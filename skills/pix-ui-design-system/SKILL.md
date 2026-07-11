@@ -1,0 +1,213 @@
+---
+name: pix-ui-design-system
+description: >
+  Distinctive production-grade UI design direction for pix projects. Use
+  when designing pages, components, dashboards, posters, landing pages, or
+  visual systems that must feel memorable while still obeying pix
+  styleguides: zero CSS classes, zero inline styles, semantic HTML, accessible
+  states, external CSS or adoptedStyleSheets, and barrel file conventions.
+tags:
+  - ui
+  - design-system
+  - frontend
+  - visual-design
+  - aesthetics
+  - accessibility
+frameworks: [all]
+---
+
+# pix-ui-design-system — Distinctive UI design within pix rules
+
+This skill adapts the creative intent of `frontend-design` to the pix MCP
+skill ecosystem. It is the design-direction layer: it helps agents create
+interfaces with a strong visual point of view while remaining compliant with
+all pix implementation styleguides.
+
+Use it when the task asks to design, beautify, restyle, polish, brand, or build
+any visible UI surface.
+
+## Non-negotiable pix constraints
+
+Design ambition never overrides implementation rules:
+
+1. **Zero CSS classes** — use semantic elements plus `[data-part]`, `[data-*]`,
+   ARIA states, and element selectors.
+2. **Zero inline styles** — no `style="..."`, no JSX `style={{...}}`.
+3. **Semantic HTML first** — choose `main`, `section`, `article`, `header`,
+   `nav`, `aside`, `form`, `fieldset`, `ul`, `ol`, `li`, `button`, `dialog`,
+   and headings before generic containers.
+4. **External styling only** — framework-native CSS files or
+   `CSSStyleSheet`/`adoptedStyleSheets` for web components.
+5. **Accessible by default** — WCAG 2.2 AA, visible focus, keyboard paths,
+   labels, reduced-motion fallback, and meaningful text alternatives.
+6. **Barrel file tree** — follow `pix-styleguide-naming` conventions.
+7. **No design shortcuts** — no Tailwind, CSS-in-JS, generic utility classes,
+   or remote font dependency unless the project explicitly accepts it.
+
+## Design thinking sequence
+
+Before writing UI code, answer these in the implementation notes or PR body:
+
+| Question | Output |
+|----------|--------|
+| Purpose | What problem does this UI solve and for whom? |
+| Tone | Pick a precise direction: brutalist/raw, editorial, luxury/refined, playful, retro-futuristic, industrial, organic, art-deco, soft/pastel, etc. |
+| Differentiator | What is the one unforgettable detail? |
+| Constraints | Framework, performance, a11y, motion, theme, and deployment constraints. |
+| Translation | Which pix skill and component pattern owns the implementation? |
+
+## Aesthetic direction rules
+
+Commit to one memorable direction. Do not blend unrelated trends.
+
+### Typography
+
+- Avoid generic defaults like Arial, Roboto, Inter, or anonymous system stacks
+  as the primary expression.
+- Prefer self-hosted or project-approved typefaces.
+- Pair a characterful display face with a restrained body face.
+- If custom fonts are unavailable, choose a deliberate fallback strategy and
+  document it.
+- Use typographic rhythm: scale, line height, tracking, measure, and hierarchy.
+
+### Color and theme
+
+- Define tokens with CSS custom properties in the external CSS surface.
+- Use one dominant palette and one sharp accent instead of evenly distributed
+  timid colors.
+- Ensure contrast targets meet WCAG 2.2 AA.
+- Provide dark/light or high-contrast behavior only when the product requires
+  it; avoid theming for its own sake.
+
+### Motion
+
+- Prefer CSS animations and transitions.
+- Add high-impact moments: staged entry, state transitions, loading feedback,
+  or one memorable hover/focus behavior.
+- Respect `prefers-reduced-motion`.
+- Do not add motion that hides content, delays interaction, or harms keyboard
+  users.
+
+### Spatial composition
+
+- Use deliberate composition: asymmetry, editorial grids, dense control panels,
+  refined negative space, diagonal rhythm, overlap, or strict geometric order.
+- Keep reading order logical even when the visual layout is expressive.
+- Use `data-part` names to encode structure, not appearance.
+
+### Background and texture
+
+- Build atmosphere with CSS gradients, masks, SVG backgrounds, borders, shadow,
+  noise assets, or layered transparency — never inline styles.
+- Keep decorative effects non-essential and accessible.
+- Avoid generic purple gradients on white, stock SaaS cards, and predictable AI
+  landing-page layouts.
+
+## Implementation pattern
+
+### Web component / vanilla
+
+```js
+import cssText from "./_Showcase.css?raw";
+
+const sheet = new CSSStyleSheet();
+sheet.replaceSync(cssText);
+
+export class ShowcasePanel extends HTMLElement {
+  connectedCallback() {
+    this.attachStyles();
+    this.render();
+  }
+
+  attachStyles() {
+    if (!document.adoptedStyleSheets.includes(sheet)) {
+      document.adoptedStyleSheets = [...document.adoptedStyleSheets, sheet];
+    }
+  }
+
+  render() {
+    this.innerHTML = `
+      <article data-part="panel" aria-labelledby="showcase-title">
+        <header data-part="masthead">
+          <p data-part="eyebrow">Design system</p>
+          <h2 id="showcase-title">Editorial command surface</h2>
+        </header>
+        <section data-part="content">
+          <p>Distinctive visuals, semantic structure, and accessible states.</p>
+        </section>
+      </article>
+    `;
+  }
+}
+```
+
+```css
+article[data-part="panel"] {
+  --surface: oklch(18% 0.03 260);
+  --ink: oklch(94% 0.02 92);
+  --accent: oklch(74% 0.18 54);
+
+  color: var(--ink);
+  background:
+    radial-gradient(circle at 12% 12%, color-mix(in oklch, var(--accent), transparent 64%), transparent 32rem),
+    linear-gradient(135deg, var(--surface), oklch(10% 0.04 260));
+  border: 0.1rem solid color-mix(in oklch, var(--ink), transparent 80%);
+}
+
+[data-part="eyebrow"] {
+  color: var(--accent);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  article[data-part="panel"] {
+    animation: panel-enter 520ms cubic-bezier(.2, .8, .2, 1) both;
+  }
+}
+```
+
+### Framework components
+
+For React, Vue, Angular, Svelte, SolidJS, Astro, Next, Nuxt, or Remix:
+
+1. Read this skill for the visual direction.
+2. Read the framework skill for implementation constraints.
+3. Read `pix-styleguide` and focused styleguide sub-skills for semantics,
+   CSS, a11y, naming, and validation.
+4. Generate code using the framework's accepted external CSS mechanism.
+
+## Design review checklist
+
+- [ ] A clear aesthetic direction is stated before implementation.
+- [ ] The memorable differentiator is visible in typography, motion, layout, or
+      atmosphere.
+- [ ] No CSS classes or inline styles are used.
+- [ ] All selectors are semantic elements, `[data-part]`, `[data-*]`, or states.
+- [ ] Every interactive element has accessible name, focus, keyboard behavior,
+      and state feedback.
+- [ ] Motion respects `prefers-reduced-motion`.
+- [ ] Color contrast is WCAG 2.2 AA.
+- [ ] File tree follows barrel and naming conventions.
+- [ ] The framework-specific skill remains the source of implementation truth.
+- [ ] `pix_check` passes before handoff.
+
+## Pair with these skills
+
+| Need | Skill |
+|------|-------|
+| Routing | [pix](../pix/SKILL.md) |
+| Architecture | [pix-architect](../pix-architect/SKILL.md) |
+| Frontend umbrella | [pix-frontend](../pix-frontend/SKILL.md) |
+| CSS rules | [pix-styleguide-css](../pix-styleguide-css/SKILL.md) |
+| Semantic HTML | [pix-styleguide-html](../pix-styleguide-html/SKILL.md) |
+| Accessibility | [pix-styleguide-a11y](../pix-styleguide-a11y/SKILL.md) |
+| Naming/file tree | [pix-styleguide-naming](../pix-styleguide-naming/SKILL.md) |
+| Validation | [pix_check](../pix/SKILL.md) via MCP tool |
+
+## See also
+
+- [pix](../pix/SKILL.md) — Central skill and tool dispatcher
+- [pix-styleguide](../pix-styleguide/SKILL.md) — Shared coding standards
+- [pix-frontend](../pix-frontend/SKILL.md) — Frontend framework index
+- [pix-architect](../pix-architect/SKILL.md) — Architecture and `.context` generation
