@@ -1,0 +1,137 @@
+/**
+ * @module test/docs-architect
+ *
+ * Regression checks for docs consolidation, ADR summaries, and the
+ * pix-architect context template inventory.
+ */
+
+import { strict as assert } from "node:assert";
+import { existsSync, readFileSync, readdirSync } from "node:fs";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const root = join(__dirname, "..");
+
+function read(path) {
+  return readFileSync(join(root, path), "utf8");
+}
+
+function listFiles(path) {
+  return readdirSync(join(root, path), { withFileTypes: true })
+    .filter((entry) => entry.isFile())
+    .map((entry) => entry.name)
+    .sort();
+}
+
+function placeholdersFromTemplates(templates) {
+  const names = new Set();
+  for (const template of templates) {
+    for (const match of template.content.matchAll(/\[([A-Z_0-9]+)\]/g)) {
+      names.add(match[1]);
+    }
+  }
+  return [...names].sort();
+}
+
+console.log("pix docs + architect test");
+
+// ── Docs are consolidated into fewer, navigable files ─────────────
+const expectedDocs = [
+  "docs/README.md",
+  "docs/01-product-architecture.md",
+  "docs/02-tools-operations.md",
+  "docs/03-engineering-guides.md",
+  "docs/04-roadmap-plans.md",
+];
+for (const file of expectedDocs) {
+  assert(existsSync(join(root, file)), `Missing consolidated doc: ${file}`);
+}
+
+const docsRootFiles = listFiles("docs").filter((file) => file.endsWith(".md"));
+assert(docsRootFiles.length <= 6, `Expected <= 6 root docs, found ${docsRootFiles.length}: ${docsRootFiles.join(", ")}`);
+
+const docsIndex = read("docs/README.md");
+for (const file of expectedDocs.slice(1)) {
+  assert(docsIndex.includes(file.replace("docs/", "./")), `docs/README.md must link ${file}`);
+}
+for (const legacySource of [
+  "docs/ANALYSIS.md",
+  "docs/ARCHITECTURE.md",
+  "docs/TOOLS.md",
+  "docs/TROUBLESHOOTING.md",
+  "docs/plans/execution-plan.md",
+  "docs/plans/refactor-roadmap.md",
+]) {
+  assert(docsIndex.includes(legacySource), `content manifest must preserve ${legacySource}`);
+}
+
+// ── ADR summaries cover every ADR file ────────────────────────────
+const allAdrMarkdown = listFiles("docs/adr").filter((file) => file.endsWith(".md") && !["README.md", "DECISIONS.md"].includes(file));
+assert(allAdrMarkdown.every((file) => /^\d{3}-.+\.md$/.test(file)), `ADR filenames must be 001-*.md without ADR- prefix: ${allAdrMarkdown.join(", ")}`);
+const adrFiles = allAdrMarkdown;
+assert(adrFiles.length > 0, "No ADR files found");
+assert.deepEqual(adrFiles.map((file) => file.slice(0, 3)), adrFiles.map((_, index) => String(index + 1).padStart(3, "0")), "ADR numbering must be contiguous from 001");
+const adrReadme = read("docs/adr/README.md");
+const decisions = read("docs/adr/DECISIONS.md");
+for (const file of adrFiles) {
+  assert(adrReadme.includes(file), `ADR README missing ${file}`);
+  assert(decisions.includes(file), `ADR decisions summary missing ${file}`);
+}
+assert(decisions.includes("## Decision themes"), "DECISIONS.md must summarize ADR themes");
+assert(decisions.includes("## Complete ADR summary"), "DECISIONS.md must include complete ADR summary");
+
+// ── Architect templates are inventoried and placeholder-complete ───
+const architectSkill = read("skills/pix-architect/SKILL.md");
+for (const required of ["pix_detect", "pix_fix", "pix_process_adr", "pix_process_handoff", "pix_component", "pix_check"]) {
+  assert(architectSkill.includes(required), `pix-architect must reference ${required}`);
+}
+
+const inventory = read("skills/pix-architect/knowledge/context-inventory.md");
+assert(inventory.includes("## Generated .context files"), "context inventory missing generated files section");
+assert(inventory.includes("## Placeholder coverage"), "context inventory missing placeholder coverage");
+assert(inventory.includes("## Skill and tool routing"), "context inventory missing skill/tool routing section");
+
+const templates = JSON.parse(read("skills/pix-architect/assets/context-server/templates.json"));
+const placeholderSchema = JSON.parse(read("skills/pix-architect/assets/context-server/placeholders.json"));
+const templatePlaceholders = placeholdersFromTemplates(templates);
+const schemaKeys = new Set();
+function collectSchemaKeys(value) {
+  if (Array.isArray(value)) {
+    for (const item of value) collectSchemaKeys(item);
+    return;
+  }
+  if (value && typeof value === "object") {
+    if (typeof value.key === "string" && (value.type || value.label)) schemaKeys.add(value.key);
+    for (const child of Object.values(value)) collectSchemaKeys(child);
+  }
+}
+collectSchemaKeys(placeholderSchema);
+for (const key of templatePlaceholders) {
+  assert(schemaKeys.has(key), `Placeholder ${key} used in templates but missing from placeholders.json`);
+}
+for (const required of ["PIX_PRIMARY_SKILL", "PIX_SECONDARY_SKILLS", "PIX_RECOMMENDED_TOOLS", "ARCHITECTURE_DECISIONS", "QUALITY_GATES", "DELIVERY_WORKFLOW"]) {
+  assert(templatePlaceholders.includes(required), `Templates must use ${required}`);
+}
+
+function skillSectionTitles(markdown, startHeading, endHeading) {
+  const start = markdown.indexOf(startHeading);
+  assert(start >= 0, `Missing heading ${startHeading}`);
+  const end = endHeading ? markdown.indexOf(endHeading, start) : markdown.length;
+  const body = markdown.slice(start, end > start ? end : markdown.length);
+  return [...body.matchAll(/^### (.+)$/gm)].map((match) => match[1]).filter((title) => !title.includes("Skill tool naming"));
+}
+
+function assertAlphabetical(values, label) {
+  const sorted = [...values].sort((a, b) => a.localeCompare(b));
+  assert.deepEqual(values, sorted, `${label} must be alphabetical: ${values.join(", ")}`);
+}
+
+assertAlphabetical(skillSectionTitles(read("skills/pix/SKILL.md"), "## Complete skill inventory", "## Recommended dispatch bundles"), "pix skill sections");
+assertAlphabetical(skillSectionTitles(read("skills/pix-architect/SKILL.md"), "## Complete skill coverage", "## Generated `.context/` output"), "pix-architect skill sections");
+
+const roadmap = read("docs/04-roadmap-plans.md");
+assert(!roadmap.includes("## 9. Migration Guide"), "Roadmap must not include a migration guide section before first release");
+assert(roadmap.includes("Final pix-architect UI/UX Implementation Plan"), "Roadmap must include the final mirrored CLI/Web UX plan");
+
+console.log("  ✅ docs, ADR summaries, architect inventory, and skill ordering are coherent");

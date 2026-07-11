@@ -1,0 +1,77 @@
+/**
+ * @module test/doctor-ui
+ *
+ * TDD coverage for the doctor command presentation layer.
+ * Default doctor output should be terminal-oriented, with JSON available
+ * explicitly for automation/export flows.
+ */
+
+import { strict as assert } from "node:assert";
+import { formatDoctorTerminal } from "../src/cli/doctor.js";
+
+console.log("pix doctor UI test");
+
+const report = {
+  ok: true,
+  version: "1.0.0",
+  sdk: "1.29.0",
+  node: "v24.18.0",
+  platform: "darwin",
+  arch: "arm64",
+  entrypoint: "/repo/bin/pix-galaxy-mcp.js",
+  tools: ["pix", "pix_check", "pix_detect"],
+  agentsConfigured: 2,
+  agentsTotal: 3,
+  agents: [
+    { name: "claude", configured: true, validated: true, configFile: "/home/.claude.json" },
+    { name: "cursor", configured: true, validated: false, configFile: "/home/.cursor/mcp.json" },
+    { name: "copilot", configured: false, configFile: null },
+  ],
+  ides: [
+    { name: "VS Code", configured: true, configFile: "/repo/.vscode/mcp.json" },
+  ],
+  models: { totalConfigured: 1 },
+  stateDir: "/home/.local/state/pix-galaxy-mcp",
+  dataDir: "/home/.local/share/pix-galaxy-mcp",
+  configDir: "/home/.config/pix-galaxy-mcp",
+  daemon: {
+    running: true,
+    pid: 123,
+    nativeService: {
+      platform: "macos",
+      service: "launchd",
+      installed: true,
+      loaded: true,
+      running: true,
+      pid: 123,
+    },
+  },
+  unconfigured: ["copilot"],
+};
+
+const ui = formatDoctorTerminal(report);
+
+assert(!ui.trimStart().startsWith("{"), "default doctor UI must not be raw JSON");
+assert(ui.includes("🩺"), "UI should include doctor emoji in title");
+assert(ui.includes("🖥️"), "UI should include system emoji");
+assert(ui.includes("🧰"), "UI should include tools emoji");
+assert(ui.includes("🤖"), "UI should include agents emoji");
+assert(ui.includes("🚀"), "UI should include daemon emoji");
+assert(ui.includes("pix-galaxy-mcp doctor"), "UI should include title");
+assert(ui.includes("System"), "UI should include system section");
+assert(ui.includes("MCP Tools"), "UI should include tools section");
+assert(ui.includes("Agents"), "UI should include agents section");
+assert(ui.includes("Daemon"), "UI should include daemon section");
+assert(ui.includes("pix_check"), "UI should show tool examples");
+assert(ui.includes("claude"), "UI should show configured agents");
+assert(ui.includes("copilot"), "UI should show missing agents");
+assert(ui.includes("Use `pix-galaxy-mcp doctor --json`"), "UI should advertise JSON export");
+
+const previousForceColor = process.env.FORCE_COLOR;
+process.env.FORCE_COLOR = "1";
+const colorUi = formatDoctorTerminal(report);
+if (previousForceColor === undefined) delete process.env.FORCE_COLOR;
+else process.env.FORCE_COLOR = previousForceColor;
+assert(/\x1b\[[0-9;]*m/.test(colorUi), "UI should emit ANSI colors when FORCE_COLOR is set");
+
+console.log("  ✅ doctor defaults to colorful emoji Terminal UI with JSON export hint");
