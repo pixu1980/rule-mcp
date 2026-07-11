@@ -1,0 +1,498 @@
+#!/usr/bin/env pwsh
+# =============================================================================
+# pix-galaxy-mcp — Universal Uninstaller (Windows / PowerShell)
+# =============================================================================
+#
+# Reverses all changes made by install.ps1:
+#   1. Removes pix-galaxy-mcp entries from ALL coding agent configs (18+)
+#   2. Removes pix-galaxy-mcp rules from CLAUDE.md / AGENTS.md / GEMINI.md
+#   3. Removes IDE configurations (VS Code, Neovim, JetBrains)
+#   4. Removes config directory (~/.config/pix-galaxy-mcp/)
+#   5. Removes environment variables
+#   6. Removes global npm package
+#
+# Usage:
+#   .\scripts\uninstall.ps1
+#   powershell -c "irm https://pix-galaxy.dev/uninstall.ps1 | iex"
+#
+# Parameters:
+#   -Agent <name>    Uninstall for a specific agent only
+#   -Purge           Also delete ~/.config/pix-galaxy-mcp/ and API keys
+#   -KeepConfig      Keep ~/.config/pix-galaxy-mcp/ (default with -Purge)
+#   -DryRun          Preview changes without writing
+#   -Force           Don't ask for confirmation
+#   -Help            Show this help
+#
+# =============================================================================
+
+param(
+  [string]$Agent = "",
+  [switch]$Purge = $false,
+  [switch]$KeepConfig = $false,
+  [switch]$DryRun = $false,
+  [switch]$Force = $false,
+  [switch]$Help = $false
+)
+
+if ($Help) {
+  Write-Host "pix-galaxy-mcp — Universal Uninstaller (PowerShell)" -ForegroundColor Cyan
+  Write-Host ""
+  Write-Host "Usage:" -ForegroundColor Yellow
+  Write-Host "  .\scripts\uninstall.ps1"
+  Write-Host "  powershell -c `"irm https://pix-galaxy.dev/uninstall.ps1 | iex`""
+  Write-Host ""
+  Write-Host "Parameters:" -ForegroundColor Yellow
+  Write-Host "  -Agent <name>    Uninstall for a specific agent only"
+  Write-Host "  -Purge           Also delete ~/.config/pix-galaxy-mcp/ and API keys"
+  Write-Host "  -KeepConfig      Keep ~/.config/pix-galaxy-mcp/ (default with -Purge)"
+  Write-Host "  -DryRun          Preview changes without writing"
+  Write-Host "  -Force           Don't ask for confirmation"
+  exit 0
+}
+
+# ── Config ──
+$McpServerName = "pix_galaxy_mcp"
+$ScriptUrl = "https://pix-galaxy.dev/uninstall.ps1"
+
+# ── State ──
+$RemovedCount = 0
+$SkippedCount = 0
+$HasError = $false
+$TargetAgent = $Agent
+
+# ── Helpers ──
+function Write-Info  { Write-Host "ℹ $($args[0])" -ForegroundColor Cyan }
+function Write-Ok    { Write-Host "✓ $($args[0])" -ForegroundColor Green }
+function Write-Warn  { Write-Host "⚠ $($args[0])" -ForegroundColor Yellow }
+function Write-Fail  { Write-Host "✗ $($args[0])" -ForegroundColor Red; $global:HasError = $true }
+function Write-Header{ Write-Host "`n── $($args[0]) ──`n" -ForegroundColor Blue }
+function Write-Step  { Write-Host "  → $($args[0])" -ForegroundColor Cyan }
+
+function Test-Command($cmd) {
+  try { Get-Command $cmd -ErrorAction Stop; return $true }
+  catch { return $false }
+}
+
+# ── JSON entry removal helper ──
+function Remove-McpEntry {
+  param(
+    [string]$FilePath,
+    [string]$Label,
+    [string]$ServiceName = $McpServerName
+  )
+
+  if (-not (Test-Path $FilePath -PathType Leaf)) {
+    Write-Step "${Label}: config not found, skipping"
+    return $false
+  }
+
+  $content = Get-Content $FilePath -Raw -ErrorAction SilentlyContinue
+  if (-not $content) {
+    Write-Step "${Label}: could not read, skipping"
+    return $false
+  }
+
+  if (-not $content.Contains($ServiceName)) {
+    Write-Step "${Label}: ${ServiceName} not found, skipping"
+    return $false
+  }
+
+  if ($DryRun) {
+    Write-Step "[dry-run] Would remove ${ServiceName} from: ${FilePath}"
+    return $true
+  }
+
+  try {
+    $json = $content | ConvertFrom-Json -ErrorAction Stop
+
+    # Convert to a mutable object we can manipulate
+    if ($json.mcpServers) {
+      $mcpServers = $json.mcpServers
+      if ($mcpServers.$ServiceName) {
+        $mcpServers.PSObject.Properties.Remove($ServiceName)
+      }
+      # Remove empty mcpServers
+      $remaining = @($mcpServers.PSObject.Properties)
+      if ($remaining.Count -eq 0) {
+        $json.PSObject.Properties.Remove('mcpServers')
+      }
+    }
+
+    $json | ConvertTo-Json -Depth 10 | Set-Content $FilePath
+    Write-Ok "${Label}: ${ServiceName} removed"
+    return $true
+  }
+  catch {
+    # JSON parse failed — try line-based removal
+    Write-Warn "${Label}: JSON parse error, trying line-based removal"
+    try {
+      $backup = "${FilePath}.bak"
+      Copy-Item $FilePath $backup -ErrorAction SilentlyContinue
+
+      $lines = Get-Content $FilePath
+      $result = @()
+      $inBlock = 0
+      foreach ($line in $lines) {
+        if ($line -match '"' + [regex]::Escape($ServiceName) + '"') { $inBlock = 1 }
+        if ($inBlock -gt 0) {
+          if ($line -match '{' -and $line -notmatch '}') { $inBlock++ }
+          if ($line -match '}') { $inBlock-- }
+          if ($inBlock -eq 0) { $inBlock = 0; continue }
+          continue
+        }
+        $result += $line
+      }
+      Set-Content $FilePath $result
+      Write-Ok "${Label}: ${ServiceName} removed (line-based)"
+      return $true
+    }
+    catch {
+      Write-Warn "${Label}: failed to remove entry"
+      return $false
+    }
+  }
+}
+
+# ── Rule block removal helper ──
+function Remove-RulesBlock {
+  param(
+    [string]$FilePath,
+    [string]$Label
+  )
+
+  if (-not (Test-Path $FilePath -PathType Leaf)) {
+    Write-Step "${Label}: not found, skipping"
+    return
+  }
+
+  $content = Get-Content $FilePath -Raw -ErrorAction SilentlyContinue
+  if (-not $content -or -not $content.Contains('pix-galaxy-mcp-rules')) {
+    Write-Step "${Label}: no pix rules found, skipping"
+    return
+  }
+
+  if ($DryRun) {
+    Write-Step "[dry-run] Would remove pix rules from: ${FilePath}"
+    return
+  }
+
+  try {
+    $backup = "${FilePath}.bak"
+    Copy-Item $FilePath $backup -ErrorAction SilentlyContinue
+
+    # Remove lines between the comments (inclusive)
+    $lines = Get-Content $FilePath
+    $inBlock = $false
+    $newLines = @()
+    foreach ($line in $lines) {
+      if ($line -match '<!-- pix-galaxy-mcp-rules -->') { $inBlock = $true; continue }
+      if ($line -match '<!-- /pix-galaxy-mcp-rules -->') { $inBlock = $false; continue }
+      if (-not $inBlock) { $newLines += $line }
+    }
+    Set-Content $FilePath $newLines
+    Write-Ok "${Label}: rules removed"
+  }
+  catch {
+    Write-Warn "${Label}: failed to remove rules"
+  }
+}
+
+# ── Line removal helper ──
+function Remove-Lines {
+  param(
+    [string]$FilePath,
+    [string]$Label,
+    [string]$Pattern
+  )
+
+  if (-not (Test-Path $FilePath -PathType Leaf)) {
+    return
+  }
+
+  $content = Get-Content $FilePath -Raw -ErrorAction SilentlyContinue
+  if (-not $content -or -not $content.Contains($Pattern)) {
+    return
+  }
+
+  if ($DryRun) {
+    Write-Step "[dry-run] Would remove matching lines from: ${FilePath}"
+    return
+  }
+
+  try {
+    $backup = "${FilePath}.bak"
+    Copy-Item $FilePath $backup -ErrorAction SilentlyContinue
+    $lines = Get-Content $FilePath | Where-Object { $_ -notmatch $Pattern }
+    Set-Content $FilePath $lines
+    Write-Ok "${Label}: entries removed"
+  }
+  catch {
+    Write-Warn "${Label}: failed to remove entries"
+  }
+}
+
+# ── Confirmation ──
+if (-not $DryRun -and -not $Force) {
+  Write-Host ""
+  Write-Host "╔══════════════════════════════════════════════════════╗" -ForegroundColor Yellow
+  Write-Host "║      pix-galaxy-mcp — Uninstall Confirmation         ║" -ForegroundColor Yellow
+  Write-Host "╚══════════════════════════════════════════════════════╝" -ForegroundColor Yellow
+  Write-Host ""
+  Write-Host "  This will remove pix-galaxy-mcp configuration from:"
+  Write-Host "   • All detected coding agents (mcp.json entries)"
+  Write-Host "   • Agent instruction files (CLAUDE.md, AGENTS.md, GEMINI.md)"
+  Write-Host "   • IDE configurations (VS Code, Neovim, JetBrains)"
+  Write-Host "   • Environment variables"
+  if ($Purge) {
+    Write-Host "   • ~/.config/pix-galaxy-mcp/ (API keys & config)" -ForegroundColor Red
+  }
+  Write-Host ""
+  Write-Host "  The npm package and project files will NOT be deleted." -ForegroundColor Yellow
+  Write-Host "  Run with -Purge to also remove config/keys." -ForegroundColor Yellow
+  Write-Host ""
+
+  $confirmation = Read-Host "  Continue? [y/N]"
+  if ($confirmation -notmatch '^[Yy]') {
+    Write-Host ""
+    Write-Host "  Uninstall cancelled." -ForegroundColor Cyan
+    exit 0
+  }
+}
+
+Write-Host ""
+Write-Host "╔══════════════════════════════════════════════════════╗" -ForegroundColor Red
+Write-Host "║       pix-galaxy-mcp — Universal Uninstaller        ║" -ForegroundColor Red
+Write-Host "╚══════════════════════════════════════════════════════╝" -ForegroundColor Red
+Write-Host ""
+
+# ─────────────────────────────────────────────────────────────────────────────
+# PHASE 1: Agent MCP Configs
+# ─────────────────────────────────────────────────────────────────────────────
+Write-Header "Phase 1: Agent MCP Configurations"
+
+$HomeDir = $HOME
+
+$AgentConfigs = @{
+  "claude"      = "$HomeDir\.claude.json"
+  "cursor"      = "$HomeDir\.cursor\mcp.json"
+  "codex"       = "$HomeDir\.codex\config.toml"
+  "copilot"     = "$HomeDir\.config\github-copilot"
+  "gemini"      = "$HomeDir\.gemini\settings.json"
+  "pi"          = "$HomeDir\.pi\agent\mcp.json"
+  "cline"       = "$HomeDir\.config\cline\mcp.json"
+  "roo"         = "$HomeDir\.config\roo\mcp.json"
+  "zed"         = "$HomeDir\.config\zed\mcp.json"
+  "opencode"    = "$HomeDir\.config\opencode\mcp.json"
+  "antigravity" = "$HomeDir\.config\antigravity\mcp.json"
+  "windsurf"    = "$HomeDir\.config\windsurf\mcp.json"
+  "kilo"        = "$HomeDir\.config\kilo\mcp.json"
+  "kimi"        = "$HomeDir\.config\kimi\mcp.json"
+  "vibe"        = "$HomeDir\.config\vibe\mcp.json"
+  "grok"        = "$HomeDir\.config\grok\mcp.json"
+  "droid"       = "$HomeDir\.config\factory\mcp.json"
+  "kiro"        = "$HomeDir\.config\kiro\mcp.json"
+  "qwen"        = "$HomeDir\.config\qwen\mcp.json"
+}
+
+$ProjectDir = (Get-Location).Path
+$VscodeMcp = "$ProjectDir\.vscode\mcp.json"
+
+if ($TargetAgent) {
+  Write-Info "Targeting agent: $TargetAgent"
+
+  if ($TargetAgent -eq "vscode") {
+    Remove-McpEntry -FilePath $VscodeMcp -Label "VS Code"
+  } elseif ($AgentConfigs.ContainsKey($TargetAgent)) {
+    $path = $AgentConfigs[$TargetAgent]
+    if ($TargetAgent -eq "codex") {
+      Remove-Lines -FilePath $path -Label "Codex CLI" -Pattern "pix"
+    } else {
+      Remove-McpEntry -FilePath $path -Label $TargetAgent
+    }
+  } else {
+    Write-Warn "Unknown agent: $TargetAgent"
+  }
+} else {
+  Write-Info "Cleaning agent configs..."
+
+  foreach ($agent in $AgentConfigs.Keys) {
+    $path = $AgentConfigs[$agent]
+    if (Test-Path $path -PathType Leaf -ErrorAction SilentlyContinue) {
+      if ($agent -eq "codex") {
+        Remove-Lines -FilePath $path -Label "Codex CLI" -Pattern "pix"
+      } else {
+        Remove-McpEntry -FilePath $path -Label $agent
+      }
+    }
+  }
+
+  # VS Code
+  if (Test-Path $VscodeMcp -PathType Leaf) {
+    Remove-McpEntry -FilePath $VscodeMcp -Label "VS Code"
+    if (-not $DryRun) {
+      $remaining = Get-Content $VscodeMcp -Raw
+      if ($remaining -and -not $remaining.Contains('mcpServers')) {
+        Remove-Item $VscodeMcp -Force -ErrorAction SilentlyContinue
+        Write-Step "VS Code: removed empty mcp.json"
+      }
+    }
+  }
+}
+
+# ─────────────────────────────────────────────────────────────────────────────
+# PHASE 2: Agent Instruction Files
+# ─────────────────────────────────────────────────────────────────────────────
+Write-Header "Phase 2: Agent Instruction Files"
+
+Remove-RulesBlock -FilePath "$HomeDir\.claude\CLAUDE.md" -Label "Claude Code"
+Remove-RulesBlock -FilePath "$HomeDir\.gemini\GEMINI.md" -Label "Gemini CLI"
+Remove-RulesBlock -FilePath "$HomeDir\.codex\AGENTS.md" -Label "Codex CLI"
+Remove-RulesBlock -FilePath "$HomeDir\.cursor\.cursorrules" -Label "Cursor"
+Remove-RulesBlock -FilePath "$ProjectDir\CLAUDE.md" -Label "Project CLAUDE.md"
+
+$piAgentsMd = "$HomeDir\.pi\agent\AGENTS.md"
+if (Test-Path $piAgentsMd) {
+  Remove-RulesBlock -FilePath $piAgentsMd -Label "Pi AGENTS.md"
+}
+
+# ─────────────────────────────────────────────────────────────────────────────
+# PHASE 3: IDE Configurations
+# ─────────────────────────────────────────────────────────────────────────────
+Write-Header "Phase 3: IDE Configurations"
+
+# Neovim
+$NeovimDir = "$HomeDir\AppData\Local\nvim"
+$NeovimMcp = "$NeovimDir\mcp.json"
+if (Test-Path $NeovimMcp) {
+  Remove-McpEntry -FilePath $NeovimMcp -Label "Neovim"
+  if (-not $DryRun) {
+    $remaining = Get-Content $NeovimMcp -Raw
+    if ($remaining -and -not $remaining.Contains('mcpServers')) {
+      Remove-Item $NeovimMcp -Force -ErrorAction SilentlyContinue
+      Write-Step "Neovim: removed empty mcp.json"
+    }
+  }
+}
+
+# JetBrains
+$IdeaDir = "$ProjectDir\.idea"
+$IdeaMcp = "$IdeaDir\mcp.json"
+if (Test-Path $IdeaMcp) {
+  Remove-McpEntry -FilePath $IdeaMcp -Label "JetBrains"
+  if (-not $DryRun) {
+    $remaining = Get-Content $IdeaMcp -Raw
+    if ($remaining -and -not $remaining.Contains('mcpServers')) {
+      Remove-Item $IdeaMcp -Force -ErrorAction SilentlyContinue
+      Write-Step "JetBrains: removed empty mcp.json"
+    }
+  }
+}
+
+# ─────────────────────────────────────────────────────────────────────────────
+# PHASE 4: Config Directory & API Keys
+# ─────────────────────────────────────────────────────────────────────────────
+Write-Header "Phase 4: Config Directory"
+
+$configDir = "$HomeDir\.config\pix-galaxy-mcp"
+if (Test-Path $configDir -PathType Container) {
+  if ($KeepConfig) {
+    Write-Step "Keeping config directory (-KeepConfig): $configDir"
+  } elseif ($Purge) {
+    if ($DryRun) {
+      Write-Step "[dry-run] Would delete: $configDir"
+    } else {
+      Remove-Item $configDir -Recurse -Force -ErrorAction SilentlyContinue
+      Write-Ok "Config directory deleted: $configDir"
+    }
+  } else {
+    $keyCount = (Get-ChildItem $configDir -File).Count
+    Write-Step "Config directory exists with $keyCount file(s): $configDir"
+    Write-Step "Use -Purge to delete API keys and config"
+  }
+} else {
+  Write-Step "No config directory found, skipping"
+}
+
+# ─────────────────────────────────────────────────────────────────────────────
+# PHASE 5: Environment Variables
+# ─────────────────────────────────────────────────────────────────────────────
+Write-Header "Phase 5: Environment Variables"
+
+if ($DryRun) {
+  Write-Step "[dry-run] Would remove User environment variables:"
+  Write-Step "  OPENAI_API_KEY, ANTHROPIC_API_KEY, GEMINI_API_KEY, XAI_API_KEY"
+} else {
+  $envVars = @("OPENAI_API_KEY", "ANTHROPIC_API_KEY", "GEMINI_API_KEY", "XAI_API_KEY")
+  foreach ($var in $envVars) {
+    $current = [Environment]::GetEnvironmentVariable($var, "User")
+    if ($current) {
+      [Environment]::SetEnvironmentVariable($var, $null, "User")
+      Write-Ok "Removed User env var: $var"
+    }
+  }
+}
+
+# ─────────────────────────────────────────────────────────────────────────────
+# PHASE 6: Global npm Package
+# ─────────────────────────────────────────────────────────────────────────────
+Write-Header "Phase 6: Global Package"
+
+if (Test-Command pix-galaxy-mcp) {
+  $globalPath = (Get-Command pix-galaxy-mcp).Source
+  Write-Step "Global binary found: $globalPath"
+
+  if ($DryRun) {
+    Write-Step "[dry-run] Would run: npm uninstall -g pix-galaxy-mcp"
+  } else {
+    $result = npm uninstall -g pix-galaxy-mcp 2>&1
+    if ($LASTEXITCODE -eq 0) {
+      Write-Ok "Global package removed"
+    } else {
+      Write-Step "Package not installed globally or already removed"
+    }
+  }
+} else {
+  Write-Step "No global pix-galaxy-mcp found, skipping"
+}
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Summary
+# ─────────────────────────────────────────────────────────────────────────────
+Write-Header "Uninstall Summary"
+
+if ($DryRun) {
+  Write-Host "⚠ Dry-run mode — no changes were made" -ForegroundColor Yellow
+  Write-Host ""
+  Write-Host "To apply:  .\scripts\uninstall.ps1"
+  Write-Host ""
+  exit 0
+}
+
+Write-Host ""
+Write-Host "✓ pix-galaxy-mcp has been uninstalled from your system." -ForegroundColor Green
+Write-Host "The following were removed:" -ForegroundColor Cyan
+Write-Host " • MCP server entries from coding agent configs"
+Write-Host " • Instruction rules from agent instruction files"
+Write-Host " • IDE configurations (VS Code, Neovim, JetBrains)"
+Write-Host " • Environment variables"
+if ($Purge) {
+  Write-Host " • Config directory and API keys"
+}
+Write-Host ""
+
+Write-Host "Note: The project files were NOT deleted." -ForegroundColor Yellow
+Write-Host "To remove them manually:  Remove-Item -Recurse -Force $ProjectDir" -ForegroundColor Yellow
+Write-Host ""
+
+Write-Host "To reinstall later:" -ForegroundColor Cyan
+Write-Host "  powershell -c `"irm https://pix-galaxy.dev/install.ps1 | iex`""
+Write-Host "  # OR"
+Write-Host "  .\scripts\install.ps1"
+Write-Host ""
+
+if ($HasError) {
+  Write-Host "⚠ Uninstall completed with warnings. Manual cleanup may be needed." -ForegroundColor Yellow
+} else {
+  Write-Host "✓ Uninstall complete! Restart your coding agent for changes to take effect." -ForegroundColor Green
+}
+Write-Host ""
