@@ -1,0 +1,78 @@
+{
+  "name": "pix-galaxy-mcp",
+  "version": "1.0.0",
+  "description": "MCP server for the pix-* skill ecosystem. Serves styleguides, component templates, framework best practices, and design system patterns. Zero npm dependencies.",
+  "type": "module",
+  "license": "MIT",
+  "private": false,
+  "publishConfig": {
+    "access": "public"
+  },
+  "bin": {
+    "pix-galaxy-mcp": "./bin/pix-galaxy-mcp.js",
+    "pix-galaxy-mcpd": "./bin/pix-galaxy-mcp.js"
+  },
+  "scripts": {
+    "dev": "node ./bin/pix-galaxy-mcp.js serve",
+    "dev:sse": "node ./bin/pix-galaxy-mcp.js serve --transport sse",
+    "dev:daemon": "node ./bin/pix-galaxy-mcp.js daemon start",
+    "doctor": "node ./bin/pix-galaxy-mcp.js doctor",
+    "tools": "node ./bin/pix-galaxy-mcp.js tools list",
+    "mcp:install": "bash ./scripts/install.sh --force",
+    "mcp:install:ps1": "pwsh ./scripts/install.ps1",
+    "mcp:uninstall": "bash ./scripts/uninstall.sh --force",
+    "post-process": "node scripts/post-process.mjs",
+    "post-process:fix": "node scripts/post-process.mjs --fix --no-dry-run",
+    "mcp:uninstall:ps1": "pwsh ./scripts/uninstall.ps1",
+    "test": "node ./test/smoke.mjs",
+    "test:all": "node test/smoke.mjs && for f in test/*.test.mjs; do node \"$f\"; done",
+    "lint": "eslint bin/ src/ test/ --ext .js,.mjs",
+    "lint:fix": "eslint bin/ src/ test/ --ext .js,.mjs --fix",
+    "format": "prettier --check '**/*.{js,mjs,json,md}' --ignore-path .gitignore",
+    "format:fix": "prettier --write '**/*.{js,mjs,json,md}' --ignore-path .gitignore",
+    "audit": "pnpm audit --prod",
+    "ci": "node test/smoke.mjs && node test/ai.test.mjs && node test/detector.test.mjs && node test/framework-routing.test.mjs && node test/skills-docs.test.mjs && node test/docs-architect.test.mjs && node test/daemon-wrapper.test.mjs && node test/doctor-ui.test.mjs && node test/cli-tui.test.mjs",
+    "prebuild": "node ./scripts/embed-skills.mjs",
+    "build": "node ./scripts/package.mjs",
+    "prepublishOnly": "node ./scripts/embed-skills.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "files": [
+    "bin/",
+    "src/",
+    "skills/",
+    "prompts/",
+    "scripts/",
+    "README.md",
+    "LICENSE",
+    "server.json"
+  ],
+  "keywords": [
+    "mcp",
+    "styleguide",
+    "design-system",
+    "frontend",
+    "react",
+    "vue",
+    "svelte",
+    "angular",
+    "solidjs",
+    "astro",
+    "pix",
+    "architect",
+    "desktop",
+    "electron",
+    "library",
+    "web"
+  ],
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "1.29.0",
+    "pix-galaxy-mcp": "link:",
+    "zod": "4.4.3"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.61.1"
+  }
+}

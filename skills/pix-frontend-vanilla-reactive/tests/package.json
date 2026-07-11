@@ -1,0 +1,10 @@
+{
+  "name": "pix-vanilla-reactivity-tests",
+  "private": true,
+  "scripts": {
+    "test": "npx playwright test demo.test.js"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.52.0"
+  }
+}

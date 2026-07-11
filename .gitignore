@@ -4,3 +4,7 @@ dist/
 *.pid
 *.log
 .env
+.DS_Store
+*.tgz
+*.tar.gz
+

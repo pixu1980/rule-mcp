@@ -1,0 +1,196 @@
+/**
+ * @module tools/fix
+ *
+ * pix_fix MCP tool — File tree validation and auto-fix.
+ * Scans a project's file tree, detects violations of the pix galaxy
+ * barrel file convention, and optionally auto-fixes them.
+ *
+ * Two modes:
+ *   lint  — scan and report issues without modifying anything
+ *   fix   — scan and auto-fix (create barrels, rename files)
+ *
+ * @see module:core/file-tree — Core validation logic
+ * @see module:cli/commands — CLI fix command handler
+ */
+
+import { z } from "zod/v4";
+import { registerTool } from "./router.js";
+import { scanFileTree, autoFixFileTree } from "../core/file-tree.js";
+
+const FixSchema = z.object({
+  path: z.string().optional().default(".").describe("Project root directory to scan"),
+  srcDir: z.string().optional().default("src").describe("Source directory (default: src)"),
+  mode: z.enum(["lint", "fix", "generate"]).default("lint").describe(
+    "lint: scan and report issues. fix: scan and auto-fix. generate: generate component file tree."
+  ),
+  name: z.string().optional().describe("Component name (PascalCase) for mode=generate"),
+  framework: z.string().optional().default("vanilla").describe("Framework for mode=generate"),
+  baseDir: z.string().optional().default("src/components").describe("Base output directory for mode=generate"),
+  dryRun: z.boolean().optional().default(true).describe("Preview fixes without applying (default: true). Set false to apply."),
+});
+
+/**
+ * Register the pix_fix tool.
+ * Called during skill loading in loadAllSkills().
+ */
+export function registerFixTool() {
+  registerTool({
+    name: "pix_fix",
+    description: "Validate and auto-fix project file tree structure against pix galaxy conventions (barrel files, _PascalCase naming, etc.).",
+    zodSchema: FixSchema,
+    inputSchema: {
+      type: "object",
+      properties: {
+        path: { type: "string", default: ".", description: "Project root" },
+        srcDir: { type: "string", default: "src", description: "Source directory" },
+        mode: { type: "string", enum: ["lint", "fix", "generate"], default: "lint" },
+        name: { type: "string", description: "Component name for generate mode" },
+        framework: { type: "string", default: "vanilla", description: "Framework for generate mode" },
+        baseDir: { type: "string", default: "src/components", description: "Base dir for generate mode" },
+        dryRun: { type: "boolean", default: true, description: "Preview without applying" },
+      },
+    },
+    handler: async (args) => {
+      const mode = args.mode || "lint";
+
+      // ── Generate mode: create component file tree ──
+      if (mode === "generate") {
+        const { generateComponentFiles } = await import("../core/file-tree.js");
+        const { writeFileSync, mkdirSync } = await import("node:fs");
+        const { dirname, join } = await import("node:path");
+
+        if (!args.name) {
+          return { isError: true, content: [{ type: "text", text: "mode=generate requires a `name` argument (PascalCase)." }] };
+        }
+
+        const rootDir = args.path || ".";
+        const files = generateComponentFiles({
+          name: args.name,
+          framework: args.framework || "vanilla",
+          baseDir: args.baseDir || "src/components",
+        });
+
+        const created = [];
+        for (const file of files) {
+          const fullPath = join(rootDir, file.path);
+          try {
+            mkdirSync(dirname(fullPath), { recursive: true });
+            writeFileSync(fullPath, file.content, "utf8");
+            created.push(file.path);
+          } catch (err) {
+            created.push(`${file.path} — ERROR: ${err.message}`);
+          }
+        }
+
+        const lines = [
+          `# pix_fix: Generated ${args.name}`,
+          "",
+          `Created ${created.length} files:`,
+          "",
+          ...created.map((p) => `  ✓ ${p}`),
+          "",
+          "File tree:",
+          `  ${args.baseDir || "src/components"}/${args.name}/`,
+          created.map((p) => `    ${p.split("/").pop()}`).filter(Boolean).join("\n"),
+        ];
+
+        return { content: [{ type: "text", text: lines.join("\n") }] };
+      }
+
+      // ── Lint mode: scan and report ──
+      if (mode === "lint") {
+        const report = scanFileTree(args.path || ".", { srcDir: args.srcDir || "src" });
+
+        if (report.pass) {
+          return {
+            content: [{
+              type: "text",
+              text: `# File Tree Validation: PASS\n\n✅ No issues found. Scanned ${report.stats.totalFiles} files in ${report.stats.totalDirs} directories.`,
+            }],
+          };
+        }
+
+        const lines = [
+          `# File Tree Validation: ${report.issues.length} issues`,
+          "",
+          `Scanned: ${report.stats.totalFiles} files, ${report.stats.totalDirs} directories`,
+          "",
+          "## Summary",
+          `- Missing barrel files: ${report.stats.missingBarrel}`,
+          `- Wrong file prefix: ${report.stats.wrongPrefix}`,
+          `- Bare component files: ${report.stats.bareFiles}`,
+          `- Fixable: ${report.stats.fixable}/${report.issues.length}`,
+          "",
+          "## Issues",
+          "",
+        ];
+
+        for (const issue of report.issues) {
+          const icon = issue.fixable ? "🔧" : "⚠️";
+          lines.push(`### ${icon} ${issue.type}`);
+          lines.push(`**Path**: \`${issue.path}\``);
+          lines.push(`**Message**: ${issue.message}`);
+          if (issue.fixAction) lines.push(`**Auto-fix**: ${issue.fixAction}`);
+          lines.push("");
+        }
+
+        lines.push("---");
+        if (report.stats.fixable > 0) {
+          lines.push(`Run with \`mode=fix dryRun=false\` to auto-fix ${report.stats.fixable} issues.`);
+        }
+
+        return { content: [{ type: "text", text: lines.join("\n") }] };
+      }
+
+      // ── Fix mode: scan and auto-correct ──
+      if (mode === "fix") {
+        const dryRun = args.dryRun !== false;
+        const result = autoFixFileTree(args.path || ".", {
+          srcDir: args.srcDir || "src",
+          dryRun,
+        });
+
+        const lines = [
+          `# File Tree Auto-Fix: ${dryRun ? "DRY RUN" : "COMPLETE"}`,
+          "",
+          ...(dryRun ? ["", "> This is a preview. Run with `dryRun=false` to apply fixes.", ""] : [""]),
+        ];
+
+        if (result.fixed.length > 0) {
+          lines.push(`## Fixed (${result.fixed.length})`);
+          lines.push("");
+          for (const f of result.fixed) {
+            lines.push(`- ${f.action}: \`${f.path}\``);
+          }
+          lines.push("");
+        }
+
+        if (result.errors.length > 0) {
+          lines.push(`## Errors (${result.errors.length})`);
+          lines.push("");
+          for (const e of result.errors) {
+            lines.push(`- ❌ \`${e.path}\`: ${e.error}`);
+          }
+          lines.push("");
+        }
+
+        if (result.remaining.length > 0) {
+          lines.push(`## Remaining Issues (${result.remaining.length})`);
+          lines.push("");
+          for (const r of result.remaining) {
+            lines.push(`- ⚠️ \`${r.path}\`: ${r.message}`);
+          }
+          lines.push("");
+        }
+
+        if (result.fixed.length === 0 && result.errors.length === 0 && result.remaining.length === 0) {
+          lines.push("✅ No issues found. File tree is clean.");
+        }
+
+        return { content: [{ type: "text", text: lines.join("\n") }] };
+      }
+
+      return { isError: true, content: [{ type: "text", text: `Unknown mode: ${mode}` }] };
+    },
+  });
+}

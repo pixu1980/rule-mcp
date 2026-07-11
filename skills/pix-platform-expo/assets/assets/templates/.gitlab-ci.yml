@@ -1,0 +1,128 @@
+variables:
+  NODE_VERSION: "22"
+
+stages:
+  - install
+  - lint
+  - test
+  - build-ios
+  - build-android
+
+default:
+  image: node:${NODE_VERSION}-alpine
+  cache:
+    key:
+      files:
+        - package-lock.json
+    paths:
+      - ~/.npm
+    policy: pull
+
+# -------------------------------------------------------------------
+# Install
+# -------------------------------------------------------------------
+install:
+  stage: install
+  cache:
+    key:
+      files:
+        - package-lock.json
+    paths:
+      - ~/.npm
+    policy: pull-push
+  script:
+    - npm ci
+  artifacts:
+    paths:
+      - node_modules/
+    expire_in: 1 hour
+
+# -------------------------------------------------------------------
+# Lint
+# -------------------------------------------------------------------
+lint:
+  stage: lint
+  needs: ["install"]
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH == "develop"
+    - if: $CI_COMMIT_BRANCH == "main"
+  script:
+    - npm run type-check
+    - npm run lint
+
+# -------------------------------------------------------------------
+# Test
+# -------------------------------------------------------------------
+test:
+  stage: test
+  needs: ["install"]
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH == "develop"
+    - if: $CI_COMMIT_BRANCH == "main"
+  script:
+    - npm run test:coverage
+  coverage: '/All files\s*\|\s*(\d+\.?\d*)\s*\|/'
+  artifacts:
+    reports:
+      coverage_report:
+        coverage_format: cobertura
+        path: coverage/cobertura-coverage.xml
+    paths:
+      - coverage/
+    expire_in: 7 days
+
+# -------------------------------------------------------------------
+# iOS builds triggered by tags
+# -------------------------------------------------------------------
+eas-build-ios-uat:
+  stage: build-ios
+  variables:
+    EXPO_TOKEN: $EXPO_TOKEN
+  before_script:
+    - apk add --no-cache git
+    - npx eas-cli --version
+  rules:
+    - if: $CI_COMMIT_TAG =~ /^uat-app-store-/
+  script:
+    - npx eas-cli build --platform ios --profile staging --non-interactive --auto-submit --no-wait
+
+eas-build-ios:
+  stage: build-ios
+  variables:
+    EXPO_TOKEN: $EXPO_TOKEN
+  before_script:
+    - apk add --no-cache git
+    - npx eas-cli --version
+  rules:
+    - if: $CI_COMMIT_TAG =~ /^app-store-/
+  script:
+    - npx eas-cli build --platform ios --profile production --non-interactive --auto-submit --no-wait
+
+# -------------------------------------------------------------------
+# Android builds triggered by tags
+# -------------------------------------------------------------------
+eas-build-android-uat:
+  stage: build-android
+  variables:
+    EXPO_TOKEN: $EXPO_TOKEN
+  before_script:
+    - apk add --no-cache git
+    - npx eas-cli --version
+  rules:
+    - if: $CI_COMMIT_TAG =~ /^uat-play-store-/
+  script:
+    - npx eas-cli build --platform android --profile staging --non-interactive --auto-submit --no-wait
+
+eas-build-android:
+  stage: build-android
+  variables:
+    EXPO_TOKEN: $EXPO_TOKEN
+  before_script:
+    - apk add --no-cache git
+    - npx eas-cli --version
+  rules:
+    - if: $CI_COMMIT_TAG =~ /^play-store-/
+  script:
+    - npx eas-cli build --platform android --profile production --non-interactive --auto-submit --no-wait

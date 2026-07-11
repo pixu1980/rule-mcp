@@ -1,0 +1,76 @@
+name: ci
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  lint:
+    name: Lint + Format
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "pnpm"
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Embed skills
+        run: node scripts/embed-skills.mjs
+      - name: Check syntax (all source files)
+        run: find bin src -name "*.js" -exec node --check {} \;
+      - name: ESLint
+        run: npx eslint bin/ src/ test/ --ext .js,.mjs --max-warnings 50 || echo "Lint warnings found"
+      - name: Prettier check
+        run: npx prettier --check '**/*.{js,mjs,json,md}' --ignore-path .gitignore || echo "Format issues found"
+
+  test:
+    name: test (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        node: ["20", "22"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+          cache: "pnpm"
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Embed skills
+        run: node scripts/embed-skills.mjs
+      - name: Run unit tests
+        run: node test/smoke.mjs
+      - name: Run galaxy routing tests
+        run: node test/galaxy.test.mjs
+      - name: Run detector tests
+        run: node test/detector.test.mjs
+      - name: Run framework routing tests
+        run: node test/framework-routing.test.mjs
+
+  audit:
+    name: Security audit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "pnpm"
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      - name: pnpm audit (production)
+        run: pnpm audit --prod || echo "Audit found issues (may be false positives)"

@@ -1,0 +1,21 @@
+version: "3.9"
+
+# pix-galaxy-mcp Docker Compose
+# Use for IDE integration via SSE transport.
+# Exposes MCP server on port 37999 with health check.
+
+services:
+  mcp:
+    build: .
+    image: ghcr.io/pixu1980/pix-galaxy-mcp:latest
+    container_name: pix-galaxy-mcp
+    ports:
+      - "37999:37999"
+    command: ["node", "src/index.js", "serve", "--transport", "sse"]
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:37999/health"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+      start_period: 5s
+    restart: unless-stopped

@@ -1,0 +1,25 @@
+FROM node:24-alpine@sha256:01743339035a5c3c11a373cd7c83aeab6ed1457b55da6a69e014a95ac4e4700b AS build
+
+WORKDIR /app
+COPY package.json package-lock.json ./
+RUN npm ci --ignore-scripts
+
+COPY . ./
+RUN npm run build
+
+FROM node:24-alpine@sha256:01743339035a5c3c11a373cd7c83aeab6ed1457b55da6a69e014a95ac4e4700b AS production
+
+WORKDIR /app
+
+# Create non-root user for security
+RUN addgroup -g 1001 -S nodejs && adduser -S node -u 1001 -G nodejs
+
+COPY --chown=node:nodejs --from=build /app/dist ./dist
+COPY --chown=node:nodejs --from=build /app/package.json ./
+COPY --chown=node:nodejs --from=build /app/node_modules ./node_modules
+
+USER node
+
+EXPOSE 3000
+
+CMD ["npm", "start"]
