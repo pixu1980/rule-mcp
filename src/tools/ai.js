@@ -1,0 +1,268 @@
+/**
+ * @module tools/ai
+ *
+ * pix routing tool — analyzes prompts and routes to the best pix skill.
+ * Uses keyword scoring across skill sections with framework biasing.
+ *
+ * Extracted from core/skills.js to keep the skill management module lean.
+ */
+
+import { z } from "zod/v4";
+import { readSkill, getSkillNames, registerTool } from "./router.js";
+import { getSkillMetadata } from "../core/skills.js";
+import { detectProject, getFrameworkSuggestion } from "../core/detector.js";
+
+// ─── Schema ───────────────────────────────────────────────────────
+
+const GalaxySchema = z.object({
+  prompt: z.string().describe("User's question about frontend development"),
+  framework: z.string().optional().describe("Optional framework hint (react, vue, svelte, angular, etc.) to bias routing"),
+  path: z.string().optional().describe("Optional project path for auto-detecting framework"),
+});
+
+// ─── Section extraction ───────────────────────────────────────────
+
+/**
+ * Extract `## Section` headings from SKILL.md content.
+ * Strips YAML frontmatter so metadata keywords don't pollute scoring.
+ */
+function extractSections(content) {
+  let body = content;
+  const fmMatch = body.match(/^---\s*\n[\s\S]*?\n---\s*\n/);
+  if (fmMatch) body = body.slice(fmMatch[0].length);
+
+  const lines = body.split("\n");
+  const sections = [];
+  let currentHeading = "Overview";
+  let currentContent = [];
+
+  for (const line of lines) {
+    const h2Match = line.match(/^##\s+(.+)/);
+    const h3Match = h2Match ? null : line.match(/^###\s+(.+)/);
+    if (h2Match) {
+      if (currentContent.length > 0) sections.push({ heading: currentHeading, content: currentContent.join("\n") });
+      currentHeading = h2Match[1].trim();
+      currentContent = [];
+    } else if (h3Match) {
+      // Treat ### as a separate section for better granularity
+      if (currentContent.length > 0) sections.push({ heading: currentHeading, content: currentContent.join("\n") });
+      currentHeading = h3Match[1].trim();
+      currentContent = [];
+    } else {
+      currentContent.push(line);
+    }
+  }
+  if (currentContent.length > 0) sections.push({ heading: currentHeading, content: currentContent.join("\n") });
+
+  return sections;
+}
+
+// ─── Stopwords ────────────────────────────────────────────────────
+
+const STOPWORDS = new Set([
+  "component", "components", "pattern", "patterns", "file", "files", "code", "name", "names",
+  "rule", "rules", "use", "uses", "using", "data", "style", "styles", "element", "elements",
+  "attribute", "attributes", "selector", "selectors", "principle", "principles", "convention",
+  "conventions", "example", "examples", "folder", "folders", "directory", "directories",
+  "structure", "type", "types", "value", "values", "property", "properties", "key", "keys",
+  "how", "can", "way", "ways", "need", "want", "make", "work", "works",
+  "like", "just", "also", "well", "get", "set", "let", "one", "first",
+  "best", "practice", "practices", "guide", "basic", "basics", "simple",
+  "learn", "following", "common", "always", "never", "often",
+  "using", "based", "called", "known", "every", "many", "some",
+]);
+
+// ─── Scoring ──────────────────────────────────────────────────────
+
+function scoreSectionWord(section, word, skillBase, descText) {
+  const contentText = (section.content || "").toLowerCase();
+  const headingText = (section.heading || "").toLowerCase();
+
+  const nameBonus = (word === skillBase) ? 3 : 0;
+  const descBonus = descText.includes(word) ? 2 : 0;
+  const weight = 1 + nameBonus + descBonus;
+
+  const wordPattern = new RegExp("\\b" + word.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + "\\b", "i");
+
+  if (wordPattern.test(headingText)) return weight * 3;
+  if (wordPattern.test(contentText)) return weight;
+  return 0;
+}
+
+function scoreSkill(sections, meta, promptWords, skillName) {
+  const descText = (meta.description || "").toLowerCase();
+  const tagText = (meta.tags || []).join(" ").toLowerCase();
+  const skillBase = skillName.replace("pix-", "");
+
+  let rawScore = 0;
+
+  for (const word of promptWords) {
+    if (STOPWORDS.has(word)) continue;
+
+    let wordScore = 0;
+    for (const section of sections) {
+      const w = scoreSectionWord(section, word, skillBase, descText);
+      if (w > wordScore) wordScore = w;
+    }
+
+    if (wordScore === 0 && (descText.includes(word) || tagText.includes(word))) {
+      wordScore = Math.max(1, 0.5 * (1 + (descText.includes(skillBase) ? 2 : 0)));
+    }
+
+    rawScore += wordScore;
+  }
+
+  return rawScore;
+}
+
+// ─── Section display ──────────────────────────────────────────────
+
+function extractTopSections(skillName, promptWords) {
+  const content = readSkill(skillName);
+  if (!content) return [];
+
+  const sections = extractSections(content);
+  const meta = getSkillMetadata(skillName);
+  const skillBase = skillName.replace("pix-", "");
+  const descText = (meta.description || "").toLowerCase();
+
+  const scored = sections
+    .map(s => {
+      let score = 0;
+      for (const word of promptWords) {
+        if (STOPWORDS.has(word)) continue;
+        score += scoreSectionWord(s, word, skillBase, descText);
+      }
+      return { heading: s.heading, score };
+    })
+    .filter(s => s.score > 0)
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 5)
+    .map(s => s.heading);
+
+  if (scored.length === 0) {
+    const hasMeta = promptWords.some(w =>
+      !STOPWORDS.has(w) && (descText.includes(w) || (meta.tags || []).join(" ").toLowerCase().includes(w))
+    );
+    if (hasMeta) return ["(matches skill description)"];
+  }
+
+  return scored;
+}
+
+// ─── Next tools mapping ───────────────────────────────────────────
+
+function skillNextTools(skillName) {
+  const suggestions = [];
+  const base = skillName.replace(/^pix-/, "").replace(/-/g, "_");
+  suggestions.push(`pix_${base}`);
+  if (skillName === "pix-styleguide" || skillName === "pix-architect") {
+    suggestions.push("pix_scaffold");
+  }
+  suggestions.push("pix_check");
+  suggestions.push("pix_search");
+  if (skillName !== "pix-frontend-vanilla-reactive") suggestions.push("pix_component");
+  return suggestions;
+}
+
+// ─── Tool registration ────────────────────────────────────────────
+
+/**
+ * Register the pix routing tool.
+ * Routes a user prompt to the correct pix skill based on keyword scoring.
+ * Returns structured JSON with route, confidence, sections, next_tools.
+ */
+export function registerAiTool() {
+  registerTool({
+    name: "pix",
+    description: "Route a prompt to the correct pix skill. Returns structured routing with relevant sections.",
+    zodSchema: GalaxySchema,
+    inputSchema: { type: "object", properties: { prompt: { type: "string", description: "User's question" } }, required: ["prompt"] },
+    handler: async (args) => {
+      const allSkills = getSkillNames();
+      const skills = allSkills.filter((skillName) => skillName !== "pix");
+      const prompt = (args.prompt || "").trim();
+      if (!prompt) {
+        return { content: [{ type: "text", text: JSON.stringify({ route: "none", confidence: 0, sections: [], next_tools: ["pix_search"], skills_available: allSkills }) }] };
+      }
+
+      const promptLower = prompt.toLowerCase();
+      const promptWords = [...new Set(promptLower.split(/[^a-z0-9]+/).filter(w => w.length > 1))];
+
+      // Detect framework from args
+      let detectedFramework = args.framework;
+      if (!detectedFramework && args.path) {
+        try {
+          const profile = detectProject(args.path);
+          detectedFramework = profile.framework;
+        } catch { /* ignore */ }
+      }
+
+      const detectedSkillName = detectedFramework
+        ? getFrameworkSuggestion(detectedFramework).skillName
+        : null;
+
+      // Score each skill
+      const skillRawScores = [];
+
+      for (const skillName of skills) {
+        const content = readSkill(skillName);
+        if (!content) continue;
+
+        const sections = extractSections(content);
+        const meta = getSkillMetadata(skillName);
+        const rawScore = scoreSkill(sections, meta, promptWords, skillName);
+
+        let finalScore = rawScore;
+
+        if (detectedFramework) {
+          if (skillName === detectedSkillName) {
+            // A detected/explicit framework is a hard routing signal. Keep the
+            // framework skill visible even for generic prompts like "button".
+            finalScore = Math.max(rawScore * 2.0, 20);
+          } else if (["pix-styleguide", "pix-frontend", "pix-platform-web", "pix-architect", "pix-ui-design-system"].includes(skillName)) {
+            finalScore *= 1.15;
+          } else {
+            finalScore *= 0.85;
+          }
+        }
+
+        if (finalScore <= 0) continue;
+
+        skillRawScores.push({ skill: skillName, rawScore: finalScore, meta });
+      }
+
+      // Normalize and sort
+      const maxRaw = Math.max(...skillRawScores.map(s => s.rawScore), 0);
+      const skillScores = skillRawScores.map(({ skill, rawScore }) => ({
+        skill,
+        confidence: maxRaw > 0 ? Math.min(1, rawScore / maxRaw) : 0,
+        sections: extractTopSections(skill, promptWords),
+        next_tools: skillNextTools(skill),
+      }));
+
+      skillScores.sort((a, b) => b.confidence - a.confidence);
+
+      const top = skillScores.slice(0, 6);
+      const primaryRoute = top[0] ?? { skill: "none", confidence: 0, sections: [], next_tools: ["pix_search"] };
+
+      const result = {
+        route: primaryRoute.skill,
+        confidence: Math.round(primaryRoute.confidence * 100) / 100,
+        sections: primaryRoute.sections,
+        next_tools: [...new Set(top.flatMap(t => t.next_tools))],
+        alternatives: top.slice(1).map(t => ({
+          route: t.skill,
+          confidence: Math.round(t.confidence * 100) / 100,
+          sections: t.sections.slice(0, 3),
+        })),
+        skills_available: allSkills,
+        summary: top.length > 0
+          ? `Top match: ${primaryRoute.skill} (${Math.round(primaryRoute.confidence * 100)}%). Relevant sections: ${primaryRoute.sections.join(", ")}. Try: ${[...new Set(top.flatMap(t => t.next_tools))].join(", ")}.`
+          : `No matching skill for "${prompt}". Try pix_search for full-text search.`,
+      };
+
+      return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
+    },
+  });
+}

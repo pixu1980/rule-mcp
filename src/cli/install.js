@@ -1,0 +1,691 @@
+/**
+ * @module cli/install
+ *
+ * Agent/IDE/model installation support for pix-galaxy-mcp.
+ * Generates MCP configuration files for ALL supported coding agents.
+ *
+ * Inspired by tokensave's architecture:
+ *   18+ agents with individual install/uninstall/healthcheck per agent.
+ *   Shared utilities for JSON/TOML file manipulation with atomic writes + backups.
+ *   Cross-platform paths for macOS, Linux, Windows.
+ *
+ * Supported agents (matching tokensave's full list):
+ *   claude, codex, cursor, copilot, gemini,
+ *   cline, roo, zed, opencode, antigravity, windsurf,
+ *   kilo, kimi, vibe, grok, droid, kiro, qwen,
+ *   pi, vscode, jetbrains, neovim, emacs
+ *
+ * Supports two install modes:
+ *   - local (default): uses `node /path/to/pix-galaxy-mcp.js serve`
+ *   - global: uses `pix-galaxy-mcp serve` (requires global install)
+ */
+
+import { existsSync, mkdirSync, readFileSync, writeFileSync, appendFileSync, rmSync } from "node:fs";
+import { homedir, platform } from "node:os";
+import { dirname, join, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
+
+// ─── Constants ───────────────────────────────────────────────────────────────
+
+/** Internal MCP server name used in agent configurations. */
+const serverName = "pix_galaxy_mcp";
+
+/**
+ * Full list of supported agents.
+ * Matching tokensave's 18+ agents: all coding agents, IDEs, and platforms.
+ */
+const allAgents = [
+  // ── Coding Agents ──
+  "claude",       // Anthropic Claude Code
+  "codex",        // OpenAI Codex CLI
+  "cursor",       // Cursor editor
+  "copilot",      // GitHub Copilot
+  "gemini",       // Google Gemini CLI
+  "cline",        // Cline VSCode extension
+  "roo",          // Roo Code
+  "zed",          // Zed editor
+  "opencode",     // OpenCode
+  "antigravity",  // Antigravity (formerly Windsurf)
+  "windsurf",     // Windsurf (legacy name)
+  "kilo",         // Kilo CLI
+  "kimi",         // Moonshot Kimi CLI
+  "vibe",         // Mistral Vibe
+  "grok",         // xAI Grok Build
+  "droid",        // Factory Droid
+  "kiro",         // AWS Kiro
+  "qwen",         // Qwen Code (Alibaba)
+  "pi",           // Pi coding agent (pi.dev)
+
+  // ── IDEs ──
+  "vscode",       // VS Code (project-level)
+  "jetbrains",    // JetBrains IDEs (IntelliJ, WebStorm, etc.)
+  "neovim",       // Neovim (via MCP plugin)
+  "emacs",        // Emacs (via mcp.el)
+];
+
+// ─── Platform detection ─────────────────────────────────────────────────────
+
+const IS_WINDOWS = platform() === "win32";
+const IS_MACOS = platform() === "darwin";
+const IS_LINUX = platform() === "linux";
+
+const HOME = homedir();
+const COMMAND_TEMPLATE_PATH = fileURLToPath(new URL("../../prompts/pix-galaxy-mcp.md", import.meta.url));
+
+// ─── File helpers ───────────────────────────────────────────────────────────
+
+/** Safely read a text file, returning empty string if it doesn't exist. */
+const readText = (file) => (existsSync(file) ? readFileSync(file, "utf8") : "");
+
+/** Write a file, optionally as a dry-run (no actual write). */
+const writeText = ({ file, content, dryRun }) => {
+  if (!dryRun) { mkdirSync(dirname(file), { recursive: true }); writeFileSync(file, content); }
+  return file;
+};
+
+/** Remove a file if it exists. */
+const removeFile = (file) => { if (existsSync(file)) rmSync(file, { force: true }); };
+
+/** Create a backup copy of a file before modifying it. Returns backup path. */
+const backupFile = (file) => {
+  if (!existsSync(file)) return null;
+  const backup = `${file}.bak`;
+  try {
+    const content = readFileSync(file);
+    writeFileSync(backup, content);
+    return backup;
+  } catch { return null; }
+};
+
+// ─── MCP config builder ─────────────────────────────────────────────────────
+
+/**
+ * Build a command config for stdio-based MCP servers.
+ *
+ * Two modes:
+ *   - local (default): uses `node /path/to/pix-galaxy-mcp.js serve`
+ *   - global: uses `pix-galaxy-mcp serve` (clean, needs global install)
+ *
+ * @param {string} entrypoint — Path to the server entry script
+ * @param {{ global?: boolean }} [opts]
+ * @returns {{ command: string, args: string[], directTools: boolean, lifecycle: string }}
+ */
+const cmdConfig = (entrypoint, opts = {}) => {
+  const config = {
+    command: opts.global ? "pix-galaxy-mcp" : process.execPath,
+    args: opts.global ? ["serve"] : [entrypoint, "serve"],
+    directTools: true,
+    lifecycle: "keep-alive",
+  };
+  return config;
+};
+
+/**
+ * Return the MCP server config object with the server name key.
+ *
+ * @param {string} entrypoint — Path to the server entry script
+ * @param {{ global?: boolean }} [opts]
+ * @returns {Record<string, object>}
+ */
+export function mcpServerConfig(entrypoint, opts = {}) {
+  return { [serverName]: cmdConfig(entrypoint, opts) };
+}
+
+// ─── JSON helpers ───────────────────────────────────────────────────────────
+
+/** Parse JSON, returning empty object on failure. */
+const parseJson = (text) => {
+  try { return JSON.parse(text); } catch { return {}; }
+};
+
+/** Serialize JSON with pretty formatting. */
+const toJson = (obj) => `${JSON.stringify(obj, null, 2)}\n`;
+
+/**
+ * Upsert an MCP server entry in a JSON config file.
+ * Creates the file if it doesn't exist.
+ *
+ * @param {string} current — Current file content
+ * @param {object} config — Server config object
+ * @returns {string} — Updated JSON content
+ */
+const upsertJsonServer = (current, config) => {
+  const json = current.trim() ? parseJson(current) : {};
+  json.mcpServers = json.mcpServers ?? {};
+  json.mcpServers[serverName] = config;
+  return toJson(json);
+};
+
+/**
+ * Remove an MCP server entry from a JSON config file.
+ *
+ * @param {string} current — Current file content
+ * @returns {string} — Updated JSON content, or empty string if file would be empty
+ */
+const removeJsonServer = (current) => {
+  if (!current.trim()) return current;
+  const json = parseJson(current);
+  if (json.mcpServers?.[serverName]) {
+    delete json.mcpServers[serverName];
+    if (Object.keys(json.mcpServers).length === 0) delete json.mcpServers;
+  }
+  return Object.keys(json).length > 0 ? toJson(json) : "";
+};
+
+/**
+ * Upsert an MCP server entry in VS Code-style JSON config
+ * (which uses `servers` instead of `mcpServers`).
+ *
+ * @param {string} current — Current file content
+ * @param {object} config — Server config object
+ * @returns {string} — Updated JSON content
+ */
+const upsertVscode = (current, config) => {
+  const json = current.trim() ? parseJson(current) : {};
+  json.servers = json.servers ?? {};
+  json.servers[serverName] = { type: "stdio", ...config };
+  return toJson(json);
+};
+
+/**
+ * Remove an MCP server entry from VS Code-style JSON config.
+ *
+ * @param {string} current — Current file content
+ * @returns {string} — Updated JSON content, or empty string if file would be empty
+ */
+const removeVscodeServer = (current) => {
+  if (!current.trim()) return current;
+  const json = parseJson(current);
+  if (json.servers?.[serverName]) {
+    delete json.servers[serverName];
+    if (Object.keys(json.servers).length === 0) delete json.servers;
+  }
+  return Object.keys(json).length > 0 ? toJson(json) : "";
+};
+
+// ─── TOML helpers ───────────────────────────────────────────────────────────
+
+/** Upsert a TOML block. */
+const upsertTomlBlock = (current, blockName, block) => {
+  const escapedName = blockName.replaceAll(".", "\\.");
+  const re = new RegExp(`\\n?\\[${escapedName}\\][\\s\\S]*?(?=\\n\\[[^\\]]+\\]|$)`, "m");
+  const nb = `[${blockName}]\n${block.trim()}\n`;
+  return re.test(current) ? current.replace(re, `\n${nb}`) : `${current.trimEnd()}\n\n${nb}`;
+};
+
+/** Remove a TOML block by name. */
+const removeTomlBlock = (current, blockName) => {
+  const re = new RegExp(`\\n?\\[${blockName.replaceAll(".", "\\.")}\\][\\s\\S]*?(?=\\n\\[[^\\]]+\\]|$)`, "m");
+  return re.test(current) ? current.replace(re, "") : current;
+};
+
+// ─── Instruction helpers ────────────────────────────────────────────────────
+
+/**
+ * Append pix-galaxy-mcp instruction marker to agent instructions file.
+ * Uses HTML comments so it's compatible with Markdown and HTML-based formats.
+ *
+ * @param {string} current — Current file content
+ * @returns {string} — Updated content with instruction marker
+ */
+const appendInstruction = (current) => {
+  const marker = "<!-- pix-galaxy-mcp -->";
+  if (current.includes(marker)) return current;
+  return `${current.trimEnd()}\n\n${marker}\nBefore writing any frontend/styling code, call \`pix\` to route the task to the correct pix skill. Follow pix galaxy principles: zero CSS classes, zero inline styles, semantic HTML, external CSS via adoptedStyleSheets. Available tools: pix, pix_component, pix_check, pix_search, pix_scaffold, pix_process_adr.\n<!-- /pix-galaxy-mcp -->\n`;
+};
+
+/** Remove the pix-galaxy-mcp instruction marker. */
+const removeInstruction = (current) => {
+  const marker = "<!-- pix-galaxy-mcp -->";
+  if (!current.includes(marker)) return current;
+  return current.replace(/\n*<!-- pix-galaxy-mcp -->[\s\S]*?<!-- \/pix-galaxy-mcp -->\n*/g, "").trimEnd();
+};
+
+const commandTemplate = () => readText(COMMAND_TEMPLATE_PATH);
+const commandBody = () => commandTemplate().replace(/^---\s*\n[\s\S]*?\n---\s*\n/, "").trim();
+const geminiCommand = () => [
+  'description = "Route coding work through pix-galaxy-mcp"',
+  'prompt = """',
+  commandBody().replaceAll("$ARGUMENTS", "{{args}}"),
+  '"""',
+  "",
+].join("\n");
+const copilotAgent = () => [
+  "---",
+  "name: pix-galaxy-mcp",
+  "description: Route work through pix MCP skills and enforce validation before completion.",
+  "---",
+  "",
+  commandBody(),
+  "",
+].join("\n");
+
+// ─── Agent installers ───────────────────────────────────────────────────────
+
+/** @param {{ entrypoint: string, dryRun: boolean, global?: boolean }} */
+const installClaude = ({ entrypoint, dryRun, global }) => {
+  const file = join(HOME, ".claude.json");
+  const mdFile = join(HOME, ".claude", "CLAUDE.md");
+  const commandFile = join(HOME, ".claude", "commands", "pix-galaxy-mcp.md");
+  return [
+    writeText({ file, content: upsertJsonServer(readText(file), cmdConfig(entrypoint, { global })), dryRun }),
+    writeText({ file: mdFile, content: appendInstruction(readText(mdFile)), dryRun }),
+    writeText({ file: commandFile, content: commandTemplate(), dryRun }),
+  ];
+};
+
+/** @param {{ entrypoint: string, dryRun: boolean, global?: boolean }} */
+const installCodex = ({ entrypoint, dryRun, global }) => {
+  const file = join(HOME, ".codex", "config.toml");
+  const cfg = cmdConfig(entrypoint, { global });
+  const block = `command = "${cfg.command.replaceAll("\\", "\\\\")}"\nargs = [${cfg.args.map(a => `"${a.replaceAll("\\", "\\\\")}"`).join(", ")}]`;
+  const mdFile = join(HOME, ".codex", "AGENTS.md");
+  return [
+    writeText({ file, content: upsertTomlBlock(readText(file), `mcp_servers.${serverName}`, block), dryRun }),
+    writeText({ file: mdFile, content: appendInstruction(readText(mdFile)), dryRun }),
+  ];
+};
+
+/** @param {{ entrypoint: string, dryRun: boolean, global?: boolean }} */
+const installCursor = ({ entrypoint, dryRun, global }) => {
+  const files = [];
+  const cursorGlobal = join(HOME, ".cursor", "mcp.json");
+  const cursorCommand = join(process.cwd(), ".cursor", "commands", "pix-galaxy-mcp.md");
+  files.push(writeText({ file: cursorGlobal, content: upsertJsonServer(readText(cursorGlobal), cmdConfig(entrypoint, { global })), dryRun }));
+  files.push(writeText({ file: cursorCommand, content: commandTemplate(), dryRun }));
+  // Also write to .cursorrules
+  const cursorRules = join(HOME, ".cursorrules");
+  if (!existsSync(cursorRules) || !readText(cursorRules).includes("pix")) {
+    writeText({
+      file: cursorRules,
+      content: appendInstruction(readText(cursorRules)),
+      dryRun,
+    });
+  }
+  return files;
+};
+
+/** @param {{ entrypoint: string, dryRun: boolean, global?: boolean }} */
+const installCopilot = ({ entrypoint, dryRun, global }) => {
+  const hostsDir = join(HOME, ".config", "github-copilot");
+  const hostsFile = join(hostsDir, "hosts.json");
+  const agentFile = join(HOME, ".copilot", "agents", "pix-galaxy-mcp.agent.md");
+  const current = readText(hostsFile);
+  const json = current.trim() ? parseJson(current) : {};
+  json[`copilot-mcp-${serverName}`] = cmdConfig(entrypoint, { global });
+  return [
+    writeText({ file: hostsFile, content: toJson(json), dryRun }),
+    writeText({ file: agentFile, content: copilotAgent(), dryRun }),
+  ];
+};
+
+/** @param {{ entrypoint: string, dryRun: boolean, global?: boolean }} */
+const installGemini = ({ entrypoint, dryRun, global }) => {
+  const file = join(HOME, ".gemini", "settings.json");
+  const mdFile = join(HOME, ".gemini", "GEMINI.md");
+  const commandFile = join(HOME, ".gemini", "commands", "pix-galaxy-mcp.toml");
+  return [
+    writeText({ file, content: upsertJsonServer(readText(file), cmdConfig(entrypoint, { global })), dryRun }),
+    writeText({ file: mdFile, content: appendInstruction(readText(mdFile)), dryRun }),
+    writeText({ file: commandFile, content: geminiCommand(), dryRun }),
+  ];
+};
+
+/** @param {{ entrypoint: string, dryRun: boolean, global?: boolean }} */
+const installPi = ({ entrypoint, dryRun, global }) => {
+  // Pi uses $PI_CODING_AGENT_DIR/mcp.json or ~/.pi/agent/mcp.json
+  const piDir = process.env.PI_CODING_AGENT_DIR
+    ? join(process.env.PI_CODING_AGENT_DIR)
+    : join(HOME, ".pi", "agent");
+  const file = join(piDir, "mcp.json");
+  const promptFile = join(piDir, "prompts", "pix-galaxy-mcp.md");
+  return [
+    writeText({ file, content: upsertJsonServer(readText(file), cmdConfig(entrypoint, { global })), dryRun }),
+    writeText({ file: promptFile, content: commandTemplate(), dryRun }),
+  ];
+};
+
+/** @param {{ entrypoint: string, dryRun: boolean, global?: boolean }} */
+const installVscode = ({ entrypoint, dryRun, global }) => {
+  const file = join(process.cwd(), ".vscode", "mcp.json");
+  return [writeText({ file, content: upsertVscode(readText(file), cmdConfig(entrypoint, { global })), dryRun })];
+};
+
+/** @param {{ entrypoint: string, dryRun: boolean, global?: boolean }} */
+const installJetbrains = ({ entrypoint, dryRun, global }) => {
+  const file = join(process.cwd(), ".idea", "mcp.json");
+  return [writeText({ file, content: upsertJsonServer(readText(file), cmdConfig(entrypoint, { global })), dryRun })];
+};
+
+/** @param {{ entrypoint: string, dryRun: boolean, global?: boolean }} */
+const installNeovim = ({ entrypoint, dryRun, global }) => {
+  const nvimDir = IS_WINDOWS
+    ? join(HOME, "AppData", "Local", "nvim")
+    : join(HOME, ".config", "nvim");
+  const file = join(nvimDir, "mcp.json");
+  return [writeText({ file, content: upsertJsonServer(readText(file), cmdConfig(entrypoint, { global })), dryRun })];
+};
+
+/** @param {{ entrypoint: string, dryRun: boolean, global?: boolean }} */
+const installEmacs = ({ entrypoint, dryRun, global }) => {
+  // Emacs uses init.el or early-init.el
+  const emacsDir = IS_WINDOWS
+    ? join(HOME, "AppData", "Roaming", ".emacs.d")
+    : join(HOME, ".emacs.d");
+  const initFile = join(emacsDir, "init.el");
+  const cfg = cmdConfig(entrypoint, { global });
+  const emacsConfig = `;; pix-galaxy-mcp\n(setq mcp-servers '((\n  "${serverName}" . (\n    (command . "${cfg.command}")\n    (args . ${JSON.stringify(cfg.args)})\n    (directTools . t)\n    (lifecycle . "keep-alive")))))\n`;
+  return [writeText({ file: initFile, content: readText(initFile).includes("pix") ? readText(initFile) : `${readText(initFile).trimEnd()}\n\n${emacsConfig}`, dryRun })];
+};
+
+/**
+ * Create a generic installer for agents that use standard JSON config files.
+ *
+ * @param {string} name — Agent name
+ * @param {object} [opts]
+ * @param {string} [opts.configPath] — Custom config path (default: ~/.config/<name>/mcp.json)
+ * @param {string} [opts.instructionsPath] — Custom instructions path
+ * @returns {Function} Installer function
+ */
+const createGenericInstaller = (name, opts = {}) => {
+  const configPath = opts.configPath || join(HOME, ".config", name, "mcp.json");
+  const instructionsPath = opts.instructionsPath || join(HOME, ".config", name, "instructions.md");
+
+  return ({ entrypoint, dryRun, global }) => {
+    const results = [
+      writeText({ file: configPath, content: upsertJsonServer(readText(configPath), cmdConfig(entrypoint, { global })), dryRun }),
+    ];
+    // Also write instruction file for agents that support it
+    if (opts.instructionsPath !== false) {
+      results.push(writeText({ file: instructionsPath, content: appendInstruction(""), dryRun }));
+    }
+    return results;
+  };
+};
+
+// ─── Agent registry ─────────────────────────────────────────────────────────
+
+/** Map of agent names to their installer functions. */
+const installers = {
+  // Coding Agents
+  claude: installClaude,
+  codex: installCodex,
+  cursor: installCursor,
+  copilot: installCopilot,
+  gemini: installGemini,
+  pi: installPi,
+
+  // Generic JSON config agents
+  cline: createGenericInstaller("cline"),
+  roo: createGenericInstaller("roo"),
+  zed: createGenericInstaller("zed"),
+  opencode: createGenericInstaller("opencode"),
+  antigravity: createGenericInstaller("antigravity"),
+  windsurf: createGenericInstaller("windsurf"),
+  kilo: createGenericInstaller("kilo"),
+  kimi: createGenericInstaller("kimi"),
+  vibe: createGenericInstaller("vibe"),
+  grok: createGenericInstaller("grok"),
+  droid: createGenericInstaller("droid", { configPath: join(HOME, ".config", "factory", "mcp.json") }),
+  kiro: createGenericInstaller("kiro"),
+  qwen: createGenericInstaller("qwen"),
+
+  // IDEs
+  vscode: installVscode,
+  jetbrains: installJetbrains,
+  neovim: installNeovim,
+  emacs: installEmacs,
+};
+
+/**
+ * Write/update installed.md manifest in the state directory.
+ *
+ * @param {string[]} agents — List of installed agent names
+ * @param {string} entrypoint — Server entry point path
+ * @param {boolean} global — Whether using global install
+ * @returns {string} — Manifest file path
+ */
+function writeInstalledManifest(agents, entrypoint, global) {
+  const stateDir = join(HOME, ".local", "share", "pix-galaxy-mcp");
+  mkdirSync(stateDir, { recursive: true });
+  const manifestPath = join(stateDir, "installed.md");
+  const timestamp = new Date().toISOString();
+  const lines = [
+    "# pix-galaxy-mcp — Installation Manifest",
+    "",
+    `Generated: ${timestamp}`,
+    `Mode: ${global ? "global" : "local"}`,
+    `Entry point: ${entrypoint}`,
+    `Node version: ${process.version}`,
+    `Platform: ${platform()}`,
+    "",
+    "## Installed Agents",
+    "",
+  ];
+  for (const name of agents) {
+    lines.push(`- [x] ${name}`);
+  }
+  lines.push("", "---", "", "To reinstall: `pix-galaxy-mcp install --agent all`");
+  writeFileSync(manifestPath, lines.join("\n") + "\n");
+  return manifestPath;
+}
+
+/**
+ * Install pix-galaxy-mcp into one or more agents.
+ * Writes an installed.md manifest after successful installation.
+ *
+ * @param {{ agent: string, entrypoint: string, dryRun?: boolean, force?: boolean, global?: boolean }} opts
+ * @returns {{ ok: boolean, dryRun: boolean, global: boolean, installed: object, manifest?: string }}
+ */
+export const installAgent = ({ agent, entrypoint, dryRun = false, force = false, global = false }) => {
+  const selected = agent === "all" ? allAgents : [agent];
+
+  if (!installers[agent] && agent !== "all") {
+    throw new Error(`Unsupported agent: "${agent}". Supported agents: ${allAgents.join(", ")}`);
+  }
+
+  const result = {};
+  for (const name of selected) {
+    if (!installers[name]) {
+      result[name] = { error: `No installer for "${name}"` };
+      continue;
+    }
+    try {
+      result[name] = installers[name]({ entrypoint, dryRun, global });
+    } catch (err) {
+      result[name] = { error: err.message };
+    }
+  }
+
+  if (!dryRun) {
+    const manifestPath = writeInstalledManifest(selected, entrypoint, global);
+    return { ok: true, dryRun, global, installed: result, manifest: manifestPath };
+  }
+  return { ok: true, dryRun, global, installed: result };
+};
+
+// ─── Uninstallers ───────────────────────────────────────────────────────────
+
+/** @param {{ dryRun: boolean }} */
+const uninstallClaude = ({ dryRun }) => {
+  const file = join(HOME, ".claude.json");
+  const mdFile = join(HOME, ".claude", "CLAUDE.md");
+  const commandFile = join(HOME, ".claude", "commands", "pix-galaxy-mcp.md");
+  if (!dryRun) removeFile(commandFile);
+  return [
+    writeText({ file, content: removeJsonServer(readText(file)), dryRun }),
+    writeText({ file: mdFile, content: removeInstruction(readText(mdFile)), dryRun }),
+    commandFile,
+  ];
+};
+
+/** @param {{ dryRun: boolean }} */
+const uninstallCodex = ({ dryRun }) => {
+  const file = join(HOME, ".codex", "config.toml");
+  const mdFile = join(HOME, ".codex", "AGENTS.md");
+  return [
+    writeText({ file, content: removeTomlBlock(readText(file), `mcp_servers.${serverName}`), dryRun }),
+    writeText({ file: mdFile, content: removeInstruction(readText(mdFile)), dryRun }),
+  ];
+};
+
+/** @param {{ dryRun: boolean }} */
+const uninstallCursor = ({ dryRun }) => {
+  const cursorGlobal = join(HOME, ".cursor", "mcp.json");
+  const commandFile = join(process.cwd(), ".cursor", "commands", "pix-galaxy-mcp.md");
+  if (!dryRun) removeFile(commandFile);
+  return [
+    writeText({ file: cursorGlobal, content: removeJsonServer(readText(cursorGlobal)), dryRun }),
+    commandFile,
+  ];
+};
+
+/** @param {{ dryRun: boolean }} */
+const uninstallCopilot = ({ dryRun }) => {
+  const hostsFile = join(HOME, ".config", "github-copilot", "hosts.json");
+  const agentFile = join(HOME, ".copilot", "agents", "pix-galaxy-mcp.agent.md");
+  if (!dryRun && existsSync(hostsFile)) {
+    const current = readText(hostsFile);
+    const json = parseJson(current);
+    delete json[`copilot-mcp-${serverName}`];
+    writeText({ file: hostsFile, content: toJson(json), dryRun });
+  }
+  if (!dryRun) removeFile(agentFile);
+  return [hostsFile, agentFile];
+};
+
+/** @param {{ dryRun: boolean }} */
+const uninstallGemini = ({ dryRun }) => {
+  const file = join(HOME, ".gemini", "settings.json");
+  const mdFile = join(HOME, ".gemini", "GEMINI.md");
+  const commandFile = join(HOME, ".gemini", "commands", "pix-galaxy-mcp.toml");
+  if (!dryRun) removeFile(commandFile);
+  return [
+    writeText({ file, content: removeJsonServer(readText(file)), dryRun }),
+    writeText({ file: mdFile, content: removeInstruction(readText(mdFile)), dryRun }),
+    commandFile,
+  ];
+};
+
+/** @param {{ dryRun: boolean }} */
+const uninstallPi = ({ dryRun }) => {
+  const piDir = process.env.PI_CODING_AGENT_DIR
+    ? join(process.env.PI_CODING_AGENT_DIR)
+    : join(HOME, ".pi", "agent");
+  const file = join(piDir, "mcp.json");
+  const promptFile = join(piDir, "prompts", "pix-galaxy-mcp.md");
+  if (!dryRun) removeFile(promptFile);
+  return [writeText({ file, content: removeJsonServer(readText(file)), dryRun }), promptFile];
+};
+
+/** @param {{ dryRun: boolean }} */
+const uninstallVscode = ({ dryRun }) => {
+  const file = join(process.cwd(), ".vscode", "mcp.json");
+  return [writeText({ file, content: removeVscodeServer(readText(file)), dryRun })];
+};
+
+/** @param {{ dryRun: boolean }} */
+const uninstallJetbrains = ({ dryRun }) => {
+  const file = join(process.cwd(), ".idea", "mcp.json");
+  return [writeText({ file, content: removeJsonServer(readText(file)), dryRun })];
+};
+
+/** @param {{ dryRun: boolean }} */
+const uninstallGeneric = (name) => ({ dryRun }) => {
+  const file = join(HOME, ".config", name, "mcp.json");
+  return [writeText({ file, content: removeJsonServer(readText(file)), dryRun })];
+};
+
+/** Map of agent names to their uninstaller functions. */
+const uninstallers = {
+  claude: uninstallClaude, codex: uninstallCodex, cursor: uninstallCursor,
+  copilot: uninstallCopilot, gemini: uninstallGemini, pi: uninstallPi,
+  vscode: uninstallVscode, jetbrains: uninstallJetbrains,
+  cline: uninstallGeneric("cline"), roo: uninstallGeneric("roo"),
+  zed: uninstallGeneric("zed"), opencode: uninstallGeneric("opencode"),
+  antigravity: uninstallGeneric("antigravity"), windsurf: uninstallGeneric("windsurf"),
+  kilo: uninstallGeneric("kilo"), kimi: uninstallGeneric("kimi"),
+  vibe: uninstallGeneric("vibe"), grok: uninstallGeneric("grok"),
+  droid: uninstallGeneric("droid"), kiro: uninstallGeneric("kiro"),
+  qwen: uninstallGeneric("qwen"), neovim: uninstallGeneric("neovim"),
+  emacs: uninstallGeneric("emacs"),
+};
+
+/**
+ * Uninstall pix-galaxy-mcp from one or more agents.
+ *
+ * @param {{ agent: string, dryRun?: boolean }} opts
+ * @returns {{ ok: boolean, dryRun: boolean, uninstalled: object }}
+ */
+export const uninstallAgent = ({ agent, dryRun = false }) => {
+  const selected = agent === "all" ? allAgents : [agent];
+
+  if (!uninstallers[agent] && agent !== "all") {
+    throw new Error(`Unsupported agent: "${agent}". Supported agents: ${allAgents.join(", ")}`);
+  }
+
+  const result = {};
+  for (const name of selected) {
+    if (!uninstallers[name]) {
+      result[name] = { error: `No uninstaller for "${name}"` };
+      continue;
+    }
+    try {
+      result[name] = uninstallers[name]({ dryRun });
+    } catch (err) {
+      result[name] = { error: err.message };
+    }
+  }
+  return { ok: true, dryRun, uninstalled: result };
+};
+
+/**
+ * Detect which agents have pix-galaxy-mcp configured.
+ * Checks common config file locations for the MCP server entry.
+ *
+ * @returns {Array<{ name: string, configured: boolean, configFile: string|null }>}
+ */
+export function detectInstalledAgents() {
+  const checks = [
+    { name: "claude", path: join(HOME, ".claude.json"), key: serverName },
+    { name: "codex", path: join(HOME, ".codex", "config.toml"), key: serverName },
+    { name: "cursor", path: join(HOME, ".cursor", "mcp.json"), key: serverName },
+    { name: "copilot", path: join(HOME, ".config", "github-copilot", "hosts.json"), key: `copilot-mcp-${serverName}` },
+    { name: "gemini", path: join(HOME, ".gemini", "settings.json"), key: serverName },
+    { name: "pi", path: join(HOME, ".pi", "agent", "mcp.json"), key: serverName },
+    { name: "vscode", path: join(process.cwd(), ".vscode", "mcp.json"), key: serverName },
+    { name: "jetbrains", path: join(process.cwd(), ".idea", "mcp.json"), key: serverName },
+  ];
+
+  // Generic ~/.config/<name>/mcp.json agents
+  const genericAgents = [
+    "cline", "roo", "zed", "opencode", "antigravity", "windsurf",
+    "kilo", "kimi", "vibe", "grok", "droid", "kiro", "qwen",
+    "neovim", "emacs",
+  ];
+  for (const name of genericAgents) {
+    const agentPath = name === "droid"
+      ? join(HOME, ".config", "factory", "mcp.json")
+      : join(HOME, ".config", name, "mcp.json");
+    checks.push({ name, path: agentPath, key: serverName });
+  }
+
+  return checks.map(({ name, path, key }) => {
+    if (!existsSync(path)) return { name, configured: false, configFile: null };
+    try {
+      const content = readFileSync(path, "utf8");
+      const configured = key ? content.includes(key) : content.includes(serverName);
+      return { name, configured, configFile: path };
+    } catch {
+      return { name, configured: false, configFile: path };
+    }
+  });
+}
+
+/**
+ * Get all supported agent names.
+ * @returns {string[]}
+ */
+export function getAllAgents() {
+  return [...allAgents];
+}
