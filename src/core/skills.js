@@ -196,9 +196,9 @@ export function parseSkillFrontmatter(content) {
     const descInline = line.match(/^description:\s*(.+)$/);
     if (descInline) {
       const afterColon = descInline[1];
-      if (afterColon === "|" || afterColon === ">") {
+      if (afterColon.startsWith("|") || afterColon.startsWith(">")) {
         // Literal or folded block scalar — collect indented continuation lines
-        const isFolded = afterColon === ">";
+        const isFolded = afterColon.startsWith(">");
         const parts = [];
         for (let j = i + 1; j < lines.length; j++) {
           const nextLine = lines[j];

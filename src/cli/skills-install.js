@@ -102,6 +102,32 @@ function copySkill(source, targetDir, name) {
 }
 
 /**
+ * Install skills into ~/.claude/skills/ for native Claude auto-discovery.
+ * Claude Code reads SKILL.md files from ~/.claude/skills/<name>/ and
+ * matches them automatically based on description keywords.
+ * Non-destructive: skips already-installed skills.
+ */
+function installNativeSkills(skills) {
+  const claudeDir = join(homedir(), ".claude", "skills");
+  let count = 0;
+  try {
+    mkdirSync(claudeDir, { recursive: true });
+    for (const skill of skills) {
+      const dest = join(claudeDir, skill.name);
+      if (!existsSync(dest)) {
+        copySkill(skill.source, join(homedir(), ".claude"), skill.name);
+        count++;
+      }
+    }
+    if (count > 0) {
+      process.stdout.write(`Added ${count} skills to ~/.claude/skills/ for native Claude auto-discovery.\n`);
+    }
+  } catch {
+    // Silently skip — .claude/skills/ is optional
+  }
+}
+
+/**
  * Render a checkbox-style interactive list.
  * Returns indices of selected items.
  */
@@ -217,6 +243,7 @@ export async function skillsInstallCommand(opts = {}) {
       installed++;
     }
     process.stdout.write(`Installed ${installed}/${skills.length} skills to ${targetDir}\n`);
+    installNativeSkills(skills);
     return;
   }
 
@@ -252,6 +279,7 @@ export async function skillsInstallCommand(opts = {}) {
   }
 
   process.stdout.write(`\nInstalled ${installed}/${skills.length} skills to ${targetDir}\n`);
+  installNativeSkills(skills);
   process.stdout.write(`Run 'pix-galaxy-mcp skills reload' to load them.\n`);
 }
 

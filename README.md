@@ -10,7 +10,7 @@ Serves styleguides, component templates, framework best practices, and design sy
 
 ---
 
-> **Zero npm dependencies**: Pure Node.js, no build step, no registry deps.  
+> **Runtime deps:** `@modelcontextprotocol/sdk` + `zod` only. No build step, no external registry deps.  
 > **Local-first**: Everything runs on your machine, skills live in `~/.agents/skills/`.
 
 ---
@@ -41,7 +41,7 @@ Serves styleguides, component templates, framework best practices, and design sy
 
 ## What is it
 
-**pix-galaxy-mcp** is an MCP (Model Context Protocol) server that exposes 71 tools and 65+ resources to any MCP-compatible coding agent (Claude Code, Cursor, Cline, Roo Code, Copilot, Gemini CLI, Codex CLI, Windsurf, OpenCode, Pi, and many more).
+**pix-galaxy-mcp** is an MCP (Model Context Protocol) server that exposes **78 tools** (or **9 in strict mode** with `PIX_STRICT_MODE=1`) and **146 resources** to any MCP-compatible coding agent (Claude Code, Cursor, Cline, Roo Code, Copilot, Gemini CLI, Codex CLI, Windsurf, OpenCode, Pi, and many more).
 
 The server solves a concrete problem: **every AI agent needs precise instructions on how to write frontend code** — zero CSS classes, zero inline styles, semantic HTML, barrel file tree. pix-galaxy-mcp centralizes these rules into modular skills and makes them available as callable MCP tools.
 
@@ -68,9 +68,9 @@ Result: React component compliant with pix principles
 | Feature | Detail |
 |---------|--------|
 | **71 MCP Tools** | `pix` orchestrator, 65 skill tools, `pix_search`, `pix_component`, `pix_check`, `pix_scaffold`, `pix_architect`, `pix_detect`, `pix_process_adr`, `pix_process_handoff`, `pix_fix` |
-| **65+ MCP Resources** | `pix://skills`, `pix://templates`, `pix://project`, `pix://<skill-name>`, `pix://<skill-name>/summary`, `pix://a11y/*` |
+| **146 MCP Resources** | `pix://skills`, `pix://templates`, `pix://project`, `pix://<skill-name>`, `pix://<skill-name>/summary`, `pix://a11y/*` |
 | **5 MCP Prompts** | `pix-code-review`, `pix-generate-component`, `pix-a11y-test`, `pix-a11y-review`, `pix-architect-scaffold` |
-| **Zero npm dependencies** | Pure Node.js, no build step. Runtime deps: `@modelcontextprotocol/sdk` + `zod` only |
+| **Runtime deps only** | `@modelcontextprotocol/sdk` + `zod`. No build step needed. |
 | **Framework auto-detection** | Reads `package.json` and detects framework, TypeScript usage, build tool |
 | **Smart routing** | `pix` analyzes the prompt and routes to the correct skill with framework bias (×2 for detected framework) |
 | **BM25 full-text search** | Semantic search across all skills: section-level indexing, ranked results with snippets |
@@ -113,6 +113,29 @@ LLM tool request
 | Cursor | `.cursor/commands/pix-galaxy-mcp.md` | `/pix-galaxy-mcp <request>` |
 | GitHub Copilot CLI | `~/.copilot/agents/pix-galaxy-mcp.agent.md` | `/agent`, then select `pix-galaxy-mcp` |
 | Codex CLI | Global `pix` skill | Use skill routing; custom prompt commands vary by Codex version |
+
+---
+
+### Recommended tool filter
+
+To reduce token consumption and prevent the model from choosing irrelevant skill tools, use `allowedTools` in your `mcp.json`:
+
+```json
+{
+  "mcpServers": {
+    "pix_galaxy_mcp": {
+      "command": "node",
+      "args": ["path/to/pix-galaxy-mcp/bin/pix-galaxy-mcp.js", "serve"],
+      "directTools": true,
+      "allowedTools": ["pix_gateway", "pix_apply", "pix", "pix_search", "pix_check", "pix_detect", "pix_scaffold", "pix_component"]
+    }
+  }
+}
+```
+
+With this filter, the model sees only 8 core tools. For routing, evidence, validation, and writing — all through `pix_gateway` + `pix_apply` — this is sufficient for most workflows.
+
+For even stricter enforcement, set `PIX_STRICT_MODE=1` (via environment variable) which limits the surface to just 9 tools (gateway, apply, search, check, detect, scaffold, component, handoff, and the `pix` router).
 
 ---
 
