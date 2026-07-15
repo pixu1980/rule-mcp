@@ -5,7 +5,7 @@
   "description": "MCP server for the pix-* skill ecosystem. Serves styleguides, component templates, framework best practices, and design system patterns.",
   "repository": {
     "url": "https://github.com/pixu1980/pix-galaxy-mcp",
-    "source": "gitlab"
+    "source": "github"
   },
   "websiteUrl": "https://github.com/pixu1980/pix-galaxy-mcp",
   "version": "1.0.0",
@@ -13,7 +13,7 @@
     {
       "registryType": "npm",
       "identifier": "pix-galaxy-mcp",
-      "version": "0.1.0",
+      "version": "1.0.0",
       "packageArguments": [
         { "type": "positional", "valueHint": "serve" }
       ],

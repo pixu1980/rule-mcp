@@ -28,9 +28,9 @@ jobs:
       - name: Check syntax (all source files)
         run: find bin src -name "*.js" -exec node --check {} \;
       - name: ESLint
-        run: npx eslint bin/ src/ test/ --ext .js,.mjs --max-warnings 50 || echo "Lint warnings found"
+        run: pnpm exec eslint bin/ src/ test/ --ext .js,.mjs --max-warnings 50
       - name: Prettier check
-        run: npx prettier --check '**/*.{js,mjs,json,md}' --ignore-path .gitignore || echo "Format issues found"
+        run: pnpm exec prettier --check '**/*.{js,mjs,json,md}' --ignore-path .gitignore
 
   test:
     name: test (${{ matrix.os }})
@@ -53,8 +53,8 @@ jobs:
         run: node scripts/embed-skills.mjs
       - name: Run unit tests
         run: node test/smoke.mjs
-      - name: Run galaxy routing tests
-        run: node test/galaxy.test.mjs
+      - name: Run ai routing tests
+        run: node test/ai.test.mjs
       - name: Run detector tests
         run: node test/detector.test.mjs
       - name: Run framework routing tests
@@ -73,4 +73,4 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
       - name: pnpm audit (production)
-        run: pnpm audit --prod || echo "Audit found issues (may be false positives)"
+        run: pnpm audit --prod

@@ -32,9 +32,9 @@ jobs:
       - name: Embed skills
         run: node scripts/embed-skills.mjs
       - name: Run tests
-        run: node test/smoke.mjs && node test/galaxy.test.mjs && node test/detector.test.mjs && node test/framework-routing.test.mjs
+        run: node test/smoke.mjs && node test/ai.test.mjs && node test/detector.test.mjs && node test/framework-routing.test.mjs
       - name: Publish
-        run: npm publish --provenance --access public
+        run: pnpm publish --provenance --access public --no-git-checks
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
@@ -105,10 +105,9 @@ jobs:
         run: |
           VERSION=${GITHUB_REF_NAME#v}
           mkdir -p dist
-          npm pack --pack-destination dist/
+          pnpm pack --pack-destination dist/
           cp server.json dist/
           cp README.md dist/
-          cp LICENSE dist/
       - name: Upload release assets
         uses: softprops/action-gh-release@v2
         with:

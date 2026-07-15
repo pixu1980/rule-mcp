@@ -1,7 +1,7 @@
 {
   "name": "pix-galaxy-mcp",
   "version": "1.0.0",
-  "description": "MCP server for the pix-* skill ecosystem. Serves styleguides, component templates, framework best practices, and design system patterns. Zero npm dependencies.",
+  "description": "MCP server for the pix-* skill ecosystem. Serves styleguides, component templates, framework best practices, and design system patterns.",
   "type": "module",
   "license": "MIT",
   "private": false,
@@ -25,7 +25,7 @@
     "post-process:fix": "node scripts/post-process.mjs --fix --no-dry-run",
     "mcp:uninstall:ps1": "pwsh ./scripts/uninstall.ps1",
     "test": "node ./test/smoke.mjs",
-    "test:all": "node test/smoke.mjs && for f in test/*.test.mjs; do node \"$f\"; done",
+    "test:all": "node test/smoke.mjs && node test/ai.test.mjs && node test/detector.test.mjs && node test/framework-routing.test.mjs && node test/enforcement.test.mjs && node test/sandbox.test.mjs && node test/https.test.mjs && node test/sse.test.mjs && node test/daemon-wrapper.test.mjs && node test/cli-tui.test.mjs && node test/doctor-ui.test.mjs && node test/repository-contract.test.mjs",
     "lint": "eslint bin/ src/ test/ --ext .js,.mjs",
     "lint:fix": "eslint bin/ src/ test/ --ext .js,.mjs --fix",
     "format": "prettier --check '**/*.{js,mjs,json,md}' --ignore-path .gitignore",
@@ -69,10 +69,11 @@
   ],
   "dependencies": {
     "@modelcontextprotocol/sdk": "1.29.0",
-    "pix-galaxy-mcp": "link:",
     "zod": "4.4.3"
   },
   "devDependencies": {
-    "@playwright/test": "1.61.1"
+    "@playwright/test": "1.61.1",
+    "eslint": "^9.0.0",
+    "prettier": "^3.0.0"
   }
 }
