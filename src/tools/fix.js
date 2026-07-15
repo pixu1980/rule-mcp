@@ -57,42 +57,63 @@ export function registerFixTool() {
       if (mode === "generate") {
         const { generateComponentFiles } = await import("../core/file-tree.js");
         const { writeFileSync, mkdirSync } = await import("node:fs");
-        const { dirname, join } = await import("node:path");
+        const { dirname, join, resolve, relative } = await import("node:path");
 
         if (!args.name) {
           return { isError: true, content: [{ type: "text", text: "mode=generate requires a `name` argument (PascalCase)." }] };
         }
 
-        const rootDir = args.path || ".";
+        const dryRun = args.dryRun !== false;
+        const rootDir = resolve(args.path || ".");
+        const baseDir = args.baseDir || "src/components";
+
+        // Validate: no path traversal in name or baseDir
+        const sanitizedBase = relative(rootDir, resolve(rootDir, baseDir));
+        if (sanitizedBase.startsWith("..") || sanitizedBase === "") {
+          return { isError: true, content: [{ type: "text", text: `baseDir "${baseDir}" escapes project root "${rootDir}". Refusing to generate.` }] };
+        }
+
         const files = generateComponentFiles({
           name: args.name,
           framework: args.framework || "vanilla",
-          baseDir: args.baseDir || "src/components",
+          baseDir,
         });
 
-        const created = [];
+        const preview = [];
         for (const file of files) {
-          const fullPath = join(rootDir, file.path);
+          const fullPath = resolve(rootDir, file.path);
+          // Block path traversal: resolved path must stay inside rootDir
+          const rel = relative(rootDir, fullPath);
+          if (rel.startsWith("..") || rel === "") {
+            preview.push(`${file.path} — BLOCKED: path escapes project root`);
+            continue;
+          }
+          if (dryRun) {
+            preview.push(`${file.path} (dry-run, not written)`);
+            continue;
+          }
           try {
             mkdirSync(dirname(fullPath), { recursive: true });
             writeFileSync(fullPath, file.content, "utf8");
-            created.push(file.path);
+            preview.push(file.path);
           } catch (err) {
-            created.push(`${file.path} — ERROR: ${err.message}`);
+            preview.push(`${file.path} — ERROR: ${err.message}`);
           }
         }
 
         const lines = [
           `# pix_fix: Generated ${args.name}`,
           "",
-          `Created ${created.length} files:`,
+          dryRun ? "> This is a preview. Run with `dryRun=false` to write files." : "",
           "",
-          ...created.map((p) => `  ✓ ${p}`),
+          `${dryRun ? "Would create" : "Created"} ${preview.length} files:`,
+          "",
+          ...preview.map((p) => `  ✓ ${p}`),
           "",
           "File tree:",
-          `  ${args.baseDir || "src/components"}/${args.name}/`,
-          created.map((p) => `    ${p.split("/").pop()}`).filter(Boolean).join("\n"),
-        ];
+          `  ${baseDir}/${args.name}/`,
+          ...files.map((f) => `    ${f.path.split("/").pop()}`).filter(Boolean),
+        ].filter(Boolean);
 
         return { content: [{ type: "text", text: lines.join("\n") }] };
       }
