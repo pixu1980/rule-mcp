@@ -295,6 +295,7 @@ export async function cli() {
         if (hasFlag("--help") || hasFlag("-h")) { printServeHelp(); return; }
         await serveCommand({
           transport: getArg("--transport", "stdio"),
+          port: parseInt(getArg("--port", "37999"), 10),
           sslCert: getArg("--ssl-cert", undefined),
           sslKey: getArg("--ssl-key", undefined),
         });

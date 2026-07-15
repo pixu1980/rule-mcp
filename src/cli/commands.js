@@ -194,7 +194,7 @@ export async function serveCommand(opts = {}) {
   if (transport === "sse") {
     const scheme = (opts.sslCert && opts.sslKey) ? "https" : "http";
     const { port } = await startSseServer({
-      port: 37999,
+      port: opts.port || 37999,
       sslCert: opts.sslCert,
       sslKey: opts.sslKey,
     });

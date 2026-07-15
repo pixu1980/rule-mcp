@@ -101,7 +101,8 @@ export function registerSkillTool(skillName) {
         // BM25-compressed: return only relevant sections
         const { search, buildIndex, isIndexReady } = await import("../core/bm25.js");
         if (!isIndexReady()) buildIndex();
-        const results = query ? search(query, 5).filter(r => r.skill === skillName) : [];
+        // Search with larger limit (50) then filter by skill — avoids top-5-before-filter bug
+        const results = query ? search(query, 50).filter(r => r.skill === skillName).slice(0, 5) : [];
         if (results.length > 0) {
           const lines = ["# " + skillName + " (TLDR)", ""];
           for (const r of results) {
@@ -179,12 +180,11 @@ export function registerCheckTool() {
     fileName: z.string().optional().describe("File name for naming convention checks"),
     isComponent: z.boolean().optional().describe("Whether this is a component file"),
     mode: z.string().optional().describe("Check mode (e.g. 'scaffold' to validate project config files)"),
-    previousPassed: z.array(z.string()).optional().describe("Guardrail IDs that passed in a previous iteration — skip them on re-check"),
     allowedDependencies: z.array(z.string()).optional().describe("Manifest-derived package names allowed in imports"),
   });
   registerTool({
     name: "pix_check",
-    description: "Run guardrail checks on code against any pix skill. Smart iteration: pass previousPassed to skip already-passed checks. Iterate: check → fix → re-check until all pass.",
+    description: "Run guardrail checks on code against any pix skill. Returns guardrail results with a re-check hint containing the current passing set. Run until allPass: true.",
     zodSchema: CheckSchema,
     inputSchema: {
       type: "object",
@@ -195,15 +195,14 @@ export function registerCheckTool() {
         fileName: { type: "string", description: "File name for naming convention checks" },
         isComponent: { type: "boolean", description: "Whether this is a component file" },
         mode: { type: "string", description: "Check mode (e.g. 'scaffold' to validate project config files)" },
-        previousPassed: { type: "array", items: { type: "string" }, description: "Guardrail IDs from previous iteration — skipped on re-check" },
         allowedDependencies: { type: "array", items: { type: "string" }, description: "Manifest-derived package names allowed in imports" },
       },
       required: ["skill", "code"],
     },
     handler: async (args) => {
-      const { skill, code, fileName, isComponent, framework, mode, previousPassed, allowedDependencies } = args;
+      const { skill, code, fileName, isComponent, framework, mode, allowedDependencies } = args;
       if (!readSkill(skill)) return { isError: true, content: [{ type: "text", text: "Unknown skill: " + skill + ". Available: " + getSkillNames().join(", ") }] };
-      const result = checkCode(skill, code, { fileName, isComponent, framework, mode, previousPassed, allowedDependencies });
+      const result = checkCode(skill, code, { fileName, isComponent, framework, mode, previousPassed: [], allowedDependencies });
       const lines = ["# Guardrail check: " + skill, ""];
       // Summary line
       const summaryParts = [];
@@ -233,18 +232,18 @@ export function registerCheckTool() {
         }
         lines.push("");
       }
-      // Iteration hint with previousPassed for re-check
+      // Re-check hint: emit the passing set so the model can use it on next iteration
       const newPassed = result.previousPassed || [];
       if (!result.allPass) {
         lines.push("---");
         lines.push("❌ " + result.failCount + " guardrails FAIL. Fix and re-check.");
         lines.push("");
-        lines.push("To skip already-passed checks on re-check, pass:");
-        lines.push("```");
-        lines.push('previousPassed: ["' + newPassed.join('", "') + '"]');
-        lines.push("```");
+        lines.push("Re-check with the same code after fixing failures. Run: pix_check with same skill + updated code.");
         lines.push("");
-        lines.push("Iterate: generate → pix_check → fix → pix_check(previousPassed) → ... until allPass: true.");
+        lines.push("Currently passing guardrails (for reference):");
+        lines.push("```");
+        lines.push(newPassed.join(", "));
+        lines.push("```");
       }
       return {
         isError: !result.allPass,

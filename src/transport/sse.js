@@ -5,10 +5,13 @@
  * Provides an HTTP/HTTPS server with:
  *   - GET /sse    — SSE stream for MCP protocol
  *   - POST /message — MCP message handler
- *   - GET /health — Health check
+ *   - GET /health — Health check (no auth required)
  *
  * Uses the SDK's SSEServerTransport for MCP protocol compliance.
  * Supports optional HTTPS with --ssl-cert / --ssl-key flags.
+ *
+ * Security: bearer token auth on /sse and /message endpoints.
+ * Token is generated at startup and printed to stderr.
  *
  * @see module:server — createServer is imported here
  */
@@ -17,6 +20,7 @@ import http from "node:http";
 import https from "node:https";
 import { readFileSync } from "node:fs";
 import { URL } from "node:url";
+import { randomBytes } from "node:crypto";
 import { SSEServerTransport } from "@modelcontextprotocol/sdk/server/sse.js";
 import { createServer } from "../server.js";
 import { generateSelfSignedCert } from "./cert.js";
@@ -31,25 +35,39 @@ let httpServer = null;
 /** Active MCP Server instance. */
 let mcpServer = null;
 
-/**
- * CORS headers applied to all responses.
- */
-const CORS_HEADERS = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
-  "Access-Control-Allow-Headers": "Content-Type, Authorization",
-};
+/** Bearer token generated at startup (printed to stderr). */
+let serverToken = null;
+
+/** Maximum POST body size (1 MB). */
+const MAX_BODY_BYTES = 1_048_576;
+
+/** Allowed CORS origins (empty = deny all cross-origin). */
+const ALLOWED_ORIGINS = new Set();
 
 /**
- * Apply CORS headers and handle preflight.
+ * Generate a random bearer token and print it to stderr.
+ * @returns {string}
+ */
+function generateToken() {
+  const token = randomBytes(32).toString("hex");
+  console.error(`[pix-galaxy-mcp] SSE bearer token: ${token}`);
+  return token;
+}
+
+/**
+ * Apply CORS headers based on allowed origins.
+ * Denies cross-origin requests by default.
  *
  * @param {http.IncomingMessage} req
  * @param {http.ServerResponse} res
  * @returns {boolean} — true if preflight was handled (caller should return)
  */
 function handleCors(req, res) {
-  for (const [key, value] of Object.entries(CORS_HEADERS)) {
-    res.setHeader(key, value);
+  const origin = req.headers.origin;
+  if (origin && ALLOWED_ORIGINS.has(origin)) {
+    res.setHeader("Access-Control-Allow-Origin", origin);
+    res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+    res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
   }
   if (req.method === "OPTIONS") {
     res.writeHead(204);
@@ -60,6 +78,23 @@ function handleCors(req, res) {
 }
 
 /**
+ * Validate bearer token on protected endpoints.
+ * Skips health check.
+ *
+ * @param {http.IncomingMessage} req
+ * @param {string} pathname
+ * @returns {boolean} — true if authorized
+ */
+function checkAuth(req, pathname) {
+  // Health check is public
+  if (pathname === "/health") return true;
+  // SSE and message endpoints require bearer token
+  const auth = req.headers.authorization;
+  if (!auth || auth !== `Bearer ${serverToken}`) return false;
+  return true;
+}
+
+/**
  * HTTP/HTTPS request handler.
  */
 async function requestHandler(req, res) {
@@ -67,6 +102,22 @@ async function requestHandler(req, res) {
 
   const proto = httpServer instanceof https.Server ? "https" : "http";
   const parsedUrl = new URL(req.url ?? "/", `${proto}://${req.headers.host ?? "localhost"}`);
+  const pathname = parsedUrl.pathname;
+
+  // Auth check (skipped for /health)
+  if (!checkAuth(req, pathname)) {
+    res.writeHead(401, { "Content-Type": "application/json" });
+    res.end(JSON.stringify({ error: "Unauthorized. Provide Authorization: Bearer <token> header." }));
+    return;
+  }
+
+  // Block cross-origin requests on protected endpoints
+  const origin = req.headers.origin;
+  if (origin && !ALLOWED_ORIGINS.has(origin)) {
+    res.writeHead(403, { "Content-Type": "application/json" });
+    res.end(JSON.stringify({ error: "Cross-origin requests are not allowed." }));
+    return;
+  }
 
   try {
     // ── GET /health ──────────────────────────────────────────
@@ -97,8 +148,19 @@ async function requestHandler(req, res) {
 
     // ── POST /message — Handle MCP request ───────────────────
     if (req.method === "POST" && parsedUrl.pathname.startsWith("/message")) {
+      // Body size limit (1 MB)
+      let bodyLength = 0;
       const buffers = [];
-      for await (const chunk of req) buffers.push(chunk);
+      const maxBytes = MAX_BODY_BYTES;
+      for await (const chunk of req) {
+        bodyLength += chunk.length;
+        if (bodyLength > maxBytes) {
+          res.writeHead(413, { "Content-Type": "application/json" });
+          res.end(JSON.stringify({ error: "Request body too large. Maximum: " + maxBytes + " bytes." }));
+          return;
+        }
+        buffers.push(chunk);
+      }
       const body = Buffer.concat(buffers).toString("utf-8");
 
       const sessionId = parsedUrl.searchParams.get("sessionId") ?? "";
@@ -149,6 +211,9 @@ async function requestHandler(req, res) {
 export async function startSseServer(options = {}) {
   const port = options.port ?? 37999;
   const { sslCert, sslKey } = options;
+
+  // Generate bearer token for this session
+  serverToken = generateToken();
 
   mcpServer = createServer();
 

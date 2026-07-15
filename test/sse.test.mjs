@@ -21,28 +21,51 @@ const check = (label, ok) => {
 
 console.log("=== SSE Transport Tests ===\n");
 
+// Capture stderr to extract the bearer token printed by startSseServer
+let token = "";
+const origStderrWrite = process.stderr.write.bind(process.stderr);
+process.stderr.write = (chunk, encoding, cb) => {
+  const str = typeof chunk === "string" ? chunk : chunk.toString();
+  const m = str.match(/SSE bearer token: ([a-f0-9]+)/);
+  if (m) token = m[1];
+  return origStderrWrite(chunk, encoding, cb);
+};
+
 await loadAllSkills();
 const { startSseServer, stopSseServer } = await import("../src/transport/sse.js");
 const server = await startSseServer({ port: 0 });
+
+// Restore stderr
+process.stderr.write = origStderrWrite;
+
+check("T0 bearer token generated", token.length === 64);
 check("T1 server started, port assigned", typeof server.port === "number" && server.port > 0);
 
-// ── T2: GET /health ──
+// Helper: auth header for all protected requests
+const authHeader = { Authorization: `Bearer ${token}` };
+
+// ── T2: GET /health (public, no auth needed) ──
 const healthRes = await fetch(`http://127.0.0.1:${server.port}/health`);
 check("T2 health returns 200", healthRes.status === 200);
 const healthBody = await healthRes.json();
 check("T2.1 health body ok:true", healthBody.ok === true);
 
-// CORS on health
-check("T5 CORS Allow-Origin", healthRes.headers.get("access-control-allow-origin") === "*");
-check("T5.1 CORS Allow-Methods", healthRes.headers.get("access-control-allow-methods")?.includes("GET"));
+// CORS deny-by-default on health (Phase 1.2)
+check("T5 CORS deny-by-default", healthRes.headers.get("access-control-allow-origin") === null || healthRes.headers.get("access-control-allow-origin") !== "*");
 
-// ── T3 + T4: Open SSE connection, get sessionId, POST MCP message ──
+// ── T3 + T4: Open SSE connection with auth, get sessionId, POST MCP message ──
 let sessionId = "";
 let endpointPath = "";
 
 // Open SSE connection and collect the endpoint event
 const sseResult = await new Promise((resolve, reject) => {
-  const req = httpGet(`http://127.0.0.1:${server.port}/sse`, (res) => {
+  const options = {
+    hostname: "127.0.0.1",
+    port: server.port,
+    path: "/sse",
+    headers: authHeader,
+  };
+  const req = httpGet(options, (res) => {
     let data = "";
     const timer = setTimeout(() => {
       // After 1s, resolve with what we have
@@ -69,7 +92,7 @@ check("T3 SSE status 200", sseResult.status === 200);
 check("T3.1 SSE content-type text/event-stream", sseResult.headers["content-type"]?.includes("text/event-stream"));
 check("T3.2 SSE cache-control no-cache", String(sseResult.headers["cache-control"] ?? "").includes("no-cache"));
 check("T3.3 SSE connection keep-alive", sseResult.headers["connection"] === "keep-alive");
-check("T3.4 CORS on SSE", sseResult.headers["access-control-allow-origin"] === "*");
+check("T3.4 CORS deny-by-default on SSE", sseResult.headers["access-control-allow-origin"] === undefined || sseResult.headers["access-control-allow-origin"] !== "*");
 check("T4 sessionId received", sessionId.length > 0);
 check("T4.1 sessionId format UUID", /^[a-f0-9-]{36}$/i.test(sessionId));
 
@@ -89,6 +112,7 @@ const postResult = await new Promise((resolve, reject) => {
     headers: {
       "Content-Type": "application/json",
       "Content-Length": Buffer.byteLength(mcpRequest),
+      ...authHeader,
     },
   }, (res) => {
     let body = "";
