@@ -93,46 +93,31 @@ export function createServer() {
 
   // ── Completion handlers ────────────────────────────────────────
 
+  // Completion is reserved for prompt arguments and resource templates only.
+  // Tool argument completion is not supported by the MCP spec.
+  // Returning empty completions until prompt argument completion is implemented.
+
   server.setRequestHandler(CompleteRequestSchema, async (request) => {
     const { ref, argument } = request.params;
 
-    // Completions for tool arguments
-    if (ref?.type === "ref" && ref.name) {
-      const toolName = ref.name;
-
-      // pix_component: component argument
-      if (toolName === "pix_component" && argument.name === "component") {
-        const components = ["button", "card", "modal", "formField", "list", "nav",
-          "playwright-config", "a11y-test-basic", "a11y-test-forms", "a11y-test-components"];
+    // Prompt argument completion
+    if (ref?.type === "ref/prompt" && ref.name) {
+      const promptName = ref.name;
+      if (promptName === "pix-code-review" || promptName === "pix-a11y-review" ||
+          promptName === "pix-generate-component" || promptName === "pix-architect-scaffold") {
+        if (argument.name === "framework") {
+          const frameworks = ["react", "vue", "svelte", "angular", "solid", "astro", "vanilla"];
+          const values = frameworks.filter(f => f.startsWith(argument.value));
+          return { completion: { values: values.slice(0, 10), total: values.length, hasMore: false } };
+        }
+      }
+      if (promptName === "pix-generate-component" && argument.name === "component") {
+        const components = ["button", "card", "modal", "formField", "list", "nav"];
         const values = components.filter(c => c.startsWith(argument.value));
         return { completion: { values: values.slice(0, 10), total: values.length, hasMore: values.length > 10 } };
       }
-
-      // pix_component: framework argument
-      if (toolName === "pix_component" && argument.name === "framework") {
-        const frameworks = ["vanilla", "react", "vue", "svelte", "angular", "solid", "astro"];
-        const values = frameworks.filter(f => f.startsWith(argument.value));
-        return { completion: { values: values.slice(0, 10), total: values.length, hasMore: false } };
-      }
-
-      // pix_check: skill argument
-      if (toolName === "pix_check" && argument.name === "skill") {
-        const skillNames = listTools()
-          .map(t => t.name)
-          .filter(n => n.startsWith("pix_"))
-          .filter(n => n.startsWith(argument.value));
-        return { completion: { values: skillNames.slice(0, 10), total: skillNames.length, hasMore: skillNames.length > 10 } };
-      }
-
-      // pix: framework argument
-      if (toolName === "pix" && argument.name === "framework") {
-        const frameworks = ["react", "vue", "svelte", "angular", "solid", "astro", "electron", "vanilla"];
-        const values = frameworks.filter(f => f.startsWith(argument.value));
-        return { completion: { values: values.slice(0, 10), total: values.length, hasMore: false } };
-      }
     }
 
-    // Default: empty completion
     return { completion: { values: [], total: 0, hasMore: false } };
   });
 
@@ -151,7 +136,7 @@ export function createServer() {
     if (!prompt) {
       throw new McpError(ErrorCode.InvalidParams, `Unknown prompt: ${name}`);
     }
-    return { prompt };
+    return { description: prompt.description, messages: prompt.messages };
   });
 
   return server;

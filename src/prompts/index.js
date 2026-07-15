@@ -74,7 +74,7 @@ export function getPrompt(name) {
         description: "Review code against pix styleguides",
         messages: [
           {
-            role: "system",
+            role: "user",
             content: {
               type: "text",
               text:
@@ -94,7 +94,7 @@ export function getPrompt(name) {
         description: "Generate a component following pix galaxy principles",
         messages: [
           {
-            role: "system",
+            role: "user",
             content: {
               type: "text",
               text:
@@ -115,7 +115,7 @@ export function getPrompt(name) {
         description: "Generate Playwright + axe-core a11y tests",
         messages: [
           {
-            role: "system",
+            role: "user",
             content: {
               type: "text",
               text:
@@ -138,7 +138,7 @@ export function getPrompt(name) {
         description: "Review code for WCAG 2.2 AA compliance with Playwright + axe-core tests",
         messages: [
           {
-            role: "system",
+            role: "user",
             content: {
               type: "text",
               text:
@@ -158,7 +158,7 @@ export function getPrompt(name) {
         description: "Scaffold a new project with .agents/ + .context/ infrastructure",
         messages: [
           {
-            role: "system",
+            role: "user",
             content: {
               type: "text",
               text:
