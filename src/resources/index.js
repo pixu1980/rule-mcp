@@ -13,7 +13,7 @@
 import { readFileSync, readdirSync, existsSync } from "node:fs";
 import { join } from "node:path";
 import { getSkillsDirs } from "../cli/paths.js";
-import { readSkill, getSkillNames } from "../tools/router.js";
+import { readSkill, getSkillNames, isPluginSkill } from "../tools/router.js";
 
 /**
  * List all available resources with their URIs and metadata.
@@ -32,9 +32,9 @@ export function listResources() {
     { uri: "pix://a11y/test-forms", name: "Form a11y test template", mimeType: "text/plain" },
   ];
 
-  // Add one resource per skill
+  // Add one resource per skill (skip plugins — they are published via their own mechanism)
   for (const name of getSkillNames()) {
-    if (name !== "pix") {
+    if (name !== "pix" && !isPluginSkill(name)) {
       resources.push({
         uri: `pix://${name}`,
         name: `${name} skill full content`,

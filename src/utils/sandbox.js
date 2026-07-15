@@ -35,14 +35,16 @@ export function safeJsonParse(text) {
  * @param {string} [label] — For error messages
  * @returns {Promise<any>}
  */
-export async function withTimeout(promiseOrFn, ms, label = "operation") {
+export async function withTimeout(promiseOrFn, ms, label = "operation", signal) {
+  const ctrl = signal?.aborted === false ? new AbortController() : null;
+  if (signal && ctrl) signal.addEventListener("abort", () => ctrl.abort());
   let timer;
   const timeoutPromise = new Promise((_, reject) => {
     timer = setTimeout(() => {
+      ctrl?.abort();
       reject(new Error(`Sandbox timeout: ${label} exceeded ${ms}ms`));
     }, ms);
   });
-
   try {
     const value = typeof promiseOrFn === "function" ? promiseOrFn() : promiseOrFn;
     return await Promise.race([value, timeoutPromise]);

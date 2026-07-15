@@ -11,7 +11,7 @@
  * Called once at startup, or on demand via `skills reload` CLI command.
  */
 import { z } from "zod/v4";
-import { readSkill, getSkillNames, registerTool, isPluginSkill, hasPluginJs, loadPluginJs } from "../tools/router.js";
+import { readSkill, getSkillNames, registerTool, isPluginSkill, hasPluginJs, loadPluginJs, clearTools } from "../tools/router.js";
 import { registerSkillTool, registerSearchTool, registerCheckTool, registerScaffoldTool } from "../tools/skill.js";
 import { registerAiTool } from "../tools/ai.js";
 import { registerProcessAdrTool } from "../tools/adr.js";
@@ -118,6 +118,7 @@ export async function loadAllSkills(force = false) {
   if (loaded && !force) return;
   if (force) {
     skillCache.clear();
+    clearTools();
   }
   loaded = true;
   registerAiTool();
