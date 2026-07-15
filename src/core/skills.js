@@ -17,7 +17,44 @@ import { registerAiTool } from "../tools/ai.js";
 import { registerProcessAdrTool } from "../tools/adr.js";
 import { registerFixTool } from "../tools/fix.js";
 import { registerProcessHandoffTool } from "../tools/handoff.js";
+import { registerGatewayTool } from "../tools/gateway.js";
+import { registerApplyTool } from "../tools/apply.js";
 import { detectProject, getFrameworkSuggestion } from "./detector.js";
+
+/**
+ * Strict mode: when PIX_STRICT_MODE=1, only expose gateway + apply + read-only tools.
+ * Skill-specific tools and mutation tools are hidden.
+ */
+const STRICT_MODE = process.env.PIX_STRICT_MODE === "1";
+
+/**
+ * Tools that write to disk or have side effects.
+ * Hidden in strict mode — all writes go through pix_apply.
+ */
+const MUTATION_TOOLS = new Set([
+  "pix_fix",
+  "pix_process_adr",
+]);
+
+/**
+ * Skill-specific tools (pix_backend_express, pix_data_postgresql, etc.).
+ * Hidden in strict mode — evidence is loaded via pix_gateway.
+ */
+const SKILL_TOOL_PREFIX = "pix_";
+
+/**
+ * Core tools always available in strict mode.
+ */
+const STRICT_CORE_TOOLS = new Set([
+  "pix_gateway",
+  "pix_apply",
+  "pix_search",
+  "pix_check",
+  "pix_detect",
+  "pix_scaffold",
+  "pix_component",
+  "pix_process_handoff",
+]);
 /** Whether skills have been loaded yet. */
 let loaded = false;
 /** Simple in-memory LRU cache for skill content (read-through). */
@@ -84,11 +121,17 @@ export async function loadAllSkills(force = false) {
   }
   loaded = true;
   registerAiTool();
+  await registerGatewayTool();
+  await registerApplyTool();
+
   const skillNames = getSkillNames();
   const pluginLoaders = [];
   for (const name of skillNames) {
     if (name !== "pix" && name !== "pix-process-adr" && name !== "pix-process-handoff") {
-      registerSkillTool(name);
+      // In strict mode, skip skill-specific tools — evidence is loaded via pix_gateway
+      if (!STRICT_MODE) {
+        registerSkillTool(name);
+      }
     }
     // Load plugin.js for custom plugins (async, non-blocking)
     if (isPluginSkill(name) && hasPluginJs(name)) {
@@ -108,8 +151,11 @@ export async function loadAllSkills(force = false) {
   registerCheckTool();
   registerScaffoldTool();
   registerDetectTool();
-  registerProcessAdrTool();
-  registerFixTool();
+  // Mutation tools: hidden in strict mode
+  if (!STRICT_MODE) {
+    registerProcessAdrTool();
+    registerFixTool();
+  }
   registerProcessHandoffTool();  // Build BM25 search index (async, non-blocking)
   const { buildIndex, clearIndex } = await import("./bm25.js");
   if (force) clearIndex();
