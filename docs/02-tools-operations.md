@@ -33,23 +33,23 @@ Every source document below is preserved verbatim under its own heading so no pr
 | `pix_fix` | Fix | Validate and auto-fix file tree structure |
 | | | |
 | **UI Frameworks** | | |
-| `pix_vanilla_reactive` | Skill | Vanilla JS reactive pattern |
-| `pix_react` | Skill | React 18+ best practices |
-| `pix_vue` | Skill | Vue 3 Composition API |
-| `pix_svelte` | Skill | Svelte 5 runes |
-| `pix_angular` | Skill | Angular standalone components |
-| `pix_solidjs` | Skill | SolidJS fine-grained reactivity |
+| `pix_frontend_vanilla_reactive` | Skill | Vanilla JS reactive pattern |
+| `pix_frontend_react` | Skill | React 18+ best practices |
+| `pix_frontend_vue` | Skill | Vue 3 Composition API |
+| `pix_frontend_svelte` | Skill | Svelte 5 runes |
+| `pix_frontend_angular` | Skill | Angular standalone components |
+| `pix_frontend_solidjs` | Skill | SolidJS fine-grained reactivity |
 | | | |
 | **Meta-Frameworks** | | |
-| `pix_astro` | Skill | Astro islands architecture |
-| `pix_next` | Skill | Next.js App Router |
-| `pix_nuxt` | Skill | Nuxt 3 best practices |
-| `pix_remix` | Skill | Remix best practices |
+| `pix_frontend_astro` | Skill | Astro islands architecture |
+| `pix_frontend_meta_next` | Skill | Next.js App Router |
+| `pix_frontend_meta_nuxt` | Skill | Nuxt 3 best practices |
+| `pix_frontend_meta_remix` | Skill | Remix best practices |
 | | | |
 | **Project Types** | | |
-| `pix_web` | Skill | Web platform best practices |
-| `pix_desktop` | Skill | Desktop app patterns (Electron) |
-| `pix_library` | Skill | Library authoring |
+| `pix_platform_web` | Skill | Web platform best practices |
+| `pix_platform_desktop` | Skill | Desktop app patterns (Electron) |
+| `pix_platform_library` | Skill | Library authoring |
 | `pix_backend` | Skill | Backend/API best practices |
 | | | |
 | **Architecture** | | |
@@ -57,38 +57,38 @@ Every source document below is preserved verbatim under its own heading so no pr
 | `pix_styleguide` | Skill | HTML, CSS, JS, a11y, naming, file tree |
 | | | |
 | **Scaffolding** | | |
-| `pix_scaffolding_backend_node` | Skill | Backend Node.js scaffold |
-| `pix_scaffolding_frontend_react_vite` | Skill | Frontend React + Vite scaffold |
-| `pix_scaffolding_ai_agents_app` | Skill | AI Agents monorepo scaffold |
-| `pix_scaffolding_expo_app` | Skill | Expo mobile scaffold |
+| `pix_backend_node` | Skill | Backend Node.js scaffold |
+| `pix_frontend_react` | Skill | Frontend React + Vite scaffold |
+| `pix_platform_agent` | Skill | AI Agents monorepo scaffold |
+| `pix_platform_expo` | Skill | Expo mobile scaffold |
 | | | |
 | **Engineering & DevOps** | | |
-| `pix_docker` | Skill | Dockerfile + compose generation |
-| `pix_docker_standards` | Skill | Docker standards |
-| `pix_gitlab_ci` | Skill | GitLab CI/CD pipelines |
-| `pix_testing` | Skill | Vitest setup & test patterns |
-| `pix_coverage_gates` | Skill | Coverage enforcement (60/50/60/60) |
-| `pix_version_management` | Skill | Husky version auto-increment |
+| `pix_devops_docker` | Skill | Dockerfile + compose generation |
+| `pix_devops_docker` | Skill | Docker standards |
+| `pix_devops_gitlab_ci` | Skill | GitLab CI/CD pipelines |
+| `pix_devops_testing` | Skill | Vitest setup & test patterns |
+| `pix_devops_testing` | Skill | Coverage enforcement (60/50/60/60) |
+| `pix_devops_version` | Skill | Husky version auto-increment |
 | | | |
 | **Backend** | | |
-| `pix_security_basics` | Skill | Security hardening |
+| `pix_backend_security` | Skill | Security hardening |
 | `pix_backend_api_design` | Skill | REST API design & OpenAPI |
 | `pix_platform_agent` | Skill | AI Agent structure and tools |
 | | | |
 | **Frontend** | | |
-| `pix_frontend_forms` | Skill | React forms with validation |
-| `pix_frontend_forms_validation` | Skill | Business field validation |
+| `pix_frontend_react` | Skill | React forms with validation |
+| `pix_styleguide_validation` | Skill | Business field validation |
 | | | |
 | **Mobile** | | |
-| `pix_expo_eas_builds` | Skill | EAS Build & Expo CI/CD |
+| `pix_platform_expo` | Skill | EAS Build & Expo CI/CD |
 | | | |
 | **Workflow** | | |
-| `pix_feature_workflow` | Skill | End-to-end feature workflow |
-| `pix_documentation` | Skill | Mintlify documentation setup |
+| `pix_process_feature_workflow` | Skill | End-to-end feature workflow |
+| `pix_process_documentation` | Skill | Mintlify documentation setup |
 
 ### Modes common to all skill tools
 
-Every skill tool (`pix_react`, `pix_docker`, etc.) supports:
+Every skill tool (`pix_frontend_react`, `pix_devops_docker`, etc.) supports:
 
 | Mode | Description | Token savings |
 |------|-------------|---------------|
@@ -154,7 +154,7 @@ Uses keyword scoring across all skill sections, with framework bias (×2 for det
   "route": "pix-frontend-react",
   "confidence": 1,
   "sections": ["Component Architecture", "Props & State"],
-  "next_tools": ["pix_react", "pix_check", "pix_component"],
+  "next_tools": ["pix_frontend_react", "pix_check", "pix_component"],
   "alternatives": [
     { "route": "pix-styleguide", "confidence": 0.6, "sections": ["CSS Architecture"] }
   ],
@@ -204,19 +204,19 @@ pix prompt="Create a responsive navbar" framework=react
 
 ```
 # Full content
-pix_react mode=full
+pix_frontend_react mode=full
 
 # TLDR: only relevant sections (BM25, 90%+ token savings)
-pix_vue mode=tldr query="reactive data"
+pix_frontend_vue mode=tldr query="reactive data"
 
 # Internal search
-pix_angular mode=search query="standalone"
+pix_frontend_angular mode=search query="standalone"
 
 # Code validation
-pix_react mode=check code="..." fileName="_Button.jsx" isComponent=true
+pix_frontend_react mode=check code="..." fileName="_Button.jsx" isComponent=true
 
 # Guardrails
-pix_svelte mode=guardrails
+pix_frontend_svelte mode=guardrails
 
 # Scaffolding (styleguides/architect only)
 pix_styleguide mode=scaffold file=.prettierrc
@@ -230,7 +230,7 @@ pix_architect mode=interview target=./my-project
 Uses BM25 to return ONLY sections matching the query, with snippets and scores. Saves 90-97% compared to `mode=full`.
 
 ```
-pix_react mode=tldr query="state management hooks"
+pix_frontend_react mode=tldr query="state management hooks"
 # → Only "Component Architecture" and "Props & State" with snippets
 # No Overview, Setup, Installation, License
 ```
@@ -411,8 +411,8 @@ Reads `package.json` from the specified directory and matches dependencies again
   "buildTool": "vite",
   "nodeVersion": ">=20",
   "suggested_skills": ["pix-frontend-react"],
-  "suggested_tools": ["pix_react", "pix_check", "pix_scaffold", "pix_component"],
-  "message": "Detected react project \"my-app\". Use pix_react, pix_check..."
+  "suggested_tools": ["pix_frontend_react", "pix_check", "pix_scaffold", "pix_component"],
+  "message": "Detected react project \"my-app\". Use pix_frontend_react, pix_check..."
 }
 ```
 
@@ -692,19 +692,19 @@ previousPassed: ["no-css-classes", "no-inline-styles", "semantic-html",
 
 | Framework | Skill | MCP Tool |
 |-----------|-------|----------|
-| React | pix-frontend-react | `pix_react` |
-| Vue 3 | pix-frontend-vue | `pix_vue` |
-| Svelte 5 | pix-frontend-svelte | `pix_svelte` |
-| Angular | pix-frontend-angular | `pix_angular` |
-| SolidJS | pix-frontend-solidjs | `pix_solidjs` |
-| Astro | pix-frontend-astro | `pix_astro` |
-| Next.js | pix-frontend-meta-next | `pix_next` |
-| Nuxt 3 | pix-frontend-meta-nuxt | `pix_nuxt` |
-| Remix | pix-frontend-meta-remix | `pix_remix` |
-| Desktop (Electron) | pix-platform-desktop | `pix_desktop` |
-| Vanilla JS | pix-frontend-vanilla-reactive | `pix_vanilla_reactive` |
-| Web platform | pix-platform-web | `pix_web` |
-| Library authoring | pix-platform-library | `pix_library` |
+| React | pix-frontend-react | `pix_frontend_react` |
+| Vue 3 | pix-frontend-vue | `pix_frontend_vue` |
+| Svelte 5 | pix-frontend-svelte | `pix_frontend_svelte` |
+| Angular | pix-frontend-angular | `pix_frontend_angular` |
+| SolidJS | pix-frontend-solidjs | `pix_frontend_solidjs` |
+| Astro | pix-frontend-astro | `pix_frontend_astro` |
+| Next.js | pix-frontend-meta-next | `pix_frontend_meta_next` |
+| Nuxt 3 | pix-frontend-meta-nuxt | `pix_frontend_meta_nuxt` |
+| Remix | pix-frontend-meta-remix | `pix_frontend_meta_remix` |
+| Desktop (Electron) | pix-platform-desktop | `pix_platform_desktop` |
+| Vanilla JS | pix-frontend-vanilla-reactive | `pix_frontend_vanilla_reactive` |
+| Web platform | pix-platform-web | `pix_platform_web` |
+| Library authoring | pix-platform-library | `pix_platform_library` |
 | Styleguides | pix-styleguide | `pix_styleguide` |
 | Architecture | pix-architect | `pix_architect` |
 
@@ -751,7 +751,7 @@ EOF
 pix-galaxy-mcp skills reload
 
 # 4. Your plugin is now available as:
-pix-galaxy-mcp tools call pix_my_custom_rules --json '{"mode": "full"}'
+pix-galaxy-mcp tools call pix_styleguide --json '{"mode": "full"}'
 ```
 
 ## Adding custom guardrails with plugin.js

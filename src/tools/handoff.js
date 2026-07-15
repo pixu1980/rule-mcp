@@ -163,6 +163,7 @@ function getGitDiff(projectDir) {
   const staged = tryExec("git diff --cached --stat", { cwd: projectDir }).trim();
   const diff = tryExec("git diff", { cwd: projectDir }).trim();
   const stagedDiff = tryExec("git diff --cached", { cwd: projectDir }).trim();
+  const untracked = tryExec("git status --porcelain", { cwd: projectDir }).trim();
 
   // Parse file list
   const statOutput = [summary, staged].filter(Boolean).join("\n");
@@ -175,6 +176,7 @@ function getGitDiff(projectDir) {
   return {
     summary: statOutput || "(no uncommitted changes)",
     files: [...new Set(files)],
+    untracked: untracked || "",
     unstaged: diff,
     staged: stagedDiff,
   };

@@ -13,7 +13,7 @@
  *   - Cross-platform support
  */
 
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { homedir, platform, arch } from "node:os";
 import { join } from "node:path";
 import { listTools } from "../tools/router.js";
@@ -95,7 +95,15 @@ function validateAgentConfigs(agents) {
  * @returns {Array<{ name: string, configured: boolean, configFile: string|null }>}
  */
 function detectIdeConfigs() {
+  let skillsCount = 0;
+  try {
+    if (existsSync("skills")) {
+      skillsCount = readdirSync("skills").filter(d => d.startsWith("pix")).length;
+    }
+  } catch {}
+
   const checks = [
+    { name: "Skills directory", ok: skillsCount >= 60, detail: `${skillsCount} skills` },
     { name: "Cursor (IDE)", path: join(HOME, ".cursor", "mcp.json") },
     { name: "Windsurf (IDE)", path: join(HOME, ".windsurf", "mcp.json") },
     { name: "VS Code User", path: join(HOME, ".vscode", "argv.json") },

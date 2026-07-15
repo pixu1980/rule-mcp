@@ -36,14 +36,14 @@ Serve pix-* skill rules, styleguides, component templates, and framework best pr
 |------|---------|-----------|
 | `pix` | Route prompt to best skill | ✅ Yes (keyword matching) |
 | `pix_styleguide` | HTML/CSS/JS/a11y/naming rules | Partial |
-| `pix_vanilla_reactive` | Vanilla JS reactive pattern rules | Partial |
-| `pix_react` | React 18+ pix best practices | Partial |
-| `pix_vue` | Vue 3 Composition API pix rules | Partial |
-| `pix_svelte` | Svelte 5 runes pix rules | Partial |
-| `pix_solidjs` | SolidJS fine-grained reactivity rules | Partial |
-| `pix_angular` | Angular standalone component rules | Partial |
-| `pix_astro` | Astro islands architecture rules | Partial |
-| `pix_electron` | Electron app patterns | Partial |
+| `pix_frontend_vanilla_reactive` | Vanilla JS reactive pattern rules | Partial |
+| `pix_frontend_react` | React 18+ pix best practices | Partial |
+| `pix_frontend_vue` | Vue 3 Composition API pix rules | Partial |
+| `pix_frontend_svelte` | Svelte 5 runes pix rules | Partial |
+| `pix_frontend_solidjs` | SolidJS fine-grained reactivity rules | Partial |
+| `pix_frontend_angular` | Angular standalone component rules | Partial |
+| `pix_frontend_astro` | Astro islands architecture rules | Partial |
+| `pix_platform_desktop` | Electron app patterns | Partial |
 | `pix_search` | Full-text search across ALL skills | ✅ Yes (local grep) |
 | `pix_component` | Component template generation | ✅ Yes (template engine) |
 | `pix_architect` | Project architecture & agent infrastructure; scaffold .agents/, .context/, SDD docs; context interview wizard | ✅ Yes (template engine + context server) |
@@ -564,11 +564,11 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 │  • Result: ["pix-frontend-react (92%)", "pix_component (88%)"] │
 └───────────────────────┬──────────────────────────────┘
                         │
-            MCP calls `pix_react` + `pix_component`
+            MCP calls `pix_frontend_react` + `pix_component`
                         │
                         ▼
 ┌──────────────────────────────────────────────────────┐
-│  pix_react (skill tool)                                │
+│  pix_frontend_react (skill tool)                                │
 │  • mode=full → full SKILL.md                           │
 │  • mode=summary → first 30 lines                       │
 │  • mode=search → grep matching lines                   │
@@ -623,7 +623,7 @@ Instead of returning full skill files, `pix` returns:
   "route": "pix-frontend-react",
   "confidence": 0.92,
   "sections": ["Component Patterns", "Hooks Rules", "Performance"],
-  "next_tools": ["pix_component(button, react)", "pix_react(mode=search, query=useMemo)"]
+  "next_tools": ["pix_component(button, react)", "pix_frontend_react(mode=search, query=useMemo)"]
 }
 ```
 
@@ -642,8 +642,8 @@ Skill read → LRU Cache (TTL: 5 min, max: 50 items)
 
 ```
 1st call: pix("React button") → route + confidence
-2nd call: pix_react(mode=summary)    → skill overview (30 lines)
-3rd call: pix_react(mode=search, query="component") → relevant lines
+2nd call: pix_frontend_react(mode=summary)    → skill overview (30 lines)
+3rd call: pix_frontend_react(mode=search, query="component") → relevant lines
 4th call: pix_component(button, react) → full template code
 5th call: pix_check(skill=pix-frontend-react, code=...) → guardrail results
 ```
@@ -1101,7 +1101,7 @@ All data stays on the filesystem. The MCP server is a read-only/validate-only se
 - [x] **5.3** Add MCP completion support
       - `CompleteRequestSchema` handler registered in server.js
       - Completions: `component` → [button, card, modal, ...], `framework` → [react, vue, svelte, ...],
-        `skill` → [pix_react, pix_vue, ...], `pix.framework` → [react, vue, svelte, ...]
+        `skill` → [pix_frontend_react, pix_frontend_vue, ...], `pix.framework` → [react, vue, svelte, ...]
 
 - [x] **5.4** Cross-platform testing
       - CI matrix already tests ubuntu-latest, macos-latest, windows-latest with Node 20 + 22

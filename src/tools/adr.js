@@ -324,5 +324,8 @@ export function registerProcessAdrTool() {
     updateAdrIndex(adrDir, existing);
   };
 
-  addAfterToolHook("*", autoLog);
+  // Auto-logging: disabled by default. Enable with PIX_AUTO_ADR=1.
+  if (process.env.PIX_AUTO_ADR === "1") {
+    addAfterToolHook("*", autoLog);
+  }
 }
