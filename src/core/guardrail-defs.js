@@ -13,11 +13,12 @@ export const SHARED_GUARDRAILS = [
   {
     id: "no-css-classes",
     label: "Zero CSS classes in stylesheets",
-    description: "CSS must use only element selectors + [data-part] + [data-*] attribute selectors. No .class selectors.",
-    check: (code) => {
-      const cssBlock = extractRealCSS(code);
+    description: "CSS must use only element selectors + [data-part] + [data-*] attribute selectors. No .class selectors (including pseudo-classes and combinators).",
+    check: (code, context) => {
+      const cssBlock = extractRealCSS(code, context);
       if (!cssBlock) return { pass: true, note: "No CSS block found, skipping" };
-      const classRules = cssBlock.match(/^\s*\.[a-zA-Z][\w-]*\s*\{/gm);
+      // Match class selectors including: .foo, .foo:hover, .foo > span, .foo.bar, .foo::before
+      const classRules = cssBlock.match(/^\s*\.[a-zA-Z][\w-]*(?:\s*[{,:\.\s>+~])/gm);
       return {
         pass: !classRules || classRules.length === 0,
         failCount: classRules?.length || 0,
@@ -29,11 +30,13 @@ export const SHARED_GUARDRAILS = [
   {
     id: "no-inline-styles",
     label: "Zero inline styles in templates",
-    description: "Templates must not use style=\"...\" attributes. All styling in external CSS files.",
+    description: "Templates must not use style=\"...\" attributes or JSX style={{...}} objects. All styling in external CSS files.",
     check: (code) => {
       const inlineAttrs = code.match(/style\s*=\s*"[^"]*"/g) || [];
       const inlineSingle = code.match(/style\s*=\s*'[^']*'/g) || [];
-      inlineAttrs.push(...inlineSingle);
+      // JSX/TSX: style={{...}} (React, Solid)
+      const jsxStyle = code.match(/style\s*=\s*\{\{[^}]*\}\}/g) || [];
+      inlineAttrs.push(...inlineSingle, ...jsxStyle);
       if (inlineAttrs.length === 0) return { pass: true, note: "No inline style attributes found" };
       const exceptions = code.match(/accent-option|contextmenu|context-menu/g);
       const effective = inlineAttrs.filter(a => !exceptions || !exceptions.some(e => a.includes(e)));
@@ -72,15 +75,18 @@ export const SHARED_GUARDRAILS = [
   {
     id: "external-css",
     label: "External CSS via adoptedStyleSheets or framework-native import",
-    description: "CSS must be loaded as external file. Use fetch→CSSStyleSheet.replaceSync→adoptedStyleSheets for vanilla, or framework-native imports (Angular styleUrls, Svelte <style>, CSS Modules for React).",
+    description: "CSS must be loaded as external file. Use fetch→CSSStyleSheet.replaceSync→adoptedStyleSheets for vanilla, or framework-native imports (Angular styleUrls, Svelte <style>, CSS Modules or plain import for React/Solid).",
     check: (code, context) => {
       const framework = context?.framework || "vanilla";
+      // CSS files are themselves external CSS
+      if (context?.fileName && /\.css$/i.test(context.fileName)) return { pass: true, note: "CSS file is external CSS by definition" };
       if (framework === "angular" && code.includes("styleUrls")) return { pass: true, note: "Angular styleUrls OK" };
       if (framework === "angular" && code.includes("@Component") && code.includes(".css")) return { pass: true, note: "Angular external CSS via component styles" };
-      if (framework === "svelte" && (code.includes("import .*.css") || code.includes("<style>"))) return { pass: true, note: "Svelte CSS import or scoped style OK" };
-      if ((framework === "react" || framework === "solid") && (code.includes("import .*.css") || code.includes(".module.css"))) return { pass: true, note: "CSS import or CSS Modules OK" };
+      if (framework === "svelte" && (code.match(/import\s+['"].*\.css['"]/) || code.includes("<style>"))) return { pass: true, note: "Svelte CSS import or scoped style OK" };
+      // React/Solid: accept both `import "./foo.css"` and `import styles from "./foo.module.css"`
+      if ((framework === "react" || framework === "solid") && code.match(/import\s+.*['"].*\.css['"]/)) return { pass: true, note: "CSS import or CSS Modules OK" };
       if (code.includes("adoptedStyleSheets") && code.includes("CSSStyleSheet")) return { pass: true, note: "adoptedStyleSheets OK" };
-      const hasCssContent = extractRealCSS(code);
+      const hasCssContent = extractRealCSS(code, context);
       if (!hasCssContent) return { pass: true, note: "No CSS content found, skipping" };
       return {
         pass: false,
@@ -180,6 +186,10 @@ export const SHARED_GUARDRAILS = [
     label: "CSS file-level comments",
     description: "Every CSS file must start with a file-level comment describing its purpose, scope, and usage. Sections should be separated by comment headers.",
     check: (code, context) => {
+      // Only check CSS files or files with explicit CSS blocks
+      const isCssFile = context?.fileName && /\.css$/i.test(context.fileName);
+      const hasCssBlock = /```css|CSSStyleSheet|<style[^>]*>/i.test(code);
+      if (!isCssFile && !hasCssBlock) return { pass: true, note: "Not a CSS file and no CSS block detected, skipping" };
       const hasCSSRules = /[\w-]+\s*\{/.test(code);
       if (!hasCSSRules) return { pass: true, note: "No CSS rules detected, skipping" };
 
@@ -661,14 +671,268 @@ export const ARCHITECT_GUARDRAILS = [
   },
 ];
 
+// ─── Backend guardrails (Express, Fastify, NestJS, Hono, Node) ───
+
+export const BACKEND_GUARDRAILS = [
+  {
+    id: "sql-injection",
+    label: "No SQL injection via string concatenation",
+    description: "All SQL queries must use parameterized placeholders ($1, ?, :name). No string concatenation with user input.",
+    check: (code) => {
+      const concatPatterns = [
+        /db\.query\(["']SELECT[^"']*["']\s*\+\s*\w+/gi,
+        /db\.query\(["']INSERT[^"']*["']\s*\+\s*\w+/gi,
+        /db\.query\(["']UPDATE[^"']*["']\s*\+\s*\w+/gi,
+        /db\.query\(["']DELETE[^"']*["']\s*\+\s*\w+/gi,
+        /db\.query\(`SELECT[^`]*\$\{/gi,
+        /db\.query\(`INSERT[^`]*\$\{/gi,
+        /db\.query\(`UPDATE[^`]*\$\{/gi,
+        /db\.query\(`DELETE[^`]*\$\{/gi,
+        /\.query\(["']SELECT.*["']\s*\+\s*req\./gi,
+        /\.query\(["']SELECT.*["']\s*\+\s*ctx\./gi,
+      ];
+      const violations = [];
+      for (const re of concatPatterns) {
+        const m = code.match(re);
+        if (m) violations.push(...m);
+      }
+      const hasQuery = /\.query\(|\.execute\(|Model\.find/i.test(code);
+      if (!hasQuery) return { pass: true, note: "No SQL queries found, skipping" };
+      return {
+        pass: violations.length === 0,
+        failCount: violations.length,
+        detail: violations.slice(0, 5),
+        suggestion: "Use parameterized queries: db.query('SELECT ... WHERE id = $1', [id]). Never concatenate user input into SQL strings.",
+      };
+    },
+  },
+  {
+    id: "error-exposure",
+    label: "No internal error details in responses",
+    description: "Production error responses must not expose stack traces or internal error messages.",
+    check: (code) => {
+      const patterns = [
+        /res\.(?:status|json|send)\(.*err\.stack/gi,
+        /res\.(?:status|json|send)\(.*error\.stack/gi,
+        /\.json\(\{\s*error:\s*err\.message/gi,
+        /\.json\(\{\s*error:\s*e\.message/gi,
+        /\.send\(err\.message\)/gi,
+      ];
+      const violations = [];
+      for (const re of patterns) { const m = code.match(re); if (m) violations.push(...m); }
+      return {
+        pass: violations.length === 0,
+        failCount: violations.length,
+        detail: violations.slice(0, 5),
+        suggestion: "Return generic messages: res.status(500).json({ error: 'Internal server error' }). Log details server-side only.",
+      };
+    },
+  },
+  {
+    id: "input-validation",
+    label: "Input validation present",
+    description: "Request body and params must be validated (Zod, Joi, class-validator).",
+    check: (code) => {
+      const hasInput = /req\.body|req\.params|req\.query|request\.body|@Body\(\)|@Param\(\)|@Query\(\)/i.test(code);
+      if (!hasInput) return { pass: true, note: "No request input detected, skipping" };
+      const hasValidation = /z\.(?:object|string|number|boolean)|\.parse\(|\.safeParse\(|Joi\.(?:object|string)|class-validator|@Validate|express-validator/i.test(code);
+      return {
+        pass: hasValidation, failCount: hasValidation ? 0 : 1,
+        detail: hasValidation ? [] : ["No input validation found"],
+        suggestion: "Add input validation with Zod, Joi, or class-validator before processing request data.",
+      };
+    },
+  },
+  {
+    id: "cors-explicit",
+    label: "CORS configured with explicit origins",
+    description: "CORS must not use wildcard origin (*). Specify explicit allowed origins.",
+    check: (code) => {
+      const hasCors = /cors\(\)|@fastify\/cors|app\.enableCors/i.test(code);
+      if (!hasCors) return { pass: true, note: "CORS not configured, skipping" };
+      const corsWildcard = /origin:\s*["']\*["']/gi.test(code);
+      return {
+        pass: !corsWildcard, failCount: corsWildcard ? 1 : 0,
+        detail: corsWildcard ? ["Wildcard origin (*) found"] : [],
+        suggestion: "Replace origin: '*' with an explicit allowlist of allowed origins.",
+      };
+    },
+  },
+  {
+    id: "rate-limiting",
+    label: "Rate limiting configured",
+    description: "API endpoints should have rate limiting enabled.",
+    check: (code) => {
+      const isServer = /app\.(?:listen|get|post|put|delete|patch)/i.test(code) || /createServer/i.test(code) || /bootstrap\(\)/i.test(code);
+      if (!isServer) return { pass: true, note: "Not a server file, skipping" };
+      const hasRateLimit = /express-rate-limit|rateLimit\(|@fastify\/rate-limit|ThrottlerModule|@Throttle/i.test(code);
+      return {
+        pass: hasRateLimit, failCount: hasRateLimit ? 0 : 1,
+        detail: hasRateLimit ? [] : ["No rate limiting detected"],
+        suggestion: "Add rate limiting: express-rate-limit (Express), @fastify/rate-limit (Fastify), ThrottlerModule (NestJS).",
+      };
+    },
+  },
+  {
+    id: "helmet-headers",
+    label: "Security headers via helmet",
+    description: "HTTP security headers should be set via helmet or framework equivalent.",
+    check: (code) => {
+      const isServer = /app\.(?:listen|get|post|use)/i.test(code) || /createServer/i.test(code) || /bootstrap\(\)/i.test(code);
+      if (!isServer) return { pass: true, note: "Not a server file, skipping" };
+      const hasHelmet = /helmet\(\)|require\(["']helmet["']\)|@fastify\/helmet|from ["']helmet["']/i.test(code);
+      return {
+        pass: hasHelmet, failCount: hasHelmet ? 0 : 1,
+        detail: hasHelmet ? [] : ["No security headers detected"],
+        suggestion: "Add helmet: app.use(helmet()) in Express, register @fastify/helmet in Fastify, app.use(helmet()) in NestJS.",
+      };
+    },
+  },
+];
+
+// ─── Database guardrails (PostgreSQL, MySQL, MongoDB, SQLite, DuckDB, SQL) ───
+
+export const DATABASE_GUARDRAILS = [
+  {
+    id: "migration-safety",
+    label: "Safe DDL operations",
+    description: "DDL must use IF NOT EXISTS / IF EXISTS for idempotent migrations.",
+    check: (code) => {
+      const hasDdl = /CREATE\s+TABLE|DROP\s+TABLE|ALTER\s+TABLE/i.test(code);
+      if (!hasDdl) return { pass: true, note: "No DDL found, skipping" };
+      const unsafeCreate = code.match(/CREATE\s+TABLE\s+(?!.*IF\s+NOT\s+EXISTS)/gi) || [];
+      const unsafeDrop = code.match(/DROP\s+TABLE\s+(?!.*IF\s+EXISTS)/gi) || [];
+      const violations = [...unsafeCreate, ...unsafeDrop];
+      return {
+        pass: violations.length === 0, failCount: violations.length,
+        detail: violations.slice(0, 5),
+        suggestion: "Use CREATE TABLE IF NOT EXISTS, DROP TABLE IF EXISTS for safe, idempotent migrations.",
+      };
+    },
+  },
+  {
+    id: "parameterized-queries",
+    label: "Parameterized database queries",
+    description: "Queries must use placeholders ($1, ?, :name), not string concatenation.",
+    check: (code) => {
+      const hasQuery = /\.query\(|\.execute\(|db\.run\(|db\.all\(|db\.get\(|Model\.find|Model\.aggregate/i.test(code);
+      if (!hasQuery) return { pass: true, note: "No database queries found, skipping" };
+      const bad = /\.query\(`[^`]*\$\{[^}]+\}[^`]*`\)|\.query\(["'][^"']*["']\s*\+\s*\w+/gi.test(code);
+      return {
+        pass: !bad, failCount: bad ? 1 : 0,
+        detail: bad ? ["Query uses string concatenation or template substitution"] : [],
+        suggestion: "Use parameterized queries: db.query('SELECT * FROM t WHERE id = $1', [id]).",
+      };
+    },
+  },
+  {
+    id: "transaction-safety",
+    label: "Multi-statement transactions",
+    description: "Multiple mutations should be wrapped in a transaction.",
+    check: (code) => {
+      const mutations = (code.match(/\.(?:insert|create|update|delete|save)\s*\(/gi) || []);
+      if (mutations.length < 2) return { pass: true, note: "Less than 2 mutations, transaction not required" };
+      const hasTx = /BEGIN|COMMIT|ROLLBACK|transaction\(|tx\s*=>|@Transactional/i.test(code);
+      return {
+        pass: hasTx, failCount: hasTx ? 0 : 1,
+        detail: hasTx ? [] : [`${mutations.length} mutations without transaction`],
+        suggestion: "Wrap multiple mutations in a transaction: await db.transaction(async (tx) => { ... }).",
+      };
+    },
+  },
+  {
+    id: "connection-pool",
+    label: "Connection pooling",
+    description: "Database clients should use connection pooling with explicit max pool size.",
+    check: (code) => {
+      const hasPool = /new\s+Pool\(|createPool\(|maxPoolSize|connectionLimit|pool_size|max\s*:\s*\d+/i.test(code);
+      const hasClient = /new\s+(?:pg\.)?Client\(|createConnection\(/i.test(code);
+      if (hasClient && !hasPool) {
+        const isServer = /app\.(?:listen|get|post)|createServer/i.test(code);
+        if (!isServer) return { pass: true, note: "Script-style DB client, pool not required" };
+        return { pass: false, failCount: 1, detail: ["Client without pool in server code"], suggestion: "Use Pool instead of Client for servers: new Pool({ max: 20 })." };
+      }
+      if (!hasClient && !hasPool && !/Pool|pool/i.test(code)) return { pass: true, note: "No DB client or ORM-managed pooling, skipping" };
+      return { pass: true, note: hasPool ? "Connection pool detected" : "ORM likely handles pooling" };
+    },
+  },
+];
+
+// ─── DevOps & security guardrails (Docker, CI, secrets) ───
+
+export const DEVOPS_GUARDRAILS = [
+  {
+    id: "docker-non-root",
+    label: "Container runs as non-root user",
+    description: "Docker containers must switch to a non-root user.",
+    check: (code) => {
+      if (!/^FROM\s+/im.test(code)) return { pass: true, note: "Not a Dockerfile, skipping" };
+      const hasUser = /^USER\s+(?!root\b)\w+/im.test(code);
+      return {
+        pass: hasUser, failCount: hasUser ? 0 : 1,
+        detail: hasUser ? [] : ["No non-root USER instruction"],
+        suggestion: "Add 'USER node' (or USER 1001) after installing dependencies.",
+      };
+    },
+  },
+  {
+    id: "docker-healthcheck",
+    label: "HEALTHCHECK defined",
+    description: "Production images should include a HEALTHCHECK.",
+    check: (code) => {
+      if (!/^FROM\s+/im.test(code)) return { pass: true, note: "Not a Dockerfile, skipping" };
+      const ok = /^HEALTHCHECK\s+/im.test(code);
+      return {
+        pass: ok, failCount: ok ? 0 : 1,
+        detail: ok ? [] : ["No HEALTHCHECK found"],
+        suggestion: "Add: HEALTHCHECK --interval=30s CMD curl -f http://localhost:3000/health || exit 1",
+      };
+    },
+  },
+  {
+    id: "secret-detection",
+    label: "No hardcoded secrets",
+    description: "Passwords, API keys, and tokens must use environment variables.",
+    check: (code) => {
+      const secrets = code.match(/(?:password|passwd|secret|apiKey|api_key|token|api_secret)\s*[:=]\s*["'][^"']{8,}["']/gi) || [];
+      const nonEnv = secrets.filter(s => !/process\.env/i.test(code.slice(Math.max(0, code.indexOf(s) - 80), code.indexOf(s))));
+      return {
+        pass: nonEnv.length === 0, failCount: nonEnv.length,
+        detail: nonEnv.slice(0, 3).map(s => s.slice(0, 60)),
+        suggestion: "Store secrets in environment variables: process.env.DB_PASSWORD. Never hardcode credentials.",
+      };
+    },
+  },
+  {
+    id: "env-gitignore",
+    label: ".env in .gitignore",
+    description: ".env files must be in .gitignore to prevent committing secrets.",
+    check: (code, context) => {
+      if (!context?.fileName?.includes(".gitignore")) return { pass: true, note: "Not .gitignore, skipping" };
+      const ok = /\.env\b/.test(code);
+      return {
+        pass: ok, failCount: ok ? 0 : 1,
+        detail: ok ? [] : [".env not in .gitignore"],
+        suggestion: "Add .env to .gitignore to prevent committing environment files.",
+      };
+    },
+  },
+];
+
 // ─── Utility (used by guardrail checks) ───
 
 /**
  * Extract ONLY actual CSS content from code. Uses multiple strategies
  * to avoid false-positives from JS/JSX/TS code.
+ * If the filename context indicates a CSS file, returns the full code.
  */
-function extractRealCSS(code) {
+function extractRealCSS(code, context = {}) {
   const cssBlocks = [];
+
+  // If this is a CSS file, the entire content is CSS
+  if (context?.fileName && /\.css$/i.test(context.fileName)) {
+    return code;
+  }
 
   const fencedCss = code.match(/```css\n([\s\S]*?)```/g);
   if (fencedCss) cssBlocks.push(...fencedCss.map(c => c.replace(/```css\n|```/g, "").trim()));

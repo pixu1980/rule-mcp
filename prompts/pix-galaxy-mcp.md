@@ -1,12 +1,12 @@
 ---
-description: Route coding work through pix-galaxy-mcp with mandatory validation
+description: Route coding work through pix-galaxy-mcp with strongly recommended validation
 argument-hint: "<request>"
 ---
-Process this request through enforced pix workflow:
+Process this request through the recommended pix workflow:
 
 $ARGUMENTS
 
-Mandatory sequence:
+Strongly recommended sequence:
 1. Call MCP tool `pix` with complete request and project path/framework when known.
 2. Load primary routed `pix-*` skill and only necessary secondary skills.
 3. Use returned skill/tool evidence as source of truth. Never invent APIs, files, dependencies, commands, requirements, or successful checks.
@@ -16,4 +16,4 @@ Mandatory sequence:
 7. Run project tests/typecheck. Report commands and real outcomes; never claim unexecuted checks passed.
 8. Record architectural decisions with `pix_process_adr`.
 
-Do not finalize while `pix_check` reports failures.
+Note: MCP servers cannot enforce tool invocation order. This sequence is advisory and depends on the model following these instructions.

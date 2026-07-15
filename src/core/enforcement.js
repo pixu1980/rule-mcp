@@ -86,7 +86,7 @@ function enforcementContract(name) {
     ? "Fix every reported failure and rerun pix_check until allPass is true."
     : "Do not invent APIs, files, tools, dependencies, or requirements. Use only returned evidence. Validate generated code with pix_check before finalizing.";
   return [
-    "## PIX ENFORCEMENT CONTRACT",
+    "## PIX WORKFLOW REMINDER",
     "",
     "- Returned skill content and deterministic tool output are source of truth.",
     "- Missing evidence means unknown: call pix_search or state uncertainty.",
@@ -109,7 +109,7 @@ export function postprocessToolResult(name, args, result, context = {}) {
       ...(result._meta ?? {}),
       pixEnforcement: {
         requestId,
-        policy: "fail-closed",
+        policy: "advisory",
         preprocessed: true,
         postprocessed: true,
         tool: name,
@@ -125,7 +125,7 @@ export function enforcementError(name, stage, error) {
     content: [{ type: "text", text: `PIX enforcement ${stage} blocked ${name}: ${error.message}` }],
     _meta: {
       pixEnforcement: {
-        policy: "fail-closed",
+        policy: "advisory",
         stage,
         tool: name,
       },
