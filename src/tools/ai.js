@@ -74,6 +74,32 @@ const STOPWORDS = new Set([
 
 // ─── Scoring ──────────────────────────────────────────────────────
 
+/**
+ * Multilingual alias map. Maps non-English domain keywords → English.
+ */
+const MULTILINGUAL_ALIASES = {
+  sicuro: "secure", sicurezza: "security", proteggere: "protect",
+  abusi: "abuse", richieste: "requests", limitazione: "rate limiting",
+  backend: "backend", database: "database", api: "api", server: "server",
+  docker: "docker", test: "test", testing: "testing", frontend: "frontend",
+  componente: "component", pulsante: "button", react: "react", vue: "vue",
+  sécurité: "security", protéger: "protect", abus: "abuse",
+  requêtes: "request", limitation: "rate limiting",
+  seguridad: "security", proteger: "protect", abusos: "abuse",
+  solicitudes: "request", limitación: "rate limiting",
+  sicherheit: "security", schützen: "protect", anfragen: "request", datenbank: "database",
+};
+
+/** Expand prompt with matching multilingual aliases. */
+function expandPrompt(prompt) {
+  const lower = prompt.toLowerCase();
+  const aliases = [];
+  for (const [native, en] of Object.entries(MULTILINGUAL_ALIASES)) {
+    if (lower.includes(native)) aliases.push(en);
+  }
+  return aliases.length > 0 ? prompt + " " + aliases.join(" ") : prompt;
+}
+
 function scoreSectionWord(section, word, skillBase, descText) {
   const contentText = (section.content || "").toLowerCase();
   const headingText = (section.heading || "").toLowerCase();
@@ -181,13 +207,30 @@ export function registerAiTool() {
     handler: async (args) => {
       const allSkills = getSkillNames();
       const skills = allSkills.filter((skillName) => skillName !== "pix");
-      const prompt = (args.prompt || "").trim();
+      const prompt = expandPrompt((args.prompt || "").trim());
       if (!prompt) {
         return { content: [{ type: "text", text: JSON.stringify({ route: "none", confidence: 0, sections: [], next_tools: ["pix_search"], skills_available: allSkills }) }] };
       }
 
       const promptLower = prompt.toLowerCase();
       const promptWords = [...new Set(promptLower.split(/[^a-z0-9]+/).filter(w => w.length > 1))];
+
+      // ── Domain classification (before framework bias) ──
+      const BACKEND_KEYWORDS = ["api", "backend", "server", "endpoint", "rest", "graphql", "express", "fastify", "nestjs", "hono", "rate", "limiting", "helmet", "cors", "auth", "jwt", "middleware"];
+      const DATA_KEYWORDS = ["database", "sql", "query", "table", "postgresql", "mysql", "mongodb", "schema", "migration", "index", "transaction", "orm", "prisma", "drizzle"];
+      const DEVOPS_KEYWORDS = ["docker", "ci", "cd", "pipeline", "deploy", "container", "kubernetes", "gitlab", "github", "actions"];
+      const FRONTEND_KEYWORDS = ["react", "vue", "svelte", "angular", "component", "button", "modal", "css", "style", "ui", "layout", "responsive"];
+
+      const promptDomain = (() => {
+        const b = BACKEND_KEYWORDS.filter(k => promptLower.includes(k)).length;
+        const d = DATA_KEYWORDS.filter(k => promptLower.includes(k)).length;
+        const o = DEVOPS_KEYWORDS.filter(k => promptLower.includes(k)).length;
+        const f = FRONTEND_KEYWORDS.filter(k => promptLower.includes(k)).length;
+        if (b >= 2 || b > f + d) return "backend";
+        if (d >= 2 || d > b + f) return "data";
+        if (o >= 2) return "devops";
+        return null; // unknown, use full scoring
+      })();
 
       // Detect framework from args
       let detectedFramework = args.framework;
@@ -202,6 +245,16 @@ export function registerAiTool() {
         ? getFrameworkSuggestion(detectedFramework).skillName
         : null;
 
+      // Determine if detected skill belongs to a different domain than the prompt
+      const detectedDomain = detectedSkillName?.startsWith("pix-frontend") ? "frontend"
+        : detectedSkillName?.startsWith("pix-backend") ? "backend"
+        : detectedSkillName?.startsWith("pix-data") ? "data"
+        : detectedSkillName?.startsWith("pix-devops") ? "devops"
+        : null;
+
+      // Only apply framework bias when domains match (or prompt domain is unknown)
+      const applyFrameworkBias = !promptDomain || promptDomain === detectedDomain;
+
       // Score each skill
       const skillRawScores = [];
 
@@ -215,10 +268,8 @@ export function registerAiTool() {
 
         let finalScore = rawScore;
 
-        if (detectedFramework) {
+        if (detectedFramework && applyFrameworkBias) {
           if (skillName === detectedSkillName) {
-            // A detected/explicit framework is a hard routing signal. Keep the
-            // framework skill visible even for generic prompts like "button".
             finalScore = Math.max(rawScore * 2.0, 20);
           } else if (["pix-styleguide", "pix-frontend", "pix-platform-web", "pix-architect", "pix-ui-design-system"].includes(skillName)) {
             finalScore *= 1.15;
@@ -236,30 +287,39 @@ export function registerAiTool() {
       const maxRaw = Math.max(...skillRawScores.map(s => s.rawScore), 0);
       const skillScores = skillRawScores.map(({ skill, rawScore }) => ({
         skill,
-        confidence: maxRaw > 0 ? Math.min(1, rawScore / maxRaw) : 0,
+        relativeScore: maxRaw > 0 ? Math.min(1, rawScore / maxRaw) : 0,
+        absoluteScore: rawScore,
         sections: extractTopSections(skill, promptWords),
         next_tools: skillNextTools(skill),
       }));
 
-      skillScores.sort((a, b) => b.confidence - a.confidence);
+      skillScores.sort((a, b) => b.relativeScore - a.relativeScore);
 
       const top = skillScores.slice(0, 6);
-      const primaryRoute = top[0] ?? { skill: "none", confidence: 0, sections: [], next_tools: ["pix_search"] };
+      const primaryRoute = top[0] ?? { skill: "none", relativeScore: 0, absoluteScore: 0, sections: [], next_tools: ["pix_search"] };
+
+      // If absolute score is below threshold, mark as uncertain
+      const ABSOLUTE_THRESHOLD = 5;
+      const isUncertain = primaryRoute.absoluteScore < ABSOLUTE_THRESHOLD;
 
       const result = {
-        route: primaryRoute.skill,
-        confidence: Math.round(primaryRoute.confidence * 100) / 100,
+        route: isUncertain ? "unknown" : primaryRoute.skill,
+        confidence: Math.round(primaryRoute.relativeScore * 100) / 100,
+        absoluteScore: Math.round(primaryRoute.absoluteScore * 100) / 100,
+        uncertain: isUncertain,
         sections: primaryRoute.sections,
         next_tools: [...new Set(top.flatMap(t => t.next_tools))],
         alternatives: top.slice(1).map(t => ({
           route: t.skill,
-          confidence: Math.round(t.confidence * 100) / 100,
+          confidence: Math.round(t.relativeScore * 100) / 100,
           sections: t.sections.slice(0, 3),
         })),
         skills_available: allSkills,
-        summary: top.length > 0
-          ? `Top match: ${primaryRoute.skill} (${Math.round(primaryRoute.confidence * 100)}%). Relevant sections: ${primaryRoute.sections.join(", ")}. Try: ${[...new Set(top.flatMap(t => t.next_tools))].join(", ")}.`
-          : `No matching skill for "${prompt}". Try pix_search for full-text search.`,
+        summary: isUncertain
+          ? `No strong match for "${prompt}". Try rephrasing or use pix_search for full-text search.`
+          : top.length > 0
+            ? `Top match: ${primaryRoute.skill} (${Math.round(primaryRoute.relativeScore * 100)}%). Relevant sections: ${primaryRoute.sections.join(", ")}. Try: ${[...new Set(top.flatMap(t => t.next_tools))].join(", ")}.`
+            : `No matching skill for "${prompt}". Try pix_search for full-text search.`,
       };
 
       return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
