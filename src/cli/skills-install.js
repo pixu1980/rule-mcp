@@ -12,7 +12,7 @@
  */
 
 import { copyFileSync, existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync, rmSync } from "node:fs";
-import { join, relative } from "node:path";
+import { join, relative, dirname } from "node:path";
 import { createInterface } from "node:readline";
 import { homedir } from "node:os";
 import { stdin as input, stdout as output } from "node:process";
@@ -89,13 +89,13 @@ function copySkill(source, targetDir, name) {
 
   const entries = readdirSync(source, { withFileTypes: true, recursive: true });
   for (const entry of entries) {
-    const srcPath = join(source, entry.parentPath ?? source, entry.name);
+    const srcPath = join(entry.parentPath ?? source, entry.name);
     const relPath = relative(source, srcPath);
     const destPath = join(dest, relPath);
     if (entry.isDirectory()) {
       mkdirSync(destPath, { recursive: true });
     } else {
-      mkdirSync(join(dest, relative(source, join(source, entry.parentPath ?? ""))), { recursive: true });
+      mkdirSync(dirname(destPath), { recursive: true });
       copyFileSync(srcPath, destPath);
     }
   }
@@ -201,8 +201,27 @@ export async function skillsInstallCommand(opts = {}) {
   const localDir = ".agents/skills";
   const targetDir = scope === "project" ? localDir : globalDir;
 
+  // Batch mode: when --all is set or stdin is not a TTY, skip interactive UI
+  if (selectAll || !process.stdin.isTTY) {
+    const toInstall = selectAll
+      ? skills
+      : skills.filter(s => isInstalled(s.name, targetDir));
+    if (toInstall.length === 0) {
+      process.stdout.write("No skills selected. Nothing installed.\n");
+      return;
+    }
+    mkdirSync(targetDir, { recursive: true });
+    let installed = 0;
+    for (const skill of toInstall) {
+      copySkill(skill.source, targetDir, skill.name);
+      installed++;
+    }
+    process.stdout.write(`Installed ${installed}/${skills.length} skills to ${targetDir}\n`);
+    return;
+  }
+
   // Pre-check installed
-  const preSelected = selectAll ? skills.map((_, i) => i) : skills.reduce((acc, s, i) => {
+  const preSelected = skills.reduce((acc, s, i) => {
     if (isInstalled(s.name, targetDir)) acc.push(i);
     return acc;
   }, []);

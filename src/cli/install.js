@@ -77,8 +77,23 @@ const COMMAND_TEMPLATE_PATH = fileURLToPath(new URL("../../prompts/pix-galaxy-mc
 /** Safely read a text file, returning empty string if it doesn't exist. */
 const readText = (file) => (existsSync(file) ? readFileSync(file, "utf8") : "");
 
-/** Write a file, optionally as a dry-run (no actual write). */
+/** Write a file with backup and atomic write. Skips if dryRun. Throws on null content. */
+const atomicWrite = ({ file, content, dryRun }) => {
+  if (content === null) throw new Error(`Cannot write null content to ${file} — parse error in source`);
+  if (dryRun) return file;
+  if (existsSync(file)) backupFile(file);
+  const tmp = file + ".tmp." + Date.now();
+  mkdirSync(dirname(file), { recursive: true });
+  writeFileSync(tmp, content, "utf8");
+  try { rmSync(file, { force: true }); } catch {}
+  writeFileSync(file, content, "utf8");
+  try { rmSync(tmp, { force: true }); } catch {}
+  return file;
+};
+
+/** Write a file, optionally as a dry-run (no actual write). @deprecated Use atomicWrite for safety. */
 const writeText = ({ file, content, dryRun }) => {
+  if (content === null) throw new Error(`Cannot write null content to ${file} — parse error in source`);
   if (!dryRun) { mkdirSync(dirname(file), { recursive: true }); writeFileSync(file, content); }
   return file;
 };
@@ -133,9 +148,9 @@ export function mcpServerConfig(entrypoint, opts = {}) {
 
 // ─── JSON helpers ───────────────────────────────────────────────────────────
 
-/** Parse JSON, returning empty object on failure. */
+/** Parse JSON, returning null on failure (fail-closed). */
 const parseJson = (text) => {
-  try { return JSON.parse(text); } catch { return {}; }
+  try { return JSON.parse(text); } catch { return null; }
 };
 
 /** Serialize JSON with pretty formatting. */
@@ -143,14 +158,11 @@ const toJson = (obj) => `${JSON.stringify(obj, null, 2)}\n`;
 
 /**
  * Upsert an MCP server entry in a JSON config file.
- * Creates the file if it doesn't exist.
- *
- * @param {string} current — Current file content
- * @param {object} config — Server config object
- * @returns {string} — Updated JSON content
+ * Returns null if the file contains invalid JSON.
  */
 const upsertJsonServer = (current, config) => {
   const json = current.trim() ? parseJson(current) : {};
+  if (json === null) return null;
   json.mcpServers = json.mcpServers ?? {};
   json.mcpServers[serverName] = config;
   return toJson(json);
@@ -158,13 +170,12 @@ const upsertJsonServer = (current, config) => {
 
 /**
  * Remove an MCP server entry from a JSON config file.
- *
- * @param {string} current — Current file content
- * @returns {string} — Updated JSON content, or empty string if file would be empty
+ * Returns null if the file contains invalid JSON.
  */
 const removeJsonServer = (current) => {
   if (!current.trim()) return current;
   const json = parseJson(current);
+  if (json === null) return null;
   if (json.mcpServers?.[serverName]) {
     delete json.mcpServers[serverName];
     if (Object.keys(json.mcpServers).length === 0) delete json.mcpServers;
@@ -175,13 +186,11 @@ const removeJsonServer = (current) => {
 /**
  * Upsert an MCP server entry in VS Code-style JSON config
  * (which uses `servers` instead of `mcpServers`).
- *
- * @param {string} current — Current file content
- * @param {object} config — Server config object
- * @returns {string} — Updated JSON content
+ * Returns null if the file contains invalid JSON.
  */
 const upsertVscode = (current, config) => {
   const json = current.trim() ? parseJson(current) : {};
+  if (json === null) return null;
   json.servers = json.servers ?? {};
   json.servers[serverName] = { type: "stdio", ...config };
   return toJson(json);
@@ -189,13 +198,12 @@ const upsertVscode = (current, config) => {
 
 /**
  * Remove an MCP server entry from VS Code-style JSON config.
- *
- * @param {string} current — Current file content
- * @returns {string} — Updated JSON content, or empty string if file would be empty
+ * Returns null if the file contains invalid JSON.
  */
 const removeVscodeServer = (current) => {
   if (!current.trim()) return current;
   const json = parseJson(current);
+  if (json === null) return null;
   if (json.servers?.[serverName]) {
     delete json.servers[serverName];
     if (Object.keys(json.servers).length === 0) delete json.servers;
