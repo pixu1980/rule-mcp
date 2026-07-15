@@ -194,7 +194,7 @@ Benchmarks run on:
 | `pix_component` (multi-file) | 2ms | 4ms | Same as single-file + filename joins |
 | `pix_check` (guardrails) | 5ms | 12ms | Regex-based, no network calls |
 | `pix_detect` | 2ms | 5ms | Reads package.json + fs.existsSync |
-| `pix_react` (full skill) | 1ms | 2ms | Read from LRU cache |
+| `pix_frontend_react` (full skill) | 1ms | 2ms | Read from LRU cache |
 | `pix_scaffold` | 1ms | 3ms | Section extraction from cached SKILL.md |
 
 **All tools respond in under 15ms at P95.** No LLM call needed.
@@ -423,7 +423,6 @@ No equivalent exists in pix-styleguide (which focuses on vanilla HTML/CSS/JS).
 
 | Ported skill | Status |
 |---------------|--------|
-| `pix-galaxy-agents` | ✅ Complete |
 | `pix-backend-api-design` | ✅ Complete |
 | `pix-backend-security` | ✅ Complete |
 | `pix-coverage-gates` | ✅ Complete |
@@ -490,7 +489,6 @@ skills/pix-scaffolding
   │     ├── → skills/pix-devops-testing
   │     ├── → skills/pix-devops-gitlab-ci
   │     └── → rules/accessibility, rules/i18n
-  ├── → skills/pix-galaxy-agents
   └── → skills/pix-platform-expo
         ├── → skills/pix-platform-expo
         └── → rules/expo

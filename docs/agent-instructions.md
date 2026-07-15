@@ -1,24 +1,25 @@
 # Agent Instructions for pix-galaxy-mcp
 
-Use enforced workflow for every coding task, not frontend only.
+Use the pix-galaxy-mcp workflow for every coding task.
 
-## Mandatory workflow
+## Recommended workflow
 
-1. Call `pix` with full request plus known framework/project path.
-2. Load routed primary `pix-*` skill and only necessary secondary skills.
+1. Call `pix` or `pix_gateway` with full request plus known framework/project path.
+2. `pix_gateway` routes, loads evidence, and checks guardrails in a single call.
 3. Treat repository/tool evidence as source of truth. Never invent APIs, files, dependencies, tools, requirements, or successful checks.
 4. If evidence missing, call `pix_search`; if still absent, state uncertainty.
 5. Write failing tests before implementation changes.
-6. Use deterministic tools such as `pix_component`, `pix_scaffold`, and `pix_fix` when applicable.
+6. Use `pix_component` for component templates, `pix_scaffold` for project config files.
 7. Run `pix_check`. Failed guardrails are blocking; fix and rerun until all pass.
 8. Run project tests/typecheck and report only commands actually executed.
-9. Record structural decisions with `pix_process_adr`.
+9. Record structural decisions with `pix_process_adr` (disabled by default, enable with `PIX_AUTO_ADR=1`).
+10. Before writing files, run `pix_gateway` to get a receipt; use `pix_apply` with the receipt for writes.
 
-## Server-enforced boundaries
+## Advisory boundaries
 
-- Preprocessing rejects malformed, unsafe, oversized, deeply nested, or blank routing requests before handlers execute.
-- Postprocessing validates MCP output, verifies router skill/tool identifiers, and appends `_meta.pixEnforcement` plus visible compliance contract.
-- Guardrails reject placeholder implementation, ignored diagnostics, empty catches, and undeclared imports when dependency context exists.
+The server applies preprocessing (rejects malformed/unsafe input) and postprocessing (validates output shape).
+These are **advisory** — they improve reliability but MCP protocol cannot enforce tool call ordering.
+See `src/core/enforcement.js` for details.
 
 ## Frontend principles
 
@@ -27,6 +28,11 @@ Use enforced workflow for every coding task, not frontend only.
 - **Semantic HTML mandatory** — use semantic element instead of generic `<div>` where available.
 - **Barrel pattern** — component folder has `index.js`; implementation files use `_PascalCase.ext`.
 - **No unapproved CSS frameworks** — no Tailwind, Bootstrap, or CSS-in-JS.
+
+## Strict mode
+
+Set `PIX_STRICT_MODE=1` to expose only 9 read-only + gateway tools:
+`pix_gateway`, `pix_apply`, `pix`, `pix_search`, `pix_check`, `pix_detect`, `pix_scaffold`, `pix_component`, `pix_process_handoff`.
 
 ## Reusable entry points
 
