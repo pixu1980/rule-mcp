@@ -30,6 +30,7 @@ export class TodoItem extends HTMLElement {
       prop: 'checked',
       event: 'change',
     });
+
     const titleModel = model({
       signal: tickState,
       get: () => {
