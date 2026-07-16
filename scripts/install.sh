@@ -284,53 +284,53 @@ else
     # ── Interactive agent selection (checkboxes) ──
     SELECTED_AGENTS=()
     if [[ "$INTERACTIVE" == "true" ]] && [[ -t 0 ]]; then
-      # Track selected indices
+      # Track selected indices and cursor
       SELECTED_IDX=()
-    SELECTED_COUNT=0
+      SELECTED_COUNT=0
+      CURSOR=0
       echo ""
-      echo -e "  ${CYAN}Select agents to install (toggle with number, a=toggle all, d=done):${NC}"
+      echo -e "  ${CYAN}Select agents (↑↓ navigate, Space toggle, Enter confirm):${NC}"
       while true; do
-        # Move cursor up to redraw (except first render)
-        [[ -n "${FIRST_RENDER:-}" ]] && echo -en "\033[$(( ${#DETECTED_AGENTS[@]} + 3 ))A"
+        [[ -n "${FIRST_RENDER:-}" ]] && echo -en "\033[$(( ${#DETECTED_AGENTS[@]} + 2 ))A"
         FIRST_RENDER=1
-        # Render list
         for i in "${!DETECTED_AGENTS[@]}"; do
           checked=" "
           for s in ${SELECTED_IDX[@]-}; do [[ "$s" == "$i" ]] && checked="x"; done
-          echo -e "  ${BOLD}$((i+1))${NC}) [${checked}] ${DETECTED_AGENTS[$i]}"
+          pointer=" "
+          [[ $i -eq $CURSOR ]] && pointer="${BOLD}>${NC}"
+          echo -e " ${pointer} [${checked}] ${DETECTED_AGENTS[$i]}"
         done
-        echo -e "  ${BOLD}a${NC}) [${SELECTED_COUNT}/${#DETECTED_AGENTS[@]}] Toggle all"
-        echo -e "  ${BOLD}d${NC}) Done — install selected agents"
         echo ""
-        read -r -p "  Toggle: " TOGGLE_INPUT
-        if [[ "$TOGGLE_INPUT" == "d" ]] || [[ -z "$TOGGLE_INPUT" ]]; then
-          break
-        elif [[ "$TOGGLE_INPUT" == "a" ]]; then
-          if [[ $SELECTED_COUNT -eq ${#DETECTED_AGENTS[@]} ]]; then
-            SELECTED_IDX=()
-            SELECTED_COUNT=0
+        # Read one char
+        read -r -s -n1 KEY
+        if [[ -z "$KEY" ]]; then
+          break  # Enter
+        elif [[ "$KEY" == $'\x20' ]]; then
+          # Space — toggle current
+          idx=$CURSOR
+          found=-1
+          for s in "${!SELECTED_IDX[@]}"; do
+            if [[ "${SELECTED_IDX[$s]}" == "$idx" ]]; then found=$s; break; fi
+          done
+          if [[ $found -ge 0 ]]; then
+            unset "SELECTED_IDX[$found]"
+            SELECTED_IDX=("${SELECTED_IDX[@]}")
+            SELECTED_COUNT=$((SELECTED_COUNT - 1))
           else
-            # Toggle all: generate index array 0..N-1
-            SELECTED_IDX=()
-            SELECTED_COUNT=${#DETECTED_AGENTS[@]}
-            for ((si=0; si<${#DETECTED_AGENTS[@]}; si++)); do SELECTED_IDX+=("$si"); done
+            SELECTED_IDX+=("$idx")
+            SELECTED_COUNT=$((SELECTED_COUNT + 1))
           fi
-        elif [[ "$TOGGLE_INPUT" =~ ^[0-9]+$ ]]; then
-          # Toggle single
-          idx=$((TOGGLE_INPUT - 1))
-          if [[ $idx -ge 0 ]] && [[ $idx -lt ${#DETECTED_AGENTS[@]} ]]; then
-            found=-1
-            for s in "${!SELECTED_IDX[@]}"; do
-              if [[ "${SELECTED_IDX[$s]}" == "$idx" ]]; then found=$s; break; fi
-            done
-            if [[ $found -ge 0 ]]; then
-              unset "SELECTED_IDX[$found]"
-              SELECTED_IDX=("${SELECTED_IDX[@]}")  # re-index
-              SELECTED_COUNT=$((SELECTED_COUNT - 1))
-            else
-              SELECTED_IDX+=("$idx")
-              SELECTED_COUNT=$((SELECTED_COUNT + 1))
-            fi
+        elif [[ "$KEY" == $'\x1b' ]]; then
+          # Escape — read arrow keys
+          read -r -s -n2 KEY2
+          if [[ "$KEY2" == "[A" ]]; then
+            # Up
+            CURSOR=$((CURSOR - 1))
+            [[ $CURSOR -lt 0 ]] && CURSOR=$((${#DETECTED_AGENTS[@]} - 1))
+          elif [[ "$KEY2" == "[B" ]]; then
+            # Down
+            CURSOR=$((CURSOR + 1))
+            [[ $CURSOR -ge ${#DETECTED_AGENTS[@]} ]] && CURSOR=0
           fi
         fi
       done
@@ -344,7 +344,6 @@ else
       fi
       info "Selected ${#SELECTED_AGENTS[@]} agent(s): ${SELECTED_AGENTS[*]}"
     else
-      # Non-interactive: install all detected agents
       SELECTED_AGENTS=("${DETECTED_AGENTS[@]}")
     fi
 
@@ -352,25 +351,33 @@ else
     INSTALL_MODE="stdio"
     if [[ "$INTERACTIVE" == "true" ]] && [[ -t 0 ]]; then
       MODES=(stdio sse docker)
-      MODE_LABELS=("Stdio daemon (default) — starts server on demand via agent" "SSE daemon — runs background HTTP server on port 37999" "Docker — run via container")
+      MODE_LABELS=("Stdio daemon — on-demand via agent" "SSE daemon — background HTTP on port 37999" "Docker — containerized")
       SELECTED_MODE=0
       echo ""
-      echo -e "  ${CYAN}Select install mode (enter number, or Enter to confirm):${NC}"
+      echo -e "  ${CYAN}Select mode (↑↓ navigate, Enter confirm):${NC}"
       while true; do
         [[ -n "${FIRST_MODE:-}" ]] && echo -en "\033[$(( ${#MODES[@]} + 2 ))A"
         FIRST_MODE=1
         for i in "${!MODES[@]}"; do
           radio=" "
           [[ $i -eq $SELECTED_MODE ]] && radio="•"
-          echo -e "  ${BOLD}$((i+1))${NC}) (${radio}) ${MODE_LABELS[$i]}"
+          pointer=" "
+          [[ $i -eq $SELECTED_MODE ]] && pointer="${BOLD}>${NC}"
+          echo -e " ${pointer} (${radio}) ${MODE_LABELS[$i]}"
         done
         echo ""
-        read -r -p "  Choose [1]: " RADIO_INPUT
-        if [[ -z "$RADIO_INPUT" ]]; then
-          break
-        elif [[ "$RADIO_INPUT" =~ ^[0-9]+$ ]] && [[ $RADIO_INPUT -ge 1 ]] && [[ $RADIO_INPUT -le ${#MODES[@]} ]]; then
-          SELECTED_MODE=$((RADIO_INPUT - 1))
-          break
+        read -r -s -n1 KEY
+        if [[ -z "$KEY" ]]; then
+          break  # Enter
+        elif [[ "$KEY" == $'\x1b' ]]; then
+          read -r -s -n2 KEY2
+          if [[ "$KEY2" == "[A" ]]; then
+            SELECTED_MODE=$((SELECTED_MODE - 1))
+            [[ $SELECTED_MODE -lt 0 ]] && SELECTED_MODE=$((${#MODES[@]} - 1))
+          elif [[ "$KEY2" == "[B" ]]; then
+            SELECTED_MODE=$((SELECTED_MODE + 1))
+            [[ $SELECTED_MODE -ge ${#MODES[@]} ]] && SELECTED_MODE=0
+          fi
         fi
       done
       INSTALL_MODE="${MODES[$SELECTED_MODE]}"
