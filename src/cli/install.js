@@ -19,6 +19,7 @@
  * Stdio can use a local Node entrypoint or a globally installed command.
  */
 
+import { execSync } from "node:child_process";
 import { existsSync, mkdirSync, readFileSync, writeFileSync, appendFileSync, rmSync } from "node:fs";
 import { homedir, platform } from "node:os";
 import { dirname, join, resolve } from "node:path";
@@ -148,6 +149,31 @@ const backupFile = (file) => {
  * @param {{ global?: boolean, mode?: "stdio"|"daemon"|"sse"|"docker", port?: number }} [opts]
  * @returns {object}
  */
+/** Detect the globally installed pix-galaxy-mcp binary, if any. */
+const resolveGlobalBinary = () => {
+  // Check common pnpm/Homebrew locations (fast path, no shell overhead).
+  const HOME = homedir();
+  const candidates = [
+    join(HOME, "Library", "pnpm", "bin", "pix-galaxy-mcp"),
+    "/opt/homebrew/bin/pix-galaxy-mcp",
+    "/usr/local/bin/pix-galaxy-mcp",
+  ];
+  for (const candidate of candidates) {
+    if (existsSync(candidate)) return candidate;
+  }
+  // Fall back to PATH scan, but exclude local node_modules/.bin (project-local shims).
+  try {
+    const out = execSync("command -v pix-galaxy-mcp 2>/dev/null || which pix-galaxy-mcp 2>/dev/null", {
+      encoding: "utf8",
+      timeout: 2000,
+    }).trim();
+    if (out && existsSync(out) && !out.includes("node_modules/.bin")) return out;
+  } catch {
+    // Not found — fall back to local Node entrypoint.
+  }
+  return null;
+};
+
 const cmdConfig = (entrypoint, opts = {}) => {
   const mode = normalizeInstallMode(opts.mode);
   if (mode === "daemon" || mode === "docker") {
@@ -160,10 +186,17 @@ const cmdConfig = (entrypoint, opts = {}) => {
       lifecycle: "keep-alive",
     };
   }
+
+  // Prefer a globally installed binary (single command, like tokensave).
+  // child_process.spawn does not expand `~` — absolute paths are mandatory.
+  const globalBin = resolveGlobalBinary();
+  if (globalBin) {
+    return { command: globalBin, args: ["serve"], directTools: true, lifecycle: "keep-alive" };
+  }
+
   return {
-    // child_process.spawn does not expand `~`; MCP stdio config needs paths.
-    command: opts.global ? "pix-galaxy-mcp" : process.execPath,
-    args: opts.global ? ["serve"] : [entrypoint, "serve"],
+    command: process.execPath,
+    args: [entrypoint, "serve"],
     directTools: true,
     lifecycle: "keep-alive",
   };
