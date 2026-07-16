@@ -288,20 +288,21 @@ else
       SELECTED_IDX=()
       SELECTED_COUNT=0
       CURSOR=0
-      echo -e "\n  ${CYAN}Select agents (↑↓ Space Enter):${NC}"
-      echo -en "\033[s"
+      echo ""
+      echo -e "  ${CYAN}Select agents (↑↓ Space Enter, q=quit):${NC}"
       while true; do
-        echo -en "\033[u\033[J"
         for i in "${!DETECTED_AGENTS[@]}"; do
           checked=" "
           for s in ${SELECTED_IDX[@]-}; do [[ "$s" == "$i" ]] && checked="x"; done
-          pointer=" "
-          [[ $i -eq $CURSOR ]] && pointer="${BOLD}>${NC}"
-          echo -e " ${pointer} [${checked}] ${DETECTED_AGENTS[$i]}"
+          pointer="  "
+          [[ $i -eq $CURSOR ]] && pointer="${BOLD}>${NC} "
+          echo -e "${pointer}[${checked}] ${DETECTED_AGENTS[$i]}"
         done
+        echo "  Selected: ${SELECTED_COUNT}/${#DETECTED_AGENTS[@]}"
         echo ""
-        # Read one char
         read -r -s -n1 KEY
+        # Clear previous lines (agents + status + empty = agents+2)
+        for ((_i=0; _i<${#DETECTED_AGENTS[@]}+2; _i++)); do echo -en "\033[1A\033[2K"; done
         if [[ -z "$KEY" ]]; then
           break  # Enter
         elif [[ "$KEY" == $'\x20' ]]; then
@@ -352,19 +353,19 @@ else
       MODES=(stdio sse docker)
       MODE_LABELS=("Stdio daemon — on-demand via agent" "SSE daemon — background HTTP on port 37999" "Docker — containerized")
       SELECTED_MODE=0
-      echo -e "\n  ${CYAN}Select mode (↑↓ Enter):${NC}"
-      echo -en "\033[s"
+      echo -e "\n  ${CYAN}Select mode (↑↓ Enter, q=quit):${NC}"
       while true; do
-        echo -en "\033[u\033[J"
         for i in "${!MODES[@]}"; do
           radio=" "
           [[ $i -eq $SELECTED_MODE ]] && radio="•"
-          pointer=" "
-          [[ $i -eq $SELECTED_MODE ]] && pointer="${BOLD}>${NC}"
-          echo -e " ${pointer} (${radio}) ${MODE_LABELS[$i]}"
+          pointer="  "
+          [[ $i -eq $SELECTED_MODE ]] && pointer="> "
+          echo -e "${pointer}(${radio}) ${MODE_LABELS[$i]}"
         done
         echo ""
         read -r -s -n1 KEY
+        for ((_i=0; _i<${#MODES[@]}+1; _i++)); do echo -en "\033[1A\033[2K"; done
+
         if [[ -z "$KEY" ]]; then
           break  # Enter
         elif [[ "$KEY" == $'\x1b' ]]; then
