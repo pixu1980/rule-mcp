@@ -1,11 +1,7 @@
 ---
 name: pix-frontend-meta-remix
-description: |
-  Remix / React Router application development with pix principles.
-  Covers nested routing, loaders/actions, SSR,
-  progressive enhancement, forms, sessions, and deployment.
-  Use with pix-frontend-react as the UI foundation.
-  Zero CSS classes, semantic HTML, barrel file tree.
+description: >-
+  Use when building Remix or React Router applications. Covers nested routing, loaders/actions, SSR, progressive enhancement, and sessions.
 tags:
   - "frontend"
   - "meta"

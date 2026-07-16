@@ -1,8 +1,7 @@
 ---
 name: pix-toolchain-typescript
-description: >
-  TypeScript compiler configuration, tsconfig management, strict mode setups,
-  path aliases, declaration files, and build strategies for Node.js and frontend.
+description: >-
+  Use when configuring TypeScript compiler options. Covers tsconfig.json, strict mode, path aliases, declaration files, and build strategies.
 tags:
   - "typescript"
   - "tsc"

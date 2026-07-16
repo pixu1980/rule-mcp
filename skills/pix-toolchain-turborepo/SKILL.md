@@ -1,9 +1,7 @@
 ---
 name: pix-toolchain-turborepo
-description: >
-  Turborepo monorepo orchestration: pipeline configuration, caching,
-  remote caching, task dependency graphs, and workspace management.
-  Use with pnpm workspaces for fast, parallel monorepo builds.
+description: >-
+  Use when orchestrating monorepos with Turborepo. Covers pipeline configuration, caching, remote caching, task dependencies, and parallel builds.
 tags:
   - "turborepo"
   - "turbo"

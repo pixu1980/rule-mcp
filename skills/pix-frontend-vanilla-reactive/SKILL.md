@@ -1,13 +1,7 @@
 ---
 name: pix-frontend-vanilla-reactive
-description: |
-  Vanilla JS reactive pattern: Proxy-based Store, Signals (State/Computed),
-  microtask-scheduled effects, template engine with html`` tagged templates,
-  {{ }} interpolation with filter pipes, <for>/<if>/<switch> directives,
-  model() two-way binding, <for> keyed list reconciliation,
-  tick bridge between store events and signal invalidation.
-  Components are custom element classes with external CSS via adoptedStyleSheets.
-  NO inline styles. Use when building reactive frontends WITHOUT frameworks.
+description: >-
+  Use when building reactive web UIs without frameworks. Covers Proxy-based Store, Signals, html`` tagged templates, custom elements, and adoptedStyleSheets.
 tags:
   - "frontend"
   - "vanilla"

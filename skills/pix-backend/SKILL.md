@@ -1,9 +1,7 @@
 ---
 name: pix-backend
-description: >
-  Backend application development umbrella — index of all backend skills.
-  Routes to specific framework, database, and deployment skills.
-  This skill is an index: delegate to the specialized skill below.
+description: >-
+  Use when designing or building backend services to route to the correct backend framework or database skill. Covers Express, Fastify, NestJS, Hono, and database integrations.
 tags:
   - "backend"
   - "api"

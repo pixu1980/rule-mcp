@@ -1,11 +1,7 @@
 ---
 name: pix-ui-design-system
-description: >
-  Distinctive production-grade UI design direction for pix projects. Use
-  when designing pages, components, dashboards, posters, landing pages, or
-  visual systems that must feel memorable while still obeying pix
-  styleguides: zero CSS classes, zero inline styles, semantic HTML, accessible
-  states, external CSS or adoptedStyleSheets, and barrel file conventions.
+description: >-
+  Use when creating production-grade UI components and design systems. Covers component composition, interaction design, accessibility states, and external CSS.
 tags:
   - ui
   - design-system

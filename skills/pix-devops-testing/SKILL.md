@@ -1,10 +1,7 @@
 ---
 name: pix-devops-testing
-description: >
-  Write and maintain tests for pix repositories using Vitest.
-  Use when creating unit or integration tests, configuring vitest.config.ts,
-  mocking dependencies, testing Fastify endpoints, testing React components,
-  or debugging test failures.
+description: >-
+  Use when writing unit or integration tests with Vitest. Covers test configuration, mocking, endpoint testing, component testing, and debugging failures.
 tags:
   - "devops"
   - "testing"

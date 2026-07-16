@@ -1,7 +1,7 @@
 ---
 name: pix-styleguide-html
-description: >
-  Semantic HTML, document structure, template engine syntax, accessibility essentials, and element conventions for frontend development.
+description: >-
+  Use when writing semantic HTML following pix conventions. Covers document structure, template engine syntax, accessibility, and element selection.
 tags:
   - "html"
   - "semantic"

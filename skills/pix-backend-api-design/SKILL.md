@@ -1,9 +1,7 @@
 ---
 name: pix-backend-api-design
-description: >
-  Design REST APIs for pix backend services.
-  Use when defining endpoints, HTTP methods, versioning, request/response contracts,
-  pagination, filtering, sorting, and OpenAPI documentation.
+description: >-
+  Use when defining REST API endpoints, HTTP methods, versioning, or request/response contracts. Covers OpenAPI documentation, pagination, filtering, and sorting.
 tags:
   - "backend"
   - "api"

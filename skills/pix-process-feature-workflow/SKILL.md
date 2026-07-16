@@ -1,9 +1,7 @@
 ---
 name: pix-process-feature-workflow
-description: >
-  End-to-end procedure for adding a new feature to any pix repository.
-  Use when implementing a feature in a backend, frontend, or AI agent project,
-  from branch creation through merge request.
+description: >-
+  Use when adding a new feature from branch creation through merge request. Covers the complete end-to-end feature implementation process.
 tags:
   - "process"
   - "feature"

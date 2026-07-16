@@ -1,10 +1,7 @@
 ---
 name: pix-process-bmad
-description: >
-  BMAD Method (Build More Architect Dreams) — AI-driven development framework
-  for structured software delivery through 4 phases (Analysis, Planning,
-  Solutioning, Implementation) with specialized agents, guided workflows,
-  and three planning tracks (Quick Flow, BMad Method, Enterprise).
+description: >-
+  Use when following the BMad structured delivery method. Covers 4-phase workflow (analysis, planning, solution, implementation) with agent-guided execution.
 tags:
   - "bmad"
   - "method"

@@ -1,8 +1,7 @@
 ---
 name: pix-devops
-description: >
-  Index of all DevOps and engineering skills: Docker, GitLab CI, testing, and version management.
-  Delegates to the specific skill based on CI/CD and infrastructure needs.
+description: >-
+  Use when setting up CI/CD, Docker, or testing infrastructure to route to the correct DevOps skill. Covers pipelines, containers, and version management.
 tags:
   - "devops"
   - "ci"

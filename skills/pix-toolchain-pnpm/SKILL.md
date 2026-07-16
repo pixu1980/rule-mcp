@@ -1,9 +1,7 @@
 ---
 name: pix-toolchain-pnpm
-description: >
-  pnpm package manager: workspace management, dependency resolution,
-  caching strategies, CI optimization, and monorepo patterns.
-  Covers workspace protocol, filter flags, and store management.
+description: >-
+  Use when managing packages with pnpm. Covers workspaces, caching strategies, CI optimization, monorepo patterns, and store management.
 tags:
   - "pnpm"
   - "package-manager"

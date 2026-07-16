@@ -1,9 +1,7 @@
 ---
 name: pix-devops-gitlab-ci
-description: >
-  Create and maintain GitLab CI pipelines for pix repositories.
-  Use when generating .gitlab-ci.yml, configuring caching, setting up
-  coverage reporting, Docker build/push, or deploy stages.
+description: >-
+  Use when creating or maintaining GitLab CI pipelines. Covers caching, Docker build/push, coverage reports, deploy stages, and workflow configuration.
 tags:
   - "devops"
   - "gitlab"

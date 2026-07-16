@@ -1,8 +1,7 @@
 ---
 name: pix-toolchain-husky
-description: >
-  Git hooks management with Husky: commit hooks, pre-push validation,
-  lint-staged integration, commitlint, and CI-friendly setup.
+description: >-
+  Use when setting up Git hooks with Husky. Covers commit hooks, pre-push validation, lint-staged, commitlint, and CI-friendly configuration.
 tags:
   - "husky"
   - "git-hooks"

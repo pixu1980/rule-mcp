@@ -1,8 +1,7 @@
 ---
 name: pix-platform
-description: >
-  Index of all platform/project-type skills: Desktop (Electron), Expo (React Native),
-  Library authoring, and Web platform conventions.
+description: >-
+  Use when building platform-specific projects to route to the correct platform skill. Covers desktop, mobile (Expo), library authoring, and web conventions.
 tags:
   - "platform"
   - "desktop"

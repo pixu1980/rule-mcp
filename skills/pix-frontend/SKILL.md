@@ -1,8 +1,7 @@
 ---
 name: pix-frontend
-description: >
-  Index of all frontend UI framework skills: React, Vue, Angular, Svelte, SolidJS, Astro, Vanilla Reactive.
-  Includes meta-framework integrations (Next.js, Nuxt, Remix).
+description: >-
+  Use when building frontend UIs to route to the correct framework skill. Covers React, Vue, Angular, Svelte, SolidJS, Astro, meta-frameworks, and vanilla reactive.
 tags:
   - "frontend"
   - "ui"

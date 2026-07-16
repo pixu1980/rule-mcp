@@ -1,10 +1,7 @@
 ---
 name: pix-data-postgresql
-description: >
-  PostgreSQL 16+ complete reference: DDL scripts, indexing strategies,
-  performance tuning, replication, partitioning, connection pooling,
-  JSONB patterns, full-text search, and production maintenance.
-  Includes ready-to-run SQL scripts for every common operation.
+description: >-
+  Use when working with PostgreSQL 16+. Covers DDL scripts, indexing, performance tuning, replication, partitioning, connection pooling, JSONB, and full-text search.
 tags:
   - "postgresql"
   - "postgres"

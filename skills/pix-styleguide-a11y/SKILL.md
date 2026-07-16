@@ -1,7 +1,7 @@
 ---
 name: pix-styleguide-a11y
-description: >
-  WCAG 2.2 AA accessibility: semantic HTML, ARIA, keyboard navigation, color contrast, forms, media, automated testing with Playwright + axe-core.
+description: >-
+  Use when ensuring WCAG 2.2 AA accessibility compliance. Covers semantic HTML, ARIA, keyboard navigation, color contrast, and Playwright + axe-core testing.
 tags:
   - "accessibility"
   - "a11y"

@@ -1,9 +1,7 @@
 ---
 name: pix-frontend-solidjs
-description: |
-  SolidJS best practices aligned with pix-styleguide and pix-frontend-vanilla-reactive.
-  Zero CSS classes (element + data-part selectors only), zero inline styles,
-  semantic HTML mandatory, barrel file tree. Fine-grained reactivity with Signals.
+description: >-
+  Use when building SolidJS applications with fine-grained reactivity. Follows pix principles: zero CSS classes, semantic HTML, Signals, barrel file tree.
 tags:
   - "frontend"
   - "solidjs"

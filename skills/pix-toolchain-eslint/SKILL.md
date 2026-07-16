@@ -1,9 +1,7 @@
 ---
 name: pix-toolchain-eslint
-description: >
-  ESLint 9+ flat config: rule sets for TypeScript, React, and Node.js,
-  plugin integration, custom rules, and CI integration.
-  Use when Biome's rule set is insufficient and you need full plugin ecosystem.
+description: >-
+  Use when configuring ESLint 9+ flat config for projects. Covers TypeScript, React, and Node.js rule sets, plugin integration, and CI setup.
 tags:
   - "eslint"
   - "linter"

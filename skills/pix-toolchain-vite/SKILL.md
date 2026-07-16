@@ -1,9 +1,7 @@
 ---
 name: pix-toolchain-vite
-description: >
-  Vite build tool configuration and best practices.
-  Covers vite.config.ts, vitest.config.ts, environment variables,
-  build optimization, and production deployment for Vite-based projects.
+description: >-
+  Use when configuring Vite as build tool. Covers vite.config.ts, environment variables, build optimization, and production deployment.
 tags:
   - "vite"
   - "build-tool"

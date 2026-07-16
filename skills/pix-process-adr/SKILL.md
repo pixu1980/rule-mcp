@@ -1,9 +1,7 @@
 ---
 name: pix-process-adr
-description: >
-  Architecture Decision Records (ADR) for pix projects.
-  Capture, store, and manage architectural decisions in docs/adr/
-  using the standard Nygard template. Auto-numbers and maintains an index.
+description: >-
+  Use when recording architecture decisions. Covers auto-numbered ADRs with Nygard template, searchable index, and chronological ordering.
 tags:
   - architecture
   - documentation

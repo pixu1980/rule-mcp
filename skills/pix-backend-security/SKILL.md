@@ -1,9 +1,7 @@
 ---
 name: pix-backend-security
-description: >
-  Apply security best practices to pix repositories. Use when handling
-  environment variables, secrets, Docker security, HTTP headers, rate limiting,
-  CORS, input validation, or CI secret management.
+description: >-
+  Use when applying security best practices to backend services. Covers rate limiting, CORS, Helmet headers, input validation, environment variables, and Docker security.
 tags:
   - "backend"
   - "security"

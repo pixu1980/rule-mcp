@@ -1,10 +1,7 @@
 ---
 name: pix-frontend-svelte
-description: |
-  Svelte 5 / SvelteKit best practices aligned with pix-styleguide and pix-frontend-vanilla-reactive.
-  Zero CSS classes (element + data-part selectors only), zero inline styles,
-  semantic HTML mandatory, barrel file tree. Runes API ($state, $derived, $effect).
-  SvelteKit is the meta-framework for Svelte — file-based routing, SSR, SSG.
+description: >-
+  Use when building Svelte 5 applications with runes API. Follows pix principles: zero CSS classes, semantic HTML, $state/$derived, barrel file tree.
 tags:
   - "frontend"
   - "svelte"

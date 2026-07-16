@@ -1,9 +1,7 @@
 ---
 name: pix-toolchain-parcel
-description: >
-  Parcel 2+ zero-configuration bundler: entry points, transpilation,
-  code splitting, image optimization, environment variables,
-  and production builds for web applications.
+description: >-
+  Use when building applications with Parcel 2+ bundler. Covers zero-config setup, entry points, code splitting, image optimization, and production builds.
 tags:
   - "parcel"
   - "bundler"

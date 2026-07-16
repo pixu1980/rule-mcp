@@ -1,8 +1,7 @@
 ---
 name: pix-backend-express
-description: >
-  Express.js 5+ best practices: middleware patterns, error handling, routing,
-  performance optimization, security headers, and production deployment.
+description: >-
+  Use when building Express.js 5+ applications. Covers middleware patterns, error handling, routing, security headers, and production deployment.
 tags:
   - "express"
   - "expressjs"

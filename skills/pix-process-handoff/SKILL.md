@@ -1,8 +1,7 @@
 ---
 name: pix-process-handoff
-description: >
-  Generate a compressed LLM handoff summary from ADR logs and project context.
-  Enables cross-chat recovery, model-switch continuity, and session handoff.
+description: >-
+  Use when generating a compressed LLM handoff summary for session recovery. Covers ADR logs, project context, and cross-chat continuity.
 tags:
   - handoff
   - recovery

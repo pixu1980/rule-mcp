@@ -1,9 +1,7 @@
 ---
 name: pix-platform-agent
-description: >
-  Scaffold and maintain AI Agent projects. Covers project structure, tool
-  definitions, environment configuration, testing, and containerization
-  without prescribing a specific agent framework or core library.
+description: >-
+  Use when scaffolding or maintaining AI Agent projects. Covers project structure, tool definitions, environment config, testing, and containerization.
 tags:
   - "ai"
   - "agents"

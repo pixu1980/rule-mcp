@@ -1,9 +1,7 @@
 ---
 name: pix-styleguide
-description: >
-  Central index of all |pix coding style guides. Delegates to specialized
-  sub-skills: HTML semantics, CSS architecture, JavaScript conventions,
-  JSON structure, Markdown documentation, a11y, naming, and patterns.
+description: >-
+  Use when enforcing coding style to route to the correct styleguide skill. Covers HTML semantics, CSS architecture, JavaScript conventions, naming, and a11y.
 tags:
   - "styleguide"
   - "index"

@@ -1,11 +1,7 @@
 ---
 name: pix-platform-library
-description: |
-  Reusable library/package development with pix principles.
-  Covers pnpm package structure, public API design,
-  TypeScript/JSDoc type exports, dual CJS/ESM distribution,
-  semantic versioning, changelog generation, and publishing.
-  Zero CSS classes, semantic HTML, barrel file tree.
+description: >-
+  Use when developing reusable npm packages. Covers pnpm structure, public API design, TypeScript exports, dual CJS/ESM, and semantic versioning.
 tags:
   - "platform"
   - "library"

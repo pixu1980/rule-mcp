@@ -1,9 +1,7 @@
 ---
 name: pix-toolchain-project
-description: >
-  Base project configuration files and conventions.
-  Covers .gitignore, .editorconfig, .nvmrc, .env.example,
-  and repository health files (README, LICENSE, CONTRIBUTING).
+description: >-
+  Use when setting up base project configuration files. Covers .gitignore, .editorconfig, .nvmrc, .env.example, README, LICENSE, and CONTRIBUTING.
 tags:
   - "project"
   - "config"

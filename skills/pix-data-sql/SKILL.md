@@ -1,9 +1,7 @@
 ---
 name: pix-data-sql
-description: >
-  Complete SQL reference: table design patterns, index optimization, DDL scripts
-  (CREATE/ALTER/DROP), query writing standards, transaction management,
-  and database-agnostic best practices for relational databases.
+description: >-
+  Use when writing SQL queries or designing relational database schemas. Covers table design, indexing, DDL scripts, transactions, and database-agnostic best practices.
 tags:
   - "sql"
   - "relational"

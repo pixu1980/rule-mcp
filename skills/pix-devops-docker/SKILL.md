@@ -1,9 +1,7 @@
 ---
 name: pix-devops-docker
-description: >
-  Create and maintain Docker configuration for pix repositories.
-  Use when generating Dockerfiles, docker-compose.yml, .dockerignore,
-  or nginx.conf for backend, frontend, or AI agent projects.
+description: >-
+  Use when creating or maintaining Docker configuration. Covers Dockerfiles, docker-compose.yml, .dockerignore, multi-stage builds, and production readiness.
 tags:
   - "devops"
   - "docker"

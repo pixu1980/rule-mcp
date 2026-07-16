@@ -1,7 +1,7 @@
 ---
 name: pix-styleguide-markdown
-description: >
-  Markdown documentation style: document structure, headings, lists, code blocks, formatting, tables, links, and tone for technical documentation.
+description: >-
+  Use when writing Markdown documentation following pix style. Covers headings, lists, code blocks, tables, links, and tone for technical docs.
 tags:
   - "markdown"
   - "documentation"

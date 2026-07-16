@@ -1,12 +1,7 @@
 ---
 name: pix-platform-web
-description: |
-  Web application development with pix principles.
-  Covers browser-based app architecture, bundling, routing,
-  progressive enhancement, performance budgets, a11y (WCAG 2.2 AA),
-  and deployment (static hosting, CDN, CI/CD).
-  Delegates framework choice to pix-frontend-react, pix-frontend-vue, pix-frontend-angular, etc.
-  Zero CSS classes, semantic HTML, barrel file tree.
+description: >-
+  Use when building browser-based web applications. Covers bundling, routing, progressive enhancement, performance budgets, WCAG 2.2 AA, and CDN deployment.
 tags:
   - "platform"
   - "web"

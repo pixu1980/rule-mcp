@@ -1,10 +1,7 @@
 ---
 name: pix-frontend-react
-description: |
-  React best practices aligned with pix-styleguide and pix-frontend-vanilla-reactive.
-  Zero CSS classes (element + data-part selectors only), zero inline styles,
-  semantic HTML mandatory, barrel file tree, no CSS-in-JS or Tailwind.
-  Adapted for React 18+ functional components with hooks.
+description: >-
+  Use when building React 18+ functional components. Follows pix principles: zero CSS classes, semantic HTML, barrel file tree, data-part selectors.
 tags:
   - "frontend"
   - "react"

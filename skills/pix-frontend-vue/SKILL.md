@@ -1,9 +1,7 @@
 ---
 name: pix-frontend-vue
-description: |
-  Vue 3 best practices aligned with pix-styleguide and pix-frontend-vanilla-reactive.
-  Zero CSS classes (element + data-part selectors only), zero inline styles,
-  semantic HTML mandatory, barrel file tree. Composition API focused.
+description: >-
+  Use when building Vue 3 Composition API components. Follows pix principles: zero CSS classes, semantic HTML, barrel file tree, data-part selectors.
 tags:
   - "frontend"
   - "vue"

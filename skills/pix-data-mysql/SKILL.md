@@ -1,10 +1,7 @@
 ---
 name: pix-data-mysql
-description: >
-  MySQL 8+ / MariaDB 11+ complete reference: DDL scripts, InnoDB tuning,
-  indexing strategies, replication (async/semi-sync/GTID), query optimization,
-  backup scripts, and production maintenance.
-  Includes ready-to-run SQL scripts for every common operation.
+description: >-
+  Use when working with MySQL 8+ or MariaDB 11+. Covers DDL scripts, InnoDB tuning, indexing, replication, query optimization, and production maintenance.
 tags:
   - "mysql"
   - "mariadb"

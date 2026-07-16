@@ -1,11 +1,7 @@
 ---
 name: pix-data-sqlite
-description: >
-  SQLite 3.x complete reference: embedded database patterns, DDL scripts,
-  WAL vs DELETE journal modes, indexing strategies, full-text search (FTS5),
-  JSON functions, performance tuning, backup strategies, and ORM-agnostic
-  SQL best practices for embedded and local-first applications.
-  Includes ready-to-run SQL scripts for every common operation.
+description: >-
+  Use when working with SQLite for embedded databases. Covers DDL scripts, query optimization, JSON functions, WAL mode, and production usage patterns.
 tags:
   - "sqlite"
   - "data"

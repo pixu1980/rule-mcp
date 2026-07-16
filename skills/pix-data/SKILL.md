@@ -1,8 +1,7 @@
 ---
 name: pix-data
-description: >
-  Index of all data/database skills: SQL fundamentals, PostgreSQL, MySQL, and MongoDB.
-  Delegates to the specific database skill based on project requirements.
+description: >-
+  Use when working with databases to route to the correct database skill. Covers PostgreSQL, MySQL, MongoDB, SQLite, DuckDB, and IndexedDB.
 tags:
   - "data"
   - "database"

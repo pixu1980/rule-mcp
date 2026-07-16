@@ -1,8 +1,7 @@
 ---
 name: pix-backend-nestjs
-description: >
-  NestJS 10+ best practices: modular architecture, decorators, dependency injection,
-  guards, interceptors, pipes, GraphQL, microservices, testing, and deployment.
+description: >-
+  Use when building NestJS 10+ applications. Covers modular architecture, decorators, dependency injection, guards, interceptors, GraphQL, and microservices.
 tags:
   - "nestjs"
   - "decorators"

@@ -1,8 +1,7 @@
 ---
 name: pix-backend-fastify
-description: >
-  Fastify 5+ best practices: plugins, hooks, schema validation, serialization,
-  lifecycle, logging, and performance tuning for high-throughput APIs.
+description: >-
+  Use when building Fastify 5+ applications. Covers plugins, hooks, schema validation, serialization, and high-throughput API optimization.
 tags:
   - "fastify"
   - "nodejs"

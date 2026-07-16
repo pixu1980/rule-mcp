@@ -1,7 +1,7 @@
 ---
 name: pix-styleguide-json
-description: >
-  JSON structure conventions: validity, property naming, date formats, numeric precision, schema mindset, and API response consistency.
+description: >-
+  Use when structuring JSON data or API responses. Covers property naming, date formats, numeric precision, schema patterns, and consistency.
 tags:
   - "json"
   - "data"

@@ -1,9 +1,7 @@
 ---
 name: pix-backend-hono
-description: >
-  Hono 4+ best practices: edge-compatible API framework, middleware patterns,
-  RPC-style type sharing, Zod validation, and multi-runtime deployment
-  (Node.js, Cloudflare Workers, Bun, Deno).
+description: >-
+  Use when building Hono 4+ edge-compatible APIs. Covers middleware, Zod validation, RPC-style type sharing, and multi-runtime deployment.
 tags:
   - "hono"
   - "ultrafast"

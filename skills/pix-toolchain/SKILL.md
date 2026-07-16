@@ -1,9 +1,7 @@
 ---
 name: pix-toolchain
-description: >
-  Index of all toolchain skills: build tools (Vite, Parcel), linters (Biome, ESLint),
-  package management (pnpm), monorepo orchestration (Turborepo), Git hooks (Husky),
-  TypeScript configuration, and project base configs.
+description: >-
+  Use when configuring build tools, linters, or package managers to route to the correct toolchain skill. Covers Vite, Biome, ESLint, pnpm, Husky, and TypeScript.
 tags:
   - "toolchain"
   - "build"

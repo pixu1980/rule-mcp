@@ -1,7 +1,7 @@
 ---
 name: pix-styleguide-css
-description: >
-  CSS architecture, selector strategy (data-part, element), naming conventions, property ordering, custom properties, cascade layers, and responsive design.
+description: >-
+  Use when writing CSS following pix architecture. Covers data-part selectors, element selectors, cascade layers, custom properties, and responsive design.
 tags:
   - "css"
   - "styling"

@@ -1,11 +1,7 @@
 ---
 name: pix-data-indexed-db
-description: >
-  IndexedDB / File System Access API complete reference: browser-based
-  persistent storage patterns, object stores, indexes, transactions, cursors,
-  schema migration, bulk operations, Blob/File storage, sync patterns,
-  and offline-first architecture for web and Progressive Web Apps.
-  Includes ready-to-run JavaScript snippets for every common operation.
+description: >-
+  Use when using IndexedDB in the browser for client-side storage. Covers object stores, indexes, transactions, cursors, and versioning.
 tags:
   - "indexeddb"
   - "data"

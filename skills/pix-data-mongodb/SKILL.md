@@ -1,10 +1,7 @@
 ---
 name: pix-data-mongodb
-description: >
-  MongoDB 7+ complete reference: schema design patterns, CRUD scripts,
-  aggregation pipeline, indexing strategies, sharding, replication,
-  Mongoose/Driver patterns, and production operations.
-  Includes ready-to-run scripts for every common operation.
+description: >-
+  Use when working with MongoDB 7+. Covers schema design, CRUD operations, aggregation pipeline, indexing, sharding, replication, and Mongoose patterns.
 tags:
   - "mongodb"
   - "mongo"

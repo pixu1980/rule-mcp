@@ -1,10 +1,7 @@
 ---
 name: pix-styleguide-validation
-description: >
-  Cross-border business validation patterns: email, phone, VAT, tax IDs,
-  postal codes, national identification numbers, and address formats.
-  Internationalised validation rules for EU, UK, US, and global entities.
-  Framework-agnostic — applicable to any frontend or backend skill.
+description: >-
+  Use when validating international business data. Covers email, phone, VAT, tax IDs, postal codes, and national identification numbers for EU, UK, and US.
 tags:
   - "validation"
   - "business-rules"

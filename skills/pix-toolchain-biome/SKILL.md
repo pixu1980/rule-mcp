@@ -1,9 +1,7 @@
 ---
 name: pix-toolchain-biome
-description: >
-  Biome linter and formatter configuration and best practices.
-  Zero-config by default, but covers migration from ESLint + Prettier,
-  rule customization, and CI integration.
+description: >-
+  Use when configuring Biome linter and formatter. Covers zero-config setup, migration from ESLint + Prettier, rule customization, and CI integration.
 tags:
   - "biome"
   - "linter"

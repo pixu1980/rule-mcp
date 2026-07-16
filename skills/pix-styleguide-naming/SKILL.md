@@ -1,7 +1,7 @@
 ---
 name: pix-styleguide-naming
-description: >
-  Naming conventions and file tree structure: PascalCase, camelCase, UPPER_SNAKE_CASE, underscore prefix rule, barrel pattern, import conventions, and directory layout.
+description: >-
+  Use when following pix naming conventions for files, folders, and exports. Covers PascalCase, camelCase, UPPER_SNAKE_CASE, barrel patterns, and directory layout.
 tags:
   - "naming"
   - "conventions"

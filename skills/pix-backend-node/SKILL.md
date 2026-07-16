@@ -1,9 +1,7 @@
 ---
 name: pix-backend-node
-description: >
-  Scaffold a new pix backend-node repository.
-  Use when creating Express + TypeScript backend structure, baseline config,
-  tests, Docker, and CI files.
+description: >-
+  Use when scaffolding a new Node.js backend repository. Covers Express + TypeScript structure, baseline config, tests, Docker, and CI files.
 tags:
   - "backend"
   - "node"

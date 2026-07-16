@@ -1,9 +1,7 @@
 ---
 name: pix-devops-version
-description: >
-  Set up automatic version increment on every commit using Husky pre-commit hooks.
-  Use when configuring version management, setting up Husky, or ensuring
-  package.json version is incremented with each commit.
+description: >-
+  Use when setting up automatic version increment on every commit. Covers Husky pre-commit hooks, package.json version management, and version automation.
 tags:
   - "devops"
   - "version"

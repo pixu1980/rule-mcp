@@ -1,10 +1,7 @@
 ---
 name: pix-frontend-astro
-description: |
-  Astro best practices aligned with pix-styleguide and pix-frontend-vanilla-reactive.
-  Zero CSS classes, zero inline styles, semantic HTML, barrel file tree.
-  Islands architecture with minimal client JS.
-  Can be used standalone or with UI framework components (React, Vue, Svelte).
+description: >-
+  Use when building Astro islands-architecture sites. Supports zero CSS classes, semantic HTML, partial hydration, and integration with UI frameworks.
 tags:
   - "frontend"
   - "astro"

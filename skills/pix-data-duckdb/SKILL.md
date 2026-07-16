@@ -1,11 +1,7 @@
 ---
 name: pix-data-duckdb
-description: >
-  DuckDB 1.x complete reference: embedded analytical database patterns,
-  columnar storage, SQL extensions (PIVOT, UNNEST, QUALIFY), Parquet/CSV/JSON
-  import, window functions, CTE patterns, query optimization,
-  and in-process analytics for local processing and reporting.
-  Includes ready-to-run SQL scripts for every common operation.
+description: >-
+  Use when working with DuckDB for analytical queries and embedded OLAP. Covers SQL, Parquet/CSV import, window functions, and performance optimization.
 tags:
   - "duckdb"
   - "data"

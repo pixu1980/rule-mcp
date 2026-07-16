@@ -1,9 +1,7 @@
 ---
 name: pix-platform-expo
-description: >
-  Configure and manage EAS Build profiles, EAS Secrets, OTA updates,
-  and tag-driven GitLab CI/CD pipelines for Expo projects.
-  Use when setting up eas.json, build/submit workflows, or CI automation.
+description: >-
+  Use when configuring EAS Build profiles, OTA updates, or CI/CD for Expo projects. Covers eas.json, build/submit workflows, and tag-driven pipelines.
 tags:
   - "platform"
   - "expo"

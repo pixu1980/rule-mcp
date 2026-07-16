@@ -1,9 +1,7 @@
 ---
 name: pix-frontend-angular
-description: |
-  Angular best practices aligned with pix-styleguide and pix-frontend-vanilla-reactive.
-  Zero CSS classes (element + data-part selectors only), zero inline styles,
-  semantic HTML mandatory, barrel file tree. Standalone components, no NgModules.
+description: >-
+  Use when building Angular standalone components. Follows pix principles: zero CSS classes, semantic HTML, barrel file tree, data-part selectors.
 tags:
   - "frontend"
   - "angular"

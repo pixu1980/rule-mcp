@@ -1,8 +1,7 @@
 ---
 name: pix-process
-description: >
-  Index of all process and methodology skills: ADR, BMAD Method, documentation,
-  feature workflow, and handoff for LLM session recovery.
+description: >-
+  Use when following development methodologies to route to the correct process skill. Covers ADRs, BMad method, documentation, feature workflow, and handoffs.
 tags:
   - "process"
   - "methodology"
