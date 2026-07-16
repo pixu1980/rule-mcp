@@ -300,7 +300,7 @@ else
         done
         echo "  Selected: ${SELECTED_COUNT}/${#DETECTED_AGENTS[@]}"
         echo ""
-        read -r -s -N1 KEY
+        IFS= read -r -s -n1 KEY
         # Clear previous lines (agents + status + empty = agents+2)
         for ((_i=0; _i<${#DETECTED_AGENTS[@]}+2; _i++)); do echo -en "\033[1A\033[2K"; done
         if [[ "$KEY" == $'\x20' ]]; then
@@ -322,7 +322,7 @@ else
           break  # Enter
         elif [[ "$KEY" == $'\x1b' ]]; then
           # Escape — read arrow keys
-          read -r -s -n2 KEY2
+          IFS= read -r -s -n2 KEY2
           if [[ "$KEY2" == "[A" ]]; then
             # Up
             CURSOR=$((CURSOR - 1))
@@ -363,13 +363,13 @@ else
           echo -e "${pointer}(${radio}) ${MODE_LABELS[$i]}"
         done
         echo ""
-        read -r -s -n1 KEY
+        IFS= read -r -s -n1 KEY
         for ((_i=0; _i<${#MODES[@]}+1; _i++)); do echo -en "\033[1A\033[2K"; done
 
         if [[ -z "$KEY" ]]; then
           break  # Enter
         elif [[ "$KEY" == $'\x1b' ]]; then
-          read -r -s -n2 KEY2
+          IFS= read -r -s -n2 KEY2
           if [[ "$KEY2" == "[A" ]]; then
             SELECTED_MODE=$((SELECTED_MODE - 1))
             [[ $SELECTED_MODE -lt 0 ]] && SELECTED_MODE=$((${#MODES[@]} - 1))
