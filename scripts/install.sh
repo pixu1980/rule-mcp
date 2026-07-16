@@ -300,12 +300,10 @@ else
         done
         echo "  Selected: ${SELECTED_COUNT}/${#DETECTED_AGENTS[@]}"
         echo ""
-        read -r -s -n1 KEY
+        read -r -s -N1 KEY
         # Clear previous lines (agents + status + empty = agents+2)
         for ((_i=0; _i<${#DETECTED_AGENTS[@]}+2; _i++)); do echo -en "\033[1A\033[2K"; done
-        if [[ -z "$KEY" ]]; then
-          break  # Enter
-        elif [[ "$KEY" == $'\x20' ]]; then
+        if [[ "$KEY" == $'\x20' ]]; then
           # Space — toggle current
           idx=$CURSOR
           found=-1
@@ -320,6 +318,8 @@ else
             SELECTED_IDX+=("$idx")
             SELECTED_COUNT=$((SELECTED_COUNT + 1))
           fi
+        elif [[ -z "$KEY" ]]; then
+          break  # Enter
         elif [[ "$KEY" == $'\x1b' ]]; then
           # Escape — read arrow keys
           read -r -s -n2 KEY2
