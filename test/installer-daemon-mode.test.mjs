@@ -1,0 +1,39 @@
+/**
+ * Regression: daemon installs must connect clients to the running local SSE
+ * service, using a stable bearer token shared with that service.
+ */
+import { strict as assert } from "node:assert";
+import { execFileSync } from "node:child_process";
+import { existsSync, readFileSync, statSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
+import { mkdtempSync } from "node:fs";
+
+const fakeHome = mkdtempSync(join(tmpdir(), "pix-daemon-install-"));
+const installModule = new URL("../src/cli/install.js", import.meta.url).href;
+const source = [
+  `import { mcpServerConfig } from ${JSON.stringify(installModule)};`,
+  'console.log(JSON.stringify(mcpServerConfig("/tmp/pix-galaxy-mcp.js", { mode: "daemon" })));',
+].join(" ");
+const output = execFileSync(process.execPath, ["--input-type=module", "--eval", source], {
+  env: { ...process.env, HOME: fakeHome },
+  encoding: "utf8",
+});
+const config = JSON.parse(output).pix_galaxy_mcp;
+const tokenFile = join(fakeHome, ".local", "state", "pix-galaxy-mcp", "sse-token");
+
+assert.equal(config.command, undefined, "daemon config must not spawn a stdio process");
+assert.equal(config.url, "http://127.0.0.1:37999/sse", "daemon config must target local SSE");
+assert.equal(config.lifecycle, "keep-alive");
+assert.match(config.headers?.Authorization ?? "", /^Bearer [a-f0-9]{64}$/i, "daemon config must authenticate to SSE");
+assert(existsSync(tokenFile), "daemon token must be persisted for service restarts");
+assert.equal(
+  config.headers.Authorization,
+  `Bearer ${readFileSync(tokenFile, "utf8").trim()}`,
+  "client and daemon must share the same persisted token",
+);
+if (process.platform !== "win32") {
+  assert.equal(statSync(tokenFile).mode & 0o777, 0o600, "daemon token file must be owner-readable only");
+}
+
+console.log("  ✅ daemon installer config uses authenticated local SSE");
