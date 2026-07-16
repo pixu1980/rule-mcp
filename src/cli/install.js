@@ -126,9 +126,13 @@ const backupFile = (file) => {
  * @returns {{ command: string, args: string[], directTools: boolean, lifecycle: string }}
  */
 const cmdConfig = (entrypoint, opts = {}) => {
+  // Use ~ shorthand when path starts with HOME
+  const home = process.env.HOME || "/root";
+  const cmd = opts.global ? "pix-galaxy-mcp" : process.execPath.replace(home, "~");
+  const args = opts.global ? ["serve"] : [entrypoint.replace(home, "~"), "serve"];
   const config = {
-    command: opts.global ? "pix-galaxy-mcp" : process.execPath,
-    args: opts.global ? ["serve"] : [entrypoint, "serve"],
+    command: cmd,
+    args: args,
     directTools: true,
     lifecycle: "keep-alive",
   };
@@ -366,7 +370,7 @@ const installVscode = ({ entrypoint, dryRun, global }) => {
   // User-level global config (macOS / Linux)
   const globalFile = join(vscodeGlobalDir(), "mcp.json");
   try {
-    files.push(writeText({ file: globalFile, content: upsertJsonServer(readText(globalFile), cmdConfig(entrypoint, { global })), dryRun }));
+    files.push(writeText({ file: globalFile, content: upsertVscode(readText(globalFile), cmdConfig(entrypoint, { global })), dryRun }));
   } catch {}
   return files;
 };

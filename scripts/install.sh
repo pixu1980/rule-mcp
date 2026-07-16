@@ -58,6 +58,7 @@ CONFIGURED_COUNT=0
 SKIPPED_COUNT=0
 HAS_ERROR=0
 INSTALL_RULES=true
+INTERACTIVE=true
 DRY_RUN=false
 FORCE=false
 CONFIGURE_MODELS=false
@@ -99,6 +100,7 @@ while [[ $# -gt 0 ]]; do
     --no-rules)   INSTALL_RULES=false; shift ;;
     --dry-run)    DRY_RUN=true; shift ;;
     --force)      FORCE=true; shift ;;
+    --no-interactive) INTERACTIVE=false; shift ;;
     --help|-h)
       echo "Usage: curl -fsSL https://pix-galaxy.dev/install.sh | bash"
       echo ""
@@ -279,20 +281,87 @@ else
   else
     info "Detected ${#DETECTED_AGENTS[@]} agent(s): ${DETECTED_AGENTS[*]}"
 
+    # ── Interactive agent selection ──
+    SELECTED_AGENTS=()
+    if [[ "$INTERACTIVE" == "true" ]] && [[ -t 0 ]]; then
+      echo ""
+      echo -e "  ${CYAN}Select agents to install (space-separated numbers, or 'all'):${NC}"
+      for i in "${!DETECTED_AGENTS[@]}"; do
+        echo -e "  ${BOLD}$((i+1))${NC}) ${DETECTED_AGENTS[$i]}"
+      done
+      echo -e "  ${BOLD}a${NC}) All agents"
+      echo ""
+      read -r -p "  Choose (e.g. '1 3 5' or 'a'): " AGENT_CHOICE
+      if [[ "$AGENT_CHOICE" == "a" ]] || [[ "$AGENT_CHOICE" == "all" ]]; then
+        SELECTED_AGENTS=("${DETECTED_AGENTS[@]}")
+      else
+        for num in $AGENT_CHOICE; do
+          idx=$((num - 1))
+          if [[ $idx -ge 0 ]] && [[ $idx -lt ${#DETECTED_AGENTS[@]} ]]; then
+            SELECTED_AGENTS+=("${DETECTED_AGENTS[$idx]}")
+          fi
+        done
+      fi
+      if [[ ${#SELECTED_AGENTS[@]} -eq 0 ]]; then
+        warn "No agents selected. Skipping installation."
+        return
+      fi
+      info "Selected ${#SELECTED_AGENTS[@]} agent(s): ${SELECTED_AGENTS[*]}"
+    else
+      # Non-interactive: install all detected agents
+      SELECTED_AGENTS=("${DETECTED_AGENTS[@]}")
+    fi
+
+    # ── Install mode selection ──
+    INSTALL_MODE="stdio"
+    if [[ "$INTERACTIVE" == "true" ]] && [[ -t 0 ]]; then
+      echo ""
+      echo -e "  ${CYAN}Select install mode:${NC}"
+      echo -e "  ${BOLD}1${NC}) Stdio daemon (default) — starts server on demand via agent"
+      echo -e "  ${BOLD}2${NC}) SSE daemon — runs background HTTP server on port 37999"
+      echo -e "  ${BOLD}3${NC}) Docker — run via container"
+      echo ""
+      read -r -p "  Choose [1]: " MODE_CHOICE
+      case "$MODE_CHOICE" in
+        2) INSTALL_MODE="sse" ;;
+        3) INSTALL_MODE="docker" ;;
+        *) INSTALL_MODE="stdio" ;;
+      esac
+    fi
+
     if [[ "$DRY_RUN" == "true" ]]; then
-      for agent in "${DETECTED_AGENTS[@]}"; do
-        sub "[dry-run] Would configure: ${agent}"
+      for agent in "${SELECTED_AGENTS[@]}"; do
+        sub "[dry-run] Would configure: ${agent} (mode: ${INSTALL_MODE})"
       done
     else
-      for agent in "${DETECTED_AGENTS[@]}"; do
-        sub "Configuring ${agent}..."
-        if eval "${BIN_CMD} install --agent ${agent}" 2>/dev/null; then
-          ok "${agent}: configured"
-          INSTALLED_AGENTS+=("$agent")
-          CONFIGURED_COUNT=$((CONFIGURED_COUNT + 1))
+      for agent in "${SELECTED_AGENTS[@]}"; do
+        sub "Configuring ${agent} (mode: ${INSTALL_MODE})..."
+        if [[ "$INSTALL_MODE" == "sse" ]]; then
+          if eval "${BIN_CMD} install --agent ${agent}" 2>/dev/null; then
+            ok "${agent}: configured (add --transport sse for SSE mode)"
+            INSTALLED_AGENTS+=("$agent")
+            CONFIGURED_COUNT=$((CONFIGURED_COUNT + 1))
+          else
+            warn "${agent}: skipped"
+          fi
+        elif [[ "$INSTALL_MODE" == "docker" ]]; then
+          info "Docker mode: run 'docker compose up -d' after installation"
+          if eval "${BIN_CMD} install --agent ${agent}" 2>/dev/null; then
+            ok "${agent}: configured (use Docker for containerized deployment)"
+            INSTALLED_AGENTS+=("$agent")
+            CONFIGURED_COUNT=$((CONFIGURED_COUNT + 1))
+          else
+            warn "${agent}: skipped"
+          fi
         else
-          warn "${agent}: skipped (may already be configured)"
-          SKIPPED_COUNT=$((SKIPPED_COUNT + 1))
+          if eval "${BIN_CMD} install --agent ${agent}" 2>/dev/null; then
+            ok "${agent}: configured"
+            INSTALLED_AGENTS+=("$agent")
+            CONFIGURED_COUNT=$((CONFIGURED_COUNT + 1))
+          else
+            warn "${agent}: skipped (may already be configured)"
+            SKIPPED_COUNT=$((SKIPPED_COUNT + 1))
+          fi
         fi
       done
     fi
