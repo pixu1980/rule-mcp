@@ -37,7 +37,7 @@ export function getRuntimePaths() {
     dataDir,
     pidFile: join(stateDir, "daemon.pid"),
     logFile: join(stateDir, "daemon.log"),
-    port: 37999,
+    port: 38000,
     configDir: join(homedir(), ".config", "pix-galaxy-mcp"),
   };
 }

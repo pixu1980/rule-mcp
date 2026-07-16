@@ -81,12 +81,12 @@ Commands:
 
   up [opts]            Start SSE server (alias for \`serve --transport sse\`)
                         On-demand HTTP daemon: pnpm up
-                        Pre-start, then connect agent to http://127.0.0.1:37999/sse
+                        Pre-start, then connect agent to http://127.0.0.1:38000/sse
 
   daemon <action>        Manage daemon (process or native service)
     start|stop|status|logs           Process-based daemon
     install|uninstall|enable|disable Native service (macOS: LaunchAgent)
-    Port: 37999 (SSE)
+    Port: 38000 (SSE)
 
   install --agent <n>    Install into agent/IDE config (Terminal UI by default)
     --agent <name>         One of: claude, codex, cursor, copilot, gemini,
@@ -194,7 +194,7 @@ export async function serveCommand(opts = {}) {
   if (transport === "sse") {
     const scheme = opts.sslCert && opts.sslKey ? "https" : "http";
     const { port } = await startSseServer({
-      port: opts.port || 37999,
+      port: opts.port || 38000,
       sslCert: opts.sslCert,
       sslKey: opts.sslKey,
     });

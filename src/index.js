@@ -86,7 +86,7 @@ Examples:
 const printDaemonHelp = () => process.stdout.write(`
 Usage: pix-galaxy-mcp daemon <action> [options]
 
-Manage the MCP daemon (SSE on port 37999).
+Manage the MCP daemon (SSE on port 38000).
 
 Process actions (cross-platform, no reboot persistence):
   start    Start background daemon process
@@ -305,7 +305,7 @@ export async function cli() {
         if (hasFlag("--help") || hasFlag("-h")) { printServeHelp(); return; }
         await serveCommand({
           transport: getArg("--transport", "stdio"),
-          port: parseInt(getArg("--port", "37999"), 10),
+          port: parseInt(getArg("--port", "38000"), 10),
           sslCert: getArg("--ssl-cert", undefined),
           sslKey: getArg("--ssl-key", undefined),
         });

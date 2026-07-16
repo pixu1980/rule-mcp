@@ -203,7 +203,8 @@ async function requestHandler(req, res) {
  * @returns {Promise<{ port: number, token: string }>}
  */
 export async function startSseServer(options = {}) {
-  const port = options.port ?? 37999;
+  const { getRuntimePaths } = await import("../cli/paths.js");
+  const port = options.port ?? getRuntimePaths().port;
   const { sslCert, sslKey } = options;
 
   // Persisted token keeps daemon client configuration valid after restarts.

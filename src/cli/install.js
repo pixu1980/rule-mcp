@@ -177,7 +177,7 @@ const resolveGlobalBinary = () => {
 const cmdConfig = (entrypoint, opts = {}) => {
   const mode = normalizeInstallMode(opts.mode);
   if (mode === "daemon" || mode === "docker") {
-    const port = Number.isInteger(opts.port) && opts.port > 0 && opts.port < 65_536 ? opts.port : 37999;
+    const port = Number.isInteger(opts.port) && opts.port > 0 && opts.port < 65_536 ? opts.port : 38000;
     const token = getOrCreateSseBearerToken();
     return {
       url: `http://127.0.0.1:${port}/sse`,
