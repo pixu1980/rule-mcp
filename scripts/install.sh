@@ -286,6 +286,7 @@ else
     if [[ "$INTERACTIVE" == "true" ]] && [[ -t 0 ]]; then
       # Track selected indices
       SELECTED_IDX=()
+    SELECTED_COUNT=0
       echo ""
       echo -e "  ${CYAN}Select agents to install (toggle with number, a=toggle all, d=done):${NC}"
       while true; do
@@ -295,21 +296,23 @@ else
         # Render list
         for i in "${!DETECTED_AGENTS[@]}"; do
           checked=" "
-          for s in "${SELECTED_IDX[@]}"; do [[ "$s" == "$i" ]] && checked="x"; done
+          for s in ${SELECTED_IDX[@]-}; do [[ "$s" == "$i" ]] && checked="x"; done
           echo -e "  ${BOLD}$((i+1))${NC}) [${checked}] ${DETECTED_AGENTS[$i]}"
         done
-        echo -e "  ${BOLD}a${NC}) [${#SELECTED_IDX[@]}/${#DETECTED_AGENTS[@]}] Toggle all"
+        echo -e "  ${BOLD}a${NC}) [${SELECTED_COUNT}/${#DETECTED_AGENTS[@]}] Toggle all"
         echo -e "  ${BOLD}d${NC}) Done — install selected agents"
         echo ""
         read -r -p "  Toggle: " TOGGLE_INPUT
         if [[ "$TOGGLE_INPUT" == "d" ]] || [[ -z "$TOGGLE_INPUT" ]]; then
           break
         elif [[ "$TOGGLE_INPUT" == "a" ]]; then
-          if [[ ${#SELECTED_IDX[@]} -eq ${#DETECTED_AGENTS[@]} ]]; then
+          if [[ $SELECTED_COUNT -eq ${#DETECTED_AGENTS[@]} ]]; then
             SELECTED_IDX=()
+            SELECTED_COUNT=0
           else
             # Toggle all: generate index array 0..N-1
             SELECTED_IDX=()
+            SELECTED_COUNT=${#DETECTED_AGENTS[@]}
             for ((si=0; si<${#DETECTED_AGENTS[@]}; si++)); do SELECTED_IDX+=("$si"); done
           fi
         elif [[ "$TOGGLE_INPUT" =~ ^[0-9]+$ ]]; then
@@ -323,8 +326,10 @@ else
             if [[ $found -ge 0 ]]; then
               unset "SELECTED_IDX[$found]"
               SELECTED_IDX=("${SELECTED_IDX[@]}")  # re-index
+              SELECTED_COUNT=$((SELECTED_COUNT - 1))
             else
               SELECTED_IDX+=("$idx")
+              SELECTED_COUNT=$((SELECTED_COUNT + 1))
             fi
           fi
         fi
