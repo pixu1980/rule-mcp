@@ -11,7 +11,7 @@
  * Supports optional HTTPS with --ssl-cert / --ssl-key flags.
  *
  * Security: bearer token auth on /sse and /message endpoints.
- * Token is generated at startup and printed to stderr.
+ * The local daemon uses one persisted owner-only token across restarts.
  *
  * @see module:server — createServer is imported here
  */
@@ -20,22 +20,19 @@ import http from "node:http";
 import https from "node:https";
 import { readFileSync } from "node:fs";
 import { URL } from "node:url";
-import { randomBytes } from "node:crypto";
 import { SSEServerTransport } from "@modelcontextprotocol/sdk/server/sse.js";
 import { createServer } from "../server.js";
 import { generateSelfSignedCert } from "./cert.js";
-import { wrapRequestHandler, safeJsonParse, withTimeout } from "../utils/sandbox.js";
+import { wrapRequestHandler, safeJsonParse } from "../utils/sandbox.js";
+import { getOrCreateSseBearerToken } from "./sse-auth.js";
 
-/** Active SSE transports, keyed by sessionId. */
-const transports = new Map();
+/** Active MCP sessions, keyed by sessionId. */
+const sessions = new Map();
 
 /** Active HTTP/HTTPS server instance. */
 let httpServer = null;
 
-/** Active MCP Server instance. */
-let mcpServer = null;
-
-/** Bearer token generated at startup (printed to stderr). */
+/** Bearer token for the active local SSE server. */
 let serverToken = null;
 
 /** Maximum POST body size (1 MB). */
@@ -43,16 +40,6 @@ const MAX_BODY_BYTES = 1_048_576;
 
 /** Allowed CORS origins (empty = deny all cross-origin). */
 const ALLOWED_ORIGINS = new Set();
-
-/**
- * Generate a random bearer token and print it to stderr.
- * @returns {string}
- */
-function generateToken() {
-  const token = randomBytes(32).toString("hex");
-  console.error(`[pix-galaxy-mcp] SSE bearer token: ${token}`);
-  return token;
-}
 
 /**
  * Apply CORS headers based on allowed origins.
@@ -129,20 +116,27 @@ async function requestHandler(req, res) {
 
     // ── GET /sse — Establish SSE stream ──────────────────────
     if (req.method === "GET" && parsedUrl.pathname === "/sse") {
-      // Close any existing transport before creating a new one
-      // (single-client model — daemon mode typically has one IDE client)
-      for (const [id, existingTransport] of transports) {
-        try { await existingTransport.close(); } catch { /* ignore */ }
-        transports.delete(id);
-      }
-
+      // Each connection owns a server instance. This lets Pi, VS Code, and
+      // other local clients share one daemon without evicting each other.
       const transport = new SSEServerTransport("/message", res);
-      transports.set(transport.sessionId, transport);
+      const server = createServer();
+      const session = { transport, server };
+      sessions.set(transport.sessionId, session);
 
-      transport.onclose = () => { transports.delete(transport.sessionId); };
-      transport.onerror = () => { transports.delete(transport.sessionId); };
+      const closeSession = () => {
+        if (!sessions.delete(transport.sessionId)) return;
+        void server.close().catch(() => {});
+      };
+      transport.onclose = closeSession;
+      transport.onerror = closeSession;
 
-      await mcpServer.connect(transport);
+      try {
+        await server.connect(transport);
+      } catch (error) {
+        sessions.delete(transport.sessionId);
+        await server.close().catch(() => {});
+        throw error;
+      }
       return;
     }
 
@@ -164,7 +158,8 @@ async function requestHandler(req, res) {
       const body = Buffer.concat(buffers).toString("utf-8");
 
       const sessionId = parsedUrl.searchParams.get("sessionId") ?? "";
-      const transport = transports.get(sessionId);
+      const session = sessions.get(sessionId);
+      const transport = session?.transport;
 
       if (!transport) {
         res.writeHead(404, { "Content-Type": "application/json" });
@@ -187,7 +182,6 @@ async function requestHandler(req, res) {
     // ── 404 ──────────────────────────────────────────────────
     res.writeHead(404, { "Content-Type": "application/json" });
     res.end(JSON.stringify({ error: "Not found" }));
-
   } catch (err) {
     if (!res.headersSent) {
       res.writeHead(500, { "Content-Type": "application/json" });
@@ -206,16 +200,15 @@ async function requestHandler(req, res) {
  *   sslCert?: string,
  *   sslKey?: string
  * }} [options] — Port and optional TLS cert paths
- * @returns {Promise<{ port: number }>}
+ * @returns {Promise<{ port: number, token: string }>}
  */
 export async function startSseServer(options = {}) {
   const port = options.port ?? 37999;
   const { sslCert, sslKey } = options;
 
-  // Generate bearer token for this session
-  serverToken = generateToken();
-
-  mcpServer = createServer();
+  // Persisted token keeps daemon client configuration valid after restarts.
+  serverToken = getOrCreateSseBearerToken();
+  console.error("[pix-galaxy-mcp] SSE authentication enabled");
 
   // Handle SSL: resolve cert files, auto-generate if missing
   let resolvedCert = sslCert;
@@ -228,7 +221,9 @@ export async function startSseServer(options = {}) {
     } catch {
       const generated = generateSelfSignedCert({ certPath: resolvedCert, keyPath: resolvedKey });
       if (!generated) {
-        throw new Error(`Failed to generate self-signed cert at ${resolvedCert}. Provide valid --ssl-cert and --ssl-key.`);
+        throw new Error(
+          `Failed to generate self-signed cert at ${resolvedCert}. Provide valid --ssl-cert and --ssl-key.`,
+        );
       }
       console.error(`[pix-galaxy-mcp] Generated self-signed cert: ${resolvedCert}`);
     }
@@ -239,16 +234,19 @@ export async function startSseServer(options = {}) {
 
   // Create HTTP or HTTPS server
   if (sslCert && sslKey) {
-    httpServer = https.createServer({
-      cert: readFileSync(resolvedCert),
-      key: readFileSync(resolvedKey),
-    }, safeHandler);
+    httpServer = https.createServer(
+      {
+        cert: readFileSync(resolvedCert),
+        key: readFileSync(resolvedKey),
+      },
+      safeHandler,
+    );
   } else {
     httpServer = http.createServer(safeHandler);
   }
 
-  // Set server timeout to auto-close idle connections
-  httpServer.timeout = 60000;
+  // SSE streams are intentionally long-lived; generic idle timeouts reconnect clients.
+  httpServer.timeout = 0;
   httpServer.keepAliveTimeout = 10000;
 
   // Start listening
@@ -256,7 +254,7 @@ export async function startSseServer(options = {}) {
     httpServer.on("error", reject);
     httpServer.listen(port, "127.0.0.1", () => {
       const addr = httpServer.address();
-      resolve({ port: addr?.port ?? port });
+      resolve({ port: addr?.port ?? port, token: serverToken });
     });
   });
 }
@@ -268,25 +266,29 @@ export async function startSseServer(options = {}) {
  * @returns {Promise<void>}
  */
 export async function stopSseServer() {
-  // Close all active transports
-  for (const [id, transport] of transports) {
+  // Close all active transports and their independent MCP server instances.
+  for (const [id, { transport, server }] of sessions) {
     try {
       transport.onclose = null;
       await transport.close();
-    } catch { /* ignore */ }
-    transports.delete(id);
-  }
-
-  // Close MCP server
-  if (mcpServer) {
-    try { await mcpServer.close(); } catch { /* ignore */ }
-    mcpServer = null;
+    } catch {
+      /* ignore */
+    }
+    try {
+      await server.close();
+    } catch {
+      /* ignore */
+    }
+    sessions.delete(id);
   }
 
   // Close HTTP server
   if (httpServer) {
     return new Promise((resolve) => {
-      httpServer.close(() => { httpServer = null; resolve(); });
+      httpServer.close(() => {
+        httpServer = null;
+        resolve();
+      });
       setTimeout(() => {
         httpServer?.closeAllConnections?.();
         httpServer = null;

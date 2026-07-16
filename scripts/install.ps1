@@ -39,6 +39,7 @@ param(
   [switch]$NoRules = $false,
   [switch]$DryRun = $false,
   [switch]$Force = $false,
+  [string]$Mode = "",
   [switch]$NoInteractive = $false,
   [switch]$Help = $false
 )
@@ -56,6 +57,7 @@ if ($Help) {
   Write-Host "  -NoRules         Skip agent instruction files"
   Write-Host "  -DryRun          Preview changes without writing"
   Write-Host "  -Force           Override existing configurations"
+  Write-Host "  -Mode <name>     stdio (default), daemon, or docker"
   Write-Host "  -NoInteractive   Skip interactive selection and install everywhere"
   exit 0
 }
@@ -74,6 +76,11 @@ $SkippedCount = 0
 $HasError = $false
 $InstallRules = -not $NoRules
 $TargetAgent = $Agent
+$InstallMode = if ($Mode -eq 'sse') { 'daemon' } else { $Mode }
+if ($InstallMode -and $InstallMode -notin @('stdio', 'daemon', 'docker')) {
+  Write-Fail "Unsupported mode: $InstallMode. Use stdio, daemon, or docker."
+  exit 1
+}
 
 # ── Helpers ──
 function Write-Info  { Write-Host "ℹ $($args[0])" -ForegroundColor Cyan }
@@ -119,8 +126,8 @@ function Select-AgentsInteractive([string[]]$Items) {
   return $selected
 }
 function Select-ModeInteractive() {
-  $modes = @('stdio','sse','docker')
-  $labels = @('Stdio daemon — on-demand via agent','SSE daemon — background HTTP on port 37999','Docker — containerized')
+  $modes = @('stdio','daemon','docker')
+  $labels = @('Stdio — agent starts a local process','Daemon — background SSE service on port 37999','Docker — containerized SSE service')
   $cursor = 0
   while ($true) {
     Show-Banner "Phase 3 — Install Mode"
@@ -225,17 +232,29 @@ if ($DryRun) {
   }
 }
 
-# Determine the command
+# Determine the command. Keep executable and arguments separate from display text.
 $BinCmd = ""
+$BinExecutable = ""
+$BinArguments = @()
 if (Test-Command pix-galaxy-mcp) {
   $BinCmd = "pix-galaxy-mcp"
+  $BinExecutable = "pix-galaxy-mcp"
   Write-Ok "Global binary found: $(Get-Command pix-galaxy-mcp).Source"
 } elseif ($PM -eq "pnpm") {
   $BinCmd = "pnpx pix-galaxy-mcp"
+  $BinExecutable = "pnpx"
+  $BinArguments = @("pix-galaxy-mcp")
   Write-Warn "Using: $BinCmd"
 } else {
   $BinCmd = "npx pix-galaxy-mcp"
+  $BinExecutable = "npx"
+  $BinArguments = @("pix-galaxy-mcp")
   Write-Warn "Using: $BinCmd"
+}
+
+function Invoke-PixCli {
+  param([Parameter(ValueFromRemainingArguments = $true)][string[]]$Arguments)
+  & $BinExecutable @BinArguments @Arguments
 }
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -244,11 +263,12 @@ if (Test-Command pix-galaxy-mcp) {
 Write-Header "Phase 3: Agent Integration"
 
 if ($TargetAgent) {
-  Write-Info "Targeting: $TargetAgent"
+  if (-not $InstallMode) { $InstallMode = 'stdio' }
+  Write-Info "Targeting: $TargetAgent (mode: $InstallMode)"
   if ($DryRun) {
-    Write-Step "[dry-run] Would run: $BinCmd install --agent $TargetAgent"
+    Write-Step "[dry-run] Would run: $BinCmd install --agent $TargetAgent --mode $InstallMode"
   } else {
-    $result = Invoke-Expression "& $BinCmd install --agent $TargetAgent" 2>&1
+    $result = Invoke-PixCli install --agent $TargetAgent --mode $InstallMode --json 2>&1
     if ($LASTEXITCODE -eq 0) {
       Write-Ok "Installed for $TargetAgent"
     } else {
@@ -299,16 +319,18 @@ if ($TargetAgent) {
     Write-Info "Detected $($DetectedAgents.Count) agent(s): $($DetectedAgents -join ', ')"
 
     $SelectedAgents = @()
-    $InstallMode = 'stdio'
+    if (-not $InstallMode) { $InstallMode = 'stdio' }
     if (-not $NoInteractive -and [Environment]::UserInteractive) {
       $SelectedAgents = Select-AgentsInteractive $DetectedAgents
       if ($SelectedAgents.Count -eq 0) {
         Write-Warn "No agents selected. Skipping installation."
         exit 0
       }
-      $mode = Select-ModeInteractive
-      if ($null -eq $mode) { exit 0 }
-      $InstallMode = $mode
+      if (-not $Mode) {
+        $selectedMode = Select-ModeInteractive
+        if ($null -eq $selectedMode) { exit 0 }
+        $InstallMode = $selectedMode
+      }
       Write-Info "Selected $($SelectedAgents.Count) agent(s): $($SelectedAgents -join ', ')"
       Write-Info "Install mode: $InstallMode"
     } else {
@@ -322,7 +344,7 @@ if ($TargetAgent) {
     } else {
       foreach ($agent in $SelectedAgents) {
         Write-Step "Configuring $agent (mode: $InstallMode)..."
-        $result = Invoke-Expression "& $BinCmd install --agent $agent --json" 2>&1
+        $result = Invoke-PixCli install --agent $agent --mode $InstallMode --json 2>&1
         if ($LASTEXITCODE -eq 0) {
           Write-Ok "$agent configured"
           $InstalledAgents += $agent
@@ -332,102 +354,16 @@ if ($TargetAgent) {
           $SkippedCount++
         }
       }
-      if ($InstallMode -eq 'sse') {
-        Write-Info "SSE mode selected: start or install the daemon with 'pix-galaxy-mcp daemon install' or 'pix-galaxy-mcp daemon start'."
+      if ($InstallMode -eq 'daemon') {
+        Write-Info "Daemon mode selected: the platform service is installed in the daemon phase."
       } elseif ($InstallMode -eq 'docker') {
-        Write-Info "Docker mode selected: run 'docker compose up -d' after installation."
+        Write-Info "Docker mode selected: start the compose service before connecting clients."
       }
     }
   }
 }
 
-# ─────────────────────────────────────────────────────────────────────────────
-# PHASE 4: IDE Integration
-# ─────────────────────────────────────────────────────────────────────────────
-Write-Header "Phase 4: IDE Integration"
-
-# VS Code
-$VscodeDir = Join-Path (Get-Location) ".vscode"
-if (Test-Path $VscodeDir -PathType Container -or $Force) {
-  if ($DryRun) {
-    Write-Step "[dry-run] Would configure: VS Code (.vscode/mcp.json)"
-  } else {
-    Write-Step "Configuring VS Code..."
-    New-Item -ItemType Directory -Force -Path $VscodeDir | Out-Null
-    $result = Invoke-Expression "& $BinCmd install --agent vscode" 2>&1
-    if ($LASTEXITCODE -eq 0) {
-      Write-Ok "VS Code configured (.vscode/mcp.json)"
-    } else {
-      Write-Warn "VS Code skipped"
-    }
-  }
-}
-
-# Neovim
-if (Test-Command nvim) {
-  $NeovimDir = "$HomeDir\AppData\Local\nvim"
-  $NeovimMcp = "$NeovimDir\mcp.json"
-  if ($DryRun) {
-    Write-Step "[dry-run] Would configure: Neovim ($NeovimMcp)"
-  } else {
-    Write-Step "Configuring Neovim..."
-    New-Item -ItemType Directory -Force -Path $NeovimDir | Out-Null
-    $mcpConfig = @{
-      mcpServers = @{
-        pix_galaxy_mcp = @{
-          command = if ($BinCmd -match " ") { $BinCmd.Split(" ")[0] } else { $BinCmd }
-          args = @(if ($BinCmd -match " ") { $BinCmd.Split(" ")[1] } else { "npx" }, "serve")
-          directTools = $true
-          lifecycle = "keep-alive"
-        }
-      }
-    }
-    if (-not (Test-Path $NeovimMcp) -or $Force) {
-      $mcpConfig | ConvertTo-Json -Depth 10 | Set-Content $NeovimMcp
-      Write-Ok "Neovim configured ($NeovimMcp)"
-    } else {
-      Write-Warn "Neovim already configured (use -Force)"
-    }
-  }
-} else {
-  Write-Step "Neovim not detected, skipping"
-}
-
-# JetBrains
-$JetBrainsCheck = @(
-  "$HomeDir\AppData\Roaming\JetBrains",
-  "$HomeDir\.config\JetBrains"
-)
-$JetBrainsFound = $false
-foreach ($p in $JetBrainsCheck) {
-  if (Test-Path $p) { $JetBrainsFound = $true; break }
-}
-if ($JetBrainsFound) {
-  $IdeaDir = Join-Path (Get-Location) ".idea"
-  $IdeaMcp = "$IdeaDir\mcp.json"
-  if ($DryRun) {
-    Write-Step "[dry-run] Would configure: JetBrains ($IdeaMcp)"
-  } else {
-    Write-Step "Configuring JetBrains..."
-    New-Item -ItemType Directory -Force -Path $IdeaDir | Out-Null
-    $ideaConfig = @{
-      mcpServers = @{
-        pix_galaxy_mcp = @{
-          command = if ($BinCmd -match " ") { $BinCmd.Split(" ")[0] } else { $BinCmd }
-          args = @(if ($BinCmd -match " ") { $BinCmd.Split(" ")[1] } else { "npx" }, "serve")
-          directTools = $true
-          lifecycle = "keep-alive"
-        }
-      }
-    }
-    if (-not (Test-Path $IdeaMcp) -or $Force) {
-      $ideaConfig | ConvertTo-Json -Depth 10 | Set-Content $IdeaMcp
-      Write-Ok "JetBrains configured (.idea/mcp.json)"
-    } else {
-      Write-Warn "JetBrains already configured (use -Force)"
-    }
-  }
-}
+# Agent and IDE configurations are written only for selections made in Phase 3.
 
 # ─────────────────────────────────────────────────────────────────────────────
 # PHASE 5: Model Provider Configuration
@@ -495,6 +431,7 @@ if ($Models) {
 # ─────────────────────────────────────────────────────────────────────────────
 # PHASE 6: Windows Service Installation
 # ─────────────────────────────────────────────────────────────────────────────
+if ($InstallMode -eq 'daemon') {
 Write-Header "Phase 6: Windows Service"
 
 if ($DryRun) {
@@ -512,7 +449,7 @@ if ($DryRun) {
   }
 
   if (Test-Command pix-galaxy-mcp) {
-    $result = Invoke-Expression "& pix-galaxy-mcp daemon install" 2>&1
+    $result = Invoke-PixCli daemon install 2>&1
     if ($LASTEXITCODE -eq 0) {
       Write-Ok "Windows Service installed and started"
       Write-Step "  The service appears in services.msc as 'pix-galaxy-mcp MCP Server'"
@@ -527,6 +464,39 @@ if ($DryRun) {
     Write-Step "  After installing globally, run: pix-galaxy-mcp daemon install"
   }
 }
+} elseif ($InstallMode -eq 'docker') {
+  Write-Header "Phase 6: Docker Service"
+  $SseTokenFile = Join-Path $HomeDir ".local\state\pix-galaxy-mcp\sse-token"
+  if ($DryRun) {
+    Write-Step "[dry-run] Would run: docker compose up -d with the local SSE token"
+  } elseif (-not (Test-Command docker)) {
+    Write-Warn "Docker Compose v2 is required for Docker mode"
+  } elseif (-not (Test-Path "docker-compose.yml")) {
+    Write-Warn "docker-compose.yml not found; run the installer from the project directory"
+  } elseif (-not (Test-Path $SseTokenFile)) {
+    Write-Warn "Missing daemon token: $SseTokenFile"
+  } else {
+    $previousToken = $env:PIX_GALAXY_MCP_SSE_TOKEN
+    try {
+      $env:PIX_GALAXY_MCP_SSE_TOKEN = (Get-Content -Raw $SseTokenFile).Trim()
+      & docker compose up -d
+      if ($LASTEXITCODE -eq 0) {
+        Write-Ok "Docker SSE service started"
+      } else {
+        Write-Warn "Docker SSE service failed to start"
+      }
+    } finally {
+      if ($null -eq $previousToken) {
+        Remove-Item Env:PIX_GALAXY_MCP_SSE_TOKEN -ErrorAction SilentlyContinue
+      } else {
+        $env:PIX_GALAXY_MCP_SSE_TOKEN = $previousToken
+      }
+    }
+  }
+} else {
+  Write-Header "Phase 6: Background Service"
+  Write-Step "Skipping native Windows service (mode: $InstallMode)"
+}
 
 # ─────────────────────────────────────────────────────────────────────────────
 # PHASE 7: Health Check
@@ -536,7 +506,7 @@ Write-Header "Phase 7: Health Check"
 if ($DryRun) {
   Write-Step "[dry-run] Would run: $BinCmd doctor"
 } elseif (Test-Command pix-galaxy-mcp) {
-  $result = Invoke-Expression "& pix-galaxy-mcp doctor" 2>&1
+  $result = Invoke-PixCli doctor 2>&1
   if ($LASTEXITCODE -eq 0) {
     Write-Ok "Health check passed"
   } else {

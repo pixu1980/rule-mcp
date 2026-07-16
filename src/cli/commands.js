@@ -41,12 +41,21 @@ const entrypoint = resolve(__dirname, "..", "..", "bin", "pix-galaxy-mcp.js");
 
 const print = (v) => process.stdout.write(`${v}\n`);
 const printJson = (v) => print(JSON.stringify(v, null, 2));
-const parseJson = (raw) => { try { return JSON.parse(raw); } catch { return {}; } };
+const parseJson = (raw) => {
+  try {
+    return JSON.parse(raw);
+  } catch {
+    return {};
+  }
+};
 
 /** Safely run a shell command, ignoring errors. */
 function tryExec(cmd, opts = {}) {
-  try { return execSync(cmd, { encoding: "utf8", timeout: 10000, stdio: "pipe", ...opts }); }
-  catch { return ""; }
+  try {
+    return execSync(cmd, { encoding: "utf8", timeout: 10000, stdio: "pipe", ...opts });
+  } catch {
+    return "";
+  }
 }
 
 /**
@@ -83,6 +92,7 @@ Commands:
     --agent <name>         One of: claude, codex, cursor, copilot, gemini,
                            cline, roo, zed, opencode, antigravity, kilo,
                            kimi, vibe, vscode, windsurf, pi
+    --mode <name>          stdio (default), daemon (SSE), or docker
     --global               Use clean command (requires global install)
     --force                Override existing config
     --dry-run              Preview without writing
@@ -93,7 +103,8 @@ Commands:
     --dry-run              Preview without removing
     --json                 Print machine-readable JSON
 
-  config [--global]      Print mcp.json config snippet
+  config [opts]          Print mcp.json config snippet
+    --mode <name>          stdio (default), daemon (SSE), or docker
     --global               Uses clean \`pix-galaxy-mcp\` command
 
   tools <sub> [args]     List or call MCP tools
@@ -171,6 +182,7 @@ Windows:
  *
  * @param {{
  *   transport?: string,
+ *   port?: number,
  *   sslCert?: string,
  *   sslKey?: string
  * }} [opts] — Transport type (stdio/sse) and optional TLS cert paths
@@ -179,33 +191,35 @@ export async function serveCommand(opts = {}) {
   await loadAllSkills();
   const transport = opts.transport ?? "stdio";
 
-  // Print mcp.json config snippet for agent setup (stderr, before server starts)
-  const configSnippet = JSON.stringify({
-    mcpServers: {
-      pix_galaxy_mcp: {
-        command: process.execPath,
-        args: [process.argv[1], "serve"],
-        directTools: true,
-        lifecycle: "keep-alive",
-      },
-    },
-  }, null, 2);
-
   if (transport === "sse") {
-    const scheme = (opts.sslCert && opts.sslKey) ? "https" : "http";
+    const scheme = opts.sslCert && opts.sslKey ? "https" : "http";
     const { port } = await startSseServer({
       port: opts.port || 37999,
       sslCert: opts.sslCert,
       sslKey: opts.sslKey,
     });
+    const configSnippet = JSON.stringify(
+      {
+        mcpServers: mcpServerConfig(entrypoint, { mode: "daemon", port }),
+      },
+      null,
+      2,
+    );
     console.error(`\npix-galaxy-mcp SSE server listening on ${scheme}://127.0.0.1:${port}/sse\n`);
     console.error(`Config for agent's mcp.json:\n`);
     console.error(configSnippet);
     console.error(``);
-    console.error(`Then start agent — it connects via STDIO automatically.`);
+    console.error(`Then start an agent configured for HTTP/SSE.`);
     console.error(``);
     await new Promise(() => {});
   } else {
+    const configSnippet = JSON.stringify(
+      {
+        mcpServers: mcpServerConfig(entrypoint),
+      },
+      null,
+      2,
+    );
     console.error(`pix-galaxy-mcp starting (STDIO transport)`);
     console.error(`Config for agent's mcp.json:\n`);
     console.error(configSnippet);
@@ -371,24 +385,37 @@ export function daemonCommand(opts) {
       break;
     }
     case "logs": {
-      if (!existsSync(p.logFile)) { print("No logs yet"); return; }
+      if (!existsSync(p.logFile)) {
+        print("No logs yet");
+        return;
+      }
       print(readFileSync(p.logFile, "utf8"));
       break;
     }
     default:
-      throw new Error(`Unknown daemon action: ${action}. Available: start, stop, status, logs, install, uninstall, enable, disable`);
+      throw new Error(
+        `Unknown daemon action: ${action}. Available: start, stop, status, logs, install, uninstall, enable, disable`,
+      );
   }
 }
 
 /**
  * Install pix-galaxy-mcp into an agent/IDE.
  *
- * @param {{ agent: string, dryRun: boolean, force: boolean, global?: boolean }} opts
+ * @param {{ agent: string, dryRun: boolean, force: boolean, global?: boolean, mode?: "stdio"|"daemon"|"sse"|"docker" }} opts
  */
 export function installCommand(opts) {
-  const result = installAgent({ agent: opts.agent, force: opts.force, dryRun: opts.dryRun, global: opts.global, entrypoint });
+  const result = installAgent({
+    agent: opts.agent,
+    force: opts.force,
+    dryRun: opts.dryRun,
+    global: opts.global,
+    mode: opts.mode,
+    entrypoint,
+  });
   if (opts.json) printJson(result);
   else print(formatInstallResult(result));
+  if (!result.ok) process.exitCode = 1;
 }
 
 /**
@@ -413,7 +440,7 @@ export async function toolsCommand(opts) {
   const { subcommand = "list", toolName, json } = opts;
 
   if (subcommand === "list") {
-    const tools = listTools().map(t => ({ name: t.name, description: t.description }));
+    const tools = listTools().map((t) => ({ name: t.name, description: t.description }));
     if (opts.jsonOutput) printJson(tools);
     else print(formatToolsList(tools));
   } else if (subcommand === "call") {
@@ -437,7 +464,7 @@ export async function toolsCommand(opts) {
  * @param {{ global?: boolean }} opts
  */
 export function configCommand(opts = {}) {
-  print(JSON.stringify(mcpServerConfig(entrypoint, { global: opts.global }), null, 2));
+  print(JSON.stringify(mcpServerConfig(entrypoint, { global: opts.global, mode: opts.mode }), null, 2));
 }
 
 /**

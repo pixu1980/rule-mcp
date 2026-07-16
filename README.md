@@ -417,7 +417,7 @@ pix-galaxy-mcp daemon start|stop|status|logs
 pix-galaxy-mcp daemon install|uninstall|enable|disable
 
 # Agent integration
-pix-galaxy-mcp install --agent <name> [--global] [--dry-run] [--force]
+pix-galaxy-mcp install --agent <name> [--mode stdio|daemon|docker] [--global] [--dry-run] [--force]
 pix-galaxy-mcp uninstall --agent <name> [--dry-run]
 
 # Tools (MCP tool calls from CLI)
@@ -442,7 +442,7 @@ pix-galaxy-mcp adr new "<title>" [--status proposed|accepted|deprecated|supersed
 pix-galaxy-mcp handoff [--mode handoff|close-session] [--compress] [--format full|brief|minimal]
 
 # Config
-pix-galaxy-mcp config [--global]
+pix-galaxy-mcp config [--mode stdio|daemon|docker] [--global]
 pix-galaxy-mcp completions --shell zsh|bash|fish
 
 # Help
@@ -474,7 +474,7 @@ The daemon always listens on `127.0.0.1:37999` over SSE. Health endpoint: `http:
 
 ### Security
 
-- Bearer token auth required for `/sse` and `/message` endpoints (token printed to stderr at startup)
+- Bearer token auth required for `/sse` and `/message`; the local daemon keeps an owner-only token at `~/.local/state/pix-galaxy-mcp/sse-token` across restarts
 - `/health` is public (no auth)
 - CORS deny-by-default (only explicit origins allowed)
 - 1 MB max POST body size
@@ -491,12 +491,15 @@ docker build -t pix-galaxy-mcp .
 # Stdio (MCP agents)
 docker run -i pix-galaxy-mcp
 
-# SSE (IDE integration)
-docker run -p 37999:37999 pix-galaxy-mcp node src/index.js serve --transport sse
+# SSE (Pi or VS Code integration)
+PIX_GALAXY_MCP_SSE_TOKEN="$(cat ~/.local/state/pix-galaxy-mcp/sse-token)" \
+  docker run -e PIX_GALAXY_MCP_SSE_TOKEN -p 37999:37999 \
+  pix-galaxy-mcp node src/index.js serve --transport sse
 
-# With docker-compose
-docker compose up -d
-# → SSE: http://localhost:37999/sse
+# With docker-compose (after `pix-galaxy-mcp install --agent pi --mode docker`)
+PIX_GALAXY_MCP_SSE_TOKEN="$(cat ~/.local/state/pix-galaxy-mcp/sse-token)" \
+  docker compose up -d
+# → authenticated SSE: http://localhost:37999/sse
 ```
 
 The Docker image uses `node:22-alpine`, has no build step, and runs the server directly.

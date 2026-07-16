@@ -115,11 +115,17 @@ docker build -t pix-galaxy-mcp .
 # Run in stdio mode (for MCP agents)
 docker run -i pix-galaxy-mcp
 
-# Run in SSE mode (for IDE integration)
-docker run -p 37999:37999 pix-galaxy-mcp node src/index.js serve --transport sse
+# Create the local token and client config first.
+pix-galaxy-mcp install --agent pi --mode docker
 
-# Or use docker-compose
-docker compose up -d
+# Run in SSE mode (for Pi or VS Code over HTTP)
+PIX_GALAXY_MCP_SSE_TOKEN="$(cat ~/.local/state/pix-galaxy-mcp/sse-token)" \
+  docker run -e PIX_GALAXY_MCP_SSE_TOKEN -p 37999:37999 \
+  pix-galaxy-mcp node src/index.js serve --transport sse
+
+# Or use docker-compose from this repository.
+PIX_GALAXY_MCP_SSE_TOKEN="$(cat ~/.local/state/pix-galaxy-mcp/sse-token)" \
+  docker compose up -d
 # → SSE endpoint: http://localhost:37999/sse
 # → Health: http://localhost:37999/health
 ```
@@ -127,9 +133,11 @@ docker compose up -d
 ### Docker Compose configuration
 
 The included `docker-compose.yml` exposes:
-- The server on port `37999` with SSE transport
+- The server on port `37999` with authenticated SSE transport
 - Automatic restarts
 - Health check endpoint at `/health`
+
+The Compose service requires `PIX_GALAXY_MCP_SSE_TOKEN`; the installer creates the owner-only token at `~/.local/state/pix-galaxy-mcp/sse-token`. Do not commit that token or copy it into shared configuration.
 
 ---
 
@@ -141,18 +149,26 @@ The included `docker-compose.yml` exposes:
 # Install into all detected agents
 pix-galaxy-mcp install --agent all
 
-# Install for a specific agent
+# Stdio is the default and works with every supported adapter.
 pix-galaxy-mcp install --agent claude
 pix-galaxy-mcp install --agent cursor
 pix-galaxy-mcp install --agent codex
-pix-galaxy-mcp install --agent pi
-pix-galaxy-mcp install --agent vscode
+
+# Daemon mode is verified for Pi and VS Code.
+pix-galaxy-mcp daemon install
+pix-galaxy-mcp install --agent pi --mode daemon
+pix-galaxy-mcp install --agent vscode --mode daemon
+
+# Docker mode starts the same authenticated SSE endpoint through Compose.
+./scripts/install.sh --agent pi --mode docker --no-rules
 
 # Preview before writing
 pix-galaxy-mcp install --agent all --dry-run
 ```
 
 Supported agents: `claude`, `codex`, `cursor`, `copilot`, `gemini`, `pi`, `cline`, `roo`, `zed`, `opencode`, `antigravity`, `windsurf`, `kilo`, `kimi`, `vibe`, `grok`, `droid`, `kiro`, `qwen`, `vscode`, `jetbrains`, `neovim`, `emacs`.
+
+`daemon` and `docker` are deliberately limited to **Pi and VS Code** until the HTTP configuration schema of every other host is verified. Other adapters fail clearly rather than silently receiving a stdio configuration.
 
 ### Manual mcp.json configuration
 
@@ -172,13 +188,38 @@ For agents that support MCP, add this to their `mcp.json`:
 }
 ```
 
-**With local path (development):**
+**With local path (development):** use absolute paths for both Node and the entrypoint. `spawn()` does not expand `~`.
 ```json
 {
   "mcpServers": {
     "pix_galaxy_mcp": {
-      "command": "node",
+      "command": "/absolute/path/to/node",
       "args": ["/absolute/path/to/pix-galaxy-mcp/bin/pix-galaxy-mcp.js", "serve"],
+      "directTools": true,
+      "lifecycle": "keep-alive"
+    }
+  }
+}
+```
+
+**Pi daemon configuration:** let the CLI generate the authenticated entry rather than copying a token manually:
+```bash
+pix-galaxy-mcp config --mode daemon
+pix-galaxy-mcp install --agent pi --mode daemon
+```
+
+**VS Code daemon configuration:** the installer updates the user-level `servers` object (not the project workspace file):
+```bash
+pix-galaxy-mcp install --agent vscode --mode daemon
+```
+It writes an entry equivalent to:
+```json
+{
+  "servers": {
+    "pix_galaxy_mcp": {
+      "type": "http",
+      "url": "http://127.0.0.1:37999/sse",
+      "headers": { "Authorization": "Bearer <local-token>" },
       "directTools": true,
       "lifecycle": "keep-alive"
     }
@@ -206,7 +247,7 @@ For agents that support MCP, add this to their `mcp.json`:
 |---|---|
 | Claude Code | `~/.claude.json` |
 | Cursor | `~/.cursor/mcp.json` |
-| VS Code | `.vscode/mcp.json` (project-level) |
+| VS Code | User-level `mcp.json`: macOS `~/Library/Application Support/Code/User/mcp.json`; Linux `~/.config/Code/User/mcp.json`; Windows `%APPDATA%\\Code\\User\\mcp.json` |
 | Cline | `~/.config/cline/mcp.json` |
 | Roo Code | `~/.config/roo/mcp.json` |
 | Zed | `~/.config/zed/mcp.json` |

@@ -12,6 +12,8 @@ services:
     ports:
       - "37999:37999"
     command: ["node", "src/index.js", "serve", "--transport", "sse"]
+    environment:
+      PIX_GALAXY_MCP_SSE_TOKEN: "${PIX_GALAXY_MCP_SSE_TOKEN:?Set by the pix-galaxy-mcp installer}"
     healthcheck:
       test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:37999/health"]
       interval: 10s

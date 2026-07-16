@@ -21,22 +21,10 @@ const check = (label, ok) => {
 
 console.log("=== SSE Transport Tests ===\n");
 
-// Capture stderr to extract the bearer token printed by startSseServer
-let token = "";
-const origStderrWrite = process.stderr.write.bind(process.stderr);
-process.stderr.write = (chunk, encoding, cb) => {
-  const str = typeof chunk === "string" ? chunk : chunk.toString();
-  const m = str.match(/SSE bearer token: ([a-f0-9]+)/);
-  if (m) token = m[1];
-  return origStderrWrite(chunk, encoding, cb);
-};
-
 await loadAllSkills();
 const { startSseServer, stopSseServer } = await import("../src/transport/sse.js");
 const server = await startSseServer({ port: 0 });
-
-// Restore stderr
-process.stderr.write = origStderrWrite;
+const token = server.token;
 
 check("T0 bearer token generated", token.length === 64);
 check("T1 server started, port assigned", typeof server.port === "number" && server.port > 0);

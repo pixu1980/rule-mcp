@@ -33,7 +33,9 @@ export function getSdkVersion() {
     const sdkPkgPath = new URL("../../node_modules/@modelcontextprotocol/sdk/package.json", import.meta.url);
     const sdkPkg = JSON.parse(readFileSync(sdkPkgPath, "utf8"));
     return sdkPkg.version || "unknown";
-  } catch { return "unknown"; }
+  } catch {
+    return "unknown";
+  }
 }
 
 /**
@@ -44,11 +46,28 @@ export function getSdkVersion() {
  * @returns {Array} — Agents with additional validation
  */
 function validateAgentConfigs(agents) {
-  return agents.map(agent => {
+  return agents.map((agent) => {
     if (!agent.configured || !agent.configFile) return agent;
 
     try {
       const content = readFileSync(agent.configFile, "utf8");
+
+      // VS Code uses `servers`, not the generic `mcpServers` key.
+      if (agent.name === "vscode") {
+        try {
+          const json = JSON.parse(content);
+          const mcpEntry = json.servers?.pix_galaxy_mcp;
+          return {
+            ...agent,
+            validated: !!mcpEntry,
+            command: mcpEntry?.command || null,
+            args: mcpEntry?.args || null,
+            url: mcpEntry?.url || null,
+          };
+        } catch {
+          return { ...agent, validated: false, parseError: "Invalid JSON" };
+        }
+      }
 
       // Claude uses .claude.json with mcpServers
       if (agent.name === "claude" && agent.configFile.endsWith(".claude.json")) {
@@ -95,10 +114,16 @@ function validateAgentConfigs(agents) {
  * @returns {Array<{ name: string, configured: boolean, configFile: string|null }>}
  */
 function detectIdeConfigs() {
+  const vscodeUserConfigPath =
+    platform() === "darwin"
+      ? join(HOME, "Library", "Application Support", "Code", "User", "mcp.json")
+      : platform() === "win32"
+        ? join(process.env.APPDATA || join(HOME, "AppData", "Roaming"), "Code", "User", "mcp.json")
+        : join(HOME, ".config", "Code", "User", "mcp.json");
   let skillsCount = 0;
   try {
     if (existsSync("skills")) {
-      skillsCount = readdirSync("skills").filter(d => d.startsWith("pix")).length;
+      skillsCount = readdirSync("skills").filter((d) => d.startsWith("pix")).length;
     }
   } catch {}
 
@@ -106,9 +131,7 @@ function detectIdeConfigs() {
     { name: "Skills directory", ok: skillsCount >= 60, detail: `${skillsCount} skills` },
     { name: "Cursor (IDE)", path: join(HOME, ".cursor", "mcp.json") },
     { name: "Windsurf (IDE)", path: join(HOME, ".windsurf", "mcp.json") },
-    { name: "VS Code User", path: platform() === "darwin"
-      ? join(HOME, "Library", "Application Support", "Code", "User", "mcp.json")
-      : join(HOME, ".config", "Code", "User", "mcp.json") },
+    { name: "VS Code User", path: vscodeUserConfigPath },
   ];
 
   // Platform-specific IDE checks
@@ -118,11 +141,14 @@ function detectIdeConfigs() {
     checks.push({ name: "JetBrains Toolbox", path: jetbrainsToolbox });
   }
 
-  return checks.map(({ name, path }) => ({
-    name,
-    configured: existsSync(path),
-    configFile: existsSync(path) ? path : null,
-  }));
+  return checks.map(({ name, path, ok, detail }) => {
+    if (typeof ok === "boolean") return { name, configured: ok, configFile: null, detail };
+    return {
+      name,
+      configured: existsSync(path),
+      configFile: existsSync(path) ? path : null,
+    };
+  });
 }
 
 /**
@@ -161,11 +187,14 @@ function detectStoredModelKeys() {
   const configDir = join(HOME, ".config", "pix-galaxy-mcp");
   const keyFiles = ["openai-key", "anthropic-key", "gemini-key", "xai-key"];
 
-  return keyFiles.map(file => {
+  return keyFiles.map((file) => {
     const fullPath = join(configDir, file);
     const exists = existsSync(fullPath);
     return {
-      provider: file.replace("-key", "").replace(/-/g, " ").replace(/\b\w/g, c => c.toUpperCase()),
+      provider: file
+        .replace("-key", "")
+        .replace(/-/g, " ")
+        .replace(/\b\w/g, (c) => c.toUpperCase()),
       configured: exists,
       file: exists ? fullPath : null,
     };
@@ -230,7 +259,7 @@ function truncate(value, max = 96) {
  */
 export function formatDoctorTerminal(report) {
   const native = report.daemon?.nativeService || {};
-  const configuredAgents = (report.agents || []).filter(agent => agent.configured);
+  const configuredAgents = (report.agents || []).filter((agent) => agent.configured);
   const missingAgents = (report.unconfigured || []).slice(0, 10);
   const sampleTools = (report.tools || []).slice(0, 12);
 
@@ -248,17 +277,23 @@ export function formatDoctorTerminal(report) {
     "",
     section("MCP Tools", "🧰"),
     `Registered:  ${color((report.tools || []).length, "green")}`,
-    `Examples:    ${sampleTools.map(tool => color(tool, "cyan")).join(", ")}${(report.tools || []).length > sampleTools.length ? color(", …", "dim") : ""}`,
+    `Examples:    ${sampleTools.map((tool) => color(tool, "cyan")).join(", ")}${(report.tools || []).length > sampleTools.length ? color(", …", "dim") : ""}`,
     "",
     section("Agents", "🤖"),
     `Configured:  ${color(report.agentsConfigured, "green")}/${report.agentsTotal}`,
   ];
 
   for (const agent of configuredAgents.slice(0, 12)) {
-    lines.push(`  ${agentIcon(agent)} ${color(agent.name.padEnd(12), agent.validated === false ? "yellow" : "bold")} ${color(truncate(agent.configFile || "", 90), "dim")}`);
+    lines.push(
+      `  ${agentIcon(agent)} ${color(agent.name.padEnd(12), agent.validated === false ? "yellow" : "bold")} ${color(truncate(agent.configFile || "", 90), "dim")}`,
+    );
   }
-  if (configuredAgents.length > 12) lines.push(color(`  … ${configuredAgents.length - 12} more configured agents`, "dim"));
-  if (missingAgents.length > 0) lines.push(`⚠️  ${color("Missing", "yellow")}: ${missingAgents.map(agent => color(agent, "yellow")).join(", ")}${(report.unconfigured || []).length > missingAgents.length ? color(", …", "dim") : ""}`);
+  if (configuredAgents.length > 12)
+    lines.push(color(`  … ${configuredAgents.length - 12} more configured agents`, "dim"));
+  if (missingAgents.length > 0)
+    lines.push(
+      `⚠️  ${color("Missing", "yellow")}: ${missingAgents.map((agent) => color(agent, "yellow")).join(", ")}${(report.unconfigured || []).length > missingAgents.length ? color(", …", "dim") : ""}`,
+    );
 
   lines.push(
     "",
@@ -295,8 +330,8 @@ export function runDoctor(telemetry = false) {
   // Detect + validate agent configs
   const detected = detectInstalledAgents();
   const validated = validateAgentConfigs(detected);
-  const configured = validated.filter(a => a.configured);
-  const missing = validated.filter(a => !a.configured);
+  const configured = validated.filter((a) => a.configured);
+  const missing = validated.filter((a) => !a.configured);
 
   // IDE configs
   const ideConfigs = detectIdeConfigs();
@@ -304,7 +339,7 @@ export function runDoctor(telemetry = false) {
   // Model provider configs
   const modelEnv = detectModelConfig();
   const modelFiles = detectStoredModelKeys();
-  const modelsConfigured = modelEnv.filter(m => m.configured).length + modelFiles.filter(m => m.configured).length;
+  const modelsConfigured = modelEnv.filter((m) => m.configured).length + modelFiles.filter((m) => m.configured).length;
 
   // Environment
   const env = getEnvironmentInfo();
@@ -333,7 +368,7 @@ export function runDoctor(telemetry = false) {
 
     entrypoint: new URL("../../bin/pix-galaxy-mcp.js", import.meta.url).pathname,
 
-    tools: listTools().map(t => t.name),
+    tools: listTools().map((t) => t.name),
 
     // Agent detection
     agents: validated,
@@ -371,7 +406,7 @@ export function runDoctor(telemetry = false) {
     },
 
     // Unconfigured agents (quick reference)
-    unconfigured: missing.map(a => a.name),
+    unconfigured: missing.map((a) => a.name),
   };
 
   if (telemetry) {

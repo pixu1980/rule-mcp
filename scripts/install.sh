@@ -30,6 +30,7 @@
 #   --no-rules           Skip agent instruction files
 #   --dry-run            Preview changes without writing
 #   --force              Override existing configurations
+#   --mode <name>        stdio (default), daemon, or docker
 #
 # =============================================================================
 
@@ -63,6 +64,8 @@ DRY_RUN=false
 FORCE=false
 CONFIGURE_MODELS=false
 TARGET_AGENT=""
+INSTALL_MODE=""
+MODE_WAS_REQUESTED=false
 
 # ── Helpers ──────────────────────────────────────────────────────────────────
 info()  { echo -e "${CYAN}ℹ${NC} $1"; }
@@ -100,6 +103,7 @@ while [[ $# -gt 0 ]]; do
     --no-rules)   INSTALL_RULES=false; shift ;;
     --dry-run)    DRY_RUN=true; shift ;;
     --force)      FORCE=true; shift ;;
+    --mode)       INSTALL_MODE="${2:-}"; MODE_WAS_REQUESTED=true; shift 2 ;;
     --no-interactive) INTERACTIVE=false; shift ;;
     --help|-h)
       echo "Usage: curl -fsSL https://pix-galaxy.dev/install.sh | bash"
@@ -110,12 +114,19 @@ while [[ $# -gt 0 ]]; do
       echo "  --no-rules       Skip agent instruction files"
       echo "  --dry-run        Preview changes without writing"
       echo "  --force          Override existing configurations"
+      echo "  --mode <name>    stdio (default), daemon, or docker"
       echo "  --help           Show this help"
       exit 0
       ;;
     *) echo "Unknown option: $1"; exit 1 ;;
   esac
 done
+
+case "$INSTALL_MODE" in
+  ""|stdio|daemon|docker) ;;
+  sse) INSTALL_MODE="daemon" ;;
+  *) echo "Unsupported mode: ${INSTALL_MODE}. Use stdio, daemon, or docker."; exit 1 ;;
+esac
 
 echo ""
 echo -e "${BOLD}${CYAN}╔══════════════════════════════════════════════════════╗${NC}"
@@ -206,17 +217,27 @@ else
   exit 1
 fi
 
+# Execute the CLI without reparsing user-controlled arguments through eval.
+run_cli() {
+  if [[ "$IS_LOCAL_REPO" == "true" ]]; then
+    node "$LOCAL_BIN" "$@"
+  else
+    pix-galaxy-mcp "$@"
+  fi
+}
+
 # ─────────────────────────────────────────────────────────────────────────────
 # PHASE 3: Detect & Install Agents
 # ─────────────────────────────────────────────────────────────────────────────
 header "Phase 3: Agent Integration"
 
 if [[ -n "$TARGET_AGENT" ]]; then
-  info "Targeting specific agent: ${TARGET_AGENT}"
+  [[ -z "$INSTALL_MODE" ]] && INSTALL_MODE="stdio"
+  info "Targeting specific agent: ${TARGET_AGENT} (mode: ${INSTALL_MODE})"
   if [[ "$DRY_RUN" == "true" ]]; then
-    sub "[dry-run] Would run: ${BIN_CMD} install --agent ${TARGET_AGENT}"
+    sub "[dry-run] Would run: ${BIN_CMD} install --agent ${TARGET_AGENT} --mode ${INSTALL_MODE}"
   else
-    eval "${BIN_CMD} install --agent ${TARGET_AGENT} --json" >/dev/null 2>/dev/null && ok "Installed for ${TARGET_AGENT}" || warn "Failed to install for ${TARGET_AGENT}"
+    run_cli install --agent "${TARGET_AGENT}" --mode "${INSTALL_MODE}" --json >/dev/null 2>/dev/null && ok "Installed for ${TARGET_AGENT}" || warn "Failed to install for ${TARGET_AGENT}"
   fi
 else
   info "Auto-detecting installed agents..."
@@ -287,14 +308,14 @@ else
 
     # ── Interactive agent + mode selection (full-screen TUI) ──
     SELECTED_AGENTS=()
-    INSTALL_MODE="stdio"
+    [[ -z "$INSTALL_MODE" ]] && INSTALL_MODE="stdio"
     if [[ "$INTERACTIVE" == "true" ]] && [[ -t 0 ]]; then
       AGENT_FLAGS=()
       for ((ai=0; ai<${#DETECTED_AGENTS[@]}; ai++)); do AGENT_FLAGS+=(0); done
       AGENT_CURSOR=0
       MODE_CURSOR=0
-      MODES=(stdio sse docker)
-      MODE_LABELS=("Stdio daemon — on-demand via agent" "SSE daemon — background HTTP on port 37999" "Docker — containerized")
+      MODES=(stdio daemon docker)
+      MODE_LABELS=("Stdio — agent starts a local process" "Daemon — background SSE service on port 37999" "Docker — containerized SSE service")
 
       tui_enter() {
         if command -v tput >/dev/null 2>&1; then
@@ -397,27 +418,29 @@ else
         exit 0
       fi
 
-      # Step 2: mode (radio)
-      while true; do
-        render_modes
-        IFS= read -r -s -n1 KEY
-        if [[ -z "$KEY" ]]; then
-          break
-        elif [[ "$KEY" == "q" ]]; then
-          tui_leave
-          exit 0
-        elif [[ "$KEY" == $'\x1b' ]]; then
-          IFS= read -r -s -n2 KEY2
-          if [[ "$KEY2" == "[A" ]]; then
-            MODE_CURSOR=$((MODE_CURSOR - 1))
-            [[ $MODE_CURSOR -lt 0 ]] && MODE_CURSOR=$((${#MODES[@]} - 1))
-          elif [[ "$KEY2" == "[B" ]]; then
-            MODE_CURSOR=$((MODE_CURSOR + 1))
-            [[ $MODE_CURSOR -ge ${#MODES[@]} ]] && MODE_CURSOR=0
+      # Step 2: mode (radio), unless a caller supplied --mode.
+      if [[ "$MODE_WAS_REQUESTED" != "true" ]]; then
+        while true; do
+          render_modes
+          IFS= read -r -s -n1 KEY
+          if [[ -z "$KEY" ]]; then
+            break
+          elif [[ "$KEY" == "q" ]]; then
+            tui_leave
+            exit 0
+          elif [[ "$KEY" == $'\x1b' ]]; then
+            IFS= read -r -s -n2 KEY2
+            if [[ "$KEY2" == "[A" ]]; then
+              MODE_CURSOR=$((MODE_CURSOR - 1))
+              [[ $MODE_CURSOR -lt 0 ]] && MODE_CURSOR=$((${#MODES[@]} - 1))
+            elif [[ "$KEY2" == "[B" ]]; then
+              MODE_CURSOR=$((MODE_CURSOR + 1))
+              [[ $MODE_CURSOR -ge ${#MODES[@]} ]] && MODE_CURSOR=0
+            fi
           fi
-        fi
-      done
-      INSTALL_MODE="${MODES[$MODE_CURSOR]}"
+        done
+        INSTALL_MODE="${MODES[$MODE_CURSOR]}"
+      fi
       tui_leave
       trap - EXIT INT TERM
 
@@ -434,138 +457,20 @@ else
     else
       for agent in "${SELECTED_AGENTS[@]}"; do
         sub "Configuring ${agent} (mode: ${INSTALL_MODE})..."
-        if [[ "$INSTALL_MODE" == "sse" ]]; then
-          if eval "${BIN_CMD} install --agent ${agent} --json" >/dev/null 2>/dev/null; then
-            ok "${agent}: configured (add --transport sse for SSE mode)"
-            INSTALLED_AGENTS+=("$agent")
-            CONFIGURED_COUNT=$((CONFIGURED_COUNT + 1))
-          else
-            warn "${agent}: skipped"
-          fi
-        elif [[ "$INSTALL_MODE" == "docker" ]]; then
-          info "Docker mode: run 'docker compose up -d' after installation"
-          if eval "${BIN_CMD} install --agent ${agent} --json" >/dev/null 2>/dev/null; then
-            ok "${agent}: configured (use Docker for containerized deployment)"
-            INSTALLED_AGENTS+=("$agent")
-            CONFIGURED_COUNT=$((CONFIGURED_COUNT + 1))
-          else
-            warn "${agent}: skipped"
-          fi
+        if run_cli install --agent "${agent}" --mode "${INSTALL_MODE}" --json >/dev/null 2>/dev/null; then
+          ok "${agent}: configured"
+          INSTALLED_AGENTS+=("$agent")
+          CONFIGURED_COUNT=$((CONFIGURED_COUNT + 1))
         else
-          if eval "${BIN_CMD} install --agent ${agent} --json" >/dev/null 2>/dev/null; then
-            ok "${agent}: configured"
-            INSTALLED_AGENTS+=("$agent")
-            CONFIGURED_COUNT=$((CONFIGURED_COUNT + 1))
-          else
-            warn "${agent}: skipped (may already be configured)"
-            SKIPPED_COUNT=$((SKIPPED_COUNT + 1))
-          fi
+          warn "${agent}: skipped"
+          SKIPPED_COUNT=$((SKIPPED_COUNT + 1))
         fi
       done
     fi
   fi
 fi
 
-# ─────────────────────────────────────────────────────────────────────────────
-# PHASE 4: IDE Integration
-# ─────────────────────────────────────────────────────────────────────────────
-header "Phase 4: IDE Integration"
-
-# VS Code project-level config
-if [[ -d ".vscode" ]] || [[ "$FORCE" == "true" ]]; then
-  if [[ "$DRY_RUN" == "true" ]]; then
-    sub "[dry-run] Would configure: VS Code (.vscode/mcp.json)"
-  else
-    sub "Configuring VS Code..."
-    mkdir -p ".vscode"
-    if eval "${BIN_CMD} install --agent vscode --json" >/dev/null 2>/dev/null; then
-      ok "VS Code: configured (.vscode/mcp.json + user-level Code/User/mcp.json)"
-    else
-      warn "VS Code: skipped"
-    fi
-  fi
-fi
-
-# Neovim (via MCP plugin)
-if command -v nvim &>/dev/null; then
-  if [[ "$DRY_RUN" == "true" ]]; then
-    sub "[dry-run] Would configure: Neovim"
-  else
-    sub "Configuring Neovim..."
-    mkdir -p "$HOME/.config/nvim"
-    NEOVIM_MCP="$HOME/.config/nvim/mcp.json"
-    if [[ ! -f "$NEOVIM_MCP" ]] || [[ "$FORCE" == "true" ]]; then
-      cat > "$NEOVIM_MCP" <<- NEOVIM_EOF
-{
-  "mcpServers": {
-    "pix_galaxy_mcp": {
-      "command": "${BIN_CMD%% *}",
-      "args": ["${BIN_CMD#* }", "serve"],
-      "directTools": true,
-      "lifecycle": "keep-alive"
-    }
-  }
-}
-NEOVIM_EOF
-      ok "Neovim: configured ($NEOVIM_MCP)"
-    else
-      warn "Neovim: already configured (use --force to overwrite)"
-    fi
-  fi
-else
-  sub "Neovim: not detected, skipping"
-fi
-
-# JetBrains IDEs (IntelliJ, WebStorm, etc.)
-if [[ "${DETECTED_AGENTS[*]-}" =~ "jetbrains" ]]; then
-  info "JetBrains IDEs detected — MCP is configured per-project in .idea/"
-  if [[ "$DRY_RUN" == "true" ]]; then
-    sub "[dry-run] Would configure: JetBrains (.idea/mcp.json)"
-  else
-    mkdir -p ".idea"
-    JETBRAINS_MCP=".idea/mcp.json"
-    if [[ ! -f "$JETBRAINS_MCP" ]] || [[ "$FORCE" == "true" ]]; then
-      cat > "$JETBRAINS_MCP" <<- JB_EOF
-{
-  "mcpServers": {
-    "pix_galaxy_mcp": {
-      "command": "${BIN_CMD%% *}",
-      "args": ["${BIN_CMD#* }", "serve"],
-      "directTools": true,
-      "lifecycle": "keep-alive"
-    }
-  }
-}
-JB_EOF
-      ok "JetBrains: configured (.idea/mcp.json)"
-    else
-      warn "JetBrains: already configured (use --force to overwrite)"
-    fi
-  fi
-fi
-
-# Emacs (via MCP plugin)
-if command -v emacs &>/dev/null; then
-  info "Emacs detected — consider installing mcp-el (https://github.com/emacs-mcp/mcp.el)"
-  if [[ "$DRY_RUN" == "true" ]]; then
-    sub "[dry-run] Would add: mcp.el configuration snippet"
-  else
-    EMACS_CONFIG="$HOME/.emacs.d/init.el"
-    if [[ -f "$EMACS_CONFIG" ]]; then
-      MCP_LINE="(setq mcp-servers '((\"pix_galaxy_mcp\" . ((command . \"${BIN_CMD%% *}\") (args . (\"${BIN_CMD#* }\" \"serve\"))))))"
-      if grep -q "pix_galaxy_mcp" "$EMACS_CONFIG" 2>/dev/null; then
-        warn "Emacs: already configured"
-      else
-        echo "" >> "$EMACS_CONFIG"
-        echo ";; pix-galaxy-mcp" >> "$EMACS_CONFIG"
-        echo "$MCP_LINE" >> "$EMACS_CONFIG"
-        ok "Emacs: configured"
-      fi
-    else
-      sub "Emacs: no init.el found, skipping auto-config"
-    fi
-  fi
-fi
+# Agent and IDE configurations are written only for selections made in Phase 3.
 
 # ─────────────────────────────────────────────────────────────────────────────
 # PHASE 6: Agent Instruction Files
@@ -713,9 +618,10 @@ fi
 # ─────────────────────────────────────────────────────────────────────────────
 # PHASE 8: Daemon Service Installation (platform-native)
 # ─────────────────────────────────────────────────────────────────────────────
-header "Phase 8: Platform Daemon Service"
+if [[ "$INSTALL_MODE" == "daemon" ]]; then
+  header "Phase 8: Platform Daemon Service"
 
-if [[ "$DRY_RUN" == "true" ]]; then
+  if [[ "$DRY_RUN" == "true" ]]; then
   sub "[dry-run] Would install daemon service for $(detect_os)"
   if [[ "$OS" == "macos" ]]; then
     sub "  Would create: ~/Library/LaunchAgents/io.github.pixu1980.pix-galaxy-mcp.plist"
@@ -727,7 +633,7 @@ if [[ "$DRY_RUN" == "true" ]]; then
   fi
 else
   info "Installing ${OS} daemon service..."
-  if eval "${BIN_CMD} daemon install" 2>/dev/null; then
+  if run_cli daemon install 2>/dev/null; then
     ok "Daemon service installed"
     if [[ "$OS" == "macos" ]]; then
       echo ""
@@ -748,6 +654,26 @@ else
     warn "Daemon service installation had issues"
     sub "  Run: ${BIN_CMD} daemon install"
   fi
+  fi
+elif [[ "$INSTALL_MODE" == "docker" ]]; then
+  header "Phase 8: Docker Service"
+  SSE_TOKEN_FILE="$HOME_DIR/.local/state/pix-galaxy-mcp/sse-token"
+  if [[ "$DRY_RUN" == "true" ]]; then
+    sub "[dry-run] Would run: docker compose up -d with the local SSE token"
+  elif ! command -v docker >/dev/null 2>&1 || ! docker compose version >/dev/null 2>&1; then
+    warn "Docker Compose v2 is required for Docker mode"
+  elif [[ ! -r "$SSE_TOKEN_FILE" ]]; then
+    warn "Missing daemon token: ${SSE_TOKEN_FILE}"
+  elif [[ ! -f "docker-compose.yml" ]]; then
+    warn "docker-compose.yml not found; run the installer from the project directory"
+  elif PIX_GALAXY_MCP_SSE_TOKEN="$(tr -d '\r\n' < "$SSE_TOKEN_FILE")" docker compose up -d; then
+    ok "Docker SSE service started"
+  else
+    warn "Docker SSE service failed to start"
+  fi
+else
+  header "Phase 8: Background Service"
+  sub "Skipping native daemon service (mode: ${INSTALL_MODE:-stdio})"
 fi
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -758,7 +684,7 @@ header "Phase 9: Health Check"
 if [[ "$DRY_RUN" == "true" ]]; then
   sub "[dry-run] Would run: ${BIN_CMD} doctor"
 else
-  if eval "${BIN_CMD} doctor" 2>/dev/null; then
+  if run_cli doctor 2>/dev/null; then
     ok "Health check passed"
   else
     warn "Health check had issues"

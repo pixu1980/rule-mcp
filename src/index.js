@@ -123,6 +123,7 @@ Supported agents (23 total — matching tokensave's 18+ agents):
 
 Options:
   --agent <name>    Target agent (or "all" for every supported agent)
+  --mode <name>     stdio (default), daemon (SSE), or docker
   --global          Use clean command path (requires global install)
   --force           Override existing configuration
   --dry-run         Preview without writing
@@ -173,10 +174,11 @@ Usage: pix-galaxy-mcp config [options]
 Print the mcp.json configuration snippet for MCP agent integration.
 
 Options:
-  --global    Use clean command path (requires global install)
+  --global          Use clean command path (requires global install)
+  --mode <name>     stdio (default), daemon (SSE), or docker
 
 Example:
-  pix-galaxy-mcp config --global
+  pix-galaxy-mcp config --mode daemon
 `);
 
 const printDoctorHelp = () => process.stdout.write(`
@@ -313,6 +315,7 @@ export async function cli() {
           dryRun: hasFlag("--dry-run"),
           force: hasFlag("--force"),
           global: hasFlag("--global"),
+          mode: getArg("--mode", "stdio"),
           json: hasFlag("--json"),
         });
         break;
@@ -338,7 +341,7 @@ export async function cli() {
 
       case "config":
         if (hasFlag("--help") || hasFlag("-h")) { printConfigHelp(); return; }
-        configCommand({ global: hasFlag("--global") });
+        configCommand({ global: hasFlag("--global"), mode: getArg("--mode", "stdio") });
         break;
 
       case "doctor":
