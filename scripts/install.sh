@@ -37,7 +37,7 @@
 set -euo pipefail
 
 # ── Config ───────────────────────────────────────────────────────────────────
-MCP_SERVER_NAME="pix_galaxy_mcp"
+MCP_SERVER_NAME="pix-galaxy-mcp"
 NODE_MIN="20"
 SCRIPT_URL="https://pix-galaxy.dev/install.sh"
 NPM_PACKAGE="pix-galaxy-mcp"
@@ -741,7 +741,7 @@ echo ""
 echo -e "  ${CYAN}Add to any agent's mcp.json:${NC}"
 echo -e "  ${GREEN}{${NC}"
 echo -e "    ${GREEN}\"mcpServers\": {${NC}"
-echo -e "      ${GREEN}\"pix_galaxy_mcp\": {${NC}"
+echo -e "      ${GREEN}\"$MCP_SERVER_NAME\": {${NC}"
 echo -e "        ${GREEN}\"command\": \"${BIN_CMD%% *}\",${NC}"
 echo -e "        ${GREEN}\"args\": [\"${BIN_CMD#* }\", \"serve\"],${NC}"
 echo -e "        ${GREEN}\"directTools\": true,${NC}"

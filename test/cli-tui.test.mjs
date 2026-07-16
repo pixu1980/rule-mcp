@@ -37,7 +37,7 @@ const uninstallUi = formatUninstallResult({
   ok: true,
   dryRun: true,
   agents: ["claude"],
-  note: "Removed pix_galaxy_mcp from claude.",
+  note: "Removed pix-galaxy-mcp from claude.",
   uninstalled: { claude: ["/tmp/.claude.json"] },
 });
 assert(uninstallUi.includes("🧽"), "uninstall UI should include cleanup emoji");

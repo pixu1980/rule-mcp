@@ -14,7 +14,7 @@ import { mcpServerConfig } from "../src/cli/install.js";
 
 const HOME = homedir();
 const entrypoint = join(HOME, "Projects", "pix-galaxy-mcp", "bin", "pix-galaxy-mcp.js");
-const config = mcpServerConfig(entrypoint).pix_galaxy_mcp;
+const config = mcpServerConfig(entrypoint)["pix-galaxy-mcp"];
 
 // Invariant: command is always an absolute path (never "~" shorthand).
 assert.equal(typeof config.command, "string", "command must be a string");

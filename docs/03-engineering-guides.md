@@ -157,7 +157,7 @@ jobs:
 # .vscode/mcp.json
 {
   "servers": {
-    "pix_galaxy_mcp": {
+    "pix-galaxy-mcp": {
       "type": "stdio",
       "command": "docker",
       "args": ["compose", "exec", "-T", "mcp", "node", "src/index.js", "serve"]

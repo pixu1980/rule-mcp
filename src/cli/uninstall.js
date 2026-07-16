@@ -28,7 +28,7 @@ export function uninstallFromAgent({ agent, dryRun = false }) {
   return {
     ok: result.ok,
     dryRun: result.dryRun,
-    note: `Removed pix_galaxy_mcp from ${agent === "all" ? "all detected agents" : agent}.`,
+    note: `Removed pix-galaxy-mcp from ${agent === "all" ? "all detected agents" : agent}.`,
     agents: Object.keys(result.uninstalled),
     uninstalled: result.uninstalled,
   };

@@ -18,7 +18,7 @@ function scan(dir) {
       const lines = c.split("\n");
       for (let i = 0; i < lines.length; i++) {
         for (const m of lines[i].matchAll(/\bpix_[a-z0-9_]+\b/g)) {
-          if (!tools.has(m[0]) && m[0] !== "pix_galaxy_mcp" && m[0] !== "pix_process_handoff") {
+          if (!tools.has(m[0]) && m[0] !== "pix-galaxy-mcp" && m[0] !== "pix_process_handoff") {
             console.log("STALE:", p + ":" + (i + 1) + " " + m[0]);
             stale++;
           }

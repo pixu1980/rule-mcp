@@ -1056,7 +1056,7 @@ pix-galaxy-mcp daemon logs
 ### Claude (Claude Code / Claude Desktop)
 
 **Issue**: Tool not found by Claude.
-- **Fix**: Ensure `~/.claude.json` has the `pix_galaxy_mcp` entry.
+- **Fix**: Ensure `~/.claude.json` has the `pix-galaxy-mcp` entry.
   ```bash
   pix-galaxy-mcp install --agent claude
   ```
@@ -1064,7 +1064,7 @@ pix-galaxy-mcp daemon logs
   ```json
   {
     "mcpServers": {
-      "pix_galaxy_mcp": {
+      "pix-galaxy-mcp": {
         "command": "/path/to/node",
         "args": ["/path/to/bin/pix-galaxy-mcp.js", "serve"]
       }
@@ -1097,7 +1097,7 @@ pix-galaxy-mcp daemon logs
   ```json
   {
     "servers": {
-      "pix_galaxy_mcp": {
+      "pix-galaxy-mcp": {
         "type": "stdio",
         "command": "/path/to/node",
         "args": ["/path/to/bin/pix-galaxy-mcp.js", "serve"]

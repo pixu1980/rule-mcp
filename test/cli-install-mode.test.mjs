@@ -16,7 +16,7 @@ const output = execFileSync(
 
 assert.equal(JSON.parse(output).ok, true, "CLI install must succeed");
 const config = JSON.parse(readFileSync(join(piDir, "mcp.json"), "utf8"));
-assert.equal(config.mcpServers.pix_galaxy_mcp.url, "http://127.0.0.1:37999/sse");
-assert.equal(config.mcpServers.pix_galaxy_mcp.command, undefined);
+assert.equal(config.mcpServers["pix-galaxy-mcp"].url, "http://127.0.0.1:37999/sse");
+assert.equal(config.mcpServers["pix-galaxy-mcp"].command, undefined);
 
 console.log("  ✅ CLI install --mode daemon writes daemon config");

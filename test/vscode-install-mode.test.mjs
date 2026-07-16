@@ -51,7 +51,7 @@ execFileSync(
 );
 
 const globalConfig = JSON.parse(readFileSync(globalFile, "utf8"));
-const globalServer = globalConfig.servers.pix_galaxy_mcp;
+const globalServer = globalConfig.servers["pix-galaxy-mcp"];
 assert.equal(globalServer.type, "http");
 assert.equal(globalServer.url, "http://127.0.0.1:37999/sse");
 assert.match(globalServer.headers?.Authorization ?? "", /^Bearer [a-f0-9]{64}$/i);
@@ -59,7 +59,7 @@ assert.equal(globalConfig.servers["other-global-server"].command, "other", "must
 assert.equal(globalConfig.mcpServers?.pix_galaxy_mcp, undefined, "must remove only legacy pix entry");
 
 const workspaceConfig = JSON.parse(readFileSync(join(fakeProject, ".vscode", "mcp.json"), "utf8"));
-assert.equal(workspaceConfig.servers.pix_galaxy_mcp, undefined, "must not create a workspace pix server");
+assert.equal(workspaceConfig.servers["pix-galaxy-mcp"], undefined, "must not create a workspace pix server");
 assert.equal(workspaceConfig.servers["other-workspace-server"].command, "other", "must preserve workspace config");
 assert(existsSync(globalFile), "must write the user-global VS Code config");
 

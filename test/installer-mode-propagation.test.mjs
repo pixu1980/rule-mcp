@@ -20,7 +20,7 @@ execFileSync(process.execPath, ["--input-type=module", "--eval", source], {
 });
 
 const config = JSON.parse(readFileSync(join(piDir, "mcp.json"), "utf8"));
-const server = config.mcpServers.pix_galaxy_mcp;
+const server = config.mcpServers["pix-galaxy-mcp"];
 assert.equal(server.command, undefined, "daemon installation must not leave a stdio command");
 assert.equal(server.url, "http://127.0.0.1:37999/sse");
 assert.match(server.headers?.Authorization ?? "", /^Bearer [a-f0-9]{64}$/i);

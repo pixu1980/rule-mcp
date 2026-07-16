@@ -12,7 +12,7 @@ const output = execFileSync(process.execPath, [join(root, "bin", "pix-galaxy-mcp
   env: { ...process.env, HOME: fakeHome },
   encoding: "utf8",
 });
-const server = JSON.parse(output).pix_galaxy_mcp;
+const server = JSON.parse(output)["pix-galaxy-mcp"];
 
 assert.equal(server.command, undefined);
 assert.equal(server.url, "http://127.0.0.1:37999/sse");

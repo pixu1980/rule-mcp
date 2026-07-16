@@ -420,7 +420,7 @@ export function installCommand(opts) {
 
 /**
  * Uninstall pix-galaxy-mcp from an agent/IDE.
- * Removes the pix_galaxy_mcp entry from the agent config file.
+ * Removes the pix-galaxy-mcp entry from the agent config file.
  *
  * @param {{ agent: string, dryRun: boolean }} opts
  */

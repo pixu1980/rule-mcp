@@ -29,7 +29,7 @@ import { getOrCreateSseBearerToken } from "../transport/sse-auth.js";
 // ─── Constants ───────────────────────────────────────────────────────────────
 
 /** Internal MCP server name used in agent configurations. */
-const serverName = "pix_galaxy_mcp";
+const serverName = "pix-galaxy-mcp";
 
 /**
  * Full list of supported agents.
@@ -231,11 +231,18 @@ const toJson = (obj) => `${JSON.stringify(obj, null, 2)}\n`;
  * Upsert an MCP server entry in a JSON config file.
  * Returns null if the file contains invalid JSON.
  */
+const LEGACY_SERVER_NAME = "pix_galaxy_mcp";
+
 const upsertJsonServer = (current, config) => {
   const json = current.trim() ? parseJson(current) : {};
   if (json === null) return null;
   json.mcpServers = json.mcpServers ?? {};
   json.mcpServers[serverName] = config;
+  // Clean up legacy underscore key so the old entry doesn't survive.
+  if (json.mcpServers[LEGACY_SERVER_NAME]) {
+    delete json.mcpServers[LEGACY_SERVER_NAME];
+    if (Object.keys(json.mcpServers).length === 0) delete json.mcpServers;
+  }
   return toJson(json);
 };
 
@@ -247,9 +254,11 @@ const removeJsonServer = (current) => {
   if (!current.trim()) return current;
   const json = parseJson(current);
   if (json === null) return null;
-  if (json.mcpServers?.[serverName]) {
-    delete json.mcpServers[serverName];
-    if (Object.keys(json.mcpServers).length === 0) delete json.mcpServers;
+  for (const key of [serverName, LEGACY_SERVER_NAME]) {
+    if (json.mcpServers?.[key]) {
+      delete json.mcpServers[key];
+      if (Object.keys(json.mcpServers).length === 0) delete json.mcpServers;
+    }
   }
   return Object.keys(json).length > 0 ? toJson(json) : "";
 };
@@ -263,11 +272,15 @@ const upsertVscode = (current, config) => {
   const json = current.trim() ? parseJson(current) : {};
   if (json === null) return null;
   json.servers = json.servers ?? {};
-  // VS Code owns `servers`; remove only this server from an older generic key.
-  if (json.mcpServers?.[serverName]) {
-    delete json.mcpServers[serverName];
-    if (Object.keys(json.mcpServers).length === 0) delete json.mcpServers;
+  // VS Code owns `servers`; remove only this server from the `mcpServers` key.
+  for (const key of [serverName, LEGACY_SERVER_NAME]) {
+    if (json.mcpServers?.[key]) {
+      delete json.mcpServers[key];
+      if (Object.keys(json.mcpServers).length === 0) delete json.mcpServers;
+    }
   }
+  // Migrate from legacy underscore name.
+  if (json.servers[LEGACY_SERVER_NAME]) delete json.servers[LEGACY_SERVER_NAME];
   json.servers[serverName] = { ...config, type: config.url ? "http" : "stdio" };
   return toJson(json);
 };
@@ -280,13 +293,15 @@ const removeVscodeServer = (current) => {
   if (!current.trim()) return current;
   const json = parseJson(current);
   if (json === null) return null;
-  if (json.servers?.[serverName]) {
-    delete json.servers[serverName];
-    if (Object.keys(json.servers).length === 0) delete json.servers;
-  }
-  if (json.mcpServers?.[serverName]) {
-    delete json.mcpServers[serverName];
-    if (Object.keys(json.mcpServers).length === 0) delete json.mcpServers;
+  for (const key of [serverName, LEGACY_SERVER_NAME]) {
+    if (json.servers?.[key]) {
+      delete json.servers[key];
+      if (Object.keys(json.servers).length === 0) delete json.servers;
+    }
+    if (json.mcpServers?.[key]) {
+      delete json.mcpServers[key];
+      if (Object.keys(json.mcpServers).length === 0) delete json.mcpServers;
+    }
   }
   return Object.keys(json).length > 0 ? toJson(json) : "";
 };

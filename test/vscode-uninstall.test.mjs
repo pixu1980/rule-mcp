@@ -40,7 +40,7 @@ execFileSync(
 
 assert.equal(existsSync(join(fakeProject, ".vscode", "mcp.json")), false, "must not create workspace mcp.json");
 const config = JSON.parse(readFileSync(globalFile, "utf8"));
-assert.equal(config.servers.pix_galaxy_mcp, undefined);
+assert.equal(config.servers["pix-galaxy-mcp"], undefined);
 assert.equal(config.servers.other.command, "other");
 
 console.log("  ✅ VS Code uninstall changes only existing global config");

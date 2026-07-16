@@ -28,7 +28,7 @@
 set -euo pipefail
 
 # ── Config ───────────────────────────────────────────────────────────────────
-MCP_SERVER_NAME="pix_galaxy_mcp"
+MCP_SERVER_NAME="pix-galaxy-mcp"
 SCRIPT_URL="https://pix-galaxy.dev/uninstall.sh"
 
 # ── Colors ───────────────────────────────────────────────────────────────────
@@ -430,16 +430,16 @@ fi
 # Emacs config
 EMACS_CONFIG="$HOME_DIR/.emacs.d/init.el"
 if [[ -f "$EMACS_CONFIG" ]]; then
-  if grep -q "pix_galaxy_mcp" "$EMACS_CONFIG" 2>/dev/null; then
+  if grep -q "pix-galaxy-mcp" "$EMACS_CONFIG" 2>/dev/null; then
     if [[ "$DRY_RUN" == "true" ]]; then
       sub "[dry-run] Would remove pix-galaxy lines from: ${EMACS_CONFIG}"
     else
       cp "$EMACS_CONFIG" "${EMACS_CONFIG}.bak" 2>/dev/null || true
       if [[ "$OS" == "macos" ]]; then
-        sed -i '' '/pix_galaxy_mcp/d' "$EMACS_CONFIG"
+        sed -i '' '/pix_galaxy_mcp\|pix-galaxy-mcp/d' "$EMACS_CONFIG"
         sed -i '' '/;; pix-galaxy-mcp/d' "$EMACS_CONFIG"
       else
-        sed -i '/pix_galaxy_mcp/d' "$EMACS_CONFIG"
+        sed -i '/pix_galaxy_mcp\|pix-galaxy-mcp/d' "$EMACS_CONFIG"
         sed -i '/;; pix-galaxy-mcp/d' "$EMACS_CONFIG"
       fi
       ok "Emacs: pix-galaxy lines removed"

@@ -19,7 +19,7 @@ const output = execFileSync(process.execPath, ["--input-type=module", "--eval", 
   env: { ...process.env, HOME: fakeHome },
   encoding: "utf8",
 });
-const config = JSON.parse(output).pix_galaxy_mcp;
+const config = JSON.parse(output)["pix-galaxy-mcp"];
 const tokenFile = join(fakeHome, ".local", "state", "pix-galaxy-mcp", "sse-token");
 
 assert.equal(config.command, undefined, "daemon config must not spawn a stdio process");

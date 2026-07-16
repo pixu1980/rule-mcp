@@ -63,7 +63,7 @@ if ($Help) {
 }
 
 # ── Config ──
-$McpServerName = "pix_galaxy_mcp"
+$McpServerName = "pix-galaxy-mcp"
 $NodeMin = 20
 $NpmPackage = "pix-galaxy-mcp"
 $PackageVersion = "latest"
@@ -557,7 +557,7 @@ Write-Host ""
 Write-Host "Add to any agent's mcp.json:" -ForegroundColor Cyan
 Write-Host "{" -ForegroundColor Green
 Write-Host '  "mcpServers": {' -ForegroundColor Green
-Write-Host '    "pix_galaxy_mcp": {' -ForegroundColor Green
+Write-Host '    "pix-galaxy-mcp": {' -ForegroundColor Green
 $cmdPart = if ($BinCmd -match " ") { $BinCmd.Split(" ")[0] } else { $BinCmd }
 $argPart = if ($BinCmd -match " ") { $BinCmd.Split(" ")[1] } else { "npx" }
 Write-Host "      `"command`": `"$cmdPart`"," -ForegroundColor Green

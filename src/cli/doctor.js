@@ -56,7 +56,7 @@ function validateAgentConfigs(agents) {
       if (agent.name === "vscode") {
         try {
           const json = JSON.parse(content);
-          const mcpEntry = json.servers?.pix_galaxy_mcp;
+          const mcpEntry = json.servers?.["pix-galaxy-mcp"] || json.servers?.pix_galaxy_mcp;
           return {
             ...agent,
             validated: !!mcpEntry,
@@ -73,7 +73,7 @@ function validateAgentConfigs(agents) {
       if (agent.name === "claude" && agent.configFile.endsWith(".claude.json")) {
         try {
           const json = JSON.parse(content);
-          const mcpEntry = json.mcpServers?.pix_galaxy_mcp;
+          const mcpEntry = json.mcpServers?.["pix-galaxy-mcp"] || json.mcpServers?.pix_galaxy_mcp;
           return {
             ...agent,
             validated: !!mcpEntry,
@@ -89,7 +89,7 @@ function validateAgentConfigs(agents) {
       if (agent.configFile.endsWith("mcp.json")) {
         try {
           const json = JSON.parse(content);
-          const mcpEntry = json.mcpServers?.pix_galaxy_mcp;
+          const mcpEntry = json.mcpServers?.["pix-galaxy-mcp"] || json.mcpServers?.pix_galaxy_mcp;
           return {
             ...agent,
             validated: !!mcpEntry,

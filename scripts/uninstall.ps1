@@ -51,7 +51,7 @@ if ($Help) {
 }
 
 # ── Config ──
-$McpServerName = "pix_galaxy_mcp"
+$McpServerName = "pix-galaxy-mcp"
 $ScriptUrl = "https://pix-galaxy.dev/uninstall.ps1"
 
 # ── State ──
