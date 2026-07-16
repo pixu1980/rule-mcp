@@ -25,8 +25,10 @@ This inventory is generated from `assets/context-server/templates.json`, `assets
 | `specs/07-architecture-decision-records.md` | specs → 07-architecture-decision-records | 12 |
 | `specs/08-deployment.md` | specs → 08-deployment | 8 |
 | `specs/09-security.md` | specs → 09-security | 9 |
+| `specs/10-devops-toolchain.md` | specs → 10-devops-toolchain | 11 |
+| `specs/11-process-delivery.md` | specs → 11-process-delivery | 7 |
 | `use-cases.concrete.md` | use-cases.concrete | 0 |
-| `specs/10-pix-routing.md` | specs → 10-pix-routing | 7 |
+| `specs/12-pix-routing.md` | specs → 12-pix-routing | 7 |
 
 ## Placeholder coverage
 
@@ -36,8 +38,8 @@ This inventory is generated from `assets/context-server/templates.json`, `assets
 
 ## Skill and tool routing
 
-- Skills indexed: 65
-- MCP tools indexed: 71
+- Skills indexed: 68
+- MCP tools indexed: 74
 
 ### MCP tools
 
@@ -131,6 +133,9 @@ This inventory is generated from `assets/context-server/templates.json`, `assets
 - `pix-data-mysql`
 - `pix-data-postgresql`
 - `pix-data-sql`
+- `pix-data-sqlite`
+- `pix-data-duckdb`
+- `pix-data-indexed-db`
 - `pix-devops`
 - `pix-devops-docker`
 - `pix-devops-gitlab-ci`

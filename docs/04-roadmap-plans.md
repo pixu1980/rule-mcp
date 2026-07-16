@@ -123,8 +123,7 @@ Target: **32 skills** after 4 merges, plus 1 new skill (`pix-process-adr`), with
 | # | Skill | Lines | Verdict | Action |
 |---|-------|-------|---------|--------|
 | 1 | pix-galaxy | ~190 | ✅ | Keep — ai router |
-| 2 | pix-galaxy-agents | ~130 | ✅ | Keep — AI Agents scaffold |
-| 3 | pix-architect | ~320 | ✅ | Keep — architecture wizard |
+| 2 | pix-architect | ~320 | ✅ | Keep — architecture wizard |
 | 4 | pix-backend | ~180 | ✅ | Keep — backend rules |
 | 5 | pix-backend-api-design | ~150 | ✅ | Keep — API design |
 | 6 | pix-backend-node | ~130 | ✅ | Keep — Backend scaffold |
@@ -244,7 +243,6 @@ The context interview is currently a 16-step wizard. Proposed improvements:
 ```
 pix-*
 ├── pix             # Skill router
-├── pix-galaxy-agents
 ├── pix-architect          # Architecture + scaffolding router
 ├── pix-backend            # Backend patterns
 ├── pix-backend-api-design # API design + OpenAPI

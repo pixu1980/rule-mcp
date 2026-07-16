@@ -23,7 +23,7 @@ The skill moves from `pix-scaffold-backend-node` to `pix-backend-node`, placing 
 
 ### 2. Merge `scaffold-ai-agents` → `ai-agents`
 
-The AI agents scaffold was an orchestrator that delegated to backend + frontend scaffolders. Its monorepo setup content is absorbed into `pix-galaxy-agents`, which was renamed from `pix-galaxy-agent-core`.
+The AI agents scaffold was an orchestrator that delegated to backend + frontend scaffolders. Its monorepo setup content is absorbed into the agents skill.
 
 ### 3. Merge `scaffold-expo` → `platform-expo`
 

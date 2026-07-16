@@ -20,7 +20,7 @@ Adopt a prefix-based thematic taxonomy with the following categories:
 | Prefix | Category | Skills |
 |--------|----------|--------|
 | `pix-` (no prefix) | Core tools | ai, backend, check, component, detect, fix, scaffold, search, styleguides |
-| `pix-galaxy-*` | AI | agent-core |
+
 | `pix-backend-*` | Backend | api-design, security |
 | `pix-devops-*` | DevOps | docker, gitlab-ci, testing, version |
 | `pix-frontend-*` | UI frameworks | angular, astro, forms, react, solidjs, svelte, vanilla-reactive, vue |
@@ -78,7 +78,6 @@ Added `pix-database-*`:
 
 - `pix-meta-*` → `pix-frontend-meta-*` (3 skills)
 - `pix-scaffold-backend-node` → `pix-backend-node` + merged content
-- `pix-galaxy-agent-core` → `pix-galaxy-agents` + merged scaffold-ai-agents content
 - `pix-scaffold-expo` → merged into `pix-platform-expo`
 - `pix-scaffold-frontend-react-vite` split:
   - Vite config → `pix-toolchain-vite` (new)
@@ -91,7 +90,6 @@ Added `pix-database-*`:
 | Prefix | Count | Skills |
 |--------|-------|--------|
 | `pix-` (core) | 9 | ai, backend, check, component, detect, fix, scaffold, search, styleguides |
-| `pix-galaxy-*` | 1 | agents |
 | `pix-backend-*` | 7 | api-design, express, fastify, hono, nestjs, node, security |
 | `pix-database-*` | 4 | mongodb, mysql, postgresql, sql |
 | `pix-devops-*` | 4 | docker, gitlab-ci, testing, version |
@@ -99,4 +97,4 @@ Added `pix-database-*`:
 | `pix-platform-*` | 4 | desktop, expo, library, web |
 | `pix-process-*` | 6 | adr, architect, bmad, documentation, feature-workflow, handoff |
 | `pix-toolchain-*` | 1 | vite |
-| **Total** | **47** | |
+| **Total** | **46** | |
