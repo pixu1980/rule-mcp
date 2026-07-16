@@ -288,11 +288,10 @@ else
       SELECTED_IDX=()
       SELECTED_COUNT=0
       CURSOR=0
-      echo ""
-      echo -e "  ${CYAN}Select agents (↑↓ navigate, Space toggle, Enter confirm):${NC}"
+      echo -e "\n  ${CYAN}Select agents (↑↓ Space Enter):${NC}"
+      echo -en "\033[s"
       while true; do
-        [[ -n "${FIRST_RENDER:-}" ]] && echo -en "\033[$(( ${#DETECTED_AGENTS[@]} + 2 ))A"
-        FIRST_RENDER=1
+        echo -en "\033[u\033[J"
         for i in "${!DETECTED_AGENTS[@]}"; do
           checked=" "
           for s in ${SELECTED_IDX[@]-}; do [[ "$s" == "$i" ]] && checked="x"; done
@@ -353,11 +352,10 @@ else
       MODES=(stdio sse docker)
       MODE_LABELS=("Stdio daemon — on-demand via agent" "SSE daemon — background HTTP on port 37999" "Docker — containerized")
       SELECTED_MODE=0
-      echo ""
-      echo -e "  ${CYAN}Select mode (↑↓ navigate, Enter confirm):${NC}"
+      echo -e "\n  ${CYAN}Select mode (↑↓ Enter):${NC}"
+      echo -en "\033[s"
       while true; do
-        [[ -n "${FIRST_MODE:-}" ]] && echo -en "\033[$(( ${#MODES[@]} + 2 ))A"
-        FIRST_MODE=1
+        echo -en "\033[u\033[J"
         for i in "${!MODES[@]}"; do
           radio=" "
           [[ $i -eq $SELECTED_MODE ]] && radio="•"
