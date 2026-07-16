@@ -208,6 +208,17 @@ if [[ "$IS_LOCAL_REPO" == "true" ]]; then
     fail "Ensure the project is intact (bin/pix-galaxy-mcp.js should exist)"
     exit 1
   fi
+
+  # Create the global pix-galaxy-mcp shim so agent configs can use the
+  # single-binary form (like tokensave) instead of node + entrypoint.
+  if command -v pnpm &>/dev/null && ! command -v pix-galaxy-mcp &>/dev/null; then
+    info "Creating global pix-galaxy-mcp shim via pnpm link…"
+    if CI=true pnpm link --global . >/dev/null 2>&1; then
+      ok "Global shim created: $(command -v pix-galaxy-mcp 2>/dev/null || echo "~/Library/pnpm/bin/pix-galaxy-mcp")"
+    else
+      info "pnpm link skipped (may already exist or insufficient permissions)"
+    fi
+  fi
 elif command -v pix-galaxy-mcp &>/dev/null; then
   BIN_CMD="pix-galaxy-mcp"
   ok "Global binary found: $(command -v pix-galaxy-mcp)"
@@ -219,10 +230,14 @@ fi
 
 # Execute the CLI without reparsing user-controlled arguments through eval.
 run_cli() {
-  if [[ "$IS_LOCAL_REPO" == "true" ]]; then
+  # Prefer the global shim when available (single binary, like tokensave).
+  if command -v pix-galaxy-mcp &>/dev/null; then
+    pix-galaxy-mcp "$@"
+  elif [[ "$IS_LOCAL_REPO" == "true" ]]; then
     node "$LOCAL_BIN" "$@"
   else
-    pix-galaxy-mcp "$@"
+    fail "pix-galaxy-mcp not found"
+    exit 1
   fi
 }
 
