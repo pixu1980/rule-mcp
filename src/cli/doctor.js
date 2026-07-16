@@ -19,7 +19,7 @@ import { join } from "node:path";
 import { listTools } from "../tools/router.js";
 import { getRuntimePaths } from "./paths.js";
 import { detectInstalledAgents } from "./install.js";
-import { checkDaemonService } from "./daemon.js";
+import { checkDaemonService, WRAPPER_SCRIPT_PATH } from "./daemon.js";
 import { banner, color, section } from "./tui.js";
 
 const HOME = homedir();
@@ -303,8 +303,10 @@ export function formatDoctorTerminal(report) {
     `Installed:   ${yesNo(native.installed)}`,
     `Loaded:      ${yesNo(native.loaded)}`,
     `Running:     ${yesNo(native.running)}${native.pid ? ` ${color(`(pid ${native.pid})`, "dim")}` : ""}`,
+    `Login Item:  ${color("pix-galaxy-mcpd", native.platform === "macos" ? "cyan" : "dim")}${native.platform === "macos" ? color(" (daemon wrapper in Login Items)", "dim") : ""}`,
     `PID file:    ${color(truncate(report.daemon?.pidFile || "", 100), "dim")}`,
     `Log file:    ${color(truncate(report.daemon?.logFile || "", 100), "dim")}`,
+    `Wrapper:     ${color(truncate(WRAPPER_SCRIPT_PATH, 100), "dim")}`,
     "",
     section("Models", "🧠"),
     `Configured providers: ${color(report.models?.totalConfigured ?? 0, (report.models?.totalConfigured ?? 0) > 0 ? "green" : "yellow")}`,

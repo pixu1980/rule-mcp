@@ -87,7 +87,7 @@ const LAUNCH_AGENT_PATH   = join(LAUNCH_AGENT_DIR, `${LAUNCH_AGENT_LABEL}.plist`
  * Using a wrapper script instead of calling Node.js directly ensures that
  * macOS displays "pix-galaxy-mcpd" in Login Items rather than "Node.js Foundation".
  */
-const WRAPPER_SCRIPT_PATH = join(HOME, ".local", "bin", "pix-galaxy-mcpd");
+export const WRAPPER_SCRIPT_PATH = join(HOME, ".local", "bin", "pix-galaxy-mcpd");
 
 /**
  * Generate the wrapper shell script that the LaunchAgent runs.
