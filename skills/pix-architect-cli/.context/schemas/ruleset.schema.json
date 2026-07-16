@@ -1,0 +1,169 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ruleset.schema.json",
+  "title": "**[DOMAIN_ENTITY_MANAGER]** Schema",
+  "description": "Template schema for validating reusable **[DOMAIN_ENTITY_MANAGER]** documents for .",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["meta", "context", "glossary", "entities", "rules", "quality"],
+  "properties": {
+    "meta": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["project", "domain", "manager", "summary"],
+      "properties": {
+        "project": {
+          "type": "string",
+          "const": ""
+        },
+        "domain": {
+          "type": "string",
+          "const": "**[DOMAIN_NAME]**"
+        },
+        "manager": {
+          "type": "string",
+          "const": "**[DOMAIN_ENTITY_MANAGER]**"
+        },
+        "summary": {
+          "type": "string",
+          "description": "Short explanation aligned with ."
+        },
+        "notes": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Include notes such as **[DOMAIN_NOTE_1]**, **[DOMAIN_NOTE_2]**, **[DOMAIN_NOTE_3]**, and **[DOMAIN_NOTE_4]**."
+        }
+      }
+    },
+    "context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["objective", "primaryEntity", "secondaryEntity", "userPersona"],
+      "properties": {
+        "objective": {
+          "type": "string",
+          "description": "Problem framing aligned with **[CONTEXT_AND_OBJECTIVE]**."
+        },
+        "primaryEntity": {
+          "type": "string",
+          "const": "**[PRIMARY_ENTITY]**"
+        },
+        "secondaryEntity": {
+          "type": "string",
+          "const": "**[SECONDARY_ENTITY]**"
+        },
+        "userPersona": {
+          "type": "string",
+          "description": "Primary user reference aligned with **[USER_PERSONA]**."
+        }
+      }
+    },
+    "glossary": {
+      "type": "array",
+      "minItems": 5,
+      "description": "Include glossary anchors such as **[DOMAIN_TERM_1]**, **[DOMAIN_TERM_2]**, **[DOMAIN_TERM_3]**, **[DOMAIN_TERM_4]**, and **[DOMAIN_TERM_5]**.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["term", "definition"],
+        "properties": {
+          "term": { "type": "string" },
+          "definition": { "type": "string" }
+        }
+      }
+    },
+    "entities": {
+      "type": "array",
+      "minItems": 4,
+      "description": "Describe the supporting domain concepts such as **[ENTITY_1]**, **[ENTITY_2]**, **[ENTITY_3]**, and **[ENTITY_4]**.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["name", "description", "role"],
+        "properties": {
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "role": { "type": "string" }
+        }
+      }
+    },
+    "rules": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["constraints", "assumptions", "dataPrinciples", "unitConventions", "edgeCases"],
+      "properties": {
+        "constraints": {
+          "type": "array",
+          "minItems": 2,
+          "items": { "type": "string" },
+          "description": "Include **[DOMAIN_CONSTRAINT_1]** and **[DOMAIN_CONSTRAINT_2]**."
+        },
+        "assumptions": {
+          "type": "array",
+          "minItems": 3,
+          "items": { "type": "string" },
+          "description": "Include **[DOMAIN_SPECIFIC_ASSUMPTION_1]**, **[DOMAIN_SPECIFIC_ASSUMPTION_2]**, and **[DOMAIN_SPECIFIC_ASSUMPTION_3]**."
+        },
+        "dataPrinciples": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string" },
+          "description": "Include **[DOMAIN_DATA_PRINCIPLE_1]**."
+        },
+        "unitConventions": {
+          "type": "array",
+          "minItems": 2,
+          "items": { "type": "string" },
+          "description": "Include **[UNIT_CONVENTION_1]** and **[UNIT_CONVENTION_2]**."
+        },
+        "edgeCases": {
+          "type": "array",
+          "minItems": 4,
+          "items": { "type": "string" },
+          "description": "Include **[EDGE_CASE_1]**, **[EDGE_CASE_2]**, **[EDGE_CASE_3]**, and **[EDGE_CASE_4]**."
+        }
+      }
+    },
+    "quality": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["performanceTarget", "robustness", "explainability", "privacy", "manualFlows", "mvpSteps", "openQuestions"],
+      "properties": {
+        "performanceTarget": {
+          "type": "string",
+          "description": "Performance goal aligned with **[PERF_TARGET_1]**."
+        },
+        "robustness": {
+          "type": "string",
+          "description": "Robustness goal aligned with **[ROBUSTNESS_REQ_1]**."
+        },
+        "explainability": {
+          "type": "string",
+          "description": "Explainability goal aligned with **[EXPLAIN_REQ_1]**."
+        },
+        "privacy": {
+          "type": "string",
+          "description": "Privacy goal aligned with **[PRIVACY_REQ_1]**."
+        },
+        "manualFlows": {
+          "type": "array",
+          "minItems": 4,
+          "items": { "type": "string" },
+          "description": "Cover **[FLOW_1]**, **[FLOW_2]**, **[FLOW_3]**, and **[FLOW_4]**."
+        },
+        "mvpSteps": {
+          "type": "array",
+          "minItems": 5,
+          "items": { "type": "string" },
+          "description": "Capture **[MVP_STEP_1]**, **[MVP_STEP_2]**, **[MVP_STEP_3]**, **[MVP_STEP_4]**, and **[MVP_STEP_5]**."
+        },
+        "openQuestions": {
+          "type": "array",
+          "minItems": 3,
+          "items": { "type": "string" },
+          "description": "Track **[OPEN_QUESTION_1]**, **[OPEN_QUESTION_2]**, and **[OPEN_QUESTION_3]**."
+        }
+      }
+    }
+  }
+}
