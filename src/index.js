@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 
+import { readFileSync } from "node:fs";
+
 /**
  * @module index
  *
@@ -289,6 +291,12 @@ export async function cli() {
   try {
     if (command === "help") {
       helpCommand();
+      return;
+    }
+
+    if (command === "version" || hasFlag("--version") || hasFlag("-v")) {
+      const pkg = JSON.parse(readFileSync(new URL("../package.json", import.meta.url), "utf8"));
+      console.log(pkg.version);
       return;
     }
 
