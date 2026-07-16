@@ -353,10 +353,22 @@ const installPi = ({ entrypoint, dryRun, global }) => {
   ];
 };
 
+/** Return the VS Code user-level global config directory. */
+const vscodeGlobalDir = () => process.platform === "darwin"
+  ? join(HOME, "Library", "Application Support", "Code", "User")
+  : join(HOME, ".config", "Code", "User");
+
 /** @param {{ entrypoint: string, dryRun: boolean, global?: boolean }} */
 const installVscode = ({ entrypoint, dryRun, global }) => {
-  const file = join(process.cwd(), ".vscode", "mcp.json");
-  return [writeText({ file, content: upsertVscode(readText(file), cmdConfig(entrypoint, { global })), dryRun })];
+  // Project-level config
+  const projectFile = join(process.cwd(), ".vscode", "mcp.json");
+  const files = [writeText({ file: projectFile, content: upsertVscode(readText(projectFile), cmdConfig(entrypoint, { global })), dryRun })];
+  // User-level global config (macOS / Linux)
+  const globalFile = join(vscodeGlobalDir(), "mcp.json");
+  try {
+    files.push(writeText({ file: globalFile, content: upsertJsonServer(readText(globalFile), cmdConfig(entrypoint, { global })), dryRun }));
+  } catch {}
+  return files;
 };
 
 /** @param {{ entrypoint: string, dryRun: boolean, global?: boolean }} */
@@ -588,8 +600,13 @@ const uninstallPi = ({ dryRun }) => {
 
 /** @param {{ dryRun: boolean }} */
 const uninstallVscode = ({ dryRun }) => {
-  const file = join(process.cwd(), ".vscode", "mcp.json");
-  return [writeText({ file, content: removeVscodeServer(readText(file)), dryRun })];
+  const projectFile = join(process.cwd(), ".vscode", "mcp.json");
+  const files = [writeText({ file: projectFile, content: removeVscodeServer(readText(projectFile)), dryRun })];
+  const globalFile = join(vscodeGlobalDir(), "mcp.json");
+  try {
+    files.push(writeText({ file: globalFile, content: removeJsonServer(readText(globalFile)), dryRun }));
+  } catch {}
+  return files;
 };
 
 /** @param {{ dryRun: boolean }} */

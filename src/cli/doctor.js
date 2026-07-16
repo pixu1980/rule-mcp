@@ -106,7 +106,7 @@ function detectIdeConfigs() {
     { name: "Skills directory", ok: skillsCount >= 60, detail: `${skillsCount} skills` },
     { name: "Cursor (IDE)", path: join(HOME, ".cursor", "mcp.json") },
     { name: "Windsurf (IDE)", path: join(HOME, ".windsurf", "mcp.json") },
-    { name: "VS Code User", path: join(HOME, ".vscode", "argv.json") },
+    { name: "VS Code User", path: join(HOME, ".vscode", "mcp.json") },
   ];
 
   // Platform-specific IDE checks
