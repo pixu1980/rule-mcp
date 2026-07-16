@@ -608,7 +608,7 @@ const uninstallVscode = ({ dryRun }) => {
   const files = [writeText({ file: projectFile, content: removeVscodeServer(readText(projectFile)), dryRun })];
   const globalFile = join(vscodeGlobalDir(), "mcp.json");
   try {
-    files.push(writeText({ file: globalFile, content: removeJsonServer(readText(globalFile)), dryRun }));
+    files.push(writeText({ file: globalFile, content: removeVscodeServer(readText(globalFile)), dryRun }));
   } catch {}
   return files;
 };

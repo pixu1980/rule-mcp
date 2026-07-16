@@ -39,6 +39,7 @@ param(
   [switch]$NoRules = $false,
   [switch]$DryRun = $false,
   [switch]$Force = $false,
+  [switch]$NoInteractive = $false,
   [switch]$Help = $false
 )
 
@@ -55,6 +56,7 @@ if ($Help) {
   Write-Host "  -NoRules         Skip agent instruction files"
   Write-Host "  -DryRun          Preview changes without writing"
   Write-Host "  -Force           Override existing configurations"
+  Write-Host "  -NoInteractive   Skip interactive selection and install everywhere"
   exit 0
 }
 
@@ -80,6 +82,64 @@ function Write-Warn  { Write-Host "⚠ $($args[0])" -ForegroundColor Yellow }
 function Write-Fail  { Write-Host "✗ $($args[0])" -ForegroundColor Red; $global:HasError = $true }
 function Write-Header{ Write-Host "`n── $($args[0]) ──`n" -ForegroundColor Blue }
 function Write-Step  { Write-Host "  → $($args[0])" -ForegroundColor Cyan }
+function Show-Banner([string]$Subtitle) {
+  Clear-Host
+  Write-Host "╔══════════════════════════════════════════════════════╗" -ForegroundColor Cyan
+  Write-Host "║         pix-galaxy-mcp — Universal Installer        ║" -ForegroundColor Cyan
+  Write-Host ("║  " + $Subtitle.PadRight(50) + "║") -ForegroundColor Cyan
+  Write-Host "╚══════════════════════════════════════════════════════╝" -ForegroundColor Cyan
+  Write-Host ""
+}
+function Select-AgentsInteractive([string[]]$Items) {
+  $flags = @{}; for($i=0; $i -lt $Items.Count; $i++){ $flags[$i] = $false }
+  $cursor = 0
+  while ($true) {
+    Show-Banner "Phase 3 — Agent Integration"
+    Write-Host "Select agents (↑↓ move, Space toggle, Enter confirm, q quit)" -ForegroundColor Cyan
+    Write-Host ""
+    for($i=0; $i -lt $Items.Count; $i++) {
+      $mark = if($flags[$i]){ 'x' } else { ' ' }
+      $prefix = if($i -eq $cursor){ '> ' } else { '  ' }
+      Write-Host ("{0}[{1}] {2}" -f $prefix,$mark,$Items[$i])
+    }
+    $selectedCount = (@($flags.Values | Where-Object { $_ })).Count
+    Write-Host ""
+    Write-Host ("Selected: {0}/{1}" -f $selectedCount, $Items.Count) -ForegroundColor Cyan
+    $key = [Console]::ReadKey($true)
+    switch ($key.Key) {
+      'UpArrow' { $cursor--; if($cursor -lt 0){ $cursor = $Items.Count - 1 } }
+      'DownArrow' { $cursor++; if($cursor -ge $Items.Count){ $cursor = 0 } }
+      'Spacebar' { $flags[$cursor] = -not $flags[$cursor] }
+      'Enter' { break }
+      'Q' { return @() }
+    }
+  }
+  $selected = @()
+  for($i=0; $i -lt $Items.Count; $i++){ if($flags[$i]){ $selected += $Items[$i] } }
+  return $selected
+}
+function Select-ModeInteractive() {
+  $modes = @('stdio','sse','docker')
+  $labels = @('Stdio daemon — on-demand via agent','SSE daemon — background HTTP on port 37999','Docker — containerized')
+  $cursor = 0
+  while ($true) {
+    Show-Banner "Phase 3 — Install Mode"
+    Write-Host "Select mode (↑↓ move, Enter confirm, q quit)" -ForegroundColor Cyan
+    Write-Host ""
+    for($i=0; $i -lt $modes.Count; $i++) {
+      $radio = if($i -eq $cursor){ '•' } else { ' ' }
+      $prefix = if($i -eq $cursor){ '> ' } else { '  ' }
+      Write-Host ("{0}({1}) {2}" -f $prefix,$radio,$labels[$i])
+    }
+    $key = [Console]::ReadKey($true)
+    switch ($key.Key) {
+      'UpArrow' { $cursor--; if($cursor -lt 0){ $cursor = $modes.Count - 1 } }
+      'DownArrow' { $cursor++; if($cursor -ge $modes.Count){ $cursor = 0 } }
+      'Enter' { return $modes[$cursor] }
+      'Q' { return $null }
+    }
+  }
+}
 
 function Test-Command($cmd) {
   try { Get-Command $cmd -ErrorAction Stop; return $true }
@@ -219,6 +279,7 @@ if ($TargetAgent) {
     "droid"       = "$HomeDir\.config\factory\mcp.json"
     "kiro"        = "$HomeDir\.config\kiro\mcp.json"
     "qwen"        = "$HomeDir\.config\qwen\mcp.json"
+    "vscode"      = (Join-Path $env:APPDATA "Code\User\mcp.json")
   }
 
   $DetectedAgents = @()
@@ -237,14 +298,31 @@ if ($TargetAgent) {
   } else {
     Write-Info "Detected $($DetectedAgents.Count) agent(s): $($DetectedAgents -join ', ')"
 
+    $SelectedAgents = @()
+    $InstallMode = 'stdio'
+    if (-not $NoInteractive -and [Environment]::UserInteractive) {
+      $SelectedAgents = Select-AgentsInteractive $DetectedAgents
+      if ($SelectedAgents.Count -eq 0) {
+        Write-Warn "No agents selected. Skipping installation."
+        exit 0
+      }
+      $mode = Select-ModeInteractive
+      if ($null -eq $mode) { exit 0 }
+      $InstallMode = $mode
+      Write-Info "Selected $($SelectedAgents.Count) agent(s): $($SelectedAgents -join ', ')"
+      Write-Info "Install mode: $InstallMode"
+    } else {
+      $SelectedAgents = $DetectedAgents
+    }
+
     if ($DryRun) {
-      foreach ($agent in $DetectedAgents) {
-        Write-Step "[dry-run] Would configure: $agent"
+      foreach ($agent in $SelectedAgents) {
+        Write-Step "[dry-run] Would configure: $agent (mode: $InstallMode)"
       }
     } else {
-      foreach ($agent in $DetectedAgents) {
-        Write-Step "Configuring $agent..."
-        $result = Invoke-Expression "& $BinCmd install --agent $agent" 2>&1
+      foreach ($agent in $SelectedAgents) {
+        Write-Step "Configuring $agent (mode: $InstallMode)..."
+        $result = Invoke-Expression "& $BinCmd install --agent $agent --json" 2>&1
         if ($LASTEXITCODE -eq 0) {
           Write-Ok "$agent configured"
           $InstalledAgents += $agent
@@ -253,6 +331,11 @@ if ($TargetAgent) {
           Write-Warn "$agent skipped (may already be configured)"
           $SkippedCount++
         }
+      }
+      if ($InstallMode -eq 'sse') {
+        Write-Info "SSE mode selected: start or install the daemon with 'pix-galaxy-mcp daemon install' or 'pix-galaxy-mcp daemon start'."
+      } elseif ($InstallMode -eq 'docker') {
+        Write-Info "Docker mode selected: run 'docker compose up -d' after installation."
       }
     }
   }

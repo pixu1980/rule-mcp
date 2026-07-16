@@ -106,7 +106,9 @@ function detectIdeConfigs() {
     { name: "Skills directory", ok: skillsCount >= 60, detail: `${skillsCount} skills` },
     { name: "Cursor (IDE)", path: join(HOME, ".cursor", "mcp.json") },
     { name: "Windsurf (IDE)", path: join(HOME, ".windsurf", "mcp.json") },
-    { name: "VS Code User", path: join(HOME, ".vscode", "mcp.json") },
+    { name: "VS Code User", path: platform() === "darwin"
+      ? join(HOME, "Library", "Application Support", "Code", "User", "mcp.json")
+      : join(HOME, ".config", "Code", "User", "mcp.json") },
   ];
 
   // Platform-specific IDE checks

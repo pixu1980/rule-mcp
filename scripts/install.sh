@@ -216,7 +216,7 @@ if [[ -n "$TARGET_AGENT" ]]; then
   if [[ "$DRY_RUN" == "true" ]]; then
     sub "[dry-run] Would run: ${BIN_CMD} install --agent ${TARGET_AGENT}"
   else
-    eval "${BIN_CMD} install --agent ${TARGET_AGENT}" 2>/dev/null && ok "Installed for ${TARGET_AGENT}" || warn "Failed to install for ${TARGET_AGENT}"
+    eval "${BIN_CMD} install --agent ${TARGET_AGENT} --json" >/dev/null 2>/dev/null && ok "Installed for ${TARGET_AGENT}" || warn "Failed to install for ${TARGET_AGENT}"
   fi
 else
   info "Auto-detecting installed agents..."
@@ -250,14 +250,18 @@ else
     "$HOME_DIR/.config/factory/mcp.json"
     "$HOME_DIR/.config/kiro/mcp.json"
     "$HOME_DIR/.config/qwen/mcp.json"
-    "$(pwd)/.vscode/mcp.json"
+    ""
     ""
   )
-  # JetBrains path OS-dependent
+  # VS Code + JetBrains paths OS-dependent
   if [[ "$OS" == "macos" ]]; then
+    AGENT_PATHS[19]="$HOME_DIR/Library/Application Support/Code/User/mcp.json"
     AGENT_PATHS[20]="$HOME_DIR/Library/Application Support/JetBrains"
   elif [[ "$OS" == "linux" ]]; then
+    AGENT_PATHS[19]="$HOME_DIR/.config/Code/User/mcp.json"
     AGENT_PATHS[20]="$HOME_DIR/.config/JetBrains"
+  else
+    AGENT_PATHS[19]="$(pwd)/.vscode/mcp.json"
   fi
 
   for i in "${!AGENT_NAMES[@]}"; do
@@ -281,105 +285,146 @@ else
   else
     info "Detected ${#DETECTED_AGENTS[@]} agent(s): ${DETECTED_AGENTS[*]}"
 
-    # ── Interactive agent selection (checkboxes) ──
+    # ── Interactive agent + mode selection (full-screen TUI) ──
     SELECTED_AGENTS=()
-    if [[ "$INTERACTIVE" == "true" ]] && [[ -t 0 ]]; then
-      # Track selected indices and cursor
-      SELECTED_IDX=()
-      SELECTED_COUNT=0
-      CURSOR=0
-      echo ""
-      echo -e "  ${CYAN}Select agents (↑↓ Space to toggle, Enter to confirm):${NC}"
-      while true; do
-        for i in "${!DETECTED_AGENTS[@]}"; do
-          checked=" "
-          for s in "${SELECTED_IDX[@]-}"; do [[ "$s" == "$i" ]] && checked="x"; done
-          pointer="  "
-          [[ $i -eq $CURSOR ]] && pointer="${BOLD}>${NC} "
-          echo -e "${pointer}[${checked}] ${DETECTED_AGENTS[$i]}"
-        done
-        echo "  Selected: ${SELECTED_COUNT}/${#DETECTED_AGENTS[@]}"
-        echo ""
-        IFS= read -r -s -n1 KEY
-        # Clear previous lines (agents + status + empty = agents+2)
-        for ((_i=0; _i<${#DETECTED_AGENTS[@]}+2; _i++)); do echo -en "\033[1A\033[2K"; done
-        if [[ "$KEY" == $'\x20' ]]; then
-          # Space — toggle current
-          idx=$CURSOR
-          found=-1
-          for s in "${!SELECTED_IDX[@]-}"; do
-            if [[ "${SELECTED_IDX[$s]}" == "$idx" ]]; then found=$s; break; fi
-          done
-          if [[ $found -ge 0 ]]; then
-            unset "SELECTED_IDX[$found]"
-            SELECTED_IDX=("${SELECTED_IDX[@]-}")
-            SELECTED_COUNT=$((SELECTED_COUNT - 1))
-          else
-            SELECTED_IDX+=("$idx")
-            SELECTED_COUNT=$((SELECTED_COUNT + 1))
-          fi
-        elif [[ -z "$KEY" ]]; then
-          break  # Enter
-        elif [[ "$KEY" == $'\x1b' ]]; then
-          # Escape — read arrow keys
-          IFS= read -r -s -n2 KEY2
-          if [[ "$KEY2" == "[A" ]]; then
-            # Up
-            CURSOR=$((CURSOR - 1))
-            [[ $CURSOR -lt 0 ]] && CURSOR=$((${#DETECTED_AGENTS[@]} - 1))
-          elif [[ "$KEY2" == "[B" ]]; then
-            # Down
-            CURSOR=$((CURSOR + 1))
-            [[ $CURSOR -ge ${#DETECTED_AGENTS[@]} ]] && CURSOR=0
-          fi
-        fi
-      done
-      # Convert indices to agent names
-      for idx in "${SELECTED_IDX[@]-}"; do
-        SELECTED_AGENTS+=("${DETECTED_AGENTS[$idx]}")
-      done
-      if [[ ${#SELECTED_AGENTS[@]} -eq 0 ]]; then
-        warn "No agents selected. Skipping installation."
-        return
-      fi
-      info "Selected ${#SELECTED_AGENTS[@]} agent(s): ${SELECTED_AGENTS[*]}"
-    else
-      SELECTED_AGENTS=("${DETECTED_AGENTS[@]}")
-    fi
-
-    # ── Install mode selection (radio buttons) ──
     INSTALL_MODE="stdio"
     if [[ "$INTERACTIVE" == "true" ]] && [[ -t 0 ]]; then
+      AGENT_FLAGS=()
+      for ((ai=0; ai<${#DETECTED_AGENTS[@]}; ai++)); do AGENT_FLAGS+=(0); done
+      AGENT_CURSOR=0
+      MODE_CURSOR=0
       MODES=(stdio sse docker)
       MODE_LABELS=("Stdio daemon — on-demand via agent" "SSE daemon — background HTTP on port 37999" "Docker — containerized")
-      SELECTED_MODE=0
-      echo -e "\n  ${CYAN}Select mode (↑↓ Enter to confirm):${NC}"
-      while true; do
+
+      tui_enter() {
+        if command -v tput >/dev/null 2>&1; then
+          tput smcup 2>/dev/null || printf '\033[?1049h'
+          tput civis 2>/dev/null || printf '\033[?25l'
+        else
+          printf '\033[?1049h\033[?25l'
+        fi
+      }
+      tui_leave() {
+        if command -v tput >/dev/null 2>&1; then
+          tput cnorm 2>/dev/null || printf '\033[?25h'
+          tput rmcup 2>/dev/null || printf '\033[?1049l'
+        else
+          printf '\033[?25h\033[?1049l'
+        fi
+      }
+      tui_clear() {
+        if command -v tput >/dev/null 2>&1; then
+          tput clear 2>/dev/null || printf '\033[H\033[2J'
+        else
+          printf '\033[H\033[2J'
+        fi
+      }
+      render_agents() {
+        tui_clear
+        echo -e "${BOLD}${CYAN}╔══════════════════════════════════════════════════════╗${NC}"
+        echo -e "${BOLD}${CYAN}║         pix-galaxy-mcp — Universal Installer         ║${NC}"
+        echo -e "${BOLD}${CYAN}║          Phase 3 — Agent Integration                 ║${NC}"
+        echo -e "${BOLD}${CYAN}╚══════════════════════════════════════════════════════╝${NC}"
+        echo ""
+        echo -e "${BOLD}Select agents${NC}  ${CYAN}(↑↓ move, SPACE toggle, ENTER confirm, q quit)${NC}"
+        echo ""
+        for i in "${!DETECTED_AGENTS[@]}"; do
+          mark=" "
+          [[ ${AGENT_FLAGS[$i]} -eq 1 ]] && mark="x"
+          pointer="  "
+          [[ $i -eq $AGENT_CURSOR ]] && pointer="${BOLD}>${NC} "
+          echo -e "${pointer}[${mark}] ${DETECTED_AGENTS[$i]}"
+        done
+        selected_count=0
+        for flag in "${AGENT_FLAGS[@]}"; do [[ "$flag" -eq 1 ]] && selected_count=$((selected_count + 1)); done
+        echo ""
+        echo -e "${CYAN}Selected:${NC} ${selected_count}/${#DETECTED_AGENTS[@]}"
+      }
+      render_modes() {
+        tui_clear
+        echo -e "${BOLD}${CYAN}╔══════════════════════════════════════════════════════╗${NC}"
+        echo -e "${BOLD}${CYAN}║         pix-galaxy-mcp — Universal Installer         ║${NC}"
+        echo -e "${BOLD}${CYAN}║          Phase 3 — Install Mode                      ║${NC}"
+        echo -e "${BOLD}${CYAN}╚══════════════════════════════════════════════════════╝${NC}"
+        echo ""
+        echo -e "${BOLD}Select mode${NC}  ${CYAN}(↑↓ move, ENTER confirm, q quit)${NC}"
+        echo ""
         for i in "${!MODES[@]}"; do
           radio=" "
-          [[ $i -eq $SELECTED_MODE ]] && radio="•"
+          [[ $i -eq $MODE_CURSOR ]] && radio="•"
           pointer="  "
-          [[ $i -eq $SELECTED_MODE ]] && pointer="> "
+          [[ $i -eq $MODE_CURSOR ]] && pointer="${BOLD}>${NC} "
           echo -e "${pointer}(${radio}) ${MODE_LABELS[$i]}"
         done
-        echo ""
-        IFS= read -r -s -n1 KEY
-        for ((_i=0; _i<${#MODES[@]}+1; _i++)); do echo -en "\033[1A\033[2K"; done
+      }
 
-        if [[ -z "$KEY" ]]; then
-          break  # Enter
+      tui_enter
+      trap 'tui_leave' EXIT INT TERM
+
+      # Step 1: agents (checkboxes)
+      while true; do
+        render_agents
+        IFS= read -r -s -n1 KEY
+        if [[ "$KEY" == $'\x20' ]]; then
+          if [[ ${AGENT_FLAGS[$AGENT_CURSOR]} -eq 1 ]]; then
+            AGENT_FLAGS[$AGENT_CURSOR]=0
+          else
+            AGENT_FLAGS[$AGENT_CURSOR]=1
+          fi
+        elif [[ -z "$KEY" ]]; then
+          break
+        elif [[ "$KEY" == "q" ]]; then
+          tui_leave
+          exit 0
         elif [[ "$KEY" == $'\x1b' ]]; then
           IFS= read -r -s -n2 KEY2
           if [[ "$KEY2" == "[A" ]]; then
-            SELECTED_MODE=$((SELECTED_MODE - 1))
-            [[ $SELECTED_MODE -lt 0 ]] && SELECTED_MODE=$((${#MODES[@]} - 1))
+            AGENT_CURSOR=$((AGENT_CURSOR - 1))
+            [[ $AGENT_CURSOR -lt 0 ]] && AGENT_CURSOR=$((${#DETECTED_AGENTS[@]} - 1))
           elif [[ "$KEY2" == "[B" ]]; then
-            SELECTED_MODE=$((SELECTED_MODE + 1))
-            [[ $SELECTED_MODE -ge ${#MODES[@]} ]] && SELECTED_MODE=0
+            AGENT_CURSOR=$((AGENT_CURSOR + 1))
+            [[ $AGENT_CURSOR -ge ${#DETECTED_AGENTS[@]} ]] && AGENT_CURSOR=0
           fi
         fi
       done
-      INSTALL_MODE="${MODES[$SELECTED_MODE]}"
+
+      for i in "${!DETECTED_AGENTS[@]}"; do
+        [[ ${AGENT_FLAGS[$i]} -eq 1 ]] && SELECTED_AGENTS+=("${DETECTED_AGENTS[$i]}")
+      done
+      if [[ ${#SELECTED_AGENTS[@]} -eq 0 ]]; then
+        tui_leave
+        warn "No agents selected. Skipping installation."
+        exit 0
+      fi
+
+      # Step 2: mode (radio)
+      while true; do
+        render_modes
+        IFS= read -r -s -n1 KEY
+        if [[ -z "$KEY" ]]; then
+          break
+        elif [[ "$KEY" == "q" ]]; then
+          tui_leave
+          exit 0
+        elif [[ "$KEY" == $'\x1b' ]]; then
+          IFS= read -r -s -n2 KEY2
+          if [[ "$KEY2" == "[A" ]]; then
+            MODE_CURSOR=$((MODE_CURSOR - 1))
+            [[ $MODE_CURSOR -lt 0 ]] && MODE_CURSOR=$((${#MODES[@]} - 1))
+          elif [[ "$KEY2" == "[B" ]]; then
+            MODE_CURSOR=$((MODE_CURSOR + 1))
+            [[ $MODE_CURSOR -ge ${#MODES[@]} ]] && MODE_CURSOR=0
+          fi
+        fi
+      done
+      INSTALL_MODE="${MODES[$MODE_CURSOR]}"
+      tui_leave
+      trap - EXIT INT TERM
+
+      info "Selected ${#SELECTED_AGENTS[@]} agent(s): ${SELECTED_AGENTS[*]}"
+      info "Install mode: ${INSTALL_MODE}"
+    else
+      SELECTED_AGENTS=("${DETECTED_AGENTS[@]}")
     fi
 
     if [[ "$DRY_RUN" == "true" ]]; then
@@ -390,7 +435,7 @@ else
       for agent in "${SELECTED_AGENTS[@]}"; do
         sub "Configuring ${agent} (mode: ${INSTALL_MODE})..."
         if [[ "$INSTALL_MODE" == "sse" ]]; then
-          if eval "${BIN_CMD} install --agent ${agent}" 2>/dev/null; then
+          if eval "${BIN_CMD} install --agent ${agent} --json" >/dev/null 2>/dev/null; then
             ok "${agent}: configured (add --transport sse for SSE mode)"
             INSTALLED_AGENTS+=("$agent")
             CONFIGURED_COUNT=$((CONFIGURED_COUNT + 1))
@@ -399,7 +444,7 @@ else
           fi
         elif [[ "$INSTALL_MODE" == "docker" ]]; then
           info "Docker mode: run 'docker compose up -d' after installation"
-          if eval "${BIN_CMD} install --agent ${agent}" 2>/dev/null; then
+          if eval "${BIN_CMD} install --agent ${agent} --json" >/dev/null 2>/dev/null; then
             ok "${agent}: configured (use Docker for containerized deployment)"
             INSTALLED_AGENTS+=("$agent")
             CONFIGURED_COUNT=$((CONFIGURED_COUNT + 1))
@@ -407,7 +452,7 @@ else
             warn "${agent}: skipped"
           fi
         else
-          if eval "${BIN_CMD} install --agent ${agent}" 2>/dev/null; then
+          if eval "${BIN_CMD} install --agent ${agent} --json" >/dev/null 2>/dev/null; then
             ok "${agent}: configured"
             INSTALLED_AGENTS+=("$agent")
             CONFIGURED_COUNT=$((CONFIGURED_COUNT + 1))
@@ -433,8 +478,8 @@ if [[ -d ".vscode" ]] || [[ "$FORCE" == "true" ]]; then
   else
     sub "Configuring VS Code..."
     mkdir -p ".vscode"
-    if eval "${BIN_CMD} install --agent vscode" 2>/dev/null; then
-      ok "VS Code: configured (.vscode/mcp.json)"
+    if eval "${BIN_CMD} install --agent vscode --json" >/dev/null 2>/dev/null; then
+      ok "VS Code: configured (.vscode/mcp.json + user-level Code/User/mcp.json)"
     else
       warn "VS Code: skipped"
     fi
