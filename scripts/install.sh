@@ -289,11 +289,11 @@ else
       SELECTED_COUNT=0
       CURSOR=0
       echo ""
-      echo -e "  ${CYAN}Select agents (↑↓ Space Enter, q=quit):${NC}"
+      echo -e "  ${CYAN}Select agents (↑↓ Space to toggle, Enter to confirm):${NC}"
       while true; do
         for i in "${!DETECTED_AGENTS[@]}"; do
           checked=" "
-          for s in ${SELECTED_IDX[@]-}; do [[ "$s" == "$i" ]] && checked="x"; done
+          for s in "${SELECTED_IDX[@]-}"; do [[ "$s" == "$i" ]] && checked="x"; done
           pointer="  "
           [[ $i -eq $CURSOR ]] && pointer="${BOLD}>${NC} "
           echo -e "${pointer}[${checked}] ${DETECTED_AGENTS[$i]}"
@@ -309,12 +309,12 @@ else
           # Space — toggle current
           idx=$CURSOR
           found=-1
-          for s in "${!SELECTED_IDX[@]}"; do
+          for s in "${!SELECTED_IDX[@]-}"; do
             if [[ "${SELECTED_IDX[$s]}" == "$idx" ]]; then found=$s; break; fi
           done
           if [[ $found -ge 0 ]]; then
             unset "SELECTED_IDX[$found]"
-            SELECTED_IDX=("${SELECTED_IDX[@]}")
+            SELECTED_IDX=("${SELECTED_IDX[@]-}")
             SELECTED_COUNT=$((SELECTED_COUNT - 1))
           else
             SELECTED_IDX+=("$idx")
@@ -335,7 +335,7 @@ else
         fi
       done
       # Convert indices to agent names
-      for idx in "${SELECTED_IDX[@]}"; do
+      for idx in "${SELECTED_IDX[@]-}"; do
         SELECTED_AGENTS+=("${DETECTED_AGENTS[$idx]}")
       done
       if [[ ${#SELECTED_AGENTS[@]} -eq 0 ]]; then
@@ -353,7 +353,7 @@ else
       MODES=(stdio sse docker)
       MODE_LABELS=("Stdio daemon — on-demand via agent" "SSE daemon — background HTTP on port 37999" "Docker — containerized")
       SELECTED_MODE=0
-      echo -e "\n  ${CYAN}Select mode (↑↓ Enter, q=quit):${NC}"
+      echo -e "\n  ${CYAN}Select mode (↑↓ Enter to confirm):${NC}"
       while true; do
         for i in "${!MODES[@]}"; do
           radio=" "
