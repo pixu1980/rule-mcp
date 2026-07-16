@@ -281,27 +281,58 @@ else
   else
     info "Detected ${#DETECTED_AGENTS[@]} agent(s): ${DETECTED_AGENTS[*]}"
 
-    # ── Interactive agent selection ──
+    # ── Interactive agent selection (checkboxes) ──
     SELECTED_AGENTS=()
     if [[ "$INTERACTIVE" == "true" ]] && [[ -t 0 ]]; then
+      # Track selected indices
+      SELECTED_IDX=()
       echo ""
-      echo -e "  ${CYAN}Select agents to install (space-separated numbers, or 'all'):${NC}"
-      for i in "${!DETECTED_AGENTS[@]}"; do
-        echo -e "  ${BOLD}$((i+1))${NC}) ${DETECTED_AGENTS[$i]}"
-      done
-      echo -e "  ${BOLD}a${NC}) All agents"
-      echo ""
-      read -r -p "  Choose (e.g. '1 3 5' or 'a'): " AGENT_CHOICE
-      if [[ "$AGENT_CHOICE" == "a" ]] || [[ "$AGENT_CHOICE" == "all" ]]; then
-        SELECTED_AGENTS=("${DETECTED_AGENTS[@]}")
-      else
-        for num in $AGENT_CHOICE; do
-          idx=$((num - 1))
-          if [[ $idx -ge 0 ]] && [[ $idx -lt ${#DETECTED_AGENTS[@]} ]]; then
-            SELECTED_AGENTS+=("${DETECTED_AGENTS[$idx]}")
-          fi
+      echo -e "  ${CYAN}Select agents to install (toggle with number, a=toggle all, d=done):${NC}"
+      while true; do
+        # Move cursor up to redraw (except first render)
+        [[ -n "${FIRST_RENDER:-}" ]] && echo -en "\033[$(( ${#DETECTED_AGENTS[@]} + 3 ))A"
+        FIRST_RENDER=1
+        # Render list
+        for i in "${!DETECTED_AGENTS[@]}"; do
+          checked=" "
+          for s in "${SELECTED_IDX[@]}"; do [[ "$s" == "$i" ]] && checked="x"; done
+          echo -e "  ${BOLD}$((i+1))${NC}) [${checked}] ${DETECTED_AGENTS[$i]}"
         done
-      fi
+        echo -e "  ${BOLD}a${NC}) [${#SELECTED_IDX[@]}/${#DETECTED_AGENTS[@]}] Toggle all"
+        echo -e "  ${BOLD}d${NC}) Done — install selected agents"
+        echo ""
+        read -r -p "  Toggle: " TOGGLE_INPUT
+        if [[ "$TOGGLE_INPUT" == "d" ]] || [[ -z "$TOGGLE_INPUT" ]]; then
+          break
+        elif [[ "$TOGGLE_INPUT" == "a" ]]; then
+          if [[ ${#SELECTED_IDX[@]} -eq ${#DETECTED_AGENTS[@]} ]]; then
+            SELECTED_IDX=()
+          else
+            # Toggle all: generate index array 0..N-1
+            SELECTED_IDX=()
+            for ((si=0; si<${#DETECTED_AGENTS[@]}; si++)); do SELECTED_IDX+=("$si"); done
+          fi
+        elif [[ "$TOGGLE_INPUT" =~ ^[0-9]+$ ]]; then
+          # Toggle single
+          idx=$((TOGGLE_INPUT - 1))
+          if [[ $idx -ge 0 ]] && [[ $idx -lt ${#DETECTED_AGENTS[@]} ]]; then
+            found=-1
+            for s in "${!SELECTED_IDX[@]}"; do
+              if [[ "${SELECTED_IDX[$s]}" == "$idx" ]]; then found=$s; break; fi
+            done
+            if [[ $found -ge 0 ]]; then
+              unset "SELECTED_IDX[$found]"
+              SELECTED_IDX=("${SELECTED_IDX[@]}")  # re-index
+            else
+              SELECTED_IDX+=("$idx")
+            fi
+          fi
+        fi
+      done
+      # Convert indices to agent names
+      for idx in "${SELECTED_IDX[@]}"; do
+        SELECTED_AGENTS+=("${DETECTED_AGENTS[$idx]}")
+      done
       if [[ ${#SELECTED_AGENTS[@]} -eq 0 ]]; then
         warn "No agents selected. Skipping installation."
         return
@@ -312,21 +343,32 @@ else
       SELECTED_AGENTS=("${DETECTED_AGENTS[@]}")
     fi
 
-    # ── Install mode selection ──
+    # ── Install mode selection (radio buttons) ──
     INSTALL_MODE="stdio"
     if [[ "$INTERACTIVE" == "true" ]] && [[ -t 0 ]]; then
+      MODES=(stdio sse docker)
+      MODE_LABELS=("Stdio daemon (default) — starts server on demand via agent" "SSE daemon — runs background HTTP server on port 37999" "Docker — run via container")
+      SELECTED_MODE=0
       echo ""
-      echo -e "  ${CYAN}Select install mode:${NC}"
-      echo -e "  ${BOLD}1${NC}) Stdio daemon (default) — starts server on demand via agent"
-      echo -e "  ${BOLD}2${NC}) SSE daemon — runs background HTTP server on port 37999"
-      echo -e "  ${BOLD}3${NC}) Docker — run via container"
-      echo ""
-      read -r -p "  Choose [1]: " MODE_CHOICE
-      case "$MODE_CHOICE" in
-        2) INSTALL_MODE="sse" ;;
-        3) INSTALL_MODE="docker" ;;
-        *) INSTALL_MODE="stdio" ;;
-      esac
+      echo -e "  ${CYAN}Select install mode (enter number, or Enter to confirm):${NC}"
+      while true; do
+        [[ -n "${FIRST_MODE:-}" ]] && echo -en "\033[$(( ${#MODES[@]} + 2 ))A"
+        FIRST_MODE=1
+        for i in "${!MODES[@]}"; do
+          radio=" "
+          [[ $i -eq $SELECTED_MODE ]] && radio="•"
+          echo -e "  ${BOLD}$((i+1))${NC}) (${radio}) ${MODE_LABELS[$i]}"
+        done
+        echo ""
+        read -r -p "  Choose [1]: " RADIO_INPUT
+        if [[ -z "$RADIO_INPUT" ]]; then
+          break
+        elif [[ "$RADIO_INPUT" =~ ^[0-9]+$ ]] && [[ $RADIO_INPUT -ge 1 ]] && [[ $RADIO_INPUT -le ${#MODES[@]} ]]; then
+          SELECTED_MODE=$((RADIO_INPUT - 1))
+          break
+        fi
+      done
+      INSTALL_MODE="${MODES[$SELECTED_MODE]}"
     fi
 
     if [[ "$DRY_RUN" == "true" ]]; then
