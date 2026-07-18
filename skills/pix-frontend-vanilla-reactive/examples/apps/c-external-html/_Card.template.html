@@ -1,0 +1,31 @@
+<!-- ═══════════════════════════════════════════════════════════════
+  Pattern C — External HTML template
+  Uses {{ }}, <for>, <if>/<else>, @click.
+  NO ${}. NO CSS classes. NO inline styles.
+-->
+<section data-part="card">
+  <header data-part="header">
+    <h2>{{ user.name | upper }}</h2>
+    <span data-part="role" data-role="{{ user.role }}">
+      <switch expr="user.role">
+        <case result="admin">🛡️ Admin</case>
+        <case result="editor">✏️ Editor</case>
+        <default>👤 User</default>
+      </switch>
+    </span>
+  </header>
+
+  <h3>Todos</h3>
+  <for each="todo in todos">
+    <article data-part="row" data-state-done="{{ todo.done }}">
+      <span>{{ todo.title }}</span>
+      <button @click="toggleTodo(todo.id)">
+        <if condition="todo.done">Undo<else>Done</if>
+      </button>
+    </article>
+  </for>
+
+  <if condition="todos.length === 0">
+    <p data-part="empty">No todos.</p>
+  </if>
+</section>
