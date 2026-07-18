@@ -1,8 +1,8 @@
 // ═══════════════════════════════════════════════════════════════════════════════
 //  Template Engine: html tag + helpers
 // ═══════════════════════════════════════════════════════════════════════════════
-//  ${} removed. Only {{ }}, <for>, <if>, @event, .prop remain.
-//  Directive system (model, repeat) removed — use @input for two-way binding.
+//  Only {{ }}, <for>, <if>, @event, .prop — no ${}, no model, no repeat.
+//  Two-way binding via @input + .value.
 // ═══════════════════════════════════════════════════════════════════════════════
 
 /**

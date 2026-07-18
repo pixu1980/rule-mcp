@@ -1,7 +1,7 @@
 // ═══════════════════════════════════════════════════════════════════════════════
 //  ExprPart ({{ }} interpolation with filters + composition)
 // ═══════════════════════════════════════════════════════════════════════════════
-//  Now supports TemplateResult values (from {{ FnName(args) }}).
+//  {{ }} resolves data expressions + function calls returning TemplateResult.
 //  When value.kind === 'template-result', creates a nested TemplateInstance.
 //  Otherwise falls back to textContent (escaped) or raw.}
 // ═══════════════════════════════════════════════════════════════════════════════

@@ -1,7 +1,7 @@
 // ═══════════════════════════════════════════════════════════════════════════════
 //  Expression parser 
 //  ═══════════════════════════════════════════════════════════════════════════════
-//  Now supports: data expressions with filters AND function calls.
+//  Data expressions with filters AND function calls (FnName(args)).
 //
 //  parseExpression() detects FnName(args) vs variable|filter automatically.
 //  evaluateExpression() now takes an optional scope for function resolution.

@@ -109,8 +109,7 @@ context() {
 
 ### Why not automatic closure resolution?
 
-Tagged template literals (`html\`\``) receive only **string parts** and
-**value slots** (the `${}` positions). With `${}` removed, values is empty.
+Tagged template literals (`html\`\``) receive only **string parts**.
 The function names inside the template strings (`"handleSave"`, `"TodoList"`)
 are not automatically linked to the JavaScript closure scope — there is no
 standard API to enumerate a caller's closure variables at runtime.
@@ -304,7 +303,7 @@ Pattern C (external .template.html)
 
 ## 8. Two-Way Binding
 
-The `model` directive is removed with `${}`. Use `@input` instead:
+Two-way binding via `@input`:
 
 ```html
 <input .value="{{ name }}" @input="onNameInput($event)">

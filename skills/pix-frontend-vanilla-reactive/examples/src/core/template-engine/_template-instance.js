@@ -1,8 +1,8 @@
 // ═══════════════════════════════════════════════════════════════════════════════
 //  Template Parser (getTemplate) + TemplateInstance 
 //  ═══════════════════════════════════════════════════════════════════════════════
-//  ${} removed. @click="fn(args)" added. _scope resolution added.
-//  No more __attr_N__ markers, no more <!--val:N-->.
+//  Syntax: {{ }}, <for>, <if>, <switch>, @event="handler(args)", .prop="{{ }}".
+//  Handler resolution via _scope → _context → component instance.
 //  ═══════════════════════════════════════════════════════════════════════════════
 
 import { parseExpression, evaluateExpression } from './_expression-parser.js';
@@ -427,7 +427,7 @@ export class TemplateInstance {
   /**
    * Update the template with new context and scope.
    *
-   * @param {Array} values - ${} values (always [] — deprecated)
+   * @param {Array} values - ${} values (always [] — kept for compat)
    * @param {object} context - The _context object for {{ }} expressions
    * @param {object} [scope] - The _scope object for @click handler resolution
    */
@@ -460,7 +460,7 @@ export class TemplateInstance {
   }
 
   /**
-   * Update only ${} values (no-op — ${} removed).
+   * Update only ${} values (no-op — ${} unused).
    */
   update(values) {}
   // (kept for compatibility with any code still passing values)
