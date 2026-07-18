@@ -14,7 +14,14 @@ frameworks: [vanilla]
 Complete vanilla JS reactive framework pattern.
 Zero framework dependencies. No build step required.
 
-Full working example: see `examples/` in this skill directory.
+Four example apps in `examples/apps/`: each shows one pattern or a combo.
+```
+apps/a-vrComponent/        ← Pattern A: CE + vrComponent (counter)
+apps/b-functional/         ← Pattern B: functional component (list)
+apps/c-external-html/     ← Pattern C: CE + external .template.html
+apps/combo/                ← All 3 patterns mixed together
+```
+Serve with any HTTP server and open each `index.html`.
 
 ## Quickstart: Hello World in 5 Minutes
 

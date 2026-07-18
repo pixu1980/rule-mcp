@@ -1,0 +1,14 @@
+<!-- Pattern C template: TodoHeader -->
+<header data-part="header">
+  <nav data-part="filters">
+    <button @click="setFilter('all')">
+      <if condition="filter === 'all'">📋<else>📄</if> All
+    </button>
+    <button @click="setFilter('open')">
+      <if condition="filter === 'open'">📋<else>📄</if> Open
+    </button>
+    <button @click="setFilter('done')">
+      <if condition="filter === 'done'">📋<else>📄</if> Done
+    </button>
+  </nav>
+</header>
