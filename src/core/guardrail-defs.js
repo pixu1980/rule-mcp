@@ -509,13 +509,14 @@ export const VANILLA_REACTIVE_GUARDRAILS = [
     check: (code) => {
       const extendsHtmlelement = /extends\s+HTMLElement/.test(code);
       const hasStaticBlock = /static\s*\{/.test(code) && /customElements\.define\(/.test(code);
+      const hasVrComponent = /vrComponent\(/.test(code);
       const isClass = /^export\s+class\s/.test(code.trim()) || /^class\s/.test(code.trim());
       if (!isClass) return { pass: true, note: "Not a class — skipping Pattern A check" };
-      if (extendsHtmlelement && hasStaticBlock) return { pass: true };
+      if (extendsHtmlelement && (hasStaticBlock || hasVrComponent)) return { pass: true };
       const failures = [];
       if (!extendsHtmlelement) failures.push("Must extend HTMLElement");
-      if (!hasStaticBlock) failures.push("Must have static {} block with customElements.define()");
-      return { pass: false, failCount: failures.length, detail: failures, suggestion: "Add: static { customElements.define('my-component', this); }" };
+      if (!hasStaticBlock && !hasVrComponent) failures.push("Must have static {} block with vrComponent() or customElements.define()");
+      return { pass: false, failCount: failures.length, detail: failures, suggestion: "Add: static { vrComponent(this, { tag: 'my-component', css: import.meta.url }); }" };
     },
   },
   {
@@ -594,7 +595,7 @@ export const VANILLA_REACTIVE_GUARDRAILS = [
       const isTemplate = context?.fileName?.endsWith(".template.html") || false;
       const hasDollarBraces = /\$\{[^}]+\}/.test(code);
       if (!isTemplate && hasDollarBraces) return { pass: true, note: "Not a .template.html file — ${\} is valid here" };
-      if (isTemplate && hasDollarBraces) return { pass: false, failCount: 1, detail: ["${\} found in external template"], suggestion: "Replace ${\} closures with @action=\"name:expr\" directives and use {{ expr }} for data expressions." };
+      if (isTemplate && hasDollarBraces) return { pass: false, failCount: 1, detail: ["${\} found in external template"], suggestion: "Replace ${\} closures with @click=\"handler\" and use {{ expr }} for data expressions. ${} is removed in v2." };
       return { pass: true };
     },
   },
@@ -622,9 +623,9 @@ export const VANILLA_REACTIVE_GUARDRAILS = [
       const hasBundleImport = /bundle-text:/.test(code) && /\.template\.html/.test(code);
       const isCe = /extends\s+HTMLElement/.test(code);
       if (!isCe) return { pass: true, note: "Not a CE — skipping" };
-      const hasHtmlFromString = /htmlFromString/.test(code);
-      if (hasHtmlFromString && (hasFetch || hasBundleImport)) return { pass: true };
-      if (hasHtmlFromString && !hasFetch && !hasBundleImport) return { pass: false, failCount: 1, detail: ["htmlFromString() used but no template file loaded"], suggestion: "Add: const templateStr = await (await fetch(new URL('./_Comp.template.html', import.meta.url))).text();" };
+      const hasHtmlCall = /html\(/.test(code) && /\.template\.html/.test(code);
+      if (hasHtmlCall && (hasFetch || hasBundleImport)) return { pass: true };
+      if (hasHtmlCall && !hasFetch && !hasBundleImport) return { pass: false, failCount: 1, detail: ["html() used with template but no fetch/import"], suggestion: "Add: const templateStr = await (await fetch(new URL('./_Comp.template.html', import.meta.url))).text();" };
       return { pass: true, note: "No Pattern C detection needed — skipping" };
     },
   },
