@@ -36,7 +36,7 @@ Every source document below is preserved verbatim under its own heading so no pr
   - Matching skills get 2.0x boost; universally relevant skills (styleguides, web) get 1.15x
   - Non-matching skills get 0.85x penalty
 
-### 3.3 Template engine v2 — multi-file generation
+### 3.3 Template engine — multi-file generation
 - [x] **T7** `pix_component` generates multi-file output: `_Component.jsx` + `_Component.css` + `index.js`
 - [x] **T8** Variable interpolation: component name, props, data-part attributes
 

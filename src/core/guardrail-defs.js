@@ -595,7 +595,7 @@ export const VANILLA_REACTIVE_GUARDRAILS = [
       const isTemplate = context?.fileName?.endsWith(".template.html") || false;
       const hasDollarBraces = /\$\{[^}]+\}/.test(code);
       if (!isTemplate && hasDollarBraces) return { pass: true, note: "Not a .template.html file — ${\} is valid here" };
-      if (isTemplate && hasDollarBraces) return { pass: false, failCount: 1, detail: ["${\} found in external template"], suggestion: "Replace ${\} closures with @click=\"handler\" and use {{ expr }} for data expressions. ${} is removed in v2." };
+      if (isTemplate && hasDollarBraces) return { pass: false, failCount: 1, detail: ["${\} found in external template"], suggestion: "Replace ${\} closures with @click=\"handler\" and use {{ expr }} for data expressions." };
       return { pass: true };
     },
   },

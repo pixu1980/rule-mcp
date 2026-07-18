@@ -216,7 +216,7 @@ No TypeScript compilation needed. The SDK ships JavaScript with `.d.ts` declarat
 | Enhancement | Tokens saved | Implementation |
 |-------------|-------------|----------------|
 | **Context-aware routing** | ~200/task | `pix` returns only RELEVANT skill sections, not full files |
-| **Template engine v2** | ~500/component | Generate complete files with variable interpolation (name, props, etc.) |
+| **Template engine** | ~500/component | Generate complete files with variable interpolation (name, props, etc.) |
 | **Project detector** | ~300/session | Auto-detect framework from `package.json`, return only relevant tools |
 | **Code generator** | ~1000/component | Full file generation (component + CSS + barrel + test) from single call |
 | **Checklist executor** | ~400/review | Return only failed checklist items as context, not full checklist |
@@ -1003,7 +1003,7 @@ All data stays on the filesystem. The MCP server is a read-only/validate-only se
       - Detects build tool: vite, webpack, esbuild, angular-cli, sveltekit, next, nuxt, parcel, tsup, tsc
       - Returns project profile JSON with suggested skills and tools
 
-- [x] **3.3** Template engine v2 — multi-file generation
+- [x] **3.3** Template engine — multi-file generation
       - `pix_component mode=multi` generates: `_Component.jsx` + `_Component.css` + `index.js`
       - Variable interpolation: component name → PascalCase, kebab-case
       - Framework-aware output: React (.jsx), Vue (.vue SFC), Svelte (.svelte), Vanilla (.js + .css)

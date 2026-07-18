@@ -183,7 +183,8 @@ result._context = { title: 'Hello' };  // data here
 | `.prop="{{ expr }}"` | PropertyPart | DOM property (not setAttribute) | `<input .value="{{ name }}">` |
 | `@event="handler(args)"` | EventPart | Event listener, resolved from _scope | `<button @click="handleSave(id)">` |
 | `<for each="x in xs">` | ForPart | Loop with keyed reconciliation | `<for each="todo in todos">` |
-| `<if condition="expr">` | IfPart | Conditional show/hide | `<if condition="done">` |
+| `<if condition="expr1">...<elseif condition="expr2">...<else>...</if>` | IfPart | Multi-branch conditional | `<if condition="done">Done<else>Pending</if>` |
+| `<switch expr="x"><case result="v">...<default>...</switch>` | SwitchPart | Multi-way branch on value match | `<switch expr="s"><case result="a">A</case><default>?</default></switch>` |
 | `{{ expr \| raw }}` | ExprPart | Unescaped HTML output | `<div>{{ content \| raw }}</div>` |
 
 ### Built-in Filters
