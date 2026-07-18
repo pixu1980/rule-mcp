@@ -1,7 +1,7 @@
 // ═══════════════════════════════════════════════════════════════════════════════
-//  ChildNodePart — handles ${} slots (and now TemplateResult from {{ }})
+//  ChildNodePart — renders TemplateResult (from {{ }} or html\`\`) into DOM
 //  ═══════════════════════════════════════════════════════════════════════════════
-//   repeat directive removed. Use <for> for iteration.
+//  Handles text nodes, document fragments, and nested TemplateInstances.
 //  ═══════════════════════════════════════════════════════════════════════════════
 
 import { Part } from './_part.js';
