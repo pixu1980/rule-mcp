@@ -79,30 +79,50 @@ The `@` prefix extracts the event name and passes it directly to
 ### Name resolution: `_scope`
 
 Every name in `@click="handleSave"` and `{{ TodoList(todos) }}` is resolved
-through a **resolution chain**.
-
-**Critical: JS closures are NOT visible to the template engine.**
-JavaScript provides no API to inspect closure scope at runtime.
-When you write `const fn = (id) => ...` and reference `fn` in a template,
-the engine receives only the **string** `"fn"` — not the function reference.
-You MUST pass functions explicitly via `result._scope`.
-
-Lookup order:
+through a **resolution chain**:
 
 ```
-1. result._scope[name]       ← explicit (Pattern B: one line)
+1. result._scope[name]       ← explicit scope object
 2. result._context[name]     ← data context (fallback)
 3. component instance[name]  ← CE methods (Pattern A/C, auto by vrComponent)
 ```
 
 **Pattern A/C** → `vrComponent` sets `_scope = this` automatically.
 Component methods resolve in step 3 (or 1 if `_scope` is set).
-No extra work needed.
+Zero extra work.
 
 **Pattern B** → one explicit line:
 ```js
-result._scope = { handleSave, TodoList };   // ← explicit, REQUIRED
+result._scope = { handleSave, TodoList };   // ← explicit
 ```
+
+**Pattern C → B** (calling a Pattern B fn from external template):
+prefer pass via `_context` — the component fn is data, not a handler:
+```js
+context() {
+  return {
+    todos: store.state.todos,
+    TodoList: TodoList,    // ← in context for Pattern C → B
+  };
+}
+```
+
+### Why not automatic closure resolution?
+
+Tagged template literals (`html\`\``) receive only **string parts** and
+**value slots** (the `${}` positions). With `${}` removed, values is empty.
+The function names inside the template strings (`"handleSave"`, `"TodoList"`)
+are not automatically linked to the JavaScript closure scope — there is no
+standard API to enumerate a caller's closure variables at runtime.
+
+To resolve names automatically at `html\`\`` call time, we would need:
+- `eval()` in the `html` function — breaks CSP, blocked in strict mode
+- A Babel plugin (build-time analysis) — adds a build step, pix is
+  zero-dependency runtime
+
+**Decision:** keep explicit `_scope` / `_context` for all patterns.
+A future compile-time plugin can auto-generate `_scope` from variable
+usage analysis, but it's optional.
 
 ### Handler resolution rules
 
