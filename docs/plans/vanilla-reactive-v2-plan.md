@@ -32,7 +32,7 @@
 
 ```
 ┌─────────────────────────────────────────────────────────────────────┐
-│                  Pix Vanilla Reactive — v2 Architecture               │
+│                  Pix Vanilla Reactive — Architecture               │
 └─────────────────────────────────────────────────────────────────────┘
 
                       Pattern A / C                    Pattern B
@@ -58,7 +58,7 @@
                           ▼                           ▼
 
                     ┌─────────────────────────────────────────┐
-                    │        Template Engine (v2)              │
+                    │        Template Engine              │
                     │                                         │
                     │  html`...`  →  getTemplate(strings)      │
                     │    1. Parse {{ expr }}, <for>, <if>     │

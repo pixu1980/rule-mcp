@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════════════════════════════
-//  Component: App (composition root, v2)
+//  Component: App (composition root)
 //  ── Custom element class with external CSS via adoptedStyleSheets
 //  ═══════════════════════════════════════════════════════════════════════════════
 

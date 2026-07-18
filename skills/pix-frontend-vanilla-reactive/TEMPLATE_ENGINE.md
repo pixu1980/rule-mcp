@@ -1,4 +1,4 @@
-# pix-vanilla-reactive — Template Engine Capabilities (v2)
+# pix-vanilla-reactive — Template Engine Capabilities
 
 > Reference: `skills/pix-frontend-vanilla-reactive/examples/src/core/`
 > Living document — update as the engine evolves.
@@ -51,7 +51,7 @@ no API to enumerate closure variables at runtime.
 | Filter chain | `{{ val \| upper \| slug }}` | chained filters |
 | Filter with arg | `{{ val \| truncate:20 }}` | `filter(val, 20)` |
 | Filter named arg | `{{ val \| join:', ' }}` | `filter(val, ', ')` |
-| **Function call** (v2) | `{{ TodoList(todos) }}` | `scope.TodoList(scope.todos)` → `ctx.TodoList(ctx.todos)` |
+| **Function call** | `{{ TodoList(todos) }}` | `scope.TodoList(scope.todos)` → `ctx.TodoList(ctx.todos)` |
 | Fn call dot-arg | `{{ Card(todo.item) }}` | `scope.Card(scope.todo.item)` → `ctx.Card(ctx.todo.item)` |
 | Raw output | `{{ html \| raw }}` | Unescaped textContent |
 
@@ -221,7 +221,7 @@ each `<case result="...">`. `<default>` renders when no case matches.
 
 ---
 
-## 7. Component Composition (v2 — via `{{ FnName(args) }}`)
+## 7. Component Composition (via `{{ FnName(args) }}`)
 
 `{{ FnName(args) }}` calls a **function** that returns a `TemplateResult`.
 The function is resolved through the standard scope chain (§3).
@@ -302,7 +302,7 @@ Pattern C (external .template.html)
 
 ---
 
-## 8. Two-Way Binding (REMOVED in v2)
+## 8. Two-Way Binding
 
 The `model` directive is removed with `${}`. Use `@input` instead:
 

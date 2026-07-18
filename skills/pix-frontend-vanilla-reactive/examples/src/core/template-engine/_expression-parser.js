@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════════════════════════════
-//  Expression parser (v2)
+//  Expression parser 
 //  ═══════════════════════════════════════════════════════════════════════════════
 //  Now supports: data expressions with filters AND function calls.
 //

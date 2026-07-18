@@ -147,7 +147,7 @@ window.addEventListener("store:change", () => {
 
 ## 4. Template Engine
 
-### API Reference (v2)
+### API Reference
 
 **Two expression systems only:** `{{ expr }}` for data, `@event="handler"` for events.
 `${}` syntax is removed. Two-way binding via `@input` + `.value` (see §8).
@@ -578,7 +578,7 @@ Key assertions enforced by guardrails engine:
 - **tickstate-bridge**: Computed signals read `tickState.get()`
 - **data-part**: Child elements use `data-part="role"` attributes
 - **template-syntax**: `{{ expr }}` for data only (NO `${}`)
-- **no-dollar-braces**: Templates must NOT contain `${}` (v2 removed it)
+- **no-dollar-braces**: Templates must NOT contain `${}`
 - **jsdoc-required**: Every JS/TS file MUST have complete JSDoc on all exported symbols
 - **css-comments-required**: Every CSS file MUST have file-level + section comments
 - **a11y-test-required**: Every project MUST have Playwright + @axe-core/playwright a11y tests
