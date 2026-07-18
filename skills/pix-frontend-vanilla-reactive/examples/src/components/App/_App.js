@@ -1,13 +1,12 @@
 // ═══════════════════════════════════════════════════════════════════════════════
-//  Component: App (composition root) + mountApp
+//  Component: App (composition root, v2)
 //  ── Custom element class with external CSS via adoptedStyleSheets
 //  ═══════════════════════════════════════════════════════════════════════════════
 
 import { html, effect, render } from '../../core/index.js';
-import { addTodo, setFilter } from '../../helpers/actions/index.js';
+import { addTodo, setFilter, deleteTodo, toggleTodo } from '../../helpers/actions/index.js';
 import { renderContext } from '../../helpers/computed/index.js';
 import { tickState } from '../../helpers/shared/index.js';
-import { TodoItem } from '../TodoItem/index.js';
 
 const cssText = await (
   await fetch(new URL('./_App.css', import.meta.url))
@@ -22,7 +21,9 @@ export class App extends HTMLElement {
   }
 
   static render(context) {
-    return html`
+    const _scope = { addTodo, setFilter, deleteTodo, toggleTodo };
+
+    const result = html`
       <h1>{{ appTitle }}</h1>
 
       <aside data-part="demo-note">
@@ -37,7 +38,7 @@ export class App extends HTMLElement {
       </aside>
 
       <section data-part="add-form">
-        <form @submit=${(e) => { e.preventDefault(); const inp = e.target.querySelector('input[name="title"]'); addTodo(inp.value); inp.value = ''; }}>
+        <form @submit="addTodoFromForm($event)">
           <input name="title" placeholder="What needs to be done?" />
           <button type="submit">Add</button>
         </form>
@@ -45,9 +46,9 @@ export class App extends HTMLElement {
 
       <nav aria-label="Filter todos">
         <span>Filter:</span>
-        <button type="button" @click=${() => setFilter('all')}>All</button>
-        <button type="button" @click=${() => setFilter('open')}>Open</button>
-        <button type="button" @click=${() => setFilter('done')}>Done</button>
+        <button type="button" @click="setFilter('all')">All</button>
+        <button type="button" @click="setFilter('open')">Open</button>
+        <button type="button" @click="setFilter('done')">Done</button>
         <span data-part="filter-label">
           Current: <strong>{{ filterStatus }}</strong>
         </span>
@@ -63,7 +64,11 @@ export class App extends HTMLElement {
 
       <h3>Todo list</h3>
       <section aria-label="Todo list">
-        <for each="todo in visibleTodos" render=${TodoItem.render}>
+        <for each="todo in visibleTodos">
+          <article data-part="todo-card" data-state-done="{{ todo.completed }}">
+            <span>{{ todo.title | upper }}</span>
+            <button type="button" @click="deleteTodo(todo.id)">✕</button>
+          </article>
         </for>
       </section>
 
@@ -78,6 +83,20 @@ export class App extends HTMLElement {
         raw HTML test: {{ description | raw }}
       </p>
     `;
+
+    result._context = context;
+    result._scope = {
+      addTodo: (e) => {
+        e.preventDefault();
+        const inp = e.target.querySelector('input[name="title"]');
+        addTodo(inp.value);
+        inp.value = '';
+      },
+      setFilter,
+      deleteTodo,
+      toggleTodo,
+    };
+    return result;
   }
 
   connectedCallback() {
