@@ -24,7 +24,8 @@ Store (Proxy)  →  tickState (Signal bridge)  →  Signals (State/Computed)
 ```
 
 **Core insight:** No virtual DOM. Plain functions return `html` template results.
-Two expression systems: `${value}` for JS values, `{{ expr }}` for template expressions with filter pipes.
+One expression system: `{{ expr }}` for data with filter pipes.
+Events use `@click="handler(args)"` resolved from `_scope` (see §5).
 
 ---
 
@@ -146,13 +147,19 @@ window.addEventListener("store:change", () => {
 
 ## 4. Template Engine
 
-### API Reference
+### API Reference (v2)
+
+**Two expression systems only:** `{{ expr }}` for data, `@event="handler"` for events.
+`${}` syntax is removed. Two-way binding via `@input` + `.value` (see §8).
 
 ```js
-import { html, render, directive, model, registerFilter } from "./core/template-engine/index.js";
+import { html, render, registerFilter } from "./core/template-engine/index.js";
 
-// html tagged template (NOT a real tag — packages strings + values)
+// html tagged template (wraps strings + values)
 const result = html`<h1>{{ title | upper }}</h1>`;
+
+// html from string (Pattern C: external .template.html files)
+const fromFile = html(`<h1>{{ title }}</h1>`);
 
 // render into container
 render(result, document.getElementById("app"));
@@ -160,28 +167,24 @@ render(result, document.getElementById("app"));
 // Register a filter
 registerFilter("upper", v => String(v).toUpperCase());
 
-// Two-way binding
-html`<input model=${{
-  signal: tickState,
-  get: () => store.state.name,
-  set: (v) => { store.state.name = v; }
-}} />`;
+// Scope for @click handler resolution (see §5)
+result._scope = { handleSave };   // handlers here
+result._context = { title: 'Hello' };  // data here
+```
 ```
 
 ### Expression Systems
 
 | Syntax | Part Type | Behavior | Example |
 |--------|-----------|----------|---------|
-| `${expr}` | ChildNodePart | JS value (handler, signal, iterable) | `<p>${name}</p>` |
 | `{{ expr }}` | ExprPart | Data expression with filter pipes | `<p>{{ title \| upper }}</p>` |
-| `attr=${expr}` | AttributePart | HTML attribute from JS | `<div class=${cls}>` |
-| `attr={{ expr }}` | AttributePart | HTML attribute from context | `<div class="{{ cls }}">` |
-| `.prop=${expr}` | PropertyPart | DOM property | `<input .value=${val}>` |
-| `@event=${fn}` | EventPart | Event listener | `<button @click=${fn}>` |
-| `model=${expr}` | AttributePart | Two-way binding | `<input model=${m}>` |
-| `<for each="x in xs">` | ForPart | Loop (inline or component) | `<for each="todo in todos">` |
-| `<if condition="expr">` | IfPart | Conditional | `<if condition="done">` |
-| `<switch expr="x">` | SwitchPart | Multi-way branch | `<switch expr="status">` |
+| `{{ Fn(args) }}` | ExprPart | Function call returning TemplateResult | `{{ TodoList(todos) }}` |
+| `attr="{{ expr }}"` | AttributePart | HTML attribute from context | `<div class="{{ cls }}">` |
+| `.prop="{{ expr }}"` | PropertyPart | DOM property (not setAttribute) | `<input .value="{{ name }}">` |
+| `@event="handler(args)"` | ClickHandlerPart | Event listener, resolved from _scope | `<button @click="handleSave(id)">` |
+| `<for each="x in xs">` | ForPart | Loop with keyed reconciliation | `<for each="todo in todos">` |
+| `<if condition="expr">` | IfPart | Conditional show/hide | `<if condition="done">` |
+| `{{ expr \| raw }}` | ExprPart | Unescaped HTML output | `<div>{{ content \| raw }}</div>` |
 
 ### Built-in Filters
 
@@ -189,15 +192,27 @@ html`<input model=${{
 `striptags`, `raw`, `json`, `default`, `truncate`, `length`, `first`, `last`,
 `join`, `tagLabel`, `tagHref`, `date`, `timeAgo`, `urlencode`, `sortBy`
 
-### Data Context Flow
+### Data Context + Scope Flow
 
-Components receive a context object. Attach it to the result:
+Components receive a context object for `{{ }}` data and a scope object for
+`@click` handler resolution:
 
 ```js
 const ctx = { title: "Hello", todos: [...] };
+const handleSave = (id) => store.del(id);
+
 const result = App.render(ctx);
-result._context = ctx; // enables {{ }} expression resolution
+result._context = ctx;         // enables {{ }} expression resolution
+result._scope = { handleSave }; // enables @click="handleSave(args)"
 render(result, root);
+```
+
+**Resolution order for all names** (handlers AND component functions):
+
+```
+1. result._scope[name]       ← explicit scope (Pattern B)
+2. result._context[name]     ← data context (fallback)
+3. component instance[name]  ← CE methods (Pattern A/C, auto by vrComponent)
 ```
 
 ### Files (in `core/template-engine/`)
@@ -208,63 +223,187 @@ render(result, root);
 | `_template-instance.js` | `TemplateInstance`, `getTemplate` (parser with `{{ }}`/`<for>`/`<if>`) |
 | `_expression-parser.js` | `parseExpression`, `evaluateExpression` |
 | `_filters.js` | `registerFilter`, `FILTERS`, built-in filters (18 filters) |
-| `_template-helpers.js` | `html`, `directive`, `model`, `isDirective` |
-| `_child-node-part.js` | ChildNodePart (text, template, iterable, signal) |
-| `_attribute-part.js` | AttributePart + model directive |
-| `_expr-part.js` | ExprPart (`{{ }}` interpolation with filters) |
-| `_for-part.js` | ForPart (`<for>` directive, keyed reconciliation) |
-| `_if-part.js` | IfPart (`<if>` directive, signal support) |
-| `_event-part.js` | EventPart |
-| `_property-part.js` | PropertyPart |
+| `_template-helpers.js` | `html` |
+| `_child-node-part.js` | ChildNodePart (text, template, signal) |
+| `_attribute-part.js` | AttributePart |
+| `_expr-part.js` | ExprPart (`{{ }}` + `{{ Fn() }}` composition) |
+| `_for-part.js` | ForPart (`<for>` loop, keyed reconciliation) |
+| `_if-part.js` | IfPart (`<if>` conditional) |
+| `_event-part.js` | ClickHandlerPart (`@click="handler(args)"`) |
+| `_property-part.js` | PropertyPart (`.value="{{ }}"`) |
 | `_range.js` | `clearRange`, `moveRangeBefore` |
 
 Full source: `examples/src/core/template-engine/`
 
 ---
 
-## 5. Component Pattern (Custom Elements + adoptedStyleSheets)
+## 5. Component Patterns (3 modes)
 
-### Pattern
+Three ways to author components. All share the same pipeline
+(Store → Signals → Template Engine → DOMParts → DOM).
 
-Every component is a class extending `HTMLElement`:
+| # | Mode | Lifecycle | CSS | When to use |
+|---|------|-----------|-----|-------------|
+| A | **Custom Element + `vrComponent`** | Own `connectedCallback` (auto) | `adoptedStyleSheets` via vrComponent | App root, route panels, modals |
+| B | **Functional Component (plain fn)** | Inherited from parent CE | External — loaded by parent | List items, card grids, reusable UI |
+| C | **CE + external `.template.html`** | Own `connectedCallback` (auto) | `adoptedStyleSheets` via vrComponent | Large views, designer-handoff HTML |
+
+---
+
+### 5A — Custom Element with `vrComponent` (Pattern A)
 
 ```js
-import { html } from "../../core/index.js";
+import { vrComponent, html } from '../../core/index.js';
 
-// CSS loaded once at module scope
-const cssText = await (
-  await fetch(new URL("./_TodoItem.css", import.meta.url))
-).text();
-const sheet = new CSSStyleSheet();
-sheet.replaceSync(cssText);
-
-export class TodoItem extends HTMLElement {
+class App extends HTMLElement {
   static {
-    customElements.define("todo-item", this);
-    document.adoptedStyleSheets = [...document.adoptedStyleSheets, sheet];
+    vrComponent(this, {
+      tag: 'app-root',
+      css: import.meta.url,   // resolves _App.js → _App.css
+    });
   }
 
-  static render(todo) {
+  // Auto-resolved as @click handler (via _scope = this)
+  handleDelete(id) { store.state.todos = store.state.todos.filter(t => t.id !== id); }
+
+  // Auto-called each render cycle → _context
+  context() {
+    return { title: store.state.title, todos: store.state.todos };
+  }
+
+  // Auto-called each render cycle → returns TemplateResult
+  render(ctx) {
     return html`
-      <article data-part="item" data-state-completed="${todo.completed ? 'done' : ''}">
-        <input type="checkbox" data-part="toggle" />
-        <span data-part="title">{{ todo.title | upper }}</span>
-        <button data-part="delete" @click=${() => removeTodo(todo.id)}>
-          Delete
-        </button>
-      </article>
+      <h1>{{ title }}</h1>
+      <for each="todo in todos">
+        <article>
+          <span>{{ todo.title }}</span>
+          <button @click="handleDelete(todo.id)">✕</button>
+        </article>
+      </for>
     `;
   }
 }
 ```
 
-### Rules
+**Rules:**
+1. NO inline styles, NO CSS classes — `[data-part="..."]` only.
+2. `vrComponent()` in `static {}` handles `define()`, CSS, reactive effect.
+3. Methods on the class are auto-resolved as `@click` handlers.
+4. `context()` returns data for `{{ }}`. Called each render cycle.
+5. `render(ctx)` returns `html\`\`` TemplateResult.
+6. `vrComponent` automatically sets `result._scope = this` and `result._context = ctx`.
 
-1. **NO inline styles** — `style="..."` is forbidden in templates.
-2. **NO CSS classes** — use element selectors + `[data-part="..."]`.
-3. **`static {}` block** for `customElements.define()` + `adoptedStyleSheets`.
-4. **`static render(item)`** used by `${Component(item)}` inside `<for>`.
-5. **Data flows through context** — components receive context as argument.
+---
+
+### 5B — Functional Component (Pattern B)
+
+```js
+import { html } from '../../core/index.js';
+
+// Handler functions (one line of _scope at the end)
+const handleSave = (id) => store.toggle(id);
+
+// Pure function: receives data, returns TemplateResult
+export function TodoList(ctx) {
+  const result = html`
+    <for each="todo in ctx.todos">
+      <article>
+        <h3>{{ todo.title | upper }}</h3>
+        <button @click="handleSave(todo.id)">Toggle</button>
+      </article>
+    </for>
+  `;
+  result._scope = { handleSave };   // ← one explicit line
+  result._context = ctx;
+  return result;
+}
+```
+
+**Rules:**
+1. Plain function (no class, no HTMLElement). No lifecycle of its own.
+2. Must set `result._scope` for `@click` handlers.
+3. Can be composed inside `{{ TodoList(todos) }}` in a parent template.
+4. CSS lives in the parent CE or global — no `adoptedStyleSheets`.
+
+**When to use:** reusable UI blocks (cards, list items, form sections).
+
+---
+
+### 5C — Custom Element with External HTML Template (Pattern C)
+
+```js
+import { vrComponent, html, render } from '../../core/index.js';
+
+// Load external .template.html at module scope
+const templateStr = await (
+  await fetch(new URL('./_ProfileCard.template.html', import.meta.url))
+).text();
+const TEMPLATE = html(templateStr);   // html() accepts strings too
+
+class ProfileCard extends HTMLElement {
+  static {
+    vrComponent(this, {
+      tag: 'profile-card',
+      css: import.meta.url,
+    });
+  }
+
+  handleToggle(id) { store.toggle(id); }
+
+  context() {
+    return { name: store.state.name, todos: store.state.todos };
+  }
+
+  render(ctx) {
+    const result = TEMPLATE;
+    result._context = ctx;
+    result._scope = this;    // method-based handlers
+    return result;
+  }
+}
+```
+
+**Template file** (`_ProfileCard.template.html`) uses only `{{ }}`, `<for>`, `<if>`:
+```html
+<section data-part="profile-card">
+  <h2>{{ name | upper }}</h2>
+  <for each="todo in todos">
+    <article>
+      <span>{{ todo.title }}</span>
+      <button @click="handleToggle(todo.id)">Toggle</button>
+    </article>
+  </for>
+  <if condition="todos.length === 0">
+    <p>No todos.</p>
+  </if>
+</section>
+```
+
+**Rules:**
+1. Template file uses ONLY `{{ }}`, `<for>`, `<if>`, `@event="handler"`.
+2. NO `${}` in template files — that is valid only in JS files.
+3. Use `@click="handler"` (string) not `@click=${\handler\}`.
+4. vrComponent auto-sets `result._scope = this` for method resolution.
+5. Functions passed from Pattern C → B go in `_context` (not `_scope`).
+
+---
+
+### Composition
+
+`{{ FnName(args) }}` calls a function that returns `TemplateResult`.
+Functions must be resolvable through the standard chain:
+
+```
+1. result._scope[name]       ← explicit scope
+2. result._context[name]     ← data context (preferred for Pattern C → B)
+3. component instance[name]  ← CE methods (auto by vrComponent)
+```
+
+Custom Elements are composed via HTML tags, NOT `{{ }}`:
+```html
+<profile-card></profile-card>   ← native CE from registry
+```
 
 ---
 
@@ -320,7 +459,8 @@ const renderContext = new Signal.Computed(() => {
 effect(() => {
   const ctx = renderContext.get();
   const result = App.render(ctx);
-  result._context = ctx;
+  result._context = ctx;       // for {{ }} data expressions
+  result._scope = this;        // for @click="handler" resolution (or explicit object)
   render(result, root);
 });
 
@@ -381,9 +521,18 @@ effect(() => { render(App.render(ctx), root); });
 effect(() => { const result = App.render(ctx); result._context = ctx; render(result, root); });
 ```
 
-### 3. `{{ }}` vs `${}` confusion
-- `{{ }}` → DATA expressions (context + filters): `{{ title | upper }}`
-- `${}` → JS values (handlers, directives): `@click=${fn}`, `model=${config}`
+### 3. Forgetting `result._scope`
+```js
+// WRONG — @click="handleSave" won't resolve:
+effect(() => { render(App.render(ctx), root); });
+// RIGHT:
+effect(() => {
+  const result = App.render(ctx);
+  result._context = ctx;
+  result._scope = { handleSave };   // or this for CE methods
+  render(result, root);
+});
+```
 
 ### 4. Context must be a plain object — pass `signal.get()`, not the signal itself.
 
@@ -404,7 +553,8 @@ effect(() => { const result = App.render(ctx); result._context = ctx; render(res
 | setState | `store.state.X = Y` |
 | JSX | `` html`...` `` |
 | key prop | `<for>` keyed reconciliation |
-| Controlled inputs | `model={...}` directive |
+| Controlled inputs | `@input="handler($event)"` + `.value="{{ }}"` |
+| onClick | `@click="handler(args)"` (resolved from `_scope`) |
 | React Context | Shared `store` import |
 
 ### Vue → Pix / Svelte → Pix
@@ -418,19 +568,39 @@ Run `pix_frontend_vanilla_reactive` mode=check to validate code against these ru
 Use `pix_check` tool for automated guardrail checking.
 
 Key assertions enforced by guardrails engine:
+
+### All patterns
 - **no-css-classes**: CSS uses element + `[data-part]` selectors only
 - **no-inline-styles**: Templates have zero `style="..."`
 - **semantic-html**: No `<div>` where semantic element exists
-- **external-css**: CSS via `fetch → CSSStyleSheet.replaceSync → adoptedStyleSheets`
-- **custom-element**: Component extends `HTMLElement` with `static {}` block
-- **html-template**: Component uses `html\`\`` tagged template
+- **external-css**: CSS via fetch → CSSStyleSheet.replaceSync → adoptedStyleSheets
 - **store-proxy**: Store uses Proxy with `store:change` events
 - **tickstate-bridge**: Computed signals read `tickState.get()`
 - **data-part**: Child elements use `data-part="role"` attributes
-- **template-syntax**: `{{ expr }}` for data, `${value}` for JS values
-- **jsdoc-required**: Every JS/TS file MUST have complete JSDoc on all exported symbols (see pix-styleguide → javascript.md)
-- **css-comments-required**: Every CSS file MUST have file-level + section comments (see pix-styleguide → css.md)
-- **a11y-test-required**: Every project MUST have Playwright + @axe-core/playwright a11y tests in `tests/a11y/` (see pix-styleguide → a11y.md → Automated Testing)
+- **template-syntax**: `{{ expr }}` for data only (NO `${}`)
+- **no-dollar-braces**: Templates must NOT contain `${}` (v2 removed it)
+- **jsdoc-required**: Every JS/TS file MUST have complete JSDoc on all exported symbols
+- **css-comments-required**: Every CSS file MUST have file-level + section comments
+- **a11y-test-required**: Every project MUST have Playwright + @axe-core/playwright a11y tests
+
+### Pattern A (Custom Element + vrComponent)
+- **vr-component**: `vrComponent(this, { tag, css })` called in `static {}` block
+- **ce-extends**: Component extends `HTMLElement`
+- **css-auto**: CSS loaded via vrComponent (import.meta.url or explicit path)
+- **mount-guard**: vrComponent handles re-mount guard automatically
+
+### Pattern B (Functional Component)
+- **fn-component**: Component is a plain function, NOT a class
+- **fn-returns-html**: Function returns `html\`\`` (`TemplateResult`)
+- **fn-scope**: `result._scope` is set for `@click` handlers
+- **fn-composable**: Function can be called inside `{{ Fn(ctx) }}`
+
+### Pattern C (External HTML Template)
+- **external-template**: Component loads template from `.template.html` file
+- **no-dollar-braces**: Template files must NOT contain `${}`
+- **click-string**: Events use `@click="handler"`, not `@click=${\fn\}`
+- **template-data-part**: External template uses `data-part` selectors
+- **template-css**: CSS loaded via vrComponent
 
 ## Project Scaffolding
 
