@@ -101,8 +101,9 @@
 | 0.4 | **Handle `$event` keyword** | `@click="handleSave($event, id)"` → args = `['$event', 'id']` → `$event` is replaced with actual DOM event at click time. |
 | 0.5 | **Add `.value="{{ }}"` property detection** | In attribute walker: if `rawName.startsWith('.')` AND value contains `{{ }}` → create `PropertyPart` instead of `AttributePart`. |
 | 0.6 | **Update `TemplateInstance.updateWithContext()`** | Remove `${}` values loop (it was `this.parts`). Keep: `exprParts` ({{ }}), `forParts`, `ifParts`, `eventParts` (new `@click`). |
-| 0.7 | **Add `EventPart` for `@click`** | New `ClickHandlerPart` (rename old `EventPart`). Constructor: `(el, handlerName, argExprs, renderTime)`. Stores: function reference from `_handlers`, resolved args. |
-| 0.8 | **Update `ExprPart` for composition** | `setValue()` → if evaluated value is a `TemplateResult` (`{ kind: 'template-result' }`), render it via `ChildNodePart` nested rendering. |
+| 0.7 | **Add `ClickHandlerPart` for `@click`** | Constructor: `(el, handlerName, argExprs, renderTime)`. Stores: function reference from `_handlers`, resolved args. |
+| 0.8 | **Update expression parser for fn calls** | `parseExpression()` must detect `FuncName(args)` before `\|`. Return `{ kind: 'fn', name: 'FuncName', args: [...] }`. `evaluateExpression()` resolves name from context, evaluates args, calls fn. |
+| 0.9 | **Update `ExprPart` for composition** | `setValue()` → if evaluated value is `{ kind: 'template-result' }`, render it via nested `TemplateInstance` (like old `ChildNodePart`). Otherwise: escaped textContent. |
 
 **Estimated**: 4h
 
@@ -208,11 +209,87 @@ export function vrComponent(klass, opts = {}) {
 
 ---
 
+## Nesting validation: Pattern C → Pattern B → Pattern A
+
+### Scenario
+
+```
+Pattern C (external .template.html CE)
+  └── {{ PatternB(ctx) }}  ← function call expression in {{ }}
+        └── <pattern-a-ce>  ← native CE in the DOM subtree
+```
+
+### Step-by-step trace
+
+**Step 1** — `_ProfileCard.template.html` contains:
+```html
+{{ TodoList(todos) }}
+```
+`getTemplate()` parses `{{ }}` as an `ExprPart` with expression `TodoList(todos)`.
+`parseExpression("TodoList(todos)")` detects `FnName(...)` → returns:
+```json
+{ "kind": "fn", "name": "TodoList", "args": [{ "variable": "todos" }] }
+```
+
+**Step 2** — `evaluateExpression(fnExpr, ctx)`:
+- Resolves `ctx['TodoList']` → the imported Component function ✓
+- Resolves `ctx['todos']` → the data array ✓
+- Calls `TodoList(ctx.todos)` → returns a `TemplateResult` ✓
+
+**Step 3** — `ExprPart.setValue()` receives the `TemplateResult`:
+- Detects `val.kind === 'template-result'`
+- Creates a nested `TemplateInstance` from the TemplateResult's strings
+- Renders the document fragment into the DOM at the ExprPart's position
+
+The fragment contains `<todo-item>` tags, which the browser upgrades.
+
+**Step 4** — `<todo-item>` `connectedCallback` fires:
+- `vrComponent` starts its own effect loop
+- Component renders independently with its own `html\`\``
+- Nested CE behaves as a standard Pattern A component
+
+### Requirements
+
+| Requirement | Phase | Status |
+|------------|-------|--------|
+| `parseExpression()` supports `fn(args)` syntax | 0.8 | ✅ Added to plan |
+| `evaluateExpression()` resolves fn from ctx, calls it | 0.8 | ✅ Added to plan |
+| `ExprPart` renders `TemplateResult` objects | 0.9 | ✅ Added to plan |
+| Mutable `{{ }}` args update on each render | 0.9 | ✅ ExprPart re-evaluates each cycle |
+| Pattern C passes functions in context | phase 3 | ✅ Documented convention |
+| Native CE lifecycle (`connectedCallback`) | — | ✅ Already works, no change needed |
+
+### Convention: component functions in context
+
+For **Pattern C** (external template, no closure), component functions MUST
+be passed in the context object:
+
+```js
+import { TodoList } from '../helpers/func/_todoList.js';
+
+class ProfileCard extends HTMLElement {
+  context() {
+    return {
+      todos: store.state.todos,
+      TodoList: TodoList,   // ← explicit, required for Pattern C
+    };
+  }
+}
+```
+
+For **Pattern A/B** (closure available), component functions are already
+in scope via `import`. Passing them in context also works and makes the
+template self-documenting.
+
+**Verdict: ✅ The nesting chain is fully supported.**
+
+---
+
 ## Dependency graph
 
 ```
-Phase 0 (engine: remove $, add @click)
-  └── Phase 1 (engine: align {{ }} semantics)
+Phase 0 (engine: remove $, add @click, add fn call parser)
+  └── Phase 1 (engine: align {{ }} semantics, add ExprPart composition)
         ├── Phase 2 (vrComponent decorator)
         │     └── Phase 3 (SKILL.md rewrite)
         │           └── Phase 4 (examples rewrite)
