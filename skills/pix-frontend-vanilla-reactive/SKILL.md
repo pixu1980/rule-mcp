@@ -16,6 +16,57 @@ Zero framework dependencies. No build step required.
 
 Full working example: see `examples/` in this skill directory.
 
+## Quickstart: Hello World in 5 Minutes
+
+Create this minimal app to verify your setup.
+
+**`index.html`** — just a custom element tag + module script:
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My App</title>
+</head>
+<body>
+  <app-root></app-root>
+  <script type="module" src="./index.js"></script>
+</body>
+</html>
+```
+
+**`index.js`** — Store + TickState + Component + mount:
+```js
+import { Store, Signal, effect, html, render, registerFilter, vrComponent }
+  from './core/index.js';
+
+// 1. Data store
+const store = new Store({ title: 'Hello World' });
+
+// 2. TickState bridge (connects Store → Signals)
+const tickState = new Signal.State(0, { equals: () => false });
+window.addEventListener('store:change', () => tickState.set(performance.now()));
+
+// 3. Template filter
+registerFilter('upper', v => String(v).toUpperCase());
+
+// 4. Component (Pattern A — see §5)
+class App extends HTMLElement {
+  static { vrComponent(this, { tag: 'app-root', css: import.meta.url }); }
+  context() { return { title: store.state.title }; }
+  render(ctx) { return html`<h1>{{ title | upper }}</h1>`; }
+}
+
+// 5. Initial render
+tickState.set(performance.now());
+```
+
+**Serve** via `pnpm dev` (Vite), `npx serve`, o qualsiasi HTTP server.
+I moduli ES (`type="module"`) NON funzionano con `file://`.
+
+---
+
 ## Architecture Overview
 
 ```
@@ -149,8 +200,14 @@ window.addEventListener("store:change", () => {
 
 ### API Reference
 
-**Two expression systems only:** `{{ expr }}` for data, `@event="handler"` for events.
-`${}` syntax is removed. Two-way binding via `@input` + `.value` (see §8).
+**Two expression systems:** `{{ expr }}` for data, `@event="handler"` for events.
+Two-way binding via `@input` + `.value`.
+
+> **What is `_scope`?** Every `@click="handler"` and `{{ FnName(args) }}`
+> needs to find the function. `result._scope` is where you put those functions.
+> For Pattern A/C, `vrComponent` sets `_scope = this` automatically — methods
+> on the class ARE the scope. For Pattern B, set it manually: `result._scope = { fn }`.
+> Full resolution chain documented in §5.
 
 ```js
 import { html, render, registerFilter } from "./core/template-engine/index.js";
@@ -229,7 +286,7 @@ render(result, root);
 | `_attribute-part.js` | AttributePart |
 | `_expr-part.js` | ExprPart (`{{ }}` + `{{ Fn() }}` composition) |
 | `_for-part.js` | ForPart (`<for>` loop, keyed reconciliation) |
-| `_if-part.js` | IfPart (`<if>` conditional) |
+| `_if-part.js` | IfPart + SwitchPart (`<if>`/`<elseif>`/`<else>` + `<switch>`/`<case>`/`<default>`) |
 | `_event-part.js` | EventPart (`@event="handler(args)"`) |
 | `_property-part.js` | PropertyPart (`.value="{{ }}"`) |
 | `_range.js` | `clearRange`, `moveRangeBefore` |
@@ -324,7 +381,8 @@ export function TodoList(ctx) {
 **Rules:**
 1. Plain function (no class, no HTMLElement). No lifecycle of its own.
 2. Must set `result._scope` for `@click` handlers.
-3. Can be composed inside `{{ TodoList(todos) }}` in a parent template.
+3. **Composition:** call inside a parent template via `{{ TodoList(todos) }}`
+   (see §5.4 below). Pass functions via `_scope`, data via `_context`.
 4. CSS lives in the parent CE or global — no `adoptedStyleSheets`.
 
 **When to use:** reusable UI blocks (cards, list items, form sections).
@@ -365,18 +423,25 @@ class ProfileCard extends HTMLElement {
 }
 ```
 
-**Template file** (`_ProfileCard.template.html`) uses only `{{ }}`, `<for>`, `<if>`:
+**Template file** (`_ProfileCard.template.html`) uses only `{{ }}`, `<for>`, `<if>`,
+`<elseif>`, `<switch>`:
 ```html
 <section data-part="profile-card">
   <h2>{{ name | upper }}</h2>
   <for each="todo in todos">
-    <article>
+    <article data-state-done="{{ todo.done }}">
       <span>{{ todo.title }}</span>
+      <switch expr="todo.done">
+        <case result="true">✅ Done</case>
+        <default>⏳ Pending</default>
+      </switch>
       <button @click="handleToggle(todo.id)">Toggle</button>
     </article>
   </for>
   <if condition="todos.length === 0">
     <p>No todos.</p>
+  <else>
+    <p>{{ todos.length }} items</p>
   </if>
 </section>
 ```
@@ -413,8 +478,8 @@ Custom Elements are composed via HTML tags, NOT `{{ }}`:
 ### Complete Tick→DOM Path
 
 ```
-1. User input → model binding setter
-2. Store proxy trap → store:change event
+1. User input → @input handler → store.state.X = Y
+2. Proxy trap fires → store:change event
 3. store:change listener → tickState.set(performance.now())
 4. tickState.notify() → invalidate computeds + schedule effects
 5. Microtask flush → render effect runs
@@ -485,17 +550,31 @@ src/
   components/
     App/
       index.js                          ← Barrel
-      _App.js                           ← Component (_PascalCase.js)
+      _App.js                           ← Pattern A: CE + vrComponent
       _App.css                          ← External CSS
     TodoItem/
       index.js
       _TodoItem.js
       _TodoItem.css
+    ProfileCard/
+      index.js
+      _ProfileCard.js                   ← Pattern C: CE + external template
+      _ProfileCard.css
+      _ProfileCard.template.html        ← External HTML template ({{ }}, <for>, <if>)
   helpers/
     index.js
     actions/                            ← Store mutation functions
     computed/                           ← ComputedSignal factories
     shared/                             ← Shared singletons (store, tickState)
+    func/                               ← Pattern B: functional components
+      _todoList.js                      ←   returns html`` + _scope
+  core/
+    index.js                            ← Unified exports
+    signals/                            ← Signal system
+    store/                              ← Proxy Store
+    template-engine/                    ← Template engine
+    decorator/
+      _vr-component.js                  ← vrComponent() helper
   styles/
     index.css
     _base.css
@@ -613,191 +692,88 @@ Iterate: `generate → pix_check → fix → pix_check → all pass`.
 
 ---
 
-## Forms (Vanilla Reactive)
+## Forms
 
-### Prerequisites
+Forms use the standard Store + `@input` + `@submit` pattern.
+No special form store — just use the same Store as the rest of your app.
 
-- Use the pix reactive Store for form state
-- Validate with `zod` schemas
-- Pure HTML/Custom Elements
-
-### Form store with validation
-
-```javascript
-import { z } from "zod";
-import { Store } from "../core/store/index.js";
-
-const contactSchema = z.object({
-  email: z.string().email(),
-  name: z.string().min(2).max(255),
-});
-
-export const formStore = new Store({
-  email: "",
-  name: "",
-  errors: {},
-  isSubmitting: false,
-});
-
-export async function submitForm() {
-  const data = formStore.get();
-  const result = contactSchema.safeParse(data);
-  if (!result.success) {
-    const errors = {};
-    result.error.issues.forEach((issue) => {
-      errors[issue.path[0]] = issue.message;
-    });
-    formStore.set({ errors });
-    return;
-  }
-  formStore.set({ isSubmitting: true });
-  try { await api.post("/contact", result.data); }
-  finally { formStore.set({ isSubmitting: false }); }
-}
-```
-
-### Form component
-
-```javascript
-import { formStore, submitForm } from "../../store/form.store.js";
-
-export class ContactForm extends HTMLElement {
-  connectedCallback() {
-    this.innerHTML = `
-      <form data-part="form">
-        <label data-part="field">
-          <span data-part="label">Email</span>
-          <input data-part="input" type="email" data-bind="email" />
-          <span data-part="error" data-error="email"></span>
-        </label>
-        <button data-part="submit" type="submit">Send</button>
-      </form>
-    `;
-    this.bindInputs();
-    this.querySelector("[data-part=form]").addEventListener("submit", (e) => {
-      e.preventDefault();
-      submitForm();
-    });
-    formStore.subscribe(() => this.render());
-  }
-
-  bindInputs() {
-    this.querySelectorAll("[data-bind]").forEach((el) => {
-      el.addEventListener("input", () => formStore.set({ [el.dataset.bind]: el.value }));
-    });
-  }
-
-  render() {
-    const s = formStore.get();
-    this.querySelector("[data-part=submit]").disabled = s.isSubmitting;
-    for (const [k, msg] of Object.entries(s.errors)) {
-      const el = this.querySelector(`[data-error="${k}"]`);
-      if (el) el.textContent = msg;
-    }
-  }
-}
-customElements.define("contact-form", ContactForm);
-```
-
-### Checklist
-
-- [ ] Store-based form state management
-- [ ] `zod` schema validation
-- [ ] `data-bind` for input binding
-- [ ] `data-error` for field-level error display
-
----
-
-## Forms (Vanilla Reactive)
-
-### Prerequisites
-
-- Use the pix reactive Store for form state
-- Use native HTML5 validation + custom validation functions
-- Pure JavaScript — no Zod, no external validation library
-- Custom Elements with Store subscriptions
-
-### Step 1 — Validation functions (pure JS)
+### Validation (pure JS)
 
 ```javascript
 export const validators = {
-  required: (value) => value?.trim()?.length > 0 ? null : "This field is required",
-  email: (value) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value) ? null : "Invalid email",
-  minLength: (min) => (value) => value?.length >= min ? null : `Minimum ${min} characters`,
-  compose: (...fns) => (value) => { for (const fn of fns) { const e = fn(value); if (e) return e; } return null; },
+  required: (v) => v?.trim()?.length > 0 ? null : "Required",
+  email: (v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v) ? null : "Invalid email",
+  minLength: (min) => (v) => v?.length >= min ? null : `Min ${min} chars`,
+  compose: (...fns) => (v) => { for (const fn of fns) { const e = fn(v); if (e) return e; } return null; },
 };
-
-export function validate(schema, data) {
-  const errors = {};
-  for (const [field, fns] of Object.entries(schema)) {
-    for (const fn of [].concat(fns)) { const e = fn(data[field]); if (e) { errors[field] = e; break; } }
-  }
-  return Object.keys(errors).length ? errors : null;
-}
 ```
 
-### Step 2 — Form store
+### Example: ContactForm with Pattern A
 
 ```javascript
-import { Store } from "../core/store/index.js";
-import { validators, validate } from "./validation.js";
+import { vrComponent, html, Store } from '../core/index.js';
+import { validators } from './validation.js';
 
-const schema = { email: [validators.required, validators.email], name: [validators.required] };
+const store = new Store({ email: '', name: '', errors: null, isSubmitting: false });
+const tickState = new Signal.State(0, { equals: () => false });
+window.addEventListener('store:change', () => tickState.set(performance.now()));
 
-export const formStore = new Store({ email: "", name: "", errors: null, isSubmitting: false });
+class ContactForm extends HTMLElement {
+  static { vrComponent(this, { tag: 'contact-form', css: import.meta.url }); }
 
-export async function submitForm() {
-  const data = formStore.get();
-  const errors = validate(schema, data);
-  if (errors) { formStore.set({ errors }); return; }
-  formStore.set({ isSubmitting: true, errors: null });
-  try {
-    await fetch("/api/contact", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(data) });
-    formStore.set({ email: "", name: "", isSubmitting: false });
-  } catch (err) {
-    formStore.set({ errors: { form: err.message }, isSubmitting: false });
+  handleSubmit($event, ctx) {
+    $event.preventDefault();
+    const data = { email: store.state.email, name: store.state.name };
+    const errors = {};
+    if (validators.required(data.email)) errors.email = validators.required(data.email);
+    else if (validators.email(data.email)) errors.email = validators.email(data.email);
+    if (validators.required(data.name)) errors.name = validators.required(data.name);
+    if (Object.keys(errors).length) { store.state.errors = errors; return; }
+    store.state.isSubmitting = true;
+    fetch('/api/contact', { method: 'POST', body: JSON.stringify(data) })
+      .then(() => { store.state.email = ''; store.state.name = ''; store.state.errors = null; })
+      .catch((e) => { store.state.errors = { form: e.message }; })
+      .finally(() => { store.state.isSubmitting = false; });
+  }
+
+  handleNameInput($event) { store.state.name = $event.target.value; }
+  handleEmailInput($event) { store.state.email = $event.target.value; }
+
+  context() {
+    return { email: store.state.email, name: store.state.name,
+             errors: store.state.errors, isSubmitting: store.state.isSubmitting };
+  }
+
+  render(ctx) {
+    return html`
+      <form @submit="handleSubmit($event, ctx)" data-part="form" novalidate>
+        <label data-part="field">
+          <span data-part="label">Email</span>
+          <input .value="{{ email }}" @input="handleEmailInput($event)" type="email" data-part="input" />
+          <span data-part="error" aria-live="polite">{{ errors.email }}</span>
+        </label>
+        <label data-part="field">
+          <span data-part="label">Name</span>
+          <input .value="{{ name }}" @input="handleNameInput($event)" data-part="input" />
+          <span data-part="error" aria-live="polite">{{ errors.name }}</span>
+        </label>
+        <button type="submit" data-part="submit" disabled="{{ isSubmitting }}">
+          {{ isSubmitting ? 'Sending...' : 'Send' }}
+        </button>
+        <if condition="errors.form">
+          <p data-part="form-error">{{ errors.form }}</p>
+        </if>
+      </form>
+    `;
   }
 }
 ```
 
-### Step 3 — Form component
-
-```javascript
-import { formStore, submitForm } from "../../store/form.store.js";
-
-const template = document.createElement("template");
-template.innerHTML = `
-  <form data-part="form" novalidate>
-    <label data-part="field"><span data-part="label">Email</span>
-      <input data-part="input" type="email" data-bind="email" />
-      <span data-part="error" data-error="email" aria-live="polite"></span></label>
-    <button data-part="submit" type="submit">Send</button>
-  </form>`;
-
-export class ContactForm extends HTMLElement {
-  connectedCallback() {
-    this.append(template.content.cloneNode(true));
-    this.querySelector("[data-part=form]").addEventListener("submit", (e) => { e.preventDefault(); submitForm(); });
-    this.querySelectorAll("[data-bind]").forEach((el) => el.addEventListener("input", () => formStore.set({ [el.dataset.bind]: el.value })));
-    formStore.subscribe(() => {
-      const s = formStore.get();
-      const btn = this.querySelector("[data-part=submit]");
-      btn.disabled = s.isSubmitting; btn.textContent = s.isSubmitting ? "Sending..." : "Send";
-      this.querySelectorAll("[data-error]").forEach((el) => (el.textContent = ""));
-      if (s.errors) for (const [k, msg] of Object.entries(s.errors)) { const el = this.querySelector(`[data-error="${k}"]`); if (el) el.textContent = msg; }
-    });
-  }
-}
-customElements.define("contact-form", ContactForm);
-```
-
-### Checklist
-
-- [ ] Store-based form state management (no external libs)
-- [ ] Pure JS validation functions
-- [ ] HTML5 novalidate with custom validation
-- [ ] aria-live for accessibility
-- [ ] Submission guarded with isSubmitting
+**Key points:**
+- Use `.value="{{ }}"` + `@input="handler($event)"` for controlled inputs
+- No `model` directive — use `@submit="handler($event)"`
+- Validation errors are part of the store — read via `{{ errors.email }}`
+- Submit state via `{{ isSubmitting }}`
 
 ## See also
 
