@@ -50,3 +50,5 @@ export {
   isRangeBeforeReference,
   normalizeExprValue,
 } from './template-engine/index.js';
+
+export { vrComponent } from './decorator/_vr-component.js';
