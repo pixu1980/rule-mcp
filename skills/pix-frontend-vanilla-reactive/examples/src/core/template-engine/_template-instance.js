@@ -1,7 +1,7 @@
 // ═══════════════════════════════════════════════════════════════════════════════
-//  Template Parser (getTemplate) + TemplateInstance (v2)
+//  Template Parser (getTemplate) + TemplateInstance 
 //  ═══════════════════════════════════════════════════════════════════════════════
-//  v2: ${} removed. @click="fn(args)" added. _scope resolution added.
+//  ${} removed. @click="fn(args)" added. _scope resolution added.
 //  No more __attr_N__ markers, no more <!--val:N-->.
 //  ═══════════════════════════════════════════════════════════════════════════════
 
@@ -427,7 +427,7 @@ export class TemplateInstance {
   /**
    * Update the template with new context and scope.
    *
-   * @param {Array} values - ${} values (always [] in v2)
+   * @param {Array} values - ${} values (always [] — deprecated)
    * @param {object} context - The _context object for {{ }} expressions
    * @param {object} [scope] - The _scope object for @click handler resolution
    */
@@ -460,7 +460,7 @@ export class TemplateInstance {
   }
 
   /**
-   * Update only ${} values (no-op in v2 — ${} removed).
+   * Update only ${} values (no-op — ${} removed).
    */
   update(values) {}
   // (kept for compatibility with any code still passing values)

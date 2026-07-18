@@ -1,7 +1,7 @@
 // ═══════════════════════════════════════════════════════════════════════════════
 //  AttributePart
 //  ═══════════════════════════════════════════════════════════════════════════════
-//  v2: model directive removed. Use @input for two-way binding.
+//   model directive removed. Use @input for two-way binding.
 //  ═══════════════════════════════════════════════════════════════════════════════
 
 import { Part } from './_part.js';

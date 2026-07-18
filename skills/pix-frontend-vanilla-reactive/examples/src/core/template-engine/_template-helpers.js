@@ -1,7 +1,7 @@
 // ═══════════════════════════════════════════════════════════════════════════════
 //  Template Engine: html tag + helpers
 // ═══════════════════════════════════════════════════════════════════════════════
-//  v2: ${} removed. Only {{ }}, <for>, <if>, @event, .prop remain.
+//  ${} removed. Only {{ }}, <for>, <if>, @event, .prop remain.
 //  Directive system (model, repeat) removed — use @input for two-way binding.
 // ═══════════════════════════════════════════════════════════════════════════════
 
