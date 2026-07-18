@@ -61,110 +61,24 @@ tagLabel, tagHref, date, timeAgo, urlencode, sortBy
 The `@` prefix extracts the event name and passes it directly to
 `addEventListener()`. **No whitelist** — any valid DOM event name works.
 
-### Mouse events
+The `@` prefix extracts the event name and passes it directly to
+`addEventListener()`. **No whitelist** — `@click`, `@submit`, `@keydown`,
+`@input`, `@animationend`, `@customEvent`, **any** valid DOM event name works.
 
-| Syntax | Event |
-|--------|-------|
-| `@click="handleSave"` | click (no args → auto-injects `$event`) |
-| `@click="handleSave($event, id)"` | click (explicit event + arg) |
-| `@dblclick="handleEdit(id)"` | double click |
-| `@mousedown="onMouseDown"` | mouse down |
-| `@mouseup="onMouseUp"` | mouse up |
-| `@mousemove="onMouseMove"` | mouse move |
-| `@mouseenter="onEnter"` | mouse enter (no bubble) |
-| `@mouseleave="onLeave"` | mouse leave (no bubble) |
-| `@mouseover="onOver"` | mouse over (bubbles) |
-| `@mouseout="onOut"` | mouse out (bubbles) |
-| `@wheel="onWheel"` | scroll wheel |
-| `@contextmenu="onMenu"` | right click |
+**Examples:**
 
-### Keyboard events
-
-| Syntax | Event |
-|--------|-------|
-| `@keydown="onKeyDown"` | key down |
-| `@keyup="onKeyUp"` | key up |
-| `@keypress="onKeyPress"` | key press (deprecated) |
-
-### Focus events
-
-| Syntax | Event |
-|--------|-------|
-| `@focus="onFocus"` | element focused |
-| `@blur="onBlur"` | element blurred |
-| `@focusin="onFocusIn"` | focus in (bubbles) |
-| `@focusout="onFocusOut"` | focus out (bubbles) |
-
-### Form events
-
-| Syntax | Event |
-|--------|-------|
-| `@input="onInput"` | input value changed |
-| `@change="onChange"` | change committed |
-| `@submit="onSubmit"` | form submitted |
-| `@reset="onReset"` | form reset |
-| `@invalid="onInvalid"` | validation failed |
-| `@select="onSelect"` | text selected |
-
-### Clipboard events
-
-| Syntax | Event |
-|--------|-------|
-| `@copy="onCopy"` | copy |
-| `@paste="onPaste"` | paste |
-| `@cut="onCut"` | cut |
-
-### Drag & Drop events
-
-| Syntax | Event |
-|--------|-------|
-| `@dragstart="onDragStart"` | drag start |
-| `@drag="onDrag"` | dragging |
-| `@dragend="onDragEnd"` | drag end |
-| `@dragenter="onDragEnter"` | drag enters target |
-| `@dragover="onDragOver"` | drag over target |
-| `@dragleave="onDragLeave"` | drag leaves target |
-| `@drop="onDrop"` | dropped |
-
-### Touch events
-
-| Syntax | Event |
-|--------|-------|
-| `@touchstart="onTouchStart"` | touch start |
-| `@touchmove="onTouchMove"` | touch move |
-| `@touchend="onTouchEnd"` | touch end |
-| `@touchcancel="onTouchCancel"` | touch cancel |
-
-### Pointer events
-
-| Syntax | Event |
-|--------|-------|
-| `@pointerdown="onPointerDown"` | pointer down |
-| `@pointerup="onPointerUp"` | pointer up |
-| `@pointermove="onPointerMove"` | pointer move |
-| `@pointerenter="onPointerEnter"` | pointer enter |
-| `@pointerleave="onPointerLeave"` | pointer leave |
-
-### Window / UI events
-
-| Syntax | Event |
-|--------|-------|
-| `@scroll="onScroll"` | scroll |
-| `@resize="onResize"` | resize (window) |
-| `@load="onLoad"` | load |
-| `@error="onError"` | error |
-| `@animationend="onAnimEnd"` | CSS animation end |
-| `@transitionend="onTransEnd"` | CSS transition end |
-
-### Custom events
-
-| Syntax | Event |
-|--------|-------|
-| `@customevent="handler"` | `new CustomEvent('customevent')` |
-
-**Any string** after `@` works. No registration, no whitelist.
+```html
+<button @click="handleSave">Save</button>
+<input @input="onInput($event)" .value="{{ name }}" />
+<form @submit="onSubmit($event, ctx.id)">...</form>
+<div @mousemove="onDrag($event, clientX)">...</div>
+<select @change="onChange($event)">...</select>
+```
 
 ### Name resolution: `_scope`
+
+Every name in `@click="handleSave"` and `{{ TodoList(todos) }}` is resolved
+through a **resolution chain**.
 
 Every name in `@click="handleSave"` and `{{ TodoList(todos) }}` is resolved
 through a **resolution chain**. The lookup order is:
