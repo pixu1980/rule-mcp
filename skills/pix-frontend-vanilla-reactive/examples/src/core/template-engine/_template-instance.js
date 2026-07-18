@@ -12,7 +12,7 @@ import { PropertyPart } from './_property-part.js';
 import { ClickHandlerPart } from './_event-part.js';
 import { ExprPart } from './_expr-part.js';
 import { ForPart } from './_for-part.js';
-import { IfPart } from './_if-part.js';
+import { IfPart, SwitchPart } from './_if-part.js';
 
 // Resolve circular dependency: ChildNodePart needs TemplateInstance
 import { _setTemplateInstance } from './_child-node-part.js';
@@ -75,12 +75,88 @@ export function getTemplate(strings) {
       return `<!--dir:${id}-->`;
     }
   );
+  // Extract <if> blocks with optional <elseif> and <else> branches
   cleanedMarkup = cleanedMarkup.replace(
     /<if\s+([^>]*)>([\s\S]*?)<\/if>/gi,
     (full, attrs, inner) => {
       const id = directiveIdCounter++;
       const condMatch = attrs.match(/condition\s*="([^"]*)"/);
-      directives.push({ kind: 'if', id, condition: condMatch ? condMatch[1] : '', inner });
+      const condition = condMatch ? condMatch[1] : '';
+
+      // Parse inner into branches: <elseif ...>, <else>, rest
+      const branches = [{ condition }];  // first branch = the <if> itself
+      const bodies = [];
+
+      // Split on <elseif condition="..."> and <else>
+      const branchRe = /<elseif\s+([^>]*)>|<else>|<\/if>/gi;
+      let lastIdx = 0;
+      let branchMatch;
+      let branchIdx = 0;
+
+      // Collect re-joined matches with their positions
+      while ((branchMatch = branchRe.exec(full)) !== null) {
+        const segment = inner.slice(lastIdx, branchMatch.index - full.indexOf('>') - 1);
+        bodies.push(segment);
+        lastIdx = branchMatch.index - full.indexOf('>') - 1 + branchMatch[0].length;
+
+        if (branchMatch[0] === '<else>') {
+          branches.push({ condition: null, isElse: true });
+          branchIdx++;
+        } else if (branchMatch[0].startsWith('<elseif')) {
+          const elseCondMatch = branchMatch[1].match(/condition\s*="([^"]*)"/);
+          branches.push({ condition: elseCondMatch ? elseCondMatch[1] : '', isElse: false });
+          branchIdx++;
+        }
+      }
+      // Last body (after last branch marker, before </if>)
+      const remaining = inner.slice(lastIdx);
+      if (remaining.trim()) bodies.push(remaining);
+      else if (branches.length > bodies.length) bodies.push('');
+
+      directives.push({
+        kind: 'if', id,
+        branches,
+        bodies,
+      });
+      return `<!--dir:${id}-->`;
+    }
+  );
+
+  // Extract <switch expr="..."> blocks with <case> and <default>
+  cleanedMarkup = cleanedMarkup.replace(
+    /<switch\s+([^>]*)>([\s\S]*?)<\/switch>/gi,
+    (full, attrs, inner) => {
+      const id = directiveIdCounter++;
+      const exprMatch = attrs.match(/expr\s*="([^"]*)"/);
+      const switchExpr = exprMatch ? exprMatch[1] : '';
+
+      // Parse inner into cases
+      const cases = [];
+      let defaultBody = null;
+      let lastIdx = 0;
+      const caseRe = /<(case)\s+([^>]*)>|<(default)>/gi;
+      let caseMatch;
+
+      while ((caseMatch = caseRe.exec(inner)) !== null) {
+        if (caseMatch[1] === 'case') {
+          const resultMatch = caseMatch[2].match(/result\s*="([^"]*)"/);
+          cases.push({
+            result: resultMatch ? resultMatch[1] : '',
+            body: inner.slice(lastIdx, caseMatch.index),
+          });
+          lastIdx = caseMatch.index + caseMatch[0].length;
+        } else if (caseMatch[3] === 'default') {
+          defaultBody = inner.slice(lastIdx, caseMatch.index);
+          lastIdx = caseMatch.index + caseMatch[0].length;
+        }
+      }
+
+      directives.push({
+        kind: 'switch', id,
+        expr: switchExpr,
+        cases,
+        defaultBody,
+      });
       return `<!--dir:${id}-->`;
     }
   );
@@ -160,18 +236,28 @@ export function getTemplate(strings) {
         const dirId = Number(dm[1]);
         const dir = directives.find(d => d.id === dirId);
         if (dir) {
-          descriptors.push({
-            kind: dir.kind, index: dirId,
+          const base = {
+            kind: dir.kind,
+            index: dirId,
             path: getNodePath(walkNode, template.content),
-            itemVar: dir.each
+          };
+          if (dir.kind === 'for') {
+            base.itemVar = dir.each
               ? (dir.each.match(/^\s*([a-zA-Z_$][\w$]*)\s+in\s+/)?.[1] || 'item')
-              : 'item',
-            itemsExprStr: dir.each
+              : 'item';
+            base.itemsExprStr = dir.each
               ? dir.each.replace(/^\s*[a-zA-Z_$][\w$]*\s+in\s+/, '').trim()
-              : '',
-            conditionStr: dir.condition || '',
-            innerTemplate: dir.inner || '',
-          });
+              : '';
+            base.innerTemplate = dir.inner || '';
+          } else if (dir.kind === 'if') {
+            base.branches = dir.branches || [];
+            base.bodies = dir.bodies || [];
+          } else if (dir.kind === 'switch') {
+            base.expr = dir.expr || '';
+            base.cases = dir.cases || [];
+            base.defaultBody = dir.defaultBody || null;
+          }
+          descriptors.push(base);
         }
         continue;
       }
@@ -233,6 +319,7 @@ export class TemplateInstance {
     this.exprParts = [];
     this.forParts = [];
     this.ifParts = [];
+    this.switchParts = [];
     this.clickParts = [];     // ClickHandlerPart instances
     this._scope = null;
     this._context = null;
@@ -306,10 +393,30 @@ export class TemplateInstance {
           const s = document.createComment(`if:${descriptor.index}:s`);
           const e = document.createComment(`if:${descriptor.index}:e`);
           if (node) node.replaceWith(s, e);
+          // Parse branches: [{ condition: 'expr' | null(isElse) }, ...]
+          const branches = (descriptor.branches || []).map(b => ({
+            condition: b.condition ? parseExpression(b.condition) : null,
+            isElse: !!b.isElse,
+          }));
           this.ifParts.push(new IfPart(
             s, e,
-            parseExpression(descriptor.conditionStr || ''),
-            descriptor.innerTemplate || '',
+            branches,
+            descriptor.bodies || [],
+          ));
+          break;
+        }
+        case 'switch': {
+          const s = document.createComment(`switch:${descriptor.index}:s`);
+          const e = document.createComment(`switch:${descriptor.index}:e`);
+          if (node) node.replaceWith(s, e);
+          this.switchParts.push(new SwitchPart(
+            s, e,
+            parseExpression(descriptor.expr || ''),
+            (descriptor.cases || []).map(c => ({
+              result: c.result,
+              body: c.body || '',
+            })),
+            descriptor.defaultBody || '',
           ));
           break;
         }
@@ -340,9 +447,10 @@ export class TemplateInstance {
       }
     }
 
-    // 2. Init <for> / <if>
+    // 2. Init <for> / <if> / <switch>
     for (const fp of this.forParts) fp.init(context);
     for (const ip of this.ifParts) ip.init(context);
+    for (const sp of this.switchParts) sp.init(context);
 
     // 3. Update @click handlers: resolve args + bind
     for (const cp of this.clickParts) {
