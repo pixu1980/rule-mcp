@@ -44,6 +44,7 @@ export {
   ExprPart,
   ForPart,
   IfPart,
+  SwitchPart,
   ChildNodePart,
   clearRange,
   moveRangeBefore,

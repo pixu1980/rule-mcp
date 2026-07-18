@@ -15,6 +15,7 @@ export {
   ExprPart,
   ForPart,
   IfPart,
+  SwitchPart,
   ChildNodePart,
 } from './_parts.js';
 export { clearRange, moveRangeBefore, isRangeBeforeReference, normalizeExprValue, inferModelProperty } from './_range.js';
