@@ -38,16 +38,21 @@ tagLabel, tagHref, date, timeAgo, urlencode, sortBy
 
 ## 2. Expression Parsing (inside `{{ }}`)
 
+**Important:** `{{ }}` expressions resolve variable names against `result._scope`
+FIRST, then `result._context` as fallback. See §3 for the full resolution chain.
+JS closure scope is NOT accessible from template strings — JavaScript provides
+no API to enumerate closure variables at runtime.
+
 | Form | Example | Resolves to |
 |------|---------|-------------|
-| Dot-path variable | `{{ todo.title }}` | `ctx.todo.title` |
-| Bracket index | `{{ items[0].name }}` | `ctx.items[0].name` |
+| Dot-path variable | `{{ todo.title }}` | `scope.todo.title` → `ctx.todo.title` |
+| Bracket index | `{{ items[0].name }}` | `scope.items[0].name` → `ctx.items[0].name` |
 | Filter pipe | `{{ val \| upper }}` | apply filter |
 | Filter chain | `{{ val \| upper \| slug }}` | chained filters |
 | Filter with arg | `{{ val \| truncate:20 }}` | `filter(val, 20)` |
 | Filter named arg | `{{ val \| join:', ' }}` | `filter(val, ', ')` |
-| **Function call** (v2) | `{{ TodoList(todos) }}` | `ctx.TodoList(ctx.todos)` |
-| Fn call dot-arg | `{{ Card(todo.item) }}` | `ctx.Card(ctx.todo.item)` |
+| **Function call** (v2) | `{{ TodoList(todos) }}` | `scope.TodoList(scope.todos)` → `ctx.TodoList(ctx.todos)` |
+| Fn call dot-arg | `{{ Card(todo.item) }}` | `scope.Card(scope.todo.item)` → `ctx.Card(ctx.todo.item)` |
 | Raw output | `{{ html \| raw }}` | Unescaped textContent |
 
 ---
@@ -59,11 +64,8 @@ tagLabel, tagHref, date, timeAgo, urlencode, sortBy
 ```
 
 The `@` prefix extracts the event name and passes it directly to
-`addEventListener()`. **No whitelist** — any valid DOM event name works.
-
-The `@` prefix extracts the event name and passes it directly to
-`addEventListener()`. **No whitelist** — `@click`, `@submit`, `@keydown`,
-`@input`, `@animationend`, `@customEvent`, **any** valid DOM event name works.
+`addEventListener()`. **No whitelist** — `@click`, `@input`, `@animationend`,
+`@customEvent`, **any** valid DOM event name works.
 
 **Examples:**
 
@@ -71,7 +73,6 @@ The `@` prefix extracts the event name and passes it directly to
 <button @click="handleSave">Save</button>
 <input @input="onInput($event)" .value="{{ name }}" />
 <form @submit="onSubmit($event, ctx.id)">...</form>
-<div @mousemove="onDrag($event, clientX)">...</div>
 <select @change="onChange($event)">...</select>
 ```
 
@@ -80,32 +81,28 @@ The `@` prefix extracts the event name and passes it directly to
 Every name in `@click="handleSave"` and `{{ TodoList(todos) }}` is resolved
 through a **resolution chain**.
 
-Every name in `@click="handleSave"` and `{{ TodoList(todos) }}` is resolved
-through a **resolution chain**. The lookup order is:
+**Critical: JS closures are NOT visible to the template engine.**
+JavaScript provides no API to inspect closure scope at runtime.
+When you write `const fn = (id) => ...` and reference `fn` in a template,
+the engine receives only the **string** `"fn"` — not the function reference.
+You MUST pass functions explicitly via `result._scope`.
+
+Lookup order:
 
 ```
-1. result._scope[name]       ← explicit scope (Pattern B)
-2. result._context[name]     ← data context (fallback for any pattern)
+1. result._scope[name]       ← explicit (Pattern B: one line)
+2. result._context[name]     ← data context (fallback)
 3. component instance[name]  ← CE methods (Pattern A/C, auto by vrComponent)
 ```
 
-This means:
-- **Pattern A/C** → `vrComponent` sets `result._scope = this` automatically.
-  Methods like `handleSave() { ... }` are found in step 3 (or 1 if `_scope` is set).
-- **Pattern B** → one explicit line:
-  ```js
-  const handleSave = (id) => store.del(id);
-  function TodoList(ctx) {
-    const result = html`<button @click="handleSave(todo.id)">Save</button>`;
-    result._scope = { handleSave };   // ← explicit, one line
-    return result;
-  }
-  ```
-- **Pattern C** → same as A: `vrComponent` auto-sets `_scope = this`.
-- **Fallback** → if not found in any scope, resolved from `_context`.
-  ```js
-  ctx.handleSave = (id) => store.del(id);  // works but less idiomatic
-  ```
+**Pattern A/C** → `vrComponent` sets `_scope = this` automatically.
+Component methods resolve in step 3 (or 1 if `_scope` is set).
+No extra work needed.
+
+**Pattern B** → one explicit line:
+```js
+result._scope = { handleSave, TodoList };   // ← explicit, REQUIRED
+```
 
 ### Handler resolution rules
 
@@ -117,7 +114,7 @@ This means:
 | `@click="handleSave(id, ctx.name)"` | `scope.handleSave(resolvedId, resolvedName)` |
 
 **Keywords:**
-- `$event` → native DOM Event (reserved, evaluated at click-time)
+- `$event` → native DOM Event (click-time, reserved)
 - `id` → resolved from merged scope at render-time (eager)
 - Name resolved through: `_scope` → `_context` → component instance
 
@@ -181,40 +178,81 @@ Condition expression is evaluated against the merged context
 
 ## 7. Component Composition (v2 — via `{{ FnName(args) }}`)
 
+`{{ FnName(args) }}` calls a **function** that returns a `TemplateResult`.
+The function is resolved through the standard scope chain (§3).
+
+### Requirements
+
+The name MUST resolve to a **plain function** that:
+- Takes data as argument(s)
+- Returns `{ kind: 'template-result', strings, values }` (TypeScript: `TemplateResult`)
+
 ```html
-{{ ComponentName(args) }}
+{{ TodoList(todos) }}         ← calls scope.TodoList(scope.todos)
+                                TodoList MUST return a TemplateResult
 ```
 
-| Syntax | Example |
-|--------|---------|
-| `{{ TodoList(todos) }}` | Renders a Pattern B component inline |
-| `{{ ContactCard(contact) }}` | Renders another component with data |
+### What works
 
-The component function **must** be resolvable through the standard
-scope resolution chain (same as `@click`):
+| Form | Works? | Reason |
+|------|--------|--------|
+| `{{ PatternB(todos) }}` | ✅ | Pattern B returns `TemplateResult` |
+| `{{ wrapCE(todo) }}` wrapping `<my-ce>` | ✅ | Factory fn returns `html\`\`` containing the tag |
+| `{{ todoItem.data }}` | ❌ | `todoItem` is a CE class, calling it returns a DOM element, not `TemplateResult` |
+| `<my-ce></my-ce>` in template | ✅ | Native CE lifecycle via browser registry |
 
+### Custom Element composition (CEs in template markup)
+
+Custom Elements are composed via HTML tags, **not** `{{ }}`:
+
+```html
+<for each="todo in todos">
+  <todo-item data-id="{{ todo.id }}"></todo-item>
+</for>
 ```
-1. result._scope[name]       ← explicit scope
-2. result._context[name]     ← data context
-3. component instance[name]  ← CE methods (auto by vrComponent)
+
+The browser's Custom Element registry upgrades `<todo-item>` automatically.
+No function call needed.
+
+### Wrapping a CE for `{{ }}` composition
+
+To use a CE inside `{{ }}`, wrap it in a factory function:
+
+```js
+function TodoItemWrap(todo) {
+  return html`<todo-item data-id="{{ todo.id }}"></todo-item>`;
+}
+// Then: {{ TodoItemWrap(todo) }}
 ```
 
-Typical usage:
+### The resolution limit: closures are NOT accessible
 
-- **Pattern A**: method on the class → auto-resolved by `vrComponent`
-- **Pattern B**: `result._scope = { TodoList, handleSave }`
-- **Pattern C**: same as A, or passed via `_scope`/`_context`
+JavaScript provides **no API** to inspect closure scope at runtime.
+When `html\`\`` is evaluated, only the template strings are available —
+the function references in the surrounding scope are invisible to the engine.
 
-The function receives the resolved args and **must** return a
-`TemplateResult` (`{ kind: 'template-result', strings, values }`).
-The `ExprPart` renders this as a nested template.
+You MUST pass functions explicitly via `result._scope`:
 
-### Nesting works:
+```js
+const handleSave = (id) => store.del(id);
+
+function TodoList(ctx) {
+  const result = html`<button @click="handleSave(todo.id)">Save</button>`;
+  result._scope = { handleSave };   // ← explicit, one line, REQUIRED
+  result._context = ctx;
+  return result;
+}
+```
+
+For **Pattern A/C**, `vrComponent` auto-sets `_scope = this`, so component
+methods are resolved automatically.
+
+### Nesting example
 
 ```
 Pattern C (external .template.html)
-  └── {{ PatternB(ctx) }}    ← fn call in {{ }}
-        └── <pattern-a-ce>   ← native CE, independent lifecycle
+  └── {{ PatternB(todos) }}    ← fn call, resolved from _scope
+        └── <pattern-a-ce>     ← native CE, independent lifecycle
 ```
 
 ---
