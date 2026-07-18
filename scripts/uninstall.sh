@@ -378,6 +378,70 @@ if [[ -f "$HOME_DIR/.pi/agent/AGENTS.md" ]]; then
 fi
 
 # ─────────────────────────────────────────────────────────────────────────────
+# PHASE 2b: Agent Command Files (prompts, workflows, commands)
+# ─────────────────────────────────────────────────────────────────────────────
+header "Phase 2b: Agent Command Files"
+
+COMMAND_NAMES=(
+  "pix-galaxy-mcp"
+  "pix-architect"
+  "pix-handoff"
+  "pix-grill"
+  "pix-tdd"
+  "pix-adr"
+  "pix-fix"
+  "pix-check"
+)
+
+remove_command_files() {
+  local label="$1"
+  local pattern="$2"
+
+  local found=0
+  for cmd in "${COMMAND_NAMES[@]}"; do
+    local file="${pattern/\{cmd\}/$cmd}"
+    if [[ -f "$file" ]]; then
+      if [[ "$DRY_RUN" == "true" ]]; then
+        sub "[dry-run] Would remove: ${file}"
+      else
+        rm -f "$file"
+      fi
+      found=$((found + 1))
+    fi
+  done
+
+  if [[ "$DRY_RUN" != "true" && $found -gt 0 ]]; then
+    ok "${label}: removed ${found} command file(s)"
+  elif [[ $found -eq 0 ]]; then
+    sub "${label}: no command files found"
+  else
+    sub "[dry-run] ${label}: would remove ${found} file(s)"
+  fi
+}
+
+remove_command_files "Pi" "$HOME_DIR/.pi/agent/prompts/{cmd}.md"
+remove_command_files "Claude Code" "$HOME_DIR/.claude/commands/{cmd}.md"
+remove_command_files "Gemini CLI" "$HOME_DIR/.gemini/commands/{cmd}.toml"
+
+if [[ -d "$HOME_DIR/.codeium/windsurf" ]]; then
+  remove_command_files "Windsurf global" "$HOME_DIR/.codeium/windsurf/global_workflows/{cmd}.md"
+fi
+if [[ -d "$HOME_DIR/.config/windsurf" ]]; then
+  remove_command_files "Windsurf global" "$HOME_DIR/.config/windsurf/global_workflows/{cmd}.md"
+fi
+if [[ -d "$HOME_DIR/.cline" ]]; then
+  remove_command_files "Cline global" "$HOME_DIR/.cline/data/workflows/{cmd}.md"
+fi
+if [[ -d "$HOME_DIR/.config/cline" ]]; then
+  remove_command_files "Cline global" "$HOME_DIR/.config/cline/data/workflows/{cmd}.md"
+fi
+
+CWD="$(pwd 2>/dev/null || echo '.')"
+remove_command_files "Cursor project" "${CWD}/.cursor/commands/{cmd}.md"
+remove_command_files "Windsurf project" "${CWD}/.windsurf/workflows/{cmd}.md"
+remove_command_files "Cline project" "${CWD}/.clinerules/workflows/{cmd}.md"
+
+# ─────────────────────────────────────────────────────────────────────────────
 # PHASE 3: IDE Configurations
 # ─────────────────────────────────────────────────────────────────────────────
 header "Phase 3: IDE Configurations"

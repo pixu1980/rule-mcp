@@ -601,6 +601,23 @@ Available pix-galaxy-mcp tools:
 fi
 
 # ─────────────────────────────────────────────────────────────────────────────
+# PHASE 6b: Agent Commands (prompt templates, workflows, etc.)
+# ─────────────────────────────────────────────────────────────────────────────
+header "Phase 6b: Agent Commands"
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" \&\& pwd)"
+if [[ -f "${SCRIPT_DIR}/install-agent-commands.sh" ]]; then
+  if [[ "$DRY_RUN" == "true" ]]; then
+    sub "[dry-run] Would run: ${SCRIPT_DIR}/install-agent-commands.sh"
+  else
+    "${SCRIPT_DIR}/install-agent-commands.sh" ${FORCE:+--force} ${DRY_RUN:+--dry-run}
+    ok "Agent commands installed"
+  fi
+else
+  sub "install-agent-commands.sh not found, skipping"
+fi
+
+# ─────────────────────────────────────────────────────────────────────────────
 # PHASE 7: Git Hooks (optional)
 # ─────────────────────────────────────────────────────────────────────────────
 header "Phase 7: Git Integration"

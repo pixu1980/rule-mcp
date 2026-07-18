@@ -498,6 +498,138 @@ export const SVELTE_GUARDRAILS = [
   },
 ];
 
+// ─── Vanilla-Reactive guardrails (pix-frontend-vanilla-reactive) ───
+
+export const VANILLA_REACTIVE_GUARDRAILS = [
+  // Pattern A: Custom Element + html\`\`
+  {
+    id: "vanilla-ce-extends",
+    label: "Custom Element extends HTMLElement",
+    description: "Pattern A components must extend HTMLElement with a static {} block for customElements.define().",
+    check: (code) => {
+      const extendsHtmlelement = /extends\s+HTMLElement/.test(code);
+      const hasStaticBlock = /static\s*\{/.test(code) && /customElements\.define\(/.test(code);
+      const isClass = /^export\s+class\s/.test(code.trim()) || /^class\s/.test(code.trim());
+      if (!isClass) return { pass: true, note: "Not a class — skipping Pattern A check" };
+      if (extendsHtmlelement && hasStaticBlock) return { pass: true };
+      const failures = [];
+      if (!extendsHtmlelement) failures.push("Must extend HTMLElement");
+      if (!hasStaticBlock) failures.push("Must have static {} block with customElements.define()");
+      return { pass: false, failCount: failures.length, detail: failures, suggestion: "Add: static { customElements.define('my-component', this); }" };
+    },
+  },
+  {
+    id: "vanilla-html-template",
+    label: "Component uses html\`\` tagged template",
+    description: "Pattern A and B components must return html\`\` (TemplateResult) for their template.",
+    check: (code) => {
+      const usesHtml = /html`/.test(code);
+      const isFn = /^export\s+function\s/.test(code.trim()) || /^function\s/.test(code.trim()) || /=>\s*\{/.test(code);
+      const isCe = /extends\s+HTMLElement/.test(code);
+      if (!isFn && !isCe) return { pass: true, note: "Not a component \u2014 skipping" };
+      if (!usesHtml) return { pass: false, failCount: 1, detail: ["No html\`\` found"], suggestion: "Use html\`\` tagged template for the template." };
+      return { pass: true };
+    },
+  },
+  {
+    id: "vanilla-mount-guard",
+    label: "connectedCallback has re-mount guard",
+    description: "Pattern A connectedCallback must check _isMounted to prevent double-mounting.",
+    check: (code) => {
+      if (!code.includes("connectedCallback")) return { pass: true, note: "No connectedCallback — skipping" };
+      const hasGuard = /_isMounted/.test(code) || /_pixBound/.test(code) || /bindElement/.test(code);
+      if (hasGuard) return { pass: true };
+      return { pass: false, failCount: 1, detail: ["No re-mount guard found"], suggestion: "Add: if (this._isMounted) return; this._isMounted = true; at start of connectedCallback()." };
+    },
+  },
+  {
+    id: "vanilla-adopted-stylesheets",
+    label: "CSS via adoptedStyleSheets in static {} block",
+    description: "Pattern CEs must load external CSS via fetch(\`.css\`).text() → CSSStyleSheet.replaceSync() → adoptedStyleSheets.",
+    check: (code) => {
+      const hasCssFetch = /CSSStyleSheet/.test(code) && /replaceSync/.test(code) && /adoptedStyleSheets/.test(code);
+      const isCe = /extends\s+HTMLElement/.test(code);
+      if (!isCe) return { pass: true, note: "Not a CE — skipping" };
+      if (hasCssFetch) return { pass: true };
+      const noFetch = /\.css['"]/.test(code) && !code.includes("CSSStyleSheet");
+      if (noFetch) return { pass: false, failCount: 1, detail: ["CSS file referenced but not loaded via adoptedStyleSheets"], suggestion: "Use: const cssText = await (await fetch(new URL('./_Comp.css', import.meta.url))).text(); const sheet = new CSSStyleSheet(); sheet.replaceSync(cssText);" };
+      return { pass: true, note: "No CSS detected — skipping" };
+    },
+  },
+
+  // Pattern B: Functional Component
+  {
+    id: "vanilla-fn-component",
+    label: "Functional component is a plain function",
+    description: "Pattern B components must be plain functions, NOT classes extending HTMLElement.",
+    check: (code) => {
+      const isPlainFn = /^export\s+function\s/.test(code.trim()) || /^function\s/.test(code.trim()) || /^export\s+const\s/.test(code.trim());
+      const isClass = /extends\s+HTMLElement/.test(code);
+      if (isClass) return { pass: true, note: "This is a Pattern A (CE). Pattern B check not applicable." };
+      if (!isPlainFn) return { pass: true, note: "Not a Pattern B component — skipping" };
+      const returnsHtml = /return\s+html`/.test(code);
+      if (!returnsHtml) return { pass: false, failCount: 1, detail: ["Function does not return html\`\`"], suggestion: "Add: return html\`...\`; at the end of the function." };
+      return { pass: true };
+    },
+  },
+  {
+    id: "vanilla-fn-no-register",
+    label: "Functional component does NOT call customElements.define",
+    description: "Pattern B functions must NOT register themselves as custom elements. That is the parent CE's responsibility.",
+    check: (code) => {
+      const isPlainFn = /^export\s+function\s/.test(code.trim()) || /^function\s/.test(code.trim());
+      if (!isPlainFn) return { pass: true, note: "Not a functional component — skipping" };
+      const hasDefine = /customElements\.define\(/.test(code);
+      if (hasDefine) return { pass: false, failCount: 1, detail: ["Functional component calls customElements.define()"], suggestion: "Remove customElements.define() from functional components. Register in the parent CE's static {} block." };
+      return { pass: true };
+    },
+  },
+
+  // Pattern C: External HTML Template
+  {
+    id: "vanilla-no-dollar-braces",
+    label: "External templates do NOT contain ${\} closures",
+    description: ".template.html files can only use {{ }}, <for>, <if>, and @action. No ${\} closures.",
+    check: (code, context) => {
+      const isTemplate = context?.fileName?.endsWith(".template.html") || false;
+      const hasDollarBraces = /\$\{[^}]+\}/.test(code);
+      if (!isTemplate && hasDollarBraces) return { pass: true, note: "Not a .template.html file — ${\} is valid here" };
+      if (isTemplate && hasDollarBraces) return { pass: false, failCount: 1, detail: ["${\} found in external template"], suggestion: "Replace ${\} closures with @action=\"name:expr\" directives and use {{ expr }} for data expressions." };
+      return { pass: true };
+    },
+  },
+  {
+    id: "vanilla-template-data-part",
+    label: "External templates use data-part selectors",
+    description: ".template.html files must use data-part=\"role\" attributes, not CSS class names.",
+    check: (code, context) => {
+      const isTemplate = context?.fileName?.endsWith(".template.html") || false;
+      if (!isTemplate) return { pass: true, note: "Not a template file — skipping" };
+      const classAttrs = code.match(/class\s*=\s*["'][^"']*["']/g);
+      const dataPart = code.match(/data-part\s*=\s*["']/g);
+      if (classAttrs && (!dataPart || classAttrs.length > dataPart.length)) {
+        return { pass: false, failCount: classAttrs.length, detail: (classAttrs || []).slice(0, 5), suggestion: "Replace class=\"...\" with data-part=\"role\" attributes." };
+      }
+      return { pass: true };
+    },
+  },
+  {
+    id: "vanilla-template-load",
+    label: "Template loaded via fetch or bundle-text",
+    description: "Pattern C templates must be loaded via fetch() at runtime or bundle-text: import at build time.",
+    check: (code) => {
+      const hasFetch = /fetch\(/.test(code) && /\.template\.html/.test(code);
+      const hasBundleImport = /bundle-text:/.test(code) && /\.template\.html/.test(code);
+      const isCe = /extends\s+HTMLElement/.test(code);
+      if (!isCe) return { pass: true, note: "Not a CE — skipping" };
+      const hasHtmlFromString = /htmlFromString/.test(code);
+      if (hasHtmlFromString && (hasFetch || hasBundleImport)) return { pass: true };
+      if (hasHtmlFromString && !hasFetch && !hasBundleImport) return { pass: false, failCount: 1, detail: ["htmlFromString() used but no template file loaded"], suggestion: "Add: const templateStr = await (await fetch(new URL('./_Comp.template.html', import.meta.url))).text();" };
+      return { pass: true, note: "No Pattern C detection needed — skipping" };
+    },
+  },
+];
+
 export const FRAMEWORK_GUARDRAILS = {
   react: [...REACT_GUARDRAILS, ...FILE_TREE_GUARDRAILS],
   vue: [...VUE_GUARDRAILS, ...FILE_TREE_GUARDRAILS],
@@ -507,6 +639,7 @@ export const FRAMEWORK_GUARDRAILS = {
   astro: [...FILE_TREE_GUARDRAILS],
   architect: [...FILE_TREE_GUARDRAILS],
   vanilla: [...FILE_TREE_GUARDRAILS],
+  "vanilla-reactive": [...VANILLA_REACTIVE_GUARDRAILS, ...FILE_TREE_GUARDRAILS],
 };
 
 // ─── Scaffold guardrails (check project config files exist) ───
