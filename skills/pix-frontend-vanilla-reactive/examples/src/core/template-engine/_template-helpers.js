@@ -1,10 +1,24 @@
 // ═══════════════════════════════════════════════════════════════════════════════
-//  PART 3 — Template Engine: Directive system + html tag
+//  Template Engine: html tag + helpers
+// ═══════════════════════════════════════════════════════════════════════════════
+//  v2: ${} removed. Only {{ }}, <for>, <if>, @event, .prop remain.
+//  Directive system (model, repeat) removed — use @input for two-way binding.
 // ═══════════════════════════════════════════════════════════════════════════════
 
-const directiveBrand = Symbol('directive');
-export function directive(name, payload) { return { [directiveBrand]: true, name, payload }; }
-export function isDirective(value, name) { return Boolean(value?.[directiveBrand] && (!name || value.name === name)); }
-export function html(strings, ...values) { return { kind: 'template-result', strings, values }; }
-export function model(config) { return directive('model', config); }
-export function repeat(items, key, renderItem) { return directive('repeat', { items, key, renderItem }); }
+/**
+ * html tagged template (or string) → TemplateResult.
+ *
+ * As tagged template:
+ *   html`<h1>{{ title }}</h1>`
+ *   → { kind: 'template-result', strings: ['<h1>{{ title }}</h1>'], values: [] }
+ *
+ * As regular function (Pattern C, from .template.html string):
+ *   html('<h1>{{ title }}</h1>')
+ *   → { kind: 'template-result', strings: ['<h1>{{ title }}</h1>'], values: [] }
+ */
+export function html(strings, ...values) {
+  if (typeof strings === 'string') {
+    return { kind: 'template-result', strings: [strings], values: [] };
+  }
+  return { kind: 'template-result', strings, values };
+}

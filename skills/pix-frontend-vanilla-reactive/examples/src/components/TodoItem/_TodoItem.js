@@ -1,10 +1,10 @@
 // ═══════════════════════════════════════════════════════════════════════════════
-//  Component: TodoItem
-//  ── Custom element class with static init + external CSS via adoptedStyleSheets
+//  Component: TodoItem (v2)
+//  ── Pattern A: Custom Element with static render using html``
 //  ═══════════════════════════════════════════════════════════════════════════════
 
-import { html, model } from '../../core/index.js';
-import { appStore, tickState } from '../../helpers/shared/index.js';
+import { html } from '../../core/index.js';
+import { appStore } from '../../helpers/shared/index.js';
 import { toggleTodo, updateTodoTitle, deleteTodo } from '../../helpers/actions/index.js';
 
 const cssText = await (
@@ -20,38 +20,18 @@ export class TodoItem extends HTMLElement {
   }
 
   static render(todo) {
-    const completedModel = model({
-      signal: tickState,
-      get: () => {
-        const t = appStore.state.todos.find((x) => x.id === todo.id);
-        return t ? t.completed : false;
-      },
-      set: () => toggleTodo(todo.id),
-      prop: 'checked',
-      event: 'change',
-    });
-
-    const titleModel = model({
-      signal: tickState,
-      get: () => {
-        const t = appStore.state.todos.find((x) => x.id === todo.id);
-        return t ? t.title : '';
-      },
-      set: (v) => updateTodoTitle(todo.id, v),
-    });
-
     const result = html`
-      <article data-part="todo-item" data-state-completed="${todo.completed ? 'done' : ''}">
-        <input type="checkbox" model=${completedModel} />
-        <input model=${titleModel} data-part="todo-title" />
-        <span data-part="tag">{{ todo.title | upper | truncate:10 }}</span>
-        <button type="button" data-part="delete-btn" @click=${() => deleteTodo(todo.id)}>✕</button>
+      <article data-part="todo-item" data-state-completed="{{ todo.completed }}">
+        <input type="checkbox" data-part="toggle" .checked="{{ todo.completed }}" />
+        <span data-part="title">{{ todo.title | upper | truncate:10 }}</span>
+        <button type="button" data-part="delete-btn" @click="deleteTodo(todo.id)">✕</button>
         <if condition="todo.completed">
           <span data-part="badge">✓ DONE</span>
         </if>
       </article>
     `;
     result._context = { todo };
+    result._scope = { toggleTodo, updateTodoTitle, deleteTodo };
     return result;
   }
 
@@ -61,6 +41,7 @@ export class TodoItem extends HTMLElement {
     if (!todo) return;
     const result = TodoItem.render(todo);
     result._context = { todo };
+    result._scope = { toggleTodo, updateTodoTitle, deleteTodo };
     import('../../core/template-engine/_template.js').then(({ render }) => {
       render(result, this);
     });

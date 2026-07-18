@@ -29,10 +29,6 @@ export {
 export {
   html,
   render,
-  model,
-  repeat,
-  directive,
-  isDirective,
   registerFilter,
   FILTERS,
   parseExpression,
@@ -44,7 +40,7 @@ export {
   Part,
   AttributePart,
   PropertyPart,
-  EventPart,
+  ClickHandlerPart,
   ExprPart,
   ForPart,
   IfPart,
@@ -53,5 +49,4 @@ export {
   moveRangeBefore,
   isRangeBeforeReference,
   normalizeExprValue,
-  inferModelProperty,
 } from './template-engine/index.js';

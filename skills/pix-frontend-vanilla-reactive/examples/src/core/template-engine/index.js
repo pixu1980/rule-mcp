@@ -2,7 +2,7 @@
 //  Template Engine public API
 // ═══════════════════════════════════════════════════════════════════════════════
 
-export { html, directive, model, repeat, isDirective } from './_template-helpers.js';
+export { html } from './_template-helpers.js';
 export { render } from './_template.js';
 export { registerFilter, FILTERS, utilSlug } from './_filters.js';
 export { parseExpression, evaluateExpression, getFromPath, parseArg } from './_expression-parser.js';
@@ -11,7 +11,7 @@ export {
   Part,
   AttributePart,
   PropertyPart,
-  EventPart,
+  ClickHandlerPart,
   ExprPart,
   ForPart,
   IfPart,
