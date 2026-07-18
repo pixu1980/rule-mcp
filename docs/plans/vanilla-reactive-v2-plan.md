@@ -14,9 +14,11 @@
 | Expression syntax | ONLY `{{ expr \| filter }}` — remove `${}`, remove `{{{ }}}` |
 | `\| raw` filter | The escape hatch for unescaped HTML — document prominently |
 | Events | `@click="handlerName(args)"` — NO `@click=${fn}` |
-| Handler resolution | `_handlers` object alongside `_context` |
+| Handler resolution | `_scope` object (Pattern B explicit) → `_context` (fallback) → component instance (auto) |
 | `$event` | Reserved keyword — injects native DOM event at click time |
-| Composition | `{{ Component(ctx) }}` — TemplateResult returned from `{{ }}` |
+| Composition (fn) | `{{ FnName(args) }}` — calls fn that returns `TemplateResult` |
+| Composition (CE) | `<my-component>` HTML tag in template |
+| Scope resolution | `_scope` (explicit) → `_context` (fallback) → component instance (auto) |
 | `.value="{{ }}"` | Property binding via `{{ }}` (auto-detected) |
 | Decorator | `vrComponent(this, { tag, css, render, context })` in `static {}` |
 | CSS loading | Convention (same path), explicit path, explicit sheet — all 3 |
@@ -45,7 +47,7 @@
                         css: meta.url,          </ul>
                         render(ctx) {         `;
                       }                        }
-                    })                          ─── _handlers ───
+                    })                          ─── _scope ───
                     }                           { handleSave,
                       handleSave(id) {           handleDelete,
                         store.del(id);           handleToggle }
@@ -77,7 +79,7 @@
                     │                                         │
                     │  ExprPart  →  textContent (escaped)      │
                     │    OR       →  TemplateResult (nested)   │
-                    │  EventPart →  click → _handlers.fn(args) │
+                    │  EventPart →  click → _scope.fn(args) │
                     │  ForPart   →  keyed reconciliation       │
                     │  IfPart    →  conditional show/hide      │
                     │  PropPart  →  el[prop] = value           │
@@ -101,7 +103,7 @@
 | 0.4 | **Handle `$event` keyword** | `@click="handleSave($event, id)"` → args = `['$event', 'id']` → `$event` is replaced with actual DOM event at click time. |
 | 0.5 | **Add `.value="{{ }}"` property detection** | In attribute walker: if `rawName.startsWith('.')` AND value contains `{{ }}` → create `PropertyPart` instead of `AttributePart`. |
 | 0.6 | **Update `TemplateInstance.updateWithContext()`** | Remove `${}` values loop (it was `this.parts`). Keep: `exprParts` ({{ }}), `forParts`, `ifParts`, `eventParts` (new `@click`). |
-| 0.7 | **Add `ClickHandlerPart` for `@click`** | Constructor: `(el, handlerName, argExprs, renderTime)`. Stores: function reference from `_handlers`, resolved args. |
+| 0.7 | **Add `ClickHandlerPart` for `@click`** | Constructor: `(el, handlerName, argExprs, renderTime)`. Stores: function reference from `_scope`, resolved args. |
 | 0.8 | **Update expression parser for fn calls** | `parseExpression()` must detect `FuncName(args)` before `\|`. Return `{ kind: 'fn', name: 'FuncName', args: [...] }`. `evaluateExpression()` resolves name from context, evaluates args, calls fn. |
 | 0.9 | **Update `ExprPart` for composition** | `setValue()` → if evaluated value is `{ kind: 'template-result' }`, render it via nested `TemplateInstance` (like old `ChildNodePart`). Otherwise: escaped textContent. |
 
@@ -115,8 +117,8 @@
 |------|------|---------|
 | 1.1 | **`htmlFromString()` → rename to `html()`** | With `${}` removed, the single-export `html` now works for both tagged templates and string input. `html(str)` returns `{ kind: 'template-result', strings: [str], values: [] }`. `html\`...\`` still works as tagged template. |
 | 1.2 | **Remove old `_template-helpers.js` exports** | Remove `directive`, `model`, `repeat`, `isDirective` — they were for `${}` only. Keep only `html`, `registerFilter`, `FILTERS` in the template helper. |
-| 1.3 | **Add `_handlers` support to render pipeline** | `render(result, container, context, handlers)` — accepts optional `handlers` object. TemplateInstance stores it. EventParts use it. |
-| 1.4 | **Document `_context` + `_handlers`** | `result._context = ctx; result._handlers = { handleSave };` — both are set BEFORE `render()`. |
+| 1.3 | **Add `_scope` support to render pipeline** | `render(result, container, context, handlers)` — accepts optional `handlers` object. TemplateInstance stores it. EventParts use it. |
+| 1.4 | **Document `_context` + `_scope`** | `result._context = ctx; result._scope = { handleSave };` — both are set BEFORE `render()`. |
 
 **Estimated**: 2h
 
@@ -143,8 +145,8 @@ export function vrComponent(klass, opts = {}) {
 | 2.1 | **Implement` vrComponent()`** | Register `customElements.define()`, adopt CSS, set up `connectedCallback` override with effect, lifecycle, cleanup. |
 | 2.2 | **CSS loading: 3 modes** | `css: 'auto'` → resolve CSS path from `import.meta.url` (e.g., `_App.js` → `_App.css`). `css: './path.css'` → fetch + adopt. `css: [sheet]` → direct adopt. |
 | 2.3 | **Auto-context from methods** | Scan `klass.prototype` for methods named `context()` or `getContext()`. Call it each render cycle. Result is `_context`. |
-| 2.4 | **Auto-handlers from methods** | Scan `klass.prototype` for NON-constructor methods (excluding `render`, `context`, `connectedCallback`, lifecycle). Bind them as `_handlers`. |
-| 2.5 | **Render loop** | In `connectedCallback` (overridden internally): create `effect()` that calls `this.render(ctx)`, attaches `_context` and `_handlers`, calls `render()`. |
+| 2.4 | **Auto-handlers from methods** | Scan `klass.prototype` for NON-constructor methods (excluding `render`, `context`, `connectedCallback`, lifecycle). Bind them as `_scope`. |
+| 2.5 | **Render loop** | In `connectedCallback` (overridden internally): create `effect()` that calls `this.render(ctx)`, attaches `_context` and `_scope`, calls `render()`. |
 | 2.6 | **Mount guard + cleanup** | `_vanillaBound` guard. `disconnectedCallback` dispose. |
 
 **Estimated**: 4h
@@ -157,11 +159,11 @@ export function vrComponent(klass, opts = {}) {
 |------|------|---------|
 | 3.1 | **Remove `${}` from all docs** | Every example: `@click=${fn}` → `@click="fn"`, `${expr}` → `{{ expr }}` |
 | 3.2 | **Add `\| raw` filter documentation** | Prominently in the expression table + dedicated subsection |
-| 3.3 | **Rewrite §4 Template Engine API** | New exports: only `html`, `render`, `registerFilter`. New section: `_handlers`. |
+| 3.3 | **Rewrite §4 Template Engine API** | New exports: only `html`, `render`, `registerFilter`. New section: `_scope`. |
 | 3.4 | **Rewrite §5 Component Patterns** | 3 modes table + Pattern A (vrComponent) + Pattern B (functional) + Pattern C (external `.template.html`) |
 | 3.5 | **Add §5.4 @click handler reference** | Show: `handleSave`, `handleSave(args)`, `handleSave($event, arg)`, `handleSave($event, {{ expr }})` |
 | 3.6 | **Add §12 Composition** | `{{ Component(ctx) }}` with TemplateResult rendering |
-| 3.7 | **Update guardrails** | Remove guardrails referencing `${}`. Add guardrails for `@click`, `_handlers`. |
+| 3.7 | **Update guardrails** | Remove guardrails referencing `${}`. Add guardrails for `@click`, `_scope`. |
 
 **Estimated**: 6h
 
@@ -175,7 +177,7 @@ export function vrComponent(klass, opts = {}) {
 | 4.2 | **Rewrite `examples/src/core/index.js`** | Remove old exports, add new ones (vrComponent, etc.) |
 | 4.3 | **Rewrite `examples/src/components/App/`** | Pattern A using `vrComponent(this, { tag: 'app-root', css: 'auto' })` |
 | 4.4 | **Rewrite `examples/src/components/TodoItem/`** | Pattern A child, using `{{ TodoItem(ctx) }}` |
-| 4.5 | **Create `examples/src/helpers/func/_todoList.js`** | Pattern B functional component with `_handlers` |
+| 4.5 | **Create `examples/src/helpers/func/_todoList.js`** | Pattern B functional component with `_scope` |
 | 4.6 | **Create `examples/src/components/ProfileCard/`** | Pattern C with `.template.html` + `vrComponent` + external CSS |
 | 4.7 | **Rewrite `examples/src/index.js`** | Wire all three patterns |
 
@@ -189,7 +191,7 @@ export function vrComponent(klass, opts = {}) {
 |------|------|---------|
 | 5.1 | **Remove `${}` guardrails** | Remove `html-template` check for `${}`. Replace with `{{ }}` check. |
 | 5.2 | **Add `@click` guardrails** | `@click` must use `="fn(args)"` not `=${\\fn}` |
-| 5.3 | **Add `_handlers` guardrails** | Check that `_handlers` is set or component has handler methods |
+| 5.3 | **Add `_scope` guardrails** | Check that `_scope` is set or component has handler methods |
 | 5.4 | **Add `vrComponent` guardrails** | Check that `vrComponent(this, ...)` is called in `static {}` |
 
 **Estimated**: 1h 30m
@@ -299,21 +301,36 @@ Phase 0 (engine: remove $, add @click, add fn call parser)
 
 ---
 
+## Scope resolution (why not automatic from closures)
+
+**Short answer:** JavaScript tagged template literals don't expose closure
+scope. `html\`\`` receives only strings and `${}` values — with `${}`
+removed, only strings remain. A name like `"handleSave"` in a template
+string is just text; there is no API to check if it matches a `const`
+in the caller's scope.
+
+To make closures visible, we would need:
+- `eval()` inside `html()` — breaks CSP, blocked in strict mode (modules)
+- A Babel plugin (build-time analysis) — adds a build dependency
+
+**Decision:** explicit `_scope` / `_context` for all patterns.
+A future compile-time plugin can auto-generate `_scope`.
+
 ## Where handlers live: resolution rules
 
 ```
 @click="handleSave"
-  → handler = _handlers.handleSave  OR  component.handleSave
+  → handler = _scope.handleSave  OR  component.handleSave
   → args = [$event]                    (auto-injected)
   → calls: handler(event)
 
 @click="handleSave(todo.id)"
-  → handler = _handlers.handleSave  OR  component.handleSave
+  → handler = _scope.handleSave  OR  component.handleSave
   → args = [evaluate('todo.id', mergedContext)]
   → calls: handler(resolvedId)
 
 @click="handleSave($event, todo.id)"
-  → handler = _handlers.handleSave  OR  component.handleSave
+  → handler = _scope.handleSave  OR  component.handleSave
   → args = [$event (click-time), evaluate('todo.id', mergedContext)]
   → calls: handler(event, resolvedId)
 ```
@@ -339,7 +356,7 @@ class App extends HTMLElement {
     });
   }
 
-  // Auto-exposed as _handlers → @click resolver
+  // Auto-exposed as _scope → @click resolver
   handleDelete(id) { store.state.todos = store.state.todos.filter(t => t.id !== id); }
 
   // Auto-called each render cycle → _context
@@ -369,17 +386,17 @@ class App extends HTMLElement {
 // ── Pattern B: Functional Component ────────────────────────────
 import { html } from '../core/index.js';
 
-const _handlers = {
-  handleSave: (id) => { /* ... */ },
-};
+const handleSave = (id) => { /* ... */ };
 
 export function TodoList(ctx) {
-  ctx._handlers = _handlers;
-  return html`
+  const result = html`
     <for each="todo in ctx.todos">
       <button @click="handleSave(todo.id)">Save</button>
     </for>
   `;
+  result._scope = { handleSave };   // ← one line
+  result._context = ctx;
+  return result;
 }
 ```
 
@@ -410,7 +427,7 @@ class ProfileCard extends HTMLElement {
   render(ctx) {
     const result = TEMPLATE;
     result._context = ctx;
-    result._handlers = this;    // component methods = handlers
+    result._scope = this;    // component methods = handlers
     return result;
   }
 }
