@@ -18,11 +18,11 @@
 | `$event` | Reserved keyword — injects native DOM event at click time |
 | Composition | `{{ Component(ctx) }}` — TemplateResult returned from `{{ }}` |
 | `.value="{{ }}"` | Property binding via `{{ }}` (auto-detected) |
-| Decorator | `VanillaReactiveComponent(this, { tag, css, render, context })` in `static {}` |
+| Decorator | `vrComponent(this, { tag, css, render, context })` in `static {}` |
 | CSS loading | Convention (same path), explicit path, explicit sheet — all 3 |
 | Evaluation | Eager (args resolved at render time) |
 | IDE extension | VS Code TextMate + LSP — level 1+2 |
-| Base class | NONE — everything in `VanillaReactiveComponent()` decorator |
+| Base class | NONE — everything in `vrComponent()` decorator |
 
 ---
 
@@ -39,8 +39,8 @@
                     class App extends          function TodoList(ctx) {
                     HTMLElement {                return html`
                     static {                     <ul>
-                      VanillaReactive            <for each="todo in todos">
-                      Component(this,            <li>{{ todo.title }}</li>
+                      vrComponent(this,           <for each="todo in todos">
+                                             <li>{{ todo.title }}</li>
                       { tag:'app-root',          </for>
                         css: meta.url,          </ul>
                         render(ctx) {         `;
@@ -119,14 +119,14 @@
 
 **Estimated**: 2h
 
-### Phase 2: VanillaReactiveComponent decorator
+### Phase 2: vrComponent decorator
 
 **Files**: `examples/src/core/decorator/_vanilla-reactive-component.js`
 **Why**: This is the core DX improvement. One call in `static {}` replaces 15 lines of boilerplate.
 
 ```js
 // Final API:
-export function VanillaReactiveComponent(klass, opts = {}) {
+export function vrComponent(klass, opts = {}) {
   const {
     tag,                  // required: custom element tag name
     css,                  // optional: 'auto' (convention), path string, or CSSStyleSheet[]
@@ -139,7 +139,7 @@ export function VanillaReactiveComponent(klass, opts = {}) {
 
 | Step | Task | Details |
 |------|------|---------|
-| 2.1 | **Implement` VanillaReactiveComponent()`** | Register `customElements.define()`, adopt CSS, set up `connectedCallback` override with effect, lifecycle, cleanup. |
+| 2.1 | **Implement` vrComponent()`** | Register `customElements.define()`, adopt CSS, set up `connectedCallback` override with effect, lifecycle, cleanup. |
 | 2.2 | **CSS loading: 3 modes** | `css: 'auto'` → resolve CSS path from `import.meta.url` (e.g., `_App.js` → `_App.css`). `css: './path.css'` → fetch + adopt. `css: [sheet]` → direct adopt. |
 | 2.3 | **Auto-context from methods** | Scan `klass.prototype` for methods named `context()` or `getContext()`. Call it each render cycle. Result is `_context`. |
 | 2.4 | **Auto-handlers from methods** | Scan `klass.prototype` for NON-constructor methods (excluding `render`, `context`, `connectedCallback`, lifecycle). Bind them as `_handlers`. |
@@ -157,7 +157,7 @@ export function VanillaReactiveComponent(klass, opts = {}) {
 | 3.1 | **Remove `${}` from all docs** | Every example: `@click=${fn}` → `@click="fn"`, `${expr}` → `{{ expr }}` |
 | 3.2 | **Add `\| raw` filter documentation** | Prominently in the expression table + dedicated subsection |
 | 3.3 | **Rewrite §4 Template Engine API** | New exports: only `html`, `render`, `registerFilter`. New section: `_handlers`. |
-| 3.4 | **Rewrite §5 Component Patterns** | 3 modes table + Pattern A (VanillaReactiveComponent) + Pattern B (functional) + Pattern C (external `.template.html`) |
+| 3.4 | **Rewrite §5 Component Patterns** | 3 modes table + Pattern A (vrComponent) + Pattern B (functional) + Pattern C (external `.template.html`) |
 | 3.5 | **Add §5.4 @click handler reference** | Show: `handleSave`, `handleSave(args)`, `handleSave($event, arg)`, `handleSave($event, {{ expr }})` |
 | 3.6 | **Add §12 Composition** | `{{ Component(ctx) }}` with TemplateResult rendering |
 | 3.7 | **Update guardrails** | Remove guardrails referencing `${}`. Add guardrails for `@click`, `_handlers`. |
@@ -171,11 +171,11 @@ export function VanillaReactiveComponent(klass, opts = {}) {
 | Step | Task | Details |
 |------|------|---------|
 | 4.1 | **Rewrite `examples/src/core/template-engine/`** | Apply Phase 0+1 changes to all engine files |
-| 4.2 | **Rewrite `examples/src/core/index.js`** | Remove old exports, add new ones (VanillaReactiveComponent, etc.) |
-| 4.3 | **Rewrite `examples/src/components/App/`** | Pattern A using `VanillaReactiveComponent(this, { tag: 'app-root', css: 'auto' })` |
+| 4.2 | **Rewrite `examples/src/core/index.js`** | Remove old exports, add new ones (vrComponent, etc.) |
+| 4.3 | **Rewrite `examples/src/components/App/`** | Pattern A using `vrComponent(this, { tag: 'app-root', css: 'auto' })` |
 | 4.4 | **Rewrite `examples/src/components/TodoItem/`** | Pattern A child, using `{{ TodoItem(ctx) }}` |
 | 4.5 | **Create `examples/src/helpers/func/_todoList.js`** | Pattern B functional component with `_handlers` |
-| 4.6 | **Create `examples/src/components/ProfileCard/`** | Pattern C with `.template.html` + `VanillaReactiveComponent` + external CSS |
+| 4.6 | **Create `examples/src/components/ProfileCard/`** | Pattern C with `.template.html` + `vrComponent` + external CSS |
 | 4.7 | **Rewrite `examples/src/index.js`** | Wire all three patterns |
 
 **Estimated**: 6h
@@ -189,7 +189,7 @@ export function VanillaReactiveComponent(klass, opts = {}) {
 | 5.1 | **Remove `${}` guardrails** | Remove `html-template` check for `${}`. Replace with `{{ }}` check. |
 | 5.2 | **Add `@click` guardrails** | `@click` must use `="fn(args)"` not `=${\\fn}` |
 | 5.3 | **Add `_handlers` guardrails** | Check that `_handlers` is set or component has handler methods |
-| 5.4 | **Add `VanillaReactiveComponent` guardrails** | Check that `VanillaReactiveComponent(this, ...)` is called in `static {}` |
+| 5.4 | **Add `vrComponent` guardrails** | Check that `vrComponent(this, ...)` is called in `static {}` |
 
 **Estimated**: 1h 30m
 
@@ -213,7 +213,7 @@ export function VanillaReactiveComponent(klass, opts = {}) {
 ```
 Phase 0 (engine: remove $, add @click)
   └── Phase 1 (engine: align {{ }} semantics)
-        ├── Phase 2 (VanillaReactiveComponent decorator)
+        ├── Phase 2 (vrComponent decorator)
         │     └── Phase 3 (SKILL.md rewrite)
         │           └── Phase 4 (examples rewrite)
         ├── Phase 5 (guardrail definitions)
@@ -248,15 +248,15 @@ Phase 0 (engine: remove $, add @click)
 
 ---
 
-## VanillaReactiveComponent API (final)
+## vrComponent API (final)
 
 ```js
-import { VanillaReactiveComponent, html, render, registerFilter } from './core/index.js';
+import { vrComponent, html, render, registerFilter } from './core/index.js';
 
 // ── Pattern A: Custom Element ──────────────────────────────────
 class App extends HTMLElement {
   static {
-    VanillaReactiveComponent(this, {
+    vrComponent(this, {
       tag: 'app-root',
       css: 'auto',               // loads ./_App.css via convention
     });
@@ -308,7 +308,7 @@ export function TodoList(ctx) {
 
 ```js
 // ── Pattern C: External HTML Template ──────────────────────────
-import { VanillaReactiveComponent, html, render } from '../core/index.js';
+import { vrComponent, html, render } from '../core/index.js';
 
 const templateStr = await (
   await fetch(new URL('./_ProfileCard.template.html', import.meta.url))
@@ -317,7 +317,7 @@ const TEMPLATE = html(templateStr);  // html() now accepts strings too
 
 class ProfileCard extends HTMLElement {
   static {
-    VanillaReactiveComponent(this, {
+    vrComponent(this, {
       tag: 'profile-card',
       css: 'auto',
     });
