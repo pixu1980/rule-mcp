@@ -11,7 +11,7 @@ export {
   Part,
   AttributePart,
   PropertyPart,
-  ClickHandlerPart,
+  EventPart,
   ExprPart,
   ForPart,
   IfPart,
