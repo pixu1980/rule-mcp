@@ -43,17 +43,17 @@ FIRST, then `result._context` as fallback. See §3 for the full resolution chain
 JS closure scope is NOT accessible from template strings — JavaScript provides
 no API to enumerate closure variables at runtime.
 
-| Form | Example | Resolves to |
-|------|---------|-------------|
-| Dot-path variable | `{{ todo.title }}` | `scope.todo.title` → `ctx.todo.title` |
-| Bracket index | `{{ items[0].name }}` | `scope.items[0].name` → `ctx.items[0].name` |
-| Filter pipe | `{{ val \| upper }}` | apply filter |
-| Filter chain | `{{ val \| upper \| slug }}` | chained filters |
-| Filter with arg | `{{ val \| truncate:20 }}` | `filter(val, 20)` |
-| Filter named arg | `{{ val \| join:', ' }}` | `filter(val, ', ')` |
-| **Function call** | `{{ TodoList(todos) }}` | `scope.TodoList(scope.todos)` → `ctx.TodoList(ctx.todos)` |
-| Fn call dot-arg | `{{ Card(todo.item) }}` | `scope.Card(scope.todo.item)` → `ctx.Card(ctx.todo.item)` |
-| Raw output | `{{ html \| raw }}` | Unescaped textContent |
+| Form | Example | Resolves to (tries _scope first, falls back to _context) |
+|------|---------|----------------------------------------------------------|
+| Dot-path variable | `{{ todo.title }}` | `_scope.todo?.title` → `_context.todo.title` |
+| Bracket index | `{{ items[0].name }}` | `_scope.items[0]?.name` → `_context.items[0].name` |
+| Filter pipe | `{{ val \| upper }}` | Apply `upper` filter to resolved value |
+| Filter chain | `{{ val \| upper \| slug }}` | Pipe through filters left-to-right |
+| Filter with arg | `{{ val \| truncate:20 }}` | `filter(resolvedVal, 20)` |
+| Filter named arg | `{{ val \| join:', ' }}` | `filter(resolvedVal, ', ')` |
+| **Function call** | `{{ TodoList(todos) }}` | Find `TodoList` in `_scope`→`_context`, call with resolved args |
+| Fn call dot-arg | `{{ Card(todo.item) }}` | Find `Card`, pass `todo.item` resolved from scope/ctx |
+| Raw output | `{{ expr \| raw }}` | Value inserted as innerHTML (not textContent) |
 
 ---
 
