@@ -1,0 +1,24 @@
+<!-- ═══════════════════════════════════════════════════════════════
+  Pattern C — External HTML template for ProfileCard
+  ═══════════════════════════════════════════════════════════════
+  Uses only {{ }}, <for>, <if>, @click.
+  NO ${} allowed.
+-->
+<section data-part="profile-card" aria-label="Profile card">
+  <h2 data-part="name">{{ name | upper }}</h2>
+
+  <h3>Todos</h3>
+  <for each="todo in todos">
+    <article data-part="todo-row" data-state-done="{{ todo.done }}">
+      <span>{{ todo.title }}</span>
+      <button @click="handleToggle(todo.id)" data-part="toggle-btn">
+        <if condition="todo.done">Undo</if>
+        <if condition="!todo.done">Done</if>
+      </button>
+    </article>
+  </for>
+
+  <if condition="todos.length === 0">
+    <p data-part="empty">No todos for this contact.</p>
+  </if>
+</section>
