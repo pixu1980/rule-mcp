@@ -179,20 +179,45 @@ full re-render.
 
 ---
 
-## 6. Conditionals (`<if>`)
+## 6. Conditionals (`<if>` / `<elseif>` / `<else>`)
 
 ```html
-<if condition="expr">
-  ...body...
+<if condition="expr1">
+  body when expr1 is truthy
+<elseif condition="expr2">
+  body when expr2 is truthy (expr1 was falsy)
+<else>
+  fallback body (all conditions false)
 </if>
 ```
 
 | Syntax | Example |
 |--------|---------|
-| `<if condition="todos.length === 0">` | Shows body when truthy |
+| `<if condition="todos.length === 0">` | First branch, evaluated first |
+| `<elseif condition="done">` | Evaluated when all previous conditions are falsy |
+| `<else>` | Fallback — no condition, runs if all above are falsy |
 
-Condition expression is evaluated against the merged context
-(for-loop scope + render context). Truthy → show. Falsy → hide.
+Conditions are evaluated IN ORDER. The first truthy branch wins.
+At most one branch renders at a time.
+
+### `<switch>` / `<case>` / `<default>`
+
+```html
+<switch expr="status">
+  <case result="active">Active content</case>
+  <case result="pending">Pending content</case>
+  <default>Default content</default>
+</switch>
+```
+
+| Syntax | Example |
+|--------|---------|
+| `<switch expr="status">` | Evaluates `status` against each case |
+| `<case result="active">` | Renders body when `status === 'active'` |
+| `<default>` | Fallback when no case matches |
+
+The `expr` value is converted to string and compared with `===` against
+each `<case result="...">`. `<default>` renders when no case matches.
 
 ---
 
@@ -310,7 +335,7 @@ const _scope = {
    d. ExprParts re-evaluate {{ }}  ← data interpolation updates
    e. ForParts reconcile           ← add/remove/move DOM nodes
    f. IfParts evaluate condition   ← show/hide
-   g. ClickHandlerParts: stable    ← handlers don't change
+   g. EventParts: resolve handlers from _scope (stable, no re-bind on re-render)
 7. DOM updated
 ```
 

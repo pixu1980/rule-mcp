@@ -427,9 +427,9 @@ export class TemplateInstance {
   /**
    * Update the template with new context and scope.
    *
-   * @param {Array} values - ${} values (always [] in v2 — kept for compat)
+   * @param {Array} values - ${} values (always [] in v2)
    * @param {object} context - The _context object for {{ }} expressions
-   * @param {object} [scope] - The _scope object for function resolution
+   * @param {object} [scope] - The _scope object for @click handler resolution
    */
   updateWithContext(values, context, scope) {
     this._context = context;
@@ -460,11 +460,10 @@ export class TemplateInstance {
   }
 
   /**
-   * Update only ${} values (kept for compat — no-op in v2).
+   * Update only ${} values (no-op in v2 — ${} removed).
    */
-  update(values) {
-    // No-op: ${} removed in v2
-  }
+  update(values) {}
+  // (kept for compatibility with any code still passing values)
 }
 
 // Resolve circular dep: register TemplateInstance with ChildNodePart

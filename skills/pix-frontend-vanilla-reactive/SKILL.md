@@ -181,7 +181,7 @@ result._context = { title: 'Hello' };  // data here
 | `{{ Fn(args) }}` | ExprPart | Function call returning TemplateResult | `{{ TodoList(todos) }}` |
 | `attr="{{ expr }}"` | AttributePart | HTML attribute from context | `<div class="{{ cls }}">` |
 | `.prop="{{ expr }}"` | PropertyPart | DOM property (not setAttribute) | `<input .value="{{ name }}">` |
-| `@event="handler(args)"` | ClickHandlerPart | Event listener, resolved from _scope | `<button @click="handleSave(id)">` |
+| `@event="handler(args)"` | EventPart | Event listener, resolved from _scope | `<button @click="handleSave(id)">` |
 | `<for each="x in xs">` | ForPart | Loop with keyed reconciliation | `<for each="todo in todos">` |
 | `<if condition="expr">` | IfPart | Conditional show/hide | `<if condition="done">` |
 | `{{ expr \| raw }}` | ExprPart | Unescaped HTML output | `<div>{{ content \| raw }}</div>` |
@@ -229,7 +229,7 @@ render(result, root);
 | `_expr-part.js` | ExprPart (`{{ }}` + `{{ Fn() }}` composition) |
 | `_for-part.js` | ForPart (`<for>` loop, keyed reconciliation) |
 | `_if-part.js` | IfPart (`<if>` conditional) |
-| `_event-part.js` | ClickHandlerPart (`@click="handler(args)"`) |
+| `_event-part.js` | EventPart (`@event="handler(args)"`) |
 | `_property-part.js` | PropertyPart (`.value="{{ }}"`) |
 | `_range.js` | `clearRange`, `moveRangeBefore` |
 
