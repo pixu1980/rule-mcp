@@ -9,7 +9,7 @@ import { parseExpression, evaluateExpression } from './_expression-parser.js';
 import { ChildNodePart } from './_child-node-part.js';
 import { AttributePart } from './_attribute-part.js';
 import { PropertyPart } from './_property-part.js';
-import { ClickHandlerPart } from './_event-part.js';
+import { EventPart } from './_event-part.js';
 import { ExprPart } from './_expr-part.js';
 import { ForPart } from './_for-part.js';
 import { IfPart, SwitchPart } from './_if-part.js';
@@ -320,7 +320,7 @@ export class TemplateInstance {
     this.forParts = [];
     this.ifParts = [];
     this.switchParts = [];
-    this.clickParts = [];     // ClickHandlerPart instances
+    this.eventParts = [];     // EventPart instances
     this._scope = null;
     this._context = null;
 
@@ -365,13 +365,13 @@ export class TemplateInstance {
         }
         case 'handler': {
           if (node) {
-            const part = new ClickHandlerPart(
+            const part = new EventPart(
               node,
               descriptor.eventName,
               descriptor.handlerName,
               descriptor.argExprs,
             );
-            this.clickParts.push(part);
+            this.eventParts.push(part);
           }
           break;
         }
@@ -453,9 +453,9 @@ export class TemplateInstance {
     for (const sp of this.switchParts) sp.init(context);
 
     // 3. Update @click handlers: resolve args + bind
-    for (const cp of this.clickParts) {
-      cp.setContext(this._scope, context);
-      cp.bind();
+    for (const ep of this.eventParts) {
+      ep.setContext(this._scope, context);
+      ep.bind();
     }
   }
 
