@@ -164,19 +164,48 @@ The `@` prefix extracts the event name and passes it directly to
 
 **Any string** after `@` works. No registration, no whitelist.
 
+### Name resolution: `_scope`
+
+Every name in `@click="handleSave"` and `{{ TodoList(todos) }}` is resolved
+through a **resolution chain**. The lookup order is:
+
+```
+1. result._scope[name]       ← explicit scope (Pattern B)
+2. result._context[name]     ← data context (fallback for any pattern)
+3. component instance[name]  ← CE methods (Pattern A/C, auto by vrComponent)
+```
+
+This means:
+- **Pattern A/C** → `vrComponent` sets `result._scope = this` automatically.
+  Methods like `handleSave() { ... }` are found in step 3 (or 1 if `_scope` is set).
+- **Pattern B** → one explicit line:
+  ```js
+  const handleSave = (id) => store.del(id);
+  function TodoList(ctx) {
+    const result = html`<button @click="handleSave(todo.id)">Save</button>`;
+    result._scope = { handleSave };   // ← explicit, one line
+    return result;
+  }
+  ```
+- **Pattern C** → same as A: `vrComponent` auto-sets `_scope = this`.
+- **Fallback** → if not found in any scope, resolved from `_context`.
+  ```js
+  ctx.handleSave = (id) => store.del(id);  // works but less idiomatic
+  ```
+
 ### Handler resolution rules
 
 | Form | Resolves to |
 |------|-------------|
-| `@click="handleSave"` | `_handlers.handleSave(event)` |
-| `@click="handleSave(id)"` | `_handlers.handleSave(resolvedId)` |
-| `@click="handleSave($event, id)"` | `_handlers.handleSave(nativeEvent, resolvedId)` |
-| `@click="handleSave(id, ctx.name)"` | `_handlers.handleSave(resolvedId, resolvedName)` |
+| `@click="handleSave"` | `scope.handleSave(event)` |
+| `@click="handleSave(id)"` | `scope.handleSave(resolvedId)` |
+| `@click="handleSave($event, id)"` | `scope.handleSave(nativeEvent, resolvedId)` |
+| `@click="handleSave(id, ctx.name)"` | `scope.handleSave(resolvedId, resolvedName)` |
 
 **Keywords:**
 - `$event` → native DOM Event (reserved, evaluated at click-time)
 - `id` → resolved from merged scope at render-time (eager)
-- Handler resolved from `_handlers` object or component methods
+- Name resolved through: `_scope` → `_context` → component instance
 
 ---
 
@@ -247,10 +276,20 @@ Condition expression is evaluated against the merged context
 | `{{ TodoList(todos) }}` | Renders a Pattern B component inline |
 | `{{ ContactCard(contact) }}` | Renders another component with data |
 
-The component function **must** be resolvable from:
-- **Pattern C**: Explicitly passed in `_context`: `ctx.TodoList = TodoList`
-- **Pattern A**: Available as a component method
-- **Pattern B**: In closure scope via `import`, passed in context
+The component function **must** be resolvable through the standard
+scope resolution chain (same as `@click`):
+
+```
+1. result._scope[name]       ← explicit scope
+2. result._context[name]     ← data context
+3. component instance[name]  ← CE methods (auto by vrComponent)
+```
+
+Typical usage:
+
+- **Pattern A**: method on the class → auto-resolved by `vrComponent`
+- **Pattern B**: `result._scope = { TodoList, handleSave }`
+- **Pattern C**: same as A, or passed via `_scope`/`_context`
 
 The function receives the resolved args and **must** return a
 `TemplateResult` (`{ kind: 'template-result', strings, values }`).
@@ -277,7 +316,7 @@ The `model` directive is removed with `${}`. Use `@input` instead:
 With handler:
 
 ```js
-const _handlers = {
+const _scope = {
   onNameInput: (e) => { store.state.name = e.target.value; },
 };
 ```
@@ -332,7 +371,7 @@ effect(() => {
   const ctx = renderContext.get();
   const result = App.render(ctx);
   result._context = ctx;
-  result._handlers = { handleSave };
+  result._scope = { handleSave };
   render(result, document.getElementById('app'));
 });
 
