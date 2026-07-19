@@ -4,5 +4,4 @@
 
 "use strict";
 
-import './_App.js';
-
+import "./_App.js";

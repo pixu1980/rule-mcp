@@ -9,13 +9,25 @@ import { vrComponent, html } from "../../../../core/index.js";
 import { store, increment, decrement, resetCount } from "../../_store.js";
 
 export class CounterApp extends HTMLElement {
-  static { vrComponent(this, { tag: 'counter-app', css: import.meta.url }); }
+  static {
+    vrComponent(this, { tag: "counter-app", css: import.meta.url });
+  }
 
-  increment() { increment(); }
-  decrement() { decrement(); }
-  resetCount() { resetCount(); }
+  increment() {
+    increment();
+  }
 
-  context() { return { count: store.state.count }; }
+  decrement() {
+    decrement();
+  }
+
+  resetCount() {
+    resetCount();
+  }
+
+  context() {
+    return { count: store.state.count };
+  }
 
   render(ctx) {
     return html`

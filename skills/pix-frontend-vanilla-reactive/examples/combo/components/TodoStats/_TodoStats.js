@@ -18,8 +18,6 @@ import { html } from "../../../../core/index.js";
  */
 export function TodoStats(visibleTodos) {
   return html`<aside data-part="stats">
-    <strong>{{ visibleTodos | length }}</strong> ·
-    <strong>{{ visibleTodos | where:"done" | length }}</strong> done
+    <strong>{{ visibleTodos | length }}</strong> · <strong>{{ visibleTodos | where:"done" | length }}</strong> done
   </aside>`;
 }
-

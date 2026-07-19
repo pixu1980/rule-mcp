@@ -22,5 +22,10 @@ export {
   SwitchPart,
   ChildNodePart,
 } from "../dom-parts/_parts.js";
-export { clearRange, moveRangeBefore, isRangeBeforeReference, normalizeExprValue, inferModelProperty } from "../dom-parts/_range.js";
-
+export {
+  clearRange,
+  moveRangeBefore,
+  isRangeBeforeReference,
+  normalizeExprValue,
+  inferModelProperty,
+} from "../dom-parts/_range.js";

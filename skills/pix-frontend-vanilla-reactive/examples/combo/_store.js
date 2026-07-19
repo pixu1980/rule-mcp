@@ -9,11 +9,11 @@ import { Store } from "../../core/index.js";
 /** Shared todo store with filter. */
 export const store = new Store({
   todos: [
-    { id: 1, title: 'Learn CustomElement', done: true },
-    { id: 2, title: 'Learn Functional', done: false },
-    { id: 3, title: 'Learn External HTML', done: false },
+    { id: 1, title: "Learn CustomElement", done: true },
+    { id: 2, title: "Learn Functional", done: false },
+    { id: 3, title: "Learn External HTML", done: false },
   ],
-  filter: 'all',
+  filter: "all",
 });
 
 /**
@@ -45,4 +45,3 @@ export const toggleTodo = (id) => {
 export const setFilter = (f) => {
   store.state.filter = f;
 };
-

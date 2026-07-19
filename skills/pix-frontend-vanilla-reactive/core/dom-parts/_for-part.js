@@ -11,7 +11,8 @@ import { ChildNodePart } from "./_child-node-part.js";
 
 export class ForPart {
   constructor(start, end, itemVar, itemsParsed, innerTemplate, renderFn) {
-    this.start = start; this.end = end;
+    this.start = start;
+    this.end = end;
     this.itemVar = itemVar;
     this.itemsParsed = itemsParsed;
     this.innerTemplate = innerTemplate;
@@ -29,8 +30,8 @@ export class ForPart {
     if (isSignalLike(signalOrValue)) {
       this.itemsSignal = signalOrValue;
       this.itemsCleanup = signalOrValue.subscribe(() => {
-      this.reconcile();
-    });
+        this.reconcile();
+      });
     }
 
     this.reconcile();
@@ -40,7 +41,7 @@ export class ForPart {
     const items = this.itemsSignal ? this.itemsSignal.get() : evaluateExpression(this.itemsParsed, this.ctx);
 
     const raw = items ?? [];
-    const list = Array.isArray(raw) ? raw : (typeof raw[Symbol.iterator] === 'function' ? [...raw] : []);
+    const list = Array.isArray(raw) ? raw : typeof raw[Symbol.iterator] === "function" ? [...raw] : [];
 
     const nextBlocks = new Map();
     const seen = new Set();
@@ -50,8 +51,10 @@ export class ForPart {
     for (let i = list.length - 1; i >= 0; i--) {
       const item = list[i];
 
-      const key = typeof item === 'object' && item !== null ? (item.id ?? JSON.stringify(item)) : String(item);
-      if (seen.has(key)) { continue; }
+      const key = typeof item === "object" && item !== null ? (item.id ?? JSON.stringify(item)) : String(item);
+      if (seen.has(key)) {
+        continue;
+      }
       seen.add(key);
 
       let block = this.blocks.get(key);
@@ -69,7 +72,9 @@ export class ForPart {
         }
 
         if (block.item !== item) {
-          this.renderBlock(block, item); block.item = item; }
+          this.renderBlock(block, item);
+          block.item = item;
+        }
       }
 
       nextBlocks.set(key, block);
@@ -77,7 +82,11 @@ export class ForPart {
     }
 
     for (const [key, block] of this.blocks) {
-      if (!nextBlocks.has(key)) { clearRange(block.start, block.end); block.start.remove(); block.end.remove(); }
+      if (!nextBlocks.has(key)) {
+        clearRange(block.start, block.end);
+        block.start.remove();
+        block.end.remove();
+      }
     }
 
     this.blocks = nextBlocks;
@@ -85,19 +94,16 @@ export class ForPart {
 
   renderTemplateString(template, itemCtx) {
     // 1. Process <if condition="..."> — remove blocks, keep content
-    let processed = template.replace(
-      /<if\s+condition="([^"]*)">([\s\S]*?)<\/if>/gi,
-      (_, condition, content) => {
-        const val = evaluateExpression(parseExpression(condition), itemCtx);
+    let processed = template.replace(/<if\s+condition="([^"]*)">([\s\S]*?)<\/if>/gi, (_, condition, content) => {
+      const val = evaluateExpression(parseExpression(condition), itemCtx);
 
-        return Boolean(val) ? content : '';
-      }
-    );
+      return Boolean(val) ? content : "";
+    });
     // 2. Evaluate {{ }} expressions
     processed = processed.replace(/\{\{([^}]+)\}\}/g, (_, expr) => {
       const val = evaluateExpression(parseExpression(expr), itemCtx);
 
-      return val == null ? '' : String(val);
+      return val == null ? "" : String(val);
     });
 
     return processed;
@@ -115,7 +121,7 @@ export class ForPart {
       const itemCtx = Object.assign(Object.create(this.ctx), { [this.itemVar]: item });
 
       const rendered = this.renderTemplateString(this.innerTemplate, itemCtx);
-      const tmp = document.createElement('template');
+      const tmp = document.createElement("template");
 
       tmp.innerHTML = rendered;
       const children = [...tmp.content.childNodes];
@@ -132,8 +138,11 @@ export class ForPart {
       this.itemsCleanup();
     }
 
-    for (const block of this.blocks.values()) { clearRange(block.start, block.end); block.start.remove(); block.end.remove(); }
+    for (const block of this.blocks.values()) {
+      clearRange(block.start, block.end);
+      block.start.remove();
+      block.end.remove();
+    }
     this.blocks.clear();
   }
 }
-

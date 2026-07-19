@@ -76,6 +76,7 @@ export class ChildNodePart extends Part {
 
   commitTemplate(result) {
     const strings = result.strings;
+
     const context = result._context;
     const scope = result._scope;
 

@@ -5,170 +5,203 @@
 "use strict";
 
 export const FILTERS = {};
-export function registerFilter(name, fn) { FILTERS[name] = fn; }
+
+export function registerFilter(name, fn) {
+  FILTERS[name] = fn;
+}
 
 // ── Built-in filters ──────────────────────────────────────────────────────────
-export function utilSlug(v) { return String(v).toLowerCase().trim().replace(/[\s\W-]+/g, '-').replace(/^-+|-+$/g, ''); }
+export function utilSlug(v) {
+  return String(v)
+    .toLowerCase()
+    .trim()
+    .replace(/[\s\W-]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
 
-registerFilter("upper",       (v) => {
+registerFilter("upper", (v) => {
   return String(v).toUpperCase();
 });
-registerFilter("lower",       (v) => {
+registerFilter("lower", (v) => {
   return String(v).toLowerCase();
 });
-registerFilter("capitalize",  v => {
+registerFilter("capitalize", (v) => {
   const s = String(v);
 
   return s[0].toUpperCase() + s.slice(1).toLowerCase();
 });
-registerFilter("slugify",     (v) => {
+registerFilter("slugify", (v) => {
   return utilSlug(v);
 });
-registerFilter("slug",        (v) => {
+registerFilter("slug", (v) => {
   return utilSlug(v);
 });
-registerFilter("trim",        (v) => {
+registerFilter("trim", (v) => {
   return String(v).trim();
 });
-registerFilter("escapeHtml",  (v) => {
+registerFilter("escapeHtml", (v) => {
   return String(v).replace(/[&<>"']/g, (s) => {
-    return ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#x27;' }[s] || s);
+    return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#x27;" }[s] || s;
   });
 });
-registerFilter("striptags",   (v) => {
-  return String(v).replace(/<[^>]*>/g, '');
+registerFilter("striptags", (v) => {
+  return String(v).replace(/<[^>]*>/g, "");
 });
-registerFilter("raw",         (v) => {
+registerFilter("raw", (v) => {
   return v;
 });
-registerFilter("json",        v => {
-  try { return JSON.stringify(v); } catch { return String(v); }
+registerFilter("json", (v) => {
+  try {
+    return JSON.stringify(v);
+  } catch {
+    return String(v);
+  }
 });
-registerFilter("default",     (v, d = '') => {
-  return v !== undefined && v !== null && v !== '' ? v : d;
+registerFilter("default", (v, d = "") => {
+  return v !== undefined && v !== null && v !== "" ? v : d;
 });
-registerFilter("truncate",    (v, l = 100) => {
+registerFilter("truncate", (v, l = 100) => {
   const s = String(v);
 
-  return s.length > l ? s.slice(0, l) + '...' : s;
+  return s.length > l ? s.slice(0, l) + "..." : s;
 });
-registerFilter("length",      (v) => {
-  return Array.isArray(v) || typeof v === 'string' ? v.length : 0;
+registerFilter("length", (v) => {
+  return Array.isArray(v) || typeof v === "string" ? v.length : 0;
 });
-registerFilter("where",       (v, prop) => {
-  return Array.isArray(v) ? v.filter((item) => {
-    return item[prop];
-  }) : v;
+registerFilter("where", (v, prop) => {
+  return Array.isArray(v)
+    ? v.filter((item) => {
+        return item[prop];
+      })
+    : v;
 });
-registerFilter("first",       (v) => {
+registerFilter("first", (v) => {
   return Array.isArray(v) && v.length ? v[0] : v;
 });
-registerFilter("last",        (v) => {
+registerFilter("last", (v) => {
   return Array.isArray(v) && v.length ? v[v.length - 1] : v;
 });
 
-registerFilter("join", (v, sep = ', ') => {
-  if (!Array.isArray(v)) { return v; }
+registerFilter("join", (v, sep = ", ") => {
+  if (!Array.isArray(v)) {
+    return v;
+  }
 
-  return v.map(i => (typeof i === 'object' && i?.label) ? i.label : String(i)).join(sep);
+  return v.map((i) => (typeof i === "object" && i?.label ? i.label : String(i))).join(sep);
 });
 
-registerFilter("tagLabel", tag => {
+registerFilter("tagLabel", (tag) => {
   if (!tag) {
-    return '';
+    return "";
   }
-  const raw = typeof tag === 'object' ? (tag.label || tag.name || String(tag)) : String(tag);
-  const m = { css: 'CSS', html: 'HTML' };
+  const raw = typeof tag === "object" ? tag.label || tag.name || String(tag) : String(tag);
+
+  const m = { css: "CSS", html: "HTML" };
 
   return m[String(raw).toLowerCase().trim()] || raw;
 });
 
-registerFilter("tagHref", tag => {
+registerFilter("tagHref", (tag) => {
   if (!tag) {
-    return '/tags/';
+    return "/tags/";
   }
 
-  if (typeof tag === 'object') {
+  if (typeof tag === "object") {
     if (tag.url) {
-      return tag.url.startsWith('/') ? tag.url : '/' + tag.url;
+      return tag.url.startsWith("/") ? tag.url : "/" + tag.url;
     }
 
-    return '/tags/' + utilSlug(tag.key || tag.name || String(tag)) + '.html';
+    return "/tags/" + utilSlug(tag.key || tag.name || String(tag)) + ".html";
   }
 
-  return '/tags/' + utilSlug(tag) + '.html';
+  return "/tags/" + utilSlug(tag) + ".html";
 });
 
-registerFilter("date", (value, format = 'en-US') => {
+registerFilter("date", (value, format = "en-US") => {
   const d = new Date(value);
-  if (Number.isNaN(d.getTime())) { return value; }
-  if (format === 'YYYY-MM-DD') {
-    return d.toISOString().split('T')[0];
+
+  if (Number.isNaN(d.getTime())) {
+    return value;
   }
 
-  if (format === 'long') {
-    return d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+  if (format === "YYYY-MM-DD") {
+    return d.toISOString().split("T")[0];
   }
 
-  if (format === 'short') {
-    return d.toLocaleDateString('en-US', { year: '2-digit', month: 'numeric', day: 'numeric' });
+  if (format === "long") {
+    return d.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
   }
 
-  if (format === 'full') {
-    return d.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+  if (format === "short") {
+    return d.toLocaleDateString("en-US", { year: "2-digit", month: "numeric", day: "numeric" });
   }
 
-  if (format === 'iso') {
+  if (format === "full") {
+    return d.toLocaleDateString("en-US", { weekday: "long", year: "numeric", month: "long", day: "numeric" });
+  }
+
+  if (format === "iso") {
     return d.toISOString();
   }
 
-  if (format === 'DD MMM YYYY') {
-    const ms = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  if (format === "DD MMM YYYY") {
+    const ms = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
-    return String(d.getDate()).padStart(2, '0') + ' ' + ms[d.getMonth()] + ' ' + d.getFullYear();
+    return String(d.getDate()).padStart(2, "0") + " " + ms[d.getMonth()] + " " + d.getFullYear();
   }
-  try { return d.toLocaleDateString(format, { year: 'numeric', month: 'long', day: 'numeric' }); }
-  catch { return d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }); }
+  try {
+    return d.toLocaleDateString(format, { year: "numeric", month: "long", day: "numeric" });
+  } catch {
+    return d.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
+  }
 });
 
-registerFilter("timeAgo", value => {
+registerFilter("timeAgo", (value) => {
   const d = new Date(value);
-  if (Number.isNaN(d.getTime())) { return value; }
+
+  if (Number.isNaN(d.getTime())) {
+    return value;
+  }
   const diff = Date.now() - d.getTime();
-  const mins = Math.floor(diff / 60000), hrs = Math.floor(diff / 3600000), days = Math.floor(diff / 86400000);
+
+  const mins = Math.floor(diff / 60000),
+    hrs = Math.floor(diff / 3600000),
+    days = Math.floor(diff / 86400000);
   if (mins < 1) {
-    return 'just now';
+    return "just now";
   }
 
   if (mins < 60) {
-    return `${mins} ${mins === 1 ? 'minute' : 'minutes'} ago`;
+    return `${mins} ${mins === 1 ? "minute" : "minutes"} ago`;
   }
 
   if (hrs < 24) {
-    return `${hrs} ${hrs === 1 ? 'hour' : 'hours'} ago`;
+    return `${hrs} ${hrs === 1 ? "hour" : "hours"} ago`;
   }
 
   if (days < 30) {
-    return `${days} ${days === 1 ? 'day' : 'days'} ago`;
+    return `${days} ${days === 1 ? "day" : "days"} ago`;
   }
 
-  return d.toLocaleDateString('en-US');
+  return d.toLocaleDateString("en-US");
 });
 
 registerFilter("urlencode", (v) => {
   return encodeURIComponent(String(v));
 });
-registerFilter("sortBy", (array, prop, dir = 'asc') => {
-  if (!Array.isArray(array)) { return array; }
+registerFilter("sortBy", (array, prop, dir = "asc") => {
+  if (!Array.isArray(array)) {
+    return array;
+  }
 
   return [...array].sort((a, b) => {
-    let va = a[prop], vb = b[prop];
-    if (prop === 'date') {
+    let va = a[prop],
+      vb = b[prop];
+    if (prop === "date") {
       va = new Date(va);
       vb = new Date(vb);
     }
 
-    return dir === 'desc' ? (va < vb ? 1 : va > vb ? -1 : 0) : (va > vb ? 1 : va < vb ? -1 : 0);
+    return dir === "desc" ? (va < vb ? 1 : va > vb ? -1 : 0) : va > vb ? 1 : va < vb ? -1 : 0;
   });
 });
-

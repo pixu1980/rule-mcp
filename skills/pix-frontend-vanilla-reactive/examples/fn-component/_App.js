@@ -9,7 +9,7 @@ import { effect, render, loadCSS } from "../../core/index.js";
 import { store, addItem, removeItem } from "./_store.js";
 import { ItemList } from "./components/ItemList/index.js";
 
-await loadCSS(new URL('./_App.css', import.meta.url));
+await loadCSS(new URL("./_App.css", import.meta.url));
 
 effect(() => {
   store.tick.get();
@@ -17,4 +17,3 @@ effect(() => {
 
   render(ItemList(ctx), document.body, ctx, { addItem, removeItem });
 });
-

@@ -4,5 +4,6 @@
 
 "use strict";
 
-export function isObject(v) { return v !== null && typeof v === 'object'; }
-
+export function isObject(v) {
+  return v !== null && typeof v === "object";
+}

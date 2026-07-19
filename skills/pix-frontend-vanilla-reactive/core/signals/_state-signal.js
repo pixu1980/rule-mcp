@@ -8,13 +8,11 @@ import { BaseSignal } from "./_base-signal.js";
 
 export class StateSignal extends BaseSignal {
   constructor(value, opts = {}) {
-
     super();
 
     this.value = value;
 
     this.equals = opts.equals ?? Object.is;
-
   }
 
   get() {
@@ -28,11 +26,12 @@ export class StateSignal extends BaseSignal {
   }
 
   set(next) {
-    if (this.equals(this.value, next)) { return this.value; }
+    if (this.equals(this.value, next)) {
+      return this.value;
+    }
     this.value = next;
     this.notify();
 
     return this.value;
   }
 }
-
