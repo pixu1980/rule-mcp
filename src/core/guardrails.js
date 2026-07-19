@@ -106,7 +106,7 @@ export function getGuardrails(skillName, mode) {
 
 export function checkCode(skillName, code, context = {}) {
   const guardrails = getGuardrails(skillName, context?.mode);
-  const previousPassed = new Set(context?.previousPassed || []);
+  const previousPassed = new Set(); // ← always start fresh — no client bypass
 
   const results = guardrails.map((g) => {
     if (previousPassed.has(g.id)) {
@@ -128,7 +128,6 @@ export function checkCode(skillName, code, context = {}) {
   const skipped = results.filter((r) => r.skipped);
 
   const newPassed = [
-    ...(context?.previousPassed || []),
     ...passed.map((r) => r.id),
   ];
 
