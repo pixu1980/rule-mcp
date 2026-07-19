@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════════════════════════════
-//  Bootstrap — imports _App (which defines <user-card>)
+//  Bootstrap — defines <user-card> custom element
 //  ═══════════════════════════════════════════════════════════════════════════════
 
-import './_App.js';
+import './components/UserCard/index.js';

@@ -4,8 +4,8 @@
 //  Just html`` — vrComponent handles _context and _scope automatically.
 //  ═══════════════════════════════════════════════════════════════════════════════
 
-import { vrComponent, html } from '../../src/core/index.js';
-import { store, increment, decrement, resetCount } from './_store.js';
+import { vrComponent, html } from '../../../src/core/index.js';
+import { store, increment, decrement, resetCount } from '../../_store.js';
 
 export class CounterApp extends HTMLElement {
   static { vrComponent(this, { tag: 'counter-app' }); }
