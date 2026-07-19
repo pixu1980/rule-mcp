@@ -273,7 +273,9 @@ export function getTemplate(strings) {
       if (em) {
         const idx = Number(em[1]);
 
-        const info = allExprMarkers.find(e => e.index === idx);
+        const info = allExprMarkers.find((e) => {
+        return e.index === idx;
+      });
         descriptors.push({
           kind: 'expr', index: idx,
           parsedExpr: info?.parsedExpr || parseExpression(''),
@@ -287,7 +289,9 @@ export function getTemplate(strings) {
       if (dm) {
         const dirId = Number(dm[1]);
 
-        const dir = directives.find(d => d.id === dirId);
+        const dir = directives.find((d) => {
+        return d.id === dirId;
+      });
         if (dir) {
           const base = {
             kind: dir.kind,

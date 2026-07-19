@@ -10,32 +10,62 @@ export function registerFilter(name, fn) { FILTERS[name] = fn; }
 // ── Built-in filters ──────────────────────────────────────────────────────────
 export function utilSlug(v) { return String(v).toLowerCase().trim().replace(/[\s\W-]+/g, '-').replace(/^-+|-+$/g, ''); }
 
-registerFilter("upper",       v => String(v).toUpperCase());
-registerFilter("lower",       v => String(v).toLowerCase());
+registerFilter("upper",       (v) => {
+  return String(v).toUpperCase();
+});
+registerFilter("lower",       (v) => {
+  return String(v).toLowerCase();
+});
 registerFilter("capitalize",  v => {
   const s = String(v);
 
   return s[0].toUpperCase() + s.slice(1).toLowerCase();
 });
-registerFilter("slugify",     v => utilSlug(v));
-registerFilter("slug",        v => utilSlug(v));
-registerFilter("trim",        v => String(v).trim());
-registerFilter("escapeHtml",  v => String(v).replace(/[&<>"']/g, s => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#x27;' }[s] || s)));
-registerFilter("striptags",   v => String(v).replace(/<[^>]*>/g, ''));
-registerFilter("raw",         v => v);
+registerFilter("slugify",     (v) => {
+  return utilSlug(v);
+});
+registerFilter("slug",        (v) => {
+  return utilSlug(v);
+});
+registerFilter("trim",        (v) => {
+  return String(v).trim();
+});
+registerFilter("escapeHtml",  (v) => {
+  return String(v).replace(/[&<>"']/g, (s) => {
+    return ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#x27;' }[s] || s);
+  });
+});
+registerFilter("striptags",   (v) => {
+  return String(v).replace(/<[^>]*>/g, '');
+});
+registerFilter("raw",         (v) => {
+  return v;
+});
 registerFilter("json",        v => {
   try { return JSON.stringify(v); } catch { return String(v); }
 });
-registerFilter("default",     (v, d = '') => (v !== undefined && v !== null && v !== '' ? v : d));
+registerFilter("default",     (v, d = '') => {
+  return v !== undefined && v !== null && v !== '' ? v : d;
+});
 registerFilter("truncate",    (v, l = 100) => {
   const s = String(v);
 
   return s.length > l ? s.slice(0, l) + '...' : s;
 });
-registerFilter("length",      v => (Array.isArray(v) || typeof v === 'string' ? v.length : 0));
-registerFilter("where",       (v, prop) => Array.isArray(v) ? v.filter(item => item[prop]) : v);
-registerFilter("first",       v => (Array.isArray(v) && v.length ? v[0] : v));
-registerFilter("last",        v => (Array.isArray(v) && v.length ? v[v.length - 1] : v));
+registerFilter("length",      (v) => {
+  return Array.isArray(v) || typeof v === 'string' ? v.length : 0;
+});
+registerFilter("where",       (v, prop) => {
+  return Array.isArray(v) ? v.filter((item) => {
+    return item[prop];
+  }) : v;
+});
+registerFilter("first",       (v) => {
+  return Array.isArray(v) && v.length ? v[0] : v;
+});
+registerFilter("last",        (v) => {
+  return Array.isArray(v) && v.length ? v[v.length - 1] : v;
+});
 
 registerFilter("join", (v, sep = ', ') => {
   if (!Array.isArray(v)) { return v; }
@@ -125,7 +155,9 @@ registerFilter("timeAgo", value => {
   return d.toLocaleDateString('en-US');
 });
 
-registerFilter("urlencode", v => encodeURIComponent(String(v)));
+registerFilter("urlencode", (v) => {
+  return encodeURIComponent(String(v));
+});
 registerFilter("sortBy", (array, prop, dir = 'asc') => {
   if (!Array.isArray(array)) { return array; }
 

@@ -145,7 +145,9 @@ export class IfPart {
       }
     }
 
-    if (activeIdx === this._activeBranch) return; // same branch, skip re-render
+    if (activeIdx === this._activeBranch) {
+      return;
+    }
     this.clear();
     if (activeIdx >= 0 && activeIdx < this.bodies.length) {
       this.renderBranch(activeIdx);
