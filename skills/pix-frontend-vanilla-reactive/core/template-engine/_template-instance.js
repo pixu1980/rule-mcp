@@ -118,8 +118,10 @@ export function getTemplate(strings) {
       }
       // Last body (after last branch marker, before </if>)
       const remaining = inner.slice(lastIdx);
-      if (remaining.trim()) bodies.push(remaining);
-      else if (branches.length > bodies.length) {
+
+      if (remaining.trim()) {
+        bodies.push(remaining);
+      } else if (branches.length > bodies.length) {
         bodies.push('');
       }
 
