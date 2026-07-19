@@ -21,7 +21,9 @@ export class Store {
     // Fires once on construction so effects created later render immediately.
     // Disable with: new Store(data, { autoTick: false })
     if (opts.autoTick !== false) {
-      this.tick = new StateSignal(0, { equals: () => false });
+      this.tick = new StateSignal(0, { equals: () => {
+      return false;
+    } });
       this.tick.set(performance.now());  // initial kick
     }
   }

@@ -84,7 +84,9 @@ export function vrComponent(component, opts = {}) {
 
     // render() method OR opts.template (Pattern C)
     const renderFn = (typeof this.render === "function")
-      ? (ctx) => this.render(ctx)
+      ? (ctx) => {
+          return this.render(ctx);
+        }
       : opts.template
         ? (ctx) => {
             const r = opts.template;

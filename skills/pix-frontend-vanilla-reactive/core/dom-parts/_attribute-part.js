@@ -20,8 +20,8 @@ export class AttributePart extends Part {
     if (isSignalLike(value)) {
       this.disposeSignal();
       this.bindSignal(value, (r) => {
-      this.commit(r);
-    });
+        this.commit(r);
+      });
 
       return;
     }
@@ -37,7 +37,6 @@ export class AttributePart extends Part {
       return;
     }
 
-    this.element.setAttribute(this.name, value === true ? '' : String(value));
+    this.element.setAttribute(this.name, value === true ? "" : String(value));
   }
 }
-

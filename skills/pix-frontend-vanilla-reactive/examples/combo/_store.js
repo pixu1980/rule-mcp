@@ -33,7 +33,9 @@ export const addTodo = (title) => {
  * @param {number|string} id - Todo identifier
  */
 export const toggleTodo = (id) => {
-  store.state.todos = store.state.todos.map(t => t.id === id ? { ...t, done: !t.done } : t);
+  store.state.todos = store.state.todos.map((t) => {
+    return t.id === id ? { ...t, done: !t.done } : t;
+  });
 };
 
 /**
