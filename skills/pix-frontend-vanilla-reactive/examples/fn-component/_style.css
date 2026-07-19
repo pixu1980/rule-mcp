@@ -1,0 +1,27 @@
+/* ═══════════════════════════════════════════════════════════════════════════════
+   fn-component global styles — loaded via fetch + CSSStyleSheet
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+[data-part="list"] {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-width: 400px;
+}
+
+[data-part="row"] {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 0;
+  border-bottom: 1px solid #eee;
+}
+
+[data-part="text"] {
+  flex: 1;
+}
+
+[data-part="empty"] {
+  color: #999;
+  font-style: italic;
+}
