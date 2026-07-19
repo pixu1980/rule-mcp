@@ -205,12 +205,14 @@ export async function serveCommand(opts = {}) {
       null,
       2,
     );
-    console.error(`\nrule-mcp SSE server listening on ${scheme}://127.0.0.1:${port}/sse\n`);
-    console.error(`Config for agent's mcp.json:\n`);
-    console.error(configSnippet);
-    console.error(``);
-    console.error(`Then start an agent configured for HTTP/SSE.`);
-    console.error(``);
+    if (process.stderr.isTTY) {
+      console.error(`\nrule-mcp SSE server listening on ${scheme}://127.0.0.1:${port}/sse\n`);
+      console.error(`Config for agent's mcp.json:\n`);
+      console.error(configSnippet);
+      console.error(``);
+      console.error(`Then start an agent configured for HTTP/SSE.`);
+      console.error(``);
+    }
     await new Promise(() => {});
   } else {
     const configSnippet = JSON.stringify(
@@ -220,14 +222,16 @@ export async function serveCommand(opts = {}) {
       null,
       2,
     );
-    console.error(`rule-mcp starting (STDIO transport)`);
-    console.error(`Config for agent's mcp.json:\n`);
-    console.error(configSnippet);
-    console.error(``);
-    console.error(`Add to agent config, then agent spawns this process.`);
-    console.error(`To test: run tools from another terminal with:`);
-    console.error(`  echo '{"jsonrpc":"2.0","method":"tools/list","id":1}' | node ${process.argv[1]} serve`);
-    console.error(``);
+    if (process.stderr.isTTY) {
+      console.error(`rule-mcp starting (STDIO transport)`);
+      console.error(`Config for agent's mcp.json:\n`);
+      console.error(configSnippet);
+      console.error(``);
+      console.error(`Add to agent config, then agent spawns this process.`);
+      console.error(`To test: run tools from another terminal with:`);
+      console.error(`  echo '{"jsonrpc":"2.0","method":"tools/list","id":1}' | node ${process.argv[1]} serve`);
+      console.error(``);
+    }
     await startServer();
   }
 }
