@@ -14,6 +14,7 @@ Use the rule-mcp workflow for every coding task.
 8. Run project tests/typecheck and report only commands actually executed.
 9. Record structural decisions with `pix_process_adr` (disabled by default, enable with `RULE_MCP_AUTO_ADR=1`).
 10. Before writing files, run `pix_gateway` to get a receipt; use `pix_apply` with the receipt for writes.
+11. After `pix_apply` writes files, Prettier + blank-line fixer + block-spacing fixer run automatically as post-processing.
 
 ## Advisory boundaries
 
