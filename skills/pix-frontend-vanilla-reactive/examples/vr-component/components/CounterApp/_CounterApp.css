@@ -1,8 +1,9 @@
 /* ═══════════════════════════════════════════════════════════════════════════════
    CounterApp — vr-component example
-   ═══════════════════════════════════════════════════════════════════════════════ */
+   ═══════════════════════════════════════════════════════════════════════════════
+   Global adoptedStyleSheets — no :host (no Shadow DOM in this engine). */
 
-:host [data-part="counter"] {
+[data-part="counter"] {
   display: flex;
   gap: 8px;
   align-items: center;
@@ -11,12 +12,12 @@
   border-radius: 8px;
 }
 
-:host [data-part="value"] {
+[data-part="value"] {
   font-size: 1.2rem;
   min-width: 100px;
 }
 
-:host [data-part="btn"] {
+[data-part="btn"] {
   padding: 4px 12px;
   cursor: pointer;
 }
