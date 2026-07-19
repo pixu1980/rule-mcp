@@ -1,0 +1,15 @@
+/* ═══════════════════════════════════════════════════════════════════════════════
+   TodoHeader — combo example (Pattern C)
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+:host [data-part="header"] {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0.5rem 0;
+}
+
+:host [data-part="header"] h3 {
+  margin: 0;
+  font-size: 1rem;
+}

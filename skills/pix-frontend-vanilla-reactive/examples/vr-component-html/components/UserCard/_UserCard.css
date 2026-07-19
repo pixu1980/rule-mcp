@@ -1,0 +1,38 @@
+/* ═══════════════════════════════════════════════════════════════════════════════
+   UserCard — vr-component-html example (Pattern C)
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+:host [data-part="card"] {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 1.5rem;
+  max-width: 400px;
+}
+
+:host [data-part="header"] {
+  border-bottom: 1px solid #eee;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+}
+
+:host [data-part="role"] {
+  font-size: 0.85rem;
+  color: #666;
+}
+
+:host [data-part="row"] {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 0;
+}
+
+:host [data-part="row"][data-state-done="true"] span {
+  text-decoration: line-through;
+  color: #999;
+}
+
+:host [data-part="empty"] {
+  color: #999;
+  font-style: italic;
+}

@@ -1,0 +1,32 @@
+/* ═══════════════════════════════════════════════════════════════════════════════
+   TodoApp — combo example
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+:host [data-part="form"] {
+  display: flex;
+  gap: 8px;
+  margin: 1rem 0;
+}
+
+:host [data-part="input"] {
+  flex: 1;
+  padding: 4px 8px;
+}
+
+:host [data-part="list"] {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+:host [data-part="item"] {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 0;
+}
+
+:host [data-part="item"][data-state-done="true"] [data-part="title"] {
+  text-decoration: line-through;
+  color: #999;
+}
