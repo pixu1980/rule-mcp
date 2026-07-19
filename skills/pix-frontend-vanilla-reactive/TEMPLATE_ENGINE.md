@@ -31,7 +31,8 @@
 upper, lower, capitalize, slugify, slug, trim,
 escapeHtml, striptags, raw, json, default,
 truncate, length, first, last, join,
-tagLabel, tagHref, date, timeAgo, urlencode, sortBy
+tagLabel, tagHref, date, timeAgo, urlencode, sortBy,
+where
 ```
 
 ---

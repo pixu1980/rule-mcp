@@ -21,6 +21,7 @@ registerFilter('json',        v => { try { return JSON.stringify(v); } catch { r
 registerFilter('default',     (v, d = '') => (v !== undefined && v !== null && v !== '' ? v : d));
 registerFilter('truncate',    (v, l = 100) => { const s = String(v); return s.length > l ? s.slice(0, l) + '...' : s; });
 registerFilter('length',      v => (Array.isArray(v) || typeof v === 'string' ? v.length : 0));
+registerFilter('where',       (v, prop) => Array.isArray(v) ? v.filter(item => item[prop]) : v);
 registerFilter('first',       v => (Array.isArray(v) && v.length ? v[0] : v));
 registerFilter('last',        v => (Array.isArray(v) && v.length ? v[v.length - 1] : v));
 
