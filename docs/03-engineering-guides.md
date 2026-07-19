@@ -236,52 +236,11 @@ Estimated % of common frontend queries answered without LLM inference:
 
 ## Preserved source: `agent-instructions.md`
 
-> Original path: `docs/agent-instructions.md`  
-> SHA-256: `00eb6402344fc08184ba3c6254b6a7f5316847921299efcc134b7b57c3f3494a`
+> Original path: `docs/agent-instructions.md` (preserved snapshot)
+> **Note:** The live document is now at `docs/05-agent-instructions.md` with current workflow, environment variables table, and strict mode docs.
+> SHA-256 (original): `00eb6402344fc08184ba3c6254b6a7f5316847921299efcc134b7b57c3f3494a`
 
-# Agent Instructions for rule-mcp
-
-When working on frontend code, use the following workflow:
-
-## Before writing any code
-
-1. Call `rule` with complete prompt to route to exact skill.
-2. Call recommended skill tool; treat returned evidence as source of truth.
-3. If evidence missing, call `pix_search` or state uncertainty. Never guess APIs/dependencies/files.
-4. Write failing test before implementation.
-5. For common components, call `pix_component` for deterministic templates.
-6. Run `pix_check`; failed guardrails block completion. Fix and rerun until green.
-7. Run project tests/typecheck and report only commands actually executed.
-8. Record structural decisions with `pix_process_adr`.
-
-## Core principles (from rule-styleguide)
-
-- **Zero CSS classes** — use element selectors + `[data-part="..."]` + `[data-*]` attribute selectors
-- **Zero inline styles** — all styling in external `.css` files via `adoptedStyleSheets`
-- **Semantic HTML is mandatory** — no `<div>` where `<section>`, `<article>`, `<header>`, `<footer>`, `<nav>`, `<main>`, `<aside>`, `<form>`, `<ul>`, `<ol>`, `<li>` exists
-- **Barrel pattern** — every component folder has `index.js` re-export, files are `_PascalCase.ext`
-- **No CSS frameworks** — pure native CSS, no Tailwind, no Bootstrap, no CSS-in-JS
-
-## Example workflow
-
-```
-User: "Create a modal component in React"
-
-Agent calls:
-  1. rule({ prompt: "React modal component" })
-     → Routes to rule-frontend-react, suggests pix_component
-
-  2. pix_component({ component: "modal", framework: "react" })
-     → Returns React modal template + CSS
-
-  3. pix_frontend_react({ query: "component patterns" })
-     → Returns React-specific rules
-
-  4. pix_check({ skill: "rule-frontend-react", code: "..." })
-     → Blocks output until every guardrail passes
-
-Agent reports only verified implementation and executed test results
-```
+*Content moved to `docs/05-agent-instructions.md` — see that file for the latest version.*
 
 ## Preserved source: `rules-vs-styleguides-comparison.md`
 

@@ -10,6 +10,7 @@ This directory is intentionally consolidated into a small handbook. Historical f
 | [./02-tools-operations.md](./02-tools-operations.md) | MCP tools, plugins, release process, setup, and troubleshooting. This file is the operator handbook. |
 | [./03-engineering-guides.md](./03-engineering-guides.md) | Examples, benchmarks, agent instructions, and styleguide comparison notes for contributors. |
 | [./04-roadmap-plans.md](./04-roadmap-plans.md) | Execution plans and refactor roadmap consolidated into one dependency-aware planning file. |
+| [./05-agent-instructions.md](./05-agent-instructions.md) | Agent workflow, frontend principles, environment variables table, strict mode. |
 
 ## Architecture decisions
 
