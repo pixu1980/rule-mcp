@@ -10,12 +10,12 @@ export function clearRange(start, end) {
 export function moveRangeBefore(start, end, ref) {
   const f = document.createDocumentFragment();
   let c = start;
-  while (c) { const n = c.nextSibling; f.append(c); if (c === end) break; c = n; }
+  while (c) { const n = c.nextSibling; f.append(c); if (c === end) { break; } c = n; }
   ref.parentNode.insertBefore(f, ref);
 }
 export function isRangeBeforeReference(start, end, ref) {
   let c = start;
-  while (c) { if (c === ref) return false; if (c === end) return c.nextSibling === ref; c = c.nextSibling; }
+  while (c) { if (c === ref) { return false; } if (c === end) { return c.nextSibling === ref; } c = c.nextSibling; }
   return false;
 }
 let _rawWarned = false;
@@ -25,8 +25,12 @@ let _rawWarned = false;
  * When `useRaw` is true, parses the string as HTML (╧å— use with trusted content only).
  */
 export function normalizeExprValue(value, useRaw) {
-  if (value == null) return document.createTextNode('');
-  if (value instanceof Node) return value;
+  if (value == null) {
+    return document.createTextNode('');
+  }
+  if (value instanceof Node) {
+    return value;
+  }
   if (useRaw && typeof value === 'string') {
     if (!_rawWarned) {
       console.warn('[rule-vr] ╬ö using |raw filter — only use with trusted content (XSS risk)');

@@ -27,7 +27,9 @@ function getNodePath(node, root) {
   let cur = node;
   while (cur && cur !== root) {
     const p = cur.parentNode;
-    if (!p) break;
+    if (!p) {
+      break;
+    }
     let i = 0;
     let c = cur;
     while (c.previousSibling) { c = c.previousSibling; i++; }
@@ -52,9 +54,13 @@ function resolveNodePath(root, path) {
 export function getTemplate(strings) {
   let key = strings;
   // Normalize single string to array for WeakMap key
-  if (typeof strings === 'string') key = [strings];
+  if (typeof strings === 'string') {
+    key = [strings];
+  }
   let rec = templateCache.get(key);
-  if (rec) return rec;
+  if (rec) {
+    return rec;
+  }
 
   // Step 1: Assemble full HTML
   const markup = Array.isArray(strings) ? strings.join('') : strings;
@@ -113,7 +119,9 @@ export function getTemplate(strings) {
       // Last body (after last branch marker, before </if>)
       const remaining = inner.slice(lastIdx);
       if (remaining.trim()) bodies.push(remaining);
-      else if (branches.length > bodies.length) bodies.push('');
+      else if (branches.length > bodies.length) {
+        bodies.push('');
+      }
 
       directives.push({
         kind: 'if', id,
@@ -380,7 +388,9 @@ export class TemplateInstance {
         case 'for': {
           const s = document.createComment(`for:${descriptor.index}:s`);
           const e = document.createComment(`for:${descriptor.index}:e`);
-          if (node) node.replaceWith(s, e);
+          if (node) {
+            node.replaceWith(s, e);
+          }
           const forPart = new ForPart(
             s, e,
             descriptor.itemVar,
@@ -394,7 +404,9 @@ export class TemplateInstance {
         case 'if': {
           const s = document.createComment(`if:${descriptor.index}:s`);
           const e = document.createComment(`if:${descriptor.index}:e`);
-          if (node) node.replaceWith(s, e);
+          if (node) {
+            node.replaceWith(s, e);
+          }
           // Parse branches: [{ condition: 'expr' | null(isElse) }, ...]
           const branches = (descriptor.branches || []).map(b => ({
             condition: b.condition ? parseExpression(b.condition) : null,
@@ -410,7 +422,9 @@ export class TemplateInstance {
         case 'switch': {
           const s = document.createComment(`switch:${descriptor.index}:s`);
           const e = document.createComment(`switch:${descriptor.index}:e`);
-          if (node) node.replaceWith(s, e);
+          if (node) {
+            node.replaceWith(s, e);
+          }
           this.switchParts.push(new SwitchPart(
             s, e,
             parseExpression(descriptor.expr || ''),

@@ -13,6 +13,8 @@ export function withoutCollector(callback) {
   try {
     return callback();
   } finally {
-    if (current) pushCollector(current);
+    if (current) {
+      pushCollector(current);
+    }
   }
 }

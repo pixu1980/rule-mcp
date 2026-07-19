@@ -27,21 +27,27 @@ registerFilter('first',       v => (Array.isArray(v) && v.length ? v[0] : v));
 registerFilter('last',        v => (Array.isArray(v) && v.length ? v[v.length - 1] : v));
 
 registerFilter('join', (v, sep = ', ') => {
-  if (!Array.isArray(v)) return v;
+  if (!Array.isArray(v)) { return v; }
   return v.map(i => (typeof i === 'object' && i?.label) ? i.label : String(i)).join(sep);
 });
 
 registerFilter('tagLabel', tag => {
-  if (!tag) return '';
+  if (!tag) {
+    return '';
+  }
   const raw = typeof tag === 'object' ? (tag.label || tag.name || String(tag)) : String(tag);
   const m = { css: 'CSS', html: 'HTML' };
   return m[String(raw).toLowerCase().trim()] || raw;
 });
 
 registerFilter('tagHref', tag => {
-  if (!tag) return '/tags/';
+  if (!tag) {
+    return '/tags/';
+  }
   if (typeof tag === 'object') {
-    if (tag.url) return tag.url.startsWith('/') ? tag.url : '/' + tag.url;
+    if (tag.url) {
+      return tag.url.startsWith('/') ? tag.url : '/' + tag.url;
+    }
     return '/tags/' + utilSlug(tag.key || tag.name || String(tag)) + '.html';
   }
   return '/tags/' + utilSlug(tag) + '.html';
@@ -49,12 +55,22 @@ registerFilter('tagHref', tag => {
 
 registerFilter('date', (value, format = 'en-US') => {
   const d = new Date(value);
-  if (Number.isNaN(d.getTime())) return value;
-  if (format === 'YYYY-MM-DD') return d.toISOString().split('T')[0];
-  if (format === 'long') return d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
-  if (format === 'short') return d.toLocaleDateString('en-US', { year: '2-digit', month: 'numeric', day: 'numeric' });
-  if (format === 'full') return d.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-  if (format === 'iso') return d.toISOString();
+  if (Number.isNaN(d.getTime())) { return value; }
+  if (format === 'YYYY-MM-DD') {
+    return d.toISOString().split('T')[0];
+  }
+  if (format === 'long') {
+    return d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+  }
+  if (format === 'short') {
+    return d.toLocaleDateString('en-US', { year: '2-digit', month: 'numeric', day: 'numeric' });
+  }
+  if (format === 'full') {
+    return d.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+  }
+  if (format === 'iso') {
+    return d.toISOString();
+  }
   if (format === 'DD MMM YYYY') {
     const ms = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
     return String(d.getDate()).padStart(2, '0') + ' ' + ms[d.getMonth()] + ' ' + d.getFullYear();
@@ -65,19 +81,27 @@ registerFilter('date', (value, format = 'en-US') => {
 
 registerFilter('timeAgo', value => {
   const d = new Date(value);
-  if (Number.isNaN(d.getTime())) return value;
+  if (Number.isNaN(d.getTime())) { return value; }
   const diff = Date.now() - d.getTime();
   const mins = Math.floor(diff / 60000), hrs = Math.floor(diff / 3600000), days = Math.floor(diff / 86400000);
-  if (mins < 1) return 'just now';
-  if (mins < 60) return `${mins} ${mins === 1 ? 'minute' : 'minutes'} ago`;
-  if (hrs < 24) return `${hrs} ${hrs === 1 ? 'hour' : 'hours'} ago`;
-  if (days < 30) return `${days} ${days === 1 ? 'day' : 'days'} ago`;
+  if (mins < 1) {
+    return 'just now';
+  }
+  if (mins < 60) {
+    return `${mins} ${mins === 1 ? 'minute' : 'minutes'} ago`;
+  }
+  if (hrs < 24) {
+    return `${hrs} ${hrs === 1 ? 'hour' : 'hours'} ago`;
+  }
+  if (days < 30) {
+    return `${days} ${days === 1 ? 'day' : 'days'} ago`;
+  }
   return d.toLocaleDateString('en-US');
 });
 
 registerFilter('urlencode', v => encodeURIComponent(String(v)));
 registerFilter('sortBy', (array, prop, dir = 'asc') => {
-  if (!Array.isArray(array)) return array;
+  if (!Array.isArray(array)) { return array; }
   return [...array].sort((a, b) => {
     let va = a[prop], vb = b[prop];
     if (prop === 'date') { va = new Date(va); vb = new Date(vb); }

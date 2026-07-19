@@ -43,7 +43,9 @@ export function vrComponent(component, opts = {}) {
   const { tag, css } = opts;
 
   // ── Validate ────────────────────────────────────────────────
-  if (!tag) throw new Error('vrComponent: tag is required');
+  if (!tag) {
+    throw new Error('vrComponent: tag is required');
+  }
   if (!(component.prototype instanceof HTMLElement)) {
     throw new Error('vrComponent: class must extend HTMLElement');
   }
@@ -63,9 +65,11 @@ export function vrComponent(component, opts = {}) {
   // ── 3. Override connectedCallback ───────────────────────────
   const origConnected = component.prototype.connectedCallback;
   component.prototype.connectedCallback = function () {
-    if (this._vrMounted) return;
+    if (this._vrMounted) { return; }
     this._vrMounted = true;
-    if (origConnected) origConnected.call(this);
+    if (origConnected) {
+      origConnected.call(this);
+    }
 
     // context() is optional — defaults to {} if not defined
     const getContext = (typeof this.context === 'function')
@@ -93,8 +97,12 @@ export function vrComponent(component, opts = {}) {
       const ctx = getContext();
       const result = renderFn(ctx);
       if (result && result.kind === 'template-result') {
-        if (!result._context) result._context = ctx;
-        if (!result._scope) result._scope = this;
+        if (!result._context) {
+          result._context = ctx;
+        }
+        if (!result._scope) {
+          result._scope = this;
+        }
         render(result, this);
       }
     });
@@ -108,7 +116,9 @@ export function vrComponent(component, opts = {}) {
       this._vrDispose = null;
     }
     this._vrMounted = false;
-    if (origDisconnected) origDisconnected.call(this);
+    if (origDisconnected) {
+      origDisconnected.call(this);
+    }
   };
 }
 
@@ -133,7 +143,7 @@ async function _loadComponentCSS(css, component) {
   }
 
   // Mode 1 & 2: string path
-  if (typeof css !== 'string') return;
+  if (typeof css !== "string") { return; }
 
   let cssPath = css;
 

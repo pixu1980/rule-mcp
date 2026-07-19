@@ -52,7 +52,9 @@ export class EventPart {
     // Resolve args eagerly (except $event which is click-time)
     this._resolvedArgs = this.argExprs.map(expr => {
       const raw = expr?.variable || expr?.name || '';
-      if (raw === '$event') return '$event';  // sentinel for click-time
+      if (raw === '$event') {
+        return '$event';
+      }  // sentinel for click-time
       return evaluateExpression(expr, context, scope);
     });
   }
