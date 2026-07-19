@@ -16,6 +16,7 @@ export const addItem = () => {
   if (title) {
     store.state.items = [...store.state.items, title];
   }
+
 };
 
 /**

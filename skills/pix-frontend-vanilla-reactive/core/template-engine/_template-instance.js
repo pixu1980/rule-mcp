@@ -72,6 +72,7 @@ export function getTemplate(strings) {
   }
 
   let rec = templateCache.get(key);
+
   if (rec) {
     return rec;
   }
@@ -462,6 +463,7 @@ export class TemplateInstance {
           const s = document.createComment(`for:${descriptor.index}:s`);
 
           const e = document.createComment(`for:${descriptor.index}:e`);
+
           if (node) {
             node.replaceWith(s, e);
           }
@@ -482,6 +484,7 @@ export class TemplateInstance {
           const s = document.createComment(`if:${descriptor.index}:s`);
 
           const e = document.createComment(`if:${descriptor.index}:e`);
+
           if (node) {
             node.replaceWith(s, e);
           }
@@ -498,6 +501,7 @@ export class TemplateInstance {
           const s = document.createComment(`switch:${descriptor.index}:s`);
 
           const e = document.createComment(`switch:${descriptor.index}:e`);
+
           if (node) {
             node.replaceWith(s, e);
           }

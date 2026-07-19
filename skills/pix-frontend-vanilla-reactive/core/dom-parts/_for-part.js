@@ -131,6 +131,7 @@ export class ForPart {
       const children = [...tmp.content.childNodes];
 
       const insertPoint = block.end;
+
       for (let i = children.length - 1; i >= 0; i--) {
         insertPoint.parentNode.insertBefore(children[i], insertPoint);
       }

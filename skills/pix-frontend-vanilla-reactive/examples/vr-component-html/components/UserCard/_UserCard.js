@@ -27,4 +27,5 @@ export class UserCard extends HTMLElement {
   context() {
     return { user: store.state.user, todos: store.state.todos };
   }
+
 }

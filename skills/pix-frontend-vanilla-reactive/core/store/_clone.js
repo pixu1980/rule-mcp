@@ -66,6 +66,7 @@ export function clonePlainValue(value, seen = new WeakMap()) {
     if (!d?.enumerable) {
       continue;
     }
+
     n[k] = clonePlainValue(raw[k], seen);
   }
 

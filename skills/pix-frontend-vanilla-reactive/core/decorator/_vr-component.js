@@ -73,6 +73,7 @@ export function vrComponent(component, opts = {}) {
     }
 
     this._vrMounted = true;
+
     if (origConnected) {
       origConnected.call(this);
     }
@@ -140,9 +141,11 @@ export function vrComponent(component, opts = {}) {
     }
 
     this._vrMounted = false;
+
     if (origDisconnected) {
       origDisconnected.call(this);
     }
+
   };
 }
 
@@ -162,6 +165,7 @@ async function _loadComponentCSS(css, component) {
       if (sheet instanceof CSSStyleSheet) {
         document.adoptedStyleSheets = [...document.adoptedStyleSheets, sheet];
       }
+
     }
 
     return;
