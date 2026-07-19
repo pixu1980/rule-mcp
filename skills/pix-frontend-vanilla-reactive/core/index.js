@@ -29,6 +29,7 @@ export {
 export {
   html,
   loadTemplate,
+  loadCSS,
   render,
   registerFilter,
   FILTERS,

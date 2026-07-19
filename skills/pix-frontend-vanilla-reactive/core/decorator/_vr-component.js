@@ -23,7 +23,7 @@
 //    }
 //  ═══════════════════════════════════════════════════════════════════════════════
 
-import { Signal, effect, render } from '../index.js';
+import { Signal, effect, render, loadCSS } from '../index.js';
 
 /**
  * Decorator for reactive Custom Elements.
@@ -54,7 +54,7 @@ export function vrComponent(component, opts = {}) {
 
   // ── 2. Load and adopt CSS ───────────────────────────────────
   if (css) {
-    loadCSS(css, component).catch(err => {
+    _loadComponentCSS(css, component).catch(err => {
       console.warn(`vrComponent: CSS load failed for <${tag}>:`, err.message);
     });
   }
@@ -120,7 +120,7 @@ export function vrComponent(component, opts = {}) {
  *   './path.css' → fetch
  *   [sheets]     → adopt directly
  */
-async function loadCSS(css, component) {
+async function _loadComponentCSS(css, component) {
   // Mode 3: CSSStyleSheet array → adopt directly
   if (Array.isArray(css)) {
     for (const sheet of css) {
@@ -143,19 +143,10 @@ async function loadCSS(css, component) {
     cssPath = css.replace(/\.[^.]+$/, '.css');
   }
 
-  // Fetch CSS text
-  let cssText;
+  // Fetch and adopt via shared helper
   try {
-    const res = await fetch(cssPath);
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    cssText = await res.text();
+    await loadCSS(cssPath);
   } catch (err) {
-    console.warn(`vrComponent: cannot fetch CSS at "${cssPath}": ${err.message}`);
-    return;
+    console.warn(`vrComponent: cannot load CSS at "${cssPath}": ${err.message}`);
   }
-
-  // Create and adopt stylesheet
-  const sheet = new CSSStyleSheet();
-  sheet.replaceSync(cssText);
-  document.adoptedStyleSheets = [...document.adoptedStyleSheets, sheet];
 }
