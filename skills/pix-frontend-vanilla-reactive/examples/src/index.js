@@ -1,11 +1,10 @@
 // ═══════════════════════════════════════════════════════════════════════════════
-//  pix-frontend-vanilla-reactive — Structured Demo Entry Point
-//  ── App mounts via <app-root> custom element (connectedCallback)
-// ═══════════════════════════════════════════════════════════════════════════════
+//  Shared Filter Registration
+//  ── Called once at module load. Filters available to all apps.
+//  ═══════════════════════════════════════════════════════════════════════════════
 
 import { registerFilter } from './core/index.js';
 
-// Register filters (called once at module load)
 registerFilter('upper',   v => String(v).toUpperCase());
 registerFilter('lower',   v => String(v).toLowerCase());
 registerFilter('capitalize', v => { const s = String(v); return s[0].toUpperCase() + s.slice(1).toLowerCase(); });
@@ -27,6 +26,3 @@ registerFilter('date', (value, format = 'en-US') => { const d = new Date(value);
 registerFilter('timeAgo', value => { const d = new Date(value); if (Number.isNaN(d.getTime())) return value; const diff = Date.now() - d.getTime(); const mins = Math.floor(diff / 60000); if (mins < 1) return 'just now'; if (mins < 60) return mins + 'm ago'; const hrs = Math.floor(diff / 3600000); if (hrs < 24) return hrs + 'h ago'; const days = Math.floor(diff / 86400000); if (days < 30) return days + 'd ago'; return d.toLocaleDateString('en-US'); });
 registerFilter('urlencode', v => encodeURIComponent(String(v)));
 registerFilter('sortBy', (array, prop, dir = 'asc') => { if (!Array.isArray(array)) return array; return [...array].sort((a, b) => { let va = a[prop], vb = b[prop]; return dir === 'desc' ? (va < vb ? 1 : -1) : (va > vb ? 1 : -1); }); });
-
-// Import App to trigger the module (CSS fetch + element definition)
-import './components/App/index.js';
