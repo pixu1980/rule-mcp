@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════════════════════════════
-//  Bootstrap — imports _App (which renders into #root)
+//  Bootstrap — imports _App (which renders into document.body by default)
 //  ═══════════════════════════════════════════════════════════════════════════════
 
 'use strict';
