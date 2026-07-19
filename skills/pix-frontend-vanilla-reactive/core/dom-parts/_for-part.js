@@ -52,7 +52,9 @@ export class ForPart {
         block = { key, start: s, end: e, item };
         this.renderBlock(block, item);
       } else {
-        if (!isRangeBeforeReference(block.start, block.end, ref)) moveRangeBefore(block.start, block.end, ref);
+        if (!isRangeBeforeReference(block.start, block.end, ref)) {
+          moveRangeBefore(block.start, block.end, ref);
+        }
         if (block.item !== item) {
           this.renderBlock(block, item); block.item = item; }
       }
