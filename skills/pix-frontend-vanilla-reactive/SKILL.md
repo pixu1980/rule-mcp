@@ -570,44 +570,32 @@ store.tick.set(performance.now());
 ```
 src/
   index.html
-  index.js                              ← Entry point
+  index.js                              ← Entry point + filter registration
   core/
-    index.js                            ← Unified exports
-    signals/                            ← Signal system
-    store/                              ← Proxy Store
-    template-engine/                    ← Template engine
-  components/
-    App/
-      index.js                          ← Barrel
-      _App.js                           ← Pattern CustomElement vrComponent: CE + vrComponent
-      _App.css                          ← External CSS
-    TodoItem/
-      index.js
-      _TodoItem.js
-      _TodoItem.css
-    ProfileCard/
-      index.js
-      _ProfileCard.js                   ← Pattern CustomElement vrComponent with External HTML: CE + external template
-      _ProfileCard.css
-      _ProfileCard.template.html        ← External HTML template ({{ }}, <for>, <if>)
-  helpers/
-    index.js
-    actions/                            ← Store mutation functions
-    computed/                           ← ComputedSignal factories
-    shared/                             ← Shared singletons (store, tickState)
-    func/                               ← Pattern Functional Component: functional components
-      _todoList.js                      ←   returns html`` + _scope
-  core/
-    index.js                            ← Unified exports
-    signals/                            ← Signal system
-    store/                              ← Proxy Store
-    template-engine/                    ← Template engine
+    index.js                            ← Unified re-exports
+    signals/                            ← Signal system (State, Computed, effect)
+    store/                              ← Proxy Store (auto-creates store.tick)
+    template-engine/                    ← html, render, getTemplate, loadTemplate
+      _with-context.js                  ← withContext(), compose() helpers
+      _load-template.js                 ← loadTemplate() helper
+    dom-parts/                          ← DOMPart classes (EventPart, ForPart, …)
     decorator/
-      _vr-component.js                  ← vrComponent() helper
+      _vr-component.js                  ← vrComponent() decorator
   styles/
     index.css
     _base.css
     _components.css
+  apps/                                 ← Example apps (see Quickstart)
+    vr-component/
+      index.html, index.js, _App.js
+    fn-component/
+      index.html, index.js, _App.js
+    vr-component-html/
+      index.html, index.js, _App.js, _Card.template.html
+    combo/
+      index.html, index.js, _App.js
+      components/TodoHeader/
+        index.js, _TodoHeader.js, _TodoHeader.template.html
 ```
 
 ---
