@@ -50,4 +50,4 @@ Load `common` rule first (this file). Load other rules only when needed:
    - `scaffolding-frontend-react-vite`
    - `scaffolding-ai-agents-app`
    - `scaffolding-expo-app`
-2. Load `rules/testing-standards.md` when configuring tests
+2. Load `skills/rule-devops-testing/STANDARDS.md` when configuring tests

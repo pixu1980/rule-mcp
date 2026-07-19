@@ -8,5 +8,6 @@ dist/
 *.tgz
 *.tar.gz
 
-.agents/
+.git
+
 .pi/

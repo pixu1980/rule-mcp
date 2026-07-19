@@ -132,7 +132,7 @@ Or `pnpm` scripts.
 
 ## Testing
 
-<Coverage thresholds and how to run tests. Reference rules/testing-standards.md content.>
+<Coverage thresholds and how to run tests. Reference skills/rule-devops-testing/STANDARDS.md content.>
 ```
 
 ### architecture.mdx
