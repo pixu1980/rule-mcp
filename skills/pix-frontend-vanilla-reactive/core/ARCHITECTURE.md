@@ -21,6 +21,66 @@ core/
 **No build step.** All files are plain ES modules. Serve with any HTTP server
 (Vite, `npx serve`, caddy, etc.). `file://` protocol won't work for ES modules.
 
+### Public API (`core/index.js`)
+
+| Export | Purpose |
+|--------|---------|
+| `html` | TemplateResult from tagged template or string |
+| `render` | Mount TemplateResult into DOM container |
+| `registerFilter` | Add a custom filter for `{{ expr \| filter }}` |
+| `vrComponent` | Decorator: define CE + CSS + reactive lifecycle |
+| `Signal`, `effect` | Signal primitives (State, Computed, effect) |
+| `Store` | Proxy-based state container (auto-creates store.tick) |
+| `loadTemplate` | Fetch + parse external `.template.html` file |
+| `TemplateInstance` | Compiled template (one per unique `html`\`\``) |
+| `ChildNodePart` | Text / template / iterable rendering |
+| `ExprPart` | `{{ }}` interpolation |
+| `AttributePart` | Attribute binding `attr="{{ }}"` |
+| `PropertyPart` | Property binding `.prop="{{ }}"` |
+| `EventPart` | `@event="handler(args)"` binding |
+| `ForPart` | `<for>` loop |
+| `IfPart`, `SwitchPart` | `<if>`/`<elseif>`/`<else>` and `<switch>`/`<case>`/`<default>` |
+
+### Full file structure
+
+```
+src/
+  index.html                    ← <app-root></app-root> + <script module>
+  index.js                     ← Entry point + filter registration
+  core/
+    index.js                   ← Unified re-exports
+    signals/                   ← Signal.State, Computed, effect, scheduler
+    store/                     ← Proxy Store (get, set, replace, snapshot)
+    template-engine/           ← html, render, getTemplate, all parts
+    dom-parts/                 ← EventPart, ForPart, IfPart, …
+    decorator/
+      _vr-component.js         ← vrComponent(this, { tag, css })
+  components/                  ← One folder per component
+    App/
+      index.js                  ← Barrel
+      _App.js                   ← CE + vrComponent
+      _App.css                  ← Adopted stylesheet
+  helpers/
+    actions/                    ← Store mutation functions
+    computed/                   ← ComputedSignal factories
+    func/                       ← Functional components
+      _todoList.js
+      _contactCard.js
+  styles/
+    _base.css
+    _variables.css
+```
+
+### Quick pattern reference
+
+| Pattern | File | Lifecycle | CSS | Events |
+|---------|------|-----------|-----|--------|
+| A: CE + vrComponent | `_PascalCase.js` | auto (vrComponent) | auto (vrComponent) | methods on class |
+| B: Functional fn | `_snake_case.js` | parent CE | by parent | `result._scope = { fn }` |
+| C: CE + ext. template | `_PascalCase.js` + `_PascalCase.template.html` | auto (vrComponent) | auto (vrComponent) | methods on class |
+
+See `SKILL.md §5` for full pattern documentation.
+
 ---
 
 ## Data Flow
