@@ -12,13 +12,40 @@ import { clearRange } from './_range.js';
 
 /**
  * Render a raw inner template string (with {{ }} expressions) against a context.
- * Used when the branch content is a string (not a compiled TemplateInstance).
+ * Parsed expressions are cached per template string.
  */
+const _exprCache = new Map();
+
 function renderRawTemplate(templateStr, ctx) {
-  const html = templateStr.replace(/\{\{([^}]+)\}\}/g, (_, expr) => {
-    const val = evaluateExpression(parseExpression(expr.trim()), ctx);
-    return val == null ? '' : String(val);
-  });
+  // Cache parsed expressions per template string
+  let parsed = _exprCache.get(templateStr);
+  if (!parsed) {
+    const parts = [];
+    let lastIdx = 0;
+    const re = /\{\{([^}]+)\}\}/g;
+    let m;
+    while ((m = re.exec(templateStr)) !== null) {
+      if (m.index > lastIdx) parts.push(templateStr.slice(lastIdx, m.index));
+      parts.push({ parsed: parseExpression(m[1].trim()), isExpr: true });
+      lastIdx = re.lastIndex;
+    }
+    if (lastIdx < templateStr.length) parts.push(templateStr.slice(lastIdx));
+    _exprCache.set(templateStr, parts);
+    parsed = parts;
+  }
+
+  // Evaluate against context
+  const out = [];
+  for (const p of parsed) {
+    if (p.isExpr) {
+      const val = evaluateExpression(p.parsed, ctx);
+      out.push(val == null ? '' : String(val));
+    } else {
+      out.push(p);
+    }
+  }
+  const html = out.join('');
+
   const tmp = document.createElement('template');
   tmp.innerHTML = html;
   return tmp.content.childNodes;
