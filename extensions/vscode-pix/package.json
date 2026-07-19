@@ -19,7 +19,6 @@
     "template",
     "web-components"
   ],
-  "icon": "icon.png",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -29,8 +28,13 @@
     "languages": [
       {
         "id": "pix-template-html",
-        "aliases": ["Pix HTML Template", "pix-template-html"],
-        "extensions": [".template.html"],
+        "aliases": [
+          "Pix HTML Template",
+          "pix-template-html"
+        ],
+        "extensions": [
+          ".template.html"
+        ],
         "configuration": "./language-configuration/language-configuration.json"
       }
     ],

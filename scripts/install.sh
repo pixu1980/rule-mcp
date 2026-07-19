@@ -488,6 +488,28 @@ fi
 # Agent and IDE configurations are written only for selections made in Phase 3.
 
 # ─────────────────────────────────────────────────────────────────────────────
+# PHASE 4: VS Code Extension
+# ─────────────────────────────────────────────────────────────────────────────
+header "Phase 4: VS Code Extension"
+
+VSIX_PATH="$(dirname "$0")/../extensions/pix-vanilla-reactive.vsix"
+if [[ -f "$VSIX_PATH" ]]; then
+  if command -v code &>/dev/null; then
+    echo -e "  ${CYAN}Installing Pix Vanilla Reactive VS Code extension...${NC}"
+    if code --install-extension "$VSIX_PATH" --force 2>&1 | tail -1; then
+      echo -e "  ${GREEN}✓ Extension installed${NC}"
+    else
+      warn "VS Code extension install failed (non-critical)"
+    fi
+  else
+    echo -e "  ${YELLOW}code CLI not found — VS Code extension not installed${NC}"
+    echo -e "  ${YELLOW}  Install via: code --install-extension $VSIX_PATH${NC}"
+  fi
+else
+  echo -e "  ${YELLOW}VSIX not found at $VSIX_PATH — skipping extension install${NC}"
+fi
+
+# ─────────────────────────────────────────────────────────────────────────────
 # PHASE 6: Agent Instruction Files
 # ─────────────────────────────────────────────────────────────────────────────
 if [[ "$INSTALL_RULES" == "true" ]]; then

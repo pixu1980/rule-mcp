@@ -516,6 +516,32 @@ else
 fi
 
 # ─────────────────────────────────────────────────────────────────────────────
+# PHASE 3b: VS Code Extension
+# ─────────────────────────────────────────────────────────────────────────────
+header "Phase 3b: VS Code Extension"
+
+if command -v code &>/dev/null; then
+  EXT_ID="pix-vanilla-reactive"
+  INSTALLED=$(code --list-extensions 2>/dev/null | grep -i "$EXT_ID" || true)
+  if [[ -n "$INSTALLED" ]]; then
+    if [[ "$DRY_RUN" == "true" ]]; then
+      sub "[dry-run] Would uninstall VS Code extension: $EXT_ID"
+    else
+      echo -e "  ${CYAN}Uninstalling VS Code extension: $EXT_ID...${NC}"
+      if code --uninstall-extension "$EXT_ID" 2>&1 | tail -1; then
+        sub "VS Code extension uninstalled"
+      else
+        warn "Failed to uninstall VS Code extension (try manually)"
+      fi
+    fi
+  else
+    sub "VS Code extension not installed, skipping"
+  fi
+else
+  sub "code CLI not found, skipping VS Code extension"
+fi
+
+# ─────────────────────────────────────────────────────────────────────────────
 # PHASE 4: Shell Profile Environment Variables
 # ─────────────────────────────────────────────────────────────────────────────
 header "Phase 4: Shell Profiles"
