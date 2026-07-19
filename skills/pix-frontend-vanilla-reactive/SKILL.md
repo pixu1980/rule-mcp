@@ -64,6 +64,22 @@ No manual `tickState`, no `window.addEventListener`, no `store.tick.set()` —
 all automatic. Just `new Store()` and the component is reactive.
 ```
 
+Boilerplate reduction: use `withContext` and `compose` to skip the
+repetitive `result._context = …; result._scope = …; return result;`:
+
+| Helper | Purpose |
+|--------|---------|
+| `withContext(tpl, ctx, scope)` | Attach context + scope to any TemplateResult |
+| `compose(tpl, data, handlers)` | Shorthand for `html\`\`` + context + scope |
+
+```js
+// Pattern A/C: render() → 4 lines to 1
+render(ctx) { return withContext(TEMPLATE, ctx, this); }
+
+// Pattern B: function return → 5 lines to 1
+return compose(html`<button @click="fn">{{ x }}</button>`, ctx, { fn });
+```
+
 **Serve** via `pnpm dev` (Vite), `npx serve`, o qualsiasi HTTP server.
 I moduli ES (`type="module"`) NON funzionano con `file://`.
 

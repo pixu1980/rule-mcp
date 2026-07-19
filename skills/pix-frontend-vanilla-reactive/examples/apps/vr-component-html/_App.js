@@ -3,7 +3,7 @@
 //  ═══════════════════════════════════════════════════════════════════════════════
 //  Uses loadTemplate helper + store.tick (automatic).
 
-import { Store, vrComponent, html, loadTemplate } from '../../src/core/index.js';
+import { Store, vrComponent, html, loadTemplate, withContext } from '../../src/core/index.js';
 
 const store = new Store({
   user: { name: 'Alice', role: 'admin' },
@@ -27,9 +27,6 @@ export class UserCard extends HTMLElement {
   context() { return { user: store.state.user, todos: store.state.todos }; }
 
   render(ctx) {
-    const result = TEMPLATE;
-    result._context = ctx;
-    result._scope = this;
-    return result;
+    return withContext(TEMPLATE, ctx, this);
   }
 }

@@ -5,7 +5,7 @@
 //  store.tick is automatic — no manual tickState.
 //  ═══════════════════════════════════════════════════════════════════════════════
 
-import { Store, effect, html, render } from '../../src/core/index.js';
+import { Store, effect, html, render, compose } from '../../src/core/index.js';
 
 const store = new Store({ items: ['Pix', 'Vanilla', 'Reactive'] });
 
@@ -20,7 +20,7 @@ const removeItem = (id) => {
 
 // ── Functional component ───────────────────────────────────────
 function ItemList(ctx) {
-  const result = html`
+  return compose(html`
     <section>
       <for each="item in ctx.items">
         <article><span>{{ item }}</span><button @click="removeItem(_index)">✕</button></article>
@@ -28,17 +28,12 @@ function ItemList(ctx) {
       <if condition="ctx.items.length === 0"><p>List is empty.</p></if>
       <button @click="addItem()">+ Add</button>
     </section>
-  `;
-  result._scope = { addItem, removeItem };
-  result._context = ctx;
-  return result;
+  `, ctx, { addItem, removeItem });
 }
 
 // ── Mount effect ────────────────────────────────────────────────
 effect(() => {
   store.tick.get();
   const ctx = { items: store.state.items };
-  const result = ItemList(ctx);
-  result._context = ctx;
-  render(result, document.getElementById('root'));
+  render(ItemList(ctx), document.getElementById('root'));
 });
