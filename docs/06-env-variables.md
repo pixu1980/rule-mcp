@@ -29,3 +29,8 @@ Variables set via `pix config env` are saved to `~/.config/pix-galaxy-mcp/env.js
 and automatically injected into the MCP stdio configuration on install/update.
 
 Environment variables set in your shell profile override the persisted config.
+
+## Strict mode
+
+Set `PIX_STRICT_MODE=1` to expose only 9 read-only + gateway tools:
+`pix_gateway`, `pix_apply`, `pix`, `pix_search`, `pix_check`, `pix_detect`, `pix_scaffold`, `pix_component`, `pix_process_handoff`.
