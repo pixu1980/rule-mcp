@@ -31,6 +31,7 @@ import {
   toolsCommand,
   doctorCommand,
   configCommand,
+  configureCommand,
   skillsReloadCommand,
   completionsCommand,
   fixCommand,
@@ -47,6 +48,15 @@ const command = args[0] ?? "serve";
 const getArg = (name, fallback) => {
   const i = args.indexOf(name);
   return i >= 0 ? args[i + 1] ?? fallback : fallback;
+};
+
+/** Get all values for a repeated flag (e.g. --set KEY=VALUE --set KEY2=VALUE2). */
+const getArgs = (name) => {
+  const values = [];
+  for (let i = 0; i < args.length - 1; i++) {
+    if (args[i] === name) values.push(args[i + 1]);
+  }
+  return values.length > 0 ? values : undefined;
 };
 
 /** Check if a flag is present. */
@@ -349,7 +359,11 @@ export async function cli() {
 
       case "config":
         if (hasFlag("--help") || hasFlag("-h")) { printConfigHelp(); return; }
-        configCommand({ global: hasFlag("--global"), mode: getArg("--mode", "stdio") });
+        if (args[1] === "env") {
+          configureCommand({ set: getArgs("--set"), list: hasFlag("--list"), unset: getArg("--unset", undefined) });
+        } else {
+          configCommand({ global: hasFlag("--global"), mode: getArg("--mode", "stdio") });
+        }
         break;
 
       case "doctor":

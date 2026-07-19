@@ -15,7 +15,7 @@ import { fileURLToPath } from "node:url";
 import { startServer } from "../server.js";
 import { startSseServer } from "../transport/sse.js";
 import { callTool, listTools } from "../tools/router.js";
-import { installAgent, mcpServerConfig } from "./install.js";
+import { installAgent, mcpServerConfig, writeEnvConfig, readEnvConfig } from "./install.js";
 import { uninstallFromAgent } from "./uninstall.js";
 import { getRuntimePaths } from "./paths.js";
 import { loadAllSkills } from "../core/skills.js";
@@ -465,6 +465,84 @@ export async function toolsCommand(opts) {
  */
 export function configCommand(opts = {}) {
   print(JSON.stringify(mcpServerConfig(entrypoint, { global: opts.global, mode: opts.mode }), null, 2));
+}
+
+/**
+ * Configure RULE_MCP_* environment variables for the MCP server.
+ * Interactive prompts if no --set arguments provided.
+ *
+ * @param {{ set?: string[], list?: boolean, unset?: string }} opts
+ */
+export function configureCommand(opts = {}) {
+  const RULE_MCP_VARS = {
+    RULE_MCP_STRICT_MODE: { desc: "Expose only gateway + read-only tools. Safe for untrusted code.", values: "1 = enable" },
+    RULE_MCP_AUTO_ADR: { desc: "Automatically log architecture decisions.", values: "1 = enable" },
+    RULE_MCP_DISABLE_AUTO_ADR: { desc: "Disable automatic ADR logging (used internally).", values: "1 = disable" },
+    RULE_MCP_DAEMON: { desc: "Run as daemon process.", values: "1 = enable" },
+  };
+
+  if (opts.list) {
+    const saved = readEnvConfig();
+    const lines = ["Current RULE_MCP_* environment variables:", ""];
+    for (const [key, meta] of Object.entries(RULE_MCP_VARS)) {
+      const val = saved[key] || "(not set)";
+      lines.push(`  ${key}=${val}`);
+      lines.push(`    ${meta.desc}`);
+      lines.push(`    Values: ${meta.values}`);
+      lines.push("");
+    }
+    print(lines.join("\n"));
+    return;
+  }
+
+  if (opts.unset) {
+    const saved = readEnvConfig();
+    delete saved[opts.unset];
+    writeEnvConfig(saved);
+    print(`Unset ${opts.unset}`);
+    return;
+  }
+
+  if (opts.set && opts.set.length > 0) {
+    const env = {};
+    for (const pair of opts.set) {
+      const eqIdx = pair.indexOf("=");
+      if (eqIdx < 1) throw new Error(`Invalid env format: "${pair}". Use KEY=VALUE.`);
+      env[pair.slice(0, eqIdx)] = pair.slice(eqIdx + 1);
+    }
+    writeEnvConfig(env);
+    print(`Saved ${Object.keys(env).length} environment variable(s).`);
+    return;
+  }
+
+  // Interactive mode: readline prompts
+  print("Configure RULE_MCP_* environment variables (leave empty to skip):");
+  print("");
+  const saved = readEnvConfig();
+  const readline = require("readline").createInterface({ input: process.stdin, output: process.stdout });
+  const keys = Object.keys(RULE_MCP_VARS);
+  let idx = 0;
+
+  const ask = () => {
+    if (idx >= keys.length) {
+      readline.close();
+      writeEnvConfig(saved);
+      print("");
+      print(`Configuration saved. Run "rule configure --list" to review.`);
+      return;
+    }
+    const key = keys[idx];
+    const meta = RULE_MCP_VARS[key];
+    const current = saved[key] || "";
+    readline.question(`${key} (${meta.desc}) [${current}]: `, (answer) => {
+      if (answer.trim()) {
+        saved[key] = answer.trim();
+      }
+      idx++;
+      ask();
+    });
+  };
+  ask();
 }
 
 /**

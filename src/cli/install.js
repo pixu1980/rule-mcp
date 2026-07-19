@@ -174,8 +174,46 @@ const resolveGlobalBinary = () => {
   return null;
 };
 
+/**
+ * Environment variable config directory and file.
+ */
+const ENV_CONFIG_DIR = join(homedir(), ".config", "rule-mcp");
+const ENV_CONFIG_FILE = join(ENV_CONFIG_DIR, "env.json");
+
+/**
+ * Read saved RULE_MCP_* environment variable preferences from disk.
+ * Returns {} if no config file exists.
+ */
+function readEnvConfig() {
+  try {
+    if (!existsSync(ENV_CONFIG_FILE)) return {};
+    return JSON.parse(readFileSync(ENV_CONFIG_FILE, "utf8"));
+  } catch {
+    return {};
+  }
+}
+
+/**
+ * Save RULE_MCP_* environment variable preferences to disk.
+ */
+export function writeEnvConfig(env) {
+  mkdirSync(ENV_CONFIG_DIR, { recursive: true });
+  writeFileSync(ENV_CONFIG_FILE, JSON.stringify(env, null, 2) + "\n", "utf8");
+}
+
+/**
+ * Resolve effective environment variables for a command:
+ *   opts.env > saved config > {}
+ */
+function resolveEnv(opts = {}) {
+  const saved = readEnvConfig();
+  return { ...saved, ...(opts.env || {}) };
+}
+
 const cmdConfig = (entrypoint, opts = {}) => {
   const mode = normalizeInstallMode(opts.mode);
+  const env = resolveEnv(opts);
+
   if (mode === "daemon" || mode === "docker") {
     const port = Number.isInteger(opts.port) && opts.port > 0 && opts.port < 65_536 ? opts.port : 38000;
     const token = getOrCreateSseBearerToken();
@@ -187,23 +225,25 @@ const cmdConfig = (entrypoint, opts = {}) => {
     };
   }
 
-  // Prefer a globally installed binary (single command, like tokensave).
+  // Build stdio config
+  let config;
   const globalBin = resolveGlobalBinary();
   if (globalBin) {
-    // Use ~/ form instead of /Users/name/ for portability and cleaner config.
     const home = homedir();
     const portableBin = globalBin.startsWith(home + "/")
       ? "~" + globalBin.slice(home.length)
       : globalBin;
-    return { command: portableBin, args: ["serve"], directTools: true, lifecycle: "keep-alive", type: "stdio" };
+    config = { command: portableBin, args: ["serve"], directTools: true, lifecycle: "keep-alive", type: "stdio" };
+  } else {
+    config = { command: process.execPath, args: [entrypoint, "serve"], directTools: true, lifecycle: "keep-alive" };
   }
 
-  return {
-    command: process.execPath,
-    args: [entrypoint, "serve"],
-    directTools: true,
-    lifecycle: "keep-alive",
-  };
+  // Attach env vars if any (supported by MCP stdio transport)
+  if (Object.keys(env).length > 0) {
+    config.env = env;
+  }
+
+  return config;
 };
 
 /**
@@ -618,7 +658,7 @@ function writeInstalledManifest(agents, entrypoint, global, mode) {
  * @param {{ agent: string, entrypoint: string, dryRun?: boolean, force?: boolean, global?: boolean, mode?: "stdio"|"daemon"|"sse"|"docker" }} opts
  * @returns {{ ok: boolean, dryRun: boolean, global: boolean, installed: object, manifest?: string }}
  */
-export const installAgent = ({ agent, entrypoint, dryRun = false, force = false, global = false, mode = "stdio" }) => {
+export const installAgent = ({ agent, entrypoint, dryRun = false, force = false, global = false, mode = "stdio", env = {} }) => {
   const normalizedMode = normalizeInstallMode(mode);
   const selected = agent === "all" ? allAgents : [agent];
 
