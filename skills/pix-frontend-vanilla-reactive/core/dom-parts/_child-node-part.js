@@ -13,7 +13,9 @@ import { normalizeExprValue, clearRange, isRangeBeforeReference, moveRangeBefore
 // TemplateInstance is imported lazily to handle circular dependency
 let TemplateInstance;
 
-export function _setTemplateInstance(cls) { TemplateInstance = cls; }
+export function _setTemplateInstance(cls) {
+  TemplateInstance = cls;
+}
 
 export class ChildNodePart extends Part {
   constructor(start, end) {
@@ -27,8 +29,8 @@ export class ChildNodePart extends Part {
   setValue(value) {
     if (isSignalLike(value)) {
       this.bindSignal(value, (r) => {
-      this.commit(r);
-    });
+        this.commit(r);
+      });
 
       return;
     }
@@ -39,7 +41,7 @@ export class ChildNodePart extends Part {
 
   commit(value) {
     // TemplateResult → render nested template
-    if (value?.kind === 'template-result') {
+    if (value?.kind === "template-result") {
       this.commitTemplate(value);
       this.value = value;
 
@@ -47,7 +49,7 @@ export class ChildNodePart extends Part {
     }
 
     // Iterable → append each item as node/text
-    if (value && typeof value !== 'string' && typeof value[Symbol.iterator] === 'function') {
+    if (value && typeof value !== "string" && typeof value[Symbol.iterator] === "function") {
       this.currentTemplateInstance = null;
       const f = document.createDocumentFragment();
 
@@ -74,7 +76,6 @@ export class ChildNodePart extends Part {
 
   commitTemplate(result) {
     const strings = result.strings;
-
     const context = result._context;
     const scope = result._scope;
 
@@ -94,4 +95,3 @@ export class ChildNodePart extends Part {
     this.start.parentNode.insertBefore(instance.fragment, this.end);
   }
 }
-

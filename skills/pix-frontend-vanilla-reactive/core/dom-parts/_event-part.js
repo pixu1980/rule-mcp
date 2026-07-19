@@ -30,9 +30,9 @@ export class EventPart {
     this.element = el;
     this.eventName = eventName;
     this.handlerName = handlerName;
-    this.argExprs = argExprs;          // parsed expression objects
-    this._resolvedHandler = null;      // set by setContext()
-    this._resolvedArgs = [];           // set by setContext() (eager)
+    this.argExprs = argExprs; // parsed expression objects
+    this._resolvedHandler = null; // set by setContext()
+    this._resolvedArgs = []; // set by setContext() (eager)
     this._listener = null;
   }
 
@@ -46,17 +46,15 @@ export class EventPart {
    */
   setContext(scope, context) {
     // Resolve handler name: scope[name] → context[name]
-    this._resolvedHandler =
-      (scope && scope[this.handlerName]) ||
-      (context && context[this.handlerName]);
+    this._resolvedHandler = (scope && scope[this.handlerName]) || (context && context[this.handlerName]);
 
     // Resolve args eagerly (except $event which is click-time)
-    this._resolvedArgs = this.argExprs.map(expr => {
-      const raw = expr?.variable || expr?.name || '';
+    this._resolvedArgs = this.argExprs.map((expr) => {
+      const raw = expr?.variable || expr?.name || "";
 
-      if (raw === '$event') {
-        return '$event';
-      }  // sentinel for click-time
+      if (raw === "$event") {
+        return "$event";
+      } // sentinel for click-time
 
       return evaluateExpression(expr, context, scope);
     });
@@ -68,16 +66,19 @@ export class EventPart {
    * Called separately because TemplateInstance needs to bind after DOM clone.
    */
   bind() {
-    if (this._listener) return; // already bound
-    if (typeof this._resolvedHandler !== 'function') {
-      console.warn('vr: handler not found:', this.handlerName);
+    if (this._listener) {
+      return;
+    }
+
+    if (typeof this._resolvedHandler !== "function") {
+      console.warn("vr: handler not found:", this.handlerName);
 
       return;
     }
 
     this._listener = (event) => {
       // Replace $event sentinels with the native DOM event
-      const args = this._resolvedArgs.map(a => a === '$event' ? event : a);
+      const args = this._resolvedArgs.map((a) => (a === "$event" ? event : a));
       // If no args and handler expects event, auto-inject it
       if (args.length === 0) {
         args.push(event);
@@ -99,4 +100,3 @@ export class EventPart {
     }
   }
 }
-

@@ -23,6 +23,8 @@ export const addItem = () => {
  * @param {number} id - Array index to remove
  */
 export const removeItem = (id) => {
-  store.state.items = store.state.items.filter((_, i) => i !== id);
+  store.state.items = store.state.items.filter((_, i) => {
+    return i !== id;
+  });
 };
 

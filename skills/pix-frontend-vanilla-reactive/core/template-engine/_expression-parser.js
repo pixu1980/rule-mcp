@@ -29,23 +29,31 @@ export function parseExpression(expr) {
     const name = fnMatch[1];
     const argsStr = fnMatch[2].trim();
     const args = argsStr
-      ? argsStr.split(',').map(a => parseExpression(a.trim()))
+      ? argsStr.split(',').map((a) => {
+          return parseExpression(a.trim());
+        })
       : [];
 
     return { kind: "fn", name, args };
   }
 
   // Data expression with optional filter pipeline
-  const pipes = trimmed.split('|').map(s => s.trim());
+  const pipes = trimmed.split('|').map((s) => {
+      return s.trim();
+    });
   const variable = pipes[0];
   const filters = pipes.slice(1).map(f => {
     const fMatch = f.match(/^([a-zA-Z_$][\w$]*)\s*\(([^)]*)\)$/);
     if (fMatch) {
-      const args = fMatch[2].trim() ? fMatch[2].split(',').map(a => parseArg(a.trim())) : [];
+      const args = fMatch[2].trim() ? fMatch[2].split(',').map((a) => {
+            return parseArg(a.trim());
+          }) : [];
 
       return { name: fMatch[1], args };
     }
-    const parts = f.split(':').map(s => s.trim());
+    const parts = f.split(':').map((s) => {
+        return s.trim();
+      });
 
     return { name: parts[0], args: parts.slice(1).map(parseArg) };
   });
@@ -122,7 +130,9 @@ export function evaluateExpression(parsed, ctx, scope) {
         return '';
       }
     }
-    const resolvedArgs = parsed.args.map(a => evaluateExpression(a, ctx, scope));
+    const resolvedArgs = parsed.args.map((a) => {
+      return evaluateExpression(a, ctx, scope);
+    });
 
     return fn(...resolvedArgs);
   }
