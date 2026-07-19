@@ -1,4 +1,4 @@
-# 003: Backend Framework Skills
+# 006 — Backend Framework Skills
 
 - **Date**: 2026-07-10
 - **Status**: accepted

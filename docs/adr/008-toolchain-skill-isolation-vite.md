@@ -1,4 +1,4 @@
-# 005: Toolchain Skill Isolation (Vite)
+# 008 — Toolchain Skill Isolation (Vite)
 
 - **Date**: 2026-07-10
 - **Status**: accepted
