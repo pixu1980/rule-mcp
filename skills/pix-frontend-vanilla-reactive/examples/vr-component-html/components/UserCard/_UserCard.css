@@ -1,39 +1,62 @@
 /* ═══════════════════════════════════════════════════════════════════════════════
    UserCard — vr-component-html example (Pattern C)
-   ═══════════════════════════════════════════════════════════════════════════════
-   Global adoptedStyleSheets — no :host (no Shadow DOM in this engine). */
+   ├── @layer components
+   ├── :root tokens prefixed with --card
+   ═══════════════════════════════════════════════════════════════════════════════ */
 
-[data-part="card"] {
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  padding: 1.5rem;
-  max-width: 400px;
+@layer base, components;
+
+@layer base {
+  :root {
+    --card-border: 0.1rem solid var(--color-border, #ccc);
+    --card-radius: 0.5rem;
+    --card-padding: 1.5rem;
+    --card-max-inline: 25rem;
+    --card-muted: var(--color-muted, #999);
+    --card-light: var(--color-light, #eee);
+    --card-gap: 0.5rem;
+  }
 }
 
-[data-part="header"] {
-  border-bottom: 1px solid #eee;
-  margin-bottom: 1rem;
-  padding-bottom: 0.5rem;
-}
+@layer components {
+  [data-part="card"] {
+    padding: var(--card-padding);
+    max-inline-size: var(--card-max-inline);
+    border: var(--card-border);
+    border-radius: var(--card-radius);
+  }
 
-[data-part="role"] {
-  font-size: 0.85rem;
-  color: #666;
-}
+  /* ─── Header ─── */
 
-[data-part="row"] {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 4px 0;
-}
+  [data-part="header"] {
+    margin-block-end: 1rem;
+    padding-block-end: 0.5rem;
+    border-block-end: 0.1rem solid var(--card-light);
+  }
 
-[data-part="row"][data-state-done="true"] span {
-  text-decoration: line-through;
-  color: #999;
-}
+  [data-part="role"] {
+    font-size: 0.85rem;
+    color: var(--card-muted);
+  }
 
-[data-part="empty"] {
-  color: #999;
-  font-style: italic;
+  /* ─── Row ─── */
+
+  [data-part="row"] {
+    display: flex;
+    gap: var(--card-gap);
+    align-items: center;
+    padding-block: 0.25rem;
+  }
+
+  [data-part="row"][data-state-done="true"] span {
+    color: var(--card-muted);
+    text-decoration: line-through;
+  }
+
+  /* ─── Empty state ─── */
+
+  [data-part="empty"] {
+    font-style: italic;
+    color: var(--card-muted);
+  }
 }

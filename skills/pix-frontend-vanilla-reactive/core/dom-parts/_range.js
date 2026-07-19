@@ -2,6 +2,7 @@
 //  PART 3b — Range / DOM helpers
 // ═══════════════════════════════════════════════════════════════════════════════
 
+'use strict';
 export function clearRange(start, end) {
   let c = start.nextSibling;
   while (c && c !== end) { const n = c.nextSibling; c.remove(); c = n; }

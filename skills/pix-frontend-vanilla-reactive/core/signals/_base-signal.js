@@ -2,6 +2,7 @@
 //  PART 1 — BaseSignal
 // ═══════════════════════════════════════════════════════════════════════════════
 
+'use strict';
 import { getCurrentCollector } from './_collector-context.js';
 
 export class BaseSignal {

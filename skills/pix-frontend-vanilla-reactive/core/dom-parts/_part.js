@@ -2,6 +2,7 @@
 //  PART 3c — Part base class
 // ═══════════════════════════════════════════════════════════════════════════════
 
+'use strict';
 import { isSignalLike } from '../signals/index.js';
 
 export class Part {

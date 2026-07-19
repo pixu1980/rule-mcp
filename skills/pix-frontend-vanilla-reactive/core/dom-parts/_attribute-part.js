@@ -4,6 +4,7 @@
 //   Two-way binding via @input + .value (see SKILL.md §8).
 //  ═══════════════════════════════════════════════════════════════════════════════
 
+'use strict';
 import { Part } from './_part.js';
 import { isSignalLike } from '../signals/index.js';
 

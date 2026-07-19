@@ -1,23 +1,42 @@
 /* ═══════════════════════════════════════════════════════════════════════════════
    CounterApp — vr-component example
-   ═══════════════════════════════════════════════════════════════════════════════
-   Global adoptedStyleSheets — no :host (no Shadow DOM in this engine). */
+   ├── @layer components
+   ├── :root tokens prefixed with --counter
+   ═══════════════════════════════════════════════════════════════════════════════ */
 
-[data-part="counter"] {
-  display: flex;
-  gap: 8px;
-  align-items: center;
-  padding: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 8px;
+@layer base, components;
+
+@layer base {
+  /* box-sizing global (one-time, safe to repeat in each CE stylesheet) */
+  *, *::before, *::after { box-sizing: border-box; }
+
+  :root {
+    --counter-gap: 0.5rem;
+    --counter-padding: 1rem;
+    --counter-border: 0.1rem solid var(--color-border, #ccc);
+    --counter-radius: 0.5rem;
+    --counter-font-size: 1.2rem;
+    --counter-btn-padding: 0.25rem 0.75rem;
+  }
 }
 
-[data-part="value"] {
-  font-size: 1.2rem;
-  min-width: 100px;
-}
+@layer components {
+  [data-part="counter"] {
+    display: flex;
+    gap: var(--counter-gap);
+    align-items: center;
+    padding: var(--counter-padding);
+    border: var(--counter-border);
+    border-radius: var(--counter-radius);
+  }
 
-[data-part="btn"] {
-  padding: 4px 12px;
-  cursor: pointer;
+  [data-part="value"] {
+    font-size: var(--counter-font-size);
+    min-inline-size: 6.25rem; /* 100px / 16 */
+  }
+
+  [data-part="btn"] {
+    padding: var(--counter-btn-padding);
+    cursor: pointer;
+  }
 }

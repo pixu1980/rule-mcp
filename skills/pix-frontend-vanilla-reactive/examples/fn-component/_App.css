@@ -1,27 +1,43 @@
 /* ═══════════════════════════════════════════════════════════════════════════════
-   fn-component global styles — loaded via fetch + CSSStyleSheet
+   fn-component (Pattern B) — loaded via loadCSS helper
+   ├── @layer components
+   ├── :root tokens prefixed with --list
    ═══════════════════════════════════════════════════════════════════════════════ */
 
-[data-part="list"] {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  max-width: 400px;
+@layer base, components;
+
+@layer base {
+  :root {
+    --list-gap: 0.25rem;
+    --list-max-inline: 25rem;
+    --list-row-gap: 0.5rem;
+    --list-row-padding: 0.25rem 0;
+    --list-muted: var(--color-muted, #999);
+  }
 }
 
-[data-part="row"] {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 4px 0;
-  border-bottom: 1px solid #eee;
-}
+@layer components {
+  [data-part="list"] {
+    display: flex;
+    flex-direction: column;
+    gap: var(--list-gap);
+    max-inline-size: var(--list-max-inline);
+  }
 
-[data-part="text"] {
-  flex: 1;
-}
+  [data-part="row"] {
+    display: flex;
+    gap: var(--list-row-gap);
+    align-items: center;
+    padding: var(--list-row-padding);
+    border-block-end: 0.1rem solid var(--list-muted);
+  }
 
-[data-part="empty"] {
-  color: #999;
-  font-style: italic;
+  [data-part="text"] {
+    flex: 1;
+  }
+
+  [data-part="empty"] {
+    font-style: italic;
+    color: var(--list-muted);
+  }
 }

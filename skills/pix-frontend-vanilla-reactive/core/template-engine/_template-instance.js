@@ -5,6 +5,7 @@
 //  Handler resolution via _scope → _context → component instance.
 //  ═══════════════════════════════════════════════════════════════════════════════
 
+'use strict';
 import { parseExpression, evaluateExpression } from './_expression-parser.js';
 import { ChildNodePart } from '../dom-parts/_child-node-part.js';
 import { AttributePart } from '../dom-parts/_attribute-part.js';

@@ -2,6 +2,7 @@
 //  Shared store + actions — combo app
 //  ═══════════════════════════════════════════════════════════════════════════════
 
+'use strict';
 import { Store } from '../../core/index.js';
 
 /** Shared todo store with filter. */
@@ -19,6 +20,7 @@ export const store = new Store({
  * @param {string} title - Todo text
  */
 export const addTodo = (title) => {
+
   if (!title?.trim()) return;
   store.state.todos = [...store.state.todos, { id: Date.now(), title: title.trim(), done: false }];
 };

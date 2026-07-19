@@ -2,6 +2,7 @@
 //  PART 2 — Store (Proxy-based state container)
 // ═══════════════════════════════════════════════════════════════════════════════
 
+'use strict';
 import { isObject } from './_guards.js';
 import { toPathArray } from './_paths.js';
 import { deepClone, clonePlainValue } from './_clone.js';

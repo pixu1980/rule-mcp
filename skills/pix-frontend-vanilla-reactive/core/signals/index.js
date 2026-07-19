@@ -2,6 +2,7 @@
 //  Signals public API
 // ═══════════════════════════════════════════════════════════════════════════════
 
+'use strict';
 import { BaseSignal } from './_base-signal.js';
 import { StateSignal } from './_state-signal.js';
 import { ComputedSignal } from './_computed-signal.js';

@@ -2,6 +2,7 @@
 //  Parts barrel
 // ═══════════════════════════════════════════════════════════════════════════════
 
+'use strict';
 export { Part } from './_part.js';
 export { AttributePart } from './_attribute-part.js';
 export { PropertyPart } from './_property-part.js';

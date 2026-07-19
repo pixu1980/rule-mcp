@@ -2,6 +2,7 @@
 //  PART 1 — StateSignal
 // ═══════════════════════════════════════════════════════════════════════════════
 
+'use strict';
 import { BaseSignal } from './_base-signal.js';
 
 export class StateSignal extends BaseSignal {

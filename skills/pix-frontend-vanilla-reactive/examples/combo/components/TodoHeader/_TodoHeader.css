@@ -1,16 +1,29 @@
 /* ═══════════════════════════════════════════════════════════════════════════════
    TodoHeader — combo example (Pattern C)
-   ═══════════════════════════════════════════════════════════════════════════════
-   Global adoptedStyleSheets — no :host (no Shadow DOM in this engine). */
+   ├── @layer components
+   ├── :root tokens prefixed with --header
+   ═══════════════════════════════════════════════════════════════════════════════ */
 
-[data-part="header"] {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 0.5rem 0;
+@layer base, components;
+
+@layer base {
+  :root {
+    --header-gap: 0.5rem;
+    --header-padding-block: 0.5rem;
+    --header-title-size: 1rem;
+  }
 }
 
-[data-part="header"] h3 {
-  margin: 0;
-  font-size: 1rem;
+@layer components {
+  [data-part="header"] {
+    display: flex;
+    gap: var(--header-gap);
+    align-items: center;
+    padding-block: var(--header-padding-block);
+  }
+
+  [data-part="header"] h3 {
+    margin: 0;
+    font-size: var(--header-title-size);
+  }
 }

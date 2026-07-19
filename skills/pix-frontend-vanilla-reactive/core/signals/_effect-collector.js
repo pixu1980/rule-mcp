@@ -2,6 +2,7 @@
 //  PART 1 — EffectCollector
 // ═══════════════════════════════════════════════════════════════════════════════
 
+'use strict';
 import { withCollector } from './_collector-context.js';
 import { schedule } from './_scheduler.js';
 
