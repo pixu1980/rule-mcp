@@ -30,17 +30,12 @@ See `src/core/enforcement.js` for details.
 - **Barrel pattern** — component folder has `index.js`; implementation files use `_PascalCase.ext`.
 - **No unapproved CSS frameworks** — no Tailwind, Bootstrap, or CSS-in-JS.
 
-## Environment variables
-
-See [06-env-variables.md](06-env-variables.md) for the complete reference table, persistence, and configuration.
-
-## Strict mode
-
-Set `RULE_MCP_STRICT_MODE=1` to expose only 9 read-only + gateway tools:
-`pix_gateway`, `pix_apply`, `rule`, `pix_search`, `pix_check`, `pix_detect`, `pix_scaffold`, `pix_component`, `pix_process_handoff`.
-
 ## Reusable entry points
 
 - Pi, Claude Code, Gemini CLI, Cursor: `/rule-mcp <request>`.
 - GitHub Copilot CLI: `/agent`, select `rule-mcp`.
 - Codex CLI: invoke globally installed `rule` skill; exact custom prompt support varies by version.
+
+## Environment variables
+
+See [06-env-variables.md](06-env-variables.md) for the complete reference table, persistence, and configuration.

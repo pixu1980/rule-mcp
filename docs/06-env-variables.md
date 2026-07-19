@@ -29,3 +29,8 @@ Variables set via `rule config env` are saved to `~/.config/rule-mcp/env.json`
 and automatically injected into the MCP stdio configuration on install/update.
 
 Environment variables set in your shell profile override the persisted config.
+
+## Strict mode
+
+Set `RULE_MCP_STRICT_MODE=1` to expose only 9 read-only + gateway tools:
+`pix_gateway`, `pix_apply`, `rule`, `pix_search`, `pix_check`, `pix_detect`, `pix_scaffold`, `pix_component`, `pix_process_handoff`.
