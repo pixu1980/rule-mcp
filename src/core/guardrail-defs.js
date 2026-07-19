@@ -610,6 +610,28 @@ export const VANILLA_REACTIVE_GUARDRAILS = [
     },
   },
   {
+    id: "js-blank-line-before-return",
+    label: "Blank line before return statements",
+    description: "Every return statement must have a blank line before it (unless first in block).",
+    check: (code) => {
+      const issues = [];
+      const lines = code.split('\n');
+      for (let i = 1; i < lines.length; i++) {
+        const line = lines[i].trim();
+        const prev = lines[i - 1].trim();
+        if ((line.startsWith('return ') || line === 'return;') &&
+            prev !== '' && !prev.endsWith('{') && !prev.endsWith('(') &&
+            !prev.startsWith('//') && !prev.startsWith('/*')) {
+          issues.push(`Line ${i + 1}: no blank line before return`);
+        }
+      }
+      if (issues.length > 0) {
+        return { pass: false, failCount: issues.length, detail: issues.slice(0, 5), suggestion: "Add a blank line before each return statement." };
+      }
+      return { pass: true };
+    },
+  },
+  {
     id: "js-blank-line-between-methods",
     label: "Blank line between class methods",
     description: "Every pair of class methods must have a blank line between them.",

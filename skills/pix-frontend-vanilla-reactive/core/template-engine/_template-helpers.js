@@ -22,6 +22,7 @@ export function html(strings, ...values) {
   if (typeof strings === 'string') {
     return { kind: 'template-result', strings: [strings], values: [] };
   }
+
   return { kind: 'template-result', strings, values };
 }
 

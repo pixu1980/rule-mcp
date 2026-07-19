@@ -62,6 +62,7 @@ export class Store {
 
         const result = Reflect.set(raw, key, prepared);
         store._emitChange(nextPath);
+
         return result;
       },
       deleteProperty(raw, key) {
@@ -72,10 +73,12 @@ export class Store {
         const result = Reflect.deleteProperty(raw, key);
 
         store._emitChange(nextPath);
+
         return result;
       },
     });
     this.proxyCache.set(target, proxy);
+
     return proxy;
   }
 
@@ -93,6 +96,7 @@ export class Store {
 
     let current = this.state;
     for (const p of parts) current = current?.[p];
+
     return current;
   }
 
@@ -108,6 +112,7 @@ export class Store {
     let current = this.state;
     for (const p of parts) { if (!isObject(current[p])) current[p] = {}; current = current[p]; }
     current[last] = value;
+
     return value;
   }
 
