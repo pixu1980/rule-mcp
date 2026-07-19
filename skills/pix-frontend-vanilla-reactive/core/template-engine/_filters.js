@@ -56,6 +56,7 @@ registerFilter("json", (v) => {
   } catch {
     return String(v);
   }
+
 });
 registerFilter("default", (v, d = "") => {
   return v !== undefined && v !== null && v !== "" ? v : d;
@@ -149,11 +150,13 @@ registerFilter("date", (value, format = "en-US") => {
 
     return String(d.getDate()).padStart(2, "0") + " " + ms[d.getMonth()] + " " + d.getFullYear();
   }
+
   try {
     return d.toLocaleDateString(format, { year: "numeric", month: "long", day: "numeric" });
   } catch {
     return d.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
   }
+
 });
 
 registerFilter("timeAgo", (value) => {
@@ -197,6 +200,7 @@ registerFilter("sortBy", (array, prop, dir = "asc") => {
   return [...array].sort((a, b) => {
     let va = a[prop],
       vb = b[prop];
+
     if (prop === "date") {
       va = new Date(va);
       vb = new Date(vb);

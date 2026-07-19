@@ -24,6 +24,7 @@ export class EffectCollector {
     if (this.deps.has(sig)) {
       return;
     }
+
     this.deps.set(
       sig,
       sig.subscribe(() => {
@@ -51,4 +52,5 @@ export class EffectCollector {
     this.active = false;
     this.cleanup();
   }
+
 }

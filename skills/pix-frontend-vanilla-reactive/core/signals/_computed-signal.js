@@ -23,6 +23,7 @@ export class ComputedSignal extends BaseSignal {
     if (this.deps.has(sig)) {
       return;
     }
+
     this.deps.set(sig, sig.subscribe(this.boundInvalidate));
   }
 
@@ -50,6 +51,7 @@ export class ComputedSignal extends BaseSignal {
 
     this.recomputing = true;
     this.cleanupDeps();
+
     try {
       const next = withCollector(this, () => {
         this.compute();
@@ -64,6 +66,7 @@ export class ComputedSignal extends BaseSignal {
     } finally {
       this.recomputing = false;
     }
+
   }
 
   get() {

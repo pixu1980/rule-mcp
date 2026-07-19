@@ -6,18 +6,21 @@
 
 export function clearRange(start, end) {
   let c = start.nextSibling;
+
   while (c && c !== end) {
     const n = c.nextSibling;
 
     c.remove();
     c = n;
   }
+
 }
 
 export function moveRangeBefore(start, end, ref) {
   const f = document.createDocumentFragment();
 
   let c = start;
+
   while (c) {
     const n = c.nextSibling;
 
@@ -29,11 +32,13 @@ export function moveRangeBefore(start, end, ref) {
 
     c = n;
   }
+
   ref.parentNode.insertBefore(f, ref);
 }
 
 export function isRangeBeforeReference(start, end, ref) {
   let c = start;
+
   while (c) {
     if (c === ref) {
       return false;

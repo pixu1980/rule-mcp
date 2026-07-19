@@ -114,6 +114,7 @@ export function vrComponent(component, opts = {}) {
       const ctx = getContext();
 
       const result = renderFn(ctx);
+
       if (result && result.kind === "template-result") {
         if (!result._context) {
           result._context = ctx;
@@ -125,6 +126,7 @@ export function vrComponent(component, opts = {}) {
 
         render(result, this);
       }
+
     });
   };
 
@@ -136,6 +138,7 @@ export function vrComponent(component, opts = {}) {
       this._vrDispose();
       this._vrDispose = null;
     }
+
     this._vrMounted = false;
     if (origDisconnected) {
       origDisconnected.call(this);
@@ -185,4 +188,5 @@ async function _loadComponentCSS(css, component) {
   } catch (err) {
     console.warn(`vrComponent: cannot load CSS at "${cssPath}": ${err.message}`);
   }
+
 }
