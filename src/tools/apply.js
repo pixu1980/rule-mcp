@@ -13,6 +13,7 @@
 import { writeFileSync, mkdirSync, existsSync } from "node:fs";
 import { dirname, join, resolve, relative } from "node:path";
 import { validateReceipt } from "./gateway.js";
+import { postProcessFiles } from "../core/post-process.js";
 
 /**
  * Assert that a path stays inside the project root.
@@ -126,6 +127,15 @@ export async function registerApplyTool() {
             results.push({ path: file.path, status: "error", error: err.message });
             allValid = false;
           }
+        }
+      }
+
+      // Post-process written files (Prettier + blank-line fixer)
+      if (!dryRun) {
+        try {
+          postProcessFiles(results);
+        } catch (e) {
+          // Post-processing is best-effort — don't block the response
         }
       }
 
