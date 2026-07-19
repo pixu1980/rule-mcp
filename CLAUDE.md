@@ -13,6 +13,8 @@ Before writing any frontend/styling code, call `pix` to route the task to the co
 
 
 
+
+
 <!-- pix-galaxy-mcp-rules -->
 ## MANDATORY: Use pix-galaxy-mcp enforced workflow for coding work
 
