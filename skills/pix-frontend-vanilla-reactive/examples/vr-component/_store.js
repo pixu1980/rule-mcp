@@ -3,6 +3,7 @@
 //  ═══════════════════════════════════════════════════════════════════════════════
 
 'use strict';
+
 import { Store } from '../../core/index.js';
 
 /** Shared counter store. Mutations auto-fire store.tick for reactivity. */
@@ -22,3 +23,4 @@ export const decrement = () => {
 export const resetCount = () => {
   store.state.count = 0;
 };
+

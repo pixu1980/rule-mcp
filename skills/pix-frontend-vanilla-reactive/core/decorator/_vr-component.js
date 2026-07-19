@@ -24,6 +24,7 @@
 //  ═══════════════════════════════════════════════════════════════════════════════
 
 'use strict';
+
 import { Signal, effect, render, loadCSS } from '../index.js';
 
 /**
@@ -46,6 +47,7 @@ export function vrComponent(component, opts = {}) {
   if (!tag) {
     throw new Error('vrComponent: tag is required');
   }
+
   if (!(component.prototype instanceof HTMLElement)) {
     throw new Error('vrComponent: class must extend HTMLElement');
   }
@@ -100,9 +102,11 @@ export function vrComponent(component, opts = {}) {
         if (!result._context) {
           result._context = ctx;
         }
+
         if (!result._scope) {
           result._scope = this;
         }
+
         render(result, this);
       }
     });
@@ -155,9 +159,11 @@ async function _loadComponentCSS(css, component) {
   }
 
   // Fetch and adopt via shared helper
+
   try {
     await loadCSS(cssPath);
   } catch (err) {
     console.warn(`vrComponent: cannot load CSS at "${cssPath}": ${err.message}`);
   }
 }
+

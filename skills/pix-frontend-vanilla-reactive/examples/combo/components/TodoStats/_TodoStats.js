@@ -6,6 +6,7 @@
 //  ═══════════════════════════════════════════════════════════════════════════════
 
 'use strict';
+
 import { html } from '../../../../core/index.js';
 
 /**
@@ -21,3 +22,4 @@ export function TodoStats(visibleTodos) {
     <strong>{{ visibleTodos | where:"done" | length }}</strong> done
   </aside>`;
 }
+

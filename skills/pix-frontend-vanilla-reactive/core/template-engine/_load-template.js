@@ -7,6 +7,7 @@
 //  ═══════════════════════════════════════════════════════════════════════════════
 
 'use strict';
+
 import { html } from './index.js';
 
 /**
@@ -21,3 +22,4 @@ export async function loadTemplate(metaUrl, relativePath) {
   const text = await (await fetch(url)).text();
   return html(text);
 }
+

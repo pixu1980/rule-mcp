@@ -3,6 +3,7 @@
 // ═══════════════════════════════════════════════════════════════════════════════
 
 'use strict';
+
 export {
   StateSignal,
   ComputedSignal,
@@ -56,3 +57,4 @@ export {
 } from './template-engine/index.js';
 
 export { vrComponent } from './decorator/_vr-component.js';
+

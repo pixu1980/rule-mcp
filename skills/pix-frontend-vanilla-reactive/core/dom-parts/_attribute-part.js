@@ -5,6 +5,7 @@
 //  ═══════════════════════════════════════════════════════════════════════════════
 
 'use strict';
+
 import { Part } from './_part.js';
 import { isSignalLike } from '../signals/index.js';
 
@@ -15,15 +16,19 @@ export class AttributePart extends Part {
     this.name = name;
   }
 
+
   setValue(value) {
     if (isSignalLike(value)) {
       this.disposeSignal();
-      this.bindSignal(value, (r) => this.commit(r));
+      this.bindSignal(value, (r) => {
+      this.commit(r);
+    });
       return;
     }
     this.disposeSignal();
     this.commit(value);
   }
+
 
   commit(value) {
     if (value == null || value === false) {
@@ -33,3 +38,4 @@ export class AttributePart extends Part {
     this.element.setAttribute(this.name, value === true ? '' : String(value));
   }
 }
+

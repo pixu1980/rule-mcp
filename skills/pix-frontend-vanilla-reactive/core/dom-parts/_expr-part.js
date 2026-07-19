@@ -7,6 +7,7 @@
 // ═══════════════════════════════════════════════════════════════════════════════
 
 'use strict';
+
 import { evaluateExpression } from '../template-engine/_expression-parser.js';
 import { isSignalLike } from '../signals/index.js';
 import { clearRange, normalizeExprValue } from './_range.js';
@@ -46,6 +47,7 @@ export class ExprPart {
     this.commit(value, hasRaw);
   }
 
+
   bindSignal(sig) {
     this.disposeSignal();
     this.signalCleanup = sig.subscribe(() => {
@@ -55,11 +57,13 @@ export class ExprPart {
     this.commit(sig.get(), this.hasRaw());
   }
 
+
   hasRaw() {
     return this.parsedExpr && this.parsedExpr.filters
       && this.parsedExpr.filters.length > 0
       && this.parsedExpr.filters[this.parsedExpr.filters.length - 1].name === 'raw';
   }
+
 
   disposeSignal() {
     if (this.signalCleanup) { this.signalCleanup(); this.signalCleanup = null; }
@@ -77,6 +81,7 @@ export class ExprPart {
       clearRange(this.start, this.end);
       this._nestedInstance = null;
     }
+
 
     clearRange(this.start, this.end);
 
@@ -99,3 +104,4 @@ export class ExprPart {
     }
   }
 }
+

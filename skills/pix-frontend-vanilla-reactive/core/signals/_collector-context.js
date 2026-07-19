@@ -3,6 +3,7 @@
 // ═══════════════════════════════════════════════════════════════════════════════
 
 'use strict';
+
 const collectorStack = [];
 export function getCurrentCollector() { return collectorStack[collectorStack.length - 1]; }
 export function pushCollector(c) { collectorStack.push(c); }
@@ -18,3 +19,4 @@ export function withoutCollector(callback) {
     }
   }
 }
+
