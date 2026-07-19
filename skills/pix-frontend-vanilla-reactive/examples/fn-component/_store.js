@@ -2,7 +2,7 @@
 //  Shared store — fn-component example
 //  ═══════════════════════════════════════════════════════════════════════════════
 
-import { Store } from '../../../core/index.js';
+import { Store } from '../../core/index.js';
 
 /** Shared items store. */
 export const store = new Store({ items: ['Pix', 'Vanilla', 'Reactive'] });

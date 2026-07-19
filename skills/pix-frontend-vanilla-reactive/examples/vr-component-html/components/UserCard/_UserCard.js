@@ -1,22 +1,25 @@
 // ═══════════════════════════════════════════════════════════════════════════════
-//  Functional Component: TodoStats — combo app
+//  UserCard — CustomElement vrComponent with External HTML
 //  ═══════════════════════════════════════════════════════════════════════════════
-//  Zero boilerplate: just html`` with {{ }} + filters.
-//  Values come from the rendering context (set by parent).
+//  Usage: <user-card></user-card>
+//  Uses template option + context() — no render() method needed.
 //  ═══════════════════════════════════════════════════════════════════════════════
 
-import { html } from '../../../../../core/index.js';
+import { vrComponent, html, loadTemplate } from '../../../../core/index.js';
+import { store, toggleTodo } from '../../_store.js';
 
-/**
- * Renders a compact summary line from a todos array.
- * Uses | length and | where filters — no _context needed.
- * The variable name must match what's available in the parent's _context.
- * @param {Array<{done: boolean}>} visibleTodos
- * @returns {TemplateResult}
- */
-export function TodoStats(visibleTodos) {
-  return html`<aside data-part="stats">
-    <strong>{{ visibleTodos | length }}</strong> ·
-    <strong>{{ visibleTodos | where:"done" | length }}</strong> done
-  </aside>`;
+const TEMPLATE = await loadTemplate(import.meta.url, './_UserCard.template.html');
+
+export class UserCard extends HTMLElement {
+  static {
+    vrComponent(this, {
+      tag: 'user-card',
+      css: import.meta.url,
+      template: TEMPLATE,
+    });
+  }
+
+  toggleTodo(id) { toggleTodo(id); }
+
+  context() { return { user: store.state.user, todos: store.state.todos }; }
 }
