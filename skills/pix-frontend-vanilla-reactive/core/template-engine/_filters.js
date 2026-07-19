@@ -95,6 +95,7 @@ registerFilter("tagLabel", (tag) => {
   if (!tag) {
     return "";
   }
+
   const raw = typeof tag === "object" ? tag.label || tag.name || String(tag) : String(tag);
 
   const m = { css: "CSS", html: "HTML" };
@@ -170,6 +171,7 @@ registerFilter("timeAgo", (value) => {
   const mins = Math.floor(diff / 60000),
     hrs = Math.floor(diff / 3600000),
     days = Math.floor(diff / 86400000);
+
   if (mins < 1) {
     return "just now";
   }

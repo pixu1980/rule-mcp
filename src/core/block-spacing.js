@@ -37,8 +37,10 @@ function findBlocks(lines) {
         /^\s*(if|for|while|switch|try|catch|finally|else)\s*\{\s*$/.test(line) ||
         /^\s*\)\s*\{\s*$/.test(line) ||
         /^\s*=>\s*\{\s*$/.test(line) ||
-        /^\s*function\s*(?:\([^)]*\))?\s*\{\s*$/.test(line) ||
-        (/^\s*\w+\s*\([^)]*\)\s*\{\s*$/.test(line) && !/^\s*(if|for|while|switch)\s*\(/.test(line)) ||
+        /^\s*(?:export\s+)?(?:async\s+)?function\s+(?:\w+)?\s*\([^)]*\)\s*\{\s*$/.test(line) ||
+        /^\s*(?:export\s+)?(?:async\s+)?function\s*\{\s*$/.test(line) ||
+        /^\s*(?:export\s+)?class\s+\w+\s*(?:extends\s+\w+)?\s*\{\s*$/.test(line) ||
+        (/^\s*(?:\w+|\w+\.prototype)\s*\([^)]*\)\s*\{\s*$/.test(line) && !/^\s*(if|for|while|switch)\s*\(/.test(line) && !/^\s*(export|import)\s/.test(line)) ||
         /^\s*constructor\s*\([^)]*\)\s*\{\s*$/.test(line)) {
       stack.push({ openLine: i, indent: indentOf(line) });
     }
@@ -48,11 +50,11 @@ function findBlocks(lines) {
       const block = stack.pop();
       block.closeLine = i;
 
-      // Only consider blocks with ≥2 lines of inner content
+      // Only consider blocks with ≥1 inner code line
       const innerLines = lines.slice(block.openLine + 1, block.closeLine)
         .filter(l => l.trim() !== "" && !/^\s*\/\//.test(l) && !/^\s*\/\*/.test(l));
 
-      if (innerLines.length >= 2) {
+      if (innerLines.length >= 1) {
         blocks.push(block);
       }
     }

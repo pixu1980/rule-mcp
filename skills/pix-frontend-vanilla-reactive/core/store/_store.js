@@ -38,6 +38,7 @@ export class Store {
     if (this.proxyCache.has(target)) {
       return this.proxyCache.get(target);
     }
+
     const store = this;
 
     const proxy = new Proxy(target, {
@@ -151,4 +152,5 @@ export class Store {
   snapshot() {
     return deepClone(this.target);
   }
+
 }

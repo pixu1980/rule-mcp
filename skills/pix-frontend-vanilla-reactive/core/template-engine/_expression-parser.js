@@ -95,6 +95,7 @@ export function getFromPath(obj, path) {
   if (!path || !obj) {
     return undefined;
   }
+
   let cur = obj;
   for (const key of path.replace(/\[(\d+)\]/g, ".$1").split(".")) {
     if (cur == null) {
@@ -104,6 +105,7 @@ export function getFromPath(obj, path) {
     if (key === "__proto__" || key === "constructor" || key === "prototype") {
       return undefined;
     }
+
     cur = cur[key];
   }
 

@@ -57,6 +57,7 @@ export function effect(fn) {
     c.stop();
   };
 }
+
 export function isSignalLike(v) {
   return Boolean(v && typeof v.get === "function" && v.__isSignal);
 }

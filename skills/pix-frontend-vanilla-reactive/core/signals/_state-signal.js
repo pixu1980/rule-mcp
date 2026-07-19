@@ -35,4 +35,5 @@ export class StateSignal extends BaseSignal {
 
     return this.value;
   }
+
 }
