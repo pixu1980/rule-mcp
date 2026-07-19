@@ -1,28 +1,27 @@
 // ═══════════════════════════════════════════════════════════════════════════════
 //  App — CustomElement vrComponent (counter)
 //  ═══════════════════════════════════════════════════════════════════════════════
-//  Store + vrComponent in one module. store.tick is automatic.
 
-import { Store, vrComponent, html } from '../../src/core/index.js';
-
-const store = new Store({ count: 0 });
+import { vrComponent, html, withContext } from '../../src/core/index.js';
+import { store, increment, decrement, resetCount } from './_store.js';
 
 export class CounterApp extends HTMLElement {
   static { vrComponent(this, { tag: 'counter-app' }); }
 
-  increment() { store.state.count++; }
-  decrement() { store.state.count--; }
-  reset()     { store.state.count = 0; }
-  context()   { return { count: store.state.count }; }
+  increment() { increment(); }
+  decrement() { decrement(); }
+  resetCount() { resetCount(); }
+
+  context() { return { count: store.state.count }; }
 
   render(ctx) {
-    return html`
+    return withContext(html`
       <section>
         <p>Count: <strong>{{ count }}</strong></p>
         <button @click="increment()">+1</button>
         <button @click="decrement()">-1</button>
-        <button @click="reset()">Reset</button>
+        <button @click="resetCount()">Reset</button>
       </section>
-    `;
+    `, ctx);  // _scope = this (auto by vrComponent)
   }
 }
