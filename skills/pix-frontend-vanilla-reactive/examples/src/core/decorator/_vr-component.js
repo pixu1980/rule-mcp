@@ -89,9 +89,10 @@ export function vrComponent(component, opts = {}) {
       const result = renderFn(ctx);
 
       if (result && result.kind === 'template-result') {
-        result._context = ctx;
-        // Auto-set _scope to the component instance for @click resolution
-        result._scope = this;
+        // Set context/scope only if the component hasn't already set them
+        // (Pattern B functions called via {{ }} may set their own _context)
+        if (!result._context) result._context = ctx;
+        if (!result._scope) result._scope = this;
         render(result, this);
       }
     });

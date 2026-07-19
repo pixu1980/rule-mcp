@@ -1,20 +1,19 @@
 // ═══════════════════════════════════════════════════════════════════════════════
 //  Functional Component: ItemList — fn-component example
 //  ═══════════════════════════════════════════════════════════════════════════════
-//  Pure function returning TemplateResult. No lifecycle, no HTMLElement.
-//  Composable via {{ ItemList(ctx) }}.
+//  Pure function returning html``. No wrapper, no scope — caller provides them.
 //  ═══════════════════════════════════════════════════════════════════════════════
 
-import { html, compose } from '../../src/core/index.js';
-import { addItem, removeItem } from './_store.js';
+import { html } from '../../../src/core/index.js';
 
 /**
  * Render an editable list of text items.
+ * Context and scope are attached by the caller (effect or parent CE).
  * @param {object} ctx - { items: string[] }
  * @returns {TemplateResult}
  */
 export function ItemList(ctx) {
-  return compose(html`
+  return html`
     <section data-part="list">
       <for each="item in ctx.items">
         <article data-part="row">
@@ -27,5 +26,5 @@ export function ItemList(ctx) {
       </if>
       <button data-part="add" @click="addItem()">+ Add</button>
     </section>
-  `, ctx, { addItem, removeItem });
+  `;
 }
