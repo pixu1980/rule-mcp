@@ -22,7 +22,8 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/pixu1980/pix-galaxy-mcp"
+    "url": "https://github.com/pixu1980/pix-galaxy-mcp",
+    "directory": "extensions/vscode-pix"
   },
   "contributes": {
     "languages": [
