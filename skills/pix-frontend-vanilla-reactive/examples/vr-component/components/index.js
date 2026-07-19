@@ -2,4 +2,5 @@
 //  Barrel — vr-component components
 //  ═══════════════════════════════════════════════════════════════════════════════
 
+'use strict';
 export {} from './CounterApp/index.js';

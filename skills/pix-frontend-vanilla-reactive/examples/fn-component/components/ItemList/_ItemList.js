@@ -4,6 +4,7 @@
 //  Pure function returning html``. No wrapper, no scope — caller provides them.
 //  ═══════════════════════════════════════════════════════════════════════════════
 
+'use strict';
 import { html } from '../../../../core/index.js';
 
 /**

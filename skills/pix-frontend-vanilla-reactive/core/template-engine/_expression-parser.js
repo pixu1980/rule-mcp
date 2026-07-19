@@ -7,6 +7,7 @@
 //  evaluateExpression() now takes an optional scope for function resolution.
 //  ═══════════════════════════════════════════════════════════════════════════════
 
+'use strict';
 import { FILTERS } from './_filters.js';
 
 /**

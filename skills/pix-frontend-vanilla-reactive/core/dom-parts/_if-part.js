@@ -5,6 +5,7 @@
 //  SwitchPart supports: <switch expr>, <case result>, <default>
 //  ═══════════════════════════════════════════════════════════════════════════════
 
+'use strict';
 import { evaluateExpression, parseExpression } from '../template-engine/_expression-parser.js';
 import { clearRange } from './_range.js';
 

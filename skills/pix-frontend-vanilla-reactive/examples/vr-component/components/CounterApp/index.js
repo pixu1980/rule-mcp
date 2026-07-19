@@ -2,4 +2,5 @@
 //  Barrel — CounterApp component
 //  ═══════════════════════════════════════════════════════════════════════════════
 
+'use strict';
 export { CounterApp } from './_CounterApp.js';

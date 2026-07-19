@@ -2,4 +2,5 @@
 //  Bootstrap — defines <user-card> custom element
 //  ═══════════════════════════════════════════════════════════════════════════════
 
+'use strict';
 import './components/UserCard/index.js';

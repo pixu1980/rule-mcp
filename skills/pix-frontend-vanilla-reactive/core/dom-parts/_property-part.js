@@ -2,6 +2,7 @@
 //  PART 3c — PropertyPart
 // ═══════════════════════════════════════════════════════════════════════════════
 
+'use strict';
 import { Part } from './_part.js';
 import { isSignalLike } from '../signals/index.js';
 

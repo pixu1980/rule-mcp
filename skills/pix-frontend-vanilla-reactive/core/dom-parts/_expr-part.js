@@ -6,6 +6,7 @@
 //  Otherwise falls back to textContent (escaped) or raw.}
 // ═══════════════════════════════════════════════════════════════════════════════
 
+'use strict';
 import { evaluateExpression } from '../template-engine/_expression-parser.js';
 import { isSignalLike } from '../signals/index.js';
 import { clearRange, normalizeExprValue } from './_range.js';

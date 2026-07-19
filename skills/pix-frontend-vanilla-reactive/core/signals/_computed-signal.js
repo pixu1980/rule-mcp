@@ -2,6 +2,7 @@
 //  PART 1 — ComputedSignal
 // ═══════════════════════════════════════════════════════════════════════════════
 
+'use strict';
 import { BaseSignal } from './_base-signal.js';
 import { withCollector } from './_collector-context.js';
 

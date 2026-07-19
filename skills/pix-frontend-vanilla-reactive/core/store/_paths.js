@@ -2,6 +2,7 @@
 //  Store — path helpers
 // ═══════════════════════════════════════════════════════════════════════════════
 
+'use strict';
 export function toPathArray(path) {
   if (Array.isArray(path)) return path;
   if (path == null || path === '') return [];

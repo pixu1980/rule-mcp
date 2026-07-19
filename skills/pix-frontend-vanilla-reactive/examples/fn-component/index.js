@@ -2,4 +2,5 @@
 //  Bootstrap — imports _App (which renders into #root)
 //  ═══════════════════════════════════════════════════════════════════════════════
 
+'use strict';
 import './_App.js';

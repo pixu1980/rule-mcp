@@ -5,6 +5,7 @@
 //  Context + scope passed to render().
 //  ═══════════════════════════════════════════════════════════════════════════════
 
+'use strict';
 import { effect, render, loadCSS } from '../../core/index.js';
 import { store, addItem, removeItem } from './_store.js';
 import { ItemList } from './components/ItemList/index.js';
