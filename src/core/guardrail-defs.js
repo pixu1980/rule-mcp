@@ -523,6 +523,83 @@ export const SVELTE_GUARDRAILS = [
 // ─── Vanilla-Reactive guardrails (rule-frontend-vanilla-reactive) ───
 
 export const VANILLA_REACTIVE_GUARDRAILS = [
+  // ── JS Styleguard ────────────────────────────────────────────────────
+  {
+    id: "js-if-braces",
+    label: "if/else always use braces",
+    description: "Every if, else, else if must use {} braces. Single-line if without braces is forbidden.",
+    check: (code) => {
+      // Match if (...) without following brace
+      const matches = code.match(/if\s*\([^)]*\)\s*[^{]*(?:;|\n)/g);
+      if (matches && matches.length > 0) {
+        return { pass: false, failCount: matches.length, detail: matches.slice(0, 5), suggestion: "Add braces: if (condition) { ... }" };
+      }
+      return { pass: true };
+    },
+  },
+  {
+    id: "js-blank-lines-blocks",
+    label: "Multi-line blocks have blank lines above/below",
+    description: "if/for/while/switch/try/return/promise/method chains spanning >1 line must have a blank line above and below.",
+    check: (code) => {
+      const issues = [];
+      const lines = code.split('\n');
+      for (let i = 1; i < lines.length - 1; i++) {
+        const line = lines[i];
+        const prev = lines[i - 1];
+        const next = lines[i + 1];
+        // Check if this line starts a block that spans multiple lines
+        if (/^\s*(if|for|while|switch|try)\s*\(/.test(line) || /^\.(then|catch|finally|map|filter|reduce|forEach)\s*\(/.test(line)) {
+          const hasPrevCode = prev.trim() && !/^\s*(\/\/|\/\*|\*|\}\s*$|\{\s*$|if|for|while|switch|try|case|default)/.test(prev);
+          if (hasPrevCode && prev.trim() !== '{' && !prev.trim().startsWith('//')) {
+            issues.push(`Line ${i + 1}: no blank line before block`);
+          }
+        }
+        // Check closing brace followed by code
+        if (/^\s*\}\s*$/.test(line) && !/catch|else|finally/.test(next)) {
+          const hasNextCode = next.trim() && !/^\s*(\/\/|\/\*|\*|\}|\)|case|default)/.test(next);
+          if (hasNextCode && next.trim() !== '{' && i > 2) {
+            // Check this is not the last block in parent
+            const afterBlock = lines.slice(i + 1).join('\n').trim();
+            if (afterBlock && !afterBlock.startsWith('}') && !afterBlock.startsWith(')')) {
+              issues.push(`Line ${i + 1}: no blank line after closing brace`);
+            }
+          }
+        }
+      }
+      if (issues.length > 0) {
+        return { pass: false, failCount: issues.length, detail: issues.slice(0, 5), suggestion: "Add blank lines around multi-line blocks (see styleguide)." };
+      }
+      return { pass: true };
+    },
+  },
+  {
+    id: "js-const-top",
+    label: "Variable declarations grouped at top",
+    description: "const/let/var declarations should be grouped at the top of their scope, separated from code by a blank line.",
+    check: (code) => {
+      const lines = code.split('\n');
+      let lastDecl = -1;
+      let firstNonDecl = -1;
+      for (let i = 0; i < lines.length; i++) {
+        const trimmed = lines[i].trim();
+        if (/^(const|let|var)\s/.test(trimmed)) {
+          lastDecl = i;
+          if (firstNonDecl < 0) firstNonDecl = i;
+        } else if (trimmed && !/^(\/\/|\/\*|\*|\s*$|import|export|'use strict'|})/.test(trimmed) && lastDecl >= 0) {
+          break;
+        }
+      }
+      if (lastDecl > 0 && lastDecl < lines.length - 1) {
+        const nextLine = lines[lastDecl + 1].trim();
+        if (nextLine && !/^(\/\/|\/\*|\*|export|import|'use strict'|}|case|default)/.test(nextLine)) {
+          return { pass: false, failCount: 1, detail: [`Line ${lastDecl + 1}: no blank line after declarations`], suggestion: "Add a blank line after the last const/let/var declaration." };
+        }
+      }
+      return { pass: true };
+    },
+  },
+
   // Pattern A: Custom Element + html\`\`
   {
     id: "vanilla-ce-extends",
