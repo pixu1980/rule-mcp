@@ -18,7 +18,7 @@ Four example apps in `examples/apps/`: each shows one pattern or a combo.
 ```
 apps/vr-component/        ← Pattern CustomElement vrComponent: CE + vrComponent (counter)
 apps/fn-component/         ← Pattern Functional Component: functional component (list)
-apps/vr-component-with-html/     ← Pattern CustomElement vrComponent with External HTML: CE + external .template.html
+apps/vr-component-html/     ← Pattern CustomElement vrComponent with External HTML: CE + external .template.html
 apps/combo/                ← Both patterns mixed together
 ```
 Serve with any HTTP server and open each `index.html`.
@@ -43,30 +43,26 @@ Create this minimal app to verify your setup.
 </html>
 ```
 
-**`index.js`** — Store + TickState + Component + mount:
+**`index.js`** — Store + Component + mount:
 ```js
-import { Store, Signal, effect, html, render, registerFilter, vrComponent }
+import { Store, effect, html, render, registerFilter, vrComponent }
   from './core/index.js';
 
-// 1. Data store
+// 1. Store (auto-creates store.tick for reactivity)
 const store = new Store({ title: 'Hello World' });
 
-// 2. TickState bridge (connects Store → Signals)
-const tickState = new Signal.State(0, { equals: () => false });
-window.addEventListener('store:change', () => tickState.set(performance.now()));
-
-// 3. Template filter
+// 2. Template filter
 registerFilter('upper', v => String(v).toUpperCase());
 
-// 4. Component (Pattern CustomElement vrComponent — see §5)
+// 3. Component
 class App extends HTMLElement {
   static { vrComponent(this, { tag: 'app-root', css: import.meta.url }); }
   context() { return { title: store.state.title }; }
   render(ctx) { return html`<h1>{{ title | upper }}</h1>`; }
 }
 
-// 5. Initial render
-tickState.set(performance.now());
+// 4. Initial render (store.tick handles subsequent changes)
+store.tick.set(performance.now());
 ```
 
 **Serve** via `pnpm dev` (Vite), `npx serve`, o qualsiasi HTTP server.
@@ -172,34 +168,46 @@ Signal.subtle.untrack(() => { console.log(count.peek()); });
 
 ---
 
-## 3. The "TickState" Bridge Pattern
+## 3. The TickState Bridge
+
+Every `Store` instance auto-creates a `store.tick` Signal that fires on every
+state mutation. No manual wiring needed.
+
+```js
+const store = new Store({ count: 0 });
+// store.tick is a Signal.State with equals: () => false
+// store.tick.set() is called automatically on every state change
+```
+
+### Usage in computed signals
+
+```js
+// Every computed that reads store.state MUST also read store.tick.get()
+const renderContext = new Signal.Computed(() => {
+  store.tick.get();  // subscribe to store changes
+  return { count: store.state.count };  // read current data
+});
+```
+
+### Disable auto-tick
+
+```js
+const store = new Store(data, { autoTick: false });
+```
+
+### Manual tickState (advanced)
 
 ```js
 const tickState = new Signal.State(0, { equals: () => false });
-```
-
-**Always use `equals: () => false`** — every store write must notify.
-
-### Wiring
-
-```js
-window.addEventListener("store:change", () => {
-  tickState.set(performance.now());
-});
+window.addEventListener('store:change', () => tickState.set(performance.now()));
 ```
 
 ### Why This Works
 
 - **Store is the truth**, signals are the notification mechanism.
-- Every computed that reads `store.state.X` MUST also read `tickState.get()`.
+- Every computed that reads `store.state.X` MUST also read a tickState.
 - Computed signals still cache — if value didn't change, downstream not invalidated.
 - For large apps (>10k reactive nodes), consider path-based selective invalidation.
-
-### Key Rules
-
-1. **Always use `equals: () => false`** — every store write must notify.
-2. **Every computed reading `store.state.X` MUST also read `tickState.get()`**.
-3. **Two effects** typically read tickState: one for rendering, one for document-level side effects.
 
 ---
 
@@ -486,19 +494,18 @@ Custom Elements are composed via HTML tags, NOT `{{ }}`:
 
 ```
 1. User input → @input handler → store.state.X = Y
-2. Proxy trap fires → store:change event
-3. store:change listener → tickState.set(performance.now())
-4. tickState.notify() → invalidate computeds + schedule effects
-5. Microtask flush → render effect runs
-6. TemplateInstance.updateWithContext(values, context)
-7. Parts write directly to DOM (ChildNodePart, ExprPart, ForPart, etc.)
+2. Proxy trap fires → store.tick.set() (automatic)
+3. Signal subscribers invalidate → ComputedSignal marks dirty
+4. Microtask flush → render effect runs
+5. TemplateInstance.updateWithContext(values, context)
+6. Parts write directly to DOM (ChildNodePart, ExprPart, ForPart, etc.)
 ```
 
 ### Synchronous vs Microtask
 
 | Phase | When | What runs |
 |-------|------|-----------|
-| Sync | During tickState.set() | Model binding syncs, computed invalidation, effect scheduling |
+| Sync | During store.tick.set() | Model binding syncs, computed invalidation, effect scheduling |
 | Microtask | After current script | Effects (render, document sync) |
 
 ---
@@ -506,39 +513,35 @@ Custom Elements are composed via HTML tags, NOT `{{ }}`:
 ## 7. Complete Bootstrap Sequence
 
 ```js
-// 1. Create store
-const store = new Store(initialState);
+// 1. Store (auto-creates store.tick for reactivity)
+const store = new Store({ title: 'Hello', todos: [] });
 
-// 2. Create tickState bridge
-const tickState = new Signal.State(0, { equals: () => false });
-window.addEventListener("store:change", () => tickState.set(performance.now()));
-
-// 3. Register filters
+// 2. Register filters
 registerFilter('upper', v => String(v).toUpperCase());
 
-// 4. Load component CSS (top-level await)
+// 3. Load component CSS (top-level await)
 const sheet = new CSSStyleSheet();
 sheet.replaceSync(await (await fetch(new URL('./_App.css', import.meta.url))).text());
 
-// 5. Define components with static {} blocks
+// 4. Define components with static {} blocks
 
-// 6. Create render context (ComputedSignal)
+// 5. Create render context (ComputedSignal) — note store.tick.get()
 const renderContext = new Signal.Computed(() => {
-  tickState.get();
-  return { title: store.state.title, todos: store.state.todos, ... };
+  store.tick.get();   // subscribe to store changes
+  return { title: store.state.title, todos: store.state.todos };
 });
 
-// 7. Mount effect
+// 6. Mount effect
 effect(() => {
   const ctx = renderContext.get();
   const result = App.render(ctx);
-  result._context = ctx;       // for {{ }} data expressions
-  result._scope = this;        // for @click="handler" resolution (or explicit object)
+  result._context = ctx;
+  result._scope = this;   // or: { handleSave }
   render(result, root);
 });
 
-// 8. Initial render kick
-tickState.set(performance.now());
+// 7. Initial render kick (store.tick auto-fires on subsequent changes)
+store.tick.set(performance.now());
 ```
 
 ---
@@ -592,12 +595,12 @@ src/
 
 ## 9. Pitfalls and Common Mistakes
 
-### 1. Forgetting `tickState.get()` in computed signals
+### 1. Forgetting `store.tick.get()` in computed signals
 ```js
 // WRONG — won't re-evaluate on store changes:
 const myComputed = new Signal.Computed(() => store.state.todos.length);
 // RIGHT:
-const myComputed = new Signal.Computed(() => { tickState.get(); return store.state.todos.length; });
+const myComputed = new Signal.Computed(() => { store.tick.get(); return store.state.todos.length; });
 ```
 
 ### 2. Forgetting `result._context`

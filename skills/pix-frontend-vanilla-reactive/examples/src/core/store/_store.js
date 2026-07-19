@@ -5,6 +5,7 @@
 import { isObject } from './_guards.js';
 import { toPathArray } from './_paths.js';
 import { deepClone, clonePlainValue } from './_clone.js';
+import { StateSignal } from '../signals/_state-signal.js';
 
 export class Store {
   constructor(initialState = {}, opts = {}) {
@@ -12,6 +13,13 @@ export class Store {
     this.target = deepClone(initialState);
     this.proxyCache = new WeakMap();
     this.state = this._createProxy(this.target, []);
+
+    // Auto-create tickState signal for reactive rendering
+    // Access via store.tick.get() in ComputedSignal / effect
+    // Disable with: new Store(data, { autoTick: false })
+    if (opts.autoTick !== false) {
+      this.tick = new StateSignal(0, { equals: () => false });
+    }
   }
   _createProxy(target, path) {
     if (!isObject(target)) return target;
@@ -48,6 +56,7 @@ export class Store {
   _emitChange(path, oldValue, newValue) {
     const detail = { path: toPathArray(path).join('.'), oldValue: deepClone(oldValue), newValue: deepClone(newValue) };
     this.events.dispatchEvent(new CustomEvent('store:change', { detail }));
+    if (this.tick) this.tick.set(performance.now());
   }
   get(path) {
     const parts = toPathArray(path);

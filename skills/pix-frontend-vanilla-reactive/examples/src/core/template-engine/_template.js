@@ -2,7 +2,7 @@
 //  PART 3d — render() function
 // ═══════════════════════════════════════════════════════════════════════════════
 
-import { ChildNodePart } from './_child-node-part.js';
+import { ChildNodePart } from '../dom-parts/_child-node-part.js';
 
 export function render(result, container) {
   let rootPart = container.__rootPart;

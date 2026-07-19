@@ -1,19 +1,12 @@
 // ═══════════════════════════════════════════════════════════════════════════════
-//  Pattern Functional Component — Functional Component (greeting list)
+//  Pattern Functional Component — list app
 //  ═══════════════════════════════════════════════════════════════════════════════
-//  No classes, no HTMLElement. Pure functions returning html``.
-//  Handlers passed via result._scope. Data via result._context.
-//  Rendered into a plain <div> via render() + effect().
-//  ═══════════════════════════════════════════════════════════════════════════════
+//  Uses store.tick (automatic) instead of manual tickState.
 
-import { Store, Signal, effect, html, render } from '../../src/core/index.js';
+import { Store, effect, html, render } from '../../src/core/index.js';
 
-// ── Store + TickState ──────────────────────────────────────────
 const store = new Store({ items: ['Pix', 'Vanilla', 'Reactive'] });
-const tickState = new Signal.State(0, { equals: () => false });
-window.addEventListener('store:change', () => tickState.set(performance.now()));
 
-// ── Handlers (in scope for @click) ─────────────────────────────
 const addItem = () => {
   const title = prompt('New item:')?.trim();
   if (title) store.state.items = [...store.state.items, title];
@@ -22,19 +15,13 @@ const removeItem = (id) => {
   store.state.items = store.state.items.filter((_, i) => i !== id);
 };
 
-// ── Functional component #1: list ───────────────────────────────
 function ItemList(ctx) {
   const result = html`
     <section data-part="list">
       <for each="item in ctx.items">
-        <article data-part="row">
-          <span>{{ item }}</span>
-          <button @click="removeItem(_index)">✕</button>
-        </article>
+        <article><span>{{ item }}</span><button @click="removeItem(_index)">✕</button></article>
       </for>
-      <if condition="ctx.items.length === 0">
-        <p data-part="empty">List is empty.</p>
-      </if>
+      <if condition="ctx.items.length === 0"><p>List is empty.</p></if>
       <button @click="addItem()">+ Add Item</button>
     </section>
   `;
@@ -43,13 +30,12 @@ function ItemList(ctx) {
   return result;
 }
 
-// ── Mount effect ────────────────────────────────────────────────
 effect(() => {
-  tickState.get();
+  store.tick.get();
   const ctx = { items: store.state.items };
   const result = ItemList(ctx);
   result._context = ctx;
   render(result, document.getElementById('root'));
 });
 
-tickState.set(performance.now());
+store.tick.set(performance.now());
