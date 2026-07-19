@@ -32,4 +32,5 @@ export class PropertyPart extends Part {
   commit(value) {
     this.element[this.name] = value;
   }
+
 }

@@ -36,6 +36,7 @@ export class ComputedSignal extends BaseSignal {
     if (this.dirty) {
       return;
     }
+
     this.dirty = true;
     this.notify();
   }
@@ -78,4 +79,5 @@ export class ComputedSignal extends BaseSignal {
   peek() {
     return this.evaluate();
   }
+
 }

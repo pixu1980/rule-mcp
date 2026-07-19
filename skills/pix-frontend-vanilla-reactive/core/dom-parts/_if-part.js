@@ -150,7 +150,9 @@ export class IfPart {
     if (activeIdx === this._activeBranch) {
       return;
     }
+
     this.clear();
+
     if (activeIdx >= 0 && activeIdx < this.bodies.length) {
       this.renderBranch(activeIdx);
     }
@@ -190,6 +192,7 @@ export class IfPart {
   destroy() {
     this.clear();
   }
+
 }
 
 // ─── SwitchPart ───────────────────────────────────────────────────────────────
@@ -249,6 +252,7 @@ export class SwitchPart {
     if (bodyIdx === this._activeCase) {
       return;
     }
+
     this.clear();
     this.renderBody(bodyIdx);
     this._activeCase = bodyIdx;
@@ -292,4 +296,5 @@ export class SwitchPart {
   destroy() {
     this.clear();
   }
+
 }

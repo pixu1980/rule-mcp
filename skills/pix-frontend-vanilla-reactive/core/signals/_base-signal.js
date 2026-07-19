@@ -34,6 +34,7 @@ export class BaseSignal {
     for (const s of this.subscribers) {
       s();
     }
+
   }
 
 }

@@ -13,6 +13,7 @@ import { isSignalLike } from "../signals/index.js";
 import { clearRange, normalizeExprValue } from "./_range.js";
 // Lazy import to handle circular dependency (TemplateInstance → ExprPart → TemplateInstance)
 let TemplateInstance;
+
 export function _setTemplateInstance(cls) {
   TemplateInstance = cls;
 }
@@ -111,6 +112,7 @@ export class ExprPart {
 
       instance.updateWithContext([], this._ctx || {}, this._scope);
       this._nestedInstance = instance;
+
       if (this.start.parentNode) {
         this.start.parentNode.insertBefore(instance.fragment, this.end);
       }
@@ -122,6 +124,7 @@ export class ExprPart {
     const node = normalizeExprValue(value, useRaw);
 
     this.currentNode = node;
+
     if (this.start.parentNode) {
       this.start.parentNode.insertBefore(node, this.end);
     }

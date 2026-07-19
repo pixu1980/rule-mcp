@@ -84,9 +84,9 @@ function fixBlankLines(filePath) {
   // Rule: blank line between class methods
   code = code.replace(/^(\s*)\}\n(\s*)(\w+\s*\()/gm, "$1}\n\n$2$3");
 
-  // Rule: blank line after declarations before next statement
+  // Rule: blank line after const/let/var declarations before next statement
   code = code.replace(
-    /(const\s+\w+\s*=\s*[^;]+;)\n(\s*)([a-zA-Z])/g,
+    /((?:const|let|var)\s+\w+\s*=\s*[^;]+;)\n(\s*)([a-zA-Z])/g,
     "$1\n\n$2$3"
   );
 

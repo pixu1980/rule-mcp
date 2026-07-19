@@ -7,11 +7,14 @@
 const scheduled = new Set();
 
 let flushing = false;
+
 export function schedule(job) {
   scheduled.add(job);
+
   if (flushing) {
     return;
   }
+
   flushing = true;
   queueMicrotask(() => {
     try {
@@ -19,6 +22,7 @@ export function schedule(job) {
         const batch = [...scheduled];
 
         scheduled.clear();
+
         for (const j of batch) {
           j.run();
         }
