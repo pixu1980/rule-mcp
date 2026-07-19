@@ -16,9 +16,11 @@ export class Store {
 
     // Auto-create tickState signal for reactive rendering
     // Access via store.tick.get() in ComputedSignal / effect
+    // Fires once on construction so effects created later render immediately.
     // Disable with: new Store(data, { autoTick: false })
     if (opts.autoTick !== false) {
       this.tick = new StateSignal(0, { equals: () => false });
+      this.tick.set(performance.now());  // initial kick
     }
   }
   _createProxy(target, path) {

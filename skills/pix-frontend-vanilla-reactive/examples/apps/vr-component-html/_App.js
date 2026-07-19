@@ -1,9 +1,9 @@
 // ═══════════════════════════════════════════════════════════════════════════════
-//  Pattern CustomElement vrComponent with External HTML — user card
+//  App — CustomElement vrComponent with External HTML (user card)
 //  ═══════════════════════════════════════════════════════════════════════════════
-//  Uses store.tick (automatic) instead of manual tickState.
+//  Uses loadTemplate helper + store.tick (automatic).
 
-import { Store, vrComponent, html } from '../../src/core/index.js';
+import { Store, vrComponent, html, loadTemplate } from '../../src/core/index.js';
 
 const store = new Store({
   user: { name: 'Alice', role: 'admin' },
@@ -13,19 +13,19 @@ const store = new Store({
   ],
 });
 
-const templateStr = await (
-  await fetch(new URL('./_Card.template.html', import.meta.url))
-).text();
-const TEMPLATE = html(templateStr);
+const TEMPLATE = await loadTemplate(import.meta.url, './_Card.template.html');
 
-class UserCard extends HTMLElement {
+export class UserCard extends HTMLElement {
   static { vrComponent(this, { tag: 'user-card', css: import.meta.url }); }
+
   toggleTodo(id) {
     store.state.todos = store.state.todos.map(t =>
       t.id === id ? { ...t, done: !t.done } : t
     );
   }
+
   context() { return { user: store.state.user, todos: store.state.todos }; }
+
   render(ctx) {
     const result = TEMPLATE;
     result._context = ctx;
@@ -33,5 +33,3 @@ class UserCard extends HTMLElement {
     return result;
   }
 }
-
-store.tick.set(performance.now());

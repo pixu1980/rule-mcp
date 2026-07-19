@@ -14,12 +14,12 @@ frameworks: [vanilla]
 Complete vanilla JS reactive framework pattern.
 Zero framework dependencies. No build step required.
 
-Four example apps in `examples/apps/`: each shows one pattern or a combo.
+Four example apps in `examples/apps/`:
 ```
-apps/vr-component/        ← Pattern CustomElement vrComponent: CE + vrComponent (counter)
-apps/fn-component/         ← Pattern Functional Component: functional component (list)
-apps/vr-component-html/     ← Pattern CustomElement vrComponent with External HTML: CE + external .template.html
-apps/combo/                ← Both patterns mixed together
+apps/vr-component/               Counter (CustomElement vrComponent)
+apps/fn-component/               List (Functional Component)
+apps/vr-component-html/          User card (CustomElement vrComponent + ext. HTML)
+apps/combo/                      Todo (all 3 patterns mixed)
 ```
 Serve with any HTTP server and open each `index.html`.
 
@@ -43,26 +43,25 @@ Create this minimal app to verify your setup.
 </html>
 ```
 
-**`index.js`** — Store + Component + mount:
+**`index.js`** — bootstrap (imports the component, no further code needed):
 ```js
-import { Store, effect, html, render, registerFilter, vrComponent }
-  from './core/index.js';
+import './_App.js';
+```
 
-// 1. Store (auto-creates store.tick for reactivity)
-const store = new Store({ title: 'Hello World' });
+**`_App.js`** — Store + Component:
+```js
+import { Store, vrComponent, html } from '../core/index.js';
 
-// 2. Template filter
-registerFilter('upper', v => String(v).toUpperCase());
+const store = new Store({ title: 'Hello World' });  // auto-tick
 
-// 3. Component
 class App extends HTMLElement {
   static { vrComponent(this, { tag: 'app-root', css: import.meta.url }); }
   context() { return { title: store.state.title }; }
   render(ctx) { return html`<h1>{{ title | upper }}</h1>`; }
 }
-
-// 4. Initial render (store.tick handles subsequent changes)
-store.tick.set(performance.now());
+```
+No manual `tickState`, no `window.addEventListener`, no `store.tick.set()` —
+all automatic. Just `new Store()` and the component is reactive.
 ```
 
 **Serve** via `pnpm dev` (Vite), `npx serve`, o qualsiasi HTTP server.
@@ -225,12 +224,16 @@ Two-way binding via `@input` + `.value`.
 > Full resolution chain documented in §5.
 
 ```js
-import { html, render, registerFilter } from "./core/template-engine/index.js";
+import { html, loadTemplate, render, registerFilter }
+  from "./core/template-engine/index.js";
 
 // html tagged template (wraps strings + values)
 const result = html`<h1>{{ title | upper }}</h1>`;
 
-// html from string (Pattern CustomElement vrComponent with External HTML: external .template.html files)
+// loadTemplate: fetch + parse external .template.html (Pattern CustomElement vrComponent with External HTML)
+const TPL = await loadTemplate(import.meta.url, './_Card.template.html');
+
+// html from string (alternative)
 const fromFile = html(`<h1>{{ title }}</h1>`);
 
 // render into container
