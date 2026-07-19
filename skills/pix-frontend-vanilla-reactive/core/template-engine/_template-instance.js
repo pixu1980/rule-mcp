@@ -6,6 +6,7 @@
 //  ═══════════════════════════════════════════════════════════════════════════════
 
 'use strict';
+
 import { parseExpression, evaluateExpression } from './_expression-parser.js';
 import { ChildNodePart } from '../dom-parts/_child-node-part.js';
 import { AttributePart } from '../dom-parts/_attribute-part.js';
@@ -276,6 +277,7 @@ export function getTemplate(strings) {
       continue;
     }
 
+
     if (walkNode.nodeType === Node.ELEMENT_NODE) {
       // Check for @click handler (stored as data-rule-event marker)
       const handlerId = walkNode.getAttribute('data-rule-event');
@@ -466,9 +468,17 @@ export class TemplateInstance {
     }
 
     // 2. Init <for> / <if> / <switch>
-    for (const fp of this.forParts) fp.init(context);
-    for (const ip of this.ifParts) ip.init(context);
-    for (const sp of this.switchParts) sp.init(context);
+    for (const fp of this.forParts) {
+  fp.init(context);
+}
+
+    for (const ip of this.ifParts) {
+  ip.init(context);
+}
+
+    for (const sp of this.switchParts) {
+  sp.init(context);
+}
 
     // 3. Update @click handlers: resolve args + bind
     for (const ep of this.eventParts) {
@@ -477,9 +487,11 @@ export class TemplateInstance {
     }
   }
 
+
   update(values) {}
 }
 
 // Resolve circular dep: register TemplateInstance with ChildNodePart + ExprPart
 _setTemplateInstance(TemplateInstance);
 _setExprTemplateInstance(TemplateInstance);
+

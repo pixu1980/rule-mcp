@@ -8,6 +8,7 @@
 //  ═══════════════════════════════════════════════════════════════════════════════
 
 'use strict';
+
 import { FILTERS } from './_filters.js';
 
 /**
@@ -53,17 +54,21 @@ export function parseArg(value) {
     return value.slice(1, -1);
   }
 
+
   if (/^\d+$/.test(value)) {
     return parseInt(value, 10);
   }
+
 
   if (/^\d+\.\d+$/.test(value)) {
     return parseFloat(value);
   }
 
+
   if (value === 'true') {
     return true;
   }
+
 
   if (value === 'false') {
     return false;
@@ -125,3 +130,4 @@ export function evaluateExpression(parsed, ctx, scope) {
   }
   return value;
 }
+

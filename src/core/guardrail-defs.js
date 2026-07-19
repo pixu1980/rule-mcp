@@ -574,6 +574,62 @@ export const VANILLA_REACTIVE_GUARDRAILS = [
     },
   },
   {
+    id: "js-single-line-method",
+    label: "Class method bodies must be multi-line",
+    description: "Every method body must span multiple lines. No method() { stmt; } on one line.",
+    check: (code) => {
+      const matches = code.match(/(?:constructor|\w+)\s*\([^)]*\)\s*\{[^}]+\}/g);
+      if (matches && matches.length > 0) {
+        const filtered = matches.filter(m => {
+          const inner = m.replace(/^\w+\s*\([^)]*\)\s*\{/, '').replace(/\}$/, '').trim();
+          return inner.length > 0 && !inner.includes('\n');
+        });
+        if (filtered.length > 0) {
+          return { pass: false, failCount: filtered.length, detail: filtered.slice(0, 5), suggestion: "Split method body across multiple lines." };
+        }
+      }
+      return { pass: true };
+    },
+  },
+  {
+    id: "js-for-loop-braces",
+    label: "for loops must have braces and be multi-line",
+    description: "Every for/for...of/for...in body must use {} and span multiple lines. No for (...) stmt;",
+    check: (code) => {
+      const matches = code.match(/for\s*\([^)]*\)\s*\{[^}]+\}/g);
+      if (matches && matches.length > 0) {
+        const filtered = matches.filter(m => {
+          const inner = m.replace(/^for\s*\([^)]*\)\s*\{/, '').replace(/\}$/, '').trim();
+          return !inner.includes('\n');
+        });
+        if (filtered.length > 0) {
+          return { pass: false, failCount: filtered.length, detail: filtered.slice(0, 5), suggestion: "Place for loop body on separate lines." };
+        }
+      }
+      return { pass: true };
+    },
+  },
+  {
+    id: "js-blank-line-between-methods",
+    label: "Blank line between class methods",
+    description: "Every pair of class methods must have a blank line between them.",
+    check: (code) => {
+      const issues = [];
+      if (!code.includes('class ')) return { pass: true, note: "Not a class — skipping" };
+      const lines = code.split('\n');
+      for (let i = 0; i < lines.length - 1; i++) {
+        // Check if line is a closing brace of a method, followed by another method
+        if (/^\s*\}\s*$/.test(lines[i]) && /^\s*(\w+|static|get|set)\s/.test(lines[i + 1])) {
+          issues.push(`Line ${i + 1}: no blank line before method`);
+        }
+      }
+      if (issues.length > 0) {
+        return { pass: false, failCount: issues.length, detail: issues.slice(0, 5), suggestion: "Add a blank line between class methods." };
+      }
+      return { pass: true };
+    },
+  },
+  {
     id: "js-blank-lines-blocks",
     label: "Multi-line blocks have blank lines above/below",
     description: "if/for/while/switch/try/return/promise/method chains spanning >1 line must have a blank line above and below.",

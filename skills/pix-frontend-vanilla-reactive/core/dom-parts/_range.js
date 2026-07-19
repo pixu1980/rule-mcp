@@ -3,6 +3,7 @@
 // ═══════════════════════════════════════════════════════════════════════════════
 
 'use strict';
+
 export function clearRange(start, end) {
   let c = start.nextSibling;
   while (c && c !== end) { const n = c.nextSibling; c.remove(); c = n; }
@@ -28,9 +29,11 @@ export function normalizeExprValue(value, useRaw) {
   if (value == null) {
     return document.createTextNode('');
   }
+
   if (value instanceof Node) {
     return value;
   }
+
   if (useRaw && typeof value === 'string') {
     if (!_rawWarned) {
       console.warn('[rule-vr] ╬ö using |raw filter — only use with trusted content (XSS risk)');
@@ -46,3 +49,4 @@ export function normalizeExprValue(value, useRaw) {
 export function inferModelProperty(el) {
   return el instanceof HTMLInputElement && el.type === 'checkbox' ? 'checked' : 'value';
 }
+

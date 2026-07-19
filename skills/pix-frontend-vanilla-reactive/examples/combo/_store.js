@@ -3,6 +3,7 @@
 //  ═══════════════════════════════════════════════════════════════════════════════
 
 'use strict';
+
 import { Store } from '../../core/index.js';
 
 /** Shared todo store with filter. */
@@ -42,3 +43,4 @@ export const toggleTodo = (id) => {
 export const setFilter = (f) => {
   store.state.filter = f;
 };
+

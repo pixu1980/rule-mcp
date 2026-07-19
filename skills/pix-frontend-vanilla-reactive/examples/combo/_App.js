@@ -5,6 +5,7 @@
 //  ═══════════════════════════════════════════════════════════════════════════════
 
 'use strict';
+
 import { vrComponent, html } from '../../core/index.js';
 import { store, addTodo, toggleTodo } from './_store.js';
 import { TodoStats } from './components/TodoStats/index.js';
@@ -20,14 +21,19 @@ export class TodoApp extends HTMLElement {
     input.value = '';
   }
 
-  toggle(todo) { toggleTodo(todo.id); }
 
+  toggle(todo) {
+
+    toggleTodo(todo.id);
+
+  }
   get visibleTodos() {
     const f = store.state.filter;
     return f === 'all' ? store.state.todos
          : f === 'done' ? store.state.todos.filter(t => t.done)
          : store.state.todos.filter(t => !t.done);
   }
+
 
   context() { return { visibleTodos: this.visibleTodos, TodoStats }; }
 
@@ -49,3 +55,4 @@ export class TodoApp extends HTMLElement {
     `;
   }
 }
+

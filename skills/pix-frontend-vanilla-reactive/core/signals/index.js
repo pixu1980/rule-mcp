@@ -3,6 +3,7 @@
 // ═══════════════════════════════════════════════════════════════════════════════
 
 'use strict';
+
 import { BaseSignal } from './_base-signal.js';
 import { StateSignal } from './_state-signal.js';
 import { ComputedSignal } from './_computed-signal.js';
@@ -35,5 +36,8 @@ export const Signal = {
 };
 
 // Re-exports of the original demo.js functions
-export function effect(fn) { const c = new EffectCollector(fn); return () => c.stop(); }
+export function effect(fn) { const c = new EffectCollector(fn); return () => {
+  c.stop();
+}; }
 export function isSignalLike(v) { return Boolean(v && typeof v.get === 'function' && v.__isSignal); }
+

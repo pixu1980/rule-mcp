@@ -3,6 +3,7 @@
 // ═══════════════════════════════════════════════════════════════════════════════
 
 'use strict';
+
 import { isObject } from './_guards.js';
 
 export function clonePlainValue(value, seen = new WeakMap()) {
@@ -12,9 +13,11 @@ export function clonePlainValue(value, seen = new WeakMap()) {
   if (raw instanceof Date) {
     return new Date(raw.getTime());
   }
+
   if (raw instanceof RegExp) {
     return new RegExp(raw.source, raw.flags);
   }
+
   if (raw instanceof Map) { const n = new Map(); seen.set(raw, n); for (const [k, v] of raw) n.set(clonePlainValue(k, seen), clonePlainValue(v, seen)); return n; }
   if (raw instanceof Set) { const n = new Set(); seen.set(raw, n); for (const v of raw) n.add(clonePlainValue(v, seen)); return n; }
   if (Array.isArray(raw)) { const n = []; seen.set(raw, n); for (const v of raw) n.push(clonePlainValue(v, seen)); return n; }
@@ -23,3 +26,4 @@ export function clonePlainValue(value, seen = new WeakMap()) {
   return n;
 }
 export function deepClone(v) { return clonePlainValue(v); }
+

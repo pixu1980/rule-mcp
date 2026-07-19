@@ -3,6 +3,7 @@
 // ═══════════════════════════════════════════════════════════════════════════════
 
 'use strict';
+
 import { isObject } from './_guards.js';
 import { toPathArray } from './_paths.js';
 import { deepClone, clonePlainValue } from './_clone.js';
@@ -24,6 +25,7 @@ export class Store {
       this.tick.set(performance.now());  // initial kick
     }
   }
+
   _createProxy(target, path) {
     if (!isObject(target)) { return target; }
     if (this.proxyCache.has(target)) { return this.proxyCache.get(target); }
@@ -33,6 +35,7 @@ export class Store {
         if (key === '__raw') {
           return raw;
         }
+
         if (key === '__path') {
           return path;
         }
@@ -68,6 +71,7 @@ export class Store {
     this.proxyCache.set(target, proxy);
     return proxy;
   }
+
   _emitChange(path) {
     // Brief change event (no deepClone — too expensive for large state)
     this.events.dispatchEvent(new CustomEvent('store:change', {
@@ -76,12 +80,14 @@ export class Store {
     // Notify reactivity system
     if (this.tick) { this.tick.set(performance.now()); }
   }
+
   get(path) {
     const parts = toPathArray(path);
     let current = this.state;
     for (const p of parts) current = current?.[p];
     return current;
   }
+
   set(path, value) {
     const parts = toPathArray(path);
     if (!parts.length) {
@@ -93,6 +99,7 @@ export class Store {
     current[last] = value;
     return value;
   }
+
   replace(next) {
     const old = deepClone(this.target);
     this.target = deepClone(next);
@@ -100,5 +107,9 @@ export class Store {
     this.state = this._createProxy(this.target, []);
     this._emitChange([]);
   }
-  snapshot() { return deepClone(this.target); }
+
+  snapshot() {
+    return deepClone(this.target);
+  }
 }
+

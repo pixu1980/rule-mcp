@@ -9,6 +9,7 @@
 //  ═══════════════════════════════════════════════════════════════════════════════
 
 'use strict';
+
 import { ChildNodePart } from '../dom-parts/_child-node-part.js';
 
 /**
@@ -25,6 +26,7 @@ export function render(result, container, context, scope) {
   if (context && !result._context) {
     result._context = context;
   }
+
   if (scope && !result._scope) {
     result._scope = scope;
   }
@@ -40,3 +42,4 @@ export function render(result, container, context, scope) {
   }
   rootPart.setValue(result);
 }
+

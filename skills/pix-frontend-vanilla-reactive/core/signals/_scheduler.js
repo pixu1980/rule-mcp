@@ -3,6 +3,7 @@
 // ═══════════════════════════════════════════════════════════════════════════════
 
 'use strict';
+
 const scheduled = new Set();
 let flushing = false;
 export function schedule(job) {
@@ -13,8 +14,11 @@ export function schedule(job) {
     try {
       while (scheduled.size > 0) {
         const batch = [...scheduled]; scheduled.clear();
-        for (const j of batch) j.run();
+        for (const j of batch) {
+  j.run();
+}
       }
     } finally { flushing = false; }
   });
 }
+
