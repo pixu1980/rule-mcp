@@ -24,6 +24,7 @@ export class PropertyPart extends Part {
 
       return;
     }
+
     this.disposeSignal();
     this.commit(value);
   }

@@ -21,6 +21,7 @@ const _exprCache = new Map();
 function renderRawTemplate(templateStr, ctx) {
   // Cache parsed expressions per template string
   let parsed = _exprCache.get(templateStr);
+
   if (!parsed) {
     const parts = [];
 
@@ -56,6 +57,7 @@ function renderRawTemplate(templateStr, ctx) {
     } else {
       out.push(p);
     }
+
   }
 
   const html = out.join("");
@@ -254,6 +256,7 @@ export class SwitchPart {
 
   renderBody(idx) {
     let body;
+
     if (idx < this.cases.length) {
       body = this.cases[idx].body;
     } else {

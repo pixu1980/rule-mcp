@@ -39,4 +39,5 @@ export class AttributePart extends Part {
 
     this.element.setAttribute(this.name, value === true ? "" : String(value));
   }
+
 }

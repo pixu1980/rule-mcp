@@ -17,11 +17,13 @@ export function popCollector() {
 }
 export function withCollector(collector, fn) {
   pushCollector(collector);
+
   try {
     return fn();
   } finally {
     popCollector();
   }
+
 }
 export function withoutCollector(callback) {
   const current = popCollector();
@@ -33,4 +35,5 @@ export function withoutCollector(callback) {
       pushCollector(current);
     }
   }
+
 }

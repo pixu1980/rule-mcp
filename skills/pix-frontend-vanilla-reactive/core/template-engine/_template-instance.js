@@ -28,6 +28,7 @@ function getNodePath(node, root) {
   const path = [];
 
   let cur = node;
+
   while (cur && cur !== root) {
     const p = cur.parentNode;
 
@@ -37,10 +38,12 @@ function getNodePath(node, root) {
 
     let i = 0;
     let c = cur;
+
     while (c.previousSibling) {
       c = c.previousSibling;
       i++;
     }
+
     path.unshift(i);
     cur = p;
   }
@@ -129,6 +132,7 @@ export function getTemplate(strings) {
         branches.push({ condition: elseCondMatch ? elseCondMatch[1] : "", isElse: false });
         branchIdx++;
       }
+
     }
     // Last body (after last branch marker, before </if>)
     const remaining = inner.slice(lastIdx);
@@ -178,6 +182,7 @@ export function getTemplate(strings) {
         defaultBody = inner.slice(lastIdx, caseMatch.index);
         lastIdx = caseMatch.index + caseMatch[0].length;
       }
+
     }
 
     directives.push({
@@ -212,6 +217,7 @@ export function getTemplate(strings) {
       const handlerName = fnMatch[1];
 
       let args = [];
+
       if (fnMatch[2] !== undefined) {
         const argsStr = fnMatch[2].trim();
 
@@ -228,6 +234,7 @@ export function getTemplate(strings) {
       clickHandlers.push({ eventName, handlerName, args, raw: valueStr });
       handlerMarkup = handlerMarkup.replace(fullAttr, `data-rule-event="${idx}"`);
     }
+
   }
 
   cleanedMarkup = handlerMarkup;
@@ -289,6 +296,7 @@ export function getTemplate(strings) {
         const dir = directives.find((d) => {
           return d.id === dirId;
         });
+
         if (dir) {
           const base = {
             kind: dir.kind,
@@ -326,6 +334,7 @@ export function getTemplate(strings) {
         const hIdx = Number(handlerId);
 
         const h = clickHandlers[hIdx];
+
         if (h) {
           descriptors.push({
             kind: "handler",
@@ -370,6 +379,7 @@ export function getTemplate(strings) {
           });
         }
       }
+
     }
   }
 
@@ -422,6 +432,7 @@ export class TemplateInstance {
             const partType = descriptor.partType || "attribute";
 
             let part;
+
             if (partType === "property") {
               part = new PropertyPart(node, descriptor.name);
             } else {
@@ -534,6 +545,7 @@ export class TemplateInstance {
       } else {
         exprPart.setValue(parsedExpr, context, this._scope);
       }
+
     }
 
     // 2. Init <for> / <if> / <switch>

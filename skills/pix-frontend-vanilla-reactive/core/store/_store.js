@@ -58,6 +58,7 @@ export class Store {
 
         return value;
       },
+
       set(raw, key, value) {
         const nextPath = [...path, key];
 
@@ -74,10 +75,12 @@ export class Store {
 
         return result;
       },
+
       deleteProperty(raw, key) {
         if (!(key in raw)) {
           return true;
         }
+
         const nextPath = [...path, key];
 
         const old = raw[key];
@@ -125,10 +128,12 @@ export class Store {
     const last = parts.pop();
 
     let current = this.state;
+
     for (const p of parts) {
       if (!isObject(current[p])) current[p] = {};
       current = current[p];
     }
+
     current[last] = value;
 
     return value;
