@@ -375,13 +375,35 @@ export const FILE_TREE_GUARDRAILS = [
         return { pass: true, failCount: 0, detail: [], suggestion: "", note: "File name follows _PascalCase.ext convention" };
       }
 
+      // _store.js, _data.js, _config.js — data helpers are snake_case, not components
+      if (/^_[a-z][a-z_-]*\.js$/.test(fileName)) {
+        return { pass: true, failCount: 0, detail: [], suggestion: "", note: "Helper file (_snake_case), not a component" };
+      }
+
       const correctName = fileName.startsWith("_") ? fileName : `_${fileName}`;
       return {
         pass: false,
         failCount: 1,
-        detail: [`File "${fileName}" does not follow the _PascalCase.ext convention`],
-        suggestion: `Rename to "${correctName}". Component files inside component folders must start with underscore + PascalCase.`,
+        detail: [`File "${fileName}" does not follow _PascalCase.ext (component) or _snake_case.js (helper) convention`],
+        suggestion: `Rename component to "${correctName}" or use _snake_case.js for helpers.`,
       };
+    },
+  },
+  {
+    id: "component-export-check",
+    label: "Component file exports a class or function",
+    description: "_PascalCase.js component files must export at least one class or function. Store/data files (_store.js) are exempt.",
+    check: (code, context) => {
+      const fileName = context?.fileName || "";
+      // Only check _PascalCase files (actual components)
+      if (!/^_[A-Z][a-zA-Z0-9]*\.\w+$/.test(fileName)) {
+        return { pass: true, note: "Not a component file, skipping" };
+      }
+      const hasExport = /^export\s+(class|function|const)/m.test(code.trim());
+      if (!hasExport) {
+        return { pass: false, failCount: 1, detail: ["No exported class/function found"], suggestion: "Add: export class MyComponent extends HTMLElement { ... }" };
+      }
+      return { pass: true };
     },
   },
   {
