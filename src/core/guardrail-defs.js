@@ -522,8 +522,10 @@ export const SVELTE_GUARDRAILS = [
 
 // ─── Vanilla-Reactive guardrails (rule-frontend-vanilla-reactive) ───
 
-export const VANILLA_REACTIVE_GUARDRAILS = [
-  // ── JS Styleguard ────────────────────────────────────────────────────
+// ── Generic JS Styleguard Rules ─────────────────────────────────────
+// These apply to ALL JavaScript/TypeScript code, regardless of framework.
+
+export const JS_GUARDRAILS = [
   {
     id: "js-if-braces",
     label: "if/else always use braces",
@@ -714,6 +716,9 @@ export const VANILLA_REACTIVE_GUARDRAILS = [
     },
   },
 
+];
+
+export const VANILLA_REACTIVE_GUARDRAILS = [
   // Pattern A: Custom Element + html\`\`
   {
     id: "vanilla-ce-extends",
@@ -845,15 +850,15 @@ export const VANILLA_REACTIVE_GUARDRAILS = [
 ];
 
 export const FRAMEWORK_GUARDRAILS = {
-  react: [...REACT_GUARDRAILS, ...FILE_TREE_GUARDRAILS],
-  vue: [...VUE_GUARDRAILS, ...FILE_TREE_GUARDRAILS],
-  angular: [...ANGULAR_GUARDRAILS, ...FILE_TREE_GUARDRAILS],
-  svelte: [...SVELTE_GUARDRAILS, ...FILE_TREE_GUARDRAILS],
-  solid: [...FILE_TREE_GUARDRAILS],
-  astro: [...FILE_TREE_GUARDRAILS],
-  architect: [...FILE_TREE_GUARDRAILS],
-  vanilla: [...FILE_TREE_GUARDRAILS],
-  "vanilla-reactive": [...VANILLA_REACTIVE_GUARDRAILS, ...FILE_TREE_GUARDRAILS],
+  react: [...REACT_GUARDRAILS, ...JS_GUARDRAILS, ...FILE_TREE_GUARDRAILS],
+  vue: [...VUE_GUARDRAILS, ...JS_GUARDRAILS, ...FILE_TREE_GUARDRAILS],
+  angular: [...ANGULAR_GUARDRAILS, ...JS_GUARDRAILS, ...FILE_TREE_GUARDRAILS],
+  svelte: [...SVELTE_GUARDRAILS, ...JS_GUARDRAILS, ...FILE_TREE_GUARDRAILS],
+  solid: [...JS_GUARDRAILS, ...FILE_TREE_GUARDRAILS],
+  astro: [...JS_GUARDRAILS, ...FILE_TREE_GUARDRAILS],
+  architect: [...JS_GUARDRAILS, ...FILE_TREE_GUARDRAILS],
+  vanilla: [...JS_GUARDRAILS, ...FILE_TREE_GUARDRAILS],
+  "vanilla-reactive": [...JS_GUARDRAILS, ...VANILLA_REACTIVE_GUARDRAILS, ...FILE_TREE_GUARDRAILS],
 };
 
 // ─── Scaffold guardrails (check project config files exist) ───
