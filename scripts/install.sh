@@ -492,21 +492,28 @@ fi
 # ─────────────────────────────────────────────────────────────────────────────
 header "Phase 4: VS Code Extension"
 
-VSIX_PATH="$(dirname "$0")/../extensions/pix-vanilla-reactive.vsix"
-if [[ -f "$VSIX_PATH" ]]; then
-  if command -v code &>/dev/null; then
-    echo -e "  ${CYAN}Installing Pix Vanilla Reactive VS Code extension...${NC}"
-    if code --install-extension "$VSIX_PATH" --force 2>&1 | tail -1; then
-      echo -e "  ${GREEN}✓ Extension installed${NC}"
+EXT_DIR="$(dirname "$0")/../extensions/vscode-pix"
+VSIX_OUT="$(dirname "$0")/../extensions/pix-vanilla-reactive.vsix"
+
+if command -v code &>/dev/null; then
+  # Build the extension .vsix package (suppress npm deprecation noise)
+  echo -e "  ${CYAN}Building VS Code extension...${NC}"
+  if cd "$EXT_DIR" && npx --yes @vscode/vsce package --out "$VSIX_OUT" 2>/dev/null; then
+    cd "$(dirname "$0")/.."
+    echo -e "  ${CYAN}Installing Pix Vanilla Reactive extension...${NC}"
+    if code --install-extension "$VSIX_OUT" --force 2>/dev/null; then
+      echo -e "  ${GREEN}✓ VS Code extension installed${NC}"
     else
       warn "VS Code extension install failed (non-critical)"
     fi
   else
-    echo -e "  ${YELLOW}code CLI not found — VS Code extension not installed${NC}"
-    echo -e "  ${YELLOW}  Install via: code --install-extension $VSIX_PATH${NC}"
+    cd "$(dirname "$0")/.."
+    warn "VS Code extension build failed (non-critical — try manually)"
+    echo -e "  ${YELLOW}  cd $EXT_DIR && npx @vscode/vsce package ${NC}"
   fi
 else
-  echo -e "  ${YELLOW}VSIX not found at $VSIX_PATH — skipping extension install${NC}"
+  echo -e "  ${YELLOW}code CLI not found — VS Code extension not installed${NC}"
+  echo -e "  ${YELLOW}  Visit vscode marketplace for manual install${NC}"
 fi
 
 # ─────────────────────────────────────────────────────────────────────────────
