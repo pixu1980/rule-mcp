@@ -9,10 +9,16 @@ import { Store } from '../../core/index.js';
 export const store = new Store({ count: 0 });
 
 /** Increment counter by 1. */
-export const increment = () => { store.state.count++; };
+export const increment = () => {
+  store.state.count++;
+};
 
 /** Decrement counter by 1. */
-export const decrement = () => { store.state.count--; };
+export const decrement = () => {
+  store.state.count--;
+};
 
 /** Reset counter to 0. */
-export const resetCount = () => { store.state.count = 0; };
+export const resetCount = () => {
+  store.state.count = 0;
+};

@@ -20,12 +20,10 @@ export const store = new Store({
  * @param {string} title - Todo text
  */
 export const addTodo = (title) => {
-
   if (!title?.trim()) {
-
     return;
-
   }
+
   store.state.todos = [...store.state.todos, { id: Date.now(), title: title.trim(), done: false }];
 };
 
@@ -41,4 +39,6 @@ export const toggleTodo = (id) => {
  * Set active filter.
  * @param {'all'|'open'|'done'} f - Filter value
  */
-export const setFilter = (f) => { store.state.filter = f; };
+export const setFilter = (f) => {
+  store.state.filter = f;
+};
