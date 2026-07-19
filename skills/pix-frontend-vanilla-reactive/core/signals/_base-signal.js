@@ -17,6 +17,7 @@ export class BaseSignal {
 
   subscribe(fn) {
     this.subscribers.add(fn);
+
     return () => {
   this.subscribers.delete(fn);
 };

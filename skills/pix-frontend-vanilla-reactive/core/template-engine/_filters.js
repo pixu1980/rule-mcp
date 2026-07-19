@@ -14,6 +14,7 @@ registerFilter("upper",       v => String(v).toUpperCase());
 registerFilter("lower",       v => String(v).toLowerCase());
 registerFilter("capitalize",  v => {
   const s = String(v);
+
   return s[0].toUpperCase() + s.slice(1).toLowerCase();
 });
 registerFilter("slugify",     v => utilSlug(v));
@@ -28,6 +29,7 @@ registerFilter("json",        v => {
 registerFilter("default",     (v, d = '') => (v !== undefined && v !== null && v !== '' ? v : d));
 registerFilter("truncate",    (v, l = 100) => {
   const s = String(v);
+
   return s.length > l ? s.slice(0, l) + '...' : s;
 });
 registerFilter("length",      v => (Array.isArray(v) || typeof v === 'string' ? v.length : 0));
@@ -37,6 +39,7 @@ registerFilter("last",        v => (Array.isArray(v) && v.length ? v[v.length - 
 
 registerFilter("join", (v, sep = ', ') => {
   if (!Array.isArray(v)) { return v; }
+
   return v.map(i => (typeof i === 'object' && i?.label) ? i.label : String(i)).join(sep);
 });
 
@@ -46,6 +49,7 @@ registerFilter("tagLabel", tag => {
   }
   const raw = typeof tag === 'object' ? (tag.label || tag.name || String(tag)) : String(tag);
   const m = { css: 'CSS', html: 'HTML' };
+
   return m[String(raw).toLowerCase().trim()] || raw;
 });
 
@@ -58,8 +62,10 @@ registerFilter("tagHref", tag => {
     if (tag.url) {
       return tag.url.startsWith('/') ? tag.url : '/' + tag.url;
     }
+
     return '/tags/' + utilSlug(tag.key || tag.name || String(tag)) + '.html';
   }
+
   return '/tags/' + utilSlug(tag) + '.html';
 });
 
@@ -88,6 +94,7 @@ registerFilter("date", (value, format = 'en-US') => {
 
   if (format === 'DD MMM YYYY') {
     const ms = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
     return String(d.getDate()).padStart(2, '0') + ' ' + ms[d.getMonth()] + ' ' + d.getFullYear();
   }
   try { return d.toLocaleDateString(format, { year: 'numeric', month: 'long', day: 'numeric' }); }
@@ -114,15 +121,18 @@ registerFilter("timeAgo", value => {
   if (days < 30) {
     return `${days} ${days === 1 ? 'day' : 'days'} ago`;
   }
+
   return d.toLocaleDateString('en-US');
 });
 
 registerFilter("urlencode", v => encodeURIComponent(String(v)));
 registerFilter("sortBy", (array, prop, dir = 'asc') => {
   if (!Array.isArray(array)) { return array; }
+
   return [...array].sort((a, b) => {
     let va = a[prop], vb = b[prop];
     if (prop === 'date') { va = new Date(va); vb = new Date(vb); }
+
     return dir === 'desc' ? (va < vb ? 1 : va > vb ? -1 : 0) : (va > vb ? 1 : va < vb ? -1 : 0);
   });
 });

@@ -9,6 +9,7 @@ export function toPathArray(path) {
   if (path == null || path === '') {
     return [];
   }
+
   return String(path).split('.').filter(Boolean);
 }
 

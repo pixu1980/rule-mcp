@@ -54,6 +54,7 @@ export class ComputedSignal extends BaseSignal {
 
   get() {
     this.track();
+
     return this.evaluate();
   }
 

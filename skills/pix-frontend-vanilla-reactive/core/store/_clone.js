@@ -24,6 +24,7 @@ export function clonePlainValue(value, seen = new WeakMap()) {
   if (Array.isArray(raw)) { const n = []; seen.set(raw, n); for (const v of raw) n.push(clonePlainValue(v, seen)); return n; }
   const n = {}; seen.set(raw, n);
   for (const k of Reflect.ownKeys(raw)) { const d = Object.getOwnPropertyDescriptor(raw, k); if (!d?.enumerable) continue; n[k] = clonePlainValue(raw[k], seen); }
+
   return n;
 }
 

@@ -29,6 +29,7 @@ export class ChildNodePart extends Part {
       this.bindSignal(value, (r) => {
       this.commit(r);
     });
+
       return;
     }
 
@@ -41,6 +42,7 @@ export class ChildNodePart extends Part {
     if (value?.kind === 'template-result') {
       this.commitTemplate(value);
       this.value = value;
+
       return;
     }
 
@@ -55,6 +57,7 @@ export class ChildNodePart extends Part {
 
       this.commitNode(f);
       this.value = value;
+
       return;
     }
 
@@ -79,6 +82,7 @@ export class ChildNodePart extends Part {
       if (context) {
         this.currentTemplateInstance.updateWithContext(result.values, context, scope);
       }
+
       return;
     }
 

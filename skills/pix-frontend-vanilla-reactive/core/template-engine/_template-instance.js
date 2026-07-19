@@ -41,12 +41,14 @@ function getNodePath(node, root) {
     path.unshift(i);
     cur = p;
   }
+
   return path;
 }
 
 function resolveNodePath(root, path) {
   let cur = root;
   for (const i of path) cur = cur.childNodes[i];
+
   return cur;
 }
 
@@ -88,6 +90,7 @@ export function getTemplate(strings) {
         each: eachMatch ? eachMatch[1] : '',
         inner,
       });
+
       return `<!--dir:${id}-->`;
     }
   );
@@ -142,6 +145,7 @@ export function getTemplate(strings) {
         branches,
         bodies,
       });
+
       return `<!--dir:${id}-->`;
     }
   );
@@ -185,6 +189,7 @@ export function getTemplate(strings) {
         cases,
         defaultBody,
       });
+
       return `<!--dir:${id}-->`;
     }
   );
@@ -365,6 +370,7 @@ export function getTemplate(strings) {
 
   rec = { template, descriptors, exprCount: exprCounter };
   templateCache.set(key, rec);
+
   return rec;
 }
 

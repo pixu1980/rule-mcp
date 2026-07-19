@@ -22,6 +22,7 @@ export class AttributePart extends Part {
       this.bindSignal(value, (r) => {
       this.commit(r);
     });
+
       return;
     }
 
@@ -32,6 +33,7 @@ export class AttributePart extends Part {
   commit(value) {
     if (value == null || value === false) {
       this.element.removeAttribute(this.name);
+
       return;
     }
 

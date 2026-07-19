@@ -31,6 +31,7 @@ export function parseExpression(expr) {
     const args = argsStr
       ? argsStr.split(',').map(a => parseExpression(a.trim()))
       : [];
+
     return { kind: "fn", name, args };
   }
 
@@ -41,11 +42,14 @@ export function parseExpression(expr) {
     const fMatch = f.match(/^([a-zA-Z_$][\w$]*)\s*\(([^)]*)\)$/);
     if (fMatch) {
       const args = fMatch[2].trim() ? fMatch[2].split(',').map(a => parseArg(a.trim())) : [];
+
       return { name: fMatch[1], args };
     }
     const parts = f.split(':').map(s => s.trim());
+
     return { name: parts[0], args: parts.slice(1).map(parseArg) };
   });
+
   return { kind: "data", variable, filters };
 }
 
@@ -92,6 +96,7 @@ export function getFromPath(obj, path) {
     }
     cur = cur[key];
   }
+
   return cur;
 }
 
@@ -113,10 +118,12 @@ export function evaluateExpression(parsed, ctx, scope) {
     if (typeof fn !== "function") {
       if (typeof fn === "undefined") {
         console.warn('vr: function not found in scope/context:', parsed.name);
+
         return '';
       }
     }
     const resolvedArgs = parsed.args.map(a => evaluateExpression(a, ctx, scope));
+
     return fn(...resolvedArgs);
   }
 
@@ -128,6 +135,7 @@ export function evaluateExpression(parsed, ctx, scope) {
       value = f(value, ...filter.args);
     }
   }
+
   return value;
 }
 
