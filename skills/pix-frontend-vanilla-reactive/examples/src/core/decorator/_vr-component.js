@@ -1,11 +1,11 @@
 // ═══════════════════════════════════════════════════════════════════════════════
-//  vrComponent — decorator for Custom Elements (pattern CustomElement vrComponent with External HTMLustomElement vrComponent with External HTMLustomElement vrComponent & C)
+//  vrComponent — decorator for Custom Elements (Pattern CustomElement vrComponent & C)
 //  ═══════════════════════════════════════════════════════════════════════════════
 //  Called once in the static {} block of a Custom Element class.
 //  Handles: define(), CSS loading (3 modes), reactive render loop with effect,
 //  scope/context wiring, mount guard, and cleanup.
 //
-//  Usage (pattern CustomElement vrComponent with External HTMLustomElement vrComponent with External HTMLustomElement vrComponent):
+//  Usage (Pattern CustomElement vrComponent):
 //    class App extends HTMLElement {
 //      static { vrComponent(this, { tag: 'app-root', css: 'auto' }); }
 //      handleDelete(id) { ... }
@@ -13,7 +13,7 @@
 //      render(ctx) { return html`<h1>{{ title }}</h1>`; }
 //    }
 //
-//  Usage (pattern CustomElement vrComponent with External HTMLustomElement vrComponent with External HTML):
+//  Usage (Pattern CustomElement vrComponent with External HTML):
 //    const TEMPLATE = html(templateStr);
 //    class ProfileCard extends HTMLElement {
 //      static { vrComponent(this, { tag: 'profile-card', css: 'auto' }); }
@@ -29,7 +29,7 @@ import { Signal, effect, render } from '../index.js';
  * Decorator for reactive Custom Elements.
  * Call ONCE inside `static {}` block.
  *
- * @param {typeof HTMLElement} component - The custom element class
+ * @param {typeof HTMLElement} klass - The custom element class
  * @param {object} opts
  * @param {string} opts.tag - Required: Custom element tag name (e.g. 'app-root')
  * @param {string|CSSStyleSheet[]} [opts.css] - CSS loading mode:
@@ -38,30 +38,30 @@ import { Signal, effect, render } from '../index.js';
  *   [sheet1, sheet2]  → adopt CSSStyleSheet array directly
  * @returns {void}
  */
-export function vrComponent(component, opts = {}) {
+export function vrComponent(klass, opts = {}) {
   const { tag, css } = opts;
 
   // ── Validate ────────────────────────────────────────────────
   if (!tag) throw new Error('vrComponent: tag is required');
-  if (!(component.prototype instanceof HTMLElement)) {
+  if (!(klass.prototype instanceof HTMLElement)) {
     throw new Error('vrComponent: class must extend HTMLElement');
   }
 
   // ── 1. Register Custom Element ──────────────────────────────
   if (!customElements.get(tag)) {
-    customElements.define(tag, component);
+    customElements.define(tag, klass);
   }
 
   // ── 2. Load and adopt CSS ───────────────────────────────────
   if (css) {
-    loadCSS(css, component).catch(err => {
+    loadCSS(css, klass).catch(err => {
       console.warn(`vrComponent: CSS load failed for <${tag}>:`, err.message);
     });
   }
 
   // ── 3. Override connectedCallback ───────────────────────────
-  const origConnected = component.prototype.connectedCallback;
-  component.prototype.connectedCallback = function () {
+  const origConnected = klass.prototype.connectedCallback;
+  klass.prototype.connectedCallback = function () {
     if (this._vrMounted) return;  // mount guard
     this._vrMounted = true;
 
@@ -98,8 +98,8 @@ export function vrComponent(component, opts = {}) {
   };
 
   // ── 4. Override disconnectedCallback for cleanup ────────────
-  const origDisconnected = component.prototype.disconnectedCallback;
-  component.prototype.disconnectedCallback = function () {
+  const origDisconnected = klass.prototype.disconnectedCallback;
+  klass.prototype.disconnectedCallback = function () {
     if (this._vrDispose) {
       this._vrDispose();
       this._vrDispose = null;
@@ -118,7 +118,7 @@ export function vrComponent(component, opts = {}) {
  *   './path.css' → fetch
  *   [sheets]     → adopt directly
  */
-async function loadCSS(css, component) {
+async function loadCSS(css, klass) {
   // Mode 3: CSSStyleSheet array → adopt directly
   if (Array.isArray(css)) {
     for (const sheet of css) {

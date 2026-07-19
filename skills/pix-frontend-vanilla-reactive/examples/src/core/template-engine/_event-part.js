@@ -1,14 +1,14 @@
 // ═══════════════════════════════════════════════════════════════════════════════
-//  EventPart — handles @eventname="handler(args)" in all 3 patterns
+//  ClickHandlerPart — handles @eventname="handler(args)" in all 3 patterns
 //  ═══════════════════════════════════════════════════════════════════════════════
-//  Resolves handler names via _scope → _context → component instance.
-//  Supports any DOM event (@click, @submit, @input, @mouseenter, …).
+//  Replaces the old EventPart (which used @click=${\fn}).
+//  Now resolves handler names via _scope → _context → component instance.
 //  ═══════════════════════════════════════════════════════════════════════════════
 
 import { evaluateExpression } from './_expression-parser.js';
 
 /**
- * EventPart — resolves @eventname="handler(args)" at render-time.
+ * ClickHandlerPart — resolves @click="handlerName" at render-time.
  *
  * Resolution chain for handler name:
  *   1. result._scope[name]
@@ -18,7 +18,7 @@ import { evaluateExpression } from './_expression-parser.js';
  * Args are evaluated EAGERLY at render time against merged context.
  * $event is a reserved keyword → replaced at click-time with DOM Event.
  */
-export class EventPart {
+export class ClickHandlerPart {
   /**
    * @param {HTMLElement} el - Element with the @event attribute
    * @param {string} eventName - Event name (click, submit, input, etc.)

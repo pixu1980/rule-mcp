@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════════════════════════════
-//  pattern CustomElement vrComponent with External HTMLustomElement vrComponent with External HTML — CE + external .template.html (user card)
+//  Pattern CustomElement vrComponent with External HTML — CE + external .template.html (user card)
 //  ═══════════════════════════════════════════════════════════════════════════════
 //  Template HTML is loaded from a separate file, parsed via html().
 //  The .template.html uses only {{ }}, <for>, <if>, @click.

@@ -188,10 +188,14 @@ const cmdConfig = (entrypoint, opts = {}) => {
   }
 
   // Prefer a globally installed binary (single command, like tokensave).
-  // child_process.spawn does not expand `~` — absolute paths are mandatory.
   const globalBin = resolveGlobalBinary();
   if (globalBin) {
-    return { command: globalBin, args: ["serve"], directTools: true, lifecycle: "keep-alive" };
+    // Use ~/ form instead of /Users/name/ for portability and cleaner config.
+    const home = homedir();
+    const portableBin = globalBin.startsWith(home + "/")
+      ? "~" + globalBin.slice(home.length)
+      : globalBin;
+    return { command: portableBin, args: ["serve"], directTools: true, lifecycle: "keep-alive", type: "stdio" };
   }
 
   return {

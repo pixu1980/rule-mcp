@@ -2,15 +2,15 @@
 //  Combo — All 3 Patterns in one app
 //  ═══════════════════════════════════════════════════════════════════════════════
 //
-//  pattern CustomElement vrComponent with External HTMLustomElement vrComponent with External HTMLustomElement vrComponent (root): <todo-app> — vrComponent, methods, context(), render()
+//  Pattern CustomElement vrComponent (root): <todo-app> — vrComponent, methods, context(), render()
 //  Pattern Functional Component (inside): {{ TodoStats(ctx) }} — functional component in {{ }}
-//  pattern CustomElement vrComponent with External HTMLustomElement vrComponent with External HTML (inside): <todo-header> — CE with external .template.html
+//  Pattern CustomElement vrComponent with External HTML (inside): <todo-header> — CE with external .template.html
 //
 //  Composition chain:
-//    <todo-app> (pattern CustomElement vrComponent with External HTMLustomElement vrComponent with External HTMLustomElement vrComponent)
+//    <todo-app> (Pattern CustomElement vrComponent)
 //      └── {{ TodoStats(ctx) }} (Pattern Functional Component, via {{ }})
-//      └── <todo-header> (pattern CustomElement vrComponent with External HTMLustomElement vrComponent with External HTML, native CE tag)
-//      └── <todo-item> (pattern CustomElement vrComponent with External HTMLustomElement vrComponent with External HTMLustomElement vrComponent, via <for> body)
+//      └── <todo-header> (Pattern CustomElement vrComponent with External HTML, native CE tag)
+//      └── <todo-item> (Pattern CustomElement vrComponent, via <for> body)
 //  ═══════════════════════════════════════════════════════════════════════════════
 
 import { Store, Signal, effect, html, render, registerFilter,
@@ -19,9 +19,9 @@ import { Store, Signal, effect, html, render, registerFilter,
 // ── Store + TickState ──────────────────────────────────────────
 const store = new Store({
   todos: [
-    { id: 1, title: 'Learn pattern CustomElement vrComponent with External HTMLustomElement vrComponent with External HTMLustomElement vrComponent', done: true },
+    { id: 1, title: 'Learn Pattern CustomElement vrComponent', done: true },
     { id: 2, title: 'Learn Pattern Functional Component', done: false },
-    { id: 3, title: 'Learn pattern CustomElement vrComponent with External HTMLustomElement vrComponent with External HTML', done: false },
+    { id: 3, title: 'Learn Pattern CustomElement vrComponent with External HTML', done: false },
   ],
   filter: 'all',
 });
@@ -62,7 +62,7 @@ function TodoStats(ctx) {
 }
 
 // ── ── ── ── ── ── ── ── ── ── ── ── ── ── ── ── ── ── ── ──
-//  pattern CustomElement vrComponent with External HTMLustomElement vrComponent with External HTML — Custom Element with external template: <todo-header>
+//  Pattern CustomElement vrComponent with External HTML — Custom Element with external template: <todo-header>
 //  ── ── ── ── ── ── ── ── ── ── ── ── ── ── ── ── ── ── ── ──
 
 const headerTpl = await (
@@ -86,7 +86,7 @@ class TodoHeader extends HTMLElement {
 }
 
 // ── ── ── ── ── ── ── ── ── ── ── ── ── ── ── ── ── ── ── ──
-//  pattern CustomElement vrComponent with External HTMLustomElement vrComponent with External HTMLustomElement vrComponent — Main App: <todo-app>
+//  Pattern CustomElement vrComponent — Main App: <todo-app>
 //  ── ── ── ── ── ── ── ── ── ── ── ── ── ── ── ── ── ── ── ──
 
 class TodoApp extends HTMLElement {
