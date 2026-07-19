@@ -21,25 +21,32 @@ export class Store {
     // Fires once on construction so effects created later render immediately.
     // Disable with: new Store(data, { autoTick: false })
     if (opts.autoTick !== false) {
-      this.tick = new StateSignal(0, { equals: () => {
-      return false;
-    } });
-      this.tick.set(performance.now());  // initial kick
+      this.tick = new StateSignal(0, {
+        equals: () => {
+          return false;
+        },
+      });
+      this.tick.set(performance.now()); // initial kick
     }
   }
 
   _createProxy(target, path) {
-    if (!isObject(target)) { return target; }
-    if (this.proxyCache.has(target)) { return this.proxyCache.get(target); }
+    if (!isObject(target)) {
+      return target;
+    }
+
+    if (this.proxyCache.has(target)) {
+      return this.proxyCache.get(target);
+    }
     const store = this;
 
     const proxy = new Proxy(target, {
       get(raw, key) {
-        if (key === '__raw') {
+        if (key === "__raw") {
           return raw;
         }
 
-        if (key === '__path') {
+        if (key === "__path") {
           return path;
         }
 
@@ -68,7 +75,9 @@ export class Store {
         return result;
       },
       deleteProperty(raw, key) {
-        if (!(key in raw)) { return true; }
+        if (!(key in raw)) {
+          return true;
+        }
         const nextPath = [...path, key];
 
         const old = raw[key];
@@ -86,13 +95,15 @@ export class Store {
 
   _emitChange(path) {
     // Brief change event (no deepClone — too expensive for large state)
-    this.events.dispatchEvent(new CustomEvent('store:change', {
-      detail: { path: toPathArray(path).join('.') },
-    }));
+    this.events.dispatchEvent(
+      new CustomEvent("store:change", {
+        detail: { path: toPathArray(path).join(".") },
+      }),
+    );
     // Notify reactivity system
     if (this.tick) {
-    this.tick.set(performance.now());
-  }
+      this.tick.set(performance.now());
+    }
   }
 
   get(path) {
@@ -108,13 +119,16 @@ export class Store {
     const parts = toPathArray(path);
 
     if (!parts.length) {
-      throw new Error('Path required');
+      throw new Error("Path required");
     }
 
     const last = parts.pop();
 
     let current = this.state;
-    for (const p of parts) { if (!isObject(current[p])) current[p] = {}; current = current[p]; }
+    for (const p of parts) {
+      if (!isObject(current[p])) current[p] = {};
+      current = current[p];
+    }
     current[last] = value;
 
     return value;
@@ -133,4 +147,3 @@ export class Store {
     return deepClone(this.target);
   }
 }
-

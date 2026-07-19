@@ -19,7 +19,7 @@
 "use strict";
 
 export async function loadCSS(url) {
-  const resolved = typeof url === 'string' ? new URL(url) : url;
+  const resolved = typeof url === "string" ? new URL(url) : url;
 
   const text = await (await fetch(resolved)).text();
   const sheet = new CSSStyleSheet();
@@ -29,4 +29,3 @@ export async function loadCSS(url) {
 
   return sheet;
 }
-

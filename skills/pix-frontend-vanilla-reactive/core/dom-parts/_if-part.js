@@ -52,15 +52,15 @@ function renderRawTemplate(templateStr, ctx) {
     if (p.isExpr) {
       const val = evaluateExpression(p.parsed, ctx);
 
-      out.push(val == null ? '' : String(val));
+      out.push(val == null ? "" : String(val));
     } else {
       out.push(p);
     }
   }
 
-  const html = out.join('');
+  const html = out.join("");
 
-  const tmp = document.createElement('template');
+  const tmp = document.createElement("template");
   tmp.innerHTML = html;
 
   return tmp.content.childNodes;
@@ -101,8 +101,8 @@ export class IfPart {
   constructor(start, end, branches, bodies) {
     this.start = start;
     this.end = end;
-    this.branches = branches;   // [{ condition: parsedExpr|null, isElse: boolean }]
-    this.bodies = bodies;       // [rawHtmlString, ...]
+    this.branches = branches; // [{ condition: parsedExpr|null, isElse: boolean }]
+    this.bodies = bodies; // [rawHtmlString, ...]
     this._contentStart = null;
     this._contentEnd = null;
     this._activeBranch = -1;
@@ -163,8 +163,8 @@ export class IfPart {
       return;
     }
 
-    this._contentStart = document.createComment('if:cs');
-    this._contentEnd = document.createComment('if:ce');
+    this._contentStart = document.createComment("if:cs");
+    this._contentEnd = document.createComment("if:ce");
     this.end.parentNode.insertBefore(this._contentStart, this.end);
     this.end.parentNode.insertBefore(this._contentEnd, this.end);
 
@@ -214,7 +214,7 @@ export class SwitchPart {
     this.start = start;
     this.end = end;
     this.exprParsed = exprParsed;
-    this.cases = cases;             // [{ result: string, body: string }]
+    this.cases = cases; // [{ result: string, body: string }]
     this.defaultBody = defaultBody;
     this._contentStart = null;
     this._contentEnd = null;
@@ -230,7 +230,7 @@ export class SwitchPart {
   evaluate() {
     const switchValue = evaluateExpression(this.exprParsed, this.ctx);
 
-    const strValue = switchValue == null ? '' : String(switchValue);
+    const strValue = switchValue == null ? "" : String(switchValue);
 
     let activeIdx = -1;
 
@@ -264,8 +264,8 @@ export class SwitchPart {
       return;
     }
 
-    this._contentStart = document.createComment('switch:cs');
-    this._contentEnd = document.createComment('switch:ce');
+    this._contentStart = document.createComment("switch:cs");
+    this._contentEnd = document.createComment("switch:ce");
     this.end.parentNode.insertBefore(this._contentStart, this.end);
     this.end.parentNode.insertBefore(this._contentEnd, this.end);
 
@@ -290,4 +290,3 @@ export class SwitchPart {
     this.clear();
   }
 }
-

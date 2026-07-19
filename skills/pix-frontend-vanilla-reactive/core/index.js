@@ -19,14 +19,7 @@ export {
   popCollector,
 } from "./signals/index.js";
 
-export {
-  Store,
-  deepClone,
-  clonePlainValue,
-  isObject,
-  toPathArray,
-  pathToString,
-} from "./store/index.js";
+export { Store, deepClone, clonePlainValue, isObject, toPathArray, pathToString } from "./store/index.js";
 
 export {
   html,
@@ -57,4 +50,3 @@ export {
 } from "./template-engine/index.js";
 
 export { vrComponent } from "./decorator/_vr-component.js";
-

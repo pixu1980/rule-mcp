@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════════════════════════════
-//  Expression parser 
+//  Expression parser
 //  ═══════════════════════════════════════════════════════════════════════════════
 //  Data expressions with filters AND function calls (FnName(args)).
 //
@@ -25,11 +25,13 @@ export function parseExpression(expr) {
 
   // Function call: FnName(arg1, arg2) — parens before any pipe char
   const fnMatch = trimmed.match(/^([a-zA-Z_$][\w$]*)\s*\(([^)]*)\)\s*$/);
+
   if (fnMatch) {
     const name = fnMatch[1];
+
     const argsStr = fnMatch[2].trim();
     const args = argsStr
-      ? argsStr.split(',').map((a) => {
+      ? argsStr.split(",").map((a) => {
           return parseExpression(a.trim());
         })
       : [];
@@ -38,22 +40,26 @@ export function parseExpression(expr) {
   }
 
   // Data expression with optional filter pipeline
-  const pipes = trimmed.split('|').map((s) => {
-      return s.trim();
-    });
+  const pipes = trimmed.split("|").map((s) => {
+    return s.trim();
+  });
   const variable = pipes[0];
-  const filters = pipes.slice(1).map(f => {
+
+  const filters = pipes.slice(1).map((f) => {
     const fMatch = f.match(/^([a-zA-Z_$][\w$]*)\s*\(([^)]*)\)$/);
+
     if (fMatch) {
-      const args = fMatch[2].trim() ? fMatch[2].split(',').map((a) => {
+      const args = fMatch[2].trim()
+        ? fMatch[2].split(",").map((a) => {
             return parseArg(a.trim());
-          }) : [];
+          })
+        : [];
 
       return { name: fMatch[1], args };
     }
-    const parts = f.split(':').map((s) => {
-        return s.trim();
-      });
+    const parts = f.split(":").map((s) => {
+      return s.trim();
+    });
 
     return { name: parts[0], args: parts.slice(1).map(parseArg) };
   });
@@ -66,21 +72,17 @@ export function parseArg(value) {
     return value.slice(1, -1);
   }
 
-
   if (/^\d+$/.test(value)) {
     return parseInt(value, 10);
   }
-
 
   if (/^\d+\.\d+$/.test(value)) {
     return parseFloat(value);
   }
 
-
   if (value === "true") {
     return true;
   }
-
 
   if (value === "false") {
     return false;
@@ -94,7 +96,7 @@ export function getFromPath(obj, path) {
     return undefined;
   }
   let cur = obj;
-  for (const key of path.replace(/\[(\d+)\]/g, '.$1').split('.')) {
+  for (const key of path.replace(/\[(\d+)\]/g, ".$1").split(".")) {
     if (cur == null) {
       return undefined;
     }
@@ -123,11 +125,12 @@ export function evaluateExpression(parsed, ctx, scope) {
   if (parsed.kind === "fn") {
     // Resolve function: scope → context → ctx itself
     const fn = (scope && scope[parsed.name]) || ctx[parsed.name];
+
     if (typeof fn !== "function") {
       if (typeof fn === "undefined") {
-        console.warn('vr: function not found in scope/context:', parsed.name);
+        console.warn("vr: function not found in scope/context:", parsed.name);
 
-        return '';
+        return "";
       }
     }
     const resolvedArgs = parsed.args.map((a) => {
@@ -141,6 +144,7 @@ export function evaluateExpression(parsed, ctx, scope) {
   let value = getFromPath(ctx, parsed.variable);
   for (const filter of parsed.filters) {
     const f = FILTERS[filter.name];
+
     if (f) {
       value = f(value, ...filter.args);
     }
@@ -148,4 +152,3 @@ export function evaluateExpression(parsed, ctx, scope) {
 
   return value;
 }
-

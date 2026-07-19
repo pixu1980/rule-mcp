@@ -4,5 +4,4 @@
 
 "use strict";
 
-import './components/CounterApp/index.js';
-
+import "./components/CounterApp/index.js";

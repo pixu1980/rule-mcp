@@ -9,7 +9,6 @@ import { schedule } from "./_scheduler.js";
 
 export class EffectCollector {
   constructor(fn) {
-
     this.fn = fn;
 
     this.deps = new Map();
@@ -19,14 +18,18 @@ export class EffectCollector {
     this.run = this.run.bind(this);
 
     this.run();
-
   }
 
   addDependency(sig) {
-    if (this.deps.has(sig)) { return; }
-    this.deps.set(sig, sig.subscribe(() => {
-      schedule(this);
-    }));
+    if (this.deps.has(sig)) {
+      return;
+    }
+    this.deps.set(
+      sig,
+      sig.subscribe(() => {
+        schedule(this);
+      }),
+    );
   }
 
   cleanup() {
@@ -49,4 +52,3 @@ export class EffectCollector {
     this.cleanup();
   }
 }
-

@@ -24,4 +24,3 @@ export async function loadTemplate(metaUrl, relativePath) {
 
   return html(text);
 }
-

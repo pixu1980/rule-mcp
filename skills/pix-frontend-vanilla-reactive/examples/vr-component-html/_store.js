@@ -7,10 +7,10 @@ import { Store } from "../../core/index.js";
 
 /** Shared store with user profile and todo list. */
 export const store = new Store({
-  user: { name: 'Alice', role: 'admin' },
+  user: { name: "Alice", role: "admin" },
   todos: [
-    { id: 1, title: 'Learn Pix', done: true },
-    { id: 2, title: 'Build app', done: false },
+    { id: 1, title: "Learn Pix", done: true },
+    { id: 2, title: "Build app", done: false },
   ],
 });
 
@@ -19,7 +19,5 @@ export const store = new Store({
  * @param {number|string} id - Todo identifier
  */
 export const toggleTodo = (id) => {
-  store.state.todos = store.state.todos.map(t =>
-    t.id === id ? { ...t, done: !t.done } : t
-  );
+  store.state.todos = store.state.todos.map((t) => (t.id === id ? { ...t, done: !t.done } : t));
 };
