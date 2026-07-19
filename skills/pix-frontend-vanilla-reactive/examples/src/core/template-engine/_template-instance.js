@@ -6,16 +6,16 @@
 //  ═══════════════════════════════════════════════════════════════════════════════
 
 import { parseExpression, evaluateExpression } from './_expression-parser.js';
-import { ChildNodePart } from './_child-node-part.js';
-import { AttributePart } from './_attribute-part.js';
-import { PropertyPart } from './_property-part.js';
-import { EventPart } from './_event-part.js';
-import { ExprPart } from './_expr-part.js';
-import { ForPart } from './_for-part.js';
-import { IfPart, SwitchPart } from './_if-part.js';
+import { ChildNodePart } from '../dom-parts/_child-node-part.js';
+import { AttributePart } from '../dom-parts/_attribute-part.js';
+import { PropertyPart } from '../dom-parts/_property-part.js';
+import { EventPart } from '../dom-parts/_event-part.js';
+import { ExprPart } from '../dom-parts/_expr-part.js';
+import { ForPart } from '../dom-parts/_for-part.js';
+import { IfPart, SwitchPart } from '../dom-parts/_if-part.js';
 
 // Resolve circular dependency: ChildNodePart needs TemplateInstance
-import { _setTemplateInstance } from './_child-node-part.js';
+import { _setTemplateInstance } from '../dom-parts/_child-node-part.js';
 
 const templateCache = new WeakMap();
 const EXPR_MARKER_RE = /^expr:(\d+)$/;

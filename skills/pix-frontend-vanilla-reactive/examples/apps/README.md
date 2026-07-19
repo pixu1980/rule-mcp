@@ -18,7 +18,7 @@ npx serve .
 |-----|---------|---------------|
 | `vr-component/` | **CustomElement vrComponent** | `vrComponent()` decorator, methods as `@click` handlers, `context()` + `render()` |
 | `fn-component/` | **Functional Component** | Plain functions returning `html\`\``, `result._scope` + `result._context`, mounted via `effect()` |
-| `vr-component-with-html/` | **CustomElement vrComponent with External HTML** | External `.template.html` loaded via `fetch`, `html(str)`, `<switch>`, `<if>/<else>` |
+| `vr-component-html/` | **CustomElement vrComponent with External HTML** | External `.template.html` loaded via `fetch`, `html(str)`, `<switch>`, `<if>/<else>` |
 | `combo/` | **All mixed** | `<todo-app>` (CustomElement vrComponent) uses `{{ TodoStats(ctx) }}` (Functional Component) and `<todo-header>` (CustomElement vrComponent with External HTML) |
 
 ## Shared Core
