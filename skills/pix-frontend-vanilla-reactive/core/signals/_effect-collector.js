@@ -2,10 +2,10 @@
 //  PART 1 — EffectCollector
 // ═══════════════════════════════════════════════════════════════════════════════
 
-'use strict';
+"use strict";
 
-import { withCollector } from './_collector-context.js';
-import { schedule } from './_scheduler.js';
+import { withCollector } from "./_collector-context.js";
+import { schedule } from "./_scheduler.js";
 
 export class EffectCollector {
   constructor(fn) {

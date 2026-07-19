@@ -7,18 +7,18 @@
 //  evaluateExpression() now takes an optional scope for function resolution.
 //  ═══════════════════════════════════════════════════════════════════════════════
 
-'use strict';
+"use strict";
 
-import { FILTERS } from './_filters.js';
+import { FILTERS } from "./_filters.js";
 
 /**
  * Parse a {{ }} expression.
  *
  * Detects:
- *   {{ title }}                 → { kind: 'data', variable: 'title', filters: [] }
- *   {{ title | upper }}         → { kind: 'data', variable: 'title', filters: [{name:'upper',args:[]}] }
- *   {{ TodoList(todos) }}       → { kind: 'fn', name: 'TodoList', args: [parsedExpr] }
- *   {{ Card(todo, ctx.n) }}     → { kind: 'fn', name: 'Card', args: [parsedExpr, parsedExpr] }
+ *   {{ title }}                 → { kind: "data", variable: "title", filters: [] }
+ *   {{ title | upper }}         → { kind: "data", variable: "title", filters: [{name:"upper",args:[]}] }
+ *   {{ TodoList(todos) }}       → { kind: "fn", name: "TodoList", args: [parsedExpr] }
+ *   {{ Card(todo, ctx.n) }}     → { kind: "fn", name: "Card", args: [parsedExpr, parsedExpr] }
  */
 export function parseExpression(expr) {
   const trimmed = expr.trim();
@@ -31,7 +31,7 @@ export function parseExpression(expr) {
     const args = argsStr
       ? argsStr.split(',').map(a => parseExpression(a.trim()))
       : [];
-    return { kind: 'fn', name, args };
+    return { kind: "fn", name, args };
   }
 
   // Data expression with optional filter pipeline
@@ -46,7 +46,7 @@ export function parseExpression(expr) {
     const parts = f.split(':').map(s => s.trim());
     return { name: parts[0], args: parts.slice(1).map(parseArg) };
   });
-  return { kind: 'data', variable, filters };
+  return { kind: "data", variable, filters };
 }
 
 export function parseArg(value) {
@@ -65,12 +65,12 @@ export function parseArg(value) {
   }
 
 
-  if (value === 'true') {
+  if (value === "true") {
     return true;
   }
 
 
-  if (value === 'false') {
+  if (value === "false") {
     return false;
   }
 
@@ -87,7 +87,7 @@ export function getFromPath(obj, path) {
       return undefined;
     }
     // Block prototype chain access
-    if (key === '__proto__' || key === 'constructor' || key === 'prototype') {
+    if (key === "__proto__" || key === "constructor" || key === "prototype") {
       return undefined;
     }
     cur = cur[key];
@@ -98,8 +98,8 @@ export function getFromPath(obj, path) {
 /**
  * Evaluate a parsed expression against a context and optional scope.
  *
- * For 'fn' kind: resolve fn name from scope→context→ctx, evaluate args, call.
- * For 'data' kind: resolve variable from ctx, apply filters.
+ * For "fn" kind: resolve fn name from scope→context→ctx, evaluate args, call.
+ * For "data" kind: resolve variable from ctx, apply filters.
  *
  * @param {object} parsed - Output of parseExpression()
  * @param {object} ctx - Data context for {{ }} resolution
@@ -107,11 +107,11 @@ export function getFromPath(obj, path) {
  * @returns {*}
  */
 export function evaluateExpression(parsed, ctx, scope) {
-  if (parsed.kind === 'fn') {
+  if (parsed.kind === "fn") {
     // Resolve function: scope → context → ctx itself
     const fn = (scope && scope[parsed.name]) || ctx[parsed.name];
-    if (typeof fn !== 'function') {
-      if (typeof fn === 'undefined') {
+    if (typeof fn !== "function") {
+      if (typeof fn === "undefined") {
         console.warn('vr: function not found in scope/context:', parsed.name);
         return '';
       }

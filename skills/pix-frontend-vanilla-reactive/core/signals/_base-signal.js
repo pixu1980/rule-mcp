@@ -2,9 +2,9 @@
 //  PART 1 — BaseSignal
 // ═══════════════════════════════════════════════════════════════════════════════
 
-'use strict';
+"use strict";
 
-import { getCurrentCollector } from './_collector-context.js';
+import { getCurrentCollector } from "./_collector-context.js";
 
 export class BaseSignal {
   constructor() {
@@ -24,6 +24,7 @@ export class BaseSignal {
 
   track() {
     const c = getCurrentCollector();
+
     if (c) { c.addDependency(this); }
   }
 

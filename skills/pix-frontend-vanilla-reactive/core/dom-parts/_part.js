@@ -2,9 +2,9 @@
 //  PART 3c — Part base class
 // ═══════════════════════════════════════════════════════════════════════════════
 
-'use strict';
+"use strict";
 
-import { isSignalLike } from '../signals/index.js';
+import { isSignalLike } from "../signals/index.js";
 
 export class Part {
   constructor() {

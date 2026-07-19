@@ -2,8 +2,8 @@
 //  Shared store — vr-component-html example
 //  ═══════════════════════════════════════════════════════════════════════════════
 
-'use strict';
-import { Store } from '../../core/index.js';
+"use strict";
+import { Store } from "../../core/index.js";
 
 /** Shared store with user profile and todo list. */
 export const store = new Store({

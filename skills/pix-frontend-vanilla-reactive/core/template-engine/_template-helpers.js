@@ -16,7 +16,7 @@
  *   html('<h1>{{ title }}</h1>')
  *   → { kind: 'template-result', strings: ['<h1>{{ title }}</h1>'], values: [] }
  */
-'use strict';
+"use strict";
 
 export function html(strings, ...values) {
   if (typeof strings === 'string') {

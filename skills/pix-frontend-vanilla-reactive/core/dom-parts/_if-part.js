@@ -5,10 +5,10 @@
 //  SwitchPart supports: <switch expr>, <case result>, <default>
 //  ═══════════════════════════════════════════════════════════════════════════════
 
-'use strict';
+"use strict";
 
-import { evaluateExpression, parseExpression } from '../template-engine/_expression-parser.js';
-import { clearRange } from './_range.js';
+import { evaluateExpression, parseExpression } from "../template-engine/_expression-parser.js";
+import { clearRange } from "./_range.js";
 
 // ─── helpers ──────────────────────────────────────────────────────────────────
 
@@ -23,13 +23,16 @@ function renderRawTemplate(templateStr, ctx) {
   let parsed = _exprCache.get(templateStr);
   if (!parsed) {
     const parts = [];
+
     let lastIdx = 0;
     const re = /\{\{([^}]+)\}\}/g;
+
     let m;
     while ((m = re.exec(templateStr)) !== null) {
       if (m.index > lastIdx) {
         parts.push(templateStr.slice(lastIdx, m.index));
       }
+
       parts.push({ parsed: parseExpression(m[1].trim()), isExpr: true });
       lastIdx = re.lastIndex;
     }
@@ -37,20 +40,24 @@ function renderRawTemplate(templateStr, ctx) {
     if (lastIdx < templateStr.length) {
       parts.push(templateStr.slice(lastIdx));
     }
+
     _exprCache.set(templateStr, parts);
     parsed = parts;
   }
 
   // Evaluate against context
   const out = [];
+
   for (const p of parsed) {
     if (p.isExpr) {
       const val = evaluateExpression(p.parsed, ctx);
+
       out.push(val == null ? '' : String(val));
     } else {
       out.push(p);
     }
   }
+
   const html = out.join('');
 
   const tmp = document.createElement('template');
@@ -63,6 +70,7 @@ function renderRawTemplate(templateStr, ctx) {
  */
 function insertChildren(children, refNode) {
   const parent = refNode.parentNode;
+
   for (let i = 0; i < children.length; i++) {
     parent.insertBefore(children[i], refNode);
   }
@@ -100,18 +108,17 @@ export class IfPart {
     this.ctx = null;
   }
 
-
   init(ctx) {
     this.ctx = ctx;
     this.evaluate();
   }
-
 
   evaluate() {
     let activeIdx = -1;
 
     for (let i = 0; i < this.branches.length; i++) {
       const branch = this.branches[i];
+
       if (branch.isElse) {
         // <else> is always the last match if no earlier branch matched
         activeIdx = i;
@@ -120,6 +127,7 @@ export class IfPart {
 
       if (branch.condition) {
         const val = evaluateExpression(branch.condition, this.ctx);
+
         if (Boolean(val)) {
           activeIdx = i;
           break;
@@ -130,23 +138,24 @@ export class IfPart {
     // If nothing matched, use last branch (should be <else>)
     if (activeIdx < 0 && this.branches.length > 0) {
       const last = this.branches[this.branches.length - 1];
+
       if (last.isElse) {
         activeIdx = this.branches.length - 1;
       }
     }
-
 
     if (activeIdx === this._activeBranch) return; // same branch, skip re-render
     this.clear();
     if (activeIdx >= 0 && activeIdx < this.bodies.length) {
       this.renderBranch(activeIdx);
     }
+
     this._activeBranch = activeIdx;
   }
 
-
   renderBranch(idx) {
     const body = this.bodies[idx];
+
     if (!body) { return; }
 
     this._contentStart = document.createComment('if:cs');
@@ -155,9 +164,9 @@ export class IfPart {
     this.end.parentNode.insertBefore(this._contentEnd, this.end);
 
     const children = renderRawTemplate(body, this.ctx);
+
     insertChildren(children, this._contentEnd);
   }
-
 
   clear() {
     if (this._contentStart) {
@@ -167,9 +176,9 @@ export class IfPart {
       this._contentStart = null;
       this._contentEnd = null;
     }
+
     this._activeBranch = -1;
   }
-
 
   destroy() {
     this.clear();
@@ -208,15 +217,14 @@ export class SwitchPart {
     this.ctx = null;
   }
 
-
   init(ctx) {
     this.ctx = ctx;
     this.evaluate();
   }
 
-
   evaluate() {
     const switchValue = evaluateExpression(this.exprParsed, this.ctx);
+
     const strValue = switchValue == null ? '' : String(switchValue);
 
     let activeIdx = -1;
@@ -237,7 +245,6 @@ export class SwitchPart {
     this._activeCase = bodyIdx;
   }
 
-
   renderBody(idx) {
     let body;
     if (idx < this.cases.length) {
@@ -254,9 +261,9 @@ export class SwitchPart {
     this.end.parentNode.insertBefore(this._contentEnd, this.end);
 
     const children = renderRawTemplate(body, this.ctx);
+
     insertChildren(children, this._contentEnd);
   }
-
 
   clear() {
     if (this._contentStart) {
@@ -266,9 +273,9 @@ export class SwitchPart {
       this._contentStart = null;
       this._contentEnd = null;
     }
+
     this._activeCase = -1;
   }
-
 
   destroy() {
     this.clear();

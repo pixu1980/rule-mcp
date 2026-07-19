@@ -2,12 +2,13 @@
 //  Store — cloning utilities
 // ═══════════════════════════════════════════════════════════════════════════════
 
-'use strict';
+"use strict";
 
-import { isObject } from './_guards.js';
+import { isObject } from "./_guards.js";
 
 export function clonePlainValue(value, seen = new WeakMap()) {
   const raw = isObject(value) ? (value.__raw ?? value) : value;
+
   if (!isObject(raw)) { return raw; }
   if (seen.has(raw)) { return seen.get(raw); }
   if (raw instanceof Date) {
@@ -25,5 +26,6 @@ export function clonePlainValue(value, seen = new WeakMap()) {
   for (const k of Reflect.ownKeys(raw)) { const d = Object.getOwnPropertyDescriptor(raw, k); if (!d?.enumerable) continue; n[k] = clonePlainValue(raw[k], seen); }
   return n;
 }
+
 export function deepClone(v) { return clonePlainValue(v); }
 

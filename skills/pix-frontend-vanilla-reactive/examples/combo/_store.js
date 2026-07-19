@@ -2,9 +2,9 @@
 //  Shared store + actions — combo app
 //  ═══════════════════════════════════════════════════════════════════════════════
 
-'use strict';
+"use strict";
 
-import { Store } from '../../core/index.js';
+import { Store } from "../../core/index.js";
 
 /** Shared todo store with filter. */
 export const store = new Store({

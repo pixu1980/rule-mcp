@@ -2,9 +2,10 @@
 //  PART 0 — Scheduler (microtask batching)
 // ═══════════════════════════════════════════════════════════════════════════════
 
-'use strict';
+"use strict";
 
 const scheduled = new Set();
+
 let flushing = false;
 export function schedule(job) {
   scheduled.add(job);

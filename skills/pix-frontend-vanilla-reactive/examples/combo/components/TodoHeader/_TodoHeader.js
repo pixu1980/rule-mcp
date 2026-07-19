@@ -5,9 +5,9 @@
 //  instead of writing a render() method. context() omitted — defaults to {}.
 //  ═══════════════════════════════════════════════════════════════════════════════
 
-'use strict';
+"use strict";
 
-import { vrComponent, html, loadTemplate } from '../../../../core/index.js';
+import { vrComponent, html, loadTemplate } from "../../../../core/index.js";
 
 const TEMPLATE = await loadTemplate(import.meta.url, './_TodoHeader.template.html');
 

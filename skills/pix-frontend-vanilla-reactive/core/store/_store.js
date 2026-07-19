@@ -2,12 +2,12 @@
 //  PART 2 — Store (Proxy-based state container)
 // ═══════════════════════════════════════════════════════════════════════════════
 
-'use strict';
+"use strict";
 
-import { isObject } from './_guards.js';
-import { toPathArray } from './_paths.js';
-import { deepClone, clonePlainValue } from './_clone.js';
-import { StateSignal } from '../signals/_state-signal.js';
+import { isObject } from "./_guards.js";
+import { toPathArray } from "./_paths.js";
+import { deepClone, clonePlainValue } from "./_clone.js";
+import { StateSignal } from "../signals/_state-signal.js";
 
 export class Store {
   constructor(initialState = {}, opts = {}) {
@@ -30,6 +30,7 @@ export class Store {
     if (!isObject(target)) { return target; }
     if (this.proxyCache.has(target)) { return this.proxyCache.get(target); }
     const store = this;
+
     const proxy = new Proxy(target, {
       get(raw, key) {
         if (key === '__raw') {
@@ -39,6 +40,7 @@ export class Store {
         if (key === '__path') {
           return path;
         }
+
         const value = Reflect.get(raw, key);
 
         if (isObject(value)) {
@@ -49,12 +51,15 @@ export class Store {
       },
       set(raw, key, value) {
         const nextPath = [...path, key];
+
         const old = raw[key];
         // Skip clone + emit if same reference (e.g. resetting to current array)
         if (old === value) {
           return Reflect.set(raw, key, value);
         }
+
         const prepared = clonePlainValue(value);
+
         const result = Reflect.set(raw, key, prepared);
         store._emitChange(nextPath);
         return result;
@@ -62,8 +67,10 @@ export class Store {
       deleteProperty(raw, key) {
         if (!(key in raw)) { return true; }
         const nextPath = [...path, key];
+
         const old = raw[key];
         const result = Reflect.deleteProperty(raw, key);
+
         store._emitChange(nextPath);
         return result;
       },
@@ -83,6 +90,7 @@ export class Store {
 
   get(path) {
     const parts = toPathArray(path);
+
     let current = this.state;
     for (const p of parts) current = current?.[p];
     return current;
@@ -90,10 +98,13 @@ export class Store {
 
   set(path, value) {
     const parts = toPathArray(path);
+
     if (!parts.length) {
       throw new Error('Path required');
     }
+
     const last = parts.pop();
+
     let current = this.state;
     for (const p of parts) { if (!isObject(current[p])) current[p] = {}; current = current[p]; }
     current[last] = value;
@@ -102,6 +113,7 @@ export class Store {
 
   replace(next) {
     const old = deepClone(this.target);
+
     this.target = deepClone(next);
     this.proxyCache = new WeakMap();
     this.state = this._createProxy(this.target, []);

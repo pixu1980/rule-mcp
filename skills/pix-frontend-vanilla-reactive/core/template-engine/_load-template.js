@@ -6,9 +6,9 @@
 //    render(ctx) { const r = TPL; r._context = ctx; r._scope = this; return r; }
 //  ═══════════════════════════════════════════════════════════════════════════════
 
-'use strict';
+"use strict";
 
-import { html } from './index.js';
+import { html } from "./index.js";
 
 /**
  * Fetch an external .template.html file and parse it into a TemplateResult.
@@ -19,6 +19,7 @@ import { html } from './index.js';
  */
 export async function loadTemplate(metaUrl, relativePath) {
   const url = new URL(relativePath, metaUrl);
+
   const text = await (await fetch(url)).text();
   return html(text);
 }

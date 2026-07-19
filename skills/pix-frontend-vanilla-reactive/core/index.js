@@ -2,7 +2,7 @@
 //  Core — unified exports
 // ═══════════════════════════════════════════════════════════════════════════════
 
-'use strict';
+"use strict";
 
 export {
   StateSignal,
@@ -17,7 +17,7 @@ export {
   getCurrentCollector,
   pushCollector,
   popCollector,
-} from './signals/index.js';
+} from "./signals/index.js";
 
 export {
   Store,
@@ -26,7 +26,7 @@ export {
   isObject,
   toPathArray,
   pathToString,
-} from './store/index.js';
+} from "./store/index.js";
 
 export {
   html,
@@ -54,7 +54,7 @@ export {
   moveRangeBefore,
   isRangeBeforeReference,
   normalizeExprValue,
-} from './template-engine/index.js';
+} from "./template-engine/index.js";
 
-export { vrComponent } from './decorator/_vr-component.js';
+export { vrComponent } from "./decorator/_vr-component.js";
 

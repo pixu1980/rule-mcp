@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
-export { ItemList } from './_ItemList.js';
+export { ItemList } from "./_ItemList.js";
 
