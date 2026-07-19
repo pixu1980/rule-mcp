@@ -9,7 +9,9 @@ const scheduled = new Set();
 let flushing = false;
 export function schedule(job) {
   scheduled.add(job);
-  if (flushing) { return; }
+  if (flushing) {
+    return;
+  }
   flushing = true;
   queueMicrotask(() => {
     try {

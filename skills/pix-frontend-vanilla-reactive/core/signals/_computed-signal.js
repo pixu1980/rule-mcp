@@ -25,7 +25,9 @@ export class ComputedSignal extends BaseSignal {
   }
 
   invalidate() {
-    if (this.dirty) { return; }
+    if (this.dirty) {
+      return;
+    }
     this.dirty = true;
     this.notify();
   }
