@@ -1,0 +1,54 @@
+{
+  "scopeName": "text.html.pix-template",
+  "name": "Pix HTML Template",
+  "fileTypes": [".template.html"],
+  "uuid": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+  "patterns": [
+    { "include": "#pix-directives" },
+    { "include": "#pix-expressions" },
+    { "include": "#pix-events" },
+    { "include": "#html" }
+  ],
+  "repository": {
+    "pix-directives": {
+      "name": "keyword.control.pix",
+      "patterns": [
+        { "match": "<for\\b", "name": "keyword.control.pix.for" },
+        { "match": "</for>", "name": "keyword.control.pix.for" },
+        { "match": "<if\\b", "name": "keyword.control.pix.if" },
+        { "match": "<elseif\\b", "name": "keyword.control.pix.elseif" },
+        { "match": "<else>", "name": "keyword.control.pix.else" },
+        { "match": "</if>", "name": "keyword.control.pix.if" },
+        { "match": "<switch\\b", "name": "keyword.control.pix.switch" },
+        { "match": "</switch>", "name": "keyword.control.pix.switch" },
+        { "match": "<case\\b", "name": "keyword.control.pix.case" },
+        { "match": "</case>", "name": "keyword.control.pix.case" },
+        { "match": "<default>", "name": "keyword.control.pix.default" },
+        { "match": "</default>", "name": "keyword.control.pix.default" }
+      ]
+    },
+    "pix-expressions": {
+      "name": "expression.pix",
+      "begin": "\\{\\{",
+      "end": "\\}\\}",
+      "name": "meta.expression.pix",
+      "patterns": [
+        { "match": "\\|\\s*(raw|upper|lower|capitalize|slugify|trim|escapeHtml|striptags|json|default|truncate|length|first|last|join|date|timeAgo|urlencode|sortBy)\\b", "name": "support.function.filter.pix" },
+        { "match": "\\b(true|false|null|undefined)\\b", "name": "constant.language.pix" },
+        { "match": "\\d+", "name": "constant.numeric.pix" },
+        { "match": "\"[^\"]*\"|'[^']*'", "name": "string.quoted.pix" },
+        { "match": "[a-zA-Z_$][\\w$.]*", "name": "variable.other.pix" }
+      ]
+    },
+    "pix-events": {
+      "name": "entity.other.attribute-name.event.pix",
+      "match": "@[a-zA-Z]+(?:-[a-zA-Z]+)*",
+      "captures": {
+        "0": { "name": "entity.other.attribute-name.event.pix" }
+      }
+    },
+    "html": {
+      "include": "text.html.derivative"
+    }
+  }
+}
