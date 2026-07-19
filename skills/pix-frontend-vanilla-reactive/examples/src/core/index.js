@@ -29,6 +29,8 @@ export {
 export {
   html,
   loadTemplate,
+  withContext,
+  compose,
   render,
   registerFilter,
   FILTERS,

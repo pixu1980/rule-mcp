@@ -8,7 +8,7 @@
 //    └── <for> loop (native in template)
 //  ═══════════════════════════════════════════════════════════════════════════════
 
-import { Store, registerFilter, vrComponent, html } from '../src/core/index.js';
+import { Store, registerFilter, vrComponent, html, compose } from '../src/core/index.js';
 import './components/TodoHeader/index.js';
 
 const store = new Store({
@@ -36,10 +36,7 @@ const setFilter = (f) => { store.state.filter = f; };
 function TodoStats(ctx) {
   const total = ctx.todos.length;
   const done = ctx.todos.filter(t => t.done).length;
-  const result = html`<aside><strong>{{ total }}</strong> · <strong>{{ done }}</strong> done</aside>`;
-  result._scope = {};
-  result._context = { total, done };
-  return result;
+  return compose(html`<aside><strong>{{ total }}</strong> · <strong>{{ done }}</strong> done</aside>`, { total, done });
 }
 
 // ── Main App ────────────────────────────────────────────────────
