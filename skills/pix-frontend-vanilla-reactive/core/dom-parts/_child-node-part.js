@@ -68,7 +68,9 @@ export class ChildNodePart extends Part {
     const context = result._context;
     const scope = result._scope;
     if (this.currentTemplateInstance?.strings === strings) {
-      if (context) this.currentTemplateInstance.updateWithContext(result.values, context, scope);
+      if (context) {
+        this.currentTemplateInstance.updateWithContext(result.values, context, scope);
+      }
       return;
     }
     clearRange(this.start, this.end);

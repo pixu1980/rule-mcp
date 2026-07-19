@@ -40,7 +40,7 @@ export class ForPart {
     for (let i = list.length - 1; i >= 0; i--) {
       const item = list[i];
       const key = typeof item === 'object' && item !== null ? (item.id ?? JSON.stringify(item)) : String(item);
-      if (seen.has(key)) continue;
+      if (seen.has(key)) { continue; }
       seen.add(key);
 
       let block = this.blocks.get(key);
@@ -53,7 +53,8 @@ export class ForPart {
         this.renderBlock(block, item);
       } else {
         if (!isRangeBeforeReference(block.start, block.end, ref)) moveRangeBefore(block.start, block.end, ref);
-        if (block.item !== item) { this.renderBlock(block, item); block.item = item; }
+        if (block.item !== item) {
+          this.renderBlock(block, item); block.item = item; }
       }
       nextBlocks.set(key, block);
       ref = block.start;
@@ -100,7 +101,9 @@ export class ForPart {
     }
   }
   destroy() {
-    if (this.itemsCleanup) this.itemsCleanup();
+    if (this.itemsCleanup) {
+      this.itemsCleanup();
+    }
     for (const block of this.blocks.values()) { clearRange(block.start, block.end); block.start.remove(); block.end.remove(); }
     this.blocks.clear();
   }
