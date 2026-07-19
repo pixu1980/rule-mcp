@@ -23,4 +23,3 @@ export const decrement = () => {
 export const resetCount = () => {
   store.state.count = 0;
 };
-

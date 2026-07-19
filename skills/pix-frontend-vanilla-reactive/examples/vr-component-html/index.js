@@ -3,4 +3,4 @@
 //  ═══════════════════════════════════════════════════════════════════════════════
 
 "use strict";
-import './components/UserCard/index.js';
+import "./components/UserCard/index.js";

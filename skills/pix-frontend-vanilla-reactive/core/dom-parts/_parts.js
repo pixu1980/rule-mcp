@@ -12,4 +12,3 @@ export { ExprPart } from "./_expr-part.js";
 export { ForPart } from "./_for-part.js";
 export { IfPart, SwitchPart } from "./_if-part.js";
 export { ChildNodePart } from "./_child-node-part.js";
-

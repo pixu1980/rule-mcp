@@ -33,10 +33,10 @@ export function render(result, container, context, scope) {
 
   let rootPart = container.__rootPart;
   if (!rootPart) {
-    const s = document.createComment('root:start');
+    const s = document.createComment("root:start");
 
-    const e = document.createComment('root:end');
-    container.textContent = '';
+    const e = document.createComment("root:end");
+    container.textContent = "";
     container.append(s, e);
     rootPart = new ChildNodePart(s, e);
     container.__rootPart = rootPart;
@@ -44,4 +44,3 @@ export function render(result, container, context, scope) {
 
   rootPart.setValue(result);
 }
-

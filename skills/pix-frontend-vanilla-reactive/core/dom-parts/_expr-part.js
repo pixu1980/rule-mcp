@@ -13,7 +13,9 @@ import { isSignalLike } from "../signals/index.js";
 import { clearRange, normalizeExprValue } from "./_range.js";
 // Lazy import to handle circular dependency (TemplateInstance → ExprPart → TemplateInstance)
 let TemplateInstance;
-export function _setTemplateInstance(cls) { TemplateInstance = cls; }
+export function _setTemplateInstance(cls) {
+  TemplateInstance = cls;
+}
 
 export class ExprPart {
   constructor(start, end) {
@@ -22,7 +24,7 @@ export class ExprPart {
     this.currentNode = null;
     this.parsedExpr = null;
     this.signalCleanup = null;
-    this._nestedInstance = null;  // TemplateInstance for {{ Fn() }}
+    this._nestedInstance = null; // TemplateInstance for {{ Fn() }}
     this._ctx = null;
     this._scope = null;
   }
@@ -39,8 +41,10 @@ export class ExprPart {
     this._scope = scope;
     this.disposeSignal();
 
-    const hasRaw = parsedExpr.filters && parsedExpr.filters.length > 0
-      && parsedExpr.filters[parsedExpr.filters.length - 1].name === 'raw';
+    const hasRaw =
+      parsedExpr.filters &&
+      parsedExpr.filters.length > 0 &&
+      parsedExpr.filters[parsedExpr.filters.length - 1].name === "raw";
 
     let value = evaluateExpression(parsedExpr, ctx, scope);
 
@@ -49,7 +53,6 @@ export class ExprPart {
 
       return;
     }
-
 
     this.commit(value, hasRaw);
   }
@@ -63,16 +66,18 @@ export class ExprPart {
         return;
       }
 
-
       this.commit(sig.get(), this.hasRaw());
     });
     this.commit(sig.get(), this.hasRaw());
   }
 
   hasRaw() {
-    return this.parsedExpr && this.parsedExpr.filters
-      && this.parsedExpr.filters.length > 0
-      && this.parsedExpr.filters[this.parsedExpr.filters.length - 1].name === 'raw';
+    return (
+      this.parsedExpr &&
+      this.parsedExpr.filters &&
+      this.parsedExpr.filters.length > 0 &&
+      this.parsedExpr.filters[this.parsedExpr.filters.length - 1].name === "raw"
+    );
   }
 
   disposeSignal() {
@@ -98,7 +103,7 @@ export class ExprPart {
     clearRange(this.start, this.end);
 
     // TemplateResult → render nested template
-    if (value && typeof value === 'object' && value.kind === 'template-result') {
+    if (value && typeof value === "object" && value.kind === "template-result") {
       const instance = new TemplateInstance(value.strings);
 
       instance.updateWithContext([], this._ctx || {}, this._scope);
@@ -119,4 +124,3 @@ export class ExprPart {
     }
   }
 }
-

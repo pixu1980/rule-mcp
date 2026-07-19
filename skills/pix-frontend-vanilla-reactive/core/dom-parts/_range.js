@@ -8,6 +8,7 @@ export function clearRange(start, end) {
   let c = start.nextSibling;
   while (c && c !== end) {
     const n = c.nextSibling;
+
     c.remove();
     c = n;
   }
@@ -19,6 +20,7 @@ export function moveRangeBefore(start, end, ref) {
   let c = start;
   while (c) {
     const n = c.nextSibling;
+
     f.append(c);
 
     if (c === end) {
@@ -55,20 +57,22 @@ let _rawWarned = false;
  */
 export function normalizeExprValue(value, useRaw) {
   if (value == null) {
-    return document.createTextNode('');
+    return document.createTextNode("");
   }
 
   if (value instanceof Node) {
     return value;
   }
 
-  if (useRaw && typeof value === 'string') {
+  if (useRaw && typeof value === "string") {
     if (!_rawWarned) {
-      console.warn('[rule-vr] ╬ö using |raw filter — only use with trusted content (XSS risk)');
+      console.warn("[rule-vr] ╬ö using |raw filter — only use with trusted content (XSS risk)");
       _rawWarned = true;
     }
 
-    const t = document.createElement('template'); t.innerHTML = value;
+    const t = document.createElement("template");
+
+    t.innerHTML = value;
     const f = document.createDocumentFragment();
 
     while (t.content.firstChild) f.append(t.content.firstChild);
@@ -80,6 +84,5 @@ export function normalizeExprValue(value, useRaw) {
 }
 
 export function inferModelProperty(el) {
-  return el instanceof HTMLInputElement && el.type === 'checkbox' ? 'checked' : 'value';
+  return el instanceof HTMLInputElement && el.type === "checkbox" ? "checked" : "value";
 }
-

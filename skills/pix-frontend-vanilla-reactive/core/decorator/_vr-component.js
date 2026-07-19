@@ -66,11 +66,11 @@ export function vrComponent(component, opts = {}) {
 
   // ── 3. Override connectedCallback ───────────────────────────
   const origConnected = component.prototype.connectedCallback;
+
   component.prototype.connectedCallback = function () {
     if (this._vrMounted) {
-    return;
-  }
-
+      return;
+    }
 
     this._vrMounted = true;
     if (origConnected) {
@@ -78,39 +78,43 @@ export function vrComponent(component, opts = {}) {
     }
 
     // context() is optional — defaults to {} if not defined
-    const getContext = typeof this.context === "function"
-      ? () => {
-          return this.context();
-        }
-      : () => {
-          return {};
-        };
+    const getContext =
+      typeof this.context === "function"
+        ? () => {
+            return this.context();
+          }
+        : () => {
+            return {};
+          };
 
     // render() method OR opts.template (Pattern C)
-    const renderFn = (typeof this.render === "function")
-      ? (ctx) => {
-          return this.render(ctx);
-        }
-      : opts.template
+    const renderFn =
+      typeof this.render === "function"
         ? (ctx) => {
-            const r = opts.template;
-            r._context = ctx;
-            r._scope = this;
-
-            return r;
+            return this.render(ctx);
           }
-        : null;
+        : opts.template
+          ? (ctx) => {
+              const r = opts.template;
+
+              r._context = ctx;
+              r._scope = this;
+
+              return r;
+            }
+          : null;
 
     if (!renderFn) {
-      console.warn("vrComponent: <" + tag + '> needs render() method or template option');
+      console.warn("vrComponent: <" + tag + "> needs render() method or template option");
 
       return;
     }
 
     this._vrDispose = effect(() => {
       const ctx = getContext();
+
       const result = renderFn(ctx);
-      if (result && result.kind === 'template-result') {
+      if (result && result.kind === "template-result") {
         if (!result._context) {
           result._context = ctx;
         }
@@ -126,6 +130,7 @@ export function vrComponent(component, opts = {}) {
 
   // ── 4. Override disconnectedCallback for cleanup ────────────
   const origDisconnected = component.prototype.disconnectedCallback;
+
   component.prototype.disconnectedCallback = function () {
     if (this._vrDispose) {
       this._vrDispose();
@@ -164,15 +169,13 @@ async function _loadComponentCSS(css, component) {
     return;
   }
 
-
-
   let cssPath = css;
 
   // Mode 1: 'auto' (pass import.meta.url of the calling module)
   // Convention: ./_App.js → ./_App.css
   // We detect this by checking if the path ends in .js or .mjs
-  if (css.endsWith('.js') || css.endsWith('.mjs')) {
-    cssPath = css.replace(/\.[^.]+$/, '.css');
+  if (css.endsWith(".js") || css.endsWith(".mjs")) {
+    cssPath = css.replace(/\.[^.]+$/, ".css");
   }
 
   // Fetch and adopt via shared helper
@@ -183,4 +186,3 @@ async function _loadComponentCSS(css, component) {
     console.warn(`vrComponent: cannot load CSS at "${cssPath}": ${err.message}`);
   }
 }
-

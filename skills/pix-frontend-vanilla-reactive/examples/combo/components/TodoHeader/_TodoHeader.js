@@ -9,7 +9,7 @@
 
 import { vrComponent, html, loadTemplate } from "../../../../core/index.js";
 
-const TEMPLATE = await loadTemplate(import.meta.url, './_TodoHeader.template.html');
+const TEMPLATE = await loadTemplate(import.meta.url, "./_TodoHeader.template.html");
 
 /**
  * Filter bar for the todo list. Dispatches 'set-filter' event.
@@ -18,17 +18,19 @@ const TEMPLATE = await loadTemplate(import.meta.url, './_TodoHeader.template.htm
 export class TodoHeader extends HTMLElement {
   static {
     vrComponent(this, {
-      tag: 'todo-header',
+      tag: "todo-header",
       css: import.meta.url,
-      template: TEMPLATE,  // ← instead of render() method
+      template: TEMPLATE, // ← instead of render() method
     });
   }
 
   /** @click handler — dispatches set-filter CustomEvent */
   setFilter(val) {
-    this.dispatchEvent(new CustomEvent('set-filter', {
-      bubbles: true, detail: { filter: val },
-    }));
+    this.dispatchEvent(
+      new CustomEvent("set-filter", {
+        bubbles: true,
+        detail: { filter: val },
+      }),
+    );
   }
 }
-
