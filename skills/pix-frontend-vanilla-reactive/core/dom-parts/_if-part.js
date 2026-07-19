@@ -6,6 +6,7 @@
 //  ═══════════════════════════════════════════════════════════════════════════════
 
 'use strict';
+
 import { evaluateExpression, parseExpression } from '../template-engine/_expression-parser.js';
 import { clearRange } from './_range.js';
 
@@ -32,6 +33,7 @@ function renderRawTemplate(templateStr, ctx) {
       parts.push({ parsed: parseExpression(m[1].trim()), isExpr: true });
       lastIdx = re.lastIndex;
     }
+
     if (lastIdx < templateStr.length) {
       parts.push(templateStr.slice(lastIdx));
     }
@@ -98,10 +100,12 @@ export class IfPart {
     this.ctx = null;
   }
 
+
   init(ctx) {
     this.ctx = ctx;
     this.evaluate();
   }
+
 
   evaluate() {
     let activeIdx = -1;
@@ -113,6 +117,7 @@ export class IfPart {
         activeIdx = i;
         break;
       }
+
       if (branch.condition) {
         const val = evaluateExpression(branch.condition, this.ctx);
         if (Boolean(val)) {
@@ -130,6 +135,7 @@ export class IfPart {
       }
     }
 
+
     if (activeIdx === this._activeBranch) return; // same branch, skip re-render
     this.clear();
     if (activeIdx >= 0 && activeIdx < this.bodies.length) {
@@ -137,6 +143,7 @@ export class IfPart {
     }
     this._activeBranch = activeIdx;
   }
+
 
   renderBranch(idx) {
     const body = this.bodies[idx];
@@ -151,6 +158,7 @@ export class IfPart {
     insertChildren(children, this._contentEnd);
   }
 
+
   clear() {
     if (this._contentStart) {
       clearRange(this._contentStart, this._contentEnd);
@@ -161,6 +169,7 @@ export class IfPart {
     }
     this._activeBranch = -1;
   }
+
 
   destroy() {
     this.clear();
@@ -199,10 +208,12 @@ export class SwitchPart {
     this.ctx = null;
   }
 
+
   init(ctx) {
     this.ctx = ctx;
     this.evaluate();
   }
+
 
   evaluate() {
     const switchValue = evaluateExpression(this.exprParsed, this.ctx);
@@ -226,6 +237,7 @@ export class SwitchPart {
     this._activeCase = bodyIdx;
   }
 
+
   renderBody(idx) {
     let body;
     if (idx < this.cases.length) {
@@ -233,6 +245,7 @@ export class SwitchPart {
     } else {
       body = this.defaultBody;
     }
+
     if (!body) { return; }
 
     this._contentStart = document.createComment('switch:cs');
@@ -243,6 +256,7 @@ export class SwitchPart {
     const children = renderRawTemplate(body, this.ctx);
     insertChildren(children, this._contentEnd);
   }
+
 
   clear() {
     if (this._contentStart) {
@@ -255,7 +269,9 @@ export class SwitchPart {
     this._activeCase = -1;
   }
 
+
   destroy() {
     this.clear();
   }
 }
+

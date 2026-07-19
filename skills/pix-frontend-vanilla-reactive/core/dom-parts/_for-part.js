@@ -3,6 +3,7 @@
 // ═══════════════════════════════════════════════════════════════════════════════
 
 'use strict';
+
 import { evaluateExpression, parseExpression } from '../template-engine/_expression-parser.js';
 import { isSignalLike } from '../signals/index.js';
 import { isRangeBeforeReference, moveRangeBefore, clearRange } from './_range.js';
@@ -20,15 +21,19 @@ export class ForPart {
     this.itemsCleanup = null;
     this.ctx = null;
   }
+
   init(ctx) {
     this.ctx = ctx;
     const signalOrValue = evaluateExpression(this.itemsParsed, ctx);
     if (isSignalLike(signalOrValue)) {
       this.itemsSignal = signalOrValue;
-      this.itemsCleanup = signalOrValue.subscribe(() => this.reconcile());
+      this.itemsCleanup = signalOrValue.subscribe(() => {
+      this.reconcile();
+    });
     }
     this.reconcile();
   }
+
   reconcile() {
     const items = this.itemsSignal ? this.itemsSignal.get() : evaluateExpression(this.itemsParsed, this.ctx);
     const raw = items ?? [];
@@ -55,6 +60,7 @@ export class ForPart {
         if (!isRangeBeforeReference(block.start, block.end, ref)) {
           moveRangeBefore(block.start, block.end, ref);
         }
+
         if (block.item !== item) {
           this.renderBlock(block, item); block.item = item; }
       }
@@ -62,11 +68,13 @@ export class ForPart {
       ref = block.start;
     }
 
+
     for (const [key, block] of this.blocks) {
       if (!nextBlocks.has(key)) { clearRange(block.start, block.end); block.start.remove(); block.end.remove(); }
     }
     this.blocks = nextBlocks;
   }
+
   renderTemplateString(template, itemCtx) {
     // 1. Process <if condition="..."> — remove blocks, keep content
     let processed = template.replace(
@@ -83,6 +91,7 @@ export class ForPart {
     });
     return processed;
   }
+
   renderBlock(block, item) {
     clearRange(block.start, block.end);
     if (this.renderFn) {
@@ -102,11 +111,14 @@ export class ForPart {
       }
     }
   }
+
   destroy() {
     if (this.itemsCleanup) {
       this.itemsCleanup();
     }
+
     for (const block of this.blocks.values()) { clearRange(block.start, block.end); block.start.remove(); block.end.remove(); }
     this.blocks.clear();
   }
 }
+

@@ -6,6 +6,7 @@
 //  ═══════════════════════════════════════════════════════════════════════════════
 
 'use strict';
+
 import { vrComponent, html, loadTemplate } from '../../../../core/index.js';
 
 const TEMPLATE = await loadTemplate(import.meta.url, './_TodoHeader.template.html');
@@ -30,3 +31,4 @@ export class TodoHeader extends HTMLElement {
     }));
   }
 }
+

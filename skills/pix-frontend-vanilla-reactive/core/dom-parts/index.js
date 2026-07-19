@@ -6,6 +6,7 @@
 //  ═══════════════════════════════════════════════════════════════════════════════
 
 'use strict';
+
 export {
   Part,
   AttributePart,
@@ -22,3 +23,4 @@ export {
   normalizeExprValue,
   inferModelProperty,
 } from './_parts.js';
+

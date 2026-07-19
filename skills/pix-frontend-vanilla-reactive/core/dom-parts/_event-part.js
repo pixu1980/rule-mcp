@@ -5,6 +5,7 @@
 //  ═══════════════════════════════════════════════════════════════════════════════
 
 'use strict';
+
 import { evaluateExpression } from '../template-engine/_expression-parser.js';
 
 /**
@@ -94,3 +95,4 @@ export class EventPart {
     }
   }
 }
+

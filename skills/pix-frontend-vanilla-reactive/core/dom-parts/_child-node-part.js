@@ -5,6 +5,7 @@
 //  ═══════════════════════════════════════════════════════════════════════════════
 
 'use strict';
+
 import { Part } from './_part.js';
 import { isSignalLike } from '../signals/index.js';
 import { normalizeExprValue, clearRange, isRangeBeforeReference, moveRangeBefore } from './_range.js';
@@ -23,14 +24,18 @@ export class ChildNodePart extends Part {
     this.currentTemplateInstance = null;
   }
 
+
   setValue(value) {
     if (isSignalLike(value)) {
-      this.bindSignal(value, (r) => this.commit(r));
+      this.bindSignal(value, (r) => {
+      this.commit(r);
+    });
       return;
     }
     this.disposeSignal();
     this.commit(value);
   }
+
 
   commit(value) {
     // TemplateResult → render nested template
@@ -57,11 +62,13 @@ export class ChildNodePart extends Part {
     this.value = value;
   }
 
+
   commitNode(node) {
     clearRange(this.start, this.end);
     this.currentNode = node;
     this.start.parentNode.insertBefore(node, this.end);
   }
+
 
   commitTemplate(result) {
     const strings = result.strings;
@@ -73,6 +80,7 @@ export class ChildNodePart extends Part {
       }
       return;
     }
+
     clearRange(this.start, this.end);
     const instance = new TemplateInstance(strings);
     this.currentTemplateInstance = instance;
@@ -80,3 +88,4 @@ export class ChildNodePart extends Part {
     this.start.parentNode.insertBefore(instance.fragment, this.end);
   }
 }
+

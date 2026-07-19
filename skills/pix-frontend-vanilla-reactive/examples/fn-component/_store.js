@@ -3,6 +3,7 @@
 //  ═══════════════════════════════════════════════════════════════════════════════
 
 'use strict';
+
 import { Store } from '../../core/index.js';
 
 /** Shared items store. */
@@ -24,3 +25,4 @@ export const addItem = () => {
 export const removeItem = (id) => {
   store.state.items = store.state.items.filter((_, i) => i !== id);
 };
+

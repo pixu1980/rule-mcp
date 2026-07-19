@@ -5,6 +5,7 @@
 //  ═══════════════════════════════════════════════════════════════════════════════
 
 'use strict';
+
 import { html } from '../../../../core/index.js';
 
 /**
@@ -29,3 +30,4 @@ export function ItemList(ctx) {
     </section>
   `;
 }
+

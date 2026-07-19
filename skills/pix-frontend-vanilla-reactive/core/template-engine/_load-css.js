@@ -17,6 +17,7 @@
  * @returns {Promise<CSSStyleSheet>}
  */
 'use strict';
+
 export async function loadCSS(url) {
   const resolved = typeof url === 'string' ? new URL(url) : url;
   const text = await (await fetch(resolved)).text();
@@ -25,3 +26,4 @@ export async function loadCSS(url) {
   document.adoptedStyleSheets = [...document.adoptedStyleSheets, sheet];
   return sheet;
 }
+

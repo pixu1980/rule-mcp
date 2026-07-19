@@ -16,3 +16,4 @@ effect(() => {
   const ctx = { items: store.state.items };
   render(ItemList(ctx), document.body, ctx, { addItem, removeItem });
 });
+
