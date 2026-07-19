@@ -4,7 +4,7 @@
 //  Just html`` — vrComponent handles _context and _scope automatically.
 //  ═══════════════════════════════════════════════════════════════════════════════
 
-import { vrComponent, html } from '../../../core/index.js';
+import { vrComponent, html } from '../../core/index.js';
 import { store, addTodo, toggleTodo } from './_store.js';
 import { TodoStats } from './components/TodoStats/index.js';
 import './components/TodoHeader/index.js';

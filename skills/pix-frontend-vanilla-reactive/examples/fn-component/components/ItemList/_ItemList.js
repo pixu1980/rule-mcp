@@ -4,7 +4,7 @@
 //  Pure function returning html``. No wrapper, no scope — caller provides them.
 //  ═══════════════════════════════════════════════════════════════════════════════
 
-import { html } from '../../../../../core/index.js';
+import { html } from '../../../../core/index.js';
 
 /**
  * Render an editable list of text items.
