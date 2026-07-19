@@ -28,6 +28,7 @@ export {
 
 export {
   html,
+  loadTemplate,
   render,
   registerFilter,
   FILTERS,

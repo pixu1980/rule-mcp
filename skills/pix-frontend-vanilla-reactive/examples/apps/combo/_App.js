@@ -1,10 +1,15 @@
 // ═══════════════════════════════════════════════════════════════════════════════
-//  Combo — All patterns in one app
+//  App — Combo: all patterns mixed
 //  ═══════════════════════════════════════════════════════════════════════════════
-//  Uses store.tick (automatic) instead of manual tickState.
+//
+//  <todo-app> (CustomElement vrComponent)
+//    └── {{ TodoStats(ctx) }} (Functional Component via {{ }})
+//    └── <todo-header> (CustomElement vrComponent with External HTML)
+//    └── <for> loop (native in template)
+//  ═══════════════════════════════════════════════════════════════════════════════
 
-import { Store, effect, html, render, registerFilter,
-        vrComponent } from '../../src/core/index.js';
+import { Store, registerFilter, vrComponent, html } from '../src/core/index.js';
+import './components/TodoHeader/index.js';
 
 const store = new Store({
   todos: [
@@ -14,8 +19,10 @@ const store = new Store({
   ],
   filter: 'all',
 });
+
 registerFilter('upper', v => String(v).toUpperCase());
 
+// ── Actions ────────────────────────────────────────────────────
 const addTodo = (title) => {
   if (!title?.trim()) return;
   store.state.todos = [...store.state.todos, { id: Date.now(), title: title.trim(), done: false }];
@@ -25,50 +32,37 @@ const toggleTodo = (id) => {
 };
 const setFilter = (f) => { store.state.filter = f; };
 
-// ── Functional Component ───────────────────────────────────────
+// ── Functional Component: TodoStats ─────────────────────────────
 function TodoStats(ctx) {
   const total = ctx.todos.length;
   const done = ctx.todos.filter(t => t.done).length;
-  const result = html`
-    <aside><strong>{{ total }}</strong> total · <strong>{{ done }}</strong> done</aside>`;
+  const result = html`<aside><strong>{{ total }}</strong> · <strong>{{ done }}</strong> done</aside>`;
   result._scope = {};
   result._context = { total, done };
   return result;
 }
 
-// ── External HTML template (CustomElement vrComponent with External HTML) ──
-const headerTpl = await (
-  await fetch(new URL('./components/TodoHeader/_Header.template.html', import.meta.url))
-).text();
-const HEADER_TMPL = html(headerTpl);
-
-class TodoHeader extends HTMLElement {
-  static { vrComponent(this, { tag: 'todo-header', css: import.meta.url }); }
-  setFilter(val) { setFilter(val); }
-  context() { return { filter: store.state.filter }; }
-  render(ctx) {
-    const result = HEADER_TMPL;
-    result._context = ctx;
-    result._scope = this;
-    return result;
-  }
-}
-
-// ── Main App (CustomElement vrComponent) ────────────────────────
-class TodoApp extends HTMLElement {
+// ── Main App ────────────────────────────────────────────────────
+export class TodoApp extends HTMLElement {
   static { vrComponent(this, { tag: 'todo-app', css: import.meta.url }); }
+
   addFromForm($event) {
     $event.preventDefault();
-    addResult($event.target.querySelector('input')?.value);
+    const input = $event.target.querySelector('input');
+    addTodo(input?.value);
+    input.value = '';
   }
   toggle(todo) { toggleTodo(todo.id); }
+
   get visibleTodos() {
     const f = store.state.filter;
     return f === 'all' ? store.state.todos
          : f === 'done' ? store.state.todos.filter(t => t.done)
          : store.state.todos.filter(t => !t.done);
   }
+
   context() { return { visibleTodos: this.visibleTodos }; }
+
   render(ctx) {
     return html`
       <todo-header></todo-header>
@@ -87,5 +81,3 @@ class TodoApp extends HTMLElement {
     `;
   }
 }
-
-store.tick.set(performance.now());

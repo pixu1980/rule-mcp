@@ -1,31 +1,30 @@
 # Example Apps — pix-vanilla-reactive
 
-Four standalone apps demonstrating the 2 component patterns + 1 variant.
+Four standalone apps demonstrating the component patterns.
 
 ## Quick Start
 
-Serve this directory with any HTTP server (Vite, npx serve, python -m http.server).
-ES modules don't work with `file://`.
-
 ```bash
 npx serve .
-# then open http://localhost:3000/apps/vr-component/
+# open http://localhost:3000/apps/vr-component/
 ```
+
+ES modules don't work with `file://`.
 
 ## Apps
 
-| App | Pattern | What it shows |
-|-----|---------|---------------|
-| `vr-component/` | **CustomElement vrComponent** | `vrComponent()` decorator, methods as `@click` handlers, `context()` + `render()` |
-| `fn-component/` | **Functional Component** | Plain functions returning `html\`\``, `result._scope` + `result._context`, mounted via `effect()` |
-| `vr-component-html/` | **CustomElement vrComponent with External HTML** | External `.template.html` loaded via `fetch`, `html(str)`, `<switch>`, `<if>/<else>` |
-| `combo/` | **All mixed** | `<todo-app>` (CustomElement vrComponent) uses `{{ TodoStats(ctx) }}` (Functional Component) and `<todo-header>` (CustomElement vrComponent with External HTML) |
+| Directory | Pattern | Structure |
+|-----------|---------|-----------|
+| `vr-component/` | CustomElement vrComponent | `_App.js` — single class with Store + vrComponent |
+| `fn-component/` | Functional Component | `_App.js` — pure functions + effect() mount |
+| `vr-component-html/` | CustomElement vrComponent + ext. HTML | `_App.js` + `_Card.template.html` via `loadTemplate()` |
+| `combo/` | All mixed | `_App.js` + `components/TodoHeader/` (sub-component) |
 
-## Shared Core
+## All apps share
 
-All apps import the shared engine from `../../src/core/index.js`:
-```
-examples/src/core/    ← signals, store, template-engine, decorator
-```
-
-Edit core files there to affect all apps at once.
+| Feature | How |
+|---------|-----|
+| Store | `new Store(data)` — auto-creates `store.tick` |
+| tickState | Automatic on `store.state.X = Y` mutation |
+| Template loading | `loadTemplate(import.meta.url, './file.html')` |
+| Core engine | Shared from `../../src/core/` |
