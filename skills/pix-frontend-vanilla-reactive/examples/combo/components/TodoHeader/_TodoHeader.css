@@ -1,15 +1,16 @@
 /* ═══════════════════════════════════════════════════════════════════════════════
    TodoHeader — combo example (Pattern C)
-   ═══════════════════════════════════════════════════════════════════════════════ */
+   ═══════════════════════════════════════════════════════════════════════════════
+   Global adoptedStyleSheets — no :host (no Shadow DOM in this engine). */
 
-:host [data-part="header"] {
+[data-part="header"] {
   display: flex;
   align-items: center;
   gap: 8px;
   padding: 0.5rem 0;
 }
 
-:host [data-part="header"] h3 {
+[data-part="header"] h3 {
   margin: 0;
   font-size: 1rem;
 }
