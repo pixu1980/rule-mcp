@@ -1,0 +1,73 @@
+{
+  "Pix template structure": {
+    "prefix": "pix-template",
+    "body": [
+      "<!-- ═══════════════════════════════════════════════",
+      "  ${1:ComponentName} — external template",
+      "  ═══════════════════════════════════════════════ -->",
+      "<section data-part=\"${2:name}\">",
+      "  $0",
+      "</section>"
+    ],
+    "description": "Pix external template structure"
+  },
+  "Pix for loop": {
+    "prefix": "pix-for",
+    "body": [
+      "<for each=\"${1:item} in ${2:items}\">",
+      "  $0",
+      "</for>"
+    ],
+    "description": "Pix <for> loop"
+  },
+  "Pix if block": {
+    "prefix": "pix-if",
+    "body": [
+      "<if condition=\"${1:expr}\">",
+      "  $0",
+      "</if>"
+    ],
+    "description": "Pix <if> conditional"
+  },
+  "Pix if-else": {
+    "prefix": "pix-ifelse",
+    "body": [
+      "<if condition=\"${1:expr}\">",
+      "  ${2:when true}",
+      "<else>",
+      "  ${3:when false}",
+      "</if>"
+    ],
+    "description": "Pix <if>/<else>"
+  },
+  "Pix switch": {
+    "prefix": "pix-switch",
+    "body": [
+      "<switch expr=\"${1:value}\">",
+      "  <case result=\"${2:case1}\">${3:body}</case>",
+      "  <default>${4:fallback}</default>",
+      "</switch>"
+    ],
+    "description": "Pix <switch>/<case>"
+  },
+  "Pix data-part attribute": {
+    "prefix": "data-part",
+    "body": "data-part=\"${1:role}\"",
+    "description": "Pix data-part attribute"
+  },
+  "Pix click event": {
+    "prefix": "pix-click",
+    "body": "@click=\"${1:handler}($2)\"",
+    "description": "Pix @click event binding"
+  },
+  "Pix expression": {
+    "prefix": "pix-expr",
+    "body": "{{ ${1:expr} }}",
+    "description": "Pix {{ }} expression"
+  },
+  "Pix expression with filter": {
+    "prefix": "pix-filter",
+    "body": "{{ ${1:expr} | ${2:upper} }}",
+    "description": "Pix {{ }} with filter"
+  }
+}

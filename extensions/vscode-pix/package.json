@@ -1,0 +1,70 @@
+{
+  "name": "pix-vanilla-reactive",
+  "displayName": "Pix Vanilla Reactive",
+  "description": "Syntax highlighting and autocomplete for pix-vanilla-reactive templates (html`` and .template.html)",
+  "version": "0.1.0",
+  "publisher": "pix-galaxy",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Programming Languages",
+    "Formatters",
+    "Language Packs"
+  ],
+  "keywords": [
+    "pix",
+    "vanilla-reactive",
+    "html",
+    "template",
+    "web-components"
+  ],
+  "icon": "icon.png",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pixu1980/pix-galaxy-mcp"
+  },
+  "contributes": {
+    "languages": [
+      {
+        "id": "pix-template-html",
+        "aliases": ["Pix HTML Template", "pix-template-html"],
+        "extensions": [".template.html"],
+        "configuration": "./language-configuration/language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "pix-template-html",
+        "scopeName": "text.html.pix-template",
+        "path": "./syntaxes/html-template.tmLanguage.json"
+      },
+      {
+        "scopeName": "inline.pix-html-template",
+        "path": "./syntaxes/html-in-js.tmLanguage.json",
+        "injectTo": [
+          "source.js",
+          "source.jsx",
+          "source.ts",
+          "source.tsx",
+          "source.mjs",
+          "source.cjs"
+        ],
+        "embeddedLanguages": {
+          "text.html.derivative": "html"
+        }
+      }
+    ],
+    "snippets": [
+      {
+        "language": "pix-template-html",
+        "path": "./snippets/pix-template.json"
+      },
+      {
+        "language": "javascript",
+        "path": "./snippets/pix-js.json"
+      }
+    ]
+  }
+}
