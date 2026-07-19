@@ -7,6 +7,12 @@ Before writing any frontend/styling code, call `rule` to route the task to the c
 
 
 
+
+
+
+
+
+
 <!-- rule-mcp-rules -->
 ## MANDATORY: Use rule-mcp enforced workflow for coding work
 

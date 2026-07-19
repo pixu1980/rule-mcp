@@ -366,6 +366,46 @@ if ($TargetAgent) {
 # Agent and IDE configurations are written only for selections made in Phase 3.
 
 # ─────────────────────────────────────────────────────────────────────────────
+# PHASE 4: VS Code Extension
+# ─────────────────────────────────────────────────────────────────────────────
+Write-Header "Phase 4: VS Code Extension"
+
+$ProjectRoot = (Get-Location).Path
+$VsixPath = Join-Path $ProjectRoot "extensions" "rule-vanilla-reactive.vsix"
+
+function Install-VsixForEditor {
+  param([string]$Cli, [string]$Label, [string]$Vsix)
+
+  if (-not (Get-Command $Cli -ErrorAction SilentlyContinue)) {
+    Write-Step "${Label}: CLI not found, skipping"
+    return
+  }
+
+  Write-Host "  Installing Pix Vanilla Reactive for ${Label}..." -ForegroundColor Cyan
+  $result = & $Cli --install-extension $Vsix --force 2>&1
+  if ($LASTEXITCODE -eq 0) {
+    Write-Ok "${Label} extension installed"
+  } else {
+    Write-Warn "${Label} extension install failed"
+  }
+}
+
+if ($DryRun) {
+  Write-Step "[dry-run] Would install extension for: code, cursor, windsurf, code-insiders, code-oss, codium"
+} elseif (Test-Path $VsixPath -PathType Leaf) {
+  Write-Ok "Extension VSIX found: ${VsixPath}"
+  Install-VsixForEditor -Cli "code" -Label "VS Code" -Vsix $VsixPath
+  Install-VsixForEditor -Cli "cursor" -Label "Cursor" -Vsix $VsixPath
+  Install-VsixForEditor -Cli "windsurf" -Label "Windsurf" -Vsix $VsixPath
+  Install-VsixForEditor -Cli "code-insiders" -Label "VS Code Insiders" -Vsix $VsixPath
+  Install-VsixForEditor -Cli "code-oss" -Label "Code-OSS" -Vsix $VsixPath
+  Install-VsixForEditor -Cli "codium" -Label "Codium" -Vsix $VsixPath
+} else {
+  Write-Warn "Extension VSIX not found at: ${VsixPath}"
+  Write-Step "Build manually: cd extensions/vscode-rule && npx @vscode/vsce package"
+}
+
+# ─────────────────────────────────────────────────────────────────────────────
 # PHASE 5: Model Provider Configuration
 # ─────────────────────────────────────────────────────────────────────────────
 if ($Models) {

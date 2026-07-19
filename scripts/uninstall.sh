@@ -169,11 +169,22 @@ const fs = require('fs');
 let c = fs.readFileSync('$file', 'utf-8');
 try {
   const j = JSON.parse(c);
+  let changed = false;
   if (j.mcpServers && j.mcpServers['$mcp_name']) {
     delete j.mcpServers['$mcp_name'];
     if (Object.keys(j.mcpServers).length === 0) {
       delete j.mcpServers;
     }
+    changed = true;
+  }
+  if (j.servers && j.servers['$mcp_name']) {
+    delete j.servers['$mcp_name'];
+    if (Object.keys(j.servers).length === 0) {
+      delete j.servers;
+    }
+    changed = true;
+  }
+  if (changed) {
     fs.writeFileSync('$file', JSON.stringify(j, null, 2) + '\n');
   }
 } catch(e) {
@@ -446,18 +457,90 @@ remove_command_files "Cline project" "${CWD}/.clinerules/workflows/{cmd}.md"
 # ─────────────────────────────────────────────────────────────────────────────
 header "Phase 3: IDE Configurations"
 
-# VS Code project-level config
+# ── Helper: remove rule entry from MCP JSON, supports both key names ──
+remove_mcp_entry_dual() {
+  local file="$1"
+  local label="$2"
+  remove_mcp_entry "$file" "$label" "rule-mcp"
+  # Also handle legacy underscored name
+  remove_mcp_entry "$file" "$label" "pix_galaxy_mcp"
+}
+
+# VS Code global config (user-level — this is where VS Code 1.90+ stores MCP)
+VSCODE_GLOBAL_DIR=""
+if [[ "$OS" == "macos" ]]; then
+  VSCODE_GLOBAL_DIR="$HOME_DIR/Library/Application Support/Code/User"
+elif [[ "$OS" == "linux" ]]; then
+  VSCODE_GLOBAL_DIR="$HOME_DIR/.config/Code/User"
+elif [[ "$OS" == "windows" ]]; then
+  VSCODE_GLOBAL_DIR="$HOME_DIR/AppData/Roaming/Code/User"
+fi
+if [[ -n "$VSCODE_GLOBAL_DIR" ]]; then
+  VSCODE_GLOBAL_MCP="$VSCODE_GLOBAL_DIR/mcp.json"
+  if [[ -f "$VSCODE_GLOBAL_MCP" ]]; then
+    remove_mcp_entry_dual "$VSCODE_GLOBAL_MCP" "VS Code (global)"
+    # If servers is now empty, keep the file but with empty servers object
+    if [[ "$DRY_RUN" == "false" && -f "$VSCODE_GLOBAL_MCP" ]]; then
+      node -e "
+const fs = require('fs');
+let c = fs.readFileSync('$VSCODE_GLOBAL_MCP', 'utf-8');
+try {
+  const j = JSON.parse(c);
+  if (j.servers && Object.keys(j.servers).length === 0) delete j.servers;
+  fs.writeFileSync('$VSCODE_GLOBAL_MCP', JSON.stringify(j, null, 2) + '\n');
+} catch(e) {}
+" 2>/dev/null || true
+    fi
+  else
+    sub "VS Code: no global mcp.json found, skipping"
+  fi
+fi
+
+# VS Code project-level config (legacy)
 VSCODE_MCP="$(pwd)/.vscode/mcp.json"
 if [[ -f "$VSCODE_MCP" ]]; then
-  remove_mcp_entry "$VSCODE_MCP" "VS Code"
-  # If mcpServers is now empty, also remove the file
+  remove_mcp_entry_dual "$VSCODE_MCP" "VS Code (project)"
   if [[ "$DRY_RUN" == "false" ]]; then
     if [[ -f "$VSCODE_MCP" ]] && ! grep -q "mcpServers" "$VSCODE_MCP" 2>/dev/null; then
-      rm "$VSCODE_MCP" 2>/dev/null && sub "VS Code: removed empty mcp.json"
+      rm "$VSCODE_MCP" 2>/dev/null && sub "VS Code (project): removed empty mcp.json"
     fi
   fi
 else
-  sub "VS Code: no .vscode/mcp.json, skipping"
+  sub "VS Code (project): no .vscode/mcp.json, skipping"
+fi
+
+# Code-OSS global config (open-source build)
+if [[ "$OS" == "macos" ]]; then
+  CODEOSS_GLOBAL_DIR="$HOME_DIR/Library/Application Support/Code - OSS/User"
+elif [[ "$OS" == "linux" ]]; then
+  CODEOSS_GLOBAL_DIR="$HOME_DIR/.config/Code - OSS/User"
+fi
+if [[ -n "$CODEOSS_GLOBAL_DIR" && -d "$CODEOSS_GLOBAL_DIR" ]]; then
+  CODEOSS_MCP="$CODEOSS_GLOBAL_DIR/mcp.json"
+  [[ -f "$CODEOSS_MCP" ]] && remove_mcp_entry_dual "$CODEOSS_MCP" "Code-OSS (global)"
+fi
+
+# VS Code Insiders
+if [[ "$OS" == "macos" ]]; then
+  VSCODE_INSIDERS_DIR="$HOME_DIR/Library/Application Support/Code - Insiders/User"
+elif [[ "$OS" == "linux" ]]; then
+  VSCODE_INSIDERS_DIR="$HOME_DIR/.config/Code - Insiders/User"
+fi
+if [[ -n "$VSCODE_INSIDERS_DIR" && -d "$VSCODE_INSIDERS_DIR" ]]; then
+  VSCODE_INSIDERS_MCP="$VSCODE_INSIDERS_DIR/mcp.json"
+  [[ -f "$VSCODE_INSIDERS_MCP" ]] && remove_mcp_entry_dual "$VSCODE_INSIDERS_MCP" "VS Code Insiders (global)"
+fi
+
+# Cursor global config
+CURSOR_GLOBAL_MCP="$HOME_DIR/.cursor/mcp.json"
+if [[ -f "$CURSOR_GLOBAL_MCP" ]]; then
+  remove_mcp_entry_dual "$CURSOR_GLOBAL_MCP" "Cursor"
+fi
+
+# Windsurf global config
+WINDSURF_GLOBAL_MCP="$HOME_DIR/.config/windsurf/mcp.json"
+if [[ -f "$WINDSURF_GLOBAL_MCP" ]]; then
+  remove_mcp_entry_dual "$WINDSURF_GLOBAL_MCP" "Windsurf"
 fi
 
 # Neovim config
@@ -468,7 +551,7 @@ elif [[ "$OS" == "linux" ]]; then
   NEOVIM_MCP="$HOME_DIR/.config/nvim/mcp.json"
 fi
 if [[ -n "$NEOVIM_MCP" && -f "$NEOVIM_MCP" ]]; then
-  remove_mcp_entry "$NEOVIM_MCP" "Neovim"
+  remove_mcp_entry_dual "$NEOVIM_MCP" "Neovim"
   if [[ "$DRY_RUN" == "false" ]]; then
     if [[ -f "$NEOVIM_MCP" ]] && ! grep -q "mcpServers" "$NEOVIM_MCP" 2>/dev/null; then
       rm "$NEOVIM_MCP" 2>/dev/null && sub "Neovim: removed empty mcp.json"
@@ -481,7 +564,7 @@ fi
 # JetBrains project-level config
 JB_MCP="$(pwd)/.idea/mcp.json"
 if [[ -f "$JB_MCP" ]]; then
-  remove_mcp_entry "$JB_MCP" "JetBrains"
+  remove_mcp_entry_dual "$JB_MCP" "JetBrains"
   if [[ "$DRY_RUN" == "false" ]]; then
     if [[ -f "$JB_MCP" ]] && ! grep -q "mcpServers" "$JB_MCP" 2>/dev/null; then
       rm "$JB_MCP" 2>/dev/null && sub "JetBrains: removed empty mcp.json"
@@ -494,7 +577,7 @@ fi
 # Emacs config
 EMACS_CONFIG="$HOME_DIR/.emacs.d/init.el"
 if [[ -f "$EMACS_CONFIG" ]]; then
-  if grep -q "rule-mcp" "$EMACS_CONFIG" 2>/dev/null; then
+  if grep -q "rule-mcp\|pix_galaxy_mcp" "$EMACS_CONFIG" 2>/dev/null; then
     if [[ "$DRY_RUN" == "true" ]]; then
       sub "[dry-run] Would remove rule-mcp lines from: ${EMACS_CONFIG}"
     else
@@ -516,29 +599,87 @@ else
 fi
 
 # ─────────────────────────────────────────────────────────────────────────────
-# PHASE 3b: VS Code Extension
+# PHASE 3b: IDE Extensions (VS Code, Cursor, Windsurf, VS Code Insiders, etc.)
 # ─────────────────────────────────────────────────────────────────────────────
-header "Phase 3b: VS Code Extension"
+header "Phase 3b: IDE Extensions"
 
-if command -v code &>/dev/null; then
-  EXT_ID="rule-vanilla-reactive"
-  INSTALLED=$(code --list-extensions 2>/dev/null | grep -i "$EXT_ID" || true)
-  if [[ -n "$INSTALLED" ]]; then
-    if [[ "$DRY_RUN" == "true" ]]; then
-      sub "[dry-run] Would uninstall VS Code extension: $EXT_ID"
-    else
-      echo -e "  ${CYAN}Uninstalling VS Code extension: $EXT_ID...${NC}"
-      if code --uninstall-extension "$EXT_ID" 2>&1 | tail -1; then
-        sub "VS Code extension uninstalled"
+# ── Helper: uninstall extension via CLI, with directory fallback ──
+extension_dirs=(
+  "$HOME_DIR/.vscode/extensions"
+  "$HOME_DIR/.vscode-oss/extensions"
+  "$HOME_DIR/.cursor/extensions"
+  "$HOME_DIR/.windsurf/extensions"
+)
+# VS Code Insiders
+if [[ "$OS" == "macos" ]]; then
+  extension_dirs+=("$HOME_DIR/Library/Application Support/Code - Insiders/extensions")
+elif [[ "$OS" == "linux" ]]; then
+  extension_dirs+=("$HOME_DIR/.config/Code - Insiders/extensions")
+fi
+
+remove_extension() {
+  local label="$1"
+  local cli="$2"
+  local ext_id="rule-mcp.rule-vanilla-reactive"
+
+  # Try via CLI
+  if [[ -n "$cli" ]] && command -v "$cli" &>/dev/null; then
+    local installed
+    installed=$("$cli" --list-extensions 2>/dev/null | grep -i "$ext_id" || true)
+    if [[ -n "$installed" ]]; then
+      if [[ "$DRY_RUN" == "true" ]]; then
+        sub "[dry-run] Would uninstall $label extension: $ext_id"
       else
-        warn "Failed to uninstall VS Code extension (try manually)"
+        echo -e "  ${CYAN}Uninstalling $label extension: $ext_id...${NC}"
+        if "$cli" --uninstall-extension "$ext_id" 2>&1; then
+          ok "$label extension uninstalled via CLI"
+        else
+          warn "$label CLI uninstall failed, removing directory directly"
+        fi
       fi
+    else
+      sub "${label}: extension not installed, skipping"
     fi
-  else
-    sub "VS Code extension not installed, skipping"
   fi
-else
-  sub "code CLI not found, skipping VS Code extension"
+
+  # Always also remove the extension directory as a safety net
+  for ext_dir in "${extension_dirs[@]}"; do
+    if [[ -d "$ext_dir" ]]; then
+      for found in "$ext_dir"/rule-mcp.rule-vanilla-reactive-* "$ext_dir"/rule-mcp.rule-vanilla-reactive; do
+        if [[ -d "$found" ]]; then
+          base=$(basename "$found")
+          if [[ "$DRY_RUN" == "true" ]]; then
+            sub "[dry-run] Would remove extension directory: ${found}"
+          else
+            rm -rf "$found"
+            ok "$label extension directory removed: ${base}"
+          fi
+        fi
+      done
+    fi
+  done
+}
+
+remove_extension "VS Code" "code"
+remove_extension "Code-OSS" "code-oss"
+remove_extension "Cursor" "cursor"
+remove_extension "Windsurf" "windsurf"
+remove_extension "VS Code Insiders" "code-insiders"
+remove_extension "Codium" "codium"
+
+# Check if any extension was actually removed
+any_removed=false
+for ext_dir in "${extension_dirs[@]}"; do
+  if [[ -d "$ext_dir" ]]; then
+    remaining=$(find "$ext_dir" -maxdepth 1 -name "rule-mcp.rule-vanilla-reactive*" 2>/dev/null | head -1)
+    if [[ -n "$remaining" ]]; then
+      any_removed=true
+    fi
+  fi
+done
+
+if ! $any_removed && [[ "$DRY_RUN" == "false" ]]; then
+  ok "No rule extension directories remain on disk"
 fi
 
 # ─────────────────────────────────────────────────────────────────────────────

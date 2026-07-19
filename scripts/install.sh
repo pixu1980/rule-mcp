@@ -492,28 +492,62 @@ fi
 # ─────────────────────────────────────────────────────────────────────────────
 header "Phase 4: VS Code Extension"
 
-EXT_DIR="$(dirname "$0")/../extensions/vscode-rule"
-VSIX_OUT="$(dirname "$0")/../extensions/rule-vanilla-reactive.vsix"
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+EXT_DIR="${PROJECT_ROOT}/extensions/vscode-rule"
+VSIX_OUT="${PROJECT_ROOT}/extensions/rule-vanilla-reactive.vsix"
 
-if command -v code &>/dev/null; then
-  # Build the extension .vsix package (suppress npm deprecation noise)
-  echo -e "  ${CYAN}Building VS Code extension...${NC}"
-  if cd "$EXT_DIR" && npx --yes @vscode/vsce package --out "$VSIX_OUT" 2>/dev/null; then
-    cd "$(dirname "$0")/.."
-    echo -e "  ${CYAN}Installing Pix Vanilla Reactive extension...${NC}"
-    if code --install-extension "$VSIX_OUT" --force 2>/dev/null; then
-      echo -e "  ${GREEN}✓ VS Code extension installed${NC}"
-    else
-      warn "VS Code extension install failed (non-critical)"
-    fi
-  else
-    cd "$(dirname "$0")/.."
-    warn "VS Code extension build failed (non-critical — try manually)"
-    echo -e "  ${YELLOW}  cd $EXT_DIR && npx @vscode/vsce package ${NC}"
+install_vsix_for_editor() {
+  local cli="$1"
+  local label="$2"
+  local vsix="$3"
+
+  if ! command -v "$cli" &>/dev/null; then
+    sub "${label}: CLI not found, skipping"
+    return 1
   fi
+
+  echo -e "  ${CYAN}Installing Pix Vanilla Reactive for ${label}...${NC}"
+  if "$cli" --install-extension "$vsix" --force 2>&1; then
+    echo -e "  ${GREEN}✓ ${label} extension installed${NC}"
+    return 0
+  else
+    warn "${label} extension install failed"
+    return 1
+  fi
+}
+
+# Use existing .vsix if available, otherwise build it
+if [[ "$DRY_RUN" == "true" ]]; then
+  sub "[dry-run] Would use VSIX: ${VSIX_OUT}"
+elif [[ -f "$VSIX_OUT" ]]; then
+  ok "Extension VSIX found: ${VSIX_OUT}"
 else
-  echo -e "  ${YELLOW}code CLI not found — VS Code extension not installed${NC}"
-  echo -e "  ${YELLOW}  Visit vscode marketplace for manual install${NC}"
+  echo -e "  ${CYAN}Building VS Code extension...${NC}"
+  if cd "$EXT_DIR" && npx --yes @vscode/vsce package --out "$VSIX_OUT" 2>&1; then
+    cd "$PROJECT_ROOT"
+    ok "Extension VSIX built: ${VSIX_OUT}"
+  else
+    cd "$PROJECT_ROOT"
+    warn "VS Code extension build failed (non-critical)"
+    echo -e "  ${YELLOW}  cd $EXT_DIR && npx @vscode/vsce package${NC}"
+    VSIX_OUT=""
+  fi
+fi
+
+if [[ "$DRY_RUN" == "true" ]]; then
+  sub "[dry-run] Would install extension for: code, cursor, windsurf, code-insiders, code-oss, codium"
+elif [[ -n "$VSIX_OUT" && -f "$VSIX_OUT" ]]; then
+  install_vsix_for_editor "code" "VS Code" "$VSIX_OUT" || true
+  install_vsix_for_editor "cursor" "Cursor" "$VSIX_OUT" || true
+  install_vsix_for_editor "windsurf" "Windsurf" "$VSIX_OUT" || true
+  install_vsix_for_editor "code-insiders" "VS Code Insiders" "$VSIX_OUT" || true
+  install_vsix_for_editor "code-oss" "Code-OSS" "$VSIX_OUT" || true
+  install_vsix_for_editor "codium" "Codium" "$VSIX_OUT" || true
+else
+  warn "No extension VSIX available — skipping extension installation"
+  echo -e "  ${YELLOW}  The MCP server config was still written.${NC}"
+  echo -e "  ${YELLOW}  Build manually: cd ${EXT_DIR} && npx @vscode/vsce package${NC}"
 fi
 
 # ─────────────────────────────────────────────────────────────────────────────

@@ -74,6 +74,16 @@ function Test-Command($cmd) {
 }
 
 # ── JSON entry removal helper ──
+function Remove-McpEntryDual {
+  param(
+    [string]$FilePath,
+    [string]$Label,
+    [string]$ServiceName = $McpServerName
+  )
+  Remove-McpEntry -FilePath $FilePath -Label $Label -ServiceName $ServiceName
+  Remove-McpEntry -FilePath $FilePath -Label "$Label (legacy)" -ServiceName "pix_galaxy_mcp"
+}
+
 function Remove-McpEntry {
   param(
     [string]$FilePath,
@@ -115,6 +125,19 @@ function Remove-McpEntry {
       $remaining = @($mcpServers.PSObject.Properties)
       if ($remaining.Count -eq 0) {
         $json.PSObject.Properties.Remove('mcpServers')
+      }
+    }
+
+    # VS Code uses json.servers (not mcpServers)
+    if ($json.servers) {
+      $servers = $json.servers
+      if ($servers.$ServiceName) {
+        $servers.PSObject.Properties.Remove($ServiceName)
+      }
+      # Remove empty servers
+      $remaining = @($servers.PSObject.Properties)
+      if ($remaining.Count -eq 0) {
+        $json.PSObject.Properties.Remove('servers')
       }
     }
 
@@ -301,7 +324,10 @@ if ($TargetAgent) {
   Write-Info "Targeting agent: $TargetAgent"
 
   if ($TargetAgent -eq "vscode") {
-    Remove-McpEntry -FilePath $VscodeMcp -Label "VS Code"
+    # VS Code global + project
+    $vscodeGlobal = Join-Path $env:APPDATA "Code\User\mcp.json"
+    if (Test-Path $vscodeGlobal) { Remove-McpEntryDual -FilePath $vscodeGlobal -Label "VS Code (global)" }
+    Remove-McpEntryDual -FilePath $VscodeMcp -Label "VS Code (project)"
   } elseif ($AgentConfigs.ContainsKey($TargetAgent)) {
     $path = $AgentConfigs[$TargetAgent]
     if ($TargetAgent -eq "codex") {
@@ -326,14 +352,29 @@ if ($TargetAgent) {
     }
   }
 
-  # VS Code
+  # VS Code global config (user-level — where VS Code 1.90+ stores MCP)
+  $vscodeGlobalDirs = @()
+  if ($env:APPDATA) {
+    $vscodeGlobalDirs += @(
+      "$env:APPDATA\Code\User",
+      "$env:APPDATA\Cursor\User"
+    )
+  }
+  foreach ($dir in $vscodeGlobalDirs) {
+    $mcp = "$dir\mcp.json"
+    if (Test-Path $mcp) {
+      Remove-McpEntryDual -FilePath $mcp -Label "$(Split-Path $dir -Leaf) (global)"
+    }
+  }
+
+  # VS Code project-level
   if (Test-Path $VscodeMcp -PathType Leaf) {
-    Remove-McpEntry -FilePath $VscodeMcp -Label "VS Code"
+    Remove-McpEntryDual -FilePath $VscodeMcp -Label "VS Code (project)"
     if (-not $DryRun) {
       $remaining = Get-Content $VscodeMcp -Raw
-      if ($remaining -and -not $remaining.Contains('mcpServers')) {
+      if ($remaining -and -not $remaining.Contains('mcpServers') -and -not $remaining.Contains('servers')) {
         Remove-Item $VscodeMcp -Force -ErrorAction SilentlyContinue
-        Write-Step "VS Code: removed empty mcp.json"
+        Write-Step "VS Code (project): removed empty mcp.json"
       }
     }
   }
@@ -359,6 +400,41 @@ if (Test-Path $piAgentsMd) {
 # PHASE 3: IDE Configurations
 # ─────────────────────────────────────────────────────────────────────────────
 Write-Header "Phase 3: IDE Configurations"
+
+# VS Code global config (macOS/Linux — covered in Phase 1 for Windows)
+if ($IsMacOS -or $IsLinux) {
+  $vscodeGlobalDirs = @()
+  if ($IsMacOS) {
+    $vscodeGlobalDirs += @(
+      "$HomeDir/Library/Application Support/Code/User",
+      "$HomeDir/Library/Application Support/Code - Insiders/User",
+      "$HomeDir/Library/Application Support/Code - OSS/User"
+    )
+  } else {
+    $vscodeGlobalDirs += @(
+      "$HomeDir/.config/Code/User",
+      "$HomeDir/.config/Code - Insiders/User",
+      "$HomeDir/.config/Code - OSS/User"
+    )
+  }
+
+  # Cursor and Windsurf global
+  $vscodeGlobalDirs += @(
+    "$HomeDir/.cursor",
+    "$HomeDir/.config/windsurf"
+  )
+
+  foreach ($dir in $vscodeGlobalDirs) {
+    $mcp = Join-Path $dir "mcp.json"
+    $label = Split-Path $dir -Leaf
+    if ($dir -match "Code - Insiders") { $label = "VS Code Insiders" }
+    elseif ($dir -match "Code - OSS") { $label = "Code-OSS" }
+    elseif ($dir -match "Code/User") { $label = "VS Code" }
+    if (Test-Path $mcp -PathType Leaf) {
+      Remove-McpEntryDual -FilePath $mcp -Label $label
+    }
+  }
+}
 
 # Neovim
 $NeovimDir = "$HomeDir\AppData\Local\nvim"
@@ -386,6 +462,73 @@ if (Test-Path $IdeaMcp) {
       Write-Step "JetBrains: removed empty mcp.json"
     }
   }
+}
+
+# ─────────────────────────────────────────────────────────────────────────────
+# PHASE 3b: IDE Extensions (VS Code, Cursor, Windsurf)
+# ─────────────────────────────────────────────────────────────────────────────
+Write-Header "Phase 3b: IDE Extensions"
+
+function Remove-Extension {
+  param([string]$Label, [string]$Cli)
+
+  $extId = "rule-mcp.rule-vanilla-reactive"
+
+  # Try via CLI
+  if ($Cli -and (Get-Command $Cli -ErrorAction SilentlyContinue)) {
+    $installed = & $Cli --list-extensions 2>&1 | Select-String -Pattern $extId
+    if ($installed) {
+      if ($DryRun) {
+        Write-Step "[dry-run] Would uninstall $Label extension: $extId"
+      } else {
+        Write-Host "  Uninstalling $Label extension: $extId..." -ForegroundColor Cyan
+        $result = & $Cli --uninstall-extension $extId 2>&1
+        if ($LASTEXITCODE -eq 0) {
+          Write-Ok "$Label extension uninstalled via CLI"
+        } else {
+          Write-Warn "$Label CLI uninstall failed, removing directory directly"
+        }
+      }
+    }
+  }
+}
+
+# Extension directories to check for removal
+$extDirs = @(
+  "$HomeDir\.vscode\extensions",
+  "$HomeDir\.vscode-oss\extensions",
+  "$HomeDir\.cursor\extensions",
+  "$HomeDir\.windsurf\extensions"
+)
+if ($env:APPDATA) {
+  $extDirs += "$env:APPDATA\Code - Insiders\extensions"
+}
+
+Remove-Extension -Label "VS Code" -Cli "code"
+Remove-Extension -Label "Cursor" -Cli "cursor"
+Remove-Extension -Label "Windsurf" -Cli "windsurf"
+Remove-Extension -Label "Code-OSS" -Cli "code-oss"
+Remove-Extension -Label "VS Code Insiders" -Cli "code-insiders"
+Remove-Extension -Label "Codium" -Cli "codium"
+
+# Always also remove any remaining extension directories as safety net
+$foundAny = $false
+foreach ($dir in $extDirs) {
+  if (Test-Path $dir) {
+    $matches = Get-ChildItem $dir -Filter "rule-mcp.rule-vanilla-reactive*" -Directory -ErrorAction SilentlyContinue
+    foreach ($m in $matches) {
+      $foundAny = $true
+      if ($DryRun) {
+        Write-Step "[dry-run] Would remove extension directory: $($m.FullName)"
+      } else {
+        Remove-Item $m.FullName -Recurse -Force -ErrorAction SilentlyContinue
+        Write-Ok "Removed extension directory: $($m.Name)"
+      }
+    }
+  }
+}
+if (-not $foundAny -and -not $DryRun) {
+  Write-Ok "No rule extension directories remain on disk"
 }
 
 # ─────────────────────────────────────────────────────────────────────────────

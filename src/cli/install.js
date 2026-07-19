@@ -20,7 +20,7 @@
  */
 
 import { execSync } from "node:child_process";
-import { existsSync, mkdirSync, readFileSync, writeFileSync, appendFileSync, rmSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, writeFileSync, appendFileSync, rmSync, readdirSync } from "node:fs";
 import { homedir, platform } from "node:os";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -83,6 +83,10 @@ const IS_LINUX = platform() === "linux";
 
 const HOME = homedir();
 const COMMAND_TEMPLATE_PATH = fileURLToPath(new URL("../../prompts/rule-mcp.md", import.meta.url));
+
+/** Resolve a path relative to the project root (3 levels up from src/cli/). */
+const resolvePath = (relative) =>
+  resolve(fileURLToPath(new URL("../../", import.meta.url)), relative);
 
 // ─── File helpers ───────────────────────────────────────────────────────────
 
@@ -184,7 +188,7 @@ const ENV_CONFIG_FILE = join(ENV_CONFIG_DIR, "env.json");
  * Read saved RULE_MCP_* environment variable preferences from disk.
  * Returns {} if no config file exists.
  */
-function readEnvConfig() {
+export function readEnvConfig() {
   try {
     if (!existsSync(ENV_CONFIG_FILE)) return {};
     return JSON.parse(readFileSync(ENV_CONFIG_FILE, "utf8"));
@@ -229,11 +233,7 @@ const cmdConfig = (entrypoint, opts = {}) => {
   let config;
   const globalBin = resolveGlobalBinary();
   if (globalBin) {
-    const home = homedir();
-    const portableBin = globalBin.startsWith(home + "/")
-      ? "~" + globalBin.slice(home.length)
-      : globalBin;
-    config = { command: portableBin, args: ["serve"], directTools: true, lifecycle: "keep-alive", type: "stdio" };
+    config = { command: globalBin, args: ["serve"], directTools: true, lifecycle: "keep-alive", type: "stdio" };
   } else {
     config = { command: process.execPath, args: [entrypoint, "serve"], directTools: true, lifecycle: "keep-alive" };
   }
@@ -501,6 +501,115 @@ const installPi = ({ entrypoint, dryRun, global, mode }) => {
   ];
 };
 
+/**
+ * Try to build and install the rule-vanilla-reactive extension for a given editor CLI.
+ * Returns true if the extension was installed successfully.
+ */
+const tryInstallExtension = (cli, vsixPath, label) => {
+  try {
+    // Try via CLI install-extension first (fast, no build needed)
+    const result = execSync(`${cli} --install-extension "${vsixPath}" --force`, {
+      encoding: "utf8",
+      timeout: 30000,
+      stdio: "pipe",
+    });
+    if (result.includes("already installed") || result.includes("Successfully installed")) {
+      return true;
+    }
+    return true;
+  } catch {
+    // CLI failed — maybe the binary doesn't exist or extension install is unsupported
+    return false;
+  }
+};
+
+/**
+ * Install the rule-vanilla-reactive VSIX extension for VS Code and all derivatives.
+ * Tries: code, cursor, windsurf, code-insiders, code-oss, codium
+ */
+const installVscodeExtension = ({ dryRun, vsixPath }) => {
+  if (dryRun) return [];
+  if (!existsSync(vsixPath)) {
+    console.warn(`  ⚠ Extension VSIX not found at: ${vsixPath}`);
+    return [];
+  }
+
+  const editors = [
+    { cli: "code", label: "VS Code" },
+    { cli: "cursor", label: "Cursor" },
+    { cli: "windsurf", label: "Windsurf" },
+    { cli: "code-insiders", label: "VS Code Insiders" },
+    { cli: "code-oss", label: "Code-OSS" },
+    { cli: "codium", label: "Codium" },
+  ];
+
+  const installed = [];
+  for (const { cli, label } of editors) {
+    try {
+      const found = execSync(`command -v ${cli} 2>/dev/null || which ${cli} 2>/dev/null`, {
+        encoding: "utf8",
+        timeout: 2000,
+      }).trim();
+      if (!found) continue;
+
+      const ok = tryInstallExtension(cli, vsixPath, label);
+      if (ok) {
+        installed.push(label);
+      }
+    } catch {
+      // CLI not found, skip
+    }
+  }
+  return installed;
+};
+
+/**
+ * Uninstall the rule-vanilla-reactive extension for VS Code and all derivatives.
+ * Uses each editor's CLI --uninstall-extension.
+ */
+const uninstallVscodeExtension = ({ dryRun }) => {
+  if (dryRun) return [];
+
+  const extId = "rule-mcp.rule-vanilla-reactive";
+  const editors = [
+    { cli: "code", label: "VS Code" },
+    { cli: "cursor", label: "Cursor" },
+    { cli: "windsurf", label: "Windsurf" },
+    { cli: "code-insiders", label: "VS Code Insiders" },
+    { cli: "code-oss", label: "Code-OSS" },
+    { cli: "codium", label: "Codium" },
+  ];
+
+  const uninstalled = [];
+  for (const { cli, label } of editors) {
+    try {
+      const found = execSync(`command -v ${cli} 2>/dev/null || which ${cli} 2>/dev/null`, {
+        encoding: "utf8",
+        timeout: 2000,
+      }).trim();
+      if (!found) continue;
+
+      execSync(`${cli} --uninstall-extension ${extId}`, {
+        encoding: "utf8",
+        timeout: 30000,
+        stdio: "pipe",
+      });
+      uninstalled.push(label);
+    } catch {
+      // CLI not found or extension not installed, skip
+    }
+  }
+
+  // Safety net: also remove extension directories from disk
+  try {
+    removeVscodeExtensionDirs({ dryRun });
+  } catch {
+    // non-critical
+  }
+
+  return uninstalled;
+};
+
 /** Return the VS Code user-level global config directory. */
 const vscodeGlobalDir = () => {
   if (process.platform === "darwin") return join(HOME, "Library", "Application Support", "Code", "User");
@@ -513,13 +622,24 @@ const vscodeGlobalDir = () => {
 const installVscode = ({ entrypoint, dryRun, global, mode }) => {
   // The universal installer is user-level. Workspace config is opt-in outside it.
   const globalFile = join(vscodeGlobalDir(), "mcp.json");
-  return [
+  const results = [
     writeText({
       file: globalFile,
       content: upsertVscode(readText(globalFile), cmdConfig(entrypoint, { global, mode })),
       dryRun,
     }),
   ];
+
+  // Also install the rule-vanilla-reactive VSIX extension (syntax highlighting, autocomplete)
+  const vsixPath = resolvePath("extensions/rule-vanilla-reactive.vsix");
+  if (!dryRun) {
+    const editors = installVscodeExtension({ dryRun, vsixPath });
+    if (editors.length > 0) {
+      results.push(`extension installed: ${editors.join(", ")}`);
+    }
+  }
+
+  return results;
 };
 
 /** @param {{ entrypoint: string, dryRun: boolean, global?: boolean }} */
@@ -762,8 +882,64 @@ const uninstallPi = ({ dryRun }) => {
   return [writeText({ file, content: removeJsonServer(readText(file)), dryRun }), promptFile];
 };
 
+/**
+ * Return VS Code extension directories for all known variants.
+ */
+const vscodeExtensionDirs = () => {
+  const dirs = [];
+  if (IS_MACOS) {
+    dirs.push(
+      join(HOME, ".vscode", "extensions"),
+      join(HOME, ".vscode-oss", "extensions"),
+      join(HOME, "Library", "Application Support", "Code - Insiders", "extensions"),
+      join(HOME, ".cursor", "extensions"),
+      join(HOME, ".windsurf", "extensions"),
+    );
+  } else if (IS_LINUX) {
+    dirs.push(
+      join(HOME, ".vscode", "extensions"),
+      join(HOME, ".vscode-oss", "extensions"),
+      join(HOME, ".config", "Code - Insiders", "extensions"),
+      join(HOME, ".cursor", "extensions"),
+    );
+  } else if (IS_WINDOWS) {
+    const appData = process.env.APPDATA || join(HOME, "AppData", "Roaming");
+    dirs.push(
+      join(HOME, ".vscode", "extensions"),
+      join(HOME, "AppData", "Local", "Programs", "Microsoft VS Code", "resources", "app", "extensions"),
+      join(appData, "Code - Insiders", "extensions"),
+      join(HOME, ".cursor", "extensions"),
+    );
+  }
+  return [...new Set(dirs.filter(Boolean))];
+};
+
+/**
+ * Remove the rule-vanilla-reactive extension directory from all known VS Code variants.
+ */
+const removeVscodeExtensionDirs = ({ dryRun }) => {
+  const extId = "rule-mcp.rule-vanilla-reactive";
+  const removed = [];
+  for (const dir of vscodeExtensionDirs()) {
+    if (!existsSync(dir)) continue;
+    const entries = readdirSync(dir, { withFileTypes: true });
+    for (const entry of entries) {
+      if (entry.isDirectory() && entry.name.startsWith(extId)) {
+        const fullPath = join(dir, entry.name);
+        if (!dryRun) {
+          rmSync(fullPath, { recursive: true, force: true });
+        }
+        removed.push(fullPath);
+      }
+    }
+  }
+  return removed;
+};
+
 /** @param {{ dryRun: boolean }} */
 const uninstallVscode = ({ dryRun }) => {
+  // Also uninstall the VSIX extension from all editor variants
+  uninstallVscodeExtension({ dryRun });
   const removeFromExistingFile = (file) => {
     if (!existsSync(file)) return null;
     const content = removeVscodeServer(readText(file));
@@ -773,9 +949,38 @@ const uninstallVscode = ({ dryRun }) => {
     }
     return writeText({ file, content, dryRun });
   };
+
+  // Remove MCP config from all VS Code variants
+  const results = [];
+
+  // Project-level
   const projectFile = join(process.cwd(), ".vscode", "mcp.json");
+  results.push(removeFromExistingFile(projectFile));
+
+  // Global (main VS Code)
   const globalFile = join(vscodeGlobalDir(), "mcp.json");
-  return [removeFromExistingFile(projectFile), removeFromExistingFile(globalFile)].filter(Boolean);
+  results.push(removeFromExistingFile(globalFile));
+
+  // VS Code Insiders global
+  const insidersDir = IS_MACOS
+    ? join(HOME, "Library", "Application Support", "Code - Insiders", "User")
+    : IS_WINDOWS
+      ? join(process.env.APPDATA || join(HOME, "AppData", "Roaming"), "Code - Insiders", "User")
+      : join(HOME, ".config", "Code - Insiders", "User");
+  results.push(removeFromExistingFile(join(insidersDir, "mcp.json")));
+
+  // Code-OSS global
+  if (!IS_WINDOWS) {
+    const ossDir = IS_MACOS
+      ? join(HOME, "Library", "Application Support", "Code - OSS", "User")
+      : join(HOME, ".config", "Code - OSS", "User");
+    results.push(removeFromExistingFile(join(ossDir, "mcp.json")));
+  }
+
+  // Cursor global
+  results.push(removeFromExistingFile(join(HOME, ".cursor", "mcp.json")));
+
+  return results.filter(Boolean);
 };
 
 /** @param {{ dryRun: boolean }} */
