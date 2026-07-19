@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════════════════════════════
-//  Bootstrap — imports _App (which defines <counter-app>)
+//  Bootstrap — defines <counter-app> custom element
 //  ═══════════════════════════════════════════════════════════════════════════════
 
-import './_App.js';
+import './components/CounterApp/index.js';

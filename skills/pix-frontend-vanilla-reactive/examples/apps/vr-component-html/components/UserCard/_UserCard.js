@@ -4,10 +4,10 @@
 //  Just return TEMPLATE — vrComponent handles _context and _scope.
 //  ═══════════════════════════════════════════════════════════════════════════════
 
-import { vrComponent, html, loadTemplate } from '../../src/core/index.js';
-import { store, toggleTodo } from './_store.js';
+import { vrComponent, html, loadTemplate } from '../../../src/core/index.js';
+import { store, toggleTodo } from '../../_store.js';
 
-const TEMPLATE = await loadTemplate(import.meta.url, './_Card.template.html');
+const TEMPLATE = await loadTemplate(import.meta.url, './_UserCard.template.html');
 
 export class UserCard extends HTMLElement {
   static { vrComponent(this, { tag: 'user-card', css: import.meta.url }); }
