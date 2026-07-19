@@ -173,6 +173,20 @@ export function fixBlockSpacing(filePath) {
     }
   }
 
+  // Rule: blank line between consecutive multi-line exports
+  // (but NOT between single-line barrel re-exports like export { X } from '...')
+  for (let i = lines.length - 1; i >= 0; i--) {
+    const curr = lines[i].trim();
+    const next = i + 1 < lines.length ? lines[i + 1].trim() : "";
+    if (next === "};") continue; // skip — handled by block rules
+    // If current line closes a multi-line export body and next line is another export
+    if ((curr === "};" || curr.startsWith("}")) &&
+        next.startsWith("export ") && !next.startsWith("export {") &&
+        i + 1 < lines.length && lines[i + 1].trim() !== "") {
+      lines.splice(i + 1, 0, "");
+    }
+  }
+
   // Clean up triple+ blank lines
   const result = lines.join("\n").replace(/\n{3,}/g, "\n\n");
 
