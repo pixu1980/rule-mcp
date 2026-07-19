@@ -15,8 +15,9 @@
 //  ═══════════════════════════════════════════════════════════════════════════════
 
 /**
+ * @deprecated Use the `template:` option in vrComponent() instead.
  * Attach context and scope to a TemplateResult and return it.
- * Saves 3 lines of boilerplate in every component.
+ * Kept for backward compatibility.
  *
  * @param {{ kind: string, strings: string[], values: any[] }} result - TemplateResult
  * @param {object} [ctx] - Data context for {{ }} expressions
@@ -32,11 +33,8 @@ export function withContext(result, ctx, scope) {
 }
 
 /**
+ * @deprecated Use the `template:` option in vrComponent() instead.
  * Shorthand: html + context + scope in one call.
- * Merges `extra` into `ctx` as _context.
- *
- * Pattern B usage:
- *   return compose(html`<button @click="fn">{{ x }}</button>`, { x }, { fn });
  *
  * @param {{ kind: string, strings: string[], values: any[] }} result - TemplateResult
  * @param {object} [data] - Data for {{ }} expressions (becomes _context)

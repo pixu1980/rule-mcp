@@ -5,7 +5,7 @@
 //  Uses template option + context() — no render() method needed.
 //  ═══════════════════════════════════════════════════════════════════════════════
 
-import { vrComponent, html, loadTemplate } from '../../../src/core/index.js';
+import { vrComponent, html, loadTemplate } from '../../../../../core/index.js';
 import { store, toggleTodo } from '../../_store.js';
 
 const TEMPLATE = await loadTemplate(import.meta.url, './_UserCard.template.html');
