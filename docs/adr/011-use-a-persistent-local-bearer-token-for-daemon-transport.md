@@ -1,4 +1,4 @@
-# 011: Use a persistent local bearer token for daemon transport
+# 011 — Use a persistent local bearer token for daemon transport
 
 - **Date**: 2026-07-16
 - **Status**: accepted

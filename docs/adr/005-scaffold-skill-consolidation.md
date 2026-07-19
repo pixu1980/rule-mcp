@@ -1,4 +1,4 @@
-# 002: Scaffold Skill Consolidation
+# 005 — Scaffold Skill Consolidation
 
 - **Date**: 2026-07-10
 - **Status**: accepted

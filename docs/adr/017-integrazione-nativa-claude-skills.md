@@ -1,4 +1,4 @@
-# Integrazione nativa Claude Skills
+# 017 — Integrazione nativa Claude Skills
 
 - **Status:** accepted
 - **Date:** 2026-07-19

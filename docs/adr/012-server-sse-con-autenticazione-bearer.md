@@ -1,4 +1,4 @@
-# Server SSE con autenticazione Bearer
+# 012 — Server SSE con autenticazione Bearer
 
 - **Status:** accepted
 - **Date:** 2026-07-19

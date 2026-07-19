@@ -1,4 +1,4 @@
-# 001: Thematic Skill Taxonomy Rename
+# 004 — Thematic Skill Taxonomy Rename
 
 - **Date**: 2026-07-10
 - **Status**: accepted
