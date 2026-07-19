@@ -13,9 +13,7 @@ export const addItem = () => {
   const title = prompt('New item:')?.trim();
 
   if (title) {
-
     store.state.items = [...store.state.items, title];
-
   }
 };
 

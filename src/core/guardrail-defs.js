@@ -529,10 +529,46 @@ export const VANILLA_REACTIVE_GUARDRAILS = [
     label: "if/else always use braces",
     description: "Every if, else, else if must use {} braces. Single-line if without braces is forbidden.",
     check: (code) => {
-      // Match if (...) without following brace
       const matches = code.match(/if\s*\([^)]*\)\s*[^{]*(?:;|\n)/g);
       if (matches && matches.length > 0) {
         return { pass: false, failCount: matches.length, detail: matches.slice(0, 5), suggestion: "Add braces: if (condition) { ... }" };
+      }
+      return { pass: true };
+    },
+  },
+  {
+    id: "js-no-inline-blocks",
+    label: "Blocks must be multi-line (no inline { code })",
+    description: "All { } blocks (if/for/while/arrow functions/promises) must span multiple lines. No inline { doThing(); }.",
+    check: (code) => {
+      // Match if/for/while/try/catch with { code } on same line
+      const matches = code.match(/(?:if|for|while|switch|try|catch|else|=>)\s*\(?[^)]*\)?\s*\{[^{}]+\}/g);
+      if (matches && matches.length > 0) {
+        const filtered = matches.filter(m => m !== '=> {}');
+        if (filtered.length > 0) {
+          return { pass: false, failCount: filtered.length, detail: filtered.slice(0, 5), suggestion: "Split block across multiple lines." };
+        }
+      }
+      return { pass: true };
+    },
+  },
+  {
+    id: "js-no-blank-lines-in-blocks",
+    label: "No blank line immediately after { or before }",
+    description: "Blocks must not have blank lines at start or end: {\n\ncode → forbidden. code\n\n} → forbidden.",
+    check: (code) => {
+      const issues = [];
+      const lines = code.split('\n');
+      for (let i = 0; i < lines.length; i++) {
+        if (/\{\s*$/.test(lines[i]) && i + 1 < lines.length && /^\s*$/.test(lines[i + 1])) {
+          issues.push(`Line ${i + 1}: blank line after {`);
+        }
+        if (/^\s*\}\s*$/.test(lines[i]) && i > 0 && /^\s*$/.test(lines[i - 1])) {
+          issues.push(`Line ${i + 1}: blank line before }`);
+        }
+      }
+      if (issues.length > 0) {
+        return { pass: false, failCount: issues.length, detail: issues.slice(0, 5), suggestion: "Remove blank lines at block start/end." };
       }
       return { pass: true };
     },

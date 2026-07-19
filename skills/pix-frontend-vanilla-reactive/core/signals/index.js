@@ -27,7 +27,10 @@ export const Signal = {
   State: StateSignal,
   Computed: ComputedSignal,
   subtle: {
-    untrack: (fn) => { const c = popCollector(); try { return fn(); } finally { if (c) { pushCollector(c); } } },
+    untrack: (fn) => {
+    const c = popCollector();
+    try { return fn(); } finally { if (c) { pushCollector(c); } }
+  },
   },
 };
 
