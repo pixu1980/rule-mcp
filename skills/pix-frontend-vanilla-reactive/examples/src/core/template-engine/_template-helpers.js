@@ -1,8 +1,8 @@
 // ═══════════════════════════════════════════════════════════════════════════════
 //  Template Engine: html tag + helpers
 // ═══════════════════════════════════════════════════════════════════════════════
-//  Only {{ }}, <for>, <if>, @event, .prop — no ${}, no model, no repeat.
-//  Two-way binding via @input + .value.
+//  v2: ${} removed. Only {{ }}, <for>, <if>, @event, .prop remain.
+//  Directive system (model, repeat) removed — use @input for two-way binding.
 // ═══════════════════════════════════════════════════════════════════════════════
 
 /**
@@ -12,7 +12,7 @@
  *   html`<h1>{{ title }}</h1>`
  *   → { kind: 'template-result', strings: ['<h1>{{ title }}</h1>'], values: [] }
  *
- * As regular function (pattern CustomElement vrComponent with External HTMLustomElement vrComponent with External HTML, from .template.html string):
+ * As regular function (Pattern CustomElement vrComponent with External HTML, from .template.html string):
  *   html('<h1>{{ title }}</h1>')
  *   → { kind: 'template-result', strings: ['<h1>{{ title }}</h1>'], values: [] }
  */
