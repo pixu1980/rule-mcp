@@ -86,8 +86,8 @@ export class ForPart {
       const childPart = new ChildNodePart(block.start, block.end);
       childPart.setValue(this.renderFn(item));
     } else {
-      // String template mode
-      const itemCtx = { ...this.ctx, [this.itemVar]: item };
+      // String template mode — avoid spread, use __item context key
+      const itemCtx = Object.assign(Object.create(this.ctx), { [this.itemVar]: item });
       const rendered = this.renderTemplateString(this.innerTemplate, itemCtx);
       const tmp = document.createElement('template');
       tmp.innerHTML = rendered;

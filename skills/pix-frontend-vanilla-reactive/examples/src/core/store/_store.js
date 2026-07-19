@@ -38,9 +38,11 @@ export class Store {
       set(raw, key, value) {
         const nextPath = [...path, key];
         const old = raw[key];
+        // Skip clone + emit if same reference (e.g. resetting to current array)
+        if (old === value) return Reflect.set(raw, key, value);
         const prepared = clonePlainValue(value);
         const result = Reflect.set(raw, key, prepared);
-        if (old !== prepared) store._emitChange(nextPath, old, prepared);
+        store._emitChange(nextPath);
         return result;
       },
       deleteProperty(raw, key) {
@@ -48,16 +50,19 @@ export class Store {
         const nextPath = [...path, key];
         const old = raw[key];
         const result = Reflect.deleteProperty(raw, key);
-        store._emitChange(nextPath, old, undefined);
+        store._emitChange(nextPath);
         return result;
       },
     });
     this.proxyCache.set(target, proxy);
     return proxy;
   }
-  _emitChange(path, oldValue, newValue) {
-    const detail = { path: toPathArray(path).join('.'), oldValue: deepClone(oldValue), newValue: deepClone(newValue) };
-    this.events.dispatchEvent(new CustomEvent('store:change', { detail }));
+  _emitChange(path) {
+    // Brief change event (no deepClone — too expensive for large state)
+    this.events.dispatchEvent(new CustomEvent('store:change', {
+      detail: { path: toPathArray(path).join('.') },
+    }));
+    // Notify reactivity system
     if (this.tick) this.tick.set(performance.now());
   }
   get(path) {
@@ -80,7 +85,7 @@ export class Store {
     this.target = deepClone(next);
     this.proxyCache = new WeakMap();
     this.state = this._createProxy(this.target, []);
-    this._emitChange([], old, this.target);
+    this._emitChange([]);
   }
   snapshot() { return deepClone(this.target); }
 }
