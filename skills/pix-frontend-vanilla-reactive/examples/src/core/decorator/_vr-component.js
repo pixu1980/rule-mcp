@@ -29,7 +29,7 @@ import { Signal, effect, render } from '../index.js';
  * Decorator for reactive Custom Elements.
  * Call ONCE inside `static {}` block.
  *
- * @param {typeof HTMLElement} klass - The custom element class
+ * @param {typeof HTMLElement} component - The custom element class
  * @param {object} opts
  * @param {string} opts.tag - Required: Custom element tag name (e.g. 'app-root')
  * @param {string|CSSStyleSheet[]} [opts.css] - CSS loading mode:
@@ -38,30 +38,30 @@ import { Signal, effect, render } from '../index.js';
  *   [sheet1, sheet2]  → adopt CSSStyleSheet array directly
  * @returns {void}
  */
-export function vrComponent(klass, opts = {}) {
+export function vrComponent(component, opts = {}) {
   const { tag, css } = opts;
 
   // ── Validate ────────────────────────────────────────────────
   if (!tag) throw new Error('vrComponent: tag is required');
-  if (!(klass.prototype instanceof HTMLElement)) {
+  if (!(component.prototype instanceof HTMLElement)) {
     throw new Error('vrComponent: class must extend HTMLElement');
   }
 
   // ── 1. Register Custom Element ──────────────────────────────
   if (!customElements.get(tag)) {
-    customElements.define(tag, klass);
+    customElements.define(tag, component);
   }
 
   // ── 2. Load and adopt CSS ───────────────────────────────────
   if (css) {
-    loadCSS(css, klass).catch(err => {
+    loadCSS(css, component).catch(err => {
       console.warn(`vrComponent: CSS load failed for <${tag}>:`, err.message);
     });
   }
 
   // ── 3. Override connectedCallback ───────────────────────────
-  const origConnected = klass.prototype.connectedCallback;
-  klass.prototype.connectedCallback = function () {
+  const origConnected = component.prototype.connectedCallback;
+  component.prototype.connectedCallback = function () {
     if (this._vrMounted) return;  // mount guard
     this._vrMounted = true;
 
@@ -98,8 +98,8 @@ export function vrComponent(klass, opts = {}) {
   };
 
   // ── 4. Override disconnectedCallback for cleanup ────────────
-  const origDisconnected = klass.prototype.disconnectedCallback;
-  klass.prototype.disconnectedCallback = function () {
+  const origDisconnected = component.prototype.disconnectedCallback;
+  component.prototype.disconnectedCallback = function () {
     if (this._vrDispose) {
       this._vrDispose();
       this._vrDispose = null;
@@ -118,7 +118,7 @@ export function vrComponent(klass, opts = {}) {
  *   './path.css' → fetch
  *   [sheets]     → adopt directly
  */
-async function loadCSS(css, klass) {
+async function loadCSS(css, component) {
   // Mode 3: CSSStyleSheet array → adopt directly
   if (Array.isArray(css)) {
     for (const sheet of css) {
