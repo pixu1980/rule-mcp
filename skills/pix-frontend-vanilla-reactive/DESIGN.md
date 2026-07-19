@@ -1,7 +1,11 @@
-# Analysis: Three Component Modes for rule-frontend-vanilla-reactive
+# Design: Three Component Modes for rule-frontend-vanilla-reactive
 
+> **Status**: ✅ **Implementation complete.** This document captures the design decisions
+> that led to the v2 engine. The implementation is in `core/` and examples in `examples/`.
+> See `SKILL.md` for usage and `core/ARCHITECTURE.md` for architecture reference.
+>
 > **Scope**: `~/Projects/pixu1980/rule-mcp` → `rule` → `rule` (porting)
-> **Date**: 2026-07-17
+> **Date**: 2026-07-17 (design), 2026-07-19 (completed)
 > **Author**: rule-mcp maintainer
 
 ---
@@ -573,16 +577,50 @@ This is a medium effort (~1 week) but provides the best DX for Pattern C.
 
 ---
 
-## 7. Implementation Plan
+## 7. Implementation Status
 
-### Phase 1: SKILL.md documentation (no code changes)
+> **All phases completed.** See `core/ARCHITECTURE.md` and `SKILL.md` for current documentation.
 
-| Task | File | Estimate |
-|------|------|----------|
-| Document Pattern B (Functional Component) | SKILL.md §5 → split into §5.1/5.2/5.3 | 2h |
-| Document Pattern C (External HTML template) | SKILL.md new §9 | 2h |
-| Document `htmlFromString()` API | SKILL.md §4 expand | 30m |
-| Add composition example (fn → CE) | SKILL.md §5 | 30m |
+The following was implemented from this design document:
+
+### Phase 1: Documentation (completed)
+- Pattern B (Functional Component) documented in SKILL.md §5B
+- Pattern C (External HTML template) documented in SKILL.md §5C
+- Composition (`{{ FnName(args) }}`) documented in SKILL.md §Composition
+- Scope resolution chain (`_scope → _context → component instance`) documented
+
+### Phase 2: Template Engine v2 (completed)
+- `${}` removed from templates — only `{{ }}` for data, `@event="handler"` for events
+- `@click="handler(args)"` pre-processing with `$event` keyword and auto-inject
+- `FnName(args)` function call detection in expression parser
+- `evaluateExpression()` now accepts optional `scope` param
+- `EventPart` resolves handlers via `_scope → _context → component instance`
+- `html()` accepts both tagged templates and strings (Pattern C)
+- `loadTemplate()` helper fetches external `.template.html` files
+
+### Phase 3: vrComponent Decorator (completed)
+- `vrComponent()` decorator in `static {}` block — no base class, no inheritance
+- Handles `customElements.define()`, CSS loading (3 modes), auto `connectedCallback`
+- `context()` is optional — defaults to `{}` if not defined
+- `template:` option for Pattern C — no `render()` method needed
+- Auto `_scope = this`, mount guard, cleanup in `disconnectedCallback`
+
+### Phase 4: Examples (completed)
+- `vr-component/` — Counter (Pattern A)
+- `fn-component/` — List (Pattern B)
+- `vr-component-html/` — User card (Pattern C)
+- `combo/` — Todo (all patterns mixed)
+
+### Phase 5: Guardrails (completed)
+- `VANILLA_REACTIVE_GUARDRAILS` with 9 rules (Pattern A/B/C, templates)
+- `JS_GUARDRAILS` with 9 generic JS rules (braces, blank lines, arrows, etc.)
+- Post-processing: Prettier + blank-line fixer + block-spacing fixer
+
+### Phase 6: IDE Extension (completed)
+- VS Code extension with TextMate grammar for `html\`\`` inside JS/TS
+- Language support for `.template.html` files (syntax highlighting)
+- 14 snippets (component templates, directives, expressions)
+- Context-aware completion provider
 | Update guardrails for new patterns | SKILL.md guardrails section | 30m |
 | Document `bindElement()` helper | SKILL.md new §7 or as helper | 1h |
 
