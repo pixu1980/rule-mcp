@@ -62,35 +62,36 @@ export function vrComponent(component, opts = {}) {
   // ── 3. Override connectedCallback ───────────────────────────
   const origConnected = component.prototype.connectedCallback;
   component.prototype.connectedCallback = function () {
-    if (this._vrMounted) return;  // mount guard
+    if (this._vrMounted) return;
     this._vrMounted = true;
-
-    // Call original connectedCallback if any
     if (origConnected) origConnected.call(this);
 
-    // Determine context source: this.context() method or empty object
+    // context() is optional — defaults to {} if not defined
     const getContext = (typeof this.context === 'function')
       ? () => this.context()
       : () => ({});
 
-    // Determine render source: this.render() method
+    // render() method OR opts.template (Pattern C)
     const renderFn = (typeof this.render === 'function')
       ? (ctx) => this.render(ctx)
-      : null;
+      : opts.template
+        ? (ctx) => {
+            const r = opts.template;
+            r._context = ctx;
+            r._scope = this;
+            return r;
+          }
+        : null;
 
     if (!renderFn) {
-      console.warn(`vrComponent: <${tag}> has no render() method`);
+      console.warn('vrComponent: <' + tag + '> needs render() method or template option');
       return;
     }
 
-    // Mount reactive render effect
     this._vrDispose = effect(() => {
       const ctx = getContext();
       const result = renderFn(ctx);
-
       if (result && result.kind === 'template-result') {
-        // Set context/scope only if the component hasn't already set them
-        // (Pattern B functions called via {{ }} may set their own _context)
         if (!result._context) result._context = ctx;
         if (!result._scope) result._scope = this;
         render(result, this);
