@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════════════════════════════
-//  Pattern A — Custom Element + vrComponent (counter app)
+//  pattern CustomElement vrComponent with External HTMLustomElement vrComponent with External HTMLustomElement vrComponent — Custom Element + vrComponent (counter app)
 //  ═══════════════════════════════════════════════════════════════════════════════
 //  Everything is in one class. vrComponent handles define, CSS, reactive loop.
 //  Methods = @click handlers. context() = data. render() = template.

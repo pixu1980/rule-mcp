@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════════════════════════════
-//  Pattern C — Custom Element with External HTML Template: ProfileCard
+//  pattern CustomElement vrComponent with External HTMLustomElement vrComponent with External HTML — Custom Element with External HTML Template: ProfileCard
 //  ═══════════════════════════════════════════════════════════════════════════════
 //  Uses vrComponent for lifecycle. Template loaded from .template.html file.
 //  html(templateStr) converts the raw string to a TemplateResult.

@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════════════════════════════
-//  Pattern B — Functional Component (greeting list)
+//  Pattern Functional Component — Functional Component (greeting list)
 //  ═══════════════════════════════════════════════════════════════════════════════
 //  No classes, no HTMLElement. Pure functions returning html``.
 //  Handlers passed via result._scope. Data via result._context.

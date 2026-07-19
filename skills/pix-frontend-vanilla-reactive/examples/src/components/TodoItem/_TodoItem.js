@@ -1,6 +1,6 @@
 // ═══════════════════════════════════════════════════════════════════════════════
 //  Component: TodoItem
-//  ── Pattern A: Custom Element with static render using html``
+//  ── pattern CustomElement vrComponent with External HTMLustomElement vrComponent with External HTMLustomElement vrComponent: Custom Element with static render using html``
 //  ═══════════════════════════════════════════════════════════════════════════════
 
 import { html } from '../../core/index.js';
