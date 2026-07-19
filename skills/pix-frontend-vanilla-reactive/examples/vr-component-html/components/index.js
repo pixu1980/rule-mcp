@@ -2,5 +2,5 @@
 //  Barrel — vr-component-html components
 //  ═══════════════════════════════════════════════════════════════════════════════
 
-'use strict';
-export {} from './UserCard/index.js';
+"use strict";
+export {} from "./UserCard/index.js";

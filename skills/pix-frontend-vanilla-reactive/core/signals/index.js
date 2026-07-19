@@ -2,14 +2,14 @@
 //  Signals public API
 // ═══════════════════════════════════════════════════════════════════════════════
 
-'use strict';
+"use strict";
 
-import { BaseSignal } from './_base-signal.js';
-import { StateSignal } from './_state-signal.js';
-import { ComputedSignal } from './_computed-signal.js';
-import { EffectCollector } from './_effect-collector.js';
-import { withCollector, withoutCollector, getCurrentCollector, pushCollector, popCollector } from './_collector-context.js';
-import { schedule } from './_scheduler.js';
+import { BaseSignal } from "./_base-signal.js";
+import { StateSignal } from "./_state-signal.js";
+import { ComputedSignal } from "./_computed-signal.js";
+import { EffectCollector } from "./_effect-collector.js";
+import { withCollector, withoutCollector, getCurrentCollector, pushCollector, popCollector } from "./_collector-context.js";
+import { schedule } from "./_scheduler.js";
 
 export {
   BaseSignal,
@@ -30,6 +30,7 @@ export const Signal = {
   subtle: {
     untrack: (fn) => {
     const c = popCollector();
+
     try { return fn(); } finally { if (c) { pushCollector(c); } }
   },
   },

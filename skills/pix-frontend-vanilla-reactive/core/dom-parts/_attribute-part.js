@@ -4,10 +4,10 @@
 //   Two-way binding via @input + .value (see SKILL.md §8).
 //  ═══════════════════════════════════════════════════════════════════════════════
 
-'use strict';
+"use strict";
 
-import { Part } from './_part.js';
-import { isSignalLike } from '../signals/index.js';
+import { Part } from "./_part.js";
+import { isSignalLike } from "../signals/index.js";
 
 export class AttributePart extends Part {
   constructor(el, name) {
@@ -15,7 +15,6 @@ export class AttributePart extends Part {
     this.element = el;
     this.name = name;
   }
-
 
   setValue(value) {
     if (isSignalLike(value)) {
@@ -25,16 +24,17 @@ export class AttributePart extends Part {
     });
       return;
     }
+
     this.disposeSignal();
     this.commit(value);
   }
-
 
   commit(value) {
     if (value == null || value === false) {
       this.element.removeAttribute(this.name);
       return;
     }
+
     this.element.setAttribute(this.name, value === true ? '' : String(value));
   }
 }

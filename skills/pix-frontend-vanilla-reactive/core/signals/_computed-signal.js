@@ -2,10 +2,10 @@
 //  PART 1 — ComputedSignal
 // ═══════════════════════════════════════════════════════════════════════════════
 
-'use strict';
+"use strict";
 
-import { BaseSignal } from './_base-signal.js';
-import { withCollector } from './_collector-context.js';
+import { BaseSignal } from "./_base-signal.js";
+import { withCollector } from "./_collector-context.js";
 
 export class ComputedSignal extends BaseSignal {
   constructor(compute, opts = {}) {
@@ -38,6 +38,7 @@ export class ComputedSignal extends BaseSignal {
     if (this.recomputing) {
       return this.cached;
     }
+
     this.recomputing = true; this.cleanupDeps();
     try {
       const next = withCollector(this, () => {
@@ -46,6 +47,7 @@ export class ComputedSignal extends BaseSignal {
       if (this.dirty || !this.equals(this.cached, next)) {
       this.cached = next;
     }
+
       this.dirty = false; return this.cached;
     } finally { this.recomputing = false; }
   }

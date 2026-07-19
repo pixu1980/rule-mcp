@@ -16,12 +16,14 @@
  * @param {string|URL} url - URL path (relative) or URL object
  * @returns {Promise<CSSStyleSheet>}
  */
-'use strict';
+"use strict";
 
 export async function loadCSS(url) {
   const resolved = typeof url === 'string' ? new URL(url) : url;
+
   const text = await (await fetch(resolved)).text();
   const sheet = new CSSStyleSheet();
+
   sheet.replaceSync(text);
   document.adoptedStyleSheets = [...document.adoptedStyleSheets, sheet];
   return sheet;

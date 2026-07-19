@@ -2,9 +2,9 @@
 //  PART 1 — StateSignal
 // ═══════════════════════════════════════════════════════════════════════════════
 
-'use strict';
+"use strict";
 
-import { BaseSignal } from './_base-signal.js';
+import { BaseSignal } from "./_base-signal.js";
 
 export class StateSignal extends BaseSignal {
   constructor(value, opts = {}) {

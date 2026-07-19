@@ -8,9 +8,9 @@
 //  Pattern B:   render(html\`\`, root, { items }, { addItem });
 //  ═══════════════════════════════════════════════════════════════════════════════
 
-'use strict';
+"use strict";
 
-import { ChildNodePart } from '../dom-parts/_child-node-part.js';
+import { ChildNodePart } from "../dom-parts/_child-node-part.js";
 
 /**
  * Render a TemplateResult into a DOM container.
@@ -34,12 +34,14 @@ export function render(result, container, context, scope) {
   let rootPart = container.__rootPart;
   if (!rootPart) {
     const s = document.createComment('root:start');
+
     const e = document.createComment('root:end');
     container.textContent = '';
     container.append(s, e);
     rootPart = new ChildNodePart(s, e);
     container.__rootPart = rootPart;
   }
+
   rootPart.setValue(result);
 }
 

@@ -5,7 +5,7 @@
 //  They can also be used standalone for direct DOM manipulation.
 //  ═══════════════════════════════════════════════════════════════════════════════
 
-'use strict';
+"use strict";
 
 export {
   Part,
@@ -22,5 +22,5 @@ export {
   isRangeBeforeReference,
   normalizeExprValue,
   inferModelProperty,
-} from './_parts.js';
+} from "./_parts.js";
 

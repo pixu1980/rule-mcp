@@ -5,9 +5,9 @@
 //  Values come from the rendering context (set by parent).
 //  ═══════════════════════════════════════════════════════════════════════════════
 
-'use strict';
+"use strict";
 
-import { html } from '../../../../core/index.js';
+import { html } from "../../../../core/index.js";
 
 /**
  * Renders a compact summary line from a todos array.
