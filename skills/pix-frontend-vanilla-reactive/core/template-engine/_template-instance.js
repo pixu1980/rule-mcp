@@ -37,7 +37,10 @@ function getNodePath(node, root) {
 
     let i = 0;
     let c = cur;
-    while (c.previousSibling) { c = c.previousSibling; i++; }
+    while (c.previousSibling) {
+      c = c.previousSibling;
+      i++;
+    }
     path.unshift(i);
     cur = p;
   }

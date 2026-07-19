@@ -67,7 +67,11 @@ export function vrComponent(component, opts = {}) {
   // ── 3. Override connectedCallback ───────────────────────────
   const origConnected = component.prototype.connectedCallback;
   component.prototype.connectedCallback = function () {
-    if (this._vrMounted) { return; }
+    if (this._vrMounted) {
+    return;
+  }
+
+
     this._vrMounted = true;
     if (origConnected) {
       origConnected.call(this);
@@ -156,7 +160,11 @@ async function _loadComponentCSS(css, component) {
   }
 
   // Mode 1 & 2: string path
-  if (typeof css !== "string") { return; }
+  if (typeof css !== "string") {
+    return;
+  }
+
+
 
   let cssPath = css;
 

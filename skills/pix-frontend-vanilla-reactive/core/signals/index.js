@@ -31,7 +31,13 @@ export const Signal = {
     untrack: (fn) => {
     const c = popCollector();
 
-    try { return fn(); } finally { if (c) { pushCollector(c); } }
+    try {
+      return fn();
+    } finally {
+      if (c) {
+        pushCollector(c);
+      }
+    }
   },
   },
 };

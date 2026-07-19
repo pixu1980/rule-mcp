@@ -163,7 +163,10 @@ registerFilter("sortBy", (array, prop, dir = 'asc') => {
 
   return [...array].sort((a, b) => {
     let va = a[prop], vb = b[prop];
-    if (prop === 'date') { va = new Date(va); vb = new Date(vb); }
+    if (prop === 'date') {
+      va = new Date(va);
+      vb = new Date(vb);
+    }
 
     return dir === 'desc' ? (va < vb ? 1 : va > vb ? -1 : 0) : (va > vb ? 1 : va < vb ? -1 : 0);
   });
