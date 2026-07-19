@@ -59,7 +59,7 @@ export function vrComponent(component, opts = {}) {
 
   // ── 2. Load and adopt CSS ───────────────────────────────────
   if (css) {
-    _loadComponentCSS(css, component).catch(err => {
+    _loadComponentCSS(css, component).catch((err) => {
       console.warn(`vrComponent: CSS load failed for <${tag}>:`, err.message);
     });
   }
@@ -83,7 +83,7 @@ export function vrComponent(component, opts = {}) {
         };
 
     // render() method OR opts.template (Pattern C)
-    const renderFn = (typeof this.render === 'function')
+    const renderFn = (typeof this.render === "function")
       ? (ctx) => this.render(ctx)
       : opts.template
         ? (ctx) => {
@@ -95,7 +95,7 @@ export function vrComponent(component, opts = {}) {
         : null;
 
     if (!renderFn) {
-      console.warn('vrComponent: <' + tag + '> needs render() method or template option');
+      console.warn("vrComponent: <" + tag + '> needs render() method or template option');
       return;
     }
 
