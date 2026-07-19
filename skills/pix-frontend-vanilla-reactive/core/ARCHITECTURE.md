@@ -53,6 +53,225 @@ store.state.count = 3;
 
 ---
 
+## Template Syntax Reference
+
+### 1. Data Interpolation (`{{ }}`)
+
+| Syntax | Type | Escaped | Example |
+|--------|------|---------|---------|
+| `{{ expr }}` | data | ✅ | `<h1>{{ title }}</h1>` |
+| `{{ expr \| raw }}` | data | ❌ | `<div>{{ htmlContent \| raw }}</div>` |
+
+#### Expression examples
+
+| Expression | Description |
+|------------|-------------|
+| `{{ title }}` | Simple variable lookup |
+| `{{ title \| upper }}` | Variable + filter |
+| `{{ title \| truncate:20 }}` | Filter with argument |
+| `{{ title \| slugify \| upper }}` | Filter chain |
+| `{{ items \| length }}` | Array/string length |
+| `{{ items \| join:', ' }}` | Array to string |
+| `{{ date \| timeAgo }}` | Relative time |
+| `{{ date \| date:'YYYY-MM-DD' }}` | Date formatting |
+
+#### Built-in filters
+
+```
+upper, lower, capitalize, slugify, slug, trim,
+escapeHtml, striptags, raw, json, default,
+truncate, length, first, last, join,
+tagLabel, tagHref, date, timeAgo, urlencode, sortBy,
+where
+```
+
+#### Expression parsing (inside `{{ }}`)
+
+| Form | Example | Resolves to |
+|------|---------|-------------|
+| Dot-path variable | `{{ todo.title }}` | `_context.todo.title` (falls back to `_scope`) |
+| Bracket index | `{{ items[0].name }}` | `_context.items[0].name` |
+| Filter pipe | `{{ val \| upper }}` | Apply filter to resolved value |
+| Filter chain | `{{ val \| upper \| slug }}` | Pipe through filters left-to-right |
+| Filter with arg | `{{ val \| truncate:20 }}` | `filter(resolvedVal, 20)` |
+| **Function call** | `{{ TodoList(todos) }}` | Resolve `TodoList` from `_scope`→`_context`, call with args |
+| Raw output | `{{ expr \| raw }}` | Inserted as innerHTML (not textContent) — opt-in XSS |
+
+`{{ }}` expressions resolve variable names against `result._scope` FIRST,
+then `result._context` as fallback. JS closure scope is NOT accessible
+from template strings.
+
+---
+
+### 2. Event Binding (`@` prefix)
+
+```
+@eventname="handler(args)"     in template (all patterns)
+```
+
+Every valid DOM event name works — `@click`, `@input`, `@animationend`,
+`@customEvent`. No whitelist.
+
+#### Examples
+
+```html
+<button @click="handleSave">Save</button>
+<input @input="onInput($event)" .value="{{ name }}" />
+<form @submit="onSubmit($event)">...</form>
+<select @change="onChange($event)">...</select>
+```
+
+#### Handler resolution rules
+
+| Form | Resolves to |
+|------|-------------|
+| `@click="handleSave"` | `scope.handleSave(event)` — auto-injects `$event` |
+| `@click="handleSave(id)"` | `scope.handleSave(resolvedId)` |
+| `@click="handleSave($event, id)"` | `scope.handleSave(nativeEvent, resolvedId)` |
+
+#### The `_scope` resolution chain
+
+Every name in `@click="handler"` and `{{ Fn(...) }}` resolves through:
+
+```
+1. result._scope[name]       ← explicit scope object (Pattern B)
+2. result._context[name]     ← data context (fallback)
+3. component instance[name]  ← CE methods (Pattern A, auto by vrComponent)
+```
+
+**Pattern A (vrComponent):** `vrComponent` sets `_scope = this` automatically.
+Component methods resolve in step 1. Zero extra work.
+
+**Pattern B (Functional):** one explicit line:
+```js
+result._scope = { handleSave, TodoList };
+```
+
+**Pattern C (ext. HTML):** methods on the CE class resolve via step 1 (auto).
+Functions passed from parent go in `_context`:
+```js
+context() {
+  return { todos: store.state.todos, TodoList };
+}
+```
+
+#### Why not automatic closure resolution?
+
+Tagged template literals receive only **string parts**. The function names
+inside `"handleSave"` are not linked to JavaScript closure scope — there
+is no API to enumerate closure variables at runtime.
+
+Solutions considered:
+- `eval()` — breaks CSP, blocked in strict mode ❌
+- Babel plugin — adds build step, violates zero-dep ❌
+- **Explicit `_scope` / `_context`** — verbose but reliable ✅
+
+---
+
+### 3. Attribute Binding
+
+| Syntax | Type | Example |
+|--------|------|---------|
+| `attr="{{ expr }}"` | HTML attribute | `<div class="{{ cls }}">` |
+| `attr="{{ expr }}"` | Boolean-ish | `<details open="{{ isOpen }}">` |
+| `.prop="{{ expr }}"` | **DOM property** | `<input .value="{{ name }}">` |
+
+Property binding (`.value`, `.checked`, `.disabled`, `.scrollTop`)
+sets the DOM property directly instead of `setAttribute()`.
+
+---
+
+### 4. Loops (`<for>`)
+
+```html
+<for each="item in items">
+  ...body...
+</for>
+```
+
+The loop variable (`item`) is available inside the `<for>` body:
+`{{ item.title }}`, `@click="del(item.id)"`. Outside the `<for>` body,
+the variable is undefined.
+
+**Keyed reconciliation:** uses item identity (object reference or
+primitive value) for DOM reuse — add, remove, reorder without
+full re-render.
+
+---
+
+### 5. Conditionals (`<if>` / `<elseif>` / `<else>` / `<switch>`)
+
+```html
+<if condition="expr1">
+  body when expr1 is truthy
+<elseif condition="expr2">
+  body when expr2 is truthy
+<else>
+  fallback body
+</if>
+```
+
+Conditions evaluated IN ORDER. First truthy branch wins.
+
+```html
+<switch expr="status">
+  <case result="active">Active content</case>
+  <case result="pending">Pending content</case>
+  <default>Default content</default>
+</switch>
+```
+
+`<switch>` compares `String(expr)` === `<case result>`.
+
+---
+
+### 6. Component Composition (`{{ FnName(args) }}`)
+
+`{{ FnName(args) }}` calls a function that returns `TemplateResult`.
+The function is resolved through the standard `_scope` chain.
+
+```html
+{{ TodoList(todos) }}  ← calls scope.TodoList(scope.todos)
+```
+
+| Form | Works? | Reason |
+|------|--------|--------|
+| `{{ PatternB(todos) }}` | ✅ | Functional component → `TemplateResult` |
+| `{{ wrapCE(todo) }}` | ✅ | Factory returns `html\`\`` |
+| `<my-ce></my-ce>` | ✅ | Native CE composition via registry |
+| `{{ CEclass(data) }}` | ❌ | CE constructor returns DOM element, not `TemplateResult` |
+
+**To use a CE inside `{{ }}`, wrap it:**
+```js
+function TodoItemWrap(todo) {
+  return html`<todo-item data-id="{{ todo.id }}"></todo-item>`;
+}
+```
+
+#### Nesting example
+
+```
+Pattern A (CE + vrComponent)
+  └── {{ PatternB(todos) }}    ← fn call, resolved from _scope
+        └── <pattern-a-ce>     ← native CE, independent lifecycle
+```
+
+---
+
+### 7. Two-Way Binding
+
+```html
+<input .value="{{ name }}" @input="onNameInput($event)">
+```
+
+```js
+const _scope = {
+  onNameInput: (e) => { store.state.name = e.target.value; },
+};
+```
+
+---
+
 ## Store Architecture
 
 ### What it is
