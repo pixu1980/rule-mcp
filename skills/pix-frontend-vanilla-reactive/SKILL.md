@@ -118,7 +118,7 @@ store.snapshot()         // Deep-cloned snapshot
 | `_guards.js` | `isObject` | Type guard |
 | `_paths.js` | `toPathArray`, `pathToString` | Path utilities |
 
-Full source: `examples/src/core/store/`
+Full source: `core/store/`
 
 ---
 
@@ -313,7 +313,7 @@ render(result, root);
 | `_property-part.js` | PropertyPart (`.value="{{ }}"`) |
 | `_range.js` | `clearRange`, `moveRangeBefore` |
 
-Full source: `examples/src/core/template-engine/`
+Full source: `core/template-engine/`
 
 ---
 

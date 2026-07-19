@@ -1,6 +1,6 @@
 # pix-vanilla-reactive — Template Engine Capabilities
 
-> Reference: `skills/pix-frontend-vanilla-reactive/examples/src/core/`
+> Reference: `skills/pix-frontend-vanilla-reactive/core/`
 > Living document — update as the engine evolves.
 
 ---

@@ -2,7 +2,7 @@
 //  Shared store — vr-component example
 //  ═══════════════════════════════════════════════════════════════════════════════
 
-import { Store } from '../../src/core/index.js';
+import { Store } from '../../../core/index.js';
 
 /** Shared counter store. Mutations auto-fire store.tick for reactivity. */
 export const store = new Store({ count: 0 });

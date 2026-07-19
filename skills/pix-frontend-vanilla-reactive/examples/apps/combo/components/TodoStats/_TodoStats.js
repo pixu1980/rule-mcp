@@ -5,7 +5,7 @@
 //  Values come from the rendering context (set by parent).
 //  ═══════════════════════════════════════════════════════════════════════════════
 
-import { html } from '../../../src/core/index.js';
+import { html } from '../../../../../core/index.js';
 
 /**
  * Renders a compact summary line from a todos array.

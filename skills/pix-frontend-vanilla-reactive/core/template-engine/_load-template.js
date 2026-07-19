@@ -6,7 +6,7 @@
 //    render(ctx) { const r = TPL; r._context = ctx; r._scope = this; return r; }
 //  ═══════════════════════════════════════════════════════════════════════════════
 
-import { html } from '../template-engine/index.js';
+import { html } from './index.js';
 
 /**
  * Fetch an external .template.html file and parse it into a TemplateResult.

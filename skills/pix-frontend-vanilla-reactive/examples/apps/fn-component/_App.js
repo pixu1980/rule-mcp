@@ -4,7 +4,7 @@
 //  Mounts the reactive effect. Context + scope passed to render().
 //  ═══════════════════════════════════════════════════════════════════════════════
 
-import { effect, render } from '../../src/core/index.js';
+import { effect, render } from '../../../core/index.js';
 import { store, addItem, removeItem } from './_store.js';
 import { ItemList } from './components/ItemList/index.js';
 
