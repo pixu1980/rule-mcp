@@ -2,6 +2,7 @@
 //  Core — unified exports
 // ═══════════════════════════════════════════════════════════════════════════════
 
+'use strict';
 export {
   StateSignal,
   ComputedSignal,

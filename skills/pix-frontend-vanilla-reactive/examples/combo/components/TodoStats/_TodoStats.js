@@ -5,6 +5,7 @@
 //  Values come from the rendering context (set by parent).
 //  ═══════════════════════════════════════════════════════════════════════════════
 
+'use strict';
 import { html } from '../../../../core/index.js';
 
 /**

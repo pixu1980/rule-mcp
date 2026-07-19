@@ -2,6 +2,7 @@
 //  PART 3 — Filter system + built-in filters
 // ═══════════════════════════════════════════════════════════════════════════════
 
+'use strict';
 export const FILTERS = {};
 export function registerFilter(name, fn) { FILTERS[name] = fn; }
 

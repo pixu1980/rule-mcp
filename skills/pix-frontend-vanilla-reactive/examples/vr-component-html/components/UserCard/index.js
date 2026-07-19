@@ -2,4 +2,5 @@
 //  Barrel — UserCard component
 //  ═══════════════════════════════════════════════════════════════════════════════
 
+'use strict';
 export { UserCard } from './_UserCard.js';

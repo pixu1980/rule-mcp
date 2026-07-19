@@ -2,6 +2,7 @@
 //  PART 3c — ForPart (<for each="item in items" [render=${Fn}]>)
 // ═══════════════════════════════════════════════════════════════════════════════
 
+'use strict';
 import { evaluateExpression, parseExpression } from '../template-engine/_expression-parser.js';
 import { isSignalLike } from '../signals/index.js';
 import { isRangeBeforeReference, moveRangeBefore, clearRange } from './_range.js';

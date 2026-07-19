@@ -23,6 +23,7 @@
 //    }
 //  ═══════════════════════════════════════════════════════════════════════════════
 
+'use strict';
 import { Signal, effect, render, loadCSS } from '../index.js';
 
 /**

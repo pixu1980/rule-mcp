@@ -2,6 +2,7 @@
 //  Store — cloning utilities
 // ═══════════════════════════════════════════════════════════════════════════════
 
+'use strict';
 import { isObject } from './_guards.js';
 
 export function clonePlainValue(value, seen = new WeakMap()) {

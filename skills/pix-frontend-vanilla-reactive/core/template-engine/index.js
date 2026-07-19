@@ -2,6 +2,7 @@
 //  Template Engine public API
 // ═══════════════════════════════════════════════════════════════════════════════
 
+'use strict';
 export { html } from './_template-helpers.js';
 export { loadTemplate } from './_load-template.js';
 export { loadCSS } from './_load-css.js';

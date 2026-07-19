@@ -5,6 +5,7 @@
 //  They can also be used standalone for direct DOM manipulation.
 //  ═══════════════════════════════════════════════════════════════════════════════
 
+'use strict';
 export {
   Part,
   AttributePart,

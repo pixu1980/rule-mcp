@@ -4,6 +4,7 @@
 //  Handles text nodes, document fragments, and nested TemplateInstances.
 //  ═══════════════════════════════════════════════════════════════════════════════
 
+'use strict';
 import { Part } from './_part.js';
 import { isSignalLike } from '../signals/index.js';
 import { normalizeExprValue, clearRange, isRangeBeforeReference, moveRangeBefore } from './_range.js';

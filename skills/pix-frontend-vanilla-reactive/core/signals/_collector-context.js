@@ -2,6 +2,7 @@
 //  PART 0 — Collector Context
 // ═══════════════════════════════════════════════════════════════════════════════
 
+'use strict';
 const collectorStack = [];
 export function getCurrentCollector() { return collectorStack[collectorStack.length - 1]; }
 export function pushCollector(c) { collectorStack.push(c); }

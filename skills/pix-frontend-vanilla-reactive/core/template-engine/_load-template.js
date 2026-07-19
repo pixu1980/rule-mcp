@@ -6,6 +6,7 @@
 //    render(ctx) { const r = TPL; r._context = ctx; r._scope = this; return r; }
 //  ═══════════════════════════════════════════════════════════════════════════════
 
+'use strict';
 import { html } from './index.js';
 
 /**

@@ -8,6 +8,7 @@
 //  Pattern B:   render(html\`\`, root, { items }, { addItem });
 //  ═══════════════════════════════════════════════════════════════════════════════
 
+'use strict';
 import { ChildNodePart } from '../dom-parts/_child-node-part.js';
 
 /**

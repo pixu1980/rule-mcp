@@ -4,6 +4,7 @@
 //  Resolves handler names via _scope → _context → component instance.
 //  ═══════════════════════════════════════════════════════════════════════════════
 
+'use strict';
 import { evaluateExpression } from '../template-engine/_expression-parser.js';
 
 /**
