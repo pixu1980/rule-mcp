@@ -64,21 +64,8 @@ No manual `tickState`, no `window.addEventListener`, no `store.tick.set()` —
 all automatic. Just `new Store()` and the component is reactive.
 ```
 
-Boilerplate reduction: use `withContext` and `compose` to skip the
-repetitive `result._context = …; result._scope = …; return result;`:
-
-| Helper | Purpose |
-|--------|---------|
-| `withContext(tpl, ctx, scope)` | Attach context + scope to any TemplateResult |
-| `compose(tpl, data, handlers)` | Shorthand for `html\`\`` + context + scope |
-
-```js
-// Pattern A/C: render() → 4 lines to 1
-render(ctx) { return withContext(TEMPLATE, ctx, this); }
-
-// Pattern B: function return → 5 lines to 1
-return compose(html`<button @click="fn">{{ x }}</button>`, ctx, { fn });
-```
+**Pattern C simplification:** pass `template:` in vrComponent options —
+no `render()` method needed (see §5C).
 
 **Serve** via `pnpm dev` (Vite), `npx serve`, o qualsiasi HTTP server.
 I moduli ES (`type="module"`) NON funzionano con `file://`.
@@ -88,7 +75,7 @@ I moduli ES (`type="module"`) NON funzionano con `file://`.
 ## Architecture Overview
 
 ```
-Store (Proxy)  →  tickState (Signal bridge)  →  Signals (State/Computed)
+Store (Proxy)  →  store.tick (auto-created Signal)  →  Signals (State/Computed)
   →  EffectCollector  →  Scheduler (microtask)  →  Template Engine  →  DOM
 ```
 
@@ -118,7 +105,7 @@ store.snapshot()         // Deep-cloned snapshot
 
 1. **Mutate directly** on `store.state`: `store.state.todos[0].title = "x"` — Proxy traps handle change events.
 2. **Replace arrays/objects** immutably: `store.state.todos = [...store.state.todos, newTodo]`.
-3. **`store.replace()`** doesn't trigger per-field traps — bump tickState manually after.
+3. **`store.replace()`** triggers a single change event (auto-tick fires).
 4. **Never pass raw proxy references** outside the store. Use `deepClone` for exports.
 5. **Change events** emit `store:change` CustomEvent with `{ path, oldValue, newValue }`.
 
@@ -210,17 +197,18 @@ const renderContext = new Signal.Computed(() => {
 const store = new Store(data, { autoTick: false });
 ```
 
-### Manual tickState (advanced)
+### Store is the truth, signals are the notification mechanism
+
+Every computed that reads `store.state.X` MUST also read `store.tick.get()
+{ store.tick.get(); return store.state.count; }
+` to re-evaluate on store changes.
 
 ```js
-const tickState = new Signal.State(0, { equals: () => false });
-window.addEventListener('store:change', () => tickState.set(performance.now()));
+// WRONG — won't re-evaluate on store changes:
+const myComputed = new Signal.Computed(() => store.state.todos.length);
+// RIGHT:
+const myComputed = new Signal.Computed(() => { store.tick.get(); return store.state.todos.length; });
 ```
-
-### Why This Works
-
-- **Store is the truth**, signals are the notification mechanism.
-- Every computed that reads `store.state.X` MUST also read a tickState.
 - Computed signals still cache — if value didn't change, downstream not invalidated.
 - For large apps (>10k reactive nodes), consider path-based selective invalidation.
 
@@ -535,33 +523,15 @@ Custom Elements are composed via HTML tags, NOT `{{ }}`:
 // 1. Store (auto-creates store.tick for reactivity)
 const store = new Store({ title: 'Hello', todos: [] });
 
-// 2. Register filters
+// 2. Register filters (optional)
 registerFilter('upper', v => String(v).toUpperCase());
 
-// 3. Load component CSS (top-level await)
-const sheet = new CSSStyleSheet();
-sheet.replaceSync(await (await fetch(new URL('./_App.css', import.meta.url))).text());
+// 3. Define components — vrComponent handles CSS, context, effect, render
+//    No manual tickState, no effect(), no store.tick.set() needed.
 
-// 4. Define components with static {} blocks
-
-// 5. Create render context (ComputedSignal) — note store.tick.get()
-const renderContext = new Signal.Computed(() => {
-  store.tick.get();   // subscribe to store changes
-  return { title: store.state.title, todos: store.state.todos };
-});
-
-// 6. Mount effect
-effect(() => {
-  const ctx = renderContext.get();
-  const result = App.render(ctx);
-  result._context = ctx;
-  result._scope = this;   // or: { handleSave }
-  render(result, root);
-});
-
-// 7. Initial render kick (store.tick auto-fires on subsequent changes)
-store.tick.set(performance.now());
 ```
+
+vrComponent resolves: `context()` → `render()` → DOM (all reactive via store.tick).
 
 ---
 
@@ -672,7 +642,7 @@ Key assertions enforced by guardrails engine:
 - **semantic-html**: No `<div>` where semantic element exists
 - **external-css**: CSS via fetch → CSSStyleSheet.replaceSync → adoptedStyleSheets
 - **store-proxy**: Store uses Proxy with `store:change` events
-- **tickstate-bridge**: Computed signals read `tickState.get()`
+- **store-tick**: Computed signals read `store.tick.get()`
 - **data-part**: Child elements use `data-part="role"` attributes
 - **template-syntax**: `{{ expr }}` for data only (NO `${}`)
 - **no-dollar-braces**: Templates must NOT contain `${}`
@@ -729,22 +699,24 @@ export const validators = {
 
 ```javascript
 import { vrComponent, html, Store } from '../core/index.js';
-import { validators } from './validation.js';
 
 const store = new Store({ email: '', name: '', errors: null, isSubmitting: false });
-const tickState = new Signal.State(0, { equals: () => false });
-window.addEventListener('store:change', () => tickState.set(performance.now()));
+// store.tick auto-created — no manual tickState needed
+
+// Validators (inline — no external dependency)
+const required = v => v?.trim()?.length > 0 ? null : 'Required';
+const email = v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v) ? null : 'Invalid email';
 
 class ContactForm extends HTMLElement {
   static { vrComponent(this, { tag: 'contact-form', css: import.meta.url }); }
 
-  handleSubmit($event, ctx) {
+  handleSubmit($event) {
     $event.preventDefault();
     const data = { email: store.state.email, name: store.state.name };
     const errors = {};
-    if (validators.required(data.email)) errors.email = validators.required(data.email);
-    else if (validators.email(data.email)) errors.email = validators.email(data.email);
-    if (validators.required(data.name)) errors.name = validators.required(data.name);
+    if (required(data.email)) errors.email = required(data.email);
+    else if (email(data.email)) errors.email = email(data.email);
+    if (required(data.name)) errors.name = required(data.name);
     if (Object.keys(errors).length) { store.state.errors = errors; return; }
     store.state.isSubmitting = true;
     fetch('/api/contact', { method: 'POST', body: JSON.stringify(data) })
@@ -763,7 +735,7 @@ class ContactForm extends HTMLElement {
 
   render(ctx) {
     return html`
-      <form @submit="handleSubmit($event, ctx)" data-part="form" novalidate>
+      <form @submit="handleSubmit($event)" data-part="form" novalidate>
         <label data-part="field">
           <span data-part="label">Email</span>
           <input .value="{{ email }}" @input="handleEmailInput($event)" type="email" data-part="input" />
