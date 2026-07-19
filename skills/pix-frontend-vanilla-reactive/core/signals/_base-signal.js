@@ -26,7 +26,9 @@ export class BaseSignal {
   track() {
     const c = getCurrentCollector();
 
-    if (c) { c.addDependency(this); }
+    if (c) {
+      c.addDependency(this);
+    }
   }
 
   notify() {

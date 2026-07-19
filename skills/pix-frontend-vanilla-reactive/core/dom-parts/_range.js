@@ -6,20 +6,43 @@
 
 export function clearRange(start, end) {
   let c = start.nextSibling;
-  while (c && c !== end) { const n = c.nextSibling; c.remove(); c = n; }
+  while (c && c !== end) {
+    const n = c.nextSibling;
+    c.remove();
+    c = n;
+  }
 }
 
 export function moveRangeBefore(start, end, ref) {
   const f = document.createDocumentFragment();
 
   let c = start;
-  while (c) { const n = c.nextSibling; f.append(c); if (c === end) { break; } c = n; }
+  while (c) {
+    const n = c.nextSibling;
+    f.append(c);
+
+    if (c === end) {
+      break;
+    }
+
+    c = n;
+  }
   ref.parentNode.insertBefore(f, ref);
 }
 
 export function isRangeBeforeReference(start, end, ref) {
   let c = start;
-  while (c) { if (c === ref) { return false; } if (c === end) { return c.nextSibling === ref; } c = c.nextSibling; }
+  while (c) {
+    if (c === ref) {
+      return false;
+    }
+
+    if (c === end) {
+      return c.nextSibling === ref;
+    }
+
+    c = c.nextSibling;
+  }
 
   return false;
 }

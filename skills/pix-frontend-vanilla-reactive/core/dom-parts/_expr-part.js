@@ -44,14 +44,26 @@ export class ExprPart {
 
     let value = evaluateExpression(parsedExpr, ctx, scope);
 
-    if (isSignalLike(value)) { this.bindSignal(value); return; }
+    if (isSignalLike(value)) {
+      this.bindSignal(value);
+
+      return;
+    }
+
+
     this.commit(value, hasRaw);
   }
 
   bindSignal(sig) {
     this.disposeSignal();
     this.signalCleanup = sig.subscribe(() => {
-      if (!this.start.isConnected) { this.disposeSignal(); return; }
+      if (!this.start.isConnected) {
+        this.disposeSignal();
+
+        return;
+      }
+
+
       this.commit(sig.get(), this.hasRaw());
     });
     this.commit(sig.get(), this.hasRaw());
@@ -64,7 +76,10 @@ export class ExprPart {
   }
 
   disposeSignal() {
-    if (this.signalCleanup) { this.signalCleanup(); this.signalCleanup = null; }
+    if (this.signalCleanup) {
+      this.signalCleanup();
+      this.signalCleanup = null;
+    }
   }
 
   /**

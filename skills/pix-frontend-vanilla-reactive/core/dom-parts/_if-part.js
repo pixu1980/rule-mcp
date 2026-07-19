@@ -159,7 +159,9 @@ export class IfPart {
   renderBranch(idx) {
     const body = this.bodies[idx];
 
-    if (!body) { return; }
+    if (!body) {
+      return;
+    }
 
     this._contentStart = document.createComment('if:cs');
     this._contentEnd = document.createComment('if:ce');
@@ -242,7 +244,9 @@ export class SwitchPart {
     // No case matched → use default body (stored at index = cases.length)
     const bodyIdx = activeIdx >= 0 ? activeIdx : this.cases.length;
 
-    if (bodyIdx === this._activeCase) { return; }
+    if (bodyIdx === this._activeCase) {
+      return;
+    }
     this.clear();
     this.renderBody(bodyIdx);
     this._activeCase = bodyIdx;
@@ -256,7 +260,9 @@ export class SwitchPart {
       body = this.defaultBody;
     }
 
-    if (!body) { return; }
+    if (!body) {
+      return;
+    }
 
     this._contentStart = document.createComment('switch:cs');
     this._contentEnd = document.createComment('switch:ce');

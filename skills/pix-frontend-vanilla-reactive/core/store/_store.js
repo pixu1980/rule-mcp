@@ -90,7 +90,9 @@ export class Store {
       detail: { path: toPathArray(path).join('.') },
     }));
     // Notify reactivity system
-    if (this.tick) { this.tick.set(performance.now()); }
+    if (this.tick) {
+    this.tick.set(performance.now());
+  }
   }
 
   get(path) {

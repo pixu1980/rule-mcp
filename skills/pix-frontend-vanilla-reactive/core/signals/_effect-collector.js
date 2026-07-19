@@ -35,7 +35,9 @@ export class EffectCollector {
   }
 
   run() {
-    if (!this.active) { return; }
+    if (!this.active) {
+      return;
+    }
     this.cleanup();
     withCollector(this, () => {
       this.fn();
