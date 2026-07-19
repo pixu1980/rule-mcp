@@ -1,4 +1,4 @@
-# Installer lossless e idempotente
+# 014 — Installer lossless e idempotente
 
 - **Status:** accepted
 - **Date:** 2026-07-19

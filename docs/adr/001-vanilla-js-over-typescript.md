@@ -1,4 +1,4 @@
-# 007: Vanilla JS over TypeScript
+# 001 — Vanilla JS over TypeScript
 
 **Status**: Accepted  
 **Date**: 2026-06-20  

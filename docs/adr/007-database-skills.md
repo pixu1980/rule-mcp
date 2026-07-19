@@ -1,4 +1,4 @@
-# 004: Database Skills
+# 007 — Database Skills
 
 - **Date**: 2026-07-10
 - **Status**: accepted
