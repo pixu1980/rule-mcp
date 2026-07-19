@@ -20,6 +20,13 @@
     "web-components"
   ],
   "license": "MIT",
+  "main": "./src/extension.js",
+  "browser": "./src/extension.js",
+  "activationEvents": [
+    "onLanguage:pix-template-html",
+    "onLanguage:javascript",
+    "onLanguage:typescript"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/pixu1980/pix-galaxy-mcp",
