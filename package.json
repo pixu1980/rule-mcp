@@ -34,7 +34,7 @@
     "audit": "pnpm audit --prod",
     "ci": "node test/smoke.mjs && node test/ai.test.mjs && node test/detector.test.mjs && node test/framework-routing.test.mjs && node test/skills-docs.test.mjs && node test/docs-architect.test.mjs && node test/docs-scan.mjs && node test/daemon-wrapper.test.mjs && node test/doctor-ui.test.mjs && node test/cli-tui.test.mjs && pnpm test:installer",
     "prebuild": "node ./scripts/embed-skills.mjs",
-    "build": "node ./scripts/package.mjs",
+    "build": "bash ./scripts/package.sh",
     "prepublishOnly": "node ./scripts/embed-skills.mjs"
   },
   "engines": {
