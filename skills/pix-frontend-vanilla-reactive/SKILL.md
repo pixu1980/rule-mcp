@@ -546,7 +546,6 @@ src/
     signals/                            ← Signal system (State, Computed, effect)
     store/                              ← Proxy Store (auto-creates store.tick)
     template-engine/                    ← html, render, getTemplate, loadTemplate
-      _with-context.js                  ← withContext(), compose() helpers
       _load-template.js                 ← loadTemplate() helper
     dom-parts/                          ← DOMPart classes (EventPart, ForPart, …)
     decorator/
