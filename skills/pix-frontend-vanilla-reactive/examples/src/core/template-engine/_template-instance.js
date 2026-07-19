@@ -14,8 +14,9 @@ import { ExprPart } from '../dom-parts/_expr-part.js';
 import { ForPart } from '../dom-parts/_for-part.js';
 import { IfPart, SwitchPart } from '../dom-parts/_if-part.js';
 
-// Resolve circular dependency: ChildNodePart needs TemplateInstance
+// Resolve circular dependency: ChildNodePart + ExprPart need TemplateInstance
 import { _setTemplateInstance } from '../dom-parts/_child-node-part.js';
+import { _setTemplateInstance as _setExprTemplateInstance } from '../dom-parts/_expr-part.js';
 
 const templateCache = new WeakMap();
 const EXPR_MARKER_RE = /^expr:(\d+)$/;
@@ -459,12 +460,9 @@ export class TemplateInstance {
     }
   }
 
-  /**
-   * Update only ${} values (no-op — not supported).
-   */
   update(values) {}
-  // (kept for compatibility with any code still passing values)
 }
 
-// Resolve circular dep: register TemplateInstance with ChildNodePart
+// Resolve circular dep: register TemplateInstance with ChildNodePart + ExprPart
 _setTemplateInstance(TemplateInstance);
+_setExprTemplateInstance(TemplateInstance);

@@ -6,10 +6,12 @@
 //  Otherwise falls back to textContent (escaped) or raw.}
 // ═══════════════════════════════════════════════════════════════════════════════
 
-import { evaluateExpression } from './_expression-parser.js';
+import { evaluateExpression } from '../template-engine/_expression-parser.js';
 import { isSignalLike } from '../signals/index.js';
 import { clearRange, normalizeExprValue } from './_range.js';
-import { TemplateInstance } from './_template-instance.js';
+// Lazy import to handle circular dependency (TemplateInstance → ExprPart → TemplateInstance)
+let TemplateInstance;
+export function _setTemplateInstance(cls) { TemplateInstance = cls; }
 
 export class ExprPart {
   constructor(start, end) {
@@ -86,11 +88,6 @@ export class ExprPart {
         this.start.parentNode.insertBefore(instance.fragment, this.end);
       }
       return;
-    }
-
-    // Signal subscribe callback
-    if (value && typeof value === 'object' && value.kind === 'template-result') {
-      return; // handled above
     }
 
     // Standard text node

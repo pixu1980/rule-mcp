@@ -61,6 +61,8 @@ export function getFromPath(obj, path) {
   let cur = obj;
   for (const key of path.replace(/\[(\d+)\]/g, '.$1').split('.')) {
     if (cur == null) return undefined;
+    // Block prototype chain access
+    if (key === '__proto__' || key === 'constructor' || key === 'prototype') return undefined;
     cur = cur[key];
   }
   return cur;
