@@ -4,11 +4,11 @@
 //  Just html`` — vrComponent handles _context and _scope automatically.
 //  ═══════════════════════════════════════════════════════════════════════════════
 
-'use strict';
+"use strict";
 
-import { vrComponent, html } from '../../core/index.js';
-import { store, addTodo, toggleTodo } from './_store.js';
-import { TodoStats } from './components/TodoStats/index.js';
+import { vrComponent, html } from "../../core/index.js";
+import { store, addTodo, toggleTodo } from "./_store.js";
+import { TodoStats } from "./components/TodoStats/index.js";
 import './components/TodoHeader/index.js';
 
 export class TodoApp extends HTMLElement {
@@ -17,23 +17,26 @@ export class TodoApp extends HTMLElement {
   addFromForm($event) {
     $event.preventDefault();
     const input = $event.target.querySelector('input');
+
     addTodo(input?.value);
     input.value = '';
   }
-
 
   toggle(todo) {
 
     toggleTodo(todo.id);
 
   }
+
   get visibleTodos() {
     const f = store.state.filter;
+
     return f === 'all' ? store.state.todos
-         : f === 'done' ? store.state.todos.filter(t => t.done)
+         : f === 'done' ? store.state.todos.filter(t => {
+    return t.done;
+  })
          : store.state.todos.filter(t => !t.done);
   }
-
 
   context() { return { visibleTodos: this.visibleTodos, TodoStats }; }
 

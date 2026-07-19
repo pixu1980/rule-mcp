@@ -2,7 +2,7 @@
 //  Bootstrap — imports _App (which renders into document.body by default)
 //  ═══════════════════════════════════════════════════════════════════════════════
 
-'use strict';
+"use strict";
 
 import './_App.js';
 

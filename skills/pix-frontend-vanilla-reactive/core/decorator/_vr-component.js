@@ -23,9 +23,9 @@
 //    }
 //  ═══════════════════════════════════════════════════════════════════════════════
 
-'use strict';
+"use strict";
 
-import { Signal, effect, render, loadCSS } from '../index.js';
+import { Signal, effect, render, loadCSS } from "../index.js";
 
 /**
  * Decorator for reactive Custom Elements.
@@ -45,11 +45,11 @@ export function vrComponent(component, opts = {}) {
 
   // ── Validate ────────────────────────────────────────────────
   if (!tag) {
-    throw new Error('vrComponent: tag is required');
+    throw new Error("vrComponent: tag is required");
   }
 
   if (!(component.prototype instanceof HTMLElement)) {
-    throw new Error('vrComponent: class must extend HTMLElement');
+    throw new Error("vrComponent: class must extend HTMLElement");
   }
 
   // ── 1. Register Custom Element ──────────────────────────────
@@ -74,9 +74,13 @@ export function vrComponent(component, opts = {}) {
     }
 
     // context() is optional — defaults to {} if not defined
-    const getContext = (typeof this.context === 'function')
-      ? () => this.context()
-      : () => ({});
+    const getContext = typeof this.context === "function"
+      ? () => {
+          return this.context();
+        }
+      : () => {
+          return {};
+        };
 
     // render() method OR opts.template (Pattern C)
     const renderFn = (typeof this.render === 'function')

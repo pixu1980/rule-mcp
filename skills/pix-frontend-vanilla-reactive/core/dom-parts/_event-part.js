@@ -4,9 +4,9 @@
 //  Resolves handler names via _scope → _context → component instance.
 //  ═══════════════════════════════════════════════════════════════════════════════
 
-'use strict';
+"use strict";
 
-import { evaluateExpression } from '../template-engine/_expression-parser.js';
+import { evaluateExpression } from "../template-engine/_expression-parser.js";
 
 /**
  * EventPart — resolves @event="handler(args)" at render-time.
@@ -53,6 +53,7 @@ export class EventPart {
     // Resolve args eagerly (except $event which is click-time)
     this._resolvedArgs = this.argExprs.map(expr => {
       const raw = expr?.variable || expr?.name || '';
+
       if (raw === '$event') {
         return '$event';
       }  // sentinel for click-time
@@ -79,6 +80,7 @@ export class EventPart {
       if (args.length === 0) {
         args.push(event);
       }
+
       this._resolvedHandler(...args);
     };
 

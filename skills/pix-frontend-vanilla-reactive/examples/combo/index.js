@@ -2,7 +2,7 @@
 //  Bootstrap — imports _App (which defines <todo-app>)
 //  ═══════════════════════════════════════════════════════════════════════════════
 
-'use strict';
+"use strict";
 
 import './_App.js';
 

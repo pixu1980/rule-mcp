@@ -5,32 +5,36 @@
 //  Handler resolution via _scope → _context → component instance.
 //  ═══════════════════════════════════════════════════════════════════════════════
 
-'use strict';
+"use strict";
 
-import { parseExpression, evaluateExpression } from './_expression-parser.js';
-import { ChildNodePart } from '../dom-parts/_child-node-part.js';
-import { AttributePart } from '../dom-parts/_attribute-part.js';
-import { PropertyPart } from '../dom-parts/_property-part.js';
-import { EventPart } from '../dom-parts/_event-part.js';
-import { ExprPart } from '../dom-parts/_expr-part.js';
-import { ForPart } from '../dom-parts/_for-part.js';
-import { IfPart, SwitchPart } from '../dom-parts/_if-part.js';
+import { parseExpression, evaluateExpression } from "./_expression-parser.js";
+import { ChildNodePart } from "../dom-parts/_child-node-part.js";
+import { AttributePart } from "../dom-parts/_attribute-part.js";
+import { PropertyPart } from "../dom-parts/_property-part.js";
+import { EventPart } from "../dom-parts/_event-part.js";
+import { ExprPart } from "../dom-parts/_expr-part.js";
+import { ForPart } from "../dom-parts/_for-part.js";
+import { IfPart, SwitchPart } from "../dom-parts/_if-part.js";
 
 // Resolve circular dependency: ChildNodePart + ExprPart need TemplateInstance
-import { _setTemplateInstance } from '../dom-parts/_child-node-part.js';
-import { _setTemplateInstance as _setExprTemplateInstance } from '../dom-parts/_expr-part.js';
+import { _setTemplateInstance } from "../dom-parts/_child-node-part.js";
+import { _setTemplateInstance as _setExprTemplateInstance } from "../dom-parts/_expr-part.js";
 
 const templateCache = new WeakMap();
+
 const EXPR_MARKER_RE = /^expr:(\d+)$/;
 
 function getNodePath(node, root) {
   const path = [];
+
   let cur = node;
   while (cur && cur !== root) {
     const p = cur.parentNode;
+
     if (!p) {
       break;
     }
+
     let i = 0;
     let c = cur;
     while (c.previousSibling) { c = c.previousSibling; i++; }
@@ -58,6 +62,7 @@ export function getTemplate(strings) {
   if (typeof strings === 'string') {
     key = [strings];
   }
+
   let rec = templateCache.get(key);
   if (rec) {
     return rec;
@@ -68,6 +73,7 @@ export function getTemplate(strings) {
 
   // Step 2: Extract <for>, <if> directive regions
   const directives = [];
+
   let cleanedMarkup = markup;
   let directiveIdCounter = 0;
 
@@ -75,6 +81,7 @@ export function getTemplate(strings) {
     /<for\s+([^>]*)>([\s\S]*?)<\/for>/gi,
     (full, attrs, inner) => {
       const id = directiveIdCounter++;
+
       const eachMatch = attrs.match(/each\s*="([^"]*)"/);
       directives.push({
         kind: 'for', id,
@@ -89,6 +96,7 @@ export function getTemplate(strings) {
     /<if\s+([^>]*)>([\s\S]*?)<\/if>/gi,
     (full, attrs, inner) => {
       const id = directiveIdCounter++;
+
       const condMatch = attrs.match(/condition\s*="([^"]*)"/);
       const condition = condMatch ? condMatch[1] : '';
 
@@ -98,6 +106,7 @@ export function getTemplate(strings) {
 
       // Split on <elseif condition="..."> and <else>
       const branchRe = /<elseif\s+([^>]*)>|<else>|<\/if>/gi;
+
       let lastIdx = 0;
       let branchMatch;
       let branchIdx = 0;
@@ -105,6 +114,7 @@ export function getTemplate(strings) {
       // Collect re-joined matches with their positions
       while ((branchMatch = branchRe.exec(full)) !== null) {
         const segment = inner.slice(lastIdx, branchMatch.index - full.indexOf('>') - 1);
+
         bodies.push(segment);
         lastIdx = branchMatch.index - full.indexOf('>') - 1 + branchMatch[0].length;
 
@@ -113,6 +123,7 @@ export function getTemplate(strings) {
           branchIdx++;
         } else if (branchMatch[0].startsWith('<elseif')) {
           const elseCondMatch = branchMatch[1].match(/condition\s*="([^"]*)"/);
+
           branches.push({ condition: elseCondMatch ? elseCondMatch[1] : '', isElse: false });
           branchIdx++;
         }
@@ -140,19 +151,23 @@ export function getTemplate(strings) {
     /<switch\s+([^>]*)>([\s\S]*?)<\/switch>/gi,
     (full, attrs, inner) => {
       const id = directiveIdCounter++;
+
       const exprMatch = attrs.match(/expr\s*="([^"]*)"/);
       const switchExpr = exprMatch ? exprMatch[1] : '';
 
       // Parse inner into cases
       const cases = [];
+
       let defaultBody = null;
       let lastIdx = 0;
       const caseRe = /<(case)\s+([^>]*)>|<(default)>/gi;
+
       let caseMatch;
 
       while ((caseMatch = caseRe.exec(inner)) !== null) {
         if (caseMatch[1] === 'case') {
           const resultMatch = caseMatch[2].match(/result\s*="([^"]*)"/);
+
           cases.push({
             result: resultMatch ? resultMatch[1] : '',
             body: inner.slice(lastIdx, caseMatch.index),
@@ -177,53 +192,69 @@ export function getTemplate(strings) {
   // Step 3: Extract @event="handler(args)" BEFORE {{ }} replacement
   // Format: @click="handlerName" or @click="handlerName($event, arg1)"
   const clickHandlers = [];
+
   let handlerMarkup = cleanedMarkup;
   const handlerRe = /@([a-zA-Z][\w-]*)="([^"]*)"/gi;
+
   let handlerMatch;
   while ((handlerMatch = handlerRe.exec(cleanedMarkup)) !== null) {
     const fullAttr = handlerMatch[0];
+
     const eventName = handlerMatch[1];
     const valueStr = handlerMatch[2].trim();
 
     // Parse handler: "handleSave" or "handleSave($event, todo.id)" or "handleSave(id)"
     const fnMatch = valueStr.match(/^([a-zA-Z_$][\w$]*)\s*(?:\(([^)]*)\))?\s*$/);
+
     if (fnMatch) {
       const handlerName = fnMatch[1];
+
       let args = [];
       if (fnMatch[2] !== undefined) {
         const argsStr = fnMatch[2].trim();
-        args = argsStr ? argsStr.split(',').map(a => parseExpression(a.trim())) : [];
+
+        args = argsStr ? argsStr.split(',').map(a => {
+    return parseExpression(a.trim());
+  }) : [];
       }
       // else: no parens → args = [] → auto-inject $event at click time
 
       const idx = clickHandlers.length;
+
       clickHandlers.push({ eventName, handlerName, args, raw: valueStr });
       handlerMarkup = handlerMarkup.replace(fullAttr, `data-rule-event="${idx}"`);
     }
   }
+
   cleanedMarkup = handlerMarkup;
 
   // Step 4: Replace {{ expr }} with <!--expr:IDX--> markers
   let exprCounter = 0;
   const allExprMarkers = [];
+
   let processed = '';
   let lastIdx = 0;
   const reExpr = /\{\{([^}]+)\}\}/g;
+
   let mExpr;
   while ((mExpr = reExpr.exec(cleanedMarkup)) !== null) {
     processed += cleanedMarkup.slice(lastIdx, mExpr.index);
     const idx = exprCounter++;
+
     processed += `<!--expr:${idx}-->`;
     allExprMarkers.push({ index: idx, parsedExpr: parseExpression(mExpr[1].trim()) });
     lastIdx = reExpr.lastIndex;
   }
+
   processed += cleanedMarkup.slice(lastIdx);
 
   // Step 5: Parse into DOM template and walk
   const template = document.createElement('template');
+
   template.innerHTML = processed;
 
   const descriptors = [];
+
   const walker = document.createTreeWalker(
     template.content,
     NodeFilter.SHOW_ELEMENT | NodeFilter.SHOW_COMMENT
@@ -233,8 +264,10 @@ export function getTemplate(strings) {
     if (walkNode.nodeType === Node.COMMENT_NODE) {
       // expr marker
       const em = walkNode.data.match(EXPR_MARKER_RE);
+
       if (em) {
         const idx = Number(em[1]);
+
         const info = allExprMarkers.find(e => e.index === idx);
         descriptors.push({
           kind: 'expr', index: idx,
@@ -245,8 +278,10 @@ export function getTemplate(strings) {
       }
       // dir marker
       const dm = walkNode.data.match(/^dir:(\d+)$/);
+
       if (dm) {
         const dirId = Number(dm[1]);
+
         const dir = directives.find(d => d.id === dirId);
         if (dir) {
           const base = {
@@ -254,6 +289,7 @@ export function getTemplate(strings) {
             index: dirId,
             path: getNodePath(walkNode, template.content),
           };
+
           if (dir.kind === 'for') {
             base.itemVar = dir.each
               ? (dir.each.match(/^\s*([a-zA-Z_$][\w$]*)\s+in\s+/)?.[1] || 'item')
@@ -270,19 +306,23 @@ export function getTemplate(strings) {
             base.cases = dir.cases || [];
             base.defaultBody = dir.defaultBody || null;
           }
+
           descriptors.push(base);
         }
+
         continue;
       }
+
       continue;
     }
-
 
     if (walkNode.nodeType === Node.ELEMENT_NODE) {
       // Check for @click handler (stored as data-rule-event marker)
       const handlerId = walkNode.getAttribute('data-rule-event');
+
       if (handlerId !== null) {
         const hIdx = Number(handlerId);
+
         const h = clickHandlers[hIdx];
         if (h) {
           descriptors.push({
@@ -294,18 +334,22 @@ export function getTemplate(strings) {
             argExprs: h.args,
           });
         }
+
         walkNode.removeAttribute('data-rule-event');
       }
 
       // Process remaining attributes
       for (const attr of [...walkNode.attributes]) {
         const attrVal = attr.value;
+
         const rawName = attr.name;
 
         // {{ }} in attribute value
         const exMatch = attrVal.match(/\{\{([^}]+)\}\}/);
+
         if (exMatch) {
           const idx = exprCounter++;
+
           const parsedExpr = parseExpression(exMatch[1].trim());
           let partType = 'attribute', name = rawName;
           if (rawName.startsWith('.')) { partType = 'property'; name = rawName.slice(1); }
@@ -329,6 +373,7 @@ export class TemplateInstance {
   constructor(strings) {
     this.strings = strings;
     const rec = getTemplate(strings);
+
     this.fragment = rec.template.content.cloneNode(true);
     this.exprParts = [];
     this.forParts = [];
@@ -348,6 +393,7 @@ export class TemplateInstance {
         case 'expr': {
           if (node) {
             const s = document.createComment(`start:expr:${descriptor.index}`);
+
             const e = document.createComment(`end:expr:${descriptor.index}`);
             node.replaceWith(s, e);
             this.exprParts.push({
@@ -356,18 +402,21 @@ export class TemplateInstance {
               parsedExpr: descriptor.parsedExpr,
             });
           }
+
           break;
         }
         case 'attrExpr': {
           if (node) {
             node.removeAttribute(descriptor.rawName);
             const partType = descriptor.partType || 'attribute';
+
             let part;
             if (partType === 'property') {
               part = new PropertyPart(node, descriptor.name);
             } else {
               part = new AttributePart(node, descriptor.name);
             }
+
             this.exprParts.push({
               index: descriptor.index,
               exprPart: part,
@@ -375,6 +424,7 @@ export class TemplateInstance {
               isAttr: true,
             });
           }
+
           break;
         }
         case 'handler': {
@@ -385,16 +435,20 @@ export class TemplateInstance {
               descriptor.handlerName,
               descriptor.argExprs,
             );
+
             this.eventParts.push(part);
           }
+
           break;
         }
         case 'for': {
           const s = document.createComment(`for:${descriptor.index}:s`);
+
           const e = document.createComment(`for:${descriptor.index}:e`);
           if (node) {
             node.replaceWith(s, e);
           }
+
           const forPart = new ForPart(
             s, e,
             descriptor.itemVar,
@@ -402,11 +456,13 @@ export class TemplateInstance {
             descriptor.innerTemplate || '',
             null,
           );
+
           this.forParts.push(forPart);
           break;
         }
         case 'if': {
           const s = document.createComment(`if:${descriptor.index}:s`);
+
           const e = document.createComment(`if:${descriptor.index}:e`);
           if (node) {
             node.replaceWith(s, e);
@@ -416,6 +472,7 @@ export class TemplateInstance {
             condition: b.condition ? parseExpression(b.condition) : null,
             isElse: !!b.isElse,
           }));
+
           this.ifParts.push(new IfPart(
             s, e,
             branches,
@@ -425,10 +482,12 @@ export class TemplateInstance {
         }
         case 'switch': {
           const s = document.createComment(`switch:${descriptor.index}:s`);
+
           const e = document.createComment(`switch:${descriptor.index}:e`);
           if (node) {
             node.replaceWith(s, e);
           }
+
           this.switchParts.push(new SwitchPart(
             s, e,
             parseExpression(descriptor.expr || ''),
@@ -459,6 +518,7 @@ export class TemplateInstance {
     for (const { exprPart, parsedExpr, isAttr } of this.exprParts) {
       if (isAttr) {
         const val = evaluateExpression(parsedExpr, context, this._scope);
+
         exprPart.commit(val, parsedExpr.filters &&
           parsedExpr.filters.length > 0 &&
           parsedExpr.filters[parsedExpr.filters.length - 1].name === 'raw');
@@ -486,7 +546,6 @@ export class TemplateInstance {
       ep.bind();
     }
   }
-
 
   update(values) {}
 }

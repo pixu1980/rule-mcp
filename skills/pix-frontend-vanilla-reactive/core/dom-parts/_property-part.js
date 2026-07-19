@@ -2,10 +2,10 @@
 //  PART 3c — PropertyPart
 // ═══════════════════════════════════════════════════════════════════════════════
 
-'use strict';
+"use strict";
 
-import { Part } from './_part.js';
-import { isSignalLike } from '../signals/index.js';
+import { Part } from "./_part.js";
+import { isSignalLike } from "../signals/index.js";
 
 export class PropertyPart extends Part {
   constructor(el, name) {
