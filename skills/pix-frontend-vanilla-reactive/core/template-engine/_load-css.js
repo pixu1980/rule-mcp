@@ -26,6 +26,7 @@ export async function loadCSS(url) {
 
   sheet.replaceSync(text);
   document.adoptedStyleSheets = [...document.adoptedStyleSheets, sheet];
+
   return sheet;
 }
 

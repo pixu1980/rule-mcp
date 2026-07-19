@@ -62,6 +62,7 @@ function renderRawTemplate(templateStr, ctx) {
 
   const tmp = document.createElement('template');
   tmp.innerHTML = html;
+
   return tmp.content.childNodes;
 }
 

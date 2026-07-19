@@ -20,6 +20,7 @@ export function moveRangeBefore(start, end, ref) {
 export function isRangeBeforeReference(start, end, ref) {
   let c = start;
   while (c) { if (c === ref) { return false; } if (c === end) { return c.nextSibling === ref; } c = c.nextSibling; }
+
   return false;
 }
 
@@ -48,8 +49,10 @@ export function normalizeExprValue(value, useRaw) {
     const f = document.createDocumentFragment();
 
     while (t.content.firstChild) f.append(t.content.firstChild);
+
     return f;
   }
+
   return document.createTextNode(String(value));
 }
 

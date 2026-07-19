@@ -90,12 +90,14 @@ export function vrComponent(component, opts = {}) {
             const r = opts.template;
             r._context = ctx;
             r._scope = this;
+
             return r;
           }
         : null;
 
     if (!renderFn) {
       console.warn("vrComponent: <" + tag + '> needs render() method or template option');
+
       return;
     }
 
@@ -147,6 +149,7 @@ async function _loadComponentCSS(css, component) {
         document.adoptedStyleSheets = [...document.adoptedStyleSheets, sheet];
       }
     }
+
     return;
   }
 

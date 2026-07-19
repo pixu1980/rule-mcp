@@ -21,6 +21,7 @@ export async function loadTemplate(metaUrl, relativePath) {
   const url = new URL(relativePath, metaUrl);
 
   const text = await (await fetch(url)).text();
+
   return html(text);
 }
 

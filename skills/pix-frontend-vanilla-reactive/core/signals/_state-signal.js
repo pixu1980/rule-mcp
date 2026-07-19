@@ -19,6 +19,7 @@ export class StateSignal extends BaseSignal {
 
   get() {
     this.track();
+
     return this.value;
   }
 
@@ -30,6 +31,7 @@ export class StateSignal extends BaseSignal {
     if (this.equals(this.value, next)) { return this.value; }
     this.value = next;
     this.notify();
+
     return this.value;
   }
 }

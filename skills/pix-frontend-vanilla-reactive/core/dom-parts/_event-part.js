@@ -57,6 +57,7 @@ export class EventPart {
       if (raw === '$event') {
         return '$event';
       }  // sentinel for click-time
+
       return evaluateExpression(expr, context, scope);
     });
   }
@@ -70,6 +71,7 @@ export class EventPart {
     if (this._listener) return; // already bound
     if (typeof this._resolvedHandler !== 'function') {
       console.warn('vr: handler not found:', this.handlerName);
+
       return;
     }
 

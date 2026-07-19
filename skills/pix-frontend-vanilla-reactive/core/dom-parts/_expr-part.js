@@ -91,6 +91,7 @@ export class ExprPart {
       if (this.start.parentNode) {
         this.start.parentNode.insertBefore(instance.fragment, this.end);
       }
+
       return;
     }
 
