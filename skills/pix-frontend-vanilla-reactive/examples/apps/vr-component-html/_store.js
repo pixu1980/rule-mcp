@@ -4,6 +4,7 @@
 
 import { Store } from '../../src/core/index.js';
 
+/** Shared store with user profile and todo list. */
 export const store = new Store({
   user: { name: 'Alice', role: 'admin' },
   todos: [
@@ -12,6 +13,10 @@ export const store = new Store({
   ],
 });
 
+/**
+ * Toggle a todo's done state by id.
+ * @param {number|string} id - Todo identifier
+ */
 export const toggleTodo = (id) => {
   store.state.todos = store.state.todos.map(t =>
     t.id === id ? { ...t, done: !t.done } : t

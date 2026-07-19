@@ -1,7 +1,8 @@
 // ═══════════════════════════════════════════════════════════════════════════════
-//  App — Functional Component (list manager)
+//  App — Functional Component bootstrap
 //  ═══════════════════════════════════════════════════════════════════════════════
-//  Mount effect: store.tick → render ItemList into DOM.
+//  Mounts the reactive effect: store.tick → render ItemList into #root.
+//  No exports — imported by index.js for its side effect.
 //  ═══════════════════════════════════════════════════════════════════════════════
 
 import { effect, render } from '../../src/core/index.js';

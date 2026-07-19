@@ -1,25 +1,31 @@
 // ═══════════════════════════════════════════════════════════════════════════════
 //  Functional Component: ItemList — fn-component example
 //  ═══════════════════════════════════════════════════════════════════════════════
-//  Pure function returning TemplateResult. No lifecycle.
+//  Pure function returning TemplateResult. No lifecycle, no HTMLElement.
+//  Composable via {{ ItemList(ctx) }}.
 //  ═══════════════════════════════════════════════════════════════════════════════
 
 import { html, compose } from '../../src/core/index.js';
 import { addItem, removeItem } from './_store.js';
 
 /**
- * Renders a list of items with add/remove controls.
+ * Render an editable list of text items.
  * @param {object} ctx - { items: string[] }
  * @returns {TemplateResult}
  */
 export function ItemList(ctx) {
   return compose(html`
-    <section>
+    <section data-part="list">
       <for each="item in ctx.items">
-        <article><span>{{ item }}</span><button @click="removeItem(_index)">✕</button></article>
+        <article data-part="row">
+          <span data-part="text">{{ item }}</span>
+          <button data-part="remove" @click="removeItem(_index)">✕</button>
+        </article>
       </for>
-      <if condition="ctx.items.length === 0"><p>List is empty.</p></if>
-      <button @click="addItem()">+ Add</button>
+      <if condition="ctx.items.length === 0">
+        <p data-part="empty">List is empty.</p>
+      </if>
+      <button data-part="add" @click="addItem()">+ Add</button>
     </section>
   `, ctx, { addItem, removeItem });
 }
