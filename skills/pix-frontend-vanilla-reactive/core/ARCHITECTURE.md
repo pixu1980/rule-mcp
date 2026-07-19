@@ -32,6 +32,7 @@ core/
 | `Signal`, `effect` | Signal primitives (State, Computed, effect) |
 | `Store` | Proxy-based state container (auto-creates store.tick) |
 | `loadTemplate` | Fetch + parse external `.template.html` file |
+| `loadCSS` | Fetch + adopt CSS file via CSSStyleSheet (Pattern B) |
 | `TemplateInstance` | Compiled template (one per unique `html`\`\``) |
 | `ChildNodePart` | Text / template / iterable rendering |
 | `ExprPart` | `{{ }}` interpolation |
