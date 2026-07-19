@@ -12,7 +12,7 @@
  *   html`<h1>{{ title }}</h1>`
  *   → { kind: 'template-result', strings: ['<h1>{{ title }}</h1>'], values: [] }
  *
- * As regular function (Pattern C, from .template.html string):
+ * As regular function (pattern CustomElement vrComponent with External HTMLustomElement vrComponent with External HTML, from .template.html string):
  *   html('<h1>{{ title }}</h1>')
  *   → { kind: 'template-result', strings: ['<h1>{{ title }}</h1>'], values: [] }
  */

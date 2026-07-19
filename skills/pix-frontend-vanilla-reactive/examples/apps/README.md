@@ -1,6 +1,6 @@
 # Example Apps — pix-vanilla-reactive
 
-Four standalone apps demonstrating the 3 component patterns and their composition.
+Four standalone apps demonstrating the 2 component patterns + 1 variant.
 
 ## Quick Start
 
@@ -9,17 +9,17 @@ ES modules don't work with `file://`.
 
 ```bash
 npx serve .
-# then open http://localhost:3000/apps/a-vrComponent/
+# then open http://localhost:3000/apps/vr-component/
 ```
 
 ## Apps
 
 | App | Pattern | What it shows |
 |-----|---------|---------------|
-| `a-vrComponent/` | **A** only | `vrComponent()` decorator, methods as `@click` handlers, `context()` + `render()` |
-| `b-functional/` | **B** only | Plain functions returning `html\`\``, `result._scope` + `result._context`, mounted via `effect()` |
-| `c-external-html/` | **C** only | External `.template.html` loaded via `fetch`, `html(str)`, `<switch>`, `<if>/<else>` |
-| `combo/` | **A + B + C** | `<todo-app>` (A) uses `{{ TodoStats(ctx) }}` (B) and `<todo-header>` (C). `<for>` loop in A. |
+| `vr-component/` | **CustomElement vrComponent** | `vrComponent()` decorator, methods as `@click` handlers, `context()` + `render()` |
+| `fn-component/` | **Functional Component** | Plain functions returning `html\`\``, `result._scope` + `result._context`, mounted via `effect()` |
+| `vr-component-with-html/` | **CustomElement vrComponent with External HTML** | External `.template.html` loaded via `fetch`, `html(str)`, `<switch>`, `<if>/<else>` |
+| `combo/` | **All mixed** | `<todo-app>` (CustomElement vrComponent) uses `{{ TodoStats(ctx) }}` (Functional Component) and `<todo-header>` (CustomElement vrComponent with External HTML) |
 
 ## Shared Core
 

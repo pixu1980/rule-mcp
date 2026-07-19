@@ -16,10 +16,10 @@ Zero framework dependencies. No build step required.
 
 Four example apps in `examples/apps/`: each shows one pattern or a combo.
 ```
-apps/a-vrComponent/        ← Pattern A: CE + vrComponent (counter)
-apps/b-functional/         ← Pattern B: functional component (list)
-apps/c-external-html/     ← Pattern C: CE + external .template.html
-apps/combo/                ← All 3 patterns mixed together
+apps/vr-component/        ← Pattern CustomElement vrComponent: CE + vrComponent (counter)
+apps/fn-component/         ← Pattern Functional Component: functional component (list)
+apps/vr-component-with-html/     ← Pattern CustomElement vrComponent with External HTML: CE + external .template.html
+apps/combo/                ← Both patterns mixed together
 ```
 Serve with any HTTP server and open each `index.html`.
 
@@ -58,7 +58,7 @@ window.addEventListener('store:change', () => tickState.set(performance.now()));
 // 3. Template filter
 registerFilter('upper', v => String(v).toUpperCase());
 
-// 4. Component (Pattern A — see §5)
+// 4. Component (Pattern CustomElement vrComponent — see §5)
 class App extends HTMLElement {
   static { vrComponent(this, { tag: 'app-root', css: import.meta.url }); }
   context() { return { title: store.state.title }; }
@@ -212,8 +212,8 @@ Two-way binding via `@input` + `.value`.
 
 > **What is `_scope`?** Every `@click="handler"` and `{{ FnName(args) }}`
 > needs to find the function. `result._scope` is where you put those functions.
-> For Pattern A/C, `vrComponent` sets `_scope = this` automatically — methods
-> on the class ARE the scope. For Pattern B, set it manually: `result._scope = { fn }`.
+> For Pattern CustomElement vrComponent, `vrComponent` sets `_scope = this` automatically — methods
+> on the class ARE the scope. For Pattern Functional Component, set it manually: `result._scope = { fn }`.
 > Full resolution chain documented in §5.
 
 ```js
@@ -222,7 +222,7 @@ import { html, render, registerFilter } from "./core/template-engine/index.js";
 // html tagged template (wraps strings + values)
 const result = html`<h1>{{ title | upper }}</h1>`;
 
-// html from string (Pattern C: external .template.html files)
+// html from string (Pattern CustomElement vrComponent with External HTML: external .template.html files)
 const fromFile = html(`<h1>{{ title }}</h1>`);
 
 // render into container
@@ -275,9 +275,9 @@ render(result, root);
 **Resolution order for all names** (handlers AND component functions):
 
 ```
-1. result._scope[name]       ← explicit scope (Pattern B)
+1. result._scope[name]       ← explicit scope (Pattern Functional Component)
 2. result._context[name]     ← data context (fallback)
-3. component instance[name]  ← CE methods (Pattern A/C, auto by vrComponent)
+3. component instance[name]  ← CE methods (Pattern CustomElement vrComponent, auto by vrComponent)
 ```
 
 ### Files (in `core/template-engine/`)
@@ -302,9 +302,9 @@ Full source: `examples/src/core/template-engine/`
 
 ---
 
-## 5. Component Patterns (3 modes)
+## 5. Component Patterns (2 patterns + 1 variant)
 
-Three ways to author components. All share the same pipeline
+Two patterns + one variant. All share the same pipeline
 (Store → Signals → Template Engine → DOMParts → DOM).
 
 | # | Mode | Lifecycle | CSS | When to use |
@@ -315,7 +315,7 @@ Three ways to author components. All share the same pipeline
 
 ---
 
-### 5A — Custom Element with `vrComponent` (Pattern A)
+### 5A — Custom Element with `vrComponent` (Pattern CustomElement vrComponent)
 
 ```js
 import { vrComponent, html } from '../../core/index.js';
@@ -361,7 +361,7 @@ class App extends HTMLElement {
 
 ---
 
-### 5B — Functional Component (Pattern B)
+### 5B — Functional Component (Pattern Functional Component)
 
 ```js
 import { html } from '../../core/index.js';
@@ -396,7 +396,7 @@ export function TodoList(ctx) {
 
 ---
 
-### 5C — Custom Element with External HTML Template (Pattern C)
+### 5C — Custom Element with External HTML Template (Pattern CustomElement vrComponent with External HTML)
 
 ```js
 import { vrComponent, html, render } from '../../core/index.js';
@@ -458,7 +458,7 @@ class ProfileCard extends HTMLElement {
 2. NO `${}` in template files — that is valid only in JS files.
 3. Use `@click="handler"` (string) not `@click=${\handler\}`.
 4. vrComponent auto-sets `result._scope = this` for method resolution.
-5. Functions passed from Pattern C → B go in `_context` (not `_scope`).
+5. Functions passed from Pattern CustomElement vrComponent (ext. HTML) → Pattern Functional Component go in `_context` (not `_scope`).
 
 ---
 
@@ -469,7 +469,7 @@ Functions must be resolvable through the standard chain:
 
 ```
 1. result._scope[name]       ← explicit scope
-2. result._context[name]     ← data context (preferred for Pattern C → B)
+2. result._context[name]     ← data context (preferred for Pattern CustomElement vrComponent (ext. HTML) → Pattern Functional Component)
 3. component instance[name]  ← CE methods (auto by vrComponent)
 ```
 
@@ -557,7 +557,7 @@ src/
   components/
     App/
       index.js                          ← Barrel
-      _App.js                           ← Pattern A: CE + vrComponent
+      _App.js                           ← Pattern CustomElement vrComponent: CE + vrComponent
       _App.css                          ← External CSS
     TodoItem/
       index.js
@@ -565,7 +565,7 @@ src/
       _TodoItem.css
     ProfileCard/
       index.js
-      _ProfileCard.js                   ← Pattern C: CE + external template
+      _ProfileCard.js                   ← Pattern CustomElement vrComponent with External HTML: CE + external template
       _ProfileCard.css
       _ProfileCard.template.html        ← External HTML template ({{ }}, <for>, <if>)
   helpers/
@@ -573,7 +573,7 @@ src/
     actions/                            ← Store mutation functions
     computed/                           ← ComputedSignal factories
     shared/                             ← Shared singletons (store, tickState)
-    func/                               ← Pattern B: functional components
+    func/                               ← Pattern Functional Component: functional components
       _todoList.js                      ←   returns html`` + _scope
   core/
     index.js                            ← Unified exports
@@ -670,19 +670,19 @@ Key assertions enforced by guardrails engine:
 - **css-comments-required**: Every CSS file MUST have file-level + section comments
 - **a11y-test-required**: Every project MUST have Playwright + @axe-core/playwright a11y tests
 
-### Pattern A (Custom Element + vrComponent)
+### Pattern CustomElement vrComponent (Custom Element + vrComponent)
 - **vr-component**: `vrComponent(this, { tag, css })` called in `static {}` block
 - **ce-extends**: Component extends `HTMLElement`
 - **css-auto**: CSS loaded via vrComponent (import.meta.url or explicit path)
 - **mount-guard**: vrComponent handles re-mount guard automatically
 
-### Pattern B (Functional Component)
+### Pattern Functional Component (Functional Component)
 - **fn-component**: Component is a plain function, NOT a class
 - **fn-returns-html**: Function returns `html\`\`` (`TemplateResult`)
 - **fn-scope**: `result._scope` is set for `@click` handlers
 - **fn-composable**: Function can be called inside `{{ Fn(ctx) }}`
 
-### Pattern C (External HTML Template)
+### Pattern CustomElement vrComponent with External HTML (External HTML Template)
 - **external-template**: Component loads template from `.template.html` file
 - **no-dollar-braces**: Template files must NOT contain `${}`
 - **click-string**: Events use `@click="handler"`, not `@click=${\fn\}`
@@ -715,7 +715,7 @@ export const validators = {
 };
 ```
 
-### Example: ContactForm with Pattern A
+### Example: ContactForm with Pattern CustomElement vrComponent
 
 ```javascript
 import { vrComponent, html, Store } from '../core/index.js';

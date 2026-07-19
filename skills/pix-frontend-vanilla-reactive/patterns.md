@@ -43,7 +43,7 @@ src/
     actions/                    ← Store mutation functions
     computed/                   ← ComputedSignal factories
     shared/                     ← Store + tickState singletons
-    func/                       ← Pattern B functional components
+    func/                       ← Pattern Functional Component functional components
       _todoList.js
       _contactCard.js
   styles/
@@ -62,9 +62,9 @@ src/
 ## Scope resolution (`_scope`)
 
 ```
-result._scope[name]    → Pattern B explicit
-result._context[name]  → fallback (Pattern C → B)
-component instance     → auto by vrComponent (Pattern A/C)
+result._scope[name]    → Pattern Functional Component explicit
+result._context[name]  → fallback (Pattern CustomElement vrComponent (ext. HTML) → Pattern Functional Component)
+component instance     → auto by vrComponent (Pattern CustomElement vrComponent)
 ```
 
 ## Template syntax

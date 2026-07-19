@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════════════════════════════
-//  Pattern B — Functional Component: TodoList
+//  Pattern Functional Component — Functional Component: TodoList
 //  ═══════════════════════════════════════════════════════════════════════════════
 //  Plain function returning html``. _scope for @click resolution.
 //  Composable via {{ TodoList(todos) }} in a parent template.

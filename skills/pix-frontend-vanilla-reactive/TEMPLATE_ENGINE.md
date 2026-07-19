@@ -60,7 +60,7 @@ no API to enumerate closure variables at runtime.
 ## 3. Event Binding (ALL DOM events — `@` prefix)
 
 ```
-@eventname="handler"          in HTML template (Pattern A, B, C)
+@eventname="handler"          in HTML template (Pattern CustomElement vrComponent, B, C)
 ```
 
 The `@` prefix extracts the event name and passes it directly to
@@ -84,25 +84,25 @@ through a **resolution chain**:
 ```
 1. result._scope[name]       ← explicit scope object
 2. result._context[name]     ← data context (fallback)
-3. component instance[name]  ← CE methods (Pattern A/C, auto by vrComponent)
+3. component instance[name]  ← CE methods (Pattern CustomElement vrComponent, auto by vrComponent)
 ```
 
-**Pattern A/C** → `vrComponent` sets `_scope = this` automatically.
+**Pattern CustomElement vrComponent** → `vrComponent` sets `_scope = this` automatically.
 Component methods resolve in step 3 (or 1 if `_scope` is set).
 Zero extra work.
 
-**Pattern B** → one explicit line:
+**Pattern Functional Component** → one explicit line:
 ```js
 result._scope = { handleSave, TodoList };   // ← explicit
 ```
 
-**Pattern C → B** (calling a Pattern B fn from external template):
+**Pattern CustomElement vrComponent (ext. HTML) → Pattern Functional Component** (calling a Pattern Functional Component fn from external template):
 prefer pass via `_context` — the component fn is data, not a handler:
 ```js
 context() {
   return {
     todos: store.state.todos,
-    TodoList: TodoList,    // ← in context for Pattern C → B
+    TodoList: TodoList,    // ← in context for Pattern CustomElement vrComponent (ext. HTML) → Pattern Functional Component
   };
 }
 ```
@@ -240,7 +240,7 @@ The name MUST resolve to a **plain function** that:
 
 | Form | Works? | Reason |
 |------|--------|--------|
-| `{{ PatternB(todos) }}` | ✅ | Pattern B returns `TemplateResult` |
+| `{{ PatternB(todos) }}` | ✅ | Pattern Functional Component returns `TemplateResult` |
 | `{{ wrapCE(todo) }}` wrapping `<my-ce>` | ✅ | Factory fn returns `html\`\`` containing the tag |
 | `{{ todoItem.data }}` | ❌ | `todoItem` is a CE class, calling it returns a DOM element, not `TemplateResult` |
 | `<my-ce></my-ce>` in template | ✅ | Native CE lifecycle via browser registry |
@@ -288,13 +288,13 @@ function TodoList(ctx) {
 }
 ```
 
-For **Pattern A/C**, `vrComponent` auto-sets `_scope = this`, so component
+For **Pattern CustomElement vrComponent**, `vrComponent` auto-sets `_scope = this`, so component
 methods are resolved automatically.
 
 ### Nesting example
 
 ```
-Pattern C (external .template.html)
+Pattern CustomElement vrComponent with External HTML (external .template.html)
   └── {{ PatternB(todos) }}    ← fn call, resolved from _scope
         └── <pattern-a-ce>     ← native CE, independent lifecycle
 ```
@@ -338,7 +338,7 @@ const _scope = {
 7. DOM updated
 ```
 
-All three patterns (A, B, C) use the **same pipeline**.
+Both patterns (A, B, C) use the **same pipeline**.
 
 ---
 
