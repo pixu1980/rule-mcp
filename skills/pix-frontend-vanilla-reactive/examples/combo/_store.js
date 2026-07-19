@@ -21,7 +21,11 @@ export const store = new Store({
  */
 export const addTodo = (title) => {
 
-  if (!title?.trim()) return;
+  if (!title?.trim()) {
+
+    return;
+
+  }
   store.state.todos = [...store.state.todos, { id: Date.now(), title: title.trim(), done: false }];
 };
 

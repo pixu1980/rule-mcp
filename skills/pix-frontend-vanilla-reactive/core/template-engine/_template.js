@@ -22,8 +22,12 @@ import { ChildNodePart } from '../dom-parts/_child-node-part.js';
 export function render(result, container, context, scope) {
   // Only set context/scope if not already set by the component
   // (Pattern B functions may set their own _context before returning)
-  if (context && !result._context) result._context = context;
-  if (scope && !result._scope) result._scope = scope;
+  if (context && !result._context) {
+    result._context = context;
+  }
+  if (scope && !result._scope) {
+    result._scope = scope;
+  }
 
   let rootPart = container.__rootPart;
   if (!rootPart) {

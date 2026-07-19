@@ -49,21 +49,42 @@ export function parseExpression(expr) {
 }
 
 export function parseArg(value) {
-  if ((value.startsWith('"') && value.endsWith('"')) || (value.startsWith("'") && value.endsWith("'"))) return value.slice(1, -1);
-  if (/^\d+$/.test(value)) return parseInt(value, 10);
-  if (/^\d+\.\d+$/.test(value)) return parseFloat(value);
-  if (value === 'true') return true;
-  if (value === 'false') return false;
+  if ((value.startsWith('"') && value.endsWith('"')) || (value.startsWith("'") && value.endsWith("'"))) {
+    return value.slice(1, -1);
+  }
+
+  if (/^\d+$/.test(value)) {
+    return parseInt(value, 10);
+  }
+
+  if (/^\d+\.\d+$/.test(value)) {
+    return parseFloat(value);
+  }
+
+  if (value === 'true') {
+    return true;
+  }
+
+  if (value === 'false') {
+    return false;
+  }
+
   return value;
 }
 
 export function getFromPath(obj, path) {
-  if (!path || !obj) return undefined;
+  if (!path || !obj) {
+    return undefined;
+  }
   let cur = obj;
   for (const key of path.replace(/\[(\d+)\]/g, '.$1').split('.')) {
-    if (cur == null) return undefined;
+    if (cur == null) {
+      return undefined;
+    }
     // Block prototype chain access
-    if (key === '__proto__' || key === 'constructor' || key === 'prototype') return undefined;
+    if (key === '__proto__' || key === 'constructor' || key === 'prototype') {
+      return undefined;
+    }
     cur = cur[key];
   }
   return cur;
@@ -98,7 +119,9 @@ export function evaluateExpression(parsed, ctx, scope) {
   let value = getFromPath(ctx, parsed.variable);
   for (const filter of parsed.filters) {
     const f = FILTERS[filter.name];
-    if (f) value = f(value, ...filter.args);
+    if (f) {
+      value = f(value, ...filter.args);
+    }
   }
   return value;
 }

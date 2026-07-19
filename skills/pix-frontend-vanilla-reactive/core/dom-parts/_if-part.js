@@ -26,11 +26,15 @@ function renderRawTemplate(templateStr, ctx) {
     const re = /\{\{([^}]+)\}\}/g;
     let m;
     while ((m = re.exec(templateStr)) !== null) {
-      if (m.index > lastIdx) parts.push(templateStr.slice(lastIdx, m.index));
+      if (m.index > lastIdx) {
+        parts.push(templateStr.slice(lastIdx, m.index));
+      }
       parts.push({ parsed: parseExpression(m[1].trim()), isExpr: true });
       lastIdx = re.lastIndex;
     }
-    if (lastIdx < templateStr.length) parts.push(templateStr.slice(lastIdx));
+    if (lastIdx < templateStr.length) {
+      parts.push(templateStr.slice(lastIdx));
+    }
     _exprCache.set(templateStr, parts);
     parsed = parts;
   }
@@ -121,7 +125,9 @@ export class IfPart {
     // If nothing matched, use last branch (should be <else>)
     if (activeIdx < 0 && this.branches.length > 0) {
       const last = this.branches[this.branches.length - 1];
-      if (last.isElse) activeIdx = this.branches.length - 1;
+      if (last.isElse) {
+        activeIdx = this.branches.length - 1;
+      }
     }
 
     if (activeIdx === this._activeBranch) return; // same branch, skip re-render
@@ -134,7 +140,7 @@ export class IfPart {
 
   renderBranch(idx) {
     const body = this.bodies[idx];
-    if (!body) return;
+    if (!body) { return; }
 
     this._contentStart = document.createComment('if:cs');
     this._contentEnd = document.createComment('if:ce');
@@ -214,7 +220,7 @@ export class SwitchPart {
     // No case matched → use default body (stored at index = cases.length)
     const bodyIdx = activeIdx >= 0 ? activeIdx : this.cases.length;
 
-    if (bodyIdx === this._activeCase) return;
+    if (bodyIdx === this._activeCase) { return; }
     this.clear();
     this.renderBody(bodyIdx);
     this._activeCase = bodyIdx;
@@ -227,7 +233,7 @@ export class SwitchPart {
     } else {
       body = this.defaultBody;
     }
-    if (!body) return;
+    if (!body) { return; }
 
     this._contentStart = document.createComment('switch:cs');
     this._contentEnd = document.createComment('switch:ce');

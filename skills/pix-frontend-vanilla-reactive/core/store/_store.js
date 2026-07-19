@@ -25,29 +25,39 @@ export class Store {
     }
   }
   _createProxy(target, path) {
-    if (!isObject(target)) return target;
-    if (this.proxyCache.has(target)) return this.proxyCache.get(target);
+    if (!isObject(target)) { return target; }
+    if (this.proxyCache.has(target)) { return this.proxyCache.get(target); }
     const store = this;
     const proxy = new Proxy(target, {
       get(raw, key) {
-        if (key === '__raw') return raw;
-        if (key === '__path') return path;
+        if (key === '__raw') {
+          return raw;
+        }
+        if (key === '__path') {
+          return path;
+        }
         const value = Reflect.get(raw, key);
-        if (isObject(value)) return store._createProxy(value, [...path, key]);
+
+        if (isObject(value)) {
+          return store._createProxy(value, [...path, key]);
+        }
+
         return value;
       },
       set(raw, key, value) {
         const nextPath = [...path, key];
         const old = raw[key];
         // Skip clone + emit if same reference (e.g. resetting to current array)
-        if (old === value) return Reflect.set(raw, key, value);
+        if (old === value) {
+          return Reflect.set(raw, key, value);
+        }
         const prepared = clonePlainValue(value);
         const result = Reflect.set(raw, key, prepared);
         store._emitChange(nextPath);
         return result;
       },
       deleteProperty(raw, key) {
-        if (!(key in raw)) return true;
+        if (!(key in raw)) { return true; }
         const nextPath = [...path, key];
         const old = raw[key];
         const result = Reflect.deleteProperty(raw, key);
@@ -64,7 +74,7 @@ export class Store {
       detail: { path: toPathArray(path).join('.') },
     }));
     // Notify reactivity system
-    if (this.tick) this.tick.set(performance.now());
+    if (this.tick) { this.tick.set(performance.now()); }
   }
   get(path) {
     const parts = toPathArray(path);
@@ -74,7 +84,9 @@ export class Store {
   }
   set(path, value) {
     const parts = toPathArray(path);
-    if (!parts.length) throw new Error('Path required');
+    if (!parts.length) {
+      throw new Error('Path required');
+    }
     const last = parts.pop();
     let current = this.state;
     for (const p of parts) { if (!isObject(current[p])) current[p] = {}; current = current[p]; }

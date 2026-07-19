@@ -12,16 +12,29 @@ export class ComputedSignal extends BaseSignal {
     this.deps = new Map(); this.cached = undefined; this.dirty = true;
     this.recomputing = false; this.boundInvalidate = this.invalidate.bind(this);
   }
-  addDependency(sig) { if (this.deps.has(sig)) return; this.deps.set(sig, sig.subscribe(this.boundInvalidate)); }
+  addDependency(sig) {
+    if (this.deps.has(sig)) { return; }
+    this.deps.set(sig, sig.subscribe(this.boundInvalidate));
+  }
   cleanupDeps() { for (const u of this.deps.values()) u(); this.deps.clear(); }
-  invalidate() { if (this.dirty) return; this.dirty = true; this.notify(); }
+  invalidate() {
+    if (this.dirty) { return; }
+    this.dirty = true;
+    this.notify();
+  }
   evaluate() {
-    if (!this.dirty) return this.cached;
-    if (this.recomputing) return this.cached;
+    if (!this.dirty) {
+      return this.cached;
+    }
+    if (this.recomputing) {
+      return this.cached;
+    }
     this.recomputing = true; this.cleanupDeps();
     try {
       const next = withCollector(this, () => this.compute());
-      if (this.dirty || !this.equals(this.cached, next)) this.cached = next;
+      if (this.dirty || !this.equals(this.cached, next)) {
+      this.cached = next;
+    }
       this.dirty = false; return this.cached;
     } finally { this.recomputing = false; }
   }
