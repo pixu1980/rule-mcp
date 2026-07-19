@@ -11,16 +11,24 @@ export function utilSlug(v) { return String(v).toLowerCase().trim().replace(/[\s
 
 registerFilter('upper',       v => String(v).toUpperCase());
 registerFilter('lower',       v => String(v).toLowerCase());
-registerFilter('capitalize',  v => { const s = String(v); return s[0].toUpperCase() + s.slice(1).toLowerCase(); });
+registerFilter('capitalize',  v => {
+  const s = String(v);
+  return s[0].toUpperCase() + s.slice(1).toLowerCase();
+});
 registerFilter('slugify',     v => utilSlug(v));
 registerFilter('slug',        v => utilSlug(v));
 registerFilter('trim',        v => String(v).trim());
 registerFilter('escapeHtml',  v => String(v).replace(/[&<>"']/g, s => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#x27;' }[s] || s)));
 registerFilter('striptags',   v => String(v).replace(/<[^>]*>/g, ''));
 registerFilter('raw',         v => v);
-registerFilter('json',        v => { try { return JSON.stringify(v); } catch { return String(v); } });
+registerFilter('json',        v => {
+  try { return JSON.stringify(v); } catch { return String(v); }
+});
 registerFilter('default',     (v, d = '') => (v !== undefined && v !== null && v !== '' ? v : d));
-registerFilter('truncate',    (v, l = 100) => { const s = String(v); return s.length > l ? s.slice(0, l) + '...' : s; });
+registerFilter('truncate',    (v, l = 100) => {
+  const s = String(v);
+  return s.length > l ? s.slice(0, l) + '...' : s;
+});
 registerFilter('length',      v => (Array.isArray(v) || typeof v === 'string' ? v.length : 0));
 registerFilter('where',       (v, prop) => Array.isArray(v) ? v.filter(item => item[prop]) : v);
 registerFilter('first',       v => (Array.isArray(v) && v.length ? v[0] : v));
