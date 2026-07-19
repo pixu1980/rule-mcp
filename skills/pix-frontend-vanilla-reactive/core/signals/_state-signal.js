@@ -29,6 +29,7 @@ export class StateSignal extends BaseSignal {
     if (this.equals(this.value, next)) {
       return this.value;
     }
+
     this.value = next;
     this.notify();
 

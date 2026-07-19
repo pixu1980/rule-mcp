@@ -44,6 +44,7 @@ export const Signal = {
           pushCollector(c);
         }
       }
+
     },
   },
 };

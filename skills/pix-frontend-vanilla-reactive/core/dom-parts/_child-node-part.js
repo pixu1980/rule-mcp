@@ -95,4 +95,5 @@ export class ChildNodePart extends Part {
     instance.updateWithContext(result.values, context || {}, scope);
     this.start.parentNode.insertBefore(instance.fragment, this.end);
   }
+
 }

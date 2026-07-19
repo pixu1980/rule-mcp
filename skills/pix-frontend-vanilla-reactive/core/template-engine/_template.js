@@ -32,6 +32,7 @@ export function render(result, container, context, scope) {
   }
 
   let rootPart = container.__rootPart;
+
   if (!rootPart) {
     const s = document.createComment("root:start");
 

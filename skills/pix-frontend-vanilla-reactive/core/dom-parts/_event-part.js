@@ -98,5 +98,6 @@ export class EventPart {
       this.element.removeEventListener(this.eventName, this._listener);
       this._listener = null;
     }
+
   }
 }

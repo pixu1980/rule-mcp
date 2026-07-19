@@ -55,9 +55,11 @@ export class ForPart {
       if (seen.has(key)) {
         continue;
       }
+
       seen.add(key);
 
       let block = this.blocks.get(key);
+
       if (!block) {
         const s = document.createComment(`for:${key}:s`);
 
@@ -87,6 +89,7 @@ export class ForPart {
         block.start.remove();
         block.end.remove();
       }
+
     }
 
     this.blocks = nextBlocks;
@@ -111,6 +114,7 @@ export class ForPart {
 
   renderBlock(block, item) {
     clearRange(block.start, block.end);
+
     if (this.renderFn) {
       // Component mode: call renderFn(item), render via ChildNodePart
       const childPart = new ChildNodePart(block.start, block.end);
@@ -143,6 +147,7 @@ export class ForPart {
       block.start.remove();
       block.end.remove();
     }
+
     this.blocks.clear();
   }
 }

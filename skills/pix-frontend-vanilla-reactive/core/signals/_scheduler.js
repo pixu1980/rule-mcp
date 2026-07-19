@@ -26,5 +26,6 @@ export function schedule(job) {
     } finally {
       flushing = false;
     }
+
   });
 }

@@ -9,6 +9,7 @@ import { execSync } from "child_process";
 import { readFileSync, writeFileSync } from "fs";
 import { resolve, dirname } from "path";
 import { fileURLToPath } from "url";
+import { fixBlockSpacing } from "./block-spacing.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const PROJECT_ROOT = resolve(__dirname, "..");
@@ -39,6 +40,7 @@ export function postProcessFiles(results) {
   // Step 2: Blank-line fixer — handles semantic spacing rules
   for (const file of jsFiles) {
     fixBlankLines(file);
+    fixBlockSpacing(file);
   }
 }
 

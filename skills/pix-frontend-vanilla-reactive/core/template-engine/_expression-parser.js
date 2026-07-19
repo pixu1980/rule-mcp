@@ -132,6 +132,7 @@ export function evaluateExpression(parsed, ctx, scope) {
 
         return "";
       }
+
     }
     const resolvedArgs = parsed.args.map((a) => {
       return evaluateExpression(a, ctx, scope);
@@ -142,6 +143,7 @@ export function evaluateExpression(parsed, ctx, scope) {
 
   // Data expression with optional filter pipeline
   let value = getFromPath(ctx, parsed.variable);
+
   for (const filter of parsed.filters) {
     const f = FILTERS[filter.name];
 
