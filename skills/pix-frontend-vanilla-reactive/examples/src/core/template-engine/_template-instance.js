@@ -18,7 +18,6 @@ import { IfPart, SwitchPart } from '../dom-parts/_if-part.js';
 import { _setTemplateInstance } from '../dom-parts/_child-node-part.js';
 
 const templateCache = new WeakMap();
-const VAL_MARKER_RE = /^val:(\d+)$/;
 const EXPR_MARKER_RE = /^expr:(\d+)$/;
 
 function getNodePath(node, root) {
@@ -56,29 +55,7 @@ export function getTemplate(strings) {
   if (rec) return rec;
 
   // Step 1: Assemble full HTML
-  // For tagged templates (arrays), we need to mark ${} text positions
-  // with <!--val:N--> so ChildNodePart can render the values.
-  // ${} in attribute/event positions are NOT supported — use @click="fn".
-  let markup;
-  if (Array.isArray(strings) && strings.length > 1) {
-    // Tagged template with ${} interpolations — mark text positions
-    const ATTR_END_RE = /([.@]?[-\w:]+)\s*=\s*(?:"|'|)?$/;
-    markup = '';
-    for (let i = 0; i < strings.length - 1; i++) {
-      markup += strings[i];
-      if (ATTR_END_RE.test(strings[i])) {
-        // ${} inside attribute/event — unsupported in v2, skip
-        markup += '';
-      } else {
-        // ${} in text position — mark for ChildNodePart
-        markup += `<!--val:${i}-->`;
-      }
-    }
-    markup += strings[strings.length - 1];
-  } else {
-    // Single string (Pattern C: html(str)) or no interpolations
-    markup = Array.isArray(strings) ? strings[0] : strings;
-  }
+  const markup = Array.isArray(strings) ? strings.join('') : strings;
 
   // Step 2: Extract <for>, <if> directive regions
   const directives = [];
@@ -241,12 +218,6 @@ export function getTemplate(strings) {
   let walkNode;
   while ((walkNode = walker.nextNode())) {
     if (walkNode.nodeType === Node.COMMENT_NODE) {
-      // val marker (${} in text position)
-      const vm = walkNode.data.match(VAL_MARKER_RE);
-      if (vm) {
-        descriptors.push({ kind: 'val', index: Number(vm[1]), path: getNodePath(walkNode, template.content) });
-        continue;
-      }
       // expr marker
       const em = walkNode.data.match(EXPR_MARKER_RE);
       if (em) {
@@ -345,7 +316,6 @@ export class TemplateInstance {
     this.strings = strings;
     const rec = getTemplate(strings);
     this.fragment = rec.template.content.cloneNode(true);
-    this.parts = new Map();
     this.exprParts = [];
     this.forParts = [];
     this.ifParts = [];
@@ -361,15 +331,6 @@ export class TemplateInstance {
 
     for (const { descriptor, node } of resolved) {
       switch (descriptor.kind) {
-        case 'val': {
-          if (node) {
-            const s = document.createComment(`start:${descriptor.index}`);
-            const e = document.createComment(`end:${descriptor.index}`);
-            node.replaceWith(s, e);
-            this.parts.set(descriptor.index, new ChildNodePart(s, e));
-          }
-          break;
-        }
         case 'expr': {
           if (node) {
             const s = document.createComment(`start:expr:${descriptor.index}`);
@@ -474,12 +435,6 @@ export class TemplateInstance {
     this._context = context;
     this._scope = scope || null;
 
-    // 0. Update ${} text values (from tagged template interpolation)
-    for (let i = 0; i < values.length; i++) {
-      const part = this.parts.get(i);
-      if (part) part.setValue(values[i]);
-    }
-
     // 1. Update {{ }} expr parts
     for (const { exprPart, parsedExpr, isAttr } of this.exprParts) {
       if (isAttr) {
@@ -505,14 +460,9 @@ export class TemplateInstance {
   }
 
   /**
-   * Update only ${} text values (ChildNodePart slots).
+   * Update only ${} values (no-op — not supported).
    */
-  update(values) {
-    for (let i = 0; i < values.length; i++) {
-      const part = this.parts.get(i);
-      if (part) part.setValue(values[i]);
-    }
-  }
+  update(values) {}
   // (kept for compatibility with any code still passing values)
 }
 
