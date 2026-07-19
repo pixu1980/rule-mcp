@@ -32,13 +32,7 @@ See `src/core/enforcement.js` for details.
 
 ## Environment variables
 
-| Variable | Description | Default | Values |
-|----------|-------------|---------|--------|
-| `RULE_MCP_STRICT_MODE` | Expose only gateway + read-only tools. Safe for untrusted code. | unset | `1` = strict mode |
-| `RULE_MCP_AUTO_ADR` | Automatically log architecture decisions via `pix_process_adr` on each tool call. | unset | `1` = enable auto-ADR |
-| `RULE_MCP_DISABLE_AUTO_ADR` | Disable automatic ADR logging (used internally during testing). | unset | `1` = disable |
-| `RULE_MCP_DAEMON` | Run as daemon process (used by LaunchAgent/systemd units). | unset | `1` = daemon mode |
-| `RULE_MCP_SSE_TOKEN` | Bearer token for SSE transport authentication. Auto-generated if unset. | auto-generated | any string |
+See [06-env-variables.md](06-env-variables.md) for the complete reference table, persistence, and configuration.
 
 ## Strict mode
 
