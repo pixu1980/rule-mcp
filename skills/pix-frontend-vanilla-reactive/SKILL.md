@@ -624,7 +624,7 @@ effect(() => {
 | React Context | Shared `store` import |
 
 ### Vue → Pix / Svelte → Pix
-See `patterns.md` in this directory for full migration tables.
+See `core/ARCHITECTURE.md` in this directory for the full pattern index and template reference.
 
 ---
 

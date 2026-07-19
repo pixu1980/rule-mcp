@@ -335,7 +335,7 @@ The styleguides are **frontend style guides**: they define HTML semantics, CSS a
 | `json.md` | JSON structure conventions |
 | `markdown.md` | Markdown documentation style |
 | `naming-and-file-tree.md` | File naming, barrel pattern, directory structure |
-| `patterns.md` | Quick reference pattern index |
+| `core/ARCHITECTURE.md` | Architecture, performance, and full template syntax reference |
 
 ---
 
