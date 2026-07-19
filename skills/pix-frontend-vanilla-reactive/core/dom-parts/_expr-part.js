@@ -59,6 +59,7 @@ export class ExprPart {
 
   bindSignal(sig) {
     this.disposeSignal();
+
     this.signalCleanup = sig.subscribe(() => {
       if (!this.start.isConnected) {
         this.disposeSignal();
@@ -68,6 +69,7 @@ export class ExprPart {
 
       this.commit(sig.get(), this.hasRaw());
     });
+
     this.commit(sig.get(), this.hasRaw());
   }
 
