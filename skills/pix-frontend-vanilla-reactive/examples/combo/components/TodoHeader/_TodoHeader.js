@@ -17,6 +17,7 @@ export class TodoHeader extends HTMLElement {
   static {
     vrComponent(this, {
       tag: 'todo-header',
+      css: import.meta.url,
       template: TEMPLATE,  // ← instead of render() method
     });
   }
