@@ -22,6 +22,7 @@ import { execSync, spawn } from "node:child_process";
 import { existsSync, mkdirSync, readFileSync, writeFileSync, rmSync, appendFileSync } from "node:fs";
 import { homedir, platform } from "node:os";
 import { join, dirname } from "node:path";
+import { fileURLToPath } from "node:url";
 import { getRuntimePaths } from "./paths.js";
 
 // ─── Platform detection ───────────────────────────────────────────────────
@@ -52,7 +53,7 @@ export function detectPlatform() {
  * @returns {{ node: string, script: string, command: string[] }}
  */
 function resolveEntrypoint() {
-  const __dirname = new URL(".", import.meta.url).pathname;
+  const __dirname = fileURLToPath(new URL(".", import.meta.url));
   const scriptPath = join(__dirname, "..", "..", "bin", "rule-mcp.js");
   const nodePath = process.execPath;
 
@@ -78,7 +79,7 @@ function tryExec(cmd, opts = {}) {
 // macOS — LaunchAgent plist
 // ═══════════════════════════════════════════════════════════════════════════
 
-const LAUNCH_AGENT_LABEL = "io.github.pixu1980.rule-mcp";
+const LAUNCH_AGENT_LABEL = "io.github.rule.rule-mcp";
 const LAUNCH_AGENT_DIR   = join(HOME, "Library", "LaunchAgents");
 const LAUNCH_AGENT_PATH   = join(LAUNCH_AGENT_DIR, `${LAUNCH_AGENT_LABEL}.plist`);
 
@@ -292,7 +293,7 @@ function generateSystemdUnit(ep) {
 
   return `[Unit]
 Description=rule-mcp MCP Server
-Documentation=https://github.com/pixu1980/rule-mcp
+Documentation=https://github.com/rule/rule-mcp
 After=network.target network-online.target
 Wants=network-online.target
 

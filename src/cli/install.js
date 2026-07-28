@@ -15,6 +15,12 @@
  *   kilo, kimi, vibe, grok, droid, kiro, qwen,
  *   pi, vscode, jetbrains, neovim, emacs
  *
+ * Verification tiers (honesty matters for a compatibility surface this wide):
+ *   - stdio: universally tested — works with every MCP host. Default, preferred.
+ *   - daemon / HTTP+SSE: interop-verified end-to-end only for `pi` and `vscode`
+ *     (see remoteModeAgents). Other agents get a correct-shape `mcpServers` config
+ *     that is NOT individually interop-tested and may need a manual tweak.
+ *
  * Supports stdio, native daemon/SSE, and Docker deployment modes.
  * Stdio can use a local Node entrypoint or a globally installed command.
  */
@@ -25,6 +31,11 @@ import { homedir, platform } from "node:os";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { getOrCreateSseBearerToken } from "../transport/sse-auth.js";
+import { DEFAULT_SSE_PORT } from "./paths.js";
+
+/** Resolve a path relative to the project root (3 levels up from src/cli/). */
+const resolvePath = (relative) =>
+  resolve(fileURLToPath(new URL("../../", import.meta.url)), relative);
 
 // ─── Constants ───────────────────────────────────────────────────────────────
 
@@ -83,10 +94,6 @@ const IS_LINUX = platform() === "linux";
 
 const HOME = homedir();
 const COMMAND_TEMPLATE_PATH = fileURLToPath(new URL("../../prompts/rule-mcp.md", import.meta.url));
-
-/** Resolve a path relative to the project root (3 levels up from src/cli/). */
-const resolvePath = (relative) =>
-  resolve(fileURLToPath(new URL("../../", import.meta.url)), relative);
 
 // ─── File helpers ───────────────────────────────────────────────────────────
 
@@ -185,6 +192,21 @@ const ENV_CONFIG_DIR = join(homedir(), ".config", "rule-mcp");
 const ENV_CONFIG_FILE = join(ENV_CONFIG_DIR, "env.json");
 
 /**
+ * Opt-out feature flags, defaulted to "0" (feature ON) in generated config so
+ * they are discoverable and easy to flip. Each is honored only when set to "1";
+ * "0" is a no-op, so shipping them at "0" changes no behavior — it just documents
+ * the switches in the user's mcp.json / Docker config.
+ */
+export const DEFAULT_OPTOUT_ENV = {
+  RULE_MCP_NO_AUTOUPDATE: "0",
+  RULE_MCP_NO_AUTORESTART: "0",
+  RULE_MCP_NO_CACHE: "0",
+  RULE_MCP_NO_CAVEMAN: "0",
+  RULE_MCP_NO_TOKENSAVE: "0",
+  RULE_MCP_NO_REMINDER: "0",
+};
+
+/**
  * Read saved RULE_MCP_* environment variable preferences from disk.
  * Returns {} if no config file exists.
  */
@@ -211,31 +233,43 @@ export function writeEnvConfig(env) {
  */
 function resolveEnv(opts = {}) {
   const saved = readEnvConfig();
-  return { ...saved, ...(opts.env || {}) };
+  // Opt-out defaults are the base so they always appear in generated config;
+  // saved preferences and explicit opts override them.
+  return { ...DEFAULT_OPTOUT_ENV, ...saved, ...(opts.env || {}) };
 }
 
 const cmdConfig = (entrypoint, opts = {}) => {
   const mode = normalizeInstallMode(opts.mode);
   const env = resolveEnv(opts);
+  // Only pi.dev coding agent supports directTools + lifecycle
+  const isPi = opts.agentName === "pi";
 
   if (mode === "daemon" || mode === "docker") {
-    const port = Number.isInteger(opts.port) && opts.port > 0 && opts.port < 65_536 ? opts.port : 38000;
+    const port = Number.isInteger(opts.port) && opts.port > 0 && opts.port < 65_536 ? opts.port : DEFAULT_SSE_PORT;
     const token = getOrCreateSseBearerToken();
-    return {
+    const config = {
       url: `http://127.0.0.1:${port}/sse`,
       headers: { Authorization: `Bearer ${token}` },
-      directTools: true,
-      lifecycle: "keep-alive",
     };
+    if (isPi) {
+      config.directTools = true;
+      config.lifecycle = "keep-alive";
+    }
+    return config;
   }
 
   // Build stdio config
   let config;
   const globalBin = resolveGlobalBinary();
   if (globalBin) {
-    config = { command: globalBin, args: ["serve"], directTools: true, lifecycle: "keep-alive", type: "stdio" };
+    const home = homedir();
+    config = { command: globalBin, args: ["serve"], type: "stdio" };
   } else {
-    config = { command: process.execPath, args: [entrypoint, "serve"], directTools: true, lifecycle: "keep-alive" };
+    config = { command: process.execPath, args: [entrypoint, "serve"] };
+  }
+  if (isPi) {
+    config.directTools = true;
+    config.lifecycle = "keep-alive";
   }
 
   // Attach env vars if any (supported by MCP stdio transport)
@@ -275,18 +309,11 @@ const toJson = (obj) => `${JSON.stringify(obj, null, 2)}\n`;
  * Upsert an MCP server entry in a JSON config file.
  * Returns null if the file contains invalid JSON.
  */
-const LEGACY_SERVER_NAME = "pix_galaxy_mcp";
-
 const upsertJsonServer = (current, config) => {
   const json = current.trim() ? parseJson(current) : {};
   if (json === null) return null;
   json.mcpServers = json.mcpServers ?? {};
   json.mcpServers[serverName] = config;
-  // Clean up legacy underscore key so the old entry doesn't survive.
-  if (json.mcpServers[LEGACY_SERVER_NAME]) {
-    delete json.mcpServers[LEGACY_SERVER_NAME];
-    if (Object.keys(json.mcpServers).length === 0) delete json.mcpServers;
-  }
   return toJson(json);
 };
 
@@ -298,13 +325,26 @@ const removeJsonServer = (current) => {
   if (!current.trim()) return current;
   const json = parseJson(current);
   if (json === null) return null;
-  for (const key of [serverName, LEGACY_SERVER_NAME]) {
-    if (json.mcpServers?.[key]) {
-      delete json.mcpServers[key];
-      if (Object.keys(json.mcpServers).length === 0) delete json.mcpServers;
-    }
+  if (json.mcpServers?.[serverName]) {
+    delete json.mcpServers[serverName];
+    if (Object.keys(json.mcpServers).length === 0) delete json.mcpServers;
   }
   return Object.keys(json).length > 0 ? toJson(json) : "";
+};
+
+/**
+ * VS Code `servers` entries carry an explicit transport `type`. It MUST match
+ * the endpoint the server actually speaks: the legacy HTTP+SSE transport lives
+ * at /sse (type "sse"); Streamable HTTP lives at /mcp (type "http"). A stdio
+ * config (no url) is "stdio". Mislabeling /sse as "http" makes VS Code POST
+ * Streamable-HTTP frames the SSE transport rejects.
+ *
+ * @param {{ url?: string }} config
+ * @returns {"stdio"|"sse"|"http"}
+ */
+const vscodeServerType = (config) => {
+  if (!config.url) return "stdio";
+  return config.url.endsWith("/mcp") ? "http" : "sse";
 };
 
 /**
@@ -317,15 +357,12 @@ const upsertVscode = (current, config) => {
   if (json === null) return null;
   json.servers = json.servers ?? {};
   // VS Code owns `servers`; remove only this server from the `mcpServers` key.
-  for (const key of [serverName, LEGACY_SERVER_NAME]) {
-    if (json.mcpServers?.[key]) {
-      delete json.mcpServers[key];
-      if (Object.keys(json.mcpServers).length === 0) delete json.mcpServers;
-    }
+  if (json.mcpServers?.[serverName]) {
+    delete json.mcpServers[serverName];
+    if (Object.keys(json.mcpServers).length === 0) delete json.mcpServers;
   }
-  // Migrate from legacy underscore name.
-  if (json.servers[LEGACY_SERVER_NAME]) delete json.servers[LEGACY_SERVER_NAME];
-  json.servers[serverName] = { ...config, type: config.url ? "http" : "stdio" };
+  if (json.servers[serverName]) delete json.servers[serverName];
+  json.servers[serverName] = { ...config, type: vscodeServerType(config) };
   return toJson(json);
 };
 
@@ -337,15 +374,13 @@ const removeVscodeServer = (current) => {
   if (!current.trim()) return current;
   const json = parseJson(current);
   if (json === null) return null;
-  for (const key of [serverName, LEGACY_SERVER_NAME]) {
-    if (json.servers?.[key]) {
-      delete json.servers[key];
-      if (Object.keys(json.servers).length === 0) delete json.servers;
-    }
-    if (json.mcpServers?.[key]) {
-      delete json.mcpServers[key];
-      if (Object.keys(json.mcpServers).length === 0) delete json.mcpServers;
-    }
+  if (json.servers?.[serverName]) {
+    delete json.servers[serverName];
+    if (Object.keys(json.servers).length === 0) delete json.servers;
+  }
+  if (json.mcpServers?.[serverName]) {
+    delete json.mcpServers[serverName];
+    if (Object.keys(json.mcpServers).length === 0) delete json.mcpServers;
   }
   return Object.keys(json).length > 0 ? toJson(json) : "";
 };
@@ -378,7 +413,7 @@ const removeTomlBlock = (current, blockName) => {
 const appendInstruction = (current) => {
   const marker = "<!-- rule-mcp -->";
   if (current.includes(marker)) return current;
-  return `${current.trimEnd()}\n\n${marker}\nBefore writing any frontend/styling code, call \`rule\` to route the task to the correct rule skill. Follow rule galaxy principles: zero CSS classes, zero inline styles, semantic HTML, external CSS via adoptedStyleSheets. Available tools: rule, pix_component, pix_check, pix_search, pix_scaffold, pix_process_adr.\n<!-- /rule-mcp -->\n`;
+  return `${current.trimEnd()}\n\n${marker}\nBefore writing any frontend/styling code, call \`rule\` to route the task to the correct rule skill. Follow rule AI principles: zero CSS classes, zero inline styles, semantic HTML, external CSS via adoptedStyleSheets. Available tools: rule, pix_component, pix_check, pix_search, pix_scaffold, pix_process_adr.\n<!-- /rule-mcp -->\n`;
 };
 
 /** Remove the rule-mcp instruction marker. */
@@ -420,7 +455,7 @@ const installClaude = ({ entrypoint, dryRun, global }) => {
   const mdFile = join(HOME, ".claude", "CLAUDE.md");
   const commandFile = join(HOME, ".claude", "commands", "rule-mcp.md");
   return [
-    writeText({ file, content: upsertJsonServer(readText(file), cmdConfig(entrypoint, { global })), dryRun }),
+    writeText({ file, content: upsertJsonServer(readText(file), cmdConfig(entrypoint, { global, agentName: "claude" })), dryRun }),
     writeText({ file: mdFile, content: appendInstruction(readText(mdFile)), dryRun }),
     writeText({ file: commandFile, content: commandTemplate(), dryRun }),
   ];
@@ -483,7 +518,7 @@ const installGemini = ({ entrypoint, dryRun, global }) => {
   const mdFile = join(HOME, ".gemini", "GEMINI.md");
   const commandFile = join(HOME, ".gemini", "commands", "rule-mcp.toml");
   return [
-    writeText({ file, content: upsertJsonServer(readText(file), cmdConfig(entrypoint, { global })), dryRun }),
+    writeText({ file, content: upsertJsonServer(readText(file), cmdConfig(entrypoint, { global, agentName: "gemini" })), dryRun }),
     writeText({ file: mdFile, content: appendInstruction(readText(mdFile)), dryRun }),
     writeText({ file: commandFile, content: geminiCommand(), dryRun }),
   ];
@@ -496,9 +531,72 @@ const installPi = ({ entrypoint, dryRun, global, mode }) => {
   const file = join(piDir, "mcp.json");
   const promptFile = join(piDir, "prompts", "rule-mcp.md");
   return [
-    writeText({ file, content: upsertJsonServer(readText(file), cmdConfig(entrypoint, { global, mode })), dryRun }),
+    writeText({ file, content: upsertJsonServer(readText(file), cmdConfig(entrypoint, { global, mode, agentName: "pi" })), dryRun }),
     writeText({ file: promptFile, content: commandTemplate(), dryRun }),
   ];
+};
+
+/** Return the VS Code user-level global config directory. */
+/**
+ * Return VS Code extension directories for all known variants.
+ */
+const vscodeExtensionDirs = () => {
+  const dirs = [];
+  if (IS_MACOS) {
+    dirs.push(
+      join(HOME, ".vscode", "extensions"),
+      join(HOME, ".vscode-oss", "extensions"),
+      join(HOME, "Library", "Application Support", "Code - Insiders", "extensions"),
+      join(HOME, ".cursor", "extensions"),
+      join(HOME, ".windsurf", "extensions"),
+    );
+  } else if (IS_LINUX) {
+    dirs.push(
+      join(HOME, ".vscode", "extensions"),
+      join(HOME, ".vscode-oss", "extensions"),
+      join(HOME, ".config", "Code - Insiders", "extensions"),
+      join(HOME, ".cursor", "extensions"),
+    );
+  } else if (IS_WINDOWS) {
+    const appData = process.env.APPDATA || join(HOME, "AppData", "Roaming");
+    dirs.push(
+      join(HOME, ".vscode", "extensions"),
+      join(HOME, "AppData", "Local", "Programs", "Microsoft VS Code", "resources", "app", "extensions"),
+      join(appData, "Code - Insiders", "extensions"),
+      join(HOME, ".cursor", "extensions"),
+    );
+  }
+  return [...new Set(dirs.filter(Boolean))];
+};
+
+/**
+ * Remove the rule-vanilla-reactive extension directory from all known VS Code variants.
+ */
+const removeVscodeExtensionDirs = ({ dryRun }) => {
+  const extId = "rule.rule-vanilla-reactive";
+  const removed = [];
+  for (const dir of vscodeExtensionDirs()) {
+    if (!existsSync(dir)) continue;
+    const entries = readdirSync(dir, { withFileTypes: true });
+    for (const entry of entries) {
+      if (entry.isDirectory() && entry.name.startsWith(extId)) {
+        const fullPath = join(dir, entry.name);
+        if (!dryRun) {
+          rmSync(fullPath, { recursive: true, force: true });
+        }
+        removed.push(fullPath);
+      }
+    }
+  }
+  return removed;
+};
+
+/** Return the VS Code user-level global config directory. */
+const vscodeGlobalDir = () => {
+  if (process.platform === "darwin") return join(HOME, "Library", "Application Support", "Code", "User");
+  if (process.platform === "win32")
+    return join(process.env.APPDATA || join(HOME, "AppData", "Roaming"), "Code", "User");
+  return join(HOME, ".config", "Code", "User");
 };
 
 /**
@@ -507,7 +605,6 @@ const installPi = ({ entrypoint, dryRun, global, mode }) => {
  */
 const tryInstallExtension = (cli, vsixPath, label) => {
   try {
-    // Try via CLI install-extension first (fast, no build needed)
     const result = execSync(`${cli} --install-extension "${vsixPath}" --force`, {
       encoding: "utf8",
       timeout: 30000,
@@ -518,7 +615,6 @@ const tryInstallExtension = (cli, vsixPath, label) => {
     }
     return true;
   } catch {
-    // CLI failed — maybe the binary doesn't exist or extension install is unsupported
     return false;
   }
 };
@@ -530,7 +626,7 @@ const tryInstallExtension = (cli, vsixPath, label) => {
 const installVscodeExtension = ({ dryRun, vsixPath }) => {
   if (dryRun) return [];
   if (!existsSync(vsixPath)) {
-    console.warn(`  ⚠ Extension VSIX not found at: ${vsixPath}`);
+    console.warn(`  \u26a0 Extension VSIX not found at: ${vsixPath}`);
     return [];
   }
 
@@ -570,7 +666,7 @@ const installVscodeExtension = ({ dryRun, vsixPath }) => {
 const uninstallVscodeExtension = ({ dryRun }) => {
   if (dryRun) return [];
 
-  const extId = "rule-mcp.rule-vanilla-reactive";
+  const extId = "rule.rule-vanilla-reactive";
   const editors = [
     { cli: "code", label: "VS Code" },
     { cli: "cursor", label: "Cursor" },
@@ -610,14 +706,6 @@ const uninstallVscodeExtension = ({ dryRun }) => {
   return uninstalled;
 };
 
-/** Return the VS Code user-level global config directory. */
-const vscodeGlobalDir = () => {
-  if (process.platform === "darwin") return join(HOME, "Library", "Application Support", "Code", "User");
-  if (process.platform === "win32")
-    return join(process.env.APPDATA || join(HOME, "AppData", "Roaming"), "Code", "User");
-  return join(HOME, ".config", "Code", "User");
-};
-
 /** @param {{ entrypoint: string, dryRun: boolean, global?: boolean, mode?: "stdio"|"daemon"|"sse"|"docker" }} */
 const installVscode = ({ entrypoint, dryRun, global, mode }) => {
   // The universal installer is user-level. Workspace config is opt-in outside it.
@@ -625,7 +713,7 @@ const installVscode = ({ entrypoint, dryRun, global, mode }) => {
   const results = [
     writeText({
       file: globalFile,
-      content: upsertVscode(readText(globalFile), cmdConfig(entrypoint, { global, mode })),
+      content: upsertVscode(readText(globalFile), cmdConfig(entrypoint, { global, mode, agentName: "vscode" })),
       dryRun,
     }),
   ];
@@ -645,14 +733,14 @@ const installVscode = ({ entrypoint, dryRun, global, mode }) => {
 /** @param {{ entrypoint: string, dryRun: boolean, global?: boolean }} */
 const installJetbrains = ({ entrypoint, dryRun, global }) => {
   const file = join(process.cwd(), ".idea", "mcp.json");
-  return [writeText({ file, content: upsertJsonServer(readText(file), cmdConfig(entrypoint, { global })), dryRun })];
+  return [writeText({ file, content: upsertJsonServer(readText(file), cmdConfig(entrypoint, { global, agentName: "jetbrains" })), dryRun })];
 };
 
 /** @param {{ entrypoint: string, dryRun: boolean, global?: boolean }} */
 const installNeovim = ({ entrypoint, dryRun, global }) => {
   const nvimDir = IS_WINDOWS ? join(HOME, "AppData", "Local", "nvim") : join(HOME, ".config", "nvim");
   const file = join(nvimDir, "mcp.json");
-  return [writeText({ file, content: upsertJsonServer(readText(file), cmdConfig(entrypoint, { global })), dryRun })];
+  return [writeText({ file, content: upsertJsonServer(readText(file), cmdConfig(entrypoint, { global, agentName: "neovim" })), dryRun })];
 };
 
 /** @param {{ entrypoint: string, dryRun: boolean, global?: boolean }} */
@@ -660,8 +748,9 @@ const installEmacs = ({ entrypoint, dryRun, global }) => {
   // Emacs uses init.el or early-init.el
   const emacsDir = IS_WINDOWS ? join(HOME, "AppData", "Roaming", ".emacs.d") : join(HOME, ".emacs.d");
   const initFile = join(emacsDir, "init.el");
-  const cfg = cmdConfig(entrypoint, { global });
-  const emacsConfig = `;; rule-mcp\n(setq mcp-servers '((\n  "${serverName}" . (\n    (command . "${cfg.command}")\n    (args . ${JSON.stringify(cfg.args)})\n    (directTools . t)\n    (lifecycle . "keep-alive")))))\n`;
+  const cfg = cmdConfig(entrypoint, { global, agentName: "emacs" });
+  const isPi = false; // Emacs is never pi.dev
+  const emacsConfig = `;; rule-mcp\n(setq mcp-servers '((\n  "${serverName}" . (\n    (command . "${cfg.command}")\n    (args . ${JSON.stringify(cfg.args)})${isPi ? "\n    (directTools . t)\n    (lifecycle . \"keep-alive\")" : ""}))))\n`;
   return [
     writeText({
       file: initFile,
@@ -690,7 +779,7 @@ const createGenericInstaller = (name, opts = {}) => {
     const results = [
       writeText({
         file: configPath,
-        content: upsertJsonServer(readText(configPath), cmdConfig(entrypoint, { global })),
+        content: upsertJsonServer(readText(configPath), cmdConfig(entrypoint, { global, agentName: name })),
         dryRun,
       }),
     ];
@@ -882,64 +971,11 @@ const uninstallPi = ({ dryRun }) => {
   return [writeText({ file, content: removeJsonServer(readText(file)), dryRun }), promptFile];
 };
 
-/**
- * Return VS Code extension directories for all known variants.
- */
-const vscodeExtensionDirs = () => {
-  const dirs = [];
-  if (IS_MACOS) {
-    dirs.push(
-      join(HOME, ".vscode", "extensions"),
-      join(HOME, ".vscode-oss", "extensions"),
-      join(HOME, "Library", "Application Support", "Code - Insiders", "extensions"),
-      join(HOME, ".cursor", "extensions"),
-      join(HOME, ".windsurf", "extensions"),
-    );
-  } else if (IS_LINUX) {
-    dirs.push(
-      join(HOME, ".vscode", "extensions"),
-      join(HOME, ".vscode-oss", "extensions"),
-      join(HOME, ".config", "Code - Insiders", "extensions"),
-      join(HOME, ".cursor", "extensions"),
-    );
-  } else if (IS_WINDOWS) {
-    const appData = process.env.APPDATA || join(HOME, "AppData", "Roaming");
-    dirs.push(
-      join(HOME, ".vscode", "extensions"),
-      join(HOME, "AppData", "Local", "Programs", "Microsoft VS Code", "resources", "app", "extensions"),
-      join(appData, "Code - Insiders", "extensions"),
-      join(HOME, ".cursor", "extensions"),
-    );
-  }
-  return [...new Set(dirs.filter(Boolean))];
-};
-
-/**
- * Remove the rule-vanilla-reactive extension directory from all known VS Code variants.
- */
-const removeVscodeExtensionDirs = ({ dryRun }) => {
-  const extId = "rule-mcp.rule-vanilla-reactive";
-  const removed = [];
-  for (const dir of vscodeExtensionDirs()) {
-    if (!existsSync(dir)) continue;
-    const entries = readdirSync(dir, { withFileTypes: true });
-    for (const entry of entries) {
-      if (entry.isDirectory() && entry.name.startsWith(extId)) {
-        const fullPath = join(dir, entry.name);
-        if (!dryRun) {
-          rmSync(fullPath, { recursive: true, force: true });
-        }
-        removed.push(fullPath);
-      }
-    }
-  }
-  return removed;
-};
-
 /** @param {{ dryRun: boolean }} */
 const uninstallVscode = ({ dryRun }) => {
   // Also uninstall the VSIX extension from all editor variants
   uninstallVscodeExtension({ dryRun });
+
   const removeFromExistingFile = (file) => {
     if (!existsSync(file)) return null;
     const content = removeVscodeServer(readText(file));
@@ -950,7 +986,6 @@ const uninstallVscode = ({ dryRun }) => {
     return writeText({ file, content, dryRun });
   };
 
-  // Remove MCP config from all VS Code variants
   const results = [];
 
   // Project-level

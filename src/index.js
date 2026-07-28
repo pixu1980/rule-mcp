@@ -35,6 +35,7 @@ import {
   skillsReloadCommand,
   completionsCommand,
   fixCommand,
+  updateCommand,
 } from "./cli/commands.js";
 
 // Install global error handlers at process level
@@ -70,7 +71,9 @@ Usage: rule-mcp serve [options]
 Start the MCP server.
 
 Options:
-  --transport <type>   Transport: stdio (default) or sse
+  --transport <type>   Transport: stdio (default), http (Streamable HTTP, current
+                       MCP spec), or sse (legacy HTTP+SSE, back-compat)
+  --port <number>      Port for http/sse transport (default: 37999, or $RULE_MCP_PORT)
   --ssl-cert <path>    TLS certificate (requires --ssl-key)
   --ssl-key <path>     TLS private key (requires --ssl-cert)
                        Auto-generates self-signed if missing
@@ -96,7 +99,7 @@ Examples:
 const printDaemonHelp = () => process.stdout.write(`
 Usage: rule-mcp daemon <action> [options]
 
-Manage the MCP daemon (SSE on port 38000).
+Manage the MCP daemon (SSE on first free port in range 3000–6000).
 
 Process actions (cross-platform, no reboot persistence):
   start    Start background daemon process
@@ -244,7 +247,7 @@ Examples:
 const printSkillsHelp = () => process.stdout.write(`
 Usage: rule-mcp skills <action> [options]
 
-Manage rule galaxy skill system.
+Manage rule AI skill system.
 
 Actions:
   install           Interactive skill installer (checkbox selection)
@@ -265,7 +268,7 @@ Examples:
 const printFixHelp = () => process.stdout.write(`
 Usage: rule-mcp fix [options]
 
-Validate and auto-fix project file tree structure against rule galaxy\nconventions (barrel files, _PascalCase naming).
+Validate and auto-fix project file tree structure against rule AI\nconventions (barrel files, _PascalCase naming).
 
 Options:
   --dir <path>      Project root (default: .)
@@ -313,12 +316,15 @@ export async function cli() {
     switch (command) {
       case "serve":
         if (hasFlag("--help") || hasFlag("-h")) { printServeHelp(); return; }
-        await serveCommand({
-          transport: getArg("--transport", "stdio"),
-          port: parseInt(getArg("--port", "38000"), 10),
-          sslCert: getArg("--ssl-cert", undefined),
-          sslKey: getArg("--ssl-key", undefined),
-        });
+        {
+          const portArg = getArg("--port", undefined);
+          await serveCommand({
+            transport: getArg("--transport", "stdio"),
+            port: portArg !== undefined ? parseInt(portArg, 10) : undefined,
+            sslCert: getArg("--ssl-cert", undefined),
+            sslKey: getArg("--ssl-key", undefined),
+          });
+        }
         break;
 
       case "daemon":
@@ -441,6 +447,10 @@ export async function cli() {
       case "completions":
         if (hasFlag("--help") || hasFlag("-h")) { printCompletionsHelp(); return; }
         completionsCommand({ shell: getArg("--shell", "zsh") });
+        break;
+
+      case "update":
+        await updateCommand();
         break;
 
       default:

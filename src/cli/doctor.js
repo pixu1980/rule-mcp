@@ -16,6 +16,7 @@
 import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { homedir, platform, arch } from "node:os";
 import { join } from "node:path";
+import { fileURLToPath } from "node:url";
 import { listTools } from "../tools/router.js";
 import { getRuntimePaths } from "./paths.js";
 import { detectInstalledAgents } from "./install.js";
@@ -56,7 +57,7 @@ function validateAgentConfigs(agents) {
       if (agent.name === "vscode") {
         try {
           const json = JSON.parse(content);
-          const mcpEntry = json.servers?.["rule-mcp"] || json.servers?.pix_galaxy_mcp;
+          const mcpEntry = json.servers?.["rule-mcp"];
           return {
             ...agent,
             validated: !!mcpEntry,
@@ -73,7 +74,7 @@ function validateAgentConfigs(agents) {
       if (agent.name === "claude" && agent.configFile.endsWith(".claude.json")) {
         try {
           const json = JSON.parse(content);
-          const mcpEntry = json.mcpServers?.["rule-mcp"] || json.mcpServers?.pix_galaxy_mcp;
+          const mcpEntry = json.mcpServers?.["rule-mcp"];
           return {
             ...agent,
             validated: !!mcpEntry,
@@ -89,7 +90,7 @@ function validateAgentConfigs(agents) {
       if (agent.configFile.endsWith("mcp.json")) {
         try {
           const json = JSON.parse(content);
-          const mcpEntry = json.mcpServers?.["rule-mcp"] || json.mcpServers?.pix_galaxy_mcp;
+          const mcpEntry = json.mcpServers?.["rule-mcp"];
           return {
             ...agent,
             validated: !!mcpEntry,
@@ -326,7 +327,7 @@ export function formatDoctorTerminal(report) {
 
 export function runDoctor(telemetry = false) {
   const p = getRuntimePaths();
-  const __dirname = new URL(".", import.meta.url).pathname;
+  const __dirname = fileURLToPath(new URL(".", import.meta.url));
   const pkg = JSON.parse(readFileSync(new URL("../../package.json", import.meta.url), "utf8"));
 
   // Detect + validate agent configs
@@ -368,7 +369,7 @@ export function runDoctor(telemetry = false) {
     platform: env.platform,
     arch: env.arch,
 
-    entrypoint: new URL("../../bin/rule-mcp.js", import.meta.url).pathname,
+    entrypoint: fileURLToPath(new URL("../../bin/rule-mcp.js", import.meta.url)),
 
     tools: listTools().map((t) => t.name),
 
@@ -401,7 +402,7 @@ export function runDoctor(telemetry = false) {
 
     // Paths
     commands: {
-      stdio: `${process.execPath} ${new URL("../../bin/rule-mcp.js", import.meta.url).pathname} serve`,
+      stdio: `${process.execPath} ${fileURLToPath(new URL("../../bin/rule-mcp.js", import.meta.url))} serve`,
       global: "rule-mcp serve",
       daemon: "rule-mcp daemon start",
       install: "rule-mcp install --agent all",

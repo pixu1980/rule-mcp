@@ -14,6 +14,7 @@ import { resolve, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { startServer } from "../server.js";
 import { startSseServer } from "../transport/sse.js";
+import { startHttpServer } from "../transport/http.js";
 import { callTool, listTools } from "../tools/router.js";
 import { installAgent, mcpServerConfig, writeEnvConfig, readEnvConfig } from "./install.js";
 import { uninstallFromAgent } from "./uninstall.js";
@@ -81,12 +82,12 @@ Commands:
 
   up [opts]            Start SSE server (alias for \`serve --transport sse\`)
                         On-demand HTTP daemon: pnpm up
-                        Pre-start, then connect agent to http://127.0.0.1:38000/sse
+                        Pre-start, then connect agent to http://127.0.0.1:{port}/sse
 
   daemon <action>        Manage daemon (process or native service)
     start|stop|status|logs           Process-based daemon
     install|uninstall|enable|disable Native service (macOS: LaunchAgent)
-    Port: 38000 (SSE)
+    Port: dynamic (first free port in range 3000–6000)
 
   install --agent <n>    Install into agent/IDE config (Terminal UI by default)
     --agent <name>         One of: claude, codex, cursor, copilot, gemini,
@@ -191,13 +192,20 @@ export async function serveCommand(opts = {}) {
   await loadAllSkills();
   const transport = opts.transport ?? "stdio";
 
-  if (transport === "sse") {
+  if (transport === "sse" || transport === "http") {
     const scheme = opts.sslCert && opts.sslKey ? "https" : "http";
-    const { port } = await startSseServer({
-      port: opts.port || 38000,
+    // Port/host resolution (explicit --port > RULE_MCP_PORT > canonical default)
+    // is centralized in the transport module so CLI, daemon, and Docker all agree.
+    // "http" = Streamable HTTP (current spec); "sse" = legacy HTTP+SSE (back-compat).
+    const start = transport === "http" ? startHttpServer : startSseServer;
+    const endpoint = transport === "http" ? "mcp" : "sse";
+    const { port, host } = await start({
+      port: opts.port,
       sslCert: opts.sslCert,
       sslKey: opts.sslKey,
     });
+    // Advertise a connectable host: 0.0.0.0 means "all interfaces", so clients use loopback.
+    const connectHost = host === "0.0.0.0" || host === "::" ? "127.0.0.1" : host;
     const configSnippet = JSON.stringify(
       {
         mcpServers: mcpServerConfig(entrypoint, { mode: "daemon", port }),
@@ -205,14 +213,12 @@ export async function serveCommand(opts = {}) {
       null,
       2,
     );
-    if (process.stderr.isTTY) {
-      console.error(`\nrule-mcp SSE server listening on ${scheme}://127.0.0.1:${port}/sse\n`);
-      console.error(`Config for agent's mcp.json:\n`);
-      console.error(configSnippet);
-      console.error(``);
-      console.error(`Then start an agent configured for HTTP/SSE.`);
-      console.error(``);
-    }
+    console.error(`\nrule-mcp ${transport === "http" ? "Streamable HTTP" : "SSE"} server listening on ${scheme}://${connectHost}:${port}/${endpoint}\n`);
+    console.error(`Config for agent's mcp.json:\n`);
+    console.error(configSnippet);
+    console.error(``);
+    console.error(`Then start an agent configured for HTTP/SSE.`);
+    console.error(``);
     await new Promise(() => {});
   } else {
     const configSnippet = JSON.stringify(
@@ -222,16 +228,14 @@ export async function serveCommand(opts = {}) {
       null,
       2,
     );
-    if (process.stderr.isTTY) {
-      console.error(`rule-mcp starting (STDIO transport)`);
-      console.error(`Config for agent's mcp.json:\n`);
-      console.error(configSnippet);
-      console.error(``);
-      console.error(`Add to agent config, then agent spawns this process.`);
-      console.error(`To test: run tools from another terminal with:`);
-      console.error(`  echo '{"jsonrpc":"2.0","method":"tools/list","id":1}' | node ${process.argv[1]} serve`);
-      console.error(``);
-    }
+    console.error(`rule-mcp starting (STDIO transport)`);
+    console.error(`Config for agent's mcp.json:\n`);
+    console.error(configSnippet);
+    console.error(``);
+    console.error(`Add to agent config, then agent spawns this process.`);
+    console.error(`To test: run tools from another terminal with:`);
+    console.error(`  echo '{"jsonrpc":"2.0","method":"tools/list","id":1}' | node ${process.argv[1]} serve`);
+    console.error(``);
     await startServer();
   }
 }
@@ -479,7 +483,7 @@ export function configCommand(opts = {}) {
  */
 export function configureCommand(opts = {}) {
   const RULE_MCP_VARS = {
-    RULE_MCP_STRICT_MODE: { desc: "Expose only gateway + read-only tools. Safe for untrusted code.", values: "1 = enable" },
+    RULE_MCP_MINIMAL_TOOLS: { desc: "Expose only the 10 dispatcher/action tools (fits client tool caps, cheaper context).", values: "1 = enable" },
     RULE_MCP_AUTO_ADR: { desc: "Automatically log architecture decisions.", values: "1 = enable" },
     RULE_MCP_DISABLE_AUTO_ADR: { desc: "Disable automatic ADR logging (used internally).", values: "1 = disable" },
     RULE_MCP_DAEMON: { desc: "Run as daemon process.", values: "1 = enable" },
@@ -579,6 +583,21 @@ export async function doctorCommand(opts = {}) {
 export async function skillsReloadCommand() {
   await loadAllSkills(true);
   print("Skills reloaded");
+}
+
+/**
+ * Force a self-update from the upstream git repo (fast-forward only).
+ * Prints a human-readable report.
+ */
+export async function updateCommand() {
+  const { runSelfUpdate, buildBanner, scheduleRestartIfNeeded } = await import("../core/self-update.js");
+  const result = await runSelfUpdate({ reloadSkills: false });
+  const banner = buildBanner(result);
+  if (banner) print(banner);
+  else if (result.updated === false && !result.skipped) print("✅ Already up to date.");
+  if (result.skipped) print(`Skipped: ${result.reason}${result.note ? ` — ${result.note}` : ""}`);
+  const restart = scheduleRestartIfNeeded(result, () => {});
+  if (restart) print(restart);
 }
 
 export { skillsInstallCommand, skillsListCommand };
