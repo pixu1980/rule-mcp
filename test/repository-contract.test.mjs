@@ -7,7 +7,7 @@ import { fileURLToPath } from "node:url";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const forbidden = "webi" + "doo";
-const ignoredDirs = new Set([".git", "node_modules", ".tokensave"]);
+const ignoredDirs = new Set([".git", "node_modules", ".tokensave", ".agents"]);
 
 function walk(dir, files = []) {
   for (const entry of readdirSync(dir, { withFileTypes: true })) {
@@ -29,7 +29,12 @@ assert.equal(
 );
 
 const references = [];
+const allowedFiles = new Set([
+  // These files describe the port history and intentionally contain the old name.
+  join(root, "skills", "rule-frontend-vanilla-reactive", "DESIGN.md"),
+]);
 for (const file of files) {
+  if (allowedFiles.has(file)) continue;
   const content = readFileSync(file);
   if (content.includes(0)) continue;
   if (content.toString("utf8").toLowerCase().includes(forbidden)) references.push(file);

@@ -10,6 +10,11 @@ import {
   registerTool,
 } from "../src/tools/router.js";
 
+// Hermetic: this suite asserts deterministic tool behavior and side effects,
+// not the result cache (which has its own test). Disable caching here.
+process.env.RULE_MCP_NO_CACHE = "1";
+process.env.RULE_MCP_NO_AUTOUPDATE = "1"; // hermetic: no real git ops in tests
+
 console.log("enforcement pipeline test");
 
 const adrCount = () => readdirSync("docs/adr").filter((name) => /^\d{3}-/.test(name)).length;
@@ -55,7 +60,7 @@ const routed = await callTool("rule", { prompt: "React accessible form" });
 assert.equal(routed.isError, undefined, "valid router request must pass enforcement");
 assert.equal(routed._meta?.pixEnforcement?.preprocessed, true, "result metadata must prove preprocessing");
 assert.equal(routed._meta?.pixEnforcement?.postprocessed, true, "result metadata must prove postprocessing");
-assert(routed.content.some((item) => item.text?.includes("PIX ENFORCEMENT CONTRACT")), "model-visible contract must be appended");
+assert(routed.content.some((item) => item.text?.includes("PIX WORKFLOW REMINDER")), "model-visible contract must be appended");
 const route = JSON.parse(routed.content[0].text);
 assert(route.route === "none" || route.skills_available.includes(route.route), "router must not invent skill names");
 await new Promise((resolve) => setTimeout(resolve, 50));
@@ -96,4 +101,24 @@ assert(
   "pix_check MCP schema must pass manifest dependencies into guardrail context",
 );
 
+// ── Token-saving: workflow reminder is full once per tool, terse thereafter, and
+//    fully suppressible via RULE_MCP_NO_REMINDER (Phase 4.1). ──
+const secondRoute = await callTool("rule", { prompt: "Vue button component" });
+const secondReminder = secondRoute.content.find((item) => item.text?.includes("PIX WORKFLOW REMINDER"));
+assert(secondReminder, "repeat call must still carry a (terse) reminder");
+assert(
+  !secondReminder.text.includes("Missing evidence means unknown"),
+  "repeat call reminder must be the terse one-liner, not the full contract",
+);
+
+process.env.RULE_MCP_NO_REMINDER = "1";
+const suppressed = await callTool("rule", { prompt: "React accessible form" });
+assert(
+  !suppressed.content.some((item) => item.text?.includes("PIX WORKFLOW REMINDER")),
+  "RULE_MCP_NO_REMINDER=1 must suppress the model-visible reminder",
+);
+assert.equal(suppressed._meta?.pixEnforcement?.postprocessed, true, "suppression must not disable enforcement metadata");
+delete process.env.RULE_MCP_NO_REMINDER;
+
 console.log("  ✅ preprocessing and postprocessing fail closed; hallucination guardrails enforced");
+console.log("  ✅ workflow reminder is full-once-then-terse and suppressible");
