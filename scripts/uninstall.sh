@@ -14,7 +14,7 @@
 #
 # Usage:
 #   ./scripts/uninstall.sh
-#   curl -fsSL https://rule-mcp.dev/uninstall.sh | bash
+#   curl -fsSL https://rule-ai.domain.example/uninstall.sh | bash
 #
 # Options:
 #   --agent <name>       Uninstall for a specific agent only
@@ -29,7 +29,7 @@ set -euo pipefail
 
 # ── Config ───────────────────────────────────────────────────────────────────
 MCP_SERVER_NAME="rule-mcp"
-SCRIPT_URL="https://rule-mcp.dev/uninstall.sh"
+SCRIPT_URL="https://rule-ai.domain.example/uninstall.sh"
 
 # ── Colors ───────────────────────────────────────────────────────────────────
 RED='\033[0;31m'
@@ -147,7 +147,8 @@ echo ""
 # ─────────────────────────────────────────────────────────────────────────────
 header "Phase 1: Agent MCP Configurations"
 
-# JSON removal helper: removes the pix_galaxy_mcp server entry from mcp.json
+# JSON removal helper: removes a server entry from mcp.json
+# Handles both mcpServers (most agents) and servers (VS Code global config)
 # Keeps the JSON valid by handling trailing commas
 remove_mcp_entry() {
   local file="$1"
@@ -457,12 +458,11 @@ remove_command_files "Cline project" "${CWD}/.clinerules/workflows/{cmd}.md"
 # ─────────────────────────────────────────────────────────────────────────────
 header "Phase 3: IDE Configurations"
 
-# ── Helper: remove rule entry from MCP JSON, supports both key names ──
+# ── Helper: remove entry for both service names (rule-mcp + legacy) ──
 remove_mcp_entry_dual() {
   local file="$1"
   local label="$2"
   remove_mcp_entry "$file" "$label" "rule-mcp"
-  # Also handle legacy underscored name
   remove_mcp_entry "$file" "$label" "pix_galaxy_mcp"
 }
 
@@ -479,7 +479,6 @@ if [[ -n "$VSCODE_GLOBAL_DIR" ]]; then
   VSCODE_GLOBAL_MCP="$VSCODE_GLOBAL_DIR/mcp.json"
   if [[ -f "$VSCODE_GLOBAL_MCP" ]]; then
     remove_mcp_entry_dual "$VSCODE_GLOBAL_MCP" "VS Code (global)"
-    # If servers is now empty, keep the file but with empty servers object
     if [[ "$DRY_RUN" == "false" && -f "$VSCODE_GLOBAL_MCP" ]]; then
       node -e "
 const fs = require('fs');
@@ -501,7 +500,7 @@ VSCODE_MCP="$(pwd)/.vscode/mcp.json"
 if [[ -f "$VSCODE_MCP" ]]; then
   remove_mcp_entry_dual "$VSCODE_MCP" "VS Code (project)"
   if [[ "$DRY_RUN" == "false" ]]; then
-    if [[ -f "$VSCODE_MCP" ]] && ! grep -q "mcpServers" "$VSCODE_MCP" 2>/dev/null; then
+    if [[ -f "$VSCODE_MCP" ]] && ! grep -q "mcpServers" "$VSCODE_MCP" 2>/dev/null && ! grep -q "\"servers\"" "$VSCODE_MCP" 2>/dev/null; then
       rm "$VSCODE_MCP" 2>/dev/null && sub "VS Code (project): removed empty mcp.json"
     fi
   fi
@@ -553,7 +552,7 @@ fi
 if [[ -n "$NEOVIM_MCP" && -f "$NEOVIM_MCP" ]]; then
   remove_mcp_entry_dual "$NEOVIM_MCP" "Neovim"
   if [[ "$DRY_RUN" == "false" ]]; then
-    if [[ -f "$NEOVIM_MCP" ]] && ! grep -q "mcpServers" "$NEOVIM_MCP" 2>/dev/null; then
+    if [[ -f "$NEOVIM_MCP" ]] && ! grep -q "mcpServers" "$NEOVIM_MCP" 2>/dev/null && ! grep -q "\"servers\"" "$NEOVIM_MCP" 2>/dev/null; then
       rm "$NEOVIM_MCP" 2>/dev/null && sub "Neovim: removed empty mcp.json"
     fi
   fi
@@ -566,7 +565,7 @@ JB_MCP="$(pwd)/.idea/mcp.json"
 if [[ -f "$JB_MCP" ]]; then
   remove_mcp_entry_dual "$JB_MCP" "JetBrains"
   if [[ "$DRY_RUN" == "false" ]]; then
-    if [[ -f "$JB_MCP" ]] && ! grep -q "mcpServers" "$JB_MCP" 2>/dev/null; then
+    if [[ -f "$JB_MCP" ]] && ! grep -q "mcpServers" "$JB_MCP" 2>/dev/null && ! grep -q "\"servers\"" "$JB_MCP" 2>/dev/null; then
       rm "$JB_MCP" 2>/dev/null && sub "JetBrains: removed empty mcp.json"
     fi
   fi
@@ -577,22 +576,22 @@ fi
 # Emacs config
 EMACS_CONFIG="$HOME_DIR/.emacs.d/init.el"
 if [[ -f "$EMACS_CONFIG" ]]; then
-  if grep -q "rule-mcp\|pix_galaxy_mcp" "$EMACS_CONFIG" 2>/dev/null; then
+  if grep -q "rule-mcp" "$EMACS_CONFIG" 2>/dev/null; then
     if [[ "$DRY_RUN" == "true" ]]; then
-      sub "[dry-run] Would remove rule-mcp lines from: ${EMACS_CONFIG}"
+      sub "[dry-run] Would remove rule-ai lines from: ${EMACS_CONFIG}"
     else
       cp "$EMACS_CONFIG" "${EMACS_CONFIG}.bak" 2>/dev/null || true
       if [[ "$OS" == "macos" ]]; then
-        sed -i '' '/pix_galaxy_mcp\|rule-mcp/d' "$EMACS_CONFIG"
+        sed -i '' '/rule-mcp/d' "$EMACS_CONFIG"
         sed -i '' '/;; rule-mcp/d' "$EMACS_CONFIG"
       else
-        sed -i '/pix_galaxy_mcp\|rule-mcp/d' "$EMACS_CONFIG"
+        sed -i '/rule-mcp/d' "$EMACS_CONFIG"
         sed -i '/;; rule-mcp/d' "$EMACS_CONFIG"
       fi
-      ok "Emacs: rule-mcp lines removed"
+      ok "Emacs: rule-ai lines removed"
     fi
   else
-    sub "Emacs: no rule-mcp config found, skipping"
+    sub "Emacs: no rule-ai config found, skipping"
   fi
 else
   sub "Emacs: no init.el found, skipping"
@@ -620,7 +619,7 @@ fi
 remove_extension() {
   local label="$1"
   local cli="$2"
-  local ext_id="rule-mcp.rule-vanilla-reactive"
+  local ext_id="rule.rule-vanilla-reactive"
 
   # Try via CLI
   if [[ -n "$cli" ]] && command -v "$cli" &>/dev/null; then
@@ -645,7 +644,7 @@ remove_extension() {
   # Always also remove the extension directory as a safety net
   for ext_dir in "${extension_dirs[@]}"; do
     if [[ -d "$ext_dir" ]]; then
-      for found in "$ext_dir"/rule-mcp.rule-vanilla-reactive-* "$ext_dir"/rule-mcp.rule-vanilla-reactive; do
+      for found in "$ext_dir"/rule.rule-vanilla-reactive-* "$ext_dir"/rule.rule-vanilla-reactive; do
         if [[ -d "$found" ]]; then
           base=$(basename "$found")
           if [[ "$DRY_RUN" == "true" ]]; then
@@ -671,7 +670,7 @@ remove_extension "Codium" "codium"
 any_removed=false
 for ext_dir in "${extension_dirs[@]}"; do
   if [[ -d "$ext_dir" ]]; then
-    remaining=$(find "$ext_dir" -maxdepth 1 -name "rule-mcp.rule-vanilla-reactive*" 2>/dev/null | head -1)
+    remaining=$(find "$ext_dir" -maxdepth 1 -name "rule.rule-vanilla-reactive*" 2>/dev/null | head -1)
     if [[ -n "$remaining" ]]; then
       any_removed=true
     fi
@@ -696,7 +695,7 @@ clean_shell_profile() {
 
   if grep -q "rule-mcp" "$profile" 2>/dev/null || grep -q "# rule-mcp:" "$profile" 2>/dev/null; then
     if [[ "$DRY_RUN" == "true" ]]; then
-      sub "[dry-run] Would remove rule-mcp env vars from: ${profile}"
+      sub "[dry-run] Would remove rule-ai env vars from: ${profile}"
     else
       if [[ "$OS" == "macos" ]]; then
         sed -i '' '/# rule-mcp:/d' "$profile" 2>/dev/null || true
@@ -714,7 +713,7 @@ clean_shell_profile() {
       ok "Cleaned: ${profile}"
     fi
   else
-    sub "${profile}: no rule-mcp entries, skipping"
+    sub "${profile}: no rule-ai entries, skipping"
   fi
   return 0
 }
@@ -766,18 +765,18 @@ POST_COMMIT="$HOOKS_DIR/post-commit"
 if [[ -f "$POST_COMMIT" ]]; then
   if grep -q "rule" "$POST_COMMIT" 2>/dev/null; then
     if [[ "$DRY_RUN" == "true" ]]; then
-      sub "[dry-run] Would remove rule-mcp lines from: ${POST_COMMIT}"
+      sub "[dry-run] Would remove rule-ai lines from: ${POST_COMMIT}"
     else
       cp "$POST_COMMIT" "${POST_COMMIT}.bak" 2>/dev/null || true
       if [[ "$OS" == "macos" ]]; then
-        sed -i '' '/rule-mcp/d' "$POST_COMMIT" 2>/dev/null || true
+        sed -i '' '/rule-ai/d' "$POST_COMMIT" 2>/dev/null || true
       else
-        sed -i '/rule-mcp/d' "$POST_COMMIT" 2>/dev/null || true
+        sed -i '/rule-ai/d' "$POST_COMMIT" 2>/dev/null || true
       fi
       ok "Git post-commit hook cleaned"
     fi
   else
-    sub "Git hooks: no rule-mcp entries, skipping"
+    sub "Git hooks: no rule-ai entries, skipping"
   fi
 else
   sub "Git hooks: not found, skipping"
@@ -821,7 +820,7 @@ if command -v rule-mcp &>/dev/null; then
   if [[ "$DRY_RUN" == "true" ]]; then
     sub "[dry-run] Would uninstall daemon service for $(detect_os)"
     if [[ "$OS" == "macos" ]]; then
-      sub "  Would unload: ~/Library/LaunchAgents/io.github.pixu1980.rule-mcp.plist"
+      sub "  Would unload: ~/Library/LaunchAgents/io.github.rule.rule-mcp.plist"
       sub "  Would remove: plist file"
     fi
   else
@@ -840,7 +839,7 @@ if command -v rule-mcp &>/dev/null; then
 else
   # Manual cleanup without the binary
   if [[ "$OS" == "macos" ]]; then
-    PLIST="$HOME_DIR/Library/LaunchAgents/io.github.pixu1980.rule-mcp.plist"
+    PLIST="$HOME_DIR/Library/LaunchAgents/io.github.rule.rule-mcp.plist"
     if [[ -f "$PLIST" ]]; then
       if [[ "$DRY_RUN" == "true" ]]; then
         sub "[dry-run] Would remove: ${PLIST}"
@@ -911,7 +910,7 @@ echo -e "  ${YELLOW}To remove them manually:  rm -rf $(pwd)${NC}"
 echo ""
 
 echo -e "  ${CYAN}To reinstall later:${NC}"
-echo -e "    curl -fsSL https://rule-mcp.dev/install.sh | bash"
+echo -e "    curl -fsSL https://rule-ai.domain.example/install.sh | bash"
 echo -e "    # OR"
 echo -e "    cd $(pwd) && ./scripts/install.sh"
 echo ""

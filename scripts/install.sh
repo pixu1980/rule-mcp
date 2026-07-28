@@ -12,7 +12,7 @@
 #   3. Registers rule-mcp as an MCP server in each detected agent
 #   4. Installs IDE extensions / configs for supported editors
 #   5. Optionally configures model provider API keys
-#   6. Appends instruction rules so agents prefer rule-mcp skills
+#   6. Appends instruction rules so agents prefer rule-ai skills
 #   7. Runs a health check to confirm everything works
 #
 # Prerequisites:
@@ -20,7 +20,7 @@
 #   - pnpm (recommended) or npm
 #
 # Usage:
-#   curl -fsSL https://rule-mcp.dev/install.sh | bash
+#   curl -fsSL https://rule-ai.domain.example/install.sh | bash
 #   # OR
 #   ./scripts/install.sh
 #
@@ -39,7 +39,7 @@ set -euo pipefail
 # ── Config ───────────────────────────────────────────────────────────────────
 MCP_SERVER_NAME="rule-mcp"
 NODE_MIN="20"
-SCRIPT_URL="https://rule-mcp.dev/install.sh"
+SCRIPT_URL="https://rule-ai.domain.example/install.sh"
 NPM_PACKAGE="rule-mcp"
 PACKAGE_VERSION="latest"
 
@@ -106,7 +106,7 @@ while [[ $# -gt 0 ]]; do
     --mode)       INSTALL_MODE="${2:-}"; MODE_WAS_REQUESTED=true; shift 2 ;;
     --no-interactive) INTERACTIVE=false; shift ;;
     --help|-h)
-      echo "Usage: curl -fsSL https://rule-mcp.dev/install.sh | bash"
+      echo "Usage: curl -fsSL https://rule-ai.domain.example/install.sh | bash"
       echo ""
       echo "Options:"
       echo "  --agent <name>   Install for a specific agent only"
@@ -507,7 +507,7 @@ install_vsix_for_editor() {
     return 1
   fi
 
-  echo -e "  ${CYAN}Installing Pix Vanilla Reactive for ${label}...${NC}"
+  echo -e "  ${CYAN}Installing rule Vanilla Reactive for ${label}...${NC}"
   if "$cli" --install-extension "$vsix" --force 2>&1; then
     echo -e "  ${GREEN}✓ ${label} extension installed${NC}"
     return 0
@@ -693,7 +693,7 @@ if [[ "$GIT_AVAIL" == "true" ]] && git rev-parse --git-dir 2>/dev/null; then
     sub "[dry-run] Would create: ${POST_COMMIT} (auto-sync hook)"
   else
     if [[ -f "$POST_COMMIT" ]] && grep -q "rule" "$POST_COMMIT" 2>/dev/null; then
-      warn "Git post-commit hook already has rule-mcp, skipping"
+      warn "Git post-commit hook already has rule-ai, skipping"
     else
       cat >> "$POST_COMMIT" <<- HOOK_EOF
 
@@ -719,7 +719,7 @@ if [[ "$INSTALL_MODE" == "daemon" ]]; then
   if [[ "$DRY_RUN" == "true" ]]; then
   sub "[dry-run] Would install daemon service for $(detect_os)"
   if [[ "$OS" == "macos" ]]; then
-    sub "  Would create: ~/Library/LaunchAgents/io.github.pixu1980.rule-mcp.plist"
+    sub "  Would create: ~/Library/LaunchAgents/io.github.rule.rule-mcp.plist"
     sub "  Would run: launchctl load -w"
     sub "  Result: appears in System Settings → General → Login Items"
   elif [[ "$OS" == "linux" ]]; then
@@ -737,7 +737,7 @@ else
       echo -e "  ${GREEN}  It will start automatically at your next login.${NC}"
       echo ""
       echo -e "  ${CYAN}To start it right now:${NC}"
-      echo -e "    launchctl start io.github.pixu1980.rule-mcp"
+      echo -e "    launchctl start io.github.rule.rule-mcp"
       echo ""
       echo -e "  ${CYAN}To view logs:${NC}"
       echo -e "    ${BIN_CMD} daemon logs"
@@ -818,7 +818,7 @@ echo -e "    ${BIN_CMD} daemon status    # Check daemon/service status"
 echo -e "    ${BIN_CMD} daemon install   # Install native service (Login Items on macOS)"
 echo ""
 
-echo -e "  ${CYAN}Add to any agent's mcp.json:${NC}"
+echo -e "  ${CYAN}Add to pi.dev coding agent's mcp.json (includes pi-specific properties):${NC}"
 echo -e "  ${GREEN}{${NC}"
 echo -e "    ${GREEN}\"mcpServers\": {${NC}"
 echo -e "      ${GREEN}\"$MCP_SERVER_NAME\": {${NC}"
@@ -826,6 +826,16 @@ echo -e "        ${GREEN}\"command\": \"${BIN_CMD%% *}\",${NC}"
 echo -e "        ${GREEN}\"args\": [\"${BIN_CMD#* }\", \"serve\"],${NC}"
 echo -e "        ${GREEN}\"directTools\": true,${NC}"
 echo -e "        ${GREEN}\"lifecycle\": \"keep-alive\"${NC}"
+echo -e "      ${GREEN}}${NC}"
+echo -e "    ${GREEN}}${NC}"
+echo -e "  ${GREEN}}${NC}"
+echo ""
+echo -e "  ${CYAN}For other agents (omit pi-specific properties):${NC}"
+echo -e "  ${GREEN}{${NC}"
+echo -e "    ${GREEN}\"mcpServers\": {${NC}"
+echo -e "      ${GREEN}\"$MCP_SERVER_NAME\": {${NC}"
+echo -e "        ${GREEN}\"command\": \"${BIN_CMD%% *}\",${NC}"
+echo -e "        ${GREEN}\"args\": [\"${BIN_CMD#* }\", \"serve\"]${NC}"
 echo -e "      ${GREEN}}${NC}"
 echo -e "    ${GREEN}}${NC}"
 echo -e "  ${GREEN}}${NC}"

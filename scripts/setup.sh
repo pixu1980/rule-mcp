@@ -6,7 +6,7 @@
 # One-command setup: npm install + agent detection + configuration.
 # Designed to be curl-pipe-able:
 #
-#   curl -fsSL https://rule-mcp.dev/setup.sh | bash
+#   curl -fsSL https://rule-ai.domain.example/setup.sh | bash
 #
 # Or local:
 #
@@ -36,7 +36,7 @@ fi
 
 # Otherwise, fetch from GitHub and run
 echo "Downloading rule-mcp installer..."
-INSTALL_URL="https://raw.githubusercontent.com/pixu1980/rule-mcp/main/scripts/install.sh"
+INSTALL_URL="https://raw.githubusercontent.com/rule/rule-mcp/main/scripts/install.sh"
 
 if command -v curl &>/dev/null; then
   bash -c "$(curl -fsSL "$INSTALL_URL")" -- "$@"

@@ -4,7 +4,7 @@
  * @module scripts/post-process
  *
  * Standalone file tree post-processing script.
- * Scans a project directory, validates the file tree against rule galaxy
+ * Scans a project directory, validates the file tree against rule AI
  * conventions, and auto-fixes violations.
  *
  * Usage:
@@ -44,7 +44,7 @@ if (HELP) {
   console.log(`
 Usage: node scripts/post-process.mjs [options]
 
-Validate and auto-fix project file tree structure against rule galaxy conventions.
+Validate and auto-fix project file tree structure against rule AI conventions.
 
 Options:
   --dir <path>      Project root directory (default: .)

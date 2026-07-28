@@ -13,7 +13,7 @@
 #
 # Usage:
 #   .\scripts\uninstall.ps1
-#   powershell -c "irm https://rule-mcp.dev/uninstall.ps1 | iex"
+#   powershell -c "irm https://rule-ai.domain.example/uninstall.ps1 | iex"
 #
 # Parameters:
 #   -Agent <name>    Uninstall for a specific agent only
@@ -39,7 +39,7 @@ if ($Help) {
   Write-Host ""
   Write-Host "Usage:" -ForegroundColor Yellow
   Write-Host "  .\scripts\uninstall.ps1"
-  Write-Host "  powershell -c `"irm https://rule-mcp.dev/uninstall.ps1 | iex`""
+  Write-Host "  powershell -c `"irm https://rule-ai.domain.example/uninstall.ps1 | iex`""
   Write-Host ""
   Write-Host "Parameters:" -ForegroundColor Yellow
   Write-Host "  -Agent <name>    Uninstall for a specific agent only"
@@ -52,7 +52,7 @@ if ($Help) {
 
 # ── Config ──
 $McpServerName = "rule-mcp"
-$ScriptUrl = "https://rule-mcp.dev/uninstall.ps1"
+$ScriptUrl = "https://rule-ai.domain.example/uninstall.ps1"
 
 # ── State ──
 $RemovedCount = 0
@@ -437,13 +437,17 @@ if ($IsMacOS -or $IsLinux) {
 }
 
 # Neovim
-$NeovimDir = "$HomeDir\AppData\Local\nvim"
-$NeovimMcp = "$NeovimDir\mcp.json"
+$NeovimMcp = ""
+if ($IsMacOS -or $IsLinux) {
+  $NeovimMcp = "$HomeDir/.config/nvim/mcp.json"
+} else {
+  $NeovimMcp = "$HomeDir\AppData\Local\nvim\mcp.json"
+}
 if (Test-Path $NeovimMcp) {
-  Remove-McpEntry -FilePath $NeovimMcp -Label "Neovim"
+  Remove-McpEntryDual -FilePath $NeovimMcp -Label "Neovim"
   if (-not $DryRun) {
     $remaining = Get-Content $NeovimMcp -Raw
-    if ($remaining -and -not $remaining.Contains('mcpServers')) {
+    if ($remaining -and -not $remaining.Contains('mcpServers') -and -not $remaining.Contains('servers')) {
       Remove-Item $NeovimMcp -Force -ErrorAction SilentlyContinue
       Write-Step "Neovim: removed empty mcp.json"
     }
@@ -454,10 +458,10 @@ if (Test-Path $NeovimMcp) {
 $IdeaDir = "$ProjectDir\.idea"
 $IdeaMcp = "$IdeaDir\mcp.json"
 if (Test-Path $IdeaMcp) {
-  Remove-McpEntry -FilePath $IdeaMcp -Label "JetBrains"
+  Remove-McpEntryDual -FilePath $IdeaMcp -Label "JetBrains"
   if (-not $DryRun) {
     $remaining = Get-Content $IdeaMcp -Raw
-    if ($remaining -and -not $remaining.Contains('mcpServers')) {
+    if ($remaining -and -not $remaining.Contains('mcpServers') -and -not $remaining.Contains('servers')) {
       Remove-Item $IdeaMcp -Force -ErrorAction SilentlyContinue
       Write-Step "JetBrains: removed empty mcp.json"
     }
@@ -472,7 +476,7 @@ Write-Header "Phase 3b: IDE Extensions"
 function Remove-Extension {
   param([string]$Label, [string]$Cli)
 
-  $extId = "rule-mcp.rule-vanilla-reactive"
+  $extId = "rule.rule-vanilla-reactive"
 
   # Try via CLI
   if ($Cli -and (Get-Command $Cli -ErrorAction SilentlyContinue)) {
@@ -515,7 +519,7 @@ Remove-Extension -Label "Codium" -Cli "codium"
 $foundAny = $false
 foreach ($dir in $extDirs) {
   if (Test-Path $dir) {
-    $matches = Get-ChildItem $dir -Filter "rule-mcp.rule-vanilla-reactive*" -Directory -ErrorAction SilentlyContinue
+    $matches = Get-ChildItem $dir -Filter "rule.rule-vanilla-reactive*" -Directory -ErrorAction SilentlyContinue
     foreach ($m in $matches) {
       $foundAny = $true
       if ($DryRun) {
@@ -628,7 +632,7 @@ Write-Host "To remove them manually:  Remove-Item -Recurse -Force $ProjectDir" -
 Write-Host ""
 
 Write-Host "To reinstall later:" -ForegroundColor Cyan
-Write-Host "  powershell -c `"irm https://rule-mcp.dev/install.ps1 | iex`""
+Write-Host "  powershell -c `"irm https://rule-ai.domain.example/install.ps1 | iex`""
 Write-Host "  # OR"
 Write-Host "  .\scripts\install.ps1"
 Write-Host ""
