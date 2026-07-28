@@ -2,7 +2,7 @@
  * @module core/file-tree
  *
  * File tree validation and auto-fix engine.
- * Enforces the pix galaxy barrel file tree convention:
+ * Enforces the pix AI barrel file tree convention:
  *
  *   src/components/PascalCase/
  *     ├── _PascalCase.ext    ← Component file (underscore + PascalCase)
@@ -560,7 +560,7 @@ function toKebab(name) {
 }
 
 /**
- * Generate the full file tree for a component following pix galaxy conventions.
+ * Generate the full file tree for a component following pix AI conventions.
  * Returns an array of { path, content } objects.
  *
  * @param {object} options

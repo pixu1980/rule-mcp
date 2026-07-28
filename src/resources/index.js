@@ -66,7 +66,7 @@ export async function readResource(uri) {
     for (const base of [embeddedSkills, homeSkills]) {
       try {
         for (const entry of readdirSync(base, { withFileTypes: true })) {
-          if (entry.isDirectory() && (entry.name === "pix" || entry.name.startsWith("pix-"))) {
+          if (entry.isDirectory() && entry.name.startsWith("pix")) {
             const sp = join(base, entry.name, "SKILL.md");
             try {
               const c = readFileSync(sp, "utf8");

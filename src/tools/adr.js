@@ -286,7 +286,7 @@ export function registerProcessAdrTool() {
       title = `File tree fix: ${args.mode || "lint"} on ${args.path || "."}`;
       tags = "tool, auto-log, file-tree";
       contextLines = [`Mode: ${args.mode || "lint"}`, `Source: ${args.srcDir || "src"}`];
-      decisionLines = [`File tree validated/fixed for pix galaxy conventions.`];
+      decisionLines = [`File tree validated/fixed for pix AI conventions.`];
 
     } else {
       // Generic (pix_architect and others)

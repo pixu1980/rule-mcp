@@ -71,7 +71,7 @@ export const COMPONENT_TEMPLATES = {
     vanilla: [
       "/**",
       " * FILE: playwright.config.js",
-      " * USAGE: Shared Playwright config for pix galaxy projects",
+      " * USAGE: Shared Playwright config for pix AI projects",
       ' * SCOPE: Chromium, a11y tests in tests/a11y/, dev server auto-start',
       " */",
       "",
