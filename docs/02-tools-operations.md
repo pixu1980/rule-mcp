@@ -122,7 +122,7 @@ All MCP tools execute inside fail-closed enforcement boundary.
 - Mandatory `addPostToolHook()` hooks are awaited.
 - Validate non-empty text-only MCP result and 1 MiB output limit.
 - For `rule`, parse routing JSON and reject unknown skills, unknown tools, or confidence outside `0..1`.
-- Append visible `PIX ENFORCEMENT CONTRACT` and `_meta.pixEnforcement` audit record.
+- Append visible `rule ENFORCEMENT CONTRACT` and `_meta.pixEnforcement` audit record.
 - Only then fire non-blocking observational hooks such as auto-ADR.
 
 ### Blocking code validation
@@ -850,7 +850,7 @@ git add -A
 git commit -m "feat: initial release v0.1.0"
 
 # Add remote
-git remote add origin https://github.com/pixu1980/rule-mcp
+git remote add origin https://github.com/rule/rule-mcp
 
 # Push
 git branch -M main
@@ -861,7 +861,7 @@ git push -u origin main
 
 ## 2. Configure GitHub Secrets
 
-Go to **GitHub → rule-mcp/rule-mcp → Settings → Secrets and variables → Actions** and add:
+Go to **GitHub → rule-mcp-rule-mcp → Settings → Secrets and variables → Actions** and add:
 
 | Secret | Value |
 |--------|-------|
@@ -897,7 +897,7 @@ The release pipeline (`.github/workflows/release.yml`) runs automatically:
 | Step | Action |
 |------|--------|
 | ✅ npm publish | Publish to npmjs.com with provenance |
-| ✅ Docker build | Multi-arch (linux/amd64 + linux/arm64) → `ghcr.io/pixu1980/rule-mcp` |
+| ✅ Docker build | Multi-arch (linux/amd64 + linux/arm64) → `ghcr.io/rule/rule-mcp` |
 | ✅ Homebrew formula | Generate `.rb` and attach to GitHub Release |
 | ✅ GitHub Release | Create release with `.tgz` + assets |
 
@@ -905,14 +905,14 @@ The release pipeline (`.github/workflows/release.yml`) runs automatically:
 
 ## 5. Homebrew Tap Configuration
 
-To enable `brew install pixu1980/tap/rule-mcp`:
+To enable `brew install rule/tap/rule-mcp`:
 
 ```bash
 # Create the tap repo
-# Go to https://github.com/new → create: rule-mcp/homebrew-tap
+# Go to https://github.com/new → create: rule-mcp-homebrew-tap
 
 # Clone, copy the generated formula, push
-git clone https://github.com/pixu1980/homebrew-tap
+git clone https://github.com/rule/homebrew-tap
 cp rule-mcp.rb homebrew-tap/Formula/
 cd homebrew-tap
 git add Formula/rule-mcp.rb
@@ -930,9 +930,9 @@ Users can install using these methods:
 |--------|---------|
 | **pnpm/pnpm** | `pnpm add -g rule-mcp` |
 | **pnpx** | `pnpx rule-mcp serve` |
-| **Homebrew** | `brew install pixu1980/tap/rule-mcp` |
-| **Docker** | `docker pull ghcr.io/pixu1980/rule-mcp` |
-| **Winget** | `winget install pixu1980.rule-mcp` |
+| **Homebrew** | `brew install rule/tap/rule-mcp` |
+| **Docker** | `docker pull ghcr.io/rule/rule-mcp` |
+| **Winget** | `winget install rule.rule-mcp` |
 | **Scoop** | `scoop bucket add rule-mcp && scoop install rule-mcp` |
 | **GitHub Release** | Direct `.tgz` download |
 
@@ -962,7 +962,7 @@ rule-mcp doctor
 rule-mcp install --agent all
 
 # Test Docker
-docker pull ghcr.io/pixu1980/rule-mcp
+docker pull ghcr.io/rule/rule-mcp
 docker compose up -d
 curl http://localhost:37999/health
 
@@ -1018,7 +1018,7 @@ Everything else is already configured in existing workflows:
 - CI: `.github/workflows/ci.yml`
 - Release: `.github/workflows/release.yml`
 - Docker: `Dockerfile` + `docker-compose.yml`
-- Winget: `.github/winget/rule-mcp.rule-mcp.yaml`
+- Winget: `.github/winget/rule-ai.rule-mcp.yaml`
 - Scoop: `.github/scoop/rule-mcp.json`
 - Server manifest: `server.json`
 - Changelog: `CHANGELOG.md`
@@ -1175,7 +1175,7 @@ rule-mcp daemon logs
 **Issue**: `rule` returns no matching skill.
 - **Verify**: Skills are loaded:
   ```bash
-  rule-mcp tools list | grep rule-mcp
+  rule-mcp tools list | grep rule-ai
   ```
 - **Try**: Use `pix_search` for free-text search across all skills.
 
@@ -1243,7 +1243,7 @@ Replace:
 3. Copy the token and use it in the command above
 
 **To find the project ID:**
-1. Go to the project page: `https://github.com/pixu1980/rule-mcp-skills`
+1. Go to the project page: `https://github.com/rule/rule-mcp-skills`
 2. The project ID is shown under the project name
 
 ### 2. Install the package globally

@@ -824,12 +824,12 @@ All data stays on the filesystem. The MCP server is a read-only/validate-only se
 
 | Platform | Package | Method |
 |----------|---------|--------|
-| macOS | Homebrew | `brew install pixu1980/tap/rule-mcp` |
+| macOS | Homebrew | `brew install rule/tap/rule-mcp` |
 | macOS | pnpm | `pnpm add -g rule-mcp` |
 | Linux | pnpm | `pnpm add -g rule-mcp` |
-| Linux | Docker | `docker pull rule-mcp/rule-mcp` |
+| Linux | Docker | `docker pull rule-ai/rule-mcp` |
 | Windows | pnpm | `pnpm add -g rule-mcp` |
-| Windows | Winget | `winget install pixu1980/rule-mcp` |
+| Windows | Winget | `winget install rule/rule-mcp` |
 | All | Direct download | GitHub Releases `.tgz` |
 | All | pnpx | `pnpx rule-mcp serve` |
 
@@ -1063,10 +1063,10 @@ All data stays on the filesystem. The MCP server is a read-only/validate-only se
 - [x] **4.3** Add Docker support
       - `Dockerfile` — multi-stage, `node:22-alpine`, embedded skills, no build step
       - `docker-compose.yml` — IDE integration via SSE on port 37999
-      - CI pushes to `ghcr.io/pixu1980/rule-mcp` with semver + sha tags
+      - CI pushes to `ghcr.io/rule/rule-mcp` with semver + sha tags
 
 - [x] **4.4** Add Windows package manager support
-      - Winget manifest: `.github/winget/rule-mcp.rule-mcp.yaml`
+      - Winget manifest: `.github/winget/rule.rule-mcp.yaml`
       - Scoop manifest: `.github/scoop/rule-mcp.json`
 
 - [x] **4.5** Add CHANGELOG + conventional commits

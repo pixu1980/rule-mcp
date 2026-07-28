@@ -79,10 +79,10 @@ To integrate with an agent via `mcp.json`:
 For contributors or custom builds:
 
 ```bash
-git clone https://github.com/pixu1980/rule-mcp.git
+git clone git@gitlab.palmabit.cloud:rule/rule-ai/rule-mcp.git
 cd rule-mcp
 pnpm install
-pnpm link --global
+pnpm link . --global
 ```
 
 Verify:

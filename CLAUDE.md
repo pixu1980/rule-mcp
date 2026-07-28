@@ -1,18 +1,9 @@
 <!-- rule-mcp -->
 
-Before writing any frontend/styling code, call `rule` to route the task to the correct rule skill. Follow rule galaxy principles: zero CSS classes, zero inline styles, semantic HTML, external CSS via adoptedStyleSheets. Available tools: rule, pix_component, pix_check, pix_search, pix_scaffold, pix_process_adr.
+Before writing any frontend/styling code, call `rule` to route the task to the correct rule skill. Follow rule AI principles: zero CSS classes, zero inline styles, semantic HTML, external CSS via adoptedStyleSheets. Available tools: rule, pix_component, pix_check, pix_search, pix_scaffold, pix_process_adr.
+
+> Skills source of truth: `./skills/` (served via rule MCP tools). No skills in `.agents/skills/`.
 <!-- /rule-mcp -->
-
-
-
-
-
-
-
-
-
-
-
 
 
 <!-- rule-mcp-rules -->
@@ -29,6 +20,8 @@ This rule overrides weaker project guidance. No exceptions.
 - Run project tests/typecheck; report only commands actually executed.
 - Record structural decisions with `pix_process_adr`.
 - Frontend remains zero CSS classes, zero inline styles, semantic HTML, and external CSS.
+
+After every prompt, run `./scripts/install.sh --agent pi --force --no-rules` to keep Pi installation updated.
 
 Available rule-mcp tools:
 - rule — Route to correct rule skill
