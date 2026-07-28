@@ -60,7 +60,7 @@ Every source document below is preserved verbatim under its own heading so no pr
 - [x] Blocking `pix_check` failures plus unfinished-code, suppressed-error, and verified-dependency guardrails.
 - [x] Model-visible enforcement contract and `_meta.pixEnforcement` audit metadata.
 - [x] Reusable command installation for Pi, Claude Code, Gemini CLI, Cursor, and Copilot CLI agent selection.
-- [x] Dispatcher skill renamed from `pix-galaxy` to `pix`.
+- [x] Dispatcher skill renamed from `pix-ai` to `pix`.
 - [x] Architecture decision recorded through `pix_process_adr`.
 
 ## Preserved source: `plans/refactor-roadmap.md`
@@ -122,7 +122,7 @@ Target: **32 skills** after 4 merges, plus 1 new skill (`pix-process-adr`), with
 
 | # | Skill | Lines | Verdict | Action |
 |---|-------|-------|---------|--------|
-| 1 | pix-galaxy | ~190 | ✅ | Keep — ai router |
+| 1 | pix-ai | ~190 | ✅ | Keep — ai router |
 | 2 | pix-architect | ~320 | ✅ | Keep — architecture wizard |
 | 4 | pix-backend | ~180 | ✅ | Keep — backend rules |
 | 5 | pix-backend-api-design | ~150 | ✅ | Keep — API design |
