@@ -7,13 +7,23 @@ version: "3.9"
 services:
   mcp:
     build: .
-    image: ghcr.io/pixu1980/rule-mcp:latest
+    image: ghcr.io/rule/rule-mcp:latest
     container_name: rule-mcp
     ports:
       - "37999:37999"
-    command: ["node", "src/index.js", "serve", "--transport", "sse"]
+    command: ["node", "src/index.js", "serve", "--transport", "sse", "--port", "37999"]
     environment:
       RULE_MCP_SSE_TOKEN: "${RULE_MCP_SSE_TOKEN:?Set by the rule-mcp installer}"
+      # Bind all interfaces inside the container so the mapped port is reachable from the host.
+      RULE_MCP_HOST: "0.0.0.0"
+      # Feature opt-out switches, shipped at "0" (feature ON) for discoverability.
+      # Flip any to "1" to disable that feature.
+      RULE_MCP_NO_AUTOUPDATE: "0"
+      RULE_MCP_NO_AUTORESTART: "0"
+      RULE_MCP_NO_CACHE: "0"
+      RULE_MCP_NO_CAVEMAN: "0"
+      RULE_MCP_NO_TOKENSAVE: "0"
+      RULE_MCP_NO_REMINDER: "0"
     healthcheck:
       test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:37999/health"]
       interval: 10s

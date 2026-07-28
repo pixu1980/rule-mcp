@@ -1,13 +1,13 @@
 {
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
-  "name": "io.github.pixu1980/rule-mcp",
+  "name": "io.github.rule/rule-mcp",
   "title": "rule-mcp",
   "description": "MCP server for the rule-* skill ecosystem. Serves styleguides, component templates, framework best practices, and design system patterns.",
   "repository": {
-    "url": "https://github.com/pixu1980/rule-mcp",
+    "url": "https://github.com/rule/rule-mcp",
     "source": "github"
   },
-  "websiteUrl": "https://github.com/pixu1980/rule-mcp",
+  "websiteUrl": "https://github.com/rule/rule-mcp",
   "version": "1.0.0",
   "packages": [
     {
