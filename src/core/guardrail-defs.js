@@ -323,7 +323,7 @@ export const SHARED_GUARDRAILS = [
 ];
 
 // ─── File tree guardrails (validate structure, not content) ───
-// These check the LLM output file tree against pix galaxy conventions.
+// These check the LLM output file tree against pix AI conventions.
 // They are registered in the FRAMEWORK_GUARDRAILS map for
 // pix-styleguide, pix-architect, and all UI framework skills.
 

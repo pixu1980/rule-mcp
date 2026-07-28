@@ -3,7 +3,7 @@
  *
  * MCP Prompt registry for pix-galaxy-mcp.
  * Provides reusable prompt templates that guide agents
- * through pix galaxy workflow phases.
+ * through pix AI workflow phases.
  *
  * @see https://spec.modelcontextprotocol.io/specification/2025-04-01/#prompts
  */
@@ -25,7 +25,7 @@ export function listPrompts() {
     },
     {
       name: "pix-generate-component",
-      description: "Generate a component following pix galaxy principles",
+      description: "Generate a component following pix AI principles",
       arguments: [
         { name: "framework", description: "Target framework", required: true },
         { name: "component", description: "Component type (button, card, modal, formField, list, nav)", required: true },
@@ -91,14 +91,14 @@ export function getPrompt(name) {
     case "pix-generate-component":
       return {
         name,
-        description: "Generate a component following pix galaxy principles",
+        description: "Generate a component following pix AI principles",
         messages: [
           {
             role: "user",
             content: {
               type: "text",
               text:
-                "You are a component generator that outputs framework-specific code following pix galaxy principles:\n" +
+                "You are a component generator that outputs framework-specific code following pix AI principles:\n" +
                 "- Zero CSS classes (use element + [data-part] selectors only)\n" +
                 "- Zero inline styles\n" +
                 "- Semantic HTML\n" +

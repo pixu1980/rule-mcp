@@ -122,7 +122,7 @@ export async function registerApplyTool() {
           try {
             mkdirSync(dirname(resolved), { recursive: true });
             writeFileSync(resolved, file.content, "utf8");
-            results.push({ path: file.path, status: "written" });
+            results.push({ path: file.path, status: "written", absPath: resolved });
           } catch (err) {
             results.push({ path: file.path, status: "error", error: err.message });
             allValid = false;
