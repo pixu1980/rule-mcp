@@ -24,6 +24,7 @@ frameworks: [all]
 | Skill | Tool | Best For |
 |-------|------|----------|
 | [pix-toolchain-vite](../pix-toolchain-vite/SKILL.md) | Vite | Modern frontend (default choice, Vite 8 + Rolldown) |
+| [pix-toolchain-rspack](../pix-toolchain-rspack/SKILL.md) | Rspack | Rust-based webpack-compatible bundler, fast HMR |
 | [pix-toolchain-parcel](../pix-toolchain-parcel/SKILL.md) | Parcel | Zero-config bundler, rapid prototyping |
 
 ## Linting & Formatting
@@ -51,7 +52,7 @@ frameworks: [all]
 ## Quick Selection Guide
 
 ```
-Need a build tool?                      → pix-toolchain-vite (default) or pix-toolchain-parcel
+Need a build tool?                      → pix-toolchain-vite (default), pix-toolchain-rspack, or pix-toolchain-parcel
 Need linting + formatting?              → pix-toolchain-biome (new) or pix-toolchain-eslint (legacy)
 Need a package manager?                 → pix-toolchain-pnpm
 Need monorepo orchestration?            → pix-toolchain-turborepo
