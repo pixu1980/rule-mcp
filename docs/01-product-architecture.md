@@ -824,12 +824,12 @@ All data stays on the filesystem. The MCP server is a read-only/validate-only se
 
 | Platform | Package | Method |
 |----------|---------|--------|
-| macOS | Homebrew | `brew install pixu1980/tap/pix-galaxy-mcp` |
+| macOS | Homebrew | `brew install pix/tap/pix-galaxy-mcp` |
 | macOS | pnpm | `pnpm add -g pix-galaxy-mcp` |
 | Linux | pnpm | `pnpm add -g pix-galaxy-mcp` |
-| Linux | Docker | `docker pull pix-galaxy/pix-galaxy-mcp` |
+| Linux | Docker | `docker pull pix-ai/pix-galaxy-mcp` |
 | Windows | pnpm | `pnpm add -g pix-galaxy-mcp` |
-| Windows | Winget | `winget install pixu1980/pix-galaxy-mcp` |
+| Windows | Winget | `winget install pix/pix-galaxy-mcp` |
 | All | Direct download | GitHub Releases `.tgz` |
 | All | pnpx | `pnpx pix-galaxy-mcp serve` |
 
@@ -1063,10 +1063,10 @@ All data stays on the filesystem. The MCP server is a read-only/validate-only se
 - [x] **4.3** Add Docker support
       - `Dockerfile` — multi-stage, `node:22-alpine`, embedded skills, no build step
       - `docker-compose.yml` — IDE integration via SSE on port 37999
-      - CI pushes to `ghcr.io/pixu1980/pix-galaxy-mcp` with semver + sha tags
+      - CI pushes to `ghcr.io/pix/pix-galaxy-mcp` with semver + sha tags
 
 - [x] **4.4** Add Windows package manager support
-      - Winget manifest: `.github/winget/pix-galaxy.pix-galaxy-mcp.yaml`
+      - Winget manifest: `.github/winget/pix.pix-galaxy-mcp.yaml`
       - Scoop manifest: `.github/scoop/pix-galaxy-mcp.json`
 
 - [x] **4.5** Add CHANGELOG + conventional commits

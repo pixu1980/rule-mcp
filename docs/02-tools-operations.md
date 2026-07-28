@@ -122,7 +122,7 @@ All MCP tools execute inside fail-closed enforcement boundary.
 - Mandatory `addPostToolHook()` hooks are awaited.
 - Validate non-empty text-only MCP result and 1 MiB output limit.
 - For `pix`, parse routing JSON and reject unknown skills, unknown tools, or confidence outside `0..1`.
-- Append visible `PIX ENFORCEMENT CONTRACT` and `_meta.pixEnforcement` audit record.
+- Append visible `pix ENFORCEMENT CONTRACT` and `_meta.pixEnforcement` audit record.
 - Only then fire non-blocking observational hooks such as auto-ADR.
 
 ### Blocking code validation
@@ -850,7 +850,7 @@ git add -A
 git commit -m "feat: initial release v0.1.0"
 
 # Add remote
-git remote add origin https://github.com/pixu1980/pix-galaxy-mcp
+git remote add origin https://github.com/pix/pix-galaxy-mcp
 
 # Push
 git branch -M main
@@ -861,7 +861,7 @@ git push -u origin main
 
 ## 2. Configure GitHub Secrets
 
-Go to **GitHub → pix-galaxy/pix-galaxy-mcp → Settings → Secrets and variables → Actions** and add:
+Go to **GitHub → pix-galaxy-pix-galaxy-mcp → Settings → Secrets and variables → Actions** and add:
 
 | Secret | Value |
 |--------|-------|
@@ -897,7 +897,7 @@ The release pipeline (`.github/workflows/release.yml`) runs automatically:
 | Step | Action |
 |------|--------|
 | ✅ npm publish | Publish to npmjs.com with provenance |
-| ✅ Docker build | Multi-arch (linux/amd64 + linux/arm64) → `ghcr.io/pixu1980/pix-galaxy-mcp` |
+| ✅ Docker build | Multi-arch (linux/amd64 + linux/arm64) → `ghcr.io/pix/pix-galaxy-mcp` |
 | ✅ Homebrew formula | Generate `.rb` and attach to GitHub Release |
 | ✅ GitHub Release | Create release with `.tgz` + assets |
 
@@ -905,14 +905,14 @@ The release pipeline (`.github/workflows/release.yml`) runs automatically:
 
 ## 5. Homebrew Tap Configuration
 
-To enable `brew install pixu1980/tap/pix-galaxy-mcp`:
+To enable `brew install pix/tap/pix-galaxy-mcp`:
 
 ```bash
 # Create the tap repo
-# Go to https://github.com/new → create: pix-galaxy/homebrew-tap
+# Go to https://github.com/new → create: pix-galaxy-homebrew-tap
 
 # Clone, copy the generated formula, push
-git clone https://github.com/pixu1980/homebrew-tap
+git clone https://github.com/pix/homebrew-tap
 cp pix-galaxy-mcp.rb homebrew-tap/Formula/
 cd homebrew-tap
 git add Formula/pix-galaxy-mcp.rb
@@ -930,9 +930,9 @@ Users can install using these methods:
 |--------|---------|
 | **pnpm/pnpm** | `pnpm add -g pix-galaxy-mcp` |
 | **pnpx** | `pnpx pix-galaxy-mcp serve` |
-| **Homebrew** | `brew install pixu1980/tap/pix-galaxy-mcp` |
-| **Docker** | `docker pull ghcr.io/pixu1980/pix-galaxy-mcp` |
-| **Winget** | `winget install pixu1980.pix-galaxy-mcp` |
+| **Homebrew** | `brew install pix/tap/pix-galaxy-mcp` |
+| **Docker** | `docker pull ghcr.io/pix/pix-galaxy-mcp` |
+| **Winget** | `winget install pix.pix-galaxy-mcp` |
 | **Scoop** | `scoop bucket add pix-galaxy-mcp && scoop install pix-galaxy-mcp` |
 | **GitHub Release** | Direct `.tgz` download |
 
@@ -962,7 +962,7 @@ pix-galaxy-mcp doctor
 pix-galaxy-mcp install --agent all
 
 # Test Docker
-docker pull ghcr.io/pixu1980/pix-galaxy-mcp
+docker pull ghcr.io/pix/pix-galaxy-mcp
 docker compose up -d
 curl http://localhost:37999/health
 
@@ -1018,7 +1018,7 @@ Everything else is already configured in existing workflows:
 - CI: `.github/workflows/ci.yml`
 - Release: `.github/workflows/release.yml`
 - Docker: `Dockerfile` + `docker-compose.yml`
-- Winget: `.github/winget/pix-galaxy.pix-galaxy-mcp.yaml`
+- Winget: `.github/winget/pix-ai.pix-galaxy-mcp.yaml`
 - Scoop: `.github/scoop/pix-galaxy-mcp.json`
 - Server manifest: `server.json`
 - Changelog: `CHANGELOG.md`
@@ -1175,7 +1175,7 @@ pix-galaxy-mcp daemon logs
 **Issue**: `pix` returns no matching skill.
 - **Verify**: Skills are loaded:
   ```bash
-  pix-galaxy-mcp tools list | grep pix-galaxy
+  pix-galaxy-mcp tools list | grep pix-ai
   ```
 - **Try**: Use `pix_search` for free-text search across all skills.
 
@@ -1243,7 +1243,7 @@ Replace:
 3. Copy the token and use it in the command above
 
 **To find the project ID:**
-1. Go to the project page: `https://github.com/pixu1980/pix-galaxy-skills`
+1. Go to the project page: `https://github.com/pix/pix-galaxy-skills`
 2. The project ID is shown under the project name
 
 ### 2. Install the package globally
