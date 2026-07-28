@@ -1,0 +1,66 @@
+/**
+ * @module test/tokensave-integration.test
+ *
+ * Verifies tokensave awareness: detection, the context-suppression helper, the
+ * opt-out env var, and the gateway directive injection when a project ships a
+ * .tokensave/ code graph.
+ */
+
+let pass = 0;
+let fail = 0;
+const check = (label, ok) => {
+  if (ok) { pass++; console.log(`  ✅ ${label}`); }
+  else { fail++; console.log(`  ❌ ${label}`); }
+};
+
+console.log("=== Tokensave Integration Tests ===\n");
+
+process.env.RULE_MCP_DISABLE_AUTO_ADR = "1";
+process.env.RULE_MCP_NO_CACHE = "1"; // hermetic: deterministic tool behavior, not the cache
+process.env.RULE_MCP_NO_AUTOUPDATE = "1"; // hermetic: no real git ops in tests
+
+import { mkdtempSync, mkdirSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
+import { detectProject, hasTokensave } from "../src/core/detector.js";
+import { suppressIfTokensave, tokensaveActive, TOKENSAVE_DIRECTIVE } from "../src/core/agent-integrations.js";
+import { loadAllSkills } from "../src/core/skills.js";
+import { callTool } from "../src/tools/router.js";
+
+// Project WITH a tokensave graph.
+const withTs = mkdtempSync(join(tmpdir(), "rule-ts-"));
+mkdirSync(join(withTs, ".tokensave"), { recursive: true });
+writeFileSync(join(withTs, "package.json"), JSON.stringify({ name: "graphed", dependencies: { react: "18.0.0" } }));
+
+// Project WITHOUT.
+const withoutTs = mkdtempSync(join(tmpdir(), "rule-nots-"));
+writeFileSync(join(withoutTs, "package.json"), JSON.stringify({ name: "plain", dependencies: { react: "18.0.0" } }));
+
+// ── T1: detection ──
+check("T1 hasTokensave true when .tokensave present", hasTokensave(withTs) === true);
+check("T1.1 hasTokensave false when absent", hasTokensave(withoutTs) === false);
+check("T1.2 detectProject exposes tokensave flag", detectProject(withTs).tokensave === true);
+
+// ── T2: suppression helper ──
+const heavy = Array.from({ length: 50 }, (_, i) => `line ${i}`).join("\n");
+const suppressed = suppressIfTokensave(heavy, { projectDir: withTs, label: "file tree" });
+check("T2 suppresses heavy block when active", suppressed.includes("TOKENSAVE ACTIVE") && !suppressed.includes("line 49"));
+const kept = suppressIfTokensave(heavy, { projectDir: withoutTs });
+check("T2.1 keeps block verbatim when inactive", kept === heavy);
+
+// ── T3: opt-out ──
+process.env.RULE_MCP_NO_TOKENSAVE = "1";
+check("T3 opt-out disables activation", tokensaveActive(withTs) === false);
+delete process.env.RULE_MCP_NO_TOKENSAVE;
+check("T3.1 activation restored after opt-out cleared", tokensaveActive(withTs) === true);
+
+// ── T4: gateway injects the directive ──
+await loadAllSkills();
+const gw = await callTool("pix_gateway", { prompt: "make a react button", path: withTs });
+const gwText = gw.content.map((c) => c.text).join("\n");
+check("T4 gateway emits tokensave directive for graphed project", gwText.includes("TOKENSAVE ACTIVE"));
+const gw2 = await callTool("pix_gateway", { prompt: "make a react button", path: withoutTs });
+check("T4.1 gateway omits directive for plain project", !gw2.content.map((c) => c.text).join("\n").includes("TOKENSAVE ACTIVE"));
+
+console.log(`\nResults: ${pass} passed, ${fail} failed`);
+setTimeout(() => process.exit(fail > 0 ? 1 : 0), 100);
