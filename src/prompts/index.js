@@ -3,7 +3,7 @@
  *
  * MCP Prompt registry for rule-mcp.
  * Provides reusable prompt templates that guide agents
- * through rule galaxy workflow phases.
+ * through rule AI workflow phases.
  *
  * @see https://spec.modelcontextprotocol.io/specification/2025-04-01/#prompts
  */
@@ -25,7 +25,7 @@ export function listPrompts() {
     },
     {
       name: "rule-generate-component",
-      description: "Generate a component following rule galaxy principles",
+      description: "Generate a component following rule AI principles",
       arguments: [
         { name: "framework", description: "Target framework", required: true },
         { name: "component", description: "Component type (button, card, modal, formField, list, nav)", required: true },
@@ -91,14 +91,14 @@ export function getPrompt(name) {
     case "rule-generate-component":
       return {
         name,
-        description: "Generate a component following rule galaxy principles",
+        description: "Generate a component following rule AI principles",
         messages: [
           {
             role: "user",
             content: {
               type: "text",
               text:
-                "You are a component generator that outputs framework-specific code following rule galaxy principles:\n" +
+                "You are a component generator that outputs framework-specific code following rule AI principles:\n" +
                 "- Zero CSS classes (use element + [data-part] selectors only)\n" +
                 "- Zero inline styles\n" +
                 "- Semantic HTML\n" +

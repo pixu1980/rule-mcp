@@ -2,7 +2,7 @@
  * @module tools/fix
  *
  * pix_fix MCP tool — File tree validation and auto-fix.
- * Scans a project's file tree, detects violations of the rule galaxy
+ * Scans a project's file tree, detects violations of the rule AI
  * barrel file convention, and optionally auto-fixes them.
  *
  * Two modes:
@@ -36,7 +36,7 @@ const FixSchema = z.object({
 export function registerFixTool() {
   registerTool({
     name: "pix_fix",
-    description: "Validate and auto-fix project file tree structure against rule galaxy conventions (barrel files, _PascalCase naming, etc.).",
+    description: "Validate and auto-fix project file tree structure against rule AI conventions (barrel files, _PascalCase naming, etc.).",
     zodSchema: FixSchema,
     inputSchema: {
       type: "object",

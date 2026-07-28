@@ -35,13 +35,10 @@ export function safeJsonParse(text) {
  * @param {string} [label] — For error messages
  * @returns {Promise<any>}
  */
-export async function withTimeout(promiseOrFn, ms, label = "operation", signal) {
-  const ctrl = signal?.aborted === false ? new AbortController() : null;
-  if (signal && ctrl) signal.addEventListener("abort", () => ctrl.abort());
+export async function withTimeout(promiseOrFn, ms, label = "operation") {
   let timer;
   const timeoutPromise = new Promise((_, reject) => {
     timer = setTimeout(() => {
-      ctrl?.abort();
       reject(new Error(`Sandbox timeout: ${label} exceeded ${ms}ms`));
     }, ms);
   });
@@ -116,9 +113,9 @@ export function wrapRequestHandler(handler, options = {}) {
             "Content-Type": "application/json",
             "Connection": "close", // force close to prevent keep-alive hanging
           });
+          // Full detail is already written to stderr above; do not leak it to the client.
           res.end(JSON.stringify({
             error: isTimeout ? "Request timed out" : "Internal server error",
-            ...(isTimeout ? {} : { detail: message }),
           }));
         }
       } catch {

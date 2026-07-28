@@ -35,20 +35,20 @@ function getServerSecret() {
  * @param {string} code - The code that was checked
  * @param {string} skillName - Skill used for validation
  * @param {boolean} allPass - Whether all guardrails passed
+ * @param {number} [now] - Injectable clock (ms) for deterministic testing
  * @returns {string} receipt token
  */
-export function issueReceipt(code, skillName, allPass) {
+export function issueReceipt(code, skillName, allPass, now = Date.now()) {
   const codeHash = createHash("sha256").update(code).digest("hex");
-  const payload = `${codeHash}:${skillName}:${allPass}:${Date.now()}`;
+  const payload = `${codeHash}:${skillName}:${allPass}:${now}`;
   const token = createHmac("sha256", getServerSecret()).update(payload).digest("hex");
   receiptStore.set(token, {
     codeHash,
     skillName,
     allPass,
-    expiresAt: Date.now() + 300_000, // 5 min TTL
+    expiresAt: now + 300_000, // 5 min TTL
   });
-  // Cleanup old receipts (> 10 min)
-  const now = Date.now();
+  // Cleanup receipts that expired over 5 min ago (i.e. issued > 10 min back)
   for (const [key, val] of receiptStore) {
     if (now - val.expiresAt > 300_000) receiptStore.delete(key);
   }
@@ -60,11 +60,17 @@ export function issueReceipt(code, skillName, allPass) {
  *
  * @param {string} token - Receipt from pix_gateway
  * @param {string} code - Code to validate against
+ * @param {number} [now] - Injectable clock (ms) for deterministic testing
  * @returns {{ valid: boolean, allPass?: boolean, reason?: string }}
  */
-export function validateReceipt(token, code) {
+export function validateReceipt(token, code, now = Date.now()) {
   const entry = receiptStore.get(token);
   if (!entry) return { valid: false, reason: "Receipt not found or expired" };
+  // Enforce the TTL at validation time — an expired receipt must never pass.
+  if (now > entry.expiresAt) {
+    receiptStore.delete(token);
+    return { valid: false, reason: "Receipt expired — re-run pix_gateway" };
+  }
   const codeHash = createHash("sha256").update(code).digest("hex");
   if (codeHash !== entry.codeHash) return { valid: false, reason: "Code hash mismatch — code was modified after check" };
   if (!entry.allPass) return { valid: false, allPass: false, reason: "Guardrails did not pass" };
@@ -76,7 +82,7 @@ export function validateReceipt(token, code) {
  */
 export async function registerGatewayTool() {
   const { registerTool } = await import("./router.js");
-  const { z } = await import("zod");
+  const { z } = await import("zod/v4");
 
   const GatewaySchema = z.object({
     prompt: z.string().describe("Complete coding request"),
@@ -105,6 +111,13 @@ export async function registerGatewayTool() {
     handler: async (args) => {
       const { prompt, code, path, framework } = args;
       const lines = [];
+
+      // ── Token-saving: nudge the agent toward the code graph when present ──
+      const { tokensaveActive, TOKENSAVE_DIRECTIVE } = await import("../core/agent-integrations.js");
+      if (path && tokensaveActive(path)) {
+        lines.push(TOKENSAVE_DIRECTIVE);
+        lines.push("");
+      }
 
       // ── Step 1: Route the prompt ──
       const { callTool } = await import("./router.js");
@@ -142,7 +155,7 @@ export async function registerGatewayTool() {
       const primarySkill = effectiveRoute?.startsWith("rule-") ? effectiveRoute : null;
       if (primarySkill) {
         const skillResult = await callTool(
-          `pix_${primarySkill.replace(/-/g, "_")}`,
+          `pix_${primarySkill.replace(/^rule-/, "").replace(/-/g, "_")}`,
           { mode: "tldr", query: prompt.slice(0, 300) }
         );
         const evidence = skillResult.content?.[0]?.text || "";

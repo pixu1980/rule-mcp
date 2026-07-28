@@ -323,7 +323,7 @@ export const SHARED_GUARDRAILS = [
 ];
 
 // ─── File tree guardrails (validate structure, not content) ───
-// These check the LLM output file tree against rule galaxy conventions.
+// These check the LLM output file tree against rule AI conventions.
 // They are registered in the FRAMEWORK_GUARDRAILS map for
 // rule-styleguide, rule-architect, and all UI framework skills.
 

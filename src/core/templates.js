@@ -10,6 +10,39 @@
 import { z } from "zod/v4";
 import { registerTool } from "../tools/router.js";
 import { COMPONENT_TEMPLATES, toPascal, toKebab, interpolate } from "./template-data.js";
+import { checkCode } from "./guardrails.js";
+
+/** Framework → canonical skill name, so component output is validated against
+ *  the same guardrails the agent's own code would face. */
+const FRAMEWORK_SKILL = {
+  react: "rule-frontend-react",
+  vue: "rule-frontend-vue",
+  svelte: "rule-frontend-svelte",
+  angular: "rule-frontend-angular",
+  solid: "rule-frontend-solidjs",
+  astro: "rule-frontend-astro",
+  vanilla: "rule-styleguide",
+};
+
+/**
+ * Validate generated template code against its skill's guardrails and return a
+ * short compliance summary. Guarantees guardrails are ALWAYS involved in
+ * component generation, not only when the agent later calls pix_check.
+ *
+ * @param {string} framework
+ * @param {string} code — the emitted code (concatenated for multi-file)
+ * @returns {string} markdown summary line(s)
+ */
+function guardrailSummary(framework, code) {
+  const skillName = FRAMEWORK_SKILL[framework] || "rule-styleguide";
+  const report = checkCode(skillName, code, { framework, isComponent: true });
+  if (report.allPass) {
+    return `## Guardrails\n\n✅ ${report.passCount}/${report.total} guardrails pass (${skillName}). Validated with pix_check.`;
+  }
+  const lines = [`## Guardrails\n\n⚠️ ${report.failCount}/${report.total} FAIL (${skillName}). Fix before shipping:`];
+  for (const f of report.failed) lines.push(`- **${f.id}**: ${f.label} — ${f.suggestion}`);
+  return lines.join("\n");
+}
 
 /**
  * Generate multi-file component output.
@@ -136,7 +169,7 @@ export function registerTemplateTool() {
 
   registerTool({
     name: "pix_component",
-    description: "Generate component or test templates following rule galaxy principles.",
+    description: "Generate component or test templates following rule AI principles.",
     zodSchema: ComponentSchema,
     handler: async (args) => {
       if (args.mode === "guardrails") return { content: [{ type: "text", text: buildGuardrailsText() }] };
@@ -148,16 +181,17 @@ export function registerTemplateTool() {
       if (args.mode === "multi") {
         const files = generateMultiFile(component, framework, args.name);
         if (!files || files.length === 0) return { isError: true, content: [{ type: "text", text: "Cannot generate multi-file output for \"" + component + "\" with \"" + framework + "\"." }] };
+        const combined = files.map(f => f.content).join("\n\n");
         return {
-          content: [{ type: "text", text: "# Generated: " + component + " → " + framework + " (" + files.length + " files)\n\n" + files.map(f => "  " + f.path).join("\n") + "\n\n---\n\n" + files.map(f => "### `" + f.path + "`\n\n```" + f.language + "\n" + f.content + "\n```").join("\n\n") }],
+          content: [{ type: "text", text: "# Generated: " + component + " → " + framework + " (" + files.length + " files)\n\n" + files.map(f => "  " + f.path).join("\n") + "\n\n---\n\n" + files.map(f => "### `" + f.path + "`\n\n```" + f.language + "\n" + f.content + "\n```").join("\n\n") + "\n\n" + guardrailSummary(framework, combined) }],
         };
       }
       const template = getTemplate(component, framework);
       if (!template) return { isError: true, content: [{ type: "text", text: "Unknown: " + component }] };
       if (typeof template === "object" && template.html && template.css) {
-        return { content: [{ type: "text", text: "# " + component + " - " + framework + "\n\n## HTML\n```html\n" + template.html + "\n```\n\n## CSS\n```css\n" + template.css + "\n```" }] };
+        return { content: [{ type: "text", text: "# " + component + " - " + framework + "\n\n## HTML\n```html\n" + template.html + "\n```\n\n## CSS\n```css\n" + template.css + "\n```\n\n" + guardrailSummary("vanilla", String(template.html) + "\n" + String(template.css)) }] };
       }
-      return { content: [{ type: "text", text: "# " + component + " - " + framework + "\n\n```\n" + template + "\n```" }] };
+      return { content: [{ type: "text", text: "# " + component + " - " + framework + "\n\n```\n" + template + "\n```\n\n" + guardrailSummary(framework, String(template)) }] };
     },
   });
 }

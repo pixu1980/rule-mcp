@@ -5,31 +5,32 @@
 //  Order: Prettier (syntax) → blank-line fixer (semantic)
 //  ═══════════════════════════════════════════════════════════════════════════════
 
-import { execSync } from "child_process";
+import { execFileSync } from "child_process";
 import { readFileSync, writeFileSync } from "fs";
-import { resolve, dirname } from "path";
-import { fileURLToPath } from "url";
 import { fixBlockSpacing } from "./block-spacing.js";
-
-const __dirname = dirname(fileURLToPath(import.meta.url));
-const PROJECT_ROOT = resolve(__dirname, "..");
 
 /**
  * Post-process an array of written files.
  * Runs Prettier + blank-line fixer on all .js files.
  *
- * @param {Array<{path: string, status: string}>} results
+ * Operates on each result's real absolute path (`absPath`, set by pix_apply
+ * from the resolved in-project target) — never on a path resolved against the
+ * server's own source tree.
+ *
+ * @param {Array<{path: string, status: string, absPath?: string}>} results
  */
 export function postProcessFiles(results) {
   const jsFiles = results
-    .filter((r) => r.status === "written" && r.path.endsWith(".js"))
-    .map((r) => resolve(PROJECT_ROOT, r.path));
+    .filter((r) => r.status === "written" && r.absPath && r.path.endsWith(".js"))
+    .map((r) => r.absPath);
 
   if (jsFiles.length === 0) return;
 
-  // Step 1: Prettier — handles quotes, semicolons, indentation, multi-line blocks
+  // Step 1: Prettier — handles quotes, semicolons, indentation, multi-line blocks.
+  // execFileSync (argv, no shell) so file paths can never be interpreted as shell
+  // syntax — an attacker-crafted filename cannot inject commands.
   try {
-    execSync(`pnpx prettier --write ${jsFiles.map((f) => `"${f}"`).join(" ")}`, {
+    execFileSync("pnpx", ["prettier", "--write", ...jsFiles], {
       stdio: "pipe",
       timeout: 15000,
     });

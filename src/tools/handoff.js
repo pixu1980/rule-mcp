@@ -13,6 +13,7 @@ import { join, relative } from "node:path";
 import { execSync } from "node:child_process";
 import { z } from "zod/v4";
 import { registerTool } from "./router.js";
+import { TOKENSAVE_DIRECTIVE, tokensaveActive } from "../core/agent-integrations.js";
 
 /** Default project directory. */
 const ADR_DIR = "docs/adr";
@@ -355,10 +356,16 @@ function buildHandoff({ projectDir, includeContext, includeAdrs, includeIdentity
       }
       lines.push("");
       if (!compress && gitDiff.unstaged.length > 0) {
-        lines.push("```diff");
-        lines.push(gitDiff.unstaged.slice(0, 2000));
-        lines.push("```");
-        lines.push("");
+        if (tokensaveActive(projectDir)) {
+          // Defer to the code graph instead of dumping a raw diff.
+          lines.push(TOKENSAVE_DIRECTIVE);
+          lines.push("");
+        } else {
+          lines.push("```diff");
+          lines.push(gitDiff.unstaged.slice(0, 2000));
+          lines.push("```");
+          lines.push("");
+        }
       }
     }
   }

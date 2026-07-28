@@ -188,7 +188,7 @@ export function getGuardrailsReport(skillName, mode) {
     for (const g of DEVOPS_GUARDRAILS) lines.push(`- [ ] **${g.id}**: ${g.label}`, `  ${g.description}`, "");
   }
 
-  lines.push("## How to use", "", "1. Generate code following rule galaxy principles.", "2. Run `pix_<skill> check` on the generated code.", "3. Fix any FAIL results.", "4. Re-check until all pass (allPass: true).", "");
+  lines.push("## How to use", "", "1. Generate code following rule AI principles.", "2. Run `pix_<skill> check` on the generated code.", "3. Fix any FAIL results.", "4. Re-check until all pass (allPass: true).", "");
 
   return lines.join("\n");
 }
