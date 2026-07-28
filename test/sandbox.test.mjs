@@ -66,7 +66,10 @@ await new Promise(r => srv2.listen(0, "127.0.0.1", r));
 const a2 = srv2.address();
 const r2 = await httpGet(`http://127.0.0.1:${a2.port}/crash`);
 check("wrap throw 500", r2.status === 500);
-check("wrap throw detail", JSON.parse(r2.body).detail?.includes("broke"));
+// Security (F5): internal error detail must NOT leak to the client; only a generic
+// message is returned. Full detail is written to stderr server-side.
+check("wrap throw hides detail", JSON.parse(r2.body).detail === undefined);
+check("wrap throw generic message", JSON.parse(r2.body).error === "Internal server error");
 await new Promise(r => srv2.close(r));
 
 // ── wrapRequestHandler: handler that times out ──
