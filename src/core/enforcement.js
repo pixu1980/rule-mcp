@@ -71,7 +71,11 @@ function validateRouterResult(result, toolNames, skillNames) {
   }
   const routes = [routing.route, ...(routing.alternatives ?? []).map((item) => item.route)];
   for (const route of routes) {
-    if (route !== "none" && !skillNames.has(route)) throw new Error(`rule router invented unknown skill: ${route}`);
+    // "none" and "unknown" are valid non-skill routes the router emits when no
+    // confident match exists — they are not invented skills.
+    if (route !== "none" && route !== "unknown" && !skillNames.has(route)) {
+      throw new Error(`rule router invented unknown skill: ${route}`);
+    }
   }
   for (const toolName of routing.next_tools ?? []) {
     if (!toolNames.has(toolName)) throw new Error(`rule router invented unknown tool: ${toolName}`);
@@ -81,7 +85,18 @@ function validateRouterResult(result, toolNames, skillNames) {
   }
 }
 
-function enforcementContract(name) {
+/**
+ * Tools whose full workflow reminder has already been emitted this process.
+ * The verbose contract repeats verbatim on every call, which is pure token
+ * overhead in a long session; after the first emission per tool we fall back to
+ * a one-line pointer. Set RULE_MCP_NO_REMINDER=1 to suppress it entirely.
+ */
+const _remindedTools = new Set();
+
+function enforcementContract(name, terse) {
+  if (terse) {
+    return "## PIX WORKFLOW REMINDER — returned evidence is source of truth; validate generated code with pix_check.";
+  }
   const nextStep = name === "pix_check"
     ? "Fix every reported failure and rerun pix_check until allPass is true."
     : "Do not invent APIs, files, tools, dependencies, or requirements. Use only returned evidence. Validate generated code with pix_check before finalizing.";
@@ -94,6 +109,11 @@ function enforcementContract(name) {
   ].join("\n");
 }
 
+/**
+ * Deterministic post-processing: validates result shape (and router output) and
+ * attaches enforcement metadata. Contains NO env- or state-dependent decoration,
+ * so its output is safe to cache and replay.
+ */
 export function postprocessToolResult(name, args, result, context = {}) {
   validateResultShape(result);
   if (!result.isError && name === "rule") {
@@ -104,7 +124,6 @@ export function postprocessToolResult(name, args, result, context = {}) {
   const requestId = context.requestId ?? randomUUID();
   return {
     ...result,
-    content: [...result.content, { type: "text", text: enforcementContract(name) }],
     _meta: {
       ...(result._meta ?? {}),
       pixEnforcement: {
@@ -116,6 +135,23 @@ export function postprocessToolResult(name, args, result, context = {}) {
         validatedArguments: Object.keys(args ?? {}).sort(),
       },
     },
+  };
+}
+
+/**
+ * Append the model-visible workflow contract. This is applied AFTER the cache so
+ * it always reflects the current process state and RULE_MCP_NO_REMINDER:
+ * first call per tool gets the full reminder, later calls a one-liner, and the
+ * opt-out suppresses it entirely. Errors are returned undecorated.
+ */
+export function decorateWorkflowReminder(name, result) {
+  if (!result || result.isError) return result;
+  if (process.env.RULE_MCP_NO_REMINDER === "1") return result;
+  const terse = _remindedTools.has(name);
+  _remindedTools.add(name);
+  return {
+    ...result,
+    content: [...result.content, { type: "text", text: enforcementContract(name, terse) }],
   };
 }
 

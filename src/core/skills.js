@@ -11,7 +11,7 @@
  * Called once at startup, or on demand via `skills reload` CLI command.
  */
 import { z } from "zod/v4";
-import { readSkill, getSkillNames, registerTool, isPluginSkill, hasPluginJs, loadPluginJs, clearTools } from "../tools/router.js";
+import { readSkill, getSkillNames, registerTool, isPluginSkill, hasPluginJs, loadPluginJs, clearTools, retainTools } from "../tools/router.js";
 import { registerSkillTool, registerSearchTool, registerCheckTool, registerScaffoldTool } from "../tools/skill.js";
 import { registerAiTool } from "../tools/ai.js";
 import { registerProcessAdrTool } from "../tools/adr.js";
@@ -22,38 +22,32 @@ import { registerApplyTool } from "../tools/apply.js";
 import { detectProject, getFrameworkSuggestion } from "./detector.js";
 
 /**
- * Strict mode: when RULE_MCP_STRICT_MODE=1, only expose gateway + apply + read-only tools.
- * Skill-specific tools and mutation tools are hidden.
+ * Minimal tool surface: expose only the dispatcher + action tools and hide the
+ * ~85 per-skill tools (their guidance is reached via pix_gateway / resources).
+ *
+ * The full 95-tool surface costs tokens on every model turn and exceeds the
+ * tool-count limits some clients impose (Cursor, GitHub Copilot), which then
+ * silently truncate the list. Off by default; enable with
+ * RULE_MCP_MINIMAL_TOOLS=1.
  */
-const STRICT_MODE = process.env.RULE_MCP_STRICT_MODE === "1";
+const MINIMAL_TOOLS = process.env.RULE_MCP_MINIMAL_TOOLS === "1";
 
 /**
- * Tools that write to disk or have side effects.
- * Hidden in strict mode — all writes go through pix_apply.
+ * The exact, fixed tool surface exposed in minimal mode. Enforced as an
+ * allowlist AFTER registration (see loadAllSkills), so the set stays small no
+ * matter what upstream registration adds.
  */
-const MUTATION_TOOLS = new Set([
-  "pix_fix",
-  "pix_process_adr",
-]);
-
-/**
- * Skill-specific tools (pix_backend_express, pix_data_postgresql, etc.).
- * Hidden in strict mode — evidence is loaded via pix_gateway.
- */
-const SKILL_TOOL_PREFIX = "pix_";
-
-/**
- * Core tools always available in strict mode.
- */
-const STRICT_CORE_TOOLS = new Set([
-  "pix_gateway",
-  "pix_apply",
+const MINIMAL_ALLOWLIST = new Set([
+  "rule",              // router / dispatcher
+  "pix_update",       // self-update
+  "pix_gateway",      // route + evidence + guardrails + receipt (single entry)
+  "pix_apply",        // the only writer
   "pix_search",
   "pix_check",
-  "pix_detect",
   "pix_scaffold",
-  "pix_component",
+  "pix_detect",
   "pix_process_handoff",
+  "pix_component",
 ]);
 /** Whether skills have been loaded yet. */
 let loaded = false;
@@ -119,9 +113,15 @@ export async function loadAllSkills(force = false) {
   if (force) {
     skillCache.clear();
     clearTools();
+    // Skill content changed — invalidate the deterministic result cache so we
+    // never replay outputs computed from stale skills.
+    const { cacheClear } = await import("./tool-cache.js");
+    cacheClear();
   }
   loaded = true;
   registerAiTool();
+  const { registerUpdateTool } = await import("../tools/update.js");
+  registerUpdateTool();
   await registerGatewayTool();
   await registerApplyTool();
 
@@ -129,8 +129,8 @@ export async function loadAllSkills(force = false) {
   const pluginLoaders = [];
   for (const name of skillNames) {
     if (name !== "rule" && name !== "rule-process-adr" && name !== "rule-process-handoff") {
-      // In strict mode, skip skill-specific tools — evidence is loaded via pix_gateway
-      if (!STRICT_MODE) {
+      // In minimal mode, skip skill-specific tools — evidence is loaded via pix_gateway
+      if (!MINIMAL_TOOLS) {
         registerSkillTool(name);
       }
     }
@@ -152,8 +152,8 @@ export async function loadAllSkills(force = false) {
   registerCheckTool();
   registerScaffoldTool();
   registerDetectTool();
-  // Mutation tools: hidden in strict mode
-  if (!STRICT_MODE) {
+  // Mutation tools: hidden in minimal mode
+  if (!MINIMAL_TOOLS) {
     registerProcessAdrTool();
     registerFixTool();
   }
@@ -163,6 +163,10 @@ export async function loadAllSkills(force = false) {
   buildIndex();
   const { registerTemplateTool } = await import("./templates.js");
   registerTemplateTool();
+
+  // Enforce the minimal surface as a hard allowlist — guarantees a small, fixed
+  // tool list regardless of what the register* calls above added.
+  if (MINIMAL_TOOLS) retainTools(MINIMAL_ALLOWLIST);
 }
 /**
  * Parse YAML frontmatter from a skill SKILL.md file.

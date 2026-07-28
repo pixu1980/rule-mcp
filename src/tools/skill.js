@@ -262,7 +262,7 @@ export function registerScaffoldTool() {
     { name: ".nvmrc", description: "Node version manager config (lts/*)" },
     { name: ".editorconfig", description: "EditorConfig for cross-IDE consistency" },
     { name: ".gitignore", description: "Git ignore rules (OS + Node + build)" },
-    { name: ".eslintrc.json", description: "ESLint config (eslint:recommended + rule galaxy rules)" },
+    { name: ".eslintrc.json", description: "ESLint config (eslint:recommended + rule AI rules)" },
     { name: "tsconfig.json", description: "TypeScript config (strict, ESNext)" },
     { name: "jsconfig.json", description: "JS config (checkJs, strict)" },
   ];

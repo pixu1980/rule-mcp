@@ -14,7 +14,26 @@ import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 import { z } from "zod/v4";
 import { getSkillsDirs } from "../cli/paths.js";
-import { enforcementError, postprocessToolResult, preprocessToolCall } from "../core/enforcement.js";
+import { decorateWorkflowReminder, enforcementError, postprocessToolResult, preprocessToolCall } from "../core/enforcement.js";
+import { cacheGet, cacheKey, cacheSet } from "../core/tool-cache.js";
+import { compressResult } from "../core/caveman.js";
+import { consumeUpdateBanner, maybeSelfUpdate } from "../core/self-update.js";
+
+/** Prepend a self-update banner (if any) to a result so the update is visible. */
+function withBanner(banner, result) {
+  if (!banner || !result || !Array.isArray(result.content)) return result;
+  return { ...result, content: [{ type: "text", text: banner }, ...result.content] };
+}
+
+/**
+ * Apply env/state-dependent decoration to a deterministic result core:
+ * the workflow reminder (process state + opt-out) then caveman compression
+ * (opt-out). Runs on BOTH cache hits and fresh computes so those toggles always
+ * take effect and are never frozen into the cache.
+ */
+function finalizeResult(name, core) {
+  return compressResult(decorateWorkflowReminder(name, core));
+}
 
 /** Internal list of registered tool definitions. */
 const _tools = [];
@@ -58,6 +77,20 @@ export function addAfterToolHook(toolName, fn) {
  */
 export function clearTools() {
   _tools.length = 0;
+}
+
+/**
+ * Retain only tools whose name is in `allowed`; drop the rest. Used by the
+ * minimal tool-surface mode to guarantee a small, fixed registry regardless of
+ * how many tools were registered upstream.
+ *
+ * @param {Set<string>|Iterable<string>} allowed
+ */
+export function retainTools(allowed) {
+  const keep = allowed instanceof Set ? allowed : new Set(allowed);
+  for (let i = _tools.length - 1; i >= 0; i--) {
+    if (!keep.has(_tools[i].name)) _tools.splice(i, 1);
+  }
 }
 
 /**
@@ -115,19 +148,37 @@ export function listTools() {
  * Execute a tool by name with the given arguments.
  * Validates args against the tool's Zod schema (if provided) before calling the handler.
  *
- * @param {string} name — Tool name (e.g. "rule", "pix_react")
+ * @param {string} name — Tool name (e.g. "rule", "pix_frontend_react")
  * @param {object} args — Tool-specific arguments
  * @returns {Promise<{ isError?: boolean, content: Array<{ type: string, text: string }> }>}
  */
 export async function callTool(name, args) {
+  // ── Forced self-update: runs once per session on the first tool call, BEFORE
+  // the cache lookup (so a cache hit can't skip it) and BEFORE tool lookup (a
+  // skills reload re-registers _tools). pix_update runs its own update. ──
+  if (name !== "pix_update") {
+    try { await maybeSelfUpdate(); } catch { /* fail-open */ }
+  }
+  const banner = consumeUpdateBanner();
+
   const tool = _tools.find((t) => t.name === name);
   if (!tool) {
-    return { isError: true, content: [{ type: "text", text: `Unknown tool: ${name}` }] };
+    return withBanner(banner, { isError: true, content: [{ type: "text", text: `Unknown tool: ${name}` }] });
   }
 
   let stage = "validation";
   try {
     const validated = tool.zodSchema ? tool.zodSchema.parse(args) : args;
+
+    // ── Deterministic recycle: replay a cached result for read-only tools ──
+    // The server never calls a model, so an identical (tool, args) call always
+    // produces the same output. Serve it from cache instead of recomputing.
+    stage = "cache";
+    const key = cacheKey(name, validated);
+    if (key) {
+      const cached = cacheGet(key);
+      if (cached) return withBanner(banner, finalizeResult(name, cached));
+    }
 
     stage = "preprocessing";
     let processedArgs = preprocessToolCall(name, validated);
@@ -144,23 +195,29 @@ export async function callTool(name, args) {
     for (const fn of postHooks) {
       result = await fn(name, processedArgs, result, tool) ?? result;
     }
-    result = postprocessToolResult(name, processedArgs, result, {
+    // Deterministic core — validated + metadata, no env/state-dependent decoration.
+    const core = postprocessToolResult(name, processedArgs, result, {
       toolNames: _tools.map((item) => item.name),
       skillNames: getSkillNames(),
     });
 
-    if (!result?.isError) {
+    stage = "finalize";
+    if (!core?.isError) {
+      // Cache the deterministic core (reminder + caveman are re-applied per call).
+      if (key) cacheSet(key, core);
+      const final = finalizeResult(name, core);
       const hooks = [...(_afterHooks["*"] || []), ...(_afterHooks[name] || [])];
-      for (const fn of hooks) fn(name, processedArgs, result).catch(() => {});
+      for (const fn of hooks) fn(name, processedArgs, final).catch(() => {});
+      return withBanner(banner, final);
     }
 
-    return result;
+    return withBanner(banner, finalizeResult(name, core));
   } catch (err) {
     if (err instanceof z.ZodError) {
       const issues = err.issues.map(i => `- ${i.path.join(".")}: ${i.message}`).join("\n");
-      return { isError: true, content: [{ type: "text", text: `Invalid arguments:\n${issues}` }] };
+      return withBanner(banner, { isError: true, content: [{ type: "text", text: `Invalid arguments:\n${issues}` }] });
     }
-    return enforcementError(name, stage, err);
+    return withBanner(banner, enforcementError(name, stage, err));
   }
 }
 

@@ -142,6 +142,7 @@ export function detectProject(projectDir = ".") {
       typescript,
       buildTool,
       nodeVersion: pkg.engines?.node ?? null,
+      tokensave: hasTokensave(projectDir),
     };
   } catch {
     return {
@@ -150,6 +151,23 @@ export function detectProject(projectDir = ".") {
       typescript: false,
       buildTool: "unknown",
       nodeVersion: null,
+      tokensave: hasTokensave(projectDir),
     };
+  }
+}
+
+/**
+ * Detect whether a project has a tokensave code graph (`.tokensave/`).
+ * When present, rule tools defer code exploration to tokensave and suppress
+ * their own redundant context dumps to save tokens.
+ *
+ * @param {string} projectDir — Path to project root
+ * @returns {boolean}
+ */
+export function hasTokensave(projectDir = ".") {
+  try {
+    return existsSync(join(projectDir, ".tokensave"));
+  } catch {
+    return false;
   }
 }
