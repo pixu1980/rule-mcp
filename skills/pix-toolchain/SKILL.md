@@ -24,6 +24,7 @@ frameworks: [all]
 | Skill | Tool | Best For |
 |-------|------|----------|
 | [rule-toolchain-vite](../rule-toolchain-vite/SKILL.md) | Vite | Modern frontend (default choice, Vite 8 + Rolldown) |
+| [rule-toolchain-rspack](../rule-toolchain-rspack/SKILL.md) | Rspack | Rust-based webpack-compatible bundler, fast HMR |
 | [rule-toolchain-parcel](../rule-toolchain-parcel/SKILL.md) | Parcel | Zero-config bundler, rapid prototyping |
 
 ## Linting & Formatting
@@ -51,7 +52,7 @@ frameworks: [all]
 ## Quick Selection Guide
 
 ```
-Need a build tool?                      → rule-toolchain-vite (default) or rule-toolchain-parcel
+Need a build tool?                      → rule-toolchain-vite (default), rule-toolchain-rspack, or rule-toolchain-parcel
 Need linting + formatting?              → rule-toolchain-biome (new) or rule-toolchain-eslint (legacy)
 Need a package manager?                 → rule-toolchain-pnpm
 Need monorepo orchestration?            → rule-toolchain-turborepo

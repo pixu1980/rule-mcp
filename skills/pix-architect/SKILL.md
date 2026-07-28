@@ -154,11 +154,46 @@ Use this table to ensure the architecture package references all relevant skills
 
 | Skill | Use in architecture when |
 |-------|--------------------------|
-| [rule-platform](../rule-platform/SKILL.md) | Umbrella routing for platform/project-type decisions. Read first before specialized skills. |
+| [rule-platform](../rule-platform/SKILL.md) | Umbrella routing for platform/project-type decisions. Read first before specialized skills. Includes **Multi-target Project Structure** convention for apps combining web frontend + Electron desktop + API backend under `src/app/`, `src/electron/`, `src/api/`. |
 | [rule-platform-web](../rule-platform-web/SKILL.md) | Browser-based web app: bundling, routing, progressive enhancement, performance budgets, static hosting. |
 | [rule-platform-desktop](../rule-platform-desktop/SKILL.md) | Desktop app: Electron (Chromium + Node.js, contextBridge IPC, auto-update) or Tauri (Rust + system webview). |
 | [rule-platform-expo](../rule-platform-expo/SKILL.md) | Mobile app: Expo/React Native with EAS Build, EAS Secrets, OTA updates, Expo Router. |
 | [rule-platform-library](../rule-platform-library/SKILL.md) | Reusable npm package: dual CJS/ESM, TypeScript exports, semantic versioning, changelog. |
+
+### Project Structure Convention
+
+For multi-target apps (web + desktop + API), rule-mcp follows the `src/` layout defined in [rule-platform Multi-target Project Structure](../rule-platform/SKILL.md#multi-target-project-structure):
+
+```
+project/
+├── src/
+│   ├── web/              ← Frontend web app (Vanilla JS, React, Vue, etc.)
+│   ├── api/              ← Backend API server (FastAPI, Express, etc.)
+│   └── desktop/          ← Desktop shell (Electron, Tauri, etc.)
+├── docs/
+├── scripts/
+└── package.json
+```
+
+When scaffolding a new project with `rule-architect`, always ask:
+- Does this project have a frontend? → `src/web/`
+- Does this project have a backend API? → `src/api/`
+- Does this project have a desktop shell? → `src/desktop/`
+
+### Test co-location
+
+Tests are co-located with their component, not centralized:
+
+```
+src/
+├── web/tests/           ← Frontend-specific
+├── api/tests/           ← Backend-specific
+└── desktop/tests/       ← Desktop-specific
+```
+
+Cross-layer tests (integration, E2E) may live at project root `tests/` with shared Playwright config.
+
+For single-platform projects (frontend only, backend only), the simpler conventions in `rule-platform-web`, `rule-backend-*`, and `rule-toolchain-project` apply directly.
 
 ### Process / Methodology
 

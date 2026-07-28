@@ -112,6 +112,46 @@ VITE_API_BASE_URL=http://localhost:3000/api
 - `README.md` — project name, description, quick start, prerequisites, scripts
 - `LICENSE` — MIT by default for open-source
 - `CONTRIBUTING.md` — branch policy, commit convention, PR process
+## Project Structure Convention
+
+For multi-target projects combining web frontend + desktop shell + API backend, rule-mcp follows the layout defined in [rule-platform](../rule-platform/SKILL.md#multi-target-project-structure):
+
+```
+project/
+├── src/
+│   ├── web/              ← Frontend (index.html, JS, CSS)
+│   ├── api/              ← Backend server (Python, Node.js, etc.)
+│   └── desktop/          ← Desktop shell (Electron, Tauri, etc.)
+├── docs/
+├── scripts/
+└── package.json
+```
+
+Tests are co-located with their component:
+
+```
+src/
+├── web/tests/           ← Frontend-specific (Playwright, Vitest)
+├── api/tests/           ← Backend-specific (pytest, node:test)
+└── desktop/tests/       ← Desktop-specific (Playwright Electron)
+```
+
+For single-platform projects (frontend-only or backend-only), use the framework-specific skill directly without the `src/` wrapper.
+
+### Path Reference
+
+When wiring modules after restructuring `./frontend/` → `./src/web/`, `./backend/` → `./src/api/`, `./electron/` → `./src/desktop/`:
+
+| Purpose | Old path | New path |
+|---|---|---|
+| Desktop frontend build | `electron/main.js` → `../frontend/build/` | `src/desktop/server.js` → `../web/build/` |
+| Desktop preload | `electron/preload.js` | `src/desktop/preload.js` (co-located) |
+| Build sprite icons | `scripts/build-sprite.js` → `../frontend/public/` | `scripts/build-sprite.js` → `../src/web/public/` |
+| API env file | `backend/.env` | `src/api/.env` |
+| API tests | `backend/tests/` | `src/api/tests/` |
+| Electron test | `tests/electron-smoke.spec.js` | `src/desktop/tests/electron-smoke.spec.js` |
+| Desktop node_modules | `.gitignore` → `electron/node_modules/` | `.gitignore` → `src/desktop/node_modules/` |
+
 ## Framework Configuration Files
 
 ### .prettierrc
