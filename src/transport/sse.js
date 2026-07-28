@@ -19,6 +19,7 @@
 import http from "node:http";
 import https from "node:https";
 import { readFileSync } from "node:fs";
+import { randomUUID, timingSafeEqual } from "node:crypto";
 import { URL } from "node:url";
 import { SSEServerTransport } from "@modelcontextprotocol/sdk/server/sse.js";
 import { createServer } from "../server.js";
@@ -37,6 +38,9 @@ let serverToken = null;
 
 /** Maximum POST body size (1 MB). */
 const MAX_BODY_BYTES = 1_048_576;
+
+/** Maximum concurrent SSE sessions — bounds memory against connection floods. */
+const MAX_SESSIONS = 256;
 
 /** Allowed CORS origins (empty = deny all cross-origin). */
 const ALLOWED_ORIGINS = new Set();
@@ -77,8 +81,14 @@ function checkAuth(req, pathname) {
   if (pathname === "/health") return true;
   // SSE and message endpoints require bearer token
   const auth = req.headers.authorization;
-  if (!auth || auth !== `Bearer ${serverToken}`) return false;
-  return true;
+  if (!auth) return false;
+  const expected = `Bearer ${serverToken}`;
+  const provided = Buffer.from(auth);
+  const wanted = Buffer.from(expected);
+  // Length guard first — timingSafeEqual throws on unequal-length buffers.
+  // The length of the expected token is not secret.
+  if (provided.length !== wanted.length) return false;
+  return timingSafeEqual(provided, wanted);
 }
 
 /**
@@ -116,6 +126,11 @@ async function requestHandler(req, res) {
 
     // ── GET /sse — Establish SSE stream ──────────────────────
     if (req.method === "GET" && parsedUrl.pathname === "/sse") {
+      if (sessions.size >= MAX_SESSIONS) {
+        res.writeHead(503, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ error: "Server session limit reached. Close an existing session and retry." }));
+        return;
+      }
       // Each connection owns a server instance. This lets Pi, VS Code, and
       // other local clients share one daemon without evicting each other.
       const transport = new SSEServerTransport("/message", res);
@@ -183,9 +198,13 @@ async function requestHandler(req, res) {
     res.writeHead(404, { "Content-Type": "application/json" });
     res.end(JSON.stringify({ error: "Not found" }));
   } catch (err) {
+    // Log full detail server-side; return only a generic message + correlation id
+    // to the client to avoid leaking internal state.
+    const requestId = randomUUID();
+    process.stderr.write(`[rule-mcp] [${requestId}] ${req.method} ${req.url}: ${err?.stack ?? err?.message ?? err}\n`);
     if (!res.headersSent) {
       res.writeHead(500, { "Content-Type": "application/json" });
-      res.end(JSON.stringify({ error: err.message }));
+      res.end(JSON.stringify({ error: "Internal server error", requestId }));
     }
   }
 }
@@ -203,8 +222,9 @@ async function requestHandler(req, res) {
  * @returns {Promise<{ port: number, token: string }>}
  */
 export async function startSseServer(options = {}) {
-  const { getRuntimePaths } = await import("../cli/paths.js");
-  const port = options.port ?? getRuntimePaths().port;
+  const { DEFAULT_SSE_PORT, getSseHost } = await import("../cli/paths.js");
+  const port = options.port ?? (Number(process.env.RULE_MCP_PORT) || DEFAULT_SSE_PORT);
+  const host = options.host ?? getSseHost();
   const { sslCert, sslKey } = options;
 
   // Persisted token keeps daemon client configuration valid after restarts.
@@ -253,9 +273,9 @@ export async function startSseServer(options = {}) {
   // Start listening
   return new Promise((resolve, reject) => {
     httpServer.on("error", reject);
-    httpServer.listen(port, "127.0.0.1", () => {
+    httpServer.listen(port, host, () => {
       const addr = httpServer.address();
-      resolve({ port: addr?.port ?? port, token: serverToken });
+      resolve({ port: addr?.port ?? port, host, token: serverToken });
     });
   });
 }

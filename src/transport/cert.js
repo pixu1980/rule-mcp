@@ -11,9 +11,10 @@
  * @see module:transport/sse — startSseServer imports cert generation
  */
 
-import { existsSync, mkdirSync, writeFileSync } from "node:fs";
+import { mkdirSync, writeFileSync, unlinkSync } from "node:fs";
 import { spawnSync } from "node:child_process";
-import { dirname } from "node:path";
+import { dirname, join } from "node:path";
+import { tmpdir } from "node:os";
 
 /**
  * Generate a self-signed TLS certificate and RSA private key.
@@ -28,13 +29,16 @@ import { dirname } from "node:path";
  * @returns {boolean} — true on success, false on failure
  */
 export function generateSelfSignedCert({ certPath, keyPath, commonName = "rule-mcp.local", days = 730 }) {
+  // Config written to a real temp file (not /dev/stdin, which is POSIX-only) so
+  // certificate generation works on Windows as well as macOS/Linux.
+  const configPath = join(tmpdir(), `rule-cert-${process.pid}.cnf`);
   try {
     mkdirSync(dirname(certPath), { recursive: true });
     mkdirSync(dirname(keyPath), { recursive: true });
 
-    // First check if openssl is available
-    const whichResult = spawnSync("which", ["openssl"], { stdio: "pipe", encoding: "utf-8" });
-    if (whichResult.status !== 0) {
+    // Check openssl is available by invoking it directly (cross-platform;
+    // `which`/`where` differ per OS, but `openssl version` does not).
+    if (!isOpenSslAvailable()) {
       console.error("openssl not found. Install openssl or provide --ssl-cert and --ssl-key manually.");
       return false;
     }
@@ -69,6 +73,7 @@ export function generateSelfSignedCert({ certPath, keyPath, commonName = "rule-m
       "DNS.2 = 127.0.0.1",
       "DNS.3 = ::1",
     ].join("\n");
+    writeFileSync(configPath, certConfig, { encoding: "utf-8", mode: 0o600 });
 
     const certResult = spawnSync("openssl", [
       "req", "-x509",
@@ -78,9 +83,8 @@ export function generateSelfSignedCert({ certPath, keyPath, commonName = "rule-m
       "-sha256",
       "-days", String(days),
       "-out", certPath,
-      "-config", "/dev/stdin",
+      "-config", configPath,
     ], {
-      input: certConfig,
       stdio: ["pipe", "pipe", "pipe"],
       encoding: "utf-8",
     });
@@ -94,6 +98,8 @@ export function generateSelfSignedCert({ certPath, keyPath, commonName = "rule-m
   } catch (err) {
     console.error("Failed to generate self-signed cert:", err.message);
     return false;
+  } finally {
+    try { unlinkSync(configPath); } catch { /* temp config already gone */ }
   }
 }
 
@@ -104,7 +110,7 @@ export function generateSelfSignedCert({ certPath, keyPath, commonName = "rule-m
  */
 export function isOpenSslAvailable() {
   try {
-    const result = spawnSync("which", ["openssl"], { stdio: "pipe", encoding: "utf-8" });
+    const result = spawnSync("openssl", ["version"], { stdio: "pipe", encoding: "utf-8" });
     return result.status === 0;
   } catch {
     return false;
