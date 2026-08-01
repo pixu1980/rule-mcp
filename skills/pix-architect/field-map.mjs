@@ -2,11 +2,10 @@
 //
 // Declarative data that Phase 4 (Task 3, `normalizeAnswers`) will use to wire
 // existing interview answers to `templates.json` placeholders — no logic
-// lives here, only the mapping tables from
-// docs/superpowers/plans/2026-07-29-architect-plan4-fill-wiring.md
-// ("Concrete mapping" + Task 1). Grounded against the real placeholder set in
-// `templates.json` (177 unique `[KEY]` tokens as of this writing) and the
-// field list in `wizard-spec.json`.
+// lives here, only the mapping tables from the architect plan for
+// `normalizeAnswers` fill-wiring ("Concrete mapping" + Task 1). Grounded
+// against the real placeholder set in `templates.json` (177 unique `[KEY]`
+// tokens as of this writing) and the field list in `wizard-spec.json`.
 //
 // Shapes:
 //   RENAMES:       { wizardKey: templateKey }               — 1:1 flat renames
