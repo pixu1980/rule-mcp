@@ -1,6 +1,6 @@
 {
   "scopeName": "inline.pix-html-template",
-  "name": "Pix HTML inside js",
+  "name": "pix HTML inside js",
   "injectionSelector": "L:source.js -comment -string",
   "patterns": [
     {

@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════════════════════════════
-//  Pix Vanilla Reactive — Completion Provider
+//  pix Vanilla Reactive — Completion Provider
 //  ═══════════════════════════════════════════════════════════════════════════════
 //  Provides context-aware autocomplete for {{ }}, @click, data-part, filters.
 //  Scans ALL workspace files, not just the current document.

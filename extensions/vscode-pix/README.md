@@ -1,4 +1,4 @@
-# Pix Vanilla Reactive — VS Code Extension
+# pix Vanilla Reactive — VS Code Extension
 
 Syntax highlighting + snippets for `pix-vanilla-reactive` template syntax.
 

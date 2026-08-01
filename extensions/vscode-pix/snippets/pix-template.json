@@ -1,5 +1,5 @@
 {
-  "Pix template structure": {
+  "pix template structure": {
     "prefix": "pix-template",
     "body": [
       "<!-- ═══════════════════════════════════════════════",
@@ -9,27 +9,27 @@
       "  $0",
       "</section>"
     ],
-    "description": "Pix external template structure"
+    "description": "pix external template structure"
   },
-  "Pix for loop": {
+  "pix for loop": {
     "prefix": "pix-for",
     "body": [
       "<for each=\"${1:item} in ${2:items}\">",
       "  $0",
       "</for>"
     ],
-    "description": "Pix <for> loop"
+    "description": "pix <for> loop"
   },
-  "Pix if block": {
+  "pix if block": {
     "prefix": "pix-if",
     "body": [
       "<if condition=\"${1:expr}\">",
       "  $0",
       "</if>"
     ],
-    "description": "Pix <if> conditional"
+    "description": "pix <if> conditional"
   },
-  "Pix if-else": {
+  "pix if-else": {
     "prefix": "pix-ifelse",
     "body": [
       "<if condition=\"${1:expr}\">",
@@ -38,9 +38,9 @@
       "  ${3:when false}",
       "</if>"
     ],
-    "description": "Pix <if>/<else>"
+    "description": "pix <if>/<else>"
   },
-  "Pix switch": {
+  "pix switch": {
     "prefix": "pix-switch",
     "body": [
       "<switch expr=\"${1:value}\">",
@@ -48,26 +48,26 @@
       "  <default>${4:fallback}</default>",
       "</switch>"
     ],
-    "description": "Pix <switch>/<case>"
+    "description": "pix <switch>/<case>"
   },
-  "Pix data-part attribute": {
+  "pix data-part attribute": {
     "prefix": "data-part",
     "body": "data-part=\"${1:role}\"",
-    "description": "Pix data-part attribute"
+    "description": "pix data-part attribute"
   },
-  "Pix click event": {
+  "pix click event": {
     "prefix": "pix-click",
     "body": "@click=\"${1:handler}($2)\"",
-    "description": "Pix @click event binding"
+    "description": "pix @click event binding"
   },
-  "Pix expression": {
+  "pix expression": {
     "prefix": "pix-expr",
     "body": "{{ ${1:expr} }}",
-    "description": "Pix {{ }} expression"
+    "description": "pix {{ }} expression"
   },
-  "Pix expression with filter": {
+  "pix expression with filter": {
     "prefix": "pix-filter",
     "body": "{{ ${1:expr} | ${2:upper} }}",
-    "description": "Pix {{ }} with filter"
+    "description": "pix {{ }} with filter"
   }
 }
