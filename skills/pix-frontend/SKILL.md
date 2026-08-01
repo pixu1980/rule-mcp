@@ -28,6 +28,7 @@ frameworks: [all]
 | [rule-frontend-solidjs](../rule-frontend-solidjs/SKILL.md) | SolidJS | createSignal | Signals |
 | [rule-frontend-astro](../rule-frontend-astro/SKILL.md) | Astro (islands) | Per-framework | Per-framework |
 | [rule-frontend-vanilla-reactive](../rule-frontend-vanilla-reactive/SKILL.md) | Vanilla JS | Proxy Store + Signals | Store |
+| [rule-frontend-custom-element](../rule-frontend-custom-element/SKILL.md) | Vanilla JS (no framework) | componentDecorator | adopedStyleSheets |
 
 ## Meta-Frameworks
 
@@ -47,6 +48,7 @@ Need lightweight Svelte?                → rule-frontend-svelte
 Need fine-grained reactivity?           → rule-frontend-solidjs
 Need static + islands?                  → rule-frontend-astro
 Need pure vanilla (no framework)?       → rule-frontend-vanilla-reactive
+Need a zero-dep custom element?         → rule-frontend-custom-element
 Need full-stack React (Next.js)?        → rule-frontend-meta-next
 Need full-stack Vue (Nuxt)?             → rule-frontend-meta-nuxt
 Need nested routing (Remix)?            → rule-frontend-meta-remix

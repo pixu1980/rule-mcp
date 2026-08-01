@@ -19,7 +19,7 @@ Serves styleguides, component templates, framework best practices, and design sy
 - [What is rule-mcp](#what-is-rule-mcp)
 - [Architecture overview](#architecture-overview)
 - [Tool reference](#tool-reference)
-  - [All 78 tools (normal mode)](#all-78-tools-normal-mode)
+  - [All 98 tools (normal mode)](#all-98-tools-normal-mode)
   - [Minimal tool surface (10 tools)](#minimal-tool-surface-10-tools)
   - [Gateway deterministic mode](#gateway-deterministic-mode)
 - [MCP Resources (146)](#mcp-resources-146)
@@ -55,9 +55,9 @@ rule-mcp install --agent all
 
 ## What is rule-mcp
 
-rule-mcp is an [MCP](https://modelcontextprotocol.io) server that exposes **97 tools**, **146 resources**, and **24 prompts** to any MCP-compatible AI coding agent. Because the server never calls an LLM (every output is deterministic), it is **model-agnostic** — it behaves identically behind Claude, GPT, Gemini, Llama, Qwen, or any other model. It provides:
+rule-mcp is an [MCP](https://modelcontextprotocol.io) server that exposes **98 tools**, **146 resources**, and **24 prompts** to any MCP-compatible AI coding agent. Because the server never calls an LLM (every output is deterministic), it is **model-agnostic** — it behaves identically behind Claude, GPT, Gemini, Llama, Qwen, or any other model. It provides:
 
-- **70 modular skills** covering frontend, backend, database, devops, toolchain, styleguide, and architecture domains
+- **88 modular skills** covering frontend, backend, database, devops, toolchain, styleguide, and architecture domains
 - **BM25 full-text search** across all skill content
 - **Guardrail engine** with 18 shared rules + framework/backend/database/devops-specific checks
 - **Deterministic gateway** (`pix_gateway` + `pix_apply`) with receipt-based validation
@@ -95,10 +95,10 @@ Claude Code, Cursor, Cline, Roo Code, Copilot, Gemini CLI, Codex CLI, Windsurf, 
 ├──────────────────────────────────────────────────────────────┤
 │  Tool Registry              │  Resources Registry            │
 │  src/tools/router.js        │  src/resources/index.js        │
-│  78 tools                   │  146 resources                 │
+│  98 tools                   │  146 resources                 │
 ├──────────────────┬───────────┴────────────────┬──────────────┤
 │  Orchestration   │  Skills & BM25            │  Guardrails  │
-│  pix_gateway     │  70 skill dirs            │  18 shared   │
+│  pix_gateway     │  88 skill dirs            │  18 shared   │
 │  pix_apply       │  src/core/bm25.js         │  + framework  │
 │  receipt system  │  src/core/skills.js        │  + backend   │
 │                  │                            │  + database  │
@@ -139,7 +139,7 @@ Claude Code, Cursor, Cline, Roo Code, Copilot, Gemini CLI, Codex CLI, Windsurf, 
 
 ## Tool reference
 
-### All 78 tools (normal mode)
+### All 98 tools (normal mode)
 
 #### Deterministic tools (9)
 
@@ -148,7 +148,7 @@ Claude Code, Cursor, Cline, Roo Code, Copilot, Gemini CLI, Codex CLI, Windsurf, 
 | `rule` | Route a prompt to the correct rule skill via BM25 keyword scoring + framework bias | ✅ |
 | `pix_gateway` | **Single-entry orchestrator:** routes → loads evidence → checks guardrails → returns receipt | ✅ |
 | `pix_apply` | Write files to disk, requires valid receipt from `pix_gateway` | ❌ |
-| `pix_search` | BM25 full-text search across all 70 skills | ✅ |
+| `pix_search` | BM25 full-text search across all 88 skills | ✅ |
 | `pix_check` | Run guardrail checks on code against any rule skill | ✅ |
 | `pix_scaffold` | Generate project config files (`.prettierrc`, `.editorconfig`, `.gitignore`, etc.) | ✅ |
 | `pix_detect` | Auto-detect project framework and suggest relevant skills/tools | ✅ |
@@ -275,7 +275,7 @@ See [docs/plans/determinism-backend-guardrails.md](./docs/plans/determinism-back
 
 | URI | Description |
 |---|---|
-| `rule://skills` | Index of all 70 skills with paths and sizes |
+| `rule://skills` | Index of all 88 skills with paths and sizes |
 | `rule://templates` | Design system component template catalog |
 | `rule://project` | Project analysis: detected framework + suggested tools/ skills |
 | `rule://community` | Community / plugin rule skills index |
@@ -591,7 +591,7 @@ The Docker image uses `node:22-alpine`, has no build step, and runs the server d
 │   ├── resources/index.js         ← MCP resource registry
 │   ├── prompts/index.js           ← MCP prompt registry
 │   └── index.js                   ← CLI entry handler
-├── skills/                        ← 70 skill directories
+├── skills/                        ← 88 skill directories
 ├── prompts/                       ← System prompt templates
 ├── scripts/                       ← Install/build scripts
 ├── test/                          ← 20 test files
