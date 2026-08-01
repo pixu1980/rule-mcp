@@ -115,16 +115,16 @@ export function createServer() {
       const TIERS = ["starter", "standard", "deep"];
 
       if (argument.name === "framework") return complete(FRAMEWORKS);
-      if (promptName === "pix-generate-component" && argument.name === "component") {
+      if (promptName === "pix-a11y-audit" && argument.name === "component") {
         return complete(["button", "card", "modal", "formField", "list", "nav"]);
       }
       if (promptName === "pix-write-tests" && argument.name === "testType") return complete(["tdd", "a11y", "devops", "all"]);
       if (promptName === "pix-handoff" && argument.name === "mode") return complete(["handoff", "close-session"]);
       if (promptName === "pix-pull-request" && argument.name === "updateAdr") return complete(["yes", "no"]);
-      if (promptName === "pix-area-backend" && argument.name === "framework") return complete(BACKENDS);
-      if (promptName === "pix-area-data" && argument.name === "database") return complete(DATABASES);
-      if (promptName === "pix-area-toolchain" && argument.name === "tool") return complete(TOOLCHAIN);
-      if (promptName === "pix-area-platform" && argument.name === "platform") return complete(PLATFORMS);
+      if (promptName === "pix-backend" && argument.name === "framework") return complete(BACKENDS);
+      if (promptName === "pix-data" && argument.name === "database") return complete(DATABASES);
+      if (promptName === "pix-toolchain" && argument.name === "tool") return complete(TOOLCHAIN);
+      if (promptName === "pix-platform" && argument.name === "platform") return complete(PLATFORMS);
       if ((promptName === "pix-setup-project" || promptName === "pix-architect-scaffold") && argument.name === "tier") {
         return complete(TIERS);
       }

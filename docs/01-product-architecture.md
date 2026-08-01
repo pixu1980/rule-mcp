@@ -61,21 +61,34 @@ Serve pix-* skill rules, styleguides, component templates, and framework best pr
 | `pix://a11y/test-basic` | Basic a11y test template |
 | `pix://a11y/test-forms` | Forms a11y test template |
 
-### Current Prompts (26)
+### Current Prompts (24)
 
 | Name | Purpose |
 |------|---------|
-| `pix-setup-project` | Bootstrap project end-to-end (detect → scaffold → toolchain → architect context) |
-| `pix-new-feature` | Feature end-to-end with TDD + a11y + commit scope |
-| `pix-pull-request` | Prepare PR: review + a11y + security + ADR + commit scope |
-| `pix-write-tests` | Write TDD + a11y + devops tests |
-| `pix-handoff` | Compressed context handoff for a new session |
-| `pix-area-*` (16) | One prompt per tool area (meta, frontend, backend, data, toolchain, styleguide, process, devops, platform, caveman, architect, grill, ai, skills, tdd, ui) |
-| `pix-code-review` | Review code against pix styleguides |
-| `pix-generate-component` | Generate component following pix principles |
-| `pix-a11y-test` | Generate a11y Playwright tests |
-| `pix-a11y-review` | Review WCAG 2.2 AA compliance |
+| `pix-a11y-audit` | Audit a11y end-to-end: WCAG 2.2 AA review + Playwright/axe-core tests |
+| `pix-ai` | AI agent integrations |
+| `pix-architect` | Context packs, interview flows (CLI + web), scaffolding |
 | `pix-architect-scaffold` | Scaffold project with .agents/ + .context/ |
+| `pix-backend` | Node, Express, Fastify, Hono, NestJS, GraphQL, API design, security |
+| `pix-caveman` | Compressed communication, commits, reviews |
+| `pix-code-review` | Review code against pix styleguides |
+| `pix-data` | PostgreSQL, MySQL, SQLite, MongoDB, DuckDB, IndexedDB, SQL |
+| `pix-devops` | Docker, GitLab CI, observability, testing, versioning |
+| `pix-frontend` | React, Vue, Svelte, Angular, Solid, Astro, Next, Nuxt, Remix, vanilla |
+| `pix-grill` | Structured questioning (grill-me, grill-with-docs) |
+| `pix-handoff` | Compressed context handoff for a new session |
+| `pix-meta` | Dispatcher/action toolset (gateway, apply, search, check, scaffold…) |
+| `pix-new-feature` | Feature end-to-end with TDD + a11y + commit scope |
+| `pix-platform` | Web, desktop, Expo, agent, library |
+| `pix-process` | Code review, feature workflow, documentation, ADR, handoff, BMAD |
+| `pix-pull-request` | Prepare PR: review + a11y + security + ADR + commit scope |
+| `pix-setup-project` | Bootstrap project end-to-end (detect → scaffold → toolchain → architect context) |
+| `pix-skills` | Skill discovery (find-skills) |
+| `pix-styleguide` | a11y, CSS, HTML, JS, JSON, Markdown, naming, patterns, validation |
+| `pix-tdd` | Test-driven development workflow |
+| `pix-toolchain` | Vite, pnpm, Turborepo, Rspack, Parcel, TypeScript, ESLint, Biome, Husky, commits |
+| `pix-ui` | UI design-system work |
+| `pix-write-tests` | Write TDD + a11y + devops tests |
 
 ---
 

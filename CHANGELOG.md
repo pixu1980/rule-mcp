@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
-- Prompts: MCP registry extended from 5 to **26 prompts** — 5 one-shot workflow prompts (`pix-setup-project`, `pix-new-feature`, `pix-pull-request`, `pix-write-tests`, `pix-handoff`), 16 area prompts (`pix-area-*`, one per tool area), plus the 5 legacy prompts updated to the shared rules (route via `pix_tool`, TDD/a11y baselines or explicit user ask, commit message with mandatory scope). Argument completion for the new prompt schemas in server.js
+- Prompts: MCP registry extended from 5 to **24 prompts**, listed alphabetically — 5 one-shot workflow prompts (`pix-setup-project`, `pix-new-feature`, `pix-pull-request`, `pix-write-tests`, `pix-handoff`), 16 area prompts (`pix-*`, one per tool area), plus the 3 legacy prompts (`pix-code-review`, `pix-a11y-audit`, `pix-architect-scaffold`) updated to the shared rules (route via `pix_tool`, TDD/a11y baselines or explicit user ask, commit message with mandatory scope). `pix-a11y-test` and `pix-a11y-review` were merged into `pix-a11y-audit` (review + test generation), and `pix-generate-component` was removed. Argument completion for the new prompt schemas in server.js
 - Initial MCP SDK port (Phase 0) — replaces hand-rolled protocol
 - 22 MCP tools: pix-galaxy, 16 skill tools, pix_search, pix_component, pix_check, pix_scaffold, pix_architect, pix_detect
 - Context-aware skill routing with framework-biased scoring

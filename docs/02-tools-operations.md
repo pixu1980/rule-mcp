@@ -644,17 +644,30 @@ Prompt templates accessible via the MCP `prompts/get` protocol.
 
 | Name | Arguments | Description |
 |------|-----------|-------------|
-| `pix-setup-project` | `projectName` (req), `framework` (opt), `toolchain` (opt), `tier` (opt) | Bootstrap project: detect → scaffold → toolchain → architect context |
-| `pix-new-feature` | `feature` (req), `framework` (opt), `area` (opt), `includeTests` (opt) | Feature end-to-end with TDD + a11y + commit scope |
-| `pix-pull-request` | `description` (req), `framework` (opt), `updateAdr` (opt) | Prepare PR: review + a11y + security + ADR + commit scope |
-| `pix-write-tests` | `scope` (req), `framework` (opt), `testType` (opt) | Write TDD + a11y (axe-core) + devops tests |
-| `pix-handoff` | `mode` (req), `includeGitDiff` (opt), `compress` (opt) | Compressed context handoff for a new session |
-| `pix-area-*` (16) | `request` (req) + area-specific optionals | One prompt per tool area (meta, frontend, backend, data, toolchain, styleguide, process, devops, platform, caveman, architect, grill, ai, skills, tdd, ui) |
-| `pix-code-review` | `framework` (opt), `code` (req) | Review code against pix styleguides |
-| `pix-generate-component` | `framework` (req), `component` (req), `features` (opt) | Generate component following pix principles |
-| `pix-a11y-test` | `framework` (req), `component` (opt) | Generate Playwright + axe-core a11y tests |
-| `pix-a11y-review` | `code` (req), `framework` (opt) | Review code for WCAG 2.2 AA compliance |
+| `pix-a11y-audit` | `code` (req), `framework` (opt), `component` (opt) | Audit a11y end-to-end: WCAG 2.2 AA review + Playwright/axe-core tests |
+| `pix-ai` | `request` (req) | AI agent integrations |
+| `pix-architect` | `request` (req) | Context packs, interview flows (CLI + web), scaffolding |
 | `pix-architect-scaffold` | `projectName` (req), `framework` (opt), `tier` (opt) | Scaffold project with .agents/ + .context/ |
+| `pix-backend` | `request` (req), `framework` (opt) | Node, Express, Fastify, Hono, NestJS, GraphQL, API design, security |
+| `pix-caveman` | `request` (req) | Compressed communication, commits, reviews |
+| `pix-code-review` | `framework` (opt), `code` (req) | Review code against pix styleguides |
+| `pix-data` | `request` (req), `database` (opt) | PostgreSQL, MySQL, SQLite, MongoDB, DuckDB, IndexedDB, SQL |
+| `pix-devops` | `request` (req) | Docker, GitLab CI, observability, testing, versioning |
+| `pix-frontend` | `request` (req), `framework` (opt) | React, Vue, Svelte, Angular, Solid, Astro, Next, Nuxt, Remix, vanilla |
+| `pix-grill` | `request` (req) | Structured questioning (grill-me, grill-with-docs) |
+| `pix-handoff` | `mode` (req), `includeGitDiff` (opt), `compress` (opt) | Compressed context handoff for a new session |
+| `pix-meta` | `request` (req) | Dispatcher/action toolset (gateway, apply, search, check, scaffold…) |
+| `pix-new-feature` | `feature` (req), `framework` (opt), `area` (opt), `includeTests` (opt) | Feature end-to-end with TDD + a11y + commit scope |
+| `pix-platform` | `request` (req), `platform` (opt) | Web, desktop, Expo, agent, library |
+| `pix-process` | `request` (req) | Code review, feature workflow, documentation, ADR, handoff, BMAD |
+| `pix-pull-request` | `description` (req), `framework` (opt), `updateAdr` (opt) | Prepare PR: review + a11y + security + ADR + commit scope |
+| `pix-setup-project` | `projectName` (req), `framework` (opt), `toolchain` (opt), `tier` (opt) | Bootstrap project: detect → scaffold → toolchain → architect context |
+| `pix-skills` | `request` (req) | Skill discovery (find-skills) |
+| `pix-styleguide` | `request` (req) | a11y, CSS, HTML, JS, JSON, Markdown, naming, patterns, validation |
+| `pix-tdd` | `request` (req) | Test-driven development workflow |
+| `pix-toolchain` | `request` (req), `tool` (opt) | Vite, pnpm, Turborepo, Rspack, Parcel, TypeScript, ESLint, Biome, Husky, commits |
+| `pix-ui` | `request` (req) | UI design-system work |
+| `pix-write-tests` | `scope` (req), `framework` (opt), `testType` (opt) | Write TDD + a11y (axe-core) + devops tests |
 
 ---
 
