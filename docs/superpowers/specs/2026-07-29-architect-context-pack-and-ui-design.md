@@ -95,7 +95,7 @@ canonical spec (sections[].fields[])         ← single source of truth
 - Right panel keeps live update. A segmented control **[Summary • Files]** at the top.
 - **Summary (default):** grouped by phase/section with human labels; **only filled fields** shown; internal keys and the raw JSON `<pre>` dump removed; repeatable groups rendered as bulleted lists.
 - **Files:** tabs over the actual generated pack (`AGENTS.md`, `README`, specs…), live-rendered markdown, so the user sees exactly what ships as they type.
-- Reuses the existing focus-preserving render guard (structural signature). Semantic HTML + `data-part` only + external CSS via `adoptedStyleSheets`; validated with `pix_check`. Preserves scroll position on live update (as today).
+- Reuses the existing focus-preserving render guard (structural signature). Semantic HTML + `data-part` only + external CSS via `adoptedStyleSheets`; validated with `rule_tool_check`. Preserves scroll position on live update (as today).
 
 ## 9. S6 — CLI parity
 
@@ -108,7 +108,7 @@ Shared `generator.mjs` + normalizer + `templates.json`, and the CLI reading the 
 - **Entry-points:** existence + resolution to `AGENTS.md`.
 - **Empty-section policy:** no `[KEY]`/`**[KEY]**` tokens survive in any emitted file.
 - **UI (Playwright):** Summary/Files toggle, live update, existing focus-retention test, scroll preservation.
-- **Guardrails:** `pix_check` on new/changed UI code.
+- **Guardrails:** `rule_tool_check` on new/changed UI code.
 - **Sync:** derived-artifact regeneration matches committed (CI drift check).
 
 ## 11. Rollout order

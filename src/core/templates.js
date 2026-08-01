@@ -151,9 +151,9 @@ function buildGuardrailsText() {
     "- [ ] **a11y-test-forms**: tests/a11y/_forms.spec.js - form inputs, labels, errors",
     "- [ ] **a11y-test-components**: tests/a11y/_components.spec.js - per-component a11y checks",
     "- [ ] **playwright-config**: playwright.config.js with Chromium target", "",
-    "Use pix_component component=a11y-test-basic to generate test templates.",
-    "Use pix_check for automated validation.",
-    "Iterate: generate, pix_check, fix, pix_check, all pass.",
+    "Use rule_tool_component component=a11y-test-basic to generate test templates.",
+    "Use rule_tool_check for automated validation.",
+    "Iterate: generate, rule_tool_check, fix, rule_tool_check, all pass.",
   ];
   return lines.join("\n");
 }
@@ -168,7 +168,7 @@ export function registerTemplateTool() {
   });
 
   registerTool({
-    name: "pix_component",
+    name: "rule_tool_component",
     description: "Generate component or test templates following rule AI principles.",
     zodSchema: ComponentSchema,
     handler: async (args) => {

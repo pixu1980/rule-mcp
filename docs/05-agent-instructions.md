@@ -4,17 +4,17 @@ Use the rule-mcp workflow for every coding task.
 
 ## Recommended workflow
 
-1. Call `rule` or `pix_gateway` with full request plus known framework/project path.
-2. `pix_gateway` routes, loads evidence, and checks guardrails in a single call.
+1. Call `pix_tool` or `rule_tool_gateway` with full request plus known framework/project path.
+2. `rule_tool_gateway` routes, loads evidence, and checks guardrails in a single call.
 3. Treat repository/tool evidence as source of truth. Never invent APIs, files, dependencies, tools, requirements, or successful checks.
-4. If evidence missing, call `pix_search`; if still absent, state uncertainty.
+4. If evidence missing, call `rule_tool_search`; if still absent, state uncertainty.
 5. Write failing tests before implementation changes.
-6. Use `pix_component` for component templates, `pix_scaffold` for project config files.
-7. Run `pix_check`. Failed guardrails are blocking; fix and rerun until all pass.
+6. Use `rule_tool_component` for component templates, `rule_tool_scaffold` for project config files.
+7. Run `rule_tool_check`. Failed guardrails are blocking; fix and rerun until all pass.
 8. Run project tests/typecheck and report only commands actually executed.
-9. Record structural decisions with `pix_process_adr` (disabled by default, enable with `RULE_MCP_AUTO_ADR=1`).
-10. Before writing files, run `pix_gateway` to get a receipt; use `pix_apply` with the receipt for writes.
-11. After `pix_apply` writes files, Prettier + blank-line fixer + block-spacing fixer run automatically as post-processing.
+9. Record structural decisions with `rule_tool_process_adr` (disabled by default, enable with `RULE_MCP_AUTO_ADR=1`).
+10. Before writing files, run `rule_tool_gateway` to get a receipt; use `rule_tool_apply` with the receipt for writes.
+11. After `rule_tool_apply` writes files, Prettier + blank-line fixer + block-spacing fixer run automatically as post-processing.
 
 ## Advisory boundaries
 
@@ -34,7 +34,7 @@ See `src/core/enforcement.js` for details.
 
 - Pi, Claude Code, Gemini CLI, Cursor: `/rule-mcp <request>`.
 - GitHub Copilot CLI: `/agent`, select `rule-mcp`.
-- Codex CLI: invoke globally installed `rule` skill; exact custom prompt support varies by version.
+- Codex CLI: invoke globally installed `pix_tool` skill; exact custom prompt support varies by version.
 
 ## Environment variables
 

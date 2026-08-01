@@ -70,7 +70,7 @@ const FRAMEWORK_SKILL_MAP = {
 export function getFrameworkSuggestion(framework) {
   const skillName = FRAMEWORK_SKILL_MAP[framework] || "rule-frontend-vanilla-reactive";
   const displayName = skillName.replace(/^rule-/, "").replace(/-/g, "_");
-  return { skillName, toolName: `pix_${displayName}` };
+  return { skillName, toolName: `rule_tool_${displayName}` };
 }
 
 /**

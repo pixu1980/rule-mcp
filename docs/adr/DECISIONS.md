@@ -40,6 +40,6 @@ This file summarizes every accepted ADR in `docs/adr/`. Individual ADR files rem
 
 ## Operating rules
 
-- Use `pix_process_adr` for new decisions.
+- Use `rule_tool_process_adr` for new decisions.
 - Do not rewrite accepted decisions; supersede them with a new ADR.
 - Keep this summary and `README.md` synchronized with every ADR file.

@@ -1,4 +1,4 @@
-# Mega-review — `openai-codex/gpt-5.6-sol`, router `rule`, skill e tool
+# Mega-review — `openai-codex/gpt-5.6-sol`, router `pix_tool`, skill e tool
 
 - **Data audit:** 2026-07-15
 - **Repository:** `rule-mcp@1.0.0`
@@ -6,7 +6,7 @@
 - **SDK MCP:** `@modelcontextprotocol/sdk@1.29.0`
 - **Host/model verificato:** Pi `0.80.6`, provider `openai-codex`, modello `gpt-5.6-sol`
 
-> **Verdetto sintetico:** `gpt-5.6-sol` è interoperabile con i tool MCP di `rule-mcp` nell'host Pi, ma il prodotto nello stato corrente **non è production/release compliant**. Il router `rule` non è un gate: senza il prompt esplicito `/rule-mcp`, il modello ha usato il router solo in 1 richiesta di dominio su 5 e ha spesso chiamato direttamente tool specializzati. Inoltre i guardrail sono aggirabili, `pix_fix` può scrivere fuori dalla root, i prompt MCP non rispettano lo schema ufficiale e build/release possono distruggere il corpus `skills/`.
+> **Verdetto sintetico:** `gpt-5.6-sol` è interoperabile con i tool MCP di `rule-mcp` nell'host Pi, ma il prodotto nello stato corrente **non è production/release compliant**. Il router `pix_tool` non è un gate: senza il prompt esplicito `/rule-mcp`, il modello ha usato il router solo in 1 richiesta di dominio su 5 e ha spesso chiamato direttamente tool specializzati. Inoltre i guardrail sono aggirabili, `rule_tool_fix` può scrivere fuori dalla root, i prompt MCP non rispettano lo schema ufficiale e build/release possono distruggere il corpus `skills/`.
 
 ## 1. Ambito, snapshot e limiti
 
@@ -49,12 +49,12 @@ PowerShell e ShellCheck non erano installati: i 2 `.ps1` non hanno quindi una va
 | Avvio MCP stdio | **Pass** | Client/server SDK in-memory con handshake riuscito |
 | `tools/list` e `tools/call` | **Pass tecnico** | 76 tool isolati, chiamate schema-valide |
 | Uso reale da `gpt-5.6-sol` | **Pass tecnico** | Pi registra provider/modello corretti e tool call riuscite |
-| Router `rule` automatico | **Fail** | 1/5 richieste di dominio senza comando esplicito |
+| Router `pix_tool` automatico | **Fail** | 1/5 richieste di dominio senza comando esplicito |
 | Router con `/rule-mcp` | **Pass parziale** | 1/1 invocato per primo, ma route primaria errata per path bias |
 | Qualità routing | **Parziale** | 52/60 top-1; 58/60 top-6; multilingual e prompt generici deboli |
 | Skill trigger Pi nativo | **Parziale** | In un caso il modello ha letto 8 `SKILL.md`, ma non via router MCP |
-| `pix_check` come gate | **Fail** | `previousPassed` aggirabile e risultato non legato all'hash del codice |
-| `pix_fix` safety | **Fail bloccante** | `dryRun` ignorato in `generate`; path traversal confermato |
+| `rule_tool_check` come gate | **Fail** | `previousPassed` aggirabile e risultato non legato all'hash del codice |
+| `rule_tool_fix` safety | **Fail bloccante** | `dryRun` ignorato in `generate`; path traversal confermato |
 | MCP resources | **Parziale** | Risorse standard leggibili; plugin elencati ma non risolvibili |
 | MCP prompts | **Fail bloccante** | Shape e ruolo non conformi allo schema SDK |
 | MCP completion | **Fail funzionale** | Usa un tipo ref inesistente per completare argomenti tool |
@@ -80,33 +80,33 @@ Le sessioni sono state eseguite con `--no-session`, output JSONL separato e auto
 }
 ```
 
-| Caso | Richiesta | Chiamate osservate | `rule` prima? | Esito |
+| Caso | Richiesta | Chiamate osservate | `pix_tool` prima? | Esito |
 |---|---|---|---|---|
-| A | Pulsante accessibile React | `rule` → `pix_search` → `pix_frontend_react` → 2× `pix_check` | Sì | Flusso quasi completo, ma risposta finale diversa dall'artefatto controllato |
-| B | Rate limiting/abusi | `pix_backend_security` → `pix_search` | **No** | Tool specializzato scelto direttamente |
-| C | API PostgreSQL, paginazione/filtri | `pix_backend_api_design` → `pix_data_postgresql` → `pix_search` | **No** | Due skill-tool diretti |
-| D | Hook React con AbortController | `pix_frontend_react` → `pix_search` | **No** | Tool framework diretto |
+| A | Pulsante accessibile React | `pix_tool` → `rule_tool_search` → `rule_tool_frontend_react` → 2× `rule_tool_check` | Sì | Flusso quasi completo, ma risposta finale diversa dall'artefatto controllato |
+| B | Rate limiting/abusi | `rule_tool_backend_security` → `rule_tool_search` | **No** | Tool specializzato scelto direttamente |
+| C | API PostgreSQL, paginazione/filtri | `rule_tool_backend_api_design` → `rule_tool_data_postgresql` → `rule_tool_search` | **No** | Due skill-tool diretti |
+| D | Hook React con AbortController | `rule_tool_frontend_react` → `rule_tool_search` | **No** | Tool framework diretto |
 | E | “Quale workflow rule?” | 8 chiamate native `read` su `SKILL.md` | No MCP | Il trigger skill dell'host funziona quando richiesto esplicitamente |
 | F | `2 + 2` | Nessun tool | n/a | Comportamento corretto |
-| G | Ripetizione rate limiting | `pix_backend_security` → `pix_search` | **No** | Conferma del caso B |
-| H | Stessa richiesta preceduta dal template `/rule-mcp` | `rule` → `pix_search` → `pix_backend_security` → … | **Sì** | Il template forza il primo passo, ma `rule` routea inizialmente al frontend |
+| G | Ripetizione rate limiting | `rule_tool_backend_security` → `rule_tool_search` | **No** | Conferma del caso B |
+| H | Stessa richiesta preceduta dal template `/rule-mcp` | `pix_tool` → `rule_tool_search` → `rule_tool_backend_security` → … | **Sì** | Il template forza il primo passo, ma `pix_tool` routea inizialmente al frontend |
 
 Risultato empirico, senza sovrainterpretare il campione:
 
 - richieste di dominio senza comando esplicito (A–D, G): router usato **1/5 = 20%**;
 - richieste con comando esplicito (H): router usato per primo **1/1**;
 - chiamata diretta a skill/tool appropriati: frequente e operativa;
-- nessun meccanismo server-side blocca una risposta che non chiama `rule`.
+- nessun meccanismo server-side blocca una risposta che non chiama `pix_tool`.
 
 ### 3.2 Perché accade
 
-`src/tools/ai.js` registra `rule` come un normale tool. `src/tools/router.js` registra tutti gli altri tool nello stesso registry e `src/server.js` li espone simultaneamente. `rule` restituisce JSON con `route` e `next_tools`, ma **non invoca né orchestra** quei tool: il modello decide se proseguire. L'enforcement si attiva solo dopo una tool call già scelta dal client.
+`src/tools/ai.js` registra `pix_tool` come un normale tool. `src/tools/router.js` registra tutti gli altri tool nello stesso registry e `src/server.js` li espone simultaneamente. `pix_tool` restituisce JSON con `route` e `next_tools`, ma **non invoca né orchestra** quei tool: il modello decide se proseguire. L'enforcement si attiva solo dopo una tool call già scelta dal client.
 
 Il template `prompts/rule-mcp.md` è quindi utile, ma resta un'istruzione in linguaggio naturale. In MCP non esiste una capability con cui il server possa imporre “chiama questo tool prima di rispondere”. Per una garanzia reale serve enforcement nell'host/agent harness oppure una sola API orchestratrice che nasconda i tool secondari.
 
 ### 3.3 La check finale non è legata alla risposta finale
 
-Nel caso A il modello ha controllato una funzione con props, `disabled`, JSDoc e nome file `_AccessibleButton.tsx`; la risposta finale ha invece mostrato una funzione senza props/JSDoc che usa `console.log`. Il server non conosce la risposta finale del modello e non emette una ricevuta legata all'hash del codice. “Ho chiamato `pix_check`” non prova quindi che l'artefatto consegnato sia quello validato.
+Nel caso A il modello ha controllato una funzione con props, `disabled`, JSDoc e nome file `_AccessibleButton.tsx`; la risposta finale ha invece mostrato una funzione senza props/JSDoc che usa `console.log`. Il server non conosce la risposta finale del modello e non emette una ricevuta legata all'hash del codice. “Ho chiamato `rule_tool_check`” non prova quindi che l'artefatto consegnato sia quello validato.
 
 ## 4. Router: qualità, bias e determinismo
 
@@ -121,7 +121,7 @@ Nel caso A il modello ha controllato una funzione con props, `disabled`, JSDoc e
 
 ### 4.2 Path bias dominante
 
-La logica a `src/tools/ai.js:222` applica un floor/bias forte al framework rilevato. Il repository stesso viene classificato da `pix_detect` come `vanilla` frontend, pur essendo un server MCP Node. Prova:
+La logica a `src/tools/ai.js:222` applica un floor/bias forte al framework rilevato. Il repository stesso viene classificato da `rule_tool_detect` come `vanilla` frontend, pur essendo un server MCP Node. Prova:
 
 | Prompt | Path | Route primaria |
 |---|---|---|
@@ -176,7 +176,7 @@ Tutti e cinque i prompt falliscono `GetPromptResultSchema`. `prompts/list` passa
 
 ### P0-02 — Build/release/Docker possono cancellare tutte le skill
 
-`scripts/embed-skills.mjs:42` rimuove `skills/` prima di verificare la sorgente. Copia esclusivamente `~/.agents/skills/rule-*`, escludendo la skill centrale `rule`; se non trova sorgenti crea solo una directory placeholder senza `SKILL.md`.
+`scripts/embed-skills.mjs:42` rimuove `skills/` prima di verificare la sorgente. Copia esclusivamente `~/.agents/skills/rule-*`, escludendo la skill centrale `pix_tool`; se non trova sorgenti crea solo una directory placeholder senza `SKILL.md`.
 
 Riproduzione in clone temporaneo con `HOME` vuota:
 
@@ -207,7 +207,7 @@ Impatto:
 
 Il comando `pnpm build`, eseguito in una copia temporanea per non distruggere il repo, termina con `MODULE_NOT_FOUND scripts/package.mjs` dopo avere già svuotato `skills/`.
 
-### P0-04 — `pix_check` è bypassabile
+### P0-04 — `rule_tool_check` è bypassabile
 
 `src/core/guardrails.js:93-100` accetta `previousPassed` dal chiamante e salta quei controlli senza verificare una ricevuta, una sessione o l'hash del codice. Passando tutti gli ID, codice non conforme ottiene `allPass: true`.
 
@@ -226,7 +226,7 @@ Cause: `extractRealCSS()` ignora CSS raw; regex classi riconosce solo `.foo {`; 
 
 **Fix:** rimuovere `previousPassed` dall'input pubblico oppure emettere una receipt server-side firmata e legata a `sha256(code + context + guardrailVersion)`. In ogni caso rieseguire tutti i check sul pass finale.
 
-### P0-05 — `pix_fix` ignora dry-run e permette path traversal
+### P0-05 — `rule_tool_fix` ignora dry-run e permette path traversal
 
 Nel ramo `mode=generate`, `src/tools/fix.js:58-79` scrive sempre e non consulta `dryRun`. Inoltre combina `path`, `baseDir` e file generati con `join()` senza verificare che il path risolto resti dentro la root.
 
@@ -240,7 +240,7 @@ Prove in directory temporanea:
 
 ### P0-06 — SSE locale senza auth + CORS wildcard + tool mutanti
 
-`src/transport/sse.js:38` imposta `Access-Control-Allow-Origin: *`; il daemon avvia HTTP su `127.0.0.1:37999` senza token. Una pagina web visitata dall'utente può aprire SSE, leggere il session endpoint e inviare JSON-RPC al localhost. La catena diventa critica perché `pix_fix` e ADR scrivono file, e `pix_fix` consente path escape.
+`src/transport/sse.js:38` imposta `Access-Control-Allow-Origin: *`; il daemon avvia HTTP su `127.0.0.1:37999` senza token. Una pagina web visitata dall'utente può aprire SSE, leggere il session endpoint e inviare JSON-RPC al localhost. La catena diventa critica perché `rule_tool_fix` e ADR scrivono file, e `rule_tool_fix` consente path escape.
 
 Altri limiti:
 
@@ -250,17 +250,17 @@ Altri limiti:
 
 **Fix:** token bearer random per avvio, CORS deny-by-default/allowlist, validazione `Origin`, body limit, consenso per tool mutanti e preferenza stdio. Il binding loopback riduce l'esposizione di rete ma non protegge dai browser locali.
 
-### P0-07 — `pix_architect interview` è rotto nello snapshot corrente
+### P0-07 — `rule_tool_architect interview` è rotto nello snapshot corrente
 
-Il tool cerca `skills/rule-architect/assets/context-server.mjs`, ma il working tree ha cancellato l'intero asset tree. La nuova implementazione è distribuita in `rule-architect-cli`/`rule-architect-web`, ancora untracked e non collegata al tool ufficiale. La matrice 402-call ha un solo errore operativo: `pix_architect` in modalità `check`, coerente con la migrazione incompleta.
+Il tool cerca `skills/rule-architect/assets/context-server.mjs`, ma il working tree ha cancellato l'intero asset tree. La nuova implementazione è distribuita in `rule-architect-cli`/`rule-architect-web`, ancora untracked e non collegata al tool ufficiale. La matrice 402-call ha un solo errore operativo: `rule_tool_architect` in modalità `check`, coerente con la migrazione incompleta.
 
 **Fix:** completare una sola migrazione atomica, aggiornare tool, test, package files e documentazione nello stesso commit; evitare due wizard concorrenti.
 
 ### P0-08 — Generator e component template non sono una sorgente affidabile
 
-`pix_fix generate` dichiara framework Angular e Astro ma `generateComponentFiles()` gestisce solo React/Solid, Vue, Svelte e vanilla; Angular/Astro cadono nel default custom element. Il custom element usa un tag senza trattino (`customElements.define("mycomponent", …)`), invalido per la piattaforma.
+`rule_tool_fix generate` dichiara framework Angular e Astro ma `generateComponentFiles()` gestisce solo React/Solid, Vue, Svelte e vanilla; Angular/Astro cadono nel default custom element. Il custom element usa un tag senza trattino (`customElements.define("mycomponent", …)`), invalido per la piattaforma.
 
-`pix_component` ha problemi complementari:
+`rule_tool_component` ha problemi complementari:
 
 - React: 0/6 template UI supera i guardrail per JSDoc mancante;
 - Svelte: 0/6 supera `css-comments-required`;
@@ -283,7 +283,7 @@ In modalità multi-file, **98 file generati su 114** non superano almeno un guar
 
 ### P1-03 — Resource list/read incoerenti per plugin
 
-`listResources()` usa tutti i nomi di `getSkillNames()` e pubblica per esempio `rule://caveman`; il regex di `readResource()` accetta solo nomi che iniziano con `rule`, quindi la risorsa pubblicizzata torna “Resource not found”. Inoltre `rule://skills` include path assoluti e duplicati embedded/home, esponendo dettagli del filesystem.
+`listResources()` usa tutti i nomi di `getSkillNames()` e pubblica per esempio `rule://caveman`; il regex di `readResource()` accetta solo nomi che iniziano con `pix_tool`, quindi la risorsa pubblicizzata torna “Resource not found”. Inoltre `rule://skills` include path assoluti e duplicati embedded/home, esponendo dettagli del filesystem.
 
 ### P1-04 — Reload non idempotente
 
@@ -348,7 +348,7 @@ Il nome progetto usa `package.json` del cwd anche quando `projectDir` punta altr
 
 ## 7. Finding medi e manutenzione (P2)
 
-- **Documentazione stale:** l'estrazione dei token `pix_*` trova 32 nomi non presenti nel registry; esclusi il nome server e gli esempi intenzionali, circa 30 sono alias obsoleti come `pix_react`, `pix_vue`, `pix_angular`, `pix_docker` e `pix_testing`, soprattutto in `docs/01-product-architecture.md` e `docs/02-tools-operations.md`.
+- **Documentazione stale:** l'estrazione dei token `pix_*` trova 32 nomi non presenti nel registry; esclusi il nome server e gli esempi intenzionali, circa 30 sono alias obsoleti come `pix_react`, `pix_vue`, `pix_angular`, `pix_docker` e `rule_tool_testing`, soprattutto in `docs/01-product-architecture.md` e `docs/02-tools-operations.md`.
 - **API/documentazione interna:** lo scan ha rilevato 20 import inutilizzati e 22 simboli pubblici privi di documentazione; `cli()` e `daemonCommand()` concentrano responsabilità e complessità elevate.
 - **Dipendenze cicliche:** registry, skill loader, resource/tool registration e auto-ADR formano cluster ciclici che rendono ordine d'import e side effect difficili da prevedere.
 - **Naming/generazione:** `formField` diventa `Formfield`, perdendo il confine di parola; file/componenti generati mescolano `.js`, `.jsx`, `.ts` e barrel senza una policy TypeScript esplicita.
@@ -371,7 +371,7 @@ Il nome progetto usa `package.json` del cwd anche quando `projectDir` punta altr
 | `pnpm pack` in clone temp | Pass parziale | Pack possibile, non prova correttezza del publish workflow |
 | JSON/YAML/JS/Bash syntax | Pass | PowerShell non verificato |
 | Docker build | Non eseguito | Docker assente; staticamente fallisce per `LICENSE` e embed |
-| `pix_check` su questo report Markdown | **Fail 1/16** | Falso positivo `css-comments-required` perché il testo cita `.css` |
+| `rule_tool_check` su questo report Markdown | **Fail 1/16** | Falso positivo `css-comments-required` perché il testo cita `.css` |
 
 Nota operativa: con pnpm 11, `pnpm ci` è un comando install built-in; per eseguire lo script package occorre `pnpm run ci`.
 
@@ -417,21 +417,21 @@ Per ognuno dei 67 skill-tool sono state chiamate le modalità:
 5. `check`;
 6. `tldr`.
 
-Totale: **402 chiamate**. Il trasporto e lo shape MCP sono operativi. Questo prova la callability, non la correttezza semantica di ogni testo restituito. `pix_architect check` è l'eccezione runtime nello snapshot di migrazione.
+Totale: **402 chiamate**. Il trasporto e lo shape MCP sono operativi. Questo prova la callability, non la correttezza semantica di ogni testo restituito. `rule_tool_architect check` è l'eccezione runtime nello snapshot di migrazione.
 
 ### 10.2 Tool deterministici
 
 | Tool | Verdetto |
 |---|---|
-| `rule` | Callable, ma non obbligatorio; ranking da correggere |
-| `pix_search` | Callable; BM25 utile, pertinenza/top-k da migliorare |
-| `pix_check` | **Bloccato**: bypass e parser incompleti |
-| `pix_scaffold` | Callable; restituisce testo, non scrive |
-| `pix_detect` | Callable; classificazione troppo frontend-centrica |
-| `pix_component` | **Bloccato**: output non affidabile per framework/guardrail |
-| `pix_fix` | **Bloccato**: filesystem safety |
-| `pix_process_adr` | Parziale: side effect/concorrenza |
-| `pix_process_handoff` | Parziale: cwd/untracked/redaction |
+| `pix_tool` | Callable, ma non obbligatorio; ranking da correggere |
+| `rule_tool_search` | Callable; BM25 utile, pertinenza/top-k da migliorare |
+| `rule_tool_check` | **Bloccato**: bypass e parser incompleti |
+| `rule_tool_scaffold` | Callable; restituisce testo, non scrive |
+| `rule_tool_detect` | Callable; classificazione troppo frontend-centrica |
+| `rule_tool_component` | **Bloccato**: output non affidabile per framework/guardrail |
+| `rule_tool_fix` | **Bloccato**: filesystem safety |
+| `rule_tool_process_adr` | Parziale: side effect/concorrenza |
+| `rule_tool_process_handoff` | Parziale: cwd/untracked/redaction |
 
 La lista completa dei 76 tool isolati è nell'Appendice B.
 
@@ -439,7 +439,7 @@ La lista completa dei 76 tool isolati è nell'Appendice B.
 
 ### Fase 1 — bloccare i rischi immediati
 
-1. Disabilitare `pix_fix generate/fix` e SSE mutante fino a sandbox/auth complete.
+1. Disabilitare `rule_tool_fix generate/fix` e SSE mutante fino a sandbox/auth complete.
 2. Disabilitare `previousPassed` pubblico.
 3. Correggere prompt MCP, build, CI, Docker e installer.
 4. Rendere plugin e auto-ADR opt-in.
@@ -453,7 +453,7 @@ Esporre per default solo un piccolo set core:
 pix_route
 pix_evidence
 pix_validate
-pix_apply (consenso esplicito)
+rule_tool_apply (consenso esplicito)
 ```
 
 `pix_route` deve effettuare internamente routing + caricamento evidenza, non limitarsi a suggerire al modello il prossimo tool. I 67 tool skill possono restare disponibili in modalità avanzata ma non tutti nel tool-choice budget iniziale.
@@ -487,7 +487,7 @@ Ogni apply/write deve richiedere una receipt valida per esattamente gli stessi b
 
 Una suite opzionale, protetta da secret/budget, deve eseguire più run per modello/host e misurare:
 
-- percentuale di prima chiamata `rule` quando l'istruzione è presente;
+- percentuale di prima chiamata `pix_tool` quando l'istruzione è presente;
 - route corretta;
 - caricamento della skill indicata;
 - check sull'hash dell'artefatto finale;
@@ -500,7 +500,7 @@ I test deterministici devono restare il gate primario; i test live sono una metr
 
 | Ordine | Azione | Gate di accettazione |
 |---:|---|---|
-| 1 | Sandbox `pix_fix`; auth/CORS SSE | Nessuna scrittura fuori root/symlink; dry-run zero side effect; browser hostile test rosso→verde |
+| 1 | Sandbox `rule_tool_fix`; auth/CORS SSE | Nessuna scrittura fuori root/symlink; dry-run zero side effect; browser hostile test rosso→verde |
 | 2 | Eliminare bypass `previousPassed` | Codice modificato forza tutti i check; test CSS/JSX avversariali verdi |
 | 3 | Rendere embed/build riproducibili | Build con HOME vuota conserva esattamente le skill versionate |
 | 4 | Riparare `prompts/get` e rimuovere completion tool fittizia | Tutte le response passano gli schema SDK ufficiali |
@@ -515,7 +515,7 @@ I test deterministici devono restare il gate primario; i test live sono una metr
 
 **Compatibilità tecnica:** sì. Pi 0.80.6 espone il server e `openai-codex/gpt-5.6-sol` genera tool call valide, legge output MCP e compone risposte utili.
 
-**Compliance workflow:** no. Il modello può e spesso preferisce saltare `rule`; può chiamare direttamente skill-tool, può consegnare codice diverso da quello controllato e non esiste un gate server-side sulla risposta finale.
+**Compliance workflow:** no. Il modello può e spesso preferisce saltare `pix_tool`; può chiamare direttamente skill-tool, può consegnare codice diverso da quello controllato e non esiste un gate server-side sulla risposta finale.
 
 **Compliance MCP complessiva:** parziale. Tools e molte resources funzionano; prompt e completion sono difettosi.
 
@@ -525,76 +525,76 @@ I test deterministici devono restare il gate primario; i test live sono una metr
 
 | Skill | Lines | MCP tool | Metadata/links | TLDR canonical query | Result |
 |---|---:|---|---|---|---|
-| `rule` | 254 | `rule` | Pass | n/a | **Pass** |
-| `rule-architect` | 253 | `pix_architect` | Pass | No result | **Blocked: interview asset missing** |
-| `rule-architect-cli` | 82 | `pix_architect_cli` | Pass | Result | **Warning: untracked/WIP** |
-| `rule-architect-web` | 71 | `pix_architect_web` | Pass | Result | **Blocked: untracked + UI/security defects** |
-| `rule-backend` | 61 | `pix_backend` | Pass | Result | **Pass** |
-| `rule-backend-api-design` | 158 | `pix_backend_api_design` | Pass | Result | **Pass** |
-| `rule-backend-express` | 147 | `pix_backend_express` | Pass | Result | **Pass** |
-| `rule-backend-fastify` | 82 | `pix_backend_fastify` | Pass | Result | **Pass** |
-| `rule-backend-hono` | 91 | `pix_backend_hono` | Pass | Result | **Pass** |
-| `rule-backend-nestjs` | 94 | `pix_backend_nestjs` | Pass | No result | **Warning** |
-| `rule-backend-node` | 214 | `pix_backend_node` | Pass | No result | **Warning** |
-| `rule-backend-security` | 174 | `pix_backend_security` | Pass | No result | **Warning** |
-| `rule-data` | 39 | `pix_data` | Pass | Result | **Pass** |
-| `rule-data-duckdb` | 234 | `pix_data_duckdb` | Warning: missing `See also` | Result | **Warning** |
-| `rule-data-indexed-db` | 317 | `pix_data_indexed_db` | Warning: missing `See also` | No result | **Warning** |
-| `rule-data-mongodb` | 743 | `pix_data_mongodb` | Pass | No result | **Warning** |
-| `rule-data-mysql` | 595 | `pix_data_mysql` | Pass | Result | **Pass** |
-| `rule-data-postgresql` | 649 | `pix_data_postgresql` | Pass | No result | **Warning** |
-| `rule-data-sql` | 632 | `pix_data_sql` | Pass | No result | **Warning** |
-| `rule-data-sqlite` | 242 | `pix_data_sqlite` | Warning: missing `See also` | Result | **Warning** |
-| `rule-devops` | 42 | `pix_devops` | Pass | Result | **Pass** |
-| `rule-devops-docker` | 128 | `pix_devops_docker` | Pass | No result | **Warning** |
-| `rule-devops-gitlab-ci` | 75 | `pix_devops_gitlab_ci` | Pass | Result | **Pass** |
-| `rule-devops-testing` | 300 | `pix_devops_testing` | Pass | No result | **Warning** |
-| `rule-devops-version` | 161 | `pix_devops_version` | Pass | No result | **Warning** |
-| `rule-frontend` | 61 | `pix_frontend` | Pass | Result | **Pass** |
-| `rule-frontend-angular` | 504 | `pix_frontend_angular` | Pass | Result | **Pass** |
-| `rule-frontend-astro` | 526 | `pix_frontend_astro` | Pass | Result | **Pass** |
-| `rule-frontend-meta-next` | 201 | `pix_frontend_meta_next` | Pass | Result | **Pass** |
-| `rule-frontend-meta-nuxt` | 181 | `pix_frontend_meta_nuxt` | Pass | Result | **Pass** |
-| `rule-frontend-meta-remix` | 224 | `pix_frontend_meta_remix` | Pass | Result | **Pass** |
-| `rule-frontend-react` | 688 | `pix_frontend_react` | Pass | No result | **Warning** |
-| `rule-frontend-solidjs` | 532 | `pix_frontend_solidjs` | Pass | Result | **Pass** |
-| `rule-frontend-svelte` | 508 | `pix_frontend_svelte` | Pass | Result | **Pass** |
-| `rule-frontend-vanilla-reactive` | 640 | `pix_frontend_vanilla_reactive` | Pass | No result | **Warning** |
-| `rule-frontend-vue` | 522 | `pix_frontend_vue` | Pass | No result | **Warning** |
-| `rule-platform` | 43 | `pix_platform` | Pass | Result | **Pass** |
-| `rule-platform-agent` | 294 | `pix_platform_agent` | Pass | No result | **Warning** |
-| `rule-platform-desktop` | 542 | `pix_platform_desktop` | Pass | Result | **Pass** |
-| `rule-platform-expo` | 254 | `pix_platform_expo` | Pass | Result | **Pass** |
-| `rule-platform-library` | 259 | `pix_platform_library` | Pass | Result | **Pass** |
-| `rule-platform-web` | 241 | `pix_platform_web` | Pass | No result | **Warning** |
+| `pix_tool` | 254 | `pix_tool` | Pass | n/a | **Pass** |
+| `rule-architect` | 253 | `rule_tool_architect` | Pass | No result | **Blocked: interview asset missing** |
+| `rule-architect-cli` | 82 | `rule_tool_architect_cli` | Pass | Result | **Warning: untracked/WIP** |
+| `rule-architect-web` | 71 | `rule_tool_architect_web` | Pass | Result | **Blocked: untracked + UI/security defects** |
+| `rule-backend` | 61 | `rule_tool_backend` | Pass | Result | **Pass** |
+| `rule-backend-api-design` | 158 | `rule_tool_backend_api_design` | Pass | Result | **Pass** |
+| `rule-backend-express` | 147 | `rule_tool_backend_express` | Pass | Result | **Pass** |
+| `rule-backend-fastify` | 82 | `rule_tool_backend_fastify` | Pass | Result | **Pass** |
+| `rule-backend-hono` | 91 | `rule_tool_backend_hono` | Pass | Result | **Pass** |
+| `rule-backend-nestjs` | 94 | `rule_tool_backend_nestjs` | Pass | No result | **Warning** |
+| `rule-backend-node` | 214 | `rule_tool_backend_node` | Pass | No result | **Warning** |
+| `rule-backend-security` | 174 | `rule_tool_backend_security` | Pass | No result | **Warning** |
+| `rule-data` | 39 | `rule_tool_data` | Pass | Result | **Pass** |
+| `rule-data-duckdb` | 234 | `rule_tool_data_duckdb` | Warning: missing `See also` | Result | **Warning** |
+| `rule-data-indexed-db` | 317 | `rule_tool_data_indexed_db` | Warning: missing `See also` | No result | **Warning** |
+| `rule-data-mongodb` | 743 | `rule_tool_data_mongodb` | Pass | No result | **Warning** |
+| `rule-data-mysql` | 595 | `rule_tool_data_mysql` | Pass | Result | **Pass** |
+| `rule-data-postgresql` | 649 | `rule_tool_data_postgresql` | Pass | No result | **Warning** |
+| `rule-data-sql` | 632 | `rule_tool_data_sql` | Pass | No result | **Warning** |
+| `rule-data-sqlite` | 242 | `rule_tool_data_sqlite` | Warning: missing `See also` | Result | **Warning** |
+| `rule-devops` | 42 | `rule_tool_devops` | Pass | Result | **Pass** |
+| `rule-devops-docker` | 128 | `rule_tool_devops_docker` | Pass | No result | **Warning** |
+| `rule-devops-gitlab-ci` | 75 | `rule_tool_devops_gitlab_ci` | Pass | Result | **Pass** |
+| `rule-devops-testing` | 300 | `rule_tool_devops_testing` | Pass | No result | **Warning** |
+| `rule-devops-version` | 161 | `rule_tool_devops_version` | Pass | No result | **Warning** |
+| `rule-frontend` | 61 | `rule_tool_frontend` | Pass | Result | **Pass** |
+| `rule-frontend-angular` | 504 | `rule_tool_frontend_angular` | Pass | Result | **Pass** |
+| `rule-frontend-astro` | 526 | `rule_tool_frontend_astro` | Pass | Result | **Pass** |
+| `rule-frontend-meta-next` | 201 | `rule_tool_frontend_meta_next` | Pass | Result | **Pass** |
+| `rule-frontend-meta-nuxt` | 181 | `rule_tool_frontend_meta_nuxt` | Pass | Result | **Pass** |
+| `rule-frontend-meta-remix` | 224 | `rule_tool_frontend_meta_remix` | Pass | Result | **Pass** |
+| `rule-frontend-react` | 688 | `rule_tool_frontend_react` | Pass | No result | **Warning** |
+| `rule-frontend-solidjs` | 532 | `rule_tool_frontend_solidjs` | Pass | Result | **Pass** |
+| `rule-frontend-svelte` | 508 | `rule_tool_frontend_svelte` | Pass | Result | **Pass** |
+| `rule-frontend-vanilla-reactive` | 640 | `rule_tool_frontend_vanilla_reactive` | Pass | No result | **Warning** |
+| `rule-frontend-vue` | 522 | `rule_tool_frontend_vue` | Pass | No result | **Warning** |
+| `rule-platform` | 43 | `rule_tool_platform` | Pass | Result | **Pass** |
+| `rule-platform-agent` | 294 | `rule_tool_platform_agent` | Pass | No result | **Warning** |
+| `rule-platform-desktop` | 542 | `rule_tool_platform_desktop` | Pass | Result | **Pass** |
+| `rule-platform-expo` | 254 | `rule_tool_platform_expo` | Pass | Result | **Pass** |
+| `rule-platform-library` | 259 | `rule_tool_platform_library` | Pass | Result | **Pass** |
+| `rule-platform-web` | 241 | `rule_tool_platform_web` | Pass | No result | **Warning** |
 | `rule-process` | 43 | `pix_process` | Pass | Result | **Pass** |
-| `rule-process-adr` | 96 | `pix_process_adr` | Pass | n/a | **Pass** |
-| `rule-process-bmad` | 422 | `pix_process_bmad` | Pass | Result | **Pass** |
-| `rule-process-documentation` | 201 | `pix_process_documentation` | Pass | No result | **Warning** |
-| `rule-process-feature-workflow` | 121 | `pix_process_feature_workflow` | Pass | Result | **Pass** |
-| `rule-process-handoff` | 97 | `pix_process_handoff` | Pass | n/a | **Pass** |
-| `rule-styleguide` | 58 | `pix_styleguide` | Pass | Result | **Pass** |
-| `rule-styleguide-a11y` | 514 | `pix_styleguide_a11y` | Pass | No result | **Warning** |
-| `rule-styleguide-css` | 488 | `pix_styleguide_css` | Pass | No result | **Warning** |
-| `rule-styleguide-html` | 339 | `pix_styleguide_html` | Pass | No result | **Warning** |
-| `rule-styleguide-javascript` | 553 | `pix_styleguide_javascript` | Pass | No result | **Warning** |
-| `rule-styleguide-json` | 132 | `pix_styleguide_json` | Pass | No result | **Warning** |
-| `rule-styleguide-markdown` | 132 | `pix_styleguide_markdown` | Pass | Result | **Pass** |
-| `rule-styleguide-naming` | 228 | `pix_styleguide_naming` | Pass | No result | **Warning** |
-| `rule-styleguide-patterns` | 183 | `pix_styleguide_patterns` | Pass | No result | **Warning** |
-| `rule-styleguide-validation` | 472 | `pix_styleguide_validation` | Pass | No result | **Warning** |
-| `rule-toolchain` | 69 | `pix_toolchain` | Pass | Result | **Pass** |
-| `rule-toolchain-biome` | 101 | `pix_toolchain_biome` | Pass | No result | **Warning** |
-| `rule-toolchain-eslint` | 81 | `pix_toolchain_eslint` | Pass | Result | **Pass** |
-| `rule-toolchain-husky` | 116 | `pix_toolchain_husky` | Pass | Result | **Pass** |
-| `rule-toolchain-parcel` | 120 | `pix_toolchain_parcel` | Pass | Result | **Pass** |
-| `rule-toolchain-pnpm` | 114 | `pix_toolchain_pnpm` | Pass | No result | **Warning** |
-| `rule-toolchain-project` | 217 | `pix_toolchain_project` | Pass | No result | **Warning** |
-| `rule-toolchain-turborepo` | 108 | `pix_toolchain_turborepo` | Pass | Result | **Pass** |
-| `rule-toolchain-typescript` | 132 | `pix_toolchain_typescript` | Pass | Result | **Pass** |
-| `rule-toolchain-vite` | 93 | `pix_toolchain_vite` | Pass | No result | **Warning** |
-| `rule-ui` | 79 | `pix_ui` | Pass | Result | **Pass** |
-| `rule-ui-design-system` | 214 | `pix_ui_design_system` | Pass | No result | **Warning** |
+| `rule-process-adr` | 96 | `rule_tool_process_adr` | Pass | n/a | **Pass** |
+| `rule-process-bmad` | 422 | `rule_tool_process_bmad` | Pass | Result | **Pass** |
+| `rule-process-documentation` | 201 | `rule_tool_process_documentation` | Pass | No result | **Warning** |
+| `rule-process-feature-workflow` | 121 | `rule_tool_process_feature_workflow` | Pass | Result | **Pass** |
+| `rule-process-handoff` | 97 | `rule_tool_process_handoff` | Pass | n/a | **Pass** |
+| `rule-styleguide` | 58 | `rule_tool_styleguide` | Pass | Result | **Pass** |
+| `rule-styleguide-a11y` | 514 | `rule_tool_styleguide_a11y` | Pass | No result | **Warning** |
+| `rule-styleguide-css` | 488 | `rule_tool_styleguide_css` | Pass | No result | **Warning** |
+| `rule-styleguide-html` | 339 | `rule_tool_styleguide_html` | Pass | No result | **Warning** |
+| `rule-styleguide-javascript` | 553 | `rule_tool_styleguide_javascript` | Pass | No result | **Warning** |
+| `rule-styleguide-json` | 132 | `rule_tool_styleguide_json` | Pass | No result | **Warning** |
+| `rule-styleguide-markdown` | 132 | `rule_tool_styleguide_markdown` | Pass | Result | **Pass** |
+| `rule-styleguide-naming` | 228 | `rule_tool_styleguide_naming` | Pass | No result | **Warning** |
+| `rule-styleguide-patterns` | 183 | `rule_tool_styleguide_patterns` | Pass | No result | **Warning** |
+| `rule-styleguide-validation` | 472 | `rule_tool_styleguide_validation` | Pass | No result | **Warning** |
+| `rule-toolchain` | 69 | `rule_tool_toolchain` | Pass | Result | **Pass** |
+| `rule-toolchain-biome` | 101 | `rule_tool_toolchain_biome` | Pass | No result | **Warning** |
+| `rule-toolchain-eslint` | 81 | `rule_tool_toolchain_eslint` | Pass | Result | **Pass** |
+| `rule-toolchain-husky` | 116 | `rule_tool_toolchain_husky` | Pass | Result | **Pass** |
+| `rule-toolchain-parcel` | 120 | `rule_tool_toolchain_parcel` | Pass | Result | **Pass** |
+| `rule-toolchain-pnpm` | 114 | `rule_tool_toolchain_pnpm` | Pass | No result | **Warning** |
+| `rule-toolchain-project` | 217 | `rule_tool_toolchain_project` | Pass | No result | **Warning** |
+| `rule-toolchain-turborepo` | 108 | `rule_tool_toolchain_turborepo` | Pass | Result | **Pass** |
+| `rule-toolchain-typescript` | 132 | `rule_tool_toolchain_typescript` | Pass | Result | **Pass** |
+| `rule-toolchain-vite` | 93 | `rule_tool_toolchain_vite` | Pass | No result | **Warning** |
+| `rule-ui` | 79 | `rule_tool_ui` | Pass | Result | **Pass** |
+| `rule-ui-design-system` | 214 | `rule_tool_ui_design_system` | Pass | No result | **Warning** |
 
 Notes: all 70 names are Agent Skills-compatible (valid lowercase/hyphen names, unique, name matches directory, descriptions below 1,024 characters); all relative Markdown links resolve. “Pass” is structural/runtime, not independent factual certification of every framework/database statement.
 
@@ -604,82 +604,82 @@ Isolated package state: **76 tools**. Live workstation state: **87 tools** becau
 
 | Tool | Kind | Exercised | Finding |
 |---|---|---|---|
-| `rule` | Router | 60 curated + 69 self-description + live model | Partial: not mandatory; routing defects |
-| `pix_architect` | Skill | 6 modes | Blocked: interview missing |
-| `pix_architect_cli` | Skill | 6 modes | Modes callable |
-| `pix_architect_web` | Skill | 6 modes | Modes callable |
-| `pix_backend` | Skill | 6 modes | Modes callable |
-| `pix_backend_api_design` | Skill | 6 modes | Modes callable |
-| `pix_backend_express` | Skill | 6 modes | Modes callable |
-| `pix_backend_fastify` | Skill | 6 modes | Modes callable |
-| `pix_backend_hono` | Skill | 6 modes | Modes callable |
-| `pix_backend_nestjs` | Skill | 6 modes | Partial: TLDR canonical query empty |
-| `pix_backend_node` | Skill | 6 modes | Partial: TLDR canonical query empty |
-| `pix_backend_security` | Skill | 6 modes | Partial: TLDR canonical query empty |
-| `pix_data` | Skill | 6 modes | Modes callable |
-| `pix_data_duckdb` | Skill | 6 modes | Modes callable |
-| `pix_data_indexed_db` | Skill | 6 modes | Partial: TLDR canonical query empty |
-| `pix_data_mongodb` | Skill | 6 modes | Partial: TLDR canonical query empty |
-| `pix_data_mysql` | Skill | 6 modes | Modes callable |
-| `pix_data_postgresql` | Skill | 6 modes | Partial: TLDR canonical query empty |
-| `pix_data_sql` | Skill | 6 modes | Partial: TLDR canonical query empty |
-| `pix_data_sqlite` | Skill | 6 modes | Modes callable |
-| `pix_devops` | Skill | 6 modes | Modes callable |
-| `pix_devops_docker` | Skill | 6 modes | Partial: TLDR canonical query empty |
-| `pix_devops_gitlab_ci` | Skill | 6 modes | Modes callable |
-| `pix_devops_testing` | Skill | 6 modes | Partial: TLDR canonical query empty |
-| `pix_devops_version` | Skill | 6 modes | Partial: TLDR canonical query empty |
-| `pix_frontend` | Skill | 6 modes | Modes callable |
-| `pix_frontend_angular` | Skill | 6 modes | Modes callable |
-| `pix_frontend_astro` | Skill | 6 modes | Modes callable |
-| `pix_frontend_meta_next` | Skill | 6 modes | Modes callable |
-| `pix_frontend_meta_nuxt` | Skill | 6 modes | Modes callable |
-| `pix_frontend_meta_remix` | Skill | 6 modes | Modes callable |
-| `pix_frontend_react` | Skill | 6 modes | Partial: TLDR canonical query empty |
-| `pix_frontend_solidjs` | Skill | 6 modes | Modes callable |
-| `pix_frontend_svelte` | Skill | 6 modes | Modes callable |
-| `pix_frontend_vanilla_reactive` | Skill | 6 modes | Partial: TLDR canonical query empty |
-| `pix_frontend_vue` | Skill | 6 modes | Partial: TLDR canonical query empty |
-| `pix_platform` | Skill | 6 modes | Modes callable |
-| `pix_platform_agent` | Skill | 6 modes | Partial: TLDR canonical query empty |
-| `pix_platform_desktop` | Skill | 6 modes | Modes callable |
-| `pix_platform_expo` | Skill | 6 modes | Modes callable |
-| `pix_platform_library` | Skill | 6 modes | Modes callable |
-| `pix_platform_web` | Skill | 6 modes | Partial: TLDR canonical query empty |
+| `pix_tool` | Router | 60 curated + 69 self-description + live model | Partial: not mandatory; routing defects |
+| `rule_tool_architect` | Skill | 6 modes | Blocked: interview missing |
+| `rule_tool_architect_cli` | Skill | 6 modes | Modes callable |
+| `rule_tool_architect_web` | Skill | 6 modes | Modes callable |
+| `rule_tool_backend` | Skill | 6 modes | Modes callable |
+| `rule_tool_backend_api_design` | Skill | 6 modes | Modes callable |
+| `rule_tool_backend_express` | Skill | 6 modes | Modes callable |
+| `rule_tool_backend_fastify` | Skill | 6 modes | Modes callable |
+| `rule_tool_backend_hono` | Skill | 6 modes | Modes callable |
+| `rule_tool_backend_nestjs` | Skill | 6 modes | Partial: TLDR canonical query empty |
+| `rule_tool_backend_node` | Skill | 6 modes | Partial: TLDR canonical query empty |
+| `rule_tool_backend_security` | Skill | 6 modes | Partial: TLDR canonical query empty |
+| `rule_tool_data` | Skill | 6 modes | Modes callable |
+| `rule_tool_data_duckdb` | Skill | 6 modes | Modes callable |
+| `rule_tool_data_indexed_db` | Skill | 6 modes | Partial: TLDR canonical query empty |
+| `rule_tool_data_mongodb` | Skill | 6 modes | Partial: TLDR canonical query empty |
+| `rule_tool_data_mysql` | Skill | 6 modes | Modes callable |
+| `rule_tool_data_postgresql` | Skill | 6 modes | Partial: TLDR canonical query empty |
+| `rule_tool_data_sql` | Skill | 6 modes | Partial: TLDR canonical query empty |
+| `rule_tool_data_sqlite` | Skill | 6 modes | Modes callable |
+| `rule_tool_devops` | Skill | 6 modes | Modes callable |
+| `rule_tool_devops_docker` | Skill | 6 modes | Partial: TLDR canonical query empty |
+| `rule_tool_devops_gitlab_ci` | Skill | 6 modes | Modes callable |
+| `rule_tool_devops_testing` | Skill | 6 modes | Partial: TLDR canonical query empty |
+| `rule_tool_devops_version` | Skill | 6 modes | Partial: TLDR canonical query empty |
+| `rule_tool_frontend` | Skill | 6 modes | Modes callable |
+| `rule_tool_frontend_angular` | Skill | 6 modes | Modes callable |
+| `rule_tool_frontend_astro` | Skill | 6 modes | Modes callable |
+| `rule_tool_frontend_meta_next` | Skill | 6 modes | Modes callable |
+| `rule_tool_frontend_meta_nuxt` | Skill | 6 modes | Modes callable |
+| `rule_tool_frontend_meta_remix` | Skill | 6 modes | Modes callable |
+| `rule_tool_frontend_react` | Skill | 6 modes | Partial: TLDR canonical query empty |
+| `rule_tool_frontend_solidjs` | Skill | 6 modes | Modes callable |
+| `rule_tool_frontend_svelte` | Skill | 6 modes | Modes callable |
+| `rule_tool_frontend_vanilla_reactive` | Skill | 6 modes | Partial: TLDR canonical query empty |
+| `rule_tool_frontend_vue` | Skill | 6 modes | Partial: TLDR canonical query empty |
+| `rule_tool_platform` | Skill | 6 modes | Modes callable |
+| `rule_tool_platform_agent` | Skill | 6 modes | Partial: TLDR canonical query empty |
+| `rule_tool_platform_desktop` | Skill | 6 modes | Modes callable |
+| `rule_tool_platform_expo` | Skill | 6 modes | Modes callable |
+| `rule_tool_platform_library` | Skill | 6 modes | Modes callable |
+| `rule_tool_platform_web` | Skill | 6 modes | Partial: TLDR canonical query empty |
 | `pix_process` | Skill | 6 modes | Modes callable |
-| `pix_process_bmad` | Skill | 6 modes | Modes callable |
-| `pix_process_documentation` | Skill | 6 modes | Partial: TLDR canonical query empty |
-| `pix_process_feature_workflow` | Skill | 6 modes | Modes callable |
-| `pix_styleguide` | Skill | 6 modes | Modes callable |
-| `pix_styleguide_a11y` | Skill | 6 modes | Partial: TLDR canonical query empty |
-| `pix_styleguide_css` | Skill | 6 modes | Partial: TLDR canonical query empty |
-| `pix_styleguide_html` | Skill | 6 modes | Partial: TLDR canonical query empty |
-| `pix_styleguide_javascript` | Skill | 6 modes | Partial: TLDR canonical query empty |
-| `pix_styleguide_json` | Skill | 6 modes | Partial: TLDR canonical query empty |
-| `pix_styleguide_markdown` | Skill | 6 modes | Modes callable |
-| `pix_styleguide_naming` | Skill | 6 modes | Partial: TLDR canonical query empty |
-| `pix_styleguide_patterns` | Skill | 6 modes | Partial: TLDR canonical query empty |
-| `pix_styleguide_validation` | Skill | 6 modes | Partial: TLDR canonical query empty |
-| `pix_toolchain` | Skill | 6 modes | Modes callable |
-| `pix_toolchain_biome` | Skill | 6 modes | Partial: TLDR canonical query empty |
-| `pix_toolchain_eslint` | Skill | 6 modes | Modes callable |
-| `pix_toolchain_husky` | Skill | 6 modes | Modes callable |
-| `pix_toolchain_parcel` | Skill | 6 modes | Modes callable |
-| `pix_toolchain_pnpm` | Skill | 6 modes | Partial: TLDR canonical query empty |
-| `pix_toolchain_project` | Skill | 6 modes | Partial: TLDR canonical query empty |
-| `pix_toolchain_turborepo` | Skill | 6 modes | Modes callable |
-| `pix_toolchain_typescript` | Skill | 6 modes | Modes callable |
-| `pix_toolchain_vite` | Skill | 6 modes | Partial: TLDR canonical query empty |
-| `pix_ui` | Skill | 6 modes | Modes callable |
-| `pix_ui_design_system` | Skill | 6 modes | Partial: TLDR canonical query empty |
-| `pix_search` | Deterministic | Integration/adversarial | Pass; relevance needs tuning |
-| `pix_check` | Deterministic | Integration/adversarial | Blocked: trusted previousPassed bypass |
-| `pix_scaffold` | Deterministic | Integration/adversarial | Pass (returns text only) |
-| `pix_detect` | Deterministic | Integration/adversarial | Partial: frontend-only classification |
-| `pix_process_adr` | Deterministic | Integration/adversarial | Partial: races/auto-log pollution |
-| `pix_fix` | Deterministic | Integration/adversarial | Blocked: dry-run/path escape |
-| `pix_process_handoff` | Deterministic | Integration/adversarial | Partial: project-name/diff gaps |
-| `pix_component` | Deterministic | Integration/adversarial | Blocked: invalid/non-compliant outputs |
+| `rule_tool_process_bmad` | Skill | 6 modes | Modes callable |
+| `rule_tool_process_documentation` | Skill | 6 modes | Partial: TLDR canonical query empty |
+| `rule_tool_process_feature_workflow` | Skill | 6 modes | Modes callable |
+| `rule_tool_styleguide` | Skill | 6 modes | Modes callable |
+| `rule_tool_styleguide_a11y` | Skill | 6 modes | Partial: TLDR canonical query empty |
+| `rule_tool_styleguide_css` | Skill | 6 modes | Partial: TLDR canonical query empty |
+| `rule_tool_styleguide_html` | Skill | 6 modes | Partial: TLDR canonical query empty |
+| `rule_tool_styleguide_javascript` | Skill | 6 modes | Partial: TLDR canonical query empty |
+| `rule_tool_styleguide_json` | Skill | 6 modes | Partial: TLDR canonical query empty |
+| `rule_tool_styleguide_markdown` | Skill | 6 modes | Modes callable |
+| `rule_tool_styleguide_naming` | Skill | 6 modes | Partial: TLDR canonical query empty |
+| `rule_tool_styleguide_patterns` | Skill | 6 modes | Partial: TLDR canonical query empty |
+| `rule_tool_styleguide_validation` | Skill | 6 modes | Partial: TLDR canonical query empty |
+| `rule_tool_toolchain` | Skill | 6 modes | Modes callable |
+| `rule_tool_toolchain_biome` | Skill | 6 modes | Partial: TLDR canonical query empty |
+| `rule_tool_toolchain_eslint` | Skill | 6 modes | Modes callable |
+| `rule_tool_toolchain_husky` | Skill | 6 modes | Modes callable |
+| `rule_tool_toolchain_parcel` | Skill | 6 modes | Modes callable |
+| `rule_tool_toolchain_pnpm` | Skill | 6 modes | Partial: TLDR canonical query empty |
+| `rule_tool_toolchain_project` | Skill | 6 modes | Partial: TLDR canonical query empty |
+| `rule_tool_toolchain_turborepo` | Skill | 6 modes | Modes callable |
+| `rule_tool_toolchain_typescript` | Skill | 6 modes | Modes callable |
+| `rule_tool_toolchain_vite` | Skill | 6 modes | Partial: TLDR canonical query empty |
+| `rule_tool_ui` | Skill | 6 modes | Modes callable |
+| `rule_tool_ui_design_system` | Skill | 6 modes | Partial: TLDR canonical query empty |
+| `rule_tool_search` | Deterministic | Integration/adversarial | Pass; relevance needs tuning |
+| `rule_tool_check` | Deterministic | Integration/adversarial | Blocked: trusted previousPassed bypass |
+| `rule_tool_scaffold` | Deterministic | Integration/adversarial | Pass (returns text only) |
+| `rule_tool_detect` | Deterministic | Integration/adversarial | Partial: frontend-only classification |
+| `rule_tool_process_adr` | Deterministic | Integration/adversarial | Partial: races/auto-log pollution |
+| `rule_tool_fix` | Deterministic | Integration/adversarial | Blocked: dry-run/path escape |
+| `rule_tool_process_handoff` | Deterministic | Integration/adversarial | Partial: project-name/diff gaps |
+| `rule_tool_component` | Deterministic | Integration/adversarial | Blocked: invalid/non-compliant outputs |
 
 ## Appendix C — Executable source inventory
 
@@ -780,4 +780,4 @@ find src bin scripts test skills -type f \( -name "*.js" -o -name "*.mjs" \) \
   -print0 | xargs -0 -n1 node --check
 ```
 
-Le prove `build`, `pix_fix`, installer e ADR devono restare in directory temporanee finché i finding P0 non sono corretti.
+Le prove `build`, `rule_tool_fix`, installer e ADR devono restare in directory temporanee finché i finding P0 non sono corretti.

@@ -22,73 +22,73 @@ Every source document below is preserved verbatim under its own heading so no pr
 
 | Tool | Category | Description |
 |------|----------|-------------|
-| `rule` | Router | Route a prompt to the correct rule skill |
-| `pix_search` | Search | Full-text BM25 search across ALL skills |
-| `pix_check` | Validation | Run guardrail checks on code |
-| `pix_scaffold` | Scaffold | Generate project config files |
-| `pix_detect` | Detection | Auto-detect project framework |
-| `pix_component` | Templates | Generate component/test templates |
-| `pix_process_adr` | ADR | Architecture Decision Records |
-| `pix_process_handoff` | Handoff | LLM context summary |
-| `pix_fix` | Fix | Validate and auto-fix file tree structure |
+| `pix_tool` | Router | Route a prompt to the correct rule skill |
+| `rule_tool_search` | Search | Full-text BM25 search across ALL skills |
+| `rule_tool_check` | Validation | Run guardrail checks on code |
+| `rule_tool_scaffold` | Scaffold | Generate project config files |
+| `rule_tool_detect` | Detection | Auto-detect project framework |
+| `rule_tool_component` | Templates | Generate component/test templates |
+| `rule_tool_process_adr` | ADR | Architecture Decision Records |
+| `rule_tool_process_handoff` | Handoff | LLM context summary |
+| `rule_tool_fix` | Fix | Validate and auto-fix file tree structure |
 | | | |
 | **UI Frameworks** | | |
-| `pix_frontend_vanilla_reactive` | Skill | Vanilla JS reactive pattern |
-| `pix_frontend_react` | Skill | React 18+ best practices |
-| `pix_frontend_vue` | Skill | Vue 3 Composition API |
-| `pix_frontend_svelte` | Skill | Svelte 5 runes |
-| `pix_frontend_angular` | Skill | Angular standalone components |
-| `pix_frontend_solidjs` | Skill | SolidJS fine-grained reactivity |
+| `rule_tool_frontend_vanilla_reactive` | Skill | Vanilla JS reactive pattern |
+| `rule_tool_frontend_react` | Skill | React 18+ best practices |
+| `rule_tool_frontend_vue` | Skill | Vue 3 Composition API |
+| `rule_tool_frontend_svelte` | Skill | Svelte 5 runes |
+| `rule_tool_frontend_angular` | Skill | Angular standalone components |
+| `rule_tool_frontend_solidjs` | Skill | SolidJS fine-grained reactivity |
 | | | |
 | **Meta-Frameworks** | | |
-| `pix_frontend_astro` | Skill | Astro islands architecture |
-| `pix_frontend_meta_next` | Skill | Next.js App Router |
-| `pix_frontend_meta_nuxt` | Skill | Nuxt 3 best practices |
-| `pix_frontend_meta_remix` | Skill | Remix best practices |
+| `rule_tool_frontend_astro` | Skill | Astro islands architecture |
+| `rule_tool_frontend_meta_next` | Skill | Next.js App Router |
+| `rule_tool_frontend_meta_nuxt` | Skill | Nuxt 3 best practices |
+| `rule_tool_frontend_meta_remix` | Skill | Remix best practices |
 | | | |
 | **Project Types** | | |
-| `pix_platform_web` | Skill | Web platform best practices |
-| `pix_platform_desktop` | Skill | Desktop app patterns (Electron) |
-| `pix_platform_library` | Skill | Library authoring |
-| `pix_backend` | Skill | Backend/API best practices |
+| `rule_tool_platform_web` | Skill | Web platform best practices |
+| `rule_tool_platform_desktop` | Skill | Desktop app patterns (Electron) |
+| `rule_tool_platform_library` | Skill | Library authoring |
+| `rule_tool_backend` | Skill | Backend/API best practices |
 | | | |
 | **Architecture** | | |
-| `pix_architect` | Skill | Enterprise architecture wizard & SDD workflow |
-| `pix_styleguide` | Skill | HTML, CSS, JS, a11y, naming, file tree |
+| `rule_tool_architect` | Skill | Enterprise architecture wizard & SDD workflow |
+| `rule_tool_styleguide` | Skill | HTML, CSS, JS, a11y, naming, file tree |
 | | | |
 | **Scaffolding** | | |
-| `pix_backend_node` | Skill | Backend Node.js scaffold |
-| `pix_frontend_react` | Skill | Frontend React + Vite scaffold |
-| `pix_platform_agent` | Skill | AI Agents monorepo scaffold |
-| `pix_platform_expo` | Skill | Expo mobile scaffold |
+| `rule_tool_backend_node` | Skill | Backend Node.js scaffold |
+| `rule_tool_frontend_react` | Skill | Frontend React + Vite scaffold |
+| `rule_tool_platform_agent` | Skill | AI Agents monorepo scaffold |
+| `rule_tool_platform_expo` | Skill | Expo mobile scaffold |
 | | | |
 | **Engineering & DevOps** | | |
-| `pix_devops_docker` | Skill | Dockerfile + compose generation |
-| `pix_devops_docker` | Skill | Docker standards |
-| `pix_devops_gitlab_ci` | Skill | GitLab CI/CD pipelines |
-| `pix_devops_testing` | Skill | Vitest setup & test patterns |
-| `pix_devops_testing` | Skill | Coverage enforcement (60/50/60/60) |
-| `pix_devops_version` | Skill | Husky version auto-increment |
+| `rule_tool_devops_docker` | Skill | Dockerfile + compose generation |
+| `rule_tool_devops_docker` | Skill | Docker standards |
+| `rule_tool_devops_gitlab_ci` | Skill | GitLab CI/CD pipelines |
+| `rule_tool_devops_testing` | Skill | Vitest setup & test patterns |
+| `rule_tool_devops_testing` | Skill | Coverage enforcement (60/50/60/60) |
+| `rule_tool_devops_version` | Skill | Husky version auto-increment |
 | | | |
 | **Backend** | | |
-| `pix_backend_security` | Skill | Security hardening |
-| `pix_backend_api_design` | Skill | REST API design & OpenAPI |
-| `pix_platform_agent` | Skill | AI Agent structure and tools |
+| `rule_tool_backend_security` | Skill | Security hardening |
+| `rule_tool_backend_api_design` | Skill | REST API design & OpenAPI |
+| `rule_tool_platform_agent` | Skill | AI Agent structure and tools |
 | | | |
 | **Frontend** | | |
-| `pix_frontend_react` | Skill | React forms with validation |
-| `pix_styleguide_validation` | Skill | Business field validation |
+| `rule_tool_frontend_react` | Skill | React forms with validation |
+| `rule_tool_styleguide_validation` | Skill | Business field validation |
 | | | |
 | **Mobile** | | |
-| `pix_platform_expo` | Skill | EAS Build & Expo CI/CD |
+| `rule_tool_platform_expo` | Skill | EAS Build & Expo CI/CD |
 | | | |
 | **Workflow** | | |
-| `pix_process_feature_workflow` | Skill | End-to-end feature workflow |
-| `pix_process_documentation` | Skill | Mintlify documentation setup |
+| `rule_tool_process_feature_workflow` | Skill | End-to-end feature workflow |
+| `rule_tool_process_documentation` | Skill | Mintlify documentation setup |
 
 ### Modes common to all skill tools
 
-Every skill tool (`pix_frontend_react`, `pix_devops_docker`, etc.) supports:
+Every skill tool (`rule_tool_frontend_react`, `rule_tool_devops_docker`, etc.) supports:
 
 | Mode | Description | Token savings |
 |------|-------------|---------------|
@@ -99,8 +99,8 @@ Every skill tool (`pix_frontend_react`, `pix_devops_docker`, etc.) supports:
 | `guardrails` | Only testable assertions | ~80% |
 | `check` | Validate `code` against guardrails | — |
 
-`pix_styleguide` and `pix_architect` add `scaffold`.  
-`pix_architect` also adds `interview` (context wizard server).
+`rule_tool_styleguide` and `rule_tool_architect` add `scaffold`.  
+`rule_tool_architect` also adds `interview` (context wizard server).
 
 ---
 
@@ -113,7 +113,7 @@ All MCP tools execute inside fail-closed enforcement boundary.
 - Zod schema validation.
 - Maximum argument payload: 256 KiB.
 - Maximum nesting: 12 levels; maximum object keys: 1000.
-- Reject NUL controls, prototype-pollution keys, non-plain objects, blank `rule` prompts.
+- Reject NUL controls, prototype-pollution keys, non-plain objects, blank `pix_tool` prompts.
 - Normalize routing/search/path fields before deterministic handler receives them.
 - Mandatory `addBeforeToolHook()` hooks are awaited; any exception blocks execution.
 
@@ -121,19 +121,19 @@ All MCP tools execute inside fail-closed enforcement boundary.
 
 - Mandatory `addPostToolHook()` hooks are awaited.
 - Validate non-empty text-only MCP result and 1 MiB output limit.
-- For `rule`, parse routing JSON and reject unknown skills, unknown tools, or confidence outside `0..1`.
+- For `pix_tool`, parse routing JSON and reject unknown skills, unknown tools, or confidence outside `0..1`.
 - Append visible `rule ENFORCEMENT CONTRACT` and `_meta.pixEnforcement` audit record.
 - Only then fire non-blocking observational hooks such as auto-ADR.
 
 ### Blocking code validation
 
-`pix_check` and skill `mode=check` return `isError: true` while any guardrail fails. Added anti-hallucination rules:
+`rule_tool_check` and skill `mode=check` return `isError: true` while any guardrail fails. Added anti-hallucination rules:
 
 - `no-placeholder-implementation`: reject TODO/FIXME/XXX, placeholder comments, not-implemented throws.
 - `no-suppressed-errors`: reject `@ts-ignore`, lint suppression, empty catches.
 - `verified-dependencies-only`: when manifest-derived `allowedDependencies` exists, reject invented imports.
 
-## 1. Router: `rule`
+## 1. Router: `pix_tool`
 
 **Analyzes a user prompt and routes to the most relevant rule skill.**
 
@@ -154,7 +154,7 @@ Uses keyword scoring across all skill sections, with framework bias (×2 for det
   "route": "rule-frontend-react",
   "confidence": 1,
   "sections": ["Component Architecture", "Props & State"],
-  "next_tools": ["pix_frontend_react", "pix_check", "pix_component"],
+  "next_tools": ["rule_tool_frontend_react", "rule_tool_check", "rule_tool_component"],
   "alternatives": [
     { "route": "rule-styleguide", "confidence": 0.6, "sections": ["CSS Architecture"] }
   ],
@@ -204,25 +204,25 @@ rule prompt="Create a responsive navbar" framework=react
 
 ```
 # Full content
-pix_frontend_react mode=full
+rule_tool_frontend_react mode=full
 
 # TLDR: only relevant sections (BM25, 90%+ token savings)
-pix_frontend_vue mode=tldr query="reactive data"
+rule_tool_frontend_vue mode=tldr query="reactive data"
 
 # Internal search
-pix_frontend_angular mode=search query="standalone"
+rule_tool_frontend_angular mode=search query="standalone"
 
 # Code validation
-pix_frontend_react mode=check code="..." fileName="_Button.jsx" isComponent=true
+rule_tool_frontend_react mode=check code="..." fileName="_Button.jsx" isComponent=true
 
 # Guardrails
-pix_frontend_svelte mode=guardrails
+rule_tool_frontend_svelte mode=guardrails
 
 # Scaffolding (styleguides/architect only)
-pix_styleguide mode=scaffold file=.prettierrc
+rule_tool_styleguide mode=scaffold file=.prettierrc
 
 # Context wizard (architect only)
-pix_architect mode=interview target=./my-project
+rule_tool_architect mode=interview target=./my-project
 ```
 
 ### Mode `tldr` — token savings
@@ -230,14 +230,14 @@ pix_architect mode=interview target=./my-project
 Uses BM25 to return ONLY sections matching the query, with snippets and scores. Saves 90-97% compared to `mode=full`.
 
 ```
-pix_frontend_react mode=tldr query="state management hooks"
+rule_tool_frontend_react mode=tldr query="state management hooks"
 # → Only "Component Architecture" and "Props & State" with snippets
 # No Overview, Setup, Installation, License
 ```
 
-### Special: pix_architect interview mode
+### Special: rule_tool_architect interview mode
 
-1. Call `pix_architect mode=interview target=./my-project`
+1. Call `rule_tool_architect mode=interview target=./my-project`
 2. A local HTTP server opens at `http://localhost:19000`
 3. Guides the user through 16 project specification steps (from Analysis Depth to Security & Compliance)
 4. Generates `.context/` files with SDD specs
@@ -245,7 +245,7 @@ pix_frontend_react mode=tldr query="state management hooks"
 
 ---
 
-## 3. Search: `pix_search`
+## 3. Search: `rule_tool_search`
 
 **Full-text BM25 search across ALL rule skills.**
 
@@ -283,7 +283,7 @@ Components use data-part attributes instead of className...
 
 ---
 
-## 4. Validation: `pix_check`
+## 4. Validation: `rule_tool_check`
 
 **Runs blocking guardrail checks on code against any rule skill.**
 
@@ -329,12 +329,12 @@ Supports smart iteration: pass `previousPassed` to skip already-verified guardra
 ### Smart iteration workflow
 
 ```
-Step 1: pix_check skill=rule-frontend-react code="..." fileName="_Btn.jsx" isComponent=true
+Step 1: rule_tool_check skill=rule-frontend-react code="..." fileName="_Btn.jsx" isComponent=true
         → Returns { passed: [...], failed: [...], previousPassed: ["no-css-classes", ...] }
 
 Step 2: Fix failing code
 
-Step 3: pix_check skill=rule-frontend-react code="..." fileName="_Btn.jsx" isComponent=true
+Step 3: rule_tool_check skill=rule-frontend-react code="..." fileName="_Btn.jsx" isComponent=true
                   previousPassed=["no-css-classes", "no-inline-styles", "semantic-html", ...]
         → Skips 4 already-passed guardrails, runs only remaining ones
         → Returns only NEW failures
@@ -344,7 +344,7 @@ Repeat until allPass: true
 
 ---
 
-## 5. Scaffold: `pix_scaffold`
+## 5. Scaffold: `rule_tool_scaffold`
 
 **Generates project scaffolding files (config templates).**
 
@@ -375,21 +375,21 @@ Reads templates from the `## Project Scaffolding` section of `rule-styleguide`.
 
 ```
 # List files
-pix_scaffold mode=list
+rule_tool_scaffold mode=list
 
 # Generate all files
-pix_scaffold mode=generate
+rule_tool_scaffold mode=generate
 
 # Generate a single file
-pix_scaffold mode=generate file=.prettierrc
+rule_tool_scaffold mode=generate file=.prettierrc
 
 # Validate existing project
-pix_scaffold mode=validate projectDir=./my-project
+rule_tool_scaffold mode=validate projectDir=./my-project
 ```
 
 ---
 
-## 6. Detection: `pix_detect`
+## 6. Detection: `rule_tool_detect`
 
 **Auto-detects framework, TypeScript, and build tool from `package.json`.**
 
@@ -411,8 +411,8 @@ Reads `package.json` from the specified directory and matches dependencies again
   "buildTool": "vite",
   "nodeVersion": ">=20",
   "suggested_skills": ["rule-frontend-react"],
-  "suggested_tools": ["pix_frontend_react", "pix_check", "pix_scaffold", "pix_component"],
-  "message": "Detected react project \"my-app\". Use pix_frontend_react, pix_check..."
+  "suggested_tools": ["rule_tool_frontend_react", "rule_tool_check", "rule_tool_scaffold", "rule_tool_component"],
+  "message": "Detected react project \"my-app\". Use rule_tool_frontend_react, rule_tool_check..."
 }
 ```
 
@@ -434,7 +434,7 @@ Build tool: vite, webpack, esbuild, angular-cli, sveltekit, next, nuxt, parcel, 
 
 ---
 
-## 7. Templates: `pix_component`
+## 7. Templates: `rule_tool_component`
 
 **Generates component or test templates following rule principles.**
 
@@ -502,7 +502,7 @@ Framework-agnostic templates: `playwright-config`, `a11y-test-basic`, `a11y-test
 
 ---
 
-## 8. ADR: `pix_process_adr`
+## 8. ADR: `rule_tool_process_adr`
 
 **Saves an Architecture Decision Record in `docs/adr/`.** Auto-numbering, Nygard template, auto-index.
 
@@ -521,11 +521,11 @@ Framework-agnostic templates: `playwright-config`, `a11y-test-basic`, `a11y-test
 
 ### Auto-ADR hooks
 
-After every call to `pix_architect`, `rule`, `pix_scaffold`, `pix_detect`, the server automatically logs a summary ADR in `docs/adr/` with tool name, args, and timestamp. Fire-and-forget, non-blocking.
+After every call to `rule_tool_architect`, `pix_tool`, `rule_tool_scaffold`, `rule_tool_detect`, the server automatically logs a summary ADR in `docs/adr/` with tool name, args, and timestamp. Fire-and-forget, non-blocking.
 
 ---
 
-## 9. Handoff: `pix_process_handoff`
+## 9. Handoff: `rule_tool_process_handoff`
 
 **Generates an LLM context summary from ADR logs + `.context/` values.** The output is a text prompt that a new LLM session can use to resume work.
 
@@ -555,7 +555,7 @@ If `maxTokens` is > 0 and the current format exceeds the budget, the handoff aut
 
 ---
 
-## 10. File Tree Fix: `pix_fix`
+## 10. File Tree Fix: `rule_tool_fix`
 
 **Validates and auto-fixes project file tree structure** against rule conventions. Operates on disk — scans actual files and directories.
 
@@ -587,7 +587,7 @@ If `maxTokens` is > 0 and the current format exceeds the budget, the handoff aut
 
 ### Guardrails (3 new)
 
-These guardrails are automatically included in `pix_check` for all frameworks:
+These guardrails are automatically included in `rule_tool_check` for all frameworks:
 
 | ID | Guardrail |
 |----|-----------|
@@ -599,7 +599,7 @@ These guardrails are automatically included in `pix_check` for all frameworks:
 
 ```json
 {
-  "name": "pix_fix",
+  "name": "rule_tool_fix",
   "arguments": { "mode": "lint", "path": "./my-project", "srcDir": "src" }
 }
 ```
@@ -644,6 +644,12 @@ Prompt templates accessible via the MCP `prompts/get` protocol.
 
 | Name | Arguments | Description |
 |------|-----------|-------------|
+| `rule-setup-project` | `projectName` (req), `framework` (opt), `toolchain` (opt), `tier` (opt) | Bootstrap project: detect → scaffold → toolchain → architect context |
+| `rule-new-feature` | `feature` (req), `framework` (opt), `area` (opt), `includeTests` (opt) | Feature end-to-end with TDD + a11y + commit scope |
+| `rule-pull-request` | `description` (req), `framework` (opt), `updateAdr` (opt) | Prepare PR: review + a11y + security + ADR + commit scope |
+| `rule-write-tests` | `scope` (req), `framework` (opt), `testType` (opt) | Write TDD + a11y (axe-core) + devops tests |
+| `rule-handoff` | `mode` (req), `includeGitDiff` (opt), `compress` (opt) | Compressed context handoff for a new session |
+| `rule-area-*` (16) | `request` (req) + area-specific optionals | One prompt per tool area (meta, frontend, backend, data, toolchain, styleguide, process, devops, platform, caveman, architect, grill, ai, skills, tdd, ui) |
 | `rule-code-review` | `framework` (opt), `code` (req) | Review code against rule styleguides |
 | `rule-generate-component` | `framework` (req), `component` (req), `features` (opt) | Generate component following rule principles |
 | `rule-a11y-test` | `framework` (req), `component` (opt) | Generate Playwright + axe-core a11y tests |
@@ -657,14 +663,14 @@ Prompt templates accessible via the MCP `prompts/get` protocol.
 ### Workflow: Generate → Check → Fix → Re-check
 
 ```
-1. pix_detect path=.                             → Detect framework
+1. rule_tool_detect path=.                             → Detect framework
 2. pix_<framework> mode=full                     → Read the rules
-3. pix_component component=button framework=react → Get template
+3. rule_tool_component component=button framework=react → Get template
    mode=multi name=MyBtn
-4. pix_check skill=rule-frontend-react                 → Validate code
+4. rule_tool_check skill=rule-frontend-react                 → Validate code
    code="..." fileName="_MyBtn.jsx" isComponent=true
 5. Fix → Re-check with previousPassed:
-   pix_check skill=rule-frontend-react code="..."
+   rule_tool_check skill=rule-frontend-react code="..."
    fileName="_MyBtn.jsx" isComponent=true
    previousPassed=["no-css-classes", "semantic-html", ...]
 6. Repeat until allPass: true
@@ -674,7 +680,7 @@ Prompt templates accessible via the MCP `prompts/get` protocol.
 
 ```
 # Instead of guessing the skill:
-pix_search query="CSS data-part selectors"
+rule_tool_search query="CSS data-part selectors"
 # → Ranked results from the correct skill
 ```
 
@@ -692,21 +698,21 @@ previousPassed: ["no-css-classes", "no-inline-styles", "semantic-html",
 
 | Framework | Skill | MCP Tool |
 |-----------|-------|----------|
-| React | rule-frontend-react | `pix_frontend_react` |
-| Vue 3 | rule-frontend-vue | `pix_frontend_vue` |
-| Svelte 5 | rule-frontend-svelte | `pix_frontend_svelte` |
-| Angular | rule-frontend-angular | `pix_frontend_angular` |
-| SolidJS | rule-frontend-solidjs | `pix_frontend_solidjs` |
-| Astro | rule-frontend-astro | `pix_frontend_astro` |
-| Next.js | rule-frontend-meta-next | `pix_frontend_meta_next` |
-| Nuxt 3 | rule-frontend-meta-nuxt | `pix_frontend_meta_nuxt` |
-| Remix | rule-frontend-meta-remix | `pix_frontend_meta_remix` |
-| Desktop (Electron) | rule-platform-desktop | `pix_platform_desktop` |
-| Vanilla JS | rule-frontend-vanilla-reactive | `pix_frontend_vanilla_reactive` |
-| Web platform | rule-platform-web | `pix_platform_web` |
-| Library authoring | rule-platform-library | `pix_platform_library` |
-| Styleguides | rule-styleguide | `pix_styleguide` |
-| Architecture | rule-architect | `pix_architect` |
+| React | rule-frontend-react | `rule_tool_frontend_react` |
+| Vue 3 | rule-frontend-vue | `rule_tool_frontend_vue` |
+| Svelte 5 | rule-frontend-svelte | `rule_tool_frontend_svelte` |
+| Angular | rule-frontend-angular | `rule_tool_frontend_angular` |
+| SolidJS | rule-frontend-solidjs | `rule_tool_frontend_solidjs` |
+| Astro | rule-frontend-astro | `rule_tool_frontend_astro` |
+| Next.js | rule-frontend-meta-next | `rule_tool_frontend_meta_next` |
+| Nuxt 3 | rule-frontend-meta-nuxt | `rule_tool_frontend_meta_nuxt` |
+| Remix | rule-frontend-meta-remix | `rule_tool_frontend_meta_remix` |
+| Desktop (Electron) | rule-platform-desktop | `rule_tool_platform_desktop` |
+| Vanilla JS | rule-frontend-vanilla-reactive | `rule_tool_frontend_vanilla_reactive` |
+| Web platform | rule-platform-web | `rule_tool_platform_web` |
+| Library authoring | rule-platform-library | `rule_tool_platform_library` |
+| Styleguides | rule-styleguide | `rule_tool_styleguide` |
+| Architecture | rule-architect | `rule_tool_architect` |
 
 ## Preserved source: `PLUGINS.md`
 
@@ -751,7 +757,7 @@ EOF
 rule-mcp skills reload
 
 # 4. Your plugin is now available as:
-rule-mcp tools call pix_styleguide --json '{"mode": "full"}'
+rule-mcp tools call rule_tool_styleguide --json '{"mode": "full"}'
 ```
 
 ## Adding custom guardrails with plugin.js
@@ -765,7 +771,7 @@ For advanced plugins, create a `plugin.js` file in your plugin directory:
  * Optional plugin.js for custom guardrails and generators.
  */
 
-/** Custom guardrails to add to the pix_check engine. */
+/** Custom guardrails to add to the rule_tool_check engine. */
 export const guardrails = [
   {
     id: "custom-two-spaces",
@@ -826,7 +832,7 @@ rule-mcp tools call rule --json '{"prompt": "List available community skills"}'
 - **Plugin names**: use `kebab-case` (e.g., `my-company-rules`)
 - **SKILL.md**: include YAML frontmatter with `name` and `description`
 - **Guardrail IDs**: prefix with your plugin name to avoid conflicts (e.g., `myco-two-spaces`)
-- **Test your plugin**: run `pix_check skill=<plugin-name>` to verify guardrails work
+- **Test your plugin**: run `rule_tool_check skill=<plugin-name>` to verify guardrails work
 
 ## Preserved source: `RELEASE.md`
 
@@ -949,7 +955,7 @@ Users can install using these methods:
 | GitHub Copilot CLI | `~/.copilot/agents/rule-mcp.agent.md` | `/agent` selection |
 | Codex CLI | `~/.agents/skills/rule/` | Skill workflow; no stable exact custom command assumed |
 
-Uninstall removes same artifact. Universal command body forces routing, evidence lookup, test-first implementation, blocking `pix_check`, real test reporting, and ADR capture.
+Uninstall removes same artifact. Universal command body forces routing, evidence lookup, test-first implementation, blocking `rule_tool_check`, real test reporting, and ADR capture.
 
 ---
 
@@ -968,7 +974,7 @@ curl http://localhost:37999/health
 
 # Test tools
 rule-mcp tools list
-rule-mcp tools call pix_detect --json '{}'
+rule-mcp tools call rule_tool_detect --json '{}'
 rule-mcp tools call rule --json '{"prompt": "React button"}'
 ```
 
@@ -1172,12 +1178,12 @@ rule-mcp daemon logs
   rule-mcp skills reload
   ```
 
-**Issue**: `rule` returns no matching skill.
+**Issue**: `pix_tool` returns no matching skill.
 - **Verify**: Skills are loaded:
   ```bash
   rule-mcp tools list | grep rule-mcp
   ```
-- **Try**: Use `pix_search` for free-text search across all skills.
+- **Try**: Use `rule_tool_search` for free-text search across all skills.
 
 ## General debugging
 

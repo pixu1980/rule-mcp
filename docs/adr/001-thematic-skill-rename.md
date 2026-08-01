@@ -44,7 +44,7 @@ Three skills keep their names (they are already correctly categorized or would l
 - Scalable: new skills slot naturally into existing prefixes
 
 **Negative:**
-- All existing MCP tool names change (e.g. `pix_react` → `pix_frontend_react`)
+- All existing MCP tool names change (e.g. `pix_react` → `rule_tool_frontend_react`)
 - All documentation references must be updated (README, docs/TOOLS.md, cross-references)
 - All cross-reference links between SKILL.md files must be updated
 - Agents with hardcoded tool names will need their prompts updated

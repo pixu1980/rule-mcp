@@ -25,7 +25,7 @@ import { callTool } from "../src/tools/router.js";
 await loadAllSkills();
 
 // ── T1: rule returns structured JSON ──
-const r1 = await callTool("rule", { prompt: "I need a React button component" });
+const r1 = await callTool("pix_tool", { prompt: "I need a React button component" });
 const text = r1.content?.[0]?.text ?? "";
 check("T1 returns content", text.length > 0);
 
@@ -50,7 +50,7 @@ if (parsed) {
 check("T2 response size reasonable (under 8KB)", text.length < 8000);
 
 // ── T3: Multi-skill query ──
-const r2 = await callTool("rule", { prompt: "React accessibility components" });
+const r2 = await callTool("pix_tool", { prompt: "React accessibility components" });
 const text2 = r2.content?.[0]?.text ?? "";
 
 let parsed2 = false;
@@ -65,7 +65,7 @@ if (parsed2) {
 }
 
 // ── T3.1: Pure accessibility query routes to styleguides ──
-const r3 = await callTool("rule", { prompt: "accessibility guidelines a11y WCAG standards" });
+const r3 = await callTool("pix_tool", { prompt: "accessibility guidelines a11y WCAG standards" });
 const text3 = r3.content?.[0]?.text ?? "";
 let parsed3 = false;
 try {
@@ -80,7 +80,7 @@ if (parsed3) {
 // ── T4: Low-confidence prompt returns route:"unknown" without erroring ──
 // Regression guard for F1: enforcement.validateRouterResult must not reject the
 // "unknown" route the handler emits when no skill matches confidently.
-const r4 = await callTool("rule", { prompt: "zzzzz qqqqq wwwww xxxxx" });
+const r4 = await callTool("pix_tool", { prompt: "zzzzz qqqqq wwwww xxxxx" });
 check("T4 low-confidence prompt does not error", r4.isError !== true);
 let parsed4 = false;
 try {

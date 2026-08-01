@@ -42,7 +42,7 @@ export function withTimeout(promise, ms, signal) {
 }
 ```
 
-Per tool mutanti (`pix_fix`, `pix_process_adr`): accettare `AbortSignal`, rispettarlo, prevenire scritture parziali dopo abort.
+Per tool mutanti (`rule_tool_fix`, `rule_tool_process_adr`): accettare `AbortSignal`, rispettarlo, prevenire scritture parziali dopo abort.
 
 **Verifica:**
 ```bash
@@ -53,7 +53,7 @@ node test/sandbox.test.mjs  # deve passare senza regressioni
 
 ## 8.2 — Resource list/read coerenti per plugin (`src/resources/index.js`)
 
-**Problema:** `listResources()` pubblica URI per skill plugin (es. `rule://caveman`) ma `readResource()` le rifiuta perché il regex accetta solo nomi che iniziano con `rule`.
+**Problema:** `listResources()` pubblica URI per skill plugin (es. `rule://caveman`) ma `readResource()` le rifiuta perché il regex accetta solo nomi che iniziano con `pix_tool`.
 
 **Fix:** Due opzioni:
 1. **Opzione A (consigliata):** `listResources()` non pubblica skill plugin. Solo skill ufficiali.

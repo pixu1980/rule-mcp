@@ -1,7 +1,7 @@
 /**
  * @module tools/handoff
  *
- * pix_process_handoff MCP tool — LLM Context Handoff.
+ * rule_tool_process_handoff MCP tool — LLM Context Handoff.
  * Reads ADR logs + .context/ values and generates a compressed handoff prompt
  * that lets a new LLM session resume work seamlessly.
  *
@@ -266,7 +266,7 @@ function buildHandoff({ projectDir, includeContext, includeAdrs, includeIdentity
   if (isCloseSession && !isMinimal) {
     const now = new Date().toISOString().slice(0, 19).replace("T", " ");
     lines.push(`_Session closed at ${now}_`);
-    lines.push(`_Run \`pix_process_handoff\` in a new session to resume._`);
+    lines.push(`_Run \`rule_tool_process_handoff\` in a new session to resume._`);
     lines.push("");
   }
 
@@ -422,7 +422,7 @@ function buildHandoff({ projectDir, includeContext, includeAdrs, includeIdentity
     lines.push("");
     lines.push("To resume this session in a new chat:");
     lines.push("");
-    lines.push("1. Run `pix_process_handoff` to load this context.");
+    lines.push("1. Run `rule_tool_process_handoff` to load this context.");
     lines.push("2. Review the ADR log in `docs/adr/` for all decisions made.");
     lines.push("3. Check the working tree changes listed above.");
     lines.push("4. Review planning artifacts in `_bmad-output/` or `.context/` if applicable.");
@@ -469,11 +469,11 @@ function buildHandoff({ projectDir, includeContext, includeAdrs, includeIdentity
 }
 
 /**
- * Register the pix_process_handoff tool.
+ * Register the rule_tool_process_handoff tool.
  */
 export function registerProcessHandoffTool() {
   registerTool({
-    name: "pix_process_handoff",
+    name: "rule_tool_process_handoff",
     description: "Generate a compressed LLM handoff summary from ADR logs and project context. Paste the output into a new chat to resume work seamlessly.",
     zodSchema: HandoffSchema,
     inputSchema: {

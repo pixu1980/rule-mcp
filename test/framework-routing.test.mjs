@@ -35,13 +35,13 @@ function getAllRoutes(parsed) {
 
 // ── T6: framework bias boosts matching skill ──
 // Without framework, rule-frontend-react should appear in top results for a React query
-const r = await callTool("rule", { prompt: "How do I create a React button component?" });
+const r = await callTool("pix_tool", { prompt: "How do I create a React button component?" });
 const parsed = JSON.parse(r.content[0].text);
 const allRoutes = getAllRoutes(parsed);
 check("T6 defaults: rule-frontend-react in top results", allRoutes.some(r => r === "rule-frontend-react"));
 
 // Now with framework="vue" — rule-frontend-vue should rank higher
-const rVue = await callTool("rule", { prompt: "Vue 3 component with Composition API", framework: "vue" });
+const rVue = await callTool("pix_tool", { prompt: "Vue 3 component with Composition API", framework: "vue" });
 const parsedVue = JSON.parse(rVue.content[0].text);
 const vueRoutes = getAllRoutes(parsedVue);
 check("T6.1 vue bias: rule-frontend-vue in results", vueRoutes.some(r => r === "rule-frontend-vue"));
@@ -55,7 +55,7 @@ writeFileSync(join(tmpDir, "package.json"), JSON.stringify({
   devDependencies: { vite: "^6.0.0" },
 }));
 
-const rPath = await callTool("rule", {
+const rPath = await callTool("pix_tool", {
   prompt: "How do I create a button component?",
   path: tmpDir,
 });
@@ -68,7 +68,7 @@ writeFileSync(join(tmpDir, "package.json"), JSON.stringify({
   name: "angular-app",
   dependencies: { "@angular/core": "^19.0.0" },
 }));
-const rOverride = await callTool("rule", {
+const rOverride = await callTool("pix_tool", {
   prompt: "How do I create a button component?",
   framework: "react",
   path: tmpDir,

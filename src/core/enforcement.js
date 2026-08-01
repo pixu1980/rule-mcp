@@ -43,7 +43,7 @@ export function preprocessToolCall(name, args) {
   }
   assertSafeValue(args ?? {}, { keys: 0 });
   const normalized = normalizeArguments(args ?? {});
-  if (name === "rule" && !normalized.prompt) throw new Error("rule requires a non-blank prompt");
+  if (name === "pix_tool" && !normalized.prompt) throw new Error("pix_tool requires a non-blank prompt");
   return normalized;
 }
 
@@ -116,7 +116,7 @@ function enforcementContract(name, terse) {
  */
 export function postprocessToolResult(name, args, result, context = {}) {
   validateResultShape(result);
-  if (!result.isError && name === "rule") {
+  if (!result.isError && name === "pix_tool") {
     validateRouterResult(result, new Set(context.toolNames ?? []), new Set(context.skillNames ?? []));
   }
   if (result.isError) return result;

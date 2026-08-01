@@ -44,12 +44,12 @@ node test/skills-docs.test.mjs  # deve passare
 ### 10.2 — Documentazione obsoleta (32 token name, ~30 min)
 
 `docs/01-product-architecture.md` e `docs/02-tools-operations.md` contengono ~32 riferimenti a nomi tool obsoleti:
-- `pix_react` → `pix_frontend_react`
-- `pix_vue` → `pix_frontend_vue`
-- `pix_angular` → `pix_frontend_angular`
-- `pix_svelte` → `pix_frontend_svelte`
-- `pix_docker` → `pix_devops_docker`
-- `pix_testing` → `pix_devops_testing`
+- `pix_react` → `rule_tool_frontend_react`
+- `pix_vue` → `rule_tool_frontend_vue`
+- `pix_angular` → `rule_tool_frontend_angular`
+- `pix_svelte` → `rule_tool_frontend_svelte`
+- `pix_docker` → `rule_tool_devops_docker`
+- `rule_tool_testing` → `rule_tool_devops_testing`
 - ...e altri 26
 
 **Fix:** Sostituzione massiva con sed o modifica manuale.
@@ -70,9 +70,9 @@ Nessun tool ha `annotations` (`readOnlyHint`, `destructiveHint`, `idempotentHint
 
 ```js
 // Tool read-only:
-registerTool({ name: "pix_search", ..., annotations: { readOnlyHint: true } });
+registerTool({ name: "rule_tool_search", ..., annotations: { readOnlyHint: true } });
 // Tool distruttivi:
-registerTool({ name: "pix_fix", ..., annotations: { destructiveHint: true } });
+registerTool({ name: "rule_tool_fix", ..., annotations: { destructiveHint: true } });
 ```
 
 ### 10.4 — Fix handoff (`src/tools/handoff.js`, ~15 min)

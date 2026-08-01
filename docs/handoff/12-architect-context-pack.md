@@ -1,6 +1,6 @@
 # Handoff — `feat/architect-context-pack` (rule-architect consolidation)
 
-_Generated 2026-07-30 with `pix_process_handoff`, augmented with the session narrative._
+_Generated 2026-07-30 with `rule_tool_process_handoff`, augmented with the session narrative._
 
 ## Status at handoff
 
@@ -71,7 +71,7 @@ The pack no longer asserts the prototype's vanilla-JS/Custom-Elements/Parcel sta
 2. **Project-structure overfit (out of P8 scope):** some templates still carry `./src/scripts/services/…`-style *structure* assumptions in non-gated prose. Stack-neutral is done; structure-neutral would be a separate follow-up.
 3. **Pre-existing CI reds, NOT from this work** (reproduce identically on `main`): `rule-styleguide-a11y: missing See also` aborts full `node --run ci`; `docs-architect` "≤6 root docs, found 8". These predate the branch.
 4. **`architect-ui.test.mjs`** needs the Playwright runner + a live server (`ARCHITECT_WEB_URL`); it fails under `node --test` (wrong runner) and is **not in `ci`** by design.
-5. **`pix_check` on the architect `.mjs`** files: a repo-wide block-spacing style gap fails identically on untouched code, and `jsdoc-required` is a confirmed **false positive** (fires on functions that have full JSDoc). Not a per-change regression — don't churn style to chase it.
+5. **`rule_tool_check` on the architect `.mjs`** files: a repo-wide block-spacing style gap fails identically on untouched code, and `jsdoc-required` is a confirmed **false positive** (fires on functions that have full JSDoc). Not a per-change regression — don't churn style to chase it.
 
 ## How to verify / resume
 
@@ -91,4 +91,4 @@ Golden snapshot is authoritative for output; regenerate intentionally with `UPDA
 
 - Roadmap/plans: `docs/superpowers/plans/2026-07-*-architect-plan{1,2,4,5,6,7,8}-*.md`
 - Design spec: `docs/superpowers/specs/2026-07-29-architect-context-pack-and-ui-design.md`
-- ADR log: `pix_process_adr` / `docs/adr` (33 ADRs; the architect work is captured in the plan docs above rather than ADRs).
+- ADR log: `rule_tool_process_adr` / `docs/adr` (33 ADRs; the architect work is captured in the plan docs above rather than ADRs).

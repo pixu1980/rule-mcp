@@ -1,74 +1,48 @@
-# Execution Plan — Self-update per-invocazione (throttled, async)
+# Execution Plan — Prompt MCP preconfezionati (workflow + aree)
 
-Obiettivo: il server MCP controlla aggiornamenti ad **ogni invocazione di tool** (non solo al primo call della sessione), con `git fetch` effettivo **al massimo ogni N secondi** (default 60, configurabile), in **background fire-and-forget** (il tool risponde subito, banner sul risultato successivo), banner **solo quando qualcosa è cambiato**, policy daemon invariata, fail-open invariato.
+Obiettivo: estendere il registro prompt del server (`src/prompts/index.js`) da 5 a **26 prompt**
+che velocizzano il lavoro dei dev, con schema argomenti rigido, stileguide invocate via tool,
+baseline TDD/a11y sempre coinvolte (o richiesta esplicita all'utente), e chiusura con
+**proposta di commit message con scope obbligatorio**.
 
-Decisioni prese in intervista (2025-08-01):
-1. Fetch throttled ad ogni invocazione (non ad ogni singola call) — ✅ concordato
-2. Check asincrono fire-and-forget — ✅ concordato
-3. Latenza 1 fetch/minuto accettabile — ✅ concordato
-4. Banner solo a update avvenuto — ✅ confermato
-5. Policy restart daemon invariata (no auto-exit multi-client) — ✅ mantenuta
-6. Dirty tree: resta fail-open, ri-fetch ad ogni intervallo — ✅ mantenuta
-7. Intervallo configurabile via env — ✅ da fare
-8. Test deterministici (repo git sandbox, no rete) — ✅
-
-Stato attuale: `src/core/self-update.js` ha già pipeline completa (fetch → ff-only merge → hot-reload skills → banner → restart). Gap: guard `_checked` once-per-process → serve throttle temporale + async.
-
-ADR: `docs/adr/023-self-update-per-invocazione-con-throttle-temporale-e-fire-and-forget.md`
-
----
-
-## Phase 1 — Test fallenti (TDD) — ✅ completata
-
-- [x] 1. Nuovo `test/self-update-throttle.test.mjs` con harness deterministico: repo git sandbox + stub git su PATH che logga le chiamate (`fetch`). Test **fallenti** sull'implementazione attuale:
-  - a) **re-check dopo intervallo**: 2 invocazioni distanziate > intervallo → 2 fetch (oggi: 1 solo, guard once-per-process) — era RED, ora GREEN
-  - b) **non-blocking**: `maybeSelfUpdate()` ritorna subito (git stub con `sleep` → il call ritorna <1.5s, oggi aspettava il fetch completo) — RED → GREEN
-  - c) **interval env parsing**: default 60s; `0` = check ad ogni call (2 fetch); invalidi/negativi → default — GREEN
-- [x] 2. `maybeSelfUpdate()` espone il promise in-flight (router può ignorarlo; i test lo awaitano per determinismo)
-
-## Phase 2 — Throttle engine (`src/core/self-update.js`) — ✅ completata
-
-- [x] 3. Sostituito `_checked` con `_lastCheckAt` (timestamp) + single-flight `_inflight` mantenuto
-- [x] 4. `maybeSelfUpdate()` → fire-and-forget: ritorna il promise senza bloccare; kick del check in background solo se intervallo scaduto; banner via `_pendingBanner`; `scheduleRestartIfNeeded` in background
-- [x] 5. Nuova env `RULE_MCP_AUTO_UPDATE_INTERVAL_SECONDS` (default 60, `0` = ogni call, positivo = secondi anche frazionari). **Deviazione**: nessun clamp minimo a 1s (per testabilità deterministica; `0` copre già il caso "ogni call")
-- [x] 6. Fail-open preservato: fetch fallito/offline/dirty tree → nessun crash, nessuna unhandled rejection, prossimo check all'intervallo
-- [x] **Bonus architetturale (conseguenza decisione 2)**: `git()` convertito da `execFileSync` (bloccante) a `execFile` promisificato — senza questo il fire-and-forget sarebbe stato finto (il fetch sincrono avrebbe comunque bloccato il tool call). Tutti i caller (`update.js`, `commands.js`, test) già `await`ano → contratto invariato
-
-## Phase 3 — Router wiring (`src/tools/router.js`) — ✅ completata
-
-- [x] 7. `callTool`: `maybeSelfUpdate()` **senza await**; esclusione `pix_update` invariata; `consumeUpdateBanner()` resta dopo (il banner arriva sul risultato successivo al check completato)
-- [x] 8. L'ordine pre-cache resta: il check parte comunque prima del lookup cache (un cache hit non può saltarlo)
-
-## Phase 4 — Docs + ADR — ✅ completata
-
-- [x] 9. `README.md` (sezione "Forced self-update") + `docs/06-env-variables.md`: documentato `RULE_MCP_AUTO_UPDATE_INTERVAL_SECONDS`
-- [x] 10. ADR `023` creato in `docs/adr/`
-- [x] 11. Voce in `CHANGELOG.md` (Unreleased → Changed)
-
-## Phase 5 — Validazione — ✅ completata
-
-- [x] 12. `node test/self-update.test.mjs` (T1–T6 verdi) + `node test/self-update-throttle.test.mjs` (5/5 verdi)
-- [x] 13. **`pnpm test:all` — EXIT 0 (suite completa, ~40 file)**; aggiunto `self-update-throttle.test.mjs` agli script `test:all` e `ci`
-- [x] 14. `pix_check` (rule-backend-node): **6 guardrail falliscono anche sulla baseline (file originale)** — stile frontend-oriented in conflitto con lo stile consolidato del modulo; nessuna classe di violazione nuova introdotta. Deviazione documentata. Nota: anche `pnpm lint` (eslint) è rotto repo-wide pre-esistente (ESLint v9 + `.eslintrc.json` legacy, serve flat config)
-- [x] 15. Smoke manuale: server SSE avviato su `http://127.0.0.1:3001/sse` (porta 3000 occupata) — handshake MCP `event: endpoint` funzionante, boot pulito coi moduli modificati
+Decisioni intervista (2025-08-01):
+1. Prompt one-shot workflow **e** per-fase (partire dai one-shot ad alto valore) — C
+2. Copertura **tutte** le 16 aree (da testare)
+3. **Un prompt per area** (argomento `framework` dove serve, non per-framework)
+4. **Schema argomenti rigido**
+5. Stileguide invocate via tool; **TDD/a11y sempre coinvolti o chiedere all'utente**
+6. Il workflow termina **proponendo il commit message con scope**
+7. Top 5: `rule-setup-project`, `rule-new-feature`, `rule-pull-request` (aggiorna anche ADR), `rule-write-tests`, `rule-handoff`
+8. Delivery: piano → TDD → registro prompt → completions → validazione
 
 ---
 
-## File modificati
+## Phase 1 — Test fallenti (TDD)
 
-| File | Cosa |
-|------|------|
-| `src/core/self-update.js` | Throttle engine: `_lastCheckAt` + `intervalMs()` + `maybeSelfUpdate` fire-and-forget + `git()` async |
-| `src/tools/router.js` | `callTool` non-awaits più il check (fire-and-forget) |
-| `src/tools/update.js` | Docblock + description `pix_update` allineati al nuovo comportamento |
-| `test/self-update-throttle.test.mjs` | **Nuovo** — 5 scenari throttle/async deterministici |
-| `package.json` | `self-update-throttle.test.mjs` aggiunto a `test:all` e `ci` |
-| `README.md`, `docs/06-env-variables.md`, `CHANGELOG.md` | Documentazione env var + changelog |
-| `docs/adr/023-…`, `docs/adr/README.md` | ADR decisione |
-| `docs/plans/execution-plan.md` | Questo piano |
+- [ ] 1. Nuovo `test/prompts.test.mjs`: struttura del registro (nomi unici kebab-case, schema argomenti rigido, getPrompt non-null per ogni prompt) + copertura attesa (5 workflow + 16 aree + 5 esistenti) + regole di contenuto (commit+scope, TDD/a11y/test) → RED oggi (5 prompt, niente regole)
 
-## Prossimi passi possibili (non inclusi)
+## Phase 2 — Registro prompt (`src/prompts/index.js`)
 
-- `RULE_MCP_AUTO_UPDATE_MODE=on-call|periodic|off` (timer periodico indipendente dalle invocazioni)
-- Fix pre-esistente lint eslint (migrazione a flat config)
-- Commit del lavoro (scope obbligatorio: es. `feat(self-update): ...`)
+- [ ] 2. **5 workflow one-shot** (orchestrano i tool):
+  - `rule-setup-project` (detect → scaffold → toolchain → architect context)
+  - `rule-new-feature` (spec → feature_workflow → gateway → implement → check → test → commit scope)
+  - `rule-pull-request` (review + a11y + security + **ADR update** + commit scope + descrizione PR)
+  - `rule-write-tests` (TDD + a11y tests + devops_testing)
+  - `rule-handoff` (process_handoff + adr + contesto compresso)
+- [ ] 3. **16 prompt per area**: `rule-area-{meta,frontend,backend,data,toolchain,styleguide,process,devops,platform,caveman,architect,grill,ai,skills,tdd,ui}` — ognuno: route alla skill dell'area, baseline TDD/a11y o domanda all'utente, commit scope finale
+- [ ] 4. **Aggiornare i 5 esistenti** (`rule-code-review`, `rule-generate-component`, `rule-a11y-test`, `rule-a11y-review`, `rule-architect-scaffold`) per rispettare le stesse regole (commit scope + baseline)
+
+## Phase 3 — Completions (`src/server.js`)
+
+- [ ] 5. Argument completion per i nuovi prompt (framework, area, testType, mode, tier…) — pattern già esistente
+
+## Phase 4 — Docs
+
+- [ ] 6. README: sezione prompt aggiornata con i 26 prompt
+- [ ] 7. CHANGELOG
+
+## Phase 5 — Validazione
+
+- [ ] 8. `node test/prompts.test.mjs` + `pnpm test:all` + smoke
+- [ ] 9. Aggiungere `test/prompts.test.mjs` a `test:all` e `ci` in package.json
+- [ ] 10. Verifica naming bare (`/rule-setup-project`, `/rule-area-frontend`…) — nessuna collisione coi tool

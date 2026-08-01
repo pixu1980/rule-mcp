@@ -13,7 +13,7 @@
 - **This phase intentionally changes the MCP wizard's UX** (context-server gains the domain-sketch + analysis-depth onboarding and switches to the canonical interview) — that is the approved goal, not a regression.
 - Single source of truth after this phase: exactly ONE `interview.js`, ONE wizard spec (`wizard-spec.json`), NO `placeholders.json`.
 - Card metadata in `wizard-spec.json` uses key `pixGalaxySkill` (NOT `pixAISkill`) and filters via an option's `projectTypes` array. There is no unified `stacks` group — frontend options live in `frontendFrameworks`/`metaFrameworks`/`backendFrameworks`.
-- Front-end stays framework-free; zero CSS classes, zero inline styles, semantic HTML, external CSS via `adoptedStyleSheets`. Validate new/changed UI with `pix_check`.
+- Front-end stays framework-free; zero CSS classes, zero inline styles, semantic HTML, external CSS via `adoptedStyleSheets`. Validate new/changed UI with `rule_tool_check`.
 - Preserve the existing focus-retention render guard (structural signature) from Phase 0.
 - Zero new runtime dependencies. Commit messages end with `Co-Authored-By: Claude Opus 4.8 (1M context) <noreply@anthropic.com>`. Branch `feat/architect-context-pack`.
 - Carry-forward from Phase 1 (do NOT reintroduce): the canonical `templates.json` and unified `generator.mjs` are already in place; the `DEVOPS_*`/`PROCESS_*` placeholder-schema gap and doc-drift (F1/F2/F4) are OUT OF SCOPE here.
@@ -69,7 +69,7 @@ const CARD_CONFIGS = {
 - [ ] **Step 2** In `renderField`'s `select` branch, look up `CARD_CONFIGS[field.options]`; if present pass it as `cfg` to `renderChoiceCards`, else `{}` (generic `skill-card` fallback, unchanged).
 - [ ] **Step 3** In `renderChoiceCards`, when `cfg.filterByProjectType`, filter `list` by the current `store.state.values.PROJECT_TYPE`: keep an option if it has no `projectTypes`, or its `projectTypes` array includes the selected type (mirror context-server's filter; `"other"`/empty selection shows all). Read the skill tag from `o.pixGalaxySkill`. Emit `data-part` per `cfg`. Keep the structural-signature focus guard intact (PROJECT_TYPE is a `select` → already in the signature, so a type change rebuilds the filtered cards — verified in Phase 0).
 - [ ] **Step 4** Extend `test/architect-ui.test.mjs`: on the project-type step, selecting `webapp` vs `backend` changes the visible `tech-card` set (e.g. Postgres appears for backend, not webapp) — the exact assertion Phase 0 verified manually. Run against a temp architect-web server. Verify focus-retention test still passes.
-- [ ] **Step 5** Run `pix_check` on the changed `interview.js` (skill `rule-frontend-vanilla-reactive`); confirm no NEW styling violations vs the file's baseline.
+- [ ] **Step 5** Run `rule_tool_check` on the changed `interview.js` (skill `rule-frontend-vanilla-reactive`); confirm no NEW styling violations vs the file's baseline.
 - [ ] **Step 6** Commit `feat(architect-web): rich project-type/tech card taxonomy with PROJECT_TYPE filtering`.
 
 ---
@@ -89,7 +89,7 @@ const CARD_CONFIGS = {
 - [ ] **Step 2** Change context-server's `loadData()`/spec load to read the canonical `wizard-spec.json` (`join(__dirname, "..", "wizard-spec.json")`), mirroring architect-web. Rewrite `/api/placeholders` to return `{ sections: wizardSpec.steps, phases: wizardSpec.phases, …flattened optionGroups }` (copy architect-web's handler). Rewrite `/api/init-values` to use the shared `detectProjectValues`.
 - [ ] **Step 3** `git rm` the stale `placeholders.json` and the old `context-server/interview.js`. Create symlinks for `interview.js`, `interview.css`, `index.html` → `../../../rule-architect-web/<file>` (copy-fallback if symlink creation fails). Confirm nothing else reads `placeholders.json` (grep; note `test/docs-architect.test.mjs:99` reads it for the placeholder-coverage assertion — update that read to the canonical spec's field set, coordinating with carry-forward F2/F4, or leave it: it is currently masked by the pre-existing docs-count abort — document which you did).
 - [ ] **Step 4** Run the consistency test + the full `test/architect-ui.test.mjs` against context-server on :19000 (focus, repeatable, generate, and the new card-filter test must pass; the two stale step-count tests are known-failing and will need their counts updated — update them to the canonical wizard's counts as part of this task since the step set changed).
-- [ ] **Step 5** `node --check` context-server.mjs; `pix_check` not needed (server, not UI).
+- [ ] **Step 5** `node --check` context-server.mjs; `rule_tool_check` not needed (server, not UI).
 - [ ] **Step 6** Commit `refactor(context-server): serve canonical wizard-spec + shared interview, drop placeholders.json`.
 
 ---

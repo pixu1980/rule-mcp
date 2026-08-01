@@ -34,11 +34,11 @@ for (const [title, subtitle] of [
 
 const toolsUi = formatToolsList([
   { name: "rule", description: "Route prompts" },
-  { name: "pix_check", description: "Validate code" },
+  { name: "rule_tool_check", description: "Validate code" },
 ]);
 assert(!toolsUi.trimStart().startsWith("["), "tools list default must not be raw JSON");
 assert(toolsUi.includes("🧰"), "tools UI should include emoji section marker");
-assert(toolsUi.includes("pix_check"), "tools UI should show tool names");
+assert(toolsUi.includes("rule_tool_check"), "tools UI should show tool names");
 assert(toolsUi.includes("--json"), "tools UI should advertise JSON export");
 
 const installUi = formatInstallResult({

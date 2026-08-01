@@ -20,7 +20,7 @@ import { detectInstallType } from "../cli/paths.js";
  */
 export function registerUpdateTool() {
   registerTool({
-    name: "pix_update",
+    name: "rule_tool_update",
     description:
       "Force-update this local MCP server from its upstream git repo (fast-forward only), " +
       "hot-reload skills, and restart if server code changed. Also runs automatically " +

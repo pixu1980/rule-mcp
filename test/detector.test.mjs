@@ -2,7 +2,7 @@
  * @module test/detector.test
  *
  * TDD tests for project framework auto-detector (Phase 3.2).
- * pix_detect tool should read package.json and return project profile.
+ * rule_tool_detect tool should read package.json and return project profile.
  */
 
 import { mkdtempSync, writeFileSync, rmSync } from "node:fs";
@@ -28,22 +28,22 @@ import { detectProject } from "../src/core/detector.js";
 
 await loadAllSkills();
 
-// ── T4: pix_detect tool exists and returns project profile ──
+// ── T4: rule_tool_detect tool exists and returns project profile ──
 const tools = (await import("../src/tools/router.js")).listTools();
-const hasDetect = tools.some(t => t.name === "pix_detect");
-check("T4 pix_detect tool registered", hasDetect);
+const hasDetect = tools.some(t => t.name === "rule_tool_detect");
+check("T4 rule_tool_detect tool registered", hasDetect);
 
-// ── T4b: pix_detect suggests registered thematic skill tools ──
+// ── T4b: rule_tool_detect suggests registered thematic skill tools ──
 const detectTmpDir = mkdtempSync(join(tmpdir(), "rule-detect-tool-"));
 writeFileSync(join(detectTmpDir, "package.json"), JSON.stringify({
   name: "detect-react-app",
   dependencies: { react: "^18.0.0", "react-dom": "^18.0.0" },
 }));
-const detectToolResult = await callTool("pix_detect", { path: detectTmpDir });
+const detectToolResult = await callTool("rule_tool_detect", { path: detectTmpDir });
 const detectPayload = JSON.parse(detectToolResult.content[0].text);
 check("T4b suggested skill uses existing thematic name", detectPayload.suggested_skills.includes("rule-frontend-react"));
 check("T4b suggested tool is registered", tools.some(t => t.name === detectPayload.suggested_tools[0]));
-check("T4b suggested tool uses thematic name", detectPayload.suggested_tools[0] === "pix_frontend_react");
+check("T4b suggested tool uses thematic name", detectPayload.suggested_tools[0] === "rule_tool_frontend_react");
 rmSync(detectTmpDir, { recursive: true, force: true });
 
 // ── T5: Detects React from package.json ──

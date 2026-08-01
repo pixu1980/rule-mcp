@@ -19,7 +19,7 @@ const report = {
   platform: "darwin",
   arch: "arm64",
   entrypoint: "/repo/bin/rule-mcp.js",
-  tools: ["rule", "pix_check", "pix_detect"],
+  tools: ["rule", "rule_tool_check", "rule_tool_detect"],
   agentsConfigured: 2,
   agentsTotal: 3,
   agents: [
@@ -62,7 +62,7 @@ assert(ui.includes("System"), "UI should include system section");
 assert(ui.includes("MCP Tools"), "UI should include tools section");
 assert(ui.includes("Agents"), "UI should include agents section");
 assert(ui.includes("Daemon"), "UI should include daemon section");
-assert(ui.includes("pix_check"), "UI should show tool examples");
+assert(ui.includes("rule_tool_check"), "UI should show tool examples");
 assert(ui.includes("claude"), "UI should show configured agents");
 assert(ui.includes("copilot"), "UI should show missing agents");
 assert(ui.includes("Use `rule-mcp doctor --json`"), "UI should advertise JSON export");

@@ -34,21 +34,21 @@ Serve rule-* skill rules, styleguides, component templates, and framework best p
 
 | Tool | Purpose | LLM-free? |
 |------|---------|-----------|
-| `rule` | Route prompt to best skill | ✅ Yes (keyword matching) |
-| `pix_styleguide` | HTML/CSS/JS/a11y/naming rules | Partial |
-| `pix_frontend_vanilla_reactive` | Vanilla JS reactive pattern rules | Partial |
-| `pix_frontend_react` | React 18+ rule best practices | Partial |
-| `pix_frontend_vue` | Vue 3 Composition API rule rules | Partial |
-| `pix_frontend_svelte` | Svelte 5 runes rule rules | Partial |
-| `pix_frontend_solidjs` | SolidJS fine-grained reactivity rules | Partial |
-| `pix_frontend_angular` | Angular standalone component rules | Partial |
-| `pix_frontend_astro` | Astro islands architecture rules | Partial |
-| `pix_platform_desktop` | Electron app patterns | Partial |
-| `pix_search` | Full-text search across ALL skills | ✅ Yes (local grep) |
-| `pix_component` | Component template generation | ✅ Yes (template engine) |
-| `pix_architect` | Project architecture & agent infrastructure; scaffold .agents/, .context/, SDD docs; context interview wizard | ✅ Yes (template engine + context server) |
-| `pix_check` | Guardrail code validation (17 shared + 8 architect) | ✅ Yes (pure functions) |
-| `pix_scaffold` | Project config file generation | ✅ Yes (template engine) |
+| `pix_tool` | Route prompt to best skill | ✅ Yes (keyword matching) |
+| `rule_tool_styleguide` | HTML/CSS/JS/a11y/naming rules | Partial |
+| `rule_tool_frontend_vanilla_reactive` | Vanilla JS reactive pattern rules | Partial |
+| `rule_tool_frontend_react` | React 18+ rule best practices | Partial |
+| `rule_tool_frontend_vue` | Vue 3 Composition API rule rules | Partial |
+| `rule_tool_frontend_svelte` | Svelte 5 runes rule rules | Partial |
+| `rule_tool_frontend_solidjs` | SolidJS fine-grained reactivity rules | Partial |
+| `rule_tool_frontend_angular` | Angular standalone component rules | Partial |
+| `rule_tool_frontend_astro` | Astro islands architecture rules | Partial |
+| `rule_tool_platform_desktop` | Electron app patterns | Partial |
+| `rule_tool_search` | Full-text search across ALL skills | ✅ Yes (local grep) |
+| `rule_tool_component` | Component template generation | ✅ Yes (template engine) |
+| `rule_tool_architect` | Project architecture & agent infrastructure; scaffold .agents/, .context/, SDD docs; context interview wizard | ✅ Yes (template engine + context server) |
+| `rule_tool_check` | Guardrail code validation (17 shared + 8 architect) | ✅ Yes (pure functions) |
+| `rule_tool_scaffold` | Project config file generation | ✅ Yes (template engine) |
 
 ### Current Resources (6)
 
@@ -61,14 +61,21 @@ Serve rule-* skill rules, styleguides, component templates, and framework best p
 | `rule://a11y/test-basic` | Basic a11y test template |
 | `rule://a11y/test-forms` | Forms a11y test template |
 
-### Current Prompts (4)
+### Current Prompts (26)
 
 | Name | Purpose |
 |------|---------|
+| `rule-setup-project` | Bootstrap project end-to-end (detect → scaffold → toolchain → architect context) |
+| `rule-new-feature` | Feature end-to-end with TDD + a11y + commit scope |
+| `rule-pull-request` | Prepare PR: review + a11y + security + ADR + commit scope |
+| `rule-write-tests` | Write TDD + a11y + devops tests |
+| `rule-handoff` | Compressed context handoff for a new session |
+| `rule-area-*` (16) | One prompt per tool area (meta, frontend, backend, data, toolchain, styleguide, process, devops, platform, caveman, architect, grill, ai, skills, tdd, ui) |
 | `rule-code-review` | Review code against rule styleguides |
 | `rule-generate-component` | Generate component following rule principles |
 | `rule-a11y-test` | Generate a11y Playwright tests |
 | `rule-a11y-review` | Review WCAG 2.2 AA compliance |
+| `rule-architect-scaffold` | Scaffold project with .agents/ + .context/ |
 
 ---
 
@@ -107,7 +114,7 @@ The current MCP protocol is **hand-rolled**:
 
 1. **Zero dependencies** — truly pure Node.js
 2. **Local-first** — all skills live on filesystem, no network calls
-3. **LLM-free tools** — `pix_component`, `pix_check`, `pix_scaffold`, `pix_search` work without any AI
+3. **LLM-free tools** — `rule_tool_component`, `rule_tool_check`, `rule_tool_scaffold`, `rule_tool_search` work without any AI
 4. **Guardrail engine** — 17 testable assertions for code quality, extensible per-framework
 5. **15 agent installers** — Claude, Codex, Cursor, Copilot, Gemini, VSCode, Cline, Roo, Zed, etc.
 6. **Embedded + overridable skills** — bundled at build time, can be overridden by `~/.agents/skills/`
@@ -206,16 +213,16 @@ No TypeScript compilation needed. The SDK ships JavaScript with `.d.ts` declarat
 
 | Tool | Saves tokens by |
 |------|----------------|
-| `pix_component button react` | Returns full React button code directly — no LLM prompt needed |
-| `pix_check skill=rule-frontend-react` | Validates code against 17 guardrails — no LLM needed for review |
-| `pix_scaffold file=.prettierrc` | Returns exact file content — no LLM context needed |
-| `pix_search query="component naming"` | Greps skill files — no LLM search needed |
+| `rule_tool_component button react` | Returns full React button code directly — no LLM prompt needed |
+| `rule_tool_check skill=rule-frontend-react` | Validates code against 17 guardrails — no LLM needed for review |
+| `rule_tool_scaffold file=.prettierrc` | Returns exact file content — no LLM context needed |
+| `rule_tool_search query="component naming"` | Greps skill files — no LLM search needed |
 
 ### Planned improvements
 
 | Enhancement | Tokens saved | Implementation |
 |-------------|-------------|----------------|
-| **Context-aware routing** | ~200/task | `rule` returns only RELEVANT skill sections, not full files |
+| **Context-aware routing** | ~200/task | `pix_tool` returns only RELEVANT skill sections, not full files |
 | **Template engine** | ~500/component | Generate complete files with variable interpolation (name, props, etc.) |
 | **Project detector** | ~300/session | Auto-detect framework from `package.json`, return only relevant tools |
 | **Code generator** | ~1000/component | Full file generation (component + CSS + barrel + test) from single call |
@@ -345,7 +352,7 @@ No `tsconfig.json`, no `tsc` build step, no `.ts` files. The project stays as Ja
 │  ┌──────────────────────────────────────────────────────────┐   │
 │  │                    Tool Handlers                           │   │
 │  │  ┌─────────────┐ ┌──────────┐ ┌───────────┐ ┌─────────┐  │   │
-│  │  │ rule         │ │ pix_*    │ │ pix_check │ │ pix_    │  │   │
+│  │  │ rule         │ │ pix_*    │ │ rule_tool_check │ │ pix_    │  │   │
 │  │  │ (router)    │ │ (skills) │ │(blocking) │ │ search  │  │   │
 │  │  └─────────────┘ └──────────┘ └───────────┘ └─────────┘  │   │
 │  │  ┌─────────────┐ ┌──────────┐ ┌───────────┐ ┌─────────┐  │   │
@@ -378,15 +385,15 @@ No `tsconfig.json`, no `tsc` build step, no `.ts` files. The project stays as Ja
 Every `callTool()` crosses mandatory gates:
 
 1. Zod argument schema validation.
-2. `preprocessToolCall()` fail-closed checks: payload size, nesting depth, key count, prototype-pollution keys, NUL controls, normalized routing fields, non-blank `rule` prompt.
+2. `preprocessToolCall()` fail-closed checks: payload size, nesting depth, key count, prototype-pollution keys, NUL controls, normalized routing fields, non-blank `pix_tool` prompt.
 3. Registered mandatory before hooks.
 4. Deterministic handler execution.
 5. Registered mandatory post hooks.
-6. `postprocessToolResult()` validates MCP content shape/size and verifies `rule` routes and `next_tools` against live registries.
+6. `postprocessToolResult()` validates MCP content shape/size and verifies `pix_tool` routes and `next_tools` against live registries.
 7. Successful response receives `_meta.pixEnforcement` audit metadata and visible compliance contract.
 8. Observational after hooks run asynchronously only after enforcement passes.
 
-`pix_check` failures use `isError: true`; downstream model cannot treat failed code as approved.
+`rule_tool_check` failures use `isError: true`; downstream model cannot treat failed code as approved.
 
 ---
 
@@ -408,10 +415,10 @@ rule-mcp/
 │   │   ├── index.js              ← Tool registration & barrel
 │   │   ├── ai.js                ← rule router tool
 │   │   ├── skill.js              ← pix_<skill> dynamic tool factory
-│   │   ├── component.js          ← pix_component template generator
-│   │   ├── check.js              ← pix_check guardrail validator
-│   │   ├── scaffold.js           ← pix_scaffold project scaffolder
-│   │   └── search.js             ← pix_search full-text search
+│   │   ├── component.js          ← rule_tool_component template generator
+│   │   ├── check.js              ← rule_tool_check guardrail validator
+│   │   ├── scaffold.js           ← rule_tool_scaffold project scaffolder
+│   │   └── search.js             ← rule_tool_search full-text search
 │   │
 │   ├── resources/
 │   │   ├── index.js              ← Resource registration
@@ -522,7 +529,7 @@ await server.connect(transport);
 ```javascript
 // Before (current): no validation at all
 registerTool({
-  name: "pix_component",
+  name: "rule_tool_component",
   handler: async (args) => { ... }
 });
 
@@ -536,7 +543,7 @@ const ComponentArgs = z.object({
 });
 
 server.setRequestHandler(CallToolRequestSchema, async (request) => {
-  if (request.params.name === "pix_component") {
+  if (request.params.name === "rule_tool_component") {
     const args = ComponentArgs.parse(request.params.arguments);
     // args is validated and typed via JSDoc + Zod
   }
@@ -553,7 +560,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
                          │  "React button"      │
                          └──────────┬──────────┘
                                     │
-                          MCP calls `rule`
+                          MCP calls `pix_tool`
                                     │
                                     ▼
 ┌──────────────────────────────────────────────────────┐
@@ -561,14 +568,14 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 │  • Prompt → keyword analysis                          │
 │  • Score skills by keyword match                      │
 │  • Return top-3 ranked skills + confidence scores     │
-│  • Result: ["rule-frontend-react (92%)", "pix_component (88%)"] │
+│  • Result: ["rule-frontend-react (92%)", "rule_tool_component (88%)"] │
 └───────────────────────┬──────────────────────────────┘
                         │
-            MCP calls `pix_frontend_react` + `pix_component`
+            MCP calls `rule_tool_frontend_react` + `rule_tool_component`
                         │
                         ▼
 ┌──────────────────────────────────────────────────────┐
-│  pix_frontend_react (skill tool)                                │
+│  rule_tool_frontend_react (skill tool)                                │
 │  • mode=full → full SKILL.md                           │
 │  • mode=summary → first 30 lines                       │
 │  • mode=search → grep matching lines                   │
@@ -576,11 +583,11 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 │  • mode=check → validate code against guardrails        │
 └───────────────────────┬──────────────────────────────┘
                         │
-            MCP calls `pix_component`
+            MCP calls `rule_tool_component`
                         │
                         ▼
 ┌──────────────────────────────────────────────────────┐
-│  pix_component (LLM-free generator)                   │
+│  rule_tool_component (LLM-free generator)                   │
 │  • component=button, framework=react                   │
 │  • Returns: JSX + CSS code blocks                     │
 │  • Zero LLM context consumed                           │
@@ -592,7 +599,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 │  Agent generates final code                           │
 │  • Uses React skill rules as context                  │
 │  • Uses component template as base                    │
-│  • Applies guardrails via pix_check                   │
+│  • Applies guardrails via rule_tool_check                   │
 │  • Iterates: generate → check → fix → until pass      │
 └──────────────────────────────────────────────────────┘
 ```
@@ -607,23 +614,23 @@ These tools return complete responses without ANY LLM call:
 
 | Tool | Response Type | Avg Tokens Saved |
 |------|--------------|-----------------|
-| `pix_component` | Full component code (JSX + CSS) | ~500/call |
-| `pix_check` | Guardrail pass/fail with fix suggestions | ~400/call |
-| `pix_scaffold` | Complete config file content | ~200/call |
-| `pix_search` | Grep results from skill files | ~150/call |
-| `rule` | Ranked skill suggestions | ~100/call |
-| `pix_detect` (future) | Project framework analysis | ~300/session |
+| `rule_tool_component` | Full component code (JSX + CSS) | ~500/call |
+| `rule_tool_check` | Guardrail pass/fail with fix suggestions | ~400/call |
+| `rule_tool_scaffold` | Complete config file content | ~200/call |
+| `rule_tool_search` | Grep results from skill files | ~150/call |
+| `pix_tool` | Ranked skill suggestions | ~100/call |
+| `rule_tool_detect` (future) | Project framework analysis | ~300/session |
 
 ### Context-Aware Routing (saves ~200 tokens/call)
 
-Instead of returning full skill files, `rule` returns:
+Instead of returning full skill files, `pix_tool` returns:
 
 ```json
 {
   "route": "rule-frontend-react",
   "confidence": 0.92,
   "sections": ["Component Patterns", "Hooks Rules", "Performance"],
-  "next_tools": ["pix_component(button, react)", "pix_frontend_react(mode=search, query=useMemo)"]
+  "next_tools": ["rule_tool_component(button, react)", "rule_tool_frontend_react(mode=search, query=useMemo)"]
 }
 ```
 
@@ -642,10 +649,10 @@ Skill read → LRU Cache (TTL: 5 min, max: 50 items)
 
 ```
 1st call: rule("React button") → route + confidence
-2nd call: pix_frontend_react(mode=summary)    → skill overview (30 lines)
-3rd call: pix_frontend_react(mode=search, query="component") → relevant lines
-4th call: pix_component(button, react) → full template code
-5th call: pix_check(skill=rule-frontend-react, code=...) → guardrail results
+2nd call: rule_tool_frontend_react(mode=summary)    → skill overview (30 lines)
+3rd call: rule_tool_frontend_react(mode=search, query="component") → relevant lines
+4th call: rule_tool_component(button, react) → full template code
+5th call: rule_tool_check(skill=rule-frontend-react, code=...) → guardrail results
 ```
 
 Each step adds minimal context. The LLM only sees what it needs.
@@ -725,8 +732,8 @@ tags: [react, jsx, hooks, component, frontend]
 ```
 
 This metadata powers:
-- `rule` routing (keyword → skill matching)
-- `pix_search` indexing (tag-based + full-text)
+- `pix_tool` routing (keyword → skill matching)
+- `rule_tool_search` indexing (tag-based + full-text)
 - Auto-detection from project `package.json` → `pix_<detected-framework>`
 
 ---
@@ -872,8 +879,8 @@ All data stays on the filesystem. The MCP server is a read-only/validate-only se
       - All 15 tools have Zod input schemas with runtime validation
       - Tools registered via SDK `setRequestHandler` in `src/server.js`
       - Ported 15 tools:
-        - `rule`, `pix_*` (10 skill tools), `pix_search`, `pix_component`,
-          `pix_architect`, `pix_check`, `pix_scaffold`
+        - `pix_tool`, `pix_*` (10 skill tools), `rule_tool_search`, `rule_tool_component`,
+          `rule_tool_architect`, `rule_tool_check`, `rule_tool_scaffold`
 
 - [x] **0.4** Port resource system (`src/resources/`)
       - All `rule://*` URIs via SDK's `ReadResourceRequestSchema`
@@ -992,19 +999,19 @@ All data stays on the filesystem. The MCP server is a read-only/validate-only se
 ### Steps
 
 - [x] **3.1** Context-aware skill routing
-      - `rule` returns structured JSON with `route`, `confidence`, `sections`, `next_tools`
+      - `pix_tool` returns structured JSON with `route`, `confidence`, `sections`, `next_tools`
       - Section-level keyword scoring with stopword filtering and framework-name bonus
       - Multi-skill queries (e.g. "React accessibility" → rule-frontend-react + rule-styleguide)
       - Up to 5 alternatives returned with scores
 
 - [x] **3.2** Project framework auto-detector (`src/core/detector.js`)
-      - `pix_detect` tool reads `package.json` → detects React/Vue/Svelte/Angular/Astro/Solid/Electron/vanilla
+      - `rule_tool_detect` tool reads `package.json` → detects React/Vue/Svelte/Angular/Astro/Solid/Electron/vanilla
       - Detects TypeScript via `tsconfig.json` or `typescript` dep
       - Detects build tool: vite, webpack, esbuild, angular-cli, sveltekit, next, nuxt, parcel, tsup, tsc
       - Returns project profile JSON with suggested skills and tools
 
 - [x] **3.3** Template engine — multi-file generation
-      - `pix_component mode=multi` generates: `_Component.jsx` + `_Component.css` + `index.js`
+      - `rule_tool_component mode=multi` generates: `_Component.jsx` + `_Component.css` + `index.js`
       - Variable interpolation: component name → PascalCase, kebab-case
       - Framework-aware output: React (.jsx), Vue (.vue SFC), Svelte (.svelte), Vanilla (.js + .css)
       - Barrel file (
@@ -1021,19 +1028,19 @@ All data stays on the filesystem. The MCP server is a read-only/validate-only se
       - Tokenized sections (170 sections, 2414 unique terms)
       - Ranked results with relevance scores
       - In-memory inverted index, rebuilt on `skills reload`
-      - `pix_search` returns scored, section-level results
+      - `rule_tool_search` returns scored, section-level results
 
 - [x] **3.5** Smart guardrail iteration
-      - `pix_check` accepts `previousPassed` array
+      - `rule_tool_check` accepts `previousPassed` array
       - Skipped guardrails shown separately
       - Returns `previousPassed` list for easy re-check
       - Suggested code fixes included in each failure
 
 ### Deliverables
-- [x] `pix_detect` tool reports project framework (react/vue/svelte/angular/solid/astro/electron/vanilla + TS + build tool)
-- [x] `pix_component` generates multi-file output (React .jsx, Vue .vue, Svelte .svelte, vanilla .js+.css+barrel)
-- [x] `pix_search` returns BM25-ranked results (170 sections, 2414 unique terms)
-- [x] `pix_check` iterates efficiently (skip passed checks via `previousPassed`)
+- [x] `rule_tool_detect` tool reports project framework (react/vue/svelte/angular/solid/astro/electron/vanilla + TS + build tool)
+- [x] `rule_tool_component` generates multi-file output (React .jsx, Vue .vue, Svelte .svelte, vanilla .js+.css+barrel)
+- [x] `rule_tool_search` returns BM25-ranked results (170 sections, 2414 unique terms)
+- [x] `rule_tool_check` iterates efficiently (skip passed checks via `previousPassed`)
 - [x] At least 60% of common frontend queries answered without LLM (routing + BM25 + templates)
 
 ---
@@ -1101,7 +1108,7 @@ All data stays on the filesystem. The MCP server is a read-only/validate-only se
 - [x] **5.3** Add MCP completion support
       - `CompleteRequestSchema` handler registered in server.js
       - Completions: `component` → [button, card, modal, ...], `framework` → [react, vue, svelte, ...],
-        `skill` → [pix_frontend_react, pix_frontend_vue, ...], `rule.framework` → [react, vue, svelte, ...]
+        `skill` → [rule_tool_frontend_react, rule_tool_frontend_vue, ...], `rule.framework` → [react, vue, svelte, ...]
 
 - [x] **5.4** Cross-platform testing
       - CI matrix already tests ubuntu-latest, macos-latest, windows-latest with Node 20 + 22
@@ -1126,9 +1133,9 @@ All data stays on the filesystem. The MCP server is a read-only/validate-only se
       - No migration guide is needed before first release
       - Documentation lives in the consolidated numbered handbook under `docs/`
 
-- [x] **6.1a** rule-architect correctly routed: `rule` → architecture query → rule-architect 100%
-- [x] **6.1b** rule-architect guardrails verified: `pix_check` for rule-architect returns 8 architect-specific checks
-- [x] **6.1c** pix_architect tool registered with full mode support (interview, scaffold, check)
+- [x] **6.1a** rule-architect correctly routed: `pix_tool` → architecture query → rule-architect 100%
+- [x] **6.1b** rule-architect guardrails verified: `rule_tool_check` for rule-architect returns 8 architect-specific checks
+- [x] **6.1c** rule_tool_architect tool registered with full mode support (interview, scaffold, check)
 - [x] **6.2** Troubleshooting guide (`docs/TROUBLESHOOTING.md`)
       - Per-agent issues: Claude, Cursor, VS Code, Copilot, Pi
       - Daemon, Docker, Skills troubleshooting

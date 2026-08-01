@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- Prompts: MCP registry extended from 5 to **26 prompts** — 5 one-shot workflow prompts (`rule-setup-project`, `rule-new-feature`, `rule-pull-request`, `rule-write-tests`, `rule-handoff`), 16 area prompts (`rule-area-*`, one per tool area), plus the 5 legacy prompts updated to the shared rules (route via `pix_tool`, TDD/a11y baselines or explicit user ask, commit message with mandatory scope). Argument completion for the new prompt schemas in server.js
 - Initial MCP SDK port (Phase 0) — replaces hand-rolled protocol
 - 22 MCP tools: rule-mcp, 16 skill tools, pix_search, pix_component, pix_check, pix_scaffold, pix_architect, pix_detect
 - Context-aware skill routing with framework-biased scoring
@@ -25,6 +26,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - CI/CD pipeline with lint, test, audit, release
 
 ### Changed
+- Tools: all 97 MCP tools renamed with the `rule_tool_` prefix (`rule` → `pix_tool`, `pix_gateway` → `rule_tool_gateway`, `pix_frontend_react` → `rule_tool_frontend_react`, …). Dispatcher/action allowlist, cache exclusions, agent-command templates, installer rules, and docs updated accordingly
 - Self-update: check now runs on every tool invocation (throttled, fire-and-forget) instead of once per session — configurable via `RULE_MCP_AUTO_UPDATE_INTERVAL_SECONDS` (default 60s, `0` = every call); the git fetch is async so the tool call never blocks (ADR 023)
 - Architecture: monolithic cli.js → modular cli/, tools/, core/, transport/
 - Module sizes: all behavioral modules ≤300 lines

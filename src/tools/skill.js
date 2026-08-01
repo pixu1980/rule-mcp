@@ -34,7 +34,7 @@ export function registerSkillTool(skillName) {
     allowedDependencies: z.array(z.string()).optional().describe("Manifest-derived package names allowed in imports"),
   });
   registerTool({
-    name: "pix_" + displayName,
+    name: "rule_tool_" + displayName,
     description: skillName + " skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content)" + (isStyleguides || isArchitect ? ", scaffold (project structure)" : "") + (isArchitect ? ", interview (context wizard)" : "") + ".",
     zodSchema: SkillSchema,
     inputSchema: {
@@ -137,7 +137,7 @@ export function registerSearchTool() {
     maxResults: z.number().int().min(1).max(100).default(10).describe("Maximum number of ranked results"),
   });
   registerTool({
-    name: "pix_search",
+    name: "rule_tool_search",
     description: "Semantic search across ALL rule skills using BM25 ranking. Returns scored, relevant sections.",
     zodSchema: SearchSchema,
     inputSchema: { type: "object", properties: { query: { type: "string" }, maxResults: { type: "number", default: 10 } }, required: ["query"] },
@@ -183,7 +183,7 @@ export function registerCheckTool() {
     allowedDependencies: z.array(z.string()).optional().describe("Manifest-derived package names allowed in imports"),
   });
   registerTool({
-    name: "pix_check",
+    name: "rule_tool_check",
     description: "Run guardrail checks on code against any rule skill. Returns guardrail results with a re-check hint containing the current passing set. Run until allPass: true.",
     zodSchema: CheckSchema,
     inputSchema: {
@@ -273,7 +273,7 @@ export function registerScaffoldTool() {
     framework: z.string().optional().describe("Framework hint (tsconfig only for TS projects)"),
   });
   registerTool({
-    name: "pix_scaffold",
+    name: "rule_tool_scaffold",
     description: "Generate project scaffolding files. Returns one or all config file templates.",
     zodSchema: ScaffoldSchema,
     inputSchema: {

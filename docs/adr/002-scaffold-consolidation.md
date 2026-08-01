@@ -13,7 +13,7 @@ The `rule-scaffold-*` skill family was fragmented. Four separate scaffolding ski
 - `rule-scaffold-expo` duplicated content that belonged in `platform-expo`
 - `rule-scaffold-frontend-react-vite` mixed three concerns: React setup, Vite config, and generic frontend tooling
 
-Additionally, the `rule-scaffold` umbrella directory itself served no purpose as a skill — the `pix_scaffold` core MCP tool already handles config file generation.
+Additionally, the `rule-scaffold` umbrella directory itself served no purpose as a skill — the `rule_tool_scaffold` core MCP tool already handles config file generation.
 
 ## Decision
 
@@ -39,7 +39,7 @@ All Expo/React Native scaffolding content moves into `rule-platform-expo`, the p
 
 ### 5. Delete all remaining `rule-scaffold-*` directories
 
-The `pix_scaffold` core MCP tool continues to handle `.prettierrc`, `.editorconfig`, `.gitignore` scaffolding.
+The `rule_tool_scaffold` core MCP tool continues to handle `.prettierrc`, `.editorconfig`, `.gitignore` scaffolding.
 
 ## Consequences
 
@@ -54,7 +54,7 @@ The `pix_scaffold` core MCP tool continues to handle `.prettierrc`, `.editorconf
 - MCP tool names changed for backend-node and ai-agents
 
 **Migration:**
-- Any agent prompts referencing `pix_scaffold_backend_node` must use `pix_backend_node`
-- Any agent prompts referencing `pix_scaffold_ai_agents` must use `pix_ai_agents`
-- Any agent prompts referencing `pix_scaffold_expo` must use `pix_platform_expo`
-- Any agent prompts referencing `pix_scaffold_frontend_react_vite` must use `pix_frontend_react` or `pix_toolchain_vite`
+- Any agent prompts referencing `rule_tool_scaffold_backend_node` must use `rule_tool_backend_node`
+- Any agent prompts referencing `rule_tool_scaffold_ai_agents` must use `rule_tool_ai_agents`
+- Any agent prompts referencing `rule_tool_scaffold_expo` must use `rule_tool_platform_expo`
+- Any agent prompts referencing `rule_tool_scaffold_frontend_react_vite` must use `rule_tool_frontend_react` or `rule_tool_toolchain_vite`

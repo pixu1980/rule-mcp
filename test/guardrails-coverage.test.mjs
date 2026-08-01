@@ -3,8 +3,8 @@
  *
  * Verifies guardrails are ALWAYS involved and enforce the core skill rules:
  *   - SHARED_GUARDRAILS apply to every skill (frontend, backend, data, devops).
- *   - pix_component generation self-validates and always emits a guardrail
- *     summary (guardrails involved even without an explicit pix_check call).
+ *   - rule_tool_component generation self-validates and always emits a guardrail
+ *     summary (guardrails involved even without an explicit rule_tool_check call).
  *   - The core rule principles — no CSS classes, no inline styles — pass on
  *     generated component templates across frameworks.
  */
@@ -45,7 +45,7 @@ for (const skill of [
 // ── T2: component generation always involves guardrails ──
 await loadAllSkills();
 for (const [component, framework] of [["button", "react"], ["card", "vue"], ["button", "vanilla"]]) {
-  const r = await callTool("pix_component", { component, framework });
+  const r = await callTool("rule_tool_component", { component, framework });
   const text = r.content.map((c) => c.text).join("\n");
   check(`T2 ${component}/${framework} output carries a guardrail summary`, text.includes("## Guardrails"));
 }
@@ -57,7 +57,7 @@ for (const [component, framework, skill] of [
   ["button", "vanilla", "rule-styleguide"],
   ["card", "vue", "rule-frontend-vue"],
 ]) {
-  const tmpl = await callTool("pix_component", { component, framework });
+  const tmpl = await callTool("rule_tool_component", { component, framework });
   // Extract fenced code from the output for a faithful check.
   const code = tmpl.content.map((c) => c.text).join("\n").match(/```[a-z]*\n([\s\S]*?)```/gi)
     ?.map((b) => b.replace(/```[a-z]*\n?/gi, "").replace(/```/g, "")).join("\n") ?? "";

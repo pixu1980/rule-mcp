@@ -10,7 +10,7 @@
 
 ## Global Constraints
 
-- rule rules: zero CSS classes, zero inline styles (the current `index.html:23` inline `style=` must go), semantic HTML, `data-part="role"` on children, CSS in `interview.css`. Validate with `pix_check`.
+- rule rules: zero CSS classes, zero inline styles (the current `index.html:23` inline `style=` must go), semantic HTML, `data-part="role"` on children, CSS in `interview.css`. Validate with `rule_tool_check`.
 - Keep the live update (panel refreshes as the user types) AND scroll preservation (current `updateSummary` saves/restores `summary-scroll` scrollTop — preserve that behavior per view).
 - Do NOT touch the Phase-0 structural-signature focus guard or the field render path. The panel is independent.
 - Files view must NOT fetch on every keystroke: debounce (~400ms) and only when the Files view is active. Summary view stays purely client-side (no fetch).
@@ -52,7 +52,7 @@ FILES (toggle; debounced POST /api/download)
 - [ ] **Step 1** Rewrite `updateSummary()` to build a grouped model: for each visible section (in order), collect its visible fields that have a non-empty value; skip empty sections. Render each as a group with the section's human `label` header (`data-part="summary-group"` / `summary-group-title`), then rows of `field.label → value` (`data-part="summary-row"`/`summary-label`/`summary-value`). For repeatable groups, render the entries as a nested bulleted list (`data-part="summary-list"`). Resolve select values to their option `label` (via `store.state` optionGroups / placeholders), not the raw key. NO internal keys (`*_count`, etc.), NO `<pre>` JSON dump.
 - [ ] **Step 2** Move the panel's inline `style="color:…"` (index.html:23) into `interview.css` under a `data-part` selector. Add CSS for `summary-group`/`summary-row`/`summary-label`/`summary-value`/`summary-list` (element + `[data-part]` selectors only, zero classes/inline). Preserve the scroll-position save/restore.
 - [ ] **Step 3** Extend `test/architect-ui.test.mjs`: fill a couple of fields, assert the summary shows the section's human label + the field's human label + resolved value, and that NO raw JSON (`{`…`}` dump) and NO `*_count` key appear. Run against a live server.
-- [ ] **Step 4** `pix_check` the changed `interview.js` (skill `rule-frontend-vanilla-reactive`) — no NEW styling violations vs baseline; confirm the inline-style removal. Commit `feat(architect-web): grouped human-friendly summary panel`.
+- [ ] **Step 4** `rule_tool_check` the changed `interview.js` (skill `rule-frontend-vanilla-reactive`) — no NEW styling violations vs baseline; confirm the inline-style removal. Commit `feat(architect-web): grouped human-friendly summary panel`.
 
 ### Task 2: Summary • Files toggle + live file preview
 
@@ -64,7 +64,7 @@ FILES (toggle; debounced POST /api/download)
 - [ ] **Step 2** Files view: maintain `this._filesSelected` (default `AGENTS.md`). On entering Files OR on value change while Files is active, debounce (~400ms) a `POST /api/download` with the current collected values + tier; on response render a file-tab strip (`data-part="file-tab"`, one per `files[].path`, click selects) + the selected file's `content` in `<pre data-part="file-content">` (scrollable). Show a lightweight "updating…" state during fetch. Do NOT fetch while on Summary.
 - [ ] **Step 3** CSS for `panel-toggle`/`panel-tab`/`file-tab`/`file-content` (element + `[data-part]`; `<pre>` wraps/scrolls, no horizontal page overflow). 
 - [ ] **Step 4** Extend the Playwright test: click the Files tab → assert a `file-tab` for `AGENTS.md` exists and `file-content` shows real generated text (e.g. the project name); click another file-tab → content changes; toggle back to Summary → grouped summary shown. Debounce: after typing, the file content eventually reflects the new value.
-- [ ] **Step 5** `pix_check`; commit `feat(architect-web): Summary/Files panel toggle with live file preview`.
+- [ ] **Step 5** `rule_tool_check`; commit `feat(architect-web): Summary/Files panel toggle with live file preview`.
 
 ### Task 3: a11y + verify both servers + finalize
 
@@ -79,7 +79,7 @@ FILES (toggle; debounced POST /api/download)
 - **Spec coverage:** D/S5 (keep live update; Summary grouped + human labels, no raw keys/JSON; Files live preview toggle) → Tasks 1–2; both-servers + a11y → Task 3.
 - **Placeholder scan:** layout + data-parts are concrete; the Files mechanism (debounced `/api/download`) is specified; the raw-`<pre>` (no md renderer) decision is explicit.
 - **Type consistency:** `updateSummary()` signature unchanged; `this._panelView`/`this._filesSelected` new element state; Files reuse the existing `/api/download` contract.
-- **Risk:** Files fetch on keystroke → mitigated by debounce + only-when-active. Inline-style removal must not break layout (pix_check + visual test). Panel changes must not touch the focus guard (Task 3 re-runs the focus test).
+- **Risk:** Files fetch on keystroke → mitigated by debounce + only-when-active. Inline-style removal must not break layout (rule_tool_check + visual test). Panel changes must not touch the focus guard (Task 3 re-runs the focus test).
 
 ## Roadmap after P7
 P5 lean/conditional templates (independent) · fast-follows F1 (doc-drift), F5 (phase labels), F7 (path-traversal), F8, F9 (frontmatter escape), F10 (clobber guard). Then finishing-a-development-branch.

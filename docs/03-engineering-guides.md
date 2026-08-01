@@ -31,11 +31,11 @@ pnpm add -g rule-mcp
 rule-mcp install --agent cursor  # or claude, codex, etc.
 
 # 4. Detect framework
-rule-mcp tools call pix_detect --json '{}'
+rule-mcp tools call rule_tool_detect --json '{}'
 # → { "framework": "react", "typescript": true, "buildTool": "vite" }
 
 # 5. Generate a button component
-rule-mcp tools call pix_component --json '{
+rule-mcp tools call rule_tool_component --json '{
   "component": "button",
   "framework": "react",
   "mode": "multi",
@@ -57,9 +57,9 @@ my-react-app/
 │   │       ├── _PrimaryButton.css
 │   │       └── index.js
 │   └── App.jsx
-├── .prettierrc          # From pix_scaffold
-├── .editorconfig        # From pix_scaffold
-├── .gitignore           # From pix_scaffold
+├── .prettierrc          # From rule_tool_scaffold
+├── .editorconfig        # From rule_tool_scaffold
+├── .gitignore           # From rule_tool_scaffold
 └── package.json
 ```
 
@@ -75,11 +75,11 @@ pnpm add -g rule-mcp
 rule-mcp install --agent all
 
 # 3. Detect framework
-rule-mcp tools call pix_detect --json '{"path": "."}'
+rule-mcp tools call rule_tool_detect --json '{"path": "."}'
 # → { "framework": "vue", "typescript": false, "buildTool": "vite" }
 
 # 4. Generate a form field component
-rule-mcp tools call pix_component --json '{
+rule-mcp tools call rule_tool_component --json '{
   "component": "formField",
   "framework": "vue",
   "mode": "multi",
@@ -97,25 +97,25 @@ rule-mcp tools call pix_component --json '{
 cd my-project
 
 # 2. Generate Playwright config
-rule-mcp tools call pix_component --json '{
+rule-mcp tools call rule_tool_component --json '{
   "component": "playwright-config"
 }'
 
 # 3. Generate a11y test templates
-rule-mcp tools call pix_component --json '{
+rule-mcp tools call rule_tool_component --json '{
   "component": "a11y-test-basic"
 }'
 
-rule-mcp tools call pix_component --json '{
+rule-mcp tools call rule_tool_component --json '{
   "component": "a11y-test-forms"
 }'
 
-rule-mcp tools call pix_component --json '{
+rule-mcp tools call rule_tool_component --json '{
   "component": "a11y-test-components"
 }'
 
 # 4. Run the full guardrails check for a11y
-rule-mcp tools call pix_check --json '{
+rule-mcp tools call rule_tool_check --json '{
   "skill": "rule-styleguide",
   "code": "import { test, expect } from \"@playwright/test\"; import AxeBuilder from \"@axe-core/playwright\";"
 }'
@@ -148,7 +148,7 @@ jobs:
         with:
           node-version: "22"
       - run: pnpm install -g rule-mcp
-      - run: rule-mcp tools call pix_check --json '{"skill": "rule-frontend-react", "code": "'"$(cat src/App.jsx)"'"}'
+      - run: rule-mcp tools call rule_tool_check --json '{"skill": "rule-frontend-react", "code": "'"$(cat src/App.jsx)"'"}'
 ```
 
 ## VS Code + Docker setup
@@ -188,14 +188,14 @@ Benchmarks run on:
 
 | Tool | Median | P95 | Notes |
 |------|--------|-----|-------|
-| `rule` (routing) | 8ms | 15ms | First call loads skills (∼50ms), subsequent calls cache |
-| `pix_search` (BM25) | 3ms | 6ms | Index built once at startup, queries are O(log n) |
-| `pix_component` (generate) | 1ms | 2ms | Pure string interpolation, no I/O |
-| `pix_component` (multi-file) | 2ms | 4ms | Same as single-file + filename joins |
-| `pix_check` (guardrails) | 5ms | 12ms | Regex-based, no network calls |
-| `pix_detect` | 2ms | 5ms | Reads package.json + fs.existsSync |
-| `pix_frontend_react` (full skill) | 1ms | 2ms | Read from LRU cache |
-| `pix_scaffold` | 1ms | 3ms | Section extraction from cached SKILL.md |
+| `pix_tool` (routing) | 8ms | 15ms | First call loads skills (∼50ms), subsequent calls cache |
+| `rule_tool_search` (BM25) | 3ms | 6ms | Index built once at startup, queries are O(log n) |
+| `rule_tool_component` (generate) | 1ms | 2ms | Pure string interpolation, no I/O |
+| `rule_tool_component` (multi-file) | 2ms | 4ms | Same as single-file + filename joins |
+| `rule_tool_check` (guardrails) | 5ms | 12ms | Regex-based, no network calls |
+| `rule_tool_detect` | 2ms | 5ms | Reads package.json + fs.existsSync |
+| `rule_tool_frontend_react` (full skill) | 1ms | 2ms | Read from LRU cache |
+| `rule_tool_scaffold` | 1ms | 3ms | Section extraction from cached SKILL.md |
 
 **All tools respond in under 15ms at P95.** No LLM call needed.
 
@@ -206,10 +206,10 @@ Comparing equivalent operations with and without MCP tools:
 | Task | Without MCP (LLM tokens) | With MCP (tool tokens) | Savings |
 |------|------------------------|----------------------|---------|
 | "Create a React button" | ∼800 tokens (reasoning + code gen) | ∼50 tokens (tool call) | **94%** |
-| "Check a11y compliance" | ∼1200 tokens (rules + analysis) | ∼30 tokens (pix_check call) | **97.5%** |
-| "What framework uses React?" | ∼400 tokens (read + analyze package.json) | ∼20 tokens (pix_detect call) | **95%** |
+| "Check a11y compliance" | ∼1200 tokens (rules + analysis) | ∼30 tokens (rule_tool_check call) | **97.5%** |
+| "What framework uses React?" | ∼400 tokens (read + analyze package.json) | ∼20 tokens (rule_tool_detect call) | **95%** |
 | "Generate form + validation" | ∼2000 tokens (patterns + code gen) | ∼60 tokens (component + check) | **97%** |
-| "Search all skills for performance" | ∼3000 tokens (scan all SKILL.md files) | ∼15 tokens (pix_search call) | **99.5%** |
+| "Search all skills for performance" | ∼3000 tokens (scan all SKILL.md files) | ∼15 tokens (rule_tool_search call) | **99.5%** |
 
 ## LLM-free hit rate
 
@@ -217,13 +217,13 @@ Estimated % of common frontend queries answered without LLM inference:
 
 | Query category | LLM-free | Tool used |
 |---------------|----------|-----------|
-| "Create a [component] in [framework]" | ✅ 95% | pix_component |
+| "Create a [component] in [framework]" | ✅ 95% | rule_tool_component |
 | "How do I [pattern] in [framework]?" | ✅ 85% | rule → skill tool |
-| "What are rule rules for CSS?" | ✅ 99% | pix_styleguide |
-| "Check my code for rule compliance" | ✅ 99% | pix_check |
-| "What framework does this project use?" | ✅ 99% | pix_detect |
-| "Find skills related to accessibility" | ✅ 99% | pix_search |
-| "Generate project config files" | ✅ 99% | pix_scaffold |
+| "What are rule rules for CSS?" | ✅ 99% | rule_tool_styleguide |
+| "Check my code for rule compliance" | ✅ 99% | rule_tool_check |
+| "What framework does this project use?" | ✅ 99% | rule_tool_detect |
+| "Find skills related to accessibility" | ✅ 99% | rule_tool_search |
+| "Generate project config files" | ✅ 99% | rule_tool_scaffold |
 | "Design a complex custom component" | ❌ 20% | Requires LLM reasoning |
 
 **Overall LLM-free rate: ∼85%** of common frontend queries.
@@ -401,7 +401,7 @@ No equivalent exists in rule-styleguide (which focuses on vanilla HTML/CSS/JS).
 
 ### Phase 1 — Immediate (already done in this port)
 - [x] Port all skills with `rule-*` rename
-- [x] Update `rule` with new catalog
+- [x] Update `pix_tool` with new catalog
 - [x] Update cross-references between skills
 - [x] Copy `rules/` for reference
 

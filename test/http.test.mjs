@@ -91,7 +91,7 @@ let sessionId;
   const { res, body } = await post({ jsonrpc: "2.0", id: 3, method: "tools/list", params: {} }, { sessionId });
   check("T4 tools/list → 200", res.status === 200);
   const names = (body?.result?.tools ?? []).map((t) => t.name);
-  check("T4.1 tools/list includes 'rule'", names.includes("rule"));
+  check("T4.1 tools/list includes 'rule'", names.includes("pix_tool"));
 }
 
 // ── T4.5: logging/setLevel is honored (advertised capability must work) ──

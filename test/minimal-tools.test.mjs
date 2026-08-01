@@ -17,9 +17,9 @@ const bin = fileURLToPath(new URL("../bin/rule-mcp.js", import.meta.url));
 
 /** The guaranteed minimal tool surface. */
 const MINIMAL = [
-  "rule", "pix_update", "pix_gateway", "pix_apply",
-  "pix_search", "pix_check", "pix_scaffold", "pix_detect",
-  "pix_process_handoff", "pix_component",
+  "pix_tool", "rule_tool_update", "rule_tool_gateway", "rule_tool_apply",
+  "rule_tool_search", "rule_tool_check", "rule_tool_scaffold", "rule_tool_detect",
+  "rule_tool_process_handoff", "rule_tool_component",
 ].sort();
 
 function toolNames(extraEnv) {
@@ -36,7 +36,7 @@ console.log("=== Minimal Tool Surface Tests ===\n");
 // ── Full surface ──
 const full = toolNames({});
 assert.ok(full.length > 90, `full surface should expose >90 tools (got ${full.length})`);
-assert.ok(full.includes("pix_frontend_react"), "full surface includes skill tools");
+assert.ok(full.includes("rule_tool_frontend_react"), "full surface includes skill tools");
 console.log(`  ✅ full surface exposes ${full.length} tools`);
 
 // ── Minimal via RULE_MCP_MINIMAL_TOOLS (convention-aligned name) ──
@@ -50,7 +50,7 @@ assert.ok(legacyIgnored.length > 90, "removed RULE_MCP_STRICT_MODE alias must NO
 console.log(`  ✅ legacy RULE_MCP_STRICT_MODE ignored → ${legacyIgnored.length} tools (full)`);
 
 // ── The dispatcher/action tools an agent needs are all present ──
-for (const t of ["rule", "pix_gateway", "pix_apply", "pix_check"]) {
+for (const t of ["pix_tool", "rule_tool_gateway", "rule_tool_apply", "rule_tool_check"]) {
   assert.ok(minimal.includes(t), `minimal surface must include ${t}`);
 }
 console.log("  ✅ dispatcher + action tools present in minimal mode");

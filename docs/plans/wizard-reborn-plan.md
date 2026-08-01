@@ -293,5 +293,5 @@ This table is auto-generated from the collected values — no manual entry.
 - [ ] CLI and Web produce byte-identical `.context/` for same input
 - [ ] All option groups have description + pixAISkill (where applicable)
 - [ ] The "skill → tool routing table" in `06-rule-routing.md` is fully auto-generated
-- [ ] `pix_check` passes for generated code or config
+- [ ] `rule_tool_check` passes for generated code or config
 - [ ] Interview completes in starter mode without asking standard/deep questions

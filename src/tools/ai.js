@@ -181,13 +181,13 @@ function extractTopSections(skillName, promptWords) {
 function skillNextTools(skillName) {
   const suggestions = [];
   const base = skillName.replace(/^rule-/, "").replace(/-/g, "_");
-  suggestions.push(`pix_${base}`);
+  suggestions.push(`rule_tool_${base}`);
   if (skillName === "rule-styleguide" || skillName === "rule-architect") {
-    suggestions.push("pix_scaffold");
+    suggestions.push("rule_tool_scaffold");
   }
-  suggestions.push("pix_check");
-  suggestions.push("pix_search");
-  if (skillName !== "rule-frontend-vanilla-reactive") suggestions.push("pix_component");
+  suggestions.push("rule_tool_check");
+  suggestions.push("rule_tool_search");
+  if (skillName !== "rule-frontend-vanilla-reactive") suggestions.push("rule_tool_component");
   return suggestions;
 }
 
@@ -200,7 +200,7 @@ function skillNextTools(skillName) {
  */
 export function registerAiTool() {
   registerTool({
-    name: "rule",
+    name: "pix_tool",
     description: "Route a prompt to the correct rule skill. Returns structured routing with relevant sections.",
     zodSchema: GalaxySchema,
     inputSchema: { type: "object", properties: { prompt: { type: "string", description: "User's question" } }, required: ["prompt"] },
@@ -209,7 +209,7 @@ export function registerAiTool() {
       const skills = allSkills.filter((skillName) => skillName !== "rule");
       const prompt = expandPrompt((args.prompt || "").trim());
       if (!prompt) {
-        return { content: [{ type: "text", text: JSON.stringify({ route: "none", confidence: 0, sections: [], next_tools: ["pix_search"], skills_available: allSkills }) }] };
+        return { content: [{ type: "text", text: JSON.stringify({ route: "none", confidence: 0, sections: [], next_tools: ["rule_tool_search"], skills_available: allSkills }) }] };
       }
 
       const promptLower = prompt.toLowerCase();
@@ -312,7 +312,7 @@ export function registerAiTool() {
       skillScores.sort((a, b) => b.relativeScore - a.relativeScore);
 
       const top = skillScores.slice(0, 6);
-      const primaryRoute = top[0] ?? { skill: "none", relativeScore: 0, absoluteScore: 0, sections: [], next_tools: ["pix_search"] };
+      const primaryRoute = top[0] ?? { skill: "none", relativeScore: 0, absoluteScore: 0, sections: [], next_tools: ["rule_tool_search"] };
 
       // If absolute score is below threshold, mark as uncertain
       const ABSOLUTE_THRESHOLD = 5;
@@ -332,10 +332,10 @@ export function registerAiTool() {
         })),
         skills_available: allSkills,
         summary: isUncertain
-          ? `No strong match for "${prompt}". Try rephrasing or use pix_search for full-text search.`
+          ? `No strong match for "${prompt}". Try rephrasing or use rule_tool_search for full-text search.`
           : top.length > 0
             ? `Top match: ${primaryRoute.skill} (${Math.round(primaryRoute.relativeScore * 100)}%). Relevant sections: ${primaryRoute.sections.join(", ")}. Try: ${[...new Set(top.flatMap(t => t.next_tools))].join(", ")}.`
-            : `No matching skill for "${prompt}". Try pix_search for full-text search.`,
+            : `No matching skill for "${prompt}". Try rule_tool_search for full-text search.`,
       };
 
       return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };

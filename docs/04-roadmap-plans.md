@@ -18,7 +18,7 @@ Every source document below is preserved verbatim under its own heading so no pr
 ## Steps (TDD: RED → GREEN → REFACTOR)
 
 ### 3.1 Context-aware skill routing
-- [x] **T1** `rule` returns structured JSON with `route`, `confidence`, `sections`, `next_tools`
+- [x] **T1** `pix_tool` returns structured JSON with `route`, `confidence`, `sections`, `next_tools`
 - [x] **T2** Returns only relevant sections (not full skill file)
 - [x] **T3** Supports multi-skill queries (e.g. "React accessibility" → react + styleguides)
   - Fixed YAML frontmatter parser to handle multi-line descriptions (`|` literal block scalars)
@@ -28,16 +28,16 @@ Every source document below is preserved verbatim under its own heading so no pr
   - Added additional stopwords to reduce noise from generic words
 
 ### 3.2 Project framework auto-detector (`src/core/detector.js`)
-- [x] **T4** `pix_detect` reads package.json and returns framework
+- [x] **T4** `rule_tool_detect` reads package.json and returns framework
 - [x] **T5** Detects TypeScript vs JavaScript
-- [x] **T6** `rule` biases routing based on detected framework
-  - Added `framework` parameter to `rule` for explicit framework hints
+- [x] **T6** `pix_tool` biases routing based on detected framework
+  - Added `framework` parameter to `pix_tool` for explicit framework hints
   - Added `path` parameter for auto-detection via `detectProject()`
   - Matching skills get 2.0x boost; universally relevant skills (styleguides, web) get 1.15x
   - Non-matching skills get 0.85x penalty
 
 ### 3.3 Template engine — multi-file generation
-- [x] **T7** `pix_component` generates multi-file output: `_Component.jsx` + `_Component.css` + `index.js`
+- [x] **T7** `rule_tool_component` generates multi-file output: `_Component.jsx` + `_Component.css` + `index.js`
 - [x] **T8** Variable interpolation: component name, props, data-part attributes
 
 ### 3.4 Semantic search with BM25
@@ -45,7 +45,7 @@ Every source document below is preserved verbatim under its own heading so no pr
 - [x] **T10** Inverted index built on skill load, cleared on `skills reload`
 
 ### 3.5 Smart guardrail iteration
-- [x] **T11** `pix_check` accepts previous errors, skips already-passed checks
+- [x] **T11** `rule_tool_check` accepts previous errors, skips already-passed checks
 - [x] **T12** Returns only NEW issues
 
 ### 3.6 Module size cleanup (ROADMAP P1 compliance)
@@ -57,11 +57,11 @@ Every source document below is preserved verbatim under its own heading so no pr
 ### 3.7 Fail-closed anti-hallucination enforcement
 - [x] Mandatory preprocessing before every handler with payload/depth/key/control validation.
 - [x] Mandatory postprocessing after every handler with MCP shape and router registry validation.
-- [x] Blocking `pix_check` failures plus unfinished-code, suppressed-error, and verified-dependency guardrails.
+- [x] Blocking `rule_tool_check` failures plus unfinished-code, suppressed-error, and verified-dependency guardrails.
 - [x] Model-visible enforcement contract and `_meta.pixEnforcement` audit metadata.
 - [x] Reusable command installation for Pi, Claude Code, Gemini CLI, Cursor, and Copilot CLI agent selection.
-- [x] Dispatcher skill renamed from `rule-mcp` to `rule`.
-- [x] Architecture decision recorded through `pix_process_adr`.
+- [x] Dispatcher skill renamed from `rule-mcp` to `pix_tool`.
+- [x] Architecture decision recorded through `rule_tool_process_adr`.
 
 ## Preserved source: `plans/refactor-roadmap.md`
 
@@ -217,7 +217,7 @@ No skills exceed the 500-line threshold with sufficient margin. `rule-styleguide
 
 **Scope**:
 - CLI: `rule-mcp adr new --title "..." [--status accepted] [--tags a,b,c]`
-- MCP Tool: `pix_process_adr` with schema validation
+- MCP Tool: `rule_tool_process_adr` with schema validation
 - Auto-ADR: Logger for architect/scaffold/detect calls
 - Index: Auto-generated `docs/adr/README.md`
 - Template: Michael Nygard format
@@ -291,7 +291,7 @@ Total: **32 skills** (36 − 4 merges + 1 new = 33, minus 1 scaffolding removal 
 ### Phase 2: rule-process-adr (1 day)
 - [x] Create `skills/rule-process-adr/SKILL.md` with ADR template
 - [x] Implement CLI `adr new` handler
-- [x] Register MCP tool `pix_process_adr`
+- [x] Register MCP tool `rule_tool_process_adr`
 - [x] Implement auto-ADR logging
 - [x] Write `docs/adr/README.md` index
 
@@ -319,7 +319,7 @@ This plan defines the definitive mirrored UX for `rule-architect` in CLI and Web
 - **Same state model**: both shells read/write the same `values` object and generate from `skills/rule-architect/templates.json`.
 - **Progressive depth**: Starter, Standard, and Deep expose the same subsets in both shells.
 - **Deterministic output**: generated `.context/` files are byte-equivalent for the same input values.
-- **LLM-ready handoff**: both shells end with validation status, generated file list, ADR reminders, and `pix_process_handoff` guidance.
+- **LLM-ready handoff**: both shells end with validation status, generated file list, ADR reminders, and `rule_tool_process_handoff` guidance.
 
 ### 9.2 Shared information architecture
 

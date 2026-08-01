@@ -25,11 +25,11 @@
 | Operation | Without rule-mcp | With rule-mcp | Saving |
 |-----------|----------------------|-------------------|--------|
 | Read React rules | ~9 000 tokens (full SKILL.md) | ~180 tokens (tldr query "component patterns") | **98 %** |
-| Generate button component | ~3 000 tokens (model writes from scratch) | ~0 tokens (pix_component returns template) | **100 %** |
-| Validate 200 lines of code | ~40 000 tokens (model reviews manually) | ~0 tokens (pix_check deterministic) | **100 %** |
-| Search all skills for "performance" | ~300 000 tokens (scan all SKILL.md) | ~15 tokens (pix_search call) | **99.995 %** |
-| Record architecture decision | ~2 000 tokens (reasoning + writing) | ~0 tokens (pix_process_adr deterministic) | **100 %** |
-| Fix file tree naming | ~1 500 tokens (explain + manual rename) | ~0 tokens (pix_fix deterministic) | **100 %** |
+| Generate button component | ~3 000 tokens (model writes from scratch) | ~0 tokens (rule_tool_component returns template) | **100 %** |
+| Validate 200 lines of code | ~40 000 tokens (model reviews manually) | ~0 tokens (rule_tool_check deterministic) | **100 %** |
+| Search all skills for "performance" | ~300 000 tokens (scan all SKILL.md) | ~15 tokens (rule_tool_search call) | **99.995 %** |
+| Record architecture decision | ~2 000 tokens (reasoning + writing) | ~0 tokens (rule_tool_process_adr deterministic) | **100 %** |
+| Fix file tree naming | ~1 500 tokens (explain + manual rename) | ~0 tokens (rule_tool_fix deterministic) | **100 %** |
 
 ---
 
@@ -48,9 +48,9 @@ shorter sentence structures. It operates on the *output* side.
 | rule routes a prompt | ~80 token output | ~80 token output | **0 %** (already structured JSON) |
 | Skill returns full content | ~18 000 token output | ~4 500 token output | **75 %** |
 | Skill returns TLDR | ~400 token output | ~100 token output | **75 %** |
-| pix_check result | ~600 token output | ~150 token output | **75 %** |
-| pix_component template | ~500 token output | ~500 token output | **0 %** (code unchanged) |
-| pix_process_adr result | ~1 200 token output | ~300 token output | **75 %** |
+| rule_tool_check result | ~600 token output | ~150 token output | **75 %** |
+| rule_tool_component template | ~500 token output | ~500 token output | **0 %** (code unchanged) |
+| rule_tool_process_adr result | ~1 200 token output | ~300 token output | **75 %** |
 | Aggregate response savings | — | — | **~70 %** |
 
 ### How to enable
@@ -82,16 +82,16 @@ tree-sitter AST extraction.
 | Styleguides & best practices | ✅ Primary | ❌ | None |
 | Component templates | ✅ Primary | ❌ | None |
 | Framework-specific rules | ✅ Primary | ❌ | None |
-| MCP tool orchestration | ✅ `rule`, `pix_search` | ❌ | None |
+| MCP tool orchestration | ✅ `pix_tool`, `rule_tool_search` | ❌ | None |
 | Code graph analysis | ❌ | ✅ tokensave_search, context, etc. | None |
 | Dependency impact | ❌ | ✅ tokensave_impact | None |
 | Dead code detection | ❌ | ✅ tokensave_dead_code | None |
 | Test coverage mapping | ❌ | ✅ tokensave_test_map | None |
 | Complexity scores | ❌ | ✅ tokensave_complexity | None |
-| Guardrail validation | ✅ `pix_check` | ❌ | None |
-| ADR records | ✅ `pix_process_adr` | ❌ | None |
+| Guardrail validation | ✅ `rule_tool_check` | ❌ | None |
+| ADR records | ✅ `rule_tool_process_adr` | ❌ | None |
 | Architecture interview | ✅ `rule-architect` | ❌ | None |
-| Architecture decisions | ✅ `pix_process_adr` | ❌ | None |
+| Architecture decisions | ✅ `rule_tool_process_adr` | ❌ | None |
 | Circular deps detection | ❌ | ✅ tokensave_circular | None |
 | Unused imports | ❌ | ✅ tokensave_unused_imports | None |
 
@@ -135,11 +135,11 @@ tree-sitter AST extraction.
 | Situation | Best tool | Reason |
 |-----------|-----------|--------|
 | "Write a React button component" | rule-mcp | Deterministic template |
-| "How do I style a component?" | pix_styleguide + TLDR | 98 % token saving |
+| "How do I style a component?" | rule_tool_styleguide + TLDR | 98 % token saving |
 | "Find unused functions in this file" | tokensave_dead_code | Graph analysis |
 | "Who calls this method?" | tokensave_callers | Dependency traversal |
-| "Check if my code follows styleguides" | pix_check | Deterministic guardrails |
-| "Record an architecture decision" | pix_process_adr | Template-based ADR |
+| "Check if my code follows styleguides" | rule_tool_check | Deterministic guardrails |
+| "Record an architecture decision" | rule_tool_process_adr | Template-based ADR |
 | "Optimize for minimum token usage" | caveman + tldr | 97 % + 75 % stacking |
 | "Map tests to source code" | tokensave_test_map | Coverage graph |
 | "Set up a new project" | rule-architect | Context interview |

@@ -8,13 +8,13 @@
 
 ## Asse A — Determinismo: gateway + receipt
 
-Il problema: MCP non può forzare l'ordine di chiamata dei tool. Il modello può saltare `rule`, chiamare direttamente skill-tool, o mentire sull'esito di `pix_check`.
+Il problema: MCP non può forzare l'ordine di chiamata dei tool. Il modello può saltare `pix_tool`, chiamare direttamente skill-tool, o mentire sull'esito di `rule_tool_check`.
 
 La soluzione: un **unico entrypoint orchestratore** che fa tutto server-side e restituisce una ricevuta verificabile.
 
-### A.1 — Nuovo tool `pix_gateway`
+### A.1 — Nuovo tool `rule_tool_gateway`
 
-- [ ] **A.1.1** Creare `pix_gateway` in `src/tools/gateway.js`
+- [ ] **A.1.1** Creare `rule_tool_gateway` in `src/tools/gateway.js`
   - Input: `{ prompt, code?, path?, framework? }`
   - Step 1 (server-side): routing via BM25 → skill primaria + secondarie
   - Step 2 (server-side): caricamento evidenza dalle skill (full/summary in base alla dimensione)
@@ -25,24 +25,24 @@ La soluzione: un **unico entrypoint orchestratore** che fa tutto server-side e r
 - [ ] **A.1.2** `sessionReceipt` firmato server-side
   - `crypto.createHmac("sha256", serverSecret).update(sha256(code) + skillName + timestamp).digest("hex")`
   - Il server mantiene un set in-memory delle receipt valide per la sessione
-  - `pix_apply` (tool di scrittura) richiede `receipt` valida per gli stessi byte
+  - `rule_tool_apply` (tool di scrittura) richiede `receipt` valida per gli stessi byte
 
-- [ ] **A.1.3** `pix_apply` — l'unico tool che scrive file
+- [ ] **A.1.3** `rule_tool_apply` — l'unico tool che scrive file
   - Input: `{ files: [{ path, content }], receipt }`
   - Verifica che la receipt corrisponda all'hash del contenuto
-  - Rifiuta se `pix_check` non era `allPass: true`
+  - Rifiuta se `rule_tool_check` non era `allPass: true`
   - Applica sandbox (path traversal, dry-run, atomic write)
 
 - [ ] **A.1.4** Feature flag `RULE_MCP_STRICT_MODE=1`
-  - In strict mode: i tool `pix_fix`, `pix_process_adr` e le skill-tool in modalità check sono disabilitati
-  - Solo `pix_gateway` + `pix_apply` + tool read-only sono esposti
+  - In strict mode: i tool `rule_tool_fix`, `rule_tool_process_adr` e le skill-tool in modalità check sono disabilitati
+  - Solo `rule_tool_gateway` + `rule_tool_apply` + tool read-only sono esposti
   - Questo rende il workflow deterministico per costruzione (non per convenzione)
 
 ### A.2 — ricevuta nell'enforcement contract
 
-- [ ] **A.2.1** `postprocessToolResult` per `pix_gateway` allega receipt firmata
-- [ ] **A.2.2** `pix_apply` valida receipt prima di scrivere
-- [ ] **A.2.3** Test: codice modificato dopo check → receipt non corrisponde → `pix_apply` rifiuta
+- [ ] **A.2.1** `postprocessToolResult` per `rule_tool_gateway` allega receipt firmata
+- [ ] **A.2.2** `rule_tool_apply` valida receipt prima di scrivere
+- [ ] **A.2.3** Test: codice modificato dopo check → receipt non corrisponde → `rule_tool_apply` rifiuta
 
 ---
 
@@ -166,7 +166,7 @@ Principio: stesso pattern di `SHARED_GUARDRAILS` ma con check specifici per ogni
 - [ ] **C.1** `getGuardrails(skillName)` ampliato per includere backend/database/devops/security
   - Mapping dichiarativo in `guardrail-defs.js`: `{ "rule-backend-express": "backend", "rule-data-postgresql": "database", ... }`
 
-- [ ] **C.2** `pix_gateway` usa `getGuardrails` internamente
+- [ ] **C.2** `rule_tool_gateway` usa `getGuardrails` internamente
   - Riceve `skill` dalla route, carica i guardrail corretti
   - Se `code` presente, esegue `checkCode(skill, code, context)` con i guardrail del dominio
 
@@ -197,9 +197,9 @@ C.3 (test)           ← dipende da tutto
 
 ## Gate di accettazione
 
-- [ ] `pix_gateway({ prompt: "Crea API Express con PostgreSQL" })` → route `rule-backend-express` + evidence caricata + checkResult se code presente
-- [ ] `pix_gateway({ prompt, code: "db.query('SELECT * FROM users WHERE id = ' + req.params.id)" })` → `checkResult.allPass: false`, failed contiene `sql-injection`
-- [ ] `pix_apply` con receipt valida → file scritto
-- [ ] `pix_apply` con receipt per codice diverso → rifiutato
-- [ ] `RULE_MCP_STRICT_MODE=1` → solo `pix_gateway` + tool read-only esposti
+- [ ] `rule_tool_gateway({ prompt: "Crea API Express con PostgreSQL" })` → route `rule-backend-express` + evidence caricata + checkResult se code presente
+- [ ] `rule_tool_gateway({ prompt, code: "db.query('SELECT * FROM users WHERE id = ' + req.params.id)" })` → `checkResult.allPass: false`, failed contiene `sql-injection`
+- [ ] `rule_tool_apply` con receipt valida → file scritto
+- [ ] `rule_tool_apply` con receipt per codice diverso → rifiutato
+- [ ] `RULE_MCP_STRICT_MODE=1` → solo `rule_tool_gateway` + tool read-only esposti
 - [ ] Backend guardrail: almeno 3 check per dominio, tutti con test avversariali

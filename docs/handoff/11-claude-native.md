@@ -97,12 +97,12 @@ grep -rl '^description:.*Use when' skills/*/SKILL.md | wc -l
 // mcp.json con filtro consigliato
 {
   "mcpServers": {
-    "pix_ai_mcp": {
+    "rule_tool_ai_mcp": {
       "command": "node",
       "args": ["bin/rule-mcp.js", "serve"],
       "allowedTools": [
-        "pix_gateway", "pix_apply", "rule", "pix_search",
-        "pix_check", "pix_detect", "pix_scaffold"
+        "rule_tool_gateway", "rule_tool_apply", "rule", "rule_tool_search",
+        "rule_tool_check", "rule_tool_detect", "rule_tool_scaffold"
       ]
     }
   }

@@ -11,7 +11,7 @@ The skill `rule-mcp-agents` was the only AI-domain skill and its name leaked the
 
 ## Decision
 
-Rename `rule-mcp-agents` to `rule-ai-agents` (tool becomes `pix_ai_agents`) and add a new `rule-ai` collector skill that indexes AI/agent skills — `rule-ai-agents` (@rule/rule-mcp-core based) and `rule-platform-agent` (framework-agnostic) — mirroring the `rule-frontend` / `rule-frontend-*` pattern. Router gains AI domain classification and treats `rule-ai` as a collector in framework bias; detector maps `@rule/rule-mcp-core` to the `agents` framework → `rule-ai-agents`.
+Rename `rule-mcp-agents` to `rule-ai-agents` (tool becomes `rule_tool_ai_agents`) and add a new `rule-ai` collector skill that indexes AI/agent skills — `rule-ai-agents` (@rule/rule-mcp-core based) and `rule-platform-agent` (framework-agnostic) — mirroring the `rule-frontend` / `rule-frontend-*` pattern. Router gains AI domain classification and treats `rule-ai` as a collector in framework bias; detector maps `@rule/rule-mcp-core` to the `agents` framework → `rule-ai-agents`.
 
 ## Consequences
 

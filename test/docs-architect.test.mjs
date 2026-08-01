@@ -83,7 +83,7 @@ assert(decisions.includes("## Complete ADR summary"), "DECISIONS.md must include
 
 // ── Architect templates are inventoried and placeholder-complete ───
 const architectSkill = read("skills/rule-architect/SKILL.md");
-for (const required of ["pix_detect", "pix_fix", "pix_process_adr", "pix_process_handoff", "pix_component", "pix_check"]) {
+for (const required of ["rule_tool_detect", "rule_tool_fix", "rule_tool_process_adr", "rule_tool_process_handoff", "rule_tool_component", "rule_tool_check"]) {
   assert(architectSkill.includes(required), `rule-architect must reference ${required}`);
 }
 

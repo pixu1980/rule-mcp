@@ -111,8 +111,8 @@ export async function readResource(uri) {
           mimeType: "text/markdown",
           text:
             "For the full a11y testing guide with Playwright + axe-core, see rule-styleguide a11y.md Section 12: Automated Testing.\n\n" +
-            "Use `pix_component component=a11y-test-basic` to generate test files.\n" +
-            "Use `pix_component component=playwright-config` to generate Playwright config.",
+            "Use `rule_tool_component component=a11y-test-basic` to generate test files.\n" +
+            "Use `rule_tool_component component=playwright-config` to generate Playwright config.",
         },
       ],
     };
@@ -154,7 +154,7 @@ export async function readResource(uri) {
     const result = {
       ...profile,
       suggested_skills: [skillName],
-      suggested_tools: [toolName, "pix_check", "pix_scaffold", "pix_component"],
+      suggested_tools: [toolName, "rule_tool_check", "rule_tool_scaffold", "rule_tool_component"],
       message: `Detected ${profile.framework} project "${profile.projectName}". Use ${toolName} for rule-compliant code generation.`,
     };
     return { contents: [{ uri, mimeType: "application/json", text: JSON.stringify(result, null, 2) }] };

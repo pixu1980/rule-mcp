@@ -56,10 +56,10 @@ check("T3.1 activation restored after opt-out cleared", tokensaveActive(withTs) 
 
 // ── T4: gateway injects the directive ──
 await loadAllSkills();
-const gw = await callTool("pix_gateway", { prompt: "make a react button", path: withTs });
+const gw = await callTool("rule_tool_gateway", { prompt: "make a react button", path: withTs });
 const gwText = gw.content.map((c) => c.text).join("\n");
 check("T4 gateway emits tokensave directive for graphed project", gwText.includes("TOKENSAVE ACTIVE"));
-const gw2 = await callTool("pix_gateway", { prompt: "make a react button", path: withoutTs });
+const gw2 = await callTool("rule_tool_gateway", { prompt: "make a react button", path: withoutTs });
 check("T4.1 gateway omits directive for plain project", !gw2.content.map((c) => c.text).join("\n").includes("TOKENSAVE ACTIVE"));
 
 console.log(`\nResults: ${pass} passed, ${fail} failed`);

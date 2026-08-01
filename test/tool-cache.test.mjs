@@ -33,12 +33,12 @@ const { registerTool, callTool } = await import("../src/tools/router.js");
 
 // ── T1: keying + denylist ──
 check("T1 read-only tool gets a key", typeof cacheKey("rule", { prompt: "x" }) === "string");
-check("T1.1 mutation tool pix_apply has no key", cacheKey("pix_apply", {}) === null);
-check("T1.2 pix_fix has no key", cacheKey("pix_fix", {}) === null);
+check("T1.1 mutation tool rule_tool_apply has no key", cacheKey("rule_tool_apply", {}) === null);
+check("T1.2 rule_tool_fix has no key", cacheKey("rule_tool_fix", {}) === null);
 check("T1.3 key stable regardless of arg order", cacheKey("rule", { a: 1, b: 2 }) === cacheKey("rule", { b: 2, a: 1 }));
 
 // ── T2: roundtrip + deep-copy isolation ──
-const k = cacheKey("pix_search", { query: "grid" });
+const k = cacheKey("rule_tool_search", { query: "grid" });
 cacheSet(k, { content: [{ type: "text", text: "hit" }] });
 const got = cacheGet(k);
 check("T2 roundtrip returns stored result", got?.content?.[0]?.text === "hit");
@@ -46,7 +46,7 @@ got.content[0].text = "mutated";
 check("T2.1 mutating a returned result does not corrupt cache", cacheGet(k).content[0].text === "hit");
 
 // ── T3: errors are never cached ──
-const ek = cacheKey("pix_search", { query: "err" });
+const ek = cacheKey("rule_tool_search", { query: "err" });
 cacheSet(ek, { isError: true, content: [{ type: "text", text: "boom" }] });
 check("T3 error result not stored", cacheGet(ek) === undefined);
 

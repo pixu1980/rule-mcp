@@ -1,7 +1,7 @@
 /**
  * @module tools/gateway
  *
- * pix_gateway — Single-entry orchestrator tool.
+ * rule_tool_gateway — Single-entry orchestrator tool.
  *
  * Combines routing, evidence loading, and guardrail checking
  * into one atomic server-side operation. The model receives
@@ -58,7 +58,7 @@ export function issueReceipt(code, skillName, allPass, now = Date.now()) {
 /**
  * Validate a receipt against current code.
  *
- * @param {string} token - Receipt from pix_gateway
+ * @param {string} token - Receipt from rule_tool_gateway
  * @param {string} code - Code to validate against
  * @param {number} [now] - Injectable clock (ms) for deterministic testing
  * @returns {{ valid: boolean, allPass?: boolean, reason?: string }}
@@ -69,7 +69,7 @@ export function validateReceipt(token, code, now = Date.now()) {
   // Enforce the TTL at validation time — an expired receipt must never pass.
   if (now > entry.expiresAt) {
     receiptStore.delete(token);
-    return { valid: false, reason: "Receipt expired — re-run pix_gateway" };
+    return { valid: false, reason: "Receipt expired — re-run rule_tool_gateway" };
   }
   const codeHash = createHash("sha256").update(code).digest("hex");
   if (codeHash !== entry.codeHash) return { valid: false, reason: "Code hash mismatch — code was modified after check" };
@@ -78,7 +78,7 @@ export function validateReceipt(token, code, now = Date.now()) {
 }
 
 /**
- * Register the pix_gateway orchestration tool.
+ * Register the rule_tool_gateway orchestration tool.
  */
 export async function registerGatewayTool() {
   const { registerTool } = await import("./router.js");
@@ -92,7 +92,7 @@ export async function registerGatewayTool() {
   });
 
   registerTool({
-    name: "pix_gateway",
+    name: "rule_tool_gateway",
     description:
       "Single-entry orchestrator: routes prompt → loads skill evidence → checks code against guardrails → returns receipt. " +
       "Use this as the primary entry point instead of calling rule + skill tools separately. " +
@@ -121,7 +121,7 @@ export async function registerGatewayTool() {
 
       // ── Step 1: Route the prompt ──
       const { callTool } = await import("./router.js");
-      const routeResult = await callTool("rule", { prompt, ...(path ? { path } : {}), ...(framework ? { framework } : {}) });
+      const routeResult = await callTool("pix_tool", { prompt, ...(path ? { path } : {}), ...(framework ? { framework } : {}) });
       let route = { route: "unknown", confidence: 0, sections: [], next_tools: [] };
       try {
         const parsed = JSON.parse(routeResult.content[0]?.text || "{}");

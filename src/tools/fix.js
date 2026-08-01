@@ -35,7 +35,7 @@ const FixSchema = z.object({
  */
 export function registerFixTool() {
   registerTool({
-    name: "pix_fix",
+    name: "rule_tool_fix",
     description: "Validate and auto-fix project file tree structure against rule AI conventions (barrel files, _PascalCase naming, etc.).",
     zodSchema: FixSchema,
     inputSchema: {

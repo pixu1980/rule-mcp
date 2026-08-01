@@ -85,10 +85,10 @@ execFileSync("bash", [universalInstallerPath, "--agent", "pi", "--force", "--dry
   env: { ...process.env, HOME: mkdtempSync(join(tmpdir(), "rule-mcp-install-")) },
   stdio: "pipe",
 });
-for (const tool of ["rule —", "pix_process_adr", "pix_process_handoff"]) {
+for (const tool of ["pix_tool —", "rule_tool_process_adr", "rule_tool_process_handoff"]) {
   assert(universalInstaller.includes(tool), `universal installer rules must reference ${tool}`);
 }
-for (const tool of ["pix_ai", "pix_adr", "pix_handoff"]) {
+for (const tool of ["rule_tool_ai", "pix_adr", "pix_handoff"]) {
   assert(!universalInstaller.includes(tool), `universal installer rules must not reference obsolete ${tool}`);
   const obsoletePattern = new RegExp(`(?<![A-Za-z0-9_])${tool}(?![A-Za-z0-9_])`);
   const sourceDir = join(root, "src");

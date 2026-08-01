@@ -1,7 +1,7 @@
 /**
  * @module test/gateway
  *
- * Tests for the pix_gateway receipt system (issue / validate).
+ * Tests for the rule_tool_gateway receipt system (issue / validate).
  * Focus: content binding AND TTL enforcement at validation time.
  */
 

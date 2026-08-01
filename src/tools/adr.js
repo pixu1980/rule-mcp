@@ -1,7 +1,7 @@
 /**
  * @module tools/adr
  *
- * pix_process_adr MCP tool — Architecture Decision Records.
+ * rule_tool_process_adr MCP tool — Architecture Decision Records.
  * Saves ADRs to docs/adr/ with auto-numbering and index maintenance.
  *
  * @see module:tools/router — registered via registerProcessAdrTool()
@@ -147,11 +147,11 @@ const ADRSchema = z.object({
 });
 
 /**
- * Register the pix_process_adr tool.
+ * Register the rule_tool_process_adr tool.
  */
 export function registerProcessAdrTool() {
   registerTool({
-    name: "pix_process_adr",
+    name: "rule_tool_process_adr",
     description: "Save an Architecture Decision Record (ADR) to docs/adr/. Auto-numbers, maintains index, uses Nygard template.",
     zodSchema: ADRSchema,
     inputSchema: {
@@ -222,7 +222,7 @@ export function registerProcessAdrTool() {
     const testProcess = process.argv.some((arg) => /(?:^|[\\/])test[\\/]/.test(arg));
     if (process.env.RULE_MCP_DISABLE_AUTO_ADR === "1" || process.env.NODE_ENV === "test" || testProcess) return;
 
-    const relevant = ["pix_architect", "rule", "pix_scaffold", "pix_detect", "pix_fix"];
+    const relevant = ["rule_tool_architect", "pix_tool", "rule_tool_scaffold", "rule_tool_detect", "rule_tool_fix"];
     if (!relevant.includes(toolName)) return;
 
     const projectDir = args.projectDir || ".";
@@ -241,8 +241,8 @@ export function registerProcessAdrTool() {
     let decisionLines = [];
     let consequenceLines = ["None — informational entry."];
 
-    if (toolName === "rule") {
-      // rule: capture prompt + routing result
+    if (toolName === "pix_tool") {
+      // pix_tool: capture prompt + routing result
       const prompt = (args.prompt || "").slice(0, 200);
       let route = "unknown";
       let confidence = "0";
@@ -266,12 +266,12 @@ export function registerProcessAdrTool() {
       if (alternatives) contextLines.push(`Alternatives: ${alternatives}`);
       decisionLines = [`Use \`${route}\` for this task.`];
 
-    } else if (toolName === "pix_scaffold") {
+    } else if (toolName === "rule_tool_scaffold") {
       title = `Scaffold: ${args.mode || "generate"} ${args.file || "all files"}`;
       contextLines = [`Scaffold operation: ${args.mode || "generate"}`, `File: ${args.file || "all"}`];
       decisionLines = [`Project scaffold files generated/validated.`];
 
-    } else if (toolName === "pix_detect") {
+    } else if (toolName === "rule_tool_detect") {
       title = `Framework detection for ${args.path || "."}`;
       let framework = "unknown";
       try {
@@ -282,7 +282,7 @@ export function registerProcessAdrTool() {
       contextLines = [`Path: ${args.path || "."}`, `Detected framework: ${framework}`];
       decisionLines = [`Use ${framework} tooling for this project.`];
 
-    } else if (toolName === "pix_fix") {
+    } else if (toolName === "rule_tool_fix") {
       title = `File tree fix: ${args.mode || "lint"} on ${args.path || "."}`;
       tags = "tool, auto-log, file-tree";
       contextLines = [`Mode: ${args.mode || "lint"}`, `Source: ${args.srcDir || "src"}`];

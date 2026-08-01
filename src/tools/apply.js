@@ -46,7 +46,7 @@ export async function registerApplyTool() {
   });
 
   registerTool({
-    name: "pix_apply",
+    name: "rule_tool_apply",
     description:
       "Write files to disk after pix_gateway validation. Requires a valid receipt from pix_gateway " +
       "proving that the code passed all guardrails. The receipt is tied to the exact code hash — " +

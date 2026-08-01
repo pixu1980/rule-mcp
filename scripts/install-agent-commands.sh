@@ -67,7 +67,7 @@ argument-hint: "[request]"
 ---
 Use the rule-mcp MCP server explicitly for this request: $ARGUMENTS
 
-Call `rule` first to select the correct skill, follow the returned guidance, and use `pix_check` to validate relevant code before finishing. If no arguments were supplied, apply this workflow to the current user request.
+Call `pix_tool` first to select the correct skill, follow the returned guidance, and use `rule_tool_check` to validate relevant code before finishing. If no arguments were supplied, apply this workflow to the current user request.
 EOF
       ;;
     "rule-architect")
@@ -78,10 +78,10 @@ argument-hint: "<request>"
 ---
 Process this request through rule-architect skill: $ARGUMENTS
 
-1. Call `rule` to route to architect skill.
+1. Call `pix_tool` to route to architect skill.
 2. Load full rule-architect skill evidence.
 3. Execute architect workflow: project scaffolding, skill mapping, context generation, ADR.
-4. Use `pix_process_adr` for architecture decisions.
+4. Use `rule_tool_process_adr` for architecture decisions.
 EOF
       ;;
     "rule-handoff")
@@ -92,7 +92,7 @@ argument-hint: "[mode] [projectDir]"
 ---
 Generate a handoff summary for session continuity: $ARGUMENTS
 
-1. Call `pix_process_handoff` with provided arguments.
+1. Call `rule_tool_process_handoff` with provided arguments.
 2. Default mode "handoff" with all includes enabled.
 3. Use mode "close-session" for full git diff + roadmap + doc scan.
 4. Output result for pasting into next session.
@@ -106,7 +106,7 @@ argument-hint: "<target>"
 ---
 Run grill-me skill for code review or interrogation: $ARGUMENTS
 
-1. Call `rule` to route to grill-me skill.
+1. Call `pix_tool` to route to grill-me skill.
 2. Load full grill-me skill evidence.
 3. Follow the guided interrogation workflow.
 EOF
@@ -119,7 +119,7 @@ argument-hint: "<feature>"
 ---
 Run test-driven development workflow: $ARGUMENTS
 
-1. Call `rule` to route to test-driven-development skill.
+1. Call `pix_tool` to route to test-driven-development skill.
 2. Load full TDD skill evidence.
 3. Follow the Red-Green-Refactor cycle.
 4. Write failing tests before implementation.
@@ -128,12 +128,12 @@ EOF
     "rule-adr")
       cat <<'EOF'
 ---
-description: Record an Architecture Decision Record via pix_process_adr
+description: Record an Architecture Decision Record via rule_tool_process_adr
 argument-hint: "<title>"
 ---
 Record an Architecture Decision Record: $ARGUMENTS
 
-1. Call `pix_process_adr` with the ADR details.
+1. Call `rule_tool_process_adr` with the ADR details.
 2. Uses Nygard template with auto-numbering.
 3. Saves to docs/adr/ with index maintenance.
 EOF
@@ -141,12 +141,12 @@ EOF
     "rule-fix")
       cat <<'EOF'
 ---
-description: Validate and fix project file tree structure via pix_fix
+description: Validate and fix project file tree structure via rule_tool_fix
 argument-hint: "[path]"
 ---
 Validate and fix project file tree: $ARGUMENTS
 
-1. Call `pix_fix` to scan project structure.
+1. Call `rule_tool_fix` to scan project structure.
 2. Fixes barrel files, naming conventions, directory layout.
 3. Pass path parameter to limit scope.
 EOF
@@ -154,12 +154,12 @@ EOF
     "rule-check")
       cat <<'EOF'
 ---
-description: Check code against rule guardrails via pix_check
+description: Check code against rule guardrails via rule_tool_check
 argument-hint: "<skill> <code>"
 ---
 Check code against rule guardrails: $ARGUMENTS
 
-1. Call `pix_check` with the target skill name and code.
+1. Call `rule_tool_check` with the target skill name and code.
 2. Fix every failure.
 3. Rerun until allPass: true.
 EOF
@@ -176,9 +176,9 @@ content_workflow() {
 
 Explicitly use the rule-mcp MCP server for the request supplied with this command.
 
-1. Call `rule` first to select the correct skill.
+1. Call `pix_tool` first to select the correct skill.
 2. Follow the routed skill guidance while completing the request.
-3. Run `pix_check` against relevant code before finishing.
+3. Run `rule_tool_check` against relevant code before finishing.
 EOF
       ;;
     "rule-architect")
@@ -187,7 +187,7 @@ EOF
 
 Route through rule-architect for project structure, ADRs, and skill mapping.
 
-1. Call `rule` to route to architect skill.
+1. Call `pix_tool` to route to architect skill.
 2. Execute architect workflow with ADR recording.
 EOF
       ;;
@@ -197,7 +197,7 @@ EOF
 
 Generate handoff summary for session continuity.
 
-1. Call `pix_process_handoff`.
+1. Call `rule_tool_process_handoff`.
 2. Default: mode "handoff" with all includes.
 EOF
       ;;
@@ -207,7 +207,7 @@ EOF
 
 Run grill-me code review or interrogation.
 
-1. Call `rule` to route to grill-me skill.
+1. Call `pix_tool` to route to grill-me skill.
 2. Execute guided interrogation workflow.
 EOF
       ;;
@@ -217,7 +217,7 @@ EOF
 
 Run test-driven development workflow (Red-Green-Refactor).
 
-1. Call `rule` to route to test-driven-development skill.
+1. Call `pix_tool` to route to test-driven-development skill.
 2. Write failing tests first, then implement, then refactor.
 EOF
       ;;
@@ -227,7 +227,7 @@ EOF
 
 Record an Architecture Decision Record.
 
-1. Call `pix_process_adr` with title and details.
+1. Call `rule_tool_process_adr` with title and details.
 2. Auto-numbered in docs/adr/ with Nygard template.
 EOF
       ;;
@@ -237,7 +237,7 @@ EOF
 
 Validate and fix project file tree structure.
 
-1. Call `pix_fix` to scan and fix.
+1. Call `rule_tool_fix` to scan and fix.
 2. Barrel files, naming, directory layout.
 EOF
       ;;
@@ -247,7 +247,7 @@ EOF
 
 Check code against rule guardrails.
 
-1. Call `pix_check` with skill name and code.
+1. Call `rule_tool_check` with skill name and code.
 2. Fix failures and rerun until all pass.
 EOF
       ;;
@@ -263,7 +263,7 @@ description = "Explicitly route a request through rule-mcp"
 prompt = """
 Use the rule-mcp MCP server explicitly for this request: {{args}}
 
-Call `rule` first to select the correct skill, follow the returned guidance, and use `pix_check` to validate relevant code before finishing. If no arguments were supplied, apply this workflow to the current user request.
+Call `pix_tool` first to select the correct skill, follow the returned guidance, and use `rule_tool_check` to validate relevant code before finishing. If no arguments were supplied, apply this workflow to the current user request.
 """
 EOF
       ;;
@@ -273,9 +273,9 @@ description = "Route to rule-architect for project scaffolding"
 prompt = """
 Process through rule-architect skill: {{args}}
 
-1. Call `rule` to route to architect skill.
+1. Call `pix_tool` to route to architect skill.
 2. Load skill evidence and execute architect workflow.
-3. Use `pix_process_adr` for decisions.
+3. Use `rule_tool_process_adr` for decisions.
 """
 EOF
       ;;
@@ -283,7 +283,7 @@ EOF
       cat <<'EOF'
 description = "Generate LLM handoff summary"
 prompt = """
-Generate handoff summary via pix_process_handoff: {{args}}
+Generate handoff summary via rule_tool_process_handoff: {{args}}
 
 Default mode "handoff". Use "close-session" for full context dump.
 """
@@ -295,7 +295,7 @@ description = "Run grill-me code review"
 prompt = """
 Run grill-me skill for code review: {{args}}
 
-Call `rule` to route to grill-me skill and execute.
+Call `pix_tool` to route to grill-me skill and execute.
 """
 EOF
       ;;
@@ -305,7 +305,7 @@ description = "Run test-driven development workflow"
 prompt = """
 Run TDD workflow: {{args}}
 
-Call `rule` to route to test-driven-development skill.
+Call `pix_tool` to route to test-driven-development skill.
 Follow Red-Green-Refactor cycle. Write failing tests first.
 """
 EOF
@@ -314,7 +314,7 @@ EOF
       cat <<'EOF'
 description = "Record Architecture Decision Record"
 prompt = """
-Record ADR via pix_process_adr: {{args}}
+Record ADR via rule_tool_process_adr: {{args}}
 
 Auto-numbered Nygard template in docs/adr/.
 """
@@ -324,7 +324,7 @@ EOF
       cat <<'EOF'
 description = "Validate/fix project file tree"
 prompt = """
-Fix project file tree via pix_fix: {{args}}
+Fix project file tree via rule_tool_fix: {{args}}
 
 Scans and fixes barrel files, naming, directory layout.
 """
@@ -334,7 +334,7 @@ EOF
       cat <<'EOF'
 description = "Check code against rule guardrails"
 prompt = """
-Check code via pix_check: {{args}}
+Check code via rule_tool_check: {{args}}
 
 Call with skill name and code. Fix failures. Rerun until all pass.
 """
