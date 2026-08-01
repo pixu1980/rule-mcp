@@ -1018,7 +1018,7 @@ Everything else is already configured in existing workflows:
 - CI: `.github/workflows/ci.yml`
 - Release: `.github/workflows/release.yml`
 - Docker: `Dockerfile` + `docker-compose.yml`
-- Winget: `.github/winget/pix-ai.pix-galaxy-mcp.yaml`
+- Winget: `.github/winget/pix-galaxy.pix-galaxy-mcp.yaml`
 - Scoop: `.github/scoop/pix-galaxy-mcp.json`
 - Server manifest: `server.json`
 - Changelog: `CHANGELOG.md`
@@ -1175,7 +1175,7 @@ pix-galaxy-mcp daemon logs
 **Issue**: `pix` returns no matching skill.
 - **Verify**: Skills are loaded:
   ```bash
-  pix-galaxy-mcp tools list | grep pix-ai
+  pix-galaxy-mcp tools list | grep pix-galaxy
   ```
 - **Try**: Use `pix_search` for free-text search across all skills.
 
