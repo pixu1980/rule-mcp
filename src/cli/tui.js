@@ -49,7 +49,7 @@ export function banner(title, subtitle = "") {
   const bottom = `╚${"═".repeat(width - 2)}╝`;
   const line = (text) => {
     const raw = String(text);
-    const pad = Math.max(0, width - 4 - visibleLength(raw));
+    const pad = Math.max(0, width - 6 - visibleLength(raw));
     return `║  ${raw}${" ".repeat(pad)}  ║`;
   };
   const lines = [top, line(title)];
