@@ -19,7 +19,7 @@
 #   - pnpm (recommended) or npm
 #
 # Usage:
-#   powershell -c "irm https://rule-ai.domain.example/install.ps1 | iex"
+#   powershell -c "irm https://rule-mcp.domain.example/install.ps1 | iex"
 #   # OR
 #   .\scripts\install.ps1
 #
@@ -48,7 +48,7 @@ if ($Help) {
   Write-Host "rule-mcp — Universal Installer (PowerShell)" -ForegroundColor Cyan
   Write-Host ""
   Write-Host "Usage:" -ForegroundColor Yellow
-  Write-Host "  powershell -c `"irm https://rule-ai.domain.example/install.ps1 | iex`""
+  Write-Host "  powershell -c `"irm https://rule-mcp.domain.example/install.ps1 | iex`""
   Write-Host "  .\scripts\install.ps1"
   Write-Host ""
   Write-Host "Parameters:" -ForegroundColor Yellow
@@ -67,7 +67,7 @@ $McpServerName = "rule-mcp"
 $NodeMin = 20
 $NpmPackage = "rule-mcp"
 $PackageVersion = "latest"
-$ScriptUrl = "https://rule-ai.domain.example/install.ps1"
+$ScriptUrl = "https://rule-mcp.domain.example/install.ps1"
 
 # ── State ──
 $InstalledAgents = @()

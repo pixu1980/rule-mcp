@@ -28,7 +28,7 @@ SHASUM=$(shasum -a 256 "${NAME}-${VERSION}.tgz" 2>/dev/null | cut -d' ' -f1 || e
 cat > "${NAME}.rb" << FORMULA
 class PixGalaxyMcp < Formula
   desc "MCP server for the rule-* skill ecosystem"
-  homepage "https://github.com/rule-ai/rule-mcp"
+  homepage "https://github.com/rule-mcp/rule-mcp"
   url "https://registry.npmjs.org/${NAME}/-/${NAME}-${VERSION}.tgz"
   sha256 "${SHASUM}"
   license "MIT"

@@ -13,7 +13,7 @@
 #
 # Usage:
 #   .\scripts\uninstall.ps1
-#   powershell -c "irm https://rule-ai.domain.example/uninstall.ps1 | iex"
+#   powershell -c "irm https://rule-mcp.domain.example/uninstall.ps1 | iex"
 #
 # Parameters:
 #   -Agent <name>    Uninstall for a specific agent only
@@ -39,7 +39,7 @@ if ($Help) {
   Write-Host ""
   Write-Host "Usage:" -ForegroundColor Yellow
   Write-Host "  .\scripts\uninstall.ps1"
-  Write-Host "  powershell -c `"irm https://rule-ai.domain.example/uninstall.ps1 | iex`""
+  Write-Host "  powershell -c `"irm https://rule-mcp.domain.example/uninstall.ps1 | iex`""
   Write-Host ""
   Write-Host "Parameters:" -ForegroundColor Yellow
   Write-Host "  -Agent <name>    Uninstall for a specific agent only"
@@ -52,7 +52,7 @@ if ($Help) {
 
 # ── Config ──
 $McpServerName = "rule-mcp"
-$ScriptUrl = "https://rule-ai.domain.example/uninstall.ps1"
+$ScriptUrl = "https://rule-mcp.domain.example/uninstall.ps1"
 
 # ── State ──
 $RemovedCount = 0
@@ -81,7 +81,7 @@ function Remove-McpEntryDual {
     [string]$ServiceName = $McpServerName
   )
   Remove-McpEntry -FilePath $FilePath -Label $Label -ServiceName $ServiceName
-  Remove-McpEntry -FilePath $FilePath -Label "$Label (legacy)" -ServiceName "pix_galaxy_mcp"
+  Remove-McpEntry -FilePath $FilePath -Label "$Label (legacy)" -ServiceName "pix_ai_mcp"
 }
 
 function Remove-McpEntry {
@@ -632,7 +632,7 @@ Write-Host "To remove them manually:  Remove-Item -Recurse -Force $ProjectDir" -
 Write-Host ""
 
 Write-Host "To reinstall later:" -ForegroundColor Cyan
-Write-Host "  powershell -c `"irm https://rule-ai.domain.example/install.ps1 | iex`""
+Write-Host "  powershell -c `"irm https://rule-mcp.domain.example/install.ps1 | iex`""
 Write-Host "  # OR"
 Write-Host "  .\scripts\install.ps1"
 Write-Host ""

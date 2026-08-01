@@ -14,7 +14,7 @@
 #
 # Usage:
 #   ./scripts/uninstall.sh
-#   curl -fsSL https://rule-ai.domain.example/uninstall.sh | bash
+#   curl -fsSL https://rule-mcp.domain.example/uninstall.sh | bash
 #
 # Options:
 #   --agent <name>       Uninstall for a specific agent only
@@ -29,7 +29,7 @@ set -euo pipefail
 
 # ── Config ───────────────────────────────────────────────────────────────────
 MCP_SERVER_NAME="rule-mcp"
-SCRIPT_URL="https://rule-ai.domain.example/uninstall.sh"
+SCRIPT_URL="https://rule-mcp.domain.example/uninstall.sh"
 
 # ── Colors ───────────────────────────────────────────────────────────────────
 RED='\033[0;31m'
@@ -463,7 +463,7 @@ remove_mcp_entry_dual() {
   local file="$1"
   local label="$2"
   remove_mcp_entry "$file" "$label" "rule-mcp"
-  remove_mcp_entry "$file" "$label" "pix_galaxy_mcp"
+  remove_mcp_entry "$file" "$label" "pix_ai_mcp"
 }
 
 # VS Code global config (user-level — this is where VS Code 1.90+ stores MCP)
@@ -578,7 +578,7 @@ EMACS_CONFIG="$HOME_DIR/.emacs.d/init.el"
 if [[ -f "$EMACS_CONFIG" ]]; then
   if grep -q "rule-mcp" "$EMACS_CONFIG" 2>/dev/null; then
     if [[ "$DRY_RUN" == "true" ]]; then
-      sub "[dry-run] Would remove rule-ai lines from: ${EMACS_CONFIG}"
+      sub "[dry-run] Would remove rule-mcp lines from: ${EMACS_CONFIG}"
     else
       cp "$EMACS_CONFIG" "${EMACS_CONFIG}.bak" 2>/dev/null || true
       if [[ "$OS" == "macos" ]]; then
@@ -588,10 +588,10 @@ if [[ -f "$EMACS_CONFIG" ]]; then
         sed -i '/rule-mcp/d' "$EMACS_CONFIG"
         sed -i '/;; rule-mcp/d' "$EMACS_CONFIG"
       fi
-      ok "Emacs: rule-ai lines removed"
+      ok "Emacs: rule-mcp lines removed"
     fi
   else
-    sub "Emacs: no rule-ai config found, skipping"
+    sub "Emacs: no rule-mcp config found, skipping"
   fi
 else
   sub "Emacs: no init.el found, skipping"
@@ -695,7 +695,7 @@ clean_shell_profile() {
 
   if grep -q "rule-mcp" "$profile" 2>/dev/null || grep -q "# rule-mcp:" "$profile" 2>/dev/null; then
     if [[ "$DRY_RUN" == "true" ]]; then
-      sub "[dry-run] Would remove rule-ai env vars from: ${profile}"
+      sub "[dry-run] Would remove rule-mcp env vars from: ${profile}"
     else
       if [[ "$OS" == "macos" ]]; then
         sed -i '' '/# rule-mcp:/d' "$profile" 2>/dev/null || true
@@ -713,7 +713,7 @@ clean_shell_profile() {
       ok "Cleaned: ${profile}"
     fi
   else
-    sub "${profile}: no rule-ai entries, skipping"
+    sub "${profile}: no rule-mcp entries, skipping"
   fi
   return 0
 }
@@ -765,18 +765,45 @@ POST_COMMIT="$HOOKS_DIR/post-commit"
 if [[ -f "$POST_COMMIT" ]]; then
   if grep -q "rule" "$POST_COMMIT" 2>/dev/null; then
     if [[ "$DRY_RUN" == "true" ]]; then
-      sub "[dry-run] Would remove rule-ai lines from: ${POST_COMMIT}"
+      sub "[dry-run] Would remove rule-mcp lines from: ${POST_COMMIT}"
     else
       cp "$POST_COMMIT" "${POST_COMMIT}.bak" 2>/dev/null || true
+      # Remove the WHOLE block, not just the lines matching "rule-mcp":
+      # a line-wise delete strips the `if`/body but leaves the closing `fi`,
+      # which makes every later commit fail with a shell syntax error.
+      # Marker-delimited blocks (current installs) go first; the legacy
+      # 4-line shape (pre-marker installs, and any orphan `fi` an older
+      # uninstall already left behind) is repaired after.
       if [[ "$OS" == "macos" ]]; then
-        sed -i '' '/rule-ai/d' "$POST_COMMIT" 2>/dev/null || true
+        SED_INPLACE=(sed -i '')
       else
-        sed -i '/rule-ai/d' "$POST_COMMIT" 2>/dev/null || true
+        SED_INPLACE=(sed -i)
+      fi
+      "${SED_INPLACE[@]}" '/^# >>> rule-mcp >>>$/,/^# <<< rule-mcp <<<$/d' "$POST_COMMIT" 2>/dev/null || true
+      # Legacy: the unmarked block was exactly
+      #   # rule-mcp: auto-sync after commit
+      #   if command -v rule-mcp ...; then
+      #     rule-mcp doctor ... &
+      #   fi
+      "${SED_INPLACE[@]}" '/^# rule-mcp: auto-sync after commit$/,/^fi$/d' "$POST_COMMIT" 2>/dev/null || true
+      # Repair orphan `fi` lines a previous line-wise uninstall left behind:
+      # drop any `fi` that has no still-open `if` above it.
+      if ! sh -n "$POST_COMMIT" 2>/dev/null; then
+        awk '
+          /^[[:space:]]*if([[:space:]]|$)/ { depth++; print; next }
+          /^[[:space:]]*fi[[:space:]]*$/   { if (depth > 0) { depth--; print } next }
+                                          { print }
+        ' "$POST_COMMIT" > "${POST_COMMIT}.tmp" 2>/dev/null &&
+          mv "${POST_COMMIT}.tmp" "$POST_COMMIT" && chmod +x "$POST_COMMIT"
+        rm -f "${POST_COMMIT}.tmp"
+      fi
+      if ! sh -n "$POST_COMMIT" 2>/dev/null; then
+        warn "post-commit hook still has a syntax error after cleaning; backup at ${POST_COMMIT}.bak"
       fi
       ok "Git post-commit hook cleaned"
     fi
   else
-    sub "Git hooks: no rule-ai entries, skipping"
+    sub "Git hooks: no rule-mcp entries, skipping"
   fi
 else
   sub "Git hooks: not found, skipping"
@@ -910,7 +937,7 @@ echo -e "  ${YELLOW}To remove them manually:  rm -rf $(pwd)${NC}"
 echo ""
 
 echo -e "  ${CYAN}To reinstall later:${NC}"
-echo -e "    curl -fsSL https://rule-ai.domain.example/install.sh | bash"
+echo -e "    curl -fsSL https://rule-mcp.domain.example/install.sh | bash"
 echo -e "    # OR"
 echo -e "    cd $(pwd) && ./scripts/install.sh"
 echo ""
