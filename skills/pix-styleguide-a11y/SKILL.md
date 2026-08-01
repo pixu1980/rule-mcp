@@ -373,3 +373,12 @@ To use this framework with any AI coding agent, add **one rule** to your agent's
 | **Windsurf** | `.windsurf/rules/a11y.md` | Same format |
 
 > **Do not duplicate** accessibility rules outside this skill — prevents rule fragmentation and ensures the AI always loads the complete context.
+
+---
+
+## See also
+
+- [pix](../pix/SKILL.md) — Central skill index and dispatcher
+- [pix-frontend](../pix-frontend/SKILL.md) — Frontend framework skills (a11y applies to all UI work)
+- [pix-styleguide-html](../pix-styleguide-html/SKILL.md) — Semantic HTML conventions
+- [pix-ui-design-system](../pix-ui-design-system/SKILL.md) — UI design system and accessibility direction
