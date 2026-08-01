@@ -186,7 +186,7 @@ For React, Vue, Angular, Svelte, SolidJS, Astro, Next, Nuxt, or Remix:
 - [ ] Color contrast is WCAG 2.2 AA.
 - [ ] File tree follows barrel and naming conventions.
 - [ ] The framework-specific skill remains the source of implementation truth.
-- [ ] `pix_check` passes before handoff.
+- [ ] `rule_tool_check` passes before handoff.
 
 ## Pair with these skills
 
@@ -199,7 +199,7 @@ For React, Vue, Angular, Svelte, SolidJS, Astro, Next, Nuxt, or Remix:
 | Semantic HTML | [rule-styleguide-html](../rule-styleguide-html/SKILL.md) |
 | Accessibility | [rule-styleguide-a11y](../rule-styleguide-a11y/SKILL.md) |
 | Naming/file tree | [rule-styleguide-naming](../rule-styleguide-naming/SKILL.md) |
-| Validation | [pix_check](../rule/SKILL.md) via MCP tool |
+| Validation | [rule_tool_check](../rule/SKILL.md) via MCP tool |
 
 ## See also
 

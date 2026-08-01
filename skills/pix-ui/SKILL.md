@@ -64,7 +64,7 @@ validate any visible interface.
 - [ ] CSS selectors avoid classes and inline styles.
 - [ ] Component/file tree follows `rule-styleguide-naming`.
 - [ ] `pix_component` is used where a template exists.
-- [ ] `pix_check` passes or reports known exceptions.
+- [ ] `rule_tool_check` passes or reports known exceptions.
 
 ## See also
 

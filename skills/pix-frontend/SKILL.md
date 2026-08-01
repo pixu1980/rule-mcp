@@ -29,6 +29,7 @@ frameworks: [all]
 | [rule-frontend-astro](../rule-frontend-astro/SKILL.md) | Astro (islands) | Per-framework | Per-framework |
 | [rule-frontend-vanilla-reactive](../rule-frontend-vanilla-reactive/SKILL.md) | Vanilla JS | Proxy Store + Signals | Store |
 | [rule-frontend-custom-element](../rule-frontend-custom-element/SKILL.md) | Vanilla JS (no framework) | componentDecorator | adopedStyleSheets |
+| [rule-frontend-template-engine](../rule-frontend-template-engine/SKILL.md) | Vanilla JS (no framework) | TemplateEngine | SSG/SSR/static-html |
 
 ## Meta-Frameworks
 
@@ -49,6 +50,7 @@ Need fine-grained reactivity?           → rule-frontend-solidjs
 Need static + islands?                  → rule-frontend-astro
 Need pure vanilla (no framework)?       → rule-frontend-vanilla-reactive
 Need a zero-dep custom element?         → rule-frontend-custom-element
+Need static HTML / SSG / SSR?           → rule-frontend-template-engine
 Need full-stack React (Next.js)?        → rule-frontend-meta-next
 Need full-stack Vue (Nuxt)?             → rule-frontend-meta-nuxt
 Need nested routing (Remix)?            → rule-frontend-meta-remix
