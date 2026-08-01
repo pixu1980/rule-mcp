@@ -90,7 +90,7 @@ Use this table to ensure the architecture package references all relevant skills
 
 | Skill | Use in architecture when |
 |-------|--------------------------|
-| [pix-galaxy-agents](../pix-galaxy-agents/SKILL.md) | Building an agent application on `@pix/pix-galaxy-core` with its prescribed provider, tool, test, and container patterns. |
+| [pix-ai-agents](../pix-ai-agents/SKILL.md) | Building an agent application on `@pix/pix-galaxy-core` with its prescribed provider, tool, test, and container patterns. |
 | [pix-platform-agent](../pix-platform-agent/SKILL.md) | Scaffolding a framework-agnostic AI coding agent project with custom tools, env config, testing, and containerization. |
 
 ### Backend
