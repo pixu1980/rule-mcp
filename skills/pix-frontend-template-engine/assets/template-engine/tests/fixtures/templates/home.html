@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="{{ site.language }}">
+<head>
+  <meta charset="utf-8">
+  <title>{{ title }}</title>
+  <meta name="description" content="{{ description }}">
+  <meta property="og:title" content="{{ title }}">
+  <meta property="og:description" content="{{ description }}">
+  <meta property="og:image" content="{{ ogImageUrl }}">
+  <meta name="twitter:image" content="{{ ogImageUrl }}">
+  <link rel="canonical" href="{{ canonicalUrl }}">
+  <script type="application/ld+json">{{ { '@context': 'https://schema.org', '@type': 'WebSite', name: title } | json | raw }}</script>
+</head>
+<body>
+  <main>
+    <for each="p in posts">
+      <article><h2>{{ p.title }}</h2></article>
+    </for>
+  </main>
+</body>
+</html>
