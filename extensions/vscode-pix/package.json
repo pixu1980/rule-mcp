@@ -29,7 +29,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/pixu1980/rule-mcp",
+    "url": "https://github.com/rule/rule-mcp",
     "directory": "extensions/vscode-rule"
   },
   "contributes": {
@@ -37,7 +37,7 @@
       {
         "id": "rule-template-html",
         "aliases": [
-          "Pix HTML Template",
+          "rule HTML Template",
           "rule-template-html"
         ],
         "extensions": [

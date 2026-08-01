@@ -1,5 +1,5 @@
 {
-  "Pix template structure": {
+  "rule template structure": {
     "prefix": "rule-template",
     "body": [
       "<!-- ═══════════════════════════════════════════════",
@@ -9,27 +9,27 @@
       "  $0",
       "</section>"
     ],
-    "description": "Pix external template structure"
+    "description": "rule external template structure"
   },
-  "Pix for loop": {
+  "rule for loop": {
     "prefix": "rule-for",
     "body": [
       "<for each=\"${1:item} in ${2:items}\">",
       "  $0",
       "</for>"
     ],
-    "description": "Pix <for> loop"
+    "description": "rule <for> loop"
   },
-  "Pix if block": {
+  "rule if block": {
     "prefix": "rule-if",
     "body": [
       "<if condition=\"${1:expr}\">",
       "  $0",
       "</if>"
     ],
-    "description": "Pix <if> conditional"
+    "description": "rule <if> conditional"
   },
-  "Pix if-else": {
+  "rule if-else": {
     "prefix": "rule-ifelse",
     "body": [
       "<if condition=\"${1:expr}\">",
@@ -38,9 +38,9 @@
       "  ${3:when false}",
       "</if>"
     ],
-    "description": "Pix <if>/<else>"
+    "description": "rule <if>/<else>"
   },
-  "Pix switch": {
+  "rule switch": {
     "prefix": "rule-switch",
     "body": [
       "<switch expr=\"${1:value}\">",
@@ -48,26 +48,26 @@
       "  <default>${4:fallback}</default>",
       "</switch>"
     ],
-    "description": "Pix <switch>/<case>"
+    "description": "rule <switch>/<case>"
   },
-  "Pix data-part attribute": {
+  "rule data-part attribute": {
     "prefix": "data-part",
     "body": "data-part=\"${1:role}\"",
-    "description": "Pix data-part attribute"
+    "description": "rule data-part attribute"
   },
-  "Pix click event": {
+  "rule click event": {
     "prefix": "rule-click",
     "body": "@click=\"${1:handler}($2)\"",
-    "description": "Pix @click event binding"
+    "description": "rule @click event binding"
   },
-  "Pix expression": {
+  "rule expression": {
     "prefix": "rule-expr",
     "body": "{{ ${1:expr} }}",
-    "description": "Pix {{ }} expression"
+    "description": "rule {{ }} expression"
   },
-  "Pix expression with filter": {
+  "rule expression with filter": {
     "prefix": "rule-filter",
     "body": "{{ ${1:expr} | ${2:upper} }}",
-    "description": "Pix {{ }} with filter"
+    "description": "rule {{ }} with filter"
   }
 }

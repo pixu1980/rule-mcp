@@ -1,6 +1,6 @@
 {
   "scopeName": "inline.rule-html-template",
-  "name": "Pix HTML inside js",
+  "name": "rule HTML inside js",
   "injectionSelector": "L:source.js -comment -string",
   "patterns": [
     {
