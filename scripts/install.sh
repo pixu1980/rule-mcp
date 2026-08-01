@@ -12,7 +12,7 @@
 #   3. Registers pix-galaxy-mcp as an MCP server in each detected agent
 #   4. Installs IDE extensions / configs for supported editors
 #   5. Optionally configures model provider API keys
-#   6. Appends instruction rules so agents prefer pix-ai skills
+#   6. Appends instruction rules so agents prefer pix-galaxy skills
 #   7. Runs a health check to confirm everything works
 #
 # Prerequisites:
@@ -20,7 +20,7 @@
 #   - pnpm (recommended) or npm
 #
 # Usage:
-#   curl -fsSL https://pix-ai.domain.example/install.sh | bash
+#   curl -fsSL https://pix-galaxy.domain.example/install.sh | bash
 #   # OR
 #   ./scripts/install.sh
 #
@@ -39,7 +39,7 @@ set -euo pipefail
 # ── Config ───────────────────────────────────────────────────────────────────
 MCP_SERVER_NAME="pix-galaxy-mcp"
 NODE_MIN="20"
-SCRIPT_URL="https://pix-ai.domain.example/install.sh"
+SCRIPT_URL="https://pix-galaxy.domain.example/install.sh"
 NPM_PACKAGE="pix-galaxy-mcp"
 PACKAGE_VERSION="latest"
 
@@ -106,7 +106,7 @@ while [[ $# -gt 0 ]]; do
     --mode)       INSTALL_MODE="${2:-}"; MODE_WAS_REQUESTED=true; shift 2 ;;
     --no-interactive) INTERACTIVE=false; shift ;;
     --help|-h)
-      echo "Usage: curl -fsSL https://pix-ai.domain.example/install.sh | bash"
+      echo "Usage: curl -fsSL https://pix-galaxy.domain.example/install.sh | bash"
       echo ""
       echo "Options:"
       echo "  --agent <name>   Install for a specific agent only"
@@ -693,14 +693,22 @@ if [[ "$GIT_AVAIL" == "true" ]] && git rev-parse --git-dir 2>/dev/null; then
     sub "[dry-run] Would create: ${POST_COMMIT} (auto-sync hook)"
   else
     if [[ -f "$POST_COMMIT" ]] && grep -q "pix" "$POST_COMMIT" 2>/dev/null; then
-      warn "Git post-commit hook already has pix-ai, skipping"
+      warn "Git post-commit hook already has pix-galaxy, skipping"
     else
-      cat >> "$POST_COMMIT" <<- HOOK_EOF
+      # A fresh hook needs a shebang; appending to an existing one must not
+      # inject a second interpreter line.
+      [[ -s "$POST_COMMIT" ]] || printf '#!/bin/sh\n' > "$POST_COMMIT"
+      # Sentinel markers so uninstall.sh can remove the whole block.
+      # Removing only the lines that match "pix-galaxy" would leave an
+      # orphan `fi` behind and break the hook for every later commit.
+      cat >> "$POST_COMMIT" <<- 'HOOK_EOF'
 
-# pix-galaxy-mcp: auto-sync after commit
-if command -v pix-galaxy-mcp &>/dev/null; then
+# >>> pix-galaxy-mcp >>>
+# auto-sync after commit
+if command -v pix-galaxy-mcp >/dev/null 2>&1; then
   pix-galaxy-mcp doctor >/dev/null 2>&1 &
 fi
+# <<< pix-galaxy-mcp <<<
 HOOK_EOF
       chmod +x "$POST_COMMIT"
       ok "Git post-commit hook installed"
