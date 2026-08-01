@@ -1,20 +1,20 @@
 # yaml-language-server: $schema=https://aka.ms/winget-manifest.version.1.6.0.schema.json
-PackageIdentifier: pixu1980.pix-galaxy-mcp
+PackageIdentifier: pix.pix-galaxy-mcp
 PackageVersion: "0.1.0"
 PackageLocale: en-US
-Publisher: pixu1980
-PublisherUrl: https://github.com/pixu1980
+Publisher: pix
+PublisherUrl: https://github.com/pix
 PackageName: pix-galaxy-mcp
-PackageUrl: https://github.com/pixu1980/pix-galaxy-mcp
+PackageUrl: https://github.com/pix/pix-galaxy-mcp
 License: MIT
-LicenseUrl: https://github.com/pixu1980/pix-galaxy-mcp/blob/main/LICENSE
+LicenseUrl: https://github.com/pix/pix-galaxy-mcp/blob/main/LICENSE
 ShortDescription: MCP server for the pix-* skill ecosystem
 Description: Serves styleguides, component templates, framework best practices, and design system patterns directly to your coding agent.
 Moniker: pix-galaxy-mcp
 Installers:
   - Architecture: x64
     InstallerType: portable
-    InstallerUrl: https://github.com/pixu1980/pix-galaxy-mcp/releases/download/v0.1.0/pix-galaxy-mcp.tgz
+    InstallerUrl: https://github.com/pix/pix-galaxy-mcp/releases/download/v0.1.0/pix-galaxy-mcp.tgz
     InstallerSha256: PLACEHOLDER
     Commands:
       - pix-galaxy-mcp
