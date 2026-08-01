@@ -48,6 +48,7 @@ frameworks: [all]
 | [rule-toolchain-typescript](../rule-toolchain-typescript/SKILL.md) | TypeScript | tsconfig, strict mode, path aliases |
 | [rule-toolchain-project](../rule-toolchain-project/SKILL.md) | Project Config | .gitignore, .editorconfig, .nvmrc, .env |
 | [rule-toolchain-husky](../rule-toolchain-husky/SKILL.md) | Husky | Git hooks, lint-staged, commitlint |
+| [rule-toolchain-commits](../rule-toolchain-commits/SKILL.md) | Commit Discipline | Atomic Conventional Commits with mandatory scope, commit-msg/pre-push hooks |
 
 ## Quick Selection Guide
 
@@ -59,6 +60,7 @@ Need monorepo orchestration?            → rule-toolchain-turborepo
 Need TypeScript config?                 → rule-toolchain-typescript
 Need base project files?                → rule-toolchain-project
 Need Git hooks?                         → rule-toolchain-husky
+Need commit/push discipline (atomic, scope)? → rule-toolchain-commits
 ```
 
 ## See also
