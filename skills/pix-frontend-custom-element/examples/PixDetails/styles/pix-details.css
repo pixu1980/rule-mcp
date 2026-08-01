@@ -1,0 +1,2 @@
+@import './_core.css' layer(components.pix-details);
+@import './states/_states.css' layer(components.pix-details);

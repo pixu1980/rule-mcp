@@ -28,6 +28,7 @@ frameworks: [all]
 | [pix-frontend-solidjs](../pix-frontend-solidjs/SKILL.md) | SolidJS | createSignal | Signals |
 | [pix-frontend-astro](../pix-frontend-astro/SKILL.md) | Astro (islands) | Per-framework | Per-framework |
 | [pix-frontend-vanilla-reactive](../pix-frontend-vanilla-reactive/SKILL.md) | Vanilla JS | Proxy Store + Signals | Store |
+| [pix-frontend-custom-element](../pix-frontend-custom-element/SKILL.md) | Vanilla JS (no framework) | componentDecorator | adopedStyleSheets |
 
 ## Meta-Frameworks
 
@@ -47,6 +48,7 @@ Need lightweight Svelte?                → pix-frontend-svelte
 Need fine-grained reactivity?           → pix-frontend-solidjs
 Need static + islands?                  → pix-frontend-astro
 Need pure vanilla (no framework)?       → pix-frontend-vanilla-reactive
+Need a zero-dep custom element?         → pix-frontend-custom-element
 Need full-stack React (Next.js)?        → pix-frontend-meta-next
 Need full-stack Vue (Nuxt)?             → pix-frontend-meta-nuxt
 Need nested routing (Remix)?            → pix-frontend-meta-remix
