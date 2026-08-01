@@ -4,6 +4,7 @@ Questo indice elenca tutti gli ADR in ordine cronologico.
 
 | # | Title | Date | Status | Tags |
 |---|-------|------|--------|------|
+| [024](024-installer-lossless-preservare-toolprefix-e-normalizzare-le-righe-vuote-delle-reg.md) | Installer lossless: preservare toolPrefix e normalizzare le righe vuote delle regole | 2026-08-01 | accepted | installer, idempotenza, toolPrefix, mcp-config |
 | [023](023-self-update-per-invocazione-con-throttle-temporale-e-fire-and-forget.md) | Self-update per-invocazione con throttle temporale e fire-and-forget | 2026-08-01 | accepted | self-update, mcp-server, operational, background |
 | [022](022-add-rule-toolchain-commits-skill-for-atomic-conventional-commits-with-mandatory-s.md) | Add rule-toolchain-commits skill for atomic conventional commits with mandatory scope | 2026-08-01 | accepted | taxonomy, skills, routing, git, toolchain |
 | [021](021-rename-rule-mcp-agents-to-rule-ai-agents-and-add-rule-ai-collector-skill.md) | Rename rule-mcp-agents to rule-ai-agents and add rule-ai collector skill | 2026-08-01 | accepted | taxonomy, skills, routing, ai |

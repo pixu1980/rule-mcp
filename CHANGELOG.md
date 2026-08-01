@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Installer: uninstall→install cycles no longer accumulate blank lines in agent instruction files (`CLAUDE.md`, `GEMINI.md`, `AGENTS.md`, `.cursorrules`). `install.sh` normalizes trailing newlines and inserts exactly one separator via `append_rules_block`; `uninstall.sh` collapses trailing blank lines after removing the rules block
+- Installer: reinstall no longer drops per-server user keys from JSON MCP configs (`upsertJsonServer`/`upsertVscode` now merge instead of replacing) — a user-set `toolPrefix` on the `rule-mcp` entry survives uninstall+install
+- Installer: fresh pi installs now default to `toolPrefix: "none"` — bare `rule-tool-*` tools and `/rule-*` prompts instead of the `mcp__pix_galaxy_mcp__*` prefix form
+
 ### Added
 - Prompts: MCP registry extended from 5 to **24 prompts**, listed alphabetically — 5 one-shot workflow prompts (`rule-setup-project`, `rule-new-feature`, `rule-pull-request`, `rule-write-tests`, `rule-handoff`), 16 area prompts (`rule-*`, one per tool area), plus the 3 legacy prompts (`rule-code-review`, `rule-a11y-audit`, `rule-architect-scaffold`) updated to the shared rules (route via `pix_tool`, TDD/a11y baselines or explicit user ask, commit message with mandatory scope). `rule-a11y-test` and `rule-a11y-review` were merged into `rule-a11y-audit` (review + test generation), and `rule-generate-component` was removed. Argument completion for the new prompt schemas in server.js
 - Initial MCP SDK port (Phase 0) — replaces hand-rolled protocol
