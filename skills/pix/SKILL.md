@@ -44,12 +44,14 @@ Prompt
   ├─ architecture / SDD / plan          → pix-architect
   ├─ UI / component / page              → pix-frontend + framework skill + pix-styleguide
   ├─ meta-framework                     → pix-frontend-meta-* + base framework skill
+  ├─ AI / agent / LLM application       → pix-ai + focused AI skill
   ├─ backend / REST / GraphQL / security → pix-backend + framework/security/API skill
   ├─ database / persistence             → pix-data + database skill
   ├─ Docker / CI / tests / observability / release → pix-devops + focused DevOps skill
   ├─ web / desktop / library / mobile   → pix-platform + platform skill
   ├─ docs / ADR / review / handoff / workflow → pix-process + process tool
   ├─ lint/build/package config          → pix-toolchain + focused toolchain skill
+  ├─ commit / push / git discipline     → pix-toolchain-commits
   └─ concrete component/test template   → pix_component
 ```
 
@@ -78,7 +80,8 @@ Build AI agent repositories, providers, tools, registries, and tests.
 
 | Skill | Tool | Frameworks | Use when |
 |-------|------|------------|----------|
-| [pix-galaxy-agents](../pix-galaxy-agents/SKILL.md) | `pix_ai_agents` | node, agents | Scaffold AI agent applications built on `@pix/pix-galaxy-core`, including providers, tools, testing, and containerization. |
+| [pix-ai](../pix-ai/SKILL.md) | `pix_ai` | all | Index of all AI/agent skills: agent scaffolding on `@pix/pix-galaxy-core` and framework-agnostic agent guidance. |
+| [pix-ai-agents](../pix-ai-agents/SKILL.md) | `pix_ai_agents` | node, agents | Scaffold AI agent applications built on `@pix/pix-galaxy-core`, including providers, tools, testing, and containerization. |
 | [pix-platform-agent](../pix-platform-agent/SKILL.md) | `pix_platform_agent` | node, agents | Scaffold and maintain AI Agent projects. Covers structure, tools, env config, testing, and containerization without prescribing any specific core library. |
 
 ### Architecture
@@ -207,6 +210,7 @@ Configure pnpm, TypeScript, ESLint, Biome, Vite, Parcel, Turborepo, Husky.
 |-------|------|------------|----------|
 | [pix-toolchain](../pix-toolchain/SKILL.md) | `pix_toolchain` | all | Index of all toolchain skills: build tools (Vite, Parcel), linters (Biome, ESLint), package management (pnpm), monore... |
 | [pix-toolchain-biome](../pix-toolchain-biome/SKILL.md) | `pix_toolchain_biome` | all | Biome linter and formatter configuration and best practices. Zero-config by default, but covers migration from ESLint... |
+| [pix-toolchain-commits](../pix-toolchain-commits/SKILL.md) | `pix_toolchain_commits` | all | Enforce atomic Conventional Commits with a mandatory scope on every commit and push. Use when writing, validating, or preparing commit messages. |
 | [pix-toolchain-eslint](../pix-toolchain-eslint/SKILL.md) | `pix_toolchain_eslint` | all | ESLint 9+ flat config: rule sets for TypeScript, React, and Node.js, plugin integration, custom rules, and CI integra... |
 | [pix-toolchain-husky](../pix-toolchain-husky/SKILL.md) | `pix_toolchain_husky` | all | Git hooks management with Husky: commit hooks, pre-push validation, lint-staged integration, commitlint, and CI-frien... |
 | [pix-toolchain-parcel](../pix-toolchain-parcel/SKILL.md) | `pix_toolchain_parcel` | all | Parcel 2+ zero-configuration bundler: entry points, transpilation, code splitting, image optimization, environment va... |
@@ -229,6 +233,7 @@ Design and route visible interface work while preserving pix implementation cons
 | Task | Primary | Secondary | Deterministic tools |
 |------|---------|-----------|---------------------|
 | Unknown project | `pix` | `pix-architect` | `pix_detect`, `pix_search` |
+| AI agent app | `pix-ai-agents` | `pix-ai`, `pix-devops-testing` | `pix_check`, `pix_process_adr` |
 | New web UI | `pix-ui` + `pix-ui-design-system` + framework skill | `pix-styleguide`, `pix-platform-web` | `pix_component`, `pix_check` |
 | React/Vite app | `pix-frontend-react` | `pix-toolchain-vite`, `pix-styleguide` | `pix_scaffold`, `pix_check` |
 | Backend API | `pix-backend-api-design` | runtime skill, `pix-backend-security` | `pix_check`, `pix_process_adr` |
@@ -237,6 +242,7 @@ Design and route visible interface work while preserving pix implementation cons
 | GraphQL API | `pix-backend-graphql` | runtime skill, `pix-backend-security` | `pix_search`, `pix_check` |
 | Production observability | `pix-devops-observability` | runtime and platform skill | `pix_check`, `pix_process_adr` |
 | Code review | `pix-process-code-review` | feature workflow, relevant domain skill | `pix_check` |
+| Commit/push | `pix-toolchain-commits` | `pix-toolchain-husky`, `pix-process-feature-workflow` | `pix_check` |
 | Docs/ADR | `pix-process-documentation` | `pix-process-adr` | `pix_process_adr`, `pix_process_handoff` |
 | File-tree cleanup | `pix-styleguide-naming` | `pix-toolchain-project` | `pix_fix`, `pix_check` |
 
