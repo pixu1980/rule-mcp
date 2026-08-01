@@ -103,18 +103,30 @@ export function createServer() {
     // Prompt argument completion
     if (ref?.type === "ref/prompt" && ref.name) {
       const promptName = ref.name;
-      if (promptName === "pix-code-review" || promptName === "pix-a11y-review" ||
-          promptName === "pix-generate-component" || promptName === "pix-architect-scaffold") {
-        if (argument.name === "framework") {
-          const frameworks = ["react", "vue", "svelte", "angular", "solid", "astro", "vanilla"];
-          const values = frameworks.filter(f => f.startsWith(argument.value));
-          return { completion: { values: values.slice(0, 10), total: values.length, hasMore: false } };
-        }
-      }
+      const complete = (values) => {
+        const filtered = values.filter((v) => v.startsWith(argument.value ?? ""));
+        return { completion: { values: filtered.slice(0, 10), total: filtered.length, hasMore: filtered.length > 10 } };
+      };
+      const FRAMEWORKS = ["react", "vue", "svelte", "angular", "solid", "astro", "vanilla"];
+      const BACKENDS = ["node", "express", "fastify", "hono", "nestjs", "graphql"];
+      const DATABASES = ["postgresql", "mysql", "sqlite", "mongodb", "duckdb", "indexed_db", "sql"];
+      const TOOLCHAIN = ["vite", "pnpm", "turborepo", "rspack", "parcel", "typescript", "eslint", "biome", "husky", "commits"];
+      const PLATFORMS = ["web", "desktop", "expo", "agent", "library"];
+      const TIERS = ["starter", "standard", "deep"];
+
+      if (argument.name === "framework") return complete(FRAMEWORKS);
       if (promptName === "pix-generate-component" && argument.name === "component") {
-        const components = ["button", "card", "modal", "formField", "list", "nav"];
-        const values = components.filter(c => c.startsWith(argument.value));
-        return { completion: { values: values.slice(0, 10), total: values.length, hasMore: values.length > 10 } };
+        return complete(["button", "card", "modal", "formField", "list", "nav"]);
+      }
+      if (promptName === "pix-write-tests" && argument.name === "testType") return complete(["tdd", "a11y", "devops", "all"]);
+      if (promptName === "pix-handoff" && argument.name === "mode") return complete(["handoff", "close-session"]);
+      if (promptName === "pix-pull-request" && argument.name === "updateAdr") return complete(["yes", "no"]);
+      if (promptName === "pix-area-backend" && argument.name === "framework") return complete(BACKENDS);
+      if (promptName === "pix-area-data" && argument.name === "database") return complete(DATABASES);
+      if (promptName === "pix-area-toolchain" && argument.name === "tool") return complete(TOOLCHAIN);
+      if (promptName === "pix-area-platform" && argument.name === "platform") return complete(PLATFORMS);
+      if ((promptName === "pix-setup-project" || promptName === "pix-architect-scaffold") && argument.name === "tier") {
+        return complete(TIERS);
       }
     }
 
