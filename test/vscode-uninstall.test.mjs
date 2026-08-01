@@ -18,7 +18,7 @@ writeFileSync(
   JSON.stringify(
     {
       servers: {
-        pix_galaxy_mcp: { type: "http", url: "http://127.0.0.1:37999/sse" },
+        "rule-mcp": { type: "http", url: "http://127.0.0.1:37999/sse" },
         other: { type: "stdio", command: "other" },
       },
     },

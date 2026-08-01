@@ -6,6 +6,7 @@
 
 import { strict as assert } from "node:assert";
 import {
+  banner,
   formatInstallResult,
   formatSkillsList,
   formatToolsList,
@@ -13,6 +14,23 @@ import {
 } from "../src/cli/tui.js";
 
 console.log("rule CLI TUI test");
+
+// ── Banner alignment: every line must render the same terminal width ──
+// Wide emoji (astral code points, e.g. 🩺) occupy two columns; count them.
+const displayWidth = (line) => {
+  const bare = line.replace(/\x1b\[[0-9;]*m/g, "");
+  let width = 0;
+  for (const ch of bare) width += ch.codePointAt(0) > 0xffff ? 2 : 1;
+  return width;
+};
+for (const [title, subtitle] of [
+  ["🩺 rule-mcp doctor", "healthy"],
+  ["rule-mcp install", "dry run"],
+  ["a much longer banner title that forces the width to auto-grow", "subtitle"],
+]) {
+  const widths = banner(title, subtitle).split("\n").map(displayWidth);
+  assert.equal(new Set(widths).size, 1, `banner borders must align for "${title}" (got ${widths.join(",")})`);
+}
 
 const toolsUi = formatToolsList([
   { name: "rule", description: "Route prompts" },

@@ -19,6 +19,8 @@ const check = (label, ok) => {
 console.log("=== Project Framework Detector ===\n");
 
 process.env.RULE_MCP_DISABLE_AUTO_ADR = "1";
+process.env.RULE_MCP_NO_CACHE = "1"; // hermetic: deterministic tool behavior, not the cache
+process.env.RULE_MCP_NO_AUTOUPDATE = "1"; // hermetic: no real git ops in tests
 
 import { loadAllSkills } from "../src/core/skills.js";
 import { callTool, registerTool } from "../src/tools/router.js";

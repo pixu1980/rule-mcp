@@ -1,7 +1,7 @@
 /**
  * @module test/skills-docs
  *
- * Documentation quality checks for rule galaxy skill corpus.
+ * Documentation quality checks for rule AI skill corpus.
  * Keeps skills portable across LLM clients by enforcing consistent metadata,
  * resolvable cross-references, and no accidental concatenated skill documents.
  */
@@ -47,6 +47,13 @@ const dirs = skillDirs();
 assert(dirs.length > 0, "No skill directories found");
 assert(dirs.includes("rule-ui"), "rule-ui umbrella skill must be present");
 assert(dirs.includes("rule-ui-design-system"), "rule-ui-design-system skill must be present");
+for (const requiredSkill of [
+  "rule-backend-graphql",
+  "rule-devops-observability",
+  "rule-process-code-review",
+]) {
+  assert(dirs.includes(requiredSkill), `${requiredSkill} must be present`);
+}
 
 for (const dir of dirs) {
   const skillPath = join(skillsRoot, dir, "SKILL.md");
@@ -76,6 +83,15 @@ for (const dir of dirs) {
     const resolved = resolve(join(skillsRoot, dir), target);
     assert(existsSync(resolved), `${dir}: broken markdown link ${href}`);
   }
+}
+
+const dispatcherSkill = readFileSync(join(skillsRoot, "rule", "SKILL.md"), "utf8");
+for (const requiredSkill of [
+  "rule-backend-graphql",
+  "rule-devops-observability",
+  "rule-process-code-review",
+]) {
+  assert(dispatcherSkill.includes(`../${requiredSkill}/SKILL.md`), `rule must link ${requiredSkill}`);
 }
 
 const uiSkill = readFileSync(join(skillsRoot, "rule-ui", "SKILL.md"), "utf8");

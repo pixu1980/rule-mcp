@@ -8,7 +8,7 @@ import { existsSync, mkdtempSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 
-const fakeHome = mkdtempSync(join(tmpdir(), "rule-remote-capability-"));
+const fakeHome = mkdtempSync(join(tmpdir(), "rule-mcp--capability-"));
 const installModule = new URL("../src/cli/install.js", import.meta.url).href;
 const output = execFileSync(
   process.execPath,

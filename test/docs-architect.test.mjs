@@ -92,8 +92,21 @@ assert(inventory.includes("## Generated .context files"), "context inventory mis
 assert(inventory.includes("## Placeholder coverage"), "context inventory missing placeholder coverage");
 assert(inventory.includes("## Skill and tool routing"), "context inventory missing skill/tool routing section");
 
-const templates = JSON.parse(read("skills/rule-architect/assets/context-server/templates.json"));
-const placeholderSchema = JSON.parse(read("skills/rule-architect/assets/context-server/placeholders.json"));
+// templates.json is the canonical file (skills/rule-architect/templates.json,
+// also used by generator.mjs and context-server.mjs); the stale local copy under
+// assets/context-server/ was removed as part of the generation-pipeline unification.
+//
+// Phase 2 Task 3: assets/context-server/placeholders.json was deleted (context-server
+// now serves the canonical wizard-spec.json + shared interview.js). This assertion is
+// repointed to skills/rule-architect/placeholders.json, which still exists on disk.
+// NOTE: this line is currently unreachable — the docs-count assertion above (line ~52)
+// already aborts the script before execution reaches here, and even if that gate were
+// fixed, this assertion would still fail because skills/rule-architect/placeholders.json
+// is missing the DEVOPS_*/PROCESS_* keys (pre-existing F2/F4 gap, out of scope for this
+// task). Repointing here only avoids referencing a now-deleted path; it does not turn
+// this test green.
+const templates = JSON.parse(read("skills/rule-architect/templates.json"));
+const placeholderSchema = JSON.parse(read("skills/rule-architect/placeholders.json"));
 const templatePlaceholders = placeholdersFromTemplates(templates);
 const schemaKeys = new Set();
 function collectSchemaKeys(value) {

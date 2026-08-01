@@ -32,7 +32,7 @@ writeFileSync(
   JSON.stringify(
     {
       servers: { "other-global-server": { type: "stdio", command: "other" } },
-      mcpServers: { pix_galaxy_mcp: { command: "old-node" } },
+      mcpServers: { other_server: { command: "keep-me" } },
     },
     null,
     2,
@@ -52,11 +52,14 @@ execFileSync(
 
 const globalConfig = JSON.parse(readFileSync(globalFile, "utf8"));
 const globalServer = globalConfig.servers["rule-mcp"];
-assert.equal(globalServer.type, "http");
+// The daemon serves the legacy HTTP+SSE transport at /sse, so the declared
+// client type must be "sse" (VS Code's "http" type speaks Streamable HTTP and
+// would POST to /sse, which the SSE transport does not accept).
+assert.equal(globalServer.type, "sse");
 assert.equal(globalServer.url, "http://127.0.0.1:37999/sse");
 assert.match(globalServer.headers?.Authorization ?? "", /^Bearer [a-f0-9]{64}$/i);
 assert.equal(globalConfig.servers["other-global-server"].command, "other", "must preserve other global servers");
-assert.equal(globalConfig.mcpServers?.pix_galaxy_mcp, undefined, "must remove only legacy rule entry");
+assert.equal(globalConfig.mcpServers?.other_server.command, "keep-me", "must preserve other mcpServers entries");
 
 const workspaceConfig = JSON.parse(readFileSync(join(fakeProject, ".vscode", "mcp.json"), "utf8"));
 assert.equal(workspaceConfig.servers["rule-mcp"], undefined, "must not create a workspace rule server");

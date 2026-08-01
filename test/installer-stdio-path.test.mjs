@@ -10,11 +10,18 @@ import { strict as assert } from "node:assert";
 import { existsSync } from "node:fs";
 import { homedir } from "node:os";
 import { join } from "node:path";
-import { mcpServerConfig } from "../src/cli/install.js";
+import { mcpServerConfig, DEFAULT_OPTOUT_ENV } from "../src/cli/install.js";
 
 const HOME = homedir();
 const entrypoint = join(HOME, "Projects", "rule-mcp", "bin", "rule-mcp.js");
 const config = mcpServerConfig(entrypoint)["rule-mcp"];
+
+// Invariant: generated stdio config ships every opt-out flag at "0" (feature ON)
+// so the switches are discoverable and easy to flip in the user's mcp.json.
+for (const [k, v] of Object.entries(DEFAULT_OPTOUT_ENV)) {
+  assert.equal(config.env?.[k], "0", `${k} must default to "0" in generated config`);
+  assert.equal(v, "0", `${k} default must be "0"`);
+}
 
 // Invariant: command is always an absolute path (never "~" shorthand).
 assert.equal(typeof config.command, "string", "command must be a string");

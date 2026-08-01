@@ -16,6 +16,8 @@ const check = (label, ok) => {
 console.log("=== rule Routing Tests ===\n");
 
 process.env.RULE_MCP_DISABLE_AUTO_ADR = "1";
+process.env.RULE_MCP_NO_CACHE = "1"; // hermetic: deterministic tool behavior, not the cache
+process.env.RULE_MCP_NO_AUTOUPDATE = "1"; // hermetic: no real git ops in tests
 
 import { loadAllSkills } from "../src/core/skills.js";
 import { callTool } from "../src/tools/router.js";
@@ -74,6 +76,17 @@ if (parsed3) {
   const hasA11y = allRoutes.some(r => r?.includes("rule-styleguide"));
   check("T3.1 a11y query routes to styleguides", hasA11y);
 }
+
+// ── T4: Low-confidence prompt returns route:"unknown" without erroring ──
+// Regression guard for F1: enforcement.validateRouterResult must not reject the
+// "unknown" route the handler emits when no skill matches confidently.
+const r4 = await callTool("rule", { prompt: "zzzzz qqqqq wwwww xxxxx" });
+check("T4 low-confidence prompt does not error", r4.isError !== true);
+let parsed4 = false;
+try {
+  parsed4 = JSON.parse(r4.content?.[0]?.text ?? "");
+} catch {}
+check("T4.1 low-confidence prompt routes to 'unknown'", parsed4 && parsed4.route === "unknown");
 
 console.log(`\nResults: ${pass} passed, ${fail} failed`);
 setTimeout(() => process.exit(fail > 0 ? 1 : 0), 100);

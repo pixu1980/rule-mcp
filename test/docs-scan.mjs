@@ -1,3 +1,11 @@
+#!/usr/bin/env node
+/**
+ * docs-scan.mjs — Scans docs/ for stale `pix_` tool references.
+ *
+ * Run after refactoring/renaming tools to ensure docs are up to date.
+ * Usage: node test/docs-scan.mjs
+ */
+
 import { loadAllSkills } from "../src/core/skills.js";
 import { listTools } from "../src/tools/router.js";
 import { readFileSync, readdirSync } from "node:fs";
