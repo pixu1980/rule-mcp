@@ -11,7 +11,7 @@ Commit/push prompts had no dedicated skill: the router sent them to pix-devops-v
 
 ## Decision
 
-Add a dedicated skill `pix-toolchain-commits` (tool `pix_toolchain_commits`) in the pix-toolchain group that enforces atomic Conventional Commits with a MANDATORY scope on every commit/push, and add a git domain classification to the router so any prompt mentioning commit/push/conventional deterministically routes to it. Enforcement is made mechanical via commit-msg/commitlint hooks documented in the skill.
+Add a dedicated skill `pix-toolchain-commits` (tool `pix_tool_toolchain_commits`) in the pix-toolchain group that enforces atomic Conventional Commits with a MANDATORY scope on every commit/push, and add a git domain classification to the router so any prompt mentioning commit/push/conventional deterministically routes to it. Enforcement is made mechanical via commit-msg/commitlint hooks documented in the skill.
 
 ## Consequences
 

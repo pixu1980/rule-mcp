@@ -4,17 +4,17 @@ Use the pix-galaxy-mcp workflow for every coding task.
 
 ## Recommended workflow
 
-1. Call `pix` or `pix_gateway` with full request plus known framework/project path.
-2. `pix_gateway` routes, loads evidence, and checks guardrails in a single call.
+1. Call `pix_tool` or `pix_tool_gateway` with full request plus known framework/project path.
+2. `pix_tool_gateway` routes, loads evidence, and checks guardrails in a single call.
 3. Treat repository/tool evidence as source of truth. Never invent APIs, files, dependencies, tools, requirements, or successful checks.
-4. If evidence missing, call `pix_search`; if still absent, state uncertainty.
+4. If evidence missing, call `pix_tool_search`; if still absent, state uncertainty.
 5. Write failing tests before implementation changes.
-6. Use `pix_component` for component templates, `pix_scaffold` for project config files.
-7. Run `pix_check`. Failed guardrails are blocking; fix and rerun until all pass.
+6. Use `pix_tool_component` for component templates, `pix_tool_scaffold` for project config files.
+7. Run `pix_tool_check`. Failed guardrails are blocking; fix and rerun until all pass.
 8. Run project tests/typecheck and report only commands actually executed.
-9. Record structural decisions with `pix_process_adr` (disabled by default, enable with `PIX_AUTO_ADR=1`).
-10. Before writing files, run `pix_gateway` to get a receipt; use `pix_apply` with the receipt for writes.
-11. After `pix_apply` writes files, Prettier + blank-line fixer + block-spacing fixer run automatically as post-processing.
+9. Record structural decisions with `pix_tool_process_adr` (disabled by default, enable with `PIX_AUTO_ADR=1`).
+10. Before writing files, run `pix_tool_gateway` to get a receipt; use `pix_tool_apply` with the receipt for writes.
+11. After `pix_tool_apply` writes files, Prettier + blank-line fixer + block-spacing fixer run automatically as post-processing.
 
 ## Advisory boundaries
 
@@ -34,7 +34,7 @@ See `src/core/enforcement.js` for details.
 
 - Pi, Claude Code, Gemini CLI, Cursor: `/pix-galaxy-mcp <request>`.
 - GitHub Copilot CLI: `/agent`, select `pix-galaxy-mcp`.
-- Codex CLI: invoke globally installed `pix` skill; exact custom prompt support varies by version.
+- Codex CLI: invoke globally installed `pix_tool` skill; exact custom prompt support varies by version.
 
 ## Environment variables
 
