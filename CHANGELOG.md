@@ -36,6 +36,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - New skill `rule-toolchain-commits` (tool `pix_toolchain_commits`): atomic Conventional Commits with mandatory scope; commit/push prompts route to it deterministically via a new git domain classification
 
 ### Fixed
+- Security: patched transitive vulnerabilities via pnpm overrides — fast-uri ≥3.1.4 (GHSA-v2hh-gcrm-f6hx), @hono/node-server ≥2.0.5 (GHSA-frvp-7c67-39w9), brace-expansion ≥1.1.17 (GHSA-mh99-v99m-4gvg)
+- Security: bumped @modelcontextprotocol/sdk 1.29.0 → 1.30.0 (resolves @hono/node-server 2.x compatibility; `pnpm audit` now clean)
 - Galaxy routing: multi-skill queries now return styleguides for accessibility
 - Section extraction: YAML frontmatter excluded from content matching
 - Stopword filtering: added generic words to reduce routing noise
