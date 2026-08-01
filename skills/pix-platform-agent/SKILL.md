@@ -260,6 +260,26 @@ Configure coverage thresholds in `vitest.config.ts` as defined in
 
 ---
 
+## Production controls for LLM behavior
+
+Treat prompts, tools, retrieval, and model configuration as production
+interfaces. Before a user-facing launch:
+
+- Define task-specific quality and safety criteria, including refusal and
+  escalation behavior.
+- Maintain a versioned golden set that covers normal, adversarial, and
+  high-risk inputs; evaluate it before model, prompt, retrieval, or tool
+  changes.
+- Give tools the least privilege possible, validate tool arguments, and apply
+  request, token, and cost limits.
+- Capture model, prompt, retrieval, tool, latency, token, and outcome metadata
+  without persisting sensitive prompt or completion content by default.
+- Monitor quality drift with sampled human review and in-product feedback; set
+  an owner and rollback path for regressions.
+
+See [rule-devops-observability](../rule-devops-observability/SKILL.md)
+for telemetry, alerting, and incident handling.
+
 ## Step 8 — Containerize
 
 Use templates from [rule-devops-docker](../rule-devops-docker/SKILL.md):
@@ -287,5 +307,6 @@ Edge cases:
 - [rule-architect](../rule-architect/SKILL.md) — Project architecture wizard
 - [rule-devops-testing](../rule-devops-testing/SKILL.md) — Test thresholds and coverage
 - [rule-devops-docker](../rule-devops-docker/SKILL.md) — Dockerfile templates
+- [rule-devops-observability](../rule-devops-observability/SKILL.md) — Production telemetry and alerting
 
 ---

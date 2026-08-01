@@ -14,61 +14,17 @@ frameworks: [vanilla]
 Complete vanilla JS reactive framework pattern.
 Zero framework dependencies. No build step required.
 
-Four example apps in `examples/apps/`:
+Full working example: see `examples/` in this skill directory.
+
+## Architecture Overview
+
 ```
-apps/vr-component/               Counter (CustomElement vrComponent)
-apps/fn-component/               List (Functional Component)
-apps/vr-component-html/          User card (CustomElement vrComponent + ext. HTML)
-apps/combo/                      Todo (all 3 patterns mixed)
-```
-Serve with any HTTP server and open each `index.html`.
-
-## Quickstart: Hello World in 5 Minutes
-
-Create this minimal app to verify your setup.
-
-**`index.html`** — just a custom element tag + module script:
-```html
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>My App</title>
-</head>
-<body>
-  <app-root></app-root>
-  <script type="module" src="./index.js"></script>
-</body>
-</html>
+Store (Proxy)  →  tickState (Signal bridge)  →  Signals (State/Computed)
+  →  EffectCollector  →  Scheduler (microtask)  →  Template Engine  →  DOM
 ```
 
-**`index.js`** — bootstrap (imports the component, no further code needed):
-```js
-import './_App.js';
-```
-
-**`_App.js`** — Store + Component:
-```js
-import { Store, vrComponent, html } from '../core/index.js';
-
-const store = new Store({ title: 'Hello World' });  // auto-tick
-
-class App extends HTMLElement {
-  static { vrComponent(this, { tag: 'app-root', css: import.meta.url }); }
-  context() { return { title: store.state.title }; }
-  render(ctx) { return html`<h1>{{ title | upper }}</h1>`; }
-}
-```
-No manual `tickState`, no `window.addEventListener`, no `store.tick.set()` —
-all automatic. Just `new Store()` and the component is reactive.
-```
-
-**Pattern C simplification:** pass `template:` in vrComponent options —
-no `render()` method needed (see §5C).
-
-**Serve** via `pnpm dev` (Vite), `npx serve`, o qualsiasi HTTP server.
-I moduli ES (`type="module"`) NON funzionano con `file://`.
+**Core insight:** No virtual DOM. Plain functions return `html` template results.
+Two expression systems: `${value}` for JS values, `{{ expr }}` for template expressions with filter pipes.
 
 ---
 
@@ -92,7 +48,7 @@ store.snapshot()         // Deep-cloned snapshot
 
 1. **Mutate directly** on `store.state`: `store.state.todos[0].title = "x"` — Proxy traps handle change events.
 2. **Replace arrays/objects** immutably: `store.state.todos = [...store.state.todos, newTodo]`.
-3. **`store.replace()`** triggers a single change event (auto-tick fires).
+3. **`store.replace()`** doesn't trigger per-field traps — bump tickState manually after.
 4. **Never pass raw proxy references** outside the store. Use `deepClone` for exports.
 5. **Change events** emit `store:change` CustomEvent with `{ path, oldValue, newValue }`.
 
@@ -105,7 +61,7 @@ store.snapshot()         // Deep-cloned snapshot
 | `_guards.js` | `isObject` | Type guard |
 | `_paths.js` | `toPathArray`, `pathToString` | Path utilities |
 
-Full source: `core/store/`
+Full source: `examples/src/core/store/`
 
 ---
 
@@ -157,47 +113,34 @@ Signal.subtle.untrack(() => { console.log(count.peek()); });
 
 ---
 
-## 3. The TickState Bridge
-
-Every `Store` instance auto-creates a `store.tick` Signal that fires on every
-state mutation. No manual wiring needed.
+## 3. The "TickState" Bridge Pattern
 
 ```js
-const store = new Store({ count: 0 });
-// store.tick is a Signal.State with equals: () => false
-// store.tick.set() is called automatically on every state change
+const tickState = new Signal.State(0, { equals: () => false });
 ```
 
-### Usage in computed signals
+**Always use `equals: () => false`** — every store write must notify.
+
+### Wiring
 
 ```js
-// Every computed that reads store.state MUST also read store.tick.get()
-const renderContext = new Signal.Computed(() => {
-  store.tick.get();  // subscribe to store changes
-  return { count: store.state.count };  // read current data
+window.addEventListener("store:change", () => {
+  tickState.set(performance.now());
 });
 ```
 
-### Disable auto-tick
+### Why This Works
 
-```js
-const store = new Store(data, { autoTick: false });
-```
-
-### Store is the truth, signals are the notification mechanism
-
-Every computed that reads `store.state.X` MUST also read `store.tick.get()
-{ store.tick.get(); return store.state.count; }
-` to re-evaluate on store changes.
-
-```js
-// WRONG — won't re-evaluate on store changes:
-const myComputed = new Signal.Computed(() => store.state.todos.length);
-// RIGHT:
-const myComputed = new Signal.Computed(() => { store.tick.get(); return store.state.todos.length; });
-```
+- **Store is the truth**, signals are the notification mechanism.
+- Every computed that reads `store.state.X` MUST also read `tickState.get()`.
 - Computed signals still cache — if value didn't change, downstream not invalidated.
 - For large apps (>10k reactive nodes), consider path-based selective invalidation.
+
+### Key Rules
+
+1. **Always use `equals: () => false`** — every store write must notify.
+2. **Every computed reading `store.state.X` MUST also read `tickState.get()`**.
+3. **Two effects** typically read tickState: one for rendering, one for document-level side effects.
 
 ---
 
@@ -205,27 +148,11 @@ const myComputed = new Signal.Computed(() => { store.tick.get(); return store.st
 
 ### API Reference
 
-**Two expression systems:** `{{ expr }}` for data, `@event="handler"` for events.
-Two-way binding via `@input` + `.value`.
-
-> **What is `_scope`?** Every `@click="handler"` and `{{ FnName(args) }}`
-> needs to find the function. `result._scope` is where you put those functions.
-> For Pattern CustomElement vrComponent, `vrComponent` sets `_scope = this` automatically — methods
-> on the class ARE the scope. For Pattern Functional Component, set it manually: `result._scope = { fn }`.
-> Full resolution chain documented in §5.
-
 ```js
-import { html, loadTemplate, render, registerFilter }
-  from "./core/template-engine/index.js";
+import { html, render, directive, model, registerFilter } from "./core/template-engine/index.js";
 
-// html tagged template (wraps strings + values)
+// html tagged template (NOT a real tag — packages strings + values)
 const result = html`<h1>{{ title | upper }}</h1>`;
-
-// loadTemplate: fetch + parse external .template.html (Pattern CustomElement vrComponent with External HTML)
-const TPL = await loadTemplate(import.meta.url, './_Card.template.html');
-
-// html from string (alternative)
-const fromFile = html(`<h1>{{ title }}</h1>`);
 
 // render into container
 render(result, document.getElementById("app"));
@@ -233,25 +160,28 @@ render(result, document.getElementById("app"));
 // Register a filter
 registerFilter("upper", v => String(v).toUpperCase());
 
-// Scope for @click handler resolution (see §5)
-result._scope = { handleSave };   // handlers here
-result._context = { title: 'Hello' };  // data here
-```
+// Two-way binding
+html`<input model=${{
+  signal: tickState,
+  get: () => store.state.name,
+  set: (v) => { store.state.name = v; }
+}} />`;
 ```
 
 ### Expression Systems
 
 | Syntax | Part Type | Behavior | Example |
 |--------|-----------|----------|---------|
+| `${expr}` | ChildNodePart | JS value (handler, signal, iterable) | `<p>${name}</p>` |
 | `{{ expr }}` | ExprPart | Data expression with filter pipes | `<p>{{ title \| upper }}</p>` |
-| `{{ Fn(args) }}` | ExprPart | Function call returning TemplateResult | `{{ TodoList(todos) }}` |
-| `attr="{{ expr }}"` | AttributePart | HTML attribute from context | `<div class="{{ cls }}">` |
-| `.prop="{{ expr }}"` | PropertyPart | DOM property (not setAttribute) | `<input .value="{{ name }}">` |
-| `@event="handler(args)"` | EventPart | Event listener, resolved from _scope | `<button @click="handleSave(id)">` |
-| `<for each="x in xs">` | ForPart | Loop with keyed reconciliation | `<for each="todo in todos">` |
-| `<if condition="expr1">...<elseif condition="expr2">...<else>...</if>` | IfPart | Multi-branch conditional | `<if condition="done">Done<else>Pending</if>` |
-| `<switch expr="x"><case result="v">...<default>...</switch>` | SwitchPart | Multi-way branch on value match | `<switch expr="s"><case result="a">A</case><default>?</default></switch>` |
-| `{{ expr \| raw }}` | ExprPart | Unescaped HTML output | `<div>{{ content \| raw }}</div>` |
+| `attr=${expr}` | AttributePart | HTML attribute from JS | `<div class=${cls}>` |
+| `attr={{ expr }}` | AttributePart | HTML attribute from context | `<div class="{{ cls }}">` |
+| `.prop=${expr}` | PropertyPart | DOM property | `<input .value=${val}>` |
+| `@event=${fn}` | EventPart | Event listener | `<button @click=${fn}>` |
+| `model=${expr}` | AttributePart | Two-way binding | `<input model=${m}>` |
+| `<for each="x in xs">` | ForPart | Loop (inline or component) | `<for each="todo in todos">` |
+| `<if condition="expr">` | IfPart | Conditional | `<if condition="done">` |
+| `<switch expr="x">` | SwitchPart | Multi-way branch | `<switch expr="status">` |
 
 ### Built-in Filters
 
@@ -259,27 +189,15 @@ result._context = { title: 'Hello' };  // data here
 `striptags`, `raw`, `json`, `default`, `truncate`, `length`, `first`, `last`,
 `join`, `tagLabel`, `tagHref`, `date`, `timeAgo`, `urlencode`, `sortBy`
 
-### Data Context + Scope Flow
+### Data Context Flow
 
-Components receive a context object for `{{ }}` data and a scope object for
-`@click` handler resolution:
+Components receive a context object. Attach it to the result:
 
 ```js
 const ctx = { title: "Hello", todos: [...] };
-const handleSave = (id) => store.del(id);
-
 const result = App.render(ctx);
-result._context = ctx;         // enables {{ }} expression resolution
-result._scope = { handleSave }; // enables @click="handleSave(args)"
+result._context = ctx; // enables {{ }} expression resolution
 render(result, root);
-```
-
-**Resolution order for all names** (handlers AND component functions):
-
-```
-1. result._scope[name]       ← explicit scope (Pattern Functional Component)
-2. result._context[name]     ← data context (fallback)
-3. component instance[name]  ← CE methods (Pattern CustomElement vrComponent, auto by vrComponent)
 ```
 
 ### Files (in `core/template-engine/`)
@@ -290,198 +208,426 @@ render(result, root);
 | `_template-instance.js` | `TemplateInstance`, `getTemplate` (parser with `{{ }}`/`<for>`/`<if>`) |
 | `_expression-parser.js` | `parseExpression`, `evaluateExpression` |
 | `_filters.js` | `registerFilter`, `FILTERS`, built-in filters (18 filters) |
-| `_template-helpers.js` | `html` |
-| `_child-node-part.js` | ChildNodePart (text, template, signal) |
-| `_attribute-part.js` | AttributePart |
-| `_expr-part.js` | ExprPart (`{{ }}` + `{{ Fn() }}` composition) |
-| `_for-part.js` | ForPart (`<for>` loop, keyed reconciliation) |
-| `_if-part.js` | IfPart + SwitchPart (`<if>`/`<elseif>`/`<else>` + `<switch>`/`<case>`/`<default>`) |
-| `_event-part.js` | EventPart (`@event="handler(args)"`) |
-| `_property-part.js` | PropertyPart (`.value="{{ }}"`) |
+| `_template-helpers.js` | `html`, `directive`, `model`, `isDirective` |
+| `_child-node-part.js` | ChildNodePart (text, template, iterable, signal) |
+| `_attribute-part.js` | AttributePart + model directive |
+| `_expr-part.js` | ExprPart (`{{ }}` interpolation with filters) |
+| `_for-part.js` | ForPart (`<for>` directive, keyed reconciliation) |
+| `_if-part.js` | IfPart (`<if>` directive, signal support) |
+| `_event-part.js` | EventPart |
+| `_property-part.js` | PropertyPart |
 | `_range.js` | `clearRange`, `moveRangeBefore` |
 
-Full source: `core/template-engine/`
+Full source: `examples/src/core/template-engine/`
 
 ---
 
-## 5. Component Patterns (2 patterns + 1 variant)
+## 5. Component Pattern (Custom Elements + adoptedStyleSheets)
 
-Two patterns + one variant. All share the same pipeline
-(Store → Signals → Template Engine → DOMParts → DOM).
+### Pattern
 
-| # | Mode | Lifecycle | CSS | When to use |
-|---|------|-----------|-----|-------------|
-| A | **Custom Element + `vrComponent`** | Own `connectedCallback` (auto) | `adoptedStyleSheets` via vrComponent | App root, route panels, modals |
-| B | **Functional Component (plain fn)** | Inherited from parent CE | External — loaded by parent | List items, card grids, reusable UI |
-| C | **CE + external `.template.html`** | Own `connectedCallback` (auto) | `adoptedStyleSheets` via vrComponent | Large views, designer-handoff HTML |
-
----
-
-### 5A — Custom Element with `vrComponent` (Pattern CustomElement vrComponent)
+Every component is a class extending `HTMLElement`:
 
 ```js
-import { vrComponent, html } from '../../core/index.js';
+import { html } from "../../core/index.js";
 
-class App extends HTMLElement {
+// CSS loaded once at module scope
+const cssText = await (
+  await fetch(new URL("./_TodoItem.css", import.meta.url))
+).text();
+const sheet = new CSSStyleSheet();
+sheet.replaceSync(cssText);
+
+export class TodoItem extends HTMLElement {
   static {
-    vrComponent(this, {
-      tag: 'app-root',
-      css: import.meta.url,   // resolves _App.js → _App.css
-    });
+    customElements.define("todo-item", this);
+    document.adoptedStyleSheets = [...document.adoptedStyleSheets, sheet];
   }
 
-  // Auto-resolved as @click handler (via _scope = this)
-  handleDelete(id) { store.state.todos = store.state.todos.filter(t => t.id !== id); }
-
-  // Auto-called each render cycle → _context
-  context() {
-    return { title: store.state.title, todos: store.state.todos };
-  }
-
-  // Auto-called each render cycle → returns TemplateResult
-  render(ctx) {
+  static render(todo) {
     return html`
-      <h1>{{ title }}</h1>
-      <for each="todo in todos">
-        <article>
-          <span>{{ todo.title }}</span>
-          <button @click="handleDelete(todo.id)">✕</button>
-        </article>
-      </for>
+      <article data-part="item" data-state-completed="${todo.completed ? 'done' : ''}">
+        <input type="checkbox" data-part="toggle" />
+        <span data-part="title">{{ todo.title | upper }}</span>
+        <button data-part="delete" @click=${() => removeTodo(todo.id)}>
+          Delete
+        </button>
+      </article>
     `;
   }
 }
 ```
 
-**Rules:**
-1. NO inline styles, NO CSS classes — `[data-part="..."]` only.
-2. `vrComponent()` in `static {}` handles `define()`, CSS, reactive effect.
-3. Methods on the class are auto-resolved as `@click` handlers.
-4. `context()` returns data for `{{ }}`. Called each render cycle.
-5. `render(ctx)` returns `html\`\`` TemplateResult.
-6. `vrComponent` automatically sets `result._scope = this` and `result._context = ctx`.
+### Rules
+
+1. **NO inline styles** — `style="..."` is forbidden in templates.
+2. **NO CSS classes** — use element selectors + `[data-part="..."]`.
+3. **`static {}` block** for `customElements.define()` + `adoptedStyleSheets`.
+4. **`static render(item)`** used by `${Component(item)}` inside `<for>`.
+5. **Data flows through context** — components receive context as argument.
 
 ---
 
-### 5B — Functional Component (Pattern Functional Component)
+## 6. Data Flow Summary
+
+### Complete Tick→DOM Path
+
+```
+1. User input → model binding setter
+2. Store proxy trap → store:change event
+3. store:change listener → tickState.set(performance.now())
+4. tickState.notify() → invalidate computeds + schedule effects
+5. Microtask flush → render effect runs
+6. TemplateInstance.updateWithContext(values, context)
+7. Parts write directly to DOM (ChildNodePart, ExprPart, ForPart, etc.)
+```
+
+### Synchronous vs Microtask
+
+| Phase | When | What runs |
+|-------|------|-----------|
+| Sync | During tickState.set() | Model binding syncs, computed invalidation, effect scheduling |
+| Microtask | After current script | Effects (render, document sync) |
+
+---
+
+## 7. Complete Bootstrap Sequence
 
 ```js
-import { html } from '../../core/index.js';
+// 1. Create store
+const store = new Store(initialState);
 
-// Handler functions (one line of _scope at the end)
-const handleSave = (id) => store.toggle(id);
+// 2. Create tickState bridge
+const tickState = new Signal.State(0, { equals: () => false });
+window.addEventListener("store:change", () => tickState.set(performance.now()));
 
-// Pure function: receives data, returns TemplateResult
-export function TodoList(ctx) {
-  const result = html`
-    <for each="todo in ctx.todos">
-      <article>
-        <h3>{{ todo.title | upper }}</h3>
-        <button @click="handleSave(todo.id)">Toggle</button>
-      </article>
-    </for>
-  `;
-  result._scope = { handleSave };   // ← one explicit line
+// 3. Register filters
+registerFilter('upper', v => String(v).toUpperCase());
+
+// 4. Load component CSS (top-level await)
+const sheet = new CSSStyleSheet();
+sheet.replaceSync(await (await fetch(new URL('./_App.css', import.meta.url))).text());
+
+// 5. Define components with static {} blocks
+
+// 6. Create render context (ComputedSignal)
+const renderContext = new Signal.Computed(() => {
+  tickState.get();
+  return { title: store.state.title, todos: store.state.todos, ... };
+});
+
+// 7. Mount effect
+effect(() => {
+  const ctx = renderContext.get();
+  const result = App.render(ctx);
   result._context = ctx;
-  return result;
+  render(result, root);
+});
+
+// 8. Initial render kick
+tickState.set(performance.now());
+```
+
+---
+
+## 8. File Structure Convention
+
+```
+src/
+  index.html
+  index.js                              ← Entry point
+  core/
+    index.js                            ← Unified exports
+    signals/                            ← Signal system
+    store/                              ← Proxy Store
+    template-engine/                    ← Template engine
+  components/
+    App/
+      index.js                          ← Barrel
+      _App.js                           ← Component (_PascalCase.js)
+      _App.css                          ← External CSS
+    TodoItem/
+      index.js
+      _TodoItem.js
+      _TodoItem.css
+  helpers/
+    index.js
+    actions/                            ← Store mutation functions
+    computed/                           ← ComputedSignal factories
+    shared/                             ← Shared singletons (store, tickState)
+  styles/
+    index.css
+    _base.css
+    _components.css
+```
+
+---
+
+## 9. Pitfalls and Common Mistakes
+
+### 1. Forgetting `tickState.get()` in computed signals
+```js
+// WRONG — won't re-evaluate on store changes:
+const myComputed = new Signal.Computed(() => store.state.todos.length);
+// RIGHT:
+const myComputed = new Signal.Computed(() => { tickState.get(); return store.state.todos.length; });
+```
+
+### 2. Forgetting `result._context`
+```js
+// WRONG — {{ }} expressions have no data:
+effect(() => { render(App.render(ctx), root); });
+// RIGHT:
+effect(() => { const result = App.render(ctx); result._context = ctx; render(result, root); });
+```
+
+### 3. `{{ }}` vs `${}` confusion
+- `{{ }}` → DATA expressions (context + filters): `{{ title | upper }}`
+- `${}` → JS values (handlers, directives): `@click=${fn}`, `model=${config}`
+
+### 4. Context must be a plain object — pass `signal.get()`, not the signal itself.
+
+### 5. Effect cleanup — `effect()` returns a disposer. Call when component unmounts.
+
+### 6. Duplicate keys in `<for>` — each item needs unique `id` or stable identity.
+
+---
+
+## 10. Migration Guide Cheatsheet
+
+### React → Pix
+| React | Vanilla Equivalent |
+|-------|-------------------|
+| `useState` | `new Signal.State()` |
+| `useMemo` | `new Signal.Computed()` |
+| `useEffect` | `effect()` |
+| setState | `store.state.X = Y` |
+| JSX | `` html`...` `` |
+| key prop | `<for>` keyed reconciliation |
+| Controlled inputs | `model={...}` directive |
+| React Context | Shared `store` import |
+
+### Vue → Pix / Svelte → Pix
+See `patterns.md` in this directory for full migration tables.
+
+---
+
+## Guardrails
+
+Run `pix_frontend_vanilla_reactive` mode=check to validate code against these rules.
+Use `pix_check` tool for automated guardrail checking.
+
+Key assertions enforced by guardrails engine:
+- **no-css-classes**: CSS uses element + `[data-part]` selectors only
+- **no-inline-styles**: Templates have zero `style="..."`
+- **semantic-html**: No `<div>` where semantic element exists
+- **external-css**: CSS via `fetch → CSSStyleSheet.replaceSync → adoptedStyleSheets`
+- **custom-element**: Component extends `HTMLElement` with `static {}` block
+- **html-template**: Component uses `html\`\`` tagged template
+- **store-proxy**: Store uses Proxy with `store:change` events
+- **tickstate-bridge**: Computed signals read `tickState.get()`
+- **data-part**: Child elements use `data-part="role"` attributes
+- **template-syntax**: `{{ expr }}` for data, `${value}` for JS values
+- **jsdoc-required**: Every JS/TS file MUST have complete JSDoc on all exported symbols (see rule-styleguide → javascript.md)
+- **css-comments-required**: Every CSS file MUST have file-level + section comments (see rule-styleguide → css.md)
+- **a11y-test-required**: Every project MUST have Playwright + @axe-core/playwright a11y tests in `tests/a11y/` (see rule-styleguide → a11y.md → Automated Testing)
+
+## Project Scaffolding
+
+All rule projects include standard config files. See [`rule-styleguide`](../rule-styleguide/SKILL.md) → Project Scaffolding.
+Use `pix_styleguide mode=scaffold` or `pix_scaffold` to generate: `.prettierrc`, `.nvmrc`, `.editorconfig`,
+`.gitignore`, `.eslintrc.json`, `tsconfig.json`, `jsconfig.json`.
+
+Iterate: `generate → pix_check → fix → pix_check → all pass`.
+
+---
+
+## Forms (Vanilla Reactive)
+
+### Prerequisites
+
+- Use the rule reactive Store for form state
+- Validate with `zod` schemas
+- Pure HTML/Custom Elements
+
+### Form store with validation
+
+```javascript
+import { z } from "zod";
+import { Store } from "../core/store/index.js";
+
+const contactSchema = z.object({
+  email: z.string().email(),
+  name: z.string().min(2).max(255),
+});
+
+export const formStore = new Store({
+  email: "",
+  name: "",
+  errors: {},
+  isSubmitting: false,
+});
+
+export async function submitForm() {
+  const data = formStore.get();
+  const result = contactSchema.safeParse(data);
+  if (!result.success) {
+    const errors = {};
+    result.error.issues.forEach((issue) => {
+      errors[issue.path[0]] = issue.message;
+    });
+    formStore.set({ errors });
+    return;
+  }
+  formStore.set({ isSubmitting: true });
+  try { await api.post("/contact", result.data); }
+  finally { formStore.set({ isSubmitting: false }); }
 }
 ```
 
-**Rules:**
-1. Plain function (no class, no HTMLElement). No lifecycle of its own.
-2. Must set `result._scope` for `@click` handlers.
-3. **Composition:** call inside a parent template via `{{ TodoList(todos) }}`
-   (see §5.4 below). Pass functions via `_scope`, data via `_context`.
-4. CSS lives in the parent CE or global — no `adoptedStyleSheets`.
+### Form component
 
-**When to use:** reusable UI blocks (cards, list items, form sections).
+```javascript
+import { formStore, submitForm } from "../../store/form.store.js";
 
----
+export class ContactForm extends HTMLElement {
+  connectedCallback() {
+    this.innerHTML = `
+      <form data-part="form">
+        <label data-part="field">
+          <span data-part="label">Email</span>
+          <input data-part="input" type="email" data-bind="email" />
+          <span data-part="error" data-error="email"></span>
+        </label>
+        <button data-part="submit" type="submit">Send</button>
+      </form>
+    `;
+    this.bindInputs();
+    this.querySelector("[data-part=form]").addEventListener("submit", (e) => {
+      e.preventDefault();
+      submitForm();
+    });
+    formStore.subscribe(() => this.render());
+  }
 
-### 5C — Custom Element with External HTML Template (Pattern CustomElement vrComponent with External HTML)
-
-```js
-import { vrComponent, html, render } from '../../core/index.js';
-
-// Load external .template.html at module scope
-const templateStr = await (
-  await fetch(new URL('./_ProfileCard.template.html', import.meta.url))
-).text();
-const TEMPLATE = html(templateStr);   // html() accepts strings too
-
-class ProfileCard extends HTMLElement {
-  static {
-    vrComponent(this, {
-      tag: 'profile-card',
-      css: import.meta.url,
+  bindInputs() {
+    this.querySelectorAll("[data-bind]").forEach((el) => {
+      el.addEventListener("input", () => formStore.set({ [el.dataset.bind]: el.value }));
     });
   }
 
-  handleToggle(id) { store.toggle(id); }
-
-  context() {
-    return { name: store.state.name, todos: store.state.todos };
+  render() {
+    const s = formStore.get();
+    this.querySelector("[data-part=submit]").disabled = s.isSubmitting;
+    for (const [k, msg] of Object.entries(s.errors)) {
+      const el = this.querySelector(`[data-error="${k}"]`);
+      if (el) el.textContent = msg;
+    }
   }
+}
+customElements.define("contact-form", ContactForm);
+```
 
-  render(ctx) {
-    const result = TEMPLATE;
-    result._context = ctx;
-    result._scope = this;    // method-based handlers
-    return result;
+### Checklist
+
+- [ ] Store-based form state management
+- [ ] `zod` schema validation
+- [ ] `data-bind` for input binding
+- [ ] `data-error` for field-level error display
+
+---
+
+## Forms (Vanilla Reactive)
+
+### Prerequisites
+
+- Use the rule reactive Store for form state
+- Use native HTML5 validation + custom validation functions
+- Pure JavaScript — no Zod, no external validation library
+- Custom Elements with Store subscriptions
+
+### Step 1 — Validation functions (pure JS)
+
+```javascript
+export const validators = {
+  required: (value) => value?.trim()?.length > 0 ? null : "This field is required",
+  email: (value) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value) ? null : "Invalid email",
+  minLength: (min) => (value) => value?.length >= min ? null : `Minimum ${min} characters`,
+  compose: (...fns) => (value) => { for (const fn of fns) { const e = fn(value); if (e) return e; } return null; },
+};
+
+export function validate(schema, data) {
+  const errors = {};
+  for (const [field, fns] of Object.entries(schema)) {
+    for (const fn of [].concat(fns)) { const e = fn(data[field]); if (e) { errors[field] = e; break; } }
+  }
+  return Object.keys(errors).length ? errors : null;
+}
+```
+
+### Step 2 — Form store
+
+```javascript
+import { Store } from "../core/store/index.js";
+import { validators, validate } from "./validation.js";
+
+const schema = { email: [validators.required, validators.email], name: [validators.required] };
+
+export const formStore = new Store({ email: "", name: "", errors: null, isSubmitting: false });
+
+export async function submitForm() {
+  const data = formStore.get();
+  const errors = validate(schema, data);
+  if (errors) { formStore.set({ errors }); return; }
+  formStore.set({ isSubmitting: true, errors: null });
+  try {
+    await fetch("/api/contact", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(data) });
+    formStore.set({ email: "", name: "", isSubmitting: false });
+  } catch (err) {
+    formStore.set({ errors: { form: err.message }, isSubmitting: false });
   }
 }
 ```
 
-**Template file** (`_ProfileCard.template.html`) uses only `{{ }}`, `<for>`, `<if>`,
-`<elseif>`, `<switch>`:
-```html
-<section data-part="profile-card">
-  <h2>{{ name | upper }}</h2>
-  <for each="todo in todos">
-    <article data-state-done="{{ todo.done }}">
-      <span>{{ todo.title }}</span>
-      <switch expr="todo.done">
-        <case result="true">✅ Done</case>
-        <default>⏳ Pending</default>
-      </switch>
-      <button @click="handleToggle(todo.id)">Toggle</button>
-    </article>
-  </for>
-  <if condition="todos.length === 0">
-    <p>No todos.</p>
-  <else>
-    <p>{{ todos.length }} items</p>
-  </if>
-</section>
+### Step 3 — Form component
+
+```javascript
+import { formStore, submitForm } from "../../store/form.store.js";
+
+const template = document.createElement("template");
+template.innerHTML = `
+  <form data-part="form" novalidate>
+    <label data-part="field"><span data-part="label">Email</span>
+      <input data-part="input" type="email" data-bind="email" />
+      <span data-part="error" data-error="email" aria-live="polite"></span></label>
+    <button data-part="submit" type="submit">Send</button>
+  </form>`;
+
+export class ContactForm extends HTMLElement {
+  connectedCallback() {
+    this.append(template.content.cloneNode(true));
+    this.querySelector("[data-part=form]").addEventListener("submit", (e) => { e.preventDefault(); submitForm(); });
+    this.querySelectorAll("[data-bind]").forEach((el) => el.addEventListener("input", () => formStore.set({ [el.dataset.bind]: el.value })));
+    formStore.subscribe(() => {
+      const s = formStore.get();
+      const btn = this.querySelector("[data-part=submit]");
+      btn.disabled = s.isSubmitting; btn.textContent = s.isSubmitting ? "Sending..." : "Send";
+      this.querySelectorAll("[data-error]").forEach((el) => (el.textContent = ""));
+      if (s.errors) for (const [k, msg] of Object.entries(s.errors)) { const el = this.querySelector(`[data-error="${k}"]`); if (el) el.textContent = msg; }
+    });
+  }
+}
+customElements.define("contact-form", ContactForm);
 ```
 
-**Rules:**
-1. Template file uses ONLY `{{ }}`, `<for>`, `<if>`, `@event="handler"`.
-2. NO `${}` in template files — that is valid only in JS files.
-3. Use `@click="handler"` (string) not `@click=${\handler\}`.
-4. vrComponent auto-sets `result._scope = this` for method resolution.
-5. Functions passed from Pattern CustomElement vrComponent (ext. HTML) → Pattern Functional Component go in `_context` (not `_scope`).
+### Checklist
 
----
+- [ ] Store-based form state management (no external libs)
+- [ ] Pure JS validation functions
+- [ ] HTML5 novalidate with custom validation
+- [ ] aria-live for accessibility
+- [ ] Submission guarded with isSubmitting
 
-### Composition
+## See also
 
-`{{ FnName(args) }}` calls a function that returns `TemplateResult`.
-Functions must be resolvable through the standard chain:
-
-```
-1. result._scope[name]       ← explicit scope
-2. result._context[name]     ← data context (preferred for Pattern CustomElement vrComponent (ext. HTML) → Pattern Functional Component)
-3. component instance[name]  ← CE methods (auto by vrComponent)
-```
-
-Custom Elements are composed via HTML tags, NOT `{{ }}`:
-```html
-<profile-card></profile-card>   ← native CE from registry
-```
-
----
-
-## Reference
-
-See references/REFERENCE.md for data flow, bootstrap sequence, pitfalls, migration guide, guardrails, scaffolding, forms, and file structure.
+- [rule](../rule/SKILL.md) — Central skill index

@@ -129,7 +129,7 @@ deploy:staging:
   needs: ["docker"]
   environment:
     name: staging
-    url: https://staging.${CI_PROJECT_NAME}.rule-mcp.cloud
+    url: https://staging.${CI_PROJECT_NAME}.rule-mcp.domain.example
   variables:
     DEPLOY_ENV: staging
     DEPLOY_HOST: "${STAGING_DEPLOY_HOST}"
@@ -148,7 +148,7 @@ deploy:production:
   needs: ["deploy:staging"]
   environment:
     name: production
-    url: https://${CI_PROJECT_NAME}.rule-mcp.cloud
+    url: https://${CI_PROJECT_NAME}.rule-mcp.domain.example
   variables:
     DEPLOY_ENV: production
     DEPLOY_HOST: "${PRODUCTION_DEPLOY_HOST}"

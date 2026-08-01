@@ -153,30 +153,35 @@ Deploy:  Netlify / Vercel / Cloudflare Pages / GitHub Pages
 
 - Use browser language detection (`navigator.language`) or user preference
 - Store translations as JSON files per locale: `locales/en.json`, `locales/it.json`
-- Use ICU MessageFormat for pluralization and interpolation
-- Never hardcode user-facing strings — always use translation keys
+- Use ICU MessageFormat for pluralization and interpolation.
+- Format dates, times, numbers, currencies, relative time, and units with the
+  `Intl` APIs; specify time-zone behavior at the product boundary.
+- Test pseudo-localized strings and an RTL locale when the product supports
+  right-to-left languages; do not assume English string length or direction.
+- Never hardcode user-facing strings — always use translation keys.
 
-## Design System / CSS Framework
+## Design System and CSS
 
-Choose a design system alongside your UI framework. Options:
+The design system is independent from the UI framework but must comply with the
+core rules above. Define reusable color, spacing, typography, and motion tokens
+as CSS custom properties in external stylesheets. Consume project-approved
+CSS-token libraries only when they preserve semantic HTML, external CSS, and
+zero CSS classes.
 
-| System | Approach |
-|--------|----------|
-| **Vanilla CSS** | Pure CSS with custom properties, @scope, layers — the rule way |
-| **Tailwind CSS** | Utility-first — rapid prototyping, consistent design system |
-| **Bootstrap** | Mature component library — responsive grid, prebuilt components |
-| **Material Design** | Material Design component library — comprehensive, enterprise |
-| **DaisyUI** | Tailwind component library — thematic, customizable, beginner-friendly |
-| **Open Props** | Design tokens as CSS custom properties — supercharged variables |
+| Approach | Use |
+|----------|-----|
+| **Vanilla CSS** | Custom properties, cascade layers, `@scope`, and external CSS — the rule way |
+| **Open Props** | Optional CSS custom-property tokens when approved by the project |
 
-The design system is independent from your UI framework — combine any with any.
+Do not introduce utility-class frameworks, CSS-in-JS, or component libraries
+that require their own class names or inline styling.
 
 ## Quick Reference
 
 ```
 ┌────────────────────────────────────────────────────────────┐
 │  Framework:  choose one rule-* skill                        │
-│  Design:     Vanilla CSS / Tailwind / Bootstrap / MUI /... │
+│  Design:     Vanilla CSS / approved CSS tokens              │
 │  Styling:    data-part, zero classes, external CSS          │
 │  Semantic:   <header> <nav> <main> <article> <footer>      │
 │  Barrel:     index.js re-export per folder                 │

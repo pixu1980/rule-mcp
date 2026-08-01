@@ -1,7 +1,7 @@
 ---
 name: rule-backend
 description: >-
-  Use when designing or building backend services to route to the correct backend framework or database skill. Covers Express, Fastify, NestJS, Hono, and database integrations.
+  Use when designing or building backend services to route to the correct backend framework, API, or database skill. Covers REST, GraphQL, Express, Fastify, NestJS, Hono, and database integrations.
 tags:
   - "backend"
   - "api"
@@ -39,6 +39,7 @@ This is the umbrella skill for backend development. It does not contain detailed
 | Skill | Focus |
 |-------|-------|
 | [rule-backend-api-design](../rule-backend-api-design/SKILL.md) | REST API design, OpenAPI, client patterns |
+| [rule-backend-graphql](../rule-backend-graphql/SKILL.md) | GraphQL schema, resolver, performance, and abuse controls |
 | [rule-backend-security](../rule-backend-security/SKILL.md) | Security hardening, auth, validation |
 
 ## Quick Reference
@@ -47,7 +48,7 @@ This is the umbrella skill for backend development. It does not contain detailed
 Framework:   Express / Fastify / Hono / NestJS
 Database:    PostgreSQL / MySQL / SQLite / MongoDB / DuckDB
 Local:       IndexedDB / Filesystem / SQLite
-API:         REST / OpenAPI-first
+API:         REST / OpenAPI-first / GraphQL
 Layers:      routes → handlers → services → repositories
 Validation:  Zod / JSON Schema at the boundary
 Deploy:      Node.js / Docker / Serverless / Electron

@@ -14,6 +14,20 @@ metadata:
 
 # Testing
 
+## Test strategy
+
+Choose test layers by risk and feedback speed. Unit tests should cover the
+majority of deterministic business behavior; integration tests should verify
+contracts between components, services, and persistence; end-to-end tests
+should protect a small set of critical user journeys. Coverage thresholds are
+a minimum safety net, not evidence that tests exercise meaningful behavior.
+
+- Test observable behavior and domain outcomes, not private implementation.
+- Isolate tests and control time, randomness, network, and external services.
+- Add a regression test for every production defect where practical.
+- Use Playwright or an equivalent browser runner for critical E2E and
+  accessibility journeys; keep those tests independent and deterministic.
+
 ## Step 1 — Configure Vitest
 
 ### Backend / AI Agent
@@ -137,7 +151,7 @@ describe('UserService', () => {
   });
 
   it('returns user when found', async () => {
-    const user = { id: '1', email: 'test@rule-mcp.dev' };
+    const user = { id: '1', email: 'test@rule-mcp.domain.example' };
     vi.mocked(mockRepo.findById).mockResolvedValue(user);
 
     const result = await service.getUser('1');
@@ -198,21 +212,9 @@ Or use `pnpm` alternatively.
 - **Async tests**: Ensure all promises are awaited. Unhandled rejections cause misleading failures.
 - **Coverage thresholds**: This skill owns coverage enforcement. Thresholds are configured in `vitest.config.ts` and verified in CI.
 
----
-
-
 ## Coverage Gates
 
-  to CI, or diagnosing coverage failures.
-compatibility: Designed for AI coding assistants
-metadata:
-  author: rule-engineering
-  version: "1.0"
----
-
-# Coverage Gates
-
-## Mandatory thresholds
+### Mandatory thresholds
 
 | Metric | Minimum |
 |---|---|
@@ -226,7 +228,7 @@ These thresholds are non-negotiable. They must be enforced in two places:
 1. **Locally** via `vitest.config.ts` — `pnpm test:coverage` (or `pnpm`) fails if below thresholds.
 2. **In CI** via `.gitlab-ci.yml` — pipeline fails if coverage check fails.
 
-## Step 1 — Configure local enforcement in vitest.config.ts
+### Step 1 — Configure local enforcement in vitest.config.ts
 
 The `thresholds` key causes the process to exit with a non-zero code if any threshold is not met:
 
@@ -245,11 +247,11 @@ coverage: {
 
 Developers run `pnpm test:coverage` (or `pnpm test:coverage`) before pushing. If it fails, they must add tests.
 
-## Step 2 — Configure CI enforcement in .gitlab-ci.yml
+### Step 2 — Configure CI enforcement in .gitlab-ci.yml
 
 Each test job in CI runs `pnpm test:coverage` (or `pnpm test:coverage`) (or the filtered equivalent for monorepos). Since Vitest exits non-zero on threshold failure, the CI job automatically fails.
 
-## Step 3 — Configure coverage reporters
+### Step 3 — Configure coverage reporters
 
 Always configure these three reporters:
 
@@ -257,7 +259,7 @@ Always configure these three reporters:
 - **`lcov`** — For local HTML report viewing (`coverage/lcov-report/index.html`).
 - **`cobertura`** — For GitLab merge request integration.
 
-## Step 4 — Set include and exclude paths
+### Step 4 — Set include and exclude paths
 
 ### Include
 
@@ -278,7 +280,7 @@ coverage: {
 }
 ```
 
-## Step 5 — Verify the gate works
+### Step 5 — Verify the gate works
 
 After setting up coverage, verify by temporarily raising a threshold and confirming the command fails. Revert the temporary change after verification.
 

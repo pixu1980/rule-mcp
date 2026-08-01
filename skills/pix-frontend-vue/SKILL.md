@@ -192,6 +192,328 @@ export { default as TodoItem } from "./_TodoItem.vue";
 
 ---
 
-## Reference
+## Guardrails
 
-Load references/REFERENCE.md for detailed Vue patterns and API reference.
+Run `pix_frontend_vue` mode=check or `pix_check` to validate code against these rules.
+
+Key rules enforced: **no-css-classes**, **no-inline-styles**, **semantic-html**,
+**external-css** (external .css files), **barrel-file**, **data-part**,
+**vue-no-class-binding** (use `data-part` not `:class`),
+**jsdoc-required** (every JS/TS file MUST have complete JSDoc — see rule-styleguide → javascript.md),
+**css-comments-required** (every CSS file MUST have file-level + section comments — see rule-styleguide → css.md),
+**a11y-test-required** (every project MUST have Playwright + @axe-core/playwright a11y tests in `tests/a11y/` — see rule-styleguide → a11y.md → Automated Testing).
+
+## Project Scaffolding
+
+All rule projects include standard config files. See [`rule-styleguide`](../rule-styleguide/SKILL.md) → Project Scaffolding.
+Use `pix_styleguide mode=scaffold` or `pix_scaffold` to generate: `.prettierrc`, `.nvmrc`, `.editorconfig`,
+`.gitignore`, `.eslintrc.json`, `tsconfig.json`, `jsconfig.json`.
+
+Iterate: `generate → pix_check → fix → pix_check → all pass`.
+
+---
+
+## Vue 3 Performance & Best Practices
+
+This section extends rule-frontend-vue with a structured performance review methodology based on common Vue 3 reactivity, rendering, and architecture patterns.
+
+### When to activate
+
+- Review Vue component performance
+- Refactor reactive state logic
+- Explain unexpected re-renders or watcher loops
+- Improve slow forms, lists, modals, dashboards, or large components
+- Decide between `ref` / `reactive` / `shallowRef` / `computed` / `watch` / `watchEffect`
+- Debug reactivity loss or stale computed values
+- Write PR feedback about Vue code quality
+- Split a large Vue component into smaller pieces
+
+### Operating principles
+
+1. **Reactivity is automatic — understand its boundaries.** Vue 3's Proxy-based reactivity tracks access, not assignment. Destructuring, spreading, or conditionally accessing reactive state can break tracking.
+
+2. **Prefer structural fixes before micro-optimizations.** Check reactive dependencies, component boundaries, and watcher discipline before adding `v-once`, `v-memo`, or `shallowRef`.
+
+3. **Classify each issue** as: correctness bug, performance risk, maintainability risk, API design risk, visual glitch, premature optimization.
+
+4. **Keep the smallest safe change first.**
+
+### Review workflow
+
+1. Identify the symptom (slow typing, watcher loops, stale computed values, too many re-renders, flickering tooltips, lost form state, large component)
+2. Find the owner (reactive dependency, watcher trigger, component boundary, provide/inject chain, computed chain depth)
+3. Match to one of the 10 patterns below
+4. Explain the risk
+5. Propose smallest fix
+6. End with a rule of thumb
+
+### The 10 patterns
+
+#### 1. Choose the right reactive container
+
+`ref()` for primitives and simple values. `reactive()` for objects when you need deep reactivity. `shallowRef()` / `shallowReactive()` for large data that doesn't need deep tracking.
+
+```ts
+// ❌ reactive with primitive (breaks reactivity)
+const count = reactive(0); // Never reactive — use ref
+
+// ✅ ref for primitives
+const count = ref(0);
+
+// ✅ shallowRef for large immutable data
+const largeList = shallowRef([]);
+function updateList(data) {
+  largeList.value = data; // trigger on whole-replacement
+}
+```
+
+Rule: *Use `ref` for primitives, `reactive` for deep objects, `shallowRef` for large immutable data.*
+
+#### 2. Watch discipline — watch vs watchEffect
+
+Use `watch` when you need the previous value or explicit dependencies. Use `watchEffect` for auto-tracking side effects. Never mutate state inside `watch` that triggers another watch (loop risk).
+
+```ts
+// ✅ watch: explicit deps, access to old value
+watch(
+  () => props.userId,
+  async (newId, oldId) => {
+    if (newId !== oldId) user.value = await fetchUser(newId);
+  }
+);
+
+// ✅ watchEffect: auto-track dependencies
+watchEffect(() => {
+  localStorage.setItem("draft", JSON.stringify(draft.value));
+});
+```
+
+Rule: *Use `watch` for explicit deps + old value, `watchEffect` for auto-tracked side effects. Never cause mutation loops.*
+
+#### 3. Computed values during render, not in watch
+
+Do not use `watch` to derive state from other state.
+
+```ts
+// ❌ Derived in watch
+const first = ref("");
+const last = ref("");
+const full = ref("");
+watch([first, last], () => {
+  full.value = `${first.value} ${last.value}`;
+});
+
+// ✅ Derived with computed
+const first = ref("");
+const last = ref("");
+const full = computed(() => `${first.value} ${last.value}`);
+```
+
+Rule: *If you are calculating from existing reactive state, use `computed`. If you are syncing outside Vue, use `watchEffect`.*
+
+#### 4. Keep state low in the component tree
+
+Move `ref()` / `reactive()` down to the component that actually needs it. Heavy siblings re-render when a parent's reactive state changes.
+
+```vue
+<script setup>
+// ❌ State in App.vue — all children re-render on input
+const search = ref("");
+</script>
+
+<!-- ✅ Extract into SearchSection.vue -->
+<script setup>
+const search = ref("");
+</script>
+```
+
+Rule: *Keep reactive state as close as possible to where it is used. Lift via `provide/inject` only when truly shared.*
+
+#### 5. Always use `:key` with `v-for`
+
+```vue
+<!-- ❌ Index key — state, focus, animations break on reorder -->
+<li v-for="(item, i) in items" :key="i">{{ item.title }}</li>
+
+<!-- ✅ Stable ID key -->
+<li v-for="item in items" :key="item.id">{{ item.title }}</li>
+```
+
+Acceptable exception: static lists that never reorder, insert, delete, or hold stateful children.
+
+Rule: *If the list can change, never use index as key.*
+
+#### 6. Use `key` for intentional component reset
+
+Changing `:key` unmounts and remounts a component — useful for forms, animations, and resetting internal state.
+
+```vue
+<UserForm :key="userId" :user-id="userId" />
+```
+
+Rule: *If you want to fully reset a component, change its key instead of manually reseting every internal value.*
+
+#### 7. Avoid prop drilling — use provide/inject or a store
+
+Deep prop chains are brittle. Use `provide`/`inject` for shared concerns (theme, user, locale).
+
+```ts
+// ✅ Provider
+provide("theme", { color: ref("dark"), setColor });
+
+// ✅ Injector
+const theme = inject("theme");
+```
+
+Rule: *Props for direct parents. Provide/inject for shared context across depth.*
+
+#### 8. One responsibility = one reason to change
+
+Split components when data fetching, state transitions, formatting, and UI layout change for different reasons.
+
+```vue
+<!-- ❌ One component does everything -->
+<!-- ✅ Extract composable + view component -->
+<script setup>
+const { data, isLoading, error } = useUserData(props.userId);
+</script>
+<template>
+  <p v-if="isLoading">Loading...</p>
+  <p v-else-if="error">Error</p>
+  <h1 v-else>{{ data.name }}</h1>
+</template>
+```
+
+Rule: *Split when different changes affect different parts.*
+
+#### 9. Use `Teleport` for modals, tooltips, and overlays
+
+`<Teleport to="body">` prevents z-index and overflow issues for overlays.
+
+```vue
+<Teleport to="body">
+  <div v-if="showModal" data-part="modal-overlay">
+    <article data-part="modal">
+      <slot />
+    </article>
+  </div>
+</Teleport>
+```
+
+Rule: *Teleport overlays to `body` to avoid stacking context bugs.*
+
+#### 10. Template refs — access after mount, not during render
+
+Use `onMounted` or `nextTick` to access template refs.
+
+```vue
+<script setup>
+const el = ref(null);
+onMounted(() => {
+  el.value?.focus(); // ✅ safe after mount
+});
+</script>
+<template>
+  <input ref="el" data-part="search" />
+</template>
+```
+
+Rule: *Template refs are `null` during render. Access them after mount.*
+
+### Decision matrix
+
+| Symptom | Check first | Likely pattern | Fix |
+|---|---|---|---|
+| Reactive value not updating | Reactive container choice | Wrong `ref` vs `reactive` type | Use correct container |
+| Watcher runs infinitely | Mutation in watcher | Loop via state mutation inside watch | Move logic or use `computed` |
+| Stale computed value | Dependencies | Missing reactive dep in computed | Ensure all deps are accessed |
+| Sibling re-renders on unrelated input | State ownership | State too high | Move state down |
+| v-for loses input/focus on reorder | List keys | Index key bug | Use stable IDs |
+| Form keeps old values after entity change | Component identity | Key reset needed | Change component key |
+| Deep prop chain is fragile | API design | Prop drilling | Provide/inject or store |
+| Large component is hard to maintain | Reasons to change | Mixed responsibilities | Extract composable + view |
+| Modal/tooltip clipped by overflow | Portal | Missing Teleport | Use `<Teleport to="body">` |
+| Ref is null when accessed | Timing | Template ref before mount | Access in `onMounted` |
+
+### Supporting resources
+
+| Resource | Path |
+|---|---|
+| 10 detailed examples | `examples/performance/01-*.md` … `10-*.md` |
+| PR review checklist | `checklists/vue-performance-pr-checklist.md` |
+| Decision matrix | `checklists/decision-matrix.md` |
+| System prompt | `prompts/portable-system-prompt.md` |
+| Code review prompt | `prompts/code-review-prompt.md` |
+| Refactor prompt | `prompts/refactor-prompt.md` |
+| Teaching prompt | `prompts/teaching-prompt.md` |
+| Audit report template | `templates/audit-report-template.md` |
+| PR comment template | `templates/pr-comment-template.md` |
+| Refactor plan template | `templates/refactor-plan-template.md` |
+| Performance playbook | `knowledge/vue-performance-playbook.md` |
+
+---
+
+## Forms (Vue 3)
+
+### Prerequisites
+
+- Use `vee-validate` + `zod` for all forms
+- Use `@vee-validate/zod` for schema integration
+- Prefer Composition API (`useForm`) over Options API
+
+### Step 1 — Define form with validation
+
+```vue
+<script setup lang="ts">
+import { useForm } from "vee-validate";
+import { toTypedSchema } from "@vee-validate/zod";
+import { z } from "zod";
+
+const schema = toTypedSchema(
+  z.object({
+    email: z.string().email(),
+    name: z.string().min(2).max(255),
+  })
+);
+
+const { defineField, handleSubmit, errors, isSubmitting } = useForm({
+  validationSchema: schema,
+  initialValues: { email: "", name: "" },
+});
+
+const [email, emailAttrs] = defineField("email");
+const [name, nameAttrs] = defineField("name");
+
+const onSubmit = handleSubmit(async (values) => {
+  // send data
+});
+</script>
+
+<template>
+  <form data-part="form" @submit="onSubmit">
+    <label data-part="field">
+      <span data-part="label">Email</span>
+      <input data-part="input" v-model="email" v-bind="emailAttrs" />
+      <span data-part="error" v-if="errors.email">{{ errors.email }}</span>
+    </label>
+    <button data-part="submit" :disabled="isSubmitting">
+      {{ isSubmitting ? "Saving..." : "Save" }}
+    </button>
+  </form>
+</template>
+```
+
+### Checklist
+
+- [ ] `vee-validate` + `@vee-validate/zod` + `zod` in use
+- [ ] Schema validation covers full form
+- [ ] Initial values are controlled
+- [ ] Field-level errors rendered
+- [ ] Submission guarded with `isSubmitting`
+---
+
+## See also
+
+- [rule](../rule/SKILL.md) — Central skill index and dispatcher
+- [rule-frontend](../rule-frontend/SKILL.md) — Frontend skill index
+- [rule-styleguide](../rule-styleguide/SKILL.md) — Shared frontend standards

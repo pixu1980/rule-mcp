@@ -174,6 +174,349 @@ Key rules enforced: **no-css-classes**, **no-inline-styles**, **semantic-html**,
 **css-comments-required** (every CSS file MUST have file-level + section comments — see rule-styleguide → css.md),
 **a11y-test-required** (every project MUST have Playwright + @axe-core/playwright a11y tests in `tests/a11y/` — see rule-styleguide → a11y.md → Automated Testing).
 
-## Reference
+## Project Scaffolding
 
-Load references/REFERENCE.md for detailed Astro patterns and examples.
+All rule projects include standard config files. See [`rule-styleguide`](../rule-styleguide/SKILL.md) → Project Scaffolding.
+Use `pix_styleguide mode=scaffold` or `pix_scaffold` to generate: `.prettierrc`, `.nvmrc`, `.editorconfig`,
+`.gitignore`, `.eslintrc.json`, `tsconfig.json`, `jsconfig.json`.
+
+Iterate: `generate → pix_check → fix → pix_check → all pass`.
+
+---
+
+## Astro Performance & Best Practices
+
+This section extends rule-frontend-astro with a structured performance review methodology for Astro's islands architecture.
+
+### When to activate
+
+- Review Astro site performance
+- Optimize client JS footprint (islands strategy)
+- Decide between client directives (`client:load`, `client:idle`, `client:visible`, `client:media`, `client:only`)
+- Choose between SSG, SSR, or hybrid rendering
+- Optimize images, fonts, and assets
+- Set up View Transitions for smooth navigation
+- Write PR feedback about Astro code quality
+
+### Operating principles
+
+1. **Zero JS by default** is Astro's superpower. Every byte of client JS must be justified.
+
+2. **Islands architecture** — interactive components are isolated. A client island loads only its own JS, not the entire page.
+
+3. **Choose the right client directive.** `client:load` is the heaviest — use it sparingly.
+
+4. **Prefetch is free.** `data-astro-prefetch` gives SPA-like navigation without a framework.
+
+5. **Classify each issue** as: performance risk, UX risk, maintainability risk, bundle size concern.
+
+### Review workflow
+
+1. Identify the symptom (slow page load, too much client JS, slow navigation, large images, poor Core Web Vitals)
+2. Find the owner (island boundary, client directive, image/asset, route configuration)
+3. Match to one of the 10 patterns below
+4. Explain the risk
+5. Propose smallest fix
+6. End with a rule of thumb
+
+### The 10 patterns
+
+#### 1. Choose the least aggressive client directive
+
+| Directive | When | Cost |
+|---|---|---|
+| `client:load` | Immediately needed on page load | Highest — loads eagerly |
+| `client:idle` | Not urgent, load when browser is idle | Medium |
+| `client:visible` | Below the fold, load when scrolled into view | Low |
+| `client:media` | Responsive component only on certain screen sizes | Low |
+| `client:only` | Framework component that can't be server-rendered | Varies |
+
+```astro
+---
+import HeavyChart from "./HeavyChart.jsx";
+---
+
+<!-- Scroll down to see it → load it then -->
+<HeavyChart client:visible />
+```
+
+Rule: *Start with the least aggressive directive. Upgrade only when needed.*
+
+#### 2. Islands should be small and focused
+
+An island is the unit of client JS. Make islands small — extract only the interactive part.
+
+```astro
+<!-- ❌ Whole page as an island -->
+<InteractivePage client:load />
+
+<!-- ✅ Only the interactive parts -->
+<header data-part="header">
+  <SearchBar client:visible />
+  <nav>Static navigation...</nav>
+</header>
+<main>Static content...</main>
+```
+
+Rule: *Islands should be the smallest possible interactive elements, not entire pages.*
+
+#### 3. Use Content Collections for type-safe, performant content
+
+Content Collections validate frontmatter at build time and enable efficient querying.
+
+```astro
+---
+import { getCollection } from "astro:content";
+
+// ✅ Efficient collection query
+const posts = await getCollection("blog");
+
+// ✅ Filter at build time
+const publishedPosts = posts.filter(p => !p.data.draft);
+---
+```
+
+Rule: *Content Collections for structured content. Avoid manual glob imports for content.*
+
+#### 4. Use View Transitions for smooth, SPA-like navigation
+
+View Transitions give SPA-like navigation without a client framework.
+
+```astro
+---
+import { ViewTransitions } from "astro:transitions";
+---
+<!doctype html>
+<html>
+  <head>
+    <ViewTransitions />
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>
+```
+
+Add `data-astro-prefetch` to links for instant navigation:
+
+```astro
+<a href="/blog" data-astro-prefetch>Blog</a>
+```
+
+Rule: *Always enable ViewTransitions for multi-page sites. Always add prefetch to navigation links.*
+
+#### 5. Optimize images with Astro's built-in components
+
+Use `<Image />` and `<Picture />` from `astro:assets` for automatic optimization.
+
+```astro
+---
+import { Image } from "astro:assets";
+import heroImage from "../images/hero.png";
+---
+
+<Image
+  src={heroImage}
+  alt="Hero"
+  widths={[400, 800, 1200]}
+  sizes="(max-width: 800px) 100vw, 800px"
+  loading="lazy"
+  decoding="async"
+/>
+```
+
+Rule: *Use `<Image />` for local images, `loading="lazy"` for below-the-fold images.*
+
+#### 6. Prefer SSG over SSR when possible
+
+Static Generation (SSG) produces zero server runtime. Server-Side Rendering (SSR) adds server cost and complexity.
+
+```astro
+---
+// ✅ SSG: content doesn't change per request
+export async function getStaticPaths() {
+  const posts = await getCollection("blog");
+  return posts.map(p => ({ params: { slug: p.slug } }));
+}
+---
+
+<!-- ✅ SSR when needed: user-specific, real-time data -->
+export const prerender = false;
+```
+
+Rule: *SSG by default. SSR only when you need per-request dynamic data.*
+
+#### 7. Minimize framework islands — prefer vanilla JS or web components
+
+Each framework island (React, Vue, Svelte, SolidJS) loads that framework's runtime.
+
+```astro
+<!-- ❌ React island for a simple counter (loads React runtime) -->
+<Counter client:load />
+
+<!-- ✅ Vanilla JS or web component — no framework overhead -->
+<script>
+  class Counter extends HTMLElement {
+    // ...
+  }
+  customElements.define("my-counter", Counter);
+</script>
+```
+
+Rule: *Use vanilla JS or web components for simple interactivity. Use framework islands only when you need component state management.*
+
+#### 8. Structure layouts for maximum reuse
+
+Nested layouts avoid repeating HTML structure and enable efficient CSS sharing.
+
+```astro
+---
+// src/layouts/_BaseLayout.astro — global shell
+import { ViewTransitions } from "astro:transitions";
+---
+<!doctype html>
+<html lang="en">
+  <head><ViewTransitions /></head>
+  <body>
+    <slot />
+  </body>
+</html>
+```
+
+```astro
+---
+// src/layouts/_BlogLayout.astro — blog-specific
+import BaseLayout from "./_BaseLayout.astro";
+---
+<BaseLayout>
+  <nav>Blog nav...</nav>
+  <article><slot /></article>
+</BaseLayout>
+```
+
+Rule: *Compose layouts like components. A base layout → page type layout → page.*
+
+#### 9. Lazy-load non-critical CSS and JS
+
+Use `is:inline` and dynamic imports for non-critical resources.
+
+```astro
+<!-- Load critical CSS in <head>, defer non-critical -->
+<link rel="stylesheet" href="/styles/critical.css" />
+<link rel="preload" href="/styles/non-critical.css" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+```
+
+For JS, use dynamic `import()` inside islands or `<script>` tags.
+
+Rule: *Critical CSS inline or in `<head>`. Non-critical CSS lazy-loaded. JS loaded on demand via directives.*
+
+#### 10. One Astro component = one concern
+
+Keep `.astro` components focused. Extract logic into separate TypeScript modules.
+
+```astro
+---
+// ✅ Import data logic from a module
+import { getLatestPosts } from "../lib/posts";
+import BlogCard from "../components/BlogCard.astro";
+
+const posts = await getLatestPosts();
+---
+
+<section data-part="blog-list">
+  {posts.map(p => <BlogCard post={p} />)}
+</section>
+```
+
+Rule: *Separate data fetching, formatting, and presentation into distinct modules.*
+
+### Decision matrix
+
+| Symptom | Check first | Likely pattern | Fix |
+|---|---|---|---|
+| Slow page load | Client JS size | Too many or wrong client directives | Use less aggressive directives |
+| Heavy page despite static content | Island boundaries | Whole-page framework islands | Reduce island scope |
+| Slow navigation between pages | Navigation | Missing ViewTransitions | Add `<ViewTransitions />` |
+| Large images slowing LCP | Image loading | Missing optimization | Use `<Image />` with `loading="lazy"` |
+| First load too heavy | Framework choice | Framework island for simple UI | Replace with vanilla JS |
+| Content hard to query | Content approach | Manual frontmatter reading | Use Content Collections |
+| Server costs too high | Rendering strategy | SSR for static content | Switch to SSG |
+| Layout duplicated across pages | Layout structure | Repeated HTML in each page | Use nested layouts |
+| Non-critical resources block render | Resource loading | Render-blocking CSS/JS | Defer non-critical resources |
+| Astro component too complex | Component design | Mixed data + view | Split into data module + view |
+
+### Supporting resources
+
+| Resource | Path |
+|---|---|
+| 10 detailed examples | `examples/performance/01-*.md` … `10-*.md` |
+| PR review checklist | `checklists/astro-performance-pr-checklist.md` |
+| Decision matrix | `checklists/decision-matrix.md` |
+| System prompt | `prompts/portable-system-prompt.md` |
+| Code review prompt | `prompts/code-review-prompt.md` |
+| Refactor prompt | `prompts/refactor-prompt.md` |
+| Teaching prompt | `prompts/teaching-prompt.md` |
+| Audit report template | `templates/audit-report-template.md` |
+| PR comment template | `templates/pr-comment-template.md` |
+| Refactor plan template | `templates/refactor-plan-template.md` |
+| Performance playbook | `knowledge/astro-performance-playbook.md` |
+
+---
+
+## Forms (Astro)
+
+### Prerequisites
+
+- Use **client islands** for interactive forms (`client:load`)
+- Server actions in Astro 5+ for form submission
+- `zod` for validation (shared between client and server)
+
+### Server action handler
+
+```typescript
+// src/actions/contact.ts
+import { defineAction } from "astro:actions";
+import { z } from "zod";
+
+export const server = {
+  contact: defineAction({
+    accept: "form",
+    input: z.object({
+      email: z.string().email(),
+      message: z.string().min(10).max(1000),
+    }),
+    handler: async (input) => {
+      return { success: true };
+    },
+  }),
+};
+```
+
+```astro
+---
+// src/pages/contact.astro
+import { actions } from "astro:actions";
+---
+
+<form data-part="form" method="POST" action={actions.contact}>
+  <label data-part="field">
+    <span data-part="label">Email</span>
+    <input data-part="input" type="email" name="email" required />
+  </label>
+  <button data-part="submit" type="submit">Send</button>
+</form>
+```
+
+### Checklist
+
+- [ ] Client island for interactive forms
+- [ ] Server actions for submission (Astro 5+)
+- [ ] Shared validation schema (zod)
+- [ ] Progressive enhancement works without JS
+---
+
+## See also
+
+- [rule](../rule/SKILL.md) — Central skill index and dispatcher
+- [rule-frontend](../rule-frontend/SKILL.md) — Frontend skill index
+- [rule-styleguide](../rule-styleguide/SKILL.md) — Shared frontend standards
