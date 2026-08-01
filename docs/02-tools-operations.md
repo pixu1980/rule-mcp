@@ -654,7 +654,6 @@ Prompt templates accessible via the MCP `prompts/get` protocol.
 | `pix-data` | `request` (req), `database` (opt) | PostgreSQL, MySQL, SQLite, MongoDB, DuckDB, IndexedDB, SQL |
 | `pix-devops` | `request` (req) | Docker, GitLab CI, observability, testing, versioning |
 | `pix-frontend` | `request` (req), `framework` (opt) | React, Vue, Svelte, Angular, Solid, Astro, Next, Nuxt, Remix, vanilla |
-| `pix-grill` | `request` (req) | Structured questioning (grill-me, grill-with-docs) |
 | `pix-handoff` | `mode` (req), `includeGitDiff` (opt), `compress` (opt) | Compressed context handoff for a new session |
 | `pix-meta` | `request` (req) | Dispatcher/action toolset (gateway, apply, search, check, scaffold…) |
 | `pix-new-feature` | `feature` (req), `framework` (opt), `area` (opt), `includeTests` (opt) | Feature end-to-end with TDD + a11y + commit scope |

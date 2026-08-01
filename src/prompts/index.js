@@ -4,7 +4,7 @@
  * MCP Prompt registry for pix-galaxy-mcp.
  * Provides reusable prompt templates that guide agents through pix AI
  * workflow phases: 5 one-shot workflow prompts (orchestrate multiple tools),
- * 16 area prompts (one per tool area), and 3 legacy prompts.
+ * 15 area prompts (one per tool area), and 3 legacy prompts.
  *
  * Every prompt:
  *   - routes through the pix_tool dispatcher to the right pix-* skill
@@ -17,7 +17,7 @@
 const FRAMEWORKS = "react, vue, svelte, angular, solid, astro, vanilla";
 
 /**
- * Shared system text for the 16 area prompts.
+ * Shared system text for the 15 area prompts.
  *
  * @param {string} area — area name (e.g. "frontend")
  * @param {string} tools — comma-separated pix_tool_* tools of the area
@@ -124,13 +124,6 @@ export function listPrompts() {
       arguments: [
         { name: "request", description: "Component, page, or frontend task", required: true },
         { name: "framework", description: `Target framework (${FRAMEWORKS})`, required: false },
-      ],
-    },
-    {
-      name: "pix-grill",
-      description: "Structured questioning: grill-me interviews and grill-with-docs evidence drills",
-      arguments: [
-        { name: "request", description: "Topic to be grilled on", required: true },
       ],
     },
     {
@@ -353,7 +346,6 @@ export function getPrompt(name) {
     "pix-platform": areaPromptText("platform", "pix_platform_web, pix_platform_desktop, pix_platform_expo, pix_platform_agent, pix_platform_library", "platform"),
     "pix-caveman": areaPromptText("caveman", "pix_caveman, pix_caveman_commit, pix_caveman_review, pix_caveman_compress, pix_caveman_help"),
     "pix-architect": areaPromptText("architect", "pix_architect_cli, pix_architect_web"),
-    "pix-grill": areaPromptText("grill", "pix_grill_me, pix_grill_with_docs"),
     "pix-ai": areaPromptText("ai", "pix_ai_agents"),
     "pix-skills": areaPromptText("skills", "pix_find_skills"),
     "pix-tdd": areaPromptText("tdd", "pix_test_driven_development"),

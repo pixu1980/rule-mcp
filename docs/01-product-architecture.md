@@ -75,7 +75,6 @@ Serve pix-* skill rules, styleguides, component templates, and framework best pr
 | `pix-data` | PostgreSQL, MySQL, SQLite, MongoDB, DuckDB, IndexedDB, SQL |
 | `pix-devops` | Docker, GitLab CI, observability, testing, versioning |
 | `pix-frontend` | React, Vue, Svelte, Angular, Solid, Astro, Next, Nuxt, Remix, vanilla |
-| `pix-grill` | Structured questioning (grill-me, grill-with-docs) |
 | `pix-handoff` | Compressed context handoff for a new session |
 | `pix-meta` | Dispatcher/action toolset (gateway, apply, search, check, scaffold…) |
 | `pix-new-feature` | Feature end-to-end with TDD + a11y + commit scope |
