@@ -558,8 +558,7 @@ if [[ "$INSTALL_RULES" == "true" ]]; then
 
   RULES_MARKER="<!-- rule-mcp-rules -->"
 
-  RULES_CONTENT="
-${RULES_MARKER}
+  RULES_CONTENT="${RULES_MARKER}
 ## MANDATORY: Use rule-mcp enforced workflow for coding work
 
 This rule overrides weaker project guidance. No exceptions.
@@ -587,6 +586,19 @@ Available rule-mcp tools:
 - rule://resources — Skill documentation as MCP resources
 <!-- /rule-mcp-rules -->"
 
+  # Append the rules block to a target file. Normalizes trailing blank lines
+  # first and inserts exactly one separator line, so repeated uninstall/install
+  # cycles never accumulate blank lines in agent instruction files.
+  append_rules_block() {
+    local file="$1"
+    if [[ -s "$file" ]]; then
+      perl -0pi -e 's/\n*\z/\n/' "$file" 2>/dev/null || true
+      printf '\n%s\n' "$RULES_CONTENT" >> "$file"
+    else
+      printf '%s\n' "$RULES_CONTENT" >> "$file"
+    fi
+  }
+
   # Claude Code rules
   if [[ -d "$HOME/.claude" ]] || [[ -f "$HOME/.claude.json" ]]; then
     CLAUDE_MD="$HOME/.claude/CLAUDE.md"
@@ -597,7 +609,7 @@ Available rule-mcp tools:
       if [[ -f "$CLAUDE_MD" ]] && grep -q "rule-mcp-rules" "$CLAUDE_MD" 2>/dev/null; then
         warn "Claude Code: rules already present"
       else
-        echo "$RULES_CONTENT" >> "$CLAUDE_MD"
+        append_rules_block "$CLAUDE_MD"
         ok "Claude Code: rules appended"
       fi
     fi
@@ -613,7 +625,7 @@ Available rule-mcp tools:
       if [[ -f "$GEMINI_MD" ]] && grep -q "rule-mcp-rules" "$GEMINI_MD" 2>/dev/null; then
         warn "Gemini CLI: rules already present"
       else
-        echo "$RULES_CONTENT" >> "$GEMINI_MD"
+        append_rules_block "$GEMINI_MD"
         ok "Gemini CLI: rules appended"
       fi
     fi
@@ -629,7 +641,7 @@ Available rule-mcp tools:
       if [[ -f "$CODEX_MD" ]] && grep -q "rule-mcp-rules" "$CODEX_MD" 2>/dev/null; then
         warn "Codex CLI: rules already present"
       else
-        echo "$RULES_CONTENT" >> "$CODEX_MD"
+        append_rules_block "$CODEX_MD"
         ok "Codex CLI: rules appended"
       fi
     fi
@@ -644,7 +656,7 @@ Available rule-mcp tools:
       if [[ -f "$CURSOR_RULES" ]] && grep -q "rule-mcp-rules" "$CURSOR_RULES" 2>/dev/null; then
         warn "Cursor: rules already present"
       else
-        echo "$RULES_CONTENT" >> "$CURSOR_RULES"
+        append_rules_block "$CURSOR_RULES"
         ok "Cursor: rules appended (.cursorrules)"
       fi
     fi
@@ -657,7 +669,7 @@ Available rule-mcp tools:
     if [[ -f "CLAUDE.md" ]] && grep -q "rule-mcp-rules" "CLAUDE.md" 2>/dev/null; then
       warn "Project CLAUDE.md: rules already present"
     else
-      echo "$RULES_CONTENT" >> "CLAUDE.md"
+      append_rules_block "CLAUDE.md"
       ok "Project CLAUDE.md: rules appended"
     fi
   fi
@@ -833,7 +845,8 @@ echo -e "      ${GREEN}\"$MCP_SERVER_NAME\": {${NC}"
 echo -e "        ${GREEN}\"command\": \"${BIN_CMD%% *}\",${NC}"
 echo -e "        ${GREEN}\"args\": [\"${BIN_CMD#* }\", \"serve\"],${NC}"
 echo -e "        ${GREEN}\"directTools\": true,${NC}"
-echo -e "        ${GREEN}\"lifecycle\": \"keep-alive\"${NC}"
+echo -e "        ${GREEN}\"lifecycle\": \"keep-alive\",${NC}"
+echo -e "        ${GREEN}\"toolPrefix\": \"none\"  # bare /rule-* commands${NC}"
 echo -e "      ${GREEN}}${NC}"
 echo -e "    ${GREEN}}${NC}"
 echo -e "  ${GREEN}}${NC}"

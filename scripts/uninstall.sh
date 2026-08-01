@@ -365,6 +365,9 @@ remove_rules_block() {
       else
         sed -i '/<!-- rule-mcp-rules -->/,/<!-- \/rule-mcp-rules -->/d' "$file" 2>/dev/null || true
       fi
+      # Collapse trailing blank lines left by the removed block so the file
+      # returns to its pre-install state (no blank-line accumulation).
+      perl -0pi -e 's/\n*\z/\n/' "$file" 2>/dev/null || true
       ok "${label}: rules removed"
     fi
   else

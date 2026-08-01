@@ -18,8 +18,6 @@ Every commit MUST use conventional commits **with a scope**: `type(scope): subje
 Commits without a scope (e.g. `docs: ...`) are rejected by the `commit-msg` hook (`.githooks/commit-msg`). Generated merge/revert messages are exempt.
 <!-- /rule-mcp-commit-rules -->
 
-
-
 <!-- rule-mcp-rules -->
 ## MANDATORY: Use rule-mcp enforced workflow for coding work
 
