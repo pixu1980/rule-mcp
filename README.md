@@ -23,7 +23,7 @@ Serves styleguides, component templates, framework best practices, and design sy
   - [Minimal tool surface (10 tools)](#minimal-tool-surface-10-tools)
   - [Gateway deterministic mode](#gateway-deterministic-mode)
 - [MCP Resources (146)](#mcp-resources-146)
-- [MCP Prompts (26)](#mcp-prompts-26)
+- [MCP Prompts (24)](#mcp-prompts-24)
 - [Guardrail engine](#guardrail-engine)
 - [CLI reference](#cli-reference)
 - [Daemon & services](#daemon--services)
@@ -55,7 +55,7 @@ pix-galaxy-mcp install --agent all
 
 ## What is pix-galaxy-mcp
 
-pix-galaxy-mcp is an [MCP](https://modelcontextprotocol.io) server that exposes **97 tools**, **146 resources**, and **26 prompts** to any MCP-compatible AI coding agent. Because the server never calls an LLM (every output is deterministic), it is **model-agnostic** — it behaves identically behind Claude, GPT, Gemini, Llama, Qwen, or any other model. It provides:
+pix-galaxy-mcp is an [MCP](https://modelcontextprotocol.io) server that exposes **97 tools**, **146 resources**, and **24 prompts** to any MCP-compatible AI coding agent. Because the server never calls an LLM (every output is deterministic), it is **model-agnostic** — it behaves identically behind Claude, GPT, Gemini, Llama, Qwen, or any other model. It provides:
 
 - **70 modular skills** covering frontend, backend, database, devops, toolchain, styleguide, and architecture domains
 - **BM25 full-text search** across all skill content
@@ -295,53 +295,38 @@ Each skill (except `pix` itself) has two resources:
 
 ---
 
-## MCP Prompts (26)
+## MCP Prompts (24)
 
-26 reusable prompts accessible via the MCP `prompts/get` protocol — 5 one-shot workflow
-prompts that orchestrate the tool sequence end-to-end, 16 area prompts (one per tool area),
-and 5 legacy prompts. Every prompt routes through `pix_tool`, involves TDD/a11y baselines
-(or asks the user), and closes by proposing a commit message with mandatory scope.
-
-**Workflow one-shot prompts**
+24 reusable prompts accessible via the MCP `prompts/get` protocol, listed alphabetically below.
+Every prompt routes through `pix_tool`, involves TDD/a11y baselines (or asks the user), and
+closes by proposing a commit message with mandatory scope.
 
 | Prompt | Description | Arguments |
 |---|---|---|
-| `pix-setup-project` | Bootstrap project: detect → scaffold → toolchain → architect context | `projectName` (required), `framework`, `toolchain`, `tier` |
-| `pix-new-feature` | Feature end-to-end: route → evidence → failing tests → code → guardrails | `feature` (required), `framework`, `area`, `includeTests` |
-| `pix-pull-request` | Prepare PR: review + a11y + security + ADR + commit scope + description | `description` (required), `framework`, `updateAdr` |
-| `pix-write-tests` | Write tests: TDD + a11y (Playwright + axe-core) + devops | `scope` (required), `framework`, `testType` |
-| `pix-handoff` | Compressed context handoff (ADR + git) for a new session | `mode` (required), `includeGitDiff`, `compress` |
-
-**Area prompts** (one per tool area)
-
-| Prompt | Area |
-|---|---|
-| `pix-area-meta` | Dispatcher/action toolset (gateway, apply, search, check, scaffold…) |
-| `pix-area-frontend` | React, Vue, Svelte, Angular, Solid, Astro, Next, Nuxt, Remix, vanilla |
-| `pix-area-backend` | Node, Express, Fastify, Hono, NestJS, GraphQL, API design, security |
-| `pix-area-data` | PostgreSQL, MySQL, SQLite, MongoDB, DuckDB, IndexedDB, SQL |
-| `pix-area-toolchain` | Vite, pnpm, Turborepo, Rspack, Parcel, TypeScript, ESLint, Biome, Husky, commits |
-| `pix-area-styleguide` | a11y, CSS, HTML, JS, JSON, Markdown, naming, patterns, validation |
-| `pix-area-process` | Code review, feature workflow, documentation, ADR, handoff, BMAD |
-| `pix-area-devops` | Docker, GitLab CI, observability, testing, versioning |
-| `pix-area-platform` | Web, desktop, Expo, agent, library |
-| `pix-area-caveman` | Compressed communication, commits, reviews |
-| `pix-area-architect` | Context packs, interview flows (CLI + web), scaffolding |
-| `pix-area-grill` | Structured questioning (grill-me, grill-with-docs) |
-| `pix-area-ai` | AI agent integrations |
-| `pix-area-skills` | Skill discovery (find-skills) |
-| `pix-area-tdd` | Test-driven development workflow |
-| `pix-area-ui` | UI design-system work |
-
-**Legacy prompts**
-
-| Prompt | Description | Arguments |
-|---|---|---|
-| `pix-code-review` | Review code against pix styleguides | `framework`, `code` (required) |
-| `pix-generate-component` | Generate a component following pix principles | `framework` (required), `component` (required), `features` |
-| `pix-a11y-test` | Generate Playwright + axe-core a11y tests | `framework` (required), `component` |
-| `pix-a11y-review` | Review code for WCAG 2.2 AA compliance | `code` (required), `framework` |
+| `pix-a11y-audit` | Audit a11y end-to-end: WCAG 2.2 AA review + Playwright/axe-core tests | `code` (required), `framework`, `component` |
+| `pix-ai` | AI agent integrations | `request` (required) |
+| `pix-architect` | Project architecture: context packs, interview flows (CLI + web), scaffolding | `request` (required) |
 | `pix-architect-scaffold` | Scaffold project with `.agents/` + `.context/` | `projectName` (required), `framework`, `tier` |
+| `pix-backend` | Node, Express, Fastify, Hono, NestJS, GraphQL, API design, security | `request` (required), `framework` |
+| `pix-caveman` | Compressed communication, commits, reviews | `request` (required) |
+| `pix-code-review` | Review code against pix styleguides | `framework`, `code` (required) |
+| `pix-data` | PostgreSQL, MySQL, SQLite, MongoDB, DuckDB, IndexedDB, SQL | `request` (required), `database` |
+| `pix-devops` | Docker, GitLab CI, observability, testing, versioning | `request` (required) |
+| `pix-frontend` | React, Vue, Svelte, Angular, Solid, Astro, Next, Nuxt, Remix, vanilla | `request` (required), `framework` |
+| `pix-grill` | Structured questioning (grill-me, grill-with-docs) | `request` (required) |
+| `pix-handoff` | Compressed context handoff (ADR + git) for a new session | `mode` (required), `includeGitDiff`, `compress` |
+| `pix-meta` | Dispatcher/action toolset (gateway, apply, search, check, scaffold…) | `request` (required) |
+| `pix-new-feature` | Feature end-to-end: route → evidence → failing tests → code → guardrails | `feature` (required), `framework`, `area`, `includeTests` |
+| `pix-platform` | Web, desktop, Expo, agent, library | `request` (required), `platform` |
+| `pix-process` | Code review, feature workflow, documentation, ADR, handoff, BMAD | `request` (required) |
+| `pix-pull-request` | Prepare PR: review + a11y + security + ADR + commit scope + description | `description` (required), `framework`, `updateAdr` |
+| `pix-setup-project` | Bootstrap project: detect → scaffold → toolchain → architect context | `projectName` (required), `framework`, `toolchain`, `tier` |
+| `pix-skills` | Skill discovery (find-skills) | `request` (required) |
+| `pix-styleguide` | a11y, CSS, HTML, JS, JSON, Markdown, naming, patterns, validation | `request` (required) |
+| `pix-tdd` | Test-driven development workflow | `request` (required) |
+| `pix-toolchain` | Vite, pnpm, Turborepo, Rspack, Parcel, TypeScript, ESLint, Biome, Husky, commits | `request` (required), `tool` |
+| `pix-ui` | UI design-system work | `request` (required) |
+| `pix-write-tests` | Write tests: TDD + a11y (Playwright + axe-core) + devops | `scope` (required), `framework`, `testType` |
 
 ---
 

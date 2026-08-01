@@ -3,7 +3,7 @@
  *
  * Validates the MCP prompt registry (src/prompts/index.js):
  *   - structure: unique kebab-case names, strict argument schema, getPrompt impl
- *   - coverage: 5 workflow one-shot + 16 area prompts + 5 legacy prompts
+ *   - coverage: 5 workflow one-shot + 16 area prompts + 3 legacy prompts
  *   - content rules: every prompt message proposes a commit with scope and
  *     involves TDD/a11y baselines (or asks the user what to do)
  */
@@ -25,29 +25,27 @@ const WORKFLOW_PROMPTS = [
 ];
 
 const AREA_PROMPTS = [
-  "pix-area-meta",
-  "pix-area-frontend",
-  "pix-area-backend",
-  "pix-area-data",
-  "pix-area-toolchain",
-  "pix-area-styleguide",
-  "pix-area-process",
-  "pix-area-devops",
-  "pix-area-platform",
-  "pix-area-caveman",
-  "pix-area-architect",
-  "pix-area-grill",
-  "pix-area-ai",
-  "pix-area-skills",
-  "pix-area-tdd",
-  "pix-area-ui",
+  "pix-meta",
+  "pix-frontend",
+  "pix-backend",
+  "pix-data",
+  "pix-toolchain",
+  "pix-styleguide",
+  "pix-process",
+  "pix-devops",
+  "pix-platform",
+  "pix-caveman",
+  "pix-architect",
+  "pix-grill",
+  "pix-ai",
+  "pix-skills",
+  "pix-tdd",
+  "pix-ui",
 ];
 
 const LEGACY_PROMPTS = [
   "pix-code-review",
-  "pix-generate-component",
-  "pix-a11y-test",
-  "pix-a11y-review",
+  "pix-a11y-audit",
   "pix-architect-scaffold",
 ];
 
@@ -65,7 +63,12 @@ test("names are unique and kebab-case", () => {
   }
 });
 
-test("registry covers workflow, all 16 areas, and the 5 legacy prompts", () => {
+test("prompts are listed in alphabetical order", () => {
+  const sorted = [...names].sort((a, b) => a.localeCompare(b));
+  assert.deepEqual(names, sorted, "prompt names must be listed alphabetically");
+});
+
+test("registry covers workflow, all 16 areas, and the 3 legacy prompts", () => {
   for (const expected of EXPECTED) {
     assert.ok(names.includes(expected), `missing prompt ${expected}`);
   }
@@ -95,6 +98,20 @@ test("every listed prompt has a getPrompt implementation with messages", () => {
       .join("\n");
     assert.ok(text.length > 0, `${p.name}: message text required`);
   }
+});
+
+test("refactor: pix-area- prefix gone, a11y merged into pix-a11y-audit, pix-generate-component removed", () => {
+  const names = listPrompts().map((p) => p.name);
+  assert.ok(!names.some((n) => n.startsWith("pix-area-")), "no pix-area- prefixed prompt must remain");
+  for (const removed of ["pix-generate-component", "pix-a11y-test", "pix-a11y-review"]) {
+    assert.ok(!names.includes(removed), `${removed} must be removed`);
+  }
+  const audit = getPrompt("pix-a11y-audit");
+  assert.ok(audit, "pix-a11y-audit must exist");
+  const text = audit.messages.map((m) => m.content?.text ?? "").join("\n");
+  assert.match(text, /WCAG 2\.2 AA/, "pix-a11y-audit must review WCAG 2.2 AA compliance");
+  assert.match(text, /axe-core|AxeBuilder/, "pix-a11y-audit must generate axe-core tests");
+  assert.match(text, /tests\/a11y/, "pix-a11y-audit must cover the tests/a11y suite");
 });
 
 // ── Content rules (commit scope + TDD/a11y baselines) ────────────
