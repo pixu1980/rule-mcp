@@ -18,32 +18,23 @@ import { homedir } from "node:os";
 import { stdin as input, stdout as output } from "node:process";
 import { getSkillsDirs, pkg } from "./paths.js";
 import { formatSkillsList } from "./tui.js";
+import { parseSkillFrontmatter } from "../core/skills.js";
 
 /**
- * Read SKILL.md frontmatter for name/description.
+ * Read SKILL.md frontmatter for name/description/tags.
+ * Delegates to the shared parseSkillFrontmatter (core/skills.js) so CLI output
+ * and MCP server metadata can never diverge. Handles folded (>) and literal (|)
+ * block scalars with chomping indicators (`>-`, `|+`, ...).
  */
 function readSkillMeta(skillDir) {
   try {
     const content = readFileSync(join(skillDir, "SKILL.md"), "utf8");
-    const name = content.match(/^name:\s*(.+)/m)?.[1]?.trim() || "";
-    let desc = "";
-    const descMatch = content.match(/^description:\s*(.*)$/m);
-    if (descMatch) {
-      const marker = descMatch[1].trim();
-      if (marker === ">" || marker === "|") {
-        const after = content.slice(descMatch.index + descMatch[0].length).split("\n");
-        const parts = [];
-        for (const line of after) {
-          if (!line.startsWith(" ") && !line.startsWith("\t") && line.trim()) break;
-          if (line.trim()) parts.push(line.trim());
-        }
-        desc = marker === ">" ? parts.join(" ") : parts.join("\n");
-      } else {
-        desc = marker;
-      }
-    }
-    const tags = content.match(/^tags:\s*\[(.+)\]/m)?.[1]?.split(",").map(s => s.trim()) || [];
-    return { name, desc, tags };
+    const meta = parseSkillFrontmatter(content);
+    return {
+      name: meta.name || "",
+      desc: meta.description || "",
+      tags: meta.tags || [],
+    };
   } catch {
     return { name: "", desc: "", tags: [] };
   }
@@ -229,9 +220,7 @@ export async function skillsInstallCommand(opts = {}) {
 
   // Batch mode: when --all is set or stdin is not a TTY, skip interactive UI
   if (selectAll || !process.stdin.isTTY) {
-    const toInstall = selectAll
-      ? skills
-      : skills.filter(s => isInstalled(s.name, targetDir));
+    const toInstall = selectAll ? skills : skills.filter((s) => isInstalled(s.name, targetDir));
     if (toInstall.length === 0) {
       process.stdout.write("No skills selected. Nothing installed.\n");
       return;
@@ -254,14 +243,17 @@ export async function skillsInstallCommand(opts = {}) {
   }, []);
 
   // Interactive selection
-  const selected = await interactiveSelect(skills.map(s => ({
-    name: s.name,
-    displayName: s.name,
-    description: s.description,
-  })), {
-    title: `Select skills to install (scope: ${scope} → ${targetDir})`,
-    selected: preSelected,
-  });
+  const selected = await interactiveSelect(
+    skills.map((s) => ({
+      name: s.name,
+      displayName: s.name,
+      description: s.description,
+    })),
+    {
+      title: `Select skills to install (scope: ${scope} → ${targetDir})`,
+      selected: preSelected,
+    },
+  );
 
   if (selected.length === 0) {
     process.stdout.write("No skills selected. Nothing installed.\n");
@@ -290,7 +282,7 @@ export function skillsListCommand(opts = {}) {
   const skills = getAvailableSkills();
   const { homeSkills, embeddedSkills } = getSkillsDirs();
   const installed = existsSync(homeSkills) ? readdirSync(homeSkills) : [];
-  const rows = skills.map(s => ({
+  const rows = skills.map((s) => ({
     name: s.name,
     description: s.description,
     tags: s.tags,
