@@ -75,7 +75,6 @@ Serve rule-* skill rules, styleguides, component templates, and framework best p
 | `rule-data` | PostgreSQL, MySQL, SQLite, MongoDB, DuckDB, IndexedDB, SQL |
 | `rule-devops` | Docker, GitLab CI, observability, testing, versioning |
 | `rule-frontend` | React, Vue, Svelte, Angular, Solid, Astro, Next, Nuxt, Remix, vanilla |
-| `rule-grill` | Structured questioning (grill-me, grill-with-docs) |
 | `rule-handoff` | Compressed context handoff for a new session |
 | `rule-meta` | Dispatcher/action toolset (gateway, apply, search, check, scaffold…) |
 | `rule-new-feature` | Feature end-to-end with TDD + a11y + commit scope |

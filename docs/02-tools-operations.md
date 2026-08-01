@@ -654,7 +654,6 @@ Prompt templates accessible via the MCP `prompts/get` protocol.
 | `rule-data` | `request` (req), `database` (opt) | PostgreSQL, MySQL, SQLite, MongoDB, DuckDB, IndexedDB, SQL |
 | `rule-devops` | `request` (req) | Docker, GitLab CI, observability, testing, versioning |
 | `rule-frontend` | `request` (req), `framework` (opt) | React, Vue, Svelte, Angular, Solid, Astro, Next, Nuxt, Remix, vanilla |
-| `rule-grill` | `request` (req) | Structured questioning (grill-me, grill-with-docs) |
 | `rule-handoff` | `mode` (req), `includeGitDiff` (opt), `compress` (opt) | Compressed context handoff for a new session |
 | `rule-meta` | `request` (req) | Dispatcher/action toolset (gateway, apply, search, check, scaffold…) |
 | `rule-new-feature` | `feature` (req), `framework` (opt), `area` (opt), `includeTests` (opt) | Feature end-to-end with TDD + a11y + commit scope |

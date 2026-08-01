@@ -313,7 +313,6 @@ closes by proposing a commit message with mandatory scope.
 | `rule-data` | PostgreSQL, MySQL, SQLite, MongoDB, DuckDB, IndexedDB, SQL | `request` (required), `database` |
 | `rule-devops` | Docker, GitLab CI, observability, testing, versioning | `request` (required) |
 | `rule-frontend` | React, Vue, Svelte, Angular, Solid, Astro, Next, Nuxt, Remix, vanilla | `request` (required), `framework` |
-| `rule-grill` | Structured questioning (grill-me, grill-with-docs) | `request` (required) |
 | `rule-handoff` | Compressed context handoff (ADR + git) for a new session | `mode` (required), `includeGitDiff`, `compress` |
 | `rule-meta` | Dispatcher/action toolset (gateway, apply, search, check, scaffold…) | `request` (required) |
 | `rule-new-feature` | Feature end-to-end: route → evidence → failing tests → code → guardrails | `feature` (required), `framework`, `area`, `includeTests` |

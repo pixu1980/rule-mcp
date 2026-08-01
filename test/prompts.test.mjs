@@ -3,7 +3,7 @@
  *
  * Validates the MCP prompt registry (src/prompts/index.js):
  *   - structure: unique kebab-case names, strict argument schema, getPrompt impl
- *   - coverage: 5 workflow one-shot + 16 area prompts + 3 legacy prompts
+ *   - coverage: 5 workflow one-shot + 15 area prompts + 3 legacy prompts
  *   - content rules: every prompt message proposes a commit with scope and
  *     involves TDD/a11y baselines (or asks the user what to do)
  */
@@ -36,7 +36,6 @@ const AREA_PROMPTS = [
   "rule-platform",
   "rule-caveman",
   "rule-architect",
-  "rule-grill",
   "rule-ai",
   "rule-skills",
   "rule-tdd",
@@ -68,7 +67,7 @@ test("prompts are listed in alphabetical order", () => {
   assert.deepEqual(names, sorted, "prompt names must be listed alphabetically");
 });
 
-test("registry covers workflow, all 16 areas, and the 3 legacy prompts", () => {
+test("registry covers workflow, all 15 areas, and the 3 legacy prompts", () => {
   for (const expected of EXPECTED) {
     assert.ok(names.includes(expected), `missing prompt ${expected}`);
   }
