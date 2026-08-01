@@ -5,7 +5,6 @@
 #   rule-mcp    — Route via rule-mcp
 #   rule-architect     — Route via rule-architect skill
 #   rule-handoff       — Generate handoff summary
-#   rule-grill         — Grill-me (code review/QA)
 #   rule-tdd           — Test-driven development workflow
 #   rule-adr           — Architecture Decision Record
 #   rule-fix           — Validate/fix file tree
@@ -98,19 +97,6 @@ Generate a handoff summary for session continuity: $ARGUMENTS
 4. Output result for pasting into next session.
 EOF
       ;;
-    "rule-grill")
-      cat <<'EOF'
----
-description: Run grill-me code review / interrogation via rule
-argument-hint: "<target>"
----
-Run grill-me skill for code review or interrogation: $ARGUMENTS
-
-1. Call `pix_tool` to route to grill-me skill.
-2. Load full grill-me skill evidence.
-3. Follow the guided interrogation workflow.
-EOF
-      ;;
     "rule-tdd")
       cat <<'EOF'
 ---
@@ -201,16 +187,6 @@ Generate handoff summary for session continuity.
 2. Default: mode "handoff" with all includes.
 EOF
       ;;
-    "rule-grill")
-      cat <<'EOF'
-# rule-grill
-
-Run grill-me code review or interrogation.
-
-1. Call `pix_tool` to route to grill-me skill.
-2. Execute guided interrogation workflow.
-EOF
-      ;;
     "rule-tdd")
       cat <<'EOF'
 # rule-tdd
@@ -289,16 +265,6 @@ Default mode "handoff". Use "close-session" for full context dump.
 """
 EOF
       ;;
-    "rule-grill")
-      cat <<'EOF'
-description = "Run grill-me code review"
-prompt = """
-Run grill-me skill for code review: {{args}}
-
-Call `pix_tool` to route to grill-me skill and execute.
-"""
-EOF
-      ;;
     "rule-tdd")
       cat <<'EOF'
 description = "Run test-driven development workflow"
@@ -347,7 +313,6 @@ COMMAND_NAMES=(
   "rule-mcp"
   "rule-architect"
   "rule-handoff"
-  "rule-grill"
   "rule-tdd"
   "rule-adr"
   "rule-fix"
@@ -424,4 +389,4 @@ echo ""
 echo "Installed ${installed} command(s); skipped ${skipped}."
 echo ""
 echo "Available commands for Pi: /rule-mcp, /rule-architect, /rule-handoff,"
-echo "  /rule-grill, /rule-tdd, /rule-adr, /rule-fix, /rule-check"
+echo "  /rule-tdd, /rule-adr, /rule-fix, /rule-check"

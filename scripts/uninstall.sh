@@ -401,7 +401,6 @@ COMMAND_NAMES=(
   "rule-mcp"
   "rule-architect"
   "rule-handoff"
-  "rule-grill"
   "rule-tdd"
   "rule-adr"
   "rule-fix"
