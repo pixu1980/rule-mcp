@@ -103,7 +103,7 @@ async function pickOption(field, values, optGroups) {
     list.forEach((opt, i) => {
       const arrow = i === idx ? "\x1b[36m▸\x1b[0m" : " ";
       const hl = i === idx ? "\x1b[1;36m" : "";
-      const tag = opt.pixGalaxySkill ? ` \x1b[2m[${opt.pixGalaxySkill}]\x1b[0m` : "";
+      const tag = opt.pixAISkill ? ` \x1b[2m[${opt.pixAISkill}]\x1b[0m` : "";
       const desc = opt.description ? `\n  \x1b[2m${opt.description}\x1b[0m` : "";
       parts.push(`  ${hl}${arrow} ${i + 1}. ${opt.label}${tag}\x1b[0m${desc}`);
     });
