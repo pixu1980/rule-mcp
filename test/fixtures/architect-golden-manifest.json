@@ -1,0 +1,234 @@
+{
+  "generic": {
+    ".clinerules": {
+      "bytes": 1405,
+      "sha256": "cce735bded9b8281"
+    },
+    ".cursor/rules/project.mdc": {
+      "bytes": 1479,
+      "sha256": "86be7e4af8017257"
+    },
+    ".github/copilot-instructions.md": {
+      "bytes": 1405,
+      "sha256": "cce735bded9b8281"
+    },
+    ".windsurf/rules/project.md": {
+      "bytes": 1433,
+      "sha256": "a5b0ac00fee1cd1a"
+    },
+    "AGENTS.md": {
+      "bytes": 1405,
+      "sha256": "cce735bded9b8281"
+    },
+    "analysis/functional-analysis.md": {
+      "bytes": 3235,
+      "sha256": "f5473c07bb050ffe"
+    },
+    "analysis/implementation-roadmap.md": {
+      "bytes": 5531,
+      "sha256": "4e7b6a5a0c8b23da"
+    },
+    "CLAUDE.md": {
+      "bytes": 1405,
+      "sha256": "cce735bded9b8281"
+    },
+    "constraints.concrete.md": {
+      "bytes": 709,
+      "sha256": "3d0316191781f85d"
+    },
+    "GEMINI.md": {
+      "bytes": 1405,
+      "sha256": "cce735bded9b8281"
+    },
+    "project-context.md": {
+      "bytes": 1761,
+      "sha256": "bde48fbff1fd369d"
+    },
+    "qa/checklist.md": {
+      "bytes": 1222,
+      "sha256": "b5f6e318b24bf010"
+    },
+    "README.md": {
+      "bytes": 3294,
+      "sha256": "51dfbf9419acd9d9"
+    },
+    "ROADMAP.md": {
+      "bytes": 3446,
+      "sha256": "91677540c3a671e0"
+    },
+    "specs/00-sdd.md": {
+      "bytes": 1292,
+      "sha256": "e8946a7818d59253"
+    },
+    "specs/01-product.md": {
+      "bytes": 933,
+      "sha256": "6e81543e4b2f7b43"
+    },
+    "specs/02-domain-glossary.md": {
+      "bytes": 460,
+      "sha256": "de779b1d8b9a344b"
+    },
+    "specs/05-architecture-ui-storage.md": {
+      "bytes": 2369,
+      "sha256": "0c409e941ed8b088"
+    },
+    "specs/06-quality-acceptance.md": {
+      "bytes": 661,
+      "sha256": "46b04f7184864a3b"
+    },
+    "specs/07-architecture-decision-records.md": {
+      "bytes": 1345,
+      "sha256": "9e00d4ccfc62a7fb"
+    },
+    "specs/08-deployment.md": {
+      "bytes": 1028,
+      "sha256": "800601b673dc5b23"
+    },
+    "specs/09-security.md": {
+      "bytes": 1622,
+      "sha256": "c90d91a236d162d6"
+    },
+    "specs/10-devops-toolchain.md": {
+      "bytes": 515,
+      "sha256": "b5f5ea67db736306"
+    },
+    "specs/11-process-delivery.md": {
+      "bytes": 303,
+      "sha256": "c6ad24be85a98103"
+    },
+    "specs/12-rule-routing.md": {
+      "bytes": 910,
+      "sha256": "1c3d44f8f5c5dd35"
+    },
+    "TEMPLATE_GUIDE.md": {
+      "bytes": 5608,
+      "sha256": "de6dd57908361521"
+    },
+    "use-cases.concrete.md": {
+      "bytes": 1004,
+      "sha256": "dd760a72820ba4c6"
+    }
+  },
+  "domain": {
+    ".clinerules": {
+      "bytes": 1404,
+      "sha256": "969f676eef458f3c"
+    },
+    ".cursor/rules/project.mdc": {
+      "bytes": 1478,
+      "sha256": "f6bf8c30718ebf1e"
+    },
+    ".github/copilot-instructions.md": {
+      "bytes": 1404,
+      "sha256": "969f676eef458f3c"
+    },
+    ".windsurf/rules/project.md": {
+      "bytes": 1432,
+      "sha256": "6bcb73c7eb150b49"
+    },
+    "AGENTS.md": {
+      "bytes": 1404,
+      "sha256": "969f676eef458f3c"
+    },
+    "analysis/functional-analysis.md": {
+      "bytes": 3235,
+      "sha256": "f5473c07bb050ffe"
+    },
+    "analysis/implementation-roadmap.md": {
+      "bytes": 5531,
+      "sha256": "4e7b6a5a0c8b23da"
+    },
+    "CLAUDE.md": {
+      "bytes": 1404,
+      "sha256": "969f676eef458f3c"
+    },
+    "constraints.concrete.md": {
+      "bytes": 709,
+      "sha256": "3d0316191781f85d"
+    },
+    "GEMINI.md": {
+      "bytes": 1404,
+      "sha256": "969f676eef458f3c"
+    },
+    "project-context.md": {
+      "bytes": 1761,
+      "sha256": "bde48fbff1fd369d"
+    },
+    "qa/checklist.md": {
+      "bytes": 1222,
+      "sha256": "b5f6e318b24bf010"
+    },
+    "README.md": {
+      "bytes": 3487,
+      "sha256": "908de74502980f3e"
+    },
+    "ROADMAP.md": {
+      "bytes": 3446,
+      "sha256": "91677540c3a671e0"
+    },
+    "schemas/ruleset.schema.json": {
+      "bytes": 6167,
+      "sha256": "dfbe2ebfd8697ab9"
+    },
+    "specs/00-sdd.md": {
+      "bytes": 1292,
+      "sha256": "e8946a7818d59253"
+    },
+    "specs/01-product.md": {
+      "bytes": 933,
+      "sha256": "6e81543e4b2f7b43"
+    },
+    "specs/02-domain-glossary.md": {
+      "bytes": 460,
+      "sha256": "de779b1d8b9a344b"
+    },
+    "specs/03-calculation-engine.md": {
+      "bytes": 1204,
+      "sha256": "9a7d502d8a91090f"
+    },
+    "specs/04-ruleset-config.md": {
+      "bytes": 1853,
+      "sha256": "7f87aa79527b67fe"
+    },
+    "specs/05-architecture-ui-storage.md": {
+      "bytes": 2369,
+      "sha256": "0c409e941ed8b088"
+    },
+    "specs/06-quality-acceptance.md": {
+      "bytes": 661,
+      "sha256": "46b04f7184864a3b"
+    },
+    "specs/07-architecture-decision-records.md": {
+      "bytes": 1345,
+      "sha256": "9e00d4ccfc62a7fb"
+    },
+    "specs/08-deployment.md": {
+      "bytes": 1028,
+      "sha256": "800601b673dc5b23"
+    },
+    "specs/09-security.md": {
+      "bytes": 1622,
+      "sha256": "c90d91a236d162d6"
+    },
+    "specs/10-devops-toolchain.md": {
+      "bytes": 515,
+      "sha256": "b5f5ea67db736306"
+    },
+    "specs/11-process-delivery.md": {
+      "bytes": 303,
+      "sha256": "c6ad24be85a98103"
+    },
+    "specs/12-rule-routing.md": {
+      "bytes": 910,
+      "sha256": "1c3d44f8f5c5dd35"
+    },
+    "TEMPLATE_GUIDE.md": {
+      "bytes": 5608,
+      "sha256": "de6dd57908361521"
+    },
+    "use-cases.concrete.md": {
+      "bytes": 1004,
+      "sha256": "dd760a72820ba4c6"
+    }
+  }
+}
