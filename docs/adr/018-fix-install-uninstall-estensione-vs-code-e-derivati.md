@@ -7,7 +7,7 @@
 
 ## Context
 
-L'estensione VS Code rule-vanilla-reactive (syntax highlighting, autocomplete per template html) non veniva installata correttamente. `install.js` CLI scriveva solo il config MCP in mcp.json ma non installava il .vsix. `install.sh` silenziava gli errori con 2>/dev/null. Manca il supporto per editor derivati (Cursor, Windsurf, VS Code Insiders, Code-OSS, Codium).
+L'estensione VS Code rule-vanilla-reactive (syntax highlighting, autocomplete per template html) non veniva installata correttamente. `install.js` CLI scriveva solo il config MCP in mcp.json ma non installava il .vsix. `install.sh` silenziava gli errori con `2>/dev/null`. Manca il supporto per editor derivati (Cursor, Windsurf, VS Code Insiders, Code-OSS, Codium).
 
 ## Decision
 

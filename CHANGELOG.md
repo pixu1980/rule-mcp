@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - Initial MCP SDK port (Phase 0) — replaces hand-rolled protocol
-- 22 MCP tools: rule-ai, 16 skill tools, pix_search, pix_component, pix_check, pix_scaffold, pix_architect, pix_detect
+- 22 MCP tools: rule-mcp, 16 skill tools, pix_search, pix_component, pix_check, pix_scaffold, pix_architect, pix_detect
 - Context-aware skill routing with framework-biased scoring
 - Project framework auto-detector (pix_detect)
 - BM25 full-text search across all skills

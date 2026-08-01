@@ -827,7 +827,7 @@ All data stays on the filesystem. The MCP server is a read-only/validate-only se
 | macOS | Homebrew | `brew install rule/tap/rule-mcp` |
 | macOS | pnpm | `pnpm add -g rule-mcp` |
 | Linux | pnpm | `pnpm add -g rule-mcp` |
-| Linux | Docker | `docker pull rule-ai/rule-mcp` |
+| Linux | Docker | `docker pull rule-mcp/rule-mcp` |
 | Windows | pnpm | `pnpm add -g rule-mcp` |
 | Windows | Winget | `winget install rule/rule-mcp` |
 | All | Direct download | GitHub Releases `.tgz` |

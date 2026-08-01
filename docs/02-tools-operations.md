@@ -1018,7 +1018,7 @@ Everything else is already configured in existing workflows:
 - CI: `.github/workflows/ci.yml`
 - Release: `.github/workflows/release.yml`
 - Docker: `Dockerfile` + `docker-compose.yml`
-- Winget: `.github/winget/rule-ai.rule-mcp.yaml`
+- Winget: `.github/winget/rule-mcp.rule-mcp.yaml`
 - Scoop: `.github/scoop/rule-mcp.json`
 - Server manifest: `server.json`
 - Changelog: `CHANGELOG.md`
@@ -1175,7 +1175,7 @@ rule-mcp daemon logs
 **Issue**: `rule` returns no matching skill.
 - **Verify**: Skills are loaded:
   ```bash
-  rule-mcp tools list | grep rule-ai
+  rule-mcp tools list | grep rule-mcp
   ```
 - **Try**: Use `pix_search` for free-text search across all skills.
 
