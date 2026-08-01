@@ -71,7 +71,7 @@
       "key": "none",
       "label": "None",
       "description": "No frontend UI layer",
-      "pixGalaxySkill": "",
+      "pixAISkill": "",
       "build": ""
     },
     {
@@ -129,7 +129,7 @@
       "key": "none",
       "label": "None",
       "description": "Standalone SPA without full-stack SSR/SSG",
-      "pixGalaxySkill": "",
+      "pixAISkill": "",
       "build": ""
     },
     {
@@ -175,7 +175,7 @@
       "key": "none",
       "label": "None",
       "description": "No backend server — client-only app",
-      "pixGalaxySkill": "",
+      "pixAISkill": "",
       "build": ""
     },
     {
@@ -790,7 +790,7 @@
               "key": "npm",
               "label": "npm",
               "description": "npm — default Node.js package manager",
-              "pixGalaxySkill": ""
+              "pixAISkill": ""
             },
             {
               "key": "pnpm",
@@ -942,7 +942,7 @@
               "key": "none",
               "label": "No containers",
               "description": "",
-              "pixGalaxySkill": ""
+              "pixAISkill": ""
             }
           ],
           "description": "Docker image strategy for the project."
@@ -1016,13 +1016,13 @@
               "key": "cypress",
               "label": "Cypress — Developer-friendly E2E",
               "description": "Developer-friendly E2E testing with Cypress",
-              "pixGalaxySkill": ""
+              "pixAISkill": ""
             },
             {
               "key": "none",
               "label": "None — Unit/integration only",
               "description": "",
-              "pixGalaxySkill": ""
+              "pixAISkill": ""
             }
           ],
           "default": "playwright",
@@ -1087,7 +1087,7 @@
               "key": "none",
               "label": "None — No ADR tracking",
               "description": "",
-              "pixGalaxySkill": ""
+              "pixAISkill": ""
             }
           ],
           "default": "critical-only",
@@ -1114,7 +1114,7 @@
               "key": "none",
               "label": "None",
               "description": "",
-              "pixGalaxySkill": ""
+              "pixAISkill": ""
             }
           ],
           "default": "full",
@@ -1147,7 +1147,7 @@
               "key": "none",
               "label": "None",
               "description": "",
-              "pixGalaxySkill": ""
+              "pixAISkill": ""
             }
           ],
           "default": "gitlab-mr",
@@ -1182,7 +1182,7 @@
               "key": "none",
               "label": "No TypeScript — Plain JavaScript",
               "description": "Plain JavaScript — no TypeScript",
-              "pixGalaxySkill": ""
+              "pixAISkill": ""
             }
           ],
           "default": "strict",
@@ -1607,7 +1607,7 @@
               "key": "none",
               "label": "None (local app)",
               "description": "",
-              "pixGalaxySkill": ""
+              "pixAISkill": ""
             },
             {
               "key": "jwt",
@@ -1674,7 +1674,7 @@
           "key": "RULE_MCP_PRIMARY_SKILL",
           "label": "Primary rule skill",
           "type": "select",
-          "options": "pixGalaxySkills",
+          "options": "pixAISkills",
           "default": "rule-architect",
           "description": "Main skill agents should read first for this project."
         },
@@ -1737,7 +1737,7 @@
               "key": "none",
               "label": "None",
               "description": "",
-              "pixGalaxySkill": ""
+              "pixAISkill": ""
             },
             {
               "key": "wcag21aa",
@@ -1781,19 +1781,19 @@
               "key": "lighthouse",
               "label": "Lighthouse CI — Performance + a11y audit",
               "description": "Lighthouse CI — performance + a11y audit",
-              "pixGalaxySkill": ""
+              "pixAISkill": ""
             },
             {
               "key": "manual",
               "label": "Manual only — Keyboard + screen reader testing",
               "description": "",
-              "pixGalaxySkill": ""
+              "pixAISkill": ""
             },
             {
               "key": "none",
               "label": "None",
               "description": "",
-              "pixGalaxySkill": ""
+              "pixAISkill": ""
             }
           ],
           "default": "axe-playwright",
@@ -1820,7 +1820,7 @@
               "key": "manual",
               "label": "Manual only",
               "description": "",
-              "pixGalaxySkill": ""
+              "pixAISkill": ""
             },
             {
               "key": "automated",
@@ -1866,13 +1866,13 @@
               "key": "static",
               "label": "Static hosting",
               "description": "Static hosting — Vercel, Netlify, Cloudflare Pages",
-              "pixGalaxySkill": ""
+              "pixAISkill": ""
             },
             {
               "key": "node",
               "label": "Node.js server",
               "description": "",
-              "pixGalaxySkill": ""
+              "pixAISkill": ""
             },
             {
               "key": "expo",
@@ -1897,13 +1897,13 @@
               "key": "github",
               "label": "GitHub Actions",
               "description": "GitHub Actions — .github/workflows",
-              "pixGalaxySkill": ""
+              "pixAISkill": ""
             },
             {
               "key": "none",
               "label": "None",
               "description": "",
-              "pixGalaxySkill": ""
+              "pixAISkill": ""
             }
           ],
           "default": "gitlab"
@@ -1949,7 +1949,7 @@
               "key": "none",
               "label": "None (local app)",
               "description": "",
-              "pixGalaxySkill": ""
+              "pixAISkill": ""
             },
             {
               "key": "jwt",
@@ -2497,7 +2497,7 @@
       "description": ""
     }
   ],
-  "pixGalaxySkills": [
+  "pixAISkills": [
     {
       "key": "rule",
       "label": "rule"

@@ -26,6 +26,9 @@ function parseArgs() {
     tier: args.includes("--tier") ? args[args.indexOf("--tier") + 1] : "starter",
     output: args.includes("--output") ? args[args.indexOf("--output") + 1] : process.cwd(),
     answersFile: args.includes("--answers") ? args[args.indexOf("--answers") + 1] : null,
+    // Overwrite pre-existing root entry files (CLAUDE.md, AGENTS.md, …).
+    // Off by default so a hand-authored file is never clobbered silently.
+    force: args.includes("--force"),
   };
 }
 
@@ -96,8 +99,16 @@ async function runInterview() {
   // ── Generate .context/ ──
   exitAltScreen();
   console.log(`\n  Generating .context/ in ${opts.output}...`);
-  const gen = generateContext(answers, spec, opts.output);
-  console.log(`  Done. ${gen.files.length} files written to ${gen.target}\n`);
+  const gen = generateContext(answers, spec, opts.output, { force: opts.force });
+  const written = gen.files.length - gen.skipped.length;
+  console.log(`  Done. ${written} files written to ${opts.output}`);
+  for (const path of gen.skipped) {
+    console.log(`  ⚠ ${path} exists — skipped (use --force to overwrite)`);
+  }
+  if (gen.skipped.length > 0) {
+    console.log(`  Re-run with --force to overwrite ${gen.skipped.length} existing root file(s).`);
+  }
+  console.log("");
 }
 
 runInterview().catch(err => {

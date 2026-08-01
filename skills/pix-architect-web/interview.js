@@ -38,6 +38,33 @@ function visibleSections(tier) {
   return sections.filter(s => TIER_ORDER[s.tier] <= TIER_ORDER[tier]);
 }
 
+// Escape HTML-significant characters before interpolating an UNTRUSTED value
+// into innerHTML (or into an HTML attribute value). "Untrusted" means anything
+// that isn't a static string literal authored in this file: user free-text
+// input, values seeded by /api/init-values -> detectProjectValues (e.g.
+// PROJECT_NAME from package.json's `name` or a markdown `# H1`), resolved
+// select/repeatable labels derived from those values, generated file content,
+// and file paths. Only literal template strings written directly in this
+// source file (data-part names, static markup) are trusted and may be
+// interpolated unescaped. Also escapes quotes so the result is safe to place
+// inside a double- or single-quoted HTML attribute, not just text content.
+function esc(s) {
+  return String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+}
+
+// data-part styling + PROJECT_TYPE filtering per option group (wizard-spec.json
+// optionGroups key -> card taxonomy). Groups not listed here (e.g. desktopFrameworks,
+// architectureSkills) fall back to the generic skill-card rendering.
+const CARD_CONFIGS = {
+  projectTypes: { cardPart: "project-type-card", gridPart: "type-grid", namePart: "type-name", descPart: "type-desc", buildPart: "type-build", showBuild: true, filterByProjectType: false },
+  frontendFrameworks: { cardPart: "tech-card", gridPart: "tech-grid", namePart: "stack-name", descPart: "tech-desc", buildPart: "stack-build", showBuild: false, filterByProjectType: true },
+  metaFrameworks: { cardPart: "tech-card", gridPart: "tech-grid", namePart: "stack-name", descPart: "tech-desc", buildPart: "stack-build", showBuild: false, filterByProjectType: true },
+  backendFrameworks: { cardPart: "tech-card", gridPart: "tech-grid", namePart: "stack-name", descPart: "tech-desc", buildPart: "stack-build", showBuild: false, filterByProjectType: true },
+  databaseEngines: { cardPart: "tech-card", gridPart: "tech-grid", namePart: "stack-name", descPart: "tech-desc", buildPart: "stack-build", showBuild: false, filterByProjectType: true },
+  apiStyles: { cardPart: "tech-card", gridPart: "tech-grid", namePart: "stack-name", descPart: "tech-desc", buildPart: "stack-build", showBuild: false, filterByProjectType: true },
+  designSystems: { cardPart: "tech-card", gridPart: "tech-grid", namePart: "stack-name", descPart: "tech-desc", buildPart: "stack-build", showBuild: false, filterByProjectType: true },
+};
+
 // ─── Custom Element ──────────────────────────────────────────
 
 class ContextWizard extends HTMLElement {
@@ -48,6 +75,15 @@ class ContextWizard extends HTMLElement {
   constructor() {
     super();
     this._dispose = null;
+    // Summary/Files panel state (element-local — not part of the reactive
+    // store, since switching views/tabs never needs to rebuild the wizard form).
+    this._panelView = "summary"; // "summary" | "files"
+    this._filesSelected = "AGENTS.md";
+    this._filesData = null; // last-fetched [{path, content, filled, unfilled}] or null
+    this._filesLoading = false;
+    this._filesError = null;
+    this._filesReqSeq = 0; // race guard: only the latest /api/download response wins
+    this._filesDebounceTimer = null;
   }
 
   connectedCallback() {
@@ -56,6 +92,7 @@ class ContextWizard extends HTMLElement {
 
   disconnectedCallback() {
     if (this._dispose) this._dispose();
+    if (this._filesDebounceTimer) clearTimeout(this._filesDebounceTimer);
   }
 
   async loadData() {
@@ -94,7 +131,7 @@ class ContextWizard extends HTMLElement {
   render() {
     const phase = store.state.phase;
     if (phase === "loading") return this.renderSimple('<section data-part="loading"><p data-part="loading-text">Loading interview…</p></section>');
-    if (phase === "error") return this.renderSimple(`<section data-part="error"><p data-part="error-text">${store.state.error}</p><button data-part="back-btn" onclick="this.closest('context-wizard').loadData()">Retry</button></section>`);
+    if (phase === "error") return this.renderSimple(`<section data-part="error"><p data-part="error-text">${esc(store.state.error)}</p><button data-part="back-btn" onclick="this.closest('context-wizard').loadData()">Retry</button></section>`);
     if (phase === "generating") return this.renderSimple('<section data-part="generating"><p data-part="generating-text">Generating .context/…</p></section>');
     if (phase === "done") return this.renderDone();
     this.renderForm();
@@ -102,6 +139,7 @@ class ContextWizard extends HTMLElement {
 
   renderSimple(htmlStr) {
     this.innerHTML = htmlStr;
+    this._lastFormSig = null;
     this.updateSummary();
   }
 
@@ -114,9 +152,38 @@ class ContextWizard extends HTMLElement {
     const section = sections[stepIdx];
     if (!section) {
       this.innerHTML = "<p>No sections for this tier.</p>";
+      this._lastFormSig = null;
       this.updateSummary();
       return;
     }
+
+    // ── Structural signature ──────────────────────────────────
+    // Rebuild the field DOM only when the STRUCTURE changes: step, tier, which
+    // fields are visible, repeatable counts, or a card-select value (drives both
+    // visibility via showIf and the selected-card highlight). Free-text input
+    // values are deliberately EXCLUDED — the browser already holds what the user
+    // typed, so rebuilding the field on every keystroke would only destroy the
+    // focused node and lose focus + caret. All showIf conditions depend on
+    // `select` fields, so including select values here keeps visibility correct.
+    const values = store.state.values;
+    const visibleFields = section.fields ? section.fields.filter(f => this.isFieldVisible(f)) : [];
+    const sig = JSON.stringify({
+      phase: store.state.phase,
+      step: stepIdx,
+      tier,
+      section: section.key,
+      fields: visibleFields.map(f => f.key),
+      selects: visibleFields.filter(f => f.type === "select").map(f => [f.key, values[f.key] || ""]),
+      counts: visibleFields
+        .filter(f => f.type === "entity-list" || f.type === "repeatable" || f.type === "repeatable-inline")
+        .map(f => [f.key, this.getRepeatableCount(f.key, f.subfields || [])]),
+    });
+    if (this._lastFormSig === sig && this.querySelector("[data-part='wizard-step']")) {
+      // Value-only change — DOM already reflects it. Skip rebuild to preserve focus.
+      this.updateSummary();
+      return;
+    }
+    this._lastFormSig = sig;
 
     // Build tab data array
     const tabData = sections.map((s, i) => ({
@@ -132,9 +199,9 @@ class ContextWizard extends HTMLElement {
     const isLast = stepIdx === sections.length - 1;
 
     const stepContent = `
-      <h2 data-part="section-title">${section.label}</h2>
-      ${section.description ? `<p data-part="section-desc">${section.description}</p>` : ""}
-      ${section.fields ? section.fields.filter(f => this.isFieldVisible(f)).map(f => this.renderField(section, f)).join("") : ""}
+      <h2 data-part="section-title">${esc(section.label)}</h2>
+      ${section.description ? `<p data-part="section-desc">${esc(section.description)}</p>` : ""}
+      ${visibleFields.map(f => this.renderField(section, f)).join("")}
     `;
 
     const actionsHtml = `
@@ -189,6 +256,7 @@ class ContextWizard extends HTMLElement {
       store.state.tier = value;
       store.state.step = 0;
     }
+    if (this._panelView === "files") this.scheduleFilesFetch();
     this.updateSummary();
   }
 
@@ -210,9 +278,21 @@ class ContextWizard extends HTMLElement {
     return phases.find(p => p.key === s.phase) || { label: "" };
   }
 
+  // Keep an option if it has no projectTypes filter, or PROJECT_TYPE is unset/"other"
+  // (show everything), or its projectTypes array includes the selected PROJECT_TYPE.
+  filterByProjectType(list) {
+    const selectedType = store.state.values.PROJECT_TYPE || "";
+
+    if (!selectedType || selectedType === "other") {
+      return list;
+    }
+
+    return list.filter(o => !o.projectTypes || o.projectTypes.includes(selectedType));
+  }
+
   renderChoiceCards(field, key, val, list, cfg) {
-    const filteredList = list;
     const hasCfg = cfg && cfg.cardPart;
+    const filteredList = (hasCfg && cfg.filterByProjectType) ? this.filterByProjectType(list) : list;
     const cards = filteredList.map(o => {
       const id = o.key || o.id;
       const selected = id === val;
@@ -220,33 +300,33 @@ class ContextWizard extends HTMLElement {
       const build = o.build || "";
       const skill = o.pixGalaxySkill || "";
       if (hasCfg) {
-        return `<article data-part="${cfg.cardPart}" data-key="${id}" ${skill ? `data-skill="${skill}"` : ""}
+        return `<article data-part="${cfg.cardPart}" data-key="${esc(id)}" ${skill ? `data-skill="${esc(skill)}"` : ""}
           data-state-selected="${selected ? "true" : ""}" role="button" tabindex="0"
           onclick="document.querySelector('context-wizard').selectCard('${key}','${id}')">
           <div data-part="card-body">
-            <h3 data-part="${cfg.namePart}">${o.label}</h3>
-            ${desc ? `<p data-part="${cfg.descPart}">${desc}</p>` : ""}
-            ${cfg.showBuild && build ? `<p data-part="${cfg.buildPart}">Build: ${build}</p>` : ""}
+            <h3 data-part="${cfg.namePart}">${esc(o.label)}</h3>
+            ${desc ? `<p data-part="${cfg.descPart}">${esc(desc)}</p>` : ""}
+            ${cfg.showBuild && build ? `<p data-part="${cfg.buildPart}">Build: ${esc(build)}</p>` : ""}
           </div>
-          ${skill ? `<code data-part="skill-tag">${skill}</code>` : ""}
+          ${skill ? `<code data-part="skill-tag">${esc(skill)}</code>` : ""}
         </article>`;
       }
       // Generic card for inline options
-      return `<article data-part="skill-card" data-key="${id}" ${skill ? `data-skill="${skill}"` : ""}
+      return `<article data-part="skill-card" data-key="${esc(id)}" ${skill ? `data-skill="${esc(skill)}"` : ""}
         data-state-selected="${selected ? "true" : ""}" role="button" tabindex="0"
         onclick="document.querySelector('context-wizard').selectCard('${key}','${id}')">
         <div data-part="card-body">
-          <h3 data-part="card-name">${o.label}</h3>
-          ${desc ? `<p data-part="card-desc">${desc}</p>` : ""}
-          ${build ? `<p data-part="card-build">${build}</p>` : ""}
+          <h3 data-part="card-name">${esc(o.label)}</h3>
+          ${desc ? `<p data-part="card-desc">${esc(desc)}</p>` : ""}
+          ${build ? `<p data-part="card-build">${esc(build)}</p>` : ""}
         </div>
-        ${skill ? `<code data-part="skill-tag">${skill}</code>` : ""}
+        ${skill ? `<code data-part="skill-tag">${esc(skill)}</code>` : ""}
       </article>`;
     }).join("");
     const gridPart = (hasCfg && cfg.gridPart) ? cfg.gridPart : "card-grid";
-    return `<h3 data-part="subtitle">${field.label || ""}</h3>
+    return `<h3 data-part="subtitle">${esc(field.label || "")}</h3>
       <nav data-part="${gridPart}">${cards}</nav>
-      ${field.description ? `<p data-part="hint">${field.description}</p>` : ""}`;
+      ${field.description ? `<p data-part="hint">${esc(field.description)}</p>` : ""}`;
   }
 
   renderField(section, field) {
@@ -258,31 +338,32 @@ class ContextWizard extends HTMLElement {
     // ALL select types render as cards — no dropdowns
     if (field.type === "select") {
       const list = typeof field.options === "string" ? (ph[field.options] || []) : (Array.isArray(field.options) ? field.options : []);
-      return this.renderChoiceCards(field, key, val, list, {});
+      const cfg = (typeof field.options === "string" && CARD_CONFIGS[field.options]) || {};
+      return this.renderChoiceCards(field, key, val, list, cfg);
     }
 
     if (field.type === "version-select") {
-      return `<p data-part="field"><label data-part="label" for="${inputId}">${field.label}</label>
-        <input data-part="input" type="text" id="${inputId}" name="${key}" value="${val || field.default || ""}" placeholder="${field.default || "e.g. 22.x"}"
+      return `<p data-part="field"><label data-part="label" for="${inputId}">${esc(field.label)}</label>
+        <input data-part="input" type="text" id="${inputId}" name="${key}" value="${esc(val || field.default || "")}" placeholder="${esc(field.default || "e.g. 22.x")}"
           oninput="document.querySelector('context-wizard').track('${key}', this.value)" />
-        <span data-part="hint">Pin major version. Default: ${field.default || "latest"}</span></p>`;
+        <span data-part="hint">Pin major version. Default: ${esc(field.default || "latest")}</span></p>`;
     }
 
     if (field.type === "textarea") {
-      return `<p data-part="field"><label data-part="label" for="${inputId}">${field.label}</label>
-        <textarea data-part="input" id="${inputId}" name="${key}" placeholder="${field.placeholder || ""}"
-          oninput="document.querySelector('context-wizard').track('${key}', this.value)">${val}</textarea>
-        ${field.description ? `<span data-part="hint">${field.description}</span>` : ""}</p>`;
+      return `<p data-part="field"><label data-part="label" for="${inputId}">${esc(field.label)}</label>
+        <textarea data-part="input" id="${inputId}" name="${key}" placeholder="${esc(field.placeholder || "")}"
+          oninput="document.querySelector('context-wizard').track('${key}', this.value)">${esc(val)}</textarea>
+        ${field.description ? `<span data-part="hint">${esc(field.description)}</span>` : ""}</p>`;
     }
 
     if (field.type === "entity-list" || field.type === "repeatable") {
       return this.renderRepeatableGroup(section, field);
     }
 
-    return `<p data-part="field"><label data-part="label" for="${inputId}">${field.label}</label>
-      <input data-part="input" type="text" id="${inputId}" name="${key}" value="${val}" placeholder="${field.placeholder || ""}"
+    return `<p data-part="field"><label data-part="label" for="${inputId}">${esc(field.label)}</label>
+      <input data-part="input" type="text" id="${inputId}" name="${key}" value="${esc(val)}" placeholder="${esc(field.placeholder || "")}"
         oninput="document.querySelector('context-wizard').track('${key}', this.value)" />
-      ${field.description ? `<span data-part="hint">${field.description}</span>` : ""}</p>`;
+      ${field.description ? `<span data-part="hint">${esc(field.description)}</span>` : ""}</p>`;
   }
 
   // ─── Repeatable Groups ─────────────────────────────────────
@@ -310,6 +391,7 @@ class ContextWizard extends HTMLElement {
     if (subfields.length === 0) subfields = [{ key: "name" }, { key: "description" }];
     for (const sf of subfields) values[`${prefix}_${nextIdx}_${sf.key}`] = "";
     values[`${prefix}_count`] = String(nextIdx);
+    if (this._panelView === "files") this.scheduleFilesFetch();
   }
 
   removeRepeatable(btn) {
@@ -337,6 +419,7 @@ class ContextWizard extends HTMLElement {
       }
     }
     values[`${basePrefix}_count`] = String(Math.max(1, currentCount - 1));
+    if (this._panelView === "files") this.scheduleFilesFetch();
   }
 
   renderRepeatableGroup(section, field) {
@@ -345,30 +428,30 @@ class ContextWizard extends HTMLElement {
     const subfields = field.subfields || [];
     const values = store.state.values;
     const count = this.getRepeatableCount(prefix, subfields);
-    let h = `<h3 data-part="subtitle">${field.label || singular}</h3>`;
+    let h = `<h3 data-part="subtitle">${esc(field.label || singular)}</h3>`;
     for (let i = 1; i <= count; i++) {
       h += `<article data-part="repeatable-group" data-index="${i}">`;
-      h += `<header data-part="group-header"><span data-part="group-num">${singular} ${i}</span>`;
-      if (count > 1) h += `<button type="button" data-part="remove-btn" data-prefix="${prefix}_${i}" data-section="${section.key}" aria-label="Remove ${singular}">&times;</button>`;
+      h += `<header data-part="group-header"><span data-part="group-num">${esc(singular)} ${i}</span>`;
+      if (count > 1) h += `<button type="button" data-part="remove-btn" data-prefix="${prefix}_${i}" data-section="${section.key}" aria-label="Remove ${esc(singular)}">&times;</button>`;
       h += `</header>`;
       for (const sf of subfields) {
         const k = `${prefix}_${i}_${sf.key}`;
         const v = values[k] || "";
         const fid = `f-${k}`;
         if (sf.type === "select" && Array.isArray(sf.options)) {
-          const opts = sf.options.map(o => `<option value="${o.key || o}" ${(o.key === v || o === v) ? "selected" : ""}>${o.label || o}</option>`).join("");
-          h += `<p data-part="field"><label data-part="label" for="${fid}">${sf.label}</label><select data-part="input" id="${fid}" name="${k}" onchange="document.querySelector('context-wizard').track('${k}', this.value)"><option value="">--</option>${opts}</select></p>`;
+          const opts = sf.options.map(o => `<option value="${esc(o.key || o)}" ${(o.key === v || o === v) ? "selected" : ""}>${esc(o.label || o)}</option>`).join("");
+          h += `<p data-part="field"><label data-part="label" for="${fid}">${esc(sf.label)}</label><select data-part="input" id="${fid}" name="${k}" onchange="document.querySelector('context-wizard').track('${k}', this.value)"><option value="">--</option>${opts}</select></p>`;
         } else if (sf.type === "boolean") {
-          h += `<p data-part="field"><label data-part="label"><input type="checkbox" name="${k}" ${v === "true" || v === true ? "checked" : ""} onchange="document.querySelector('context-wizard').track('${k}', this.checked ? 'true' : '')" /> ${sf.label}</label></p>`;
+          h += `<p data-part="field"><label data-part="label"><input type="checkbox" name="${k}" ${v === "true" || v === true ? "checked" : ""} onchange="document.querySelector('context-wizard').track('${k}', this.checked ? 'true' : '')" /> ${esc(sf.label)}</label></p>`;
         } else if (sf.type === "textarea") {
-          h += `<p data-part="field"><label data-part="label" for="${fid}">${sf.label}</label><textarea data-part="input" id="${fid}" name="${k}" placeholder="${sf.placeholder || ""}" oninput="document.querySelector('context-wizard').track('${k}', this.value)">${v}</textarea></p>`;
+          h += `<p data-part="field"><label data-part="label" for="${fid}">${esc(sf.label)}</label><textarea data-part="input" id="${fid}" name="${k}" placeholder="${esc(sf.placeholder || "")}" oninput="document.querySelector('context-wizard').track('${k}', this.value)">${esc(v)}</textarea></p>`;
         } else {
-          h += `<p data-part="field"><label data-part="label" for="${fid}">${sf.label}</label><input data-part="input" type="text" id="${fid}" name="${k}" value="${v}" placeholder="${sf.placeholder || ""}" oninput="document.querySelector('context-wizard').track('${k}', this.value)" /></p>`;
+          h += `<p data-part="field"><label data-part="label" for="${fid}">${esc(sf.label)}</label><input data-part="input" type="text" id="${fid}" name="${k}" value="${esc(v)}" placeholder="${esc(sf.placeholder || "")}" oninput="document.querySelector('context-wizard').track('${k}', this.value)" /></p>`;
         }
       }
       h += `</article>`;
     }
-    h += `<p data-part="field"><button type="button" data-part="add-btn" data-prefix="${prefix}" data-section="${section.key}" data-subfields='${JSON.stringify(subfields)}'>+ Add ${singular}</button></p>`;
+    h += `<p data-part="field"><button type="button" data-part="add-btn" data-prefix="${prefix}" data-section="${section.key}" data-subfields='${esc(JSON.stringify(subfields))}'>+ Add ${esc(singular)}</button></p>`;
     return h;
   }
 
@@ -391,29 +474,198 @@ class ContextWizard extends HTMLElement {
     return true;
   }
 
-  updateSummary() {
-    const panel = document.querySelector("[data-part='summary-panel']");
-    if (!panel) return;
-    const scrollEl = panel.querySelector("[data-part='summary-scroll']");
-    const scrollTop = scrollEl ? scrollEl.scrollTop : 0;
-    const values = store.state.values;
-    const rows = Object.entries(values)
-      .sort((a, b) => a[0].localeCompare(b[0]))
-      .filter(([k]) => !k.endsWith("_count"))
-      .map(([k, v]) => `<tr><td data-part="summary-key">${k}</td><td data-part="summary-val">${v || "<em style='color:var(--color-text-muted)'>\u2014</em>"}</td></tr>`).join("");
-    const json = JSON.stringify(values, null, 2);
-    const inner = `\n      <h3>\u26a1 Configuration Summary</h3>\n      <div data-part="summary-scroll">\n        <table>${rows}</table>\n        <pre data-part="summary-json">${json}</pre>\n      </div>`;
-    if (panel.innerHTML !== inner) {
-      panel.innerHTML = inner;
-      if (scrollTop > 0) { const ns = panel.querySelector("[data-part='summary-scroll']"); if (ns) ns.scrollTop = scrollTop; }
-    }
+  // Resolve a `select` field's stored key to its human option label.
+  resolveSelectLabel(field, raw, ph) {
+    const list = typeof field.options === "string" ? (ph[field.options] || []) : (Array.isArray(field.options) ? field.options : []);
+    const opt = list.find(o => (o.key || o.id) === raw);
+    return opt ? opt.label : raw;
   }
 
-  collectAndSubmit(mode) {
+  // One bullet per filled entry of a repeatable/entity-list field: prefer the
+  // "name" subfield, else the first subfield with a non-empty value.
+  summaryRepeatableItems(field, values) {
+    const prefix = field.key;
+    const subfields = field.subfields || [];
+    const count = this.getRepeatableCount(prefix, subfields);
+    const primary = subfields.find(sf => sf.key === "name") || subfields[0];
+    const items = [];
+    for (let i = 1; i <= count; i++) {
+      let text = primary ? String(values[`${prefix}_${i}_${primary.key}`] || "").trim() : "";
+      if (!text) {
+        for (const sf of subfields) {
+          const v = String(values[`${prefix}_${i}_${sf.key}`] || "").trim();
+          if (v) { text = v; break; }
+        }
+      }
+      if (text) items.push(text);
+    }
+    return items;
+  }
+
+  // Render one field as a summary-row (label -> value), or a labeled bulleted
+  // list for repeatable/entity-list fields. Returns "" when there's nothing to show.
+  renderSummaryRow(field, values, ph) {
+    const label = esc(field.label || field.key);
+    if (field.type === "entity-list" || field.type === "repeatable" || field.type === "repeatable-inline") {
+      const items = this.summaryRepeatableItems(field, values);
+      if (items.length === 0) return "";
+      return `<div data-part="summary-row"><span data-part="summary-label">${label}</span><ul data-part="summary-list">${items.map(i => `<li>${esc(i)}</li>`).join("")}</ul></div>`;
+    }
+    const raw = values[field.key];
+    if (raw === undefined || raw === null || String(raw).trim() === "") return "";
+    const display = field.type === "select" ? this.resolveSelectLabel(field, raw, ph) : raw;
+    return `<div data-part="summary-row"><span data-part="summary-label">${label}</span><span data-part="summary-value">${esc(display)}</span></div>`;
+  }
+
+  // --- Summary/Files panel ------------------------------------
+
+  // Merge tracked store values with whatever is currently in the DOM
+  // (uncommitted keystrokes on the focused input). Shared by the Files
+  // preview fetch and the final generate/download submit, so both see
+  // the same in-progress answers.
+  collectValues() {
     const values = { ...store.state.values };
     this.querySelectorAll("input, textarea, select").forEach(el => {
       if (el.name && el.type !== "checkbox") values[el.name] = el.value;
     });
+    return values;
+  }
+
+  setPanelView(view) {
+    if (view !== "summary" && view !== "files") return;
+    if (this._panelView === view) return;
+    this._panelView = view;
+    if (view === "files") {
+      this.scheduleFilesFetch();
+    } else if (this._filesDebounceTimer) {
+      // Leaving Files: cancel any pending debounced fetch — Summary stays
+      // purely client-side, it must never trigger a network request.
+      clearTimeout(this._filesDebounceTimer);
+      this._filesDebounceTimer = null;
+    }
+    this.updateSummary();
+  }
+
+  selectFile(path) {
+    if (!path || this._filesSelected === path) return;
+    this._filesSelected = path;
+    this.updateSummary();
+  }
+
+  // Debounce (~400ms) so a fetch fires once per pause in typing, not per
+  // keystroke. Called on entering Files and on every value change while
+  // Files is active; never while on Summary.
+  scheduleFilesFetch() {
+    if (this._filesDebounceTimer) clearTimeout(this._filesDebounceTimer);
+    this._filesLoading = true;
+    this._filesError = null;
+    this.updateSummary();
+    this._filesDebounceTimer = setTimeout(() => this.fetchFiles(), 400);
+  }
+
+  fetchFiles() {
+    // Belt-and-suspenders alongside the setPanelView timer-cancel: never POST
+    // while Summary is showing, even if this got invoked some other way.
+    if (this._panelView !== "files") return;
+    // Race guard: bump the sequence now, and only accept the response whose
+    // seq still matches when it resolves -- a later request that resolves
+    // first must not get clobbered by a slower, now-stale earlier one.
+    const seq = ++this._filesReqSeq;
+    const values = this.collectValues();
+    fetch("/api/download", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ values, tier: store.state.tier }),
+    })
+      .then(r => r.json())
+      .then(result => {
+        if (seq !== this._filesReqSeq) return;
+        this._filesLoading = false;
+        this._filesData = result.files || [];
+        if (!this._filesData.some(f => f.path === this._filesSelected)) {
+          const fallback = this._filesData.find(f => f.path === "AGENTS.md") || this._filesData[0];
+          this._filesSelected = fallback ? fallback.path : "AGENTS.md";
+        }
+        this.updateSummary();
+      })
+      .catch(err => {
+        if (seq !== this._filesReqSeq) return;
+        this._filesLoading = false;
+        this._filesError = err.message;
+        this.updateSummary();
+      });
+  }
+
+  renderPanelToggle() {
+    const view = this._panelView;
+    return `<div data-part="panel-toggle">
+      <button type="button" data-part="panel-tab" data-state-active="${view === "summary" ? "true" : ""}" onclick="document.querySelector('context-wizard').setPanelView('summary')">Summary</button>
+      <button type="button" data-part="panel-tab" data-state-active="${view === "files" ? "true" : ""}" onclick="document.querySelector('context-wizard').setPanelView('files')">Files</button>
+    </div>`;
+  }
+
+  renderSummaryBody() {
+    const values = store.state.values;
+    const ph = store.state.placeholders || {};
+    const sections = visibleSections(store.state.tier);
+
+    const groups = sections.map(section => {
+      const rows = (section.fields || [])
+        .filter(f => this.isFieldVisible(f))
+        .map(f => this.renderSummaryRow(f, values, ph))
+        .filter(Boolean)
+        .join("");
+      if (!rows) return "";
+      const title = esc((section.label || "").replace(/^Step \d+ \u2014 /, ""));
+      return `<section data-part="summary-group"><h4 data-part="summary-group-title">${title}</h4>${rows}</section>`;
+    }).filter(Boolean).join("");
+
+    const body = groups || `<p data-part="summary-empty">Fill in the interview fields to see a live summary of all choices.</p>`;
+    return `<div data-part="summary-scroll">${body}</div>`;
+  }
+
+  renderFilesBody() {
+    const files = this._filesData || [];
+    const tabs = files
+      .map(f => `<button type="button" data-part="file-tab" data-path="${esc(f.path)}" data-state-active="${f.path === this._filesSelected ? "true" : ""}">${esc(f.path)}</button>`)
+      .join("");
+    const selected = files.find(f => f.path === this._filesSelected) || files[0];
+
+    let contentHtml;
+    if (selected) {
+      contentHtml = `<pre data-part="file-content">${esc(selected.content || "")}</pre>`;
+    } else if (this._filesLoading) {
+      contentHtml = "";
+    } else {
+      contentHtml = `<p data-part="summary-empty">No files yet \u2014 fill in the interview to see a live preview.</p>`;
+    }
+
+    return `<div data-part="files-body">
+      ${files.length ? `<nav data-part="file-tabs">${tabs}</nav>` : ""}
+      ${this._filesLoading ? `<p data-part="files-loading">Updating\u2026</p>` : ""}
+      ${this._filesError ? `<p data-part="files-error">${esc(this._filesError)}</p>` : ""}
+      ${contentHtml}
+    </div>`;
+  }
+
+  updateSummary() {
+    const panel = document.querySelector("[data-part='summary-panel']");
+    if (!panel) return;
+    const view = this._panelView;
+    const scrollPart = view === "files" ? "file-content" : "summary-scroll";
+    const scrollEl = panel.querySelector(`[data-part='${scrollPart}']`);
+    const scrollTop = scrollEl ? scrollEl.scrollTop : 0;
+
+    const body = view === "files" ? this.renderFilesBody() : this.renderSummaryBody();
+    const inner = `\n      <h3>\u26a1 Configuration Summary</h3>${this.renderPanelToggle()}${body}`;
+    if (panel.innerHTML !== inner) {
+      panel.innerHTML = inner;
+      if (scrollTop > 0) { const ns = panel.querySelector(`[data-part='${scrollPart}']`); if (ns) ns.scrollTop = scrollTop; }
+    }
+  }
+
+  collectAndSubmit(mode) {
+    const values = this.collectValues();
     if (mode === "download") {
       store.state.phase = "generating";
       fetch("/api/download", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ values, tier: store.state.tier }) })
@@ -436,18 +688,19 @@ class ContextWizard extends HTMLElement {
   }
 
   renderDone() {
+    this._lastFormSig = null;
     const result = store.state.result;
     const error = store.state.error;
     if (error) {
-      this.innerHTML = `<section data-part="result"><h2 data-part="result-title">Failed</h2><p>${error}</p><button data-part="back-btn" onclick="this.closest('context-wizard').loadData()">Try Again</button></section>`;
+      this.innerHTML = `<section data-part="result"><h2 data-part="result-title">Failed</h2><p>${esc(error)}</p><button data-part="back-btn" onclick="this.closest('context-wizard').loadData()">Try Again</button></section>`;
       this.updateSummary(); return;
     }
     const files = (result && result.files) || [];
     const allFilled = files.filter(f => f.unfilled === 0).length;
     this.innerHTML = `
       <section data-part="result" data-state-success="true">
-        <h2 data-part="result-title">\u2705 ${result.summary || "Generated!"}</h2>
-        <p data-part="result-path">Target: <code>${result.target || "./.context/"}</code></p>
+        <h2 data-part="result-title">\u2705 ${esc(result.summary || "Generated!")}</h2>
+        <p data-part="result-path">Target: <code>${esc(result.target || "./.context/")}</code></p>
         <table data-part="result-table"><thead><tr><th data-part="th">File</th><th data-part="th">Filled</th><th data-part="th">Unfilled</th></tr></thead>
           <tbody>${files.map(f => `<tr><td data-part="td"><code>${f.path}</code></td><td data-part="td">${f.filled}</td><td data-part="td">${f.unfilled}</td></tr>`).join("")}</tbody>
         </table>
@@ -461,11 +714,12 @@ class ContextWizard extends HTMLElement {
 // ─── Event delegation for add/remove repeatable buttons ─────
 
 document.addEventListener("click", (e) => {
-  const btn = e.target.closest("[data-part='add-btn'], [data-part='remove-btn']");
+  const btn = e.target.closest("[data-part='add-btn'], [data-part='remove-btn'], [data-part='file-tab']");
   if (!btn) return;
   e.preventDefault();
   const wizard = document.querySelector("context-wizard");
   if (!wizard) return;
   if (btn.dataset.part === "add-btn") wizard.addRepeatable(btn);
   if (btn.dataset.part === "remove-btn") wizard.removeRepeatable(btn);
+  if (btn.dataset.part === "file-tab") wizard.selectFile(btn.dataset.path);
 });

@@ -90,7 +90,8 @@ Use this table to ensure the architecture package references all relevant skills
 
 | Skill | Use in architecture when |
 |-------|--------------------------|
-| [rule-platform-agent](../rule-platform-agent/SKILL.md) | Scaffolding an AI coding agent project with custom tools, env config, testing, and containerization.
+| [rule-mcp-agents](../rule-mcp-agents/SKILL.md) | Building an agent application on `@rule/rule-mcp-core` with its prescribed provider, tool, test, and container patterns. |
+| [rule-platform-agent](../rule-platform-agent/SKILL.md) | Scaffolding a framework-agnostic AI coding agent project with custom tools, env config, testing, and containerization. |
 
 ### Backend
 
@@ -100,6 +101,7 @@ Use this table to ensure the architecture package references all relevant skills
 | [rule-backend-api-design](../rule-backend-api-design/SKILL.md) | Designing REST endpoints, HTTP methods, versioning, request/response contracts, pagination, filtering, sorting, and OpenAPI docs. |
 | [rule-backend-express](../rule-backend-express/SKILL.md) | API server built with Express.js 5+ (middleware, routing, error handling, security headers). |
 | [rule-backend-fastify](../rule-backend-fastify/SKILL.md) | API server built with Fastify 5+ (schema validation, serialization, plugins, high throughput). |
+| [rule-backend-graphql](../rule-backend-graphql/SKILL.md) | GraphQL API contract and operations: schema-first design, resolver boundaries, N+1 prevention, caching, and abuse controls. |
 | [rule-backend-hono](../rule-backend-hono/SKILL.md) | Edge-compatible API built with Hono 4+ (multi-runtime: Node, Cloudflare Workers, Bun, Deno). |
 | [rule-backend-nestjs](../rule-backend-nestjs/SKILL.md) | Modular enterprise API with NestJS 10+ (decorators, DI, guards, interceptors, GraphQL, microservices). |
 | [rule-backend-node](../rule-backend-node/SKILL.md) | Scaffolding a new Node.js + TypeScript backend repository with baseline config, tests, Docker, and CI. |
@@ -125,6 +127,7 @@ Use this table to ensure the architecture package references all relevant skills
 | [rule-devops](../rule-devops/SKILL.md) | Umbrella routing for DevOps decisions. Read first before using specialized sub-skills. |
 | [rule-devops-docker](../rule-devops-docker/SKILL.md) | Containerizing with Docker: Dockerfile, docker-compose, .dockerignore, multi-stage builds, nginx config. |
 | [rule-devops-gitlab-ci](../rule-devops-gitlab-ci/SKILL.md) | CI/CD with GitLab CI: pipeline caching, coverage reporting, Docker build/push, deploy stages. |
+| [rule-devops-observability](../rule-devops-observability/SKILL.md) | Production observability and reliability: SLOs, telemetry, alerting, incident learning, and rollback verification. |
 | [rule-devops-testing](../rule-devops-testing/SKILL.md) | Test infrastructure with Vitest: unit, integration, config, mocks, coverage thresholds (60/50/60/60). |
 | [rule-devops-version](../rule-devops-version/SKILL.md) | Automatic version increment on every commit using Husky pre-commit hooks. |
 
@@ -154,46 +157,11 @@ Use this table to ensure the architecture package references all relevant skills
 
 | Skill | Use in architecture when |
 |-------|--------------------------|
-| [rule-platform](../rule-platform/SKILL.md) | Umbrella routing for platform/project-type decisions. Read first before specialized skills. Includes **Multi-target Project Structure** convention for apps combining web frontend + Electron desktop + API backend under `src/app/`, `src/electron/`, `src/api/`. |
+| [rule-platform](../rule-platform/SKILL.md) | Umbrella routing for platform/project-type decisions. Read first before specialized skills. |
 | [rule-platform-web](../rule-platform-web/SKILL.md) | Browser-based web app: bundling, routing, progressive enhancement, performance budgets, static hosting. |
 | [rule-platform-desktop](../rule-platform-desktop/SKILL.md) | Desktop app: Electron (Chromium + Node.js, contextBridge IPC, auto-update) or Tauri (Rust + system webview). |
 | [rule-platform-expo](../rule-platform-expo/SKILL.md) | Mobile app: Expo/React Native with EAS Build, EAS Secrets, OTA updates, Expo Router. |
 | [rule-platform-library](../rule-platform-library/SKILL.md) | Reusable npm package: dual CJS/ESM, TypeScript exports, semantic versioning, changelog. |
-
-### Project Structure Convention
-
-For multi-target apps (web + desktop + API), rule-mcp follows the `src/` layout defined in [rule-platform Multi-target Project Structure](../rule-platform/SKILL.md#multi-target-project-structure):
-
-```
-project/
-├── src/
-│   ├── web/              ← Frontend web app (Vanilla JS, React, Vue, etc.)
-│   ├── api/              ← Backend API server (FastAPI, Express, etc.)
-│   └── desktop/          ← Desktop shell (Electron, Tauri, etc.)
-├── docs/
-├── scripts/
-└── package.json
-```
-
-When scaffolding a new project with `rule-architect`, always ask:
-- Does this project have a frontend? → `src/web/`
-- Does this project have a backend API? → `src/api/`
-- Does this project have a desktop shell? → `src/desktop/`
-
-### Test co-location
-
-Tests are co-located with their component, not centralized:
-
-```
-src/
-├── web/tests/           ← Frontend-specific
-├── api/tests/           ← Backend-specific
-└── desktop/tests/       ← Desktop-specific
-```
-
-Cross-layer tests (integration, E2E) may live at project root `tests/` with shared Playwright config.
-
-For single-platform projects (frontend only, backend only), the simpler conventions in `rule-platform-web`, `rule-backend-*`, and `rule-toolchain-project` apply directly.
 
 ### Process / Methodology
 
@@ -202,6 +170,7 @@ For single-platform projects (frontend only, backend only), the simpler conventi
 | [rule-process](../rule-process/SKILL.md) | Umbrella routing for process decisions. Read first before specialized skills. |
 | [rule-process-adr](../rule-process-adr/SKILL.md) | Recording architecture decisions: auto-numbered Nygard ADRs in docs/adr/ with index. |
 | [rule-process-bmad](../rule-process-bmad/SKILL.md) | Full 4-phase delivery: Analysis, Planning, Solutioning, Implementation — choose Quick Flow, BMAD, or Enterprise. |
+| [rule-process-code-review](../rule-process-code-review/SKILL.md) | Risk-based PR/MR review: readiness, high-risk inspection order, actionable feedback, approval, and follow-up ownership. |
 | [rule-process-documentation](../rule-process-documentation/SKILL.md) | Setting up Mintlify documentation portal: mint.json, page templates, local preview, deploy. |
 | [rule-process-feature-workflow](../rule-process-feature-workflow/SKILL.md) | End-to-end feature procedure: branch creation through merge request with TDD and guardrails. |
 | [rule-process-handoff](../rule-process-handoff/SKILL.md) | LLM session handoff: compressed summary from ADR logs and project context for cross-chat continuity. |
@@ -245,7 +214,7 @@ For single-platform projects (frontend only, backend only), the simpler conventi
 
 ## Generated `.context/` output
 
-The context interview must generate these industry-standard outputs from `assets/context-server/templates.json`:
+The context interview must generate these industry-standard outputs from `templates.json`:
 
 - `README.md` — documentation map and project frame
 - `ROADMAP.md` — milestone tracker
@@ -258,10 +227,10 @@ The context interview must generate these industry-standard outputs from `assets
 
 ## Placeholder and inventory governance
 
-- `assets/context-server/placeholders.json` is the interview schema.
-- `assets/context-server/templates.json` is the generated `.context/` source.
+- `wizard-spec.json` is the interview schema.
+- `templates.json` is the generated `.context/` source.
 - [`knowledge/context-inventory.md`](./knowledge/context-inventory.md) is the census of generated files, placeholders, tools, and skill routing.
-- Every placeholder used by a template must be present in `placeholders.json`.
+- Every placeholder used by a template must be present in `wizard-spec.json`.
 - Every generated project must include `RULE_MCP_PRIMARY_SKILL`, `RULE_MCP_SECONDARY_SKILLS`, `RULE_MCP_RECOMMENDED_TOOLS`, `ARCHITECTURE_DECISIONS`, `QUALITY_GATES`, and `DELIVERY_WORKFLOW`.
 
 ## Quality gates

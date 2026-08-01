@@ -357,7 +357,7 @@ Data contract for every option in every optionGroup:
   "label": "React 18+",                         // Title
   "description": "Functional components...",     // Description
   "build": "Vite",                               // Subtle mono text (optional)
-  "pixGalaxySkill": "rule-frontend-react"         // Skill tag (if empty, not shown)
+  "pixAISkill": "rule-frontend-react"         // Skill tag (if empty, not shown)
 }
 ```
 

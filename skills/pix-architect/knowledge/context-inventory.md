@@ -1,6 +1,6 @@
 # rule-architect Context Inventory
 
-This inventory is generated from `assets/context-server/templates.json`, `assets/context-server/placeholders.json`, the skill corpus, and the registered MCP tools. It is the audit surface for keeping `.context` output industry-ready.
+This inventory is generated from `../templates.json`, `../wizard-spec.json`, the skill corpus, and the registered MCP tools. It is the audit surface for keeping `.context` output industry-ready.
 
 ## Generated .context files
 
