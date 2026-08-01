@@ -17,6 +17,10 @@ import { fileURLToPath } from "node:url";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const root = join(__dirname, "..");
 
+// Hermetic: exercise tool wiring, not the result cache.
+process.env.PIX_GALAXY_MCP_NO_CACHE = "1";
+process.env.PIX_GALAXY_MCP_NO_AUTOUPDATE = "1"; // hermetic: no real git ops in tests
+
 console.log("pix-galaxy-mcp smoke test");
 
 let failures = 0;

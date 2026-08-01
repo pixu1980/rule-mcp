@@ -8,7 +8,7 @@ import { existsSync, mkdtempSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 
-const fakeHome = mkdtempSync(join(tmpdir(), "pix-remote-capability-"));
+const fakeHome = mkdtempSync(join(tmpdir(), "pix-galaxy--capability-"));
 const installModule = new URL("../src/cli/install.js", import.meta.url).href;
 const output = execFileSync(
   process.execPath,
