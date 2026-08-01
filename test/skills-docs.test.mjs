@@ -95,19 +95,19 @@ for (const requiredSkill of [
 }
 
 const uiSkill = readFileSync(join(skillsRoot, "pix-ui", "SKILL.md"), "utf8");
-for (const required of ["pix-ui-design-system", "pix-frontend", "pix-styleguide", "pix_check"]) {
+for (const required of ["pix-ui-design-system", "pix-frontend", "pix-styleguide", "pix_tool_check"]) {
   assert(uiSkill.includes(required), `pix-ui must reference ${required}`);
 }
 
 const uiDesignSkill = readFileSync(join(skillsRoot, "pix-ui-design-system", "SKILL.md"), "utf8");
-for (const required of ["Zero CSS classes", "Zero inline styles", "Semantic HTML", "adoptedStyleSheets", "WCAG 2.2 AA", "pix_check"]) {
+for (const required of ["Zero CSS classes", "Zero inline styles", "Semantic HTML", "adoptedStyleSheets", "WCAG 2.2 AA", "pix_tool_check"]) {
   assert(uiDesignSkill.includes(required), `pix-ui-design-system must enforce ${required}`);
 }
 
 await loadAllSkills(true);
 const tools = listTools();
-assert(tools.some(tool => tool.name === "pix_ui"), "pix_ui MCP tool must be registered");
-assert(tools.some(tool => tool.name === "pix_ui_design_system"), "pix_ui_design_system MCP tool must be registered");
+assert(tools.some(tool => tool.name === "pix_tool_ui"), "pix_tool_ui MCP tool must be registered");
+assert(tools.some(tool => tool.name === "pix_tool_ui_design_system"), "pix_tool_ui_design_system MCP tool must be registered");
 for (const tool of tools) {
   assert(tool.description && tool.description.length > 20, `${tool.name}: MCP tool description must be useful`);
 }

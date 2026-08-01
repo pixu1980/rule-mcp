@@ -38,16 +38,16 @@ const MINIMAL_TOOLS = process.env.PIX_GALAXY_MCP_MINIMAL_TOOLS === "1";
  * matter what upstream registration adds.
  */
 const MINIMAL_ALLOWLIST = new Set([
-  "pix",              // router / dispatcher
-  "pix_update",       // self-update
-  "pix_gateway",      // route + evidence + guardrails + receipt (single entry)
-  "pix_apply",        // the only writer
-  "pix_search",
-  "pix_check",
-  "pix_scaffold",
-  "pix_detect",
-  "pix_process_handoff",
-  "pix_component",
+  "pix_tool",          // router / dispatcher
+  "pix_tool_update",   // self-update
+  "pix_tool_gateway",  // route + evidence + guardrails + receipt (single entry)
+  "pix_tool_apply",    // the only writer
+  "pix_tool_search",
+  "pix_tool_check",
+  "pix_tool_scaffold",
+  "pix_tool_detect",
+  "pix_tool_process_handoff",
+  "pix_tool_component",
 ]);
 /** Whether skills have been loaded yet. */
 let loaded = false;
@@ -323,7 +323,7 @@ function registerDetectTool() {
     path: z.string().optional().default(".").describe("Project directory path"),
   });
   registerTool({
-    name: "pix_detect",
+    name: "pix_tool_detect",
     description: "Detect project framework, TypeScript usage, and build tool from package.json.",
     zodSchema: DetectSchema,
     inputSchema: {
@@ -339,9 +339,9 @@ function registerDetectTool() {
       const { skillName, toolName } = getFrameworkSuggestion(profile.framework);
       const suggestions = [
         toolName,
-        "pix_check",
-        "pix_scaffold",
-        "pix_component",
+        "pix_tool_check",
+        "pix_tool_scaffold",
+        "pix_tool_component",
       ];
       const result = {
         ...profile,

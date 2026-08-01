@@ -22,73 +22,73 @@ Every source document below is preserved verbatim under its own heading so no pr
 
 | Tool | Category | Description |
 |------|----------|-------------|
-| `pix` | Router | Route a prompt to the correct pix skill |
-| `pix_search` | Search | Full-text BM25 search across ALL skills |
-| `pix_check` | Validation | Run guardrail checks on code |
-| `pix_scaffold` | Scaffold | Generate project config files |
-| `pix_detect` | Detection | Auto-detect project framework |
-| `pix_component` | Templates | Generate component/test templates |
-| `pix_process_adr` | ADR | Architecture Decision Records |
-| `pix_process_handoff` | Handoff | LLM context summary |
-| `pix_fix` | Fix | Validate and auto-fix file tree structure |
+| `pix_tool` | Router | Route a prompt to the correct pix skill |
+| `pix_tool_search` | Search | Full-text BM25 search across ALL skills |
+| `pix_tool_check` | Validation | Run guardrail checks on code |
+| `pix_tool_scaffold` | Scaffold | Generate project config files |
+| `pix_tool_detect` | Detection | Auto-detect project framework |
+| `pix_tool_component` | Templates | Generate component/test templates |
+| `pix_tool_process_adr` | ADR | Architecture Decision Records |
+| `pix_tool_process_handoff` | Handoff | LLM context summary |
+| `pix_tool_fix` | Fix | Validate and auto-fix file tree structure |
 | | | |
 | **UI Frameworks** | | |
-| `pix_frontend_vanilla_reactive` | Skill | Vanilla JS reactive pattern |
-| `pix_frontend_react` | Skill | React 18+ best practices |
-| `pix_frontend_vue` | Skill | Vue 3 Composition API |
-| `pix_frontend_svelte` | Skill | Svelte 5 runes |
-| `pix_frontend_angular` | Skill | Angular standalone components |
-| `pix_frontend_solidjs` | Skill | SolidJS fine-grained reactivity |
+| `pix_tool_frontend_vanilla_reactive` | Skill | Vanilla JS reactive pattern |
+| `pix_tool_frontend_react` | Skill | React 18+ best practices |
+| `pix_tool_frontend_vue` | Skill | Vue 3 Composition API |
+| `pix_tool_frontend_svelte` | Skill | Svelte 5 runes |
+| `pix_tool_frontend_angular` | Skill | Angular standalone components |
+| `pix_tool_frontend_solidjs` | Skill | SolidJS fine-grained reactivity |
 | | | |
 | **Meta-Frameworks** | | |
-| `pix_frontend_astro` | Skill | Astro islands architecture |
-| `pix_frontend_meta_next` | Skill | Next.js App Router |
-| `pix_frontend_meta_nuxt` | Skill | Nuxt 3 best practices |
-| `pix_frontend_meta_remix` | Skill | Remix best practices |
+| `pix_tool_frontend_astro` | Skill | Astro islands architecture |
+| `pix_tool_frontend_meta_next` | Skill | Next.js App Router |
+| `pix_tool_frontend_meta_nuxt` | Skill | Nuxt 3 best practices |
+| `pix_tool_frontend_meta_remix` | Skill | Remix best practices |
 | | | |
 | **Project Types** | | |
-| `pix_platform_web` | Skill | Web platform best practices |
-| `pix_platform_desktop` | Skill | Desktop app patterns (Electron) |
-| `pix_platform_library` | Skill | Library authoring |
-| `pix_backend` | Skill | Backend/API best practices |
+| `pix_tool_platform_web` | Skill | Web platform best practices |
+| `pix_tool_platform_desktop` | Skill | Desktop app patterns (Electron) |
+| `pix_tool_platform_library` | Skill | Library authoring |
+| `pix_tool_backend` | Skill | Backend/API best practices |
 | | | |
 | **Architecture** | | |
-| `pix_architect` | Skill | Enterprise architecture wizard & SDD workflow |
-| `pix_styleguide` | Skill | HTML, CSS, JS, a11y, naming, file tree |
+| `pix_tool_architect` | Skill | Enterprise architecture wizard & SDD workflow |
+| `pix_tool_styleguide` | Skill | HTML, CSS, JS, a11y, naming, file tree |
 | | | |
 | **Scaffolding** | | |
-| `pix_backend_node` | Skill | Backend Node.js scaffold |
-| `pix_frontend_react` | Skill | Frontend React + Vite scaffold |
-| `pix_platform_agent` | Skill | AI Agents monorepo scaffold |
-| `pix_platform_expo` | Skill | Expo mobile scaffold |
+| `pix_tool_backend_node` | Skill | Backend Node.js scaffold |
+| `pix_tool_frontend_react` | Skill | Frontend React + Vite scaffold |
+| `pix_tool_platform_agent` | Skill | AI Agents monorepo scaffold |
+| `pix_tool_platform_expo` | Skill | Expo mobile scaffold |
 | | | |
 | **Engineering & DevOps** | | |
-| `pix_devops_docker` | Skill | Dockerfile + compose generation |
-| `pix_devops_docker` | Skill | Docker standards |
-| `pix_devops_gitlab_ci` | Skill | GitLab CI/CD pipelines |
-| `pix_devops_testing` | Skill | Vitest setup & test patterns |
-| `pix_devops_testing` | Skill | Coverage enforcement (60/50/60/60) |
-| `pix_devops_version` | Skill | Husky version auto-increment |
+| `pix_tool_devops_docker` | Skill | Dockerfile + compose generation |
+| `pix_tool_devops_docker` | Skill | Docker standards |
+| `pix_tool_devops_gitlab_ci` | Skill | GitLab CI/CD pipelines |
+| `pix_tool_devops_testing` | Skill | Vitest setup & test patterns |
+| `pix_tool_devops_testing` | Skill | Coverage enforcement (60/50/60/60) |
+| `pix_tool_devops_version` | Skill | Husky version auto-increment |
 | | | |
 | **Backend** | | |
-| `pix_backend_security` | Skill | Security hardening |
-| `pix_backend_api_design` | Skill | REST API design & OpenAPI |
-| `pix_platform_agent` | Skill | AI Agent structure and tools |
+| `pix_tool_backend_security` | Skill | Security hardening |
+| `pix_tool_backend_api_design` | Skill | REST API design & OpenAPI |
+| `pix_tool_platform_agent` | Skill | AI Agent structure and tools |
 | | | |
 | **Frontend** | | |
-| `pix_frontend_react` | Skill | React forms with validation |
-| `pix_styleguide_validation` | Skill | Business field validation |
+| `pix_tool_frontend_react` | Skill | React forms with validation |
+| `pix_tool_styleguide_validation` | Skill | Business field validation |
 | | | |
 | **Mobile** | | |
-| `pix_platform_expo` | Skill | EAS Build & Expo CI/CD |
+| `pix_tool_platform_expo` | Skill | EAS Build & Expo CI/CD |
 | | | |
 | **Workflow** | | |
-| `pix_process_feature_workflow` | Skill | End-to-end feature workflow |
-| `pix_process_documentation` | Skill | Mintlify documentation setup |
+| `pix_tool_process_feature_workflow` | Skill | End-to-end feature workflow |
+| `pix_tool_process_documentation` | Skill | Mintlify documentation setup |
 
 ### Modes common to all skill tools
 
-Every skill tool (`pix_frontend_react`, `pix_devops_docker`, etc.) supports:
+Every skill tool (`pix_tool_frontend_react`, `pix_tool_devops_docker`, etc.) supports:
 
 | Mode | Description | Token savings |
 |------|-------------|---------------|
@@ -99,8 +99,8 @@ Every skill tool (`pix_frontend_react`, `pix_devops_docker`, etc.) supports:
 | `guardrails` | Only testable assertions | ~80% |
 | `check` | Validate `code` against guardrails | — |
 
-`pix_styleguide` and `pix_architect` add `scaffold`.  
-`pix_architect` also adds `interview` (context wizard server).
+`pix_tool_styleguide` and `pix_tool_architect` add `scaffold`.  
+`pix_tool_architect` also adds `interview` (context wizard server).
 
 ---
 
@@ -113,7 +113,7 @@ All MCP tools execute inside fail-closed enforcement boundary.
 - Zod schema validation.
 - Maximum argument payload: 256 KiB.
 - Maximum nesting: 12 levels; maximum object keys: 1000.
-- Reject NUL controls, prototype-pollution keys, non-plain objects, blank `pix` prompts.
+- Reject NUL controls, prototype-pollution keys, non-plain objects, blank `pix_tool` prompts.
 - Normalize routing/search/path fields before deterministic handler receives them.
 - Mandatory `addBeforeToolHook()` hooks are awaited; any exception blocks execution.
 
@@ -121,19 +121,19 @@ All MCP tools execute inside fail-closed enforcement boundary.
 
 - Mandatory `addPostToolHook()` hooks are awaited.
 - Validate non-empty text-only MCP result and 1 MiB output limit.
-- For `pix`, parse routing JSON and reject unknown skills, unknown tools, or confidence outside `0..1`.
+- For `pix_tool`, parse routing JSON and reject unknown skills, unknown tools, or confidence outside `0..1`.
 - Append visible `pix ENFORCEMENT CONTRACT` and `_meta.pixEnforcement` audit record.
 - Only then fire non-blocking observational hooks such as auto-ADR.
 
 ### Blocking code validation
 
-`pix_check` and skill `mode=check` return `isError: true` while any guardrail fails. Added anti-hallucination rules:
+`pix_tool_check` and skill `mode=check` return `isError: true` while any guardrail fails. Added anti-hallucination rules:
 
 - `no-placeholder-implementation`: reject TODO/FIXME/XXX, placeholder comments, not-implemented throws.
 - `no-suppressed-errors`: reject `@ts-ignore`, lint suppression, empty catches.
 - `verified-dependencies-only`: when manifest-derived `allowedDependencies` exists, reject invented imports.
 
-## 1. Router: `pix`
+## 1. Router: `pix_tool`
 
 **Analyzes a user prompt and routes to the most relevant pix skill.**
 
@@ -154,7 +154,7 @@ Uses keyword scoring across all skill sections, with framework bias (×2 for det
   "route": "pix-frontend-react",
   "confidence": 1,
   "sections": ["Component Architecture", "Props & State"],
-  "next_tools": ["pix_frontend_react", "pix_check", "pix_component"],
+  "next_tools": ["pix_tool_frontend_react", "pix_tool_check", "pix_tool_component"],
   "alternatives": [
     { "route": "pix-styleguide", "confidence": 0.6, "sections": ["CSS Architecture"] }
   ],
@@ -204,25 +204,25 @@ pix prompt="Create a responsive navbar" framework=react
 
 ```
 # Full content
-pix_frontend_react mode=full
+pix_tool_frontend_react mode=full
 
 # TLDR: only relevant sections (BM25, 90%+ token savings)
-pix_frontend_vue mode=tldr query="reactive data"
+pix_tool_frontend_vue mode=tldr query="reactive data"
 
 # Internal search
-pix_frontend_angular mode=search query="standalone"
+pix_tool_frontend_angular mode=search query="standalone"
 
 # Code validation
-pix_frontend_react mode=check code="..." fileName="_Button.jsx" isComponent=true
+pix_tool_frontend_react mode=check code="..." fileName="_Button.jsx" isComponent=true
 
 # Guardrails
-pix_frontend_svelte mode=guardrails
+pix_tool_frontend_svelte mode=guardrails
 
 # Scaffolding (styleguides/architect only)
-pix_styleguide mode=scaffold file=.prettierrc
+pix_tool_styleguide mode=scaffold file=.prettierrc
 
 # Context wizard (architect only)
-pix_architect mode=interview target=./my-project
+pix_tool_architect mode=interview target=./my-project
 ```
 
 ### Mode `tldr` — token savings
@@ -230,14 +230,14 @@ pix_architect mode=interview target=./my-project
 Uses BM25 to return ONLY sections matching the query, with snippets and scores. Saves 90-97% compared to `mode=full`.
 
 ```
-pix_frontend_react mode=tldr query="state management hooks"
+pix_tool_frontend_react mode=tldr query="state management hooks"
 # → Only "Component Architecture" and "Props & State" with snippets
 # No Overview, Setup, Installation, License
 ```
 
-### Special: pix_architect interview mode
+### Special: pix_tool_architect interview mode
 
-1. Call `pix_architect mode=interview target=./my-project`
+1. Call `pix_tool_architect mode=interview target=./my-project`
 2. A local HTTP server opens at `http://localhost:19000`
 3. Guides the user through 16 project specification steps (from Analysis Depth to Security & Compliance)
 4. Generates `.context/` files with SDD specs
@@ -245,7 +245,7 @@ pix_frontend_react mode=tldr query="state management hooks"
 
 ---
 
-## 3. Search: `pix_search`
+## 3. Search: `pix_tool_search`
 
 **Full-text BM25 search across ALL pix skills.**
 
@@ -283,7 +283,7 @@ Components use data-part attributes instead of className...
 
 ---
 
-## 4. Validation: `pix_check`
+## 4. Validation: `pix_tool_check`
 
 **Runs blocking guardrail checks on code against any pix skill.**
 
@@ -329,12 +329,12 @@ Supports smart iteration: pass `previousPassed` to skip already-verified guardra
 ### Smart iteration workflow
 
 ```
-Step 1: pix_check skill=pix-frontend-react code="..." fileName="_Btn.jsx" isComponent=true
+Step 1: pix_tool_check skill=pix-frontend-react code="..." fileName="_Btn.jsx" isComponent=true
         → Returns { passed: [...], failed: [...], previousPassed: ["no-css-classes", ...] }
 
 Step 2: Fix failing code
 
-Step 3: pix_check skill=pix-frontend-react code="..." fileName="_Btn.jsx" isComponent=true
+Step 3: pix_tool_check skill=pix-frontend-react code="..." fileName="_Btn.jsx" isComponent=true
                   previousPassed=["no-css-classes", "no-inline-styles", "semantic-html", ...]
         → Skips 4 already-passed guardrails, runs only remaining ones
         → Returns only NEW failures
@@ -344,7 +344,7 @@ Repeat until allPass: true
 
 ---
 
-## 5. Scaffold: `pix_scaffold`
+## 5. Scaffold: `pix_tool_scaffold`
 
 **Generates project scaffolding files (config templates).**
 
@@ -375,21 +375,21 @@ Reads templates from the `## Project Scaffolding` section of `pix-styleguide`.
 
 ```
 # List files
-pix_scaffold mode=list
+pix_tool_scaffold mode=list
 
 # Generate all files
-pix_scaffold mode=generate
+pix_tool_scaffold mode=generate
 
 # Generate a single file
-pix_scaffold mode=generate file=.prettierrc
+pix_tool_scaffold mode=generate file=.prettierrc
 
 # Validate existing project
-pix_scaffold mode=validate projectDir=./my-project
+pix_tool_scaffold mode=validate projectDir=./my-project
 ```
 
 ---
 
-## 6. Detection: `pix_detect`
+## 6. Detection: `pix_tool_detect`
 
 **Auto-detects framework, TypeScript, and build tool from `package.json`.**
 
@@ -411,8 +411,8 @@ Reads `package.json` from the specified directory and matches dependencies again
   "buildTool": "vite",
   "nodeVersion": ">=20",
   "suggested_skills": ["pix-frontend-react"],
-  "suggested_tools": ["pix_frontend_react", "pix_check", "pix_scaffold", "pix_component"],
-  "message": "Detected react project \"my-app\". Use pix_frontend_react, pix_check..."
+  "suggested_tools": ["pix_tool_frontend_react", "pix_tool_check", "pix_tool_scaffold", "pix_tool_component"],
+  "message": "Detected react project \"my-app\". Use pix_tool_frontend_react, pix_tool_check..."
 }
 ```
 
@@ -434,7 +434,7 @@ Build tool: vite, webpack, esbuild, angular-cli, sveltekit, next, nuxt, parcel, 
 
 ---
 
-## 7. Templates: `pix_component`
+## 7. Templates: `pix_tool_component`
 
 **Generates component or test templates following pix principles.**
 
@@ -502,7 +502,7 @@ Framework-agnostic templates: `playwright-config`, `a11y-test-basic`, `a11y-test
 
 ---
 
-## 8. ADR: `pix_process_adr`
+## 8. ADR: `pix_tool_process_adr`
 
 **Saves an Architecture Decision Record in `docs/adr/`.** Auto-numbering, Nygard template, auto-index.
 
@@ -521,11 +521,11 @@ Framework-agnostic templates: `playwright-config`, `a11y-test-basic`, `a11y-test
 
 ### Auto-ADR hooks
 
-After every call to `pix_architect`, `pix`, `pix_scaffold`, `pix_detect`, the server automatically logs a summary ADR in `docs/adr/` with tool name, args, and timestamp. Fire-and-forget, non-blocking.
+After every call to `pix_tool_architect`, `pix_tool`, `pix_tool_scaffold`, `pix_tool_detect`, the server automatically logs a summary ADR in `docs/adr/` with tool name, args, and timestamp. Fire-and-forget, non-blocking.
 
 ---
 
-## 9. Handoff: `pix_process_handoff`
+## 9. Handoff: `pix_tool_process_handoff`
 
 **Generates an LLM context summary from ADR logs + `.context/` values.** The output is a text prompt that a new LLM session can use to resume work.
 
@@ -555,7 +555,7 @@ If `maxTokens` is > 0 and the current format exceeds the budget, the handoff aut
 
 ---
 
-## 10. File Tree Fix: `pix_fix`
+## 10. File Tree Fix: `pix_tool_fix`
 
 **Validates and auto-fixes project file tree structure** against pix conventions. Operates on disk — scans actual files and directories.
 
@@ -587,7 +587,7 @@ If `maxTokens` is > 0 and the current format exceeds the budget, the handoff aut
 
 ### Guardrails (3 new)
 
-These guardrails are automatically included in `pix_check` for all frameworks:
+These guardrails are automatically included in `pix_tool_check` for all frameworks:
 
 | ID | Guardrail |
 |----|-----------|
@@ -599,7 +599,7 @@ These guardrails are automatically included in `pix_check` for all frameworks:
 
 ```json
 {
-  "name": "pix_fix",
+  "name": "pix_tool_fix",
   "arguments": { "mode": "lint", "path": "./my-project", "srcDir": "src" }
 }
 ```
@@ -644,6 +644,12 @@ Prompt templates accessible via the MCP `prompts/get` protocol.
 
 | Name | Arguments | Description |
 |------|-----------|-------------|
+| `pix-setup-project` | `projectName` (req), `framework` (opt), `toolchain` (opt), `tier` (opt) | Bootstrap project: detect → scaffold → toolchain → architect context |
+| `pix-new-feature` | `feature` (req), `framework` (opt), `area` (opt), `includeTests` (opt) | Feature end-to-end with TDD + a11y + commit scope |
+| `pix-pull-request` | `description` (req), `framework` (opt), `updateAdr` (opt) | Prepare PR: review + a11y + security + ADR + commit scope |
+| `pix-write-tests` | `scope` (req), `framework` (opt), `testType` (opt) | Write TDD + a11y (axe-core) + devops tests |
+| `pix-handoff` | `mode` (req), `includeGitDiff` (opt), `compress` (opt) | Compressed context handoff for a new session |
+| `pix-area-*` (16) | `request` (req) + area-specific optionals | One prompt per tool area (meta, frontend, backend, data, toolchain, styleguide, process, devops, platform, caveman, architect, grill, ai, skills, tdd, ui) |
 | `pix-code-review` | `framework` (opt), `code` (req) | Review code against pix styleguides |
 | `pix-generate-component` | `framework` (req), `component` (req), `features` (opt) | Generate component following pix principles |
 | `pix-a11y-test` | `framework` (req), `component` (opt) | Generate Playwright + axe-core a11y tests |
@@ -657,14 +663,14 @@ Prompt templates accessible via the MCP `prompts/get` protocol.
 ### Workflow: Generate → Check → Fix → Re-check
 
 ```
-1. pix_detect path=.                             → Detect framework
+1. pix_tool_detect path=.                             → Detect framework
 2. pix_<framework> mode=full                     → Read the rules
-3. pix_component component=button framework=react → Get template
+3. pix_tool_component component=button framework=react → Get template
    mode=multi name=MyBtn
-4. pix_check skill=pix-frontend-react                 → Validate code
+4. pix_tool_check skill=pix-frontend-react                 → Validate code
    code="..." fileName="_MyBtn.jsx" isComponent=true
 5. Fix → Re-check with previousPassed:
-   pix_check skill=pix-frontend-react code="..."
+   pix_tool_check skill=pix-frontend-react code="..."
    fileName="_MyBtn.jsx" isComponent=true
    previousPassed=["no-css-classes", "semantic-html", ...]
 6. Repeat until allPass: true
@@ -674,7 +680,7 @@ Prompt templates accessible via the MCP `prompts/get` protocol.
 
 ```
 # Instead of guessing the skill:
-pix_search query="CSS data-part selectors"
+pix_tool_search query="CSS data-part selectors"
 # → Ranked results from the correct skill
 ```
 
@@ -692,21 +698,21 @@ previousPassed: ["no-css-classes", "no-inline-styles", "semantic-html",
 
 | Framework | Skill | MCP Tool |
 |-----------|-------|----------|
-| React | pix-frontend-react | `pix_frontend_react` |
-| Vue 3 | pix-frontend-vue | `pix_frontend_vue` |
-| Svelte 5 | pix-frontend-svelte | `pix_frontend_svelte` |
-| Angular | pix-frontend-angular | `pix_frontend_angular` |
-| SolidJS | pix-frontend-solidjs | `pix_frontend_solidjs` |
-| Astro | pix-frontend-astro | `pix_frontend_astro` |
-| Next.js | pix-frontend-meta-next | `pix_frontend_meta_next` |
-| Nuxt 3 | pix-frontend-meta-nuxt | `pix_frontend_meta_nuxt` |
-| Remix | pix-frontend-meta-remix | `pix_frontend_meta_remix` |
-| Desktop (Electron) | pix-platform-desktop | `pix_platform_desktop` |
-| Vanilla JS | pix-frontend-vanilla-reactive | `pix_frontend_vanilla_reactive` |
-| Web platform | pix-platform-web | `pix_platform_web` |
-| Library authoring | pix-platform-library | `pix_platform_library` |
-| Styleguides | pix-styleguide | `pix_styleguide` |
-| Architecture | pix-architect | `pix_architect` |
+| React | pix-frontend-react | `pix_tool_frontend_react` |
+| Vue 3 | pix-frontend-vue | `pix_tool_frontend_vue` |
+| Svelte 5 | pix-frontend-svelte | `pix_tool_frontend_svelte` |
+| Angular | pix-frontend-angular | `pix_tool_frontend_angular` |
+| SolidJS | pix-frontend-solidjs | `pix_tool_frontend_solidjs` |
+| Astro | pix-frontend-astro | `pix_tool_frontend_astro` |
+| Next.js | pix-frontend-meta-next | `pix_tool_frontend_meta_next` |
+| Nuxt 3 | pix-frontend-meta-nuxt | `pix_tool_frontend_meta_nuxt` |
+| Remix | pix-frontend-meta-remix | `pix_tool_frontend_meta_remix` |
+| Desktop (Electron) | pix-platform-desktop | `pix_tool_platform_desktop` |
+| Vanilla JS | pix-frontend-vanilla-reactive | `pix_tool_frontend_vanilla_reactive` |
+| Web platform | pix-platform-web | `pix_tool_platform_web` |
+| Library authoring | pix-platform-library | `pix_tool_platform_library` |
+| Styleguides | pix-styleguide | `pix_tool_styleguide` |
+| Architecture | pix-architect | `pix_tool_architect` |
 
 ## Preserved source: `PLUGINS.md`
 
@@ -751,7 +757,7 @@ EOF
 pix-galaxy-mcp skills reload
 
 # 4. Your plugin is now available as:
-pix-galaxy-mcp tools call pix_styleguide --json '{"mode": "full"}'
+pix-galaxy-mcp tools call pix_tool_styleguide --json '{"mode": "full"}'
 ```
 
 ## Adding custom guardrails with plugin.js
@@ -765,7 +771,7 @@ For advanced plugins, create a `plugin.js` file in your plugin directory:
  * Optional plugin.js for custom guardrails and generators.
  */
 
-/** Custom guardrails to add to the pix_check engine. */
+/** Custom guardrails to add to the pix_tool_check engine. */
 export const guardrails = [
   {
     id: "custom-two-spaces",
@@ -826,7 +832,7 @@ pix-galaxy-mcp tools call pix --json '{"prompt": "List available community skill
 - **Plugin names**: use `kebab-case` (e.g., `my-company-rules`)
 - **SKILL.md**: include YAML frontmatter with `name` and `description`
 - **Guardrail IDs**: prefix with your plugin name to avoid conflicts (e.g., `myco-two-spaces`)
-- **Test your plugin**: run `pix_check skill=<plugin-name>` to verify guardrails work
+- **Test your plugin**: run `pix_tool_check skill=<plugin-name>` to verify guardrails work
 
 ## Preserved source: `RELEASE.md`
 
@@ -949,7 +955,7 @@ Users can install using these methods:
 | GitHub Copilot CLI | `~/.copilot/agents/pix-galaxy-mcp.agent.md` | `/agent` selection |
 | Codex CLI | `~/.agents/skills/pix/` | Skill workflow; no stable exact custom command assumed |
 
-Uninstall removes same artifact. Universal command body forces routing, evidence lookup, test-first implementation, blocking `pix_check`, real test reporting, and ADR capture.
+Uninstall removes same artifact. Universal command body forces routing, evidence lookup, test-first implementation, blocking `pix_tool_check`, real test reporting, and ADR capture.
 
 ---
 
@@ -968,7 +974,7 @@ curl http://localhost:37999/health
 
 # Test tools
 pix-galaxy-mcp tools list
-pix-galaxy-mcp tools call pix_detect --json '{}'
+pix-galaxy-mcp tools call pix_tool_detect --json '{}'
 pix-galaxy-mcp tools call pix --json '{"prompt": "React button"}'
 ```
 
@@ -1172,12 +1178,12 @@ pix-galaxy-mcp daemon logs
   pix-galaxy-mcp skills reload
   ```
 
-**Issue**: `pix` returns no matching skill.
+**Issue**: `pix_tool` returns no matching skill.
 - **Verify**: Skills are loaded:
   ```bash
   pix-galaxy-mcp tools list | grep pix-galaxy
   ```
-- **Try**: Use `pix_search` for free-text search across all skills.
+- **Try**: Use `pix_tool_search` for free-text search across all skills.
 
 ## General debugging
 

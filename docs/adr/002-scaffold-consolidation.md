@@ -13,7 +13,7 @@ The `pix-scaffold-*` skill family was fragmented. Four separate scaffolding skil
 - `pix-scaffold-expo` duplicated content that belonged in `platform-expo`
 - `pix-scaffold-frontend-react-vite` mixed three concerns: React setup, Vite config, and generic frontend tooling
 
-Additionally, the `pix-scaffold` umbrella directory itself served no purpose as a skill — the `pix_scaffold` core MCP tool already handles config file generation.
+Additionally, the `pix-scaffold` umbrella directory itself served no purpose as a skill — the `pix_tool_scaffold` core MCP tool already handles config file generation.
 
 ## Decision
 
@@ -39,7 +39,7 @@ All Expo/React Native scaffolding content moves into `pix-platform-expo`, the pl
 
 ### 5. Delete all remaining `pix-scaffold-*` directories
 
-The `pix_scaffold` core MCP tool continues to handle `.prettierrc`, `.editorconfig`, `.gitignore` scaffolding.
+The `pix_tool_scaffold` core MCP tool continues to handle `.prettierrc`, `.editorconfig`, `.gitignore` scaffolding.
 
 ## Consequences
 
@@ -54,7 +54,7 @@ The `pix_scaffold` core MCP tool continues to handle `.prettierrc`, `.editorconf
 - MCP tool names changed for backend-node and ai-agents
 
 **Migration:**
-- Any agent prompts referencing `pix_scaffold_backend_node` must use `pix_backend_node`
-- Any agent prompts referencing `pix_scaffold_ai_agents` must use `pix_ai_agents`
-- Any agent prompts referencing `pix_scaffold_expo` must use `pix_platform_expo`
-- Any agent prompts referencing `pix_scaffold_frontend_react_vite` must use `pix_frontend_react` or `pix_toolchain_vite`
+- Any agent prompts referencing `pix_tool_scaffold_backend_node` must use `pix_tool_backend_node`
+- Any agent prompts referencing `pix_tool_scaffold_ai_agents` must use `pix_tool_ai_agents`
+- Any agent prompts referencing `pix_tool_scaffold_expo` must use `pix_tool_platform_expo`
+- Any agent prompts referencing `pix_tool_scaffold_frontend_react_vite` must use `pix_tool_frontend_react` or `pix_tool_toolchain_vite`

@@ -10,7 +10,7 @@ Il wizard architect era implementato in un unico file context-server.mjs. La nuo
 
 ## Decision
 
-Migrazione a pix-architect-cli (terminal) e pix-architect-web (browser). pix_architect tool agganciato al nuovo sistema.
+Migrazione a pix-architect-cli (terminal) e pix-architect-web (browser). pix_tool_architect tool agganciato al nuovo sistema.
 
 ## Consequences
 

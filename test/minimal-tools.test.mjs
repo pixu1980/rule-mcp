@@ -17,9 +17,9 @@ const bin = fileURLToPath(new URL("../bin/pix-galaxy-mcp.js", import.meta.url));
 
 /** The guaranteed minimal tool surface. */
 const MINIMAL = [
-  "pix", "pix_update", "pix_gateway", "pix_apply",
-  "pix_search", "pix_check", "pix_scaffold", "pix_detect",
-  "pix_process_handoff", "pix_component",
+  "pix_tool", "pix_tool_update", "pix_tool_gateway", "pix_tool_apply",
+  "pix_tool_search", "pix_tool_check", "pix_tool_scaffold", "pix_tool_detect",
+  "pix_tool_process_handoff", "pix_tool_component",
 ].sort();
 
 function toolNames(extraEnv) {
@@ -36,7 +36,7 @@ console.log("=== Minimal Tool Surface Tests ===\n");
 // ── Full surface ──
 const full = toolNames({});
 assert.ok(full.length > 90, `full surface should expose >90 tools (got ${full.length})`);
-assert.ok(full.includes("pix_frontend_react"), "full surface includes skill tools");
+assert.ok(full.includes("pix_tool_frontend_react"), "full surface includes skill tools");
 console.log(`  ✅ full surface exposes ${full.length} tools`);
 
 // ── Minimal via PIX_GALAXY_MCP_MINIMAL_TOOLS (convention-aligned name) ──
@@ -50,7 +50,7 @@ assert.ok(legacyIgnored.length > 90, "removed PIX_STRICT_MODE alias must NOT tri
 console.log(`  ✅ legacy PIX_STRICT_MODE ignored → ${legacyIgnored.length} tools (full)`);
 
 // ── The dispatcher/action tools an agent needs are all present ──
-for (const t of ["pix", "pix_gateway", "pix_apply", "pix_check"]) {
+for (const t of ["pix_tool", "pix_tool_gateway", "pix_tool_apply", "pix_tool_check"]) {
   assert.ok(minimal.includes(t), `minimal surface must include ${t}`);
 }
 console.log("  ✅ dispatcher + action tools present in minimal mode");
