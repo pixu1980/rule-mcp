@@ -19,30 +19,30 @@ Decisioni intervista (2025-08-01):
 
 ## Phase 1 — Test fallenti (TDD)
 
-- [ ] 1. Nuovo `test/prompts.test.mjs`: struttura del registro (nomi unici kebab-case, schema argomenti rigido, getPrompt non-null per ogni prompt) + copertura attesa (5 workflow + 16 aree + 5 esistenti) + regole di contenuto (commit+scope, TDD/a11y/test) → RED oggi (5 prompt, niente regole)
+- [x] 1. Nuovo `test/prompts.test.mjs`: struttura del registro (nomi unici kebab-case, schema argomenti rigido, getPrompt non-null per ogni prompt) + copertura attesa (5 workflow + 16 aree + 5 esistenti) + regole di contenuto (commit+scope, TDD/a11y/test) → RED oggi (5 prompt, niente regole)
 
 ## Phase 2 — Registro prompt (`src/prompts/index.js`)
 
-- [ ] 2. **5 workflow one-shot** (orchestrano i tool):
+- [x] 2. **5 workflow one-shot** (orchestrano i tool):
   - `rule-setup-project` (detect → scaffold → toolchain → architect context)
   - `rule-new-feature` (spec → feature_workflow → gateway → implement → check → test → commit scope)
   - `rule-pull-request` (review + a11y + security + **ADR update** + commit scope + descrizione PR)
   - `rule-write-tests` (TDD + a11y tests + devops_testing)
   - `rule-handoff` (process_handoff + adr + contesto compresso)
-- [ ] 3. **16 prompt per area**: `rule-area-{meta,frontend,backend,data,toolchain,styleguide,process,devops,platform,caveman,architect,grill,ai,skills,tdd,ui}` — ognuno: route alla skill dell'area, baseline TDD/a11y o domanda all'utente, commit scope finale
-- [ ] 4. **Aggiornare i 5 esistenti** (`rule-code-review`, `rule-generate-component`, `rule-a11y-test`, `rule-a11y-review`, `rule-architect-scaffold`) per rispettare le stesse regole (commit scope + baseline)
+- [x] 3. **16 prompt per area**: `rule-area-{...}` — **con tutti i 97 tool rinominati `rule_tool_*`** (decisione intervista) per evitare collisioni coi prompt — ognuno: route alla skill dell'area, baseline TDD/a11y o domanda all'utente, commit scope finale
+- [x] 4. **Aggiornare i 5 esistenti** (`rule-code-review`, `rule-generate-component`, `rule-a11y-test`, `rule-a11y-review`, `rule-architect-scaffold`) per rispettare le stesse regole (commit scope + baseline)
 
 ## Phase 3 — Completions (`src/server.js`)
 
-- [ ] 5. Argument completion per i nuovi prompt (framework, area, testType, mode, tier…) — pattern già esistente
+- [x] 5. Argument completion per i nuovi prompt (framework, area, testType, mode, tier…) — pattern già esistente
 
 ## Phase 4 — Docs
 
-- [ ] 6. README: sezione prompt aggiornata con i 26 prompt
-- [ ] 7. CHANGELOG
+- [x] 6. README: sezione prompt aggiornata con i 26 prompt
+- [x] 7. CHANGELOG
 
 ## Phase 5 — Validazione
 
-- [ ] 8. `node test/prompts.test.mjs` + `pnpm test:all` + smoke
-- [ ] 9. Aggiungere `test/prompts.test.mjs` a `test:all` e `ci` in package.json
-- [ ] 10. Verifica naming bare (`/rule-setup-project`, `/rule-area-frontend`…) — nessuna collisione coi tool
+- [x] 8. `node test/prompts.test.mjs` + `pnpm test:all` + smoke
+- [x] 9. Aggiungere `test/prompts.test.mjs` a `test:all` e `ci` in package.json
+- [x] 10. Verifica naming bare (`/rule-setup-project`, `/rule-area-frontend`…) — nessuna collisione coi tool
