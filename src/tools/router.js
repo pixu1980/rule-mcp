@@ -153,11 +153,14 @@ export function listTools() {
  * @returns {Promise<{ isError?: boolean, content: Array<{ type: string, text: string }> }>}
  */
 export async function callTool(name, args) {
-  // ── Forced self-update: runs once per session on the first tool call, BEFORE
-  // the cache lookup (so a cache hit can't skip it) and BEFORE tool lookup (a
-  // skills reload re-registers _tools). pix_update runs its own update. ──
+  // ── Self-update: throttled fire-and-forget check on every invocation, kicked
+  // BEFORE the cache lookup (so a cache hit can't skip it) and BEFORE tool
+  // lookup (a skills reload re-registers _tools). NOT awaited: the tool
+  // responds immediately; the banner of a completed background check is
+  // consumed below and prepended to this result. pix_update runs its own
+  // update. ──
   if (name !== "pix_update") {
-    try { await maybeSelfUpdate(); } catch { /* fail-open */ }
+    try { maybeSelfUpdate(); } catch { /* fail-open */ }
   }
   const banner = consumeUpdateBanner();
 

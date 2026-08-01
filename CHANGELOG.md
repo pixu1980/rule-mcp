@@ -25,6 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - CI/CD pipeline with lint, test, audit, release
 
 ### Changed
+- Self-update: check now runs on every tool invocation (throttled, fire-and-forget) instead of once per session — configurable via `RULE_MCP_AUTO_UPDATE_INTERVAL_SECONDS` (default 60s, `0` = every call); the git fetch is async so the tool call never blocks (ADR 023)
 - Architecture: monolithic cli.js → modular cli/, tools/, core/, transport/
 - Module sizes: all behavioral modules ≤300 lines
 - YAML frontmatter parsing: handles multi-line descriptions

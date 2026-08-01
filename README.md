@@ -461,10 +461,12 @@ rule-mcp <command> --help
 
 ## Forced self-update
 
-On git-clone installs the server keeps itself current automatically. The first
-tool call of each session force-checks the upstream repo, fast-forwards if
-behind, hot-reloads skills, and restarts when server code changed — always
-visible to the user via a `🔄 Updating MCP server` banner on the result.
+On git-clone installs the server keeps itself current automatically. Every
+tool invocation kicks a background check — the actual `git fetch` runs at most
+once per `RULE_MCP_AUTO_UPDATE_INTERVAL_SECONDS` (default 60s) — and
+fast-forwards if behind, hot-reloads skills, and restarts when server code
+changed. The check never blocks the tool call (fire-and-forget); a
+`🔄 Updating MCP server` banner is prepended to a later result.
 
 - **Safe**: fast-forward only (never discards local commits/changes); skipped
   when the working tree has tracked changes, HEAD is detached, or no upstream is
@@ -474,7 +476,8 @@ visible to the user via a `🔄 Updating MCP server` banner on the result.
 - **On demand**: `rule-mcp update`, or the `pix_update` MCP tool.
 - **Opt-out**: `RULE_MCP_NO_AUTOUPDATE=1` disables the check;
   `RULE_MCP_NO_AUTORESTART=1` keeps the process alive on code changes
-  (you restart/reconnect manually).
+  (you restart/reconnect manually). `RULE_MCP_AUTO_UPDATE_INTERVAL_SECONDS`
+  tunes the throttle (default 60; `0` = check on every tool call).
 
 ---
 
