@@ -313,7 +313,6 @@ closes by proposing a commit message with mandatory scope.
 | `pix-data` | PostgreSQL, MySQL, SQLite, MongoDB, DuckDB, IndexedDB, SQL | `request` (required), `database` |
 | `pix-devops` | Docker, GitLab CI, observability, testing, versioning | `request` (required) |
 | `pix-frontend` | React, Vue, Svelte, Angular, Solid, Astro, Next, Nuxt, Remix, vanilla | `request` (required), `framework` |
-| `pix-grill` | Structured questioning (grill-me, grill-with-docs) | `request` (required) |
 | `pix-handoff` | Compressed context handoff (ADR + git) for a new session | `mode` (required), `includeGitDiff`, `compress` |
 | `pix-meta` | Dispatcher/action toolset (gateway, apply, search, check, scaffold…) | `request` (required) |
 | `pix-new-feature` | Feature end-to-end: route → evidence → failing tests → code → guardrails | `feature` (required), `framework`, `area`, `includeTests` |
