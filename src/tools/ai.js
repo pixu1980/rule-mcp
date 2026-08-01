@@ -216,16 +216,26 @@ export function registerAiTool() {
       const promptWords = [...new Set(promptLower.split(/[^a-z0-9]+/).filter(w => w.length > 1))];
 
       // ── Domain classification (before framework bias) ──
+      const AI_KEYWORDS = ["agent", "agents", "llm", "assistant", "autonomous", "registry", "provider"];
       const BACKEND_KEYWORDS = ["api", "backend", "server", "endpoint", "rest", "graphql", "express", "fastify", "nestjs", "hono", "rate", "limiting", "helmet", "cors", "auth", "jwt", "middleware"];
+      // Git/commit signals: strong, unambiguous triggers for commit/push discipline.
+      const hasCommitSignal = /(^|[^a-z])commit/.test(promptLower);
+      const hasConventionalSignal = promptLower.includes("conventional");
+      const hasPushSignal = /(^|[^a-z])push/.test(promptLower) && /(^|[^a-z])git/.test(promptLower);
       const DATA_KEYWORDS = ["database", "sql", "query", "table", "postgresql", "mysql", "mongodb", "schema", "migration", "index", "transaction", "orm", "prisma", "drizzle"];
       const DEVOPS_KEYWORDS = ["docker", "ci", "cd", "pipeline", "deploy", "container", "kubernetes", "gitlab", "github", "actions"];
       const FRONTEND_KEYWORDS = ["react", "vue", "svelte", "angular", "component", "button", "modal", "css", "style", "ui", "layout", "responsive"];
 
       const promptDomain = (() => {
+        const g = (hasCommitSignal ? 1 : 0) + (hasConventionalSignal ? 1 : 0) + (hasPushSignal ? 1 : 0);
+        const a = AI_KEYWORDS.filter(k => promptLower.includes(k)).length;
         const b = BACKEND_KEYWORDS.filter(k => promptLower.includes(k)).length;
         const d = DATA_KEYWORDS.filter(k => promptLower.includes(k)).length;
         const o = DEVOPS_KEYWORDS.filter(k => promptLower.includes(k)).length;
         const f = FRONTEND_KEYWORDS.filter(k => promptLower.includes(k)).length;
+        // Commit signals must outweigh other domains (e.g. "add a commit button" stays frontend).
+        if (g >= 2 || g > f + b + d) return "git";
+        if (a >= 2 || a > b + f + d) return "ai";
         if (b >= 2 || b > f + d) return "backend";
         if (d >= 2 || d > b + f) return "data";
         if (o >= 2) return "devops";
@@ -246,7 +256,8 @@ export function registerAiTool() {
         : null;
 
       // Determine if detected skill belongs to a different domain than the prompt
-      const detectedDomain = detectedSkillName?.startsWith("rule-frontend") ? "frontend"
+      const detectedDomain = detectedSkillName?.startsWith("rule-ai") ? "ai"
+        : detectedSkillName?.startsWith("rule-frontend") ? "frontend"
         : detectedSkillName?.startsWith("rule-backend") ? "backend"
         : detectedSkillName?.startsWith("rule-data") ? "data"
         : detectedSkillName?.startsWith("rule-devops") ? "devops"
@@ -268,10 +279,15 @@ export function registerAiTool() {
 
         let finalScore = rawScore;
 
+        // Commit/push prompts deterministically route to the commits discipline skill.
+        if (promptDomain === "git" && skillName === "rule-toolchain-commits") {
+          finalScore = Math.max(rawScore * 2.0, 25);
+        }
+
         if (detectedFramework && applyFrameworkBias) {
           if (skillName === detectedSkillName) {
             finalScore = Math.max(rawScore * 2.0, 20);
-          } else if (["rule-styleguide", "rule-frontend", "rule-platform-web", "rule-architect", "rule-ui-design-system"].includes(skillName)) {
+          } else if (["rule-styleguide", "rule-frontend", "rule-platform-web", "rule-architect", "rule-ui-design-system", "rule-ai"].includes(skillName)) {
             finalScore *= 1.15;
           } else {
             finalScore *= 0.85;

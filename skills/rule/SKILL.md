@@ -44,12 +44,14 @@ Prompt
   ├─ architecture / SDD / plan          → rule-architect
   ├─ UI / component / page              → rule-frontend + framework skill + rule-styleguide
   ├─ meta-framework                     → rule-frontend-meta-* + base framework skill
+  ├─ AI / agent / LLM application       → rule-ai + focused AI skill
   ├─ backend / REST / GraphQL / security → rule-backend + framework/security/API skill
   ├─ database / persistence             → rule-data + database skill
   ├─ Docker / CI / tests / observability / release → rule-devops + focused DevOps skill
   ├─ web / desktop / library / mobile   → rule-platform + platform skill
   ├─ docs / ADR / review / handoff / workflow → rule-process + process tool
   ├─ lint/build/package config          → rule-toolchain + focused toolchain skill
+  ├─ commit / push / git discipline     → rule-toolchain-commits
   └─ concrete component/test template   → pix_component
 ```
 
@@ -78,7 +80,8 @@ Build AI agent repositories, providers, tools, registries, and tests.
 
 | Skill | Tool | Frameworks | Use when |
 |-------|------|------------|----------|
-| [rule-mcp-agents](../rule-mcp-agents/SKILL.md) | `pix_ai_agents` | node, agents | Scaffold AI agent applications built on `@rule/rule-mcp-core`, including providers, tools, testing, and containerization. |
+| [rule-ai](../rule-ai/SKILL.md) | `pix_ai` | all | Index of all AI/agent skills: agent scaffolding on `@rule/rule-mcp-core` and framework-agnostic agent guidance. |
+| [rule-ai-agents](../rule-ai-agents/SKILL.md) | `pix_ai_agents` | node, agents | Scaffold AI agent applications built on `@rule/rule-mcp-core`, including providers, tools, testing, and containerization. |
 | [rule-platform-agent](../rule-platform-agent/SKILL.md) | `pix_platform_agent` | node, agents | Scaffold and maintain AI Agent projects. Covers structure, tools, env config, testing, and containerization without prescribing any specific core library. |
 
 ### Architecture
@@ -207,6 +210,7 @@ Configure pnpm, TypeScript, ESLint, Biome, Vite, Parcel, Turborepo, Husky.
 |-------|------|------------|----------|
 | [rule-toolchain](../rule-toolchain/SKILL.md) | `pix_toolchain` | all | Index of all toolchain skills: build tools (Vite, Parcel), linters (Biome, ESLint), package management (pnpm), monore... |
 | [rule-toolchain-biome](../rule-toolchain-biome/SKILL.md) | `pix_toolchain_biome` | all | Biome linter and formatter configuration and best practices. Zero-config by default, but covers migration from ESLint... |
+| [rule-toolchain-commits](../rule-toolchain-commits/SKILL.md) | `pix_toolchain_commits` | all | Enforce atomic Conventional Commits with a mandatory scope on every commit and push. Use when writing, validating, or preparing commit messages. |
 | [rule-toolchain-eslint](../rule-toolchain-eslint/SKILL.md) | `pix_toolchain_eslint` | all | ESLint 9+ flat config: rule sets for TypeScript, React, and Node.js, plugin integration, custom rules, and CI integra... |
 | [rule-toolchain-husky](../rule-toolchain-husky/SKILL.md) | `pix_toolchain_husky` | all | Git hooks management with Husky: commit hooks, pre-push validation, lint-staged integration, commitlint, and CI-frien... |
 | [rule-toolchain-parcel](../rule-toolchain-parcel/SKILL.md) | `pix_toolchain_parcel` | all | Parcel 2+ zero-configuration bundler: entry points, transpilation, code splitting, image optimization, environment va... |
@@ -229,6 +233,7 @@ Design and route visible interface work while preserving rule implementation con
 | Task | Primary | Secondary | Deterministic tools |
 |------|---------|-----------|---------------------|
 | Unknown project | `rule` | `rule-architect` | `pix_detect`, `pix_search` |
+| AI agent app | `rule-ai-agents` | `rule-ai`, `rule-devops-testing` | `pix_check`, `pix_process_adr` |
 | New web UI | `rule-ui` + `rule-ui-design-system` + framework skill | `rule-styleguide`, `rule-platform-web` | `pix_component`, `pix_check` |
 | React/Vite app | `rule-frontend-react` | `rule-toolchain-vite`, `rule-styleguide` | `pix_scaffold`, `pix_check` |
 | Backend API | `rule-backend-api-design` | runtime skill, `rule-backend-security` | `pix_check`, `pix_process_adr` |
@@ -237,6 +242,7 @@ Design and route visible interface work while preserving rule implementation con
 | GraphQL API | `rule-backend-graphql` | runtime skill, `rule-backend-security` | `pix_search`, `pix_check` |
 | Production observability | `rule-devops-observability` | runtime and platform skill | `pix_check`, `pix_process_adr` |
 | Code review | `rule-process-code-review` | feature workflow, relevant domain skill | `pix_check` |
+| Commit/push | `rule-toolchain-commits` | `rule-toolchain-husky`, `rule-process-feature-workflow` | `pix_check` |
 | Docs/ADR | `rule-process-documentation` | `rule-process-adr` | `pix_process_adr`, `pix_process_handoff` |
 | File-tree cleanup | `rule-styleguide-naming` | `rule-toolchain-project` | `pix_fix`, `pix_check` |
 
