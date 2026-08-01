@@ -35,3 +35,12 @@ Available pix-galaxy-mcp tools:
 - pix_detect — Detect project framework
 - pix://resources — Skill documentation as MCP resources
 <!-- /pix-galaxy-mcp-rules -->
+
+
+<!-- pix-galaxy-mcp-commit-rules -->
+## MANDATORY: commit scope
+
+Every commit MUST use conventional commits **with a scope**: `type(scope): subject` (e.g. `feat(skills): ...`, `chore(config): ...`, `docs(project): ...`).
+
+Commits without a scope (e.g. `docs: ...`) are rejected by the `commit-msg` hook (`.githooks/commit-msg`). Generated merge/revert messages are exempt.
+<!-- /pix-galaxy-mcp-commit-rules -->
