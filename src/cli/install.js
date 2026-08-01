@@ -254,6 +254,9 @@ const cmdConfig = (entrypoint, opts = {}) => {
     if (isPi) {
       config.directTools = true;
       config.lifecycle = "keep-alive";
+      // Bare per-server tool naming: tools become `rule-tool-*` and prompts
+      // `/rule-*` instead of the `mcp__pix_galaxy_mcp__*` prefix form.
+      config.toolPrefix = "none";
     }
     return config;
   }
@@ -270,6 +273,9 @@ const cmdConfig = (entrypoint, opts = {}) => {
   if (isPi) {
     config.directTools = true;
     config.lifecycle = "keep-alive";
+    // Same clean naming as the daemon branch: bare `rule-tool-*` tools and
+    // `/rule-*` prompts instead of `mcp__pix_galaxy_mcp__*`.
+    config.toolPrefix = "none";
   }
 
   // Attach env vars if any (supported by MCP stdio transport)
@@ -313,7 +319,7 @@ const upsertJsonServer = (current, config) => {
   const json = current.trim() ? parseJson(current) : {};
   if (json === null) return null;
   json.mcpServers = json.mcpServers ?? {};
-  json.mcpServers[serverName] = config;
+  json.mcpServers[serverName] = { ...json.mcpServers[serverName], ...config };
   return toJson(json);
 };
 
@@ -362,7 +368,7 @@ const upsertVscode = (current, config) => {
     if (Object.keys(json.mcpServers).length === 0) delete json.mcpServers;
   }
   if (json.servers[serverName]) delete json.servers[serverName];
-  json.servers[serverName] = { ...config, type: vscodeServerType(config) };
+  json.servers[serverName] = { ...json.servers[serverName], ...config, type: vscodeServerType(config) };
   return toJson(json);
 };
 
