@@ -401,7 +401,6 @@ COMMAND_NAMES=(
   "pix-galaxy-mcp"
   "pix-architect"
   "pix-handoff"
-  "pix-grill"
   "pix-tdd"
   "pix-adr"
   "pix-fix"
