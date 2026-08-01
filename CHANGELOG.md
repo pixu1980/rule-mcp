@@ -29,6 +29,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Module sizes: all behavioral modules ≤300 lines
 - YAML frontmatter parsing: handles multi-line descriptions
 - Scoring algorithm: holistic word-match scoring with framework bias
+- Skill rename: `rule-mcp-agents` → `rule-ai-agents` (tool `pix_galaxy_agents` → `pix_ai_agents`)
+- New collector skill `rule-ai` routing AI/agent work to `rule-ai-agents` and `rule-platform-agent` (mirrors `rule-frontend` pattern)
+- Router: AI domain classification added to prompt routing; `rule-ai` treated as collector in framework bias
+- Detector: `@rule/rule-mcp-core` dependency maps to `agents` framework → `rule-ai-agents`
+- New skill `rule-toolchain-commits` (tool `pix_toolchain_commits`): atomic Conventional Commits with mandatory scope; commit/push prompts route to it deterministically via a new git domain classification
 
 ### Fixed
 - Galaxy routing: multi-skill queries now return styleguides for accessibility

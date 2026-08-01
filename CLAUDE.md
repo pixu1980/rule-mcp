@@ -8,6 +8,16 @@ Before writing any frontend/styling code, call `rule` to route the task to the c
 
 
 
+
+
+<!-- rule-mcp-commit-rules -->
+## MANDATORY: commit scope
+
+Every commit MUST use conventional commits **with a scope**: `type(scope): subject` (e.g. `feat(skills): ...`, `chore(config): ...`, `docs(project): ...`).
+
+Commits without a scope (e.g. `docs: ...`) are rejected by the `commit-msg` hook (`.githooks/commit-msg`). Generated merge/revert messages are exempt.
+<!-- /rule-mcp-commit-rules -->
+
 <!-- rule-mcp-rules -->
 ## MANDATORY: Use rule-mcp enforced workflow for coding work
 
@@ -35,12 +45,3 @@ Available rule-mcp tools:
 - pix_detect — Detect project framework
 - rule://resources — Skill documentation as MCP resources
 <!-- /rule-mcp-rules -->
-
-
-<!-- rule-mcp-commit-rules -->
-## MANDATORY: commit scope
-
-Every commit MUST use conventional commits **with a scope**: `type(scope): subject` (e.g. `feat(skills): ...`, `chore(config): ...`, `docs(project): ...`).
-
-Commits without a scope (e.g. `docs: ...`) are rejected by the `commit-msg` hook (`.githooks/commit-msg`). Generated merge/revert messages are exempt.
-<!-- /rule-mcp-commit-rules -->
