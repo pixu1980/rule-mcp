@@ -4,6 +4,8 @@ Questo indice elenca tutti gli ADR in ordine cronologico.
 
 | # | Title | Date | Status | Tags |
 |---|-------|------|--------|------|
+| [022](022-add-rule-toolchain-commits-skill-for-atomic-conventional-commits-with-mandatory-s.md) | Add rule-toolchain-commits skill for atomic conventional commits with mandatory scope | 2026-08-01 | accepted | taxonomy, skills, routing, git, toolchain |
+| [021](021-rename-rule-mcp-agents-to-rule-ai-agents-and-add-rule-ai-collector-skill.md) | Rename rule-mcp-agents to rule-ai-agents and add rule-ai collector skill | 2026-08-01 | accepted | taxonomy, skills, routing, ai |
 | [020](020-harden-the-rule-architect-interview-servers-loopback-bind-no-wildcard-cors-pa.md) | Harden the rule-architect interview servers: loopback bind, no wildcard CORS, path containment | 2026-07-30 | accepted | architect, security, mcp, server |
 | [019](019-rule-architect-produces-framework-neutral-answer-driven-context-packs.md) | rule-architect produces framework-neutral, answer-driven context packs | 2026-07-30 | accepted | architect, templates, framework-neutral, detect, generator |
 | [018](018-fix-install-uninstall-estensione-vs-code-e-derivati.md) | Fix install/uninstall estensione VS Code e derivati | 2026-07-19 | accepted | vscode, extension, installer, cursor, windsurf |

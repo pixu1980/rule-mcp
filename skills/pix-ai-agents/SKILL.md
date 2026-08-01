@@ -1,5 +1,5 @@
 ---
-name: rule-mcp-agents
+name: rule-ai-agents
 description: >
   Scaffold and maintain AI Agent repositories built on @rule/rule-mcp-core.
   Use when creating a new AI agent project, adding tools to an existing agent,

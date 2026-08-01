@@ -90,7 +90,7 @@ Use this table to ensure the architecture package references all relevant skills
 
 | Skill | Use in architecture when |
 |-------|--------------------------|
-| [rule-mcp-agents](../rule-mcp-agents/SKILL.md) | Building an agent application on `@rule/rule-mcp-core` with its prescribed provider, tool, test, and container patterns. |
+| [rule-ai-agents](../rule-ai-agents/SKILL.md) | Building an agent application on `@rule/rule-mcp-core` with its prescribed provider, tool, test, and container patterns. |
 | [rule-platform-agent](../rule-platform-agent/SKILL.md) | Scaffolding a framework-agnostic AI coding agent project with custom tools, env config, testing, and containerization. |
 
 ### Backend

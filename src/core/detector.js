@@ -18,6 +18,7 @@ import { join } from "node:path";
  * Ordered by specificity (most specific first).
  */
 const FRAMEWORK_RULES = [
+  { deps: ["@rule/rule-mcp-core"], key: "agents" },
   { deps: ["@angular/core"], key: "angular" },
   { deps: ["react", "react-dom"], key: "react" },
   { deps: ["vue"], key: "vue" },
@@ -49,6 +50,7 @@ const BUILD_TOOL_RULES = [
  * registerSkillTool(): strip `rule-`, replace `-` with `_`, prefix `pix_`.
  */
 const FRAMEWORK_SKILL_MAP = {
+  agents: "rule-ai-agents",
   angular: "rule-frontend-angular",
   astro: "rule-frontend-astro",
   electron: "rule-platform-desktop",
