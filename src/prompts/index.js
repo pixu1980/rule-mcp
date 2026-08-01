@@ -4,7 +4,7 @@
  * MCP Prompt registry for rule-mcp.
  * Provides reusable prompt templates that guide agents through rule AI
  * workflow phases: 5 one-shot workflow prompts (orchestrate multiple tools),
- * 16 area prompts (one per tool area), and 5 legacy prompts.
+ * 16 area prompts (one per tool area), and 3 legacy prompts.
  *
  * Every prompt:
  *   - routes through the pix_tool dispatcher to the right rule-* skill
@@ -48,15 +48,105 @@ function areaPromptText(area, tools, frameworkHint) {
  */
 export function listPrompts() {
   return [
-    // ── One-shot workflow prompts ────────────────────────────────
     {
-      name: "rule-setup-project",
-      description: "Bootstrap a project end-to-end: detect framework, scaffold config, toolchain, and architect context",
+      name: "rule-a11y-audit",
+      description: "Audit a11y end-to-end: review code for WCAG 2.2 AA compliance and generate Playwright + axe-core tests",
+      arguments: [
+        { name: "code", description: "Code to review for a11y compliance", required: true },
+        { name: "framework", description: "Target framework", required: false },
+        { name: "component", description: "Component type to generate tests for", required: false },
+      ],
+    },
+    {
+      name: "rule-ai",
+      description: "AI agent work: rule-ai-agents patterns for agent integrations",
+      arguments: [
+        { name: "request", description: "Agent integration task", required: true },
+      ],
+    },
+    {
+      name: "rule-architect",
+      description: "Project architecture: context packs, interview flows (CLI + web), scaffolding",
+      arguments: [
+        { name: "request", description: "Architecture, scaffold, or context-pack task", required: true },
+      ],
+    },
+    {
+      name: "rule-architect-scaffold",
+      description: "Scaffold a new project with .agents/ + .context/ infrastructure",
       arguments: [
         { name: "projectName", description: "Name of the project", required: true },
         { name: "framework", description: `Target framework (${FRAMEWORKS})`, required: false },
-        { name: "toolchain", description: "Build toolchain (vite, parcel, rspack, turborepo…)", required: false },
-        { name: "tier", description: "Architect context tier (starter, standard, deep)", required: false },
+        { name: "tier", description: "Context generation tier (starter, standard, deep)", required: false },
+      ],
+    },
+    {
+      name: "rule-backend",
+      description: "Backend/API work: node, express, fastify, hono, nestjs, graphql, api design, security",
+      arguments: [
+        { name: "request", description: "Endpoint, service, or backend task", required: true },
+        { name: "framework", description: "Backend framework (node, express, fastify, hono, nestjs, graphql)", required: false },
+      ],
+    },
+    {
+      name: "rule-caveman",
+      description: "Ultra-compressed communication and review: caveman modes, compressed commits, compressed reviews",
+      arguments: [
+        { name: "request", description: "Text to compress, or commit/review to write in caveman style", required: true },
+      ],
+    },
+    {
+      name: "rule-code-review",
+      description: "Review code against rule styleguides for the given framework",
+      arguments: [
+        { name: "framework", description: `Framework (${FRAMEWORKS})`, required: false },
+        { name: "code", description: "Code to review", required: true },
+      ],
+    },
+    {
+      name: "rule-data",
+      description: "Data-layer work: postgresql, mysql, sqlite, mongodb, duckdb, indexed-db, SQL",
+      arguments: [
+        { name: "request", description: "Schema, query, or data-layer task", required: true },
+        { name: "database", description: "Database (postgresql, mysql, sqlite, mongodb, duckdb, indexed_db, sql)", required: false },
+      ],
+    },
+    {
+      name: "rule-devops",
+      description: "DevOps work: docker, gitlab-ci, observability, testing, versioning",
+      arguments: [
+        { name: "request", description: "CI/CD, container, observability, or versioning task", required: true },
+      ],
+    },
+    {
+      name: "rule-frontend",
+      description: "Frontend work following rule styleguides: zero CSS classes, semantic HTML, external CSS, TDD + a11y",
+      arguments: [
+        { name: "request", description: "Component, page, or frontend task", required: true },
+        { name: "framework", description: `Target framework (${FRAMEWORKS})`, required: false },
+      ],
+    },
+    {
+      name: "rule-grill",
+      description: "Structured questioning: grill-me interviews and grill-with-docs evidence drills",
+      arguments: [
+        { name: "request", description: "Topic to be grilled on", required: true },
+      ],
+    },
+    {
+      name: "rule-handoff",
+      description: "Produce a compressed context handoff (ADR summary + git context) to resume in a new session",
+      arguments: [
+        { name: "mode", description: "Handoff mode (handoff, close-session)", required: true },
+        { name: "includeGitDiff", description: "Include working-tree diff (default: yes)", required: false },
+        { name: "compress", description: "Aggressively compress the output (default: no)", required: false },
+      ],
+    },
+    {
+      name: "rule-meta",
+      description: "Work with the rule dispatcher/action toolset: routing, gateway, apply, search, check, scaffold, detect, fix, ADR, handoff",
+      arguments: [
+        { name: "request", description: "What to route, search, validate, scaffold, or record", required: true },
       ],
     },
     {
@@ -70,6 +160,21 @@ export function listPrompts() {
       ],
     },
     {
+      name: "rule-platform",
+      description: "Platform work: web, desktop, expo, agent, library",
+      arguments: [
+        { name: "request", description: "Platform target or task", required: true },
+        { name: "platform", description: "Platform (web, desktop, expo, agent, library)", required: false },
+      ],
+    },
+    {
+      name: "rule-process",
+      description: "Process work: code review, feature workflow, documentation, ADR, handoff, BMAD",
+      arguments: [
+        { name: "request", description: "Review, workflow, documentation, or decision task", required: true },
+      ],
+    },
+    {
       name: "rule-pull-request",
       description: "Prepare a pull request: review + a11y + security, update the ADR, commit with scope, PR description",
       arguments: [
@@ -79,58 +184,38 @@ export function listPrompts() {
       ],
     },
     {
-      name: "rule-write-tests",
-      description: "Write tests: TDD unit tests, a11y Playwright + axe-core specs, and devops test setup",
+      name: "rule-setup-project",
+      description: "Bootstrap a project end-to-end: detect framework, scaffold config, toolchain, and architect context",
       arguments: [
-        { name: "scope", description: "What to test (feature, component, module, project)", required: true },
+        { name: "projectName", description: "Name of the project", required: true },
         { name: "framework", description: `Target framework (${FRAMEWORKS})`, required: false },
-        { name: "testType", description: "Test type (tdd, a11y, devops, all — default all)", required: false },
+        { name: "toolchain", description: "Build toolchain (vite, parcel, rspack, turborepo…)", required: false },
+        { name: "tier", description: "Architect context tier (starter, standard, deep)", required: false },
       ],
     },
     {
-      name: "rule-handoff",
-      description: "Produce a compressed context handoff (ADR summary + git context) to resume in a new session",
+      name: "rule-skills",
+      description: "Skill discovery: find, install, and evaluate agent skills",
       arguments: [
-        { name: "mode", description: "Handoff mode (handoff, close-session)", required: true },
-        { name: "includeGitDiff", description: "Include working-tree diff (default: yes)", required: false },
-        { name: "compress", description: "Aggressively compress the output (default: no)", required: false },
+        { name: "request", description: "Skill you are looking for", required: true },
       ],
     },
-
-    // ── Area prompts (one per tool area) ─────────────────────────
     {
-      name: "rule-area-meta",
-      description: "Work with the rule dispatcher/action toolset: routing, gateway, apply, search, check, scaffold, detect, fix, ADR, handoff",
+      name: "rule-styleguide",
+      description: "Styleguide work: a11y, css, html, javascript, json, markdown, naming, patterns, validation",
       arguments: [
-        { name: "request", description: "What to route, search, validate, scaffold, or record", required: true },
+        { name: "request", description: "Styleguide check or authoring task", required: true },
       ],
     },
     {
-      name: "rule-area-frontend",
-      description: "Frontend work following rule styleguides: zero CSS classes, semantic HTML, external CSS, TDD + a11y",
+      name: "rule-tdd",
+      description: "Test-driven development workflow: red → green → refactor, failing tests first",
       arguments: [
-        { name: "request", description: "Component, page, or frontend task", required: true },
-        { name: "framework", description: `Target framework (${FRAMEWORKS})`, required: false },
+        { name: "request", description: "Feature or bugfix to develop test-first", required: true },
       ],
     },
     {
-      name: "rule-area-backend",
-      description: "Backend/API work: node, express, fastify, hono, nestjs, graphql, api design, security",
-      arguments: [
-        { name: "request", description: "Endpoint, service, or backend task", required: true },
-        { name: "framework", description: "Backend framework (node, express, fastify, hono, nestjs, graphql)", required: false },
-      ],
-    },
-    {
-      name: "rule-area-data",
-      description: "Data-layer work: postgresql, mysql, sqlite, mongodb, duckdb, indexed-db, SQL",
-      arguments: [
-        { name: "request", description: "Schema, query, or data-layer task", required: true },
-        { name: "database", description: "Database (postgresql, mysql, sqlite, mongodb, duckdb, indexed_db, sql)", required: false },
-      ],
-    },
-    {
-      name: "rule-area-toolchain",
+      name: "rule-toolchain",
       description: "Toolchain configuration: vite, pnpm, turborepo, rspack, parcel, typescript, eslint, biome, husky, commits, project",
       arguments: [
         { name: "request", description: "Toolchain config or setup task", required: true },
@@ -138,125 +223,19 @@ export function listPrompts() {
       ],
     },
     {
-      name: "rule-area-styleguide",
-      description: "Styleguide work: a11y, css, html, javascript, json, markdown, naming, patterns, validation",
-      arguments: [
-        { name: "request", description: "Styleguide check or authoring task", required: true },
-      ],
-    },
-    {
-      name: "rule-area-process",
-      description: "Process work: code review, feature workflow, documentation, ADR, handoff, BMAD",
-      arguments: [
-        { name: "request", description: "Review, workflow, documentation, or decision task", required: true },
-      ],
-    },
-    {
-      name: "rule-area-devops",
-      description: "DevOps work: docker, gitlab-ci, observability, testing, versioning",
-      arguments: [
-        { name: "request", description: "CI/CD, container, observability, or versioning task", required: true },
-      ],
-    },
-    {
-      name: "rule-area-platform",
-      description: "Platform work: web, desktop, expo, agent, library",
-      arguments: [
-        { name: "request", description: "Platform target or task", required: true },
-        { name: "platform", description: "Platform (web, desktop, expo, agent, library)", required: false },
-      ],
-    },
-    {
-      name: "rule-area-caveman",
-      description: "Ultra-compressed communication and review: caveman modes, compressed commits, compressed reviews",
-      arguments: [
-        { name: "request", description: "Text to compress, or commit/review to write in caveman style", required: true },
-      ],
-    },
-    {
-      name: "rule-area-architect",
-      description: "Project architecture: context packs, interview flows (CLI + web), scaffolding",
-      arguments: [
-        { name: "request", description: "Architecture, scaffold, or context-pack task", required: true },
-      ],
-    },
-    {
-      name: "rule-area-grill",
-      description: "Structured questioning: grill-me interviews and grill-with-docs evidence drills",
-      arguments: [
-        { name: "request", description: "Topic to be grilled on", required: true },
-      ],
-    },
-    {
-      name: "rule-area-ai",
-      description: "AI agent work: rule-ai-agents patterns for agent integrations",
-      arguments: [
-        { name: "request", description: "Agent integration task", required: true },
-      ],
-    },
-    {
-      name: "rule-area-skills",
-      description: "Skill discovery: find, install, and evaluate agent skills",
-      arguments: [
-        { name: "request", description: "Skill you are looking for", required: true },
-      ],
-    },
-    {
-      name: "rule-area-tdd",
-      description: "Test-driven development workflow: red → green → refactor, failing tests first",
-      arguments: [
-        { name: "request", description: "Feature or bugfix to develop test-first", required: true },
-      ],
-    },
-    {
-      name: "rule-area-ui",
+      name: "rule-ui",
       description: "UI design-system work: design-system components, tokens, patterns",
       arguments: [
         { name: "request", description: "UI/design-system task", required: true },
       ],
     },
-
-    // ── Legacy prompts (kept, updated to the shared rules) ────────
     {
-      name: "rule-code-review",
-      description: "Review code against rule styleguides for the given framework",
+      name: "rule-write-tests",
+      description: "Write tests: TDD unit tests, a11y Playwright + axe-core specs, and devops test setup",
       arguments: [
-        { name: "framework", description: `Framework (${FRAMEWORKS})`, required: false },
-        { name: "code", description: "Code to review", required: true },
-      ],
-    },
-    {
-      name: "rule-generate-component",
-      description: "Generate a component following rule AI principles",
-      arguments: [
-        { name: "framework", description: "Target framework", required: true },
-        { name: "component", description: "Component type (button, card, modal, formField, list, nav)", required: true },
-        { name: "features", description: "Additional features or requirements", required: false },
-      ],
-    },
-    {
-      name: "rule-a11y-test",
-      description: "Generate Playwright + axe-core a11y tests for a project",
-      arguments: [
-        { name: "framework", description: "Target framework", required: true },
-        { name: "component", description: "Component type to test", required: false },
-      ],
-    },
-    {
-      name: "rule-a11y-review",
-      description: "Review code for a11y compliance (WCAG 2.2 AA, Playwright + axe-core required)",
-      arguments: [
-        { name: "code", description: "Code to review", required: true },
-        { name: "framework", description: "Framework", required: false },
-      ],
-    },
-    {
-      name: "rule-architect-scaffold",
-      description: "Scaffold a new project with .agents/ + .context/ infrastructure",
-      arguments: [
-        { name: "projectName", description: "Name of the project", required: true },
+        { name: "scope", description: "What to test (feature, component, module, project)", required: true },
         { name: "framework", description: `Target framework (${FRAMEWORKS})`, required: false },
-        { name: "tier", description: "Context generation tier (starter, standard, deep)", required: false },
+        { name: "testType", description: "Test type (tdd, a11y, devops, all — default all)", required: false },
       ],
     },
   ];
@@ -363,22 +342,22 @@ export function getPrompt(name) {
 
   // ── Area prompts ───────────────────────────────────────────────
   const AREAS = {
-    "rule-area-meta": areaPromptText("meta", "pix_tool, rule_tool_gateway, rule_tool_apply, rule_tool_search, rule_tool_check, rule_tool_scaffold, rule_tool_detect, rule_tool_fix, rule_tool_process_adr, rule_tool_process_handoff"),
-    "rule-area-frontend": areaPromptText("frontend", "pix_frontend_react, pix_frontend_vue, pix_frontend_svelte, pix_frontend_angular, pix_frontend_solidjs, pix_frontend_astro, pix_frontend_meta_next, pix_frontend_meta_nuxt, pix_frontend_meta_remix, pix_frontend_vanilla_reactive, pix_frontend_design", "frontend"),
-    "rule-area-backend": areaPromptText("backend", "pix_backend_node, pix_backend_express, pix_backend_fastify, pix_backend_hono, pix_backend_nestjs, pix_backend_graphql, pix_backend_api_design, pix_backend_security", "backend"),
-    "rule-area-data": areaPromptText("data", "pix_data_postgresql, pix_data_mysql, pix_data_sqlite, pix_data_mongodb, pix_data_duckdb, pix_data_indexed_db, pix_data_sql", "data"),
-    "rule-area-toolchain": areaPromptText("toolchain", "pix_toolchain_vite, pix_toolchain_pnpm, pix_toolchain_turborepo, pix_toolchain_rspack, pix_toolchain_parcel, pix_toolchain_typescript, pix_toolchain_eslint, pix_toolchain_biome, pix_toolchain_husky, pix_toolchain_commits, pix_toolchain_project", "toolchain"),
-    "rule-area-styleguide": areaPromptText("styleguide", "pix_styleguide_a11y, pix_styleguide_css, pix_styleguide_html, pix_styleguide_javascript, pix_styleguide_json, pix_styleguide_markdown, pix_styleguide_naming, pix_styleguide_patterns, pix_styleguide_validation"),
-    "rule-area-process": areaPromptText("process", "pix_process_code_review, pix_process_feature_workflow, pix_process_documentation, pix_process_bmad, rule_tool_process_adr, rule_tool_process_handoff"),
-    "rule-area-devops": areaPromptText("devops", "pix_devops_docker, pix_devops_gitlab_ci, pix_devops_observability, pix_devops_testing, pix_devops_version"),
-    "rule-area-platform": areaPromptText("platform", "pix_platform_web, pix_platform_desktop, pix_platform_expo, pix_platform_agent, pix_platform_library", "platform"),
-    "rule-area-caveman": areaPromptText("caveman", "pix_caveman, pix_caveman_commit, pix_caveman_review, pix_caveman_compress, pix_caveman_help"),
-    "rule-area-architect": areaPromptText("architect", "pix_architect_cli, pix_architect_web"),
-    "rule-area-grill": areaPromptText("grill", "pix_grill_me, pix_grill_with_docs"),
-    "rule-area-ai": areaPromptText("ai", "pix_ai_agents"),
-    "rule-area-skills": areaPromptText("skills", "pix_find_skills"),
-    "rule-area-tdd": areaPromptText("tdd", "pix_test_driven_development"),
-    "rule-area-ui": areaPromptText("ui", "pix_ui_design_system"),
+    "rule-meta": areaPromptText("meta", "pix_tool, rule_tool_gateway, rule_tool_apply, rule_tool_search, rule_tool_check, rule_tool_scaffold, rule_tool_detect, rule_tool_fix, rule_tool_process_adr, rule_tool_process_handoff"),
+    "rule-frontend": areaPromptText("frontend", "pix_frontend_react, pix_frontend_vue, pix_frontend_svelte, pix_frontend_angular, pix_frontend_solidjs, pix_frontend_astro, pix_frontend_meta_next, pix_frontend_meta_nuxt, pix_frontend_meta_remix, pix_frontend_vanilla_reactive, pix_frontend_design", "frontend"),
+    "rule-backend": areaPromptText("backend", "pix_backend_node, pix_backend_express, pix_backend_fastify, pix_backend_hono, pix_backend_nestjs, pix_backend_graphql, pix_backend_api_design, pix_backend_security", "backend"),
+    "rule-data": areaPromptText("data", "pix_data_postgresql, pix_data_mysql, pix_data_sqlite, pix_data_mongodb, pix_data_duckdb, pix_data_indexed_db, pix_data_sql", "data"),
+    "rule-toolchain": areaPromptText("toolchain", "pix_toolchain_vite, pix_toolchain_pnpm, pix_toolchain_turborepo, pix_toolchain_rspack, pix_toolchain_parcel, pix_toolchain_typescript, pix_toolchain_eslint, pix_toolchain_biome, pix_toolchain_husky, pix_toolchain_commits, pix_toolchain_project", "toolchain"),
+    "rule-styleguide": areaPromptText("styleguide", "pix_styleguide_a11y, pix_styleguide_css, pix_styleguide_html, pix_styleguide_javascript, pix_styleguide_json, pix_styleguide_markdown, pix_styleguide_naming, pix_styleguide_patterns, pix_styleguide_validation"),
+    "rule-process": areaPromptText("process", "pix_process_code_review, pix_process_feature_workflow, pix_process_documentation, pix_process_bmad, rule_tool_process_adr, rule_tool_process_handoff"),
+    "rule-devops": areaPromptText("devops", "pix_devops_docker, pix_devops_gitlab_ci, pix_devops_observability, pix_devops_testing, pix_devops_version"),
+    "rule-platform": areaPromptText("platform", "pix_platform_web, pix_platform_desktop, pix_platform_expo, pix_platform_agent, pix_platform_library", "platform"),
+    "rule-caveman": areaPromptText("caveman", "pix_caveman, pix_caveman_commit, pix_caveman_review, pix_caveman_compress, pix_caveman_help"),
+    "rule-architect": areaPromptText("architect", "pix_architect_cli, pix_architect_web"),
+    "rule-grill": areaPromptText("grill", "pix_grill_me, pix_grill_with_docs"),
+    "rule-ai": areaPromptText("ai", "pix_ai_agents"),
+    "rule-skills": areaPromptText("skills", "pix_find_skills"),
+    "rule-tdd": areaPromptText("tdd", "pix_test_driven_development"),
+    "rule-ui": areaPromptText("ui", "pix_ui_design_system"),
   };
   if (AREAS[name]) {
     return { name, description: name, messages: user(AREAS[name]) };
@@ -402,54 +381,25 @@ export function getPrompt(name) {
         ),
       };
 
-    case "rule-generate-component":
+    case "rule-a11y-audit":
       return {
         name,
-        description: "Generate a component following rule AI principles",
+        description: "Audit a11y end-to-end (review + tests)",
         messages: user(
-          "You are a component generator that outputs framework-specific code following rule AI principles:\n" +
-          "- Zero CSS classes (use element + [data-part] selectors only)\n" +
-          "- Zero inline styles\n" +
-          "- Semantic HTML\n" +
-          "- External CSS via adoptedStyleSheets or framework-native imports\n" +
-          "Call `rule_tool_component` first to get the template, then adapt it.\n" +
-          "Write failing tests first (TDD) and a11y specs (Playwright + axe-core) for the component; if not applicable, ask the user.\n" +
-          "Validate with `rule_tool_check` and iterate until all guardrails pass.\n" +
-          "Finish by proposing a conventional commit message with a mandatory scope, e.g. \"feat(<component>): ...\"."
-        ),
-      };
-
-    case "rule-a11y-test":
-      return {
-        name,
-        description: "Generate Playwright + axe-core a11y tests",
-        messages: user(
-          "You are an a11y test generator. Generate Playwright test files using @axe-core/playwright.\n" +
-          "Every project must have:\n" +
+          "You are an a11y auditor enforcing WCAG 2.2 AA.\n" +
+          "Part 1 — Review the code:\n" +
+          "  - semantic HTML, headings hierarchy, color contrast (4.5:1 text, 3:1 large),\n" +
+          "  - focus styles, keyboard nav, form labels, alt text, ARIA usage.\n" +
+          "Part 2 — Ensure automated tests exist in tests/a11y/ using Playwright + @axe-core/playwright:\n" +
           "  - tests/a11y/_basic.spec.js (page structure)\n" +
           "  - tests/a11y/_forms.spec.js (form a11y)\n" +
           "  - tests/a11y/_components.spec.js (component a11y)\n" +
           "  - playwright.config.js\n" +
           "Use AxeBuilder from @axe-core/playwright, assert expect(results.violations).toEqual([]).\n" +
-          "Follow rule styleguides: zero CSS classes, semantic HTML, external CSS.\n" +
-          "Use `rule_tool_component` for test templates; validate with `rule_tool_check`.\n" +
+          "If the a11y tests are missing, generate them — use `rule_tool_component` for test templates.\n" +
+          "Validate findings and generated tests with `rule_tool_check` against pix_styleguide_a11y.\n" +
           "Run the tests and report real outcomes; never claim unexecuted checks passed.\n" +
           "Finish by proposing a conventional commit message with a mandatory scope, e.g. \"test(a11y): ...\"."
-        ),
-      };
-
-    case "rule-a11y-review":
-      return {
-        name,
-        description: "Review code for WCAG 2.2 AA compliance with Playwright + axe-core tests",
-        messages: user(
-          "You are an a11y reviewer enforcing WCAG 2.2 AA.\n" +
-          "Check: semantic HTML, headings hierarchy, color contrast (4.5:1 text, 3:1 large),\n" +
-          "focus styles, keyboard nav, form labels, alt text, ARIA usage.\n" +
-          "Also verify that automated a11y tests exist in tests/a11y/ using Playwright + @axe-core/playwright.\n" +
-          "If tests are missing, flag a violation and ask the user how to proceed.\n" +
-          "Validate findings with `rule_tool_check` against pix_styleguide_a11y.\n" +
-          "Finish by proposing a conventional commit message with a mandatory scope."
         ),
       };
 

@@ -23,7 +23,7 @@ Serves styleguides, component templates, framework best practices, and design sy
   - [Minimal tool surface (10 tools)](#minimal-tool-surface-10-tools)
   - [Gateway deterministic mode](#gateway-deterministic-mode)
 - [MCP Resources (146)](#mcp-resources-146)
-- [MCP Prompts (26)](#mcp-prompts-26)
+- [MCP Prompts (24)](#mcp-prompts-24)
 - [Guardrail engine](#guardrail-engine)
 - [CLI reference](#cli-reference)
 - [Daemon & services](#daemon--services)
@@ -55,7 +55,7 @@ rule-mcp install --agent all
 
 ## What is rule-mcp
 
-rule-mcp is an [MCP](https://modelcontextprotocol.io) server that exposes **97 tools**, **146 resources**, and **26 prompts** to any MCP-compatible AI coding agent. Because the server never calls an LLM (every output is deterministic), it is **model-agnostic** — it behaves identically behind Claude, GPT, Gemini, Llama, Qwen, or any other model. It provides:
+rule-mcp is an [MCP](https://modelcontextprotocol.io) server that exposes **97 tools**, **146 resources**, and **24 prompts** to any MCP-compatible AI coding agent. Because the server never calls an LLM (every output is deterministic), it is **model-agnostic** — it behaves identically behind Claude, GPT, Gemini, Llama, Qwen, or any other model. It provides:
 
 - **70 modular skills** covering frontend, backend, database, devops, toolchain, styleguide, and architecture domains
 - **BM25 full-text search** across all skill content
@@ -295,53 +295,38 @@ Each skill (except `rule` itself) has two resources:
 
 ---
 
-## MCP Prompts (26)
+## MCP Prompts (24)
 
-26 reusable prompts accessible via the MCP `prompts/get` protocol — 5 one-shot workflow
-prompts that orchestrate the tool sequence end-to-end, 16 area prompts (one per tool area),
-and 5 legacy prompts. Every prompt routes through `pix_tool`, involves TDD/a11y baselines
-(or asks the user), and closes by proposing a commit message with mandatory scope.
-
-**Workflow one-shot prompts**
+24 reusable prompts accessible via the MCP `prompts/get` protocol, listed alphabetically below.
+Every prompt routes through `pix_tool`, involves TDD/a11y baselines (or asks the user), and
+closes by proposing a commit message with mandatory scope.
 
 | Prompt | Description | Arguments |
 |---|---|---|
-| `rule-setup-project` | Bootstrap project: detect → scaffold → toolchain → architect context | `projectName` (required), `framework`, `toolchain`, `tier` |
-| `rule-new-feature` | Feature end-to-end: route → evidence → failing tests → code → guardrails | `feature` (required), `framework`, `area`, `includeTests` |
-| `rule-pull-request` | Prepare PR: review + a11y + security + ADR + commit scope + description | `description` (required), `framework`, `updateAdr` |
-| `rule-write-tests` | Write tests: TDD + a11y (Playwright + axe-core) + devops | `scope` (required), `framework`, `testType` |
-| `rule-handoff` | Compressed context handoff (ADR + git) for a new session | `mode` (required), `includeGitDiff`, `compress` |
-
-**Area prompts** (one per tool area)
-
-| Prompt | Area |
-|---|---|
-| `rule-area-meta` | Dispatcher/action toolset (gateway, apply, search, check, scaffold…) |
-| `rule-area-frontend` | React, Vue, Svelte, Angular, Solid, Astro, Next, Nuxt, Remix, vanilla |
-| `rule-area-backend` | Node, Express, Fastify, Hono, NestJS, GraphQL, API design, security |
-| `rule-area-data` | PostgreSQL, MySQL, SQLite, MongoDB, DuckDB, IndexedDB, SQL |
-| `rule-area-toolchain` | Vite, pnpm, Turborepo, Rspack, Parcel, TypeScript, ESLint, Biome, Husky, commits |
-| `rule-area-styleguide` | a11y, CSS, HTML, JS, JSON, Markdown, naming, patterns, validation |
-| `rule-area-process` | Code review, feature workflow, documentation, ADR, handoff, BMAD |
-| `rule-area-devops` | Docker, GitLab CI, observability, testing, versioning |
-| `rule-area-platform` | Web, desktop, Expo, agent, library |
-| `rule-area-caveman` | Compressed communication, commits, reviews |
-| `rule-area-architect` | Context packs, interview flows (CLI + web), scaffolding |
-| `rule-area-grill` | Structured questioning (grill-me, grill-with-docs) |
-| `rule-area-ai` | AI agent integrations |
-| `rule-area-skills` | Skill discovery (find-skills) |
-| `rule-area-tdd` | Test-driven development workflow |
-| `rule-area-ui` | UI design-system work |
-
-**Legacy prompts**
-
-| Prompt | Description | Arguments |
-|---|---|---|
-| `rule-code-review` | Review code against rule styleguides | `framework`, `code` (required) |
-| `rule-generate-component` | Generate a component following rule principles | `framework` (required), `component` (required), `features` |
-| `rule-a11y-test` | Generate Playwright + axe-core a11y tests | `framework` (required), `component` |
-| `rule-a11y-review` | Review code for WCAG 2.2 AA compliance | `code` (required), `framework` |
+| `rule-a11y-audit` | Audit a11y end-to-end: WCAG 2.2 AA review + Playwright/axe-core tests | `code` (required), `framework`, `component` |
+| `rule-ai` | AI agent integrations | `request` (required) |
+| `rule-architect` | Project architecture: context packs, interview flows (CLI + web), scaffolding | `request` (required) |
 | `rule-architect-scaffold` | Scaffold project with `.agents/` + `.context/` | `projectName` (required), `framework`, `tier` |
+| `rule-backend` | Node, Express, Fastify, Hono, NestJS, GraphQL, API design, security | `request` (required), `framework` |
+| `rule-caveman` | Compressed communication, commits, reviews | `request` (required) |
+| `rule-code-review` | Review code against rule styleguides | `framework`, `code` (required) |
+| `rule-data` | PostgreSQL, MySQL, SQLite, MongoDB, DuckDB, IndexedDB, SQL | `request` (required), `database` |
+| `rule-devops` | Docker, GitLab CI, observability, testing, versioning | `request` (required) |
+| `rule-frontend` | React, Vue, Svelte, Angular, Solid, Astro, Next, Nuxt, Remix, vanilla | `request` (required), `framework` |
+| `rule-grill` | Structured questioning (grill-me, grill-with-docs) | `request` (required) |
+| `rule-handoff` | Compressed context handoff (ADR + git) for a new session | `mode` (required), `includeGitDiff`, `compress` |
+| `rule-meta` | Dispatcher/action toolset (gateway, apply, search, check, scaffold…) | `request` (required) |
+| `rule-new-feature` | Feature end-to-end: route → evidence → failing tests → code → guardrails | `feature` (required), `framework`, `area`, `includeTests` |
+| `rule-platform` | Web, desktop, Expo, agent, library | `request` (required), `platform` |
+| `rule-process` | Code review, feature workflow, documentation, ADR, handoff, BMAD | `request` (required) |
+| `rule-pull-request` | Prepare PR: review + a11y + security + ADR + commit scope + description | `description` (required), `framework`, `updateAdr` |
+| `rule-setup-project` | Bootstrap project: detect → scaffold → toolchain → architect context | `projectName` (required), `framework`, `toolchain`, `tier` |
+| `rule-skills` | Skill discovery (find-skills) | `request` (required) |
+| `rule-styleguide` | a11y, CSS, HTML, JS, JSON, Markdown, naming, patterns, validation | `request` (required) |
+| `rule-tdd` | Test-driven development workflow | `request` (required) |
+| `rule-toolchain` | Vite, pnpm, Turborepo, Rspack, Parcel, TypeScript, ESLint, Biome, Husky, commits | `request` (required), `tool` |
+| `rule-ui` | UI design-system work | `request` (required) |
+| `rule-write-tests` | Write tests: TDD + a11y (Playwright + axe-core) + devops | `scope` (required), `framework`, `testType` |
 
 ---
 

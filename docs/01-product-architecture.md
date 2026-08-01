@@ -61,21 +61,34 @@ Serve rule-* skill rules, styleguides, component templates, and framework best p
 | `rule://a11y/test-basic` | Basic a11y test template |
 | `rule://a11y/test-forms` | Forms a11y test template |
 
-### Current Prompts (26)
+### Current Prompts (24)
 
 | Name | Purpose |
 |------|---------|
-| `rule-setup-project` | Bootstrap project end-to-end (detect → scaffold → toolchain → architect context) |
-| `rule-new-feature` | Feature end-to-end with TDD + a11y + commit scope |
-| `rule-pull-request` | Prepare PR: review + a11y + security + ADR + commit scope |
-| `rule-write-tests` | Write TDD + a11y + devops tests |
-| `rule-handoff` | Compressed context handoff for a new session |
-| `rule-area-*` (16) | One prompt per tool area (meta, frontend, backend, data, toolchain, styleguide, process, devops, platform, caveman, architect, grill, ai, skills, tdd, ui) |
-| `rule-code-review` | Review code against rule styleguides |
-| `rule-generate-component` | Generate component following rule principles |
-| `rule-a11y-test` | Generate a11y Playwright tests |
-| `rule-a11y-review` | Review WCAG 2.2 AA compliance |
+| `rule-a11y-audit` | Audit a11y end-to-end: WCAG 2.2 AA review + Playwright/axe-core tests |
+| `rule-ai` | AI agent integrations |
+| `rule-architect` | Context packs, interview flows (CLI + web), scaffolding |
 | `rule-architect-scaffold` | Scaffold project with .agents/ + .context/ |
+| `rule-backend` | Node, Express, Fastify, Hono, NestJS, GraphQL, API design, security |
+| `rule-caveman` | Compressed communication, commits, reviews |
+| `rule-code-review` | Review code against rule styleguides |
+| `rule-data` | PostgreSQL, MySQL, SQLite, MongoDB, DuckDB, IndexedDB, SQL |
+| `rule-devops` | Docker, GitLab CI, observability, testing, versioning |
+| `rule-frontend` | React, Vue, Svelte, Angular, Solid, Astro, Next, Nuxt, Remix, vanilla |
+| `rule-grill` | Structured questioning (grill-me, grill-with-docs) |
+| `rule-handoff` | Compressed context handoff for a new session |
+| `rule-meta` | Dispatcher/action toolset (gateway, apply, search, check, scaffold…) |
+| `rule-new-feature` | Feature end-to-end with TDD + a11y + commit scope |
+| `rule-platform` | Web, desktop, Expo, agent, library |
+| `rule-process` | Code review, feature workflow, documentation, ADR, handoff, BMAD |
+| `rule-pull-request` | Prepare PR: review + a11y + security + ADR + commit scope |
+| `rule-setup-project` | Bootstrap project end-to-end (detect → scaffold → toolchain → architect context) |
+| `rule-skills` | Skill discovery (find-skills) |
+| `rule-styleguide` | a11y, CSS, HTML, JS, JSON, Markdown, naming, patterns, validation |
+| `rule-tdd` | Test-driven development workflow |
+| `rule-toolchain` | Vite, pnpm, Turborepo, Rspack, Parcel, TypeScript, ESLint, Biome, Husky, commits |
+| `rule-ui` | UI design-system work |
+| `rule-write-tests` | Write TDD + a11y + devops tests |
 
 ---
 

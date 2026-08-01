@@ -115,16 +115,16 @@ export function createServer() {
       const TIERS = ["starter", "standard", "deep"];
 
       if (argument.name === "framework") return complete(FRAMEWORKS);
-      if (promptName === "rule-generate-component" && argument.name === "component") {
+      if (promptName === "rule-a11y-audit" && argument.name === "component") {
         return complete(["button", "card", "modal", "formField", "list", "nav"]);
       }
       if (promptName === "rule-write-tests" && argument.name === "testType") return complete(["tdd", "a11y", "devops", "all"]);
       if (promptName === "rule-handoff" && argument.name === "mode") return complete(["handoff", "close-session"]);
       if (promptName === "rule-pull-request" && argument.name === "updateAdr") return complete(["yes", "no"]);
-      if (promptName === "rule-area-backend" && argument.name === "framework") return complete(BACKENDS);
-      if (promptName === "rule-area-data" && argument.name === "database") return complete(DATABASES);
-      if (promptName === "rule-area-toolchain" && argument.name === "tool") return complete(TOOLCHAIN);
-      if (promptName === "rule-area-platform" && argument.name === "platform") return complete(PLATFORMS);
+      if (promptName === "rule-backend" && argument.name === "framework") return complete(BACKENDS);
+      if (promptName === "rule-data" && argument.name === "database") return complete(DATABASES);
+      if (promptName === "rule-toolchain" && argument.name === "tool") return complete(TOOLCHAIN);
+      if (promptName === "rule-platform" && argument.name === "platform") return complete(PLATFORMS);
       if ((promptName === "rule-setup-project" || promptName === "rule-architect-scaffold") && argument.name === "tier") {
         return complete(TIERS);
       }

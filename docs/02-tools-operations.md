@@ -644,17 +644,30 @@ Prompt templates accessible via the MCP `prompts/get` protocol.
 
 | Name | Arguments | Description |
 |------|-----------|-------------|
-| `rule-setup-project` | `projectName` (req), `framework` (opt), `toolchain` (opt), `tier` (opt) | Bootstrap project: detect → scaffold → toolchain → architect context |
-| `rule-new-feature` | `feature` (req), `framework` (opt), `area` (opt), `includeTests` (opt) | Feature end-to-end with TDD + a11y + commit scope |
-| `rule-pull-request` | `description` (req), `framework` (opt), `updateAdr` (opt) | Prepare PR: review + a11y + security + ADR + commit scope |
-| `rule-write-tests` | `scope` (req), `framework` (opt), `testType` (opt) | Write TDD + a11y (axe-core) + devops tests |
-| `rule-handoff` | `mode` (req), `includeGitDiff` (opt), `compress` (opt) | Compressed context handoff for a new session |
-| `rule-area-*` (16) | `request` (req) + area-specific optionals | One prompt per tool area (meta, frontend, backend, data, toolchain, styleguide, process, devops, platform, caveman, architect, grill, ai, skills, tdd, ui) |
-| `rule-code-review` | `framework` (opt), `code` (req) | Review code against rule styleguides |
-| `rule-generate-component` | `framework` (req), `component` (req), `features` (opt) | Generate component following rule principles |
-| `rule-a11y-test` | `framework` (req), `component` (opt) | Generate Playwright + axe-core a11y tests |
-| `rule-a11y-review` | `code` (req), `framework` (opt) | Review code for WCAG 2.2 AA compliance |
+| `rule-a11y-audit` | `code` (req), `framework` (opt), `component` (opt) | Audit a11y end-to-end: WCAG 2.2 AA review + Playwright/axe-core tests |
+| `rule-ai` | `request` (req) | AI agent integrations |
+| `rule-architect` | `request` (req) | Context packs, interview flows (CLI + web), scaffolding |
 | `rule-architect-scaffold` | `projectName` (req), `framework` (opt), `tier` (opt) | Scaffold project with .agents/ + .context/ |
+| `rule-backend` | `request` (req), `framework` (opt) | Node, Express, Fastify, Hono, NestJS, GraphQL, API design, security |
+| `rule-caveman` | `request` (req) | Compressed communication, commits, reviews |
+| `rule-code-review` | `framework` (opt), `code` (req) | Review code against rule styleguides |
+| `rule-data` | `request` (req), `database` (opt) | PostgreSQL, MySQL, SQLite, MongoDB, DuckDB, IndexedDB, SQL |
+| `rule-devops` | `request` (req) | Docker, GitLab CI, observability, testing, versioning |
+| `rule-frontend` | `request` (req), `framework` (opt) | React, Vue, Svelte, Angular, Solid, Astro, Next, Nuxt, Remix, vanilla |
+| `rule-grill` | `request` (req) | Structured questioning (grill-me, grill-with-docs) |
+| `rule-handoff` | `mode` (req), `includeGitDiff` (opt), `compress` (opt) | Compressed context handoff for a new session |
+| `rule-meta` | `request` (req) | Dispatcher/action toolset (gateway, apply, search, check, scaffold…) |
+| `rule-new-feature` | `feature` (req), `framework` (opt), `area` (opt), `includeTests` (opt) | Feature end-to-end with TDD + a11y + commit scope |
+| `rule-platform` | `request` (req), `platform` (opt) | Web, desktop, Expo, agent, library |
+| `rule-process` | `request` (req) | Code review, feature workflow, documentation, ADR, handoff, BMAD |
+| `rule-pull-request` | `description` (req), `framework` (opt), `updateAdr` (opt) | Prepare PR: review + a11y + security + ADR + commit scope |
+| `rule-setup-project` | `projectName` (req), `framework` (opt), `toolchain` (opt), `tier` (opt) | Bootstrap project: detect → scaffold → toolchain → architect context |
+| `rule-skills` | `request` (req) | Skill discovery (find-skills) |
+| `rule-styleguide` | `request` (req) | a11y, CSS, HTML, JS, JSON, Markdown, naming, patterns, validation |
+| `rule-tdd` | `request` (req) | Test-driven development workflow |
+| `rule-toolchain` | `request` (req), `tool` (opt) | Vite, pnpm, Turborepo, Rspack, Parcel, TypeScript, ESLint, Biome, Husky, commits |
+| `rule-ui` | `request` (req) | UI design-system work |
+| `rule-write-tests` | `scope` (req), `framework` (opt), `testType` (opt) | Write TDD + a11y (axe-core) + devops tests |
 
 ---
 

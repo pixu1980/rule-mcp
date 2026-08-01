@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
-- Prompts: MCP registry extended from 5 to **26 prompts** — 5 one-shot workflow prompts (`rule-setup-project`, `rule-new-feature`, `rule-pull-request`, `rule-write-tests`, `rule-handoff`), 16 area prompts (`rule-area-*`, one per tool area), plus the 5 legacy prompts updated to the shared rules (route via `pix_tool`, TDD/a11y baselines or explicit user ask, commit message with mandatory scope). Argument completion for the new prompt schemas in server.js
+- Prompts: MCP registry extended from 5 to **24 prompts**, listed alphabetically — 5 one-shot workflow prompts (`rule-setup-project`, `rule-new-feature`, `rule-pull-request`, `rule-write-tests`, `rule-handoff`), 16 area prompts (`rule-*`, one per tool area), plus the 3 legacy prompts (`rule-code-review`, `rule-a11y-audit`, `rule-architect-scaffold`) updated to the shared rules (route via `pix_tool`, TDD/a11y baselines or explicit user ask, commit message with mandatory scope). `rule-a11y-test` and `rule-a11y-review` were merged into `rule-a11y-audit` (review + test generation), and `rule-generate-component` was removed. Argument completion for the new prompt schemas in server.js
 - Initial MCP SDK port (Phase 0) — replaces hand-rolled protocol
 - 22 MCP tools: rule-mcp, 16 skill tools, pix_search, pix_component, pix_check, pix_scaffold, pix_architect, pix_detect
 - Context-aware skill routing with framework-biased scoring

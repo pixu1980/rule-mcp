@@ -3,7 +3,7 @@
  *
  * Validates the MCP prompt registry (src/prompts/index.js):
  *   - structure: unique kebab-case names, strict argument schema, getPrompt impl
- *   - coverage: 5 workflow one-shot + 16 area prompts + 5 legacy prompts
+ *   - coverage: 5 workflow one-shot + 16 area prompts + 3 legacy prompts
  *   - content rules: every prompt message proposes a commit with scope and
  *     involves TDD/a11y baselines (or asks the user what to do)
  */
@@ -25,29 +25,27 @@ const WORKFLOW_PROMPTS = [
 ];
 
 const AREA_PROMPTS = [
-  "rule-area-meta",
-  "rule-area-frontend",
-  "rule-area-backend",
-  "rule-area-data",
-  "rule-area-toolchain",
-  "rule-area-styleguide",
-  "rule-area-process",
-  "rule-area-devops",
-  "rule-area-platform",
-  "rule-area-caveman",
-  "rule-area-architect",
-  "rule-area-grill",
-  "rule-area-ai",
-  "rule-area-skills",
-  "rule-area-tdd",
-  "rule-area-ui",
+  "rule-meta",
+  "rule-frontend",
+  "rule-backend",
+  "rule-data",
+  "rule-toolchain",
+  "rule-styleguide",
+  "rule-process",
+  "rule-devops",
+  "rule-platform",
+  "rule-caveman",
+  "rule-architect",
+  "rule-grill",
+  "rule-ai",
+  "rule-skills",
+  "rule-tdd",
+  "rule-ui",
 ];
 
 const LEGACY_PROMPTS = [
   "rule-code-review",
-  "rule-generate-component",
-  "rule-a11y-test",
-  "rule-a11y-review",
+  "rule-a11y-audit",
   "rule-architect-scaffold",
 ];
 
@@ -65,7 +63,12 @@ test("names are unique and kebab-case", () => {
   }
 });
 
-test("registry covers workflow, all 16 areas, and the 5 legacy prompts", () => {
+test("prompts are listed in alphabetical order", () => {
+  const sorted = [...names].sort((a, b) => a.localeCompare(b));
+  assert.deepEqual(names, sorted, "prompt names must be listed alphabetically");
+});
+
+test("registry covers workflow, all 16 areas, and the 3 legacy prompts", () => {
   for (const expected of EXPECTED) {
     assert.ok(names.includes(expected), `missing prompt ${expected}`);
   }
@@ -95,6 +98,20 @@ test("every listed prompt has a getPrompt implementation with messages", () => {
       .join("\n");
     assert.ok(text.length > 0, `${p.name}: message text required`);
   }
+});
+
+test("refactor: rule-area- prefix gone, a11y merged into rule-a11y-audit, rule-generate-component removed", () => {
+  const names = listPrompts().map((p) => p.name);
+  assert.ok(!names.some((n) => n.startsWith("rule-area-")), "no rule-area- prefixed prompt must remain");
+  for (const removed of ["rule-generate-component", "rule-a11y-test", "rule-a11y-review"]) {
+    assert.ok(!names.includes(removed), `${removed} must be removed`);
+  }
+  const audit = getPrompt("rule-a11y-audit");
+  assert.ok(audit, "rule-a11y-audit must exist");
+  const text = audit.messages.map((m) => m.content?.text ?? "").join("\n");
+  assert.match(text, /WCAG 2\.2 AA/, "rule-a11y-audit must review WCAG 2.2 AA compliance");
+  assert.match(text, /axe-core|AxeBuilder/, "rule-a11y-audit must generate axe-core tests");
+  assert.match(text, /tests\/a11y/, "rule-a11y-audit must cover the tests/a11y suite");
 });
 
 // ── Content rules (commit scope + TDD/a11y baselines) ────────────
