@@ -18,8 +18,6 @@ Every commit MUST use conventional commits **with a scope**: `type(scope): subje
 Commits without a scope (e.g. `docs: ...`) are rejected by the `commit-msg` hook (`.githooks/commit-msg`). Generated merge/revert messages are exempt.
 <!-- /pix-galaxy-mcp-commit-rules -->
 
-
-
 <!-- pix-galaxy-mcp-rules -->
 ## MANDATORY: Use pix-galaxy-mcp enforced workflow for coding work
 
