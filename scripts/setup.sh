@@ -6,7 +6,7 @@
 # One-command setup: npm install + agent detection + configuration.
 # Designed to be curl-pipe-able:
 #
-#   curl -fsSL https://pix-ai.domain.example/setup.sh | bash
+#   curl -fsSL https://pix-galaxy.domain.example/setup.sh | bash
 #
 # Or local:
 #
