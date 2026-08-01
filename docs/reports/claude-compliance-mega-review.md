@@ -56,7 +56,7 @@ clean shipped resource count: 146
 tool defs JSON bytes: 90873  ~tokens: 22718
 ```
 
-In questa sessione live (con skill personali aggiuntive installate sulla macchina, es. `caveman-*`, `frontend-design`, `grill-me`...) il conteggio tool sale a **87**, e nell'host "pi" ogni risorsa MCP viene *inoltre* esposta come un tool a sé stante (`get_..._skill_full_content`, `get_..._skill_summary_first_30_lines`, ecc.), portando la superficie totale visibile al modello a **oltre 220 tool callable in una singola sessione**. Questo è un dettaglio specifico dell'host, non del server, ma è un effetto concreto e osservabile dell'architettura "una risorsa/skill = un tool" che il progetto adotta.
+In questa sessione live (con skill personali aggiuntive installate sulla macchina, es. `caveman-*`, `frontend-design`...) il conteggio tool sale a **87**, e nell'host "pi" ogni risorsa MCP viene *inoltre* esposta come un tool a sé stante (`get_..._skill_full_content`, `get_..._skill_summary_first_30_lines`, ecc.), portando la superficie totale visibile al modello a **oltre 220 tool callable in una singola sessione**. Questo è un dettaglio specifico dell'host, non del server, ma è un effetto concreto e osservabile dell'architettura "una risorsa/skill = un tool" che il progetto adotta.
 
 ---
 

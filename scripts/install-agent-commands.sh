@@ -5,7 +5,6 @@
 #   pix-galaxy-mcp    — Route via pix-galaxy-mcp
 #   pix-architect     — Route via pix-architect skill
 #   pix-handoff       — Generate handoff summary
-#   pix-grill         — Grill-me (code review/QA)
 #   pix-tdd           — Test-driven development workflow
 #   pix-adr           — Architecture Decision Record
 #   pix-fix           — Validate/fix file tree
@@ -98,19 +97,6 @@ Generate a handoff summary for session continuity: $ARGUMENTS
 4. Output result for pasting into next session.
 EOF
       ;;
-    "pix-grill")
-      cat <<'EOF'
----
-description: Run grill-me code review / interrogation via pix
-argument-hint: "<target>"
----
-Run grill-me skill for code review or interrogation: $ARGUMENTS
-
-1. Call `pix_tool` to route to grill-me skill.
-2. Load full grill-me skill evidence.
-3. Follow the guided interrogation workflow.
-EOF
-      ;;
     "pix-tdd")
       cat <<'EOF'
 ---
@@ -201,16 +187,6 @@ Generate handoff summary for session continuity.
 2. Default: mode "handoff" with all includes.
 EOF
       ;;
-    "pix-grill")
-      cat <<'EOF'
-# pix-grill
-
-Run grill-me code review or interrogation.
-
-1. Call `pix_tool` to route to grill-me skill.
-2. Execute guided interrogation workflow.
-EOF
-      ;;
     "pix-tdd")
       cat <<'EOF'
 # pix-tdd
@@ -289,16 +265,6 @@ Default mode "handoff". Use "close-session" for full context dump.
 """
 EOF
       ;;
-    "pix-grill")
-      cat <<'EOF'
-description = "Run grill-me code review"
-prompt = """
-Run grill-me skill for code review: {{args}}
-
-Call `pix_tool` to route to grill-me skill and execute.
-"""
-EOF
-      ;;
     "pix-tdd")
       cat <<'EOF'
 description = "Run test-driven development workflow"
@@ -347,7 +313,6 @@ COMMAND_NAMES=(
   "pix-galaxy-mcp"
   "pix-architect"
   "pix-handoff"
-  "pix-grill"
   "pix-tdd"
   "pix-adr"
   "pix-fix"
@@ -424,4 +389,4 @@ echo ""
 echo "Installed ${installed} command(s); skipped ${skipped}."
 echo ""
 echo "Available commands for Pi: /pix-galaxy-mcp, /pix-architect, /pix-handoff,"
-echo "  /pix-grill, /pix-tdd, /pix-adr, /pix-fix, /pix-check"
+echo "  /pix-tdd, /pix-adr, /pix-fix, /pix-check"
