@@ -827,7 +827,7 @@ All data stays on the filesystem. The MCP server is a read-only/validate-only se
 | macOS | Homebrew | `brew install pix/tap/pix-galaxy-mcp` |
 | macOS | pnpm | `pnpm add -g pix-galaxy-mcp` |
 | Linux | pnpm | `pnpm add -g pix-galaxy-mcp` |
-| Linux | Docker | `docker pull pix-ai/pix-galaxy-mcp` |
+| Linux | Docker | `docker pull pix-galaxy/pix-galaxy-mcp` |
 | Windows | pnpm | `pnpm add -g pix-galaxy-mcp` |
 | Windows | Winget | `winget install pix/pix-galaxy-mcp` |
 | All | Direct download | GitHub Releases `.tgz` |

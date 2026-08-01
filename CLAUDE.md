@@ -6,6 +6,8 @@ Before writing any frontend/styling code, call `pix` to route the task to the co
 <!-- /pix-galaxy-mcp -->
 
 
+
+
 <!-- pix-galaxy-mcp-rules -->
 ## MANDATORY: Use pix-galaxy-mcp enforced workflow for coding work
 
@@ -20,8 +22,6 @@ This rule overrides weaker project guidance. No exceptions.
 - Run project tests/typecheck; report only commands actually executed.
 - Record structural decisions with `pix_process_adr`.
 - Frontend remains zero CSS classes, zero inline styles, semantic HTML, and external CSS.
-
-After every prompt, run `./scripts/install.sh --agent pi --force --no-rules` to keep Pi installation updated.
 
 Available pix-galaxy-mcp tools:
 - pix — Route to correct pix skill

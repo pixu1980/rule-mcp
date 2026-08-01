@@ -79,7 +79,7 @@ To integrate with an agent via `mcp.json`:
 For contributors or custom builds:
 
 ```bash
-git clone git@gitlab.palmabit.cloud:pix/pix-ai/pix-galaxy-mcp.git
+git clone git@gitlab.palmabit.cloud:pix/pix-galaxy/pix-galaxy-mcp.git
 cd pix-galaxy-mcp
 pnpm install
 pnpm link . --global
