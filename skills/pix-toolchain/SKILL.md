@@ -48,6 +48,7 @@ frameworks: [all]
 | [pix-toolchain-typescript](../pix-toolchain-typescript/SKILL.md) | TypeScript | tsconfig, strict mode, path aliases |
 | [pix-toolchain-project](../pix-toolchain-project/SKILL.md) | Project Config | .gitignore, .editorconfig, .nvmrc, .env |
 | [pix-toolchain-husky](../pix-toolchain-husky/SKILL.md) | Husky | Git hooks, lint-staged, commitlint |
+| [pix-toolchain-commits](../pix-toolchain-commits/SKILL.md) | Commit Discipline | Atomic Conventional Commits with mandatory scope, commit-msg/pre-push hooks |
 
 ## Quick Selection Guide
 
@@ -59,6 +60,7 @@ Need monorepo orchestration?            → pix-toolchain-turborepo
 Need TypeScript config?                 → pix-toolchain-typescript
 Need base project files?                → pix-toolchain-project
 Need Git hooks?                         → pix-toolchain-husky
+Need commit/push discipline (atomic, scope)? → pix-toolchain-commits
 ```
 
 ## See also
