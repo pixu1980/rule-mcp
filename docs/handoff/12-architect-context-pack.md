@@ -12,7 +12,7 @@ _Generated 2026-07-30 with `rule_tool_process_handoff`, augmented with the sessi
 
 ## What the branch delivers
 
-`rule-architect` turns a wizard interview into a `.context/` documentation pack. The consolidation (roadmap in `docs/superpowers/plans/…architect-plan{1,2,4,5,6,7,8}…`) took it from three divergent generator copies + a prototype-overfit output to one engine producing framework-neutral, cross-harness packs.
+`rule-architect` turns a wizard interview into a `.context/` documentation pack. The consolidation (roadmap in the architect plan series) took it from three divergent generator copies + a prototype-overfit output to one engine producing framework-neutral, cross-harness packs.
 
 | Phase | Outcome |
 |---|---|
@@ -89,6 +89,6 @@ Golden snapshot is authoritative for output; regenerate intentionally with `UPDA
 
 ## Reference
 
-- Roadmap/plans: `docs/superpowers/plans/2026-07-*-architect-plan{1,2,4,5,6,7,8}-*.md`
-- Design spec: `docs/superpowers/specs/2026-07-29-architect-context-pack-and-ui-design.md`
+- Design history: architect plan series (kept in git history)
+- Design spec: architect-context-pack design (kept in git history)
 - ADR log: `rule_tool_process_adr` / `docs/adr` (33 ADRs; the architect work is captured in the plan docs above rather than ADRs).
