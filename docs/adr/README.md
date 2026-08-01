@@ -4,6 +4,7 @@ Questo indice elenca tutti gli ADR in ordine cronologico.
 
 | # | Title | Date | Status | Tags |
 |---|-------|------|--------|------|
+| [023](023-self-update-per-invocazione-con-throttle-temporale-e-fire-and-forget.md) | Self-update per-invocazione con throttle temporale e fire-and-forget | 2026-08-01 | accepted | self-update, mcp-server, operational, background |
 | [022](022-add-pix-toolchain-commits-skill-for-atomic-conventional-commits-with-mandatory-s.md) | Add pix-toolchain-commits skill for atomic conventional commits with mandatory scope | 2026-08-01 | accepted | taxonomy, skills, routing, git, toolchain |
 | [021](021-rename-pix-galaxy-agents-to-pix-ai-agents-and-add-pix-ai-collector-skill.md) | Rename pix-galaxy-agents to pix-ai-agents and add pix-ai collector skill | 2026-08-01 | accepted | taxonomy, skills, routing, ai |
 | [020](020-harden-the-pix-architect-interview-servers-loopback-bind-no-wildcard-cors-pa.md) | Harden the pix-architect interview servers: loopback bind, no wildcard CORS, path containment | 2026-07-30 | accepted | architect, security, mcp, server |

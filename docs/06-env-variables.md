@@ -7,6 +7,7 @@
 | `PIX_DISABLE_AUTO_ADR` | Disable automatic ADR logging (used internally during testing). | unset | `1` = disable |
 | `PIX_GALAXY_MCP_DAEMON` | Run as daemon process (used by LaunchAgent/systemd units). | unset | `1` = daemon mode |
 | `PIX_GALAXY_MCP_SSE_TOKEN` | Bearer token for SSE transport authentication. Auto-generated if unset. | auto-generated | any string |
+| `PIX_GALAXY_MCP_AUTO_UPDATE_INTERVAL_SECONDS` | Throttle between self-update checks (git fetch at most once per interval, on tool invocations). | `60` | seconds; `0` = check on every tool call |
 
 ## Configuration
 

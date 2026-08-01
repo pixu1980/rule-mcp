@@ -2,10 +2,10 @@
  * @module tools/update
  *
  * pix_update — explicit self-update entry point. Runs the same git
- * fast-forward + skill hot-reload as the forced pre-check, and reports what
- * happened. The forced check (core/self-update.maybeSelfUpdate) runs this
- * automatically on the first tool call of a session; this tool lets the agent
- * or user trigger it on demand.
+ * fast-forward + skill hot-reload as the automatic check, and reports what
+ * happened. The automatic check (core/self-update.maybeSelfUpdate) runs
+ * throttled in the background on tool calls; this tool lets the agent or user
+ * trigger it on demand.
  *
  * @see module:core/self-update
  */
@@ -23,8 +23,8 @@ export function registerUpdateTool() {
     name: "pix_update",
     description:
       "Force-update this local MCP server from its upstream git repo (fast-forward only), " +
-      "hot-reload skills, and restart if server code changed. Runs automatically on the first " +
-      "tool call of each session; call directly to update on demand.",
+      "hot-reload skills, and restart if server code changed. Also runs automatically " +
+      "(throttled, in the background) on tool calls; call directly to update on demand.",
     zodSchema: z.object({}),
     inputSchema: { type: "object", properties: {} },
     handler: async () => {
