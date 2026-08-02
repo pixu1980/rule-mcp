@@ -80,6 +80,32 @@ STACK=react
 > rule-mcp handoff | xclip      # Linux
 ```
 
+## Slash command: `/rule-handoff`
+
+`/rule-handoff` runs the handoff directly in the chat. A bare invocation just works and produces a quick `handoff`-mode summary with every include flag on and `compress` off. The command takes a **single free-form `options` argument** of space-separated tokens; the server resolves them into the exact tool arguments, and `/rule-handoff help` prints the usage list without running the tool.
+
+| Token | Effect |
+|-------|--------|
+| `handoff` \| `close-session` | Mode (default: `handoff`). `close-session` = full session close (diff + roadmap + docs scan) |
+| `compress` | Aggressively compress the output |
+| `full` \| `brief` \| `minimal` | Output format (default: `full`) |
+| `no-diff` \| `no-log` \| `no-context` \| `no-adrs` \| `no-roadmap` | Omit the corresponding section |
+| `max=<n>` | Cap output to n tokens (0 = no limit) |
+| `help` | Print the usage list (no tool call) |
+
+```
+/rule-handoff                                  # all defaults → quick handoff
+/rule-handoff help                             # print this list
+/rule-handoff close-session                    # full session close
+/rule-handoff compress minimal                 # compressed one-line JSON
+/rule-handoff brief                            # brief format
+/rule-handoff no-diff                          # handoff without the diff
+/rule-handoff close-session no-diff no-log     # close without diff/log
+/rule-handoff compress max=2000                # compressed, token-capped
+```
+
+When in doubt, just run `/rule-handoff` — the defaults produce a complete handoff you can paste into a new session.
+
 ## Recovery Flow
 
 1. **Source session**: Before closing, run `rule-mcp handoff` → copy output

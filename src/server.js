@@ -30,6 +30,7 @@ import { pkg } from "./cli/paths.js";
 import { listTools, callTool } from "./tools/router.js";
 import { listResources, readResource } from "./resources/index.js";
 import { listPrompts, getPrompt } from "./prompts/index.js";
+import { HANDOFF_COMPLETIONS } from "./prompts/handoff-options.js";
 
 /** @type {Server|null} */
 let serverInstance = null;
@@ -103,30 +104,18 @@ export function createServer() {
     // Prompt argument completion
     if (ref?.type === "ref/prompt" && ref.name) {
       const promptName = ref.name;
-      const complete = (values) => {
-        const filtered = values.filter((v) => v.startsWith(argument.value ?? ""));
+      const complete = (values, prefix = argument.value ?? "") => {
+        const filtered = values.filter((v) => v.startsWith(prefix));
         return { completion: { values: filtered.slice(0, 10), total: filtered.length, hasMore: filtered.length > 10 } };
       };
-      const FRAMEWORKS = ["react", "vue", "svelte", "angular", "solid", "astro", "vanilla"];
-      const BACKENDS = ["node", "express", "fastify", "hono", "nestjs", "graphql"];
-      const DATABASES = ["postgresql", "mysql", "sqlite", "mongodb", "duckdb", "indexed_db", "sql"];
-      const TOOLCHAIN = ["vite", "pnpm", "turborepo", "rspack", "parcel", "typescript", "eslint", "biome", "husky", "commits"];
-      const PLATFORMS = ["web", "desktop", "expo", "agent", "library"];
-      const TIERS = ["starter", "standard", "deep"];
 
-      if (argument.name === "framework") return complete(FRAMEWORKS);
-      if (promptName === "rule-a11y-audit" && argument.name === "component") {
-        return complete(["button", "card", "modal", "formField", "list", "nav"]);
-      }
-      if (promptName === "rule-write-tests" && argument.name === "testType") return complete(["tdd", "a11y", "devops", "all"]);
-      if (promptName === "rule-handoff" && argument.name === "mode") return complete(["handoff", "close-session"]);
-      if (promptName === "rule-pull-request" && argument.name === "updateAdr") return complete(["yes", "no"]);
-      if (promptName === "rule-backend" && argument.name === "framework") return complete(BACKENDS);
-      if (promptName === "rule-data" && argument.name === "database") return complete(DATABASES);
-      if (promptName === "rule-toolchain" && argument.name === "tool") return complete(TOOLCHAIN);
-      if (promptName === "rule-platform" && argument.name === "platform") return complete(PLATFORMS);
-      if ((promptName === "rule-setup-project" || promptName === "rule-architect-scaffold") && argument.name === "tier") {
-        return complete(TIERS);
+      // Every rule-* prompt takes a single free-form primary argument, so
+      // only rule-handoff (fixed token vocabulary) needs argument completions.
+      if (promptName === "rule-handoff" && argument.name === "options") {
+        // Token-aware completion: complete the last token of a space-separated list.
+        const value = argument.value ?? "";
+        const last = value.split(/\s+/).pop() ?? "";
+        return complete(HANDOFF_COMPLETIONS, last);
       }
     }
 
@@ -144,7 +133,7 @@ export function createServer() {
     if (!name) {
       throw new McpError(ErrorCode.InvalidParams, "Prompt name is required");
     }
-    const prompt = getPrompt(name);
+    const prompt = getPrompt(name, request.params.arguments ?? {});
     if (!prompt) {
       throw new McpError(ErrorCode.InvalidParams, `Unknown prompt: ${name}`);
     }

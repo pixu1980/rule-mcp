@@ -14,30 +14,147 @@
  * @see https://spec.modelcontextprotocol.io/specification/2025-04-01/#prompts
  */
 
-const FRAMEWORKS = "react, vue, svelte, angular, solid, astro, vanilla";
+import { parseHandoffOptions, HANDOFF_USAGE } from "./handoff-options.js";
+
+/** Tokens that trigger the generic per-prompt help message. */
+const HELP_TOKENS = new Set(["help", "--help", "-h"]);
+
+/**
+ * Examples shown by the generic `/rule-* help` message, keyed by prompt name.
+ */
+const PROMPT_EXAMPLES = {
+  "rule-a11y-audit": [
+    "/rule-a11y-audit help",
+    "/rule-a11y-audit review the login form for WCAG 2.2 AA",
+  ],
+  "rule-ai": [
+    "/rule-ai help",
+    "/rule-ai add a web-search tool to the agent",
+  ],
+  "rule-architect": [
+    "/rule-architect help",
+    "/rule-architect generate .context/ for my project",
+  ],
+  "rule-architect-scaffold": [
+    "/rule-architect-scaffold help",
+    "/rule-architect-scaffold my-app react deep",
+  ],
+  "rule-backend": [
+    "/rule-backend help",
+    "/rule-backend express REST API with zod validation",
+  ],
+  "rule-caveman": [
+    "/rule-caveman help",
+    "/rule-caveman write a commit for the pending changes",
+  ],
+  "rule-code-review": [
+    "/rule-code-review help",
+    "/rule-code-review review this component for styleguide compliance",
+  ],
+  "rule-data": [
+    "/rule-data help",
+    "/rule-data postgresql schema for the users table",
+  ],
+  "rule-devops": [
+    "/rule-devops help",
+    "/rule-devops multi-stage docker build for node",
+  ],
+  "rule-frontend": [
+    "/rule-frontend help",
+    "/rule-frontend react login form with validation",
+  ],
+  "rule-handoff": [
+    "/rule-handoff help",
+    "/rule-handoff close-session",
+  ],
+  "rule-meta": [
+    "/rule-meta help",
+    "/rule-meta search for the a11y skill",
+  ],
+  "rule-new-feature": [
+    "/rule-new-feature help",
+    "/rule-new-feature add dark mode to the header (react, include tests)",
+  ],
+  "rule-platform": [
+    "/rule-platform help",
+    "/rule-platform electron desktop app scaffold",
+  ],
+  "rule-process": [
+    "/rule-process help",
+    "/rule-process run a code review on the pending changes",
+  ],
+  "rule-pull-request": [
+    "/rule-pull-request help",
+    "/rule-pull-request login form with tests and ADR",
+  ],
+  "rule-setup-project": [
+    "/rule-setup-project help",
+    "/rule-setup-project my-app vite react",
+  ],
+  "rule-skills": [
+    "/rule-skills help",
+    "/rule-skills find a skill for docker",
+  ],
+  "rule-styleguide": [
+    "/rule-styleguide help",
+    "/rule-styleguide check this HTML for semantics",
+  ],
+  "rule-tdd": [
+    "/rule-tdd help",
+    "/rule-tdd write failing tests for the shopping cart",
+  ],
+  "rule-toolchain": [
+    "/rule-toolchain help",
+    "/rule-toolchain set up vite + biome",
+  ],
+  "rule-ui": [
+    "/rule-ui help",
+    "/rule-ui design-system button component",
+  ],
+  "rule-write-tests": [
+    "/rule-write-tests help",
+    "/rule-write-tests a11y tests for the modal (component)",
+  ],
+};
+
+/**
+ * Build the generic `/rule-* help` message for a prompt definition.
+ *
+ * @param {string} name — prompt name
+ * @param {{ description: string, arguments: Array<{ name: string, description: string, required?: boolean }> }} def — prompt definition
+ * @param {string[]} [examples] — example invocations
+ * @returns {string} — the help block the model should present verbatim
+ */
+function buildHelpMessage(name, def, examples = []) {
+  const argList = def.arguments.map((a) => (a.required ? `<${a.name}>` : `[${a.name}]`)).join(" ");
+  const lines = [
+    `Usage: /${name} ${argList}`,
+    "",
+    def.description,
+    "",
+    ...def.arguments.map((a) => `  ${a.name}  ${a.description}`),
+  ];
+  if (examples.length > 0) {
+    lines.push("", "Examples:", ...examples.map((e) => `  ${e}`));
+  }
+  return lines.join("\n");
+}
 
 /**
  * Shared system text for the 15 area prompts.
  *
  * @param {string} area — area name (e.g. "frontend")
  * @param {string} tools — comma-separated rule_tool_* tools of the area
- * @param {string} [frameworkHint] — when set, the framework argument picks the skill
  */
-function areaPromptText(area, tools, frameworkHint) {
+function areaPromptText(area, tools) {
   const lines = [
     `You are the ${area} area specialist for rule-mcp.`,
     `Route this request through \`pix_tool\` first to pick the exact rule-* skill, then load the returned skill evidence as source of truth: ${tools}.`,
-  ];
-  if (frameworkHint) {
-    lines.push(`Use the framework argument to select the right ${frameworkHint} skill; never invent APIs or dependencies not present in the skill evidence.`);
-  } else {
-    lines.push("Never invent APIs, files, dependencies, commands, or requirements not present in the skill evidence.");
-  }
-  lines.push(
+    "The request is free text: extract the target framework/platform/database/tool from it when present; never invent APIs, files, dependencies, commands, or requirements not present in the skill evidence.",
     "Baseline: involve TDD (write failing tests first) and a11y (WCAG 2.2 AA, axe-core where applicable). If the request has no test/a11y surface, ask the user what to cover before finishing.",
     "Validate generated code with `rule_tool_check` and iterate until all guardrails pass.",
     `When the work is done, propose a conventional commit message with a mandatory scope, e.g. "feat(${area}): ...".`,
-  );
+  ];
   return lines.join("\n");
 }
 
@@ -52,9 +169,7 @@ export function listPrompts() {
       name: "rule-a11y-audit",
       description: "Audit a11y end-to-end: review code for WCAG 2.2 AA compliance and generate Playwright + axe-core tests",
       arguments: [
-        { name: "code", description: "Code to review for a11y compliance", required: true },
-        { name: "framework", description: "Target framework", required: false },
-        { name: "component", description: "Component type to generate tests for", required: false },
+        { name: "code", description: "Code to review for a11y compliance (free text: include framework/component if relevant)", required: true },
       ],
     },
     {
@@ -75,17 +190,14 @@ export function listPrompts() {
       name: "rule-architect-scaffold",
       description: "Scaffold a new project with .agents/ + .context/ infrastructure",
       arguments: [
-        { name: "projectName", description: "Name of the project", required: true },
-        { name: "framework", description: `Target framework (${FRAMEWORKS})`, required: false },
-        { name: "tier", description: "Context generation tier (starter, standard, deep)", required: false },
+        { name: "projectName", description: "Project name (free text: append framework/tier, e.g. \"my-app react deep\")", required: true },
       ],
     },
     {
       name: "rule-backend",
       description: "Backend/API work: node, express, fastify, hono, nestjs, graphql, api design, security",
       arguments: [
-        { name: "request", description: "Endpoint, service, or backend task", required: true },
-        { name: "framework", description: "Backend framework (node, express, fastify, hono, nestjs, graphql)", required: false },
+        { name: "request", description: "Endpoint, service, or backend task (free text: include framework, e.g. \"express REST API\")", required: true },
       ],
     },
     {
@@ -97,18 +209,16 @@ export function listPrompts() {
     },
     {
       name: "rule-code-review",
-      description: "Review code against rule styleguides for the given framework",
+      description: "Review code against rule styleguides",
       arguments: [
-        { name: "framework", description: `Framework (${FRAMEWORKS})`, required: false },
-        { name: "code", description: "Code to review", required: true },
+        { name: "code", description: "Code to review (free text: include framework if relevant)", required: true },
       ],
     },
     {
       name: "rule-data",
       description: "Data-layer work: postgresql, mysql, sqlite, mongodb, duckdb, indexed-db, SQL",
       arguments: [
-        { name: "request", description: "Schema, query, or data-layer task", required: true },
-        { name: "database", description: "Database (postgresql, mysql, sqlite, mongodb, duckdb, indexed_db, sql)", required: false },
+        { name: "request", description: "Schema, query, or data-layer task (free text: include database, e.g. \"postgresql users table\")", required: true },
       ],
     },
     {
@@ -122,17 +232,14 @@ export function listPrompts() {
       name: "rule-frontend",
       description: "Frontend work following rule styleguides: zero CSS classes, semantic HTML, external CSS, TDD + a11y",
       arguments: [
-        { name: "request", description: "Component, page, or frontend task", required: true },
-        { name: "framework", description: `Target framework (${FRAMEWORKS})`, required: false },
+        { name: "request", description: "Component, page, or frontend task (free text: include framework, e.g. \"react login form\")", required: true },
       ],
     },
     {
       name: "rule-handoff",
-      description: "Produce a compressed context handoff (ADR summary + git context) to resume in a new session",
+      description: "Produce a compressed context handoff (ADR summary + git context) to resume in a new session. Usage: /rule-handoff [options] or /rule-handoff help — no arguments = quick handoff",
       arguments: [
-        { name: "mode", description: "Handoff mode (handoff, close-session)", required: true },
-        { name: "includeGitDiff", description: "Include working-tree diff (default: yes)", required: false },
-        { name: "compress", description: "Aggressively compress the output (default: no)", required: false },
+        { name: "options", description: "Space-separated tokens: handoff | close-session (default: handoff), compress, full | brief | minimal (default: full), no-diff, no-log, no-context, no-adrs, no-roadmap, max=<n> (default: 0), or help. Empty = all defaults.", required: false },
       ],
     },
     {
@@ -146,18 +253,14 @@ export function listPrompts() {
       name: "rule-new-feature",
       description: "Implement a feature end-to-end: route → evidence → failing tests → code → guardrails → tests → commit scope",
       arguments: [
-        { name: "feature", description: "Feature description or requirement", required: true },
-        { name: "framework", description: `Target framework (${FRAMEWORKS})`, required: false },
-        { name: "area", description: "Area (frontend, backend, data, toolchain, …)", required: false },
-        { name: "includeTests", description: "Whether to generate TDD + a11y tests (default: yes)", required: false },
+        { name: "feature", description: "Feature description or requirement (free text: include framework/area and \"no tests\" to skip TDD/a11y tests)", required: true },
       ],
     },
     {
       name: "rule-platform",
       description: "Platform work: web, desktop, expo, agent, library",
       arguments: [
-        { name: "request", description: "Platform target or task", required: true },
-        { name: "platform", description: "Platform (web, desktop, expo, agent, library)", required: false },
+        { name: "request", description: "Platform target or task (free text: include platform, e.g. \"electron desktop app\")", required: true },
       ],
     },
     {
@@ -171,19 +274,14 @@ export function listPrompts() {
       name: "rule-pull-request",
       description: "Prepare a pull request: review + a11y + security, update the ADR, commit with scope, PR description",
       arguments: [
-        { name: "description", description: "What changed / PR summary", required: true },
-        { name: "framework", description: `Target framework (${FRAMEWORKS})`, required: false },
-        { name: "updateAdr", description: "Generate or update the Architecture Decision Record (default: yes)", required: false },
+        { name: "description", description: "What changed / PR summary (free text: append \"no adr\" to skip the Architecture Decision Record)", required: true },
       ],
     },
     {
       name: "rule-setup-project",
       description: "Bootstrap a project end-to-end: detect framework, scaffold config, toolchain, and architect context",
       arguments: [
-        { name: "projectName", description: "Name of the project", required: true },
-        { name: "framework", description: `Target framework (${FRAMEWORKS})`, required: false },
-        { name: "toolchain", description: "Build toolchain (vite, parcel, rspack, turborepo…)", required: false },
-        { name: "tier", description: "Architect context tier (starter, standard, deep)", required: false },
+        { name: "projectName", description: "Project name (free text: append framework/toolchain/tier, e.g. \"my-app vite react\")", required: true },
       ],
     },
     {
@@ -211,8 +309,7 @@ export function listPrompts() {
       name: "rule-toolchain",
       description: "Toolchain configuration: vite, pnpm, turborepo, rspack, parcel, typescript, eslint, biome, husky, commits, project",
       arguments: [
-        { name: "request", description: "Toolchain config or setup task", required: true },
-        { name: "tool", description: "Tool (vite, pnpm, turborepo, rspack, parcel, typescript, eslint, biome, husky, commits)", required: false },
+        { name: "request", description: "Toolchain config or setup task (free text: include tool, e.g. \"vite + biome\")", required: true },
       ],
     },
     {
@@ -226,9 +323,7 @@ export function listPrompts() {
       name: "rule-write-tests",
       description: "Write tests: TDD unit tests, a11y Playwright + axe-core specs, and devops test setup",
       arguments: [
-        { name: "scope", description: "What to test (feature, component, module, project)", required: true },
-        { name: "framework", description: `Target framework (${FRAMEWORKS})`, required: false },
-        { name: "testType", description: "Test type (tdd, a11y, devops, all — default all)", required: false },
+        { name: "scope", description: "What to test (free text: include test type — tdd, a11y, devops, all)", required: true },
       ],
     },
   ];
@@ -238,10 +333,28 @@ export function listPrompts() {
  * Get a specific prompt by name with its system message content.
  *
  * @param {string} name — Prompt name
+ * @param {Record<string, string>} [args] — Prompt arguments from the client
  * @returns {{ name: string, description: string, messages: Array<{ role: string, content: { type: string, text: string } }> }|null}
  */
-export function getPrompt(name) {
+export function getPrompt(name, args = {}) {
   const user = (text) => [{ role: "user", content: { type: "text", text } }];
+
+  // ── Generic `/rule-* help` ──────────────────────────────────────
+  // Any prompt whose primary argument is `help` (or --help / -h) returns
+  // its usage block instead of running a task.
+  const def = listPrompts().find((p) => p.name === name);
+  const primary = def?.arguments?.[0];
+  const primaryValue = primary ? args?.[primary.name] : undefined;
+  if (primaryValue !== undefined && HELP_TOKENS.has(String(primaryValue).trim().toLowerCase())) {
+    // Help is returned as a ready-made assistant message: the client displays it
+    // immediately instead of asking the model to generate it (no reasoning, no tokens).
+    const helpText = name === "rule-handoff" ? HANDOFF_USAGE : buildHelpMessage(name, def, PROMPT_EXAMPLES[name] ?? []);
+    return {
+      name,
+      description: `${name} usage`,
+      messages: [{ role: "assistant", content: { type: "text", text: helpText } }],
+    };
+  }
 
   // ── One-shot workflow prompts ──────────────────────────────────
   switch (name) {
@@ -252,7 +365,7 @@ export function getPrompt(name) {
         messages: user(
           "You are a project bootstrap specialist for rule-mcp.\n" +
           "Sequence:\n" +
-          "1. Call `rule_tool_detect` on the project path (or use the framework argument) to detect the stack.\n" +
+          "1. Call `rule_tool_detect` on the project path (or use the framework name from the request text) to detect the stack.\n" +
           "2. Route through `pix_tool` with the detected framework to load the primary rule-* skill evidence.\n" +
           "3. Call `rule_tool_scaffold` for the project config files, then `pix_toolchain_project` (or the area toolchain skill) for tooling setup.\n" +
           "4. Generate architect context (`.agents/` + `.context/`) via the architect skill (`pix_architect_cli` or `pix_architect_web`, mode=interview/scaffold) at the requested tier.\n" +
@@ -269,7 +382,7 @@ export function getPrompt(name) {
         messages: user(
           "You are a feature-implementation specialist for rule-mcp.\n" +
           "Sequence:\n" +
-          "1. Route the feature through `pix_tool` (with framework/area when known) and load the routed skill evidence as source of truth.\n" +
+          "1. Route the feature through `pix_tool` (extract framework/area from the request text when present) and load the routed skill evidence as source of truth.\n" +
           "2. If a feature-workflow skill applies (pix_process_feature_workflow or BMAD), run it first to define scope.\n" +
           "3. Write failing tests first (TDD) for the feature; include a11y tests (Playwright + axe-core) when the change has UI surface.\n" +
           "4. Implement against the skill evidence; call `rule_tool_component` for component templates when applicable.\n" +
@@ -289,7 +402,7 @@ export function getPrompt(name) {
           "Sequence:\n" +
           "1. Review the changes: run the code-review skill (`pix_process_code_review`), caveman review (`pix_caveman_review`), a11y review (`pix_styleguide_a11y`), and backend security review (`pix_backend_security`) when the change touches those surfaces.\n" +
           "2. Fix every guardrail failure with `rule_tool_check` until all pass.\n" +
-          "3. Generate or update the Architecture Decision Record with `rule_tool_process_adr` for any structural decision (updateAdr defaults to yes).\n" +
+          "3. Generate or update the Architecture Decision Record with `rule_tool_process_adr` for any structural decision (updated by default; append \"no adr\" to the request to skip).\n" +
           "4. Ensure the work includes tests (TDD + a11y where applicable); if missing, flag it and ask the user.\n" +
           "5. Write the PR description: summary, why, test evidence, and any ADR references.\n" +
           "Finish by proposing a conventional commit message with a mandatory scope, e.g. \"feat(<scope>): <summary>\"."
@@ -304,7 +417,7 @@ export function getPrompt(name) {
           "You are a test-writing specialist for rule-mcp.\n" +
           "Sequence:\n" +
           "1. Route through `pix_tool` (with framework when known) and load the test-driven-development skill evidence (pix_test_driven_development).\n" +
-          "2. Depending on testType: write failing unit tests first (TDD), generate Playwright + @axe-core/playwright a11y specs (pix_styleguide_a11y / pix_devops_testing), or both.\n" +
+          "2. Depending on the test types named in the request (tdd, a11y, devops, all): write failing unit tests first (TDD), generate Playwright + @axe-core/playwright a11y specs (pix_styleguide_a11y / pix_devops_testing), or both.\n" +
           "3. For component tests use `rule_tool_component` (component=a11y-test-basic/forms/components, playwright-config).\n" +
           "4. Run the tests and report real outcomes; never claim unexecuted checks passed.\n" +
           "5. Validate the test code with `rule_tool_check`.\n" +
@@ -313,21 +426,37 @@ export function getPrompt(name) {
         ),
       };
 
-    case "rule-handoff":
+    case "rule-handoff": {
+      const opts = parseHandoffOptions(args?.options);
+
+      const includeFlags = [
+        `${opts.includeGitDiff ? "includeGitDiff=yes" : "includeGitDiff=no"}`,
+        `${opts.includeGitLog ? "includeGitLog=yes" : "includeGitLog=no"}`,
+        `${opts.includeContext ? "includeContext=yes" : "includeContext=no"}`,
+        `${opts.includeAdrs ? "includeAdrs=yes" : "includeAdrs=no"}`,
+        `${opts.includeRoadmap ? "includeRoadmap=yes" : "includeRoadmap=no"}`,
+      ].join(", ");
+
       return {
         name,
         description: "Produce a compressed context handoff",
         messages: user(
           "You are a handoff specialist for rule-mcp.\n" +
-          "Sequence:\n" +
-          "1. Run `rule_tool_process_handoff` with the requested mode (handoff or close-session) and options.\n" +
-          "2. Include the ADR summary (docs/adr) and git context (includeGitDiff defaults to yes).\n" +
-          "3. If compress is set, produce the aggressive compressed form.\n" +
-          "4. Present the handoff as a paste-ready block for a new session; include the commit-scope convention reminder.\n" +
-          "If anything is ambiguous, ask the user which parts to include.\n" +
+          "The user invoked `/rule-handoff`; every option is optional and defaults are applied server-side. The requested options are already resolved here into exact tool arguments — do not reinterpret them.\n" +
+          "Resolved arguments for `rule_tool_process_handoff` (mode: handoff | close-session):\n" +
+          `- mode=${opts.mode}\n` +
+          `- compress=${opts.compress ? "true" : "false"}\n` +
+          `- format=${opts.format}\n` +
+          `- ${includeFlags}\n` +
+          `- maxTokens=${opts.maxTokens}\n` +
+          "Run `rule_tool_process_handoff` with EXACTLY these arguments; do not change them.\n" +
+          "Include the ADR summary (docs/adr) and git context in the output.\n" +
+          "Present the handoff as a paste-ready block for a new session; include the commit-scope convention reminder.\n" +
+          "If the resolved arguments are ambiguous, ask the user which parts to include.\n" +
           "Finish by proposing the next conventional commit message with a mandatory scope for the pending changes."
         ),
       };
+    }
 
     default:
       break;
@@ -336,14 +465,14 @@ export function getPrompt(name) {
   // ── Area prompts ───────────────────────────────────────────────
   const AREAS = {
     "rule-meta": areaPromptText("meta", "pix_tool, rule_tool_gateway, rule_tool_apply, rule_tool_search, rule_tool_check, rule_tool_scaffold, rule_tool_detect, rule_tool_fix, rule_tool_process_adr, rule_tool_process_handoff"),
-    "rule-frontend": areaPromptText("frontend", "pix_frontend_react, pix_frontend_vue, pix_frontend_svelte, pix_frontend_angular, pix_frontend_solidjs, pix_frontend_astro, pix_frontend_meta_next, pix_frontend_meta_nuxt, pix_frontend_meta_remix, pix_frontend_vanilla_reactive, pix_frontend_design", "frontend"),
-    "rule-backend": areaPromptText("backend", "pix_backend_node, pix_backend_express, pix_backend_fastify, pix_backend_hono, pix_backend_nestjs, pix_backend_graphql, pix_backend_api_design, pix_backend_security", "backend"),
-    "rule-data": areaPromptText("data", "pix_data_postgresql, pix_data_mysql, pix_data_sqlite, pix_data_mongodb, pix_data_duckdb, pix_data_indexed_db, pix_data_sql", "data"),
-    "rule-toolchain": areaPromptText("toolchain", "pix_toolchain_vite, pix_toolchain_pnpm, pix_toolchain_turborepo, pix_toolchain_rspack, pix_toolchain_parcel, pix_toolchain_typescript, pix_toolchain_eslint, pix_toolchain_biome, pix_toolchain_husky, pix_toolchain_commits, pix_toolchain_project", "toolchain"),
+    "rule-frontend": areaPromptText("frontend", "pix_frontend_react, pix_frontend_vue, pix_frontend_svelte, pix_frontend_angular, pix_frontend_solidjs, pix_frontend_astro, pix_frontend_meta_next, pix_frontend_meta_nuxt, pix_frontend_meta_remix, pix_frontend_vanilla_reactive, pix_frontend_design"),
+    "rule-backend": areaPromptText("backend", "pix_backend_node, pix_backend_express, pix_backend_fastify, pix_backend_hono, pix_backend_nestjs, pix_backend_graphql, pix_backend_api_design, pix_backend_security"),
+    "rule-data": areaPromptText("data", "pix_data_postgresql, pix_data_mysql, pix_data_sqlite, pix_data_mongodb, pix_data_duckdb, pix_data_indexed_db, pix_data_sql"),
+    "rule-toolchain": areaPromptText("toolchain", "pix_toolchain_vite, pix_toolchain_pnpm, pix_toolchain_turborepo, pix_toolchain_rspack, pix_toolchain_parcel, pix_toolchain_typescript, pix_toolchain_eslint, pix_toolchain_biome, pix_toolchain_husky, pix_toolchain_commits, pix_toolchain_project"),
     "rule-styleguide": areaPromptText("styleguide", "pix_styleguide_a11y, pix_styleguide_css, pix_styleguide_html, pix_styleguide_javascript, pix_styleguide_json, pix_styleguide_markdown, pix_styleguide_naming, pix_styleguide_patterns, pix_styleguide_validation"),
     "rule-process": areaPromptText("process", "pix_process_code_review, pix_process_feature_workflow, pix_process_documentation, pix_process_bmad, rule_tool_process_adr, rule_tool_process_handoff"),
     "rule-devops": areaPromptText("devops", "pix_devops_docker, pix_devops_gitlab_ci, pix_devops_observability, pix_devops_testing, pix_devops_version"),
-    "rule-platform": areaPromptText("platform", "pix_platform_web, pix_platform_desktop, pix_platform_expo, pix_platform_agent, pix_platform_library", "platform"),
+    "rule-platform": areaPromptText("platform", "pix_platform_web, pix_platform_desktop, pix_platform_expo, pix_platform_agent, pix_platform_library"),
     "rule-caveman": areaPromptText("caveman", "pix_caveman, pix_caveman_commit, pix_caveman_review, pix_caveman_compress, pix_caveman_help"),
     "rule-architect": areaPromptText("architect", "pix_architect_cli, pix_architect_web"),
     "rule-ai": areaPromptText("ai", "pix_ai_agents"),
