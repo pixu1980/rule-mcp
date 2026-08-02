@@ -128,6 +128,22 @@ assert(
   "rule-data-mysql must document InnoDB foreign-key indexing",
 );
 
+const typescriptSkill = readFileSync(join(skillsRoot, "rule-toolchain-typescript", "SKILL.md"), "utf8");
+for (const required of [
+  'exactOptionalPropertyTypes": true',
+  "verbatimModuleSyntax",
+  "noFallthroughCasesInSwitch",
+  "unknown over any",
+  "discriminated union",
+  "branded types",
+  "runtime validation",
+  "generated types",
+  "type-coverage",
+  "tsc --noEmit",
+]) {
+  assert(typescriptSkill.includes(required), `rule-toolchain-typescript must cover ${required}`);
+}
+
 await loadAllSkills(true);
 const tools = listTools();
 assert(tools.some(tool => tool.name === "rule_tool_ui"), "rule_tool_ui MCP tool must be registered");
