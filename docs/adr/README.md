@@ -4,6 +4,7 @@ Questo indice elenca tutti gli ADR in ordine cronologico.
 
 | # | Title | Date | Status | Tags |
 |---|-------|------|--------|------|
+| [026](026-rafforzare-la-disciplina-typescript-per-grandi-codebase.md) | Rafforzare la disciplina TypeScript per grandi codebase | 2026-08-02 | accepted | typescript, toolchain, strict, monorepo, quality |
 | [025](025-rafforzare-le-skill-sui-vincoli-relazionali-del-database.md) | Rafforzare le skill sui vincoli relazionali del database | 2026-08-02 | accepted | database, sql, postgresql, mysql, schema |
 | [024](024-installer-lossless-preservare-toolprefix-e-normalizzare-le-righe-vuote-delle-reg.md) | Installer lossless: preservare toolPrefix e normalizzare le righe vuote delle regole | 2026-08-01 | accepted | installer, idempotenza, toolPrefix, mcp-config |
 | [023](023-self-update-per-invocazione-con-throttle-temporale-e-fire-and-forget.md) | Self-update per-invocazione con throttle temporale e fire-and-forget | 2026-08-01 | accepted | self-update, mcp-server, operational, background |
