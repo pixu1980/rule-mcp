@@ -31,14 +31,16 @@ function readAdrs(projectDir) {
     const files = readdirSync(adrDir);
     const adrs = [];
     for (const f of files) {
-      const m = f.match(/^(\d{3})-(.+)\.md$/);
+      const m = f.match(/^(\d{3,4})-(.+)\.md$/);
       if (!m) continue;
       try {
         const content = readFileSync(join(adrDir, f), "utf8");
         const number = parseInt(m[1]);
-        const title = content.match(/^# \d{3}: (.+)$/m)?.[1] || m[2].replace(/-/g, " ");
+        const title = content.match(/^# (?:ADR-)?\d{3,4}: (.+)$/m)?.[1] || m[2].replace(/-/g, " ");
         const date = content.match(/\*\*Date\*\*: (\S+)/)?.[1] || "";
-        const status = content.match(/\*\*Status\*\*: (\w+)/)?.[1] || "proposed";
+        const statusRaw = content.match(/\*\*Status\*\*:\s*(.+?)(?:\n|$)/)?.[1]
+          || content.match(/^## Status\s*\n+\s*(.+?)(?:\n|$)/m)?.[1] || "proposed";
+        const status = statusRaw.replace(/\*\*/g, "").replace(/\[([^\]]+)\]\([^)]*\)/g, "$1").trim().split(/\s+/)[0];
         const tagsLine = content.match(/\*\*Tags\*\*: (.+)/)?.[1] || "";
         const tags = tagsLine.split(",").map(s => s.trim()).filter(Boolean);
         // Extract decision blurb (first 2 lines of Decision section)
@@ -249,7 +251,7 @@ function buildHandoff({ projectDir, includeContext, includeAdrs, includeIdentity
   const docsScan = includeRoadmap !== false ? scanProjectDocs(projectDir) : null;
   const isCloseSession = mode === "close-session";
 
-  const projectName = identity.name || projectDir === "." ? process.cwd().split("/").pop() : projectDir.split("/").pop();
+  const projectName = identity.name || (projectDir === "." ? process.cwd().split("/").pop() : projectDir.split("/").pop());
   const isBrief = format === "brief";
   const isMinimal = format === "minimal";
 
