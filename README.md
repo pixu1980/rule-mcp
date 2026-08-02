@@ -297,35 +297,38 @@ Each skill (except `pix` itself) has two resources:
 
 ## MCP Prompts (24)
 
-24 reusable prompts accessible via the MCP `prompts/get` protocol, listed alphabetically below.
+23 reusable prompts accessible via the MCP `prompts/get` protocol, listed alphabetically below.
 Every prompt routes through `pix_tool`, involves TDD/a11y baselines (or asks the user), and
-closes by proposing a commit message with mandatory scope.
+closes by proposing a commit message with mandatory scope. Every prompt takes a **single
+free-form argument** and supports `help` (or `--help` / `-h`) as its value to print the usage
+list, e.g. `/pix-frontend help` — help is returned as a ready-made assistant message and
+displayed instantly, without invoking the model.
 
 | Prompt | Description | Arguments |
 |---|---|---|
-| `pix-a11y-audit` | Audit a11y end-to-end: WCAG 2.2 AA review + Playwright/axe-core tests | `code` (required), `framework`, `component` |
+| `pix-a11y-audit` | Audit a11y end-to-end: WCAG 2.2 AA review + Playwright/axe-core tests | `code` (required, free text) |
 | `pix-ai` | AI agent integrations | `request` (required) |
 | `pix-architect` | Project architecture: context packs, interview flows (CLI + web), scaffolding | `request` (required) |
-| `pix-architect-scaffold` | Scaffold project with `.agents/` + `.context/` | `projectName` (required), `framework`, `tier` |
-| `pix-backend` | Node, Express, Fastify, Hono, NestJS, GraphQL, API design, security | `request` (required), `framework` |
+| `pix-architect-scaffold` | Scaffold project with `.agents/` + `.context/` | `projectName` (required, free text: framework/tier) |
+| `pix-backend` | Node, Express, Fastify, Hono, NestJS, GraphQL, API design, security | `request` (required, free text: framework) |
 | `pix-caveman` | Compressed communication, commits, reviews | `request` (required) |
-| `pix-code-review` | Review code against pix styleguides | `framework`, `code` (required) |
-| `pix-data` | PostgreSQL, MySQL, SQLite, MongoDB, DuckDB, IndexedDB, SQL | `request` (required), `database` |
+| `pix-code-review` | Review code against pix styleguides | `code` (required, free text) |
+| `pix-data` | PostgreSQL, MySQL, SQLite, MongoDB, DuckDB, IndexedDB, SQL | `request` (required, free text: database) |
 | `pix-devops` | Docker, GitLab CI, observability, testing, versioning | `request` (required) |
-| `pix-frontend` | React, Vue, Svelte, Angular, Solid, Astro, Next, Nuxt, Remix, vanilla | `request` (required), `framework` |
-| `pix-handoff` | Compressed context handoff (ADR + git) for a new session | `mode` (required), `includeGitDiff`, `compress` |
+| `pix-frontend` | React, Vue, Svelte, Angular, Solid, Astro, Next, Nuxt, Remix, vanilla | `request` (required, free text: framework) |
+| `pix-handoff` | Compressed context handoff (ADR + git) for a new session | `options` (optional: `handoff` \| `close-session`, `compress`, `full` \| `brief` \| `minimal`, `no-*`, `max=<n>`, `help`; empty = all defaults) |
 | `pix-meta` | Dispatcher/action toolset (gateway, apply, search, check, scaffold…) | `request` (required) |
-| `pix-new-feature` | Feature end-to-end: route → evidence → failing tests → code → guardrails | `feature` (required), `framework`, `area`, `includeTests` |
-| `pix-platform` | Web, desktop, Expo, agent, library | `request` (required), `platform` |
+| `pix-new-feature` | Feature end-to-end: route → evidence → failing tests → code → guardrails | `feature` (required, free text: framework/area/"no tests") |
+| `pix-platform` | Web, desktop, Expo, agent, library | `request` (required, free text: platform) |
 | `pix-process` | Code review, feature workflow, documentation, ADR, handoff, BMAD | `request` (required) |
-| `pix-pull-request` | Prepare PR: review + a11y + security + ADR + commit scope + description | `description` (required), `framework`, `updateAdr` |
-| `pix-setup-project` | Bootstrap project: detect → scaffold → toolchain → architect context | `projectName` (required), `framework`, `toolchain`, `tier` |
+| `pix-pull-request` | Prepare PR: review + a11y + security + ADR + commit scope + description | `description` (required, free text: "no adr") |
+| `pix-setup-project` | Bootstrap project: detect → scaffold → toolchain → architect context | `projectName` (required, free text: framework/toolchain/tier) |
 | `pix-skills` | Skill discovery (find-skills) | `request` (required) |
 | `pix-styleguide` | a11y, CSS, HTML, JS, JSON, Markdown, naming, patterns, validation | `request` (required) |
 | `pix-tdd` | Test-driven development workflow | `request` (required) |
-| `pix-toolchain` | Vite, pnpm, Turborepo, Rspack, Parcel, TypeScript, ESLint, Biome, Husky, commits | `request` (required), `tool` |
+| `pix-toolchain` | Vite, pnpm, Turborepo, Rspack, Parcel, TypeScript, ESLint, Biome, Husky, commits | `request` (required, free text: tool) |
 | `pix-ui` | UI design-system work | `request` (required) |
-| `pix-write-tests` | Write tests: TDD + a11y (Playwright + axe-core) + devops | `scope` (required), `framework`, `testType` |
+| `pix-write-tests` | Write tests: TDD + a11y (Playwright + axe-core) + devops | `scope` (required, free text: tdd/a11y/devops/all) |
 
 ---
 
