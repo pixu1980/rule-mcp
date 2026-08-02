@@ -150,33 +150,69 @@ DROP TABLE IF EXISTS {table} CASCADE;
 
 ## 2. Table Design Patterns
 
+### Schema authority and integrity
+
+The **database is the authority** for data invariants. Application and ORM validation improves user feedback, but it must complement—not replace—database constraints. A rule enforced only in service code protects one code path; a `NOT NULL`, `CHECK`, `UNIQUE`, or `FOREIGN KEY` constraint protects APIs, workers, scripts, migrations, and every future client.
+
+```sql
+CREATE TABLE payments (
+    id       BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    user_id  BIGINT NOT NULL REFERENCES users(id) ON DELETE RESTRICT,
+    amount   DECIMAL(12, 2) NOT NULL CHECK (amount > 0),
+    email    VARCHAR(255) NOT NULL,
+    CONSTRAINT uq_payments_email UNIQUE (email)
+);
+```
+
+When using an ORM, inspect the generated migration and database schema. A relation declared in the ORM is not evidence that the database contains a `REFERENCES` constraint.
+
+### Normalization boundaries and EAV
+
+Use 3NF as the default for OLTP schemas: each fact belongs in one place, with atomic columns and explicit relationships. Avoid comma-separated values, repeating columns (`phone_1`, `phone_2`), and generic **EAV** tables (`entity_id`, `attribute_name`, `attribute_value`) unless there is a documented, genuinely dynamic use case. Prefer a child or junction table; use typed `JSONB`/JSON for bounded flexible attributes when relational constraints are not required.
+
+Do not over-normalize a single conceptual value into unnecessary tables. Normalize until facts are unambiguous and independently constrained, then stop; denormalize deliberately only for a measured read or reporting requirement.
+
+Avoid overloaded tables that mix unrelated domains such as alerts, audit events, and system logs. Separate domains preserve meaningful types, constraints, and foreign keys.
+
+Soft delete is a policy choice, not a universal rule. Use `deleted_at` when retention, auditability, or referencing rows require preservation; use hard deletion only when retention permits it and `ON DELETE` behavior is explicit.
+
+### Schema documentation and tests
+
+Treat the schema as living code:
+
+- document non-obvious columns and allowed values with `COMMENT ON COLUMN` (or the database-specific column comment syntax);
+- keep an ER diagram or relationship summary versioned with the migrations;
+- maintain schema tests for valid, invalid, boundary, and duplicate data;
+- exercise both upgrade and rollback paths in an isolated database.
+
 ### Naming Conventions
 
-| Element | Convention | Example |
-|---------|-----------|---------|
-| Tables | snake_case, plural | `users`, `order_items` |
-| Columns | snake_case, singular | `first_name`, `created_at` |
-| Primary keys | `id` (BIGINT) or `uuid` | `id BIGINT GENERATED ALWAYS AS IDENTITY` |
-| Foreign keys | `{referenced_table}_id` | `user_id`, `order_id` |
-| Indexes | `idx_{table}_{columns}` | `idx_users_email` |
-| Unique constraints | `uq_{table}_{columns}` | `uq_users_email` |
-| Check constraints | `ck_{table}_{column}` | `ck_users_status` |
-| Triggers | `trg_{table}_{action}` | `trg_users_updated_at` |
+| Element            | Convention                | Example                                  |
+| ------------------ | ------------------------- | ---------------------------------------- |
+| Tables             | snake_case, plural        | `users`, `order_items`                   |
+| Columns            | snake_case, singular      | `first_name`, `created_at`               |
+| Primary keys       | `id` (BIGINT) or `uuid`   | `id BIGINT GENERATED ALWAYS AS IDENTITY` |
+| Foreign keys       | `{referenced_table}_id`   | `user_id`, `order_id`                    |
+| Indexes            | `idx_{table}_{columns}`   | `idx_users_email`                        |
+| Reserved words     | Avoid as bare identifiers | Use `order_status`, not `order`          |
+| Unique constraints | `uq_{table}_{columns}`    | `uq_users_email`                         |
+| Check constraints  | `ck_{table}_{column}`     | `ck_users_status`                        |
+| Triggers           | `trg_{table}_{action}`    | `trg_users_updated_at`                   |
 
 ### Column Types — Decision Matrix
 
-| Data | Type | Reason |
-|------|------|--------|
-| Auto-increment ID | `BIGINT IDENTITY` | 8 bytes, 9 quintillion rows |
-| UUID | `UUID` | 16 bytes, distributed-safe |
-| Short string (<256) | `VARCHAR(n)` | Index-friendly, bounded |
-| Long text | `TEXT` | No arbitrary limit, same perf as VARCHAR |
-| Boolean | `BOOLEAN` | Native support in all modern DBs |
-| Date+time | `TIMESTAMPTZ` | Always store UTC, convert on display |
-| Date only | `DATE` | 4 bytes, timezone-safe |
-| JSON | `JSONB` | Indexable, supports operators |
-| Money | `DECIMAL(12,2)` or `BIGINT` (cents) | Exact, no floating-point errors |
-| Enum-like | `VARCHAR(32)` + CHECK | Portable, no custom type needed |
+| Data                | Type                                | Reason                                   |
+| ------------------- | ----------------------------------- | ---------------------------------------- |
+| Auto-increment ID   | `BIGINT IDENTITY`                   | 8 bytes, 9 quintillion rows              |
+| UUID                | `UUID`                              | 16 bytes, distributed-safe               |
+| Short string (<256) | `VARCHAR(n)`                        | Index-friendly, bounded                  |
+| Long text           | `TEXT`                              | No arbitrary limit, same perf as VARCHAR |
+| Boolean             | `BOOLEAN`                           | Native support in all modern DBs         |
+| Date+time           | `TIMESTAMPTZ`                       | Always store UTC, convert on display     |
+| Date only           | `DATE`                              | 4 bytes, timezone-safe                   |
+| JSON                | `JSONB`                             | Indexable, supports operators            |
+| Money               | `DECIMAL(12,2)` or `BIGINT` (cents) | Exact, no floating-point errors          |
+| Enum-like           | `VARCHAR(32)` + CHECK               | Portable, no custom type needed          |
 
 ### Common Table Patterns
 
@@ -221,14 +257,14 @@ CREATE TABLE {table}_closure (
 ### Normalization Guidelines
 
 ```
-1NF: Atomic columns, no arrays/json unless required
+1NF: Atomic columns; use arrays/JSON only for an intentional flexible-attribute boundary
 2NF: No partial dependencies (composite keys)
 3NF: No transitive dependencies (non-key → non-key)
 
-Normalize until it hurts → denormalize until it works.
-- OLTP: 3NF by default, limit joins
-- OLAP: Star/snowflake schema, denormalize for read performance
+- OLTP: 3NF by default; avoid EAV and repeating groups
+- OLAP: Star/snowflake schema; denormalize for measured read performance
 - Audit: Keep normalized + add versioning
+- Stop when each fact is unambiguous and independently constrained; avoid unnecessary joins
 ```
 
 ---
@@ -253,15 +289,15 @@ Normalize until it hurts → denormalize until it works.
 
 ### Index Types
 
-| Type | Use case | Syntax |
-|------|----------|--------|
-| **B-tree** (default) | Equality + range queries | `CREATE INDEX ...` |
-| **Composite** | Multi-column queries | `CREATE INDEX ON t (a, b)` — equality first, range last |
-| **Covering** | Index-only scans | `CREATE INDEX ON t (a) INCLUDE (b, c)` |
-| **Partial** | Filtered queries | `CREATE INDEX ON t (a) WHERE status = 'active'` |
-| **Unique** | Uniqueness enforcement | `CREATE UNIQUE INDEX ON t (a)` |
-| **Descending** | ORDER BY DESC | `CREATE INDEX ON t (a DESC, b ASC)` |
-| **Concurrent** | Zero-downtime DDL | `CREATE INDEX CONCURRENTLY IF NOT EXISTS ...` |
+| Type                 | Use case                 | Syntax                                                  |
+| -------------------- | ------------------------ | ------------------------------------------------------- |
+| **B-tree** (default) | Equality + range queries | `CREATE INDEX ...`                                      |
+| **Composite**        | Multi-column queries     | `CREATE INDEX ON t (a, b)` — equality first, range last |
+| **Covering**         | Index-only scans         | `CREATE INDEX ON t (a) INCLUDE (b, c)`                  |
+| **Partial**          | Filtered queries         | `CREATE INDEX ON t (a) WHERE status = 'active'`         |
+| **Unique**           | Uniqueness enforcement   | `CREATE UNIQUE INDEX ON t (a)`                          |
+| **Descending**       | ORDER BY DESC            | `CREATE INDEX ON t (a DESC, b ASC)`                     |
+| **Concurrent**       | Zero-downtime DDL        | `CREATE INDEX CONCURRENTLY IF NOT EXISTS ...`           |
 
 ### Index Design Recipes
 
@@ -454,12 +490,12 @@ SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;     -- Strongest, slowest
 
 ### Isolation Level Comparison
 
-| Level | Dirty Read | Non-repeatable | Phantom | Use Case |
-|-------|-----------|----------------|---------|----------|
-| READ UNCOMMITTED | ✅ | ✅ | ✅ | Never use |
-| READ COMMITTED | ❌ | ✅ | ✅ | General purpose |
-| REPEATABLE READ | ❌ | ❌ | ✅ | Reporting |
-| SERIALIZABLE | ❌ | ❌ | ❌ | Financial, critical data |
+| Level            | Dirty Read | Non-repeatable | Phantom | Use Case                 |
+| ---------------- | ---------- | -------------- | ------- | ------------------------ |
+| READ UNCOMMITTED | ✅         | ✅             | ✅      | Never use                |
+| READ COMMITTED   | ❌         | ✅             | ✅      | General purpose          |
+| REPEATABLE READ  | ❌         | ❌             | ✅      | Reporting                |
+| SERIALIZABLE     | ❌         | ❌             | ❌      | Financial, critical data |
 
 ---
 
@@ -506,6 +542,23 @@ DROP TABLE IF EXISTS orders;
 ```
 
 ---
+
+### Migration Verification and Rollback Tests
+
+```sql
+-- Apply the migration in an isolated database, then verify the constraints exist.
+SELECT constraint_name, constraint_type
+FROM information_schema.table_constraints
+WHERE table_name = 'payments'
+ORDER BY constraint_name;
+
+-- Exercise invalid and duplicate inputs; each must fail at the database boundary.
+-- INSERT INTO payments (user_id, amount, email) VALUES (999999, 10.00, 'a@example.com');
+-- INSERT INTO payments (user_id, amount, email) VALUES (1, -1.00, 'b@example.com');
+-- INSERT INTO payments (user_id, amount, email) VALUES (1, 10.00, 'a@example.com');
+
+-- Run the documented DOWN migration and verify the previous schema is restored.
+```
 
 ## 7. Performance Monitoring
 

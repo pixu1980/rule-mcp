@@ -104,6 +104,30 @@ for (const required of ["Zero CSS classes", "Zero inline styles", "Semantic HTML
   assert(uiDesignSkill.includes(required), `pix-ui-design-system must enforce ${required}`);
 }
 
+const sqlSkill = readFileSync(join(skillsRoot, "pix-data-sql", "SKILL.md"), "utf8");
+for (const required of [
+  "database is the authority",
+  "EAV",
+  "COMMENT ON COLUMN",
+  "schema tests",
+  "ORM",
+  "Soft delete is a policy choice",
+  "Avoid overloaded tables",
+]) {
+  assert(sqlSkill.includes(required), `pix-data-sql must cover ${required}`);
+}
+
+const postgresSkill = readFileSync(join(skillsRoot, "pix-data-postgresql", "SKILL.md"), "utf8");
+for (const required of ["referencing side of a foreign key", "timestamptz", "PostgreSQL 18"]) {
+  assert(postgresSkill.includes(required), `pix-data-postgresql must cover ${required}`);
+}
+
+const mysqlSkill = readFileSync(join(skillsRoot, "pix-data-mysql", "SKILL.md"), "utf8");
+assert(
+  mysqlSkill.includes("InnoDB automatically indexes foreign-key columns"),
+  "pix-data-mysql must document InnoDB foreign-key indexing",
+);
+
 await loadAllSkills(true);
 const tools = listTools();
 assert(tools.some(tool => tool.name === "pix_tool_ui"), "pix_tool_ui MCP tool must be registered");
