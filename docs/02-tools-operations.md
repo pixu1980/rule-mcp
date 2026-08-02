@@ -553,6 +553,30 @@ After every call to `pix_tool_architect`, `pix_tool`, `pix_tool_scaffold`, `pix_
 
 If `maxTokens` is > 0 and the current format exceeds the budget, the handoff auto-downgrades: `full → brief → minimal`.
 
+### Slash command: `/pix-handoff`
+
+A bare `/pix-handoff` produces a quick `handoff`-mode summary with every include flag on and `compress` off. The command takes a **single free-form `options` argument** of space-separated tokens; the server resolves them into the exact tool arguments, so `/pix-handoff help` prints the full usage list.
+
+| Token | Effect |
+|-------|--------|
+| `handoff` \| `close-session` | Mode (default: `handoff`). `close-session` = full session close with diff, roadmap check, doc scan |
+| `compress` | Aggressively compress the output |
+| `full` \| `brief` \| `minimal` | Output format (default: `full`) |
+| `no-diff` \| `no-log` \| `no-context` \| `no-adrs` \| `no-roadmap` | Omit the corresponding section |
+| `max=<n>` | Cap output to n tokens (0 = no limit) |
+| `help` | Print the usage list (no tool call) |
+
+```
+/pix-handoff                                  # all defaults → quick handoff
+/pix-handoff help                             # print this list
+/pix-handoff close-session                    # full session close
+/pix-handoff compress minimal                 # compressed one-line JSON
+/pix-handoff brief                            # brief format
+/pix-handoff no-diff                          # handoff without the diff
+/pix-handoff close-session no-diff no-log     # close without diff/log
+/pix-handoff compress max=2000                # compressed, token-capped
+```
+
 ---
 
 ## 10. File Tree Fix: `pix_tool_fix`
@@ -640,33 +664,33 @@ Resources accessible via the MCP `resources/read` protocol.
 
 ## MCP Prompts
 
-Prompt templates accessible via the MCP `prompts/get` protocol.
+Prompt templates accessible via the MCP `prompts/get` protocol. Every prompt takes a **single free-form argument** and supports `help` (or `--help` / `-h`) as its value to print the usage list, e.g. `/pix-frontend help` — help is returned as a ready-made assistant message and displayed instantly, without invoking the model.
 
 | Name | Arguments | Description |
 |------|-----------|-------------|
-| `pix-a11y-audit` | `code` (req), `framework` (opt), `component` (opt) | Audit a11y end-to-end: WCAG 2.2 AA review + Playwright/axe-core tests |
+| `pix-a11y-audit` | `code` (req, free text) | Audit a11y end-to-end: WCAG 2.2 AA review + Playwright/axe-core tests |
 | `pix-ai` | `request` (req) | AI agent integrations |
 | `pix-architect` | `request` (req) | Context packs, interview flows (CLI + web), scaffolding |
-| `pix-architect-scaffold` | `projectName` (req), `framework` (opt), `tier` (opt) | Scaffold project with .agents/ + .context/ |
-| `pix-backend` | `request` (req), `framework` (opt) | Node, Express, Fastify, Hono, NestJS, GraphQL, API design, security |
+| `pix-architect-scaffold` | `projectName` (req, free text: framework/tier) | Scaffold project with .agents/ + .context/ |
+| `pix-backend` | `request` (req, free text: framework) | Node, Express, Fastify, Hono, NestJS, GraphQL, API design, security |
 | `pix-caveman` | `request` (req) | Compressed communication, commits, reviews |
-| `pix-code-review` | `framework` (opt), `code` (req) | Review code against pix styleguides |
-| `pix-data` | `request` (req), `database` (opt) | PostgreSQL, MySQL, SQLite, MongoDB, DuckDB, IndexedDB, SQL |
+| `pix-code-review` | `code` (req, free text) | Review code against pix styleguides |
+| `pix-data` | `request` (req, free text: database) | PostgreSQL, MySQL, SQLite, MongoDB, DuckDB, IndexedDB, SQL |
 | `pix-devops` | `request` (req) | Docker, GitLab CI, observability, testing, versioning |
-| `pix-frontend` | `request` (req), `framework` (opt) | React, Vue, Svelte, Angular, Solid, Astro, Next, Nuxt, Remix, vanilla |
-| `pix-handoff` | `mode` (req), `includeGitDiff` (opt), `compress` (opt) | Compressed context handoff for a new session |
+| `pix-frontend` | `request` (req, free text: framework) | React, Vue, Svelte, Angular, Solid, Astro, Next, Nuxt, Remix, vanilla |
+| `pix-handoff` | `options` (opt, free-form tokens: `handoff` \| `close-session`, `compress`, `full` \| `brief` \| `minimal`, `no-diff`, `no-log`, `no-context`, `no-adrs`, `no-roadmap`, `max=<n>`, `help`) | Compressed context handoff for a new session |
 | `pix-meta` | `request` (req) | Dispatcher/action toolset (gateway, apply, search, check, scaffold…) |
-| `pix-new-feature` | `feature` (req), `framework` (opt), `area` (opt), `includeTests` (opt) | Feature end-to-end with TDD + a11y + commit scope |
-| `pix-platform` | `request` (req), `platform` (opt) | Web, desktop, Expo, agent, library |
+| `pix-new-feature` | `feature` (req, free text: framework/area/"no tests") | Feature end-to-end with TDD + a11y + commit scope |
+| `pix-platform` | `request` (req, free text: platform) | Web, desktop, Expo, agent, library |
 | `pix-process` | `request` (req) | Code review, feature workflow, documentation, ADR, handoff, BMAD |
-| `pix-pull-request` | `description` (req), `framework` (opt), `updateAdr` (opt) | Prepare PR: review + a11y + security + ADR + commit scope |
-| `pix-setup-project` | `projectName` (req), `framework` (opt), `toolchain` (opt), `tier` (opt) | Bootstrap project: detect → scaffold → toolchain → architect context |
+| `pix-pull-request` | `description` (req, free text: "no adr") | Prepare PR: review + a11y + security + ADR + commit scope |
+| `pix-setup-project` | `projectName` (req, free text: framework/toolchain/tier) | Bootstrap project: detect → scaffold → toolchain → architect context |
 | `pix-skills` | `request` (req) | Skill discovery (find-skills) |
 | `pix-styleguide` | `request` (req) | a11y, CSS, HTML, JS, JSON, Markdown, naming, patterns, validation |
 | `pix-tdd` | `request` (req) | Test-driven development workflow |
-| `pix-toolchain` | `request` (req), `tool` (opt) | Vite, pnpm, Turborepo, Rspack, Parcel, TypeScript, ESLint, Biome, Husky, commits |
+| `pix-toolchain` | `request` (req, free text: tool) | Vite, pnpm, Turborepo, Rspack, Parcel, TypeScript, ESLint, Biome, Husky, commits |
 | `pix-ui` | `request` (req) | UI design-system work |
-| `pix-write-tests` | `scope` (req), `framework` (opt), `testType` (opt) | Write TDD + a11y (axe-core) + devops tests |
+| `pix-write-tests` | `scope` (req, free text: tdd/a11y/devops/all) | Write TDD + a11y (axe-core) + devops tests |
 
 ---
 
