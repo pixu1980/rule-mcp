@@ -71,6 +71,11 @@ CREATE INDEX CONCURRENTLY IF NOT EXISTS idx_org_plan ON app.organizations (plan)
 CREATE UNIQUE INDEX CONCURRENTLY IF NOT EXISTS uq_org_slug_active ON app.organizations (slug)
     WHERE deleted_at IS NULL;
 
+-- PostgreSQL does not automatically index the referencing side of a foreign key.
+-- Add the child-side index when joins, parent deletes, or updates need it.
+CREATE INDEX CONCURRENTLY IF NOT EXISTS idx_orders_org_id
+    ON app.orders (org_id);
+
 -- Updated_at trigger
 CREATE OR REPLACE FUNCTION trg_set_updated_at()
 RETURNS TRIGGER AS $$
@@ -153,16 +158,31 @@ DELETE FROM app.orders WHERE created_at < '2024-01-01';
 
 ## 2. Indexing Strategy (PostgreSQL-Specific)
 
+### Foreign-key indexing rule
+
+PostgreSQL indexes the referenced key when needed for the constraint, but it does **not** automatically index the referencing side of a foreign key. Index child columns used in joins, parent deletes, or common filters. Do not create every possible index: confirm the access pattern with `EXPLAIN (ANALYZE, BUFFERS)` and account for write amplification.
+
+```sql
+CREATE INDEX CONCURRENTLY IF NOT EXISTS idx_payments_user_id
+    ON app.payments (user_id);
+```
+
+### Timestamp and identifier choices
+
+Use `timestamptz` for an absolute instant; PostgreSQL stores the instant consistently and renders it in the session time zone. Use `timestamp without time zone` only for a deliberately zone-less civil time such as a recurring local schedule.
+
+For PostgreSQL 16+, `BIGINT GENERATED ALWAYS AS IDENTITY` is a compact sequential default, while UUIDs are useful when identifiers are generated across clients or services. **PostgreSQL 18** adds built-in `uuidv7()`, a time-ordered UUID with better index locality than random UUIDv4, but it exposes creation-time information and is not portable to the PostgreSQL 16+ baseline. Gate it behind a documented server-version requirement.
+
 ### Index Types Comparison
 
-| Type | Use Case | Creation |
-|------|----------|----------|
-| **B-tree** (default) | Equality, range, ORDER BY | `CREATE INDEX ...` |
-| **GiST** | Full-text, geometry, ranges | `CREATE INDEX ... USING GIST` |
-| **GIN** | JSONB, arrays, full-text | `CREATE INDEX ... USING GIN` |
-| **BRIN** | Append-only, time-series | `CREATE INDEX ... USING BRIN` |
-| **Hash** | Equality only (rarely useful) | `CREATE INDEX ... USING HASH` |
-| **SP-GiST** | Spatial, network addresses | `CREATE INDEX ... USING SPGIST` |
+| Type                 | Use Case                      | Creation                        |
+| -------------------- | ----------------------------- | ------------------------------- |
+| **B-tree** (default) | Equality, range, ORDER BY     | `CREATE INDEX ...`              |
+| **GiST**             | Full-text, geometry, ranges   | `CREATE INDEX ... USING GIST`   |
+| **GIN**              | JSONB, arrays, full-text      | `CREATE INDEX ... USING GIN`    |
+| **BRIN**             | Append-only, time-series      | `CREATE INDEX ... USING BRIN`   |
+| **Hash**             | Equality only (rarely useful) | `CREATE INDEX ... USING HASH`   |
+| **SP-GiST**          | Spatial, network addresses    | `CREATE INDEX ... USING SPGIST` |
 
 ### Practical Index Patterns
 
@@ -578,6 +598,35 @@ $$ LANGUAGE plpgsql;
 
 ## 11. Migration Scripts
 
+### Constraint rollout and schema verification
+
+Keep integrity rules in the database and verify the applied schema rather than trusting an ORM relation declaration. For large existing tables, `NOT VALID` can stage foreign-key or check-constraint validation so cleanup and validation can happen separately:
+
+```sql
+ALTER TABLE app.orders
+  ADD CONSTRAINT fk_orders_org
+  FOREIGN KEY (org_id) REFERENCES app.organizations(id)
+  NOT VALID;
+
+-- After existing data is repaired:
+ALTER TABLE app.orders VALIDATE CONSTRAINT fk_orders_org;
+
+-- PostgreSQL 16+ compatibility note: staged NOT NULL workflows and newer temporal
+-- constraint syntax are version- and migration-tool-specific. Verify the target
+-- server version before using PostgreSQL 18-only features.
+```
+
+Migration tests should apply the migration to an isolated database, assert that expected constraints and indexes exist, try invalid/duplicate/boundary inputs, and exercise the rollback or documented down migration. Use `COMMENT ON COLUMN` for business meaning and allowed values.
+
+```sql
+COMMENT ON COLUMN app.orders.status IS
+  'Allowed values: pending, paid, shipped, cancelled';
+
+SELECT constraint_name, constraint_type
+FROM information_schema.table_constraints
+WHERE table_schema = 'app' AND table_name = 'orders';
+```
+
 ### Complete Migration Example
 
 ```sql
@@ -635,6 +684,10 @@ UPDATE app.users SET encrypted_ssn = pgp_sym_encrypt('123-45-6789', current_sett
 -- Decrypt
 SELECT pgp_sym_decrypt(encrypted_ssn, current_setting('app.encryption_key')) AS ssn FROM app.users;
 ```
+
+## PostgreSQL 18 features (opt-in)
+
+Do not silently use features newer than the skill baseline. PostgreSQL 18-specific options such as `uuidv7()`, temporal `WITHOUT OVERLAPS`, `PERIOD`, and any newer staged-constraint behavior must be marked in migrations and checked against the deployment version. For portable skills, retain identity keys, explicit foreign keys, `CHECK`, `UNIQUE`, `NOT NULL`, and `timestamptz` as the baseline.
 
 ## See also
 
