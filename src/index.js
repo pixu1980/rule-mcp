@@ -408,7 +408,7 @@ export async function cli() {
         const { registerProcessHandoffTool } = await import("./tools/handoff.js");
         const { callTool: ct } = await import("./tools/router.js");
         registerProcessHandoffTool();
-        const handoffRes = await ct("pix_process_handoff", {
+        const handoffRes = await ct("rule_tool_process_handoff", {
           projectDir: getArg("--dir", "."),
           compress: hasFlag("--compress"),
           format: getArg("--format", "full"),
