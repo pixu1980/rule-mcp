@@ -104,6 +104,30 @@ for (const required of ["Zero CSS classes", "Zero inline styles", "Semantic HTML
   assert(uiDesignSkill.includes(required), `rule-ui-design-system must enforce ${required}`);
 }
 
+const sqlSkill = readFileSync(join(skillsRoot, "rule-data-sql", "SKILL.md"), "utf8");
+for (const required of [
+  "database is the authority",
+  "EAV",
+  "COMMENT ON COLUMN",
+  "schema tests",
+  "ORM",
+  "Soft delete is a policy choice",
+  "Avoid overloaded tables",
+]) {
+  assert(sqlSkill.includes(required), `rule-data-sql must cover ${required}`);
+}
+
+const postgresSkill = readFileSync(join(skillsRoot, "rule-data-postgresql", "SKILL.md"), "utf8");
+for (const required of ["referencing side of a foreign key", "timestamptz", "PostgreSQL 18"]) {
+  assert(postgresSkill.includes(required), `rule-data-postgresql must cover ${required}`);
+}
+
+const mysqlSkill = readFileSync(join(skillsRoot, "rule-data-mysql", "SKILL.md"), "utf8");
+assert(
+  mysqlSkill.includes("InnoDB automatically indexes foreign-key columns"),
+  "rule-data-mysql must document InnoDB foreign-key indexing",
+);
+
 await loadAllSkills(true);
 const tools = listTools();
 assert(tools.some(tool => tool.name === "rule_tool_ui"), "rule_tool_ui MCP tool must be registered");

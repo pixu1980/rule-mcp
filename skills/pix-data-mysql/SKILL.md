@@ -59,6 +59,28 @@ CREATE TABLE IF NOT EXISTS organizations (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 ```
 
+### Relational integrity and foreign-key indexes
+
+Keep the database as the final integrity boundary. Application and ORM validation is useful for friendly errors, but every invariant that must hold for all writers belongs in `NOT NULL`, `CHECK`, `UNIQUE`, and `FOREIGN KEY` constraints. Inspect generated migrations to confirm that ORM relations become real database constraints.
+
+InnoDB automatically indexes foreign-key columns when it needs an index for the constraint. Keep an explicit, named index when the access pattern, composite ordering, or cross-database portability requires one; verify it with `SHOW INDEX` rather than assuming the ORM or engine chose the best query index.
+
+```sql
+CREATE TABLE payments (
+    id       BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    user_id  BIGINT UNSIGNED NOT NULL,
+    amount   DECIMAL(12, 2) NOT NULL,
+    email    VARCHAR(255) NOT NULL,
+    CONSTRAINT fk_payments_user FOREIGN KEY (user_id) REFERENCES users(id),
+    CONSTRAINT ck_payments_amount CHECK (amount > 0),
+    CONSTRAINT uq_payments_email UNIQUE (email)
+) ENGINE=InnoDB;
+
+SHOW INDEX FROM payments;
+```
+
+`CHECK` constraints are enforced by MySQL 8.0.16+; verify enforcement and syntax for the target MariaDB release. Keep `DATETIME` values in an explicit UTC convention when they represent instants, or use `TIMESTAMP` with a documented conversion policy. Neither choice replaces documenting whether a value is an instant or a local civil time.
+
 ### ALTER TABLE — MySQL-Safe
 
 ```sql
@@ -532,6 +554,25 @@ mysql -e "SHOW SLAVE STATUS\G" | grep -E "Seconds_Behind_Master|Slave_(IO|SQL)_R
 ---
 
 ## 9. Migration Scripts
+
+### Verification, documentation, and rollback
+
+Treat migrations as executable schema history. In an isolated database, apply each migration, verify constraints and indexes, test invalid/duplicate/boundary inputs, and exercise the rollback or documented down migration. Use column comments for business meaning and allowed values.
+
+```sql
+-- Verify the applied schema instead of trusting an ORM model.
+SELECT CONSTRAINT_NAME, CONSTRAINT_TYPE
+FROM information_schema.TABLE_CONSTRAINTS
+WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'organizations';
+
+ALTER TABLE organizations
+    MODIFY COLUMN plan ENUM('free', 'pro', 'enterprise') NOT NULL
+    COMMENT 'Allowed values: free, pro, enterprise';
+
+-- Run the DOWN migration in the isolated database and verify the prior shape.
+```
+
+Avoid comma-separated values, repeating columns, and generic EAV tables in relational tables. Prefer child/junction tables for independently queryable facts; use MySQL JSON only for intentionally flexible attributes whose constraints are not relational.
 
 ```sql
 -- 20240115_120000_create_organizations.sql
