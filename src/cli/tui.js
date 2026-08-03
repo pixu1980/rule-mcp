@@ -7,38 +7,38 @@
  */
 
 const ANSI = {
-  reset: "\x1b[0m",
-  bold: "\x1b[1m",
-  dim: "\x1b[2m",
-  cyan: "\x1b[36m",
-  green: "\x1b[32m",
-  yellow: "\x1b[33m",
-  red: "\x1b[31m",
-  magenta: "\x1b[35m",
-  blue: "\x1b[34m",
+  reset: "\u{1B}[0m",
+  bold: "\u{1B}[1m",
+  dim: "\u{1B}[2m",
+  cyan: "\u{1B}[36m",
+  green: "\u{1B}[32m",
+  yellow: "\u{1B}[33m",
+  red: "\u{1B}[31m",
+  magenta: "\u{1B}[35m",
+  blue: "\u{1B}[34m",
 };
 
 /** Whether ANSI color should be emitted for interactive terminals. */
 export function shouldUseColor() {
-  if (process.env.NO_COLOR) return false;
-  if (process.env.FORCE_COLOR) return true;
+  if (process.env.NO_COLOR) {return false;}
+  if (process.env.FORCE_COLOR) {return true;}
   return Boolean(process.stdout.isTTY);
 }
 
 /** Colorize text only when the output stream supports it. */
 export function color(text, tone = "reset") {
-  if (!shouldUseColor()) return String(text);
+  if (!shouldUseColor()) {return String(text);}
   return `${ANSI[tone] || ""}${text}${ANSI.reset}`;
 }
 
 /** Strip ANSI escapes before calculating terminal column widths. */
 function visibleLength(value) {
-  return String(value).replace(/\x1b\[[0-9;]*m/g, "").length;
+  return String(value).replaceAll(/\x1B\[[0-9;]*m/g, "").length;
 }
 
 /** Truncate text to a terminal-friendly width. */
 export function truncate(value, max = 80) {
-  const text = String(value ?? "").replace(/\s+/g, " ").trim();
+  const text = String(value ?? "").replaceAll(/\s+/g, " ").trim();
   return text.length > max ? `${text.slice(0, Math.max(0, max - 1))}…` : text;
 }
 
@@ -53,7 +53,7 @@ export function banner(title, subtitle = "") {
     return `║  ${raw}${" ".repeat(pad)}  ║`;
   };
   const lines = [top, line(title)];
-  if (subtitle) lines.push(line(color(subtitle, "dim")));
+  if (subtitle) {lines.push(line(color(subtitle, "dim")));}
   lines.push(bottom);
   return color(lines.join("\n"), "cyan");
 }
@@ -72,11 +72,11 @@ export function kv(rows) {
 /** Render a compact table. */
 export function table(headers, rows, { maxWidth = 54 } = {}) {
   const normalized = rows.map(row => row.map((cell, index) => index === row.length - 1 ? truncate(cell, maxWidth) : String(cell ?? "")));
-  const widths = headers.map((header, i) => Math.min(maxWidth, Math.max(
+  const widths = headers.map((header, index) => Math.min(maxWidth, Math.max(
     visibleLength(header),
-    ...normalized.map(row => visibleLength(row[i] ?? "")),
+    ...normalized.map(row => visibleLength(row[index] ?? "")),
   )));
-  const renderRow = (row) => row.map((cell, i) => String(cell ?? "").padEnd(widths[i])).join("  ");
+  const renderRow = (row) => row.map((cell, index) => String(cell ?? "").padEnd(widths[index])).join("  ");
   return [
     color(renderRow(headers), "bold"),
     color(widths.map(w => "─".repeat(w)).join("  "), "dim"),
@@ -126,7 +126,7 @@ export function formatUninstallResult(result) {
       ["Note", result.note || "—"],
     ]),
   ];
-  if (rows.length > 0) lines.push("", section("Updated configs", "📁"), table(["", "Agent", "Files"], rows));
+  if (rows.length > 0) {lines.push("", section("Updated configs", "📁"), table(["", "Agent", "Files"], rows));}
   return `${lines.join("\n")}\n`;
 }
 

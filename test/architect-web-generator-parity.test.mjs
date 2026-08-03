@@ -33,19 +33,19 @@ const CONTEXT_SERVER_SRC = readFileSync(
 );
 
 test("neither server passes a null spec to the generator", () => {
-  for (const [name, src] of [["architect-web", SRC], ["context-server", CONTEXT_SERVER_SRC]]) {
+  for (const [name, source] of [["architect-web", SRC], ["context-server", CONTEXT_SERVER_SRC]]) {
     assert.doesNotMatch(
-      src,
+      source,
       /generateContext(Content)?\([^)]*,\s*null\s*[,)]/,
       `${name} must pass the loaded wizardSpec, not null`
     );
     assert.match(
-      src,
+      source,
       /generateContext\(values \|\| \{\}, wizardSpec/,
       `${name}: /api/generate must pass wizardSpec`
     );
     assert.match(
-      src,
+      source,
       /generateContextContent\(values \|\| \{\}, wizardSpec\)/,
       `${name}: /api/download must pass wizardSpec`
     );

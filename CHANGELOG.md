@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Tooling: repository lint migrated to **ESLint 10 flat config** (`eslint.config.mjs` + `@eslint/js` + `eslint-plugin-unicorn`), replacing the legacy `.eslintrc.json`. Applied the unicorn autofix pass (modern idioms: `node:` protocol, `replaceAll`, `flatMap`, `new` for builtins, ternary/curly/assert consistency) and fixed real issues it surfaced (`no-undef` bash-completion template interpolation, `no-empty` catches, `no-useless-escape`, dead assignments). Opinionated unicorn rules (`no-null`, `no-array-reduce`, `name-replacements`, `import-style`, …) are scoped/tuned per ADR 028; CI lint step no longer passes `--ext` (removed in ESLint 10). `pnpm lint`: 0 errors / 48 warnings. Scaffold guardrail now verifies `eslint.config.mjs`.
+
 ### Fixed
 
 - Installer: uninstall→install cycles no longer accumulate blank lines in agent instruction files (`CLAUDE.md`, `GEMINI.md`, `AGENTS.md`, `.cursorrules`). `install.sh` normalizes trailing newlines and inserts exactly one separator via `append_rules_block`; `uninstall.sh` collapses trailing blank lines after removing the rules block

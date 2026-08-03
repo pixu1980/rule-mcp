@@ -22,10 +22,10 @@ const MINIMAL = [
   "pix_tool_process_handoff", "pix_tool_component",
 ].sort();
 
-function toolNames(extraEnv) {
+function toolNames(extraEnvironment) {
   const r = spawnSync(process.execPath, [bin, "tools", "list", "--json"], {
     encoding: "utf8",
-    env: { ...process.env, PIX_GALAXY_MCP_NO_AUTOUPDATE: "1", ...extraEnv },
+    env: { ...process.env, PIX_GALAXY_MCP_NO_AUTOUPDATE: "1", ...extraEnvironment },
   });
   const parsed = JSON.parse(r.stdout);
   return (parsed.tools ?? parsed).map((t) => t.name);
@@ -41,7 +41,7 @@ console.log(`  ✅ full surface exposes ${full.length} tools`);
 
 // ── Minimal via PIX_GALAXY_MCP_MINIMAL_TOOLS (convention-aligned name) ──
 const minimal = toolNames({ PIX_GALAXY_MCP_MINIMAL_TOOLS: "1" });
-assert.deepEqual(minimal.slice().sort(), MINIMAL, "minimal mode exposes exactly the allowlist");
+assert.deepEqual([...minimal].sort(), MINIMAL, "minimal mode exposes exactly the allowlist");
 console.log(`  ✅ PIX_GALAXY_MCP_MINIMAL_TOOLS → ${minimal.length} tools`);
 
 // ── Default is OFF (opt-in): the legacy PIX_STRICT_MODE no longer applies ──

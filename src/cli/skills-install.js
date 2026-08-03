@@ -16,7 +16,7 @@ import { join, relative, dirname } from "node:path";
 import { createInterface } from "node:readline";
 import { homedir } from "node:os";
 import { stdin as input, stdout as output } from "node:process";
-import { getSkillsDirs, pkg } from "./paths.js";
+import { getSkillsDirs as getSkillsDirectories, pkg as package_ } from "./paths.js";
 import { formatSkillsList } from "./tui.js";
 import { parseSkillFrontmatter } from "../core/skills.js";
 
@@ -44,13 +44,13 @@ function readSkillMeta(skillDir) {
  * Get all available skills from the embedded directory.
  */
 function getAvailableSkills() {
-  const { embeddedSkills } = getSkillsDirs();
+  const { embeddedSkills } = getSkillsDirectories();
   const skills = [];
-  if (!existsSync(embeddedSkills)) return skills;
+  if (!existsSync(embeddedSkills)) {return skills;}
   for (const entry of readdirSync(embeddedSkills, { withFileTypes: true })) {
-    if (!entry.isDirectory()) continue;
+    if (!entry.isDirectory()) {continue;}
     const skillDir = join(embeddedSkills, entry.name);
-    if (!existsSync(join(skillDir, "SKILL.md"))) continue;
+    if (!existsSync(join(skillDir, "SKILL.md"))) {continue;}
     const meta = readSkillMeta(skillDir);
     skills.push({
       name: entry.name,
@@ -74,20 +74,20 @@ function isInstalled(name, targetDir) {
  * Copy a skill directory recursively to the target.
  */
 function copySkill(source, targetDir, name) {
-  const dest = join(targetDir, name);
-  if (existsSync(dest)) rmSync(dest, { recursive: true });
-  mkdirSync(dest, { recursive: true });
+  const destination = join(targetDir, name);
+  if (existsSync(destination)) {rmSync(destination, { recursive: true });}
+  mkdirSync(destination, { recursive: true });
 
   const entries = readdirSync(source, { withFileTypes: true, recursive: true });
   for (const entry of entries) {
-    const srcPath = join(entry.parentPath ?? source, entry.name);
-    const relPath = relative(source, srcPath);
-    const destPath = join(dest, relPath);
+    const sourcePath = join(entry.parentPath ?? source, entry.name);
+    const relPath = relative(source, sourcePath);
+    const destinationPath = join(destination, relPath);
     if (entry.isDirectory()) {
-      mkdirSync(destPath, { recursive: true });
+      mkdirSync(destinationPath, { recursive: true });
     } else {
-      mkdirSync(dirname(destPath), { recursive: true });
-      copyFileSync(srcPath, destPath);
+      mkdirSync(dirname(destinationPath), { recursive: true });
+      copyFileSync(sourcePath, destinationPath);
     }
   }
 }
@@ -104,8 +104,8 @@ function installNativeSkills(skills) {
   try {
     mkdirSync(claudeDir, { recursive: true });
     for (const skill of skills) {
-      const dest = join(claudeDir, skill.name);
-      if (!existsSync(dest)) {
+      const destination = join(claudeDir, skill.name);
+      if (!existsSync(destination)) {
         copySkill(skill.source, join(homedir(), ".claude"), skill.name);
         count++;
       }
@@ -139,60 +139,83 @@ async function interactiveSelect(items, { title, selected = [] }) {
     stdin.setEncoding("utf8");
 
     function render() {
-      output.write("\x1B[?25l"); // hide cursor
+      output.write("\u{1B}[?25l"); // hide cursor
       output.write(`\n  ${title}\n\n`);
       const start = Math.max(0, Math.min(cursor - Math.floor(pageSize / 2), items.length - pageSize));
       const end = Math.min(start + pageSize, items.length);
-      for (let i = start; i < end; i++) {
-        const item = items[i];
-        const check = checked.includes(i) ? "✓" : " ";
-        const pointer = i === cursor ? "▶" : " ";
+      for (let index = start; index < end; index++) {
+        const item = items[index];
+        const check = checked.includes(index) ? "✓" : " ";
+        const pointer = index === cursor ? "▶" : " ";
         const label = item.displayName || item.name;
         const desc = item.description ? ` — ${item.description}` : "";
         output.write(`  ${pointer} [${check}] ${label}${desc}\n`);
       }
       output.write(`\n  ␣ toggle   ↵ confirm   q quit\n`);
-      output.write(`\x1B[${end - start + 4}A`); // move up
+      output.write(`\u{1B}[${end - start + 4}A`); // move up
     }
 
     render();
 
     const onData = (key) => {
-      if (key === "\x1B[A" || key === "k") {
+      switch (key) {
+      case "\u{1B}[A": 
+      case "k": {
         // Up
         cursor = Math.max(0, cursor - 1);
         render();
-      } else if (key === "\x1B[B" || key === "j") {
+      
+      break;
+      }
+      case "\u{1B}[B": 
+      case "j": {
         // Down
         cursor = Math.min(items.length - 1, cursor + 1);
         render();
-      } else if (key === " ") {
+      
+      break;
+      }
+      case " ": {
         // Toggle
-        const idx = checked.indexOf(cursor);
-        if (idx >= 0) checked.splice(idx, 1);
-        else checked.push(cursor);
+        const index = checked.indexOf(cursor);
+        if (index === -1) {checked.push(cursor);}
+        else {checked.splice(index, 1);}
         render();
-      } else if (key === "\r" || key === "\n") {
+      
+      break;
+      }
+      case "\r": 
+      case "\n": {
         // Confirm
         stdin.setRawMode(wasRaw ?? false);
         stdin.pause();
         stdin.removeListener("data", onData);
-        output.write("\x1B[2K\x1B[?25h"); // show cursor
-        output.write(`\x1B[${pageSize + 4}A`); // clear lines
+        output.write("\u{1B}[2K\u{1B}[?25h"); // show cursor
+        output.write(`\u{1B}[${pageSize + 4}A`); // clear lines
         resolve([...checked]);
-      } else if (key === "q") {
+      
+      break;
+      }
+      case "q": {
         // Quit
         stdin.setRawMode(wasRaw ?? false);
         stdin.pause();
         stdin.removeListener("data", onData);
-        output.write("\x1B[2K\x1B[?25h");
-        output.write(`\x1B[${pageSize + 4}A`);
+        output.write("\u{1B}[2K\u{1B}[?25h");
+        output.write(`\u{1B}[${pageSize + 4}A`);
         resolve([]);
-      } else if (key === "a") {
+      
+      break;
+      }
+      case "a": {
         // Toggle all
-        if (checked.length === items.length) checked.length = 0;
-        else for (let i = 0; i < items.length; i++) if (!checked.includes(i)) checked.push(i);
+        if (checked.length === items.length) {checked.length = 0;}
+        else {for (let index = 0; index < items.length; index++) {if (!checked.includes(index)) {checked.push(index);}}}
         render();
+      
+      break;
+      }
+      // No default
       }
     };
 
@@ -203,9 +226,9 @@ async function interactiveSelect(items, { title, selected = [] }) {
 /**
  * Interactive skill install command.
  */
-export async function skillsInstallCommand(opts = {}) {
-  const scope = opts.scope || "global";
-  const selectAll = opts.selectAll || false;
+export async function skillsInstallCommand(options = {}) {
+  const scope = options.scope || "global";
+  const selectAll = options.selectAll || false;
 
   const skills = getAvailableSkills();
   if (skills.length === 0) {
@@ -237,9 +260,9 @@ export async function skillsInstallCommand(opts = {}) {
   }
 
   // Pre-check installed
-  const preSelected = skills.reduce((acc, s, i) => {
-    if (isInstalled(s.name, targetDir)) acc.push(i);
-    return acc;
+  const preSelected = skills.reduce((accumulator, s, index) => {
+    if (isInstalled(s.name, targetDir)) {accumulator.push(index);}
+    return accumulator;
   }, []);
 
   // Interactive selection
@@ -263,8 +286,8 @@ export async function skillsInstallCommand(opts = {}) {
   // Install
   mkdirSync(targetDir, { recursive: true });
   let installed = 0;
-  for (const idx of selected) {
-    const skill = skills[idx];
+  for (const index of selected) {
+    const skill = skills[index];
     copySkill(skill.source, targetDir, skill.name);
     installed++;
     process.stdout.write(`  ✓ ${skill.name}\n`);
@@ -278,9 +301,9 @@ export async function skillsInstallCommand(opts = {}) {
 /**
  * Non-interactive skill list command.
  */
-export function skillsListCommand(opts = {}) {
+export function skillsListCommand(options = {}) {
   const skills = getAvailableSkills();
-  const { homeSkills, embeddedSkills } = getSkillsDirs();
+  const { homeSkills, embeddedSkills } = getSkillsDirectories();
   const installed = existsSync(homeSkills) ? readdirSync(homeSkills) : [];
   const rows = skills.map((s) => ({
     name: s.name,
@@ -291,7 +314,7 @@ export function skillsListCommand(opts = {}) {
     installPath: join(homeSkills, s.name),
   }));
 
-  if (opts.json) {
+  if (options.json) {
     process.stdout.write(JSON.stringify(rows, null, 2) + "\n");
   } else {
     process.stdout.write(formatSkillsList(rows));

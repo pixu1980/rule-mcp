@@ -32,7 +32,7 @@ function collectInterviewJsFiles(dir) {
     const entries = readdirSync(dir, { withFileTypes: true });
     for (const entry of entries) {
       // Skip node_modules
-      if (entry.name === "node_modules") continue;
+      if (entry.name === "node_modules") {continue;}
       const fullPath = join(dir, entry.name);
       if (entry.isDirectory()) {
         results.push(...collectInterviewJsFiles(fullPath));
@@ -40,7 +40,7 @@ function collectInterviewJsFiles(dir) {
         results.push(fullPath);
       }
     }
-  } catch (err) {
+  } catch {
     // If directory doesn't exist, return empty
   }
   return results;

@@ -28,8 +28,8 @@ function findBlocks(lines) {
   const blocks = [];
   const stack = [];
 
-  for (let i = 0; i < lines.length; i++) {
-    const line = lines[i];
+  for (let index = 0; index < lines.length; index++) {
+    const line = lines[index];
     const trimmed = line.trim();
 
     // Opening brace (not including object literals like { key: val })
@@ -42,19 +42,19 @@ function findBlocks(lines) {
         /^\s*(?:export\s+)?class\s+\w+\s*(?:extends\s+\w+)?\s*\{\s*$/.test(line) ||
         (/^\s*(?:\w+|\w+\.prototype)\s*\([^)]*\)\s*\{\s*$/.test(line) && !/^\s*(if|for|while|switch)\s*\(/.test(line) && !/^\s*(export|import)\s/.test(line)) ||
         /^\s*constructor\s*\([^)]*\)\s*\{\s*$/.test(line)) {
-      stack.push({ openLine: i, indent: indentOf(line) });
+      stack.push({ openLine: index, indent: indentOf(line) });
     }
 
     // Closing brace — pop from stack and record the block
     if (/^\s*\}\s*$/.test(line) && stack.length > 0) {
       const block = stack.pop();
-      block.closeLine = i;
+      block.closeLine = index;
 
       // Only consider blocks with ≥1 inner code line
       const innerLines = lines.slice(block.openLine + 1, block.closeLine)
         .filter(l => l.trim() !== "" && !/^\s*\/\//.test(l) && !/^\s*\/\*/.test(l));
 
-      if (innerLines.length >= 1) {
+      if (innerLines.length > 0) {
         blocks.push(block);
       }
     }
@@ -77,36 +77,34 @@ function classifyBlock(block, allBlocks, lines) {
   // and closeLine > block.closeLine
   let parent = null;
   for (const other of allBlocks) {
-    if (other.openLine < block.openLine && other.closeLine > block.closeLine) {
-      if (!parent || (other.openLine > parent.openLine)) {
+    if (other.openLine < block.openLine && other.closeLine > block.closeLine && (!parent || (other.openLine > parent.openLine))) {
         parent = other;
       }
-    }
   }
 
-  if (!parent) return "middle"; // no parent → toplevel → always middle
+  if (!parent) {return "middle";} // no parent → toplevel → always middle
 
   // Check if block is at start of parent
-  let atStart = true;
-  for (let i = parent.openLine + 1; i < block.openLine; i++) {
-    if (lines[i].trim() !== "" && !lines[i].trim().startsWith("//") && !lines[i].trim().startsWith("/*") && !lines[i].trim().startsWith("*")) {
-      atStart = false;
+  let isAtStart = true;
+  for (let index = parent.openLine + 1; index < block.openLine; index++) {
+    if (lines[index].trim() !== "" && !lines[index].trimStart().startsWith("//") && !lines[index].trimStart().startsWith("/*") && !lines[index].trimStart().startsWith("*")) {
+      isAtStart = false;
       break;
     }
   }
 
   // Check if block is at end of parent
-  let atEnd = true;
-  for (let i = block.closeLine + 1; i < parent.closeLine; i++) {
-    if (lines[i].trim() !== "" && !lines[i].trim().startsWith("//") && !lines[i].trim().startsWith("/*") && !lines[i].trim().startsWith("*")) {
-      atEnd = false;
+  let isAtEnd = true;
+  for (let index = block.closeLine + 1; index < parent.closeLine; index++) {
+    if (lines[index].trim() !== "" && !lines[index].trimStart().startsWith("//") && !lines[index].trimStart().startsWith("/*") && !lines[index].trimStart().startsWith("*")) {
+      isAtEnd = false;
       break;
     }
   }
 
-  if (atStart && atEnd) return "start_end"; // only child → both
-  if (atStart) return "start";
-  if (atEnd) return "end";
+  if (isAtStart && isAtEnd) {return "start_end";} // only child → both
+  if (isAtStart) {return "start";}
+  if (isAtEnd) {return "end";}
   return "middle";
 }
 
@@ -128,22 +126,24 @@ export function fixBlockSpacing(filePath) {
 
     // Check line above (blank before block opening)
     if (block.openLine > 0) {
-      const prevLine = lines[block.openLine - 1];
-      const prevTrimmed = prevLine.trim();
-      const needsAbove = type === "end" || type === "middle" || type === "start_end";
+      const previousLine = lines[block.openLine - 1];
+      const previousTrimmed = previousLine.trim();
+      const isNeedsAbove = type === "end" || type === "middle" || type === "start_end";
 
-      if (needsAbove && prevTrimmed !== "" &&
-          !prevTrimmed.startsWith("//") && !prevTrimmed.startsWith("/*") &&
-          !prevTrimmed.startsWith("*") && !prevTrimmed.endsWith("{") &&
-          !prevTrimmed.endsWith("(")) {
+      if (isNeedsAbove && previousTrimmed !== "" &&
+          !previousTrimmed.startsWith("//") && !previousTrimmed.startsWith("/*") &&
+          !previousTrimmed.startsWith("*") && !previousTrimmed.endsWith("{") &&
+          !previousTrimmed.endsWith("(")) {
         // Insert blank line before the block
         lines.splice(block.openLine, 0, "");
         // Adjust subsequent block positions since we inserted
         for (const other of blocks) {
-          if (other.openLine >= block.openLine && other !== block) {
-            other.openLine++;
-            other.closeLine++;
+          if (!(other.openLine >= block.openLine) || other === block) {
+          	continue;
           }
+
+          other.openLine++;
+          other.closeLine++;
         }
         block.closeLine++; // our block's close also moved
       }
@@ -153,9 +153,9 @@ export function fixBlockSpacing(filePath) {
     if (block.closeLine < lines.length - 1) {
       const nextLine = lines[block.closeLine + 1];
       const nextTrimmed = nextLine.trim();
-      const needsBelow = type === "start" || type === "middle" || type === "start_end";
+      const isNeedsBelow = type === "start" || type === "middle" || type === "start_end";
 
-      if (needsBelow && nextTrimmed !== "" &&
+      if (isNeedsBelow && nextTrimmed !== "" &&
           !nextTrimmed.startsWith("//") && !nextTrimmed.startsWith("/*") &&
           !nextTrimmed.startsWith("*") && !nextTrimmed.startsWith(")") &&
           !nextTrimmed.startsWith("]") && !nextTrimmed.startsWith(",") &&
@@ -164,10 +164,12 @@ export function fixBlockSpacing(filePath) {
         // Insert blank line after the block
         lines.splice(block.closeLine + 1, 0, "");
         for (const other of blocks) {
-          if (other.openLine > block.closeLine) {
-            other.openLine++;
-            other.closeLine++;
+          if (!(other.openLine > block.closeLine)) {
+          	continue;
           }
+
+          other.openLine++;
+          other.closeLine++;
         }
       }
     }
@@ -175,20 +177,20 @@ export function fixBlockSpacing(filePath) {
 
   // Rule: blank line between consecutive multi-line exports
   // (but NOT between single-line barrel re-exports like export { X } from '...')
-  for (let i = lines.length - 1; i >= 0; i--) {
-    const curr = lines[i].trim();
-    const next = i + 1 < lines.length ? lines[i + 1].trim() : "";
-    if (next === "};") continue; // skip — handled by block rules
+  for (let index = lines.length - 1; index >= 0; index--) {
+    const current = lines[index].trim();
+    const next = index + 1 < lines.length ? lines[index + 1].trim() : "";
+    if (next === "};") {continue;} // skip — handled by block rules
     // If current line closes a multi-line export body and next line is another export
-    if ((curr === "};" || curr.startsWith("}")) &&
+    if ((current === "};" || current.startsWith("}")) &&
         next.startsWith("export ") && !next.startsWith("export {") &&
-        i + 1 < lines.length && lines[i + 1].trim() !== "") {
-      lines.splice(i + 1, 0, "");
+        index + 1 < lines.length && lines[index + 1].trim() !== "") {
+      lines.splice(index + 1, 0, "");
     }
   }
 
   // Clean up triple+ blank lines
-  const result = lines.join("\n").replace(/\n{3,}/g, "\n\n");
+  const result = lines.join("\n").replaceAll(/\n{3,}/g, "\n\n");
 
   if (result !== orig) {
     writeFileSync(filePath, result, "utf8");
@@ -204,7 +206,7 @@ export function fixBlockSpacingOnFiles(files) {
   let count = 0;
   for (const file of files) {
     try {
-      if (fixBlockSpacing(file)) count++;
+      if (fixBlockSpacing(file)) {count++;}
     } catch {
       // skip files that can't be read/written
     }

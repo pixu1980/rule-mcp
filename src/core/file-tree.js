@@ -83,10 +83,12 @@ function isIgnored(name) {
  */
 function isComponentDir(dirPath, entries) {
   for (const entry of entries) {
-    if (entry.isFile()) {
-      const ext = extname(entry.name);
-      if (COMPONENT_EXTENSIONS.has(ext)) return true;
+    if (!entry.isFile()) {
+    	continue;
     }
+
+    const extension = extname(entry.name);
+    if (COMPONENT_EXTENSIONS.has(extension)) {return true;}
   }
   return false;
 }
@@ -110,12 +112,12 @@ function isPrefixedComponent(name) {
  * Matches: PascalCase.ext, kebab-case.ext, camelCase.ext
  */
 function isBareComponent(name) {
-  if (isBarrelFile(name)) return false;
-  if (name.startsWith("_")) return false;
-  const ext = extname(name);
-  if (!COMPONENT_EXTENSIONS.has(ext)) return false;
+  if (isBarrelFile(name)) {return false;}
+  if (name.startsWith("_")) {return false;}
+  const extension = extname(name);
+  if (!COMPONENT_EXTENSIONS.has(extension)) {return false;}
   // Exclude utility files that belong at the folder root
-  if (/^[a-z][a-z0-9-]*\.[a-z]+$/.test(name)) return false; // kebab-case utils
+  if (/^[a-z][a-z0-9-]*\.[a-z]+$/.test(name)) {return false;} // kebab-case utils
   // Match files that look like components: PascalCase, camelCase starting with uppercase
   return /^[A-Z][a-zA-Z0-9]*\./.test(name);
 }
@@ -135,7 +137,7 @@ export function scanFileTree(rootDir, options = {}) {
   const issues = [];
 
   let totalFiles = 0;
-  let totalDirs = 0;
+  let totalDirectories = 0;
 
   if (!existsSync(target)) {
     return {
@@ -154,14 +156,14 @@ export function scanFileTree(rootDir, options = {}) {
       return;
     }
 
-    const dirs = entries.filter((e) => e.isDirectory());
+    const directories = entries.filter((e) => e.isDirectory());
     const files = entries.filter((e) => e.isFile());
 
-    totalDirs += dirs.length;
+    totalDirectories += directories.length;
     totalFiles += files.length;
 
     const dirName = basename(currentPath);
-    const isComponentLike = /^[A-Z]/.test(dirName) && dirs.length + files.length > 0;
+    const isComponentLike = /^[A-Z]/.test(dirName) && directories.length + files.length > 0;
 
     // Only validate component folders (PascalCase directories under src/)
     if (isComponentLike && depth >= 1) {
@@ -182,17 +184,19 @@ export function scanFileTree(rootDir, options = {}) {
 
       // ── Check 2: Component files should start with _ ──
       for (const file of componentFiles) {
-        if (!isPrefixedComponent(file.name)) {
-          const correctName = `_${file.name}`;
-          issues.push({
-            type: "wrong-prefix",
-            path: join(currentPath, file.name),
-            message: `Component file "${file.name}" should be prefixed with underscore: "${correctName}".`,
-            fixable: true,
-            fixAction: `Rename to ${correctName}`,
-            suggestion: `Rename "${file.name}" to "${correctName}".`,
-          });
+        if (isPrefixedComponent(file.name)) {
+        	continue;
         }
+
+        const correctName = `_${file.name}`;
+        issues.push({
+          type: "wrong-prefix",
+          path: join(currentPath, file.name),
+          message: `Component file "${file.name}" should be prefixed with underscore: "${correctName}".`,
+          fixable: true,
+          fixAction: `Rename to ${correctName}`,
+          suggestion: `Rename "${file.name}" to "${correctName}".`,
+        });
       }
 
       // ── Check 3: Bare PascalCase files (not in a component folder) ──
@@ -219,60 +223,64 @@ export function scanFileTree(rootDir, options = {}) {
     // ── Check 5: Orphan CSS files (CSS without matching component) ──
     const cssFiles = files.filter((f) => extname(f.name) === ".css");
     for (const css of cssFiles) {
-      if (css.name.startsWith("_")) {
-        // Check if there's a matching component
-        const baseName = css.name.replace(extname(css.name), "");
-        const matchingComponent = files.some(
-          (f) => parse(f.name).name === baseName && f.name !== css.name
-        );
-        if (!matchingComponent) {
-          issues.push({
-            type: "orphan-css",
-            path: join(currentPath, css.name),
-            message: `Orphan CSS file "${css.name}" has no matching component file.`,
-            fixable: false,
-            suggestion: `Remove "${css.name}" or create the matching component file.`,
-          });
-        }
+      if (!css.name.startsWith("_")) {
+      	continue;
+      }
+
+      // Check if there's a matching component
+      const baseName = css.name.replace(extname(css.name), "");
+      const matchingComponent = files.some(
+        (f) => parse(f.name).name === baseName && f.name !== css.name
+      );
+      if (!matchingComponent) {
+        issues.push({
+          type: "orphan-css",
+          path: join(currentPath, css.name),
+          message: `Orphan CSS file "${css.name}" has no matching component file.`,
+          fixable: false,
+          suggestion: `Remove "${css.name}" or create the matching component file.`,
+        });
       }
     }
 
     // ── Check 6: Stale barrel files (index.js that doesn't re-export) ──
     for (const file of files) {
-      if (isBarrelFile(file.name)) {
-        const fullPath = join(currentPath, file.name);
-        try {
-          const content = readFileSync(fullPath, "utf8").trim();
-          if (content.length === 0) {
-            issues.push({
-              type: "empty-barrel",
-              path: fullPath,
-              message: `Barrel file "${file.name}" is empty. It should re-export components.`,
-              fixable: true,
-              fixAction: `Add re-export statements based on sibling files`,
-              suggestion: `Add export statements to ${fullPath}.`,
-            });
-          } else if (
-            !content.includes("export ") &&
-            !content.includes("module.exports")
-          ) {
-            issues.push({
-              type: "empty-barrel",
-              path: fullPath,
-              message: `Barrel file "${file.name}" has no exports.`,
-              fixable: true,
-              fixAction: `Add re-export statements`,
-              suggestion: `Add export { ... } from '...' or export * from '...' to ${fullPath}.`,
-            });
-          }
-        } catch {
-          // skip unreadable
+      if (!isBarrelFile(file.name)) {
+      	continue;
+      }
+
+      const fullPath = join(currentPath, file.name);
+      try {
+        const content = readFileSync(fullPath, "utf8").trim();
+        if (content.length === 0) {
+          issues.push({
+            type: "empty-barrel",
+            path: fullPath,
+            message: `Barrel file "${file.name}" is empty. It should re-export components.`,
+            fixable: true,
+            fixAction: `Add re-export statements based on sibling files`,
+            suggestion: `Add export statements to ${fullPath}.`,
+          });
+        } else if (
+          !content.includes("export ") &&
+          !content.includes("module.exports")
+        ) {
+          issues.push({
+            type: "empty-barrel",
+            path: fullPath,
+            message: `Barrel file "${file.name}" has no exports.`,
+            fixable: true,
+            fixAction: `Add re-export statements`,
+            suggestion: `Add export { ... } from '...' or export * from '...' to ${fullPath}.`,
+          });
         }
+      } catch {
+        // skip unreadable
       }
     }
 
     // Recurse
-    for (const dir of dirs) {
+    for (const dir of directories) {
       if (!isIgnored(dir.name)) {
         scan(join(currentPath, dir.name), depth + 1);
       }
@@ -283,11 +291,11 @@ export function scanFileTree(rootDir, options = {}) {
 
   const stats = {
     totalFiles,
-    totalDirs,
-    missingBarrel: issues.filter((i) => i.type === "missing-barrel").length,
-    wrongPrefix: issues.filter((i) => i.type === "wrong-prefix").length,
-    bareFiles: issues.filter((i) => i.type === "bare-file").length,
-    fixable: issues.filter((i) => i.fixable).length,
+    totalDirs: totalDirectories,
+    missingBarrel: issues.filter((index) => index.type === "missing-barrel").length,
+    wrongPrefix: issues.filter((index) => index.type === "wrong-prefix").length,
+    bareFiles: issues.filter((index) => index.type === "bare-file").length,
+    fixable: issues.filter((index) => index.fixable).length,
   };
 
   return {
@@ -319,144 +327,150 @@ export function scanFileTree(rootDir, options = {}) {
  */
 export function autoFixFileTree(rootDir, options = {}) {
   const srcDir = options.srcDir || "src";
-  const dryRun = options.dryRun !== false;
+  const isDryRun = options.dryRun !== false;
   const report = scanFileTree(rootDir, options);
   const fixed = [];
   const errors = [];
 
   // Phase 1: Rename unprefixed component files (must happen before barrel creation)
   for (const issue of report.issues) {
-    if (issue.type === "wrong-prefix" && issue.fixable) {
-      const oldPath = issue.path;
-      const dir = dirname(oldPath);
-      const oldName = basename(oldPath);
-      const newName = `_${oldName}`;
-      const newPath = join(dir, newName);
+    if (!(issue.type === "wrong-prefix" && issue.fixable)) {
+    	continue;
+    }
 
-      if (dryRun) {
-        fixed.push({ path: oldPath, action: `[DRY RUN] Rename to ${newName}` });
-      } else {
-        try {
-          if (existsSync(newPath)) {
-            errors.push({ path: oldPath, error: `Target "${newName}" already exists. Skipping.` });
-            continue;
-          }
-          renameSync(oldPath, newPath);
-          fixed.push({ path: oldPath, action: `Renamed to ${newName}` });
-        } catch (err) {
-          errors.push({ path: oldPath, error: err.message });
+    const oldPath = issue.path;
+    const dir = dirname(oldPath);
+    const oldName = basename(oldPath);
+    const newName = `_${oldName}`;
+    const newPath = join(dir, newName);
+
+    if (isDryRun) {
+      fixed.push({ path: oldPath, action: `[DRY RUN] Rename to ${newName}` });
+    } else {
+      try {
+        if (existsSync(newPath)) {
+          errors.push({ path: oldPath, error: `Target "${newName}" already exists. Skipping.` });
+          continue;
         }
+        renameSync(oldPath, newPath);
+        fixed.push({ path: oldPath, action: `Renamed to ${newName}` });
+      } catch (error) {
+        errors.push({ path: oldPath, error: error.message });
       }
     }
   }
 
   // Phase 2: Create missing barrel files
   for (const issue of report.issues) {
-    if (issue.type === "missing-barrel" && issue.fixable) {
-      const dir = issue.path;
-      const folderName = basename(dir);
+    if (!(issue.type === "missing-barrel" && issue.fixable)) {
+    	continue;
+    }
 
-      // Find all prefixed component files in the directory to build exports
-      let entries;
+    const dir = issue.path;
+    const folderName = basename(dir);
+
+    // Find all prefixed component files in the directory to build exports
+    let entries;
+    try {
+      entries = readdirSync(dir, { withFileTypes: true });
+    } catch (error) {
+      errors.push({ path: dir, error: `Cannot read directory: ${error.message}` });
+      continue;
+    }
+
+    const files = entries.filter((e) => e.isFile());
+    const componentExports = [];
+
+    for (const file of files) {
+      const name = file.name;
+      const extension = extname(name);
+
+      // Get the component name from _PascalCase.ext
+      const componentMatch = name.match(/^_([A-Z][a-zA-Z0-9]*)\.\w+$/);
+      if (componentMatch) {
+        const componentName = componentMatch[1];
+        componentExports.push(componentName);
+      }
+    }
+
+    // Build barrel content
+    let barrelContent;
+    if (componentExports.length > 0) {
+      const esm = componentExports
+        .map((c) => {
+          const fileName = `_${c}`;
+          return `export { ${c} } from './${fileName}';\n`;
+        })
+        .join("");
+      barrelContent = `/**\n * @module ${folderName}\n * @description Component barrel\n */\n\n${esm}`;
+    } else {
+      // No underscore-prefixed files found; try to build from what's available
+      const jsFiles = files.filter(
+        (f) => COMPONENT_EXTENSIONS.has(extname(f.name)) && !isBarrelFile(f.name)
+      );
+      if (jsFiles.length > 0) {
+        const firstFile = parse(jsFiles[0].name).name;
+        const componentName = firstFile.startsWith("_") ? firstFile.slice(1) : firstFile;
+        barrelContent = `/**\n * @module ${folderName}\n * @description Component barrel\n */\n\nexport { ${componentName} } from './_${componentName}';\n`;
+      } else {
+        barrelContent = `/**\n * @module ${folderName}\n * @description Component barrel\n */\n\n`;
+      }
+    }
+
+    const barrelPath = join(dir, "index.js");
+
+    if (isDryRun) {
+      fixed.push({ path: barrelPath, action: `[DRY RUN] Create index.js` });
+    } else {
       try {
-        entries = readdirSync(dir, { withFileTypes: true });
-      } catch (err) {
-        errors.push({ path: dir, error: `Cannot read directory: ${err.message}` });
-        continue;
-      }
-
-      const files = entries.filter((e) => e.isFile());
-      const componentExports = [];
-
-      for (const file of files) {
-        const name = file.name;
-        const ext = extname(name);
-
-        // Get the component name from _PascalCase.ext
-        const componentMatch = name.match(/^_([A-Z][a-zA-Z0-9]*)\.\w+$/);
-        if (componentMatch) {
-          const componentName = componentMatch[1];
-          componentExports.push(componentName);
-        }
-      }
-
-      // Build barrel content
-      let barrelContent = "";
-      if (componentExports.length > 0) {
-        const esm = componentExports
-          .map((c) => {
-            const fileName = `_${c}`;
-            return `export { ${c} } from './${fileName}';\n`;
-          })
-          .join("");
-        barrelContent = `/**\n * @module ${folderName}\n * @description Component barrel\n */\n\n${esm}`;
-      } else {
-        // No underscore-prefixed files found; try to build from what's available
-        const jsFiles = files.filter(
-          (f) => COMPONENT_EXTENSIONS.has(extname(f.name)) && !isBarrelFile(f.name)
-        );
-        if (jsFiles.length > 0) {
-          const firstFile = parse(jsFiles[0].name).name;
-          const componentName = firstFile.startsWith("_") ? firstFile.slice(1) : firstFile;
-          barrelContent = `/**\n * @module ${folderName}\n * @description Component barrel\n */\n\nexport { ${componentName} } from './_${componentName}';\n`;
-        } else {
-          barrelContent = `/**\n * @module ${folderName}\n * @description Component barrel\n */\n\n`;
-        }
-      }
-
-      const barrelPath = join(dir, "index.js");
-
-      if (dryRun) {
-        fixed.push({ path: barrelPath, action: `[DRY RUN] Create index.js` });
-      } else {
-        try {
-          writeFileSync(barrelPath, barrelContent, "utf8");
-          fixed.push({ path: barrelPath, action: "Created index.js" });
-        } catch (err) {
-          errors.push({ path: barrelPath, error: `Cannot write: ${err.message}` });
-        }
+        writeFileSync(barrelPath, barrelContent, "utf8");
+        fixed.push({ path: barrelPath, action: "Created index.js" });
+      } catch (error) {
+        errors.push({ path: barrelPath, error: `Cannot write: ${error.message}` });
       }
     }
   }
 
   // Phase 3: Fix empty barrel files
   for (const issue of report.issues) {
-    if (issue.type === "empty-barrel" && issue.fixable) {
-      const dir = dirname(issue.path);
-      const folderName = basename(dir);
+    if (!(issue.type === "empty-barrel" && issue.fixable)) {
+    	continue;
+    }
 
-      let entries;
-      try {
-        entries = readdirSync(dir, { withFileTypes: true });
-      } catch {
-        continue;
+    const dir = dirname(issue.path);
+    const folderName = basename(dir);
+
+    let entries;
+    try {
+      entries = readdirSync(dir, { withFileTypes: true });
+    } catch {
+      continue;
+    }
+
+    const files = entries.filter((e) => e.isFile());
+    const componentExports = [];
+
+    for (const file of files) {
+      const name = file.name;
+      const componentMatch = name.match(/^_([A-Z][a-zA-Z0-9]*)\.\w+$/);
+      if (componentMatch) {
+        componentExports.push(componentMatch[1]);
       }
+    }
 
-      const files = entries.filter((e) => e.isFile());
-      const componentExports = [];
+    if (componentExports.length > 0) {
+      const content = componentExports
+        .map((c) => `export { ${c} } from './_${c}';\n`)
+        .join("");
 
-      for (const file of files) {
-        const name = file.name;
-        const componentMatch = name.match(/^_([A-Z][a-zA-Z0-9]*)\.\w+$/);
-        if (componentMatch) {
-          componentExports.push(componentMatch[1]);
-        }
-      }
-
-      if (componentExports.length > 0) {
-        const content = componentExports
-          .map((c) => `export { ${c} } from './_${c}';\n`)
-          .join("");
-
-        if (dryRun) {
-          fixed.push({ path: issue.path, action: "[DRY RUN] Populate barrel with exports" });
-        } else {
-          try {
-            writeFileSync(issue.path, `/**\n * @module ${folderName}\n * @description Component barrel\n */\n\n${content}`, "utf8");
-            fixed.push({ path: issue.path, action: "Populated barrel with exports" });
-          } catch (err) {
-            errors.push({ path: issue.path, error: err.message });
-          }
+      if (isDryRun) {
+        fixed.push({ path: issue.path, action: "[DRY RUN] Populate barrel with exports" });
+      } else {
+        try {
+          writeFileSync(issue.path, `/**\n * @module ${folderName}\n * @description Component barrel\n */\n\n${content}`, "utf8");
+          fixed.push({ path: issue.path, action: "Populated barrel with exports" });
+        } catch (error) {
+          errors.push({ path: issue.path, error: error.message });
         }
       }
     }
@@ -464,14 +478,14 @@ export function autoFixFileTree(rootDir, options = {}) {
 
   // Determine remaining unfixable issues
   const fixableTypes = new Set(["missing-barrel", "wrong-prefix", "empty-barrel"]);
-  const remaining = report.issues.filter((i) => !fixableTypes.has(i.type));
+  const remaining = report.issues.filter((index) => !fixableTypes.has(index.type));
 
   return {
     ok: errors.length === 0,
     fixed,
     errors,
     remaining,
-    dryRun,
+    dryRun: isDryRun,
   };
 }
 
@@ -534,8 +548,8 @@ export function checkFileNameConvention(code, context = {}) {
     return { pass: true, failCount: 0, detail: [], suggestion: "", note: "No filename context, skipping" };
   }
 
-  const valid = /^_[A-Z][a-zA-Z0-9]*\.\w+$/.test(fileName);
-  if (valid) {
+  const isValid = /^_[A-Z][a-zA-Z0-9]*\.\w+$/.test(fileName);
+  if (isValid) {
     return { pass: true, failCount: 0, detail: [], suggestion: "", note: "File name follows _PascalCase.ext convention" };
   }
 
@@ -556,7 +570,7 @@ export function checkFileNameConvention(code, context = {}) {
  * @returns {string}
  */
 function toKebab(name) {
-  return name.replace(/([a-z])([A-Z])/g, "$1-$2").replace(/([A-Z]+)([A-Z][a-z])/g, "$1-$2").toLowerCase();
+  return name.replaceAll(/([a-z])([A-Z])/g, "$1-$2").replaceAll(/([A-Z]+)([A-Z][a-z])/g, "$1-$2").toLowerCase();
 }
 
 /**
@@ -580,36 +594,42 @@ export function generateComponentFiles(options) {
   files.push({ path: join(folderPath, "index.js"), content: barrelContent });
 
   // Component file
-  let componentContent = "";
+  let componentContent;
   const componentFilePath = join(folderPath, `_${name}`);
 
   switch (framework) {
     case "react":
-    case "solid":
+    case "solid": {
       componentContent = `/**\n * @module ${name}\n * @description ${name} component\n */\n\nexport function ${name}({ children }) {\n  return (\n    <article data-part="${name.toLowerCase()}">\n      {children}\n    </article>\n  );\n}\n`;
       files.push({ path: `${componentFilePath}.jsx`, content: componentContent });
       break;
-    case "vue":
+    }
+    case "vue": {
       componentContent = `<script setup>\n/**\n * @module ${name}\n * @description ${name} component\n */\ndefineProps({});\n</script>\n\n<template>\n  <article data-part="${name.toLowerCase()}">\n    <slot />\n  </article>\n</template>\n`;
       files.push({ path: `${componentFilePath}.vue`, content: componentContent });
       break;
-    case "svelte":
+    }
+    case "svelte": {
       componentContent = `<script>\n/**\n * @module ${name}\n * @description ${name} component\n */\nlet { children } = $props();\n</script>\n\n<article data-part="${name.toLowerCase()}">\n  {@render children()}\n</article>\n`;
       files.push({ path: `${componentFilePath}.svelte`, content: componentContent });
       break;
-    case "angular":
+    }
+    case "angular": {
       componentContent = `import { Component } from '@angular/core';\n\n/**\n * @module ${name}\n * @description ${name} component\n */\n@Component({\n  selector: '${tag}',\n  standalone: true,\n  template: \`<article data-part="${name.toLowerCase()}"><ng-content /></article>\`,\n})\nexport class ${name} {}\n`;
       files.push({ path: `${componentFilePath}.ts`, content: componentContent });
       break;
-    case "astro":
+    }
+    case "astro": {
       componentContent = `---\n/**\n * @module ${name}\n * @description ${name} component\n */\n---\n<article data-part="${name.toLowerCase()}">\n  <slot />\n</article>\n`;
       files.push({ path: `${componentFilePath}.astro`, content: componentContent });
       break;
+    }
     case "vanilla":
-    default:
+    default: {
       componentContent = `/**\n * @module ${name}\n * @description ${name} component\n */\n\nexport class ${name} extends HTMLElement {\n  connectedCallback() {\n    this.innerHTML = \`<article data-part="${name.toLowerCase()}"></article>\`;\n  }\n}\n\ncustomElements.define("${tag}", ${name});\n`;
       files.push({ path: `${componentFilePath}.js`, content: componentContent });
       break;
+    }
   }
 
   return files;

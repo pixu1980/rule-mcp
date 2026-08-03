@@ -26,8 +26,8 @@ check("safeJsonParse empty undefined", safeJsonParse("") === undefined);
 
 // ── withTimeout ──
 check("withTimeout fast resolves", await withTimeout(Promise.resolve("done"), 1000, "fast") === "done");
-try { await withTimeout(new Promise(r => setTimeout(r, 50000)), 10, "slow"); check("withTimeout slow rejects", false); }
-catch (e) { check("withTimeout slow timeout msg", e.message.includes("Sandbox timeout")); }
+try { await withTimeout(new Promise(r => setTimeout(r, 50_000)), 10, "slow"); check("withTimeout slow rejects", false); }
+catch (error) { check("withTimeout slow timeout msg", error.message.includes("Sandbox timeout")); }
 
 // ── trySafe ──
 check("trySafe ok", (await trySafe(() => Promise.resolve(42))).ok === true);
@@ -37,7 +37,7 @@ check("trySafe sync", (await trySafe(() => { throw new Error("sync"); })).ok ===
 // Helper: issue HTTP request and collect response
 const httpGet = (url) => new Promise((resolve, reject) => {
   const agent = new http.Agent({ keepAlive: false, timeout: 2000 });
-  const req = http.get(url, { agent }, (res) => {
+  const request = http.get(url, { agent }, (res) => {
     let data = "";
     res.on("data", c => data += c);
     res.on("end", () => {
@@ -45,13 +45,13 @@ const httpGet = (url) => new Promise((resolve, reject) => {
       resolve({ status: res.statusCode, body: data });
     });
   });
-  req.on("error", (e) => { agent.destroy(); reject(e); });
-  req.setTimeout(3000, () => { req.destroy(); agent.destroy(); reject(new Error("req timeout")); });
-  req.end();
+  request.on("error", (e) => { agent.destroy(); reject(e); });
+  request.setTimeout(3000, () => { request.destroy(); agent.destroy(); reject(new Error("req timeout")); });
+  request.end();
 });
 
 // ── wrapRequestHandler: success handler ──
-const srv1 = createServer(wrapRequestHandler(async (req, res) => {
+const srv1 = createServer(wrapRequestHandler(async (request, res) => {
   res.writeHead(200, { "Content-Type": "application/json" });
   res.end(JSON.stringify({ ok: true }));
 }));
