@@ -38,9 +38,9 @@ const HOME = homedir();
  * @returns {"macos" | "linux" | "windows" | "unknown"}
  */
 export function detectPlatform() {
-  if (IS_MACOS)   return "macos";
-  if (IS_LINUX)   return "linux";
-  if (IS_WINDOWS) return "windows";
+  if (IS_MACOS)   {return "macos";}
+  if (IS_LINUX)   {return "linux";}
+  if (IS_WINDOWS) {return "windows";}
   return "unknown";
 }
 
@@ -66,12 +66,12 @@ function resolveEntrypoint() {
 
 /** Escape a string for use in a plist <string> element. */
 function escapePlist(s) {
-  return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  return s.replaceAll('&', "&amp;").replaceAll('<', "&lt;").replaceAll('>', "&gt;");
 }
 
 /** Safely run a shell command, ignoring errors. */
-function tryExec(cmd, opts = {}) {
-  try { return execSync(cmd, { encoding: "utf8", timeout: 10000, stdio: "pipe", ...opts }); }
+function tryExec(command, options = {}) {
+  try { return execSync(command, { encoding: "utf8", timeout: 10_000, stdio: "pipe", ...options }); }
   catch { return ""; }
 }
 
@@ -128,7 +128,7 @@ function generateLaunchAgentPlist(ep) {
   mkdirSync(p.stateDir, { recursive: true });
 
   return `<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "https://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
 	<key>Label</key>
@@ -251,13 +251,13 @@ function checkLaunchAgent() {
       const newPidMatch = out.match(/"PID"\s*=\s*(\d+)/);
       if (newPidMatch) {
         const pid = parseInt(newPidMatch[1], 10);
-        if (pid > 0) result.pid = pid;
+        if (pid > 0) {result.pid = pid;}
       } else {
         // Legacy format: "PID\tStatus\tLabel"
         const oldPidMatch = out.match(/^(\d+)\t/m);
         if (oldPidMatch) {
           const pid = parseInt(oldPidMatch[1], 10);
-          if (pid > 0) result.pid = pid;
+          if (pid > 0) {result.pid = pid;}
         }
       }
     }
@@ -286,7 +286,7 @@ function generateSystemdUnit(ep) {
   mkdirSync(p.stateDir, { recursive: true });
 
   // Build a shell command string from the command array
-  const cmd = ep.command.map(a => (a.includes(" ") ? `"${a}"` : a)).join(" ");
+  const command = ep.command.map(a => (a.includes(" ") ? `"${a}"` : a)).join(" ");
 
   // Extract node bin dir for PATH
   const nodeBinDir = ep.node.replace(/\/node$/, "");
@@ -299,7 +299,7 @@ Wants=network-online.target
 
 [Service]
 Type=simple
-ExecStart=${cmd}
+ExecStart=${command}
 Restart=on-failure
 RestartSec=5
 RestartSteps=3
@@ -392,7 +392,7 @@ function checkSystemdService() {
     path: SYSTEMD_UNIT_PATH,
   };
 
-  if (!result.installed) return result;
+  if (!result.installed) {return result;}
 
   const enabledOut = tryExec(`systemctl --user is-enabled "${SYSTEMD_UNIT_NAME}" 2>/dev/null || echo "disabled"`);
   result.enabled = enabledOut.trim() === "enabled";
@@ -404,7 +404,7 @@ function checkSystemdService() {
   const pidMatch = pidOut.match(/MainPID=(\d+)/);
   if (pidMatch) {
     const pid = parseInt(pidMatch[1], 10);
-    if (pid > 0) result.pid = pid;
+    if (pid > 0) {result.pid = pid;}
   }
 
   return result;
@@ -430,19 +430,19 @@ function getWindowsServiceCommand() {
  */
 function installWindowsService({ dryRun = false } = {}) {
   const name = WINDOWS_SERVICE_NAME;
-  const cmd = getWindowsServiceCommand();
+  const command = getWindowsServiceCommand();
 
   if (dryRun) {
-    return { ok: true, name, action: `dry-run (would create service: ${cmd})` };
+    return { ok: true, name, action: `dry-run (would create service: ${command})` };
   }
 
   // Check if service already exists
   const check = tryExec(`sc query "${name}" 2>nul || echo NOT_FOUND`);
-  const exists = !check.includes("NOT_FOUND") && !check.includes("FAILED") && !check.includes("1060");
+  const isExists = !check.includes("NOT_FOUND") && !check.includes("FAILED") && !check.includes("1060");
 
-  if (exists) {
+  if (isExists) {
     // Service exists — update config and restart
-    tryExec(`sc config "${name}" binPath= "${cmd}" start= auto`);
+    tryExec(`sc config "${name}" binPath= "${command}" start= auto`);
     tryExec(`sc stop "${name}" 2>nul || true`);
     tryExec(`sc start "${name}" 2>nul || true`);
     return { ok: true, name, action: "updated-and-started" };
@@ -451,22 +451,22 @@ function installWindowsService({ dryRun = false } = {}) {
   // Create new service
   try {
     execSync(
-      `sc create "${name}" binPath= "${cmd}" start= auto displayName= "rule-mcp MCP Server"`,
-      { encoding: "utf8", timeout: 10000, stdio: "pipe" }
+      `sc create "${name}" binPath= "${command}" start= auto displayName= "rule-mcp MCP Server"`,
+      { encoding: "utf8", timeout: 10_000, stdio: "pipe" }
     );
     tryExec(`sc description "${name}" "MCP server for the rule-* skill ecosystem. Serves styleguides, component templates, and framework best practices."`);
     tryExec(`sc start "${name}"`);
     return { ok: true, name, action: "created-and-started" };
-  } catch (err) {
+  } catch {
     // Fallback: try PowerShell New-Service
     try {
       execSync(
-        `powershell -Command "New-Service -Name '${name}' -BinaryPathName '${cmd}' -StartupType Automatic -Description 'MCP server for the rule-* skill ecosystem' ; Start-Service -Name '${name}'"`,
-        { encoding: "utf8", timeout: 30000, stdio: "pipe", shell: true }
+        `powershell -Command "New-Service -Name '${name}' -BinaryPathName '${command}' -StartupType Automatic -Description 'MCP server for the rule-* skill ecosystem' ; Start-Service -Name '${name}'"`,
+        { encoding: "utf8", timeout: 30_000, stdio: "pipe", shell: true }
       );
       return { ok: true, name, action: "created-and-started (PowerShell)" };
-    } catch (pErr) {
-      return { ok: false, name, error: `Failed to create service: ${pErr.message}` };
+    } catch (error) {
+      return { ok: false, name, error: `Failed to create service: ${error.message}` };
     }
   }
 }
@@ -511,7 +511,7 @@ function checkWindowsService() {
     result.running = out.includes("RUNNING") || (out.includes("STATE") && out.includes("4"));
     // sc query PID is optional; only shown with qc or extra flags
     const pidMatch = out.match(/PID\s+:\s+(\d+)/i);
-    if (pidMatch) result.pid = parseInt(pidMatch[1], 10);
+    if (pidMatch) {result.pid = parseInt(pidMatch[1], 10);}
   }
 
   return result;
@@ -580,9 +580,9 @@ export function startDaemonProcess({ dryRun = false } = {}) {
  */
 export function stopDaemonProcess({ dryRun = false } = {}) {
   const p = getRuntimePaths();
-  if (!existsSync(p.pidFile)) return { ok: true, action: "not-running" };
+  if (!existsSync(p.pidFile)) {return { ok: true, action: "not-running" };}
 
-  if (dryRun) return { ok: true, action: "dry-run (would stop daemon)" };
+  if (dryRun) {return { ok: true, action: "dry-run (would stop daemon)" };}
 
   const pid = Number(readFileSync(p.pidFile, "utf8").trim());
   try {
@@ -602,7 +602,7 @@ export function daemonProcessStatus() {
   const p = getRuntimePaths();
   const result = { running: false, pid: null, stalePid: null, pidFile: p.pidFile, logFile: p.logFile };
 
-  if (!existsSync(p.pidFile)) return result;
+  if (!existsSync(p.pidFile)) {return result;}
 
   const pid = Number(readFileSync(p.pidFile, "utf8").trim());
   try {
@@ -637,16 +637,20 @@ export function installDaemonService({ dryRun = false } = {}) {
   const platform = detectPlatform();
 
   switch (platform) {
-    case "macos":
+    case "macos": {
       return { ok: true, platform, service: "launchd", result: installLaunchAgent({ dryRun }) };
-    case "linux":
+    }
+    case "linux": {
       return { ok: true, platform, service: "systemd", result: installSystemdService({ dryRun }) };
-    case "windows":
+    }
+    case "windows": {
       return { ok: true, platform, service: "windows-service", result: installWindowsService({ dryRun }) };
-    default:
+    }
+    default: {
       // Fallback: start process-based daemon
       const proc = startDaemonProcess({ dryRun });
       return { ok: proc.ok, platform: "unknown", service: "process", result: proc };
+    }
   }
 }
 
@@ -664,16 +668,20 @@ export function uninstallDaemonService({ dryRun = false } = {}) {
   const platform = detectPlatform();
 
   switch (platform) {
-    case "macos":
+    case "macos": {
       return { ok: true, platform, service: "launchd", result: uninstallLaunchAgent({ dryRun }) };
-    case "linux":
+    }
+    case "linux": {
       return { ok: true, platform, service: "systemd", result: uninstallSystemdService({ dryRun }) };
-    case "windows":
+    }
+    case "windows": {
       return { ok: true, platform, service: "windows-service", result: uninstallWindowsService({ dryRun }) };
-    default:
+    }
+    default: {
       // Fallback: stop process-based daemon
       const proc = stopDaemonProcess({ dryRun });
       return { ok: proc.ok, platform: "unknown", service: "process", result: proc };
+    }
   }
 }
 
@@ -763,7 +771,7 @@ export function formatDaemonStatus() {
     `Running:    ${status.running ? "✓" : "✗"}`,
   ];
 
-  if (status.pid) lines.push(`PID:        ${status.pid}`);
+  if (status.pid) {lines.push(`PID:        ${status.pid}`);}
 
   // Add native-specific details
   if (status.platform === "macos" && status.details.launchAgent) {
@@ -776,8 +784,7 @@ export function formatDaemonStatus() {
     lines.push(`Service:    ${status.details.windowsService.name}`);
   }
 
-  lines.push(`PID file:   ${p.pidFile}`);
-  lines.push(`Log file:   ${p.logFile}`);
+  lines.push(`PID file:   ${p.pidFile}`, `Log file:   ${p.logFile}`);
 
   return lines.join("\n");
 }
@@ -791,9 +798,12 @@ export function formatDaemonStatus() {
 export function getServiceFilePath() {
   const platform = detectPlatform();
   switch (platform) {
-    case "macos":   return LAUNCH_AGENT_PATH;
-    case "linux":   return SYSTEMD_UNIT_PATH;
-    default:        return null;
+    case "macos": {   return LAUNCH_AGENT_PATH;
+    }
+    case "linux": {   return SYSTEMD_UNIT_PATH;
+    }
+    default: {        return null;
+    }
   }
 }
 
@@ -805,9 +815,13 @@ export function getServiceFilePath() {
 export function getServiceName() {
   const platform = detectPlatform();
   switch (platform) {
-    case "macos":   return LAUNCH_AGENT_LABEL;
-    case "linux":   return SYSTEMD_UNIT_NAME;
-    case "windows": return WINDOWS_SERVICE_NAME;
-    default:        return null;
+    case "macos": {   return LAUNCH_AGENT_LABEL;
+    }
+    case "linux": {   return SYSTEMD_UNIT_NAME;
+    }
+    case "windows": { return WINDOWS_SERVICE_NAME;
+    }
+    default: {        return null;
+    }
   }
 }

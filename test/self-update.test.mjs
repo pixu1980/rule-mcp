@@ -17,7 +17,7 @@ import { buildBanner, scheduleRestartIfNeeded } from "../src/core/self-update.js
 
 console.log("self-update engine test");
 
-const g = (args, cwd) => execFileSync("git", args, { cwd, stdio: ["ignore", "pipe", "ignore"], encoding: "utf8" });
+const g = (arguments_, cwd) => execFileSync("git", arguments_, { cwd, stdio: ["ignore", "pipe", "ignore"], encoding: "utf8" });
 
 /** Build a bare "upstream" + a working clone that tracks it. */
 function makeClonePair() {
@@ -65,7 +65,7 @@ function pushUpstreamChange(seed, files) {
  * pure git logic by replicating runSelfUpdate's steps is also overkill. We run
  * the real module with RULE_MCP_GALAXY_MCP overriding cwd through a child process.
  */
-function runUpdateIn(clone, env = {}) {
+function runUpdateIn(clone, environment = {}) {
   const script = `
     import { runSelfUpdate } from ${JSON.stringify(new URL("../src/core/self-update.js", import.meta.url).href)};
     const r = await runSelfUpdate({ reloadSkills: false });
@@ -76,7 +76,7 @@ function runUpdateIn(clone, env = {}) {
     // Force the module to treat `clone` as the repo root by running from there and
     // relying on detectInstallType(.git) — but getRepoRoot resolves from module path.
     // So instead we pass an explicit override the module honors:
-    env: { ...process.env, RULE_MCP_REPO_ROOT: clone, ...env },
+    env: { ...process.env, RULE_MCP_REPO_ROOT: clone, ...environment },
     encoding: "utf8",
   });
   return JSON.parse(out);
@@ -133,8 +133,8 @@ function runUpdateIn(clone, env = {}) {
   assert.match(buildBanner({ updated: true, from: "aaaaaaa", to: "bbbbbbb", count: 2, changedSkills: true, changedCode: false }), /Updating MCP server/);
   assert.equal(buildBanner({ updated: false }), null, "no banner when nothing changed");
 
-  let exited = false;
-  const note = scheduleRestartIfNeeded({ updated: true, changedCode: true }, () => { exited = true; });
+  let isExited = false;
+  const note = scheduleRestartIfNeeded({ updated: true, changedCode: true }, () => { isExited = true; });
   assert.match(note, /restart/i, "code change schedules a restart note");
 
   process.env.RULE_MCP_NO_AUTORESTART = "1";
@@ -149,20 +149,20 @@ function runUpdateIn(clone, env = {}) {
 // ── T6: daemon mode never force-exits by default (protects connected clients) ──
 {
   process.env.RULE_MCP_DAEMON = "1";
-  let daemonExited = false;
-  const daemonNote = scheduleRestartIfNeeded({ updated: true, changedCode: true }, () => { daemonExited = true; });
+  let isDaemonExited = false;
+  const daemonNote = scheduleRestartIfNeeded({ updated: true, changedCode: true }, () => { isDaemonExited = true; });
   assert.match(daemonNote, /daemon/i, "daemon mode explains a manual/opt-in restart");
   // Let any deferred (800ms) exit fire — a ref'd timer keeps the loop alive.
   await new Promise((r) => setTimeout(r, 900));
-  assert.equal(daemonExited, false, "daemon mode must not force-exit by default");
+  assert.equal(isDaemonExited, false, "daemon mode must not force-exit by default");
 
   // Single-client daemons can opt back in — the deferred restart returns.
   process.env.RULE_MCP_DAEMON_AUTORESTART = "1";
-  let optInExited = false;
-  const optInNote = scheduleRestartIfNeeded({ updated: true, changedCode: true }, () => { optInExited = true; });
+  let isOptInExited = false;
+  const optInNote = scheduleRestartIfNeeded({ updated: true, changedCode: true }, () => { isOptInExited = true; });
   assert.match(optInNote, /restart/i, "daemon opt-in yields a restart note");
   await new Promise((r) => setTimeout(r, 900));
-  assert.equal(optInExited, true, "daemon opt-in performs the deferred restart");
+  assert.equal(isOptInExited, true, "daemon opt-in performs the deferred restart");
   delete process.env.RULE_MCP_DAEMON_AUTORESTART;
   delete process.env.RULE_MCP_DAEMON;
   console.log("  ✅ daemon-mode restart is client-safe by default");

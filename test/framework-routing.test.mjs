@@ -38,13 +38,13 @@ function getAllRoutes(parsed) {
 const r = await callTool("pix_tool", { prompt: "How do I create a React button component?" });
 const parsed = JSON.parse(r.content[0].text);
 const allRoutes = getAllRoutes(parsed);
-check("T6 defaults: rule-frontend-react in top results", allRoutes.some(r => r === "rule-frontend-react"));
+check("T6 defaults: rule-frontend-react in top results", allRoutes.includes("rule-frontend-react"));
 
 // Now with framework="vue" — rule-frontend-vue should rank higher
 const rVue = await callTool("pix_tool", { prompt: "Vue 3 component with Composition API", framework: "vue" });
 const parsedVue = JSON.parse(rVue.content[0].text);
 const vueRoutes = getAllRoutes(parsedVue);
-check("T6.1 vue bias: rule-frontend-vue in results", vueRoutes.some(r => r === "rule-frontend-vue"));
+check("T6.1 vue bias: rule-frontend-vue in results", vueRoutes.includes("rule-frontend-vue"));
 check("T6.2 vue bias: rule-frontend-vue is primary route with bias", parsedVue.route === "rule-frontend-vue");
 
 // ── T6.3: framework bias with path auto-detection ──
@@ -61,7 +61,7 @@ const rPath = await callTool("pix_tool", {
 });
 const parsedPath = JSON.parse(rPath.content[0].text);
 const pathRoutes = getAllRoutes(parsedPath);
-check("T6.3 auto-detect: rule-frontend-svelte in results", pathRoutes.some(r => r === "rule-frontend-svelte"));
+check("T6.3 auto-detect: rule-frontend-svelte in results", pathRoutes.includes("rule-frontend-svelte"));
 
 // ── T6.4: explicit framework overrides path detection ──
 writeFileSync(join(tmpDir, "package.json"), JSON.stringify({
@@ -75,7 +75,7 @@ const rOverride = await callTool("pix_tool", {
 });
 const parsedOverride = JSON.parse(rOverride.content[0].text);
 const overrideRoutes = getAllRoutes(parsedOverride);
-check("T6.4 explicit framework overrides path: rule-frontend-react in results", overrideRoutes.some(r => r === "rule-frontend-react"));
+check("T6.4 explicit framework overrides path: rule-frontend-react in results", overrideRoutes.includes("rule-frontend-react"));
 
 // Cleanup
 rmSync(tmpDir, { recursive: true, force: true });

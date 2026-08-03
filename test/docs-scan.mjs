@@ -24,12 +24,14 @@ function scan(dir) {
     } else if (e.name.endsWith(".md")) {
       const c = readFileSync(p, "utf8");
       const lines = c.split("\n");
-      for (let i = 0; i < lines.length; i++) {
-        for (const m of lines[i].matchAll(/\bpix_[a-z0-9_]+\b/g)) {
-          if (!tools.has(m[0]) && m[0] !== "rule-mcp" && m[0] !== "rule_tool_process_handoff") {
-            console.log("STALE:", p + ":" + (i + 1) + " " + m[0]);
-            stale++;
+      for (const [index, line] of lines.entries()) {
+        for (const m of line.matchAll(/\bpix_[a-z0-9_]+\b/g)) {
+          if (tools.has(m[0]) || m[0] === "rule-mcp" || m[0] === "rule_tool_process_handoff") {
+          	continue;
           }
+
+          console.log("STALE:", p + ":" + (index + 1) + " " + m[0]);
+          stale++;
         }
       }
     }

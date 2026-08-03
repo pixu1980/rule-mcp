@@ -22,7 +22,7 @@ const output = execFileSync(
   "bash",
   [
     "-c",
-    `printf ' \\r\\033[B\\r' | HOME=${JSON.stringify(fakeHome)} TERM=xterm /usr/bin/script -q /dev/null bash scripts/install.sh --dry-run --no-rules`,
+    String.raw`printf ' \r\033[B\r' | HOME=${JSON.stringify(fakeHome)} TERM=xterm /usr/bin/script -q /dev/null bash scripts/install.sh --dry-run --no-rules`,
   ],
   { cwd: root, encoding: "utf8" },
 );

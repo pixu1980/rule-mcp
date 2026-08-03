@@ -138,21 +138,21 @@ function extractSections(content) {
  * @param {boolean} [force=false] — Force rebuild even if index exists
  */
 export function buildIndex(force = false) {
-  if (_index && !force) return;
+  if (_index && !force) {return;}
 
   const skillNames = getSkillNames();
   const df = new Map(); // term → docId → freq
-  const docLength = new Map();
+  const documentLength = new Map();
   const docs = [];
-  let docId = 0;
+  let documentId = 0;
 
   for (const skillName of skillNames) {
     const content = readSkill(skillName);
-    if (!content) continue;
+    if (!content) {continue;}
 
     const sections = extractSections(content);
     for (const section of sections) {
-      if (!section.text.trim()) continue;
+      if (!section.text.trim()) {continue;}
 
       const terms = tokenize(section.text);
       const termFreq = new Map();
@@ -162,31 +162,31 @@ export function buildIndex(force = false) {
       }
 
       // Store document
-      const id = docId++;
+      const id = documentId++;
       docs.push({
         id,
         skill: skillName,
         section: section.heading,
         text: section.text,
-        snippet: section.text.replace(/\s+/g, " ").slice(0, 200).trim(),
+        snippet: section.text.replaceAll(/\s+/g, " ").slice(0, 200).trim(),
       });
 
-      docLength.set(id, terms.length);
+      documentLength.set(id, terms.length);
 
       // Update inverted index
       for (const [term, freq] of termFreq) {
-        if (!df.has(term)) df.set(term, new Map());
+        if (!df.has(term)) {df.set(term, new Map());}
         df.get(term).set(id, freq);
       }
     }
   }
 
   const totalDocs = docs.length;
-  const avgDocLength = totalDocs > 0
-    ? [...docLength.values()].reduce((a, b) => a + b, 0) / totalDocs
+  const avgDocumentLength = totalDocs > 0
+    ? [...documentLength.values()].reduce((a, b) => a + b, 0) / totalDocs
     : 0;
 
-  _index = { df, docLength, docs, totalDocs, avgDocLength };
+  _index = { df, docLength: documentLength, docs, totalDocs, avgDocLength: avgDocumentLength };
 }
 
 /**
@@ -209,7 +209,7 @@ export function isIndexReady() {
  * @returns {{ totalDocs: number, avgDocLength: number, uniqueTerms: number } | null}
  */
 export function getIndexStats() {
-  if (!_index) return null;
+  if (!_index) {return null;}
   return {
     totalDocs: _index.totalDocs,
     avgDocLength: Math.round(_index.avgDocLength * 10) / 10,
@@ -230,7 +230,7 @@ export function getIndexStats() {
  * @returns {number}
  */
 function bm25Score(tf, docLen, avgDocLen, N, n) {
-  if (n === 0 || N === 0) return 0;
+  if (n === 0 || N === 0) {return 0;}
 
   // IDF (inverse document frequency) with smoothing
   const idf = Math.log(1 + (N - n + 0.5) / (n + 0.5));
@@ -251,39 +251,39 @@ function bm25Score(tf, docLen, avgDocLen, N, n) {
  * @returns {Array<{ skill: string, section: string, score: number, snippet: string }>}
  */
 export function search(query, maxResults = DEFAULT_MAX_RESULTS) {
-  if (!_index) return [];
+  if (!_index) {return [];}
 
   const queryTerms = tokenize(query);
-  if (queryTerms.length === 0) return [];
+  if (queryTerms.length === 0) {return [];}
 
   const { df, docLength, docs, totalDocs, avgDocLength } = _index;
   const scores = new Map(); // docId → cumulative score
 
   for (const term of queryTerms) {
     const posting = df.get(term);
-    if (!posting) continue;
+    if (!posting) {continue;}
 
     const n = posting.size; // docs containing this term
 
-    for (const [docId, tf] of posting) {
-      const docLen = docLength.get(docId) || 0;
-      const score = bm25Score(tf, docLen, avgDocLength, totalDocs, n);
+    for (const [documentId, tf] of posting) {
+      const documentLength = docLength.get(documentId) || 0;
+      const score = bm25Score(tf, documentLength, avgDocLength, totalDocs, n);
 
-      scores.set(docId, (scores.get(docId) || 0) + score);
+      scores.set(documentId, (scores.get(documentId) || 0) + score);
     }
   }
 
   // Sort by score descending
-  const ranked = [...scores.entries()]
+  const ranked = [...scores]
     .sort((a, b) => b[1] - a[1])
     .slice(0, maxResults)
-    .map(([docId, score]) => {
-      const doc = docs[docId];
+    .map(([documentId, score]) => {
+      const document = docs[documentId];
       return {
-        skill: doc.skill,
-        section: doc.section,
+        skill: document.skill,
+        section: document.section,
         score: Math.round(score * 1000) / 1000,
-        snippet: doc.snippet,
+        snippet: document.snippet,
       };
     });
 

@@ -32,14 +32,14 @@ try {
   await new Promise((resolve, reject) => {
     const timer = setTimeout(() => reject(new Error(`SSE server did not start:\n${stderr}`)), 10_000);
     const poll = setInterval(() => {
-      if (!stderr.includes("SSE server listening") || !stderr.includes('"Authorization"')) return;
+      if (!stderr.includes("SSE server listening") || !stderr.includes('"Authorization"')) {return;}
       clearInterval(poll);
       clearTimeout(timer);
       resolve();
     }, 25);
     child.once("error", reject);
   });
-  assert.match(stderr, new RegExp(`http://127\\.0\\.0\\.1:${port}/sse`));
+  assert.match(stderr, new RegExp(String.raw`http://127\.0\.0\.1:${port}/sse`));
   assert.match(stderr, /"url": "http:\/\/127\.0\.0\.1:/);
   assert.match(stderr, /"Authorization": "Bearer [a-f0-9]{64}"/i);
 } finally {

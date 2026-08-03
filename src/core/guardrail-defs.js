@@ -16,9 +16,9 @@ export const SHARED_GUARDRAILS = [
     description: "CSS must use only element selectors + [data-part] + [data-*] attribute selectors. No .class selectors (including pseudo-classes and combinators).",
     check: (code, context) => {
       const cssBlock = extractRealCSS(code, context);
-      if (!cssBlock) return { pass: true, note: "No CSS block found, skipping" };
+      if (!cssBlock) {return { pass: true, note: "No CSS block found, skipping" };}
       // Match class selectors including: .foo, .foo:hover, .foo > span, .foo.bar, .foo::before
-      const classRules = cssBlock.match(/^\s*\.[a-zA-Z][\w-]*(?:\s*[{,:\.\s>+~])/gm);
+      const classRules = cssBlock.match(/^\s*\.[a-zA-Z][\w-]*(?:\s*[{,:.\s>+~])/gm);
       return {
         pass: !classRules || classRules.length === 0,
         failCount: classRules?.length || 0,
@@ -32,14 +32,14 @@ export const SHARED_GUARDRAILS = [
     label: "Zero inline styles in templates",
     description: "Templates must not use style=\"...\" attributes or JSX style={{...}} objects. All styling in external CSS files.",
     check: (code) => {
-      const inlineAttrs = code.match(/style\s*=\s*"[^"]*"/g) || [];
+      const inlineAttributes = code.match(/style\s*=\s*"[^"]*"/g) || [];
       const inlineSingle = code.match(/style\s*=\s*'[^']*'/g) || [];
       // JSX/TSX: style={{...}} (React, Solid)
       const jsxStyle = code.match(/style\s*=\s*\{\{[^}]*\}\}/g) || [];
-      inlineAttrs.push(...inlineSingle, ...jsxStyle);
-      if (inlineAttrs.length === 0) return { pass: true, note: "No inline style attributes found" };
+      inlineAttributes.push(...inlineSingle, ...jsxStyle);
+      if (inlineAttributes.length === 0) {return { pass: true, note: "No inline style attributes found" };}
       const exceptions = code.match(/accent-option|contextmenu|context-menu/g);
-      const effective = inlineAttrs.filter(a => !exceptions || !exceptions.some(e => a.includes(e)));
+      const effective = inlineAttributes.filter(a => !exceptions || exceptions.every(e => !a.includes(e)));
       return {
         pass: effective.length === 0,
         failCount: effective.length,
@@ -61,9 +61,9 @@ export const SHARED_GUARDRAILS = [
       const violations = [];
       for (const re of nonSemanticDivPatterns) {
         const m = code.match(re);
-        if (m) violations.push(...m);
+        if (m) {violations.push(...m);}
       }
-      if (violations.length === 0) return { pass: true, note: "No semantic-violating <div> found" };
+      if (violations.length === 0) {return { pass: true, note: "No semantic-violating <div> found" };}
       return {
         pass: false,
         failCount: violations.length,
@@ -79,15 +79,15 @@ export const SHARED_GUARDRAILS = [
     check: (code, context) => {
       const framework = context?.framework || "vanilla";
       // CSS files are themselves external CSS
-      if (context?.fileName && /\.css$/i.test(context.fileName)) return { pass: true, note: "CSS file is external CSS by definition" };
-      if (framework === "angular" && code.includes("styleUrls")) return { pass: true, note: "Angular styleUrls OK" };
-      if (framework === "angular" && code.includes("@Component") && code.includes(".css")) return { pass: true, note: "Angular external CSS via component styles" };
-      if (framework === "svelte" && (code.match(/import\s+['"].*\.css['"]/) || code.includes("<style>"))) return { pass: true, note: "Svelte CSS import or scoped style OK" };
+      if (context?.fileName && /\.css$/i.test(context.fileName)) {return { pass: true, note: "CSS file is external CSS by definition" };}
+      if (framework === "angular" && code.includes("styleUrls")) {return { pass: true, note: "Angular styleUrls OK" };}
+      if (framework === "angular" && code.includes("@Component") && code.includes(".css")) {return { pass: true, note: "Angular external CSS via component styles" };}
+      if (framework === "svelte" && (/import\s+['"].*\.css['"]/.test(code) || code.includes("<style>"))) {return { pass: true, note: "Svelte CSS import or scoped style OK" };}
       // React/Solid: accept both `import "./foo.css"` and `import styles from "./foo.module.css"`
-      if ((framework === "react" || framework === "solid") && code.match(/import\s+.*['"].*\.css['"]/)) return { pass: true, note: "CSS import or CSS Modules OK" };
-      if (code.includes("adoptedStyleSheets") && code.includes("CSSStyleSheet")) return { pass: true, note: "adoptedStyleSheets OK" };
+      if ((framework === "react" || framework === "solid") && /import\s+.*['"].*\.css['"]/.test(code)) {return { pass: true, note: "CSS import or CSS Modules OK" };}
+      if (code.includes("adoptedStyleSheets") && code.includes("CSSStyleSheet")) {return { pass: true, note: "adoptedStyleSheets OK" };}
       const hasCssContent = extractRealCSS(code, context);
-      if (!hasCssContent) return { pass: true, note: "No CSS content found, skipping" };
+      if (!hasCssContent) {return { pass: true, note: "No CSS content found, skipping" };}
       return {
         pass: false,
         failCount: 1,
@@ -117,14 +117,14 @@ export const SHARED_GUARDRAILS = [
     label: "File naming convention (_PascalCase.js)",
     description: "Component files inside folders must be _PascalCase.js. Utils are _kebab-case.js.",
     check: (code, context) => {
-      if (!context?.fileName) return { pass: true, note: "No filename context" };
+      if (!context?.fileName) {return { pass: true, note: "No filename context" };}
       const name = context.fileName;
       const isComponent = context.isComponent;
-      if (!isComponent) return { pass: true, note: "Not a component file" };
-      const valid = /^_[A-Z][a-zA-Z0-9]*\.\w+$/.test(name);
+      if (!isComponent) {return { pass: true, note: "Not a component file" };}
+      const isValid = /^_[A-Z][a-zA-Z0-9]*\.\w+$/.test(name);
       return {
-        pass: valid,
-        failCount: valid ? 0 : 1,
+        pass: isValid,
+        failCount: isValid ? 0 : 1,
         suggestion: `Rename "${name}" to "_PascalCase.ext" (e.g., _TodoItem.jsx). Component files inside folders must start with underscore + PascalCase.`,
       };
     },
@@ -136,7 +136,7 @@ export const SHARED_GUARDRAILS = [
     check: (code) => {
       const hasDataPart = code.includes('data-part="');
       const hasChildren = code.includes("<div") || code.includes("<section") || code.includes("<header") || code.includes("<nav");
-      if (!hasChildren) return { pass: true, note: "No child elements found" };
+      if (!hasChildren) {return { pass: true, note: "No child elements found" };}
       return {
         pass: hasDataPart,
         failCount: hasDataPart ? 0 : 1,
@@ -150,7 +150,7 @@ export const SHARED_GUARDRAILS = [
     description: "Every JS/TS file must have JSDoc on all exported functions, classes, constants, and types. Module-level JSDoc recommended.",
     check: (code, context) => {
       const fileName = context?.fileName || "";
-      if (fileName === "index.js" || fileName === "index.ts") return { pass: true, note: "Barrel file, skipping JSDoc check" };
+      if (fileName === "index.js" || fileName === "index.ts") {return { pass: true, note: "Barrel file, skipping JSDoc check" };}
 
       const exportPatterns = [
         /export\s+(async\s+)?function\s+(\w+)/g,
@@ -165,14 +165,14 @@ export const SHARED_GUARDRAILS = [
         const re = new RegExp(pattern.source, "g");
         let match;
         while ((match = re.exec(code)) !== null) {
-          const symbol = match[match.length - 1] || match[2] || "";
-          if (!symbol) continue;
+          const symbol = match.at(-1) || match[2] || "";
+          if (!symbol) {continue;}
           const before = code.slice(Math.max(0, match.index - 200), match.index);
-          if (!before.includes("/**")) missingDocs.push(symbol);
+          if (!before.includes("/**")) {missingDocs.push(symbol);}
         }
       }
 
-      if (missingDocs.length === 0) return { pass: true, note: "All exported symbols have JSDoc" };
+      if (missingDocs.length === 0) {return { pass: true, note: "All exported symbols have JSDoc" };}
       return {
         pass: false,
         failCount: missingDocs.length,
@@ -189,9 +189,9 @@ export const SHARED_GUARDRAILS = [
       // Only check CSS files or files with explicit CSS blocks
       const isCssFile = context?.fileName && /\.css$/i.test(context.fileName);
       const hasCssBlock = /```css|CSSStyleSheet|<style[^>]*>/i.test(code);
-      if (!isCssFile && !hasCssBlock) return { pass: true, note: "Not a CSS file and no CSS block detected, skipping" };
+      if (!isCssFile && !hasCssBlock) {return { pass: true, note: "Not a CSS file and no CSS block detected, skipping" };}
       const hasCSSRules = /[\w-]+\s*\{/.test(code);
-      if (!hasCSSRules) return { pass: true, note: "No CSS rules detected, skipping" };
+      if (!hasCSSRules) {return { pass: true, note: "No CSS rules detected, skipping" };}
 
       const trimmed = code.trimStart();
       const hasFileComment = /\/\*\*\s*\n/.test(trimmed) || /\/\*\s*FILE:/i.test(trimmed) || /\/\*\s*USAGE:/i.test(trimmed) || /\/\*\s*SCOPE:/i.test(trimmed);
@@ -233,16 +233,16 @@ export const SHARED_GUARDRAILS = [
       const hasPlaywrightConfig = /playwright\.config/.test(code);
 
       const details = [];
-      if (!hasPlaywright && !isTestFile) details.push("No @playwright/test import");
-      if (!hasAxeImport) details.push("No @axe-core/playwright import");
-      if (!hasAxeBuilder) details.push("No AxeBuilder usage");
-      if (!hasViolationCheck) details.push("No violation assertion (expect(results.violations).toEqual([]))");
+      if (!hasPlaywright && !isTestFile) {details.push("No @playwright/test import");}
+      if (!hasAxeImport) {details.push("No @axe-core/playwright import");}
+      if (!hasAxeBuilder) {details.push("No AxeBuilder usage");}
+      if (!hasViolationCheck) {details.push("No violation assertion (expect(results.violations).toEqual([]))");}
 
       if (context?.mode === "scaffold" || context?.fileName === "playwright.config.js") {
-        const configValid = hasPlaywrightConfig || (hasPlaywright && hasAxeImport);
+        const isConfigValid = hasPlaywrightConfig || (hasPlaywright && hasAxeImport);
         return {
-          pass: configValid,
-          failCount: configValid ? 0 : 1,
+          pass: isConfigValid,
+          failCount: isConfigValid ? 0 : 1,
           detail: ["Missing playwright.config.js or @axe-core/playwright dependency"],
           suggestion: "Create playwright.config.js and install: pnpm install --save-dev playwright @axe-core/playwright",
         };
@@ -310,7 +310,7 @@ export const SHARED_GUARDRAILS = [
       ].map((match) => match[1]);
       const packages = specifiers
         .filter((name) => !name.startsWith(".") && !name.startsWith("/") && !name.startsWith("node:"))
-        .map((name) => name.startsWith("@") ? name.split("/").slice(0, 2).join("/") : name.split("/")[0]);
+        .map((name) => name.startsWith("@") ? name.split("/").slice(0, 2).join("/") : name.split("/", 1)[0]);
       const unknown = [...new Set(packages.filter((name) => !allowed.has(name)))];
       return {
         pass: unknown.length === 0,
@@ -334,7 +334,7 @@ export const FILE_TREE_GUARDRAILS = [
     description: "Every component folder must have an index.js (or index.ts) that re-exports the public API. The barrel must contain at least one export statement.",
     check: (code, context) => {
       const fileName = context?.fileName || "";
-      if (!fileName.match(/^index\.(js|ts|jsx|tsx)$/)) {
+      if (!/^index\.(js|ts|jsx|tsx)$/.test(fileName)) {
         return { pass: true, note: "Not a barrel file, skipping" };
       }
       const trimmed = (code || "").trim();
@@ -370,8 +370,8 @@ export const FILE_TREE_GUARDRAILS = [
         return { pass: true, failCount: 0, detail: [], suggestion: "", note: "Barrel file, skipping" };
       }
 
-      const valid = /^_[A-Z][a-zA-Z0-9]*\.\w+$/.test(fileName);
-      if (valid) {
+      const isValid = /^_[A-Z][a-zA-Z0-9]*\.\w+$/.test(fileName);
+      if (isValid) {
         return { pass: true, failCount: 0, detail: [], suggestion: "", note: "File name follows _PascalCase.ext convention" };
       }
 
@@ -412,7 +412,7 @@ export const FILE_TREE_GUARDRAILS = [
     description: "The barrel file's export statements must reference existing component files with the correct _PascalCase names.",
     check: (code, context) => {
       const fileName = context?.fileName || "";
-      if (!fileName.match(/^index\.(js|ts|jsx|tsx)$/)) {
+      if (!/^index\.(js|ts|jsx|tsx)$/.test(fileName)) {
         return { pass: true, note: "Not a barrel file, skipping" };
       }
 
@@ -475,7 +475,7 @@ export const REACT_GUARDRAILS = [
     description: "Hooks must be called at top level, not inside conditions, loops, or callbacks.",
     check: (code) => {
       const hooks = code.match(/\b(useState|useEffect|useMemo|useCallback|useRef|useReducer|useContext|useImperativeHandle|useLayoutEffect|useDebugValue|useTransition|useDeferredValue|useId|useSyncExternalStore|useInsertionEffect)\(/g);
-      if (!hooks) return { pass: true, note: "No hooks found" };
+      if (!hooks) {return { pass: true, note: "No hooks found" };}
       const conditionalHooks = code.match(/if\s*\(.*\)\s*\{[^}]*\b(useState|useEffect|useMemo)\(/g);
       return {
         pass: !conditionalHooks,
@@ -561,12 +561,12 @@ export const JS_GUARDRAILS = [
     check: (code) => {
       const issues = [];
       const lines = code.split('\n');
-      for (let i = 0; i < lines.length; i++) {
-        if (/\{\s*$/.test(lines[i]) && i + 1 < lines.length && /^\s*$/.test(lines[i + 1])) {
-          issues.push(`Line ${i + 1}: blank line after {`);
+      for (let index = 0; index < lines.length; index++) {
+        if (/\{\s*$/.test(lines[index]) && index + 1 < lines.length && /^\s*$/.test(lines[index + 1])) {
+          issues.push(`Line ${index + 1}: blank line after {`);
         }
-        if (/^\s*\}\s*$/.test(lines[i]) && i > 0 && /^\s*$/.test(lines[i - 1])) {
-          issues.push(`Line ${i + 1}: blank line before }`);
+        if (/^\s*\}\s*$/.test(lines[index]) && index > 0 && /^\s*$/.test(lines[index - 1])) {
+          issues.push(`Line ${index + 1}: blank line before }`);
         }
       }
       if (issues.length > 0) {
@@ -618,13 +618,13 @@ export const JS_GUARDRAILS = [
     check: (code) => {
       const issues = [];
       const lines = code.split('\n');
-      for (let i = 1; i < lines.length; i++) {
-        const line = lines[i].trim();
-        const prev = lines[i - 1].trim();
+      for (let index = 1; index < lines.length; index++) {
+        const line = lines[index].trim();
+        const previous = lines[index - 1].trim();
         if ((line.startsWith('return ') || line === 'return;') &&
-            prev !== '' && !prev.endsWith('{') && !prev.endsWith('(') &&
-            !prev.startsWith('//') && !prev.startsWith('/*')) {
-          issues.push(`Line ${i + 1}: no blank line before return`);
+            previous !== '' && !previous.endsWith('{') && !previous.endsWith('(') &&
+            !previous.startsWith('//') && !previous.startsWith('/*')) {
+          issues.push(`Line ${index + 1}: no blank line before return`);
         }
       }
       if (issues.length > 0) {
@@ -639,12 +639,12 @@ export const JS_GUARDRAILS = [
     description: "Every pair of class methods must have a blank line between them.",
     check: (code) => {
       const issues = [];
-      if (!code.includes('class ')) return { pass: true, note: "Not a class — skipping" };
+      if (!code.includes('class ')) {return { pass: true, note: "Not a class — skipping" };}
       const lines = code.split('\n');
-      for (let i = 0; i < lines.length - 1; i++) {
+      for (let index = 0; index < lines.length - 1; index++) {
         // Check if line is a closing brace of a method, followed by another method
-        if (/^\s*\}\s*$/.test(lines[i]) && /^\s*(\w+|static|get|set)\s/.test(lines[i + 1])) {
-          issues.push(`Line ${i + 1}: no blank line before method`);
+        if (/^\s*\}\s*$/.test(lines[index]) && /^\s*(\w+|static|get|set)\s/.test(lines[index + 1])) {
+          issues.push(`Line ${index + 1}: no blank line before method`);
         }
       }
       if (issues.length > 0) {
@@ -660,25 +660,25 @@ export const JS_GUARDRAILS = [
     check: (code) => {
       const issues = [];
       const lines = code.split('\n');
-      for (let i = 1; i < lines.length - 1; i++) {
-        const line = lines[i];
-        const prev = lines[i - 1];
-        const next = lines[i + 1];
+      for (let index = 1; index < lines.length - 1; index++) {
+        const line = lines[index];
+        const previous = lines[index - 1];
+        const next = lines[index + 1];
         // Check if this line starts a block that spans multiple lines
         if (/^\s*(if|for|while|switch|try)\s*\(/.test(line) || /^\.(then|catch|finally|map|filter|reduce|forEach)\s*\(/.test(line)) {
-          const hasPrevCode = prev.trim() && !/^\s*(\/\/|\/\*|\*|\}\s*$|\{\s*$|if|for|while|switch|try|case|default)/.test(prev);
-          if (hasPrevCode && prev.trim() !== '{' && !prev.trim().startsWith('//')) {
-            issues.push(`Line ${i + 1}: no blank line before block`);
+          const hasPreviousCode = previous.trim() && !/^\s*(\/\/|\/\*|\*|\}\s*$|\{\s*$|if|for|while|switch|try|case|default)/.test(previous);
+          if (hasPreviousCode && previous.trim() !== '{' && !previous.trimStart().startsWith('//')) {
+            issues.push(`Line ${index + 1}: no blank line before block`);
           }
         }
         // Check closing brace followed by code
         if (/^\s*\}\s*$/.test(line) && !/catch|else|finally/.test(next)) {
           const hasNextCode = next.trim() && !/^\s*(\/\/|\/\*|\*|\}|\)|case|default)/.test(next);
-          if (hasNextCode && next.trim() !== '{' && i > 2) {
+          if (hasNextCode && next.trim() !== '{' && index > 2) {
             // Check this is not the last block in parent
-            const afterBlock = lines.slice(i + 1).join('\n').trim();
+            const afterBlock = lines.slice(index + 1).join('\n').trim();
             if (afterBlock && !afterBlock.startsWith('}') && !afterBlock.startsWith(')')) {
-              issues.push(`Line ${i + 1}: no blank line after closing brace`);
+              issues.push(`Line ${index + 1}: no blank line after closing brace`);
             }
           }
         }
@@ -695,21 +695,21 @@ export const JS_GUARDRAILS = [
     description: "const/let/var declarations should be grouped at the top of their scope, separated from code by a blank line.",
     check: (code) => {
       const lines = code.split('\n');
-      let lastDecl = -1;
-      let firstNonDecl = -1;
-      for (let i = 0; i < lines.length; i++) {
-        const trimmed = lines[i].trim();
+      let lastDeclaration = -1;
+      let firstNonDeclaration = -1;
+      for (const [index, line] of lines.entries()) {
+        const trimmed = line.trim();
         if (/^(const|let|var)\s/.test(trimmed)) {
-          lastDecl = i;
-          if (firstNonDecl < 0) firstNonDecl = i;
-        } else if (trimmed && !/^(\/\/|\/\*|\*|\s*$|import|export|'use strict'|})/.test(trimmed) && lastDecl >= 0) {
+          lastDeclaration = index;
+          if (firstNonDeclaration < 0) {firstNonDeclaration = index;}
+        } else if (trimmed && !/^(\/\/|\/\*|\*|\s*$|import|export|'use strict'|})/.test(trimmed) && lastDeclaration >= 0) {
           break;
         }
       }
-      if (lastDecl > 0 && lastDecl < lines.length - 1) {
-        const nextLine = lines[lastDecl + 1].trim();
+      if (lastDeclaration > 0 && lastDeclaration < lines.length - 1) {
+        const nextLine = lines[lastDeclaration + 1].trim();
         if (nextLine && !/^(\/\/|\/\*|\*|export|import|'use strict'|}|case|default)/.test(nextLine)) {
-          return { pass: false, failCount: 1, detail: [`Line ${lastDecl + 1}: no blank line after declarations`], suggestion: "Add a blank line after the last const/let/var declaration." };
+          return { pass: false, failCount: 1, detail: [`Line ${lastDeclaration + 1}: no blank line after declarations`], suggestion: "Add a blank line after the last const/let/var declaration." };
         }
       }
       return { pass: true };
@@ -721,7 +721,7 @@ export const JS_GUARDRAILS = [
     description: "Errors must be created with new: throw new Error('...'). Calling error constructors as functions (throw Error('...')) is forbidden.",
     check: (code) => {
       const violations = code.match(/throw\s+(?!new\s+)(?:Error|TypeError|RangeError|SyntaxError|ReferenceError|EvalError|URIError)\s*\(/g) || [];
-      if (violations.length === 0) return { pass: true, note: "No bare error constructor throws found" };
+      if (violations.length === 0) {return { pass: true, note: "No bare error constructor throws found" };}
       return {
         pass: false,
         failCount: violations.length,
@@ -737,11 +737,11 @@ export const JS_GUARDRAILS = [
     check: (code) => {
       const violations = [];
       for (const name of ["Map", "Set", "Date", "Array", "WeakMap", "WeakSet"]) {
-        const re = new RegExp(`(?:=|:)\\s*${name}\\s*\\(`, "g");
+        const re = new RegExp(String.raw`(?:=|:)\s*${name}\s*\(`, "g");
         let m;
-        while ((m = re.exec(code)) !== null) violations.push(m[0].trim());
+        while ((m = re.exec(code)) !== null) {violations.push(m[0].trim());}
       }
-      if (violations.length === 0) return { pass: true, note: "No bare builtin constructor calls found" };
+      if (violations.length === 0) {return { pass: true, note: "No bare builtin constructor calls found" };}
       return {
         pass: false,
         failCount: violations.length,
@@ -756,7 +756,7 @@ export const JS_GUARDRAILS = [
     description: "rows.map(fn).flat() allocates an intermediate array; use rows.flatMap(fn) instead. Only .flat() with no depth argument is flagged.",
     check: (code) => {
       const violations = code.match(/\.map\s*\([^()]*(?:\([^()]*\))?[^()]*\)\s*\.flat\s*\(\s*\)/g) || [];
-      if (violations.length === 0) return { pass: true, note: "No map().flat() chains found" };
+      if (violations.length === 0) {return { pass: true, note: "No map().flat() chains found" };}
       return {
         pass: false,
         failCount: violations.length,
@@ -772,14 +772,13 @@ export const JS_GUARDRAILS = [
     check: (code) => {
       const violations = [];
       const arrayNames = [...code.matchAll(/const\s+(\w+)\s*=\s*\[/g)].map((m) => m[1]);
-      if (arrayNames.length === 0) return { pass: true, note: "No array literals found, skipping" };
+      if (arrayNames.length === 0) {return { pass: true, note: "No array literals found, skipping" };}
       const lines = code.split("\n");
-      for (let i = 0; i < lines.length; i++) {
-        const line = lines[i];
-        const inIteration = /\bfor\s*\(|\.filter\s*\(|\.map\s*\(|\.some\s*\(|\.every\s*\(|\.find\s*\(|\.findIndex\s*\(/.test(line);
-        if (!inIteration) continue;
+      for (const line of lines) {
+        const isInIteration = /\bfor\s*\(|\.filter\s*\(|\.map\s*\(|\.some\s*\(|\.every\s*\(|\.find\s*\(|\.findIndex\s*\(/.test(line);
+        if (!isInIteration) {continue;}
         for (const name of arrayNames) {
-          if (new RegExp(`\\b${name}\\.includes\\(`).test(line)) {
+          if (new RegExp(String.raw`\b${name}\.includes\(`).test(line)) {
             violations.push(line.trim());
             break;
           }
@@ -788,10 +787,10 @@ export const JS_GUARDRAILS = [
       // Multi-line callbacks: .filter(
       //   x => allowed.includes(x)
       for (const name of arrayNames) {
-        const multi = code.match(new RegExp(`\\.(?:filter|map|some|every|find)\\s*\\([\\s\\S]{0,200}?\\b${name}\\.includes\\(`, "g"));
-        if (multi) violations.push(...multi.map((v) => v.replace(/\n/g, " ").trim().slice(0, 80)));
+        const multi = code.match(new RegExp(String.raw`\.(?:filter|map|some|every|find)\s*\([\s\S]{0,200}?\b${name}\.includes\(`, "g"));
+        if (multi) {violations.push(...multi.map((v) => v.replaceAll('\n', " ").trim().slice(0, 80)));}
       }
-      if (violations.length === 0) return { pass: true, note: "No includes-in-loop lookups found" };
+      if (violations.length === 0) {return { pass: true, note: "No includes-in-loop lookups found" };}
       return {
         pass: false,
         failCount: violations.length,
@@ -806,9 +805,9 @@ export const JS_GUARDRAILS = [
     description: "Node builtin imports must use the explicit node: prefix (import fs from 'node:fs'). The bare form can be shadowed by a same-named npm package.",
     check: (code) => {
       const builtins = ["fs", "path", "util", "url", "os", "http", "https", "crypto", "stream", "events", "buffer", "child_process", "assert", "querystring", "readline", "worker_threads", "perf_hooks", "zlib", "dns", "net", "tls", "timers", "string_decoder", "vm", "module", "process", "async_hooks", "cluster", "constants", "domain", "inspector", "punycode", "repl", "sys", "trace_events", "tty", "v8", "wasi", "test"];
-      const re = new RegExp(`from\\s*['\"](?:${builtins.join("|")})(?:/[\\w.-]*)?['\"]`, "g");
+      const re = new RegExp(String.raw`from\s*['"](?:${builtins.join("|")})(?:/[\w.-]*)?['"]`, "g");
       const violations = code.match(re) || [];
-      if (violations.length === 0) return { pass: true, note: "No bare node builtin imports found" };
+      if (violations.length === 0) {return { pass: true, note: "No bare node builtin imports found" };}
       return {
         pass: false,
         failCount: violations.length,
@@ -823,7 +822,7 @@ export const JS_GUARDRAILS = [
     description: "str.replace(/x/g, y) with a global regex literal should be str.replaceAll('x', y).",
     check: (code) => {
       const violations = code.match(/\.replace\s*\(\s*\/[^/]*\/g\s*[,)]/g) || [];
-      if (violations.length === 0) return { pass: true, note: "No global-regex replace found" };
+      if (violations.length === 0) {return { pass: true, note: "No global-regex replace found" };}
       return {
         pass: false,
         failCount: violations.length,
@@ -838,7 +837,7 @@ export const JS_GUARDRAILS = [
     description: "Prefer for...of loops over Array.prototype.forEach: better type narrowing, direct await, and break/continue support.",
     check: (code) => {
       const violations = code.match(/\b\w+\.forEach\s*\(/g) || [];
-      if (violations.length === 0) return { pass: true, note: "No .forEach() calls found" };
+      if (violations.length === 0) {return { pass: true, note: "No .forEach() calls found" };}
       return {
         pass: false,
         failCount: violations.length,
@@ -851,34 +850,34 @@ export const JS_GUARDRAILS = [
 ];
 
 export const VANILLA_REACTIVE_GUARDRAILS = [
-  // Pattern A: Custom Element + html\`\`
+  // Pattern A: Custom Element + html``
   {
     id: "vanilla-ce-extends",
     label: "Custom Element extends HTMLElement",
     description: "Pattern A components must extend HTMLElement with a static {} block for customElements.define().",
     check: (code) => {
-      const extendsHtmlelement = /extends\s+HTMLElement/.test(code);
+      const isExtendsHtmlelement = /extends\s+HTMLElement/.test(code);
       const hasStaticBlock = /static\s*\{/.test(code) && /customElements\.define\(/.test(code);
       const hasVrComponent = /vrComponent\(/.test(code);
       const isClass = /^export\s+class\s/.test(code.trim()) || /^class\s/.test(code.trim());
-      if (!isClass) return { pass: true, note: "Not a class — skipping Pattern A check" };
-      if (extendsHtmlelement && (hasStaticBlock || hasVrComponent)) return { pass: true };
+      if (!isClass) {return { pass: true, note: "Not a class — skipping Pattern A check" };}
+      if (isExtendsHtmlelement && (hasStaticBlock || hasVrComponent)) {return { pass: true };}
       const failures = [];
-      if (!extendsHtmlelement) failures.push("Must extend HTMLElement");
-      if (!hasStaticBlock && !hasVrComponent) failures.push("Must have static {} block with vrComponent() or customElements.define()");
+      if (!isExtendsHtmlelement) {failures.push("Must extend HTMLElement");}
+      if (!hasStaticBlock && !hasVrComponent) {failures.push("Must have static {} block with vrComponent() or customElements.define()");}
       return { pass: false, failCount: failures.length, detail: failures, suggestion: "Add: static { vrComponent(this, { tag: 'my-component', css: import.meta.url }); }" };
     },
   },
   {
     id: "vanilla-html-template",
-    label: "Component uses html\`\` tagged template",
-    description: "Pattern A and B components must return html\`\` (TemplateResult) for their template.",
+    label: "Component uses html`` tagged template",
+    description: "Pattern A and B components must return html`` (TemplateResult) for their template.",
     check: (code) => {
-      const usesHtml = /html`/.test(code);
-      const isFn = /^export\s+function\s/.test(code.trim()) || /^function\s/.test(code.trim()) || /=>\s*\{/.test(code);
+      const isUsesHtml = /html`/.test(code);
+      const isFunction = /^export\s+function\s/.test(code.trim()) || /^function\s/.test(code.trim()) || /=>\s*\{/.test(code);
       const isCe = /extends\s+HTMLElement/.test(code);
-      if (!isFn && !isCe) return { pass: true, note: "Not a component \u2014 skipping" };
-      if (!usesHtml) return { pass: false, failCount: 1, detail: ["No html\`\` found"], suggestion: "Use html\`\` tagged template for the template." };
+      if (!isFunction && !isCe) {return { pass: true, note: "Not a component \u{2014} skipping" };}
+      if (!isUsesHtml) {return { pass: false, failCount: 1, detail: ["No html`` found"], suggestion: "Use html`` tagged template for the template." };}
       return { pass: true };
     },
   },
@@ -887,23 +886,23 @@ export const VANILLA_REACTIVE_GUARDRAILS = [
     label: "connectedCallback has re-mount guard",
     description: "Pattern A connectedCallback must check _isMounted to prevent double-mounting.",
     check: (code) => {
-      if (!code.includes("connectedCallback")) return { pass: true, note: "No connectedCallback — skipping" };
+      if (!code.includes("connectedCallback")) {return { pass: true, note: "No connectedCallback — skipping" };}
       const hasGuard = /_isMounted/.test(code) || /_pixBound/.test(code) || /bindElement/.test(code);
-      if (hasGuard) return { pass: true };
+      if (hasGuard) {return { pass: true };}
       return { pass: false, failCount: 1, detail: ["No re-mount guard found"], suggestion: "Add: if (this._isMounted) return; this._isMounted = true; at start of connectedCallback()." };
     },
   },
   {
     id: "vanilla-adopted-stylesheets",
     label: "CSS via adoptedStyleSheets in static {} block",
-    description: "Pattern CEs must load external CSS via fetch(\`.css\`).text() → CSSStyleSheet.replaceSync() → adoptedStyleSheets.",
+    description: "Pattern CEs must load external CSS via fetch(`.css`).text() → CSSStyleSheet.replaceSync() → adoptedStyleSheets.",
     check: (code) => {
       const hasCssFetch = /CSSStyleSheet/.test(code) && /replaceSync/.test(code) && /adoptedStyleSheets/.test(code);
       const isCe = /extends\s+HTMLElement/.test(code);
-      if (!isCe) return { pass: true, note: "Not a CE — skipping" };
-      if (hasCssFetch) return { pass: true };
-      const noFetch = /\.css['"]/.test(code) && !code.includes("CSSStyleSheet");
-      if (noFetch) return { pass: false, failCount: 1, detail: ["CSS file referenced but not loaded via adoptedStyleSheets"], suggestion: "Use: const cssText = await (await fetch(new URL('./_Comp.css', import.meta.url))).text(); const sheet = new CSSStyleSheet(); sheet.replaceSync(cssText);" };
+      if (!isCe) {return { pass: true, note: "Not a CE — skipping" };}
+      if (hasCssFetch) {return { pass: true };}
+      const isNoFetch = /\.css['"]/.test(code) && !code.includes("CSSStyleSheet");
+      if (isNoFetch) {return { pass: false, failCount: 1, detail: ["CSS file referenced but not loaded via adoptedStyleSheets"], suggestion: "Use: const cssText = await (await fetch(new URL('./_Comp.css', import.meta.url))).text(); const sheet = new CSSStyleSheet(); sheet.replaceSync(cssText);" };}
       return { pass: true, note: "No CSS detected — skipping" };
     },
   },
@@ -914,12 +913,12 @@ export const VANILLA_REACTIVE_GUARDRAILS = [
     label: "Functional component is a plain function",
     description: "Pattern B components must be plain functions, NOT classes extending HTMLElement.",
     check: (code) => {
-      const isPlainFn = /^export\s+function\s/.test(code.trim()) || /^function\s/.test(code.trim()) || /^export\s+const\s/.test(code.trim());
+      const isPlainFunction = /^export\s+function\s/.test(code.trim()) || /^function\s/.test(code.trim()) || /^export\s+const\s/.test(code.trim());
       const isClass = /extends\s+HTMLElement/.test(code);
-      if (isClass) return { pass: true, note: "This is a Pattern A (CE). Pattern B check not applicable." };
-      if (!isPlainFn) return { pass: true, note: "Not a Pattern B component — skipping" };
-      const returnsHtml = /return\s+html`/.test(code);
-      if (!returnsHtml) return { pass: false, failCount: 1, detail: ["Function does not return html\`\`"], suggestion: "Add: return html\`...\`; at the end of the function." };
+      if (isClass) {return { pass: true, note: "This is a Pattern A (CE). Pattern B check not applicable." };}
+      if (!isPlainFunction) {return { pass: true, note: "Not a Pattern B component — skipping" };}
+      const isReturnsHtml = /return\s+html`/.test(code);
+      if (!isReturnsHtml) {return { pass: false, failCount: 1, detail: ["Function does not return html``"], suggestion: "Add: return html`...`; at the end of the function." };}
       return { pass: true };
     },
   },
@@ -928,10 +927,10 @@ export const VANILLA_REACTIVE_GUARDRAILS = [
     label: "Functional component does NOT call customElements.define",
     description: "Pattern B functions must NOT register themselves as custom elements. That is the parent CE's responsibility.",
     check: (code) => {
-      const isPlainFn = /^export\s+function\s/.test(code.trim()) || /^function\s/.test(code.trim());
-      if (!isPlainFn) return { pass: true, note: "Not a functional component — skipping" };
+      const isPlainFunction = /^export\s+function\s/.test(code.trim()) || /^function\s/.test(code.trim());
+      if (!isPlainFunction) {return { pass: true, note: "Not a functional component — skipping" };}
       const hasDefine = /customElements\.define\(/.test(code);
-      if (hasDefine) return { pass: false, failCount: 1, detail: ["Functional component calls customElements.define()"], suggestion: "Remove customElements.define() from functional components. Register in the parent CE's static {} block." };
+      if (hasDefine) {return { pass: false, failCount: 1, detail: ["Functional component calls customElements.define()"], suggestion: "Remove customElements.define() from functional components. Register in the parent CE's static {} block." };}
       return { pass: true };
     },
   },
@@ -939,13 +938,13 @@ export const VANILLA_REACTIVE_GUARDRAILS = [
   // Pattern C: External HTML Template
   {
     id: "vanilla-no-dollar-braces",
-    label: "External templates do NOT contain ${\} closures",
-    description: ".template.html files can only use {{ }}, <for>, <if>, and @action. No ${\} closures.",
+    label: "External templates do NOT contain ${} closures",
+    description: ".template.html files can only use {{ }}, <for>, <if>, and @action. No ${} closures.",
     check: (code, context) => {
       const isTemplate = context?.fileName?.endsWith(".template.html") || false;
-      const hasDollarBraces = /\$\{[^}]+\}/.test(code);
-      if (!isTemplate && hasDollarBraces) return { pass: true, note: "Not a .template.html file — ${\} is valid here" };
-      if (isTemplate && hasDollarBraces) return { pass: false, failCount: 1, detail: ["${\} found in external template"], suggestion: "Replace ${\} closures with @click=\"handler\" and use {{ expr }} for data expressions." };
+      const hasDollarBraces = /\${[^}]+\}/.test(code);
+      if (!isTemplate && hasDollarBraces) {return { pass: true, note: "Not a .template.html file — ${} is valid here" };}
+      if (isTemplate && hasDollarBraces) {return { pass: false, failCount: 1, detail: ["${} found in external template"], suggestion: "Replace ${} closures with @click=\"handler\" and use {{ expr }} for data expressions." };}
       return { pass: true };
     },
   },
@@ -955,11 +954,11 @@ export const VANILLA_REACTIVE_GUARDRAILS = [
     description: ".template.html files must use data-part=\"role\" attributes, not CSS class names.",
     check: (code, context) => {
       const isTemplate = context?.fileName?.endsWith(".template.html") || false;
-      if (!isTemplate) return { pass: true, note: "Not a template file — skipping" };
-      const classAttrs = code.match(/class\s*=\s*["'][^"']*["']/g);
+      if (!isTemplate) {return { pass: true, note: "Not a template file — skipping" };}
+      const classAttributes = code.match(/class\s*=\s*["'][^"']*["']/g);
       const dataPart = code.match(/data-part\s*=\s*["']/g);
-      if (classAttrs && (!dataPart || classAttrs.length > dataPart.length)) {
-        return { pass: false, failCount: classAttrs.length, detail: (classAttrs || []).slice(0, 5), suggestion: "Replace class=\"...\" with data-part=\"role\" attributes." };
+      if (classAttributes && (!dataPart || classAttributes.length > dataPart.length)) {
+        return { pass: false, failCount: classAttributes.length, detail: (classAttributes || []).slice(0, 5), suggestion: "Replace class=\"...\" with data-part=\"role\" attributes." };
       }
       return { pass: true };
     },
@@ -972,10 +971,10 @@ export const VANILLA_REACTIVE_GUARDRAILS = [
       const hasFetch = /fetch\(/.test(code) && /\.template\.html/.test(code);
       const hasBundleImport = /bundle-text:/.test(code) && /\.template\.html/.test(code);
       const isCe = /extends\s+HTMLElement/.test(code);
-      if (!isCe) return { pass: true, note: "Not a CE — skipping" };
+      if (!isCe) {return { pass: true, note: "Not a CE — skipping" };}
       const hasHtmlCall = /html\(/.test(code) && /\.template\.html/.test(code);
-      if (hasHtmlCall && (hasFetch || hasBundleImport)) return { pass: true };
-      if (hasHtmlCall && !hasFetch && !hasBundleImport) return { pass: false, failCount: 1, detail: ["html() used with template but no fetch/import"], suggestion: "Add: const templateStr = await (await fetch(new URL('./_Comp.template.html', import.meta.url))).text();" };
+      if (hasHtmlCall && (hasFetch || hasBundleImport)) {return { pass: true };}
+      if (hasHtmlCall && !hasFetch && !hasBundleImport) {return { pass: false, failCount: 1, detail: ["html() used with template but no fetch/import"], suggestion: "Add: const templateStr = await (await fetch(new URL('./_Comp.template.html', import.meta.url))).text();" };}
       return { pass: true, note: "No Pattern C detection needed — skipping" };
     },
   },
@@ -995,13 +994,13 @@ export const FRAMEWORK_GUARDRAILS = {
 
 // ─── Scaffold guardrails (check project config files exist) ───
 
-const SCAFFOLD_CHECK = (fileName, label, checkFn) => ({
+const SCAFFOLD_CHECK = (fileName, label, checkFunction) => ({
   id: `scaffold-${fileName.replace(/^[.]/, "")}`,
   label: `${fileName} present`,
   description: `Project must have ${fileName} file.`,
   check: (code, context) => {
-    if (context?.mode !== "scaffold") return { pass: true, note: "Only checked in scaffold mode" };
-    return checkFn(code, context);
+    if (context?.mode !== "scaffold") {return { pass: true, note: "Only checked in scaffold mode" };}
+    return checkFunction(code, context);
   },
 });
 
@@ -1024,9 +1023,9 @@ export const SCAFFOLD_GUARDRAILS = [
     const hasBuild = code.includes("dist/") || code.includes("build/");
     return { pass: hasOs && hasNode && hasBuild, failCount: [hasOs, hasNode, hasBuild].filter(Boolean).length, suggestion: "Create .gitignore with OS entries (.DS_Store, Thumbs.db), node_modules/, dist/, .env, coverage/." };
   }),
-  SCAFFOLD_CHECK(".eslintrc.json", "ESLint config present", (code) => {
-    const hasEslint = code.includes('"eslint:recommended"') || code.includes('"extends"');
-    return { pass: hasEslint, failCount: hasEslint ? 0 : 1, suggestion: "Create .eslintrc.json with eslint:recommended, browser+es2024+node env." };
+  SCAFFOLD_CHECK("eslint.config.mjs", "ESLint flat config present", (code) => {
+    const hasEslint = code.includes("unicorn") || code.includes("@eslint/js") || code.includes("defineConfig");
+    return { pass: hasEslint, failCount: hasEslint ? 0 : 1, suggestion: "Create eslint.config.mjs with @eslint/js + eslint-plugin-unicorn (see rule-toolchain-eslint)." };
   }),
   SCAFFOLD_CHECK("tsconfig.json", "TypeScript config present", (code) => {
     const hasTs = code.includes('"strict"') && code.includes('"include"') && code.includes('"src"');
@@ -1050,11 +1049,11 @@ export const ARCHITECT_GUARDRAILS = [
       const hasInstructions = code.includes("instructions/");
       const hasPrompts = code.includes("prompts/");
       const hasSkills = code.includes("skills/");
-      if (!hasAgentsDir) return { pass: false, failCount: 1, detail: [], suggestion: "Create .agents/ directory at project root with instructions/, prompts/, skills/, styleguides/ subdirectories." };
+      if (!hasAgentsDir) {return { pass: false, failCount: 1, detail: [], suggestion: "Create .agents/ directory at project root with instructions/, prompts/, skills/, styleguides/ subdirectories." };}
       const missing = [];
-      if (!hasInstructions) missing.push("instructions/");
-      if (!hasPrompts) missing.push("prompts/");
-      if (!hasSkills) missing.push("skills/");
+      if (!hasInstructions) {missing.push("instructions/");}
+      if (!hasPrompts) {missing.push("prompts/");}
+      if (!hasSkills) {missing.push("skills/");}
       if (missing.length > 0) {
         return { pass: false, failCount: missing.length, detail: missing.map(m => "Missing: " + m), suggestion: "Create missing subdirectories: " + missing.join(", ") };
       }
@@ -1070,10 +1069,10 @@ export const ARCHITECT_GUARDRAILS = [
       const hasWorkflow = /spec|plan|implement|test|docs|pr/i.test(code);
       const hasLocation = /where\s*to\s*look|directory|structure/i.test(code);
       const results = [];
-      if (!hasGoldenRules) results.push("Missing golden rules section");
-      if (!hasWorkflow) results.push("Missing workflow section");
-      if (!hasLocation) results.push("Missing 'where to look' section");
-      if (results.length === 0) return { pass: true, note: "AGENTS.md structure OK" };
+      if (!hasGoldenRules) {results.push("Missing golden rules section");}
+      if (!hasWorkflow) {results.push("Missing workflow section");}
+      if (!hasLocation) {results.push("Missing 'where to look' section");}
+      if (results.length === 0) {return { pass: true, note: "AGENTS.md structure OK" };}
       return { pass: false, failCount: results.length, detail: results, suggestion: "AGENTS.md must include: golden rules, project structure overview, and workflow (Spec → Plan → Implement → Test → Docs → PR)." };
     },
   },
@@ -1084,8 +1083,8 @@ export const ARCHITECT_GUARDRAILS = [
     check: (code) => {
       const specs = ["00-sdd", "01-product", "02-domain-glossary", "03-business-logic", "04-config", "05-architecture", "06-quality"];
       const missing = specs.filter(s => !code.includes(s));
-      if (missing.length === 0) return { pass: true, note: "All 7 SDD specs referenced" };
-      if (missing.length <= 3) return { pass: true, note: missing.length + " specs still to create (in progress)" };
+      if (missing.length === 0) {return { pass: true, note: "All 7 SDD specs referenced" };}
+      if (missing.length <= 3) {return { pass: true, note: missing.length + " specs still to create (in progress)" };}
       return { pass: false, failCount: missing.length, detail: missing, suggestion: "Create " + missing.join(", ") + " in .context/specs/. Use pix_architect mode=scaffold to generate templates." };
     },
   },
@@ -1095,7 +1094,7 @@ export const ARCHITECT_GUARDRAILS = [
     description: "All .context/ files must be generated with real values, not raw [PLACEHOLDER] markers.",
     check: (code) => {
       const unfilled = code.match(/\[PLACEHOLDER_\w+\]/g) || code.match(/\[UNFILLED\]/g) || [];
-      if (unfilled.length === 0) return { pass: true, note: "No unfilled placeholders" };
+      if (unfilled.length === 0) {return { pass: true, note: "No unfilled placeholders" };}
       return { pass: false, failCount: unfilled.length, detail: unfilled.slice(0, 10), suggestion: "Fill all remaining placeholders. Use pix_architect mode=interview for the guided wizard, or manually edit .context/ files." };
     },
   },
@@ -1107,10 +1106,10 @@ export const ARCHITECT_GUARDRAILS = [
       const hasCliDir = code.includes("cli/");
       const hasTemplates = code.includes(".context/");
       const hasCliJs = code.includes("cli.js");
-      if (!hasCliDir) return { pass: false, failCount: 1, detail: ["Missing cli/ directory"], suggestion: "Create cli/ with cli.js and .context/ templates." };
+      if (!hasCliDir) {return { pass: false, failCount: 1, detail: ["Missing cli/ directory"], suggestion: "Create cli/ with cli.js and .context/ templates." };}
       const missing = [];
-      if (!hasTemplates) missing.push(".context/ templates");
-      if (!hasCliJs) missing.push("cli.js entry point");
+      if (!hasTemplates) {missing.push(".context/ templates");}
+      if (!hasCliJs) {missing.push("cli.js entry point");}
       if (missing.length > 0) {
         return { pass: false, failCount: missing.length, detail: missing, suggestion: "Add missing: " + missing.join(", ") };
       }
@@ -1124,7 +1123,7 @@ export const ARCHITECT_GUARDRAILS = [
     check: (code) => {
       const phases = ["spec", "plan", "implement", "test", "docs", "pr"];
       const found = phases.filter(p => code.toLowerCase().includes(p));
-      if (found.length >= 4) return { pass: true, note: found.length + "/6 workflow phases found" };
+      if (found.length >= 4) {return { pass: true, note: found.length + "/6 workflow phases found" };}
       return { pass: false, failCount: 6 - found.length, detail: phases.filter(p => !found.includes(p)), suggestion: "Document the workflow: Spec → Plan → Implement → Test → Docs → PR in AI_WORKFLOW.md." };
     },
   },
@@ -1137,10 +1136,10 @@ export const ARCHITECT_GUARDRAILS = [
       const hasTesting = code.includes("testing");
       const hasDocs = code.includes("docs");
       const missing = [];
-      if (!hasCoding) missing.push("coding.instructions.md");
-      if (!hasTesting) missing.push("testing.instructions.md");
-      if (!hasDocs) missing.push("docs.instructions.md");
-      if (missing.length === 0) return { pass: true, note: "All instruction files present" };
+      if (!hasCoding) {missing.push("coding.instructions.md");}
+      if (!hasTesting) {missing.push("testing.instructions.md");}
+      if (!hasDocs) {missing.push("docs.instructions.md");}
+      if (missing.length === 0) {return { pass: true, note: "All instruction files present" };}
       return { pass: false, failCount: missing.length, detail: missing, suggestion: "Create " + missing.join(", ") + " in .agents/instructions/." };
     },
   },
@@ -1168,20 +1167,20 @@ export const BACKEND_GUARDRAILS = [
         /db\.query\(["']INSERT[^"']*["']\s*\+\s*\w+/gi,
         /db\.query\(["']UPDATE[^"']*["']\s*\+\s*\w+/gi,
         /db\.query\(["']DELETE[^"']*["']\s*\+\s*\w+/gi,
-        /db\.query\(`SELECT[^`]*\$\{/gi,
-        /db\.query\(`INSERT[^`]*\$\{/gi,
-        /db\.query\(`UPDATE[^`]*\$\{/gi,
-        /db\.query\(`DELETE[^`]*\$\{/gi,
+        /db\.query\(`SELECT[^`]*\${/gi,
+        /db\.query\(`INSERT[^`]*\${/gi,
+        /db\.query\(`UPDATE[^`]*\${/gi,
+        /db\.query\(`DELETE[^`]*\${/gi,
         /\.query\(["']SELECT.*["']\s*\+\s*req\./gi,
         /\.query\(["']SELECT.*["']\s*\+\s*ctx\./gi,
       ];
       const violations = [];
       for (const re of concatPatterns) {
         const m = code.match(re);
-        if (m) violations.push(...m);
+        if (m) {violations.push(...m);}
       }
       const hasQuery = /\.query\(|\.execute\(|Model\.find/i.test(code);
-      if (!hasQuery) return { pass: true, note: "No SQL queries found, skipping" };
+      if (!hasQuery) {return { pass: true, note: "No SQL queries found, skipping" };}
       return {
         pass: violations.length === 0,
         failCount: violations.length,
@@ -1203,7 +1202,7 @@ export const BACKEND_GUARDRAILS = [
         /\.send\(err\.message\)/gi,
       ];
       const violations = [];
-      for (const re of patterns) { const m = code.match(re); if (m) violations.push(...m); }
+      for (const re of patterns) { const m = code.match(re); if (m) {violations.push(...m);} }
       return {
         pass: violations.length === 0,
         failCount: violations.length,
@@ -1218,7 +1217,7 @@ export const BACKEND_GUARDRAILS = [
     description: "Request body and params must be validated (Zod, Joi, class-validator).",
     check: (code) => {
       const hasInput = /req\.body|req\.params|req\.query|request\.body|@Body\(\)|@Param\(\)|@Query\(\)/i.test(code);
-      if (!hasInput) return { pass: true, note: "No request input detected, skipping" };
+      if (!hasInput) {return { pass: true, note: "No request input detected, skipping" };}
       const hasValidation = /z\.(?:object|string|number|boolean)|\.parse\(|\.safeParse\(|Joi\.(?:object|string)|class-validator|@Validate|express-validator/i.test(code);
       return {
         pass: hasValidation, failCount: hasValidation ? 0 : 1,
@@ -1233,11 +1232,11 @@ export const BACKEND_GUARDRAILS = [
     description: "CORS must not use wildcard origin (*). Specify explicit allowed origins.",
     check: (code) => {
       const hasCors = /cors\(\)|@fastify\/cors|app\.enableCors/i.test(code);
-      if (!hasCors) return { pass: true, note: "CORS not configured, skipping" };
-      const corsWildcard = /origin:\s*["']\*["']/gi.test(code);
+      if (!hasCors) {return { pass: true, note: "CORS not configured, skipping" };}
+      const isCorsWildcard = /origin:\s*["']\*["']/gi.test(code);
       return {
-        pass: !corsWildcard, failCount: corsWildcard ? 1 : 0,
-        detail: corsWildcard ? ["Wildcard origin (*) found"] : [],
+        pass: !isCorsWildcard, failCount: isCorsWildcard ? 1 : 0,
+        detail: isCorsWildcard ? ["Wildcard origin (*) found"] : [],
         suggestion: "Replace origin: '*' with an explicit allowlist of allowed origins.",
       };
     },
@@ -1248,7 +1247,7 @@ export const BACKEND_GUARDRAILS = [
     description: "API endpoints should have rate limiting enabled.",
     check: (code) => {
       const isServer = /app\.(?:listen|get|post|put|delete|patch)/i.test(code) || /createServer/i.test(code) || /bootstrap\(\)/i.test(code);
-      if (!isServer) return { pass: true, note: "Not a server file, skipping" };
+      if (!isServer) {return { pass: true, note: "Not a server file, skipping" };}
       const hasRateLimit = /express-rate-limit|rateLimit\(|@fastify\/rate-limit|ThrottlerModule|@Throttle/i.test(code);
       return {
         pass: hasRateLimit, failCount: hasRateLimit ? 0 : 1,
@@ -1263,7 +1262,7 @@ export const BACKEND_GUARDRAILS = [
     description: "HTTP security headers should be set via helmet or framework equivalent.",
     check: (code) => {
       const isServer = /app\.(?:listen|get|post|use)/i.test(code) || /createServer/i.test(code) || /bootstrap\(\)/i.test(code);
-      if (!isServer) return { pass: true, note: "Not a server file, skipping" };
+      if (!isServer) {return { pass: true, note: "Not a server file, skipping" };}
       const hasHelmet = /helmet\(\)|require\(["']helmet["']\)|@fastify\/helmet|from ["']helmet["']/i.test(code);
       return {
         pass: hasHelmet, failCount: hasHelmet ? 0 : 1,
@@ -1283,7 +1282,7 @@ export const DATABASE_GUARDRAILS = [
     description: "DDL must use IF NOT EXISTS / IF EXISTS for idempotent migrations.",
     check: (code) => {
       const hasDdl = /CREATE\s+TABLE|DROP\s+TABLE|ALTER\s+TABLE/i.test(code);
-      if (!hasDdl) return { pass: true, note: "No DDL found, skipping" };
+      if (!hasDdl) {return { pass: true, note: "No DDL found, skipping" };}
       const unsafeCreate = code.match(/CREATE\s+TABLE\s+(?!.*IF\s+NOT\s+EXISTS)/gi) || [];
       const unsafeDrop = code.match(/DROP\s+TABLE\s+(?!.*IF\s+EXISTS)/gi) || [];
       const violations = [...unsafeCreate, ...unsafeDrop];
@@ -1300,11 +1299,11 @@ export const DATABASE_GUARDRAILS = [
     description: "Queries must use placeholders ($1, ?, :name), not string concatenation.",
     check: (code) => {
       const hasQuery = /\.query\(|\.execute\(|db\.run\(|db\.all\(|db\.get\(|Model\.find|Model\.aggregate/i.test(code);
-      if (!hasQuery) return { pass: true, note: "No database queries found, skipping" };
-      const bad = /\.query\(`[^`]*\$\{[^}]+\}[^`]*`\)|\.query\(["'][^"']*["']\s*\+\s*\w+/gi.test(code);
+      if (!hasQuery) {return { pass: true, note: "No database queries found, skipping" };}
+      const isBad = /\.query\(`[^`]*\${[^}]+\}[^`]*`\)|\.query\(["'][^"']*["']\s*\+\s*\w+/gi.test(code);
       return {
-        pass: !bad, failCount: bad ? 1 : 0,
-        detail: bad ? ["Query uses string concatenation or template substitution"] : [],
+        pass: !isBad, failCount: isBad ? 1 : 0,
+        detail: isBad ? ["Query uses string concatenation or template substitution"] : [],
         suggestion: "Use parameterized queries: db.query('SELECT * FROM t WHERE id = $1', [id]).",
       };
     },
@@ -1315,7 +1314,7 @@ export const DATABASE_GUARDRAILS = [
     description: "Multiple mutations should be wrapped in a transaction.",
     check: (code) => {
       const mutations = (code.match(/\.(?:insert|create|update|delete|save)\s*\(/gi) || []);
-      if (mutations.length < 2) return { pass: true, note: "Less than 2 mutations, transaction not required" };
+      if (mutations.length < 2) {return { pass: true, note: "Less than 2 mutations, transaction not required" };}
       const hasTx = /BEGIN|COMMIT|ROLLBACK|transaction\(|tx\s*=>|@Transactional/i.test(code);
       return {
         pass: hasTx, failCount: hasTx ? 0 : 1,
@@ -1333,10 +1332,10 @@ export const DATABASE_GUARDRAILS = [
       const hasClient = /new\s+(?:pg\.)?Client\(|createConnection\(/i.test(code);
       if (hasClient && !hasPool) {
         const isServer = /app\.(?:listen|get|post)|createServer/i.test(code);
-        if (!isServer) return { pass: true, note: "Script-style DB client, pool not required" };
+        if (!isServer) {return { pass: true, note: "Script-style DB client, pool not required" };}
         return { pass: false, failCount: 1, detail: ["Client without pool in server code"], suggestion: "Use Pool instead of Client for servers: new Pool({ max: 20 })." };
       }
-      if (!hasClient && !hasPool && !/Pool|pool/i.test(code)) return { pass: true, note: "No DB client or ORM-managed pooling, skipping" };
+      if (!hasClient && !hasPool && !/Pool|pool/i.test(code)) {return { pass: true, note: "No DB client or ORM-managed pooling, skipping" };}
       return { pass: true, note: hasPool ? "Connection pool detected" : "ORM likely handles pooling" };
     },
   },
@@ -1350,7 +1349,7 @@ export const DEVOPS_GUARDRAILS = [
     label: "Container runs as non-root user",
     description: "Docker containers must switch to a non-root user.",
     check: (code) => {
-      if (!/^FROM\s+/im.test(code)) return { pass: true, note: "Not a Dockerfile, skipping" };
+      if (!/^FROM\s+/im.test(code)) {return { pass: true, note: "Not a Dockerfile, skipping" };}
       const hasUser = /^USER\s+(?!root\b)\w+/im.test(code);
       return {
         pass: hasUser, failCount: hasUser ? 0 : 1,
@@ -1364,11 +1363,11 @@ export const DEVOPS_GUARDRAILS = [
     label: "HEALTHCHECK defined",
     description: "Production images should include a HEALTHCHECK.",
     check: (code) => {
-      if (!/^FROM\s+/im.test(code)) return { pass: true, note: "Not a Dockerfile, skipping" };
-      const ok = /^HEALTHCHECK\s+/im.test(code);
+      if (!/^FROM\s+/im.test(code)) {return { pass: true, note: "Not a Dockerfile, skipping" };}
+      const isOk = /^HEALTHCHECK\s+/im.test(code);
       return {
-        pass: ok, failCount: ok ? 0 : 1,
-        detail: ok ? [] : ["No HEALTHCHECK found"],
+        pass: isOk, failCount: isOk ? 0 : 1,
+        detail: isOk ? [] : ["No HEALTHCHECK found"],
         suggestion: "Add: HEALTHCHECK --interval=30s CMD curl -f http://localhost:3000/health || exit 1",
       };
     },
@@ -1379,10 +1378,10 @@ export const DEVOPS_GUARDRAILS = [
     description: "Passwords, API keys, and tokens must use environment variables.",
     check: (code) => {
       const secrets = code.match(/(?:password|passwd|secret|apiKey|api_key|token|api_secret)\s*[:=]\s*["'][^"']{8,}["']/gi) || [];
-      const nonEnv = secrets.filter(s => !/process\.env/i.test(code.slice(Math.max(0, code.indexOf(s) - 80), code.indexOf(s))));
+      const nonEnvironment = secrets.filter(s => !/process\.env/i.test(code.slice(Math.max(0, code.indexOf(s) - 80), code.indexOf(s))));
       return {
-        pass: nonEnv.length === 0, failCount: nonEnv.length,
-        detail: nonEnv.slice(0, 3).map(s => s.slice(0, 60)),
+        pass: nonEnvironment.length === 0, failCount: nonEnvironment.length,
+        detail: nonEnvironment.slice(0, 3).map(s => s.slice(0, 60)),
         suggestion: "Store secrets in environment variables: process.env.DB_PASSWORD. Never hardcode credentials.",
       };
     },
@@ -1392,11 +1391,11 @@ export const DEVOPS_GUARDRAILS = [
     label: ".env in .gitignore",
     description: ".env files must be in .gitignore to prevent committing secrets.",
     check: (code, context) => {
-      if (!context?.fileName?.includes(".gitignore")) return { pass: true, note: "Not .gitignore, skipping" };
-      const ok = /\.env\b/.test(code);
+      if (!context?.fileName?.includes(".gitignore")) {return { pass: true, note: "Not .gitignore, skipping" };}
+      const isOk = /\.env\b/.test(code);
       return {
-        pass: ok, failCount: ok ? 0 : 1,
-        detail: ok ? [] : [".env not in .gitignore"],
+        pass: isOk, failCount: isOk ? 0 : 1,
+        detail: isOk ? [] : [".env not in .gitignore"],
         suggestion: "Add .env to .gitignore to prevent committing environment files.",
       };
     },
@@ -1419,13 +1418,13 @@ function extractRealCSS(code, context = {}) {
   }
 
   const fencedCss = code.match(/```css\n([\s\S]*?)```/g);
-  if (fencedCss) cssBlocks.push(...fencedCss.map(c => c.replace(/```css\n|```/g, "").trim()));
+  if (fencedCss) {cssBlocks.push(...fencedCss.map(c => c.replaceAll(/```css\n|```/g, "").trim()));}
 
   const sheetCss = code.match(/CSSStyleSheet\.replaceSync\(`([\s\S]*?)`\)/g);
-  if (sheetCss) cssBlocks.push(...sheetCss.map(c => c.match(/`([\s\S]*?)`/)?.[1] || "").filter(Boolean));
+  if (sheetCss) {cssBlocks.push(...sheetCss.map(c => c.match(/`([\s\S]*?)`/)?.[1] || "").filter(Boolean));}
 
   const styleBlocks = code.match(/<style[^>]*>([\s\S]*?)<\/style>/g);
-  if (styleBlocks) cssBlocks.push(...styleBlocks.map(c => c.replace(/<style[^>]*>|<\/style>/g, "").trim()));
+  if (styleBlocks) {cssBlocks.push(...styleBlocks.map(c => c.replaceAll(/<style[^>]*>|<\/style>/g, "").trim()));}
 
   return cssBlocks.join("\n\n");
 }

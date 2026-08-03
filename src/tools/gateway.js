@@ -24,7 +24,7 @@ const receiptStore = new Map();
 let SERVER_SECRET = null;
 
 function getServerSecret() {
-  if (!SERVER_SECRET) SERVER_SECRET = randomUUID();
+  if (!SERVER_SECRET) {SERVER_SECRET = randomUUID();}
   return SERVER_SECRET;
 }
 
@@ -49,8 +49,8 @@ export function issueReceipt(code, skillName, allPass, now = Date.now()) {
     expiresAt: now + 300_000, // 5 min TTL
   });
   // Cleanup receipts that expired over 5 min ago (i.e. issued > 10 min back)
-  for (const [key, val] of receiptStore) {
-    if (now - val.expiresAt > 300_000) receiptStore.delete(key);
+  for (const [key, value] of receiptStore) {
+    if (now - value.expiresAt > 300_000) {receiptStore.delete(key);}
   }
   return token;
 }
@@ -65,15 +65,15 @@ export function issueReceipt(code, skillName, allPass, now = Date.now()) {
  */
 export function validateReceipt(token, code, now = Date.now()) {
   const entry = receiptStore.get(token);
-  if (!entry) return { valid: false, reason: "Receipt not found or expired" };
+  if (!entry) {return { valid: false, reason: "Receipt not found or expired" };}
   // Enforce the TTL at validation time — an expired receipt must never pass.
   if (now > entry.expiresAt) {
     receiptStore.delete(token);
     return { valid: false, reason: "Receipt expired — re-run rule_tool_gateway" };
   }
   const codeHash = createHash("sha256").update(code).digest("hex");
-  if (codeHash !== entry.codeHash) return { valid: false, reason: "Code hash mismatch — code was modified after check" };
-  if (!entry.allPass) return { valid: false, allPass: false, reason: "Guardrails did not pass" };
+  if (codeHash !== entry.codeHash) {return { valid: false, reason: "Code hash mismatch — code was modified after check" };}
+  if (!entry.allPass) {return { valid: false, allPass: false, reason: "Guardrails did not pass" };}
   return { valid: true, allPass: true };
 }
 
@@ -108,20 +108,19 @@ export async function registerGatewayTool() {
       },
       required: ["prompt"],
     },
-    handler: async (args) => {
-      const { prompt, code, path, framework } = args;
+    handler: async (arguments_) => {
+      const { prompt, code, path, framework } = arguments_;
       const lines = [];
 
       // ── Token-saving: nudge the agent toward the code graph when present ──
       const { tokensaveActive, TOKENSAVE_DIRECTIVE } = await import("../core/agent-integrations.js");
       if (path && tokensaveActive(path)) {
-        lines.push(TOKENSAVE_DIRECTIVE);
-        lines.push("");
+        lines.push(TOKENSAVE_DIRECTIVE, "");
       }
 
       // ── Step 1: Route the prompt ──
       const { callTool } = await import("./router.js");
-      const routeResult = await callTool("pix_tool", { prompt, ...(path ? { path } : {}), ...(framework ? { framework } : {}) });
+      const routeResult = await callTool("pix_tool", { prompt, ...(path && { path }), ...(framework && { framework }) });
       let route = { route: "unknown", confidence: 0, sections: [], next_tools: [] };
       try {
         const parsed = JSON.parse(routeResult.content[0]?.text || "{}");
@@ -155,17 +154,14 @@ export async function registerGatewayTool() {
       const primarySkill = effectiveRoute?.startsWith("rule-") ? effectiveRoute : null;
       if (primarySkill) {
         const skillResult = await callTool(
-          `pix_${primarySkill.replace(/^rule-/, "").replace(/-/g, "_")}`,
+          `pix_${primarySkill.replace(/^rule-/, "").replaceAll('-', "_")}`,
           { mode: "tldr", query: prompt.slice(0, 300) }
         );
         const evidence = skillResult.content?.[0]?.text || "";
         const truncated = evidence.length > 8000
           ? evidence.slice(0, 8000) + "\n\n... (truncated, use pix_* tool for full content)"
           : evidence;
-        lines.push("## Evidence");
-        lines.push("");
-        lines.push(truncated);
-        lines.push("");
+        lines.push("## Evidence", "", truncated, "");
       }
 
       // ── Step 3: Run guardrails if code provided ──
@@ -181,8 +177,7 @@ export async function registerGatewayTool() {
           // Don't restrict dependencies for backend code
         });
 
-        lines.push("## Guardrail Check");
-        lines.push("");
+        lines.push("## Guardrail Check", "");
         if (result.allPass) {
           lines.push(`✅ All ${result.total} guardrails pass.`);
           // Issue receipt only on full pass
@@ -211,16 +206,14 @@ export async function registerGatewayTool() {
         "pix_apply",
         "pix_search",
       ])].slice(0, 10);
-      lines.push("## Next Steps");
-      lines.push("");
-      lines.push(`Available tools: ${nextTools.join(", ")}`);
-      lines.push(receipt
+      lines.push("## Next Steps", "");
+      lines.push(`Available tools: ${nextTools.join(", ")}`, receipt
         ? `\nTo write files, call pix_apply with the receipt above. The receipt proves pix_gateway validated this exact code.`
         : `\nFix failures, then run pix_gateway again with the updated code.`);
 
       const response = {
         route: effectiveRoute,
-        originalRoute: route.route !== effectiveRoute ? route.route : undefined,
+        originalRoute: route.route === effectiveRoute ? undefined : route.route,
         confidence: route.confidence,
         evidence_loaded: !!primarySkill,
         checkResult,

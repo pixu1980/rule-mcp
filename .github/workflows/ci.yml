@@ -28,7 +28,7 @@ jobs:
       - name: Check syntax (all source files)
         run: find bin src -name "*.js" -exec node --check {} \;
       - name: ESLint
-        run: pnpm exec eslint bin/ src/ test/ --ext .js,.mjs --max-warnings 50
+        run: pnpm exec eslint bin/ src/ test/ --max-warnings 50
       - name: Prettier check
         run: pnpm exec prettier --check '**/*.{js,mjs,json,md}' --ignore-path .gitignore
 

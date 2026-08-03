@@ -60,15 +60,15 @@ const ALLOWED_ORIGINS = new Set();
  *
  * @returns {boolean} true if the preflight was handled (caller should return)
  */
-function handleCors(req, res) {
-  const origin = req.headers.origin;
+function handleCors(request, res) {
+  const origin = request.headers.origin;
   if (origin && ALLOWED_ORIGINS.has(origin)) {
     res.setHeader("Access-Control-Allow-Origin", origin);
     res.setHeader("Access-Control-Allow-Methods", "GET, POST, DELETE, OPTIONS");
     res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization, Mcp-Session-Id, MCP-Protocol-Version");
     res.setHeader("Access-Control-Expose-Headers", "Mcp-Session-Id");
   }
-  if (req.method === "OPTIONS") {
+  if (request.method === "OPTIONS") {
     res.writeHead(204);
     res.end();
     return true;
@@ -81,19 +81,19 @@ function handleCors(req, res) {
  *
  * @returns {boolean} true if authorized
  */
-function checkAuth(req, pathname) {
-  if (pathname === "/health") return true;
-  const auth = req.headers.authorization;
-  if (!auth) return false;
+function checkAuth(request, pathname) {
+  if (pathname === "/health") {return true;}
+  const auth = request.headers.authorization;
+  if (!auth) {return false;}
   const provided = Buffer.from(auth);
   const wanted = Buffer.from(`Bearer ${serverToken}`);
-  if (provided.length !== wanted.length) return false;
+  if (provided.length !== wanted.length) {return false;}
   return timingSafeEqual(provided, wanted);
 }
 
 /** Write a JSON-RPC-style error response. */
 function sendJsonRpcError(res, status, code, message) {
-  if (res.headersSent) return;
+  if (res.headersSent) {return;}
   res.writeHead(status, { "Content-Type": "application/json" });
   res.end(JSON.stringify({ jsonrpc: "2.0", error: { code, message }, id: null }));
 }
@@ -104,10 +104,10 @@ function sendJsonRpcError(res, status, code, message) {
  * @returns {Promise<string|null>} body text, or null if the cap was exceeded
  *   (a 413 response is sent in that case)
  */
-async function readBody(req, res) {
+async function readBody(request, res) {
   let bodyLength = 0;
   const buffers = [];
-  for await (const chunk of req) {
+  for await (const chunk of request) {
     bodyLength += chunk.length;
     if (bodyLength > MAX_BODY_BYTES) {
       res.writeHead(413, { "Content-Type": "application/json" });
@@ -122,22 +122,22 @@ async function readBody(req, res) {
 /**
  * HTTP/HTTPS request handler for the Streamable HTTP transport.
  */
-async function requestHandler(req, res) {
-  if (handleCors(req, res)) return;
+async function requestHandler(request, res) {
+  if (handleCors(request, res)) {return;}
 
-  const proto = httpServer instanceof https.Server ? "https" : "http";
-  const parsedUrl = new URL(req.url ?? "/", `${proto}://${req.headers.host ?? "localhost"}`);
+  const prototype = httpServer instanceof https.Server ? "https" : "http";
+  const parsedUrl = new URL(request.url ?? "/", `${prototype}://${request.headers.host ?? "localhost"}`);
   const pathname = parsedUrl.pathname;
 
   // Auth (skipped for /health)
-  if (!checkAuth(req, pathname)) {
+  if (!checkAuth(request, pathname)) {
     res.writeHead(401, { "Content-Type": "application/json" });
     res.end(JSON.stringify({ error: "Unauthorized. Provide Authorization: Bearer <token> header." }));
     return;
   }
 
   // Cross-origin denial on protected endpoints (DNS-rebinding hardening)
-  const origin = req.headers.origin;
+  const origin = request.headers.origin;
   if (origin && !ALLOWED_ORIGINS.has(origin)) {
     res.writeHead(403, { "Content-Type": "application/json" });
     res.end(JSON.stringify({ error: "Cross-origin requests are not allowed." }));
@@ -146,7 +146,7 @@ async function requestHandler(req, res) {
 
   try {
     // ── GET /health ──
-    if (req.method === "GET" && pathname === "/health") {
+    if (request.method === "GET" && pathname === "/health") {
       res.writeHead(200, { "Content-Type": "application/json" });
       res.end(JSON.stringify({ ok: true, uptime: process.uptime() }));
       return;
@@ -158,16 +158,16 @@ async function requestHandler(req, res) {
       return;
     }
 
-    const sessionId = req.headers["mcp-session-id"];
+    const sessionId = request.headers["mcp-session-id"];
     const existing = typeof sessionId === "string" ? transports.get(sessionId) : undefined;
 
     // ── POST /mcp ──
-    if (req.method === "POST") {
-      const body = await readBody(req, res);
-      if (body === null) return; // 413 already sent
+    if (request.method === "POST") {
+      const body = await readBody(request, res);
+      if (body === null) {return;} // 413 already sent
       const parsed = safeJsonParse(body);
       if (parsed === undefined) {
-        sendJsonRpcError(res, 400, -32700, "Parse error: invalid JSON in request body");
+        sendJsonRpcError(res, 400, -32_700, "Parse error: invalid JSON in request body");
         return;
       }
 
@@ -175,11 +175,11 @@ async function requestHandler(req, res) {
       if (!transport) {
         // A new session is only allowed on an initialize request with no session id.
         if (sessionId || !isInitializeRequest(parsed)) {
-          sendJsonRpcError(res, 400, -32000, "Bad Request: no valid session id for a non-initialize request");
+          sendJsonRpcError(res, 400, -32_000, "Bad Request: no valid session id for a non-initialize request");
           return;
         }
         if (transports.size >= MAX_SESSIONS) {
-          sendJsonRpcError(res, 503, -32000, "Server session limit reached. Close an existing session and retry.");
+          sendJsonRpcError(res, 503, -32_000, "Server session limit reached. Close an existing session and retry.");
           return;
         }
         const server = createServer();
@@ -198,26 +198,26 @@ async function requestHandler(req, res) {
         await server.connect(transport);
       }
 
-      await transport.handleRequest(req, res, parsed);
+      await transport.handleRequest(request, res, parsed);
       return;
     }
 
     // ── GET /mcp (server → client SSE) and DELETE /mcp (terminate) ──
-    if (req.method === "GET" || req.method === "DELETE") {
+    if (request.method === "GET" || request.method === "DELETE") {
       if (!existing) {
         res.writeHead(404, { "Content-Type": "application/json" });
         res.end(JSON.stringify({ error: "No session found for Mcp-Session-Id." }));
         return;
       }
-      await existing.transport.handleRequest(req, res);
+      await existing.transport.handleRequest(request, res);
       return;
     }
 
     res.writeHead(405, { "Content-Type": "application/json", Allow: "GET, POST, DELETE, OPTIONS" });
     res.end(JSON.stringify({ error: "Method not allowed" }));
-  } catch (err) {
+  } catch (error) {
     const requestId = randomUUID();
-    process.stderr.write(`[rule-mcp] [${requestId}] ${req.method} ${req.url}: ${err?.stack ?? err?.message ?? err}\n`);
+    process.stderr.write(`[rule-mcp] [${requestId}] ${request.method} ${request.url}: ${error?.stack ?? error?.message ?? error}\n`);
     if (!res.headersSent) {
       res.writeHead(500, { "Content-Type": "application/json" });
       res.end(JSON.stringify({ error: "Internal server error", requestId }));
@@ -252,17 +252,13 @@ export async function startHttpServer(options = {}) {
     }
   }
 
-  const safeHandler = wrapRequestHandler(requestHandler, { timeout: 60000 });
+  const safeHandler = wrapRequestHandler(requestHandler, { timeout: 60_000 });
 
-  if (sslCert && sslKey) {
-    httpServer = https.createServer({ cert: readFileSync(sslCert), key: readFileSync(sslKey) }, safeHandler);
-  } else {
-    httpServer = http.createServer(safeHandler);
-  }
+  httpServer = sslCert && sslKey ? https.createServer({ cert: readFileSync(sslCert), key: readFileSync(sslKey) }, safeHandler) : http.createServer(safeHandler);
 
   // Streams are long-lived; disable the generic idle timeout.
   httpServer.timeout = 0;
-  httpServer.keepAliveTimeout = 10000;
+  httpServer.keepAliveTimeout = 10_000;
 
   return new Promise((resolve, reject) => {
     httpServer.on("error", reject);

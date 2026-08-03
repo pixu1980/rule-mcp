@@ -183,7 +183,7 @@ test("every listed prompt has a getPrompt implementation with messages", () => {
 
 test("refactor: rule-area- prefix gone, a11y merged into rule-a11y-audit, rule-generate-component removed", () => {
   const names = listPrompts().map((p) => p.name);
-  assert.ok(!names.some((n) => n.startsWith("rule-area-")), "no rule-area- prefixed prompt must remain");
+  assert.ok(names.every((n) => !n.startsWith("rule-area-")), "no rule-area- prefixed prompt must remain");
   for (const removed of ["rule-generate-component", "rule-a11y-test", "rule-a11y-review"]) {
     assert.ok(!names.includes(removed), `${removed} must be removed`);
   }
@@ -205,9 +205,9 @@ test("every prompt exposes exactly one argument", () => {
 
 test("every prompt supports /<name> help as an instant assistant message", () => {
   for (const p of prompts) {
-    const arg = p.arguments[0];
+    const argument = p.arguments[0];
     for (const token of ["help", "--help", "-h"]) {
-      const full = getPrompt(p.name, { [arg.name]: token });
+      const full = getPrompt(p.name, { [argument.name]: token });
       assert.ok(full, `${p.name}: getPrompt with ${token} must return a prompt`);
       assert.equal(full.messages.length, 1, `${p.name}: help must be a single message`);
       assert.equal(full.messages[0].role, "assistant", `${p.name}: ${token} help must be an assistant message (shown instantly, no model call)`);
@@ -221,10 +221,10 @@ test("every prompt supports /<name> help as an instant assistant message", () =>
 test("every prompt ends with a commit-scope proposal and involves TDD/a11y or asks the user", () => {
   for (const p of prompts) {
     const text = getPrompt(p.name).messages.map((m) => m.content?.text ?? "").join("\n");
-    const commitWithScope = /commit/i.test(text) && /scope/i.test(text);
-    assert.ok(commitWithScope, `${p.name}: must propose a commit with scope`);
-    const baselines = /tdd|a11y|test/i.test(text) || /ask/i.test(text);
-    assert.ok(baselines, `${p.name}: must involve TDD/a11y baselines or ask the user what to do`);
+    const isCommitWithScope = /commit/i.test(text) && /scope/i.test(text);
+    assert.ok(isCommitWithScope, `${p.name}: must propose a commit with scope`);
+    const isBaselines = /tdd|a11y|test/i.test(text) || /ask/i.test(text);
+    assert.ok(isBaselines, `${p.name}: must involve TDD/a11y baselines or ask the user what to do`);
   }
 });
 

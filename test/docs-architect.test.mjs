@@ -45,15 +45,15 @@ const expectedDocs = [
   "docs/04-roadmap-plans.md",
 ];
 for (const file of expectedDocs) {
-  assert(existsSync(join(root, file)), `Missing consolidated doc: ${file}`);
+  assert.ok(existsSync(join(root, file)), `Missing consolidated doc: ${file}`);
 }
 
 const docsRootFiles = listFiles("docs").filter((file) => file.endsWith(".md"));
-assert(docsRootFiles.length <= 6, `Expected <= 6 root docs, found ${docsRootFiles.length}: ${docsRootFiles.join(", ")}`);
+assert.ok(docsRootFiles.length <= 6, `Expected <= 6 root docs, found ${docsRootFiles.length}: ${docsRootFiles.join(", ")}`);
 
 const docsIndex = read("docs/README.md");
 for (const file of expectedDocs.slice(1)) {
-  assert(docsIndex.includes(file.replace("docs/", "./")), `docs/README.md must link ${file}`);
+  assert.ok(docsIndex.includes(file.replace("docs/", "./")), `docs/README.md must link ${file}`);
 }
 for (const legacySource of [
   "docs/ANALYSIS.md",
@@ -63,34 +63,34 @@ for (const legacySource of [
   "docs/plans/execution-plan.md",
   "docs/plans/refactor-roadmap.md",
 ]) {
-  assert(docsIndex.includes(legacySource), `content manifest must preserve ${legacySource}`);
+  assert.ok(docsIndex.includes(legacySource), `content manifest must preserve ${legacySource}`);
 }
 
 // ── ADR summaries cover every ADR file ────────────────────────────
 const allAdrMarkdown = listFiles("docs/adr").filter((file) => file.endsWith(".md") && !["README.md", "DECISIONS.md"].includes(file));
-assert(allAdrMarkdown.every((file) => /^\d{3}-.+\.md$/.test(file)), `ADR filenames must be 001-*.md without ADR- prefix: ${allAdrMarkdown.join(", ")}`);
+assert.ok(allAdrMarkdown.every((file) => /^\d{3}-.+\.md$/.test(file)), `ADR filenames must be 001-*.md without ADR- prefix: ${allAdrMarkdown.join(", ")}`);
 const adrFiles = allAdrMarkdown;
-assert(adrFiles.length > 0, "No ADR files found");
+assert.ok(adrFiles.length > 0, "No ADR files found");
 assert.deepEqual(adrFiles.map((file) => file.slice(0, 3)), adrFiles.map((_, index) => String(index + 1).padStart(3, "0")), "ADR numbering must be contiguous from 001");
 const adrReadme = read("docs/adr/README.md");
 const decisions = read("docs/adr/DECISIONS.md");
 for (const file of adrFiles) {
-  assert(adrReadme.includes(file), `ADR README missing ${file}`);
-  assert(decisions.includes(file), `ADR decisions summary missing ${file}`);
+  assert.ok(adrReadme.includes(file), `ADR README missing ${file}`);
+  assert.ok(decisions.includes(file), `ADR decisions summary missing ${file}`);
 }
-assert(decisions.includes("## Decision themes"), "DECISIONS.md must summarize ADR themes");
-assert(decisions.includes("## Complete ADR summary"), "DECISIONS.md must include complete ADR summary");
+assert.ok(decisions.includes("## Decision themes"), "DECISIONS.md must summarize ADR themes");
+assert.ok(decisions.includes("## Complete ADR summary"), "DECISIONS.md must include complete ADR summary");
 
 // ── Architect templates are inventoried and placeholder-complete ───
 const architectSkill = read("skills/rule-architect/SKILL.md");
 for (const required of ["rule_tool_detect", "rule_tool_fix", "rule_tool_process_adr", "rule_tool_process_handoff", "rule_tool_component", "rule_tool_check"]) {
-  assert(architectSkill.includes(required), `rule-architect must reference ${required}`);
+  assert.ok(architectSkill.includes(required), `rule-architect must reference ${required}`);
 }
 
 const inventory = read("skills/rule-architect/knowledge/context-inventory.md");
-assert(inventory.includes("## Generated .context files"), "context inventory missing generated files section");
-assert(inventory.includes("## Placeholder coverage"), "context inventory missing placeholder coverage");
-assert(inventory.includes("## Skill and tool routing"), "context inventory missing skill/tool routing section");
+assert.ok(inventory.includes("## Generated .context files"), "context inventory missing generated files section");
+assert.ok(inventory.includes("## Placeholder coverage"), "context inventory missing placeholder coverage");
+assert.ok(inventory.includes("## Skill and tool routing"), "context inventory missing skill/tool routing section");
 
 // templates.json is the canonical file (skills/rule-architect/templates.json,
 // also used by generator.mjs and context-server.mjs); the stale local copy under
@@ -111,25 +111,25 @@ const templatePlaceholders = placeholdersFromTemplates(templates);
 const schemaKeys = new Set();
 function collectSchemaKeys(value) {
   if (Array.isArray(value)) {
-    for (const item of value) collectSchemaKeys(item);
+    for (const item of value) {collectSchemaKeys(item);}
     return;
   }
   if (value && typeof value === "object") {
-    if (typeof value.key === "string" && (value.type || value.label)) schemaKeys.add(value.key);
-    for (const child of Object.values(value)) collectSchemaKeys(child);
+    if (typeof value.key === "string" && (value.type || value.label)) {schemaKeys.add(value.key);}
+    for (const child of Object.values(value)) {collectSchemaKeys(child);}
   }
 }
 collectSchemaKeys(placeholderSchema);
 for (const key of templatePlaceholders) {
-  assert(schemaKeys.has(key), `Placeholder ${key} used in templates but missing from placeholders.json`);
+  assert.ok(schemaKeys.has(key), `Placeholder ${key} used in templates but missing from placeholders.json`);
 }
 for (const required of ["RULE_MCP_PRIMARY_SKILL", "RULE_MCP_SECONDARY_SKILLS", "RULE_MCP_RECOMMENDED_TOOLS", "ARCHITECTURE_DECISIONS", "QUALITY_GATES", "DELIVERY_WORKFLOW"]) {
-  assert(templatePlaceholders.includes(required), `Templates must use ${required}`);
+  assert.ok(templatePlaceholders.includes(required), `Templates must use ${required}`);
 }
 
 function skillSectionTitles(markdown, startHeading, endHeading) {
   const start = markdown.indexOf(startHeading);
-  assert(start >= 0, `Missing heading ${startHeading}`);
+  assert.ok(start !== -1, `Missing heading ${startHeading}`);
   const end = endHeading ? markdown.indexOf(endHeading, start) : markdown.length;
   const body = markdown.slice(start, end > start ? end : markdown.length);
   return [...body.matchAll(/^### (.+)$/gm)].map((match) => match[1]).filter((title) => !title.includes("Skill tool naming"));
@@ -144,7 +144,7 @@ assertAlphabetical(skillSectionTitles(read("skills/rule/SKILL.md"), "## Complete
 assertAlphabetical(skillSectionTitles(read("skills/rule-architect/SKILL.md"), "## Complete skill coverage", "## Generated `.context/` output"), "rule-architect skill sections");
 
 const roadmap = read("docs/04-roadmap-plans.md");
-assert(!roadmap.includes("## 9. Migration Guide"), "Roadmap must not include a migration guide section before first release");
-assert(roadmap.includes("Final rule-architect UI/UX Implementation Plan"), "Roadmap must include the final mirrored CLI/Web UX plan");
+assert.ok(!roadmap.includes("## 9. Migration Guide"), "Roadmap must not include a migration guide section before first release");
+assert.ok(roadmap.includes("Final rule-architect UI/UX Implementation Plan"), "Roadmap must include the final mirrored CLI/Web UX plan");
 
 console.log("  ✅ docs, ADR summaries, architect inventory, and skill ordering are coherent");

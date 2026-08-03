@@ -21,7 +21,7 @@ export const pkg = JSON.parse(
  * Single source of truth shared by the CLI, daemon, Docker image, and docs.
  * Override with --port or the RULE_MCP_PORT env var.
  */
-export const DEFAULT_SSE_PORT = 37999;
+export const DEFAULT_SSE_PORT = 37_999;
 
 /**
  * Host/interface the SSE/HTTP transport binds to.
@@ -98,9 +98,9 @@ export function detectInstallType() {
   const root = getRepoRoot();
   try {
     // A git clone can pull; this is the only self-updatable install.
-    if (existsSync(join(root, ".git"))) return "git";
+    if (existsSync(join(root, ".git"))) {return "git";}
   } catch { /* ignore */ }
-  if (existsSync("/.dockerenv") || process.env.RULE_MCP_DOCKER === "1") return "docker";
-  if (root.includes(`${sep}node_modules${sep}`) || root.endsWith(`${sep}node_modules`)) return "npm";
+  if (existsSync("/.dockerenv") || process.env.RULE_MCP_DOCKER === "1") {return "docker";}
+  if (root.includes(`${sep}node_modules${sep}`) || root.endsWith(`${sep}node_modules`)) {return "npm";}
   return "unknown";
 }

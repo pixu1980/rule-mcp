@@ -21,7 +21,7 @@ import { join } from "node:path";
 
 console.log("self-update throttle test");
 
-const g = (args, cwd) => execFileSync("git", args, { cwd, stdio: ["ignore", "pipe", "ignore"], encoding: "utf8" });
+const g = (arguments_, cwd) => execFileSync("git", arguments_, { cwd, stdio: ["ignore", "pipe", "ignore"], encoding: "utf8" });
 
 /** Build a bare "upstream" + a working clone that tracks it (same as self-update.test). */
 function makeClonePair() {
@@ -60,8 +60,8 @@ const REAL_GIT = process.env.PATH.split(":")
 function makeGitStub() {
   const dir = mkdtempSync(join(tmpdir(), "rule-gitstub-"));
   const log = join(mkdtempSync(join(tmpdir(), "rule-gitlog-")), "git.log");
-  const stub = `#!/bin/sh
-printf '%s\\n' "$1" >> "$RULE_MCP_GIT_LOG"
+  const stub = String.raw`#!/bin/sh
+printf '%s\n' "$1" >> "$RULE_MCP_GIT_LOG"
 if [ -n "$RULE_MCP_GIT_SLEEP" ]; then sleep "$RULE_MCP_GIT_SLEEP"; fi
 exec ${REAL_GIT} "$@"
 `;
@@ -74,7 +74,7 @@ exec ${REAL_GIT} "$@"
  * Run a scenario script in a child process with cwd=clone, the stubbed git on
  * PATH, and env overrides. Returns { out, logPath }.
  */
-function runScenario(clone, scriptBody, env = {}) {
+function runScenario(clone, scriptBody, environment = {}) {
   const stub = makeGitStub();
   const moduleUrl = new URL("../src/core/self-update.js", import.meta.url).href;
   const script = `
@@ -88,7 +88,7 @@ function runScenario(clone, scriptBody, env = {}) {
       RULE_MCP_REPO_ROOT: clone,
       PATH: `${stub.dir}:${process.env.PATH}`,
       RULE_MCP_GIT_LOG: stub.log,
-      ...env,
+      ...environment,
     },
     encoding: "utf8",
   });

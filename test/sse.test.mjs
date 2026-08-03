@@ -53,7 +53,7 @@ const sseResult = await new Promise((resolve, reject) => {
     path: "/sse",
     headers: authHeader,
   };
-  const req = httpGet(options, (res) => {
+  const request = httpGet(options, (res) => {
     let data = "";
     const timer = setTimeout(() => {
       // After 1s, resolve with what we have
@@ -73,7 +73,7 @@ const sseResult = await new Promise((resolve, reject) => {
     });
     res.on("error", reject);
   });
-  req.on("error", reject);
+  request.on("error", reject);
 });
 
 check("T3 SSE status 200", sseResult.status === 200);
@@ -92,7 +92,7 @@ const mcpRequest = JSON.stringify({
 });
 
 const postResult = await new Promise((resolve, reject) => {
-  const req = httpRequest({
+  const request = httpRequest({
     hostname: "127.0.0.1",
     port: server.port,
     path: `/message?sessionId=${sessionId}`,
@@ -107,9 +107,9 @@ const postResult = await new Promise((resolve, reject) => {
     res.on("data", (c) => body += c);
     res.on("end", () => resolve({ status: res.statusCode, body }));
   });
-  req.on("error", reject);
-  req.write(mcpRequest);
-  req.end();
+  request.on("error", reject);
+  request.write(mcpRequest);
+  request.end();
 });
 
 check("T4.2 POST /message status 202", postResult.status === 202);
@@ -128,4 +128,4 @@ try {
 }
 
 console.log(`\nResults: ${pass} passed, ${fail} failed`);
-if (fail > 0) process.exit(1);
+if (fail > 0) {process.exit(1);}

@@ -30,10 +30,10 @@ const FRAMEWORK_ALIASES = {
 };
 
 function resolveFramework(framework) {
-  if (!framework) return "vanilla";
+  if (!framework) {return "vanilla";}
   const f = framework.toLowerCase();
   for (const [key, aliases] of Object.entries(FRAMEWORK_ALIASES)) {
-    if (aliases.includes(f) || key === f) return key;
+    if (aliases.includes(f) || key === f) {return key;}
   }
   return "vanilla";
 }
@@ -75,7 +75,7 @@ const PLUGIN_GUARDRAILS = new Map();
  * @param {Array} guardrails — Array of guardrail objects { id, label, description, check }
  */
 export function mergePluginGuardrails(pluginName, guardrails) {
-  if (!Array.isArray(guardrails) || guardrails.length === 0) return;
+  if (!Array.isArray(guardrails) || guardrails.length === 0) {return;}
   const existing = PLUGIN_GUARDRAILS.get(pluginName) || [];
   PLUGIN_GUARDRAILS.set(pluginName, [...existing, ...guardrails]);
 }
@@ -94,7 +94,7 @@ export function getGuardrails(skillName, mode) {
   const backend = isBackend ? BACKEND_GUARDRAILS : [];
 
   // Database guardrails for data/database skills
-  const isDatabase = /^rule-data(?:-|$)/.test(skillName) || /^rule-data-/.test(skillName);
+  const isDatabase = /^rule-data(?:-|$)/.test(skillName) || skillName.startsWith('rule-data-');
   const database = isDatabase ? DATABASE_GUARDRAILS : [];
 
   // DevOps guardrails for devops skills
@@ -159,33 +159,33 @@ export function getGuardrailsReport(skillName, mode) {
   const fg = FRAMEWORK_GUARDRAILS[framework] || [];
   if (fg.length > 0) {
     lines.push(`## Framework-specific (${framework})`, "");
-    for (const g of fg) lines.push(`- [ ] **${g.id}**: ${g.label}`, `  ${g.description}`, "");
+    for (const g of fg) {lines.push(`- [ ] **${g.id}**: ${g.label}`, `  ${g.description}`, "");}
   }
 
   if (skillName === "rule-styleguide") {
     lines.push(`## Project Scaffolding (${SCAFFOLD_GUARDRAILS.length} config files)`, "");
-    for (const g of SCAFFOLD_GUARDRAILS) lines.push(`- [ ] **${g.id}**: ${g.label}`, `  ${g.description}`, "");
+    for (const g of SCAFFOLD_GUARDRAILS) {lines.push(`- [ ] **${g.id}**: ${g.label}`, `  ${g.description}`, "");}
     lines.push("Run `pix_styleguide mode=scaffold` to generate these files.", "");
   }
 
   if (skillName === "rule-architect") {
     lines.push(`## Architecture & Documentation (${ARCHITECT_GUARDRAILS.length} checks)`, "");
-    for (const g of ARCHITECT_GUARDRAILS) lines.push(`- [ ] **${g.id}**: ${g.label}`, `  ${g.description}`, "");
+    for (const g of ARCHITECT_GUARDRAILS) {lines.push(`- [ ] **${g.id}**: ${g.label}`, `  ${g.description}`, "");}
   }
 
   if (/^rule-(?:backend|backend-)/.test(skillName)) {
     lines.push(`## Backend Security & API (${BACKEND_GUARDRAILS.length} checks)`, "");
-    for (const g of BACKEND_GUARDRAILS) lines.push(`- [ ] **${g.id}**: ${g.label}`, `  ${g.description}`, "");
+    for (const g of BACKEND_GUARDRAILS) {lines.push(`- [ ] **${g.id}**: ${g.label}`, `  ${g.description}`, "");}
   }
 
   if (/^rule-data(?:-|$)/.test(skillName)) {
     lines.push(`## Database Safety (${DATABASE_GUARDRAILS.length} checks)`, "");
-    for (const g of DATABASE_GUARDRAILS) lines.push(`- [ ] **${g.id}**: ${g.label}`, `  ${g.description}`, "");
+    for (const g of DATABASE_GUARDRAILS) {lines.push(`- [ ] **${g.id}**: ${g.label}`, `  ${g.description}`, "");}
   }
 
   if (/^rule-devops(?:-|$)/.test(skillName)) {
     lines.push(`## DevOps & Security (${DEVOPS_GUARDRAILS.length} checks)`, "");
-    for (const g of DEVOPS_GUARDRAILS) lines.push(`- [ ] **${g.id}**: ${g.label}`, `  ${g.description}`, "");
+    for (const g of DEVOPS_GUARDRAILS) {lines.push(`- [ ] **${g.id}**: ${g.label}`, `  ${g.description}`, "");}
   }
 
   lines.push("## How to use", "", "1. Generate code following rule AI principles.", "2. Run `pix_<skill> check` on the generated code.", "3. Fix any FAIL results.", "4. Re-check until all pass (allPass: true).", "");

@@ -331,7 +331,7 @@ Supports smart iteration: pass `previousPassed` to skip already-verified guardra
 - `js-prefer-replace-all` — `str.replace(/x/g, …)` → `str.replaceAll('x', …)`
 - `js-no-array-for-each` — `.forEach()` → `for...of`
 
-**Scaffold (mode=scaffold):** verifies .prettierrc, .nvmrc, .editorconfig, .gitignore, .eslintrc.json, tsconfig.json, jsconfig.json
+**Scaffold (mode=scaffold):** verifies .prettierrc, .nvmrc, .editorconfig, .gitignore, eslint.config.mjs, tsconfig.json, jsconfig.json
 
 **Architect:** verifies .agents/, AGENTS.md, SDD specs, placeholders, CLI, workflow
 
@@ -376,7 +376,7 @@ Reads templates from the `## Project Scaffolding` section of `rule-styleguide`.
 | `.nvmrc` | Node version (lts/*) |
 | `.editorconfig` | Cross-IDE consistency (indent_size=2, charset=utf-8, end_of_line=lf) |
 | `.gitignore` | OS + Node + build rules (.DS_Store, node_modules/, dist/, .env, coverage/) |
-| `.eslintrc.json` | ESLint config (eslint:recommended, browser+es2024+node env) |
+| `eslint.config.mjs` | ESLint flat config (@eslint/js + eslint-plugin-unicorn, ESLint 10) |
 | `tsconfig.json` | TypeScript config (strict=true, target=ES2022, module=ESNext, moduleResolution=bundler) |
 | `jsconfig.json` | JS config (checkJs=true, strict=true, target=ES2022) |
 

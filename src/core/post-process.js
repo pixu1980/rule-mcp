@@ -5,8 +5,8 @@
 //  Order: Prettier (syntax) → blank-line fixer (semantic)
 //  ═══════════════════════════════════════════════════════════════════════════════
 
-import { execFileSync } from "child_process";
-import { readFileSync, writeFileSync } from "fs";
+import { execFileSync } from "node:child_process";
+import { readFileSync, writeFileSync } from "node:fs";
 import { fixBlockSpacing } from "./block-spacing.js";
 
 /**
@@ -24,7 +24,7 @@ export function postProcessFiles(results) {
     .filter((r) => r.status === "written" && r.absPath && r.path.endsWith(".js"))
     .map((r) => r.absPath);
 
-  if (jsFiles.length === 0) return;
+  if (jsFiles.length === 0) {return;}
 
   // Step 1: Prettier — handles quotes, semicolons, indentation, multi-line blocks.
   // execFileSync (argv, no shell) so file paths can never be interpreted as shell
@@ -32,9 +32,9 @@ export function postProcessFiles(results) {
   try {
     execFileSync("pnpx", ["prettier", "--write", ...jsFiles], {
       stdio: "pipe",
-      timeout: 15000,
+      timeout: 15_000,
     });
-  } catch (e) {
+  } catch {
     // Prettier may exit non-zero if it can't parse files after our changes — ignore
   }
 
@@ -56,43 +56,42 @@ function fixBlankLines(filePath) {
   const orig = code;
   const lines = code.split("\n");
   const newLines = [];
-  let prevLine = "";
+  let previousLine = "";
 
-  for (let i = 0; i < lines.length; i++) {
-    const line = lines[i];
+  for (const [index, line] of lines.entries()) {
     const trimmed = line.trimStart();
 
     // Rule: blank line before return
     if (
       (trimmed.startsWith("return ") || trimmed === "return;") &&
-      i > 0 &&
-      prevLine !== "" &&
-      !prevLine.endsWith("{") &&
-      !prevLine.endsWith("(") &&
-      !prevLine.startsWith("//") &&
-      !prevLine.startsWith("/*") &&
-      !prevLine.endsWith("?")
+      index > 0 &&
+      previousLine !== "" &&
+      !previousLine.endsWith("{") &&
+      !previousLine.endsWith("(") &&
+      !previousLine.startsWith("//") &&
+      !previousLine.startsWith("/*") &&
+      !previousLine.endsWith("?")
     ) {
       newLines.push("");
     }
 
     newLines.push(line);
-    prevLine = line.trimEnd();
+    previousLine = line.trimEnd();
   }
 
   code = newLines.join("\n");
 
   // Rule: blank line between class methods
-  code = code.replace(/^(\s*)\}\n(\s*)(\w+\s*\()/gm, "$1}\n\n$2$3");
+  code = code.replaceAll(/^(\s*)\}\n(\s*)(\w+\s*\()/gm, "$1}\n\n$2$3");
 
   // Rule: blank line after const/let/var declarations before next statement
-  code = code.replace(
+  code = code.replaceAll(
     /((?:const|let|var)\s+\w+\s*=\s*[^;]+;)\n(\s*)([a-zA-Z])/g,
     "$1\n\n$2$3"
   );
 
   // Remove double blank lines
-  code = code.replace(/\n{3,}/g, "\n\n");
+  code = code.replaceAll(/\n{3,}/g, "\n\n");
 
   if (code !== orig) {
     writeFileSync(filePath, code, "utf8");

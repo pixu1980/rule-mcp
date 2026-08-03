@@ -27,9 +27,7 @@ try {
   // ── T1: Self-signed cert generation ──
   const { generateSelfSignedCert, isOpenSslAvailable } = await import("../src/transport/cert.js");
 
-  if (!isOpenSslAvailable()) {
-    console.log("  ⏭️  OpenSSL not available, skipping cert generation tests");
-  } else {
+  if (isOpenSslAvailable()) {
     const certPath = join(tmpDir, "cert.pem");
     const keyPath = join(tmpDir, "key.pem");
 
@@ -56,7 +54,7 @@ try {
 
     // ── T3: Health check over HTTPS (accept self-signed cert) ──
     const httpsBody = await new Promise((resolve, reject) => {
-      const req = https.request({
+      const request = https.request({
         hostname: "127.0.0.1",
         port: httpsServer.port,
         path: "/health",
@@ -67,8 +65,8 @@ try {
         res.on("data", (c) => data += c);
         res.on("end", () => resolve({ status: res.statusCode, headers: res.headers, body: data }));
       });
-      req.on("error", reject);
-      req.end();
+      request.on("error", reject);
+      request.end();
     });
     check("T3 HTTPS health check returns 200", httpsBody.status === 200);
     const parsed = JSON.parse(httpsBody.body);
@@ -83,25 +81,27 @@ try {
 
     try {
       await new Promise((resolve, reject) => {
-        const req = https.request({
+        const request = https.request({
           hostname: "127.0.0.1",
           port: httpsServer.port,
           path: "/health",
           method: "GET",
           rejectUnauthorized: false,
         }, (res) => resolve(res));
-        req.on("error", reject);
-        req.end();
+        request.on("error", reject);
+        request.end();
       });
       check("T4.1 HTTPS port closed after stop", false);
     } catch {
       check("T4.1 HTTPS port closed after stop", true);
     }
+  } else {
+    console.log("  ⏭️  OpenSSL not available, skipping cert generation tests");
   }
 } finally {
   // Clean up temp files
-  try { rmSync(tmpDir, { recursive: true, force: true }); } catch {}
+  try { rmSync(tmpDir, { recursive: true, force: true }); } catch { /* ignore: tmp dir may be absent */ }
 }
 
 console.log(`\nResults: ${pass} passed, ${fail} failed`);
-if (fail > 0) process.exit(1);
+if (fail > 0) {process.exit(1);}

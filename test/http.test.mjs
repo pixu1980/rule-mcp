@@ -36,17 +36,17 @@ function parseBody(contentType, text) {
   if (contentType.includes("text/event-stream")) {
     // Extract the last `data:` line's JSON payload.
     const dataLines = text.split("\n").filter((l) => l.startsWith("data:"));
-    const last = dataLines[dataLines.length - 1];
+    const last = dataLines.at(-1);
     return last ? JSON.parse(last.slice(5).trim()) : null;
   }
   return text ? JSON.parse(text) : null;
 }
 
-async function post(bodyObj, { token = TOKEN, sessionId } = {}) {
+async function post(bodyObject, { token = TOKEN, sessionId } = {}) {
   const headers = { "Content-Type": "application/json", Accept: ACCEPT };
-  if (token) headers.Authorization = `Bearer ${token}`;
-  if (sessionId) headers["Mcp-Session-Id"] = sessionId;
-  const res = await fetch(base, { method: "POST", headers, body: JSON.stringify(bodyObj) });
+  if (token) {headers.Authorization = `Bearer ${token}`;}
+  if (sessionId) {headers["Mcp-Session-Id"] = sessionId;}
+  const res = await fetch(base, { method: "POST", headers, body: JSON.stringify(bodyObject) });
   const text = await res.text();
   return { res, body: parseBody(res.headers.get("content-type") ?? "", text) };
 }

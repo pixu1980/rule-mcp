@@ -37,12 +37,12 @@ const ROOT_FILES = [
   ".windsurf/rules/project.md",
 ];
 
-function tmp() {
+function temporary() {
   return mkdtempSync(join(tmpdir(), "architect-guard-"));
 }
 
 test("fresh project: every root file is written and nothing is skipped", () => {
-  const dir = tmp();
+  const dir = temporary();
   try {
     const { files, skipped } = generateContext(ANSWERS, spec, dir);
     assert.deepEqual(skipped, [], "a clean project must skip nothing");
@@ -59,7 +59,7 @@ test("fresh project: every root file is written and nothing is skipped", () => {
 });
 
 test("an existing root file is preserved, not overwritten, and reported as skipped", () => {
-  const dir = tmp();
+  const dir = temporary();
   try {
     const SENTINEL = "# MY HAND-WRITTEN CLAUDE.md — DO NOT TOUCH\n";
     writeFileSync(join(dir, "CLAUDE.md"), SENTINEL, "utf-8");
@@ -79,7 +79,7 @@ test("an existing root file is preserved, not overwritten, and reported as skipp
 test("skipping an existing AGENTS.md does not block the fan-out files", () => {
   // AGENTS.md is the source body every fan-out file copies. Even when AGENTS.md
   // itself is skipped, CLAUDE.md et al. must be written from the rendered body.
-  const dir = tmp();
+  const dir = temporary();
   try {
     writeFileSync(join(dir, "AGENTS.md"), "# pre-existing\n", "utf-8");
     const { skipped } = generateContext(ANSWERS, spec, dir);
@@ -92,7 +92,7 @@ test("skipping an existing AGENTS.md does not block the fan-out files", () => {
 });
 
 test("{ force: true } overwrites an existing root file", () => {
-  const dir = tmp();
+  const dir = temporary();
   try {
     writeFileSync(join(dir, "CLAUDE.md"), "# stale\n", "utf-8");
     const { skipped } = generateContext(ANSWERS, spec, dir, { force: true });
@@ -104,7 +104,7 @@ test("{ force: true } overwrites an existing root file", () => {
 });
 
 test(".context/ is always regenerated, guard or not — it is not a guarded root file", () => {
-  const dir = tmp();
+  const dir = temporary();
   try {
     // Seed a .context/ file with sentinel content, then regenerate WITHOUT force.
     mkdirSync(join(dir, ".context"), { recursive: true });
@@ -129,7 +129,7 @@ test(".context/ is always regenerated, guard or not — it is not a guarded root
 });
 
 test("skipped paths are project-root-relative and cover only root files", () => {
-  const dir = tmp();
+  const dir = temporary();
   try {
     for (const rel of [".clinerules", ".cursor/rules/project.mdc"]) {
       mkdirSync(dirname(join(dir, rel)), { recursive: true });

@@ -51,15 +51,15 @@ assert.match(
 
 // ── Behavioral: real functions extracted from the scripts ───────────────────
 
-const rulesMarker = installSh.match(/^  RULES_MARKER="[^"]*"$/m)?.[0];
-const rulesContent = installSh.match(/^  RULES_CONTENT="[\s\S]*?<!-- \/rule-mcp-rules -->"$/m)?.[0];
+const rulesMarker = installSh.match(/^ {2}RULES_MARKER="[^"]*"$/m)?.[0];
+const rulesContent = installSh.match(/^ {2}RULES_CONTENT="[\s\S]*?<!-- \/rule-mcp-rules -->"$/m)?.[0];
 assert.ok(rulesMarker && rulesContent, "must extract RULES_MARKER and RULES_CONTENT from install.sh");
 
-const appendFn = extractBashFunction(installSh, "append_rules_block");
-const removeFn = extractBashFunction(uninstallSh, "remove_rules_block");
-assert.ok(appendFn && removeFn, "must extract append_rules_block and remove_rules_block");
+const appendFunction = extractBashFunction(installSh, "append_rules_block");
+const removeFunction = extractBashFunction(uninstallSh, "remove_rules_block");
+assert.ok(appendFunction && removeFunction, "must extract append_rules_block and remove_rules_block");
 
-const harness = `#!/usr/bin/env bash
+const harness = String.raw`#!/usr/bin/env bash
 set -euo pipefail
 sub() { :; }
 ok() { :; }
@@ -73,23 +73,23 @@ case "$OSTYPE" in
 esac
 ${rulesMarker}
 ${rulesContent}
-${appendFn}
-${removeFn}
+${appendFunction}
+${removeFunction}
 fail() { echo "HARNESS FAIL: $1"; exit 1; }
 tmp="$(mktemp -d)"
 trap 'rm -rf "$tmp"' EXIT
 
 # A) Fresh file: install → uninstall must restore the exact original bytes.
-printf 'line1\\nline2\\n' > "$tmp/a.md"
-printf 'line1\\nline2\\n' > "$tmp/a.expected"
+printf 'line1\nline2\n' > "$tmp/a.md"
+printf 'line1\nline2\n' > "$tmp/a.expected"
 append_rules_block "$tmp/a.md"
 remove_rules_block "$tmp/a.md" test
 cmp -s "$tmp/a.md" "$tmp/a.expected" || fail "A: fresh cycle changed the file"
 echo "A ok"
 
 # B) Three full cycles on a plain file must be byte-stable (no accumulation).
-printf 'line1\\n' > "$tmp/b.md"
-printf 'line1\\n' > "$tmp/b.expected"
+printf 'line1\n' > "$tmp/b.md"
+printf 'line1\n' > "$tmp/b.expected"
 for _ in 1 2 3; do
   append_rules_block "$tmp/b.md"
   remove_rules_block "$tmp/b.md" test
@@ -98,17 +98,17 @@ cmp -s "$tmp/b.md" "$tmp/b.expected" || fail "B: repeated cycles accumulated bla
 echo "B ok"
 
 # C) A single install inserts exactly ONE blank separator before the marker.
-printf 'line1\\n' > "$tmp/c.md"
+printf 'line1\n' > "$tmp/c.md"
 append_rules_block "$tmp/c.md"
 sep="$(awk '/<!-- rule-mcp-rules -->/{print n; exit} /^$/{n++; next} {n=0}' "$tmp/c.md")"
 [[ "$sep" == "1" ]] || fail "C: expected exactly 1 blank separator before marker (got '$sep')"
-printf 'line1\\n' > "$tmp/c.expected"
+printf 'line1\n' > "$tmp/c.expected"
 remove_rules_block "$tmp/c.md" test
 cmp -s "$tmp/c.md" "$tmp/c.expected" || fail "C: uninstall did not restore original"
 echo "C ok"
 
 # D) Pre-existing accumulated blanks (old bug state) converge to a stable file.
-printf 'line1\\n\\n\\n\\n\\n<!-- rule-mcp-rules -->\\nX\\n<!-- /rule-mcp-rules -->\\n' > "$tmp/d.md"
+printf 'line1\n\n\n\n\n<!-- rule-mcp-rules -->\nX\n<!-- /rule-mcp-rules -->\n' > "$tmp/d.md"
 remove_rules_block "$tmp/d.md" test
 append_rules_block "$tmp/d.md"
 cp "$tmp/d.md" "$tmp/d.stable"
@@ -142,16 +142,16 @@ function readScript(path) {
 import { readFileSync } from "node:fs";
 
 /** Extract a `name() { ... }` bash function (brace-balanced) from script source. */
-function extractBashFunction(src, name) {
-  const start = src.indexOf(`${name}() {`);
-  if (start === -1) return null;
-  const open = src.indexOf("{", start);
+function extractBashFunction(source, name) {
+  const start = source.indexOf(`${name}() {`);
+  if (start === -1) {return null;}
+  const open = source.indexOf("{", start);
   let depth = 0;
-  for (let i = open; i < src.length; i++) {
-    if (src[i] === "{") depth++;
-    else if (src[i] === "}") {
+  for (let index = open; index < source.length; index++) {
+    if (source[index] === "{") {depth++;}
+    else if (source[index] === "}") {
       depth--;
-      if (depth === 0) return src.slice(start, i + 1);
+      if (depth === 0) {return source.slice(start, index + 1);}
     }
   }
   return null;

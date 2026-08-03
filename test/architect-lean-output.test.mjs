@@ -48,7 +48,7 @@ function byPath(files, path) {
 // template that opted out of substitution (`raw: true`). Everything else is
 // an unfilled placeholder that leaked into shipped output.
 function leakedTokens(file, rawPaths) {
-  if (rawPaths.has(file.path)) return [];
+  if (rawPaths.has(file.path)) {return [];}
   return [...file.content.matchAll(BRACKET_TOKEN_RE)]
     .map((m) => m[1])
     .filter((key) => !JUNK.has(key));
@@ -102,19 +102,19 @@ test("JSON output stays parseable after the lean policy runs", () => {
 test("emitWhen gates the domain-overfit templates on PROJECT_TYPE", () => {
   const gated = ["specs/03-calculation-engine.md", "specs/04-ruleset-config.md", "schemas/ruleset.schema.json"];
 
-  const generic = render({ ...fixture, PROJECT_TYPE: "webapp" }).map((f) => f.path);
+  const generic = new Set(render({ ...fixture, PROJECT_TYPE: "webapp" }).map((f) => f.path));
   for (const path of gated) {
-    assert.ok(!generic.includes(path), `${path} must be omitted for a generic project`);
+    assert.ok(!generic.has(path), `${path} must be omitted for a generic project`);
   }
 
-  const domain = render(rulesetAnswers).map((f) => f.path);
+  const domain = new Set(render(rulesetAnswers).map((f) => f.path));
   for (const path of gated) {
-    assert.ok(domain.includes(path), `${path} must be emitted for PROJECT_TYPE=other`);
+    assert.ok(domain.has(path), `${path} must be emitted for PROJECT_TYPE=other`);
   }
 
   // Ungated templates are unaffected either way.
-  assert.ok(generic.includes("AGENTS.md") && domain.includes("AGENTS.md"));
-  assert.ok(generic.includes("specs/00-sdd.md") && domain.includes("specs/00-sdd.md"));
+  assert.ok(generic.has("AGENTS.md") && domain.has("AGENTS.md"));
+  assert.ok(generic.has("specs/00-sdd.md") && domain.has("specs/00-sdd.md"));
 });
 
 test("a malformed emitWhen fails loudly instead of silently omitting a file", async () => {

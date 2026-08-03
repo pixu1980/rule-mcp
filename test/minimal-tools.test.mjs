@@ -22,10 +22,10 @@ const MINIMAL = [
   "rule_tool_process_handoff", "rule_tool_component",
 ].sort();
 
-function toolNames(extraEnv) {
+function toolNames(extraEnvironment) {
   const r = spawnSync(process.execPath, [bin, "tools", "list", "--json"], {
     encoding: "utf8",
-    env: { ...process.env, RULE_MCP_NO_AUTOUPDATE: "1", ...extraEnv },
+    env: { ...process.env, RULE_MCP_NO_AUTOUPDATE: "1", ...extraEnvironment },
   });
   const parsed = JSON.parse(r.stdout);
   return (parsed.tools ?? parsed).map((t) => t.name);
@@ -41,7 +41,7 @@ console.log(`  ✅ full surface exposes ${full.length} tools`);
 
 // ── Minimal via RULE_MCP_MINIMAL_TOOLS (convention-aligned name) ──
 const minimal = toolNames({ RULE_MCP_MINIMAL_TOOLS: "1" });
-assert.deepEqual(minimal.slice().sort(), MINIMAL, "minimal mode exposes exactly the allowlist");
+assert.deepEqual([...minimal].sort(), MINIMAL, "minimal mode exposes exactly the allowlist");
 console.log(`  ✅ RULE_MCP_MINIMAL_TOOLS → ${minimal.length} tools`);
 
 // ── Default is OFF (opt-in): the legacy RULE_MCP_STRICT_MODE no longer applies ──

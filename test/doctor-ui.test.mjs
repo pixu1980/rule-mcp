@@ -51,27 +51,27 @@ const report = {
 
 const ui = formatDoctorTerminal(report);
 
-assert(!ui.trimStart().startsWith("{"), "default doctor UI must not be raw JSON");
-assert(ui.includes("🩺"), "UI should include doctor emoji in title");
-assert(ui.includes("🖥️"), "UI should include system emoji");
-assert(ui.includes("🧰"), "UI should include tools emoji");
-assert(ui.includes("🤖"), "UI should include agents emoji");
-assert(ui.includes("🚀"), "UI should include daemon emoji");
-assert(ui.includes("rule-mcp doctor"), "UI should include title");
-assert(ui.includes("System"), "UI should include system section");
-assert(ui.includes("MCP Tools"), "UI should include tools section");
-assert(ui.includes("Agents"), "UI should include agents section");
-assert(ui.includes("Daemon"), "UI should include daemon section");
-assert(ui.includes("rule_tool_check"), "UI should show tool examples");
-assert(ui.includes("claude"), "UI should show configured agents");
-assert(ui.includes("copilot"), "UI should show missing agents");
-assert(ui.includes("Use `rule-mcp doctor --json`"), "UI should advertise JSON export");
+assert.ok(!ui.trimStart().startsWith("{"), "default doctor UI must not be raw JSON");
+assert.ok(ui.includes("🩺"), "UI should include doctor emoji in title");
+assert.ok(ui.includes("🖥️"), "UI should include system emoji");
+assert.ok(ui.includes("🧰"), "UI should include tools emoji");
+assert.ok(ui.includes("🤖"), "UI should include agents emoji");
+assert.ok(ui.includes("🚀"), "UI should include daemon emoji");
+assert.ok(ui.includes("rule-mcp doctor"), "UI should include title");
+assert.ok(ui.includes("System"), "UI should include system section");
+assert.ok(ui.includes("MCP Tools"), "UI should include tools section");
+assert.ok(ui.includes("Agents"), "UI should include agents section");
+assert.ok(ui.includes("Daemon"), "UI should include daemon section");
+assert.ok(ui.includes("rule_tool_check"), "UI should show tool examples");
+assert.ok(ui.includes("claude"), "UI should show configured agents");
+assert.ok(ui.includes("copilot"), "UI should show missing agents");
+assert.ok(ui.includes("Use `rule-mcp doctor --json`"), "UI should advertise JSON export");
 
 const previousForceColor = process.env.FORCE_COLOR;
 process.env.FORCE_COLOR = "1";
 const colorUi = formatDoctorTerminal(report);
-if (previousForceColor === undefined) delete process.env.FORCE_COLOR;
-else process.env.FORCE_COLOR = previousForceColor;
-assert(/\x1b\[[0-9;]*m/.test(colorUi), "UI should emit ANSI colors when FORCE_COLOR is set");
+if (previousForceColor === undefined) {delete process.env.FORCE_COLOR;}
+else {process.env.FORCE_COLOR = previousForceColor;}
+assert.ok(/\x1B\[[0-9;]*m/.test(colorUi), "UI should emit ANSI colors when FORCE_COLOR is set");
 
 console.log("  ✅ doctor defaults to colorful emoji Terminal UI with JSON export hint");

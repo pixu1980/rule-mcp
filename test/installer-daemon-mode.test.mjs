@@ -28,7 +28,7 @@ assert.equal(config.url, "http://127.0.0.1:37999/sse", "daemon config must targe
 assert.equal(config.lifecycle, undefined);
 assert.equal(config.directTools, undefined);
 assert.match(config.headers?.Authorization ?? "", /^Bearer [a-f0-9]{64}$/i, "daemon config must authenticate to SSE");
-assert(existsSync(tokenFile), "daemon token must be persisted for service restarts");
+assert.ok(existsSync(tokenFile), "daemon token must be persisted for service restarts");
 assert.equal(
   config.headers.Authorization,
   `Bearer ${readFileSync(tokenFile, "utf8").trim()}`,

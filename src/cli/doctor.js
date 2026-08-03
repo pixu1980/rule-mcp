@@ -31,9 +31,9 @@ const HOME = homedir();
  */
 export function getSdkVersion() {
   try {
-    const sdkPkgPath = new URL("../../node_modules/@modelcontextprotocol/sdk/package.json", import.meta.url);
-    const sdkPkg = JSON.parse(readFileSync(sdkPkgPath, "utf8"));
-    return sdkPkg.version || "unknown";
+    const sdkPackagePath = new URL("../../node_modules/@modelcontextprotocol/sdk/package.json", import.meta.url);
+    const sdkPackage = JSON.parse(readFileSync(sdkPackagePath, "utf8"));
+    return sdkPackage.version || "unknown";
   } catch {
     return "unknown";
   }
@@ -48,7 +48,7 @@ export function getSdkVersion() {
  */
 function validateAgentConfigs(agents) {
   return agents.map((agent) => {
-    if (!agent.configured || !agent.configFile) return agent;
+    if (!agent.configured || !agent.configFile) {return agent;}
 
     try {
       const content = readFileSync(agent.configFile, "utf8");
@@ -118,15 +118,15 @@ function detectIdeConfigs() {
   const vscodeUserConfigPath =
     platform() === "darwin"
       ? join(HOME, "Library", "Application Support", "Code", "User", "mcp.json")
-      : platform() === "win32"
+      : (platform() === "win32"
         ? join(process.env.APPDATA || join(HOME, "AppData", "Roaming"), "Code", "User", "mcp.json")
-        : join(HOME, ".config", "Code", "User", "mcp.json");
+        : join(HOME, ".config", "Code", "User", "mcp.json"));
   let skillsCount = 0;
   try {
     if (existsSync("skills")) {
       skillsCount = readdirSync("skills").filter((d) => d.startsWith("rule")).length;
     }
-  } catch {}
+  } catch { /* skills dir may be absent in packaged installs */ }
 
   const checks = [
     { name: "Skills directory", ok: skillsCount >= 60, detail: `${skillsCount} skills` },
@@ -143,7 +143,7 @@ function detectIdeConfigs() {
   }
 
   return checks.map(({ name, path, ok, detail }) => {
-    if (typeof ok === "boolean") return { name, configured: ok, configFile: null, detail };
+    if (typeof ok === "boolean") {return { name, configured: ok, configFile: null, detail };}
     return {
       name,
       configured: existsSync(path),
@@ -194,8 +194,8 @@ function detectStoredModelKeys() {
     return {
       provider: file
         .replace("-key", "")
-        .replace(/-/g, " ")
-        .replace(/\b\w/g, (c) => c.toUpperCase()),
+        .replaceAll('-', " ")
+        .replaceAll(/\b\w/g, (c) => c.toUpperCase()),
       configured: exists,
       file: exists ? fullPath : null,
     };
@@ -238,7 +238,7 @@ function statusIcon(ok) {
 }
 
 function agentIcon(agent) {
-  if (!agent.configured) return color("○", "dim");
+  if (!agent.configured) {return color("○", "dim");}
   return agent.validated === false ? color("⚠️", "yellow") : color("✅", "green");
 }
 
@@ -290,11 +290,11 @@ export function formatDoctorTerminal(report) {
     );
   }
   if (configuredAgents.length > 12)
-    lines.push(color(`  … ${configuredAgents.length - 12} more configured agents`, "dim"));
+    {lines.push(color(`  … ${configuredAgents.length - 12} more configured agents`, "dim"));}
   if (missingAgents.length > 0)
-    lines.push(
+    {lines.push(
       `⚠️  ${color("Missing", "yellow")}: ${missingAgents.map((agent) => color(agent, "yellow")).join(", ")}${(report.unconfigured || []).length > missingAgents.length ? color(", …", "dim") : ""}`,
-    );
+    );}
 
   lines.push(
     "",
@@ -328,7 +328,7 @@ export function formatDoctorTerminal(report) {
 export function runDoctor(telemetry = false) {
   const p = getRuntimePaths();
   const __dirname = fileURLToPath(new URL(".", import.meta.url));
-  const pkg = JSON.parse(readFileSync(new URL("../../package.json", import.meta.url), "utf8"));
+  const package_ = JSON.parse(readFileSync(new URL("../../package.json", import.meta.url), "utf8"));
 
   // Detect + validate agent configs
   const detected = detectInstalledAgents();
@@ -340,21 +340,21 @@ export function runDoctor(telemetry = false) {
   const ideConfigs = detectIdeConfigs();
 
   // Model provider configs
-  const modelEnv = detectModelConfig();
+  const modelEnvironment = detectModelConfig();
   const modelFiles = detectStoredModelKeys();
-  const modelsConfigured = modelEnv.filter((m) => m.configured).length + modelFiles.filter((m) => m.configured).length;
+  const modelsConfigured = modelEnvironment.filter((m) => m.configured).length + modelFiles.filter((m) => m.configured).length;
 
   // Environment
-  const env = getEnvironmentInfo();
+  const environment = getEnvironmentInfo();
 
   // Daemon status
-  let daemonRunning = false;
+  let isDaemonRunning = false;
   let daemonPid = null;
   if (existsSync(p.pidFile)) {
     try {
       const pid = Number(readFileSync(p.pidFile, "utf8").trim());
       process.kill(pid, 0);
-      daemonRunning = true;
+      isDaemonRunning = true;
       daemonPid = pid;
     } catch {
       // Stale PID
@@ -363,11 +363,11 @@ export function runDoctor(telemetry = false) {
 
   const report = {
     ok: true,
-    version: pkg.version,
+    version: package_.version,
     sdk: getSdkVersion(),
-    node: env.node,
-    platform: env.platform,
-    arch: env.arch,
+    node: environment.node,
+    platform: environment.platform,
+    arch: environment.arch,
 
     entrypoint: fileURLToPath(new URL("../../bin/rule-mcp.js", import.meta.url)),
 
@@ -383,7 +383,7 @@ export function runDoctor(telemetry = false) {
 
     // Model configuration
     models: {
-      env: modelEnv,
+      env: modelEnvironment,
       files: modelFiles,
       totalConfigured: modelsConfigured,
     },
@@ -393,7 +393,7 @@ export function runDoctor(telemetry = false) {
     dataDir: p.dataDir,
     configDir: p.configDir,
     daemon: {
-      running: daemonRunning,
+      running: isDaemonRunning,
       pid: daemonPid,
       pidFile: p.pidFile,
       logFile: p.logFile,
@@ -414,10 +414,10 @@ export function runDoctor(telemetry = false) {
 
   if (telemetry) {
     report.telemetry = {
-      version: pkg.version,
-      node: env.node,
-      platform: env.platform,
-      arch: env.arch,
+      version: package_.version,
+      node: environment.node,
+      platform: environment.platform,
+      arch: environment.arch,
       tools: report.tools.length,
       agents: report.agentsConfigured,
       models: modelsConfigured,

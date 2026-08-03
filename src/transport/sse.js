@@ -78,38 +78,38 @@ function handleCors(req, res) {
  */
 function checkAuth(req, pathname) {
   // Health check is public
-  if (pathname === "/health") return true;
+  if (pathname === "/health") {return true;}
   // SSE and message endpoints require bearer token
   const auth = req.headers.authorization;
-  if (!auth) return false;
+  if (!auth) {return false;}
   const expected = `Bearer ${serverToken}`;
   const provided = Buffer.from(auth);
   const wanted = Buffer.from(expected);
   // Length guard first — timingSafeEqual throws on unequal-length buffers.
   // The length of the expected token is not secret.
-  if (provided.length !== wanted.length) return false;
+  if (provided.length !== wanted.length) {return false;}
   return timingSafeEqual(provided, wanted);
 }
 
 /**
  * HTTP/HTTPS request handler.
  */
-async function requestHandler(req, res) {
-  if (handleCors(req, res)) return;
+async function requestHandler(request, res) {
+  if (handleCors(request, res)) {return;}
 
-  const proto = httpServer instanceof https.Server ? "https" : "http";
-  const parsedUrl = new URL(req.url ?? "/", `${proto}://${req.headers.host ?? "localhost"}`);
+  const prototype = httpServer instanceof https.Server ? "https" : "http";
+  const parsedUrl = new URL(request.url ?? "/", `${prototype}://${request.headers.host ?? "localhost"}`);
   const pathname = parsedUrl.pathname;
 
   // Auth check (skipped for /health)
-  if (!checkAuth(req, pathname)) {
+  if (!checkAuth(request, pathname)) {
     res.writeHead(401, { "Content-Type": "application/json" });
     res.end(JSON.stringify({ error: "Unauthorized. Provide Authorization: Bearer <token> header." }));
     return;
   }
 
   // Block cross-origin requests on protected endpoints
-  const origin = req.headers.origin;
+  const origin = request.headers.origin;
   if (origin && !ALLOWED_ORIGINS.has(origin)) {
     res.writeHead(403, { "Content-Type": "application/json" });
     res.end(JSON.stringify({ error: "Cross-origin requests are not allowed." }));
@@ -118,14 +118,14 @@ async function requestHandler(req, res) {
 
   try {
     // ── GET /health ──────────────────────────────────────────
-    if (req.method === "GET" && parsedUrl.pathname === "/health") {
+    if (request.method === "GET" && parsedUrl.pathname === "/health") {
       res.writeHead(200, { "Content-Type": "application/json" });
       res.end(JSON.stringify({ ok: true, uptime: process.uptime() }));
       return;
     }
 
     // ── GET /sse — Establish SSE stream ──────────────────────
-    if (req.method === "GET" && parsedUrl.pathname === "/sse") {
+    if (request.method === "GET" && parsedUrl.pathname === "/sse") {
       if (sessions.size >= MAX_SESSIONS) {
         res.writeHead(503, { "Content-Type": "application/json" });
         res.end(JSON.stringify({ error: "Server session limit reached. Close an existing session and retry." }));
@@ -139,7 +139,7 @@ async function requestHandler(req, res) {
       sessions.set(transport.sessionId, session);
 
       const closeSession = () => {
-        if (!sessions.delete(transport.sessionId)) return;
+        if (!sessions.delete(transport.sessionId)) {return;}
         void server.close().catch(() => {});
       };
       transport.onclose = closeSession;
@@ -156,12 +156,12 @@ async function requestHandler(req, res) {
     }
 
     // ── POST /message — Handle MCP request ───────────────────
-    if (req.method === "POST" && parsedUrl.pathname.startsWith("/message")) {
+    if (request.method === "POST" && parsedUrl.pathname.startsWith("/message")) {
       // Body size limit (1 MB)
       let bodyLength = 0;
       const buffers = [];
       const maxBytes = MAX_BODY_BYTES;
-      for await (const chunk of req) {
+      for await (const chunk of request) {
         bodyLength += chunk.length;
         if (bodyLength > maxBytes) {
           res.writeHead(413, { "Content-Type": "application/json" });
@@ -190,18 +190,18 @@ async function requestHandler(req, res) {
         return;
       }
 
-      await transport.handlePostMessage(req, res, parsed);
+      await transport.handlePostMessage(request, res, parsed);
       return;
     }
 
     // ── 404 ──────────────────────────────────────────────────
     res.writeHead(404, { "Content-Type": "application/json" });
     res.end(JSON.stringify({ error: "Not found" }));
-  } catch (err) {
+  } catch (error) {
     // Log full detail server-side; return only a generic message + correlation id
     // to the client to avoid leaking internal state.
     const requestId = randomUUID();
-    process.stderr.write(`[rule-mcp] [${requestId}] ${req.method} ${req.url}: ${err?.stack ?? err?.message ?? err}\n`);
+    process.stderr.write(`[rule-mcp] [${requestId}] ${request.method} ${request.url}: ${error?.stack ?? error?.message ?? error}\n`);
     if (!res.headersSent) {
       res.writeHead(500, { "Content-Type": "application/json" });
       res.end(JSON.stringify({ error: "Internal server error", requestId }));
@@ -251,24 +251,20 @@ export async function startSseServer(options = {}) {
   }
 
   // Wrap the request handler with sandbox (timeout + error recovery)
-  const safeHandler = wrapRequestHandler(requestHandler, { timeout: 60000 });
+  const safeHandler = wrapRequestHandler(requestHandler, { timeout: 60_000 });
 
   // Create HTTP or HTTPS server
-  if (sslCert && sslKey) {
-    httpServer = https.createServer(
+  httpServer = sslCert && sslKey ? https.createServer(
       {
         cert: readFileSync(resolvedCert),
         key: readFileSync(resolvedKey),
       },
       safeHandler,
-    );
-  } else {
-    httpServer = http.createServer(safeHandler);
-  }
+    ) : http.createServer(safeHandler);
 
   // SSE streams are intentionally long-lived; generic idle timeouts reconnect clients.
   httpServer.timeout = 0;
-  httpServer.keepAliveTimeout = 10000;
+  httpServer.keepAliveTimeout = 10_000;
 
   // Start listening
   return new Promise((resolve, reject) => {

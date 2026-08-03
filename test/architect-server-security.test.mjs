@@ -66,13 +66,13 @@ test("both servers export a loopback BIND_HOST and a createServer factory", () =
   }
 });
 
-async function withServer(mod, fn) {
-  const server = mod.createServer(process.cwd());
+async function withServer(module_, function_) {
+  const server = module_.createServer(process.cwd());
   server.listen(0, "127.0.0.1");
   await once(server, "listening");
   const { port } = server.address();
   try {
-    await fn(`http://127.0.0.1:${port}`);
+    await function_(`http://127.0.0.1:${port}`);
   } finally {
     server.close();
     await once(server, "close");

@@ -20,7 +20,7 @@ import { test, expect } from "@playwright/test";
 test.describe("rule-architect interview", () => {
   test.beforeEach(async ({ page }) => {
     await page.goto("http://localhost:19000");
-    await page.waitForSelector("[data-part='wizard-body']", { timeout: 10000 });
+    await page.waitForSelector("[data-part='wizard-body']", { timeout: 10_000 });
   });
 
   test("loads 15 steps (standard tier) including step 0", async ({ page }) => {
@@ -68,26 +68,26 @@ test.describe("rule-architect interview", () => {
     // The Glossary step has THREE repeatable field groups (Domain Terms, Constraints,
     // Additional Details) — target one by its data-prefix to avoid a strict-mode
     // violation from the generic "[data-part='add-btn']" locator matching all three.
-    const addBtn = page.locator("[data-part='add-btn'][data-prefix='DOMAIN_TERMS']");
-    if (await addBtn.isVisible({ timeout: 3000 }).catch(() => false)) {
+    const addButton = page.locator("[data-part='add-btn'][data-prefix='DOMAIN_TERMS']");
+    if (await addButton.isVisible({ timeout: 3000 }).catch(() => false)) {
       // Click add multiple times
       const initialCount = await page.locator("[data-part='repeatable-group']").count();
-      await addBtn.click();
+      await addButton.click();
       await page.waitForTimeout(500);
       // Should have one more group
       const afterFirst = await page.locator("[data-part='repeatable-group']").count();
       expect(afterFirst).toBeGreaterThan(initialCount);
 
       // Click add again
-      await addBtn.click();
+      await addButton.click();
       await page.waitForTimeout(500);
       const afterSecond = await page.locator("[data-part='repeatable-group']").count();
       expect(afterSecond).toBeGreaterThan(afterFirst);
 
       // Click remove on the first Domain Terms group
-      const removeBtn = page.locator("[data-part='remove-btn'][data-prefix='DOMAIN_TERMS_1']");
-      if (await removeBtn.isVisible().catch(() => false)) {
-        await removeBtn.click();
+      const removeButton = page.locator("[data-part='remove-btn'][data-prefix='DOMAIN_TERMS_1']");
+      if (await removeButton.isVisible().catch(() => false)) {
+        await removeButton.click();
         await page.waitForTimeout(500);
         // Should have fewer groups
         const afterRemove = await page.locator("[data-part='repeatable-group']").count();
@@ -103,21 +103,21 @@ test.describe("rule-architect interview", () => {
     await page.click("[data-part='project-type-card']:first-child");
 
     // Navigate to last step
-    for (let i = 0; i < 20; i++) {
-      const nextBtn = page.locator("[data-part='nav-btn'][data-direction='next']");
-      if (!(await nextBtn.isVisible().catch(() => false))) break;
-      await nextBtn.click();
+    for (let index = 0; index < 20; index++) {
+      const nextButton = page.locator("[data-part='nav-btn'][data-direction='next']");
+      if (!(await nextButton.isVisible().catch(() => false))) {break;}
+      await nextButton.click();
       await page.waitForTimeout(300);
     }
 
     // Should see submit buttons
-    const generateBtn = page.locator("[data-part='submit-btn']");
-    const downloadBtn = page.locator("[data-part='download-btn']");
-    await expect(generateBtn).toBeVisible({ timeout: 5000 });
-    await expect(downloadBtn).toBeVisible({ timeout: 5000 });
+    const generateButton = page.locator("[data-part='submit-btn']");
+    const downloadButton = page.locator("[data-part='download-btn']");
+    await expect(generateButton).toBeVisible({ timeout: 5000 });
+    await expect(downloadButton).toBeVisible({ timeout: 5000 });
 
     // Click download (doesn't write to disk)
-    await downloadBtn.click();
+    await downloadButton.click();
     await page.waitForTimeout(2000);
     // Should show done screen
     await expect(page.locator("[data-part='result']")).toBeVisible({ timeout: 5000 });
@@ -145,7 +145,7 @@ test.describe("rule-architect interview", () => {
 
     // Walk forward until a text/textarea input is visible inside the step body.
     let input = null;
-    for (let i = 0; i < 20; i++) {
+    for (let index = 0; index < 20; index++) {
       const candidate = page
         .locator("[data-part='wizard-step'] input[type='text'], [data-part='wizard-step'] textarea")
         .first();
@@ -154,7 +154,7 @@ test.describe("rule-architect interview", () => {
         break;
       }
       const next = page.locator("[data-part='nav-btn'][data-direction='next']");
-      if (!(await next.isVisible().catch(() => false))) break;
+      if (!(await next.isVisible().catch(() => false))) {break;}
       await next.click();
       await page.waitForTimeout(150);
     }
@@ -182,7 +182,7 @@ const ARCHITECT_WEB_URL = process.env.ARCHITECT_WEB_URL || "http://localhost:370
 test.describe("rule-architect-web interview (card taxonomy)", () => {
   test.beforeEach(async ({ page }) => {
     await page.goto(ARCHITECT_WEB_URL);
-    await page.waitForSelector("[data-part='wizard-body']", { timeout: 10000 });
+    await page.waitForSelector("[data-part='wizard-body']", { timeout: 10_000 });
   });
 
   test("tech-card set is filtered by PROJECT_TYPE (Postgres: backend-only)", async ({ page }) => {
@@ -320,7 +320,7 @@ test.describe("rule-architect-web interview (card taxonomy)", () => {
   test("toggling to Summary cancels a pending Files debounce — no /api/download fires afterward", async ({ page }) => {
     let downloadCalls = 0;
     page.on("request", r => {
-      if (r.method() === "POST" && r.url().includes("/api/download")) downloadCalls++;
+      if (r.method() === "POST" && r.url().includes("/api/download")) {downloadCalls++;}
     });
 
     await page.click("[data-part='nav-btn'][data-direction='next']");
@@ -375,14 +375,14 @@ test.describe("rule-architect-web interview (card taxonomy)", () => {
     await summaryTab.click();
     await expect(summaryTab).toHaveAttribute("data-state-active", "true");
 
-    const valueEl = panel.locator("[data-part='summary-value']").filter({ hasText: "img" });
-    await expect(valueEl).toBeVisible({ timeout: 3000 });
+    const valueElement = panel.locator("[data-part='summary-value']").filter({ hasText: "img" });
+    await expect(valueElement).toBeVisible({ timeout: 3000 });
 
     // (a) The payload must appear as literal, escaped TEXT — not be parsed as markup.
-    await expect(valueEl).toHaveText(payload);
+    await expect(valueElement).toHaveText(payload);
 
     // (b) No injected element or handler actually ran.
-    expect(await page.evaluate(() => window.__xss)).toBeUndefined();
+    expect(await page.evaluate(() => globalThis.__xss)).toBeUndefined();
     await expect(panel.locator("[data-part='summary-value'] img")).toHaveCount(0);
   });
 });
@@ -400,13 +400,13 @@ test.describe("panel a11y (both servers serve the identical interview.js)", () =
   for (const url of SERVER_URLS) {
     test(`segmented control + file tabs are accessible buttons; panel is complementary (${url})`, async ({ page }) => {
       await page.goto(url);
-      await page.waitForSelector("[data-part='wizard-body']", { timeout: 10000 });
+      await page.waitForSelector("[data-part='wizard-body']", { timeout: 10_000 });
 
       // The panel must be reachable as a `complementary` landmark — i.e. a real <aside>.
       const panel = page.getByRole("complementary");
       await expect(panel).toBeVisible();
       await expect(panel).toHaveAttribute("data-part", "summary-panel");
-      expect(await panel.evaluate(el => el.tagName)).toBe("ASIDE");
+      expect(await panel.evaluate(element => element.tagName)).toBe("ASIDE");
 
       // Segmented control: two buttons with accessible names "Summary"/"Files"
       // reachable by role+name; the active one is distinguishable via

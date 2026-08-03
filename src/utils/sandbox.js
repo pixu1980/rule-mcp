@@ -23,7 +23,7 @@ export function safeJsonParse(text) {
   try {
     return JSON.parse(text);
   } catch {
-    return undefined;
+    return;
   }
 }
 
@@ -61,8 +61,8 @@ export async function trySafe(fn) {
   try {
     const value = typeof fn === "function" ? await fn() : await fn;
     return { ok: true, value };
-  } catch (err) {
-    return { ok: false, error: err?.message ?? String(err ?? "Unknown error") };
+  } catch (error) {
+    return { ok: false, error: error?.message ?? String(error ?? "Unknown error") };
   }
 }
 
@@ -76,23 +76,23 @@ export async function trySafe(fn) {
  * @returns {(req, res) => Promise<void>}
  */
 export function wrapRequestHandler(handler, options = {}) {
-  const timeout = options.timeout ?? 30000;
+  const timeout = options.timeout ?? 30_000;
 
-  return async (req, res) => {
+  return async (request, res) => {
     // Track if the handler was aborted (timeout)
-    let aborted = false;
+    let isAborted = false;
 
     // On timeout or error, destroy the request socket to unblock the handler
     const cleanup = () => {
-      aborted = true;
-      try { req.destroy(); } catch { /* ignore */ }
+      isAborted = true;
+      try { request.destroy(); } catch { /* ignore */ }
     };
 
     try {
       await withTimeout(
-        Promise.resolve().then(() => handler(req, res)),
+        Promise.resolve().then(() => handler(request, res)),
         timeout,
-        `${req.method} ${req.url}`
+        `${request.method} ${request.url}`
       );
 
       // Handler didn't send a response — send fallback
@@ -100,11 +100,11 @@ export function wrapRequestHandler(handler, options = {}) {
         res.writeHead(500, { "Content-Type": "application/json", "Connection": "close" });
         res.end(JSON.stringify({ error: "Handler did not send a response" }));
       }
-    } catch (err) {
-      const message = err?.message ?? String(err ?? "Unknown error");
+    } catch (error) {
+      const message = error?.message ?? String(error ?? "Unknown error");
       const isTimeout = message.startsWith("Sandbox timeout");
 
-      process.stderr.write(`[sandbox] ${isTimeout ? "TIMEOUT" : "ERROR"} ${req.method} ${req.url}: ${message}\n`);
+      process.stderr.write(`[sandbox] ${isTimeout ? "TIMEOUT" : "ERROR"} ${request.method} ${request.url}: ${message}\n`);
 
       try {
         if (!res.headersSent && !res.writableEnded) {
@@ -133,8 +133,8 @@ export function wrapRequestHandler(handler, options = {}) {
  * Call once at startup.
  */
 export function installProcessErrorHandlers() {
-  process.on("uncaughtException", (err, origin) => {
-    process.stderr.write(`[sandbox] UNCAUGHT EXCEPTION (${origin}): ${err.stack ?? err.message}\n`);
+  process.on("uncaughtException", (error, origin) => {
+    process.stderr.write(`[sandbox] UNCAUGHT EXCEPTION (${origin}): ${error.stack ?? error.message}\n`);
   });
 
   process.on("unhandledRejection", (reason) => {

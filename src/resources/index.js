@@ -12,7 +12,7 @@
 
 import { readFileSync, readdirSync, existsSync } from "node:fs";
 import { join } from "node:path";
-import { getSkillsDirs } from "../cli/paths.js";
+import { getSkillsDirs as getSkillsDirectories } from "../cli/paths.js";
 import { readSkill, getSkillNames, isPluginSkill } from "../tools/router.js";
 
 /**
@@ -34,18 +34,19 @@ export function listResources() {
 
   // Add one resource per skill (skip plugins — they are published via their own mechanism)
   for (const name of getSkillNames()) {
-    if (name !== "rule" && !isPluginSkill(name)) {
-      resources.push({
-        uri: `rule://${name}`,
-        name: `${name} skill full content`,
-        mimeType: "text/markdown",
-      });
-      resources.push({
-        uri: `rule://${name}/summary`,
-        name: `${name} skill summary (first 30 lines)`,
-        mimeType: "text/markdown",
-      });
+    if (name === "rule" || isPluginSkill(name)) {
+    	continue;
     }
+
+    resources.push({
+      uri: `rule://${name}`,
+      name: `${name} skill full content`,
+      mimeType: "text/markdown",
+    }, {
+      uri: `rule://${name}/summary`,
+      name: `${name} skill summary (first 30 lines)`,
+      mimeType: "text/markdown",
+    });
   }
 
   return resources;
@@ -58,29 +59,31 @@ export function listResources() {
  * @returns {Promise<{ contents: Array<{ uri: string, mimeType: string, text: string }> }>}
  */
 export async function readResource(uri) {
-  const { homeSkills, embeddedSkills } = getSkillsDirs();
+  const { homeSkills, embeddedSkills } = getSkillsDirectories();
 
   // ── Skill index ────────────────────────────────────────────────
   if (uri === "rule://skills") {
-    const dirs = [];
+    const directories = [];
     for (const base of [embeddedSkills, homeSkills]) {
       try {
         for (const entry of readdirSync(base, { withFileTypes: true })) {
-          if (entry.isDirectory() && entry.name.startsWith("rule")) {
-            const sp = join(base, entry.name, "SKILL.md");
-            try {
-              const c = readFileSync(sp, "utf8");
-              dirs.push({ name: entry.name, path: sp, length: c.length });
-            } catch {
-              /* no SKILL.md */
-            }
+          if (!(entry.isDirectory() && entry.name.startsWith("rule"))) {
+          	continue;
+          }
+
+          const sp = join(base, entry.name, "SKILL.md");
+          try {
+            const c = readFileSync(sp, "utf8");
+            directories.push({ name: entry.name, path: sp, length: c.length });
+          } catch {
+            /* no SKILL.md */
           }
         }
       } catch {
         /* no dir */
       }
     }
-    return { contents: [{ uri, mimeType: "application/json", text: JSON.stringify(dirs, null, 2) }] };
+    return { contents: [{ uri, mimeType: "application/json", text: JSON.stringify(directories, null, 2) }] };
   }
 
   // ── Templates catalog ──────────────────────────────────────────
@@ -136,11 +139,13 @@ export async function readResource(uri) {
     const allSkills = getSkillNames();
     const plugins = [];
     for (const name of allSkills) {
-      if (isPluginSkill(name)) {
-        const content = readSkill(name);
-        const desc = content?.match(/^description:\s*(.+)$/m)?.[1]?.trim() || "User-defined plugin skill";
-        plugins.push({ name, description: desc, type: "plugin", source: "~/.agents/skills/" });
+      if (!isPluginSkill(name)) {
+      	continue;
       }
+
+      const content = readSkill(name);
+      const desc = content?.match(/^description:\s*(.+)$/m)?.[1]?.trim() || "User-defined plugin skill";
+      plugins.push({ name, description: desc, type: "plugin", source: "~/.agents/skills/" });
     }
     const result = { plugins, known_community: [], total: plugins.length };
     return { contents: [{ uri, mimeType: "application/json", text: JSON.stringify(result, null, 2) }] };

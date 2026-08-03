@@ -30,18 +30,18 @@ const text = r1.content?.[0]?.text ?? "";
 check("T1 returns content", text.length > 0);
 
 // Try to parse as JSON — new format should be JSON
-let parsed = false;
+let isParsed = false;
 try {
-  parsed = JSON.parse(text);
+  isParsed = JSON.parse(text);
 } catch {
   // Old plain text format — will need update
 }
 
-if (parsed) {
-  check("T1.1 JSON response has route", typeof parsed.route === "string");
-  check("T1.2 JSON has confidence", typeof parsed.confidence === "number");
-  check("T1.3 JSON has sections array", Array.isArray(parsed.sections));
-  check("T1.4 JSON has next_tools array", Array.isArray(parsed.next_tools));
+if (isParsed) {
+  check("T1.1 JSON response has route", typeof isParsed.route === "string");
+  check("T1.2 JSON has confidence", typeof isParsed.confidence === "number");
+  check("T1.3 JSON has sections array", Array.isArray(isParsed.sections));
+  check("T1.4 JSON has next_tools array", Array.isArray(isParsed.next_tools));
 } else {
   check("T1.1 JSON response (will fix)", false);
 }
@@ -53,13 +53,13 @@ check("T2 response size reasonable (under 8KB)", text.length < 8000);
 const r2 = await callTool("pix_tool", { prompt: "React accessibility components" });
 const text2 = r2.content?.[0]?.text ?? "";
 
-let parsed2 = false;
+let isParsed2 = false;
 try {
-  parsed2 = JSON.parse(text2);
-} catch {}
+  isParsed2 = JSON.parse(text2);
+} catch { /* invalid JSON — treated as false */ }
 
-if (parsed2) {
-  const allRoutes = [parsed2.route, ...(parsed2.alternatives || []).map(a => a.route)];
+if (isParsed2) {
+  const allRoutes = [isParsed2.route, ...(isParsed2.alternatives || []).map(a => a.route)];
   const hasReact = allRoutes.some(r => r?.includes("rule-frontend-react"));
   check("T3 multi-skill: React routes", hasReact);
 }
@@ -67,12 +67,12 @@ if (parsed2) {
 // ── T3.1: Pure accessibility query routes to styleguides ──
 const r3 = await callTool("pix_tool", { prompt: "accessibility guidelines a11y WCAG standards" });
 const text3 = r3.content?.[0]?.text ?? "";
-let parsed3 = false;
+let isParsed3 = false;
 try {
-  parsed3 = JSON.parse(text3);
-} catch {}
-if (parsed3) {
-  const allRoutes = [parsed3.route, ...(parsed3.alternatives || []).map(a => a.route)];
+  isParsed3 = JSON.parse(text3);
+} catch { /* invalid JSON — treated as false */ }
+if (isParsed3) {
+  const allRoutes = [isParsed3.route, ...(isParsed3.alternatives || []).map(a => a.route)];
   const hasA11y = allRoutes.some(r => r?.includes("rule-styleguide"));
   check("T3.1 a11y query routes to styleguides", hasA11y);
 }
@@ -82,11 +82,11 @@ if (parsed3) {
 // "unknown" route the handler emits when no skill matches confidently.
 const r4 = await callTool("pix_tool", { prompt: "zzzzz qqqqq wwwww xxxxx" });
 check("T4 low-confidence prompt does not error", r4.isError !== true);
-let parsed4 = false;
+let isParsed4 = false;
 try {
-  parsed4 = JSON.parse(r4.content?.[0]?.text ?? "");
-} catch {}
-check("T4.1 low-confidence prompt routes to 'unknown'", parsed4 && parsed4.route === "unknown");
+  isParsed4 = JSON.parse(r4.content?.[0]?.text ?? "");
+} catch { /* invalid JSON — treated as false */ }
+check("T4.1 low-confidence prompt routes to 'unknown'", isParsed4 && isParsed4.route === "unknown");
 
 console.log(`\nResults: ${pass} passed, ${fail} failed`);
 setTimeout(() => process.exit(fail > 0 ? 1 : 0), 100);

@@ -77,9 +77,9 @@ test("generateContext writes AGENTS.md at the project root, not under .context/"
     assert.ok(agentsEntry, "files[] should include an AGENTS.md entry");
 
     const rootPath = join(dir, "AGENTS.md");
-    const ctxPath = join(dir, ".context", "AGENTS.md");
+    const contextPath = join(dir, ".context", "AGENTS.md");
     assert.ok(existsSync(rootPath), "AGENTS.md must be written to <targetDir>/AGENTS.md");
-    assert.ok(!existsSync(ctxPath), "AGENTS.md must NOT be written under <targetDir>/.context/");
+    assert.ok(!existsSync(contextPath), "AGENTS.md must NOT be written under <targetDir>/.context/");
 
     const written = readFileSync(rootPath, "utf-8");
     assert.equal(written, agentsEntry.content, "written file content must match the returned files[] entry");
@@ -106,7 +106,7 @@ test("generateContextContent fans the AGENTS.md body out to every plain per-tool
     assert.ok(entry, `files[] should include a ${path} entry`);
     assert.equal(entry.content, agents.content, `${path} must carry the FULL AGENTS.md body verbatim`);
     assert.match(entry.content, /Sample Project Name/, `${path} must contain the resolved PROJECT_NAME`);
-    assert.match(entry.content, /\.context\/README\.md/, `${path} must contain the .context\\README.md pointer`);
+    assert.match(entry.content, /\.context\/README\.md/, String.raw`${path} must contain the .context\README.md pointer`);
   }
 });
 
@@ -247,7 +247,7 @@ test("frontmatter survives a hostile project name (F9)", () => {
       `${label}: every frontmatter line must be a single key — got ${JSON.stringify(block)}`
     );
     assert.ok(
-      !block.some((line) => line.includes("alwaysApply: false")),
+      block.every((line) => !line.includes("alwaysApply: false")),
       `${label}: injection must not take effect`
     );
   }

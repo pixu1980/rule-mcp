@@ -27,19 +27,19 @@ let failures = 0;
 
 // 1. Check bin entry point
 const bin = join(root, "bin", "rule-mcp.js");
-assert(existsSync(bin), `bin entry point missing: ${bin}`);
+assert.ok(existsSync(bin), `bin entry point missing: ${bin}`);
 console.log("  ✅ bin/rule-mcp.js exists");
 
 // 2. Check package.json
-const pkg = JSON.parse(readFileSync(join(root, "package.json"), "utf8"));
-assert(pkg.name === "rule-mcp", `Wrong package name: ${pkg.name}`);
-assert(pkg.bin["rule-mcp"], "Missing bin entry");
-assert(pkg.dependencies["@modelcontextprotocol/sdk"], "Missing @modelcontextprotocol/sdk dependency");
-assert(pkg.dependencies["zod"], "Missing zod dependency");
+const package_ = JSON.parse(readFileSync(join(root, "package.json"), "utf8"));
+assert.ok(package_.name === "rule-mcp", `Wrong package name: ${package_.name}`);
+assert.ok(package_.bin["rule-mcp"], "Missing bin entry");
+assert.ok(package_.dependencies["@modelcontextprotocol/sdk"], "Missing @modelcontextprotocol/sdk dependency");
+assert.ok(package_.dependencies["zod"], "Missing zod dependency");
 console.log("  ✅ package.json valid with SDK + Zod deps");
 
 // 3. Check src files (SDK-based layout — no mcp/ directory)
-const srcFiles = [
+const sourceFiles = [
   "server.js",
   "index.js",
   "tools/router.js",
@@ -56,12 +56,12 @@ const srcFiles = [
   "cli/doctor.js",
   "cli/uninstall.js",
 ];
-for (const f of srcFiles) {
+for (const f of sourceFiles) {
   const p = join(root, "src", f);
-  assert(existsSync(p), `Missing src/${f}`);
-  const src = readFileSync(p, "utf8");
-  assert(src.length > 50, `src/${f} too short`);
-  assert(src.includes("/**"), `src/${f} missing JSDoc`);
+  assert.ok(existsSync(p), `Missing src/${f}`);
+  const source = readFileSync(p, "utf8");
+  assert.ok(source.length > 50, `src/${f} too short`);
+  assert.ok(source.includes("/**"), `src/${f} missing JSDoc`);
 }
 console.log("  ✅ All src files present with JSDoc");
 
@@ -69,8 +69,8 @@ console.log("  ✅ All src files present with JSDoc");
 try {
   await import("@modelcontextprotocol/sdk/server/index.js");
   console.log("  ✅ @modelcontextprotocol/sdk importable");
-} catch (e) {
-  console.log("  ❌ @modelcontextprotocol/sdk import failed:", e.message);
+} catch (error) {
+  console.log("  ❌ @modelcontextprotocol/sdk import failed:", error.message);
   failures++;
 }
 
@@ -78,37 +78,36 @@ try {
 try {
   await import("zod/v4");
   console.log("  ✅ zod importable");
-} catch (e) {
-  console.log("  ❌ zod import failed:", e.message);
+} catch (error) {
+  console.log("  ❌ zod import failed:", error.message);
   failures++;
 }
 
 // 6. Check server exports
 try {
   const server = await import("../src/server.js");
-  assert(typeof server.startServer === "function", "startServer not exported");
-  assert(typeof server.stopServer === "function", "stopServer not exported");
+  assert.ok(typeof server.startServer === "function", "startServer not exported");
+  assert.ok(typeof server.stopServer === "function", "stopServer not exported");
   console.log("  ✅ src/server.js exports startServer + stopServer");
-} catch (e) {
-  console.log("  ❌ src/server.js export check failed:", e.message);
+} catch (error) {
+  console.log("  ❌ src/server.js export check failed:", error.message);
   failures++;
 }
 
 // 7. Check tool router exports
 try {
   const router = await import("../src/tools/router.js");
-  assert(typeof router.registerTool === "function", "registerTool not exported");
-  assert(typeof router.listTools === "function", "listTools not exported");
-  assert(typeof router.callTool === "function", "callTool not exported");
+  assert.ok(typeof router.registerTool === "function", "registerTool not exported");
+  assert.ok(typeof router.listTools === "function", "listTools not exported");
+  assert.ok(typeof router.callTool === "function", "callTool not exported");
   console.log("  ✅ src/tools/router.js exports registerTool, listTools, callTool");
-} catch (e) {
-  console.log("  ❌ src/tools/router.js export check failed:", e.message);
+} catch (error) {
+  console.log("  ❌ src/tools/router.js export check failed:", error.message);
   failures++;
 }
 
 if (failures > 0) {
   console.log(`\n❌ ${failures} failure(s) — see above`);
   process.exit(1);
-} else {
-  console.log("\n  ✅ All checks passed");
 }
+console.log("\n  ✅ All checks passed");

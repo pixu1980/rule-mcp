@@ -25,28 +25,28 @@ const DOCS_DIR = "docs";
  */
 function readAdrs(projectDir) {
   const adrDir = join(projectDir, ADR_DIR);
-  if (!existsSync(adrDir)) return [];
+  if (!existsSync(adrDir)) {return [];}
 
   try {
     const files = readdirSync(adrDir);
     const adrs = [];
     for (const f of files) {
       const m = f.match(/^(\d{3,4})-(.+)\.md$/);
-      if (!m) continue;
+      if (!m) {continue;}
       try {
         const content = readFileSync(join(adrDir, f), "utf8");
         const number = parseInt(m[1]);
-        const title = content.match(/^# (?:ADR-)?\d{3,4}: (.+)$/m)?.[1] || m[2].replace(/-/g, " ");
+        const title = content.match(/^# (?:ADR-)?\d{3,4}: (.+)$/m)?.[1] || m[2].replaceAll('-', " ");
         const date = content.match(/\*\*Date\*\*: (\S+)/)?.[1] || "";
         const statusRaw = content.match(/\*\*Status\*\*:\s*(.+?)(?:\n|$)/)?.[1]
           || content.match(/^## Status\s*\n+\s*(.+?)(?:\n|$)/m)?.[1] || "proposed";
-        const status = statusRaw.replace(/\*\*/g, "").replace(/\[([^\]]+)\]\([^)]*\)/g, "$1").trim().split(/\s+/)[0];
+        const status = statusRaw.replaceAll('**', "").replaceAll(/\[([^\]]+)\]\([^)]*\)/g, "$1").trim().split(/\s+/, 1)[0];
         const tagsLine = content.match(/\*\*Tags\*\*: (.+)/)?.[1] || "";
         const tags = tagsLine.split(",").map(s => s.trim()).filter(Boolean);
         // Extract decision blurb (first 2 lines of Decision section)
         const decision = content.match(/## Decision\n\n([\s\S]*?)(?:\n## |$)/)?.[1]?.split("\n").slice(0, 2).join(" ").slice(0, 200) || "";
         adrs.push({ number, title, date, status, tags, decision });
-      } catch {}
+      } catch { /* malformed ADR file — skip */ }
     }
     return adrs.sort((a, b) => b.number - a.number);
   } catch {
@@ -59,7 +59,7 @@ function readAdrs(projectDir) {
  */
 function readContextValues(projectDir) {
   const ctxDir = join(projectDir, CONTEXT_DIR);
-  if (!existsSync(ctxDir)) return {};
+  if (!existsSync(ctxDir)) {return {};}
 
   const values = {};
   try {
@@ -71,13 +71,13 @@ function readContextValues(projectDir) {
         const lines = content.split("\n");
         for (const line of lines) {
           const m = line.match(/^\*\*(\w+)\*\*:\s*(.+)/);
-          if (m) values[m[1]] = m[2].trim();
+          if (m) {values[m[1]] = m[2].trim();}
           const m2 = line.match(/^- \*\*(\w+)\*\*:\s*(.+)/);
-          if (m2) values[m2[1]] = m2[2].trim();
+          if (m2) {values[m2[1]] = m2[2].trim();}
         }
-      } catch {}
+      } catch { /* unreadable context file — skip */ }
     }
-  } catch {}
+  } catch { /* context dir unreadable */ }
   return values;
 }
 
@@ -85,14 +85,14 @@ function readContextValues(projectDir) {
  * Read project identity from package.json.
  */
 function readProjectIdentity(projectDir) {
-  const pkgPath = join(projectDir, "package.json");
-  if (!existsSync(pkgPath)) return {};
+  const packagePath = join(projectDir, "package.json");
+  if (!existsSync(packagePath)) {return {};}
   try {
-    const pkg = JSON.parse(readFileSync(pkgPath, "utf8"));
+    const package_ = JSON.parse(readFileSync(packagePath, "utf8"));
     return {
-      name: pkg.name || "",
-      description: pkg.description || "",
-      version: pkg.version || "",
+      name: package_.name || "",
+      description: package_.description || "",
+      version: package_.version || "",
     };
   } catch {
     return {};
@@ -126,31 +126,31 @@ function estimateTokens(text) {
 /**
  * Compress a value: truncate long strings, deduplicate, etc.
  */
-function compressValue(v, maxLen = 80) {
-  if (!v || v === "—") return "—";
-  const str = String(v);
-  if (str.length <= maxLen) return str;
-  return str.slice(0, maxLen - 3) + "...";
+function compressValue(v, maxLength = 80) {
+  if (!v || v === "—") {return "—";}
+  const string_ = String(v);
+  if (string_.length <= maxLength) {return string_;}
+  return string_.slice(0, maxLength - 3) + "...";
 }
 
 /**
  * Priority-scored entries. Higher = more important to keep.
  */
 function priorityScore(key) {
-  if (/ADR|decision|arch/i.test(key)) return 100;
-  if (/PROJECT_TYPE|STACK|BUILD/i.test(key)) return 80;
-  if (/DOMAIN|ENTITY|PERSONA|FEATURE/i.test(key)) return 60;
-  if (/VERSION|NODE|TYPESCRIPT/i.test(key)) return 40;
-  if (/DESCRIPTION|NAME|PITCH/i.test(key)) return 50;
-  if (/NOTES|CONSTRAINT|NEED/i.test(key)) return 30;
+  if (/ADR|decision|arch/i.test(key)) {return 100;}
+  if (/PROJECT_TYPE|STACK|BUILD/i.test(key)) {return 80;}
+  if (/DOMAIN|ENTITY|PERSONA|FEATURE/i.test(key)) {return 60;}
+  if (/VERSION|NODE|TYPESCRIPT/i.test(key)) {return 40;}
+  if (/DESCRIPTION|NAME|PITCH/i.test(key)) {return 50;}
+  if (/NOTES|CONSTRAINT|NEED/i.test(key)) {return 30;}
   return 10;
 }
 
 /**
  * Safely run a shell command, returning stdout or empty string on failure.
  */
-function tryExec(cmd, opts = {}) {
-  try { return execSync(cmd, { encoding: "utf8", timeout: 10000, stdio: "pipe", ...opts }); }
+function tryExec(command, options = {}) {
+  try { return execSync(command, { encoding: "utf8", timeout: 10_000, stdio: "pipe", ...options }); }
   catch { return ""; }
 }
 
@@ -160,7 +160,7 @@ function tryExec(cmd, opts = {}) {
  */
 function getGitDiff(projectDir) {
   const gitDir = join(projectDir, ".git");
-  if (!existsSync(gitDir)) return { summary: "", files: [], diff: "" };
+  if (!existsSync(gitDir)) {return { summary: "", files: [], diff: "" };}
 
   const summary = tryExec("git diff --stat", { cwd: projectDir }).trim();
   const staged = tryExec("git diff --cached --stat", { cwd: projectDir }).trim();
@@ -173,7 +173,7 @@ function getGitDiff(projectDir) {
   const files = statOutput
     .split("\n")
     .filter(l => l.includes("|"))
-    .map(l => l.split("|")[0].trim())
+    .map(l => l.split("|", 1)[0].trim())
     .filter(Boolean);
 
   return {
@@ -190,7 +190,7 @@ function getGitDiff(projectDir) {
  */
 function getGitLog(projectDir) {
   const gitDir = join(projectDir, ".git");
-  if (!existsSync(gitDir)) return "";
+  if (!existsSync(gitDir)) {return "";}
 
   const log = tryExec(
     "git log --oneline --abbrev-commit --max-count=20 " +
@@ -207,14 +207,14 @@ function getGitLog(projectDir) {
  */
 function scanProjectDocs(projectDir) {
   const docsPath = join(projectDir, DOCS_DIR);
-  if (!existsSync(docsPath)) return { roadmaps: [], changelogs: [], keyDocs: [], scanDate: new Date().toISOString() };
+  if (!existsSync(docsPath)) {return { roadmaps: [], changelogs: [], keyDocs: [], scanDate: new Date().toISOString() };}
 
   const result = { roadmaps: [], changelogs: [], keyDocs: [], scanDate: new Date().toISOString() };
 
   try {
     const entries = readdirSync(docsPath, { withFileTypes: true, recursive: true });
     for (const entry of entries) {
-      if (!entry.isFile()) continue;
+      if (!entry.isFile()) {continue;}
       const fullPath = join(entry.parentPath, entry.name);
       const relPath = relative(projectDir, fullPath);
       const isRoadmap = /roadmap|plan/i.test(entry.name);
@@ -228,9 +228,9 @@ function scanProjectDocs(projectDir) {
           modified: stat.mtime.toISOString().slice(0, 10),
         };
 
-        if (isRoadmap) result.roadmaps.push(info);
-        else if (isChangelog) result.changelogs.push(info);
-        else result.keyDocs.push(info);
+        if (isRoadmap) {result.roadmaps.push(info);}
+        else if (isChangelog) {result.changelogs.push(info);}
+        else {result.keyDocs.push(info);}
       } catch { /* skip unreadable */ }
     }
   } catch { /* skip unreadable */ }
@@ -245,10 +245,10 @@ function buildHandoff({ projectDir, includeContext, includeAdrs, includeIdentity
   const lines = [];
   const identity = includeIdentity ? readProjectIdentity(projectDir) : {};
   const adrs = includeAdrs ? readAdrs(projectDir) : [];
-  const ctxValues = includeContext ? readContextValues(projectDir) : {};
-  const gitDiff = includeGitDiff !== false ? getGitDiff(projectDir) : null;
-  const gitLog = includeGitLog !== false ? getGitLog(projectDir) : null;
-  const docsScan = includeRoadmap !== false ? scanProjectDocs(projectDir) : null;
+  const contextValues = includeContext ? readContextValues(projectDir) : {};
+  const gitDiff = includeGitDiff === false ? null : getGitDiff(projectDir);
+  const gitLog = includeGitLog === false ? null : getGitLog(projectDir);
+  const docsScan = includeRoadmap === false ? null : scanProjectDocs(projectDir);
   const isCloseSession = mode === "close-session";
 
   const projectName = identity.name || (projectDir === "." ? process.cwd().split("/").pop() : projectDir.split("/").pop());
@@ -260,16 +260,13 @@ function buildHandoff({ projectDir, includeContext, includeAdrs, includeIdentity
     lines.push(`HANDOFF:${projectName}`);
   } else {
     const title = isCloseSession ? "SESSION CLOSE" : "HANDOFF";
-    lines.push(`## ${title}: ${projectName}`);
-    lines.push("");
+    lines.push(`## ${title}: ${projectName}`, "");
   }
 
   // ── Mode banner ──
   if (isCloseSession && !isMinimal) {
     const now = new Date().toISOString().slice(0, 19).replace("T", " ");
-    lines.push(`_Session closed at ${now}_`);
-    lines.push(`_Run \`rule_tool_process_handoff\` in a new session to resume._`);
-    lines.push("");
+    lines.push(`_Session closed at ${now}_`, `_Run \`rule_tool_process_handoff\` in a new session to resume._`, "");
   }
 
   // ── Identity ──
@@ -278,8 +275,8 @@ function buildHandoff({ projectDir, includeContext, includeAdrs, includeIdentity
       lines.push(`Project: ${identity.name}${identity.version ? ` v${identity.version}` : ""}`);
     } else {
       lines.push("### Project Identity");
-      if (identity.description) lines.push(`- Description: ${compressValue(identity.description, 150)}`);
-      if (identity.version) lines.push(`- Version: ${identity.version}`);
+      if (identity.description) {lines.push(`- Description: ${compressValue(identity.description, 150)}`);}
+      if (identity.version) {lines.push(`- Version: ${identity.version}`);}
     }
     lines.push("");
   }
@@ -297,45 +294,38 @@ function buildHandoff({ projectDir, includeContext, includeAdrs, includeIdentity
         lines.push(`- ${String(a.number).padStart(3, "0")}: [${a.status}] ${compressValue(a.title, 80)}`);
       }
     } else {
-      lines.push("### ADR Log");
-      lines.push("");
-      lines.push("| # | Status | Title | Tags | Decision |");
-      lines.push("|---|--------|-------|------|----------|");
+      lines.push("### ADR Log", "", "| # | Status | Title | Tags | Decision |", "|---|--------|-------|------|----------|");
       for (const a of adrs) {
         lines.push(`| ${String(a.number).padStart(3, "0")} | ${a.status} | ${compressValue(a.title, 60)} | ${a.tags.slice(0, 3).join(", ")} | ${compressValue(a.decision, 100)} |`);
       }
     }
     lines.push("");
   } else if (!isMinimal) {
-    lines.push("### ADR Log");
-    lines.push("*No ADRs recorded yet.*");
-    lines.push("");
+    lines.push("### ADR Log", "*No ADRs recorded yet.*", "");
   }
 
   // ── Context Values (sorted by priority, then compressed) ──
-  const ctxEntries = Object.entries(ctxValues);
-  if (ctxEntries.length > 0) {
+  const contextEntries = Object.entries(contextValues);
+  if (contextEntries.length > 0) {
     // Sort by priority score descending
-    const sorted = ctxEntries.sort((a, b) => priorityScore(b[0]) - priorityScore(a[0]));
+    const sorted = contextEntries.sort((a, b) => priorityScore(b[0]) - priorityScore(a[0]));
 
     if (isMinimal) {
       // Compact JSON on one line
       const minimal = {};
-      for (const [k, v] of sorted.slice(0, 15)) minimal[k] = compressValue(v, 40);
+      for (const [k, v] of sorted.slice(0, 15)) {minimal[k] = compressValue(v, 40);}
       lines.push(`Ctx:${JSON.stringify(minimal)}`);
     } else if (compress) {
       // Compressed: short key=value format, skip _count fields
       const chunk = sorted
         .filter(([k]) => !k.endsWith("_count"))
         .slice(0, 30)
-        .map(([k, v]) => `${k}=${compressValue(String(v).replace(/\n/g, "\\n"), 60)}`)
+        .map(([k, v]) => `${k}=${compressValue(String(v).replaceAll('\n', String.raw`\n`), 60)}`)
         .join("  ");
-      lines.push("### Snapshot (compressed)");
-      lines.push(chunk);
+      lines.push("### Snapshot (compressed)", chunk);
     } else {
       // Full table
-      lines.push("### Context Snapshot");
-      lines.push("");
+      lines.push("### Context Snapshot", "");
       for (const [k, v] of sorted) {
         if (!k.endsWith("_count")) {
           lines.push(`- \`${k}\`: ${compressValue(v, isBrief ? 50 : 200)}`);
@@ -350,9 +340,7 @@ function buildHandoff({ projectDir, includeContext, includeAdrs, includeIdentity
     if (isMinimal) {
       lines.push(`Changed:${gitDiff.files.length} files`);
     } else {
-      lines.push("### Working Tree Changes (uncommitted)");
-      lines.push("");
-      lines.push(`Changed ${gitDiff.files.length} file(s):`);
+      lines.push("### Working Tree Changes (uncommitted)", "", `Changed ${gitDiff.files.length} file(s):`);
       for (const f of gitDiff.files) {
         lines.push(`- \`${f}\``);
       }
@@ -360,36 +348,26 @@ function buildHandoff({ projectDir, includeContext, includeAdrs, includeIdentity
       if (!compress && gitDiff.unstaged.length > 0) {
         if (tokensaveActive(projectDir)) {
           // Defer to the code graph instead of dumping a raw diff.
-          lines.push(TOKENSAVE_DIRECTIVE);
-          lines.push("");
+          lines.push(TOKENSAVE_DIRECTIVE, "");
         } else {
           lines.push("```diff");
-          lines.push(gitDiff.unstaged.slice(0, 2000));
-          lines.push("```");
-          lines.push("");
+          lines.push(gitDiff.unstaged.slice(0, 2000), "```", "");
         }
       }
     }
   }
 
   // ── Git Log ──
-  if (gitLog && gitLog.length > 0 && !isMinimal) {
-    if (!isBrief) {
-      lines.push("### Recent Commits");
-      lines.push("");
-      lines.push("```");
-      lines.push(gitLog.slice(0, 1000));
-      lines.push("```");
-      lines.push("");
+  if (gitLog && gitLog.length > 0 && !isMinimal && !isBrief) {
+      lines.push("### Recent Commits", "", "```");
+      lines.push(gitLog.slice(0, 1000), "```", "");
     }
-  }
 
   // ── Docs & Roadmap Scan ──
   if (docsScan && !isMinimal) {
     const hasContent = docsScan.roadmaps.length > 0 || docsScan.changelogs.length > 0;
     if (hasContent) {
-      lines.push("### Documentation Status");
-      lines.push("");
+      lines.push("### Documentation Status", "");
 
       if (docsScan.roadmaps.length > 0) {
         lines.push("**Roadmaps:**");
@@ -420,31 +398,14 @@ function buildHandoff({ projectDir, includeContext, includeAdrs, includeIdentity
 
   // ── Session close footer ──
   if (isCloseSession && !isMinimal) {
-    lines.push("### Next Session Recovery");
-    lines.push("");
-    lines.push("To resume this session in a new chat:");
-    lines.push("");
-    lines.push("1. Run `rule_tool_process_handoff` to load this context.");
-    lines.push("2. Review the ADR log in `docs/adr/` for all decisions made.");
-    lines.push("3. Check the working tree changes listed above.");
-    lines.push("4. Review planning artifacts in `_bmad-output/` or `.context/` if applicable.");
-    lines.push("5. Continue from the next logical task.");
-    lines.push("");
+    lines.push("### Next Session Recovery", "", "To resume this session in a new chat:", "", "1. Run `rule_tool_process_handoff` to load this context.", "2. Review the ADR log in `docs/adr/` for all decisions made.", "3. Check the working tree changes listed above.", "4. Review planning artifacts in `_bmad-output/` or `.context/` if applicable.", "5. Continue from the next logical task.", "");
   }
 
   // ── Handoff Instruction ──
-  if (!isMinimal) {
-    lines.push("### Handoff Instruction");
-    lines.push("");
-    lines.push(`You are continuing work on **${projectName}**.`);
-    lines.push("The ADR log and context snapshot capture everything decided so far.");
-    lines.push("");
-    lines.push("Review ADRs for architectural decisions. Review snapshot for configuration.");
-    lines.push("Continue without re-asking answered questions.");
-    lines.push("");
+  if (isMinimal) {
+    lines.push("Continue work on " + projectName + ". ADRs at docs/adr/. Do not re-ask.", "");
   } else {
-    lines.push("Continue work on " + projectName + ". ADRs at docs/adr/. Do not re-ask.");
-    lines.push("");
+    lines.push("### Handoff Instruction", "", `You are continuing work on **${projectName}**.`, "The ADR log and context snapshot capture everything decided so far.", "", "Review ADRs for architectural decisions. Review snapshot for configuration.", "Continue without re-asking answered questions.", "");
   }
 
   const output = lines.join("\n");
@@ -462,10 +423,10 @@ function buildHandoff({ projectDir, includeContext, includeAdrs, includeIdentity
     text: output,
     stats: {
       adrs: adrs.length,
-      contextKeys: Object.keys(ctxValues).length,
+      contextKeys: Object.keys(contextValues).length,
       lines: output.split("\n").length,
       tokens,
-      format: isMinimal ? "minimal" : isBrief ? "brief" : "full",
+      format: isMinimal ? "minimal" : (isBrief ? "brief" : "full"),
     },
   };
 }
@@ -487,25 +448,24 @@ export function registerProcessHandoffTool() {
         includeIdentity: { type: "boolean", default: true, description: "Include project identity" },
       },
     },
-    handler: async (args) => {
+    handler: async (arguments_) => {
       const result = buildHandoff({
-        projectDir: args.projectDir || ".",
-        mode: args.mode || "handoff",
-        includeContext: args.includeContext !== false,
-        includeAdrs: args.includeAdrs !== false,
-        includeIdentity: args.includeIdentity !== false,
-        includeGitDiff: args.includeGitDiff !== false,
-        includeGitLog: args.includeGitLog !== false,
-        includeRoadmap: args.includeRoadmap !== false,
-        compress: !!args.compress,
-        maxTokens: args.maxTokens || 0,
-        format: args.format || "full",
+        projectDir: arguments_.projectDir || ".",
+        mode: arguments_.mode || "handoff",
+        includeContext: arguments_.includeContext !== false,
+        includeAdrs: arguments_.includeAdrs !== false,
+        includeIdentity: arguments_.includeIdentity !== false,
+        includeGitDiff: arguments_.includeGitDiff !== false,
+        includeGitLog: arguments_.includeGitLog !== false,
+        includeRoadmap: arguments_.includeRoadmap !== false,
+        compress: !!arguments_.compress,
+        maxTokens: arguments_.maxTokens || 0,
+        format: arguments_.format || "full",
       });
 
       const text = [result.text];
-      const modeLabel = args.mode === "close-session" ? "Session Close" : "Handoff";
-      text.push("---");
-      text.push(`_${modeLabel}: ${result.stats.format}, ${result.stats.adrs} ADRs, ${result.stats.contextKeys} keys, ${result.stats.lines} lines, ~${result.stats.tokens} tokens._`);
+      const modeLabel = arguments_.mode === "close-session" ? "Session Close" : "Handoff";
+      text.push("---", `_${modeLabel}: ${result.stats.format}, ${result.stats.adrs} ADRs, ${result.stats.contextKeys} keys, ${result.stats.lines} lines, ~${result.stats.tokens} tokens._`);
 
       return {
         content: [{

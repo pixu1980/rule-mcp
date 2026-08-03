@@ -30,8 +30,8 @@ const expectations = [
 ];
 
 for (const [file, marker, label] of expectations) {
-  assert(existsSync(file), `${label} must be installed at ${file}`);
-  assert(readFileSync(file, "utf8").includes(marker), `${label} must preserve argument/routing marker`);
+  assert.ok(existsSync(file), `${label} must be installed at ${file}`);
+  assert.ok(readFileSync(file, "utf8").includes(marker), `${label} must preserve argument/routing marker`);
 }
 
 execFileSync(
@@ -44,7 +44,7 @@ execFileSync(
   { cwd: fakeProject, env: { ...process.env, HOME: fakeHome, PI_CODING_AGENT_DIR: piDir } },
 );
 for (const [file, , label] of expectations) {
-  assert(!existsSync(file), `${label} must be removed during uninstall`);
+  assert.ok(!existsSync(file), `${label} must be removed during uninstall`);
 }
 
 console.log("  ✅ reusable rule command install/uninstall works for Pi, Claude, Gemini, Cursor, and Copilot");

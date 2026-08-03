@@ -40,7 +40,7 @@ function guardrailSummary(framework, code) {
     return `## Guardrails\n\n✅ ${report.passCount}/${report.total} guardrails pass (${skillName}). Validated with pix_check.`;
   }
   const lines = [`## Guardrails\n\n⚠️ ${report.failCount}/${report.total} FAIL (${skillName}). Fix before shipping:`];
-  for (const f of report.failed) lines.push(`- **${f.id}**: ${f.label} — ${f.suggestion}`);
+  for (const f of report.failed) {lines.push(`- **${f.id}**: ${f.label} — ${f.suggestion}`);}
   return lines.join("\n");
 }
 
@@ -52,61 +52,59 @@ export function generateMultiFile(component, framework = "vanilla", name) {
   const pascal = toPascal(name || component);
   const kebab = toKebab(pascal);
   const t = COMPONENT_TEMPLATES[component];
-  if (!t) return null;
+  if (!t) {return null;}
 
   const basePath = `src/components/${pascal}`;
   const files = [];
-  const vars = { Name: pascal, name: kebab, Name_lower: name || component };
+  const variables = { Name: pascal, name: kebab, Name_lower: name || component };
   const vanillaCss = t.vanilla?.css || "";
-  const interpCss = interpolate(vanillaCss, vars);
+  const interpCss = interpolate(vanillaCss, variables);
 
   switch (framework) {
     case "react":
     case "solid": {
-      const ext = ".jsx";
-      const src = t[framework] || t.react;
-      let compSrc = "";
-      if (src && typeof src === "string") {
-        compSrc = interpolate(src, vars);
+      const extension = ".jsx";
+      const source = t[framework] || t.react;
+      let compSource;
+      if (source && typeof source === "string") {
+        compSource = interpolate(source, variables);
       } else if (t.vanilla?.html) {
-        compSrc = `export function ${pascal}({ children }) {\n  return (\n${indent(t.vanilla.html, 4)}\n  );\n}`;
-      } else return null;
-      if (!compSrc.includes(`export function ${pascal}`)) compSrc = compSrc.replace(/export function \w+/, `export function ${pascal}`);
-      files.push({ path: `${basePath}/_${pascal}${ext}`, language: "jsx", content: compSrc });
-      if (interpCss) files.push({ path: `${basePath}/_${pascal}.css`, language: "css", content: interpCss });
-      files.push({ path: `${basePath}/index.js`, language: "javascript", content: `export { ${pascal} } from './_${pascal}${ext}';\n` });
+        compSource = `export function ${pascal}({ children }) {\n  return (\n${indent(t.vanilla.html, 4)}\n  );\n}`;
+      } else {return null;}
+      if (!compSource.includes(`export function ${pascal}`)) {compSource = compSource.replace(/export function \w+/, `export function ${pascal}`);}
+      files.push({ path: `${basePath}/_${pascal}${extension}`, language: "jsx", content: compSource });
+      if (interpCss) {files.push({ path: `${basePath}/_${pascal}.css`, language: "css", content: interpCss });}
+      files.push({ path: `${basePath}/index.js`, language: "javascript", content: `export { ${pascal} } from './_${pascal}${extension}';\n` });
       break;
     }
     case "vue": {
-      const src = t.vue;
-      let content = "";
-      if (src && typeof src === "string") {
-        content = interpolate(src, vars);
+      const source = t.vue;
+      let content;
+      if (source && typeof source === "string") {
+        content = interpolate(source, variables);
       } else if (t.vanilla?.html) {
-        content = `<script setup>\ndefineProps({});\n<\/script>\n\n<template>\n${indent(interpolate(t.vanilla.html, vars), 2)}\n<\/template>\n\n<style scoped>\n${interpCss}\n<\/style>`;
-      } else return null;
-      files.push({ path: `${basePath}/_${pascal}.vue`, language: "vue", content });
-      files.push({ path: `${basePath}/index.js`, language: "javascript", content: `export { default as ${pascal} } from './_${pascal}.vue';\n` });
+        content = `<script setup>\ndefineProps({});\n</script>\n\n<template>\n${indent(interpolate(t.vanilla.html, variables), 2)}\n</template>\n\n<style scoped>\n${interpCss}\n</style>`;
+      } else {return null;}
+      files.push({ path: `${basePath}/_${pascal}.vue`, language: "vue", content }, { path: `${basePath}/index.js`, language: "javascript", content: `export { default as ${pascal} } from './_${pascal}.vue';\n` });
       break;
     }
     case "svelte": {
-      const src = t.svelte;
-      let content = "";
-      if (src && typeof src === "string") {
-        content = interpolate(src, vars);
+      const source = t.svelte;
+      let content;
+      if (source && typeof source === "string") {
+        content = interpolate(source, variables);
       } else if (t.vanilla?.html) {
-        content = `<script>\nlet { children } = \$props();\n<\/script>\n\n${interpolate(t.vanilla.html, vars)}\n\n<style>\n${interpCss}\n<\/style>`;
-      } else return null;
-      files.push({ path: `${basePath}/_${pascal}.svelte`, language: "svelte", content });
-      files.push({ path: `${basePath}/index.js`, language: "javascript", content: `export { default as ${pascal} } from './_${pascal}.svelte';\n` });
+        content = `<script>\nlet { children } = $props();\n</script>\n\n${interpolate(t.vanilla.html, variables)}\n\n<style>\n${interpCss}\n</style>`;
+      } else {return null;}
+      files.push({ path: `${basePath}/_${pascal}.svelte`, language: "svelte", content }, { path: `${basePath}/index.js`, language: "javascript", content: `export { default as ${pascal} } from './_${pascal}.svelte';\n` });
       break;
     }
     default: {
-      if (!t.vanilla) return null;
-      const html = interpolate(t.vanilla.html || "", vars);
-      const jsContent = `/**\n * @module ${basePath}/_${pascal}\n * @description ${t.description}\n */\n\nconst template = document.createElement("template");\ntemplate.innerHTML = \`${html.replace(/`/g, "\\`")}\`;\n\nexport class ${pascal} extends HTMLElement {\n  connectedCallback() {\n    this.append(template.content.cloneNode(true));\n  }\n}\n\ncustomElements.define("${kebab}", ${pascal});\n`;
+      if (!t.vanilla) {return null;}
+      const html = interpolate(t.vanilla.html || "", variables);
+      const jsContent = `/**\n * @module ${basePath}/_${pascal}\n * @description ${t.description}\n */\n\nconst template = document.createElement("template");\ntemplate.innerHTML = \`${html.replaceAll('`', "\\`")}\`;\n\nexport class ${pascal} extends HTMLElement {\n  connectedCallback() {\n    this.append(template.content.cloneNode(true));\n  }\n}\n\ncustomElements.define("${kebab}", ${pascal});\n`;
       files.push({ path: `${basePath}/_${pascal}.js`, language: "javascript", content: jsContent });
-      if (interpCss) files.push({ path: `${basePath}/_${pascal}.css`, language: "css", content: interpCss });
+      if (interpCss) {files.push({ path: `${basePath}/_${pascal}.css`, language: "css", content: interpCss });}
       files.push({ path: `${basePath}/index.js`, language: "javascript", content: `export { ${pascal} } from './_${pascal}.js';\n` });
     }
   }
@@ -122,17 +120,17 @@ export function listTemplateCategories() {
 
 export function getTemplate(component, framework = "vanilla") {
   const t = COMPONENT_TEMPLATES[component];
-  if (!t) return null;
-  if (framework === "vanilla" && t.vanilla) return t.vanilla;
+  if (!t) {return null;}
+  if (framework === "vanilla" && t.vanilla) {return t.vanilla;}
   const key = framework;
-  if (t[key]) return t[key];
-  if (t.vanilla) return t.vanilla;
+  if (t[key]) {return t[key];}
+  if (t.vanilla) {return t.vanilla;}
   return null;
 }
 
-function indent(str, spaces) {
+function indent(string_, spaces) {
   const pad = " ".repeat(spaces);
-  return str.split("\n").map(l => l ? pad + l : l).join("\n");
+  return string_.split("\n").map(l => l ? pad + l : l).join("\n");
 }
 
 function buildGuardrailsText() {
@@ -171,23 +169,23 @@ export function registerTemplateTool() {
     name: "rule_tool_component",
     description: "Generate component or test templates following rule AI principles.",
     zodSchema: ComponentSchema,
-    handler: async (args) => {
-      if (args.mode === "guardrails") return { content: [{ type: "text", text: buildGuardrailsText() }] };
-      const component = args.component;
-      const framework = args.framework || "vanilla";
+    handler: async (arguments_) => {
+      if (arguments_.mode === "guardrails") {return { content: [{ type: "text", text: buildGuardrailsText() }] };}
+      const component = arguments_.component;
+      const framework = arguments_.framework || "vanilla";
       if (!COMPONENT_TEMPLATES[component]) {
         return { isError: true, content: [{ type: "text", text: "Unknown: " + component + ". Available: " + Object.keys(COMPONENT_TEMPLATES).join(", ") }] };
       }
-      if (args.mode === "multi") {
-        const files = generateMultiFile(component, framework, args.name);
-        if (!files || files.length === 0) return { isError: true, content: [{ type: "text", text: "Cannot generate multi-file output for \"" + component + "\" with \"" + framework + "\"." }] };
+      if (arguments_.mode === "multi") {
+        const files = generateMultiFile(component, framework, arguments_.name);
+        if (!files || files.length === 0) {return { isError: true, content: [{ type: "text", text: "Cannot generate multi-file output for \"" + component + "\" with \"" + framework + "\"." }] };}
         const combined = files.map(f => f.content).join("\n\n");
         return {
           content: [{ type: "text", text: "# Generated: " + component + " → " + framework + " (" + files.length + " files)\n\n" + files.map(f => "  " + f.path).join("\n") + "\n\n---\n\n" + files.map(f => "### `" + f.path + "`\n\n```" + f.language + "\n" + f.content + "\n```").join("\n\n") + "\n\n" + guardrailSummary(framework, combined) }],
         };
       }
       const template = getTemplate(component, framework);
-      if (!template) return { isError: true, content: [{ type: "text", text: "Unknown: " + component }] };
+      if (!template) {return { isError: true, content: [{ type: "text", text: "Unknown: " + component }] };}
       if (typeof template === "object" && template.html && template.css) {
         return { content: [{ type: "text", text: "# " + component + " - " + framework + "\n\n## HTML\n```html\n" + template.html + "\n```\n\n## CSS\n```css\n" + template.css + "\n```\n\n" + guardrailSummary("vanilla", String(template.html) + "\n" + String(template.css)) }] };
       }

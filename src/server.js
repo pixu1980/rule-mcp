@@ -26,7 +26,7 @@ import {
   ErrorCode,
   McpError,
 } from "@modelcontextprotocol/sdk/types.js";
-import { pkg } from "./cli/paths.js";
+import { pkg as package_ } from "./cli/paths.js";
 import { listTools, callTool } from "./tools/router.js";
 import { listResources, readResource } from "./resources/index.js";
 import { listPrompts, getPrompt } from "./prompts/index.js";
@@ -46,7 +46,7 @@ export function createServer() {
   const server = new Server(
     {
       name: "rule-mcp",
-      version: pkg.version,
+      version: package_.version,
     },
     {
       capabilities: {
@@ -68,13 +68,13 @@ export function createServer() {
   });
 
   server.setRequestHandler(CallToolRequestSchema, async (request) => {
-    const { name, arguments: args } = request.params;
+    const { name, arguments: arguments_ } = request.params;
 
     if (!name) {
       throw new McpError(ErrorCode.InvalidParams, "Tool name is required");
     }
 
-    return callTool(name, args ?? {});
+    return callTool(name, arguments_ ?? {});
   });
 
   // ── Resource handlers ──────────────────────────────────────────
@@ -162,12 +162,14 @@ export async function startServer() {
  * Gracefully stop the running server, if any.
  */
 export async function stopServer() {
-  if (serverInstance) {
-    try {
-      await serverInstance.close();
-    } catch {
-      // ignore close errors
-    }
-    serverInstance = null;
+  if (!serverInstance) {
+  	return;
   }
+
+  try {
+    await serverInstance.close();
+  } catch {
+    // ignore close errors
+  }
+  serverInstance = null;
 }

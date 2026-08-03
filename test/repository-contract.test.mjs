@@ -7,17 +7,17 @@ import { fileURLToPath } from "node:url";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const forbidden = "";
-const ignoredDirs = new Set([".git", "node_modules", ".tokensave", ".agents", ".pi", ".github", ".vscode"]);
+const ignoredDirectories = new Set([".git", "node_modules", ".tokensave", ".agents", ".pi", ".github", ".vscode"]);
 
 /**
  * Walk a directory tree, returning all file paths.
  */
 function walk(dir, files = []) {
   for (const entry of readdirSync(dir, { withFileTypes: true })) {
-    if (ignoredDirs.has(entry.name)) continue;
+    if (ignoredDirectories.has(entry.name)) {continue;}
     const path = join(dir, entry.name);
-    if (entry.isDirectory()) walk(path, files);
-    else files.push(path);
+    if (entry.isDirectory()) {walk(path, files);}
+    else {files.push(path);}
   }
   return files;
 }
@@ -28,10 +28,10 @@ console.log("repository contract test");
 // `forbidden` is the legacy token that must not appear in file names/contents.
 // When it is empty there is nothing to scan for — `"".includes("")` is always
 // true, which would flag every file — so skip the substring sweep entirely.
-const sourceDirs = ["src", "test", "prompts", "scripts", "extensions", "rules", "skills"];
-for (const sub of forbidden ? sourceDirs : []) {
+const sourceDirectories = ["src", "test", "prompts", "scripts", "extensions", "rules", "skills"];
+for (const sub of forbidden ? sourceDirectories : []) {
   const dir = join(root, sub);
-  if (!existsSync(dir)) continue;
+  if (!existsSync(dir)) {continue;}
 
   const files = walk(dir);
 
@@ -47,18 +47,17 @@ for (const sub of forbidden ? sourceDirs : []) {
   const contentMatches = [];
   for (const file of files) {
     // Skip this file itself (contains 'pix_' in comments/messages)
-    if (file === import.meta.filename || file.endsWith("repository-contract.test.mjs")) continue;
+    if (file === import.meta.filename || file.endsWith("repository-contract.test.mjs")) {continue;}
     const content = readFileSync(file);
-    if (content.includes(0)) continue;
+    if (content.includes(0)) {continue;}
     const text = content.toString("utf8");
-    if (!text.includes(forbidden)) continue;
+    if (!text.includes(forbidden)) {continue;}
     // Skip lines that are intentional legacy references (env vars, git username, server names)
     const lines = text.split("\n");
     const hasRealPix = lines.some(l => {
-      if (!l.includes(forbidden)) return false;
-      return true;
+      return !!l.includes(forbidden);
     });
-    if (hasRealPix) contentMatches.push(file);
+    if (hasRealPix) {contentMatches.push(file);}
   }
   assert.equal(
     contentMatches.length,
@@ -70,13 +69,13 @@ for (const sub of forbidden ? sourceDirs : []) {
 }
 
 // Root-level checks
-assert(existsSync(join(root, "skills", "rule", "SKILL.md")), "router skill must be named rule");
+assert.ok(existsSync(join(root, "skills", "rule", "SKILL.md")), "router skill must be named rule");
 
 const promptTemplate = join(root, "prompts", "rule-mcp.md");
-assert(existsSync(promptTemplate), "Pi prompt template must exist");
+assert.ok(existsSync(promptTemplate), "Pi prompt template must exist");
 const prompt = readFileSync(promptTemplate, "utf8");
-assert(prompt.includes("$ARGUMENTS"), "Pi prompt template must forward command arguments");
-assert(prompt.includes("rule"), "Pi prompt template must route through rule tool");
+assert.ok(prompt.includes("$ARGUMENTS"), "Pi prompt template must forward command arguments");
+assert.ok(prompt.includes("rule"), "Pi prompt template must route through rule tool");
 
 const universalInstallerPath = join(root, "scripts", "install.sh");
 const universalInstaller = readFileSync(universalInstallerPath, "utf8");
@@ -86,10 +85,10 @@ execFileSync("bash", [universalInstallerPath, "--agent", "pi", "--force", "--dry
   stdio: "pipe",
 });
 for (const tool of ["pix_tool —", "rule_tool_process_adr", "rule_tool_process_handoff"]) {
-  assert(universalInstaller.includes(tool), `universal installer rules must reference ${tool}`);
+  assert.ok(universalInstaller.includes(tool), `universal installer rules must reference ${tool}`);
 }
 for (const tool of ["rule_tool_ai", "pix_adr", "pix_handoff"]) {
-  assert(!universalInstaller.includes(tool), `universal installer rules must not reference obsolete ${tool}`);
+  assert.ok(!universalInstaller.includes(tool), `universal installer rules must not reference obsolete ${tool}`);
   const obsoletePattern = new RegExp(`(?<![A-Za-z0-9_])${tool}(?![A-Za-z0-9_])`);
   const sourceDir = join(root, "src");
   if (existsSync(sourceDir)) {
@@ -102,7 +101,7 @@ for (const tool of ["rule_tool_ai", "pix_adr", "pix_handoff"]) {
 }
 
 const skillsInstaller = join(root, "scripts", "install-skills.sh");
-assert(existsSync(skillsInstaller), "skills-only installer must exist");
+assert.ok(existsSync(skillsInstaller), "skills-only installer must exist");
 const fakeHome = mkdtempSync(join(tmpdir(), "rule-mcp-skills-"));
 const target = join(fakeHome, ".agents", "skills");
 mkdirSync(join(target), { recursive: true });

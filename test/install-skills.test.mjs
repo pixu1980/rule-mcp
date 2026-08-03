@@ -44,13 +44,13 @@ try {
     .sort();
 
   for (const skill of sourceSkills) {
-    assert(existsSync(join(target, skill, "SKILL.md")), `${skill} was not installed`);
+    assert.ok(existsSync(join(target, skill, "SKILL.md")), `${skill} was not installed`);
   }
 
-  assert(!existsSync(join(target, "rule", "stale.txt")), "existing bundled skill must be replaced cleanly");
-  assert(existsSync(join(target, "custom-skill", "SKILL.md")), "unrelated custom skills must be preserved");
-  assert(result.stdout.includes(`Installed ${sourceSkills.length} skills`), "installer must report the installed count");
-  assert(result.stdout.includes(target), "installer must report the global destination");
+  assert.ok(!existsSync(join(target, "rule", "stale.txt")), "existing bundled skill must be replaced cleanly");
+  assert.ok(existsSync(join(target, "custom-skill", "SKILL.md")), "unrelated custom skills must be preserved");
+  assert.ok(result.stdout.includes(`Installed ${sourceSkills.length} skills`), "installer must report the installed count");
+  assert.ok(result.stdout.includes(target), "installer must report the global destination");
 
   console.log(`  ✅ ${sourceSkills.length} skills installed globally without touching custom skills`);
 } finally {

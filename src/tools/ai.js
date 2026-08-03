@@ -29,7 +29,7 @@ const GalaxySchema = z.object({
 function extractSections(content) {
   let body = content;
   const fmMatch = body.match(/^---\s*\n[\s\S]*?\n---\s*\n/);
-  if (fmMatch) body = body.slice(fmMatch[0].length);
+  if (fmMatch) {body = body.slice(fmMatch[0].length);}
 
   const lines = body.split("\n");
   const sections = [];
@@ -40,19 +40,19 @@ function extractSections(content) {
     const h2Match = line.match(/^##\s+(.+)/);
     const h3Match = h2Match ? null : line.match(/^###\s+(.+)/);
     if (h2Match) {
-      if (currentContent.length > 0) sections.push({ heading: currentHeading, content: currentContent.join("\n") });
+      if (currentContent.length > 0) {sections.push({ heading: currentHeading, content: currentContent.join("\n") });}
       currentHeading = h2Match[1].trim();
       currentContent = [];
     } else if (h3Match) {
       // Treat ### as a separate section for better granularity
-      if (currentContent.length > 0) sections.push({ heading: currentHeading, content: currentContent.join("\n") });
+      if (currentContent.length > 0) {sections.push({ heading: currentHeading, content: currentContent.join("\n") });}
       currentHeading = h3Match[1].trim();
       currentContent = [];
     } else {
       currentContent.push(line);
     }
   }
-  if (currentContent.length > 0) sections.push({ heading: currentHeading, content: currentContent.join("\n") });
+  if (currentContent.length > 0) {sections.push({ heading: currentHeading, content: currentContent.join("\n") });}
 
   return sections;
 }
@@ -95,7 +95,7 @@ function expandPrompt(prompt) {
   const lower = prompt.toLowerCase();
   const aliases = [];
   for (const [native, en] of Object.entries(MULTILINGUAL_ALIASES)) {
-    if (lower.includes(native)) aliases.push(en);
+    if (lower.includes(native)) {aliases.push(en);}
   }
   return aliases.length > 0 ? prompt + " " + aliases.join(" ") : prompt;
 }
@@ -108,10 +108,10 @@ function scoreSectionWord(section, word, skillBase, descText) {
   const descBonus = descText.includes(word) ? 2 : 0;
   const weight = 1 + nameBonus + descBonus;
 
-  const wordPattern = new RegExp("\\b" + word.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + "\\b", "i");
+  const wordPattern = new RegExp(String.raw`\b` + word.replaceAll(/[.*+?^${}()|[\]\\]/g, String.raw`\$&`) + String.raw`\b`, "i");
 
-  if (wordPattern.test(headingText)) return weight * 3;
-  if (wordPattern.test(contentText)) return weight;
+  if (wordPattern.test(headingText)) {return weight * 3;}
+  if (wordPattern.test(contentText)) {return weight;}
   return 0;
 }
 
@@ -123,12 +123,12 @@ function scoreSkill(sections, meta, promptWords, skillName) {
   let rawScore = 0;
 
   for (const word of promptWords) {
-    if (STOPWORDS.has(word)) continue;
+    if (STOPWORDS.has(word)) {continue;}
 
     let wordScore = 0;
     for (const section of sections) {
       const w = scoreSectionWord(section, word, skillBase, descText);
-      if (w > wordScore) wordScore = w;
+      if (w > wordScore) {wordScore = w;}
     }
 
     if (wordScore === 0 && (descText.includes(word) || tagText.includes(word))) {
@@ -145,7 +145,7 @@ function scoreSkill(sections, meta, promptWords, skillName) {
 
 function extractTopSections(skillName, promptWords) {
   const content = readSkill(skillName);
-  if (!content) return [];
+  if (!content) {return [];}
 
   const sections = extractSections(content);
   const meta = getSkillMetadata(skillName);
@@ -156,7 +156,7 @@ function extractTopSections(skillName, promptWords) {
     .map(s => {
       let score = 0;
       for (const word of promptWords) {
-        if (STOPWORDS.has(word)) continue;
+        if (STOPWORDS.has(word)) {continue;}
         score += scoreSectionWord(s, word, skillBase, descText);
       }
       return { heading: s.heading, score };
@@ -170,7 +170,7 @@ function extractTopSections(skillName, promptWords) {
     const hasMeta = promptWords.some(w =>
       !STOPWORDS.has(w) && (descText.includes(w) || (meta.tags || []).join(" ").toLowerCase().includes(w))
     );
-    if (hasMeta) return ["(matches skill description)"];
+    if (hasMeta) {return ["(matches skill description)"];}
   }
 
   return scored;
@@ -180,14 +180,13 @@ function extractTopSections(skillName, promptWords) {
 
 function skillNextTools(skillName) {
   const suggestions = [];
-  const base = skillName.replace(/^rule-/, "").replace(/-/g, "_");
+  const base = skillName.replace(/^rule-/, "").replaceAll('-', "_");
   suggestions.push(`rule_tool_${base}`);
   if (skillName === "rule-styleguide" || skillName === "rule-architect") {
     suggestions.push("rule_tool_scaffold");
   }
-  suggestions.push("rule_tool_check");
-  suggestions.push("rule_tool_search");
-  if (skillName !== "rule-frontend-vanilla-reactive") suggestions.push("rule_tool_component");
+  suggestions.push("rule_tool_check", "rule_tool_search");
+  if (skillName !== "rule-frontend-vanilla-reactive") {suggestions.push("rule_tool_component");}
   return suggestions;
 }
 
@@ -204,10 +203,10 @@ export function registerAiTool() {
     description: "Route a prompt to the correct rule skill. Returns structured routing with relevant sections.",
     zodSchema: GalaxySchema,
     inputSchema: { type: "object", properties: { prompt: { type: "string", description: "User's question" } }, required: ["prompt"] },
-    handler: async (args) => {
+    handler: async (arguments_) => {
       const allSkills = getSkillNames();
       const skills = allSkills.filter((skillName) => skillName !== "rule");
-      const prompt = expandPrompt((args.prompt || "").trim());
+      const prompt = expandPrompt((arguments_.prompt || "").trim());
       if (!prompt) {
         return { content: [{ type: "text", text: JSON.stringify({ route: "none", confidence: 0, sections: [], next_tools: ["rule_tool_search"], skills_available: allSkills }) }] };
       }
@@ -234,19 +233,19 @@ export function registerAiTool() {
         const o = DEVOPS_KEYWORDS.filter(k => promptLower.includes(k)).length;
         const f = FRONTEND_KEYWORDS.filter(k => promptLower.includes(k)).length;
         // Commit signals must outweigh other domains (e.g. "add a commit button" stays frontend).
-        if (g >= 2 || g > f + b + d) return "git";
-        if (a >= 2 || a > b + f + d) return "ai";
-        if (b >= 2 || b > f + d) return "backend";
-        if (d >= 2 || d > b + f) return "data";
-        if (o >= 2) return "devops";
+        if (g >= 2 || g > f + b + d) {return "git";}
+        if (a >= 2 || a > b + f + d) {return "ai";}
+        if (b >= 2 || b > f + d) {return "backend";}
+        if (d >= 2 || d > b + f) {return "data";}
+        if (o >= 2) {return "devops";}
         return null; // unknown, use full scoring
       })();
 
       // Detect framework from args
-      let detectedFramework = args.framework;
-      if (!detectedFramework && args.path) {
+      let detectedFramework = arguments_.framework;
+      if (!detectedFramework && arguments_.path) {
         try {
-          const profile = detectProject(args.path);
+          const profile = detectProject(arguments_.path);
           detectedFramework = profile.framework;
         } catch { /* ignore */ }
       }
@@ -264,14 +263,14 @@ export function registerAiTool() {
         : null;
 
       // Only apply framework bias when domains match (or prompt domain is unknown)
-      const applyFrameworkBias = !promptDomain || promptDomain === detectedDomain;
+      const isApplyFrameworkBias = !promptDomain || promptDomain === detectedDomain;
 
       // Score each skill
       const skillRawScores = [];
 
       for (const skillName of skills) {
         const content = readSkill(skillName);
-        if (!content) continue;
+        if (!content) {continue;}
 
         const sections = extractSections(content);
         const meta = getSkillMetadata(skillName);
@@ -281,12 +280,12 @@ export function registerAiTool() {
 
         // Commit/push prompts deterministically route to the commits discipline skill.
         if (promptDomain === "git" && skillName === "rule-toolchain-commits") {
-          finalScore = Math.max(rawScore * 2.0, 25);
+          finalScore = Math.max(rawScore * 2, 25);
         }
 
-        if (detectedFramework && applyFrameworkBias) {
+        if (detectedFramework && isApplyFrameworkBias) {
           if (skillName === detectedSkillName) {
-            finalScore = Math.max(rawScore * 2.0, 20);
+            finalScore = Math.max(rawScore * 2, 20);
           } else if (["rule-styleguide", "rule-frontend", "rule-platform-web", "rule-architect", "rule-ui-design-system", "rule-ai"].includes(skillName)) {
             finalScore *= 1.15;
           } else {
@@ -294,7 +293,7 @@ export function registerAiTool() {
           }
         }
 
-        if (finalScore <= 0) continue;
+        if (finalScore <= 0) {continue;}
 
         skillRawScores.push({ skill: skillName, rawScore: finalScore, meta });
       }
@@ -333,9 +332,9 @@ export function registerAiTool() {
         skills_available: allSkills,
         summary: isUncertain
           ? `No strong match for "${prompt}". Try rephrasing or use rule_tool_search for full-text search.`
-          : top.length > 0
+          : (top.length > 0
             ? `Top match: ${primaryRoute.skill} (${Math.round(primaryRoute.relativeScore * 100)}%). Relevant sections: ${primaryRoute.sections.join(", ")}. Try: ${[...new Set(top.flatMap(t => t.next_tools))].join(", ")}.`
-            : `No matching skill for "${prompt}". Try rule_tool_search for full-text search.`,
+            : `No matching skill for "${prompt}". Try rule_tool_search for full-text search.`),
       };
 
       return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };

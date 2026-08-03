@@ -10,7 +10,7 @@
 
 import { join } from "node:path";
 import { spawn } from "node:child_process";
-import { getSkillsDirs } from "../cli/paths.js";
+import { getSkillsDirs as getSkillsDirectories } from "../cli/paths.js";
 
 /**
  * Start the rule-architect context interview server for the given target directory.
@@ -23,7 +23,7 @@ import { getSkillsDirs } from "../cli/paths.js";
  */
 export async function startContextServer(skillName, targetDir) {
   // Resolve the server script path from embedded skills first, then home skills
-  const { homeSkills, embeddedSkills } = getSkillsDirs();
+  const { homeSkills, embeddedSkills } = getSkillsDirectories();
   const serverPaths = [
     join(embeddedSkills, skillName, "assets", "context-server.mjs"),
     join(homeSkills, skillName, "assets", "context-server.mjs"),
@@ -57,13 +57,13 @@ export async function startContextServer(skillName, targetDir) {
     });
 
     let output = "";
-    let resolved = false;
+    let isResolved = false;
 
     proc.stdout.on("data", (data) => {
       output += data.toString();
       // Try to extract URL from output
-      if (!resolved && output.includes("http://localhost")) {
-        resolved = true;
+      if (!isResolved && output.includes("http://localhost")) {
+        isResolved = true;
         const urlMatch = output.match(/http:\/\/localhost:\d+/);
         const url = urlMatch ? urlMatch[0] : "(see output)";
         resolve({
@@ -79,33 +79,39 @@ export async function startContextServer(skillName, targetDir) {
       output += data.toString();
     });
 
-    proc.on("error", (err) => {
-      if (!resolved) {
-        resolved = true;
-        resolve({
-          isError: true,
-          content: [{ type: "text", text: "Failed to start context server: " + err.message }],
-        });
+    proc.on("error", (error) => {
+      if (isResolved) {
+      	return;
       }
+
+      isResolved = true;
+      resolve({
+        isError: true,
+        content: [{ type: "text", text: "Failed to start context server: " + error.message }],
+      });
     });
 
     proc.on("close", (code) => {
-      if (!resolved) {
-        resolved = true;
-        resolve({
-          content: [{ type: "text", text: "Context interview server stopped (exit code " + code + ").\n\nServer output:\n" + output }],
-        });
+      if (isResolved) {
+      	return;
       }
+
+      isResolved = true;
+      resolve({
+        content: [{ type: "text", text: "Context interview server stopped (exit code " + code + ").\n\nServer output:\n" + output }],
+      });
     });
 
     // Timeout fallback — if server doesn't print URL within 5s, send output anyway
     setTimeout(() => {
-      if (!resolved) {
-        resolved = true;
-        resolve({
-          content: [{ type: "text", text: "## rule-architect Context Interview Server\n\nServer started. Check the terminal for the URL.\n\nOutput:\n" + (output || "(waiting for server...)") }],
-        });
+      if (isResolved) {
+      	return;
       }
+
+      isResolved = true;
+      resolve({
+        content: [{ type: "text", text: "## rule-architect Context Interview Server\n\nServer started. Check the terminal for the URL.\n\nOutput:\n" + (output || "(waiting for server...)") }],
+      });
     }, 5000);
   });
 }

@@ -9,7 +9,7 @@ test("add adds exactly 1 group per click", async ({ page }) => {
   await page.waitForTimeout(200);
 
   // Navigate: step 2 → 3 → 4 → 5
-  for (let i = 0; i < 4; i++) {
+  for (let index = 0; index < 4; index++) {
     await page.click("[data-part='nav-btn'][data-direction='next']");
     await page.waitForTimeout(300);
   }
@@ -20,9 +20,9 @@ test("add adds exactly 1 group per click", async ({ page }) => {
   console.log(`Initial groups: ${before}`);
 
   // Click "+ Add Domain Terms" button (first add button on this step)
-  const addBtn = page.locator("[data-part='add-btn']").first();
-  await expect(addBtn).toBeVisible();
-  await addBtn.click();
+  const addButton = page.locator("[data-part='add-btn']").first();
+  await expect(addButton).toBeVisible();
+  await addButton.click();
   await page.waitForTimeout(500);
 
   const after = await groups.count();
@@ -32,16 +32,16 @@ test("add adds exactly 1 group per click", async ({ page }) => {
   expect(after - before).toBe(1);
 
   // Click again
-  await addBtn.click();
+  await addButton.click();
   await page.waitForTimeout(500);
   const after2 = await groups.count();
   console.log(`After 2 clicks: ${after} → ${after2}`);
   expect(after2 - after).toBe(1);
 
   // Remove one
-  const removeBtn = page.locator("[data-part='remove-btn']").first();
-  if (await removeBtn.isVisible().catch(() => false)) {
-    await removeBtn.click();
+  const removeButton = page.locator("[data-part='remove-btn']").first();
+  if (await removeButton.isVisible().catch(() => false)) {
+    await removeButton.click();
     await page.waitForTimeout(500);
     const afterRemove = await groups.count();
     console.log(`After remove: ${after2} → ${afterRemove}`);

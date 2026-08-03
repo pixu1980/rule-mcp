@@ -13,7 +13,7 @@
 import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 import { z } from "zod/v4";
-import { getSkillsDirs } from "../cli/paths.js";
+import { getSkillsDirs as getSkillsDirectories } from "../cli/paths.js";
 import { decorateWorkflowReminder, enforcementError, postprocessToolResult, preprocessToolCall } from "../core/enforcement.js";
 import { cacheGet, cacheKey, cacheSet } from "../core/tool-cache.js";
 import { compressResult } from "../core/caveman.js";
@@ -21,7 +21,7 @@ import { consumeUpdateBanner, maybeSelfUpdate } from "../core/self-update.js";
 
 /** Prepend a self-update banner (if any) to a result so the update is visible. */
 function withBanner(banner, result) {
-  if (!banner || !result || !Array.isArray(result.content)) return result;
+  if (!banner || !result || !Array.isArray(result.content)) {return result;}
   return { ...result, content: [{ type: "text", text: banner }, ...result.content] };
 }
 
@@ -48,15 +48,15 @@ const _postHooks = {};
 const _afterHooks = {};
 
 /** Register mandatory preprocessing hook. */
-export function addBeforeToolHook(toolName, fn) {
-  if (!_beforeHooks[toolName]) _beforeHooks[toolName] = [];
-  _beforeHooks[toolName].push(fn);
+export function addBeforeToolHook(toolName, function_) {
+  if (!_beforeHooks[toolName]) {_beforeHooks[toolName] = [];}
+  _beforeHooks[toolName].push(function_);
 }
 
 /** Register mandatory postprocessing hook. */
-export function addPostToolHook(toolName, fn) {
-  if (!_postHooks[toolName]) _postHooks[toolName] = [];
-  _postHooks[toolName].push(fn);
+export function addPostToolHook(toolName, function_) {
+  if (!_postHooks[toolName]) {_postHooks[toolName] = [];}
+  _postHooks[toolName].push(function_);
 }
 
 /**
@@ -67,7 +67,7 @@ export function addPostToolHook(toolName, fn) {
  * @param {(toolName: string, args: object, result: object) => Promise<void>} fn
  */
 export function addAfterToolHook(toolName, fn) {
-  if (!_afterHooks[toolName]) _afterHooks[toolName] = [];
+  if (!_afterHooks[toolName]) {_afterHooks[toolName] = [];}
   _afterHooks[toolName].push(fn);
 }
 
@@ -88,8 +88,8 @@ export function clearTools() {
  */
 export function retainTools(allowed) {
   const keep = allowed instanceof Set ? allowed : new Set(allowed);
-  for (let i = _tools.length - 1; i >= 0; i--) {
-    if (!keep.has(_tools[i].name)) _tools.splice(i, 1);
+  for (let index = _tools.length - 1; index >= 0; index--) {
+    if (!keep.has(_tools[index].name)) {_tools.splice(index, 1);}
   }
 }
 
@@ -180,26 +180,26 @@ export async function callTool(name, args) {
     const key = cacheKey(name, validated);
     if (key) {
       const cached = cacheGet(key);
-      if (cached) return withBanner(banner, finalizeResult(name, cached));
+      if (cached) {return withBanner(banner, finalizeResult(name, cached));}
     }
 
     stage = "preprocessing";
-    let processedArgs = preprocessToolCall(name, validated);
+    let processedArguments = preprocessToolCall(name, validated);
     const beforeHooks = [...(_beforeHooks["*"] || []), ...(_beforeHooks[name] || [])];
-    for (const fn of beforeHooks) {
-      processedArgs = await fn(name, processedArgs, tool) ?? processedArgs;
+    for (const function_ of beforeHooks) {
+      processedArguments = await function_(name, processedArguments, tool) ?? processedArguments;
     }
 
     stage = "execution";
-    let result = await tool.handler(processedArgs);
+    let result = await tool.handler(processedArguments);
 
     stage = "postprocessing";
     const postHooks = [...(_postHooks["*"] || []), ...(_postHooks[name] || [])];
-    for (const fn of postHooks) {
-      result = await fn(name, processedArgs, result, tool) ?? result;
+    for (const function_ of postHooks) {
+      result = await function_(name, processedArguments, result, tool) ?? result;
     }
     // Deterministic core — validated + metadata, no env/state-dependent decoration.
-    const core = postprocessToolResult(name, processedArgs, result, {
+    const core = postprocessToolResult(name, processedArguments, result, {
       toolNames: _tools.map((item) => item.name),
       skillNames: getSkillNames(),
     });
@@ -207,20 +207,20 @@ export async function callTool(name, args) {
     stage = "finalize";
     if (!core?.isError) {
       // Cache the deterministic core (reminder + caveman are re-applied per call).
-      if (key) cacheSet(key, core);
+      if (key) {cacheSet(key, core);}
       const final = finalizeResult(name, core);
       const hooks = [...(_afterHooks["*"] || []), ...(_afterHooks[name] || [])];
-      for (const fn of hooks) fn(name, processedArgs, final).catch(() => {});
+      for (const function_ of hooks) {function_(name, processedArguments, final).catch(() => {});}
       return withBanner(banner, final);
     }
 
     return withBanner(banner, finalizeResult(name, core));
-  } catch (err) {
-    if (err instanceof z.ZodError) {
-      const issues = err.issues.map(i => `- ${i.path.join(".")}: ${i.message}`).join("\n");
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      const issues = error.issues.map(index => `- ${index.path.join(".")}: ${index.message}`).join("\n");
       return withBanner(banner, { isError: true, content: [{ type: "text", text: `Invalid arguments:\n${issues}` }] });
     }
-    return withBanner(banner, enforcementError(name, stage, err));
+    return withBanner(banner, enforcementError(name, stage, error));
   }
 }
 
@@ -232,7 +232,7 @@ export async function callTool(name, args) {
  * @returns {string|null} — The full SKILL.md content, or null if not found
  */
 export function readSkill(skillName) {
-  const { homeSkills, embeddedSkills } = getSkillsDirs();
+  const { homeSkills, embeddedSkills } = getSkillsDirectories();
   for (const base of [homeSkills, embeddedSkills]) {
     try {
       return readFileSync(join(base, skillName, "SKILL.md"), "utf8");
@@ -252,11 +252,11 @@ export function readSkill(skillName) {
  */
 export function getSkillNames() {
   const names = new Set();
-  const { homeSkills, embeddedSkills } = getSkillsDirs();
+  const { homeSkills, embeddedSkills } = getSkillsDirectories();
   for (const base of [embeddedSkills, homeSkills]) {
     try {
       for (const entry of readdirSync(base, { withFileTypes: true })) {
-        if (!entry.isDirectory() || entry.name === "rule") continue;
+        if (!entry.isDirectory() || entry.name === "rule") {continue;}
         // Official rule skills: rule-frontend-react, rule-backend-express, etc.
         // Also include bare rule dispatcher skill.
         if (entry.name.startsWith("rule-") || entry.name === "rule") { names.add(entry.name); continue; }
@@ -281,7 +281,7 @@ export function getSkillNames() {
  */
 export function isPluginSkill(skillName) {
   // rule is the router skill, not a plugin
-  if (skillName === "rule") return false;
+  if (skillName === "rule") {return false;}
   return !skillName.startsWith("rule-");
 }
 
@@ -292,7 +292,7 @@ export function isPluginSkill(skillName) {
  * @returns {boolean}
  */
 export function hasPluginJs(pluginName) {
-  const { homeSkills } = getSkillsDirs();
+  const { homeSkills } = getSkillsDirectories();
   try {
     return existsSync(join(homeSkills, pluginName, "plugin.js"));
   } catch { return false; }
@@ -306,10 +306,10 @@ export function hasPluginJs(pluginName) {
  * @returns {Promise<{ guardrails?: Array, generators?: object } | null>}
  */
 export async function loadPluginJs(pluginName) {
-  const { homeSkills } = getSkillsDirs();
+  const { homeSkills } = getSkillsDirectories();
   try {
     const pluginPath = new URL("file://" + join(homeSkills, pluginName, "plugin.js"));
-    const mod = await import(pluginPath.href);
-    return { guardrails: mod.guardrails || null, generators: mod.generators || null };
+    const module_ = await import(pluginPath.href);
+    return { guardrails: module_.guardrails || null, generators: module_.generators || null };
   } catch { return null; }
 }

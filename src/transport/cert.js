@@ -95,8 +95,8 @@ export function generateSelfSignedCert({ certPath, keyPath, commonName = "rule-m
     }
 
     return true;
-  } catch (err) {
-    console.error("Failed to generate self-signed cert:", err.message);
+  } catch (error) {
+    console.error("Failed to generate self-signed cert:", error.message);
     return false;
   } finally {
     try { unlinkSync(configPath); } catch { /* temp config already gone */ }

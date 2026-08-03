@@ -16,10 +16,10 @@ test("canonical templates.json is the one context-server.mjs (and generator.mjs)
   // 24 since Phase 6 Task 1 added the root-output AGENTS.md template (was 23).
   assert.equal(templates.length, 24);
 
-  const outputs = templates.map((t) => t.output || t.path.replace(/^templates\//, ""));
-  assert.ok(outputs.includes("specs/12-rule-routing.md"), "missing specs/12-rule-routing.md");
-  assert.ok(outputs.includes("specs/10-devops-toolchain.md"), "missing specs/10-devops-toolchain.md");
-  assert.ok(outputs.includes("specs/11-process-delivery.md"), "missing specs/11-process-delivery.md");
+  const outputs = new Set(templates.map((t) => t.output || t.path.replace(/^templates\//, "")));
+  assert.ok(outputs.has("specs/12-rule-routing.md"), "missing specs/12-rule-routing.md");
+  assert.ok(outputs.has("specs/10-devops-toolchain.md"), "missing specs/10-devops-toolchain.md");
+  assert.ok(outputs.has("specs/11-process-delivery.md"), "missing specs/11-process-delivery.md");
 });
 
 test("stale local templates.json duplicate no longer exists", () => {

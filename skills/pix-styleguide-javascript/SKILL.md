@@ -198,7 +198,7 @@ function status(ok) {
 
 ## Modern JS/TS idioms (enforced by eslint-plugin-unicorn)
 
-These are the correctness and performance idioms rule expects in every JS/TS file. They map 1:1 to `eslint-plugin-unicorn` rules in the `recommended` preset (see [rule-toolchain-eslint](../rule-toolchain-eslint/SKILL.md)); all of them are autofixable with `pnpm eslint . --fix`.
+These are the correctness and performance idioms rule expects in every JS/TS file. They map to `eslint-plugin-unicorn` rules (see [rule-toolchain-eslint](../rule-toolchain-eslint/SKILL.md)); most are autofixable with `pnpm eslint . --fix`. The `for...of` idiom is enforced by rule's own `js-no-array-for-each` guardrail (the upstream unicorn rule was removed in unicorn 70).
 
 | Idiom | ❌ Avoid | ✅ Prefer | Why |
 |-------|---------|-----------|-----|

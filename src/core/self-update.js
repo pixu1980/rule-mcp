@@ -53,9 +53,9 @@ export function autoUpdateEnabled() {
  */
 function intervalMs() {
   const raw = process.env.RULE_MCP_AUTO_UPDATE_INTERVAL_SECONDS;
-  if (raw === undefined || raw === "") return DEFAULT_INTERVAL_MS;
+  if (raw === undefined || raw === "") {return DEFAULT_INTERVAL_MS;}
   const n = Number(raw);
-  if (!Number.isFinite(n) || n < 0) return DEFAULT_INTERVAL_MS;
+  if (!Number.isFinite(n) || n < 0) {return DEFAULT_INTERVAL_MS;}
   return n === 0 ? 0 : Math.max(Math.round(n * 1000), 1);
 }
 
@@ -64,9 +64,9 @@ function intervalMs() {
  * Async (never blocks the event loop) so the fire-and-forget check can run in
  * the background without stalling the tool call that triggered it.
  */
-async function git(args, root, timeout = 8000) {
+async function git(arguments_, root, timeout = 8000) {
   try {
-    const { stdout } = await execFileAsync("git", args, {
+    const { stdout } = await execFileAsync("git", arguments_, {
       cwd: root,
       timeout,
       maxBuffer: 16 * 1024 * 1024,
@@ -80,8 +80,8 @@ async function git(args, root, timeout = 8000) {
 
 /** Manual update command hint for install types we cannot auto-update. */
 function manualHint(type) {
-  if (type === "npm") return "Update with: pnpm add -g rule-mcp@latest (then restart the server).";
-  if (type === "docker") return "Update with: docker compose pull && docker compose up -d.";
+  if (type === "npm") {return "Update with: pnpm add -g rule-mcp@latest (then restart the server).";}
+  if (type === "docker") {return "Update with: docker compose pull && docker compose up -d.";}
   return "Auto-update is only available for git-clone installs.";
 }
 
@@ -98,7 +98,7 @@ function manualHint(type) {
  */
 export async function runSelfUpdate(opts = {}) {
   const { reloadSkills = true } = opts;
-  if (!autoUpdateEnabled()) return { checked: false, updated: false, skipped: true, reason: "disabled" };
+  if (!autoUpdateEnabled()) {return { checked: false, updated: false, skipped: true, reason: "disabled" };}
 
   const type = detectInstallType();
   if (type !== "git") {
@@ -108,29 +108,29 @@ export async function runSelfUpdate(opts = {}) {
   const root = getRepoRoot();
 
   const branch = await git(["rev-parse", "--abbrev-ref", "HEAD"], root);
-  if (!branch || branch === "HEAD") return { checked: true, updated: false, skipped: true, reason: "detached-head" };
+  if (!branch || branch === "HEAD") {return { checked: true, updated: false, skipped: true, reason: "detached-head" };}
 
   const upstream = await git(["rev-parse", "--abbrev-ref", "--symbolic-full-name", "@{u}"], root);
-  if (!upstream) return { checked: true, updated: false, skipped: true, reason: "no-upstream" };
+  if (!upstream) {return { checked: true, updated: false, skipped: true, reason: "no-upstream" };}
 
   // Only TRACKED modifications block a fast-forward; untracked artifacts
   // (.tokensave/, build output, caches) are irrelevant to ff safety.
   const dirty = await git(["status", "--porcelain", "--untracked-files=no"], root);
-  if (dirty === null) return { checked: true, updated: false, skipped: true, reason: "git-error" };
-  if (dirty.length > 0) return { checked: true, updated: false, skipped: true, reason: "dirty-tree" };
+  if (dirty === null) {return { checked: true, updated: false, skipped: true, reason: "git-error" };}
+  if (dirty.length > 0) {return { checked: true, updated: false, skipped: true, reason: "dirty-tree" };}
 
   // Fetch (network); fail-open on offline/timeout.
   const fetched = await git(["fetch", "--quiet"], root);
-  if (fetched === null) return { checked: true, updated: false, skipped: true, reason: "fetch-failed" };
+  if (fetched === null) {return { checked: true, updated: false, skipped: true, reason: "fetch-failed" };}
 
   const before = await git(["rev-parse", "HEAD"], root);
   const remote = await git(["rev-parse", "@{u}"], root);
-  if (!before || !remote) return { checked: true, updated: false, skipped: true, reason: "git-error" };
-  if (before === remote) return { checked: true, updated: false };
+  if (!before || !remote) {return { checked: true, updated: false, skipped: true, reason: "git-error" };}
+  if (before === remote) {return { checked: true, updated: false };}
 
   // Fast-forward only — never clobber local commits.
   const merged = await git(["merge", "--ff-only", "@{u}"], root);
-  if (merged === null) return { checked: true, updated: false, skipped: true, reason: "not-fast-forward" };
+  if (merged === null) {return { checked: true, updated: false, skipped: true, reason: "not-fast-forward" };}
 
   const after = await git(["rev-parse", "HEAD"], root);
   const diff = (await git(["diff", "--name-only", before, after], root)) ?? "";
@@ -166,7 +166,7 @@ export async function runSelfUpdate(opts = {}) {
  * @returns {string|null}
  */
 export function buildBanner(r) {
-  if (!r) return null;
+  if (!r) {return null;}
   if (r.updated) {
     const what =
       r.changedSkills && r.changedCode
@@ -176,12 +176,12 @@ export function buildBanner(r) {
           : r.changedSkills
             ? "skills"
             : "files";
-    let msg = `🔄 Updating MCP server — rule-mcp updated ${r.from}→${r.to} (${r.count} ${what} file(s)).`;
-    if (r.changedSkills) msg += " Skills hot-reloaded.";
-    return msg;
+    let message = `🔄 Updating MCP server — rule-mcp updated ${r.from}→${r.to} (${r.count} ${what} file(s)).`;
+    if (r.changedSkills) {message += " Skills hot-reloaded.";}
+    return message;
   }
   // Non-git installs get a one-line hint so the user knows how to update.
-  if (r.skipped && r.note) return `ℹ️ rule-mcp is up to date on disk. ${r.note}`;
+  if (r.skipped && r.note) {return `ℹ️ rule-mcp is up to date on disk. ${r.note}`;}
   return null;
 }
 
@@ -206,7 +206,7 @@ export function buildBanner(r) {
  * @returns {string|null}
  */
 export function scheduleRestartIfNeeded(r, exit) {
-  if (!r?.updated || !r.changedCode) return null;
+  if (!r?.updated || !r.changedCode) {return null;}
   if (process.env.RULE_MCP_NO_AUTORESTART === "1") {
     return "Server code changed — restart the server (or reconnect your MCP client) to load it.";
   }
@@ -234,11 +234,11 @@ export function scheduleRestartIfNeeded(r, exit) {
  * @returns {Promise<object>|undefined} in-flight check promise, or undefined when throttled/disabled
  */
 export function maybeSelfUpdate() {
-  if (!autoUpdateEnabled()) return undefined;
-  if (_inflight) return _inflight; // concurrent invocations share one check
+  if (!autoUpdateEnabled()) {return;}
+  if (_inflight) {return _inflight;} // concurrent invocations share one check
   const throttle = intervalMs();
   const now = Date.now();
-  if (throttle !== 0 && now - _lastCheckAt < throttle) return undefined;
+  if (throttle !== 0 && now - _lastCheckAt < throttle) {return;}
   _lastCheckAt = now; // stamp at kickoff so slow checks don't re-trigger
   _inflight = runSelfUpdate()
     .catch(() => ({ checked: false, updated: false, skipped: true, reason: "error" }))
@@ -246,8 +246,8 @@ export function maybeSelfUpdate() {
       _inflight = null;
       let banner = buildBanner(result);
       const restartNote = scheduleRestartIfNeeded(result);
-      if (restartNote) banner = banner ? `${banner}\n${restartNote}` : `🔄 Updating MCP server — ${restartNote}`;
-      if (banner) _pendingBanner = banner;
+      if (restartNote) {banner = banner ? `${banner}\n${restartNote}` : `🔄 Updating MCP server — ${restartNote}`;}
+      if (banner) {_pendingBanner = banner;}
       return result;
     });
   return _inflight;

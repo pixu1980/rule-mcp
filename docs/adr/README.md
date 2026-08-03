@@ -4,6 +4,7 @@ Questo indice elenca tutti gli ADR in ordine cronologico.
 
 | # | Title | Date | Status | Tags |
 |---|-------|------|--------|------|
+| [028](028-migrare-il-tooling-del-repo-a-eslint-10-flat-config-con-eslint-plugin-unicorn.md) | Migrare il tooling del repo a ESLint 10 flat config con eslint-plugin-unicorn | 2026-08-03 | accepted | eslint, toolchain, unicorn, flat-config, migration, security, brace-expansion |
 | [027](027-adottare-eslint-plugin-unicorn-per-la-qualita-js-ts.md) | Adottare eslint-plugin-unicorn per la qualità JS/TS | 2026-08-03 | accepted | eslint, toolchain, unicorn, javascript, typescript, styleguide, guardrails, quality |
 | [026](026-rafforzare-la-disciplina-typescript-per-grandi-codebase.md) | Rafforzare la disciplina TypeScript per grandi codebase | 2026-08-02 | accepted | typescript, toolchain, strict, monorepo, quality |
 | [025](025-rafforzare-le-skill-sui-vincoli-relazionali-del-database.md) | Rafforzare le skill sui vincoli relazionali del database | 2026-08-02 | accepted | database, sql, postgresql, mysql, schema |

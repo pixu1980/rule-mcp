@@ -64,6 +64,6 @@ assert.equal(globalConfig.mcpServers?.other_server.command, "keep-me", "must pre
 const workspaceConfig = JSON.parse(readFileSync(join(fakeProject, ".vscode", "mcp.json"), "utf8"));
 assert.equal(workspaceConfig.servers["rule-mcp"], undefined, "must not create a workspace rule server");
 assert.equal(workspaceConfig.servers["other-workspace-server"].command, "other", "must preserve workspace config");
-assert(existsSync(globalFile), "must write the user-global VS Code config");
+assert.ok(existsSync(globalFile), "must write the user-global VS Code config");
 
 console.log("  ✅ VS Code daemon install targets global HTTP config only");

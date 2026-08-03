@@ -1,3 +1,5 @@
+minimumReleaseAgeExclude:
+  - globals@17.9.0
 overrides:
   rule-mcp: 'link:'
   # Security: force patched versions for vulnerable transitive deps
@@ -5,4 +7,10 @@ overrides:
   #  GHSA-mh99-v99m-4gvg brace-expansion)
   fast-uri: '^3.1.4'
   '@hono/node-server': '^2.0.5'
-  brace-expansion: '^1.1.17'
+  # brace-expansion: only patched lines are allowed (GHSA-mh99-v99m-4gvg).
+  # Vulnerable: <1.1.17, 2.0.0-2.1.2, 3.0.0-3.0.2, all 4.x, 5.0.0-5.0.7.
+  # The >=5.0.8 tail is required by minimatch@10 (eslint 10); 5.0.9 is patched.
+  brace-expansion: '>=1.1.17 <2 || >=2.1.3 <3 || >=3.0.3 <4 || >=5.0.8'
+  # minimatch@10 (eslint 10) needs the v5 API (named `expand` export), which
+  # the global override's lockfile-first preference would deny (1.1.18 reuse).
+  'minimatch@>=10 > brace-expansion': '5.0.9'

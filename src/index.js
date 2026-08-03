@@ -42,26 +42,26 @@ import {
 // Prevents uncaught exceptions from crashing the server
 installProcessErrorHandlers();
 
-const args = process.argv.slice(2);
-const command = args[0] ?? "serve";
+const arguments_ = process.argv.slice(2);
+const command = arguments_[0] ?? "serve";
 
 /** Get a named CLI argument value. */
-const getArg = (name, fallback) => {
-  const i = args.indexOf(name);
-  return i >= 0 ? args[i + 1] ?? fallback : fallback;
+const getArgument = (name, fallback) => {
+  const index = arguments_.indexOf(name);
+  return index === -1 ? fallback : arguments_[index + 1] ?? fallback;
 };
 
 /** Get all values for a repeated flag (e.g. --set KEY=VALUE --set KEY2=VALUE2). */
-const getArgs = (name) => {
+const getArguments = (name) => {
   const values = [];
-  for (let i = 0; i < args.length - 1; i++) {
-    if (args[i] === name) values.push(args[i + 1]);
+  for (let index = 0; index < arguments_.length - 1; index++) {
+    if (arguments_[index] === name) {values.push(arguments_[index + 1]);}
   }
   return values.length > 0 ? values : undefined;
 };
 
 /** Check if a flag is present. */
-const hasFlag = (name) => args.includes(name);
+const hasFlag = (name) => arguments_.includes(name);
 
 // ─── Per-command help printers ───────────────────────────────────
 
@@ -308,156 +308,181 @@ export async function cli() {
     }
 
     if (command === "version" || hasFlag("--version") || hasFlag("-v")) {
-      const pkg = JSON.parse(readFileSync(new URL("../package.json", import.meta.url), "utf8"));
-      console.log(pkg.version);
+      const package_ = JSON.parse(readFileSync(new URL("../package.json", import.meta.url), "utf8"));
+      console.log(package_.version);
       return;
     }
 
     switch (command) {
-      case "serve":
+      case "serve": {
         if (hasFlag("--help") || hasFlag("-h")) { printServeHelp(); return; }
         {
-          const portArg = getArg("--port", undefined);
+          const portArgument = getArgument("--port");
           await serveCommand({
-            transport: getArg("--transport", "stdio"),
-            port: portArg !== undefined ? parseInt(portArg, 10) : undefined,
-            sslCert: getArg("--ssl-cert", undefined),
-            sslKey: getArg("--ssl-key", undefined),
+            transport: getArgument("--transport", "stdio"),
+            port: portArgument === undefined ? undefined : parseInt(portArgument, 10),
+            sslCert: getArgument("--ssl-cert"),
+            sslKey: getArgument("--ssl-key"),
           });
         }
         break;
+      }
 
-      case "daemon":
+      case "daemon": {
         if (hasFlag("--help") || hasFlag("-h")) { printDaemonHelp(); return; }
-        daemonCommand({ action: args[1] ?? "status", dryRun: hasFlag("--dry-run") });
+        daemonCommand({ action: arguments_[1] ?? "status", dryRun: hasFlag("--dry-run") });
         break;
+      }
 
-      case "install":
+      case "install": {
         if (hasFlag("--help") || hasFlag("-h")) { printInstallHelp(); return; }
         installCommand({
-          agent: getArg("--agent", "all"),
+          agent: getArgument("--agent", "all"),
           dryRun: hasFlag("--dry-run"),
           force: hasFlag("--force"),
           global: hasFlag("--global"),
-          mode: getArg("--mode", "stdio"),
+          mode: getArgument("--mode", "stdio"),
           json: hasFlag("--json"),
         });
         break;
+      }
 
-      case "uninstall":
+      case "uninstall": {
         if (hasFlag("--help") || hasFlag("-h")) { printUninstallHelp(); return; }
         uninstallCommand({
-          agent: getArg("--agent", "all"),
+          agent: getArgument("--agent", "all"),
           dryRun: hasFlag("--dry-run"),
           json: hasFlag("--json"),
         });
         break;
+      }
 
-      case "tools":
+      case "tools": {
         if (hasFlag("--help") || hasFlag("-h")) { printToolsHelp(); return; }
         await toolsCommand({
-          subcommand: args[1] ?? "list",
-          toolName: args[2],
-          json: getArg("--json", "{}"),
-          jsonOutput: (args[1] ?? "list") === "list" && hasFlag("--json"),
+          subcommand: arguments_[1] ?? "list",
+          toolName: arguments_[2],
+          json: getArgument("--json", "{}"),
+          jsonOutput: (arguments_[1] ?? "list") === "list" && hasFlag("--json"),
         });
         break;
+      }
 
-      case "config":
+      case "config": {
         if (hasFlag("--help") || hasFlag("-h")) { printConfigHelp(); return; }
-        if (args[1] === "env") {
-          configureCommand({ set: getArgs("--set"), list: hasFlag("--list"), unset: getArg("--unset", undefined) });
+        if (arguments_[1] === "env") {
+          configureCommand({ set: getArguments("--set"), list: hasFlag("--list"), unset: getArgument("--unset") });
         } else {
-          configCommand({ global: hasFlag("--global"), mode: getArg("--mode", "stdio") });
+          configCommand({ global: hasFlag("--global"), mode: getArgument("--mode", "stdio") });
         }
         break;
+      }
 
-      case "doctor":
+      case "doctor": {
         if (hasFlag("--help") || hasFlag("-h")) { printDoctorHelp(); return; }
         await doctorCommand({
           telemetry: hasFlag("--telemetry"),
           json: hasFlag("--json"),
-          jsonOut: getArg("--json-out", getArg("--output", undefined)),
+          jsonOut: getArgument("--json-out", getArgument("--output")),
         });
         break;
+      }
 
-      case "adr":
-        if (hasFlag("--help") || hasFlag("-h") || !args[1]) { printAdrHelp(); return; }
-        if (args[1] === "new" && args[2]) {
+      case "adr": {
+        if (hasFlag("--help") || hasFlag("-h") || !arguments_[1]) { printAdrHelp(); return; }
+        if (arguments_[1] === "new" && arguments_[2]) {
           const { callTool } = await import("./tools/router.js");
           const { loadAllSkills } = await import("./core/skills.js");
           await loadAllSkills();
           const result = await callTool("pix_process_adr", {
-            title: args[2],
-            status: getArg("--status", "accepted"),
-            context: getArg("--context", ""),
-            decision: getArg("--decision", ""),
-            consequences: getArg("--consequences", ""),
-            tags: (getArg("--tags", "architecture") || "architecture").split(","),
+            title: arguments_[2],
+            status: getArgument("--status", "accepted"),
+            context: getArgument("--context", ""),
+            decision: getArgument("--decision", ""),
+            consequences: getArgument("--consequences", ""),
+            tags: (getArgument("--tags", "architecture") || "architecture").split(","),
           });
           process.stdout.write(result.content[0].text + "\n");
-        } else if (args[1] === "new" && !args[2]) {
+        } else if (arguments_[1] === "new" && !arguments_[2]) {
           printAdrHelp();
         } else {
           printAdrHelp();
         }
         break;
+      }
 
-      case "handoff":
+      case "handoff": {
         if (hasFlag("--help") || hasFlag("-h")) { printHandoffHelp(); return; }
         const { registerProcessHandoffTool } = await import("./tools/handoff.js");
         const { callTool: ct } = await import("./tools/router.js");
         registerProcessHandoffTool();
         const handoffRes = await ct("rule_tool_process_handoff", {
-          projectDir: getArg("--dir", "."),
+          projectDir: getArgument("--dir", "."),
           compress: hasFlag("--compress"),
-          format: getArg("--format", "full"),
-          mode: getArg("--mode", "handoff"),
+          format: getArgument("--format", "full"),
+          mode: getArgument("--mode", "handoff"),
         });
         process.stdout.write(handoffRes.content[0].text + "\n");
         break;
+      }
 
-      case "skills":
+      case "skills": {
         if (hasFlag("--help") || hasFlag("-h")) { printSkillsHelp(); return; }
-        if (args[1] === "install") {
+        switch (arguments_[1]) {
+        case "install": {
           const { skillsInstallCommand } = await import("./cli/skills-install.js");
-          await skillsInstallCommand({ scope: getArg("--scope", "global"), selectAll: hasFlag("--all") });
-        } else if (args[1] === "list") {
+          await skillsInstallCommand({ scope: getArgument("--scope", "global"), selectAll: hasFlag("--all") });
+        
+        break;
+        }
+        case "list": {
           const { skillsListCommand } = await import("./cli/skills-install.js");
           skillsListCommand({ json: hasFlag("--json") });
-        } else if (args[1] === "reload") {
+        
+        break;
+        }
+        case "reload": {
           await skillsReloadCommand();
-        } else if (!args[1]) {
-          printSkillsHelp();
-        } else {
-          throw new Error(`Unknown skills action: ${args[1] ?? ""}. Use 'rule-mcp skills --help'.`);
+        
+        break;
+        }
+        default: { if (arguments_[1]) {
+          throw new Error(`Unknown skills action: ${arguments_[1] ?? ""}. Use 'rule-mcp skills --help'.`);
+        }
+        printSkillsHelp();
+        }
         }
         break;
+      }
 
-      case "fix":
+      case "fix": {
         if (hasFlag("--help") || hasFlag("-h")) { printFixHelp(); return; }
         await fixCommand({
-          dir: getArg("--dir", "."),
-          srcDir: getArg("--src-dir", "src"),
-          mode: getArg("--mode", "lint"),
+          dir: getArgument("--dir", "."),
+          srcDir: getArgument("--src-dir", "src"),
+          mode: getArgument("--mode", "lint"),
           dryRun: hasFlag("--no-dry-run") ? false : true,
         });
         break;
+      }
 
-      case "completions":
+      case "completions": {
         if (hasFlag("--help") || hasFlag("-h")) { printCompletionsHelp(); return; }
-        completionsCommand({ shell: getArg("--shell", "zsh") });
+        completionsCommand({ shell: getArgument("--shell", "zsh") });
         break;
+      }
 
-      case "update":
+      case "update": {
         await updateCommand();
         break;
+      }
 
-      default:
+      default: {
         throw new Error(`Unknown command: ${command}. Run 'rule-mcp help' for usage.`);
+      }
     }
-  } catch (err) {
-    process.stderr.write(`${err.stack ?? err.message}\n`);
+  } catch (error) {
+    process.stderr.write(`${error.stack ?? error.message}\n`);
     process.exitCode = 1;
   }
 }

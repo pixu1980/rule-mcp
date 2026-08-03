@@ -51,7 +51,7 @@ for (const [component, framework] of [["button", "react"], ["card", "vue"], ["bu
 }
 
 // ── T3: core principles hold on generated templates ──
-const CORE_IDS = ["no-css-classes", "no-inline-styles"];
+const CORE_IDS = new Set(["no-css-classes", "no-inline-styles"]);
 for (const [component, framework, skill] of [
   ["button", "react", "rule-frontend-react"],
   ["button", "vanilla", "rule-styleguide"],
@@ -60,9 +60,9 @@ for (const [component, framework, skill] of [
   const tmpl = await callTool("rule_tool_component", { component, framework });
   // Extract fenced code from the output for a faithful check.
   const code = tmpl.content.map((c) => c.text).join("\n").match(/```[a-z]*\n([\s\S]*?)```/gi)
-    ?.map((b) => b.replace(/```[a-z]*\n?/gi, "").replace(/```/g, "")).join("\n") ?? "";
+    ?.map((b) => b.replaceAll(/```[a-z]*\n?/gi, "").replaceAll('```', "")).join("\n") ?? "";
   const report = checkCode(skill, code, { framework, isComponent: true });
-  const failedCore = report.failed.filter((f) => CORE_IDS.includes(f.id));
+  const failedCore = report.failed.filter((f) => CORE_IDS.has(f.id));
   check(`T3 ${component}/${framework} passes core principles (no classes/inline styles)`, failedCore.length === 0);
 }
 

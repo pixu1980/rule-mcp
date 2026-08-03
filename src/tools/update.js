@@ -34,7 +34,7 @@ export function registerUpdateTool() {
       const lines = [];
       if (result.updated) {
         lines.push(buildBanner(result));
-        if (restartNote) lines.push(restartNote);
+        if (restartNote) {lines.push(restartNote);}
       } else if (result.skipped) {
         const reasons = {
           disabled: "Auto-update is disabled (RULE_MCP_NO_AUTOUPDATE=1).",
@@ -49,7 +49,7 @@ export function registerUpdateTool() {
           unknown: "Install type is not a git clone.",
         };
         lines.push(`ℹ️ No update applied: ${reasons[result.reason] ?? result.reason}`);
-        if (result.note) lines.push(result.note);
+        if (result.note) {lines.push(result.note);}
       } else {
         lines.push(`✅ rule-mcp is already up to date (install: ${detectInstallType()}).`);
       }

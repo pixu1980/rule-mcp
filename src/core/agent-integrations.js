@@ -32,7 +32,7 @@ export const TOKENSAVE_DIRECTIVE =
  * @returns {boolean}
  */
 export function tokensaveActive(projectDir = process.cwd()) {
-  if (process.env.RULE_MCP_NO_TOKENSAVE === "1") return false;
+  if (process.env.RULE_MCP_NO_TOKENSAVE === "1") {return false;}
   return hasTokensave(projectDir);
 }
 
@@ -47,7 +47,7 @@ export function tokensaveActive(projectDir = process.cwd()) {
  */
 export function suppressIfTokensave(block, opts = {}) {
   const { projectDir = process.cwd(), label = "context" } = opts;
-  if (!tokensaveActive(projectDir)) return block;
+  if (!tokensaveActive(projectDir)) {return block;}
   return `${TOKENSAVE_DIRECTIVE}\n\n_(${label} suppressed — ${countLines(block)} lines omitted; query tokensave for detail.)_`;
 }
 
@@ -60,12 +60,12 @@ export function suppressIfTokensave(block, opts = {}) {
  */
 export function annotateTokensave(text, opts = {}) {
   const { projectDir = process.cwd() } = opts;
-  if (!tokensaveActive(projectDir)) return text;
+  if (!tokensaveActive(projectDir)) {return text;}
   return `${TOKENSAVE_DIRECTIVE}\n\n${text}`;
 }
 
 /** @param {string} s @returns {number} */
 function countLines(s) {
-  if (!s) return 0;
+  if (!s) {return 0;}
   return s.split("\n").length;
 }

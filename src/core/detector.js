@@ -69,7 +69,7 @@ const FRAMEWORK_SKILL_MAP = {
  */
 export function getFrameworkSuggestion(framework) {
   const skillName = FRAMEWORK_SKILL_MAP[framework] || "rule-frontend-vanilla-reactive";
-  const displayName = skillName.replace(/^rule-/, "").replace(/-/g, "_");
+  const displayName = skillName.replace(/^rule-/, "").replaceAll('-', "_");
   return { skillName, toolName: `rule_tool_${displayName}` };
 }
 
@@ -80,8 +80,8 @@ export function getFrameworkSuggestion(framework) {
  * @param {string[]} depNames — List of dependency names to check
  * @returns {boolean}
  */
-function hasDeps(deps, depNames) {
-  if (!deps) return false;
+function hasDependencies(deps, depNames) {
+  if (!deps) {return false;}
   // Rule matches if ANY of the listed deps are found
   return depNames.some(name => name in deps);
 }
@@ -100,9 +100,9 @@ function hasDeps(deps, depNames) {
  * }}
  */
 export function detectProject(projectDir = ".") {
-  const pkgPath = join(projectDir, "package.json");
+  const packagePath = join(projectDir, "package.json");
 
-  if (!existsSync(pkgPath)) {
+  if (!existsSync(packagePath)) {
     return {
       projectName: "unknown",
       framework: "vanilla",
@@ -113,37 +113,37 @@ export function detectProject(projectDir = ".") {
   }
 
   try {
-    const pkg = JSON.parse(readFileSync(pkgPath, "utf8"));
-    const deps = { ...pkg.dependencies, ...pkg.devDependencies };
+    const package_ = JSON.parse(readFileSync(packagePath, "utf8"));
+    const dependencies = { ...package_.dependencies, ...package_.devDependencies };
 
     // Detect framework
     let framework = "vanilla";
     for (const rule of FRAMEWORK_RULES) {
-      if (hasDeps(deps, rule.deps)) {
+      if (hasDependencies(dependencies, rule.deps)) {
         framework = rule.key;
         break;
       }
     }
 
     // Detect TypeScript
-    const typescript = !!deps?.typescript ||
+    const typescript = !!dependencies?.typescript ||
       existsSync(join(projectDir, "tsconfig.json"));
 
     // Detect build tool
     let buildTool = "unknown";
     for (const rule of BUILD_TOOL_RULES) {
-      if (hasDeps(deps, rule.deps)) {
+      if (hasDependencies(dependencies, rule.deps)) {
         buildTool = rule.key;
         break;
       }
     }
 
     return {
-      projectName: pkg.name || "unknown",
+      projectName: package_.name || "unknown",
       framework,
       typescript,
       buildTool,
-      nodeVersion: pkg.engines?.node ?? null,
+      nodeVersion: package_.engines?.node ?? null,
       tokensave: hasTokensave(projectDir),
     };
   } catch {

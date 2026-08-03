@@ -126,9 +126,9 @@ const PROMPT_EXAMPLES = {
  * @returns {string} — the help block the model should present verbatim
  */
 function buildHelpMessage(name, def, examples = []) {
-  const argList = def.arguments.map((a) => (a.required ? `<${a.name}>` : `[${a.name}]`)).join(" ");
+  const argumentList = def.arguments.map((a) => (a.required ? `<${a.name}>` : `[${a.name}]`)).join(" ");
   const lines = [
-    `Usage: /${name} ${argList}`,
+    `Usage: /${name} ${argumentList}`,
     "",
     def.description,
     "",
@@ -358,7 +358,7 @@ export function getPrompt(name, args = {}) {
 
   // ── One-shot workflow prompts ──────────────────────────────────
   switch (name) {
-    case "rule-setup-project":
+    case "rule-setup-project": {
       return {
         name,
         description: "Bootstrap a project end-to-end",
@@ -374,8 +374,9 @@ export function getPrompt(name, args = {}) {
           "Finish by proposing a conventional commit message with a mandatory scope, e.g. \"chore(setup): ...\"."
         ),
       };
+    }
 
-    case "rule-new-feature":
+    case "rule-new-feature": {
       return {
         name,
         description: "Implement a feature end-to-end",
@@ -392,8 +393,9 @@ export function getPrompt(name, args = {}) {
           "Finish by proposing a conventional commit message with a mandatory scope, e.g. \"feat(<area>): <summary>\"."
         ),
       };
+    }
 
-    case "rule-pull-request":
+    case "rule-pull-request": {
       return {
         name,
         description: "Prepare a pull request (review + ADR + commit scope + description)",
@@ -408,8 +410,9 @@ export function getPrompt(name, args = {}) {
           "Finish by proposing a conventional commit message with a mandatory scope, e.g. \"feat(<scope>): <summary>\"."
         ),
       };
+    }
 
-    case "rule-write-tests":
+    case "rule-write-tests": {
       return {
         name,
         description: "Write tests (TDD + a11y + devops)",
@@ -425,16 +428,17 @@ export function getPrompt(name, args = {}) {
           "Finish by proposing a conventional commit message with a mandatory scope, e.g. \"test(<scope>): add ... tests\"."
         ),
       };
+    }
 
     case "rule-handoff": {
-      const opts = parseHandoffOptions(args?.options);
+      const options = parseHandoffOptions(args?.options);
 
       const includeFlags = [
-        `${opts.includeGitDiff ? "includeGitDiff=yes" : "includeGitDiff=no"}`,
-        `${opts.includeGitLog ? "includeGitLog=yes" : "includeGitLog=no"}`,
-        `${opts.includeContext ? "includeContext=yes" : "includeContext=no"}`,
-        `${opts.includeAdrs ? "includeAdrs=yes" : "includeAdrs=no"}`,
-        `${opts.includeRoadmap ? "includeRoadmap=yes" : "includeRoadmap=no"}`,
+        `${options.includeGitDiff ? "includeGitDiff=yes" : "includeGitDiff=no"}`,
+        `${options.includeGitLog ? "includeGitLog=yes" : "includeGitLog=no"}`,
+        `${options.includeContext ? "includeContext=yes" : "includeContext=no"}`,
+        `${options.includeAdrs ? "includeAdrs=yes" : "includeAdrs=no"}`,
+        `${options.includeRoadmap ? "includeRoadmap=yes" : "includeRoadmap=no"}`,
       ].join(", ");
 
       return {
@@ -444,11 +448,11 @@ export function getPrompt(name, args = {}) {
           "You are a handoff specialist for rule-mcp.\n" +
           "The user invoked `/rule-handoff`; every option is optional and defaults are applied server-side. The requested options are already resolved here into exact tool arguments — do not reinterpret them.\n" +
           "Resolved arguments for `rule_tool_process_handoff` (mode: handoff | close-session):\n" +
-          `- mode=${opts.mode}\n` +
-          `- compress=${opts.compress ? "true" : "false"}\n` +
-          `- format=${opts.format}\n` +
+          `- mode=${options.mode}\n` +
+          `- compress=${options.compress ? "true" : "false"}\n` +
+          `- format=${options.format}\n` +
           `- ${includeFlags}\n` +
-          `- maxTokens=${opts.maxTokens}\n` +
+          `- maxTokens=${options.maxTokens}\n` +
           "Run `rule_tool_process_handoff` with EXACTLY these arguments; do not change them.\n" +
           "Include the ADR summary (docs/adr) and git context in the output.\n" +
           "Present the handoff as a paste-ready block for a new session; include the commit-scope convention reminder.\n" +
@@ -458,8 +462,9 @@ export function getPrompt(name, args = {}) {
       };
     }
 
-    default:
+    default: {
       break;
+    }
   }
 
   // ── Area prompts ───────────────────────────────────────────────
@@ -486,7 +491,7 @@ export function getPrompt(name, args = {}) {
 
   // ── Legacy prompts (updated to the shared rules) ───────────────
   switch (name) {
-    case "rule-code-review":
+    case "rule-code-review": {
       return {
         name,
         description: "Review code against rule styleguides",
@@ -501,8 +506,9 @@ export function getPrompt(name, args = {}) {
           "Finish by proposing a conventional commit message with a mandatory scope."
         ),
       };
+    }
 
-    case "rule-a11y-audit":
+    case "rule-a11y-audit": {
       return {
         name,
         description: "Audit a11y end-to-end (review + tests)",
@@ -523,8 +529,9 @@ export function getPrompt(name, args = {}) {
           "Finish by proposing a conventional commit message with a mandatory scope, e.g. \"test(a11y): ...\"."
         ),
       };
+    }
 
-    case "rule-architect-scaffold":
+    case "rule-architect-scaffold": {
       return {
         name,
         description: "Scaffold a new project with .agents/ + .context/ infrastructure",
@@ -541,8 +548,10 @@ export function getPrompt(name, args = {}) {
           "Finish by proposing a conventional commit message with a mandatory scope, e.g. \"chore(scaffold): ...\"."
         ),
       };
+    }
 
-    default:
+    default: {
       return null;
+    }
   }
 }
