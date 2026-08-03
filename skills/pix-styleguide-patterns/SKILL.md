@@ -145,6 +145,19 @@ class MyComponent extends HTMLElement {
 }
 ```
 
+## JavaScript — Modern Idioms (unicorn-enforced)
+
+| Instead of | Use | Why |
+|---|---|---|
+| `arr.includes(x)` in a loop | `new Set(arr).has(x)` | O(1) vs O(n) per lookup (O(n²) in loops) |
+| `arr.forEach(fn)` | `for (const item of arr) { }` | break/continue/await + TS narrowing |
+| `import fs from 'fs'` | `import fs from 'node:fs'` | unshadowable builtin |
+| `throw Error('boom')` | `throw new Error('boom')` | `new` required |
+| `str.replace(/-/g, ' ')` | `str.replaceAll('-', ' ')` | clearer intent |
+| `rows.map(f).flat()` | `rows.flatMap(f)` | no intermediate array |
+| `const m = Map()` | `const m = new Map()` | `new` for Map/Set/Date/Array/WeakMap/WeakSet |
+| `if (ok) return a; else return b;` | `return ok ? a : b;` | avoids `let`, enables `prefer-const` |
+
 ## Import Order
 
 1. Core / framework

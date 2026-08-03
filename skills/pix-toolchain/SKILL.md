@@ -32,7 +32,7 @@ frameworks: [all]
 | Skill | Tool | Best For |
 |-------|------|----------|
 | [pix-toolchain-biome](../pix-toolchain-biome/SKILL.md) | Biome | Fast, unified linter+formatter (Rust, recommended) |
-| [pix-toolchain-eslint](../pix-toolchain-eslint/SKILL.md) | ESLint | Legacy projects needing full plugin ecosystem |
+| [pix-toolchain-eslint](../pix-toolchain-eslint/SKILL.md) | ESLint | ESLint 10 flat config, eslint-plugin-unicorn, type-aware linting |
 
 ## Package Management & Monorepo
 
@@ -54,7 +54,7 @@ frameworks: [all]
 
 ```
 Need a build tool?                      → pix-toolchain-vite (default), pix-toolchain-rspack, or pix-toolchain-parcel
-Need linting + formatting?              → pix-toolchain-biome (new) or pix-toolchain-eslint (legacy)
+Need linting + formatting?              → pix-toolchain-biome (fast, unified) or pix-toolchain-eslint (ESLint 10 + unicorn)
 Need a package manager?                 → pix-toolchain-pnpm
 Need monorepo orchestration?            → pix-toolchain-turborepo
 Need TypeScript config?                 → pix-toolchain-typescript
