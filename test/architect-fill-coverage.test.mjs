@@ -48,7 +48,7 @@ const PLACEHOLDER_RE = /\[([A-Z_0-9]+)\]/g;
 function allTemplatePlaceholders() {
   const found = new Set();
   for (const tmpl of templates) {
-    for (const match of tmpl.content.matchAll(PLACEHOLDER_RE)) found.add(match[1]);
+    for (const match of tmpl.content.matchAll(PLACEHOLDER_RE)) {found.add(match[1]);}
   }
   return found;
 }
@@ -59,7 +59,7 @@ function flatWizardKeys() {
   const keys = new Set();
   for (const step of spec.steps) {
     for (const field of step.fields) {
-      if (field.type !== "repeatable" && field.type !== "entity-list") keys.add(field.key);
+      if (field.type !== "repeatable" && field.type !== "entity-list") {keys.add(field.key);}
     }
   }
   return keys;
@@ -69,8 +69,8 @@ function flatWizardKeys() {
 function matchesComposition(key) {
   for (const rule of COMPOSITION) {
     for (const pattern of [rule.template, ...(rule.aliases || [])]) {
-      const re = new RegExp("^" + pattern.replace("{i}", "(\\d+)") + "$");
-      if (re.test(key)) return true;
+      const re = new RegExp("^" + pattern.replace("{i}", String.raw`(\d+)`) + "$");
+      if (re.test(key)) {return true;}
     }
   }
   return false;
@@ -141,7 +141,7 @@ test("normalizeAnswers + generateContextContent fill >=95% of meaningful placeho
 
   const unfilled = [];
   for (const key of meaningful) {
-    if (combined.includes(`[${key}]`) || combined.includes(`TODO: ${key}`)) unfilled.push(key);
+    if (combined.includes(`[${key}]`) || combined.includes(`TODO: ${key}`)) {unfilled.push(key);}
   }
   const filled = meaningful.length - unfilled.length;
   const pct = (filled / meaningful.length) * 100;

@@ -209,17 +209,17 @@ export const COMPONENT_TEMPLATES = {
 };
 
 /** Convert kebab-case or snake_case to PascalCase. */
-export function toPascal(str) {
-  if (/^[A-Z][a-zA-Z0-9]*$/.test(str)) return str;
-  return str.split(/[-_\s]+/).map(s => s.charAt(0).toUpperCase() + s.slice(1).toLowerCase()).join("");
+export function toPascal(string_) {
+  if (/^[A-Z][a-zA-Z0-9]*$/.test(string_)) {return string_;}
+  return string_.split(/[-_\s]+/).map(s => s.charAt(0).toUpperCase() + s.slice(1).toLowerCase()).join("");
 }
 
 /** Convert PascalCase to kebab-case. */
-export function toKebab(str) {
-  return str.replace(/([a-z0-9])([A-Z])/g, "$1-$2").replace(/([A-Z])([A-Z][a-z])/g, "$1-$2").toLowerCase();
+export function toKebab(string_) {
+  return string_.replaceAll(/([a-z0-9])([A-Z])/g, "$1-$2").replaceAll(/([A-Z])([A-Z][a-z])/g, "$1-$2").toLowerCase();
 }
 
 /** Interpolate template variables. */
-export function interpolate(template, vars) {
-  return template.replace(/\{\{\s*(\w[\w-]*)\s*\}\}/g, (match, key) => vars[key] !== undefined ? vars[key] : match);
+export function interpolate(template, variables) {
+  return template.replaceAll(/\{\{\s*(\w[\w-]*)\s*\}\}/g, (match, key) => variables[key] === undefined ? match : variables[key]);
 }

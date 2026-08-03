@@ -99,37 +99,46 @@ export function parseHandoffOptions(raw) {
     }
     switch (token) {
       case "handoff":
-      case "close-session":
+      case "close-session": {
         result.mode = token;
         break;
-      case "compress":
+      }
+      case "compress": {
         result.compress = true;
         break;
+      }
       case "full":
       case "brief":
-      case "minimal":
+      case "minimal": {
         result.format = token;
         break;
-      case "no-diff":
+      }
+      case "no-diff": {
         result.includeGitDiff = false;
         break;
-      case "no-log":
+      }
+      case "no-log": {
         result.includeGitLog = false;
         break;
-      case "no-context":
+      }
+      case "no-context": {
         result.includeContext = false;
         break;
-      case "no-adrs":
+      }
+      case "no-adrs": {
         result.includeAdrs = false;
         break;
-      case "no-roadmap":
+      }
+      case "no-roadmap": {
         result.includeRoadmap = false;
         break;
+      }
       case "help":
       case "--help":
-      case "-h":
+      case "-h": {
         result.help = true;
         break;
+      }
       default: {
         const max = /^max=(\d+)$/.exec(token);
         if (max) {

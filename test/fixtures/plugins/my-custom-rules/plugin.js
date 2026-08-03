@@ -30,7 +30,7 @@ export const guardrails = [
       return {
         pass: longLines.length === 0,
         failCount: longLines.length,
-        detail: longLines.slice(0, 5).map(l => l.substring(0, 80) + "..."),
+        detail: longLines.slice(0, 5).map(l => l.slice(0, 80) + "..."),
         suggestion: "Break lines longer than 100 characters.",
       };
     },

@@ -32,8 +32,8 @@ try {
     await stopSseServer();
   }
 } finally {
-  if (originalHome === undefined) delete process.env.HOME;
-  else process.env.HOME = originalHome;
+  if (originalHome === undefined) {delete process.env.HOME;}
+  else {process.env.HOME = originalHome;}
 }
 
 console.log("  ✅ SSE daemon accepts its persisted installer token");

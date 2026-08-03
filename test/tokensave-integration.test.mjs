@@ -42,7 +42,7 @@ check("T1.1 hasTokensave false when absent", hasTokensave(withoutTs) === false);
 check("T1.2 detectProject exposes tokensave flag", detectProject(withTs).tokensave === true);
 
 // ── T2: suppression helper ──
-const heavy = Array.from({ length: 50 }, (_, i) => `line ${i}`).join("\n");
+const heavy = Array.from({ length: 50 }, (_, index) => `line ${index}`).join("\n");
 const suppressed = suppressIfTokensave(heavy, { projectDir: withTs, label: "file tree" });
 check("T2 suppresses heavy block when active", suppressed.includes("TOKENSAVE ACTIVE") && !suppressed.includes("line 49"));
 const kept = suppressIfTokensave(heavy, { projectDir: withoutTs });

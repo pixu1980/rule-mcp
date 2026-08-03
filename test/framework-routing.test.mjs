@@ -38,13 +38,13 @@ function getAllRoutes(parsed) {
 const r = await callTool("pix_tool", { prompt: "How do I create a React button component?" });
 const parsed = JSON.parse(r.content[0].text);
 const allRoutes = getAllRoutes(parsed);
-check("T6 defaults: pix-frontend-react in top results", allRoutes.some(r => r === "pix-frontend-react"));
+check("T6 defaults: pix-frontend-react in top results", allRoutes.includes("pix-frontend-react"));
 
 // Now with framework="vue" — pix-frontend-vue should rank higher
 const rVue = await callTool("pix_tool", { prompt: "Vue 3 component with Composition API", framework: "vue" });
 const parsedVue = JSON.parse(rVue.content[0].text);
 const vueRoutes = getAllRoutes(parsedVue);
-check("T6.1 vue bias: pix-frontend-vue in results", vueRoutes.some(r => r === "pix-frontend-vue"));
+check("T6.1 vue bias: pix-frontend-vue in results", vueRoutes.includes("pix-frontend-vue"));
 check("T6.2 vue bias: pix-frontend-vue is primary route with bias", parsedVue.route === "pix-frontend-vue");
 
 // ── T6.3: framework bias with path auto-detection ──
@@ -61,7 +61,7 @@ const rPath = await callTool("pix_tool", {
 });
 const parsedPath = JSON.parse(rPath.content[0].text);
 const pathRoutes = getAllRoutes(parsedPath);
-check("T6.3 auto-detect: pix-frontend-svelte in results", pathRoutes.some(r => r === "pix-frontend-svelte"));
+check("T6.3 auto-detect: pix-frontend-svelte in results", pathRoutes.includes("pix-frontend-svelte"));
 
 // ── T6.4: explicit framework overrides path detection ──
 writeFileSync(join(tmpDir, "package.json"), JSON.stringify({
@@ -75,7 +75,7 @@ const rOverride = await callTool("pix_tool", {
 });
 const parsedOverride = JSON.parse(rOverride.content[0].text);
 const overrideRoutes = getAllRoutes(parsedOverride);
-check("T6.4 explicit framework overrides path: pix-frontend-react in results", overrideRoutes.some(r => r === "pix-frontend-react"));
+check("T6.4 explicit framework overrides path: pix-frontend-react in results", overrideRoutes.includes("pix-frontend-react"));
 
 // Cleanup
 rmSync(tmpDir, { recursive: true, force: true });

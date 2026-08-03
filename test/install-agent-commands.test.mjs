@@ -52,15 +52,15 @@ try {
   ];
 
   for (const file of commandFiles) {
-    assert(existsSync(file), `missing command file: ${file}`);
+    assert.ok(existsSync(file), `missing command file: ${file}`);
     const content = readFileSync(file, "utf8");
-    assert(content.includes("pix-galaxy-mcp"), `${file} must name pix-galaxy-mcp`);
-    assert(content.includes("pix"), `${file} must explicitly route through pix`);
+    assert.ok(content.includes("pix-galaxy-mcp"), `${file} must name pix-galaxy-mcp`);
+    assert.ok(content.includes("pix"), `${file} must explicitly route through pix`);
   }
 
   const installScript = readFileSync(join(root, "scripts", "install.sh"), "utf8");
-  assert(installScript.includes("install-agent-commands.sh"), "install.sh must install explicit agent commands");
-  assert(
+  assert.ok(installScript.includes("install-agent-commands.sh"), "install.sh must install explicit agent commands");
+  assert.ok(
     installScript.includes('if [[ ${#COMMAND_ARGS[@]} -gt 0 ]]'),
     "install.sh must handle an empty command argument array on Bash 3",
   );

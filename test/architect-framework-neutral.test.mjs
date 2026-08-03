@@ -58,7 +58,7 @@ test("a neutral React pack ships no hardcoded vanilla/Custom-Elements/Parcel pro
   for (const file of files) {
     for (const re of OVERFIT) {
       const m = file.content.match(re);
-      if (m) offenders.push(`${file.path}: /${re.source}/ -> "${m[0]}"`);
+      if (m) {offenders.push(`${file.path}: /${re.source}/ -> "${m[0]}"`);}
     }
   }
   assert.deepEqual(offenders, [], `framework-overfit literals leaked:\n  ${offenders.join("\n  ")}`);

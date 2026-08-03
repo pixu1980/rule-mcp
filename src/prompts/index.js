@@ -126,9 +126,9 @@ const PROMPT_EXAMPLES = {
  * @returns {string} — the help block the model should present verbatim
  */
 function buildHelpMessage(name, def, examples = []) {
-  const argList = def.arguments.map((a) => (a.required ? `<${a.name}>` : `[${a.name}]`)).join(" ");
+  const argumentList = def.arguments.map((a) => (a.required ? `<${a.name}>` : `[${a.name}]`)).join(" ");
   const lines = [
-    `Usage: /${name} ${argList}`,
+    `Usage: /${name} ${argumentList}`,
     "",
     def.description,
     "",
@@ -358,7 +358,7 @@ export function getPrompt(name, args = {}) {
 
   // ── One-shot workflow prompts ──────────────────────────────────
   switch (name) {
-    case "pix-setup-project":
+    case "pix-setup-project": {
       return {
         name,
         description: "Bootstrap a project end-to-end",
@@ -374,8 +374,9 @@ export function getPrompt(name, args = {}) {
           "Finish by proposing a conventional commit message with a mandatory scope, e.g. \"chore(setup): ...\"."
         ),
       };
+    }
 
-    case "pix-new-feature":
+    case "pix-new-feature": {
       return {
         name,
         description: "Implement a feature end-to-end",
@@ -392,8 +393,9 @@ export function getPrompt(name, args = {}) {
           "Finish by proposing a conventional commit message with a mandatory scope, e.g. \"feat(<area>): <summary>\"."
         ),
       };
+    }
 
-    case "pix-pull-request":
+    case "pix-pull-request": {
       return {
         name,
         description: "Prepare a pull request (review + ADR + commit scope + description)",
@@ -408,8 +410,9 @@ export function getPrompt(name, args = {}) {
           "Finish by proposing a conventional commit message with a mandatory scope, e.g. \"feat(<scope>): <summary>\"."
         ),
       };
+    }
 
-    case "pix-write-tests":
+    case "pix-write-tests": {
       return {
         name,
         description: "Write tests (TDD + a11y + devops)",
@@ -425,16 +428,17 @@ export function getPrompt(name, args = {}) {
           "Finish by proposing a conventional commit message with a mandatory scope, e.g. \"test(<scope>): add ... tests\"."
         ),
       };
+    }
 
     case "pix-handoff": {
-      const opts = parseHandoffOptions(args?.options);
+      const options = parseHandoffOptions(args?.options);
 
       const includeFlags = [
-        `${opts.includeGitDiff ? "includeGitDiff=yes" : "includeGitDiff=no"}`,
-        `${opts.includeGitLog ? "includeGitLog=yes" : "includeGitLog=no"}`,
-        `${opts.includeContext ? "includeContext=yes" : "includeContext=no"}`,
-        `${opts.includeAdrs ? "includeAdrs=yes" : "includeAdrs=no"}`,
-        `${opts.includeRoadmap ? "includeRoadmap=yes" : "includeRoadmap=no"}`,
+        `${options.includeGitDiff ? "includeGitDiff=yes" : "includeGitDiff=no"}`,
+        `${options.includeGitLog ? "includeGitLog=yes" : "includeGitLog=no"}`,
+        `${options.includeContext ? "includeContext=yes" : "includeContext=no"}`,
+        `${options.includeAdrs ? "includeAdrs=yes" : "includeAdrs=no"}`,
+        `${options.includeRoadmap ? "includeRoadmap=yes" : "includeRoadmap=no"}`,
       ].join(", ");
 
       return {
@@ -444,11 +448,11 @@ export function getPrompt(name, args = {}) {
           "You are a handoff specialist for pix-galaxy-mcp.\n" +
           "The user invoked `/pix-handoff`; every option is optional and defaults are applied server-side. The requested options are already resolved here into exact tool arguments — do not reinterpret them.\n" +
           "Resolved arguments for `pix_tool_process_handoff` (mode: handoff | close-session):\n" +
-          `- mode=${opts.mode}\n` +
-          `- compress=${opts.compress ? "true" : "false"}\n` +
-          `- format=${opts.format}\n` +
+          `- mode=${options.mode}\n` +
+          `- compress=${options.compress ? "true" : "false"}\n` +
+          `- format=${options.format}\n` +
           `- ${includeFlags}\n` +
-          `- maxTokens=${opts.maxTokens}\n` +
+          `- maxTokens=${options.maxTokens}\n` +
           "Run `pix_tool_process_handoff` with EXACTLY these arguments; do not change them.\n" +
           "Include the ADR summary (docs/adr) and git context in the output.\n" +
           "Present the handoff as a paste-ready block for a new session; include the commit-scope convention reminder.\n" +
@@ -458,8 +462,9 @@ export function getPrompt(name, args = {}) {
       };
     }
 
-    default:
+    default: {
       break;
+    }
   }
 
   // ── Area prompts ───────────────────────────────────────────────
@@ -486,7 +491,7 @@ export function getPrompt(name, args = {}) {
 
   // ── Legacy prompts (updated to the shared rules) ───────────────
   switch (name) {
-    case "pix-code-review":
+    case "pix-code-review": {
       return {
         name,
         description: "Review code against pix styleguides",
@@ -501,8 +506,9 @@ export function getPrompt(name, args = {}) {
           "Finish by proposing a conventional commit message with a mandatory scope."
         ),
       };
+    }
 
-    case "pix-a11y-audit":
+    case "pix-a11y-audit": {
       return {
         name,
         description: "Audit a11y end-to-end (review + tests)",
@@ -523,8 +529,9 @@ export function getPrompt(name, args = {}) {
           "Finish by proposing a conventional commit message with a mandatory scope, e.g. \"test(a11y): ...\"."
         ),
       };
+    }
 
-    case "pix-architect-scaffold":
+    case "pix-architect-scaffold": {
       return {
         name,
         description: "Scaffold a new project with .agents/ + .context/ infrastructure",
@@ -541,8 +548,10 @@ export function getPrompt(name, args = {}) {
           "Finish by proposing a conventional commit message with a mandatory scope, e.g. \"chore(scaffold): ...\"."
         ),
       };
+    }
 
-    default:
+    default: {
       return null;
+    }
   }
 }

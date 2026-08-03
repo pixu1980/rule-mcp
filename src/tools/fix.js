@@ -50,8 +50,8 @@ export function registerFixTool() {
         dryRun: { type: "boolean", default: true, description: "Preview without applying" },
       },
     },
-    handler: async (args) => {
-      const mode = args.mode || "lint";
+    handler: async (arguments_) => {
+      const mode = arguments_.mode || "lint";
 
       // ── Generate mode: create component file tree ──
       if (mode === "generate") {
@@ -59,13 +59,13 @@ export function registerFixTool() {
         const { writeFileSync, mkdirSync } = await import("node:fs");
         const { dirname, join, resolve, relative } = await import("node:path");
 
-        if (!args.name) {
+        if (!arguments_.name) {
           return { isError: true, content: [{ type: "text", text: "mode=generate requires a `name` argument (PascalCase)." }] };
         }
 
-        const dryRun = args.dryRun !== false;
-        const rootDir = resolve(args.path || ".");
-        const baseDir = args.baseDir || "src/components";
+        const isDryRun = arguments_.dryRun !== false;
+        const rootDir = resolve(arguments_.path || ".");
+        const baseDir = arguments_.baseDir || "src/components";
 
         // Validate: no path traversal in name or baseDir
         const sanitizedBase = relative(rootDir, resolve(rootDir, baseDir));
@@ -74,8 +74,8 @@ export function registerFixTool() {
         }
 
         const files = generateComponentFiles({
-          name: args.name,
-          framework: args.framework || "vanilla",
+          name: arguments_.name,
+          framework: arguments_.framework || "vanilla",
           baseDir,
         });
 
@@ -88,7 +88,7 @@ export function registerFixTool() {
             preview.push(`${file.path} — BLOCKED: path escapes project root`);
             continue;
           }
-          if (dryRun) {
+          if (isDryRun) {
             preview.push(`${file.path} (dry-run, not written)`);
             continue;
           }
@@ -96,22 +96,22 @@ export function registerFixTool() {
             mkdirSync(dirname(fullPath), { recursive: true });
             writeFileSync(fullPath, file.content, "utf8");
             preview.push(file.path);
-          } catch (err) {
-            preview.push(`${file.path} — ERROR: ${err.message}`);
+          } catch (error) {
+            preview.push(`${file.path} — ERROR: ${error.message}`);
           }
         }
 
         const lines = [
-          `# pix_fix: Generated ${args.name}`,
+          `# pix_fix: Generated ${arguments_.name}`,
           "",
-          dryRun ? "> This is a preview. Run with `dryRun=false` to write files." : "",
+          isDryRun ? "> This is a preview. Run with `dryRun=false` to write files." : "",
           "",
-          `${dryRun ? "Would create" : "Created"} ${preview.length} files:`,
+          `${isDryRun ? "Would create" : "Created"} ${preview.length} files:`,
           "",
           ...preview.map((p) => `  ✓ ${p}`),
           "",
           "File tree:",
-          `  ${baseDir}/${args.name}/`,
+          `  ${baseDir}/${arguments_.name}/`,
           ...files.map((f) => `    ${f.path.split("/").pop()}`).filter(Boolean),
         ].filter(Boolean);
 
@@ -120,7 +120,7 @@ export function registerFixTool() {
 
       // ── Lint mode: scan and report ──
       if (mode === "lint") {
-        const report = scanFileTree(args.path || ".", { srcDir: args.srcDir || "src" });
+        const report = scanFileTree(arguments_.path || ".", { srcDir: arguments_.srcDir || "src" });
 
         if (report.pass) {
           return {
@@ -148,10 +148,8 @@ export function registerFixTool() {
 
         for (const issue of report.issues) {
           const icon = issue.fixable ? "🔧" : "⚠️";
-          lines.push(`### ${icon} ${issue.type}`);
-          lines.push(`**Path**: \`${issue.path}\``);
-          lines.push(`**Message**: ${issue.message}`);
-          if (issue.fixAction) lines.push(`**Auto-fix**: ${issue.fixAction}`);
+          lines.push(`### ${icon} ${issue.type}`, `**Path**: \`${issue.path}\``, `**Message**: ${issue.message}`);
+          if (issue.fixAction) {lines.push(`**Auto-fix**: ${issue.fixAction}`);}
           lines.push("");
         }
 
@@ -165,21 +163,20 @@ export function registerFixTool() {
 
       // ── Fix mode: scan and auto-correct ──
       if (mode === "fix") {
-        const dryRun = args.dryRun !== false;
-        const result = autoFixFileTree(args.path || ".", {
-          srcDir: args.srcDir || "src",
-          dryRun,
+        const isDryRun = arguments_.dryRun !== false;
+        const result = autoFixFileTree(arguments_.path || ".", {
+          srcDir: arguments_.srcDir || "src",
+          dryRun: isDryRun,
         });
 
         const lines = [
-          `# File Tree Auto-Fix: ${dryRun ? "DRY RUN" : "COMPLETE"}`,
+          `# File Tree Auto-Fix: ${isDryRun ? "DRY RUN" : "COMPLETE"}`,
           "",
-          ...(dryRun ? ["", "> This is a preview. Run with `dryRun=false` to apply fixes.", ""] : [""]),
+          ...(isDryRun ? ["", "> This is a preview. Run with `dryRun=false` to apply fixes.", ""] : [""]),
         ];
 
         if (result.fixed.length > 0) {
-          lines.push(`## Fixed (${result.fixed.length})`);
-          lines.push("");
+          lines.push(`## Fixed (${result.fixed.length})`, "");
           for (const f of result.fixed) {
             lines.push(`- ${f.action}: \`${f.path}\``);
           }
@@ -187,8 +184,7 @@ export function registerFixTool() {
         }
 
         if (result.errors.length > 0) {
-          lines.push(`## Errors (${result.errors.length})`);
-          lines.push("");
+          lines.push(`## Errors (${result.errors.length})`, "");
           for (const e of result.errors) {
             lines.push(`- ❌ \`${e.path}\`: ${e.error}`);
           }
@@ -196,8 +192,7 @@ export function registerFixTool() {
         }
 
         if (result.remaining.length > 0) {
-          lines.push(`## Remaining Issues (${result.remaining.length})`);
-          lines.push("");
+          lines.push(`## Remaining Issues (${result.remaining.length})`, "");
           for (const r of result.remaining) {
             lines.push(`- ⚠️ \`${r.path}\`: ${r.message}`);
           }

@@ -72,11 +72,11 @@ export async function registerApplyTool() {
       },
       required: ["files", "receipt"],
     },
-    handler: async (args) => {
-      const { files, receipt, path: rootPath = ".", dryRun } = args;
+    handler: async (arguments_) => {
+      const { files, receipt, path: rootPath = ".", dryRun } = arguments_;
       const rootDir = resolve(rootPath);
       const results = [];
-      let allValid = true;
+      let isAllValid = true;
 
       // ── Step 1: Validate receipt against ALL file contents ──
       // Concatenate all file contents and validate once
@@ -102,14 +102,14 @@ export async function registerApplyTool() {
         try {
           const resolved = assertInsideProject(rootDir, file.path);
           resolvedPaths.push({ file, resolved });
-        } catch (err) {
+        } catch (error) {
           return {
             isError: true,
             content: [{
               type: "text",
-              text: `# pix_apply: Path validation FAILED\n\n**File:** ${file.path}\n**Error:** ${err.message}`,
+              text: `# pix_apply: Path validation FAILED\n\n**File:** ${file.path}\n**Error:** ${error.message}`,
             }],
-            _meta: { pixApply: { receiptValid: true, pathError: err.message, filesWritten: 0 } },
+            _meta: { pixApply: { receiptValid: true, pathError: error.message, filesWritten: 0 } },
           };
         }
       }
@@ -123,9 +123,9 @@ export async function registerApplyTool() {
             mkdirSync(dirname(resolved), { recursive: true });
             writeFileSync(resolved, file.content, "utf8");
             results.push({ path: file.path, status: "written", absPath: resolved });
-          } catch (err) {
-            results.push({ path: file.path, status: "error", error: err.message });
-            allValid = false;
+          } catch (error) {
+            results.push({ path: file.path, status: "error", error: error.message });
+            isAllValid = false;
           }
         }
       }
@@ -134,7 +134,7 @@ export async function registerApplyTool() {
       if (!dryRun) {
         try {
           postProcessFiles(results);
-        } catch (e) {
+        } catch {
           // Post-processing is best-effort — don't block the response
         }
       }
@@ -147,7 +147,7 @@ export async function registerApplyTool() {
         `Receipt: **valid** ✅`,
         `Files: ${results.length}`,
         "",
-        ...results.map(r => `- ${r.status === "written" ? "✅" : r.status === "dry-run" ? "📋" : "❌"} ${r.path}${r.note ? ` (${r.note})` : ""}${r.error ? ` — ${r.error}` : ""}`),
+        ...results.map(r => `- ${r.status === "written" ? "✅" : (r.status === "dry-run" ? "📋" : "❌")} ${r.path}${r.note ? ` (${r.note})` : ""}${r.error ? ` — ${r.error}` : ""}`),
         "",
         dryRun ? "Run again with `dryRun: false` to apply changes." : `Wrote ${results.filter(r => r.status === "written").length} files.`,
       ].filter(Boolean);

@@ -24,8 +24,8 @@ const pidFile = join(stateDir, "daemon.pid");
 const logFile = join(stateDir, "daemon.log");
 
 // Clean up any stale state
-try { unlinkSync(pidFile); } catch {}
-try { unlinkSync(logFile); } catch {}
+try { unlinkSync(pidFile); } catch { /* ignore: pid file may be absent */ }
+try { unlinkSync(logFile); } catch { /* ignore: log file may be absent */ }
 
 // ── Import the daemon command handler ──
 const { daemonCommand } = await import("../src/cli/commands.js");
@@ -56,9 +56,9 @@ if (pidExists) {
     check("T7.3 daemon health endpoint responds", res.status === 200);
     const body = await res.json();
     check("T7.4 daemon reports ok:true", body.ok === true);
-  } catch (e) {
+  } catch (error) {
     check("T7.3 daemon health endpoint responds", false);
-    console.log("       Error:", e.message);
+    console.log("       Error:", error.message);
   }
 }
 
@@ -93,4 +93,4 @@ process.stdout.write = origStdout;
 check("T8.2 daemon status reports not running after stop", statusAfterOutput.includes('"running": false'));
 
 console.log(`\nResults: ${pass} passed, ${fail} failed`);
-if (fail > 0) process.exit(1);
+if (fail > 0) {process.exit(1);}

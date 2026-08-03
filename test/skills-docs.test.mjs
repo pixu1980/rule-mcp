@@ -25,7 +25,7 @@ const removedSkillNames = [
   "pix-frontend-forms-validation",
 ];
 
-function skillDirs() {
+function skillDirectories() {
   return readdirSync(skillsRoot, { withFileTypes: true })
     .filter((entry) => entry.isDirectory())
     .map((entry) => entry.name)
@@ -33,55 +33,55 @@ function skillDirs() {
 }
 
 function stripFencedCode(markdown) {
-  return markdown.replace(/```[\s\S]*?```/g, "");
+  return markdown.replaceAll(/```[\s\S]*?```/g, "");
 }
 
 function markdownLinks(markdown) {
   const withoutCode = stripFencedCode(markdown);
-  return [...withoutCode.matchAll(/\[[^\]]+\]\(([^)\s]+)(?:\s+\"[^\"]*\")?\)/g)].map((match) => match[1]);
+  return [...withoutCode.matchAll(/\[[^\]]+\]\(([^)\s]+)(?:\s+"[^"]*")?\)/g)].map((match) => match[1]);
 }
 
 console.log("pix skill documentation test");
 
-const dirs = skillDirs();
-assert(dirs.length > 0, "No skill directories found");
-assert(dirs.includes("pix-ui"), "pix-ui umbrella skill must be present");
-assert(dirs.includes("pix-ui-design-system"), "pix-ui-design-system skill must be present");
+const directories = skillDirectories();
+assert.ok(directories.length > 0, "No skill directories found");
+assert.ok(directories.includes("pix-ui"), "pix-ui umbrella skill must be present");
+assert.ok(directories.includes("pix-ui-design-system"), "pix-ui-design-system skill must be present");
 for (const requiredSkill of [
   "pix-backend-graphql",
   "pix-devops-observability",
   "pix-process-code-review",
 ]) {
-  assert(dirs.includes(requiredSkill), `${requiredSkill} must be present`);
+  assert.ok(directories.includes(requiredSkill), `${requiredSkill} must be present`);
 }
 
-for (const dir of dirs) {
+for (const dir of directories) {
   const skillPath = join(skillsRoot, dir, "SKILL.md");
-  assert(existsSync(skillPath), `Missing SKILL.md for ${dir}`);
+  assert.ok(existsSync(skillPath), `Missing SKILL.md for ${dir}`);
 
   const content = readFileSync(skillPath, "utf8");
   const metadata = parseSkillFrontmatter(content);
 
   assert.equal(metadata.name, dir, `${dir}: frontmatter name must match directory`);
-  assert(metadata.description?.length > 20, `${dir}: description must be present and useful`);
-  assert(Array.isArray(metadata.tags) && metadata.tags.length > 0, `${dir}: tags must be a non-empty YAML list`);
-  assert(Array.isArray(metadata.frameworks) && metadata.frameworks.length > 0, `${dir}: frameworks must be present`);
+  assert.ok(metadata.description?.length > 20, `${dir}: description must be present and useful`);
+  assert.ok(Array.isArray(metadata.tags) && metadata.tags.length > 0, `${dir}: tags must be a non-empty YAML list`);
+  assert.ok(Array.isArray(metadata.frameworks) && metadata.frameworks.length > 0, `${dir}: frameworks must be present`);
 
   const innerFrontmatterCount = (content.match(/\n---\nname:\s*pix-/g) || []).length;
   assert.equal(innerFrontmatterCount, 0, `${dir}: contains an embedded second SKILL.md document`);
 
-  assert(content.includes("## See also"), `${dir}: missing See also cross-reference section`);
+  assert.ok(content.includes("## See also"), `${dir}: missing See also cross-reference section`);
 
   for (const removedName of removedSkillNames) {
-    assert(!content.includes(removedName), `${dir}: references removed/non-existent skill ${removedName}`);
+    assert.ok(!content.includes(removedName), `${dir}: references removed/non-existent skill ${removedName}`);
   }
 
   for (const href of markdownLinks(content)) {
-    if (/^[a-z][a-z0-9+.-]*:/i.test(href) || href.startsWith("#")) continue;
-    const target = href.split("#")[0];
-    if (!target) continue;
+    if (/^[a-z][a-z0-9+.-]*:/i.test(href) || href.startsWith("#")) {continue;}
+    const target = href.split("#", 1)[0];
+    if (!target) {continue;}
     const resolved = resolve(join(skillsRoot, dir), target);
-    assert(existsSync(resolved), `${dir}: broken markdown link ${href}`);
+    assert.ok(existsSync(resolved), `${dir}: broken markdown link ${href}`);
   }
 }
 
@@ -91,17 +91,17 @@ for (const requiredSkill of [
   "pix-devops-observability",
   "pix-process-code-review",
 ]) {
-  assert(dispatcherSkill.includes(`../${requiredSkill}/SKILL.md`), `pix must link ${requiredSkill}`);
+  assert.ok(dispatcherSkill.includes(`../${requiredSkill}/SKILL.md`), `pix must link ${requiredSkill}`);
 }
 
 const uiSkill = readFileSync(join(skillsRoot, "pix-ui", "SKILL.md"), "utf8");
 for (const required of ["pix-ui-design-system", "pix-frontend", "pix-styleguide", "pix_tool_check"]) {
-  assert(uiSkill.includes(required), `pix-ui must reference ${required}`);
+  assert.ok(uiSkill.includes(required), `pix-ui must reference ${required}`);
 }
 
 const uiDesignSkill = readFileSync(join(skillsRoot, "pix-ui-design-system", "SKILL.md"), "utf8");
 for (const required of ["Zero CSS classes", "Zero inline styles", "Semantic HTML", "adoptedStyleSheets", "WCAG 2.2 AA", "pix_tool_check"]) {
-  assert(uiDesignSkill.includes(required), `pix-ui-design-system must enforce ${required}`);
+  assert.ok(uiDesignSkill.includes(required), `pix-ui-design-system must enforce ${required}`);
 }
 
 const sqlSkill = readFileSync(join(skillsRoot, "pix-data-sql", "SKILL.md"), "utf8");
@@ -114,16 +114,16 @@ for (const required of [
   "Soft delete is a policy choice",
   "Avoid overloaded tables",
 ]) {
-  assert(sqlSkill.includes(required), `pix-data-sql must cover ${required}`);
+  assert.ok(sqlSkill.includes(required), `pix-data-sql must cover ${required}`);
 }
 
 const postgresSkill = readFileSync(join(skillsRoot, "pix-data-postgresql", "SKILL.md"), "utf8");
 for (const required of ["referencing side of a foreign key", "timestamptz", "PostgreSQL 18"]) {
-  assert(postgresSkill.includes(required), `pix-data-postgresql must cover ${required}`);
+  assert.ok(postgresSkill.includes(required), `pix-data-postgresql must cover ${required}`);
 }
 
 const mysqlSkill = readFileSync(join(skillsRoot, "pix-data-mysql", "SKILL.md"), "utf8");
-assert(
+assert.ok(
   mysqlSkill.includes("InnoDB automatically indexes foreign-key columns"),
   "pix-data-mysql must document InnoDB foreign-key indexing",
 );
@@ -141,7 +141,7 @@ for (const required of [
   "type-coverage",
   "tsc --noEmit",
 ]) {
-  assert(typescriptSkill.includes(required), `pix-toolchain-typescript must cover ${required}`);
+  assert.ok(typescriptSkill.includes(required), `pix-toolchain-typescript must cover ${required}`);
 }
 
 const eslintSkill = readFileSync(join(skillsRoot, "pix-toolchain-eslint", "SKILL.md"), "utf8");
@@ -163,7 +163,7 @@ for (const required of [
   "FlatCompat",
   "eslint.config.mjs",
 ]) {
-  assert(eslintSkill.includes(required), `pix-toolchain-eslint must cover ${required}`);
+  assert.ok(eslintSkill.includes(required), `pix-toolchain-eslint must cover ${required}`);
 }
 
 const jsStyleguide = readFileSync(join(skillsRoot, "pix-styleguide-javascript", "SKILL.md"), "utf8");
@@ -178,20 +178,20 @@ for (const required of [
   "new Map(",
   "prefer-const",
 ]) {
-  assert(jsStyleguide.includes(required), `pix-styleguide-javascript must cover ${required}`);
+  assert.ok(jsStyleguide.includes(required), `pix-styleguide-javascript must cover ${required}`);
 }
 
 const patternsSkill = readFileSync(join(skillsRoot, "pix-styleguide-patterns", "SKILL.md"), "utf8");
 for (const required of ["node:fs", "flatMap", "replaceAll", "new Set(", "for (const item of", "new Map("]) {
-  assert(patternsSkill.includes(required), `pix-styleguide-patterns must cover ${required}`);
+  assert.ok(patternsSkill.includes(required), `pix-styleguide-patterns must cover ${required}`);
 }
 
 await loadAllSkills(true);
 const tools = listTools();
-assert(tools.some(tool => tool.name === "pix_tool_ui"), "pix_tool_ui MCP tool must be registered");
-assert(tools.some(tool => tool.name === "pix_tool_ui_design_system"), "pix_tool_ui_design_system MCP tool must be registered");
+assert.ok(tools.some(tool => tool.name === "pix_tool_ui"), "pix_tool_ui MCP tool must be registered");
+assert.ok(tools.some(tool => tool.name === "pix_tool_ui_design_system"), "pix_tool_ui_design_system MCP tool must be registered");
 for (const tool of tools) {
-  assert(tool.description && tool.description.length > 20, `${tool.name}: MCP tool description must be useful`);
+  assert.ok(tool.description && tool.description.length > 20, `${tool.name}: MCP tool description must be useful`);
 }
 
-console.log(`  ✅ ${dirs.length} skills and ${tools.length} tools have consistent docs metadata and cross-references`);
+console.log(`  ✅ ${directories.length} skills and ${tools.length} tools have consistent docs metadata and cross-references`);
