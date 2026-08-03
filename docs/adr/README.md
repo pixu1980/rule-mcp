@@ -4,6 +4,7 @@ Questo indice elenca tutti gli ADR in ordine cronologico.
 
 | # | Title | Date | Status | Tags |
 |---|-------|------|--------|------|
+| [027](027-adottare-eslint-plugin-unicorn-per-la-qualita-js-ts.md) | Adottare eslint-plugin-unicorn per la qualità JS/TS | 2026-08-03 | accepted | eslint, toolchain, unicorn, javascript, typescript, styleguide, guardrails, quality |
 | [026](026-rafforzare-la-disciplina-typescript-per-grandi-codebase.md) | Rafforzare la disciplina TypeScript per grandi codebase | 2026-08-02 | accepted | typescript, toolchain, strict, monorepo, quality |
 | [025](025-rafforzare-le-skill-sui-vincoli-relazionali-del-database.md) | Rafforzare le skill sui vincoli relazionali del database | 2026-08-02 | accepted | database, sql, postgresql, mysql, schema |
 | [024](024-installer-lossless-preservare-toolprefix-e-normalizzare-le-righe-vuote-delle-reg.md) | Installer lossless: preservare toolPrefix e normalizzare le righe vuote delle regole | 2026-08-01 | accepted | installer, idempotenza, toolPrefix, mcp-config |
