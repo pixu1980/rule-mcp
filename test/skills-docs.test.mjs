@@ -144,6 +144,48 @@ for (const required of [
   assert(typescriptSkill.includes(required), `rule-toolchain-typescript must cover ${required}`);
 }
 
+const eslintSkill = readFileSync(join(skillsRoot, "rule-toolchain-eslint", "SKILL.md"), "utf8");
+for (const required of [
+  "eslint-plugin-unicorn",
+  "unicorn.configs.recommended",
+  "unicorn.configs.unopinionated",
+  "prefer-set-has",
+  "no-array-for-each",
+  "prefer-node-protocol",
+  "throw-new-error",
+  "prefer-string-replace-all",
+  "prefer-array-flat-map",
+  "new-for-builtins",
+  "prevent-abbreviations",
+  "no-null",
+  "filename-case",
+  "recommended-type-checked",
+  "FlatCompat",
+  "eslint.config.mjs",
+]) {
+  assert(eslintSkill.includes(required), `rule-toolchain-eslint must cover ${required}`);
+}
+
+const jsStyleguide = readFileSync(join(skillsRoot, "rule-styleguide-javascript", "SKILL.md"), "utf8");
+for (const required of [
+  "new Set(",
+  "Set.has",
+  "for...of",
+  "node:fs",
+  "throw new Error",
+  "replaceAll",
+  "flatMap",
+  "new Map(",
+  "prefer-const",
+]) {
+  assert(jsStyleguide.includes(required), `rule-styleguide-javascript must cover ${required}`);
+}
+
+const patternsSkill = readFileSync(join(skillsRoot, "rule-styleguide-patterns", "SKILL.md"), "utf8");
+for (const required of ["node:fs", "flatMap", "replaceAll", "new Set(", "for (const item of", "new Map("]) {
+  assert(patternsSkill.includes(required), `rule-styleguide-patterns must cover ${required}`);
+}
+
 await loadAllSkills(true);
 const tools = listTools();
 assert(tools.some(tool => tool.name === "rule_tool_ui"), "rule_tool_ui MCP tool must be registered");

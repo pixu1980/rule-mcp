@@ -32,7 +32,7 @@ frameworks: [all]
 | Skill | Tool | Best For |
 |-------|------|----------|
 | [rule-toolchain-biome](../rule-toolchain-biome/SKILL.md) | Biome | Fast, unified linter+formatter (Rust, recommended) |
-| [rule-toolchain-eslint](../rule-toolchain-eslint/SKILL.md) | ESLint | Legacy projects needing full plugin ecosystem |
+| [rule-toolchain-eslint](../rule-toolchain-eslint/SKILL.md) | ESLint | ESLint 10 flat config, eslint-plugin-unicorn, type-aware linting |
 
 ## Package Management & Monorepo
 
@@ -54,7 +54,7 @@ frameworks: [all]
 
 ```
 Need a build tool?                      → rule-toolchain-vite (default), rule-toolchain-rspack, or rule-toolchain-parcel
-Need linting + formatting?              → rule-toolchain-biome (new) or rule-toolchain-eslint (legacy)
+Need linting + formatting?              → rule-toolchain-biome (fast, unified) or rule-toolchain-eslint (ESLint 10 + unicorn)
 Need a package manager?                 → rule-toolchain-pnpm
 Need monorepo orchestration?            → rule-toolchain-turborepo
 Need TypeScript config?                 → rule-toolchain-typescript

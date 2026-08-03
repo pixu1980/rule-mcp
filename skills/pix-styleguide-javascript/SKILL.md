@@ -1,7 +1,7 @@
 ---
 name: rule-styleguide-javascript
 description: >-
-  Use when writing JavaScript or TypeScript following rule conventions. Covers naming, functions, classes, async patterns, DOM manipulation, and custom elements.
+  Use when writing JavaScript or TypeScript following rule conventions. Covers naming, functions, classes, async patterns, modern idioms (Set.has, for...of, node: protocol, replaceAll, flatMap), DOM manipulation, and custom elements.
 tags:
   - "javascript"
   - "ecmascript"
@@ -111,7 +111,9 @@ if (items.length === 0) {
   return;
 }
 
-items.forEach(item => process(item));
+for (const item of items) {
+  process(item);
+}
 ```
 
 ### Short-circuit for registration and guards
@@ -151,9 +153,10 @@ async function fetchData(url) {
 
 ## Loops and iteration
 
-* `for` loops > `.forEach` when you need `break` or `continue`.
+* Prefer `for...of` over `.forEach()` — always. `for...of` gives better TypeScript narrowing, lets you `await` directly, and supports `break`/`continue` (none of which work cleanly inside a `.forEach()` callback).
 * Use `for...of` for iterating values. Avoid `for...in`.
 * Avoid nesting or chaining loops when possible.
+* For membership checks inside a loop, prefer `Set.prototype.has()` over `Array.prototype.includes()`: `.includes()` rescans the whole array per call (O(n²) in a loop), while `Set.has()` is roughly constant-time.
 
 ## Strings
 
@@ -175,6 +178,40 @@ const greeting = `Hello, ${name}!`;
 
 * Be specific in checks. Don't rely on truthy/falsy for edge cases.
 * Prefer ternary over logical `||` and `&&` for value selection.
+* Prefer a ternary over a simple `if/else` that only returns or assigns a value — it avoids `let` and lets `prefer-const` flag the variable.
+
+```js
+// PREFERRED
+function status(ok) {
+  return ok ? 'pass' : 'fail';
+}
+
+// AVOID
+function status(ok) {
+  if (ok) {
+    return 'pass';
+  } else {
+    return 'fail';
+  }
+}
+```
+
+## Modern JS/TS idioms (enforced by eslint-plugin-unicorn)
+
+These are the correctness and performance idioms rule expects in every JS/TS file. They map 1:1 to `eslint-plugin-unicorn` rules in the `recommended` preset (see [rule-toolchain-eslint](../rule-toolchain-eslint/SKILL.md)); all of them are autofixable with `pnpm eslint . --fix`.
+
+| Idiom | ❌ Avoid | ✅ Prefer | Why |
+|-------|---------|-----------|-----|
+| Set membership in loops | `allowed.includes(scope)` inside `.filter()`/loops | `new Set([...])` + `allowed.has(scope)` | `.includes()` is O(n) per call → O(n²) in loops; `Set.has()` is O(1) |
+| Iteration | `users.forEach(u => sendEmail(u))` | `for (const u of users) { sendEmail(u); }` | `break`/`continue`/`await` + better TS narrowing |
+| Node builtins | `import fs from 'fs'` | `import fs from 'node:fs'` | Unambiguous; can't be shadowed by an npm package |
+| Throwing errors | `throw Error('boom')` | `throw new Error('boom')` | Consistency; `new` required for error constructors |
+| Global string replace | `str.replace(/-/g, ' ')` | `str.replaceAll('-', ' ')` | Clearer intent, no regex escaping |
+| Nested array flatten | `rows.map(r => r.cells).flat()` | `rows.flatMap(r => r.cells)` | No intermediate array allocation |
+| Builtin constructors | `const cache = Map()` | `const cache = new Map()` | `new` required for `Map`/`Set`/`Date`/`Array`/`WeakMap`/`WeakSet` (`String`/`Number`/`Boolean`/`Symbol`/`BigInt` are exempt) |
+| Regex | `/[0-9]/` | `/\d/` | Shorter, consistent |
+
+> Tuning: `prevent-abbreviations`, `no-null`, `no-array-reduce`, and `filename-case` are opinionated — scope them per project (`warn` or `ignore` options) instead of fighting the codebase.
 
 ## Types and safety
 

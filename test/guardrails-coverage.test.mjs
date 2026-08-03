@@ -66,5 +66,44 @@ for (const [component, framework, skill] of [
   check(`T3 ${component}/${framework} passes core principles (no classes/inline styles)`, failedCore.length === 0);
 }
 
+// ── T4: JS/TS idiom guardrails (eslint-plugin-unicorn rules) fire on legacy
+//    patterns and pass on the modern idioms the styleguide mandates. ──
+const JS_IDIOM_IDS = [
+  "js-prefer-set-has",
+  "js-no-array-for-each",
+  "js-node-protocol",
+  "js-throw-new-error",
+  "js-prefer-replace-all",
+  "js-array-flat-map",
+  "js-new-for-builtins",
+];
+const BAD_JS = `const allowed = ['read', 'write'];
+const granted = requested.filter((scope) => allowed.includes(scope));
+users.forEach((user) => sendEmail(user));
+import fs from 'fs';
+throw Error('boom');
+str.replace(/-/g, ' ');
+rows.map((r) => r.cells).flat();
+const cache = Map();`;
+const badReport = checkCode("rule-styleguide-javascript", BAD_JS, { fileName: "demo.js", framework: "vanilla" });
+for (const id of JS_IDIOM_IDS) {
+  check(`T4 ${id} fires on non-idiomatic JS`, badReport.failed.some((f) => f.id === id));
+}
+const GOOD_JS = `const allowed = new Set(['read', 'write']);
+const granted = requested.filter((scope) => allowed.has(scope));
+for (const user of users) {
+  sendEmail(user);
+}
+import fs from 'node:fs';
+throw new Error('boom');
+str.replaceAll('-', ' ');
+rows.flatMap((r) => r.cells);
+const cache = new Map();`;
+const goodReport = checkCode("rule-styleguide-javascript", GOOD_JS, { fileName: "demo.js", framework: "vanilla" });
+const goodFailed = new Set(goodReport.failed.map((f) => f.id));
+for (const id of JS_IDIOM_IDS) {
+  check(`T4 ${id} passes idiomatic JS`, !goodFailed.has(id));
+}
+
 console.log(`\nResults: ${pass} passed, ${fail} failed`);
 setTimeout(() => process.exit(fail > 0 ? 1 : 0), 100);

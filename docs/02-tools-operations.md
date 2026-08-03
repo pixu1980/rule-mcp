@@ -322,6 +322,15 @@ Supports smart iteration: pass `previousPassed` to skip already-verified guardra
 - Angular: `angular-no-ngclass`
 - Svelte: `svelte-no-class-directive`
 
+**JavaScript/TypeScript idioms (all JS frameworks — eslint-plugin-unicorn rules):**
+- `js-throw-new-error` — `throw Error()` → `throw new Error()`
+- `js-new-for-builtins` — `Map()`/`Set()`/`Date()`/`Array()` → `new Map()`/…
+- `js-array-flat-map` — `.map().flat()` → `.flatMap()`
+- `js-prefer-set-has` — `Array.includes()` in loops → `Set.has()` (O(n²) → O(n))
+- `js-node-protocol` — `import fs from 'fs'` → `import fs from 'node:fs'`
+- `js-prefer-replace-all` — `str.replace(/x/g, …)` → `str.replaceAll('x', …)`
+- `js-no-array-for-each` — `.forEach()` → `for...of`
+
 **Scaffold (mode=scaffold):** verifies .prettierrc, .nvmrc, .editorconfig, .gitignore, .eslintrc.json, tsconfig.json, jsconfig.json
 
 **Architect:** verifies .agents/, AGENTS.md, SDD specs, placeholders, CLI, workflow
