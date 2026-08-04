@@ -4,6 +4,12 @@ Questo indice elenca tutti gli ADR in ordine cronologico.
 
 | # | Title | Date | Status | Tags |
 |---|-------|------|--------|------|
+| [034](034-registry-driven-clean-slash-commands-for-every-agent-and-ide.md) | Registry-driven clean slash commands for every agent and IDE | 2026-08-04 | accepted | agents, commands, registry, claudecode, vscode, pi, gemini, cursor, windsurf, cline |
+| [033](033-the-tool-surface-is-skills-and-nothing-else.md) | The tool surface is ./skills and nothing else | 2026-08-04 | accepted | skills, security, tool-surface, plugins |
+| [032](032-pin-the-self-update-remote-and-drop-root-in-the-container.md) | Pin the self-update remote and drop root in the container | 2026-08-04 | accepted | self-update, security, docker, container, git |
+| [031](031-interview-servers-enforce-same-origin-and-own-their-process-lifecycle.md) | Interview servers enforce same-origin and own their process lifecycle | 2026-08-04 | accepted | architect, security, csrf, interview, lifecycle |
+| [030](030-bind-write-authorization-to-destinations-not-just-content.md) | Bind write authorization to destinations, not just content | 2026-08-04 | accepted | security, apply, gateway, receipts, containment |
+| [029](029-clean-rule-commands-via-user-commands-prompt-suppression-not-a-plugin.md) | Clean rule commands via user commands + prompt suppression, not a plugin | 2026-08-04 | accepted | agents, commands, claude, prompts |
 | [028](028-migrare-il-tooling-del-repo-a-eslint-10-flat-config-con-eslint-plugin-unicorn.md) | Migrare il tooling del repo a ESLint 10 flat config con eslint-plugin-unicorn | 2026-08-03 | accepted | eslint, toolchain, unicorn, flat-config, migration, security, brace-expansion |
 | [027](027-adottare-eslint-plugin-unicorn-per-la-qualita-js-ts.md) | Adottare eslint-plugin-unicorn per la qualità JS/TS | 2026-08-03 | accepted | eslint, toolchain, unicorn, javascript, typescript, styleguide, guardrails, quality |
 | [026](026-rafforzare-la-disciplina-typescript-per-grandi-codebase.md) | Rafforzare la disciplina TypeScript per grandi codebase | 2026-08-02 | accepted | typescript, toolchain, strict, monorepo, quality |
