@@ -7,7 +7,7 @@
  * into one atomic server-side operation. The model receives
  * everything in one response — no multi-step hop.
  *
- * Input:  { prompt, code?, path?, framework? }
+ * Input:  { prompt, code?, files?, path?, framework? }
  * Output: { route, evidence, checkResult?, receipt?, nextTools }
  */
 
@@ -16,9 +16,45 @@ import { createHash } from "node:crypto";
 
 /**
  * In-memory receipt store (cleared on server restart).
- * Maps receipt token → { codeHash, skillName, allPass, expiresAt }
+ * Maps receipt token → { codeHash, binding, skillName, allPass, expiresAt }
+ *
+ * `binding` records WHAT the receipt proves:
+ *   - "content" — legacy: a hash of the checked code, no destination bound
+ *   - "files"   — a hash of the ordered (path, content) tuples that were checked
+ *
+ * The two are never interchangeable. A caller that could downgrade a path-bound
+ * receipt to the content-only check would simply pick the weaker one.
  */
 const receiptStore = new Map();
+
+/** Receipt lifetime (ms). */
+const RECEIPT_TTL_MS = 300_000;
+
+/**
+ * Canonical digest of a file set: length-prefixed path AND content, in order.
+ *
+ * The previous digest hashed `contents.join("\n---FILE---\n")`, an in-band
+ * separator that made [{a:"X\n---FILE---\nY"}] and [{a:"X"},{b:"Y"}] collide —
+ * and it never covered paths at all, so a receipt earned for benign code
+ * authorised writing that code to `.git/hooks/pre-commit`. Length prefixes make
+ * every field unambiguous; including the path binds the destination.
+ *
+ * @param {Array<{ path: string, content: string }>} files
+ * @returns {string} sha256 hex
+ */
+export function canonicalFilesDigest(files) {
+  const hash = createHash("sha256");
+  hash.update(`files:${files.length}\n`);
+  for (const file of files) {
+    const path = String(file?.path ?? "");
+    const content = String(file?.content ?? "");
+    hash.update(`${Buffer.byteLength(path, "utf8")}:${path}\n`);
+    hash.update(`${Buffer.byteLength(content, "utf8")}:`);
+    hash.update(content, "utf8");
+    hash.update("\n");
+  }
+  return hash.digest("hex");
+}
 
 /** Server secret for receipt signing (generated once per process). */
 let SERVER_SECRET = null;
@@ -40,41 +76,123 @@ function getServerSecret() {
  */
 export function issueReceipt(code, skillName, allPass, now = Date.now()) {
   const codeHash = createHash("sha256").update(code).digest("hex");
-  const payload = `${codeHash}:${skillName}:${allPass}:${now}`;
-  const token = createHmac("sha256", getServerSecret()).update(payload).digest("hex");
-  receiptStore.set(token, {
-    codeHash,
+  return storeReceipt({ codeHash, binding: "content", skillName, allPass, now });
+}
+
+/**
+ * Generate a PATH-BOUND receipt: the digest covers the ordered
+ * (path, content) tuples, so the receipt authorises writing exactly these
+ * contents to exactly these destinations and nothing else.
+ *
+ * @param {Array<{ path: string, content: string }>} files
+ * @param {string} skillName - Skill used for validation
+ * @param {boolean} allPass - Whether all guardrails passed
+ * @param {number} [now] - Injectable clock (ms) for deterministic testing
+ * @returns {string} receipt token
+ */
+export function issueFilesReceipt(files, skillName, allPass, now = Date.now()) {
+  return storeReceipt({
+    codeHash: canonicalFilesDigest(files),
+    binding: "files",
     skillName,
     allPass,
-    expiresAt: now + 300_000, // 5 min TTL
+    now,
   });
-  // Cleanup receipts that expired over 5 min ago (i.e. issued > 10 min back)
+}
+
+/** Sign an entry, store it, and evict long-expired receipts. */
+function storeReceipt({ codeHash, binding, skillName, allPass, now }) {
+  const payload = `${binding}:${codeHash}:${skillName}:${allPass}:${now}`;
+  const token = createHmac("sha256", getServerSecret()).update(payload).digest("hex");
+  receiptStore.set(token, { codeHash, binding, skillName, allPass, expiresAt: now + RECEIPT_TTL_MS });
+  // Cleanup receipts that expired over one TTL ago (i.e. issued > 2×TTL back).
   for (const [key, value] of receiptStore) {
-    if (now - value.expiresAt > 300_000) {receiptStore.delete(key);}
+    if (now - value.expiresAt > RECEIPT_TTL_MS) {receiptStore.delete(key);}
   }
   return token;
+}
+
+/** Shared checks: existence, TTL, guardrail outcome. */
+function openReceipt(token, now) {
+  const entry = receiptStore.get(token);
+  if (!entry) {return { error: "Receipt not found or expired" };}
+  if (now > entry.expiresAt) {
+    receiptStore.delete(token);
+    return { error: "Receipt expired — re-run pix_gateway" };
+  }
+  return { entry };
 }
 
 /**
  * Validate a receipt against current code.
  *
- * @param {string} token - Receipt from rule_tool_gateway
+ * @param {string} token - Receipt from pix_gateway
  * @param {string} code - Code to validate against
  * @param {number} [now] - Injectable clock (ms) for deterministic testing
  * @returns {{ valid: boolean, allPass?: boolean, reason?: string }}
  */
 export function validateReceipt(token, code, now = Date.now()) {
-  const entry = receiptStore.get(token);
-  if (!entry) {return { valid: false, reason: "Receipt not found or expired" };}
-  // Enforce the TTL at validation time — an expired receipt must never pass.
-  if (now > entry.expiresAt) {
-    receiptStore.delete(token);
-    return { valid: false, reason: "Receipt expired — re-run rule_tool_gateway" };
+  const { entry, error } = openReceipt(token, now);
+  if (error) {return { valid: false, reason: error };}
+  // A path-bound receipt must never be checked through the content-only route:
+  // that would let the caller drop the destination binding at will.
+  if (entry.binding === "files") {
+    return { valid: false, reason: "Receipt is path-bound — validate it against the file set, not the raw code" };
   }
   const codeHash = createHash("sha256").update(code).digest("hex");
   if (codeHash !== entry.codeHash) {return { valid: false, reason: "Code hash mismatch — code was modified after check" };}
   if (!entry.allPass) {return { valid: false, allPass: false, reason: "Guardrails did not pass" };}
   return { valid: true, allPass: true };
+}
+
+/**
+ * Validate a receipt for an actual write, i.e. against the file set that
+ * pix_apply is about to put on disk. This is the only validation the write
+ * path uses; it accepts both bindings and states which one carried the proof.
+ *
+ * - "files"   receipt: the ordered (path, content) tuples must match exactly.
+ * - "content" receipt: legacy single-file flow only. The gateway issues these
+ *   from a bare `code` string, which cannot describe more than one destination,
+ *   so a multi-file write requires the path-bound flow.
+ *
+ * @param {string} token - Receipt from pix_gateway
+ * @param {Array<{ path: string, content: string }>} files - Files to be written
+ * @param {number} [now] - Injectable clock (ms) for deterministic testing
+ * @returns {{ valid: boolean, binding?: "files"|"content", allPass?: boolean, reason?: string }}
+ */
+export function validateApply(token, files, now = Date.now()) {
+  if (!Array.isArray(files) || files.length === 0) {
+    return { valid: false, reason: "No files to validate" };
+  }
+  const { entry, error } = openReceipt(token, now);
+  if (error) {return { valid: false, reason: error };}
+
+  if (entry.binding === "files") {
+    if (canonicalFilesDigest(files) !== entry.codeHash) {
+      return {
+        valid: false,
+        binding: "files",
+        reason: "File set mismatch — paths, contents, order, or file count differ from what was checked",
+      };
+    }
+  } else {
+    if (files.length > 1) {
+      return {
+        valid: false,
+        binding: "content",
+        reason: "Content-only receipt cannot authorise a multi-file write — pass `files` to pix_gateway for a path-bound receipt",
+      };
+    }
+    const codeHash = createHash("sha256").update(String(files[0].content ?? "")).digest("hex");
+    if (codeHash !== entry.codeHash) {
+      return { valid: false, binding: "content", reason: "Code hash mismatch — code was modified after check" };
+    }
+  }
+
+  if (!entry.allPass) {
+    return { valid: false, binding: entry.binding, allPass: false, reason: "Guardrails did not pass" };
+  }
+  return { valid: true, binding: entry.binding, allPass: true };
 }
 
 /**
@@ -86,7 +204,11 @@ export async function registerGatewayTool() {
 
   const GatewaySchema = z.object({
     prompt: z.string().describe("Complete coding request"),
-    code: z.string().optional().describe("Code to validate against guardrails"),
+    code: z.string().optional().describe("Code to validate against guardrails (single file, legacy)"),
+    files: z.array(z.object({
+      path: z.string().describe("Relative file path within the project"),
+      content: z.string().describe("File content to validate"),
+    })).optional().describe("Files to validate — yields a path-bound receipt, required for multi-file writes"),
     path: z.string().optional().describe("Project path for framework auto-detection"),
     framework: z.string().optional().describe("Target framework (react, vue, svelte, angular, solid, astro, vanilla, express, fastify, nestjs, hono)"),
   });
@@ -102,14 +224,29 @@ export async function registerGatewayTool() {
       type: "object",
       properties: {
         prompt: { type: "string", description: "Complete coding request" },
-        code: { type: "string", description: "Code to validate" },
+        code: { type: "string", description: "Code to validate (single file, legacy)" },
+        files: {
+          type: "array",
+          description: "Files to validate — yields a path-bound receipt, required for multi-file writes",
+          items: {
+            type: "object",
+            properties: {
+              path: { type: "string", description: "Relative file path" },
+              content: { type: "string", description: "File content" },
+            },
+            required: ["path", "content"],
+          },
+        },
         path: { type: "string", description: "Project path" },
         framework: { type: "string", description: "Target framework" },
       },
       required: ["prompt"],
     },
     handler: async (arguments_) => {
-      const { prompt, code, path, framework } = arguments_;
+      const { prompt, code, files, path, framework } = arguments_;
+      // A file set yields a path-bound receipt; a bare `code` string cannot name
+      // a destination, so it stays limited to the legacy single-file write.
+      const fileSet = Array.isArray(files) && files.length > 0 ? files : null;
       const lines = [];
 
       // ── Token-saving: nudge the agent toward the code graph when present ──
@@ -167,36 +304,59 @@ export async function registerGatewayTool() {
       // ── Step 3: Run guardrails if code provided ──
       let checkResult = null;
       let receipt = null;
-      if (code) {
+      if (fileSet || code) {
         const skillName = primarySkill || "rule-ui-design-system";
         const { checkCode } = await import("../core/guardrails.js");
-        const result = checkCode(skillName, code, {
+        const checkContext = {
           framework: framework || "vanilla",
-          fileName: "code",
           isComponent: false,
           // Don't restrict dependencies for backend code
-        });
+        };
+
+        // Every file is checked on its own so a failure names the file it came
+        // from, and so the receipt covers exactly what was checked.
+        const units = fileSet
+          ? fileSet.map((file) => ({ label: file.path, code: file.content }))
+          : [{ label: "code", code }];
+        const checks = units.map((unit) => ({
+          label: unit.label,
+          result: checkCode(skillName, unit.code, { ...checkContext, fileName: unit.label }),
+        }));
+
+        const allPass = checks.every((entry) => entry.result.allPass);
+        const total = checks.reduce((sum, entry) => sum + entry.result.total, 0);
+        const failCount = checks.reduce((sum, entry) => sum + entry.result.failCount, 0);
+        const passCount = checks.reduce((sum, entry) => sum + entry.result.passCount, 0);
+        const failed = checks.flatMap((entry) =>
+          entry.result.failed.map((f) => ({
+            id: f.id,
+            label: f.label,
+            suggestion: f.suggestion,
+            ...(fileSet && { file: entry.label }),
+          })),
+        );
 
         lines.push("## Guardrail Check", "");
-        if (result.allPass) {
-          lines.push(`✅ All ${result.total} guardrails pass.`);
+        if (allPass) {
+          lines.push(`✅ All ${total} guardrails pass${fileSet ? ` across ${fileSet.length} file(s)` : ""}.`);
           // Issue receipt only on full pass
-          receipt = issueReceipt(code, skillName, true);
-          lines.push(`**Receipt:** \`${receipt}\` (valid 5 min, pass to pix_apply)`);
+          receipt = fileSet
+            ? issueFilesReceipt(fileSet, skillName, true)
+            : issueReceipt(code, skillName, true);
+          lines.push(
+            `**Receipt:** \`${receipt}\` (valid 5 min, pass to pix_apply)`,
+            fileSet
+              ? "Bound to these exact paths and contents — writing elsewhere is refused."
+              : "Content-only receipt: authorises a single-file write. Pass `files` here for a path-bound receipt.",
+          );
         } else {
-          lines.push(`❌ ${result.failCount} guardrails FAIL. Fix and re-check via pix_gateway.`);
-          for (const f of result.failed) {
-            lines.push(`- **${f.id}**: ${f.label} — ${f.suggestion}`);
+          lines.push(`❌ ${failCount} guardrails FAIL. Fix and re-check via pix_gateway.`);
+          for (const f of failed) {
+            lines.push(`- **${f.id}**${f.file ? ` (${f.file})` : ""}: ${f.label} — ${f.suggestion}`);
           }
         }
         lines.push("");
-        checkResult = {
-          allPass: result.allPass,
-          failCount: result.failCount,
-          passCount: result.passCount,
-          total: result.total,
-          failed: result.failed.map(f => ({ id: f.id, label: f.label, suggestion: f.suggestion })),
-        };
+        checkResult = { allPass, failCount, passCount, total, failed };
       }
 
       // ── Step 4: Next tools hint ──
@@ -218,6 +378,7 @@ export async function registerGatewayTool() {
         evidence_loaded: !!primarySkill,
         checkResult,
         receipt,
+        receipt_binding: receipt ? (fileSet ? "files" : "content") : undefined,
         next_tools: nextTools,
       };
 
@@ -229,7 +390,7 @@ export async function registerGatewayTool() {
         _meta: {
           pixGateway: {
             route: effectiveRoute,
-            checkPerformed: !!code,
+            checkPerformed: !!(fileSet || code),
             allPass: checkResult?.allPass ?? null,
             receiptIssued: !!receipt,
           },
