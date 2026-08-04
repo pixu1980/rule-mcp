@@ -33,10 +33,10 @@ const JSON_OUTPUT = args.includes("--json");
 const DRY_RUN = !args.includes("--no-dry-run");
 
 const DIR_IDX = args.indexOf("--dir");
-const ROOT_DIR = DIR_IDX >= 0 ? args[DIR_IDX + 1] : ".";
+const ROOT_DIR = DIR_IDX === -1 ? "." : args[DIR_IDX + 1];
 
 const SRC_IDX = args.indexOf("--src-dir");
-const SRC_DIR = SRC_IDX >= 0 ? args[SRC_IDX + 1] : "src";
+const SRC_DIR = SRC_IDX === -1 ? "src" : args[SRC_IDX + 1];
 
 // ─── Help ────────────────────────────────────────────────────────────────────
 
@@ -140,7 +140,7 @@ async function main() {
       console.log(`  ${icon} [${issue.type}]`);
       console.log(`     ${issue.path}`);
       console.log(`     ${issue.message}`);
-      if (issue.fixAction) console.log(`     → ${issue.fixAction}`);
+      if (issue.fixAction) {console.log(`     → ${issue.fixAction}`);}
       console.log("");
     }
 
@@ -152,7 +152,7 @@ async function main() {
   }
 }
 
-main().catch((err) => {
-  console.error(`FATAL: ${err.message}`);
+main().catch((error) => {
+  console.error(`FATAL: ${error.message}`);
   process.exit(1);
 });
