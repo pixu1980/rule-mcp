@@ -12,8 +12,14 @@
  * the user's actual call proceeds on the current version.
  *
  * Safety:
+ *   - the upstream remote must be an ALLOWED remote (see resolveAllowedRemotes):
+ *     fetching and merging is code execution, so where the code comes from is
+ *     verified before anything is merged
  *   - fast-forward only (`git merge --ff-only`) — never discards local work
  *   - skipped when the working tree is dirty, HEAD is detached, or no upstream
+ *   - RULE_MCP_UPDATE_REMOTE overrides the allowed remote(s) (comma-separated)
+ *   - RULE_MCP_UPDATE_REQUIRE_SIGNATURE=1 additionally requires a valid
+ *     signature on the upstream commit
  *   - RULE_MCP_NO_AUTOUPDATE=1 disables the check
  *   - RULE_MCP_NO_AUTORESTART=1 keeps the process alive on code changes
  *
@@ -22,6 +28,7 @@
  */
 
 import { execFile } from "node:child_process";
+import { readFileSync } from "node:fs";
 import { promisify } from "node:util";
 import { getRepoRoot, detectInstallType } from "../cli/paths.js";
 
@@ -78,6 +85,71 @@ async function git(arguments_, root, timeout = 8000) {
   }
 }
 
+/**
+ * Reduce a git remote to a comparable identity: host + path, without scheme,
+ * credentials, port, `.git` suffix, or trailing slash.
+ *
+ * git accepts several spellings of the same repository — this project's own
+ * remote is scp-style SSH while server.json declares the HTTPS form — so a
+ * string compare would reject the legitimate case and teach everyone to disable
+ * the check. Returns null for anything unusable, which matches nothing.
+ *
+ * @param {string|null|undefined} url
+ * @returns {string|null}
+ */
+export function normalizeRemoteUrl(url) {
+  if (typeof url !== "string") {return null;}
+  let value = url.trim();
+  if (value === "") {return null;}
+
+  // Local paths (used by tests and by clone-of-a-clone installs) have no host.
+  if (value.startsWith("/") || value.startsWith(".") || value.startsWith("file://")) {
+    return value.replace(/^file:\/\//, "").replace(/\/+$/, "") || null;
+  }
+
+  // scp-style: git@host:owner/repo.git → host/owner/repo
+  const scp = value.match(/^(?:[^@/]+@)?([^/:]+):(?!\/)(.+)$/);
+  value = scp ? `${scp[1]}/${scp[2]}` : value.replace(/^[a-z][a-z0-9+.-]*:\/\//i, "").replace(/^[^@/]+@/, "");
+
+  // Strip a port on the host segment, then the .git suffix and trailing slashes.
+  const [host, ...rest] = value.split("/");
+  const path = rest.join("/").replace(/\.git$/i, "").replace(/\/+$/, "");
+  const identity = `${host.replace(/:\d+$/, "").toLowerCase()}/${path}`;
+
+  return identity === "/" ? null : identity;
+}
+
+/** Repository declared by the shipped server.json, or null when unreadable. */
+function declaredRepository() {
+  try {
+    const manifest = JSON.parse(readFileSync(new URL("../../server.json", import.meta.url), "utf8"));
+    return manifest?.repository?.url ?? null;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * The remotes this install may take code from.
+ *
+ * Precedence: an explicit RULE_MCP_UPDATE_REMOTE (comma-separated) REPLACES
+ * the default — a fork or a test sandbox names its own upstream — otherwise the
+ * repository declared in the shipped server.json is the only trusted source.
+ * There is deliberately no trust-on-first-use fallback: pinning whatever the
+ * remote happens to say would trust whoever edited .git/config first.
+ *
+ * @param {Record<string, string|undefined>} [environment]
+ * @returns {string[]} normalised remote identities (possibly empty)
+ */
+export function resolveAllowedRemotes(environment = process.env) {
+  const override = environment.RULE_MCP_UPDATE_REMOTE;
+  const sources = override
+    ? override.split(",")
+    : [declaredRepository()];
+
+  return sources.map((source) => normalizeRemoteUrl(source)).filter(Boolean);
+}
+
 /** Manual update command hint for install types we cannot auto-update. */
 function manualHint(type) {
   if (type === "npm") {return "Update with: pnpm add -g rule-mcp@latest (then restart the server).";}
@@ -113,6 +185,20 @@ export async function runSelfUpdate(opts = {}) {
   const upstream = await git(["rev-parse", "--abbrev-ref", "--symbolic-full-name", "@{u}"], root);
   if (!upstream) {return { checked: true, updated: false, skipped: true, reason: "no-upstream" };}
 
+  // ── Where the code comes from, verified BEFORE any fetch or merge ──
+  // A fetch + ff-merge + restart is remote code execution. One line rewritten in
+  // .git/config would otherwise be enough to own the server at the next tool call.
+  const remoteName = upstream.includes("/") ? upstream.slice(0, upstream.indexOf("/")) : "origin";
+  const remoteUrl = await git(["remote", "get-url", remoteName], root);
+  const allowed = resolveAllowedRemotes();
+  const identity = normalizeRemoteUrl(remoteUrl);
+  if (allowed.length === 0) {
+    return { checked: true, updated: false, skipped: true, reason: "no-allowed-remote", remote: remoteUrl ?? null };
+  }
+  if (!identity || !allowed.includes(identity)) {
+    return { checked: true, updated: false, skipped: true, reason: "remote-not-allowed", remote: remoteUrl ?? null };
+  }
+
   // Only TRACKED modifications block a fast-forward; untracked artifacts
   // (.tokensave/, build output, caches) are irrelevant to ff safety.
   const dirty = await git(["status", "--porcelain", "--untracked-files=no"], root);
@@ -128,11 +214,33 @@ export async function runSelfUpdate(opts = {}) {
   if (!before || !remote) {return { checked: true, updated: false, skipped: true, reason: "git-error" };}
   if (before === remote) {return { checked: true, updated: false };}
 
+  // Optional second gate: the upstream commit must carry a valid signature.
+  // Off by default — most repositories do not sign, and failing closed would
+  // silently stop every update instead of protecting anything.
+  if (process.env.RULE_MCP_UPDATE_REQUIRE_SIGNATURE === "1") {
+    const verified = await git(["verify-commit", "--raw", remote], root);
+    if (verified === null) {
+      return { checked: true, updated: false, skipped: true, reason: "unsigned-upstream", to: remote.slice(0, 7) };
+    }
+  }
+
   // Fast-forward only — never clobber local commits.
   const merged = await git(["merge", "--ff-only", "@{u}"], root);
   if (merged === null) {return { checked: true, updated: false, skipped: true, reason: "not-fast-forward" };}
 
   const after = await git(["rev-parse", "HEAD"], root);
+
+  // `git merge --ff-only <ancestor>` exits 0 with "Already up to date" without
+  // moving HEAD, which happens on every check while the local branch is AHEAD of
+  // its upstream — the normal state during feature work. Treating that as an
+  // update produced a banner claiming the server had just updated itself
+  // (`updated 1cb8547→1cb8547 (0 files)`) on every tool call.
+  if (!after || after === before) {return { checked: true, updated: false };}
+
+  // Auditable trail, written only when HEAD actually moved: what was pulled,
+  // and from where.
+  process.stderr.write(`[rule-mcp] self-update ${before.slice(0, 7)}→${after.slice(0, 7)} from ${remoteUrl}\n`);
+
   const diff = (await git(["diff", "--name-only", before, after], root)) ?? "";
   const changed = diff.split("\n").filter(Boolean);
   const changedSkills = changed.some((p) => p.startsWith("skills/"));
@@ -175,10 +283,26 @@ export function buildBanner(r) {
           ? "code"
           : r.changedSkills
             ? "skills"
-            : "files";
-    let message = `🔄 Updating MCP server — rule-mcp updated ${r.from}→${r.to} (${r.count} ${what} file(s)).`;
+            : "";
+    const scope = what ? `${what} file(s)` : "file(s)";
+    let message = `🔄 Updating MCP server — rule-mcp updated ${r.from}→${r.to} (${r.count} ${scope}).`;
     if (r.changedSkills) {message += " Skills hot-reloaded.";}
     return message;
+  }
+  // A refused remote is never silent: it means this install's upstream is not
+  // the one it ships with, which is either a fork that needs configuring or
+  // someone repointing the remote at code of their own.
+  if (r.reason === "remote-not-allowed") {
+    return `⚠️ rule-mcp self-update REFUSED — the git remote (${r.remote ?? "unknown"}) is not an allowed update source. ` +
+      "Set RULE_MCP_UPDATE_REMOTE to the upstream you trust, or update manually. No code was fetched.";
+  }
+  if (r.reason === "no-allowed-remote") {
+    return "⚠️ rule-mcp self-update REFUSED — no allowed update remote is configured. " +
+      "Set RULE_MCP_UPDATE_REMOTE to the upstream you trust. No code was fetched.";
+  }
+  if (r.reason === "unsigned-upstream") {
+    return `⚠️ rule-mcp self-update REFUSED — upstream commit ${r.to ?? ""} has no valid signature and ` +
+      "RULE_MCP_UPDATE_REQUIRE_SIGNATURE=1. No code was merged.";
   }
   // Non-git installs get a one-line hint so the user knows how to update.
   if (r.skipped && r.note) {return `ℹ️ rule-mcp is up to date on disk. ${r.note}`;}
