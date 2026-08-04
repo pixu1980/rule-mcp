@@ -10,21 +10,137 @@
  * Output: { written: [...], receiptValid: boolean }
  */
 
-import { writeFileSync, mkdirSync, existsSync } from "node:fs";
-import { dirname, join, resolve, relative } from "node:path";
-import { validateReceipt } from "./gateway.js";
+import { writeFileSync, mkdirSync, existsSync, realpathSync } from "node:fs";
+import { homedir, tmpdir } from "node:os";
+import { dirname, resolve, relative, parse, sep, isAbsolute } from "node:path";
+import { validateApply } from "./gateway.js";
 import { postProcessFiles } from "../core/post-process.js";
 
+export { canonicalFilesDigest } from "./gateway.js";
+
 /**
- * Assert that a path stays inside the project root.
- * Throws if path traversal is detected.
+ * Directories that are never a project. The old guard accepted any root the
+ * caller named, so `path: "/"` made every destination "inside the project" and
+ * the traversal check could not fail. Refusing implausible roots is what puts
+ * a floor under the containment check.
  */
-function assertInsideProject(rootDir, targetPath) {
+const SYSTEM_ROOTS = [
+  "/etc", "/usr", "/bin", "/sbin", "/var", "/opt", "/boot", "/dev", "/proc", "/sys",
+  "/System", "/Library", "/Applications", "/private/etc", "/private/var",
+  String.raw`C:\Windows`, String.raw`C:\Program Files`,
+];
+
+/**
+ * Path segments that are never a legitimate write destination: writing there is
+ * code execution (git hooks, agent plugins) or credential theft, whatever the
+ * content passed. Guardrails validate WHAT is written; this validates WHERE.
+ */
+const PROTECTED_SEGMENTS = new Set([".git", ".ssh", ".gnupg", ".agents", ".claude", "node_modules"]);
+
+/** File names that are never part of a project tree. */
+const PROTECTED_NAMES = new Set([
+  ".zshrc", ".zshenv", ".zprofile", ".bashrc", ".bash_profile", ".profile", ".cshrc", ".kshrc",
+  "authorized_keys", "known_hosts", "id_rsa", "id_ed25519",
+]);
+
+/** Resolve a path to its real location when it exists, else leave it as-is. */
+const realOrSelf = (path) => {
+  try {
+    return realpathSync(path);
+  } catch {
+    return path;
+  }
+};
+
+/** Is `candidate` the same path as `base`, or inside it? */
+const isWithin = (candidate, base) => candidate === base || candidate.startsWith(base + sep);
+
+/**
+ * Validate and resolve the project root a write is anchored to.
+ * Throws when the root is not a plausible project directory.
+ *
+ * @param {string} rootPath — caller-supplied project root
+ * @returns {string} the resolved root
+ */
+export function resolveProjectRoot(rootPath) {
+  const root = resolve(rootPath || ".");
+
+  if (root === parse(root).root) {
+    throw new Error(`Refused: "${root}" is the filesystem root, not a project root.`);
+  }
+  if (root === realOrSelf(homedir()) || root === resolve(homedir())) {
+    throw new Error(`Refused: "${root}" is the home directory, not a project root.`);
+  }
+
+  // Temp directories are legitimate scaffolding targets even though they sit
+  // under /var on macOS, so they are checked before the system-root denylist.
+  const temporaryRoots = [resolve(tmpdir()), realOrSelf(tmpdir())];
+  if (temporaryRoots.some((temporary) => isWithin(root, temporary))) {return root;}
+
+  const real = realOrSelf(root);
+  for (const system of SYSTEM_ROOTS) {
+    if (isWithin(root, system) || isWithin(real, system)) {
+      throw new Error(`Refused: "${root}" is a system directory, not a project root.`);
+    }
+  }
+
+  return root;
+}
+
+/**
+ * Resolve a single write destination inside `rootDir`.
+ *
+ * Rejects, in order: unusable paths, absolute paths, `..` traversal, symlinked
+ * escapes (checked against the real filesystem, not by string math), and
+ * destinations that grant code execution or hold credentials.
+ *
+ * @param {string} rootDir — already validated by resolveProjectRoot
+ * @param {string} targetPath — relative path supplied by the caller
+ * @returns {string} the absolute path to write
+ */
+export function resolveWriteTarget(rootDir, targetPath) {
+  if (typeof targetPath !== "string" || targetPath.trim() === "") {
+    throw new Error("Refused: empty file path.");
+  }
+  if (targetPath.includes("\0")) {
+    throw new Error(`Refused: invalid NUL byte in path "${targetPath}".`);
+  }
+  if (isAbsolute(targetPath) || /^[A-Za-z]:[\\/]/.test(targetPath)) {
+    throw new Error(`Refused: "${targetPath}" is an absolute path — file paths must be relative to the project root.`);
+  }
+
   const resolved = resolve(rootDir, targetPath);
-  const rel = relative(rootDir, resolved);
-  if (rel.startsWith("..") || rel === "") {
+  const relativePath = relative(rootDir, resolved);
+  if (relativePath === "" || relativePath.startsWith("..")) {
     throw new Error(`Path traversal blocked: "${targetPath}" escapes project root "${rootDir}".`);
   }
+
+  // Sensitive destinations are judged on the normalised path, so "src/../.git"
+  // is refused for the same reason as ".git".
+  const segments = relativePath.split(sep).filter(Boolean);
+  for (const segment of segments) {
+    if (PROTECTED_SEGMENTS.has(segment)) {
+      throw new Error(`Refused: "${targetPath}" writes into the protected directory "${segment}".`);
+    }
+  }
+  if (PROTECTED_NAMES.has(segments.at(-1))) {
+    throw new Error(`Refused: "${targetPath}" is a protected file (${segments.at(-1)}).`);
+  }
+
+  // path.resolve is string math: a symlinked directory inside the project still
+  // resolves to a path that "looks" contained. Ask the filesystem instead, via
+  // the deepest ancestor that actually exists.
+  const realRoot = realOrSelf(rootDir);
+  let ancestor = resolved;
+  while (!existsSync(ancestor)) {
+    const parent = dirname(ancestor);
+    if (parent === ancestor) {break;}
+    ancestor = parent;
+  }
+  if (!isWithin(realOrSelf(ancestor), realRoot)) {
+    throw new Error(`Refused: "${targetPath}" escapes the project root through a symlink.`);
+  }
+
   return resolved;
 }
 
@@ -74,14 +190,30 @@ export async function registerApplyTool() {
     },
     handler: async (arguments_) => {
       const { files, receipt, path: rootPath = ".", dryRun } = arguments_;
-      const rootDir = resolve(rootPath);
       const results = [];
-      let isAllValid = true;
 
-      // ── Step 1: Validate receipt against ALL file contents ──
-      // Concatenate all file contents and validate once
-      const combinedContent = files.map(f => f.content).join("\n---FILE---\n");
-      const receiptCheck = validateReceipt(receipt, combinedContent);
+      // ── Step 0: Validate the project root itself ──
+      // The root is caller-supplied, so it is the first thing to distrust: a
+      // root of "/" would make every destination "inside the project".
+      let rootDir;
+      try {
+        rootDir = resolveProjectRoot(rootPath);
+      } catch (error) {
+        return {
+          isError: true,
+          content: [{
+            type: "text",
+            text: `# pix_apply: Project root REJECTED\n\n**Root:** ${rootPath}\n**Error:** ${error.message}\n\n` +
+              `Pass the project directory you are working in — pix_apply never writes outside it.`,
+          }],
+          _meta: { pixApply: { receiptValid: false, rootError: error.message, filesWritten: 0 } },
+        };
+      }
+
+      // ── Step 1: Validate the receipt against the exact file set ──
+      // The receipt binds (path, content) tuples when pix_gateway received
+      // `files`; a legacy content-only receipt still covers a single file.
+      const receiptCheck = validateApply(receipt, files);
 
       if (!receiptCheck.valid) {
         return {
@@ -100,7 +232,7 @@ export async function registerApplyTool() {
       const resolvedPaths = [];
       for (const file of files) {
         try {
-          const resolved = assertInsideProject(rootDir, file.path);
+          const resolved = resolveWriteTarget(rootDir, file.path);
           resolvedPaths.push({ file, resolved });
         } catch (error) {
           return {
@@ -125,7 +257,6 @@ export async function registerApplyTool() {
             results.push({ path: file.path, status: "written", absPath: resolved });
           } catch (error) {
             results.push({ path: file.path, status: "error", error: error.message });
-            isAllValid = false;
           }
         }
       }
@@ -144,7 +275,8 @@ export async function registerApplyTool() {
         "",
         dryRun ? "> This is a preview. Set `dryRun: false` to write files." : "",
         "",
-        `Receipt: **valid** ✅`,
+        `Receipt: **valid** ✅ (${receiptCheck.binding === "files" ? "path-bound" : "content-only, legacy single file"})`,
+        `Root: \`${rootDir}\``,
         `Files: ${results.length}`,
         "",
         ...results.map(r => `- ${r.status === "written" ? "✅" : (r.status === "dry-run" ? "📋" : "❌")} ${r.path}${r.note ? ` (${r.note})` : ""}${r.error ? ` — ${r.error}` : ""}`),
@@ -157,6 +289,8 @@ export async function registerApplyTool() {
         _meta: {
           pixApply: {
             receiptValid: true,
+            receiptBinding: receiptCheck.binding,
+            root: rootDir,
             dryRun: !!dryRun,
             filesWritten: results.filter(r => r.status === "written").length,
             filesPreviewed: results.filter(r => r.status === "dry-run").length,
