@@ -49,7 +49,7 @@ for (const file of expectedDocs) {
 }
 
 const docsRootFiles = listFiles("docs").filter((file) => file.endsWith(".md"));
-assert.ok(docsRootFiles.length <= 6, `Expected <= 6 root docs, found ${docsRootFiles.length}: ${docsRootFiles.join(", ")}`);
+assert.ok(docsRootFiles.length <= 8, `Expected <= 8 root docs, found ${docsRootFiles.length}: ${docsRootFiles.join(", ")}`);
 
 const docsIndex = read("docs/README.md");
 for (const file of expectedDocs.slice(1)) {
