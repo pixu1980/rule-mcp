@@ -36,6 +36,7 @@ import {
   completionsCommand,
   fixCommand,
   updateCommand,
+  agentCommandsCommand,
 } from "./cli/commands.js";
 
 // Install global error handlers at process level
@@ -474,6 +475,35 @@ export async function cli() {
 
       case "update": {
         await updateCommand();
+        break;
+      }
+
+      case "agent-commands": {
+        if (hasFlag("--help") || hasFlag("-h")) {
+          process.stderr.write(`Usage: rule-mcp agent-commands [options]\n\n` +
+            `Registry-driven agent slash-command management.\n\n` +
+            `  --dir <path>     Write commands to this directory\n` +
+            `  --format <f>     args (default), workflow, gemini, prompt, plain\n` +
+            `  --list           List command names\n` +
+            `  --targets        Print resolved target directories\n` +
+            `  --sync           Write to EVERY detected agent dir\n` +
+            `  --remove         Remove instead of writing\n` +
+            `  --force          Overwrite existing files\n` +
+            `  --dry-run        Preview without writing\n` +
+            `  --agent <name>   Limit to one agent\n`);
+          return;
+        }
+        agentCommandsCommand({
+          dir: getArgument("--dir"),
+          format: getArgument("--format", "args"),
+          list: hasFlag("--list"),
+          targets: hasFlag("--targets"),
+          sync: hasFlag("--sync"),
+          remove: hasFlag("--remove"),
+          force: hasFlag("--force"),
+          dryRun: hasFlag("--dry-run"),
+          agent: getArgument("--agent"),
+        });
         break;
       }
 

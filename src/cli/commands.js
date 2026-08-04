@@ -23,6 +23,8 @@ import { loadAllSkills } from "../core/skills.js";
 import { formatDoctorTerminal, runDoctor } from "./doctor.js";
 import { formatInstallResult, formatToolsList, formatUninstallResult } from "./tui.js";
 import { generateCompletions } from "./completions.js";
+import { commandNames, renderAgentCommandFiles, FORMAT_EXT } from "../core/agent-commands.js";
+import { resolveCommandTargets } from "../core/agent-command-targets.js";
 
 import {
   installDaemonService,
@@ -640,3 +642,121 @@ export function completionsCommand(opts = {}) {
 }
 
 export {skillsInstallCommand, skillsListCommand} from "./skills-install.js";
+
+/**
+ * Resolve the command-file directories for this machine — the single answer to
+ * "where do the bare `/rule-*` commands have to be written?".
+ *
+ * @param {{ agent?: string }} opts
+ */
+function resolvedTargets(opts) {
+  return resolveCommandTargets(opts.agent ? { agent: opts.agent } : { detectedOnly: true });
+}
+
+/**
+ * Print the resolved command targets — `agent<TAB>format<TAB>scope<TAB>dir`, or
+ * JSON with `--json`. Installer/uninstaller scripts consume this so they can
+ * never drift from the registry.
+ *
+ * @param {{ agent?: string, json?: boolean }} opts
+ */
+function printCommandTargets(opts) {
+  const targets = resolvedTargets(opts);
+  if (opts.json) {
+    print(JSON.stringify(targets, null, 2));
+    return;
+  }
+  print(targets.map((t) => [t.agent, t.format, t.scope, t.dir].join("\t")).join("\n"));
+}
+
+/**
+ * Write (or remove with `--remove`) the whole clean command set in every resolved
+ * target directory, so a single call covers every agent/IDE on this machine.
+ *
+ * @param {{ agent?: string, remove?: boolean, dryRun?: boolean, json?: boolean }} opts
+ */
+function syncCommandTargets(opts) {
+  const targets = resolvedTargets(opts);
+  if (targets.length === 0) {
+    print("agent-commands: no agent command directories found on this machine");
+    return;
+  }
+
+  let files = 0;
+  for (const { label, format, dir } of targets) {
+    const rendered = renderAgentCommandFiles(format);
+    if (!opts.dryRun && !opts.remove) {mkdirSync(dir, { recursive: true });}
+    for (const { filename, content } of rendered) {
+      const file = resolve(dir, filename);
+      if (opts.remove) {
+        if (existsSync(file) && !opts.dryRun) {rmSync(file, { force: true });}
+      } else if (!opts.dryRun) {
+        writeFileSync(file, content);
+      }
+      files += 1;
+    }
+    const verb = opts.remove ? "removed" : "wrote";
+    print(`  ${opts.dryRun ? "[dry-run] " : ""}${label}: ${verb} ${rendered.length} ${format} command file(s) → ${dir}`);
+  }
+  print(`agent-commands: ${opts.remove ? "removed" : "synced"} ${files} file(s) across ${targets.length} directory(ies)`);
+}
+
+/**
+ * Generate (or remove) the clean `/rule-*` agent slash-command files for one
+ * agent directory. Registry-driven (see {@link module:core/agent-commands}) so
+ * the same ordered set is written for every agent.
+ *
+ * @param {{ dir?: string, format?: string, remove?: boolean, list?: boolean, force?: boolean, dryRun?: boolean }} opts
+ */
+export function agentCommandsCommand(opts = {}) {
+  if (opts.list) {
+    print(commandNames().join("\n"));
+    return;
+  }
+  if (opts.targets) {
+    printCommandTargets(opts);
+    return;
+  }
+  if (opts.sync) {
+    syncCommandTargets(opts);
+    return;
+  }
+
+  const format = opts.format || "args";
+  if (!FORMAT_EXT[format]) {
+    throw new Error(`Unknown --format "${format}". Use one of: ${Object.keys(FORMAT_EXT).join(", ")}.`);
+  }
+  if (!opts.dir) {
+    throw new Error("agent-commands requires --dir <dir> (or --list).");
+  }
+  const dir = resolve(opts.dir);
+  const files = renderAgentCommandFiles(format);
+
+  let written = 0;
+  let skipped = 0;
+  let removed = 0;
+
+  if (opts.remove) {
+    for (const { filename } of files) {
+      const file = resolve(dir, filename);
+      if (existsSync(file)) {
+        if (!opts.dryRun) {rmSync(file, { force: true });}
+        removed += 1;
+      }
+    }
+    print(`agent-commands: removed ${removed} file(s) from ${dir}`);
+    return;
+  }
+
+  if (!opts.dryRun) {mkdirSync(dir, { recursive: true });}
+  for (const { filename, content } of files) {
+    const file = resolve(dir, filename);
+    if (existsSync(file) && !opts.force) {
+      skipped += 1;
+      continue;
+    }
+    if (!opts.dryRun) {writeFileSync(file, content);}
+    written += 1;
+  }
+  print(`agent-commands: wrote ${written}, skipped ${skipped} (${format}) → ${dir}`);
+}
