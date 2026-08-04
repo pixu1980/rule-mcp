@@ -29,6 +29,7 @@ const FRAMEWORK_ALIASES = {
   vanilla: ["vanilla", "vanilla-js", "js", "javascript"],
 };
 
+// eslint-disable-next-line no-unused-vars
 function resolveFramework(framework) {
   if (!framework) {return "vanilla";}
   const f = framework.toLowerCase();

@@ -8,6 +8,7 @@
  *   3. Responses come back via the SSE stream
  */
 
+// eslint-disable-next-line no-unused-vars
 import { strict as assert } from "node:assert";
 import { get as httpGet, request as httpRequest } from "node:http";
 import { loadAllSkills } from "../src/core/skills.js";
@@ -43,6 +44,7 @@ check("T5 CORS deny-by-default", healthRes.headers.get("access-control-allow-ori
 
 // ── T3 + T4: Open SSE connection with auth, get sessionId, POST MCP message ──
 let sessionId = "";
+// eslint-disable-next-line no-unused-vars
 let endpointPath = "";
 
 // Open SSE connection and collect the endpoint event
