@@ -28,15 +28,15 @@ const EXCLUDED_DIRS = new Set(["node_modules", ".git", "test-results", "__pycach
 const EXCLUDED_FILES = new Set([".DS_Store", "package-lock.json", "pnpm-lock.yaml"]);
 
 function shouldExclude(name, isDir) {
-  if (isDir && EXCLUDED_DIRS.has(name)) return true;
-  if (!isDir && EXCLUDED_FILES.has(name)) return true;
+  if (isDir && EXCLUDED_DIRS.has(name)) {return true;}
+  if (!isDir && EXCLUDED_FILES.has(name)) {return true;}
   return name === ".DS_Store";
 }
 
 function copyRecursive(src, dest) {
   mkdirSync(dest, { recursive: true });
   for (const entry of readdirSync(src, { withFileTypes: true })) {
-    if (shouldExclude(entry.name, entry.isDirectory())) continue;
+    if (shouldExclude(entry.name, entry.isDirectory())) {continue;}
     const srcPath = join(src, entry.name);
     const destPath = join(dest, entry.name);
     if (entry.isDirectory()) {
@@ -51,10 +51,12 @@ function countSkillFiles(dir) {
   let count = 0;
   try {
     for (const entry of readdirSync(dir, { withFileTypes: true })) {
-      if (entry.isDirectory() && (entry.name === "rule" || entry.name.startsWith("rule-"))) {
-        const skillMd = join(dir, entry.name, "SKILL.md");
-        if (existsSync(skillMd)) count++;
+      if (!(entry.isDirectory() && (entry.name === "rule" || entry.name.startsWith("rule-")))) {
+      	continue;
       }
+
+      const skillMd = join(dir, entry.name, "SKILL.md");
+      if (existsSync(skillMd)) {count++;}
     }
   } catch { /* ignore */ }
   return count;
