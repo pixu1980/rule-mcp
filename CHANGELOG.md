@@ -7,7 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Security
+
+- **Write containment:** `pix_apply` now validates the project root itself, refuses the filesystem root, home directory, system directories, and absolute/`..`/symlink-escape paths. Sensitive destinations (`.git`, `.ssh`, `.gnupg`, shell rc files, key material) are blocked by destination, not just by content. Receipts are path-bound with length-prefixed canonical digests — a receipt for one path never authorises another.
+- **Interview server CSRF:** Both `rule-architect` interview servers now enforce `Sec-Fetch-Site` + `Origin` + `Host` on every `/api/*` request. A cross-origin POST to `/api/generate` is refused even though the browser allows it as a CORS simple request.
+- **Self-update hardening:** The upstream remote is verified BEFORE any fetch or merge. Only the repository declared in `server.json` (or an explicit `RULE_MCP_UPDATE_REMOTE`) is trusted. No trust-on-first-use. `RULE_MCP_UPDATE_REQUIRE_SIGNATURE=1` adds `git verify-commit`. Phantom updates (branch ahead of upstream, `--ff-only` exits 0 without moving HEAD) are no longer reported.
+- **Container hardening:** The Docker image drops to `USER node` before `CMD`, installs with `--ignore-scripts`, and sets `RULE_MCP_DOCKER=1`. The compose file publishes only on `127.0.0.1:37999:37999`.
+
 ### Changed
+
+- **Tool surface:** Only `./skills` is scanned for tool registration. Nothing in `~/.agents/skills` can add, rename, or shadow a tool. The `plugin.js` import from the home directory is removed (audit finding 15). Tools reduced from ~176 to 88.
+- **Architect lifecycle:** Interview servers are tracked in a registry keyed by target directory, reused instead of duplicated, output-capped at 64 KB, killed after 30 minutes and on exit/SIGINT/SIGTERM. `pix_architect` added to the cache denylist so a replayed result never hands out a dead port.
+- **Agent commands registry:** Clean `/rule-*` commands are now driven by a single registry (`agent-command-targets.js` + `agent-commands.js`) covering 13 agent/IDE combinations with 5 render formats. The CLI gains `agent-commands` with `--list`, `--targets`, `--sync`, and per-directory generation.
 
 - Tooling: repository lint migrated to **ESLint 10 flat config** (`eslint.config.mjs` + `@eslint/js` + `eslint-plugin-unicorn`), replacing the legacy `.eslintrc.json`. Applied the unicorn autofix pass (modern idioms: `node:` protocol, `replaceAll`, `flatMap`, `new` for builtins, ternary/curly/assert consistency) and fixed real issues it surfaced (`no-undef` bash-completion template interpolation, `no-empty` catches, `no-useless-escape`, dead assignments). Opinionated unicorn rules (`no-null`, `no-array-reduce`, `name-replacements`, `import-style`, …) are scoped/tuned per ADR 028; CI lint step no longer passes `--ext` (removed in ESLint 10). `pnpm lint`: 0 errors / 48 warnings. Scaffold guardrail now verifies `eslint.config.mjs`.
 
