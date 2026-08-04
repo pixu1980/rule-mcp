@@ -9,8 +9,11 @@ services:
     build: .
     image: ghcr.io/rule/rule-mcp:latest
     container_name: rule-mcp
+    # Loopback-only publication. An unqualified "37999:37999" binds the host's
+    # 0.0.0.0 and puts the MCP server on the LAN, where the bearer token is the
+    # only barrier and failed auth is neither rate-limited nor logged.
     ports:
-      - "37999:37999"
+      - "127.0.0.1:37999:37999"
     command: ["node", "src/index.js", "serve", "--transport", "sse", "--port", "37999"]
     environment:
       RULE_MCP_SSE_TOKEN: "${RULE_MCP_SSE_TOKEN:?Set by the rule-mcp installer}"
