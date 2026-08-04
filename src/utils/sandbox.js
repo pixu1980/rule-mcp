@@ -80,6 +80,7 @@ export function wrapRequestHandler(handler, options = {}) {
 
   return async (request, res) => {
     // Track if the handler was aborted (timeout)
+// eslint-disable-next-line no-unused-vars
     let isAborted = false;
 
     // On timeout or error, destroy the request socket to unblock the handler

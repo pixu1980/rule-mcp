@@ -30,6 +30,7 @@ function findBlocks(lines) {
 
   for (let index = 0; index < lines.length; index++) {
     const line = lines[index];
+// eslint-disable-next-line no-unused-vars
     const trimmed = line.trim();
 
     // Opening brace (not including object literals like { key: val })
