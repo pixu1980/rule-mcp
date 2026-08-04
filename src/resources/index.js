@@ -59,12 +59,13 @@ export function listResources() {
  * @returns {Promise<{ contents: Array<{ uri: string, mimeType: string, text: string }> }>}
  */
 export async function readResource(uri) {
-  const { homeSkills, embeddedSkills } = getSkillsDirectories();
+  // Bundled skills only — the same single source of truth the tool surface uses.
+  const { embeddedSkills } = getSkillsDirectories();
 
   // ── Skill index ────────────────────────────────────────────────
   if (uri === "rule://skills") {
     const directories = [];
-    for (const base of [embeddedSkills, homeSkills]) {
+    for (const base of [embeddedSkills]) {
       try {
         for (const entry of readdirSync(base, { withFileTypes: true })) {
           if (!(entry.isDirectory() && entry.name.startsWith("rule"))) {

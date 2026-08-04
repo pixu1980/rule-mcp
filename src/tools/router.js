@@ -226,55 +226,61 @@ export async function callTool(name, args) {
 
 /**
  * Read the SKILL.md file for a given skill name.
- * Searches homeSkills (~/.agents/skills) first, then embeddedSkills (bundled).
+ *
+ * The bundled `skills/` directory is the ONLY source. `~/.agents/skills` used to
+ * take precedence, which let a directory in the user's home silently replace the
+ * content this server ships under the same tool name.
  *
  * @param {string} skillName — e.g. "rule-frontend-react", "rule-styleguide"
  * @returns {string|null} — The full SKILL.md content, or null if not found
  */
 export function readSkill(skillName) {
-  const { homeSkills, embeddedSkills } = getSkillsDirectories();
-  for (const base of [homeSkills, embeddedSkills]) {
-    try {
-      return readFileSync(join(base, skillName, "SKILL.md"), "utf8");
-    } catch { /* next */ }
+  const { embeddedSkills } = getSkillsDirectories();
+  try {
+    return readFileSync(join(embeddedSkills, skillName, "SKILL.md"), "utf8");
+  } catch {
+    return null;
   }
-  return null;
 }
 
 /**
  * Get a sorted list of all available skill names.
- * Merges embedded and home directories, deduplicates.
  *
- * Plugin detection: any directory with a SKILL.md file is auto-detected,
- * regardless of naming convention. Official rule skills start with "rule-".
+ * The tool surface of this server is defined by the bundled `skills/` directory
+ * and by nothing else. Two rules, both deliberate:
+ *
+ *   - only `skills/` is scanned. Merging `~/.agents/skills` meant any directory
+ *     there became a callable tool under the pix_ prefix: 79 stale `rule-*`
+ *     directories from the previous brand resurfaced as `pix_pix_*`, and
+ *     generic skills like `test-driven-development` were renamed into the
+ *     namespace. It also made plugin.js in the user's home an in-process import.
+ *   - only `rule-*` names are accepted, so a foreign directory dropped into
+ *     `skills/` cannot mint a tool that claims to be ours either.
+ *
+ * The bare `rule` directory is excluded: it backs the dispatcher tool, which
+ * is registered by code, not as a per-skill tool.
  *
  * @returns {string[]}
  */
 export function getSkillNames() {
   const names = new Set();
-  const { homeSkills, embeddedSkills } = getSkillsDirectories();
-  for (const base of [embeddedSkills, homeSkills]) {
-    try {
-      for (const entry of readdirSync(base, { withFileTypes: true })) {
-        if (!entry.isDirectory() || entry.name === "rule") {continue;}
-        // Official rule skills: rule-frontend-react, rule-backend-express, etc.
-        // Also include bare rule dispatcher skill.
-        if (entry.name.startsWith("rule-") || entry.name === "rule") { names.add(entry.name); continue; }
-        // Plugin detection: any directory with a SKILL.md is a plugin
-        try {
-          if (existsSync(join(base, entry.name, "SKILL.md"))) {
-            names.add(entry.name);
-          }
-        } catch { /* skip */ }
-      }
-    } catch { /* no dir */ }
-  }
+  const { embeddedSkills } = getSkillsDirectories();
+  try {
+    for (const entry of readdirSync(embeddedSkills, { withFileTypes: true })) {
+      if (!entry.isDirectory() || !entry.name.startsWith("rule-")) {continue;}
+      if (!existsSync(join(embeddedSkills, entry.name, "SKILL.md"))) {continue;}
+      names.add(entry.name);
+    }
+  } catch { /* no dir */ }
   return [...names].sort();
 }
 
 /**
- * Check if a skill is a plugin (non-official, user-defined).
- * Plugins live in ~/.agents/skills/ and do not start with "rule-".
+ * Check if a skill name is foreign to this server.
+ *
+ * getSkillNames() only ever yields `rule-*` names, so this is false for every
+ * registered skill. It is kept as an explicit guard: resources and skill tools
+ * consult it before treating a name as ours.
  *
  * @param {string} skillName
  * @returns {boolean}
@@ -286,30 +292,16 @@ export function isPluginSkill(skillName) {
 }
 
 /**
- * Check if a plugin skill has a custom plugin.js for extended functionality.
+ * Whether a skill ships a plugin.js.
  *
- * @param {string} pluginName — The plugin directory name
+ * Always false: plugin.js was only ever imported from `~/.agents/skills`, which
+ * this server no longer reads. Importing it meant executing code from the user's
+ * home directory in-process at startup, with no isolation and failures swallowed
+ * (2026-08-04 audit, finding 15). Bundled skills carry no plugin.js.
+ *
+ * @param {string} _pluginName — The plugin directory name
  * @returns {boolean}
  */
-export function hasPluginJs(pluginName) {
-  const { homeSkills } = getSkillsDirectories();
-  try {
-    return existsSync(join(homeSkills, pluginName, "plugin.js"));
-  } catch { return false; }
-}
-
-/**
- * Dynamic import a plugin's plugin.js file.
- * Returns the plugin's exported guardrails and generators, or null.
- *
- * @param {string} pluginName — The plugin directory name
- * @returns {Promise<{ guardrails?: Array, generators?: object } | null>}
- */
-export async function loadPluginJs(pluginName) {
-  const { homeSkills } = getSkillsDirectories();
-  try {
-    const pluginPath = new URL("file://" + join(homeSkills, pluginName, "plugin.js"));
-    const module_ = await import(pluginPath.href);
-    return { guardrails: module_.guardrails || null, generators: module_.generators || null };
-  } catch { return null; }
+export function hasPluginJs(_pluginName) {
+  return false;
 }

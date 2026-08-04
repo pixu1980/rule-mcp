@@ -11,7 +11,7 @@
  * Called once at startup, or on demand via `skills reload` CLI command.
  */
 import { z } from "zod/v4";
-import { readSkill, getSkillNames, registerTool, isPluginSkill, hasPluginJs, loadPluginJs, clearTools, retainTools } from "../tools/router.js";
+import { readSkill, getSkillNames, registerTool, clearTools, retainTools } from "../tools/router.js";
 import { registerSkillTool, registerSearchTool, registerCheckTool, registerScaffoldTool } from "../tools/skill.js";
 import { registerAiTool } from "../tools/ai.js";
 import { registerProcessAdrTool } from "../tools/adr.js";
@@ -126,26 +126,12 @@ export async function loadAllSkills(force = false) {
   await registerApplyTool();
 
   const skillNames = getSkillNames();
-  const pluginLoaders = [];
   for (const name of skillNames) {
     // In minimal mode, skip skill-specific tools — evidence is loaded via pix_gateway
       if (name !== "rule" && name !== "rule-process-adr" && name !== "rule-process-handoff" && !IS_MINIMAL_TOOLS) {
         registerSkillTool(name);
       }
-    // Load plugin.js for custom plugins (async, non-blocking)
-    if (isPluginSkill(name) && hasPluginJs(name)) {
-        pluginLoaders.push(
-          loadPluginJs(name).then(plugin => {
-            return import("./guardrails.js").then(module_ => {
-              if (module_.mergePluginGuardrails && plugin?.guardrails) {
-                module_.mergePluginGuardrails(name, plugin.guardrails);
-              }
-            });
-          }).catch(() => {})
-        );
-      }
   }
-  await Promise.all(pluginLoaders);
   registerSearchTool();
   registerCheckTool();
   registerScaffoldTool();

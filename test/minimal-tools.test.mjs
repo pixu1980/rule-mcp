@@ -10,10 +10,17 @@
  */
 
 import { spawnSync } from "node:child_process";
+import { readdirSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { strict as assert } from "node:assert";
 
 const bin = fileURLToPath(new URL("../bin/rule-mcp.js", import.meta.url));
+
+const ACTION_TOOL_COUNT = 10;
+// Derived from disk, not a threshold: the old `> 90` only held on machines whose
+// ~/.agents/skills inflated the surface with stale directories from another brand.
+const embeddedSkillCount = readdirSync(new URL("../skills", import.meta.url).pathname, { withFileTypes: true })
+  .filter((e) => e.isDirectory() && e.name.startsWith("rule-")).length;
 
 /** The guaranteed minimal tool surface. */
 const MINIMAL = [
@@ -35,9 +42,12 @@ console.log("=== Minimal Tool Surface Tests ===\n");
 
 // ── Full surface ──
 const full = toolNames({});
-assert.ok(full.length > 90, `full surface should expose >90 tools (got ${full.length})`);
-assert.ok(full.includes("rule_tool_frontend_react"), "full surface includes skill tools");
-console.log(`  ✅ full surface exposes ${full.length} tools`);
+assert.equal(
+  full.length,
+  embeddedSkillCount + ACTION_TOOL_COUNT,
+  `full surface must be ./skills + action tools (got ${full.length}, expected ${embeddedSkillCount + ACTION_TOOL_COUNT})`,
+);
+console.log(`  ✅ full surface exposes ${full.length} tools (${embeddedSkillCount} skills + ${ACTION_TOOL_COUNT} action)`);
 
 // ── Minimal via RULE_MCP_MINIMAL_TOOLS (convention-aligned name) ──
 const minimal = toolNames({ RULE_MCP_MINIMAL_TOOLS: "1" });
@@ -46,7 +56,11 @@ console.log(`  ✅ RULE_MCP_MINIMAL_TOOLS → ${minimal.length} tools`);
 
 // ── Default is OFF (opt-in): the legacy RULE_MCP_STRICT_MODE no longer applies ──
 const legacyIgnored = toolNames({ RULE_MCP_STRICT_MODE: "1" });
-assert.ok(legacyIgnored.length > 90, "removed RULE_MCP_STRICT_MODE alias must NOT trigger minimal mode");
+assert.equal(
+  legacyIgnored.length,
+  embeddedSkillCount + ACTION_TOOL_COUNT,
+  `removed RULE_MCP_STRICT_MODE alias must NOT trigger minimal mode (got ${legacyIgnored.length}, expected ${embeddedSkillCount + ACTION_TOOL_COUNT})`,
+);
 console.log(`  ✅ legacy RULE_MCP_STRICT_MODE ignored → ${legacyIgnored.length} tools (full)`);
 
 // ── The dispatcher/action tools an agent needs are all present ──
