@@ -20,6 +20,7 @@ import { generateContext, generateContextContent } from "../generator.mjs";
 import { detectProjectValues } from "../detect.mjs";
 import { containWithin } from "../static-file.mjs";
 import { collectBody } from "../http-body.mjs";
+import { denyForeignRequest } from "../http-guard.mjs";
 
 // Loopback only: the MCP tool spawns this server and opens it in the local
 // user's browser. listen(PORT) with no host bound all interfaces (LAN).
@@ -75,6 +76,17 @@ export function createServer(targetDir) {
       res.writeHead(204);
       return res.end();
     }
+
+    // Same-origin enforcement. Loopback binding and absent CORS headers stop a
+    // hostile page from READING these endpoints, not from sending a simple
+    // cross-origin POST — and /api/generate writes files, so the request itself
+    // is the attack. Origin / Sec-Fetch-Site / Host are browser-set and cannot
+    // be forged by page script.
+    if (url.pathname.startsWith("/api/")
+      && denyForeignRequest(req, res, { port: server.address()?.port })) {
+      return;
+    }
+
 
     // API: GET /api/placeholders — backward compat (flatten optionGroups to top level)
     if (req.method === "GET" && url.pathname === "/api/placeholders") {

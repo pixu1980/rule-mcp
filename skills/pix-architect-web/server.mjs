@@ -20,6 +20,7 @@ import { generateContext, generateContextContent } from "../rule-architect/gener
 import { detectProjectValues } from "../rule-architect/detect.mjs";
 import { containWithin } from "../rule-architect/static-file.mjs";
 import { collectBody } from "../rule-architect/http-body.mjs";
+import { denyForeignRequest } from "../rule-architect/http-guard.mjs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ASSETS = __dirname; // web files (index.html, interview.js, interview.css)
@@ -66,6 +67,17 @@ export function createServer(targetDir) {
       res.writeHead(204);
       return res.end();
     }
+
+    // Same-origin enforcement. Loopback binding and absent CORS headers stop a
+    // hostile page from READING these endpoints, not from sending a simple
+    // cross-origin POST — and /api/generate writes files, so the request itself
+    // is the attack. Origin / Sec-Fetch-Site / Host are browser-set and cannot
+    // be forged by page script.
+    if (url.pathname.startsWith("/api/")
+      && denyForeignRequest(req, res, { port: server.address()?.port })) {
+      return;
+    }
+
 
     // API: GET /api/wizard-spec — return wizard spec (primary source)
     if (req.method === "GET" && url.pathname === "/api/wizard-spec") {
