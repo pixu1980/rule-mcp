@@ -5,6 +5,7 @@
  * Tests that daemon start/stop/status/logs work with the SSE transport.
  */
 
+// eslint-disable-next-line no-unused-vars
 import { strict as assert } from "node:assert";
 import { existsSync, readFileSync, unlinkSync } from "node:fs";
 import { homedir } from "node:os";

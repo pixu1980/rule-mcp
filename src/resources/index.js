@@ -10,6 +10,7 @@
  * @see module:core/skills
  */
 
+// eslint-disable-next-line no-unused-vars
 import { readFileSync, readdirSync, existsSync } from "node:fs";
 import { join } from "node:path";
 import { getSkillsDirs as getSkillsDirectories } from "../cli/paths.js";

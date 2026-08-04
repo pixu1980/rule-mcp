@@ -65,7 +65,10 @@ export function section(title, icon = "✨") {
 
 /** Render a key-value list. */
 export function kv(rows) {
-  const maxKey = rows.reduce((max, [key]) => Math.max(max, visibleLength(key)), 0);
+  let maxKey = 0;
+  for (const [key] of rows) {
+    maxKey = Math.max(maxKey, visibleLength(key));
+  }
   return rows.map(([key, value]) => `${color(String(key).padEnd(maxKey), "dim")}  ${value}`).join("\n");
 }
 

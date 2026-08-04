@@ -330,6 +330,31 @@ export function listPrompts() {
 }
 
 /**
+ * Whether MCP prompts are currently suppressed.
+ *
+ * Claude Code exposes MCP prompts as `/<server>:<prompt> (MCP)` and offers no
+ * client-side way to hide them. The installer ships clean `/rule-*` user
+ * commands for Claude and sets this flag so the prefixed prompt duplicates are
+ * not also listed. `listPrompts()` itself stays pure (the full registry) — only
+ * `listActivePrompts()` honours the flag.
+ *
+ * @returns {boolean}
+ */
+export function promptsSuppressed() {
+  return process.env.RULE_MCP_NO_PROMPTS === "1";
+}
+
+/**
+ * The prompts the server should advertise: the full registry, or an empty list
+ * when suppression is active.
+ *
+ * @returns {ReturnType<typeof listPrompts>}
+ */
+export function listActivePrompts() {
+  return promptsSuppressed() ? [] : listPrompts();
+}
+
+/**
  * Get a specific prompt by name with its system message content.
  *
  * @param {string} name — Prompt name

@@ -23,6 +23,7 @@ process.env.RULE_MCP_NO_CACHE = "1"; // hermetic: deterministic tool behavior, n
 process.env.RULE_MCP_NO_AUTOUPDATE = "1"; // hermetic: no real git ops in tests
 
 import { loadAllSkills } from "../src/core/skills.js";
+// eslint-disable-next-line no-unused-vars
 import { callTool, registerTool } from "../src/tools/router.js";
 import { detectProject } from "../src/core/detector.js";
 

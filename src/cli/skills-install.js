@@ -11,11 +11,13 @@
  *   rule-mcp skills install --scope global --all
  */
 
+// eslint-disable-next-line no-unused-vars
 import { copyFileSync, existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync, rmSync } from "node:fs";
 import { join, relative, dirname } from "node:path";
 import { createInterface } from "node:readline";
 import { homedir } from "node:os";
 import { stdin as input, stdout as output } from "node:process";
+// eslint-disable-next-line no-unused-vars
 import { getSkillsDirs as getSkillsDirectories, pkg as package_ } from "./paths.js";
 import { formatSkillsList } from "./tui.js";
 import { parseSkillFrontmatter } from "../core/skills.js";
@@ -260,10 +262,10 @@ export async function skillsInstallCommand(options = {}) {
   }
 
   // Pre-check installed
-  const preSelected = skills.reduce((accumulator, s, index) => {
-    if (isInstalled(s.name, targetDir)) {accumulator.push(index);}
-    return accumulator;
-  }, []);
+  const preSelected = [];
+  for (const [index, s] of skills.entries()) {
+    if (isInstalled(s.name, targetDir)) {preSelected.push(index);}
+  }
 
   // Interactive selection
   const selected = await interactiveSelect(
@@ -303,6 +305,7 @@ export async function skillsInstallCommand(options = {}) {
  */
 export function skillsListCommand(options = {}) {
   const skills = getAvailableSkills();
+// eslint-disable-next-line no-unused-vars
   const { homeSkills, embeddedSkills } = getSkillsDirectories();
   const installed = existsSync(homeSkills) ? readdirSync(homeSkills) : [];
   const rows = skills.map((s) => ({

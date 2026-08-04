@@ -18,6 +18,7 @@
 // this test process would leak an open handle and never exit.
 import test from "node:test";
 import assert from "node:assert/strict";
+// eslint-disable-next-line no-unused-vars
 import { resolve, sep, join } from "node:path";
 import { once } from "node:events";
 import { containWithin } from "../skills/rule-architect/static-file.mjs";

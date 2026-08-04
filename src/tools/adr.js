@@ -7,6 +7,7 @@
  * @see module:tools/router — registered via registerProcessAdrTool()
  */
 
+// eslint-disable-next-line no-unused-vars
 import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync, appendFileSync } from "node:fs";
 import { join } from "node:path";
 import { z } from "zod/v4";

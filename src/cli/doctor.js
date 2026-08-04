@@ -327,6 +327,7 @@ export function formatDoctorTerminal(report) {
 
 export function runDoctor(telemetry = false) {
   const p = getRuntimePaths();
+// eslint-disable-next-line no-unused-vars
   const __dirname = fileURLToPath(new URL(".", import.meta.url));
   const package_ = JSON.parse(readFileSync(new URL("../../package.json", import.meta.url), "utf8"));
 

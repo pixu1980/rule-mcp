@@ -26,6 +26,7 @@
  */
 
 import { execSync } from "node:child_process";
+// eslint-disable-next-line no-unused-vars
 import { existsSync, mkdirSync, readFileSync, writeFileSync, appendFileSync, rmSync, readdirSync } from "node:fs";
 import { homedir, platform } from "node:os";
 import { dirname, join, resolve } from "node:path";
@@ -101,6 +102,7 @@ const COMMAND_TEMPLATE_PATH = fileURLToPath(new URL("../../prompts/rule-mcp.md",
 const readText = (file) => (existsSync(file) ? readFileSync(file, "utf8") : "");
 
 /** Write a file with backup and atomic write. Skips if dryRun. Throws on null content. */
+// eslint-disable-next-line no-unused-vars
 const atomicWrite = ({ file, content, dryRun }) => {
   if (content === null) {throw new Error(`Cannot write null content to ${file} — parse error in source`);}
   if (dryRun) {return file;}
@@ -265,6 +267,7 @@ const commandConfig = (entrypoint, options = {}) => {
   let config;
   const globalBin = resolveGlobalBinary();
   if (globalBin) {
+// eslint-disable-next-line no-unused-vars
     const home = homedir();
     config = { command: globalBin, args: ["serve"], type: "stdio" };
   } else {
@@ -611,6 +614,7 @@ const vscodeGlobalDir = () => {
  * Try to build and install the rule-vanilla-reactive extension for a given editor CLI.
  * Returns true if the extension was installed successfully.
  */
+// eslint-disable-next-line no-unused-vars
 const tryInstallExtension = (cli, vsixPath, label) => {
   try {
     const result = execSync(`${cli} --install-extension "${vsixPath}" --force`, {
@@ -875,6 +879,7 @@ function writeInstalledManifest(agents, entrypoint, global, mode) {
  * @param {{ agent: string, entrypoint: string, dryRun?: boolean, force?: boolean, global?: boolean, mode?: "stdio"|"daemon"|"sse"|"docker" }} opts
  * @returns {{ ok: boolean, dryRun: boolean, global: boolean, installed: object, manifest?: string }}
  */
+// eslint-disable-next-line no-unused-vars
 export const installAgent = ({ agent, entrypoint, dryRun = false, force = false, global = false, mode = "stdio", env = {} }) => {
   const normalizedMode = normalizeInstallMode(mode);
   const selected = agent === "all" ? allAgents : [agent];

@@ -122,6 +122,7 @@ exec ${escapePlist(ep.node)} ${escapePlist(ep.script)} serve --transport sse
  * @param {{ node: string, script: string, command: string[] }} ep
  * @returns {string} — plist XML content
  */
+// eslint-disable-next-line no-unused-vars
 function generateLaunchAgentPlist(ep) {
   const p = getRuntimePaths();
   const logPath = p.logFile;

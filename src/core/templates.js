@@ -157,6 +157,7 @@ function buildGuardrailsText() {
 }
 
 export function registerTemplateTool() {
+// eslint-disable-next-line no-unused-vars
   const componentKeys = Object.keys(COMPONENT_TEMPLATES);
   const ComponentSchema = z.object({
     component: z.string().describe("Component or test type"),

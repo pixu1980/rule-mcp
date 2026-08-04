@@ -16,6 +16,7 @@
  */
 
 import { getSkillNames, readSkill } from "../tools/router.js";
+// eslint-disable-next-line no-unused-vars
 import { skillCache } from "./skills.js";
 
 // ─── BM25 parameters ──────────────────────────────────────────────

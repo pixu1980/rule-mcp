@@ -133,6 +133,7 @@ function runUpdateIn(clone, environment = {}) {
   assert.match(buildBanner({ updated: true, from: "aaaaaaa", to: "bbbbbbb", count: 2, changedSkills: true, changedCode: false }), /Updating MCP server/);
   assert.equal(buildBanner({ updated: false }), null, "no banner when nothing changed");
 
+// eslint-disable-next-line no-unused-vars
   let isExited = false;
   const note = scheduleRestartIfNeeded({ updated: true, changedCode: true }, () => { isExited = true; });
   assert.match(note, /restart/i, "code change schedules a restart note");

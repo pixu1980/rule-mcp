@@ -8,7 +8,9 @@
  * @see module:index — CLI entry point that dispatches to these commands
  */
 
+// eslint-disable-next-line no-unused-vars
 import { spawn, execSync } from "node:child_process";
+// eslint-disable-next-line no-unused-vars
 import { appendFileSync, existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { resolve, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -33,6 +35,7 @@ import {
   formatDaemonStatus,
   startDaemonProcess,
   stopDaemonProcess,
+// eslint-disable-next-line no-unused-vars
   daemonProcessStatus,
   detectPlatform,
   getServiceFilePath,

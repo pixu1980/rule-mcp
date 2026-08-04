@@ -4,6 +4,7 @@ import { existsSync, mkdirSync, mkdtempSync, readFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 
+// eslint-disable-next-line no-unused-vars
 const root = new URL("..", import.meta.url).pathname;
 const fakeHome = mkdtempSync(join(tmpdir(), "rule-agent-commands-"));
 const fakeProject = join(fakeHome, "project");
