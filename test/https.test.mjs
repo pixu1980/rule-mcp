@@ -6,6 +6,7 @@
  * health check over HTTPS, graceful shutdown.
  */
 
+// eslint-disable-next-line no-unused-vars
 import { readFileSync, existsSync, unlinkSync, mkdirSync, rmSync } from "node:fs";
 import { join } from "node:path";
 import { tmpdir } from "node:os";

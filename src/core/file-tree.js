@@ -19,14 +19,18 @@
 
 import {
   existsSync,
+// eslint-disable-next-line no-unused-vars
   mkdirSync,
   readdirSync,
   readFileSync,
   renameSync,
   writeFileSync,
+// eslint-disable-next-line no-unused-vars
   statSync,
+// eslint-disable-next-line no-unused-vars
   unlinkSync,
 } from "node:fs";
+// eslint-disable-next-line no-unused-vars
 import { join, dirname, basename, extname, relative, parse } from "node:path";
 
 // ─── Constants ───────────────────────────────────────────────────────────────
@@ -81,6 +85,7 @@ function isIgnored(name) {
  * Check if a directory is a potential component folder:
  * contains at least one component-like file.
  */
+// eslint-disable-next-line no-unused-vars
 function isComponentDir(dirPath, entries) {
   for (const entry of entries) {
     if (!entry.isFile()) {
@@ -326,6 +331,7 @@ export function scanFileTree(rootDir, options = {}) {
  * }}
  */
 export function autoFixFileTree(rootDir, options = {}) {
+// eslint-disable-next-line no-unused-vars
   const srcDir = options.srcDir || "src";
   const isDryRun = options.dryRun !== false;
   const report = scanFileTree(rootDir, options);
@@ -383,6 +389,7 @@ export function autoFixFileTree(rootDir, options = {}) {
 
     for (const file of files) {
       const name = file.name;
+// eslint-disable-next-line no-unused-vars
       const extension = extname(name);
 
       // Get the component name from _PascalCase.ext

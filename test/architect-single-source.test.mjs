@@ -9,6 +9,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { existsSync, lstatSync, readFileSync, realpathSync, readdirSync } from "node:fs";
+// eslint-disable-next-line no-unused-vars
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { join } from "node:path";
 

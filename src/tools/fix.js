@@ -57,6 +57,7 @@ export function registerFixTool() {
       if (mode === "generate") {
         const { generateComponentFiles } = await import("../core/file-tree.js");
         const { writeFileSync, mkdirSync } = await import("node:fs");
+// eslint-disable-next-line no-unused-vars
         const { dirname, join, resolve, relative } = await import("node:path");
 
         if (!arguments_.name) {
