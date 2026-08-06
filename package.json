@@ -4,11 +4,9 @@
   "packageManager": "pnpm@10.16.1",
   "description": "MCP server for the rule-* skill ecosystem. Serves styleguides, component templates, framework best practices, and design system patterns.",
   "type": "module",
-  "packageManager": "pnpm@9.15.9",
   "license": "MIT",
   "packageManager": "pnpm@9.15.9",
   "private": false,
-  "packageManager": "pnpm@11.20.0",
   "publishConfig": {
     "access": "public"
   },
@@ -43,8 +41,6 @@
     "build": "bash ./scripts/package.sh",
     "prepublishOnly": "node ./scripts/embed-skills.mjs"
   },
-  "packageManager": "pnpm@9.15.9",
-  "packageManager": "pnpm@9.0.0",
   "engines": {
     "node": ">=20"
   },
