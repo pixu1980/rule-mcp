@@ -6,6 +6,7 @@
   "type": "module",
   "packageManager": "pnpm@9.15.9",
   "license": "MIT",
+  "packageManager": "pnpm@9.15.9",
   "private": false,
   "packageManager": "pnpm@11.20.0",
   "publishConfig": {
