@@ -271,9 +271,29 @@ project/
     └── pdf/               ← Generated PDFs
 ```
 
+## Electron Forge vs electron-builder
+
+| Criterion | Electron Forge | electron-builder |
+|---|---|---|
+| Maintainer | Electron project (official) | Community |
+| Support model | Official Electron support | Community-maintained |
+| Downloads | Lower | ~2-3M weekly |
+| Auto-updater | External (`update-electron-app`) | Built-in (`electron-updater`) |
+| Config location | `forge.config.js` | `package.json` → `build` key |
+| Current stable | v7.x (2026) | v26.15.x (2026) |
+| Next major | — | v27 alpha (ESM-native, Node ≥22.12) |
+
+**Decision rule**: Pick **Electron Forge** for official support and all-in-one pipeline. Pick **electron-builder** for the most mature built-in auto-updater and widest community footprint. Both produce signed, updatable installers for all platforms.
+
+> ⚠️ If you do NOT use Electron Forge, other tools are maintained by community members and do NOT come with official support from the Electron project.
+
+---
+
 ## Packaging with electron-builder (Electron)
 
-### package.json Skeleton
+electron-builder produces native installers from a single `build` block in `package.json`.
+
+### Package.json Skeleton (Production-Ready)
 
 ```json
 {
@@ -283,10 +303,28 @@ project/
     "productName": "MyApp",
     "asar": true,
     "directories": { "output": "release" },
-    "files": ["electron/**/*", "src/**/*", "assets/**/*", "scripts/**/*", "requirements.txt", "package.json"],
-    "mac": { "target": ["dmg", "zip"] },
-    "win": { "target": ["nsis", "portable"] },
-    "linux": { "target": ["AppImage", "deb", "rpm"] }
+    "files": [
+      "electron/**/*",
+      "src/**/*",
+      "assets/**/*",
+      "scripts/**/*",
+      "requirements.txt",
+      "package.json"
+    ],
+    "mac": {
+      "category": "public.app-category.productivity",
+      "target": ["dmg", "zip"],
+      "hardenedRuntime": true,
+      "notarize": true
+    },
+    "win": {
+      "target": ["nsis"]
+    },
+    "linux": {
+      "target": ["AppImage", "deb", "rpm"],
+      "category": "Utility"
+    },
+    "publish": [{ "provider": "github" }]
   },
   "scripts": {
     "dev": "electron .",
@@ -295,6 +333,24 @@ project/
   }
 }
 ```
+
+### Platform Target Reference
+
+| Platform | Targets | When to use |
+|---|---|---|
+| macOS | `dmg`, `pkg`, `zip` | DMG = standard drag-to-Applications; PKG = enterprise scripts; **zip = REQUIRED for Squirrel.Mac auto-update** |
+| Windows | `nsis`, `msi`, `portable` | NSIS = customizable wizard + uninstaller; MSI = GPO/Intune deployment; portable = no install |
+| Linux | `AppImage`, `deb`, `rpm`, `snap`, `flatpak` | AppImage = single executable; deb/rpm = apt/dnf integration; Snap/Flatpak = store distribution |
+
+> ⚠️ The `zip` target on macOS is NOT optional if you auto-update: without it, `latest-mac.yml` cannot be created, which causes an `autoUpdater` error. The default macOS target is `dmg+zip`, so there is usually no need to specify it explicitly.
+
+### Build Command
+
+```bash
+npx electron-builder --mac --win --linux
+```
+
+> ⚠️ You can only fully build a given platform's signed installers on (or for) that platform — which is why CI matters.
 
 ### CSP for Electron
 
@@ -307,21 +363,52 @@ project/
 
 ## Auto-Update Patterns
 
+### The Dependency Chain (Critical)
+
+> 🔴 **macOS rule**: Your application MUST be signed for automatic updates to work — this is a requirement of **Squirrel.Mac**. Code signing → notarization → working silent updates is one unbreakable chain.
+
+| Scenario | macOS behavior |
+|---|---|
+| Signed + notarized | Silent install works |
+| Unsigned | Can notify user about update, but CANNOT replace the binary |
+
 ### Electron (electron-updater)
+
+`electron-updater` is electron-builder's companion. It supports GitHub Releases, Amazon S3, DigitalOcean Spaces, Keygen, and generic HTTP(S) servers.
+
+```js
+// electron/main.js — minimal two-liner
+const { autoUpdater } = require("electron-updater");
+
+app.whenReady().then(() => {
+  createWindow();
+  autoUpdater.checkForUpdatesAndNotify();
+});
+```
+
+> Do NOT call `setFeedURL` — electron-builder automatically creates an internal `app-update.yml` file on build.
+
+With progress reporting:
 
 ```js
 // electron/main.js
 const { autoUpdater } = require("electron-updater");
 
 app.whenReady().then(() => {
+  createWindow();
   autoUpdater.checkForUpdatesAndNotify();
-  autoUpdater.on("download-progress", (p) => {
-    mainWin.webContents.send("update-progress", p.percent);
+
+  autoUpdater.on("download-progress", (progress) => {
+    mainWin.webContents.send("update-progress", progress.percent);
+  });
+
+  autoUpdater.on("update-downloaded", () => {
+    mainWin.webContents.send("update-ready");
   });
 });
 ```
 
-Configure publisher in electron-builder:
+Where you host releases is set by the `publish` block in your build config:
 
 ```json
 "publish": [{
@@ -330,6 +417,8 @@ Configure publisher in electron-builder:
   "repo": "myapp"
 }]
 ```
+
+This means: push a tag → CI uploads artifacts to GitHub Release → updater finds them automatically.
 
 ### Tauri (built-in updater)
 
@@ -347,29 +436,191 @@ Configure publisher in electron-builder:
 
 ## Code Signing & Notarization
 
-### macOS
+### The Dependency Chain
 
 ```
-# CI step
-xcrun notarytool submit MyApp.dmg --apple-id $APPLE_ID --password $APP_PW --team-id $TEAM_ID
+Code Signing → Notarization → Working Silent Auto-Update
+     ❌              ❌              ❌
+  Skip signing and the entire downstream chain collapses.
 ```
 
-Include in electron-builder config:
+> 🔴 An unsigned macOS app can **notify** about an update but **cannot silently install it**. Signing is non-negotiable for auto-update.
+
+### macOS: Sign, then Notarize
+
+**Prerequisites**: Apple Developer Program membership (99 USD/year; notarization is included at no extra cost). Notarization has been mandatory for Developer-ID apps distributed outside the Mac App Store since macOS 10.15 Catalina.
+
+**electron-builder config** (set in `package.json` → `build.mac`):
 
 ```json
 "mac": {
   "hardenedRuntime": true,
-  "gatekeeperAssess": false,
-  "entitlements": "build/entitlements.mac.plist"
+  "notarize": true,
+  "entitlements": "build/entitlements.mac.plist",
+  "entitlementsInherit": "build/entitlements.mac.plist"
 }
 ```
 
-### Windows
+**entitlements.mac.plist**:
 
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>com.apple.security.cs.allow-jit</key>
+  <true/>
+  <key>com.apple.security.cs.allow-unsigned-executable-memory</key>
+  <true/>
+  <key>com.apple.security.cs.allow-dyld-environment-variables</key>
+  <true/>
+</dict>
+</plist>
 ```
-# Set env vars: CSC_LINK, CSC_KEY_PASSWORD
-# electron-builder handles authenticating via Azure Key Vault or local .pfx
+
+**Environment variables** (supply at build time — NEVER in the repo):
+
+```bash
+# macOS signing certificate (base64-encoded .p12) and its password
+export CSC_LINK="$(base64 -i developer-id.p12)"
+export CSC_KEY_PASSWORD="••••••"
+
+# Notarization credentials (App Store Connect API or Apple ID app-specific password)
+export APPLE_ID="you@example.com"
+export APPLE_APP_SPECIFIC_PASSWORD="abcd-efgh-ijkl-mnop"
+export APPLE_TEAM_ID="XXXXXXXXXX"
 ```
+
+### Windows: The 2024 SmartScreen Reality
+
+**Key changes every team must know**:
+
+1. **EV certificates no longer bypass SmartScreen** (2024 change). Years ago, EV-signed files got positive SmartScreen reputation by default. That behavior no longer exists. EV and OV certificates now build reputation equally.
+
+2. **Hardware token requirement** (June 2023). Code-signing private keys must be stored on certified hardware (USB token or HSM). This breaks headless CI for traditional OV/EV certificates.
+
+**Decision order for 2026**:
+
+| Priority | Option | Cost | CI-friendly | Notes |
+|---|---|---|---|---|
+| 1️⃣ | **Azure Artifact Signing** | ~$10/month | ✅ Native | USA, Canada, EU, UK (orgs); USA, Canada (individuals) |
+| 2️⃣ | **OV certificate** (DigiCert, Sectigo, GlobalSign) | ~$200-300/year | ❌ USB token | Fallback if outside Azure regions |
+| 3️⃣ | **Keep existing EV cert** until expiry | ~$300-400/year | ❌ USB token | Still valid if already owned — don't buy new |
+| 🆓 | **Microsoft Store** (MSIX) | Free | ✅ | Microsoft re-signs automatically → **no SmartScreen warning, no certificate needed** |
+
+**Azure Artifact Signing env vars**:
+
+```bash
+export AZURE_TENANT_ID="..."
+export AZURE_CLIENT_ID="..."
+export AZURE_CLIENT_SECRET="..."
+```
+
+**Traditional certificate env vars**:
+
+```bash
+export CSC_LINK="$(base64 -i cert.pfx)"
+export CSC_KEY_PASSWORD="••••••"
+```
+
+### Signed vs Unsigned — Quick Reference
+
+| | Signed + Notarized | Unsigned |
+|---|---|---|
+| macOS first launch | Clean, Gatekeeper passes | "Unidentified developer" block; right-click → Open workaround |
+| Windows first download | SmartScreen warning until reputation builds | SmartScreen warning, no reputation inheritance |
+| macOS auto-update | ✅ Works silently | ❌ Can notify only — cannot replace binary |
+| Mac App Store eligible | ✅ Yes | ❌ No |
+
+> Unsigned builds are acceptable for a developer audience comfortable with override steps. For non-technical users — and for any app that auto-updates on macOS — signing is non-negotiable.
+
+## Distribution Channels
+
+Choose by audience reach and how much control/revenue you keep.
+
+| Channel | Cost | Signing required | Auto-update | Best for |
+|---|---|---|---|---|
+| **Your own website** | Hosting only | Optional (but recommended) | ✅ via GitHub Releases / S3 | Full control, direct distribution |
+| **GitHub Releases** | Free | Optional | ✅ Native electron-updater | Path of least resistance |
+| **Mac App Store** | 30% commission (15% under $1M) | ✅ Mandatory | ❌ (Store handles updates) | Discovery + trust |
+| **Microsoft Store** | 15-30% commission | ❌ (Microsoft re-signs) | ❌ (Store handles updates) | **No SmartScreen, no cert needed** |
+| **Homebrew Cask** | Free | Optional | ✅ App-hosted | Developer audience (`brew install`) |
+
+### Mac App Store Notes
+
+- Requires sandboxing and App Review
+- Apple's standard 30% commission, reduced to 15% under the App Store Small Business Program (under $1M USD annual proceeds)
+- Disables electron-updater (Store manages updates)
+
+### Microsoft Store — The SmartScreen Hack
+
+Publishing an MSIX package through the Microsoft Store means **Microsoft re-signs your package automatically**. Users never see a SmartScreen warning and you never need to purchase or renew a certificate. The trade-off: store submission, review, and packaging as MSIX rather than distributing a standalone NSIS/MSI installer.
+
+### Homebrew Cask
+
+Free, developer-friendly macOS distribution via a pull request to the [homebrew-cask](https://github.com/Homebrew/homebrew-cask) repo. Ideal for reaching technical users with `brew install myapp`.
+
+## CI/CD with GitHub Actions
+
+You cannot cross-build everything locally: DMG notarization needs macOS, signed Windows installers need Windows tooling. The realistic path is a GitHub Actions matrix.
+
+### Complete release.yml
+
+```yaml
+name: Release
+on:
+  push:
+    tags: ["v*"]
+
+jobs:
+  release:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [macos-latest, windows-latest, ubuntu-latest]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm ci
+      - name: Build, sign, and publish
+        run: npx electron-builder --publish always
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # macOS signing + notarization (read on macos-latest only)
+          CSC_LINK: ${{ secrets.MAC_CSC_LINK }}
+          CSC_KEY_PASSWORD: ${{ secrets.MAC_CSC_KEY_PASSWORD }}
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_PASSWORD }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+          # Windows: Azure Artifact Signing (read on windows-latest)
+          AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+          AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+          AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+```
+
+### How It Works
+
+- Each runner builds only its own platform's targets
+- electron-builder signs using whichever credentials are present in that runner's environment
+- `--publish always` uploads every artifact + `latest*.yml` update metadata to a single GitHub Release
+- **Store every secret in repository or environment secrets — never in the workflow file**
+- Because Azure Artifact Signing works with plain environment variables, the Windows job needs no USB token and no self-hosted runner
+
+### Secrets to Configure in GitHub
+
+| Secret | Platform | Purpose |
+|---|---|---|
+| `GH_TOKEN` | All | GitHub Releases upload (auto-provided) |
+| `MAC_CSC_LINK` | macOS | Base64-encoded .p12 certificate |
+| `MAC_CSC_KEY_PASSWORD` | macOS | Certificate password |
+| `APPLE_ID` | macOS | Apple ID for notarization |
+| `APPLE_APP_PASSWORD` | macOS | App-specific password for notarization |
+| `APPLE_TEAM_ID` | macOS | Apple Developer Team ID |
+| `AZURE_TENANT_ID` | Windows | Azure Artifact Signing |
+| `AZURE_CLIENT_ID` | Windows | Azure Artifact Signing |
+| `AZURE_CLIENT_SECRET` | Windows | Azure Artifact Signing |
 
 ## Crash Reporting
 
@@ -508,29 +759,33 @@ app.on("open-url", (event, url) => {
 ## Quick Reference
 
 ```
-┌────────────────────────────────────────────────────────────┐
-│  rule-platform-desktop — Desktop Application Project Type            │
-│                                                           │
-│  Framework:  Electron (primary) / Tauri / Neutralinojs    │
-│  UI layer:   Any rule-* framework skill                    │
-│  Update:     electron-updater / Tauri updater              │
-│  Signing:    macOS notarization + Windows Authenticode    │
-│  Crash:      Sentry for main + renderer processes          │
-│                                                           │
-│  electron/                                                 │
-│   ├── main.js           ← app lifecycle + createWindow    │
-│   ├── preload.js        ← contextBridge only              │
-│   ├── ipc/              ← domain handler modules          │
-│   └── helpers/          ← fs, path, venv utilities        │
-│                                                           │
-│  IPC pattern:                                             │
-│   preload: qt.fn = () => ipcRenderer.invoke('channel')   │
-│   main:    ipcMain.handle('channel', handler)             │
-│                                                           │
-│  Security: contextIsolation=true, nodeIntegration=false   │
-│  Styling:  data-part attributes, zero classes             │
-│  Build:    electron-builder, asar, multi-platform         │
-└────────────────────────────────────────────────────────────┘
+┌──────────────────────────────────────────────────────────────────┐
+│  rule-platform-desktop — Desktop Application Project Type         │
+│                                                                  │
+│  Framework:  Electron (primary) / Tauri / Neutralinojs           │
+│  UI layer:   Any rule-* framework skill                           │
+│  Packaging:  electron-builder (community) / Forge (official)     │
+│  Update:     electron-updater / Tauri updater                    │
+│  Signing:    macOS notarization + Windows Azure/OV certificate   │
+│  CI/CD:      GitHub Actions matrix (macOS + Windows + Linux)     │
+│  Crash:      Sentry for main + renderer processes                │
+│                                                                  │
+│  electron/                                                       │
+│   ├── main.js           ← app lifecycle + createWindow           │
+│   ├── preload.js        ← contextBridge only                     │
+│   ├── ipc/              ← domain handler modules                 │
+│   └── helpers/          ← fs, path, venv utilities               │
+│                                                                  │
+│  IPC pattern:                                                    │
+│   preload: qt.fn = () => ipcRenderer.invoke('channel')          │
+│   main:    ipcMain.handle('channel', handler)                    │
+│                                                                  │
+│  Security: contextIsolation=true, nodeIntegration=false          │
+│  Styling:  data-part attributes, zero classes                    │
+│  Build:    electron-builder, asar, multi-platform                │
+│  Signing chain: sign → notarize → silent auto-update (macOS)    │
+│  Distribution: Web, GitHub Releases, App Stores, Homebrew        │
+└──────────────────────────────────────────────────────────────────┘
 ```
 
 ---
