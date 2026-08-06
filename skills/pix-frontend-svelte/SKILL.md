@@ -104,22 +104,22 @@ For shared/global CSS, import at module level:
 
 ## Svelte ↔ rule-frontend-vanilla-reactive Mapping
 
-| rule-frontend-vanilla-reactive | Svelte 5 Equivalent |
-|----------------------|---------------------|
-| `StateSignal` | `$state()` rune |
-| `ComputedSignal` | `$derived()` rune |
-| `effect()` | `$effect()` rune |
-| `Store (Proxy)` | `$state()` object or Svelte store |
-| `tickState` bridge | `$state()` deep reactivity (automatic) |
-| `html\`\`` tagged templates | Template in `.svelte` file |
-| `{{ expr \| filter }}` | `{expression}` + `$derived` |
-| `${value}` | `{value}` |
-| `@click=${fn}` | `onclick={fn}` |
-| `model={...}` directive | `bind:value` / `bind:checked` |
-| `<for each="x in xs">` | `{#each xs as x (x.id)}` |
-| `<if condition="c">` | `{#if c}` |
-| `<switch expr="x">` | `{#if}` / `{:else if}` chain |
-| `adoptedStyleSheets` | `<style>` tag in `.svelte` (scoped by default) |
+| rule-frontend-vanilla-reactive | Svelte 5 Equivalent                            |
+| ----------------------------- | ---------------------------------------------- |
+| `StateSignal`                 | `$state()` rune                                |
+| `ComputedSignal`              | `$derived()` rune                              |
+| `effect()`                    | `$effect()` rune                               |
+| `Store (Proxy)`               | `$state()` object or Svelte store              |
+| `tickState` bridge            | `$state()` deep reactivity (automatic)         |
+| `html\`\`` tagged templates   | Template in `.svelte` file                     |
+| `{{ expr \| filter }}`        | `{expression}` + `$derived`                    |
+| `${value}`                    | `{value}`                                      |
+| `@click=${fn}`                | `onclick={fn}`                                 |
+| `model={...}` directive       | `bind:value` / `bind:checked`                  |
+| `<for each="x in xs">`        | `{#each xs as x (x.id)}`                       |
+| `<if condition="c">`          | `{#if c}`                                      |
+| `<switch expr="x">`           | `{#if}` / `{:else if}` chain                   |
+| `adoptedStyleSheets`          | `<style>` tag in `.svelte` (scoped by default) |
 
 ## Lists and Conditionals
 
@@ -242,7 +242,7 @@ This section extends rule-frontend-svelte with a structured performance review m
 </script>
 ```
 
-Rule: *`$derived` for computed values. `$effect` for side effects (logging, localStorage, imperative APIs).*
+Rule: _`$derived` for computed values. `$effect` for side effects (logging, localStorage, imperative APIs)._
 
 #### 2. Keep `$state` as close as possible to usage
 
@@ -261,7 +261,7 @@ A `$state` update re-renders the component that owns it and any children that re
 </script>
 ```
 
-Rule: *Keep `$state` in the smallest component that needs it.*
+Rule: _Keep `$state` in the smallest component that needs it._
 
 #### 3. Always use keys with `{#each}`
 
@@ -277,7 +277,7 @@ Rule: *Keep `$state` in the smallest component that needs it.*
 {/each}
 ```
 
-Rule: *Always provide a stable key expression in `{#each}`. Never use index for mutable lists.*
+Rule: _Always provide a stable key expression in `{#each}`. Never use index for mutable lists._
 
 #### 4. Use `{#key}` for intentional component reset
 
@@ -289,7 +289,7 @@ Svelte 5's `{#key expression}` block destroys and recreates its content when the
 {/key}
 ```
 
-Rule: *Use `{#key}` to fully reset a component instead of manually reseting every internal value.*
+Rule: _Use `{#key}` to fully reset a component instead of manually reseting every internal value._
 
 #### 5. Use snippets (`{#snippet}`) for reusable template logic
 
@@ -307,7 +307,7 @@ Svelte 5 snippets replace slot-based patterns and are more efficient.
 {/each}
 ```
 
-Rule: *Use `{#snippet}` for reusable template fragments. They are compiled, not runtime.*
+Rule: _Use `{#snippet}` for reusable template fragments. They are compiled, not runtime._
 
 #### 6. One responsibility = one reason to change
 
@@ -331,7 +331,7 @@ Split when data fetching, formatting, state transitions, and UI rendering change
 {/if}
 ```
 
-Rule: *Split when different changes affect different parts.*
+Rule: _Split when different changes affect different parts._
 
 #### 7. `$effect` must clean up resources
 
@@ -348,7 +348,7 @@ Every `$effect` that sets up timers, event listeners, subscriptions, or observer
 </script>
 ```
 
-Rule: *Every `$effect` with persistent side effects must return a cleanup function.*
+Rule: _Every `$effect` with persistent side effects must return a cleanup function._
 
 #### 8. Prefer `$derived` over `$state` + `$effect` for async resources with `$effect`
 
@@ -372,7 +372,7 @@ Use `$state` + `$effect` for manual async, or a store pattern with proper lifecy
 </script>
 ```
 
-Rule: *Handle race conditions in async `$effect` via cancellation flags or AbortController.*
+Rule: _Handle race conditions in async `$effect` via cancellation flags or AbortController._
 
 #### 9. Avoid `$state` for what can be derived
 
@@ -395,7 +395,7 @@ Don't store values that can be calculated from other reactive state.
 </script>
 ```
 
-Rule: *If a value can be computed from existing `$state`, use `$derived`. Don't store what you can compute.*
+Rule: _If a value can be computed from existing `$state`, use `$derived`. Don't store what you can compute._
 
 #### 10. Use Svelte stores (`.svelte.js` files) for shared state
 
@@ -405,44 +405,46 @@ Shared reactive state belongs in `.svelte.js` module files or stores, not in com
 // stores/_todos.svelte.js
 let todos = $state([]);
 
-export function getTodos() { return todos; }
+export function getTodos() {
+  return todos;
+}
 export function addTodo(title) {
   todos = [...todos, { id: crypto.randomUUID(), title, completed: false }];
 }
 ```
 
-Rule: *Component `$state` for local state. `.svelte.js` module `$state` for shared state.*
+Rule: _Component `$state` for local state. `.svelte.js` module `$state` for shared state._
 
 ### Decision matrix
 
-| Symptom | Check first | Likely pattern | Fix |
-|---|---|---|---|
-| Derived value stale | Derivation method | `$effect` used for computation | Use `$derived` |
-| Effect runs more than expected | Dependencies | Unstable reactive dep in $effect | Stabilize dep or check scope |
-| List loses focus on reorder | Key | No `{#each}` key or index key | Add stable key expression |
-| Component keeps stale form data | Identity | Missing reset | Use `{#key entityId}` |
-| Sibling re-renders on input | State owner | `$state` too high | Move state down |
-| Memory leak on route change | Effect cleanup | Missing cleanup return | Add cleanup to `$effect` |
-| Race condition in fetch | Async effect | No cancellation flag | Add `AbortController` |
-| Storing what can be computed | State choice | `$state` + `$effect` for derived | Use `$derived` |
-| Large component is hard to change | Responsibilities | Mixed concerns | Extract store + view |
-| Shared state scattered | Store architecture | Component-scoped shared state | Use `.svelte.js` module |
+| Symptom                           | Check first        | Likely pattern                   | Fix                          |
+| --------------------------------- | ------------------ | -------------------------------- | ---------------------------- |
+| Derived value stale               | Derivation method  | `$effect` used for computation   | Use `$derived`               |
+| Effect runs more than expected    | Dependencies       | Unstable reactive dep in $effect | Stabilize dep or check scope |
+| List loses focus on reorder       | Key                | No `{#each}` key or index key    | Add stable key expression    |
+| Component keeps stale form data   | Identity           | Missing reset                    | Use `{#key entityId}`        |
+| Sibling re-renders on input       | State owner        | `$state` too high                | Move state down              |
+| Memory leak on route change       | Effect cleanup     | Missing cleanup return           | Add cleanup to `$effect`     |
+| Race condition in fetch           | Async effect       | No cancellation flag             | Add `AbortController`        |
+| Storing what can be computed      | State choice       | `$state` + `$effect` for derived | Use `$derived`               |
+| Large component is hard to change | Responsibilities   | Mixed concerns                   | Extract store + view         |
+| Shared state scattered            | Store architecture | Component-scoped shared state    | Use `.svelte.js` module      |
 
 ### Supporting resources
 
-| Resource | Path |
-|---|---|
-| 10 detailed examples | `examples/performance/01-*.md` … `10-*.md` |
-| PR review checklist | `checklists/svelte-performance-pr-checklist.md` |
-| Decision matrix | `checklists/decision-matrix.md` |
-| System prompt | `prompts/portable-system-prompt.md` |
-| Code review prompt | `prompts/code-review-prompt.md` |
-| Refactor prompt | `prompts/refactor-prompt.md` |
-| Teaching prompt | `prompts/teaching-prompt.md` |
-| Audit report template | `templates/audit-report-template.md` |
-| PR comment template | `templates/pr-comment-template.md` |
-| Refactor plan template | `templates/refactor-plan-template.md` |
-| Performance playbook | `knowledge/svelte-performance-playbook.md` |
+| Resource               | Path                                            |
+| ---------------------- | ----------------------------------------------- |
+| 10 detailed examples   | `examples/performance/01-*.md` … `10-*.md`      |
+| PR review checklist    | `checklists/svelte-performance-pr-checklist.md` |
+| Decision matrix        | `checklists/decision-matrix.md`                 |
+| System prompt          | `prompts/portable-system-prompt.md`             |
+| Code review prompt     | `prompts/code-review-prompt.md`                 |
+| Refactor prompt        | `prompts/refactor-prompt.md`                    |
+| Teaching prompt        | `prompts/teaching-prompt.md`                    |
+| Audit report template  | `templates/audit-report-template.md`            |
+| PR comment template    | `templates/pr-comment-template.md`              |
+| Refactor plan template | `templates/refactor-plan-template.md`           |
+| Performance playbook   | `knowledge/svelte-performance-playbook.md`      |
 
 ---
 
@@ -495,6 +497,7 @@ Rule: *Component `$state` for local state. `.svelte.js` module `$state` for shar
 - [ ] `bind:value` for controlled inputs
 - [ ] Field-level errors rendered
 - [ ] Submission guarded with `submitting`
+
 ---
 
 ## See also

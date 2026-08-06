@@ -47,11 +47,7 @@ const directories = skillDirectories();
 assert.ok(directories.length > 0, "No skill directories found");
 assert.ok(directories.includes("rule-ui"), "rule-ui umbrella skill must be present");
 assert.ok(directories.includes("rule-ui-design-system"), "rule-ui-design-system skill must be present");
-for (const requiredSkill of [
-  "rule-backend-graphql",
-  "rule-devops-observability",
-  "rule-process-code-review",
-]) {
+for (const requiredSkill of ["rule-backend-graphql", "rule-devops-observability", "rule-process-code-review"]) {
   assert.ok(directories.includes(requiredSkill), `${requiredSkill} must be present`);
 }
 
@@ -77,20 +73,20 @@ for (const dir of directories) {
   }
 
   for (const href of markdownLinks(content)) {
-    if (/^[a-z][a-z0-9+.-]*:/i.test(href) || href.startsWith("#")) {continue;}
+    if (/^[a-z][a-z0-9+.-]*:/i.test(href) || href.startsWith("#")) {
+      continue;
+    }
     const target = href.split("#", 1)[0];
-    if (!target) {continue;}
+    if (!target) {
+      continue;
+    }
     const resolved = resolve(join(skillsRoot, dir), target);
     assert.ok(existsSync(resolved), `${dir}: broken markdown link ${href}`);
   }
 }
 
 const dispatcherSkill = readFileSync(join(skillsRoot, "rule", "SKILL.md"), "utf8");
-for (const requiredSkill of [
-  "rule-backend-graphql",
-  "rule-devops-observability",
-  "rule-process-code-review",
-]) {
+for (const requiredSkill of ["rule-backend-graphql", "rule-devops-observability", "rule-process-code-review"]) {
   assert.ok(dispatcherSkill.includes(`../${requiredSkill}/SKILL.md`), `rule must link ${requiredSkill}`);
 }
 
@@ -100,7 +96,14 @@ for (const required of ["rule-ui-design-system", "rule-frontend", "rule-stylegui
 }
 
 const uiDesignSkill = readFileSync(join(skillsRoot, "rule-ui-design-system", "SKILL.md"), "utf8");
-for (const required of ["Zero CSS classes", "Zero inline styles", "Semantic HTML", "adoptedStyleSheets", "WCAG 2.2 AA", "rule_tool_check"]) {
+for (const required of [
+  "Zero CSS classes",
+  "Zero inline styles",
+  "Semantic HTML",
+  "adoptedStyleSheets",
+  "WCAG 2.2 AA",
+  "rule_tool_check",
+]) {
   assert.ok(uiDesignSkill.includes(required), `rule-ui-design-system must enforce ${required}`);
 }
 
@@ -188,10 +191,18 @@ for (const required of ["node:fs", "flatMap", "replaceAll", "new Set(", "for (co
 
 await loadAllSkills(true);
 const tools = listTools();
-assert.ok(tools.some(tool => tool.name === "rule_tool_ui"), "rule_tool_ui MCP tool must be registered");
-assert.ok(tools.some(tool => tool.name === "rule_tool_ui_design_system"), "rule_tool_ui_design_system MCP tool must be registered");
+assert.ok(
+  tools.some((tool) => tool.name === "rule_tool_ui"),
+  "rule_tool_ui MCP tool must be registered",
+);
+assert.ok(
+  tools.some((tool) => tool.name === "rule_tool_ui_design_system"),
+  "rule_tool_ui_design_system MCP tool must be registered",
+);
 for (const tool of tools) {
   assert.ok(tool.description && tool.description.length > 20, `${tool.name}: MCP tool description must be useful`);
 }
 
-console.log(`  ✅ ${directories.length} skills and ${tools.length} tools have consistent docs metadata and cross-references`);
+console.log(
+  `  ✅ ${directories.length} skills and ${tools.length} tools have consistent docs metadata and cross-references`,
+);

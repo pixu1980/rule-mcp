@@ -25,6 +25,7 @@
 **Problema:** `withTimeout` restituisce errore al chiamante ma la Promise sottostante continua l'esecuzione. Una scrittura può completare dopo il timeout.
 
 **Fix:**
+
 ```js
 // src/utils/sandbox.js
 export function withTimeout(promise, ms, signal) {
@@ -32,7 +33,7 @@ export function withTimeout(promise, ms, signal) {
     promise,
     new Promise((_, reject) => {
       const timer = setTimeout(() => {
-        signal?.abort?.();  // notifica alla Promise di fermarsi
+        signal?.abort?.(); // notifica alla Promise di fermarsi
         reject(new Error(`Timeout after ${ms}ms`));
       }, ms);
       // cleanup
@@ -45,6 +46,7 @@ export function withTimeout(promise, ms, signal) {
 Per tool mutanti (`rule_tool_fix`, `rule_tool_process_adr`): accettare `AbortSignal`, rispettarlo, prevenire scritture parziali dopo abort.
 
 **Verifica:**
+
 ```bash
 node test/sandbox.test.mjs  # deve passare senza regressioni
 ```
@@ -56,6 +58,7 @@ node test/sandbox.test.mjs  # deve passare senza regressioni
 **Problema:** `listResources()` pubblica URI per skill plugin (es. `rule://caveman`) ma `readResource()` le rifiuta perché il regex accetta solo nomi che iniziano con `pix_tool`.
 
 **Fix:** Due opzioni:
+
 1. **Opzione A (consigliata):** `listResources()` non pubblica skill plugin. Solo skill ufficiali.
 2. **Opzione B:** `readResource()` accetta anche skill plugin.
 
@@ -68,11 +71,13 @@ for (const name of getSkillNames()) {
 ```
 
 Inoltre `rule://skills` espone path assoluti del filesystem. Usare path relativi:
+
 ```js
 // resources/index.js ~riga 80: usare relative(root, sp) invece di sp
 ```
 
 **Verifica:**
+
 ```bash
 # Verificare che risorse plugin non siano pubblicizzate
 HOME=/tmp/rule-audit-home RULE_MCP_DISABLE_AUTO_ADR=1 NODE_ENV=test \
@@ -86,6 +91,7 @@ HOME=/tmp/rule-audit-home RULE_MCP_DISABLE_AUTO_ADR=1 NODE_ENV=test \
 **Problema:** `loadAllSkills(force=true)` non svuota `_tools`. Una seconda chiamata raddoppia il registry: 76 → 152 tool.
 
 **Fix:**
+
 ```js
 // src/tools/router.js — clearTools deve essere chiamato all'inizio di loadAllSkills(force=true)
 export function clearTools() {
@@ -97,7 +103,7 @@ export async function loadAllSkills(force = false) {
   if (loaded && !force) return;
   if (force) {
     skillCache.clear();
-    clearTools();  // ← aggiungere questa riga
+    clearTools(); // ← aggiungere questa riga
   }
   // ...
 }

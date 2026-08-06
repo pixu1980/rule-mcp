@@ -9,8 +9,13 @@
 let pass = 0;
 let fail = 0;
 const check = (label, ok) => {
-  if (ok) { pass++; console.log(`  ✅ ${label}`); }
-  else { fail++; console.log(`  ❌ ${label}`); }
+  if (ok) {
+    pass++;
+    console.log(`  ✅ ${label}`);
+  } else {
+    fail++;
+    console.log(`  ❌ ${label}`);
+  }
 };
 
 console.log("=== rule Routing Tests ===\n");
@@ -56,11 +61,13 @@ const text2 = r2.content?.[0]?.text ?? "";
 let isParsed2 = false;
 try {
   isParsed2 = JSON.parse(text2);
-} catch { /* invalid JSON — treated as false */ }
+} catch {
+  /* invalid JSON — treated as false */
+}
 
 if (isParsed2) {
-  const allRoutes = [isParsed2.route, ...(isParsed2.alternatives || []).map(a => a.route)];
-  const hasReact = allRoutes.some(r => r?.includes("rule-frontend-react"));
+  const allRoutes = [isParsed2.route, ...(isParsed2.alternatives || []).map((a) => a.route)];
+  const hasReact = allRoutes.some((r) => r?.includes("rule-frontend-react"));
   check("T3 multi-skill: React routes", hasReact);
 }
 
@@ -70,10 +77,12 @@ const text3 = r3.content?.[0]?.text ?? "";
 let isParsed3 = false;
 try {
   isParsed3 = JSON.parse(text3);
-} catch { /* invalid JSON — treated as false */ }
+} catch {
+  /* invalid JSON — treated as false */
+}
 if (isParsed3) {
-  const allRoutes = [isParsed3.route, ...(isParsed3.alternatives || []).map(a => a.route)];
-  const hasA11y = allRoutes.some(r => r?.includes("rule-styleguide"));
+  const allRoutes = [isParsed3.route, ...(isParsed3.alternatives || []).map((a) => a.route)];
+  const hasA11y = allRoutes.some((r) => r?.includes("rule-styleguide"));
   check("T3.1 a11y query routes to styleguides", hasA11y);
 }
 
@@ -85,7 +94,9 @@ check("T4 low-confidence prompt does not error", r4.isError !== true);
 let isParsed4 = false;
 try {
   isParsed4 = JSON.parse(r4.content?.[0]?.text ?? "");
-} catch { /* invalid JSON — treated as false */ }
+} catch {
+  /* invalid JSON — treated as false */
+}
 check("T4.1 low-confidence prompt routes to 'unknown'", isParsed4 && isParsed4.route === "unknown");
 
 console.log(`\nResults: ${pass} passed, ${fail} failed`);

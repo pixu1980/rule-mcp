@@ -39,8 +39,8 @@ try {
   assert.equal(result.status, 0, result.stderr || result.stdout);
 
   const sourceSkills = readdirSync(join(root, "skills"), { withFileTypes: true })
-    .filter(entry => entry.isDirectory() && existsSync(join(root, "skills", entry.name, "SKILL.md")))
-    .map(entry => entry.name)
+    .filter((entry) => entry.isDirectory() && existsSync(join(root, "skills", entry.name, "SKILL.md")))
+    .map((entry) => entry.name)
     .sort();
 
   for (const skill of sourceSkills) {
@@ -49,7 +49,10 @@ try {
 
   assert.ok(!existsSync(join(target, "rule", "stale.txt")), "existing bundled skill must be replaced cleanly");
   assert.ok(existsSync(join(target, "custom-skill", "SKILL.md")), "unrelated custom skills must be preserved");
-  assert.ok(result.stdout.includes(`Installed ${sourceSkills.length} skills`), "installer must report the installed count");
+  assert.ok(
+    result.stdout.includes(`Installed ${sourceSkills.length} skills`),
+    "installer must report the installed count",
+  );
   assert.ok(result.stdout.includes(target), "installer must report the global destination");
 
   console.log(`  ✅ ${sourceSkills.length} skills installed globally without touching custom skills`);

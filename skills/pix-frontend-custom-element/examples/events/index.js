@@ -1,8 +1,8 @@
 // @ts-check
 
-import { cancelEvent } from './_cancelEvent.js';
-import { dispatchCustomEvent } from './_dispatchCustomEvent.js';
-import { dispatchComponentEvent } from './_dispatchComponentEvent.js';
+import { cancelEvent } from "./_cancelEvent.js";
+import { dispatchCustomEvent } from "./_dispatchCustomEvent.js";
+import { dispatchComponentEvent } from "./_dispatchComponentEvent.js";
 
 /**
  * Event utilities used by rule custom elements.

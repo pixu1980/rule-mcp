@@ -7,6 +7,7 @@ This playbook supports the rule-frontend-svelte performance review skill. It cov
 Svelte 5 introduces **runes** (`$state`, `$derived`, `$effect`) — explicit reactive primitives that replace Svelte 4's implicit `let =` reactivity.
 
 Key differences from Svelte 4:
+
 - `$state()` is explicit — no more `let count = 0` magic
 - `$derived()` replaces `$:` reactive declarations
 - `$effect()` replaces `$:` for side effects and adds cleanup
@@ -32,12 +33,12 @@ The most common Svelte 5 anti-pattern is using `$effect` to derive state.
 
 ### When to use each
 
-| Tool | Purpose |
-|---|---|
-| `$state()` | Mutable local reactive state |
-| `$derived()` | Computed values from other reactive state |
-| `$derived.by()` | Complex multi-statement derived values |
-| `$effect()` | Side effects: sync, logging, localStorage, imperative APIs |
+| Tool            | Purpose                                                    |
+| --------------- | ---------------------------------------------------------- |
+| `$state()`      | Mutable local reactive state                               |
+| `$derived()`    | Computed values from other reactive state                  |
+| `$derived.by()` | Complex multi-statement derived values                     |
+| `$effect()`     | Side effects: sync, logging, localStorage, imperative APIs |
 
 ## Pattern 2 — State locality
 
@@ -127,6 +128,7 @@ Snippets can be passed to other components:
 ## Pattern 6 — Component responsibility
 
 ### Signs of mixed responsibility
+
 - Component changes when the API contract changes and when the UI design changes
 - Data fetching, formatting, loading/error states, and event handlers are all in one file
 
@@ -138,15 +140,21 @@ let currentUser = $state(null);
 let loading = $state(false);
 let error = $state(null);
 
-export function getUser() { return currentUser; }
-export function isLoading() { return loading; }
-export function getError() { return error; }
+export function getUser() {
+  return currentUser;
+}
+export function isLoading() {
+  return loading;
+}
+export function getError() {
+  return error;
+}
 
 export async function loadUser(id) {
   loading = true;
   error = null;
   try {
-    currentUser = await fetch(`/api/users/${id}`).then(r => r.json());
+    currentUser = await fetch(`/api/users/${id}`).then((r) => r.json());
   } catch (e) {
     error = e.message;
   } finally {
@@ -259,9 +267,15 @@ $effect(() => {
 // stores/_counter.svelte.js
 let count = $state(0);
 
-export function getCount() { return count; }
-export function increment() { count++; }
-export function decrement() { count--; }
+export function getCount() {
+  return count;
+}
+export function increment() {
+  count++;
+}
+export function decrement() {
+  count--;
+}
 ```
 
 Components import these functions directly:
@@ -279,6 +293,7 @@ Components import these functions directly:
 Use browser Performance panel for scripting, layout, and paint cost.
 
 Svelte 5 compiles to efficient vanilla JS — the main performance concerns are:
+
 - Async `$effect` race conditions (correctness)
 - Missing `{#each}` keys
 - State scope too broad

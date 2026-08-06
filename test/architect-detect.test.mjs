@@ -20,10 +20,21 @@ import { detectProjectValues } from "../skills/rule-architect/detect.mjs";
 // A value that cannot be inferred from a generic project's files. If the
 // detector emits any of these, it is fabricating project-specific content.
 const FABRICATED_KEYS = [
-  "AUTH_MECHANISM", "DEPLOY_TARGET", "BROWSER_SUPPORT", "CSP_POLICY",
-  "MVP_STEP_1", "NON_GOAL_1", "PERSONA_1", "USER_STORY_1", "TESTING_PYRAMID",
-  "ENTITY_1", "FEATURE_1", "KEY_VALUE_PROP_1", "QUALITY_GATES",
-  "RULE_MCP_PRIMARY_SKILL", "DOMAIN_NAME",
+  "AUTH_MECHANISM",
+  "DEPLOY_TARGET",
+  "BROWSER_SUPPORT",
+  "CSP_POLICY",
+  "MVP_STEP_1",
+  "NON_GOAL_1",
+  "PERSONA_1",
+  "USER_STORY_1",
+  "TESTING_PYRAMID",
+  "ENTITY_1",
+  "FEATURE_1",
+  "KEY_VALUE_PROP_1",
+  "QUALITY_GATES",
+  "RULE_MCP_PRIMARY_SKILL",
+  "DOMAIN_NAME",
 ];
 
 test("detectProjectValues reads PROJECT_NAME from package.json", () => {
@@ -68,7 +79,10 @@ test("PROJECT_NAME falls back to the directory name when package.json has none",
   try {
     const values = detectProjectValues(dir);
     assert.ok(values.PROJECT_NAME && values.PROJECT_NAME.length > 0, "a directory name is a generic identity signal");
-    assert.ok(values.PROJECT_NAME.startsWith("architect-detect-named-"), `expected the dir basename, got ${values.PROJECT_NAME}`);
+    assert.ok(
+      values.PROJECT_NAME.startsWith("architect-detect-named-"),
+      `expected the dir basename, got ${values.PROJECT_NAME}`,
+    );
   } finally {
     rmSync(dir, { recursive: true, force: true });
   }
@@ -86,7 +100,11 @@ test("PROJECT_NAME comes from a CONTEXT.md H1 when there is no package.json", ()
 });
 
 test("STACK_PKG_MANAGER is detected from the lockfile actually present", () => {
-  for (const [lockfile, manager] of [["pnpm-lock.yaml", "pnpm"], ["yarn.lock", "yarn"], ["package-lock.json", "npm"]]) {
+  for (const [lockfile, manager] of [
+    ["pnpm-lock.yaml", "pnpm"],
+    ["yarn.lock", "yarn"],
+    ["package-lock.json", "npm"],
+  ]) {
     const dir = mkdtempSync(join(tmpdir(), "architect-detect-"));
     try {
       writeFileSync(join(dir, "package.json"), JSON.stringify({ name: "x" }));

@@ -24,14 +24,14 @@ validate any visible interface.
 
 ## Routing contract
 
-| User intent | Primary skill | Required companions |
-|-------------|---------------|---------------------|
-| Visual direction, aesthetics, UI polish | [rule-ui-design-system](../rule-ui-design-system/SKILL.md) | [rule-styleguide](../rule-styleguide/SKILL.md) |
-| Framework component implementation | [rule-frontend](../rule-frontend/SKILL.md) or a framework skill | [rule-ui-design-system](../rule-ui-design-system/SKILL.md), [rule-styleguide](../rule-styleguide/SKILL.md) |
-| Component template generation | MCP `pix_component` | `pix_check` |
-| Accessibility review | [rule-styleguide-a11y](../rule-styleguide-a11y/SKILL.md) | `pix_check` |
-| CSS architecture | [rule-styleguide-css](../rule-styleguide-css/SKILL.md) | [rule-styleguide-naming](../rule-styleguide-naming/SKILL.md) |
-| File tree and naming | [rule-styleguide-naming](../rule-styleguide-naming/SKILL.md) | MCP `pix_fix` |
+| User intent                             | Primary skill                                                 | Required companions                                                                                    |
+| --------------------------------------- | ------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
+| Visual direction, aesthetics, UI polish | [rule-ui-design-system](../rule-ui-design-system/SKILL.md)      | [rule-styleguide](../rule-styleguide/SKILL.md)                                                           |
+| Framework component implementation      | [rule-frontend](../rule-frontend/SKILL.md) or a framework skill | [rule-ui-design-system](../rule-ui-design-system/SKILL.md), [rule-styleguide](../rule-styleguide/SKILL.md) |
+| Component template generation           | MCP `pix_component`                                           | `pix_check`                                                                                            |
+| Accessibility review                    | [rule-styleguide-a11y](../rule-styleguide-a11y/SKILL.md)        | `pix_check`                                                                                            |
+| CSS architecture                        | [rule-styleguide-css](../rule-styleguide-css/SKILL.md)          | [rule-styleguide-naming](../rule-styleguide-naming/SKILL.md)                                             |
+| File tree and naming                    | [rule-styleguide-naming](../rule-styleguide-naming/SKILL.md)    | MCP `pix_fix`                                                                                          |
 
 ## Required workflow
 

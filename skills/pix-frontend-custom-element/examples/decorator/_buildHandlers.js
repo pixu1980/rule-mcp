@@ -1,6 +1,6 @@
 // @ts-check
 
-import { strings } from './_utils.js';
+import { strings } from "./_utils.js";
 
 /**
  * Convert a `{ name: fn }` map into `{ handle<PascalName><Suffix>: fn }`.
@@ -10,7 +10,7 @@ import { strings } from './_utils.js';
  * @param {string} [methodSuffix='']
  * @returns {Record<string, T>}
  */
-export function buildHandlers(input, methodSuffix = '') {
+export function buildHandlers(input, methodSuffix = "") {
   return Object.entries(input).reduce((acc, [key, fn]) => {
     acc[`handle${strings.toPascalCase(key)}${methodSuffix}`] = fn;
     return acc;
@@ -25,7 +25,7 @@ export function buildHandlers(input, methodSuffix = '') {
  * @returns {Record<string, T>}
  */
 export function buildEventHandlers(events) {
-  return buildHandlers(events, 'Event');
+  return buildHandlers(events, "Event");
 }
 
 /**
@@ -36,5 +36,5 @@ export function buildEventHandlers(events) {
  * @returns {Record<string, T>}
  */
 export function buildAttributeHandlers(attributes) {
-  return buildHandlers(attributes, 'AttributeChanged');
+  return buildHandlers(attributes, "AttributeChanged");
 }

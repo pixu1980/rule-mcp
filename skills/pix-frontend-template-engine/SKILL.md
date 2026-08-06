@@ -125,7 +125,7 @@ Use `engine.template` or the shorter `engine.html` alias when a template is smal
 When the target is browser runtime code, use the browser-safe tagged runtime and keep the template to JavaScript `${...}` interpolations only.
 
 ```js
-import TemplateEngine from './src/template-engine/index.js';
+import TemplateEngine from "./src/template-engine/index.js";
 
 const engine = new TemplateEngine();
 const renderCard = engine.html`
@@ -136,8 +136,8 @@ const renderCard = engine.html`
 `;
 
 const html = renderCard({
-  title: 'Inline template',
-  summary: 'Rendered without a template file.',
+  title: "Inline template",
+  summary: "Rendered without a template file.",
 });
 ```
 

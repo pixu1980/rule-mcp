@@ -7,12 +7,12 @@
 - **Exception — Expo/React Native projects**: use `jest` + `jest-expo` + `@testing-library/react-native` (React Native's native module layer is incompatible with Vitest). See `expo` rule.
 - Coverage thresholds are mandatory in local config and CI
 
-| Metric | Minimum |
-|---|---|
-| Statements | 60% |
-| Branches | 50% |
-| Functions | 60% |
-| Lines | 60% |
+| Metric     | Minimum |
+| ---------- | ------- |
+| Statements | 60%     |
+| Branches   | 50%     |
+| Functions  | 60%     |
+| Lines      | 60%     |
 
 ## Required conventions
 

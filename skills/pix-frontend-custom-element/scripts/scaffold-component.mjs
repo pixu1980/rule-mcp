@@ -1,60 +1,52 @@
 // @ts-check
 
-import { mkdir, readdir, readFile, stat, writeFile } from 'node:fs/promises';
-import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { mkdir, readdir, readFile, stat, writeFile } from "node:fs/promises";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 
 const SKILL_ROOT = path.dirname(fileURLToPath(import.meta.url));
-const SHARED_SOURCE_ROOT = path.join(SKILL_ROOT, '..', 'examples'); // decorator/ and events/ subfolders
-const SHARED_PACKAGE_NAME = '@rule-mcp/rule-core';
+const SHARED_SOURCE_ROOT = path.join(SKILL_ROOT, "..", "examples"); // decorator/ and events/ subfolders
+const SHARED_PACKAGE_NAME = "@rule-mcp/rule-core";
 
 const DEFAULTS = {
   target: process.cwd(),
-  componentsDir: 'src/components',
-  sharedDir: 'packages/rule-core',
+  componentsDir: "src/components",
+  sharedDir: "packages/rule-core",
   installShared: false,
   force: false,
   dryRun: false,
 };
 
 const SHARED_SOURCES = [
-  { sourceRoot: path.join(SHARED_SOURCE_ROOT, 'decorator'), targetFolder: 'decorator', skipEntries: [] },
-  { sourceRoot: path.join(SHARED_SOURCE_ROOT, 'events'), targetFolder: 'events', skipEntries: [] },
+  { sourceRoot: path.join(SHARED_SOURCE_ROOT, "decorator"), targetFolder: "decorator", skipEntries: [] },
+  { sourceRoot: path.join(SHARED_SOURCE_ROOT, "events"), targetFolder: "events", skipEntries: [] },
   // Template-engine tagged runtime is installed when the sibling
   // rule-template-engine skill is present; otherwise it is skipped.
   {
-    sourceRoot: path.resolve(
-      SKILL_ROOT,
-      '..',
-      '..',
-      'rule-template-engine',
-      'assets',
-      'tagged-runtime'
-    ),
-    targetFolder: 'template-engine',
+    sourceRoot: path.resolve(SKILL_ROOT, "..", "..", "rule-template-engine", "assets", "tagged-runtime"),
+    targetFolder: "template-engine",
     skipEntries: [],
     optional: true,
   },
 ];
-const DECORATOR_MARKER = 'export function componentDecorator';
+const DECORATOR_MARKER = "export function componentDecorator";
 
 const SHARED_PACKAGE_FILES = Object.freeze({
-  'package.json': `${JSON.stringify(
+  "package.json": `${JSON.stringify(
     {
       name: SHARED_PACKAGE_NAME,
       private: true,
-      type: 'module',
+      type: "module",
       exports: {
-        './decorator/index.js': './decorator/index.js',
-        './events/index.js': './events/index.js',
-        './template-engine/index.js': './template-engine/index.js',
+        "./decorator/index.js": "./decorator/index.js",
+        "./events/index.js": "./events/index.js",
+        "./template-engine/index.js": "./template-engine/index.js",
       },
     },
     null,
-    2
+    2,
   )}\n`,
-  'README.md':
-    '# @rule-mcp/rule-core\n\nShared runtime helpers for rule-mcp component packages.\n',
+  "README.md": "# @rule-mcp/rule-core\n\nShared runtime helpers for rule-mcp component packages.\n",
 });
 
 /**
@@ -101,7 +93,7 @@ const SHARED_PACKAGE_FILES = Object.freeze({
  * @param {string} fallback
  * @returns {string}
  */
-const getArg = (argv, flag, fallback = '') => {
+const getArg = (argv, flag, fallback = "") => {
   const index = argv.findIndex((entry) => entry === flag);
   if (index === -1) return fallback;
   return argv[index + 1] ?? fallback;
@@ -116,7 +108,7 @@ const getArg = (argv, flag, fallback = '') => {
 const parseList = (raw) => {
   if (!raw) return [];
   return raw
-    .split(',')
+    .split(",")
     .map((part) => part.trim())
     .filter(Boolean);
 };
@@ -127,8 +119,8 @@ const parseList = (raw) => {
  */
 const toKebabCase = (str) =>
   str
-    .replace(/([a-z0-9])([A-Z])/g, '$1-$2')
-    .replace(/([A-Z])([A-Z][a-z])/g, '$1-$2')
+    .replace(/([a-z0-9])([A-Z])/g, "$1-$2")
+    .replace(/([A-Z])([A-Z][a-z])/g, "$1-$2")
     .toLowerCase();
 
 /**
@@ -140,7 +132,7 @@ const toPascalCase = (str) =>
     .split(/[-_\s]+/)
     .filter(Boolean)
     .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
-    .join('');
+    .join("");
 
 /**
  * Validate and normalise a class name into its custom-element tag.
@@ -156,9 +148,9 @@ const resolveName = (name) => {
   const pascal = toPascalCase(name);
   const tag = toKebabCase(pascal);
 
-  if (!tag.includes('-')) {
+  if (!tag.includes("-")) {
     throw new Error(
-      `Class name "${name}" produces tag "${tag}" without a hyphen. Custom element names must contain a hyphen - use a class with at least two PascalCase words (e.g. "PixCard").`
+      `Class name "${name}" produces tag "${tag}" without a hyphen. Custom element names must contain a hyphen - use a class with at least two PascalCase words (e.g. "PixCard").`,
     );
   }
 
@@ -170,21 +162,21 @@ const resolveName = (name) => {
  * @returns {ScaffoldOptions}
  */
 export const parseArgs = (argv) => {
-  const tagFlag = getArg(argv, '--tag', '');
-  const { name, tag: defaultTag } = resolveName(getArg(argv, '--name', ''));
+  const tagFlag = getArg(argv, "--tag", "");
+  const { name, tag: defaultTag } = resolveName(getArg(argv, "--name", ""));
 
   return {
-    target: path.resolve(getArg(argv, '--target', DEFAULTS.target)),
+    target: path.resolve(getArg(argv, "--target", DEFAULTS.target)),
     name,
     tag: tagFlag || defaultTag,
-    componentsDir: getArg(argv, '--components-dir', DEFAULTS.componentsDir),
-    sharedDir: getArg(argv, '--shared-dir', DEFAULTS.sharedDir),
-    extendsElement: getArg(argv, '--extends', ''),
-    attributes: parseList(getArg(argv, '--attributes', '')),
-    events: parseList(getArg(argv, '--events', '')),
-    installShared: argv.includes('--install-shared'),
-    force: argv.includes('--force'),
-    dryRun: argv.includes('--dry-run'),
+    componentsDir: getArg(argv, "--components-dir", DEFAULTS.componentsDir),
+    sharedDir: getArg(argv, "--shared-dir", DEFAULTS.sharedDir),
+    extendsElement: getArg(argv, "--extends", ""),
+    attributes: parseList(getArg(argv, "--attributes", "")),
+    events: parseList(getArg(argv, "--events", "")),
+    installShared: argv.includes("--install-shared"),
+    force: argv.includes("--force"),
+    dryRun: argv.includes("--dry-run"),
   };
 };
 
@@ -211,7 +203,7 @@ const fileExists = async (filePath) => {
  */
 const findExistingDecorator = async (root) => {
   /** @type {string[]} */
-  const skipDirs = ['node_modules', 'dist', 'build', '.git', '.next', '.parcel-cache'];
+  const skipDirs = ["node_modules", "dist", "build", ".git", ".next", ".parcel-cache"];
 
   /** @param {string} dir */
   const walk = async (dir) => {
@@ -234,7 +226,7 @@ const findExistingDecorator = async (root) => {
       if (!/\.m?js$/.test(entry.name)) continue;
 
       const filePath = path.join(dir, entry.name);
-      const content = await readFile(filePath, 'utf8').catch(() => '');
+      const content = await readFile(filePath, "utf8").catch(() => "");
       if (content.includes(DECORATOR_MARKER)) {
         return path.dirname(filePath);
       }
@@ -285,9 +277,9 @@ const copyTree = async (sourceRoot, targetRoot, force, skipEntries = []) => {
         throw new Error(`Refusing to overwrite ${destPath} without --force.`);
       }
 
-      const content = await readFile(srcPath, 'utf8');
+      const content = await readFile(srcPath, "utf8");
       await mkdir(path.dirname(destPath), { recursive: true });
-      await writeFile(destPath, content, 'utf8');
+      await writeFile(destPath, content, "utf8");
       written.push(destPath);
     }
   };
@@ -306,8 +298,8 @@ const copyTree = async (sourceRoot, targetRoot, force, skipEntries = []) => {
  */
 const relativeImport = (fromFile, toDir) => {
   let rel = path.relative(path.dirname(fromFile), toDir);
-  rel = rel.split(path.sep).join('/');
-  if (!rel.startsWith('.')) rel = `./${rel}`;
+  rel = rel.split(path.sep).join("/");
+  if (!rel.startsWith(".")) rel = `./${rel}`;
   return rel;
 };
 
@@ -319,9 +311,9 @@ const relativeImport = (fromFile, toDir) => {
 const buildComponentFiles = (options, sharedImportPath, hasTemplateEngine = true) => {
   const { name, tag, extendsElement, attributes, events } = options;
 
-  const baseClass = extendsElement ? extendsElementToHTMLClass(extendsElement) : 'HTMLElement';
+  const baseClass = extendsElement ? extendsElementToHTMLClass(extendsElement) : "HTMLElement";
 
-  const extendsLine = extendsElement ? `  static extendsElement = '${extendsElement}';\n` : '';
+  const extendsLine = extendsElement ? `  static extendsElement = '${extendsElement}';\n` : "";
 
   const attributesImport = `import attributes from './${tag}.attributes.js';`;
   const eventsImport = `import events from './${tag}.events.js';`;
@@ -403,7 +395,7 @@ export default ${name};
 `;
 
   const attributeEntries = attributes.map((attr) => {
-    const handlerName = attr.replace(/[^a-zA-Z0-9]/g, '');
+    const handlerName = attr.replace(/[^a-zA-Z0-9]/g, "");
     return `  /**
    * @this {HTMLElement & { componentName: string }}
    * @param {string | null} _oldValue
@@ -427,11 +419,11 @@ export default {
   variant(_oldValue, newValue) {
     this.setAttribute('data-variant', normalizeVariant(newValue));
   },
-${attributeEntries.length > 0 ? attributeEntries.join('\n') + '\n' : ''}};
+${attributeEntries.length > 0 ? attributeEntries.join("\n") + "\n" : ""}};
 `;
 
   const eventEntries = events.map((evt) => {
-    const handlerName = evt.replace(/[^a-zA-Z0-9]/g, '');
+    const handlerName = evt.replace(/[^a-zA-Z0-9]/g, "");
     return `  /**
    * @this {HTMLElement}
    * @param {Event} _e
@@ -444,7 +436,7 @@ ${attributeEntries.length > 0 ? attributeEntries.join('\n') + '\n' : ''}};
   const eventsJs = `// @ts-check
 
 export default {
-${eventEntries.length > 0 ? eventEntries.join('\n') + '\n' : ''}};
+${eventEntries.length > 0 ? eventEntries.join("\n") + "\n" : ""}};
 `;
 
   const constsJs = `// @ts-check
@@ -552,24 +544,24 @@ ${selector} {
 const extendsElementToHTMLClass = (tag) => {
   /** @type {Record<string, string>} */
   const overrides = {
-    a: 'HTMLAnchorElement',
-    blockquote: 'HTMLQuoteElement',
-    button: 'HTMLButtonElement',
-    details: 'HTMLDetailsElement',
-    dialog: 'HTMLDialogElement',
-    div: 'HTMLDivElement',
-    form: 'HTMLFormElement',
-    img: 'HTMLImageElement',
-    input: 'HTMLInputElement',
-    label: 'HTMLLabelElement',
-    li: 'HTMLLIElement',
-    ol: 'HTMLOListElement',
-    p: 'HTMLParagraphElement',
-    select: 'HTMLSelectElement',
-    span: 'HTMLSpanElement',
-    table: 'HTMLTableElement',
-    textarea: 'HTMLTextAreaElement',
-    ul: 'HTMLUListElement',
+    a: "HTMLAnchorElement",
+    blockquote: "HTMLQuoteElement",
+    button: "HTMLButtonElement",
+    details: "HTMLDetailsElement",
+    dialog: "HTMLDialogElement",
+    div: "HTMLDivElement",
+    form: "HTMLFormElement",
+    img: "HTMLImageElement",
+    input: "HTMLInputElement",
+    label: "HTMLLabelElement",
+    li: "HTMLLIElement",
+    ol: "HTMLOListElement",
+    p: "HTMLParagraphElement",
+    select: "HTMLSelectElement",
+    span: "HTMLSpanElement",
+    table: "HTMLTableElement",
+    textarea: "HTMLTextAreaElement",
+    ul: "HTMLUListElement",
   };
 
   if (overrides[tag]) return overrides[tag];
@@ -608,12 +600,12 @@ export const scaffoldComponent = async (options) => {
       for (const [relativePath, content] of Object.entries(SHARED_PACKAGE_FILES)) {
         const targetPath = path.join(sharedLibraryPath, relativePath);
         await mkdir(path.dirname(targetPath), { recursive: true });
-        await writeFile(targetPath, content, 'utf8');
+        await writeFile(targetPath, content, "utf8");
         sharedWritten.push(targetPath);
       }
     } else {
       for (const source of SHARED_SOURCES) {
-        sharedWritten.push(path.join(sharedLibraryPath, source.targetFolder, '<copied>'));
+        sharedWritten.push(path.join(sharedLibraryPath, source.targetFolder, "<copied>"));
       }
 
       for (const relativePath of Object.keys(SHARED_PACKAGE_FILES)) {
@@ -625,10 +617,10 @@ export const scaffoldComponent = async (options) => {
   } else {
     throw new Error(
       [
-        'No existing `componentDecorator` found in the project.',
-        'Re-run with `--install-shared` to install the shared library once at',
+        "No existing `componentDecorator` found in the project.",
+        "Re-run with `--install-shared` to install the shared library once at",
         `\`${path.join(options.sharedDir)}\` (override with --shared-dir).`,
-      ].join(' ')
+      ].join(" "),
     );
   }
 
@@ -637,9 +629,7 @@ export const scaffoldComponent = async (options) => {
 
   // template-engine tagged runtime is present only when the sibling
   // rule-template-engine skill was installed into the shared library.
-  const hasTemplateEngine = await fileExists(
-    path.join(sharedLibraryPath, 'template-engine', 'index.js')
-  );
+  const hasTemplateEngine = await fileExists(path.join(sharedLibraryPath, "template-engine", "index.js"));
 
   // 2. build component files
   const files = buildComponentFiles(options, sharedImportPath, hasTemplateEngine);
@@ -662,7 +652,7 @@ export const scaffoldComponent = async (options) => {
     for (const [relPath, content] of Object.entries(files)) {
       const abs = path.join(componentDir, relPath);
       await mkdir(path.dirname(abs), { recursive: true });
-      await writeFile(abs, content, 'utf8');
+      await writeFile(abs, content, "utf8");
       componentWritten.push(abs);
     }
   } else {
@@ -679,13 +669,13 @@ export const scaffoldComponent = async (options) => {
     writtenFiles: [...sharedWritten, ...componentWritten],
     dryRun: options.dryRun,
     nextSteps: [
-      `Import the component module from your app entry: import '${path.relative(targetRoot, componentEntryFile).split(path.sep).join('/')}';`,
+      `Import the component module from your app entry: import '${path.relative(targetRoot, componentEntryFile).split(path.sep).join("/")}';`,
       sharedLibraryInstalled
         ? 'Confirm the bundler resolves component CSS imports as raw text (for esbuild use `loader: { ".css": "text", ".svg": "text" }`).'
-        : 'Reusing existing shared library - no bundler change needed.',
+        : "Reusing existing shared library - no bundler change needed.",
       options.extendsElement
         ? `Customized built-ins (\`is="${options.tag}"\`) require the @ungap/custom-elements polyfill on Safari.`
-        : 'Autonomous element - no Safari polyfill needed.',
+        : "Autonomous element - no Safari polyfill needed.",
     ],
   };
 };
@@ -697,13 +687,11 @@ const main = async () => {
 };
 
 const currentFile = fileURLToPath(import.meta.url);
-const invokedFile = process.argv[1] ? path.resolve(process.argv[1]) : '';
+const invokedFile = process.argv[1] ? path.resolve(process.argv[1]) : "";
 
 if (invokedFile === currentFile) {
   main().catch((error) => {
-    process.stderr.write(
-      `scaffold-component error: ${error instanceof Error ? error.message : String(error)}\n`
-    );
+    process.stderr.write(`scaffold-component error: ${error instanceof Error ? error.message : String(error)}\n`);
     process.exitCode = 1;
   });
 }

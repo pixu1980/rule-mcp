@@ -12,7 +12,7 @@ Every MCP host namespaces the prompts a server exposes, and none of them let the
 - Claude Code → `/rule-mcp:rule-backend (MCP)`
 - VS Code (Copilot Chat) → `/mcp.rule-mcp.rule-backend`
 
-Only the host's own command/prompt **files** are invoked bare (`/rule-backend`). ADR 029 solved this for Claude Code and Pi with user-level command files plus `RULE_MCP_NO_PROMPTS=1`, but the knowledge of *which directory, which format, which host* was spread across three places: the per-agent installers (`src/cli/install.js`), a hand-maintained installer script (`scripts/install-agent-commands.sh`) and a hand-maintained path list in `scripts/uninstall.sh`.
+Only the host's own command/prompt **files** are invoked bare (`/rule-backend`). ADR 029 solved this for Claude Code and Pi with user-level command files plus `RULE_MCP_NO_PROMPTS=1`, but the knowledge of _which directory, which format, which host_ was spread across three places: the per-agent installers (`src/cli/install.js`), a hand-maintained installer script (`scripts/install-agent-commands.sh`) and a hand-maintained path list in `scripts/uninstall.sh`.
 
 Consequences of that split: VS Code was never covered (its commands stayed prefixed), and nothing structurally prevented the next new agent from being forgotten the same way.
 

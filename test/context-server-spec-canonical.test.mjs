@@ -17,18 +17,29 @@ const CONTEXT_SERVER_DIR = fileURLToPath(new URL("../skills/rule-architect/asset
 const WIZARD_SPEC_PATH = new URL("../skills/rule-architect/wizard-spec.json", import.meta.url);
 
 test("stale placeholders.json no longer exists under assets/context-server/", () => {
-  assert.equal(existsSync(CONTEXT_SERVER_DIR + "placeholders.json"), false, "assets/context-server/placeholders.json should have been removed");
+  assert.equal(
+    existsSync(CONTEXT_SERVER_DIR + "placeholders.json"),
+    false,
+    "assets/context-server/placeholders.json should have been removed",
+  );
 });
 
 for (const file of ["interview.js", "interview.css", "index.html"]) {
   test(`assets/context-server/${file} does not exist — context-server serves it by path from rule-architect-web/`, () => {
     const linkPath = CONTEXT_SERVER_DIR + file;
-    assert.equal(existsSync(linkPath), false, `${linkPath} should not exist (no symlink, no copy) — pnpm pack drops symlinks from the published tarball`);
+    assert.equal(
+      existsSync(linkPath),
+      false,
+      `${linkPath} should not exist (no symlink, no copy) — pnpm pack drops symlinks from the published tarball`,
+    );
   });
 }
 
 test("canonical wizard-spec.json has the domain-sketch onboarding step (previously missing from context-server)", () => {
   const wizardSpec = JSON.parse(readFileSync(WIZARD_SPEC_PATH, "utf-8"));
   const stepKeys = wizardSpec.steps.map((step) => step.key);
-  assert.ok(stepKeys.includes("step-1-domain-sketch"), `wizard-spec.json steps must include step-1-domain-sketch, found: ${stepKeys.join(", ")}`);
+  assert.ok(
+    stepKeys.includes("step-1-domain-sketch"),
+    `wizard-spec.json steps must include step-1-domain-sketch, found: ${stepKeys.join(", ")}`,
+  );
 });

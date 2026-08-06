@@ -15,7 +15,7 @@ Focus on:
 
 For each issue, return:
 
-```md
+````md
 ### Issue title
 
 - Pattern: [one of the Electron patterns]
@@ -26,12 +26,14 @@ For each issue, return:
 ```js
 // improved snippet
 ```
+````
 
 Rule of thumb:
-```
+
+````
 
 Review this code:
 
 ```js
 PASTE_CODE_HERE
-```
+````

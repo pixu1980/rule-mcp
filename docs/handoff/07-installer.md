@@ -22,10 +22,15 @@ Nelle fasi 1-6 sono stati corretti: file-system safety, SSE auth, MCP protocol, 
 **Problema:** `parseJson()` a riga 137 trasforma JSON malformato in `{}`, cancellando silenziosamente la configurazione utente. `backupFile()` esiste ma non viene mai chiamato.
 
 **Fix:**
+
 ```js
 // src/cli/install.js — parseJson deve fallire, non restituire {}
 const parseJson = (text) => {
-  try { return JSON.parse(text); } catch { return null; }  // null = errore
+  try {
+    return JSON.parse(text);
+  } catch {
+    return null;
+  } // null = errore
 };
 
 // Ogni upsert deve:
@@ -41,6 +46,7 @@ const parseJson = (text) => {
 **Problema:** `--all` chiama `setRawMode()` anche quando stdin non è TTY → crash. `copySkill()` duplica i path perché `parentPath` è già assoluto su Node 24.
 
 **Fix:**
+
 ```js
 // Se !process.stdin.isTTY && selectAll → installazione batch, no UI
 // copySkill: usare entry.parentPath ?? source (parentPath è già assoluto)

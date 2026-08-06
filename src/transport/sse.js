@@ -78,16 +78,22 @@ function handleCors(req, res) {
  */
 function checkAuth(req, pathname) {
   // Health check is public
-  if (pathname === "/health") {return true;}
+  if (pathname === "/health") {
+    return true;
+  }
   // SSE and message endpoints require bearer token
   const auth = req.headers.authorization;
-  if (!auth) {return false;}
+  if (!auth) {
+    return false;
+  }
   const expected = `Bearer ${serverToken}`;
   const provided = Buffer.from(auth);
   const wanted = Buffer.from(expected);
   // Length guard first — timingSafeEqual throws on unequal-length buffers.
   // The length of the expected token is not secret.
-  if (provided.length !== wanted.length) {return false;}
+  if (provided.length !== wanted.length) {
+    return false;
+  }
   return timingSafeEqual(provided, wanted);
 }
 
@@ -95,7 +101,9 @@ function checkAuth(req, pathname) {
  * HTTP/HTTPS request handler.
  */
 async function requestHandler(request, res) {
-  if (handleCors(request, res)) {return;}
+  if (handleCors(request, res)) {
+    return;
+  }
 
   const prototype = httpServer instanceof https.Server ? "https" : "http";
   const parsedUrl = new URL(request.url ?? "/", `${prototype}://${request.headers.host ?? "localhost"}`);
@@ -139,7 +147,9 @@ async function requestHandler(request, res) {
       sessions.set(transport.sessionId, session);
 
       const closeSession = () => {
-        if (!sessions.delete(transport.sessionId)) {return;}
+        if (!sessions.delete(transport.sessionId)) {
+          return;
+        }
         void server.close().catch(() => {});
       };
       transport.onclose = closeSession;
@@ -201,7 +211,9 @@ async function requestHandler(request, res) {
     // Log full detail server-side; return only a generic message + correlation id
     // to the client to avoid leaking internal state.
     const requestId = randomUUID();
-    process.stderr.write(`[rule-mcp] [${requestId}] ${request.method} ${request.url}: ${error?.stack ?? error?.message ?? error}\n`);
+    process.stderr.write(
+      `[rule-mcp] [${requestId}] ${request.method} ${request.url}: ${error?.stack ?? error?.message ?? error}\n`,
+    );
     if (!res.headersSent) {
       res.writeHead(500, { "Content-Type": "application/json" });
       res.end(JSON.stringify({ error: "Internal server error", requestId }));
@@ -254,13 +266,16 @@ export async function startSseServer(options = {}) {
   const safeHandler = wrapRequestHandler(requestHandler, { timeout: 60_000 });
 
   // Create HTTP or HTTPS server
-  httpServer = sslCert && sslKey ? https.createServer(
-      {
-        cert: readFileSync(resolvedCert),
-        key: readFileSync(resolvedKey),
-      },
-      safeHandler,
-    ) : http.createServer(safeHandler);
+  httpServer =
+    sslCert && sslKey
+      ? https.createServer(
+          {
+            cert: readFileSync(resolvedCert),
+            key: readFileSync(resolvedKey),
+          },
+          safeHandler,
+        )
+      : http.createServer(safeHandler);
 
   // SSE streams are intentionally long-lived; generic idle timeouts reconnect clients.
   httpServer.timeout = 0;

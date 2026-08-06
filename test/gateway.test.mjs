@@ -8,8 +8,13 @@
 let pass = 0;
 let fail = 0;
 const check = (label, ok) => {
-  if (ok) { pass++; console.log(`  ✅ ${label}`); }
-  else { fail++; console.log(`  ❌ ${label}`); }
+  if (ok) {
+    pass++;
+    console.log(`  ✅ ${label}`);
+  } else {
+    fail++;
+    console.log(`  ❌ ${label}`);
+  }
 };
 
 console.log("=== Gateway Receipt Tests ===\n");

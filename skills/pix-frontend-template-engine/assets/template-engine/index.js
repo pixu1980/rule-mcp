@@ -1,7 +1,7 @@
 // Template Engine - Main Entry Point
 
-import { registerBuiltinFilters } from './_filters.js';
-import { TemplateRenderer } from './_renderer.js';
+import { registerBuiltinFilters } from "./_filters.js";
+import { TemplateRenderer } from "./_renderer.js";
 
 export class TemplateEngine {
   constructor(options = {}) {
@@ -38,8 +38,8 @@ export class TemplateEngine {
    * @returns {(data?: object, options?: object) => string} Render function
    */
   template(strings, ...values) {
-    if (!Array.isArray(strings) || !Object.prototype.hasOwnProperty.call(strings, 'raw')) {
-      throw new TypeError('TemplateEngine.template must be used as a tagged template literal');
+    if (!Array.isArray(strings) || !Object.prototype.hasOwnProperty.call(strings, "raw")) {
+      throw new TypeError("TemplateEngine.template must be used as a tagged template literal");
     }
 
     return (data = {}, options = {}) => {
@@ -68,15 +68,15 @@ export class TemplateEngine {
   }
 
   createTemplateLiteralSource(strings, values, data) {
-    let source = '';
+    let source = "";
 
     for (let index = 0; index < strings.length; index++) {
       source += strings[index];
 
       if (index < values.length) {
         const value = values[index];
-        const resolvedValue = typeof value === 'function' ? value(data) : value;
-        source += resolvedValue == null ? '' : String(resolvedValue);
+        const resolvedValue = typeof value === "function" ? value(data) : value;
+        source += resolvedValue == null ? "" : String(resolvedValue);
       }
     }
 

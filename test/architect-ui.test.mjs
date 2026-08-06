@@ -46,8 +46,10 @@ test.describe("rule-architect interview", () => {
     // Click Web Application
     await page.click("[data-part='project-type-card']:first-child");
     // Wait for selection + re-render (stack fields filter by PROJECT_TYPE)
-    await expect(page.locator("[data-part='project-type-card']:first-child"))
-      .toHaveAttribute("data-state-selected", "true");
+    await expect(page.locator("[data-part='project-type-card']:first-child")).toHaveAttribute(
+      "data-state-selected",
+      "true",
+    );
     // Tech cards should be filtered for webapp on the same page
     await expect(page.locator("[data-part='tech-card']").filter({ hasText: "SQLite" }).first()).toBeVisible();
     await expect(page.locator("[data-part='tech-card']").filter({ hasText: "tRPC" }).first()).toBeVisible();
@@ -105,7 +107,9 @@ test.describe("rule-architect interview", () => {
     // Navigate to last step
     for (let index = 0; index < 20; index++) {
       const nextButton = page.locator("[data-part='nav-btn'][data-direction='next']");
-      if (!(await nextButton.isVisible().catch(() => false))) {break;}
+      if (!(await nextButton.isVisible().catch(() => false))) {
+        break;
+      }
       await nextButton.click();
       await page.waitForTimeout(300);
     }
@@ -132,8 +136,9 @@ test.describe("rule-architect interview", () => {
     // ALL select-type fields render as skill-cards (no native <select>), so
     // PROJECT_TYPE_OTHER's revealed "Architecture Skill" group shows up as a
     // subtitle + skill-cards, not a native select[name='PROJECT_TYPE_OTHER'].
-    await expect(page.locator("[data-part='subtitle']").filter({ hasText: "Architecture Skill" }))
-      .toBeVisible({ timeout: 3000 });
+    await expect(page.locator("[data-part='subtitle']").filter({ hasText: "Architecture Skill" })).toBeVisible({
+      timeout: 3000,
+    });
     await expect(page.locator("[data-part='skill-card'][data-key='rule-architect']")).toBeVisible();
   });
 
@@ -154,7 +159,9 @@ test.describe("rule-architect interview", () => {
         break;
       }
       const next = page.locator("[data-part='nav-btn'][data-direction='next']");
-      if (!(await next.isVisible().catch(() => false))) {break;}
+      if (!(await next.isVisible().catch(() => false))) {
+        break;
+      }
       await next.click();
       await page.waitForTimeout(150);
     }
@@ -192,8 +199,10 @@ test.describe("rule-architect-web interview (card taxonomy)", () => {
 
     // Select Web Application, then a backend framework to reveal the DATABASE field.
     await page.click("[data-part='project-type-card'][data-key='webapp']");
-    await expect(page.locator("[data-part='project-type-card'][data-key='webapp']"))
-      .toHaveAttribute("data-state-selected", "true");
+    await expect(page.locator("[data-part='project-type-card'][data-key='webapp']")).toHaveAttribute(
+      "data-state-selected",
+      "true",
+    );
     await page.click("[data-part='tech-card'][data-key='express']");
     await expect(page.locator("[data-part='tech-card'][data-key='sqlite']")).toBeVisible();
 
@@ -203,8 +212,10 @@ test.describe("rule-architect-web interview (card taxonomy)", () => {
 
     // Switch PROJECT_TYPE to Backend / API — the tech-card set must change accordingly.
     await page.click("[data-part='project-type-card'][data-key='backend']");
-    await expect(page.locator("[data-part='project-type-card'][data-key='backend']"))
-      .toHaveAttribute("data-state-selected", "true");
+    await expect(page.locator("[data-part='project-type-card'][data-key='backend']")).toHaveAttribute(
+      "data-state-selected",
+      "true",
+    );
     await expect(page.locator("[data-part='tech-card'][data-key='postgresql']")).toBeVisible();
     await expect(page.locator("[data-part='tech-card'][data-key='indexeddb']")).toHaveCount(0);
   });
@@ -238,8 +249,10 @@ test.describe("rule-architect-web interview (card taxonomy)", () => {
     // Step 1 -> Step 2 (Project Type & Stack): pick Web Application (a select field).
     await page.click("[data-part='nav-btn'][data-direction='next']");
     await page.click("[data-part='project-type-card'][data-key='webapp']");
-    await expect(page.locator("[data-part='project-type-card'][data-key='webapp']"))
-      .toHaveAttribute("data-state-selected", "true");
+    await expect(page.locator("[data-part='project-type-card'][data-key='webapp']")).toHaveAttribute(
+      "data-state-selected",
+      "true",
+    );
 
     const panel = page.locator("[data-part='summary-panel']");
 
@@ -248,7 +261,9 @@ test.describe("rule-architect-web interview (card taxonomy)", () => {
     await expect(panel.locator("[data-part='summary-label']").filter({ hasText: "Project Name" })).toBeVisible();
     await expect(panel.locator("[data-part='summary-value']").filter({ hasText: "My RPG Builder" })).toBeVisible();
 
-    await expect(panel.locator("[data-part='summary-group-title']").filter({ hasText: "Project Type & Stack" })).toBeVisible();
+    await expect(
+      panel.locator("[data-part='summary-group-title']").filter({ hasText: "Project Type & Stack" }),
+    ).toBeVisible();
     // Select values resolve to the option's human label, not the raw key.
     await expect(panel.locator("[data-part='summary-value']").filter({ hasText: "Web Application" })).toBeVisible();
     await expect(panel.locator("[data-part='summary-value']").filter({ hasText: /^webapp$/ })).toHaveCount(0);
@@ -319,8 +334,10 @@ test.describe("rule-architect-web interview (card taxonomy)", () => {
   // /api/download, even for a request that was scheduled just before the toggle.
   test("toggling to Summary cancels a pending Files debounce — no /api/download fires afterward", async ({ page }) => {
     let downloadCalls = 0;
-    page.on("request", r => {
-      if (r.method() === "POST" && r.url().includes("/api/download")) {downloadCalls++;}
+    page.on("request", (r) => {
+      if (r.method() === "POST" && r.url().includes("/api/download")) {
+        downloadCalls++;
+      }
     });
 
     await page.click("[data-part='nav-btn'][data-direction='next']");
@@ -334,7 +351,9 @@ test.describe("rule-architect-web interview (card taxonomy)", () => {
 
     // Enter Files and let its initial debounced fetch resolve.
     await filesTab.click();
-    await expect(panel.locator("[data-part='file-tab']").filter({ hasText: "AGENTS.md" })).toBeVisible({ timeout: 5000 });
+    await expect(panel.locator("[data-part='file-tab']").filter({ hasText: "AGENTS.md" })).toBeVisible({
+      timeout: 5000,
+    });
 
     // Type (schedules a new ~400ms debounced fetch), then immediately toggle
     // back to Summary — well within the debounce window.
@@ -406,7 +425,7 @@ test.describe("panel a11y (both servers serve the identical interview.js)", () =
       const panel = page.getByRole("complementary");
       await expect(panel).toBeVisible();
       await expect(panel).toHaveAttribute("data-part", "summary-panel");
-      expect(await panel.evaluate(element => element.tagName)).toBe("ASIDE");
+      expect(await panel.evaluate((element) => element.tagName)).toBe("ASIDE");
 
       // Segmented control: two buttons with accessible names "Summary"/"Files"
       // reachable by role+name; the active one is distinguishable via

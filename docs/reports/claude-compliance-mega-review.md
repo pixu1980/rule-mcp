@@ -11,7 +11,7 @@
 
 1. **Un audit architetturale completo** di ogni sottosistema (server, tools, skills, resources, prompts, enforcement, installer, CLI).
 2. **Verifiche puntuali riproducibili** con evidenza grezza (comandi eseguiti + output) per i punti critici, non affermazioni generiche.
-3. **Una risposta diretta e argomentata** alla domanda centrale: *il router `pix_tool` e i trigger delle skill/tool vengono realmente coinvolti dal modello durante una sessione chat?*
+3. **Una risposta diretta e argomentata** alla domanda centrale: _il router `pix_tool` e i trigger delle skill/tool vengono realmente coinvolti dal modello durante una sessione chat?_
 
 Ogni comando riportato in questo documento è stato eseguito realmente in questa sessione contro il repository corrente (non simulato).
 
@@ -19,18 +19,18 @@ Ogni comando riportato in questo documento è stato eseguito realmente in questa
 
 ## 1. Executive Summary
 
-| Area | Verdetto | Severità |
-|---|---|---|
-| Protocollo MCP — `tools/*`, `resources/*` | ✅ Conforme (validato contro gli schema Zod ufficiali dell'SDK) | — |
-| Protocollo MCP — `prompts/get` | ❌ **Rotto per qualunque client conforme alla spec**, Claude incluso | 🔴 Critical |
-| Router `pix_tool` invocato automaticamente dal modello | ⚠️ **Non garantito strutturalmente**. Dipende al 100% da istruzioni testuali (CLAUDE.md/AGENTS.md), non dal protocollo | 🟠 High |
-| Integrazione con le "Agent Skills" native di Claude (`.claude/skills/`) | ❌ Non implementata: le skill restano markdown esposti solo via tool MCP custom | 🟠 High |
-| Superficie di tool esposta (76 tool + 146 risorse "as shipped") | ⚠️ Grande, senza `annotations`/`readOnlyHint`, nessun filtro `allowedTools` consigliato | 🟡 Medium |
-| Sicurezza (path traversal, command injection) | ⚠️ Una falla di path traversal in `rule_tool_fix mode=generate` | 🟡 Medium |
-| Qualità test/CI | ⚠️ 4/20 file di test rossi o falliti allo stato attuale | 🟡 Medium |
-| Validazione argomenti, guardrail, enforcement post-hoc | ✅ Solido, ben progettato per quello che può fare (vedi §6) | — |
+| Area                                                                    | Verdetto                                                                                                               | Severità    |
+| ----------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- | ----------- |
+| Protocollo MCP — `tools/*`, `resources/*`                               | ✅ Conforme (validato contro gli schema Zod ufficiali dell'SDK)                                                        | —           |
+| Protocollo MCP — `prompts/get`                                          | ❌ **Rotto per qualunque client conforme alla spec**, Claude incluso                                                   | 🔴 Critical |
+| Router `pix_tool` invocato automaticamente dal modello                  | ⚠️ **Non garantito strutturalmente**. Dipende al 100% da istruzioni testuali (CLAUDE.md/AGENTS.md), non dal protocollo | 🟠 High     |
+| Integrazione con le "Agent Skills" native di Claude (`.claude/skills/`) | ❌ Non implementata: le skill restano markdown esposti solo via tool MCP custom                                        | 🟠 High     |
+| Superficie di tool esposta (76 tool + 146 risorse "as shipped")         | ⚠️ Grande, senza `annotations`/`readOnlyHint`, nessun filtro `allowedTools` consigliato                                | 🟡 Medium   |
+| Sicurezza (path traversal, command injection)                           | ⚠️ Una falla di path traversal in `rule_tool_fix mode=generate`                                                         | 🟡 Medium   |
+| Qualità test/CI                                                         | ⚠️ 4/20 file di test rossi o falliti allo stato attuale                                                                | 🟡 Medium   |
+| Validazione argomenti, guardrail, enforcement post-hoc                  | ✅ Solido, ben progettato per quello che può fare (vedi §6)                                                            | —           |
 
-**In una frase**: l'infrastruttura di guardrail/enforcement/BM25 è progettata bene ed è *effettiva quando un tool viene effettivamente chiamato*, ma **nulla nel server MCP obbliga un modello — Claude o altro — a chiamare `pix_tool` prima di scrivere codice**. Il progetto lo sa e compensa iniettando istruzioni testuali (`CLAUDE.md`, `AGENTS.md`, `.cursorrules`) in ogni agente supportato: è una soluzione ragionevole ma probabilistica, non deterministica, e in più il canale nativo che Claude offre proprio per questo scopo (Agent Skills in `.claude/skills/`, auto-discovery reale) non viene usato.
+**In una frase**: l'infrastruttura di guardrail/enforcement/BM25 è progettata bene ed è _effettiva quando un tool viene effettivamente chiamato_, ma **nulla nel server MCP obbliga un modello — Claude o altro — a chiamare `pix_tool` prima di scrivere codice**. Il progetto lo sa e compensa iniettando istruzioni testuali (`CLAUDE.md`, `AGENTS.md`, `.cursorrules`) in ogni agente supportato: è una soluzione ragionevole ma probabilistica, non deterministica, e in più il canale nativo che Claude offre proprio per questo scopo (Agent Skills in `.claude/skills/`, auto-discovery reale) non viene usato.
 
 ---
 
@@ -56,7 +56,7 @@ clean shipped resource count: 146
 tool defs JSON bytes: 90873  ~tokens: 22718
 ```
 
-In questa sessione live (con skill personali aggiuntive installate sulla macchina, es. `caveman-*`, `frontend-design`...) il conteggio tool sale a **87**, e nell'host "pi" ogni risorsa MCP viene *inoltre* esposta come un tool a sé stante (`get_..._skill_full_content`, `get_..._skill_summary_first_30_lines`, ecc.), portando la superficie totale visibile al modello a **oltre 220 tool callable in una singola sessione**. Questo è un dettaglio specifico dell'host, non del server, ma è un effetto concreto e osservabile dell'architettura "una risorsa/skill = un tool" che il progetto adotta.
+In questa sessione live (con skill personali aggiuntive installate sulla macchina, es. `caveman-*`, `frontend-design`...) il conteggio tool sale a **87**, e nell'host "pi" ogni risorsa MCP viene _inoltre_ esposta come un tool a sé stante (`get_..._skill_full_content`, `get_..._skill_summary_first_30_lines`, ecc.), portando la superficie totale visibile al modello a **oltre 220 tool callable in una singola sessione**. Questo è un dettaglio specifico dell'host, non del server, ma è un effetto concreto e osservabile dell'architettura "una risorsa/skill = un tool" che il progetto adotta.
 
 ---
 
@@ -65,7 +65,7 @@ In questa sessione live (con skill personali aggiuntive installate sulla macchin
 `src/prompts/index.js` costruisce ogni prompt con un messaggio `role: "system"`:
 
 ```js
-messages: [{ role: "system", content: { type: "text", text: "..." } }]
+messages: [{ role: "system", content: { type: "text", text: "..." } }];
 ```
 
 Lo spec MCP (`PromptMessage`) e l'SDK ufficiale ammettono **solo** `role: "user" | "assistant"` — non `"system"` (fonte: [MCP spec — Prompts](https://modelcontextprotocol.io/specification/2025-06-18/server/prompts), confermato via `RoleSchema = z.enum(['user','assistant'])` nell'SDK installato in `node_modules/@modelcontextprotocol/sdk`).
@@ -81,7 +81,7 @@ import { getPrompt } from "./src/prompts/index.js";
 const p = getPrompt("rule-code-review");
 const serverResult = { prompt: p }; // esattamente ciò che server.js manda sul wire
 
-GetPromptResultSchema.safeParse(serverResult).success
+GetPromptResultSchema.safeParse(serverResult).success;
 // => false
 ```
 
@@ -135,7 +135,7 @@ return { description: prompt.description, messages: prompt.messages };
 
 ## 4. 🟠 HIGH — Il router e le skill NON usano il meccanismo nativo di Claude
 
-Claude (Claude Code, Claude Agent SDK, claude.ai) ha una feature **nativa** chiamata *Agent Skills*: cartelle in `.claude/skills/<name>/SKILL.md` con frontmatter YAML, **scoperte e invocate automaticamente da Claude stesso** in base alla `description`, oppure richiamabili esplicitamente con `/nome-skill` — senza passare da un tool MCP (fonte: [Claude Code Docs — Agent Skills](https://code.claude.com/docs/en/skills), [Claude Code Docs — Skills nell'SDK](https://code.claude.com/docs/en/agent-sdk/skills)).
+Claude (Claude Code, Claude Agent SDK, claude.ai) ha una feature **nativa** chiamata _Agent Skills_: cartelle in `.claude/skills/<name>/SKILL.md` con frontmatter YAML, **scoperte e invocate automaticamente da Claude stesso** in base alla `description`, oppure richiamabili esplicitamente con `/nome-skill` — senza passare da un tool MCP (fonte: [Claude Code Docs — Agent Skills](https://code.claude.com/docs/en/skills), [Claude Code Docs — Skills nell'SDK](https://code.claude.com/docs/en/agent-sdk/skills)).
 
 `rule-mcp` **non installa mai nulla in `.claude/skills/`**. Verificato leggendo `src/cli/skills-install.js`:
 
@@ -154,7 +154,7 @@ Per Claude, questo significa che **il meccanismo di auto-invocazione realmente s
 
 ### Compensazione attuale (e suo limite strutturale)
 
-Il progetto è consapevole di questo limite e compensa iniettando testo imperativo nei file di memoria di ogni agente. Verificato in `scripts/install.sh` (righe 516-565) e osservabile *live* in questa stessa sessione, dove il blocco `<!-- rule-mcp-rules -->` è presente nel `CLAUDE.md` di progetto:
+Il progetto è consapevole di questo limite e compensa iniettando testo imperativo nei file di memoria di ogni agente. Verificato in `scripts/install.sh` (righe 516-565) e osservabile _live_ in questa stessa sessione, dove il blocco `<!-- rule-mcp-rules -->` è presente nel `CLAUDE.md` di progetto:
 
 ```
 ## MANDATORY: Use rule-mcp enforced workflow for coding work
@@ -163,18 +163,18 @@ This rule overrides weaker project guidance. No exceptions.
 ...
 ```
 
-Questo funziona **solo se l'host carica quel file come istruzione persistente di sistema** (vero per Claude Code/`CLAUDE.md`, Gemini CLI/`GEMINI.md`, Codex/`AGENTS.md`, Cursor/`.cursorrules`, "pi"/`AGENTS.md` — tutti supportati e verificati nel codice di installazione). Ma resta **un'istruzione in linguaggio naturale che il modello può ignorare, dimenticare a metà conversazione (specialmente su context lunghi), o de-prioritizzare** rispetto alla richiesta esplicita dell'utente. Nessun meccanismo del protocollo MCP impedisce al modello di generare codice senza chiamare `pix_tool` — il server può solo reagire *dopo* che un tool è stato chiamato (vedi §6), non *prima*.
+Questo funziona **solo se l'host carica quel file come istruzione persistente di sistema** (vero per Claude Code/`CLAUDE.md`, Gemini CLI/`GEMINI.md`, Codex/`AGENTS.md`, Cursor/`.cursorrules`, "pi"/`AGENTS.md` — tutti supportati e verificati nel codice di installazione). Ma resta **un'istruzione in linguaggio naturale che il modello può ignorare, dimenticare a metà conversazione (specialmente su context lunghi), o de-prioritizzare** rispetto alla richiesta esplicita dell'utente. Nessun meccanismo del protocollo MCP impedisce al modello di generare codice senza chiamare `pix_tool` — il server può solo reagire _dopo_ che un tool è stato chiamato (vedi §6), non _prima_.
 
 **Non esiste, nello spec MCP attuale, un modo per un server di forzare un client a chiamare un tool specifico prima di rispondere.** Questo è un limite del protocollo, non solo di questo progetto — ma il progetto lo presenta implicitamente come "enforced workflow", il che può creare un falso senso di garanzia.
 
 ---
 
-## 5. 🟠 HIGH — L'"enforcement" è reale solo *dopo* l'invocazione, mai *prima*
+## 5. 🟠 HIGH — L'"enforcement" è reale solo _dopo_ l'invocazione, mai _prima_
 
 `src/core/enforcement.js` è ben scritto per quello che fa:
 
 - `preprocessToolCall`: rifiuta payload oversize (>256KB), NUL byte, prototype pollution, nesting >12, >1000 chiavi, richieste `pix_tool` senza `prompt`.
-- `postprocessToolResult`: valida che l'output sia MCP-content valido, e — **solo per il tool `pix_tool`** — verifica che le skill/tool citati nella risposta di routing esistano davvero (`validateRouterResult`), prevenendo allucinazioni del *router stesso*.
+- `postprocessToolResult`: valida che l'output sia MCP-content valido, e — **solo per il tool `pix_tool`** — verifica che le skill/tool citati nella risposta di routing esistano davvero (`validateRouterResult`), prevenendo allucinazioni del _router stesso_.
 - Ogni risposta non di errore riceve in coda un blocco testuale "PIX ENFORCEMENT CONTRACT" (`## PIX ENFORCEMENT CONTRACT ...`) — un nudge testuale ripetuto ad ogni tool call.
 
 Ho verificato con un test reale che questo pipeline funziona come documentato:
@@ -196,6 +196,7 @@ Il punto architetturale da chiarire: **questo hook si attiva solo quando un tool
 - Nessun tool registrato in `src/tools/router.js` imposta `annotations` (`readOnlyHint`, `destructiveHint`, `idempotentHint`, `title`) benché l'SDK e lo spec 2025-06-18 li supportino (`ToolAnnotationsSchema`, verificato in `node_modules/@modelcontextprotocol/sdk`). Risultato pratico: un client come Claude Code non può distinguere in automatico "questo tool legge soltanto" (es. `rule_tool_search`) da "questo tool scrive file" (es. `rule_tool_fix mode=generate`, `rule_tool_process_adr`) — tutti richiedono la stessa fiducia/approvazione.
 
 ### Raccomandazione concreta
+
 - Aggiungere `annotations: { readOnlyHint: true }` a `pix_tool`, `rule_tool_search`, `rule_tool_check` (mode ≠ scaffold), le 67 skill-tool in `mode=full/summary/search/guardrails/tldr`.
 - Aggiungere `annotations: { destructiveHint: false, idempotentHint: false }` a `rule_tool_fix` (mode=fix/generate), `rule_tool_process_adr`.
 - Documentare nel README un `allowedTools`/whitelist consigliata per Claude Code, per limitare il tool-choice budget al set core (9 tool) più il set skill effettivamente rilevante al progetto, invece di esporre tutti i 76 sempre.
@@ -228,6 +229,7 @@ A differenza di `rule_tool_process_adr` (che passa sempre `title` attraverso `sl
 Non è uno scenario di attacco "diretto" da rete (il chiamante è il modello collegato via MCP, non un utente HTTP anonimo), ma è un classico pattern "confused deputy" da MCP: se il modello viene indotto — per prompt injection da un file/README letto in precedenza, o per semplice allucinazione — a passare un `name`/`baseDir` con `../`, il server scrive fuori dalla directory di progetto senza alcun avviso.
 
 ### Fix consigliato
+
 Aggiungere una funzione `assertInsideProject(rootDir, fullPath)` (resolve + `startsWith`) prima di ogni `writeFileSync`/`mkdirSync` in `fix.js`, analoga alla `slugify()` già usata in `adr.js`.
 
 ---
@@ -269,16 +271,16 @@ I fallimenti in `docs-architect.test.mjs` e `skills-docs.test.mjs` sono drift di
 
 ## 10. Raccomandazioni prioritizzate
 
-| # | Azione | Severità | Sforzo |
-|---|---|---|---|
-| 1 | Correggere `prompts/get`: shape `{description, messages}` senza wrapper `prompt`, `role: "user"` invece di `"system"` | 🔴 Critical | Basso (1 file, `server.js` + `prompts/index.js`) |
-| 2 | Aggiungere sanitizzazione path (`assertInsideProject`) in `rule_tool_fix mode=generate` per `name`/`baseDir` | 🟡 Medium | Basso |
-| 3 | Aggiungere `annotations` (`readOnlyHint`/`destructiveHint`) a tutti i tool in `registerTool()` | 🟡 Medium | Medio (tocca ~9 punti di registrazione) |
-| 4 | Documentare esplicitamente (README/docs) che l'"enforcement" è **advisory, non protocollare**, ed è efficace solo se l'host carica `CLAUDE.md`/`AGENTS.md` come istruzione persistente — evitare il termine "enforced" senza qualificarlo | 🟠 High | Basso |
-| 5 | Valutare un ponte reale verso `.claude/skills/` (generare `SKILL.md` + frontmatter compatibile anche lì, non solo in `~/.agents/skills/`) per ottenere auto-discovery nativa su Claude | 🟠 High | Alto |
-| 6 | Aggiungere una guida "raccomandazione allowedTools" per host con tanti tool, e valutare di *non* esporre 2 risorse per ogni skill di default (146 risorse è tanto se l'host le trasforma in tool) | 🟡 Medium | Medio |
-| 7 | Riscrivere ~59/70 descrizioni skill con formula esplicita "Use when..." per aumentare la qualità del matching semantico se/quando porterete le skill su un meccanismo nativo | 🟢 Low | Medio |
-| 8 | Correggere `test:all` in `package.json` (playwright vs node) e sanare il drift `docs/adr/DECISIONS.md` | 🟢 Low | Basso |
+| #   | Azione                                                                                                                                                                                                                                    | Severità    | Sforzo                                           |
+| --- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------- | ------------------------------------------------ |
+| 1   | Correggere `prompts/get`: shape `{description, messages}` senza wrapper `prompt`, `role: "user"` invece di `"system"`                                                                                                                     | 🔴 Critical | Basso (1 file, `server.js` + `prompts/index.js`) |
+| 2   | Aggiungere sanitizzazione path (`assertInsideProject`) in `rule_tool_fix mode=generate` per `name`/`baseDir`                                                                                                                               | 🟡 Medium   | Basso                                            |
+| 3   | Aggiungere `annotations` (`readOnlyHint`/`destructiveHint`) a tutti i tool in `registerTool()`                                                                                                                                            | 🟡 Medium   | Medio (tocca ~9 punti di registrazione)          |
+| 4   | Documentare esplicitamente (README/docs) che l'"enforcement" è **advisory, non protocollare**, ed è efficace solo se l'host carica `CLAUDE.md`/`AGENTS.md` come istruzione persistente — evitare il termine "enforced" senza qualificarlo | 🟠 High     | Basso                                            |
+| 5   | Valutare un ponte reale verso `.claude/skills/` (generare `SKILL.md` + frontmatter compatibile anche lì, non solo in `~/.agents/skills/`) per ottenere auto-discovery nativa su Claude                                                    | 🟠 High     | Alto                                             |
+| 6   | Aggiungere una guida "raccomandazione allowedTools" per host con tanti tool, e valutare di _non_ esporre 2 risorse per ogni skill di default (146 risorse è tanto se l'host le trasforma in tool)                                         | 🟡 Medium   | Medio                                            |
+| 7   | Riscrivere ~59/70 descrizioni skill con formula esplicita "Use when..." per aumentare la qualità del matching semantico se/quando porterete le skill su un meccanismo nativo                                                              | 🟢 Low      | Medio                                            |
+| 8   | Correggere `test:all` in `package.json` (playwright vs node) e sanare il drift `docs/adr/DECISIONS.md`                                                                                                                                    | 🟢 Low      | Basso                                            |
 
 ---
 

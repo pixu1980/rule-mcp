@@ -44,11 +44,7 @@ export function generateSelfSignedCert({ certPath, keyPath, commonName = "rule-m
     }
 
     // Generate RSA private key
-    const keyResult = spawnSync("openssl", [
-      "genrsa",
-      "-out", keyPath,
-      "2048",
-    ], { stdio: "pipe", encoding: "utf-8" });
+    const keyResult = spawnSync("openssl", ["genrsa", "-out", keyPath, "2048"], { stdio: "pipe", encoding: "utf-8" });
 
     if (keyResult.status !== 0) {
       console.error("Failed to generate RSA key:", keyResult.stderr);
@@ -75,19 +71,28 @@ export function generateSelfSignedCert({ certPath, keyPath, commonName = "rule-m
     ].join("\n");
     writeFileSync(configPath, certConfig, { encoding: "utf-8", mode: 0o600 });
 
-    const certResult = spawnSync("openssl", [
-      "req", "-x509",
-      "-new",
-      "-nodes",
-      "-key", keyPath,
-      "-sha256",
-      "-days", String(days),
-      "-out", certPath,
-      "-config", configPath,
-    ], {
-      stdio: ["pipe", "pipe", "pipe"],
-      encoding: "utf-8",
-    });
+    const certResult = spawnSync(
+      "openssl",
+      [
+        "req",
+        "-x509",
+        "-new",
+        "-nodes",
+        "-key",
+        keyPath,
+        "-sha256",
+        "-days",
+        String(days),
+        "-out",
+        certPath,
+        "-config",
+        configPath,
+      ],
+      {
+        stdio: ["pipe", "pipe", "pipe"],
+        encoding: "utf-8",
+      },
+    );
 
     if (certResult.status !== 0) {
       console.error("Failed to generate certificate:", certResult.stderr);
@@ -99,7 +104,11 @@ export function generateSelfSignedCert({ certPath, keyPath, commonName = "rule-m
     console.error("Failed to generate self-signed cert:", error.message);
     return false;
   } finally {
-    try { unlinkSync(configPath); } catch { /* temp config already gone */ }
+    try {
+      unlinkSync(configPath);
+    } catch {
+      /* temp config already gone */
+    }
   }
 }
 

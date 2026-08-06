@@ -46,13 +46,13 @@ function manifestOf(files) {
   return Object.fromEntries(
     [...files]
       .sort((a, b) => a.path.localeCompare(b.path))
-      .map((f) => [f.path, { bytes: Buffer.byteLength(f.content, "utf-8"), sha256: sha256(f.content) }])
+      .map((f) => [f.path, { bytes: Buffer.byteLength(f.content, "utf-8"), sha256: sha256(f.content) }]),
   );
 }
 
 function buildManifest() {
   return Object.fromEntries(
-    Object.entries(VARIANTS).map(([name, answers]) => [name, manifestOf(generateContextContent(answers, spec))])
+    Object.entries(VARIANTS).map(([name, answers]) => [name, manifestOf(generateContextContent(answers, spec))]),
   );
 }
 
@@ -66,7 +66,7 @@ if (process.env.UPDATE_ARCHITECT_SNAPSHOT === "1") {
 test("the generated pack matches the committed golden snapshot", () => {
   assert.ok(
     existsSync(SNAPSHOT_PATH),
-    `missing snapshot — create it with UPDATE_ARCHITECT_SNAPSHOT=1 node --test ${relative(ROOT, import.meta.filename)}`
+    `missing snapshot — create it with UPDATE_ARCHITECT_SNAPSHOT=1 node --test ${relative(ROOT, import.meta.filename)}`,
   );
   const expected = JSON.parse(readFileSync(SNAPSHOT_PATH, "utf-8"));
 
@@ -74,12 +74,12 @@ test("the generated pack matches the committed golden snapshot", () => {
     assert.deepEqual(
       Object.keys(actual[variant]).sort(),
       Object.keys(expected[variant] || {}).sort(),
-      `${variant}: the set of emitted files changed`
+      `${variant}: the set of emitted files changed`,
     );
     assert.deepEqual(
       actual[variant],
       expected[variant],
-      `${variant}: generated content changed — inspect the diff, then re-run with UPDATE_ARCHITECT_SNAPSHOT=1 if intended`
+      `${variant}: generated content changed — inspect the diff, then re-run with UPDATE_ARCHITECT_SNAPSHOT=1 if intended`,
     );
   }
 });
@@ -124,9 +124,12 @@ test("the disk writer produces byte-identical content to the in-memory renderer"
     // so compare on the reported path of each written file.
     const diskByPath = new Map(
       onDisk.map((full) => [
-        relative(dir, full).split(sep).join("/").replace(/^\.context\//, ""),
+        relative(dir, full)
+          .split(sep)
+          .join("/")
+          .replace(/^\.context\//, ""),
         readFileSync(full, "utf-8"),
-      ])
+      ]),
     );
 
     assert.equal(diskByPath.size, reported.length, "every reported file must exist on disk exactly once");

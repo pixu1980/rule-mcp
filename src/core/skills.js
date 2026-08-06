@@ -38,10 +38,10 @@ const IS_MINIMAL_TOOLS = process.env.RULE_MCP_MINIMAL_TOOLS === "1";
  * matter what upstream registration adds.
  */
 const MINIMAL_ALLOWLIST = new Set([
-  "pix_tool",          // router / dispatcher
-  "rule_tool_update",   // self-update
-  "rule_tool_gateway",  // route + evidence + guardrails + receipt (single entry)
-  "rule_tool_apply",    // the only writer
+  "pix_tool", // router / dispatcher
+  "rule_tool_update", // self-update
+  "rule_tool_gateway", // route + evidence + guardrails + receipt (single entry)
+  "rule_tool_apply", // the only writer
   "rule_tool_search",
   "rule_tool_check",
   "rule_tool_scaffold",
@@ -65,14 +65,18 @@ class LruCache {
    * @param {string} key
    * @returns {boolean}
    */
-  has(key) { return this._map.has(key); }
+  has(key) {
+    return this._map.has(key);
+  }
   /**
    * Get a value, promoting it to MRU position.
    * @param {string} key
    * @returns {string|undefined}
    */
   get(key) {
-    if (!this._map.has(key)) {return;}
+    if (!this._map.has(key)) {
+      return;
+    }
     const value = this._map.get(key);
     this._map.delete(key);
     this._map.set(key, value);
@@ -84,17 +88,25 @@ class LruCache {
    * @param {string} value
    */
   set(key, value) {
-    if (this._map.has(key)) {this._map.delete(key);}
+    if (this._map.has(key)) {
+      this._map.delete(key);
+    }
     this._map.set(key, value);
     if (this._map.size > this._maxSize) {
       const firstKey = this._map.keys().next().value;
-      if (firstKey !== undefined) {this._map.delete(firstKey);}
+      if (firstKey !== undefined) {
+        this._map.delete(firstKey);
+      }
     }
   }
   /** Clear all entries. */
-  clear() { this._map.clear(); }
+  clear() {
+    this._map.clear();
+  }
   /** @returns {number} */
-  get size() { return this._map.size; }
+  get size() {
+    return this._map.size;
+  }
 }
 /**
  * Global LRU cache for skill content.
@@ -109,7 +121,9 @@ export const skillCache = new LruCache(50);
  * @param {boolean} [force=false] — Force re-load even if already loaded
  */
 export async function loadAllSkills(force = false) {
-  if (isLoaded && !force) {return;}
+  if (isLoaded && !force) {
+    return;
+  }
   if (force) {
     skillCache.clear();
     clearTools();
@@ -128,9 +142,9 @@ export async function loadAllSkills(force = false) {
   const skillNames = getSkillNames();
   for (const name of skillNames) {
     // In minimal mode, skip skill-specific tools — evidence is loaded via pix_gateway
-      if (name !== "rule" && name !== "rule-process-adr" && name !== "rule-process-handoff" && !IS_MINIMAL_TOOLS) {
-        registerSkillTool(name);
-      }
+    if (name !== "rule" && name !== "rule-process-adr" && name !== "rule-process-handoff" && !IS_MINIMAL_TOOLS) {
+      registerSkillTool(name);
+    }
   }
   registerSearchTool();
   registerCheckTool();
@@ -141,16 +155,20 @@ export async function loadAllSkills(force = false) {
     registerProcessAdrTool();
     registerFixTool();
   }
-  registerProcessHandoffTool();  // Build BM25 search index (async, non-blocking)
+  registerProcessHandoffTool(); // Build BM25 search index (async, non-blocking)
   const { buildIndex, clearIndex } = await import("./bm25.js");
-  if (force) {clearIndex();}
+  if (force) {
+    clearIndex();
+  }
   buildIndex();
   const { registerTemplateTool } = await import("./templates.js");
   registerTemplateTool();
 
   // Enforce the minimal surface as a hard allowlist — guarantees a small, fixed
   // tool list regardless of what the register* calls above added.
-  if (IS_MINIMAL_TOOLS) {retainTools(MINIMAL_ALLOWLIST);}
+  if (IS_MINIMAL_TOOLS) {
+    retainTools(MINIMAL_ALLOWLIST);
+  }
 }
 /**
  * Parse YAML frontmatter from a skill SKILL.md file.
@@ -168,7 +186,9 @@ export async function loadAllSkills(force = false) {
 export function parseSkillFrontmatter(content) {
   const result = {};
   const match = content?.match(/^---\s*\n([\s\S]*?)\n---\s*\n/);
-  if (!match) {return result;}
+  if (!match) {
+    return result;
+  }
   const frontmatter = match[1];
   const lines = frontmatter.split("\n");
   for (let index = 0; index < lines.length; index++) {
@@ -191,16 +211,18 @@ export function parseSkillFrontmatter(content) {
         for (let index_ = index + 1; index_ < lines.length; index_++) {
           const nextLine = lines[index_];
           // Block ends when a line is NOT indented (starts at col 0 or is empty)
-          if (nextLine.length === 0 || !nextLine.startsWith(" ") && !nextLine.startsWith("\t")) {break;}
+          if (nextLine.length === 0 || (!nextLine.startsWith(" ") && !nextLine.startsWith("\t"))) {
+            break;
+          }
           const stripped = nextLine.trim();
           if (stripped.length > 0 || !isFolded) {
             parts.push(stripped);
           }
         }
-        result.description = isFolded
-          ? parts.join(" ").replaceAll(/\s+/g, " ")
-          : parts.join("\n");
-        if (result.description) {result.description = result.description.trim();}
+        result.description = isFolded ? parts.join(" ").replaceAll(/\s+/g, " ") : parts.join("\n");
+        if (result.description) {
+          result.description = result.description.trim();
+        }
       } else {
         // Inline scalar
         result.description = afterColon.trim();
@@ -213,18 +235,26 @@ export function parseSkillFrontmatter(content) {
       for (let index_ = index + 1; index_ < lines.length; index_++) {
         const tagLine = lines[index_].trim();
         if (tagLine.startsWith("- ")) {
-          tags.push(tagLine.slice(2).trim().replace(/^"(.*)"$/, "$1").replace(/^'(.*)'$/, "$1"));
+          tags.push(
+            tagLine
+              .slice(2)
+              .trim()
+              .replace(/^"(.*)"$/, "$1")
+              .replace(/^'(.*)'$/, "$1"),
+          );
         } else if (!tagLine.startsWith("-")) {
           break;
         }
       }
-      if (tags.length > 0) {result.tags = tags;}
+      if (tags.length > 0) {
+        result.tags = tags;
+      }
       continue;
     }
     // frameworks: inline scalar
     const fwMatch = line.match(/^frameworks:\s*(.+)$/);
     if (fwMatch) {
-      result.frameworks = fwMatch[1].split(",").map(s => s.trim().replaceAll(/^\[|\]$/g, ""));
+      result.frameworks = fwMatch[1].split(",").map((s) => s.trim().replaceAll(/^\[|\]$/g, ""));
     }
   }
   return result;
@@ -239,9 +269,13 @@ export function parseSkillFrontmatter(content) {
 export function getSkillMetadata(skillName) {
   const cacheKey = `meta:${skillName}`;
   const cached = skillCache.get(cacheKey);
-  if (cached) {return JSON.parse(cached);}
+  if (cached) {
+    return JSON.parse(cached);
+  }
   const content = readSkill(skillName);
-  if (!content) {return {};}
+  if (!content) {
+    return {};
+  }
   const meta = parseSkillFrontmatter(content);
   skillCache.set(cacheKey, JSON.stringify(meta));
   return meta;
@@ -257,7 +291,9 @@ export function extractScaffoldSection(content) {
   const startMarker = "## Project Scaffolding";
   const endMarker = "## Guardrails";
   const start = content.indexOf(startMarker);
-  if (start === -1) {return "Scaffolding section not found. Use pix_styleguide mode=full to read the full skill.";}
+  if (start === -1) {
+    return "Scaffolding section not found. Use pix_styleguide mode=full to read the full skill.";
+  }
   const end = content.indexOf(endMarker, start + 1);
   return content.slice(start, end > start ? end : undefined).trim();
 }
@@ -271,29 +307,43 @@ export function extractScaffoldSection(content) {
  */
 export function extractSingleScaffoldFile(section, fileName) {
   const lines = section.split("\n");
-  const headers = [
-    "### `" + fileName + "`",
-    "### " + fileName,
-    "#### `" + fileName + "`",
-    "#### " + fileName,
-  ];
+  const headers = ["### `" + fileName + "`", "### " + fileName, "#### `" + fileName + "`", "#### " + fileName];
   let startIndex = -1;
   for (const [index, line] of lines.entries()) {
-    if (headers.some(h => line.trim() === h)) { startIndex = index; break; }
+    if (headers.some((h) => line.trim() === h)) {
+      startIndex = index;
+      break;
+    }
   }
   if (startIndex < 0) {
-    return { isError: true, content: [{ type: "text", text: "File \"" + fileName + "\" not found. Available: .prettierrc, .nvmrc, .editorconfig, .gitignore, eslint.config.mjs, tsconfig.json, jsconfig.json" }] };
+    return {
+      isError: true,
+      content: [
+        {
+          type: "text",
+          text:
+            'File "' +
+            fileName +
+            '" not found. Available: .prettierrc, .nvmrc, .editorconfig, .gitignore, eslint.config.mjs, tsconfig.json, jsconfig.json',
+        },
+      ],
+    };
   }
   let fenceStart = -1;
   for (let index = startIndex + 1; index < lines.length; index++) {
-    if (lines[index].trimStart().startsWith("```")) { fenceStart = index; break; }
+    if (lines[index].trimStart().startsWith("```")) {
+      fenceStart = index;
+      break;
+    }
   }
   if (fenceStart < 0) {
-    return { isError: true, content: [{ type: "text", text: "No code block found for \"" + fileName + "\"." }] };
+    return { isError: true, content: [{ type: "text", text: 'No code block found for "' + fileName + '".' }] };
   }
   const contentLines = [];
   for (let index = fenceStart + 1; index < lines.length; index++) {
-    if (lines[index].trimStart().startsWith("```")) {break;}
+    if (lines[index].trimStart().startsWith("```")) {
+      break;
+    }
     contentLines.push(lines[index]);
   }
   return { content: [{ type: "text", text: contentLines.join("\n") }] };
@@ -320,17 +370,13 @@ function registerDetectTool() {
       const profile = detectProject(projectDir);
       // Suggest relevant skill tools based on detected framework
       const { skillName, toolName } = getFrameworkSuggestion(profile.framework);
-      const suggestions = [
-        toolName,
-        "rule_tool_check",
-        "rule_tool_scaffold",
-        "rule_tool_component",
-      ];
+      const suggestions = [toolName, "rule_tool_check", "rule_tool_scaffold", "rule_tool_component"];
       const result = {
         ...profile,
         suggested_skills: [skillName],
         suggested_tools: suggestions,
-        message: `Detected ${profile.framework === "vanilla" ? "vanilla JS" : profile.framework} project "${profile.projectName}". ` +
+        message:
+          `Detected ${profile.framework === "vanilla" ? "vanilla JS" : profile.framework} project "${profile.projectName}". ` +
           `Use ${suggestions.join(", ")} for rule-compliant code generation.`,
       };
       return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };

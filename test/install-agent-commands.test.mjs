@@ -61,7 +61,7 @@ try {
   const installScript = readFileSync(join(root, "scripts", "install.sh"), "utf8");
   assert.ok(installScript.includes("install-agent-commands.sh"), "install.sh must install explicit agent commands");
   assert.ok(
-    installScript.includes('if [[ ${#COMMAND_ARGS[@]} -gt 0 ]]'),
+    installScript.includes("if [[ ${#COMMAND_ARGS[@]} -gt 0 ]]"),
     "install.sh must handle an empty command argument array on Bash 3",
   );
 

@@ -58,20 +58,10 @@ import { Component, Input, Output, EventEmitter } from "@angular/core";
   standalone: true,
   styleUrls: ["./_TodoItem.component.css"],
   template: `
-    <article
-      data-part="item"
-      [attr.data-state-completed]="todo.completed ? 'done' : null"
-    >
-      <input
-        type="checkbox"
-        data-part="toggle"
-        [checked]="todo.completed"
-        (change)="toggle.emit(todo.id)"
-      />
+    <article data-part="item" [attr.data-state-completed]="todo.completed ? 'done' : null">
+      <input type="checkbox" data-part="toggle" [checked]="todo.completed" (change)="toggle.emit(todo.id)" />
       <span data-part="title">{{ todo.title }}</span>
-      <button data-part="delete" (click)="delete.emit(todo.id)">
-        Delete
-      </button>
+      <button data-part="delete" (click)="delete.emit(todo.id)">Delete</button>
     </article>
   `,
 })
@@ -98,21 +88,21 @@ article[data-part="item"][data-state-completed="done"] {
 
 ## Angular ↔ rule-frontend-vanilla-reactive Mapping
 
-| rule-frontend-vanilla-reactive | Angular Equivalent |
-|----------------------|-------------------|
-| `StateSignal` | `signal()` (Angular 16+) / `BehaviorSubject` |
-| `ComputedSignal` | `computed()` |
-| `effect()` | `effect()` |
-| `Store (Proxy)` | Service + `signal()` |
-| `html\`\`` tagged templates | Component `template` |
-| `{{ expr }}` | `{{ expr }}` |
-| `@click=${fn}` | `(click)="fn()"` |
-| `model={...}` directive | `[(ngModel)]` or `[value]` + `(input)` |
-| `<for each="x in xs">` | `*ngFor="let x of xs"` or `@for (x of xs)` |
-| `<if condition="c">` | `*ngIf="c"` or `@if (c)` |
-| `adoptedStyleSheets` | `styleUrls` in @Component decorator |
-| `data-part="..."` | `data-part="..."` or `[attr.data-part]="..."` |
-| `static {}` block | Module-level CSS via `styleUrls` |
+| rule-frontend-vanilla-reactive | Angular Equivalent                            |
+| ----------------------------- | --------------------------------------------- |
+| `StateSignal`                 | `signal()` (Angular 16+) / `BehaviorSubject`  |
+| `ComputedSignal`              | `computed()`                                  |
+| `effect()`                    | `effect()`                                    |
+| `Store (Proxy)`               | Service + `signal()`                          |
+| `html\`\`` tagged templates   | Component `template`                          |
+| `{{ expr }}`                  | `{{ expr }}`                                  |
+| `@click=${fn}`                | `(click)="fn()"`                              |
+| `model={...}` directive       | `[(ngModel)]` or `[value]` + `(input)`        |
+| `<for each="x in xs">`        | `*ngFor="let x of xs"` or `@for (x of xs)`    |
+| `<if condition="c">`          | `*ngIf="c"` or `@if (c)`                      |
+| `adoptedStyleSheets`          | `styleUrls` in @Component decorator           |
+| `data-part="..."`             | `data-part="..."` or `[attr.data-part]="..."` |
+| `static {}` block             | Module-level CSS via `styleUrls`              |
 
 ## CSS Loading — Angular Style
 
@@ -126,7 +116,7 @@ No fetch/adoptedStyleSheets needed — Angular handles scoped CSS loading.
   styleUrls: ["./_MyComponent.component.css"],
   template: `...`,
 })
-export class MyComponent { }
+export class MyComponent {}
 ```
 
 ## Lists and Conditionals (Angular 17+ @ syntax)
@@ -147,7 +137,9 @@ export class MyComponent { }
     </section>
   `,
 })
-export class TodoList { todos: Todo[] = []; }
+export class TodoList {
+  todos: Todo[] = [];
+}
 ```
 
 ## Barrel Pattern
@@ -230,7 +222,7 @@ This section extends rule-frontend-angular with a structured performance review 
 export class MyComponent {}
 ```
 
-Rule: *Set `OnPush` on every component. Use `Default` only when you have a specific reason and understand the cost.*
+Rule: _Set `OnPush` on every component. Use `Default` only when you have a specific reason and understand the cost._
 
 #### 2. Prefer Signals over `BehaviorSubject` + `async` pipe
 
@@ -246,7 +238,7 @@ private dataSignal = signal<Data | null>(null);
 readonly data = this.dataSignal.asReadonly();
 ```
 
-Rule: *Use `signal()` for local state, RxJS for complex async streams (debounce, combineLatest, etc.).*
+Rule: _Use `signal()` for local state, RxJS for complex async streams (debounce, combineLatest, etc.)._
 
 #### 3. Always use `track` / `trackBy` in `@for`
 
@@ -255,14 +247,14 @@ Without tracking, Angular removes and recreates every DOM element on every list 
 ```html
 <!-- ❌ Angular 17+ @for without track recreates all -->
 @for (item of items; track item.id) {
-  <li data-part="item">{{ item.title }}</li>
+<li data-part="item">{{ item.title }}</li>
 }
 
 <!-- ❌ Angular legacy ngFor with index -->
 <li *ngFor="let item of items; let i = index" [attr.data-part]="'item'">{{ item.title }}</li>
 ```
 
-Rule: *Always provide a stable identity `track` in `@for`. Never use index for mutable lists.*
+Rule: _Always provide a stable identity `track` in `@for`. Never use index for mutable lists._
 
 #### 4. Compute values synchronously, not in lifecycle hooks
 
@@ -285,7 +277,7 @@ readonly sortedItems = computed(() =>
 );
 ```
 
-Rule: *Use `computed()` for derived values, not `effect()` or lifecycle hooks.*
+Rule: _Use `computed()` for derived values, not `effect()` or lifecycle hooks._
 
 #### 5. Unsubscribe in `ngOnDestroy` or use `takeUntilDestroyed`
 
@@ -293,19 +285,19 @@ Every subscription, interval, and event listener MUST be cleaned up.
 
 ```typescript
 // ❌ Memory leak — no unsubscribe
-this.route.params.subscribe(params => {
+this.route.params.subscribe((params) => {
   this.loadData(params.id);
 });
 
 // ✅ takeUntilDestroyed (Angular 16+)
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
-this.route.params.pipe(takeUntilDestroyed()).subscribe(params => {
+this.route.params.pipe(takeUntilDestroyed()).subscribe((params) => {
   this.loadData(params.id);
 });
 ```
 
-Rule: *Every subscription must be cleaned up. Prefer `takeUntilDestroyed` over manual `ngOnDestroy` Subject.*
+Rule: _Every subscription must be cleaned up. Prefer `takeUntilDestroyed` over manual `ngOnDestroy` Subject._
 
 #### 6. Keep state in the component, not in global singletons
 
@@ -321,7 +313,7 @@ export class SearchComponent {
 
 Share state via services only when multiple unrelated components need the same data.
 
-Rule: *Local state in `signal()`, shared state in service with `signal()`, async streams in RxJS.*
+Rule: _Local state in `signal()`, shared state in service with `signal()`, async streams in RxJS._
 
 #### 7. Lazy-load feature routes
 
@@ -337,7 +329,7 @@ export const routes: Routes = [
 ];
 ```
 
-Rule: *Every route is lazy. `loadComponent` / `loadChildren` by default.*
+Rule: _Every route is lazy. `loadComponent` / `loadChildren` by default._
 
 #### 8. One responsibility = one reason to change
 
@@ -364,7 +356,7 @@ export class UserProfile {
 }
 ```
 
-Rule: *Split when different changes affect different parts.*
+Rule: _Split when different changes affect different parts._
 
 #### 9. Use `@defer` for below-the-fold content (Angular 17+)
 
@@ -372,15 +364,15 @@ Rule: *Split when different changes affect different parts.*
 
 ```html
 @defer (on viewport) {
-  <heavy-chart />
+<heavy-chart />
 } @placeholder {
-  <p data-part="placeholder">Chart loading...</p>
+<p data-part="placeholder">Chart loading...</p>
 } @loading {
-  <p data-part="loading">Loading chart...</p>
+<p data-part="loading">Loading chart...</p>
 }
 ```
 
-Rule: *Defer heavy, non-critical components until they are visible or idle.*
+Rule: _Defer heavy, non-critical components until they are visible or idle._
 
 #### 10. Avoid `ngDoCheck` — use Signals and `computed` instead
 
@@ -398,37 +390,37 @@ ngDoCheck() {
 readonly derived = computed(() => expensiveWork(this.someSignal()));
 ```
 
-Rule: *If you reach for `ngDoCheck`, you are fighting the framework. Use signals instead.*
+Rule: _If you reach for `ngDoCheck`, you are fighting the framework. Use signals instead._
 
 ### Decision matrix
 
-| Symptom | Check first | Likely pattern | Fix |
-|---|---|---|---|
-| Slow typing / UI freezes | Change detection strategy | `Default` instead of `OnPush` | Set `OnPush` on every component |
-| Too many change detection cycles | State origin | Service state used as local | Move to component signal |
-| List recreates all DOM on update | Track identity | Missing `track` in `@for` | Add `track item.id` |
-| Stale displayed value | Derivation | Derived in lifecycle hook | Use `computed()` |
-| Memory leak on page switch | Subscriptions | Missing unsubscribe | Add `takeUntilDestroyed` |
-| Slow initial bundle | Module structure | Eager imports | Lazy-load routes |
-| Component too large | Reasons to change | Mixed responsibilities | Extract service + view |
-| Heavy chart blocks initial render | Defer strategy | Eager heavy component | Use `@defer (on viewport)` |
-| Manual diff logic exists | Lifecycle misuse | `ngDoCheck` | Replace with `computed()` |
+| Symptom                           | Check first               | Likely pattern                | Fix                             |
+| --------------------------------- | ------------------------- | ----------------------------- | ------------------------------- |
+| Slow typing / UI freezes          | Change detection strategy | `Default` instead of `OnPush` | Set `OnPush` on every component |
+| Too many change detection cycles  | State origin              | Service state used as local   | Move to component signal        |
+| List recreates all DOM on update  | Track identity            | Missing `track` in `@for`     | Add `track item.id`             |
+| Stale displayed value             | Derivation                | Derived in lifecycle hook     | Use `computed()`                |
+| Memory leak on page switch        | Subscriptions             | Missing unsubscribe           | Add `takeUntilDestroyed`        |
+| Slow initial bundle               | Module structure          | Eager imports                 | Lazy-load routes                |
+| Component too large               | Reasons to change         | Mixed responsibilities        | Extract service + view          |
+| Heavy chart blocks initial render | Defer strategy            | Eager heavy component         | Use `@defer (on viewport)`      |
+| Manual diff logic exists          | Lifecycle misuse          | `ngDoCheck`                   | Replace with `computed()`       |
 
 ### Supporting resources
 
-| Resource | Path |
-|---|---|
-| 10 detailed examples | `examples/performance/01-*.md` … `10-*.md` |
-| PR review checklist | `checklists/angular-performance-pr-checklist.md` |
-| Decision matrix | `checklists/decision-matrix.md` |
-| System prompt | `prompts/portable-system-prompt.md` |
-| Code review prompt | `prompts/code-review-prompt.md` |
-| Refactor prompt | `prompts/refactor-prompt.md` |
-| Teaching prompt | `prompts/teaching-prompt.md` |
-| Audit report template | `templates/audit-report-template.md` |
-| PR comment template | `templates/pr-comment-template.md` |
-| Refactor plan template | `templates/refactor-plan-template.md` |
-| Performance playbook | `knowledge/angular-performance-playbook.md` |
+| Resource               | Path                                             |
+| ---------------------- | ------------------------------------------------ |
+| 10 detailed examples   | `examples/performance/01-*.md` … `10-*.md`       |
+| PR review checklist    | `checklists/angular-performance-pr-checklist.md` |
+| Decision matrix        | `checklists/decision-matrix.md`                  |
+| System prompt          | `prompts/portable-system-prompt.md`              |
+| Code review prompt     | `prompts/code-review-prompt.md`                  |
+| Refactor prompt        | `prompts/refactor-prompt.md`                     |
+| Teaching prompt        | `prompts/teaching-prompt.md`                     |
+| Audit report template  | `templates/audit-report-template.md`             |
+| PR comment template    | `templates/pr-comment-template.md`               |
+| Refactor plan template | `templates/refactor-plan-template.md`            |
+| Performance playbook   | `knowledge/angular-performance-playbook.md`      |
 
 ---
 
@@ -454,7 +446,7 @@ import { FormBuilder, FormGroup, Validators } from "@angular/forms";
         <span data-part="label">Email</span>
         <input data-part="input" formControlName="email" type="email" />
         <span data-part="error" *ngIf="form.get('email')?.invalid && form.get('email')?.touched">
-          {{ getError('email') }}
+          {{ getError("email") }}
         </span>
       </label>
       <button data-part="submit" [disabled]="form.invalid || submitting">Save</button>
@@ -492,6 +484,7 @@ export class MyFormComponent {
 - [ ] Validators applied at `FormGroup`/`FormControl` level
 - [ ] Field-level errors rendered after touch
 - [ ] Submit button disabled when invalid or submitting
+
 ---
 
 ## See also

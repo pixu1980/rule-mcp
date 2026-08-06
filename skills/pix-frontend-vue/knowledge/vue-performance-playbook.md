@@ -31,6 +31,7 @@ const { x, y } = state; // ❌ x and y are not reactive
 ```
 
 Fix: use `toRefs()`:
+
 ```ts
 const { x, y } = toRefs(state); // ✅ x and y are Refs
 ```
@@ -39,12 +40,12 @@ const { x, y } = toRefs(state); // ✅ x and y are Refs
 
 ### When to use what
 
-| Situation | Tool |
-|---|---|
-| Derive state from reactive state | `computed()` |
-| Fire side effect when deps change | `watch()` |
+| Situation                              | Tool            |
+| -------------------------------------- | --------------- |
+| Derive state from reactive state       | `computed()`    |
+| Fire side effect when deps change      | `watch()`       |
 | Fire side effect that auto-tracks deps | `watchEffect()` |
-| Fire side effect on every render | No — redesign |
+| Fire side effect on every render       | No — redesign   |
 
 ### Watch loop prevention
 
@@ -52,8 +53,12 @@ Never mutate a reactive value inside `watch` that changes a dependency of the sa
 
 ```ts
 // ❌ Loop risk
-watch(count, (v) => { if (v > 5) threshold.value = v; });
-watch(threshold, (v) => { count.value = v * 2; });
+watch(count, (v) => {
+  if (v > 5) threshold.value = v;
+});
+watch(threshold, (v) => {
+  count.value = v * 2;
+});
 ```
 
 ### Cleanup
@@ -61,7 +66,9 @@ watch(threshold, (v) => { count.value = v * 2; });
 `watch` and `watchEffect` return a stop handle:
 
 ```ts
-const stop = watchEffect(() => { /* ... */ });
+const stop = watchEffect(() => {
+  /* ... */
+});
 onUnmounted(stop); // ✅ Manual cleanup
 // or let Vue auto-stop when component unmounts
 ```
@@ -72,17 +79,15 @@ Computed values are lazy, cached, and only re-evaluate when their dependencies c
 
 ```ts
 // ❌ Watch for deriving
-const search = ref('');
+const search = ref("");
 const results = ref([]);
 watch(search, (q) => {
-  results.value = items.filter(i => i.name.includes(q));
+  results.value = items.filter((i) => i.name.includes(q));
 });
 
 // ✅ Computed for deriving
-const search = ref('');
-const results = computed(() =>
-  items.filter(i => i.name.includes(search.value))
-);
+const search = ref("");
+const results = computed(() => items.filter((i) => i.name.includes(search.value)));
 ```
 
 Note: `computed` is reactive — passing `results.value` to a child component will re-render only when `results` changes.
@@ -102,8 +107,8 @@ Move the state into the component that renders the search input and results.
 ```vue
 <!-- App.vue — no search state -->
 <script setup>
-import SearchSection from './SearchSection.vue';
-import HeavyDashboard from './HeavyDashboard.vue';
+import SearchSection from "./SearchSection.vue";
+import HeavyDashboard from "./HeavyDashboard.vue";
 </script>
 <template>
   <SearchSection />
@@ -139,13 +144,13 @@ Props should flow from parent to direct child. When data must reach deeply neste
 
 ```ts
 // Ancestor
-import { provide, ref } from 'vue';
-const theme = ref('dark');
-provide('theme', { theme, setTheme: (t) => theme.value = t });
+import { provide, ref } from "vue";
+const theme = ref("dark");
+provide("theme", { theme, setTheme: (t) => (theme.value = t) });
 
 // Descendant
-import { inject } from 'vue';
-const { theme, setTheme } = inject('theme');
+import { inject } from "vue";
+const { theme, setTheme } = inject("theme");
 ```
 
 ### Best practices
@@ -217,7 +222,7 @@ onMounted(() => {
 
 function validate() {
   if (!inputRef.value) return; // guard against unmounted
-  inputRef.value.setCustomValidity('');
+  inputRef.value.setCustomValidity("");
 }
 </script>
 <template>
@@ -228,6 +233,7 @@ function validate() {
 ## Measurement notes
 
 Use Vue DevTools browser extension for:
+
 - Component tree and state inspection
 - Timeline tab for reactivity events and watcher triggers
 - Performance tab for component render timing

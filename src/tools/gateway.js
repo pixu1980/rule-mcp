@@ -60,7 +60,9 @@ export function canonicalFilesDigest(files) {
 let SERVER_SECRET = null;
 
 function getServerSecret() {
-  if (!SERVER_SECRET) {SERVER_SECRET = randomUUID();}
+  if (!SERVER_SECRET) {
+    SERVER_SECRET = randomUUID();
+  }
   return SERVER_SECRET;
 }
 
@@ -107,7 +109,9 @@ function storeReceipt({ codeHash, binding, skillName, allPass, now }) {
   receiptStore.set(token, { codeHash, binding, skillName, allPass, expiresAt: now + RECEIPT_TTL_MS });
   // Cleanup receipts that expired over one TTL ago (i.e. issued > 2×TTL back).
   for (const [key, value] of receiptStore) {
-    if (now - value.expiresAt > RECEIPT_TTL_MS) {receiptStore.delete(key);}
+    if (now - value.expiresAt > RECEIPT_TTL_MS) {
+      receiptStore.delete(key);
+    }
   }
   return token;
 }
@@ -115,7 +119,9 @@ function storeReceipt({ codeHash, binding, skillName, allPass, now }) {
 /** Shared checks: existence, TTL, guardrail outcome. */
 function openReceipt(token, now) {
   const entry = receiptStore.get(token);
-  if (!entry) {return { error: "Receipt not found or expired" };}
+  if (!entry) {
+    return { error: "Receipt not found or expired" };
+  }
   if (now > entry.expiresAt) {
     receiptStore.delete(token);
     return { error: "Receipt expired — re-run pix_gateway" };
@@ -133,15 +139,21 @@ function openReceipt(token, now) {
  */
 export function validateReceipt(token, code, now = Date.now()) {
   const { entry, error } = openReceipt(token, now);
-  if (error) {return { valid: false, reason: error };}
+  if (error) {
+    return { valid: false, reason: error };
+  }
   // A path-bound receipt must never be checked through the content-only route:
   // that would let the caller drop the destination binding at will.
   if (entry.binding === "files") {
     return { valid: false, reason: "Receipt is path-bound — validate it against the file set, not the raw code" };
   }
   const codeHash = createHash("sha256").update(code).digest("hex");
-  if (codeHash !== entry.codeHash) {return { valid: false, reason: "Code hash mismatch — code was modified after check" };}
-  if (!entry.allPass) {return { valid: false, allPass: false, reason: "Guardrails did not pass" };}
+  if (codeHash !== entry.codeHash) {
+    return { valid: false, reason: "Code hash mismatch — code was modified after check" };
+  }
+  if (!entry.allPass) {
+    return { valid: false, allPass: false, reason: "Guardrails did not pass" };
+  }
   return { valid: true, allPass: true };
 }
 
@@ -165,7 +177,9 @@ export function validateApply(token, files, now = Date.now()) {
     return { valid: false, reason: "No files to validate" };
   }
   const { entry, error } = openReceipt(token, now);
-  if (error) {return { valid: false, reason: error };}
+  if (error) {
+    return { valid: false, reason: error };
+  }
 
   if (entry.binding === "files") {
     if (canonicalFilesDigest(files) !== entry.codeHash) {
@@ -180,10 +194,13 @@ export function validateApply(token, files, now = Date.now()) {
       return {
         valid: false,
         binding: "content",
-        reason: "Content-only receipt cannot authorise a multi-file write — pass `files` to pix_gateway for a path-bound receipt",
+        reason:
+          "Content-only receipt cannot authorise a multi-file write — pass `files` to pix_gateway for a path-bound receipt",
       };
     }
-    const codeHash = createHash("sha256").update(String(files[0].content ?? "")).digest("hex");
+    const codeHash = createHash("sha256")
+      .update(String(files[0].content ?? ""))
+      .digest("hex");
     if (codeHash !== entry.codeHash) {
       return { valid: false, binding: "content", reason: "Code hash mismatch — code was modified after check" };
     }
@@ -205,12 +222,22 @@ export async function registerGatewayTool() {
   const GatewaySchema = z.object({
     prompt: z.string().describe("Complete coding request"),
     code: z.string().optional().describe("Code to validate against guardrails (single file, legacy)"),
-    files: z.array(z.object({
-      path: z.string().describe("Relative file path within the project"),
-      content: z.string().describe("File content to validate"),
-    })).optional().describe("Files to validate — yields a path-bound receipt, required for multi-file writes"),
+    files: z
+      .array(
+        z.object({
+          path: z.string().describe("Relative file path within the project"),
+          content: z.string().describe("File content to validate"),
+        }),
+      )
+      .optional()
+      .describe("Files to validate — yields a path-bound receipt, required for multi-file writes"),
     path: z.string().optional().describe("Project path for framework auto-detection"),
-    framework: z.string().optional().describe("Target framework (react, vue, svelte, angular, solid, astro, vanilla, express, fastify, nestjs, hono)"),
+    framework: z
+      .string()
+      .optional()
+      .describe(
+        "Target framework (react, vue, svelte, angular, solid, astro, vanilla, express, fastify, nestjs, hono)",
+      ),
   });
 
   registerTool({
@@ -257,29 +284,40 @@ export async function registerGatewayTool() {
 
       // ── Step 1: Route the prompt ──
       const { callTool } = await import("./router.js");
-      const routeResult = await callTool("pix_tool", { prompt, ...(path && { path }), ...(framework && { framework }) });
+      const routeResult = await callTool("pix_tool", {
+        prompt,
+        ...(path && { path }),
+        ...(framework && { framework }),
+      });
       let route = { route: "unknown", confidence: 0, sections: [], next_tools: [] };
       try {
         const parsed = JSON.parse(routeResult.content[0]?.text || "{}");
         route = parsed;
-      } catch { /* keep defaults */ }
+      } catch {
+        /* keep defaults */
+      }
 
       // ── Domain override: when framework is backend/data/devops, force correct domain skill ──
       const BACKEND_FRAMEWORKS = ["express", "fastify", "nestjs", "hono"];
       const DOMAIN_OVERRIDE = {
-        express: "rule-backend-express", fastify: "rule-backend-fastify",
-        nestjs: "rule-backend-nestjs", hono: "rule-backend-hono",
-        postgresql: "rule-data-postgresql", mysql: "rule-data-mysql",
-        mongodb: "rule-data-mongodb", sqlite: "rule-data-sqlite",
-        duckdb: "rule-data-duckdb", sql: "rule-data-sql",
-        docker: "rule-devops-docker", "gitlab-ci": "rule-devops-gitlab-ci",
+        express: "rule-backend-express",
+        fastify: "rule-backend-fastify",
+        nestjs: "rule-backend-nestjs",
+        hono: "rule-backend-hono",
+        postgresql: "rule-data-postgresql",
+        mysql: "rule-data-mysql",
+        mongodb: "rule-data-mongodb",
+        sqlite: "rule-data-sqlite",
+        duckdb: "rule-data-duckdb",
+        sql: "rule-data-sql",
+        docker: "rule-devops-docker",
+        "gitlab-ci": "rule-devops-gitlab-ci",
       };
       // If the router gave us a frontend skill but framework is backend, override
       const isBackendFramework = framework && BACKEND_FRAMEWORKS.includes(framework);
       const isFrontendRoute = route.route?.startsWith("rule-frontend") || route.route?.startsWith("rule-platform");
-      const effectiveRoute = (isBackendFramework && isFrontendRoute)
-        ? (DOMAIN_OVERRIDE[framework] || `rule-backend-${framework}`)
-        : route.route;
+      const effectiveRoute =
+        isBackendFramework && isFrontendRoute ? DOMAIN_OVERRIDE[framework] || `rule-backend-${framework}` : route.route;
 
       lines.push(`## Route: ${effectiveRoute} (confidence: ${Math.round((route.confidence || 0) * 100)}%)`);
       if (route.sections?.length) {
@@ -290,14 +328,15 @@ export async function registerGatewayTool() {
       // ── Step 2: Load primary skill evidence ──
       const primarySkill = effectiveRoute?.startsWith("rule-") ? effectiveRoute : null;
       if (primarySkill) {
-        const skillResult = await callTool(
-          `pix_${primarySkill.replace(/^rule-/, "").replaceAll('-', "_")}`,
-          { mode: "tldr", query: prompt.slice(0, 300) }
-        );
+        const skillResult = await callTool(`pix_${primarySkill.replace(/^rule-/, "").replaceAll("-", "_")}`, {
+          mode: "tldr",
+          query: prompt.slice(0, 300),
+        });
         const evidence = skillResult.content?.[0]?.text || "";
-        const truncated = evidence.length > 8000
-          ? evidence.slice(0, 8000) + "\n\n... (truncated, use pix_* tool for full content)"
-          : evidence;
+        const truncated =
+          evidence.length > 8000
+            ? evidence.slice(0, 8000) + "\n\n... (truncated, use pix_* tool for full content)"
+            : evidence;
         lines.push("## Evidence", "", truncated, "");
       }
 
@@ -340,9 +379,7 @@ export async function registerGatewayTool() {
         if (allPass) {
           lines.push(`✅ All ${total} guardrails pass${fileSet ? ` across ${fileSet.length} file(s)` : ""}.`);
           // Issue receipt only on full pass
-          receipt = fileSet
-            ? issueFilesReceipt(fileSet, skillName, true)
-            : issueReceipt(code, skillName, true);
+          receipt = fileSet ? issueFilesReceipt(fileSet, skillName, true) : issueReceipt(code, skillName, true);
           lines.push(
             `**Receipt:** \`${receipt}\` (valid 5 min, pass to pix_apply)`,
             fileSet
@@ -360,16 +397,17 @@ export async function registerGatewayTool() {
       }
 
       // ── Step 4: Next tools hint ──
-      const nextTools = [...new Set([
-        ...(route.next_tools || []),
-        "pix_gateway",
-        "pix_apply",
-        "pix_search",
-      ])].slice(0, 10);
+      const nextTools = [...new Set([...(route.next_tools || []), "pix_gateway", "pix_apply", "pix_search"])].slice(
+        0,
+        10,
+      );
       lines.push("## Next Steps", "");
-      lines.push(`Available tools: ${nextTools.join(", ")}`, receipt
-        ? `\nTo write files, call pix_apply with the receipt above. The receipt proves pix_gateway validated this exact code.`
-        : `\nFix failures, then run pix_gateway again with the updated code.`);
+      lines.push(
+        `Available tools: ${nextTools.join(", ")}`,
+        receipt
+          ? `\nTo write files, call pix_apply with the receipt above. The receipt proves pix_gateway validated this exact code.`
+          : `\nFix failures, then run pix_gateway again with the updated code.`,
+      );
 
       const response = {
         route: effectiveRoute,

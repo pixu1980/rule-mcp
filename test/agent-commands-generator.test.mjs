@@ -47,7 +47,10 @@ test("coverage: one clean command per prompt, plus the router, no duplicates", (
 test("every command routes through rule and proposes a scoped commit", () => {
   for (const cmd of listAgentCommands()) {
     assert.ok(/rule/i.test(cmd.body), `${cmd.name}: body must route through rule`);
-    assert.ok(/commit/i.test(cmd.body) && /scope/i.test(cmd.body), `${cmd.name}: body must propose a commit with scope`);
+    assert.ok(
+      /commit/i.test(cmd.body) && /scope/i.test(cmd.body),
+      `${cmd.name}: body must propose a commit with scope`,
+    );
     assert.ok(cmd.description && cmd.description.length > 0, `${cmd.name}: description required`);
   }
 });
@@ -56,7 +59,11 @@ test("args format renders frontmatter, safely quoted description, and $ARGUMENTS
   for (const cmd of listAgentCommands()) {
     const out = renderAgentCommand(cmd, "args");
     assert.ok(out.startsWith("---\n"), `${cmd.name}: args output must open with YAML frontmatter`);
-    assert.match(out, /\ndescription: ".*"\n/, `${cmd.name}: description must be a quoted YAML scalar (colons are safe)`);
+    assert.match(
+      out,
+      /\ndescription: ".*"\n/,
+      `${cmd.name}: description must be a quoted YAML scalar (colons are safe)`,
+    );
     assert.match(out, /\nargument-hint: ".*"\n/, `${cmd.name}: argument-hint required`);
     assert.ok(out.includes("$ARGUMENTS"), `${cmd.name}: args body must carry the $ARGUMENTS placeholder`);
   }
@@ -96,14 +103,20 @@ test("handoff command persists the generated handoff and commits it on its own",
   assert.match(body, /next free|next available/i, "must state how the file number is chosen");
 });
 
-test("the MCP handoff prompt persists the handoff too", { skip: "target has a minimal prompt registry — port prompts separately" }, async () => {
-  // Hosts that use the MCP prompt instead of the generated user command must get
-  // the same instruction, or the behaviour depends on the client.
-  const { getPrompt } = await import("../src/prompts/index.js");
-  const text = getPrompt("rule-handoff", {}).messages.map((m) => m.content.text).join("\n");
-  assert.match(text, /docs\/handoff\//, "prompt must say where the handoff file is written");
-  assert.match(text, /chore\(handoff\)/, "prompt must ask for the chore(handoff) commit");
-});
+test(
+  "the MCP handoff prompt persists the handoff too",
+  { skip: "target has a minimal prompt registry — port prompts separately" },
+  async () => {
+    // Hosts that use the MCP prompt instead of the generated user command must get
+    // the same instruction, or the behaviour depends on the client.
+    const { getPrompt } = await import("../src/prompts/index.js");
+    const text = getPrompt("rule-handoff", {})
+      .messages.map((m) => m.content.text)
+      .join("\n");
+    assert.match(text, /docs\/handoff\//, "prompt must say where the handoff file is written");
+    assert.match(text, /chore\(handoff\)/, "prompt must ask for the chore(handoff) commit");
+  },
+);
 
 test("renderAgentCommandFiles emits router-first files with the format extension", () => {
   for (const [format, ext] of Object.entries(FORMAT_EXT)) {

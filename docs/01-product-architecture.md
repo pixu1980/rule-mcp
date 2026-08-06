@@ -32,62 +32,62 @@ Serve rule-* skill rules, styleguides, component templates, and framework best p
 
 ### Current Tools (14)
 
-| Tool | Purpose | LLM-free? |
-|------|---------|-----------|
-| `pix_tool` | Route prompt to best skill | ✅ Yes (keyword matching) |
-| `rule_tool_styleguide` | HTML/CSS/JS/a11y/naming rules | Partial |
-| `rule_tool_frontend_vanilla_reactive` | Vanilla JS reactive pattern rules | Partial |
-| `rule_tool_frontend_react` | React 18+ rule best practices | Partial |
-| `rule_tool_frontend_vue` | Vue 3 Composition API rule rules | Partial |
-| `rule_tool_frontend_svelte` | Svelte 5 runes rule rules | Partial |
-| `rule_tool_frontend_solidjs` | SolidJS fine-grained reactivity rules | Partial |
-| `rule_tool_frontend_angular` | Angular standalone component rules | Partial |
-| `rule_tool_frontend_astro` | Astro islands architecture rules | Partial |
-| `rule_tool_platform_desktop` | Electron app patterns | Partial |
-| `rule_tool_search` | Full-text search across ALL skills | ✅ Yes (local grep) |
-| `rule_tool_component` | Component template generation | ✅ Yes (template engine) |
-| `rule_tool_architect` | Project architecture & agent infrastructure; scaffold .agents/, .context/, SDD docs; context interview wizard | ✅ Yes (template engine + context server) |
-| `rule_tool_check` | Guardrail code validation (17 shared + 8 architect) | ✅ Yes (pure functions) |
-| `rule_tool_scaffold` | Project config file generation | ✅ Yes (template engine) |
+| Tool                                 | Purpose                                                                                                       | LLM-free?                                 |
+| ------------------------------------ | ------------------------------------------------------------------------------------------------------------- | ----------------------------------------- |
+| `pix_tool`                           | Route prompt to best skill                                                                                    | ✅ Yes (keyword matching)                 |
+| `rule_tool_styleguide`                | HTML/CSS/JS/a11y/naming rules                                                                                 | Partial                                   |
+| `rule_tool_frontend_vanilla_reactive` | Vanilla JS reactive pattern rules                                                                             | Partial                                   |
+| `rule_tool_frontend_react`            | React 18+ rule best practices                                                                                  | Partial                                   |
+| `rule_tool_frontend_vue`              | Vue 3 Composition API rule rules                                                                               | Partial                                   |
+| `rule_tool_frontend_svelte`           | Svelte 5 runes rule rules                                                                                      | Partial                                   |
+| `rule_tool_frontend_solidjs`          | SolidJS fine-grained reactivity rules                                                                         | Partial                                   |
+| `rule_tool_frontend_angular`          | Angular standalone component rules                                                                            | Partial                                   |
+| `rule_tool_frontend_astro`            | Astro islands architecture rules                                                                              | Partial                                   |
+| `rule_tool_platform_desktop`          | Electron app patterns                                                                                         | Partial                                   |
+| `rule_tool_search`                    | Full-text search across ALL skills                                                                            | ✅ Yes (local grep)                       |
+| `rule_tool_component`                 | Component template generation                                                                                 | ✅ Yes (template engine)                  |
+| `rule_tool_architect`                 | Project architecture & agent infrastructure; scaffold .agents/, .context/, SDD docs; context interview wizard | ✅ Yes (template engine + context server) |
+| `rule_tool_check`                     | Guardrail code validation (17 shared + 8 architect)                                                           | ✅ Yes (pure functions)                   |
+| `rule_tool_scaffold`                  | Project config file generation                                                                                | ✅ Yes (template engine)                  |
 
 ### Current Resources (6)
 
-| URI | Purpose |
-|-----|---------|
-| `rule://skills` | JSON index of all skills |
-| `rule://templates` | Component template catalog |
-| `rule://ai` | rule skill full content |
-| `rule://a11y` | A11y testing guide |
-| `rule://a11y/test-basic` | Basic a11y test template |
-| `rule://a11y/test-forms` | Forms a11y test template |
+| URI                     | Purpose                    |
+| ----------------------- | -------------------------- |
+| `rule://skills`          | JSON index of all skills   |
+| `rule://templates`       | Component template catalog |
+| `rule://ai`              | rule skill full content     |
+| `rule://a11y`            | A11y testing guide         |
+| `rule://a11y/test-basic` | Basic a11y test template   |
+| `rule://a11y/test-forms` | Forms a11y test template   |
 
 ### Current Prompts (24)
 
-| Name | Purpose |
-|------|---------|
-| `rule-a11y-audit` | Audit a11y end-to-end: WCAG 2.2 AA review + Playwright/axe-core tests |
-| `rule-ai` | AI agent integrations |
-| `rule-architect` | Context packs, interview flows (CLI + web), scaffolding |
-| `rule-architect-scaffold` | Scaffold project with .agents/ + .context/ |
-| `rule-backend` | Node, Express, Fastify, Hono, NestJS, GraphQL, API design, security |
-| `rule-caveman` | Compressed communication, commits, reviews |
-| `rule-code-review` | Review code against rule styleguides |
-| `rule-data` | PostgreSQL, MySQL, SQLite, MongoDB, DuckDB, IndexedDB, SQL |
-| `rule-devops` | Docker, GitLab CI, observability, testing, versioning |
-| `rule-frontend` | React, Vue, Svelte, Angular, Solid, Astro, Next, Nuxt, Remix, vanilla |
-| `rule-handoff` | Compressed context handoff for a new session |
-| `rule-meta` | Dispatcher/action toolset (gateway, apply, search, check, scaffold…) |
-| `rule-new-feature` | Feature end-to-end with TDD + a11y + commit scope |
-| `rule-platform` | Web, desktop, Expo, agent, library |
-| `rule-process` | Code review, feature workflow, documentation, ADR, handoff, BMAD |
-| `rule-pull-request` | Prepare PR: review + a11y + security + ADR + commit scope |
-| `rule-setup-project` | Bootstrap project end-to-end (detect → scaffold → toolchain → architect context) |
-| `rule-skills` | Skill discovery (find-skills) |
-| `rule-styleguide` | a11y, CSS, HTML, JS, JSON, Markdown, naming, patterns, validation |
-| `rule-tdd` | Test-driven development workflow |
-| `rule-toolchain` | Vite, pnpm, Turborepo, Rspack, Parcel, TypeScript, ESLint, Biome, Husky, commits |
-| `rule-ui` | UI design-system work |
-| `rule-write-tests` | Write TDD + a11y + devops tests |
+| Name                     | Purpose                                                                          |
+| ------------------------ | -------------------------------------------------------------------------------- |
+| `rule-a11y-audit`         | Audit a11y end-to-end: WCAG 2.2 AA review + Playwright/axe-core tests            |
+| `rule-ai`                 | AI agent integrations                                                            |
+| `rule-architect`          | Context packs, interview flows (CLI + web), scaffolding                          |
+| `rule-architect-scaffold` | Scaffold project with .agents/ + .context/                                       |
+| `rule-backend`            | Node, Express, Fastify, Hono, NestJS, GraphQL, API design, security              |
+| `rule-caveman`            | Compressed communication, commits, reviews                                       |
+| `rule-code-review`        | Review code against rule styleguides                                              |
+| `rule-data`               | PostgreSQL, MySQL, SQLite, MongoDB, DuckDB, IndexedDB, SQL                       |
+| `rule-devops`             | Docker, GitLab CI, observability, testing, versioning                            |
+| `rule-frontend`           | React, Vue, Svelte, Angular, Solid, Astro, Next, Nuxt, Remix, vanilla            |
+| `rule-handoff`            | Compressed context handoff for a new session                                     |
+| `rule-meta`               | Dispatcher/action toolset (gateway, apply, search, check, scaffold…)             |
+| `rule-new-feature`        | Feature end-to-end with TDD + a11y + commit scope                                |
+| `rule-platform`           | Web, desktop, Expo, agent, library                                               |
+| `rule-process`            | Code review, feature workflow, documentation, ADR, handoff, BMAD                 |
+| `rule-pull-request`       | Prepare PR: review + a11y + security + ADR + commit scope                        |
+| `rule-setup-project`      | Bootstrap project end-to-end (detect → scaffold → toolchain → architect context) |
+| `rule-skills`             | Skill discovery (find-skills)                                                    |
+| `rule-styleguide`         | a11y, CSS, HTML, JS, JSON, Markdown, naming, patterns, validation                |
+| `rule-tdd`                | Test-driven development workflow                                                 |
+| `rule-toolchain`          | Vite, pnpm, Turborepo, Rspack, Parcel, TypeScript, ESLint, Biome, Husky, commits |
+| `rule-ui`                 | UI design-system work                                                            |
+| `rule-write-tests`        | Write TDD + a11y + devops tests                                                  |
 
 ---
 
@@ -159,25 +159,25 @@ No TypeScript compilation needed. The SDK ships JavaScript with `.d.ts` declarat
 
 ### What the SDK provides vs current custom impl
 
-| Feature | Current (hand-rolled) | `@modelcontextprotocol/sdk` |
-|---------|----------------------|---------------------------|
-| Protocol version negotiation | Hardcoded `"2025-12-11"` | Automatic via `Server` class |
-| Transport | Custom stdio line parser | `StdioServerTransport` (battle-tested) |
-| SSE/HTTP transport | ❌ (hand-rolled child process) | `SSEServerTransport` (full HTTP server) |
-| Tool registration | `[]push({ name, handler })` | `server.setRequestHandler(ListToolsRequestSchema, ...)` |
-| Input schema | Plain object (doc only) | Zod schemas with runtime validation |
-| Resource templates | ❌ | `ResourceTemplate` with URI pattern matching |
-| Streaming results | ❌ | `CallToolResultSchema` + streaming support |
-| Error codes | `-32603` for everything | Proper `McpError` + typed error codes |
-| Capability negotiation | `{ tools: {}, resources: {}, prompts: {} }` | Declared via `server.registerCapabilities()` |
-| Logging | `process.stderr.write` | Built-in `logging/setLevel` notifications |
-| Ping/health | ❌ | `ping` request handler |
-| Cancellation | ❌ | `notifications/cancelled` support |
-| Progress notifications | ❌ | `notifications/progress` support |
-| Roots support | ❌ | `roots/list` capability |
-| Sampling support | ❌ | `sampling/createMessage` capability |
-| Completion support | ❌ | `completions/complete` for dynamic arg suggestions |
-| MCP spec updates | Manual sync required | SDK tracks spec automatically |
+| Feature                      | Current (hand-rolled)                       | `@modelcontextprotocol/sdk`                             |
+| ---------------------------- | ------------------------------------------- | ------------------------------------------------------- |
+| Protocol version negotiation | Hardcoded `"2025-12-11"`                    | Automatic via `Server` class                            |
+| Transport                    | Custom stdio line parser                    | `StdioServerTransport` (battle-tested)                  |
+| SSE/HTTP transport           | ❌ (hand-rolled child process)              | `SSEServerTransport` (full HTTP server)                 |
+| Tool registration            | `[]push({ name, handler })`                 | `server.setRequestHandler(ListToolsRequestSchema, ...)` |
+| Input schema                 | Plain object (doc only)                     | Zod schemas with runtime validation                     |
+| Resource templates           | ❌                                          | `ResourceTemplate` with URI pattern matching            |
+| Streaming results            | ❌                                          | `CallToolResultSchema` + streaming support              |
+| Error codes                  | `-32603` for everything                     | Proper `McpError` + typed error codes                   |
+| Capability negotiation       | `{ tools: {}, resources: {}, prompts: {} }` | Declared via `server.registerCapabilities()`            |
+| Logging                      | `process.stderr.write`                      | Built-in `logging/setLevel` notifications               |
+| Ping/health                  | ❌                                          | `ping` request handler                                  |
+| Cancellation                 | ❌                                          | `notifications/cancelled` support                       |
+| Progress notifications       | ❌                                          | `notifications/progress` support                        |
+| Roots support                | ❌                                          | `roots/list` capability                                 |
+| Sampling support             | ❌                                          | `sampling/createMessage` capability                     |
+| Completion support           | ❌                                          | `completions/complete` for dynamic arg suggestions      |
+| MCP spec updates             | Manual sync required                        | SDK tracks spec automatically                           |
 
 ### Migration Complexity
 
@@ -194,19 +194,19 @@ No TypeScript compilation needed. The SDK ships JavaScript with `.d.ts` declarat
 
 ### 9 rule-* skills available
 
-| Skill | Files | Lines | Maturity |
-|-------|-------|-------|----------|
-| rule-styleguide | 8 (.md) | ~2,500 | ✅ Mature |
-| rule-frontend-vanilla-reactive | 3 (md + patterns + tests) | ~1,200 | ✅ Mature |
-| rule-frontend-react | 4 (md + checklists + knowledge) | ~800 | ✅ Stable |
-| rule-frontend-vue | 4 | ~700 | ✅ Stable |
-| rule-frontend-angular | 4 | ~700 | ✅ Stable |
-| rule-frontend-svelte | 4 | ~650 | ✅ Stable |
-| rule-frontend-solidjs | 4 | ~600 | ✅ Stable |
-| rule-frontend-astro | 4 | ~550 | ✅ Stable |
-| rule-architect | 20+ (md + knowledge + assets + checklists + prompts + templates) | ~3,500 | ✅ Mature |
-| rule-electron | 4 | ~800 | ✅ Stable |
-| rule | 1 (SKILL.md) | ~200 | ✅ Mature |
+| Skill                         | Files                                                            | Lines  | Maturity  |
+| ----------------------------- | ---------------------------------------------------------------- | ------ | --------- |
+| rule-styleguide                | 8 (.md)                                                          | ~2,500 | ✅ Mature |
+| rule-frontend-vanilla-reactive | 3 (md + patterns + tests)                                        | ~1,200 | ✅ Mature |
+| rule-frontend-react            | 4 (md + checklists + knowledge)                                  | ~800   | ✅ Stable |
+| rule-frontend-vue              | 4                                                                | ~700   | ✅ Stable |
+| rule-frontend-angular          | 4                                                                | ~700   | ✅ Stable |
+| rule-frontend-svelte           | 4                                                                | ~650   | ✅ Stable |
+| rule-frontend-solidjs          | 4                                                                | ~600   | ✅ Stable |
+| rule-frontend-astro            | 4                                                                | ~550   | ✅ Stable |
+| rule-architect                 | 20+ (md + knowledge + assets + checklists + prompts + templates) | ~3,500 | ✅ Mature |
+| rule-electron                  | 4                                                                | ~800   | ✅ Stable |
+| rule                           | 1 (SKILL.md)                                                     | ~200   | ✅ Mature |
 
 ### Content types per skill
 
@@ -223,25 +223,25 @@ No TypeScript compilation needed. The SDK ships JavaScript with `.d.ts` declarat
 
 ### Already implemented (LLM-free)
 
-| Tool | Saves tokens by |
-|------|----------------|
-| `rule_tool_component button react` | Returns full React button code directly — no LLM prompt needed |
-| `rule_tool_check skill=rule-frontend-react` | Validates code against 17 guardrails — no LLM needed for review |
-| `rule_tool_scaffold file=.prettierrc` | Returns exact file content — no LLM context needed |
-| `rule_tool_search query="component naming"` | Greps skill files — no LLM search needed |
+| Tool                                       | Saves tokens by                                                 |
+| ------------------------------------------ | --------------------------------------------------------------- |
+| `rule_tool_component button react`          | Returns full React button code directly — no LLM prompt needed  |
+| `rule_tool_check skill=rule-frontend-react`  | Validates code against 17 guardrails — no LLM needed for review |
+| `rule_tool_scaffold file=.prettierrc`       | Returns exact file content — no LLM context needed              |
+| `rule_tool_search query="component naming"` | Greps skill files — no LLM search needed                        |
 
 ### Planned improvements
 
-| Enhancement | Tokens saved | Implementation |
-|-------------|-------------|----------------|
-| **Context-aware routing** | ~200/task | `pix_tool` returns only RELEVANT skill sections, not full files |
-| **Template engine** | ~500/component | Generate complete files with variable interpolation (name, props, etc.) |
-| **Project detector** | ~300/session | Auto-detect framework from `package.json`, return only relevant tools |
-| **Code generator** | ~1000/component | Full file generation (component + CSS + barrel + test) from single call |
-| **Checklist executor** | ~400/review | Return only failed checklist items as context, not full checklist |
-| **Semantic search** | ~200/query | BM25 search on skill content, return only matching sections |
-| **Multi-file scaffold** | ~800/project | Generate entire project structure in one call |
-| **Cache layer** | ~100/call | Cache skill reads in memory, re-scan only on `skills reload` |
+| Enhancement               | Tokens saved    | Implementation                                                          |
+| ------------------------- | --------------- | ----------------------------------------------------------------------- |
+| **Context-aware routing** | ~200/task       | `pix_tool` returns only RELEVANT skill sections, not full files         |
+| **Template engine**       | ~500/component  | Generate complete files with variable interpolation (name, props, etc.) |
+| **Project detector**      | ~300/session    | Auto-detect framework from `package.json`, return only relevant tools   |
+| **Code generator**        | ~1000/component | Full file generation (component + CSS + barrel + test) from single call |
+| **Checklist executor**    | ~400/review     | Return only failed checklist items as context, not full checklist       |
+| **Semantic search**       | ~200/query      | BM25 search on skill content, return only matching sections             |
+| **Multi-file scaffold**   | ~800/project    | Generate entire project structure in one call                           |
+| **Cache layer**           | ~100/call       | Cache skill reads in memory, re-scan only on `skills reload`            |
 
 ### LLM-required vs LLM-free decision tree
 
@@ -266,6 +266,7 @@ Is it a known pattern?
 ## 6. Release Pipeline (Current)
 
 ### CI (`.github/workflows/ci.yml`)
+
 - ✅ Matrix: ubuntu, macos, windows
 - ✅ Node 20
 - ✅ Syntax check on all `.js` files
@@ -277,6 +278,7 @@ Is it a known pattern?
 - ❌ **No coverage reporting**
 
 ### Release (`.github/workflows/release.yml`)
+
 - ✅ pnpm publish with provenance
 - ✅ Homebrew formula generation
 - ✅ GitHub release with assets
@@ -290,23 +292,24 @@ Is it a known pattern?
 
 ## 7. Recommendations Summary
 
-| Priority | Change | Rationale |
-|----------|--------|-----------|
-| **P0** | Port to `@modelcontextprotocol/sdk` | Protocol compliance, transport abstraction, SSE, proper types |
-| **P0** | Add Zod validation | Catch invalid args before execution |
-| **P1** | Implement SSE transport | Replace hand-rolled daemon with real HTTP server |
-| **P1** | Add streaming results | Long-running tools (search, check) can stream progress |
-| **P1** | Improve token-saving tools | Context-aware routing, BM25 search, multi-file generation |
-| **P2** | Add Docker support | Containerized deployment |
-| **P2** | Add Windows packaging | MSI installer, Winget |
-| **P2** | Add macOS packaging | .pkg, Homebrew cask |
-| **P2** | Improve CI/CD | Linting, vitest, audit, automated versioning |
-| **P3** | Add telemetry (opt-in) | Usage patterns for prioritization |
-| **P3** | Add plugin system | Third-party skill support |
+| Priority | Change                              | Rationale                                                     |
+| -------- | ----------------------------------- | ------------------------------------------------------------- |
+| **P0**   | Port to `@modelcontextprotocol/sdk` | Protocol compliance, transport abstraction, SSE, proper types |
+| **P0**   | Add Zod validation                  | Catch invalid args before execution                           |
+| **P1**   | Implement SSE transport             | Replace hand-rolled daemon with real HTTP server              |
+| **P1**   | Add streaming results               | Long-running tools (search, check) can stream progress        |
+| **P1**   | Improve token-saving tools          | Context-aware routing, BM25 search, multi-file generation     |
+| **P2**   | Add Docker support                  | Containerized deployment                                      |
+| **P2**   | Add Windows packaging               | MSI installer, Winget                                         |
+| **P2**   | Add macOS packaging                 | .pkg, Homebrew cask                                           |
+| **P2**   | Improve CI/CD                       | Linting, vitest, audit, automated versioning                  |
+| **P3**   | Add telemetry (opt-in)              | Usage patterns for prioritization                             |
+| **P3**   | Add plugin system                   | Third-party skill support                                     |
 
 ### Key architectural decision: Vanilla JS, no TypeScript
 
 The official `@modelcontextprotocol/sdk` publishes JavaScript (ESM + CJS) with embedded `.d.ts` types. We consume it as plain ESM. Type safety comes from:
+
 - **Runtime validation**: Zod schemas on every tool input
 - **Documentation**: JSDoc on all public functions
 - **IDE hints**: Editors use the SDK's `.d.ts` files automatically
@@ -519,7 +522,7 @@ import {
 /** @type {Server} */
 const server = new Server(
   { name: "rule-mcp", version: "0.2.0" },
-  { capabilities: { tools: {}, resources: {}, prompts: {}, logging: {} } }
+  { capabilities: { tools: {}, resources: {}, prompts: {}, logging: {} } },
 );
 
 // Zod validates input at runtime — no TS needed
@@ -624,14 +627,14 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 
 These tools return complete responses without ANY LLM call:
 
-| Tool | Response Type | Avg Tokens Saved |
-|------|--------------|-----------------|
-| `rule_tool_component` | Full component code (JSX + CSS) | ~500/call |
-| `rule_tool_check` | Guardrail pass/fail with fix suggestions | ~400/call |
-| `rule_tool_scaffold` | Complete config file content | ~200/call |
-| `rule_tool_search` | Grep results from skill files | ~150/call |
-| `pix_tool` | Ranked skill suggestions | ~100/call |
-| `rule_tool_detect` (future) | Project framework analysis | ~300/session |
+| Tool                       | Response Type                            | Avg Tokens Saved |
+| -------------------------- | ---------------------------------------- | ---------------- |
+| `rule_tool_component`       | Full component code (JSX + CSS)          | ~500/call        |
+| `rule_tool_check`           | Guardrail pass/fail with fix suggestions | ~400/call        |
+| `rule_tool_scaffold`        | Complete config file content             | ~200/call        |
+| `rule_tool_search`          | Grep results from skill files            | ~150/call        |
+| `pix_tool`                 | Ranked skill suggestions                 | ~100/call        |
+| `rule_tool_detect` (future) | Project framework analysis               | ~300/session     |
 
 ### Context-Aware Routing (saves ~200 tokens/call)
 
@@ -744,6 +747,7 @@ tags: [react, jsx, hooks, component, frontend]
 ```
 
 This metadata powers:
+
 - `pix_tool` routing (keyword → skill matching)
 - `rule_tool_search` indexing (tag-based + full-text)
 - Auto-detection from project `package.json` → `pix_<detected-framework>`
@@ -804,14 +808,14 @@ Just 2 runtime deps (SDK + Zod). No TypeScript, no compilation step. Pure ESM.
 
 We use the official `@modelcontextprotocol/sdk` **as published** — it ships as JavaScript (ESM + CJS) with `.d.ts` declaration files. No need for a separate vanilla-js fork.
 
-| Aspect | Approach |
-|--------|----------|
-| **SDK usage** | Import as ESM: `import { Server } from "@modelcontextprotocol/sdk/server/index.js"` |
-| **Validation** | `zod` at runtime: `z.object({...}).parse(args)` |
-| **Documentation** | JSDoc for all public functions, types in `@param` / `@returns` tags |
-| **Build step** | None (`node src/index.js` directly) |
-| **Test** | `vitest` with `--experimental-vm-modules` or `node --test` |
-| **Declaration** | No `.d.ts` needed — Zod + JSDoc cover documentation |
+| Aspect            | Approach                                                                            |
+| ----------------- | ----------------------------------------------------------------------------------- |
+| **SDK usage**     | Import as ESM: `import { Server } from "@modelcontextprotocol/sdk/server/index.js"` |
+| **Validation**    | `zod` at runtime: `z.object({...}).parse(args)`                                     |
+| **Documentation** | JSDoc for all public functions, types in `@param` / `@returns` tags                 |
+| **Build step**    | None (`node src/index.js` directly)                                                 |
+| **Test**          | `vitest` with `--experimental-vm-modules` or `node --test`                          |
+| **Declaration**   | No `.d.ts` needed — Zod + JSDoc cover documentation                                 |
 
 ```javascript
 /**
@@ -841,17 +845,16 @@ All data stays on the filesystem. The MCP server is a read-only/validate-only se
 
 ## 13. Platform Support
 
-| Platform | Package | Method |
-|----------|---------|--------|
-| macOS | Homebrew | `brew install rule/tap/rule-mcp` |
-| macOS | pnpm | `pnpm add -g rule-mcp` |
-| Linux | pnpm | `pnpm add -g rule-mcp` |
-| Linux | Docker | `docker pull rule-mcp/rule-mcp` |
-| Windows | pnpm | `pnpm add -g rule-mcp` |
-| Windows | Winget | `winget install rule/rule-mcp` |
-| All | Direct download | GitHub Releases `.tgz` |
-| All | pnpx | `pnpx rule-mcp serve` |
-
+| Platform | Package         | Method                                  |
+| -------- | --------------- | --------------------------------------- |
+| macOS    | Homebrew        | `brew install rule/tap/rule-mcp`   |
+| macOS    | pnpm            | `pnpm add -g rule-mcp`            |
+| Linux    | pnpm            | `pnpm add -g rule-mcp`            |
+| Linux    | Docker          | `docker pull rule-mcp/rule-mcp` |
+| Windows  | pnpm            | `pnpm add -g rule-mcp`            |
+| Windows  | Winget          | `winget install rule/rule-mcp`     |
+| All      | Direct download | GitHub Releases `.tgz`                  |
+| All      | pnpx            | `pnpx rule-mcp serve`             |
 
 ## Preserved source: `ROADMAP.md`
 
@@ -875,41 +878,21 @@ All data stays on the filesystem. The MCP server is a read-only/validate-only se
 
 ### Steps
 
-- [x] **0.1** Add SDK + Zod dependencies
-      - `@modelcontextprotocol/sdk ^1.29.0`, `zod ^4.4.3`
-      - SDK works as ESM (`import { Server } from "@modelcontextprotocol/sdk/server/index.js"`)
+- [x] **0.1** Add SDK + Zod dependencies - `@modelcontextprotocol/sdk ^1.29.0`, `zod ^4.4.3` - SDK works as ESM (`import { Server } from "@modelcontextprotocol/sdk/server/index.js"`)
 
-- [x] **0.2** Implement SDK Server bootstrap (`src/server.js`)
-      - `Server` instance with `rule-mcp` name + version
-      - Capabilities: `tools`, `resources`, `prompts`, `logging`
-      - `StdioServerTransport` (default)
-      - `SetLevelRequest` handled automatically by SDK when `logging: {}` capability declared
-      - `createServer()` exported for reuse by SSE transport
+- [x] **0.2** Implement SDK Server bootstrap (`src/server.js`) - `Server` instance with `rule-mcp` name + version - Capabilities: `tools`, `resources`, `prompts`, `logging` - `StdioServerTransport` (default) - `SetLevelRequest` handled automatically by SDK when `logging: {}` capability declared - `createServer()` exported for reuse by SSE transport
 
-- [x] **0.3** Port tool system (`src/tools/`)
-      - `ToolRegistry` in `src/tools/router.js` with `registerTool`, `listTools`, `callTool`
-      - All 15 tools have Zod input schemas with runtime validation
-      - Tools registered via SDK `setRequestHandler` in `src/server.js`
-      - Ported 15 tools:
-        - `pix_tool`, `pix_*` (10 skill tools), `rule_tool_search`, `rule_tool_component`,
-          `rule_tool_architect`, `rule_tool_check`, `rule_tool_scaffold`
+- [x] **0.3** Port tool system (`src/tools/`) - `ToolRegistry` in `src/tools/router.js` with `registerTool`, `listTools`, `callTool` - All 15 tools have Zod input schemas with runtime validation - Tools registered via SDK `setRequestHandler` in `src/server.js` - Ported 15 tools: - `pix_tool`, `pix_*` (10 skill tools), `rule_tool_search`, `rule_tool_component`,
+      `rule_tool_architect`, `rule_tool_check`, `rule_tool_scaffold`
 
-- [x] **0.4** Port resource system (`src/resources/`)
-      - All `rule://*` URIs via SDK's `ReadResourceRequestSchema`
-      - Dynamic `rule://<skill-name>/summary` (first 30 lines)
-      - 6+ resources: `skills`, `templates`, `ai`, `a11y`, `a11y/test-basic`, `a11y/test-forms`, plus per-skill URIs
+- [x] **0.4** Port resource system (`src/resources/`) - All `rule://*` URIs via SDK's `ReadResourceRequestSchema` - Dynamic `rule://<skill-name>/summary` (first 30 lines) - 6+ resources: `skills`, `templates`, `ai`, `a11y`, `a11y/test-basic`, `a11y/test-forms`, plus per-skill URIs
 
-- [x] **0.5** Port prompt system (`src/prompts/`)
-      - All 4 prompts via SDK's `GetPromptRequestSchema`
-      - Plus `rule-architect-scaffold` (5 total)
+- [x] **0.5** Port prompt system (`src/prompts/`) - All 4 prompts via SDK's `GetPromptRequestSchema` - Plus `rule-architect-scaffold` (5 total)
 
-- [x] **0.6** Remove obsolete files
-      - `src/mcp/protocol.js` — deleted
-      - `src/mcp/stdio.js` — deleted (replaced by `StdioServerTransport`)
-      - `src/tools/router.js` — kept as ToolRegistry (rename in P1)
-      - `src/cli.js` → `src/cli/commands.js` + `src/index.js` (Phase 1)
+- [x] **0.6** Remove obsolete files - `src/mcp/protocol.js` — deleted - `src/mcp/stdio.js` — deleted (replaced by `StdioServerTransport`) - `src/tools/router.js` — kept as ToolRegistry (rename in P1) - `src/cli.js` → `src/cli/commands.js` + `src/index.js` (Phase 1)
 
 ### Deliverables
+
 - [x] All 15 tools work identically via SDK
 - [x] All 6+ resources resolvable
 - [x] All 5 prompts available
@@ -928,26 +911,16 @@ All data stays on the filesystem. The MCP server is a read-only/validate-only se
 
 ### Steps
 
-- [x] **1.1** Split `src/cli.js` → `src/cli/commands.js` + `src/index.js`
-      - `commands.js`: 164 lines, named exports for every command
-      - `index.js`: 106 lines, CLI entry → parse args → call command
-      - `src/cli.js` — deleted
+- [x] **1.1** Split `src/cli.js` → `src/cli/commands.js` + `src/index.js` - `commands.js`: 164 lines, named exports for every command - `index.js`: 106 lines, CLI entry → parse args → call command - `src/cli.js` — deleted
 
-- [x] **1.2** Split `src/core/skills.js` → `src/core/skills.js` + `src/tools/skill.js` + `src/tools/architect.js`
-      - `core/skills.js`: 289 lines — `loadAllSkills()`, LRU cache, YAML frontmatter parsing
-      - `tools/skill.js`: 270 lines — dynamic tool registration (`registerSkillTool`, `registerSearchTool`, etc.)
-      - `tools/architect.js`: 111 lines — context interview server
+- [x] **1.2** Split `src/core/skills.js` → `src/core/skills.js` + `src/tools/skill.js` + `src/tools/architect.js` - `core/skills.js`: 289 lines — `loadAllSkills()`, LRU cache, YAML frontmatter parsing - `tools/skill.js`: 270 lines — dynamic tool registration (`registerSkillTool`, `registerSearchTool`, etc.) - `tools/architect.js`: 111 lines — context interview server
 
-- [x] **1.3** Extract CLI commands into `src/cli/`
-      - `doctor.js` — 84 lines, `runDoctor()` + `getSdkVersion()`
-      - `install.js` — 194 lines (existing)
-      - `uninstall.js` — 196 lines, actual removal logic for all 15 agents
+- [x] **1.3** Extract CLI commands into `src/cli/` - `doctor.js` — 84 lines, `runDoctor()` + `getSdkVersion()` - `install.js` — 194 lines (existing) - `uninstall.js` — 196 lines, actual removal logic for all 15 agents
 
-- [x] **1.4** Add Zod schemas to ALL tools
-      - Every tool has Zod `object({...})` with proper types, defaults, descriptions
-      - Schema errors return user-friendly messages
+- [x] **1.4** Add Zod schemas to ALL tools - Every tool has Zod `object({...})` with proper types, defaults, descriptions - Schema errors return user-friendly messages
 
 ### Deliverables
+
 - [x] Each module ≤300 lines (all 13 modules pass)
 - [x] All existing behavior preserved
 - [x] Zod validation on all tool inputs
@@ -963,25 +936,14 @@ All data stays on the filesystem. The MCP server is a read-only/validate-only se
 
 ### Steps
 
-- [x] **2.1** Implement SSE transport (`src/transport/sse.js` — 209 lines)
-      - Pure Node.js `http` module (no Express)
-      - `GET /sse` — SSE stream via `SSEServerTransport`
-      - `POST /message` — MCP message handler
-      - `GET /health` — Health check endpoint
-      - CORS headers on all endpoints
+- [x] **2.1** Implement SSE transport (`src/transport/sse.js` — 209 lines) - Pure Node.js `http` module (no Express) - `GET /sse` — SSE stream via `SSEServerTransport` - `POST /message` — MCP message handler - `GET /health` — Health check endpoint - CORS headers on all endpoints
 
-- [x] **2.2** Replace daemon command
-      - `rule-mcp daemon start` → spawns `serve --transport sse` on port 37999
-      - `rule-mcp daemon stop` → graceful shutdown via `SIGTERM`
-      - PID file management preserved
-      - Child process stdout/stderr captured to daemon.log
+- [x] **2.2** Replace daemon command - `rule-mcp daemon start` → spawns `serve --transport sse` on port 37999 - `rule-mcp daemon stop` → graceful shutdown via `SIGTERM` - PID file management preserved - Child process stdout/stderr captured to daemon.log
 
-- [x] **2.3** Add optional HTTPS support
-      - `--ssl-cert <path>` / `--ssl-key <path>` flags
-      - Auto-generates self-signed certs via OpenSSL (`src/transport/cert.js`)
-      - `GET /health` works over HTTPS
+- [x] **2.3** Add optional HTTPS support - `--ssl-cert <path>` / `--ssl-key <path>` flags - Auto-generates self-signed certs via OpenSSL (`src/transport/cert.js`) - `GET /health` works over HTTPS
 
 ### Sandbox / Resilience Layer (`src/utils/sandbox.js`)
+
 - [x] `safeJsonParse` — never throws on malformed JSON
 - [x] `withTimeout` — async timeout guard for all handlers
 - [x] `trySafe` — wraps any function to never throw
@@ -991,6 +953,7 @@ All data stays on the filesystem. The MCP server is a read-only/validate-only se
 - [x] Integrated into process startup (`src/index.js`)
 
 ### Deliverables
+
 - [x] `rule-mcp daemon start` works with SSE transport (port 37999)
 - [x] `GET /health` returns `{ ok: true }`
 - [x] `GET /sse` establishes SSE connection with sessionId
@@ -1010,45 +973,18 @@ All data stays on the filesystem. The MCP server is a read-only/validate-only se
 
 ### Steps
 
-- [x] **3.1** Context-aware skill routing
-      - `pix_tool` returns structured JSON with `route`, `confidence`, `sections`, `next_tools`
-      - Section-level keyword scoring with stopword filtering and framework-name bonus
-      - Multi-skill queries (e.g. "React accessibility" → rule-frontend-react + rule-styleguide)
-      - Up to 5 alternatives returned with scores
+- [x] **3.1** Context-aware skill routing - `pix_tool` returns structured JSON with `route`, `confidence`, `sections`, `next_tools` - Section-level keyword scoring with stopword filtering and framework-name bonus - Multi-skill queries (e.g. "React accessibility" → rule-frontend-react + rule-styleguide) - Up to 5 alternatives returned with scores
 
-- [x] **3.2** Project framework auto-detector (`src/core/detector.js`)
-      - `rule_tool_detect` tool reads `package.json` → detects React/Vue/Svelte/Angular/Astro/Solid/Electron/vanilla
-      - Detects TypeScript via `tsconfig.json` or `typescript` dep
-      - Detects build tool: vite, webpack, esbuild, angular-cli, sveltekit, next, nuxt, parcel, tsup, tsc
-      - Returns project profile JSON with suggested skills and tools
+- [x] **3.2** Project framework auto-detector (`src/core/detector.js`) - `rule_tool_detect` tool reads `package.json` → detects React/Vue/Svelte/Angular/Astro/Solid/Electron/vanilla - Detects TypeScript via `tsconfig.json` or `typescript` dep - Detects build tool: vite, webpack, esbuild, angular-cli, sveltekit, next, nuxt, parcel, tsup, tsc - Returns project profile JSON with suggested skills and tools
 
-- [x] **3.3** Template engine — multi-file generation
-      - `rule_tool_component mode=multi` generates: `_Component.jsx` + `_Component.css` + `index.js`
-      - Variable interpolation: component name → PascalCase, kebab-case
-      - Framework-aware output: React (.jsx), Vue (.vue SFC), Svelte (.svelte), Vanilla (.js + .css)
-      - Barrel file (
-      - Example:
-        ```
-        Generated 3 files:
-          src/components/PrimaryButton/_PrimaryButton.jsx
-          src/components/PrimaryButton/_PrimaryButton.css
-          src/components/PrimaryButton/index.js
-        ```
+- [x] **3.3** Template engine — multi-file generation - `rule_tool_component mode=multi` generates: `_Component.jsx` + `_Component.css` + `index.js` - Variable interpolation: component name → PascalCase, kebab-case - Framework-aware output: React (.jsx), Vue (.vue SFC), Svelte (.svelte), Vanilla (.js + .css) - Barrel file. Example output: `src/components/PrimaryButton/_PrimaryButton.jsx`, `src/components/PrimaryButton/_PrimaryButton.css`, `src/components/PrimaryButton/index.js`
 
-- [x] **3.4** Semantic search with BM25
-      - New `src/core/bm25.js` module with full BM25 scoring
-      - Tokenized sections (170 sections, 2414 unique terms)
-      - Ranked results with relevance scores
-      - In-memory inverted index, rebuilt on `skills reload`
-      - `rule_tool_search` returns scored, section-level results
+- [x] **3.4** Semantic search with BM25 - New `src/core/bm25.js` module with full BM25 scoring - Tokenized sections (170 sections, 2414 unique terms) - Ranked results with relevance scores - In-memory inverted index, rebuilt on `skills reload` - `rule_tool_search` returns scored, section-level results
 
-- [x] **3.5** Smart guardrail iteration
-      - `rule_tool_check` accepts `previousPassed` array
-      - Skipped guardrails shown separately
-      - Returns `previousPassed` list for easy re-check
-      - Suggested code fixes included in each failure
+- [x] **3.5** Smart guardrail iteration - `rule_tool_check` accepts `previousPassed` array - Skipped guardrails shown separately - Returns `previousPassed` list for easy re-check - Suggested code fixes included in each failure
 
 ### Deliverables
+
 - [x] `rule_tool_detect` tool reports project framework (react/vue/svelte/angular/solid/astro/electron/vanilla + TS + build tool)
 - [x] `rule_tool_component` generates multi-file output (React .jsx, Vue .vue, Svelte .svelte, vanilla .js+.css+barrel)
 - [x] `rule_tool_search` returns BM25-ranked results (170 sections, 2414 unique terms)
@@ -1065,34 +1001,18 @@ All data stays on the filesystem. The MCP server is a read-only/validate-only se
 
 ### Steps
 
-- [x] **4.1** Upgrade CI (`ci.yml`)
-      - ESLint + Prettier config files (`.eslintrc.json`, `.prettierrc`, `.editorconfig`, `.nvmrc`)
-      - CI workflow: lint job (syntax check, ESLint, Prettier) + test job (OS×Node matrix) + audit job
-      - Node.js 20 + 22 in matrix, across ubuntu/macos/windows
-      - `pnpm audit --prod` in dedicated audit job
-      - `pnpm install --frozen-lockfile` for reproducible builds
+- [x] **4.1** Upgrade CI (`ci.yml`) - ESLint + Prettier config files (`.eslintrc.json`, `.prettierrc`, `.editorconfig`, `.nvmrc`) - CI workflow: lint job (syntax check, ESLint, Prettier) + test job (OS×Node matrix) + audit job - Node.js 20 + 22 in matrix, across ubuntu/macos/windows - `pnpm audit --prod` in dedicated audit job - `pnpm install --frozen-lockfile` for reproducible builds
 
-- [x] **4.2** Upgrade release pipeline (`release.yml`)
-      - pnpm publish with provenance (kept)
-      - Docker build + push to GHCR (linux/amd64 + linux/arm64)
-      - Homebrew formula update (kept)
-      - GitHub Release with assets (kept)
-      - Tests run before publish
+- [x] **4.2** Upgrade release pipeline (`release.yml`) - pnpm publish with provenance (kept) - Docker build + push to GHCR (linux/amd64 + linux/arm64) - Homebrew formula update (kept) - GitHub Release with assets (kept) - Tests run before publish
 
-- [x] **4.3** Add Docker support
-      - `Dockerfile` — multi-stage, `node:22-alpine`, embedded skills, no build step
-      - `docker-compose.yml` — IDE integration via SSE on port 37999
-      - CI pushes to `ghcr.io/rule/rule-mcp` with semver + sha tags
+- [x] **4.3** Add Docker support - `Dockerfile` — multi-stage, `node:22-alpine`, embedded skills, no build step - `docker-compose.yml` — IDE integration via SSE on port 37999 - CI pushes to `ghcr.io/rule/rule-mcp` with semver + sha tags
 
-- [x] **4.4** Add Windows package manager support
-      - Winget manifest: `.github/winget/rule.rule-mcp.yaml`
-      - Scoop manifest: `.github/scoop/rule-mcp.json`
+- [x] **4.4** Add Windows package manager support - Winget manifest: `.github/winget/rule.rule-mcp.yaml` - Scoop manifest: `.github/scoop/rule-mcp.json`
 
-- [x] **4.5** Add CHANGELOG + conventional commits
-      - `CHANGELOG.md` with initial entries following Keep a Changelog
-      - `.github/semantic.yml` — enforce conventional commit types on PR titles
+- [x] **4.5** Add CHANGELOG + conventional commits - `CHANGELOG.md` with initial entries following Keep a Changelog - `.github/semantic.yml` — enforce conventional commit types on PR titles
 
 ### Deliverables
+
 - [x] CI passes on every PR (lint + test + audit)
 - [x] Tag `v*` triggers: pnpm publish + Homebrew + Docker + GitHub Release
 - [x] `rule-mcp --version` returns correct version
@@ -1108,25 +1028,17 @@ All data stays on the filesystem. The MCP server is a read-only/validate-only se
 
 ### Steps
 
-- [x] **5.1** Verify all 15 agent installers
-      - All 16 agents have installer functions with JSON/TOML/INI config format detection
-      - `installed.md` manifest written to `~/.local/share/rule-mcp/installed.md` after install
-      - `rule-mcp doctor` reports which agents are configured (scans 15 common config file locations)
+- [x] **5.1** Verify all 15 agent installers - All 16 agents have installer functions with JSON/TOML/INI config format detection - `installed.md` manifest written to `~/.local/share/rule-mcp/installed.md` after install - `rule-mcp doctor` reports which agents are configured (scans 15 common config file locations)
 
-- [x] **5.2** Add `rule://project` resource
-      - Reads CWD → detects framework + TypeScript + build tool via `detectProject()`
-      - Returns JSON with framework, node version, suggested skills, suggested tools
+- [x] **5.2** Add `rule://project` resource - Reads CWD → detects framework + TypeScript + build tool via `detectProject()` - Returns JSON with framework, node version, suggested skills, suggested tools
 
-- [x] **5.3** Add MCP completion support
-      - `CompleteRequestSchema` handler registered in server.js
-      - Completions: `component` → [button, card, modal, ...], `framework` → [react, vue, svelte, ...],
-        `skill` → [rule_tool_frontend_react, rule_tool_frontend_vue, ...], `rule.framework` → [react, vue, svelte, ...]
+- [x] **5.3** Add MCP completion support - `CompleteRequestSchema` handler registered in server.js - Completions: `component` → [button, card, modal, ...], `framework` → [react, vue, svelte, ...],
+      `skill` → [rule_tool_frontend_react, rule_tool_frontend_vue, ...], `rule.framework` → [react, vue, svelte, ...]
 
-- [x] **5.4** Cross-platform testing
-      - CI matrix already tests ubuntu-latest, macos-latest, windows-latest with Node 20 + 22
-      - Docker image supports linux/amd64 + linux/arm64
+- [x] **5.4** Cross-platform testing - CI matrix already tests ubuntu-latest, macos-latest, windows-latest with Node 20 + 22 - Docker image supports linux/amd64 + linux/arm64
 
 ### Deliverables
+
 - [x] All 16 agents installable with `installed.md` manifest
 - [x] Completion support for component, framework, skill tool arguments (via SDK `CompleteRequestSchema`)
 - [x] Cross-platform CI artifacts (`.tgz` via pnpm pack, Docker via GHCR, Homebrew formula)
@@ -1141,36 +1053,21 @@ All data stays on the filesystem. The MCP server is a read-only/validate-only se
 
 ### Steps
 
-- [x] **6.1** Consolidate documentation for unreleased package
-      - No migration guide is needed before first release
-      - Documentation lives in the consolidated numbered handbook under `docs/`
+- [x] **6.1** Consolidate documentation for unreleased package - No migration guide is needed before first release - Documentation lives in the consolidated numbered handbook under `docs/`
 
 - [x] **6.1a** rule-architect correctly routed: `pix_tool` → architecture query → rule-architect 100%
 - [x] **6.1b** rule-architect guardrails verified: `rule_tool_check` for rule-architect returns 8 architect-specific checks
 - [x] **6.1c** rule_tool_architect tool registered with full mode support (interview, scaffold, check)
-- [x] **6.2** Troubleshooting guide (`docs/TROUBLESHOOTING.md`)
-      - Per-agent issues: Claude, Cursor, VS Code, Copilot, Pi
-      - Daemon, Docker, Skills troubleshooting
-      - General debugging table with common symptoms and fixes
+- [x] **6.2** Troubleshooting guide (`docs/TROUBLESHOOTING.md`) - Per-agent issues: Claude, Cursor, VS Code, Copilot, Pi - Daemon, Docker, Skills troubleshooting - General debugging table with common symptoms and fixes
 
-- [x] **6.3** Performance benchmarks (`docs/BENCHMARKS.md`)
-      - Response times: all tools <15ms P95
-      - Token savings: 94-99.5% vs LLM-only
-      - LLM-free hit rate: ∼85% of common queries
-      - Cache performance metrics
+- [x] **6.3** Performance benchmarks (`docs/BENCHMARKS.md`) - Response times: all tools <15ms P95 - Token savings: 94-99.5% vs LLM-only - LLM-free hit rate: ∼85% of common queries - Cache performance metrics
 
-- [x] **6.4** Architecture Decision Records (`docs/adr/`)
-      - 001: Vanilla JS over TypeScript
-      - 002: SDK over hand-rolled protocol
-      - 003: File-based skill loading over database
+- [x] **6.4** Architecture Decision Records (`docs/adr/`) - 001: Vanilla JS over TypeScript - 002: SDK over hand-rolled protocol - 003: File-based skill loading over database
 
-- [x] **6.5** Example integration guide (`docs/EXAMPLES.md`)
-      - React project: create Vite app, generate components via MCP
-      - Vue 3 project: detect framework, generate form field
-      - A11y project: generate Playwright config + test templates + guardrails
-      - CI integration and VS Code + Docker setup
+- [x] **6.5** Example integration guide (`docs/EXAMPLES.md`) - React project: create Vite app, generate components via MCP - Vue 3 project: detect framework, generate form field - A11y project: generate Playwright config + test templates + guardrails - CI integration and VS Code + Docker setup
 
 ### Deliverables
+
 - [x] README updated with badges, quick start, troubleshooting, architecture diagram, docs table
 - [x] Example integration guide (`docs/EXAMPLES.md`) with React, Vue, a11y walkthroughs
 - [x] ADRs documented for 3 key decisions (`docs/adr/NNN-*`)
@@ -1185,25 +1082,14 @@ All data stays on the filesystem. The MCP server is a read-only/validate-only se
 
 ### Steps
 
-- [x] **7.1** Define plugin detection
-      - `getSkillNames()` detects any directory with SKILL.md (not just `rule-*` prefix)
-      - `isPluginSkill()` / `hasPluginJs()` / `loadPluginJs()` in router.js
-      - `registerSkillTool()` handles plugin names without `rule-` prefix
-      - `mergePluginGuardrails()` in guardrails.js — plugins inject custom guardrails
-      - `plugin.js` dynamically imported, guardrails merged into guardrails engine
-      - `docs/PLUGINS.md` — complete plugin authoring guide with examples
+- [x] **7.1** Define plugin detection - `getSkillNames()` detects any directory with SKILL.md (not just `rule-*` prefix) - `isPluginSkill()` / `hasPluginJs()` / `loadPluginJs()` in router.js - `registerSkillTool()` handles plugin names without `rule-` prefix - `mergePluginGuardrails()` in guardrails.js — plugins inject custom guardrails - `plugin.js` dynamically imported, guardrails merged into guardrails engine - `docs/PLUGINS.md` — complete plugin authoring guide with examples
 
-- [x] **7.2** Add community skill discovery
-      - `rule://community` resource — lists installed plugins + known community skills
-      - Auto-detects all plugins in `~/.agents/skills/` with SKILL.md
-      - Tool `pix_<plugin-name>` auto-registered for each plugin
+- [x] **7.2** Add community skill discovery - `rule://community` resource — lists installed plugins + known community skills - Auto-detects all plugins in `~/.agents/skills/` with SKILL.md - Tool `pix_<plugin-name>` auto-registered for each plugin
 
-- [x] **7.3** Add opt-in telemetry
-      - `rule-mcp doctor --telemetry` adds anonymous usage stats to report
-      - Collects: version, node version, platform, arch, tool count, agent count, timestamp
-      - Controlled by `--telemetry` flag — never sent without explicit opt-in
+- [x] **7.3** Add opt-in telemetry - `rule-mcp doctor --telemetry` adds anonymous usage stats to report - Collects: version, node version, platform, arch, tool count, agent count, timestamp - Controlled by `--telemetry` flag — never sent without explicit opt-in
 
 ### Deliverables
+
 - [x] Plugin detection documented with examples (`docs/PLUGINS.md`)
 - [x] Community skill index via `rule://community` resource (auto-discovers installed plugins)
 - [x] Opt-in telemetry via `rule-mcp doctor --telemetry`
@@ -1212,28 +1098,28 @@ All data stays on the filesystem. The MCP server is a read-only/validate-only se
 
 ## Summary Timeline
 
-| Phase | What | Effort | Duration |
-|-------|------|--------|----------|
-| Phase | What | Effort | Status |
-|-------|------|--------|--------|
-| **P0** | Port to MCP SDK | High | ✅ Complete |
-| **P1** | Core refactor | Medium | ✅ Complete |
-| **P2** | SSE Transport + HTTPS + Sandbox | Medium | ✅ Complete |
-| **P3** | Token-Saving Tools | Medium | ✅ Complete |
-| **P4** | CI/CD Pipeline | Medium | ✅ Complete |
-| **P5** | IDE Compatibility | Low | ✅ Complete |
-| **P6** | Documentation | Low | ✅ Complete |
-| **P7** | Plugins (future) | High | ✅ Complete |
+| Phase   | What                            | Effort   | Duration    |
+| ------- | ------------------------------- | -------- | ----------- |
+| Phase   | What                            | Effort   | Status      |
+| ------- | ------                          | -------- | --------    |
+| **P0**  | Port to MCP SDK                 | High     | ✅ Complete |
+| **P1**  | Core refactor                   | Medium   | ✅ Complete |
+| **P2**  | SSE Transport + HTTPS + Sandbox | Medium   | ✅ Complete |
+| **P3**  | Token-Saving Tools              | Medium   | ✅ Complete |
+| **P4**  | CI/CD Pipeline                  | Medium   | ✅ Complete |
+| **P5**  | IDE Compatibility               | Low      | ✅ Complete |
+| **P6**  | Documentation                   | Low      | ✅ Complete |
+| **P7**  | Plugins (future)                | High     | ✅ Complete |
 
 ---
 
 ## Risk Register
 
-| Risk | Likelihood | Impact | Mitigation |
-|------|-----------|--------|------------|
-| SDK API changes | Low | High (pinned dep) | Pin SDK version, lockfile, test before release |
-| Backward compat break | Low | High | Smoke test against all 15 agents |
-| Skill content migration | Low | Medium | Skills are markdown — zero changes needed |
-| Windows path issues | Medium | Medium | CI on Windows, normalize with `node:path` |
-| Zod validation too strict | Low | Low | Schema errors return clear messages via `McpError` |
-| User needs TS | Very low | Very low | SDK ships `.d.ts` — editors get autocomplete anyway |
+| Risk                      | Likelihood | Impact            | Mitigation                                          |
+| ------------------------- | ---------- | ----------------- | --------------------------------------------------- |
+| SDK API changes           | Low        | High (pinned dep) | Pin SDK version, lockfile, test before release      |
+| Backward compat break     | Low        | High              | Smoke test against all 15 agents                    |
+| Skill content migration   | Low        | Medium            | Skills are markdown — zero changes needed           |
+| Windows path issues       | Medium     | Medium            | CI on Windows, normalize with `node:path`           |
+| Zod validation too strict | Low        | Low               | Schema errors return clear messages via `McpError`  |
+| User needs TS             | Very low   | Very low          | SDK ships `.d.ts` — editors get autocomplete anyway |

@@ -11,7 +11,7 @@ Claude Code exposes MCP prompts as slash commands prefixed with the server name 
 
 ## Decision
 
-1) Do NOT ship a Claude plugin. 2) Generate the clean command set from the MCP prompt registry as the single source of truth (src/core/agent-commands.js + `rule-mcp agent-commands` CLI): the rule-mcp router pinned first, then every prompt alphabetically, rendered per agent format (args/workflow/gemini). 3) Suppress the server's prompts for Claude via a new RULE_MCP_NO_PROMPTS env flag (default 0), set to 1 in the Claude MCP config; listActivePrompts() returns [] when set, while listPrompts() stays pure. 4) install.sh/install-agent-commands.sh and `install --agent claude` write the full set for every agent; uninstall removes it. 5) /rule-handoff commits pending work as atomic scoped conventional commits + one separate docs(handoff)/docs(adr) commit, never pushing.
+1. Do NOT ship a Claude plugin. 2) Generate the clean command set from the MCP prompt registry as the single source of truth (src/core/agent-commands.js + `rule-mcp agent-commands` CLI): the rule-mcp router pinned first, then every prompt alphabetically, rendered per agent format (args/workflow/gemini). 3) Suppress the server's prompts for Claude via a new RULE_MCP_NO_PROMPTS env flag (default 0), set to 1 in the Claude MCP config; listActivePrompts() returns [] when set, while listPrompts() stays pure. 4) install.sh/install-agent-commands.sh and `install --agent claude` write the full set for every agent; uninstall removes it. 5) /rule-handoff commits pending work as atomic scoped conventional commits + one separate docs(handoff)/docs(adr) commit, never pushing.
 
 ## Consequences
 

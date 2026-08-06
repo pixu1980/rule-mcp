@@ -25,9 +25,23 @@ export { canonicalFilesDigest } from "./gateway.js";
  * a floor under the containment check.
  */
 const SYSTEM_ROOTS = [
-  "/etc", "/usr", "/bin", "/sbin", "/var", "/opt", "/boot", "/dev", "/proc", "/sys",
-  "/System", "/Library", "/Applications", "/private/etc", "/private/var",
-  String.raw`C:\Windows`, String.raw`C:\Program Files`,
+  "/etc",
+  "/usr",
+  "/bin",
+  "/sbin",
+  "/var",
+  "/opt",
+  "/boot",
+  "/dev",
+  "/proc",
+  "/sys",
+  "/System",
+  "/Library",
+  "/Applications",
+  "/private/etc",
+  "/private/var",
+  String.raw`C:\Windows`,
+  String.raw`C:\Program Files`,
 ];
 
 /**
@@ -39,8 +53,18 @@ const PROTECTED_SEGMENTS = new Set([".git", ".ssh", ".gnupg", ".agents", ".claud
 
 /** File names that are never part of a project tree. */
 const PROTECTED_NAMES = new Set([
-  ".zshrc", ".zshenv", ".zprofile", ".bashrc", ".bash_profile", ".profile", ".cshrc", ".kshrc",
-  "authorized_keys", "known_hosts", "id_rsa", "id_ed25519",
+  ".zshrc",
+  ".zshenv",
+  ".zprofile",
+  ".bashrc",
+  ".bash_profile",
+  ".profile",
+  ".cshrc",
+  ".kshrc",
+  "authorized_keys",
+  "known_hosts",
+  "id_rsa",
+  "id_ed25519",
 ]);
 
 /** Resolve a path to its real location when it exists, else leave it as-is. */
@@ -75,7 +99,9 @@ export function resolveProjectRoot(rootPath) {
   // Temp directories are legitimate scaffolding targets even though they sit
   // under /var on macOS, so they are checked before the system-root denylist.
   const temporaryRoots = [resolve(tmpdir()), realOrSelf(tmpdir())];
-  if (temporaryRoots.some((temporary) => isWithin(root, temporary))) {return root;}
+  if (temporaryRoots.some((temporary) => isWithin(root, temporary))) {
+    return root;
+  }
 
   const real = realOrSelf(root);
   for (const system of SYSTEM_ROOTS) {
@@ -134,7 +160,9 @@ export function resolveWriteTarget(rootDir, targetPath) {
   let ancestor = resolved;
   while (!existsSync(ancestor)) {
     const parent = dirname(ancestor);
-    if (parent === ancestor) {break;}
+    if (parent === ancestor) {
+      break;
+    }
     ancestor = parent;
   }
   if (!isWithin(realOrSelf(ancestor), realRoot)) {
@@ -152,10 +180,14 @@ export async function registerApplyTool() {
   const { z } = await import("zod");
 
   const ApplySchema = z.object({
-    files: z.array(z.object({
-      path: z.string().describe("Relative file path within the project"),
-      content: z.string().describe("File content to write"),
-    })).describe("Array of files to create/write"),
+    files: z
+      .array(
+        z.object({
+          path: z.string().describe("Relative file path within the project"),
+          content: z.string().describe("File content to write"),
+        }),
+      )
+      .describe("Array of files to create/write"),
     receipt: z.string().describe("Receipt token from pix_gateway that validated this exact code"),
     path: z.string().optional().default(".").describe("Project root directory"),
     dryRun: z.boolean().optional().default(true).describe("Preview without writing (default: true)"),
@@ -201,11 +233,14 @@ export async function registerApplyTool() {
       } catch (error) {
         return {
           isError: true,
-          content: [{
-            type: "text",
-            text: `# pix_apply: Project root REJECTED\n\n**Root:** ${rootPath}\n**Error:** ${error.message}\n\n` +
-              `Pass the project directory you are working in — pix_apply never writes outside it.`,
-          }],
+          content: [
+            {
+              type: "text",
+              text:
+                `# pix_apply: Project root REJECTED\n\n**Root:** ${rootPath}\n**Error:** ${error.message}\n\n` +
+                `Pass the project directory you are working in — pix_apply never writes outside it.`,
+            },
+          ],
           _meta: { pixApply: { receiptValid: false, rootError: error.message, filesWritten: 0 } },
         };
       }
@@ -218,12 +253,15 @@ export async function registerApplyTool() {
       if (!receiptCheck.valid) {
         return {
           isError: true,
-          content: [{
-            type: "text",
-            text: `# pix_apply: Receipt validation FAILED\n\n**Reason:** ${receiptCheck.reason || "Invalid receipt"}\n\n` +
-              `The receipt must be obtained from pix_gateway after ALL guardrails pass. ` +
-              `If you modified the code after pix_gateway, run pix_gateway again with the updated code.`,
-          }],
+          content: [
+            {
+              type: "text",
+              text:
+                `# pix_apply: Receipt validation FAILED\n\n**Reason:** ${receiptCheck.reason || "Invalid receipt"}\n\n` +
+                `The receipt must be obtained from pix_gateway after ALL guardrails pass. ` +
+                `If you modified the code after pix_gateway, run pix_gateway again with the updated code.`,
+            },
+          ],
           _meta: { pixApply: { receiptValid: false, reason: receiptCheck.reason, filesWritten: 0 } },
         };
       }
@@ -237,10 +275,12 @@ export async function registerApplyTool() {
         } catch (error) {
           return {
             isError: true,
-            content: [{
-              type: "text",
-              text: `# pix_apply: Path validation FAILED\n\n**File:** ${file.path}\n**Error:** ${error.message}`,
-            }],
+            content: [
+              {
+                type: "text",
+                text: `# pix_apply: Path validation FAILED\n\n**File:** ${file.path}\n**Error:** ${error.message}`,
+              },
+            ],
             _meta: { pixApply: { receiptValid: true, pathError: error.message, filesWritten: 0 } },
           };
         }
@@ -279,9 +319,14 @@ export async function registerApplyTool() {
         `Root: \`${rootDir}\``,
         `Files: ${results.length}`,
         "",
-        ...results.map(r => `- ${r.status === "written" ? "✅" : (r.status === "dry-run" ? "📋" : "❌")} ${r.path}${r.note ? ` (${r.note})` : ""}${r.error ? ` — ${r.error}` : ""}`),
+        ...results.map(
+          (r) =>
+            `- ${r.status === "written" ? "✅" : r.status === "dry-run" ? "📋" : "❌"} ${r.path}${r.note ? ` (${r.note})` : ""}${r.error ? ` — ${r.error}` : ""}`,
+        ),
         "",
-        dryRun ? "Run again with `dryRun: false` to apply changes." : `Wrote ${results.filter(r => r.status === "written").length} files.`,
+        dryRun
+          ? "Run again with `dryRun: false` to apply changes."
+          : `Wrote ${results.filter((r) => r.status === "written").length} files.`,
       ].filter(Boolean);
 
       return {
@@ -292,8 +337,8 @@ export async function registerApplyTool() {
             receiptBinding: receiptCheck.binding,
             root: rootDir,
             dryRun: !!dryRun,
-            filesWritten: results.filter(r => r.status === "written").length,
-            filesPreviewed: results.filter(r => r.status === "dry-run").length,
+            filesWritten: results.filter((r) => r.status === "written").length,
+            filesPreviewed: results.filter((r) => r.status === "dry-run").length,
           },
         },
       };

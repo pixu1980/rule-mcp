@@ -26,11 +26,11 @@ export const guardrails = [
     label: "Max line length 100",
     description: "Maximum line length should be 100 characters.",
     check: (code) => {
-      const longLines = code.split("\n").filter(l => l.length > 100);
+      const longLines = code.split("\n").filter((l) => l.length > 100);
       return {
         pass: longLines.length === 0,
         failCount: longLines.length,
-        detail: longLines.slice(0, 5).map(l => l.slice(0, 80) + "..."),
+        detail: longLines.slice(0, 5).map((l) => l.slice(0, 80) + "..."),
         suggestion: "Break lines longer than 100 characters.",
       };
     },

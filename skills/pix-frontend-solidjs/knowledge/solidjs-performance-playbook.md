@@ -7,6 +7,7 @@ This playbook supports the rule-frontend-solidjs performance review skill. It co
 SolidJS compiles your JSX into real DOM nodes and updates them granularly when signals change. The key insight: **signals track where they are read, not where they are declared.**
 
 Common bugs come from:
+
 1. Breaking the reactive chain (destructuring, accessing outside tracking scope)
 2. Using wrong control flow components
 3. Missing memoization for derived values
@@ -75,19 +76,20 @@ const total = createMemo(() => cart.reduce((sum, item) => sum + item.price, 0));
 ```
 
 ### Rules
+
 - Memoize when the computation is O(n) or more
 - Memoize when returning an object/array that is passed as props to children (referential stability)
 - Don't memoize simple value access or concatenation
 
 ## Pattern 4 — createSignal vs createStore
 
-| Situation | Choice |
-|---|---|
-| Primitive value (number, string, boolean) | `createSignal` |
-| Single-level object | Either |
-| Nested object with frequent deep updates | `createStore` |
-| Array with nested objects | `createStore` |
-| Large immutable data replaced entirely | `createSignal` with whole-replacement |
+| Situation                                 | Choice                                |
+| ----------------------------------------- | ------------------------------------- |
+| Primitive value (number, string, boolean) | `createSignal`                        |
+| Single-level object                       | Either                                |
+| Nested object with frequent deep updates  | `createStore`                         |
+| Array with nested objects                 | `createStore`                         |
+| Large immutable data replaced entirely    | `createSignal` with whole-replacement |
 
 ```js
 // Signal: simple, whole-replacement
@@ -105,18 +107,19 @@ Manual fetch + signal is error-prone. `createResource` handles loading, error, r
 
 ```jsx
 const [data, { mutate, refetch }] = createResource(
-  () => props.userId,         // source signal (re-fetches on change)
-  async (userId) => {         // fetcher
+  () => props.userId, // source signal (re-fetches on change)
+  async (userId) => {
+    // fetcher
     const res = await fetch(`/api/users/${userId}`);
     if (!res.ok) throw new Error("Failed to fetch");
     return res.json();
-  }
+  },
 );
 
 // Usage
 <Show when={!data.loading} fallback={<p>Loading...</p>}>
   <pre>{JSON.stringify(data())}</pre>
-</Show>
+</Show>;
 ```
 
 ## Pattern 6 — State locality
@@ -135,7 +138,7 @@ function Page() {
 
 function SearchSection() {
   const [search, setSearch] = createSignal("");
-  return <input value={search()} onInput={e => setSearch(e.target.value)} />;
+  return <input value={search()} onInput={(e) => setSearch(e.target.value)} />;
 }
 ```
 
@@ -178,9 +181,7 @@ Signals, effects, and JSX should be separated by concern, not by file size.
 function useFilteredItems(items, filter) {
   return createMemo(() => {
     const f = filter();
-    return items().filter(item =>
-      f === "all" ? true : item.status === f
-    );
+    return items().filter((item) => (f === "all" ? true : item.status === f));
   });
 }
 
@@ -188,11 +189,7 @@ function useFilteredItems(items, filter) {
 function FilterableList(props) {
   const [filter, setFilter] = createSignal("all");
   const filteredItems = useFilteredItems(() => props.items, filter);
-  return (
-    <For each={filteredItems()}>
-      {(item) => <li>{item.title}</li>}
-    </For>
-  );
+  return <For each={filteredItems()}>{(item) => <li>{item.title}</li>}</For>;
 }
 ```
 
@@ -202,17 +199,20 @@ Solid's JSX compiler wraps every `{}` expression in a reactive scope. But for li
 
 ```jsx
 // ❌ Inefficient: ternary creates new nodes on every branch switch
-{loading() ? <Spinner /> : <Content />}
+{
+  loading() ? <Spinner /> : <Content />;
+}
 
 // ✅ Efficient: Show mounts/unmounts once
 <Show when={!loading()} fallback={<Spinner />}>
   <Content />
-</Show>
+</Show>;
 ```
 
 ## Measurement notes
 
 Use SolidJS DevTools browser extension for:
+
 - Signal value inspection
 - Effect and memo dependency tracking
 - Component render timing

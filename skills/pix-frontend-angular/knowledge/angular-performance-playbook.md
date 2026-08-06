@@ -7,6 +7,7 @@ This playbook supports the rule-frontend-angular performance review skill. It co
 Angular performance is about controlling **when change detection runs** and **how much work** each cycle does.
 
 Key levers:
+
 1. **ChangeDetectionStrategy.OnPush** — limits checks to input changes, events, and async pipes
 2. **Signals** — provide fine-grained reactivity without zone.js
 3. **Lazy loading** — defers code download until needed
@@ -15,6 +16,7 @@ Key levers:
 ## Pattern 1 — OnPush by default
 
 `ChangeDetectionStrategy.Default` checks every component in the tree on any async activity (timer, HTTP response, click, etc.). `OnPush` checks only when:
+
 - Component inputs change (new reference)
 - An event fires inside the component
 - An async pipe emits
@@ -40,27 +42,25 @@ Key levers:
 
 ### When to use
 
-| Use case | Tool |
-|---|---|
-| Local component state | `signal()` |
-| Derived values | `computed()` |
-| Side effects | `effect()` |
-| Complex async streams | RxJS (`Subject`, `mergeMap`, etc.) |
-| HTTP requests | RxJS (`HttpClient`) |
-| Forms | `FormsModule` / `ReactiveFormsModule` |
+| Use case              | Tool                                  |
+| --------------------- | ------------------------------------- |
+| Local component state | `signal()`                            |
+| Derived values        | `computed()`                          |
+| Side effects          | `effect()`                            |
+| Complex async streams | RxJS (`Subject`, `mergeMap`, etc.)    |
+| HTTP requests         | RxJS (`HttpClient`)                   |
+| Forms                 | `FormsModule` / `ReactiveFormsModule` |
 
 ### Signal service pattern
 
 ```typescript
-@Injectable({ providedIn: 'root' })
+@Injectable({ providedIn: "root" })
 export class CartService {
   private items = signal<CartItem[]>([]);
-  readonly total = computed(() =>
-    this.items().reduce((sum, i) => sum + i.price, 0)
-  );
+  readonly total = computed(() => this.items().reduce((sum, i) => sum + i.price, 0));
 
   addItem(item: CartItem) {
-    this.items.update(current => [...current, item]);
+    this.items.update((current) => [...current, item]);
   }
 }
 ```
@@ -71,9 +71,9 @@ Angular 17+ `@for` with `track`:
 
 ```html
 @for (item of items; track item.id) {
-  <li>{{ item.title }}</li>
+<li>{{ item.title }}</li>
 } @empty {
-  <li>No items</li>
+<li>No items</li>
 }
 ```
 
@@ -107,7 +107,7 @@ Every subscription, interval, and event listener MUST be cleaned up.
 ### takeUntilDestroyed (Angular 16+)
 
 ```typescript
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
 export class MyComponent {
   private destroyRef = inject(DestroyRef);
@@ -115,7 +115,7 @@ export class MyComponent {
   constructor() {
     interval(1000)
       .pipe(takeUntilDestroyed())
-      .subscribe(v => console.log(v));
+      .subscribe((v) => console.log(v));
   }
 }
 ```
@@ -158,14 +158,15 @@ All routes should be lazy unless the component is needed on every page.
 
 ```typescript
 export const routes: Routes = [
-  { path: '', loadComponent: () => import('./home/_Home.component') },
-  { path: 'settings', loadChildren: () => import('./settings/settings.routes') },
+  { path: "", loadComponent: () => import("./home/_Home.component") },
+  { path: "settings", loadChildren: () => import("./settings/settings.routes") },
 ];
 ```
 
 ## Pattern 8 — Component responsibility
 
 ### Signs of mixed responsibility
+
 - Component changes when API contract changes
 - Same component changes when UI design changes
 - Data fetching, formatting, error states, and handlers in one file
@@ -197,25 +198,25 @@ export class UserProfile {
 
 ```html
 @defer (on viewport; prefetch on idle) {
-  <expensive-chart />
+<expensive-chart />
 } @placeholder {
-  <div data-part="placeholder">Loading...</div>
+<div data-part="placeholder">Loading...</div>
 } @loading (after 100ms; minimum 500ms) {
-  <div data-part="loading">Loading chart...</div>
+<div data-part="loading">Loading chart...</div>
 } @error {
-  <div data-part="error">Failed to load chart</div>
+<div data-part="error">Failed to load chart</div>
 }
 ```
 
 ### Triggers
 
-| Trigger | When |
-|---|---|
-| `on viewport` | When element enters viewport |
-| `on idle` | When browser is idle |
-| `on immediate` | Immediately after rendering |
-| `on timer(500ms)` | After a delay |
-| `when condition` | When a boolean expression becomes true |
+| Trigger           | When                                   |
+| ----------------- | -------------------------------------- |
+| `on viewport`     | When element enters viewport           |
+| `on idle`         | When browser is idle                   |
+| `on immediate`    | Immediately after rendering            |
+| `on timer(500ms)` | After a delay                          |
+| `when condition`  | When a boolean expression becomes true |
 
 ## Pattern 10 — Avoid ngDoCheck
 
@@ -237,6 +238,7 @@ readonly derived = computed(() => process(this.val()));
 ## Measurement notes
 
 Use Angular DevTools browser extension:
+
 - **Profiler** tab: record change detection cycles, see component tree updates
 - **Components** tab: inspect component state and change detection strategy
 

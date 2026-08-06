@@ -35,18 +35,18 @@ a minimum safety net, not evidence that tests exercise meaningful behavior.
 Create `vitest.config.ts`:
 
 ```ts
-import { defineConfig } from 'vitest/config';
+import { defineConfig } from "vitest/config";
 
 export default defineConfig({
   test: {
     globals: true,
-    root: '.',
-    include: ['tests/**/*.test.ts'],
+    root: ".",
+    include: ["tests/**/*.test.ts"],
     coverage: {
-      provider: 'v8',
-      include: ['src/**/*.ts'],
-      exclude: ['src/types/**', 'src/**/*.d.ts'],
-      reporter: ['text', 'lcov', 'cobertura'],
+      provider: "v8",
+      include: ["src/**/*.ts"],
+      exclude: ["src/types/**", "src/**/*.d.ts"],
+      reporter: ["text", "lcov", "cobertura"],
       thresholds: {
         statements: 60,
         branches: 50,
@@ -63,22 +63,22 @@ export default defineConfig({
 Create `vitest.config.ts`:
 
 ```ts
-import { defineConfig } from 'vitest/config';
-import react from '@vitejs/plugin-react';
+import { defineConfig } from "vitest/config";
+import react from "@vitejs/plugin-react";
 
 export default defineConfig({
   plugins: [react()],
   test: {
     globals: true,
-    environment: 'jsdom',
-    root: '.',
-    include: ['tests/**/*.test.{ts,tsx}'],
-    setupFiles: ['./tests/setup.ts'],
+    environment: "jsdom",
+    root: ".",
+    include: ["tests/**/*.test.{ts,tsx}"],
+    setupFiles: ["./tests/setup.ts"],
     coverage: {
-      provider: 'v8',
-      include: ['src/**/*.{ts,tsx}'],
-      exclude: ['src/types/**', 'src/**/*.d.ts', 'src/main.tsx'],
-      reporter: ['text', 'lcov', 'cobertura'],
+      provider: "v8",
+      include: ["src/**/*.{ts,tsx}"],
+      exclude: ["src/types/**", "src/**/*.d.ts", "src/main.tsx"],
+      reporter: ["text", "lcov", "cobertura"],
       thresholds: {
         statements: 60,
         branches: 50,
@@ -93,7 +93,7 @@ export default defineConfig({
 Create `tests/setup.ts` for frontend:
 
 ```ts
-import '@testing-library/jest-dom/vitest';
+import "@testing-library/jest-dom/vitest";
 ```
 
 ## Step 2 — Write unit tests
@@ -101,11 +101,11 @@ import '@testing-library/jest-dom/vitest';
 ### Pattern: Arrange-Act-Assert
 
 ```ts
-import { describe, expect, it } from 'vitest';
-import { calculateTotal } from '../../src/services/order-service.js';
+import { describe, expect, it } from "vitest";
+import { calculateTotal } from "../../src/services/order-service.js";
 
-describe('calculateTotal', () => {
-  it('sums item prices with quantity', () => {
+describe("calculateTotal", () => {
+  it("sums item prices with quantity", () => {
     // Arrange
     const items = [
       { price: 10, quantity: 2 },
@@ -119,13 +119,13 @@ describe('calculateTotal', () => {
     expect(total).toBe(35);
   });
 
-  it('returns 0 for empty items', () => {
+  it("returns 0 for empty items", () => {
     expect(calculateTotal([])).toBe(0);
   });
 
-  it('throws on negative price', () => {
+  it("throws on negative price", () => {
     const items = [{ price: -1, quantity: 1 }];
-    expect(() => calculateTotal(items)).toThrow('Price must be non-negative');
+    expect(() => calculateTotal(items)).toThrow("Price must be non-negative");
   });
 });
 ```
@@ -133,11 +133,11 @@ describe('calculateTotal', () => {
 ### Pattern: Mocking dependencies
 
 ```ts
-import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { UserService } from '../../src/services/user-service.js';
-import type { UserRepository } from '../../src/repositories/user-repository.js';
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import { UserService } from "../../src/services/user-service.js";
+import type { UserRepository } from "../../src/repositories/user-repository.js";
 
-describe('UserService', () => {
+describe("UserService", () => {
   let service: UserService;
   let mockRepo: UserRepository;
 
@@ -150,14 +150,14 @@ describe('UserService', () => {
     service = new UserService(mockRepo);
   });
 
-  it('returns user when found', async () => {
-    const user = { id: '1', email: 'test@rule-mcp.domain.example' };
+  it("returns user when found", async () => {
+    const user = { id: "1", email: "test@rule-mcp.domain.example" };
     vi.mocked(mockRepo.findById).mockResolvedValue(user);
 
-    const result = await service.getUser('1');
+    const result = await service.getUser("1");
 
     expect(result).toEqual(user);
-    expect(mockRepo.findById).toHaveBeenCalledWith('1');
+    expect(mockRepo.findById).toHaveBeenCalledWith("1");
   });
 });
 ```
@@ -173,19 +173,19 @@ Test backend APIs.
 Example:
 
 ```tsx
-import { render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
-import { describe, expect, it } from 'vitest';
-import { Counter } from '../../src/components/Counter.js';
+import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import { describe, expect, it } from "vitest";
+import { Counter } from "../../src/components/Counter.js";
 
-describe('Counter', () => {
-  it('increments count on click', async () => {
+describe("Counter", () => {
+  it("increments count on click", async () => {
     const user = userEvent.setup();
     render(<Counter initial={0} />);
 
-    await user.click(screen.getByRole('button', { name: /increment/i }));
+    await user.click(screen.getByRole("button", { name: /increment/i }));
 
-    expect(screen.getByText('1')).toBeInTheDocument();
+    expect(screen.getByText("1")).toBeInTheDocument();
   });
 });
 ```
@@ -216,12 +216,12 @@ Or use `pnpm` alternatively.
 
 ### Mandatory thresholds
 
-| Metric | Minimum |
-|---|---|
-| Statements | 60% |
-| Branches | 50% |
-| Functions | 60% |
-| Lines | 60% |
+| Metric     | Minimum |
+| ---------- | ------- |
+| Statements | 60%     |
+| Branches   | 50%     |
+| Functions  | 60%     |
+| Lines      | 60%     |
 
 These thresholds are non-negotiable. They must be enforced in two places:
 
@@ -289,6 +289,7 @@ After setting up coverage, verify by temporarily raising a threshold and confirm
 - **Coverage drops below thresholds**: Identify uncovered lines using `coverage/lcov-report/index.html`. Write targeted tests for uncovered branches and functions.
 - **Do not lower thresholds**. Do not add `/* v8 ignore */` comments unless the code is genuinely untestable (e.g., platform-specific fallback).
 - **Hard-to-test functions**: Refactor to be more testable — extract pure logic, inject dependencies.
+
 ---
 
 ## See also

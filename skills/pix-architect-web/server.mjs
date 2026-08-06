@@ -37,7 +37,7 @@ const MIME = {
   ".svg": "image/svg+xml",
 };
 
-const [,, ...args] = process.argv;
+const [, , ...args] = process.argv;
 const targetDir = args[0] || process.cwd();
 const PORT = args.includes("--port") ? parseInt(args[args.indexOf("--port") + 1]) : 0;
 
@@ -73,11 +73,9 @@ export function createServer(targetDir) {
     // cross-origin POST — and /api/generate writes files, so the request itself
     // is the attack. Origin / Sec-Fetch-Site / Host are browser-set and cannot
     // be forged by page script.
-    if (url.pathname.startsWith("/api/")
-      && denyForeignRequest(req, res, { port: server.address()?.port })) {
+    if (url.pathname.startsWith("/api/") && denyForeignRequest(req, res, { port: server.address()?.port })) {
       return;
     }
-
 
     // API: GET /api/wizard-spec — return wizard spec (primary source)
     if (req.method === "GET" && url.pathname === "/api/wizard-spec") {
@@ -90,7 +88,7 @@ export function createServer(targetDir) {
       const tiers = [
         { key: "starter", label: "Starter", description: "Domain Sketch + Tech Stack. 30 minutes." },
         { key: "standard", label: "Standard", description: "Starter + Domain Deep-Dive. 90 minutes." },
-        { key: "deep", label: "Deep", description: "Standard + Quality, Security, Deploy. 3 hours." }
+        { key: "deep", label: "Deep", description: "Standard + Quality, Security, Deploy. 3 hours." },
       ];
       // Flatten optionGroups to top level for backward compat
       const compat = {
@@ -105,7 +103,7 @@ export function createServer(targetDir) {
 
     // API: GET /api/templates — return template list
     if (req.method === "GET" && url.pathname === "/api/templates") {
-      const summary = templates.map(t => ({
+      const summary = templates.map((t) => ({
         path: t.output || t.path.replace(/^templates\//, ""),
         label: t.label || t.path,
         placeholders: extractPlaceholders(t.content),
@@ -123,38 +121,49 @@ export function createServer(targetDir) {
 
     // API: POST /api/generate — generate .context from submitted values
     if (req.method === "POST" && url.pathname === "/api/generate") {
-      collectBody(req).then((body) => {
-        const { values, tier, force } = JSON.parse(body);
-        const { files: generated, skipped } = generateContext(values || {}, wizardSpec, targetDir, { force: !!force });
-        const ctxCount = generated.filter(f => !f.root).length;
-        const rootWritten = generated.filter(f => f.root && !f.skipped).length;
-        res.writeHead(200, { "Content-Type": "application/json" });
-        res.end(JSON.stringify({
-          ok: true,
-          target: join(targetDir, ".context"),
-          files: generated,
-          skipped,
-          summary: `Generated ${ctxCount} files in .context/ and ${rootWritten} agent entry files at the project root`
-            + (skipped.length ? ` (${skipped.length} existing root file(s) left untouched — pass force:true to overwrite)` : ""),
-        }));
-      }).catch((err) => {
-        res.writeHead(err.statusCode || 400, { "Content-Type": "application/json" });
-        res.end(JSON.stringify({ ok: false, error: err.message }));
-      });
+      collectBody(req)
+        .then((body) => {
+          const { values, tier, force } = JSON.parse(body);
+          const { files: generated, skipped } = generateContext(values || {}, wizardSpec, targetDir, {
+            force: !!force,
+          });
+          const ctxCount = generated.filter((f) => !f.root).length;
+          const rootWritten = generated.filter((f) => f.root && !f.skipped).length;
+          res.writeHead(200, { "Content-Type": "application/json" });
+          res.end(
+            JSON.stringify({
+              ok: true,
+              target: join(targetDir, ".context"),
+              files: generated,
+              skipped,
+              summary:
+                `Generated ${ctxCount} files in .context/ and ${rootWritten} agent entry files at the project root` +
+                (skipped.length
+                  ? ` (${skipped.length} existing root file(s) left untouched — pass force:true to overwrite)`
+                  : ""),
+            }),
+          );
+        })
+        .catch((err) => {
+          res.writeHead(err.statusCode || 400, { "Content-Type": "application/json" });
+          res.end(JSON.stringify({ ok: false, error: err.message }));
+        });
       return;
     }
 
     // API: POST /api/download — return file contents as JSON (no disk write)
     if (req.method === "POST" && url.pathname === "/api/download") {
-      collectBody(req).then((body) => {
-        const { values, tier } = JSON.parse(body);
-        const files = generateContextContent(values || {}, wizardSpec);
-        res.writeHead(200, { "Content-Type": "application/json" });
-        res.end(JSON.stringify({ ok: true, files }));
-      }).catch((err) => {
-        res.writeHead(err.statusCode || 400, { "Content-Type": "application/json" });
-        res.end(JSON.stringify({ ok: false, error: err.message }));
-      });
+      collectBody(req)
+        .then((body) => {
+          const { values, tier } = JSON.parse(body);
+          const files = generateContextContent(values || {}, wizardSpec);
+          res.writeHead(200, { "Content-Type": "application/json" });
+          res.end(JSON.stringify({ ok: true, files }));
+        })
+        .catch((err) => {
+          res.writeHead(err.statusCode || 400, { "Content-Type": "application/json" });
+          res.end(JSON.stringify({ ok: false, error: err.message }));
+        });
       return;
     }
 
@@ -204,9 +213,9 @@ if (isMain) {
   const server = createServer(targetDir);
 
   server.listen(PORT, BIND_HOST, () => {
-  const addr = server.address();
-  const url = `http://localhost:${addr.port}`;
-  console.log(`
+    const addr = server.address();
+    const url = `http://localhost:${addr.port}`;
+    console.log(`
 ╔══════════════════════════════════════════════════════╗
 ║          rule-architect Context Interview             ║
 ╠══════════════════════════════════════════════════════╣
@@ -227,5 +236,5 @@ if (isMain) {
 function extractPlaceholders(content) {
   const matches = content.match(/\[([A-Z_0-9]+)\]/g);
   if (!matches) return [];
-  return [...new Set(matches)].map(m => m.slice(1, -1)).sort();
+  return [...new Set(matches)].map((m) => m.slice(1, -1)).sort();
 }

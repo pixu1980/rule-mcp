@@ -17,7 +17,7 @@ The codebase is unusually disciplined for an MCP server: bearer auth on both HTT
 
 Three things need attention before telemetry work starts:
 
-1. **The write path can be pointed anywhere.** `rule_tool_apply`'s containment root is a caller-supplied argument, and the gateway receipt binds file *contents* but not file *paths*. Together they turn "the only writer, gated by guardrails" into "write approved bytes to any path".
+1. **The write path can be pointed anywhere.** `rule_tool_apply`'s containment root is a caller-supplied argument, and the gateway receipt binds file _contents_ but not file _paths_. Together they turn "the only writer, gated by guardrails" into "write approved bytes to any path".
 2. **The architect interview server is an unauthenticated local writer.** It writes into the user's project on a `POST` that any website open in the browser can issue, and the MCP tool that spawns it never kills it.
 3. **The tool surface costs ~54k tokens per model turn** (measured). For a product whose core claim is token savings, this is the single largest measurable regression, and half of it is exact duplication.
 
@@ -35,7 +35,7 @@ Three things need attention before telemetry work starts:
 
 **Also:** no `realpath` resolution. A symlink inside a legitimate project (`<project>/vendor → /etc`) escapes containment, because `path.resolve` is pure string math and never touches the filesystem.
 
-**Fix:** anchor containment to a root the caller cannot choose — process cwd, or an explicit allowlist of opened project roots — and validate the *realpath* of the deepest existing ancestor before writing. Reject absolute `file.path` values outright rather than normalising them.
+**Fix:** anchor containment to a root the caller cannot choose — process cwd, or an explicit allowlist of opened project roots — and validate the _realpath_ of the deepest existing ancestor before writing. Reject absolute `file.path` values outright rather than normalising them.
 
 **Fixed** — `resolveProjectRoot()` refuses the filesystem root, the home directory and system directories; `resolveWriteTarget()` refuses absolute paths, `..`, NUL bytes, protected destinations, and symlink escapes proven by `realpath` on the deepest existing ancestor. ADR 030, `test/apply-containment.test.mjs` (19 assertions).
 
@@ -45,7 +45,7 @@ Three things need attention before telemetry work starts:
 
 The receipt is `sha256(code)`. `rule_tool_apply` recomputes that hash over `files.map(f => f.content).join("\n---FILE---\n")` — content only. Paths are never part of the signed material.
 
-**Failure scenario:** obtain a receipt for content that passes every guardrail, then apply that same content to `.git/hooks/pre-commit`, `package.json`, `eslint.config.mjs`, or any dotfile inside root. Guardrails validated *what*, never *where*, so the receipt proves nothing about the destination. Combined with finding 1, "where" is unbounded.
+**Failure scenario:** obtain a receipt for content that passes every guardrail, then apply that same content to `.git/hooks/pre-commit`, `package.json`, `eslint.config.mjs`, or any dotfile inside root. Guardrails validated _what_, never _where_, so the receipt proves nothing about the destination. Combined with finding 1, "where" is unbounded.
 
 **Second defect:** the `\n---FILE---\n` separator is in-band. `files: [{path:"a", content:"X\n---FILE---\nY"}]` and `files: [{path:"a",content:"X"},{path:"b",content:"Y"}]` hash identically — a receipt issued for one shape is valid for the other.
 
@@ -59,7 +59,7 @@ The receipt is `sha256(code)`. `rule_tool_apply` recomputes that hash over `file
 
 The server binds loopback (`BIND_HOST = "127.0.0.1"`, line 26) and deliberately sets no CORS headers — good. But it has **no authentication token, no `Origin` check, and no `Host` check**, and `POST /api/generate` writes generated files into `targetDir` including agent entry files at the project root, honouring `force: true` from the request body (line 113).
 
-**Failure scenario:** while the interview server is running, any page the user visits issues `fetch("http://localhost:<port>/api/generate", {method:"POST", mode:"no-cors", headers:{"Content-Type":"text/plain"}, body:"{…}"})`. `text/plain` makes it a CORS *simple request* — no preflight, so the absence of CORS headers does not stop the request from executing. The attacker cannot read the response but does not need to: the side effect is a file write into the user's project with attacker-chosen content, `force: true` overwriting existing root files. Port discovery is a short scan of the ephemeral range. Missing `Host` validation additionally leaves DNS-rebinding open.
+**Failure scenario:** while the interview server is running, any page the user visits issues `fetch("http://localhost:<port>/api/generate", {method:"POST", mode:"no-cors", headers:{"Content-Type":"text/plain"}, body:"{…}"})`. `text/plain` makes it a CORS _simple request_ — no preflight, so the absence of CORS headers does not stop the request from executing. The attacker cannot read the response but does not need to: the side effect is a file write into the user's project with attacker-chosen content, `force: true` overwriting existing root files. Port discovery is a short scan of the ephemeral range. Missing `Host` validation additionally leaves DNS-rebinding open.
 
 **Fix:** mint a one-time token at spawn, put it in the URL the MCP tool prints, and require it on every `/api/*` request; reject requests whose `Origin` is present and not same-origin, whose `Host` is not `localhost`/`127.0.0.1`, or whose `Sec-Fetch-Site` is not `same-origin`. Drop `force` from the wire protocol or gate it behind the token too.
 
@@ -95,13 +95,13 @@ The server binds loopback (`BIND_HOST = "127.0.0.1"`, line 26) and deliberately 
 
 **Where:** `src/core/self-update.js:123-158`, invoked from `src/tools/router.js:162-164`
 
-The forced update is well-engineered in the ways it advertises — `--ff-only`, dirty-tree skip, detached-HEAD skip, fail-open — but it verifies *nothing about what it pulls*: no remote-URL allowlist, no signed-tag or `git verify-commit` check. On success it hot-reloads skills and schedules `process.exit(0)` so a supervisor restarts into the new code (`self-update.js:208-225`).
+The forced update is well-engineered in the ways it advertises — `--ff-only`, dirty-tree skip, detached-HEAD skip, fail-open — but it verifies _nothing about what it pulls_: no remote-URL allowlist, no signed-tag or `git verify-commit` check. On success it hot-reloads skills and schedules `process.exit(0)` so a supervisor restarts into the new code (`self-update.js:208-225`).
 
 **Failure scenario:** anyone who can write one line into `.git/config` (`branch.<x>.remote`, or `remote.origin.url`) — a malicious dependency's postinstall, a shared dev box, a checked-in `.git` in a container image — gains code execution in the MCP server at the next tool call, with no user interaction and no visible prompt. Upstream repository compromise has the same effect on every install. Note also that `git merge` runs repository-provided hooks when `core.hooksPath` points inside the tree (this repo ships `.githooks/`), so pulled content can execute on the following merge.
 
-**Fix:** pin the expected remote URL and abort on mismatch; require a signed tag or signed commit before merging; keep auto-*detection* forced but make auto-*apply* opt-in (`RULE_MCP_AUTOUPDATE_APPLY=1`) with the banner offering `rule_tool_update` instead. Log the resolved remote and commit id so the update is auditable.
+**Fix:** pin the expected remote URL and abort on mismatch; require a signed tag or signed commit before merging; keep auto-_detection_ forced but make auto-_apply_ opt-in (`RULE_MCP_AUTOUPDATE_APPLY=1`) with the banner offering `rule_tool_update` instead. Log the resolved remote and commit id so the update is auditable.
 
-**Fixed (remote pinning + optional signature + audit log)** — the upstream remote is verified *before any fetch*: `normalizeRemoteUrl()` compares host+path so this repo's scp-style SSH remote matches the HTTPS URL `server.json` declares, and `resolveAllowedRemotes()` trusts only that declaration unless `RULE_MCP_UPDATE_REMOTE` replaces it. A mismatch yields `remote-not-allowed` with a loud banner and no network call, which closes the `.git/config` rewrite vector. `RULE_MCP_UPDATE_REQUIRE_SIGNATURE=1` adds `git verify-commit`. Applied updates log remote and commit range to stderr. ADR 032, `test/self-update-remote-pin.test.mjs` (10 assertions, including a real repointed-remote sandbox). **Residual:** auto-apply is still forced, so a compromised *upstream* is only mitigated by enabling signature verification — flipping auto-apply to opt-in changes a documented product promise and is left as an open decision.
+**Fixed (remote pinning + optional signature + audit log)** — the upstream remote is verified _before any fetch_: `normalizeRemoteUrl()` compares host+path so this repo's scp-style SSH remote matches the HTTPS URL `server.json` declares, and `resolveAllowedRemotes()` trusts only that declaration unless `RULE_MCP_UPDATE_REMOTE` replaces it. A mismatch yields `remote-not-allowed` with a loud banner and no network call, which closes the `.git/config` rewrite vector. `RULE_MCP_UPDATE_REQUIRE_SIGNATURE=1` adds `git verify-commit`. Applied updates log remote and commit range to stderr. ADR 032, `test/self-update-remote-pin.test.mjs` (10 assertions, including a real repointed-remote sandbox). **Residual:** auto-apply is still forced, so a compromised _upstream_ is only mitigated by enabling signature verification — flipping auto-apply to opt-in changes a documented product promise and is left as an open decision.
 
 ### 7. Docker ships the server on every host interface, as root
 
@@ -143,7 +143,7 @@ The cache namespace is `version + statSync(embeddedSkills).mtimeMs`. A directory
 
 **Where:** `src/tools/router.js:180-184` vs `186-213`
 
-The cache is consulted before `preprocessToolCall`, before `_beforeHooks`, and returns before `_afterHooks`. Today the loss is limited (argument normalisation, NUL/prototype hygiene), but the shape is wrong in two ways: any future security check added to preprocessing is silently skipped whenever a cache entry exists, and the key is computed from *un-normalised* arguments, so `path: " . "` and `path: "."` occupy two entries for one computation.
+The cache is consulted before `preprocessToolCall`, before `_beforeHooks`, and returns before `_afterHooks`. Today the loss is limited (argument normalisation, NUL/prototype hygiene), but the shape is wrong in two ways: any future security check added to preprocessing is silently skipped whenever a cache entry exists, and the key is computed from _un-normalised_ arguments, so `path: " . "` and `path: "."` occupy two entries for one computation.
 
 **Telemetry consequence (relevant to phase 2):** `_afterHooks` never fire on cache hits or errors, so telemetry built on them would be blind to exactly the events we want to count. Instrument inside `callTool` around both exits.
 
@@ -153,7 +153,7 @@ The cache is consulted before `preprocessToolCall`, before `_beforeHooks`, and r
 
 **Where:** `src/core/tool-cache.js:132-144`, `189-192`
 
-`flush()` serialises the whole `_memory` map and `gzipSync(..., { level: 9 })` on the main thread, on a 2s debounce and again on `process.exit`. The bound is 500 *entries*, with no byte budget, and a single entry may legally hold 1 MB of content (`src/core/enforcement.js:4`).
+`flush()` serialises the whole `_memory` map and `gzipSync(..., { level: 9 })` on the main thread, on a 2s debounce and again on `process.exit`. The bound is 500 _entries_, with no byte budget, and a single entry may legally hold 1 MB of content (`src/core/enforcement.js:4`).
 
 **Failure scenario:** a session that fills the cache with large skill bodies produces a multi-hundred-MB JSON string plus a level-9 compression pass, blocking the event loop for seconds — in daemon mode that stalls every connected client, and it happens again at shutdown.
 
@@ -276,12 +276,12 @@ Measured baseline to compare against once telemetry lands: **176 tools / 215,711
 
 ## Suggested order of work
 
-| Order | Items | Rationale |
-|-------|-------|-----------|
-| 1 | 1, 2, 3, 4, 5 | Write-path and spawned-server boundaries. Everything else is safe to defer; these are not. |
-| 2 | 7, 6 | Deployment defaults and unverified remote code — config-level fixes with large blast radius. |
-| 3 | 8, 9, 19 | The three measurable token/staleness wins, and the baseline telemetry has to be able to prove. |
-| 4 | 10, 11, 12 | Cache and daemon-state correctness — prerequisites for trustworthy metrics. |
-| 5 | 13-18, 20-23 | Hardening and hygiene. |
+| Order | Items         | Rationale                                                                                      |
+| ----- | ------------- | ---------------------------------------------------------------------------------------------- |
+| 1     | 1, 2, 3, 4, 5 | Write-path and spawned-server boundaries. Everything else is safe to defer; these are not.     |
+| 2     | 7, 6          | Deployment defaults and unverified remote code — config-level fixes with large blast radius.   |
+| 3     | 8, 9, 19      | The three measurable token/staleness wins, and the baseline telemetry has to be able to prove. |
+| 4     | 10, 11, 12    | Cache and daemon-state correctness — prerequisites for trustworthy metrics.                    |
+| 5     | 13-18, 20-23  | Hardening and hygiene.                                                                         |
 
 ADR candidates: receipt scope (path binding), interview-server authentication, self-update trust model, minimal-tools default, telemetry storage and redaction contract.

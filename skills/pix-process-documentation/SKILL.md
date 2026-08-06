@@ -118,15 +118,15 @@ description: How to develop and contribute
 
 ## Scripts
 
-| Command | Description |
-|---|---|
-| `pnpm dev` | Start development server |
-| `pnpm test` | Run tests |
-| `pnpm test:coverage` | Run tests with coverage |
-| `pnpm lint` | Lint code |
-| `pnpm format` | Format code |
-| `pnpm build` | Build for production |
-| `pnpm seed` | Run seed data |
+| Command              | Description              |
+| -------------------- | ------------------------ |
+| `pnpm dev`           | Start development server |
+| `pnpm test`          | Run tests                |
+| `pnpm test:coverage` | Run tests with coverage  |
+| `pnpm lint`          | Lint code                |
+| `pnpm format`        | Format code              |
+| `pnpm build`         | Build for production     |
+| `pnpm seed`          | Run seed data            |
 
 Or `pnpm` scripts.
 
@@ -155,14 +155,14 @@ description: System architecture overview
 
 ## Technology Stack
 
-| Layer | Technology |
-|---|---|
-| Runtime | Node.js |
-| Language | TypeScript (strict) |
-| Linter/Formatter | Biome 2.0 |
-| Testing | Vitest |
-| CI/CD | GitLab CI |
-| Containers | Docker |
+| Layer            | Technology          |
+| ---------------- | ------------------- |
+| Runtime          | Node.js             |
+| Language         | TypeScript (strict) |
+| Linter/Formatter | Biome 2.0           |
+| Testing          | Vitest              |
+| CI/CD            | GitLab CI           |
+| Containers       | Docker              |
 ```
 
 ## Step 4 — Add the docs script and dependency
@@ -173,7 +173,7 @@ Install last version of **mintlify** and add to root `package.json`:
 {
   "scripts": {
     "docs": "mintlify dev --dir mintlify"
-  },
+  }
 }
 ```
 

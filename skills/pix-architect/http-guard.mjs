@@ -62,7 +62,9 @@ export function checkLocalRequest(req, options = {}) {
 
   // ── Host: HTTP/1.1 requires it; a foreign name means DNS rebinding ──
   const host = first(headers.host);
-  if (!host) {return deny("Missing Host header.");}
+  if (!host) {
+    return deny("Missing Host header.");
+  }
   const hostParts = parseAuthority(host);
   if (!hostParts || !LOOPBACK_HOSTS.has(hostParts.hostname)) {
     return deny(`Host "${host}" is not a loopback address.`);
@@ -108,7 +110,9 @@ export function checkLocalRequest(req, options = {}) {
  */
 export function denyForeignRequest(req, res, options = {}) {
   const verdict = checkLocalRequest(req, options);
-  if (verdict.ok) {return false;}
+  if (verdict.ok) {
+    return false;
+  }
   res.writeHead(verdict.status, { "Content-Type": "application/json" });
   res.end(JSON.stringify({ ok: false, error: `Refused: ${verdict.reason}` }));
   return true;

@@ -1,6 +1,6 @@
 // @ts-check
 
-import { dispatchCustomEvent } from './_dispatchCustomEvent.js';
+import { dispatchCustomEvent } from "./_dispatchCustomEvent.js";
 
 /**
  * Dispatch a namespaced custom event for a component instance, using
@@ -22,6 +22,6 @@ export const dispatchComponentEvent = function (eventName, detail, originalEvent
     componentName,
     eventName,
     detail,
-    originalEvent ?? new Event(`${componentName}.${eventName}`)
+    originalEvent ?? new Event(`${componentName}.${eventName}`),
   );
 };

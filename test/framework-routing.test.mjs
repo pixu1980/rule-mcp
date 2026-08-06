@@ -13,8 +13,13 @@ import { tmpdir } from "node:os";
 let pass = 0;
 let fail = 0;
 const check = (label, ok) => {
-  if (ok) { pass++; console.log(`  ✅ ${label}`); }
-  else { fail++; console.log(`  ❌ ${label}`); }
+  if (ok) {
+    pass++;
+    console.log(`  ✅ ${label}`);
+  } else {
+    fail++;
+    console.log(`  ❌ ${label}`);
+  }
 };
 
 console.log("=== Framework-Biased Routing ===\n");
@@ -30,7 +35,7 @@ await loadAllSkills();
 
 // Helper to collect all routes from a response (primary + alternatives)
 function getAllRoutes(parsed) {
-  return [parsed.route, ...(parsed.alternatives || []).map(a => a.route)];
+  return [parsed.route, ...(parsed.alternatives || []).map((a) => a.route)];
 }
 
 // ── T6: framework bias boosts matching skill ──
@@ -49,11 +54,14 @@ check("T6.2 vue bias: rule-frontend-vue is primary route with bias", parsedVue.r
 
 // ── T6.3: framework bias with path auto-detection ──
 const tmpDir = mkdtempSync(join(tmpdir(), "rule-fw-"));
-writeFileSync(join(tmpDir, "package.json"), JSON.stringify({
-  name: "svelte-app",
-  dependencies: { svelte: "^5.0.0" },
-  devDependencies: { vite: "^6.0.0" },
-}));
+writeFileSync(
+  join(tmpDir, "package.json"),
+  JSON.stringify({
+    name: "svelte-app",
+    dependencies: { svelte: "^5.0.0" },
+    devDependencies: { vite: "^6.0.0" },
+  }),
+);
 
 const rPath = await callTool("pix_tool", {
   prompt: "How do I create a button component?",
@@ -64,10 +72,13 @@ const pathRoutes = getAllRoutes(parsedPath);
 check("T6.3 auto-detect: rule-frontend-svelte in results", pathRoutes.includes("rule-frontend-svelte"));
 
 // ── T6.4: explicit framework overrides path detection ──
-writeFileSync(join(tmpDir, "package.json"), JSON.stringify({
-  name: "angular-app",
-  dependencies: { "@angular/core": "^19.0.0" },
-}));
+writeFileSync(
+  join(tmpDir, "package.json"),
+  JSON.stringify({
+    name: "angular-app",
+    dependencies: { "@angular/core": "^19.0.0" },
+  }),
+);
 const rOverride = await callTool("pix_tool", {
   prompt: "How do I create a button component?",
   framework: "react",
@@ -75,7 +86,10 @@ const rOverride = await callTool("pix_tool", {
 });
 const parsedOverride = JSON.parse(rOverride.content[0].text);
 const overrideRoutes = getAllRoutes(parsedOverride);
-check("T6.4 explicit framework overrides path: rule-frontend-react in results", overrideRoutes.includes("rule-frontend-react"));
+check(
+  "T6.4 explicit framework overrides path: rule-frontend-react in results",
+  overrideRoutes.includes("rule-frontend-react"),
+);
 
 // Cleanup
 rmSync(tmpDir, { recursive: true, force: true });

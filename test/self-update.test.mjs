@@ -17,7 +17,8 @@ import { buildBanner, scheduleRestartIfNeeded } from "../src/core/self-update.js
 
 console.log("self-update engine test");
 
-const g = (arguments_, cwd) => execFileSync("git", arguments_, { cwd, stdio: ["ignore", "pipe", "ignore"], encoding: "utf8" });
+const g = (arguments_, cwd) =>
+  execFileSync("git", arguments_, { cwd, stdio: ["ignore", "pipe", "ignore"], encoding: "utf8" });
 
 /** Build a bare "upstream" + a working clone that tracks it. */
 function makeClonePair() {
@@ -130,12 +131,17 @@ function runUpdateIn(clone, environment = {}) {
 
 // ── T5: banner + restart decisions (pure) ──
 {
-  assert.match(buildBanner({ updated: true, from: "aaaaaaa", to: "bbbbbbb", count: 2, changedSkills: true, changedCode: false }), /Updating MCP server/);
+  assert.match(
+    buildBanner({ updated: true, from: "aaaaaaa", to: "bbbbbbb", count: 2, changedSkills: true, changedCode: false }),
+    /Updating MCP server/,
+  );
   assert.equal(buildBanner({ updated: false }), null, "no banner when nothing changed");
 
-// eslint-disable-next-line no-unused-vars
+  // eslint-disable-next-line no-unused-vars
   let isExited = false;
-  const note = scheduleRestartIfNeeded({ updated: true, changedCode: true }, () => { isExited = true; });
+  const note = scheduleRestartIfNeeded({ updated: true, changedCode: true }, () => {
+    isExited = true;
+  });
   assert.match(note, /restart/i, "code change schedules a restart note");
 
   process.env.RULE_MCP_NO_AUTORESTART = "1";
@@ -151,7 +157,9 @@ function runUpdateIn(clone, environment = {}) {
 {
   process.env.RULE_MCP_DAEMON = "1";
   let isDaemonExited = false;
-  const daemonNote = scheduleRestartIfNeeded({ updated: true, changedCode: true }, () => { isDaemonExited = true; });
+  const daemonNote = scheduleRestartIfNeeded({ updated: true, changedCode: true }, () => {
+    isDaemonExited = true;
+  });
   assert.match(daemonNote, /daemon/i, "daemon mode explains a manual/opt-in restart");
   // Let any deferred (800ms) exit fire — a ref'd timer keeps the loop alive.
   await new Promise((r) => setTimeout(r, 900));
@@ -160,7 +168,9 @@ function runUpdateIn(clone, environment = {}) {
   // Single-client daemons can opt back in — the deferred restart returns.
   process.env.RULE_MCP_DAEMON_AUTORESTART = "1";
   let isOptInExited = false;
-  const optInNote = scheduleRestartIfNeeded({ updated: true, changedCode: true }, () => { isOptInExited = true; });
+  const optInNote = scheduleRestartIfNeeded({ updated: true, changedCode: true }, () => {
+    isOptInExited = true;
+  });
   assert.match(optInNote, /restart/i, "daemon opt-in yields a restart note");
   await new Promise((r) => setTimeout(r, 900));
   assert.equal(isOptInExited, true, "daemon opt-in performs the deferred restart");

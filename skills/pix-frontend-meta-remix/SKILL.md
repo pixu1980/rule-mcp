@@ -188,13 +188,13 @@ export async function loader({ request }) {
 
 ## Deployment
 
-| Target | Adapter | Config |
-|--------|---------|--------|
-| **Node.js** | `@remix-run/node` | `pnpm run start` |
-| **Cloudflare Workers** | `@remix-run/cloudflare` | `wrangler.toml` |
-| **Vercel** | `@vercel/remix` | Auto-detect |
-| **Netlify** | `@netlify/remix-adapter` | `netlify.toml` |
-| **Fly.io** | `@remix-run/node` + Docker | Dockerfile |
+| Target                 | Adapter                    | Config           |
+| ---------------------- | -------------------------- | ---------------- |
+| **Node.js**            | `@remix-run/node`          | `pnpm run start` |
+| **Cloudflare Workers** | `@remix-run/cloudflare`    | `wrangler.toml`  |
+| **Vercel**             | `@vercel/remix`            | Auto-detect      |
+| **Netlify**            | `@netlify/remix-adapter`   | `netlify.toml`   |
+| **Fly.io**             | `@remix-run/node` + Docker | Dockerfile       |
 
 ## Quick Reference
 
@@ -210,6 +210,7 @@ export async function loader({ request }) {
 │  Deploy:    Node, Cloudflare Workers, Vercel, Netlify    │
 └────────────────────────────────────────────────────────────┘
 ```
+
 ---
 
 ## See also

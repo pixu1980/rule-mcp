@@ -14,15 +14,15 @@ _Generated 2026-07-30 with `rule_tool_process_handoff`, augmented with the sessi
 
 `rule-architect` turns a wizard interview into a `.context/` documentation pack. The consolidation (roadmap in the architect plan series) took it from three divergent generator copies + a prototype-overfit output to one engine producing framework-neutral, cross-harness packs.
 
-| Phase | Outcome |
-|---|---|
-| P1 | Unified 3 `.context/` generator copies → 1 (`skills/rule-architect/generator.mjs`). |
-| P2 | Unified the wizard spec (`wizard-spec.json`) + the two `interview.js`; `detect.mjs` extracted; context-server serves the canonical UI **by path** (symlinks broke `pnpm pack`). |
-| P4 | Placeholder fill 27% → 100% via `field-map.mjs` + `normalize.mjs` (RENAMES/COMPOSITION/DERIVED). |
-| P5 | Lean + conditional output (`emitWhen`, empty-section policy, `raw` templates). |
-| P6 | Canonical `AGENTS.md` fanned out to CLAUDE/GEMINI/.clinerules/Copilot/Cursor/Windsurf. |
-| P7 | Live Summary/Files UI panel. |
-| P8 | Framework-neutral pack prose (this session). |
+| Phase | Outcome                                                                                                                                                                         |
+| ----- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| P1    | Unified 3 `.context/` generator copies → 1 (`skills/rule-architect/generator.mjs`).                                                                                              |
+| P2    | Unified the wizard spec (`wizard-spec.json`) + the two `interview.js`; `detect.mjs` extracted; context-server serves the canonical UI **by path** (symlinks broke `pnpm pack`). |
+| P4    | Placeholder fill 27% → 100% via `field-map.mjs` + `normalize.mjs` (RENAMES/COMPOSITION/DERIVED).                                                                                |
+| P5    | Lean + conditional output (`emitWhen`, empty-section policy, `raw` templates).                                                                                                  |
+| P6    | Canonical `AGENTS.md` fanned out to CLAUDE/GEMINI/.clinerules/Copilot/Cursor/Windsurf.                                                                                          |
+| P7    | Live Summary/Files UI panel.                                                                                                                                                    |
+| P8    | Framework-neutral pack prose (this session).                                                                                                                                    |
 
 ## This session (2026-07-30)
 
@@ -43,19 +43,23 @@ dbdb999 feat(architect): guard root entry files from silent overwrite (F10)
 ```
 
 ### F10 — root-file overwrite guard (`dbdb999`)
+
 `generateContext` wrote 7 root entry files into the project root, clobbering a hand-authored `CLAUDE.md`/`AGENTS.md`. Now: existing root file → **skip + report**; overwrite only on `--force` (CLI) / `force:true` (web). `.context/` stays architect-owned (always regenerated). Guarded per-file. **User decisions locked.**
 
 ### F7 — interview-server hardening (`43fbfee`)
+
 Both servers (`rule-architect-web/server.mjs` + the MCP-spawned `assets/context-server.mjs`): path-traversal containment (`static-file.mjs` `containWithin`), bind `127.0.0.1` (`BIND_HOST`, was all-interfaces), dropped wildcard CORS. Main-guarded auto-listen + exported `createServer`/`BIND_HOST` for tests. Verified via real spawn (loopback serves, LAN unreachable, no leak).
 
 ### Hardening sweep (high-confidence, full branch diff) — 5 fixes
+
 1. **`$`-substitution corruption** (`4be5a79`): `replaceAll(ph, str)` interpreted `$&`/`$$`/`` $` ``/`$'` in answers → function replacement.
-2. **detector fabrication** (`823ed06`): `detectProjectValues` returned 27 fixed TTRPG/Electron values for *any* project (even empty). Rewrote to detect-or-stay-silent (PROJECT_NAME + lockfile-based pkg manager only).
+2. **detector fabrication** (`823ed06`): `detectProjectValues` returned 27 fixed TTRPG/Electron values for _any_ project (even empty). Rewrote to detect-or-stay-silent (PROJECT_NAME + lockfile-based pkg manager only).
 3. **unbounded POST body** (`769fcbb`): `collectBody` caps at 2 MiB → 413.
 4. **4 residual XSS sinks** (`90e64bd`): error/summary/target → innerHTML now `esc()`-wrapped.
 5. **backtick cosmetic** (`20b3534`): `` `[KEY]` `` unfilled no longer renders literal marker underscores.
 
 ### P8 — framework-neutral pack prose (`624ee71`, `7e052fd`, `547fa97`, `fc6b9a7`)
+
 The pack no longer asserts the prototype's vanilla-JS/Custom-Elements/Parcel stack as fact (a React project's README used to say "pure vanilla JavaScript only"). Grounding showed most content was already collected; only **3 new single-subfield repeatables** added (`ARCHITECTURE_PRINCIPLES`, `TECH_CONSTRAINTS`, `GUIDANCE_LINKS`). 7 templates de-overfit to answer-driven placeholders (`[BROWSER_SUPPORT]`, `[BUILD_COMMAND]`, `[STACK_CSS_APPROACH]`, `[ARCH_PRINCIPLE_*]`, working `[GUIDANCE_LINK_*]` refs replacing dead skill links). New CI gate `architect-framework-neutral.test.mjs`. Fill-coverage 100% (143/143), golden regenerated. **User decisions locked** (framework-neutral, answer-driven, new fields).
 
 ## Locked design decisions (do NOT reopen)
@@ -63,12 +67,12 @@ The pack no longer asserts the prototype's vanilla-JS/Custom-Elements/Parcel sta
 - F10: guard **root files only**; `.context/` always regenerated; skip-if-exists + `--force`.
 - F7: full hardening (containment guard + loopback bind + no wildcard CORS).
 - P5: `emitWhen` gate on `PROJECT_TYPE` (weak-proxy trade-off accepted).
-- P8: framework-neutral = neutral across *frameworks*; the rule **methodology** (zero CSS classes, semantic HTML, external CSS, pnpm exact, `./src`, English) stays as correct defaults.
+- P8: framework-neutral = neutral across _frameworks_; the rule **methodology** (zero CSS classes, semantic HTML, external CSS, pnpm exact, `./src`, English) stays as correct defaults.
 
 ## Open items / next
 
 1. **Merge decision** — the branch is ready but unmerged; that's a human call.
-2. **Project-structure overfit (out of P8 scope):** some templates still carry `./src/scripts/services/…`-style *structure* assumptions in non-gated prose. Stack-neutral is done; structure-neutral would be a separate follow-up.
+2. **Project-structure overfit (out of P8 scope):** some templates still carry `./src/scripts/services/…`-style _structure_ assumptions in non-gated prose. Stack-neutral is done; structure-neutral would be a separate follow-up.
 3. **Pre-existing CI reds, NOT from this work** (reproduce identically on `main`): `rule-styleguide-a11y: missing See also` aborts full `node --run ci`; `docs-architect` "≤6 root docs, found 8". These predate the branch.
 4. **`architect-ui.test.mjs`** needs the Playwright runner + a live server (`ARCHITECT_WEB_URL`); it fails under `node --test` (wrong runner) and is **not in `ci`** by design.
 5. **`rule_tool_check` on the architect `.mjs`** files: a repo-wide block-spacing style gap fails identically on untouched code, and `jsdoc-required` is a confirmed **false positive** (fires on functions that have full JSDoc). Not a per-change regression — don't churn style to chase it.

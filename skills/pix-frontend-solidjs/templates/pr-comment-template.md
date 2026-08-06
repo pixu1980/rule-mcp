@@ -1,4 +1,4 @@
-```md
+````md
 Observation: [what the code currently does]
 
 Risk: [why this can cause a bug, performance issue, or maintenance problem]
@@ -10,9 +10,11 @@ Example:
 ```jsx
 // code sample
 ```
+````
 
 Rule of thumb: [one reusable sentence]
-```
+
+````
 
 ## Example comment
 
@@ -24,4 +26,4 @@ Risk: Destructuring reads props once and severs Solid's reactive tracking. The c
 Suggested fix: Access `props.name` and `props.value` directly, or use `mergeProps()` if you need defaults.
 
 Rule of thumb: Never destructure SolidJS props — they are reactive proxies.
-```
+````

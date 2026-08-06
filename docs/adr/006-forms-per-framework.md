@@ -24,15 +24,15 @@ All React-specific form content (`react-hook-form`, `zod`, `FormProvider`, `useF
 
 Each framework skill now has a `## Forms` section idiomatic to its ecosystem:
 
-| Framework | Form Library | Validation |
-|-----------|-------------|------------|
-| React | `react-hook-form` | `zod` + `@hookform/resolvers` |
-| Vue 3 | `vee-validate` | `zod` + `@vee-validate/zod` |
-| Angular | Reactive Forms (`FormGroup`) | Angular `Validators` + `zod` |
-| SolidJS | `@modular-forms/solid` | `zod` + `zodForm` |
-| Svelte 5 | `sveltekit-superforms` | `zod` + adapter |
-| Astro | Server Actions + islands | `zod` (shared client/server) |
-| Vanilla | Store + Signals | `zod` + `safeParse` |
+| Framework | Form Library                 | Validation                    |
+| --------- | ---------------------------- | ----------------------------- |
+| React     | `react-hook-form`            | `zod` + `@hookform/resolvers` |
+| Vue 3     | `vee-validate`               | `zod` + `@vee-validate/zod`   |
+| Angular   | Reactive Forms (`FormGroup`) | Angular `Validators` + `zod`  |
+| SolidJS   | `@modular-forms/solid`       | `zod` + `zodForm`             |
+| Svelte 5  | `sveltekit-superforms`       | `zod` + adapter               |
+| Astro     | Server Actions + islands     | `zod` (shared client/server)  |
+| Vanilla   | Store + Signals              | `zod` + `safeParse`           |
 
 ### 3. Italian business validation — preserved but needs relocation
 
@@ -41,12 +41,14 @@ The Italian entity validation (partita IVA, codice fiscale, SDI) is currently or
 ## Consequences
 
 **Positive:**
+
 - Each framework owns its own form patterns — no accidental React leakage into Vue/Svelte
 - SOLID compliance: single responsibility per skill, proper interface segregation
 - Vanilla Reactive finally has form patterns congruent with its Store/Signal architecture
 - 1 fewer top-level skill (54 total, down from 55)
 
 **Negative:**
+
 - Italian business validation is temporarily orphaned (needs new home)
 - Developers must look in each framework skill for form guidance rather than a central "forms" skill
 - Cleanup: cross-references in other skills may still point to `rule-frontend-forms`

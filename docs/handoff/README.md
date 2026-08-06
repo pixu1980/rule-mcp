@@ -11,16 +11,16 @@
 
 Tutti i P0 e la maggior parte dei P1 dell'audit sono stati risolti. **Non rifare questi fix.**
 
-| Commit | Fase | Cosa |
-|---|---|---|
-| `5a8e35f` | 1.1 | `rule_tool_fix` sandbox (dryRun, path traversal, custom element tag) |
-| `1f2338e` | 1.2-1.3 | SSE auth/CORS/body-limit, `previousPassed` rimosso |
-| `9e89c42` | 2 | `prompts/get` MCP-conforme, completion `ref/prompt` |
-| `47cd1aa` | 3 | Build/CI riproducibili, LICENSE, metadata, Docker |
-| `42e542b` | 4 | Guardrail CSS/JSX, terminologia "advisory" |
-| `db0f40b` | 5 | Router domain-aware, multilingual, confidence, TLDR |
-| `a1752fc` | A+B+C | `rule_tool_gateway` + `rule_tool_apply` + backend/data/devops guardrails |
-| `7042789` | 6 | Template React/Svelte conformi ai guardrail |
+| Commit    | Fase    | Cosa                                                                   |
+| --------- | ------- | ---------------------------------------------------------------------- |
+| `5a8e35f` | 1.1     | `rule_tool_fix` sandbox (dryRun, path traversal, custom element tag)    |
+| `1f2338e` | 1.2-1.3 | SSE auth/CORS/body-limit, `previousPassed` rimosso                     |
+| `9e89c42` | 2       | `prompts/get` MCP-conforme, completion `ref/prompt`                    |
+| `47cd1aa` | 3       | Build/CI riproducibili, LICENSE, metadata, Docker                      |
+| `42e542b` | 4       | Guardrail CSS/JSX, terminologia "advisory"                             |
+| `db0f40b` | 5       | Router domain-aware, multilingual, confidence, TLDR                    |
+| `a1752fc` | A+B+C   | `rule_tool_gateway` + `rule_tool_apply` + backend/data/devops guardrails |
+| `7042789` | 6       | Template React/Svelte conformi ai guardrail                            |
 
 ## Setup per iniziare
 
@@ -34,13 +34,13 @@ pnpm test  # smoke test, deve passare
 
 Ogni file contiene: contesto, fix specifici con codice, comandi di verifica, pitfalls.
 
-| Fase | File | Tempo stimato | Severità |
-|---|---|---|---|
-| 7 | [07-installer.md](07-installer.md) | ~1 ora | 🟠 P1 |
-| 8 | [08-server-sse.md](08-server-sse.md) | ~45 min | 🟠 P1 |
-| 9 | [09-architect-wizard.md](09-architect-wizard.md) | ~1.5 ore | 🔴 P0 |
-| 10 | [10-docs-maintenance.md](10-docs-maintenance.md) | ~1 ora | 🟡 P2 |
-| 11 | [11-claude-native.md](11-claude-native.md) | ~2.5 ore | 🟠 P1 / 🟢 P3 |
+| Fase | File                                             | Tempo stimato | Severità      |
+| ---- | ------------------------------------------------ | ------------- | ------------- |
+| 7    | [07-installer.md](07-installer.md)               | ~1 ora        | 🟠 P1         |
+| 8    | [08-server-sse.md](08-server-sse.md)             | ~45 min       | 🟠 P1         |
+| 9    | [09-architect-wizard.md](09-architect-wizard.md) | ~1.5 ore      | 🔴 P0         |
+| 10   | [10-docs-maintenance.md](10-docs-maintenance.md) | ~1 ora        | 🟡 P2         |
+| 11   | [11-claude-native.md](11-claude-native.md)       | ~2.5 ore      | 🟠 P1 / 🟢 P3 |
 
 ## Architettura essenziale
 

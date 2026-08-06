@@ -136,7 +136,7 @@ FROM timeseries;
 -- Year-over-year comparison
 SELECT year, month, revenue,
   LAG(revenue) OVER (PARTITION BY month ORDER BY year) AS prev_year_revenue,
-  (revenue - LAG(revenue) OVER (PARTITION BY month ORDER BY year)) / 
+  (revenue - LAG(revenue) OVER (PARTITION BY month ORDER BY year)) /
     NULLIF(LAG(revenue) OVER (PARTITION BY month ORDER BY year), 0) * 100 AS yoy_pct
 FROM monthly_revenue;
 ```

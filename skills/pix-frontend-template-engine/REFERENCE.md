@@ -54,7 +54,7 @@ Use `engine.template` or `engine.html` as a tagged template literal. The full en
 ### Minimal inline template
 
 ```js
-import TemplateEngine from './src/template-engine/index.js';
+import TemplateEngine from "./src/template-engine/index.js";
 
 const engine = new TemplateEngine();
 const renderList = engine.html`
@@ -65,8 +65,8 @@ const renderList = engine.html`
 `;
 
 const html = renderList({
-  title: 'Links',
-  items: ['Docs', 'API'],
+  title: "Links",
+  items: ["Docs", "API"],
 });
 ```
 

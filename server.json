@@ -14,9 +14,7 @@
       "registryType": "npm",
       "identifier": "rule-mcp",
       "version": "1.0.0",
-      "packageArguments": [
-        { "type": "positional", "valueHint": "serve" }
-      ],
+      "packageArguments": [{ "type": "positional", "valueHint": "serve" }],
       "transport": { "type": "stdio" }
     }
   ]

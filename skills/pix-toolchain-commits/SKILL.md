@@ -29,19 +29,19 @@ frameworks: [all]
 
 ## Commit types
 
-| Type | Use when |
-|------|----------|
-| `feat` | New user-visible or API feature |
-| `fix` | Bug fix |
+| Type       | Use when                                |
+| ---------- | --------------------------------------- |
+| `feat`     | New user-visible or API feature         |
+| `fix`      | Bug fix                                 |
 | `refactor` | Internal change with no behavior change |
-| `perf` | Performance improvement |
-| `docs` | Documentation only |
-| `test` | Tests only |
-| `chore` | Maintenance, tooling, deps, config |
-| `build` | Build system / bundler changes |
-| `ci` | CI pipeline changes |
-| `style` | Formatting, no logic change |
-| `revert` | Reverting a previous commit |
+| `perf`     | Performance improvement                 |
+| `docs`     | Documentation only                      |
+| `test`     | Tests only                              |
+| `chore`    | Maintenance, tooling, deps, config      |
+| `build`    | Build system / bundler changes          |
+| `ci`       | CI pipeline changes                     |
+| `style`    | Formatting, no logic change             |
+| `revert`   | Reverting a previous commit             |
 
 ## Commit scope
 

@@ -29,12 +29,12 @@ Before applying this skill, load the rule **`api-security`** to ensure API authe
 
 ## Step 2 — Map operations to HTTP verbs
 
-| Method | Purpose |
-|---|---|
-| `GET` | Retrieve one or more resources |
-| `POST` | Create new data |
-| `PUT` / `PATCH` | Update existing data |
-| `DELETE` | Remove data |
+| Method          | Purpose                        |
+| --------------- | ------------------------------ |
+| `GET`           | Retrieve one or more resources |
+| `POST`          | Create new data                |
+| `PUT` / `PATCH` | Update existing data           |
+| `DELETE`        | Remove data                    |
 
 ## Step 3 — Apply versioning and transport policy
 
@@ -56,17 +56,17 @@ Before applying this skill, load the rule **`api-security`** to ensure API authe
 
 ### HTTP status codes
 
-| Code | Meaning |
-|---|---|
-| `200 OK` | Successful response |
-| `201 Created` | Resource successfully created |
-| `204 No Content` | Operation successful, no response body |
-| `400 Bad Request` | Invalid data or validation error |
-| `401 Unauthorized` | Missing or invalid authentication |
-| `402 Payment Required` | Unpaid or missing payment info |
-| `403 Forbidden` | Authenticated but unauthorized |
-| `404 Not Found` | Resource does not exist |
-| `500 Internal Server Error` | Unhandled backend issue |
+| Code                        | Meaning                                |
+| --------------------------- | -------------------------------------- |
+| `200 OK`                    | Successful response                    |
+| `201 Created`               | Resource successfully created          |
+| `204 No Content`            | Operation successful, no response body |
+| `400 Bad Request`           | Invalid data or validation error       |
+| `401 Unauthorized`          | Missing or invalid authentication      |
+| `402 Payment Required`      | Unpaid or missing payment info         |
+| `403 Forbidden`             | Authenticated but unauthorized         |
+| `404 Not Found`             | Resource does not exist                |
+| `500 Internal Server Error` | Unhandled backend issue                |
 
 ### Pagination responses
 
@@ -114,6 +114,7 @@ Use this consistent structure:
 - [ ] `Accept-Language` header supported for localization
 - [ ] Structured error responses with correlation-id and specific codes
 - [ ] OpenAPI v3 documentation updated
+
 ## API Client Pattern (from rule-backend)
 
 ```javascript

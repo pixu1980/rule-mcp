@@ -75,12 +75,12 @@ LOG_LEVEL=info
 Create `src/config/env.ts` to validate at startup with zod:
 
 ```ts
-import { z } from 'zod';
+import { z } from "zod";
 
 const envSchema = z.object({
   PORT: z.coerce.number().int().positive().default(3001),
-  NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
-  LOG_LEVEL: z.enum(['fatal', 'error', 'warn', 'info', 'debug', 'trace']).default('info'),
+  NODE_ENV: z.enum(["development", "production", "test"]).default("development"),
+  LOG_LEVEL: z.enum(["fatal", "error", "warn", "info", "debug", "trace"]).default("info"),
   AI_MODEL: z.string().min(1),
   AI_MAX_TOKENS: z.coerce.number().int().positive().default(4096),
   AI_TEMPERATURE: z.coerce.number().min(0).max(2).default(0.7),
@@ -100,9 +100,9 @@ Fail fast: validation runs at process start, never at first request.
 A provider wraps an LLM API into a common interface. Example with OpenAI:
 
 ```ts
-import OpenAI from 'openai';
-import type { LLMProvider, Message, LLMResponse } from '../types.js';
-import { env } from '../config/env.js';
+import OpenAI from "openai";
+import type { LLMProvider, Message, LLMResponse } from "../types.js";
+import { env } from "../config/env.js";
 
 export const openaiProvider: LLMProvider = {
   async chat(messages, tools) {
@@ -112,12 +112,12 @@ export const openaiProvider: LLMProvider = {
       max_tokens: env.AI_MAX_TOKENS,
       temperature: env.AI_TEMPERATURE,
       messages,
-      tools: tools?.map(t => ({
-        type: 'function',
+      tools: tools?.map((t) => ({
+        type: "function",
         function: { name: t.name, description: t.description, parameters: t.parameters },
       })),
     });
-    return { content: response.choices[0].message.content ?? '' };
+    return { content: response.choices[0].message.content ?? "" };
   },
 };
 ```
@@ -132,16 +132,16 @@ Tools self-register at module level. Each file exports one tool and calls
 `toolRegistry.register()` on import:
 
 ```ts
-import { z } from 'zod';
-import { toolRegistry } from '../registries/index.js';
-import type { Tool } from '../types.js';
+import { z } from "zod";
+import { toolRegistry } from "../registries/index.js";
+import type { Tool } from "../types.js";
 
 const searchTool: Tool = {
-  name: 'search',
-  description: 'Search the knowledge base for relevant information',
+  name: "search",
+  description: "Search the knowledge base for relevant information",
   parameters: z.object({
-    query: z.string().describe('The search query'),
-    limit: z.number().int().positive().default(10).describe('Max results'),
+    query: z.string().describe("The search query"),
+    limit: z.number().int().positive().default(10).describe("Max results"),
   }),
   execute: async ({ query, limit }) => {
     // Calls your search backend or external API
@@ -160,11 +160,11 @@ import all modules so self-registration fires at startup.
 ## Step 5 — Create the entry point
 
 ```ts
-import './agents/index.js';
-import './tools/index.js';
-import './providers/index.js';
-import { startRunner } from './runner.js';
-import { env } from './config/env.js';
+import "./agents/index.js";
+import "./tools/index.js";
+import "./providers/index.js";
+import { startRunner } from "./runner.js";
+import { env } from "./config/env.js";
 
 const logger = { info: console.log, error: console.error };
 
@@ -172,7 +172,7 @@ try {
   await startRunner();
   logger.info(`Agent started with model ${env.AI_MODEL}`);
 } catch (err) {
-  logger.error('Agent failed to start', err);
+  logger.error("Agent failed to start", err);
   process.exit(1);
 }
 ```
@@ -209,12 +209,12 @@ idempotent (skips if marker exists).
 Mock the LLM SDK directly:
 
 ```ts
-import { describe, expect, it, vi } from 'vitest';
+import { describe, expect, it, vi } from "vitest";
 
 // Mock the SDK your provider uses
-vi.mock('openai', () => {
+vi.mock("openai", () => {
   const mockCreate = vi.fn().mockResolvedValue({
-    choices: [{ message: { content: 'mocked response' } }],
+    choices: [{ message: { content: "mocked response" } }],
   });
   return {
     default: vi.fn(() => ({
@@ -223,13 +223,13 @@ vi.mock('openai', () => {
   };
 });
 
-import { openaiProvider } from '../../src/providers/openai.js';
+import { openaiProvider } from "../../src/providers/openai.js";
 
-describe('openaiProvider', () => {
-  it('returns a chat response', async () => {
-    const result = await openaiProvider.chat([{ role: 'user', content: 'hello' }]);
+describe("openaiProvider", () => {
+  it("returns a chat response", async () => {
+    const result = await openaiProvider.chat([{ role: "user", content: "hello" }]);
     expect(result).toBeDefined();
-    expect(result.content).toBe('mocked response');
+    expect(result.content).toBe("mocked response");
   });
 });
 ```
@@ -239,13 +239,13 @@ describe('openaiProvider', () => {
 Test `execute` directly, without involving the registry:
 
 ```ts
-import { describe, expect, it } from 'vitest';
-import { searchTool } from '../../src/tools/search.tool.js';
+import { describe, expect, it } from "vitest";
+import { searchTool } from "../../src/tools/search.tool.js";
 
-describe('searchTool', () => {
-  it('returns results array', async () => {
-    const result = await searchTool.execute({ query: 'test', limit: 5 });
-    expect(result).toHaveProperty('results');
+describe("searchTool", () => {
+  it("returns results array", async () => {
+    const result = await searchTool.execute({ query: "test", limit: 5 });
+    expect(result).toHaveProperty("results");
   });
 });
 ```
@@ -287,13 +287,14 @@ Use templates from [rule-devops-docker](../rule-devops-docker/SKILL.md):
 - **`Dockerfile`** — Node.js runner template
 - **`docker-compose.yml`** — Single service (or combined with dashboard)
 
-| Setting | Value |
-|---------|-------|
-| **Port** | `3001` |
-| **Entry** | `dist/index.js` |
+| Setting         | Value                     |
+| --------------- | ------------------------- |
+| **Port**        | `3001`                    |
+| **Entry**       | `dist/index.js`           |
 | **Healthcheck** | Omit if no HTTP interface |
 
 Edge cases:
+
 - If the agent has no HTTP interface, remove `HEALTHCHECK` and set
   `CMD ["node", "dist/index.js"]`.
 - If tools need API keys, add them to `.env.example` and validate in

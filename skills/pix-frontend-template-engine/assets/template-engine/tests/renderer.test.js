@@ -1,33 +1,31 @@
-import { test, describe } from 'node:test';
-import assert from 'node:assert/strict';
-import fs from 'node:fs';
-import path from 'node:path';
-import { fileURLToPath } from 'node:url';
-import { TemplateRenderer } from '../_renderer.js';
+import { test, describe } from "node:test";
+import assert from "node:assert/strict";
+import fs from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+import { TemplateRenderer } from "../_renderer.js";
 
-const FIXTURES = path.join(path.dirname(fileURLToPath(import.meta.url)), 'fixtures');
+const FIXTURES = path.join(path.dirname(fileURLToPath(import.meta.url)), "fixtures");
 
-describe('TemplateEngine - Renderer', () => {
-  test('DOM renderer - nested loops and include', () => {
-    const renderer = new TemplateRenderer(path.resolve('./'));
-    const template = fs.readFileSync(path.join(FIXTURES, 'debug-template.html'), 'utf8');
-    const data = JSON.parse(
-      fs.readFileSync(path.join(FIXTURES, 'simple-test-data.json'), 'utf8')
-    );
+describe("TemplateEngine - Renderer", () => {
+  test("DOM renderer - nested loops and include", () => {
+    const renderer = new TemplateRenderer(path.resolve("./"));
+    const template = fs.readFileSync(path.join(FIXTURES, "debug-template.html"), "utf8");
+    const data = JSON.parse(fs.readFileSync(path.join(FIXTURES, "simple-test-data.json"), "utf8"));
 
     const out = renderer.renderString(template, data, {
       currentDir: FIXTURES,
     });
     assert.match(out, /First Post/);
-    assert.ok(!out.includes('<for')); // ensure no leftover <for> tags
+    assert.ok(!out.includes("<for")); // ensure no leftover <for> tags
   });
 
-  test('render should preserve include data for DOM include processing', () => {
-    const tmpDir = fs.mkdtempSync(path.join(process.cwd(), 'tmp-renderer-'));
+  test("render should preserve include data for DOM include processing", () => {
+    const tmpDir = fs.mkdtempSync(path.join(process.cwd(), "tmp-renderer-"));
 
     try {
       fs.writeFileSync(
-        path.join(tmpDir, 'card.html'),
+        path.join(tmpDir, "card.html"),
         `<article>
           <if condition="showCover && post.coverImage">
             <img src="{{ post.coverImage }}" alt="" />
@@ -36,45 +34,45 @@ describe('TemplateEngine - Renderer', () => {
             <case value="3"><h3>{{ post.title }}</h3></case>
             <default><h2>{{ post.title }}</h2></default>
           </switch>
-        </article>`
+        </article>`,
       );
 
       fs.writeFileSync(
-        path.join(tmpDir, 'page.html'),
+        path.join(tmpDir, "page.html"),
         `<for each="p in posts">
           <include
             src="./card.html"
             data='{"post": {{ p | json | raw }}, "headingLevel": "3", "showCover": true}'
           ></include>
-        </for>`
+        </for>`,
       );
 
       const renderer = new TemplateRenderer(tmpDir);
-      const result = renderer.render('page.html', {
-        posts: [{ title: 'Card Title', coverImage: '/assets/cover.jpg' }],
+      const result = renderer.render("page.html", {
+        posts: [{ title: "Card Title", coverImage: "/assets/cover.jpg" }],
       });
 
-      assert.ok(result.includes('<h3>Card Title</h3>'));
+      assert.ok(result.includes("<h3>Card Title</h3>"));
       assert.ok(result.includes('src="/assets/cover.jpg"'));
     } finally {
       fs.rmSync(tmpDir, { recursive: true, force: true });
     }
   });
 
-  test('should handle missing template files gracefully', () => {
-    const renderer = new TemplateRenderer(path.resolve('./'));
+  test("should handle missing template files gracefully", () => {
+    const renderer = new TemplateRenderer(path.resolve("./"));
 
     try {
-      renderer.render('non-existent-template.html', {});
-      assert.ok(false, 'Should throw for missing template');
+      renderer.render("non-existent-template.html", {});
+      assert.ok(false, "Should throw for missing template");
     } catch (error) {
       assert.ok(error instanceof Error);
-      assert.ok(error.message.includes('ENOENT') || error.message.includes('not found'));
+      assert.ok(error.message.includes("ENOENT") || error.message.includes("not found"));
     }
   });
 
-  test('should render template with complex data structures', () => {
-    const renderer = new TemplateRenderer(path.resolve('./'));
+  test("should render template with complex data structures", () => {
+    const renderer = new TemplateRenderer(path.resolve("./"));
     const template = `
       <div>
         <for each="post in posts">
@@ -92,9 +90,9 @@ describe('TemplateEngine - Renderer', () => {
     const data = {
       posts: [
         {
-          title: 'Test Post',
-          excerpt: 'This is a test',
-          tags: [{ name: 'javascript' }, { name: 'node' }],
+          title: "Test Post",
+          excerpt: "This is a test",
+          tags: [{ name: "javascript" }, { name: "node" }],
         },
       ],
     };
@@ -106,8 +104,8 @@ describe('TemplateEngine - Renderer', () => {
     assert.match(result, /node/);
   });
 
-  test('should handle conditional rendering', () => {
-    const renderer = new TemplateRenderer(path.resolve('./'));
+  test("should handle conditional rendering", () => {
+    const renderer = new TemplateRenderer(path.resolve("./"));
     const template = `
       <if condition="user.isAdmin">
         <div class="admin-panel">Admin Content</div>
@@ -120,16 +118,16 @@ describe('TemplateEngine - Renderer', () => {
     const adminData = { user: { isAdmin: true } };
     const userResult = renderer.renderString(template, adminData);
     assert.match(userResult, /Admin Content/);
-    assert.ok(!userResult.includes('User Content'));
+    assert.ok(!userResult.includes("User Content"));
 
     const regularData = { user: { isAdmin: false } };
     const adminResult = renderer.renderString(template, regularData);
     assert.match(adminResult, /User Content/);
-    assert.ok(!adminResult.includes('Admin Content'));
+    assert.ok(!adminResult.includes("Admin Content"));
   });
 
-  test('should handle template inheritance with blocks', () => {
-    const renderer = new TemplateRenderer(path.resolve('./src/templates'));
+  test("should handle template inheritance with blocks", () => {
+    const renderer = new TemplateRenderer(path.resolve("./src/templates"));
 
     // Simple test for extends/blocks functionality
     const childTemplate = `
@@ -144,34 +142,34 @@ describe('TemplateEngine - Renderer', () => {
     try {
       const result = renderer.renderString(childTemplate, {});
       // Should attempt to process extends directive
-      assert.ok(typeof result === 'string');
+      assert.ok(typeof result === "string");
     } catch (error) {
       // Expected if base.html doesn't exist in test environment
       assert.ok(error instanceof Error);
     }
   });
 
-  test('should handle empty templates', () => {
-    const renderer = new TemplateRenderer(path.resolve('./'));
-    const result = renderer.renderString('', {});
-    assert.strictEqual(result, '');
+  test("should handle empty templates", () => {
+    const renderer = new TemplateRenderer(path.resolve("./"));
+    const result = renderer.renderString("", {});
+    assert.strictEqual(result, "");
   });
 
-  test('should handle templates with only static content', () => {
-    const renderer = new TemplateRenderer(path.resolve('./'));
-    const template = '<h1>Static Content</h1><p>No variables here</p>';
+  test("should handle templates with only static content", () => {
+    const renderer = new TemplateRenderer(path.resolve("./"));
+    const template = "<h1>Static Content</h1><p>No variables here</p>";
     const result = renderer.renderString(template, {});
     assert.strictEqual(result, template);
   });
 
-  test('should handle malformed template syntax gracefully', () => {
-    const renderer = new TemplateRenderer(path.resolve('./'));
+  test("should handle malformed template syntax gracefully", () => {
+    const renderer = new TemplateRenderer(path.resolve("./"));
 
     // Test various malformed templates
     const malformedTemplates = [
-      '{{ unclosed variable',
+      "{{ unclosed variable",
       '<for each="item in">content</for>',
-      '{{ nested {{ variable }} }}',
+      "{{ nested {{ variable }} }}",
       '<for each="">content</for>',
     ];
 
@@ -179,7 +177,7 @@ describe('TemplateEngine - Renderer', () => {
       try {
         const result = renderer.renderString(template, {});
         // Should either handle gracefully or throw a reasonable error
-        assert.ok(typeof result === 'string' || result === undefined);
+        assert.ok(typeof result === "string" || result === undefined);
       } catch (error) {
         // Expected for malformed syntax
         assert.ok(error instanceof Error);
@@ -187,14 +185,14 @@ describe('TemplateEngine - Renderer', () => {
     }
   });
 
-  test('should handle preprocessing errors gracefully', () => {
-    const renderer = new TemplateRenderer(path.resolve('./'));
+  test("should handle preprocessing errors gracefully", () => {
+    const renderer = new TemplateRenderer(path.resolve("./"));
 
     // Mock console.warn to capture warnings
     const originalWarn = console.warn;
     const warnings = [];
     console.warn = (...args) => {
-      warnings.push(args.join(' '));
+      warnings.push(args.join(" "));
     };
 
     // Template with invalid extends/includes that should trigger preprocessing errors
@@ -206,8 +204,8 @@ describe('TemplateEngine - Renderer', () => {
     `;
 
     try {
-      const result = renderer.renderString(template, {}, { currentDir: path.resolve('./') });
-      assert.ok(typeof result === 'string');
+      const result = renderer.renderString(template, {}, { currentDir: path.resolve("./") });
+      assert.ok(typeof result === "string");
     } catch (error) {
       // Should handle errors gracefully
       assert.ok(error instanceof Error);
@@ -217,14 +215,14 @@ describe('TemplateEngine - Renderer', () => {
     console.warn = originalWarn;
   });
 
-  test('should handle include errors gracefully', () => {
-    const renderer = new TemplateRenderer(path.resolve('./'));
+  test("should handle include errors gracefully", () => {
+    const renderer = new TemplateRenderer(path.resolve("./"));
 
     // Mock console.warn to capture warnings
     const originalWarn = console.warn;
     const warnings = [];
     console.warn = (...args) => {
-      warnings.push(args.join(' '));
+      warnings.push(args.join(" "));
     };
 
     const template = `
@@ -234,18 +232,18 @@ describe('TemplateEngine - Renderer', () => {
       </div>
     `;
 
-    const result = renderer.renderString(template, {}, { currentDir: path.resolve('./') });
+    const result = renderer.renderString(template, {}, { currentDir: path.resolve("./") });
 
     // Should include warning about failed include
-    assert.ok(warnings.some((warn) => warn.includes('Include failed')));
-    assert.ok(result.includes('Regular content'));
+    assert.ok(warnings.some((warn) => warn.includes("Include failed")));
+    assert.ok(result.includes("Regular content"));
 
     // Restore console.warn
     console.warn = originalWarn;
   });
 
-  test('should handle different element directives', () => {
-    const renderer = new TemplateRenderer(path.resolve('./'));
+  test("should handle different element directives", () => {
+    const renderer = new TemplateRenderer(path.resolve("./"));
 
     // Test switch element
     const switchTemplate = `
@@ -256,11 +254,11 @@ describe('TemplateEngine - Renderer', () => {
       </switch>
     `;
 
-    const result1 = renderer.renderString(switchTemplate, { status: 'active' });
-    assert.ok(result1.includes('Active Status'));
+    const result1 = renderer.renderString(switchTemplate, { status: "active" });
+    assert.ok(result1.includes("Active Status"));
 
-    const result2 = renderer.renderString(switchTemplate, { status: 'unknown' });
-    assert.ok(result2.includes('Unknown Status'));
+    const result2 = renderer.renderString(switchTemplate, { status: "unknown" });
+    assert.ok(result2.includes("Unknown Status"));
 
     // Test markdown element
     const mdTemplate = `
@@ -272,19 +270,19 @@ describe('TemplateEngine - Renderer', () => {
     `;
 
     const mdResult = renderer.renderString(mdTemplate, {});
-    assert.ok(mdResult.includes('Heading'));
+    assert.ok(mdResult.includes("Heading"));
   });
 
-  test('should use template cache for repeated renders', () => {
-    const renderer = new TemplateRenderer(path.resolve('./'));
-    const template = '<h1>{{ title }}</h1>';
+  test("should use template cache for repeated renders", () => {
+    const renderer = new TemplateRenderer(path.resolve("./"));
+    const template = "<h1>{{ title }}</h1>";
 
     // First render
-    const result1 = renderer.renderString(template, { title: 'First' });
-    assert.ok(result1.includes('First'));
+    const result1 = renderer.renderString(template, { title: "First" });
+    assert.ok(result1.includes("First"));
 
     // Second render should use cache (tests cache functionality)
-    const result2 = renderer.renderString(template, { title: 'Second' });
-    assert.ok(result2.includes('Second'));
+    const result2 = renderer.renderString(template, { title: "Second" });
+    assert.ok(result2.includes("Second"));
   });
 });

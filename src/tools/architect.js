@@ -53,7 +53,9 @@ export function listInterviewServers() {
 export function stopInterviewServers() {
   let killed = 0;
   for (const entry of _servers.values()) {
-    if (stopEntry(entry)) {killed += 1;}
+    if (stopEntry(entry)) {
+      killed += 1;
+    }
   }
   _servers.clear();
   return killed;
@@ -99,17 +101,21 @@ async function resolveServerPath(skillName) {
     try {
       accessSync(candidate, constants.F_OK);
       return { serverPath: candidate, candidates };
-    } catch { /* next */ }
+    } catch {
+      /* next */
+    }
   }
   return { serverPath: null, candidates };
 }
 
 /** Tool result for a server that is already up. */
 const reusedResult = (entry) => ({
-  content: [{
-    type: "text",
-    text: `## rule-architect Context Interview Server\n\nAlready running — reusing it instead of starting a second one.\n\n  **${entry.url ?? "(see terminal output)"}**\n\nTarget project: \`${entry.targetDir}/.context/\`\nPID: ${entry.child.pid}`,
-  }],
+  content: [
+    {
+      type: "text",
+      text: `## rule-architect Context Interview Server\n\nAlready running — reusing it instead of starting a second one.\n\n  **${entry.url ?? "(see terminal output)"}**\n\nTarget project: \`${entry.targetDir}/.context/\`\nPID: ${entry.child.pid}`,
+    },
+  ],
 });
 
 /**
@@ -157,7 +163,9 @@ export async function startContextServer(skillName, targetDir) {
 
   child.on("close", () => {
     clearTimeout(entry.lifetimeTimer);
-    if (_servers.get(target) === entry) {_servers.delete(target);}
+    if (_servers.get(target) === entry) {
+      _servers.delete(target);
+    }
   });
 
   return new Promise((resolve) => {
@@ -167,7 +175,9 @@ export async function startContextServer(skillName, targetDir) {
 
     /** Resolve once, stop reading the child's output, keep the server running. */
     const settle = (result) => {
-      if (isResolved) {return;}
+      if (isResolved) {
+        return;
+      }
       isResolved = true;
       clearTimeout(urlTimer);
       // The output was only needed to find the URL; keeping the listeners
@@ -180,15 +190,21 @@ export async function startContextServer(skillName, targetDir) {
     };
 
     const capture = (data) => {
-      if (output.length < MAX_OUTPUT_CHARS) {output += data.toString();}
+      if (output.length < MAX_OUTPUT_CHARS) {
+        output += data.toString();
+      }
       const match = output.match(/http:\/\/localhost:\d+/);
-      if (!match) {return;}
+      if (!match) {
+        return;
+      }
       entry.url = match[0];
       settle({
-        content: [{
-          type: "text",
-          text: `## rule-architect Context Interview Server\n\nServer started! Open your browser to:\n\n  **${entry.url}**\n\nTarget project: \`${target}/.context/\`\nPID: ${child.pid} — stops automatically after 30 minutes.\n\n---\n\n${output.trim()}`,
-        }],
+        content: [
+          {
+            type: "text",
+            text: `## rule-architect Context Interview Server\n\nServer started! Open your browser to:\n\n  **${entry.url}**\n\nTarget project: \`${target}/.context/\`\nPID: ${child.pid} — stops automatically after 30 minutes.\n\n---\n\n${output.trim()}`,
+          },
+        ],
       });
     };
 
@@ -206,7 +222,12 @@ export async function startContextServer(skillName, targetDir) {
 
     child.on("close", (code) => {
       settle({
-        content: [{ type: "text", text: "Context interview server stopped (exit code " + code + ").\n\nServer output:\n" + output }],
+        content: [
+          {
+            type: "text",
+            text: "Context interview server stopped (exit code " + code + ").\n\nServer output:\n" + output,
+          },
+        ],
       });
     });
 
@@ -214,10 +235,14 @@ export async function startContextServer(skillName, targetDir) {
     // whatever it did print rather than hanging the tool call.
     urlTimer = setTimeout(() => {
       settle({
-        content: [{
-          type: "text",
-          text: "## rule-architect Context Interview Server\n\nServer started. Check the terminal for the URL.\n\nOutput:\n" + (output || "(waiting for server...)"),
-        }],
+        content: [
+          {
+            type: "text",
+            text:
+              "## rule-architect Context Interview Server\n\nServer started. Check the terminal for the URL.\n\nOutput:\n" +
+              (output || "(waiting for server...)"),
+          },
+        ],
       });
     }, URL_TIMEOUT_MS);
     urlTimer.unref?.();

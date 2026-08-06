@@ -36,15 +36,15 @@ Choose one framework skill below the rule-platform-web layer.
 
 Choose ONE framework skill below rule-platform-web:
 
-| Framework | Skill | Best for |
-|-----------|-------|----------|
-| Vanilla JS | [rule-frontend-vanilla-reactive](../rule-frontend-vanilla-reactive/SKILL.md) | Simple apps, widgets, embedded UIs |
-| React 18+ | [rule-frontend-react](../rule-frontend-react/SKILL.md) | Complex UIs with rich interactivity |
-| Vue 3 | [rule-frontend-vue](../rule-frontend-vue/SKILL.md) | Progressive adoption, balance of power/simplicity |
-| Angular 16+ | [rule-frontend-angular](../rule-frontend-angular/SKILL.md) | Large enterprise applications |
-| SolidJS | [rule-frontend-solidjs](../rule-frontend-solidjs/SKILL.md) | Fine-grained reactivity, fastest runtime |
-| Svelte 5 | [rule-frontend-svelte](../rule-frontend-svelte/SKILL.md) | Minimal boilerplate, smallest bundles |
-| Astro | [rule-frontend-astro](../rule-frontend-astro/SKILL.md) | Content-first, islands architecture |
+| Framework   | Skill                                                                      | Best for                                          |
+| ----------- | -------------------------------------------------------------------------- | ------------------------------------------------- |
+| Vanilla JS  | [rule-frontend-vanilla-reactive](../rule-frontend-vanilla-reactive/SKILL.md) | Simple apps, widgets, embedded UIs                |
+| React 18+   | [rule-frontend-react](../rule-frontend-react/SKILL.md)                       | Complex UIs with rich interactivity               |
+| Vue 3       | [rule-frontend-vue](../rule-frontend-vue/SKILL.md)                           | Progressive adoption, balance of power/simplicity |
+| Angular 16+ | [rule-frontend-angular](../rule-frontend-angular/SKILL.md)                   | Large enterprise applications                     |
+| SolidJS     | [rule-frontend-solidjs](../rule-frontend-solidjs/SKILL.md)                   | Fine-grained reactivity, fastest runtime          |
+| Svelte 5    | [rule-frontend-svelte](../rule-frontend-svelte/SKILL.md)                     | Minimal boilerplate, smallest bundles             |
+| Astro       | [rule-frontend-astro](../rule-frontend-astro/SKILL.md)                       | Content-first, islands architecture               |
 
 ## File Tree Convention
 
@@ -104,14 +104,14 @@ Never commit secrets — use CI/CD secrets or server-only env.
 
 ## Performance Budgets (Web)
 
-| Metric | Target | Tool |
-|--------|--------|------|
-| LCP (Largest Contentful Paint) | < 2.5s on slow 3G | Lighthouse CI |
-| INP (Interaction to Next Paint) | < 200ms | Web Vitals library |
-| CLS (Cumulative Layout Shift) | < 0.1 | Lighthouse CI |
-| TBT (Total Blocking Time) | < 200ms | Lighthouse CI |
-| Bundle size (initial) | < 150KB gzipped | bundlesize / size-limit |
-| Time to Interactive | < 3.5s on slow 3G | Lighthouse CI |
+| Metric                          | Target            | Tool                    |
+| ------------------------------- | ----------------- | ----------------------- |
+| LCP (Largest Contentful Paint)  | < 2.5s on slow 3G | Lighthouse CI           |
+| INP (Interaction to Next Paint) | < 200ms           | Web Vitals library      |
+| CLS (Cumulative Layout Shift)   | < 0.1             | Lighthouse CI           |
+| TBT (Total Blocking Time)       | < 200ms           | Lighthouse CI           |
+| Bundle size (initial)           | < 150KB gzipped   | bundlesize / size-limit |
+| Time to Interactive             | < 3.5s on slow 3G | Lighthouse CI           |
 
 ## Security
 
@@ -168,10 +168,10 @@ as CSS custom properties in external stylesheets. Consume project-approved
 CSS-token libraries only when they preserve semantic HTML, external CSS, and
 zero CSS classes.
 
-| Approach | Use |
-|----------|-----|
+| Approach        | Use                                                                         |
+| --------------- | --------------------------------------------------------------------------- |
 | **Vanilla CSS** | Custom properties, cascade layers, `@scope`, and external CSS — the rule way |
-| **Open Props** | Optional CSS custom-property tokens when approved by the project |
+| **Open Props**  | Optional CSS custom-property tokens when approved by the project            |
 
 Do not introduce utility-class frameworks, CSS-in-JS, or component libraries
 that require their own class names or inline styling.
@@ -197,7 +197,6 @@ that require their own class names or inline styling.
 ```
 
 ---
-
 
 # Scaffolding: Frontend Project Structure
 

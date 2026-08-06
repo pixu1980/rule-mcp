@@ -9,12 +9,7 @@
       "hash": "PLACEHOLDER"
     }
   },
-  "bin": [
-    [
-      "bin/rule-mcp.js",
-      "rule-mcp"
-    ]
-  ],
+  "bin": [["bin/rule-mcp.js", "rule-mcp"]],
   "checkver": {
     "github": "https://github.com/rule/rule-mcp"
   },

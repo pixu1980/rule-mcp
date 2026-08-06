@@ -25,7 +25,11 @@ export function listResources() {
   const resources = [
     { uri: "rule://skills", name: "All rule skills index", mimeType: "application/json" },
     { uri: "rule://templates", name: "Design system component templates", mimeType: "application/json" },
-    { uri: "rule://project", name: "Project analysis (detected framework + suggested tools)", mimeType: "application/json" },
+    {
+      uri: "rule://project",
+      name: "Project analysis (detected framework + suggested tools)",
+      mimeType: "application/json",
+    },
     { uri: "rule://community", name: "Community rule skills index", mimeType: "application/json" },
     { uri: "rule://ai", name: "rule skill full content", mimeType: "text/markdown" },
     { uri: "rule://a11y", name: "A11y testing guide (Playwright + axe-core)", mimeType: "text/markdown" },
@@ -36,18 +40,21 @@ export function listResources() {
   // Add one resource per skill (skip plugins — they are published via their own mechanism)
   for (const name of getSkillNames()) {
     if (name === "rule" || isPluginSkill(name)) {
-    	continue;
+      continue;
     }
 
-    resources.push({
-      uri: `rule://${name}`,
-      name: `${name} skill full content`,
-      mimeType: "text/markdown",
-    }, {
-      uri: `rule://${name}/summary`,
-      name: `${name} skill summary (first 30 lines)`,
-      mimeType: "text/markdown",
-    });
+    resources.push(
+      {
+        uri: `rule://${name}`,
+        name: `${name} skill full content`,
+        mimeType: "text/markdown",
+      },
+      {
+        uri: `rule://${name}/summary`,
+        name: `${name} skill summary (first 30 lines)`,
+        mimeType: "text/markdown",
+      },
+    );
   }
 
   return resources;
@@ -70,7 +77,7 @@ export async function readResource(uri) {
       try {
         for (const entry of readdirSync(base, { withFileTypes: true })) {
           if (!(entry.isDirectory() && entry.name.startsWith("rule"))) {
-          	continue;
+            continue;
           }
 
           const sp = join(base, entry.name, "SKILL.md");
@@ -142,7 +149,7 @@ export async function readResource(uri) {
     const plugins = [];
     for (const name of allSkills) {
       if (!isPluginSkill(name)) {
-      	continue;
+        continue;
       }
 
       const content = readSkill(name);

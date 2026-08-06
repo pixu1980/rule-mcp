@@ -1,7 +1,6 @@
 {
   "name": "rule-mcp",
   "version": "1.0.0",
-  "packageManager": "pnpm@10.16.1",
   "description": "MCP server for the rule-* skill ecosystem. Serves styleguides, component templates, framework best practices, and design system patterns.",
   "type": "module",
   "license": "MIT",
@@ -40,10 +39,10 @@
     "build": "bash ./scripts/package.sh",
     "prepublishOnly": "node ./scripts/embed-skills.mjs"
   },
-  "packageManager": "pnpm@11.20.0",
   "engines": {
     "node": ">=20"
   },
+  "packageManager": "pnpm@11.20.0",
   "files": [
     "bin/",
     "src/",

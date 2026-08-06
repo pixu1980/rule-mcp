@@ -19,14 +19,22 @@ const bin = fileURLToPath(new URL("../bin/rule-mcp.js", import.meta.url));
 const ACTION_TOOL_COUNT = 10;
 // Derived from disk, not a threshold: the old `> 90` only held on machines whose
 // ~/.agents/skills inflated the surface with stale directories from another brand.
-const embeddedSkillCount = readdirSync(new URL("../skills", import.meta.url).pathname, { withFileTypes: true })
-  .filter((e) => e.isDirectory() && e.name.startsWith("rule-")).length;
+const embeddedSkillCount = readdirSync(new URL("../skills", import.meta.url).pathname, { withFileTypes: true }).filter(
+  (e) => e.isDirectory() && e.name.startsWith("rule-"),
+).length;
 
 /** The guaranteed minimal tool surface. */
 const MINIMAL = [
-  "pix_tool", "rule_tool_update", "rule_tool_gateway", "rule_tool_apply",
-  "rule_tool_search", "rule_tool_check", "rule_tool_scaffold", "rule_tool_detect",
-  "rule_tool_process_handoff", "rule_tool_component",
+  "pix_tool",
+  "rule_tool_update",
+  "rule_tool_gateway",
+  "rule_tool_apply",
+  "rule_tool_search",
+  "rule_tool_check",
+  "rule_tool_scaffold",
+  "rule_tool_detect",
+  "rule_tool_process_handoff",
+  "rule_tool_component",
 ].sort();
 
 function toolNames(extraEnvironment) {
@@ -47,7 +55,9 @@ assert.equal(
   embeddedSkillCount + ACTION_TOOL_COUNT,
   `full surface must be ./skills + action tools (got ${full.length}, expected ${embeddedSkillCount + ACTION_TOOL_COUNT})`,
 );
-console.log(`  ✅ full surface exposes ${full.length} tools (${embeddedSkillCount} skills + ${ACTION_TOOL_COUNT} action)`);
+console.log(
+  `  ✅ full surface exposes ${full.length} tools (${embeddedSkillCount} skills + ${ACTION_TOOL_COUNT} action)`,
+);
 
 // ── Minimal via RULE_MCP_MINIMAL_TOOLS (convention-aligned name) ──
 const minimal = toolNames({ RULE_MCP_MINIMAL_TOOLS: "1" });

@@ -27,9 +27,7 @@ const report = {
     { name: "cursor", configured: true, validated: false, configFile: "/home/.cursor/mcp.json" },
     { name: "copilot", configured: false, configFile: null },
   ],
-  ides: [
-    { name: "VS Code", configured: true, configFile: "/repo/.vscode/mcp.json" },
-  ],
+  ides: [{ name: "VS Code", configured: true, configFile: "/repo/.vscode/mcp.json" }],
   models: { totalConfigured: 1 },
   stateDir: "/home/.local/state/rule-mcp",
   dataDir: "/home/.local/share/rule-mcp",
@@ -70,8 +68,11 @@ assert.ok(ui.includes("Use `rule-mcp doctor --json`"), "UI should advertise JSON
 const previousForceColor = process.env.FORCE_COLOR;
 process.env.FORCE_COLOR = "1";
 const colorUi = formatDoctorTerminal(report);
-if (previousForceColor === undefined) {delete process.env.FORCE_COLOR;}
-else {process.env.FORCE_COLOR = previousForceColor;}
+if (previousForceColor === undefined) {
+  delete process.env.FORCE_COLOR;
+} else {
+  process.env.FORCE_COLOR = previousForceColor;
+}
 assert.ok(/\x1B\[[0-9;]*m/.test(colorUi), "UI should emit ANSI colors when FORCE_COLOR is set");
 
 console.log("  ✅ doctor defaults to colorful emoji Terminal UI with JSON export hint");

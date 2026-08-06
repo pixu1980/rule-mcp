@@ -29,6 +29,7 @@ For every repository, generate:
 Copy `assets/templates/Dockerfile.backend` to `Dockerfile` at the project root.
 
 Adjust the `EXPOSE` port and `CMD` entry point based on the application:
+
 - Backend: port `3000`, entry `dist/server.js`
 - AI Agent: port `3001`, entry `dist/agent.js`
 
@@ -47,6 +48,7 @@ Copy `assets/templates/.dockerignore` to `.dockerignore` at the repository root.
 Copy `assets/templates/docker-compose.yml` to `docker-compose.yml` at the project root.
 
 Adjust ports:
+
 - Backend: `3000:3000`
 - Frontend: `5173:5173`
 - AI Agent: `3001:3001`
@@ -70,9 +72,7 @@ After creating Docker files, verify:
 
 ---
 
-
 ## Docker Standards
-
 
 ## Base image policy
 
@@ -108,14 +108,16 @@ After creating Docker files, verify:
 ## Implementation reference
 
 Use `docker` skill for concrete templates and file-level generation steps.
+
 ## Backend Deployment Targets (from rule-backend)
 
-| Target | Config |
-|--------|--------|
-| **Node.js** | Dockerfile + pm2 / systemd |
+| Target         | Config                                       |
+| -------------- | -------------------------------------------- |
+| **Node.js**    | Dockerfile + pm2 / systemd                   |
 | **Serverless** | AWS Lambda (Hono), CloudFlare Workers (Hono) |
-| **Docker** | Multi-stage build with distroless |
-| **Electron** | Bundled as part of the desktop app |
+| **Docker**     | Multi-stage build with distroless            |
+| **Electron**   | Bundled as part of the desktop app           |
+
 ---
 
 ## See also

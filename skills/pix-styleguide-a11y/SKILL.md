@@ -25,6 +25,7 @@ frameworks: [all]
 > **Based on:** [A11Y.md](https://github.com/fecarrico/A11Y.md) by Felipe A. Carriço — an accessibility validation protocol and persistent context architecture for developing certifiable software with AI.
 >
 > **See also:**
+>
 > - [`naming-and-file-tree.md`][rule-styleguide-naming](../rule-styleguide-naming/SKILL.md) for project structure
 > - [`html.md`][rule-styleguide-html](../rule-styleguide-html/SKILL.md) for semantic HTML conventions
 > - [`EAA.md`](./EAA.md) for the European Accessibility Act compliance checklist
@@ -45,11 +46,11 @@ Accessibility is **not a feature** — it is a **pre-condition for use**.
 
 Select the appropriate profile before generating or reviewing interface code. If unspecified, **Standard (AA)** is the default.
 
-| Profile | Target | Contrast (text / UI) | Min Font† | Min Target | Use Case |
-| :--- | :--- | :--- | :--- | :--- | :--- |
-| **🛡️ Shield (AAA)** | WCAG AAA | 7:1 / 3:1 (SC 1.4.6, 1.4.11) | 14px† | 44×44px (SC 2.5.5) · 48×48px† advised | Regulated industries, healthcare, gov |
-| **⚖️ Standard (AA)** | WCAG AA | 4.5:1 / 3:1 (SC 1.4.3, 1.4.11) | 12px† | 24×24px (SC 2.5.8) · 44×44px† advised | **Default.** Production apps, public web |
-| **🚀 Launchpad (A)** | WCAG A | 3:1† (house floor) | 10px† | 24×24px† | MVPs, internal tools, prototypes |
+| Profile              | Target   | Contrast (text / UI)           | Min Font† | Min Target                            | Use Case                                 |
+| :------------------- | :------- | :----------------------------- | :-------- | :------------------------------------ | :--------------------------------------- |
+| **🛡️ Shield (AAA)**  | WCAG AAA | 7:1 / 3:1 (SC 1.4.6, 1.4.11)   | 14px†     | 44×44px (SC 2.5.5) · 48×48px† advised | Regulated industries, healthcare, gov    |
+| **⚖️ Standard (AA)** | WCAG AA  | 4.5:1 / 3:1 (SC 1.4.3, 1.4.11) | 12px†     | 24×24px (SC 2.5.8) · 44×44px† advised | **Default.** Production apps, public web |
+| **🚀 Launchpad (A)** | WCAG A   | 3:1† (house floor)             | 10px†     | 24×24px†                              | MVPs, internal tools, prototypes         |
 
 > **† House Rule:** non-normative — this framework's ergonomic policy where WCAG requires less or nothing at that level. WCAG defines no minimum font size at any level; Level A defines no contrast or target-size criteria; 44–48px targets come from Apple HIG / Material Design.
 >
@@ -71,12 +72,12 @@ Select the appropriate profile before generating or reviewing interface code. If
 
 Evaluate the impact of any design or implementation decision:
 
-| Severity | Label | Definition | MUST? |
-| :--- | :--- | :--- | :--- |
-| 🔴 **CRITICAL** | Operation | Blocks **Task Completion** or renders function unusable (broken keyboard nav, clickable div/span, modal without focus management) | **MUST FIX** |
-| 🟠 **HIGH** | Perception & Readability | Significantly increases **Error or Abandonment Rate** (insufficient contrast, fonts < 12px in critical text, lack of dynamic feedback) | **MUST FIX** |
-| 🟡 **MEDIUM** | Efficiency & Satisfaction | Reduces efficiency (lack of optional keyboard shortcuts, lack of redundant labels) | **SHOULD FIX** |
-| 🔵 **LOW** | Cosmetic / Polish | Minor improvements (micro-interactions without aria-labels, focus indicator enhancements) | **MAY FIX** |
+| Severity        | Label                     | Definition                                                                                                                             | MUST?          |
+| :-------------- | :------------------------ | :------------------------------------------------------------------------------------------------------------------------------------- | :------------- |
+| 🔴 **CRITICAL** | Operation                 | Blocks **Task Completion** or renders function unusable (broken keyboard nav, clickable div/span, modal without focus management)      | **MUST FIX**   |
+| 🟠 **HIGH**     | Perception & Readability  | Significantly increases **Error or Abandonment Rate** (insufficient contrast, fonts < 12px in critical text, lack of dynamic feedback) | **MUST FIX**   |
+| 🟡 **MEDIUM**   | Efficiency & Satisfaction | Reduces efficiency (lack of optional keyboard shortcuts, lack of redundant labels)                                                     | **SHOULD FIX** |
+| 🔵 **LOW**      | Cosmetic / Polish         | Minor improvements (micro-interactions without aria-labels, focus indicator enhancements)                                              | **MAY FIX**    |
 
 ---
 
@@ -87,7 +88,7 @@ To ensure technical integrity, any agent interacting with this framework **MUST*
 1. **No Inference:** Never infer accessibility without direct evidence in the code or specification.
 2. **Lazy Context Loading:** Reference files (`references/`) MUST NOT be preloaded — consult only when the task explicitly involves that component type.
 3. **Reference APG:** Prioritize patterns from the [WAI-ARIA Authoring Practices Guide (APG)](https://www.w3.org/WAI/ARIA/apg/).
-4. **Protocol for Ambiguity:** Follow the *Complex Component Protocol* (Section 6) in case of uncertainty.
+4. **Protocol for Ambiguity:** Follow the _Complex Component Protocol_ (Section 6) in case of uncertainty.
 5. **Explain Trade-offs:** Explain impacts on Accessibility vs UX vs Business when suggesting changes.
 6. **UI Component Interrogation:** Before adding `onClick` to non-semantic elements, **MUST** propose replacing them with native elements or full ARIA patterns.
 7. **Framework Adaptation:** This guide uses React/TSX syntax. On **web** frameworks, transpose patterns to the active framework while preserving semantic equivalence. See [`references/guide-framework-mapping.md`](./references/guide-framework-mapping.md).
@@ -142,21 +143,21 @@ Semantic HTML is the foundation of accessibility. **Do not use `<div>` or `<span
 
 ### Decision table
 
-| Element | When to use | Never use `<div>` when |
-|---------|-------------|----------------------|
-| `<header>` | Introductory content, heading group, site header, search bar | Content is at the top of a section/page |
-| `<main>` | Primary content unique to this page | One per document |
-| `<footer>` | Metadata, copyright, related links for its parent | Content is at the bottom of a section/page |
-| `<nav>` | Navigation links for the page or section | Links form a navigation menu |
-| `<article>` | Self-contained, independently distributable content | Content makes sense on its own |
-| `<section>` | Thematic grouping of content, usually with a heading | Content is a distinct part of a larger whole |
-| `<aside>` | Content tangentially related to the main content (sidebar, pullquote) | Content complements but is not essential |
-| `<figure>` + `<figcaption>` | Self-contained media (image, diagram, code block) with optional caption | Media needs a caption |
-| `<button>` | Action triggering a state change (submit, close, toggle) | An element is clickable and does not navigate |
-| `<label>` | Describing a form control | A form input needs a descriptive label |
-| `<form>` | A group of interactive controls for submitting data | Inputs collect and submit data |
-| `<table>` | Tabular data with rows and columns | Data requires row/column relationships |
-| `<table>` for calendar grids | A month/week calendar **is** tabular data (days × weeks) | A grid of days/weeks is rendered |
+| Element                      | When to use                                                             | Never use `<div>` when                        |
+| ---------------------------- | ----------------------------------------------------------------------- | --------------------------------------------- |
+| `<header>`                   | Introductory content, heading group, site header, search bar            | Content is at the top of a section/page       |
+| `<main>`                     | Primary content unique to this page                                     | One per document                              |
+| `<footer>`                   | Metadata, copyright, related links for its parent                       | Content is at the bottom of a section/page    |
+| `<nav>`                      | Navigation links for the page or section                                | Links form a navigation menu                  |
+| `<article>`                  | Self-contained, independently distributable content                     | Content makes sense on its own                |
+| `<section>`                  | Thematic grouping of content, usually with a heading                    | Content is a distinct part of a larger whole  |
+| `<aside>`                    | Content tangentially related to the main content (sidebar, pullquote)   | Content complements but is not essential      |
+| `<figure>` + `<figcaption>`  | Self-contained media (image, diagram, code block) with optional caption | Media needs a caption                         |
+| `<button>`                   | Action triggering a state change (submit, close, toggle)                | An element is clickable and does not navigate |
+| `<label>`                    | Describing a form control                                               | A form input needs a descriptive label        |
+| `<form>`                     | A group of interactive controls for submitting data                     | Inputs collect and submit data                |
+| `<table>`                    | Tabular data with rows and columns                                      | Data requires row/column relationships        |
+| `<table>` for calendar grids | A month/week calendar **is** tabular data (days × weeks)                | A grid of days/weeks is rendered              |
 
 ### Example: semantic vs non-semantic
 
@@ -189,10 +190,12 @@ Every page must have at least these landmarks:
 ```html
 <body>
   <header>
-    <nav>...</nav>        <!-- Site navigation -->
+    <nav>...</nav>
+    <!-- Site navigation -->
   </header>
   <main>
-    <article>...</article> <!-- Primary content or listing -->
+    <article>...</article>
+    <!-- Primary content or listing -->
   </main>
   <footer>...</footer>
 </body>
@@ -231,7 +234,7 @@ Benefits: No ARIA role conflicts, built-in screen reader semantics, `table-layou
 - **Focus Indicator (House Rule† — inspired by SC 2.4.13 AAA):** The focus ring **MUST** have a minimum thickness of 2px and a contrast of at least 3:1 against the background.
 - **Typography (House Rule†):** Text **MUST NOT** be smaller than the minimum font size of the active Compliance Profile (Section 0.1); 12px under default Standard (AA).
   - **Density Exception:** In complex dashboards or secondary metadata (badges), **min 10px** is allowed, provided the contrast is raised to **7:1** as mitigation — documented in `templates/EXCEPTIONS.md`.
-- **Target Spacing & Hit Area:** See *Section 3.2 — Targets*. In dense UIs, if visual size < 44px, the **hit area** MUST be expanded via CSS/padding. Adjacent targets **SHOULD** have 8px of spacing.
+- **Target Spacing & Hit Area:** See _Section 3.2 — Targets_. In dense UIs, if visual size < 44px, the **hit area** MUST be expanded via CSS/padding. Adjacent targets **SHOULD** have 8px of spacing.
 
 ### 5.1 Color and Contrast
 
@@ -241,11 +244,18 @@ Benefits: No ARIA role conflicts, built-in screen reader semantics, `table-layou
 
 ```css
 /* ✅ CORRECT: color + underline for links */
-a { color: #1a73e8; text-decoration: underline; }
+a {
+  color: #1a73e8;
+  text-decoration: underline;
+}
 
 /* ❌ VIOLATION: color-only distinction */
-.error { color: red; }
-.success { color: green; }
+.error {
+  color: red;
+}
+.success {
+  color: green;
+}
 ```
 
 - Focus indicators must have at least **3:1** contrast ratio against the focused element's background.
@@ -262,6 +272,7 @@ Prefer the **OKLCH** color space (Luminance, Chroma, Hue) for perceptually unifo
 ### 5.3 Visual Redundancy for Charts
 
 Charts and dashboards **MUST NOT** rely exclusively on colors to differentiate data series:
+
 - **Lines:** Use dashed, dotted, and different thicknesses.
 - **Markers:** Use distinct shapes (circles, triangles, squares).
 - **Areas:** Use textures/hatch patterns instead of adjacent solid colors.
@@ -320,37 +331,37 @@ Compliance must be verified through these steps:
 
 These files in `references/` are **lazy-loaded** — read only the guide relevant to the component type you are building.
 
-| Guide | Component Type | File |
-| :--- | :--- | :--- |
-| Autocomplete & Combobox | Search & Selects | [`references/guide-autocomplete.md`](./references/guide-autocomplete.md) |
-| Buttons & Actions | Buttons | [`references/guide-buttons.md`](./references/guide-buttons.md) |
-| Carousels & Sliders | Sliding Content | [`references/guide-carousels-sliders.md`](./references/guide-carousels-sliders.md) |
-| Compliance Profiles | AI Generation & Auditing | [`references/guide-compliance-profiles.md`](./references/guide-compliance-profiles.md) |
-| Content, Interaction & Timing | Microcopy & Timeouts | [`references/guide-content-interaction.md`](./references/guide-content-interaction.md) |
-| Drag & Drop | Interactive Lists & Boards | [`references/guide-drag-drop.md`](./references/guide-drag-drop.md) |
-| Forms | Forms & Errors | [`references/guide-forms.md`](./references/guide-forms.md) |
-| Framework Mapping | AI Code Generation | [`references/guide-framework-mapping.md`](./references/guide-framework-mapping.md) |
-| Governance & Compliance | VPAT & Audit Readiness | [`references/guide-governance.md`](./references/guide-governance.md) |
-| Images & Alt Text | Images | [`references/guide-images.md`](./references/guide-images.md) |
-| Infinite Scroll | Pagination & Feeds | [`references/guide-infinite-scroll.md`](./references/guide-infinite-scroll.md) |
-| Loading & Skeletons | Loading States | [`references/guide-loading-skeleton.md`](./references/guide-loading-skeleton.md) |
-| Modals & Dialogs | Modals | [`references/guide-modals.md`](./references/guide-modals.md) |
-| Navigation | Navigation | [`references/guide-navigation.md`](./references/guide-navigation.md) |
-| Platform-Native Mapping | iOS, Android, RN, Flutter | [`references/guide-platform-native.md`](./references/guide-platform-native.md) |
-| Responsive & Zoom | Web Layout & Zoom | [`references/guide-responsive-mobile.md`](./references/guide-responsive-mobile.md) |
-| Tables | Data Grids & Tables | [`references/guide-tables.md`](./references/guide-tables.md) |
-| Tabs & Accordions | Content Disclosure | [`references/guide-tabs-accordion.md`](./references/guide-tabs-accordion.md) |
-| Toasts & Notifications | Dynamic Feedback | [`references/guide-toasts-notifications.md`](./references/guide-toasts-notifications.md) |
-| Tooltips & Popovers | Contextual Information | [`references/guide-tooltips-popovers.md`](./references/guide-tooltips-popovers.md) |
-| Visual Perception & Color | Color & Contrast | [`references/guide-visual-perception.md`](./references/guide-visual-perception.md) |
+| Guide                         | Component Type             | File                                                                                     |
+| :---------------------------- | :------------------------- | :--------------------------------------------------------------------------------------- |
+| Autocomplete & Combobox       | Search & Selects           | [`references/guide-autocomplete.md`](./references/guide-autocomplete.md)                 |
+| Buttons & Actions             | Buttons                    | [`references/guide-buttons.md`](./references/guide-buttons.md)                           |
+| Carousels & Sliders           | Sliding Content            | [`references/guide-carousels-sliders.md`](./references/guide-carousels-sliders.md)       |
+| Compliance Profiles           | AI Generation & Auditing   | [`references/guide-compliance-profiles.md`](./references/guide-compliance-profiles.md)   |
+| Content, Interaction & Timing | Microcopy & Timeouts       | [`references/guide-content-interaction.md`](./references/guide-content-interaction.md)   |
+| Drag & Drop                   | Interactive Lists & Boards | [`references/guide-drag-drop.md`](./references/guide-drag-drop.md)                       |
+| Forms                         | Forms & Errors             | [`references/guide-forms.md`](./references/guide-forms.md)                               |
+| Framework Mapping             | AI Code Generation         | [`references/guide-framework-mapping.md`](./references/guide-framework-mapping.md)       |
+| Governance & Compliance       | VPAT & Audit Readiness     | [`references/guide-governance.md`](./references/guide-governance.md)                     |
+| Images & Alt Text             | Images                     | [`references/guide-images.md`](./references/guide-images.md)                             |
+| Infinite Scroll               | Pagination & Feeds         | [`references/guide-infinite-scroll.md`](./references/guide-infinite-scroll.md)           |
+| Loading & Skeletons           | Loading States             | [`references/guide-loading-skeleton.md`](./references/guide-loading-skeleton.md)         |
+| Modals & Dialogs              | Modals                     | [`references/guide-modals.md`](./references/guide-modals.md)                             |
+| Navigation                    | Navigation                 | [`references/guide-navigation.md`](./references/guide-navigation.md)                     |
+| Platform-Native Mapping       | iOS, Android, RN, Flutter  | [`references/guide-platform-native.md`](./references/guide-platform-native.md)           |
+| Responsive & Zoom             | Web Layout & Zoom          | [`references/guide-responsive-mobile.md`](./references/guide-responsive-mobile.md)       |
+| Tables                        | Data Grids & Tables        | [`references/guide-tables.md`](./references/guide-tables.md)                             |
+| Tabs & Accordions             | Content Disclosure         | [`references/guide-tabs-accordion.md`](./references/guide-tabs-accordion.md)             |
+| Toasts & Notifications        | Dynamic Feedback           | [`references/guide-toasts-notifications.md`](./references/guide-toasts-notifications.md) |
+| Tooltips & Popovers           | Contextual Information     | [`references/guide-tooltips-popovers.md`](./references/guide-tooltips-popovers.md)       |
+| Visual Perception & Color     | Color & Contrast           | [`references/guide-visual-perception.md`](./references/guide-visual-perception.md)       |
 
 ### Templates
 
-| Template | Purpose | File |
-| :--- | :--- | :--- |
-| Decisions Log | Cross-turn memory of pattern choices | [`templates/A11Y-DECISIONS.md`](./templates/A11Y-DECISIONS.md) |
-| Exceptions Log | Documented deviations from standards | [`templates/EXCEPTIONS.md`](./templates/EXCEPTIONS.md) |
-| Verification Report | Compliance evidence for a feature | [`templates/REPORT.md`](./templates/REPORT.md) |
+| Template            | Purpose                              | File                                                           |
+| :------------------ | :----------------------------------- | :------------------------------------------------------------- |
+| Decisions Log       | Cross-turn memory of pattern choices | [`templates/A11Y-DECISIONS.md`](./templates/A11Y-DECISIONS.md) |
+| Exceptions Log      | Documented deviations from standards | [`templates/EXCEPTIONS.md`](./templates/EXCEPTIONS.md)         |
+| Verification Report | Compliance evidence for a feature    | [`templates/REPORT.md`](./templates/REPORT.md)                 |
 
 ### External Standards
 
@@ -365,12 +376,12 @@ These files in `references/` are **lazy-loaded** — read only the guide relevan
 
 To use this framework with any AI coding agent, add **one rule** to your agent's configuration file:
 
-| Environment | Configuration File | Rule |
-| :--- | :--- | :--- |
-| **Cursor** | `.cursor/rules/a11y.mdc` | `--- description: "Accessibility context" alwaysApply: true ---` + `Follow strictly the accessibility rules defined in rule-styleguide-a11y.` |
-| **Claude Code** | `CLAUDE.md` (root) | `## Accessibility` + `Follow the accessibility rules in the rule-styleguide-a11y skill.` |
-| **GitHub Copilot** | `.github/copilot-instructions.md` | Same format |
-| **Windsurf** | `.windsurf/rules/a11y.md` | Same format |
+| Environment        | Configuration File                | Rule                                                                                                                                         |
+| :----------------- | :-------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Cursor**         | `.cursor/rules/a11y.mdc`          | `--- description: "Accessibility context" alwaysApply: true ---` + `Follow strictly the accessibility rules defined in rule-styleguide-a11y.` |
+| **Claude Code**    | `CLAUDE.md` (root)                | `## Accessibility` + `Follow the accessibility rules in the rule-styleguide-a11y skill.`                                                      |
+| **GitHub Copilot** | `.github/copilot-instructions.md` | Same format                                                                                                                                  |
+| **Windsurf**       | `.windsurf/rules/a11y.md`         | Same format                                                                                                                                  |
 
 > **Do not duplicate** accessibility rules outside this skill — prevents rule fragmentation and ensures the AI always loads the complete context.
 

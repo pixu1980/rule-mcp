@@ -35,8 +35,7 @@ import { getOrCreateSseBearerToken } from "../transport/sse-auth.js";
 import { DEFAULT_SSE_PORT } from "./paths.js";
 
 /** Resolve a path relative to the project root (3 levels up from src/cli/). */
-const resolvePath = (relative) =>
-  resolve(fileURLToPath(new URL("../../", import.meta.url)), relative);
+const resolvePath = (relative) => resolve(fileURLToPath(new URL("../../", import.meta.url)), relative);
 
 // ─── Constants ───────────────────────────────────────────────────────────────
 
@@ -104,25 +103,37 @@ const readText = (file) => (existsSync(file) ? readFileSync(file, "utf8") : "");
 /** Write a file with backup and atomic write. Skips if dryRun. Throws on null content. */
 // eslint-disable-next-line no-unused-vars
 const atomicWrite = ({ file, content, dryRun }) => {
-  if (content === null) {throw new Error(`Cannot write null content to ${file} — parse error in source`);}
-  if (dryRun) {return file;}
-  if (existsSync(file)) {backupFile(file);}
+  if (content === null) {
+    throw new Error(`Cannot write null content to ${file} — parse error in source`);
+  }
+  if (dryRun) {
+    return file;
+  }
+  if (existsSync(file)) {
+    backupFile(file);
+  }
   const temporary = file + ".tmp." + Date.now();
   mkdirSync(dirname(file), { recursive: true });
   writeFileSync(temporary, content, "utf8");
   try {
     rmSync(file, { force: true });
-  } catch { /* ignore: file may not exist yet */ }
+  } catch {
+    /* ignore: file may not exist yet */
+  }
   writeFileSync(file, content, "utf8");
   try {
     rmSync(temporary, { force: true });
-  } catch { /* ignore: temp file may not exist yet */ }
+  } catch {
+    /* ignore: temp file may not exist yet */
+  }
   return file;
 };
 
 /** Write a file, optionally as a dry-run (no actual write). @deprecated Use atomicWrite for safety. */
 const writeText = ({ file, content, dryRun }) => {
-  if (content === null) {throw new Error(`Cannot write null content to ${file} — parse error in source`);}
+  if (content === null) {
+    throw new Error(`Cannot write null content to ${file} — parse error in source`);
+  }
   if (!dryRun) {
     mkdirSync(dirname(file), { recursive: true });
     writeFileSync(file, content);
@@ -132,12 +143,16 @@ const writeText = ({ file, content, dryRun }) => {
 
 /** Remove a file if it exists. */
 const removeFile = (file) => {
-  if (existsSync(file)) {rmSync(file, { force: true });}
+  if (existsSync(file)) {
+    rmSync(file, { force: true });
+  }
 };
 
 /** Create a backup copy of a file before modifying it. Returns backup path. */
 const backupFile = (file) => {
-  if (!existsSync(file)) {return null;}
+  if (!existsSync(file)) {
+    return null;
+  }
   const backup = `${file}.bak`;
   try {
     const content = readFileSync(file);
@@ -172,7 +187,9 @@ const resolveGlobalBinary = () => {
     "/usr/local/bin/rule-mcp",
   ];
   for (const candidate of candidates) {
-    if (existsSync(candidate)) {return candidate;}
+    if (existsSync(candidate)) {
+      return candidate;
+    }
   }
   // Fall back to PATH scan, but exclude local node_modules/.bin (project-local shims).
   try {
@@ -180,7 +197,9 @@ const resolveGlobalBinary = () => {
       encoding: "utf8",
       timeout: 2000,
     }).trim();
-    if (out && existsSync(out) && !out.includes("node_modules/.bin")) {return out;}
+    if (out && existsSync(out) && !out.includes("node_modules/.bin")) {
+      return out;
+    }
   } catch {
     // Not found — fall back to local Node entrypoint.
   }
@@ -214,7 +233,9 @@ export const DEFAULT_OPTOUT_ENV = {
  */
 export function readEnvConfig() {
   try {
-    if (!existsSync(ENV_CONFIG_FILE)) {return {};}
+    if (!existsSync(ENV_CONFIG_FILE)) {
+      return {};
+    }
     return JSON.parse(readFileSync(ENV_CONFIG_FILE, "utf8"));
   } catch {
     return {};
@@ -247,7 +268,8 @@ const commandConfig = (entrypoint, options = {}) => {
   const isPi = options.agentName === "pi";
 
   if (mode === "daemon" || mode === "docker") {
-    const port = Number.isInteger(options.port) && options.port > 0 && options.port < 65_536 ? options.port : DEFAULT_SSE_PORT;
+    const port =
+      Number.isInteger(options.port) && options.port > 0 && options.port < 65_536 ? options.port : DEFAULT_SSE_PORT;
     const token = getOrCreateSseBearerToken();
     const config = {
       url: `http://127.0.0.1:${port}/sse`,
@@ -267,7 +289,7 @@ const commandConfig = (entrypoint, options = {}) => {
   let config;
   const globalBin = resolveGlobalBinary();
   if (globalBin) {
-// eslint-disable-next-line no-unused-vars
+    // eslint-disable-next-line no-unused-vars
     const home = homedir();
     config = { command: globalBin, args: ["serve"], type: "stdio" };
   } else {
@@ -320,7 +342,9 @@ const toJson = (object) => `${JSON.stringify(object, null, 2)}\n`;
  */
 const upsertJsonServer = (current, config) => {
   const json = current.trim() ? parseJson(current) : {};
-  if (json === null) {return null;}
+  if (json === null) {
+    return null;
+  }
   json.mcpServers = json.mcpServers ?? {};
   json.mcpServers[serverName] = { ...json.mcpServers[serverName], ...config };
   return toJson(json);
@@ -331,12 +355,18 @@ const upsertJsonServer = (current, config) => {
  * Returns null if the file contains invalid JSON.
  */
 const removeJsonServer = (current) => {
-  if (!current.trim()) {return current;}
+  if (!current.trim()) {
+    return current;
+  }
   const json = parseJson(current);
-  if (json === null) {return null;}
+  if (json === null) {
+    return null;
+  }
   if (json.mcpServers?.[serverName]) {
     delete json.mcpServers[serverName];
-    if (Object.keys(json.mcpServers).length === 0) {delete json.mcpServers;}
+    if (Object.keys(json.mcpServers).length === 0) {
+      delete json.mcpServers;
+    }
   }
   return Object.keys(json).length > 0 ? toJson(json) : "";
 };
@@ -352,7 +382,9 @@ const removeJsonServer = (current) => {
  * @returns {"stdio"|"sse"|"http"}
  */
 const vscodeServerType = (config) => {
-  if (!config.url) {return "stdio";}
+  if (!config.url) {
+    return "stdio";
+  }
   return config.url.endsWith("/mcp") ? "http" : "sse";
 };
 
@@ -363,14 +395,20 @@ const vscodeServerType = (config) => {
  */
 const upsertVscode = (current, config) => {
   const json = current.trim() ? parseJson(current) : {};
-  if (json === null) {return null;}
+  if (json === null) {
+    return null;
+  }
   json.servers = json.servers ?? {};
   // VS Code owns `servers`; remove only this server from the `mcpServers` key.
   if (json.mcpServers?.[serverName]) {
     delete json.mcpServers[serverName];
-    if (Object.keys(json.mcpServers).length === 0) {delete json.mcpServers;}
+    if (Object.keys(json.mcpServers).length === 0) {
+      delete json.mcpServers;
+    }
   }
-  if (json.servers[serverName]) {delete json.servers[serverName];}
+  if (json.servers[serverName]) {
+    delete json.servers[serverName];
+  }
   json.servers[serverName] = { ...json.servers[serverName], ...config, type: vscodeServerType(config) };
   return toJson(json);
 };
@@ -380,16 +418,24 @@ const upsertVscode = (current, config) => {
  * Returns null if the file contains invalid JSON.
  */
 const removeVscodeServer = (current) => {
-  if (!current.trim()) {return current;}
+  if (!current.trim()) {
+    return current;
+  }
   const json = parseJson(current);
-  if (json === null) {return null;}
+  if (json === null) {
+    return null;
+  }
   if (json.servers?.[serverName]) {
     delete json.servers[serverName];
-    if (Object.keys(json.servers).length === 0) {delete json.servers;}
+    if (Object.keys(json.servers).length === 0) {
+      delete json.servers;
+    }
   }
   if (json.mcpServers?.[serverName]) {
     delete json.mcpServers[serverName];
-    if (Object.keys(json.mcpServers).length === 0) {delete json.mcpServers;}
+    if (Object.keys(json.mcpServers).length === 0) {
+      delete json.mcpServers;
+    }
   }
   return Object.keys(json).length > 0 ? toJson(json) : "";
 };
@@ -421,14 +467,18 @@ const removeTomlBlock = (current, blockName) => {
  */
 const appendInstruction = (current) => {
   const marker = "<!-- rule-mcp -->";
-  if (current.includes(marker)) {return current;}
+  if (current.includes(marker)) {
+    return current;
+  }
   return `${current.trimEnd()}\n\n${marker}\nBefore writing any frontend/styling code, call \`rule\` to route the task to the correct rule skill. Follow rule AI principles: zero CSS classes, zero inline styles, semantic HTML, external CSS via adoptedStyleSheets. Available tools: rule, pix_component, pix_check, pix_search, pix_scaffold, pix_process_adr.\n<!-- /rule-mcp -->\n`;
 };
 
 /** Remove the rule-mcp instruction marker. */
 const removeInstruction = (current) => {
   const marker = "<!-- rule-mcp -->";
-  if (!current.includes(marker)) {return current;}
+  if (!current.includes(marker)) {
+    return current;
+  }
   return current.replaceAll(/\n*<!-- rule-mcp -->[\s\S]*?<!-- \/rule-mcp -->\n*/g, "").trimEnd();
 };
 
@@ -464,7 +514,11 @@ const installClaude = ({ entrypoint, dryRun, global }) => {
   const mdFile = join(HOME, ".claude", "CLAUDE.md");
   const commandFile = join(HOME, ".claude", "commands", "rule-mcp.md");
   return [
-    writeText({ file, content: upsertJsonServer(readText(file), commandConfig(entrypoint, { global, agentName: "claude" })), dryRun }),
+    writeText({
+      file,
+      content: upsertJsonServer(readText(file), commandConfig(entrypoint, { global, agentName: "claude" })),
+      dryRun,
+    }),
     writeText({ file: mdFile, content: appendInstruction(readText(mdFile)), dryRun }),
     writeText({ file: commandFile, content: commandTemplate(), dryRun }),
   ];
@@ -527,7 +581,11 @@ const installGemini = ({ entrypoint, dryRun, global }) => {
   const mdFile = join(HOME, ".gemini", "GEMINI.md");
   const commandFile = join(HOME, ".gemini", "commands", "rule-mcp.toml");
   return [
-    writeText({ file, content: upsertJsonServer(readText(file), commandConfig(entrypoint, { global, agentName: "gemini" })), dryRun }),
+    writeText({
+      file,
+      content: upsertJsonServer(readText(file), commandConfig(entrypoint, { global, agentName: "gemini" })),
+      dryRun,
+    }),
     writeText({ file: mdFile, content: appendInstruction(readText(mdFile)), dryRun }),
     writeText({ file: commandFile, content: geminiCommand(), dryRun }),
   ];
@@ -540,7 +598,11 @@ const installPi = ({ entrypoint, dryRun, global, mode }) => {
   const file = join(piDir, "mcp.json");
   const promptFile = join(piDir, "prompts", "rule-mcp.md");
   return [
-    writeText({ file, content: upsertJsonServer(readText(file), commandConfig(entrypoint, { global, mode, agentName: "pi" })), dryRun }),
+    writeText({
+      file,
+      content: upsertJsonServer(readText(file), commandConfig(entrypoint, { global, mode, agentName: "pi" })),
+      dryRun,
+    }),
     writeText({ file: promptFile, content: commandTemplate(), dryRun }),
   ];
 };
@@ -585,11 +647,13 @@ const removeVscodeExtensionDirectories = ({ dryRun }) => {
   const extensionId = "rule.rule-vanilla-reactive";
   const removed = [];
   for (const dir of vscodeExtensionDirectories()) {
-    if (!existsSync(dir)) {continue;}
+    if (!existsSync(dir)) {
+      continue;
+    }
     const entries = readdirSync(dir, { withFileTypes: true });
     for (const entry of entries) {
       if (!(entry.isDirectory() && entry.name.startsWith(extensionId))) {
-      	continue;
+        continue;
       }
 
       const fullPath = join(dir, entry.name);
@@ -604,9 +668,12 @@ const removeVscodeExtensionDirectories = ({ dryRun }) => {
 
 /** Return the VS Code user-level global config directory. */
 const vscodeGlobalDir = () => {
-  if (process.platform === "darwin") {return join(HOME, "Library", "Application Support", "Code", "User");}
-  if (process.platform === "win32")
-    {return join(process.env.APPDATA || join(HOME, "AppData", "Roaming"), "Code", "User");}
+  if (process.platform === "darwin") {
+    return join(HOME, "Library", "Application Support", "Code", "User");
+  }
+  if (process.platform === "win32") {
+    return join(process.env.APPDATA || join(HOME, "AppData", "Roaming"), "Code", "User");
+  }
   return join(HOME, ".config", "Code", "User");
 };
 
@@ -636,7 +703,9 @@ const tryInstallExtension = (cli, vsixPath, label) => {
  * Tries: code, cursor, windsurf, code-insiders, code-oss, codium
  */
 const installVscodeExtension = ({ dryRun, vsixPath }) => {
-  if (dryRun) {return [];}
+  if (dryRun) {
+    return [];
+  }
   if (!existsSync(vsixPath)) {
     console.warn(`  \u{26A0} Extension VSIX not found at: ${vsixPath}`);
     return [];
@@ -658,7 +727,9 @@ const installVscodeExtension = ({ dryRun, vsixPath }) => {
         encoding: "utf8",
         timeout: 2000,
       }).trim();
-      if (!found) {continue;}
+      if (!found) {
+        continue;
+      }
 
       const ok = tryInstallExtension(cli, vsixPath, label);
       if (ok) {
@@ -676,7 +747,9 @@ const installVscodeExtension = ({ dryRun, vsixPath }) => {
  * Uses each editor's CLI --uninstall-extension.
  */
 const uninstallVscodeExtension = ({ dryRun }) => {
-  if (dryRun) {return [];}
+  if (dryRun) {
+    return [];
+  }
 
   const extensionId = "rule.rule-vanilla-reactive";
   const editors = [
@@ -695,7 +768,9 @@ const uninstallVscodeExtension = ({ dryRun }) => {
         encoding: "utf8",
         timeout: 2000,
       }).trim();
-      if (!found) {continue;}
+      if (!found) {
+        continue;
+      }
 
       execSync(`${cli} --uninstall-extension ${extensionId}`, {
         encoding: "utf8",
@@ -745,14 +820,26 @@ const installVscode = ({ entrypoint, dryRun, global, mode }) => {
 /** @param {{ entrypoint: string, dryRun: boolean, global?: boolean }} */
 const installJetbrains = ({ entrypoint, dryRun, global }) => {
   const file = join(process.cwd(), ".idea", "mcp.json");
-  return [writeText({ file, content: upsertJsonServer(readText(file), commandConfig(entrypoint, { global, agentName: "jetbrains" })), dryRun })];
+  return [
+    writeText({
+      file,
+      content: upsertJsonServer(readText(file), commandConfig(entrypoint, { global, agentName: "jetbrains" })),
+      dryRun,
+    }),
+  ];
 };
 
 /** @param {{ entrypoint: string, dryRun: boolean, global?: boolean }} */
 const installNeovim = ({ entrypoint, dryRun, global }) => {
   const nvimDir = IS_WINDOWS ? join(HOME, "AppData", "Local", "nvim") : join(HOME, ".config", "nvim");
   const file = join(nvimDir, "mcp.json");
-  return [writeText({ file, content: upsertJsonServer(readText(file), commandConfig(entrypoint, { global, agentName: "neovim" })), dryRun })];
+  return [
+    writeText({
+      file,
+      content: upsertJsonServer(readText(file), commandConfig(entrypoint, { global, agentName: "neovim" })),
+      dryRun,
+    }),
+  ];
 };
 
 /** @param {{ entrypoint: string, dryRun: boolean, global?: boolean }} */
@@ -762,7 +849,7 @@ const installEmacs = ({ entrypoint, dryRun, global }) => {
   const initFile = join(emacsDir, "init.el");
   const config = commandConfig(entrypoint, { global, agentName: "emacs" });
   const isPi = false; // Emacs is never pi.dev
-  const emacsConfig = `;; rule-mcp\n(setq mcp-servers '((\n  "${serverName}" . (\n    (command . "${config.command}")\n    (args . ${JSON.stringify(config.args)})${isPi ? "\n    (directTools . t)\n    (lifecycle . \"keep-alive\")" : ""}))))\n`;
+  const emacsConfig = `;; rule-mcp\n(setq mcp-servers '((\n  "${serverName}" . (\n    (command . "${config.command}")\n    (args . ${JSON.stringify(config.args)})${isPi ? '\n    (directTools . t)\n    (lifecycle . "keep-alive")' : ""}))))\n`;
   return [
     writeText({
       file: initFile,
@@ -880,7 +967,15 @@ function writeInstalledManifest(agents, entrypoint, global, mode) {
  * @returns {{ ok: boolean, dryRun: boolean, global: boolean, installed: object, manifest?: string }}
  */
 // eslint-disable-next-line no-unused-vars
-export const installAgent = ({ agent, entrypoint, dryRun = false, force = false, global = false, mode = "stdio", env = {} }) => {
+export const installAgent = ({
+  agent,
+  entrypoint,
+  dryRun = false,
+  force = false,
+  global = false,
+  mode = "stdio",
+  env = {},
+}) => {
   const normalizedMode = normalizeInstallMode(mode);
   const selected = agent === "all" ? allAgents : [agent];
 
@@ -922,7 +1017,9 @@ const uninstallClaude = ({ dryRun }) => {
   const file = join(HOME, ".claude.json");
   const mdFile = join(HOME, ".claude", "CLAUDE.md");
   const commandFile = join(HOME, ".claude", "commands", "rule-mcp.md");
-  if (!dryRun) {removeFile(commandFile);}
+  if (!dryRun) {
+    removeFile(commandFile);
+  }
   return [
     writeText({ file, content: removeJsonServer(readText(file)), dryRun }),
     writeText({ file: mdFile, content: removeInstruction(readText(mdFile)), dryRun }),
@@ -944,7 +1041,9 @@ const uninstallCodex = ({ dryRun }) => {
 const uninstallCursor = ({ dryRun }) => {
   const cursorGlobal = join(HOME, ".cursor", "mcp.json");
   const commandFile = join(process.cwd(), ".cursor", "commands", "rule-mcp.md");
-  if (!dryRun) {removeFile(commandFile);}
+  if (!dryRun) {
+    removeFile(commandFile);
+  }
   return [writeText({ file: cursorGlobal, content: removeJsonServer(readText(cursorGlobal)), dryRun }), commandFile];
 };
 
@@ -958,7 +1057,9 @@ const uninstallCopilot = ({ dryRun }) => {
     delete json[`copilot-mcp-${serverName}`];
     writeText({ file: hostsFile, content: toJson(json), dryRun });
   }
-  if (!dryRun) {removeFile(agentFile);}
+  if (!dryRun) {
+    removeFile(agentFile);
+  }
   return [hostsFile, agentFile];
 };
 
@@ -967,7 +1068,9 @@ const uninstallGemini = ({ dryRun }) => {
   const file = join(HOME, ".gemini", "settings.json");
   const mdFile = join(HOME, ".gemini", "GEMINI.md");
   const commandFile = join(HOME, ".gemini", "commands", "rule-mcp.toml");
-  if (!dryRun) {removeFile(commandFile);}
+  if (!dryRun) {
+    removeFile(commandFile);
+  }
   return [
     writeText({ file, content: removeJsonServer(readText(file)), dryRun }),
     writeText({ file: mdFile, content: removeInstruction(readText(mdFile)), dryRun }),
@@ -980,7 +1083,9 @@ const uninstallPi = ({ dryRun }) => {
   const piDir = process.env.PI_CODING_AGENT_DIR ? join(process.env.PI_CODING_AGENT_DIR) : join(HOME, ".pi", "agent");
   const file = join(piDir, "mcp.json");
   const promptFile = join(piDir, "prompts", "rule-mcp.md");
-  if (!dryRun) {removeFile(promptFile);}
+  if (!dryRun) {
+    removeFile(promptFile);
+  }
   return [writeText({ file, content: removeJsonServer(readText(file)), dryRun }), promptFile];
 };
 
@@ -990,10 +1095,14 @@ const uninstallVscode = ({ dryRun }) => {
   uninstallVscodeExtension({ dryRun });
 
   const removeFromExistingFile = (file) => {
-    if (!existsSync(file)) {return null;}
+    if (!existsSync(file)) {
+      return null;
+    }
     const content = removeVscodeServer(readText(file));
     if (content === "") {
-      if (!dryRun) {removeFile(file);}
+      if (!dryRun) {
+        removeFile(file);
+      }
       return file;
     }
     return writeText({ file, content, dryRun });
@@ -1012,9 +1121,9 @@ const uninstallVscode = ({ dryRun }) => {
   // VS Code Insiders global
   const insidersDir = IS_MACOS
     ? join(HOME, "Library", "Application Support", "Code - Insiders", "User")
-    : (IS_WINDOWS
+    : IS_WINDOWS
       ? join(process.env.APPDATA || join(HOME, "AppData", "Roaming"), "Code - Insiders", "User")
-      : join(HOME, ".config", "Code - Insiders", "User"));
+      : join(HOME, ".config", "Code - Insiders", "User");
   results.push(removeFromExistingFile(join(insidersDir, "mcp.json")));
 
   // Code-OSS global
@@ -1143,7 +1252,9 @@ export function detectInstalledAgents() {
   }
 
   return checks.map(({ name, path, key }) => {
-    if (!existsSync(path)) {return { name, configured: false, configFile: null };}
+    if (!existsSync(path)) {
+      return { name, configured: false, configFile: null };
+    }
     try {
       const content = readFileSync(path, "utf8");
       const configured = key ? content.includes(key) : content.includes(serverName);

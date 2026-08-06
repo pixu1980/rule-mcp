@@ -47,32 +47,35 @@ const user = {
   profile: {
     avatar: "https://...",
     bio: "Software engineer",
-    preferences: { theme: "dark", notifications: true }
+    preferences: { theme: "dark", notifications: true },
   },
-  address: {               // One-to-one: embed
+  address: {
+    // One-to-one: embed
     street: "123 Main St",
     city: "Rome",
-    country: "IT"
+    country: "IT",
   },
-  recent_orders: [         // One-to-few: embed (max 5)
+  recent_orders: [
+    // One-to-few: embed (max 5)
     { id: 1, total: 100, date: ISODate() },
-    { id: 2, total: 250, date: ISODate() }
+    { id: 2, total: 250, date: ISODate() },
   ],
-  created_at: ISODate()
+  created_at: ISODate(),
 };
 
 // ✅ REFERENCE: Data accessed independently or unbounded arrays
 // One-to-many, Many-to-many
 const order = {
   _id: ObjectId(),
-  user_id: ObjectId("..."),  // Reference to user
-  items: [                   // References to products
+  user_id: ObjectId("..."), // Reference to user
+  items: [
+    // References to products
     { product_id: ObjectId("..."), quantity: 2, price: 50 },
-    { product_id: ObjectId("..."), quantity: 1, price: 100 }
+    { product_id: ObjectId("..."), quantity: 1, price: 100 },
   ],
   total: 200,
   status: "pending",
-  created_at: ISODate()
+  created_at: ISODate(),
 };
 ```
 
@@ -92,7 +95,7 @@ const order = {
 // Single collection with discriminator field
 const event = {
   _id: ObjectId(),
-  type: "click",           // discriminator: "click" | "pageview" | "purchase"
+  type: "click", // discriminator: "click" | "pageview" | "purchase"
   user_id: ObjectId(),
   timestamp: ISODate(),
   // Click-specific
@@ -101,7 +104,7 @@ const event = {
   page: "/checkout",
   // Purchase-specific
   total: 150,
-  currency: "EUR"
+  currency: "EUR",
 };
 // Index with partialFilterExpression for each type
 ```
@@ -114,21 +117,23 @@ db.createCollection("sensor_readings", {
   timeseries: {
     timeField: "timestamp",
     metaField: "metadata",
-    granularity: "seconds"
-  }
+    granularity: "seconds",
+  },
 });
 
 db.sensor_readings.insertOne({
   timestamp: ISODate(),
   metadata: { sensor_id: "sensor_01", type: "temperature" },
-  value: 22.5
+  value: 22.5,
 });
 
 // Query
-db.sensor_readings.find({
-  timestamp: { $gte: ISODate("2024-01-01"), $lt: ISODate("2024-02-01") },
-  "metadata.sensor_id": "sensor_01"
-}).sort({ timestamp: 1 });
+db.sensor_readings
+  .find({
+    timestamp: { $gte: ISODate("2024-01-01"), $lt: ISODate("2024-02-01") },
+    "metadata.sensor_id": "sensor_01",
+  })
+  .sort({ timestamp: 1 });
 ```
 
 ---
@@ -160,28 +165,30 @@ db.orders.insertMany([...], { ordered: false });
 
 ```javascript
 // Find with projection
-db.users.find(
-  { email: "john@example.com" },
-  { name: 1, email: 1, _id: 0 }
-);
+db.users.find({ email: "john@example.com" }, { name: 1, email: 1, _id: 0 });
 
 // Find with operators
-db.orders.find({
-  status: { $in: ["pending", "processing"] },
-  total: { $gte: 100, $lte: 500 },
-  created_at: { $gte: ISODate("2024-01-01") }
-}).sort({ created_at: -1 }).limit(20);
+db.orders
+  .find({
+    status: { $in: ["pending", "processing"] },
+    total: { $gte: 100, $lte: 500 },
+    created_at: { $gte: ISODate("2024-01-01") },
+  })
+  .sort({ created_at: -1 })
+  .limit(20);
 
 // Text search (requires text index)
-db.articles.find(
-  { $text: { $search: "database optimization tips" } },
-  { score: { $meta: "textScore" } }
-).sort({ score: { $meta: "textScore" } }).limit(10);
+db.articles
+  .find({ $text: { $search: "database optimization tips" } }, { score: { $meta: "textScore" } })
+  .sort({ score: { $meta: "textScore" } })
+  .limit(10);
 
 // Cursor-based pagination
-const page = await db.orders.find(
-  { _id: { $gt: ObjectId("...") }, user_id: ObjectId("...") }
-).sort({ _id: 1 }).limit(20).toArray();
+const page = await db.orders
+  .find({ _id: { $gt: ObjectId("...") }, user_id: ObjectId("...") })
+  .sort({ _id: 1 })
+  .limit(20)
+  .toArray();
 
 // Count (use estimatedDocumentCount for large collections)
 db.orders.estimatedDocumentCount(); // fast, approximate
@@ -192,16 +199,13 @@ db.orders.countDocuments({ status: "pending" }); // slow, exact
 
 ```javascript
 // Update one (atomic)
-db.users.updateOne(
-  { email: "john@example.com" },
-  { $set: { name: "John Updated", updated_at: new Date() } }
-);
+db.users.updateOne({ email: "john@example.com" }, { $set: { name: "John Updated", updated_at: new Date() } });
 
 // Upsert (insert if not exist)
 db.users.updateOne(
   { email: "new@example.com" },
   { $set: { name: "New User", created_at: new Date() } },
-  { upsert: true }
+  { upsert: true },
 );
 
 // Array operations
@@ -210,15 +214,12 @@ db.orders.updateOne(
   {
     $push: { items: { product_id: ObjectId("..."), quantity: 1, price: 50 } },
     $inc: { total: 50 },
-    $set: { updated_at: new Date() }
-  }
+    $set: { updated_at: new Date() },
+  },
 );
 
 // Remove from array
-db.orders.updateOne(
-  { _id: ObjectId("...") },
-  { $pull: { items: { product_id: ObjectId("...") } } }
-);
+db.orders.updateOne({ _id: ObjectId("...") }, { $pull: { items: { product_id: ObjectId("...") } } });
 
 // Bulk write
 db.users.bulkWrite([
@@ -266,10 +267,7 @@ db.articles.createIndex({ title: "text", body: "text" }, { weights: { title: 10,
 db.users.createIndex({ email: 1 }, { unique: true });
 
 // Partial (index only matching docs)
-db.orders.createIndex(
-  { status: 1, created_at: -1 },
-  { partialFilterExpression: { status: "pending" } }
-);
+db.orders.createIndex({ status: 1, created_at: -1 }, { partialFilterExpression: { status: "pending" } });
 
 // TTL (automatic document expiry)
 db.sessions.createIndex({ created_at: 1 }, { expireAfterSeconds: 86400 });
@@ -278,10 +276,7 @@ db.sessions.createIndex({ created_at: 1 }, { expireAfterSeconds: 86400 });
 db.users.createIndex({ "metadata.$**": 1 });
 
 // Unique + Partial (conditional uniqueness)
-db.organizations.createIndex(
-  { name: 1 },
-  { unique: true, partialFilterExpression: { status: { $ne: "deleted" } } }
-);
+db.organizations.createIndex({ name: 1 }, { unique: true, partialFilterExpression: { status: { $ne: "deleted" } } });
 ```
 
 ### Index Selection Rules
@@ -298,7 +293,8 @@ db.organizations.createIndex(
 
 ```javascript
 // Explain query
-db.orders.find({ user_id: ObjectId("..."), status: "completed" })
+db.orders
+  .find({ user_id: ObjectId("..."), status: "completed" })
   .sort({ created_at: -1 })
   .limit(20)
   .explain("executionStats");
@@ -312,9 +308,7 @@ Look for:
 
 // List all indexes with sizes
 db.orders.getIndexes();
-db.orders.aggregate([
-  { $indexStats: {} }
-]).forEach(i => printjson(i));
+db.orders.aggregate([{ $indexStats: {} }]).forEach((i) => printjson(i));
 
 // Drop unused indexes
 db.orders.dropIndex("unused_index_name");
@@ -331,7 +325,7 @@ db.orders.dropIndex("unused_index_name");
 db.orders.aggregate([
   { $match: { created_at: { $gte: ISODate("2024-01-01") } } },
   { $group: { _id: "$status", count: { $sum: 1 }, total_revenue: { $sum: "$total" } } },
-  { $sort: { count: -1 } }
+  { $sort: { count: -1 } },
 ]);
 
 // Pattern 2: Lookup (JOIN)
@@ -343,11 +337,11 @@ db.orders.aggregate([
       localField: "items.product_id",
       foreignField: "_id",
       as: "product_details",
-      pipeline: [{ $project: { name: 1, price: 1 } }]
-    }
+      pipeline: [{ $project: { name: 1, price: 1 } }],
+    },
   },
   { $unwind: "$product_details" },
-  { $group: { _id: "$_id", items: { $push: "$product_details" }, total: { $first: "$total" } } }
+  { $group: { _id: "$_id", items: { $push: "$product_details" }, total: { $first: "$total" } } },
 ]);
 
 // Pattern 3: Pagination with total count (facet)
@@ -360,27 +354,27 @@ db.orders.aggregate([
         { $sort: { created_at: -1 } },
         { $skip: 0 },
         { $limit: 20 },
-        { $project: { _id: 1, total: 1, status: 1, created_at: 1 } }
-      ]
-    }
-  }
+        { $project: { _id: 1, total: 1, status: 1, created_at: 1 } },
+      ],
+    },
+  },
 ]);
 ```
 
 ### Aggregation Pipeline Stages
 
-| Stage | Purpose | Performance Notes |
-|-------|---------|-------------------|
-| `$match` | Filter documents | Use first, can use indexes |
-| `$sort` | Sort documents | Use index if possible |
-| `$project` | Select/transform fields | Reduces pipeline data size |
-| `$group` | Group by key | Memory-bound (100MB default) |
-| `$limit` / `$skip` | Pagination | Put $match before $skip |
-| `$lookup` | JOIN from another collection | Use indexes on foreign collection |
-| `$unwind` | Deconstruct array | Can increase document count |
-| `$facet` | Multi-pipeline (parallel) | Multiple pipelines in one pass |
-| `$bucket` / `$bucketAuto` | Histogram | For reporting/analytics |
-| `$merge` | Output to collection | Materialized views |
+| Stage                     | Purpose                      | Performance Notes                 |
+| ------------------------- | ---------------------------- | --------------------------------- |
+| `$match`                  | Filter documents             | Use first, can use indexes        |
+| `$sort`                   | Sort documents               | Use index if possible             |
+| `$project`                | Select/transform fields      | Reduces pipeline data size        |
+| `$group`                  | Group by key                 | Memory-bound (100MB default)      |
+| `$limit` / `$skip`        | Pagination                   | Put $match before $skip           |
+| `$lookup`                 | JOIN from another collection | Use indexes on foreign collection |
+| `$unwind`                 | Deconstruct array            | Can increase document count       |
+| `$facet`                  | Multi-pipeline (parallel)    | Multiple pipelines in one pass    |
+| `$bucket` / `$bucketAuto` | Histogram                    | For reporting/analytics           |
+| `$merge`                  | Output to collection         | Materialized views                |
 
 ### Window Functions (MongoDB 5+)
 
@@ -395,10 +389,10 @@ db.orders.aggregate([
       sortBy: { created_at: 1 },
       output: {
         running_total: { $sum: "$total", window: { documents: ["unbounded", "current"] } },
-        order_rank: { $rank: {} }
-      }
-    }
-  }
+        order_rank: { $rank: {} },
+      },
+    },
+  },
 ]);
 ```
 
@@ -417,8 +411,8 @@ rs.initiate({
   members: [
     { _id: 0, host: "mongo1:27017", priority: 2 },
     { _id: 1, host: "mongo2:27017", priority: 1 },
-    { _id: 2, host: "mongo3:27017", arbiterOnly: true } // arbiter (no data)
-  ]
+    { _id: 2, host: "mongo3:27017", arbiterOnly: true }, // arbiter (no data)
+  ],
 });
 
 // Check status
@@ -433,16 +427,16 @@ rs.printReplicationInfo();
 // Write concern (acknowledgment level)
 db.orders.insertOne(
   { user_id: ObjectId("..."), total: 100 },
-  { writeConcern: { w: "majority", j: true, wtimeout: 5000 } }
+  { writeConcern: { w: "majority", j: true, wtimeout: 5000 } },
   // w: "majority" — acknowledged by majority of replicas
   // j: true — written to journal
   // wtimeout: 5000ms — fail after 5 seconds
 );
 
 // Read preference
-db.getMongo().setReadPref("secondary");          // Read from secondary (analytics)
-db.getMongo().setReadPref("primaryPreferred");    // Primary if available
-db.getMongo().setReadPref("nearest");             // Lowest latency
+db.getMongo().setReadPref("secondary"); // Read from secondary (analytics)
+db.getMongo().setReadPref("primaryPreferred"); // Primary if available
+db.getMongo().setReadPref("nearest"); // Lowest latency
 ```
 
 ### Monitoring Replication
@@ -455,7 +449,7 @@ rs.printSecondaryReplicationInfo();
 rs.printReplicationInfo();
 
 // Member health
-rs.status().members.forEach(m => {
+rs.status().members.forEach((m) => {
   print(m.name + ": " + m.stateStr + " (health: " + m.health + ")");
 });
 ```
@@ -471,7 +465,7 @@ rs.status().members.forEach(m => {
 sh.enableSharding("myapp");
 sh.shardCollection("myapp.orders", { user_id: "hashed" }); // Hashed sharding
 // OR
-sh.shardCollection("myapp.organizations", { name: 1 });    // Ranged sharding
+sh.shardCollection("myapp.organizations", { name: 1 }); // Ranged sharding
 
 // Create index to support shard key
 db.orders.createIndex({ user_id: 1 });
@@ -514,11 +508,13 @@ import mongoose from "mongoose";
 const orderSchema = new mongoose.Schema(
   {
     user_id: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true, index: true },
-    items: [{
-      product_id: { type: mongoose.Schema.Types.ObjectId, ref: "Product", required: true },
-      quantity: { type: Number, required: true, min: 1 },
-      price: { type: Number, required: true, min: 0 },
-    }],
+    items: [
+      {
+        product_id: { type: mongoose.Schema.Types.ObjectId, ref: "Product", required: true },
+        quantity: { type: Number, required: true, min: 1 },
+        price: { type: Number, required: true, min: 0 },
+      },
+    ],
     total: { type: Number, required: true, min: 0 },
     status: {
       type: String,
@@ -533,33 +529,33 @@ const orderSchema = new mongoose.Schema(
     metadata: { type: mongoose.Schema.Types.Mixed },
   },
   {
-    timestamps: true,  // createdAt + updatedAt
+    timestamps: true, // createdAt + updatedAt
     toJSON: { virtuals: true },
     toObject: { virtuals: true },
-  }
+  },
 );
 
 // Compound index
 orderSchema.index({ status: 1, created_at: -1 });
 
 // Virtual (computed field)
-orderSchema.virtual("item_count").get(function() {
+orderSchema.virtual("item_count").get(function () {
   return this.items.reduce((sum, item) => sum + item.quantity, 0);
 });
 
 // Pre-save hook
-orderSchema.pre("save", function(next) {
+orderSchema.pre("save", function (next) {
   this.total = this.items.reduce((sum, item) => sum + item.price * item.quantity, 0);
   next();
 });
 
 // Instance method
-orderSchema.methods.canCancel = function() {
+orderSchema.methods.canCancel = function () {
   return ["pending", "confirmed"].includes(this.status);
 };
 
 // Static method
-orderSchema.statics.findPending = function() {
+orderSchema.statics.findPending = function () {
   return this.find({ status: "pending" }).sort({ created_at: -1 });
 };
 
@@ -584,12 +580,14 @@ const db = client.db("myapp");
 const orders = db.collection("orders");
 
 // Using aggregation
-const result = await orders.aggregate([
-  { $match: { user_id: new ObjectId(userId) } },
-  { $sort: { created_at: -1 } },
-  { $limit: 20 },
-  { $lookup: { from: "products", localField: "items.product_id", foreignField: "_id", as: "products" } }
-]).toArray();
+const result = await orders
+  .aggregate([
+    { $match: { user_id: new ObjectId(userId) } },
+    { $sort: { created_at: -1 } },
+    { $limit: 20 },
+    { $lookup: { from: "products", localField: "items.product_id", foreignField: "_id", as: "products" } },
+  ])
+  .toArray();
 ```
 
 ---
@@ -616,26 +614,29 @@ storage:
 
 ```javascript
 // Slow query profiler
-db.setProfilingLevel(1, { slowms: 100 });  // Log queries > 100ms
-db.system.profile.find({ millis: { $gt: 1000 } }).sort({ ts: -1 }).limit(20);
+db.setProfilingLevel(1, { slowms: 100 }); // Log queries > 100ms
+db.system.profile
+  .find({ millis: { $gt: 1000 } })
+  .sort({ ts: -1 })
+  .limit(20);
 
 // Current operations
 db.currentOp({
   $ownOps: false,
   $all: false,
   active: true,
-  secs_running: { $gt: 5 }
+  secs_running: { $gt: 5 },
 });
 
 // Kill slow operation
 db.killOp(opid);
 
 // Server status (key metrics)
-db.serverStatus().connections;       // Connection pool
-db.serverStatus().network;           // Network throughput
-db.serverStatus().opcounters;        // Operations per second
-db.serverStatus().wiredTiger;        // Cache hit ratio, IO
-db.serverStatus().mem;               // Memory usage
+db.serverStatus().connections; // Connection pool
+db.serverStatus().network; // Network throughput
+db.serverStatus().opcounters; // Operations per second
+db.serverStatus().wiredTiger; // Cache hit ratio, IO
+db.serverStatus().mem; // Memory usage
 
 // Collection stats
 db.orders.stats();
@@ -661,7 +662,10 @@ db.orders.find({ user_id: userId }, { _id: 1, total: 1, status: 1 }).toArray();
 // ❌ BAD: Negative skip (cursor-based is better)
 db.orders.find().sort({ _id: 1 }).skip(10000).limit(20);
 // ✅ FIX: Use range query
-db.orders.find({ _id: { $gt: lastSeenId } }).sort({ _id: 1 }).limit(20);
+db.orders
+  .find({ _id: { $gt: lastSeenId } })
+  .sort({ _id: 1 })
+  .limit(20);
 ```
 
 ---

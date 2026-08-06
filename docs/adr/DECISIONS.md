@@ -25,17 +25,17 @@ This file summarizes every accepted ADR in `docs/adr/`. Individual ADR files rem
 
 ## Complete ADR summary
 
-| ADR | Status | Decision | Consequences |
-|-----|--------|----------|--------------|
-| [001-thematic-skill-rename.md](./001-thematic-skill-rename.md) | accepted | Use thematic `rule-*` prefixes. | Skills become discoverable and consistently routed. |
-| [002-scaffold-consolidation.md](./002-scaffold-consolidation.md) | accepted | Merge scaffold responsibilities into semantic domains. | Fewer overlapping skills and one source of truth. |
-| [003-backend-framework-skills.md](./003-backend-framework-skills.md) | accepted | Add dedicated NestJS, Express, Fastify, and Hono guidance. | Framework-specific backend evidence becomes explicit. |
-| [004-database-skills.md](./004-database-skills.md) | accepted | Add SQL, PostgreSQL, MySQL, and MongoDB skills. | Data guidance gains focused operational depth. |
-| [005-toolchain-vite.md](./005-toolchain-vite.md) | accepted | Isolate Vite guidance in `rule-toolchain-vite`. | Frameworks share one build-tool source of truth. |
-| [006-forms-per-framework.md](./006-forms-per-framework.md) | accepted | Keep form patterns within each framework skill. | Avoids cross-framework leakage. |
-| [007-vanilla-js-over-typescript.md](./007-vanilla-js-over-typescript.md) | accepted | Implement server in ESM JavaScript. | No build step; runtime validation remains essential. |
-| [008-sdk-over-handrolled-protocol.md](./008-sdk-over-handrolled-protocol.md) | accepted | Use official MCP SDK. | Protocol behavior follows maintained upstream contracts. |
-| [009-file-based-skill-loading.md](./009-file-based-skill-loading.md) | accepted | Load `SKILL.md` files from disk. | Skills stay inspectable and independently editable. |
+| ADR                                                                                                                                | Status   | Decision                                                            | Consequences                                                                       |
+| ---------------------------------------------------------------------------------------------------------------------------------- | -------- | ------------------------------------------------------------------- | ---------------------------------------------------------------------------------- |
+| [001-thematic-skill-rename.md](./001-thematic-skill-rename.md)                                                                     | accepted | Use thematic `rule-*` prefixes.                                      | Skills become discoverable and consistently routed.                                |
+| [002-scaffold-consolidation.md](./002-scaffold-consolidation.md)                                                                   | accepted | Merge scaffold responsibilities into semantic domains.              | Fewer overlapping skills and one source of truth.                                  |
+| [003-backend-framework-skills.md](./003-backend-framework-skills.md)                                                               | accepted | Add dedicated NestJS, Express, Fastify, and Hono guidance.          | Framework-specific backend evidence becomes explicit.                              |
+| [004-database-skills.md](./004-database-skills.md)                                                                                 | accepted | Add SQL, PostgreSQL, MySQL, and MongoDB skills.                     | Data guidance gains focused operational depth.                                     |
+| [005-toolchain-vite.md](./005-toolchain-vite.md)                                                                                   | accepted | Isolate Vite guidance in `rule-toolchain-vite`.                      | Frameworks share one build-tool source of truth.                                   |
+| [006-forms-per-framework.md](./006-forms-per-framework.md)                                                                         | accepted | Keep form patterns within each framework skill.                     | Avoids cross-framework leakage.                                                    |
+| [007-vanilla-js-over-typescript.md](./007-vanilla-js-over-typescript.md)                                                           | accepted | Implement server in ESM JavaScript.                                 | No build step; runtime validation remains essential.                               |
+| [008-sdk-over-handrolled-protocol.md](./008-sdk-over-handrolled-protocol.md)                                                       | accepted | Use official MCP SDK.                                               | Protocol behavior follows maintained upstream contracts.                           |
+| [009-file-based-skill-loading.md](./009-file-based-skill-loading.md)                                                               | accepted | Load `SKILL.md` files from disk.                                    | Skills stay inspectable and independently editable.                                |
 | [010-fail-closed-mcp-enforcement-and-reusable-agent-commands.md](./010-fail-closed-mcp-enforcement-and-reusable-agent-commands.md) | accepted | Enforce every handler boundary and install reusable host workflows. | Safer deterministic output at cost of stricter payloads and host-path maintenance. |
 
 ## Operating rules

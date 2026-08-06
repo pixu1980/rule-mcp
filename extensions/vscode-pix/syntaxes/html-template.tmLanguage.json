@@ -33,7 +33,10 @@
       "end": "\\}\\}",
       "name": "meta.expression.rule",
       "patterns": [
-        { "match": "\\|\\s*(raw|upper|lower|capitalize|slugify|trim|escapeHtml|striptags|json|default|truncate|length|first|last|join|date|timeAgo|urlencode|sortBy)\\b", "name": "support.function.filter.rule" },
+        {
+          "match": "\\|\\s*(raw|upper|lower|capitalize|slugify|trim|escapeHtml|striptags|json|default|truncate|length|first|last|join|date|timeAgo|urlencode|sortBy)\\b",
+          "name": "support.function.filter.rule"
+        },
         { "match": "\\b(true|false|null|undefined)\\b", "name": "constant.language.rule" },
         { "match": "\\d+", "name": "constant.numeric.rule" },
         { "match": "\"[^\"]*\"|'[^']*'", "name": "string.quoted.rule" },

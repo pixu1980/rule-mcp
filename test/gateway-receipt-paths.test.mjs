@@ -19,12 +19,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 
-import {
-  issueReceipt,
-  issueFilesReceipt,
-  validateReceipt,
-  validateApply,
-} from "../src/tools/gateway.js";
+import { issueReceipt, issueFilesReceipt, validateReceipt, validateApply } from "../src/tools/gateway.js";
 
 const T0 = 2_000_000; // injected clock (ms)
 const TTL = 300_000;
@@ -112,10 +107,14 @@ test("a content-only receipt cannot authorise a multi-file write", () => {
   // now require the path-bound flow.
   const code = "A\n---FILE---\nB";
   const token = issueReceipt(code, SKILL, true, T0);
-  const result = validateApply(token, [
-    { path: "src/a.js", content: "A" },
-    { path: "src/b.js", content: "B" },
-  ], T0);
+  const result = validateApply(
+    token,
+    [
+      { path: "src/a.js", content: "A" },
+      { path: "src/b.js", content: "B" },
+    ],
+    T0,
+  );
   assert.equal(result.valid, false);
   assert.match(result.reason, /path-bound|multi/i);
 });

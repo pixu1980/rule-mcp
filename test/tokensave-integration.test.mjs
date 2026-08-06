@@ -9,8 +9,13 @@
 let pass = 0;
 let fail = 0;
 const check = (label, ok) => {
-  if (ok) { pass++; console.log(`  ✅ ${label}`); }
-  else { fail++; console.log(`  ❌ ${label}`); }
+  if (ok) {
+    pass++;
+    console.log(`  ✅ ${label}`);
+  } else {
+    fail++;
+    console.log(`  ❌ ${label}`);
+  }
 };
 
 console.log("=== Tokensave Integration Tests ===\n");
@@ -45,7 +50,10 @@ check("T1.2 detectProject exposes tokensave flag", detectProject(withTs).tokensa
 // ── T2: suppression helper ──
 const heavy = Array.from({ length: 50 }, (_, index) => `line ${index}`).join("\n");
 const suppressed = suppressIfTokensave(heavy, { projectDir: withTs, label: "file tree" });
-check("T2 suppresses heavy block when active", suppressed.includes("TOKENSAVE ACTIVE") && !suppressed.includes("line 49"));
+check(
+  "T2 suppresses heavy block when active",
+  suppressed.includes("TOKENSAVE ACTIVE") && !suppressed.includes("line 49"),
+);
 const kept = suppressIfTokensave(heavy, { projectDir: withoutTs });
 check("T2.1 keeps block verbatim when inactive", kept === heavy);
 
@@ -61,7 +69,13 @@ const gw = await callTool("rule_tool_gateway", { prompt: "make a react button", 
 const gwText = gw.content.map((c) => c.text).join("\n");
 check("T4 gateway emits tokensave directive for graphed project", gwText.includes("TOKENSAVE ACTIVE"));
 const gw2 = await callTool("rule_tool_gateway", { prompt: "make a react button", path: withoutTs });
-check("T4.1 gateway omits directive for plain project", !gw2.content.map((c) => c.text).join("\n").includes("TOKENSAVE ACTIVE"));
+check(
+  "T4.1 gateway omits directive for plain project",
+  !gw2.content
+    .map((c) => c.text)
+    .join("\n")
+    .includes("TOKENSAVE ACTIVE"),
+);
 
 console.log(`\nResults: ${pass} passed, ${fail} failed`);
 setTimeout(() => process.exit(fail > 0 ? 1 : 0), 100);

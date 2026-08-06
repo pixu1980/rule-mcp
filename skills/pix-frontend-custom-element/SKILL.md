@@ -36,14 +36,14 @@ Use this skill when a task asks to:
 
 ## Hard constraints
 
-| Rule | Reason |
-| ---- | ------ |
-| No Shadow DOM | Light DOM keeps styles, slots, ARIA, and form participation natural |
-| No `<template>` elements | Render via `innerHTML` or `insertAdjacentHTML`; never shadow roots |
-| CSS via `adoptedStyleSheets` | One shared `CSSStyleSheet` per component class, never re-injected per instance |
-| `static {}` block as the only registration site | CSS adoption + element define + mixins run once at module load, safe for HMR |
-| Metadata-driven lifecycle | `static attributes`, `static events`, `static styles = styles` declare intent; `componentDecorator(this)` wires CSS adoption and lifecycle plumbing |
-| `@rule-mcp/rule-core` is canonical | Keep `decorator/`, `events/`, and the tagged `template-engine/` in one shared workspace package |
+| Rule                                            | Reason                                                                                                                                              |
+| ----------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
+| No Shadow DOM                                   | Light DOM keeps styles, slots, ARIA, and form participation natural                                                                                 |
+| No `<template>` elements                        | Render via `innerHTML` or `insertAdjacentHTML`; never shadow roots                                                                                  |
+| CSS via `adoptedStyleSheets`                    | One shared `CSSStyleSheet` per component class, never re-injected per instance                                                                      |
+| `static {}` block as the only registration site | CSS adoption + element define + mixins run once at module load, safe for HMR                                                                        |
+| Metadata-driven lifecycle                       | `static attributes`, `static events`, `static styles = styles` declare intent; `componentDecorator(this)` wires CSS adoption and lifecycle plumbing |
+| `@rule-mcp/rule-core` is canonical             | Keep `decorator/`, `events/`, and the tagged `template-engine/` in one shared workspace package                                                     |
 
 Never inject `<style>` tags inside `render`/`onRender`/`connectedCallback`. CSS belongs to `adoptedStyleSheets` only.
 
@@ -82,19 +82,19 @@ The script:
 
 Flags:
 
-| Flag | Default | Notes |
-| ---- | ------- | ----- |
-| `--name` | (required) | PascalCase class name; must yield a hyphenated tag |
-| `--tag` | derived | Override the kebab-case tag |
-| `--target` | `cwd` | Project root |
-| `--components-dir` | `src/components` | Where to put the component folder |
-| `--shared-dir` | `packages/rule-core` | Where to install `decorator/`, `events/`, and the browser-safe tagged `template-engine/` if missing |
-| `--extends` | (none) | Built-in tag for customized built-ins (e.g. `details`) |
-| `--attributes` | (empty) | Comma list — becomes `static attributes` keys |
-| `--events` | (empty) | Comma list — becomes `static events` keys |
-| `--install-shared` | `false` | Copy `decorator/`, `events/`, and the browser-safe tagged `template-engine/` if missing |
-| `--force` | `false` | Allow overwriting existing files |
-| `--dry-run` | `false` | Report what would be written without writing |
+| Flag               | Default             | Notes                                                                                               |
+| ------------------ | ------------------- | --------------------------------------------------------------------------------------------------- |
+| `--name`           | (required)          | PascalCase class name; must yield a hyphenated tag                                                  |
+| `--tag`            | derived             | Override the kebab-case tag                                                                         |
+| `--target`         | `cwd`               | Project root                                                                                        |
+| `--components-dir` | `src/components`    | Where to put the component folder                                                                   |
+| `--shared-dir`     | `packages/rule-core` | Where to install `decorator/`, `events/`, and the browser-safe tagged `template-engine/` if missing |
+| `--extends`        | (none)              | Built-in tag for customized built-ins (e.g. `details`)                                              |
+| `--attributes`     | (empty)             | Comma list — becomes `static attributes` keys                                                       |
+| `--events`         | (empty)             | Comma list — becomes `static events` keys                                                           |
+| `--install-shared` | `false`             | Copy `decorator/`, `events/`, and the browser-safe tagged `template-engine/` if missing             |
+| `--force`          | `false`             | Allow overwriting existing files                                                                    |
+| `--dry-run`        | `false`             | Report what would be written without writing                                                        |
 
 Run the test suite when modifying the script:
 
@@ -117,11 +117,11 @@ find . -path "*/packages/rule-core/decorator/index.js" -not -path "*/node_module
 
 ### Step 2 — install once when missing
 
-| Project shape | Recommended path |
-| ------------- | ---------------- |
-| Single app or package target | `src/shared/` |
-| rule-mcp monorepo component package | `packages/rule-core/` |
-| Existing workspace shared package | Reuse that path and expose it through a stable import alias/package name |
+| Project shape                         | Recommended path                                                         |
+| ------------------------------------- | ------------------------------------------------------------------------ |
+| Single app or package target          | `src/shared/`                                                            |
+| rule-mcp monorepo component package | `packages/rule-core/`                                                     |
+| Existing workspace shared package     | Reuse that path and expose it through a stable import alias/package name |
 
 ### Step 3 — scaffold the component
 
@@ -151,16 +151,16 @@ packages/
 
 Every rule component **must** split its source into focused modules:
 
-| File | What goes in it |
-| ---- | --------------- |
-| `ComponentName.js` | Class body, `static` block, lifecycle hooks only. No imports of TemplateEngine or SVG icons. |
-| `ComponentName.template.js` | `TemplateEngine` instance + all `engine.html` compiled render functions. Imports SVG icons via `bundle-text:`. |
-| `ComponentName.consts.js` | Named `export const` values: string keys, enum-like arrays, lookup maps. No functions, no DOM. |
-| `ComponentName.utils.js` | Pure `export const` functions: validators, mappers, DOM-free utilities. May import from `consts.js`. |
-| `ComponentName.attributes.js` | `export default {}` map of attribute change handlers. Always present, even when empty. |
-| `ComponentName.events.js` | `export default {}` map of DOM event handlers. Always present. |
-| `ComponentName.css` | Component stylesheet, imported as raw text via `bundle-text:`. |
-| `icons/*.svg` | One SVG file per icon, imported as raw text via `bundle-text:./icons/<name>.svg`. No inline SVG strings in JS files. |
+| File                          | What goes in it                                                                                                      |
+| ----------------------------- | -------------------------------------------------------------------------------------------------------------------- |
+| `ComponentName.js`            | Class body, `static` block, lifecycle hooks only. No imports of TemplateEngine or SVG icons.                         |
+| `ComponentName.template.js`   | `TemplateEngine` instance + all `engine.html` compiled render functions. Imports SVG icons via `bundle-text:`.       |
+| `ComponentName.consts.js`     | Named `export const` values: string keys, enum-like arrays, lookup maps. No functions, no DOM.                       |
+| `ComponentName.utils.js`      | Pure `export const` functions: validators, mappers, DOM-free utilities. May import from `consts.js`.                 |
+| `ComponentName.attributes.js` | `export default {}` map of attribute change handlers. Always present, even when empty.                               |
+| `ComponentName.events.js`     | `export default {}` map of DOM event handlers. Always present.                                                       |
+| `ComponentName.css`           | Component stylesheet, imported as raw text via `bundle-text:`.                                                       |
+| `icons/*.svg`                 | One SVG file per icon, imported as raw text via `bundle-text:./icons/<name>.svg`. No inline SVG strings in JS files. |
 
 Anti-patterns:
 
@@ -172,17 +172,17 @@ Anti-patterns:
 ## Class skeleton
 
 ```js
-import styles from 'bundle-text:./PixDetails.css'; // Parcel
+import styles from "bundle-text:./PixDetails.css"; // Parcel
 // import styles from './PixDetails.css?raw';      // Vite
 
-import { componentDecorator } from '@rule-mcp/rule-core/decorator/index.js';
-import { OPEN_STATES } from './PixDetails.consts.js';
-import { resolveState } from './PixDetails.utils.js';
-import attributes from './PixDetails.attributes.js';
-import events from './PixDetails.events.js';
+import { componentDecorator } from "@rule-mcp/rule-core/decorator/index.js";
+import { OPEN_STATES } from "./PixDetails.consts.js";
+import { resolveState } from "./PixDetails.utils.js";
+import attributes from "./PixDetails.attributes.js";
+import events from "./PixDetails.events.js";
 
 export class PixDetails extends HTMLDetailsElement {
-  static extendsElement = 'details'; // omit for autonomous elements
+  static extendsElement = "details"; // omit for autonomous elements
   static attributes = attributes;
   static events = events;
   static styles = styles;
@@ -226,13 +226,13 @@ Generated lifecycle behaviour:
 
 ```js
 // PixDetails.attributes.js
-import { events } from '@rule-mcp/rule-core/events/index.js';
+import { events } from "@rule-mcp/rule-core/events/index.js";
 
 export default {
   open(_oldValue, newValue) {
-    const state = newValue === null ? 'closed' : 'open';
-    this.setAttribute('aria-expanded', String(state === 'open'));
-    events.dispatchComponentEvent.call(this, 'toggle', { state });
+    const state = newValue === null ? "closed" : "open";
+    this.setAttribute("aria-expanded", String(state === "open"));
+    events.dispatchComponentEvent.call(this, "toggle", { state });
   },
 };
 ```
@@ -243,7 +243,7 @@ export default {
 
 ```js
 // PixDetails.events.js
-import { events } from '@rule-mcp/rule-core/events/index.js';
+import { events } from "@rule-mcp/rule-core/events/index.js";
 
 export default {
   click(e) {
@@ -259,12 +259,12 @@ Each key is a DOM event type. `this` is the element. The decorator attaches and 
 
 ## Bundler support — bundle-text vs ?raw
 
-| Bundler | Import form | Notes |
-| ------- | ----------- | ----- |
-| Parcel | `import s from 'bundle-text:./x.css'` | Treats the file as a UTF-8 text asset |
-| Vite / Rollup w/ vite-plugin | `import s from './x.css?raw'` | `?raw` query suffix |
-| esbuild | `import s from './x.css'` | Configure `loader: { '.css': 'text' }` |
-| webpack 5+ | `import s from './x.css?raw'` or asset/source | `webpack.config.js` rule with `type: 'asset/source'` |
+| Bundler                      | Import form                                   | Notes                                                |
+| ---------------------------- | --------------------------------------------- | ---------------------------------------------------- |
+| Parcel                       | `import s from 'bundle-text:./x.css'`         | Treats the file as a UTF-8 text asset                |
+| Vite / Rollup w/ vite-plugin | `import s from './x.css?raw'`                 | `?raw` query suffix                                  |
+| esbuild                      | `import s from './x.css'`                     | Configure `loader: { '.css': 'text' }`               |
+| webpack 5+                   | `import s from './x.css?raw'` or asset/source | `webpack.config.js` rule with `type: 'asset/source'` |
 
 The decorator's `registerStylesheet` accepts either a CSS **string** or a pre-built **`CSSStyleSheet`** (or an array of either) — so any of those import strategies work without code changes.
 
@@ -308,7 +308,7 @@ Component CSS lives in a sub-layer per component under the rule layers (`reset, 
     --rule-details--border-radius: var(--card-border-radius, var(--radius-control));
   }
 
-  [is='rule-details'] {
+  [is="rule-details"] {
     padding: var(--rule-details--padding);
     border: 0.1rem solid var(--rule-details--border-color);
     border-radius: var(--rule-details--border-radius);
@@ -327,18 +327,18 @@ Declare component-scoped tokens (`--rule-details--*`) at the top of the `@layer`
 
 ## Common mistakes
 
-| Symptom | Fix |
-| ------- | --- |
-| `decorator/` or `events/` copied inside a component folder | Move them to a project-shared path; update imports in every component |
-| Two `decorator/` installations in different folders | Pick one as canonical, delete the others, update imports |
-| Importing helpers from a sibling component (`../OtherComp/...`) | Always import from the central library path |
-| Styles applied twice after HMR | Use `componentDecorator` / `registerStylesheet` — never adopt sheets manually in render |
-| Listener not removed on detach | Don't store `bound` references; rely on `addEventListener(type, this)` + `handleEvent` (the decorator does this for you) |
-| `customElements.define` throws on second import | Decorator skips when `customElements.get(tag)` already returns; never call `define` directly |
-| CSS file imported but `styles` is `undefined` | Bundler is treating the file as a CSS module/side-effect import — switch to `bundle-text:` (Parcel) or `?raw` (Vite/webpack) |
-| Inline SVG strings in `ComponentName.js` | Move each SVG to `icons/<name>.svg` and import with `bundle-text:./icons/<name>.svg` |
-| Constants or helper functions defined in `ComponentName.js` | Move constants to `ComponentName.consts.js`, pure helpers to `ComponentName.utils.js` |
-| Customized built-in not upgrading on Safari | Ship the `@ungap/custom-elements` polyfill at app entry |
+| Symptom                                                         | Fix                                                                                                                          |
+| --------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| `decorator/` or `events/` copied inside a component folder      | Move them to a project-shared path; update imports in every component                                                        |
+| Two `decorator/` installations in different folders             | Pick one as canonical, delete the others, update imports                                                                     |
+| Importing helpers from a sibling component (`../OtherComp/...`) | Always import from the central library path                                                                                  |
+| Styles applied twice after HMR                                  | Use `componentDecorator` / `registerStylesheet` — never adopt sheets manually in render                                      |
+| Listener not removed on detach                                  | Don't store `bound` references; rely on `addEventListener(type, this)` + `handleEvent` (the decorator does this for you)     |
+| `customElements.define` throws on second import                 | Decorator skips when `customElements.get(tag)` already returns; never call `define` directly                                 |
+| CSS file imported but `styles` is `undefined`                   | Bundler is treating the file as a CSS module/side-effect import — switch to `bundle-text:` (Parcel) or `?raw` (Vite/webpack) |
+| Inline SVG strings in `ComponentName.js`                        | Move each SVG to `icons/<name>.svg` and import with `bundle-text:./icons/<name>.svg`                                         |
+| Constants or helper functions defined in `ComponentName.js`     | Move constants to `ComponentName.consts.js`, pure helpers to `ComponentName.utils.js`                                        |
+| Customized built-in not upgrading on Safari                     | Ship the `@ungap/custom-elements` polyfill at app entry                                                                      |
 
 ## See also
 

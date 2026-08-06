@@ -26,7 +26,12 @@ import {
   resolveCommandTargets,
   suppressesMcpPrompts,
 } from "../src/core/agent-command-targets.js";
-import { FORMAT_EXT, renderAgentCommand, renderAgentCommandFiles, listAgentCommands } from "../src/core/agent-commands.js";
+import {
+  FORMAT_EXT,
+  renderAgentCommand,
+  renderAgentCommandFiles,
+  listAgentCommands,
+} from "../src/core/agent-commands.js";
 import { getAllAgents } from "../src/cli/install.js";
 
 console.log("agent command targets test");
@@ -45,7 +50,9 @@ test("coverage: every supported agent is either covered or explicitly excluded",
   const covered = new Set(agentsWithCleanCommands());
   const uncovered = [];
   for (const agent of getAllAgents()) {
-    if (covered.has(agent)) {continue;}
+    if (covered.has(agent)) {
+      continue;
+    }
     const reason = AGENTS_WITHOUT_COMMAND_SURFACE[agent];
     if (!reason || reason.trim().length === 0) {
       uncovered.push(agent);
@@ -110,7 +117,10 @@ test("VS Code: the committed .github/prompts dir is never written to automatical
   // team-shared and committed, so an install must not drop 24 files in git status.
   for (const context of [ctx(), ctx({ present: [join("/repo", ".github")] })]) {
     const dirs = resolveCommandTargets({ agent: "vscode", ...context }).map((t) => t.dir);
-    assert.ok(dirs.every((dir) => !dir.includes(".github")), "no automatic writes into .github");
+    assert.ok(
+      dirs.every((dir) => !dir.includes(".github")),
+      "no automatic writes into .github",
+    );
   }
 });
 
@@ -136,11 +146,7 @@ test("detectedOnly resolves nothing for agents that are not installed", () => {
     detectedOnly: true,
     ...ctx({ present: [join("/home/u", ".claude")] }),
   });
-  assert.deepEqual(
-    [...new Set(claudeOnly.map((t) => t.agent))],
-    ["claude"],
-    "only the detected agent is targeted",
-  );
+  assert.deepEqual([...new Set(claudeOnly.map((t) => t.agent))], ["claude"], "only the detected agent is targeted");
 });
 
 test("hosts that namespace MCP prompts have them suppressed", () => {

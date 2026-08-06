@@ -16,7 +16,7 @@ export const strings = {
       .split(/[-_\s]+/)
       .filter(Boolean)
       .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
-      .join('');
+      .join("");
   },
 
   /**
@@ -28,8 +28,8 @@ export const strings = {
    */
   toKebabCase(str) {
     return str
-      .replace(/([a-z0-9])([A-Z])/g, '$1-$2')
-      .replace(/([A-Z])([A-Z][a-z])/g, '$1-$2')
+      .replace(/([a-z0-9])([A-Z])/g, "$1-$2")
+      .replace(/([A-Z])([A-Z][a-z])/g, "$1-$2")
       .toLowerCase();
   },
 
@@ -40,9 +40,7 @@ export const strings = {
    */
   guid() {
     return `rule-${
-      globalThis.crypto?.randomUUID
-        ? globalThis.crypto.randomUUID()
-        : Math.random().toString(36).slice(2, 10)
+      globalThis.crypto?.randomUUID ? globalThis.crypto.randomUUID() : Math.random().toString(36).slice(2, 10)
     }`;
   },
 };

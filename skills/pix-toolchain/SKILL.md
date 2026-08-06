@@ -21,34 +21,34 @@ frameworks: [all]
 
 ## Build Tools
 
-| Skill | Tool | Best For |
-|-------|------|----------|
-| [rule-toolchain-vite](../rule-toolchain-vite/SKILL.md) | Vite | Modern frontend (default choice, Vite 8 + Rolldown) |
-| [rule-toolchain-rspack](../rule-toolchain-rspack/SKILL.md) | Rspack | Rust-based webpack-compatible bundler, fast HMR |
-| [rule-toolchain-parcel](../rule-toolchain-parcel/SKILL.md) | Parcel | Zero-config bundler, rapid prototyping |
+| Skill                                                    | Tool   | Best For                                            |
+| -------------------------------------------------------- | ------ | --------------------------------------------------- |
+| [rule-toolchain-vite](../rule-toolchain-vite/SKILL.md)     | Vite   | Modern frontend (default choice, Vite 8 + Rolldown) |
+| [rule-toolchain-rspack](../rule-toolchain-rspack/SKILL.md) | Rspack | Rust-based webpack-compatible bundler, fast HMR     |
+| [rule-toolchain-parcel](../rule-toolchain-parcel/SKILL.md) | Parcel | Zero-config bundler, rapid prototyping              |
 
 ## Linting & Formatting
 
-| Skill | Tool | Best For |
-|-------|------|----------|
-| [rule-toolchain-biome](../rule-toolchain-biome/SKILL.md) | Biome | Fast, unified linter+formatter (Rust, recommended) |
+| Skill                                                    | Tool   | Best For                                                         |
+| -------------------------------------------------------- | ------ | ---------------------------------------------------------------- |
+| [rule-toolchain-biome](../rule-toolchain-biome/SKILL.md)   | Biome  | Fast, unified linter+formatter (Rust, recommended)               |
 | [rule-toolchain-eslint](../rule-toolchain-eslint/SKILL.md) | ESLint | ESLint 10 flat config, eslint-plugin-unicorn, type-aware linting |
 
 ## Package Management & Monorepo
 
-| Skill | Tool | Best For |
-|-------|------|----------|
-| [rule-toolchain-pnpm](../rule-toolchain-pnpm/SKILL.md) | pnpm | Package management, workspace, monorepo |
+| Skill                                                          | Tool      | Best For                                         |
+| -------------------------------------------------------------- | --------- | ------------------------------------------------ |
+| [rule-toolchain-pnpm](../rule-toolchain-pnpm/SKILL.md)           | pnpm      | Package management, workspace, monorepo          |
 | [rule-toolchain-turborepo](../rule-toolchain-turborepo/SKILL.md) | Turborepo | Monorepo orchestration, parallel builds, caching |
 
 ## Configuration & Hooks
 
-| Skill | Tool | Best For |
-|-------|------|----------|
-| [rule-toolchain-typescript](../rule-toolchain-typescript/SKILL.md) | TypeScript | tsconfig, strict mode, path aliases |
-| [rule-toolchain-project](../rule-toolchain-project/SKILL.md) | Project Config | .gitignore, .editorconfig, .nvmrc, .env |
-| [rule-toolchain-husky](../rule-toolchain-husky/SKILL.md) | Husky | Git hooks, lint-staged, commitlint |
-| [rule-toolchain-commits](../rule-toolchain-commits/SKILL.md) | Commit Discipline | Atomic Conventional Commits with mandatory scope, commit-msg/pre-push hooks |
+| Skill                                                            | Tool              | Best For                                                                    |
+| ---------------------------------------------------------------- | ----------------- | --------------------------------------------------------------------------- |
+| [rule-toolchain-typescript](../rule-toolchain-typescript/SKILL.md) | TypeScript        | tsconfig, strict mode, path aliases                                         |
+| [rule-toolchain-project](../rule-toolchain-project/SKILL.md)       | Project Config    | .gitignore, .editorconfig, .nvmrc, .env                                     |
+| [rule-toolchain-husky](../rule-toolchain-husky/SKILL.md)           | Husky             | Git hooks, lint-staged, commitlint                                          |
+| [rule-toolchain-commits](../rule-toolchain-commits/SKILL.md)       | Commit Discipline | Atomic Conventional Commits with mandatory scope, commit-msg/pre-push hooks |
 
 ## Quick Selection Guide
 

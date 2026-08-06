@@ -20,14 +20,20 @@ const ANSI = {
 
 /** Whether ANSI color should be emitted for interactive terminals. */
 export function shouldUseColor() {
-  if (process.env.NO_COLOR) {return false;}
-  if (process.env.FORCE_COLOR) {return true;}
+  if (process.env.NO_COLOR) {
+    return false;
+  }
+  if (process.env.FORCE_COLOR) {
+    return true;
+  }
   return Boolean(process.stdout.isTTY);
 }
 
 /** Colorize text only when the output stream supports it. */
 export function color(text, tone = "reset") {
-  if (!shouldUseColor()) {return String(text);}
+  if (!shouldUseColor()) {
+    return String(text);
+  }
   return `${ANSI[tone] || ""}${text}${ANSI.reset}`;
 }
 
@@ -38,7 +44,9 @@ function visibleLength(value) {
 
 /** Truncate text to a terminal-friendly width. */
 export function truncate(value, max = 80) {
-  const text = String(value ?? "").replaceAll(/\s+/g, " ").trim();
+  const text = String(value ?? "")
+    .replaceAll(/\s+/g, " ")
+    .trim();
   return text.length > max ? `${text.slice(0, Math.max(0, max - 1))}…` : text;
 }
 
@@ -53,7 +61,9 @@ export function banner(title, subtitle = "") {
     return `║  ${raw}${" ".repeat(pad)}  ║`;
   };
   const lines = [top, line(title)];
-  if (subtitle) {lines.push(line(color(subtitle, "dim")));}
+  if (subtitle) {
+    lines.push(line(color(subtitle, "dim")));
+  }
   lines.push(bottom);
   return color(lines.join("\n"), "cyan");
 }
@@ -74,15 +84,16 @@ export function kv(rows) {
 
 /** Render a compact table. */
 export function table(headers, rows, { maxWidth = 54 } = {}) {
-  const normalized = rows.map(row => row.map((cell, index) => index === row.length - 1 ? truncate(cell, maxWidth) : String(cell ?? "")));
-  const widths = headers.map((header, index) => Math.min(maxWidth, Math.max(
-    visibleLength(header),
-    ...normalized.map(row => visibleLength(row[index] ?? "")),
-  )));
+  const normalized = rows.map((row) =>
+    row.map((cell, index) => (index === row.length - 1 ? truncate(cell, maxWidth) : String(cell ?? ""))),
+  );
+  const widths = headers.map((header, index) =>
+    Math.min(maxWidth, Math.max(visibleLength(header), ...normalized.map((row) => visibleLength(row[index] ?? "")))),
+  );
   const renderRow = (row) => row.map((cell, index) => String(cell ?? "").padEnd(widths[index])).join("  ");
   return [
     color(renderRow(headers), "bold"),
-    color(widths.map(w => "─".repeat(w)).join("  "), "dim"),
+    color(widths.map((w) => "─".repeat(w)).join("  "), "dim"),
     ...normalized.map(renderRow),
   ].join("\n");
 }
@@ -91,11 +102,7 @@ export function table(headers, rows, { maxWidth = 54 } = {}) {
 export function formatInstallResult(result) {
   const installed = result.installed || {};
   const agents = Object.keys(installed);
-  const rows = agents.map(agent => [
-    "✅",
-    agent,
-    (installed[agent] || []).join(", "),
-  ]);
+  const rows = agents.map((agent) => ["✅", agent, (installed[agent] || []).join(", ")]);
   const lines = [
     banner("rule-mcp install", result.dryRun ? "dry run" : "agent integration"),
     "",
@@ -117,7 +124,11 @@ export function formatInstallResult(result) {
 
 /** Format uninstall command result for humans. */
 export function formatUninstallResult(result) {
-  const rows = Object.entries(result.uninstalled || {}).map(([agent, files]) => ["🧹", agent, (files || []).join(", ")]);
+  const rows = Object.entries(result.uninstalled || {}).map(([agent, files]) => [
+    "🧹",
+    agent,
+    (files || []).join(", "),
+  ]);
   const lines = [
     banner("rule-mcp uninstall", result.dryRun ? "dry run" : "agent cleanup"),
     "",
@@ -129,13 +140,15 @@ export function formatUninstallResult(result) {
       ["Note", result.note || "—"],
     ]),
   ];
-  if (rows.length > 0) {lines.push("", section("Updated configs", "📁"), table(["", "Agent", "Files"], rows));}
+  if (rows.length > 0) {
+    lines.push("", section("Updated configs", "📁"), table(["", "Agent", "Files"], rows));
+  }
   return `${lines.join("\n")}\n`;
 }
 
 /** Format registered MCP tools for humans. */
 export function formatToolsList(tools) {
-  const rows = tools.map(tool => ["🔧", tool.name, tool.description || ""]);
+  const rows = tools.map((tool) => ["🔧", tool.name, tool.description || ""]);
   return `${[
     banner("rule-mcp tools", `${tools.length} registered tools`),
     "",
@@ -148,7 +161,7 @@ export function formatToolsList(tools) {
 
 /** Format installed/available skills for humans. */
 export function formatSkillsList(skills) {
-  const rows = skills.map(skill => [
+  const rows = skills.map((skill) => [
     skill.installed ? "✅" : "○",
     skill.name,
     skill.installed ? "installed" : "available",

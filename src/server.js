@@ -163,7 +163,7 @@ export async function startServer() {
  */
 export async function stopServer() {
   if (!serverInstance) {
-  	return;
+    return;
   }
 
   try {

@@ -19,11 +19,11 @@ metadata:
 
 ## Core dependency
 
-| Field | Value |
-|---|---|
-| **Package** | `@rule/rule-mcp-core` |
-| **Repository** | `https://github.com/rule/rule-mcp-core` |
-| **Install** | `pnpm add @rule/rule-mcp-core` (or `pnpm add @rule/rule-mcp-core`) |
+| Field          | Value                                                                |
+| -------------- | -------------------------------------------------------------------- |
+| **Package**    | `@rule/rule-mcp-core`                                               |
+| **Repository** | `https://github.com/rule/rule-mcp-core`                             |
+| **Install**    | `pnpm add @rule/rule-mcp-core` (or `pnpm add @rule/rule-mcp-core`) |
 
 This must be the primary dependency for all AI Agents app repositories.
 
@@ -76,12 +76,12 @@ LOG_LEVEL=info
 Create `src/config/env.ts` to validate at startup using zod. Fail fast on missing or invalid values:
 
 ```ts
-import { z } from 'zod';
+import { z } from "zod";
 
 const envSchema = z.object({
   PORT: z.coerce.number().int().positive().default(3001),
-  NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
-  LOG_LEVEL: z.enum(['fatal', 'error', 'warn', 'info', 'debug', 'trace']).default('info'),
+  NODE_ENV: z.enum(["development", "production", "test"]).default("development"),
+  LOG_LEVEL: z.enum(["fatal", "error", "warn", "info", "debug", "trace"]).default("info"),
   AI_MODEL: z.string().min(1),
   AI_MAX_TOKENS: z.coerce.number().int().positive().default(4096),
   AI_TEMPERATURE: z.coerce.number().min(0).max(2).default(0.7),
@@ -97,9 +97,9 @@ export type Env = z.infer<typeof envSchema>;
 Create `src/server/src/providers/<name>.ts`. Each provider wraps `@rule/rule-mcp-core` and implements the `LLMProvider` interface defined in `src/server/src/types.ts`:
 
 ```ts
-import { createAgent } from '@rule/rule-mcp-core';
-import type { LLMProvider, Message, LLMResponse } from '../types.js';
-import { env } from '../config/env.js';
+import { createAgent } from "@rule/rule-mcp-core";
+import type { LLMProvider, Message, LLMResponse } from "../types.js";
+import { env } from "../config/env.js";
 
 export const pixProvider: LLMProvider = {
   async chat(messages, tools) {
@@ -120,16 +120,16 @@ export const pixProvider: LLMProvider = {
 Create `src/server/src/tools/<name>.tool.ts`. Each tool self-registers at module level using `toolRegistry`:
 
 ```ts
-import { z } from 'zod';
-import { toolRegistry } from '../registries/index.js';
-import type { Tool } from '../types.js';
+import { z } from "zod";
+import { toolRegistry } from "../registries/index.js";
+import type { Tool } from "../types.js";
 
 const searchTool: Tool = {
-  name: 'search',
-  description: 'Search the knowledge base for relevant information',
+  name: "search",
+  description: "Search the knowledge base for relevant information",
   parameters: z.object({
-    query: z.string().describe('The search query'),
-    limit: z.number().int().positive().default(10).describe('Max results'),
+    query: z.string().describe("The search query"),
+    limit: z.number().int().positive().default(10).describe("Max results"),
   }),
   execute: async ({ query, limit }) => {
     return { results: [] };
@@ -144,13 +144,13 @@ toolRegistry.register(searchTool);
 Create `src/server/src/index.ts`. It imports all registries (triggering self-registration) and starts the AgentRunner:
 
 ```ts
-import './agents/index.js';
-import './tools/index.js';
-import './providers/index.js';
-import { AgentRunner } from '@rule/rule-mcp-core';
-import { agentRegistry } from './registries/index.js';
-import { env } from './config/env.js';
-import pino from 'pino';
+import "./agents/index.js";
+import "./tools/index.js";
+import "./providers/index.js";
+import { AgentRunner } from "@rule/rule-mcp-core";
+import { agentRegistry } from "./registries/index.js";
+import { env } from "./config/env.js";
+import pino from "pino";
 
 const logger = pino({ level: env.LOG_LEVEL });
 const runner = new AgentRunner({ agentRegistry, logger });
@@ -183,20 +183,20 @@ Create `seed/run-seed.ts` following the seed policy in `rules/common.md`. The se
 Mock `@rule/rule-mcp-core` to isolate provider and tool logic:
 
 ```ts
-import { describe, expect, it, vi } from 'vitest';
+import { describe, expect, it, vi } from "vitest";
 
-vi.mock('@rule/rule-mcp-core', () => ({
+vi.mock("@rule/rule-mcp-core", () => ({
   createAgent: vi.fn(() => ({
-    chat: vi.fn().mockResolvedValue({ content: 'mocked response' }),
+    chat: vi.fn().mockResolvedValue({ content: "mocked response" }),
   })),
   AgentRunner: vi.fn(() => ({ start: vi.fn() })),
 }));
 
-import { pixProvider } from '../../src/server/src/providers/rule.js';
+import { pixProvider } from "../../src/server/src/providers/rule.js";
 
-describe('pixProvider', () => {
-  it('returns a chat response', async () => {
-    const result = await pixProvider.chat([{ role: 'user', content: 'hello' }]);
+describe("pixProvider", () => {
+  it("returns a chat response", async () => {
+    const result = await pixProvider.chat([{ role: "user", content: "hello" }]);
     expect(result).toBeDefined();
   });
 });
@@ -207,13 +207,13 @@ describe('pixProvider', () => {
 Test each tool's `execute` function directly, without involving the registry:
 
 ```ts
-import { describe, expect, it } from 'vitest';
-import { searchTool } from '../../src/server/src/tools/search.tool.js';
+import { describe, expect, it } from "vitest";
+import { searchTool } from "../../src/server/src/tools/search.tool.js";
 
-describe('searchTool', () => {
-  it('returns results array', async () => {
-    const result = await searchTool.execute({ query: 'test', limit: 5 });
-    expect(result).toHaveProperty('results');
+describe("searchTool", () => {
+  it("returns results array", async () => {
+    const result = await searchTool.execute({ query: "test", limit: 5 });
+    expect(result).toHaveProperty("results");
   });
 });
 ```
@@ -230,11 +230,11 @@ The monorepo has two Dockerfiles. Use templates from [skills/docker/SKILL.md](..
 - **`src/dashboard/Dockerfile`** — Frontend template with nginx
 - **Root `docker-compose.yml`** — runs both `server` and `dashboard` services
 
-| Setting | Server | Dashboard |
-|---|---|---|
-| **Port** | `3001` | `8080` |
-| **Entry** | `dist/index.js` | nginx |
-| **Healthcheck** | Omit if no HTTP interface | `GET /` |
+| Setting         | Server                    | Dashboard |
+| --------------- | ------------------------- | --------- |
+| **Port**        | `3001`                    | `8080`    |
+| **Entry**       | `dist/index.js`           | nginx     |
+| **Healthcheck** | Omit if no HTTP interface | `GET /`   |
 
 ## Edge cases
 

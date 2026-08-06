@@ -1,6 +1,6 @@
 // @ts-check
 
-import { strings } from './_utils.js';
+import { strings } from "./_utils.js";
 
 /**
  * @typedef {EventTarget & {
@@ -48,7 +48,7 @@ export function buildLifecycleMethods(component) {
     handleEvent(e) {
       const handler = this[`handle${strings.toPascalCase(e.type)}Event`];
 
-      if (typeof handler === 'function') {
+      if (typeof handler === "function") {
         handler.call(this, e);
       }
     },
@@ -62,7 +62,7 @@ export function buildLifecycleMethods(component) {
     attributeChangedCallback(name, oldValue, newValue) {
       const handler = this[`handle${strings.toPascalCase(name)}AttributeChanged`];
 
-      if (typeof handler === 'function') {
+      if (typeof handler === "function") {
         handler.call(this, oldValue, newValue);
       }
 

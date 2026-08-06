@@ -124,15 +124,15 @@ document.querySelectorAll("[data-part='delete']").forEach((btn) => {
 
 ## Astro ↔ rule-frontend-vanilla-reactive Mapping
 
-| rule-frontend-vanilla-reactive | Astro Equivalent |
-|----------------------|------------------|
-| `html\`\`` tagged templates | `.astro` template (JSX-like) |
-| `{{ expr }}` | `{expression}` |
-| `@click=${fn}` | Client island JS or framework island |
-| `adoptedStyleSheets` | `<style>` in `.astro` (scoped by default) or external CSS import |
-| `data-part="..."` | `data-part="..."` (same) |
-| Component folder | `components/PascalCase/` |
-| Barrel | `index.js` in component folder |
+| rule-frontend-vanilla-reactive | Astro Equivalent                                                 |
+| ----------------------------- | ---------------------------------------------------------------- |
+| `html\`\`` tagged templates   | `.astro` template (JSX-like)                                     |
+| `{{ expr }}`                  | `{expression}`                                                   |
+| `@click=${fn}`                | Client island JS or framework island                             |
+| `adoptedStyleSheets`          | `<style>` in `.astro` (scoped by default) or external CSS import |
+| `data-part="..."`             | `data-part="..."` (same)                                         |
+| Component folder              | `components/PascalCase/`                                         |
+| Barrel                        | `index.js` in component folder                                   |
 
 ## CSS in Astro
 
@@ -223,13 +223,13 @@ This section extends rule-frontend-astro with a structured performance review me
 
 #### 1. Choose the least aggressive client directive
 
-| Directive | When | Cost |
-|---|---|---|
-| `client:load` | Immediately needed on page load | Highest — loads eagerly |
-| `client:idle` | Not urgent, load when browser is idle | Medium |
-| `client:visible` | Below the fold, load when scrolled into view | Low |
-| `client:media` | Responsive component only on certain screen sizes | Low |
-| `client:only` | Framework component that can't be server-rendered | Varies |
+| Directive        | When                                              | Cost                    |
+| ---------------- | ------------------------------------------------- | ----------------------- |
+| `client:load`    | Immediately needed on page load                   | Highest — loads eagerly |
+| `client:idle`    | Not urgent, load when browser is idle             | Medium                  |
+| `client:visible` | Below the fold, load when scrolled into view      | Low                     |
+| `client:media`   | Responsive component only on certain screen sizes | Low                     |
+| `client:only`    | Framework component that can't be server-rendered | Varies                  |
 
 ```astro
 ---
@@ -240,7 +240,7 @@ import HeavyChart from "./HeavyChart.jsx";
 <HeavyChart client:visible />
 ```
 
-Rule: *Start with the least aggressive directive. Upgrade only when needed.*
+Rule: _Start with the least aggressive directive. Upgrade only when needed._
 
 #### 2. Islands should be small and focused
 
@@ -258,7 +258,7 @@ An island is the unit of client JS. Make islands small — extract only the inte
 <main>Static content...</main>
 ```
 
-Rule: *Islands should be the smallest possible interactive elements, not entire pages.*
+Rule: _Islands should be the smallest possible interactive elements, not entire pages._
 
 #### 3. Use Content Collections for type-safe, performant content
 
@@ -276,7 +276,7 @@ const publishedPosts = posts.filter(p => !p.data.draft);
 ---
 ```
 
-Rule: *Content Collections for structured content. Avoid manual glob imports for content.*
+Rule: _Content Collections for structured content. Avoid manual glob imports for content._
 
 #### 4. Use View Transitions for smooth, SPA-like navigation
 
@@ -303,7 +303,7 @@ Add `data-astro-prefetch` to links for instant navigation:
 <a href="/blog" data-astro-prefetch>Blog</a>
 ```
 
-Rule: *Always enable ViewTransitions for multi-page sites. Always add prefetch to navigation links.*
+Rule: _Always enable ViewTransitions for multi-page sites. Always add prefetch to navigation links._
 
 #### 5. Optimize images with Astro's built-in components
 
@@ -325,7 +325,7 @@ import heroImage from "../images/hero.png";
 />
 ```
 
-Rule: *Use `<Image />` for local images, `loading="lazy"` for below-the-fold images.*
+Rule: _Use `<Image />` for local images, `loading="lazy"` for below-the-fold images._
 
 #### 6. Prefer SSG over SSR when possible
 
@@ -344,7 +344,7 @@ export async function getStaticPaths() {
 export const prerender = false;
 ```
 
-Rule: *SSG by default. SSR only when you need per-request dynamic data.*
+Rule: _SSG by default. SSR only when you need per-request dynamic data._
 
 #### 7. Minimize framework islands — prefer vanilla JS or web components
 
@@ -363,7 +363,7 @@ Each framework island (React, Vue, Svelte, SolidJS) loads that framework's runti
 </script>
 ```
 
-Rule: *Use vanilla JS or web components for simple interactivity. Use framework islands only when you need component state management.*
+Rule: _Use vanilla JS or web components for simple interactivity. Use framework islands only when you need component state management._
 
 #### 8. Structure layouts for maximum reuse
 
@@ -394,7 +394,7 @@ import BaseLayout from "./_BaseLayout.astro";
 </BaseLayout>
 ```
 
-Rule: *Compose layouts like components. A base layout → page type layout → page.*
+Rule: _Compose layouts like components. A base layout → page type layout → page._
 
 #### 9. Lazy-load non-critical CSS and JS
 
@@ -408,7 +408,7 @@ Use `is:inline` and dynamic imports for non-critical resources.
 
 For JS, use dynamic `import()` inside islands or `<script>` tags.
 
-Rule: *Critical CSS inline or in `<head>`. Non-critical CSS lazy-loaded. JS loaded on demand via directives.*
+Rule: _Critical CSS inline or in `<head>`. Non-critical CSS lazy-loaded. JS loaded on demand via directives._
 
 #### 10. One Astro component = one concern
 
@@ -428,38 +428,38 @@ const posts = await getLatestPosts();
 </section>
 ```
 
-Rule: *Separate data fetching, formatting, and presentation into distinct modules.*
+Rule: _Separate data fetching, formatting, and presentation into distinct modules._
 
 ### Decision matrix
 
-| Symptom | Check first | Likely pattern | Fix |
-|---|---|---|---|
-| Slow page load | Client JS size | Too many or wrong client directives | Use less aggressive directives |
-| Heavy page despite static content | Island boundaries | Whole-page framework islands | Reduce island scope |
-| Slow navigation between pages | Navigation | Missing ViewTransitions | Add `<ViewTransitions />` |
-| Large images slowing LCP | Image loading | Missing optimization | Use `<Image />` with `loading="lazy"` |
-| First load too heavy | Framework choice | Framework island for simple UI | Replace with vanilla JS |
-| Content hard to query | Content approach | Manual frontmatter reading | Use Content Collections |
-| Server costs too high | Rendering strategy | SSR for static content | Switch to SSG |
-| Layout duplicated across pages | Layout structure | Repeated HTML in each page | Use nested layouts |
-| Non-critical resources block render | Resource loading | Render-blocking CSS/JS | Defer non-critical resources |
-| Astro component too complex | Component design | Mixed data + view | Split into data module + view |
+| Symptom                             | Check first        | Likely pattern                      | Fix                                   |
+| ----------------------------------- | ------------------ | ----------------------------------- | ------------------------------------- |
+| Slow page load                      | Client JS size     | Too many or wrong client directives | Use less aggressive directives        |
+| Heavy page despite static content   | Island boundaries  | Whole-page framework islands        | Reduce island scope                   |
+| Slow navigation between pages       | Navigation         | Missing ViewTransitions             | Add `<ViewTransitions />`             |
+| Large images slowing LCP            | Image loading      | Missing optimization                | Use `<Image />` with `loading="lazy"` |
+| First load too heavy                | Framework choice   | Framework island for simple UI      | Replace with vanilla JS               |
+| Content hard to query               | Content approach   | Manual frontmatter reading          | Use Content Collections               |
+| Server costs too high               | Rendering strategy | SSR for static content              | Switch to SSG                         |
+| Layout duplicated across pages      | Layout structure   | Repeated HTML in each page          | Use nested layouts                    |
+| Non-critical resources block render | Resource loading   | Render-blocking CSS/JS              | Defer non-critical resources          |
+| Astro component too complex         | Component design   | Mixed data + view                   | Split into data module + view         |
 
 ### Supporting resources
 
-| Resource | Path |
-|---|---|
-| 10 detailed examples | `examples/performance/01-*.md` … `10-*.md` |
-| PR review checklist | `checklists/astro-performance-pr-checklist.md` |
-| Decision matrix | `checklists/decision-matrix.md` |
-| System prompt | `prompts/portable-system-prompt.md` |
-| Code review prompt | `prompts/code-review-prompt.md` |
-| Refactor prompt | `prompts/refactor-prompt.md` |
-| Teaching prompt | `prompts/teaching-prompt.md` |
-| Audit report template | `templates/audit-report-template.md` |
-| PR comment template | `templates/pr-comment-template.md` |
-| Refactor plan template | `templates/refactor-plan-template.md` |
-| Performance playbook | `knowledge/astro-performance-playbook.md` |
+| Resource               | Path                                           |
+| ---------------------- | ---------------------------------------------- |
+| 10 detailed examples   | `examples/performance/01-*.md` … `10-*.md`     |
+| PR review checklist    | `checklists/astro-performance-pr-checklist.md` |
+| Decision matrix        | `checklists/decision-matrix.md`                |
+| System prompt          | `prompts/portable-system-prompt.md`            |
+| Code review prompt     | `prompts/code-review-prompt.md`                |
+| Refactor prompt        | `prompts/refactor-prompt.md`                   |
+| Teaching prompt        | `prompts/teaching-prompt.md`                   |
+| Audit report template  | `templates/audit-report-template.md`           |
+| PR comment template    | `templates/pr-comment-template.md`             |
+| Refactor plan template | `templates/refactor-plan-template.md`          |
+| Performance playbook   | `knowledge/astro-performance-playbook.md`      |
 
 ---
 
@@ -513,6 +513,7 @@ import { actions } from "astro:actions";
 - [ ] Server actions for submission (Astro 5+)
 - [ ] Shared validation schema (zod)
 - [ ] Progressive enhancement works without JS
+
 ---
 
 ## See also

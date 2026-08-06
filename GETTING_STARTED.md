@@ -20,13 +20,14 @@
 
 ## 1. Prerequisites
 
-| Requirement | Minimum | Check |
-|---|---|---|
-| **Node.js** | ≥ 20 | `node --version` |
-| **pnpm** (recommended) | any | `pnpm --version` |
-| **npm** (alternative) | any | `npm --version` |
+| Requirement            | Minimum | Check            |
+| ---------------------- | ------- | ---------------- |
+| **Node.js**            | ≥ 20    | `node --version` |
+| **pnpm** (recommended) | any     | `pnpm --version` |
+| **npm** (alternative)  | any     | `npm --version`  |
 
 If you don't have pnpm:
+
 ```bash
 npm install -g pnpm
 ```
@@ -41,6 +42,7 @@ pnpm add -g rule-mcp
 ```
 
 Verify the installation:
+
 ```bash
 rule-mcp doctor
 ```
@@ -59,6 +61,7 @@ pnpx rule-mcp serve
 ```
 
 To integrate with an agent via `mcp.json`:
+
 ```json
 {
   "mcpServers": {
@@ -86,16 +89,19 @@ pnpm link . --global
 ```
 
 Verify:
+
 ```bash
 rule-mcp doctor
 ```
 
 Start the server in stdio mode (for agent integration):
+
 ```bash
 rule-mcp serve
 ```
 
 Start in SSE mode (for IDE integration over HTTP):
+
 ```bash
 rule-mcp serve --transport sse
 # → SSE endpoint: http://127.0.0.1:37999/sse
@@ -133,6 +139,7 @@ RULE_MCP_SSE_TOKEN="$(cat ~/.local/state/rule-mcp/sse-token)" \
 ### Docker Compose configuration
 
 The included `docker-compose.yml` exposes:
+
 - The server on port `37999` with authenticated SSE transport
 - Automatic restarts
 - Health check endpoint at `/health`
@@ -175,6 +182,7 @@ Supported agents: `claude`, `codex`, `cursor`, `copilot`, `gemini`, `pi`, `cline
 For agents that support MCP, add this to their `mcp.json`:
 
 **After global install (`rule-mcp` available in PATH):**
+
 ```json
 {
   "mcpServers": {
@@ -189,6 +197,7 @@ For agents that support MCP, add this to their `mcp.json`:
 ```
 
 **With local path (development):** use absolute paths for both Node and the entrypoint. `spawn()` does not expand `~`.
+
 ```json
 {
   "mcpServers": {
@@ -203,16 +212,20 @@ For agents that support MCP, add this to their `mcp.json`:
 ```
 
 **Pi daemon configuration:** let the CLI generate the authenticated entry rather than copying a token manually:
+
 ```bash
 rule-mcp config --mode daemon
 rule-mcp install --agent pi --mode daemon
 ```
 
 **VS Code daemon configuration:** the installer updates the user-level `servers` object (not the project workspace file):
+
 ```bash
 rule-mcp install --agent vscode --mode daemon
 ```
+
 It writes an entry equivalent to:
+
 ```json
 {
   "servers": {
@@ -228,6 +241,7 @@ It writes an entry equivalent to:
 ```
 
 **Recommended tool filter (reduces token consumption):**
+
 ```json
 {
   "mcpServers": {
@@ -235,7 +249,16 @@ It writes an entry equivalent to:
       "command": "rule-mcp",
       "args": ["serve"],
       "directTools": true,
-      "allowedTools": ["pix_gateway", "pix_apply", "rule", "pix_search", "pix_check", "pix_detect", "pix_scaffold", "pix_component"]
+      "allowedTools": [
+        "pix_gateway",
+        "pix_apply",
+        "rule",
+        "pix_search",
+        "pix_check",
+        "pix_detect",
+        "pix_scaffold",
+        "pix_component"
+      ]
     }
   }
 }
@@ -243,20 +266,20 @@ It writes an entry equivalent to:
 
 ### Agent config file paths
 
-| Agent | Configuration file |
-|---|---|
-| Claude Code | `~/.claude.json` |
-| Cursor | `~/.cursor/mcp.json` |
-| VS Code | User-level `mcp.json`: macOS `~/Library/Application Support/Code/User/mcp.json`; Linux `~/.config/Code/User/mcp.json`; Windows `%APPDATA%\\Code\\User\\mcp.json` |
-| Cline | `~/.config/cline/mcp.json` |
-| Roo Code | `~/.config/roo/mcp.json` |
-| Zed | `~/.config/zed/mcp.json` |
-| Windsurf | `~/.config/windsurf/mcp.json` |
-| Pi | `~/.pi/agent/mcp.json` |
-| Gemini CLI | `~/.gemini/settings.json` |
-| JetBrains | `.idea/mcp.json` (project-level) |
-| Neovim | `~/.config/nvim/mcp.json` |
-| Emacs | `~/.emacs.d/init.el` |
+| Agent       | Configuration file                                                                                                                                               |
+| ----------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Claude Code | `~/.claude.json`                                                                                                                                                 |
+| Cursor      | `~/.cursor/mcp.json`                                                                                                                                             |
+| VS Code     | User-level `mcp.json`: macOS `~/Library/Application Support/Code/User/mcp.json`; Linux `~/.config/Code/User/mcp.json`; Windows `%APPDATA%\\Code\\User\\mcp.json` |
+| Cline       | `~/.config/cline/mcp.json`                                                                                                                                       |
+| Roo Code    | `~/.config/roo/mcp.json`                                                                                                                                         |
+| Zed         | `~/.config/zed/mcp.json`                                                                                                                                         |
+| Windsurf    | `~/.config/windsurf/mcp.json`                                                                                                                                    |
+| Pi          | `~/.pi/agent/mcp.json`                                                                                                                                           |
+| Gemini CLI  | `~/.gemini/settings.json`                                                                                                                                        |
+| JetBrains   | `.idea/mcp.json` (project-level)                                                                                                                                 |
+| Neovim      | `~/.config/nvim/mcp.json`                                                                                                                                        |
+| Emacs       | `~/.emacs.d/init.el`                                                                                                                                             |
 
 ---
 

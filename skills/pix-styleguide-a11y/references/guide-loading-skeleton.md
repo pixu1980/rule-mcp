@@ -22,9 +22,7 @@
 <div aria-live="polite" role="status">Loading search results...</div>
 
 <!-- Progress bar -->
-<div role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100">
-  70%
-</div>
+<div role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100">70%</div>
 ```
 
 ## CSS: Respect Reduced Motion

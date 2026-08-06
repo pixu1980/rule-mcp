@@ -69,7 +69,7 @@ const FRAMEWORK_SKILL_MAP = {
  */
 export function getFrameworkSuggestion(framework) {
   const skillName = FRAMEWORK_SKILL_MAP[framework] || "rule-frontend-vanilla-reactive";
-  const displayName = skillName.replace(/^rule-/, "").replaceAll('-', "_");
+  const displayName = skillName.replace(/^rule-/, "").replaceAll("-", "_");
   return { skillName, toolName: `rule_tool_${displayName}` };
 }
 
@@ -81,9 +81,11 @@ export function getFrameworkSuggestion(framework) {
  * @returns {boolean}
  */
 function hasDependencies(deps, depNames) {
-  if (!deps) {return false;}
+  if (!deps) {
+    return false;
+  }
   // Rule matches if ANY of the listed deps are found
-  return depNames.some(name => name in deps);
+  return depNames.some((name) => name in deps);
 }
 
 /**
@@ -126,8 +128,7 @@ export function detectProject(projectDir = ".") {
     }
 
     // Detect TypeScript
-    const typescript = !!dependencies?.typescript ||
-      existsSync(join(projectDir, "tsconfig.json"));
+    const typescript = !!dependencies?.typescript || existsSync(join(projectDir, "tsconfig.json"));
 
     // Detect build tool
     let buildTool = "unknown";

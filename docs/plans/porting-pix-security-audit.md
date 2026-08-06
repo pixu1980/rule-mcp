@@ -7,22 +7,22 @@
 
 ## Decisioni approvate dall'intervista
 
-| Decisione | Scelta |
-|---|---|
-| Scope | **Parità totale** — security + architettura + docs + test + unicorn autofix |
-| Branding | **Rinomina rule→rule durante il porting** (env `RULE_MCP_*`→`RULE_MCP_*`, `pix_*`→`pix_*`, `rule-*`→`rule-*`) |
-| Conflitti | **Merge selettivo 3-way** — preservare i cambi rule già nel target (es. `46b5af9` unify rule-* commands) |
-| Registry agent commands | Sì, completo (registry + CLI install/sync/diagnose + prompt suppression) |
-| Tool surface | Sì — solo `./skills`, niente shadowing da `~/.agents/skills` |
-| Self-update hardening | Sì, tutto (remote pinning, signature verification, fix phantom update) |
-| Container hardening | Sì (USER node, `--ignore-scripts`, bind 127.0.0.1) |
-| apply.js + gateway.js | Sì, entrambi (finding 01 e 02) |
-| Architect interview servers | Sì, tutto (http-guard + lifecycle registry, finding 03 e 04) |
-| Cache NON_CACHEABLE + phantom update | Sì, entrambi (finding 05) |
-| Test | Sì, portare i 11 nuovi + agganciare a `test:all` / `ci` / `test:installer` |
-| Docs & ADR | Sì, ADR 029-034 + handoff 13 + report audit + CHANGELOG |
-| Open items handoff | Sì, risolverli durante il porting |
-| Commit | **Atomic conventional commits con scope** (`type(scope): subject`), rispettando l'hook `commit-msg` del target |
+| Decisione                            | Scelta                                                                                                                            |
+| ------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------- |
+| Scope                                | **Parità totale** — security + architettura + docs + test + unicorn autofix                                                       |
+| Branding                             | **Rinomina rule→rule durante il porting** (env `RULE_MCP_*`→`RULE_MCP_*`, `pix_*`→`pix_*`, `rule-*`→`rule-*`) |
+| Conflitti                            | **Merge selettivo 3-way** — preservare i cambi rule già nel target (es. `46b5af9` unify rule-* commands)                            |
+| Registry agent commands              | Sì, completo (registry + CLI install/sync/diagnose + prompt suppression)                                                          |
+| Tool surface                         | Sì — solo `./skills`, niente shadowing da `~/.agents/skills`                                                                      |
+| Self-update hardening                | Sì, tutto (remote pinning, signature verification, fix phantom update)                                                            |
+| Container hardening                  | Sì (USER node, `--ignore-scripts`, bind 127.0.0.1)                                                                                |
+| apply.js + gateway.js                | Sì, entrambi (finding 01 e 02)                                                                                                    |
+| Architect interview servers          | Sì, tutto (http-guard + lifecycle registry, finding 03 e 04)                                                                      |
+| Cache NON_CACHEABLE + phantom update | Sì, entrambi (finding 05)                                                                                                         |
+| Test                                 | Sì, portare i 11 nuovi + agganciare a `test:all` / `ci` / `test:installer`                                                        |
+| Docs & ADR                           | Sì, ADR 029-034 + handoff 13 + report audit + CHANGELOG                                                                           |
+| Open items handoff                   | Sì, risolverli durante il porting                                                                                                 |
+| Commit                               | **Atomic conventional commits con scope** (`type(scope): subject`), rispettando l'hook `commit-msg` del target                    |
 
 ## Convenzioni trasversali
 

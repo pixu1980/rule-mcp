@@ -52,9 +52,7 @@ src/
 <script setup>
 import { onMounted } from "vue";
 
-const cssText = await (
-  await fetch(new URL("./_TodoItem.css", import.meta.url))
-).text();
+const cssText = await (await fetch(new URL("./_TodoItem.css", import.meta.url))).text();
 const sheet = new CSSStyleSheet();
 sheet.replaceSync(cssText);
 
@@ -70,20 +68,10 @@ defineProps({
 </script>
 
 <template>
-  <article
-    data-part="item"
-    :data-state-completed="todo.completed ? 'done' : null"
-  >
-    <input
-      type="checkbox"
-      data-part="toggle"
-      :checked="todo.completed"
-      @change="$emit('toggle', todo.id)"
-    />
+  <article data-part="item" :data-state-completed="todo.completed ? 'done' : null">
+    <input type="checkbox" data-part="toggle" :checked="todo.completed" @change="$emit('toggle', todo.id)" />
     <span data-part="title">{{ todo.title }}</span>
-    <button data-part="delete" @click="$emit('delete', todo.id)">
-      Delete
-    </button>
+    <button data-part="delete" @click="$emit('delete', todo.id)">Delete</button>
   </article>
 </template>
 ```
@@ -104,23 +92,23 @@ article[data-part="item"][data-state-completed="done"] {
 
 ## Vue ↔ rule-frontend-vanilla-reactive Mapping
 
-| rule-frontend-vanilla-reactive | Vue 3 Equivalent |
-|----------------------|------------------|
-| `StateSignal` | `ref()` / `reactive()` |
-| `ComputedSignal` | `computed()` |
-| `effect()` | `watchEffect()` / `watch()` |
-| `Store (Proxy)` | `reactive()` or Pinia store |
-| `tickState` bridge | Deep reactivity (automatic) |
-| `html\`\`` tagged templates | `<template>` block |
-| `{{ expr \| filter }}` | `{{ expr }}` + computed / methods |
-| `${value}` | `{{ value }}` |
-| `@click=${fn}` | `@click="fn"` |
-| `model={...}` directive | `v-model` |
-| `<for each="x in xs">` | `v-for="x in xs" :key="x.id"` |
-| `<if condition="c">` | `v-if="c"` |
-| `<switch expr="x">` | `v-if / v-else-if / v-else` chain |
-| `adoptedStyleSheets` | `onMounted` to adopt once |
-| `data-part="..."` | `:data-part="..."` (Vue binding) |
+| rule-frontend-vanilla-reactive | Vue 3 Equivalent                  |
+| ----------------------------- | --------------------------------- |
+| `StateSignal`                 | `ref()` / `reactive()`            |
+| `ComputedSignal`              | `computed()`                      |
+| `effect()`                    | `watchEffect()` / `watch()`       |
+| `Store (Proxy)`               | `reactive()` or Pinia store       |
+| `tickState` bridge            | Deep reactivity (automatic)       |
+| `html\`\`` tagged templates   | `<template>` block                |
+| `{{ expr \| filter }}`        | `{{ expr }}` + computed / methods |
+| `${value}`                    | `{{ value }}`                     |
+| `@click=${fn}`                | `@click="fn"`                     |
+| `model={...}` directive       | `v-model`                         |
+| `<for each="x in xs">`        | `v-for="x in xs" :key="x.id"`     |
+| `<if condition="c">`          | `v-if="c"`                        |
+| `<switch expr="x">`           | `v-if / v-else-if / v-else` chain |
+| `adoptedStyleSheets`          | `onMounted` to adopt once         |
+| `data-part="..."`             | `:data-part="..."` (Vue binding)  |
 
 ## CSS Loading — Module Scope
 
@@ -129,9 +117,7 @@ Always load CSS at module scope (outside `<script setup>`), not in `<style>` blo
 ```vue
 <script setup>
 // Module-scope: runs once per import
-const cssText = await (
-  await fetch(new URL("./_Component.css", import.meta.url))
-).text();
+const cssText = await (await fetch(new URL("./_Component.css", import.meta.url))).text();
 const sheet = new CSSStyleSheet();
 sheet.replaceSync(cssText);
 
@@ -267,7 +253,7 @@ function updateList(data) {
 }
 ```
 
-Rule: *Use `ref` for primitives, `reactive` for deep objects, `shallowRef` for large immutable data.*
+Rule: _Use `ref` for primitives, `reactive` for deep objects, `shallowRef` for large immutable data._
 
 #### 2. Watch discipline — watch vs watchEffect
 
@@ -279,7 +265,7 @@ watch(
   () => props.userId,
   async (newId, oldId) => {
     if (newId !== oldId) user.value = await fetchUser(newId);
-  }
+  },
 );
 
 // ✅ watchEffect: auto-track dependencies
@@ -288,7 +274,7 @@ watchEffect(() => {
 });
 ```
 
-Rule: *Use `watch` for explicit deps + old value, `watchEffect` for auto-tracked side effects. Never cause mutation loops.*
+Rule: _Use `watch` for explicit deps + old value, `watchEffect` for auto-tracked side effects. Never cause mutation loops._
 
 #### 3. Computed values during render, not in watch
 
@@ -309,7 +295,7 @@ const last = ref("");
 const full = computed(() => `${first.value} ${last.value}`);
 ```
 
-Rule: *If you are calculating from existing reactive state, use `computed`. If you are syncing outside Vue, use `watchEffect`.*
+Rule: _If you are calculating from existing reactive state, use `computed`. If you are syncing outside Vue, use `watchEffect`._
 
 #### 4. Keep state low in the component tree
 
@@ -327,7 +313,7 @@ const search = ref("");
 </script>
 ```
 
-Rule: *Keep reactive state as close as possible to where it is used. Lift via `provide/inject` only when truly shared.*
+Rule: _Keep reactive state as close as possible to where it is used. Lift via `provide/inject` only when truly shared._
 
 #### 5. Always use `:key` with `v-for`
 
@@ -341,7 +327,7 @@ Rule: *Keep reactive state as close as possible to where it is used. Lift via `p
 
 Acceptable exception: static lists that never reorder, insert, delete, or hold stateful children.
 
-Rule: *If the list can change, never use index as key.*
+Rule: _If the list can change, never use index as key._
 
 #### 6. Use `key` for intentional component reset
 
@@ -351,7 +337,7 @@ Changing `:key` unmounts and remounts a component — useful for forms, animatio
 <UserForm :key="userId" :user-id="userId" />
 ```
 
-Rule: *If you want to fully reset a component, change its key instead of manually reseting every internal value.*
+Rule: _If you want to fully reset a component, change its key instead of manually reseting every internal value._
 
 #### 7. Avoid prop drilling — use provide/inject or a store
 
@@ -365,7 +351,7 @@ provide("theme", { color: ref("dark"), setColor });
 const theme = inject("theme");
 ```
 
-Rule: *Props for direct parents. Provide/inject for shared context across depth.*
+Rule: _Props for direct parents. Provide/inject for shared context across depth._
 
 #### 8. One responsibility = one reason to change
 
@@ -384,7 +370,7 @@ const { data, isLoading, error } = useUserData(props.userId);
 </template>
 ```
 
-Rule: *Split when different changes affect different parts.*
+Rule: _Split when different changes affect different parts._
 
 #### 9. Use `Teleport` for modals, tooltips, and overlays
 
@@ -400,7 +386,7 @@ Rule: *Split when different changes affect different parts.*
 </Teleport>
 ```
 
-Rule: *Teleport overlays to `body` to avoid stacking context bugs.*
+Rule: _Teleport overlays to `body` to avoid stacking context bugs._
 
 #### 10. Template refs — access after mount, not during render
 
@@ -418,38 +404,38 @@ onMounted(() => {
 </template>
 ```
 
-Rule: *Template refs are `null` during render. Access them after mount.*
+Rule: _Template refs are `null` during render. Access them after mount._
 
 ### Decision matrix
 
-| Symptom | Check first | Likely pattern | Fix |
-|---|---|---|---|
-| Reactive value not updating | Reactive container choice | Wrong `ref` vs `reactive` type | Use correct container |
-| Watcher runs infinitely | Mutation in watcher | Loop via state mutation inside watch | Move logic or use `computed` |
-| Stale computed value | Dependencies | Missing reactive dep in computed | Ensure all deps are accessed |
-| Sibling re-renders on unrelated input | State ownership | State too high | Move state down |
-| v-for loses input/focus on reorder | List keys | Index key bug | Use stable IDs |
-| Form keeps old values after entity change | Component identity | Key reset needed | Change component key |
-| Deep prop chain is fragile | API design | Prop drilling | Provide/inject or store |
-| Large component is hard to maintain | Reasons to change | Mixed responsibilities | Extract composable + view |
-| Modal/tooltip clipped by overflow | Portal | Missing Teleport | Use `<Teleport to="body">` |
-| Ref is null when accessed | Timing | Template ref before mount | Access in `onMounted` |
+| Symptom                                   | Check first               | Likely pattern                       | Fix                          |
+| ----------------------------------------- | ------------------------- | ------------------------------------ | ---------------------------- |
+| Reactive value not updating               | Reactive container choice | Wrong `ref` vs `reactive` type       | Use correct container        |
+| Watcher runs infinitely                   | Mutation in watcher       | Loop via state mutation inside watch | Move logic or use `computed` |
+| Stale computed value                      | Dependencies              | Missing reactive dep in computed     | Ensure all deps are accessed |
+| Sibling re-renders on unrelated input     | State ownership           | State too high                       | Move state down              |
+| v-for loses input/focus on reorder        | List keys                 | Index key bug                        | Use stable IDs               |
+| Form keeps old values after entity change | Component identity        | Key reset needed                     | Change component key         |
+| Deep prop chain is fragile                | API design                | Prop drilling                        | Provide/inject or store      |
+| Large component is hard to maintain       | Reasons to change         | Mixed responsibilities               | Extract composable + view    |
+| Modal/tooltip clipped by overflow         | Portal                    | Missing Teleport                     | Use `<Teleport to="body">`   |
+| Ref is null when accessed                 | Timing                    | Template ref before mount            | Access in `onMounted`        |
 
 ### Supporting resources
 
-| Resource | Path |
-|---|---|
-| 10 detailed examples | `examples/performance/01-*.md` … `10-*.md` |
-| PR review checklist | `checklists/vue-performance-pr-checklist.md` |
-| Decision matrix | `checklists/decision-matrix.md` |
-| System prompt | `prompts/portable-system-prompt.md` |
-| Code review prompt | `prompts/code-review-prompt.md` |
-| Refactor prompt | `prompts/refactor-prompt.md` |
-| Teaching prompt | `prompts/teaching-prompt.md` |
-| Audit report template | `templates/audit-report-template.md` |
-| PR comment template | `templates/pr-comment-template.md` |
-| Refactor plan template | `templates/refactor-plan-template.md` |
-| Performance playbook | `knowledge/vue-performance-playbook.md` |
+| Resource               | Path                                         |
+| ---------------------- | -------------------------------------------- |
+| 10 detailed examples   | `examples/performance/01-*.md` … `10-*.md`   |
+| PR review checklist    | `checklists/vue-performance-pr-checklist.md` |
+| Decision matrix        | `checklists/decision-matrix.md`              |
+| System prompt          | `prompts/portable-system-prompt.md`          |
+| Code review prompt     | `prompts/code-review-prompt.md`              |
+| Refactor prompt        | `prompts/refactor-prompt.md`                 |
+| Teaching prompt        | `prompts/teaching-prompt.md`                 |
+| Audit report template  | `templates/audit-report-template.md`         |
+| PR comment template    | `templates/pr-comment-template.md`           |
+| Refactor plan template | `templates/refactor-plan-template.md`        |
+| Performance playbook   | `knowledge/vue-performance-playbook.md`      |
 
 ---
 
@@ -473,7 +459,7 @@ const schema = toTypedSchema(
   z.object({
     email: z.string().email(),
     name: z.string().min(2).max(255),
-  })
+  }),
 );
 
 const { defineField, handleSubmit, errors, isSubmitting } = useForm({
@@ -510,6 +496,7 @@ const onSubmit = handleSubmit(async (values) => {
 - [ ] Initial values are controlled
 - [ ] Field-level errors rendered
 - [ ] Submission guarded with `isSubmitting`
+
 ---
 
 ## See also

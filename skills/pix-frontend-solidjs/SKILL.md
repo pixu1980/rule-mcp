@@ -50,9 +50,7 @@ src/
 // components/TodoItem/_TodoItem.jsx
 import { onMount } from "solid-js";
 
-const cssText = await (
-  await fetch(new URL("./_TodoItem.css", import.meta.url))
-).text();
+const cssText = await (await fetch(new URL("./_TodoItem.css", import.meta.url))).text();
 const sheet = new CSSStyleSheet();
 sheet.replaceSync(cssText);
 
@@ -62,10 +60,7 @@ export function TodoItem(props) {
   });
 
   return (
-    <article
-      data-part="item"
-      data-state-completed={props.todo.completed ? "done" : null}
-    >
+    <article data-part="item" data-state-completed={props.todo.completed ? "done" : null}>
       <input
         type="checkbox"
         data-part="toggle"
@@ -97,31 +92,29 @@ article[data-part="item"][data-state-completed="done"] {
 
 ## SolidJS ↔ rule-frontend-vanilla-reactive Mapping
 
-| rule-frontend-vanilla-reactive | SolidJS Equivalent |
-|----------------------|--------------------|
-| `StateSignal` | `createSignal()` |
-| `ComputedSignal` | `createMemo()` |
-| `effect()` | `createEffect()` |
-| `Store (Proxy)` | `createStore()` (proxied) or plain signals |
-| `tickState` bridge | Solid's fine-grained reactivity (automatic) |
-| `html\`\`` tagged templates | JSX |
-| `{{ expr \| filter }}` | `{expression}` |
-| `${value}` | `{value}` |
-| `@click=${fn}` | `onClick={fn}` |
-| `model={...}` directive | `value` + `onInput` / `checked` + `onChange` |
-| `<for each="x in xs">` | `<For each={items}>{(item) => <Component />}</For>` |
-| `<if condition="c">` | `<Show when={c}>` / `<Switch>` / `<Match>` |
-| `<switch expr="x">` | `<Switch><Match when={x === "a"}>...</Match></Switch>` |
-| `adoptedStyleSheets` | `onMount` to adopt once |
-| `data-part="..."` | `data-part="..."` (same) |
+| rule-frontend-vanilla-reactive | SolidJS Equivalent                                     |
+| ----------------------------- | ------------------------------------------------------ |
+| `StateSignal`                 | `createSignal()`                                       |
+| `ComputedSignal`              | `createMemo()`                                         |
+| `effect()`                    | `createEffect()`                                       |
+| `Store (Proxy)`               | `createStore()` (proxied) or plain signals             |
+| `tickState` bridge            | Solid's fine-grained reactivity (automatic)            |
+| `html\`\`` tagged templates   | JSX                                                    |
+| `{{ expr \| filter }}`        | `{expression}`                                         |
+| `${value}`                    | `{value}`                                              |
+| `@click=${fn}`                | `onClick={fn}`                                         |
+| `model={...}` directive       | `value` + `onInput` / `checked` + `onChange`           |
+| `<for each="x in xs">`        | `<For each={items}>{(item) => <Component />}</For>`    |
+| `<if condition="c">`          | `<Show when={c}>` / `<Switch>` / `<Match>`             |
+| `<switch expr="x">`           | `<Switch><Match when={x === "a"}>...</Match></Switch>` |
+| `adoptedStyleSheets`          | `onMount` to adopt once                                |
+| `data-part="..."`             | `data-part="..."` (same)                               |
 
 ## CSS Loading Pattern
 
 ```jsx
 // Module-level: fetch once
-const cssText = await (
-  await fetch(new URL("./_Component.css", import.meta.url))
-).text();
+const cssText = await (await fetch(new URL("./_Component.css", import.meta.url))).text();
 const sheet = new CSSStyleSheet();
 sheet.replaceSync(cssText);
 
@@ -164,14 +157,9 @@ import { For, Show } from "solid-js";
 function TodoList(props) {
   return (
     <section data-part="list">
-      <Show
-        when={props.todos.length > 0}
-        fallback={<p data-part="empty">No todos yet.</p>}
-      >
+      <Show when={props.todos.length > 0} fallback={<p data-part="empty">No todos yet.</p>}>
         <ul data-part="items">
-          <For each={props.todos}>
-            {(todo) => <li data-part="item">{todo.title}</li>}
-          </For>
+          <For each={props.todos}>{(todo) => <li data-part="item">{todo.title}</li>}</For>
         </ul>
       </Show>
     </section>
@@ -265,7 +253,7 @@ function TodoItem(props) {
 }
 ```
 
-Rule: *Access `props.X` directly. Destructuring severs the reactive chain.*
+Rule: _Access `props.X` directly. Destructuring severs the reactive chain._
 
 #### 2. Use `<For>` for lists, not `.map()`
 
@@ -281,7 +269,7 @@ Solid's `<For>` component tracks identity via key and minimizes DOM operations.
 </ul>
 ```
 
-Rule: *Always use `<For>` with signal-derived arrays. Never use `.map()` on reactive data.*
+Rule: _Always use `<For>` with signal-derived arrays. Never use `.map()` on reactive data._
 
 #### 3. Use `<Show>` and `<Switch>` for conditionals, not ternaries
 
@@ -289,15 +277,17 @@ Solid's control flow components preserve reactivity and properly clean up effect
 
 ```jsx
 // ❌ Ternary — effect cleanup may not work correctly
-{cond() ? <Heavy /> : <Other />}
+{
+  cond() ? <Heavy /> : <Other />;
+}
 
 // ✅ <Show> — proper mount/unmount lifecycle
 <Show when={cond()} fallback={<Other />}>
   <Heavy />
-</Show>
+</Show>;
 ```
 
-Rule: *Use `<Show>` for if/else, `<Switch>`/`<Match>` for multi-branch conditions.*
+Rule: _Use `<Show>` for if/else, `<Switch>`/`<Match>` for multi-branch conditions._
 
 #### 4. Use `createMemo` for derived computations
 
@@ -305,14 +295,14 @@ Do not recalculate expensive values inside JSX. Memoize them.
 
 ```jsx
 // ❌ Expensive recalculation on every signal change
-<p>Total: {items().reduce((s, i) => s + i.price, 0)}</p>
+<p>Total: {items().reduce((s, i) => s + i.price, 0)}</p>;
 
 // ✅ Memoized — recalculates only when items change
 const total = createMemo(() => items().reduce((s, i) => s + i.price, 0));
-<p>Total: {total()}</p>
+<p>Total: {total()}</p>;
 ```
 
-Rule: *`createMemo` for expensive or stable derived values. Simple values can stay inline.*
+Rule: _`createMemo` for expensive or stable derived values. Simple values can stay inline._
 
 #### 5. Use `createStore` for nested state, `createSignal` for flat values
 
@@ -329,7 +319,7 @@ const [state, setState] = createStore({ items: [], user: null });
 setState("items", 0, "completed", true);
 ```
 
-Rule: *`createSignal` for flat values, `createStore` for deeply nested state.*
+Rule: _`createSignal` for flat values, `createStore` for deeply nested state._
 
 #### 6. Use `createResource` for async data
 
@@ -341,16 +331,16 @@ const [userData, { mutate, refetch }] = createResource(
   async (id) => {
     const res = await fetch(`/api/users/${id}`);
     return res.json();
-  }
+  },
 );
 
 // Usage with Suspense
 <Suspense fallback={<p>Loading...</p>}>
   <UserProfile data={userData()} />
-</Suspense>
+</Suspense>;
 ```
 
-Rule: *Use `createResource` for async data fetching. It integrates with Suspense and refetch.*
+Rule: _Use `createResource` for async data fetching. It integrates with Suspense and refetch._
 
 #### 7. Keep signal state close to usage
 
@@ -375,7 +365,7 @@ function SearchSection() {
 }
 ```
 
-Rule: *Signals as close as possible to where they are read. Pass `props` not `accessors` when possible.*
+Rule: _Signals as close as possible to where they are read. Pass `props` not `accessors` when possible._
 
 #### 8. Clean up side effects in `onCleanup`
 
@@ -393,7 +383,7 @@ createEffect(() => {
 });
 ```
 
-Rule: *Every side effect in `createEffect` should pair with an `onCleanup`.*
+Rule: _Every side effect in `createEffect` should pair with an `onCleanup`._
 
 #### 9. Prefer `untrack` to read signals without tracking
 
@@ -404,11 +394,14 @@ import { untrack } from "solid-js";
 
 createEffect(() => {
   // Re-run when items() changes, but also read search() without subscribing to it
-  saveToStorage(untrack(() => search()), items());
+  saveToStorage(
+    untrack(() => search()),
+    items(),
+  );
 });
 ```
 
-Rule: *`untrack()` reads without creating dependencies. Use it intentionally to break unnecessary effect re-runs.*
+Rule: _`untrack()` reads without creating dependencies. Use it intentionally to break unnecessary effect re-runs._
 
 #### 10. One responsibility = one reason to change
 
@@ -432,38 +425,38 @@ function UserProfile(props) {
 }
 ```
 
-Rule: *Split when different changes affect different parts.*
+Rule: _Split when different changes affect different parts._
 
 ### Decision matrix
 
-| Symptom | Check first | Likely pattern | Fix |
-|---|---|---|---|
-| UI not updating after prop change | Prop access | Destructured props | Access `props.X` directly |
-| List recreates all DOM on change | List rendering | `.map()` instead of `<For>` | Use `<For>` with stable key |
-| Expensive calculation on every render | Derived value | No createMemo | Wrap in createMemo |
-| Deep nested state not reactive | Store choice | createSignal for object | Use createStore |
-| Effect re-runs too often | Dependency tracking | Untracked signal dependency | Add or use `untrack()` |
-| Memory leak on component unmount | Cleanup | Missing onCleanup | Add onCleanup to effects |
-| Loading state not integrated | Async data | Manual fetch in effect | Use createResource |
-| Sibling updates on input | Signal ownership | Signal too high | Move signal down |
-| Large component is hard to maintain | Responsibilities | Mixed concerns | Extract hooks + view |
-| Conditional component not cleaning up | Control flow | Ternary instead of `<Show>` | Use `<Show>` / `<Switch>` |
+| Symptom                               | Check first         | Likely pattern              | Fix                         |
+| ------------------------------------- | ------------------- | --------------------------- | --------------------------- |
+| UI not updating after prop change     | Prop access         | Destructured props          | Access `props.X` directly   |
+| List recreates all DOM on change      | List rendering      | `.map()` instead of `<For>` | Use `<For>` with stable key |
+| Expensive calculation on every render | Derived value       | No createMemo               | Wrap in createMemo          |
+| Deep nested state not reactive        | Store choice        | createSignal for object     | Use createStore             |
+| Effect re-runs too often              | Dependency tracking | Untracked signal dependency | Add or use `untrack()`      |
+| Memory leak on component unmount      | Cleanup             | Missing onCleanup           | Add onCleanup to effects    |
+| Loading state not integrated          | Async data          | Manual fetch in effect      | Use createResource          |
+| Sibling updates on input              | Signal ownership    | Signal too high             | Move signal down            |
+| Large component is hard to maintain   | Responsibilities    | Mixed concerns              | Extract hooks + view        |
+| Conditional component not cleaning up | Control flow        | Ternary instead of `<Show>` | Use `<Show>` / `<Switch>`   |
 
 ### Supporting resources
 
-| Resource | Path |
-|---|---|
-| 10 detailed examples | `examples/performance/01-*.md` … `10-*.md` |
-| PR review checklist | `checklists/solidjs-performance-pr-checklist.md` |
-| Decision matrix | `checklists/decision-matrix.md` |
-| System prompt | `prompts/portable-system-prompt.md` |
-| Code review prompt | `prompts/code-review-prompt.md` |
-| Refactor prompt | `prompts/refactor-prompt.md` |
-| Teaching prompt | `prompts/teaching-prompt.md` |
-| Audit report template | `templates/audit-report-template.md` |
-| PR comment template | `templates/pr-comment-template.md` |
-| Refactor plan template | `templates/refactor-plan-template.md` |
-| Performance playbook | `knowledge/solidjs-performance-playbook.md` |
+| Resource               | Path                                             |
+| ---------------------- | ------------------------------------------------ |
+| 10 detailed examples   | `examples/performance/01-*.md` … `10-*.md`       |
+| PR review checklist    | `checklists/solidjs-performance-pr-checklist.md` |
+| Decision matrix        | `checklists/decision-matrix.md`                  |
+| System prompt          | `prompts/portable-system-prompt.md`              |
+| Code review prompt     | `prompts/code-review-prompt.md`                  |
+| Refactor prompt        | `prompts/refactor-prompt.md`                     |
+| Teaching prompt        | `prompts/teaching-prompt.md`                     |
+| Audit report template  | `templates/audit-report-template.md`             |
+| PR comment template    | `templates/pr-comment-template.md`               |
+| Refactor plan template | `templates/refactor-plan-template.md`            |
+| Performance playbook   | `knowledge/solidjs-performance-playbook.md`      |
 
 ---
 
@@ -520,6 +513,7 @@ function MyForm() {
 - [ ] Schema validation covers full form
 - [ ] Field-level errors rendered
 - [ ] Submission guarded with `form.submitting`
+
 ---
 
 ## See also

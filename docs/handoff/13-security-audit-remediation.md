@@ -15,14 +15,14 @@ A full-scope security and performance audit of the MCP server, then remediation 
 
 ### Commits
 
-| Commit | What |
-|---|---|
-| `8898219` | `fix(security)` — write path + interview servers (findings 01-05) |
-| `c9f3202` | `docs(audit)` — audit report + ADR 030/031 |
+| Commit    | What                                                                        |
+| --------- | --------------------------------------------------------------------------- |
+| `8898219` | `fix(security)` — write path + interview servers (findings 01-05)           |
+| `c9f3202` | `docs(audit)` — audit report + ADR 030/031                                  |
 | `3d041d9` | `fix(security)` — self-update remote pinning + container hardening (06, 07) |
-| `1cb8547` | `fix(skills)` — tool surface is `./skills` and nothing else |
-| `8c5560d` | `fix(self-update)` — no phantom update when the branch is ahead |
-| `a5d2792` | `fix(self-update)` — audit log only when HEAD actually moved |
+| `1cb8547` | `fix(skills)` — tool surface is `./skills` and nothing else                 |
+| `8c5560d` | `fix(self-update)` — no phantom update when the branch is ahead             |
+| `a5d2792` | `fix(self-update)` — audit log only when HEAD actually moved                |
 
 ### Fixes by finding
 
@@ -38,12 +38,12 @@ A full-scope security and performance audit of the MCP server, then remediation 
 
 ## Measured numbers
 
-| | before | after |
-|---|---|---|
-| tools exposed | 176 | **88** |
-| `rule_tool_pix_*` tools | 79 | **0** |
-| `tools/list` payload | 216,102 B (~54k tokens/turn) | **105,190 B (~26k tokens/turn)** |
-| minimal mode | — | 10 tools, 7,106 B (~1.8k tokens) |
+|                        | before                       | after                            |
+| ---------------------- | ---------------------------- | -------------------------------- |
+| tools exposed          | 176                          | **88**                           |
+| `rule_tool_pix_*` tools | 79                           | **0**                            |
+| `tools/list` payload   | 216,102 B (~54k tokens/turn) | **105,190 B (~26k tokens/turn)** |
+| minimal mode           | —                            | 10 tools, 7,106 B (~1.8k tokens) |
 
 Measured with the 79 stale `rule*` directories still on disk, so the reduction is a property of the code, not of the machine. `~/.agents/skills` was then cleaned from 88 directories to 9 (79 `rule*` removed at the user's request; list in the session scratchpad).
 

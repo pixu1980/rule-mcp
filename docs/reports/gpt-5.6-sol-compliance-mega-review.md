@@ -16,15 +16,15 @@ Il repository era già fortemente modificato prima dell'audit. Questo documento 
 
 Esclusi `.git/`, `node_modules/`, `.tokensave/`, `.context/`, `dist/`, `coverage/` e `test-results/`:
 
-| Area | File | Righe |
-|---|---:|---:|
-| Totale snapshot prima di questo report | 474 | 61.546 |
-| `src/` | 32 | 9.313 |
-| `src/` + `bin/` + `scripts/` | 42 | 12.221 |
-| `test/` | 22 | 1.712 |
-| `skills/` (tutti gli asset inclusi) | 377 | 39.924 |
-| `SKILL.md` | 70 | 17.581 |
-| `docs/` | 22 | 4.958 |
+| Area                                   | File |  Righe |
+| -------------------------------------- | ---: | -----: |
+| Totale snapshot prima di questo report |  474 | 61.546 |
+| `src/`                                 |   32 |  9.313 |
+| `src/` + `bin/` + `scripts/`           |   42 | 12.221 |
+| `test/`                                |   22 |  1.712 |
+| `skills/` (tutti gli asset inclusi)    |  377 | 39.924 |
+| `SKILL.md`                             |   70 | 17.581 |
+| `docs/`                                |   22 |  4.958 |
 
 Sono stati eseguiti:
 
@@ -44,27 +44,27 @@ PowerShell e ShellCheck non erano installati: i 2 `.ps1` non hanno quindi una va
 
 ## 2. Scorecard finale
 
-| Area | Verdetto | Evidenza principale |
-|---|---|---|
-| Avvio MCP stdio | **Pass** | Client/server SDK in-memory con handshake riuscito |
-| `tools/list` e `tools/call` | **Pass tecnico** | 76 tool isolati, chiamate schema-valide |
-| Uso reale da `gpt-5.6-sol` | **Pass tecnico** | Pi registra provider/modello corretti e tool call riuscite |
-| Router `pix_tool` automatico | **Fail** | 1/5 richieste di dominio senza comando esplicito |
-| Router con `/rule-mcp` | **Pass parziale** | 1/1 invocato per primo, ma route primaria errata per path bias |
-| Qualità routing | **Parziale** | 52/60 top-1; 58/60 top-6; multilingual e prompt generici deboli |
-| Skill trigger Pi nativo | **Parziale** | In un caso il modello ha letto 8 `SKILL.md`, ma non via router MCP |
-| `rule_tool_check` come gate | **Fail** | `previousPassed` aggirabile e risultato non legato all'hash del codice |
-| `rule_tool_fix` safety | **Fail bloccante** | `dryRun` ignorato in `generate`; path traversal confermato |
-| MCP resources | **Parziale** | Risorse standard leggibili; plugin elencati ma non risolvibili |
-| MCP prompts | **Fail bloccante** | Shape e ruolo non conformi allo schema SDK |
-| MCP completion | **Fail funzionale** | Usa un tipo ref inesistente per completare argomenti tool |
-| Template/componenti | **Fail** | Output non framework-specific o non conforme ai guardrail |
-| Test suite | **Fail** | `test:all` strutturalmente errato; suite rosse e copertura incompleta |
-| CI/release/build | **Fail bloccante** | file test/build/LICENSE mancanti; gate mascherati; embed distruttivo |
-| Installer/uninstaller | **Fail** | config malformate sovrascritte; `skills install --all` crasha non-TTY |
-| Sicurezza SSE | **Fail** | HTTP locale senza auth, CORS `*`, tool mutanti raggiungibili |
-| Documentazione/manifest | **Fail drift** | conteggi/tool/versioni/source e claim “zero dependencies” incoerenti |
-| Production readiness complessiva | **Non approvata** | P0 e P1 aperti |
+| Area                             | Verdetto            | Evidenza principale                                                    |
+| -------------------------------- | ------------------- | ---------------------------------------------------------------------- |
+| Avvio MCP stdio                  | **Pass**            | Client/server SDK in-memory con handshake riuscito                     |
+| `tools/list` e `tools/call`      | **Pass tecnico**    | 76 tool isolati, chiamate schema-valide                                |
+| Uso reale da `gpt-5.6-sol`       | **Pass tecnico**    | Pi registra provider/modello corretti e tool call riuscite             |
+| Router `pix_tool` automatico     | **Fail**            | 1/5 richieste di dominio senza comando esplicito                       |
+| Router con `/rule-mcp`     | **Pass parziale**   | 1/1 invocato per primo, ma route primaria errata per path bias         |
+| Qualità routing                  | **Parziale**        | 52/60 top-1; 58/60 top-6; multilingual e prompt generici deboli        |
+| Skill trigger Pi nativo          | **Parziale**        | In un caso il modello ha letto 8 `SKILL.md`, ma non via router MCP     |
+| `rule_tool_check` come gate       | **Fail**            | `previousPassed` aggirabile e risultato non legato all'hash del codice |
+| `rule_tool_fix` safety            | **Fail bloccante**  | `dryRun` ignorato in `generate`; path traversal confermato             |
+| MCP resources                    | **Parziale**        | Risorse standard leggibili; plugin elencati ma non risolvibili         |
+| MCP prompts                      | **Fail bloccante**  | Shape e ruolo non conformi allo schema SDK                             |
+| MCP completion                   | **Fail funzionale** | Usa un tipo ref inesistente per completare argomenti tool              |
+| Template/componenti              | **Fail**            | Output non framework-specific o non conforme ai guardrail              |
+| Test suite                       | **Fail**            | `test:all` strutturalmente errato; suite rosse e copertura incompleta  |
+| CI/release/build                 | **Fail bloccante**  | file test/build/LICENSE mancanti; gate mascherati; embed distruttivo   |
+| Installer/uninstaller            | **Fail**            | config malformate sovrascritte; `skills install --all` crasha non-TTY  |
+| Sicurezza SSE                    | **Fail**            | HTTP locale senza auth, CORS `*`, tool mutanti raggiungibili           |
+| Documentazione/manifest          | **Fail drift**      | conteggi/tool/versioni/source e claim “zero dependencies” incoerenti   |
+| Production readiness complessiva | **Non approvata**   | P0 e P1 aperti                                                         |
 
 ## 3. Risposta diretta: il router e i trigger entrano davvero in chat?
 
@@ -80,16 +80,16 @@ Le sessioni sono state eseguite con `--no-session`, output JSONL separato e auto
 }
 ```
 
-| Caso | Richiesta | Chiamate osservate | `pix_tool` prima? | Esito |
-|---|---|---|---|---|
-| A | Pulsante accessibile React | `pix_tool` → `rule_tool_search` → `rule_tool_frontend_react` → 2× `rule_tool_check` | Sì | Flusso quasi completo, ma risposta finale diversa dall'artefatto controllato |
-| B | Rate limiting/abusi | `rule_tool_backend_security` → `rule_tool_search` | **No** | Tool specializzato scelto direttamente |
-| C | API PostgreSQL, paginazione/filtri | `rule_tool_backend_api_design` → `rule_tool_data_postgresql` → `rule_tool_search` | **No** | Due skill-tool diretti |
-| D | Hook React con AbortController | `rule_tool_frontend_react` → `rule_tool_search` | **No** | Tool framework diretto |
-| E | “Quale workflow rule?” | 8 chiamate native `read` su `SKILL.md` | No MCP | Il trigger skill dell'host funziona quando richiesto esplicitamente |
-| F | `2 + 2` | Nessun tool | n/a | Comportamento corretto |
-| G | Ripetizione rate limiting | `rule_tool_backend_security` → `rule_tool_search` | **No** | Conferma del caso B |
-| H | Stessa richiesta preceduta dal template `/rule-mcp` | `pix_tool` → `rule_tool_search` → `rule_tool_backend_security` → … | **Sì** | Il template forza il primo passo, ma `pix_tool` routea inizialmente al frontend |
+| Caso | Richiesta                                                 | Chiamate osservate                                                               | `pix_tool` prima? | Esito                                                                           |
+| ---- | --------------------------------------------------------- | -------------------------------------------------------------------------------- | ----------------- | ------------------------------------------------------------------------------- |
+| A    | Pulsante accessibile React                                | `pix_tool` → `rule_tool_search` → `rule_tool_frontend_react` → 2× `rule_tool_check` | Sì                | Flusso quasi completo, ma risposta finale diversa dall'artefatto controllato    |
+| B    | Rate limiting/abusi                                       | `rule_tool_backend_security` → `rule_tool_search`                                  | **No**            | Tool specializzato scelto direttamente                                          |
+| C    | API PostgreSQL, paginazione/filtri                        | `rule_tool_backend_api_design` → `rule_tool_data_postgresql` → `rule_tool_search`   | **No**            | Due skill-tool diretti                                                          |
+| D    | Hook React con AbortController                            | `rule_tool_frontend_react` → `rule_tool_search`                                    | **No**            | Tool framework diretto                                                          |
+| E    | “Quale workflow rule?”                                     | 8 chiamate native `read` su `SKILL.md`                                           | No MCP            | Il trigger skill dell'host funziona quando richiesto esplicitamente             |
+| F    | `2 + 2`                                                   | Nessun tool                                                                      | n/a               | Comportamento corretto                                                          |
+| G    | Ripetizione rate limiting                                 | `rule_tool_backend_security` → `rule_tool_search`                                  | **No**            | Conferma del caso B                                                             |
+| H    | Stessa richiesta preceduta dal template `/rule-mcp` | `pix_tool` → `rule_tool_search` → `rule_tool_backend_security` → …                 | **Sì**            | Il template forza il primo passo, ma `pix_tool` routea inizialmente al frontend |
 
 Risultato empirico, senza sovrainterpretare il campione:
 
@@ -123,10 +123,10 @@ Nel caso A il modello ha controllato una funzione con props, `disabled`, JSDoc e
 
 La logica a `src/tools/ai.js:222` applica un floor/bias forte al framework rilevato. Il repository stesso viene classificato da `rule_tool_detect` come `vanilla` frontend, pur essendo un server MCP Node. Prova:
 
-| Prompt | Path | Route primaria |
-|---|---|---|
-| “Protect a backend web service…” | assente | `rule-backend-security` |
-| stesso prompt | root di questo repo | **`rule-frontend-vanilla-reactive`** |
+| Prompt                            | Path                | Route primaria                                    |
+| --------------------------------- | ------------------- | ------------------------------------------------- |
+| “Protect a backend web service…”  | assente             | `rule-backend-security`                            |
+| stesso prompt                     | root di questo repo | **`rule-frontend-vanilla-reactive`**               |
 | stesso caso via `/rule-mcp` | root di questo repo | **`rule-frontend-vanilla-reactive`, confidence 1** |
 
 La route backend corretta compare solo come alternativa. La rilevazione progetto deve essere un segnale secondario e domain-aware, non un override trasversale.
@@ -139,11 +139,11 @@ La route backend corretta compare solo come alternativa. La rilevazione progetto
 
 Il corpus e i sinonimi sono prevalentemente inglesi:
 
-| Lingua | Prompt sicurezza backend | Route |
-|---|---|---|
-| Inglese | rate limiting + secure headers | `rule-backend-security` |
-| Italiano | limitazione richieste + intestazioni sicure | `rule-backend` |
-| Francese | limitation requêtes + en-têtes sécurisés | `rule-backend` |
+| Lingua   | Prompt sicurezza backend                    | Route                  |
+| -------- | ------------------------------------------- | ---------------------- |
+| Inglese  | rate limiting + secure headers              | `rule-backend-security` |
+| Italiano | limitazione richieste + intestazioni sicure | `rule-backend`          |
+| Francese | limitation requêtes + en-têtes sécurisés    | `rule-backend`          |
 
 Il dominio generale viene riconosciuto, ma la specializzazione si perde. Servono alias multilingua o una fase di normalizzazione/classificazione semantica.
 
@@ -213,14 +213,14 @@ Il comando `pnpm build`, eseguito in una copia temporanea per non distruggere il
 
 Ulteriori false negative/positive riprodotte:
 
-| Input | Risultato attuale | Atteso |
-|---|---|---|
-| CSS raw `.foo:hover { … }` | Pass | Fail zero-class |
-| React `style={{ color: "red" }}` | Pass | Fail no-inline-style |
-| CSS `.foo > span`, `.foo.bar` | Pass | Fail |
-| `previousPassed` con tutti gli ID + codice invalido | Pass | Eseguire tutti i check o rifiutare ricevuta |
-| React `import "./Button.css"` con CSS incluso nel payload | Fail external CSS | Pass |
-| File Markdown che cita `.css` | Fail `css-comments-required` | Regola non applicabile |
+| Input                                                     | Risultato attuale            | Atteso                                      |
+| --------------------------------------------------------- | ---------------------------- | ------------------------------------------- |
+| CSS raw `.foo:hover { … }`                                | Pass                         | Fail zero-class                             |
+| React `style={{ color: "red" }}`                          | Pass                         | Fail no-inline-style                        |
+| CSS `.foo > span`, `.foo.bar`                             | Pass                         | Fail                                        |
+| `previousPassed` con tutti gli ID + codice invalido       | Pass                         | Eseguire tutti i check o rifiutare ricevuta |
+| React `import "./Button.css"` con CSS incluso nel payload | Fail external CSS            | Pass                                        |
+| File Markdown che cita `.css`                             | Fail `css-comments-required` | Regola non applicabile                      |
 
 Cause: `extractRealCSS()` ignora CSS raw; regex classi riconosce solo `.foo {`; inline style cerca solo attributi HTML quotati; l'import CSS usa il literal string check `import .*.css`.
 
@@ -358,20 +358,20 @@ Il nome progetto usa `package.json` del cwd anche quando `projectDir` punta altr
 
 ## 8. Test, lint, CI e release: risultati reali
 
-| Comando/prova | Stato | Nota |
-|---|---|---|
-| `node test/smoke.mjs` | Pass | Smoke molto superficiale |
-| `pnpm run ci` | **Fail** | Si ferma su `rule-data-duckdb` senza `See also` |
-| `pnpm test:all` | **Fail** | Esegue suite Playwright con `node` |
-| batch manuale, 19 file (`console-test` escluso) | 14 pass / 5 fail | daemon, docs, skill-docs, 2× Playwright |
-| `pnpm lint` | **Fail** | `eslint` non dichiarato; audit esterno rileva 324 problemi |
-| `pnpm format` | **Fail** | `prettier` non dichiarato; audit esterno segnala 292 file |
-| `pnpm audit --prod` | Pass | 0 vulnerabilità note nel registry al momento del test |
-| `pnpm build` in clone temp | **Fail** | embed cancella skill, poi `package.mjs` mancante |
-| `pnpm pack` in clone temp | Pass parziale | Pack possibile, non prova correttezza del publish workflow |
-| JSON/YAML/JS/Bash syntax | Pass | PowerShell non verificato |
-| Docker build | Non eseguito | Docker assente; staticamente fallisce per `LICENSE` e embed |
-| `rule_tool_check` su questo report Markdown | **Fail 1/16** | Falso positivo `css-comments-required` perché il testo cita `.css` |
+| Comando/prova                                   | Stato            | Nota                                                               |
+| ----------------------------------------------- | ---------------- | ------------------------------------------------------------------ |
+| `node test/smoke.mjs`                           | Pass             | Smoke molto superficiale                                           |
+| `pnpm run ci`                                   | **Fail**         | Si ferma su `rule-data-duckdb` senza `See also`                     |
+| `pnpm test:all`                                 | **Fail**         | Esegue suite Playwright con `node`                                 |
+| batch manuale, 19 file (`console-test` escluso) | 14 pass / 5 fail | daemon, docs, skill-docs, 2× Playwright                            |
+| `pnpm lint`                                     | **Fail**         | `eslint` non dichiarato; audit esterno rileva 324 problemi         |
+| `pnpm format`                                   | **Fail**         | `prettier` non dichiarato; audit esterno segnala 292 file          |
+| `pnpm audit --prod`                             | Pass             | 0 vulnerabilità note nel registry al momento del test              |
+| `pnpm build` in clone temp                      | **Fail**         | embed cancella skill, poi `package.mjs` mancante                   |
+| `pnpm pack` in clone temp                       | Pass parziale    | Pack possibile, non prova correttezza del publish workflow         |
+| JSON/YAML/JS/Bash syntax                        | Pass             | PowerShell non verificato                                          |
+| Docker build                                    | Non eseguito     | Docker assente; staticamente fallisce per `LICENSE` e embed        |
+| `rule_tool_check` su questo report Markdown      | **Fail 1/16**    | Falso positivo `css-comments-required` perché il testo cita `.css` |
 
 Nota operativa: con pnpm 11, `pnpm ci` è un comando install built-in; per eseguire lo script package occorre `pnpm run ci`.
 
@@ -421,17 +421,17 @@ Totale: **402 chiamate**. Il trasporto e lo shape MCP sono operativi. Questo pro
 
 ### 10.2 Tool deterministici
 
-| Tool | Verdetto |
-|---|---|
-| `pix_tool` | Callable, ma non obbligatorio; ranking da correggere |
-| `rule_tool_search` | Callable; BM25 utile, pertinenza/top-k da migliorare |
-| `rule_tool_check` | **Bloccato**: bypass e parser incompleti |
-| `rule_tool_scaffold` | Callable; restituisce testo, non scrive |
-| `rule_tool_detect` | Callable; classificazione troppo frontend-centrica |
-| `rule_tool_component` | **Bloccato**: output non affidabile per framework/guardrail |
-| `rule_tool_fix` | **Bloccato**: filesystem safety |
-| `rule_tool_process_adr` | Parziale: side effect/concorrenza |
-| `rule_tool_process_handoff` | Parziale: cwd/untracked/redaction |
+| Tool                       | Verdetto                                                    |
+| -------------------------- | ----------------------------------------------------------- |
+| `pix_tool`                 | Callable, ma non obbligatorio; ranking da correggere        |
+| `rule_tool_search`          | Callable; BM25 utile, pertinenza/top-k da migliorare        |
+| `rule_tool_check`           | **Bloccato**: bypass e parser incompleti                    |
+| `rule_tool_scaffold`        | Callable; restituisce testo, non scrive                     |
+| `rule_tool_detect`          | Callable; classificazione troppo frontend-centrica          |
+| `rule_tool_component`       | **Bloccato**: output non affidabile per framework/guardrail |
+| `rule_tool_fix`             | **Bloccato**: filesystem safety                             |
+| `rule_tool_process_adr`     | Parziale: side effect/concorrenza                           |
+| `rule_tool_process_handoff` | Parziale: cwd/untracked/redaction                           |
 
 La lista completa dei 76 tool isolati è nell'Appendice B.
 
@@ -498,18 +498,18 @@ I test deterministici devono restare il gate primario; i test live sono una metr
 
 ## 12. Priorità di remediation
 
-| Ordine | Azione | Gate di accettazione |
-|---:|---|---|
-| 1 | Sandbox `rule_tool_fix`; auth/CORS SSE | Nessuna scrittura fuori root/symlink; dry-run zero side effect; browser hostile test rosso→verde |
-| 2 | Eliminare bypass `previousPassed` | Codice modificato forza tutti i check; test CSS/JSX avversariali verdi |
-| 3 | Rendere embed/build riproducibili | Build con HOME vuota conserva esattamente le skill versionate |
-| 4 | Riparare `prompts/get` e rimuovere completion tool fittizia | Tutte le response passano gli schema SDK ufficiali |
-| 5 | Riparare CI/release/package metadata | Un solo comando locale riproduce tutti i gate; nessun `|| echo` |
-| 6 | Correggere generatori/template | Ogni output framework compila e supera i guardrail indipendenti |
-| 7 | Rendere installer lossless/idempotente | Matrice 23 agenti install→reinstall→uninstall senza perdita |
-| 8 | Gateway/orchestrazione e receipts | Artefatto finale hash-equal a quello validato |
-| 9 | Calibrare router/multilingua | Dataset top-1 concordato, unknown threshold, path non cambia dominio |
-| 10 | Aggiornare docs/manifest | Conteggi/versioni/source generati automaticamente |
+| Ordine | Azione                                                      | Gate di accettazione                                                                             |
+| -----: | ----------------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
+|      1 | Sandbox `rule_tool_fix`; auth/CORS SSE                       | Nessuna scrittura fuori root/symlink; dry-run zero side effect; browser hostile test rosso→verde |
+|      2 | Eliminare bypass `previousPassed`                           | Codice modificato forza tutti i check; test CSS/JSX avversariali verdi                           |
+|      3 | Rendere embed/build riproducibili                           | Build con HOME vuota conserva esattamente le skill versionate                                    |
+|      4 | Riparare `prompts/get` e rimuovere completion tool fittizia | Tutte le response passano gli schema SDK ufficiali                                               |
+|      5 | Riparare CI/release/package metadata                        | Un solo comando locale riproduce tutti i gate; nessun `                                          |     | echo` |
+|      6 | Correggere generatori/template                              | Ogni output framework compila e supera i guardrail indipendenti                                  |
+|      7 | Rendere installer lossless/idempotente                      | Matrice 23 agenti install→reinstall→uninstall senza perdita                                      |
+|      8 | Gateway/orchestrazione e receipts                           | Artefatto finale hash-equal a quello validato                                                    |
+|      9 | Calibrare router/multilingua                                | Dataset top-1 concordato, unknown threshold, path non cambia dominio                             |
+|     10 | Aggiornare docs/manifest                                    | Conteggi/versioni/source generati automaticamente                                                |
 
 ## 13. Conclusione di compliance per `gpt-5.6-sol`
 
@@ -523,78 +523,78 @@ I test deterministici devono restare il gate primario; i test live sono una metr
 
 ## Appendix A — Per-skill structural and trigger audit
 
-| Skill | Lines | MCP tool | Metadata/links | TLDR canonical query | Result |
-|---|---:|---|---|---|---|
-| `pix_tool` | 254 | `pix_tool` | Pass | n/a | **Pass** |
-| `rule-architect` | 253 | `rule_tool_architect` | Pass | No result | **Blocked: interview asset missing** |
-| `rule-architect-cli` | 82 | `rule_tool_architect_cli` | Pass | Result | **Warning: untracked/WIP** |
-| `rule-architect-web` | 71 | `rule_tool_architect_web` | Pass | Result | **Blocked: untracked + UI/security defects** |
-| `rule-backend` | 61 | `rule_tool_backend` | Pass | Result | **Pass** |
-| `rule-backend-api-design` | 158 | `rule_tool_backend_api_design` | Pass | Result | **Pass** |
-| `rule-backend-express` | 147 | `rule_tool_backend_express` | Pass | Result | **Pass** |
-| `rule-backend-fastify` | 82 | `rule_tool_backend_fastify` | Pass | Result | **Pass** |
-| `rule-backend-hono` | 91 | `rule_tool_backend_hono` | Pass | Result | **Pass** |
-| `rule-backend-nestjs` | 94 | `rule_tool_backend_nestjs` | Pass | No result | **Warning** |
-| `rule-backend-node` | 214 | `rule_tool_backend_node` | Pass | No result | **Warning** |
-| `rule-backend-security` | 174 | `rule_tool_backend_security` | Pass | No result | **Warning** |
-| `rule-data` | 39 | `rule_tool_data` | Pass | Result | **Pass** |
-| `rule-data-duckdb` | 234 | `rule_tool_data_duckdb` | Warning: missing `See also` | Result | **Warning** |
-| `rule-data-indexed-db` | 317 | `rule_tool_data_indexed_db` | Warning: missing `See also` | No result | **Warning** |
-| `rule-data-mongodb` | 743 | `rule_tool_data_mongodb` | Pass | No result | **Warning** |
-| `rule-data-mysql` | 595 | `rule_tool_data_mysql` | Pass | Result | **Pass** |
-| `rule-data-postgresql` | 649 | `rule_tool_data_postgresql` | Pass | No result | **Warning** |
-| `rule-data-sql` | 632 | `rule_tool_data_sql` | Pass | No result | **Warning** |
-| `rule-data-sqlite` | 242 | `rule_tool_data_sqlite` | Warning: missing `See also` | Result | **Warning** |
-| `rule-devops` | 42 | `rule_tool_devops` | Pass | Result | **Pass** |
-| `rule-devops-docker` | 128 | `rule_tool_devops_docker` | Pass | No result | **Warning** |
-| `rule-devops-gitlab-ci` | 75 | `rule_tool_devops_gitlab_ci` | Pass | Result | **Pass** |
-| `rule-devops-testing` | 300 | `rule_tool_devops_testing` | Pass | No result | **Warning** |
-| `rule-devops-version` | 161 | `rule_tool_devops_version` | Pass | No result | **Warning** |
-| `rule-frontend` | 61 | `rule_tool_frontend` | Pass | Result | **Pass** |
-| `rule-frontend-angular` | 504 | `rule_tool_frontend_angular` | Pass | Result | **Pass** |
-| `rule-frontend-astro` | 526 | `rule_tool_frontend_astro` | Pass | Result | **Pass** |
-| `rule-frontend-meta-next` | 201 | `rule_tool_frontend_meta_next` | Pass | Result | **Pass** |
-| `rule-frontend-meta-nuxt` | 181 | `rule_tool_frontend_meta_nuxt` | Pass | Result | **Pass** |
-| `rule-frontend-meta-remix` | 224 | `rule_tool_frontend_meta_remix` | Pass | Result | **Pass** |
-| `rule-frontend-react` | 688 | `rule_tool_frontend_react` | Pass | No result | **Warning** |
-| `rule-frontend-solidjs` | 532 | `rule_tool_frontend_solidjs` | Pass | Result | **Pass** |
-| `rule-frontend-svelte` | 508 | `rule_tool_frontend_svelte` | Pass | Result | **Pass** |
-| `rule-frontend-vanilla-reactive` | 640 | `rule_tool_frontend_vanilla_reactive` | Pass | No result | **Warning** |
-| `rule-frontend-vue` | 522 | `rule_tool_frontend_vue` | Pass | No result | **Warning** |
-| `rule-platform` | 43 | `rule_tool_platform` | Pass | Result | **Pass** |
-| `rule-platform-agent` | 294 | `rule_tool_platform_agent` | Pass | No result | **Warning** |
-| `rule-platform-desktop` | 542 | `rule_tool_platform_desktop` | Pass | Result | **Pass** |
-| `rule-platform-expo` | 254 | `rule_tool_platform_expo` | Pass | Result | **Pass** |
-| `rule-platform-library` | 259 | `rule_tool_platform_library` | Pass | Result | **Pass** |
-| `rule-platform-web` | 241 | `rule_tool_platform_web` | Pass | No result | **Warning** |
-| `rule-process` | 43 | `pix_process` | Pass | Result | **Pass** |
-| `rule-process-adr` | 96 | `rule_tool_process_adr` | Pass | n/a | **Pass** |
-| `rule-process-bmad` | 422 | `rule_tool_process_bmad` | Pass | Result | **Pass** |
-| `rule-process-documentation` | 201 | `rule_tool_process_documentation` | Pass | No result | **Warning** |
-| `rule-process-feature-workflow` | 121 | `rule_tool_process_feature_workflow` | Pass | Result | **Pass** |
-| `rule-process-handoff` | 97 | `rule_tool_process_handoff` | Pass | n/a | **Pass** |
-| `rule-styleguide` | 58 | `rule_tool_styleguide` | Pass | Result | **Pass** |
-| `rule-styleguide-a11y` | 514 | `rule_tool_styleguide_a11y` | Pass | No result | **Warning** |
-| `rule-styleguide-css` | 488 | `rule_tool_styleguide_css` | Pass | No result | **Warning** |
-| `rule-styleguide-html` | 339 | `rule_tool_styleguide_html` | Pass | No result | **Warning** |
-| `rule-styleguide-javascript` | 553 | `rule_tool_styleguide_javascript` | Pass | No result | **Warning** |
-| `rule-styleguide-json` | 132 | `rule_tool_styleguide_json` | Pass | No result | **Warning** |
-| `rule-styleguide-markdown` | 132 | `rule_tool_styleguide_markdown` | Pass | Result | **Pass** |
-| `rule-styleguide-naming` | 228 | `rule_tool_styleguide_naming` | Pass | No result | **Warning** |
-| `rule-styleguide-patterns` | 183 | `rule_tool_styleguide_patterns` | Pass | No result | **Warning** |
-| `rule-styleguide-validation` | 472 | `rule_tool_styleguide_validation` | Pass | No result | **Warning** |
-| `rule-toolchain` | 69 | `rule_tool_toolchain` | Pass | Result | **Pass** |
-| `rule-toolchain-biome` | 101 | `rule_tool_toolchain_biome` | Pass | No result | **Warning** |
-| `rule-toolchain-eslint` | 81 | `rule_tool_toolchain_eslint` | Pass | Result | **Pass** |
-| `rule-toolchain-husky` | 116 | `rule_tool_toolchain_husky` | Pass | Result | **Pass** |
-| `rule-toolchain-parcel` | 120 | `rule_tool_toolchain_parcel` | Pass | Result | **Pass** |
-| `rule-toolchain-pnpm` | 114 | `rule_tool_toolchain_pnpm` | Pass | No result | **Warning** |
-| `rule-toolchain-project` | 217 | `rule_tool_toolchain_project` | Pass | No result | **Warning** |
-| `rule-toolchain-turborepo` | 108 | `rule_tool_toolchain_turborepo` | Pass | Result | **Pass** |
-| `rule-toolchain-typescript` | 132 | `rule_tool_toolchain_typescript` | Pass | Result | **Pass** |
-| `rule-toolchain-vite` | 93 | `rule_tool_toolchain_vite` | Pass | No result | **Warning** |
-| `rule-ui` | 79 | `rule_tool_ui` | Pass | Result | **Pass** |
-| `rule-ui-design-system` | 214 | `rule_tool_ui_design_system` | Pass | No result | **Warning** |
+| Skill                           | Lines | MCP tool                             | Metadata/links              | TLDR canonical query | Result                                       |
+| ------------------------------- | ----: | ------------------------------------ | --------------------------- | -------------------- | -------------------------------------------- |
+| `pix_tool`                      |   254 | `pix_tool`                           | Pass                        | n/a                  | **Pass**                                     |
+| `rule-architect`                 |   253 | `rule_tool_architect`                 | Pass                        | No result            | **Blocked: interview asset missing**         |
+| `rule-architect-cli`             |    82 | `rule_tool_architect_cli`             | Pass                        | Result               | **Warning: untracked/WIP**                   |
+| `rule-architect-web`             |    71 | `rule_tool_architect_web`             | Pass                        | Result               | **Blocked: untracked + UI/security defects** |
+| `rule-backend`                   |    61 | `rule_tool_backend`                   | Pass                        | Result               | **Pass**                                     |
+| `rule-backend-api-design`        |   158 | `rule_tool_backend_api_design`        | Pass                        | Result               | **Pass**                                     |
+| `rule-backend-express`           |   147 | `rule_tool_backend_express`           | Pass                        | Result               | **Pass**                                     |
+| `rule-backend-fastify`           |    82 | `rule_tool_backend_fastify`           | Pass                        | Result               | **Pass**                                     |
+| `rule-backend-hono`              |    91 | `rule_tool_backend_hono`              | Pass                        | Result               | **Pass**                                     |
+| `rule-backend-nestjs`            |    94 | `rule_tool_backend_nestjs`            | Pass                        | No result            | **Warning**                                  |
+| `rule-backend-node`              |   214 | `rule_tool_backend_node`              | Pass                        | No result            | **Warning**                                  |
+| `rule-backend-security`          |   174 | `rule_tool_backend_security`          | Pass                        | No result            | **Warning**                                  |
+| `rule-data`                      |    39 | `rule_tool_data`                      | Pass                        | Result               | **Pass**                                     |
+| `rule-data-duckdb`               |   234 | `rule_tool_data_duckdb`               | Warning: missing `See also` | Result               | **Warning**                                  |
+| `rule-data-indexed-db`           |   317 | `rule_tool_data_indexed_db`           | Warning: missing `See also` | No result            | **Warning**                                  |
+| `rule-data-mongodb`              |   743 | `rule_tool_data_mongodb`              | Pass                        | No result            | **Warning**                                  |
+| `rule-data-mysql`                |   595 | `rule_tool_data_mysql`                | Pass                        | Result               | **Pass**                                     |
+| `rule-data-postgresql`           |   649 | `rule_tool_data_postgresql`           | Pass                        | No result            | **Warning**                                  |
+| `rule-data-sql`                  |   632 | `rule_tool_data_sql`                  | Pass                        | No result            | **Warning**                                  |
+| `rule-data-sqlite`               |   242 | `rule_tool_data_sqlite`               | Warning: missing `See also` | Result               | **Warning**                                  |
+| `rule-devops`                    |    42 | `rule_tool_devops`                    | Pass                        | Result               | **Pass**                                     |
+| `rule-devops-docker`             |   128 | `rule_tool_devops_docker`             | Pass                        | No result            | **Warning**                                  |
+| `rule-devops-gitlab-ci`          |    75 | `rule_tool_devops_gitlab_ci`          | Pass                        | Result               | **Pass**                                     |
+| `rule-devops-testing`            |   300 | `rule_tool_devops_testing`            | Pass                        | No result            | **Warning**                                  |
+| `rule-devops-version`            |   161 | `rule_tool_devops_version`            | Pass                        | No result            | **Warning**                                  |
+| `rule-frontend`                  |    61 | `rule_tool_frontend`                  | Pass                        | Result               | **Pass**                                     |
+| `rule-frontend-angular`          |   504 | `rule_tool_frontend_angular`          | Pass                        | Result               | **Pass**                                     |
+| `rule-frontend-astro`            |   526 | `rule_tool_frontend_astro`            | Pass                        | Result               | **Pass**                                     |
+| `rule-frontend-meta-next`        |   201 | `rule_tool_frontend_meta_next`        | Pass                        | Result               | **Pass**                                     |
+| `rule-frontend-meta-nuxt`        |   181 | `rule_tool_frontend_meta_nuxt`        | Pass                        | Result               | **Pass**                                     |
+| `rule-frontend-meta-remix`       |   224 | `rule_tool_frontend_meta_remix`       | Pass                        | Result               | **Pass**                                     |
+| `rule-frontend-react`            |   688 | `rule_tool_frontend_react`            | Pass                        | No result            | **Warning**                                  |
+| `rule-frontend-solidjs`          |   532 | `rule_tool_frontend_solidjs`          | Pass                        | Result               | **Pass**                                     |
+| `rule-frontend-svelte`           |   508 | `rule_tool_frontend_svelte`           | Pass                        | Result               | **Pass**                                     |
+| `rule-frontend-vanilla-reactive` |   640 | `rule_tool_frontend_vanilla_reactive` | Pass                        | No result            | **Warning**                                  |
+| `rule-frontend-vue`              |   522 | `rule_tool_frontend_vue`              | Pass                        | No result            | **Warning**                                  |
+| `rule-platform`                  |    43 | `rule_tool_platform`                  | Pass                        | Result               | **Pass**                                     |
+| `rule-platform-agent`            |   294 | `rule_tool_platform_agent`            | Pass                        | No result            | **Warning**                                  |
+| `rule-platform-desktop`          |   542 | `rule_tool_platform_desktop`          | Pass                        | Result               | **Pass**                                     |
+| `rule-platform-expo`             |   254 | `rule_tool_platform_expo`             | Pass                        | Result               | **Pass**                                     |
+| `rule-platform-library`          |   259 | `rule_tool_platform_library`          | Pass                        | Result               | **Pass**                                     |
+| `rule-platform-web`              |   241 | `rule_tool_platform_web`              | Pass                        | No result            | **Warning**                                  |
+| `rule-process`                   |    43 | `pix_process`                        | Pass                        | Result               | **Pass**                                     |
+| `rule-process-adr`               |    96 | `rule_tool_process_adr`               | Pass                        | n/a                  | **Pass**                                     |
+| `rule-process-bmad`              |   422 | `rule_tool_process_bmad`              | Pass                        | Result               | **Pass**                                     |
+| `rule-process-documentation`     |   201 | `rule_tool_process_documentation`     | Pass                        | No result            | **Warning**                                  |
+| `rule-process-feature-workflow`  |   121 | `rule_tool_process_feature_workflow`  | Pass                        | Result               | **Pass**                                     |
+| `rule-process-handoff`           |    97 | `rule_tool_process_handoff`           | Pass                        | n/a                  | **Pass**                                     |
+| `rule-styleguide`                |    58 | `rule_tool_styleguide`                | Pass                        | Result               | **Pass**                                     |
+| `rule-styleguide-a11y`           |   514 | `rule_tool_styleguide_a11y`           | Pass                        | No result            | **Warning**                                  |
+| `rule-styleguide-css`            |   488 | `rule_tool_styleguide_css`            | Pass                        | No result            | **Warning**                                  |
+| `rule-styleguide-html`           |   339 | `rule_tool_styleguide_html`           | Pass                        | No result            | **Warning**                                  |
+| `rule-styleguide-javascript`     |   553 | `rule_tool_styleguide_javascript`     | Pass                        | No result            | **Warning**                                  |
+| `rule-styleguide-json`           |   132 | `rule_tool_styleguide_json`           | Pass                        | No result            | **Warning**                                  |
+| `rule-styleguide-markdown`       |   132 | `rule_tool_styleguide_markdown`       | Pass                        | Result               | **Pass**                                     |
+| `rule-styleguide-naming`         |   228 | `rule_tool_styleguide_naming`         | Pass                        | No result            | **Warning**                                  |
+| `rule-styleguide-patterns`       |   183 | `rule_tool_styleguide_patterns`       | Pass                        | No result            | **Warning**                                  |
+| `rule-styleguide-validation`     |   472 | `rule_tool_styleguide_validation`     | Pass                        | No result            | **Warning**                                  |
+| `rule-toolchain`                 |    69 | `rule_tool_toolchain`                 | Pass                        | Result               | **Pass**                                     |
+| `rule-toolchain-biome`           |   101 | `rule_tool_toolchain_biome`           | Pass                        | No result            | **Warning**                                  |
+| `rule-toolchain-eslint`          |    81 | `rule_tool_toolchain_eslint`          | Pass                        | Result               | **Pass**                                     |
+| `rule-toolchain-husky`           |   116 | `rule_tool_toolchain_husky`           | Pass                        | Result               | **Pass**                                     |
+| `rule-toolchain-parcel`          |   120 | `rule_tool_toolchain_parcel`          | Pass                        | Result               | **Pass**                                     |
+| `rule-toolchain-pnpm`            |   114 | `rule_tool_toolchain_pnpm`            | Pass                        | No result            | **Warning**                                  |
+| `rule-toolchain-project`         |   217 | `rule_tool_toolchain_project`         | Pass                        | No result            | **Warning**                                  |
+| `rule-toolchain-turborepo`       |   108 | `rule_tool_toolchain_turborepo`       | Pass                        | Result               | **Pass**                                     |
+| `rule-toolchain-typescript`      |   132 | `rule_tool_toolchain_typescript`      | Pass                        | Result               | **Pass**                                     |
+| `rule-toolchain-vite`            |    93 | `rule_tool_toolchain_vite`            | Pass                        | No result            | **Warning**                                  |
+| `rule-ui`                        |    79 | `rule_tool_ui`                        | Pass                        | Result               | **Pass**                                     |
+| `rule-ui-design-system`          |   214 | `rule_tool_ui_design_system`          | Pass                        | No result            | **Warning**                                  |
 
 Notes: all 70 names are Agent Skills-compatible (valid lowercase/hyphen names, unique, name matches directory, descriptions below 1,024 characters); all relative Markdown links resolve. “Pass” is structural/runtime, not independent factual certification of every framework/database statement.
 
@@ -602,152 +602,152 @@ Notes: all 70 names are Agent Skills-compatible (valid lowercase/hyphen names, u
 
 Isolated package state: **76 tools**. Live workstation state: **87 tools** because 11 unrelated global Agent Skills are auto-imported as plugins.
 
-| Tool | Kind | Exercised | Finding |
-|---|---|---|---|
-| `pix_tool` | Router | 60 curated + 69 self-description + live model | Partial: not mandatory; routing defects |
-| `rule_tool_architect` | Skill | 6 modes | Blocked: interview missing |
-| `rule_tool_architect_cli` | Skill | 6 modes | Modes callable |
-| `rule_tool_architect_web` | Skill | 6 modes | Modes callable |
-| `rule_tool_backend` | Skill | 6 modes | Modes callable |
-| `rule_tool_backend_api_design` | Skill | 6 modes | Modes callable |
-| `rule_tool_backend_express` | Skill | 6 modes | Modes callable |
-| `rule_tool_backend_fastify` | Skill | 6 modes | Modes callable |
-| `rule_tool_backend_hono` | Skill | 6 modes | Modes callable |
-| `rule_tool_backend_nestjs` | Skill | 6 modes | Partial: TLDR canonical query empty |
-| `rule_tool_backend_node` | Skill | 6 modes | Partial: TLDR canonical query empty |
-| `rule_tool_backend_security` | Skill | 6 modes | Partial: TLDR canonical query empty |
-| `rule_tool_data` | Skill | 6 modes | Modes callable |
-| `rule_tool_data_duckdb` | Skill | 6 modes | Modes callable |
-| `rule_tool_data_indexed_db` | Skill | 6 modes | Partial: TLDR canonical query empty |
-| `rule_tool_data_mongodb` | Skill | 6 modes | Partial: TLDR canonical query empty |
-| `rule_tool_data_mysql` | Skill | 6 modes | Modes callable |
-| `rule_tool_data_postgresql` | Skill | 6 modes | Partial: TLDR canonical query empty |
-| `rule_tool_data_sql` | Skill | 6 modes | Partial: TLDR canonical query empty |
-| `rule_tool_data_sqlite` | Skill | 6 modes | Modes callable |
-| `rule_tool_devops` | Skill | 6 modes | Modes callable |
-| `rule_tool_devops_docker` | Skill | 6 modes | Partial: TLDR canonical query empty |
-| `rule_tool_devops_gitlab_ci` | Skill | 6 modes | Modes callable |
-| `rule_tool_devops_testing` | Skill | 6 modes | Partial: TLDR canonical query empty |
-| `rule_tool_devops_version` | Skill | 6 modes | Partial: TLDR canonical query empty |
-| `rule_tool_frontend` | Skill | 6 modes | Modes callable |
-| `rule_tool_frontend_angular` | Skill | 6 modes | Modes callable |
-| `rule_tool_frontend_astro` | Skill | 6 modes | Modes callable |
-| `rule_tool_frontend_meta_next` | Skill | 6 modes | Modes callable |
-| `rule_tool_frontend_meta_nuxt` | Skill | 6 modes | Modes callable |
-| `rule_tool_frontend_meta_remix` | Skill | 6 modes | Modes callable |
-| `rule_tool_frontend_react` | Skill | 6 modes | Partial: TLDR canonical query empty |
-| `rule_tool_frontend_solidjs` | Skill | 6 modes | Modes callable |
-| `rule_tool_frontend_svelte` | Skill | 6 modes | Modes callable |
-| `rule_tool_frontend_vanilla_reactive` | Skill | 6 modes | Partial: TLDR canonical query empty |
-| `rule_tool_frontend_vue` | Skill | 6 modes | Partial: TLDR canonical query empty |
-| `rule_tool_platform` | Skill | 6 modes | Modes callable |
-| `rule_tool_platform_agent` | Skill | 6 modes | Partial: TLDR canonical query empty |
-| `rule_tool_platform_desktop` | Skill | 6 modes | Modes callable |
-| `rule_tool_platform_expo` | Skill | 6 modes | Modes callable |
-| `rule_tool_platform_library` | Skill | 6 modes | Modes callable |
-| `rule_tool_platform_web` | Skill | 6 modes | Partial: TLDR canonical query empty |
-| `pix_process` | Skill | 6 modes | Modes callable |
-| `rule_tool_process_bmad` | Skill | 6 modes | Modes callable |
-| `rule_tool_process_documentation` | Skill | 6 modes | Partial: TLDR canonical query empty |
-| `rule_tool_process_feature_workflow` | Skill | 6 modes | Modes callable |
-| `rule_tool_styleguide` | Skill | 6 modes | Modes callable |
-| `rule_tool_styleguide_a11y` | Skill | 6 modes | Partial: TLDR canonical query empty |
-| `rule_tool_styleguide_css` | Skill | 6 modes | Partial: TLDR canonical query empty |
-| `rule_tool_styleguide_html` | Skill | 6 modes | Partial: TLDR canonical query empty |
-| `rule_tool_styleguide_javascript` | Skill | 6 modes | Partial: TLDR canonical query empty |
-| `rule_tool_styleguide_json` | Skill | 6 modes | Partial: TLDR canonical query empty |
-| `rule_tool_styleguide_markdown` | Skill | 6 modes | Modes callable |
-| `rule_tool_styleguide_naming` | Skill | 6 modes | Partial: TLDR canonical query empty |
-| `rule_tool_styleguide_patterns` | Skill | 6 modes | Partial: TLDR canonical query empty |
-| `rule_tool_styleguide_validation` | Skill | 6 modes | Partial: TLDR canonical query empty |
-| `rule_tool_toolchain` | Skill | 6 modes | Modes callable |
-| `rule_tool_toolchain_biome` | Skill | 6 modes | Partial: TLDR canonical query empty |
-| `rule_tool_toolchain_eslint` | Skill | 6 modes | Modes callable |
-| `rule_tool_toolchain_husky` | Skill | 6 modes | Modes callable |
-| `rule_tool_toolchain_parcel` | Skill | 6 modes | Modes callable |
-| `rule_tool_toolchain_pnpm` | Skill | 6 modes | Partial: TLDR canonical query empty |
-| `rule_tool_toolchain_project` | Skill | 6 modes | Partial: TLDR canonical query empty |
-| `rule_tool_toolchain_turborepo` | Skill | 6 modes | Modes callable |
-| `rule_tool_toolchain_typescript` | Skill | 6 modes | Modes callable |
-| `rule_tool_toolchain_vite` | Skill | 6 modes | Partial: TLDR canonical query empty |
-| `rule_tool_ui` | Skill | 6 modes | Modes callable |
-| `rule_tool_ui_design_system` | Skill | 6 modes | Partial: TLDR canonical query empty |
-| `rule_tool_search` | Deterministic | Integration/adversarial | Pass; relevance needs tuning |
-| `rule_tool_check` | Deterministic | Integration/adversarial | Blocked: trusted previousPassed bypass |
-| `rule_tool_scaffold` | Deterministic | Integration/adversarial | Pass (returns text only) |
-| `rule_tool_detect` | Deterministic | Integration/adversarial | Partial: frontend-only classification |
-| `rule_tool_process_adr` | Deterministic | Integration/adversarial | Partial: races/auto-log pollution |
-| `rule_tool_fix` | Deterministic | Integration/adversarial | Blocked: dry-run/path escape |
-| `rule_tool_process_handoff` | Deterministic | Integration/adversarial | Partial: project-name/diff gaps |
-| `rule_tool_component` | Deterministic | Integration/adversarial | Blocked: invalid/non-compliant outputs |
+| Tool                                 | Kind          | Exercised                                     | Finding                                 |
+| ------------------------------------ | ------------- | --------------------------------------------- | --------------------------------------- |
+| `pix_tool`                           | Router        | 60 curated + 69 self-description + live model | Partial: not mandatory; routing defects |
+| `rule_tool_architect`                 | Skill         | 6 modes                                       | Blocked: interview missing              |
+| `rule_tool_architect_cli`             | Skill         | 6 modes                                       | Modes callable                          |
+| `rule_tool_architect_web`             | Skill         | 6 modes                                       | Modes callable                          |
+| `rule_tool_backend`                   | Skill         | 6 modes                                       | Modes callable                          |
+| `rule_tool_backend_api_design`        | Skill         | 6 modes                                       | Modes callable                          |
+| `rule_tool_backend_express`           | Skill         | 6 modes                                       | Modes callable                          |
+| `rule_tool_backend_fastify`           | Skill         | 6 modes                                       | Modes callable                          |
+| `rule_tool_backend_hono`              | Skill         | 6 modes                                       | Modes callable                          |
+| `rule_tool_backend_nestjs`            | Skill         | 6 modes                                       | Partial: TLDR canonical query empty     |
+| `rule_tool_backend_node`              | Skill         | 6 modes                                       | Partial: TLDR canonical query empty     |
+| `rule_tool_backend_security`          | Skill         | 6 modes                                       | Partial: TLDR canonical query empty     |
+| `rule_tool_data`                      | Skill         | 6 modes                                       | Modes callable                          |
+| `rule_tool_data_duckdb`               | Skill         | 6 modes                                       | Modes callable                          |
+| `rule_tool_data_indexed_db`           | Skill         | 6 modes                                       | Partial: TLDR canonical query empty     |
+| `rule_tool_data_mongodb`              | Skill         | 6 modes                                       | Partial: TLDR canonical query empty     |
+| `rule_tool_data_mysql`                | Skill         | 6 modes                                       | Modes callable                          |
+| `rule_tool_data_postgresql`           | Skill         | 6 modes                                       | Partial: TLDR canonical query empty     |
+| `rule_tool_data_sql`                  | Skill         | 6 modes                                       | Partial: TLDR canonical query empty     |
+| `rule_tool_data_sqlite`               | Skill         | 6 modes                                       | Modes callable                          |
+| `rule_tool_devops`                    | Skill         | 6 modes                                       | Modes callable                          |
+| `rule_tool_devops_docker`             | Skill         | 6 modes                                       | Partial: TLDR canonical query empty     |
+| `rule_tool_devops_gitlab_ci`          | Skill         | 6 modes                                       | Modes callable                          |
+| `rule_tool_devops_testing`            | Skill         | 6 modes                                       | Partial: TLDR canonical query empty     |
+| `rule_tool_devops_version`            | Skill         | 6 modes                                       | Partial: TLDR canonical query empty     |
+| `rule_tool_frontend`                  | Skill         | 6 modes                                       | Modes callable                          |
+| `rule_tool_frontend_angular`          | Skill         | 6 modes                                       | Modes callable                          |
+| `rule_tool_frontend_astro`            | Skill         | 6 modes                                       | Modes callable                          |
+| `rule_tool_frontend_meta_next`        | Skill         | 6 modes                                       | Modes callable                          |
+| `rule_tool_frontend_meta_nuxt`        | Skill         | 6 modes                                       | Modes callable                          |
+| `rule_tool_frontend_meta_remix`       | Skill         | 6 modes                                       | Modes callable                          |
+| `rule_tool_frontend_react`            | Skill         | 6 modes                                       | Partial: TLDR canonical query empty     |
+| `rule_tool_frontend_solidjs`          | Skill         | 6 modes                                       | Modes callable                          |
+| `rule_tool_frontend_svelte`           | Skill         | 6 modes                                       | Modes callable                          |
+| `rule_tool_frontend_vanilla_reactive` | Skill         | 6 modes                                       | Partial: TLDR canonical query empty     |
+| `rule_tool_frontend_vue`              | Skill         | 6 modes                                       | Partial: TLDR canonical query empty     |
+| `rule_tool_platform`                  | Skill         | 6 modes                                       | Modes callable                          |
+| `rule_tool_platform_agent`            | Skill         | 6 modes                                       | Partial: TLDR canonical query empty     |
+| `rule_tool_platform_desktop`          | Skill         | 6 modes                                       | Modes callable                          |
+| `rule_tool_platform_expo`             | Skill         | 6 modes                                       | Modes callable                          |
+| `rule_tool_platform_library`          | Skill         | 6 modes                                       | Modes callable                          |
+| `rule_tool_platform_web`              | Skill         | 6 modes                                       | Partial: TLDR canonical query empty     |
+| `pix_process`                        | Skill         | 6 modes                                       | Modes callable                          |
+| `rule_tool_process_bmad`              | Skill         | 6 modes                                       | Modes callable                          |
+| `rule_tool_process_documentation`     | Skill         | 6 modes                                       | Partial: TLDR canonical query empty     |
+| `rule_tool_process_feature_workflow`  | Skill         | 6 modes                                       | Modes callable                          |
+| `rule_tool_styleguide`                | Skill         | 6 modes                                       | Modes callable                          |
+| `rule_tool_styleguide_a11y`           | Skill         | 6 modes                                       | Partial: TLDR canonical query empty     |
+| `rule_tool_styleguide_css`            | Skill         | 6 modes                                       | Partial: TLDR canonical query empty     |
+| `rule_tool_styleguide_html`           | Skill         | 6 modes                                       | Partial: TLDR canonical query empty     |
+| `rule_tool_styleguide_javascript`     | Skill         | 6 modes                                       | Partial: TLDR canonical query empty     |
+| `rule_tool_styleguide_json`           | Skill         | 6 modes                                       | Partial: TLDR canonical query empty     |
+| `rule_tool_styleguide_markdown`       | Skill         | 6 modes                                       | Modes callable                          |
+| `rule_tool_styleguide_naming`         | Skill         | 6 modes                                       | Partial: TLDR canonical query empty     |
+| `rule_tool_styleguide_patterns`       | Skill         | 6 modes                                       | Partial: TLDR canonical query empty     |
+| `rule_tool_styleguide_validation`     | Skill         | 6 modes                                       | Partial: TLDR canonical query empty     |
+| `rule_tool_toolchain`                 | Skill         | 6 modes                                       | Modes callable                          |
+| `rule_tool_toolchain_biome`           | Skill         | 6 modes                                       | Partial: TLDR canonical query empty     |
+| `rule_tool_toolchain_eslint`          | Skill         | 6 modes                                       | Modes callable                          |
+| `rule_tool_toolchain_husky`           | Skill         | 6 modes                                       | Modes callable                          |
+| `rule_tool_toolchain_parcel`          | Skill         | 6 modes                                       | Modes callable                          |
+| `rule_tool_toolchain_pnpm`            | Skill         | 6 modes                                       | Partial: TLDR canonical query empty     |
+| `rule_tool_toolchain_project`         | Skill         | 6 modes                                       | Partial: TLDR canonical query empty     |
+| `rule_tool_toolchain_turborepo`       | Skill         | 6 modes                                       | Modes callable                          |
+| `rule_tool_toolchain_typescript`      | Skill         | 6 modes                                       | Modes callable                          |
+| `rule_tool_toolchain_vite`            | Skill         | 6 modes                                       | Partial: TLDR canonical query empty     |
+| `rule_tool_ui`                        | Skill         | 6 modes                                       | Modes callable                          |
+| `rule_tool_ui_design_system`          | Skill         | 6 modes                                       | Partial: TLDR canonical query empty     |
+| `rule_tool_search`                    | Deterministic | Integration/adversarial                       | Pass; relevance needs tuning            |
+| `rule_tool_check`                     | Deterministic | Integration/adversarial                       | Blocked: trusted previousPassed bypass  |
+| `rule_tool_scaffold`                  | Deterministic | Integration/adversarial                       | Pass (returns text only)                |
+| `rule_tool_detect`                    | Deterministic | Integration/adversarial                       | Partial: frontend-only classification   |
+| `rule_tool_process_adr`               | Deterministic | Integration/adversarial                       | Partial: races/auto-log pollution       |
+| `rule_tool_fix`                       | Deterministic | Integration/adversarial                       | Blocked: dry-run/path escape            |
+| `rule_tool_process_handoff`           | Deterministic | Integration/adversarial                       | Partial: project-name/diff gaps         |
+| `rule_tool_component`                 | Deterministic | Integration/adversarial                       | Blocked: invalid/non-compliant outputs  |
 
 ## Appendix C — Executable source inventory
 
-| File | Lines | Static parse | Review note |
-|---|---:|---|---|
-| `bin/rule-mcp.js` | 16 | Pass | Parsed; no blocker isolated by automated scan |
-| `scripts/embed-skills.mjs` | 67 | Pass | Destructive/non-reproducible skill embedding |
-| `scripts/install-skills.sh` | 29 | Pass | Parsed; no blocker isolated by automated scan |
-| `scripts/install.ps1` | 526 | Not run | Not parsed: PowerShell unavailable |
-| `scripts/install.sh` | 785 | Pass | Parsed; no blocker isolated by automated scan |
-| `scripts/package.sh` | 90 | Pass | Overwrites installers; masks pack failure |
-| `scripts/post-process.mjs` | 159 | Pass | Parsed; no blocker isolated by automated scan |
-| `scripts/setup.sh` | 51 | Pass | Parsed; no blocker isolated by automated scan |
-| `scripts/uninstall.ps1` | 499 | Not run | Not parsed: PowerShell unavailable |
-| `scripts/uninstall.sh` | 696 | Pass | Parsed; no blocker isolated by automated scan |
-| `src/cli/commands.js` | 504 | Pass | Parsed; no blocker isolated by automated scan |
-| `src/cli/completions.js` | 250 | Pass | Parsed; no blocker isolated by automated scan |
-| `src/cli/daemon.js` | 813 | Pass | Parsed; no blocker isolated by automated scan |
-| `src/cli/doctor.js` | 383 | Pass | Health result misses prompt/build/release failures |
-| `src/cli/install.js` | 692 | Pass | Malformed-config data loss; uninstall path mismatches |
-| `src/cli/paths.js` | 59 | Pass | Parsed; no blocker isolated by automated scan |
-| `src/cli/skills-install.js` | 261 | Pass | Non-TTY crash; recursive copy path defect |
-| `src/cli/tui.js` | 163 | Pass | Parsed; no blocker isolated by automated scan |
-| `src/cli/uninstall.js` | 36 | Pass | Parsed; no blocker isolated by automated scan |
-| `src/core/bm25.js` | 292 | Pass | Parsed; no blocker isolated by automated scan |
-| `src/core/detector.js` | 156 | Pass | Parsed; no blocker isolated by automated scan |
-| `src/core/enforcement.js` | 135 | Pass | Parsed; no blocker isolated by automated scan |
-| `src/core/file-tree.js` | 599 | Pass | Framework fallback, invalid custom-element tag, naming drift |
-| `src/core/guardrail-defs.js` | 684 | Pass | Regex blind spots; CSS/inline-style false passes |
-| `src/core/guardrails.js` | 165 | Pass | `previousPassed` bypass |
-| `src/core/skills.js` | 306 | Pass | Parsed; no blocker isolated by automated scan |
-| `src/core/template-data.js` | 226 | Pass | Accessibility/semantic/template defects |
-| `src/core/templates.js` | 164 | Pass | Framework fallback and non-compliant generation |
-| `src/index.js` | 428 | Pass | Parsed; no blocker isolated by automated scan |
-| `src/prompts/index.js` | 182 | Pass | Invalid MCP prompt role `system` |
-| `src/resources/index.js` | 179 | Pass | Plugin resources advertised but unreadable; duplicate/path leak |
-| `src/server.js` | 188 | Pass | Invalid prompts/get and completion implementation |
-| `src/tools/adr.js` | 329 | Pass | Auto-log side effects and concurrency risk |
-| `src/tools/ai.js` | 269 | Pass | Router scoring, confidence, path-bias defects |
-| `src/tools/architect.js` | 112 | Pass | Parsed; no blocker isolated by automated scan |
-| `src/tools/fix.js` | 197 | Pass | Dry-run ignored in generate; path escape/overwrite |
-| `src/tools/handoff.js` | 508 | Pass | Project-name precedence and incomplete working tree |
-| `src/tools/router.js` | 256 | Pass | Registry/enforcement; force reload duplicates; plugin trust boundary |
-| `src/tools/skill.js` | 318 | Pass | TLDR top-5-before-filter defect |
-| `src/transport/cert.js` | 113 | Pass | Parsed; no blocker isolated by automated scan |
-| `src/transport/sse.js` | 233 | Pass | Unauthenticated wildcard-CORS loopback service |
-| `src/utils/sandbox.js` | 145 | Pass | Timeout does not cancel work; errors swallowed |
-| `test/add-once.test.mjs` | 51 | Pass | Playwright test incorrectly run with Node by test:all |
-| `test/agent-commands-install.test.mjs` | 51 | Pass | Parsed; no blocker isolated by automated scan |
-| `test/ai.test.mjs` | 80 | Pass | Parsed; no blocker isolated by automated scan |
-| `test/architect-ui.test.mjs` | 114 | Pass | Hard-coded shared port; stale wizard expectations |
-| `test/cli-tui.test.mjs` | 55 | Pass | Parsed; no blocker isolated by automated scan |
-| `test/console-test.mjs` | 42 | Pass | Parsed; no blocker isolated by automated scan |
-| `test/daemon-wrapper.test.mjs` | 25 | Pass | Parsed; no blocker isolated by automated scan |
-| `test/daemon.test.mjs` | 97 | Pass | Environment-dependent native service assumptions |
-| `test/detector.test.mjs` | 105 | Pass | Parsed; no blocker isolated by automated scan |
-| `test/docs-architect.test.mjs` | 138 | Pass | Runtime fail: deleted architect assets |
-| `test/doctor-ui.test.mjs` | 78 | Pass | Parsed; no blocker isolated by automated scan |
-| `test/enforcement.test.mjs` | 100 | Pass | Does not test previousPassed or guardrail false negatives |
-| `test/fixtures/plugins/my-custom-rules/plugin.js` | 44 | Pass | Parsed; no blocker isolated by automated scan |
-| `test/framework-routing.test.mjs` | 83 | Pass | Parsed; no blocker isolated by automated scan |
-| `test/https.test.mjs` | 108 | Pass | Parsed; no blocker isolated by automated scan |
-| `test/pi-install.test.mjs` | 33 | Pass | Parsed; no blocker isolated by automated scan |
-| `test/repository-contract.test.mjs` | 92 | Pass | Parsed; no blocker isolated by automated scan |
-| `test/sandbox.test.mjs` | 92 | Pass | Parsed; no blocker isolated by automated scan |
-| `test/skills-docs.test.mjs` | 100 | Pass | Runtime fail: missing `See also` in new data skills |
-| `test/smoke.mjs` | 111 | Pass | Parsed; no blocker isolated by automated scan |
-| `test/sse.test.mjs` | 120 | Pass | Parsed; no blocker isolated by automated scan |
+| File                                              | Lines | Static parse | Review note                                                          |
+| ------------------------------------------------- | ----: | ------------ | -------------------------------------------------------------------- |
+| `bin/rule-mcp.js`                           |    16 | Pass         | Parsed; no blocker isolated by automated scan                        |
+| `scripts/embed-skills.mjs`                        |    67 | Pass         | Destructive/non-reproducible skill embedding                         |
+| `scripts/install-skills.sh`                       |    29 | Pass         | Parsed; no blocker isolated by automated scan                        |
+| `scripts/install.ps1`                             |   526 | Not run      | Not parsed: PowerShell unavailable                                   |
+| `scripts/install.sh`                              |   785 | Pass         | Parsed; no blocker isolated by automated scan                        |
+| `scripts/package.sh`                              |    90 | Pass         | Overwrites installers; masks pack failure                            |
+| `scripts/post-process.mjs`                        |   159 | Pass         | Parsed; no blocker isolated by automated scan                        |
+| `scripts/setup.sh`                                |    51 | Pass         | Parsed; no blocker isolated by automated scan                        |
+| `scripts/uninstall.ps1`                           |   499 | Not run      | Not parsed: PowerShell unavailable                                   |
+| `scripts/uninstall.sh`                            |   696 | Pass         | Parsed; no blocker isolated by automated scan                        |
+| `src/cli/commands.js`                             |   504 | Pass         | Parsed; no blocker isolated by automated scan                        |
+| `src/cli/completions.js`                          |   250 | Pass         | Parsed; no blocker isolated by automated scan                        |
+| `src/cli/daemon.js`                               |   813 | Pass         | Parsed; no blocker isolated by automated scan                        |
+| `src/cli/doctor.js`                               |   383 | Pass         | Health result misses prompt/build/release failures                   |
+| `src/cli/install.js`                              |   692 | Pass         | Malformed-config data loss; uninstall path mismatches                |
+| `src/cli/paths.js`                                |    59 | Pass         | Parsed; no blocker isolated by automated scan                        |
+| `src/cli/skills-install.js`                       |   261 | Pass         | Non-TTY crash; recursive copy path defect                            |
+| `src/cli/tui.js`                                  |   163 | Pass         | Parsed; no blocker isolated by automated scan                        |
+| `src/cli/uninstall.js`                            |    36 | Pass         | Parsed; no blocker isolated by automated scan                        |
+| `src/core/bm25.js`                                |   292 | Pass         | Parsed; no blocker isolated by automated scan                        |
+| `src/core/detector.js`                            |   156 | Pass         | Parsed; no blocker isolated by automated scan                        |
+| `src/core/enforcement.js`                         |   135 | Pass         | Parsed; no blocker isolated by automated scan                        |
+| `src/core/file-tree.js`                           |   599 | Pass         | Framework fallback, invalid custom-element tag, naming drift         |
+| `src/core/guardrail-defs.js`                      |   684 | Pass         | Regex blind spots; CSS/inline-style false passes                     |
+| `src/core/guardrails.js`                          |   165 | Pass         | `previousPassed` bypass                                              |
+| `src/core/skills.js`                              |   306 | Pass         | Parsed; no blocker isolated by automated scan                        |
+| `src/core/template-data.js`                       |   226 | Pass         | Accessibility/semantic/template defects                              |
+| `src/core/templates.js`                           |   164 | Pass         | Framework fallback and non-compliant generation                      |
+| `src/index.js`                                    |   428 | Pass         | Parsed; no blocker isolated by automated scan                        |
+| `src/prompts/index.js`                            |   182 | Pass         | Invalid MCP prompt role `system`                                     |
+| `src/resources/index.js`                          |   179 | Pass         | Plugin resources advertised but unreadable; duplicate/path leak      |
+| `src/server.js`                                   |   188 | Pass         | Invalid prompts/get and completion implementation                    |
+| `src/tools/adr.js`                                |   329 | Pass         | Auto-log side effects and concurrency risk                           |
+| `src/tools/ai.js`                                 |   269 | Pass         | Router scoring, confidence, path-bias defects                        |
+| `src/tools/architect.js`                          |   112 | Pass         | Parsed; no blocker isolated by automated scan                        |
+| `src/tools/fix.js`                                |   197 | Pass         | Dry-run ignored in generate; path escape/overwrite                   |
+| `src/tools/handoff.js`                            |   508 | Pass         | Project-name precedence and incomplete working tree                  |
+| `src/tools/router.js`                             |   256 | Pass         | Registry/enforcement; force reload duplicates; plugin trust boundary |
+| `src/tools/skill.js`                              |   318 | Pass         | TLDR top-5-before-filter defect                                      |
+| `src/transport/cert.js`                           |   113 | Pass         | Parsed; no blocker isolated by automated scan                        |
+| `src/transport/sse.js`                            |   233 | Pass         | Unauthenticated wildcard-CORS loopback service                       |
+| `src/utils/sandbox.js`                            |   145 | Pass         | Timeout does not cancel work; errors swallowed                       |
+| `test/add-once.test.mjs`                          |    51 | Pass         | Playwright test incorrectly run with Node by test:all                |
+| `test/agent-commands-install.test.mjs`            |    51 | Pass         | Parsed; no blocker isolated by automated scan                        |
+| `test/ai.test.mjs`                                |    80 | Pass         | Parsed; no blocker isolated by automated scan                        |
+| `test/architect-ui.test.mjs`                      |   114 | Pass         | Hard-coded shared port; stale wizard expectations                    |
+| `test/cli-tui.test.mjs`                           |    55 | Pass         | Parsed; no blocker isolated by automated scan                        |
+| `test/console-test.mjs`                           |    42 | Pass         | Parsed; no blocker isolated by automated scan                        |
+| `test/daemon-wrapper.test.mjs`                    |    25 | Pass         | Parsed; no blocker isolated by automated scan                        |
+| `test/daemon.test.mjs`                            |    97 | Pass         | Environment-dependent native service assumptions                     |
+| `test/detector.test.mjs`                          |   105 | Pass         | Parsed; no blocker isolated by automated scan                        |
+| `test/docs-architect.test.mjs`                    |   138 | Pass         | Runtime fail: deleted architect assets                               |
+| `test/doctor-ui.test.mjs`                         |    78 | Pass         | Parsed; no blocker isolated by automated scan                        |
+| `test/enforcement.test.mjs`                       |   100 | Pass         | Does not test previousPassed or guardrail false negatives            |
+| `test/fixtures/plugins/my-custom-rules/plugin.js` |    44 | Pass         | Parsed; no blocker isolated by automated scan                        |
+| `test/framework-routing.test.mjs`                 |    83 | Pass         | Parsed; no blocker isolated by automated scan                        |
+| `test/https.test.mjs`                             |   108 | Pass         | Parsed; no blocker isolated by automated scan                        |
+| `test/pi-install.test.mjs`                        |    33 | Pass         | Parsed; no blocker isolated by automated scan                        |
+| `test/repository-contract.test.mjs`               |    92 | Pass         | Parsed; no blocker isolated by automated scan                        |
+| `test/sandbox.test.mjs`                           |    92 | Pass         | Parsed; no blocker isolated by automated scan                        |
+| `test/skills-docs.test.mjs`                       |   100 | Pass         | Runtime fail: missing `See also` in new data skills                  |
+| `test/smoke.mjs`                                  |   111 | Pass         | Parsed; no blocker isolated by automated scan                        |
+| `test/sse.test.mjs`                               |   120 | Pass         | Parsed; no blocker isolated by automated scan                        |
 
 ## Appendix D — Artefatti e riproducibilità
 

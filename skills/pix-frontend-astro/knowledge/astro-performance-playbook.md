@@ -7,6 +7,7 @@ This playbook supports the rule-frontend-astro performance review skill. It cove
 Astro's performance philosophy: **zero JS by default**. Every byte of client-side JavaScript must be justified.
 
 Three key levers:
+
 1. **Islands architecture** — interactive components are isolated; only their JS loads
 2. **Client directives** — control when and how island JS loads
 3. **Rendering strategy** — SSG (build-time) vs SSR (request-time) per page
@@ -15,13 +16,13 @@ Three key levers:
 
 ### Directive hierarchy (least to most aggressive)
 
-| Directive | Load trigger | Best for |
-|---|---|---|
-| `client:visible` | Element enters viewport | Below-the-fold components |
-| `client:idle` | Browser is idle | Non-critical enhancements |
-| `client:media` | Media query matches | Responsive components |
-| `client:load` | Immediately on page load | Critical interactive UI |
-| `client:only` | Immediately (no SSR) | Framework-only components |
+| Directive        | Load trigger             | Best for                  |
+| ---------------- | ------------------------ | ------------------------- |
+| `client:visible` | Element enters viewport  | Below-the-fold components |
+| `client:idle`    | Browser is idle          | Non-critical enhancements |
+| `client:media`   | Media query matches      | Responsive components     |
+| `client:load`    | Immediately on page load | Critical interactive UI   |
+| `client:only`    | Immediately (no SSR)     | Framework-only components |
 
 ### Decision flow
 
@@ -154,6 +155,7 @@ import logo from '../images/logo.svg';
 ```
 
 ### Image checklist
+
 - ✅ Local images → `<Image />` from `astro:assets`
 - ✅ Explicit `width` + `height` to prevent CLS
 - ✅ `loading="lazy"` for below-the-fold images
@@ -193,14 +195,14 @@ Is SEO important?
 
 Each framework island loads that framework's runtime. Multiple frameworks = multiple runtimes.
 
-| Framework | Runtime cost |
-|---|---|
+| Framework                  | Runtime cost            |
+| -------------------------- | ----------------------- |
 | Vanilla JS / Web Component | 0 KB framework overhead |
-| Preact | ~4 KB |
-| SolidJS | ~8 KB |
-| Svelte | ~2 KB (compiled) |
-| Vue | ~33 KB |
-| React + ReactDOM | ~45 KB |
+| Preact                     | ~4 KB                   |
+| SolidJS                    | ~8 KB                   |
+| Svelte                     | ~2 KB (compiled)        |
+| Vue                        | ~33 KB                  |
+| React + ReactDOM           | ~45 KB                  |
 
 ```astro
 <!-- ✅ Simple interactivity → no framework -->
@@ -242,6 +244,7 @@ import BaseLayout from './_BaseLayout.astro';
 ## Pattern 9 — Critical vs deferred resources
 
 ### Critical CSS
+
 Inlined or loaded in `<head>`:
 
 ```astro
@@ -253,11 +256,13 @@ Inlined or loaded in `<head>`:
 ```
 
 ### Deferred CSS
+
 ```astro
 <link rel="preload" href="/styles/fonts.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
 ```
 
 ### Deferred JS
+
 ```astro
 <script type="module" src="/scripts/analytics.js" async></script>
 ```
@@ -283,9 +288,8 @@ If frontmatter grows beyond ~30 lines, extract logic:
 ```ts
 // lib/posts.ts
 export async function getFeaturedPosts() {
-  const posts = await getCollection('blog');
-  return posts.filter(p => p.data.featured && !p.data.draft)
-    .sort((a, b) => b.data.date - a.data.date);
+  const posts = await getCollection("blog");
+  return posts.filter((p) => p.data.featured && !p.data.draft).sort((a, b) => b.data.date - a.data.date);
 }
 ```
 
@@ -299,6 +303,7 @@ const posts = await getFeaturedPosts();
 ## Measurement notes
 
 Use these tools:
+
 - **Lighthouse** / PageSpeed Insights — Core Web Vitals (LCP, CLS, INP)
 - **Browser DevTools Network panel** — JS bundle sizes per island
 - **Astro's built-in `astro build` output** — page-level bundle analysis

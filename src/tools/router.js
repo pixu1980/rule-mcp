@@ -14,14 +14,21 @@ import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 import { z } from "zod/v4";
 import { getSkillsDirs as getSkillsDirectories } from "../cli/paths.js";
-import { decorateWorkflowReminder, enforcementError, postprocessToolResult, preprocessToolCall } from "../core/enforcement.js";
+import {
+  decorateWorkflowReminder,
+  enforcementError,
+  postprocessToolResult,
+  preprocessToolCall,
+} from "../core/enforcement.js";
 import { cacheGet, cacheKey, cacheSet } from "../core/tool-cache.js";
 import { compressResult } from "../core/caveman.js";
 import { consumeUpdateBanner, maybeSelfUpdate } from "../core/self-update.js";
 
 /** Prepend a self-update banner (if any) to a result so the update is visible. */
 function withBanner(banner, result) {
-  if (!banner || !result || !Array.isArray(result.content)) {return result;}
+  if (!banner || !result || !Array.isArray(result.content)) {
+    return result;
+  }
   return { ...result, content: [{ type: "text", text: banner }, ...result.content] };
 }
 
@@ -49,13 +56,17 @@ const _afterHooks = {};
 
 /** Register mandatory preprocessing hook. */
 export function addBeforeToolHook(toolName, function_) {
-  if (!_beforeHooks[toolName]) {_beforeHooks[toolName] = [];}
+  if (!_beforeHooks[toolName]) {
+    _beforeHooks[toolName] = [];
+  }
   _beforeHooks[toolName].push(function_);
 }
 
 /** Register mandatory postprocessing hook. */
 export function addPostToolHook(toolName, function_) {
-  if (!_postHooks[toolName]) {_postHooks[toolName] = [];}
+  if (!_postHooks[toolName]) {
+    _postHooks[toolName] = [];
+  }
   _postHooks[toolName].push(function_);
 }
 
@@ -67,7 +78,9 @@ export function addPostToolHook(toolName, function_) {
  * @param {(toolName: string, args: object, result: object) => Promise<void>} fn
  */
 export function addAfterToolHook(toolName, fn) {
-  if (!_afterHooks[toolName]) {_afterHooks[toolName] = [];}
+  if (!_afterHooks[toolName]) {
+    _afterHooks[toolName] = [];
+  }
   _afterHooks[toolName].push(fn);
 }
 
@@ -89,7 +102,9 @@ export function clearTools() {
 export function retainTools(allowed) {
   const keep = allowed instanceof Set ? allowed : new Set(allowed);
   for (let index = _tools.length - 1; index >= 0; index--) {
-    if (!keep.has(_tools[index].name)) {_tools.splice(index, 1);}
+    if (!keep.has(_tools[index].name)) {
+      _tools.splice(index, 1);
+    }
   }
 }
 
@@ -127,9 +142,9 @@ export function listTools() {
         const hasDefault = new Set(
           Object.entries(jsonSchema.properties ?? {})
             .filter(([, v]) => v && typeof v === "object" && "default" in v)
-            .map(([k]) => k)
+            .map(([k]) => k),
         );
-        const required = (jsonSchema.required ?? []).filter(k => !hasDefault.has(k));
+        const required = (jsonSchema.required ?? []).filter((k) => !hasDefault.has(k));
         inputSchema = {
           type: jsonSchema.type ?? "object",
           properties: jsonSchema.properties ?? {},
@@ -160,7 +175,11 @@ export async function callTool(name, args) {
   // consumed below and prepended to this result. pix_update runs its own
   // update. ──
   if (name !== "pix_update") {
-    try { maybeSelfUpdate(); } catch { /* fail-open */ }
+    try {
+      maybeSelfUpdate();
+    } catch {
+      /* fail-open */
+    }
   }
   const banner = consumeUpdateBanner();
 
@@ -180,14 +199,16 @@ export async function callTool(name, args) {
     const key = cacheKey(name, validated);
     if (key) {
       const cached = cacheGet(key);
-      if (cached) {return withBanner(banner, finalizeResult(name, cached));}
+      if (cached) {
+        return withBanner(banner, finalizeResult(name, cached));
+      }
     }
 
     stage = "preprocessing";
     let processedArguments = preprocessToolCall(name, validated);
     const beforeHooks = [...(_beforeHooks["*"] || []), ...(_beforeHooks[name] || [])];
     for (const function_ of beforeHooks) {
-      processedArguments = await function_(name, processedArguments, tool) ?? processedArguments;
+      processedArguments = (await function_(name, processedArguments, tool)) ?? processedArguments;
     }
 
     stage = "execution";
@@ -196,7 +217,7 @@ export async function callTool(name, args) {
     stage = "postprocessing";
     const postHooks = [...(_postHooks["*"] || []), ...(_postHooks[name] || [])];
     for (const function_ of postHooks) {
-      result = await function_(name, processedArguments, result, tool) ?? result;
+      result = (await function_(name, processedArguments, result, tool)) ?? result;
     }
     // Deterministic core — validated + metadata, no env/state-dependent decoration.
     const core = postprocessToolResult(name, processedArguments, result, {
@@ -207,17 +228,21 @@ export async function callTool(name, args) {
     stage = "finalize";
     if (!core?.isError) {
       // Cache the deterministic core (reminder + caveman are re-applied per call).
-      if (key) {cacheSet(key, core);}
+      if (key) {
+        cacheSet(key, core);
+      }
       const final = finalizeResult(name, core);
       const hooks = [...(_afterHooks["*"] || []), ...(_afterHooks[name] || [])];
-      for (const function_ of hooks) {function_(name, processedArguments, final).catch(() => {});}
+      for (const function_ of hooks) {
+        function_(name, processedArguments, final).catch(() => {});
+      }
       return withBanner(banner, final);
     }
 
     return withBanner(banner, finalizeResult(name, core));
   } catch (error) {
     if (error instanceof z.ZodError) {
-      const issues = error.issues.map(index => `- ${index.path.join(".")}: ${index.message}`).join("\n");
+      const issues = error.issues.map((index) => `- ${index.path.join(".")}: ${index.message}`).join("\n");
       return withBanner(banner, { isError: true, content: [{ type: "text", text: `Invalid arguments:\n${issues}` }] });
     }
     return withBanner(banner, enforcementError(name, stage, error));
@@ -267,11 +292,17 @@ export function getSkillNames() {
   const { embeddedSkills } = getSkillsDirectories();
   try {
     for (const entry of readdirSync(embeddedSkills, { withFileTypes: true })) {
-      if (!entry.isDirectory() || !entry.name.startsWith("rule-")) {continue;}
-      if (!existsSync(join(embeddedSkills, entry.name, "SKILL.md"))) {continue;}
+      if (!entry.isDirectory() || !entry.name.startsWith("rule-")) {
+        continue;
+      }
+      if (!existsSync(join(embeddedSkills, entry.name, "SKILL.md"))) {
+        continue;
+      }
       names.add(entry.name);
     }
-  } catch { /* no dir */ }
+  } catch {
+    /* no dir */
+  }
   return [...names].sort();
 }
 
@@ -287,7 +318,9 @@ export function getSkillNames() {
  */
 export function isPluginSkill(skillName) {
   // rule is the router skill, not a plugin
-  if (skillName === "rule") {return false;}
+  if (skillName === "rule") {
+    return false;
+  }
   return !skillName.startsWith("rule-");
 }
 

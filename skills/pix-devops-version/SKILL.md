@@ -31,6 +31,7 @@ pnpm exec husky init
 ```
 
 This creates:
+
 - `.husky/` directory
 - `package.json` script: `"prepare": "husky"`
 
@@ -68,13 +69,8 @@ Add lint-staged configuration to `package.json`:
 ```json
 {
   "lint-staged": {
-    "*.{js,ts,tsx}": [
-      "biome check --apply",
-      "biome format --write"
-    ],
-    "*.{json,md,yml,yaml}": [
-      "biome format --write"
-    ]
+    "*.{js,ts,tsx}": ["biome check --apply", "biome format --write"],
+    "*.{json,md,yml,yaml}": ["biome format --write"]
   }
 }
 ```
@@ -108,6 +104,7 @@ git commit -m "test: verify version increment"
 ```
 
 Check that:
+
 1. The version in `package.json` was incremented (patch version)
 2. `package.json` and `package-lock.json` were automatically added to the commit
 3. Type checking and linting ran successfully

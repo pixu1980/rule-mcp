@@ -41,10 +41,16 @@ process.stdin.setEncoding("utf8");
 let raw = false;
 
 function rawOn() {
-  if (!raw) { process.stdin.setRawMode(true); raw = true; }
+  if (!raw) {
+    process.stdin.setRawMode(true);
+    raw = true;
+  }
 }
 function rawOff() {
-  if (raw) { process.stdin.setRawMode(false); raw = false; }
+  if (raw) {
+    process.stdin.setRawMode(false);
+    raw = false;
+  }
 }
 
 function waitKey() {
@@ -68,17 +74,28 @@ function waitKey() {
 
 // ── Cursor helpers ──
 
-function cursorUp(n) { if (n > 0) process.stdout.write(`\x1b[${n}A`); }
-function clearRest() { process.stdout.write("\x1b[0J"); }
-function hide() { process.stdout.write("\x1b[?25l"); }
-function show() { process.stdout.write("\x1b[?25h"); }
+function cursorUp(n) {
+  if (n > 0) process.stdout.write(`\x1b[${n}A`);
+}
+function clearRest() {
+  process.stdout.write("\x1b[0J");
+}
+function hide() {
+  process.stdout.write("\x1b[?25l");
+}
+function show() {
+  process.stdout.write("\x1b[?25h");
+}
 
 // ── Readline question ──
 
 function ask(prompt) {
   return new Promise((resolve) => {
     const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
-    rl.question(prompt, (a) => { rl.close(); resolve(a.trim()); });
+    rl.question(prompt, (a) => {
+      rl.close();
+      resolve(a.trim());
+    });
   });
 }
 
@@ -87,13 +104,19 @@ function ask(prompt) {
 // ══════════════════════════════════════════════════════════════════════════════
 
 async function pickOption(field, values, optGroups) {
-  const list = typeof field.options === "string"
-    ? (optGroups[field.options] || [])
-    : (Array.isArray(field.options) ? field.options : []);
+  const list =
+    typeof field.options === "string"
+      ? optGroups[field.options] || []
+      : Array.isArray(field.options)
+        ? field.options
+        : [];
 
   const req = field.required ? " *" : "";
   const current = values[field.key];
-  let idx = Math.max(0, list.findIndex(o => (o.key ?? o.id) === current));
+  let idx = Math.max(
+    0,
+    list.findIndex((o) => (o.key ?? o.id) === current),
+  );
 
   function buildOutput() {
     const parts = [`  ${field.label}${req}`];
@@ -138,7 +161,9 @@ async function pickOption(field, values, optGroups) {
     } else if (key === "enter") {
       break;
     } else if (key === "esc") {
-      rawOff(); show(); return;
+      rawOff();
+      show();
+      return;
     }
   }
   rawOff();
@@ -175,8 +200,11 @@ async function inputTextarea(field, values) {
   const req = field.required ? " *" : "";
   console.log(`  ${field.label}${req}`);
   if (field.description) console.log(`  ${field.description}`);
-  if (val) { val.split("\n").forEach(l => console.log(`  \x1b[2m│ ${l}\x1b[0m`)); }
-  else { console.log(`  \x1b[2m(${ph || "one per line, blank = done"})\x1b[0m`); }
+  if (val) {
+    val.split("\n").forEach((l) => console.log(`  \x1b[2m│ ${l}\x1b[0m`));
+  } else {
+    console.log(`  \x1b[2m(${ph || "one per line, blank = done"})\x1b[0m`);
+  }
 
   const lines = val ? val.split("\n").filter(Boolean) : [];
   while (true) {
@@ -210,8 +238,12 @@ async function inputRepeatable(field, values) {
     if (cmd === "a") {
       const name = await ask(`  New ${nameKey}: `);
       if (name) {
-        const item = {}; sf.forEach(s => { item[s.key] = ""; });
-        item[nameKey] = name; arr.push(item);
+        const item = {};
+        sf.forEach((s) => {
+          item[s.key] = "";
+        });
+        item[nameKey] = name;
+        arr.push(item);
         console.log(`  \x1b[2mAdded: ${name}\x1b[0m`);
       }
     } else if (cmd.startsWith("d")) {
@@ -242,9 +274,18 @@ async function navPrompt(nav) {
   rawOn();
   while (true) {
     const k = await waitKey();
-    if (k === "ctrl-c") { rawOff(); return "quit"; }
-    if (k === "enter" || k === "right" || k === "n") { rawOff(); return nav.isLast ? "submit" : "next"; }
-    if ((k === "esc" || k === "left" || k === "p") && !nav.isFirst) { rawOff(); return "prev"; }
+    if (k === "ctrl-c") {
+      rawOff();
+      return "quit";
+    }
+    if (k === "enter" || k === "right" || k === "n") {
+      rawOff();
+      return nav.isLast ? "submit" : "next";
+    }
+    if ((k === "esc" || k === "left" || k === "p") && !nav.isFirst) {
+      rawOff();
+      return "prev";
+    }
   }
 }
 
@@ -253,7 +294,7 @@ async function navPrompt(nav) {
 // ══════════════════════════════════════════════════════════════════════════════
 
 export async function renderStep(step, values, optionGroups, nav) {
-  const vFields = step.fields.filter(f => isFieldVisible(f, values));
+  const vFields = step.fields.filter((f) => isFieldVisible(f, values));
 
   if (vFields.length === 0) {
     return { action: nav.isLast ? "submit" : "next", values };
@@ -266,7 +307,12 @@ export async function renderStep(step, values, optionGroups, nav) {
   const showCounter = nav.totalSteps > 0;
   const pct = showCounter ? Math.round((nav.stepNum / nav.totalSteps) * 100) : 0;
   const bar = showCounter
-    ? "\x1b[36m" + "█".repeat(Math.round(pct / 10)) + "\x1b[0m" + "\x1b[2m" + "░".repeat(10 - Math.round(pct / 10)) + "\x1b[0m"
+    ? "\x1b[36m" +
+      "█".repeat(Math.round(pct / 10)) +
+      "\x1b[0m" +
+      "\x1b[2m" +
+      "░".repeat(10 - Math.round(pct / 10)) +
+      "\x1b[0m"
     : "\x1b[2m?\x1b[0m";
   const stepLabel = showCounter ? `Step ${nav.stepNum}/${nav.totalSteps}` : "Analysis Depth";
   console.log(`\x1b[2m${"─".repeat(64)}\x1b[0m`);
@@ -279,11 +325,20 @@ export async function renderStep(step, values, optionGroups, nav) {
   // ── Fields ──
   for (const field of vFields) {
     switch (field.type) {
-      case "select": await pickOption(field, values, optionGroups); break;
-      case "text": await inputText(field, values); break;
-      case "textarea": await inputTextarea(field, values); break;
-      case "repeatable": await inputRepeatable(field, values); break;
-      default: await inputText({ ...field, type: "text" }, values);
+      case "select":
+        await pickOption(field, values, optionGroups);
+        break;
+      case "text":
+        await inputText(field, values);
+        break;
+      case "textarea":
+        await inputTextarea(field, values);
+        break;
+      case "repeatable":
+        await inputRepeatable(field, values);
+        break;
+      default:
+        await inputText({ ...field, type: "text" }, values);
     }
   }
 

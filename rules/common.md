@@ -16,16 +16,16 @@ This rule system is also available as an MCP server (`rule-mcp-rules`). If you h
 
 Load `common` rule first (this file). Load other rules only when needed:
 
-| Rule | When to Load |
-|---|---|
-| `commits-branches` | **Load immediately** — Before any git operation, branch creation, or commit |
-| `documentation` | **Load immediately** — When creating or updating README files |
-| `typescript` | **Load immediately** — When writing TypeScript code, types, interfaces |
-| `testing-standards` | When creating tests or configuring test coverage |
-| `accessibility` | **Only if requested. Frontend only** — Load when the project has frontend components AND accessibility features are required |
-| `i18n` | **Only if requested. Frontend only** — Load when the project has frontend components AND internationalization is needed |
-| `expo` | **Only if requested.** — Load when working on Expo / React Native mobile projects |
-| `api-security` | **Only if requested. Backend only** — Load when the project has backend components requiring API security |
+| Rule                | When to Load                                                                                                                 |
+| ------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| `commits-branches`  | **Load immediately** — Before any git operation, branch creation, or commit                                                  |
+| `documentation`     | **Load immediately** — When creating or updating README files                                                                |
+| `typescript`        | **Load immediately** — When writing TypeScript code, types, interfaces                                                       |
+| `testing-standards` | When creating tests or configuring test coverage                                                                             |
+| `accessibility`     | **Only if requested. Frontend only** — Load when the project has frontend components AND accessibility features are required |
+| `i18n`              | **Only if requested. Frontend only** — Load when the project has frontend components AND internationalization is needed      |
+| `expo`              | **Only if requested.** — Load when working on Expo / React Native mobile projects                                            |
+| `api-security`      | **Only if requested. Backend only** — Load when the project has backend components requiring API security                    |
 
 ### Rule descriptions
 

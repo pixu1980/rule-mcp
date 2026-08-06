@@ -157,10 +157,7 @@
           "type": "select",
           "options": "frontendFrameworks",
           "showIf": {
-            "PROJECT_TYPE": [
-              "webapp",
-              "desktop"
-            ]
+            "PROJECT_TYPE": ["webapp", "desktop"]
           },
           "default": "react",
           "description": "UI framework from rule-frontend-* skills. Shows when project type is Web or Desktop."
@@ -172,11 +169,7 @@
           "options": "metaFrameworks",
           "showIf": {
             "PROJECT_TYPE": "webapp",
-            "FRONTEND_FRAMEWORK": [
-              "react",
-              "vue",
-              "svelte"
-            ]
+            "FRONTEND_FRAMEWORK": ["react", "vue", "svelte"]
           },
           "default": "none",
           "description": "Full-stack framework built on the chosen frontend. Only available when Project Type is Web and a compatible frontend is selected."
@@ -198,11 +191,7 @@
           "type": "select",
           "options": "backendFrameworks",
           "showIf": {
-            "PROJECT_TYPE": [
-              "webapp",
-              "mobile",
-              "backend"
-            ]
+            "PROJECT_TYPE": ["webapp", "mobile", "backend"]
           },
           "default": "none",
           "description": "Server framework from rule-backend-* skills. Shows when project needs a backend."
@@ -226,11 +215,7 @@
           "type": "select",
           "options": "apiStyles",
           "showIf": {
-            "PROJECT_TYPE": [
-              "webapp",
-              "mobile",
-              "backend"
-            ]
+            "PROJECT_TYPE": ["webapp", "mobile", "backend"]
           },
           "default": "rest",
           "description": "API contract pattern: REST, GraphQL, tRPC, WebSocket, or Local Only."
@@ -241,10 +226,7 @@
           "type": "select",
           "options": "designSystems",
           "showIf": {
-            "PROJECT_TYPE": [
-              "webapp",
-              "desktop"
-            ]
+            "PROJECT_TYPE": ["webapp", "desktop"]
           },
           "default": "vanilla-css",
           "description": "CSS framework or methodology."
@@ -862,16 +844,7 @@
                   "key": "attrType",
                   "label": "Type",
                   "type": "select",
-                  "options": [
-                    "string",
-                    "number",
-                    "boolean",
-                    "date",
-                    "enum",
-                    "relation",
-                    "uuid",
-                    "json"
-                  ]
+                  "options": ["string", "number", "boolean", "date", "enum", "relation", "uuid", "json"]
                 },
                 {
                   "key": "attrRequired",
@@ -889,11 +862,7 @@
                   "key": "relType",
                   "label": "Type",
                   "type": "select",
-                  "options": [
-                    "1:1",
-                    "1:N",
-                    "N:M"
-                  ]
+                  "options": ["1:1", "1:N", "N:M"]
                 },
                 {
                   "key": "relTarget",
@@ -1038,11 +1007,7 @@
               "key": "priority",
               "label": "Priority",
               "type": "select",
-              "options": [
-                "P0 (Must)",
-                "P1 (Should)",
-                "P2 (Nice)"
-              ]
+              "options": ["P0 (Must)", "P1 (Should)", "P2 (Nice)"]
             }
           ]
         }
@@ -1725,61 +1690,42 @@
         "label": "PostgreSQL",
         "pixGalaxySkill": "rule-data-postgresql",
         "description": "Relational database for transactional backends, strong constraints, advanced SQL.",
-        "projectTypes": [
-          "backend"
-        ]
+        "projectTypes": ["backend"]
       },
       {
         "key": "mysql",
         "label": "MySQL",
         "pixGalaxySkill": "rule-data-mysql",
         "description": "Relational database with broad hosting support, mature tooling.",
-        "projectTypes": [
-          "backend"
-        ]
+        "projectTypes": ["backend"]
       },
       {
         "key": "sqlite",
         "label": "SQLite",
         "pixGalaxySkill": "rule-data-sqlite",
         "description": "Embedded relational database for local-first apps, offline storage, zero-config persistence.",
-        "projectTypes": [
-          "webapp",
-          "desktop",
-          "backend",
-          "mobile"
-        ]
+        "projectTypes": ["webapp", "desktop", "backend", "mobile"]
       },
       {
         "key": "mongodb",
         "label": "MongoDB",
         "pixGalaxySkill": "rule-data-mongodb",
         "description": "Document database for flexible schemas, fast iteration, JSON-shaped data.",
-        "projectTypes": [
-          "backend"
-        ]
+        "projectTypes": ["backend"]
       },
       {
         "key": "duckdb",
         "label": "DuckDB",
         "pixGalaxySkill": "rule-data-duckdb",
         "description": "Embedded analytical database for local OLAP queries on Parquet/CSV/JSON.",
-        "projectTypes": [
-          "webapp",
-          "desktop",
-          "backend"
-        ]
+        "projectTypes": ["webapp", "desktop", "backend"]
       },
       {
         "key": "indexeddb",
         "label": "IndexedDB / File System",
         "pixGalaxySkill": "rule-data-indexed-db",
         "description": "Browser storage for offline-capable apps that need local persistence without a server.",
-        "projectTypes": [
-          "webapp",
-          "desktop",
-          "mobile"
-        ]
+        "projectTypes": ["webapp", "desktop", "mobile"]
       }
     ],
     "apiStyles": [
@@ -1788,55 +1734,35 @@
         "label": "REST (OpenAPI)",
         "pixGalaxySkill": "rule-backend-api-design",
         "description": "Resource-oriented HTTP API with explicit endpoints, predictable status codes, and OpenAPI-friendly contracts.",
-        "projectTypes": [
-          "webapp",
-          "backend",
-          "mobile"
-        ]
+        "projectTypes": ["webapp", "backend", "mobile"]
       },
       {
         "key": "graphql",
         "label": "GraphQL",
         "pixGalaxySkill": "rule-backend",
         "description": "Typed graph endpoint for clients that need flexible field selection and fewer round-trips.",
-        "projectTypes": [
-          "webapp",
-          "backend",
-          "mobile"
-        ]
+        "projectTypes": ["webapp", "backend", "mobile"]
       },
       {
         "key": "trpc",
         "label": "tRPC",
         "pixGalaxySkill": "rule-backend",
         "description": "End-to-end typed RPC for TypeScript stacks when you want client and server to share the same contract.",
-        "projectTypes": [
-          "webapp",
-          "backend",
-          "mobile"
-        ]
+        "projectTypes": ["webapp", "backend", "mobile"]
       },
       {
         "key": "websocket",
         "label": "WebSocket / Realtime",
         "pixGalaxySkill": "rule-backend",
         "description": "Realtime bidirectional channel for live updates, collaboration, presence, and push events.",
-        "projectTypes": [
-          "webapp",
-          "backend",
-          "mobile"
-        ]
+        "projectTypes": ["webapp", "backend", "mobile"]
       },
       {
         "key": "local",
         "label": "Local Only (no network)",
         "pixGalaxySkill": "rule-backend",
         "description": "No network layer: local filesystem, IPC, or embedded APIs for fully offline products.",
-        "projectTypes": [
-          "desktop",
-          "backend",
-          "webapp"
-        ]
+        "projectTypes": ["desktop", "backend", "webapp"]
       }
     ],
     "designSystems": [
@@ -1845,66 +1771,42 @@
         "label": "Vanilla CSS",
         "pixGalaxySkill": "rule-styleguide",
         "description": "Plain CSS with custom properties, cascade layers, and low-level primitives for maximum control.",
-        "projectTypes": [
-          "webapp",
-          "desktop",
-          "mobile"
-        ]
+        "projectTypes": ["webapp", "desktop", "mobile"]
       },
       {
         "key": "tailwind",
         "label": "Tailwind CSS",
         "pixGalaxySkill": "rule-ui-design-system",
         "description": "Utility-first styling for rapid UI assembly with reusable design tokens and atomic classes.",
-        "projectTypes": [
-          "webapp",
-          "desktop",
-          "mobile"
-        ]
+        "projectTypes": ["webapp", "desktop", "mobile"]
       },
       {
         "key": "bootstrap",
         "label": "Bootstrap",
         "pixGalaxySkill": "rule-styleguide",
         "description": "Opinionated component library with responsive defaults and quick, familiar scaffolding.",
-        "projectTypes": [
-          "webapp",
-          "desktop",
-          "mobile"
-        ]
+        "projectTypes": ["webapp", "desktop", "mobile"]
       },
       {
         "key": "mui",
         "label": "Material Design (MUI)",
         "pixGalaxySkill": "rule-ui-design-system",
         "description": "Material Design component system for polished application UIs and complex interaction states.",
-        "projectTypes": [
-          "webapp",
-          "desktop",
-          "mobile"
-        ]
+        "projectTypes": ["webapp", "desktop", "mobile"]
       },
       {
         "key": "daisyui",
         "label": "DaisyUI",
         "pixGalaxySkill": "rule-ui-design-system",
         "description": "Tailwind component layer with themed UI primitives and fast setup.",
-        "projectTypes": [
-          "webapp",
-          "desktop",
-          "mobile"
-        ]
+        "projectTypes": ["webapp", "desktop", "mobile"]
       },
       {
         "key": "open-props",
         "label": "Open Props",
         "pixGalaxySkill": "rule-styleguide-css",
         "description": "Design token and CSS variable system for scalable theming and consistent spacing.",
-        "projectTypes": [
-          "webapp",
-          "desktop",
-          "mobile"
-        ]
+        "projectTypes": ["webapp", "desktop", "mobile"]
       }
     ],
     "architectureSkills": [
@@ -2928,11 +2830,7 @@
       "override": true
     },
     "FEATURES": {
-      "from": [
-        "TOP_FEATURE_1",
-        "TOP_FEATURE_2",
-        "TOP_FEATURE_3"
-      ],
+      "from": ["TOP_FEATURE_1", "TOP_FEATURE_2", "TOP_FEATURE_3"],
       "transform": "featuresFromSketch"
     },
     "PERSONAS": {

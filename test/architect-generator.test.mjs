@@ -62,7 +62,7 @@ test("answer values are substituted literally — $ patterns are not interpreted
     const agents = files.find((f) => f.path === "AGENTS.md");
     assert.ok(
       agents.content.includes(expected),
-      `${JSON.stringify(value)} must appear verbatim; first line was ${JSON.stringify(agents.content.split("\n", 1)[0])}`
+      `${JSON.stringify(value)} must appear verbatim; first line was ${JSON.stringify(agents.content.split("\n", 1)[0])}`,
     );
   }
 });

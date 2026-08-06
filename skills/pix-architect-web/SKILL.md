@@ -41,14 +41,14 @@ Open `http://localhost:3000`.
 
 ## API endpoints
 
-| Method | Path | Description |
-|--------|------|-------------|
-| `GET` | `/api/wizard-spec` | Returns wizard-spec.json from rule-architect engine |
-| `GET` | `/api/placeholders` | Backward compat — wizard-spec wrapped as placeholders shape |
-| `GET` | `/api/templates` | Template list with placeholder counts |
-| `GET` | `/api/init-values` | Detect project values to pre-fill the interview |
-| `POST` | `/api/generate` | Write .context/ to disk, returns file list |
-| `POST` | `/api/download` | Returns file contents as JSON (no disk write) |
+| Method | Path                | Description                                                 |
+| ------ | ------------------- | ----------------------------------------------------------- |
+| `GET`  | `/api/wizard-spec`  | Returns wizard-spec.json from rule-architect engine          |
+| `GET`  | `/api/placeholders` | Backward compat — wizard-spec wrapped as placeholders shape |
+| `GET`  | `/api/templates`    | Template list with placeholder counts                       |
+| `GET`  | `/api/init-values`  | Detect project values to pre-fill the interview             |
+| `POST` | `/api/generate`     | Write .context/ to disk, returns file list                  |
+| `POST` | `/api/download`     | Returns file contents as JSON (no disk write)               |
 
 ## How it works
 

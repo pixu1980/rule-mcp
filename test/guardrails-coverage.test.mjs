@@ -12,8 +12,13 @@
 let pass = 0;
 let fail = 0;
 const check = (label, ok) => {
-  if (ok) { pass++; console.log(`  ✅ ${label}`); }
-  else { fail++; console.log(`  ❌ ${label}`); }
+  if (ok) {
+    pass++;
+    console.log(`  ✅ ${label}`);
+  } else {
+    fail++;
+    console.log(`  ❌ ${label}`);
+  }
 };
 
 console.log("=== Guardrails Coverage Tests ===\n");
@@ -39,12 +44,19 @@ for (const skill of [
   "rule-styleguide",
 ]) {
   const ids = new Set(getGuardrails(skill).map((g) => g.id));
-  check(`T1 ${skill} includes all shared guardrails`, sharedIds.every((id) => ids.has(id)));
+  check(
+    `T1 ${skill} includes all shared guardrails`,
+    sharedIds.every((id) => ids.has(id)),
+  );
 }
 
 // ── T2: component generation always involves guardrails ──
 await loadAllSkills();
-for (const [component, framework] of [["button", "react"], ["card", "vue"], ["button", "vanilla"]]) {
+for (const [component, framework] of [
+  ["button", "react"],
+  ["card", "vue"],
+  ["button", "vanilla"],
+]) {
   const r = await callTool("rule_tool_component", { component, framework });
   const text = r.content.map((c) => c.text).join("\n");
   check(`T2 ${component}/${framework} output carries a guardrail summary`, text.includes("## Guardrails"));
@@ -59,8 +71,13 @@ for (const [component, framework, skill] of [
 ]) {
   const tmpl = await callTool("rule_tool_component", { component, framework });
   // Extract fenced code from the output for a faithful check.
-  const code = tmpl.content.map((c) => c.text).join("\n").match(/```[a-z]*\n([\s\S]*?)```/gi)
-    ?.map((b) => b.replaceAll(/```[a-z]*\n?/gi, "").replaceAll('```', "")).join("\n") ?? "";
+  const code =
+    tmpl.content
+      .map((c) => c.text)
+      .join("\n")
+      .match(/```[a-z]*\n([\s\S]*?)```/gi)
+      ?.map((b) => b.replaceAll(/```[a-z]*\n?/gi, "").replaceAll("```", ""))
+      .join("\n") ?? "";
   const report = checkCode(skill, code, { framework, isComponent: true });
   const failedCore = report.failed.filter((f) => CORE_IDS.has(f.id));
   check(`T3 ${component}/${framework} passes core principles (no classes/inline styles)`, failedCore.length === 0);
@@ -87,7 +104,10 @@ rows.map((r) => r.cells).flat();
 const cache = Map();`;
 const badReport = checkCode("rule-styleguide-javascript", BAD_JS, { fileName: "demo.js", framework: "vanilla" });
 for (const id of JS_IDIOM_IDS) {
-  check(`T4 ${id} fires on non-idiomatic JS`, badReport.failed.some((f) => f.id === id));
+  check(
+    `T4 ${id} fires on non-idiomatic JS`,
+    badReport.failed.some((f) => f.id === id),
+  );
 }
 const GOOD_JS = `const allowed = new Set(['read', 'write']);
 const granted = requested.filter((scope) => allowed.has(scope));

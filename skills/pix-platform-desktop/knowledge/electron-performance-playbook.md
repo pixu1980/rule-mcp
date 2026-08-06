@@ -5,6 +5,7 @@ This playbook supports the rule-electron performance review skill. It covers IPC
 ## Mental model
 
 Electron performance is about three things:
+
 1. **IPC cost** — every cross-process call has overhead
 2. **Main process responsiveness** — the main process handles all system interactions
 3. **App startup** — first impression is everything
@@ -38,11 +39,7 @@ const b = await qt.getB();
 const c = await qt.getC();
 
 // ✅ Parallel (all at once)
-const [a, b, c] = await Promise.all([
-  qt.getA(),
-  qt.getB(),
-  qt.getC(),
-]);
+const [a, b, c] = await Promise.all([qt.getA(), qt.getB(), qt.getC()]);
 ```
 
 ## Pattern 2 — Throttling IPC
@@ -56,7 +53,7 @@ Mouse moves, scroll events, resize — these fire at 60+ fps. Sending IPC for ea
 ```js
 // requestAnimationFrame throttling
 let pending = null;
-element.addEventListener('mousemove', (e) => {
+element.addEventListener("mousemove", (e) => {
   pending = e;
   if (!rafScheduled) {
     rafScheduled = true;
@@ -73,7 +70,7 @@ element.addEventListener('mousemove', (e) => {
 const debouncedSave = debounce((text) => {
   qt.saveDraft(id, text);
 }, 500);
-editor.addEventListener('input', (e) => debouncedSave(e.target.value));
+editor.addEventListener("input", (e) => debouncedSave(e.target.value));
 ```
 
 ## Pattern 3 — Window creation
@@ -104,35 +101,36 @@ function openPreferences() {
 ```js
 const win = new BrowserWindow({
   show: false,
-  backgroundColor: '#1a1a2e',
+  backgroundColor: "#1a1a2e",
 });
 
-win.once('ready-to-show', () => {
+win.once("ready-to-show", () => {
   win.show();
 });
 
-win.loadURL('file://...');
+win.loadURL("file://...");
 ```
 
 ## Pattern 4 — Native modules
 
 Native modules (`.node` files) are expensive. Each one:
+
 - Must be compiled for the target platform (`electron-rebuild`)
 - Increases package size significantly
 - Can cause version compatibility issues with Electron
 
 ### Prefer built-ins
 
-| Need | Built-in alternative |
-|---|---|
-| Hashing | `crypto.createHash()` |
-| UUID | `crypto.randomUUID()` |
-| JSON | `JSON.parse / JSON.stringify` |
-| HTTP | `fetch()` (Node 18+) or `http` module |
-| Path | `path` module |
-| File system | `fs` module |
-| Compression | `zlib` module |
-| Events | `EventEmitter` |
+| Need        | Built-in alternative                  |
+| ----------- | ------------------------------------- |
+| Hashing     | `crypto.createHash()`                 |
+| UUID        | `crypto.randomUUID()`                 |
+| JSON        | `JSON.parse / JSON.stringify`         |
+| HTTP        | `fetch()` (Node 18+) or `http` module |
+| Path        | `path` module                         |
+| File system | `fs` module                           |
+| Compression | `zlib` module                         |
+| Events      | `EventEmitter`                        |
 
 ## Pattern 5 — Startup optimization
 
@@ -159,14 +157,16 @@ app.whenReady()
 ```js
 // Simple splash
 const splash = new BrowserWindow({
-  width: 400, height: 300,
-  frame: false, alwaysOnTop: true,
-  backgroundColor: '#1a1a2e',
+  width: 400,
+  height: 300,
+  frame: false,
+  alwaysOnTop: true,
+  backgroundColor: "#1a1a2e",
 });
 splash.loadURL(`file://${__dirname}/splash.html`);
 
 // Close when main is ready
-mainWin.once('ready-to-show', () => {
+mainWin.once("ready-to-show", () => {
   splash.close();
   mainWin.show();
 });
@@ -178,9 +178,9 @@ CPU-heavy work in the main process blocks all IPC and window management.
 
 ```js
 // worker.js
-const { parentPort } = require('worker_threads');
+const { parentPort } = require("worker_threads");
 
-parentPort.on('message', (data) => {
+parentPort.on("message", (data) => {
   const result = expensiveComputation(data);
   parentPort.postMessage(result);
 });
@@ -188,15 +188,15 @@ parentPort.on('message', (data) => {
 
 ```js
 // main.js
-const { Worker } = require('worker_threads');
+const { Worker } = require("worker_threads");
 
 function runWorker(workerPath, data) {
   return new Promise((resolve, reject) => {
     const worker = new Worker(workerPath);
     worker.postMessage(data);
-    worker.on('message', resolve);
-    worker.on('error', reject);
-    worker.on('exit', (code) => {
+    worker.on("message", resolve);
+    worker.on("error", reject);
+    worker.on("exit", (code) => {
       if (code !== 0) reject(new Error(`Worker stopped with exit code ${code}`));
     });
   });
@@ -225,13 +225,13 @@ pnpx depcheck
 
 ### Common swaps
 
-| Heavy package | Lighter alternative |
-|---|---|
-| `lodash` | Native array/object methods |
-| `moment` | `Intl.DateTimeFormat` or `date-fns` (tree-shakeable) |
-| `axios` | `fetch()` (Node 18+) |
-| `uuid` | `crypto.randomUUID()` |
-| `fs-extra` | `fs` + manual mkdirp |
+| Heavy package | Lighter alternative                                  |
+| ------------- | ---------------------------------------------------- |
+| `lodash`      | Native array/object methods                          |
+| `moment`      | `Intl.DateTimeFormat` or `date-fns` (tree-shakeable) |
+| `axios`       | `fetch()` (Node 18+)                                 |
+| `uuid`        | `crypto.randomUUID()`                                |
+| `fs-extra`    | `fs` + manual mkdirp                                 |
 
 ## Pattern 8 — ASAR and packaging
 
@@ -241,18 +241,8 @@ ASAR archives all files into a single blob for faster reads. However, native mod
 {
   "build": {
     "asar": true,
-    "asarUnpack": [
-      "node_modules/**/*.node",
-      "scripts/**",
-      "python/**"
-    ],
-    "files": [
-      "electron/**/*",
-      "src/**/*",
-      "assets/**/*",
-      "!**/*.map",
-      "!**/*.test.*"
-    ]
+    "asarUnpack": ["node_modules/**/*.node", "scripts/**", "python/**"],
+    "files": ["electron/**/*", "src/**/*", "assets/**/*", "!**/*.map", "!**/*.test.*"]
   }
 }
 ```
@@ -279,22 +269,22 @@ Keep the main entry point thin:
 
 ```js
 // electron/main.js
-const { app } = require('electron');
-const { bootstrap } = require('./_bootstrap.js');
+const { app } = require("electron");
+const { bootstrap } = require("./_bootstrap.js");
 
 app.whenReady().then(() => bootstrap());
 ```
 
 ```js
 // electron/_bootstrap.js
-const { createMainWindow } = require('./windows/_main.js');
-const { registerAllHandlers } = require('./ipc/index.js');
+const { createMainWindow } = require("./windows/_main.js");
+const { registerAllHandlers } = require("./ipc/index.js");
 
 function bootstrap() {
   createMainWindow();
   registerAllHandlers();
   // Lazy-load non-critical features
-  import('./features/_auto-updater.js').then(m => m.init());
+  import("./features/_auto-updater.js").then((m) => m.init());
 }
 ```
 

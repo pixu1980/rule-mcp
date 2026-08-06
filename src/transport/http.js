@@ -82,18 +82,26 @@ function handleCors(request, res) {
  * @returns {boolean} true if authorized
  */
 function checkAuth(request, pathname) {
-  if (pathname === "/health") {return true;}
+  if (pathname === "/health") {
+    return true;
+  }
   const auth = request.headers.authorization;
-  if (!auth) {return false;}
+  if (!auth) {
+    return false;
+  }
   const provided = Buffer.from(auth);
   const wanted = Buffer.from(`Bearer ${serverToken}`);
-  if (provided.length !== wanted.length) {return false;}
+  if (provided.length !== wanted.length) {
+    return false;
+  }
   return timingSafeEqual(provided, wanted);
 }
 
 /** Write a JSON-RPC-style error response. */
 function sendJsonRpcError(res, status, code, message) {
-  if (res.headersSent) {return;}
+  if (res.headersSent) {
+    return;
+  }
   res.writeHead(status, { "Content-Type": "application/json" });
   res.end(JSON.stringify({ jsonrpc: "2.0", error: { code, message }, id: null }));
 }
@@ -123,7 +131,9 @@ async function readBody(request, res) {
  * HTTP/HTTPS request handler for the Streamable HTTP transport.
  */
 async function requestHandler(request, res) {
-  if (handleCors(request, res)) {return;}
+  if (handleCors(request, res)) {
+    return;
+  }
 
   const prototype = httpServer instanceof https.Server ? "https" : "http";
   const parsedUrl = new URL(request.url ?? "/", `${prototype}://${request.headers.host ?? "localhost"}`);
@@ -164,7 +174,9 @@ async function requestHandler(request, res) {
     // ── POST /mcp ──
     if (request.method === "POST") {
       const body = await readBody(request, res);
-      if (body === null) {return;} // 413 already sent
+      if (body === null) {
+        return;
+      } // 413 already sent
       const parsed = safeJsonParse(body);
       if (parsed === undefined) {
         sendJsonRpcError(res, 400, -32_700, "Parse error: invalid JSON in request body");
@@ -217,7 +229,9 @@ async function requestHandler(request, res) {
     res.end(JSON.stringify({ error: "Method not allowed" }));
   } catch (error) {
     const requestId = randomUUID();
-    process.stderr.write(`[rule-mcp] [${requestId}] ${request.method} ${request.url}: ${error?.stack ?? error?.message ?? error}\n`);
+    process.stderr.write(
+      `[rule-mcp] [${requestId}] ${request.method} ${request.url}: ${error?.stack ?? error?.message ?? error}\n`,
+    );
     if (!res.headersSent) {
       res.writeHead(500, { "Content-Type": "application/json" });
       res.end(JSON.stringify({ error: "Internal server error", requestId }));
@@ -254,7 +268,10 @@ export async function startHttpServer(options = {}) {
 
   const safeHandler = wrapRequestHandler(requestHandler, { timeout: 60_000 });
 
-  httpServer = sslCert && sslKey ? https.createServer({ cert: readFileSync(sslCert), key: readFileSync(sslKey) }, safeHandler) : http.createServer(safeHandler);
+  httpServer =
+    sslCert && sslKey
+      ? https.createServer({ cert: readFileSync(sslCert), key: readFileSync(sslKey) }, safeHandler)
+      : http.createServer(safeHandler);
 
   // Streams are long-lived; disable the generic idle timeout.
   httpServer.timeout = 0;
@@ -279,10 +296,14 @@ export async function stopHttpServer() {
     try {
       transport.onclose = null;
       await transport.close();
-    } catch { /* ignore */ }
+    } catch {
+      /* ignore */
+    }
     try {
       await server.close();
-    } catch { /* ignore */ }
+    } catch {
+      /* ignore */
+    }
     transports.delete(id);
   }
 

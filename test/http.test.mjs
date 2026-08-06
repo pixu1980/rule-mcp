@@ -9,8 +9,13 @@
 let pass = 0;
 let fail = 0;
 const check = (label, ok) => {
-  if (ok) { pass++; console.log(`  ✅ ${label}`); }
-  else { fail++; console.log(`  ❌ ${label}`); }
+  if (ok) {
+    pass++;
+    console.log(`  ✅ ${label}`);
+  } else {
+    fail++;
+    console.log(`  ❌ ${label}`);
+  }
 };
 
 console.log("=== Streamable HTTP Transport Tests ===\n");
@@ -44,8 +49,12 @@ function parseBody(contentType, text) {
 
 async function post(bodyObject, { token = TOKEN, sessionId } = {}) {
   const headers = { "Content-Type": "application/json", Accept: ACCEPT };
-  if (token) {headers.Authorization = `Bearer ${token}`;}
-  if (sessionId) {headers["Mcp-Session-Id"] = sessionId;}
+  if (token) {
+    headers.Authorization = `Bearer ${token}`;
+  }
+  if (sessionId) {
+    headers["Mcp-Session-Id"] = sessionId;
+  }
   const res = await fetch(base, { method: "POST", headers, body: JSON.stringify(bodyObject) });
   const text = await res.text();
   return { res, body: parseBody(res.headers.get("content-type") ?? "", text) };
@@ -96,7 +105,10 @@ let sessionId;
 
 // ── T4.5: logging/setLevel is honored (advertised capability must work) ──
 {
-  const { res, body } = await post({ jsonrpc: "2.0", id: 5, method: "logging/setLevel", params: { level: "info" } }, { sessionId });
+  const { res, body } = await post(
+    { jsonrpc: "2.0", id: 5, method: "logging/setLevel", params: { level: "info" } },
+    { sessionId },
+  );
   check("T4.5 logging/setLevel → 200", res.status === 200);
   check("T4.5.1 logging/setLevel returns a non-error result", !!body && !body.error);
 }

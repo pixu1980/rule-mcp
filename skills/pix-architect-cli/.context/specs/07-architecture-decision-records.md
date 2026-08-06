@@ -32,18 +32,23 @@ When documenting a new decision, use:
 # ADR **[NN]**: [Title]
 
 ## Context
+
 What is the problem or opportunity?
 
 ## Decision
+
 What was decided?
 
 ## Rationale
+
 Why was this chosen over alternatives?
 
 ## Consequences
+
 What does this mean for the codebase, team, or users?
 
 ## Alternatives Considered
+
 - Option A: pros/cons
 - Option B: pros/cons
 ```

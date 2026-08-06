@@ -37,6 +37,7 @@ description: React best practices aligned with rule-styleguide. Zero CSS classes
 ```
 
 **Verifica:**
+
 ```bash
 # Dopo installazione:
 ls ~/.claude/skills/rule-*/SKILL.md | wc -l  # deve essere > 0
@@ -47,19 +48,21 @@ ls ~/.claude/skills/rule-*/SKILL.md | wc -l  # deve essere > 0
 L'audit ha rilevato che 59 skill su 70 non hanno una formula esplicita "Use when..." nella `description`. Questo è critico per l'auto-discovery nativo di Claude, che matcha la `description` contro il prompt utente.
 
 **Template:**
+
 ```yaml
 description: >-
   Use when <condition> to <action>. Covers <topics>.
 ```
 
 **Esempi corretti (già presenti):**
+
 ```yaml
 # rule-backend-express
 description: >-
   Express.js 5+ best practices: middleware patterns, error handling,
   routing, performance optimization, security headers, and production deployment.
 
-# rule-data-postgresql  
+# rule-data-postgresql
 description: >-
   PostgreSQL 16+ complete reference: DDL scripts, indexing strategies,
   performance tuning, replication, connection pooling, JSONB patterns,
@@ -67,6 +70,7 @@ description: >-
 ```
 
 **Esempi da migliorare (troppo vaghi):**
+
 ```yaml
 # rule-backend (attuale)
 description: >-
@@ -83,6 +87,7 @@ description: >-
 **File da modificare:** tutti i 70 `skills/*/SKILL.md` che non hanno già "Use when" o formula equivalente nella description.
 
 **Verifica:**
+
 ```bash
 # Contare quante skill hanno "Use when" nella description
 grep -rl '^description:.*Use when' skills/*/SKILL.md | wc -l
@@ -101,8 +106,13 @@ grep -rl '^description:.*Use when' skills/*/SKILL.md | wc -l
       "command": "node",
       "args": ["bin/rule-mcp.js", "serve"],
       "allowedTools": [
-        "rule_tool_gateway", "rule_tool_apply", "rule", "rule_tool_search",
-        "rule_tool_check", "rule_tool_detect", "rule_tool_scaffold"
+        "rule_tool_gateway",
+        "rule_tool_apply",
+        "rule",
+        "rule_tool_search",
+        "rule_tool_check",
+        "rule_tool_detect",
+        "rule_tool_scaffold"
       ]
     }
   }
@@ -114,6 +124,7 @@ grep -rl '^description:.*Use when' skills/*/SKILL.md | wc -l
 Il README dichiara 71 tool, ma sono 78 (normal mode) o 9 (strict mode). E le risorse non sono più 146 — vanno contate con `rule://skills`.
 
 **Fix:**
+
 ```bash
 # Ottenere conteggi reali
 HOME=/tmp/rule-audit-home RULE_MCP_DISABLE_AUTO_ADR=1 NODE_ENV=test \

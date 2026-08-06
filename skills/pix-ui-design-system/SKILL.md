@@ -44,13 +44,13 @@ Design ambition never overrides implementation rules:
 
 Before writing UI code, answer these in the implementation notes or PR body:
 
-| Question | Output |
-|----------|--------|
-| Purpose | What problem does this UI solve and for whom? |
-| Tone | Pick a precise direction: brutalist/raw, editorial, luxury/refined, playful, retro-futuristic, industrial, organic, art-deco, soft/pastel, etc. |
-| Differentiator | What is the one unforgettable detail? |
-| Constraints | Framework, performance, a11y, motion, theme, and deployment constraints. |
-| Translation | Which rule skill and component pattern owns the implementation? |
+| Question       | Output                                                                                                                                          |
+| -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| Purpose        | What problem does this UI solve and for whom?                                                                                                   |
+| Tone           | Pick a precise direction: brutalist/raw, editorial, luxury/refined, playful, retro-futuristic, industrial, organic, art-deco, soft/pastel, etc. |
+| Differentiator | What is the one unforgettable detail?                                                                                                           |
+| Constraints    | Framework, performance, a11y, motion, theme, and deployment constraints.                                                                        |
+| Translation    | Which rule skill and component pattern owns the implementation?                                                                                  |
 
 ## Aesthetic direction rules
 
@@ -158,7 +158,7 @@ article[data-part="panel"] {
 
 @media (prefers-reduced-motion: no-preference) {
   article[data-part="panel"] {
-    animation: panel-enter 520ms cubic-bezier(.2, .8, .2, 1) both;
+    animation: panel-enter 520ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
   }
 }
 ```
@@ -190,16 +190,16 @@ For React, Vue, Angular, Svelte, SolidJS, Astro, Next, Nuxt, or Remix:
 
 ## Pair with these skills
 
-| Need | Skill |
-|------|-------|
-| Routing | [rule](../rule/SKILL.md) |
-| Architecture | [rule-architect](../rule-architect/SKILL.md) |
-| Frontend umbrella | [rule-frontend](../rule-frontend/SKILL.md) |
-| CSS rules | [rule-styleguide-css](../rule-styleguide-css/SKILL.md) |
-| Semantic HTML | [rule-styleguide-html](../rule-styleguide-html/SKILL.md) |
-| Accessibility | [rule-styleguide-a11y](../rule-styleguide-a11y/SKILL.md) |
-| Naming/file tree | [rule-styleguide-naming](../rule-styleguide-naming/SKILL.md) |
-| Validation | [rule_tool_check](../rule/SKILL.md) via MCP tool |
+| Need              | Skill                                                      |
+| ----------------- | ---------------------------------------------------------- |
+| Routing           | [rule](../rule/SKILL.md)                                     |
+| Architecture      | [rule-architect](../rule-architect/SKILL.md)                 |
+| Frontend umbrella | [rule-frontend](../rule-frontend/SKILL.md)                   |
+| CSS rules         | [rule-styleguide-css](../rule-styleguide-css/SKILL.md)       |
+| Semantic HTML     | [rule-styleguide-html](../rule-styleguide-html/SKILL.md)     |
+| Accessibility     | [rule-styleguide-a11y](../rule-styleguide-a11y/SKILL.md)     |
+| Naming/file tree  | [rule-styleguide-naming](../rule-styleguide-naming/SKILL.md) |
+| Validation        | [rule_tool_check](../rule/SKILL.md) via MCP tool             |
 
 ## See also
 

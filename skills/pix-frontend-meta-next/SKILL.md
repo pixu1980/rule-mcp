@@ -81,11 +81,11 @@ export default async function Page() {
 ```
 
 ```jsx
-'use client'; // Client Component — for interactivity, state, effects
+"use client"; // Client Component — for interactivity, state, effects
 
 export function LikeButton({ postId }) {
   const [liked, setLiked] = useState(false);
-  return <button onClick={() => setLiked(true)}>{liked ? '❤️' : '🤍'}</button>;
+  return <button onClick={() => setLiked(true)}>{liked ? "❤️" : "🤍"}</button>;
 }
 ```
 
@@ -143,10 +143,10 @@ import Image from "next/image";
   alt="Hero"
   width={1200}
   height={600}
-  priority            // LCP image — preload
-  placeholder="blur"  // Show blur-up while loading
+  priority // LCP image — preload
+  placeholder="blur" // Show blur-up while loading
   blurDataURL="data:image/webp;base64,..."
-/>
+/>;
 ```
 
 ### Static Export
@@ -167,11 +167,11 @@ DATABASE_URL=postgres://...                     ← Server only
 
 ## Deployment
 
-| Target | Config |
-|--------|--------|
-| **Vercel** | Zero config — automatic |
-| **Docker (Node)** | `next start` on port 3000 |
-| **Static** | `output: 'export'` → any static host |
+| Target            | Config                               |
+| ----------------- | ------------------------------------ |
+| **Vercel**        | Zero config — automatic              |
+| **Docker (Node)** | `next start` on port 3000            |
+| **Static**        | `output: 'export'` → any static host |
 
 ## Quick Reference
 
@@ -187,6 +187,7 @@ DATABASE_URL=postgres://...                     ← Server only
 │  Deploy:    Vercel (auto), Docker, Static export          │
 └────────────────────────────────────────────────────────────┘
 ```
+
 ---
 
 ## See also

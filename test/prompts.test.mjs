@@ -17,13 +17,7 @@ console.log("prompts registry test");
 
 // ── Expected registry ────────────────────────────────────────────
 
-const WORKFLOW_PROMPTS = [
-  "rule-setup-project",
-  "rule-new-feature",
-  "rule-pull-request",
-  "rule-write-tests",
-  "rule-handoff",
-];
+const WORKFLOW_PROMPTS = ["rule-setup-project", "rule-new-feature", "rule-pull-request", "rule-write-tests", "rule-handoff"];
 
 const AREA_PROMPTS = [
   "rule-meta",
@@ -43,11 +37,7 @@ const AREA_PROMPTS = [
   "rule-ui",
 ];
 
-const LEGACY_PROMPTS = [
-  "rule-code-review",
-  "rule-a11y-audit",
-  "rule-architect-scaffold",
-];
+const LEGACY_PROMPTS = ["rule-code-review", "rule-a11y-audit", "rule-architect-scaffold"];
 
 const EXPECTED = [...WORKFLOW_PROMPTS, ...AREA_PROMPTS, ...LEGACY_PROMPTS];
 
@@ -82,7 +72,10 @@ test("strict argument schema on every prompt", () => {
     // A prompt may have zero required arguments only when every optional
     // argument documents its default, so a bare invocation is well-defined.
     const allOptionalWithDefaults = p.arguments.every((a) => a.required === false && /default:/i.test(a.description));
-    assert.ok(p.arguments.some((a) => a.required === true) || allOptionalWithDefaults, `${p.name}: at least one required argument, or every optional argument must document its default`);
+    assert.ok(
+      p.arguments.some((a) => a.required === true) || allOptionalWithDefaults,
+      `${p.name}: at least one required argument, or every optional argument must document its default`,
+    );
     for (const a of p.arguments) {
       assert.ok(a.name && a.name.length > 0, `${p.name}: argument name required`);
       assert.ok(a.description && a.description.length > 0, `${p.name}: argument ${a.name} needs a description`);
@@ -94,14 +87,20 @@ test("strict argument schema on every prompt", () => {
 test("rule-handoff takes a single free-form options argument", () => {
   const p = prompts.find((x) => x.name === "rule-handoff");
   assert.ok(p, "rule-handoff exists");
-  assert.deepEqual(p.arguments.map((a) => a.name), ["options"], "single options argument, no required mode");
+  assert.deepEqual(
+    p.arguments.map((a) => a.name),
+    ["options"],
+    "single options argument, no required mode",
+  );
   const options = p.arguments[0];
   assert.equal(options.required, false, "options must be optional so /rule-handoff works bare");
   assert.match(options.description, /default:/i, "options must document its default");
   assert.match(options.description, /help/i, "options must advertise the help token");
   assert.match(options.description, /close-session/, "options must list the close-session mode");
 
-  const text = getPrompt("rule-handoff").messages.map((m) => m.content?.text ?? "").join("\n");
+  const text = getPrompt("rule-handoff")
+    .messages.map((m) => m.content?.text ?? "")
+    .join("\n");
   assert.match(text, /default/i, "handler text must mention the defaults");
   assert.match(text, /close-session/, "handler text must explain the close-session mode");
 });
@@ -151,7 +150,8 @@ test("parseHandoffOptions translates the compact vocabulary", () => {
 
 test("rule-handoff getPrompt interpolates the parsed options into the message", () => {
   const text = getPrompt("rule-handoff", { options: "close-session compress minimal" })
-    .messages.map((m) => m.content?.text ?? "").join("\n");
+    .messages.map((m) => m.content?.text ?? "")
+    .join("\n");
   assert.match(text, /close-session/, "message must carry the requested mode");
   assert.match(text, /compress=true/, "message must carry compress=true");
   assert.match(text, /format=minimal/, "message must carry format=minimal");
@@ -174,16 +174,17 @@ test("every listed prompt has a getPrompt implementation with messages", () => {
     const full = getPrompt(p.name);
     assert.ok(full, `${p.name}: getPrompt returned null`);
     assert.ok(Array.isArray(full.messages) && full.messages.length > 0, `${p.name}: messages required`);
-    const text = full.messages
-      .map((m) => m.content?.text ?? "")
-      .join("\n");
+    const text = full.messages.map((m) => m.content?.text ?? "").join("\n");
     assert.ok(text.length > 0, `${p.name}: message text required`);
   }
 });
 
 test("refactor: rule-area- prefix gone, a11y merged into rule-a11y-audit, rule-generate-component removed", () => {
   const names = listPrompts().map((p) => p.name);
-  assert.ok(names.every((n) => !n.startsWith("rule-area-")), "no rule-area- prefixed prompt must remain");
+  assert.ok(
+    names.every((n) => !n.startsWith("rule-area-")),
+    "no rule-area- prefixed prompt must remain",
+  );
   for (const removed of ["rule-generate-component", "rule-a11y-test", "rule-a11y-review"]) {
     assert.ok(!names.includes(removed), `${removed} must be removed`);
   }
@@ -210,7 +211,11 @@ test("every prompt supports /<name> help as an instant assistant message", () =>
       const full = getPrompt(p.name, { [argument.name]: token });
       assert.ok(full, `${p.name}: getPrompt with ${token} must return a prompt`);
       assert.equal(full.messages.length, 1, `${p.name}: help must be a single message`);
-      assert.equal(full.messages[0].role, "assistant", `${p.name}: ${token} help must be an assistant message (shown instantly, no model call)`);
+      assert.equal(
+        full.messages[0].role,
+        "assistant",
+        `${p.name}: ${token} help must be an assistant message (shown instantly, no model call)`,
+      );
       const text = full.messages[0].content.text;
       assert.match(text, /^Usage: \/rule-/, `${p.name}: ${token} must start with the usage line`);
       assert.ok(!/Do NOT call/i.test(text), `${p.name}: ${token} help must be pure content, no meta-instruction`);
@@ -220,7 +225,9 @@ test("every prompt supports /<name> help as an instant assistant message", () =>
 
 test("every prompt ends with a commit-scope proposal and involves TDD/a11y or asks the user", () => {
   for (const p of prompts) {
-    const text = getPrompt(p.name).messages.map((m) => m.content?.text ?? "").join("\n");
+    const text = getPrompt(p.name)
+      .messages.map((m) => m.content?.text ?? "")
+      .join("\n");
     const isCommitWithScope = /commit/i.test(text) && /scope/i.test(text);
     assert.ok(isCommitWithScope, `${p.name}: must propose a commit with scope`);
     const isBaselines = /tdd|a11y|test/i.test(text) || /ask/i.test(text);

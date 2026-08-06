@@ -18,14 +18,14 @@ frameworks: [all]
 
 ## Available Skills
 
-| Skill | Purpose | When to Use |
-|-------|---------|-------------|
-| [rule-process-adr](../rule-process-adr/SKILL.md) | Architecture Decision Records | After every architect/scaffold/detect call |
-| [rule-process-bmad](../rule-process-bmad/SKILL.md) | BMAD Method Framework | Full-project AI-driven delivery lifecycle |
-| [rule-process-code-review](../rule-process-code-review/SKILL.md) | Code Review Workflow | Preparing and conducting risk-based PR/MR review |
-| [rule-process-documentation](../rule-process-documentation/SKILL.md) | Documentation Standards | Setting up project docs, Mintlify |
-| [rule-process-feature-workflow](../rule-process-feature-workflow/SKILL.md) | Feature Workflow | End-to-end feature lifecycle management |
-| [rule-process-handoff](../rule-process-handoff/SKILL.md) | LLM Session Handoff | Closing a session, resuming in new chat |
+| Skill                                                                    | Purpose                       | When to Use                                      |
+| ------------------------------------------------------------------------ | ----------------------------- | ------------------------------------------------ |
+| [rule-process-adr](../rule-process-adr/SKILL.md)                           | Architecture Decision Records | After every architect/scaffold/detect call       |
+| [rule-process-bmad](../rule-process-bmad/SKILL.md)                         | BMAD Method Framework         | Full-project AI-driven delivery lifecycle        |
+| [rule-process-code-review](../rule-process-code-review/SKILL.md)           | Code Review Workflow          | Preparing and conducting risk-based PR/MR review |
+| [rule-process-documentation](../rule-process-documentation/SKILL.md)       | Documentation Standards       | Setting up project docs, Mintlify                |
+| [rule-process-feature-workflow](../rule-process-feature-workflow/SKILL.md) | Feature Workflow              | End-to-end feature lifecycle management          |
+| [rule-process-handoff](../rule-process-handoff/SKILL.md)                   | LLM Session Handoff           | Closing a session, resuming in new chat          |
 
 ## Quick Selection Guide
 

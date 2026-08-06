@@ -31,10 +31,14 @@ const FRAMEWORK_ALIASES = {
 
 // eslint-disable-next-line no-unused-vars
 function resolveFramework(framework) {
-  if (!framework) {return "vanilla";}
+  if (!framework) {
+    return "vanilla";
+  }
   const f = framework.toLowerCase();
   for (const [key, aliases] of Object.entries(FRAMEWORK_ALIASES)) {
-    if (aliases.includes(f) || key === f) {return key;}
+    if (aliases.includes(f) || key === f) {
+      return key;
+    }
   }
   return "vanilla";
 }
@@ -59,7 +63,7 @@ const SKILL_FRAMEWORK_MAP = {
   "rule-styleguide-patterns": "vanilla",
   "rule-styleguide-validation": "vanilla",
   "rule-frontend-vanilla-reactive": "vanilla-reactive",
-  "rule": "vanilla",
+  rule: "vanilla",
   "rule-architect": "architect",
 };
 
@@ -76,7 +80,9 @@ const PLUGIN_GUARDRAILS = new Map();
  * @param {Array} guardrails — Array of guardrail objects { id, label, description, check }
  */
 export function mergePluginGuardrails(pluginName, guardrails) {
-  if (!Array.isArray(guardrails) || guardrails.length === 0) {return;}
+  if (!Array.isArray(guardrails) || guardrails.length === 0) {
+    return;
+  }
   const existing = PLUGIN_GUARDRAILS.get(pluginName) || [];
   PLUGIN_GUARDRAILS.set(pluginName, [...existing, ...guardrails]);
 }
@@ -95,14 +101,23 @@ export function getGuardrails(skillName, mode) {
   const backend = isBackend ? BACKEND_GUARDRAILS : [];
 
   // Database guardrails for data/database skills
-  const isDatabase = /^rule-data(?:-|$)/.test(skillName) || skillName.startsWith('rule-data-');
+  const isDatabase = /^rule-data(?:-|$)/.test(skillName) || skillName.startsWith("rule-data-");
   const database = isDatabase ? DATABASE_GUARDRAILS : [];
 
   // DevOps guardrails for devops skills
   const isDevops = /^rule-devops(?:-|$)/.test(skillName);
   const devops = isDevops ? DEVOPS_GUARDRAILS : [];
 
-  return [...SHARED_GUARDRAILS, ...frameworkSpecific, ...scaffold, ...architect, ...backend, ...database, ...devops, ...plugin];
+  return [
+    ...SHARED_GUARDRAILS,
+    ...frameworkSpecific,
+    ...scaffold,
+    ...architect,
+    ...backend,
+    ...database,
+    ...devops,
+    ...plugin,
+  ];
 }
 
 export function checkCode(skillName, code, context = {}) {
@@ -112,15 +127,26 @@ export function checkCode(skillName, code, context = {}) {
   const results = guardrails.map((g) => {
     if (previousPassed.has(g.id)) {
       return {
-        id: g.id, label: g.label, pass: true, failCount: 0,
-        detail: [], suggestion: "", note: "Skipped — previously passed", skipped: true,
+        id: g.id,
+        label: g.label,
+        pass: true,
+        failCount: 0,
+        detail: [],
+        suggestion: "",
+        note: "Skipped — previously passed",
+        skipped: true,
       };
     }
     const result = g.check(code, context);
     return {
-      id: g.id, label: g.label, pass: result.pass,
-      failCount: result.failCount || 0, detail: result.detail || [],
-      suggestion: result.suggestion || "", note: result.note || "", skipped: false,
+      id: g.id,
+      label: g.label,
+      pass: result.pass,
+      failCount: result.failCount || 0,
+      detail: result.detail || [],
+      suggestion: result.suggestion || "",
+      note: result.note || "",
+      skipped: false,
     };
   });
 
@@ -128,9 +154,7 @@ export function checkCode(skillName, code, context = {}) {
   const failed = results.filter((r) => !r.pass);
   const skipped = results.filter((r) => r.skipped);
 
-  const newPassed = [
-    ...passed.map((r) => r.id),
-  ];
+  const newPassed = [...passed.map((r) => r.id)];
 
   return {
     skill: skillName,
@@ -139,11 +163,18 @@ export function checkCode(skillName, code, context = {}) {
     failCount: failed.length,
     skippedCount: skipped.length,
     passed: passed.map((r) => ({ id: r.id, label: r.label })),
-    failed: failed.map((r) => ({ id: r.id, label: r.label, failCount: r.failCount, detail: r.detail, suggestion: r.suggestion })),
+    failed: failed.map((r) => ({
+      id: r.id,
+      label: r.label,
+      failCount: r.failCount,
+      detail: r.detail,
+      suggestion: r.suggestion,
+    })),
     skipped: skipped.map((r) => ({ id: r.id, label: r.label })),
-    summary: failed.length === 0
-      ? `✅ All ${guardrails.length} guardrails pass for ${skillName} (${skipped.length} skipped from previous iteration).`
-      : `❌ ${failed.length}/${guardrails.length} guardrails FAIL for ${skillName} (${skipped.length} skipped from previous). Fix then re-check.`,
+    summary:
+      failed.length === 0
+        ? `✅ All ${guardrails.length} guardrails pass for ${skillName} (${skipped.length} skipped from previous iteration).`
+        : `❌ ${failed.length}/${guardrails.length} guardrails FAIL for ${skillName} (${skipped.length} skipped from previous). Fix then re-check.`,
     allPass: failed.length === 0,
     previousPassed: newPassed,
   };
@@ -151,7 +182,14 @@ export function checkCode(skillName, code, context = {}) {
 
 export function getGuardrailsReport(skillName, mode) {
   const guardrails = getGuardrails(skillName, mode);
-  const lines = [`# Guardrails: ${skillName}`, "", `Total: ${guardrails.length} testable assertions`, "", "## Shared (all rule skills)", ""];
+  const lines = [
+    `# Guardrails: ${skillName}`,
+    "",
+    `Total: ${guardrails.length} testable assertions`,
+    "",
+    "## Shared (all rule skills)",
+    "",
+  ];
   for (const g of SHARED_GUARDRAILS) {
     lines.push(`- [ ] **${g.id}**: ${g.label}`, `  ${g.description}`, "");
   }
@@ -160,36 +198,56 @@ export function getGuardrailsReport(skillName, mode) {
   const fg = FRAMEWORK_GUARDRAILS[framework] || [];
   if (fg.length > 0) {
     lines.push(`## Framework-specific (${framework})`, "");
-    for (const g of fg) {lines.push(`- [ ] **${g.id}**: ${g.label}`, `  ${g.description}`, "");}
+    for (const g of fg) {
+      lines.push(`- [ ] **${g.id}**: ${g.label}`, `  ${g.description}`, "");
+    }
   }
 
   if (skillName === "rule-styleguide") {
     lines.push(`## Project Scaffolding (${SCAFFOLD_GUARDRAILS.length} config files)`, "");
-    for (const g of SCAFFOLD_GUARDRAILS) {lines.push(`- [ ] **${g.id}**: ${g.label}`, `  ${g.description}`, "");}
+    for (const g of SCAFFOLD_GUARDRAILS) {
+      lines.push(`- [ ] **${g.id}**: ${g.label}`, `  ${g.description}`, "");
+    }
     lines.push("Run `pix_styleguide mode=scaffold` to generate these files.", "");
   }
 
   if (skillName === "rule-architect") {
     lines.push(`## Architecture & Documentation (${ARCHITECT_GUARDRAILS.length} checks)`, "");
-    for (const g of ARCHITECT_GUARDRAILS) {lines.push(`- [ ] **${g.id}**: ${g.label}`, `  ${g.description}`, "");}
+    for (const g of ARCHITECT_GUARDRAILS) {
+      lines.push(`- [ ] **${g.id}**: ${g.label}`, `  ${g.description}`, "");
+    }
   }
 
   if (/^rule-(?:backend|backend-)/.test(skillName)) {
     lines.push(`## Backend Security & API (${BACKEND_GUARDRAILS.length} checks)`, "");
-    for (const g of BACKEND_GUARDRAILS) {lines.push(`- [ ] **${g.id}**: ${g.label}`, `  ${g.description}`, "");}
+    for (const g of BACKEND_GUARDRAILS) {
+      lines.push(`- [ ] **${g.id}**: ${g.label}`, `  ${g.description}`, "");
+    }
   }
 
   if (/^rule-data(?:-|$)/.test(skillName)) {
     lines.push(`## Database Safety (${DATABASE_GUARDRAILS.length} checks)`, "");
-    for (const g of DATABASE_GUARDRAILS) {lines.push(`- [ ] **${g.id}**: ${g.label}`, `  ${g.description}`, "");}
+    for (const g of DATABASE_GUARDRAILS) {
+      lines.push(`- [ ] **${g.id}**: ${g.label}`, `  ${g.description}`, "");
+    }
   }
 
   if (/^rule-devops(?:-|$)/.test(skillName)) {
     lines.push(`## DevOps & Security (${DEVOPS_GUARDRAILS.length} checks)`, "");
-    for (const g of DEVOPS_GUARDRAILS) {lines.push(`- [ ] **${g.id}**: ${g.label}`, `  ${g.description}`, "");}
+    for (const g of DEVOPS_GUARDRAILS) {
+      lines.push(`- [ ] **${g.id}**: ${g.label}`, `  ${g.description}`, "");
+    }
   }
 
-  lines.push("## How to use", "", "1. Generate code following rule AI principles.", "2. Run `pix_<skill> check` on the generated code.", "3. Fix any FAIL results.", "4. Re-check until all pass (allPass: true).", "");
+  lines.push(
+    "## How to use",
+    "",
+    "1. Generate code following rule AI principles.",
+    "2. Run `pix_<skill> check` on the generated code.",
+    "3. Fix any FAIL results.",
+    "4. Re-check until all pass (allPass: true).",
+    "",
+  );
 
   return lines.join("\n");
 }

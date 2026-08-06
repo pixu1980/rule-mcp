@@ -37,8 +37,10 @@ import { join } from "node:path";
  * the namespaced MCP prompts (still functional, just prefixed).
  */
 export const AGENTS_WITHOUT_COMMAND_SURFACE = {
-  codex: "Codex CLI exposes MCP prompts as slash commands itself; its custom-prompt directory is not verified against a published spec, so writing files there would be a guess.",
-  copilot: "GitHub Copilot CLI gets a custom agent file (~/.copilot/agents); its prompt-file directory is not verified against a published spec.",
+  codex:
+    "Codex CLI exposes MCP prompts as slash commands itself; its custom-prompt directory is not verified against a published spec, so writing files there would be a guess.",
+  copilot:
+    "GitHub Copilot CLI gets a custom agent file (~/.copilot/agents); its prompt-file directory is not verified against a published spec.",
   zed: "Zed stores its rules/prompt library in profile storage, not in discoverable per-command files.",
   antigravity: "No published custom-command file location; MCP prompts remain the entry point.",
   kilo: "Kilo CLI command directory is not verified against a published spec.",
@@ -73,8 +75,12 @@ const defaultContext = () => ({
 
 /** Roaming application-data root for editors that follow the VS Code layout. */
 const editorDataRoot = ({ home, platform, env }) => {
-  if (platform === "darwin") {return join(home, "Library", "Application Support");}
-  if (platform === "win32") {return env.APPDATA || join(home, "AppData", "Roaming");}
+  if (platform === "darwin") {
+    return join(home, "Library", "Application Support");
+  }
+  if (platform === "win32") {
+    return env.APPDATA || join(home, "AppData", "Roaming");
+  }
   return join(home, ".config");
 };
 
@@ -91,7 +97,9 @@ const vscodePromptDirs = (ctx) => {
     const userDir = join(root, variant, "User");
     // The stable channel is always targeted (it is the default install); other
     // variants only when the editor actually has a user-data directory.
-    if (index > 0 && !ctx.exists(userDir)) {continue;}
+    if (index > 0 && !ctx.exists(userDir)) {
+      continue;
+    }
     dirs.push(join(userDir, "prompts"));
     for (const profile of ctx.listDir(join(userDir, "profiles"))) {
       dirs.push(join(userDir, "profiles", profile, "prompts"));
@@ -107,7 +115,9 @@ const vscodePromptDirs = (ctx) => {
  */
 const firstExisting = (ctx, candidates) => {
   const found = candidates.find(({ gate }) => ctx.exists(gate));
-  if (found) {return [found.dir];}
+  if (found) {
+    return [found.dir];
+  }
   return ctx.force ? [candidates[0].dir] : [];
 };
 
@@ -183,10 +193,14 @@ export const COMMAND_TARGETS = [
     format: "workflow",
     scope: "global",
     namespacedPrompts: false,
-    detect: (ctx) => ctx.exists(join(ctx.home, ".codeium", "windsurf")) || ctx.exists(join(ctx.home, ".config", "windsurf")),
+    detect: (ctx) =>
+      ctx.exists(join(ctx.home, ".codeium", "windsurf")) || ctx.exists(join(ctx.home, ".config", "windsurf")),
     dirs: (ctx) =>
       firstExisting(ctx, [
-        { gate: join(ctx.home, ".codeium", "windsurf"), dir: join(ctx.home, ".codeium", "windsurf", "global_workflows") },
+        {
+          gate: join(ctx.home, ".codeium", "windsurf"),
+          dir: join(ctx.home, ".codeium", "windsurf", "global_workflows"),
+        },
         { gate: join(ctx.home, ".config", "windsurf"), dir: join(ctx.home, ".config", "windsurf", "global_workflows") },
       ]),
   },
@@ -294,12 +308,16 @@ export function resolveCommandTargets(options = {}) {
   const resolved = [];
 
   for (const target of COMMAND_TARGETS) {
-    if (options.agent && target.agent !== options.agent) {continue;}
+    if (options.agent && target.agent !== options.agent) {
+      continue;
+    }
     // An explicit single-agent install forces its user-level directories into
     // existence; project directories are never created on spec, and a sweep over
     // every agent (detectedOnly) only fills what is already there.
     const ctx = { ...base, force: Boolean(options.agent) && !options.detectedOnly && target.scope === "global" };
-    if (options.detectedOnly && !target.detect(ctx)) {continue;}
+    if (options.detectedOnly && !target.detect(ctx)) {
+      continue;
+    }
     for (const dir of target.dirs(ctx)) {
       resolved.push({ agent: target.agent, label: target.label, format: target.format, scope: target.scope, dir });
     }

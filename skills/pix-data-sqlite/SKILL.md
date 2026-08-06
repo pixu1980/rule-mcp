@@ -77,12 +77,12 @@ ALTER TABLE items_new RENAME TO items;
 
 ### Journal mode comparison
 
-| Mode | Durability | Write Speed | Concurrency | Use Case |
-|------|-----------|-------------|-------------|----------|
-| `DELETE` | Full (rollback journal) | Slowest | Read-only | Legacy / strict ACID |
-| `WAL` (Write-Ahead Log) | Full | Fast | Concurrent reads + 1 writer | **Default for local-first apps** |
-| `MEMORY` | None (crash = data loss) | Fastest | Single connection | Temp/cache only |
-| `OFF` | None | Fastest | Single connection | Test/scratch |
+| Mode                    | Durability               | Write Speed | Concurrency                 | Use Case                         |
+| ----------------------- | ------------------------ | ----------- | --------------------------- | -------------------------------- |
+| `DELETE`                | Full (rollback journal)  | Slowest     | Read-only                   | Legacy / strict ACID             |
+| `WAL` (Write-Ahead Log) | Full                     | Fast        | Concurrent reads + 1 writer | **Default for local-first apps** |
+| `MEMORY`                | None (crash = data loss) | Fastest     | Single connection           | Temp/cache only                  |
+| `OFF`                   | None                     | Fastest     | Single connection           | Test/scratch                     |
 
 ```sql
 -- Recommended for local-first apps

@@ -48,17 +48,15 @@ function byPath(files, path) {
 // template that opted out of substitution (`raw: true`). Everything else is
 // an unfilled placeholder that leaked into shipped output.
 function leakedTokens(file, rawPaths) {
-  if (rawPaths.has(file.path)) {return [];}
-  return [...file.content.matchAll(BRACKET_TOKEN_RE)]
-    .map((m) => m[1])
-    .filter((key) => !JUNK.has(key));
+  if (rawPaths.has(file.path)) {
+    return [];
+  }
+  return [...file.content.matchAll(BRACKET_TOKEN_RE)].map((m) => m[1]).filter((key) => !JUNK.has(key));
 }
 
 function rawTemplatePaths() {
   const templates = JSON.parse(readFileSync(join(ROOT, "skills/rule-architect/templates.json"), "utf-8"));
-  return new Set(
-    templates.filter((t) => t.raw).map((t) => t.output || t.path.replace(/^templates\//, ""))
-  );
+  return new Set(templates.filter((t) => t.raw).map((t) => t.output || t.path.replace(/^templates\//, "")));
 }
 
 test("no bold **[KEY]** unfilled marker survives anywhere in the pack", () => {
@@ -69,7 +67,7 @@ test("no bold **[KEY]** unfilled marker survives anywhere in the pack", () => {
   assert.deepEqual(
     offenders,
     [],
-    `the bold unfilled marker must be gone: ${offenders.map((o) => `${o.path} (${o.hits})`).join(", ")}`
+    `the bold unfilled marker must be gone: ${offenders.map((o) => `${o.path} (${o.hits})`).join(", ")}`,
   );
 });
 
@@ -82,7 +80,7 @@ test("no unfilled [KEY] token leaks into shipped output (JUNK and raw templates 
   assert.deepEqual(
     offenders,
     [],
-    `bracket tokens leaked: ${offenders.map((o) => `${o.path} -> ${o.keys.join(",")}`).join(" | ")}`
+    `bracket tokens leaked: ${offenders.map((o) => `${o.path} -> ${o.keys.join(",")}`).join(" | ")}`,
   );
 });
 
@@ -94,7 +92,7 @@ test("JSON output stays parseable after the lean policy runs", () => {
   const json = byPath(render(rulesetAnswers), "schemas/ruleset.schema.json");
   assert.doesNotThrow(
     () => JSON.parse(json.content),
-    "schemas/ruleset.schema.json must remain valid JSON — line-dropping breaks it"
+    "schemas/ruleset.schema.json must remain valid JSON — line-dropping breaks it",
   );
   assert.doesNotMatch(json.content, BRACKET_TOKEN_RE, "no bracket token may survive in the schema");
 });
@@ -120,13 +118,10 @@ test("emitWhen gates the domain-overfit templates on PROJECT_TYPE", () => {
 test("a malformed emitWhen fails loudly instead of silently omitting a file", async () => {
   const { shouldEmit } = await import("../skills/rule-architect/generator.mjs");
   assert.ok(shouldEmit({ output: "x.md" }, {}), "no gate means always emit");
-  assert.throws(
-    () => shouldEmit({ output: "x.md", emitWhen: { in: ["other"] } }, {}),
-    /needs a "field"/
-  );
+  assert.throws(() => shouldEmit({ output: "x.md", emitWhen: { in: ["other"] } }, {}), /needs a "field"/);
   assert.throws(
     () => shouldEmit({ output: "x.md", emitWhen: { field: "PROJECT_TYPE" } }, {}),
-    /needs "in" or "equals"/
+    /needs "in" or "equals"/,
   );
 });
 
@@ -137,7 +132,7 @@ test("TEMPLATE_GUIDE.md keeps its placeholder documentation verbatim", () => {
   assert.doesNotMatch(
     guide.content,
     /Sample Project Name/,
-    "the guide must NOT have the fixture's project name substituted into its examples"
+    "the guide must NOT have the fixture's project name substituted into its examples",
   );
 });
 
@@ -188,7 +183,7 @@ test("an empty-string answer counts as unfilled, not as filled (F8)", () => {
   assert.doesNotMatch(
     agents.content,
     /^- Quality gates:\s*$/m,
-    "an empty answer must drop the whole line, not leave a dangling label"
+    "an empty answer must drop the whole line, not leave a dangling label",
   );
 });
 
@@ -200,7 +195,7 @@ test("an unfilled placeholder inside inline code does not trap the marker unders
     assert.doesNotMatch(
       file.content,
       /`_TODO:[^`]*_`/,
-      `${file.path} has an italic TODO marker trapped inside an inline-code span`
+      `${file.path} has an italic TODO marker trapped inside an inline-code span`,
     );
   }
   const agents = byPath(render(), "AGENTS.md");

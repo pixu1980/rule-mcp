@@ -1,6 +1,6 @@
 // @ts-check
 
-import TemplateEngine from '../../template-engine/index.js';
+import TemplateEngine from "../../template-engine/index.js";
 
 const engine = new TemplateEngine();
 
@@ -26,13 +26,13 @@ const renderPage = engine.template`
 
 const html = renderPage({
   page: {
-    title: 'Inline report',
-    description: 'Rendered with tagged template literals.',
+    title: "Inline report",
+    description: "Rendered with tagged template literals.",
   },
   items: [
-    { label: 'Mode', value: 'tagged-template-literal' },
-    { label: 'Alias', value: 'engine.html' },
-    { label: 'Reusable', value: 'yes' },
+    { label: "Mode", value: "tagged-template-literal" },
+    { label: "Alias", value: "engine.html" },
+    { label: "Reusable", value: "yes" },
   ],
 });
 

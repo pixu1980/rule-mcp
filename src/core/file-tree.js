@@ -19,15 +19,15 @@
 
 import {
   existsSync,
-// eslint-disable-next-line no-unused-vars
+  // eslint-disable-next-line no-unused-vars
   mkdirSync,
   readdirSync,
   readFileSync,
   renameSync,
   writeFileSync,
-// eslint-disable-next-line no-unused-vars
+  // eslint-disable-next-line no-unused-vars
   statSync,
-// eslint-disable-next-line no-unused-vars
+  // eslint-disable-next-line no-unused-vars
   unlinkSync,
 } from "node:fs";
 // eslint-disable-next-line no-unused-vars
@@ -36,7 +36,20 @@ import { join, dirname, basename, extname, relative, parse } from "node:path";
 // ─── Constants ───────────────────────────────────────────────────────────────
 
 /** Directories to ignore during scan. */
-const IGNORE_DIRS = new Set(["node_modules", ".git", ".tokensave", "dist", "build", ".next", ".nuxt", ".output", "coverage", ".vscode", ".idea", ".agents"]);
+const IGNORE_DIRS = new Set([
+  "node_modules",
+  ".git",
+  ".tokensave",
+  "dist",
+  "build",
+  ".next",
+  ".nuxt",
+  ".output",
+  "coverage",
+  ".vscode",
+  ".idea",
+  ".agents",
+]);
 
 const BARREL_FILE_NAMES = new Set(["index.js", "index.ts", "index.jsx", "index.tsx"]);
 
@@ -89,11 +102,13 @@ function isIgnored(name) {
 function isComponentDir(dirPath, entries) {
   for (const entry of entries) {
     if (!entry.isFile()) {
-    	continue;
+      continue;
     }
 
     const extension = extname(entry.name);
-    if (COMPONENT_EXTENSIONS.has(extension)) {return true;}
+    if (COMPONENT_EXTENSIONS.has(extension)) {
+      return true;
+    }
   }
   return false;
 }
@@ -117,12 +132,20 @@ function isPrefixedComponent(name) {
  * Matches: PascalCase.ext, kebab-case.ext, camelCase.ext
  */
 function isBareComponent(name) {
-  if (isBarrelFile(name)) {return false;}
-  if (name.startsWith("_")) {return false;}
+  if (isBarrelFile(name)) {
+    return false;
+  }
+  if (name.startsWith("_")) {
+    return false;
+  }
   const extension = extname(name);
-  if (!COMPONENT_EXTENSIONS.has(extension)) {return false;}
+  if (!COMPONENT_EXTENSIONS.has(extension)) {
+    return false;
+  }
   // Exclude utility files that belong at the folder root
-  if (/^[a-z][a-z0-9-]*\.[a-z]+$/.test(name)) {return false;} // kebab-case utils
+  if (/^[a-z][a-z0-9-]*\.[a-z]+$/.test(name)) {
+    return false;
+  } // kebab-case utils
   // Match files that look like components: PascalCase, camelCase starting with uppercase
   return /^[A-Z][a-zA-Z0-9]*\./.test(name);
 }
@@ -190,7 +213,7 @@ export function scanFileTree(rootDir, options = {}) {
       // ── Check 2: Component files should start with _ ──
       for (const file of componentFiles) {
         if (isPrefixedComponent(file.name)) {
-        	continue;
+          continue;
         }
 
         const correctName = `_${file.name}`;
@@ -229,14 +252,12 @@ export function scanFileTree(rootDir, options = {}) {
     const cssFiles = files.filter((f) => extname(f.name) === ".css");
     for (const css of cssFiles) {
       if (!css.name.startsWith("_")) {
-      	continue;
+        continue;
       }
 
       // Check if there's a matching component
       const baseName = css.name.replace(extname(css.name), "");
-      const matchingComponent = files.some(
-        (f) => parse(f.name).name === baseName && f.name !== css.name
-      );
+      const matchingComponent = files.some((f) => parse(f.name).name === baseName && f.name !== css.name);
       if (!matchingComponent) {
         issues.push({
           type: "orphan-css",
@@ -251,7 +272,7 @@ export function scanFileTree(rootDir, options = {}) {
     // ── Check 6: Stale barrel files (index.js that doesn't re-export) ──
     for (const file of files) {
       if (!isBarrelFile(file.name)) {
-      	continue;
+        continue;
       }
 
       const fullPath = join(currentPath, file.name);
@@ -266,10 +287,7 @@ export function scanFileTree(rootDir, options = {}) {
             fixAction: `Add re-export statements based on sibling files`,
             suggestion: `Add export statements to ${fullPath}.`,
           });
-        } else if (
-          !content.includes("export ") &&
-          !content.includes("module.exports")
-        ) {
+        } else if (!content.includes("export ") && !content.includes("module.exports")) {
           issues.push({
             type: "empty-barrel",
             path: fullPath,
@@ -331,7 +349,7 @@ export function scanFileTree(rootDir, options = {}) {
  * }}
  */
 export function autoFixFileTree(rootDir, options = {}) {
-// eslint-disable-next-line no-unused-vars
+  // eslint-disable-next-line no-unused-vars
   const srcDir = options.srcDir || "src";
   const isDryRun = options.dryRun !== false;
   const report = scanFileTree(rootDir, options);
@@ -341,7 +359,7 @@ export function autoFixFileTree(rootDir, options = {}) {
   // Phase 1: Rename unprefixed component files (must happen before barrel creation)
   for (const issue of report.issues) {
     if (!(issue.type === "wrong-prefix" && issue.fixable)) {
-    	continue;
+      continue;
     }
 
     const oldPath = issue.path;
@@ -369,7 +387,7 @@ export function autoFixFileTree(rootDir, options = {}) {
   // Phase 2: Create missing barrel files
   for (const issue of report.issues) {
     if (!(issue.type === "missing-barrel" && issue.fixable)) {
-    	continue;
+      continue;
     }
 
     const dir = issue.path;
@@ -389,7 +407,7 @@ export function autoFixFileTree(rootDir, options = {}) {
 
     for (const file of files) {
       const name = file.name;
-// eslint-disable-next-line no-unused-vars
+      // eslint-disable-next-line no-unused-vars
       const extension = extname(name);
 
       // Get the component name from _PascalCase.ext
@@ -412,9 +430,7 @@ export function autoFixFileTree(rootDir, options = {}) {
       barrelContent = `/**\n * @module ${folderName}\n * @description Component barrel\n */\n\n${esm}`;
     } else {
       // No underscore-prefixed files found; try to build from what's available
-      const jsFiles = files.filter(
-        (f) => COMPONENT_EXTENSIONS.has(extname(f.name)) && !isBarrelFile(f.name)
-      );
+      const jsFiles = files.filter((f) => COMPONENT_EXTENSIONS.has(extname(f.name)) && !isBarrelFile(f.name));
       if (jsFiles.length > 0) {
         const firstFile = parse(jsFiles[0].name).name;
         const componentName = firstFile.startsWith("_") ? firstFile.slice(1) : firstFile;
@@ -441,7 +457,7 @@ export function autoFixFileTree(rootDir, options = {}) {
   // Phase 3: Fix empty barrel files
   for (const issue of report.issues) {
     if (!(issue.type === "empty-barrel" && issue.fixable)) {
-    	continue;
+      continue;
     }
 
     const dir = dirname(issue.path);
@@ -466,15 +482,17 @@ export function autoFixFileTree(rootDir, options = {}) {
     }
 
     if (componentExports.length > 0) {
-      const content = componentExports
-        .map((c) => `export { ${c} } from './_${c}';\n`)
-        .join("");
+      const content = componentExports.map((c) => `export { ${c} } from './_${c}';\n`).join("");
 
       if (isDryRun) {
         fixed.push({ path: issue.path, action: "[DRY RUN] Populate barrel with exports" });
       } else {
         try {
-          writeFileSync(issue.path, `/**\n * @module ${folderName}\n * @description Component barrel\n */\n\n${content}`, "utf8");
+          writeFileSync(
+            issue.path,
+            `/**\n * @module ${folderName}\n * @description Component barrel\n */\n\n${content}`,
+            "utf8",
+          );
           fixed.push({ path: issue.path, action: "Populated barrel with exports" });
         } catch (error) {
           errors.push({ path: issue.path, error: error.message });
@@ -557,7 +575,13 @@ export function checkFileNameConvention(code, context = {}) {
 
   const isValid = /^_[A-Z][a-zA-Z0-9]*\.\w+$/.test(fileName);
   if (isValid) {
-    return { pass: true, failCount: 0, detail: [], suggestion: "", note: "File name follows _PascalCase.ext convention" };
+    return {
+      pass: true,
+      failCount: 0,
+      detail: [],
+      suggestion: "",
+      note: "File name follows _PascalCase.ext convention",
+    };
   }
 
   const correctName = `_${fileName}`;
@@ -577,7 +601,10 @@ export function checkFileNameConvention(code, context = {}) {
  * @returns {string}
  */
 function toKebab(name) {
-  return name.replaceAll(/([a-z])([A-Z])/g, "$1-$2").replaceAll(/([A-Z]+)([A-Z][a-z])/g, "$1-$2").toLowerCase();
+  return name
+    .replaceAll(/([a-z])([A-Z])/g, "$1-$2")
+    .replaceAll(/([A-Z]+)([A-Z][a-z])/g, "$1-$2")
+    .toLowerCase();
 }
 
 /**

@@ -19,25 +19,25 @@ frameworks: [all]
 
 ## UI Frameworks
 
-| Skill | Framework | Reactive Model | State Mgmt |
-|-------|-----------|----------------|------------|
-| [rule-frontend-react](../rule-frontend-react/SKILL.md) | React 18+ | useState/hooks | Context + hooks |
-| [rule-frontend-vue](../rule-frontend-vue/SKILL.md) | Vue 3 | ref()/reactive | Pinia |
-| [rule-frontend-angular](../rule-frontend-angular/SKILL.md) | Angular 16+ (standalone) | signal() | Signals |
-| [rule-frontend-svelte](../rule-frontend-svelte/SKILL.md) | Svelte 5 | $state (runes) | Runes |
-| [rule-frontend-solidjs](../rule-frontend-solidjs/SKILL.md) | SolidJS | createSignal | Signals |
-| [rule-frontend-astro](../rule-frontend-astro/SKILL.md) | Astro (islands) | Per-framework | Per-framework |
-| [rule-frontend-vanilla-reactive](../rule-frontend-vanilla-reactive/SKILL.md) | Vanilla JS | Proxy Store + Signals | Store |
-| [rule-frontend-custom-element](../rule-frontend-custom-element/SKILL.md) | Vanilla JS (no framework) | componentDecorator | adopedStyleSheets |
-| [rule-frontend-template-engine](../rule-frontend-template-engine/SKILL.md) | Vanilla JS (no framework) | TemplateEngine | SSG/SSR/static-html |
+| Skill                                                                      | Framework                 | Reactive Model        | State Mgmt          |
+| -------------------------------------------------------------------------- | ------------------------- | --------------------- | ------------------- |
+| [rule-frontend-react](../rule-frontend-react/SKILL.md)                       | React 18+                 | useState/hooks        | Context + hooks     |
+| [rule-frontend-vue](../rule-frontend-vue/SKILL.md)                           | Vue 3                     | ref()/reactive        | Pinia               |
+| [rule-frontend-angular](../rule-frontend-angular/SKILL.md)                   | Angular 16+ (standalone)  | signal()              | Signals             |
+| [rule-frontend-svelte](../rule-frontend-svelte/SKILL.md)                     | Svelte 5                  | $state (runes)        | Runes               |
+| [rule-frontend-solidjs](../rule-frontend-solidjs/SKILL.md)                   | SolidJS                   | createSignal          | Signals             |
+| [rule-frontend-astro](../rule-frontend-astro/SKILL.md)                       | Astro (islands)           | Per-framework         | Per-framework       |
+| [rule-frontend-vanilla-reactive](../rule-frontend-vanilla-reactive/SKILL.md) | Vanilla JS                | Proxy Store + Signals | Store               |
+| [rule-frontend-custom-element](../rule-frontend-custom-element/SKILL.md)     | Vanilla JS (no framework) | componentDecorator    | adopedStyleSheets   |
+| [rule-frontend-template-engine](../rule-frontend-template-engine/SKILL.md)   | Vanilla JS (no framework) | TemplateEngine        | SSG/SSR/static-html |
 
 ## Meta-Frameworks
 
-| Skill | Based On | Features |
-|-------|----------|----------|
-| [rule-frontend-meta-next](../rule-frontend-meta-next/SKILL.md) | Next.js (React) | App Router, SSR/SSG/ISR, server components |
-| [rule-frontend-meta-nuxt](../rule-frontend-meta-nuxt/SKILL.md) | Nuxt 3 (Vue) | File-based routing, SSR/SSG, auto-imports |
-| [rule-frontend-meta-remix](../rule-frontend-meta-remix/SKILL.md) | Remix (React) | Nested routing, loaders/actions, SSR |
+| Skill                                                          | Based On        | Features                                   |
+| -------------------------------------------------------------- | --------------- | ------------------------------------------ |
+| [rule-frontend-meta-next](../rule-frontend-meta-next/SKILL.md)   | Next.js (React) | App Router, SSR/SSG/ISR, server components |
+| [rule-frontend-meta-nuxt](../rule-frontend-meta-nuxt/SKILL.md)   | Nuxt 3 (Vue)    | File-based routing, SSR/SSG, auto-imports  |
+| [rule-frontend-meta-remix](../rule-frontend-meta-remix/SKILL.md) | Remix (React)   | Nested routing, loaders/actions, SSR       |
 
 ## Quick Selection Guide
 

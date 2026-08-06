@@ -15,9 +15,9 @@ compatibility: Designed for AI coding assistants
 
 ## AI Agent Skills
 
-| Skill | Core Library | Use when |
-|-------|--------------|----------|
-| [rule-ai-agents](../rule-ai-agents/SKILL.md) | `@rule/rule-mcp-core` | Scaffolding AI Agent repositories on `@rule/rule-mcp-core`: providers, tools, registries, testing, containerization. |
+| Skill                                                | Core Library              | Use when                                                                                                                                    |
+| ---------------------------------------------------- | ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| [rule-ai-agents](../rule-ai-agents/SKILL.md)           | `@rule/rule-mcp-core`    | Scaffolding AI Agent repositories on `@rule/rule-mcp-core`: providers, tools, registries, testing, containerization.                       |
 | [rule-platform-agent](../rule-platform-agent/SKILL.md) | none (framework-agnostic) | Structuring an AI Agent project without prescribing a specific SDK or core library (LangChain, Vercel AI SDK, MCP clients, custom runners). |
 
 ## Quick Selection Guide

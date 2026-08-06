@@ -18,7 +18,12 @@ import { startServer } from "../server.js";
 import { startSseServer } from "../transport/sse.js";
 import { startHttpServer } from "../transport/http.js";
 import { callTool, listTools } from "../tools/router.js";
-import { installAgent, mcpServerConfig, writeEnvConfig as writeEnvironmentConfig, readEnvConfig as readEnvironmentConfig } from "./install.js";
+import {
+  installAgent,
+  mcpServerConfig,
+  writeEnvConfig as writeEnvironmentConfig,
+  readEnvConfig as readEnvironmentConfig,
+} from "./install.js";
 import { uninstallFromAgent } from "./uninstall.js";
 import { getRuntimePaths } from "./paths.js";
 import { loadAllSkills } from "../core/skills.js";
@@ -35,7 +40,7 @@ import {
   formatDaemonStatus,
   startDaemonProcess,
   stopDaemonProcess,
-// eslint-disable-next-line no-unused-vars
+  // eslint-disable-next-line no-unused-vars
   daemonProcessStatus,
   detectPlatform,
   getServiceFilePath,
@@ -218,7 +223,9 @@ export async function serveCommand(opts = {}) {
       null,
       2,
     );
-    console.error(`\nrule-mcp ${transport === "http" ? "Streamable HTTP" : "SSE"} server listening on ${scheme}://${connectHost}:${port}/${endpoint}\n`);
+    console.error(
+      `\nrule-mcp ${transport === "http" ? "Streamable HTTP" : "SSE"} server listening on ${scheme}://${connectHost}:${port}/${endpoint}\n`,
+    );
     console.error(`Config for agent's mcp.json:\n`);
     console.error(configSnippet);
     console.error(``);
@@ -270,37 +277,39 @@ export function daemonCommand(opts) {
       const result = installDaemonService({ dryRun });
       if (result.ok) {
         switch (result.platform) {
-        case "macos": {
-          print(`✓ LaunchAgent created: ${result.result.path}`);
-          print(`  The daemon should now appear in:`);
-          print(`    System Settings → General → Login Items & Extensions`);
-          if (result.result.action === "loaded") {
-            print(`  ✓ launchctl loaded the service (it will start at next login)`);
-            const svcName = getServiceName();
-            if (svcName) {print(`  To start now: launchctl start ${svcName}`);}
+          case "macos": {
+            print(`✓ LaunchAgent created: ${result.result.path}`);
+            print(`  The daemon should now appear in:`);
+            print(`    System Settings → General → Login Items & Extensions`);
+            if (result.result.action === "loaded") {
+              print(`  ✓ launchctl loaded the service (it will start at next login)`);
+              const svcName = getServiceName();
+              if (svcName) {
+                print(`  To start now: launchctl start ${svcName}`);
+              }
+            }
+
+            break;
           }
-        
-        break;
-        }
-        case "linux": {
-          print(`✓ systemd unit created: ${result.result.path}`);
-          if (result.result.action === "enabled-and-started") {
-            print(`  ✓ Service enabled and started`);
+          case "linux": {
+            print(`✓ systemd unit created: ${result.result.path}`);
+            if (result.result.action === "enabled-and-started") {
+              print(`  ✓ Service enabled and started`);
+            }
+
+            break;
           }
-        
-        break;
-        }
-        case "windows": {
-          print(`✓ Windows service created: ${result.result.name}`);
-          if (result.result.action.includes("started")) {
-            print(`  ✓ Service started`);
+          case "windows": {
+            print(`✓ Windows service created: ${result.result.name}`);
+            if (result.result.action.includes("started")) {
+              print(`  ✓ Service started`);
+            }
+
+            break;
           }
-        
-        break;
-        }
-        default: {
-          print(`✓ Service installed (${result.service}): ${result.result.action}`);
-        }
+          default: {
+            print(`✓ Service installed (${result.service}): ${result.result.action}`);
+          }
         }
       } else {
         print(`✗ Failed: ${result.result.error || "unknown error"}`);
@@ -381,9 +390,13 @@ export function daemonCommand(opts) {
       }
       // Fallback to process daemon
       const proc = startDaemonProcess({ dryRun });
-      if (proc.pid) {print(`Daemon started (pid ${proc.pid})`);}
-      else if (proc.action === "already-running") {print(`Daemon already running (pid ${proc.pid})`);}
-      else {print(`Daemon: ${proc.action}`);}
+      if (proc.pid) {
+        print(`Daemon started (pid ${proc.pid})`);
+      } else if (proc.action === "already-running") {
+        print(`Daemon already running (pid ${proc.pid})`);
+      } else {
+        print(`Daemon: ${proc.action}`);
+      }
       break;
     }
     case "stop": {
@@ -438,9 +451,14 @@ export function installCommand(opts) {
     mode: opts.mode,
     entrypoint,
   });
-  if (opts.json) {printJson(result);}
-  else {print(formatInstallResult(result));}
-  if (!result.ok) {process.exitCode = 1;}
+  if (opts.json) {
+    printJson(result);
+  } else {
+    print(formatInstallResult(result));
+  }
+  if (!result.ok) {
+    process.exitCode = 1;
+  }
 }
 
 /**
@@ -451,8 +469,11 @@ export function installCommand(opts) {
  */
 export function uninstallCommand(opts) {
   const result = uninstallFromAgent({ agent: opts.agent, dryRun: opts.dryRun });
-  if (opts.json) {printJson(result);}
-  else {print(formatUninstallResult(result));}
+  if (opts.json) {
+    printJson(result);
+  } else {
+    print(formatUninstallResult(result));
+  }
 }
 
 /**
@@ -466,8 +487,11 @@ export async function toolsCommand(opts) {
 
   if (subcommand === "list") {
     const tools = listTools().map((t) => ({ name: t.name, description: t.description }));
-    if (opts.jsonOutput) {printJson(tools);}
-    else {print(formatToolsList(tools));}
+    if (opts.jsonOutput) {
+      printJson(tools);
+    } else {
+      print(formatToolsList(tools));
+    }
   } else if (subcommand === "call") {
     const input = parseJson(json ?? "{}");
     const previousAutoAdr = process.env.RULE_MCP_DISABLE_AUTO_ADR;
@@ -475,8 +499,11 @@ export async function toolsCommand(opts) {
     try {
       printJson(await callTool(toolName, input));
     } finally {
-      if (previousAutoAdr === undefined) {delete process.env.RULE_MCP_DISABLE_AUTO_ADR;}
-      else {process.env.RULE_MCP_DISABLE_AUTO_ADR = previousAutoAdr;}
+      if (previousAutoAdr === undefined) {
+        delete process.env.RULE_MCP_DISABLE_AUTO_ADR;
+      } else {
+        process.env.RULE_MCP_DISABLE_AUTO_ADR = previousAutoAdr;
+      }
     }
   } else {
     throw new Error(`Unknown tools action: ${subcommand}`);
@@ -500,7 +527,10 @@ export function configCommand(opts = {}) {
  */
 export function configureCommand(opts = {}) {
   const RULE_MCP_VARS = {
-    RULE_MCP_MINIMAL_TOOLS: { desc: "Expose only the 10 dispatcher/action tools (fits client tool caps, cheaper context).", values: "1 = enable" },
+    RULE_MCP_MINIMAL_TOOLS: {
+      desc: "Expose only the 10 dispatcher/action tools (fits client tool caps, cheaper context).",
+      values: "1 = enable",
+    },
     RULE_MCP_AUTO_ADR: { desc: "Automatically log architecture decisions.", values: "1 = enable" },
     RULE_MCP_DISABLE_AUTO_ADR: { desc: "Disable automatic ADR logging (used internally).", values: "1 = disable" },
     RULE_MCP_DAEMON: { desc: "Run as daemon process.", values: "1 = enable" },
@@ -529,7 +559,9 @@ export function configureCommand(opts = {}) {
     const environment = {};
     for (const pair of opts.set) {
       const eqIndex = pair.indexOf("=");
-      if (eqIndex < 1) {throw new Error(`Invalid env format: "${pair}". Use KEY=VALUE.`);}
+      if (eqIndex < 1) {
+        throw new Error(`Invalid env format: "${pair}". Use KEY=VALUE.`);
+      }
       environment[pair.slice(0, eqIndex)] = pair.slice(eqIndex + 1);
     }
     writeEnvironmentConfig(environment);
@@ -588,7 +620,9 @@ export async function doctorCommand(options = {}) {
   }
 
   print(formatDoctorTerminal(report));
-  if (jsonOut) {print(`JSON exported to ${resolve(jsonOut)}`);}
+  if (jsonOut) {
+    print(`JSON exported to ${resolve(jsonOut)}`);
+  }
 }
 
 /**
@@ -607,14 +641,19 @@ export async function updateCommand() {
   const { runSelfUpdate, buildBanner, scheduleRestartIfNeeded } = await import("../core/self-update.js");
   const result = await runSelfUpdate({ reloadSkills: false });
   const banner = buildBanner(result);
-  if (banner) {print(banner);}
-  else if (result.updated === false && !result.skipped) {print("✅ Already up to date.");}
-  if (result.skipped) {print(`Skipped: ${result.reason}${result.note ? ` — ${result.note}` : ""}`);}
+  if (banner) {
+    print(banner);
+  } else if (result.updated === false && !result.skipped) {
+    print("✅ Already up to date.");
+  }
+  if (result.skipped) {
+    print(`Skipped: ${result.reason}${result.note ? ` — ${result.note}` : ""}`);
+  }
   const restart = scheduleRestartIfNeeded(result, () => {});
-  if (restart) {print(restart);}
+  if (restart) {
+    print(restart);
+  }
 }
-
-
 
 /**
  * Validate and auto-fix project file tree structure.
@@ -644,7 +683,7 @@ export function completionsCommand(opts = {}) {
   print(script);
 }
 
-export {skillsInstallCommand, skillsListCommand} from "./skills-install.js";
+export { skillsInstallCommand, skillsListCommand } from "./skills-install.js";
 
 /**
  * Resolve the command-file directories for this machine — the single answer to
@@ -688,20 +727,28 @@ function syncCommandTargets(opts) {
   let files = 0;
   for (const { label, format, dir } of targets) {
     const rendered = renderAgentCommandFiles(format);
-    if (!opts.dryRun && !opts.remove) {mkdirSync(dir, { recursive: true });}
+    if (!opts.dryRun && !opts.remove) {
+      mkdirSync(dir, { recursive: true });
+    }
     for (const { filename, content } of rendered) {
       const file = resolve(dir, filename);
       if (opts.remove) {
-        if (existsSync(file) && !opts.dryRun) {rmSync(file, { force: true });}
+        if (existsSync(file) && !opts.dryRun) {
+          rmSync(file, { force: true });
+        }
       } else if (!opts.dryRun) {
         writeFileSync(file, content);
       }
       files += 1;
     }
     const verb = opts.remove ? "removed" : "wrote";
-    print(`  ${opts.dryRun ? "[dry-run] " : ""}${label}: ${verb} ${rendered.length} ${format} command file(s) → ${dir}`);
+    print(
+      `  ${opts.dryRun ? "[dry-run] " : ""}${label}: ${verb} ${rendered.length} ${format} command file(s) → ${dir}`,
+    );
   }
-  print(`agent-commands: ${opts.remove ? "removed" : "synced"} ${files} file(s) across ${targets.length} directory(ies)`);
+  print(
+    `agent-commands: ${opts.remove ? "removed" : "synced"} ${files} file(s) across ${targets.length} directory(ies)`,
+  );
 }
 
 /**
@@ -743,7 +790,9 @@ export function agentCommandsCommand(opts = {}) {
     for (const { filename } of files) {
       const file = resolve(dir, filename);
       if (existsSync(file)) {
-        if (!opts.dryRun) {rmSync(file, { force: true });}
+        if (!opts.dryRun) {
+          rmSync(file, { force: true });
+        }
         removed += 1;
       }
     }
@@ -751,14 +800,18 @@ export function agentCommandsCommand(opts = {}) {
     return;
   }
 
-  if (!opts.dryRun) {mkdirSync(dir, { recursive: true });}
+  if (!opts.dryRun) {
+    mkdirSync(dir, { recursive: true });
+  }
   for (const { filename, content } of files) {
     const file = resolve(dir, filename);
     if (existsSync(file) && !opts.force) {
       skipped += 1;
       continue;
     }
-    if (!opts.dryRun) {writeFileSync(file, content);}
+    if (!opts.dryRun) {
+      writeFileSync(file, content);
+    }
     written += 1;
   }
   print(`agent-commands: wrote ${written}, skipped ${skipped} (${format}) → ${dir}`);

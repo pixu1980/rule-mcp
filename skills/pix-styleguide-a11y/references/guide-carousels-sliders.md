@@ -18,9 +18,7 @@
     <div role="group" aria-roledescription="slide" aria-label="1 of 3">
       <img src="slide1.jpg" alt="Description" />
     </div>
-    <div role="group" aria-roledescription="slide" aria-label="2 of 3" hidden aria-hidden="true">
-      ...
-    </div>
+    <div role="group" aria-roledescription="slide" aria-label="2 of 3" hidden aria-hidden="true">...</div>
   </div>
   <button aria-label="Next slide" aria-controls="carousel-slides">›</button>
   <button aria-label="Pause auto-rotation">⏸</button>
@@ -29,7 +27,7 @@
 
 ## Keyboard interactions
 
-| Key | Action |
-| :--- | :--- |
-| Tab | Navigate to carousel controls |
-| Enter / Space | Activate button |
+| Key           | Action                        |
+| :------------ | :---------------------------- |
+| Tab           | Navigate to carousel controls |
+| Enter / Space | Activate button               |

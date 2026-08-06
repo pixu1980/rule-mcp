@@ -11,7 +11,7 @@ Un ciclo uninstall.sh + install.sh (a) rimuoveva la chiave per-server toolPrefix
 
 ## Decision
 
-upsertJsonServer/upsertVscode fondono (merge) l'entry esistente con la nuova config preservando le chiavi utente (toolPrefix, timeout, env custom); cmdConfig scrive toolPrefix:"none" di default per pi (tool rule-tool-*, prompt /rule-*); install.sh usa append_rules_block che normalizza i newline finali e inserisce esattamente un separatore; uninstall.sh collassa i newline finali dopo la rimozione del blocco.
+upsertJsonServer/upsertVscode fondono (merge) l'entry esistente con la nuova config preservando le chiavi utente (toolPrefix, timeout, env custom); cmdConfig scrive toolPrefix:"none" di default per pi (tool rule-tool-_, prompt /rule-_); install.sh usa append_rules_block che normalizza i newline finali e inserisce esattamente un separatore; uninstall.sh collassa i newline finali dopo la rimozione del blocco.
 
 ## Consequences
 

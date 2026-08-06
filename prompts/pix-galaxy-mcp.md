@@ -2,11 +2,13 @@
 description: Route coding work through rule-mcp with strongly recommended validation
 argument-hint: "<request>"
 ---
+
 Process this request through the recommended rule workflow:
 
 $ARGUMENTS
 
 Strongly recommended sequence:
+
 1. Call MCP tool `pix_tool` with complete request and project path/framework when known.
 2. Load primary routed `rule-*` skill and only necessary secondary skills.
 3. Use returned skill/tool evidence as source of truth. Never invent APIs, files, dependencies, commands, requirements, or successful checks.

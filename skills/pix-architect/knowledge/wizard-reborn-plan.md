@@ -14,18 +14,18 @@ rule-architect-cli    ← shell:  opentui CLI, reads wizard-spec from rule-archi
 rule-architect-web    ← shell:  vanilla JS Web, reads wizard-spec from rule-architect, renders DOM
 ```
 
-| Role | `rule-architect` | `rule-architect-cli` | `rule-architect-web` |
-|------|:--:|:--:|:--:|
-| wizard-spec.json source of truth | ✅ | — | — |
-| templates.json (.context/ output) | ✅ | — | — |
-| generator engine | ✅ | — | — |
-| showIf/validation logic | ✅ (shared) | ✅ (copy for offline) | ✅ (JS clone) |
-| optionGroups (all skills) | ✅ | — | — |
-| SKILL.md (routing, docs) | ✅ | — | — |
-| CLI rendering (opentui) | — | ✅ | — |
-| Web rendering (vanilla JS) | — | — | ✅ |
-| HTTP server (context-server.mjs) | — | — | ✅ |
-| prefillMap logic | ✅ | ✅ | ✅ |
+| Role                              | `rule-architect` |  `rule-architect-cli`  | `rule-architect-web` |
+| --------------------------------- | :-------------: | :-------------------: | :-----------------: |
+| wizard-spec.json source of truth  |       ✅        |           —           |          —          |
+| templates.json (.context/ output) |       ✅        |           —           |          —          |
+| generator engine                  |       ✅        |           —           |          —          |
+| showIf/validation logic           |   ✅ (shared)   | ✅ (copy for offline) |    ✅ (JS clone)    |
+| optionGroups (all skills)         |       ✅        |           —           |          —          |
+| SKILL.md (routing, docs)          |       ✅        |           —           |          —          |
+| CLI rendering (opentui)           |        —        |          ✅           |          —          |
+| Web rendering (vanilla JS)        |        —        |           —           |         ✅          |
+| HTTP server (context-server.mjs)  |        —        |           —           |         ✅          |
+| prefillMap logic                  |       ✅        |          ✅           |         ✅          |
 
 **Rule**: `rule-architect` holds ALL shared data. CLI and Web are thin renderers. No logic duplicated — only display code.
 
@@ -35,12 +35,12 @@ rule-architect-web    ← shell:  vanilla JS Web, reads wizard-spec from rule-ar
 
 ### Domain + Tech in parallel
 
-| Iteration | What | Why |
-|---|---|---|
-| **Sketch** | Domain sketch (5 fields, 2 min) | Informs tech choices without analysis paralysis |
-| **Lock** | Technology Stack (10 cond. steps) | Chosen with domain context. Now locked. |
-| **Deepen** | Domain Deep-Dive (6 steps, pre-filled) | Confident tech can support domain |
-| **Harden** | Quality & Delivery (8 steps) | Both domain and tech known → precise choices |
+| Iteration  | What                                   | Why                                             |
+| ---------- | -------------------------------------- | ----------------------------------------------- |
+| **Sketch** | Domain sketch (5 fields, 2 min)        | Informs tech choices without analysis paralysis |
+| **Lock**   | Technology Stack (10 cond. steps)      | Chosen with domain context. Now locked.         |
+| **Deepen** | Domain Deep-Dive (6 steps, pre-filled) | Confident tech can support domain               |
+| **Harden** | Quality & Delivery (8 steps)           | Both domain and tech known → precise choices    |
 
 > Domain drives tech, but tech constrains domain. Sketch first → choose tech → deepen domain → harden everything.
 
@@ -88,13 +88,13 @@ PHASE 4 — QUALITY & DELIVERY deep      8 steps
 
 ### Pre-fill from Sketch (Phase 1 → Phase 3)
 
-| Sketch field | Auto-populates | Phase 3 step |
-|---|---|---|
-| `PROJECT_NAME_SKETCH` | `PROJECT_NAME` | Step 12 |
-| `PROJECT_PITCH_SKETCH` | `PROJECT_ELEVATOR_PITCH` | Step 12 |
-| `TOP_FEATURE_1,2,3` | `FEATURES` array | Step 16 |
-| `PRIMARY_PERSONA` | `PERSONA_1` | Step 15 |
-| `DOMAIN_TERMS_RAW` | `DOMAIN_TERMS` array | Step 13 |
+| Sketch field           | Auto-populates           | Phase 3 step |
+| ---------------------- | ------------------------ | ------------ |
+| `PROJECT_NAME_SKETCH`  | `PROJECT_NAME`           | Step 12      |
+| `PROJECT_PITCH_SKETCH` | `PROJECT_ELEVATOR_PITCH` | Step 12      |
+| `TOP_FEATURE_1,2,3`    | `FEATURES` array         | Step 16      |
+| `PRIMARY_PERSONA`      | `PERSONA_1`              | Step 15      |
+| `DOMAIN_TERMS_RAW`     | `DOMAIN_TERMS` array     | Step 13      |
 
 ---
 
@@ -154,11 +154,11 @@ rule-architect/wizard-spec.json
   "$schema": "./wizard-spec.schema.json",
   "version": "2.0",
   "phases": [
-    { "key": "context",  "label": "Context",            "tier": "starter",  "order": 0 },
-    { "key": "sketch",   "label": "Domain Sketch",      "tier": "starter",  "order": 1 },
-    { "key": "tech",     "label": "Technology Stack",   "tier": "starter",  "order": 2 },
-    { "key": "domain",   "label": "Domain Deep-Dive",   "tier": "standard", "order": 3 },
-    { "key": "quality",  "label": "Quality & Delivery", "tier": "deep",     "order": 4 }
+    { "key": "context", "label": "Context", "tier": "starter", "order": 0 },
+    { "key": "sketch", "label": "Domain Sketch", "tier": "starter", "order": 1 },
+    { "key": "tech", "label": "Technology Stack", "tier": "starter", "order": 2 },
+    { "key": "domain", "label": "Domain Deep-Dive", "tier": "standard", "order": 3 },
+    { "key": "quality", "label": "Quality & Delivery", "tier": "deep", "order": 4 },
   ],
   "steps": [
     {
@@ -167,17 +167,17 @@ rule-architect/wizard-spec.json
       "tier": "starter",
       "label": "Step 1 — Domain Sketch",
       "description": "Quick context to inform technology choices.",
-      "fields": [ /* ... */ ]
-    }
+      "fields": [/* ... */],
+    },
   ],
   "optionGroups": {
-    "projectTypes": [ /* ... */ ],
-    "frontendFrameworks": [ /* ... */ ]
+    "projectTypes": [/* ... */],
+    "frontendFrameworks": [/* ... */],
   },
   "prefillMap": {
     "PROJECT_NAME": { "from": "PROJECT_NAME_SKETCH" },
-    "PROJECT_ELEVATOR_PITCH": { "from": "PROJECT_PITCH_SKETCH" }
-  }
+    "PROJECT_ELEVATOR_PITCH": { "from": "PROJECT_PITCH_SKETCH" },
+  },
 }
 ```
 
@@ -205,6 +205,7 @@ rule-architect/wizard-spec.json
 ### MCP tool: `pix_architect`
 
 Modes beyond `full/guardrails/check/search`:
+
 - `wizard-spec` → returns wizard-spec.json to agent
 - `generate` → accepts answers JSON, returns generated .context/ preview
 - `validate` → checks answers against wizard-spec schema
@@ -287,13 +288,13 @@ POST /api/download         → returns file contents as JSON (no disk write)
 
 ### What changes
 
-| Current | New |
-|---|---|
-| `assets/context-server/placeholders.json` (embedded) | `../rule-architect/wizard-spec.json` (shared) |
-| `sections` from store | `steps` from wizard-spec |
-| No prefill between steps | `prefillMap` logic on step advance |
-| 18 steps | 25 steps (Phase 1 added, rest reorganized) |
-| Templates embedded in server | Templates from `../rule-architect/templates.json` |
+| Current                                              | New                                              |
+| ---------------------------------------------------- | ------------------------------------------------ |
+| `assets/context-server/placeholders.json` (embedded) | `../rule-architect/wizard-spec.json` (shared)     |
+| `sections` from store                                | `steps` from wizard-spec                         |
+| No prefill between steps                             | `prefillMap` logic on step advance               |
+| 18 steps                                             | 25 steps (Phase 1 added, rest reorganized)       |
+| Templates embedded in server                         | Templates from `../rule-architect/templates.json` |
 
 ---
 
@@ -308,21 +309,23 @@ function applyPrefill(values, wizardSpec) {
   const result = { ...values };
   for (const [targetKey, rule] of Object.entries(map)) {
     if (!result[targetKey] || rule.override) {
-      if (typeof rule.from === 'string') {
-        result[targetKey] = values[rule.from] || '';
-      } else if (rule.transform === 'featuresFromSketch') {
+      if (typeof rule.from === "string") {
+        result[targetKey] = values[rule.from] || "";
+      } else if (rule.transform === "featuresFromSketch") {
         result[targetKey] = values.TOP_FEATURES || [];
-      } else if (rule.transform === 'personaFromSketch') {
-        result[targetKey] = [{
-          name: values.PRIMARY_PERSONA || '',
-          description: '',
-          goal: '',
-          pain: '',
-          behavior: ''
-        }];
-      } else if (rule.transform === 'termsFromSketch') {
-        const lines = (values.DOMAIN_TERMS_RAW || '').split('\n').filter(Boolean);
-        result[targetKey] = lines.map(line => ({ term: line, definition: '' }));
+      } else if (rule.transform === "personaFromSketch") {
+        result[targetKey] = [
+          {
+            name: values.PRIMARY_PERSONA || "",
+            description: "",
+            goal: "",
+            pain: "",
+            behavior: "",
+          },
+        ];
+      } else if (rule.transform === "termsFromSketch") {
+        const lines = (values.DOMAIN_TERMS_RAW || "").split("\n").filter(Boolean);
+        result[targetKey] = lines.map((line) => ({ term: line, definition: "" }));
       }
     }
   }
@@ -354,10 +357,10 @@ Data contract for every option in every optionGroup:
 ```jsonc
 {
   "key": "react",
-  "label": "React 18+",                         // Title
-  "description": "Functional components...",     // Description
-  "build": "Vite",                               // Subtle mono text (optional)
-  "pixAISkill": "rule-frontend-react"         // Skill tag (if empty, not shown)
+  "label": "React 18+", // Title
+  "description": "Functional components...", // Description
+  "build": "Vite", // Subtle mono text (optional)
+  "pixAISkill": "rule-frontend-react", // Skill tag (if empty, not shown)
 }
 ```
 

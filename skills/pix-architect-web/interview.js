@@ -35,7 +35,7 @@ const TIER_ORDER = { starter: 0, standard: 1, deep: 2 };
 
 function visibleSections(tier) {
   const sections = store.state.sections || [];
-  return sections.filter(s => TIER_ORDER[s.tier] <= TIER_ORDER[tier]);
+  return sections.filter((s) => TIER_ORDER[s.tier] <= TIER_ORDER[tier]);
 }
 
 // Escape HTML-significant characters before interpolating an UNTRUSTED value
@@ -49,20 +49,79 @@ function visibleSections(tier) {
 // interpolated unescaped. Also escapes quotes so the result is safe to place
 // inside a double- or single-quoted HTML attribute, not just text content.
 function esc(s) {
-  return String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  return String(s).replace(
+    /[&<>"']/g,
+    (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c],
+  );
 }
 
 // data-part styling + PROJECT_TYPE filtering per option group (wizard-spec.json
 // optionGroups key -> card taxonomy). Groups not listed here (e.g. desktopFrameworks,
 // architectureSkills) fall back to the generic skill-card rendering.
 const CARD_CONFIGS = {
-  projectTypes: { cardPart: "project-type-card", gridPart: "type-grid", namePart: "type-name", descPart: "type-desc", buildPart: "type-build", showBuild: true, filterByProjectType: false },
-  frontendFrameworks: { cardPart: "tech-card", gridPart: "tech-grid", namePart: "stack-name", descPart: "tech-desc", buildPart: "stack-build", showBuild: false, filterByProjectType: true },
-  metaFrameworks: { cardPart: "tech-card", gridPart: "tech-grid", namePart: "stack-name", descPart: "tech-desc", buildPart: "stack-build", showBuild: false, filterByProjectType: true },
-  backendFrameworks: { cardPart: "tech-card", gridPart: "tech-grid", namePart: "stack-name", descPart: "tech-desc", buildPart: "stack-build", showBuild: false, filterByProjectType: true },
-  databaseEngines: { cardPart: "tech-card", gridPart: "tech-grid", namePart: "stack-name", descPart: "tech-desc", buildPart: "stack-build", showBuild: false, filterByProjectType: true },
-  apiStyles: { cardPart: "tech-card", gridPart: "tech-grid", namePart: "stack-name", descPart: "tech-desc", buildPart: "stack-build", showBuild: false, filterByProjectType: true },
-  designSystems: { cardPart: "tech-card", gridPart: "tech-grid", namePart: "stack-name", descPart: "tech-desc", buildPart: "stack-build", showBuild: false, filterByProjectType: true },
+  projectTypes: {
+    cardPart: "project-type-card",
+    gridPart: "type-grid",
+    namePart: "type-name",
+    descPart: "type-desc",
+    buildPart: "type-build",
+    showBuild: true,
+    filterByProjectType: false,
+  },
+  frontendFrameworks: {
+    cardPart: "tech-card",
+    gridPart: "tech-grid",
+    namePart: "stack-name",
+    descPart: "tech-desc",
+    buildPart: "stack-build",
+    showBuild: false,
+    filterByProjectType: true,
+  },
+  metaFrameworks: {
+    cardPart: "tech-card",
+    gridPart: "tech-grid",
+    namePart: "stack-name",
+    descPart: "tech-desc",
+    buildPart: "stack-build",
+    showBuild: false,
+    filterByProjectType: true,
+  },
+  backendFrameworks: {
+    cardPart: "tech-card",
+    gridPart: "tech-grid",
+    namePart: "stack-name",
+    descPart: "tech-desc",
+    buildPart: "stack-build",
+    showBuild: false,
+    filterByProjectType: true,
+  },
+  databaseEngines: {
+    cardPart: "tech-card",
+    gridPart: "tech-grid",
+    namePart: "stack-name",
+    descPart: "tech-desc",
+    buildPart: "stack-build",
+    showBuild: false,
+    filterByProjectType: true,
+  },
+  apiStyles: {
+    cardPart: "tech-card",
+    gridPart: "tech-grid",
+    namePart: "stack-name",
+    descPart: "tech-desc",
+    buildPart: "stack-build",
+    showBuild: false,
+    filterByProjectType: true,
+  },
+  designSystems: {
+    cardPart: "tech-card",
+    gridPart: "tech-grid",
+    namePart: "stack-name",
+    descPart: "tech-desc",
+    buildPart: "stack-build",
+    showBuild: false,
+    filterByProjectType: true,
+  },
 };
 
 // ─── Custom Element ──────────────────────────────────────────
@@ -97,17 +156,16 @@ class ContextWizard extends HTMLElement {
 
   async loadData() {
     try {
-      const [pr, ir] = await Promise.all([
-        fetch("/api/placeholders"),
-        fetch("/api/init-values"),
-      ]);
+      const [pr, ir] = await Promise.all([fetch("/api/placeholders"), fetch("/api/init-values")]);
       const data = await pr.json();
       store.state.placeholders = data;
       store.state.sections = data.sections || [];
       store.state.phases = data.phases || [];
 
       let initValues = {};
-      try { initValues = await ir.json(); } catch {}
+      try {
+        initValues = await ir.json();
+      } catch {}
 
       store.state.values = { ...initValues };
       store.state.step = 0;
@@ -130,9 +188,18 @@ class ContextWizard extends HTMLElement {
 
   render() {
     const phase = store.state.phase;
-    if (phase === "loading") return this.renderSimple('<section data-part="loading"><p data-part="loading-text">Loading interview…</p></section>');
-    if (phase === "error") return this.renderSimple(`<section data-part="error"><p data-part="error-text">${esc(store.state.error)}</p><button data-part="back-btn" onclick="this.closest('context-wizard').loadData()">Retry</button></section>`);
-    if (phase === "generating") return this.renderSimple('<section data-part="generating"><p data-part="generating-text">Generating .context/…</p></section>');
+    if (phase === "loading")
+      return this.renderSimple(
+        '<section data-part="loading"><p data-part="loading-text">Loading interview…</p></section>',
+      );
+    if (phase === "error")
+      return this.renderSimple(
+        `<section data-part="error"><p data-part="error-text">${esc(store.state.error)}</p><button data-part="back-btn" onclick="this.closest('context-wizard').loadData()">Retry</button></section>`,
+      );
+    if (phase === "generating")
+      return this.renderSimple(
+        '<section data-part="generating"><p data-part="generating-text">Generating .context/…</p></section>',
+      );
     if (phase === "done") return this.renderDone();
     this.renderForm();
   }
@@ -166,17 +233,17 @@ class ContextWizard extends HTMLElement {
     // focused node and lose focus + caret. All showIf conditions depend on
     // `select` fields, so including select values here keeps visibility correct.
     const values = store.state.values;
-    const visibleFields = section.fields ? section.fields.filter(f => this.isFieldVisible(f)) : [];
+    const visibleFields = section.fields ? section.fields.filter((f) => this.isFieldVisible(f)) : [];
     const sig = JSON.stringify({
       phase: store.state.phase,
       step: stepIdx,
       tier,
       section: section.key,
-      fields: visibleFields.map(f => f.key),
-      selects: visibleFields.filter(f => f.type === "select").map(f => [f.key, values[f.key] || ""]),
+      fields: visibleFields.map((f) => f.key),
+      selects: visibleFields.filter((f) => f.type === "select").map((f) => [f.key, values[f.key] || ""]),
       counts: visibleFields
-        .filter(f => f.type === "entity-list" || f.type === "repeatable" || f.type === "repeatable-inline")
-        .map(f => [f.key, this.getRepeatableCount(f.key, f.subfields || [])]),
+        .filter((f) => f.type === "entity-list" || f.type === "repeatable" || f.type === "repeatable-inline")
+        .map((f) => [f.key, this.getRepeatableCount(f.key, f.subfields || [])]),
     });
     if (this._lastFormSig === sig && this.querySelector("[data-part='wizard-step']")) {
       // Value-only change — DOM already reflects it. Skip rebuild to preserve focus.
@@ -201,16 +268,20 @@ class ContextWizard extends HTMLElement {
     const stepContent = `
       <h2 data-part="section-title">${esc(section.label)}</h2>
       ${section.description ? `<p data-part="section-desc">${esc(section.description)}</p>` : ""}
-      ${visibleFields.map(f => this.renderField(section, f)).join("")}
+      ${visibleFields.map((f) => this.renderField(section, f)).join("")}
     `;
 
     const actionsHtml = `
       ${!isFirst ? `<button type="button" data-part="nav-btn" data-direction="prev" onclick="document.querySelector('context-wizard').goToStep(${stepIdx - 1})">← Back</button>` : ""}
       ${!isLast ? `<button type="button" data-part="nav-btn" data-direction="next" onclick="document.querySelector('context-wizard').goToStep(${stepIdx + 1})">Next →</button>` : ""}
-      ${isLast ? `<nav data-part="submit-row">
+      ${
+        isLast
+          ? `<nav data-part="submit-row">
         <button type="button" data-part="submit-btn" onclick="document.querySelector('context-wizard').collectAndSubmit('generate')">Generate .context/</button>
         <button type="button" data-part="download-btn" onclick="document.querySelector('context-wizard').collectAndSubmit('download')">Download .context/</button>
-      </nav>` : ""}
+      </nav>`
+          : ""
+      }
     `;
 
     const ctx = {
@@ -220,11 +291,14 @@ class ContextWizard extends HTMLElement {
     const result = html`
       <nav data-part="stepper-nav">
         <for each="t in tabs">
-          <button type="button" data-part="step-dot"
+          <button
+            type="button"
+            data-part="step-dot"
             data-state-active="{{ t.isActiveStr }}"
             data-state-done="{{ t.isDoneStr }}"
             data-phase="{{ t.phase }}"
-            onclick="document.querySelector('context-wizard').goToStep({{ t.num }})">
+            onclick="document.querySelector('context-wizard').goToStep({{ t.num }})"
+          >
             <span data-part="step-num">{{ t.num }}</span>
             <span data-part="step-label">{{ t.label }}</span>
           </button>
@@ -273,9 +347,9 @@ class ContextWizard extends HTMLElement {
 
   getPhase(key) {
     const phases = store.state.phases || [];
-    const s = (store.state.sections || []).find(s2 => s2.key === key);
+    const s = (store.state.sections || []).find((s2) => s2.key === key);
     if (!s) return { label: "" };
-    return phases.find(p => p.key === s.phase) || { label: "" };
+    return phases.find((p) => p.key === s.phase) || { label: "" };
   }
 
   // Keep an option if it has no projectTypes filter, or PROJECT_TYPE is unset/"other"
@@ -287,20 +361,21 @@ class ContextWizard extends HTMLElement {
       return list;
     }
 
-    return list.filter(o => !o.projectTypes || o.projectTypes.includes(selectedType));
+    return list.filter((o) => !o.projectTypes || o.projectTypes.includes(selectedType));
   }
 
   renderChoiceCards(field, key, val, list, cfg) {
     const hasCfg = cfg && cfg.cardPart;
-    const filteredList = (hasCfg && cfg.filterByProjectType) ? this.filterByProjectType(list) : list;
-    const cards = filteredList.map(o => {
-      const id = o.key || o.id;
-      const selected = id === val;
-      const desc = o.description || "";
-      const build = o.build || "";
-      const skill = o.pixGalaxySkill || "";
-      if (hasCfg) {
-        return `<article data-part="${cfg.cardPart}" data-key="${esc(id)}" ${skill ? `data-skill="${esc(skill)}"` : ""}
+    const filteredList = hasCfg && cfg.filterByProjectType ? this.filterByProjectType(list) : list;
+    const cards = filteredList
+      .map((o) => {
+        const id = o.key || o.id;
+        const selected = id === val;
+        const desc = o.description || "";
+        const build = o.build || "";
+        const skill = o.pixGalaxySkill || "";
+        if (hasCfg) {
+          return `<article data-part="${cfg.cardPart}" data-key="${esc(id)}" ${skill ? `data-skill="${esc(skill)}"` : ""}
           data-state-selected="${selected ? "true" : ""}" role="button" tabindex="0"
           onclick="document.querySelector('context-wizard').selectCard('${key}','${id}')">
           <div data-part="card-body">
@@ -310,9 +385,9 @@ class ContextWizard extends HTMLElement {
           </div>
           ${skill ? `<code data-part="skill-tag">${esc(skill)}</code>` : ""}
         </article>`;
-      }
-      // Generic card for inline options
-      return `<article data-part="skill-card" data-key="${esc(id)}" ${skill ? `data-skill="${esc(skill)}"` : ""}
+        }
+        // Generic card for inline options
+        return `<article data-part="skill-card" data-key="${esc(id)}" ${skill ? `data-skill="${esc(skill)}"` : ""}
         data-state-selected="${selected ? "true" : ""}" role="button" tabindex="0"
         onclick="document.querySelector('context-wizard').selectCard('${key}','${id}')">
         <div data-part="card-body">
@@ -322,8 +397,9 @@ class ContextWizard extends HTMLElement {
         </div>
         ${skill ? `<code data-part="skill-tag">${esc(skill)}</code>` : ""}
       </article>`;
-    }).join("");
-    const gridPart = (hasCfg && cfg.gridPart) ? cfg.gridPart : "card-grid";
+      })
+      .join("");
+    const gridPart = hasCfg && cfg.gridPart ? cfg.gridPart : "card-grid";
     return `<h3 data-part="subtitle">${esc(field.label || "")}</h3>
       <nav data-part="${gridPart}">${cards}</nav>
       ${field.description ? `<p data-part="hint">${esc(field.description)}</p>` : ""}`;
@@ -337,7 +413,8 @@ class ContextWizard extends HTMLElement {
 
     // ALL select types render as cards — no dropdowns
     if (field.type === "select") {
-      const list = typeof field.options === "string" ? (ph[field.options] || []) : (Array.isArray(field.options) ? field.options : []);
+      const list =
+        typeof field.options === "string" ? ph[field.options] || [] : Array.isArray(field.options) ? field.options : [];
       const cfg = (typeof field.options === "string" && CARD_CONFIGS[field.options]) || {};
       return this.renderChoiceCards(field, key, val, list, cfg);
     }
@@ -375,7 +452,7 @@ class ContextWizard extends HTMLElement {
     let count = 0;
     const fields = Array.isArray(subfields) ? subfields : [];
     for (let i = 1; i <= 100; i++) {
-      if (!fields.some(sf => values[`${prefix}_${i}_${sf.key}`] !== undefined)) break;
+      if (!fields.some((sf) => values[`${prefix}_${i}_${sf.key}`] !== undefined)) break;
       count = i;
     }
     return Math.max(1, count);
@@ -385,7 +462,9 @@ class ContextWizard extends HTMLElement {
     const prefix = btn.dataset.prefix;
     const values = store.state.values;
     let subfields = [];
-    try { subfields = JSON.parse(btn.dataset.subfields || "[]"); } catch {}
+    try {
+      subfields = JSON.parse(btn.dataset.subfields || "[]");
+    } catch {}
     const currentCount = this.getRepeatableCount(prefix, subfields);
     const nextIdx = currentCount + 1;
     if (subfields.length === 0) subfields = [{ key: "name" }, { key: "description" }];
@@ -407,7 +486,9 @@ class ContextWizard extends HTMLElement {
       }
     }
     if (!(currentCount > 0)) currentCount = 1;
-    Object.keys(values).filter(k => k.startsWith(fullPrefix + "_")).forEach(k => delete values[k]);
+    Object.keys(values)
+      .filter((k) => k.startsWith(fullPrefix + "_"))
+      .forEach((k) => delete values[k]);
     if (idx > 0) {
       for (const k of Object.keys(values)) {
         const m = k.match(new RegExp("^" + basePrefix + "_(\\d+)_(.+)$"));
@@ -432,14 +513,20 @@ class ContextWizard extends HTMLElement {
     for (let i = 1; i <= count; i++) {
       h += `<article data-part="repeatable-group" data-index="${i}">`;
       h += `<header data-part="group-header"><span data-part="group-num">${esc(singular)} ${i}</span>`;
-      if (count > 1) h += `<button type="button" data-part="remove-btn" data-prefix="${prefix}_${i}" data-section="${section.key}" aria-label="Remove ${esc(singular)}">&times;</button>`;
+      if (count > 1)
+        h += `<button type="button" data-part="remove-btn" data-prefix="${prefix}_${i}" data-section="${section.key}" aria-label="Remove ${esc(singular)}">&times;</button>`;
       h += `</header>`;
       for (const sf of subfields) {
         const k = `${prefix}_${i}_${sf.key}`;
         const v = values[k] || "";
         const fid = `f-${k}`;
         if (sf.type === "select" && Array.isArray(sf.options)) {
-          const opts = sf.options.map(o => `<option value="${esc(o.key || o)}" ${(o.key === v || o === v) ? "selected" : ""}>${esc(o.label || o)}</option>`).join("");
+          const opts = sf.options
+            .map(
+              (o) =>
+                `<option value="${esc(o.key || o)}" ${o.key === v || o === v ? "selected" : ""}>${esc(o.label || o)}</option>`,
+            )
+            .join("");
           h += `<p data-part="field"><label data-part="label" for="${fid}">${esc(sf.label)}</label><select data-part="input" id="${fid}" name="${k}" onchange="document.querySelector('context-wizard').track('${k}', this.value)"><option value="">--</option>${opts}</select></p>`;
         } else if (sf.type === "boolean") {
           h += `<p data-part="field"><label data-part="label"><input type="checkbox" name="${k}" ${v === "true" || v === true ? "checked" : ""} onchange="document.querySelector('context-wizard').track('${k}', this.checked ? 'true' : '')" /> ${esc(sf.label)}</label></p>`;
@@ -463,7 +550,7 @@ class ContextWizard extends HTMLElement {
       if (Array.isArray(condVal)) {
         // Array: field is visible if actual value is IN the array
         if (!condVal.includes(actual)) return false;
-      } else if (typeof condVal === 'object' && condVal !== null && 'not' in condVal) {
+      } else if (typeof condVal === "object" && condVal !== null && "not" in condVal) {
         // Negation: field is visible if actual value is NOT this value
         if (actual === condVal.not) return false;
       } else {
@@ -476,8 +563,9 @@ class ContextWizard extends HTMLElement {
 
   // Resolve a `select` field's stored key to its human option label.
   resolveSelectLabel(field, raw, ph) {
-    const list = typeof field.options === "string" ? (ph[field.options] || []) : (Array.isArray(field.options) ? field.options : []);
-    const opt = list.find(o => (o.key || o.id) === raw);
+    const list =
+      typeof field.options === "string" ? ph[field.options] || [] : Array.isArray(field.options) ? field.options : [];
+    const opt = list.find((o) => (o.key || o.id) === raw);
     return opt ? opt.label : raw;
   }
 
@@ -487,14 +575,17 @@ class ContextWizard extends HTMLElement {
     const prefix = field.key;
     const subfields = field.subfields || [];
     const count = this.getRepeatableCount(prefix, subfields);
-    const primary = subfields.find(sf => sf.key === "name") || subfields[0];
+    const primary = subfields.find((sf) => sf.key === "name") || subfields[0];
     const items = [];
     for (let i = 1; i <= count; i++) {
       let text = primary ? String(values[`${prefix}_${i}_${primary.key}`] || "").trim() : "";
       if (!text) {
         for (const sf of subfields) {
           const v = String(values[`${prefix}_${i}_${sf.key}`] || "").trim();
-          if (v) { text = v; break; }
+          if (v) {
+            text = v;
+            break;
+          }
         }
       }
       if (text) items.push(text);
@@ -509,7 +600,7 @@ class ContextWizard extends HTMLElement {
     if (field.type === "entity-list" || field.type === "repeatable" || field.type === "repeatable-inline") {
       const items = this.summaryRepeatableItems(field, values);
       if (items.length === 0) return "";
-      return `<div data-part="summary-row"><span data-part="summary-label">${label}</span><ul data-part="summary-list">${items.map(i => `<li>${esc(i)}</li>`).join("")}</ul></div>`;
+      return `<div data-part="summary-row"><span data-part="summary-label">${label}</span><ul data-part="summary-list">${items.map((i) => `<li>${esc(i)}</li>`).join("")}</ul></div>`;
     }
     const raw = values[field.key];
     if (raw === undefined || raw === null || String(raw).trim() === "") return "";
@@ -525,7 +616,7 @@ class ContextWizard extends HTMLElement {
   // the same in-progress answers.
   collectValues() {
     const values = { ...store.state.values };
-    this.querySelectorAll("input, textarea, select").forEach(el => {
+    this.querySelectorAll("input, textarea, select").forEach((el) => {
       if (el.name && el.type !== "checkbox") values[el.name] = el.value;
     });
     return values;
@@ -577,18 +668,18 @@ class ContextWizard extends HTMLElement {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ values, tier: store.state.tier }),
     })
-      .then(r => r.json())
-      .then(result => {
+      .then((r) => r.json())
+      .then((result) => {
         if (seq !== this._filesReqSeq) return;
         this._filesLoading = false;
         this._filesData = result.files || [];
-        if (!this._filesData.some(f => f.path === this._filesSelected)) {
-          const fallback = this._filesData.find(f => f.path === "AGENTS.md") || this._filesData[0];
+        if (!this._filesData.some((f) => f.path === this._filesSelected)) {
+          const fallback = this._filesData.find((f) => f.path === "AGENTS.md") || this._filesData[0];
           this._filesSelected = fallback ? fallback.path : "AGENTS.md";
         }
         this.updateSummary();
       })
-      .catch(err => {
+      .catch((err) => {
         if (seq !== this._filesReqSeq) return;
         this._filesLoading = false;
         this._filesError = err.message;
@@ -609,27 +700,34 @@ class ContextWizard extends HTMLElement {
     const ph = store.state.placeholders || {};
     const sections = visibleSections(store.state.tier);
 
-    const groups = sections.map(section => {
-      const rows = (section.fields || [])
-        .filter(f => this.isFieldVisible(f))
-        .map(f => this.renderSummaryRow(f, values, ph))
-        .filter(Boolean)
-        .join("");
-      if (!rows) return "";
-      const title = esc((section.label || "").replace(/^Step \d+ \u2014 /, ""));
-      return `<section data-part="summary-group"><h4 data-part="summary-group-title">${title}</h4>${rows}</section>`;
-    }).filter(Boolean).join("");
+    const groups = sections
+      .map((section) => {
+        const rows = (section.fields || [])
+          .filter((f) => this.isFieldVisible(f))
+          .map((f) => this.renderSummaryRow(f, values, ph))
+          .filter(Boolean)
+          .join("");
+        if (!rows) return "";
+        const title = esc((section.label || "").replace(/^Step \d+ \u2014 /, ""));
+        return `<section data-part="summary-group"><h4 data-part="summary-group-title">${title}</h4>${rows}</section>`;
+      })
+      .filter(Boolean)
+      .join("");
 
-    const body = groups || `<p data-part="summary-empty">Fill in the interview fields to see a live summary of all choices.</p>`;
+    const body =
+      groups || `<p data-part="summary-empty">Fill in the interview fields to see a live summary of all choices.</p>`;
     return `<div data-part="summary-scroll">${body}</div>`;
   }
 
   renderFilesBody() {
     const files = this._filesData || [];
     const tabs = files
-      .map(f => `<button type="button" data-part="file-tab" data-path="${esc(f.path)}" data-state-active="${f.path === this._filesSelected ? "true" : ""}">${esc(f.path)}</button>`)
+      .map(
+        (f) =>
+          `<button type="button" data-part="file-tab" data-path="${esc(f.path)}" data-state-active="${f.path === this._filesSelected ? "true" : ""}">${esc(f.path)}</button>`,
+      )
       .join("");
-    const selected = files.find(f => f.path === this._filesSelected) || files[0];
+    const selected = files.find((f) => f.path === this._filesSelected) || files[0];
 
     let contentHtml;
     if (selected) {
@@ -660,7 +758,10 @@ class ContextWizard extends HTMLElement {
     const inner = `\n      <h3>\u26a1 Configuration Summary</h3>${this.renderPanelToggle()}${body}`;
     if (panel.innerHTML !== inner) {
       panel.innerHTML = inner;
-      if (scrollTop > 0) { const ns = panel.querySelector(`[data-part='${scrollPart}']`); if (ns) ns.scrollTop = scrollTop; }
+      if (scrollTop > 0) {
+        const ns = panel.querySelector(`[data-part='${scrollPart}']`);
+        if (ns) ns.scrollTop = scrollTop;
+      }
     }
   }
 
@@ -668,23 +769,47 @@ class ContextWizard extends HTMLElement {
     const values = this.collectValues();
     if (mode === "download") {
       store.state.phase = "generating";
-      fetch("/api/download", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ values, tier: store.state.tier }) })
-        .then(r => r.json())
-        .then(result => {
+      fetch("/api/download", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ values, tier: store.state.tier }),
+      })
+        .then((r) => r.json())
+        .then((result) => {
           if (result.files) {
             let text = "# rule-architect .context/ Export\n\n";
             for (const f of result.files) text += `=== ${f.path} ===\n\n${f.content}\n\n`;
             const blob = new Blob([text], { type: "text/plain" });
-            const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = "context-export.txt"; a.click();
+            const a = document.createElement("a");
+            a.href = URL.createObjectURL(blob);
+            a.download = "context-export.txt";
+            a.click();
             URL.revokeObjectURL(a.href);
-            store.state.result = { summary: "Downloaded " + result.files.length + " files" }; store.state.phase = "done";
+            store.state.result = { summary: "Downloaded " + result.files.length + " files" };
+            store.state.phase = "done";
           }
-        }).catch(err => { store.state.error = err.message; store.state.phase = "done"; });
+        })
+        .catch((err) => {
+          store.state.error = err.message;
+          store.state.phase = "done";
+        });
       return;
     }
     store.state.phase = "generating";
-    fetch("/api/generate", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ values, tier: store.state.tier }) })
-      .then(r => r.json()).then(result => { store.state.result = result; store.state.phase = "done"; }).catch(err => { store.state.error = err.message; store.state.phase = "done"; });
+    fetch("/api/generate", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ values, tier: store.state.tier }),
+    })
+      .then((r) => r.json())
+      .then((result) => {
+        store.state.result = result;
+        store.state.phase = "done";
+      })
+      .catch((err) => {
+        store.state.error = err.message;
+        store.state.phase = "done";
+      });
   }
 
   renderDone() {
@@ -693,16 +818,17 @@ class ContextWizard extends HTMLElement {
     const error = store.state.error;
     if (error) {
       this.innerHTML = `<section data-part="result"><h2 data-part="result-title">Failed</h2><p>${esc(error)}</p><button data-part="back-btn" onclick="this.closest('context-wizard').loadData()">Try Again</button></section>`;
-      this.updateSummary(); return;
+      this.updateSummary();
+      return;
     }
     const files = (result && result.files) || [];
-    const allFilled = files.filter(f => f.unfilled === 0).length;
+    const allFilled = files.filter((f) => f.unfilled === 0).length;
     this.innerHTML = `
       <section data-part="result" data-state-success="true">
         <h2 data-part="result-title">\u2705 ${esc(result.summary || "Generated!")}</h2>
         <p data-part="result-path">Target: <code>${esc(result.target || "./.context/")}</code></p>
         <table data-part="result-table"><thead><tr><th data-part="th">File</th><th data-part="th">Filled</th><th data-part="th">Unfilled</th></tr></thead>
-          <tbody>${files.map(f => `<tr><td data-part="td"><code>${f.path}</code></td><td data-part="td">${f.filled}</td><td data-part="td">${f.unfilled}</td></tr>`).join("")}</tbody>
+          <tbody>${files.map((f) => `<tr><td data-part="td"><code>${f.path}</code></td><td data-part="td">${f.filled}</td><td data-part="td">${f.unfilled}</td></tr>`).join("")}</tbody>
         </table>
         <p>${allFilled === files.length ? "\u2705 All filled" : `\u26a0\ufe0f ${allFilled}/${files.length} filled`}</p>
         <button data-part="back-btn" onclick="this.closest('context-wizard').loadData()">Start Over</button>

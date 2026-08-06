@@ -16,7 +16,9 @@ import { join } from "node:path";
 const CANONICAL_INTERVIEW = fileURLToPath(new URL("../skills/rule-architect-web/interview.js", import.meta.url));
 const SKILLS_DIR = fileURLToPath(new URL("../skills", import.meta.url));
 
-const CONTEXT_SERVER_ASSETS_DIR = fileURLToPath(new URL("../skills/rule-architect/assets/context-server/", import.meta.url));
+const CONTEXT_SERVER_ASSETS_DIR = fileURLToPath(
+  new URL("../skills/rule-architect/assets/context-server/", import.meta.url),
+);
 
 const SERVER_FILES = [
   fileURLToPath(new URL("../skills/rule-architect-web/server.mjs", import.meta.url)),
@@ -33,7 +35,9 @@ function collectInterviewJsFiles(dir) {
     const entries = readdirSync(dir, { withFileTypes: true });
     for (const entry of entries) {
       // Skip node_modules
-      if (entry.name === "node_modules") {continue;}
+      if (entry.name === "node_modules") {
+        continue;
+      }
       const fullPath = join(dir, entry.name);
       if (entry.isDirectory()) {
         results.push(...collectInterviewJsFiles(fullPath));
@@ -53,24 +57,24 @@ test("exactly one interview.js exists under skills/ — the canonical real file,
   assert.equal(
     allInterviewJsFiles.length,
     1,
-    `exactly one interview.js should exist under skills/ (context-server.mjs serves it by path instead of symlinking), but found ${allInterviewJsFiles.length}: ${allInterviewJsFiles.join(", ")}`
+    `exactly one interview.js should exist under skills/ (context-server.mjs serves it by path instead of symlinking), but found ${allInterviewJsFiles.length}: ${allInterviewJsFiles.join(", ")}`,
   );
 
   const [onlyFile] = allInterviewJsFiles;
-  assert.equal(
-    lstatSync(onlyFile).isSymbolicLink(),
-    false,
-    `${onlyFile} should be a real file, not a symlink`
-  );
+  assert.equal(lstatSync(onlyFile).isSymbolicLink(), false, `${onlyFile} should be a real file, not a symlink`);
   assert.equal(
     realpathSync(onlyFile),
     realpathSync(CANONICAL_INTERVIEW),
-    `the one interview.js at ${onlyFile} should be the canonical one at ${CANONICAL_INTERVIEW}`
+    `the one interview.js at ${onlyFile} should be the canonical one at ${CANONICAL_INTERVIEW}`,
   );
 });
 
 test("no placeholders.json exists under skills/rule-architect/assets/context-server/", () => {
-  assert.equal(existsSync(CONTEXT_SERVER_ASSETS_DIR + "placeholders.json"), false, "stale assets/context-server/placeholders.json must not be reintroduced");
+  assert.equal(
+    existsSync(CONTEXT_SERVER_ASSETS_DIR + "placeholders.json"),
+    false,
+    "stale assets/context-server/placeholders.json must not be reintroduced",
+  );
 });
 
 for (const serverPath of SERVER_FILES) {
@@ -80,7 +84,7 @@ for (const serverPath of SERVER_FILES) {
     assert.doesNotMatch(
       source,
       /detectProjectValues\s*[=:]|function\s+detectProjectValues/,
-      `${serverPath} must not carry its own inline detectProjectValues implementation (function, const, arrow, or property form)`
+      `${serverPath} must not carry its own inline detectProjectValues implementation (function, const, arrow, or property form)`,
     );
   });
 }

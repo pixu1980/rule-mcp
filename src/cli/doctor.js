@@ -48,7 +48,9 @@ export function getSdkVersion() {
  */
 function validateAgentConfigs(agents) {
   return agents.map((agent) => {
-    if (!agent.configured || !agent.configFile) {return agent;}
+    if (!agent.configured || !agent.configFile) {
+      return agent;
+    }
 
     try {
       const content = readFileSync(agent.configFile, "utf8");
@@ -118,15 +120,17 @@ function detectIdeConfigs() {
   const vscodeUserConfigPath =
     platform() === "darwin"
       ? join(HOME, "Library", "Application Support", "Code", "User", "mcp.json")
-      : (platform() === "win32"
+      : platform() === "win32"
         ? join(process.env.APPDATA || join(HOME, "AppData", "Roaming"), "Code", "User", "mcp.json")
-        : join(HOME, ".config", "Code", "User", "mcp.json"));
+        : join(HOME, ".config", "Code", "User", "mcp.json");
   let skillsCount = 0;
   try {
     if (existsSync("skills")) {
       skillsCount = readdirSync("skills").filter((d) => d.startsWith("rule")).length;
     }
-  } catch { /* skills dir may be absent in packaged installs */ }
+  } catch {
+    /* skills dir may be absent in packaged installs */
+  }
 
   const checks = [
     { name: "Skills directory", ok: skillsCount >= 60, detail: `${skillsCount} skills` },
@@ -143,7 +147,9 @@ function detectIdeConfigs() {
   }
 
   return checks.map(({ name, path, ok, detail }) => {
-    if (typeof ok === "boolean") {return { name, configured: ok, configFile: null, detail };}
+    if (typeof ok === "boolean") {
+      return { name, configured: ok, configFile: null, detail };
+    }
     return {
       name,
       configured: existsSync(path),
@@ -194,7 +200,7 @@ function detectStoredModelKeys() {
     return {
       provider: file
         .replace("-key", "")
-        .replaceAll('-', " ")
+        .replaceAll("-", " ")
         .replaceAll(/\b\w/g, (c) => c.toUpperCase()),
       configured: exists,
       file: exists ? fullPath : null,
@@ -238,7 +244,9 @@ function statusIcon(ok) {
 }
 
 function agentIcon(agent) {
-  if (!agent.configured) {return color("○", "dim");}
+  if (!agent.configured) {
+    return color("○", "dim");
+  }
   return agent.validated === false ? color("⚠️", "yellow") : color("✅", "green");
 }
 
@@ -289,12 +297,14 @@ export function formatDoctorTerminal(report) {
       `  ${agentIcon(agent)} ${color(agent.name.padEnd(12), agent.validated === false ? "yellow" : "bold")} ${color(truncate(agent.configFile || "", 90), "dim")}`,
     );
   }
-  if (configuredAgents.length > 12)
-    {lines.push(color(`  … ${configuredAgents.length - 12} more configured agents`, "dim"));}
-  if (missingAgents.length > 0)
-    {lines.push(
+  if (configuredAgents.length > 12) {
+    lines.push(color(`  … ${configuredAgents.length - 12} more configured agents`, "dim"));
+  }
+  if (missingAgents.length > 0) {
+    lines.push(
       `⚠️  ${color("Missing", "yellow")}: ${missingAgents.map((agent) => color(agent, "yellow")).join(", ")}${(report.unconfigured || []).length > missingAgents.length ? color(", …", "dim") : ""}`,
-    );}
+    );
+  }
 
   lines.push(
     "",
@@ -327,7 +337,7 @@ export function formatDoctorTerminal(report) {
 
 export function runDoctor(telemetry = false) {
   const p = getRuntimePaths();
-// eslint-disable-next-line no-unused-vars
+  // eslint-disable-next-line no-unused-vars
   const __dirname = fileURLToPath(new URL(".", import.meta.url));
   const package_ = JSON.parse(readFileSync(new URL("../../package.json", import.meta.url), "utf8"));
 
@@ -343,7 +353,8 @@ export function runDoctor(telemetry = false) {
   // Model provider configs
   const modelEnvironment = detectModelConfig();
   const modelFiles = detectStoredModelKeys();
-  const modelsConfigured = modelEnvironment.filter((m) => m.configured).length + modelFiles.filter((m) => m.configured).length;
+  const modelsConfigured =
+    modelEnvironment.filter((m) => m.configured).length + modelFiles.filter((m) => m.configured).length;
 
   // Environment
   const environment = getEnvironmentInfo();

@@ -2,19 +2,23 @@
 //  PART 3c — IfPart (<if condition="expr">)
 // ═══════════════════════════════════════════════════════════════════════════════
 
-import { evaluateExpression, parseExpression } from './_expression-parser.js';
-import { isSignalLike } from '../signals/index.js';
-import { clearRange } from './_range.js';
-import { ForPart } from './_for-part.js';
+import { evaluateExpression, parseExpression } from "./_expression-parser.js";
+import { isSignalLike } from "../signals/index.js";
+import { clearRange } from "./_range.js";
+import { ForPart } from "./_for-part.js";
 
 export class IfPart {
   constructor(start, end, conditionParsed, innerTemplate) {
-    this.start = start; this.end = end;
+    this.start = start;
+    this.end = end;
     this.conditionParsed = conditionParsed;
     this.innerTemplate = innerTemplate;
-    this.contentStart = null; this.contentEnd = null;
-    this.conditionSignal = null; this.conditionCleanup = null;
-    this.visible = false; this.ctx = null;
+    this.contentStart = null;
+    this.contentEnd = null;
+    this.conditionSignal = null;
+    this.conditionCleanup = null;
+    this.visible = false;
+    this.ctx = null;
   }
   init(ctx) {
     this.ctx = ctx;
@@ -32,24 +36,24 @@ export class IfPart {
   }
   render() {
     this.clear();
-    this.contentStart = document.createComment('if:cs');
-    this.contentEnd = document.createComment('if:ce');
+    this.contentStart = document.createComment("if:cs");
+    this.contentEnd = document.createComment("if:ce");
     this.end.parentNode.insertBefore(this.contentStart, this.end);
     this.end.parentNode.insertBefore(this.contentEnd, this.end);
     // Process inner template string for this condition
     if (this.innerTemplate) {
-      const rendered = new ForPart(/*dummy*/null, null, '').renderTemplateString
-        ? (function() {
+      const rendered = new ForPart(/*dummy*/ null, null, "").renderTemplateString
+        ? function () {
             let t = this.innerTemplate;
             t = t.replace(/\{\{([^}]+)\}\}/g, (_, expr) => {
               const val = evaluateExpression(parseExpression(expr), this.ctx);
-              return val == null ? '' : String(val);
+              return val == null ? "" : String(val);
             });
             return t;
-          }).call(this)
+          }.call(this)
         : this.innerTemplate;
-      
-      const tmp = document.createElement('template');
+
+      const tmp = document.createElement("template");
       tmp.innerHTML = rendered || this.innerTemplate;
       const children = [...tmp.content.childNodes];
       const pt = this.contentEnd;
@@ -60,10 +64,15 @@ export class IfPart {
   clear() {
     if (this.contentStart) {
       clearRange(this.contentStart, this.contentEnd);
-      this.contentStart.remove(); this.contentEnd.remove();
-      this.contentStart = null; this.contentEnd = null;
+      this.contentStart.remove();
+      this.contentEnd.remove();
+      this.contentStart = null;
+      this.contentEnd = null;
     }
     this.visible = false;
   }
-  destroy() { if (this.conditionCleanup) this.conditionCleanup(); this.clear(); }
+  destroy() {
+    if (this.conditionCleanup) this.conditionCleanup();
+    this.clear();
+  }
 }

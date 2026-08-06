@@ -4,31 +4,31 @@ This inventory is generated from `../templates.json`, `../wizard-spec.json`, the
 
 ## Generated .context files
 
-| Output | Label | Placeholder count |
-|--------|-------|-------------------|
-| `README.md` | README | 14 |
-| `ROADMAP.md` | ROADMAP | 29 |
-| `TEMPLATE_GUIDE.md` | TEMPLATE_GUIDE | 25 |
-| `analysis/functional-analysis.md` | analysis → functional-analysis | 89 |
-| `analysis/implementation-roadmap.md` | analysis → implementation-roadmap | 31 |
-| `constraints.concrete.md` | constraints.concrete | 0 |
-| `project-context.md` | project-context | 13 |
-| `qa/checklist.md` | qa → checklist | 8 |
-| `schemas/ruleset.schema.json` | schemas → ruleset.schema.json | 49 |
-| `specs/00-sdd.md` | specs → 00-sdd | 10 |
-| `specs/01-product.md` | specs → 01-product | 19 |
-| `specs/02-domain-glossary.md` | specs → 02-domain-glossary | 18 |
-| `specs/03-calculation-engine.md` | specs → 03-calculation-engine | 36 |
-| `specs/04-ruleset-config.md` | specs → 04-ruleset-config | 27 |
-| `specs/05-architecture-ui-storage.md` | specs → 05-architecture-ui-storage | 24 |
-| `specs/06-quality-acceptance.md` | specs → 06-quality-acceptance | 14 |
-| `specs/07-architecture-decision-records.md` | specs → 07-architecture-decision-records | 12 |
-| `specs/08-deployment.md` | specs → 08-deployment | 8 |
-| `specs/09-security.md` | specs → 09-security | 9 |
-| `specs/10-devops-toolchain.md` | specs → 10-devops-toolchain | 11 |
-| `specs/11-process-delivery.md` | specs → 11-process-delivery | 7 |
-| `use-cases.concrete.md` | use-cases.concrete | 0 |
-| `specs/12-rule-routing.md` | specs → 12-rule-routing | 7 |
+| Output                                      | Label                                    | Placeholder count |
+| ------------------------------------------- | ---------------------------------------- | ----------------- |
+| `README.md`                                 | README                                   | 14                |
+| `ROADMAP.md`                                | ROADMAP                                  | 29                |
+| `TEMPLATE_GUIDE.md`                         | TEMPLATE_GUIDE                           | 25                |
+| `analysis/functional-analysis.md`           | analysis → functional-analysis           | 89                |
+| `analysis/implementation-roadmap.md`        | analysis → implementation-roadmap        | 31                |
+| `constraints.concrete.md`                   | constraints.concrete                     | 0                 |
+| `project-context.md`                        | project-context                          | 13                |
+| `qa/checklist.md`                           | qa → checklist                           | 8                 |
+| `schemas/ruleset.schema.json`               | schemas → ruleset.schema.json            | 49                |
+| `specs/00-sdd.md`                           | specs → 00-sdd                           | 10                |
+| `specs/01-product.md`                       | specs → 01-product                       | 19                |
+| `specs/02-domain-glossary.md`               | specs → 02-domain-glossary               | 18                |
+| `specs/03-calculation-engine.md`            | specs → 03-calculation-engine            | 36                |
+| `specs/04-ruleset-config.md`                | specs → 04-ruleset-config                | 27                |
+| `specs/05-architecture-ui-storage.md`       | specs → 05-architecture-ui-storage       | 24                |
+| `specs/06-quality-acceptance.md`            | specs → 06-quality-acceptance            | 14                |
+| `specs/07-architecture-decision-records.md` | specs → 07-architecture-decision-records | 12                |
+| `specs/08-deployment.md`                    | specs → 08-deployment                    | 8                 |
+| `specs/09-security.md`                      | specs → 09-security                      | 9                 |
+| `specs/10-devops-toolchain.md`              | specs → 10-devops-toolchain              | 11                |
+| `specs/11-process-delivery.md`              | specs → 11-process-delivery              | 7                 |
+| `use-cases.concrete.md`                     | use-cases.concrete                       | 0                 |
+| `specs/12-rule-routing.md`                   | specs → 12-rule-routing                   | 7                 |
 
 ## Placeholder coverage
 

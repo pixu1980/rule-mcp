@@ -49,14 +49,16 @@ const command = arguments_[0] ?? "serve";
 /** Get a named CLI argument value. */
 const getArgument = (name, fallback) => {
   const index = arguments_.indexOf(name);
-  return index === -1 ? fallback : arguments_[index + 1] ?? fallback;
+  return index === -1 ? fallback : (arguments_[index + 1] ?? fallback);
 };
 
 /** Get all values for a repeated flag (e.g. --set KEY=VALUE --set KEY2=VALUE2). */
 const getArguments = (name) => {
   const values = [];
   for (let index = 0; index < arguments_.length - 1; index++) {
-    if (arguments_[index] === name) {values.push(arguments_[index + 1]);}
+    if (arguments_[index] === name) {
+      values.push(arguments_[index + 1]);
+    }
   }
   return values.length > 0 ? values : undefined;
 };
@@ -66,7 +68,8 @@ const hasFlag = (name) => arguments_.includes(name);
 
 // ─── Per-command help printers ───────────────────────────────────
 
-const printServeHelp = () => process.stdout.write(`
+const printServeHelp = () =>
+  process.stdout.write(`
 Usage: rule-mcp serve [options]
 
 Start the MCP server.
@@ -97,7 +100,8 @@ Examples:
   pnpm dev
 `);
 
-const printDaemonHelp = () => process.stdout.write(`
+const printDaemonHelp = () =>
+  process.stdout.write(`
 Usage: rule-mcp daemon <action> [options]
 
 Manage the MCP daemon (SSE on first free port in range 3000–6000).
@@ -126,7 +130,8 @@ Examples:
   rule-mcp daemon disable         # Unload native service
 `);
 
-const printInstallHelp = () => process.stdout.write(`
+const printInstallHelp = () =>
+  process.stdout.write(`
 Usage: rule-mcp install --agent <name> [options]
 
 Install rule-mcp into an agent/IDE (edits mcp.json).
@@ -150,7 +155,8 @@ Example:
   rule-mcp install --agent all        # Install into every agent
 `);
 
-const printUninstallHelp = () => process.stdout.write(`
+const printUninstallHelp = () =>
+  process.stdout.write(`
 Usage: rule-mcp uninstall --agent <name> [options]
 
 Remove rule-mcp from an agent/IDE.
@@ -169,7 +175,8 @@ Example:
   rule-mcp uninstall --agent claude
 `);
 
-const printToolsHelp = () => process.stdout.write(`
+const printToolsHelp = () =>
+  process.stdout.write(`
 Usage: rule-mcp tools <subcommand> [args]
 
 List or call MCP tools directly.
@@ -184,7 +191,8 @@ Examples:
   rule-mcp tools call rule --json '{"prompt": "I need a button"}'
 `);
 
-const printConfigHelp = () => process.stdout.write(`
+const printConfigHelp = () =>
+  process.stdout.write(`
 Usage: rule-mcp config [options]
 
 Print the mcp.json configuration snippet for MCP agent integration.
@@ -197,7 +205,8 @@ Example:
   rule-mcp config --mode daemon
 `);
 
-const printDoctorHelp = () => process.stdout.write(`
+const printDoctorHelp = () =>
+  process.stdout.write(`
 Usage: rule-mcp doctor [options]
 
 Run system health check. Defaults to a human-friendly Terminal UI.
@@ -209,7 +218,8 @@ Options:
   --telemetry         Include anonymous usage stats in output/export
 `);
 
-const printAdrHelp = () => process.stdout.write(`
+const printAdrHelp = () =>
+  process.stdout.write(`
 Usage: rule-mcp adr new "<title>" [options]
 
 Create a new Architecture Decision Record (ADR) in docs/adr/.
@@ -226,7 +236,8 @@ Example:
   rule-mcp adr new "Use PostgreSQL" --status accepted --tags database
 `);
 
-const printHandoffHelp = () => process.stdout.write(`
+const printHandoffHelp = () =>
+  process.stdout.write(`
 Usage: rule-mcp handoff [options]
 
 Generate a compressed LLM context handoff summary.
@@ -245,7 +256,8 @@ Examples:
   rule-mcp handoff --mode close-session    # Full session close
 `);
 
-const printSkillsHelp = () => process.stdout.write(`
+const printSkillsHelp = () =>
+  process.stdout.write(`
 Usage: rule-mcp skills <action> [options]
 
 Manage rule AI skill system.
@@ -266,7 +278,8 @@ Examples:
   rule-mcp skills reload
 `);
 
-const printFixHelp = () => process.stdout.write(`
+const printFixHelp = () =>
+  process.stdout.write(`
 Usage: rule-mcp fix [options]
 
 Validate and auto-fix project file tree structure against rule AI\nconventions (barrel files, _PascalCase naming).
@@ -283,7 +296,8 @@ Examples:
   rule-mcp fix --mode fix --no-dry-run
 `);
 
-const printCompletionsHelp = () => process.stdout.write(`
+const printCompletionsHelp = () =>
+  process.stdout.write(`
 Usage: rule-mcp completions [options]
 
 Generate shell auto-completion script.
@@ -316,7 +330,10 @@ export async function cli() {
 
     switch (command) {
       case "serve": {
-        if (hasFlag("--help") || hasFlag("-h")) { printServeHelp(); return; }
+        if (hasFlag("--help") || hasFlag("-h")) {
+          printServeHelp();
+          return;
+        }
         {
           const portArgument = getArgument("--port");
           await serveCommand({
@@ -330,13 +347,19 @@ export async function cli() {
       }
 
       case "daemon": {
-        if (hasFlag("--help") || hasFlag("-h")) { printDaemonHelp(); return; }
+        if (hasFlag("--help") || hasFlag("-h")) {
+          printDaemonHelp();
+          return;
+        }
         daemonCommand({ action: arguments_[1] ?? "status", dryRun: hasFlag("--dry-run") });
         break;
       }
 
       case "install": {
-        if (hasFlag("--help") || hasFlag("-h")) { printInstallHelp(); return; }
+        if (hasFlag("--help") || hasFlag("-h")) {
+          printInstallHelp();
+          return;
+        }
         installCommand({
           agent: getArgument("--agent", "all"),
           dryRun: hasFlag("--dry-run"),
@@ -349,7 +372,10 @@ export async function cli() {
       }
 
       case "uninstall": {
-        if (hasFlag("--help") || hasFlag("-h")) { printUninstallHelp(); return; }
+        if (hasFlag("--help") || hasFlag("-h")) {
+          printUninstallHelp();
+          return;
+        }
         uninstallCommand({
           agent: getArgument("--agent", "all"),
           dryRun: hasFlag("--dry-run"),
@@ -359,7 +385,10 @@ export async function cli() {
       }
 
       case "tools": {
-        if (hasFlag("--help") || hasFlag("-h")) { printToolsHelp(); return; }
+        if (hasFlag("--help") || hasFlag("-h")) {
+          printToolsHelp();
+          return;
+        }
         await toolsCommand({
           subcommand: arguments_[1] ?? "list",
           toolName: arguments_[2],
@@ -370,7 +399,10 @@ export async function cli() {
       }
 
       case "config": {
-        if (hasFlag("--help") || hasFlag("-h")) { printConfigHelp(); return; }
+        if (hasFlag("--help") || hasFlag("-h")) {
+          printConfigHelp();
+          return;
+        }
         if (arguments_[1] === "env") {
           configureCommand({ set: getArguments("--set"), list: hasFlag("--list"), unset: getArgument("--unset") });
         } else {
@@ -380,7 +412,10 @@ export async function cli() {
       }
 
       case "doctor": {
-        if (hasFlag("--help") || hasFlag("-h")) { printDoctorHelp(); return; }
+        if (hasFlag("--help") || hasFlag("-h")) {
+          printDoctorHelp();
+          return;
+        }
         await doctorCommand({
           telemetry: hasFlag("--telemetry"),
           json: hasFlag("--json"),
@@ -390,7 +425,10 @@ export async function cli() {
       }
 
       case "adr": {
-        if (hasFlag("--help") || hasFlag("-h") || !arguments_[1]) { printAdrHelp(); return; }
+        if (hasFlag("--help") || hasFlag("-h") || !arguments_[1]) {
+          printAdrHelp();
+          return;
+        }
         if (arguments_[1] === "new" && arguments_[2]) {
           const { callTool } = await import("./tools/router.js");
           const { loadAllSkills } = await import("./core/skills.js");
@@ -413,7 +451,10 @@ export async function cli() {
       }
 
       case "handoff": {
-        if (hasFlag("--help") || hasFlag("-h")) { printHandoffHelp(); return; }
+        if (hasFlag("--help") || hasFlag("-h")) {
+          printHandoffHelp();
+          return;
+        }
         const { registerProcessHandoffTool } = await import("./tools/handoff.js");
         const { callTool: ct } = await import("./tools/router.js");
         registerProcessHandoffTool();
@@ -428,36 +469,43 @@ export async function cli() {
       }
 
       case "skills": {
-        if (hasFlag("--help") || hasFlag("-h")) { printSkillsHelp(); return; }
+        if (hasFlag("--help") || hasFlag("-h")) {
+          printSkillsHelp();
+          return;
+        }
         switch (arguments_[1]) {
-        case "install": {
-          const { skillsInstallCommand } = await import("./cli/skills-install.js");
-          await skillsInstallCommand({ scope: getArgument("--scope", "global"), selectAll: hasFlag("--all") });
-        
-        break;
-        }
-        case "list": {
-          const { skillsListCommand } = await import("./cli/skills-install.js");
-          skillsListCommand({ json: hasFlag("--json") });
-        
-        break;
-        }
-        case "reload": {
-          await skillsReloadCommand();
-        
-        break;
-        }
-        default: { if (arguments_[1]) {
-          throw new Error(`Unknown skills action: ${arguments_[1] ?? ""}. Use 'rule-mcp skills --help'.`);
-        }
-        printSkillsHelp();
-        }
+          case "install": {
+            const { skillsInstallCommand } = await import("./cli/skills-install.js");
+            await skillsInstallCommand({ scope: getArgument("--scope", "global"), selectAll: hasFlag("--all") });
+
+            break;
+          }
+          case "list": {
+            const { skillsListCommand } = await import("./cli/skills-install.js");
+            skillsListCommand({ json: hasFlag("--json") });
+
+            break;
+          }
+          case "reload": {
+            await skillsReloadCommand();
+
+            break;
+          }
+          default: {
+            if (arguments_[1]) {
+              throw new Error(`Unknown skills action: ${arguments_[1] ?? ""}. Use 'rule-mcp skills --help'.`);
+            }
+            printSkillsHelp();
+          }
         }
         break;
       }
 
       case "fix": {
-        if (hasFlag("--help") || hasFlag("-h")) { printFixHelp(); return; }
+        if (hasFlag("--help") || hasFlag("-h")) {
+          printFixHelp();
+          return;
+        }
         await fixCommand({
           dir: getArgument("--dir", "."),
           srcDir: getArgument("--src-dir", "src"),
@@ -468,7 +516,10 @@ export async function cli() {
       }
 
       case "completions": {
-        if (hasFlag("--help") || hasFlag("-h")) { printCompletionsHelp(); return; }
+        if (hasFlag("--help") || hasFlag("-h")) {
+          printCompletionsHelp();
+          return;
+        }
         completionsCommand({ shell: getArgument("--shell", "zsh") });
         break;
       }
@@ -480,17 +531,19 @@ export async function cli() {
 
       case "agent-commands": {
         if (hasFlag("--help") || hasFlag("-h")) {
-          process.stderr.write(`Usage: rule-mcp agent-commands [options]\n\n` +
-            `Registry-driven agent slash-command management.\n\n` +
-            `  --dir <path>     Write commands to this directory\n` +
-            `  --format <f>     args (default), workflow, gemini, prompt, plain\n` +
-            `  --list           List command names\n` +
-            `  --targets        Print resolved target directories\n` +
-            `  --sync           Write to EVERY detected agent dir\n` +
-            `  --remove         Remove instead of writing\n` +
-            `  --force          Overwrite existing files\n` +
-            `  --dry-run        Preview without writing\n` +
-            `  --agent <name>   Limit to one agent\n`);
+          process.stderr.write(
+            `Usage: rule-mcp agent-commands [options]\n\n` +
+              `Registry-driven agent slash-command management.\n\n` +
+              `  --dir <path>     Write commands to this directory\n` +
+              `  --format <f>     args (default), workflow, gemini, prompt, plain\n` +
+              `  --list           List command names\n` +
+              `  --targets        Print resolved target directories\n` +
+              `  --sync           Write to EVERY detected agent dir\n` +
+              `  --remove         Remove instead of writing\n` +
+              `  --force          Overwrite existing files\n` +
+              `  --dry-run        Preview without writing\n` +
+              `  --agent <name>   Limit to one agent\n`,
+          );
           return;
         }
         agentCommandsCommand({

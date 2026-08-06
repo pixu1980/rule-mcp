@@ -87,7 +87,7 @@ for (const { name, mod } of SERVERS) {
       assert.notEqual(
         res.headers.get("access-control-allow-origin"),
         "*",
-        "a wildcard ACAO lets any website read this local server"
+        "a wildcard ACAO lets any website read this local server",
       );
       await res.text();
     });

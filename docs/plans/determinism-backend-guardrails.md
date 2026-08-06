@@ -130,7 +130,7 @@ Principio: stesso pattern di `SHARED_GUARDRAILS` ma con check specifici per ogni
 - [ ] **B.3.5** `test-coverage** — Comando coverage negli script
   - `"test:coverage"` o `"coverage"` in `package.json` scripts → pass
 
-- [ ] **B.3.6** `env-file-exclusion** — `.env` in `.gitignore`
+- [ ] **B.3.6** `env-file-exclusion** — `.env`in`.gitignore`
   - `.gitignore` contiene `.env` → pass
 
 ### B.4 — SECURITY_GUARDRAILS (già in parte coperti da B.1)
@@ -150,14 +150,14 @@ Principio: stesso pattern di `SHARED_GUARDRAILS` ma con check specifici per ogni
 
 ### B.5 — Mappatura guardrail → skill
 
-| Guardrail set | Skill triggerate |
-|---|---|
-| `SHARED_GUARDRAILS` | Tutte (esistente) |
-| `FRAMEWORK_GUARDRAILS` | react, vue, angular, svelte, solid (esistente) |
-| `BACKEND_GUARDRAILS` | express, fastify, nestjs, hono, backend-node, backend-api-design |
-| `DATABASE_GUARDRAILS` | postgresql, mysql, mongodb, sqlite, duckdb, indexed-db, sql |
-| `DEVOPS_GUARDRAILS` | docker, gitlab-ci, testing, version |
-| `SECURITY_GUARDRAILS` | backend-security, platform-agent |
+| Guardrail set          | Skill triggerate                                                 |
+| ---------------------- | ---------------------------------------------------------------- |
+| `SHARED_GUARDRAILS`    | Tutte (esistente)                                                |
+| `FRAMEWORK_GUARDRAILS` | react, vue, angular, svelte, solid (esistente)                   |
+| `BACKEND_GUARDRAILS`   | express, fastify, nestjs, hono, backend-node, backend-api-design |
+| `DATABASE_GUARDRAILS`  | postgresql, mysql, mongodb, sqlite, duckdb, indexed-db, sql      |
+| `DEVOPS_GUARDRAILS`    | docker, gitlab-ci, testing, version                              |
+| `SECURITY_GUARDRAILS`  | backend-security, platform-agent                                 |
 
 ---
 

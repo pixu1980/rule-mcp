@@ -58,7 +58,9 @@ test("a neutral React pack ships no hardcoded vanilla/Custom-Elements/Parcel pro
   for (const file of files) {
     for (const re of OVERFIT) {
       const m = file.content.match(re);
-      if (m) {offenders.push(`${file.path}: /${re.source}/ -> "${m[0]}"`);}
+      if (m) {
+        offenders.push(`${file.path}: /${re.source}/ -> "${m[0]}"`);
+      }
     }
   }
   assert.deepEqual(offenders, [], `framework-overfit literals leaked:\n  ${offenders.join("\n  ")}`);
@@ -70,7 +72,7 @@ test("no dead ../.agents/skills/rule-* link ships in any emitted file", () => {
     assert.doesNotMatch(
       file.content,
       /\]\(\.\.\/\.agents\/skills\/rule-/,
-      `${file.path} still links to a hardcoded skill path that will 404 in a real project`
+      `${file.path} still links to a hardcoded skill path that will 404 in a real project`,
     );
   }
 });

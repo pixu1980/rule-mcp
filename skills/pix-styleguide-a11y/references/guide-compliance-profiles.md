@@ -5,6 +5,7 @@
 Accessibility is not a monolith. While **WCAG 2.2 AA** is the industry and legal standard, different stages of a project demand different levels of rigor.
 
 > **Normative vs House Rules.** Each profile mixes two layers:
+>
 > - **WCAG Success Criteria** at its target level (cited by SC number — skipping one requires `EXCEPTIONS.md`)
 > - **House Rules†** — this standard's stricter ergonomic policy (marked †; relaxing one is a product decision recorded in `A11Y-DECISIONS.md`)
 >
@@ -14,11 +15,11 @@ Accessibility is not a monolith. While **WCAG 2.2 AA** is the industry and legal
 
 ## The Profiles
 
-| Profile | Target Standard | Primary Use Case | Focus |
-| :--- | :--- | :--- | :--- |
-| **🛡️ Shield (AAA)** | WCAG 2.2 AAA | Regulated industries, specialized software | Ultimate inclusivity, zero barriers |
-| **⚖️ Standard (AA)** | WCAG 2.2 AA | Production web apps (**Default**) | Legal compliance, broad usability |
-| **🚀 Launchpad (A)** | WCAG 2.2 A | MVPs, internal tools, prototypes | Absolute minimum baseline |
+| Profile              | Target Standard | Primary Use Case                           | Focus                               |
+| :------------------- | :-------------- | :----------------------------------------- | :---------------------------------- |
+| **🛡️ Shield (AAA)**  | WCAG 2.2 AAA    | Regulated industries, specialized software | Ultimate inclusivity, zero barriers |
+| **⚖️ Standard (AA)** | WCAG 2.2 AA     | Production web apps (**Default**)          | Legal compliance, broad usability   |
+| **🚀 Launchpad (A)** | WCAG 2.2 A      | MVPs, internal tools, prototypes           | Absolute minimum baseline           |
 
 ---
 

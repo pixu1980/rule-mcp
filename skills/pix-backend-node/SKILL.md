@@ -115,15 +115,15 @@ Create:
 Example (`src/index.ts` health route):
 
 ```ts
-import express from 'express';
-import type { Request, Response } from 'express';
+import express from "express";
+import type { Request, Response } from "express";
 
 const app = express();
 
-app.get('/health', (_req: Request, res: Response) => {
+app.get("/health", (_req: Request, res: Response) => {
   res.status(200).json({
-    status: 'ok',
-    service: 'backend',
+    status: "ok",
+    service: "backend",
     timestamp: new Date().toISOString(),
   });
 });
@@ -162,6 +162,7 @@ app.get('/health', (_req: Request, res: Response) => {
 - TypeScript strict mode must be enabled.
 - `pnpm run build` must pass.
 - Generated structure must stay aligned with `apps/backend`.
+
 ## Local-First Storage Patterns (from rule-backend)
 
 ### Pattern: Filesystem as Source of Truth
@@ -195,12 +196,13 @@ await set("user-preferences", { theme: "dark" });
 const prefs = await get("user-preferences");
 ```
 
-| Storage | Best for | Technology |
-|---------|----------|------------|
-| **IndexedDB** | Browser/Electron renderer | idb-keyval, Dexie.js |
-| **Filesystem** | Electron main process | fs (JSON, SQLite via better-sqlite3) |
-| **SQLite** | Embedded local DB | better-sqlite3, sql.js |
-| **DuckDB** | Analytics / OLAP | duckdb (in-process OLAP) |
+| Storage        | Best for                  | Technology                           |
+| -------------- | ------------------------- | ------------------------------------ |
+| **IndexedDB**  | Browser/Electron renderer | idb-keyval, Dexie.js                 |
+| **Filesystem** | Electron main process     | fs (JSON, SQLite via better-sqlite3) |
+| **SQLite**     | Embedded local DB         | better-sqlite3, sql.js               |
+| **DuckDB**     | Analytics / OLAP          | duckdb (in-process OLAP)             |
+
 ---
 
 ## See also

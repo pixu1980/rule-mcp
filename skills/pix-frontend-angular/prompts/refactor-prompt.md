@@ -22,5 +22,5 @@ Return:
 Code:
 
 ```typescript
-PASTE_COMPONENT_HERE
+PASTE_COMPONENT_HERE;
 ```

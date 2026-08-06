@@ -24,6 +24,7 @@
 Le skill `rule-data-duckdb`, `rule-data-indexed-db`, `rule-data-sqlite` non hanno sezione `## See also`. Questo rompe `test/skills-docs.test.mjs`.
 
 **Fix:** Aggiungere alla fine di ogni `SKILL.md`:
+
 ```markdown
 ## See also
 
@@ -32,11 +33,13 @@ Le skill `rule-data-duckdb`, `rule-data-indexed-db`, `rule-data-sqlite` non hann
 ```
 
 File da modificare:
+
 - `skills/rule-data-duckdb/SKILL.md`
 - `skills/rule-data-indexed-db/SKILL.md`
 - `skills/rule-data-sqlite/SKILL.md`
 
 **Verifica:**
+
 ```bash
 node test/skills-docs.test.mjs  # deve passare
 ```
@@ -44,6 +47,7 @@ node test/skills-docs.test.mjs  # deve passare
 ### 10.2 — Documentazione obsoleta (32 token name, ~30 min)
 
 `docs/01-product-architecture.md` e `docs/02-tools-operations.md` contengono ~32 riferimenti a nomi tool obsoleti:
+
 - `pix_react` → `rule_tool_frontend_react`
 - `pix_vue` → `rule_tool_frontend_vue`
 - `pix_angular` → `rule_tool_frontend_angular`
@@ -55,6 +59,7 @@ node test/skills-docs.test.mjs  # deve passare
 **Fix:** Sostituzione massiva con sed o modifica manuale.
 
 **Verifica:**
+
 ```bash
 # Estrarre i riferimenti e verificare contro il registry attuale
 HOME=/tmp/rule-audit-home RULE_MCP_DISABLE_AUTO_ADR=1 NODE_ENV=test \
@@ -80,6 +85,7 @@ registerTool({ name: "rule_tool_fix", ..., annotations: { destructiveHint: true 
 **Problema:** Usa `process.cwd()` per il nome progetto anche quando `projectDir` punta altrove. Git diff non include untracked files.
 
 **Fix:**
+
 ```js
 // Usare projectDir come cwd per execSync
 execSync("git log ...", { cwd: projectDir });
@@ -92,6 +98,7 @@ execSync("git status --porcelain", { cwd: projectDir });
 **Problema:** Hook wildcard `addAfterToolHook("*", autoLog)` crea ADR automaticamente per ogni chiamata tool.
 
 **Fix:**
+
 ```js
 // Disabilitare di default. Abilitare solo se RULE_MCP_AUTO_ADR=1
 if (process.env.RULE_MCP_AUTO_ADR === "1") {
@@ -102,6 +109,7 @@ if (process.env.RULE_MCP_AUTO_ADR === "1") {
 ### 10.6 — `test:all` corretto (`package.json`, ~5 min)
 
 Già fatto in Fase 3.2 ma verificare che `pnpm run ci` passi:
+
 ```bash
 pnpm run ci
 # Deve eseguire smoke + ai + detector + framework-routing + skills-docs + docs-architect + daemon-wrapper + doctor-ui + cli-tui
@@ -113,6 +121,7 @@ pnpm run ci
 `doctor` restituisce `ok: true` anche con prompt MCP invalidi o build rotta.
 
 **Fix:** Aggiungere check per:
+
 - `prompts/get` risposta valida (chiamata MCP interna)
 - `skills/` contiene almeno 60 SKILL.md
 - `LICENSE` esiste

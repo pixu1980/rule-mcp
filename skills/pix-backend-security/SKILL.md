@@ -47,12 +47,12 @@ API_KEY=replace-with-your-api-key
 Validate all environment variables at application startup using zod. Fail fast if any required variable is missing or invalid:
 
 ```ts
-import { z } from 'zod';
+import { z } from "zod";
 
 const envSchema = z.object({
   PORT: z.coerce.number().int().positive().default(3000),
-  NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
-  LOG_LEVEL: z.enum(['fatal', 'error', 'warn', 'info', 'debug', 'trace']).default('info'),
+  NODE_ENV: z.enum(["development", "production", "test"]).default("development"),
+  LOG_LEVEL: z.enum(["fatal", "error", "warn", "info", "debug", "trace"]).default("info"),
   DATABASE_URL: z.string().url(),
   JWT_SECRET: z.string().min(32),
 });
@@ -87,7 +87,7 @@ Validate dependency choices against the project's active ruleset and security po
 Use `helmet` or `@fastify/helmet` to set security headers:
 
 ```ts
-import helmet from 'helmet';
+import helmet from "helmet";
 
 await app.register(helmet, {
   contentSecurityPolicy: {
@@ -95,7 +95,7 @@ await app.register(helmet, {
       defaultSrc: ["'self'"],
       scriptSrc: ["'self'"],
       styleSrc: ["'self'", "'unsafe-inline'"],
-      imgSrc: ["'self'", 'data:'],
+      imgSrc: ["'self'", "data:"],
     },
   },
 });
@@ -108,7 +108,7 @@ Use `express-rate-limit` or `@fastify/rate-limit`:
 ```ts
 await app.register(rateLimit, {
   max: 100,
-  timeWindow: '1 minute',
+  timeWindow: "1 minute",
 });
 ```
 
@@ -117,11 +117,11 @@ await app.register(rateLimit, {
 Use `cors` or `@fastify/cors` with explicit origin configuration:
 
 ```ts
-import cors from 'cors';
+import cors from "cors";
 
 await app.register(cors, {
-  origin: env.ALLOWED_ORIGINS.split(','),
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
+  origin: env.ALLOWED_ORIGINS.split(","),
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
   credentials: true,
 });
 ```
@@ -140,18 +140,18 @@ await app.register(cors, {
 - Return structured error responses, never expose internal error details.
 
 ```ts
-import { z } from 'zod';
+import { z } from "zod";
 
 const createUserSchema = z.object({
   email: z.string().email(),
   name: z.string().min(1).max(100),
-  role: z.enum(['admin', 'user']),
+  role: z.enum(["admin", "user"]),
 });
 
-app.post('/users', async (request, reply) => {
+app.post("/users", async (request, reply) => {
   const result = createUserSchema.safeParse(request.body);
   if (!result.success) {
-    return reply.status(400).send({ error: 'Validation failed', details: result.error.flatten() });
+    return reply.status(400).send({ error: "Validation failed", details: result.error.flatten() });
   }
   // proceed with result.data
 });

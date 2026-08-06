@@ -106,7 +106,11 @@ test("generateContextContent fans the AGENTS.md body out to every plain per-tool
     assert.ok(entry, `files[] should include a ${path} entry`);
     assert.equal(entry.content, agents.content, `${path} must carry the FULL AGENTS.md body verbatim`);
     assert.match(entry.content, /Sample Project Name/, `${path} must contain the resolved PROJECT_NAME`);
-    assert.match(entry.content, /\.context\/README\.md/, String.raw`${path} must contain the .context\README.md pointer`);
+    assert.match(
+      entry.content,
+      /\.context\/README\.md/,
+      String.raw`${path} must contain the .context\README.md pointer`,
+    );
   }
 });
 
@@ -119,17 +123,21 @@ test("generateContextContent prepends resolved frontmatter for Cursor and Windsu
   assert.equal(
     cursor.content,
     "---\ndescription: Sample Project Name project rules\nalwaysApply: true\n---\n\n" + agents.content,
-    ".cursor/rules/project.mdc must be resolved frontmatter (real PROJECT_NAME, not a literal token) + the full body"
+    ".cursor/rules/project.mdc must be resolved frontmatter (real PROJECT_NAME, not a literal token) + the full body",
   );
   assert.match(cursor.content, /^---\n/, "Cursor rule must start with frontmatter");
-  assert.doesNotMatch(cursor.content, /\[PROJECT_NAME\]/, "Cursor frontmatter must use the RESOLVED project name, not a literal placeholder");
+  assert.doesNotMatch(
+    cursor.content,
+    /\[PROJECT_NAME\]/,
+    "Cursor frontmatter must use the RESOLVED project name, not a literal placeholder",
+  );
 
   const windsurf = files.find((f) => f.path === ".windsurf/rules/project.md");
   assert.ok(windsurf, "files[] should include a .windsurf/rules/project.md entry");
   assert.equal(
     windsurf.content,
     "---\ntrigger: always_on\n---\n\n" + agents.content,
-    ".windsurf/rules/project.md must be Windsurf frontmatter + the full body"
+    ".windsurf/rules/project.md must be Windsurf frontmatter + the full body",
   );
   assert.match(windsurf.content, /^---\n/, "Windsurf rule must start with frontmatter");
 });
@@ -240,15 +248,15 @@ test("frontmatter survives a hostile project name (F9)", () => {
     const block = lines.slice(1, close);
     assert.ok(
       block.includes(requiredKey),
-      `${label}: "${requiredKey}" must stay inside the frontmatter block — got ${JSON.stringify(block)}`
+      `${label}: "${requiredKey}" must stay inside the frontmatter block — got ${JSON.stringify(block)}`,
     );
     assert.ok(
       block.every((line) => /^[a-zA-Z][\w-]*:/.test(line)),
-      `${label}: every frontmatter line must be a single key — got ${JSON.stringify(block)}`
+      `${label}: every frontmatter line must be a single key — got ${JSON.stringify(block)}`,
     );
     assert.ok(
       block.every((line) => !line.includes("alwaysApply: false")),
-      `${label}: injection must not take effect`
+      `${label}: injection must not take effect`,
     );
   }
 });

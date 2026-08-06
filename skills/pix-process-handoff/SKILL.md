@@ -20,11 +20,11 @@ where the previous one left off — with zero Q&A to re-establish context.
 
 ## Use Cases
 
-| Use Case | When | Why |
-|----------|------|-----|
-| **Chat recovery** | Browser refresh / timeout / new chat | Paste handoff → continue without re-explaining |
-| **Model swap** | Switching GPT → Claude → Gemini mid-task | Handoff normalises context across models |
-| **Session handoff** | Hand work to a colleague | A→B: paste handoff, B picks up instantly |
+| Use Case            | When                                     | Why                                            |
+| ------------------- | ---------------------------------------- | ---------------------------------------------- |
+| **Chat recovery**   | Browser refresh / timeout / new chat     | Paste handoff → continue without re-explaining |
+| **Model swap**      | Switching GPT → Claude → Gemini mid-task | Handoff normalises context across models       |
+| **Session handoff** | Hand work to a colleague                 | A→B: paste handoff, B picks up instantly       |
 
 ## How It Works
 
@@ -84,14 +84,14 @@ STACK=react
 
 `/rule-handoff` runs the handoff directly in the chat. A bare invocation just works and produces a quick `handoff`-mode summary with every include flag on and `compress` off. The command takes a **single free-form `options` argument** of space-separated tokens; the server resolves them into the exact tool arguments, and `/rule-handoff help` prints the usage list without running the tool.
 
-| Token | Effect |
-|-------|--------|
-| `handoff` \| `close-session` | Mode (default: `handoff`). `close-session` = full session close (diff + roadmap + docs scan) |
-| `compress` | Aggressively compress the output |
-| `full` \| `brief` \| `minimal` | Output format (default: `full`) |
-| `no-diff` \| `no-log` \| `no-context` \| `no-adrs` \| `no-roadmap` | Omit the corresponding section |
-| `max=<n>` | Cap output to n tokens (0 = no limit) |
-| `help` | Print the usage list (no tool call) |
+| Token                                                              | Effect                                                                                       |
+| ------------------------------------------------------------------ | -------------------------------------------------------------------------------------------- |
+| `handoff` \| `close-session`                                       | Mode (default: `handoff`). `close-session` = full session close (diff + roadmap + docs scan) |
+| `compress`                                                         | Aggressively compress the output                                                             |
+| `full` \| `brief` \| `minimal`                                     | Output format (default: `full`)                                                              |
+| `no-diff` \| `no-log` \| `no-context` \| `no-adrs` \| `no-roadmap` | Omit the corresponding section                                                               |
+| `max=<n>`                                                          | Cap output to n tokens (0 = no limit)                                                        |
+| `help`                                                             | Print the usage list (no tool call)                                                          |
 
 ```
 /rule-handoff                                  # all defaults → quick handoff

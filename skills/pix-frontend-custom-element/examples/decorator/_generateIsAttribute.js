@@ -1,6 +1,6 @@
 // @ts-check
 
-import { strings } from './_utils.js';
+import { strings } from "./_utils.js";
 
 /**
  * Convert a component class name (PascalCase) into its custom-element tag

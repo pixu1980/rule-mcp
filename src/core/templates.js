@@ -40,7 +40,9 @@ function guardrailSummary(framework, code) {
     return `## Guardrails\n\n✅ ${report.passCount}/${report.total} guardrails pass (${skillName}). Validated with pix_check.`;
   }
   const lines = [`## Guardrails\n\n⚠️ ${report.failCount}/${report.total} FAIL (${skillName}). Fix before shipping:`];
-  for (const f of report.failed) {lines.push(`- **${f.id}**: ${f.label} — ${f.suggestion}`);}
+  for (const f of report.failed) {
+    lines.push(`- **${f.id}**: ${f.label} — ${f.suggestion}`);
+  }
   return lines.join("\n");
 }
 
@@ -52,7 +54,9 @@ export function generateMultiFile(component, framework = "vanilla", name) {
   const pascal = toPascal(name || component);
   const kebab = toKebab(pascal);
   const t = COMPONENT_TEMPLATES[component];
-  if (!t) {return null;}
+  if (!t) {
+    return null;
+  }
 
   const basePath = `src/components/${pascal}`;
   const files = [];
@@ -70,11 +74,21 @@ export function generateMultiFile(component, framework = "vanilla", name) {
         compSource = interpolate(source, variables);
       } else if (t.vanilla?.html) {
         compSource = `export function ${pascal}({ children }) {\n  return (\n${indent(t.vanilla.html, 4)}\n  );\n}`;
-      } else {return null;}
-      if (!compSource.includes(`export function ${pascal}`)) {compSource = compSource.replace(/export function \w+/, `export function ${pascal}`);}
+      } else {
+        return null;
+      }
+      if (!compSource.includes(`export function ${pascal}`)) {
+        compSource = compSource.replace(/export function \w+/, `export function ${pascal}`);
+      }
       files.push({ path: `${basePath}/_${pascal}${extension}`, language: "jsx", content: compSource });
-      if (interpCss) {files.push({ path: `${basePath}/_${pascal}.css`, language: "css", content: interpCss });}
-      files.push({ path: `${basePath}/index.js`, language: "javascript", content: `export { ${pascal} } from './_${pascal}${extension}';\n` });
+      if (interpCss) {
+        files.push({ path: `${basePath}/_${pascal}.css`, language: "css", content: interpCss });
+      }
+      files.push({
+        path: `${basePath}/index.js`,
+        language: "javascript",
+        content: `export { ${pascal} } from './_${pascal}${extension}';\n`,
+      });
       break;
     }
     case "vue": {
@@ -84,8 +98,17 @@ export function generateMultiFile(component, framework = "vanilla", name) {
         content = interpolate(source, variables);
       } else if (t.vanilla?.html) {
         content = `<script setup>\ndefineProps({});\n</script>\n\n<template>\n${indent(interpolate(t.vanilla.html, variables), 2)}\n</template>\n\n<style scoped>\n${interpCss}\n</style>`;
-      } else {return null;}
-      files.push({ path: `${basePath}/_${pascal}.vue`, language: "vue", content }, { path: `${basePath}/index.js`, language: "javascript", content: `export { default as ${pascal} } from './_${pascal}.vue';\n` });
+      } else {
+        return null;
+      }
+      files.push(
+        { path: `${basePath}/_${pascal}.vue`, language: "vue", content },
+        {
+          path: `${basePath}/index.js`,
+          language: "javascript",
+          content: `export { default as ${pascal} } from './_${pascal}.vue';\n`,
+        },
+      );
       break;
     }
     case "svelte": {
@@ -95,17 +118,34 @@ export function generateMultiFile(component, framework = "vanilla", name) {
         content = interpolate(source, variables);
       } else if (t.vanilla?.html) {
         content = `<script>\nlet { children } = $props();\n</script>\n\n${interpolate(t.vanilla.html, variables)}\n\n<style>\n${interpCss}\n</style>`;
-      } else {return null;}
-      files.push({ path: `${basePath}/_${pascal}.svelte`, language: "svelte", content }, { path: `${basePath}/index.js`, language: "javascript", content: `export { default as ${pascal} } from './_${pascal}.svelte';\n` });
+      } else {
+        return null;
+      }
+      files.push(
+        { path: `${basePath}/_${pascal}.svelte`, language: "svelte", content },
+        {
+          path: `${basePath}/index.js`,
+          language: "javascript",
+          content: `export { default as ${pascal} } from './_${pascal}.svelte';\n`,
+        },
+      );
       break;
     }
     default: {
-      if (!t.vanilla) {return null;}
+      if (!t.vanilla) {
+        return null;
+      }
       const html = interpolate(t.vanilla.html || "", variables);
-      const jsContent = `/**\n * @module ${basePath}/_${pascal}\n * @description ${t.description}\n */\n\nconst template = document.createElement("template");\ntemplate.innerHTML = \`${html.replaceAll('`', "\\`")}\`;\n\nexport class ${pascal} extends HTMLElement {\n  connectedCallback() {\n    this.append(template.content.cloneNode(true));\n  }\n}\n\ncustomElements.define("${kebab}", ${pascal});\n`;
+      const jsContent = `/**\n * @module ${basePath}/_${pascal}\n * @description ${t.description}\n */\n\nconst template = document.createElement("template");\ntemplate.innerHTML = \`${html.replaceAll("`", "\\`")}\`;\n\nexport class ${pascal} extends HTMLElement {\n  connectedCallback() {\n    this.append(template.content.cloneNode(true));\n  }\n}\n\ncustomElements.define("${kebab}", ${pascal});\n`;
       files.push({ path: `${basePath}/_${pascal}.js`, language: "javascript", content: jsContent });
-      if (interpCss) {files.push({ path: `${basePath}/_${pascal}.css`, language: "css", content: interpCss });}
-      files.push({ path: `${basePath}/index.js`, language: "javascript", content: `export { ${pascal} } from './_${pascal}.js';\n` });
+      if (interpCss) {
+        files.push({ path: `${basePath}/_${pascal}.css`, language: "css", content: interpCss });
+      }
+      files.push({
+        path: `${basePath}/index.js`,
+        language: "javascript",
+        content: `export { ${pascal} } from './_${pascal}.js';\n`,
+      });
     }
   }
   return files;
@@ -113,29 +153,42 @@ export function generateMultiFile(component, framework = "vanilla", name) {
 
 export function listTemplateCategories() {
   return Object.entries(COMPONENT_TEMPLATES).map(([name, t]) => ({
-    name, description: t.description,
+    name,
+    description: t.description,
     frameworks: ["vanilla", "react", "vue", "svelte", "angular", "solid", "astro"],
   }));
 }
 
 export function getTemplate(component, framework = "vanilla") {
   const t = COMPONENT_TEMPLATES[component];
-  if (!t) {return null;}
-  if (framework === "vanilla" && t.vanilla) {return t.vanilla;}
+  if (!t) {
+    return null;
+  }
+  if (framework === "vanilla" && t.vanilla) {
+    return t.vanilla;
+  }
   const key = framework;
-  if (t[key]) {return t[key];}
-  if (t.vanilla) {return t.vanilla;}
+  if (t[key]) {
+    return t[key];
+  }
+  if (t.vanilla) {
+    return t.vanilla;
+  }
   return null;
 }
 
 function indent(string_, spaces) {
   const pad = " ".repeat(spaces);
-  return string_.split("\n").map(l => l ? pad + l : l).join("\n");
+  return string_
+    .split("\n")
+    .map((l) => (l ? pad + l : l))
+    .join("\n");
 }
 
 function buildGuardrailsText() {
   const lines = [
-    "# Component Guardrails", "",
+    "# Component Guardrails",
+    "",
     "## Shared (all components)",
     "- [ ] **no-css-classes**: CSS uses element + [data-part] selectors only. No .class rules.",
     "- [ ] **no-inline-styles**: Template has no style=... attributes.",
@@ -143,12 +196,14 @@ function buildGuardrailsText() {
     "- [ ] **external-css**: CSS loaded externally (adoptedStyleSheets or framework-native).",
     "- [ ] **data-part-naming**: Child elements have data-part=role attributes.",
     "- [ ] **element-attr-selectors**: CSS uses element or [data-part=] only.",
-    "- [ ] **file-naming**: File is _PascalCase.ext. Folder is PascalCase/. Barrel: index.js.", "",
+    "- [ ] **file-naming**: File is _PascalCase.ext. Folder is PascalCase/. Barrel: index.js.",
+    "",
     "## A11y Testing (MANDATORY)",
     "- [ ] **a11y-test-basic**: tests/a11y/_basic.spec.js - page structure, headings, landmarks",
     "- [ ] **a11y-test-forms**: tests/a11y/_forms.spec.js - form inputs, labels, errors",
     "- [ ] **a11y-test-components**: tests/a11y/_components.spec.js - per-component a11y checks",
-    "- [ ] **playwright-config**: playwright.config.js with Chromium target", "",
+    "- [ ] **playwright-config**: playwright.config.js with Chromium target",
+    "",
     "Use rule_tool_component component=a11y-test-basic to generate test templates.",
     "Use rule_tool_check for automated validation.",
     "Iterate: generate, rule_tool_check, fix, rule_tool_check, all pass.",
@@ -157,7 +212,7 @@ function buildGuardrailsText() {
 }
 
 export function registerTemplateTool() {
-// eslint-disable-next-line no-unused-vars
+  // eslint-disable-next-line no-unused-vars
   const componentKeys = Object.keys(COMPONENT_TEMPLATES);
   const ComponentSchema = z.object({
     component: z.string().describe("Component or test type"),
@@ -171,26 +226,97 @@ export function registerTemplateTool() {
     description: "Generate component or test templates following rule AI principles.",
     zodSchema: ComponentSchema,
     handler: async (arguments_) => {
-      if (arguments_.mode === "guardrails") {return { content: [{ type: "text", text: buildGuardrailsText() }] };}
+      if (arguments_.mode === "guardrails") {
+        return { content: [{ type: "text", text: buildGuardrailsText() }] };
+      }
       const component = arguments_.component;
       const framework = arguments_.framework || "vanilla";
       if (!COMPONENT_TEMPLATES[component]) {
-        return { isError: true, content: [{ type: "text", text: "Unknown: " + component + ". Available: " + Object.keys(COMPONENT_TEMPLATES).join(", ") }] };
+        return {
+          isError: true,
+          content: [
+            {
+              type: "text",
+              text: "Unknown: " + component + ". Available: " + Object.keys(COMPONENT_TEMPLATES).join(", "),
+            },
+          ],
+        };
       }
       if (arguments_.mode === "multi") {
         const files = generateMultiFile(component, framework, arguments_.name);
-        if (!files || files.length === 0) {return { isError: true, content: [{ type: "text", text: "Cannot generate multi-file output for \"" + component + "\" with \"" + framework + "\"." }] };}
-        const combined = files.map(f => f.content).join("\n\n");
+        if (!files || files.length === 0) {
+          return {
+            isError: true,
+            content: [
+              {
+                type: "text",
+                text: 'Cannot generate multi-file output for "' + component + '" with "' + framework + '".',
+              },
+            ],
+          };
+        }
+        const combined = files.map((f) => f.content).join("\n\n");
         return {
-          content: [{ type: "text", text: "# Generated: " + component + " → " + framework + " (" + files.length + " files)\n\n" + files.map(f => "  " + f.path).join("\n") + "\n\n---\n\n" + files.map(f => "### `" + f.path + "`\n\n```" + f.language + "\n" + f.content + "\n```").join("\n\n") + "\n\n" + guardrailSummary(framework, combined) }],
+          content: [
+            {
+              type: "text",
+              text:
+                "# Generated: " +
+                component +
+                " → " +
+                framework +
+                " (" +
+                files.length +
+                " files)\n\n" +
+                files.map((f) => "  " + f.path).join("\n") +
+                "\n\n---\n\n" +
+                files.map((f) => "### `" + f.path + "`\n\n```" + f.language + "\n" + f.content + "\n```").join("\n\n") +
+                "\n\n" +
+                guardrailSummary(framework, combined),
+            },
+          ],
         };
       }
       const template = getTemplate(component, framework);
-      if (!template) {return { isError: true, content: [{ type: "text", text: "Unknown: " + component }] };}
-      if (typeof template === "object" && template.html && template.css) {
-        return { content: [{ type: "text", text: "# " + component + " - " + framework + "\n\n## HTML\n```html\n" + template.html + "\n```\n\n## CSS\n```css\n" + template.css + "\n```\n\n" + guardrailSummary("vanilla", String(template.html) + "\n" + String(template.css)) }] };
+      if (!template) {
+        return { isError: true, content: [{ type: "text", text: "Unknown: " + component }] };
       }
-      return { content: [{ type: "text", text: "# " + component + " - " + framework + "\n\n```\n" + template + "\n```\n\n" + guardrailSummary(framework, String(template)) }] };
+      if (typeof template === "object" && template.html && template.css) {
+        return {
+          content: [
+            {
+              type: "text",
+              text:
+                "# " +
+                component +
+                " - " +
+                framework +
+                "\n\n## HTML\n```html\n" +
+                template.html +
+                "\n```\n\n## CSS\n```css\n" +
+                template.css +
+                "\n```\n\n" +
+                guardrailSummary("vanilla", String(template.html) + "\n" + String(template.css)),
+            },
+          ],
+        };
+      }
+      return {
+        content: [
+          {
+            type: "text",
+            text:
+              "# " +
+              component +
+              " - " +
+              framework +
+              "\n\n```\n" +
+              template +
+              "\n```\n\n" +
+              guardrailSummary(framework, String(template)),
+          },
+        ],
+      };
     },
   });
 }

@@ -8,6 +8,7 @@
 ## Context
 
 The `rule-scaffold-*` skill family was fragmented. Four separate scaffolding skills each contained overlapping content:
+
 - `rule-scaffold-backend-node` was a full backend scaffold but lived in `scaffold-*` instead of `backend-*`
 - `rule-scaffold-ai-agents` was an orchestrator that delegated to backend + frontend scaffolders
 - `rule-scaffold-expo` duplicated content that belonged in `platform-expo`
@@ -31,11 +32,11 @@ All Expo/React Native scaffolding content moves into `rule-platform-expo`, the p
 
 ### 4. Split `scaffold-frontend-react-vite` into three targets
 
-| Content | Destination |
-|---------|-------------|
-| Vite configuration, vitest, build optimization | `rule-toolchain-vite` (new skill) |
+| Content                                                        | Destination                         |
+| -------------------------------------------------------------- | ----------------------------------- |
+| Vite configuration, vitest, build optimization                 | `rule-toolchain-vite` (new skill)    |
 | React-specific scaffolding (app bootstrap, routing, API layer) | `rule-frontend-react` (extant skill) |
-| Generic frontend project setup (package.json, tsconfig, biome) | `rule-platform-web` (extant skill) |
+| Generic frontend project setup (package.json, tsconfig, biome) | `rule-platform-web` (extant skill)   |
 
 ### 5. Delete all remaining `rule-scaffold-*` directories
 
@@ -44,16 +45,19 @@ The `rule_tool_scaffold` core MCP tool continues to handle `.prettierrc`, `.edit
 ## Consequences
 
 **Positive:**
+
 - Skills now live in their semantic category (`backend-*`, `platform-*`, `frontend-*`, `toolchain-*`)
 - No more `scaffold-*` as a catch-all category
 - Vite has its own dedicated skill (framework-agnostic, usable with React, Vue, Svelte, etc.)
 - All content preserved — no deletions, only moves and merges
 
 **Negative:**
+
 - Cross-references from the old scaffold directories needed updating across all SKILL.md files
 - MCP tool names changed for backend-node and ai-agents
 
 **Migration:**
+
 - Any agent prompts referencing `rule_tool_scaffold_backend_node` must use `rule_tool_backend_node`
 - Any agent prompts referencing `rule_tool_scaffold_ai_agents` must use `rule_tool_ai_agents`
 - Any agent prompts referencing `rule_tool_scaffold_expo` must use `rule_tool_platform_expo`

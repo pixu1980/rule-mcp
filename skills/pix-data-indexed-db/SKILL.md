@@ -51,14 +51,14 @@ function openDB(name, version, upgradeFn) {
 }
 
 // Usage
-const db = await openDB('MyApp', 2, (db, ev) => {
+const db = await openDB("MyApp", 2, (db, ev) => {
   if (ev.oldVersion < 1) {
-    const store = db.createObjectStore('items', { keyPath: 'id', autoIncrement: true });
-    store.createIndex('by_uuid', 'uuid', { unique: true });
-    store.createIndex('by_status', 'status', { unique: false });
+    const store = db.createObjectStore("items", { keyPath: "id", autoIncrement: true });
+    store.createIndex("by_uuid", "uuid", { unique: true });
+    store.createIndex("by_status", "status", { unique: false });
   }
   if (ev.oldVersion < 2) {
-    db.createObjectStore('audit_log', { keyPath: 'id', autoIncrement: true });
+    db.createObjectStore("audit_log", { keyPath: "id", autoIncrement: true });
   }
 });
 ```
@@ -68,23 +68,23 @@ const db = await openDB('MyApp', 2, (db, ev) => {
 ### Store with compound indexes
 
 ```javascript
-const store = db.createObjectStore('entities', { keyPath: 'id' });
-store.createIndex('by_type_status', ['type', 'status'], { unique: false });
-store.createIndex('by_updated', 'updated_at', { unique: false });
-store.createIndex('by_parent', 'parent_id', { unique: false });
+const store = db.createObjectStore("entities", { keyPath: "id" });
+store.createIndex("by_type_status", ["type", "status"], { unique: false });
+store.createIndex("by_updated", "updated_at", { unique: false });
+store.createIndex("by_parent", "parent_id", { unique: false });
 ```
 
 ### Index access patterns
 
 ```javascript
 // Unique index lookup
-const tx = db.transaction('entities', 'readonly');
-const idx = tx.objectStore('entities').index('by_uuid');
+const tx = db.transaction("entities", "readonly");
+const idx = tx.objectStore("entities").index("by_uuid");
 const entity = await idx.get(uuid);
 
 // Range query on compound index
-const range = IDBKeyRange.bound(['active', minDate], ['active', maxDate]);
-const cursor = store.index('by_type_status').openCursor(range);
+const range = IDBKeyRange.bound(["active", minDate], ["active", maxDate]);
+const cursor = store.index("by_type_status").openCursor(range);
 ```
 
 ## 3. CRUD Operations
@@ -93,8 +93,8 @@ const cursor = store.index('by_type_status').openCursor(range);
 
 ```javascript
 async function putItem(data) {
-  const tx = db.transaction('items', 'readwrite');
-  const store = tx.objectStore('items');
+  const tx = db.transaction("items", "readwrite");
+  const store = tx.objectStore("items");
   const id = await new Promise((res, rej) => {
     const req = store.put({ ...data, updated_at: new Date().toISOString() });
     req.onsuccess = () => res(req.result);
@@ -109,8 +109,8 @@ async function putItem(data) {
 
 ```javascript
 async function getItem(id) {
-  const tx = db.transaction('items', 'readonly');
-  const store = tx.objectStore('items');
+  const tx = db.transaction("items", "readonly");
+  const store = tx.objectStore("items");
   return new Promise((res, rej) => {
     const req = store.get(id);
     req.onsuccess = () => res(req.result);
@@ -123,8 +123,8 @@ async function getItem(id) {
 
 ```javascript
 async function deleteItem(id) {
-  const tx = db.transaction('items', 'readwrite');
-  tx.objectStore('items').delete(id);
+  const tx = db.transaction("items", "readwrite");
+  tx.objectStore("items").delete(id);
   await tx.done;
 }
 ```
@@ -134,17 +134,17 @@ async function deleteItem(id) {
 ### Explicit transaction life cycle
 
 ```javascript
-const tx = db.transaction(['items', 'audit_log'], 'readwrite');
+const tx = db.transaction(["items", "audit_log"], "readwrite");
 
 // Perform operations
-const store = tx.objectStore('items');
+const store = tx.objectStore("items");
 store.put(newItem);
-const audit = tx.objectStore('audit_log');
-audit.add({ action: 'create', item_id: newItem.id, ts: new Date().toISOString() });
+const audit = tx.objectStore("audit_log");
+audit.add({ action: "create", item_id: newItem.id, ts: new Date().toISOString() });
 
 // Check for errors
-tx.onerror = () => console.error('Transaction failed:', tx.error);
-tx.onabort = () => console.warn('Transaction aborted');
+tx.onerror = () => console.error("Transaction failed:", tx.error);
+tx.onabort = () => console.warn("Transaction aborted");
 
 // Wait for completion
 await tx.done;
@@ -154,19 +154,19 @@ await tx.done;
 
 ```javascript
 async function* iterateStore(storeName, query) {
-  const tx = db.transaction(storeName, 'readonly');
-  const source = query?.index
-    ? tx.objectStore(storeName).index(query.index)
-    : tx.objectStore(storeName);
+  const tx = db.transaction(storeName, "readonly");
+  const source = query?.index ? tx.objectStore(storeName).index(query.index) : tx.objectStore(storeName);
   const range = query?.range || null;
-  const direction = query?.direction || 'next';
+  const direction = query?.direction || "next";
 
   const cursorReq = source.openCursor(range, direction);
   yield new Promise((res, rej) => {
     cursorReq.onsuccess = () => {
       const cursor = cursorReq.result;
-      if (cursor) { res(cursor.value); cursor.continue(); }
-      else res(null);
+      if (cursor) {
+        res(cursor.value);
+        cursor.continue();
+      } else res(null);
     };
     cursorReq.onerror = () => rej(cursorReq.error);
   });
@@ -174,11 +174,11 @@ async function* iterateStore(storeName, query) {
 
 // Keyset pagination
 async function paginate(storeName, pageSize, cursorId) {
-  const tx = db.transaction(storeName, 'readonly');
+  const tx = db.transaction(storeName, "readonly");
   const store = tx.objectStore(storeName);
   const range = cursorId ? IDBKeyRange.lowerBound(cursorId, true) : null;
   const cursor = await new Promise((res, rej) => {
-    const req = store.openCursor(range, 'next');
+    const req = store.openCursor(range, "next");
     req.onsuccess = () => res(req.result);
     req.onerror = () => rej(req.error);
   });
@@ -188,7 +188,9 @@ async function paginate(storeName, pageSize, cursorId) {
   while (c && results.length < pageSize) {
     results.push(c.value);
     c.continue();
-    await new Promise(r => { c?.source.transaction?.addEventListener('complete', r); });
+    await new Promise((r) => {
+      c?.source.transaction?.addEventListener("complete", r);
+    });
   }
   return { results, nextCursor: c?.key || null };
 }
@@ -199,15 +201,15 @@ async function paginate(storeName, pageSize, cursorId) {
 ```javascript
 const MIGRATIONS = {
   1: (db) => {
-    db.createObjectStore('items', { keyPath: 'id' });
-    db.createObjectStore('config', { keyPath: 'key' });
+    db.createObjectStore("items", { keyPath: "id" });
+    db.createObjectStore("config", { keyPath: "key" });
   },
   2: (db, tx) => {
-    const store = tx.objectStore('items');
-    store.createIndex('by_status', 'status', { unique: false });
+    const store = tx.objectStore("items");
+    store.createIndex("by_status", "status", { unique: false });
   },
   3: (db) => {
-    db.createObjectStore('audit_log', { keyPath: 'id', autoIncrement: true });
+    db.createObjectStore("audit_log", { keyPath: "id", autoIncrement: true });
   },
 };
 
@@ -224,8 +226,8 @@ async function migrateDB(name, targetVersion) {
 
 ```javascript
 async function bulkPut(items) {
-  const tx = db.transaction('items', 'readwrite');
-  const store = tx.objectStore('items');
+  const tx = db.transaction("items", "readwrite");
+  const store = tx.objectStore("items");
   for (const item of items) {
     store.put(item);
   }
@@ -233,7 +235,7 @@ async function bulkPut(items) {
 }
 
 async function getAll(storeName) {
-  const tx = db.transaction(storeName, 'readonly');
+  const tx = db.transaction(storeName, "readonly");
   const store = tx.objectStore(storeName);
   return new Promise((res, rej) => {
     const req = store.getAll();
@@ -249,8 +251,8 @@ async function getAll(storeName) {
 // Store a File/Blob
 async function storeFile(file) {
   const id = crypto.randomUUID();
-  const tx = db.transaction('files', 'readwrite');
-  tx.objectStore('files').put({ id, name: file.name, type: file.type, size: file.size, blob: file });
+  const tx = db.transaction("files", "readwrite");
+  tx.objectStore("files").put({ id, name: file.name, type: file.type, size: file.size, blob: file });
   await tx.done;
   return id;
 }
@@ -270,28 +272,31 @@ async function saveToDisk(blob, filename) {
 
 ```javascript
 async function enqueueSync(action, payload) {
-  const tx = db.transaction('sync_queue', 'readwrite');
-  tx.objectStore('sync_queue').add({
+  const tx = db.transaction("sync_queue", "readwrite");
+  tx.objectStore("sync_queue").add({
     id: crypto.randomUUID(),
     action,
     payload,
-    status: 'pending',
+    status: "pending",
     created_at: new Date().toISOString(),
   });
   await tx.done;
 }
 
 async function processSyncQueue(apiEndpoint) {
-  const tx = db.transaction('sync_queue', 'readwrite');
-  const store = tx.objectStore('sync_queue');
-  const pending = await new Promise(r => { const req = store.getAll(); req.onsuccess = () => r(req.result); });
+  const tx = db.transaction("sync_queue", "readwrite");
+  const store = tx.objectStore("sync_queue");
+  const pending = await new Promise((r) => {
+    const req = store.getAll();
+    req.onsuccess = () => r(req.result);
+  });
 
-  for (const item of pending.filter(p => p.status === 'pending')) {
+  for (const item of pending.filter((p) => p.status === "pending")) {
     try {
-      await fetch(apiEndpoint, { method: 'POST', body: JSON.stringify(item.payload) });
-      store.put({ ...item, status: 'synced', synced_at: new Date().toISOString() });
+      await fetch(apiEndpoint, { method: "POST", body: JSON.stringify(item.payload) });
+      store.put({ ...item, status: "synced", synced_at: new Date().toISOString() });
     } catch {
-      store.put({ ...item, status: 'failed', retry_count: (item.retry_count || 0) + 1 });
+      store.put({ ...item, status: "failed", retry_count: (item.retry_count || 0) + 1 });
     }
   }
   await tx.done;

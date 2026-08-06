@@ -7,7 +7,7 @@
 
 ## Context
 
-rule-architect turns a wizard interview into a .context/ documentation pack. It was prototyped against one specific vanilla-JS / Custom-Elements / Electron desktop app, and that project's stack leaked into the engine two ways: (1) detectProjectValues fabricated ~27 fixed values (AUTH_MECHANISM, DEPLOY_TARGET, MVP_STEP_*, PERSONA_*, ...) for EVERY project — an empty directory returned all 27; (2) seven templates hardcoded prose stating that stack as fact ("pure vanilla JavaScript only", "Custom Elements v1", Parcel, adoptedStyleSheets, fixed browser versions, dead ../.agents/skills/rule-* links). The result: a React project's generated README asserted "pure vanilla JavaScript only" while its own AGENTS.md said "Frontend: React 18+" — the pack contradicted the user's answers, which undermines trust in the entire output.
+rule-architect turns a wizard interview into a .context/ documentation pack. It was prototyped against one specific vanilla-JS / Custom-Elements / Electron desktop app, and that project's stack leaked into the engine two ways: (1) detectProjectValues fabricated ~27 fixed values (AUTH_MECHANISM, DEPLOY_TARGET, MVP_STEP__, PERSONA__, ...) for EVERY project — an empty directory returned all 27; (2) seven templates hardcoded prose stating that stack as fact ("pure vanilla JavaScript only", "Custom Elements v1", Parcel, adoptedStyleSheets, fixed browser versions, dead ../.agents/skills/rule-* links). The result: a React project's generated README asserted "pure vanilla JavaScript only" while its own AGENTS.md said "Frontend: React 18+" — the pack contradicted the user's answers, which undermines trust in the entire output.
 
 ## Decision
 

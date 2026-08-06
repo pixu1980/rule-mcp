@@ -13,31 +13,17 @@
   },
   "rule for loop": {
     "prefix": "rule-for",
-    "body": [
-      "<for each=\"${1:item} in ${2:items}\">",
-      "  $0",
-      "</for>"
-    ],
+    "body": ["<for each=\"${1:item} in ${2:items}\">", "  $0", "</for>"],
     "description": "rule <for> loop"
   },
   "rule if block": {
     "prefix": "rule-if",
-    "body": [
-      "<if condition=\"${1:expr}\">",
-      "  $0",
-      "</if>"
-    ],
+    "body": ["<if condition=\"${1:expr}\">", "  $0", "</if>"],
     "description": "rule <if> conditional"
   },
   "rule if-else": {
     "prefix": "rule-ifelse",
-    "body": [
-      "<if condition=\"${1:expr}\">",
-      "  ${2:when true}",
-      "<else>",
-      "  ${3:when false}",
-      "</if>"
-    ],
+    "body": ["<if condition=\"${1:expr}\">", "  ${2:when true}", "<else>", "  ${3:when false}", "</if>"],
     "description": "rule <if>/<else>"
   },
   "rule switch": {

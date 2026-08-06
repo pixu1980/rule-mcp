@@ -2,7 +2,7 @@
 
 ## Goal
 
-Define how  uses the rule skill and MCP tool ecosystem during architecture, implementation, validation, and handoff.
+Define how uses the rule skill and MCP tool ecosystem during architecture, implementation, validation, and handoff.
 
 ## Primary routing
 

@@ -52,7 +52,10 @@ test("fresh project: every root file is written and nothing is skipped", () => {
     // Every reported root entry is flagged written, none skipped.
     const roots = files.filter((f) => f.root);
     assert.ok(roots.length >= ROOT_FILES.length, "all root entries reported");
-    assert.ok(roots.every((f) => f.written === true && !f.skipped), "fresh roots are written, not skipped");
+    assert.ok(
+      roots.every((f) => f.written === true && !f.skipped),
+      "fresh roots are written, not skipped",
+    );
   } finally {
     rmSync(dir, { recursive: true, force: true });
   }
@@ -119,7 +122,7 @@ test(".context/ is always regenerated, guard or not — it is not a guarded root
     assert.notEqual(
       readFileSync(sdd, "utf-8"),
       "STALE CONTEXT — MUST BE OVERWRITTEN\n",
-      ".context/ files must always be regenerated"
+      ".context/ files must always be regenerated",
     );
     assert.ok(!skipped.includes("specs/00-sdd.md"), ".context files are never reported as skipped");
     void seeded;
@@ -139,7 +142,7 @@ test("skipped paths are project-root-relative and cover only root files", () => 
     assert.deepEqual(
       [...skipped].sort(),
       [".clinerules", ".cursor/rules/project.mdc"].sort(),
-      "skipped must be exactly the pre-existing root files, root-relative"
+      "skipped must be exactly the pre-existing root files, root-relative",
     );
   } finally {
     rmSync(dir, { recursive: true, force: true });

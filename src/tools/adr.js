@@ -26,7 +26,7 @@ function slugify(text) {
     .replaceAll(/[ìíîï]/g, "i")
     .replaceAll(/[òóôõö]/g, "o")
     .replaceAll(/[ùúûü]/g, "u")
-    .replaceAll('ñ', "n")
+    .replaceAll("ñ", "n")
     .replaceAll(/[^a-z0-9]+/g, "-")
     .replaceAll(/^-|-$/g, "")
     .slice(0, 80);
@@ -36,9 +36,7 @@ function slugify(text) {
 function nextAdrNumber(adrDir) {
   try {
     const files = readdirSync(adrDir);
-    const nums = files
-      .filter(f => /^\d{3}-/.test(f))
-      .map(f => parseInt(f.match(/^(\d{3})-/)[1], 10));
+    const nums = files.filter((f) => /^\d{3}-/.test(f)).map((f) => parseInt(f.match(/^(\d{3})-/)[1], 10));
     return nums.length > 0 ? Math.max(...nums) + 1 : 1;
   } catch {
     return 1;
@@ -103,7 +101,9 @@ function updateAdrIndex(adrDir, entries) {
   const sorted = [...entries].sort((a, b) => b.number - a.number);
   for (const e of sorted) {
     const file = e.file || adrFilename(e.number, e.title);
-    lines.push(`| [${String(e.number).padStart(3, "0")}](${file}) | ${e.title} | ${e.date} | ${e.status} | ${e.tags.join(", ")} |`);
+    lines.push(
+      `| [${String(e.number).padStart(3, "0")}](${file}) | ${e.title} | ${e.date} | ${e.status} | ${e.tags.join(", ")} |`,
+    );
   }
   lines.push("");
 
@@ -122,11 +122,14 @@ function listExistingAdrs(adrDir) {
       const m = f.match(/^(\d{3})-(.+)\.md$/);
       if (m) {
         const content = readFileSync(join(adrDir, f), "utf8");
-        const title = content.match(/^# \d{3}: (.+)$/m)?.[1] || m[2].replaceAll('-', " ");
+        const title = content.match(/^# \d{3}: (.+)$/m)?.[1] || m[2].replaceAll("-", " ");
         const date = content.match(/\*\*Date\*\*: (\S+)/)?.[1] || "";
         const status = content.match(/\*\*Status\*\*: (\w+)/)?.[1] || "proposed";
         const tagsLine = content.match(/\*\*Tags\*\*: (.+)/)?.[1] || "";
-        const tags = tagsLine.split(",").map(s => s.trim()).filter(Boolean);
+        const tags = tagsLine
+          .split(",")
+          .map((s) => s.trim())
+          .filter(Boolean);
         adrs.push({ file: f, number: parseInt(m[1]), title, date, status, tags });
       }
     }
@@ -143,7 +146,10 @@ const ADRSchema = z.object({
   decision: z.string().optional().describe("The decision made and why"),
   consequences: z.string().optional().describe("Consequences: positive and negative outcomes"),
   alternatives: z.array(z.string()).optional().describe("Alternative options considered"),
-  tags: z.array(z.string()).default(["architecture"]).describe("Tags for categorization (e.g. database, api, frontend)"),
+  tags: z
+    .array(z.string())
+    .default(["architecture"])
+    .describe("Tags for categorization (e.g. database, api, frontend)"),
   projectDir: z.string().optional().default(".").describe("Project root directory"),
 });
 
@@ -153,7 +159,8 @@ const ADRSchema = z.object({
 export function registerProcessAdrTool() {
   registerTool({
     name: "rule_tool_process_adr",
-    description: "Save an Architecture Decision Record (ADR) to docs/adr/. Auto-numbers, maintains index, uses Nygard template.",
+    description:
+      "Save an Architecture Decision Record (ADR) to docs/adr/. Auto-numbers, maintains index, uses Nygard template.",
     zodSchema: ADRSchema,
     inputSchema: {
       type: "object",
@@ -195,20 +202,22 @@ export function registerProcessAdrTool() {
       updateAdrIndex(adrDir, existing);
 
       return {
-        content: [{
-          type: "text",
-          text: [
-            `✅ ${String(number).padStart(3, "0")} created: ${arguments_.title}`,
-            "",
-            `File: ${filePath}`,
-            `Status: ${arguments_.status || "accepted"}`,
-            `Tags: ${(arguments_.tags || ["architecture"]).join(", ")}`,
-            "",
-            "```markdown",
-            content,
-            "```",
-          ].join("\n"),
-        }],
+        content: [
+          {
+            type: "text",
+            text: [
+              `✅ ${String(number).padStart(3, "0")} created: ${arguments_.title}`,
+              "",
+              `File: ${filePath}`,
+              `Status: ${arguments_.status || "accepted"}`,
+              `Tags: ${(arguments_.tags || ["architecture"]).join(", ")}`,
+              "",
+              "```markdown",
+              content,
+              "```",
+            ].join("\n"),
+          },
+        ],
       };
     },
   });
@@ -221,10 +230,14 @@ export function registerProcessAdrTool() {
    */
   const autoLog = async (toolName, arguments_, result) => {
     const testProcess = process.argv.some((argument) => /(?:^|[\\/])test[\\/]/.test(argument));
-    if (process.env.RULE_MCP_DISABLE_AUTO_ADR === "1" || process.env.NODE_ENV === "test" || testProcess) {return;}
+    if (process.env.RULE_MCP_DISABLE_AUTO_ADR === "1" || process.env.NODE_ENV === "test" || testProcess) {
+      return;
+    }
 
     const relevant = ["rule_tool_architect", "pix_tool", "rule_tool_scaffold", "rule_tool_detect", "rule_tool_fix"];
-    if (!relevant.includes(toolName)) {return;}
+    if (!relevant.includes(toolName)) {
+      return;
+    }
 
     const projectDir = arguments_.projectDir || ".";
     const adrDir = join(projectDir, "docs/adr");
@@ -243,71 +256,77 @@ export function registerProcessAdrTool() {
     let consequenceLines = ["None — informational entry."];
 
     switch (toolName) {
-    case "pix_tool": {
-      // pix_tool: capture prompt + routing result
-      const prompt = (arguments_.prompt || "").slice(0, 200);
-      let route = "unknown";
-      let confidence = "0";
-      let alternatives = "";
-      try {
-        const resultText = result?.content?.[0]?.text || "{}";
-        const parsed = JSON.parse(resultText);
-        if (parsed.route) {route = parsed.route;}
-        if (parsed.confidence) {confidence = String(parsed.confidence);}
-        if (parsed.alternatives?.length > 0) {
-          alternatives = parsed.alternatives.slice(0, 3).map(a => `${a.route} (${a.confidence})`).join(", ");
+      case "pix_tool": {
+        // pix_tool: capture prompt + routing result
+        const prompt = (arguments_.prompt || "").slice(0, 200);
+        let route = "unknown";
+        let confidence = "0";
+        let alternatives = "";
+        try {
+          const resultText = result?.content?.[0]?.text || "{}";
+          const parsed = JSON.parse(resultText);
+          if (parsed.route) {
+            route = parsed.route;
+          }
+          if (parsed.confidence) {
+            confidence = String(parsed.confidence);
+          }
+          if (parsed.alternatives?.length > 0) {
+            alternatives = parsed.alternatives
+              .slice(0, 3)
+              .map((a) => `${a.route} (${a.confidence})`)
+              .join(", ");
+          }
+        } catch {
+          /* use defaults */
         }
-      } catch { /* use defaults */ }
 
-      title = `Skill routing: ${prompt.slice(0, 80)}`;
-      tags = "tool, auto-log, routing";
-      contextLines = [
-        `Prompt: "${prompt}"`,
-        `Routed to: **${route}** (confidence: ${confidence})`,
-      ];
-      if (alternatives) {contextLines.push(`Alternatives: ${alternatives}`);}
-      decisionLines = [`Use \`${route}\` for this task.`];
+        title = `Skill routing: ${prompt.slice(0, 80)}`;
+        tags = "tool, auto-log, routing";
+        contextLines = [`Prompt: "${prompt}"`, `Routed to: **${route}** (confidence: ${confidence})`];
+        if (alternatives) {
+          contextLines.push(`Alternatives: ${alternatives}`);
+        }
+        decisionLines = [`Use \`${route}\` for this task.`];
 
-    
-    break;
-    }
-    case "rule_tool_scaffold": {
-      title = `Scaffold: ${arguments_.mode || "generate"} ${arguments_.file || "all files"}`;
-      contextLines = [`Scaffold operation: ${arguments_.mode || "generate"}`, `File: ${arguments_.file || "all"}`];
-      decisionLines = [`Project scaffold files generated/validated.`];
+        break;
+      }
+      case "rule_tool_scaffold": {
+        title = `Scaffold: ${arguments_.mode || "generate"} ${arguments_.file || "all files"}`;
+        contextLines = [`Scaffold operation: ${arguments_.mode || "generate"}`, `File: ${arguments_.file || "all"}`];
+        decisionLines = [`Project scaffold files generated/validated.`];
 
-    
-    break;
-    }
-    case "rule_tool_detect": {
-      title = `Framework detection for ${arguments_.path || "."}`;
-      let framework = "unknown";
-      try {
-        const resultText = result?.content?.[0]?.text || "{}";
-        const parsed = JSON.parse(resultText);
-        framework = parsed.framework || "unknown";
-      } catch { /* result may not be valid JSON */ }
-      contextLines = [`Path: ${arguments_.path || "."}`, `Detected framework: ${framework}`];
-      decisionLines = [`Use ${framework} tooling for this project.`];
+        break;
+      }
+      case "rule_tool_detect": {
+        title = `Framework detection for ${arguments_.path || "."}`;
+        let framework = "unknown";
+        try {
+          const resultText = result?.content?.[0]?.text || "{}";
+          const parsed = JSON.parse(resultText);
+          framework = parsed.framework || "unknown";
+        } catch {
+          /* result may not be valid JSON */
+        }
+        contextLines = [`Path: ${arguments_.path || "."}`, `Detected framework: ${framework}`];
+        decisionLines = [`Use ${framework} tooling for this project.`];
 
-    
-    break;
-    }
-    case "rule_tool_fix": {
-      title = `File tree fix: ${arguments_.mode || "lint"} on ${arguments_.path || "."}`;
-      tags = "tool, auto-log, file-tree";
-      contextLines = [`Mode: ${arguments_.mode || "lint"}`, `Source: ${arguments_.srcDir || "src"}`];
-      decisionLines = [`File tree validated/fixed for rule AI conventions.`];
+        break;
+      }
+      case "rule_tool_fix": {
+        title = `File tree fix: ${arguments_.mode || "lint"} on ${arguments_.path || "."}`;
+        tags = "tool, auto-log, file-tree";
+        contextLines = [`Mode: ${arguments_.mode || "lint"}`, `Source: ${arguments_.srcDir || "src"}`];
+        decisionLines = [`File tree validated/fixed for rule AI conventions.`];
 
-    
-    break;
-    }
-    default: {
-      // Generic (pix_architect and others)
-      title = `Tool: ${toolName} — ${arguments_.action || arguments_.mode || "execute"}`;
-      contextLines = [`Tool: ${toolName}`, `Args: ${JSON.stringify(arguments_).slice(0, 200)}`];
-      decisionLines = [`Tool executed successfully.`];
-    }
+        break;
+      }
+      default: {
+        // Generic (pix_architect and others)
+        title = `Tool: ${toolName} — ${arguments_.action || arguments_.mode || "execute"}`;
+        contextLines = [`Tool: ${toolName}`, `Args: ${JSON.stringify(arguments_).slice(0, 200)}`];
+        decisionLines = [`Tool executed successfully.`];
+      }
     }
 
     const content = [

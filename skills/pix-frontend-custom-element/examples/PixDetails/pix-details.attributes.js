@@ -1,6 +1,6 @@
 // @ts-check
 
-import { events } from '../events/index.js';
+import { events } from "../events/index.js";
 
 /**
  * Attribute change handlers for PixDetails. The decorator wires these into
@@ -15,9 +15,9 @@ export default {
    * @param {string | null} newValue
    */
   open(_oldValue, newValue) {
-    const state = newValue === null ? 'closed' : 'open';
-    this.setAttribute('aria-expanded', String(state === 'open'));
+    const state = newValue === null ? "closed" : "open";
+    this.setAttribute("aria-expanded", String(state === "open"));
 
-    events.dispatchComponentEvent.call(this, 'toggle', { state });
+    events.dispatchComponentEvent.call(this, "toggle", { state });
   },
 };

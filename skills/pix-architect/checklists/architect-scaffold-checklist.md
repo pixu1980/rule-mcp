@@ -8,6 +8,7 @@
 - [ ] Create `REPO_MAP.md` with full repository structure
 
 ### instructions/
+
 - [ ] `repo.instructions.md` — branching, CI/CD, conventions
 - [ ] `coding.instructions.md` — code style, architecture, naming
 - [ ] `testing.instructions.md` — testing strategy, coverage targets
@@ -16,6 +17,7 @@
 - [ ] `backend.instructions.md` — API-specific (if applicable)
 
 ### prompts/
+
 - [ ] `feature-spec.prompt.md` — requirements structure
 - [ ] `implementation-plan.prompt.md` — task breakdown
 - [ ] `plan-and-slice.prompt.md` — independent increments
@@ -30,10 +32,12 @@
 - [ ] `pr-description.prompt.md` — PR description format
 
 ### skills/
+
 - [ ] `README.md` — skill catalog
 - [ ] Individual rule-* skills as needed
 
 ### styleguides/
+
 - [ ] `html.md` — semantic HTML, accessibility
 - [ ] `css.md` — classless selectors, data-part
 - [ ] `javascript.md` — ES modules, JSDoc
@@ -41,6 +45,7 @@
 - [ ] `markdown.md` — documentation formatting
 
 ### assistants/
+
 - [ ] `claude-code.md` — Claude Code guidance
 - [ ] `cursor.md` — Cursor editor rules
 - [ ] `copilot.md` — GitHub Copilot instructions

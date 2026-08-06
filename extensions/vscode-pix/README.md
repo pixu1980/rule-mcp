@@ -33,6 +33,7 @@ Without the extension, this is plain green text. With it, HTML tags, `{{ }}`,
 ```
 
 Files with `.template.html` extension get proper HTML highlighting PLUS:
+
 - `<for>`, `<if>`, `<elseif>`, `<else>`, `<switch>`, `<case>` — keyword colors
 - `{{ expr | filter }}` — expression highlighting with filter recognition
 - `@click`, `@submit`, etc. — event attribute colors
@@ -40,20 +41,20 @@ Files with `.template.html` extension get proper HTML highlighting PLUS:
 
 ### 3. Snippets
 
-| Prefix | Expansion |
-|--------|-----------|
-| `html` | `html\`\`` tagged template |
+| Prefix          | Expansion                             |
+| --------------- | ------------------------------------- |
+| `html`          | `html\`\`` tagged template            |
 | `rule-component` | Full component class with vrComponent |
-| `rule-fn` | Functional component stub |
-| `rule-effect` | Effect mount with Store + render |
-| `rule-for` | `<for each="item in items">` |
-| `rule-if` | `<if condition="">` |
-| `rule-ifelse` | `<if>/<else>` block |
-| `rule-switch` | `<switch>/<case>/<default>` |
-| `rule-click` | `@click="handler()"` |
-| `rule-expr` | `{{ expr }}` |
-| `rule-filter` | `{{ expr \| upper }}` |
-| `data-part` | `data-part="role"` |
+| `rule-fn`        | Functional component stub             |
+| `rule-effect`    | Effect mount with Store + render      |
+| `rule-for`       | `<for each="item in items">`          |
+| `rule-if`        | `<if condition="">`                   |
+| `rule-ifelse`    | `<if>/<else>` block                   |
+| `rule-switch`    | `<switch>/<case>/<default>`           |
+| `rule-click`     | `@click="handler()"`                  |
+| `rule-expr`      | `{{ expr }}`                          |
+| `rule-filter`    | `{{ expr \| upper }}`                 |
+| `data-part`     | `data-part="role"`                    |
 
 ## Installation
 
@@ -80,11 +81,11 @@ code --install-extension *.vsix
 
 ## What it highlights
 
-| Construct | Color | Example |
-|-----------|-------|---------|
-| `<for>`, `<if>`, `<switch>` | Keyword | `<for each="x in xs">` |
-| `{{ }}` expressions | Variable | `{{ title \| upper }}` |
-| Filter names | Support | `\| raw`, `\| upper`, `\| slugify` |
-| `@event` attributes | Event | `@click="fn"` |
-| `data-part` | Attribute | `data-part="card"` |
-| HTML tags | Built-in | `<section>`, `<h1>` |
+| Construct                   | Color     | Example                            |
+| --------------------------- | --------- | ---------------------------------- |
+| `<for>`, `<if>`, `<switch>` | Keyword   | `<for each="x in xs">`             |
+| `{{ }}` expressions         | Variable  | `{{ title \| upper }}`             |
+| Filter names                | Support   | `\| raw`, `\| upper`, `\| slugify` |
+| `@event` attributes         | Event     | `@click="fn"`                      |
+| `data-part`                 | Attribute | `data-part="card"`                 |
+| HTML tags                   | Built-in  | `<section>`, `<h1>`                |

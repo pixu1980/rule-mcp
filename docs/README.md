@@ -4,14 +4,14 @@ This directory is intentionally consolidated into a small handbook. Historical f
 
 ## Handbook
 
-| File | Purpose |
-|------|---------|
+| File                                                         | Purpose                                                                                                                                                              |
+| ------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | [./01-product-architecture.md](./01-product-architecture.md) | Project mission, architecture, migration notes, and roadmap. This file consolidates the previous analysis/architecture/roadmap docs without dropping source content. |
-| [./02-tools-operations.md](./02-tools-operations.md) | MCP tools, plugins, release process, setup, and troubleshooting. This file is the operator handbook. |
-| [./03-engineering-guides.md](./03-engineering-guides.md) | Examples, benchmarks, agent instructions, and styleguide comparison notes for contributors. |
-| [./04-roadmap-plans.md](./04-roadmap-plans.md) | Execution plans and refactor roadmap consolidated into one dependency-aware planning file. |
-| [./05-agent-instructions.md](./05-agent-instructions.md) | Agent workflow, frontend principles, strict mode. |
-| [./06-env-variables.md](./06-env-variables.md) | Complete `RULE_MCP_*` environment variable reference with defaults and configuration. |
+| [./02-tools-operations.md](./02-tools-operations.md)         | MCP tools, plugins, release process, setup, and troubleshooting. This file is the operator handbook.                                                                 |
+| [./03-engineering-guides.md](./03-engineering-guides.md)     | Examples, benchmarks, agent instructions, and styleguide comparison notes for contributors.                                                                          |
+| [./04-roadmap-plans.md](./04-roadmap-plans.md)               | Execution plans and refactor roadmap consolidated into one dependency-aware planning file.                                                                           |
+| [./05-agent-instructions.md](./05-agent-instructions.md)     | Agent workflow, frontend principles, strict mode.                                                                                                                    |
+| [./06-env-variables.md](./06-env-variables.md)               | Complete `RULE_MCP_*` environment variable reference with defaults and configuration.                                                                                     |
 
 ## Architecture decisions
 

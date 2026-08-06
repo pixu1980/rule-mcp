@@ -15,7 +15,7 @@ export class TemplateEngine {
    */
   render() {
     throw new Error(
-      'TemplateEngine.render is not available in the browser-safe tagged runtime. Use the full rule-template-engine install for SSG/SSR workflows.'
+      "TemplateEngine.render is not available in the browser-safe tagged runtime. Use the full rule-template-engine install for SSG/SSR workflows.",
     );
   }
 
@@ -27,8 +27,8 @@ export class TemplateEngine {
    * @returns {(data?: object) => string}
    */
   template(strings, ...values) {
-    if (!Array.isArray(strings) || !Object.prototype.hasOwnProperty.call(strings, 'raw')) {
-      throw new TypeError('TemplateEngine.template must be used as a tagged template literal');
+    if (!Array.isArray(strings) || !Object.prototype.hasOwnProperty.call(strings, "raw")) {
+      throw new TypeError("TemplateEngine.template must be used as a tagged template literal");
     }
 
     return (data = {}) => this.createTemplateLiteralSource(strings, values, data);
@@ -54,15 +54,15 @@ export class TemplateEngine {
    * @returns {string}
    */
   createTemplateLiteralSource(strings, values, data) {
-    let source = '';
+    let source = "";
 
     for (let index = 0; index < strings.length; index++) {
       source += strings[index];
 
       if (index < values.length) {
         const value = values[index];
-        const resolvedValue = typeof value === 'function' ? value(data) : value;
-        source += resolvedValue == null ? '' : String(resolvedValue);
+        const resolvedValue = typeof value === "function" ? value(data) : value;
+        source += resolvedValue == null ? "" : String(resolvedValue);
       }
     }
 

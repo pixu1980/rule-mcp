@@ -76,7 +76,10 @@ export function commandNames() {
 
 /** Collapse whitespace and wrap a string as a safe double-quoted YAML/TOML scalar. */
 function quoted(text) {
-  return `"${String(text).replaceAll(/\s+/g, " ").trim().replaceAll('"', String.raw`\"`)}"`;
+  return `"${String(text)
+    .replaceAll(/\s+/g, " ")
+    .trim()
+    .replaceAll('"', String.raw`\"`)}"`;
 }
 
 /**
@@ -197,7 +200,9 @@ export function renderAgentCommand(command, format) {
   }
   if (spec.frontmatter === "yaml") {
     // Claude Code / Pi / Cursor / Roo / VS Code prompt files all read this shape.
-    return ["---", `description: ${quoted(description)}`, `argument-hint: "${argumentHint}"`, "---", body, ""].join("\n");
+    return ["---", `description: ${quoted(description)}`, `argument-hint: "${argumentHint}"`, "---", body, ""].join(
+      "\n",
+    );
   }
   // Prose-only workflow file (Windsurf, Cline).
   return [`# ${name}`, "", body, ""].join("\n");

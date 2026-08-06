@@ -44,8 +44,7 @@ test("read-only tools are still cacheable", async () => {
 // ── 04: spawned servers are tracked, reused, and killed ────────────────────
 
 test("interview servers are tracked, reused per target, and stopped", async () => {
-  const { startContextServer, listInterviewServers, stopInterviewServers } =
-    await import("../src/tools/architect.js");
+  const { startContextServer, listInterviewServers, stopInterviewServers } = await import("../src/tools/architect.js");
 
   const target = mkdtempSync(join(tmpdir(), "rule-interview-"));
   try {

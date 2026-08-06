@@ -6,38 +6,125 @@
 //  Caches results until workspace changes.
 //  ═══════════════════════════════════════════════════════════════════════════════
 
-const vscode = require('vscode');
+const vscode = require("vscode");
 
 const BUILTIN_FILTERS = [
-  'upper', 'lower', 'capitalize', 'slugify', 'trim',
-  'escapeHtml', 'striptags', 'raw', 'json', 'default',
-  'truncate', 'length', 'first', 'last', 'join',
-  'tagLabel', 'tagHref', 'date', 'timeAgo', 'urlencode', 'sortBy',
+  "upper",
+  "lower",
+  "capitalize",
+  "slugify",
+  "trim",
+  "escapeHtml",
+  "striptags",
+  "raw",
+  "json",
+  "default",
+  "truncate",
+  "length",
+  "first",
+  "last",
+  "join",
+  "tagLabel",
+  "tagHref",
+  "date",
+  "timeAgo",
+  "urlencode",
+  "sortBy",
 ];
 
 const DATA_PARTS = [
-  'root', 'header', 'footer', 'nav', 'main', 'section',
-  'card', 'list', 'item', 'row', 'grid', 'cell',
-  'form', 'input', 'label', 'field', 'error', 'submit',
-  'btn', 'toggle', 'icon', 'avatar', 'badge', 'tag',
-  'title', 'subtitle', 'text', 'meta', 'status',
-  'modal', 'dialog', 'overlay', 'close', 'backdrop',
-  'menu', 'dropdown', 'tab', 'panel', 'sidebar',
-  'loading', 'empty', 'placeholder', 'progress',
-  'toolbar', 'action', 'search', 'filter', 'sort',
+  "root",
+  "header",
+  "footer",
+  "nav",
+  "main",
+  "section",
+  "card",
+  "list",
+  "item",
+  "row",
+  "grid",
+  "cell",
+  "form",
+  "input",
+  "label",
+  "field",
+  "error",
+  "submit",
+  "btn",
+  "toggle",
+  "icon",
+  "avatar",
+  "badge",
+  "tag",
+  "title",
+  "subtitle",
+  "text",
+  "meta",
+  "status",
+  "modal",
+  "dialog",
+  "overlay",
+  "close",
+  "backdrop",
+  "menu",
+  "dropdown",
+  "tab",
+  "panel",
+  "sidebar",
+  "loading",
+  "empty",
+  "placeholder",
+  "progress",
+  "toolbar",
+  "action",
+  "search",
+  "filter",
+  "sort",
 ];
 
 const EVENT_NAMES = [
-  'click', 'dblclick', 'mousedown', 'mouseup', 'mousemove',
-  'mouseenter', 'mouseleave', 'mouseover', 'mouseout',
-  'keydown', 'keyup', 'keypress', 'focus', 'blur',
-  'input', 'change', 'submit', 'reset', 'select',
-  'scroll', 'wheel', 'resize', 'load', 'error',
-  'touchstart', 'touchmove', 'touchend', 'touchcancel',
-  'pointerdown', 'pointerup', 'pointermove',
-  'dragstart', 'drag', 'dragend', 'drop',
-  'copy', 'paste', 'cut', 'contextmenu',
-  'animationend', 'transitionend',
+  "click",
+  "dblclick",
+  "mousedown",
+  "mouseup",
+  "mousemove",
+  "mouseenter",
+  "mouseleave",
+  "mouseover",
+  "mouseout",
+  "keydown",
+  "keyup",
+  "keypress",
+  "focus",
+  "blur",
+  "input",
+  "change",
+  "submit",
+  "reset",
+  "select",
+  "scroll",
+  "wheel",
+  "resize",
+  "load",
+  "error",
+  "touchstart",
+  "touchmove",
+  "touchend",
+  "touchcancel",
+  "pointerdown",
+  "pointerup",
+  "pointermove",
+  "dragstart",
+  "drag",
+  "dragend",
+  "drop",
+  "copy",
+  "paste",
+  "cut",
+  "contextmenu",
+  "animationend",
+  "transitionend",
 ];
 
 // ─── Workspace cache ─────────────────────────────────────────────────────────
@@ -46,7 +133,12 @@ let cachedHandlers = [];
 let cachedFilters = [];
 let cachedTags = [];
 
-function clearCache() { cachedContextKeys = []; cachedHandlers = []; cachedFilters = []; cachedTags = []; }
+function clearCache() {
+  cachedContextKeys = [];
+  cachedHandlers = [];
+  cachedFilters = [];
+  cachedTags = [];
+}
 
 /**
  * Find all JS files in the open workspace and scan them for rule patterns.
@@ -60,10 +152,7 @@ async function scanWorkspace() {
   const filters = new Set([...BUILTIN_FILTERS]);
   const tags = new Set();
 
-  const jsFiles = await vscode.workspace.findFiles(
-    '**/*.{js,mjs,jsx,ts,tsx}',
-    '**/node_modules/**'
-  );
+  const jsFiles = await vscode.workspace.findFiles("**/*.{js,mjs,jsx,ts,tsx}", "**/node_modules/**");
 
   for (const file of jsFiles) {
     try {
@@ -92,8 +181,9 @@ async function scanWorkspace() {
       // @click handlers from method names (Pattern A)
       const methodMatches = text.matchAll(/^\s+(\w+)\s*\([^)]*\)\s*\{/gm);
       for (const m of methodMatches) {
-        if (!['constructor', 'connectedCallback', 'disconnectedCallback',
-              'context', 'render', 'static'].includes(m[1])) {
+        if (
+          !["constructor", "connectedCallback", "disconnectedCallback", "context", "render", "static"].includes(m[1])
+        ) {
           handlers.add(m[1]);
         }
       }
@@ -109,8 +199,9 @@ async function scanWorkspace() {
       // vrComponent tag: 'tag-name'
       const tagMatches = text.matchAll(/tag:\s*['"](\S+?)['"]/g);
       for (const m of tagMatches) tags.add(m[1]);
-
-    } catch { /* skip unreadable files */ }
+    } catch {
+      /* skip unreadable files */
+    }
   }
 
   cachedContextKeys = [...keys].sort();
@@ -121,7 +212,7 @@ async function scanWorkspace() {
 
 function activate(context) {
   // Re-scan when workspace files change
-  const watcher = vscode.workspace.createFileSystemWatcher('**/*.{js,mjs,jsx,ts,tsx}');
+  const watcher = vscode.workspace.createFileSystemWatcher("**/*.{js,mjs,jsx,ts,tsx}");
   watcher.onDidChange(clearCache);
   watcher.onDidCreate(clearCache);
   watcher.onDidDelete(clearCache);
@@ -129,7 +220,7 @@ function activate(context) {
 
   // ── Provider for .template.html ──────────────────────────────
   const htmlProvider = vscode.languages.registerCompletionItemProvider(
-    { language: 'rule-template-html', scheme: 'file' },
+    { language: "rule-template-html", scheme: "file" },
     {
       async provideCompletionItems(document, position) {
         await scanWorkspace();
@@ -137,23 +228,23 @@ function activate(context) {
         const linePrefix = document.lineAt(position).text.slice(0, position.character);
 
         // Inside {{ }} → context keys
-        if (linePrefix.includes('{{') && !linePrefix.includes('|')) {
+        if (linePrefix.includes("{{") && !linePrefix.includes("|")) {
           for (const k of cachedContextKeys) {
             const item = new vscode.CompletionItem(k, vscode.CompletionItemKind.Variable);
-            item.detail = 'rule context';
+            item.detail = "rule context";
             item.range = document.getWordRangeAtPosition(position, /\w*$/);
             items.push(item);
           }
         }
 
         // After | inside {{ }} → filters
-        if (linePrefix.includes('|')) {
-          const pipeIdx = linePrefix.lastIndexOf('|');
+        if (linePrefix.includes("|")) {
+          const pipeIdx = linePrefix.lastIndexOf("|");
           const afterPipe = linePrefix.slice(pipeIdx + 1).trim();
           for (const f of cachedFilters) {
             if (!afterPipe || f.startsWith(afterPipe)) {
               const item = new vscode.CompletionItem(f, vscode.CompletionItemKind.Function);
-              item.detail = 'rule filter';
+              item.detail = "rule filter";
               items.push(item);
             }
           }
@@ -162,11 +253,11 @@ function activate(context) {
         // Inside @click="…" or @submit="…" → handlers
         if (/@\w+="[^"]*$/.test(linePrefix)) {
           const quoteMatch = linePrefix.match(/@\w+="([^"]*)$/);
-          const prefix = quoteMatch ? quoteMatch[1] : '';
+          const prefix = quoteMatch ? quoteMatch[1] : "";
           for (const h of cachedHandlers) {
             if (!prefix || h.startsWith(prefix)) {
               const item = new vscode.CompletionItem(h, vscode.CompletionItemKind.Function);
-              item.detail = 'rule handler';
+              item.detail = "rule handler";
               item.insertText = `${h}($1)`;
               items.push(item);
             }
@@ -180,7 +271,7 @@ function activate(context) {
           for (const role of DATA_PARTS) {
             if (!prefix || role.startsWith(prefix)) {
               const item = new vscode.CompletionItem(role, vscode.CompletionItemKind.Property);
-              item.detail = 'rule data-part';
+              item.detail = "rule data-part";
               items.push(item);
             }
           }
@@ -193,26 +284,32 @@ function activate(context) {
           for (const ev of EVENT_NAMES) {
             if (!prefix || ev.startsWith(prefix)) {
               const item = new vscode.CompletionItem(ev, vscode.CompletionItemKind.Event);
-              item.detail = 'DOM event';
+              item.detail = "DOM event";
               items.push(item);
             }
           }
         }
 
         return items;
-      }
+      },
     },
-    '{', '|', ' ', '@', '"', '\'', '.'
+    "{",
+    "|",
+    " ",
+    "@",
+    '"',
+    "'",
+    ".",
   );
   context.subscriptions.push(htmlProvider);
 
   // ── Provider for JS/TS (inside html``) ────────────────────────
   const jsProvider = vscode.languages.registerCompletionItemProvider(
     [
-      { language: 'javascript', scheme: 'file' },
-      { language: 'typescript', scheme: 'file' },
-      { language: 'javascriptreact', scheme: 'file' },
-      { language: 'typescriptreact', scheme: 'file' },
+      { language: "javascript", scheme: "file" },
+      { language: "typescript", scheme: "file" },
+      { language: "javascriptreact", scheme: "file" },
+      { language: "typescriptreact", scheme: "file" },
     ],
     {
       async provideCompletionItems(document, position) {
@@ -227,22 +324,22 @@ function activate(context) {
         const linePrefix = document.lineAt(position).text.slice(0, position.character);
 
         // {{ }} → context keys
-        if (linePrefix.includes('{{') && !linePrefix.includes('|')) {
+        if (linePrefix.includes("{{") && !linePrefix.includes("|")) {
           for (const k of cachedContextKeys) {
             const item = new vscode.CompletionItem(k, vscode.CompletionItemKind.Variable);
-            item.detail = 'rule context';
+            item.detail = "rule context";
             items.push(item);
           }
         }
 
         // | → filters
-        if (linePrefix.includes('|')) {
-          const pipeIdx = linePrefix.lastIndexOf('|');
+        if (linePrefix.includes("|")) {
+          const pipeIdx = linePrefix.lastIndexOf("|");
           const afterPipe = linePrefix.slice(pipeIdx + 1).trim();
           for (const f of cachedFilters) {
             if (!afterPipe || f.startsWith(afterPipe)) {
               const item = new vscode.CompletionItem(f, vscode.CompletionItemKind.Function);
-              item.detail = 'rule filter';
+              item.detail = "rule filter";
               items.push(item);
             }
           }
@@ -251,11 +348,11 @@ function activate(context) {
         // @click="…" → handlers
         if (/@\w+="[^"]*$/.test(linePrefix)) {
           const quoteMatch = linePrefix.match(/@\w+="([^"]*)$/);
-          const prefix = quoteMatch ? quoteMatch[1] : '';
+          const prefix = quoteMatch ? quoteMatch[1] : "";
           for (const h of cachedHandlers) {
             if (!prefix || h.startsWith(prefix)) {
               const item = new vscode.CompletionItem(h, vscode.CompletionItemKind.Function);
-              item.detail = 'rule handler';
+              item.detail = "rule handler";
               item.insertText = `${h}($1)`;
               items.push(item);
             }
@@ -269,16 +366,22 @@ function activate(context) {
           for (const role of DATA_PARTS) {
             if (!prefix || role.startsWith(prefix)) {
               const item = new vscode.CompletionItem(role, vscode.CompletionItemKind.Property);
-              item.detail = 'rule data-part';
+              item.detail = "rule data-part";
               items.push(item);
             }
           }
         }
 
         return items;
-      }
+      },
     },
-    '{', '|', ' ', '@', '"', '\'', '.'
+    "{",
+    "|",
+    " ",
+    "@",
+    '"',
+    "'",
+    ".",
   );
   context.subscriptions.push(jsProvider);
 }

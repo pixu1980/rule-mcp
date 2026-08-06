@@ -36,12 +36,12 @@ Two expression systems: `${value}` for JS values, `{{ expr }}` for template expr
 import { Store } from "./core/store/index.js";
 
 const store = new Store(initialState, options);
-store.state              // Proxy-wrapped state tree (mutate directly)
-store.get(path)          // Read by dot-path
-store.set(path, value)   // Write by dot-path
-store.update(path, fn)   // (current) => next
-store.replace(nextState) // Replace entire tree
-store.snapshot()         // Deep-cloned snapshot
+store.state; // Proxy-wrapped state tree (mutate directly)
+store.get(path); // Read by dot-path
+store.set(path, value); // Write by dot-path
+store.update(path, fn); // (current) => next
+store.replace(nextState); // Replace entire tree
+store.snapshot(); // Deep-cloned snapshot
 ```
 
 ### Key Rules
@@ -54,12 +54,12 @@ store.snapshot()         // Deep-cloned snapshot
 
 ### Files (in `core/store/`)
 
-| File | Export | Purpose |
-|------|--------|---------|
-| `_store.js` | `Store` | Proxy-based state container |
-| `_clone.js` | `deepClone`, `clonePlainValue` | Handles Date, RegExp, Map, Set, arrays |
-| `_guards.js` | `isObject` | Type guard |
-| `_paths.js` | `toPathArray`, `pathToString` | Path utilities |
+| File         | Export                         | Purpose                                |
+| ------------ | ------------------------------ | -------------------------------------- |
+| `_store.js`  | `Store`                        | Proxy-based state container            |
+| `_clone.js`  | `deepClone`, `clonePlainValue` | Handles Date, RegExp, Map, Set, arrays |
+| `_guards.js` | `isObject`                     | Type guard                             |
+| `_paths.js`  | `toPathArray`, `pathToString`  | Path utilities                         |
 
 Full source: `examples/src/core/store/`
 
@@ -74,33 +74,37 @@ import { Signal, effect } from "./core/signals/index.js";
 
 // State signal
 const count = new Signal.State(0);
-count.get();            // → 0 (tracks dependency in active collector)
-count.set(5);           // notifies subscribers (unless equal)
-count.peek();           // read without tracking
+count.get(); // → 0 (tracks dependency in active collector)
+count.set(5); // notifies subscribers (unless equal)
+count.peek(); // read without tracking
 
 // Computed signal (lazy, derived)
 const doubled = new Signal.Computed(() => count.get() * 2);
-doubled.get();          // → 10 (lazy evaluate if dirty)
+doubled.get(); // → 10 (lazy evaluate if dirty)
 
 // Effect (auto-track + re-run on change)
-const dispose = effect(() => { console.log(count.get()); });
-dispose();              // stop the effect
+const dispose = effect(() => {
+  console.log(count.get());
+});
+dispose(); // stop the effect
 
 // Untracked reads inside effects
-Signal.subtle.untrack(() => { console.log(count.peek()); });
+Signal.subtle.untrack(() => {
+  console.log(count.peek());
+});
 ```
 
 ### Files (in `core/signals/`)
 
-| File | Export | Lines |
-|------|--------|-------|
-| `_base-signal.js` | `BaseSignal` | subscribe, track, notify |
-| `_state-signal.js` | `StateSignal` | get, set, peek with equality check |
-| `_computed-signal.js` | `ComputedSignal` | lazy eval, dirty tracking, dependency collection |
-| `_collector-context.js` | `withCollector`, `withoutCollector` | Stack-based tracking context |
-| `_effect-collector.js` | `EffectCollector` | Auto-track + dynamic resubscription |
-| `_scheduler.js` | `schedule` | Microtask-batched effect scheduling |
-| `index.js` | `Signal`, `effect`, `isSignalLike` | Unified exports |
+| File                    | Export                              | Lines                                            |
+| ----------------------- | ----------------------------------- | ------------------------------------------------ |
+| `_base-signal.js`       | `BaseSignal`                        | subscribe, track, notify                         |
+| `_state-signal.js`      | `StateSignal`                       | get, set, peek with equality check               |
+| `_computed-signal.js`   | `ComputedSignal`                    | lazy eval, dirty tracking, dependency collection |
+| `_collector-context.js` | `withCollector`, `withoutCollector` | Stack-based tracking context                     |
+| `_effect-collector.js`  | `EffectCollector`                   | Auto-track + dynamic resubscription              |
+| `_scheduler.js`         | `schedule`                          | Microtask-batched effect scheduling              |
+| `index.js`              | `Signal`, `effect`, `isSignalLike`  | Unified exports                                  |
 
 ### Key Rules
 
@@ -158,30 +162,34 @@ const result = html`<h1>{{ title | upper }}</h1>`;
 render(result, document.getElementById("app"));
 
 // Register a filter
-registerFilter("upper", v => String(v).toUpperCase());
+registerFilter("upper", (v) => String(v).toUpperCase());
 
 // Two-way binding
-html`<input model=${{
-  signal: tickState,
-  get: () => store.state.name,
-  set: (v) => { store.state.name = v; }
-}} />`;
+html`<input
+  model=${{
+    signal: tickState,
+    get: () => store.state.name,
+    set: (v) => {
+      store.state.name = v;
+    },
+  }}
+/>`;
 ```
 
 ### Expression Systems
 
-| Syntax | Part Type | Behavior | Example |
-|--------|-----------|----------|---------|
-| `${expr}` | ChildNodePart | JS value (handler, signal, iterable) | `<p>${name}</p>` |
-| `{{ expr }}` | ExprPart | Data expression with filter pipes | `<p>{{ title \| upper }}</p>` |
-| `attr=${expr}` | AttributePart | HTML attribute from JS | `<div class=${cls}>` |
-| `attr={{ expr }}` | AttributePart | HTML attribute from context | `<div class="{{ cls }}">` |
-| `.prop=${expr}` | PropertyPart | DOM property | `<input .value=${val}>` |
-| `@event=${fn}` | EventPart | Event listener | `<button @click=${fn}>` |
-| `model=${expr}` | AttributePart | Two-way binding | `<input model=${m}>` |
-| `<for each="x in xs">` | ForPart | Loop (inline or component) | `<for each="todo in todos">` |
-| `<if condition="expr">` | IfPart | Conditional | `<if condition="done">` |
-| `<switch expr="x">` | SwitchPart | Multi-way branch | `<switch expr="status">` |
+| Syntax                  | Part Type     | Behavior                             | Example                       |
+| ----------------------- | ------------- | ------------------------------------ | ----------------------------- |
+| `${expr}`               | ChildNodePart | JS value (handler, signal, iterable) | `<p>${name}</p>`              |
+| `{{ expr }}`            | ExprPart      | Data expression with filter pipes    | `<p>{{ title \| upper }}</p>` |
+| `attr=${expr}`          | AttributePart | HTML attribute from JS               | `<div class=${cls}>`          |
+| `attr={{ expr }}`       | AttributePart | HTML attribute from context          | `<div class="{{ cls }}">`     |
+| `.prop=${expr}`         | PropertyPart  | DOM property                         | `<input .value=${val}>`       |
+| `@event=${fn}`          | EventPart     | Event listener                       | `<button @click=${fn}>`       |
+| `model=${expr}`         | AttributePart | Two-way binding                      | `<input model=${m}>`          |
+| `<for each="x in xs">`  | ForPart       | Loop (inline or component)           | `<for each="todo in todos">`  |
+| `<if condition="expr">` | IfPart        | Conditional                          | `<if condition="done">`       |
+| `<switch expr="x">`     | SwitchPart    | Multi-way branch                     | `<switch expr="status">`      |
 
 ### Built-in Filters
 
@@ -202,21 +210,21 @@ render(result, root);
 
 ### Files (in `core/template-engine/`)
 
-| File | Export |
-|------|--------|
-| `_template.js` | `render()` |
+| File                    | Export                                                                 |
+| ----------------------- | ---------------------------------------------------------------------- |
+| `_template.js`          | `render()`                                                             |
 | `_template-instance.js` | `TemplateInstance`, `getTemplate` (parser with `{{ }}`/`<for>`/`<if>`) |
-| `_expression-parser.js` | `parseExpression`, `evaluateExpression` |
-| `_filters.js` | `registerFilter`, `FILTERS`, built-in filters (18 filters) |
-| `_template-helpers.js` | `html`, `directive`, `model`, `isDirective` |
-| `_child-node-part.js` | ChildNodePart (text, template, iterable, signal) |
-| `_attribute-part.js` | AttributePart + model directive |
-| `_expr-part.js` | ExprPart (`{{ }}` interpolation with filters) |
-| `_for-part.js` | ForPart (`<for>` directive, keyed reconciliation) |
-| `_if-part.js` | IfPart (`<if>` directive, signal support) |
-| `_event-part.js` | EventPart |
-| `_property-part.js` | PropertyPart |
-| `_range.js` | `clearRange`, `moveRangeBefore` |
+| `_expression-parser.js` | `parseExpression`, `evaluateExpression`                                |
+| `_filters.js`           | `registerFilter`, `FILTERS`, built-in filters (18 filters)             |
+| `_template-helpers.js`  | `html`, `directive`, `model`, `isDirective`                            |
+| `_child-node-part.js`   | ChildNodePart (text, template, iterable, signal)                       |
+| `_attribute-part.js`    | AttributePart + model directive                                        |
+| `_expr-part.js`         | ExprPart (`{{ }}` interpolation with filters)                          |
+| `_for-part.js`          | ForPart (`<for>` directive, keyed reconciliation)                      |
+| `_if-part.js`           | IfPart (`<if>` directive, signal support)                              |
+| `_event-part.js`        | EventPart                                                              |
+| `_property-part.js`     | PropertyPart                                                           |
+| `_range.js`             | `clearRange`, `moveRangeBefore`                                        |
 
 Full source: `examples/src/core/template-engine/`
 
@@ -232,9 +240,7 @@ Every component is a class extending `HTMLElement`:
 import { html } from "../../core/index.js";
 
 // CSS loaded once at module scope
-const cssText = await (
-  await fetch(new URL("./_TodoItem.css", import.meta.url))
-).text();
+const cssText = await (await fetch(new URL("./_TodoItem.css", import.meta.url))).text();
 const sheet = new CSSStyleSheet();
 sheet.replaceSync(cssText);
 
@@ -246,12 +252,10 @@ export class TodoItem extends HTMLElement {
 
   static render(todo) {
     return html`
-      <article data-part="item" data-state-completed="${todo.completed ? 'done' : ''}">
+      <article data-part="item" data-state-completed="${todo.completed ? "done" : ""}">
         <input type="checkbox" data-part="toggle" />
         <span data-part="title">{{ todo.title | upper }}</span>
-        <button data-part="delete" @click=${() => removeTodo(todo.id)}>
-          Delete
-        </button>
+        <button data-part="delete" @click=${() => removeTodo(todo.id)}>Delete</button>
       </article>
     `;
   }
@@ -284,10 +288,10 @@ export class TodoItem extends HTMLElement {
 
 ### Synchronous vs Microtask
 
-| Phase | When | What runs |
-|-------|------|-----------|
-| Sync | During tickState.set() | Model binding syncs, computed invalidation, effect scheduling |
-| Microtask | After current script | Effects (render, document sync) |
+| Phase     | When                   | What runs                                                     |
+| --------- | ---------------------- | ------------------------------------------------------------- |
+| Sync      | During tickState.set() | Model binding syncs, computed invalidation, effect scheduling |
+| Microtask | After current script   | Effects (render, document sync)                               |
 
 ---
 
@@ -366,22 +370,34 @@ src/
 ## 9. Pitfalls and Common Mistakes
 
 ### 1. Forgetting `tickState.get()` in computed signals
+
 ```js
 // WRONG — won't re-evaluate on store changes:
 const myComputed = new Signal.Computed(() => store.state.todos.length);
 // RIGHT:
-const myComputed = new Signal.Computed(() => { tickState.get(); return store.state.todos.length; });
+const myComputed = new Signal.Computed(() => {
+  tickState.get();
+  return store.state.todos.length;
+});
 ```
 
 ### 2. Forgetting `result._context`
+
 ```js
 // WRONG — {{ }} expressions have no data:
-effect(() => { render(App.render(ctx), root); });
+effect(() => {
+  render(App.render(ctx), root);
+});
 // RIGHT:
-effect(() => { const result = App.render(ctx); result._context = ctx; render(result, root); });
+effect(() => {
+  const result = App.render(ctx);
+  result._context = ctx;
+  render(result, root);
+});
 ```
 
 ### 3. `{{ }}` vs `${}` confusion
+
 - `{{ }}` → DATA expressions (context + filters): `{{ title | upper }}`
 - `${}` → JS values (handlers, directives): `@click=${fn}`, `model=${config}`
 
@@ -396,18 +412,20 @@ effect(() => { const result = App.render(ctx); result._context = ctx; render(res
 ## 10. Migration Guide Cheatsheet
 
 ### React → Pix
-| React | Vanilla Equivalent |
-|-------|-------------------|
-| `useState` | `new Signal.State()` |
-| `useMemo` | `new Signal.Computed()` |
-| `useEffect` | `effect()` |
-| setState | `store.state.X = Y` |
-| JSX | `` html`...` `` |
-| key prop | `<for>` keyed reconciliation |
-| Controlled inputs | `model={...}` directive |
-| React Context | Shared `store` import |
+
+| React             | Vanilla Equivalent           |
+| ----------------- | ---------------------------- |
+| `useState`        | `new Signal.State()`         |
+| `useMemo`         | `new Signal.Computed()`      |
+| `useEffect`       | `effect()`                   |
+| setState          | `store.state.X = Y`          |
+| JSX               | `` html`...` ``              |
+| key prop          | `<for>` keyed reconciliation |
+| Controlled inputs | `model={...}` directive      |
+| React Context     | Shared `store` import        |
 
 ### Vue → Pix / Svelte → Pix
+
 See `patterns.md` in this directory for full migration tables.
 
 ---
@@ -418,6 +436,7 @@ Run `pix_frontend_vanilla_reactive` mode=check to validate code against these ru
 Use `pix_check` tool for automated guardrail checking.
 
 Key assertions enforced by guardrails engine:
+
 - **no-css-classes**: CSS uses element + `[data-part]` selectors only
 - **no-inline-styles**: Templates have zero `style="..."`
 - **semantic-html**: No `<div>` where semantic element exists
@@ -480,8 +499,11 @@ export async function submitForm() {
     return;
   }
   formStore.set({ isSubmitting: true });
-  try { await api.post("/contact", result.data); }
-  finally { formStore.set({ isSubmitting: false }); }
+  try {
+    await api.post("/contact", result.data);
+  } finally {
+    formStore.set({ isSubmitting: false });
+  }
 }
 ```
 
@@ -550,16 +572,30 @@ customElements.define("contact-form", ContactForm);
 
 ```javascript
 export const validators = {
-  required: (value) => value?.trim()?.length > 0 ? null : "This field is required",
-  email: (value) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value) ? null : "Invalid email",
-  minLength: (min) => (value) => value?.length >= min ? null : `Minimum ${min} characters`,
-  compose: (...fns) => (value) => { for (const fn of fns) { const e = fn(value); if (e) return e; } return null; },
+  required: (value) => (value?.trim()?.length > 0 ? null : "This field is required"),
+  email: (value) => (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value) ? null : "Invalid email"),
+  minLength: (min) => (value) => (value?.length >= min ? null : `Minimum ${min} characters`),
+  compose:
+    (...fns) =>
+    (value) => {
+      for (const fn of fns) {
+        const e = fn(value);
+        if (e) return e;
+      }
+      return null;
+    },
 };
 
 export function validate(schema, data) {
   const errors = {};
   for (const [field, fns] of Object.entries(schema)) {
-    for (const fn of [].concat(fns)) { const e = fn(data[field]); if (e) { errors[field] = e; break; } }
+    for (const fn of [].concat(fns)) {
+      const e = fn(data[field]);
+      if (e) {
+        errors[field] = e;
+        break;
+      }
+    }
   }
   return Object.keys(errors).length ? errors : null;
 }
@@ -578,10 +614,17 @@ export const formStore = new Store({ email: "", name: "", errors: null, isSubmit
 export async function submitForm() {
   const data = formStore.get();
   const errors = validate(schema, data);
-  if (errors) { formStore.set({ errors }); return; }
+  if (errors) {
+    formStore.set({ errors });
+    return;
+  }
   formStore.set({ isSubmitting: true, errors: null });
   try {
-    await fetch("/api/contact", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(data) });
+    await fetch("/api/contact", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
     formStore.set({ email: "", name: "", isSubmitting: false });
   } catch (err) {
     formStore.set({ errors: { form: err.message }, isSubmitting: false });
@@ -606,14 +649,24 @@ template.innerHTML = `
 export class ContactForm extends HTMLElement {
   connectedCallback() {
     this.append(template.content.cloneNode(true));
-    this.querySelector("[data-part=form]").addEventListener("submit", (e) => { e.preventDefault(); submitForm(); });
-    this.querySelectorAll("[data-bind]").forEach((el) => el.addEventListener("input", () => formStore.set({ [el.dataset.bind]: el.value })));
+    this.querySelector("[data-part=form]").addEventListener("submit", (e) => {
+      e.preventDefault();
+      submitForm();
+    });
+    this.querySelectorAll("[data-bind]").forEach((el) =>
+      el.addEventListener("input", () => formStore.set({ [el.dataset.bind]: el.value })),
+    );
     formStore.subscribe(() => {
       const s = formStore.get();
       const btn = this.querySelector("[data-part=submit]");
-      btn.disabled = s.isSubmitting; btn.textContent = s.isSubmitting ? "Sending..." : "Send";
+      btn.disabled = s.isSubmitting;
+      btn.textContent = s.isSubmitting ? "Sending..." : "Send";
       this.querySelectorAll("[data-error]").forEach((el) => (el.textContent = ""));
-      if (s.errors) for (const [k, msg] of Object.entries(s.errors)) { const el = this.querySelector(`[data-error="${k}"]`); if (el) el.textContent = msg; }
+      if (s.errors)
+        for (const [k, msg] of Object.entries(s.errors)) {
+          const el = this.querySelector(`[data-error="${k}"]`);
+          if (el) el.textContent = msg;
+        }
     });
   }
 }

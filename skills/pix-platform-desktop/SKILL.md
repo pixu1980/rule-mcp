@@ -15,11 +15,11 @@ Choose a desktop framework below, then pair with a UI framework.
 
 ## Supported Desktop Frameworks
 
-| Framework | Skill plugin | Platform | Runtime |
-|-----------|-------------|----------|---------|
-| **Electron** (embedded) | rule-platform-desktop/electron | macOS, Windows, Linux | Chromium + Node.js |
-| **Tauri** (planned) | rule-platform-desktop/tauri | macOS, Windows, Linux | System webview + Rust |
-| **Neutralinojs** (planned) | rule-platform-desktop/neutralino | macOS, Windows, Linux, Web | Native OS APIs |
+| Framework                  | Skill plugin                    | Platform                   | Runtime               |
+| -------------------------- | ------------------------------- | -------------------------- | --------------------- |
+| **Electron** (embedded)    | rule-platform-desktop/electron   | macOS, Windows, Linux      | Chromium + Node.js    |
+| **Tauri** (planned)        | rule-platform-desktop/tauri      | macOS, Windows, Linux      | System webview + Rust |
+| **Neutralinojs** (planned) | rule-platform-desktop/neutralino | macOS, Windows, Linux, Web | Native OS APIs        |
 
 ## When to use rule-platform-desktop
 
@@ -181,7 +181,9 @@ if (typeof qt === "undefined") {
     loadArchive: async () => ({ next_number: 1, quotes: [] }),
     loadConfig: async () => ({ brand: "QuoteTool" }),
     saveQuote: async (data) => ({ ok: true, entry: { number: "001" } }),
-    generatePDF: async () => { throw new Error("PDF only in Electron"); },
+    generatePDF: async () => {
+      throw new Error("PDF only in Electron");
+    },
   };
 }
 ```
@@ -213,10 +215,11 @@ function generatePDF(pythonCmd, scriptPath, dataPath, pdfPath) {
   return new Promise((resolve, reject) => {
     const proc = spawn(pythonCmd, [scriptPath, dataPath, pdfPath]);
     let stderr = "";
-    proc.stderr.on("data", (chunk) => { stderr += chunk.toString(); });
+    proc.stderr.on("data", (chunk) => {
+      stderr += chunk.toString();
+    });
     proc.on("close", (code) => {
-      code === 0 ? resolve({ ok: true, pdf_path: pdfPath })
-                 : reject(new Error(stderr.trim()));
+      code === 0 ? resolve({ ok: true, pdf_path: pdfPath }) : reject(new Error(stderr.trim()));
     });
   });
 }
@@ -280,14 +283,7 @@ project/
     "productName": "MyApp",
     "asar": true,
     "directories": { "output": "release" },
-    "files": [
-      "electron/**/*",
-      "src/**/*",
-      "assets/**/*",
-      "scripts/**/*",
-      "requirements.txt",
-      "package.json"
-    ],
+    "files": ["electron/**/*", "src/**/*", "assets/**/*", "scripts/**/*", "requirements.txt", "package.json"],
     "mac": { "target": ["dmg", "zip"] },
     "win": { "target": ["nsis", "portable"] },
     "linux": { "target": ["AppImage", "deb", "rpm"] }
@@ -352,12 +348,14 @@ Configure publisher in electron-builder:
 ## Code Signing & Notarization
 
 ### macOS
+
 ```
 # CI step
 xcrun notarytool submit MyApp.dmg --apple-id $APPLE_ID --password $APP_PW --team-id $TEAM_ID
 ```
 
 Include in electron-builder config:
+
 ```json
 "mac": {
   "hardenedRuntime": true,
@@ -367,6 +365,7 @@ Include in electron-builder config:
 ```
 
 ### Windows
+
 ```
 # Set env vars: CSC_LINK, CSC_KEY_PASSWORD
 # electron-builder handles authenticating via Azure Key Vault or local .pfx
@@ -375,6 +374,7 @@ Include in electron-builder config:
 ## Crash Reporting
 
 ### Electron (Sentry)
+
 ```js
 const Sentry = require("@sentry/electron");
 
@@ -390,15 +390,16 @@ Sentry.init({
 
 ## Debugging Guide
 
-| Task | Technique |
-|------|-----------|
-| Main process | `electron --inspect=5858 .` → Chrome DevTools → Node.js icon |
-| Renderer | Open DevTools with `win.webContents.openDevTools()` |
-| Preload | `console.log` statements appear in the renderer DevTools console |
-| IPC tracing | Add `ipcMain` / `ipcRenderer` event listeners for `'before-input-event'` |
-| Performance | `electron --js-flags="--trace-gc"` for garbage collection logging |
+| Task         | Technique                                                                |
+| ------------ | ------------------------------------------------------------------------ |
+| Main process | `electron --inspect=5858 .` → Chrome DevTools → Node.js icon             |
+| Renderer     | Open DevTools with `win.webContents.openDevTools()`                      |
+| Preload      | `console.log` statements appear in the renderer DevTools console         |
+| IPC tracing  | Add `ipcMain` / `ipcRenderer` event listeners for `'before-input-event'` |
+| Performance  | `electron --js-flags="--trace-gc"` for garbage collection logging        |
 
 ### DevTools Extensions
+
 ```js
 const { BrowserWindow, session } = require("electron");
 const devTools = path.join(os.homedir(), ".config/chromium/Default/Extensions/fmkadmapgofadopljbjfkapdkoienihi/");
@@ -454,6 +455,7 @@ const greeting = await invoke("greet", { name: "World" });
 ## Protocol Handling (Deep Links)
 
 ### Electron
+
 ```js
 app.setAsDefaultProtocolClient("myapp");
 
@@ -464,6 +466,7 @@ app.on("open-url", (event, url) => {
 ```
 
 ### Tauri
+
 ```toml
 # tauri.conf.json
 {
@@ -480,6 +483,7 @@ app.on("open-url", (event, url) => {
 ## Guards & Best Practices
 
 ### Security
+
 - ✅ `contextIsolation: true` — always
 - ✅ `nodeIntegration: false` — always
 - ✅ Preload via `contextBridge` only
@@ -488,12 +492,14 @@ app.on("open-url", (event, url) => {
 - ❌ Never expose `ipcRenderer.on` or `require`
 
 ### Main Process
+
 - ✅ Keep main.js thin — delegate to modules
 - ✅ Handle IPC errors with try/catch
 - ✅ Use `worker_threads` for CPU-heavy work
 - ✅ Clean up window references on close (nullify `closed` event)
 
 ### Renderer
+
 - ✅ Mock IPC for browser dev mode
 - ✅ `data-part` attributes (rule-styleguide)
 - ✅ Zero CSS classes, zero inline styles
@@ -526,6 +532,7 @@ app.on("open-url", (event, url) => {
 │  Build:    electron-builder, asar, multi-platform         │
 └────────────────────────────────────────────────────────────┘
 ```
+
 ---
 
 ## See also

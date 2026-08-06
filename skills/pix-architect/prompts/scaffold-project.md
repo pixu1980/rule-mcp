@@ -13,6 +13,7 @@ You are creating a new project with full agent infrastructure and architecture d
 ## Project Info
 
 Fill in:
+
 - PROJECT_NAME:
 - PROJECT_DESCRIPTION:
 - DOMAIN_NAME:

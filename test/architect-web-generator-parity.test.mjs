@@ -29,25 +29,28 @@ test("architect-web server has no inline generator copy", () => {
 // answers, which is exactly the drift the shared generator exists to prevent.
 const CONTEXT_SERVER_SRC = readFileSync(
   new URL("../skills/rule-architect/assets/context-server.mjs", import.meta.url),
-  "utf-8"
+  "utf-8",
 );
 
 test("neither server passes a null spec to the generator", () => {
-  for (const [name, source] of [["architect-web", SRC], ["context-server", CONTEXT_SERVER_SRC]]) {
+  for (const [name, source] of [
+    ["architect-web", SRC],
+    ["context-server", CONTEXT_SERVER_SRC],
+  ]) {
     assert.doesNotMatch(
       source,
       /generateContext(Content)?\([^)]*,\s*null\s*[,)]/,
-      `${name} must pass the loaded wizardSpec, not null`
+      `${name} must pass the loaded wizardSpec, not null`,
     );
     assert.match(
       source,
       /generateContext\(values \|\| \{\}, wizardSpec/,
-      `${name}: /api/generate must pass wizardSpec`
+      `${name}: /api/generate must pass wizardSpec`,
     );
     assert.match(
       source,
       /generateContextContent\(values \|\| \{\}, wizardSpec\)/,
-      `${name}: /api/download must pass wizardSpec`
+      `${name}: /api/download must pass wizardSpec`,
     );
   }
 });

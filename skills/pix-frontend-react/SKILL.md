@@ -58,9 +58,7 @@ src/
 // components/TodoItem/_TodoItem.jsx
 import { useEffect, useRef } from "react";
 
-const cssText = await (
-  await fetch(new URL("./_TodoItem.css", import.meta.url))
-).text();
+const cssText = await (await fetch(new URL("./_TodoItem.css", import.meta.url))).text();
 const sheet = new CSSStyleSheet();
 sheet.replaceSync(cssText);
 
@@ -76,12 +74,7 @@ export function TodoItem({ todo, onToggle, onDelete }) {
 
   return (
     <article ref={ref} data-part="item" data-state-completed={todo.completed ? "done" : null}>
-      <input
-        type="checkbox"
-        data-part="toggle"
-        checked={todo.completed}
-        onChange={() => onToggle(todo.id)}
-      />
+      <input type="checkbox" data-part="toggle" checked={todo.completed} onChange={() => onToggle(todo.id)} />
       <span data-part="title">{todo.title}</span>
       <button data-part="delete" onClick={() => onDelete(todo.id)}>
         Delete
@@ -125,24 +118,24 @@ export { TodoItem } from "./_TodoItem.jsx";
 
 ## React ↔ rule-frontend-vanilla-reactive Mapping
 
-| rule-frontend-vanilla-reactive | React Equivalent |
-|----------------------|-----------------|
-| `StateSignal` | `useState` / `useReducer` |
-| `ComputedSignal` | `useMemo` |
-| `effect()` | `useEffect` |
-| `Store (Proxy)` | React Context + `useReducer` |
-| `tickState` bridge | Context dispatch |
-| `html\`\`` tagged templates | JSX |
-| `{{ expr \| filter }}` | `{expression}` inline |
-| `${value}` | `{value}` |
-| `@click=${fn}` | `onClick={fn}` |
-| `model={...}` directive | `value` + `onChange` |
-| `<for each="x in xs">` | `{xs.map(x => <Component key={x.id} />)}` |
-| `<if condition="c">` | `{c && <Content />}` or ternary |
-| `<switch expr="x">` | `{switch(x) { ... }}` or object map |
-| `adoptedStyleSheets` | `useEffect` to adopt once |
-| `data-part="..."` | `data-part="..."` (same) |
-| `static {}` block | Module-level CSS fetch |
+| rule-frontend-vanilla-reactive | React Equivalent                          |
+| ----------------------------- | ----------------------------------------- |
+| `StateSignal`                 | `useState` / `useReducer`                 |
+| `ComputedSignal`              | `useMemo`                                 |
+| `effect()`                    | `useEffect`                               |
+| `Store (Proxy)`               | React Context + `useReducer`              |
+| `tickState` bridge            | Context dispatch                          |
+| `html\`\`` tagged templates   | JSX                                       |
+| `{{ expr \| filter }}`        | `{expression}` inline                     |
+| `${value}`                    | `{value}`                                 |
+| `@click=${fn}`                | `onClick={fn}`                            |
+| `model={...}` directive       | `value` + `onChange`                      |
+| `<for each="x in xs">`        | `{xs.map(x => <Component key={x.id} />)}` |
+| `<if condition="c">`          | `{c && <Content />}` or ternary           |
+| `<switch expr="x">`           | `{switch(x) { ... }}` or object map       |
+| `adoptedStyleSheets`          | `useEffect` to adopt once                 |
+| `data-part="..."`             | `data-part="..."` (same)                  |
+| `static {}` block             | Module-level CSS fetch                    |
 
 ## CSS Loading Pattern
 
@@ -173,9 +166,7 @@ export function AppProvider({ children, initialState, reducer }) {
   const [state, dispatch] = useReducer(reducer, initialState);
   return (
     <AppContext.Provider value={state}>
-      <AppDispatch.Provider value={dispatch}>
-        {children}
-      </AppDispatch.Provider>
+      <AppDispatch.Provider value={dispatch}>{children}</AppDispatch.Provider>
     </AppContext.Provider>
   );
 }
@@ -206,13 +197,19 @@ export function useAppDispatch() {
 
 ```jsx
 // ✅ Use: ternary, &&, or early return
-{hasTodos ? (
-  <ul data-part="list">
-    {todos.map((t) => <li key={t.id} data-part="item">{t.title}</li>)}
-  </ul>
-) : (
-  <p data-part="empty">No todos yet.</p>
-)}
+{
+  hasTodos ? (
+    <ul data-part="list">
+      {todos.map((t) => (
+        <li key={t.id} data-part="item">
+          {t.title}
+        </li>
+      ))}
+    </ul>
+  ) : (
+    <p data-part="empty">No todos yet.</p>
+  );
+}
 ```
 
 ## Complete Example: TodoApp
@@ -307,14 +304,17 @@ type UserState =
 
 function userReducer(state: UserState, action: UserAction): UserState {
   switch (action.type) {
-    case "success": return { status: "success", user: action.payload, error: null };
-    case "error": return { status: "error", user: null, error: action.payload };
-    default: return state;
+    case "success":
+      return { status: "success", user: action.payload, error: null };
+    case "error":
+      return { status: "error", user: null, error: action.payload };
+    default:
+      return state;
   }
 }
 ```
 
-Rule: *If state values depend on each other or must always stay consistent, prefer a reducer or an explicit state machine shape.*
+Rule: _If state values depend on each other or must always stay consistent, prefer a reducer or an explicit state machine shape._
 
 #### 2. `useTransition` and debounce solve different problems
 
@@ -326,7 +326,7 @@ API called on every keystroke → debounce
 Both happening → debounce request + transition for rendering results
 ```
 
-Rule: *`useTransition` improves render responsiveness. Debounce reduces frequency.*
+Rule: _`useTransition` improves render responsiveness. Debounce reduces frequency._
 
 #### 3. Keep state where it is actually needed
 
@@ -334,15 +334,17 @@ Move state down when only a small part of the tree needs it. Before adding `Reac
 
 ```tsx
 function SearchSection() {
-  const [search, setSearch] = useState("");  // Owned here, not in parent
-  return <>
-    <SearchBox value={search} onChange={setSearch} />
-    <Results query={search} />
-  </>;
+  const [search, setSearch] = useState(""); // Owned here, not in parent
+  return (
+    <>
+      <SearchBox value={search} onChange={setSearch} />
+      <Results query={search} />
+    </>
+  );
 }
 ```
 
-Rule: *Keep state as close as possible to where it is used. Lift only when sharing is real.*
+Rule: _Keep state as close as possible to where it is used. Lift only when sharing is real._
 
 #### 4. `useEffect` is for synchronization, not derived calculations
 
@@ -351,37 +353,43 @@ Use `useEffect` when React must sync with something **outside** React (localStor
 ```tsx
 // ❌ Derived state in effect
 const [double, setDouble] = useState(0);
-useEffect(() => { setDouble(count * 2); }, [count]);
+useEffect(() => {
+  setDouble(count * 2);
+}, [count]);
 
 // ✅ Calculate during render
 const double = count * 2;
 ```
 
-Rule: *If you are calculating from existing React state, calculate during render. If you are syncing outside React, use an effect.*
+Rule: _If you are calculating from existing React state, calculate during render. If you are syncing outside React, use an effect._
 
 #### 5. Do not use array index as `key` for changing lists
 
 ```tsx
 // ❌ Index key — state, focus, animations break on reorder
-{tasks.map((task, i) => <TaskItem key={i} task={task} />)}
+{
+  tasks.map((task, i) => <TaskItem key={i} task={task} />);
+}
 
 // ✅ Stable ID
-{tasks.map(task => <TaskItem key={task.id} task={task} />)}
+{
+  tasks.map((task) => <TaskItem key={task.id} task={task} />);
+}
 ```
 
 Acceptable exception: static lists that never reorder, insert, delete, filter, or hold stateful children.
 
-Rule: *If the list can change, never use index as key.*
+Rule: _If the list can change, never use index as key._
 
 #### 6. Changing `key` resets a component
 
 Use a changing key when the desired behavior is a full fresh start (form reset, animation restart, discarding old local state).
 
 ```tsx
-<UserForm key={userId} userId={userId} />  // Fully resets on userId change
+<UserForm key={userId} userId={userId} /> // Fully resets on userId change
 ```
 
-Rule: *If you want to fully reset a component, change its key instead of manually syncing every internal value.*
+Rule: _If you want to fully reset a component, change its key instead of manually syncing every internal value._
 
 #### 7. Not everything needs `useMemo`
 
@@ -395,7 +403,7 @@ const sortedItems = useMemo(() => [...items].sort((a, b) => a.price - b.price), 
 
 Never mutate props or state inside `useMemo`. Copy before sorting/reversing.
 
-Rule: *Memoize expensive work, not simple values.*
+Rule: _Memoize expensive work, not simple values._
 
 #### 8. One responsibility means one reason to change
 
@@ -414,7 +422,7 @@ function UserProfile({ userId }: { userId: string }) {
 }
 ```
 
-Rule: *Split when different changes affect different parts.*
+Rule: _Split when different changes affect different parts._
 
 #### 9. Use `useLayoutEffect` only to prevent visible layout glitches
 
@@ -430,7 +438,7 @@ useLayoutEffect(() => {
 
 Warning: `useLayoutEffect` blocks paint. Overuse reduces performance.
 
-Rule: *Use `useLayoutEffect` only when the user would otherwise see a visual glitch.*
+Rule: _Use `useLayoutEffect` only when the user would otherwise see a visual glitch._
 
 #### 10. Avoid prop soup with compound components
 
@@ -449,22 +457,22 @@ When a component gains too many customization props, prefer composition and comp
 </Accordion>
 ```
 
-Rule: *If your component API keeps growing flags and render props, split the API into composable parts.*
+Rule: _If your component API keeps growing flags and render props, split the API into composable parts._
 
 ### Decision matrix
 
-| Symptom | Check first | Likely pattern | Fix |
-|---|---|---|---|
-| Slow typing | State owner + heavy siblings | State too high | Move state down |
-| Search sends too many requests | Network call frequency | Debounce needed | Debounce input or request |
-| Big local filtering freezes UI | Render workload | `useTransition` needed | Wrap non-urgent update |
-| Error and data appear together | Dependent state | Reducer needed | Use reducer or state machine |
-| Effect loops or double renders | Derived state in effect | Misused `useEffect` | Calculate during render |
-| Input value moves to another row | List keys | Index key bug | Use stable IDs |
-| Form keeps old values | Component identity | Key reset needed | Change component key |
-| Many `useMemo` around simple values | Calculation cost | Overmemoization | Remove memoization |
-| Tooltip flickers | DOM measurement timing | Effect after paint | Use `useLayoutEffect` |
-| Component has 20+ props | API design | Prop soup | Use composition |
+| Symptom                             | Check first                  | Likely pattern         | Fix                          |
+| ----------------------------------- | ---------------------------- | ---------------------- | ---------------------------- |
+| Slow typing                         | State owner + heavy siblings | State too high         | Move state down              |
+| Search sends too many requests      | Network call frequency       | Debounce needed        | Debounce input or request    |
+| Big local filtering freezes UI      | Render workload              | `useTransition` needed | Wrap non-urgent update       |
+| Error and data appear together      | Dependent state              | Reducer needed         | Use reducer or state machine |
+| Effect loops or double renders      | Derived state in effect      | Misused `useEffect`    | Calculate during render      |
+| Input value moves to another row    | List keys                    | Index key bug          | Use stable IDs               |
+| Form keeps old values               | Component identity           | Key reset needed       | Change component key         |
+| Many `useMemo` around simple values | Calculation cost             | Overmemoization        | Remove memoization           |
+| Tooltip flickers                    | DOM measurement timing       | Effect after paint     | Use `useLayoutEffect`        |
+| Component has 20+ props             | API design                   | Prop soup              | Use composition              |
 
 ### PR review style
 
@@ -484,20 +492,25 @@ Rule of thumb: [one reusable sentence]
 ## React performance review
 
 ### Main finding
+
 Short summary of the highest-impact issue.
 
 ### Issues found
+
 #### 1. Title
+
 - Pattern: one of the 10
 - Risk: what can go wrong
 - Fix: smallest safe change
 
 ### Suggested priority
+
 1. Fix correctness risks first
 2. Fix render boundary problems second
 3. Remove premature optimizations third
 
 ### Rule of thumb
+
 One reusable principle.
 ```
 
@@ -511,22 +524,21 @@ If performance claims are uncertain, say so and suggest measurement with React D
 
 All materials from the companion performance skill are integrated into the rule-frontend-react skill directory:
 
-| Resource | Path |
-|---|---|
-| 10 detailed examples | `examples/performance/01-*.md` … `10-*.md` |
-| PR review checklist | `checklists/react-performance-pr-checklist.md` |
-| Decision matrix | `checklists/decision-matrix.md` |
-| System prompt | `prompts/portable-system-prompt.md` |
-| Code review prompt | `prompts/code-review-prompt.md` |
-| Refactor prompt | `prompts/refactor-prompt.md` |
-| Teaching prompt | `prompts/teaching-prompt.md` |
-| Audit report template | `templates/audit-report-template.md` |
-| PR comment template | `templates/pr-comment-template.md` |
-| Refactor plan template | `templates/refactor-plan-template.md` |
-| Performance playbook | `knowledge/react-performance-playbook.md` |
+| Resource               | Path                                           |
+| ---------------------- | ---------------------------------------------- |
+| 10 detailed examples   | `examples/performance/01-*.md` … `10-*.md`     |
+| PR review checklist    | `checklists/react-performance-pr-checklist.md` |
+| Decision matrix        | `checklists/decision-matrix.md`                |
+| System prompt          | `prompts/portable-system-prompt.md`            |
+| Code review prompt     | `prompts/code-review-prompt.md`                |
+| Refactor prompt        | `prompts/refactor-prompt.md`                   |
+| Teaching prompt        | `prompts/teaching-prompt.md`                   |
+| Audit report template  | `templates/audit-report-template.md`           |
+| PR comment template    | `templates/pr-comment-template.md`             |
+| Refactor plan template | `templates/refactor-plan-template.md`          |
+| Performance playbook   | `knowledge/react-performance-playbook.md`      |
 
 ---
-
 
 # Scaffolding: React Project Setup
 
@@ -586,6 +598,7 @@ src/
 - Error boundary at root level
 - Separation: routes/pages/components/services/types
 - Never empty files or TODO placeholders
+
 ## Forms (React Hook Form)
 
 ### Prerequisites
@@ -657,8 +670,12 @@ function OrderForm() {
         {fields.map((field, index) => (
           <ItemRow key={field.id} index={index} onRemove={() => remove(index)} />
         ))}
-        <button type="button" onClick={() => append({ product: "", qty: 1 })}>Add Item</button>
-        <button type="submit" disabled={form.formState.isSubmitting}>Submit</button>
+        <button type="button" onClick={() => append({ product: "", qty: 1 })}>
+          Add Item
+        </button>
+        <button type="submit" disabled={form.formState.isSubmitting}>
+          Submit
+        </button>
       </form>
     </FormProvider>
   );
@@ -673,6 +690,7 @@ function OrderForm() {
 - [ ] Field-level errors rendered
 - [ ] Submission guarded with `isSubmitting`
 - [ ] Large forms split via `FormProvider`
+
 ---
 
 ## See also

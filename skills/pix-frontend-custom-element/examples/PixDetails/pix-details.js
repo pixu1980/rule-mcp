@@ -5,15 +5,15 @@
 //   Vite:    import styles from './styles/rule-details.css?raw';
 //   esbuild: configure a `loader: { '.css': 'text' }` rule for the file.
 // The decorator accepts either a CSS string, a CSSStyleSheet, or an array of either.
-import styles from 'bundle-text:./styles/rule-details.css';
+import styles from "bundle-text:./styles/rule-details.css";
 
-import TemplateEngine from '../../../rule-template-engine/assets/tagged-runtime/index.js';
+import TemplateEngine from "../../../rule-template-engine/assets/tagged-runtime/index.js";
 
-import { componentDecorator } from '../decorator/index.js';
-import { strings } from '../decorator/_utils.js';
+import { componentDecorator } from "../decorator/index.js";
+import { strings } from "../decorator/_utils.js";
 
-import attributes from './rule-details.attributes.js';
-import events from './rule-details.events.js';
+import attributes from "./rule-details.attributes.js";
+import events from "./rule-details.events.js";
 
 const engine = new TemplateEngine();
 
@@ -41,7 +41,7 @@ const renderContent = engine.html`<section content id="${({ contentId }) => cont
  * </details>
  */
 export class PixDetails extends HTMLDetailsElement {
-  static extendsElement = 'details';
+  static extendsElement = "details";
   static attributes = attributes;
   static events = events;
   static styles = styles;
@@ -51,7 +51,7 @@ export class PixDetails extends HTMLDetailsElement {
   }
 
   /** @type {string} */
-  #guid = '';
+  #guid = "";
 
   /** @type {HTMLElement | null} */
   #summary = null;
@@ -69,20 +69,20 @@ export class PixDetails extends HTMLDetailsElement {
    * Idempotent: safe to call across reconnects.
    */
   onRender() {
-    this.setAttribute('aria-expanded', String(this.open));
+    this.setAttribute("aria-expanded", String(this.open));
 
-    this.#summary = this.querySelector(':scope > summary');
+    this.#summary = this.querySelector(":scope > summary");
 
     if (!this.#summary) return;
 
     this.#summary.id ||= this.#guid;
-    this.#summary.setAttribute('aria-controls', `${this.#guid}-content`);
+    this.#summary.setAttribute("aria-controls", `${this.#guid}-content`);
 
-    if (!this.#summary.querySelector('.rule-icon-chevron-down')) {
-      this.#summary.insertAdjacentHTML('beforeend', renderChevron({}));
+    if (!this.#summary.querySelector(".rule-icon-chevron-down")) {
+      this.#summary.insertAdjacentHTML("beforeend", renderChevron({}));
     }
 
-    const existingSection = this.querySelector(':scope > section[content]');
+    const existingSection = this.querySelector(":scope > section[content]");
 
     if (existingSection) {
       this.#content = /** @type {HTMLElement} */ (existingSection);
@@ -90,7 +90,7 @@ export class PixDetails extends HTMLDetailsElement {
     } else {
       const siblings = this.#nextElementSiblingsOf(this.#summary);
       const html = renderContent({ contentId: `${this.#guid}-content` });
-      this.#summary.insertAdjacentHTML('afterend', html);
+      this.#summary.insertAdjacentHTML("afterend", html);
 
       const section = /** @type {HTMLElement} */ (this.#summary.nextElementSibling);
 
