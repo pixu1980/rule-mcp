@@ -5,14 +5,14 @@
  * Conforme agli standard definiti in COPILOT_RULES.md
  */
 
-import assert from 'node:assert/strict';
-import { mkdirSync, rmSync, writeFileSync } from 'node:fs';
-import { join } from 'node:path';
-import { describe, test } from 'node:test';
+import assert from "node:assert/strict";
+import { mkdirSync, rmSync, writeFileSync } from "node:fs";
+import { join } from "node:path";
+import { describe, test } from "node:test";
 
-import { TemplateEngine } from '../index.js';
+import { TemplateEngine } from "../index.js";
 
-const TEST_DIR = join(process.cwd(), 'test-tmp-directives');
+const TEST_DIR = join(process.cwd(), "test-tmp-directives");
 
 function setupTestDir() {
   try {
@@ -31,8 +31,8 @@ function cleanupTestDir() {
   }
 }
 
-describe('TemplateEngine - Directives', () => {
-  test('should process for loops', () => {
+describe("TemplateEngine - Directives", () => {
+  test("should process for loops", () => {
     setupTestDir();
 
     const templateContent = `
@@ -42,22 +42,22 @@ describe('TemplateEngine - Directives', () => {
 </for>
 </ul>`.trim();
 
-    const templatePath = join(TEST_DIR, 'loop.html');
+    const templatePath = join(TEST_DIR, "loop.html");
     writeFileSync(templatePath, templateContent);
 
     const engine = new TemplateEngine({ rootDir: TEST_DIR });
-    const result = engine.render('loop.html', {
-      items: ['Item 1', 'Item 2', 'Item 3'],
+    const result = engine.render("loop.html", {
+      items: ["Item 1", "Item 2", "Item 3"],
     });
 
-    assert.ok(result.includes('Item 1'));
-    assert.ok(result.includes('Item 2'));
-    assert.ok(result.includes('Item 3'));
+    assert.ok(result.includes("Item 1"));
+    assert.ok(result.includes("Item 2"));
+    assert.ok(result.includes("Item 3"));
 
     cleanupTestDir();
   });
 
-  test('should process for loops with objects', () => {
+  test("should process for loops with objects", () => {
     setupTestDir();
 
     const templateContent = `
@@ -68,26 +68,26 @@ describe('TemplateEngine - Directives', () => {
 </for>
 </div>`.trim();
 
-    const templatePath = join(TEST_DIR, 'loop-objects.html');
+    const templatePath = join(TEST_DIR, "loop-objects.html");
     writeFileSync(templatePath, templateContent);
 
     const engine = new TemplateEngine({ rootDir: TEST_DIR });
-    const result = engine.render('loop-objects.html', {
+    const result = engine.render("loop-objects.html", {
       posts: [
-        { title: 'Post 1', content: 'Content 1' },
-        { title: 'Post 2', content: 'Content 2' },
+        { title: "Post 1", content: "Content 1" },
+        { title: "Post 2", content: "Content 2" },
       ],
     });
 
-    assert.ok(result.includes('Post 1'));
-    assert.ok(result.includes('Content 1'));
-    assert.ok(result.includes('Post 2'));
-    assert.ok(result.includes('Content 2'));
+    assert.ok(result.includes("Post 1"));
+    assert.ok(result.includes("Content 1"));
+    assert.ok(result.includes("Post 2"));
+    assert.ok(result.includes("Content 2"));
 
     cleanupTestDir();
   });
 
-  test('should handle empty loops', () => {
+  test("should handle empty loops", () => {
     setupTestDir();
 
     const templateContent = `
@@ -97,22 +97,22 @@ describe('TemplateEngine - Directives', () => {
 </for>
 </ul>`.trim();
 
-    const templatePath = join(TEST_DIR, 'empty-loop.html');
+    const templatePath = join(TEST_DIR, "empty-loop.html");
     writeFileSync(templatePath, templateContent);
 
     const engine = new TemplateEngine({ rootDir: TEST_DIR });
-    const result = engine.render('empty-loop.html', {
+    const result = engine.render("empty-loop.html", {
       items: [],
     });
 
     // Empty loop should not add content
-    assert.ok(result.includes('<ul>'));
-    assert.ok(result.includes('</ul>'));
+    assert.ok(result.includes("<ul>"));
+    assert.ok(result.includes("</ul>"));
 
     cleanupTestDir();
   });
 
-  test('should process if conditionals', () => {
+  test("should process if conditionals", () => {
     setupTestDir();
 
     const templateContent = `
@@ -122,23 +122,23 @@ describe('TemplateEngine - Directives', () => {
 </if>
 </div>`.trim();
 
-    const templatePath = join(TEST_DIR, 'if.html');
+    const templatePath = join(TEST_DIR, "if.html");
     writeFileSync(templatePath, templateContent);
 
     const engine = new TemplateEngine({ rootDir: TEST_DIR });
 
     // Test truthy condition
-    let result = engine.render('if.html', { showContent: true });
-    assert.ok(result.includes('Content is visible'));
+    let result = engine.render("if.html", { showContent: true });
+    assert.ok(result.includes("Content is visible"));
 
     // Test falsy condition
-    result = engine.render('if.html', { showContent: false });
-    assert.ok(!result.includes('Content is visible'));
+    result = engine.render("if.html", { showContent: false });
+    assert.ok(!result.includes("Content is visible"));
 
     cleanupTestDir();
   });
 
-  test('should process switch statements', () => {
+  test("should process switch statements", () => {
     setupTestDir();
 
     const templateContent = `
@@ -156,27 +156,27 @@ describe('TemplateEngine - Directives', () => {
 </switch>
 </div>`.trim();
 
-    const templatePath = join(TEST_DIR, 'switch.html');
+    const templatePath = join(TEST_DIR, "switch.html");
     writeFileSync(templatePath, templateContent);
 
     const engine = new TemplateEngine({ rootDir: TEST_DIR });
 
     // Test published case
-    let result = engine.render('switch.html', { status: 'published' });
-    assert.ok(result.includes('Published content'));
+    let result = engine.render("switch.html", { status: "published" });
+    assert.ok(result.includes("Published content"));
 
     // Test draft case
-    result = engine.render('switch.html', { status: 'draft' });
-    assert.ok(result.includes('Draft content'));
+    result = engine.render("switch.html", { status: "draft" });
+    assert.ok(result.includes("Draft content"));
 
     // Test default case
-    result = engine.render('switch.html', { status: 'unknown' });
-    assert.ok(result.includes('Unknown status'));
+    result = engine.render("switch.html", { status: "unknown" });
+    assert.ok(result.includes("Unknown status"));
 
     cleanupTestDir();
   });
 
-  test('should process nested conditionals', () => {
+  test("should process nested conditionals", () => {
     setupTestDir();
 
     const templateContent = `
@@ -188,23 +188,23 @@ describe('TemplateEngine - Directives', () => {
 </if>
 </div>`.trim();
 
-    const templatePath = join(TEST_DIR, 'nested-if.html');
+    const templatePath = join(TEST_DIR, "nested-if.html");
     writeFileSync(templatePath, templateContent);
 
     const engine = new TemplateEngine({ rootDir: TEST_DIR });
 
     // Test admin user
-    let result = engine.render('nested-if.html', { user: { admin: true } });
-    assert.ok(result.includes('Admin user'));
+    let result = engine.render("nested-if.html", { user: { admin: true } });
+    assert.ok(result.includes("Admin user"));
 
     // Test no user
-    result = engine.render('nested-if.html', {});
-    assert.ok(!result.includes('Admin user'));
+    result = engine.render("nested-if.html", {});
+    assert.ok(!result.includes("Admin user"));
 
     cleanupTestDir();
   });
 
-  test('should process markdown blocks', () => {
+  test("should process markdown blocks", () => {
     setupTestDir();
 
     const templateContent = `
@@ -215,14 +215,14 @@ This is **bold** text.
 </md>
 </div>`.trim();
 
-    const templatePath = join(TEST_DIR, 'markdown.html');
+    const templatePath = join(TEST_DIR, "markdown.html");
     writeFileSync(templatePath, templateContent);
 
     const engine = new TemplateEngine({ rootDir: TEST_DIR });
-    const result = engine.render('markdown.html', {});
+    const result = engine.render("markdown.html", {});
 
-    assert.ok(result.includes('<h1>'));
-    assert.ok(result.includes('<strong>'));
+    assert.ok(result.includes("<h1>"));
+    assert.ok(result.includes("<strong>"));
 
     cleanupTestDir();
   });

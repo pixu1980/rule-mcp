@@ -86,10 +86,10 @@ const { data: post } = await useFetch(`/api/posts/${route.params.slug}`);
 export default defineNuxtConfig({
   ssr: true, // SSR enabled by default
   routeRules: {
-    "/": { prerender: true },                           // SSG
-    "/blog/**": { swr: 3600 },                          // ISR-equivalent
-    "/dashboard/**": { ssr: false },                    // SPA-only
-    "/api/**": { cors: true },                          // CORS headers
+    "/": { prerender: true }, // SSG
+    "/blog/**": { swr: 3600 }, // ISR-equivalent
+    "/dashboard/**": { ssr: false }, // SPA-only
+    "/api/**": { cors: true }, // CORS headers
   },
 });
 ```
@@ -145,13 +145,13 @@ const user = await $fetch("/api/user", {
 
 ## Deployment
 
-| Target | Command | Output |
-|--------|---------|--------|
-| **Node server** | `nuxt build` | `.output/server/` |
-| **Static** | `nuxt generate` | `dist/` (full SSG) |
-| **Vercel** | `nuxt build` | Auto-detected |
-| **Cloudflare** | `nuxt build --preset=cloudflare` | Workers-compatible |
-| **Netlify** | `nuxt build --preset=netlify` | Edge + serverless |
+| Target          | Command                          | Output             |
+| --------------- | -------------------------------- | ------------------ |
+| **Node server** | `nuxt build`                     | `.output/server/`  |
+| **Static**      | `nuxt generate`                  | `dist/` (full SSG) |
+| **Vercel**      | `nuxt build`                     | Auto-detected      |
+| **Cloudflare**  | `nuxt build --preset=cloudflare` | Workers-compatible |
+| **Netlify**     | `nuxt build --preset=netlify`    | Edge + serverless  |
 
 ## Quick Reference
 
@@ -167,6 +167,7 @@ const user = await $fetch("/api/user", {
 │  Deploy:    Node, Static, Vercel, Cloudflare, Netlify     │
 └────────────────────────────────────────────────────────────┘
 ```
+
 ---
 
 ## See also

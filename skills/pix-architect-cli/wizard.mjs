@@ -36,9 +36,8 @@ async function runInterview() {
   const opts = parseArgs();
   const spec = loadSpec();
   const allSteps = spec.steps;
-  let answers = opts.answersFile && existsSync(opts.answersFile)
-    ? JSON.parse(readFileSync(opts.answersFile, "utf-8"))
-    : {};
+  let answers =
+    opts.answersFile && existsSync(opts.answersFile) ? JSON.parse(readFileSync(opts.answersFile, "utf-8")) : {};
 
   // ── Enter alternate screen buffer ──
   enterAltScreen();
@@ -48,14 +47,14 @@ async function runInterview() {
   });
 
   // ── Step 0: Analysis Depth — always shown, no step counter ──
-  const depthStep = allSteps.find(s => s.key === "step-0-depth");
+  const depthStep = allSteps.find((s) => s.key === "step-0-depth");
 
   if (depthStep) {
     answers = applyPrefill(answers, spec.prefillMap);
     const result = await renderStep(depthStep, answers, spec.optionGroups, {
       isFirst: true,
       isLast: false,
-      stepNum: 0,       // 0 means "unknown" — renderer hides counter
+      stepNum: 0, // 0 means "unknown" — renderer hides counter
       totalSteps: 0,
     });
 
@@ -70,7 +69,7 @@ async function runInterview() {
 
   // ── Now filter remaining steps by chosen depth ──
   const depth = answers.ANALYSIS_DEPTH || opts.tier || "starter";
-  const steps = visibleSteps(allSteps, depth).filter(s => s.key !== "step-0-depth");
+  const steps = visibleSteps(allSteps, depth).filter((s) => s.key !== "step-0-depth");
 
   // ── Steps 1..N ──
   let stepIdx = 0;
@@ -111,7 +110,7 @@ async function runInterview() {
   console.log("");
 }
 
-runInterview().catch(err => {
+runInterview().catch((err) => {
   exitAltScreen();
   console.error("Fatal:", err.message);
   process.exit(1);

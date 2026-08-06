@@ -127,7 +127,15 @@
     "quality": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["performanceTarget", "robustness", "explainability", "privacy", "manualFlows", "mvpSteps", "openQuestions"],
+      "required": [
+        "performanceTarget",
+        "robustness",
+        "explainability",
+        "privacy",
+        "manualFlows",
+        "mvpSteps",
+        "openQuestions"
+      ],
       "properties": {
         "performanceTarget": {
           "type": "string",

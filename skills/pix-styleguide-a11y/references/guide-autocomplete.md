@@ -25,9 +25,9 @@
 
 ## Keyboard interactions
 
-| Key | Action |
-| :--- | :--- |
+| Key        | Action                          |
+| :--------- | :------------------------------ |
 | Down Arrow | Move to next option / open list |
-| Up Arrow | Move to previous option |
-| Enter | Select highlighted option |
-| Escape | Close list / return to input |
+| Up Arrow   | Move to previous option         |
+| Enter      | Select highlighted option       |
+| Escape     | Close list / return to input    |

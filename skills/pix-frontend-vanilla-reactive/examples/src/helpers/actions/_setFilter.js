@@ -2,6 +2,8 @@
 //  Action: setFilter
 // ═══════════════════════════════════════════════════════════════════════════════
 
-import { appStore } from '../shared/index.js';
+import { appStore } from "../shared/index.js";
 
-export function setFilter(status) { appStore.state.filters.status = status; }
+export function setFilter(status) {
+  appStore.state.filters.status = status;
+}

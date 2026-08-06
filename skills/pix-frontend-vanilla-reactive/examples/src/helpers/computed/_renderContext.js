@@ -2,10 +2,10 @@
 //  Computed: renderContext
 // ═══════════════════════════════════════════════════════════════════════════════
 
-import { ComputedSignal } from '../../core/index.js';
-import { appStore, tickState } from '../shared/index.js';
-import { visibleTodos } from './_visibleTodos.js';
-import { stats } from './_stats.js';
+import { ComputedSignal } from "../../core/index.js";
+import { appStore, tickState } from "../shared/index.js";
+import { visibleTodos } from "./_visibleTodos.js";
+import { stats } from "./_stats.js";
 
 export const renderContext = new ComputedSignal(() => {
   tickState.get();
@@ -19,6 +19,6 @@ export const renderContext = new ComputedSignal(() => {
     completed: stats.get().completed,
     pulseCount: Math.round(tickState.peek()),
     filterStatus: appStore.state.filters.status,
-    tags: ['html', 'css', 'js', 'demo'],
+    tags: ["html", "css", "js", "demo"],
   };
 });

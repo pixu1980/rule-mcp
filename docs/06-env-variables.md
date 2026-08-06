@@ -1,13 +1,13 @@
 # Environment Variables Reference
 
-| Variable | Description | Default | Values |
-|----------|-------------|---------|--------|
-| `PIX_GALAXY_MCP_MINIMAL_TOOLS` | Expose only the 10 dispatcher/action tools (fits client tool caps, cheaper context). Safe for untrusted code. | unset | `1` = enable |
-| `PIX_AUTO_ADR` | Automatically log architecture decisions via `pix_tool_process_adr` on each tool call. | unset | `1` = enable auto-ADR |
-| `PIX_DISABLE_AUTO_ADR` | Disable automatic ADR logging (used internally during testing). | unset | `1` = disable |
-| `PIX_GALAXY_MCP_DAEMON` | Run as daemon process (used by LaunchAgent/systemd units). | unset | `1` = daemon mode |
-| `PIX_GALAXY_MCP_SSE_TOKEN` | Bearer token for SSE transport authentication. Auto-generated if unset. | auto-generated | any string |
-| `PIX_GALAXY_MCP_AUTO_UPDATE_INTERVAL_SECONDS` | Throttle between self-update checks (git fetch at most once per interval, on tool invocations). | `60` | seconds; `0` = check on every tool call |
+| Variable                                      | Description                                                                                                   | Default        | Values                                  |
+| --------------------------------------------- | ------------------------------------------------------------------------------------------------------------- | -------------- | --------------------------------------- |
+| `PIX_GALAXY_MCP_MINIMAL_TOOLS`                | Expose only the 10 dispatcher/action tools (fits client tool caps, cheaper context). Safe for untrusted code. | unset          | `1` = enable                            |
+| `PIX_AUTO_ADR`                                | Automatically log architecture decisions via `pix_tool_process_adr` on each tool call.                        | unset          | `1` = enable auto-ADR                   |
+| `PIX_DISABLE_AUTO_ADR`                        | Disable automatic ADR logging (used internally during testing).                                               | unset          | `1` = disable                           |
+| `PIX_GALAXY_MCP_DAEMON`                       | Run as daemon process (used by LaunchAgent/systemd units).                                                    | unset          | `1` = daemon mode                       |
+| `PIX_GALAXY_MCP_SSE_TOKEN`                    | Bearer token for SSE transport authentication. Auto-generated if unset.                                       | auto-generated | any string                              |
+| `PIX_GALAXY_MCP_AUTO_UPDATE_INTERVAL_SECONDS` | Throttle between self-update checks (git fetch at most once per interval, on tool invocations).               | `60`           | seconds; `0` = check on every tool call |
 
 ## Configuration
 

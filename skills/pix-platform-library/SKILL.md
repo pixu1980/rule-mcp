@@ -219,16 +219,19 @@ Keep a human-readable `CHANGELOG.md`:
 ## [1.1.0] — 2026-06-15
 
 ### Added
+
 - `createStore(options)` now accepts `onError` callback
 - New `defineComponent(schema)` for typed component definitions
 
 ### Fixed
+
 - Memory leak in `html`` template engine when used with SVG
 - Type export for `StoreOptions` interface
 
 ## [1.0.0] — 2026-05-01
 
 ### Added
+
 - Initial release: `createStore`, `html`, `render`, `defineComponent`
 ```
 
@@ -246,6 +249,7 @@ Keep a human-readable `CHANGELOG.md`:
 │  Deps:       zero runtime preferred, audit before adding   │
 └────────────────────────────────────────────────────────────┘
 ```
+
 ---
 
 ## See also

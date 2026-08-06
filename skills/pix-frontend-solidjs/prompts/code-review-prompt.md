@@ -15,7 +15,7 @@ Focus on:
 
 For each issue, return:
 
-```md
+````md
 ### Issue title
 
 - Pattern: [one of the SolidJS patterns]
@@ -26,12 +26,14 @@ For each issue, return:
 ```jsx
 // improved snippet
 ```
+````
 
 Rule of thumb:
-```
+
+````
 
 Review this code:
 
 ```jsx
 PASTE_CODE_HERE
-```
+````

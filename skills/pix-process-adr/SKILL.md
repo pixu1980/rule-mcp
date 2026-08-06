@@ -85,6 +85,7 @@ proposed → accepted → deprecated
                 ↓
           superseded (by new ADR)
 ```
+
 ---
 
 ## See also

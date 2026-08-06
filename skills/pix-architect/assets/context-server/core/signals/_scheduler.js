@@ -11,9 +11,12 @@ export function schedule(job) {
   queueMicrotask(() => {
     try {
       while (scheduled.size > 0) {
-        const batch = [...scheduled]; scheduled.clear();
+        const batch = [...scheduled];
+        scheduled.clear();
         for (const j of batch) j.run();
       }
-    } finally { flushing = false; }
+    } finally {
+      flushing = false;
+    }
   });
 }

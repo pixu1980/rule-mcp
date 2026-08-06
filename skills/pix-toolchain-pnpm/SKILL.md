@@ -41,18 +41,18 @@ packages:
 
 ## Key Commands
 
-| Command | Description |
-|---------|-------------|
-| `pnpm add <pkg>` | Install dependency |
-| `pnpm add -D <pkg>` | Install dev dependency |
-| `pnpm add -g <pkg>` | Install globally |
-| `pnpm remove <pkg>` | Uninstall |
-| `pnpm up` | Update all dependencies |
-| `pnpm up --latest` | Update to latest versions |
-| `pnpm audit` | Security audit |
-| `pnpm outdated` | List outdated packages |
-| `pnpm dlx <pkg>` | Run a package without installing (like npx) |
-| `pnpm exec <cmd>` | Execute command in project context |
+| Command             | Description                                 |
+| ------------------- | ------------------------------------------- |
+| `pnpm add <pkg>`    | Install dependency                          |
+| `pnpm add -D <pkg>` | Install dev dependency                      |
+| `pnpm add -g <pkg>` | Install globally                            |
+| `pnpm remove <pkg>` | Uninstall                                   |
+| `pnpm up`           | Update all dependencies                     |
+| `pnpm up --latest`  | Update to latest versions                   |
+| `pnpm audit`        | Security audit                              |
+| `pnpm outdated`     | List outdated packages                      |
+| `pnpm dlx <pkg>`    | Run a package without installing (like npx) |
+| `pnpm exec <cmd>`   | Execute command in project context          |
 
 ## Workspace Commands
 

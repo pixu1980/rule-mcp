@@ -2,10 +2,12 @@ import { test, expect } from "@playwright/test";
 
 test("capture console errors on add click", async ({ page }) => {
   const errors = [];
-  page.on("console", message => {
-    if (message.type() === "error") {errors.push(message.text());}
+  page.on("console", (message) => {
+    if (message.type() === "error") {
+      errors.push(message.text());
+    }
   });
-  page.on("pageerror", error => errors.push(error.message));
+  page.on("pageerror", (error) => errors.push(error.message));
 
   await page.goto("http://localhost:19000");
   await page.waitForSelector("[data-part='stepper-root']");
@@ -24,7 +26,7 @@ test("capture console errors on add click", async ({ page }) => {
   // Check the button's data-prefix
   const prefix = await addButton.getAttribute("data-prefix");
   console.log("Add button prefix:", prefix);
-  console.log("Add button HTML:", await addButton.evaluate(element => element.outerHTML));
+  console.log("Add button HTML:", await addButton.evaluate((element) => element.outerHTML));
 
   // Click add
   await addButton.click();

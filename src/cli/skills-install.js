@@ -48,11 +48,17 @@ function readSkillMeta(skillDir) {
 function getAvailableSkills() {
   const { embeddedSkills } = getSkillsDirectories();
   const skills = [];
-  if (!existsSync(embeddedSkills)) {return skills;}
+  if (!existsSync(embeddedSkills)) {
+    return skills;
+  }
   for (const entry of readdirSync(embeddedSkills, { withFileTypes: true })) {
-    if (!entry.isDirectory()) {continue;}
+    if (!entry.isDirectory()) {
+      continue;
+    }
     const skillDir = join(embeddedSkills, entry.name);
-    if (!existsSync(join(skillDir, "SKILL.md"))) {continue;}
+    if (!existsSync(join(skillDir, "SKILL.md"))) {
+      continue;
+    }
     const meta = readSkillMeta(skillDir);
     skills.push({
       name: entry.name,
@@ -77,7 +83,9 @@ function isInstalled(name, targetDir) {
  */
 function copySkill(source, targetDir, name) {
   const destination = join(targetDir, name);
-  if (existsSync(destination)) {rmSync(destination, { recursive: true });}
+  if (existsSync(destination)) {
+    rmSync(destination, { recursive: true });
+  }
   mkdirSync(destination, { recursive: true });
 
   const entries = readdirSync(source, { withFileTypes: true, recursive: true });
@@ -161,63 +169,73 @@ async function interactiveSelect(items, { title, selected = [] }) {
 
     const onData = (key) => {
       switch (key) {
-      case "\u{1B}[A": 
-      case "k": {
-        // Up
-        cursor = Math.max(0, cursor - 1);
-        render();
-      
-      break;
-      }
-      case "\u{1B}[B": 
-      case "j": {
-        // Down
-        cursor = Math.min(items.length - 1, cursor + 1);
-        render();
-      
-      break;
-      }
-      case " ": {
-        // Toggle
-        const index = checked.indexOf(cursor);
-        if (index === -1) {checked.push(cursor);}
-        else {checked.splice(index, 1);}
-        render();
-      
-      break;
-      }
-      case "\r": 
-      case "\n": {
-        // Confirm
-        stdin.setRawMode(wasRaw ?? false);
-        stdin.pause();
-        stdin.removeListener("data", onData);
-        output.write("\u{1B}[2K\u{1B}[?25h"); // show cursor
-        output.write(`\u{1B}[${pageSize + 4}A`); // clear lines
-        resolve([...checked]);
-      
-      break;
-      }
-      case "q": {
-        // Quit
-        stdin.setRawMode(wasRaw ?? false);
-        stdin.pause();
-        stdin.removeListener("data", onData);
-        output.write("\u{1B}[2K\u{1B}[?25h");
-        output.write(`\u{1B}[${pageSize + 4}A`);
-        resolve([]);
-      
-      break;
-      }
-      case "a": {
-        // Toggle all
-        if (checked.length === items.length) {checked.length = 0;}
-        else {for (let index = 0; index < items.length; index++) {if (!checked.includes(index)) {checked.push(index);}}}
-        render();
-      
-      break;
-      }
-      // No default
+        case "\u{1B}[A":
+        case "k": {
+          // Up
+          cursor = Math.max(0, cursor - 1);
+          render();
+
+          break;
+        }
+        case "\u{1B}[B":
+        case "j": {
+          // Down
+          cursor = Math.min(items.length - 1, cursor + 1);
+          render();
+
+          break;
+        }
+        case " ": {
+          // Toggle
+          const index = checked.indexOf(cursor);
+          if (index === -1) {
+            checked.push(cursor);
+          } else {
+            checked.splice(index, 1);
+          }
+          render();
+
+          break;
+        }
+        case "\r":
+        case "\n": {
+          // Confirm
+          stdin.setRawMode(wasRaw ?? false);
+          stdin.pause();
+          stdin.removeListener("data", onData);
+          output.write("\u{1B}[2K\u{1B}[?25h"); // show cursor
+          output.write(`\u{1B}[${pageSize + 4}A`); // clear lines
+          resolve([...checked]);
+
+          break;
+        }
+        case "q": {
+          // Quit
+          stdin.setRawMode(wasRaw ?? false);
+          stdin.pause();
+          stdin.removeListener("data", onData);
+          output.write("\u{1B}[2K\u{1B}[?25h");
+          output.write(`\u{1B}[${pageSize + 4}A`);
+          resolve([]);
+
+          break;
+        }
+        case "a": {
+          // Toggle all
+          if (checked.length === items.length) {
+            checked.length = 0;
+          } else {
+            for (let index = 0; index < items.length; index++) {
+              if (!checked.includes(index)) {
+                checked.push(index);
+              }
+            }
+          }
+          render();
+
+          break;
+        }
+        // No default
       }
     };
 
@@ -264,7 +282,9 @@ export async function skillsInstallCommand(options = {}) {
   // Pre-check installed
   const preSelected = [];
   for (const [index, s] of skills.entries()) {
-    if (isInstalled(s.name, targetDir)) {preSelected.push(index);}
+    if (isInstalled(s.name, targetDir)) {
+      preSelected.push(index);
+    }
   }
 
   // Interactive selection
@@ -305,7 +325,7 @@ export async function skillsInstallCommand(options = {}) {
  */
 export function skillsListCommand(options = {}) {
   const skills = getAvailableSkills();
-// eslint-disable-next-line no-unused-vars
+  // eslint-disable-next-line no-unused-vars
   const { homeSkills, embeddedSkills } = getSkillsDirectories();
   const installed = existsSync(homeSkills) ? readdirSync(homeSkills) : [];
   const rows = skills.map((s) => ({

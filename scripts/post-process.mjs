@@ -110,7 +110,6 @@ async function main() {
 
     console.log("");
     process.exit(result.errors.length > 0 ? 1 : 0);
-
   } else {
     // Lint mode
     const report = scanFileTree(ROOT_DIR, { srcDir: SRC_DIR });
@@ -140,11 +139,15 @@ async function main() {
       console.log(`  ${icon} [${issue.type}]`);
       console.log(`     ${issue.path}`);
       console.log(`     ${issue.message}`);
-      if (issue.fixAction) {console.log(`     → ${issue.fixAction}`);}
+      if (issue.fixAction) {
+        console.log(`     → ${issue.fixAction}`);
+      }
       console.log("");
     }
 
-    console.log(`  Summary: ${report.stats.missingBarrel} missing barrels, ${report.stats.wrongPrefix} wrong prefixes, ${report.stats.bareFiles} bare files`);
+    console.log(
+      `  Summary: ${report.stats.missingBarrel} missing barrels, ${report.stats.wrongPrefix} wrong prefixes, ${report.stats.bareFiles} bare files`,
+    );
     console.log(`  Fixable: ${report.stats.fixable}/${report.issues.length}`);
     console.log(`  Run with --fix --no-dry-run to auto-fix.`);
     console.log("");

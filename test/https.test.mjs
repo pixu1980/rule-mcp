@@ -15,8 +15,13 @@ import https from "node:https";
 let pass = 0;
 let fail = 0;
 const check = (label, ok) => {
-  if (ok) { pass++; console.log(`  ✅ ${label}`); }
-  else { fail++; console.log(`  ❌ ${label}`); }
+  if (ok) {
+    pass++;
+    console.log(`  ✅ ${label}`);
+  } else {
+    fail++;
+    console.log(`  ❌ ${label}`);
+  }
 };
 
 console.log("=== HTTPS Support Tests ===\n");
@@ -55,17 +60,20 @@ try {
 
     // ── T3: Health check over HTTPS (accept self-signed cert) ──
     const httpsBody = await new Promise((resolve, reject) => {
-      const request = https.request({
-        hostname: "127.0.0.1",
-        port: httpsServer.port,
-        path: "/health",
-        method: "GET",
-        rejectUnauthorized: false,
-      }, (res) => {
-        let data = "";
-        res.on("data", (c) => data += c);
-        res.on("end", () => resolve({ status: res.statusCode, headers: res.headers, body: data }));
-      });
+      const request = https.request(
+        {
+          hostname: "127.0.0.1",
+          port: httpsServer.port,
+          path: "/health",
+          method: "GET",
+          rejectUnauthorized: false,
+        },
+        (res) => {
+          let data = "";
+          res.on("data", (c) => (data += c));
+          res.on("end", () => resolve({ status: res.statusCode, headers: res.headers, body: data }));
+        },
+      );
       request.on("error", reject);
       request.end();
     });
@@ -74,7 +82,11 @@ try {
     check("T3.1 HTTPS health body ok:true", parsed.ok === true);
 
     // ── T5: CORS on HTTPS (denied for unknown origins since Phase 1.2) ──
-    check("T5 CORS deny-by-default on HTTPS", httpsBody.headers["access-control-allow-origin"] === undefined || httpsBody.headers["access-control-allow-origin"] !== "*");
+    check(
+      "T5 CORS deny-by-default on HTTPS",
+      httpsBody.headers["access-control-allow-origin"] === undefined ||
+        httpsBody.headers["access-control-allow-origin"] !== "*",
+    );
 
     // ── T4: Graceful shutdown ──
     await stopSseServer();
@@ -82,13 +94,16 @@ try {
 
     try {
       await new Promise((resolve, reject) => {
-        const request = https.request({
-          hostname: "127.0.0.1",
-          port: httpsServer.port,
-          path: "/health",
-          method: "GET",
-          rejectUnauthorized: false,
-        }, (res) => resolve(res));
+        const request = https.request(
+          {
+            hostname: "127.0.0.1",
+            port: httpsServer.port,
+            path: "/health",
+            method: "GET",
+            rejectUnauthorized: false,
+          },
+          (res) => resolve(res),
+        );
         request.on("error", reject);
         request.end();
       });
@@ -101,8 +116,14 @@ try {
   }
 } finally {
   // Clean up temp files
-  try { rmSync(tmpDir, { recursive: true, force: true }); } catch { /* ignore: tmp dir may be absent */ }
+  try {
+    rmSync(tmpDir, { recursive: true, force: true });
+  } catch {
+    /* ignore: tmp dir may be absent */
+  }
 }
 
 console.log(`\nResults: ${pass} passed, ${fail} failed`);
-if (fail > 0) {process.exit(1);}
+if (fail > 0) {
+  process.exit(1);
+}

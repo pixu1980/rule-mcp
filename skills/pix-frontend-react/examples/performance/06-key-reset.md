@@ -6,7 +6,7 @@ The form keeps local state from the previous user.
 
 ```tsx
 function App() {
-  const [userId, setUserId] = useState('1');
+  const [userId, setUserId] = useState("1");
 
   return (
     <>
@@ -21,7 +21,7 @@ function App() {
 
 ```tsx
 function App() {
-  const [userId, setUserId] = useState('1');
+  const [userId, setUserId] = useState("1");
 
   return (
     <>

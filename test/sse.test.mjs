@@ -16,8 +16,13 @@ import { loadAllSkills } from "../src/core/skills.js";
 let pass = 0;
 let fail = 0;
 const check = (label, ok) => {
-  if (ok) { pass++; console.log(`  ✅ ${label}`); }
-  else { fail++; console.log(`  ❌ ${label}`); }
+  if (ok) {
+    pass++;
+    console.log(`  ✅ ${label}`);
+  } else {
+    fail++;
+    console.log(`  ❌ ${label}`);
+  }
 };
 
 console.log("=== SSE Transport Tests ===\n");
@@ -40,7 +45,11 @@ const healthBody = await healthRes.json();
 check("T2.1 health body ok:true", healthBody.ok === true);
 
 // CORS deny-by-default on health (Phase 1.2)
-check("T5 CORS deny-by-default", healthRes.headers.get("access-control-allow-origin") === null || healthRes.headers.get("access-control-allow-origin") !== "*");
+check(
+  "T5 CORS deny-by-default",
+  healthRes.headers.get("access-control-allow-origin") === null ||
+    healthRes.headers.get("access-control-allow-origin") !== "*",
+);
 
 // ── T3 + T4: Open SSE connection with auth, get sessionId, POST MCP message ──
 let sessionId = "";
@@ -82,7 +91,11 @@ check("T3 SSE status 200", sseResult.status === 200);
 check("T3.1 SSE content-type text/event-stream", sseResult.headers["content-type"]?.includes("text/event-stream"));
 check("T3.2 SSE cache-control no-cache", String(sseResult.headers["cache-control"] ?? "").includes("no-cache"));
 check("T3.3 SSE connection keep-alive", sseResult.headers["connection"] === "keep-alive");
-check("T3.4 CORS deny-by-default on SSE", sseResult.headers["access-control-allow-origin"] === undefined || sseResult.headers["access-control-allow-origin"] !== "*");
+check(
+  "T3.4 CORS deny-by-default on SSE",
+  sseResult.headers["access-control-allow-origin"] === undefined ||
+    sseResult.headers["access-control-allow-origin"] !== "*",
+);
 check("T4 sessionId received", sessionId.length > 0);
 check("T4.1 sessionId format UUID", /^[a-f0-9-]{36}$/i.test(sessionId));
 
@@ -94,21 +107,24 @@ const mcpRequest = JSON.stringify({
 });
 
 const postResult = await new Promise((resolve, reject) => {
-  const request = httpRequest({
-    hostname: "127.0.0.1",
-    port: server.port,
-    path: `/message?sessionId=${sessionId}`,
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "Content-Length": Buffer.byteLength(mcpRequest),
-      ...authHeader,
+  const request = httpRequest(
+    {
+      hostname: "127.0.0.1",
+      port: server.port,
+      path: `/message?sessionId=${sessionId}`,
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Content-Length": Buffer.byteLength(mcpRequest),
+        ...authHeader,
+      },
     },
-  }, (res) => {
-    let body = "";
-    res.on("data", (c) => body += c);
-    res.on("end", () => resolve({ status: res.statusCode, body }));
-  });
+    (res) => {
+      let body = "";
+      res.on("data", (c) => (body += c));
+      res.on("end", () => resolve({ status: res.statusCode, body }));
+    },
+  );
   request.on("error", reject);
   request.write(mcpRequest);
   request.end();
@@ -130,4 +146,6 @@ try {
 }
 
 console.log(`\nResults: ${pass} passed, ${fail} failed`);
-if (fail > 0) {process.exit(1);}
+if (fail > 0) {
+  process.exit(1);
+}

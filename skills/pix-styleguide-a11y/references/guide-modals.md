@@ -63,8 +63,8 @@
 
 ## Keyboard interactions
 
-| Key | Action |
-| :--- | :--- |
-| Escape | Close modal |
-| Tab | Cycle through modal elements |
-| Shift+Tab | Cycle backward |
+| Key       | Action                       |
+| :-------- | :--------------------------- |
+| Escape    | Close modal                  |
+| Tab       | Cycle through modal elements |
+| Shift+Tab | Cycle backward               |

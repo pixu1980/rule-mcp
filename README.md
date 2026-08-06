@@ -113,27 +113,27 @@ Claude Code, Cursor, Cline, Roo Code, Copilot, Gemini CLI, Codex CLI, Windsurf, 
 
 **Key files:**
 
-| File | Purpose |
-|---|---|
-| `src/server.js` | MCP server bootstrap, handler registration |
-| `src/tools/router.js` | Generic tool registry (`registerTool`, `listTools`, `callTool`) |
-| `src/tools/ai.js` | Router tool `pix_tool` (BM25 keyword scoring + framework bias) |
-| `src/tools/gateway.js` | Gateway orchestrator `pix_gateway` + receipt system |
-| `src/tools/apply.js` | Write tool `pix_apply` with receipt validation |
-| `src/tools/skill.js` | Skill-tool generator + `pix_search`, `pix_check`, `pix_scaffold` |
-| `src/core/guardrails.js` | Guardrail engine (check runner + report) |
+| File                         | Purpose                                                                  |
+| ---------------------------- | ------------------------------------------------------------------------ |
+| `src/server.js`              | MCP server bootstrap, handler registration                               |
+| `src/tools/router.js`        | Generic tool registry (`registerTool`, `listTools`, `callTool`)          |
+| `src/tools/ai.js`            | Router tool `pix_tool` (BM25 keyword scoring + framework bias)           |
+| `src/tools/gateway.js`       | Gateway orchestrator `pix_gateway` + receipt system                      |
+| `src/tools/apply.js`         | Write tool `pix_apply` with receipt validation                           |
+| `src/tools/skill.js`         | Skill-tool generator + `pix_search`, `pix_check`, `pix_scaffold`         |
+| `src/core/guardrails.js`     | Guardrail engine (check runner + report)                                 |
 | `src/core/guardrail-defs.js` | All guardrail definitions (shared, framework, backend, database, devops) |
-| `src/core/enforcement.js` | Pre/post processing (advisory — policy tag: `advisory`) |
-| `src/core/bm25.js` | BM25 full-text search index |
-| `src/core/detector.js` | Project framework detection |
+| `src/core/enforcement.js`    | Pre/post processing (advisory — policy tag: `advisory`)                  |
+| `src/core/bm25.js`           | BM25 full-text search index                                              |
+| `src/core/detector.js`       | Project framework detection                                              |
 
 **Modes:**
 
-| Mode | Tools exposed | Use case |
-|---|---|---|
-| Normal (default) | 95 | Full access to all skills, tools, and features |
-| Minimal (`PIX_GALAXY_MCP_MINIMAL_TOOLS=1`) | 10 | Dispatcher + action tools only — fits client tool caps (Cursor/Copilot), cheaper context, safe for untrusted code |
-| Allowed-tools filter | 8 (recommended) | Via `mcp.json` `allowedTools` — reduce token consumption |
+| Mode                                       | Tools exposed   | Use case                                                                                                          |
+| ------------------------------------------ | --------------- | ----------------------------------------------------------------------------------------------------------------- |
+| Normal (default)                           | 95              | Full access to all skills, tools, and features                                                                    |
+| Minimal (`PIX_GALAXY_MCP_MINIMAL_TOOLS=1`) | 10              | Dispatcher + action tools only — fits client tool caps (Cursor/Copilot), cheaper context, safe for untrusted code |
+| Allowed-tools filter                       | 8 (recommended) | Via `mcp.json` `allowedTools` — reduce token consumption                                                          |
 
 ---
 
@@ -143,97 +143,97 @@ Claude Code, Cursor, Cline, Roo Code, Copilot, Gemini CLI, Codex CLI, Windsurf, 
 
 #### Deterministic tools (9)
 
-| Tool | Description | Read-only |
-|---|---|---|
-| `pix` | Route a prompt to the correct pix skill via BM25 keyword scoring + framework bias | ✅ |
-| `pix_gateway` | **Single-entry orchestrator:** routes → loads evidence → checks guardrails → returns receipt | ✅ |
-| `pix_apply` | Write files to disk, requires valid receipt from `pix_gateway` | ❌ |
-| `pix_search` | BM25 full-text search across all 89 skills | ✅ |
-| `pix_check` | Run guardrail checks on code against any pix skill | ✅ |
-| `pix_scaffold` | Generate project config files (`.prettierrc`, `.editorconfig`, `.gitignore`, etc.) | ✅ |
-| `pix_detect` | Auto-detect project framework and suggest relevant skills/tools | ✅ |
-| `pix_component` | Generate component templates (button, card, modal, form, list, nav) for 7 frameworks | ✅ |
-| `pix_process_handoff` | Generate compressed LLM handoff for cross-session recovery | ✅ |
+| Tool                  | Description                                                                                  | Read-only |
+| --------------------- | -------------------------------------------------------------------------------------------- | --------- |
+| `pix`                 | Route a prompt to the correct pix skill via BM25 keyword scoring + framework bias            | ✅        |
+| `pix_gateway`         | **Single-entry orchestrator:** routes → loads evidence → checks guardrails → returns receipt | ✅        |
+| `pix_apply`           | Write files to disk, requires valid receipt from `pix_gateway`                               | ❌        |
+| `pix_search`          | BM25 full-text search across all 89 skills                                                   | ✅        |
+| `pix_check`           | Run guardrail checks on code against any pix skill                                           | ✅        |
+| `pix_scaffold`        | Generate project config files (`.prettierrc`, `.editorconfig`, `.gitignore`, etc.)           | ✅        |
+| `pix_detect`          | Auto-detect project framework and suggest relevant skills/tools                              | ✅        |
+| `pix_component`       | Generate component templates (button, card, modal, form, list, nav) for 7 frameworks         | ✅        |
+| `pix_process_handoff` | Generate compressed LLM handoff for cross-session recovery                                   | ✅        |
 
 #### Skill tools (67)
 
 Each skill directory under `skills/` becomes a tool `pix_<skill-name>`. All support 6 modes: `full`, `summary`, `search`, `guardrails`, `check`, `tldr`.
 
-| Tool | Skill name | Lines | Domain |
-|---|---|---|---|
-| `pix_architect` | pix-architect | 253 | Architecture |
-| `pix_architect_cli` | pix-architect-cli | 82 | Architecture |
-| `pix_architect_web` | pix-architect-web | 71 | Architecture |
-| `pix_backend` | pix-backend | 61 | Backend |
-| `pix_backend_api_design` | pix-backend-api-design | 158 | Backend |
-| `pix_backend_express` | pix-backend-express | 147 | Backend |
-| `pix_backend_fastify` | pix-backend-fastify | 82 | Backend |
-| `pix_backend_hono` | pix-backend-hono | 91 | Backend |
-| `pix_backend_nestjs` | pix-backend-nestjs | 94 | Backend |
-| `pix_backend_node` | pix-backend-node | 214 | Backend |
-| `pix_backend_security` | pix-backend-security | 174 | Backend |
-| `pix_data` | pix-data | 39 | Data |
-| `pix_data_duckdb` | pix-data-duckdb | 234 | Data |
-| `pix_data_indexed_db` | pix-data-indexed-db | 317 | Data |
-| `pix_data_mongodb` | pix-data-mongodb | 743 | Data |
-| `pix_data_mysql` | pix-data-mysql | 595 | Data |
-| `pix_data_postgresql` | pix-data-postgresql | 649 | Data |
-| `pix_data_sql` | pix-data-sql | 632 | Data |
-| `pix_data_sqlite` | pix-data-sqlite | 242 | Data |
-| `pix_devops` | pix-devops | 42 | DevOps |
-| `pix_devops_docker` | pix-devops-docker | 128 | DevOps |
-| `pix_devops_gitlab_ci` | pix-devops-gitlab-ci | 75 | DevOps |
-| `pix_devops_testing` | pix-devops-testing | 300 | DevOps |
-| `pix_devops_version` | pix-devops-version | 161 | DevOps |
-| `pix_frontend` | pix-frontend | 61 | Frontend |
-| `pix_frontend_angular` | pix-frontend-angular | 504 | Frontend |
-| `pix_frontend_astro` | pix-frontend-astro | 526 | Frontend |
-| `pix_frontend_meta_next` | pix-frontend-meta-next | 201 | Frontend |
-| `pix_frontend_meta_nuxt` | pix-frontend-meta-nuxt | 181 | Frontend |
-| `pix_frontend_meta_remix` | pix-frontend-meta-remix | 224 | Frontend |
-| `pix_frontend_react` | pix-frontend-react | 688 | Frontend |
-| `pix_frontend_solidjs` | pix-frontend-solidjs | 532 | Frontend |
-| `pix_frontend_svelte` | pix-frontend-svelte | 508 | Frontend |
-| `pix_frontend_vanilla_reactive` | pix-frontend-vanilla-reactive | 640 | Frontend |
-| `pix_frontend_vue` | pix-frontend-vue | 522 | Frontend |
-| `pix_platform` | pix-platform | 43 | Platform |
-| `pix_platform_agent` | pix-platform-agent | 294 | Platform |
-| `pix_platform_desktop` | pix-platform-desktop | 542 | Platform |
-| `pix_platform_expo` | pix-platform-expo | 254 | Platform |
-| `pix_platform_library` | pix-platform-library | 259 | Platform |
-| `pix_platform_web` | pix-platform-web | 241 | Platform |
-| `pix_process` | pix-process | 43 | Process |
-| `pix_process_bmad` | pix-process-bmad | 422 | Process |
-| `pix_process_documentation` | pix-process-documentation | 201 | Process |
-| `pix_process_feature_workflow` | pix-process-feature-workflow | 121 | Process |
-| `pix_styleguide` | pix-styleguide | 58 | Styleguide |
-| `pix_styleguide_a11y` | pix-styleguide-a11y | 514 | Styleguide |
-| `pix_styleguide_css` | pix-styleguide-css | 488 | Styleguide |
-| `pix_styleguide_html` | pix-styleguide-html | 339 | Styleguide |
-| `pix_styleguide_javascript` | pix-styleguide-javascript | 553 | Styleguide |
-| `pix_styleguide_json` | pix-styleguide-json | 132 | Styleguide |
-| `pix_styleguide_markdown` | pix-styleguide-markdown | 132 | Styleguide |
-| `pix_styleguide_naming` | pix-styleguide-naming | 228 | Styleguide |
-| `pix_styleguide_patterns` | pix-styleguide-patterns | 183 | Styleguide |
-| `pix_styleguide_validation` | pix-styleguide-validation | 472 | Styleguide |
-| `pix_toolchain` | pix-toolchain | 69 | Toolchain |
-| `pix_toolchain_biome` | pix-toolchain-biome | 101 | Toolchain |
-| `pix_toolchain_eslint` | pix-toolchain-eslint | 81 | Toolchain |
-| `pix_toolchain_husky` | pix-toolchain-husky | 116 | Toolchain |
-| `pix_toolchain_parcel` | pix-toolchain-parcel | 120 | Toolchain |
-| `pix_toolchain_pnpm` | pix-toolchain-pnpm | 114 | Toolchain |
-| `pix_toolchain_project` | pix-toolchain-project | 217 | Toolchain |
-| `pix_toolchain_turborepo` | pix-toolchain-turborepo | 108 | Toolchain |
-| `pix_toolchain_typescript` | pix-toolchain-typescript | 132 | Toolchain |
-| `pix_toolchain_vite` | pix-toolchain-vite | 93 | Toolchain |
-| `pix_ui` | pix-ui | 79 | UI |
-| `pix_ui_design_system` | pix-ui-design-system | 214 | UI |
+| Tool                            | Skill name                    | Lines | Domain       |
+| ------------------------------- | ----------------------------- | ----- | ------------ |
+| `pix_architect`                 | pix-architect                 | 253   | Architecture |
+| `pix_architect_cli`             | pix-architect-cli             | 82    | Architecture |
+| `pix_architect_web`             | pix-architect-web             | 71    | Architecture |
+| `pix_backend`                   | pix-backend                   | 61    | Backend      |
+| `pix_backend_api_design`        | pix-backend-api-design        | 158   | Backend      |
+| `pix_backend_express`           | pix-backend-express           | 147   | Backend      |
+| `pix_backend_fastify`           | pix-backend-fastify           | 82    | Backend      |
+| `pix_backend_hono`              | pix-backend-hono              | 91    | Backend      |
+| `pix_backend_nestjs`            | pix-backend-nestjs            | 94    | Backend      |
+| `pix_backend_node`              | pix-backend-node              | 214   | Backend      |
+| `pix_backend_security`          | pix-backend-security          | 174   | Backend      |
+| `pix_data`                      | pix-data                      | 39    | Data         |
+| `pix_data_duckdb`               | pix-data-duckdb               | 234   | Data         |
+| `pix_data_indexed_db`           | pix-data-indexed-db           | 317   | Data         |
+| `pix_data_mongodb`              | pix-data-mongodb              | 743   | Data         |
+| `pix_data_mysql`                | pix-data-mysql                | 595   | Data         |
+| `pix_data_postgresql`           | pix-data-postgresql           | 649   | Data         |
+| `pix_data_sql`                  | pix-data-sql                  | 632   | Data         |
+| `pix_data_sqlite`               | pix-data-sqlite               | 242   | Data         |
+| `pix_devops`                    | pix-devops                    | 42    | DevOps       |
+| `pix_devops_docker`             | pix-devops-docker             | 128   | DevOps       |
+| `pix_devops_gitlab_ci`          | pix-devops-gitlab-ci          | 75    | DevOps       |
+| `pix_devops_testing`            | pix-devops-testing            | 300   | DevOps       |
+| `pix_devops_version`            | pix-devops-version            | 161   | DevOps       |
+| `pix_frontend`                  | pix-frontend                  | 61    | Frontend     |
+| `pix_frontend_angular`          | pix-frontend-angular          | 504   | Frontend     |
+| `pix_frontend_astro`            | pix-frontend-astro            | 526   | Frontend     |
+| `pix_frontend_meta_next`        | pix-frontend-meta-next        | 201   | Frontend     |
+| `pix_frontend_meta_nuxt`        | pix-frontend-meta-nuxt        | 181   | Frontend     |
+| `pix_frontend_meta_remix`       | pix-frontend-meta-remix       | 224   | Frontend     |
+| `pix_frontend_react`            | pix-frontend-react            | 688   | Frontend     |
+| `pix_frontend_solidjs`          | pix-frontend-solidjs          | 532   | Frontend     |
+| `pix_frontend_svelte`           | pix-frontend-svelte           | 508   | Frontend     |
+| `pix_frontend_vanilla_reactive` | pix-frontend-vanilla-reactive | 640   | Frontend     |
+| `pix_frontend_vue`              | pix-frontend-vue              | 522   | Frontend     |
+| `pix_platform`                  | pix-platform                  | 43    | Platform     |
+| `pix_platform_agent`            | pix-platform-agent            | 294   | Platform     |
+| `pix_platform_desktop`          | pix-platform-desktop          | 542   | Platform     |
+| `pix_platform_expo`             | pix-platform-expo             | 254   | Platform     |
+| `pix_platform_library`          | pix-platform-library          | 259   | Platform     |
+| `pix_platform_web`              | pix-platform-web              | 241   | Platform     |
+| `pix_process`                   | pix-process                   | 43    | Process      |
+| `pix_process_bmad`              | pix-process-bmad              | 422   | Process      |
+| `pix_process_documentation`     | pix-process-documentation     | 201   | Process      |
+| `pix_process_feature_workflow`  | pix-process-feature-workflow  | 121   | Process      |
+| `pix_styleguide`                | pix-styleguide                | 58    | Styleguide   |
+| `pix_styleguide_a11y`           | pix-styleguide-a11y           | 514   | Styleguide   |
+| `pix_styleguide_css`            | pix-styleguide-css            | 488   | Styleguide   |
+| `pix_styleguide_html`           | pix-styleguide-html           | 339   | Styleguide   |
+| `pix_styleguide_javascript`     | pix-styleguide-javascript     | 553   | Styleguide   |
+| `pix_styleguide_json`           | pix-styleguide-json           | 132   | Styleguide   |
+| `pix_styleguide_markdown`       | pix-styleguide-markdown       | 132   | Styleguide   |
+| `pix_styleguide_naming`         | pix-styleguide-naming         | 228   | Styleguide   |
+| `pix_styleguide_patterns`       | pix-styleguide-patterns       | 183   | Styleguide   |
+| `pix_styleguide_validation`     | pix-styleguide-validation     | 472   | Styleguide   |
+| `pix_toolchain`                 | pix-toolchain                 | 69    | Toolchain    |
+| `pix_toolchain_biome`           | pix-toolchain-biome           | 101   | Toolchain    |
+| `pix_toolchain_eslint`          | pix-toolchain-eslint          | 81    | Toolchain    |
+| `pix_toolchain_husky`           | pix-toolchain-husky           | 116   | Toolchain    |
+| `pix_toolchain_parcel`          | pix-toolchain-parcel          | 120   | Toolchain    |
+| `pix_toolchain_pnpm`            | pix-toolchain-pnpm            | 114   | Toolchain    |
+| `pix_toolchain_project`         | pix-toolchain-project         | 217   | Toolchain    |
+| `pix_toolchain_turborepo`       | pix-toolchain-turborepo       | 108   | Toolchain    |
+| `pix_toolchain_typescript`      | pix-toolchain-typescript      | 132   | Toolchain    |
+| `pix_toolchain_vite`            | pix-toolchain-vite            | 93    | Toolchain    |
+| `pix_ui`                        | pix-ui                        | 79    | UI           |
+| `pix_ui_design_system`          | pix-ui-design-system          | 214   | UI           |
 
 #### Mutating tools (2)
 
-| Tool | Description |
-|---|---|
-| `pix_fix` | File tree lint, fix, and component generation (sandboxed in Phase 1) |
+| Tool              | Description                                                          |
+| ----------------- | -------------------------------------------------------------------- |
+| `pix_fix`         | File tree lint, fix, and component generation (sandboxed in Phase 1) |
 | `pix_process_adr` | Architecture Decision Record creation (auto-log disabled by default) |
 
 ### Minimal tool surface (10 tools)
@@ -273,25 +273,25 @@ See [docs/plans/determinism-backend-guardrails.md](./docs/plans/determinism-back
 
 ### Static resources (8)
 
-| URI | Description |
-|---|---|
-| `pix://skills` | Index of all 89 skills with paths and sizes |
-| `pix://templates` | Design system component template catalog |
-| `pix://project` | Project analysis: detected framework + suggested tools/ skills |
-| `pix://community` | Community / plugin pix skills index |
-| `pix://ai` | pix skill full content |
-| `pix://a11y` | A11y testing guide (Playwright + axe-core) |
-| `pix://a11y/test-basic` | Basic a11y test template |
-| `pix://a11y/test-forms` | Form a11y test template |
+| URI                     | Description                                                    |
+| ----------------------- | -------------------------------------------------------------- |
+| `pix://skills`          | Index of all 89 skills with paths and sizes                    |
+| `pix://templates`       | Design system component template catalog                       |
+| `pix://project`         | Project analysis: detected framework + suggested tools/ skills |
+| `pix://community`       | Community / plugin pix skills index                            |
+| `pix://ai`              | pix skill full content                                         |
+| `pix://a11y`            | A11y testing guide (Playwright + axe-core)                     |
+| `pix://a11y/test-basic` | Basic a11y test template                                       |
+| `pix://a11y/test-forms` | Form a11y test template                                        |
 
 ### Skill resources (138 = 69 × 2)
 
 Each skill (except `pix` itself) has two resources:
 
-| URI | Description |
-|---|---|
-| `pix://<skill-name>` | Full skill content |
-| `pix://<skill-name>/summary` | First 30 lines |
+| URI                          | Description        |
+| ---------------------------- | ------------------ |
+| `pix://<skill-name>`         | Full skill content |
+| `pix://<skill-name>/summary` | First 30 lines     |
 
 ---
 
@@ -304,31 +304,31 @@ free-form argument** and supports `help` (or `--help` / `-h`) as its value to pr
 list, e.g. `/pix-frontend help` — help is returned as a ready-made assistant message and
 displayed instantly, without invoking the model.
 
-| Prompt | Description | Arguments |
-|---|---|---|
-| `pix-a11y-audit` | Audit a11y end-to-end: WCAG 2.2 AA review + Playwright/axe-core tests | `code` (required, free text) |
-| `pix-ai` | AI agent integrations | `request` (required) |
-| `pix-architect` | Project architecture: context packs, interview flows (CLI + web), scaffolding | `request` (required) |
-| `pix-architect-scaffold` | Scaffold project with `.agents/` + `.context/` | `projectName` (required, free text: framework/tier) |
-| `pix-backend` | Node, Express, Fastify, Hono, NestJS, GraphQL, API design, security | `request` (required, free text: framework) |
-| `pix-caveman` | Compressed communication, commits, reviews | `request` (required) |
-| `pix-code-review` | Review code against pix styleguides | `code` (required, free text) |
-| `pix-data` | PostgreSQL, MySQL, SQLite, MongoDB, DuckDB, IndexedDB, SQL | `request` (required, free text: database) |
-| `pix-devops` | Docker, GitLab CI, observability, testing, versioning | `request` (required) |
-| `pix-frontend` | React, Vue, Svelte, Angular, Solid, Astro, Next, Nuxt, Remix, vanilla | `request` (required, free text: framework) |
-| `pix-handoff` | Compressed context handoff (ADR + git) for a new session | `options` (optional: `handoff` \| `close-session`, `compress`, `full` \| `brief` \| `minimal`, `no-*`, `max=<n>`, `help`; empty = all defaults) |
-| `pix-meta` | Dispatcher/action toolset (gateway, apply, search, check, scaffold…) | `request` (required) |
-| `pix-new-feature` | Feature end-to-end: route → evidence → failing tests → code → guardrails | `feature` (required, free text: framework/area/"no tests") |
-| `pix-platform` | Web, desktop, Expo, agent, library | `request` (required, free text: platform) |
-| `pix-process` | Code review, feature workflow, documentation, ADR, handoff, BMAD | `request` (required) |
-| `pix-pull-request` | Prepare PR: review + a11y + security + ADR + commit scope + description | `description` (required, free text: "no adr") |
-| `pix-setup-project` | Bootstrap project: detect → scaffold → toolchain → architect context | `projectName` (required, free text: framework/toolchain/tier) |
-| `pix-skills` | Skill discovery (find-skills) | `request` (required) |
-| `pix-styleguide` | a11y, CSS, HTML, JS, JSON, Markdown, naming, patterns, validation | `request` (required) |
-| `pix-tdd` | Test-driven development workflow | `request` (required) |
-| `pix-toolchain` | Vite, pnpm, Turborepo, Rspack, Parcel, TypeScript, ESLint, Biome, Husky, commits | `request` (required, free text: tool) |
-| `pix-ui` | UI design-system work | `request` (required) |
-| `pix-write-tests` | Write tests: TDD + a11y (Playwright + axe-core) + devops | `scope` (required, free text: tdd/a11y/devops/all) |
+| Prompt                   | Description                                                                      | Arguments                                                                                                                                       |
+| ------------------------ | -------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| `pix-a11y-audit`         | Audit a11y end-to-end: WCAG 2.2 AA review + Playwright/axe-core tests            | `code` (required, free text)                                                                                                                    |
+| `pix-ai`                 | AI agent integrations                                                            | `request` (required)                                                                                                                            |
+| `pix-architect`          | Project architecture: context packs, interview flows (CLI + web), scaffolding    | `request` (required)                                                                                                                            |
+| `pix-architect-scaffold` | Scaffold project with `.agents/` + `.context/`                                   | `projectName` (required, free text: framework/tier)                                                                                             |
+| `pix-backend`            | Node, Express, Fastify, Hono, NestJS, GraphQL, API design, security              | `request` (required, free text: framework)                                                                                                      |
+| `pix-caveman`            | Compressed communication, commits, reviews                                       | `request` (required)                                                                                                                            |
+| `pix-code-review`        | Review code against pix styleguides                                              | `code` (required, free text)                                                                                                                    |
+| `pix-data`               | PostgreSQL, MySQL, SQLite, MongoDB, DuckDB, IndexedDB, SQL                       | `request` (required, free text: database)                                                                                                       |
+| `pix-devops`             | Docker, GitLab CI, observability, testing, versioning                            | `request` (required)                                                                                                                            |
+| `pix-frontend`           | React, Vue, Svelte, Angular, Solid, Astro, Next, Nuxt, Remix, vanilla            | `request` (required, free text: framework)                                                                                                      |
+| `pix-handoff`            | Compressed context handoff (ADR + git) for a new session                         | `options` (optional: `handoff` \| `close-session`, `compress`, `full` \| `brief` \| `minimal`, `no-*`, `max=<n>`, `help`; empty = all defaults) |
+| `pix-meta`               | Dispatcher/action toolset (gateway, apply, search, check, scaffold…)             | `request` (required)                                                                                                                            |
+| `pix-new-feature`        | Feature end-to-end: route → evidence → failing tests → code → guardrails         | `feature` (required, free text: framework/area/"no tests")                                                                                      |
+| `pix-platform`           | Web, desktop, Expo, agent, library                                               | `request` (required, free text: platform)                                                                                                       |
+| `pix-process`            | Code review, feature workflow, documentation, ADR, handoff, BMAD                 | `request` (required)                                                                                                                            |
+| `pix-pull-request`       | Prepare PR: review + a11y + security + ADR + commit scope + description          | `description` (required, free text: "no adr")                                                                                                   |
+| `pix-setup-project`      | Bootstrap project: detect → scaffold → toolchain → architect context             | `projectName` (required, free text: framework/toolchain/tier)                                                                                   |
+| `pix-skills`             | Skill discovery (find-skills)                                                    | `request` (required)                                                                                                                            |
+| `pix-styleguide`         | a11y, CSS, HTML, JS, JSON, Markdown, naming, patterns, validation                | `request` (required)                                                                                                                            |
+| `pix-tdd`                | Test-driven development workflow                                                 | `request` (required)                                                                                                                            |
+| `pix-toolchain`          | Vite, pnpm, Turborepo, Rspack, Parcel, TypeScript, ESLint, Biome, Husky, commits | `request` (required, free text: tool)                                                                                                           |
+| `pix-ui`                 | UI design-system work                                                            | `request` (required)                                                                                                                            |
+| `pix-write-tests`        | Write tests: TDD + a11y (Playwright + axe-core) + devops                         | `scope` (required, free text: tdd/a11y/devops/all)                                                                                              |
 
 ---
 
@@ -338,73 +338,73 @@ The guardrail engine runs deterministic checks against code and returns structur
 
 ### Shared guardrails (18 rules — apply to ALL skills)
 
-| ID | Label | Description |
-|---|---|---|
-| `no-css-classes` | Zero CSS classes | No `.class` selectors (including pseudo-classes, combinators) |
-| `no-inline-styles` | Zero inline styles | No `style=""` or `style={{}}` in JSX |
-| `semantic-html` | Semantic HTML | No `<div>` where `<section>`, `<article>`, `<header>`, etc. exist |
-| `external-css` | External CSS | CSS via `adoptedStyleSheets`, `import`, or framework-native |
-| `barrel-file-tree` | Barrel pattern | `index.js` re-exports public API |
-| `file-naming` | File naming | `_PascalCase.ext` for component files |
-| `data-part-naming` | data-part attribute | Child elements use `data-part="name"` |
-| `jsdoc-required` | JSDoc on exports | Every exported symbol has `/** */` |
-| `css-comments-required` | CSS file comments | CSS files start with `/* FILE: ... */` |
-| `a11y-test-required` | A11y tests | Playwright + axe-core tests exist |
-| `no-placeholder-implementation` | No placeholders | No `TODO`, `FIXME`, placeholder code |
-| `no-suppressed-errors` | No suppressed errors | No `@ts-ignore`, `eslint-disable` without reason |
-| `verified-dependencies-only` | Verified deps | Imports must exist in manifest |
-| `react-no-classname` | No className | React uses `data-part` not `className` |
-| `react-hooks-rules` | Hooks rules | Hooks called at top level only |
-| `component-folder-barrel` | Folder barrel | Component folder has `index.js` |
-| `component-file-prefix` | File prefix | Component files start with `_` |
-| `barrel-exports-match-files` | Barrel matches files | `index.js` exports match actual files |
+| ID                              | Label                | Description                                                       |
+| ------------------------------- | -------------------- | ----------------------------------------------------------------- |
+| `no-css-classes`                | Zero CSS classes     | No `.class` selectors (including pseudo-classes, combinators)     |
+| `no-inline-styles`              | Zero inline styles   | No `style=""` or `style={{}}` in JSX                              |
+| `semantic-html`                 | Semantic HTML        | No `<div>` where `<section>`, `<article>`, `<header>`, etc. exist |
+| `external-css`                  | External CSS         | CSS via `adoptedStyleSheets`, `import`, or framework-native       |
+| `barrel-file-tree`              | Barrel pattern       | `index.js` re-exports public API                                  |
+| `file-naming`                   | File naming          | `_PascalCase.ext` for component files                             |
+| `data-part-naming`              | data-part attribute  | Child elements use `data-part="name"`                             |
+| `jsdoc-required`                | JSDoc on exports     | Every exported symbol has `/** */`                                |
+| `css-comments-required`         | CSS file comments    | CSS files start with `/* FILE: ... */`                            |
+| `a11y-test-required`            | A11y tests           | Playwright + axe-core tests exist                                 |
+| `no-placeholder-implementation` | No placeholders      | No `TODO`, `FIXME`, placeholder code                              |
+| `no-suppressed-errors`          | No suppressed errors | No `@ts-ignore`, `eslint-disable` without reason                  |
+| `verified-dependencies-only`    | Verified deps        | Imports must exist in manifest                                    |
+| `react-no-classname`            | No className         | React uses `data-part` not `className`                            |
+| `react-hooks-rules`             | Hooks rules          | Hooks called at top level only                                    |
+| `component-folder-barrel`       | Folder barrel        | Component folder has `index.js`                                   |
+| `component-file-prefix`         | File prefix          | Component files start with `_`                                    |
+| `barrel-exports-match-files`    | Barrel matches files | `index.js` exports match actual files                             |
 
 ### Framework-specific guardrails
 
 Applied in addition to shared rules when checking code for a specific framework:
 
-| Framework | Guardrails |
-|---|---|
-| React | `REACT_GUARDRAILS` + `FILE_TREE_GUARDRAILS` |
-| Vue | `VUE_GUARDRAILS` + `FILE_TREE_GUARDRAILS` |
-| Angular | `ANGULAR_GUARDRAILS` + `FILE_TREE_GUARDRAILS` |
-| Svelte | `SVELTE_GUARDRAILS` + `FILE_TREE_GUARDRAILS` |
-| Solid | `FILE_TREE_GUARDRAILS` |
+| Framework | Guardrails                                    |
+| --------- | --------------------------------------------- |
+| React     | `REACT_GUARDRAILS` + `FILE_TREE_GUARDRAILS`   |
+| Vue       | `VUE_GUARDRAILS` + `FILE_TREE_GUARDRAILS`     |
+| Angular   | `ANGULAR_GUARDRAILS` + `FILE_TREE_GUARDRAILS` |
+| Svelte    | `SVELTE_GUARDRAILS` + `FILE_TREE_GUARDRAILS`  |
+| Solid     | `FILE_TREE_GUARDRAILS`                        |
 
 ### Backend guardrails (6 checks)
 
 Applied when `pix_check` targets a `pix-backend-*` skill:
 
-| ID | Description |
-|---|---|
-| `sql-injection` | No string concatenation in SQL queries |
-| `error-exposure` | No stack traces or error details in HTTP responses |
-| `input-validation` | Zod/Joi/class-validator present when handling request input |
-| `cors-explicit` | CORS with explicit origin list, no wildcard `*` |
-| `rate-limiting` | Rate limiter configured (express-rate-limit, @fastify/rate-limit, ThrottlerModule) |
-| `helmet-headers` | Security headers via helmet or framework equivalent |
+| ID                 | Description                                                                        |
+| ------------------ | ---------------------------------------------------------------------------------- |
+| `sql-injection`    | No string concatenation in SQL queries                                             |
+| `error-exposure`   | No stack traces or error details in HTTP responses                                 |
+| `input-validation` | Zod/Joi/class-validator present when handling request input                        |
+| `cors-explicit`    | CORS with explicit origin list, no wildcard `*`                                    |
+| `rate-limiting`    | Rate limiter configured (express-rate-limit, @fastify/rate-limit, ThrottlerModule) |
+| `helmet-headers`   | Security headers via helmet or framework equivalent                                |
 
 ### Database guardrails (4 checks)
 
 Applied when targeting a `pix-data-*` skill:
 
-| ID | Description |
-|---|---|
-| `migration-safety` | DDL uses `IF NOT EXISTS` / `IF EXISTS` |
+| ID                      | Description                                            |
+| ----------------------- | ------------------------------------------------------ |
+| `migration-safety`      | DDL uses `IF NOT EXISTS` / `IF EXISTS`                 |
 | `parameterized-queries` | All queries use placeholders, not string concatenation |
-| `transaction-safety` | Multiple mutations wrapped in a transaction |
-| `connection-pool` | Server code uses connection pool, not direct client |
+| `transaction-safety`    | Multiple mutations wrapped in a transaction            |
+| `connection-pool`       | Server code uses connection pool, not direct client    |
 
 ### DevOps guardrails (4 checks)
 
 Applied when targeting a `pix-devops-*` skill:
 
-| ID | Description |
-|---|---|
-| `docker-non-root` | Container runs as non-root user |
-| `docker-healthcheck` | `HEALTHCHECK` instruction present |
-| `secret-detection` | No hardcoded passwords, API keys, or tokens |
-| `env-gitignore` | `.env` listed in `.gitignore` |
+| ID                   | Description                                 |
+| -------------------- | ------------------------------------------- |
+| `docker-non-root`    | Container runs as non-root user             |
+| `docker-healthcheck` | `HEALTHCHECK` instruction present           |
+| `secret-detection`   | No hardcoded passwords, API keys, or tokens |
+| `env-gitignore`      | `.env` listed in `.gitignore`               |
 
 ### How to use guardrails
 
@@ -426,6 +426,7 @@ pix-galaxy-mcp tools call pix_check --json '{
 ```
 
 The guardrail engine is defined in:
+
 - [`src/core/guardrail-defs.js`](./src/core/guardrail-defs.js) — all 30+ guardrail checks
 - [`src/core/guardrails.js`](./src/core/guardrails.js) — engine (runner, reporter, merge)
 
@@ -605,25 +606,25 @@ The Docker image uses `node:22-alpine`, has no build step, and runs the server d
 
 ## Further reading
 
-| Document | Description |
-|---|---|
-| [`GETTING_STARTED.md`](./GETTING_STARTED.md) | Step-by-step installation & agent integration |
-| [`docs/01-product-architecture.md`](./docs/01-product-architecture.md) | Full skill taxonomy and product architecture |
-| [`docs/02-tools-operations.md`](./docs/02-tools-operations.md) | Detailed tool operations reference |
-| [`docs/03-engineering-guides.md`](./docs/03-engineering-guides.md) | Engineering practices and conventions |
-| [`docs/04-roadmap-plans.md`](./docs/04-roadmap-plans.md) | Roadmap and planned features |
-| [`docs/plans/execution-plan.md`](./docs/plans/execution-plan.md) | Execution plan from mega-review audit |
-| [`docs/plans/determinism-backend-guardrails.md`](./docs/plans/determinism-backend-guardrails.md) | Gateway + backend guardrail design |
-| [`docs/adr/README.md`](./docs/adr/README.md) | Architecture Decision Records index |
-| [`docs/agent-instructions.md`](./docs/agent-instructions.md) | Agent instruction templates |
-| [`docs/handoff/README.md`](./docs/handoff/README.md) | Handoff documents for LLM session continuity |
+| Document                                                                                         | Description                                   |
+| ------------------------------------------------------------------------------------------------ | --------------------------------------------- |
+| [`GETTING_STARTED.md`](./GETTING_STARTED.md)                                                     | Step-by-step installation & agent integration |
+| [`docs/01-product-architecture.md`](./docs/01-product-architecture.md)                           | Full skill taxonomy and product architecture  |
+| [`docs/02-tools-operations.md`](./docs/02-tools-operations.md)                                   | Detailed tool operations reference            |
+| [`docs/03-engineering-guides.md`](./docs/03-engineering-guides.md)                               | Engineering practices and conventions         |
+| [`docs/04-roadmap-plans.md`](./docs/04-roadmap-plans.md)                                         | Roadmap and planned features                  |
+| [`docs/plans/execution-plan.md`](./docs/plans/execution-plan.md)                                 | Execution plan from mega-review audit         |
+| [`docs/plans/determinism-backend-guardrails.md`](./docs/plans/determinism-backend-guardrails.md) | Gateway + backend guardrail design            |
+| [`docs/adr/README.md`](./docs/adr/README.md)                                                     | Architecture Decision Records index           |
+| [`docs/agent-instructions.md`](./docs/agent-instructions.md)                                     | Agent instruction templates                   |
+| [`docs/handoff/README.md`](./docs/handoff/README.md)                                             | Handoff documents for LLM session continuity  |
 
 ### Audit reports
 
-| Document | Description |
-|---|---|
-| [`docs/reports/claude-compliance-mega-review.md`](./docs/reports/claude-compliance-mega-review.md) | Full protocol-level audit for Claude |
-| [`docs/reports/gpt-5.6-sol-compliance-mega-review.md`](./docs/reports/gpt-5.6-sol-compliance-mega-review.md) | Comprehensive audit for GPT-5.6-sol |
+| Document                                                                                                     | Description                          |
+| ------------------------------------------------------------------------------------------------------------ | ------------------------------------ |
+| [`docs/reports/claude-compliance-mega-review.md`](./docs/reports/claude-compliance-mega-review.md)           | Full protocol-level audit for Claude |
+| [`docs/reports/gpt-5.6-sol-compliance-mega-review.md`](./docs/reports/gpt-5.6-sol-compliance-mega-review.md) | Comprehensive audit for GPT-5.6-sol  |
 
 ---
 

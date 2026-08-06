@@ -32,13 +32,13 @@
 
 ```javascript
 function showToast(message, type) {
-  const toast = document.createElement('div');
+  const toast = document.createElement("div");
   toast.textContent = message;
-  toast.setAttribute('role', type === 'error' ? 'alert' : 'status');
-  document.getElementById('toast-container').appendChild(toast);
+  toast.setAttribute("role", type === "error" ? "alert" : "status");
+  document.getElementById("toast-container").appendChild(toast);
 
   // Auto-dismiss (only for non-actionable toasts)
-  if (!toast.querySelector('button')) {
+  if (!toast.querySelector("button")) {
     setTimeout(() => toast.remove(), 5000);
   }
 }

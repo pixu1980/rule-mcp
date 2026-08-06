@@ -48,7 +48,9 @@ const PLACEHOLDER_RE = /\[([A-Z_0-9]+)\]/g;
 function allTemplatePlaceholders() {
   const found = new Set();
   for (const tmpl of templates) {
-    for (const match of tmpl.content.matchAll(PLACEHOLDER_RE)) {found.add(match[1]);}
+    for (const match of tmpl.content.matchAll(PLACEHOLDER_RE)) {
+      found.add(match[1]);
+    }
   }
   return found;
 }
@@ -59,7 +61,9 @@ function flatWizardKeys() {
   const keys = new Set();
   for (const step of spec.steps) {
     for (const field of step.fields) {
-      if (field.type !== "repeatable" && field.type !== "entity-list") {keys.add(field.key);}
+      if (field.type !== "repeatable" && field.type !== "entity-list") {
+        keys.add(field.key);
+      }
     }
   }
   return keys;
@@ -70,7 +74,9 @@ function matchesComposition(key) {
   for (const rule of COMPOSITION) {
     for (const pattern of [rule.template, ...(rule.aliases || [])]) {
       const re = new RegExp("^" + pattern.replace("{i}", String.raw`(\d+)`) + "$");
-      if (re.test(key)) {return true;}
+      if (re.test(key)) {
+        return true;
+      }
     }
   }
   return false;
@@ -114,7 +120,7 @@ test("field-map + already-collected flat keys cover every meaningful placeholder
   assert.equal(
     uncovered.length,
     0,
-    `every meaningful placeholder must be covered by RENAMES/COMPOSITION/DERIVED/flat-keys — uncovered: ${uncovered.sort().join(", ")}`
+    `every meaningful placeholder must be covered by RENAMES/COMPOSITION/DERIVED/flat-keys — uncovered: ${uncovered.sort().join(", ")}`,
   );
 });
 
@@ -141,18 +147,22 @@ test("normalizeAnswers + generateContextContent fill >=95% of meaningful placeho
 
   const unfilled = [];
   for (const key of meaningful) {
-    if (combined.includes(`[${key}]`) || combined.includes(`TODO: ${key}`)) {unfilled.push(key);}
+    if (combined.includes(`[${key}]`) || combined.includes(`TODO: ${key}`)) {
+      unfilled.push(key);
+    }
   }
   const filled = meaningful.length - unfilled.length;
   const pct = (filled / meaningful.length) * 100;
 
-  console.log(`\narchitect wired fill (post-Task-3, normalizeAnswers applied): ${filled}/${meaningful.length} = ${pct.toFixed(1)}%`);
+  console.log(
+    `\narchitect wired fill (post-Task-3, normalizeAnswers applied): ${filled}/${meaningful.length} = ${pct.toFixed(1)}%`,
+  );
   if (unfilled.length > 0) {
     console.log(`  still unfilled (${unfilled.length}): ${unfilled.sort().join(", ")}`);
   }
 
   assert.ok(
     pct >= 95,
-    `wired fill should be >=95% of meaningful placeholders (got ${pct.toFixed(1)}%) — still unfilled: ${unfilled.sort().join(", ")}`
+    `wired fill should be >=95% of meaningful placeholders (got ${pct.toFixed(1)}%) — still unfilled: ${unfilled.sort().join(", ")}`,
   );
 });

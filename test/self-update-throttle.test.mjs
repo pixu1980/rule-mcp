@@ -21,7 +21,8 @@ import { join } from "node:path";
 
 console.log("self-update throttle test");
 
-const g = (arguments_, cwd) => execFileSync("git", arguments_, { cwd, stdio: ["ignore", "pipe", "ignore"], encoding: "utf8" });
+const g = (arguments_, cwd) =>
+  execFileSync("git", arguments_, { cwd, stdio: ["ignore", "pipe", "ignore"], encoding: "utf8" });
 
 /** Build a bare "upstream" + a working clone that tracks it (same as self-update.test). */
 function makeClonePair() {
@@ -103,7 +104,7 @@ const fetchCount = (logPath) =>
 // ── S1: re-check after interval elapses (today: once per process) ──
 {
   const { clone, base } = makeClonePair();
-  const upstream = execFileSync('git', ['remote', 'get-url', 'origin'], { cwd: clone, encoding: 'utf8' }).trim();
+  const upstream = execFileSync("git", ["remote", "get-url", "origin"], { cwd: clone, encoding: "utf8" }).trim();
   const { logPath } = runScenario(
     clone,
     `
@@ -124,7 +125,7 @@ const fetchCount = (logPath) =>
 // ── S2: non-blocking — maybeSelfUpdate returns before the fetch completes ──
 {
   const { clone, base } = makeClonePair();
-  const upstream = execFileSync('git', ['remote', 'get-url', 'origin'], { cwd: clone, encoding: 'utf8' }).trim();
+  const upstream = execFileSync("git", ["remote", "get-url", "origin"], { cwd: clone, encoding: "utf8" }).trim();
   const { out } = runScenario(
     clone,
     `
@@ -147,7 +148,7 @@ const fetchCount = (logPath) =>
 // ── S3a: interval 0 => check on every invocation ──
 {
   const { clone, base } = makeClonePair();
-  const upstream = execFileSync('git', ['remote', 'get-url', 'origin'], { cwd: clone, encoding: 'utf8' }).trim();
+  const upstream = execFileSync("git", ["remote", "get-url", "origin"], { cwd: clone, encoding: "utf8" }).trim();
   const { logPath } = runScenario(
     clone,
     `
@@ -166,7 +167,7 @@ const fetchCount = (logPath) =>
 // ── S3b: invalid interval => default 60s (throttled) ──
 {
   const { clone, base } = makeClonePair();
-  const upstream = execFileSync('git', ['remote', 'get-url', 'origin'], { cwd: clone, encoding: 'utf8' }).trim();
+  const upstream = execFileSync("git", ["remote", "get-url", "origin"], { cwd: clone, encoding: "utf8" }).trim();
   const { logPath } = runScenario(
     clone,
     `
@@ -185,7 +186,7 @@ const fetchCount = (logPath) =>
 // ── S3c: negative interval => default 60s (throttled) ──
 {
   const { clone, base } = makeClonePair();
-  const upstream = execFileSync('git', ['remote', 'get-url', 'origin'], { cwd: clone, encoding: 'utf8' }).trim();
+  const upstream = execFileSync("git", ["remote", "get-url", "origin"], { cwd: clone, encoding: "utf8" }).trim();
   const { logPath } = runScenario(
     clone,
     `

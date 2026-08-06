@@ -94,12 +94,22 @@ test("every tool traces back to a pix-* directory in ./skills", () => {
   const dirs = new Set(embeddedSkillDirs);
   // Action tools are registered by code, not by a skill directory.
   const ACTION = new Set([
-    "pix_tool", "pix_tool_apply", "pix_tool_check", "pix_tool_component", "pix_tool_detect",
-    "pix_tool_fix", "pix_tool_gateway", "pix_tool_scaffold", "pix_tool_search", "pix_tool_update",
+    "pix_tool",
+    "pix_tool_apply",
+    "pix_tool_check",
+    "pix_tool_component",
+    "pix_tool_detect",
+    "pix_tool_fix",
+    "pix_tool_gateway",
+    "pix_tool_scaffold",
+    "pix_tool_search",
+    "pix_tool_update",
     "pix_tool_architect",
   ]);
   for (const name of surface.tools) {
-    if (ACTION.has(name)) {continue;}
+    if (ACTION.has(name)) {
+      continue;
+    }
     const dir = `pix-${name.replace(/^pix_tool_/, "").replaceAll("_", "-")}`;
     assert.ok(dirs.has(dir), `${name} has no backing directory in ./skills (expected ${dir})`);
   }
@@ -140,7 +150,7 @@ test("a home copy cannot shadow the content of an embedded skill", async () => {
 test("the surface size matches the embedded skill count", () => {
   // All directories minus the bare `pix` router skill which is registered as
   // the dispatcher tool rather than a skill tool.
-  const expectedSkills = embeddedSkillDirs.filter(d => d.startsWith("pix-")).length;
+  const expectedSkills = embeddedSkillDirs.filter((d) => d.startsWith("pix-")).length;
   assert.equal(surface.skills.length, expectedSkills);
   assert.ok(surface.bytes < 130_000, `tool schemas grew to ${surface.bytes} bytes — the surface is leaking again`);
 });

@@ -1,9 +1,9 @@
 // @ts-check
 
-import { applyMixins } from './_applyMixins.js';
-import { defineCustomElement } from './_defineCustomElement.js';
-import { generateIsAttribute } from './_generateIsAttribute.js';
-import { registerStylesheet } from './_registerStylesheet.js';
+import { applyMixins } from "./_applyMixins.js";
+import { defineCustomElement } from "./_defineCustomElement.js";
+import { generateIsAttribute } from "./_generateIsAttribute.js";
+import { registerStylesheet } from "./_registerStylesheet.js";
 
 /**
  * Register a component into the Custom Elements registry and wire runtime helpers.

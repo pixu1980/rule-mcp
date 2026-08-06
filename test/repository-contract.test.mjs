@@ -14,10 +14,15 @@ const ignoredDirectories = new Set([".git", "node_modules", ".tokensave", ".agen
  */
 function walk(dir, files = []) {
   for (const entry of readdirSync(dir, { withFileTypes: true })) {
-    if (ignoredDirectories.has(entry.name)) {continue;}
+    if (ignoredDirectories.has(entry.name)) {
+      continue;
+    }
     const path = join(dir, entry.name);
-    if (entry.isDirectory()) {walk(path, files);}
-    else {files.push(path);}
+    if (entry.isDirectory()) {
+      walk(path, files);
+    } else {
+      files.push(path);
+    }
   }
   return files;
 }
@@ -31,7 +36,9 @@ console.log("repository contract test");
 const sourceDirectories = ["src", "test", "prompts", "scripts", "extensions", "rules", "skills"];
 for (const sub of forbidden ? sourceDirectories : []) {
   const dir = join(root, sub);
-  if (!existsSync(dir)) {continue;}
+  if (!existsSync(dir)) {
+    continue;
+  }
 
   const files = walk(dir);
 
@@ -47,24 +54,35 @@ for (const sub of forbidden ? sourceDirectories : []) {
   const contentMatches = [];
   for (const file of files) {
     // Skip this file itself (contains 'pix_' in comments/messages)
-    if (file === import.meta.filename || file.endsWith("repository-contract.test.mjs")) {continue;}
+    if (file === import.meta.filename || file.endsWith("repository-contract.test.mjs")) {
+      continue;
+    }
     const content = readFileSync(file);
-    if (content.includes(0)) {continue;}
+    if (content.includes(0)) {
+      continue;
+    }
     const text = content.toString("utf8");
-    if (!text.includes(forbidden)) {continue;}
+    if (!text.includes(forbidden)) {
+      continue;
+    }
     // Skip lines that are intentional legacy references (env vars, git username, server names)
     const lines = text.split("\n");
-    const hasRealPix = lines.some(l => {
+    const hasRealPix = lines.some((l) => {
       return !!l.includes(forbidden);
     });
-    if (hasRealPix) {contentMatches.push(file);}
+    if (hasRealPix) {
+      contentMatches.push(file);
+    }
   }
   assert.equal(
     contentMatches.length,
     0,
     `[${sub}] ${contentMatches.length} files contain '${forbidden}' in their content.\n` +
-    "Run: rg -l 'pix_' " + sub + "/\n" +
-    "First 10:\n" + contentMatches.slice(0, 10).join("\n"),
+      "Run: rg -l 'pix_' " +
+      sub +
+      "/\n" +
+      "First 10:\n" +
+      contentMatches.slice(0, 10).join("\n"),
   );
 }
 

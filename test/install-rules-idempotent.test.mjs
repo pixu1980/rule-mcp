@@ -144,14 +144,19 @@ import { readFileSync } from "node:fs";
 /** Extract a `name() { ... }` bash function (brace-balanced) from script source. */
 function extractBashFunction(source, name) {
   const start = source.indexOf(`${name}() {`);
-  if (start === -1) {return null;}
+  if (start === -1) {
+    return null;
+  }
   const open = source.indexOf("{", start);
   let depth = 0;
   for (let index = open; index < source.length; index++) {
-    if (source[index] === "{") {depth++;}
-    else if (source[index] === "}") {
+    if (source[index] === "{") {
+      depth++;
+    } else if (source[index] === "}") {
       depth--;
-      if (depth === 0) {return source.slice(start, index + 1);}
+      if (depth === 0) {
+        return source.slice(start, index + 1);
+      }
     }
   }
   return null;

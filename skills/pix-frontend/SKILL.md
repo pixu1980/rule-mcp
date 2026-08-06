@@ -19,25 +19,25 @@ frameworks: [all]
 
 ## UI Frameworks
 
-| Skill | Framework | Reactive Model | State Mgmt |
-|-------|-----------|----------------|------------|
-| [pix-frontend-react](../pix-frontend-react/SKILL.md) | React 18+ | useState/hooks | Context + hooks |
-| [pix-frontend-vue](../pix-frontend-vue/SKILL.md) | Vue 3 | ref()/reactive | Pinia |
-| [pix-frontend-angular](../pix-frontend-angular/SKILL.md) | Angular 16+ (standalone) | signal() | Signals |
-| [pix-frontend-svelte](../pix-frontend-svelte/SKILL.md) | Svelte 5 | $state (runes) | Runes |
-| [pix-frontend-solidjs](../pix-frontend-solidjs/SKILL.md) | SolidJS | createSignal | Signals |
-| [pix-frontend-astro](../pix-frontend-astro/SKILL.md) | Astro (islands) | Per-framework | Per-framework |
-| [pix-frontend-vanilla-reactive](../pix-frontend-vanilla-reactive/SKILL.md) | Vanilla JS | Proxy Store + Signals | Store |
-| [pix-frontend-custom-element](../pix-frontend-custom-element/SKILL.md) | Vanilla JS (no framework) | componentDecorator | adopedStyleSheets |
-| [pix-frontend-template-engine](../pix-frontend-template-engine/SKILL.md) | Vanilla JS (no framework) | TemplateEngine | SSG/SSR/static-html |
+| Skill                                                                      | Framework                 | Reactive Model        | State Mgmt          |
+| -------------------------------------------------------------------------- | ------------------------- | --------------------- | ------------------- |
+| [pix-frontend-react](../pix-frontend-react/SKILL.md)                       | React 18+                 | useState/hooks        | Context + hooks     |
+| [pix-frontend-vue](../pix-frontend-vue/SKILL.md)                           | Vue 3                     | ref()/reactive        | Pinia               |
+| [pix-frontend-angular](../pix-frontend-angular/SKILL.md)                   | Angular 16+ (standalone)  | signal()              | Signals             |
+| [pix-frontend-svelte](../pix-frontend-svelte/SKILL.md)                     | Svelte 5                  | $state (runes)        | Runes               |
+| [pix-frontend-solidjs](../pix-frontend-solidjs/SKILL.md)                   | SolidJS                   | createSignal          | Signals             |
+| [pix-frontend-astro](../pix-frontend-astro/SKILL.md)                       | Astro (islands)           | Per-framework         | Per-framework       |
+| [pix-frontend-vanilla-reactive](../pix-frontend-vanilla-reactive/SKILL.md) | Vanilla JS                | Proxy Store + Signals | Store               |
+| [pix-frontend-custom-element](../pix-frontend-custom-element/SKILL.md)     | Vanilla JS (no framework) | componentDecorator    | adopedStyleSheets   |
+| [pix-frontend-template-engine](../pix-frontend-template-engine/SKILL.md)   | Vanilla JS (no framework) | TemplateEngine        | SSG/SSR/static-html |
 
 ## Meta-Frameworks
 
-| Skill | Based On | Features |
-|-------|----------|----------|
-| [pix-frontend-meta-next](../pix-frontend-meta-next/SKILL.md) | Next.js (React) | App Router, SSR/SSG/ISR, server components |
-| [pix-frontend-meta-nuxt](../pix-frontend-meta-nuxt/SKILL.md) | Nuxt 3 (Vue) | File-based routing, SSR/SSG, auto-imports |
-| [pix-frontend-meta-remix](../pix-frontend-meta-remix/SKILL.md) | Remix (React) | Nested routing, loaders/actions, SSR |
+| Skill                                                          | Based On        | Features                                   |
+| -------------------------------------------------------------- | --------------- | ------------------------------------------ |
+| [pix-frontend-meta-next](../pix-frontend-meta-next/SKILL.md)   | Next.js (React) | App Router, SSR/SSG/ISR, server components |
+| [pix-frontend-meta-nuxt](../pix-frontend-meta-nuxt/SKILL.md)   | Nuxt 3 (Vue)    | File-based routing, SSR/SSG, auto-imports  |
+| [pix-frontend-meta-remix](../pix-frontend-meta-remix/SKILL.md) | Remix (React)   | Nested routing, loaders/actions, SSR       |
 
 ## Quick Selection Guide
 
