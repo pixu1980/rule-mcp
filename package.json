@@ -40,6 +40,7 @@
     "build": "bash ./scripts/package.sh",
     "prepublishOnly": "node ./scripts/embed-skills.mjs"
   },
+  "packageManager": "pnpm@11.20.0",
   "engines": {
     "node": ">=20"
   },
