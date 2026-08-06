@@ -966,15 +966,14 @@ function writeInstalledManifest(agents, entrypoint, global, mode) {
  * @param {{ agent: string, entrypoint: string, dryRun?: boolean, force?: boolean, global?: boolean, mode?: "stdio"|"daemon"|"sse"|"docker" }} opts
  * @returns {{ ok: boolean, dryRun: boolean, global: boolean, installed: object, manifest?: string }}
  */
-// eslint-disable-next-line no-unused-vars
 export const installAgent = ({
   agent,
   entrypoint,
   dryRun = false,
-  force = false,
+  _force = false,
   global = false,
   mode = "stdio",
-  env = {},
+  _env = {},
 }) => {
   const normalizedMode = normalizeInstallMode(mode);
   const selected = agent === "all" ? allAgents : [agent];

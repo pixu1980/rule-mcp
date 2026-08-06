@@ -21,7 +21,7 @@ const displayWidth = (line) => {
   const bare = line.replaceAll(/\x1B\[[0-9;]*m/g, "");
   let width = 0;
   for (const ch of bare) {
-    width += ch.codePointAt(0) > 0xff_ff ? 2 : 1;
+    width += ch.codePointAt(0) > 0xFF_FF ? 2 : 1;
   }
   return width;
 };
