@@ -5,7 +5,6 @@
   "description": "MCP server for the rule-* skill ecosystem. Serves styleguides, component templates, framework best practices, and design system patterns.",
   "type": "module",
   "license": "MIT",
-  "packageManager": "pnpm@9.15.9",
   "private": false,
   "publishConfig": {
     "access": "public"
