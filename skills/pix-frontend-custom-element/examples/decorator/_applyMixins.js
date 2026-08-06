@@ -1,7 +1,7 @@
 // @ts-check
 
-import { buildAttributeHandlers, buildEventHandlers } from './_buildHandlers.js';
-import { buildLifecycleMethods } from './_buildLifecycleMethods.js';
+import { buildAttributeHandlers, buildEventHandlers } from "./_buildHandlers.js";
+import { buildLifecycleMethods } from "./_buildLifecycleMethods.js";
 
 /**
  * Augment the component prototype with generated handlers and lifecycle methods.
@@ -30,7 +30,7 @@ export function applyMixins(component, isAttribute) {
     { componentName: isAttribute },
     component.attributes && buildAttributeHandlers(component.attributes),
     component.events && buildEventHandlers(component.events),
-    buildLifecycleMethods(component)
+    buildLifecycleMethods(component),
   );
 
   if (component.attributes) {

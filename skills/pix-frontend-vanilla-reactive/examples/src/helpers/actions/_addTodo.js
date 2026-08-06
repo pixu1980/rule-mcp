@@ -2,7 +2,7 @@
 //  Action: addTodo
 // ═══════════════════════════════════════════════════════════════════════════════
 
-import { appStore } from '../shared/index.js';
+import { appStore } from "../shared/index.js";
 
 export function addTodo(title) {
   if (!title.trim()) return;

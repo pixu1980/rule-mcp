@@ -14,8 +14,13 @@ import { join } from "node:path";
 let pass = 0;
 let fail = 0;
 const check = (label, ok) => {
-  if (ok) { pass++; console.log(`  ✅ ${label}`); }
-  else { fail++; console.log(`  ❌ ${label}`); }
+  if (ok) {
+    pass++;
+    console.log(`  ✅ ${label}`);
+  } else {
+    fail++;
+    console.log(`  ❌ ${label}`);
+  }
 };
 
 console.log("=== Daemon Command Tests ===\n");
@@ -25,8 +30,16 @@ const pidFile = join(stateDir, "daemon.pid");
 const logFile = join(stateDir, "daemon.log");
 
 // Clean up any stale state
-try { unlinkSync(pidFile); } catch { /* ignore: pid file may be absent */ }
-try { unlinkSync(logFile); } catch { /* ignore: log file may be absent */ }
+try {
+  unlinkSync(pidFile);
+} catch {
+  /* ignore: pid file may be absent */
+}
+try {
+  unlinkSync(logFile);
+} catch {
+  /* ignore: log file may be absent */
+}
 
 // ── Import the daemon command handler ──
 const { daemonCommand } = await import("../src/cli/commands.js");
@@ -49,7 +62,7 @@ if (pidExists) {
   }
 
   // Wait for daemon to start HTTP server
-  await new Promise(r => setTimeout(r, 2000));
+  await new Promise((r) => setTimeout(r, 2000));
 
   // Check the HTTP server is responding
   try {
@@ -67,7 +80,10 @@ if (pidExists) {
 // (capture stdout)
 const origStdout = process.stdout.write;
 let statusOutput = "";
-process.stdout.write = (chunk) => { statusOutput += chunk.toString(); return true; };
+process.stdout.write = (chunk) => {
+  statusOutput += chunk.toString();
+  return true;
+};
 
 await daemonCommand({ action: "status" });
 
@@ -88,10 +104,15 @@ try {
 
 // ── T8.2: daemon status shows not running after stop ──
 let statusAfterOutput = "";
-process.stdout.write = (chunk) => { statusAfterOutput += chunk.toString(); return true; };
+process.stdout.write = (chunk) => {
+  statusAfterOutput += chunk.toString();
+  return true;
+};
 await daemonCommand({ action: "status" });
 process.stdout.write = origStdout;
 check("T8.2 daemon status reports not running after stop", statusAfterOutput.includes('"running": false'));
 
 console.log(`\nResults: ${pass} passed, ${fail} failed`);
-if (fail > 0) {process.exit(1);}
+if (fail > 0) {
+  process.exit(1);
+}

@@ -263,9 +263,7 @@ function buildDocMap(emitted) {
 // two copies could drift.
 function renderAll(templates, answers, spec) {
   const emitted = templates.filter((tmpl) => shouldEmit(tmpl, answers, spec));
-  const enriched = isFilled(answers.DOC_MAP)
-    ? answers
-    : { ...answers, DOC_MAP: buildDocMap(emitted) };
+  const enriched = isFilled(answers.DOC_MAP) ? answers : { ...answers, DOC_MAP: buildDocMap(emitted) };
   return emitted.map((tmpl) => renderTemplate(tmpl, enriched));
 }
 
@@ -350,7 +348,7 @@ export function generateContext(answers, spec, targetDir, options = {}) {
   mkdirSync(ctxDir, { recursive: true });
 
   const rootOutputs = new Set(
-    templates.filter((tmpl) => tmpl.root).map((tmpl) => tmpl.output || tmpl.path.replace(/^templates\//, ""))
+    templates.filter((tmpl) => tmpl.root).map((tmpl) => tmpl.output || tmpl.path.replace(/^templates\//, "")),
   );
 
   const generated = renderAll(templates, answers, spec);
@@ -388,7 +386,13 @@ export function generateContext(answers, spec, targetDir, options = {}) {
     for (const entry of fanOut) {
       const fullPath = join(targetDir, entry.path);
       const status = writeEntry(fullPath, entry.content, { guard: true, force });
-      const record = { path: entry.path, content: entry.content, filled: agentsEntry.filled, unfilled: agentsEntry.unfilled, root: true };
+      const record = {
+        path: entry.path,
+        content: entry.content,
+        filled: agentsEntry.filled,
+        unfilled: agentsEntry.unfilled,
+        root: true,
+      };
       if (status === "skipped") {
         record.skipped = true;
         skipped.push(entry.path);
@@ -418,7 +422,7 @@ export function generateContextContent(answers, spec) {
   const templates = JSON.parse(readFileSync(templatesPath, "utf-8"));
 
   const rootOutputs = new Set(
-    templates.filter((tmpl) => tmpl.root).map((tmpl) => tmpl.output || tmpl.path.replace(/^templates\//, ""))
+    templates.filter((tmpl) => tmpl.root).map((tmpl) => tmpl.output || tmpl.path.replace(/^templates\//, "")),
   );
   const files = renderAll(templates, answers, spec);
   for (const rendered of files) {
@@ -432,7 +436,13 @@ export function generateContextContent(answers, spec) {
   if (agentsEntry) {
     const fanOut = fanOutEntryPoints(agentsEntry.content, answers.PROJECT_NAME || "");
     for (const entry of fanOut) {
-      files.push({ path: entry.path, content: entry.content, filled: agentsEntry.filled, unfilled: agentsEntry.unfilled, root: true });
+      files.push({
+        path: entry.path,
+        content: entry.content,
+        filled: agentsEntry.filled,
+        unfilled: agentsEntry.unfilled,
+        root: true,
+      });
     }
   }
 

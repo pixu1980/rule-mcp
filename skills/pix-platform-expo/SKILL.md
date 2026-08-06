@@ -132,7 +132,7 @@ Store sensitive build-time values in EAS Secrets — **never** in `.env` files c
 pnpx eas secret:create --name API_KEY --value your-secret-value
 ```
 
-> **Note**: `EXPO_PUBLIC_*` variables (defined in `.env` locally or in the `env` block of `eas.json` or stored as  EAS Secrets) are automatically inlined into the JS bundle at build time and accessible as `process.env.EXPO_PUBLIC_*`.
+> **Note**: `EXPO_PUBLIC_*` variables (defined in `.env` locally or in the `env` block of `eas.json` or stored as EAS Secrets) are automatically inlined into the JS bundle at build time and accessible as `process.env.EXPO_PUBLIC_*`.
 
 Secrets can also be managed via the Expo dashboard.
 
@@ -148,24 +148,24 @@ This keeps builds reproducible and signing setup consistent across environments 
 
 ## Step 4 — Build profiles and commands
 
-| Profile | Purpose | Command |
-|---|---|---|
-| development | Device dev client with Metro live reload | `pnpx eas build --profile development --platform ios` |
-| development-simulator | iOS Simulator dev client (no provisioning needed) | `pnpx eas build --profile development-simulator --platform ios` |
-| preview | Internal QA / demo — APK for Android, simulator build for iOS | `pnpx eas build --profile preview --platform all` |
-| staging | UAT — submits to TestFlight / Play Console internal | `pnpx eas build --profile staging --platform ios --auto-submit` |
-| production | Public release — App Store / Play Store (AAB for Android) | `pnpx eas build --profile production --platform ios --auto-submit` |
+| Profile               | Purpose                                                       | Command                                                            |
+| --------------------- | ------------------------------------------------------------- | ------------------------------------------------------------------ |
+| development           | Device dev client with Metro live reload                      | `pnpx eas build --profile development --platform ios`              |
+| development-simulator | iOS Simulator dev client (no provisioning needed)             | `pnpx eas build --profile development-simulator --platform ios`    |
+| preview               | Internal QA / demo — APK for Android, simulator build for iOS | `pnpx eas build --profile preview --platform all`                  |
+| staging               | UAT — submits to TestFlight / Play Console internal           | `pnpx eas build --profile staging --platform ios --auto-submit`    |
+| production            | Public release — App Store / Play Store (AAB for Android)     | `pnpx eas build --profile production --platform ios --auto-submit` |
 
 ### When to rebuild vs reload
 
-| Change Type | Requires Rebuild? |
-|---|---|
-| Editing JS/TS files | No — reloads via Metro |
-| Changing images/assets | No — reloads via Metro |
-| Updating native modules | Yes |
-| Modifying app.config.ts | Yes |
-| Changing EAS Secrets | Yes |
-| OTA update with EAS Update | No rebuild needed |
+| Change Type                | Requires Rebuild?      |
+| -------------------------- | ---------------------- |
+| Editing JS/TS files        | No — reloads via Metro |
+| Changing images/assets     | No — reloads via Metro |
+| Updating native modules    | Yes                    |
+| Modifying app.config.ts    | Yes                    |
+| Changing EAS Secrets       | Yes                    |
+| OTA update with EAS Update | No rebuild needed      |
 
 ## Step 5 — EAS Update (OTA)
 
@@ -183,29 +183,29 @@ Copy the template from `assets/templates/.gitlab-ci.yml` to `.gitlab-ci.yml` at 
 
 ### Pipeline stages
 
-| Stage | Jobs | Trigger |
-|---|---|---|
-| `install` | `install` — `pnpm ci`, caches `~/.pnpm`, exposes `node_modules/` artifact | Always |
-| `lint` | `lint` — `type-check` + `lint` | MRs, `develop`, `main` |
-| `test` | `test` — `test:coverage`, cobertura coverage artifact | MRs, `develop`, `main` |
-| `build-ios` | `eas-build-ios-uat`, `eas-build-ios` | Tags only |
-| `build-android` | `eas-build-android-uat`, `eas-build-android` | Tags only |
+| Stage           | Jobs                                                                      | Trigger                |
+| --------------- | ------------------------------------------------------------------------- | ---------------------- |
+| `install`       | `install` — `pnpm ci`, caches `~/.pnpm`, exposes `node_modules/` artifact | Always                 |
+| `lint`          | `lint` — `type-check` + `lint`                                            | MRs, `develop`, `main` |
+| `test`          | `test` — `test:coverage`, cobertura coverage artifact                     | MRs, `develop`, `main` |
+| `build-ios`     | `eas-build-ios-uat`, `eas-build-ios`                                      | Tags only              |
+| `build-android` | `eas-build-android-uat`, `eas-build-android`                              | Tags only              |
 
 EAS build jobs override `before_script` to skip `pnpm ci` — EAS Cloud manages its own dependencies.
 
 ### Tag-driven release convention
 
-| Tag pattern | Platform | EAS profile | Submit target |
-|---|---|---|---|
-| `app-store-<version>` | iOS | production | App Store (--auto-submit) |
-| `uat-app-store-<version>` | iOS | staging | TestFlight |
-| `play-store-<version>` | Android | production | Play Console (--auto-submit) |
-| `uat-play-store-<version>` | Android | staging | Play Console internal |
+| Tag pattern                | Platform | EAS profile | Submit target                |
+| -------------------------- | -------- | ----------- | ---------------------------- |
+| `app-store-<version>`      | iOS      | production  | App Store (--auto-submit)    |
+| `uat-app-store-<version>`  | iOS      | staging     | TestFlight                   |
+| `play-store-<version>`     | Android  | production  | Play Console (--auto-submit) |
+| `uat-play-store-<version>` | Android  | staging     | Play Console internal        |
 
 ### CI variables required in GitLab
 
-| Variable | Description |
-|---|---|
+| Variable     | Description                                  |
+| ------------ | -------------------------------------------- |
 | `EXPO_TOKEN` | EAS authentication token (masked, protected) |
 
 `EXPO_TOKEN` must be explicitly declared in each EAS job's `variables:` block (e.g., `EXPO_TOKEN: $EXPO_TOKEN`) so that `eas-cli` can authenticate. All other secrets must be stored in **EAS Secrets**, not GitLab CI variables.

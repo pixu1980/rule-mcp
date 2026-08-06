@@ -1,6 +1,6 @@
 # PR Comment Template
 
-```md
+````md
 Observation: [what the code currently does]
 
 Risk: [why this can cause a bug, performance issue, visual glitch, or maintenance problem]
@@ -12,9 +12,11 @@ Example:
 ```tsx
 // code sample
 ```
+````
 
 Rule of thumb: [one reusable sentence]
-```
+
+````
 
 ## Example comment
 
@@ -26,4 +28,4 @@ Risk: this can create invalid UI states, such as rendering user data while an ol
 Suggested fix: model the fetch lifecycle as one state transition with `useReducer` or a discriminated union.
 
 Rule of thumb: when state values must stay in sync, update them through one action.
-```
+````

@@ -15,55 +15,55 @@ frameworks: [all]
 
 ## Purpose
 
-* JSON is a data interchange format, not a place for logic or comments.
-* Keep JSON predictable, stable, and easy to diff in code reviews.
+- JSON is a data interchange format, not a place for logic or comments.
+- Keep JSON predictable, stable, and easy to diff in code reviews.
 
 ## Validity rules
 
-* JSON must be valid JSON, no trailing commas.
-* Use double quotes for all strings and property names.
-* Allowed value types: object, array, string, number, boolean, null.
-* Do not use `undefined`, functions, dates, or `NaN`/`Infinity`. Use `null` or omit the key.
+- JSON must be valid JSON, no trailing commas.
+- Use double quotes for all strings and property names.
+- Allowed value types: object, array, string, number, boolean, null.
+- Do not use `undefined`, functions, dates, or `NaN`/`Infinity`. Use `null` or omit the key.
 
 ## Structure and consistency
 
-* Keep a consistent shape for the same concept across the codebase.
-* Prefer stable ordering of keys inside objects to reduce diff noise.
-* Use arrays for ordered collections, objects for keyed lookups.
-* Avoid deeply nested structures unless required by the domain.
+- Keep a consistent shape for the same concept across the codebase.
+- Prefer stable ordering of keys inside objects to reduce diff noise.
+- Use arrays for ordered collections, objects for keyed lookups.
+- Avoid deeply nested structures unless required by the domain.
 
 ## Naming conventions
 
-* Use `camelCase` for keys by default.
-* Use consistent suffixes: `Id`, `At`, `Url`, `isX`, `hasX`.
-* Use plural names for arrays, singular for single objects.
+- Use `camelCase` for keys by default.
+- Use consistent suffixes: `Id`, `At`, `Url`, `isX`, `hasX`.
+- Use plural names for arrays, singular for single objects.
 
 ## Numbers, precision, and units
 
-* Do not store ambiguous numbers. Include units via naming or structure:
-  * ✅ `timeoutMs`, `sizeRem`, `angleDeg`
-  * ✅ `{ "value": 350, "unit": "ms" }` when multiple units are possible
-* Store currency amounts as integer minor units plus currency code:
-  * ✅ `{ "amountMinor": 1299, "currency": "EUR" }`
-* Avoid mixing numeric strings and numbers for the same field.
+- Do not store ambiguous numbers. Include units via naming or structure:
+  - ✅ `timeoutMs`, `sizeRem`, `angleDeg`
+  - ✅ `{ "value": 350, "unit": "ms" }` when multiple units are possible
+- Store currency amounts as integer minor units plus currency code:
+  - ✅ `{ "amountMinor": 1299, "currency": "EUR" }`
+- Avoid mixing numeric strings and numbers for the same field.
 
 ## Dates and time
 
-* Store timestamps as ISO 8601 strings in UTC:
-  * ✅ `"2026-01-19T10:15:00Z"`
-* If timezone matters, include it explicitly.
-* Do not store locale formatted dates.
+- Store timestamps as ISO 8601 strings in UTC:
+  - ✅ `"2026-01-19T10:15:00Z"`
+- If timezone matters, include it explicitly.
+- Do not store locale formatted dates.
 
 ## Booleans and nulls
 
-* Use booleans for flags, not `"true"` or `"false"` strings.
-* Use `null` only when "known empty" is meaningful.
-* Prefer omitting optional fields over writing `null` everywhere.
+- Use booleans for flags, not `"true"` or `"false"` strings.
+- Use `null` only when "known empty" is meaningful.
+- Prefer omitting optional fields over writing `null` everywhere.
 
 ## Schema mindset
 
-* When a JSON file represents a contract, define a schema and follow it strictly.
-* Prefer explicit versioning for long-lived formats.
+- When a JSON file represents a contract, define a schema and follow it strictly.
+- Prefer explicit versioning for long-lived formats.
 
 ```json
 {
@@ -75,10 +75,10 @@ frameworks: [all]
 
 ## Formatting rules
 
-* Use 2-space indentation.
-* Newline at end of file.
-* One property per line.
-* Keep lines reasonably short for diffs.
+- Use 2-space indentation.
+- Newline at end of file.
+- One property per line.
+- Keep lines reasonably short for diffs.
 
 ## Ordering guideline for object keys
 
@@ -119,9 +119,8 @@ When not constrained by an external spec, prefer this order:
 
 ## Tooling and enforcement
 
-* Always format JSON with a formatter on save.
-* Validate JSON in CI to prevent broken files from landing in the repo.
-
+- Always format JSON with a formatter on save.
+- Validate JSON in CI to prevent broken files from landing in the repo.
 
 ---
 

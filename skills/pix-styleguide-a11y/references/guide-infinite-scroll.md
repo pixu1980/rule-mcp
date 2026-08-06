@@ -12,15 +12,13 @@
 ## Example
 
 ```html
-<div aria-live="polite" role="status" aria-label="Loading more items">
-  10 new items loaded
-</div>
+<div aria-live="polite" role="status" aria-label="Loading more items">10 new items loaded</div>
 <button id="load-more" type="button">Load more</button>
 ```
 
 ## Keyboard interactions
 
-| Key | Action |
-| :--- | :--- |
-| Tab | Navigate through items to "Load More" button |
-| Enter / Space | Activate "Load More" |
+| Key           | Action                                       |
+| :------------ | :------------------------------------------- |
+| Tab           | Navigate through items to "Load More" button |
+| Enter / Space | Activate "Load More"                         |

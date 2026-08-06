@@ -13,11 +13,11 @@ These rules apply to all frontend services (web and mobile). Accessibility (a11y
 
 ## WCAG 2.1 compliance levels
 
-| Level | Requirement | Key thresholds |
-|---|---|---|
-| **A** (Minimum) | Not sufficient for EAA compliance | Basic keyboard nav, text alternatives |
-| **AA** (Required) | Mandatory baseline for all projects | Color contrast ≥ 4.5:1, text resize to 200%, visible focus indicators, consistent navigation |
-| **AAA** (Enhanced) | Recommended for high-accessibility environments | Color contrast ≥ 7:1, sign language for media, extended timeouts |
+| Level              | Requirement                                     | Key thresholds                                                                               |
+| ------------------ | ----------------------------------------------- | -------------------------------------------------------------------------------------------- |
+| **A** (Minimum)    | Not sufficient for EAA compliance               | Basic keyboard nav, text alternatives                                                        |
+| **AA** (Required)  | Mandatory baseline for all projects             | Color contrast ≥ 4.5:1, text resize to 200%, visible focus indicators, consistent navigation |
+| **AAA** (Enhanced) | Recommended for high-accessibility environments | Color contrast ≥ 7:1, sign language for media, extended timeouts                             |
 
 ## Semantic HTML
 
@@ -34,12 +34,12 @@ Use ARIA only when native HTML is insufficient (e.g., custom UI components).
 
 ### Landmark roles
 
-| Role | Usage |
-|---|---|
-| `role="banner"` | Page header |
-| `role="navigation"` | Navigation menus |
-| `role="main"` | Main content area |
-| `role="contentinfo"` | Footer |
+| Role                 | Usage             |
+| -------------------- | ----------------- |
+| `role="banner"`      | Page header       |
+| `role="navigation"`  | Navigation menus  |
+| `role="main"`        | Main content area |
+| `role="contentinfo"` | Footer            |
 
 ### Interactive components
 
@@ -49,7 +49,9 @@ Use ARIA only when native HTML is insufficient (e.g., custom UI components).
 ```html
 <!-- ✅ Correct -->
 <button aria-expanded="false" aria-controls="menu">Menu</button>
-<ul id="menu" hidden>...</ul>
+<ul id="menu" hidden>
+  ...
+</ul>
 
 <!-- ❌ Wrong — no role, not keyboard accessible -->
 <div onClick="openMenu()">Menu</div>
@@ -58,21 +60,25 @@ Use ARIA only when native HTML is insufficient (e.g., custom UI components).
 ## Verification process
 
 ### Design stage
+
 - Use accessibility-ready design tools (e.g., Figma plugins for contrast and color blindness simulation).
 - Define color, typography, and spacing tokens that meet AA (and AAA where required) contrast ratios.
 
 ### Development stage
+
 - Use semantic HTML and ARIA only when required.
 - Validate against WCAG 2.1 AA checklists during implementation.
 - Add automated accessibility tests with `axe-core` or `jest-axe`.
 
 ### Testing & QA stage
+
 - Run Lighthouse accessibility audits.
 - Validate with screen readers (NVDA, JAWS, VoiceOver, TalkBack).
 - Perform keyboard-only navigation testing.
 - Perform manual color contrast checks (AA/AAA ratios).
 
 ### CI/CD integration
+
 - Block deployments if automated tests reveal critical WCAG AA violations.
 - Generate accessibility reports per release cycle.
 

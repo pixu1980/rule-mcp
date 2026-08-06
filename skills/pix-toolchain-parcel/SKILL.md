@@ -29,11 +29,13 @@ Entry point convention: `src/index.html` is the default entry. Parcel automatica
 ```html
 <!DOCTYPE html>
 <html lang="en">
-<head><title>App</title></head>
-<body>
-  <div id="root"></div>
-  <script type="module" src="./index.tsx"></script>
-</body>
+  <head>
+    <title>App</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="./index.tsx"></script>
+  </body>
 </html>
 ```
 
@@ -84,7 +86,7 @@ MY_API_URL=https://api.example.com parcel build src/index.html
 Access in code:
 
 ```javascript
-process.env.MY_API_URL
+process.env.MY_API_URL;
 ```
 
 ## Production Build
@@ -94,6 +96,7 @@ parcel build src/index.html
 ```
 
 Output goes to `dist/`. Optimizations applied automatically:
+
 - Minification (esbuild)
 - Tree shaking
 - Code splitting
@@ -102,14 +105,14 @@ Output goes to `dist/`. Optimizations applied automatically:
 
 ## Migrating from Webpack/Vite
 
-| Feature | Webpack | Vite | Parcel |
-|---------|---------|------|--------|
-| Config file | webpack.config.js | vite.config.ts | None needed |
-| Dev server | webpack-dev-server | vite | Built-in |
-| HMR | webpack.HotModuleReplacement | Built-in | Built-in |
-| TypeScript | ts-loader/tsc | esbuild | Built-in |
-| CSS modules | css-loader | *.module.css | *.module.css |
-| Build speed | Slow (single-core) | Fast (esbuild) | Fastest (multicore) |
+| Feature     | Webpack                      | Vite           | Parcel              |
+| ----------- | ---------------------------- | -------------- | ------------------- |
+| Config file | webpack.config.js            | vite.config.ts | None needed         |
+| Dev server  | webpack-dev-server           | vite           | Built-in            |
+| HMR         | webpack.HotModuleReplacement | Built-in       | Built-in            |
+| TypeScript  | ts-loader/tsc                | esbuild        | Built-in            |
+| CSS modules | css-loader                   | *.module.css   | *.module.css        |
+| Build speed | Slow (single-core)           | Fast (esbuild) | Fastest (multicore) |
 
 ## See also
 

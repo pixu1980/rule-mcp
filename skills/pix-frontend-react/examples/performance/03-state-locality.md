@@ -6,7 +6,7 @@
 
 ```tsx
 function App() {
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useState("");
 
   return (
     <main>
@@ -31,7 +31,7 @@ function App() {
 }
 
 function SearchSection() {
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useState("");
 
   return (
     <section aria-label="Search products">

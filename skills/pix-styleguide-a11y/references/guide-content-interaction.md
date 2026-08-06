@@ -17,11 +17,11 @@ Language should be as simple as possible to reduce cognitive load.
 
 ## 3. System Feedback & Status Messages (Aria-live)
 
-| Type | Region | Use Case |
-| :--- | :--- | :--- |
-| Status | `aria-live="polite"` or `role="status"` | "Item added to cart", non-critical notifications |
-| Critical | `aria-live="assertive"` or `role="alert"` | Errors preventing immediate progress |
-| Progress | `role="progressbar"` + `aria-valuenow` | Loading indicators with percentage |
+| Type     | Region                                    | Use Case                                         |
+| :------- | :---------------------------------------- | :----------------------------------------------- |
+| Status   | `aria-live="polite"` or `role="status"`   | "Item added to cart", non-critical notifications |
+| Critical | `aria-live="assertive"` or `role="alert"` | Errors preventing immediate progress             |
+| Progress | `role="progressbar"` + `aria-valuenow`    | Loading indicators with percentage               |
 
 ```html
 <!-- Status update -->
@@ -31,9 +31,7 @@ Language should be as simple as possible to reduce cognitive load.
 <div role="alert">Form submission failed. Please correct errors below.</div>
 
 <!-- Progress -->
-<div role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100">
-  60% complete
-</div>
+<div role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100">60% complete</div>
 ```
 
 ## 4. Sensory and Multimedia
@@ -43,4 +41,4 @@ Language should be as simple as possible to reduce cognitive load.
 
 ## 5. Tip for Content AI
 
-When generating text for the interface, validate: *"If I couldn't see the screen, would this instruction still make sense?"*
+When generating text for the interface, validate: _"If I couldn't see the screen, would this instruction still make sense?"_

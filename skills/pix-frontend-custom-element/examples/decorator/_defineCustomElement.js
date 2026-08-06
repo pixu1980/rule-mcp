@@ -1,6 +1,6 @@
 // @ts-check
 
-import { buildExtendOptions } from './_buildExtendOptions.js';
+import { buildExtendOptions } from "./_buildExtendOptions.js";
 
 /**
  * Safely register a custom element. Skips definition when:
@@ -12,7 +12,7 @@ import { buildExtendOptions } from './_buildExtendOptions.js';
  * @returns {void}
  */
 export function defineCustomElement(component, isAttribute) {
-  if (typeof customElements === 'undefined') return;
+  if (typeof customElements === "undefined") return;
   if (customElements.get(isAttribute)) return;
   customElements.define(isAttribute, component, buildExtendOptions(component));
 }

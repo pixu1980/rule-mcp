@@ -55,7 +55,7 @@ Define TypeScript interfaces and types in `src/types/`. Use strict typing, for e
 export interface CreateOrderInput {
   readonly userId: string;
   readonly items: readonly OrderItem[];
-  readonly currency: 'EUR' | 'USD';
+  readonly currency: "EUR" | "USD";
 }
 
 export interface Order {
@@ -63,7 +63,7 @@ export interface Order {
   readonly userId: string;
   readonly items: readonly OrderItem[];
   readonly total: number;
-  readonly currency: 'EUR' | 'USD';
+  readonly currency: "EUR" | "USD";
   readonly createdAt: Date;
 }
 ```

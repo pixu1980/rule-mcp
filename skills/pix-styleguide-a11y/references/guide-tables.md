@@ -14,7 +14,9 @@
 
 ```html
 <table>
-  <caption>Employee Data</caption>
+  <caption>
+    Employee Data
+  </caption>
   <thead>
     <tr>
       <th scope="col" aria-sort="ascending">Name <button aria-label="Sort by name">▲</button></th>
@@ -43,7 +45,7 @@ For tables with rowspan/colspan, use multiple `<th>` elements with appropriate `
 
 ## Keyboard interactions
 
-| Key | Action |
-| :--- | :--- |
-| Tab | Navigate into/out of table |
+| Key        | Action                                    |
+| :--------- | :---------------------------------------- |
+| Tab        | Navigate into/out of table                |
 | Arrow keys | Navigate between cells (when interactive) |

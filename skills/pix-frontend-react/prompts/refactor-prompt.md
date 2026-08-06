@@ -24,5 +24,5 @@ Return:
 Code:
 
 ```tsx
-PASTE_COMPONENT_HERE
+PASTE_COMPONENT_HERE;
 ```

@@ -42,11 +42,11 @@ Test jobs run in parallel. Build jobs depend on their respective test jobs.
 
 Set these in **Settings > CI/CD > Variables**:
 
-| Variable | Description |
-|---|---|
-| `STAGING_DEPLOY_HOST` | Staging deployment API host |
-| `STAGING_DEPLOY_TOKEN` | Staging deployment auth token (masked) |
-| `PRODUCTION_DEPLOY_HOST` | Production deployment API host |
+| Variable                  | Description                               |
+| ------------------------- | ----------------------------------------- |
+| `STAGING_DEPLOY_HOST`     | Staging deployment API host               |
+| `STAGING_DEPLOY_TOKEN`    | Staging deployment auth token (masked)    |
+| `PRODUCTION_DEPLOY_HOST`  | Production deployment API host            |
 | `PRODUCTION_DEPLOY_TOKEN` | Production deployment auth token (masked) |
 
 ## Caching strategy

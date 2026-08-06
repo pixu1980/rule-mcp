@@ -36,17 +36,17 @@ Once routed here, consult the table below and load the specific sub-skill's SKIL
 
 ## Available Guides
 
-| Skill | Covers | When to use |
-|-------|--------|-------------|
-| [pix-styleguide-html](../pix-styleguide-html/SKILL.md) | Semantic HTML, document structure, template engine syntax, valid nesting | Writing HTML templates or components |
-| [pix-styleguide-css](../pix-styleguide-css/SKILL.md) | Data-part selectors, element selectors, cascade layers, custom properties, CSS comments | Styling any component |
-| [pix-styleguide-javascript](../pix-styleguide-javascript/SKILL.md) | Naming, functions, classes, async, JSDoc, Playwright + axe-core testing | Writing JS/TS modules |
-| [pix-styleguide-json](../pix-styleguide-json/SKILL.md) | Structure, property naming, date formats, numeric precision | API contracts or config files |
-| [pix-styleguide-markdown](../pix-styleguide-markdown/SKILL.md) | Headings, lists, code blocks, tables, links, tone | Writing documentation |
-| [pix-styleguide-a11y](../pix-styleguide-a11y/SKILL.md) | WCAG 2.2 AA, ARIA, AI Behavioral Contract, Compliance Profiles, platform-native mapping | Every PR — accessibility is mandatory |
-| [pix-styleguide-naming](../pix-styleguide-naming/SKILL.md) | PascalCase, camelCase, UPPER_SNAKE_CASE, barrel pattern, `_` prefix, directory layout | Creating new files, folders, or exports |
-| [pix-styleguide-patterns](../pix-styleguide-patterns/SKILL.md) | Quick reference cheat sheet: naming, file tree, HTML elements, CSS property order, JS patterns | Daily reference during development |
-| [pix-styleguide-validation](../pix-styleguide-validation/SKILL.md) | International business validation: email, phone, VAT, tax IDs, postal codes | Form/API validation rules |
+| Skill                                                              | Covers                                                                                         | When to use                             |
+| ------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------- | --------------------------------------- |
+| [pix-styleguide-html](../pix-styleguide-html/SKILL.md)             | Semantic HTML, document structure, template engine syntax, valid nesting                       | Writing HTML templates or components    |
+| [pix-styleguide-css](../pix-styleguide-css/SKILL.md)               | Data-part selectors, element selectors, cascade layers, custom properties, CSS comments        | Styling any component                   |
+| [pix-styleguide-javascript](../pix-styleguide-javascript/SKILL.md) | Naming, functions, classes, async, JSDoc, Playwright + axe-core testing                        | Writing JS/TS modules                   |
+| [pix-styleguide-json](../pix-styleguide-json/SKILL.md)             | Structure, property naming, date formats, numeric precision                                    | API contracts or config files           |
+| [pix-styleguide-markdown](../pix-styleguide-markdown/SKILL.md)     | Headings, lists, code blocks, tables, links, tone                                              | Writing documentation                   |
+| [pix-styleguide-a11y](../pix-styleguide-a11y/SKILL.md)             | WCAG 2.2 AA, ARIA, AI Behavioral Contract, Compliance Profiles, platform-native mapping        | Every PR — accessibility is mandatory   |
+| [pix-styleguide-naming](../pix-styleguide-naming/SKILL.md)         | PascalCase, camelCase, UPPER_SNAKE_CASE, barrel pattern, `_` prefix, directory layout          | Creating new files, folders, or exports |
+| [pix-styleguide-patterns](../pix-styleguide-patterns/SKILL.md)     | Quick reference cheat sheet: naming, file tree, HTML elements, CSS property order, JS patterns | Daily reference during development      |
+| [pix-styleguide-validation](../pix-styleguide-validation/SKILL.md) | International business validation: email, phone, VAT, tax IDs, postal codes                    | Form/API validation rules               |
 
 ---
 
@@ -67,6 +67,7 @@ User says "what are the coding standards" → router scores `pix-styleguide` (th
 Run `pix_check skill=pix-styleguide code="..."` to validate code.
 
 Key guardrails enforced across all styleguides:
+
 - **no-css-classes**: Zero `.class` selectors — use element + `[data-part]` only
 - **no-inline-styles**: Zero `style="..."` attributes
 - **semantic-html**: Zero `<div>` where semantic element exists

@@ -2,7 +2,7 @@
 
 This document logs known deviations from accessibility standards (WCAG 2.2 AA / EN 301 549) that have been temporarily accepted.
 
-> **Objective:** Provide technical and legal transparency by documenting *where*, *why*, and *how* we temporarily mitigate guidelines that could not be met due to technical, platform, or scope limitations.
+> **Objective:** Provide technical and legal transparency by documenting _where_, _why_, and _how_ we temporarily mitigate guidelines that could not be met due to technical, platform, or scope limitations.
 
 ## Rules
 
@@ -18,6 +18,7 @@ This document logs known deviations from accessibility standards (WCAG 2.2 AA / 
 ## Exception Log
 
 ### 1. Basic Details
+
 - **Exception ID:** [e.g., EXT-2026-001]
 - **Component / Page:** [e.g., Financial Dashboard Dynamic Table]
 - **WCAG Guideline Affected:** [e.g., 2.1.1 Keyboard (A) and 1.4.3 Contrast (Minimum) (AA)]
@@ -27,21 +28,25 @@ This document logs known deviations from accessibility standards (WCAG 2.2 AA / 
 - **Tracking Issue:** [Link to the backlog item]
 
 ### 2. Technical Blockade Description
+
 - **What is broken?** [Explain what the user cannot do]
 - **Why did it happen?** [Third-party tool, legacy architecture, etc.]
 
 ### 3. Workaround (Fallback / Remediation)
+
 - **How can the user still complete the task?** [Text alternative, support option, etc.]
 
 ### 4. Resolution Plan and Expiry
+
 - **Expiry (review-by date):** [YYYY-MM-DD — mandatory]
 - **Resolution Criterion:** [What needs to happen for this exception to no longer exist?]
 
 ---
 
-*Blank copy below for new exceptions:*
+_Blank copy below for new exceptions:_
 
 ### 1. Basic Details
+
 - **Exception ID:**
 - **Component / Page:**
 - **WCAG Guideline Affected:**
@@ -51,12 +56,15 @@ This document logs known deviations from accessibility standards (WCAG 2.2 AA / 
 - **Tracking Issue:**
 
 ### 2. Technical Blockade Description
+
 - **What is broken?**
 - **Why did it happen?**
 
 ### 3. Workaround (Fallback / Remediation)
+
 - **How can the user still complete the task?**
 
 ### 4. Resolution Plan and Expiry
+
 - **Expiry (review-by date):**
 - **Resolution Criterion:**

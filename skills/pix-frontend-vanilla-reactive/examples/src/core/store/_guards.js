@@ -2,4 +2,6 @@
 //  Store — guard helpers
 // ═══════════════════════════════════════════════════════════════════════════════
 
-export function isObject(v) { return v !== null && typeof v === 'object'; }
+export function isObject(v) {
+  return v !== null && typeof v === "object";
+}

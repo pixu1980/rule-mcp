@@ -1,11 +1,11 @@
-'use strict';
+"use strict";
 
-import { readFileSync } from 'node:fs';
-import { dirname, resolve } from 'node:path';
-import { JSDOM } from 'jsdom';
+import { readFileSync } from "node:fs";
+import { dirname, resolve } from "node:path";
+import { JSDOM } from "jsdom";
 
-import { evaluateExpression, parseExpression } from './_expression-parser.js';
-import { registerBuiltinFilters } from './_filters.js';
+import { evaluateExpression, parseExpression } from "./_expression-parser.js";
+import { registerBuiltinFilters } from "./_filters.js";
 
 export class TemplateRenderer {
   constructor(rootDir) {
@@ -24,7 +24,7 @@ export class TemplateRenderer {
   // --- String-based helpers for preprocessing (extends/includes) ---
   loadTemplate(filePath) {
     if (this.cache.has(filePath)) return this.cache.get(filePath);
-    const content = readFileSync(filePath, 'utf8');
+    const content = readFileSync(filePath, "utf8");
     this.cache.set(filePath, content);
     return content;
   }
@@ -49,7 +49,7 @@ export class TemplateRenderer {
 
     let result = layoutContent;
     for (const [blockName, blockContent] of Object.entries(blocks)) {
-      const blockRegex = new RegExp(`<block\\s+name=["']${blockName}["'][^>]*>.*?<\\/block>`, 'gs');
+      const blockRegex = new RegExp(`<block\\s+name=["']${blockName}["'][^>]*>.*?<\\/block>`, "gs");
       result = result.replace(blockRegex, blockContent);
     }
 
@@ -57,8 +57,7 @@ export class TemplateRenderer {
   }
 
   processIncludes(content, _data, currentDir) {
-    const includeRegex =
-      /<include\s+src=["']([^"']+)["']\s*\/?>|<include\s+src=["']([^"']+)["'][^>]*><\/include>/g;
+    const includeRegex = /<include\s+src=["']([^"']+)["']\s*\/?>|<include\s+src=["']([^"']+)["'][^>]*><\/include>/g;
     return content.replace(includeRegex, (m, s1, s2) => {
       if (/\s(?:data|locals)=['"]/.test(m)) {
         return m;
@@ -70,7 +69,7 @@ export class TemplateRenderer {
         const includeContent = this.loadTemplate(includePath);
         return includeContent; // DOM renderer will handle inner directives
       } catch (err) {
-        console.warn('Include failed:', err.message);
+        console.warn("Include failed:", err.message);
         return m;
       }
     });
@@ -80,7 +79,7 @@ export class TemplateRenderer {
   render(templatePath, data = {}) {
     const fullPath = resolve(this.rootDir, templatePath);
     const currentDir = dirname(fullPath);
-    const content = readFileSync(fullPath, 'utf8');
+    const content = readFileSync(fullPath, "utf8");
 
     // Preprocess extends/includes at string level
     let processed = content;
@@ -88,7 +87,7 @@ export class TemplateRenderer {
       processed = this.processExtends(processed, data, currentDir);
       processed = this.processIncludes(processed, data, currentDir);
     } catch (err) {
-      console.warn('Preprocessing error:', err.message);
+      console.warn("Preprocessing error:", err.message);
     }
 
     this._currentDir = currentDir;
@@ -107,14 +106,14 @@ export class TemplateRenderer {
       this.cleanup(document.documentElement);
 
       let out = dom.serialize();
-      out = out.replace(/&lt;\//g, '&lt;&#x2F;');
+      out = out.replace(/&lt;\//g, "&lt;&#x2F;");
       return out;
     }
 
     this.processNode(document.body, data);
     this.cleanup(document.body);
     let out = document.body.innerHTML;
-    out = out.replace(/&lt;\//g, '&lt;&#x2F;');
+    out = out.replace(/&lt;\//g, "&lt;&#x2F;");
     return out;
   }
   processNode(node, data) {
@@ -148,19 +147,19 @@ export class TemplateRenderer {
   handleElementDirectives(node, data) {
     const tag = node.tagName?.toLowerCase();
     if (!tag) return false;
-    if (tag === 'if') {
+    if (tag === "if") {
       this.processIfElement(node, data);
       return true;
     }
-    if (tag === 'switch') {
+    if (tag === "switch") {
       this.processSwitchElement(node, data);
       return true;
     }
-    if (tag === 'md' || tag === 'markdown') {
+    if (tag === "md" || tag === "markdown") {
       this.processMdElement(node, data);
       return true;
     }
-    if (tag === 'include') {
+    if (tag === "include") {
       this.processIncludeElement(node, data);
       return true;
     }
@@ -170,7 +169,7 @@ export class TemplateRenderer {
   iterateChildren(node, data) {
     const children = Array.from(node.childNodes ?? []);
     for (const child of children) {
-      if (child.nodeType === child.ELEMENT_NODE && child.tagName.toLowerCase() === 'for') {
+      if (child.nodeType === child.ELEMENT_NODE && child.tagName.toLowerCase() === "for") {
         this.processForElement(child, data);
       } else {
         this.processNode(child, data);
@@ -182,7 +181,7 @@ export class TemplateRenderer {
     return text.replace(/\{\{([^}]+)\}\}/g, (_m, expr) => {
       const parsed = parseExpression(expr);
       const value = evaluateExpression(parsed, data, Object.fromEntries(this.filters));
-      if (value == null) return '';
+      if (value == null) return "";
       return String(value);
     });
   }
@@ -206,7 +205,7 @@ export class TemplateRenderer {
 
       if (value != null) {
         const appliedFilters = parsed.filters || [];
-        const hasRawFilter = appliedFilters.some((f) => f.name === 'raw');
+        const hasRawFilter = appliedFilters.some((f) => f.name === "raw");
         if (hasRawFilter) {
           this.appendRawContentToFragment(String(value), frag);
         } else {
@@ -233,17 +232,17 @@ export class TemplateRenderer {
 
   escapeHtml(str) {
     const htmlEscapeMap = {
-      '&': '&amp;',
-      '<': '&lt;',
-      '>': '&gt;',
-      '"': '&quot;',
-      "'": '&#x27;',
+      "&": "&amp;",
+      "<": "&lt;",
+      ">": "&gt;",
+      '"': "&quot;",
+      "'": "&#x27;",
     };
     return String(str).replace(/[&<>"']/g, (s) => htmlEscapeMap[s]);
   }
 
   processForElement(forEl, data) {
-    const each = forEl.getAttribute('each');
+    const each = forEl.getAttribute("each");
     const match = each?.match(/^\s*([a-zA-Z_$][a-zA-Z0-9_$]*)\s+in\s+(.+)$/);
     if (!match) {
       forEl.remove();
@@ -264,7 +263,7 @@ export class TemplateRenderer {
     for (let i = 0; i < arr.length; i++) {
       const item = arr[i];
       const clone = forEl.cloneNode(true);
-      clone.removeAttribute('each');
+      clone.removeAttribute("each");
 
       const newData = { ...data };
       newData[itemVar] = item;
@@ -281,7 +280,7 @@ export class TemplateRenderer {
   }
 
   processIfElement(ifEl, data) {
-    const cond = ifEl.getAttribute('condition') || '';
+    const cond = ifEl.getAttribute("condition") || "";
     const parsed = parseExpression(cond);
     const res = evaluateExpression(parsed, data, Object.fromEntries(this.filters));
 
@@ -298,14 +297,14 @@ export class TemplateRenderer {
   }
 
   processSwitchElement(switchEl, data) {
-    const expr = switchEl.getAttribute('expr') || '';
+    const expr = switchEl.getAttribute("expr") || "";
     const parsed = parseExpression(expr);
     const val = evaluateExpression(parsed, data, Object.fromEntries(this.filters));
 
     let chosen = null;
     for (const child of Array.from(switchEl.children)) {
-      if (child.tagName.toLowerCase() === 'case') {
-        const caseVal = child.getAttribute('value');
+      if (child.tagName.toLowerCase() === "case") {
+        const caseVal = child.getAttribute("value");
         if (String(caseVal) === String(val)) {
           chosen = child;
           break;
@@ -313,8 +312,7 @@ export class TemplateRenderer {
       }
     }
 
-    if (!chosen)
-      chosen = Array.from(switchEl.children).find((c) => c.tagName.toLowerCase() === 'default');
+    if (!chosen) chosen = Array.from(switchEl.children).find((c) => c.tagName.toLowerCase() === "default");
 
     if (chosen) {
       const parent = switchEl.parentNode;
@@ -328,8 +326,8 @@ export class TemplateRenderer {
   }
 
   processMdElement(mdEl, _data) {
-    const inner = mdEl.innerHTML || '';
-    const mdFilter = this.filters.get('md');
+    const inner = mdEl.innerHTML || "";
+    const mdFilter = this.filters.get("md");
     const rendered = mdFilter ? mdFilter(inner) : inner;
     const parent = mdEl.parentNode;
     const frag = mdEl.ownerDocument.createDocumentFragment();
@@ -340,7 +338,7 @@ export class TemplateRenderer {
   }
 
   processIncludeElement(includeEl, data) {
-    const src = includeEl.getAttribute('src');
+    const src = includeEl.getAttribute("src");
     if (!src) {
       includeEl.remove();
       return;
@@ -349,8 +347,8 @@ export class TemplateRenderer {
     // Get locals or data attributes and merge with existing data
     let includeData = { ...data };
 
-    const localsAttr = includeEl.getAttribute('locals');
-    const dataAttr = includeEl.getAttribute('data');
+    const localsAttr = includeEl.getAttribute("locals");
+    const dataAttr = includeEl.getAttribute("data");
 
     if (localsAttr) {
       try {
@@ -359,7 +357,7 @@ export class TemplateRenderer {
         const locals = JSON.parse(processedLocals);
         includeData = { ...includeData, ...locals };
       } catch (err) {
-        console.warn('Failed to parse locals attribute:', err.message, 'Raw:', localsAttr);
+        console.warn("Failed to parse locals attribute:", err.message, "Raw:", localsAttr);
       }
     }
 
@@ -370,20 +368,20 @@ export class TemplateRenderer {
         const dataObj = JSON.parse(processedData);
         includeData = { ...includeData, ...dataObj };
       } catch (err) {
-        console.warn('Failed to parse data attribute:', err.message);
+        console.warn("Failed to parse data attribute:", err.message);
       }
     }
 
     const includePath = resolve(this._currentDir || this.rootDir, src);
     try {
-      const content = readFileSync(includePath, 'utf8');
+      const content = readFileSync(includePath, "utf8");
       const includedHtml = this.renderString(content, includeData);
       const tmp = new JSDOM(includedHtml).window.document.body;
       const frag = includeEl.ownerDocument.createDocumentFragment();
       while (tmp.firstChild) frag.appendChild(tmp.firstChild);
       includeEl.parentNode.insertBefore(frag, includeEl);
     } catch (err) {
-      console.warn('Include failed:', err.message);
+      console.warn("Include failed:", err.message);
     }
     includeEl.remove();
   }
@@ -395,17 +393,17 @@ export class TemplateRenderer {
       if (!container) return;
 
       // Ensure main script is marked as module to satisfy bundlers (vite/rollup)
-      const scripts = Array.from(container.querySelectorAll('script'));
+      const scripts = Array.from(container.querySelectorAll("script"));
       for (const s of scripts) {
-        const src = s.getAttribute?.('src');
-        if (src && typeof src === 'string' && src.trim().endsWith('/scripts/main.js')) {
-          if (!s.hasAttribute('type')) s.setAttribute('type', 'module');
+        const src = s.getAttribute?.("src");
+        if (src && typeof src === "string" && src.trim().endsWith("/scripts/main.js")) {
+          if (!s.hasAttribute("type")) s.setAttribute("type", "module");
         }
       }
 
       // Normalize boolean attributes: keep them but remove empty values where possible
-      for (const el of Array.from(container.querySelectorAll('[defer]'))) {
-        if (el.getAttribute('defer') === '') el.setAttribute('defer', '');
+      for (const el of Array.from(container.querySelectorAll("[defer]"))) {
+        if (el.getAttribute("defer") === "") el.setAttribute("defer", "");
       }
     } catch (_err) {
       // non-fatal - leave DOM as-is on error

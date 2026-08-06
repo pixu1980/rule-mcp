@@ -9,9 +9,9 @@ function UserProfile({ userId }: { userId: string }) {
 
   useEffect(() => {
     fetch(`/api/users/${userId}`)
-      .then(response => response.json())
+      .then((response) => response.json())
       .then(setUser)
-      .catch(() => setError('Error loading user'));
+      .catch(() => setError("Error loading user"));
   }, [userId]);
 
   if (error) return <p>{error}</p>;
@@ -39,12 +39,12 @@ function useUser(userId: string) {
     setState({ user: null, error: null, loading: true });
 
     fetch(`/api/users/${userId}`)
-      .then(response => response.json())
-      .then(user => {
+      .then((response) => response.json())
+      .then((user) => {
         if (active) setState({ user, error: null, loading: false });
       })
       .catch(() => {
-        if (active) setState({ user: null, error: 'Error loading user', loading: false });
+        if (active) setState({ user: null, error: "Error loading user", loading: false });
       });
 
     return () => {

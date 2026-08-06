@@ -15,7 +15,7 @@ Focus on:
 
 For each issue, return:
 
-```md
+````md
 ### Issue title
 
 - Pattern: [one of the Astro patterns]
@@ -28,12 +28,14 @@ For each issue, return:
 // improved snippet
 ---
 ```
+````
 
 Rule of thumb:
-```
+
+````
 
 Review this code:
 
 ```astro
 PASTE_CODE_HERE
-```
+````

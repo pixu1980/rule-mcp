@@ -112,6 +112,7 @@ VITE_API_BASE_URL=http://localhost:3000/api
 - `README.md` — project name, description, quick start, prerequisites, scripts
 - `LICENSE` — MIT by default for open-source
 - `CONTRIBUTING.md` — branch policy, commit convention, PR process
+
 ## Framework Configuration Files
 
 ### .prettierrc
@@ -204,6 +205,7 @@ lts/*
 2. Or call `pix_scaffold mode=generate file=.prettierrc` for a single file.
 3. Create/paste each file at the project root.
 4. Run `pix_check` to validate the files are present.
+
 ---
 
 ## See also

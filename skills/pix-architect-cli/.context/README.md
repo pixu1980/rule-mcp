@@ -1,8 +1,8 @@
-#  Documentation
+# Documentation
 
 ## Overview
 
- is a **[DOMAIN_NAME]** product designed to .
+is a **[DOMAIN_NAME]** product designed to .
 
 Primary value propositions:
 

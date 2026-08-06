@@ -15,16 +15,9 @@ export {
   getCurrentCollector,
   pushCollector,
   popCollector,
-} from './signals/index.js';
+} from "./signals/index.js";
 
-export {
-  Store,
-  deepClone,
-  clonePlainValue,
-  isObject,
-  toPathArray,
-  pathToString,
-} from './store/index.js';
+export { Store, deepClone, clonePlainValue, isObject, toPathArray, pathToString } from "./store/index.js";
 
 export {
   html,
@@ -54,4 +47,4 @@ export {
   isRangeBeforeReference,
   normalizeExprValue,
   inferModelProperty,
-} from './template-engine/index.js';
+} from "./template-engine/index.js";

@@ -19,7 +19,7 @@ export const dispatchCustomEvent = function (
   eventName,
   detail = {},
   originalEvent = undefined,
-  dispatcher = undefined
+  dispatcher = undefined,
 ) {
   const target = dispatcher ?? this ?? globalThis;
 

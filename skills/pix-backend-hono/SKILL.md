@@ -29,17 +29,17 @@ frameworks: [all]
 - RPC-style type sharing between client and server
 
 ```typescript
-import { Hono } from 'hono';
-import { cors } from 'hono/cors';
-import { jwt } from 'hono/jwt';
+import { Hono } from "hono";
+import { cors } from "hono/cors";
+import { jwt } from "hono/jwt";
 
 const app = new Hono();
 
-app.use('/api/*', cors({ origin: ALLOWED_ORIGINS }));
-app.use('/api/*', jwt({ secret: process.env.JWT_SECRET! }));
+app.use("/api/*", cors({ origin: ALLOWED_ORIGINS }));
+app.use("/api/*", jwt({ secret: process.env.JWT_SECRET! }));
 
-app.get('/api/v1/users/:id', async (c) => {
-  const id = c.req.param('id');
+app.get("/api/v1/users/:id", async (c) => {
+  const id = c.req.param("id");
   const user = await db.getUser(id);
   return c.json(user);
 });

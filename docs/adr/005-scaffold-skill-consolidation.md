@@ -8,6 +8,7 @@
 ## Context
 
 The `pix-scaffold-*` skill family was fragmented. Four separate scaffolding skills each contained overlapping content:
+
 - `pix-scaffold-backend-node` was a full backend scaffold but lived in `scaffold-*` instead of `backend-*`
 - `pix-scaffold-ai-agents` was an orchestrator that delegated to backend + frontend scaffolders
 - `pix-scaffold-expo` duplicated content that belonged in `platform-expo`
@@ -31,11 +32,11 @@ All Expo/React Native scaffolding content moves into `pix-platform-expo`, the pl
 
 ### 4. Split `scaffold-frontend-react-vite` into three targets
 
-| Content | Destination |
-|---------|-------------|
-| Vite configuration, vitest, build optimization | `pix-toolchain-vite` (new skill) |
+| Content                                                        | Destination                         |
+| -------------------------------------------------------------- | ----------------------------------- |
+| Vite configuration, vitest, build optimization                 | `pix-toolchain-vite` (new skill)    |
 | React-specific scaffolding (app bootstrap, routing, API layer) | `pix-frontend-react` (extant skill) |
-| Generic frontend project setup (package.json, tsconfig, biome) | `pix-platform-web` (extant skill) |
+| Generic frontend project setup (package.json, tsconfig, biome) | `pix-platform-web` (extant skill)   |
 
 ### 5. Delete all remaining `pix-scaffold-*` directories
 
@@ -44,16 +45,19 @@ The `pix_tool_scaffold` core MCP tool continues to handle `.prettierrc`, `.edito
 ## Consequences
 
 **Positive:**
+
 - Skills now live in their semantic category (`backend-*`, `platform-*`, `frontend-*`, `toolchain-*`)
 - No more `scaffold-*` as a catch-all category
 - Vite has its own dedicated skill (framework-agnostic, usable with React, Vue, Svelte, etc.)
 - All content preserved — no deletions, only moves and merges
 
 **Negative:**
+
 - Cross-references from the old scaffold directories needed updating across all SKILL.md files
 - MCP tool names changed for backend-node and ai-agents
 
 **Migration:**
+
 - Any agent prompts referencing `pix_tool_scaffold_backend_node` must use `pix_tool_backend_node`
 - Any agent prompts referencing `pix_tool_scaffold_ai_agents` must use `pix_tool_ai_agents`
 - Any agent prompts referencing `pix_tool_scaffold_expo` must use `pix_tool_platform_expo`

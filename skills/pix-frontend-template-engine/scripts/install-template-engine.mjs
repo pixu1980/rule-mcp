@@ -1,17 +1,17 @@
 // @ts-check
 
-import { cp, mkdir, readFile, readdir, writeFile } from 'node:fs/promises';
-import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { cp, mkdir, readFile, readdir, writeFile } from "node:fs/promises";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 
 /**
  * @param {string[]} argv
  * @returns {{ target: string; dest: string; withExamples: boolean }}
  */
 const parseArgs = (argv) => {
-  const targetIndex = argv.findIndex((arg) => arg === '--target');
-  const destIndex = argv.findIndex((arg) => arg === '--dest');
-  const withExamples = argv.includes('--with-examples');
+  const targetIndex = argv.findIndex((arg) => arg === "--target");
+  const destIndex = argv.findIndex((arg) => arg === "--dest");
+  const withExamples = argv.includes("--with-examples");
 
   if (targetIndex === -1 || !argv[targetIndex + 1]) {
     throw new Error('Missing required argument: --target "<project-root>"');
@@ -19,7 +19,7 @@ const parseArgs = (argv) => {
 
   return {
     target: argv[targetIndex + 1],
-    dest: destIndex !== -1 && argv[destIndex + 1] ? argv[destIndex + 1] : 'src/template-engine',
+    dest: destIndex !== -1 && argv[destIndex + 1] ? argv[destIndex + 1] : "src/template-engine",
     withExamples,
   };
 };
@@ -30,7 +30,7 @@ const parseArgs = (argv) => {
  */
 const fileExists = async (filePath) => {
   try {
-    await readFile(filePath, 'utf8');
+    await readFile(filePath, "utf8");
     return true;
   } catch {
     return false;
@@ -43,8 +43,8 @@ const fileExists = async (filePath) => {
  * @returns {string}
  */
 const toImportSpecifier = (fromFile, toFile) => {
-  let specifier = path.relative(path.dirname(fromFile), toFile).split(path.sep).join('/');
-  if (!specifier.startsWith('.')) specifier = `./${specifier}`;
+  let specifier = path.relative(path.dirname(fromFile), toFile).split(path.sep).join("/");
+  if (!specifier.startsWith(".")) specifier = `./${specifier}`;
   return specifier;
 };
 
@@ -64,12 +64,12 @@ const updateExampleImports = async (examplesDir, engineDir) => {
       continue;
     }
 
-    if (!entry.isFile() || !entry.name.endsWith('.mjs')) continue;
+    if (!entry.isFile() || !entry.name.endsWith(".mjs")) continue;
 
-    const engineImport = toImportSpecifier(entryPath, path.join(engineDir, 'index.js'));
-    const content = await readFile(entryPath, 'utf8');
-    const updated = content.replaceAll('../../template-engine/index.js', engineImport);
-    await writeFile(entryPath, updated, 'utf8');
+    const engineImport = toImportSpecifier(entryPath, path.join(engineDir, "index.js"));
+    const content = await readFile(entryPath, "utf8");
+    const updated = content.replaceAll("../../template-engine/index.js", engineImport);
+    await writeFile(entryPath, updated, "utf8");
   }
 };
 
@@ -80,13 +80,13 @@ const main = async () => {
   const { target, dest, withExamples } = parseArgs(process.argv.slice(2));
 
   const currentFile = fileURLToPath(import.meta.url);
-  const skillRoot = path.resolve(path.dirname(currentFile), '..');
+  const skillRoot = path.resolve(path.dirname(currentFile), "..");
 
-  const sourceEngineDir = path.join(skillRoot, 'assets/template-engine');
-  const sourceExamplesDir = path.join(skillRoot, 'assets/examples');
+  const sourceEngineDir = path.join(skillRoot, "assets/template-engine");
+  const sourceExamplesDir = path.join(skillRoot, "assets/examples");
 
   const targetEngineDir = path.resolve(target, dest);
-  const targetExamplesDir = path.resolve(target, 'examples/template-engine');
+  const targetExamplesDir = path.resolve(target, "examples/template-engine");
 
   await mkdir(targetEngineDir, { recursive: true });
   await cp(sourceEngineDir, targetEngineDir, { recursive: true, force: true });
@@ -97,19 +97,19 @@ const main = async () => {
     await updateExampleImports(targetExamplesDir, targetEngineDir);
   }
 
-  const packageJsonPath = path.resolve(target, 'package.json');
+  const packageJsonPath = path.resolve(target, "package.json");
   const hasPackageJson = await fileExists(packageJsonPath);
 
   if (hasPackageJson) {
-    const packageRaw = await readFile(packageJsonPath, 'utf8');
+    const packageRaw = await readFile(packageJsonPath, "utf8");
     /** @type {any} */
     const packageJson = JSON.parse(packageRaw);
 
     packageJson.devDependencies ??= {};
-    packageJson.devDependencies.jsdom ??= '^26.1.0';
-    packageJson.devDependencies.marked ??= '^17.0.5';
+    packageJson.devDependencies.jsdom ??= "^26.1.0";
+    packageJson.devDependencies.marked ??= "^17.0.5";
 
-    await writeFile(packageJsonPath, `${JSON.stringify(packageJson, null, 2)}\n`, 'utf8');
+    await writeFile(packageJsonPath, `${JSON.stringify(packageJson, null, 2)}\n`, "utf8");
   }
 
   const summary = {
@@ -117,9 +117,9 @@ const main = async () => {
     installedExamples: withExamples ? targetExamplesDir : null,
     packageJsonUpdated: hasPackageJson,
     nextSteps: [
-      'Install dependencies with pnpm install',
-      `Run tests: node --test ${path.join(dest, 'tests/*.test.js')}`,
-      `Import TemplateEngine from ${path.join(dest, 'index.js')}`,
+      "Install dependencies with pnpm install",
+      `Run tests: node --test ${path.join(dest, "tests/*.test.js")}`,
+      `Import TemplateEngine from ${path.join(dest, "index.js")}`,
     ],
   };
 
@@ -127,8 +127,6 @@ const main = async () => {
 };
 
 main().catch((error) => {
-  process.stderr.write(
-    `install-template-engine error: ${error instanceof Error ? error.message : String(error)}\n`
-  );
+  process.stderr.write(`install-template-engine error: ${error instanceof Error ? error.message : String(error)}\n`);
   process.exitCode = 1;
 });

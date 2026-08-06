@@ -56,13 +56,13 @@
 // After route change:
 function handleRouteChange() {
   // Option A: Focus the main content area
-  document.getElementById('main-content').focus();
+  document.getElementById("main-content").focus();
 
   // Option B: Focus the page heading
-  document.querySelector('h1').focus();
+  document.querySelector("h1").focus();
 
   // Announce navigation
-  document.getElementById('route-announcer').textContent = 'Navigated to ' + pageTitle;
+  document.getElementById("route-announcer").textContent = "Navigated to " + pageTitle;
 }
 ```
 

@@ -14,8 +14,13 @@ import { join } from "node:path";
 let pass = 0;
 let fail = 0;
 const check = (label, ok) => {
-  if (ok) { pass++; console.log(`  ✅ ${label}`); }
-  else { fail++; console.log(`  ❌ ${label}`); }
+  if (ok) {
+    pass++;
+    console.log(`  ✅ ${label}`);
+  } else {
+    fail++;
+    console.log(`  ❌ ${label}`);
+  }
 };
 
 console.log("=== Post-process Tests ===\n");
@@ -38,7 +43,9 @@ try {
   process.chdir(tmpDir);
   try {
     postProcessFiles([{ path: evilName, status: "written", absPath: evilAbs }]);
-  } catch { /* prettier may reject the file — irrelevant to the security assertion */ }
+  } catch {
+    /* prettier may reject the file — irrelevant to the security assertion */
+  }
   process.chdir(origCwd);
 
   check("T1 no shell injection (sentinel not created)", !existsSync(sentinel));
@@ -56,7 +63,11 @@ try {
   postProcessFiles([{ path: "skip.js", status: "dry-run", absPath: untouched }]);
   check("T3 non-written entry untouched", readFileSync(untouched, "utf8") === "const x=1;return x;");
 } finally {
-  try { process.chdir(origCwd); } catch { /* ignore */ }
+  try {
+    process.chdir(origCwd);
+  } catch {
+    /* ignore */
+  }
   rmSync(tmpDir, { recursive: true, force: true });
 }
 

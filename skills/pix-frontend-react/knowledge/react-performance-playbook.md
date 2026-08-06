@@ -27,10 +27,10 @@ Recommended shapes:
 
 ```tsx
 type FetchState<T> =
-  | { status: 'idle'; data: null; error: null }
-  | { status: 'loading'; data: null; error: null }
-  | { status: 'success'; data: T; error: null }
-  | { status: 'error'; data: null; error: string };
+  | { status: "idle"; data: null; error: null }
+  | { status: "loading"; data: null; error: null }
+  | { status: "success"; data: T; error: null }
+  | { status: "error"; data: null; error: string };
 ```
 
 This makes invalid combinations harder to express.
@@ -114,13 +114,13 @@ React uses keys to match previous and next children. Bad keys cause state to sti
 Avoid:
 
 ```tsx
-items.map((item, index) => <Row key={index} item={item} />)
+items.map((item, index) => <Row key={index} item={item} />);
 ```
 
 Prefer:
 
 ```tsx
-items.map(item => <Row key={item.id} item={item} />)
+items.map((item) => <Row key={item.id} item={item} />);
 ```
 
 Index is acceptable only when all are true:

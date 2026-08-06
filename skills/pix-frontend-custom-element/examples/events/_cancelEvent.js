@@ -11,12 +11,7 @@
  * @param {boolean} [stopImmediatePropagation=true]
  * @returns {false | undefined}
  */
-export const cancelEvent = (
-  e,
-  preventDefault = true,
-  stopPropagation = true,
-  stopImmediatePropagation = true
-) => {
+export const cancelEvent = (e, preventDefault = true, stopPropagation = true, stopImmediatePropagation = true) => {
   if (!e) return;
 
   preventDefault && e.preventDefault();

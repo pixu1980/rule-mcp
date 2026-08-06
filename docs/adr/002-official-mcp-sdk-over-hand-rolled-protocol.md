@@ -7,6 +7,7 @@
 ## Context
 
 The initial implementation used a custom JSON-RPC protocol for MCP communication. This required maintaining:
+
 - Message framing (JSON-RPC 2.0)
 - Request/response matching
 - Error serialization

@@ -32,7 +32,9 @@ try {
   await new Promise((resolve, reject) => {
     const timer = setTimeout(() => reject(new Error(`SSE server did not start:\n${stderr}`)), 10_000);
     const poll = setInterval(() => {
-      if (!stderr.includes("SSE server listening") || !stderr.includes('"Authorization"')) {return;}
+      if (!stderr.includes("SSE server listening") || !stderr.includes('"Authorization"')) {
+        return;
+      }
       clearInterval(poll);
       clearTimeout(timer);
       resolve();

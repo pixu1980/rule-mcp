@@ -7,6 +7,7 @@
 ## Context
 
 The pix-galaxy-mcp server needs a language choice for implementation. Options considered:
+
 - Vanilla JavaScript (ESM)
 - TypeScript with compilation step
 

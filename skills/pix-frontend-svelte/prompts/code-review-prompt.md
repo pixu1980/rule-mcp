@@ -14,7 +14,7 @@ Focus on:
 
 For each issue, return:
 
-```md
+````md
 ### Issue title
 
 - Pattern: [one of the Svelte patterns]
@@ -25,12 +25,14 @@ For each issue, return:
 ```svelte
 <!-- improved snippet -->
 ```
+````
 
 Rule of thumb:
-```
+
+````
 
 Review this code:
 
 ```svelte
 PASTE_CODE_HERE
-```
+````

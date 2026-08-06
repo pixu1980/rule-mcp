@@ -10,6 +10,7 @@
 ## 2. Descriptive Evidence (The "Why")
 
 When creating custom complex widgets, include a comment block explaining the accessibility strategy:
+
 - What is the focus order?
 - How are states communicated?
 - What is the fallback for non-JS environments?
@@ -39,6 +40,7 @@ When creating custom complex widgets, include a comment block explaining the acc
 ## 6. European Compliance (EN 301 549)
 
 For EAA compliance:
+
 - **Interoperability:** Ensure the software does not prevent use of third-party assistive technologies.
 - **Accessibility Declaration:** Maintain a public accessibility page describing features and compliance level.
 

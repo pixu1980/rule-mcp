@@ -24,14 +24,14 @@ validate any visible interface.
 
 ## Routing contract
 
-| User intent | Primary skill | Required companions |
-|-------------|---------------|---------------------|
-| Visual direction, aesthetics, UI polish | [pix-ui-design-system](../pix-ui-design-system/SKILL.md) | [pix-styleguide](../pix-styleguide/SKILL.md) |
-| Framework component implementation | [pix-frontend](../pix-frontend/SKILL.md) or a framework skill | [pix-ui-design-system](../pix-ui-design-system/SKILL.md), [pix-styleguide](../pix-styleguide/SKILL.md) |
-| Component template generation | MCP `pix_component` | `pix_check` |
-| Accessibility review | [pix-styleguide-a11y](../pix-styleguide-a11y/SKILL.md) | `pix_check` |
-| CSS architecture | [pix-styleguide-css](../pix-styleguide-css/SKILL.md) | [pix-styleguide-naming](../pix-styleguide-naming/SKILL.md) |
-| File tree and naming | [pix-styleguide-naming](../pix-styleguide-naming/SKILL.md) | MCP `pix_fix` |
+| User intent                             | Primary skill                                                 | Required companions                                                                                    |
+| --------------------------------------- | ------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
+| Visual direction, aesthetics, UI polish | [pix-ui-design-system](../pix-ui-design-system/SKILL.md)      | [pix-styleguide](../pix-styleguide/SKILL.md)                                                           |
+| Framework component implementation      | [pix-frontend](../pix-frontend/SKILL.md) or a framework skill | [pix-ui-design-system](../pix-ui-design-system/SKILL.md), [pix-styleguide](../pix-styleguide/SKILL.md) |
+| Component template generation           | MCP `pix_component`                                           | `pix_check`                                                                                            |
+| Accessibility review                    | [pix-styleguide-a11y](../pix-styleguide-a11y/SKILL.md)        | `pix_check`                                                                                            |
+| CSS architecture                        | [pix-styleguide-css](../pix-styleguide-css/SKILL.md)          | [pix-styleguide-naming](../pix-styleguide-naming/SKILL.md)                                             |
+| File tree and naming                    | [pix-styleguide-naming](../pix-styleguide-naming/SKILL.md)    | MCP `pix_fix`                                                                                          |
 
 ## Required workflow
 
