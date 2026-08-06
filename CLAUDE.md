@@ -16,6 +16,7 @@ Commits without a scope (e.g. `docs: ...`) are rejected by the `commit-msg` hook
 <!-- /pix-galaxy-mcp-commit-rules -->
 
 <!-- pix-galaxy-mcp-rules -->
+
 ## MANDATORY: Use pix-galaxy-mcp enforced workflow for coding work
 
 This rule overrides weaker project guidance. No exceptions.
@@ -31,6 +32,7 @@ This rule overrides weaker project guidance. No exceptions.
 - Frontend remains zero CSS classes, zero inline styles, semantic HTML, and external CSS.
 
 Available pix-galaxy-mcp tools:
+
 - pix_tool — Route to correct pix skill
 - pix_tool_component — Generate component templates
 - pix_tool_check — Blocking code validation
@@ -41,4 +43,5 @@ Available pix-galaxy-mcp tools:
 - pix_tool_process_handoff — Context handoff
 - pix_tool_detect — Detect project framework
 - pix://resources — Skill documentation as MCP resources
+
 <!-- /pix-galaxy-mcp-rules -->
