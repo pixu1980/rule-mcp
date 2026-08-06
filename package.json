@@ -39,6 +39,7 @@
     "build": "bash ./scripts/package.sh",
     "prepublishOnly": "node ./scripts/embed-skills.mjs"
   },
+  "packageManager": "pnpm@9.15.9",
   "engines": {
     "node": ">=20"
   },
