@@ -252,7 +252,7 @@ function getGitLog(projectDir) {
     return "";
   }
 
-  const log = tryExec("git log --oneline --abbrev-commit --max-count=20 " + "--pretty=format:'%h %s (%ar)'", {
+  const log = tryExec("git log --oneline --abbrev-commit --max-count=20 --pretty=format:'%h %s (%ar)'", {
     cwd: projectDir,
   }).trim();
 
