@@ -1,0 +1,21 @@
+#!/bin/sh
+# rule-mcp: enforce Prettier formatting before every push.
+#   Fails early if any file is not formatted, preventing CI from
+#   rejecting the same commit later.
+#
+# Install: cp .githooks/pre-push .git/hooks/pre-push && chmod +x .git/hooks/pre-push
+
+set -e
+
+echo "pre-push: checking formatting..."
+
+if ! pnpm format --no-color 2>&1; then
+  echo "" >&2
+  echo "pre-push: rejected — unformatted files detected." >&2
+  echo "  Run: pnpm format:fix" >&2
+  echo "  Then stage and push again." >&2
+  exit 1
+fi
+
+echo "pre-push: formatting ok"
+exit 0

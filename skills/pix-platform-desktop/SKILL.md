@@ -273,15 +273,15 @@ project/
 
 ## Electron Forge vs electron-builder
 
-| Criterion | Electron Forge | electron-builder |
-|---|---|---|
-| Maintainer | Electron project (official) | Community |
-| Support model | Official Electron support | Community-maintained |
-| Downloads | Lower | ~2-3M weekly |
-| Auto-updater | External (`update-electron-app`) | Built-in (`electron-updater`) |
-| Config location | `forge.config.js` | `package.json` → `build` key |
-| Current stable | v7.x (2026) | v26.15.x (2026) |
-| Next major | — | v27 alpha (ESM-native, Node ≥22.12) |
+| Criterion       | Electron Forge                   | electron-builder                    |
+| --------------- | -------------------------------- | ----------------------------------- |
+| Maintainer      | Electron project (official)      | Community                           |
+| Support model   | Official Electron support        | Community-maintained                |
+| Downloads       | Lower                            | ~2-3M weekly                        |
+| Auto-updater    | External (`update-electron-app`) | Built-in (`electron-updater`)       |
+| Config location | `forge.config.js`                | `package.json` → `build` key        |
+| Current stable  | v7.x (2026)                      | v26.15.x (2026)                     |
+| Next major      | —                                | v27 alpha (ESM-native, Node ≥22.12) |
 
 **Decision rule**: Pick **Electron Forge** for official support and all-in-one pipeline. Pick **electron-builder** for the most mature built-in auto-updater and widest community footprint. Both produce signed, updatable installers for all platforms.
 
@@ -303,14 +303,7 @@ electron-builder produces native installers from a single `build` block in `pack
     "productName": "MyApp",
     "asar": true,
     "directories": { "output": "release" },
-    "files": [
-      "electron/**/*",
-      "src/**/*",
-      "assets/**/*",
-      "scripts/**/*",
-      "requirements.txt",
-      "package.json"
-    ],
+    "files": ["electron/**/*", "src/**/*", "assets/**/*", "scripts/**/*", "requirements.txt", "package.json"],
     "mac": {
       "category": "public.app-category.productivity",
       "target": ["dmg", "zip"],
@@ -336,11 +329,11 @@ electron-builder produces native installers from a single `build` block in `pack
 
 ### Platform Target Reference
 
-| Platform | Targets | When to use |
-|---|---|---|
-| macOS | `dmg`, `pkg`, `zip` | DMG = standard drag-to-Applications; PKG = enterprise scripts; **zip = REQUIRED for Squirrel.Mac auto-update** |
-| Windows | `nsis`, `msi`, `portable` | NSIS = customizable wizard + uninstaller; MSI = GPO/Intune deployment; portable = no install |
-| Linux | `AppImage`, `deb`, `rpm`, `snap`, `flatpak` | AppImage = single executable; deb/rpm = apt/dnf integration; Snap/Flatpak = store distribution |
+| Platform | Targets                                     | When to use                                                                                                    |
+| -------- | ------------------------------------------- | -------------------------------------------------------------------------------------------------------------- |
+| macOS    | `dmg`, `pkg`, `zip`                         | DMG = standard drag-to-Applications; PKG = enterprise scripts; **zip = REQUIRED for Squirrel.Mac auto-update** |
+| Windows  | `nsis`, `msi`, `portable`                   | NSIS = customizable wizard + uninstaller; MSI = GPO/Intune deployment; portable = no install                   |
+| Linux    | `AppImage`, `deb`, `rpm`, `snap`, `flatpak` | AppImage = single executable; deb/rpm = apt/dnf integration; Snap/Flatpak = store distribution                 |
 
 > ⚠️ The `zip` target on macOS is NOT optional if you auto-update: without it, `latest-mac.yml` cannot be created, which causes an `autoUpdater` error. The default macOS target is `dmg+zip`, so there is usually no need to specify it explicitly.
 
@@ -367,10 +360,10 @@ npx electron-builder --mac --win --linux
 
 > 🔴 **macOS rule**: Your application MUST be signed for automatic updates to work — this is a requirement of **Squirrel.Mac**. Code signing → notarization → working silent updates is one unbreakable chain.
 
-| Scenario | macOS behavior |
-|---|---|
-| Signed + notarized | Silent install works |
-| Unsigned | Can notify user about update, but CANNOT replace the binary |
+| Scenario           | macOS behavior                                              |
+| ------------------ | ----------------------------------------------------------- |
+| Signed + notarized | Silent install works                                        |
+| Unsigned           | Can notify user about update, but CANNOT replace the binary |
 
 ### Electron (electron-updater)
 
@@ -501,12 +494,12 @@ export APPLE_TEAM_ID="XXXXXXXXXX"
 
 **Decision order for 2026**:
 
-| Priority | Option | Cost | CI-friendly | Notes |
-|---|---|---|---|---|
-| 1️⃣ | **Azure Artifact Signing** | ~$10/month | ✅ Native | USA, Canada, EU, UK (orgs); USA, Canada (individuals) |
-| 2️⃣ | **OV certificate** (DigiCert, Sectigo, GlobalSign) | ~$200-300/year | ❌ USB token | Fallback if outside Azure regions |
-| 3️⃣ | **Keep existing EV cert** until expiry | ~$300-400/year | ❌ USB token | Still valid if already owned — don't buy new |
-| 🆓 | **Microsoft Store** (MSIX) | Free | ✅ | Microsoft re-signs automatically → **no SmartScreen warning, no certificate needed** |
+| Priority | Option                                             | Cost           | CI-friendly  | Notes                                                                                |
+| -------- | -------------------------------------------------- | -------------- | ------------ | ------------------------------------------------------------------------------------ |
+| 1️⃣       | **Azure Artifact Signing**                         | ~$10/month     | ✅ Native    | USA, Canada, EU, UK (orgs); USA, Canada (individuals)                                |
+| 2️⃣       | **OV certificate** (DigiCert, Sectigo, GlobalSign) | ~$200-300/year | ❌ USB token | Fallback if outside Azure regions                                                    |
+| 3️⃣       | **Keep existing EV cert** until expiry             | ~$300-400/year | ❌ USB token | Still valid if already owned — don't buy new                                         |
+| 🆓       | **Microsoft Store** (MSIX)                         | Free           | ✅           | Microsoft re-signs automatically → **no SmartScreen warning, no certificate needed** |
 
 **Azure Artifact Signing env vars**:
 
@@ -525,12 +518,12 @@ export CSC_KEY_PASSWORD="••••••"
 
 ### Signed vs Unsigned — Quick Reference
 
-| | Signed + Notarized | Unsigned |
-|---|---|---|
-| macOS first launch | Clean, Gatekeeper passes | "Unidentified developer" block; right-click → Open workaround |
-| Windows first download | SmartScreen warning until reputation builds | SmartScreen warning, no reputation inheritance |
-| macOS auto-update | ✅ Works silently | ❌ Can notify only — cannot replace binary |
-| Mac App Store eligible | ✅ Yes | ❌ No |
+|                        | Signed + Notarized                          | Unsigned                                                      |
+| ---------------------- | ------------------------------------------- | ------------------------------------------------------------- |
+| macOS first launch     | Clean, Gatekeeper passes                    | "Unidentified developer" block; right-click → Open workaround |
+| Windows first download | SmartScreen warning until reputation builds | SmartScreen warning, no reputation inheritance                |
+| macOS auto-update      | ✅ Works silently                           | ❌ Can notify only — cannot replace binary                    |
+| Mac App Store eligible | ✅ Yes                                      | ❌ No                                                         |
 
 > Unsigned builds are acceptable for a developer audience comfortable with override steps. For non-technical users — and for any app that auto-updates on macOS — signing is non-negotiable.
 
@@ -538,13 +531,13 @@ export CSC_KEY_PASSWORD="••••••"
 
 Choose by audience reach and how much control/revenue you keep.
 
-| Channel | Cost | Signing required | Auto-update | Best for |
-|---|---|---|---|---|
-| **Your own website** | Hosting only | Optional (but recommended) | ✅ via GitHub Releases / S3 | Full control, direct distribution |
-| **GitHub Releases** | Free | Optional | ✅ Native electron-updater | Path of least resistance |
-| **Mac App Store** | 30% commission (15% under $1M) | ✅ Mandatory | ❌ (Store handles updates) | Discovery + trust |
-| **Microsoft Store** | 15-30% commission | ❌ (Microsoft re-signs) | ❌ (Store handles updates) | **No SmartScreen, no cert needed** |
-| **Homebrew Cask** | Free | Optional | ✅ App-hosted | Developer audience (`brew install`) |
+| Channel              | Cost                           | Signing required           | Auto-update                 | Best for                            |
+| -------------------- | ------------------------------ | -------------------------- | --------------------------- | ----------------------------------- |
+| **Your own website** | Hosting only                   | Optional (but recommended) | ✅ via GitHub Releases / S3 | Full control, direct distribution   |
+| **GitHub Releases**  | Free                           | Optional                   | ✅ Native electron-updater  | Path of least resistance            |
+| **Mac App Store**    | 30% commission (15% under $1M) | ✅ Mandatory               | ❌ (Store handles updates)  | Discovery + trust                   |
+| **Microsoft Store**  | 15-30% commission              | ❌ (Microsoft re-signs)    | ❌ (Store handles updates)  | **No SmartScreen, no cert needed**  |
+| **Homebrew Cask**    | Free                           | Optional                   | ✅ App-hosted               | Developer audience (`brew install`) |
 
 ### Mac App Store Notes
 
@@ -610,17 +603,17 @@ jobs:
 
 ### Secrets to Configure in GitHub
 
-| Secret | Platform | Purpose |
-|---|---|---|
-| `GH_TOKEN` | All | GitHub Releases upload (auto-provided) |
-| `MAC_CSC_LINK` | macOS | Base64-encoded .p12 certificate |
-| `MAC_CSC_KEY_PASSWORD` | macOS | Certificate password |
-| `APPLE_ID` | macOS | Apple ID for notarization |
-| `APPLE_APP_PASSWORD` | macOS | App-specific password for notarization |
-| `APPLE_TEAM_ID` | macOS | Apple Developer Team ID |
-| `AZURE_TENANT_ID` | Windows | Azure Artifact Signing |
-| `AZURE_CLIENT_ID` | Windows | Azure Artifact Signing |
-| `AZURE_CLIENT_SECRET` | Windows | Azure Artifact Signing |
+| Secret                 | Platform | Purpose                                |
+| ---------------------- | -------- | -------------------------------------- |
+| `GH_TOKEN`             | All      | GitHub Releases upload (auto-provided) |
+| `MAC_CSC_LINK`         | macOS    | Base64-encoded .p12 certificate        |
+| `MAC_CSC_KEY_PASSWORD` | macOS    | Certificate password                   |
+| `APPLE_ID`             | macOS    | Apple ID for notarization              |
+| `APPLE_APP_PASSWORD`   | macOS    | App-specific password for notarization |
+| `APPLE_TEAM_ID`        | macOS    | Apple Developer Team ID                |
+| `AZURE_TENANT_ID`      | Windows  | Azure Artifact Signing                 |
+| `AZURE_CLIENT_ID`      | Windows  | Azure Artifact Signing                 |
+| `AZURE_CLIENT_SECRET`  | Windows  | Azure Artifact Signing                 |
 
 ## Crash Reporting
 

@@ -19,27 +19,27 @@ This skill helps you choose the **right authentication strategy** for your app's
 
 **These are two orthogonal axes.** Conflating them is why teams adopt JWTs they don't need.
 
-| Axis | Question | Options |
-|---|---|---|
-| **State location** | Where does auth state live? | **Server** (sessions) or **Client** (tokens) |
-| **Transport** | How does the credential travel? | **Cookie** or **Authorization header** |
+| Axis               | Question                        | Options                                      |
+| ------------------ | ------------------------------- | -------------------------------------------- |
+| **State location** | Where does auth state live?     | **Server** (sessions) or **Client** (tokens) |
+| **Transport**      | How does the credential travel? | **Cookie** or **Authorization header**       |
 
-- A **session** is stateful: server stores the record, client holds an opaque ID — the *hotel keycard* model
-- A **JWT** is stateless: claims are self-contained and signed — the *digital passport* model
+- A **session** is stateful: server stores the record, client holds an opaque ID — the _hotel keycard_ model
+- A **JWT** is stateless: claims are self-contained and signed — the _digital passport_ model
 - You can deliver **either** over a cookie or the `Authorization` header. Cookies and headers are transport; sessions and tokens are architecture.
 
 ---
 
 ## Sessions vs JWTs: The Comparison
 
-| Criterion | Server-side sessions | JWT / self-contained tokens |
-|---|---|---|
-| Where state lives | Server (store) | Client (signed token) |
-| Revocation | **Immediate** — delete the record | **Hard** — short TTL + rotation, or deny-list |
-| Scaling | Needs shared store (e.g. Redis) | Stateless; no per-request lookup |
-| Credential size | ~32-byte opaque ID | Often 800+ bytes of claims per request |
-| Primary attack surface | **CSRF** (cookies auto-sent) | **XSS** (token theft from JS-readable storage) |
-| Best fit | Server-rendered monolith | API-first, SPA, mobile, microservices |
+| Criterion              | Server-side sessions              | JWT / self-contained tokens                    |
+| ---------------------- | --------------------------------- | ---------------------------------------------- |
+| Where state lives      | Server (store)                    | Client (signed token)                          |
+| Revocation             | **Immediate** — delete the record | **Hard** — short TTL + rotation, or deny-list  |
+| Scaling                | Needs shared store (e.g. Redis)   | Stateless; no per-request lookup               |
+| Credential size        | ~32-byte opaque ID                | Often 800+ bytes of claims per request         |
+| Primary attack surface | **CSRF** (cookies auto-sent)      | **XSS** (token theft from JS-readable storage) |
+| Best fit               | Server-rendered monolith          | API-first, SPA, mobile, microservices          |
 
 > The size contrast in one line: a session cookie carries ~32 bytes and requires a lookup; a JWT carries claims inline (often 800+ bytes on every request) and skips the lookup. You're trading bandwidth and revocation latency for a store.
 
@@ -60,47 +60,49 @@ For a server-rendered monolith, start with **server-side sessions** in a signed,
 
 ```js
 // Node.js + Express session pattern
-const express = require('express');
-const session = require('express-session');
-const RedisStore = require('connect-redis').default;
-const { createClient } = require('redis');
-const crypto = require('node:crypto');
+const express = require("express");
+const session = require("express-session");
+const RedisStore = require("connect-redis").default;
+const { createClient } = require("redis");
+const crypto = require("node:crypto");
 
 const redisClient = createClient({ url: process.env.REDIS_URL });
 redisClient.connect();
 
 const app = express();
 
-app.use(session({
-  store: new RedisStore({ client: redisClient }),
-  name: 'sid',                          // Don't use default 'connect.sid'
-  secret: process.env.SESSION_SECRET,   // High-entropy, rotated
-  resave: false,
-  saveUninitialized: false,
-  cookie: {
-    httpOnly: true,    // JS cannot read it → blunts XSS exfiltration
-    secure: true,      // HTTPS only
-    sameSite: 'lax',   // Mitigates CSRF on top-level navigations
-    maxAge: 24 * 60 * 60 * 1000, // 24 hours
-  },
-}));
+app.use(
+  session({
+    store: new RedisStore({ client: redisClient }),
+    name: "sid", // Don't use default 'connect.sid'
+    secret: process.env.SESSION_SECRET, // High-entropy, rotated
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      httpOnly: true, // JS cannot read it → blunts XSS exfiltration
+      secure: true, // HTTPS only
+      sameSite: "lax", // Mitigates CSRF on top-level navigations
+      maxAge: 24 * 60 * 60 * 1000, // 24 hours
+    },
+  }),
+);
 
-app.post('/login', async (req, res) => {
+app.post("/login", async (req, res) => {
   // Verify password with Argon2 first (see below)
   const user = await verifyCredentials(req.body.email, req.body.password);
-  if (!user) return res.status(401).json({ error: 'Invalid credentials' });
+  if (!user) return res.status(401).json({ error: "Invalid credentials" });
 
   // Regenerate session ID on login to prevent session fixation
   req.session.regenerate((err) => {
-    if (err) return res.status(500).json({ error: 'Session error' });
+    if (err) return res.status(500).json({ error: "Session error" });
     req.session.userId = user.id;
     res.json({ ok: true });
   });
 });
 
-app.post('/logout', (req, res) => {
+app.post("/logout", (req, res) => {
   req.session.destroy((err) => {
-    res.clearCookie('sid');
+    res.clearCookie("sid");
     res.json({ ok: true });
   });
 });
@@ -115,21 +117,21 @@ app.post('/logout', (req, res) => {
 
 ### Trade-offs
 
-| Concern | Mitigation |
-|---|---|
+| Concern     | Mitigation                                                   |
+| ----------- | ------------------------------------------------------------ |
 | **Scaling** | Shared store (Redis) so any instance can resolve any session |
-| **CSRF** | `SameSite=Lax` + CSRF token with constant-time comparison |
-| **XSS** | `HttpOnly` flag closes the JS read path |
+| **CSRF**    | `SameSite=Lax` + CSRF token with constant-time comparison    |
+| **XSS**     | `HttpOnly` flag closes the JS read path                      |
 
 ### Password Hashing: Argon2
 
 ```js
-const argon2 = require('argon2');
+const argon2 = require("argon2");
 
 // Hash before storage
 const hash = await argon2.hash(password, {
-  type: argon2.argon2id,  // Hybrid: resistant to both GPU and side-channel
-  memoryCost: 19456,       // 19 MiB
+  type: argon2.argon2id, // Hybrid: resistant to both GPU and side-channel
+  memoryCost: 19456, // 19 MiB
   timeCost: 2,
   parallelism: 1,
 });
@@ -145,6 +147,7 @@ const valid = await argon2.verify(hash, password);
 ## JWTs & Tokens: Stateless Scaling with a Revocation Cost
 
 Reach for **raw JWTs** only when you have a **concrete stateless-scaling reason**:
+
 - API serving multiple client types
 - Microservices passing identity between themselves
 - Cross-domain access where cookies are awkward
@@ -162,40 +165,36 @@ Because a JWT is self-contained, it stays valid until expiry **no matter what yo
 
 ```js
 // jwt-utils.js
-const jwt = require('jsonwebtoken');
-const crypto = require('node:crypto');
+const jwt = require("jsonwebtoken");
+const crypto = require("node:crypto");
 
-const ACCESS_TTL = '15m';
-const REFRESH_TTL = '7d';
-const REFRESH_FAMILY_TTL = '30d';
+const ACCESS_TTL = "15m";
+const REFRESH_TTL = "7d";
+const REFRESH_FAMILY_TTL = "30d";
 
 function signAccessToken(userId, roles = []) {
-  return jwt.sign(
-    { sub: userId, roles, type: 'access' },
-    process.env.JWT_PRIVATE_KEY,
-    {
-      algorithm: 'RS256',           // Never accept "none"; pin the algorithm
-      expiresIn: ACCESS_TTL,
-      issuer: 'myapp',
-      jwtid: crypto.randomUUID(),   // Unique ID for potential deny-listing
-    }
-  );
+  return jwt.sign({ sub: userId, roles, type: "access" }, process.env.JWT_PRIVATE_KEY, {
+    algorithm: "RS256", // Never accept "none"; pin the algorithm
+    expiresIn: ACCESS_TTL,
+    issuer: "myapp",
+    jwtid: crypto.randomUUID(), // Unique ID for potential deny-listing
+  });
 }
 
 function signRefreshToken(userId, familyId) {
   // Rotation: each refresh creates a new token, invalidates the old one
   // Family: all tokens in the same family are invalidated on theft detection
-  return jwt.sign(
-    { sub: userId, type: 'refresh', family: familyId },
-    process.env.JWT_REFRESH_SECRET,
-    { algorithm: 'HS256', expiresIn: REFRESH_TTL, jwtid: crypto.randomUUID() }
-  );
+  return jwt.sign({ sub: userId, type: "refresh", family: familyId }, process.env.JWT_REFRESH_SECRET, {
+    algorithm: "HS256",
+    expiresIn: REFRESH_TTL,
+    jwtid: crypto.randomUUID(),
+  });
 }
 
 function verifyAccessToken(token) {
   return jwt.verify(token, process.env.JWT_PUBLIC_KEY, {
-    algorithms: ['RS256'],  // Pin the algorithm — critical
-    issuer: 'myapp',
+    algorithms: ["RS256"], // Pin the algorithm — critical
+    issuer: "myapp",
   });
 }
 
@@ -205,7 +204,7 @@ async function rotateRefreshToken(oldToken) {
   try {
     decoded = jwt.verify(oldToken, process.env.JWT_REFRESH_SECRET);
   } catch {
-    throw new Error('Invalid refresh token');
+    throw new Error("Invalid refresh token");
   }
 
   // Check if this token has already been used (reuse detection)
@@ -213,11 +212,11 @@ async function rotateRefreshToken(oldToken) {
   if (wasUsed) {
     // Token reuse = potential theft — invalidate the entire family
     await redis.del(`refresh_family:${decoded.family}`);
-    throw new Error('Token reuse detected — family invalidated');
+    throw new Error("Token reuse detected — family invalidated");
   }
 
   // Mark this token as used
-  await redis.setex(`used_refresh:${decoded.jti}`, 7 * 86400, '1');
+  await redis.setex(`used_refresh:${decoded.jti}`, 7 * 86400, "1");
 
   // Issue new pair
   const newAccess = signAccessToken(decoded.sub);
@@ -234,23 +233,23 @@ async function rotateRefreshToken(oldToken) {
 
 > 🔴 **Storing JWTs in `localStorage` is an anti-pattern.** Any XSS on your page can read and exfiltrate the token.
 
-| Storage | XSS-safe? | CSRF-safe? | Recommendation |
-|---|---|---|---|
-| `localStorage` | ❌ Any XSS reads it | ✅ Not auto-sent | **Never for tokens** |
-| `sessionStorage` | ❌ Any XSS reads it | ✅ Not auto-sent | **Never for tokens** |
-| `HttpOnly` cookie | ✅ JS can't read | ❌ Auto-sent (need CSRF protection) | **✅ Recommended** |
-| In-memory variable | ✅ Not accessible from DOM | ✅ Not auto-sent | ✅ For SPAs + silent refresh via cookie |
+| Storage            | XSS-safe?                  | CSRF-safe?                          | Recommendation                          |
+| ------------------ | -------------------------- | ----------------------------------- | --------------------------------------- |
+| `localStorage`     | ❌ Any XSS reads it        | ✅ Not auto-sent                    | **Never for tokens**                    |
+| `sessionStorage`   | ❌ Any XSS reads it        | ✅ Not auto-sent                    | **Never for tokens**                    |
+| `HttpOnly` cookie  | ✅ JS can't read           | ❌ Auto-sent (need CSRF protection) | **✅ Recommended**                      |
+| In-memory variable | ✅ Not accessible from DOM | ✅ Not auto-sent                    | ✅ For SPAs + silent refresh via cookie |
 
 **The recommended pattern**: store tokens in `HttpOnly` cookies. For SPAs, keep the access token in a short-lived `HttpOnly` cookie and use a silent refresh endpoint. The JavaScript layer never touches the raw token.
 
 ```js
 // Setting the access-token cookie from the server
-res.cookie('access_token', accessToken, {
+res.cookie("access_token", accessToken, {
   httpOnly: true,
   secure: true,
-  sameSite: 'strict',
-  maxAge: 15 * 60 * 1000,  // 15 minutes
-  path: '/api',             // Only sent to API routes
+  sameSite: "strict",
+  maxAge: 15 * 60 * 1000, // 15 minutes
+  path: "/api", // Only sent to API routes
 });
 ```
 
@@ -259,6 +258,7 @@ res.cookie('access_token', accessToken, {
 ## OAuth 2.0/2.1 + OIDC: Delegated Identity
 
 Use OAuth 2.0 + OpenID Connect when you need:
+
 - "Sign in with Google/GitHub/Microsoft"
 - Enterprise SSO (Okta, Azure AD)
 - Delegated API access
@@ -266,7 +266,7 @@ Use OAuth 2.0 + OpenID Connect when you need:
 ### The Standard
 
 - **OAuth 2.0**: RFC 6749 — delegated authorization (access tokens)
-- **OpenID Connect**: Layers identity on top — tells you *who* the user is (id_token)
+- **OpenID Connect**: Layers identity on top — tells you _who_ the user is (id_token)
 - **OAuth 2.1**: IETF draft-15 (March 2026) — not yet RFC, but direction is settled:
   - PKCE **required** for all authorization code flows
   - Exact redirect-URI matching (no wildcards)
@@ -375,20 +375,19 @@ Design account recovery before launch.
 
 ```js
 // Server: generate registration challenge
-const { generateRegistrationOptions, verifyRegistrationResponse } =
-  require('@simplewebauthn/server');
+const { generateRegistrationOptions, verifyRegistrationResponse } = require("@simplewebauthn/server");
 
-app.get('/auth/passkey/register-options', async (req, res) => {
+app.get("/auth/passkey/register-options", async (req, res) => {
   const user = req.session.userId; // Must be already logged in (to bind passkey)
 
   const options = await generateRegistrationOptions({
-    rpName: 'MyApp',
-    rpID: 'myapp.com',
+    rpName: "MyApp",
+    rpID: "myapp.com",
     userName: user.email,
-    attestationType: 'none',           // Don't collect attestation for UX
+    attestationType: "none", // Don't collect attestation for UX
     authenticatorSelection: {
-      residentKey: 'required',         // Discoverable credential = passkey
-      userVerification: 'preferred',
+      residentKey: "required", // Discoverable credential = passkey
+      userVerification: "preferred",
     },
   });
 
@@ -399,12 +398,12 @@ app.get('/auth/passkey/register-options', async (req, res) => {
 });
 
 // Server: verify registration
-app.post('/auth/passkey/register-verify', async (req, res) => {
+app.post("/auth/passkey/register-verify", async (req, res) => {
   const verification = await verifyRegistrationResponse({
     response: req.body,
     expectedChallenge: req.session.passkeyChallenge,
-    expectedOrigin: 'https://myapp.com',
-    expectedRPID: 'myapp.com',
+    expectedOrigin: "https://myapp.com",
+    expectedRPID: "myapp.com",
   });
 
   if (verification.verified) {
@@ -418,7 +417,7 @@ app.post('/auth/passkey/register-verify', async (req, res) => {
     req.session.passkeyChallenge = null; // Consume the challenge
     res.json({ ok: true });
   } else {
-    res.status(400).json({ error: 'Verification failed' });
+    res.status(400).json({ error: "Verification failed" });
   }
 });
 ```
@@ -427,27 +426,26 @@ app.post('/auth/passkey/register-verify', async (req, res) => {
 
 ```js
 // Server: generate authentication challenge
-const { generateAuthenticationOptions, verifyAuthenticationResponse } =
-  require('@simplewebauthn/server');
+const { generateAuthenticationOptions, verifyAuthenticationResponse } = require("@simplewebauthn/server");
 
-app.get('/auth/passkey/auth-options', async (req, res) => {
+app.get("/auth/passkey/auth-options", async (req, res) => {
   const options = await generateAuthenticationOptions({
-    rpID: 'myapp.com',
-    userVerification: 'preferred',
+    rpID: "myapp.com",
+    userVerification: "preferred",
   });
 
   req.session.passkeyAuthChallenge = options.challenge;
   res.json(options);
 });
 
-app.post('/auth/passkey/auth-verify', async (req, res) => {
+app.post("/auth/passkey/auth-verify", async (req, res) => {
   const credential = await db.getCredential(req.body.id);
 
   const verification = await verifyAuthenticationResponse({
     response: req.body,
     expectedChallenge: req.session.passkeyAuthChallenge,
-    expectedOrigin: 'https://myapp.com',
-    expectedRPID: 'myapp.com',
+    expectedOrigin: "https://myapp.com",
+    expectedRPID: "myapp.com",
     credential: {
       id: credential.credentialId,
       publicKey: credential.publicKey,
@@ -463,7 +461,7 @@ app.post('/auth/passkey/auth-verify', async (req, res) => {
     req.session.userId = credential.userId;
     res.json({ ok: true });
   } else {
-    res.status(400).json({ error: 'Verification failed' });
+    res.status(400).json({ error: "Verification failed" });
   }
 });
 ```
@@ -481,24 +479,24 @@ app.post('/auth/passkey/auth-verify', async (req, res) => {
 
 If authentication **isn't your product**, the most defensible 2026 default is a managed provider.
 
-| Provider | Best for | Key features |
-|---|---|---|
-| **Auth0** | Enterprise, B2B | Universal login, organizations, many IdP integrations |
-| **Clerk** | React/Next.js SPAs | Drop-in `<SignIn/>` components, beautiful default UI |
-| **Supabase Auth** | Supabase stack | Row-Level Security integration, Postgres-backed |
-| **WorkOS** | Enterprise SSO | Admin portal, directory sync, SCIM provisioning |
-| **Stytch** | Auth infrastructure | Headless SDK, passkeys-first, fraud prevention |
-| **Firebase Auth** | Google Cloud stack | Free tier generous, tight GCP integration |
+| Provider          | Best for            | Key features                                          |
+| ----------------- | ------------------- | ----------------------------------------------------- |
+| **Auth0**         | Enterprise, B2B     | Universal login, organizations, many IdP integrations |
+| **Clerk**         | React/Next.js SPAs  | Drop-in `<SignIn/>` components, beautiful default UI  |
+| **Supabase Auth** | Supabase stack      | Row-Level Security integration, Postgres-backed       |
+| **WorkOS**        | Enterprise SSO      | Admin portal, directory sync, SCIM provisioning       |
+| **Stytch**        | Auth infrastructure | Headless SDK, passkeys-first, fraud prevention        |
+| **Firebase Auth** | Google Cloud stack  | Free tier generous, tight GCP integration             |
 
 ### Decision: Build vs Buy
 
-| Build | Buy (Managed Provider) |
-|---|---|
-| Full control | Hardened implementation |
-| Zero per-MAU cost | Someone else's on-call rotation |
-| You own the breach surface | Faster time-to-login |
-| Custom UX requirements | Drop-in SDKs for common patterns |
-| Auth IS your product | Auth is table stakes |
+| Build                      | Buy (Managed Provider)           |
+| -------------------------- | -------------------------------- |
+| Full control               | Hardened implementation          |
+| Zero per-MAU cost          | Someone else's on-call rotation  |
+| You own the breach surface | Faster time-to-login             |
+| Custom UX requirements     | Drop-in SDKs for common patterns |
+| Auth IS your product       | Auth is table stakes             |
 
 > For most greenfield apps, the managed route is the rational starting point — migrate off later if scale or cost demands.
 
@@ -510,21 +508,20 @@ Cookies are sent **automatically** on cross-site requests. Combine defenses:
 
 ```js
 // 1. SameSite cookie attribute (baseline)
-cookie: { sameSite: 'lax' }
+cookie: {
+  sameSite: "lax";
+}
 
 // 2. CSRF token with constant-time comparison
-const crypto = require('node:crypto');
+const crypto = require("node:crypto");
 
 function generateCsrfToken() {
-  return crypto.randomBytes(32).toString('hex');
+  return crypto.randomBytes(32).toString("hex");
 }
 
 function verifyCsrfToken(stored, received) {
   if (!stored || !received) return false;
-  return crypto.timingSafeEqual(
-    Buffer.from(stored, 'hex'),
-    Buffer.from(received, 'hex')
-  );
+  return crypto.timingSafeEqual(Buffer.from(stored, "hex"), Buffer.from(received, "hex"));
 }
 
 // 3. Custom request header requirement (for SPAs)
@@ -536,15 +533,15 @@ function verifyCsrfToken(stored, received) {
 
 ```js
 // Server sets a non-HttpOnly CSRF cookie
-res.cookie('csrf_token', token, {
+res.cookie("csrf_token", token, {
   secure: true,
-  sameSite: 'strict',
+  sameSite: "strict",
   httpOnly: false, // JS can read this one (but it's not the auth token)
 });
 
 // Client reads it and sends it back in a header
-fetch('/api/data', {
-  headers: { 'X-CSRF-Token': readCookie('csrf_token') },
+fetch("/api/data", {
+  headers: { "X-CSRF-Token": readCookie("csrf_token") },
 });
 ```
 
@@ -552,13 +549,13 @@ fetch('/api/data', {
 
 ## Decision Matrix by App Archetype
 
-| App archetype | Start with | Add when needed |
-|---|---|---|
-| **Server-rendered monolith** | Server-side sessions (HttpOnly cookie) | OIDC for social login; passkeys opt-in |
-| **SPA / mobile / API backend** | Short-lived access tokens + refresh rotation, in HttpOnly cookies | OIDC for third-party identity |
-| **Needs social login or enterprise SSO** | OAuth 2.0 + OIDC (target 2.1 profile) | Sessions or tokens for your own surfaces |
-| **Auth isn't your product** | Managed provider (Auth0/Clerk/Supabase/WorkOS/Stytch) | — it already bundles the rest |
-| **High-security / consumer-facing** | Any base above + passkeys | Recovery flow designed up front |
+| App archetype                            | Start with                                                        | Add when needed                          |
+| ---------------------------------------- | ----------------------------------------------------------------- | ---------------------------------------- |
+| **Server-rendered monolith**             | Server-side sessions (HttpOnly cookie)                            | OIDC for social login; passkeys opt-in   |
+| **SPA / mobile / API backend**           | Short-lived access tokens + refresh rotation, in HttpOnly cookies | OIDC for third-party identity            |
+| **Needs social login or enterprise SSO** | OAuth 2.0 + OIDC (target 2.1 profile)                             | Sessions or tokens for your own surfaces |
+| **Auth isn't your product**              | Managed provider (Auth0/Clerk/Supabase/WorkOS/Stytch)             | — it already bundles the rest            |
+| **High-security / consumer-facing**      | Any base above + passkeys                                         | Recovery flow designed up front          |
 
 ### The Common Production Architecture (Hybrid)
 
@@ -577,12 +574,12 @@ fetch('/api/data', {
 
 These only surface in the browser — session replay captures them, error logs don't.
 
-| Failure mode | Cause | Detection |
-|---|---|---|
-| **Silent token-expiry logout loops** | Refresh token expires mid-session, SPA bounces to login repeatedly | Each request returns valid 401 — logs look fine |
-| **Abandoned passkey enrollment** | User cancels OS WebAuthn prompt | Browser-side only; server never sees the attempt |
-| **OAuth redirect dead-ends** | Mismatched redirect URI or lost state parameter | Round-trip happens off your server |
-| **Browser-specific cookie failures** | SameSite/Secure issues on specific browser versions | Reproduces only on that browser |
+| Failure mode                         | Cause                                                              | Detection                                        |
+| ------------------------------------ | ------------------------------------------------------------------ | ------------------------------------------------ |
+| **Silent token-expiry logout loops** | Refresh token expires mid-session, SPA bounces to login repeatedly | Each request returns valid 401 — logs look fine  |
+| **Abandoned passkey enrollment**     | User cancels OS WebAuthn prompt                                    | Browser-side only; server never sees the attempt |
+| **OAuth redirect dead-ends**         | Mismatched redirect URI or lost state parameter                    | Round-trip happens off your server               |
+| **Browser-specific cookie failures** | SameSite/Secure issues on specific browser versions                | Reproduces only on that browser                  |
 
 > Authentication is a **UX surface**, not just a protocol choice. Watch the real flow after launch.
 
@@ -591,6 +588,7 @@ These only surface in the browser — session replay captures them, error logs d
 ## Guards & Best Practices
 
 ### Credential Storage
+
 - ✅ Store tokens in `HttpOnly`, `Secure`, `SameSite` cookies
 - ✅ Hash passwords with **Argon2id** — never bcrypt for new projects
 - ✅ Regenerate session IDs on login (prevent session fixation)
@@ -598,6 +596,7 @@ These only surface in the browser — session replay captures them, error logs d
 - ❌ Never embed sensitive data in session IDs
 
 ### JWT Hygiene
+
 - ✅ Pin the algorithm: `algorithms: ['RS256']` — never accept `"none"`
 - ✅ Short access-token TTL (15 minutes) + refresh rotation
 - ✅ Include `jti` (unique ID) for potential deny-listing
@@ -606,6 +605,7 @@ These only surface in the browser — session replay captures them, error logs d
 - ❌ Never use symmetric keys (HS256) for access tokens in distributed systems
 
 ### OAuth / OIDC
+
 - ✅ Authorization Code + PKCE for **all** clients
 - ✅ Exact redirect-URI matching (no wildcards)
 - ✅ Validate `state` parameter against stored value
@@ -613,12 +613,14 @@ These only surface in the browser — session replay captures them, error logs d
 - ❌ Never skip PKCE — even for confidential clients
 
 ### Passkeys
+
 - ✅ Offer as opt-in upgrade, not the only door
 - ✅ Allow multiple passkeys per account
 - ✅ Design recovery flow before launch (recovery codes)
 - ❌ Don't require passkeys without a fallback
 
 ### Sessions
+
 - ✅ Shared store (Redis) for multi-instance deployments
 - ✅ Absolute + idle timeouts
 - ✅ CSRF token with constant-time comparison

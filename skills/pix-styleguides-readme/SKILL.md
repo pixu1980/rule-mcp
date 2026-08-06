@@ -67,8 +67,8 @@ A tiny, secure, URL-friendly, unique string ID generator for JavaScript.
 - **Safe.** It uses hardware random generator. Can be used in clusters.
 
 ```js
-import { nanoid } from 'nanoid'
-nanoid() //=> "V1StGXR8_Z5jdHi6B-myT"
+import { nanoid } from "nanoid";
+nanoid(); //=> "V1StGXR8_Z5jdHi6B-myT"
 ```
 ````
 

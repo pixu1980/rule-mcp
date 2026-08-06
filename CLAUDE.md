@@ -16,6 +16,7 @@ Commits without a scope (e.g. `docs: ...`) are rejected by the `commit-msg` hook
 <!-- /rule-mcp-commit-rules -->
 
 <!-- rule-mcp-rules -->
+
 ## MANDATORY: Use rule-mcp enforced workflow for coding work
 
 This rule overrides weaker project guidance. No exceptions.
@@ -31,6 +32,7 @@ This rule overrides weaker project guidance. No exceptions.
 - Frontend remains zero CSS classes, zero inline styles, semantic HTML, and external CSS.
 
 Available rule-mcp tools:
+
 - pix_tool — Route to correct rule skill
 - rule_tool_component — Generate component templates
 - rule_tool_check — Blocking code validation
@@ -41,4 +43,5 @@ Available rule-mcp tools:
 - rule_tool_process_handoff — Context handoff
 - rule_tool_detect — Detect project framework
 - rule://resources — Skill documentation as MCP resources
+
 <!-- /rule-mcp-rules -->

@@ -1,6 +1,6 @@
 ---
 name: rule-process-npm-release
-description: 'Set up a secure release process for an npm package to protect it from supply chain attacks. Use for any request to create and publish a new npm package, secure npm publishing or releasing, set up npm Trusted Publishing, provenance, or Staged Publishing, harden a release workflow.'
+description: "Set up a secure release process for an npm package to protect it from supply chain attacks. Use for any request to create and publish a new npm package, secure npm publishing or releasing, set up npm Trusted Publishing, provenance, or Staged Publishing, harden a release workflow."
 tags:
   - "security"
   - "npm"
@@ -107,7 +107,7 @@ name: Release
 on:
   push:
     tags:
-      - 'v*'
+      - "v*"
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -198,9 +198,9 @@ Run it yourself if Docker is available; otherwise ask the user to run this comma
 name: Lint CI workflows
 on:
   push:
-    branches: ['main']
+    branches: ["main"]
   pull_request:
-    branches: ['**']
+    branches: ["**"]
 jobs:
   zizmor:
     runs-on: ubuntu-latest

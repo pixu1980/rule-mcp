@@ -28,11 +28,11 @@ The browser's main thread handles **rendering, user input, and JavaScript execut
 
 ## Worker Types at a Glance
 
-| Type | Scope | Use case | API |
-|---|---|---|---|
-| **Dedicated Worker** | Single script/tab | CPU-heavy computation, parsing, image processing | `new Worker()` |
-| **Shared Worker** | Multiple scripts/windows/iframes (same origin) | Shared state, cross-tab coordination | `new SharedWorker()` |
-| **Service Worker** | Network proxy, offline cache | PWAs, offline support, push notifications, background sync | `navigator.serviceWorker.register()` |
+| Type                 | Scope                                          | Use case                                                   | API                                  |
+| -------------------- | ---------------------------------------------- | ---------------------------------------------------------- | ------------------------------------ |
+| **Dedicated Worker** | Single script/tab                              | CPU-heavy computation, parsing, image processing           | `new Worker()`                       |
+| **Shared Worker**    | Multiple scripts/windows/iframes (same origin) | Shared state, cross-tab coordination                       | `new SharedWorker()`                 |
+| **Service Worker**   | Network proxy, offline cache                   | PWAs, offline support, push notifications, background sync | `navigator.serviceWorker.register()` |
 
 ---
 
@@ -44,7 +44,7 @@ Accessible only by the script that created them. The bread-and-butter worker typ
 
 ```js
 if (window.Worker) {
-  const worker = new Worker('worker.js');
+  const worker = new Worker("worker.js");
 }
 ```
 
@@ -52,10 +52,10 @@ if (window.Worker) {
 
 ```js
 // Modern bundler-safe path (Vite, webpack, Parcel)
-const worker = new Worker(new URL('worker.js', import.meta.url));
+const worker = new Worker(new URL("worker.js", import.meta.url));
 
 // Classic path (relative to HTML page)
-const worker = new Worker('worker.js');
+const worker = new Worker("worker.js");
 ```
 
 ### Main ↔ Worker Communication
@@ -64,19 +64,19 @@ const worker = new Worker('worker.js');
 
 ```js
 // main.js
-const worker = new Worker('worker.js');
+const worker = new Worker("worker.js");
 
 // Send data to worker
-worker.postMessage({ numbers: [5, 3], operation: 'multiply' });
+worker.postMessage({ numbers: [5, 3], operation: "multiply" });
 
 // Receive result from worker
 worker.onmessage = (event) => {
-  console.log('Result:', event.data);
+  console.log("Result:", event.data);
 };
 
 // Handle errors
 worker.onerror = (error) => {
-  console.error('Worker error:', error.message);
+  console.error("Worker error:", error.message);
 };
 
 // Terminate when done
@@ -91,7 +91,7 @@ self.onmessage = (event) => {
   const { numbers, operation } = event.data;
 
   let result;
-  if (operation === 'multiply') {
+  if (operation === "multiply") {
     result = numbers[0] * numbers[1];
   }
 
@@ -106,16 +106,18 @@ Create a worker from a string or function — no separate file needed:
 ```js
 // Convert a function to a worker URL
 function fn2workerURL(fn) {
-  const blob = new Blob([`(${fn.toString()})()`], { type: 'text/javascript' });
+  const blob = new Blob([`(${fn.toString()})()`], { type: "text/javascript" });
   return URL.createObjectURL(blob);
 }
 
-const worker = new Worker(fn2workerURL(() => {
-  self.onmessage = (e) => {
-    // Heavy computation here
-    self.postMessage(result);
-  };
-}));
+const worker = new Worker(
+  fn2workerURL(() => {
+    self.onmessage = (e) => {
+      // Heavy computation here
+      self.postMessage(result);
+    };
+  }),
+);
 ```
 
 > ⚠️ `URL.createObjectURL()` creates a blob URL — call `URL.revokeObjectURL(url)` after the worker is created to avoid memory leaks.
@@ -140,12 +142,12 @@ Accessible by **multiple scripts** across different windows, tabs, iframes, or w
 
 ```js
 // main.js (same code in multiple windows/tabs)
-const worker = new SharedWorker('shared-worker.js');
+const worker = new SharedWorker("shared-worker.js");
 
 // Messages go through a port
-worker.port.postMessage({ type: 'square', value: 7 });
+worker.port.postMessage({ type: "square", value: 7 });
 worker.port.onmessage = (event) => {
-  console.log('Result:', event.data);
+  console.log("Result:", event.data);
 };
 ```
 
@@ -162,7 +164,7 @@ self.onconnect = (event) => {
   port.onmessage = (e) => {
     const { type, value } = e.data;
     let result;
-    if (type === 'square') result = value * value;
+    if (type === "square") result = value * value;
 
     // Broadcast to all connected ports
     connections.forEach((p) => p.postMessage({ result }));
@@ -179,7 +181,7 @@ self.onconnect = (event) => {
 - `extendedLifetime` keeps worker alive briefly after all references close:
 
 ```js
-const worker = new SharedWorker('worker.js', { extendedLifetime: true });
+const worker = new SharedWorker("worker.js", { extendedLifetime: true });
 // Worker lives a few seconds after all ports close —
 // useful for flushing analytics or saving state on navigation
 ```
@@ -197,14 +199,14 @@ Messages are deep-copied via the **structured clone algorithm**. This means:
 worker.postMessage({
   numbers: [1, 2, 3],
   date: new Date(),
-  map: new Map([['key', 'value']]),
+  map: new Map([["key", "value"]]),
   buffer: new ArrayBuffer(16),
   nested: { circular: null }, // circular references work (unlike JSON)
 });
 
 // ❌ These DO NOT survive:
 worker.postMessage({
-  fn: () => {},           // Functions are dropped
+  fn: () => {}, // Functions are dropped
   element: document.body, // DOM nodes are dropped
   instance: new MyClass(), // Class prototypes are dropped
 });
@@ -256,7 +258,7 @@ Workers have a global `importScripts()` function that loads scripts synchronousl
 
 ```js
 // worker.js
-importScripts('lib1.js', 'lib2.js');
+importScripts("lib1.js", "lib2.js");
 
 // Now use globals from lib1 and lib2
 const result = lib1.process(lib2.transform(data));
@@ -267,7 +269,7 @@ const result = lib1.process(lib2.transform(data));
 For ES modules in workers, use the `type: 'module'` option:
 
 ```js
-const worker = new Worker('worker.js', { type: 'module' });
+const worker = new Worker("worker.js", { type: "module" });
 // worker.js can now use: import { foo } from './lib.js';
 ```
 
@@ -305,45 +307,46 @@ const worker = new Worker('worker.js', { type: 'module' });
 
 ```js
 // main.js
-const worker = new Worker(new URL('compute.js', import.meta.url));
+const worker = new Worker(new URL("compute.js", import.meta.url));
 
-document.querySelector('#generate').addEventListener('click', () => {
-  const input = document.querySelector('#quota').value;
-  worker.postMessage({ command: 'generate', quota: input });
+document.querySelector("#generate").addEventListener("click", () => {
+  const input = document.querySelector("#quota").value;
+  worker.postMessage({ command: "generate", quota: input });
 });
 
-worker.addEventListener('message', (e) => {
-  document.querySelector('#output').textContent =
-    `Finished generating ${e.data} primes!`;
+worker.addEventListener("message", (e) => {
+  document.querySelector("#output").textContent = `Finished generating ${e.data} primes!`;
 });
 ```
 
 ```js
 // compute.js
-addEventListener('message', (e) => {
-  if (e.data.command === 'generate') {
+addEventListener("message", (e) => {
+  if (e.data.command === "generate") {
     const primes = generatePrimes(e.data.quota);
     postMessage(primes.length);
   }
 });
 
-function generatePrimes(quota) { /* heavy computation */ }
+function generatePrimes(quota) {
+  /* heavy computation */
+}
 ```
 
 ### Pattern 2: Image Processing with OffscreenCanvas
 
 ```js
 // main.js
-const canvas = document.querySelector('canvas');
+const canvas = document.querySelector("canvas");
 const offscreen = canvas.transferControlToOffscreen();
 
-const worker = new Worker('renderer.js');
+const worker = new Worker("renderer.js");
 worker.postMessage({ canvas: offscreen }, [offscreen]);
 
 // worker.js — can now render directly to canvas from a worker!
 self.onmessage = (e) => {
   const canvas = e.data.canvas;
-  const ctx = canvas.getContext('2d');
+  const ctx = canvas.getContext("2d");
   // Draw without blocking the UI thread
 };
 ```
@@ -356,18 +359,20 @@ const workers = [];
 const cpuCount = navigator.hardwareConcurrency || 4;
 
 for (let i = 0; i < cpuCount; i++) {
-  workers.push(new Worker('task.js'));
+  workers.push(new Worker("task.js"));
 }
 
 function parallelMap(data, fn) {
   const chunkSize = Math.ceil(data.length / workers.length);
-  return Promise.all(workers.map((worker, i) => {
-    return new Promise((resolve) => {
-      const chunk = data.slice(i * chunkSize, (i + 1) * chunkSize);
-      worker.onmessage = (e) => resolve(e.data);
-      worker.postMessage({ chunk, fn: fn.toString() });
-    });
-  })).then(results => results.flat());
+  return Promise.all(
+    workers.map((worker, i) => {
+      return new Promise((resolve) => {
+        const chunk = data.slice(i * chunkSize, (i + 1) * chunkSize);
+        worker.onmessage = (e) => resolve(e.data);
+        worker.postMessage({ chunk, fn: fn.toString() });
+      });
+    }),
+  ).then((results) => results.flat());
 }
 ```
 
@@ -402,11 +407,11 @@ class QueryableWorker {
 }
 
 // Usage
-const task = new QueryableWorker('task.js');
-task.addListener('onResult', (result) => {
-  document.querySelector('#output').textContent = result;
+const task = new QueryableWorker("task.js");
+task.addListener("onResult", (result) => {
+  document.querySelector("#output").textContent = result;
 });
-task.sendQuery('getDifference', 5, 3);
+task.sendQuery("getDifference", 5, 3);
 ```
 
 ---
@@ -438,15 +443,15 @@ Transfer   Structured
 
 ### Quick Rules
 
-| Situation | Solution |
-|---|---|
-| Heavy computation blocking UI | **Dedicated Worker** — never run sync CPU work on the main thread |
-| Large binary data passing | **Transferable objects** — zero-copy, ownership moves |
-| Multiple tabs sharing state | **Shared Worker** — single worker for all same-origin contexts |
-| Offline / background sync / push | **Service Worker** — network proxy, not for CPU work |
-| Multi-core parallel processing | **Multiple dedicated workers** — one per core |
-| Worker startup overhead > task time | Stay on **main thread** — workers have creation cost |
-| Canvas rendering blocking UI | **OffscreenCanvas** — transfer to worker |
+| Situation                           | Solution                                                          |
+| ----------------------------------- | ----------------------------------------------------------------- |
+| Heavy computation blocking UI       | **Dedicated Worker** — never run sync CPU work on the main thread |
+| Large binary data passing           | **Transferable objects** — zero-copy, ownership moves             |
+| Multiple tabs sharing state         | **Shared Worker** — single worker for all same-origin contexts    |
+| Offline / background sync / push    | **Service Worker** — network proxy, not for CPU work              |
+| Multi-core parallel processing      | **Multiple dedicated workers** — one per core                     |
+| Worker startup overhead > task time | Stay on **main thread** — workers have creation cost              |
+| Canvas rendering blocking UI        | **OffscreenCanvas** — transfer to worker                          |
 
 ### When NOT to Use Workers
 
@@ -469,10 +474,10 @@ Workers have their **own execution context**, distinct from the creating documen
 
 ## Debugging
 
-| Browser | Debug URL |
-|---|---|
-| Chrome | `chrome://inspect/#workers` |
-| Edge | `edge://inspect/#workers` |
+| Browser | Debug URL                               |
+| ------- | --------------------------------------- |
+| Chrome  | `chrome://inspect/#workers`             |
+| Edge    | `edge://inspect/#workers`               |
 | Firefox | `about:debugging#/runtime/this-firefox` |
 
 Workers appear in the Sources panel alongside main-thread scripts. You can set breakpoints, inspect variables, and use the console — just like debugging the main thread.
@@ -482,24 +487,28 @@ Workers appear in the Sources panel alongside main-thread scripts. You can set b
 ## Guards & Best Practices
 
 ### Worker Lifecycle
+
 - ✅ Create workers **once**, not per-task
 - ✅ `terminate()` workers when no longer needed (SPA unmount)
 - ✅ Handle `worker.onerror` — unhandled errors are silent otherwise
 - ❌ Don't create workers in a loop or per-event
 
 ### Data Transfer
+
 - ✅ Use **transferables** for large binary data (>1MB)
 - ✅ `SharedArrayBuffer` only when you need true shared memory + `Atomics`
 - ❌ Don't send functions, DOM nodes, or class instances — structured clone drops them
 - ❌ Don't send the entire application state — be selective
 
 ### Compatibility
+
 - ✅ Feature-detect: `if (window.Worker) { ... }`
 - ✅ Use `new URL('worker.js', import.meta.url)` for bundler compatibility
 - ✅ Test with your bundler (Vite, webpack, Parcel) — each has worker syntax
 - ❌ Workers require a server — `file://` URLs cannot create workers
 
 ### Performance
+
 - ✅ Split work across `navigator.hardwareConcurrency` workers for CPU-bound parallelism
 - ✅ Profile before and after — workers are not free
 - ❌ Don't create more workers than CPU cores for CPU-bound tasks
