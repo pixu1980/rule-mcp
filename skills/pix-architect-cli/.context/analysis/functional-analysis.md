@@ -1,4 +1,4 @@
-# Functional Analysis: 
+# Functional Analysis:
 
 ## 1. Context and objective
 
@@ -142,7 +142,6 @@ Quality expectations:
 - Privacy: **[PRIVACY_REQ_1]**
 
 ## 12. Open questions
-
 
 - **[OPEN_QUESTION_1]**
 - **[OPEN_QUESTION_2]**

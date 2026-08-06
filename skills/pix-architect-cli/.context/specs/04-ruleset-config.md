@@ -2,7 +2,7 @@
 
 ## Goal
 
-**[DOMAIN_ENTITY_MANAGER]** defines the reusable rules, presets, or policy data that keep  consistent across workflows.
+**[DOMAIN_ENTITY_MANAGER]** defines the reusable rules, presets, or policy data that keep consistent across workflows.
 
 ## Required shape
 

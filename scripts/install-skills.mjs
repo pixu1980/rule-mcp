@@ -20,8 +20,8 @@ if (!existsSync(sourceRoot)) {
 }
 
 const skills = readdirSync(sourceRoot, { withFileTypes: true })
-  .filter(entry => entry.isDirectory() && existsSync(join(sourceRoot, entry.name, "SKILL.md")))
-  .map(entry => entry.name)
+  .filter((entry) => entry.isDirectory() && existsSync(join(sourceRoot, entry.name, "SKILL.md")))
+  .map((entry) => entry.name)
   .sort();
 
 if (skills.length === 0) {

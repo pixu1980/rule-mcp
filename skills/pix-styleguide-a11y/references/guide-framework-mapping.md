@@ -18,52 +18,46 @@ When generating or reviewing code, **transpose** these patterns into the active 
 
 ## 1. Vue.js / Nuxt
 
-| Concept | Syntax |
-| :--- | :--- |
-| State binding | `:aria-expanded="isOpen"` (v-bind) |
-| Event handling | `@keydown.enter="submit"` |
-| Focus | `$refs.element.focus()` |
+| Concept        | Syntax                             |
+| :------------- | :--------------------------------- |
+| State binding  | `:aria-expanded="isOpen"` (v-bind) |
+| Event handling | `@keydown.enter="submit"`          |
+| Focus          | `$refs.element.focus()`            |
 
 ```html
-<button :aria-pressed="isActive" @click="isActive = !isActive">
-  Toggle
-</button>
+<button :aria-pressed="isActive" @click="isActive = !isActive">Toggle</button>
 ```
 
 ## 2. Angular
 
-| Concept | Syntax |
-| :--- | :--- |
-| State binding | `[attr.aria-expanded]="isOpen"` (note `attr.` prefix) |
-| Event handling | `(keydown.enter)="submit()"` |
-| Focus | `@ViewChild` + `ElementRef` |
+| Concept        | Syntax                                                |
+| :------------- | :---------------------------------------------------- |
+| State binding  | `[attr.aria-expanded]="isOpen"` (note `attr.` prefix) |
+| Event handling | `(keydown.enter)="submit()"`                          |
+| Focus          | `@ViewChild` + `ElementRef`                           |
 
 ```html
-<button [attr.aria-pressed]="isActive" (click)="isActive = !isActive">
-  Toggle
-</button>
+<button [attr.aria-pressed]="isActive" (click)="isActive = !isActive">Toggle</button>
 ```
 
 ## 3. Svelte
 
-| Concept | Syntax |
-| :--- | :--- |
-| State binding | `aria-expanded={isOpen}` |
-| Event handling | `on:keydown` |
-| Directives | `use:focusTrap` for complex logic |
+| Concept        | Syntax                            |
+| :------------- | :-------------------------------- |
+| State binding  | `aria-expanded={isOpen}`          |
+| Event handling | `on:keydown`                      |
+| Directives     | `use:focusTrap` for complex logic |
 
 ```html
-<button aria-pressed={isActive} on:click={() => isActive = !isActive}>
-  Toggle
-</button>
+<button aria-pressed="{isActive}" on:click="{()" ="">isActive = !isActive}> Toggle</button>
 ```
 
 ## 4. SolidJS
 
-| Concept | Syntax |
-| :--- | :--- |
-| State binding | `aria-expanded={isOpen()}` (invoke signal) |
-| Event handling | `onKeyDown={(e) => ...}` |
+| Concept        | Syntax                                     |
+| :------------- | :----------------------------------------- |
+| State binding  | `aria-expanded={isOpen()}` (invoke signal) |
+| Event handling | `onKeyDown={(e) => ...}`                   |
 
 ```jsx
 <button aria-pressed={isActive()} onClick={() => setIsActive(!isActive())}>
@@ -73,13 +67,13 @@ When generating or reviewing code, **transpose** these patterns into the active 
 
 ## 5. Vanilla JS / Web Components (Lit)
 
-| Concept | Syntax |
-| :--- | :--- |
-| State binding | `.ariaExpanded=${this.isOpen}` or `?aria-hidden=${this.isHidden}` |
+| Concept            | Syntax                                                                                    |
+| :----------------- | :---------------------------------------------------------------------------------------- |
+| State binding      | `.ariaExpanded=${this.isOpen}` or `?aria-hidden=${this.isHidden}`                         |
 | Shadow DOM caution | `aria-controls` / `aria-describedby` IDs do not cross Shadow DOM — use `ElementInternals` |
 
 ```js
-html`<button .ariaPressed=${this.isActive} @click=${this.toggle}>Toggle</button>`
+html`<button .ariaPressed=${this.isActive} @click=${this.toggle}>Toggle</button>`;
 ```
 
 ---
@@ -87,6 +81,7 @@ html`<button .ariaPressed=${this.isActive} @click=${this.toggle}>Toggle</button>
 ## Translation Example: Destructive Confirmation Modal
 
 ### React/TSX (Source)
+
 ```tsx
 <dialog aria-labelledby="modal-title" ref={dialogRef}>
   <h2 id="modal-title">Confirm deletion</h2>
@@ -97,6 +92,7 @@ html`<button .ariaPressed=${this.isActive} @click=${this.toggle}>Toggle</button>
 ```
 
 ### Vue.js
+
 ```html
 <dialog aria-labelledby="modal-title" ref="dialogRef">
   <h2 id="modal-title">Confirm deletion</h2>

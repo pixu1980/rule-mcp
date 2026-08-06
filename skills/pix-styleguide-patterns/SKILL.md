@@ -82,27 +82,27 @@ src/
 
 ## HTML — Semantic Elements Cheat Sheet (MANDATORY)
 
-| Instead of `<div>` | Use |
-|---|---|
-| Generic container with heading | `<section>` |
-| Self-contained content | `<article>` |
-| Top navigation links | `<nav>` |
-| Main page content | `<main>` |
-| Site/page header | `<header>` |
-| Section/component header | `<header>` |
-| Site/page footer | `<footer>` |
-| Section/component footer | `<footer>` |
-| Sidebar, complementary | `<aside>` |
-| Image + caption | `<figure>` + `<figcaption>` |
-| Clickable action | `<button>` |
-| List of items | `<ul>` / `<ol>` + `<li>` |
-| Search bar | `<search>` |
-| Form | `<form>` |
-| Tab navigation | `<nav>` |
-| Summary/stats | `<section>` |
-| Modal/dialog | `<dialog>` |
-| Expandable section | `<details>` + `<summary>` |
-| Flex row / CSS wrapper | `<section>` |
+| Instead of `<div>`             | Use                         |
+| ------------------------------ | --------------------------- |
+| Generic container with heading | `<section>`                 |
+| Self-contained content         | `<article>`                 |
+| Top navigation links           | `<nav>`                     |
+| Main page content              | `<main>`                    |
+| Site/page header               | `<header>`                  |
+| Section/component header       | `<header>`                  |
+| Site/page footer               | `<footer>`                  |
+| Section/component footer       | `<footer>`                  |
+| Sidebar, complementary         | `<aside>`                   |
+| Image + caption                | `<figure>` + `<figcaption>` |
+| Clickable action               | `<button>`                  |
+| List of items                  | `<ul>` / `<ol>` + `<li>`    |
+| Search bar                     | `<search>`                  |
+| Form                           | `<form>`                    |
+| Tab navigation                 | `<nav>`                     |
+| Summary/stats                  | `<section>`                 |
+| Modal/dialog                   | `<dialog>`                  |
+| Expandable section             | `<details>` + `<summary>`   |
+| Flex row / CSS wrapper         | `<section>`                 |
 
 ## CSS — Property Ordering
 
@@ -124,39 +124,49 @@ src/
 - Use `data-*` attributes for state (boolean presence)
 
 ```css
-my-component { display: block; }             /* ✅ element */
-my-component [data-part="header"] { }       /* ✅ attribute */
-my-component [data-open] { }                 /* ✅ state attribute */
-.my-component { display: block; }            /* ❌ class */
+my-component {
+  display: block;
+} /* ✅ element */
+my-component [data-part="header"] {
+} /* ✅ attribute */
+my-component [data-open] {
+} /* ✅ state attribute */
+.my-component {
+  display: block;
+} /* ❌ class */
 ```
 
 ## JavaScript — Static Init Block Pattern
 
 ```js
-import styles from './_MyComponent.css' with { type: 'css' };
+import styles from "./_MyComponent.css" with { type: "css" };
 
 class MyComponent extends HTMLElement {
   static {
-    customElements.define('my-component', this);
+    customElements.define("my-component", this);
     document.adoptedStyleSheets = [...document.adoptedStyleSheets, styles];
   }
-  connectedCallback() { this.render(); }
-  render() { /* idempotent DOM rendering */ }
+  connectedCallback() {
+    this.render();
+  }
+  render() {
+    /* idempotent DOM rendering */
+  }
 }
 ```
 
 ## JavaScript — Modern Idioms (unicorn-enforced)
 
-| Instead of | Use | Why |
-|---|---|---|
-| `arr.includes(x)` in a loop | `new Set(arr).has(x)` | O(1) vs O(n) per lookup (O(n²) in loops) |
-| `arr.forEach(fn)` | `for (const item of arr) { }` | break/continue/await + TS narrowing |
-| `import fs from 'fs'` | `import fs from 'node:fs'` | unshadowable builtin |
-| `throw Error('boom')` | `throw new Error('boom')` | `new` required |
-| `str.replace(/-/g, ' ')` | `str.replaceAll('-', ' ')` | clearer intent |
-| `rows.map(f).flat()` | `rows.flatMap(f)` | no intermediate array |
-| `const m = Map()` | `const m = new Map()` | `new` for Map/Set/Date/Array/WeakMap/WeakSet |
-| `if (ok) return a; else return b;` | `return ok ? a : b;` | avoids `let`, enables `prefer-const` |
+| Instead of                         | Use                           | Why                                          |
+| ---------------------------------- | ----------------------------- | -------------------------------------------- |
+| `arr.includes(x)` in a loop        | `new Set(arr).has(x)`         | O(1) vs O(n) per lookup (O(n²) in loops)     |
+| `arr.forEach(fn)`                  | `for (const item of arr) { }` | break/continue/await + TS narrowing          |
+| `import fs from 'fs'`              | `import fs from 'node:fs'`    | unshadowable builtin                         |
+| `throw Error('boom')`              | `throw new Error('boom')`     | `new` required                               |
+| `str.replace(/-/g, ' ')`           | `str.replaceAll('-', ' ')`    | clearer intent                               |
+| `rows.map(f).flat()`               | `rows.flatMap(f)`             | no intermediate array                        |
+| `const m = Map()`                  | `const m = new Map()`         | `new` for Map/Set/Date/Array/WeakMap/WeakSet |
+| `if (ok) return a; else return b;` | `return ok ? a : b;`          | avoids `let`, enables `prefer-const`         |
 
 ## Import Order
 
@@ -167,10 +177,10 @@ class MyComponent extends HTMLElement {
 5. Side-effect (registrations)
 
 ```js
-import { Store } from '@core/index.js';
-import { TodoItem } from '@components/TodoItem/index.js';
-import { addTodo } from '@helpers/index.js';
-import '@styles/index.css';
+import { Store } from "@core/index.js";
+import { TodoItem } from "@components/TodoItem/index.js";
+import { addTodo } from "@helpers/index.js";
+import "@styles/index.css";
 ```
 
 ## Accessibility — Minimum Viable Checklist
@@ -185,7 +195,6 @@ import '@styles/index.css';
 - [ ] Keyboard navigation works
 - [ ] `lang` attribute on `<html>`
 - [ ] `prefers-reduced-motion` respected
-
 
 ---
 

@@ -43,14 +43,14 @@ The **BMad Method** (Build More Architect Dreams) is an AI-driven development fr
 
 The BMAD Method structures software delivery into four phases:
 
-| Phase | Name | Status | What Happens |
-|-------|------|--------|-------------|
-| 1 | Analysis | Optional | Brainstorming, research, forge idea, product brief or PRFAQ |
-| 2 | Planning | Required | Create requirements: PRD, UX, SPEC |
-| 3 | Solutioning | Required* | Design architecture spine or detailed project/system architectures |
-| 4 | Implementation | Required | Build epic by epic, story by story |
+| Phase | Name           | Status    | What Happens                                                       |
+| ----- | -------------- | --------- | ------------------------------------------------------------------ |
+| 1     | Analysis       | Optional  | Brainstorming, research, forge idea, product brief or PRFAQ        |
+| 2     | Planning       | Required  | Create requirements: PRD, UX, SPEC                                 |
+| 3     | Solutioning    | Required* | Design architecture spine or detailed project/system architectures |
+| 4     | Implementation | Required  | Build epic by epic, story by story                                 |
 
-*\*Required for BMad Method and Enterprise tracks. Quick Flow skips to implementation.*
+_\*Required for BMad Method and Enterprise tracks. Quick Flow skips to implementation._
 
 ### Workflows
 
@@ -87,13 +87,13 @@ Every workflow runs in a **fresh chat**. This prevents context window limitation
 
 Based on project complexity, choose one of three tracks:
 
-| Track | Best For | Docs Created | Phases |
-|-------|----------|-------------|--------|
-| **Quick Flow** | Bug fixes, simple features, clear scope (1-15 stories) | Tech-spec only | Planning → Implementation (single workflow) |
-| **BMad Method** | Products, platforms, complex features (10-50+ stories) | PRD + Architecture + UX | Analysis (opt) → Planning → Solutioning → Implementation |
-| **Enterprise** | Compliance, multi-tenant systems (30+ stories) | PRD + Architecture + Security + DevOps | Analysis (opt) → Planning → Solutioning → Implementation |
+| Track           | Best For                                               | Docs Created                           | Phases                                                   |
+| --------------- | ------------------------------------------------------ | -------------------------------------- | -------------------------------------------------------- |
+| **Quick Flow**  | Bug fixes, simple features, clear scope (1-15 stories) | Tech-spec only                         | Planning → Implementation (single workflow)              |
+| **BMad Method** | Products, platforms, complex features (10-50+ stories) | PRD + Architecture + UX                | Analysis (opt) → Planning → Solutioning → Implementation |
+| **Enterprise**  | Compliance, multi-tenant systems (30+ stories)         | PRD + Architecture + Security + DevOps | Analysis (opt) → Planning → Solutioning → Implementation |
 
-*Story counts are guidance, not definitions. Choose based on planning needs, not story math.*
+_Story counts are guidance, not definitions. Choose based on planning needs, not story math._
 
 ---
 
@@ -154,15 +154,15 @@ Explore the problem space and validate ideas before committing to planning.
 
 ### Workflows
 
-| Workflow | Purpose | Produces |
-|----------|---------|----------|
-| `bmad-brainstorming` | Brainstorm project ideas with guided facilitation | `brainstorm.html` keepsake + optional `brainstorm-intent.md` |
-| `bmad-forge-idea` | Pressure-test an idea until it hardens or dies cheaply | `forge-report.html` + `forged-idea.md` when hardened |
-| `bmad-domain-research` | Validate domain assumptions | Research findings |
-| `bmad-market-research` | Validate market assumptions | Research findings |
-| `bmad-technical-research` | Validate technical assumptions | Research findings |
-| `bmad-product-brief` | Capture strategic vision (concept is clear) | `brief.md` + `addendum.md` + optional HTML/presentation |
-| `bmad-prfaq` | Working Backwards — stress-test product concept customer-first | `prfaq-{project}.md` |
+| Workflow                  | Purpose                                                        | Produces                                                     |
+| ------------------------- | -------------------------------------------------------------- | ------------------------------------------------------------ |
+| `bmad-brainstorming`      | Brainstorm project ideas with guided facilitation              | `brainstorm.html` keepsake + optional `brainstorm-intent.md` |
+| `bmad-forge-idea`         | Pressure-test an idea until it hardens or dies cheaply         | `forge-report.html` + `forged-idea.md` when hardened         |
+| `bmad-domain-research`    | Validate domain assumptions                                    | Research findings                                            |
+| `bmad-market-research`    | Validate market assumptions                                    | Research findings                                            |
+| `bmad-technical-research` | Validate technical assumptions                                 | Research findings                                            |
+| `bmad-product-brief`      | Capture strategic vision (concept is clear)                    | `brief.md` + `addendum.md` + optional HTML/presentation      |
+| `bmad-prfaq`              | Working Backwards — stress-test product concept customer-first | `prfaq-{project}.md`                                         |
 
 ### When to use each
 
@@ -181,20 +181,20 @@ Define what to build and for whom. **Required** for BMad Method and Enterprise t
 
 ### Workflows
 
-| Workflow | Purpose | Produces |
-|----------|---------|----------|
-| `bmad-prd` | Create, update, or validate a PRD | Create/Update: `prd.md` + `addendum.md` + `.memlog.md`. Validate: `validation-report.html` + `.md` |
-| `bmad-ux` | Design user experience (when UX matters) | `DESIGN.md` (visual) + `EXPERIENCE.md` (behavioral) spine pair + `.memlog.md` |
+| Workflow   | Purpose                                  | Produces                                                                                           |
+| ---------- | ---------------------------------------- | -------------------------------------------------------------------------------------------------- |
+| `bmad-prd` | Create, update, or validate a PRD        | Create/Update: `prd.md` + `addendum.md` + `.memlog.md`. Validate: `validation-report.html` + `.md` |
+| `bmad-ux`  | Design user experience (when UX matters) | `DESIGN.md` (visual) + `EXPERIENCE.md` (behavioral) spine pair + `.memlog.md`                      |
 
 ### bmad-prd intents
 
 The PRD workflow has three intents:
 
-| Intent | Use case |
-|--------|----------|
-| **Create** | Coached discovery from scratch — names the workspace folder and guides to a PRD |
-| **Update** | Point at existing PRD + change signal — surfaces conflicts before applying |
-| **Validate** | Critique a finished PRD against a checklist — produces HTML findings report |
+| Intent       | Use case                                                                        |
+| ------------ | ------------------------------------------------------------------------------- |
+| **Create**   | Coached discovery from scratch — names the workspace folder and guides to a PRD |
+| **Update**   | Point at existing PRD + change signal — surfaces conflicts before applying      |
+| **Validate** | Critique a finished PRD against a checklist — produces HTML findings report     |
 
 ### UX Design (optional)
 
@@ -212,11 +212,11 @@ Decide how to build it and break work into stories. **Required** for BMad Method
 
 ### Workflows
 
-| Workflow | Purpose | Produces |
-|----------|---------|----------|
-| `bmad-create-architecture` | Make technical decisions explicit | `ARCHITECTURE-SPINE.md` (default) or hydrated output |
-| `bmad-create-epics-and-stories` | Break requirements into implementable work | Epic files with stories |
-| `bmad-check-implementation-readiness` | Gate check before implementation | PASS / CONCERNS / FAIL decision |
+| Workflow                              | Purpose                                    | Produces                                             |
+| ------------------------------------- | ------------------------------------------ | ---------------------------------------------------- |
+| `bmad-create-architecture`            | Make technical decisions explicit          | `ARCHITECTURE-SPINE.md` (default) or hydrated output |
+| `bmad-create-epics-and-stories`       | Break requirements into implementable work | Epic files with stories                              |
+| `bmad-check-implementation-readiness` | Gate check before implementation           | PASS / CONCERNS / FAIL decision                      |
 
 ### Order
 
@@ -240,21 +240,21 @@ Invoke `bmad-agent-dev` and run `bmad-sprint-planning` to create `sprint-status.
 
 For each story, repeat with fresh chats:
 
-| Step | Agent | Workflow | Command | Purpose |
-|------|-------|----------|---------|---------|
-| 1 | DEV | `bmad-create-story` | `bmad-create-story` | Create story file from epic |
-| 2 | DEV | `bmad-dev-story` | `bmad-dev-story` | Implement the story |
-| 3 | DEV | `bmad-code-review` | `bmad-code-review` | Quality validation (recommended) |
+| Step | Agent | Workflow            | Command             | Purpose                          |
+| ---- | ----- | ------------------- | ------------------- | -------------------------------- |
+| 1    | DEV   | `bmad-create-story` | `bmad-create-story` | Create story file from epic      |
+| 2    | DEV   | `bmad-dev-story`    | `bmad-dev-story`    | Implement the story              |
+| 3    | DEV   | `bmad-code-review`  | `bmad-code-review`  | Quality validation (recommended) |
 
 After completing all stories in an epic: invoke `bmad-agent-dev`, run `bmad-retrospective`.
 
 ### Additional workflows
 
-| Workflow | Purpose | Produces |
-|----------|---------|----------|
-| `bmad-correct-course` | Handle significant mid-sprint changes | Updated plan or re-routing |
-| `bmad-sprint-status` | Track sprint progress and story status | Sprint status update |
-| `bmad-retrospective` | Review after epic completion | Lessons learned |
+| Workflow              | Purpose                                | Produces                   |
+| --------------------- | -------------------------------------- | -------------------------- |
+| `bmad-correct-course` | Handle significant mid-sprint changes  | Updated plan or re-routing |
+| `bmad-sprint-status`  | Track sprint progress and story status | Sprint status update       |
+| `bmad-retrospective`  | Review after epic completion           | Lessons learned            |
 
 ---
 
@@ -262,10 +262,10 @@ After completing all stories in an epic: invoke `bmad-agent-dev`, run `bmad-retr
 
 Skip phases 1-3 for small, well-understood work.
 
-| Workflow | Purpose | Produces |
-|----------|---------|----------|
+| Workflow         | Purpose                                                         | Produces           |
+| ---------------- | --------------------------------------------------------------- | ------------------ |
 | `bmad-quick-dev` | Unified flow — clarify intent, plan, implement, review, present | `spec-*.md` + code |
-| `bmad-dev-auto` | One unattended dev-loop iteration — small intent in, code out | `spec-*.md` + code |
+| `bmad-dev-auto`  | One unattended dev-loop iteration — small intent in, code out   | `spec-*.md` + code |
 
 ---
 
@@ -273,13 +273,13 @@ Skip phases 1-3 for small, well-understood work.
 
 BMad provides specialized agents. Each has a distinct persona, communication style, and set of workflows.
 
-| Agent | Skill | Role | When to Use |
-|-------|-------|------|-------------|
-| **Analyst** | `bmad-agent-analyst` | Research, brainstorming, domain analysis | Phase 1 analysis workflows |
-| **PM** | `bmad-agent-pm` | Product discovery, PRD, requirements | Phase 2 planning, epics/stories |
-| **UX Designer** | `bmad-agent-ux-designer` | User experience, visual design | After PRD, before architecture |
-| **Architect** | `bmad-agent-architect` | Technical decisions, architecture | Phase 3 solutioning, readiness |
-| **Developer** | `bmad-agent-dev` | Implementation, coding, review | Phase 4 implementation |
+| Agent           | Skill                    | Role                                     | When to Use                     |
+| --------------- | ------------------------ | ---------------------------------------- | ------------------------------- |
+| **Analyst**     | `bmad-agent-analyst`     | Research, brainstorming, domain analysis | Phase 1 analysis workflows      |
+| **PM**          | `bmad-agent-pm`          | Product discovery, PRD, requirements     | Phase 2 planning, epics/stories |
+| **UX Designer** | `bmad-agent-ux-designer` | User experience, visual design           | After PRD, before architecture  |
+| **Architect**   | `bmad-agent-architect`   | Technical decisions, architecture        | Phase 3 solutioning, readiness  |
+| **Developer**   | `bmad-agent-dev`         | Implementation, coding, review           | Phase 4 implementation          |
 
 Agents are invoked directly in the AI IDE:
 
@@ -297,16 +297,16 @@ bmad-create-architecture
 
 Every skill ships a `customize.toml` with its customizable fields:
 
-| Field | Shape | Rule | Example |
-|-------|-------|------|---------|
-| `agent.icon` | scalar | override wins | `"🏥"` |
-| `agent.role` | scalar | override wins | `"Drives product discovery"` |
-| `agent.communication_style` | scalar | override wins | `"Precise, regulatory-aware"` |
-| `agent.persistent_facts` | array of strings | append | `"Our org is AWS-only"` |
-| `agent.principles` | array of strings | append | `"Ship nothing that fails audit"` |
-| `agent.activation_steps_prepend` | array of strings | append | runs before greet |
-| `agent.activation_steps_append` | array of strings | append | runs after greet |
-| `agent.menu` | array of tables | merge by `code` | menu items |
+| Field                            | Shape            | Rule            | Example                           |
+| -------------------------------- | ---------------- | --------------- | --------------------------------- |
+| `agent.icon`                     | scalar           | override wins   | `"🏥"`                            |
+| `agent.role`                     | scalar           | override wins   | `"Drives product discovery"`      |
+| `agent.communication_style`      | scalar           | override wins   | `"Precise, regulatory-aware"`     |
+| `agent.persistent_facts`         | array of strings | append          | `"Our org is AWS-only"`           |
+| `agent.principles`               | array of strings | append          | `"Ship nothing that fails audit"` |
+| `agent.activation_steps_prepend` | array of strings | append          | runs before greet                 |
+| `agent.activation_steps_append`  | array of strings | append          | runs after greet                  |
+| `agent.menu`                     | array of tables  | merge by `code` | menu items                        |
 
 See the [Customization](#11-customization) section for the three-layer override model.
 
@@ -327,11 +327,13 @@ Without this structure, agents make inconsistent decisions across sessions.
 ### project-context.md
 
 An optional file at `_bmad-output/project-context.md` that documents:
+
 - Technology stack and conventions
 - Implementation rules
 - Coding standards
 
 **How to create it:**
+
 - **Manually**: write `_bmad-output/project-context.md`
 - **Generate**: run `bmad-generate-project-context` (Analyst agent) after architecture
 
@@ -343,20 +345,20 @@ An optional file at `_bmad-output/project-context.md` that documents:
 
 Every skill can be customized without modifying installed files. Customizations survive updates.
 
-| Priority | File | Scope | Git |
-|----------|------|-------|-----|
+| Priority | File                                  | Scope                | Git        |
+| -------- | ------------------------------------- | -------------------- | ---------- |
 | 1 (wins) | `_bmad/custom/{skill-name}.user.toml` | Personal preferences | gitignored |
-| 2 | `_bmad/custom/{skill-name}.toml` | Team/org overrides | committed |
-| 3 (last) | `skill's own customize.toml` | Defaults | shipped |
+| 2        | `_bmad/custom/{skill-name}.toml`      | Team/org overrides   | committed  |
+| 3 (last) | `skill's own customize.toml`          | Defaults             | shipped    |
 
 ### Merge rules
 
-| Shape | Rule |
-|-------|------|
-| Scalar (string, int, bool, float) | Override wins |
-| Table | Deep merge (recursive) |
+| Shape                                          | Rule                                               |
+| ---------------------------------------------- | -------------------------------------------------- |
+| Scalar (string, int, bool, float)              | Override wins                                      |
+| Table                                          | Deep merge (recursive)                             |
 | Array of tables with same `code` or `id` field | Merge by that key — matching replaces, new appends |
-| Any other array | Append (base, team, user) |
+| Any other array                                | Append (base, team, user)                          |
 
 ### Customization helper
 
@@ -384,32 +386,33 @@ Requires Python 3.11+ (stdlib `tomllib` only — no pip dependencies).
 
 ## Quick Reference: All Workflows
 
-| Workflow | Command | Agent | Phase | Purpose |
-|----------|---------|-------|-------|---------|
-| **BMad-Help** ⭐ | `bmad-help` | Any | — | Intelligent guide — ask anything |
-| Brainstorming | `bmad-brainstorming` | Analyst | 1 | Guided ideation |
-| Forge Idea | `bmad-forge-idea` | Analyst | 1 | Pressure-test an idea |
-| Domain Research | `bmad-domain-research` | Analyst | 1 | Domain assumptions |
-| Market Research | `bmad-market-research` | Analyst | 1 | Market assumptions |
-| Technical Research | `bmad-technical-research` | Analyst | 1 | Technical assumptions |
-| Product Brief | `bmad-product-brief` | Analyst | 1 | Strategic vision |
-| PRFAQ | `bmad-prfaq` | Analyst | 1 | Working Backwards |
-| PRD | `bmad-prd` | Any | 2 | Create/update/validate PRD |
-| UX Design | `bmad-ux` | UX Designer | 2 | User experience design |
-| Architecture | `bmad-create-architecture` | Architect | 3 | Technical decisions |
-| Epics & Stories | `bmad-create-epics-and-stories` | PM | 3 | Break down requirements |
-| Readiness Check | `bmad-check-implementation-readiness` | Architect | 3 | Gate check |
-| Sprint Planning | `bmad-sprint-planning` | DEV | 4 | Initialize tracking |
-| Create Story | `bmad-create-story` | DEV | 4 | Prepare next story |
-| Dev Story | `bmad-dev-story` | DEV | 4 | Implement a story |
-| Code Review | `bmad-code-review` | DEV | 4 | Quality validation |
-| Correct Course | `bmad-correct-course` | DEV | 4 | Mid-sprint changes |
-| Sprint Status | `bmad-sprint-status` | DEV | 4 | Track progress |
-| Retrospective | `bmad-retrospective` | DEV | 4 | Lessons learned |
-| Quick Dev | `bmad-quick-dev` | DEV | 2-4 | Unified quick flow |
-| Dev Auto | `bmad-dev-auto` | DEV | 2-4 | Unattended dev loop |
-| Generate Project Context | `bmad-generate-project-context` | Analyst | — | Auto-generate context |
-| Customize | `bmad-customize` | — | — | Guided customization |
+| Workflow                 | Command                               | Agent       | Phase | Purpose                          |
+| ------------------------ | ------------------------------------- | ----------- | ----- | -------------------------------- |
+| **BMad-Help** ⭐         | `bmad-help`                           | Any         | —     | Intelligent guide — ask anything |
+| Brainstorming            | `bmad-brainstorming`                  | Analyst     | 1     | Guided ideation                  |
+| Forge Idea               | `bmad-forge-idea`                     | Analyst     | 1     | Pressure-test an idea            |
+| Domain Research          | `bmad-domain-research`                | Analyst     | 1     | Domain assumptions               |
+| Market Research          | `bmad-market-research`                | Analyst     | 1     | Market assumptions               |
+| Technical Research       | `bmad-technical-research`             | Analyst     | 1     | Technical assumptions            |
+| Product Brief            | `bmad-product-brief`                  | Analyst     | 1     | Strategic vision                 |
+| PRFAQ                    | `bmad-prfaq`                          | Analyst     | 1     | Working Backwards                |
+| PRD                      | `bmad-prd`                            | Any         | 2     | Create/update/validate PRD       |
+| UX Design                | `bmad-ux`                             | UX Designer | 2     | User experience design           |
+| Architecture             | `bmad-create-architecture`            | Architect   | 3     | Technical decisions              |
+| Epics & Stories          | `bmad-create-epics-and-stories`       | PM          | 3     | Break down requirements          |
+| Readiness Check          | `bmad-check-implementation-readiness` | Architect   | 3     | Gate check                       |
+| Sprint Planning          | `bmad-sprint-planning`                | DEV         | 4     | Initialize tracking              |
+| Create Story             | `bmad-create-story`                   | DEV         | 4     | Prepare next story               |
+| Dev Story                | `bmad-dev-story`                      | DEV         | 4     | Implement a story                |
+| Code Review              | `bmad-code-review`                    | DEV         | 4     | Quality validation               |
+| Correct Course           | `bmad-correct-course`                 | DEV         | 4     | Mid-sprint changes               |
+| Sprint Status            | `bmad-sprint-status`                  | DEV         | 4     | Track progress                   |
+| Retrospective            | `bmad-retrospective`                  | DEV         | 4     | Lessons learned                  |
+| Quick Dev                | `bmad-quick-dev`                      | DEV         | 2-4   | Unified quick flow               |
+| Dev Auto                 | `bmad-dev-auto`                       | DEV         | 2-4   | Unattended dev loop              |
+| Generate Project Context | `bmad-generate-project-context`       | Analyst     | —     | Auto-generate context            |
+| Customize                | `bmad-customize`                      | —           | —     | Guided customization             |
+
 ---
 
 ## See also

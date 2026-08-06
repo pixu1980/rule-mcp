@@ -18,12 +18,12 @@ frameworks: [all]
 
 ## Available Skills
 
-| Skill | Platform | Best For |
-|-------|----------|----------|
-| [pix-platform-desktop](../pix-platform-desktop/SKILL.md) | Desktop (Electron) | Cross-platform desktop apps, IPC, native APIs |
-| [pix-platform-expo](../pix-platform-expo/SKILL.md) | Mobile (Expo/RN) | Cross-platform mobile apps, EAS Build |
-| [pix-platform-library](../pix-platform-library/SKILL.md) | npm package | Library authoring, dual CJS/ESM, public API |
-| [pix-platform-web](../pix-platform-web/SKILL.md) | Web platform | PWA, service workers, offline, performance budgets |
+| Skill                                                    | Platform           | Best For                                           |
+| -------------------------------------------------------- | ------------------ | -------------------------------------------------- |
+| [pix-platform-desktop](../pix-platform-desktop/SKILL.md) | Desktop (Electron) | Cross-platform desktop apps, IPC, native APIs      |
+| [pix-platform-expo](../pix-platform-expo/SKILL.md)       | Mobile (Expo/RN)   | Cross-platform mobile apps, EAS Build              |
+| [pix-platform-library](../pix-platform-library/SKILL.md) | npm package        | Library authoring, dual CJS/ESM, public API        |
+| [pix-platform-web](../pix-platform-web/SKILL.md)         | Web platform       | PWA, service workers, offline, performance budgets |
 
 ## Quick Selection Guide
 

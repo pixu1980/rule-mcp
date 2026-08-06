@@ -8,6 +8,7 @@
 ## Context
 
 Build tool configuration was embedded inside `pix-scaffold-frontend-react-vite`, coupling Vite-specific settings with React scaffolding. This created a dependency where:
+
 - Non-React projects (Vue + Vite, Svelte + Vite, Astro) had no access to Vite best practices
 - React scaffolding was cluttered with build-tool configuration
 - The `pix-toolchain-*` category provides a home for any build tool, linter, or formatter skill
@@ -27,11 +28,13 @@ The `pix-frontend-react` skill now references `pix-toolchain-vite` for build con
 ## Consequences
 
 **Positive:**
+
 - Framework-agnostic Vite skill — usable by React, Vue, Svelte, Astro, and vanilla projects
 - Single source of truth for Vite configuration
 - `pix-toolchain-*` category is extensible (future: webpack, esbuild, tsc)
 - Cleaner separation of concerns
 
 **Negative:**
+
 - React scaffolding now spans two skills (`frontend-react` + `toolchain-vite`)
 - Agents must call both skills for complete project setup

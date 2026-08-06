@@ -15,7 +15,7 @@ Focus on:
 
 For each issue, return:
 
-```md
+````md
 ### Issue title
 
 - Pattern: [one of the Angular patterns]
@@ -26,12 +26,14 @@ For each issue, return:
 ```typescript
 // improved snippet
 ```
+````
 
 Rule of thumb:
-```
+
+````
 
 Review this code:
 
 ```typescript
 PASTE_CODE_HERE
-```
+````

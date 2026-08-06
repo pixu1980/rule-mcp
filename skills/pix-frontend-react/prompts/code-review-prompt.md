@@ -17,7 +17,7 @@ Focus on:
 
 For each issue, return:
 
-```md
+````md
 ### Issue title
 
 - Pattern:
@@ -28,12 +28,14 @@ For each issue, return:
 ```tsx
 // improved snippet when useful
 ```
+````
 
 Rule of thumb:
-```
+
+````
 
 Review this code:
 
 ```tsx
 PASTE_CODE_HERE
-```
+````

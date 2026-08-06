@@ -18,13 +18,13 @@ frameworks: [all]
 
 ## Available Skills
 
-| Skill | Domain | Best For |
-|-------|--------|----------|
-| [pix-devops-docker](../pix-devops-docker/SKILL.md) | Containerization | Dockerfile, docker-compose, multi-stage builds, security |
-| [pix-devops-gitlab-ci](../pix-devops-gitlab-ci/SKILL.md) | CI/CD | GitLab pipeline configuration, caching, testing matrix |
-| [pix-devops-observability](../pix-devops-observability/SKILL.md) | Reliability | SLOs, telemetry, alerting, incident learning, rollback verification |
-| [pix-devops-testing](../pix-devops-testing/SKILL.md) | Quality | Vitest, coverage thresholds, integration tests |
-| [pix-devops-version](../pix-devops-version/SKILL.md) | Versioning | Semantic release, changelog, git tags |
+| Skill                                                            | Domain           | Best For                                                            |
+| ---------------------------------------------------------------- | ---------------- | ------------------------------------------------------------------- |
+| [pix-devops-docker](../pix-devops-docker/SKILL.md)               | Containerization | Dockerfile, docker-compose, multi-stage builds, security            |
+| [pix-devops-gitlab-ci](../pix-devops-gitlab-ci/SKILL.md)         | CI/CD            | GitLab pipeline configuration, caching, testing matrix              |
+| [pix-devops-observability](../pix-devops-observability/SKILL.md) | Reliability      | SLOs, telemetry, alerting, incident learning, rollback verification |
+| [pix-devops-testing](../pix-devops-testing/SKILL.md)             | Quality          | Vitest, coverage thresholds, integration tests                      |
+| [pix-devops-version](../pix-devops-version/SKILL.md)             | Versioning       | Semantic release, changelog, git tags                               |
 
 ## Quick Selection Guide
 

@@ -25,10 +25,10 @@ frameworks: [all]
 const app = fastify({ logger: true });
 
 // Plugin registration
-app.register(require('@fastify/cors'), { origin: ALLOWED_ORIGINS });
-app.register(require('@fastify/helmet'));
-app.register(require('./plugins/auth'));
-app.register(require('./routes/users'), { prefix: '/api/v1/users' });
+app.register(require("@fastify/cors"), { origin: ALLOWED_ORIGINS });
+app.register(require("@fastify/helmet"));
+app.register(require("./plugins/auth"));
+app.register(require("./routes/users"), { prefix: "/api/v1/users" });
 ```
 
 ## Fastify Schema Validation & Serialization
@@ -41,7 +41,7 @@ app.register(require('./routes/users'), { prefix: '/api/v1/users' });
 ```typescript
 const createUserSchema = {
   body: Type.Object({
-    email: Type.String({ format: 'email' }),
+    email: Type.String({ format: "email" }),
     name: Type.String({ minLength: 2 }),
   }),
   response: {

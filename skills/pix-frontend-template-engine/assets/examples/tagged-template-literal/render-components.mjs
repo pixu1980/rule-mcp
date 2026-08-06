@@ -1,6 +1,6 @@
 // @ts-check
 
-import TemplateEngine from '../../template-engine/index.js';
+import TemplateEngine from "../../template-engine/index.js";
 
 const engine = new TemplateEngine();
 
@@ -11,33 +11,33 @@ const renderCard = engine.html`
     <h2>{{ title }}</h2>
     <p>{{ summary }}</p>
     <div>
-      ${(card) => card.badges.map((badge) => renderBadge(badge)).join('')}
+      ${(card) => card.badges.map((badge) => renderBadge(badge)).join("")}
     </div>
   </article>
 `;
 
 const renderPage = engine.html`
   <section>
-    ${(data) => data.cards.map((card) => renderCard(card)).join('')}
+    ${(data) => data.cards.map((card) => renderCard(card)).join("")}
   </section>
 `;
 
 const html = renderPage({
   cards: [
     {
-      title: 'Inline card',
-      summary: 'Small reusable render functions stay near data preparation.',
+      title: "Inline card",
+      summary: "Small reusable render functions stay near data preparation.",
       badges: [
-        { kind: 'Mode', label: 'Tagged' },
-        { kind: 'Scope', label: 'Card data' },
+        { kind: "Mode", label: "Tagged" },
+        { kind: "Scope", label: "Card data" },
       ],
     },
     {
-      title: 'Second card',
-      summary: 'JavaScript interpolation can map data before template rendering.',
+      title: "Second card",
+      summary: "JavaScript interpolation can map data before template rendering.",
       badges: [
-        { kind: 'Mode', label: 'Map' },
-        { kind: 'Scope', label: 'Page data' },
+        { kind: "Mode", label: "Map" },
+        { kind: "Scope", label: "Page data" },
       ],
     },
   ],

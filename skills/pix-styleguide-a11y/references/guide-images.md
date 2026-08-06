@@ -14,25 +14,25 @@
 
 ```html
 <!-- Informative: describes the conclusion -->
-<img src="sales-chart.png" alt="Bar chart showing 20% sales growth in Q1.">
+<img src="sales-chart.png" alt="Bar chart showing 20% sales growth in Q1." />
 
 <!-- Functional: describes the action -->
 <a href="/print">
-  <img src="printer-icon.png" alt="Print document">
+  <img src="printer-icon.png" alt="Print document" />
 </a>
 
 <!-- Decorative: hidden from screen readers -->
-<img src="pretty-divider.png" alt="">
+<img src="pretty-divider.png" alt="" />
 ```
 
 ## Bad Examples
 
 ```html
 <!-- ❌ Vague — doesn't convey information -->
-<img src="sales-chart.png" alt="Sales chart">
+<img src="sales-chart.png" alt="Sales chart" />
 
 <!-- ❌ Missing alt — screen reader reads filename -->
-<img src="image-123-final.png">
+<img src="image-123-final.png" />
 ```
 
 ## Complex Images (Charts, Diagrams)
@@ -41,11 +41,11 @@ For complex images, provide a longer description:
 
 ```html
 <figure>
-  <img src="quarterly-results.png" alt="Bar chart showing quarterly revenue trends.">
+  <img src="quarterly-results.png" alt="Bar chart showing quarterly revenue trends." />
   <figcaption>Revenue grew from $1.2M (Q1) to $1.8M (Q3), with a dip in Q2 at $1.0M.</figcaption>
 </figure>
 ```
 
 ## Tip for AI
 
-Whenever generating a component with an image, ask: *"If I remove this image, what information does the user lose?"* That answer should be your `alt`.
+Whenever generating a component with an image, ask: _"If I remove this image, what information does the user lose?"_ That answer should be your `alt`.

@@ -13,12 +13,8 @@
 ## Example
 
 ```html
-<button aria-describedby="tooltip-1" type="button">
-  Save
-</button>
-<div role="tooltip" id="tooltip-1">
-  Save changes to your profile
-</div>
+<button aria-describedby="tooltip-1" type="button">Save</button>
+<div role="tooltip" id="tooltip-1">Save changes to your profile</div>
 ```
 
 ## CSS
@@ -43,9 +39,7 @@ button:focus-visible + [role="tooltip"],
 For richer popovers (menus, datepickers):
 
 ```html
-<button aria-expanded="false" aria-haspopup="true" aria-controls="popover-1" type="button">
-  More options
-</button>
+<button aria-expanded="false" aria-haspopup="true" aria-controls="popover-1" type="button">More options</button>
 <div id="popover-1" role="menu" aria-labelledby="popover-trigger">
   <button role="menuitem">Edit</button>
   <button role="menuitem">Delete</button>
@@ -54,8 +48,8 @@ For richer popovers (menus, datepickers):
 
 ## Keyboard interactions
 
-| Key | Action |
-| :--- | :--- |
-| Escape | Dismiss tooltip/popover |
-| Tab | Move to/from trigger |
-| Enter / Space | Open popover |
+| Key           | Action                  |
+| :------------ | :---------------------- |
+| Escape        | Dismiss tooltip/popover |
+| Tab           | Move to/from trigger    |
+| Enter / Space | Open popover            |

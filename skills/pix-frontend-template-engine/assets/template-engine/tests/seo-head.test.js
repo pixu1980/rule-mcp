@@ -1,28 +1,28 @@
-import assert from 'node:assert/strict';
-import path from 'node:path';
-import { fileURLToPath } from 'node:url';
-import { describe, test } from 'node:test';
-import { JSDOM } from 'jsdom';
+import assert from "node:assert/strict";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+import { describe, test } from "node:test";
+import { JSDOM } from "jsdom";
 
-import { TemplateEngine } from '../index.js';
+import { TemplateEngine } from "../index.js";
 
-const FIXTURES = path.join(path.dirname(fileURLToPath(import.meta.url)), 'fixtures');
+const FIXTURES = path.join(path.dirname(fileURLToPath(import.meta.url)), "fixtures");
 const engine = new TemplateEngine({ rootDir: FIXTURES });
 
 const site = {
-  analytics: { dashboardPath: '/privacy.html', endpoint: '' },
+  analytics: { dashboardPath: "/privacy.html", endpoint: "" },
   author: 'Emiliano "pixu1980" Pisu',
-  description: 'Vanilla-first static blog.',
-  jsonFeedPath: '/feed.json',
-  language: 'en',
-  locale: 'en-US',
-  rssFeedPath: '/feed.rss',
+  description: "Vanilla-first static blog.",
+  jsonFeedPath: "/feed.json",
+  language: "en",
+  locale: "en-US",
+  rssFeedPath: "/feed.rss",
   security: {
     csp: "default-src 'self'",
-    referrerPolicy: 'strict-origin-when-cross-origin',
+    referrerPolicy: "strict-origin-when-cross-origin",
   },
-  title: 'dout.dev',
-  url: 'https://dout.dev',
+  title: "dout.dev",
+  url: "https://dout.dev",
 };
 
 function renderDocument(templatePath, data) {
@@ -32,29 +32,21 @@ function renderDocument(templatePath, data) {
 
 function assertSocialTagsStayInHead(document, selectors) {
   for (const selector of selectors) {
-    assert.notEqual(
-      document.head.querySelector(selector),
-      null,
-      `${selector} should render in <head>`
-    );
-    assert.equal(
-      document.body.querySelector(selector),
-      null,
-      `${selector} should not render in <body>`
-    );
+    assert.notEqual(document.head.querySelector(selector), null, `${selector} should render in <head>`);
+    assert.equal(document.body.querySelector(selector), null, `${selector} should not render in <body>`);
   }
 }
 
-describe('TemplateEngine - SEO head rendering', () => {
-  test('home template keeps OG and Twitter tags in head', () => {
-    const document = renderDocument('templates/home.html', {
-      canonicalUrl: 'https://dout.dev/',
-      description: 'Latest field notes from dout.dev.',
+describe("TemplateEngine - SEO head rendering", () => {
+  test("home template keeps OG and Twitter tags in head", () => {
+    const document = renderDocument("templates/home.html", {
+      canonicalUrl: "https://dout.dev/",
+      description: "Latest field notes from dout.dev.",
       featuredPost: null,
-      ogImageUrl: 'https://dout.dev/assets/og/pages/home.png',
+      ogImageUrl: "https://dout.dev/assets/og/pages/home.png",
       posts: [],
       stats: { posts: 0, series: 0, tags: 0 },
-      title: 'dout.dev',
+      title: "dout.dev",
       topTags: [],
     });
 
@@ -65,40 +57,37 @@ describe('TemplateEngine - SEO head rendering', () => {
     ]);
   });
 
-  test('tag template emits one canonical and keeps metadata in head', () => {
-    const document = renderDocument('templates/tag.html', {
-      canonicalUrl: 'https://dout.dev/tags/css.html',
-      description: 'Posts tagged with CSS.',
-      ogImageUrl: 'https://dout.dev/assets/og/tags/css.png',
+  test("tag template emits one canonical and keeps metadata in head", () => {
+    const document = renderDocument("templates/tag.html", {
+      canonicalUrl: "https://dout.dev/tags/css.html",
+      description: "Posts tagged with CSS.",
+      ogImageUrl: "https://dout.dev/assets/og/tags/css.png",
       pagination: null,
       posts: [],
-      tag: { name: 'CSS', slug: 'css' },
-      title: 'CSS Posts',
+      tag: { name: "CSS", slug: "css" },
+      title: "CSS Posts",
     });
 
     assert.equal(document.head.querySelectorAll('link[rel="canonical"]').length, 1);
-    assertSocialTagsStayInHead(document, [
-      'meta[property="og:image"]',
-      'meta[name="twitter:image"]',
-    ]);
+    assertSocialTagsStayInHead(document, ['meta[property="og:image"]', 'meta[name="twitter:image"]']);
   });
 
-  test('post template emits article metadata in head', () => {
-    const document = renderDocument('templates/post.html', {
-      canonicalUrl: 'https://dout.dev/posts/example.html',
-      description: 'Example article description.',
-      ogImageUrl: 'https://dout.dev/assets/og/posts/example.png',
+  test("post template emits article metadata in head", () => {
+    const document = renderDocument("templates/post.html", {
+      canonicalUrl: "https://dout.dev/posts/example.html",
+      description: "Example article description.",
+      ogImageUrl: "https://dout.dev/assets/og/posts/example.png",
       post: {
-        content: '<p>Example body</p>',
-        coverAlt: 'Example cover',
-        date: '2026-04-20T12:00:00.000Z',
-        keywords: ['css', 'accessibility'],
-        name: 'example',
+        content: "<p>Example body</p>",
+        coverAlt: "Example cover",
+        date: "2026-04-20T12:00:00.000Z",
+        keywords: ["css", "accessibility"],
+        name: "example",
         tags: [],
-        title: 'Example Post',
+        title: "Example Post",
         toc: [],
       },
-      title: 'Example Post',
+      title: "Example Post",
     });
 
     assertSocialTagsStayInHead(document, [

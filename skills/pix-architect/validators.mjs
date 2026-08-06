@@ -34,7 +34,7 @@ export function isFieldRequired(field, values) {
 const TIER_ORDER = { starter: 0, standard: 1, deep: 2 };
 
 export function visibleSteps(steps, tier) {
-  return steps.filter(s => {
+  return steps.filter((s) => {
     // Step 0 (depth) always visible
     if (s.key === "step-0-depth") return true;
     return TIER_ORDER[s.tier] <= TIER_ORDER[tier];
@@ -53,21 +53,19 @@ export function applyPrefill(values, prefillMap) {
       if (typeof rule.from === "string") {
         result[targetKey] = values[rule.from] || "";
       } else if (Array.isArray(rule.from) && rule.transform === "featuresFromSketch") {
-        const features = rule.from.map(k => values[k] || "").filter(Boolean);
+        const features = rule.from.map((k) => values[k] || "").filter(Boolean);
         if (features.length > 0) {
-          result[targetKey] = features.map(name => ({ feature: name, description: "" }));
+          result[targetKey] = features.map((name) => ({ feature: name, description: "" }));
         }
       } else if (rule.transform === "personaFromSketch") {
         const name = values[rule.from] || "";
         if (name) {
-          result[targetKey] = [
-            { name, description: "", goal: "", pain: "", behavior: "" }
-          ];
+          result[targetKey] = [{ name, description: "", goal: "", pain: "", behavior: "" }];
         }
       } else if (rule.transform === "termsFromSketch") {
         const lines = (values[rule.from] || "").split("\n").filter(Boolean);
         if (lines.length > 0) {
-          result[targetKey] = lines.map(term => ({ term, definition: "" }));
+          result[targetKey] = lines.map((term) => ({ term, definition: "" }));
         }
       }
     }

@@ -13,31 +13,17 @@
   },
   "pix for loop": {
     "prefix": "pix-for",
-    "body": [
-      "<for each=\"${1:item} in ${2:items}\">",
-      "  $0",
-      "</for>"
-    ],
+    "body": ["<for each=\"${1:item} in ${2:items}\">", "  $0", "</for>"],
     "description": "pix <for> loop"
   },
   "pix if block": {
     "prefix": "pix-if",
-    "body": [
-      "<if condition=\"${1:expr}\">",
-      "  $0",
-      "</if>"
-    ],
+    "body": ["<if condition=\"${1:expr}\">", "  $0", "</if>"],
     "description": "pix <if> conditional"
   },
   "pix if-else": {
     "prefix": "pix-ifelse",
-    "body": [
-      "<if condition=\"${1:expr}\">",
-      "  ${2:when true}",
-      "<else>",
-      "  ${3:when false}",
-      "</if>"
-    ],
+    "body": ["<if condition=\"${1:expr}\">", "  ${2:when true}", "<else>", "  ${3:when false}", "</if>"],
     "description": "pix <if>/<else>"
   },
   "pix switch": {

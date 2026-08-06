@@ -5,7 +5,7 @@
 The products are already loaded, but filtering and rendering the result makes typing feel slow.
 
 ```tsx
-const [search, setSearch] = useState('');
+const [search, setSearch] = useState("");
 const [results, setResults] = useState(products);
 const [isPending, startTransition] = useTransition();
 
@@ -14,7 +14,7 @@ function handleChange(event: ChangeEvent<HTMLInputElement>) {
   setSearch(value);
 
   startTransition(() => {
-    setResults(products.filter(product => product.name.includes(value)));
+    setResults(products.filter((product) => product.name.includes(value)));
   });
 }
 ```
@@ -26,7 +26,7 @@ Use `useTransition` because the work is UI rendering work.
 ```tsx
 function handleChange(event: ChangeEvent<HTMLInputElement>) {
   fetch(`/api/search?q=${event.target.value}`)
-    .then(response => response.json())
+    .then((response) => response.json())
     .then(setResults);
 }
 ```

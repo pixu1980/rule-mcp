@@ -6,6 +6,7 @@ baseline TDD/a11y sempre coinvolte (o richiesta esplicita all'utente), e chiusur
 **proposta di commit message con scope obbligatorio**.
 
 Decisioni intervista (2025-08-01):
+
 1. Prompt one-shot workflow **e** per-fase (partire dai one-shot ad alto valore) — C
 2. Copertura **tutte** le 16 aree (da testare)
 3. **Un prompt per area** (argomento `framework` dove serve, non per-framework)

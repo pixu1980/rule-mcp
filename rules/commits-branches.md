@@ -15,6 +15,7 @@ Use the following prefixes:
 Format: `<prefix>/<short-kebab-description>`
 
 ### Branch naming rules
+
 - Never use author names as branch names
 - Do not use only a number or ID as the branch name
 - Avoid overly generic or excessively long names
@@ -33,17 +34,17 @@ Follow **Conventional Commits** specification (v1.0.0):
 
 ### Types
 
-| Type | Usage |
-|---|---|
-| `feat` | New feature |
-| `fix` | Bug fix |
-| `refactor` | Refactoring without behavior change |
-| `chore` | Tooling, deps, CI |
-| `docs` | Documentation |
-| `test` | Tests |
-| `perf` | Performance improvement |
-| `ci` | CI pipeline changes |
-| `style` | Formatting (handled by Biome, rarely manual) |
+| Type       | Usage                                        |
+| ---------- | -------------------------------------------- |
+| `feat`     | New feature                                  |
+| `fix`      | Bug fix                                      |
+| `refactor` | Refactoring without behavior change          |
+| `chore`    | Tooling, deps, CI                            |
+| `docs`     | Documentation                                |
+| `test`     | Tests                                        |
+| `perf`     | Performance improvement                      |
+| `ci`       | CI pipeline changes                          |
+| `style`    | Formatting (handled by Biome, rarely manual) |
 
 ### Scope
 
@@ -52,7 +53,7 @@ Use the package or module name: `backend`, `frontend`, `agent`, `docker`, `ci`, 
 ### Rules
 
 - Subject line: imperative mood, lowercase, no period, max 72 characters.
-- Body: wrap at 80 characters. Explain *what* and *why*, not *how*.
+- Body: wrap at 80 characters. Explain _what_ and _why_, not _how_.
 - Breaking changes: add `BREAKING CHANGE:` footer or `!` after type.
 - Reference GitLab issues: `Closes #123` or `Refs #456`.
 

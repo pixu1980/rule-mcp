@@ -68,11 +68,11 @@ If `@rspack/cli` is installed:
 
 Choose one of three approaches:
 
-| Approach | Config | Best For |
-|----------|--------|----------|
-| **Built-in CSS** | `experiments: { css: true }` | Modern projects, no legacy loaders |
-| **css-loader + CssExtractRspackPlugin** | `css-loader` + `CssExtractRspackPlugin` | Webpack migration compat |
-| **style-loader** | `style-loader` | Pure style-in-JS injection |
+| Approach                                | Config                                  | Best For                           |
+| --------------------------------------- | --------------------------------------- | ---------------------------------- |
+| **Built-in CSS**                        | `experiments: { css: true }`            | Modern projects, no legacy loaders |
+| **css-loader + CssExtractRspackPlugin** | `css-loader` + `CssExtractRspackPlugin` | Webpack migration compat           |
+| **style-loader**                        | `style-loader`                          | Pure style-in-JS injection         |
 
 ### Built-in CSS (recommended for new projects)
 

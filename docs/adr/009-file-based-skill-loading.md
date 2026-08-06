@@ -7,6 +7,7 @@
 ## Context
 
 Skills (SKILL.md files) need to be discoverable and queryable. Options:
+
 - File-based: read SKILL.md from `~/.agents/skills/<name>/` or embedded `skills/` directory
 - Database: store skill content in SQLite, PostgreSQL, etc.
 

@@ -11,23 +11,19 @@
 
 ## Keyboard interactions
 
-| Key | Action |
-| :--- | :--- |
-| Tab | Navigate to draggable item |
-| Space | Pick up / drop item |
-| Arrow keys | Move selected item |
-| Escape | Cancel drag operation |
+| Key        | Action                     |
+| :--------- | :------------------------- |
+| Tab        | Navigate to draggable item |
+| Space      | Pick up / drop item        |
+| Arrow keys | Move selected item         |
+| Escape     | Cancel drag operation      |
 
 ## Example
 
 ```html
 <div role="list" aria-label="Sortable tasks">
-  <div role="listitem" tabindex="0" aria-grabbed="false" draggable="true">
-    Task 1
-  </div>
-  <div role="listitem" tabindex="0" aria-grabbed="false" draggable="true">
-    Task 2
-  </div>
+  <div role="listitem" tabindex="0" aria-grabbed="false" draggable="true">Task 1</div>
+  <div role="listitem" tabindex="0" aria-grabbed="false" draggable="true">Task 2</div>
 </div>
 <div aria-live="polite" role="status">Task 1 moved to position 2</div>
 ```

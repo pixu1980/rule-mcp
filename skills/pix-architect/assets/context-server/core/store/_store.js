@@ -2,9 +2,9 @@
 //  PART 2 — Store (Proxy-based state container)
 // ═══════════════════════════════════════════════════════════════════════════════
 
-import { isObject } from './_guards.js';
-import { toPathArray } from './_paths.js';
-import { deepClone, clonePlainValue } from './_clone.js';
+import { isObject } from "./_guards.js";
+import { toPathArray } from "./_paths.js";
+import { deepClone, clonePlainValue } from "./_clone.js";
 
 export class Store {
   constructor(initialState = {}, opts = {}) {
@@ -19,8 +19,8 @@ export class Store {
     const store = this;
     const proxy = new Proxy(target, {
       get(raw, key) {
-        if (key === '__raw') return raw;
-        if (key === '__path') return path;
+        if (key === "__raw") return raw;
+        if (key === "__path") return path;
         const value = Reflect.get(raw, key);
         if (isObject(value)) return store._createProxy(value, [...path, key]);
         return value;
@@ -46,8 +46,8 @@ export class Store {
     return proxy;
   }
   _emitChange(path, oldValue, newValue) {
-    const detail = { path: toPathArray(path).join('.'), oldValue: deepClone(oldValue), newValue: deepClone(newValue) };
-    this.events.dispatchEvent(new CustomEvent('store:change', { detail }));
+    const detail = { path: toPathArray(path).join("."), oldValue: deepClone(oldValue), newValue: deepClone(newValue) };
+    this.events.dispatchEvent(new CustomEvent("store:change", { detail }));
   }
   get(path) {
     const parts = toPathArray(path);
@@ -57,10 +57,13 @@ export class Store {
   }
   set(path, value) {
     const parts = toPathArray(path);
-    if (!parts.length) throw new Error('Path required');
+    if (!parts.length) throw new Error("Path required");
     const last = parts.pop();
     let current = this.state;
-    for (const p of parts) { if (!isObject(current[p])) current[p] = {}; current = current[p]; }
+    for (const p of parts) {
+      if (!isObject(current[p])) current[p] = {};
+      current = current[p];
+    }
     current[last] = value;
     return value;
   }
@@ -71,5 +74,7 @@ export class Store {
     this.state = this._createProxy(this.target, []);
     this._emitChange([], old, this.target);
   }
-  snapshot() { return deepClone(this.target); }
+  snapshot() {
+    return deepClone(this.target);
+  }
 }

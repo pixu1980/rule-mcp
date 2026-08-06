@@ -1,11 +1,11 @@
 ---
-name: ' Context'
+name: " Context"
 description: Quick context on the product frame, domain language, and implementation rules.
 ---
 
 Use these rules when working in this repository:
 
--  is a **[DOMAIN_NAME]** product designed to .
+- is a **[DOMAIN_NAME]** product designed to .
 - Core working context: **[CONTEXT_AND_OBJECTIVE]**
 - The main records are **[PRIMARY_ENTITY]** with supporting **[SECONDARY_ENTITY]**.
 - **[DOMAIN_ENTITY_MANAGER]** captures reusable reference rules, presets, or policy data when the product needs them.

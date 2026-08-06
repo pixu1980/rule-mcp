@@ -24,7 +24,9 @@ export function postProcessFiles(results) {
     .filter((r) => r.status === "written" && r.absPath && r.path.endsWith(".js"))
     .map((r) => r.absPath);
 
-  if (jsFiles.length === 0) {return;}
+  if (jsFiles.length === 0) {
+    return;
+  }
 
   // Step 1: Prettier — handles quotes, semicolons, indentation, multi-line blocks.
   // execFileSync (argv, no shell) so file paths can never be interpreted as shell
@@ -85,10 +87,7 @@ function fixBlankLines(filePath) {
   code = code.replaceAll(/^(\s*)\}\n(\s*)(\w+\s*\()/gm, "$1}\n\n$2$3");
 
   // Rule: blank line after const/let/var declarations before next statement
-  code = code.replaceAll(
-    /((?:const|let|var)\s+\w+\s*=\s*[^;]+;)\n(\s*)([a-zA-Z])/g,
-    "$1\n\n$2$3"
-  );
+  code = code.replaceAll(/((?:const|let|var)\s+\w+\s*=\s*[^;]+;)\n(\s*)([a-zA-Z])/g, "$1\n\n$2$3");
 
   // Remove double blank lines
   code = code.replaceAll(/\n{3,}/g, "\n\n");

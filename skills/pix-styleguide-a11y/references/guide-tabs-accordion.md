@@ -19,12 +19,8 @@
 
 ```html
 <div role="tablist" aria-label="Documentation">
-  <button role="tab" aria-selected="true" aria-controls="panel-1" id="tab-1" tabindex="0">
-    Overview
-  </button>
-  <button role="tab" aria-selected="false" aria-controls="panel-2" id="tab-2" tabindex="-1">
-    Details
-  </button>
+  <button role="tab" aria-selected="true" aria-controls="panel-1" id="tab-1" tabindex="0">Overview</button>
+  <button role="tab" aria-selected="false" aria-controls="panel-2" id="tab-2" tabindex="-1">Details</button>
 </div>
 <div role="tabpanel" id="panel-1" aria-labelledby="tab-1">
   <h2>Overview content</h2>
@@ -49,16 +45,16 @@
 
 ## Keyboard interactions (Tabs)
 
-| Key | Action |
-| :--- | :--- |
-| Left/Right Arrow | Switch between tabs |
-| Tab | Move from tablist into active tabpanel |
-| Home | Go to first tab |
-| End | Go to last tab |
+| Key              | Action                                 |
+| :--------------- | :------------------------------------- |
+| Left/Right Arrow | Switch between tabs                    |
+| Tab              | Move from tablist into active tabpanel |
+| Home             | Go to first tab                        |
+| End              | Go to last tab                         |
 
 ## Keyboard interactions (Accordion)
 
-| Key | Action |
-| :--- | :--- |
-| Enter / Space | Toggle accordion section |
-| Tab | Move to next focusable element |
+| Key           | Action                         |
+| :------------ | :----------------------------- |
+| Enter / Space | Toggle accordion section       |
+| Tab           | Move to next focusable element |

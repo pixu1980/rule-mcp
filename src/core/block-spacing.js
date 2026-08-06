@@ -30,19 +30,23 @@ function findBlocks(lines) {
 
   for (let index = 0; index < lines.length; index++) {
     const line = lines[index];
-// eslint-disable-next-line no-unused-vars
+    // eslint-disable-next-line no-unused-vars
     const trimmed = line.trim();
 
     // Opening brace (not including object literals like { key: val })
-    if (/^\s*(if|for|while|switch|try|catch|finally|else\s*if|else)\s*\([^)]*\)\s*\{\s*$/.test(line) ||
-        /^\s*(if|for|while|switch|try|catch|finally|else)\s*\{\s*$/.test(line) ||
-        /^\s*\)\s*\{\s*$/.test(line) ||
-        /^\s*=>\s*\{\s*$/.test(line) ||
-        /^\s*(?:export\s+)?(?:async\s+)?function\s+(?:\w+)?\s*\([^)]*\)\s*\{\s*$/.test(line) ||
-        /^\s*(?:export\s+)?(?:async\s+)?function\s*\{\s*$/.test(line) ||
-        /^\s*(?:export\s+)?class\s+\w+\s*(?:extends\s+\w+)?\s*\{\s*$/.test(line) ||
-        (/^\s*(?:\w+|\w+\.prototype)\s*\([^)]*\)\s*\{\s*$/.test(line) && !/^\s*(if|for|while|switch)\s*\(/.test(line) && !/^\s*(export|import)\s/.test(line)) ||
-        /^\s*constructor\s*\([^)]*\)\s*\{\s*$/.test(line)) {
+    if (
+      /^\s*(if|for|while|switch|try|catch|finally|else\s*if|else)\s*\([^)]*\)\s*\{\s*$/.test(line) ||
+      /^\s*(if|for|while|switch|try|catch|finally|else)\s*\{\s*$/.test(line) ||
+      /^\s*\)\s*\{\s*$/.test(line) ||
+      /^\s*=>\s*\{\s*$/.test(line) ||
+      /^\s*(?:export\s+)?(?:async\s+)?function\s+(?:\w+)?\s*\([^)]*\)\s*\{\s*$/.test(line) ||
+      /^\s*(?:export\s+)?(?:async\s+)?function\s*\{\s*$/.test(line) ||
+      /^\s*(?:export\s+)?class\s+\w+\s*(?:extends\s+\w+)?\s*\{\s*$/.test(line) ||
+      (/^\s*(?:\w+|\w+\.prototype)\s*\([^)]*\)\s*\{\s*$/.test(line) &&
+        !/^\s*(if|for|while|switch)\s*\(/.test(line) &&
+        !/^\s*(export|import)\s/.test(line)) ||
+      /^\s*constructor\s*\([^)]*\)\s*\{\s*$/.test(line)
+    ) {
       stack.push({ openLine: index, indent: indentOf(line) });
     }
 
@@ -52,8 +56,9 @@ function findBlocks(lines) {
       block.closeLine = index;
 
       // Only consider blocks with ≥1 inner code line
-      const innerLines = lines.slice(block.openLine + 1, block.closeLine)
-        .filter(l => l.trim() !== "" && !/^\s*\/\//.test(l) && !/^\s*\/\*/.test(l));
+      const innerLines = lines
+        .slice(block.openLine + 1, block.closeLine)
+        .filter((l) => l.trim() !== "" && !/^\s*\/\//.test(l) && !/^\s*\/\*/.test(l));
 
       if (innerLines.length > 0) {
         blocks.push(block);
@@ -78,17 +83,28 @@ function classifyBlock(block, allBlocks, lines) {
   // and closeLine > block.closeLine
   let parent = null;
   for (const other of allBlocks) {
-    if (other.openLine < block.openLine && other.closeLine > block.closeLine && (!parent || (other.openLine > parent.openLine))) {
-        parent = other;
-      }
+    if (
+      other.openLine < block.openLine &&
+      other.closeLine > block.closeLine &&
+      (!parent || other.openLine > parent.openLine)
+    ) {
+      parent = other;
+    }
   }
 
-  if (!parent) {return "middle";} // no parent → toplevel → always middle
+  if (!parent) {
+    return "middle";
+  } // no parent → toplevel → always middle
 
   // Check if block is at start of parent
   let isAtStart = true;
   for (let index = parent.openLine + 1; index < block.openLine; index++) {
-    if (lines[index].trim() !== "" && !lines[index].trimStart().startsWith("//") && !lines[index].trimStart().startsWith("/*") && !lines[index].trimStart().startsWith("*")) {
+    if (
+      lines[index].trim() !== "" &&
+      !lines[index].trimStart().startsWith("//") &&
+      !lines[index].trimStart().startsWith("/*") &&
+      !lines[index].trimStart().startsWith("*")
+    ) {
       isAtStart = false;
       break;
     }
@@ -97,15 +113,26 @@ function classifyBlock(block, allBlocks, lines) {
   // Check if block is at end of parent
   let isAtEnd = true;
   for (let index = block.closeLine + 1; index < parent.closeLine; index++) {
-    if (lines[index].trim() !== "" && !lines[index].trimStart().startsWith("//") && !lines[index].trimStart().startsWith("/*") && !lines[index].trimStart().startsWith("*")) {
+    if (
+      lines[index].trim() !== "" &&
+      !lines[index].trimStart().startsWith("//") &&
+      !lines[index].trimStart().startsWith("/*") &&
+      !lines[index].trimStart().startsWith("*")
+    ) {
       isAtEnd = false;
       break;
     }
   }
 
-  if (isAtStart && isAtEnd) {return "start_end";} // only child → both
-  if (isAtStart) {return "start";}
-  if (isAtEnd) {return "end";}
+  if (isAtStart && isAtEnd) {
+    return "start_end";
+  } // only child → both
+  if (isAtStart) {
+    return "start";
+  }
+  if (isAtEnd) {
+    return "end";
+  }
   return "middle";
 }
 
@@ -131,16 +158,21 @@ export function fixBlockSpacing(filePath) {
       const previousTrimmed = previousLine.trim();
       const isNeedsAbove = type === "end" || type === "middle" || type === "start_end";
 
-      if (isNeedsAbove && previousTrimmed !== "" &&
-          !previousTrimmed.startsWith("//") && !previousTrimmed.startsWith("/*") &&
-          !previousTrimmed.startsWith("*") && !previousTrimmed.endsWith("{") &&
-          !previousTrimmed.endsWith("(")) {
+      if (
+        isNeedsAbove &&
+        previousTrimmed !== "" &&
+        !previousTrimmed.startsWith("//") &&
+        !previousTrimmed.startsWith("/*") &&
+        !previousTrimmed.startsWith("*") &&
+        !previousTrimmed.endsWith("{") &&
+        !previousTrimmed.endsWith("(")
+      ) {
         // Insert blank line before the block
         lines.splice(block.openLine, 0, "");
         // Adjust subsequent block positions since we inserted
         for (const other of blocks) {
           if (!(other.openLine >= block.openLine) || other === block) {
-          	continue;
+            continue;
           }
 
           other.openLine++;
@@ -156,17 +188,24 @@ export function fixBlockSpacing(filePath) {
       const nextTrimmed = nextLine.trim();
       const isNeedsBelow = type === "start" || type === "middle" || type === "start_end";
 
-      if (isNeedsBelow && nextTrimmed !== "" &&
-          !nextTrimmed.startsWith("//") && !nextTrimmed.startsWith("/*") &&
-          !nextTrimmed.startsWith("*") && !nextTrimmed.startsWith(")") &&
-          !nextTrimmed.startsWith("]") && !nextTrimmed.startsWith(",") &&
-          !/^\s*(catch|else|finally|case|default)/.test(nextLine) &&
-          !nextTrimmed.endsWith("{") && !nextTrimmed.startsWith("(")) {
+      if (
+        isNeedsBelow &&
+        nextTrimmed !== "" &&
+        !nextTrimmed.startsWith("//") &&
+        !nextTrimmed.startsWith("/*") &&
+        !nextTrimmed.startsWith("*") &&
+        !nextTrimmed.startsWith(")") &&
+        !nextTrimmed.startsWith("]") &&
+        !nextTrimmed.startsWith(",") &&
+        !/^\s*(catch|else|finally|case|default)/.test(nextLine) &&
+        !nextTrimmed.endsWith("{") &&
+        !nextTrimmed.startsWith("(")
+      ) {
         // Insert blank line after the block
         lines.splice(block.closeLine + 1, 0, "");
         for (const other of blocks) {
           if (!(other.openLine > block.closeLine)) {
-          	continue;
+            continue;
           }
 
           other.openLine++;
@@ -181,11 +220,17 @@ export function fixBlockSpacing(filePath) {
   for (let index = lines.length - 1; index >= 0; index--) {
     const current = lines[index].trim();
     const next = index + 1 < lines.length ? lines[index + 1].trim() : "";
-    if (next === "};") {continue;} // skip — handled by block rules
+    if (next === "};") {
+      continue;
+    } // skip — handled by block rules
     // If current line closes a multi-line export body and next line is another export
-    if ((current === "};" || current.startsWith("}")) &&
-        next.startsWith("export ") && !next.startsWith("export {") &&
-        index + 1 < lines.length && lines[index + 1].trim() !== "") {
+    if (
+      (current === "};" || current.startsWith("}")) &&
+      next.startsWith("export ") &&
+      !next.startsWith("export {") &&
+      index + 1 < lines.length &&
+      lines[index + 1].trim() !== ""
+    ) {
       lines.splice(index + 1, 0, "");
     }
   }
@@ -207,7 +252,9 @@ export function fixBlockSpacingOnFiles(files) {
   let count = 0;
   for (const file of files) {
     try {
-      if (fixBlockSpacing(file)) {count++;}
+      if (fixBlockSpacing(file)) {
+        count++;
+      }
     } catch {
       // skip files that can't be read/written
     }

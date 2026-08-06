@@ -1,4 +1,4 @@
-```md
+````md
 Observation: [what the code currently does]
 
 Risk: [why this causes a bug, performance issue, or maintenance problem]
@@ -10,9 +10,11 @@ Example:
 ```svelte
 <!-- code sample -->
 ```
+````
 
 Rule of thumb: [one reusable sentence]
-```
+
+````
 
 ## Example comment
 
@@ -24,4 +26,4 @@ Risk: `$effect` runs after DOM update and can cause extra work. It is also harde
 Suggested fix: Replace `$effect` with `$derived`.
 
 Rule of thumb: Use `$derived` for computed values, `$effect` for side effects only.
-```
+````

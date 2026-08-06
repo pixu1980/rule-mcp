@@ -67,7 +67,7 @@ function tokenize(text) {
   return text
     .toLowerCase()
     .split(/[^a-z0-9]+/)
-    .filter(t => t.length >= MIN_TERM_LENGTH && !STOPWORDS.has(t));
+    .filter((t) => t.length >= MIN_TERM_LENGTH && !STOPWORDS.has(t));
 }
 
 /**
@@ -75,27 +75,173 @@ function tokenize(text) {
  * Curated for technical frontend content — keeps framework/language terms.
  */
 const STOPWORDS = new Set([
-  "the", "and", "for", "are", "but", "not", "you", "all", "can", "had",
-  "her", "was", "one", "our", "out", "has", "have", "been", "some", "same",
-  "also", "than", "then", "that", "them", "this", "they", "will", "with",
-  "what", "when", "where", "which", "while", "from", "each", "just",
-  "like", "more", "most", "much", "only", "over", "such", "very", "way",
-  "well", "your", "into", "should", "could", "would", "about", "after",
-  "their", "there", "these", "those", "other", "every", "first", "last",
-  "still", "than", "then", "its", "may", "make", "made", "used", "use",
-  "using", "need", "without", "within", "both", "between", "under",
-  "above", "before", "after", "during", "through", "against", "being",
-  "done", "does", "doing", "having", "get", "got", "give", "given",
-  "take", "taken", "took", "see", "seen", "say", "said", "part", "also",
-  "back", "set", "put", "run", "let", "keep", "found", "new", "many",
-  "long", "thing", "things", "work", "works", "working", "number",
-  "line", "means", "same", "must", "next", "two", "three", "four",
-  "five", "six", "seven", "eight", "nine", "ten", "top", "bottom",
-  "left", "right", "case", "default", "public", "private", "static",
-  "void", "true", "false", "null", "type", "types", "value", "values",
-  "method", "methods", "call", "calls", "called", "calling",
-  "define", "defined", "defines", "defining", "spec", "specs",
-  "doc", "docs", "file", "files", "folder", "folders",
+  "the",
+  "and",
+  "for",
+  "are",
+  "but",
+  "not",
+  "you",
+  "all",
+  "can",
+  "had",
+  "her",
+  "was",
+  "one",
+  "our",
+  "out",
+  "has",
+  "have",
+  "been",
+  "some",
+  "same",
+  "also",
+  "than",
+  "then",
+  "that",
+  "them",
+  "this",
+  "they",
+  "will",
+  "with",
+  "what",
+  "when",
+  "where",
+  "which",
+  "while",
+  "from",
+  "each",
+  "just",
+  "like",
+  "more",
+  "most",
+  "much",
+  "only",
+  "over",
+  "such",
+  "very",
+  "way",
+  "well",
+  "your",
+  "into",
+  "should",
+  "could",
+  "would",
+  "about",
+  "after",
+  "their",
+  "there",
+  "these",
+  "those",
+  "other",
+  "every",
+  "first",
+  "last",
+  "still",
+  "than",
+  "then",
+  "its",
+  "may",
+  "make",
+  "made",
+  "used",
+  "use",
+  "using",
+  "need",
+  "without",
+  "within",
+  "both",
+  "between",
+  "under",
+  "above",
+  "before",
+  "after",
+  "during",
+  "through",
+  "against",
+  "being",
+  "done",
+  "does",
+  "doing",
+  "having",
+  "get",
+  "got",
+  "give",
+  "given",
+  "take",
+  "taken",
+  "took",
+  "see",
+  "seen",
+  "say",
+  "said",
+  "part",
+  "also",
+  "back",
+  "set",
+  "put",
+  "run",
+  "let",
+  "keep",
+  "found",
+  "new",
+  "many",
+  "long",
+  "thing",
+  "things",
+  "work",
+  "works",
+  "working",
+  "number",
+  "line",
+  "means",
+  "same",
+  "must",
+  "next",
+  "two",
+  "three",
+  "four",
+  "five",
+  "six",
+  "seven",
+  "eight",
+  "nine",
+  "ten",
+  "top",
+  "bottom",
+  "left",
+  "right",
+  "case",
+  "default",
+  "public",
+  "private",
+  "static",
+  "void",
+  "true",
+  "false",
+  "null",
+  "type",
+  "types",
+  "value",
+  "values",
+  "method",
+  "methods",
+  "call",
+  "calls",
+  "called",
+  "calling",
+  "define",
+  "defined",
+  "defines",
+  "defining",
+  "spec",
+  "specs",
+  "doc",
+  "docs",
+  "file",
+  "files",
+  "folder",
+  "folders",
 ]);
 
 // ─── Index building ───────────────────────────────────────────────
@@ -139,7 +285,9 @@ function extractSections(content) {
  * @param {boolean} [force=false] — Force rebuild even if index exists
  */
 export function buildIndex(force = false) {
-  if (_index && !force) {return;}
+  if (_index && !force) {
+    return;
+  }
 
   const skillNames = getSkillNames();
   const df = new Map(); // term → docId → freq
@@ -149,11 +297,15 @@ export function buildIndex(force = false) {
 
   for (const skillName of skillNames) {
     const content = readSkill(skillName);
-    if (!content) {continue;}
+    if (!content) {
+      continue;
+    }
 
     const sections = extractSections(content);
     for (const section of sections) {
-      if (!section.text.trim()) {continue;}
+      if (!section.text.trim()) {
+        continue;
+      }
 
       const terms = tokenize(section.text);
       const termFreq = new Map();
@@ -176,16 +328,16 @@ export function buildIndex(force = false) {
 
       // Update inverted index
       for (const [term, freq] of termFreq) {
-        if (!df.has(term)) {df.set(term, new Map());}
+        if (!df.has(term)) {
+          df.set(term, new Map());
+        }
         df.get(term).set(id, freq);
       }
     }
   }
 
   const totalDocs = docs.length;
-  const avgDocumentLength = totalDocs > 0
-    ? [...documentLength.values()].reduce((a, b) => a + b, 0) / totalDocs
-    : 0;
+  const avgDocumentLength = totalDocs > 0 ? [...documentLength.values()].reduce((a, b) => a + b, 0) / totalDocs : 0;
 
   _index = { df, docLength: documentLength, docs, totalDocs, avgDocLength: avgDocumentLength };
 }
@@ -210,7 +362,9 @@ export function isIndexReady() {
  * @returns {{ totalDocs: number, avgDocLength: number, uniqueTerms: number } | null}
  */
 export function getIndexStats() {
-  if (!_index) {return null;}
+  if (!_index) {
+    return null;
+  }
   return {
     totalDocs: _index.totalDocs,
     avgDocLength: Math.round(_index.avgDocLength * 10) / 10,
@@ -231,7 +385,9 @@ export function getIndexStats() {
  * @returns {number}
  */
 function bm25Score(tf, docLen, avgDocLen, N, n) {
-  if (n === 0 || N === 0) {return 0;}
+  if (n === 0 || N === 0) {
+    return 0;
+  }
 
   // IDF (inverse document frequency) with smoothing
   const idf = Math.log(1 + (N - n + 0.5) / (n + 0.5));
@@ -240,7 +396,7 @@ function bm25Score(tf, docLen, avgDocLen, N, n) {
   const numerator = tf * (K1 + 1);
   const denominator = tf + K1 * (1 - B + B * (docLen / avgDocLen));
 
-  return idf * numerator / denominator;
+  return (idf * numerator) / denominator;
 }
 
 /**
@@ -252,17 +408,23 @@ function bm25Score(tf, docLen, avgDocLen, N, n) {
  * @returns {Array<{ skill: string, section: string, score: number, snippet: string }>}
  */
 export function search(query, maxResults = DEFAULT_MAX_RESULTS) {
-  if (!_index) {return [];}
+  if (!_index) {
+    return [];
+  }
 
   const queryTerms = tokenize(query);
-  if (queryTerms.length === 0) {return [];}
+  if (queryTerms.length === 0) {
+    return [];
+  }
 
   const { df, docLength, docs, totalDocs, avgDocLength } = _index;
   const scores = new Map(); // docId → cumulative score
 
   for (const term of queryTerms) {
     const posting = df.get(term);
-    if (!posting) {continue;}
+    if (!posting) {
+      continue;
+    }
 
     const n = posting.size; // docs containing this term
 

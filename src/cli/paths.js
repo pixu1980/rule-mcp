@@ -12,9 +12,7 @@ import { join, sep } from "node:path";
 import { fileURLToPath } from "node:url";
 
 /** @type {{ name: string, version: string }} */
-export const pkg = JSON.parse(
-  readFileSync(new URL("../../package.json", import.meta.url), "utf8"),
-);
+export const pkg = JSON.parse(readFileSync(new URL("../../package.json", import.meta.url), "utf8"));
 
 /**
  * Canonical default port for the SSE/HTTP transport.
@@ -48,8 +46,7 @@ export function getSseHost() {
 export function getRuntimePaths() {
   // PIX_GALAXY_MCP_STATE_DIR lets containers and tests relocate mutable state
   // (tokens, caches, daemon pid) off the default ~/.local/state path.
-  const stateDir = process.env.PIX_GALAXY_MCP_STATE_DIR
-    || join(homedir(), ".local", "state", "pix-galaxy-mcp");
+  const stateDir = process.env.PIX_GALAXY_MCP_STATE_DIR || join(homedir(), ".local", "state", "pix-galaxy-mcp");
   const dataDir = join(homedir(), ".local", "share", "pix-galaxy-mcp");
 
   return {
@@ -98,9 +95,17 @@ export function detectInstallType() {
   const root = getRepoRoot();
   try {
     // A git clone can pull; this is the only self-updatable install.
-    if (existsSync(join(root, ".git"))) {return "git";}
-  } catch { /* ignore */ }
-  if (existsSync("/.dockerenv") || process.env.PIX_GALAXY_MCP_DOCKER === "1") {return "docker";}
-  if (root.includes(`${sep}node_modules${sep}`) || root.endsWith(`${sep}node_modules`)) {return "npm";}
+    if (existsSync(join(root, ".git"))) {
+      return "git";
+    }
+  } catch {
+    /* ignore */
+  }
+  if (existsSync("/.dockerenv") || process.env.PIX_GALAXY_MCP_DOCKER === "1") {
+    return "docker";
+  }
+  if (root.includes(`${sep}node_modules${sep}`) || root.endsWith(`${sep}node_modules`)) {
+    return "npm";
+  }
   return "unknown";
 }

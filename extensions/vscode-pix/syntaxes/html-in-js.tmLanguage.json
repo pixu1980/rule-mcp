@@ -46,7 +46,10 @@
       "end": "\\}\\}",
       "name": "meta.expression.pix",
       "patterns": [
-        { "match": "\\|\\s*(raw|upper|lower|capitalize|slugify|trim|escapeHtml|striptags|json|default|truncate|length|first|last|join|date|timeAgo|urlencode|sortBy)\\b", "name": "support.function.filter.pix" },
+        {
+          "match": "\\|\\s*(raw|upper|lower|capitalize|slugify|trim|escapeHtml|striptags|json|default|truncate|length|first|last|join|date|timeAgo|urlencode|sortBy)\\b",
+          "name": "support.function.filter.pix"
+        },
         { "match": "\\b(true|false|null|undefined)\\b", "name": "constant.language.pix" },
         { "match": "\\d+", "name": "constant.numeric.pix" },
         { "match": "\"[^\"]*\"|'[^']*'", "name": "string.quoted.pix" },
@@ -61,14 +64,10 @@
       "begin": "\\$\\{",
       "end": "\\}",
       "name": "meta.interpolation.pix",
-      "patterns": [
-        { "include": "source.js" }
-      ]
+      "patterns": [{ "include": "source.js" }]
     },
     "html-content": {
-      "patterns": [
-        { "include": "text.html.derivative" }
-      ]
+      "patterns": [{ "include": "text.html.derivative" }]
     }
   }
 }

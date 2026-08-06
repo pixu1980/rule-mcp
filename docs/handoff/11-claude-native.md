@@ -37,6 +37,7 @@ description: React best practices aligned with pix-styleguide. Zero CSS classes,
 ```
 
 **Verifica:**
+
 ```bash
 # Dopo installazione:
 ls ~/.claude/skills/pix-*/SKILL.md | wc -l  # deve essere > 0
@@ -47,19 +48,21 @@ ls ~/.claude/skills/pix-*/SKILL.md | wc -l  # deve essere > 0
 L'audit ha rilevato che 59 skill su 70 non hanno una formula esplicita "Use when..." nella `description`. Questo è critico per l'auto-discovery nativo di Claude, che matcha la `description` contro il prompt utente.
 
 **Template:**
+
 ```yaml
 description: >-
   Use when <condition> to <action>. Covers <topics>.
 ```
 
 **Esempi corretti (già presenti):**
+
 ```yaml
 # pix-backend-express
 description: >-
   Express.js 5+ best practices: middleware patterns, error handling,
   routing, performance optimization, security headers, and production deployment.
 
-# pix-data-postgresql  
+# pix-data-postgresql
 description: >-
   PostgreSQL 16+ complete reference: DDL scripts, indexing strategies,
   performance tuning, replication, connection pooling, JSONB patterns,
@@ -67,6 +70,7 @@ description: >-
 ```
 
 **Esempi da migliorare (troppo vaghi):**
+
 ```yaml
 # pix-backend (attuale)
 description: >-
@@ -83,6 +87,7 @@ description: >-
 **File da modificare:** tutti i 70 `skills/*/SKILL.md` che non hanno già "Use when" o formula equivalente nella description.
 
 **Verifica:**
+
 ```bash
 # Contare quante skill hanno "Use when" nella description
 grep -rl '^description:.*Use when' skills/*/SKILL.md | wc -l
@@ -101,8 +106,13 @@ grep -rl '^description:.*Use when' skills/*/SKILL.md | wc -l
       "command": "node",
       "args": ["bin/pix-galaxy-mcp.js", "serve"],
       "allowedTools": [
-        "pix_tool_gateway", "pix_tool_apply", "pix", "pix_tool_search",
-        "pix_tool_check", "pix_tool_detect", "pix_tool_scaffold"
+        "pix_tool_gateway",
+        "pix_tool_apply",
+        "pix",
+        "pix_tool_search",
+        "pix_tool_check",
+        "pix_tool_detect",
+        "pix_tool_scaffold"
       ]
     }
   }
@@ -114,6 +124,7 @@ grep -rl '^description:.*Use when' skills/*/SKILL.md | wc -l
 Il README dichiara 71 tool, ma sono 78 (normal mode) o 9 (strict mode). E le risorse non sono più 146 — vanno contate con `pix://skills`.
 
 **Fix:**
+
 ```bash
 # Ottenere conteggi reali
 HOME=/tmp/pix-audit-home PIX_DISABLE_AUTO_ADR=1 NODE_ENV=test \

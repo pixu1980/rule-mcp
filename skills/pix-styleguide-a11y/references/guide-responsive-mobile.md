@@ -20,8 +20,12 @@ body {
   font-size: 100%; /* Browser default (16px) */
 }
 
-h1 { font-size: 2rem; }
-p  { font-size: 1rem; }
+h1 {
+  font-size: 2rem;
+}
+p {
+  font-size: 1rem;
+}
 
 /* Reflow: single-column by default */
 .container {
@@ -50,5 +54,5 @@ p  { font-size: 1rem; }
 ## Viewport Meta
 
 ```html
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 ```

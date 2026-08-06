@@ -24,7 +24,7 @@ const double = count * 2;
 
 ```tsx
 useEffect(() => {
-  localStorage.setItem('theme', theme);
+  localStorage.setItem("theme", theme);
 }, [theme]);
 ```
 

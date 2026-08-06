@@ -1,12 +1,12 @@
 #!/usr/bin/env node
 
-import assert from 'node:assert/strict';
-import { describe, test } from 'node:test';
+import assert from "node:assert/strict";
+import { describe, test } from "node:test";
 
-import { TemplateEngine } from '../index.js';
+import { TemplateEngine } from "../index.js";
 
-describe('TemplateEngine - Tagged Template Literals', () => {
-  test('should render inline templates with engine.template', () => {
+describe("TemplateEngine - Tagged Template Literals", () => {
+  test("should render inline templates with engine.template", () => {
     const engine = new TemplateEngine();
 
     const renderList = engine.template`
@@ -17,16 +17,16 @@ describe('TemplateEngine - Tagged Template Literals', () => {
     `;
 
     const html = renderList({
-      title: 'tagged literal',
-      items: ['Alpha', 'Beta'],
+      title: "tagged literal",
+      items: ["Alpha", "Beta"],
     });
 
-    assert.ok(html.includes('<h1>TAGGED LITERAL</h1>'));
-    assert.ok(html.includes('<span>Alpha</span>'));
-    assert.ok(html.includes('<span>Beta</span>'));
+    assert.ok(html.includes("<h1>TAGGED LITERAL</h1>"));
+    assert.ok(html.includes("<span>Alpha</span>"));
+    assert.ok(html.includes("<span>Beta</span>"));
   });
 
-  test('should render inline templates with engine.html alias', () => {
+  test("should render inline templates with engine.html alias", () => {
     const engine = new TemplateEngine();
 
     const renderCard = engine.html`<article><h2>{{ card.title }}</h2><p>{{ card.summary }}</p></article>`;
@@ -34,15 +34,15 @@ describe('TemplateEngine - Tagged Template Literals', () => {
     assert.strictEqual(
       renderCard({
         card: {
-          title: 'Alias',
-          summary: 'Short form works',
+          title: "Alias",
+          summary: "Short form works",
         },
       }),
-      '<article><h2>Alias</h2><p>Short form works</p></article>'
+      "<article><h2>Alias</h2><p>Short form works</p></article>",
     );
   });
 
-  test('should compose tagged render functions with shared render data', () => {
+  test("should compose tagged render functions with shared render data", () => {
     const engine = new TemplateEngine();
 
     const renderHeader = engine.html`<header><h1>{{ page.title }}</h1></header>`;
@@ -51,15 +51,15 @@ describe('TemplateEngine - Tagged Template Literals', () => {
     assert.strictEqual(
       renderShell({
         page: {
-          title: 'Composed page',
-          description: 'Header and body share data.',
+          title: "Composed page",
+          description: "Header and body share data.",
         },
       }),
-      '<main><header><h1>Composed page</h1></header><p>Header and body share data.</p></main>'
+      "<main><header><h1>Composed page</h1></header><p>Header and body share data.</p></main>",
     );
   });
 
-  test('should evaluate JavaScript interpolations before template rendering', () => {
+  test("should evaluate JavaScript interpolations before template rendering", () => {
     const engine = new TemplateEngine();
 
     const renderPage = engine.html`
@@ -68,21 +68,21 @@ describe('TemplateEngine - Tagged Template Literals', () => {
     `;
 
     const html = renderPage({
-      title: 'Inline function',
-      meta: { generatedAt: '2026-04-30' },
-      links: ['Docs', 'API'],
+      title: "Inline function",
+      meta: { generatedAt: "2026-04-30" },
+      links: ["Docs", "API"],
     });
 
-    assert.ok(html.includes('<section>Inline function</section>'));
-    assert.ok(html.includes('<footer>2026-04-30 - 2 links</footer>'));
+    assert.ok(html.includes("<section>Inline function</section>"));
+    assert.ok(html.includes("<footer>2026-04-30 - 2 links</footer>"));
   });
 
-  test('should reject non-tagged direct calls', () => {
+  test("should reject non-tagged direct calls", () => {
     const engine = new TemplateEngine();
 
-    assert.throws(() => engine.template('<p>{{ message }}</p>'), {
-      name: 'TypeError',
-      message: 'TemplateEngine.template must be used as a tagged template literal',
+    assert.throws(() => engine.template("<p>{{ message }}</p>"), {
+      name: "TypeError",
+      message: "TemplateEngine.template must be used as a tagged template literal",
     });
   });
 });

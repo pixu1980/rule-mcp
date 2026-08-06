@@ -16,7 +16,7 @@ Focus on:
 
 For each issue, return:
 
-```md
+````md
 ### Issue title
 
 - Pattern: [one of the 10 patterns]
@@ -27,12 +27,14 @@ For each issue, return:
 ```vue
 <!-- improved snippet -->
 ```
+````
 
 Rule of thumb:
-```
+
+````
 
 Review this code:
 
 ```vue
 PASTE_CODE_HERE
-```
+````

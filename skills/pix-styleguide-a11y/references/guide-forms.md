@@ -18,7 +18,7 @@
 ```html
 <div class="form-group">
   <label for="email-field">Email Address</label>
-  <input type="email" id="email-field" aria-describedby="email-help" required>
+  <input type="email" id="email-field" aria-describedby="email-help" required />
   <p id="email-help">We'll never share your email.</p>
 </div>
 ```
@@ -28,7 +28,7 @@
 ```html
 <div class="form-group error">
   <label for="password-field">Password</label>
-  <input type="password" id="password-field" aria-invalid="true" aria-errormessage="pass-error">
+  <input type="password" id="password-field" aria-invalid="true" aria-errormessage="pass-error" />
   <p id="pass-error" role="alert">Password must be at least 8 characters.</p>
 </div>
 ```
@@ -39,9 +39,9 @@
 <fieldset>
   <legend>Shipping address</legend>
   <label for="street">Street</label>
-  <input id="street" type="text">
+  <input id="street" type="text" />
   <label for="city">City</label>
-  <input id="city" type="text">
+  <input id="city" type="text" />
 </fieldset>
 ```
 
@@ -49,13 +49,13 @@
 
 ```html
 <!-- ❌ Placeholder as label — disappears when typing -->
-<input type="text" placeholder="Enter your username">
+<input type="text" placeholder="Enter your username" />
 
 <!-- ❌ No label -->
 <input type="email" />
 
 <!-- ❌ Color-only error indication -->
-<input type="text" style="border: 1px solid red;">
+<input type="text" style="border: 1px solid red;" />
 ```
 
 ## Accessibility Implications

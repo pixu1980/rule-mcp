@@ -9,12 +9,7 @@
       "hash": "PLACEHOLDER"
     }
   },
-  "bin": [
-    [
-      "bin/pix-galaxy-mcp.js",
-      "pix-galaxy-mcp"
-    ]
-  ],
+  "bin": [["bin/pix-galaxy-mcp.js", "pix-galaxy-mcp"]],
   "checkver": {
     "github": "https://github.com/pix/pix-galaxy-mcp"
   },

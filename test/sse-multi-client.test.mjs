@@ -23,7 +23,9 @@ const openSse = (port, token) =>
         response.on("data", (chunk) => {
           body += chunk.toString();
           const match = body.match(/sessionId=([^\s]+)/);
-          if (match) {resolve({ response, sessionId: match[1] });}
+          if (match) {
+            resolve({ response, sessionId: match[1] });
+          }
         });
         response.on("error", reject);
       },
