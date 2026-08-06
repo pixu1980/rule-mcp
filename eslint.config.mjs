@@ -97,6 +97,8 @@ export default defineConfig([
       "unicorn/prefer-promise-try": "off",
       "unicorn/no-return-array-push": "off",
       "unicorn/prefer-number-properties": "off",
+      "unicorn/number-literal-case": "off",
+      "unicorn/numeric-separators-style": "off",
       "no-control-regex": "off", // TUI/ANSI color sequences are intentional
     },
   },
