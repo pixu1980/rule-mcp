@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # =============================================================================
-# rule-mcp — Universal Uninstaller
+# rule-mcp - Universal Uninstaller
 # =============================================================================
 #
 # Reverses all changes made by install.sh:
@@ -107,7 +107,7 @@ done
 if [[ "$DRY_RUN" == "false" && "$FORCE" == "false" ]]; then
   echo ""
   echo -e "${YELLOW}${BOLD}╔══════════════════════════════════════════════════════╗${NC}"
-  echo -e "${YELLOW}${BOLD}║      rule-mcp — Uninstall Confirmation         ║${NC}"
+  echo -e "${YELLOW}${BOLD}║      rule-mcp - Uninstall Confirmation         ║${NC}"
   echo -e "${YELLOW}${BOLD}╚══════════════════════════════════════════════════════╝${NC}"
   echo ""
   echo -e "  This will remove rule-mcp configuration from:"
@@ -138,7 +138,7 @@ fi
 
 echo ""
 echo -e "${BOLD}${RED}╔══════════════════════════════════════════════════════╗${NC}"
-echo -e "${BOLD}${RED}║       rule-mcp — Universal Uninstaller         ║${NC}"
+echo -e "${BOLD}${RED}║       rule-mcp - Universal Uninstaller         ║${NC}"
 echo -e "${BOLD}${RED}╚══════════════════════════════════════════════════════╝${NC}"
 echo ""
 
@@ -468,7 +468,7 @@ remove_mcp_entry_dual() {
   remove_mcp_entry "$file" "$label" "pix_ai_mcp"
 }
 
-# VS Code global config (user-level — this is where VS Code 1.90+ stores MCP)
+# VS Code global config (user-level - this is where VS Code 1.90+ stores MCP)
 VSCODE_GLOBAL_DIR=""
 if [[ "$OS" == "macos" ]]; then
   VSCODE_GLOBAL_DIR="$HOME_DIR/Library/Application Support/Code/User"
@@ -912,7 +912,7 @@ fi
 header "Uninstall Summary"
 
 if [[ "$DRY_RUN" == "true" ]]; then
-  echo -e "  ${YELLOW}⚠ Dry-run mode — no changes were made${NC}"
+  echo -e "  ${YELLOW}⚠ Dry-run mode - no changes were made${NC}"
   echo ""
   echo "  To apply:  ./scripts/uninstall.sh"
   echo "  To run live: curl -fsSL ${SCRIPT_URL} | bash"

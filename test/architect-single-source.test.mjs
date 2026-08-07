@@ -1,7 +1,7 @@
 // test/architect-single-source.test.mjs
 // Phase 2 Task 4: drift guard. Locks the single-source invariants Phase 2
-// established — exactly one interview.js under skills/ (the canonical real
-// file at rule-architect-web/interview.js, no symlinked copies —
+// established - exactly one interview.js under skills/ (the canonical real
+// file at rule-architect-web/interview.js, no symlinked copies -
 // context-server.mjs now serves it BY PATH instead, since symlinks get
 // dropped by `pnpm pack`), no stale placeholders.json under
 // assets/context-server/, and both servers importing detectProjectValues
@@ -51,7 +51,7 @@ function collectInterviewJsFiles(dir) {
   return results;
 }
 
-test("exactly one interview.js exists under skills/ — the canonical real file, no symlinked copies", () => {
+test("exactly one interview.js exists under skills/ - the canonical real file, no symlinked copies", () => {
   const allInterviewJsFiles = collectInterviewJsFiles(SKILLS_DIR);
 
   assert.equal(

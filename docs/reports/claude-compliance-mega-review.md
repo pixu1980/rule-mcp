@@ -1,53 +1,53 @@
-# Mega Review — Compliance `claude-*` e affidabilità del router `pix_tool`
+# Mega Review - `claude-*` Compliance and `pix_tool` Router Reliability
 
-**Data**: 2026-07-15
-**Versione analizzata**: `rule-mcp@1.0.0`, commit `4d9764b` (2026-07-11)
-**SDK MCP**: `@modelcontextprotocol/sdk@1.29.0`
-**Autore**: mega-review agente (pi), su richiesta utente
+**Date**: 2026-07-15
+**Version analyzed**: `rule-mcp@1.0.0`, commit `4d9764b` (2026-07-11)
+**MCP SDK**: `@modelcontextprotocol/sdk@1.29.0`
+**Author**: mega-review agent (pi), on user request
 
-## 0. Come leggere questo report
+## 0. How to read this report
 
-"Ogni singola riga di codice" non è verificabile in un solo passaggio (~9.3k righe in `src/`, 70 skill in `skills/`, oltre 700 righe di guardrail). Questo report è quindi:
+"Every single line of code" is not verifiable in a single pass (~9.3k lines in `src/`, 70 skills in `skills/`, over 700 guardrail lines). This report is therefore:
 
-1. **Un audit architetturale completo** di ogni sottosistema (server, tools, skills, resources, prompts, enforcement, installer, CLI).
-2. **Verifiche puntuali riproducibili** con evidenza grezza (comandi eseguiti + output) per i punti critici, non affermazioni generiche.
-3. **Una risposta diretta e argomentata** alla domanda centrale: _il router `pix_tool` e i trigger delle skill/tool vengono realmente coinvolti dal modello durante una sessione chat?_
+1. **A complete architectural audit** of every subsystem (server, tools, skills, resources, prompts, enforcement, installer, CLI).
+2. **Reproducible point checks** with raw evidence (executed commands + output) for critical points, not generic claims.
+3. **A direct, reasoned answer** to the central question: _does the `pix_tool` router and skill/tool triggers actually get invoked by the model during a chat session?_
 
-Ogni comando riportato in questo documento è stato eseguito realmente in questa sessione contro il repository corrente (non simulato).
+Every command reported in this document was actually executed in this session against the current repository (not simulated).
 
 ---
 
 ## 1. Executive Summary
 
-| Area                                                                    | Verdetto                                                                                                               | Severità    |
-| ----------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- | ----------- |
-| Protocollo MCP — `tools/*`, `resources/*`                               | ✅ Conforme (validato contro gli schema Zod ufficiali dell'SDK)                                                        | —           |
-| Protocollo MCP — `prompts/get`                                          | ❌ **Rotto per qualunque client conforme alla spec**, Claude incluso                                                   | 🔴 Critical |
-| Router `pix_tool` invocato automaticamente dal modello                  | ⚠️ **Non garantito strutturalmente**. Dipende al 100% da istruzioni testuali (CLAUDE.md/AGENTS.md), non dal protocollo | 🟠 High     |
-| Integrazione con le "Agent Skills" native di Claude (`.claude/skills/`) | ❌ Non implementata: le skill restano markdown esposti solo via tool MCP custom                                        | 🟠 High     |
-| Superficie di tool esposta (76 tool + 146 risorse "as shipped")         | ⚠️ Grande, senza `annotations`/`readOnlyHint`, nessun filtro `allowedTools` consigliato                                | 🟡 Medium   |
-| Sicurezza (path traversal, command injection)                           | ⚠️ Una falla di path traversal in `rule_tool_fix mode=generate`                                                         | 🟡 Medium   |
-| Qualità test/CI                                                         | ⚠️ 4/20 file di test rossi o falliti allo stato attuale                                                                | 🟡 Medium   |
-| Validazione argomenti, guardrail, enforcement post-hoc                  | ✅ Solido, ben progettato per quello che può fare (vedi §6)                                                            | —           |
+| Area                                                                | Verdict                                                                                                               | Severity    |
+| ------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | ----------- |
+| MCP Protocol - `tools/*`, `resources/*`                             | ✅ Compliant (validated against the SDK's official Zod schemas)                                                       | -           |
+| MCP Protocol - `prompts/get`                                        | ❌ **Broken for any spec-compliant client**, Claude included                                                          | 🔴 Critical |
+| `pix_tool` router automatically invoked by the model                | ⚠️ **Not structurally guaranteed**. 100% dependent on textual instructions (CLAUDE.md/AGENTS.md), not on the protocol | 🟠 High     |
+| Integration with Claude's native "Agent Skills" (`.claude/skills/`) | ❌ Not implemented: skills remain Markdown exposed only via custom MCP tool                                           | 🟠 High     |
+| Exposed tool surface (76 tools + 146 resources "as shipped")        | ⚠️ Large, without `annotations`/`readOnlyHint`, no recommended `allowedTools` filter                                  | 🟡 Medium   |
+| Security (path traversal, command injection)                        | ⚠️ One path traversal flaw in `rule_tool_fix mode=generate`                                                            | 🟡 Medium   |
+| Test/CI quality                                                     | ⚠️ 4/20 test files red or failing in current state                                                                    | 🟡 Medium   |
+| Argument validation, guardrails, post-hoc enforcement               | ✅ Solid, well-designed for what it can do (see §6)                                                                   | -           |
 
-**In una frase**: l'infrastruttura di guardrail/enforcement/BM25 è progettata bene ed è _effettiva quando un tool viene effettivamente chiamato_, ma **nulla nel server MCP obbliga un modello — Claude o altro — a chiamare `pix_tool` prima di scrivere codice**. Il progetto lo sa e compensa iniettando istruzioni testuali (`CLAUDE.md`, `AGENTS.md`, `.cursorrules`) in ogni agente supportato: è una soluzione ragionevole ma probabilistica, non deterministica, e in più il canale nativo che Claude offre proprio per questo scopo (Agent Skills in `.claude/skills/`, auto-discovery reale) non viene usato.
+**In one sentence**: the guardrail/enforcement/BM25 infrastructure is well-designed and _effective when a tool is actually called_, but **nothing in the MCP server forces a model - Claude or otherwise - to call `pix_tool` before writing code**. The project knows this and compensates by injecting textual instructions (`CLAUDE.md`, `AGENTS.md`, `.cursorrules`) into every supported agent: it's a reasonable but probabilistic solution, not deterministic, and moreover the native channel Claude offers precisely for this purpose (Agent Skills in `.claude/skills/`, real auto-discovery) is not used.
 
 ---
 
-## 2. Architettura — cosa espone davvero il server
+## 2. Architecture - what the server really exposes
 
 ```
-src/server.js         → Server MCP (stdio/SSE), capabilities: tools, resources, prompts, logging, completions
-src/tools/router.js   → registry generico (registerTool/listTools/callTool) + hook before/after/post
-src/tools/ai.js       → tool "rule" (il router — scoring keyword su sezioni ## delle SKILL.md)
-src/tools/skill.js    → genera un tool pix_<skill> per OGNI skill + rule_tool_search/rule_tool_check/rule_tool_scaffold
-src/core/skills.js    → loadAllSkills(): carica 70 skill, registra ~76 tool, costruisce indice BM25
-src/core/enforcement.js → pre/post-processing: valida shape, appende "PIX ENFORCEMENT CONTRACT"
-src/resources/index.js → 146 risorse rule://... (2 per skill + 8 statiche)
-src/prompts/index.js  → 5 MCP prompt (code-review, generate-component, a11y-test/review, architect-scaffold)
+src/server.js         → MCP server (stdio/SSE), capabilities: tools, resources, prompts, logging, completions
+src/tools/router.js   → generic registry (registerTool/listTools/callTool) + before/after/post hooks
+src/tools/ai.js       → "rule" tool (the router - keyword scoring on ## sections of SKILL.md)
+src/tools/skill.js    → generates a pix_<skill> tool for EVERY skill + rule_tool_search/rule_tool_check/rule_tool_scaffold
+src/core/skills.js    → loadAllSkills(): loads 70 skills, registers ~76 tools, builds BM25 index
+src/core/enforcement.js → pre/post-processing: validates shape, appends "PIX ENFORCEMENT CONTRACT"
+src/resources/index.js → 146 rule:// resources (2 per skill + 8 static)
+src/prompts/index.js  → 5 MCP prompts (code-review, generate-component, a11y-test/review, architect-scaffold)
 ```
 
-Conteggio verificato (repository pulito, nessuna skill personale extra in `~/.agents/skills`):
+Verified count (clean repository, no extra personal skills in `~/.agents/skills`):
 
 ```
 $ node clean-tools.mjs
@@ -56,36 +56,36 @@ clean shipped resource count: 146
 tool defs JSON bytes: 90873  ~tokens: 22718
 ```
 
-In questa sessione live (con skill personali aggiuntive installate sulla macchina, es. `caveman-*`, `frontend-design`...) il conteggio tool sale a **87**, e nell'host "pi" ogni risorsa MCP viene _inoltre_ esposta come un tool a sé stante (`get_..._skill_full_content`, `get_..._skill_summary_first_30_lines`, ecc.), portando la superficie totale visibile al modello a **oltre 220 tool callable in una singola sessione**. Questo è un dettaglio specifico dell'host, non del server, ma è un effetto concreto e osservabile dell'architettura "una risorsa/skill = un tool" che il progetto adotta.
+In this live session (with additional personal skills installed on the machine, e.g. `caveman-*`, `frontend-design`...) the tool count rises to **87**, and in the "pi" host every MCP resource is _also_ exposed as a standalone tool (`get_..._skill_full_content`, `get_..._skill_summary_first_30_lines`, etc.), bringing the total surface visible to the model to **over 220 callable tools in a single session**. This is a host-specific detail, not a server one, but it's a concrete, observable effect of the "one resource/skill = one tool" architecture the project adopts.
 
 ---
 
-## 3. 🔴 CRITICAL — `prompts/get` restituisce una risposta non valida per lo spec MCP
+## 3. 🔴 CRITICAL - `prompts/get` returns an invalid response per the MCP spec
 
-`src/prompts/index.js` costruisce ogni prompt con un messaggio `role: "system"`:
+`src/prompts/index.js` builds each prompt with a `role: "system"` message:
 
 ```js
 messages: [{ role: "system", content: { type: "text", text: "..." } }];
 ```
 
-Lo spec MCP (`PromptMessage`) e l'SDK ufficiale ammettono **solo** `role: "user" | "assistant"` — non `"system"` (fonte: [MCP spec — Prompts](https://modelcontextprotocol.io/specification/2025-06-18/server/prompts), confermato via `RoleSchema = z.enum(['user','assistant'])` nell'SDK installato in `node_modules/@modelcontextprotocol/sdk`).
+The MCP spec (`PromptMessage`) and the official SDK allow **only** `role: "user" | "assistant"` - not `"system"` (source: [MCP spec - Prompts](https://modelcontextprotocol.io/specification/2025-06-18/server/prompts), confirmed via `RoleSchema = z.enum(['user','assistant'])` in the SDK installed in `node_modules/@modelcontextprotocol/sdk`).
 
-In più, `src/server.js` risponde a `prompts/get` con `{ prompt: {...} }`, mentre `GetPromptResultSchema` richiede `{ description?, messages }` **al primo livello**, senza wrapper `prompt` e senza campo `name`.
+Additionally, `src/server.js` responds to `prompts/get` with `{ prompt: {...} }`, while `GetPromptResultSchema` requires `{ description?, messages }` **at the top level**, without a `prompt` wrapper and without a `name` field.
 
-### Riproduzione (eseguita realmente, non simulata)
+### Reproduction (actually executed, not simulated)
 
 ```js
 import { GetPromptResultSchema } from "@modelcontextprotocol/sdk/types.js";
 import { getPrompt } from "./src/prompts/index.js";
 
 const p = getPrompt("rule-code-review");
-const serverResult = { prompt: p }; // esattamente ciò che server.js manda sul wire
+const serverResult = { prompt: p }; // exactly what server.js sends on the wire
 
 GetPromptResultSchema.safeParse(serverResult).success;
 // => false
 ```
 
-Output reale:
+Actual output:
 
 ```
 --- Validation against official GetPromptResultSchema ---
@@ -100,7 +100,7 @@ success: false
 ]
 ```
 
-E anche correggendo lo shape (`{ description, messages }` senza wrapper), il `role: "system"` fallisce comunque:
+And even fixing the shape (`{ description, messages }` without wrapper), the `role: "system"` still fails:
 
 ```
 Fixed shape but role='system' still present. success: false
@@ -114,30 +114,30 @@ Fixed shape but role='system' still present. success: false
 ]
 ```
 
-### Impatto
+### Impact
 
-Qualunque client MCP che valida le risposte contro lo schema ufficiale (il client TypeScript/Python di riferimento, e presumibilmente Claude Desktop/Claude Code quando usano `prompts/get`) **rifiuta la risposta con un errore di parsing**. Le 5 slash-prompt del server (`rule-code-review`, `rule-generate-component`, `rule-a11y-test`, `rule-a11y-review`, `rule-architect-scaffold`) sono quindi **inutilizzabili da qualsiasi client conforme**, indipendentemente dal modello. `tools/*` e `resources/*` invece sono stati validati con successo contro gli schema ufficiali (vedi §Appendice) — il problema è isolato al sottosistema `prompts`.
+Any MCP client that validates responses against the official schema (the TypeScript/Python reference client, and presumably Claude Desktop/Claude Code when using `prompts/get`) **rejects the response with a parsing error**. The 5 server slash-prompts (`rule-code-review`, `rule-generate-component`, `rule-a11y-test`, `rule-a11y-review`, `rule-architect-scaffold`) are therefore **unusable by any compliant client**, regardless of the model. `tools/*` and `resources/*` on the other hand were successfully validated against the official schemas (see Appendix) - the problem is isolated to the `prompts` subsystem.
 
-### Fix consigliato
+### Recommended fix
 
 ```js
-// server.js — GetPromptRequestSchema handler
+// server.js - GetPromptRequestSchema handler
 const prompt = getPrompt(name);
 return { description: prompt.description, messages: prompt.messages };
 
-// prompts/index.js — ogni messages[]
+// prompts/index.js - each messages[]
 { role: "user", content: { type: "text", text: "<system-style instructions>" } }
 ```
 
-(Il pattern comune per "istruzioni di sistema" via MCP prompt è impacchettarle in un messaggio `role: "user"` iniziale, dato che lo spec non prevede un ruolo system dedicato in questo canale.)
+(The common pattern for "system instructions" via MCP prompts is to package them in an initial `role: "user"` message, since the spec doesn't provide a dedicated system role in this channel.)
 
 ---
 
-## 4. 🟠 HIGH — Il router e le skill NON usano il meccanismo nativo di Claude
+## 4. 🟠 HIGH - The router and skills do NOT use Claude's native mechanism
 
-Claude (Claude Code, Claude Agent SDK, claude.ai) ha una feature **nativa** chiamata _Agent Skills_: cartelle in `.claude/skills/<name>/SKILL.md` con frontmatter YAML, **scoperte e invocate automaticamente da Claude stesso** in base alla `description`, oppure richiamabili esplicitamente con `/nome-skill` — senza passare da un tool MCP (fonte: [Claude Code Docs — Agent Skills](https://code.claude.com/docs/en/skills), [Claude Code Docs — Skills nell'SDK](https://code.claude.com/docs/en/agent-sdk/skills)).
+Claude (Claude Code, Claude Agent SDK, claude.ai) has a **native** feature called _Agent Skills_: folders in `.claude/skills/<name>/SKILL.md` with YAML frontmatter, **discovered and invoked automatically by Claude itself** based on the `description`, or explicitly callable with `/skill-name` - without going through an MCP tool (source: [Claude Code Docs - Agent Skills](https://code.claude.com/docs/en/skills), [Claude Code Docs - Skills in the SDK](https://code.claude.com/docs/en/agent-sdk/skills)).
 
-`rule-mcp` **non installa mai nulla in `.claude/skills/`**. Verificato leggendo `src/cli/skills-install.js`:
+`rule-mcp` **never installs anything in `.claude/skills/`**. Verified by reading `src/cli/skills-install.js`:
 
 ```js
 const globalDir = ...          // ~/.agents/skills
@@ -145,16 +145,16 @@ const localDir = ".agents/skills";
 const targetDir = scope === "project" ? localDir : globalDir;
 ```
 
-Le 70 skill del progetto vivono solo in `~/.agents/skills/` (una convenzione inventata dall'ecosistema rule, non riconosciuta nativamente da nessun host), e diventano visibili al modello **esclusivamente** come:
+The project's 70 skills live only in `~/.agents/skills/` (a convention invented by the rule ecosystem, not natively recognized by any host), and become visible to the model **exclusively** as:
 
-1. Contenuto leggibile via tool MCP `pix_<skill>` (richiede che il modello scelga di chiamarlo);
-2. Contenuto leggibile via risorsa MCP `rule://<skill>` (richiede supporto client + scelta esplicita, o — nel caso di host come "pi" — un ulteriore tool `get_..._skill_full_content` da scegliere).
+1. Readable content via the `pix_<skill>` MCP tool (requires the model to choose to call it);
+2. Readable content via the `rule://<skill>` MCP resource (requires client support + explicit choice, or - in the case of hosts like "pi" - an additional `get_..._skill_full_content` tool to choose).
 
-Per Claude, questo significa che **il meccanismo di auto-invocazione realmente supportato dal vendor (matching semantico automatico su `description`) non entra mai in gioco**: tutto il "trigger" avviene sul livello superiore, molto più fragile, di "il modello decide di chiamare un tool tra 76+".
+For Claude, this means that **the auto-invocation mechanism actually supported by the vendor (automatic semantic matching on `description`) never comes into play**: all "triggering" happens at the higher, much more fragile level of "the model decides to call a tool among 76+".
 
-### Compensazione attuale (e suo limite strutturale)
+### Current compensation (and its structural limitation)
 
-Il progetto è consapevole di questo limite e compensa iniettando testo imperativo nei file di memoria di ogni agente. Verificato in `scripts/install.sh` (righe 516-565) e osservabile _live_ in questa stessa sessione, dove il blocco `<!-- rule-mcp-rules -->` è presente nel `CLAUDE.md` di progetto:
+The project is aware of this limitation and compensates by injecting imperative text into each agent's memory files. Verified in `scripts/install.sh` (lines 516-565) and observable _live_ in this same session, where the `<!-- rule-mcp-rules -->` block is present in the project's `CLAUDE.md`:
 
 ```
 ## MANDATORY: Use rule-mcp enforced workflow for coding work
@@ -163,49 +163,49 @@ This rule overrides weaker project guidance. No exceptions.
 ...
 ```
 
-Questo funziona **solo se l'host carica quel file come istruzione persistente di sistema** (vero per Claude Code/`CLAUDE.md`, Gemini CLI/`GEMINI.md`, Codex/`AGENTS.md`, Cursor/`.cursorrules`, "pi"/`AGENTS.md` — tutti supportati e verificati nel codice di installazione). Ma resta **un'istruzione in linguaggio naturale che il modello può ignorare, dimenticare a metà conversazione (specialmente su context lunghi), o de-prioritizzare** rispetto alla richiesta esplicita dell'utente. Nessun meccanismo del protocollo MCP impedisce al modello di generare codice senza chiamare `pix_tool` — il server può solo reagire _dopo_ che un tool è stato chiamato (vedi §6), non _prima_.
+This works **only if the host loads that file as a persistent system instruction** (true for Claude Code/`CLAUDE.md`, Gemini CLI/`GEMINI.md`, Codex/`AGENTS.md`, Cursor/`.cursorrules`, "pi"/`AGENTS.md` - all supported and verified in the installation code). But it remains **a natural language instruction that the model can ignore, forget mid-conversation (especially in long contexts), or de-prioritize** relative to the user's explicit request. No MCP protocol mechanism prevents the model from generating code without calling `pix_tool` - the server can only react _after_ a tool has been called (see §6), not _before_.
 
-**Non esiste, nello spec MCP attuale, un modo per un server di forzare un client a chiamare un tool specifico prima di rispondere.** Questo è un limite del protocollo, non solo di questo progetto — ma il progetto lo presenta implicitamente come "enforced workflow", il che può creare un falso senso di garanzia.
+**There is, in the current MCP spec, no way for a server to force a client to call a specific tool before responding.** This is a protocol limitation, not just this project's - but the project implicitly presents it as an "enforced workflow", which can create a false sense of guarantee.
 
 ---
 
-## 5. 🟠 HIGH — L'"enforcement" è reale solo _dopo_ l'invocazione, mai _prima_
+## 5. 🟠 HIGH - "Enforcement" is real only _after_ invocation, never _before_
 
-`src/core/enforcement.js` è ben scritto per quello che fa:
+`src/core/enforcement.js` is well-written for what it does:
 
-- `preprocessToolCall`: rifiuta payload oversize (>256KB), NUL byte, prototype pollution, nesting >12, >1000 chiavi, richieste `pix_tool` senza `prompt`.
-- `postprocessToolResult`: valida che l'output sia MCP-content valido, e — **solo per il tool `pix_tool`** — verifica che le skill/tool citati nella risposta di routing esistano davvero (`validateRouterResult`), prevenendo allucinazioni del _router stesso_.
-- Ogni risposta non di errore riceve in coda un blocco testuale "PIX ENFORCEMENT CONTRACT" (`## PIX ENFORCEMENT CONTRACT ...`) — un nudge testuale ripetuto ad ogni tool call.
+- `preprocessToolCall`: rejects oversized payloads (>256KB), NUL bytes, prototype pollution, nesting >12, >1000 keys, `pix_tool` requests without `prompt`.
+- `postprocessToolResult`: validates that the output is valid MCP-content, and - **only for the `pix_tool` tool** - verifies that the skills/tools cited in the routing response actually exist (`validateRouterResult`), preventing the _router itself_ from hallucinating.
+- Every non-error response gets a trailing "PIX ENFORCEMENT CONTRACT" text block (`## PIX ENFORCEMENT CONTRACT ...`) - a textual nudge repeated on every tool call.
 
-Ho verificato con un test reale che questo pipeline funziona come documentato:
+I verified with a real test that this pipeline works as documented:
 
 ```
 === test/enforcement.test.mjs ===
 ✅ preprocessing and postprocessing fail closed; hallucination guardrails enforced
 ```
 
-Il punto architetturale da chiarire: **questo hook si attiva solo quando un tool viene effettivamente invocato**. Se il modello (Claude o altro) decide semplicemente di scrivere il codice senza chiamare `pix_tool`/`rule_tool_check`, l'intera pipeline di enforcement non entra mai in esecuzione — non c'è alcun controllo server-side che blocchi una risposta "no-tool-call". L'unica leva rimasta è, di nuovo, l'istruzione testuale in `CLAUDE.md`/`AGENTS.md`.
+The architectural point to clarify: **this hook activates only when a tool is actually invoked**. If the model (Claude or otherwise) simply decides to write code without calling `pix_tool`/`rule_tool_check`, the entire enforcement pipeline never executes - there is no server-side control that blocks a "no-tool-call" response. The only remaining lever is, again, the textual instruction in `CLAUDE.md`/`AGENTS.md`.
 
 ---
 
-## 6. 🟡 MEDIUM — Superficie di tool enorme, nessuna annotation, nessun filtro consigliato
+## 6. 🟡 MEDIUM - Enormous tool surface, no annotations, no recommended filter
 
-- 76 tool "as shipped" (87+ in un ambiente con skill personali extra), ciascuno con schema JSON completo re-inviato ad ogni turno: **~22.7k token** solo per le definizioni tool (misurato: `90873 byte / 4 ≈ 22718 token`), prima ancora che la conversazione inizi.
-- Anthropic stessa documenta che ogni definizione di tool MCP costa **500–2000 token**, e che caricare troppi tool "brucia" contesto prima che Claude faccia qualunque lavoro utile — per questo ha introdotto **Tool Search** (abilitato di default in Claude Code) per differire il caricamento delle definizioni complete e permettere di scalare a centinaia/migliaia di tool (fonte: [Claude Code Docs — Scale to many tools with tool search](https://code.claude.com/docs/en/agent-sdk/tool-search.md), [Tool Search Tool — Claude Platform Docs](https://platform.claude.com/docs/en/agents-and-tools/tool-use/tool-search-tool)).
-- Questo significa che l'affidabilità del "il modello sceglie il tool giusto tra N" **varia moltissimo per host**: buona su Claude Code (tool search attivo di default), incerta su host che non implementano tool search o filtri `allowedTools` (es. Claude Desktop "vanilla", o host generici come "pi" che oltretutto duplicano il problema esponendo anche le risorse come tool).
-- Nessun tool registrato in `src/tools/router.js` imposta `annotations` (`readOnlyHint`, `destructiveHint`, `idempotentHint`, `title`) benché l'SDK e lo spec 2025-06-18 li supportino (`ToolAnnotationsSchema`, verificato in `node_modules/@modelcontextprotocol/sdk`). Risultato pratico: un client come Claude Code non può distinguere in automatico "questo tool legge soltanto" (es. `rule_tool_search`) da "questo tool scrive file" (es. `rule_tool_fix mode=generate`, `rule_tool_process_adr`) — tutti richiedono la stessa fiducia/approvazione.
+- 76 tools "as shipped" (87+ in an environment with extra personal skills), each with full JSON schema re-sent every turn: **~22.7k tokens** for tool definitions alone (measured: `90873 bytes / 4 ≈ 22718 tokens`), before the conversation even starts.
+- Anthropic itself documents that every MCP tool definition costs **500–2000 tokens**, and that loading too many tools "burns" context before Claude does any useful work - which is why they introduced **Tool Search** (enabled by default in Claude Code) to defer loading full definitions and allow scaling to hundreds/thousands of tools (source: [Claude Code Docs - Scale to many tools with tool search](https://code.claude.com/docs/en/agent-sdk/tool-search.md), [Tool Search Tool - Claude Platform Docs](https://platform.claude.com/docs/en/agents-and-tools/tool-use/tool-search-tool)).
+- This means the reliability of "the model picks the right tool among N" **varies greatly by host**: good on Claude Code (tool search active by default), uncertain on hosts that don't implement tool search or `allowedTools` filters (e.g. vanilla Claude Desktop, or generic hosts like "pi" that moreover duplicate the problem by also exposing resources as tools).
+- No tool registered in `src/tools/router.js` sets `annotations` (`readOnlyHint`, `destructiveHint`, `idempotentHint`, `title`) even though the SDK and 2025-06-18 spec support them (`ToolAnnotationsSchema`, verified in `node_modules/@modelcontextprotocol/sdk`). Practical result: a client like Claude Code cannot automatically distinguish "this tool only reads" (e.g. `rule_tool_search`) from "this tool writes files" (e.g. `rule_tool_fix mode=generate`, `rule_tool_process_adr`) - all require the same trust/approval.
 
-### Raccomandazione concreta
+### Concrete recommendation
 
-- Aggiungere `annotations: { readOnlyHint: true }` a `pix_tool`, `rule_tool_search`, `rule_tool_check` (mode ≠ scaffold), le 67 skill-tool in `mode=full/summary/search/guardrails/tldr`.
-- Aggiungere `annotations: { destructiveHint: false, idempotentHint: false }` a `rule_tool_fix` (mode=fix/generate), `rule_tool_process_adr`.
-- Documentare nel README un `allowedTools`/whitelist consigliata per Claude Code, per limitare il tool-choice budget al set core (9 tool) più il set skill effettivamente rilevante al progetto, invece di esporre tutti i 76 sempre.
+- Add `annotations: { readOnlyHint: true }` to `pix_tool`, `rule_tool_search`, `rule_tool_check` (mode ≠ scaffold), the 67 skill-tools in `mode=full/summary/search/guardrails/tldr`.
+- Add `annotations: { destructiveHint: false, idempotentHint: false }` to `rule_tool_fix` (mode=fix/generate), `rule_tool_process_adr`.
+- Document in README a recommended `allowedTools`/whitelist for Claude Code, to limit the tool-choice budget to the core set (9 tools) plus the skill set actually relevant to the project, instead of always exposing all 76.
 
 ---
 
-## 7. 🟡 MEDIUM — Path traversal in `rule_tool_fix mode=generate`
+## 7. 🟡 MEDIUM - Path traversal in `rule_tool_fix mode=generate`
 
-`src/tools/fix.js`, ramo `mode === "generate"`:
+`src/tools/fix.js`, branch `mode === "generate"`:
 
 ```js
 const rootDir = args.path || ".";
@@ -217,35 +217,35 @@ for (const file of files) {
 }
 ```
 
-`args.name` e `args.baseDir` sono stringhe libere fornite dal chiamante (in pratica dal modello, sulla base del prompt utente) e **non vengono mai sanitizzate** prima di essere passate a `join()`/`writeFileSync`. Verificato con:
+`args.name` and `args.baseDir` are free strings provided by the caller (in practice by the model, based on the user prompt) and **are never sanitized** before being passed to `join()`/`writeFileSync`. Verified with:
 
 ```
 $ grep -n "startsWith(rootDir\|resolve(\|sanitize" src/core/file-tree.js src/tools/fix.js
-(nessun risultato)
+(no results)
 ```
 
-A differenza di `rule_tool_process_adr` (che passa sempre `title` attraverso `slugify()`, il quale rimuove `/` e caratteri non alfanumerici — verificato in `src/tools/adr.js`), `rule_tool_fix` non applica alcuna funzione equivalente a `name`/`baseDir`. Un valore come `name = "../../../../tmp/evil"` o `baseDir = "../../.ssh"` **non viene bloccato a livello di codice**: `join()` di Node normalizza ma non impedisce la risalita di directory.
+Unlike `rule_tool_process_adr` (which always passes `title` through `slugify()`, which removes `/` and non-alphanumeric characters - verified in `src/tools/adr.js`), `rule_tool_fix` applies no equivalent function to `name`/`baseDir`. A value like `name = "../../../../tmp/evil"` or `baseDir = "../../.ssh"` **is not blocked at code level**: Node's `join()` normalizes but doesn't prevent directory traversal.
 
-Non è uno scenario di attacco "diretto" da rete (il chiamante è il modello collegato via MCP, non un utente HTTP anonimo), ma è un classico pattern "confused deputy" da MCP: se il modello viene indotto — per prompt injection da un file/README letto in precedenza, o per semplice allucinazione — a passare un `name`/`baseDir` con `../`, il server scrive fuori dalla directory di progetto senza alcun avviso.
+This is not a "direct" network attack scenario (the caller is the model connected via MCP, not an anonymous HTTP user), but it's a classic MCP "confused deputy" pattern: if the model is induced - through prompt injection from a previously-read file/README, or through simple hallucination - to pass a `name`/`baseDir` with `../`, the server writes outside the project directory without any warning.
 
-### Fix consigliato
+### Recommended fix
 
-Aggiungere una funzione `assertInsideProject(rootDir, fullPath)` (resolve + `startsWith`) prima di ogni `writeFileSync`/`mkdirSync` in `fix.js`, analoga alla `slugify()` già usata in `adr.js`.
-
----
-
-## 8. 🟢 Cosa funziona bene (per completezza)
-
-- **Validazione Zod** su ogni tool (via `zodSchema.parse`) prima dell'handler — verificato che errori di validazione tornano come `isError: true` con dettaglio leggibile, non stack trace grezzi.
-- **`rule_tool_check`/guardrail engine** (`src/core/guardrails.js` + `guardrail-defs.js`, 683 righe): motore deterministico, testabile, con supporto a `previousPassed` per iterazione incrementale — buon design per un ciclo "generate → check → fix → re-check".
-- **BM25 (`src/core/bm25.js`)**: indice di ricerca reale (non semplice `includes()`), con statistiche (`totalDocs`, `uniqueTerms`, `avgDocLength`) esposte per diagnosi.
-- **Router `pix_tool` (`src/tools/ai.js`)**: l'algoritmo di scoring è testato (14 test dedicati tra `test/ai.test.mjs` e `test/framework-routing.test.mjs`, tutti verdi in questa sessione) — è corretto **come funzione pura**: dato un prompt, restituisce sempre skill coerenti con keyword/heading matching e bias di framework. Il problema descritto in §4/§6 non è "l'algoritmo sbaglia", è "non è garantito che venga interrogato".
-- **Comando exec sicuro**: verificato che `execSync`/`spawn` in `handoff.js`, `daemon.js`, `architect.js` non concatenano mai input utente dentro la stringa di comando shell — i path arbitrari passano solo come `cwd` o argomenti array a `spawn` (safe pattern), non come injection nella command string.
-- **Multi-agente**: l'installer supporta realmente 23 agenti/IDE con path di configurazione distinti (verificato in `src/cli/install.js`), non solo Claude.
+Add an `assertInsideProject(rootDir, fullPath)` function (resolve + `startsWith`) before every `writeFileSync`/`mkdirSync` in `fix.js`, analogous to the `slugify()` already used in `adr.js`.
 
 ---
 
-## 9. Stato dei test — evidenza reale (non dichiarata, eseguita)
+## 8. 🟢 What works well (for completeness)
+
+- **Zod validation** on every tool (via `zodSchema.parse`) before the handler - verified that validation errors return as `isError: true` with readable detail, not raw stack traces.
+- **`rule_tool_check`/guardrail engine** (`src/core/guardrails.js` + `guardrail-defs.js`, 683 lines): deterministic, testable engine, with `previousPassed` support for incremental iteration - good design for a "generate → check → fix → re-check" cycle.
+- **BM25 (`src/core/bm25.js`)**: real search index (not simple `includes()`), with statistics (`totalDocs`, `uniqueTerms`, `avgDocLength`) exposed for diagnostics.
+- **`pix_tool` router (`src/tools/ai.js`)**: the scoring algorithm is tested (14 dedicated tests between `test/ai.test.mjs` and `test/framework-routing.test.mjs`, all green in this session) - it's correct **as a pure function**: given a prompt, it always returns skills consistent with keyword/heading matching and framework bias. The problem described in §4/§6 is not "the algorithm is wrong", it's "there's no guarantee it will be queried".
+- **Safe command execution**: verified that `execSync`/`spawn` in `handoff.js`, `daemon.js`, `architect.js` never concatenate user input inside the shell command string - arbitrary paths pass only as `cwd` or array arguments to `spawn` (safe pattern), not as injection into the command string.
+- **Multi-agent**: the installer truly supports 23 agents/IDEs with distinct configuration paths (verified in `src/cli/install.js`), not just Claude.
+
+---
+
+## 9. Test status - real evidence (not declared, executed)
 
 ```
 $ node test/smoke.mjs                     → 7/7 ✅
@@ -256,38 +256,38 @@ $ node test/enforcement.test.mjs          → ✅
 $ node test/sandbox.test.mjs              → 15/15 ✅
 $ node test/https.test.mjs                → 11/11 ✅
 $ node test/sse.test.mjs                  → 16/16 ✅
-$ node test/daemon.test.mjs               → 1/6 ✅ (5 falliti — timing porta, verificare se ambiente-dipendente)
-$ node test/add-once.test.mjs             → ❌ crash: richiede `playwright test`, non `node`, va eseguito con il test runner Playwright
-$ node test/architect-ui.test.mjs         → ❌ crash: stesso motivo (usa test.describe() di @playwright/test)
-$ node test/docs-architect.test.mjs       → ❌ AssertionError: ADR decisions summary missing 011-...md (drift docs/adr/DECISIONS.md)
+$ node test/daemon.test.mjs               → 1/6 ✅ (5 failed - port timing, verify if environment-dependent)
+$ node test/add-once.test.mjs             → ❌ crash: requires `playwright test`, not `node`, must be run with Playwright test runner
+$ node test/architect-ui.test.mjs         → ❌ crash: same reason (uses test.describe() from @playwright/test)
+$ node test/docs-architect.test.mjs       → ❌ AssertionError: ADR decisions summary missing 011-...md (docs/adr/DECISIONS.md drift)
 $ node test/skills-docs.test.mjs          → ❌ AssertionError: rule-data-duckdb missing "See also" cross-reference
 ```
 
-Lo script `"test:all": "for f in test/*.test.mjs; do node \"$f\"; done"` in `package.json` è **rotto per costruzione**: itera alla cieca su tutti i `*.test.mjs`, ma almeno 2 file (`add-once.test.mjs`, `architect-ui.test.mjs`) sono suite `@playwright/test` che vanno lanciate con `pnpm exec playwright test`, non con `node` diretto. Lo script `"ci"` invece elenca i file esplicitamente ed evita questo problema — ma allora `test:all` andrebbe corretto o rimosso per non essere fuorviante.
+The `"test:all": "for f in test/*.test.mjs; do node \"$f\"; done"` script in `package.json` is **broken by design**: it blindly iterates over all `*.test.mjs`, but at least 2 files (`add-once.test.mjs`, `architect-ui.test.mjs`) are `@playwright/test` suites that must be run with `pnpm exec playwright test`, not with direct `node`. The `"ci"` script instead lists files explicitly and avoids this problem - but then `test:all` should be fixed or removed to not be misleading.
 
-I fallimenti in `docs-architect.test.mjs` e `skills-docs.test.mjs` sono drift di documentazione preesistenti (non introdotti in questa sessione — verificato che il working tree aveva già modifiche non committate su `docs/adr/001-*.md`, `002-*.md`, `docs/03-*.md`, `docs/04-*.md` prima di questo audit).
-
----
-
-## 10. Raccomandazioni prioritizzate
-
-| #   | Azione                                                                                                                                                                                                                                    | Severità    | Sforzo                                           |
-| --- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------- | ------------------------------------------------ |
-| 1   | Correggere `prompts/get`: shape `{description, messages}` senza wrapper `prompt`, `role: "user"` invece di `"system"`                                                                                                                     | 🔴 Critical | Basso (1 file, `server.js` + `prompts/index.js`) |
-| 2   | Aggiungere sanitizzazione path (`assertInsideProject`) in `rule_tool_fix mode=generate` per `name`/`baseDir`                                                                                                                               | 🟡 Medium   | Basso                                            |
-| 3   | Aggiungere `annotations` (`readOnlyHint`/`destructiveHint`) a tutti i tool in `registerTool()`                                                                                                                                            | 🟡 Medium   | Medio (tocca ~9 punti di registrazione)          |
-| 4   | Documentare esplicitamente (README/docs) che l'"enforcement" è **advisory, non protocollare**, ed è efficace solo se l'host carica `CLAUDE.md`/`AGENTS.md` come istruzione persistente — evitare il termine "enforced" senza qualificarlo | 🟠 High     | Basso                                            |
-| 5   | Valutare un ponte reale verso `.claude/skills/` (generare `SKILL.md` + frontmatter compatibile anche lì, non solo in `~/.agents/skills/`) per ottenere auto-discovery nativa su Claude                                                    | 🟠 High     | Alto                                             |
-| 6   | Aggiungere una guida "raccomandazione allowedTools" per host con tanti tool, e valutare di _non_ esporre 2 risorse per ogni skill di default (146 risorse è tanto se l'host le trasforma in tool)                                         | 🟡 Medium   | Medio                                            |
-| 7   | Riscrivere ~59/70 descrizioni skill con formula esplicita "Use when..." per aumentare la qualità del matching semantico se/quando porterete le skill su un meccanismo nativo                                                              | 🟢 Low      | Medio                                            |
-| 8   | Correggere `test:all` in `package.json` (playwright vs node) e sanare il drift `docs/adr/DECISIONS.md`                                                                                                                                    | 🟢 Low      | Basso                                            |
+The failures in `docs-architect.test.mjs` and `skills-docs.test.mjs` are pre-existing documentation drift (not introduced in this session - verified that the working tree already had uncommitted modifications on `docs/adr/001-*.md`, `002-*.md`, `docs/03-*.md`, `docs/04-*.md` before this audit).
 
 ---
 
-## Appendice A — Comandi eseguiti per la verifica protocollare
+## 10. Prioritized recommendations
+
+| #   | Action                                                                                                                                                                                                                                  | Severity    | Effort                                         |
+| --- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------- | ---------------------------------------------- |
+| 1   | Fix `prompts/get`: shape `{description, messages}` without `prompt` wrapper, `role: "user"` instead of `"system"`                                                                                                                       | 🔴 Critical | Low (1 file, `server.js` + `prompts/index.js`) |
+| 2   | Add path sanitization (`assertInsideProject`) in `rule_tool_fix mode=generate` for `name`/`baseDir`                                                                                                                                      | 🟡 Medium   | Low                                            |
+| 3   | Add `annotations` (`readOnlyHint`/`destructiveHint`) to all tools in `registerTool()`                                                                                                                                                   | 🟡 Medium   | Medium (touches ~9 registration points)        |
+| 4   | Explicitly document (README/docs) that "enforcement" is **advisory, not protocol-level**, and is effective only if the host loads `CLAUDE.md`/`AGENTS.md` as a persistent instruction - avoid the term "enforced" without qualifying it | 🟠 High     | Low                                            |
+| 5   | Evaluate a real bridge to `.claude/skills/` (generate `SKILL.md` + compatible frontmatter there too, not just in `~/.agents/skills/`) to obtain native auto-discovery on Claude                                                         | 🟠 High     | High                                           |
+| 6   | Add a "recommended allowedTools" guide for hosts with many tools, and evaluate _not_ exposing 2 resources per skill by default (146 resources is a lot if the host converts them to tools)                                              | 🟡 Medium   | Medium                                         |
+| 7   | Rewrite ~59/70 skill descriptions with explicit "Use when..." formula to increase semantic matching quality if/when you migrate skills to a native mechanism                                                                            | 🟢 Low      | Medium                                         |
+| 8   | Fix `test:all` in `package.json` (playwright vs node) and heal the `docs/adr/DECISIONS.md` drift                                                                                                                                        | 🟢 Low      | Low                                            |
+
+---
+
+## Appendix A - Commands executed for protocol verification
 
 ```bash
-# Verifica shape prompts/get vs schema ufficiale
+# Verify prompts/get shape vs official schema
 node -e '
 import { GetPromptResultSchema } from "@modelcontextprotocol/sdk/types.js";
 import { getPrompt } from "./src/prompts/index.js";
@@ -295,28 +295,28 @@ const p = getPrompt("rule-code-review");
 console.log(GetPromptResultSchema.safeParse({ prompt: p }).success); // false
 '
 
-# Verifica tools/resources (entrambi PASS)
+# Verify tools/resources (both PASS)
 ListToolsResultSchema.safeParse({ tools: listTools() }).success        // true
 ReadResourceResultSchema.safeParse(await readResource("rule://skills")).success // true
 CallToolResultSchema.safeParse(await callTool("rule", {...})).success   // true
 
-# Conteggio tool/risorse "as shipped"
+# "As shipped" tool/resource count
 clean shipped tool count: 76
 clean shipped resource count: 146
 tool defs JSON bytes: 90873  ~tokens: 22718
 ```
 
-## Appendice B — Metriche skill
+## Appendix B - Skill metrics
 
-- 70 cartelle skill in `skills/` (repo), 69 restituite da `getSkillNames()` (esclude `pix_tool` stesso).
-- 0 skill senza `description` nel frontmatter.
-- 0 skill con `description` > 1024 caratteri.
-- 59/70 skill **senza** una formula esplicita "use when/this/for" nella `description` (rilevante solo se si migra a un meccanismo di auto-discovery semantica nativo tipo Claude Skills; con l'attuale dispatch esplicito via tool `pix_<skill>` l'impatto pratico è limitato).
+- 70 skill folders in `skills/` (repo), 69 returned by `getSkillNames()` (excludes `pix_tool` itself).
+- 0 skills without `description` in frontmatter.
+- 0 skills with `description` > 1024 characters.
+- 59/70 skills **without** an explicit "use when/this/for" formula in the `description` (relevant only if migrating to a native semantic auto-discovery mechanism like Claude Skills; with the current explicit dispatch via `pix_<skill>` tool the practical impact is limited).
 
-## Appendice C — Riferimenti esterni
+## Appendix C - External references
 
-- MCP Specification — Prompts: https://modelcontextprotocol.io/specification/2025-06-18/server/prompts
-- Claude Code Docs — Agent Skills: https://code.claude.com/docs/en/skills
-- Claude Code Docs — Agent Skills nell'SDK: https://code.claude.com/docs/en/agent-sdk/skills
-- Claude Code Docs — Tool Search (scale to many tools): https://code.claude.com/docs/en/agent-sdk/tool-search.md
-- Claude Platform Docs — Tool Search Tool: https://platform.claude.com/docs/en/agents-and-tools/tool-use/tool-search-tool
+- MCP Specification - Prompts: https://modelcontextprotocol.io/specification/2025-06-18/server/prompts
+- Claude Code Docs - Agent Skills: https://code.claude.com/docs/en/skills
+- Claude Code Docs - Agent Skills in the SDK: https://code.claude.com/docs/en/agent-sdk/skills
+- Claude Code Docs - Tool Search (scale to many tools): https://code.claude.com/docs/en/agent-sdk/tool-search.md
+- Claude Platform Docs - Tool Search Tool: https://platform.claude.com/docs/en/agents-and-tools/tool-use/tool-search-tool

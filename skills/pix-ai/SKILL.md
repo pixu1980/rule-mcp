@@ -11,7 +11,7 @@ frameworks: [all]
 compatibility: Designed for AI coding assistants
 ---
 
-# rule-ai — AI Agent Skills Index
+# rule-ai - AI Agent Skills Index
 
 ## AI Agent Skills
 
@@ -29,8 +29,8 @@ Need framework-agnostic agent project structure (any SDK)?            → rule-p
 
 ## See also
 
-- [rule](../rule/SKILL.md) — Central skill index and dispatcher
-- [rule-devops-testing](../rule-devops-testing/SKILL.md) — Test coverage thresholds for agent code
-- [rule-devops-docker](../rule-devops-docker/SKILL.md) — Containerizing agent services
+- [rule](../rule/SKILL.md) - Central skill index and dispatcher
+- [rule-devops-testing](../rule-devops-testing/SKILL.md) - Test coverage thresholds for agent code
+- [rule-devops-docker](../rule-devops-docker/SKILL.md) - Containerizing agent services
 
 ---

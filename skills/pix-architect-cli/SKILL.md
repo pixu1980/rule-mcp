@@ -12,7 +12,7 @@ tags:
 frameworks: [node, agents]
 ---
 
-# rule-architect-cli — Terminal Interview Shell
+# rule-architect-cli - Terminal Interview Shell
 
 Thin rendering shell for the rule-architect engine. Reads `wizard-spec.json`
 from `../rule-architect/` and renders the 25-step interview wizard in a terminal.
@@ -68,12 +68,12 @@ Navigation: ← → arrow keys, Enter to confirm, Ctrl+C to quit.
 
 ## Dependencies
 
-- `opentui` — terminal UI toolkit (https://opentui.com)
-- `../rule-architect/wizard-spec.json` — interview spec
-- `../rule-architect/validators.mjs` — showIf + prefill logic
-- `../rule-architect/generator.mjs` — .context/ generation
+- `opentui` - terminal UI toolkit (https://opentui.com)
+- `../rule-architect/wizard-spec.json` - interview spec
+- `../rule-architect/validators.mjs` - showIf + prefill logic
+- `../rule-architect/generator.mjs` - .context/ generation
 
 ## See also
 
-- [rule-architect](../rule-architect/SKILL.md) — The engine
-- [rule-architect-web](../rule-architect-web/SKILL.md) — Browser alternative
+- [rule-architect](../rule-architect/SKILL.md) - The engine
+- [rule-architect-web](../rule-architect-web/SKILL.md) - Browser alternative

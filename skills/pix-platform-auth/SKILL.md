@@ -9,9 +9,9 @@ tags:
 frameworks: [auth, sessions, jwt, oauth, passkeys]
 ---
 
-# rule-platform-auth — Authentication Strategy for Web Apps
+# rule-platform-auth - Authentication Strategy for Web Apps
 
-This skill helps you choose the **right authentication strategy** for your app's shape — not the one a tutorial cargo-culted. It covers the decision framework, implementation patterns, and the production failure modes that backend logs miss.
+This skill helps you choose the **right authentication strategy** for your app's shape - not the one a tutorial cargo-culted. It covers the decision framework, implementation patterns, and the production failure modes that backend logs miss.
 
 ---
 
@@ -24,8 +24,8 @@ This skill helps you choose the **right authentication strategy** for your app's
 | **State location** | Where does auth state live?     | **Server** (sessions) or **Client** (tokens) |
 | **Transport**      | How does the credential travel? | **Cookie** or **Authorization header**       |
 
-- A **session** is stateful: server stores the record, client holds an opaque ID — the _hotel keycard_ model
-- A **JWT** is stateless: claims are self-contained and signed — the _digital passport_ model
+- A **session** is stateful: server stores the record, client holds an opaque ID - the _hotel keycard_ model
+- A **JWT** is stateless: claims are self-contained and signed - the _digital passport_ model
 - You can deliver **either** over a cookie or the `Authorization` header. Cookies and headers are transport; sessions and tokens are architecture.
 
 ---
@@ -35,7 +35,7 @@ This skill helps you choose the **right authentication strategy** for your app's
 | Criterion              | Server-side sessions              | JWT / self-contained tokens                    |
 | ---------------------- | --------------------------------- | ---------------------------------------------- |
 | Where state lives      | Server (store)                    | Client (signed token)                          |
-| Revocation             | **Immediate** — delete the record | **Hard** — short TTL + rotation, or deny-list  |
+| Revocation             | **Immediate** - delete the record | **Hard** - short TTL + rotation, or deny-list  |
 | Scaling                | Needs shared store (e.g. Redis)   | Stateless; no per-request lookup               |
 | Credential size        | ~32-byte opaque ID                | Often 800+ bytes of claims per request         |
 | Primary attack surface | **CSRF** (cookies auto-sent)      | **XSS** (token theft from JS-readable storage) |
@@ -110,7 +110,7 @@ app.post("/logout", (req, res) => {
 
 ### Session ID Rules
 
-- Generate with `crypto.randomBytes(32)` — OWASP recommends at least 128 bits of entropy
+- Generate with `crypto.randomBytes(32)` - OWASP recommends at least 128 bits of entropy
 - Never embed sensitive data in the session ID itself
 - Rotate the ID on login (`req.session.regenerate()`) to prevent session fixation
 - Set an absolute timeout + idle timeout
@@ -157,7 +157,7 @@ Reach for **raw JWTs** only when you have a **concrete stateless-scaling reason*
 Because a JWT is self-contained, it stays valid until expiry **no matter what your server thinks**. Instant logout requires:
 
 1. **Short-lived access tokens** (15 minutes) + refresh-token rotation, OR
-2. A **server-side deny-list** checked on every request — which reintroduces the state JWTs were meant to eliminate
+2. A **server-side deny-list** checked on every request - which reintroduces the state JWTs were meant to eliminate
 
 > **RFC 9700** (OAuth 2.0 Security BCP, January 2025) is the ratified anchor for refresh-token rotation and short access-token lifetimes.
 
@@ -193,7 +193,7 @@ function signRefreshToken(userId, familyId) {
 
 function verifyAccessToken(token) {
   return jwt.verify(token, process.env.JWT_PUBLIC_KEY, {
-    algorithms: ["RS256"], // Pin the algorithm — critical
+    algorithms: ["RS256"], // Pin the algorithm - critical
     issuer: "myapp",
   });
 }
@@ -210,9 +210,9 @@ async function rotateRefreshToken(oldToken) {
   // Check if this token has already been used (reuse detection)
   const wasUsed = await redis.get(`used_refresh:${decoded.jti}`);
   if (wasUsed) {
-    // Token reuse = potential theft — invalidate the entire family
+    // Token reuse = potential theft - invalidate the entire family
     await redis.del(`refresh_family:${decoded.family}`);
-    throw new Error("Token reuse detected — family invalidated");
+    throw new Error("Token reuse detected - family invalidated");
   }
 
   // Mark this token as used
@@ -265,9 +265,9 @@ Use OAuth 2.0 + OpenID Connect when you need:
 
 ### The Standard
 
-- **OAuth 2.0**: RFC 6749 — delegated authorization (access tokens)
-- **OpenID Connect**: Layers identity on top — tells you _who_ the user is (id_token)
-- **OAuth 2.1**: IETF draft-15 (March 2026) — not yet RFC, but direction is settled:
+- **OAuth 2.0**: RFC 6749 - delegated authorization (access tokens)
+- **OpenID Connect**: Layers identity on top - tells you _who_ the user is (id_token)
+- **OAuth 2.1**: IETF draft-15 (March 2026) - not yet RFC, but direction is settled:
   - PKCE **required** for all authorization code flows
   - Exact redirect-URI matching (no wildcards)
   - Implicit grant and password grant **removed**
@@ -281,7 +281,7 @@ For an MVP with **first-party login only** (no social sign-in, no SSO), OAuth ad
 ### Implementation Pattern (Authorization Code + PKCE)
 
 ```js
-// server.js — OAuth 2.1-compliant flow
+// server.js - OAuth 2.1-compliant flow
 const crypto = require('node:crypto');
 
 // Step 1: Generate PKCE code verifier + challenge
@@ -315,7 +315,7 @@ app.get('/auth/google', (req, res) => {
   res.redirect(`https://accounts.google.com/o/oauth2/v2/auth?${params}`);
 });
 
-// Step 3: Handle callback — exchange code for tokens
+// Step 3: Handle callback - exchange code for tokens
 app.get('/auth/google/callback', async (req, res) => {
   const { code, state } = req.query;
 
@@ -349,13 +349,13 @@ app.get('/auth/google/callback', async (req, res) => {
 
 ## Passkeys & WebAuthn: Phishing-Resistant Authentication
 
-Built on WebAuthn/FIDO2. A passkey is a public/private key pair — the private key stays in device secure hardware and signs a server challenge after local biometric/PIN check.
+Built on WebAuthn/FIDO2. A passkey is a public/private key pair - the private key stays in device secure hardware and signs a server challenge after local biometric/PIN check.
 
 ### Why Passkeys
 
-- **Origin-bound** — cannot be phished (credential never leaves the device)
-- **Replay-resistant** — each assertion includes a fresh server challenge
-- **No shared secret** — server only stores the public key
+- **Origin-bound** - cannot be phished (credential never leaves the device)
+- **Replay-resistant** - each assertion includes a fresh server challenge
+- **No shared secret** - server only stores the public key
 
 ### Current State (2026)
 
@@ -498,7 +498,7 @@ If authentication **isn't your product**, the most defensible 2026 default is a 
 | Custom UX requirements     | Drop-in SDKs for common patterns |
 | Auth IS your product       | Auth is table stakes             |
 
-> For most greenfield apps, the managed route is the rational starting point — migrate off later if scale or cost demands.
+> For most greenfield apps, the managed route is the rational starting point - migrate off later if scale or cost demands.
 
 ---
 
@@ -554,7 +554,7 @@ fetch("/api/data", {
 | **Server-rendered monolith**             | Server-side sessions (HttpOnly cookie)                            | OIDC for social login; passkeys opt-in   |
 | **SPA / mobile / API backend**           | Short-lived access tokens + refresh rotation, in HttpOnly cookies | OIDC for third-party identity            |
 | **Needs social login or enterprise SSO** | OAuth 2.0 + OIDC (target 2.1 profile)                             | Sessions or tokens for your own surfaces |
-| **Auth isn't your product**              | Managed provider (Auth0/Clerk/Supabase/WorkOS/Stytch)             | — it already bundles the rest            |
+| **Auth isn't your product**              | Managed provider (Auth0/Clerk/Supabase/WorkOS/Stytch)             | - it already bundles the rest            |
 | **High-security / consumer-facing**      | Any base above + passkeys                                         | Recovery flow designed up front          |
 
 ### The Common Production Architecture (Hybrid)
@@ -572,11 +572,11 @@ fetch("/api/data", {
 
 ## UX Failure Modes (What Backend Logs Miss)
 
-These only surface in the browser — session replay captures them, error logs don't.
+These only surface in the browser - session replay captures them, error logs don't.
 
 | Failure mode                         | Cause                                                              | Detection                                        |
 | ------------------------------------ | ------------------------------------------------------------------ | ------------------------------------------------ |
-| **Silent token-expiry logout loops** | Refresh token expires mid-session, SPA bounces to login repeatedly | Each request returns valid 401 — logs look fine  |
+| **Silent token-expiry logout loops** | Refresh token expires mid-session, SPA bounces to login repeatedly | Each request returns valid 401 - logs look fine  |
 | **Abandoned passkey enrollment**     | User cancels OS WebAuthn prompt                                    | Browser-side only; server never sees the attempt |
 | **OAuth redirect dead-ends**         | Mismatched redirect URI or lost state parameter                    | Round-trip happens off your server               |
 | **Browser-specific cookie failures** | SameSite/Secure issues on specific browser versions                | Reproduces only on that browser                  |
@@ -590,14 +590,14 @@ These only surface in the browser — session replay captures them, error logs d
 ### Credential Storage
 
 - ✅ Store tokens in `HttpOnly`, `Secure`, `SameSite` cookies
-- ✅ Hash passwords with **Argon2id** — never bcrypt for new projects
+- ✅ Hash passwords with **Argon2id** - never bcrypt for new projects
 - ✅ Regenerate session IDs on login (prevent session fixation)
 - ❌ Never store JWTs in `localStorage` or `sessionStorage`
 - ❌ Never embed sensitive data in session IDs
 
 ### JWT Hygiene
 
-- ✅ Pin the algorithm: `algorithms: ['RS256']` — never accept `"none"`
+- ✅ Pin the algorithm: `algorithms: ['RS256']` - never accept `"none"`
 - ✅ Short access-token TTL (15 minutes) + refresh rotation
 - ✅ Include `jti` (unique ID) for potential deny-listing
 - ✅ Detect refresh-token reuse → invalidate entire family
@@ -610,7 +610,7 @@ These only surface in the browser — session replay captures them, error logs d
 - ✅ Exact redirect-URI matching (no wildcards)
 - ✅ Validate `state` parameter against stored value
 - ❌ Never use Implicit grant or Resource Owner Password Credentials
-- ❌ Never skip PKCE — even for confidential clients
+- ❌ Never skip PKCE - even for confidential clients
 
 ### Passkeys
 
@@ -632,7 +632,7 @@ These only surface in the browser — session replay captures them, error logs d
 
 ```
 ┌──────────────────────────────────────────────────────────────────┐
-│  rule-platform-auth — Authentication Strategy                     │
+│  rule-platform-auth - Authentication Strategy                     │
 │                                                                  │
 │  The two axes:                                                   │
 │   State:  Sessions (server)  vs  JWTs (client)                  │
@@ -646,7 +646,7 @@ These only surface in the browser — session replay captures them, error logs d
 │   High-sec     → Any base + passkeys (opt-in, with recovery)    │
 │                                                                  │
 │  Golden rules:                                                   │
-│   ✅ Tokens in HttpOnly cookies — NEVER localStorage            │
+│   ✅ Tokens in HttpOnly cookies - NEVER localStorage            │
 │   ✅ Argon2id for passwords                                      │
 │   ✅ PKCE for all OAuth flows                                    │
 │   ✅ Refresh-token rotation + reuse detection                   │
@@ -665,11 +665,11 @@ These only surface in the browser — session replay captures them, error logs d
 
 ## See also
 
-- [rule](../rule/SKILL.md) — Central skill index and dispatcher
-- [rule-backend-security](../rule-backend-security/SKILL.md) — Security skill
+- [rule](../rule/SKILL.md) - Central skill index and dispatcher
+- [rule-backend-security](../rule-backend-security/SKILL.md) - Security skill
 - [OWASP Session Management Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Session_Management_Cheat_Sheet.html)
 - [OWASP CSRF Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html)
 - [OWASP Password Storage Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html)
-- [RFC 9700 — OAuth 2.0 Security BCP](https://datatracker.ietf.org/doc/rfc9700/)
+- [RFC 9700 - OAuth 2.0 Security BCP](https://datatracker.ietf.org/doc/rfc9700/)
 - [OAuth 2.1 draft](https://datatracker.ietf.org/doc/draft-ietf-oauth-v2-1/)
 - [SimpleWebAuthn](https://simplewebauthn.dev/)

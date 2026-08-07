@@ -8,18 +8,18 @@ tags:
 frameworks: [solidjs]
 ---
 
-# rule-frontend-solidjs — SolidJS with rule Principles
+# rule-frontend-solidjs - SolidJS with rule Principles
 
 This skill adapts [rule-styleguide](../rule-styleguide/SKILL.md) and
 [rule-frontend-vanilla-reactive](../rule-frontend-vanilla-reactive/SKILL.md) to **SolidJS** (fine-grained reactivity).
 
 ## Core Rules (inherited from rule skills)
 
-1. **Zero CSS classes** — only element selectors + `[data-part="..."]` + `[data-*]`
-2. **Zero inline styles** — external `.css` files via `adoptedStyleSheets`
-3. **Semantic HTML is mandatory** — never `<div>` where a semantic element exists
-4. **Barrel pattern** — every component folder has `index.js`
-5. **No CSS-in-JS, no Tailwind** — external `.css` files only
+1. **Zero CSS classes** - only element selectors + `[data-part="..."]` + `[data-*]`
+2. **Zero inline styles** - external `.css` files via `adoptedStyleSheets`
+3. **Semantic HTML is mandatory** - never `<div>` where a semantic element exists
+4. **Barrel pattern** - every component folder has `index.js`
+5. **No CSS-in-JS, no Tailwind** - external `.css` files only
 
 ## File Tree Convention
 
@@ -127,7 +127,7 @@ export function Component() {
 }
 ```
 
-## State Management — createStore
+## State Management - createStore
 
 ```js
 // stores/_todoStore.js
@@ -182,9 +182,9 @@ Run `pix_frontend_solidjs` mode=check or `pix_check` to validate code against th
 
 Key rules enforced: **no-css-classes**, **no-inline-styles**, **semantic-html**,
 **external-css** (adoptedStyleSheets or CSS imports), **barrel-file**, **data-part**,
-**jsdoc-required** (every JS/TS file MUST have complete JSDoc — see rule-styleguide → javascript.md),
-**css-comments-required** (every CSS file MUST have file-level + section comments — see rule-styleguide → css.md),
-**a11y-test-required** (every project MUST have Playwright + @axe-core/playwright a11y tests in `tests/a11y/` — see rule-styleguide → a11y.md → Automated Testing).
+**jsdoc-required** (every JS/TS file MUST have complete JSDoc - see rule-styleguide → javascript.md),
+**css-comments-required** (every CSS file MUST have file-level + section comments - see rule-styleguide → css.md),
+**a11y-test-required** (every project MUST have Playwright + @axe-core/playwright a11y tests in `tests/a11y/` - see rule-styleguide → a11y.md → Automated Testing).
 
 ## Project Scaffolding
 
@@ -231,12 +231,12 @@ This section extends rule-frontend-solidjs with a structured performance review 
 
 ### The 10 patterns
 
-#### 1. Never destructure props — use `props.X` directly
+#### 1. Never destructure props - use `props.X` directly
 
 Destructuring props breaks Solid's reactivity tracking.
 
 ```jsx
-// ❌ Destructuring — breaks reactivity
+// ❌ Destructuring - breaks reactivity
 function TodoItem({ todo, onToggle }) {
   return <span>{todo.title}</span>; // won't update
 }
@@ -260,10 +260,10 @@ Rule: _Access `props.X` directly. Destructuring severs the reactive chain._
 Solid's `<For>` component tracks identity via key and minimizes DOM operations.
 
 ```jsx
-// ❌ Array.map — recreates all DOM on every signal change
+// ❌ Array.map - recreates all DOM on every signal change
 <ul>{items().map(item => <li>{item.title}</li>)}</ul>
 
-// ✅ <For> with stable key — minimal DOM operations
+// ✅ <For> with stable key - minimal DOM operations
 <ul>
   <For each={items()}>{(item) => <li>{item.title}</li>}</For>
 </ul>
@@ -276,12 +276,12 @@ Rule: _Always use `<For>` with signal-derived arrays. Never use `.map()` on reac
 Solid's control flow components preserve reactivity and properly clean up effects.
 
 ```jsx
-// ❌ Ternary — effect cleanup may not work correctly
+// ❌ Ternary - effect cleanup may not work correctly
 {
   cond() ? <Heavy /> : <Other />;
 }
 
-// ✅ <Show> — proper mount/unmount lifecycle
+// ✅ <Show> - proper mount/unmount lifecycle
 <Show when={cond()} fallback={<Other />}>
   <Heavy />
 </Show>;
@@ -297,7 +297,7 @@ Do not recalculate expensive values inside JSX. Memoize them.
 // ❌ Expensive recalculation on every signal change
 <p>Total: {items().reduce((s, i) => s + i.price, 0)}</p>;
 
-// ✅ Memoized — recalculates only when items change
+// ✅ Memoized - recalculates only when items change
 const total = createMemo(() => items().reduce((s, i) => s + i.price, 0));
 <p>Total: {total()}</p>;
 ```
@@ -347,7 +347,7 @@ Rule: _Use `createResource` for async data fetching. It integrates with Suspense
 Signals owned too high re-execute sibling effects on every change.
 
 ```jsx
-// ❌ Signal in parent — whole tree re-runs on search
+// ❌ Signal in parent - whole tree re-runs on search
 function App() {
   const [search, setSearch] = createSignal("");
   return (
@@ -358,7 +358,7 @@ function App() {
   );
 }
 
-// ✅ Signal in SearchSection — only it re-runs
+// ✅ Signal in SearchSection - only it re-runs
 function SearchSection() {
   const [search, setSearch] = createSignal("");
   return <>{/* search UI */}</>;
@@ -467,7 +467,7 @@ Rule: _Split when different changes affect different parts._
 - Use `@modular-forms/solid` + `zod` for all forms
 - Signals for form state, effects for submission
 
-### Step 1 — Define form with validation
+### Step 1 - Define form with validation
 
 ```tsx
 import { createForm, zodForm, SubmitHandler } from "@modular-forms/solid";
@@ -518,6 +518,6 @@ function MyForm() {
 
 ## See also
 
-- [rule](../rule/SKILL.md) — Central skill index and dispatcher
-- [rule-frontend](../rule-frontend/SKILL.md) — Frontend skill index
-- [rule-styleguide](../rule-styleguide/SKILL.md) — Shared frontend standards
+- [rule](../rule/SKILL.md) - Central skill index and dispatcher
+- [rule-frontend](../rule-frontend/SKILL.md) - Frontend skill index
+- [rule-styleguide](../rule-styleguide/SKILL.md) - Shared frontend standards

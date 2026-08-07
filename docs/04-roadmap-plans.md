@@ -11,7 +11,7 @@ Every source document below is preserved verbatim under its own heading so no pr
 > Original path: `docs/plans/execution-plan.md`  
 > SHA-256: `4d75abac2a4bda7c62b99dc6e9b00eba5c8c8e559e8960374a3b6de3e786d00b`
 
-# Execution Plan — Phase 3: Token-Saving Tools
+# Execution Plan - Phase 3: Token-Saving Tools
 
 > Started: 2026-06-27
 
@@ -38,7 +38,7 @@ Every source document below is preserved verbatim under its own heading so no pr
   - Matching skills get 2.0x boost; universally relevant skills (styleguides, web) get 1.15x
   - Non-matching skills get 0.85x penalty
 
-### 3.3 Template engine — multi-file generation
+### 3.3 Template engine - multi-file generation
 
 - [x] **T7** `rule_tool_component` generates multi-file output: `_Component.jsx` + `_Component.css` + `index.js`
 - [x] **T8** Variable interpolation: component name, props, data-part attributes
@@ -75,7 +75,7 @@ Every source document below is preserved verbatim under its own heading so no pr
 > Original path: `docs/plans/refactor-roadmap.md`  
 > SHA-256: `57940d22e47b5a763fc9d275d86380ddb5910f781411053b2858f2eebd99e3d9`
 
-# rule-mcp — Refactor Roadmap
+# rule-mcp - Refactor Roadmap
 
 > **Author**: Enterprise Architecture Review  
 > **Scope**: 36 skills → audit, merge, split, redesign rule-architect, create rule-process-adr  
@@ -122,48 +122,48 @@ Target: **32 skills** after 4 merges, plus 1 new skill (`rule-process-adr`), wit
 | 🔀 Merge      | Merge into another skill   |
 | ✂️ Split      | Split into multiple skills |
 | 📦 New        | Create new skill           |
-| 📏 Oversized  | Exceeds 500 lines — split  |
-| 📐 Undersized | Below 100 lines — merge    |
+| 📏 Oversized  | Exceeds 500 lines - split  |
+| 📐 Undersized | Below 100 lines - merge    |
 
 ### Audit table
 
 | #   | Skill                         | Lines | Verdict | Action                            |
 | --- | ----------------------------- | ----- | ------- | --------------------------------- |
-| 1   | rule-mcp                    | ~190  | ✅      | Keep — ai router                  |
-| 2   | rule-architect                 | ~320  | ✅      | Keep — architecture wizard        |
-| 4   | rule-backend                   | ~180  | ✅      | Keep — backend rules              |
-| 5   | rule-backend-api-design        | ~150  | ✅      | Keep — API design                 |
-| 6   | rule-backend-node              | ~130  | ✅      | Keep — Backend scaffold           |
-| 7   | rule-backend-security          | ~150  | ✅      | Keep — security                   |
+| 1   | rule-mcp                    | ~190  | ✅      | Keep - ai router                  |
+| 2   | rule-architect                 | ~320  | ✅      | Keep - architecture wizard        |
+| 4   | rule-backend                   | ~180  | ✅      | Keep - backend rules              |
+| 5   | rule-backend-api-design        | ~150  | ✅      | Keep - API design                 |
+| 6   | rule-backend-node              | ~130  | ✅      | Keep - Backend scaffold           |
+| 7   | rule-backend-security          | ~150  | ✅      | Keep - security                   |
 | 8   | rule-coverage-gates            | ~80   | 🔀      | Merge into rule-devops-testing     |
-| 9   | rule-devops-docker             | ~170  | ✅      | Keep — Docker rules               |
+| 9   | rule-devops-docker             | ~170  | ✅      | Keep - Docker rules               |
 | 10  | rule-devops-docker-standards   | ~60   | 🔀      | Merge into rule-devops-docker      |
-| 11  | rule-devops-gitlab-ci          | ~160  | ✅      | Keep — CI rules                   |
-| 12  | rule-devops-testing            | ~180  | ✅      | Keep — testing                    |
-| 13  | rule-devops-version            | ~100  | ✅      | Keep — versioning                 |
-| 14  | rule-frontend-angular          | ~280  | ✅      | Keep — Angular-specific rules     |
-| 15  | rule-frontend-astro            | ~250  | ✅      | Keep — Astro-specific             |
-| 16  | rule-frontend-forms            | ~220  | ✅      | Keep — forms rules                |
+| 11  | rule-devops-gitlab-ci          | ~160  | ✅      | Keep - CI rules                   |
+| 12  | rule-devops-testing            | ~180  | ✅      | Keep - testing                    |
+| 13  | rule-devops-version            | ~100  | ✅      | Keep - versioning                 |
+| 14  | rule-frontend-angular          | ~280  | ✅      | Keep - Angular-specific rules     |
+| 15  | rule-frontend-astro            | ~250  | ✅      | Keep - Astro-specific             |
+| 16  | rule-frontend-forms            | ~220  | ✅      | Keep - forms rules                |
 | 17  | rule-frontend-forms-validation | ~80   | 🔀      | Merge into rule-frontend-forms     |
-| 18  | rule-frontend-meta-next        | ~220  | ✅      | Keep — Next.js                    |
-| 19  | rule-frontend-meta-nuxt        | ~190  | ✅      | Keep — Nuxt                       |
-| 20  | rule-frontend-meta-remix       | ~160  | ✅      | Keep — Remix                      |
-| 21  | rule-frontend-react            | ~380  | ✅      | Keep — React rules                |
-| 22  | rule-frontend-react            | ~100  | ✅      | Keep — React+ Vite scaffold       |
-| 23  | rule-frontend-solidjs          | ~240  | ✅      | Keep — SolidJS                    |
-| 24  | rule-frontend-svelte           | ~260  | ✅      | Keep — Svelte                     |
-| 25  | rule-frontend-vanilla-reactive | ~340  | ✅      | Keep — vanilla reactive           |
-| 26  | rule-frontend-vue              | ~300  | ✅      | Keep — Vue                        |
-| 27  | rule-platform-desktop          | ~200  | ✅      | Keep — desktop rules              |
-| 28  | rule-platform-expo             | ~180  | ✅      | Keep — Expo rules                 |
-| 29  | rule-platform-expo             | ~100  | ✅      | Keep — Expo scaffold              |
-| 30  | rule-platform-library          | ~170  | ✅      | Keep — library rules              |
-| 31  | rule-platform-web              | ~140  | ✅      | Keep — web platform               |
-| 32  | rule-process-documentation     | ~140  | ✅      | Keep — docs practices             |
-| 33  | rule-process-feature-workflow  | ~110  | ✅      | Keep — workflow                   |
+| 18  | rule-frontend-meta-next        | ~220  | ✅      | Keep - Next.js                    |
+| 19  | rule-frontend-meta-nuxt        | ~190  | ✅      | Keep - Nuxt                       |
+| 20  | rule-frontend-meta-remix       | ~160  | ✅      | Keep - Remix                      |
+| 21  | rule-frontend-react            | ~380  | ✅      | Keep - React rules                |
+| 22  | rule-frontend-react            | ~100  | ✅      | Keep - React+ Vite scaffold       |
+| 23  | rule-frontend-solidjs          | ~240  | ✅      | Keep - SolidJS                    |
+| 24  | rule-frontend-svelte           | ~260  | ✅      | Keep - Svelte                     |
+| 25  | rule-frontend-vanilla-reactive | ~340  | ✅      | Keep - vanilla reactive           |
+| 26  | rule-frontend-vue              | ~300  | ✅      | Keep - Vue                        |
+| 27  | rule-platform-desktop          | ~200  | ✅      | Keep - desktop rules              |
+| 28  | rule-platform-expo             | ~180  | ✅      | Keep - Expo rules                 |
+| 29  | rule-platform-expo             | ~100  | ✅      | Keep - Expo scaffold              |
+| 30  | rule-platform-library          | ~170  | ✅      | Keep - library rules              |
+| 31  | rule-platform-web              | ~140  | ✅      | Keep - web platform               |
+| 32  | rule-process-documentation     | ~140  | ✅      | Keep - docs practices             |
+| 33  | rule-process-feature-workflow  | ~110  | ✅      | Keep - workflow                   |
 | 34  | rule-process-handoff           | ~120  | 📦      | Extract from rule-architect        |
 | 35  | rule-scaffolding               | ~90   | 🔀      | Merge into rule-architect          |
-| 36  | rule-styleguide                | ~480  | ✅      | Keep (at limit) — main styleguide |
+| 36  | rule-styleguide                | ~480  | ✅      | Keep (at limit) - main styleguide |
 
 ### Summary
 
@@ -184,7 +184,7 @@ Target: **32 skills** after 4 merges, plus 1 new skill (`rule-process-adr`), wit
 
 **Action**: Move content from `rule-coverage-gates/SKILL.md` into `rule-devops-testing/SKILL.md` under a new `## Coverage Gates` section.
 
-**Loss**: None — all rules preserved.
+**Loss**: None - all rules preserved.
 
 ### M2: docker-standards → rule-devops-docker
 
@@ -214,7 +214,7 @@ Target: **32 skills** after 4 merges, plus 1 new skill (`rule-process-adr`), wit
 
 ## 4. Split Proposals
 
-No skills exceed the 500-line threshold with sufficient margin. `rule-styleguide` is at 480 lines — monitored but not split.
+No skills exceed the 500-line threshold with sufficient margin. `rule-styleguide` is at 480 lines - monitored but not split.
 
 ---
 
@@ -291,11 +291,11 @@ Total: **32 skills** (36 − 4 merges + 1 new = 33, minus 1 scaffolding removal 
 
 ### Phase 1: Merge (1 day)
 
-- [x] Merge coverage-gates → testing — verified in `rule-devops-testing`
-- [x] Merge docker-standards → docker — verified in `rule-devops-docker`
-- [x] Merge forms-validation → forms — validation lives in framework/styleguide coverage
-- [x] Merge scaffolding → architect — verified in `rule-architect`
-- [x] Remove merged skill directories — stale directories are absent
+- [x] Merge coverage-gates → testing - verified in `rule-devops-testing`
+- [x] Merge docker-standards → docker - verified in `rule-devops-docker`
+- [x] Merge forms-validation → forms - validation lives in framework/styleguide coverage
+- [x] Merge scaffolding → architect - verified in `rule-architect`
+- [x] Remove merged skill directories - stale directories are absent
 
 ### Phase 2: rule-process-adr (1 day)
 
@@ -315,9 +315,9 @@ Total: **32 skills** (36 − 4 merges + 1 new = 33, minus 1 scaffolding removal 
 ### Phase 4: Testing & verification (1 day)
 
 - [x] Run smoke tests
-- [x] Verify MCP tool listing — current taxonomy exposes 71 MCP tools
+- [x] Verify MCP tool listing - current taxonomy exposes 71 MCP tools
 - [x] Verify CLI commands
-- [x] Remove migration guide requirement — package has not been released yet
+- [x] Remove migration guide requirement - package has not been released yet
 
 ---
 

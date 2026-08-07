@@ -4,7 +4,7 @@
  * Forced self-update for local git-clone installs. On every tool invocation the
  * server checks for upstream updates (throttled: the actual fetch runs at most
  * once per RULE_MCP_AUTO_UPDATE_INTERVAL_SECONDS, default 60s), fast-forwards
- * if behind, hot-reloads skills, and — when server CODE changed — schedules a
+ * if behind, hot-reloads skills, and - when server CODE changed - schedules a
  * restart so the update takes effect. The check is fire-and-forget: the tool
  * responds immediately and a banner is prepended to a later result. It is
  * visible to the user and forced, but always fail-open: any error, offline
@@ -15,7 +15,7 @@
  *   - the upstream remote must be an ALLOWED remote (see resolveAllowedRemotes):
  *     fetching and merging is code execution, so where the code comes from is
  *     verified before anything is merged
- *   - fast-forward only (`git merge --ff-only`) — never discards local work
+ *   - fast-forward only (`git merge --ff-only`) - never discards local work
  *   - skipped when the working tree is dirty, HEAD is detached, or no upstream
  *   - RULE_MCP_UPDATE_REMOTE overrides the allowed remote(s) (comma-separated)
  *   - RULE_MCP_UPDATE_REQUIRE_SIGNATURE=1 additionally requires a valid
@@ -23,8 +23,8 @@
  *   - RULE_MCP_NO_AUTOUPDATE=1 disables the check
  *   - RULE_MCP_NO_AUTORESTART=1 keeps the process alive on code changes
  *
- * @see module:cli/paths — getRepoRoot, detectInstallType
- * @see module:core/skills — loadAllSkills(true) hot-reload
+ * @see module:cli/paths - getRepoRoot, detectInstallType
+ * @see module:core/skills - loadAllSkills(true) hot-reload
  */
 
 import { execFile } from "node:child_process";
@@ -93,8 +93,8 @@ async function git(arguments_, root, timeout = 8000) {
  * Reduce a git remote to a comparable identity: host + path, without scheme,
  * credentials, port, `.git` suffix, or trailing slash.
  *
- * git accepts several spellings of the same repository — this project's own
- * remote is scp-style SSH while server.json declares the HTTPS form — so a
+ * git accepts several spellings of the same repository - this project's own
+ * remote is scp-style SSH while server.json declares the HTTPS form - so a
  * string compare would reject the legitimate case and teach everyone to disable
  * the check. Returns null for anything unusable, which matches nothing.
  *
@@ -144,7 +144,7 @@ function declaredRepository() {
  * The remotes this install may take code from.
  *
  * Precedence: an explicit RULE_MCP_UPDATE_REMOTE (comma-separated) REPLACES
- * the default — a fork or a test sandbox names its own upstream — otherwise the
+ * the default - a fork or a test sandbox names its own upstream - otherwise the
  * repository declared in the shipped server.json is the only trusted source.
  * There is deliberately no trust-on-first-use fallback: pinning whatever the
  * remote happens to say would trust whoever edited .git/config first.
@@ -244,7 +244,7 @@ export async function runSelfUpdate(opts = {}) {
   }
 
   // Optional second gate: the upstream commit must carry a valid signature.
-  // Off by default — most repositories do not sign, and failing closed would
+  // Off by default - most repositories do not sign, and failing closed would
   // silently stop every update instead of protecting anything.
   if (process.env.RULE_MCP_UPDATE_REQUIRE_SIGNATURE === "1") {
     const verified = await git(["verify-commit", "--raw", remote], root);
@@ -253,7 +253,7 @@ export async function runSelfUpdate(opts = {}) {
     }
   }
 
-  // Fast-forward only — never clobber local commits.
+  // Fast-forward only - never clobber local commits.
   const merged = await git(["merge", "--ff-only", "@{u}"], root);
   if (merged === null) {
     return { checked: true, updated: false, skipped: true, reason: "not-fast-forward" };
@@ -263,7 +263,7 @@ export async function runSelfUpdate(opts = {}) {
 
   // `git merge --ff-only <ancestor>` exits 0 with "Already up to date" without
   // moving HEAD, which happens on every check while the local branch is AHEAD of
-  // its upstream — the normal state during feature work. Treating that as an
+  // its upstream - the normal state during feature work. Treating that as an
   // update produced a banner claiming the server had just updated itself
   // (`updated 1cb8547→1cb8547 (0 files)`) on every tool call.
   if (!after || after === before) {
@@ -303,7 +303,7 @@ export async function runSelfUpdate(opts = {}) {
  * Build the user-visible banner for an update result, or null when there is
  * nothing worth showing (silent skips stay silent).
  *
- * @param {object} r — runSelfUpdate result
+ * @param {object} r - runSelfUpdate result
  * @returns {string|null}
  */
 export function buildBanner(r) {
@@ -314,7 +314,7 @@ export function buildBanner(r) {
     const what =
       r.changedSkills && r.changedCode ? "skills + code" : r.changedCode ? "code" : r.changedSkills ? "skills" : "";
     const scope = what ? `${what} file(s)` : "file(s)";
-    let message = `🔄 Updating MCP server — rule-mcp updated ${r.from}→${r.to} (${r.count} ${scope}).`;
+    let message = `🔄 Updating MCP server - rule-mcp updated ${r.from}→${r.to} (${r.count} ${scope}).`;
     if (r.changedSkills) {
       message += " Skills hot-reloaded.";
     }
@@ -325,19 +325,19 @@ export function buildBanner(r) {
   // someone repointing the remote at code of their own.
   if (r.reason === "remote-not-allowed") {
     return (
-      `⚠️ rule-mcp self-update REFUSED — the git remote (${r.remote ?? "unknown"}) is not an allowed update source. ` +
+      `⚠️ rule-mcp self-update REFUSED - the git remote (${r.remote ?? "unknown"}) is not an allowed update source. ` +
       "Set RULE_MCP_UPDATE_REMOTE to the upstream you trust, or update manually. No code was fetched."
     );
   }
   if (r.reason === "no-allowed-remote") {
     return (
-      "⚠️ rule-mcp self-update REFUSED — no allowed update remote is configured. " +
+      "⚠️ rule-mcp self-update REFUSED - no allowed update remote is configured. " +
       "Set RULE_MCP_UPDATE_REMOTE to the upstream you trust. No code was fetched."
     );
   }
   if (r.reason === "unsigned-upstream") {
     return (
-      `⚠️ rule-mcp self-update REFUSED — upstream commit ${r.to ?? ""} has no valid signature and ` +
+      `⚠️ rule-mcp self-update REFUSED - upstream commit ${r.to ?? ""} has no valid signature and ` +
       "RULE_MCP_UPDATE_REQUIRE_SIGNATURE=1. No code was merged."
     );
   }
@@ -359,13 +359,13 @@ export function buildBanner(r) {
  *
  * A shared daemon serves several clients at once (Pi + VS Code + …), so a forced
  * exit would drop every other client's session mid-request. Daemon mode therefore
- * NEVER auto-exits by default — it returns an instruction and leaves the process
+ * NEVER auto-exits by default - it returns an instruction and leaves the process
  * running. Set RULE_MCP_DAEMON_AUTORESTART=1 for single-client daemons that
  * want the old behavior. Stdio installs (client owns/respawns the process) keep
  * auto-restart on.
  *
- * @param {object} r — runSelfUpdate result
- * @param {() => void} [exit] — injectable exit (defaults to process.exit)
+ * @param {object} r - runSelfUpdate result
+ * @param {() => void} [exit] - injectable exit (defaults to process.exit)
  * @returns {string|null}
  */
 export function scheduleRestartIfNeeded(r, exit) {
@@ -373,12 +373,12 @@ export function scheduleRestartIfNeeded(r, exit) {
     return null;
   }
   if (process.env.RULE_MCP_NO_AUTORESTART === "1") {
-    return "Server code changed — restart the server (or reconnect your MCP client) to load it.";
+    return "Server code changed - restart the server (or reconnect your MCP client) to load it.";
   }
   const isDaemon = process.env.RULE_MCP_DAEMON === "1";
   if (isDaemon && process.env.RULE_MCP_DAEMON_AUTORESTART !== "1") {
     return (
-      "Server code changed — restart the daemon to apply it. Auto-restart is off in daemon " +
+      "Server code changed - restart the daemon to apply it. Auto-restart is off in daemon " +
       "mode to protect other connected clients; set RULE_MCP_DAEMON_AUTORESTART=1 to enable it."
     );
   }
@@ -386,13 +386,13 @@ export function scheduleRestartIfNeeded(r, exit) {
   const t = setTimeout(doExit, 800);
   t.unref?.();
   const mode = isDaemon ? "daemon" : "server";
-  return `Server code changed — restarting the ${mode} to apply it. Your client will reconnect.`;
+  return `Server code changed - restarting the ${mode} to apply it. Your client will reconnect.`;
 }
 
 /**
  * Throttled, fire-and-forget update check. The router calls this on every tool
  * invocation but real work (git fetch + ff-only merge + skill hot-reload)
- * happens at most once per interval — or on every call with interval 0. The
+ * happens at most once per interval - or on every call with interval 0. The
  * caller may await the returned promise (tests) or ignore it (router: the tool
  * responds immediately and any banner is prepended to a later result).
  *
@@ -418,7 +418,7 @@ export function maybeSelfUpdate() {
       let banner = buildBanner(result);
       const restartNote = scheduleRestartIfNeeded(result);
       if (restartNote) {
-        banner = banner ? `${banner}\n${restartNote}` : `🔄 Updating MCP server — ${restartNote}`;
+        banner = banner ? `${banner}\n${restartNote}` : `🔄 Updating MCP server - ${restartNote}`;
       }
       if (banner) {
         _pendingBanner = banner;

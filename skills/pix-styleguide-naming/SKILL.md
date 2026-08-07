@@ -158,7 +158,7 @@ export { formatDate } from "./_formatDate.js";
 
 ### 2.4 Barrel Exception
 
-If a folder has only one meaningful export and no additional files, the barrel may be omitted and the file itself may serve as the entry point — but only for top-level or trivial cases. For components, always use the barrel pattern.
+If a folder has only one meaningful export and no additional files, the barrel may be omitted and the file itself may serve as the entry point - but only for top-level or trivial cases. For components, always use the barrel pattern.
 
 ---
 
@@ -226,5 +226,5 @@ import "@styles/index.css";
 
 ## See also
 
-- [rule-styleguide](../rule-styleguide/SKILL.md) — Style guides index
-- [rule](../rule/SKILL.md) — Central skill index
+- [rule-styleguide](../rule-styleguide/SKILL.md) - Style guides index
+- [rule](../rule/SKILL.md) - Central skill index

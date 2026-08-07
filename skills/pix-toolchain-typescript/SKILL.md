@@ -13,7 +13,7 @@ tags:
 frameworks: [all]
 ---
 
-# rule-toolchain-typescript — TypeScript Configuration
+# rule-toolchain-typescript - TypeScript Configuration
 
 ## Strict Mode (Mandatory)
 
@@ -139,7 +139,7 @@ pnpm exec openapi-typescript ./openapi.yaml -o ./src/api/schema.gen.ts
 git diff --exit-code ./src/api/schema.gen.ts
 ```
 
-Generated types are compile-time declarations, not runtime validation. Every external boundary—HTTP responses, parsed JSON, environment variables, queues, and untyped library output—must validate `unknown` data at runtime with the project's schema validator. Derive the static type from that schema where possible so one definition protects both layers.
+Generated types are compile-time declarations, not runtime validation. Every external boundary-HTTP responses, parsed JSON, environment variables, queues, and untyped library output-must validate `unknown` data at runtime with the project's schema validator. Derive the static type from that schema where possible so one definition protects both layers.
 
 ```ts
 const payload: unknown = await response.json();
@@ -197,6 +197,6 @@ Prefer clear, boring types over clever nested conditional or mapped types. If a 
 
 ## See also
 
-- [rule-toolchain-project](../rule-toolchain-project/SKILL.md) — Base project config
-- [rule-toolchain-biome](../rule-toolchain-biome/SKILL.md) — Linting & formatting
-- [rule](../rule/SKILL.md) — Central skill index
+- [rule-toolchain-project](../rule-toolchain-project/SKILL.md) - Base project config
+- [rule-toolchain-biome](../rule-toolchain-biome/SKILL.md) - Linting & formatting
+- [rule](../rule/SKILL.md) - Central skill index

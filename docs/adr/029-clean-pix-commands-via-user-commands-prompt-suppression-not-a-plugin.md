@@ -7,7 +7,7 @@
 
 ## Context
 
-Claude Code exposes MCP prompts as slash commands prefixed with the server name (/rule-mcp:rule-handoff, shown as (MCP)). Users wanted bare /rule-handoff. A Claude plugin does NOT solve this: plugin commands are also namespaced (/plugin-name:command); displayName is UI-only and never changes the invocation. The only mechanism that yields a bare /rule-handoff is a user/project command file in ~/.claude/commands/. MCP prompts cannot be hidden client-side — the server must stop emitting them (prompts/list) to remove the prefixed duplicates. The 7 agent commands were also hand-maintained per-agent heredocs, drifting from the ~23 MCP prompts.
+Claude Code exposes MCP prompts as slash commands prefixed with the server name (/rule-mcp:rule-handoff, shown as (MCP)). Users wanted bare /rule-handoff. A Claude plugin does NOT solve this: plugin commands are also namespaced (/plugin-name:command); displayName is UI-only and never changes the invocation. The only mechanism that yields a bare /rule-handoff is a user/project command file in ~/.claude/commands/. MCP prompts cannot be hidden client-side - the server must stop emitting them (prompts/list) to remove the prefixed duplicates. The 7 agent commands were also hand-maintained per-agent heredocs, drifting from the ~23 MCP prompts.
 
 ## Decision
 

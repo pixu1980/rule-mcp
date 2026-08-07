@@ -1,10 +1,10 @@
 /**
  * @module tools/adr
  *
- * rule_tool_process_adr MCP tool — Architecture Decision Records.
+ * rule_tool_process_adr MCP tool - Architecture Decision Records.
  * Saves ADRs to docs/adr/ with auto-numbering and index maintenance.
  *
- * @see module:tools/router — registered via registerProcessAdrTool()
+ * @see module:tools/router - registered via registerProcessAdrTool()
  */
 
 // eslint-disable-next-line no-unused-vars
@@ -197,7 +197,7 @@ export function registerProcessAdrTool() {
       const filePath = join(adrDir, filename);
       writeFileSync(filePath, content);
 
-      // Update index — listExistingAdrs reads from disk (already includes the new ADR)
+      // Update index - listExistingAdrs reads from disk (already includes the new ADR)
       const existing = listExistingAdrs(adrDir);
       updateAdrIndex(adrDir, existing);
 
@@ -253,7 +253,7 @@ export function registerProcessAdrTool() {
     let tags = "tool, auto-log";
     let contextLines;
     let decisionLines;
-    let consequenceLines = ["None — informational entry."];
+    let consequenceLines = ["None - informational entry."];
 
     switch (toolName) {
       case "pix_tool": {
@@ -323,7 +323,7 @@ export function registerProcessAdrTool() {
       }
       default: {
         // Generic (pix_architect and others)
-        title = `Tool: ${toolName} — ${arguments_.action || arguments_.mode || "execute"}`;
+        title = `Tool: ${toolName} - ${arguments_.action || arguments_.mode || "execute"}`;
         contextLines = [`Tool: ${toolName}`, `Args: ${JSON.stringify(arguments_).slice(0, 200)}`];
         decisionLines = [`Tool executed successfully.`];
       }

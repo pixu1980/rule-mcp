@@ -8,11 +8,11 @@ Astro's performance philosophy: **zero JS by default**. Every byte of client-sid
 
 Three key levers:
 
-1. **Islands architecture** — interactive components are isolated; only their JS loads
-2. **Client directives** — control when and how island JS loads
-3. **Rendering strategy** — SSG (build-time) vs SSR (request-time) per page
+1. **Islands architecture** - interactive components are isolated; only their JS loads
+2. **Client directives** - control when and how island JS loads
+3. **Rendering strategy** - SSG (build-time) vs SSR (request-time) per page
 
-## Pattern 1 — Client directive strategy
+## Pattern 1 - Client directive strategy
 
 ### Directive hierarchy (least to most aggressive)
 
@@ -39,15 +39,15 @@ Does it need to SSR for SEO/content?
   no → client:only
 ```
 
-## Pattern 2 — Small islands
+## Pattern 2 - Small islands
 
 An island's JS includes the component AND its framework runtime. Keep islands small.
 
 ```astro
-<!-- ❌ Large island — includes full framework runtime -->
+<!-- ❌ Large island - includes full framework runtime -->
 <InteractiveDashboard client:load />
 
-<!-- ✅ Small island — only the interactive part -->
+<!-- ✅ Small island - only the interactive part -->
 <DashboardCharts client:visible />
 ```
 
@@ -57,7 +57,7 @@ An island's JS includes the component AND its framework runtime. Keep islands sm
 - Use vanilla HTML + CSS for static content around the island
 - Pass data as props from the Astro component (server) to the island (client)
 
-## Pattern 3 — Content Collections
+## Pattern 3 - Content Collections
 
 Content Collections validate frontmatter, provide TypeScript types, and enable efficient queries.
 
@@ -78,11 +78,11 @@ const reviews = await getCollection('reviews', ({ data }) => !data.draft);
 
 ### Performance notes
 
-- `getCollection()` runs at build time (SSG) — zero runtime cost
+- `getCollection()` runs at build time (SSG) - zero runtime cost
 - Filter inside the `getCollection` callback to reduce iterations
 - Use `getEntry` for single pages (more efficient than filtering a collection)
 
-## Pattern 4 — View Transitions
+## Pattern 4 - View Transitions
 
 View Transitions enable SPA-like navigation without a client-side router.
 
@@ -123,7 +123,7 @@ import { ViewTransitions } from 'astro:transitions';
 <!-- Same name → smooth crossfade between pages -->
 ```
 
-## Pattern 5 — Image optimization
+## Pattern 5 - Image optimization
 
 ```astro
 ---
@@ -163,16 +163,16 @@ import logo from '../images/logo.svg';
 - ✅ Responsive `sizes` attribute
 - ✅ WebP format (automatic with `<Image />`)
 
-## Pattern 6 — SSG vs SSR
+## Pattern 6 - SSG vs SSR
 
 ```astro
 ---
-// ✅ SSG — content page, rendered at build time
-// This is the default — no export needed
+// ✅ SSG - content page, rendered at build time
+// This is the default - no export needed
 ---
 
 ---
-// ✅ SSR — needs per-request data
+// ✅ SSR - needs per-request data
 export const prerender = false;
 
 const user = await getUser(Astro.request.headers.get('cookie'));
@@ -191,7 +191,7 @@ Is SEO important?
   no → CSR (client:only island)
 ```
 
-## Pattern 7 — Framework island cost
+## Pattern 7 - Framework island cost
 
 Each framework island loads that framework's runtime. Multiple frameworks = multiple runtimes.
 
@@ -212,10 +212,10 @@ Each framework island loads that framework's runtime. Multiple frameworks = mult
 </script>
 ```
 
-## Pattern 8 — Layout composition
+## Pattern 8 - Layout composition
 
 ```astro
-<!-- src/layouts/_BaseLayout.astro — global shell -->
+<!-- src/layouts/_BaseLayout.astro - global shell -->
 ---
 import { ViewTransitions } from 'astro:transitions';
 ---
@@ -231,7 +231,7 @@ import { ViewTransitions } from 'astro:transitions';
 ```
 
 ```astro
-<!-- src/layouts/_BlogLayout.astro — blog specific -->
+<!-- src/layouts/_BlogLayout.astro - blog specific -->
 ---
 import BaseLayout from './_BaseLayout.astro';
 ---
@@ -241,7 +241,7 @@ import BaseLayout from './_BaseLayout.astro';
 </BaseLayout>
 ```
 
-## Pattern 9 — Critical vs deferred resources
+## Pattern 9 - Critical vs deferred resources
 
 ### Critical CSS
 
@@ -267,7 +267,7 @@ Inlined or loaded in `<head>`:
 <script type="module" src="/scripts/analytics.js" async></script>
 ```
 
-## Pattern 10 — Component responsibility in Astro
+## Pattern 10 - Component responsibility in Astro
 
 Astro's frontmatter (the `---` block) runs at build or request time. Keep it focused.
 
@@ -304,10 +304,10 @@ const posts = await getFeaturedPosts();
 
 Use these tools:
 
-- **Lighthouse** / PageSpeed Insights — Core Web Vitals (LCP, CLS, INP)
-- **Browser DevTools Network panel** — JS bundle sizes per island
-- **Astro's built-in `astro build` output** — page-level bundle analysis
-- **Bundle Analyzer** (`rollup-plugin-visualizer`) — visualize island dependencies
+- **Lighthouse** / PageSpeed Insights - Core Web Vitals (LCP, CLS, INP)
+- **Browser DevTools Network panel** - JS bundle sizes per island
+- **Astro's built-in `astro build` output** - page-level bundle analysis
+- **Bundle Analyzer** (`rollup-plugin-visualizer`) - visualize island dependencies
 
 ## Final principle
 

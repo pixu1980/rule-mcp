@@ -27,7 +27,7 @@ metadata:
 
 This must be the primary dependency for all AI Agents app repositories.
 
-## Step 1 — Create the project structure
+## Step 1 - Create the project structure
 
 If the AI Agents app is a **monorepo**, the server package lives at `src/server/`. The `src/server/` package structure is:
 
@@ -38,9 +38,9 @@ src/server/
 │   ├── types.ts               # All shared interfaces (LLMProvider, Tool, MemoryProvider, AgentConfig)
 │   ├── config/
 │   │   └── env.ts             # Environment validation using zod
-│   ├── agents/                # Agent definitions — one file per agent
+│   ├── agents/                # Agent definitions - one file per agent
 │   │   └── <name>.agent.ts    # Calls agentRegistry.register() at module level
-│   ├── tools/                 # Tool definitions — one file per tool
+│   ├── tools/                 # Tool definitions - one file per tool
 │   │   └── <name>.tool.ts     # Calls toolRegistry.register() at module level
 │   ├── providers/             # LLMProvider implementations using @rule/rule-mcp-core
 │   │   └── <name>.ts
@@ -56,7 +56,7 @@ src/server/
 └── vitest.config.ts
 ```
 
-## Step 2 — Validate environment variables
+## Step 2 - Validate environment variables
 
 Create `.env.example` with all required variables:
 
@@ -92,7 +92,7 @@ export const env = envSchema.parse(process.env);
 export type Env = z.infer<typeof envSchema>;
 ```
 
-## Step 3 — Implement a provider
+## Step 3 - Implement a provider
 
 Create `src/server/src/providers/<name>.ts`. Each provider wraps `@rule/rule-mcp-core` and implements the `LLMProvider` interface defined in `src/server/src/types.ts`:
 
@@ -115,7 +115,7 @@ export const pixProvider: LLMProvider = {
 };
 ```
 
-## Step 4 — Define a tool
+## Step 4 - Define a tool
 
 Create `src/server/src/tools/<name>.tool.ts`. Each tool self-registers at module level using `toolRegistry`:
 
@@ -139,7 +139,7 @@ const searchTool: Tool = {
 toolRegistry.register(searchTool);
 ```
 
-## Step 5 — Create the entry point
+## Step 5 - Create the entry point
 
 Create `src/server/src/index.ts`. It imports all registries (triggering self-registration) and starts the AgentRunner:
 
@@ -158,7 +158,7 @@ const runner = new AgentRunner({ agentRegistry, logger });
 await runner.start();
 ```
 
-## Step 6 — Set up seed data
+## Step 6 - Set up seed data
 
 The seed runs at the **monorepo root** (`seed/run-seed.ts`). It must include agent configuration, tool definitions, and sample datasets.
 
@@ -176,7 +176,7 @@ Place in `seed/data/agent-config.json`:
 
 Create `seed/run-seed.ts` following the seed policy in `rules/common.md`. The seed writes a `.seed-complete` marker and is idempotent.
 
-## Step 7 — Write tests
+## Step 7 - Write tests
 
 ### Unit tests
 
@@ -222,13 +222,13 @@ describe("searchTool", () => {
 
 Coverage thresholds apply as defined in [rule-devops-testing](../rule-devops-testing/SKILL.md). Configure `vitest.config.ts` accordingly.
 
-## Step 8 — Containerize
+## Step 8 - Containerize
 
 The monorepo has two Dockerfiles. Use templates from [skills/docker/SKILL.md](../rule-devops-docker/SKILL.md):
 
-- **`src/server/Dockerfile`** — Backend or AI Agent template
-- **`src/dashboard/Dockerfile`** — Frontend template with nginx
-- **Root `docker-compose.yml`** — runs both `server` and `dashboard` services
+- **`src/server/Dockerfile`** - Backend or AI Agent template
+- **`src/dashboard/Dockerfile`** - Frontend template with nginx
+- **Root `docker-compose.yml`** - runs both `server` and `dashboard` services
 
 | Setting         | Server                    | Dashboard |
 | --------------- | ------------------------- | --------- |
@@ -245,7 +245,7 @@ The monorepo has two Dockerfiles. Use templates from [skills/docker/SKILL.md](..
 
 ## See also
 
-- [rule](../rule/SKILL.md) — Central skill index and dispatcher
-- [rule-architect](../rule-architect/SKILL.md) — Project architecture wizard
+- [rule](../rule/SKILL.md) - Central skill index and dispatcher
+- [rule-architect](../rule-architect/SKILL.md) - Project architecture wizard
 
 ---

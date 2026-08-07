@@ -1,76 +1,76 @@
-# Mega-review — `openai-codex/gpt-5.6-sol`, router `pix_tool`, skill e tool
+# Mega-review - `openai-codex/gpt-5.6-sol`, `pix_tool` router, skills and tools
 
-- **Data audit:** 2026-07-15
+- **Audit date:** 2026-07-15
 - **Repository:** `rule-mcp@1.0.0`
-- **Commit di riferimento:** `4d9764b`
-- **SDK MCP:** `@modelcontextprotocol/sdk@1.29.0`
-- **Host/model verificato:** Pi `0.80.6`, provider `openai-codex`, modello `gpt-5.6-sol`
+- **Reference commit:** `4d9764b`
+- **MCP SDK:** `@modelcontextprotocol/sdk@1.29.0`
+- **Verified host/model:** Pi `0.80.6`, provider `openai-codex`, model `gpt-5.6-sol`
 
-> **Verdetto sintetico:** `gpt-5.6-sol` è interoperabile con i tool MCP di `rule-mcp` nell'host Pi, ma il prodotto nello stato corrente **non è production/release compliant**. Il router `pix_tool` non è un gate: senza il prompt esplicito `/rule-mcp`, il modello ha usato il router solo in 1 richiesta di dominio su 5 e ha spesso chiamato direttamente tool specializzati. Inoltre i guardrail sono aggirabili, `rule_tool_fix` può scrivere fuori dalla root, i prompt MCP non rispettano lo schema ufficiale e build/release possono distruggere il corpus `skills/`.
+> **Summary verdict:** `gpt-5.6-sol` is interoperable with `rule-mcp` MCP tools in the Pi host, but the product in its current state **is not production/release compliant**. The `pix_tool` router is not a gate: without the explicit `/rule-mcp` prompt, the model used the router in only 1 out of 5 domain requests and often called specialized tools directly. Additionally, guardrails are bypassable, `rule_tool_fix` can write outside the root, MCP prompts don't respect the official schema, and build/release can destroy the `skills/` corpus.
 
-## 1. Ambito, snapshot e limiti
+## 1. Scope, snapshot and limits
 
-Il repository era già fortemente modificato prima dell'audit. Questo documento valuta il **working tree osservato**, separandolo dalla baseline Git quando necessario. Non sono state ripristinate né corrette le modifiche dell'autore. Le prove distruttive sono state eseguite in directory temporanee; gli ADR creati automaticamente durante le prime chiamate sono stati rimossi a fine audit.
+The repository was already heavily modified before the audit. This document evaluates the **observed working tree**, separating it from the Git baseline when necessary. The author's modifications were neither restored nor corrected. Destructive tests were run in temporary directories; ADRs auto-created during initial calls were removed at audit end.
 
-### Copertura
+### Coverage
 
-Esclusi `.git/`, `node_modules/`, `.tokensave/`, `.context/`, `dist/`, `coverage/` e `test-results/`:
+Excluding `.git/`, `node_modules/`, `.tokensave/`, `.context/`, `dist/`, `coverage/` and `test-results/`:
 
-| Area                                   | File |  Righe |
-| -------------------------------------- | ---: | -----: |
-| Totale snapshot prima di questo report |  474 | 61.546 |
-| `src/`                                 |   32 |  9.313 |
-| `src/` + `bin/` + `scripts/`           |   42 | 12.221 |
-| `test/`                                |   22 |  1.712 |
-| `skills/` (tutti gli asset inclusi)    |  377 | 39.924 |
-| `SKILL.md`                             |   70 | 17.581 |
-| `docs/`                                |   22 |  4.958 |
+| Area                              | Files |  Lines |
+| --------------------------------- | ----: | -----: |
+| Total snapshot before this report |   474 | 61,546 |
+| `src/`                            |    32 |  9,313 |
+| `src/` + `bin/` + `scripts/`      |    42 | 12,221 |
+| `test/`                           |    22 |  1,712 |
+| `skills/` (all assets included)   |   377 | 39,924 |
+| `SKILL.md`                        |    70 | 17,581 |
+| `docs/`                           |    22 |  4,958 |
 
-Sono stati eseguiti:
+Executed:
 
-- parse sintattico di 138 file `.js`/`.mjs` con `node --check`;
-- parse di 5 shell script con `bash -n`;
-- parse di 9 JSON con `JSON.parse`;
-- parse di 15 YAML con Ruby/Psych;
-- inventario AST/import/export, complessità, link Markdown, metadati e frontmatter;
-- matrice runtime di 67 skill-tool × 6 modalità = **402 chiamate**;
-- test MCP in-memory con client/server ufficiali SDK;
-- test avversariali su guardrail, file-system, installer, router, risorse, prompt e packaging;
-- 8 conversazioni reali separate con `openai-codex/gpt-5.6-sol`.
+- syntactic parse of 138 `.js`/`.mjs` files with `node --check`;
+- parse of 5 shell scripts with `bash -n`;
+- parse of 9 JSON files with `JSON.parse`;
+- parse of 15 YAML files with Ruby/Psych;
+- AST/import/export inventory, complexity, Markdown links, metadata and frontmatter;
+- runtime matrix of 67 skill-tools × 6 modes = **402 calls**;
+- in-memory MCP tests with official SDK client/server;
+- adversarial tests on guardrails, file-system, installer, router, resources, prompts and packaging;
+- 8 separate real conversations with `openai-codex/gpt-5.6-sol`.
 
-PowerShell e ShellCheck non erano installati: i 2 `.ps1` non hanno quindi una validazione parser nativa e i `.sh` non hanno una verifica ShellCheck. Docker non era disponibile: il Dockerfile è stato auditato staticamente, non costruito.
+PowerShell and ShellCheck were not installed: the 2 `.ps1` files therefore lack native parser validation and the `.sh` files lack ShellCheck verification. Docker was unavailable: the Dockerfile was statically audited, not built.
 
-“Ogni riga” significa che ogni file testuale nel perimetro è entrato negli scan e che ogni sottosistema eseguibile è stato letto/revisionato. Non significa una certificazione formale della veridicità di ogni affermazione contenuta nelle 17.581 righe di documentazione skill né l'esecuzione di ogni snippet SQL/framework su tutte le piattaforme.
+"Every line" means every textual file in scope was scanned and every executable subsystem was read/reviewed. It does not mean formal certification of every statement in the 17,581 lines of skill documentation nor execution of every SQL/framework snippet on all platforms.
 
-## 2. Scorecard finale
+## 2. Final scorecard
 
-| Area                             | Verdetto            | Evidenza principale                                                    |
-| -------------------------------- | ------------------- | ---------------------------------------------------------------------- |
-| Avvio MCP stdio                  | **Pass**            | Client/server SDK in-memory con handshake riuscito                     |
-| `tools/list` e `tools/call`      | **Pass tecnico**    | 76 tool isolati, chiamate schema-valide                                |
-| Uso reale da `gpt-5.6-sol`       | **Pass tecnico**    | Pi registra provider/modello corretti e tool call riuscite             |
-| Router `pix_tool` automatico     | **Fail**            | 1/5 richieste di dominio senza comando esplicito                       |
-| Router con `/rule-mcp`     | **Pass parziale**   | 1/1 invocato per primo, ma route primaria errata per path bias         |
-| Qualità routing                  | **Parziale**        | 52/60 top-1; 58/60 top-6; multilingual e prompt generici deboli        |
-| Skill trigger Pi nativo          | **Parziale**        | In un caso il modello ha letto 8 `SKILL.md`, ma non via router MCP     |
-| `rule_tool_check` come gate       | **Fail**            | `previousPassed` aggirabile e risultato non legato all'hash del codice |
-| `rule_tool_fix` safety            | **Fail bloccante**  | `dryRun` ignorato in `generate`; path traversal confermato             |
-| MCP resources                    | **Parziale**        | Risorse standard leggibili; plugin elencati ma non risolvibili         |
-| MCP prompts                      | **Fail bloccante**  | Shape e ruolo non conformi allo schema SDK                             |
-| MCP completion                   | **Fail funzionale** | Usa un tipo ref inesistente per completare argomenti tool              |
-| Template/componenti              | **Fail**            | Output non framework-specific o non conforme ai guardrail              |
-| Test suite                       | **Fail**            | `test:all` strutturalmente errato; suite rosse e copertura incompleta  |
-| CI/release/build                 | **Fail bloccante**  | file test/build/LICENSE mancanti; gate mascherati; embed distruttivo   |
-| Installer/uninstaller            | **Fail**            | config malformate sovrascritte; `skills install --all` crasha non-TTY  |
-| Sicurezza SSE                    | **Fail**            | HTTP locale senza auth, CORS `*`, tool mutanti raggiungibili           |
-| Documentazione/manifest          | **Fail drift**      | conteggi/tool/versioni/source e claim “zero dependencies” incoerenti   |
-| Production readiness complessiva | **Non approvata**   | P0 e P1 aperti                                                         |
+| Area                          | Verdict             | Primary evidence                                                       |
+| ----------------------------- | ------------------- | ---------------------------------------------------------------------- |
+| MCP stdio startup             | **Pass**            | In-memory SDK client/server with successful handshake                  |
+| `tools/list` and `tools/call` | **Technical Pass**  | 76 isolated tools, schema-valid calls                                  |
+| Real use by `gpt-5.6-sol`     | **Technical Pass**  | Pi registers correct provider/model and successful tool calls          |
+| Automatic `pix_tool` router   | **Fail**            | 1/5 domain requests without explicit command                           |
+| Router with `/rule-mcp` | **Partial Pass**    | 1/1 invoked first, but primary route wrong due to path bias            |
+| Routing quality               | **Partial**         | 52/60 top-1; 58/60 top-6; multilingual and generic prompts weak        |
+| Native Pi skill trigger       | **Partial**         | In one case the model read 8 `SKILL.md`, but not via MCP router        |
+| `rule_tool_check` as gate      | **Fail**            | `previousPassed` bypassable and result not tied to code hash           |
+| `rule_tool_fix` safety         | **Blocking Fail**   | `dryRun` ignored in `generate`; path traversal confirmed               |
+| MCP resources                 | **Partial**         | Standard resources readable; plugins listed but unresolvable           |
+| MCP prompts                   | **Blocking Fail**   | Shape and role non-compliant with SDK schema                           |
+| MCP completion                | **Functional Fail** | Uses nonexistent ref type for tool argument completion                 |
+| Templates/components          | **Fail**            | Output not framework-specific or not guardrail-compliant               |
+| Test suite                    | **Fail**            | `test:all` structurally broken; red suites and incomplete coverage     |
+| CI/release/build              | **Blocking Fail**   | Missing test/build/LICENSE files; masked gates; destructive embed      |
+| Installer/uninstaller         | **Fail**            | Malformed configs overwritten; `skills install --all` crashes non-TTY  |
+| SSE security                  | **Fail**            | Local HTTP without auth, CORS `*`, reachable mutating tools            |
+| Documentation/manifest        | **Fail drift**      | Tool counts/versions/source and "zero dependencies" claim inconsistent |
+| Overall production readiness  | **Not approved**    | Open P0s and P1s                                                       |
 
-## 3. Risposta diretta: il router e i trigger entrano davvero in chat?
+## 3. Direct answer: do the router and triggers actually enter the chat?
 
-### 3.1 Esperimento reale su `gpt-5.6-sol`
+### 3.1 Real experiment on `gpt-5.6-sol`
 
-Le sessioni sono state eseguite con `--no-session`, output JSONL separato e auto-ADR disabilitato dove possibile. Il record finale del caso A riporta realmente:
+Sessions were run with `--no-session`, separate JSONL output, and auto-ADR disabled where possible. Case A's final record actually reports:
 
 ```json
 {
@@ -80,105 +80,105 @@ Le sessioni sono state eseguite con `--no-session`, output JSONL separato e auto
 }
 ```
 
-| Caso | Richiesta                                                 | Chiamate osservate                                                               | `pix_tool` prima? | Esito                                                                           |
-| ---- | --------------------------------------------------------- | -------------------------------------------------------------------------------- | ----------------- | ------------------------------------------------------------------------------- |
-| A    | Pulsante accessibile React                                | `pix_tool` → `rule_tool_search` → `rule_tool_frontend_react` → 2× `rule_tool_check` | Sì                | Flusso quasi completo, ma risposta finale diversa dall'artefatto controllato    |
-| B    | Rate limiting/abusi                                       | `rule_tool_backend_security` → `rule_tool_search`                                  | **No**            | Tool specializzato scelto direttamente                                          |
-| C    | API PostgreSQL, paginazione/filtri                        | `rule_tool_backend_api_design` → `rule_tool_data_postgresql` → `rule_tool_search`   | **No**            | Due skill-tool diretti                                                          |
-| D    | Hook React con AbortController                            | `rule_tool_frontend_react` → `rule_tool_search`                                    | **No**            | Tool framework diretto                                                          |
-| E    | “Quale workflow rule?”                                     | 8 chiamate native `read` su `SKILL.md`                                           | No MCP            | Il trigger skill dell'host funziona quando richiesto esplicitamente             |
-| F    | `2 + 2`                                                   | Nessun tool                                                                      | n/a               | Comportamento corretto                                                          |
-| G    | Ripetizione rate limiting                                 | `rule_tool_backend_security` → `rule_tool_search`                                  | **No**            | Conferma del caso B                                                             |
-| H    | Stessa richiesta preceduta dal template `/rule-mcp` | `pix_tool` → `rule_tool_search` → `rule_tool_backend_security` → …                 | **Sì**            | Il template forza il primo passo, ma `pix_tool` routea inizialmente al frontend |
+| Case | Request                                             | Observed calls                                                                   | `pix_tool` first? | Result                                                                  |
+| ---- | --------------------------------------------------- | -------------------------------------------------------------------------------- | ----------------- | ----------------------------------------------------------------------- |
+| A    | Accessible React button                             | `pix_tool` → `rule_tool_search` → `rule_tool_frontend_react` → 2× `rule_tool_check` | Yes               | Almost complete flow, but final response differs from checked artifact  |
+| B    | Rate limiting/abuse                                 | `rule_tool_backend_security` → `rule_tool_search`                                  | **No**            | Specialized tool chosen directly                                        |
+| C    | PostgreSQL API, pagination/filters                  | `rule_tool_backend_api_design` → `rule_tool_data_postgresql` → `rule_tool_search`   | **No**            | Two direct skill-tools                                                  |
+| D    | React hook with AbortController                     | `rule_tool_frontend_react` → `rule_tool_search`                                    | **No**            | Direct framework tool                                                   |
+| E    | "Which rule workflow?"                               | 8 native `read` calls on `SKILL.md`                                              | No MCP            | The host's skill trigger works when explicitly requested                |
+| F    | `2 + 2`                                             | No tools                                                                         | n/a               | Correct behavior                                                        |
+| G    | Repeat rate limiting                                | `rule_tool_backend_security` → `rule_tool_search`                                  | **No**            | Confirms case B                                                         |
+| H    | Same request preceded by `/rule-mcp` template | `pix_tool` → `rule_tool_search` → `rule_tool_backend_security` → …                 | **Yes**           | Template forces first step, but `pix_tool` initially routes to frontend |
 
-Risultato empirico, senza sovrainterpretare il campione:
+Empirical result, without overinterpreting the sample:
 
-- richieste di dominio senza comando esplicito (A–D, G): router usato **1/5 = 20%**;
-- richieste con comando esplicito (H): router usato per primo **1/1**;
-- chiamata diretta a skill/tool appropriati: frequente e operativa;
-- nessun meccanismo server-side blocca una risposta che non chiama `pix_tool`.
+- domain requests without explicit command (A–D, G): router used **1/5 = 20%**;
+- requests with explicit command (H): router used first **1/1**;
+- direct call to appropriate skills/tools: frequent and operational;
+- no server-side mechanism blocks a response that doesn't call `pix_tool`.
 
-### 3.2 Perché accade
+### 3.2 Why this happens
 
-`src/tools/ai.js` registra `pix_tool` come un normale tool. `src/tools/router.js` registra tutti gli altri tool nello stesso registry e `src/server.js` li espone simultaneamente. `pix_tool` restituisce JSON con `route` e `next_tools`, ma **non invoca né orchestra** quei tool: il modello decide se proseguire. L'enforcement si attiva solo dopo una tool call già scelta dal client.
+`src/tools/ai.js` registers `pix_tool` as a normal tool. `src/tools/router.js` registers all other tools in the same registry and `src/server.js` exposes them simultaneously. `pix_tool` returns JSON with `route` and `next_tools`, but **does not invoke or orchestrate** those tools: the model decides whether to proceed. Enforcement only activates after a tool call already chosen by the client.
 
-Il template `prompts/rule-mcp.md` è quindi utile, ma resta un'istruzione in linguaggio naturale. In MCP non esiste una capability con cui il server possa imporre “chiama questo tool prima di rispondere”. Per una garanzia reale serve enforcement nell'host/agent harness oppure una sola API orchestratrice che nasconda i tool secondari.
+The `prompts/rule-mcp.md` template is therefore useful, but remains a natural language instruction. MCP has no capability for a server to enforce "call this tool before responding". For a real guarantee, enforcement is needed in the host/agent harness or a single orchestrating API that hides secondary tools.
 
-### 3.3 La check finale non è legata alla risposta finale
+### 3.3 The final check is not tied to the final response
 
-Nel caso A il modello ha controllato una funzione con props, `disabled`, JSDoc e nome file `_AccessibleButton.tsx`; la risposta finale ha invece mostrato una funzione senza props/JSDoc che usa `console.log`. Il server non conosce la risposta finale del modello e non emette una ricevuta legata all'hash del codice. “Ho chiamato `rule_tool_check`” non prova quindi che l'artefatto consegnato sia quello validato.
+In case A the model checked a function with props, `disabled`, JSDoc and filename `_AccessibleButton.tsx`; the final response instead showed a function without props/JSDoc using `console.log`. The server doesn't know the model's final response and doesn't emit a receipt tied to the code hash. "I called `rule_tool_check`" therefore doesn't prove the delivered artifact is the one validated.
 
-## 4. Router: qualità, bias e determinismo
+## 4. Router: quality, bias and determinism
 
-### 4.1 Risultati quantitativi
+### 4.1 Quantitative results
 
-- corpus isolato: 70 skill, 69 route candidate, 76 tool;
-- definizioni tool: 90.873 byte, circa **22.719 token** usando la stima byte/4;
-- 60 prompt curati: **52/60 top-1**, **58/60 top-6**;
-- 69 prompt derivati dalle descrizioni delle skill: **68/69 exact top-1**;
-- la descrizione di `rule-ui` viene routeata a `rule-ui-design-system`;
-- `loadAllSkills(true)` duplica il registry: **76 → 152 tool**.
+- isolated corpus: 70 skills, 69 route candidates, 76 tools;
+- tool definitions: 90,873 bytes, approximately **22,719 tokens** using byte/4 estimate;
+- 60 curated prompts: **52/60 top-1**, **58/60 top-6**;
+- 69 prompts derived from skill descriptions: **68/69 exact top-1**;
+- `rule-ui`'s description routes to `rule-ui-design-system`;
+- `loadAllSkills(true)` duplicates the registry: **76 → 152 tools**.
 
-### 4.2 Path bias dominante
+### 4.2 Dominant path bias
 
-La logica a `src/tools/ai.js:222` applica un floor/bias forte al framework rilevato. Il repository stesso viene classificato da `rule_tool_detect` come `vanilla` frontend, pur essendo un server MCP Node. Prova:
+The logic at `src/tools/ai.js:222` applies a strong floor/bias to the detected framework. The repository itself is classified by `rule_tool_detect` as `vanilla` frontend, despite being an MCP Node server. Test:
 
-| Prompt                            | Path                | Route primaria                                    |
-| --------------------------------- | ------------------- | ------------------------------------------------- |
-| “Protect a backend web service…”  | assente             | `rule-backend-security`                            |
-| stesso prompt                     | root di questo repo | **`rule-frontend-vanilla-reactive`**               |
-| stesso caso via `/rule-mcp` | root di questo repo | **`rule-frontend-vanilla-reactive`, confidence 1** |
+| Prompt                           | Path              | Primary route                                     |
+| -------------------------------- | ----------------- | ------------------------------------------------- |
+| "Protect a backend web service…" | absent            | `rule-backend-security`                            |
+| same prompt                      | root of this repo | **`rule-frontend-vanilla-reactive`**               |
+| same case via `/rule-mcp`  | root of this repo | **`rule-frontend-vanilla-reactive`, confidence 1** |
 
-La route backend corretta compare solo come alternativa. La rilevazione progetto deve essere un segnale secondario e domain-aware, non un override trasversale.
+The correct backend route only appears as an alternative. Project detection must be a secondary, domain-aware signal, not a cross-cutting override.
 
-### 4.3 Confidence fuorviante
+### 4.3 Misleading confidence
 
-`confidence` è normalizzata sul massimo del gruppo (`rawScore / maxRaw`, `src/tools/ai.js:239`), quindi il candidato migliore ottiene quasi sempre `1`, anche quando la query è ambigua. “Build a secure API” ha prodotto `rule-platform-library` con confidence `1`. Questa non è una probabilità né una confidence assoluta; l'API dovrebbe chiamarla `relativeScore` oppure calibrare una soglia assoluta con fallback “unknown”.
+`confidence` is normalized on the group maximum (`rawScore / maxRaw`, `src/tools/ai.js:239`), so the best candidate almost always gets `1`, even when the query is ambiguous. "Build a secure API" produced `rule-platform-library` with confidence `1`. This is neither a probability nor an absolute confidence; the API should call it `relativeScore` or calibrate an absolute threshold with "unknown" fallback.
 
-### 4.4 Multilingua incompleta
+### 4.4 Incomplete multilingual support
 
-Il corpus e i sinonimi sono prevalentemente inglesi:
+The corpus and synonyms are predominantly English:
 
-| Lingua   | Prompt sicurezza backend                    | Route                  |
+| Language | Backend security prompt                     | Route                  |
 | -------- | ------------------------------------------- | ---------------------- |
-| Inglese  | rate limiting + secure headers              | `rule-backend-security` |
-| Italiano | limitazione richieste + intestazioni sicure | `rule-backend`          |
-| Francese | limitation requêtes + en-têtes sécurisés    | `rule-backend`          |
+| English  | rate limiting + secure headers              | `rule-backend-security` |
+| Italian  | limitazione richieste + intestazioni sicure | `rule-backend`          |
+| French   | limitation requêtes + en-têtes sécurisés    | `rule-backend`          |
 
-Il dominio generale viene riconosciuto, ma la specializzazione si perde. Servono alias multilingua o una fase di normalizzazione/classificazione semantica.
+The general domain is recognized, but specialization is lost. Multilingual aliases or a semantic normalization/classification phase is needed.
 
-### 4.5 TLDR e ricerca
+### 4.5 TLDR and search
 
-`src/tools/skill.js:104` esegue `search(query, 5)` e **poi** filtra per skill. Se quella skill non è nei primi cinque risultati globali, TLDR restituisce “no relevant sections” anche quando il documento contiene materiale utile. Con la query canonica basata sul nome skill, 30 skill-tool non trovano sezioni. La ricerca deve filtrare il corpus per skill prima del top-k.
+`src/tools/skill.js:104` runs `search(query, 5)` and **then** filters by skill. If that skill is not in the top-five global results, TLDR returns "no relevant sections" even when the document contains useful material. With the canonical skill-name-based query, 30 skill-tools find no sections. The search must filter the corpus by skill before top-k.
 
-### 4.6 Contaminazione da `$HOME`
+### 4.6 `$HOME` contamination
 
-In ambiente isolato vengono caricati 76 tool. Con il normale `$HOME` del workstation vengono importate 11 skill esterne (`caveman-*`, `frontend-design`, ecc.) e il totale sale a 87. `loadPluginJs()` importa inoltre codice JavaScript arbitrario dal plugin. Conseguenze:
+In an isolated environment, 76 tools load. With the normal workstation `$HOME`, 11 external skills (`caveman-*`, `frontend-design`, etc.) are imported and the total rises to 87. `loadPluginJs()` additionally imports arbitrary JavaScript code from the plugin. Consequences:
 
-- superficie e comportamento non riproducibili;
-- prompt/tool supply-chain locale;
-- plugin eseguiti con i privilegi del server;
-- build, test e produzione dipendono dal contenuto della home dell'utente.
+- non-reproducible surface and behavior;
+- local prompt/tool supply-chain;
+- plugins executed with server privileges;
+- build, test and production depend on the user's home content.
 
-L'import di plugin deve essere opt-in, allowlisted e separato dal corpus ufficiale.
+Plugin import must be opt-in, allowlisted and separated from the official corpus.
 
-## 5. Finding bloccanti (P0)
+## 5. Blocking findings (P0)
 
-### P0-01 — `prompts/get` non è MCP-conforme
+### P0-01 - `prompts/get` is not MCP-compliant
 
-- `src/server.js:150-154` restituisce `{ prompt }`;
-- lo schema ufficiale richiede `{ description?, messages }` al top level;
-- `src/prompts/index.js` usa `role: "system"`, ma MCP ammette `user` o `assistant`.
+- `src/server.js:150-154` returns `{ prompt }`;
+- the official schema requires `{ description?, messages }` at top level;
+- `src/prompts/index.js` uses `role: "system"`, but MCP allows `user` or `assistant`.
 
-Tutti e cinque i prompt falliscono `GetPromptResultSchema`. `prompts/list` passa; `prompts/get` no.
+All five prompts fail `GetPromptResultSchema`. `prompts/list` passes; `prompts/get` does not.
 
-**Fix:** restituire `description`/`messages` senza wrapper e convertire il messaggio iniziale in ruolo `user`.
+**Fix:** return `description`/`messages` without wrapper and convert the initial message to `user` role.
 
-### P0-02 — Build/release/Docker possono cancellare tutte le skill
+### P0-02 - Build/release/Docker can delete all skills
 
-`scripts/embed-skills.mjs:42` rimuove `skills/` prima di verificare la sorgente. Copia esclusivamente `~/.agents/skills/rule-*`, escludendo la skill centrale `pix_tool`; se non trova sorgenti crea solo una directory placeholder senza `SKILL.md`.
+`scripts/embed-skills.mjs:42` removes `skills/` before verifying the source. It copies exclusively `~/.agents/skills/rule-*`, excluding the central `pix_tool` skill; if no sources are found it creates only a placeholder directory without `SKILL.md`.
 
-Riproduzione in clone temporaneo con `HOME` vuota:
+Reproduction in temporary clone with empty `HOME`:
 
 ```text
 Embedding skills...
@@ -187,228 +187,228 @@ Embedded 0 skills
 SKILL_MD_COUNT=0
 ```
 
-Impatto:
+Impact:
 
-- `prebuild`, `prepublishOnly`, workflow release e Docker eseguono lo script;
-- una CI pulita perde il corpus versionato;
-- una macchina dello sviluppatore può pubblicare contenuti locali non revisionati;
-- l'operazione non è atomica né riproducibile.
+- `prebuild`, `prepublishOnly`, release workflow and Docker run the script;
+- a clean CI loses the versioned corpus;
+- a developer's machine can publish unreviewed local content;
+- the operation is neither atomic nor reproducible.
 
-**Fix:** il repository deve essere la sorgente canonica; scrivere in una directory staging, validare hash/conteggio, poi sostituire atomicamente. Mai leggere `$HOME` durante build/release.
+**Fix:** the repository must be the canonical source; write to a staging directory, validate hash/count, then atomically replace. Never read `$HOME` during build/release.
 
-### P0-03 — Pipeline release non eseguibile come dichiarata
+### P0-03 - Release pipeline not executable as declared
 
-- `package.json` esegue `node scripts/package.mjs`, ma il file non esiste;
-- `.github/workflows/ci.yml` e `release.yml` eseguono `test/ai.test.mjs`, che non esiste;
-- il Dockerfile copia `LICENSE`, che non esiste;
-- `scripts/package.sh` sovrascrive gli installer universali con stub minimali e maschera il fallimento di `npm pack`;
-- lint/format/audit nei workflow usano `|| echo`, quindi non bloccano la pipeline;
-- `eslint` e `prettier` non sono dipendenze dichiarate.
+- `package.json` runs `node scripts/package.mjs`, but the file does not exist;
+- `.github/workflows/ci.yml` and `release.yml` run `test/ai.test.mjs`, which does not exist;
+- the Dockerfile copies `LICENSE`, which does not exist;
+- `scripts/package.sh` overwrites universal installers with minimal stubs and masks `npm pack` failure;
+- lint/format/audit in workflows use `|| echo`, so they don't block the pipeline;
+- `eslint` and `prettier` are not declared dependencies.
 
-Il comando `pnpm build`, eseguito in una copia temporanea per non distruggere il repo, termina con `MODULE_NOT_FOUND scripts/package.mjs` dopo avere già svuotato `skills/`.
+The command `pnpm build`, run in a temporary copy to not destroy the repo, ends with `MODULE_NOT_FOUND scripts/package.mjs` after already emptying `skills/`.
 
-### P0-04 — `rule_tool_check` è bypassabile
+### P0-04 - `rule_tool_check` is bypassable
 
-`src/core/guardrails.js:93-100` accetta `previousPassed` dal chiamante e salta quei controlli senza verificare una ricevuta, una sessione o l'hash del codice. Passando tutti gli ID, codice non conforme ottiene `allPass: true`.
+`src/core/guardrails.js:93-100` accepts `previousPassed` from the caller and skips those checks without verifying a receipt, session or code hash. Passing all IDs, non-compliant code gets `allPass: true`.
 
-Ulteriori false negative/positive riprodotte:
+Additional reproduced false negatives/positives:
 
-| Input                                                     | Risultato attuale            | Atteso                                      |
-| --------------------------------------------------------- | ---------------------------- | ------------------------------------------- |
-| CSS raw `.foo:hover { … }`                                | Pass                         | Fail zero-class                             |
-| React `style={{ color: "red" }}`                          | Pass                         | Fail no-inline-style                        |
-| CSS `.foo > span`, `.foo.bar`                             | Pass                         | Fail                                        |
-| `previousPassed` con tutti gli ID + codice invalido       | Pass                         | Eseguire tutti i check o rifiutare ricevuta |
-| React `import "./Button.css"` con CSS incluso nel payload | Fail external CSS            | Pass                                        |
-| File Markdown che cita `.css`                             | Fail `css-comments-required` | Regola non applicabile                      |
+| Input                                                      | Current result               | Expected                         |
+| ---------------------------------------------------------- | ---------------------------- | -------------------------------- |
+| CSS raw `.foo:hover { … }`                                 | Pass                         | Fail zero-class                  |
+| React `style={{ color: "red" }}`                           | Pass                         | Fail no-inline-style             |
+| CSS `.foo > span`, `.foo.bar`                              | Pass                         | Fail                             |
+| `previousPassed` with all IDs + invalid code               | Pass                         | Run all checks or reject receipt |
+| React `import "./Button.css"` with CSS included in payload | Fail external CSS            | Pass                             |
+| Markdown file citing `.css`                                | Fail `css-comments-required` | Rule not applicable              |
 
-Cause: `extractRealCSS()` ignora CSS raw; regex classi riconosce solo `.foo {`; inline style cerca solo attributi HTML quotati; l'import CSS usa il literal string check `import .*.css`.
+Causes: `extractRealCSS()` ignores raw CSS; class regex only recognizes `.foo {`; inline style only looks for quoted HTML attributes; CSS import uses the literal string check `import .*.css`.
 
-**Fix:** rimuovere `previousPassed` dall'input pubblico oppure emettere una receipt server-side firmata e legata a `sha256(code + context + guardrailVersion)`. In ogni caso rieseguire tutti i check sul pass finale.
+**Fix:** remove `previousPassed` from public input or emit a server-side signed receipt tied to `sha256(code + context + guardrailVersion)`. In any case, rerun all checks on the final pass.
 
-### P0-05 — `rule_tool_fix` ignora dry-run e permette path traversal
+### P0-05 - `rule_tool_fix` ignores dry-run and allows path traversal
 
-Nel ramo `mode=generate`, `src/tools/fix.js:58-79` scrive sempre e non consulta `dryRun`. Inoltre combina `path`, `baseDir` e file generati con `join()` senza verificare che il path risolto resti dentro la root.
+In the `mode=generate` branch, `src/tools/fix.js:58-79` always writes and does not check `dryRun`. It also combines `path`, `baseDir` and generated files with `join()` without verifying the resolved path stays inside the root.
 
-Prove in directory temporanea:
+Tests in a temporary directory:
 
-- `dryRun: true` ha creato file reali;
-- `baseDir: "../outside"` ha scritto fuori dalla root;
-- file esistenti vengono sovrascritti senza conferma/backup.
+- `dryRun: true` created real files;
+- `baseDir: "../outside"` wrote outside the root;
+- existing files are overwritten without confirmation/backup.
 
-**Fix:** `resolve`, `relative`, rifiuto di path assoluti/`..`, no symlink escape, modalità preview realmente read-only, scrittura atomica e collision policy esplicita.
+**Fix:** `resolve`, `relative`, reject absolute/`..` paths, no symlink escape, truly read-only preview mode, atomic write and explicit collision policy.
 
-### P0-06 — SSE locale senza auth + CORS wildcard + tool mutanti
+### P0-06 - Local SSE without auth + CORS wildcard + mutating tools
 
-`src/transport/sse.js:38` imposta `Access-Control-Allow-Origin: *`; il daemon avvia HTTP su `127.0.0.1:37999` senza token. Una pagina web visitata dall'utente può aprire SSE, leggere il session endpoint e inviare JSON-RPC al localhost. La catena diventa critica perché `rule_tool_fix` e ADR scrivono file, e `rule_tool_fix` consente path escape.
+`src/transport/sse.js:38` sets `Access-Control-Allow-Origin: *`; the daemon starts HTTP on `127.0.0.1:37999` without a token. A web page visited by the user can open SSE, read the session endpoint and send JSON-RPC to localhost. The chain becomes critical because `rule_tool_fix` and ADR write files, and `rule_tool_fix` allows path escape.
 
-Altri limiti:
+Other limits:
 
-- body POST accumulato in memoria senza limite (`Buffer.concat`);
-- una nuova sessione SSE chiude quelle precedenti;
-- nessuna origin allowlist, CSRF token o capability grant.
+- POST body accumulated in memory without limit (`Buffer.concat`);
+- a new SSE session closes previous ones;
+- no origin allowlist, CSRF token or capability grant.
 
-**Fix:** token bearer random per avvio, CORS deny-by-default/allowlist, validazione `Origin`, body limit, consenso per tool mutanti e preferenza stdio. Il binding loopback riduce l'esposizione di rete ma non protegge dai browser locali.
+**Fix:** random bearer token at startup, CORS deny-by-default/allowlist, `Origin` validation, body limit, consent for mutating tools and stdio preference. Loopback binding reduces network exposure but doesn't protect from local browsers.
 
-### P0-07 — `rule_tool_architect interview` è rotto nello snapshot corrente
+### P0-07 - `rule_tool_architect interview` is broken in the current snapshot
 
-Il tool cerca `skills/rule-architect/assets/context-server.mjs`, ma il working tree ha cancellato l'intero asset tree. La nuova implementazione è distribuita in `rule-architect-cli`/`rule-architect-web`, ancora untracked e non collegata al tool ufficiale. La matrice 402-call ha un solo errore operativo: `rule_tool_architect` in modalità `check`, coerente con la migrazione incompleta.
+The tool looks for `skills/rule-architect/assets/context-server.mjs`, but the working tree deleted the entire asset tree. The new implementation is spread across `rule-architect-cli`/`rule-architect-web`, still untracked and not connected to the official tool. The 402-call matrix has a single operational error: `rule_tool_architect` in `check` mode, consistent with the incomplete migration.
 
-**Fix:** completare una sola migrazione atomica, aggiornare tool, test, package files e documentazione nello stesso commit; evitare due wizard concorrenti.
+**Fix:** complete a single atomic migration, update tool, tests, package files and documentation in the same commit; avoid two concurrent wizards.
 
-### P0-08 — Generator e component template non sono una sorgente affidabile
+### P0-08 - Generator and component templates are not a reliable source
 
-`rule_tool_fix generate` dichiara framework Angular e Astro ma `generateComponentFiles()` gestisce solo React/Solid, Vue, Svelte e vanilla; Angular/Astro cadono nel default custom element. Il custom element usa un tag senza trattino (`customElements.define("mycomponent", …)`), invalido per la piattaforma.
+`rule_tool_fix generate` declares Angular and Astro frameworks but `generateComponentFiles()` handles only React/Solid, Vue, Svelte and vanilla; Angular/Astro fall through to the custom element default. The custom element uses a dashless tag (`customElements.define("mycomponent", …)`), invalid for the platform.
 
-`rule_tool_component` ha problemi complementari:
+`rule_tool_component` has complementary problems:
 
-- React: 0/6 template UI supera i guardrail per JSDoc mancante;
-- Svelte: 0/6 supera `css-comments-required`;
-- Angular, Astro e Solid ricevono generic HTML/CSS con `{{ label }}`, non componenti validi per il framework;
-- il check sul primo code fence può ignorare il secondo fence CSS;
-- modal senza semantics `dialog`, focus management e accessible close label;
-- `<button>` spesso senza `type="button"`.
+- React: 0/6 UI templates pass guardrails for missing JSDoc;
+- Svelte: 0/6 pass `css-comments-required`;
+- Angular, Astro and Solid receive generic HTML/CSS with `{{ label }}`, not valid framework components;
+- the first code fence check can ignore the second CSS fence;
+- modal without `dialog` semantics, focus management and accessible close label;
+- `<button>` often without `type="button"`.
 
-In modalità multi-file, **98 file generati su 114** non superano almeno un guardrail dichiarato del progetto; 16 combinazioni multi-file restituiscono direttamente errore.
+In multi-file mode, **98 out of 114 generated files** fail at least one declared project guardrail; 16 multi-file combinations return a direct error.
 
-## 6. Finding alti (P1)
+## 6. High findings (P1)
 
-### P1-01 — Il “fail-closed workflow” è advisory
+### P1-01 - The "fail-closed workflow" is advisory
 
-`preprocessToolCall` e `postprocessToolResult` sono utili e validano payload/output, ma esistono solo dentro `callTool()`. Non intercettano testo finale, file scritti dall'host o risposte senza tool. Documentazione e messaggi devono evitare di presentarlo come garanzia end-to-end.
+`preprocessToolCall` and `postprocessToolResult` are useful and validate payloads/output, but exist only inside `callTool()`. They don't intercept final text, host-written files or responses without tools. Documentation and messages must avoid presenting it as an end-to-end guarantee.
 
-### P1-02 — MCP completion è una capability morta
+### P1-02 - MCP completion is a dead capability
 
-`src/server.js:100` controlla `ref.type === "ref"` per completare argomenti di tool. Lo schema MCP `complete` supporta riferimenti a prompt/resource (`ref/prompt`, `ref/resource`), non tool argument completion e non il tipo `ref`. Le richieste schema-valide restituiscono sempre una lista vuota.
+`src/server.js:100` checks `ref.type === "ref"` to complete tool arguments. The MCP `complete` schema supports prompt/resource references (`ref/prompt`, `ref/resource`), not tool argument completion and not the `ref` type. Schema-valid requests always return an empty list.
 
-### P1-03 — Resource list/read incoerenti per plugin
+### P1-03 - Inconsistent resource list/read for plugins
 
-`listResources()` usa tutti i nomi di `getSkillNames()` e pubblica per esempio `rule://caveman`; il regex di `readResource()` accetta solo nomi che iniziano con `pix_tool`, quindi la risorsa pubblicizzata torna “Resource not found”. Inoltre `rule://skills` include path assoluti e duplicati embedded/home, esponendo dettagli del filesystem.
+`listResources()` uses all names from `getSkillNames()` and publishes e.g. `rule://caveman`; `readResource()`'s regex only accepts names starting with `pix_tool`, so the advertised resource returns "Resource not found". Additionally, `rule://skills` includes absolute paths and embedded/home duplicates, exposing filesystem details.
 
-### P1-04 — Reload non idempotente
+### P1-04 - Non-idempotent reload
 
-`loadAllSkills(force = true)` non svuota `_tools`: una seconda chiamata raddoppia l'elenco da 76 a 152. Il comando reload può quindi generare nomi duplicati, ambiguità e crescita memoria. La registrazione deve essere keyed-map/idempotente e atomica.
+`loadAllSkills(force = true)` does not clear `_tools`: a second call doubles the list from 76 to 152. The reload command can therefore produce duplicate names, ambiguity and memory growth. Registration must be keyed-map/idempotent and atomic.
 
-### P1-05 — Auto-ADR produce side effect non richiesti e race
+### P1-05 - Auto-ADR produces unsolicited side effects and races
 
-L'hook wildcard di `src/tools/adr.js:327` crea ADR per routing/detection/fix. Le prime quattro chiamate di audit hanno creato ADR 011–014 e modificato l'indice senza una richiesta esplicita; sono stati rimossi a fine audit. Il numbering “scan max + 1” e la riscrittura dell'indice non hanno lock, quindi processi concorrenti possono collidere.
+The wildcard hook in `src/tools/adr.js:327` creates ADRs for routing/detection/fix. The first four audit calls created ADRs 011–014 and modified the index without explicit request; they were removed at audit end. The "scan max + 1" numbering and index rewrite have no lock, so concurrent processes can collide.
 
-**Fix:** default off, opt-in esplicito per sessione, lock/atomic rename e deduplica semantica.
+**Fix:** default off, explicit per-session opt-in, lock/atomic rename and semantic deduplication.
 
-### P1-06 — Installer può perdere configurazioni utente
+### P1-06 - Installer can lose user configuration
 
-`src/cli/install.js:137` trasforma JSON non valido in `{}`; gli upsert successivi riscrivono il file cancellando il contenuto precedente. `backupFile()` esiste ma non viene usato. L'uninstaller ha inoltre mapping generici che non sempre coincidono con i path/config speciali usati dall'installer.
+`src/cli/install.js:137` transforms invalid JSON into `{}`; subsequent upserts rewrite the file erasing previous content. `backupFile()` exists but is not used. The uninstaller also has generic mappings that don't always match the special paths/configs used by the installer.
 
-**Fix:** parse fail-closed, backup obbligatorio prima di ogni modifica, write atomica e test round-trip per tutti i 23 agenti.
+**Fix:** fail-closed parse, mandatory backup before every modification, atomic write and round-trip tests for all 23 agents.
 
-### P1-07 — `skills install --all` non è non-interattivo e il copier è errato
+### P1-07 - `skills install --all` is not non-interactive and the copier is broken
 
-In una shell non-TTY:
+In a non-TTY shell:
 
 ```text
 TypeError: stdin.setRawMode is not a function
 ```
 
-`--all` pre-seleziona gli elementi ma chiama comunque l'interfaccia raw. Inoltre `copySkill()` combina `source` con `Dirent.parentPath` già assoluto, creando path inesistenti/duplicati su Node 24. Gli asset correnti mostrano già directory `assets/assets` in quattro skill.
+`--all` pre-selects items but still calls the raw interface. Additionally, `copySkill()` combines `source` with already-absolute `Dirent.parentPath`, creating nonexistent/duplicate paths on Node 24. Current assets already show `assets/assets` directories in four skills.
 
-### P1-08 — Gestione segreti insicura nell'installer shell
+### P1-08 - Unsafe secret handling in shell installer
 
-`scripts/install.sh` legge API key senza modalità silent, le interpola senza escaping in `.bashrc`/`.zshrc`, può duplicarle a ogni run e salva copie in file senza `chmod 600` esplicito. Il server MCP non necessita di queste chiavi per il proprio funzionamento.
+`scripts/install.sh` reads API keys without silent mode, interpolates them unescaped into `.bashrc`/`.zshrc`, can duplicate them on each run and saves copies in files without explicit `chmod 600`. The MCP server does not need these keys for its own operation.
 
-**Fix:** rimuovere la raccolta segreti dall'installer oppure usare keychain/provider CLI; mai scrivere token in shell rc.
+**Fix:** remove secret collection from the installer or use keychain/provider CLI; never write tokens to shell rc.
 
-### P1-09 — Nuovo wizard web: XSS e server esposto
+### P1-09 - New web wizard: XSS and exposed server
 
-La versione untracked in `skills/rule-architect-web/`:
+The untracked version in `skills/rule-architect-web/`:
 
-- interpola input e messaggi di errore in `innerHTML` senza escaping;
-- usa numerosi `onclick`/`oninput` inline e uno `style=` inline, violando i suoi stessi principi;
-- imposta CORS `*`;
-- accumula request body senza limite;
-- usa `server.listen(PORT)` senza host, quindi ascolta su tutte le interfacce;
-- scrive configurazione senza autenticazione.
+- interpolates input and error messages into `innerHTML` without escaping;
+- uses numerous inline `onclick`/`oninput` and one inline `style=`, violating its own principles;
+- sets CORS `*`;
+- accumulates request body without limit;
+- uses `server.listen(PORT)` without host, therefore listens on all interfaces;
+- writes configuration without authentication.
 
-Non deve essere distribuita prima di sanitizzazione, event listener esterni, binding loopback e token sessione.
+Must not be distributed before sanitization, external event listeners, loopback binding and session token.
 
-### P1-10 — Metadata/package incoerenti
+### P1-10 - Inconsistent metadata/package
 
 - package `1.0.0`, package in `server.json` `0.1.0`;
-- repository GitHub con `"source": "gitlab"`;
-- descrizione “Zero npm dependencies” ma dipendenze runtime SDK/Zod;
-- self-dependency `"rule-mcp": "link:"`, che crea un link a sé stesso e warning bin in install pulita;
-- README dichiara 71 tool, runtime isolato 76 e live 87.
+- GitHub repository with `"source": "gitlab"`;
+- description "Zero npm dependencies" but SDK/Zod runtime dependencies;
+- self-dependency `"rule-mcp": "link:"`, which creates a self-link and bin warning on clean install;
+- README declares 71 tools, isolated runtime 76 and live 87.
 
-### P1-11 — Sandbox timeout non cancella il lavoro
+### P1-11 - Sandbox timeout does not cancel work
 
-Il timeout restituisce errore al chiamante, ma la Promise sottostante continua e può completare una scrittura dopo il timeout. Per tool mutanti servono `AbortSignal`, cancellazione cooperativa e transazioni/rollback.
+The timeout returns an error to the caller, but the underlying Promise continues and can complete a write after the timeout. For mutating tools, `AbortSignal`, cooperative cancellation and transactions/rollback are needed.
 
-### P1-12 — Handoff incompleto
+### P1-12 - Incomplete handoff
 
-Il nome progetto usa `package.json` del cwd anche quando `projectDir` punta altrove; il git diff standard non include untracked file, proprio quelli più rilevanti nello snapshot corrente. Usare sempre cwd=`projectDir`, includere status/nomi untracked e applicare limiti/redaction prima di inviare il contesto a un modello.
+The project name uses `package.json` of the cwd even when `projectDir` points elsewhere; the standard git diff does not include untracked files, precisely the most relevant ones in the current snapshot. Always use cwd=`projectDir`, include untracked status/names and apply limits/redaction before sending context to a model.
 
-## 7. Finding medi e manutenzione (P2)
+## 7. Medium and maintenance findings (P2)
 
-- **Documentazione stale:** l'estrazione dei token `pix_*` trova 32 nomi non presenti nel registry; esclusi il nome server e gli esempi intenzionali, circa 30 sono alias obsoleti come `pix_react`, `pix_vue`, `pix_angular`, `pix_docker` e `rule_tool_testing`, soprattutto in `docs/01-product-architecture.md` e `docs/02-tools-operations.md`.
-- **API/documentazione interna:** lo scan ha rilevato 20 import inutilizzati e 22 simboli pubblici privi di documentazione; `cli()` e `daemonCommand()` concentrano responsabilità e complessità elevate.
-- **Dipendenze cicliche:** registry, skill loader, resource/tool registration e auto-ADR formano cluster ciclici che rendono ordine d'import e side effect difficili da prevedere.
-- **Naming/generazione:** `formField` diventa `Formfield`, perdendo il confine di parola; file/componenti generati mescolano `.js`, `.jsx`, `.ts` e barrel senza una policy TypeScript esplicita.
-- **Health check insufficiente:** `doctor` può restituire `ok: true` anche quando prompt, build, release e alcune configurazioni agente sono invalide.
-- **Porta SSE non configurabile da CLI:** `serveCommand()` passa sempre `37999` e `src/index.js` non inoltra `--port`; il tentativo `serve --port 3004` ha comunque colliso su 37999. Questo contribuisce alla fragilità dei test/daemon.
-- **Tool annotations assenti:** i client non ricevono `readOnlyHint`, `destructiveHint` o `idempotentHint`; tool di sola lettura e tool mutanti appaiono equivalenti.
+- **Stale documentation:** extraction of `pix_*` tokens finds 32 names not present in the registry; excluding the server name and intentional examples, about 30 are obsolete aliases like `pix_react`, `pix_vue`, `pix_angular`, `pix_docker` and `rule_tool_testing`, mostly in `docs/01-product-architecture.md` and `docs/02-tools-operations.md`.
+- **Internal API/documentation:** the scan detected 20 unused imports and 22 undocumented public symbols; `cli()` and `daemonCommand()` concentrate high responsibilities and complexity.
+- **Cyclic dependencies:** registry, skill loader, resource/tool registration and auto-ADR form cyclic clusters that make import order and side effects hard to predict.
+- **Naming/generation:** `formField` becomes `Formfield`, losing the word boundary; generated files/components mix `.js`, `.jsx`, `.ts` and barrels without an explicit TypeScript policy.
+- **Insufficient health check:** `doctor` can return `ok: true` even when prompts, build, release and some agent configurations are invalid.
+- **SSE port not CLI-configurable:** `serveCommand()` always passes `37999` and `src/index.js` does not forward `--port`; `serve --port 3004` still collided on 37999. This contributes to test/daemon fragility.
+- **Missing tool annotations:** clients receive no `readOnlyHint`, `destructiveHint` or `idempotentHint`; read-only tools and mutating tools appear equivalent.
 
-## 8. Test, lint, CI e release: risultati reali
+## 8. Test, lint, CI and release: real results
 
-| Comando/prova                                   | Stato            | Nota                                                               |
-| ----------------------------------------------- | ---------------- | ------------------------------------------------------------------ |
-| `node test/smoke.mjs`                           | Pass             | Smoke molto superficiale                                           |
-| `pnpm run ci`                                   | **Fail**         | Si ferma su `rule-data-duckdb` senza `See also`                     |
-| `pnpm test:all`                                 | **Fail**         | Esegue suite Playwright con `node`                                 |
-| batch manuale, 19 file (`console-test` escluso) | 14 pass / 5 fail | daemon, docs, skill-docs, 2× Playwright                            |
-| `pnpm lint`                                     | **Fail**         | `eslint` non dichiarato; audit esterno rileva 324 problemi         |
-| `pnpm format`                                   | **Fail**         | `prettier` non dichiarato; audit esterno segnala 292 file          |
-| `pnpm audit --prod`                             | Pass             | 0 vulnerabilità note nel registry al momento del test              |
-| `pnpm build` in clone temp                      | **Fail**         | embed cancella skill, poi `package.mjs` mancante                   |
-| `pnpm pack` in clone temp                       | Pass parziale    | Pack possibile, non prova correttezza del publish workflow         |
-| JSON/YAML/JS/Bash syntax                        | Pass             | PowerShell non verificato                                          |
-| Docker build                                    | Non eseguito     | Docker assente; staticamente fallisce per `LICENSE` e embed        |
-| `rule_tool_check` su questo report Markdown      | **Fail 1/16**    | Falso positivo `css-comments-required` perché il testo cita `.css` |
+| Command/test                                     | Status           | Note                                                                |
+| ------------------------------------------------ | ---------------- | ------------------------------------------------------------------- |
+| `node test/smoke.mjs`                            | Pass             | Very superficial smoke                                              |
+| `pnpm run ci`                                    | **Fail**         | Stops on `rule-data-duckdb` missing `See also`                       |
+| `pnpm test:all`                                  | **Fail**         | Runs Playwright suites with `node`                                  |
+| manual batch, 19 files (`console-test` excluded) | 14 pass / 5 fail | daemon, docs, skill-docs, 2× Playwright                             |
+| `pnpm lint`                                      | **Fail**         | `eslint` not declared; external audit finds 324 issues              |
+| `pnpm format`                                    | **Fail**         | `prettier` not declared; external audit reports 292 files           |
+| `pnpm audit --prod`                              | Pass             | 0 known vulnerabilities in registry at test time                    |
+| `pnpm build` in temp clone                       | **Fail**         | embed deletes skills, then `package.mjs` missing                    |
+| `pnpm pack` in temp clone                        | Partial Pass     | Pack possible, doesn't prove publish workflow correctness           |
+| JSON/YAML/JS/Bash syntax                         | Pass             | PowerShell not verified                                             |
+| Docker build                                     | Not run          | Docker absent; statically fails for `LICENSE` and embed             |
+| `rule_tool_check` on this Markdown report         | **Fail 1/16**    | False positive `css-comments-required` because text mentions `.css` |
 
-Nota operativa: con pnpm 11, `pnpm ci` è un comando install built-in; per eseguire lo script package occorre `pnpm run ci`.
+Operational note: with pnpm 11, `pnpm ci` is a built-in install command; to run the package script you need `pnpm run ci`.
 
-### Debolezze dei test
+### Test weaknesses
 
-- `test:all` include `add-once.test.mjs` e `architect-ui.test.mjs`, che richiedono Playwright runner;
-- Playwright usa porta hard-coded 19000, già occupata durante l'audit;
-- CI GitHub chiama un file inesistente;
-- la suite non copre `previousPassed`, CSS raw, React style object, path traversal, dry-run, malformed config, prompt schema o resource plugin;
-- `doctor` restituisce `ok: true` anche con build/prompt/release rotti e config agent non validate;
-- CI maschera lint/format/audit invece di usarli come gate.
+- `test:all` includes `add-once.test.mjs` and `architect-ui.test.mjs`, which require Playwright runner;
+- Playwright uses hard-coded port 19000, already occupied during audit;
+- GitHub CI calls a nonexistent file;
+- the suite doesn't cover `previousPassed`, raw CSS, React style objects, path traversal, dry-run, malformed config, prompt schema or resource plugins;
+- `doctor` returns `ok: true` even with broken build/prompt/release and unvalidated agent configs;
+- CI masks lint/format/audit instead of using them as gates.
 
-## 9. Audit skill e contenuti
+## 9. Skills and content audit
 
-Tutte le 70 directory hanno:
+All 70 directories have:
 
-- nome frontmatter coerente con la directory;
-- nomi lowercase/hyphen compatibili con il formato Agent Skills;
-- descrizione presente e sotto 1.024 caratteri;
-- link Markdown relativi risolvibili;
-- tool callable nelle modalità dichiarate, salvo il ramo architect già descritto.
+- frontmatter name consistent with the directory;
+- lowercase/hyphen names compatible with Agent Skills format;
+- description present and under 1,024 characters;
+- resolvable relative Markdown links;
+- tools callable in declared modes, except the architect branch already described.
 
-Gap trasversali:
+Cross-cutting gaps:
 
-- `rule-data-duckdb`, `rule-data-indexed-db`, `rule-data-sqlite` non hanno `See also` e rompono la suite;
-- 30 query TLDR canoniche non restituiscono sezioni per il bug top-k globale;
-- `rule-architect-cli`, `rule-architect-web` e le tre nuove skill data sono untracked, quindi non fanno parte di una release Git riproducibile;
-- descrizioni e API descrivono spesso un enforcement più forte di quello realmente ottenibile;
-- molti asset sono duplicati (`assets/assets`) o generano codice che non soddisfa i guardrail.
+- `rule-data-duckdb`, `rule-data-indexed-db`, `rule-data-sqlite` missing `See also` and break the suite;
+- 30 canonical TLDR queries return no sections due to global top-k bug;
+- `rule-architect-cli`, `rule-architect-web` and the three new data skills are untracked, therefore not part of a reproducible Git release;
+- descriptions and APIs often describe enforcement stronger than actually achievable;
+- many assets are duplicated (`assets/assets`) or generate code that doesn't satisfy guardrails.
 
-La tabella completa per skill è nell'Appendice A.
+The complete per-skill table is in Appendix A.
 
-## 10. Audit tool
+## 10. Tool audit
 
-### 10.1 Skill-tool
+### 10.1 Skill-tools
 
-Per ognuno dei 67 skill-tool sono state chiamate le modalità:
+For each of the 67 skill-tools, the following modes were called:
 
 1. `full`;
 2. `summary`;
@@ -417,50 +417,50 @@ Per ognuno dei 67 skill-tool sono state chiamate le modalità:
 5. `check`;
 6. `tldr`.
 
-Totale: **402 chiamate**. Il trasporto e lo shape MCP sono operativi. Questo prova la callability, non la correttezza semantica di ogni testo restituito. `rule_tool_architect check` è l'eccezione runtime nello snapshot di migrazione.
+Total: **402 calls**. The transport and MCP shape are operational. This proves callability, not semantic correctness of every returned text. `rule_tool_architect check` is the runtime exception in the migration snapshot.
 
-### 10.2 Tool deterministici
+### 10.2 Deterministic tools
 
-| Tool                       | Verdetto                                                    |
-| -------------------------- | ----------------------------------------------------------- |
-| `pix_tool`                 | Callable, ma non obbligatorio; ranking da correggere        |
-| `rule_tool_search`          | Callable; BM25 utile, pertinenza/top-k da migliorare        |
-| `rule_tool_check`           | **Bloccato**: bypass e parser incompleti                    |
-| `rule_tool_scaffold`        | Callable; restituisce testo, non scrive                     |
-| `rule_tool_detect`          | Callable; classificazione troppo frontend-centrica          |
-| `rule_tool_component`       | **Bloccato**: output non affidabile per framework/guardrail |
-| `rule_tool_fix`             | **Bloccato**: filesystem safety                             |
-| `rule_tool_process_adr`     | Parziale: side effect/concorrenza                           |
-| `rule_tool_process_handoff` | Parziale: cwd/untracked/redaction                           |
+| Tool                       | Verdict                                                  |
+| -------------------------- | -------------------------------------------------------- |
+| `pix_tool`                 | Callable, but not mandatory; ranking needs correction    |
+| `rule_tool_search`          | Callable; BM25 useful, relevance/top-k needs improvement |
+| `rule_tool_check`           | **Blocked**: bypass and incomplete parsers               |
+| `rule_tool_scaffold`        | Callable; returns text, doesn't write                    |
+| `rule_tool_detect`          | Callable; classification too frontend-centric            |
+| `rule_tool_component`       | **Blocked**: unreliable output for framework/guardrails  |
+| `rule_tool_fix`             | **Blocked**: filesystem safety                           |
+| `rule_tool_process_adr`     | Partial: side effects/concurrency                        |
+| `rule_tool_process_handoff` | Partial: cwd/untracked/redaction                         |
 
-La lista completa dei 76 tool isolati è nell'Appendice B.
+The complete list of 76 isolated tools is in Appendix B.
 
-## 11. Architettura consigliata per enforcement reale
+## 11. Recommended architecture for real enforcement
 
-### Fase 1 — bloccare i rischi immediati
+### Phase 1 - block immediate risks
 
-1. Disabilitare `rule_tool_fix generate/fix` e SSE mutante fino a sandbox/auth complete.
-2. Disabilitare `previousPassed` pubblico.
-3. Correggere prompt MCP, build, CI, Docker e installer.
-4. Rendere plugin e auto-ADR opt-in.
-5. Completare o ritirare il wizard split.
+1. Disable `rule_tool_fix generate/fix` and mutating SSE until complete sandbox/auth.
+2. Disable public `previousPassed`.
+3. Fix MCP prompts, build, CI, Docker and installer.
+4. Make plugins and auto-ADR opt-in.
+5. Complete or retire the split wizard.
 
-### Fase 2 — gateway unico
+### Phase 2 - single gateway
 
-Esporre per default solo un piccolo set core:
+Expose only a small core set by default:
 
 ```text
 pix_route
 pix_evidence
 pix_validate
-rule_tool_apply (consenso esplicito)
+rule_tool_apply (explicit consent)
 ```
 
-`pix_route` deve effettuare internamente routing + caricamento evidenza, non limitarsi a suggerire al modello il prossimo tool. I 67 tool skill possono restare disponibili in modalità avanzata ma non tutti nel tool-choice budget iniziale.
+`pix_route` must internally perform routing + evidence loading, not just suggest the next tool to the model. The 67 skill tools can remain available in advanced mode but not all in the initial tool-choice budget.
 
-### Fase 3 — ricevuta verificabile
+### Phase 3 - verifiable receipt
 
-`pix_validate` dovrebbe produrre:
+`pix_validate` should produce:
 
 ```json
 {
@@ -472,56 +472,56 @@ rule_tool_apply (consenso esplicito)
 }
 ```
 
-Ogni apply/write deve richiedere una receipt valida per esattamente gli stessi byte. Un host extension può inoltre impedire la risposta finale o la scrittura finché non esiste una receipt; un server MCP da solo non può intercettare il testo finale del modello.
+Every apply/write must require a valid receipt for exactly the same bytes. A host extension can additionally block the final response or write until a receipt exists; an MCP server alone cannot intercept the model's final text.
 
-### Fase 4 — router calibrato
+### Phase 4 - calibrated router
 
-- classificare prima il dominio (backend/frontend/data/devops/process), poi framework;
-- usare path/framework solo dentro il dominio pertinente;
-- introdurre score assoluto + soglia “unknown”;
-- aggiungere alias IT/FR/ES o semantic embeddings controllati;
-- deduplicare registry e separare skill ufficiali/plugin;
-- misurare top-1/top-k su dataset versionato, anche per prompt negativi/ambigui.
+- classify domain first (backend/frontend/data/devops/process), then framework;
+- use path/framework only within the relevant domain;
+- introduce absolute score + "unknown" threshold;
+- add IT/FR/ES aliases or controlled semantic embeddings;
+- deduplicate registry and separate official/plugin skills;
+- measure top-1/top-k on a versioned dataset, including negative/ambiguous prompts.
 
-### Fase 5 — conformance live in CI
+### Phase 5 - live conformance in CI
 
-Una suite opzionale, protetta da secret/budget, deve eseguire più run per modello/host e misurare:
+An optional suite, protected by secrets/budget, must run multiple runs per model/host and measure:
 
-- percentuale di prima chiamata `pix_tool` quando l'istruzione è presente;
-- route corretta;
-- caricamento della skill indicata;
-- check sull'hash dell'artefatto finale;
-- nessuna tool call per richieste fuori dominio;
-- nessuna scrittura senza consenso.
+- percentage of `pix_tool` first call when instruction is present;
+- correct route;
+- loading of the indicated skill;
+- check on final artifact hash;
+- no tool calls for out-of-domain requests;
+- no writes without consent.
 
-I test deterministici devono restare il gate primario; i test live sono una metrica probabilistica, non un requisito non riproducibile per ogni PR.
+Deterministic tests must remain the primary gate; live tests are a probabilistic metric, not an unreproducible requirement for every PR.
 
-## 12. Priorità di remediation
+## 12. Remediation priorities
 
-| Ordine | Azione                                                      | Gate di accettazione                                                                             |
-| -----: | ----------------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
-|      1 | Sandbox `rule_tool_fix`; auth/CORS SSE                       | Nessuna scrittura fuori root/symlink; dry-run zero side effect; browser hostile test rosso→verde |
-|      2 | Eliminare bypass `previousPassed`                           | Codice modificato forza tutti i check; test CSS/JSX avversariali verdi                           |
-|      3 | Rendere embed/build riproducibili                           | Build con HOME vuota conserva esattamente le skill versionate                                    |
-|      4 | Riparare `prompts/get` e rimuovere completion tool fittizia | Tutte le response passano gli schema SDK ufficiali                                               |
-|      5 | Riparare CI/release/package metadata                        | Un solo comando locale riproduce tutti i gate; nessun `                                          |     | echo` |
-|      6 | Correggere generatori/template                              | Ogni output framework compila e supera i guardrail indipendenti                                  |
-|      7 | Rendere installer lossless/idempotente                      | Matrice 23 agenti install→reinstall→uninstall senza perdita                                      |
-|      8 | Gateway/orchestrazione e receipts                           | Artefatto finale hash-equal a quello validato                                                    |
-|      9 | Calibrare router/multilingua                                | Dataset top-1 concordato, unknown threshold, path non cambia dominio                             |
-|     10 | Aggiornare docs/manifest                                    | Conteggi/versioni/source generati automaticamente                                                |
+| Order | Action                                            | Acceptance gate                                                                         |
+| ----: | ------------------------------------------------- | --------------------------------------------------------------------------------------- |
+|     1 | Sandbox `rule_tool_fix`; SSE auth/CORS             | No write outside root/symlink; zero side effect dry-run; hostile browser test red→green |
+|     2 | Remove `previousPassed` bypass                    | Modified code forces all checks; adversarial CSS/JSX tests green                        |
+|     3 | Make embed/build reproducible                     | Build with empty HOME preserves exactly the versioned skills                            |
+|     4 | Fix `prompts/get` and remove fake completion tool | All responses pass official SDK schemas                                                 |
+|     5 | Fix CI/release/package metadata                   | A single local command reproduces all gates; no `                                       |     | echo` |
+|     6 | Fix generators/templates                          | Every framework output compiles and passes independent guardrails                       |
+|     7 | Make installer lossless/idempotent                | Matrix of 23 agents install→reinstall→uninstall without loss                            |
+|     8 | Gateway/orchestration and receipts                | Final artifact hash-equal to the validated one                                          |
+|     9 | Calibrate router/multilingual                     | Agreed top-1 dataset, unknown threshold, path doesn't change domain                     |
+|    10 | Update docs/manifest                              | Auto-generated counts/versions/source                                                   |
 
-## 13. Conclusione di compliance per `gpt-5.6-sol`
+## 13. Compliance conclusion for `gpt-5.6-sol`
 
-**Compatibilità tecnica:** sì. Pi 0.80.6 espone il server e `openai-codex/gpt-5.6-sol` genera tool call valide, legge output MCP e compone risposte utili.
+**Technical compatibility:** yes. Pi 0.80.6 exposes the server and `openai-codex/gpt-5.6-sol` generates valid tool calls, reads MCP output and composes useful responses.
 
-**Compliance workflow:** no. Il modello può e spesso preferisce saltare `pix_tool`; può chiamare direttamente skill-tool, può consegnare codice diverso da quello controllato e non esiste un gate server-side sulla risposta finale.
+**Workflow compliance:** no. The model can and often prefers to skip `pix_tool`; can call skill-tools directly, can deliver code different from what was checked, and there is no server-side gate on the final response.
 
-**Compliance MCP complessiva:** parziale. Tools e molte resources funzionano; prompt e completion sono difettosi.
+**Overall MCP compliance:** partial. Tools and many resources work; prompts and completion are defective.
 
-**Production/release approval:** negata fino alla chiusura dei P0. Il problema non è il modello specifico: sono soprattutto contratti, trust boundary e pipeline del server. Il comando esplicito `/rule-mcp` migliora sensibilmente il comportamento del modello, ma non sostituisce enforcement verificabile.
+**Production/release approval:** denied until P0 closure. The problem is not the specific model: it's primarily about server contracts, trust boundaries and pipeline. The explicit `/rule-mcp` command noticeably improves model behavior, but does not replace verifiable enforcement.
 
-## Appendix A — Per-skill structural and trigger audit
+## Appendix A - Per-skill structural and trigger audit
 
 | Skill                           | Lines | MCP tool                             | Metadata/links              | TLDR canonical query | Result                                       |
 | ------------------------------- | ----: | ------------------------------------ | --------------------------- | -------------------- | -------------------------------------------- |
@@ -596,9 +596,9 @@ I test deterministici devono restare il gate primario; i test live sono una metr
 | `rule-ui`                        |    79 | `rule_tool_ui`                        | Pass                        | Result               | **Pass**                                     |
 | `rule-ui-design-system`          |   214 | `rule_tool_ui_design_system`          | Pass                        | No result            | **Warning**                                  |
 
-Notes: all 70 names are Agent Skills-compatible (valid lowercase/hyphen names, unique, name matches directory, descriptions below 1,024 characters); all relative Markdown links resolve. “Pass” is structural/runtime, not independent factual certification of every framework/database statement.
+Notes: all 70 names are Agent Skills-compatible (valid lowercase/hyphen names, unique, name matches directory, descriptions below 1,024 characters); all relative Markdown links resolve. "Pass" is structural/runtime, not independent factual certification of every framework/database statement.
 
-## Appendix B — Packaged MCP tool inventory
+## Appendix B - Packaged MCP tool inventory
 
 Isolated package state: **76 tools**. Live workstation state: **87 tools** because 11 unrelated global Agent Skills are auto-imported as plugins.
 
@@ -681,7 +681,7 @@ Isolated package state: **76 tools**. Live workstation state: **87 tools** becau
 | `rule_tool_process_handoff`           | Deterministic | Integration/adversarial                       | Partial: project-name/diff gaps         |
 | `rule_tool_component`                 | Deterministic | Integration/adversarial                       | Blocked: invalid/non-compliant outputs  |
 
-## Appendix C — Executable source inventory
+## Appendix C - Executable source inventory
 
 | File                                              | Lines | Static parse | Review note                                                          |
 | ------------------------------------------------- | ----: | ------------ | -------------------------------------------------------------------- |
@@ -749,35 +749,35 @@ Isolated package state: **76 tools**. Live workstation state: **87 tools** becau
 | `test/smoke.mjs`                                  |   111 | Pass         | Parsed; no blocker isolated by automated scan                        |
 | `test/sse.test.mjs`                               |   120 | Pass         | Parsed; no blocker isolated by automated scan                        |
 
-## Appendix D — Artefatti e riproducibilità
+## Appendix D - Artifacts and reproducibility
 
-Gli artefatti grezzi dell'audit sono temporanei e non vengono inclusi nel package:
+The raw audit artifacts are temporary and not included in the package:
 
-- `/tmp/rule-mcp-static-audit.json` — inventario, metadati, template e guardrail;
-- `/tmp/rule-skill-mode-matrix.json` — 402 chiamate per modalità;
-- `/tmp/rule-audit-gpt56sol-a.jsonl` … `h.jsonl` — trace chat modello/tool;
-- `/tmp/rule-audit-tests.log` — batch test file-per-file;
-- `/tmp/rule-audit-eslint.log` e `/tmp/rule-audit-prettier.log`;
-- `/tmp/rule-audit-pnpm-run-ci.log`, `/tmp/rule-audit-pack.log` e log delle prove isolate.
+- `/tmp/rule-mcp-static-audit.json` - inventory, metadata, templates and guardrails;
+- `/tmp/rule-skill-mode-matrix.json` - 402 calls per mode;
+- `/tmp/rule-audit-gpt56sol-a.jsonl` … `h.jsonl` - model/tool chat traces;
+- `/tmp/rule-audit-tests.log` - per-file test batch;
+- `/tmp/rule-audit-eslint.log` and `/tmp/rule-audit-prettier.log`;
+- `/tmp/rule-audit-pnpm-run-ci.log`, `/tmp/rule-audit-pack.log` and isolated test logs.
 
-Comandi chiave, da eseguire con auto-ADR disabilitato e preferibilmente in un clone temporaneo:
+Key commands, to be run with auto-ADR disabled and preferably in a temporary clone:
 
 ```bash
-# Suite package effettiva (non usare `pnpm ci`, che in pnpm 11 installa)
+# Actual package suite (do not use `pnpm ci`, which in pnpm 11 installs)
 RULE_MCP_DISABLE_AUTO_ADR=1 pnpm run ci
 
-# Smoke e audit dipendenze
+# Smoke and dependency audit
 RULE_MCP_DISABLE_AUTO_ADR=1 pnpm test
 pnpm audit --prod
 
-# Inventario tool isolato dalla home utente
+# Tool inventory isolated from user home
 HOME=/tmp/rule-clean-home RULE_MCP_DISABLE_AUTO_ADR=1 NODE_ENV=test \
   node --input-type=module -e \
   'import {loadAllSkills} from "./src/core/skills.js"; import {listTools} from "./src/tools/router.js"; await loadAllSkills(); console.log(listTools().length)'
 
-# Verifica sintattica JavaScript
+# JavaScript syntax verification
 find src bin scripts test skills -type f \( -name "*.js" -o -name "*.mjs" \) \
   -print0 | xargs -0 -n1 node --check
 ```
 
-Le prove `build`, `rule_tool_fix`, installer e ADR devono restare in directory temporanee finché i finding P0 non sono corretti.
+`build`, `rule_tool_fix`, installer and ADR tests must remain in temporary directories until P0 findings are fixed.

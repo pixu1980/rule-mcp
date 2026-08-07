@@ -27,7 +27,7 @@ const HOME = homedir();
 
 /**
  * Get the installed SDK version string.
- * @returns {string} — e.g. "1.29.0" or "unknown"
+ * @returns {string} - e.g. "1.29.0" or "unknown"
  */
 export function getSdkVersion() {
   try {
@@ -43,8 +43,8 @@ export function getSdkVersion() {
  * Check agent-specific configuration details beyond basic detection.
  * Validates that the MCP server entry is well-formed.
  *
- * @param {Array} agents — Agent detection results
- * @returns {Array} — Agents with additional validation
+ * @param {Array} agents - Agent detection results
+ * @returns {Array} - Agents with additional validation
  */
 function validateAgentConfigs(agents) {
   return agents.map((agent) => {
@@ -236,8 +236,8 @@ function getEnvironmentInfo() {
  *   - Registered tools
  *   - Daemon status
  *
- * @param {boolean} [telemetry=false] — Include anonymous usage stats
- * @returns {object} — Comprehensive health report
+ * @param {boolean} [telemetry=false] - Include anonymous usage stats
+ * @returns {object} - Comprehensive health report
  */
 function statusIcon(ok) {
   return ok ? color("✅", "green") : color("❌", "red");
@@ -263,7 +263,7 @@ function truncate(value, max = 96) {
  * Format a doctor report for humans in the terminal.
  * JSON remains available through `rule-mcp doctor --json`.
  *
- * @param {object} report — Result from runDoctor()
+ * @param {object} report - Result from runDoctor()
  * @returns {string}
  */
 export function formatDoctorTerminal(report) {
@@ -435,7 +435,7 @@ export function runDoctor(telemetry = false) {
       models: modelsConfigured,
       timestamp: new Date().toISOString(),
     };
-    report.telemetry_note = "Anonymous usage stats — no personal data collected. Disable by omitting --telemetry.";
+    report.telemetry_note = "Anonymous usage stats - no personal data collected. Disable by omitting --telemetry.";
   }
 
   return report;

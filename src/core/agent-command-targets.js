@@ -13,7 +13,7 @@
  * than a per-installer accident:
  *
  *   1. {@link COMMAND_TARGETS} declares every directory + render format.
- *   2. {@link AGENTS_WITHOUT_COMMAND_SURFACE} documents the remaining gaps —
+ *   2. {@link AGENTS_WITHOUT_COMMAND_SURFACE} documents the remaining gaps -
  *      an agent may be in one list or the other, never in neither
  *      (enforced by test/agent-command-targets.test.mjs).
  *   3. Hosts that namespace prompts AND receive files also get
@@ -23,8 +23,8 @@
  * Resolution is pure: `exists`/`listDir` are injected, so the whole registry is
  * unit-testable for any platform without touching the filesystem.
  *
- * @see module:core/agent-commands — the command bodies and render formats
- * @see module:cli/install — installs/removes the resolved targets
+ * @see module:core/agent-commands - the command bodies and render formats
+ * @see module:cli/install - installs/removes the resolved targets
  */
 
 import { existsSync, readdirSync } from "node:fs";
@@ -55,7 +55,7 @@ export const AGENTS_WITHOUT_COMMAND_SURFACE = {
   emacs: "mcp.el exposes prompts directly; there is no command-file convention to write to.",
 };
 
-/** Default resolution context — real filesystem, real HOME. */
+/** Default resolution context - real filesystem, real HOME. */
 const defaultContext = () => ({
   home: homedir(),
   cwd: process.cwd(),
@@ -154,7 +154,7 @@ export const COMMAND_TARGETS = [
     dirs: vscodePromptDirs,
   },
   // NOTE: VS Code also reads workspace prompt files from `.github/prompts`, but
-  // that is a committed, team-shared location — 24 generated files would land in
+  // that is a committed, team-shared location - 24 generated files would land in
   // the user's git status on every install. User-level prompt files already apply
   // to every workspace, so the workspace dir is left to explicit
   // `agent-commands --dir .github/prompts --format prompt`.
@@ -164,7 +164,7 @@ export const COMMAND_TARGETS = [
     format: "args",
     scope: "global",
     // Pi is configured with toolPrefix "none", so its MCP prompts are already
-    // bare `/rule-*` — keep them and add the files.
+    // bare `/rule-*` - keep them and add the files.
     namespacedPrompts: false,
     detect: (ctx) => ctx.exists(ctx.env.PI_CODING_AGENT_DIR || join(ctx.home, ".pi", "agent")),
     dirs: (ctx) => [join(ctx.env.PI_CODING_AGENT_DIR || join(ctx.home, ".pi", "agent"), "prompts")],
@@ -281,7 +281,7 @@ export function agentsWithCleanCommands() {
 
 /**
  * Whether this agent's host namespaces MCP prompts AND gets clean command files
- * instead — i.e. whether the server should hide its prompts for that host.
+ * instead - i.e. whether the server should hide its prompts for that host.
  *
  * @param {string} agent
  * @returns {boolean}
@@ -294,9 +294,9 @@ export function suppressesMcpPrompts(agent) {
  * Resolve command targets to concrete directories.
  *
  * @param {object} [options]
- * @param {string} [options.agent] — only this agent (gates are skipped: an
+ * @param {string} [options.agent] - only this agent (gates are skipped: an
  *   explicit install targets the agent even if nothing is detected yet)
- * @param {boolean} [options.detectedOnly] — only agents present on this machine
+ * @param {boolean} [options.detectedOnly] - only agents present on this machine
  * @param {string} [options.home] @param {string} [options.cwd]
  * @param {string} [options.platform] @param {object} [options.env]
  * @param {(path: string) => boolean} [options.exists]

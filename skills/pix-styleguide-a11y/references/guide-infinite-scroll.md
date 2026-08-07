@@ -4,7 +4,7 @@
 
 ## Core Rules
 
-1. **Load More Button:** Prefer a "Load More" button over automatic scroll fetching — auto-fetching traps keyboard users from reaching the footer.
+1. **Load More Button:** Prefer a "Load More" button over automatic scroll fetching - auto-fetching traps keyboard users from reaching the footer.
 2. **Focus Management:** When new items load, manage focus if it was on a trigger, or announce loading via `aria-live`.
 3. **Footer Access:** Ensure keyboard users can navigate past the feed.
 4. **Simple Pointer Alternative:** Provide a single-click alternative to scroll-based loading.

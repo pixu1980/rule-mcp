@@ -16,14 +16,14 @@ tags:
 frameworks: [all]
 ---
 
-# rule-backend-nestjs — NestJS Best Practices
+# rule-backend-nestjs - NestJS Best Practices
 
 ## NestJS Architecture
 
-- **Modular by default** — one module per domain. Never create a single monolithic module
+- **Modular by default** - one module per domain. Never create a single monolithic module
 - Feature modules with: `Module`, `Controller`, `Service`, `Dto`, `Entity/Model`
 - Shared modules for cross-cutting concerns (auth, logger, database)
-- Use `@Global()` sparingly — prefer explicit imports
+- Use `@Global()` sparingly - prefer explicit imports
 
 ```typescript
 @Module({
@@ -37,16 +37,16 @@ export class UsersModule {}
 
 ## NestJS Controllers
 
-- Lean controllers — route + validate + delegate to service. No business logic
+- Lean controllers - route + validate + delegate to service. No business logic
 - Use `@Body()`, `@Param()`, `@Query()` DTOs with `class-validator`
 - Consistent REST endpoint naming: `/api/v1/resources`
 - Version APIs via URL prefix or header
 
 ## NestJS Providers & Services
 
-- Single responsibility per service — inject repositories, not other services directly
+- Single responsibility per service - inject repositories, not other services directly
 - Use `@Injectable()` for all providers
-- Avoid circular dependencies — restructure modules if detected
+- Avoid circular dependencies - restructure modules if detected
 - Use `OnModuleInit` / `OnModuleDestroy` for lifecycle hooks
 
 ## NestJS Guards & Interceptors
@@ -69,7 +69,7 @@ export class TransformInterceptor<T> implements NestInterceptor<T, ApiResponse<T
 
 - Prefer `TypeORM` or `MikroORM` for relational databases
 - `@Entity()` with explicit table names in plural
-- Migrations for schema changes — never `synchronize: true` in production
+- Migrations for schema changes - never `synchronize: true` in production
 - Use transactions with `@Transactional()` or `QueryRunner`
 
 ## NestJS GraphQL Integration
@@ -87,6 +87,6 @@ export class TransformInterceptor<T> implements NestInterceptor<T, ApiResponse<T
 
 ## See also
 
-- [rule](../rule/SKILL.md) — Central skill index and dispatcher
-- [rule-backend](../rule-backend/SKILL.md) — Backend umbrella
-- [rule-data-postgresql](../rule-data-postgresql/SKILL.md) — PostgreSQL
+- [rule](../rule/SKILL.md) - Central skill index and dispatcher
+- [rule-backend](../rule-backend/SKILL.md) - Backend umbrella
+- [rule-data-postgresql](../rule-data-postgresql/SKILL.md) - PostgreSQL

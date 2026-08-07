@@ -90,7 +90,7 @@ project-root/
 
 ## Step-by-step scaffolding instructions
 
-### Step 1 — Generate baseline configuration
+### Step 1 - Generate baseline configuration
 
 Create:
 
@@ -100,13 +100,13 @@ Create:
 - `.env.example` with runtime variables for providers and server startup
 - `initEnv.ts` to validate and normalize env variables
 
-### Step 2 — Generate Express bootstrap files
+### Step 2 - Generate Express bootstrap files
 
 - `src/index.ts` must be the single backend entrypoint.
 - Register JSON parser, auth middleware (if configured), and `cors`.
 - Register API routes and global error middleware from `src/common/middleware/error-handler.ts`.
 
-### Step 3 — Generate mandatory backend modules
+### Step 3 - Generate mandatory backend modules
 
 - Generate all folders under `src/` listed in the mandatory structure.
 - Ensure registries (`agent`, `provider`, `tool`) are implemented and wired in the runtime.
@@ -129,27 +129,27 @@ app.get("/health", (_req: Request, res: Response) => {
 });
 ```
 
-### Step 4 — Generate mandatory scripts and tests
+### Step 4 - Generate mandatory scripts and tests
 
 - Create `scripts/` folder with `create-agent.ts` and `create-tool.ts` scripts copied from `assets/templates/scripts/` of this skill.
 - `scripts/create-agent.ts` must generate new agent module files under `src/agents`.
 - `scripts/create-tool.ts` must generate new tool module files under `src/tools`.
 - Generate tests under `tests/` for runner, memory, and registries.
 
-### Step 5 — Apply standards
+### Step 5 - Apply standards
 
 - Testing guardrails: use `testing-standards` rule
 - Type safety: use `typescript` rule
 - Docker: use `docker-standards` and `docker` skills
 - Docs: use `documentation` rule and `documentation` skill
 
-### Step 6 — Finalize
+### Step 6 - Finalize
 
 - Generate `.gitlab-ci.yml` using `gitlab-ci` skill
 - Run seed before first start
 - Verify tests and build
 
-### Step 7 — Final validation
+### Step 7 - Final validation
 
 - Verify backend starts with `pnpm run dev`
 - Verify TypeScript build with `pnpm run build`
@@ -207,7 +207,7 @@ const prefs = await get("user-preferences");
 
 ## See also
 
-- [rule](../rule/SKILL.md) — Central skill index and dispatcher
-- [rule-backend](../rule-backend/SKILL.md) — Backend skill index
-- [rule-toolchain-project](../rule-toolchain-project/SKILL.md) — Project configuration baseline
-- [rule-devops-testing](../rule-devops-testing/SKILL.md) — Testing and coverage
+- [rule](../rule/SKILL.md) - Central skill index and dispatcher
+- [rule-backend](../rule-backend/SKILL.md) - Backend skill index
+- [rule-toolchain-project](../rule-toolchain-project/SKILL.md) - Project configuration baseline
+- [rule-devops-testing](../rule-devops-testing/SKILL.md) - Testing and coverage

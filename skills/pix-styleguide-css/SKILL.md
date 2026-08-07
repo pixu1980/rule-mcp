@@ -50,13 +50,13 @@ frameworks: [all]
 }
 ```
 
-## Selector Strategy — Element and Attribute Selectors Only
+## Selector Strategy - Element and Attribute Selectors Only
 
 Never use CSS classes. Style solely with element selectors and attribute selectors.
 Priority order:
 
-1. **Element selectors** — `button`, `input`, `h2`, `section`, `nav`, custom element tags
-2. **Attribute selectors** — `[data-part="header"]`, `[data-state-completed="done"]`, `[aria-hidden="true"]`, `[type="submit"]`
+1. **Element selectors** - `button`, `input`, `h2`, `section`, `nav`, custom element tags
+2. **Attribute selectors** - `[data-part="header"]`, `[data-state-completed="done"]`, `[aria-hidden="true"]`, `[type="submit"]`
 
 For internal component structure, use `data-part="name"` attributes to identify child elements.
 For state-driven styling, use `data-*` boolean or enumerated attributes.
@@ -103,17 +103,17 @@ my-component [data-part="input"] {
 
 Key advantages of avoiding classes:
 
-- **Zero specificity battles** — only element (0,0,1) and attribute (0,1,0) selectors
-- **Semantic alignment** — the HTML structure tells you what each element is
-- **No naming debates** — no BEM, SMACSS, ITCSS, or any naming convention needed
-- **Simpler selectors** — shallow, scoped, easy to override
+- **Zero specificity battles** - only element (0,0,1) and attribute (0,1,0) selectors
+- **Semantic alignment** - the HTML structure tells you what each element is
+- **No naming debates** - no BEM, SMACSS, ITCSS, or any naming convention needed
+- **Simpler selectors** - shallow, scoped, easy to override
 
 ### Rules for data-part attributes
 
 - Use `data-part="role"` to identify child elements within a component
 - Use semantic HTML elements first, `data-part` second
 - Keep part names short and descriptive: `header`, `body`, `input`, `label`, `list`, `item`
-- Don't use `data-part` on the custom element itself — use the element tag selector
+- Don't use `data-part` on the custom element itself - use the element tag selector
 
 ### Rules for state attributes
 
@@ -407,7 +407,7 @@ my-component {
 - Keep CSS ordering aligned with markup order.
 - Avoid ids inside reusable components.
 
-## Documentation — CSS Comments (MANDATORY)
+## Documentation - CSS Comments (MANDATORY)
 
 > **Every CSS file MUST have clear, meaningful comments.** No exceptions.
 > This is enforced by rule guardrails (`pix_check` includes `css-comments-required`).
@@ -539,5 +539,5 @@ Use clear section headers to group related rules:
 
 ## See also
 
-- [rule-styleguide](../rule-styleguide/SKILL.md) — Style guides index
-- [rule](../rule/SKILL.md) — Central skill index
+- [rule-styleguide](../rule-styleguide/SKILL.md) - Style guides index
+- [rule](../rule/SKILL.md) - Central skill index

@@ -10,7 +10,7 @@ tags:
 frameworks: [node, worker-threads]
 ---
 
-# rule-backend-workers — Node.js Concurrency & Worker Threads
+# rule-backend-workers - Node.js Concurrency & Worker Threads
 
 This skill helps you decide **when and how** to split CPU-bound JavaScript off the main thread in Node.js backends. It covers the event loop mental model, `worker_threads`, worker pools (`piscina`), and `cluster`.
 
@@ -18,11 +18,11 @@ This skill helps you decide **when and how** to split CPU-bound JavaScript off t
 
 ## The Core Model: One JS Thread, an Event Loop, and libuv
 
-Node.js executes your **JavaScript on a single thread**, driven by the event loop. Concurrency comes from **outsourcing the waiting** — libuv hands blocking I/O to a background thread pool — not from running your JS in parallel.
+Node.js executes your **JavaScript on a single thread**, driven by the event loop. Concurrency comes from **outsourcing the waiting** - libuv hands blocking I/O to a background thread pool - not from running your JS in parallel.
 
 | What                         | Where it runs                           | Parallel?              |
 | ---------------------------- | --------------------------------------- | ---------------------- |
-| Your JavaScript              | Single thread (event loop)              | ❌ No — one call stack |
+| Your JavaScript              | Single thread (event loop)              | ❌ No - one call stack |
 | fs, dns.lookup, crypto, zlib | libuv thread pool (default 4, max 1024) | ✅ Yes (C-level)       |
 | Network sockets              | OS kernel (epoll/kqueue/IOCP)           | ✅ Yes (OS-level)      |
 
@@ -65,7 +65,7 @@ Node.js executes your **JavaScript on a single thread**, driven by the event loo
 Three-tier priority: **process.nextTick → promise microtasks → macrotasks** (timers, I/O, setImmediate).
 
 ```js
-// Run inside an I/O callback — order is deterministic
+// Run inside an I/O callback - order is deterministic
 const fs = require("node:fs");
 
 fs.readFile(__filename, () => {
@@ -77,7 +77,7 @@ fs.readFile(__filename, () => {
 // Prints: 4, 3, 2, 1
 ```
 
-> `setImmediate()` always executes before a timer when both are scheduled within an I/O cycle. At the top level, the order is non-deterministic — don't rely on it outside an I/O callback.
+> `setImmediate()` always executes before a timer when both are scheduled within an I/O cycle. At the top level, the order is non-deterministic - don't rely on it outside an I/O callback.
 
 ---
 
@@ -87,7 +87,7 @@ fs.readFile(__filename, () => {
 | ------------- | ------------------------------------------------------ |
 | Default size  | 4 threads                                              |
 | Maximum size  | 1024 (`UV_THREADPOOL_SIZE`)                            |
-| Preallocation | On first use — must set env var **before** Node starts |
+| Preallocation | On first use - must set env var **before** Node starts |
 
 ### What Uses It
 
@@ -98,12 +98,12 @@ fs.readFile(__filename, () => {
 
 ### What Does NOT Use It
 
-- ❌ **Network I/O** — handled by OS polling (epoll/kqueue/IOCP), surfaces in poll phase
-- ❌ `dns.resolve*()` — uses c-ares, bypasses the pool
-- ❌ **Your JavaScript** — the pool runs C-level operations, never your JS
+- ❌ **Network I/O** - handled by OS polling (epoll/kqueue/IOCP), surfaces in poll phase
+- ❌ `dns.resolve*()` - uses c-ares, bypasses the pool
+- ❌ **Your JavaScript** - the pool runs C-level operations, never your JS
 
 ```bash
-# Set before Node starts — the pool is preallocated on first use.
+# Set before Node starts - the pool is preallocated on first use.
 UV_THREADPOOL_SIZE=8 node server.js
 ```
 
@@ -113,18 +113,18 @@ UV_THREADPOOL_SIZE=8 node server.js
 
 ## Worker Threads: Real Parallelism for CPU-Bound JS
 
-Worker threads run JavaScript **in parallel** on separate threads. Each worker is a **separate V8 isolate** with its own event loop and libuv loop — that's why workers can't share ordinary objects and must communicate by message passing.
+Worker threads run JavaScript **in parallel** on separate threads. Each worker is a **separate V8 isolate** with its own event loop and libuv loop - that's why workers can't share ordinary objects and must communicate by message passing.
 
-> **Myth**: "Workers are just OS threads." Each is a full V8 isolate + event loop + libuv loop — no shared globals, no shared closure scope.
+> **Myth**: "Workers are just OS threads." Each is a full V8 isolate + event loop + libuv loop - no shared globals, no shared closure scope.
 
 ### When to Use Workers
 
 | Scenario                       | Tool                                                           |
 | ------------------------------ | -------------------------------------------------------------- |
-| I/O-bound (network, DB, files) | `async/await` — Node's built-in async I/O is already efficient |
-| CPU-bound JavaScript           | `worker_threads` — offload computation off the main thread     |
-| Already-async crypto/fs/zlib   | ❌ Do NOT wrap in a worker — already runs on libuv pool        |
-| High-frequency worker creation | Worker **pool** (piscina) — reuse, don't recreate              |
+| I/O-bound (network, DB, files) | `async/await` - Node's built-in async I/O is already efficient |
+| CPU-bound JavaScript           | `worker_threads` - offload computation off the main thread     |
+| Already-async crypto/fs/zlib   | ❌ Do NOT wrap in a worker - already runs on libuv pool        |
+| High-frequency worker creation | Worker **pool** (piscina) - reuse, don't recreate              |
 
 ### Basic Pattern
 
@@ -151,7 +151,7 @@ parentPort.postMessage(fib(workerData.n));
 ### Single-File Worker with isMainThread
 
 ```js
-// fib.js — same file, two roles
+// fib.js - same file, two roles
 const { isMainThread, parentPort, workerData } = require("node:worker_threads");
 
 function fib(n) {
@@ -171,16 +171,16 @@ if (isMainThread) {
 
 ### Message Passing & Isolation
 
-Data through `workerData` or `postMessage()` is **deep-copied** via the HTML structured clone algorithm — functions, class prototypes, and live references don't survive.
+Data through `workerData` or `postMessage()` is **deep-copied** via the HTML structured clone algorithm - functions, class prototypes, and live references don't survive.
 
 The only way to share memory:
 
 ```js
-// SharedArrayBuffer — read/write from both threads
+// SharedArrayBuffer - read/write from both threads
 const shared = new SharedArrayBuffer(1024);
 const view = new Int32Array(shared);
 
-// Transferring an ArrayBuffer — moves ownership (zero-copy)
+// Transferring an ArrayBuffer - moves ownership (zero-copy)
 worker.postMessage(buffer, [buffer]);
 // buffer is now empty in the sender
 ```
@@ -266,7 +266,7 @@ if (cluster.isPrimary) {
     cluster.fork();
   }
   cluster.on("exit", (worker) => {
-    console.log(`Worker ${worker.process.pid} died — restarting`);
+    console.log(`Worker ${worker.process.pid} died - restarting`);
     cluster.fork();
   });
 } else {
@@ -289,14 +289,14 @@ if (cluster.isPrimary) {
 ### The Failure Mode
 
 ```js
-// ❌ server-blocking.js — /health stalls while fib runs
+// ❌ server-blocking.js - /health stalls while fib runs
 app.get("/report", (req, res) => {
   res.json({ value: fib(45) }); // blocks the event loop for seconds
 });
 app.get("/health", (req, res) => res.send("ok"));
 ```
 
-**Production signature**: many concurrent users stall at the same wall-clock instant — not one user's bad network.
+**Production signature**: many concurrent users stall at the same wall-clock instant - not one user's bad network.
 
 ### Detection
 
@@ -338,11 +338,11 @@ piscina
 
 | Situation                                    | Solution                                                                                                  |
 | -------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
-| I/O-bound (network, DB, files)               | `async/await` — the thread pool + OS already give you concurrency                                         |
+| I/O-bound (network, DB, files)               | `async/await` - the thread pool + OS already give you concurrency                                         |
 | Route does heavy sync computation            | Offload to **worker thread** behind a **pool** (piscina)                                                  |
 | Saturating one core under concurrent traffic | **Cluster** across cores (or multiple container replicas)                                                 |
 | Tempted to bump `UV_THREADPOOL_SIZE`         | Only if I/O-bound on pool-backed ops (lots of concurrent fs/crypto). Will **never** speed up CPU-bound JS |
-| Already-async crypto, fs, zlib               | ❌ Don't wrap in a worker — already runs on libuv pool                                                    |
+| Already-async crypto, fs, zlib               | ❌ Don't wrap in a worker - already runs on libuv pool                                                    |
 
 ### Tool Comparison
 
@@ -359,23 +359,23 @@ piscina
 
 ### Worker Threads
 
-- ✅ Use a **pool** (piscina) — never spawn per-request
+- ✅ Use a **pool** (piscina) - never spawn per-request
 - ✅ Workers for **CPU-bound synchronous** JS only
 - ✅ `minThreads` + `maxThreads` tuned to available cores
-- ✅ Handle `worker.on('error')` — unhandled errors crash the process
+- ✅ Handle `worker.on('error')` - unhandled errors crash the process
 - ❌ Don't wrap already-async `fs`/`crypto`/`zlib` in a worker
-- ❌ Don't pass functions or class instances via `postMessage` — structured clone drops them
+- ❌ Don't pass functions or class instances via `postMessage` - structured clone drops them
 
 ### Main Thread
 
-- ✅ Keep the event loop free — no synchronous CPU work in request handlers
+- ✅ Keep the event loop free - no synchronous CPU work in request handlers
 - ✅ `monitorEventLoopDelay` for production observability
 - ✅ `UV_THREADPOOL_SIZE` set before Node starts, not mutated at runtime
 
 ### Cluster
 
 - ✅ Fork one worker per CPU core
-- ✅ Handle `exit` event — restart dead workers
+- ✅ Handle `exit` event - restart dead workers
 - ✅ Use a process manager (PM2) or container replicas in production
 
 ---
@@ -384,12 +384,12 @@ piscina
 
 ```
 ┌──────────────────────────────────────────────────────────────────┐
-│  rule-backend-workers — Node.js Concurrency & Workers             │
+│  rule-backend-workers - Node.js Concurrency & Workers             │
 │                                                                  │
 │  Event loop:  6 phases, microtasks drain between macrotasks     │
 │  libuv pool:  4 threads (default), max 1024, C-level only       │
 │  Workers:     Separate V8 isolate + event loop, CPU-bound JS    │
-│  Pool:        piscina — reuse workers, tune to CPU count        │
+│  Pool:        piscina - reuse workers, tune to CPU count        │
 │  Cluster:     Fork processes, share socket, scale I/O           │
 │                                                                  │
 │  Decision:                                                       │
@@ -406,8 +406,8 @@ piscina
 
 ## See also
 
-- [rule](../rule/SKILL.md) — Central skill index and dispatcher
-- [rule-backend](../rule-backend/SKILL.md) — Backend skill index
-- [rule-frontend-workers](../rule-frontend-workers/SKILL.md) — Browser Web Workers skill
+- [rule](../rule/SKILL.md) - Central skill index and dispatcher
+- [rule-backend](../rule-backend/SKILL.md) - Backend skill index
+- [rule-frontend-workers](../rule-frontend-workers/SKILL.md) - Browser Web Workers skill
 - [Node.js worker_threads docs](https://nodejs.org/api/worker_threads.html)
 - [Piscina GitHub](https://github.com/piscinajs/piscina)

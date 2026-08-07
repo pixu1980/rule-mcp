@@ -45,7 +45,7 @@ Every component is a class extending `HTMLElement` with a `static {}` block that
 - Registers the stylesheet via `adoptedStyleSheets` API
 
 ```js
-// _TodoItem.js — component file (_ prefix, PascalCase)
+// _TodoItem.js - component file (_ prefix, PascalCase)
 import { html, model } from "../../core/index.js";
 
 // Load CSS as string via top-level await (no build step)
@@ -119,7 +119,7 @@ const store = new Store({ items: [], title: "My App" });
 const tickState = new Signal.State(0, { equals: () => false });
 window.addEventListener("store:change", () => tickState.set(performance.now()));
 
-// 2. Component CSS — external file, loaded as string → adoptedStyleSheets
+// 2. Component CSS - external file, loaded as string → adoptedStyleSheets
 const cssText = await (await fetch(new URL("./_App.css", import.meta.url))).text();
 const sheet = new CSSStyleSheet();
 sheet.replaceSync(cssText);
@@ -180,7 +180,7 @@ my-component {
   padding: 0.5rem 1rem;
 }
 
-/* ❌ FORBIDDEN: CSS classes — use element or [data-part] selectors */
+/* ❌ FORBIDDEN: CSS classes - use element or [data-part] selectors */
 /* .button { } .my-component { } */
 
 /* ❌ AVOID: id for styling */

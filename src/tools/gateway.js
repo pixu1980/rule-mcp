@@ -1,11 +1,11 @@
 /**
  * @module tools/gateway
  *
- * rule_tool_gateway — Single-entry orchestrator tool.
+ * rule_tool_gateway - Single-entry orchestrator tool.
  *
  * Combines routing, evidence loading, and guardrail checking
  * into one atomic server-side operation. The model receives
- * everything in one response — no multi-step hop.
+ * everything in one response - no multi-step hop.
  *
  * Input:  { prompt, code?, files?, path?, framework? }
  * Output: { route, evidence, checkResult?, receipt?, nextTools }
@@ -19,8 +19,8 @@ import { createHash } from "node:crypto";
  * Maps receipt token → { codeHash, binding, skillName, allPass, expiresAt }
  *
  * `binding` records WHAT the receipt proves:
- *   - "content" — legacy: a hash of the checked code, no destination bound
- *   - "files"   — a hash of the ordered (path, content) tuples that were checked
+ *   - "content" - legacy: a hash of the checked code, no destination bound
+ *   - "files"   - a hash of the ordered (path, content) tuples that were checked
  *
  * The two are never interchangeable. A caller that could downgrade a path-bound
  * receipt to the content-only check would simply pick the weaker one.
@@ -34,7 +34,7 @@ const RECEIPT_TTL_MS = 300_000;
  * Canonical digest of a file set: length-prefixed path AND content, in order.
  *
  * The previous digest hashed `contents.join("\n---FILE---\n")`, an in-band
- * separator that made [{a:"X\n---FILE---\nY"}] and [{a:"X"},{b:"Y"}] collide —
+ * separator that made [{a:"X\n---FILE---\nY"}] and [{a:"X"},{b:"Y"}] collide -
  * and it never covered paths at all, so a receipt earned for benign code
  * authorised writing that code to `.git/hooks/pre-commit`. Length prefixes make
  * every field unambiguous; including the path binds the destination.
@@ -124,7 +124,7 @@ function openReceipt(token, now) {
   }
   if (now > entry.expiresAt) {
     receiptStore.delete(token);
-    return { error: "Receipt expired — re-run pix_gateway" };
+    return { error: "Receipt expired - re-run pix_gateway" };
   }
   return { entry };
 }
@@ -145,11 +145,11 @@ export function validateReceipt(token, code, now = Date.now()) {
   // A path-bound receipt must never be checked through the content-only route:
   // that would let the caller drop the destination binding at will.
   if (entry.binding === "files") {
-    return { valid: false, reason: "Receipt is path-bound — validate it against the file set, not the raw code" };
+    return { valid: false, reason: "Receipt is path-bound - validate it against the file set, not the raw code" };
   }
   const codeHash = createHash("sha256").update(code).digest("hex");
   if (codeHash !== entry.codeHash) {
-    return { valid: false, reason: "Code hash mismatch — code was modified after check" };
+    return { valid: false, reason: "Code hash mismatch - code was modified after check" };
   }
   if (!entry.allPass) {
     return { valid: false, allPass: false, reason: "Guardrails did not pass" };
@@ -186,7 +186,7 @@ export function validateApply(token, files, now = Date.now()) {
       return {
         valid: false,
         binding: "files",
-        reason: "File set mismatch — paths, contents, order, or file count differ from what was checked",
+        reason: "File set mismatch - paths, contents, order, or file count differ from what was checked",
       };
     }
   } else {
@@ -195,14 +195,14 @@ export function validateApply(token, files, now = Date.now()) {
         valid: false,
         binding: "content",
         reason:
-          "Content-only receipt cannot authorise a multi-file write — pass `files` to pix_gateway for a path-bound receipt",
+          "Content-only receipt cannot authorise a multi-file write - pass `files` to pix_gateway for a path-bound receipt",
       };
     }
     const codeHash = createHash("sha256")
       .update(String(files[0].content ?? ""))
       .digest("hex");
     if (codeHash !== entry.codeHash) {
-      return { valid: false, binding: "content", reason: "Code hash mismatch — code was modified after check" };
+      return { valid: false, binding: "content", reason: "Code hash mismatch - code was modified after check" };
     }
   }
 
@@ -230,7 +230,7 @@ export async function registerGatewayTool() {
         }),
       )
       .optional()
-      .describe("Files to validate — yields a path-bound receipt, required for multi-file writes"),
+      .describe("Files to validate - yields a path-bound receipt, required for multi-file writes"),
     path: z.string().optional().describe("Project path for framework auto-detection"),
     framework: z
       .string()
@@ -254,7 +254,7 @@ export async function registerGatewayTool() {
         code: { type: "string", description: "Code to validate (single file, legacy)" },
         files: {
           type: "array",
-          description: "Files to validate — yields a path-bound receipt, required for multi-file writes",
+          description: "Files to validate - yields a path-bound receipt, required for multi-file writes",
           items: {
             type: "object",
             properties: {
@@ -383,13 +383,13 @@ export async function registerGatewayTool() {
           lines.push(
             `**Receipt:** \`${receipt}\` (valid 5 min, pass to pix_apply)`,
             fileSet
-              ? "Bound to these exact paths and contents — writing elsewhere is refused."
+              ? "Bound to these exact paths and contents - writing elsewhere is refused."
               : "Content-only receipt: authorises a single-file write. Pass `files` here for a path-bound receipt.",
           );
         } else {
           lines.push(`❌ ${failCount} guardrails FAIL. Fix and re-check via pix_gateway.`);
           for (const f of failed) {
-            lines.push(`- **${f.id}**${f.file ? ` (${f.file})` : ""}: ${f.label} — ${f.suggestion}`);
+            lines.push(`- **${f.id}**${f.file ? ` (${f.file})` : ""}: ${f.label} - ${f.suggestion}`);
           }
         }
         lines.push("");

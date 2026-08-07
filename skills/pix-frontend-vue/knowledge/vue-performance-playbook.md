@@ -10,7 +10,7 @@ Vue 3 performance is usually about three questions:
 2. Which components re-ran their render because of that change?
 3. Was that re-render necessary?
 
-## Pattern 1 — Reactive container choice
+## Pattern 1 - Reactive container choice
 
 `ref()` wraps a value in a reactive object with `.value`. `reactive()` makes an object deeply reactive. `shallowRef()` / `shallowReactive()` skip deep proxy wrapping.
 
@@ -36,7 +36,7 @@ Fix: use `toRefs()`:
 const { x, y } = toRefs(state); // ✅ x and y are Refs
 ```
 
-## Pattern 2 — Watch discipline
+## Pattern 2 - Watch discipline
 
 ### When to use what
 
@@ -45,7 +45,7 @@ const { x, y } = toRefs(state); // ✅ x and y are Refs
 | Derive state from reactive state       | `computed()`    |
 | Fire side effect when deps change      | `watch()`       |
 | Fire side effect that auto-tracks deps | `watchEffect()` |
-| Fire side effect on every render       | No — redesign   |
+| Fire side effect on every render       | No - redesign   |
 
 ### Watch loop prevention
 
@@ -73,7 +73,7 @@ onUnmounted(stop); // ✅ Manual cleanup
 // or let Vue auto-stop when component unmounts
 ```
 
-## Pattern 3 — Computed before watch
+## Pattern 3 - Computed before watch
 
 Computed values are lazy, cached, and only re-evaluate when their dependencies change. They are always preferred over `watch` for derived state.
 
@@ -90,9 +90,9 @@ const search = ref("");
 const results = computed(() => items.filter((i) => i.name.includes(search.value)));
 ```
 
-Note: `computed` is reactive — passing `results.value` to a child component will re-render only when `results` changes.
+Note: `computed` is reactive - passing `results.value` to a child component will re-render only when `results` changes.
 
-## Pattern 4 — State locality
+## Pattern 4 - State locality
 
 A `ref()` or `reactive()` update causes the owning component and its children to re-render.
 
@@ -105,7 +105,7 @@ A parent owns `search` state. A heavy `<Dashboard>` sibling re-renders on every 
 Move the state into the component that renders the search input and results.
 
 ```vue
-<!-- App.vue — no search state -->
+<!-- App.vue - no search state -->
 <script setup>
 import SearchSection from "./SearchSection.vue";
 import HeavyDashboard from "./HeavyDashboard.vue";
@@ -116,7 +116,7 @@ import HeavyDashboard from "./HeavyDashboard.vue";
 </template>
 ```
 
-## Pattern 5 — List keys
+## Pattern 5 - List keys
 
 Vue uses `:key` to match vnodes across re-renders. Changing list order with index keys causes state to be reused on the wrong DOM nodes.
 
@@ -130,7 +130,7 @@ Vue uses `:key` to match vnodes across re-renders. Changing list order with inde
 
 Only when the list is truly static: no insert, delete, reorder, filter, sort, and no stateful children (inputs, focus, animations).
 
-## Pattern 6 — Key reset
+## Pattern 6 - Key reset
 
 Changing `:key` destroys and recreates the component. This is the cleanest way to reset form state, restart animations, or discard local state when the selected entity changes.
 
@@ -138,7 +138,7 @@ Changing `:key` destroys and recreates the component. This is the cleanest way t
 <UserForm :key="selectedUserId" :user-id="selectedUserId" />
 ```
 
-## Pattern 7 — Provide/inject over prop drilling
+## Pattern 7 - Provide/inject over prop drilling
 
 Props should flow from parent to direct child. When data must reach deeply nested components, use `provide`/`inject`.
 
@@ -159,7 +159,7 @@ const { theme, setTheme } = inject("theme");
 - Consider `readonly()` for exposed state to prevent unintended mutations
 - Default inject values for optional context
 
-## Pattern 8 — Component responsibility
+## Pattern 8 - Component responsibility
 
 ### Signs of mixed responsibility
 
@@ -192,7 +192,7 @@ export function useUserData(userId) {
 }
 ```
 
-## Pattern 9 — Teleport
+## Pattern 9 - Teleport
 
 `<Teleport to="body">` moves DOM nodes to a different part of the DOM tree. This is essential for modals, tooltips, dropdowns, and overlays that might be clipped by `overflow: hidden` or z-index stacking contexts on ancestors.
 
@@ -206,7 +206,7 @@ export function useUserData(userId) {
 </Teleport>
 ```
 
-## Pattern 10 — Template refs lifecycle
+## Pattern 10 - Template refs lifecycle
 
 Template refs are set after the component mounts and are cleared before unmounting. They are `null` during the initial render, `onBeforeUpdate`, and `onUpdated`.
 

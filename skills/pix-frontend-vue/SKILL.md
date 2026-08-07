@@ -8,18 +8,18 @@ tags:
 frameworks: [vue]
 ---
 
-# rule-frontend-vue — Vue 3 with rule Principles
+# rule-frontend-vue - Vue 3 with rule Principles
 
 This skill adapts [rule-styleguide](../rule-styleguide/SKILL.md) and
 [rule-frontend-vanilla-reactive](../rule-frontend-vanilla-reactive/SKILL.md) to **Vue 3 Composition API**.
 
 ## Core Rules (inherited from rule skills)
 
-1. **Zero CSS classes** — only element selectors + `[data-part="..."]` + `[data-*]` attribute selectors
-2. **Zero inline styles** — all styling in external `.css` files via `adoptedStyleSheets`
-3. **Semantic HTML is mandatory** — never `<div>` where a semantic element exists
-4. **Barrel pattern** — every component folder has `index.js`
-5. **No scoped `<style>` blocks** — external `.css` files only, loaded at module scope
+1. **Zero CSS classes** - only element selectors + `[data-part="..."]` + `[data-*]` attribute selectors
+2. **Zero inline styles** - all styling in external `.css` files via `adoptedStyleSheets`
+3. **Semantic HTML is mandatory** - never `<div>` where a semantic element exists
+4. **Barrel pattern** - every component folder has `index.js`
+5. **No scoped `<style>` blocks** - external `.css` files only, loaded at module scope
 6. **No utility CSS frameworks** (Tailwind, UnoCSS, etc.)
 
 ## File Tree Convention
@@ -110,7 +110,7 @@ article[data-part="item"][data-state-completed="done"] {
 | `adoptedStyleSheets`          | `onMounted` to adopt once         |
 | `data-part="..."`             | `:data-part="..."` (Vue binding)  |
 
-## CSS Loading — Module Scope
+## CSS Loading - Module Scope
 
 Always load CSS at module scope (outside `<script setup>`), not in `<style>` blocks.
 
@@ -128,7 +128,7 @@ onMounted(() => {
 </script>
 
 <template>...</template>
-<!-- NO <style> block — use external .css file -->
+<!-- NO <style> block - use external .css file -->
 ```
 
 ## Lists and Conditionals
@@ -185,9 +185,9 @@ Run `pix_frontend_vue` mode=check or `pix_check` to validate code against these 
 Key rules enforced: **no-css-classes**, **no-inline-styles**, **semantic-html**,
 **external-css** (external .css files), **barrel-file**, **data-part**,
 **vue-no-class-binding** (use `data-part` not `:class`),
-**jsdoc-required** (every JS/TS file MUST have complete JSDoc — see rule-styleguide → javascript.md),
-**css-comments-required** (every CSS file MUST have file-level + section comments — see rule-styleguide → css.md),
-**a11y-test-required** (every project MUST have Playwright + @axe-core/playwright a11y tests in `tests/a11y/` — see rule-styleguide → a11y.md → Automated Testing).
+**jsdoc-required** (every JS/TS file MUST have complete JSDoc - see rule-styleguide → javascript.md),
+**css-comments-required** (every CSS file MUST have file-level + section comments - see rule-styleguide → css.md),
+**a11y-test-required** (every project MUST have Playwright + @axe-core/playwright a11y tests in `tests/a11y/` - see rule-styleguide → a11y.md → Automated Testing).
 
 ## Project Scaffolding
 
@@ -216,7 +216,7 @@ This section extends rule-frontend-vue with a structured performance review meth
 
 ### Operating principles
 
-1. **Reactivity is automatic — understand its boundaries.** Vue 3's Proxy-based reactivity tracks access, not assignment. Destructuring, spreading, or conditionally accessing reactive state can break tracking.
+1. **Reactivity is automatic - understand its boundaries.** Vue 3's Proxy-based reactivity tracks access, not assignment. Destructuring, spreading, or conditionally accessing reactive state can break tracking.
 
 2. **Prefer structural fixes before micro-optimizations.** Check reactive dependencies, component boundaries, and watcher discipline before adding `v-once`, `v-memo`, or `shallowRef`.
 
@@ -241,7 +241,7 @@ This section extends rule-frontend-vue with a structured performance review meth
 
 ```ts
 // ❌ reactive with primitive (breaks reactivity)
-const count = reactive(0); // Never reactive — use ref
+const count = reactive(0); // Never reactive - use ref
 
 // ✅ ref for primitives
 const count = ref(0);
@@ -255,7 +255,7 @@ function updateList(data) {
 
 Rule: _Use `ref` for primitives, `reactive` for deep objects, `shallowRef` for large immutable data._
 
-#### 2. Watch discipline — watch vs watchEffect
+#### 2. Watch discipline - watch vs watchEffect
 
 Use `watch` when you need the previous value or explicit dependencies. Use `watchEffect` for auto-tracking side effects. Never mutate state inside `watch` that triggers another watch (loop risk).
 
@@ -303,7 +303,7 @@ Move `ref()` / `reactive()` down to the component that actually needs it. Heavy 
 
 ```vue
 <script setup>
-// ❌ State in App.vue — all children re-render on input
+// ❌ State in App.vue - all children re-render on input
 const search = ref("");
 </script>
 
@@ -318,7 +318,7 @@ Rule: _Keep reactive state as close as possible to where it is used. Lift via `p
 #### 5. Always use `:key` with `v-for`
 
 ```vue
-<!-- ❌ Index key — state, focus, animations break on reorder -->
+<!-- ❌ Index key - state, focus, animations break on reorder -->
 <li v-for="(item, i) in items" :key="i">{{ item.title }}</li>
 
 <!-- ✅ Stable ID key -->
@@ -331,7 +331,7 @@ Rule: _If the list can change, never use index as key._
 
 #### 6. Use `key` for intentional component reset
 
-Changing `:key` unmounts and remounts a component — useful for forms, animations, and resetting internal state.
+Changing `:key` unmounts and remounts a component - useful for forms, animations, and resetting internal state.
 
 ```vue
 <UserForm :key="userId" :user-id="userId" />
@@ -339,7 +339,7 @@ Changing `:key` unmounts and remounts a component — useful for forms, animatio
 
 Rule: _If you want to fully reset a component, change its key instead of manually reseting every internal value._
 
-#### 7. Avoid prop drilling — use provide/inject or a store
+#### 7. Avoid prop drilling - use provide/inject or a store
 
 Deep prop chains are brittle. Use `provide`/`inject` for shared concerns (theme, user, locale).
 
@@ -388,7 +388,7 @@ Rule: _Split when different changes affect different parts._
 
 Rule: _Teleport overlays to `body` to avoid stacking context bugs._
 
-#### 10. Template refs — access after mount, not during render
+#### 10. Template refs - access after mount, not during render
 
 Use `onMounted` or `nextTick` to access template refs.
 
@@ -447,7 +447,7 @@ Rule: _Template refs are `null` during render. Access them after mount._
 - Use `@vee-validate/zod` for schema integration
 - Prefer Composition API (`useForm`) over Options API
 
-### Step 1 — Define form with validation
+### Step 1 - Define form with validation
 
 ```vue
 <script setup lang="ts">
@@ -501,6 +501,6 @@ const onSubmit = handleSubmit(async (values) => {
 
 ## See also
 
-- [rule](../rule/SKILL.md) — Central skill index and dispatcher
-- [rule-frontend](../rule-frontend/SKILL.md) — Frontend skill index
-- [rule-styleguide](../rule-styleguide/SKILL.md) — Shared frontend standards
+- [rule](../rule/SKILL.md) - Central skill index and dispatcher
+- [rule-frontend](../rule-frontend/SKILL.md) - Frontend skill index
+- [rule-styleguide](../rule-styleguide/SKILL.md) - Shared frontend standards

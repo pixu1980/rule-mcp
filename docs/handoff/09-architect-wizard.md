@@ -1,84 +1,84 @@
-# Handoff Fase 9 — Architect e wizard
+# Handoff Phase 9 - Architect and wizard
 
-**Per:** deepseek-v4-flash  
-**Da:** gpt-5.6-sol (audit + remediation fasi 1-6)  
-**Data:** 2026-07-15  
-**File interessati:** `skills/rule-architect/`, `skills/rule-architect-cli/`, `skills/rule-architect-web/`, `src/tools/architect.js`
-
----
-
-## Contesto (cosa è già successo)
-
-Il working tree ha subito una migrazione parziale del wizard architect:
-
-- `skills/rule-architect/assets/context-server/` è stato **cancellato** (38 file deleted)
-- Sono comparsi nuovi file **untracked:** `skills/rule-architect-cli/`, `skills/rule-architect-web/`, `skills/rule-architect/generator.mjs`, `skills/rule-architect/validators.mjs`, `skills/rule-architect/wizard-spec.json`, `skills/rule-architect/placeholders.json`, `skills/rule-architect/templates.json`
-- Il tool `rule_tool_architect` punta ancora al vecchio `context-server.mjs` (non esiste più)
-- `rule_tool_architect check` è l'unica modalità che crasha nella matrice 402-call
-
-**⚠️ IMPORTANTE:** Non cancellare né sovrascrivere i file untracked dell'autore. Completare la migrazione o documentare lo stato.
+**To:** deepseek-v4-flash  
+**From:** gpt-5.6-sol (audit + remediation phases 1-6)  
+**Date:** 2026-07-15  
+**Files affected:** `skills/rule-architect/`, `skills/rule-architect-cli/`, `skills/rule-architect-web/`, `src/tools/architect.js`
 
 ---
 
-## Cosa fare
+## Context (what already happened)
 
-### 9.1 — Completare la migrazione wizard
+The working tree underwent a partial architect wizard migration:
 
-Due opzioni:
+- `skills/rule-architect/assets/context-server/` was **deleted** (38 files deleted)
+- New **untracked** files appeared: `skills/rule-architect-cli/`, `skills/rule-architect-web/`, `skills/rule-architect/generator.mjs`, `skills/rule-architect/validators.mjs`, `skills/rule-architect/wizard-spec.json`, `skills/rule-architect/placeholders.json`, `skills/rule-architect/templates.json`
+- The `rule_tool_architect` tool still points to the old `context-server.mjs` (no longer exists)
+- `rule_tool_architect check` is the only mode that crashes in the 402-call matrix
 
-**Opzione A — Completare il nuovo wizard (consigliata):**
+**⚠️ IMPORTANT:** Do not delete or overwrite the author's untracked files. Complete the migration or document the state.
 
-1. Agganciare `src/tools/architect.js` al nuovo `rule-architect-cli` (CLI) o `rule-architect-web` (browser)
-2. Aggiornare `rule_tool_architect` tool in tutte le modalità (full, summary, search, guardrails, check, tldr)
-3. Rimuovere riferimenti al vecchio `context-server.mjs`
+---
 
-**Opzione B — Ripristinare il vecchio wizard:**
+## What to do
+
+### 9.1 - Complete the wizard migration
+
+Two options:
+
+**Option A - Complete the new wizard (recommended):**
+
+1. Hook `src/tools/architect.js` to the new `rule-architect-cli` (CLI) or `rule-architect-web` (browser)
+2. Update `rule_tool_architect` tool in all modes (full, summary, search, guardrails, check, tldr)
+3. Remove references to the old `context-server.mjs`
+
+**Option B - Restore the old wizard:**
 
 1. `git checkout HEAD -- skills/rule-architect/assets/`
-2. Rimuovere i file untracked del nuovo wizard
+2. Remove the untracked files of the new wizard
 
-**In entrambi i casi:** il tool `rule_tool_architect` deve funzionare in tutte le 6 modalità.
+**In both cases:** the `rule_tool_architect` tool must work in all 6 modes.
 
-### 9.2 — Sanitizzare il wizard web (`skills/rule-architect-web/`)
+### 9.2 - Sanitize the web wizard (`skills/rule-architect-web/`)
 
-Se si sceglie Opzione A, il wizard web ha problemi di sicurezza bloccanti:
+If Option A is chosen, the web wizard has blocking security issues:
 
-**Problemi trovati dall'audit (P1-09):**
+**Issues found by audit (P1-09):**
 
-- `innerHTML` senza escaping → XSS
-- `onclick`/`oninput` inline (viola i principi rule)
-- `style=` inline (viola i principi rule)
-- `server.listen(PORT)` senza host → ascolta su tutte le interfacce
+- `innerHTML` without escaping → XSS
+- Inline `onclick`/`oninput` (violates rule principles)
+- Inline `style=` (violates rule principles)
+- `server.listen(PORT)` without host → listens on all interfaces
 - CORS `*`
-- Nessun body limit
-- Nessuna autenticazione
+- No body limit
+- No authentication
 
-**Fix minimi:**
+**Minimum fixes:**
 
 ```js
-// server.mjs: binding loopback
+// server.mjs: loopback binding
 server.listen(PORT, "127.0.0.1", () => { ... });
 
 // interview.js: sanitize before innerHTML
 function escapeHtml(str) {
   return String(str).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]);
 }
-// Usare textContent per dati, innerHTML solo per template trusted
+// Use textContent for data, innerHTML only for trusted templates
 
-// Sostituire onclick/oninput con addEventListener
+// Replace onclick/oninput with addEventListener
 ```
 
-### 9.3 — Aggiornare test
+### 9.3 - Update tests
 
-- `test/docs-architect.test.mjs` → crasha perché `templates.json` non esiste più. Aggiornare per il nuovo wizard.
-- `test/architect-ui.test.mjs` → test Playwright, aggiornare per il nuovo wizard web.
+- `test/docs-architect.test.mjs` → crashes because `templates.json` no longer exists. Update for the new wizard.
+- `test/architect-ui.test.mjs` → Playwright test, update for the new web wizard.
 
 ---
 
-## Comandi di verifica
+## Verification commands
 
 ```bash
-# Verificare che rule_tool_architect funzioni in tutte le modalità
+# Verify rule_tool_architect works in all modes
 HOME=/tmp/rule-audit-home RULE_MCP_DISABLE_AUTO_ADR=1 NODE_ENV=test \
   node -e 'import{loadAllSkills}from"./src/core/skills.js";import{callTool}from"./src/tools/router.js";await loadAllSkills();
   for(const m of["full","summary","search","guardrails","check","tldr"]){
@@ -86,14 +86,14 @@ HOME=/tmp/rule-audit-home RULE_MCP_DISABLE_AUTO_ADR=1 NODE_ENV=test \
     console.log(m,r.isError?"FAIL":"PASS");
   }'
 
-# I test esistenti devono passare (dopo fix)
+# Existing tests must pass (after fixes)
 node test/docs-architect.test.mjs
 npx playwright test test/architect-ui.test.mjs
 ```
 
 ---
 
-## File da NON toccare (modifiche dell'autore)
+## Files NOT to touch (author's modifications)
 
 - `skills/rule-architect/generator.mjs`
 - `skills/rule-architect/validators.mjs`
@@ -101,7 +101,7 @@ npx playwright test test/architect-ui.test.mjs
 - `skills/rule-architect/placeholders.json`
 - `skills/rule-architect/templates.json`
 - `skills/rule-architect/knowledge/wizard-reborn-plan.md`
-- Tutta `skills/rule-architect-cli/`
-- Tutta `skills/rule-architect-web/`
+- All of `skills/rule-architect-cli/`
+- All of `skills/rule-architect-web/`
 
-Questi sono work-in-progress dell'autore. Vanno integrati, non cancellati.
+These are the author's work-in-progress. They should be integrated, not deleted.

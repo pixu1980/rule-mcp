@@ -8,18 +8,18 @@ tags:
 frameworks: [svelte]
 ---
 
-# rule-frontend-svelte — Svelte 5 with rule Principles
+# rule-frontend-svelte - Svelte 5 with rule Principles
 
 This skill adapts [rule-styleguide](../rule-styleguide/SKILL.md) and
 [rule-frontend-vanilla-reactive](../rule-frontend-vanilla-reactive/SKILL.md) to **Svelte 5 runes API**.
 
 ## Core Rules (inherited from rule skills)
 
-1. **Zero CSS classes** — only element selectors + `[data-part="..."]` + `[data-*]`
-2. **Zero inline styles** — CSS via `<style>` tag in `.svelte` (scoped by Svelte) or external `.css` imports
-3. **Semantic HTML is mandatory** — never `<div>` where a semantic element exists
-4. **Barrel pattern** — every component folder has `index.js`
-5. **`<style>` is the primary mechanism** — Svelte scopes `<style>` tags per component. Use external CSS imports only for truly global styles.
+1. **Zero CSS classes** - only element selectors + `[data-part="..."]` + `[data-*]`
+2. **Zero inline styles** - CSS via `<style>` tag in `.svelte` (scoped by Svelte) or external `.css` imports
+3. **Semantic HTML is mandatory** - never `<div>` where a semantic element exists
+4. **Barrel pattern** - every component folder has `index.js`
+5. **`<style>` is the primary mechanism** - Svelte scopes `<style>` tags per component. Use external CSS imports only for truly global styles.
 
 ## File Tree Convention
 
@@ -47,7 +47,7 @@ src/
 ## Component Pattern
 
 Use Svelte's native `<style>` tag for component-scoped CSS.
-Svelte scopes styles to the component at compile time — no `adoptedStyleSheets` needed.
+Svelte scopes styles to the component at compile time - no `adoptedStyleSheets` needed.
 
 ```svelte
 <!-- components/TodoItem/_TodoItem.svelte -->
@@ -88,7 +88,7 @@ Svelte scopes styles to the component at compile time — no `adoptedStyleSheets
 ## CSS Loading in Svelte
 
 Use the `<style>` tag inside `.svelte` files for component-scoped CSS.
-Svelte automatically scopes styles at compile time — rule rules still apply:
+Svelte automatically scopes styles at compile time - rule rules still apply:
 no CSS classes, only element + `[data-part]` selectors.
 
 For shared/global CSS, import at module level:
@@ -100,7 +100,7 @@ For shared/global CSS, import at module level:
 </script>
 ```
 
-**No `adoptedStyleSheets` needed in Svelte** — the framework handles CSS scoping natively.
+**No `adoptedStyleSheets` needed in Svelte** - the framework handles CSS scoping natively.
 
 ## Svelte ↔ rule-frontend-vanilla-reactive Mapping
 
@@ -137,7 +137,7 @@ For shared/global CSS, import at module level:
 </section>
 ```
 
-## State Management — $state as Store
+## State Management - $state as Store
 
 ```js
 // stores/_todos.svelte.js
@@ -249,7 +249,7 @@ Rule: _`$derived` for computed values. `$effect` for side effects (logging, loca
 A `$state` update re-renders the component that owns it and any children that read it.
 
 ```svelte
-<!-- ❌ State in App—unrelated children re-render on search -->
+<!-- ❌ State in App-unrelated children re-render on search -->
 <script>
   let search = $state("");
 </script>
@@ -266,7 +266,7 @@ Rule: _Keep `$state` in the smallest component that needs it._
 #### 3. Always use keys with `{#each}`
 
 ```svelte
-<!-- ❌ Index as key — state, focus, animations break on reorder -->
+<!-- ❌ Index as key - state, focus, animations break on reorder -->
 {#each items as item, i (i)}
   <li data-part="item">{item.title}</li>
 {/each}
@@ -455,7 +455,7 @@ Rule: _Component `$state` for local state. `.svelte.js` module `$state` for shar
 - Use `sveltekit-superforms` + `zod` for form handling
 - Use `$state()` runes for reactive form state
 
-### Step 1 — Define form with validation
+### Step 1 - Define form with validation
 
 ```svelte
 <script lang="ts">
@@ -502,6 +502,6 @@ Rule: _Component `$state` for local state. `.svelte.js` module `$state` for shar
 
 ## See also
 
-- [rule](../rule/SKILL.md) — Central skill index and dispatcher
-- [rule-frontend](../rule-frontend/SKILL.md) — Frontend skill index
-- [rule-styleguide](../rule-styleguide/SKILL.md) — Shared frontend standards
+- [rule](../rule/SKILL.md) - Central skill index and dispatcher
+- [rule-frontend](../rule-frontend/SKILL.md) - Frontend skill index
+- [rule-styleguide](../rule-styleguide/SKILL.md) - Shared frontend standards

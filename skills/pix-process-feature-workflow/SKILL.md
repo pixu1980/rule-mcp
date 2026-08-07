@@ -24,7 +24,7 @@ known dependencies, identified non-functional requirements, and a named owner
 for unresolved risks. Link the business outcome, design, or API contract when
 one exists. Split work that cannot be reviewed or released safely as one unit.
 
-## Step 1 — Create a feature branch
+## Step 1 - Create a feature branch
 
 ```bash
 git checkout develop
@@ -34,7 +34,7 @@ git checkout -b feat/<feature-name>
 
 Follow branch and commit rules from [rule-toolchain-husky](../rule-toolchain-husky/SKILL.md).
 
-## Step 2 — Plan the implementation
+## Step 2 - Plan the implementation
 
 Before writing code, identify:
 
@@ -47,7 +47,7 @@ Before writing code, identify:
 - Whether a feature flag, staged rollout, migration, or rollback plan is
   required to keep `main` safely deployable.
 
-## Step 3 — Write types first
+## Step 3 - Write types first
 
 Define TypeScript interfaces and types in `src/types/`. Use strict typing, for example:
 
@@ -68,19 +68,19 @@ export interface Order {
 }
 ```
 
-## Step 4 — Write tests before or alongside implementation
+## Step 4 - Write tests before or alongside implementation
 
 - Create test files in `tests/unit/` and `tests/integration/` mirroring the source structure
 - Write at least: one happy-path test, one error-case test, one edge-case test per public function
 - See [rule-devops-testing](../rule-devops-testing/SKILL.md) for patterns
 
-## Step 5 — Implement the feature
+## Step 5 - Implement the feature
 
 - Place business logic in `src/services/`
 - Place data access in `src/repositories/`
 - Place route handlers in `src/routes/` (backend) or page components in `src/pages/` (frontend)
 
-## Step 6 — Validate
+## Step 6 - Validate
 
 Run in order:
 
@@ -97,12 +97,12 @@ All must pass. Coverage must meet thresholds from [rule-devops-testing](../rule-
 For running services, verify the relevant deployment health signal over an
 observation window; a green pipeline alone is not a production validation.
 
-## Step 7 — Commit
+## Step 7 - Commit
 
 Use Conventional Commits format. Keep commits atomic: do not combine
 unrelated refactors, dependency upgrades, or formatting with the feature.
 
-## Step 8 — Push and create merge request
+## Step 8 - Push and create merge request
 
 Push and create a merge request targeting `develop`. Ensure CI pipeline passes.
 Provide intent, non-goals, risks, verification evidence, rollout/rollback
@@ -135,7 +135,7 @@ for the review workflow.
 
 ## See also
 
-- [rule](../rule/SKILL.md) — Central skill index and dispatcher
-- [rule-architect](../rule-architect/SKILL.md) — Project architecture wizard
-- [rule-process-code-review](../rule-process-code-review/SKILL.md) — Risk-based PR/MR review
-- [rule-devops-observability](../rule-devops-observability/SKILL.md) — Production health and rollback verification
+- [rule](../rule/SKILL.md) - Central skill index and dispatcher
+- [rule-architect](../rule-architect/SKILL.md) - Project architecture wizard
+- [rule-process-code-review](../rule-process-code-review/SKILL.md) - Risk-based PR/MR review
+- [rule-devops-observability](../rule-devops-observability/SKILL.md) - Production health and rollback verification

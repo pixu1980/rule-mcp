@@ -13,14 +13,14 @@ Common bugs come from:
 3. Missing memoization for derived values
 4. Not cleaning up side effects
 
-## Pattern 1 — Never destructure props
+## Pattern 1 - Never destructure props
 
 SolidJS wraps props in a reactive proxy. Destructuring reads the value once and loses reactivity.
 
 ### Correct patterns
 
 ```jsx
-// ✅ Direct access — reactive
+// ✅ Direct access - reactive
 function Item(props) {
   return <span>{props.name}</span>;
 }
@@ -38,14 +38,14 @@ function Item(props) {
 }
 ```
 
-## Pattern 2 — Control flow components
+## Pattern 2 - Control flow components
 
 SolidJS provides `<For>`, `<Show>`, `<Switch>`, `<Match>`, `<Index>`, `<Portal>`, `<Dynamic>`, `<ErrorBoundary>`. These are compiled to efficiently create and update DOM nodes.
 
 ### Why not `.map()` on signals
 
 ```jsx
-// ❌ items() is a signal — .map() returns a new array on every signal change
+// ❌ items() is a signal - .map() returns a new array on every signal change
 // Solid's JSX compiler treats arrays of elements as static children
 <ul>{items().map(item => <li>{item}</li>)}</ul>
 
@@ -61,7 +61,7 @@ SolidJS provides `<For>`, `<Show>`, `<Switch>`, `<Match>`, `<Index>`, `<Portal>`
 
 `<For>` is keyed (requires stable identity). `<Index>` is unkeyed (uses index). Use `<Index>` for static lists where you need access to the index value.
 
-## Pattern 3 — createMemo discipline
+## Pattern 3 - createMemo discipline
 
 `createMemo` lazily evaluates and caches until dependencies change.
 
@@ -81,7 +81,7 @@ const total = createMemo(() => cart.reduce((sum, item) => sum + item.price, 0));
 - Memoize when returning an object/array that is passed as props to children (referential stability)
 - Don't memoize simple value access or concatenation
 
-## Pattern 4 — createSignal vs createStore
+## Pattern 4 - createSignal vs createStore
 
 | Situation                                 | Choice                                |
 | ----------------------------------------- | ------------------------------------- |
@@ -101,7 +101,7 @@ const [state, setState] = createStore({ items: [], filter: "all" });
 setState("items", 0, "completed", true); // nested path update
 ```
 
-## Pattern 5 — createResource for async
+## Pattern 5 - createResource for async
 
 Manual fetch + signal is error-prone. `createResource` handles loading, error, refetch, and integrates with `<Suspense>`.
 
@@ -122,7 +122,7 @@ const [data, { mutate, refetch }] = createResource(
 </Show>;
 ```
 
-## Pattern 6 — State locality
+## Pattern 6 - State locality
 
 Signals create reactive boundaries. A signal update re-executes only the effects and JSX expressions that read it.
 
@@ -142,7 +142,7 @@ function SearchSection() {
 }
 ```
 
-## Pattern 7 — onCleanup discipline
+## Pattern 7 - onCleanup discipline
 
 Every effect that creates a resource must clean it up.
 
@@ -157,7 +157,7 @@ createEffect(() => {
 
 Common resources that need cleanup: intervals, event listeners, WebSockets, observer subscriptions, async operation cancel tokens.
 
-## Pattern 8 — untrack
+## Pattern 8 - untrack
 
 `untrack()` reads a signal without subscribing to it. Use it to prevent an effect from re-running when a particular signal changes.
 
@@ -170,7 +170,7 @@ createEffect(() => {
 });
 ```
 
-## Pattern 9 — Component responsibility
+## Pattern 9 - Component responsibility
 
 Signals, effects, and JSX should be separated by concern, not by file size.
 
@@ -193,7 +193,7 @@ function FilterableList(props) {
 }
 ```
 
-## Pattern 10 — JSX Expressions vs Control Flow
+## Pattern 10 - JSX Expressions vs Control Flow
 
 Solid's JSX compiler wraps every `{}` expression in a reactive scope. But for lists and conditionals, the control flow components are more efficient because they handle granular updates.
 

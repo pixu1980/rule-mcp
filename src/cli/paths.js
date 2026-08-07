@@ -63,8 +63,8 @@ export function getRuntimePaths() {
  * Home skills override embedded skills for user-customizable rules.
  *
  * @returns {{
- *   homeSkills: string,       — ~/.agents/skills (user's custom skills)
- *   embeddedSkills: string     — Bundled skills directory relative to this source file
+ *   homeSkills: string,       - ~/.agents/skills (user's custom skills)
+ *   embeddedSkills: string     - Bundled skills directory relative to this source file
  * }}
  */
 export function getSkillsDirs() {

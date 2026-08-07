@@ -11,10 +11,10 @@ Every source document below is preserved verbatim under its own heading so no pr
 > Original path: `docs/ANALYSIS.md`  
 > SHA-256: `b75589534e7ca82579c14a1a3b749bf0c262a1da701ac9376d4b2d204425bc10`
 
-# rule-mcp — Analysis
+# rule-mcp - Analysis
 
 > Comprehensive analysis of current state, architecture gaps, and migration plan to official MCP SDK.  
-> **Vanilla JS throughout** — no TypeScript compilation. SDK consumed as published ESM.
+> **Vanilla JS throughout** - no TypeScript compilation. SDK consumed as published ESM.
 
 ---
 
@@ -28,7 +28,7 @@ Every source document below is preserved verbatim under its own heading so no pr
 
 ### Mission
 
-Serve rule-* skill rules, styleguides, component templates, and framework best practices directly to AI coding agents via MCP — without leaving the editor. Bypass the LLM for well-defined patterns; enrich context when LLM reasoning is needed.
+Serve rule-* skill rules, styleguides, component templates, and framework best practices directly to AI coding agents via MCP - without leaving the editor. Bypass the LLM for well-defined patterns; enrich context when LLM reasoning is needed.
 
 ### Current Tools (14)
 
@@ -116,40 +116,40 @@ The current MCP protocol is **hand-rolled**:
 
 - `stdio.js`: Custom line-buffered parser for `Content-Length: N\r\n\r\n<body>` framing
 - `protocol.js`: Manual JSON-RPC dispatch for methods: `initialize`, `tools/list`, `tools/call`, `resources/list`, `resources/read`, `prompts/list`, `prompts/get`
-- No transport abstraction — stdio only (daemon mode spawns `serve` as child process)
-- No Zod/type validation — schemas are plain objects without enforcement
+- No transport abstraction - stdio only (daemon mode spawns `serve` as child process)
+- No Zod/type validation - schemas are plain objects without enforcement
 - No proper error codes (all errors get `-32603`)
 - No capability negotiation beyond `{ tools: {}, resources: {}, prompts: {} }`
 - Protocol version hardcoded as `"2025-12-11"`
 
 ### Strengths
 
-1. **Zero dependencies** — truly pure Node.js
-2. **Local-first** — all skills live on filesystem, no network calls
-3. **LLM-free tools** — `rule_tool_component`, `rule_tool_check`, `rule_tool_scaffold`, `rule_tool_search` work without any AI
-4. **Guardrail engine** — 17 testable assertions for code quality, extensible per-framework
-5. **15 agent installers** — Claude, Codex, Cursor, Copilot, Gemini, VSCode, Cline, Roo, Zed, etc.
-6. **Embedded + overridable skills** — bundled at build time, can be overridden by `~/.agents/skills/`
+1. **Zero dependencies** - truly pure Node.js
+2. **Local-first** - all skills live on filesystem, no network calls
+3. **LLM-free tools** - `rule_tool_component`, `rule_tool_check`, `rule_tool_scaffold`, `rule_tool_search` work without any AI
+4. **Guardrail engine** - 17 testable assertions for code quality, extensible per-framework
+5. **15 agent installers** - Claude, Codex, Cursor, Copilot, Gemini, VSCode, Cline, Roo, Zed, etc.
+6. **Embedded + overridable skills** - bundled at build time, can be overridden by `~/.agents/skills/`
 
 ### Weaknesses
 
-1. **No official MCP SDK** — hand-rolled protocol breaks if MCP spec evolves
-2. **No Zod validation** — `inputSchema` is documentation-only, no runtime enforcement
-3. **No SSE transport** — daemon is just a spawned child process, not a real HTTP server
-4. **No logging infrastructure** — `process.stderr.write` only
-5. **No tool call cancellation** — no abort support
-6. **No streaming results** — all results are single `{ content: [...] }` blocks
+1. **No official MCP SDK** - hand-rolled protocol breaks if MCP spec evolves
+2. **No Zod validation** - `inputSchema` is documentation-only, no runtime enforcement
+3. **No SSE transport** - daemon is just a spawned child process, not a real HTTP server
+4. **No logging infrastructure** - `process.stderr.write` only
+5. **No tool call cancellation** - no abort support
+6. **No streaming results** - all results are single `{ content: [...] }` blocks
 7. **No notification support** (e.g. `notifications/initialized`)
-8. **No proper error taxonomy** — all errors are `-32603` (Internal error)
-9. **No standardized test framework** — single smoke test, no unit tests
-10. **Skill embedding at build time** — requires `node scripts/embed-skills.mjs` before every release
-11. **CI not exhaustive** — no linting, no test coverage, no audit
+8. **No proper error taxonomy** - all errors are `-32603` (Internal error)
+9. **No standardized test framework** - single smoke test, no unit tests
+10. **Skill embedding at build time** - requires `node scripts/embed-skills.mjs` before every release
+11. **CI not exhaustive** - no linting, no test coverage, no audit
 
 ---
 
 ## 3. Gap Analysis: Official MCP SDK (`@modelcontextprotocol/sdk`)
 
-### SDK is published as ESM+CJS — works with vanilla JS out of the box
+### SDK is published as ESM+CJS - works with vanilla JS out of the box
 
 ```
 pnpm add @modelcontextprotocol/sdk zod
@@ -186,7 +186,7 @@ No TypeScript compilation needed. The SDK ships JavaScript with `.d.ts` declarat
 - **Breaking changes:** None for MCP clients (protocol is backward-compatible)
 - **New capabilities unlocked:** SSE, streaming, completion, logging, cancellation
 - **Dependencies added:** 2 (`@modelcontextprotocol/sdk` + `zod`)
-- **Build step:** Still zero — `node src/index.js serve` just works
+- **Build step:** Still zero - `node src/index.js serve` just works
 
 ---
 
@@ -210,12 +210,12 @@ No TypeScript compilation needed. The SDK ships JavaScript with `.d.ts` declarat
 
 ### Content types per skill
 
-- `SKILL.md` — Main documentation + quick reference
-- `checklists/` — Per-task checklists for code review
-- `examples/` — Code examples showing rule principles
-- `knowledge/` — Deep-dive knowledge base files
-- `prompts/` — Reusable prompt templates
-- `templates/` — File templates for scaffolding
+- `SKILL.md` - Main documentation + quick reference
+- `checklists/` - Per-task checklists for code review
+- `examples/` - Code examples showing rule principles
+- `knowledge/` - Deep-dive knowledge base files
+- `prompts/` - Reusable prompt templates
+- `templates/` - File templates for scaffolding
 
 ---
 
@@ -225,10 +225,10 @@ No TypeScript compilation needed. The SDK ships JavaScript with `.d.ts` declarat
 
 | Tool                                       | Saves tokens by                                                 |
 | ------------------------------------------ | --------------------------------------------------------------- |
-| `rule_tool_component button react`          | Returns full React button code directly — no LLM prompt needed  |
-| `rule_tool_check skill=rule-frontend-react`  | Validates code against 17 guardrails — no LLM needed for review |
-| `rule_tool_scaffold file=.prettierrc`       | Returns exact file content — no LLM context needed              |
-| `rule_tool_search query="component naming"` | Greps skill files — no LLM search needed                        |
+| `rule_tool_component button react`          | Returns full React button code directly - no LLM prompt needed  |
+| `rule_tool_check skill=rule-frontend-react`  | Validates code against 17 guardrails - no LLM needed for review |
+| `rule_tool_scaffold file=.prettierrc`       | Returns exact file content - no LLM context needed              |
+| `rule_tool_search query="component naming"` | Greps skill files - no LLM search needed                        |
 
 ### Planned improvements
 
@@ -321,21 +321,21 @@ No `tsconfig.json`, no `tsc` build step, no `.ts` files. The project stays as Ja
 > Original path: `docs/ARCHITECTURE.md`  
 > SHA-256: `ff26dcc6d43deceb60d6c5ef1b1f2df1360140acc2a27906f9286e0cad6d47c5`
 
-# rule-mcp — Architecture
+# rule-mcp - Architecture
 
 > Target architecture with `@modelcontextprotocol/sdk` (vanilla JS).  
-> A local-first MCP server for the rule-* skill ecosystem — zero-dependency frontend rules, templates, and guardrails delivered at the speed of the filesystem.
+> A local-first MCP server for the rule-* skill ecosystem - zero-dependency frontend rules, templates, and guardrails delivered at the speed of the filesystem.
 
 ---
 
 ## 1. Architecture Principles
 
-1. **Local-first** — everything runs on the user's machine. No cloud, no API keys, no telemetry (opt-in only). Skills live at `~/.agents/skills/`.
-2. **LLM-free by default** — well-defined patterns (templates, guardrails, scaffolding) serve responses without any model call. LLM is only consulted for novel/unstructured tasks.
-3. **MCP-native** — full compliance with the MCP specification via the official TypeScript SDK. Supports stdio (agents) and SSE (IDEs, web UIs).
-4. **Framework-agnostic** — 10+ rule-* skills served through a unified interface. Adding a new skill = adding a directory.
-5. **Stateless** — no database, no state files beyond daemon PID. Skill content is read from disk on every request (with in-memory LRU cache).
-6. **Vanilla JS** — pure Node.js ESM. No TypeScript compilation step. JSDoc for documentation. SDK consumed as plain ESM.
+1. **Local-first** - everything runs on the user's machine. No cloud, no API keys, no telemetry (opt-in only). Skills live at `~/.agents/skills/`.
+2. **LLM-free by default** - well-defined patterns (templates, guardrails, scaffolding) serve responses without any model call. LLM is only consulted for novel/unstructured tasks.
+3. **MCP-native** - full compliance with the MCP specification via the official TypeScript SDK. Supports stdio (agents) and SSE (IDEs, web UIs).
+4. **Framework-agnostic** - 10+ rule-* skills served through a unified interface. Adding a new skill = adding a directory.
+5. **Stateless** - no database, no state files beyond daemon PID. Skill content is read from disk on every request (with in-memory LRU cache).
+6. **Vanilla JS** - pure Node.js ESM. No TypeScript compilation step. JSDoc for documentation. SDK consumed as plain ESM.
 
 ---
 
@@ -525,7 +525,7 @@ const server = new Server(
   { capabilities: { tools: {}, resources: {}, prompts: {}, logging: {} } },
 );
 
-// Zod validates input at runtime — no TS needed
+// Zod validates input at runtime - no TS needed
 server.setRequestHandler(ListToolsRequestSchema, async () => ({
   tools: registry.getToolDefinitions(),
 }));
@@ -806,7 +806,7 @@ Just 2 runtime deps (SDK + Zod). No TypeScript, no compilation step. Pure ESM.
 
 ## 11. Vanilla JS Approach
 
-We use the official `@modelcontextprotocol/sdk` **as published** — it ships as JavaScript (ESM + CJS) with `.d.ts` declaration files. No need for a separate vanilla-js fork.
+We use the official `@modelcontextprotocol/sdk` **as published** - it ships as JavaScript (ESM + CJS) with `.d.ts` declaration files. No need for a separate vanilla-js fork.
 
 | Aspect            | Approach                                                                            |
 | ----------------- | ----------------------------------------------------------------------------------- |
@@ -815,7 +815,7 @@ We use the official `@modelcontextprotocol/sdk` **as published** — it ships as
 | **Documentation** | JSDoc for all public functions, types in `@param` / `@returns` tags                 |
 | **Build step**    | None (`node src/index.js` directly)                                                 |
 | **Test**          | `vitest` with `--experimental-vm-modules` or `node --test`                          |
-| **Declaration**   | No `.d.ts` needed — Zod + JSDoc cover documentation                                 |
+| **Declaration**   | No `.d.ts` needed - Zod + JSDoc cover documentation                                 |
 
 ```javascript
 /**
@@ -834,8 +834,8 @@ async function handleComponent(args) {
 ## 12. Security Model
 
 - **No network calls** (except SSE daemon mode, which is opt-in)
-- **No telemetry by default** — opt-in `doctor` report only
-- **No code execution** — tools read files and match text patterns
+- **No telemetry by default** - opt-in `doctor` report only
+- **No code execution** - tools read files and match text patterns
 - **No user data collection**
 - **No external API keys**
 
@@ -861,7 +861,7 @@ All data stays on the filesystem. The MCP server is a read-only/validate-only se
 > Original path: `docs/ROADMAP.md`  
 > SHA-256: `4d8bb2ac194f3520775d0a8dd66a998d7082021c71b1adbba5d992633f47ab86`
 
-# rule-mcp — Roadmap
+# rule-mcp - Roadmap
 
 > Execution plan for porting to `@modelcontextprotocol/sdk` (vanilla JS),  
 > building a release pipeline matching tokensave standards,  
@@ -869,7 +869,7 @@ All data stays on the filesystem. The MCP server is a read-only/validate-only se
 
 ---
 
-## Phase 0: Foundation — Port to MCP SDK
+## Phase 0: Foundation - Port to MCP SDK
 
 **Goal:** Replace hand-rolled MCP protocol with official SDK.  
 **Effort:** High (restructure entire MCP layer)  
@@ -889,7 +889,7 @@ All data stays on the filesystem. The MCP server is a read-only/validate-only se
 
 - [x] **0.5** Port prompt system (`src/prompts/`) - All 4 prompts via SDK's `GetPromptRequestSchema` - Plus `rule-architect-scaffold` (5 total)
 
-- [x] **0.6** Remove obsolete files - `src/mcp/protocol.js` — deleted - `src/mcp/stdio.js` — deleted (replaced by `StdioServerTransport`) - `src/tools/router.js` — kept as ToolRegistry (rename in P1) - `src/cli.js` → `src/cli/commands.js` + `src/index.js` (Phase 1)
+- [x] **0.6** Remove obsolete files - `src/mcp/protocol.js` - deleted - `src/mcp/stdio.js` - deleted (replaced by `StdioServerTransport`) - `src/tools/router.js` - kept as ToolRegistry (rename in P1) - `src/cli.js` → `src/cli/commands.js` + `src/index.js` (Phase 1)
 
 ### Deliverables
 
@@ -899,7 +899,7 @@ All data stays on the filesystem. The MCP server is a read-only/validate-only se
 - [x] CLI commands unchanged: `serve`, `daemon` (upgraded in P2), `install`, `uninstall`, `tools`, `doctor`, `skills reload`
 - [x] `rule-mcp doctor` reports SDK version (`1.29.0`)
 - [x] Same modules, better SDK
-- [x] Zero build step — `node src/index.js serve` works instantly
+- [x] Zero build step - `node src/index.js serve` works instantly
 
 ---
 
@@ -911,11 +911,11 @@ All data stays on the filesystem. The MCP server is a read-only/validate-only se
 
 ### Steps
 
-- [x] **1.1** Split `src/cli.js` → `src/cli/commands.js` + `src/index.js` - `commands.js`: 164 lines, named exports for every command - `index.js`: 106 lines, CLI entry → parse args → call command - `src/cli.js` — deleted
+- [x] **1.1** Split `src/cli.js` → `src/cli/commands.js` + `src/index.js` - `commands.js`: 164 lines, named exports for every command - `index.js`: 106 lines, CLI entry → parse args → call command - `src/cli.js` - deleted
 
-- [x] **1.2** Split `src/core/skills.js` → `src/core/skills.js` + `src/tools/skill.js` + `src/tools/architect.js` - `core/skills.js`: 289 lines — `loadAllSkills()`, LRU cache, YAML frontmatter parsing - `tools/skill.js`: 270 lines — dynamic tool registration (`registerSkillTool`, `registerSearchTool`, etc.) - `tools/architect.js`: 111 lines — context interview server
+- [x] **1.2** Split `src/core/skills.js` → `src/core/skills.js` + `src/tools/skill.js` + `src/tools/architect.js` - `core/skills.js`: 289 lines - `loadAllSkills()`, LRU cache, YAML frontmatter parsing - `tools/skill.js`: 270 lines - dynamic tool registration (`registerSkillTool`, `registerSearchTool`, etc.) - `tools/architect.js`: 111 lines - context interview server
 
-- [x] **1.3** Extract CLI commands into `src/cli/` - `doctor.js` — 84 lines, `runDoctor()` + `getSdkVersion()` - `install.js` — 194 lines (existing) - `uninstall.js` — 196 lines, actual removal logic for all 15 agents
+- [x] **1.3** Extract CLI commands into `src/cli/` - `doctor.js` - 84 lines, `runDoctor()` + `getSdkVersion()` - `install.js` - 194 lines (existing) - `uninstall.js` - 196 lines, actual removal logic for all 15 agents
 
 - [x] **1.4** Add Zod schemas to ALL tools - Every tool has Zod `object({...})` with proper types, defaults, descriptions - Schema errors return user-friendly messages
 
@@ -936,7 +936,7 @@ All data stays on the filesystem. The MCP server is a read-only/validate-only se
 
 ### Steps
 
-- [x] **2.1** Implement SSE transport (`src/transport/sse.js` — 209 lines) - Pure Node.js `http` module (no Express) - `GET /sse` — SSE stream via `SSEServerTransport` - `POST /message` — MCP message handler - `GET /health` — Health check endpoint - CORS headers on all endpoints
+- [x] **2.1** Implement SSE transport (`src/transport/sse.js` - 209 lines) - Pure Node.js `http` module (no Express) - `GET /sse` - SSE stream via `SSEServerTransport` - `POST /message` - MCP message handler - `GET /health` - Health check endpoint - CORS headers on all endpoints
 
 - [x] **2.2** Replace daemon command - `rule-mcp daemon start` → spawns `serve --transport sse` on port 37999 - `rule-mcp daemon stop` → graceful shutdown via `SIGTERM` - PID file management preserved - Child process stdout/stderr captured to daemon.log
 
@@ -944,11 +944,11 @@ All data stays on the filesystem. The MCP server is a read-only/validate-only se
 
 ### Sandbox / Resilience Layer (`src/utils/sandbox.js`)
 
-- [x] `safeJsonParse` — never throws on malformed JSON
-- [x] `withTimeout` — async timeout guard for all handlers
-- [x] `trySafe` — wraps any function to never throw
-- [x] `wrapRequestHandler` — HTTP handler with timeout, error recovery, connection cleanup
-- [x] `installProcessErrorHandlers` — catches `uncaughtException` + `unhandledRejection`
+- [x] `safeJsonParse` - never throws on malformed JSON
+- [x] `withTimeout` - async timeout guard for all handlers
+- [x] `trySafe` - wraps any function to never throw
+- [x] `wrapRequestHandler` - HTTP handler with timeout, error recovery, connection cleanup
+- [x] `installProcessErrorHandlers` - catches `uncaughtException` + `unhandledRejection`
 - [x] Integrated into SSE transport (`wrapRequestHandler` on all endpoints)
 - [x] Integrated into process startup (`src/index.js`)
 
@@ -967,7 +967,7 @@ All data stays on the filesystem. The MCP server is a read-only/validate-only se
 
 ## Phase 3: Token-Saving Tools
 
-**Goal:** Maximize LLM-free execution — tools should handle as much as possible without model calls.  
+**Goal:** Maximize LLM-free execution - tools should handle as much as possible without model calls.  
 **Effort:** Medium  
 **Risk:** Low (all code, no model dependency)
 
@@ -977,7 +977,7 @@ All data stays on the filesystem. The MCP server is a read-only/validate-only se
 
 - [x] **3.2** Project framework auto-detector (`src/core/detector.js`) - `rule_tool_detect` tool reads `package.json` → detects React/Vue/Svelte/Angular/Astro/Solid/Electron/vanilla - Detects TypeScript via `tsconfig.json` or `typescript` dep - Detects build tool: vite, webpack, esbuild, angular-cli, sveltekit, next, nuxt, parcel, tsup, tsc - Returns project profile JSON with suggested skills and tools
 
-- [x] **3.3** Template engine — multi-file generation - `rule_tool_component mode=multi` generates: `_Component.jsx` + `_Component.css` + `index.js` - Variable interpolation: component name → PascalCase, kebab-case - Framework-aware output: React (.jsx), Vue (.vue SFC), Svelte (.svelte), Vanilla (.js + .css) - Barrel file. Example output: `src/components/PrimaryButton/_PrimaryButton.jsx`, `src/components/PrimaryButton/_PrimaryButton.css`, `src/components/PrimaryButton/index.js`
+- [x] **3.3** Template engine - multi-file generation - `rule_tool_component mode=multi` generates: `_Component.jsx` + `_Component.css` + `index.js` - Variable interpolation: component name → PascalCase, kebab-case - Framework-aware output: React (.jsx), Vue (.vue SFC), Svelte (.svelte), Vanilla (.js + .css) - Barrel file. Example output: `src/components/PrimaryButton/_PrimaryButton.jsx`, `src/components/PrimaryButton/_PrimaryButton.css`, `src/components/PrimaryButton/index.js`
 
 - [x] **3.4** Semantic search with BM25 - New `src/core/bm25.js` module with full BM25 scoring - Tokenized sections (170 sections, 2414 unique terms) - Ranked results with relevance scores - In-memory inverted index, rebuilt on `skills reload` - `rule_tool_search` returns scored, section-level results
 
@@ -995,7 +995,7 @@ All data stays on the filesystem. The MCP server is a read-only/validate-only se
 
 ## Phase 4: CI/CD & Release Pipeline
 
-**Goal:** Release pipeline matching tokensave standards — automated, multi-platform, provenance-verified.  
+**Goal:** Release pipeline matching tokensave standards - automated, multi-platform, provenance-verified.  
 **Effort:** Medium  
 **Risk:** Low
 
@@ -1005,11 +1005,11 @@ All data stays on the filesystem. The MCP server is a read-only/validate-only se
 
 - [x] **4.2** Upgrade release pipeline (`release.yml`) - pnpm publish with provenance (kept) - Docker build + push to GHCR (linux/amd64 + linux/arm64) - Homebrew formula update (kept) - GitHub Release with assets (kept) - Tests run before publish
 
-- [x] **4.3** Add Docker support - `Dockerfile` — multi-stage, `node:22-alpine`, embedded skills, no build step - `docker-compose.yml` — IDE integration via SSE on port 37999 - CI pushes to `ghcr.io/rule/rule-mcp` with semver + sha tags
+- [x] **4.3** Add Docker support - `Dockerfile` - multi-stage, `node:22-alpine`, embedded skills, no build step - `docker-compose.yml` - IDE integration via SSE on port 37999 - CI pushes to `ghcr.io/rule/rule-mcp` with semver + sha tags
 
 - [x] **4.4** Add Windows package manager support - Winget manifest: `.github/winget/rule.rule-mcp.yaml` - Scoop manifest: `.github/scoop/rule-mcp.json`
 
-- [x] **4.5** Add CHANGELOG + conventional commits - `CHANGELOG.md` with initial entries following Keep a Changelog - `.github/semantic.yml` — enforce conventional commit types on PR titles
+- [x] **4.5** Add CHANGELOG + conventional commits - `CHANGELOG.md` with initial entries following Keep a Changelog - `.github/semantic.yml` - enforce conventional commit types on PR titles
 
 ### Deliverables
 
@@ -1074,7 +1074,7 @@ All data stays on the filesystem. The MCP server is a read-only/validate-only se
 
 ---
 
-## Phase 7: Future — Plugin System & Community
+## Phase 7: Future - Plugin System & Community
 
 **Goal:** Allow anyone to create rule-* skills without modifying the MCP server.  
 **Effort:** High  
@@ -1082,11 +1082,11 @@ All data stays on the filesystem. The MCP server is a read-only/validate-only se
 
 ### Steps
 
-- [x] **7.1** Define plugin detection - `getSkillNames()` detects any directory with SKILL.md (not just `rule-*` prefix) - `isPluginSkill()` / `hasPluginJs()` / `loadPluginJs()` in router.js - `registerSkillTool()` handles plugin names without `rule-` prefix - `mergePluginGuardrails()` in guardrails.js — plugins inject custom guardrails - `plugin.js` dynamically imported, guardrails merged into guardrails engine - `docs/PLUGINS.md` — complete plugin authoring guide with examples
+- [x] **7.1** Define plugin detection - `getSkillNames()` detects any directory with SKILL.md (not just `rule-*` prefix) - `isPluginSkill()` / `hasPluginJs()` / `loadPluginJs()` in router.js - `registerSkillTool()` handles plugin names without `rule-` prefix - `mergePluginGuardrails()` in guardrails.js - plugins inject custom guardrails - `plugin.js` dynamically imported, guardrails merged into guardrails engine - `docs/PLUGINS.md` - complete plugin authoring guide with examples
 
-- [x] **7.2** Add community skill discovery - `rule://community` resource — lists installed plugins + known community skills - Auto-detects all plugins in `~/.agents/skills/` with SKILL.md - Tool `pix_<plugin-name>` auto-registered for each plugin
+- [x] **7.2** Add community skill discovery - `rule://community` resource - lists installed plugins + known community skills - Auto-detects all plugins in `~/.agents/skills/` with SKILL.md - Tool `pix_<plugin-name>` auto-registered for each plugin
 
-- [x] **7.3** Add opt-in telemetry - `rule-mcp doctor --telemetry` adds anonymous usage stats to report - Collects: version, node version, platform, arch, tool count, agent count, timestamp - Controlled by `--telemetry` flag — never sent without explicit opt-in
+- [x] **7.3** Add opt-in telemetry - `rule-mcp doctor --telemetry` adds anonymous usage stats to report - Collects: version, node version, platform, arch, tool count, agent count, timestamp - Controlled by `--telemetry` flag - never sent without explicit opt-in
 
 ### Deliverables
 
@@ -1119,7 +1119,7 @@ All data stays on the filesystem. The MCP server is a read-only/validate-only se
 | ------------------------- | ---------- | ----------------- | --------------------------------------------------- |
 | SDK API changes           | Low        | High (pinned dep) | Pin SDK version, lockfile, test before release      |
 | Backward compat break     | Low        | High              | Smoke test against all 15 agents                    |
-| Skill content migration   | Low        | Medium            | Skills are markdown — zero changes needed           |
+| Skill content migration   | Low        | Medium            | Skills are markdown - zero changes needed           |
 | Windows path issues       | Medium     | Medium            | CI on Windows, normalize with `node:path`           |
 | Zod validation too strict | Low        | Low               | Schema errors return clear messages via `McpError`  |
-| User needs TS             | Very low   | Very low          | SDK ships `.d.ts` — editors get autocomplete anyway |
+| User needs TS             | Very low   | Very low          | SDK ships `.d.ts` - editors get autocomplete anyway |

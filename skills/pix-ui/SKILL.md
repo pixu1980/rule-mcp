@@ -12,7 +12,7 @@ tags:
 frameworks: [all]
 ---
 
-# rule-ui — UI umbrella and routing layer
+# rule-ui - UI umbrella and routing layer
 
 `rule-ui` is the UI topic umbrella. It sits above visual design,
 frontend frameworks, component templates, and styleguide validation so agents
@@ -68,8 +68,8 @@ validate any visible interface.
 
 ## See also
 
-- [rule](../rule/SKILL.md) — Central skill and tool dispatcher
-- [rule-ui-design-system](../rule-ui-design-system/SKILL.md) — Visual design direction
-- [rule-frontend](../rule-frontend/SKILL.md) — Frontend framework routing
-- [rule-styleguide](../rule-styleguide/SKILL.md) — Shared implementation standards
-- [rule-architect](../rule-architect/SKILL.md) — Architecture and `.context` generation
+- [rule](../rule/SKILL.md) - Central skill and tool dispatcher
+- [rule-ui-design-system](../rule-ui-design-system/SKILL.md) - Visual design direction
+- [rule-frontend](../rule-frontend/SKILL.md) - Frontend framework routing
+- [rule-styleguide](../rule-styleguide/SKILL.md) - Shared implementation standards
+- [rule-architect](../rule-architect/SKILL.md) - Architecture and `.context` generation

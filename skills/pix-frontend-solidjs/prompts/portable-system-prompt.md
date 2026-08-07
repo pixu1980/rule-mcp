@@ -18,7 +18,7 @@ Use this review order:
 
 Classify issues using these patterns:
 
-- Never destructure props — access props.X directly
+- Never destructure props - access props.X directly
 - Use <For> over .map(), <Show> over ternary, <Switch> over chained ternaries
 - Use createMemo for expensive derived values
 - Use createStore for nested state, createSignal for flat values

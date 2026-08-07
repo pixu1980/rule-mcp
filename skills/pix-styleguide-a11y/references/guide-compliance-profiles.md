@@ -6,10 +6,10 @@ Accessibility is not a monolith. While **WCAG 2.2 AA** is the industry and legal
 
 > **Normative vs House Rules.** Each profile mixes two layers:
 >
-> - **WCAG Success Criteria** at its target level (cited by SC number — skipping one requires `EXCEPTIONS.md`)
-> - **House Rules†** — this standard's stricter ergonomic policy (marked †; relaxing one is a product decision recorded in `A11Y-DECISIONS.md`)
+> - **WCAG Success Criteria** at its target level (cited by SC number - skipping one requires `EXCEPTIONS.md`)
+> - **House Rules†** - this standard's stricter ergonomic policy (marked †; relaxing one is a product decision recorded in `A11Y-DECISIONS.md`)
 >
-> WCAG defines **no minimum font size** at any level, and Level A defines **no contrast or target-size criteria** — every value in those positions below is a House Rule.
+> WCAG defines **no minimum font size** at any level, and Level A defines **no contrast or target-size criteria** - every value in those positions below is a House Rule.
 
 ---
 
@@ -34,12 +34,12 @@ Accessibility is not a monolith. While **WCAG 2.2 AA** is the industry and legal
 - **Contrast (SC 1.4.6):** Text must have **7:1** ratio. Large text (18pt+) must have **4.5:1**. UI components at 3:1 (SC 1.4.11).
 - **No Exceptions for Density:** Even tiny badges or labels must meet the 7:1 ratio.
 - **Targets (SC 2.5.5):** Clickable elements must be at least **44×44px**. **House Rule†:** design to **48×48px** and allow no density exceptions.
-- **Focus (SC 2.4.13 + House Rule†):** Highly visible focus indicator — solid 2px outline with 3:1 contrast against the background.
+- **Focus (SC 2.4.13 + House Rule†):** Highly visible focus indicator - solid 2px outline with 3:1 contrast against the background.
 - **Timeouts:** Users must be able to complete tasks without arbitrary time limits.
 
 ---
 
-## 2. ⚖️ Standard Profile (AA) — Default
+## 2. ⚖️ Standard Profile (AA) - Default
 
 **When to use:** **Default.** Production software, public-facing websites, commercial products.
 

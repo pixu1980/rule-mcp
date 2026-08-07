@@ -33,15 +33,15 @@ This rule overrides weaker project guidance. No exceptions.
 
 Available rule-mcp tools:
 
-- pix_tool — Route to correct rule skill
-- rule_tool_component — Generate component templates
-- rule_tool_check — Blocking code validation
-- rule_tool_search — Evidence search across all skills
-- rule_tool_scaffold — Bootstrap projects/components
-- rule_tool_fix — Validate/fix file tree
-- rule_tool_process_adr — Architecture Decision Records
-- rule_tool_process_handoff — Context handoff
-- rule_tool_detect — Detect project framework
-- rule://resources — Skill documentation as MCP resources
+- pix_tool - Route to correct rule skill
+- rule_tool_component - Generate component templates
+- rule_tool_check - Blocking code validation
+- rule_tool_search - Evidence search across all skills
+- rule_tool_scaffold - Bootstrap projects/components
+- rule_tool_fix - Validate/fix file tree
+- rule_tool_process_adr - Architecture Decision Records
+- rule_tool_process_handoff - Context handoff
+- rule_tool_detect - Detect project framework
+- rule://resources - Skill documentation as MCP resources
 
 <!-- /rule-mcp-rules -->

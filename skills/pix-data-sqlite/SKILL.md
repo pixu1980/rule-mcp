@@ -17,7 +17,7 @@ tags:
 frameworks: [all]
 ---
 
-# rule-data-sqlite — SQLite 3.x Best Practices & Scripts
+# rule-data-sqlite - SQLite 3.x Best Practices & Scripts
 
 ## Table of Contents
 
@@ -178,7 +178,7 @@ PRAGMA foreign_keys = ON;         -- Enforce FK constraints
 - Writers do not block readers; readers do not block writers.
 - Checkpoint frequency: automatic at `wal_autocheckpoint` (default 1000 pages).
 - Manual checkpoint: `PRAGMA wal_checkpoint(TRUNCATE);`
-- Connection pooling is not typical for SQLite — use a single WAL connection.
+- Connection pooling is not typical for SQLite - use a single WAL connection.
 
 ## 8. Backup & Migration
 
@@ -200,7 +200,7 @@ DETACH DATABASE backup;
 ## 9. Security & Encryption
 
 - SQLite does not have built-in encryption. Use SEE (SQLite Encryption Extension) or sqlcipher.
-- Sanitize all user input in SQL — prefer parameterized queries.
+- Sanitize all user input in SQL - prefer parameterized queries.
 - File permissions on the `.db` file are the primary access control.
 - Consider `PRAGMA key = '...'` with sqlcipher-compatible builds.
 
@@ -238,5 +238,5 @@ ORDER BY rank;
 
 ## See also
 
-- [rule-data-sql](../rule-data-sql/SKILL.md) — SQL fundamentals
-- [rule-data-postgresql](../rule-data-postgresql/SKILL.md) — PostgreSQL reference
+- [rule-data-sql](../rule-data-sql/SKILL.md) - SQL fundamentals
+- [rule-data-postgresql](../rule-data-postgresql/SKILL.md) - PostgreSQL reference

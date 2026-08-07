@@ -8,7 +8,7 @@ tags:
 frameworks: [all]
 ---
 
-# rule-platform-library — Library / Package Development with rule Principles
+# rule-platform-library - Library / Package Development with rule Principles
 
 This skill covers **reusable code packages** published to pnpm or bundled into other projects.
 
@@ -22,20 +22,20 @@ This skill covers **reusable code packages** published to pnpm or bundled into o
 
 ## Core Rules
 
-1. **Public API is explicit** — every exported symbol is intentional and documented
-2. **Zero runtime dependencies** where possible — if needed, audit carefully
-3. **Semantic versioning** — breaking changes bump major, new features bump minor, fixes bump patch
-4. **ES modules first** — CJS provided via wrapper for compatibility
-5. **Barrel pattern** — `index.js` re-exports the public API, internal files prefixed with `_`
-6. **JSDoc required** on all public exports — types, params, returns, examples
-7. **Tests required** — node:test or Vitest, minimum 80% coverage on public API
-8. **CHANGELOG.md** — keep a human-readable changelog per release
+1. **Public API is explicit** - every exported symbol is intentional and documented
+2. **Zero runtime dependencies** where possible - if needed, audit carefully
+3. **Semantic versioning** - breaking changes bump major, new features bump minor, fixes bump patch
+4. **ES modules first** - CJS provided via wrapper for compatibility
+5. **Barrel pattern** - `index.js` re-exports the public API, internal files prefixed with `_`
+6. **JSDoc required** on all public exports - types, params, returns, examples
+7. **Tests required** - node:test or Vitest, minimum 80% coverage on public API
+8. **CHANGELOG.md** - keep a human-readable changelog per release
 
 ## Tree-Shaking & Bundle Size
 
-- **`sideEffects: false`** in package.json — enables bundlers to tree-shake unused exports
+- **`sideEffects: false`** in package.json - enables bundlers to tree-shake unused exports
 - **Barrel trade-off**: For large libraries (>50 exports), consider direct imports instead of barrel to avoid circular references and improve tree-shaking
-- **No side-effect imports**: Never `import "./setup"` — use explicit initialization instead
+- **No side-effect imports**: Never `import "./setup"` - use explicit initialization instead
 - **Size budget**: Use `size-limit` or `bundlesize` to cap the library's gzipped weight
 
 ## File Tree Convention
@@ -133,7 +133,7 @@ When developing in a pnpm workspace:
 ### Barrel Pattern
 
 ```js
-// src/index.js — public API barrel
+// src/index.js - public API barrel
 // Only re-export what consumers should use.
 // Everything else stays private via underscore prefix.
 
@@ -216,7 +216,7 @@ Keep a human-readable `CHANGELOG.md`:
 ```markdown
 # Changelog
 
-## [1.1.0] — 2026-06-15
+## [1.1.0] - 2026-06-15
 
 ### Added
 
@@ -228,7 +228,7 @@ Keep a human-readable `CHANGELOG.md`:
 - Memory leak in `html`` template engine when used with SVG
 - Type export for `StoreOptions` interface
 
-## [1.0.0] — 2026-05-01
+## [1.0.0] - 2026-05-01
 
 ### Added
 
@@ -245,7 +245,7 @@ Keep a human-readable `CHANGELOG.md`:
 │  Build:      esbuild / tsup / microbundle                  │
 │  Test:       node:test / Vitest, ≥80% coverage            │
 │  Version:    semver, CHANGELOG.md per release              │
-│  Deploy:     pnpm publish —access public                    │
+│  Deploy:     pnpm publish -access public                    │
 │  Deps:       zero runtime preferred, audit before adding   │
 └────────────────────────────────────────────────────────────┘
 ```
@@ -254,5 +254,5 @@ Keep a human-readable `CHANGELOG.md`:
 
 ## See also
 
-- [rule](../rule/SKILL.md) — Central skill index and dispatcher
-- [rule-platform](../rule-platform/SKILL.md) — Platform skill index
+- [rule](../rule/SKILL.md) - Central skill index and dispatcher
+- [rule-platform](../rule-platform/SKILL.md) - Platform skill index

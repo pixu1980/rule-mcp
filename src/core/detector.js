@@ -7,7 +7,7 @@
  * - TypeScript vs JavaScript
  * - Build tool: vite, webpack, esbuild, tsc, etc.
  *
- * @see module:tools/router — pix_detect tool registered here
+ * @see module:tools/router - pix_detect tool registered here
  */
 
 import { existsSync, readFileSync } from "node:fs";
@@ -64,7 +64,7 @@ const FRAMEWORK_SKILL_MAP = {
 /**
  * Get the canonical skill/tool suggestion for a detected framework key.
  *
- * @param {string} framework — Framework key returned by detectProject
+ * @param {string} framework - Framework key returned by detectProject
  * @returns {{ skillName: string, toolName: string }}
  */
 export function getFrameworkSuggestion(framework) {
@@ -76,8 +76,8 @@ export function getFrameworkSuggestion(framework) {
 /**
  * Detect a dependency in a list of package.json dependencies.
  *
- * @param {object} deps — package.json dependencies or devDependencies
- * @param {string[]} depNames — List of dependency names to check
+ * @param {object} deps - package.json dependencies or devDependencies
+ * @param {string[]} depNames - List of dependency names to check
  * @returns {boolean}
  */
 function hasDependencies(deps, depNames) {
@@ -92,7 +92,7 @@ function hasDependencies(deps, depNames) {
  * Detect the project framework, TypeScript usage, and build tool
  * from a project directory's package.json.
  *
- * @param {string} projectDir — Path to project root
+ * @param {string} projectDir - Path to project root
  * @returns {{
  *   projectName: string,
  *   framework: string,
@@ -164,7 +164,7 @@ export function detectProject(projectDir = ".") {
  * When present, rule tools defer code exploration to tokensave and suppress
  * their own redundant context dumps to save tokens.
  *
- * @param {string} projectDir — Path to project root
+ * @param {string} projectDir - Path to project root
  * @returns {boolean}
  */
 export function hasTokensave(projectDir = ".") {

@@ -5,7 +5,7 @@
  *   - SHARED_GUARDRAILS apply to every skill (frontend, backend, data, devops).
  *   - rule_tool_component generation self-validates and always emits a guardrail
  *     summary (guardrails involved even without an explicit rule_tool_check call).
- *   - The core rule principles — no CSS classes, no inline styles — pass on
+ *   - The core rule principles - no CSS classes, no inline styles - pass on
  *     generated component templates across frameworks.
  */
 

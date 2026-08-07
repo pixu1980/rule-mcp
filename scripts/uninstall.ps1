@@ -1,6 +1,6 @@
 #!/usr/bin/env pwsh
 # =============================================================================
-# rule-mcp — Universal Uninstaller (Windows / PowerShell)
+# rule-mcp - Universal Uninstaller (Windows / PowerShell)
 # =============================================================================
 #
 # Reverses all changes made by install.ps1:
@@ -35,7 +35,7 @@ param(
 )
 
 if ($Help) {
-  Write-Host "rule-mcp — Universal Uninstaller (PowerShell)" -ForegroundColor Cyan
+  Write-Host "rule-mcp - Universal Uninstaller (PowerShell)" -ForegroundColor Cyan
   Write-Host ""
   Write-Host "Usage:" -ForegroundColor Yellow
   Write-Host "  .\scripts\uninstall.ps1"
@@ -146,7 +146,7 @@ function Remove-McpEntry {
     return $true
   }
   catch {
-    # JSON parse failed — try line-based removal
+    # JSON parse failed - try line-based removal
     Write-Warn "${Label}: JSON parse error, trying line-based removal"
     try {
       $backup = "${FilePath}.bak"
@@ -258,7 +258,7 @@ function Remove-Lines {
 if (-not $DryRun -and -not $Force) {
   Write-Host ""
   Write-Host "╔══════════════════════════════════════════════════════╗" -ForegroundColor Yellow
-  Write-Host "║      rule-mcp — Uninstall Confirmation         ║" -ForegroundColor Yellow
+  Write-Host "║      rule-mcp - Uninstall Confirmation         ║" -ForegroundColor Yellow
   Write-Host "╚══════════════════════════════════════════════════════╝" -ForegroundColor Yellow
   Write-Host ""
   Write-Host "  This will remove rule-mcp configuration from:"
@@ -284,7 +284,7 @@ if (-not $DryRun -and -not $Force) {
 
 Write-Host ""
 Write-Host "╔══════════════════════════════════════════════════════╗" -ForegroundColor Red
-Write-Host "║       rule-mcp — Universal Uninstaller        ║" -ForegroundColor Red
+Write-Host "║       rule-mcp - Universal Uninstaller        ║" -ForegroundColor Red
 Write-Host "╚══════════════════════════════════════════════════════╝" -ForegroundColor Red
 Write-Host ""
 
@@ -352,7 +352,7 @@ if ($TargetAgent) {
     }
   }
 
-  # VS Code global config (user-level — where VS Code 1.90+ stores MCP)
+  # VS Code global config (user-level - where VS Code 1.90+ stores MCP)
   $vscodeGlobalDirs = @()
   if ($env:APPDATA) {
     $vscodeGlobalDirs += @(
@@ -401,7 +401,7 @@ if (Test-Path $piAgentsMd) {
 # ─────────────────────────────────────────────────────────────────────────────
 Write-Header "Phase 3: IDE Configurations"
 
-# VS Code global config (macOS/Linux — covered in Phase 1 for Windows)
+# VS Code global config (macOS/Linux - covered in Phase 1 for Windows)
 if ($IsMacOS -or $IsLinux) {
   $vscodeGlobalDirs = @()
   if ($IsMacOS) {
@@ -608,7 +608,7 @@ if (Test-Command rule-mcp) {
 Write-Header "Uninstall Summary"
 
 if ($DryRun) {
-  Write-Host "⚠ Dry-run mode — no changes were made" -ForegroundColor Yellow
+  Write-Host "⚠ Dry-run mode - no changes were made" -ForegroundColor Yellow
   Write-Host ""
   Write-Host "To apply:  .\scripts\uninstall.ps1"
   Write-Host ""

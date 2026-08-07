@@ -1,10 +1,10 @@
-# rule Vanilla Reactive — VS Code Extension
+# rule Vanilla Reactive - VS Code Extension
 
 Syntax highlighting + snippets for `rule-vanilla-reactive` template syntax.
 
 ## Features
 
-### 1. `html\`\`` inside JS/TS — highlighted as HTML
+### 1. `html\`\`` inside JS/TS - highlighted as HTML
 
 ```js
 const result = html`
@@ -18,7 +18,7 @@ const result = html`
 Without the extension, this is plain green text. With it, HTML tags, `{{ }}`,
 `@click`, and `data-part` attributes are all syntax-highlighted.
 
-### 2. `.template.html` files — full language support
+### 2. `.template.html` files - full language support
 
 ```html
 <section data-part="card">
@@ -34,10 +34,10 @@ Without the extension, this is plain green text. With it, HTML tags, `{{ }}`,
 
 Files with `.template.html` extension get proper HTML highlighting PLUS:
 
-- `<for>`, `<if>`, `<elseif>`, `<else>`, `<switch>`, `<case>` — keyword colors
-- `{{ expr | filter }}` — expression highlighting with filter recognition
-- `@click`, `@submit`, etc. — event attribute colors
-- `data-part` — attribute recognition
+- `<for>`, `<if>`, `<elseif>`, `<else>`, `<switch>`, `<case>` - keyword colors
+- `{{ expr | filter }}` - expression highlighting with filter recognition
+- `@click`, `@submit`, etc. - event attribute colors
+- `data-part` - attribute recognition
 
 ### 3. Snippets
 

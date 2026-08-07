@@ -12,7 +12,7 @@ tags:
 frameworks: [all]
 ---
 
-# rule — Skill and tool dispatcher
+# rule - Skill and tool dispatcher
 
 `rule` is the canonical entry point for the full rule ecosystem. It routes user intent to the smallest set of specialized skills and MCP tools needed to complete the task without duplicating context.
 
@@ -99,7 +99,7 @@ Design and implement APIs, runtime frameworks, security, and scaffolds.
 
 | Skill                                                        | Tool                     | Frameworks         | Use when                                                                                                                 |
 | ------------------------------------------------------------ | ------------------------ | ------------------ | ------------------------------------------------------------------------------------------------------------------------ |
-| [rule-backend](../rule-backend/SKILL.md)                       | `pix_backend`            | all                | Backend application development umbrella — routes REST, GraphQL, runtime, security, and database work to focused skills. |
+| [rule-backend](../rule-backend/SKILL.md)                       | `pix_backend`            | all                | Backend application development umbrella - routes REST, GraphQL, runtime, security, and database work to focused skills. |
 | [rule-backend-api-design](../rule-backend-api-design/SKILL.md) | `pix_backend_api_design` | node, api          | Design REST APIs for rule backend services. Use when defining endpoints, HTTP methods, versioning, request/respons...     |
 | [rule-backend-express](../rule-backend-express/SKILL.md)       | `pix_backend_express`    | all                | Express.js 5+ best practices: middleware patterns, error handling, routing, performance optimization, security header... |
 | [rule-backend-fastify](../rule-backend-fastify/SKILL.md)       | `pix_backend_fastify`    | all                | Fastify 5+ best practices: plugins, hooks, schema validation, serialization, lifecycle, logging, and performance tuni... |
@@ -182,7 +182,7 @@ Write ADRs/docs, follow BMAD, feature workflow, and handoff.
 | ------------------------------------------------------------------------ | ------------------------------ | ---------- | ------------------------------------------------------------------------------------------------------------------------ |
 | [rule-process](../rule-process/SKILL.md)                                   | `pix_process`                  | all        | Index of process skills: ADR, BMAD, code review, documentation, feature workflow, and LLM handoff.                       |
 | [rule-process-adr](../rule-process-adr/SKILL.md)                           | `pix_process_adr`              | all        | Architecture Decision Records (ADR) for rule projects. Capture, store, and manage architectural decisions in docs/...     |
-| [rule-process-bmad](../rule-process-bmad/SKILL.md)                         | `pix_process_bmad`             | all        | BMAD Method (Build More Architect Dreams) — AI-driven development framework for structured software delivery through...  |
+| [rule-process-bmad](../rule-process-bmad/SKILL.md)                         | `pix_process_bmad`             | all        | BMAD Method (Build More Architect Dreams) - AI-driven development framework for structured software delivery through...  |
 | [rule-process-code-review](../rule-process-code-review/SKILL.md)           | `pix_process_code_review`      | all        | Prepare and conduct risk-based PR/MR reviews with explicit quality, safety, and follow-up gates.                         |
 | [rule-process-documentation](../rule-process-documentation/SKILL.md)       | `pix_process_documentation`    | all        | Set up and maintain Mintlify documentation for rule repositories. Use when creating the docs/ directory, configuri...     |
 | [rule-process-feature-workflow](../rule-process-feature-workflow/SKILL.md) | `pix_process_feature_workflow` | all        | End-to-end procedure for adding a new feature to any rule repository. Use when implementing a feature in a backend...     |
@@ -262,7 +262,7 @@ Design and route visible interface work while preserving rule implementation con
 
 ## See also
 
-- [rule-architect](../rule-architect/SKILL.md) — Architecture wizard and SDD workflow
-- [rule-styleguide](../rule-styleguide/SKILL.md) — Shared coding standards
-- [rule-process-feature-workflow](../rule-process-feature-workflow/SKILL.md) — Feature delivery workflow
-- [rule-toolchain](../rule-toolchain/SKILL.md) — Toolchain index
+- [rule-architect](../rule-architect/SKILL.md) - Architecture wizard and SDD workflow
+- [rule-styleguide](../rule-styleguide/SKILL.md) - Shared coding standards
+- [rule-process-feature-workflow](../rule-process-feature-workflow/SKILL.md) - Feature delivery workflow
+- [rule-toolchain](../rule-toolchain/SKILL.md) - Toolchain index

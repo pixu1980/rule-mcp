@@ -13,13 +13,13 @@
  * first; every remaining command follows in locale-alphabetical order.
  *
  * Why clean commands at all: Claude Code exposes MCP prompts as
- * `/<server>:<prompt> (MCP)` — the server prefix cannot be dropped client-side.
+ * `/<server>:<prompt> (MCP)` - the server prefix cannot be dropped client-side.
  * User-level command files (`~/.claude/commands/*.md`) are invoked bare
  * (`/rule-handoff`), so the installer ships these AND suppresses the server's
  * prompts for Claude (RULE_MCP_NO_PROMPTS=1) to avoid duplicate entries.
  *
- * @see module:prompts/index — listPrompts (the source registry)
- * @see module:cli/install — installClaude sets RULE_MCP_NO_PROMPTS
+ * @see module:prompts/index - listPrompts (the source registry)
+ * @see module:cli/install - installClaude sets RULE_MCP_NO_PROMPTS
  */
 
 import { listPrompts } from "../prompts/index.js";
@@ -36,15 +36,15 @@ export const ROUTER_COMMAND = "rule-mcp";
  *                   literal, meaningless token never reaches the model)
  */
 const FORMATS = {
-  // Claude Code, Pi, Cursor, opencode — substitute $ARGUMENTS
+  // Claude Code, Pi, Cursor, opencode - substitute $ARGUMENTS
   args: { ext: ".md", frontmatter: "yaml", placeholder: "$ARGUMENTS" },
-  // Roo Code / forks — frontmatter menu entry, arguments typed by hand
+  // Roo Code / forks - frontmatter menu entry, arguments typed by hand
   plain: { ext: ".md", frontmatter: "yaml", placeholder: null },
-  // VS Code Copilot Chat prompt files — `/name`, ${input:…} only, no $ARGUMENTS
+  // VS Code Copilot Chat prompt files - `/name`, ${input:…} only, no $ARGUMENTS
   prompt: { ext: ".prompt.md", frontmatter: "yaml", placeholder: null },
-  // Windsurf, Cline — workflow files, no argument substitution
+  // Windsurf, Cline - workflow files, no argument substitution
   workflow: { ext: ".md", frontmatter: null, placeholder: null },
-  // Gemini CLI (and forks) — TOML with {{args}}
+  // Gemini CLI (and forks) - TOML with {{args}}
   gemini: { ext: ".toml", frontmatter: "toml", placeholder: "{{args}}" },
 };
 
@@ -112,7 +112,7 @@ const ROUTER = {
  * scoped Conventional Commits, followed by a separate commit for pending decision
  * documents. The generated handoff is then written to docs/handoff/ and committed
  * on its own, so it survives the session instead of living only in the chat.
- * Commits stay local — the flow never pushes.
+ * Commits stay local - the flow never pushes.
  */
 const HANDOFF_BODY = [
   "Generate a session handoff and commit pending work: $ARGUMENTS",
@@ -123,7 +123,7 @@ const HANDOFF_BODY = [
   "   b. Stage each group explicitly (pathspecs or `git add -p`) and commit with Conventional Commits AND a mandatory scope: `type(scope): subject` (e.g. `feat(architect): ...`, `chore(eslint): ...`). The `commit-msg` hook rejects scope-less messages.",
   "   c. After the code/config commits, make ONE SEPARATE final commit for decision documents already pending in the tree (ADR, CHANGELOG, docs/): `docs(adr): ...` or `docs(handoff): ...`.",
   "   d. NEVER push. Leave every commit local for review.",
-  "3. Persist the handoff: write it to `docs/handoff/<NN>-<slug>.md` where NN is the next free two-digit number in that directory and <slug> is a kebab-case topic (e.g. `13-security-audit-remediation.md`). Open with the branch, the commit range it covers, and the date. Then commit that file ALONE — no other paths — as `chore(handoff): add session handoff <NN>-<slug>`. A handoff that exists only in the chat is lost when the session ends.",
+  "3. Persist the handoff: write it to `docs/handoff/<NN>-<slug>.md` where NN is the next free two-digit number in that directory and <slug> is a kebab-case topic (e.g. `13-security-audit-remediation.md`). Open with the branch, the commit range it covers, and the date. Then commit that file ALONE - no other paths - as `chore(handoff): add session handoff <NN>-<slug>`. A handoff that exists only in the chat is lost when the session ends.",
   "4. Present the handoff as a paste-ready block for the next session, including the commit-scope convention reminder, the path of the handoff file, and the list of commits just created.",
   "5. If the grouping into atomic commits is ambiguous, ask the user how to split before committing.",
 ].join("\n");
@@ -132,7 +132,7 @@ const HANDOFF_BODY = [
  * Uniform body for an area/workflow command: route through rule, honour the
  * TDD/a11y baseline, validate, and close with a scoped commit.
  *
- * @param {string} description — the prompt's registry description
+ * @param {string} description - the prompt's registry description
  * @returns {string}
  */
 function areaBody(description) {

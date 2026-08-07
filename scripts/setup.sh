@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # =============================================================================
-# rule-mcp — Quick Setup (one-liner)
+# rule-mcp - Quick Setup (one-liner)
 # =============================================================================
 #
 # One-command setup: npm install + agent detection + configuration.
@@ -30,7 +30,7 @@ INSTALL_SCRIPT="$SCRIPT_DIR/install.sh"
 
 # If we're inside the repository, use the local install.sh
 if [ -f "$INSTALL_SCRIPT" ]; then
-  echo "Found local install.sh — running it..."
+  echo "Found local install.sh - running it..."
   exec bash "$INSTALL_SCRIPT" "$@"
 fi
 

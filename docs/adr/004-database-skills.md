@@ -7,7 +7,7 @@
 
 ## Context
 
-Database expertise is required in most projects but was absent from the skill taxonomy. Different databases have fundamentally different patterns — PostgreSQL indexing strategies differ from MongoDB schema design differ from MySQL InnoDB tuning. A single "database" skill would be too shallow.
+Database expertise is required in most projects but was absent from the skill taxonomy. Different databases have fundamentally different patterns - PostgreSQL indexing strategies differ from MongoDB schema design differ from MySQL InnoDB tuning. A single "database" skill would be too shallow.
 
 ## Decision
 
@@ -27,9 +27,9 @@ Create four database skills spanning relational and document databases:
 - Comprehensive database coverage: SQL theory + 3 major implementations
 - Each skill is focused enough to provide deep, actionable guidance
 - Cross-references between SQL → PostgreSQL/MySQL and MongoDB → SQL for hybrid architectures
-- Framework-agnostic — usable by any backend framework skill
+- Framework-agnostic - usable by any backend framework skill
 
 **Negative:**
 
 - Four skills to maintain as database versions evolve
-- Some content (indexing theory) is duplicated across SQL and specific DB skills — intentional for self-containment
+- Some content (indexing theory) is duplicated across SQL and specific DB skills - intentional for self-containment

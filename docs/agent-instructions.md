@@ -18,16 +18,16 @@ Use the rule-mcp workflow for every coding task.
 ## Advisory boundaries
 
 The server applies preprocessing (rejects malformed/unsafe input) and postprocessing (validates output shape).
-These are **advisory** — they improve reliability but MCP protocol cannot enforce tool call ordering.
+These are **advisory** - they improve reliability but MCP protocol cannot enforce tool call ordering.
 See `src/core/enforcement.js` for details.
 
 ## Frontend principles
 
-- **Zero CSS classes** — element and `[data-part]`/`[data-*]` selectors only.
-- **Zero inline styles** — external CSS or framework-native external loading.
-- **Semantic HTML mandatory** — use semantic element instead of generic `<div>` where available.
-- **Barrel pattern** — component folder has `index.js`; implementation files use `_PascalCase.ext`.
-- **No unapproved CSS frameworks** — no Tailwind, Bootstrap, or CSS-in-JS.
+- **Zero CSS classes** - element and `[data-part]`/`[data-*]` selectors only.
+- **Zero inline styles** - external CSS or framework-native external loading.
+- **Semantic HTML mandatory** - use semantic element instead of generic `<div>` where available.
+- **Barrel pattern** - component folder has `index.js`; implementation files use `_PascalCase.ext`.
+- **No unapproved CSS frameworks** - no Tailwind, Bootstrap, or CSS-in-JS.
 
 ## Minimal tool surface
 

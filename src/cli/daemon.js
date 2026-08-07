@@ -85,7 +85,7 @@ function tryExec(command, options = {}) {
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
-// macOS — LaunchAgent plist
+// macOS - LaunchAgent plist
 // ═══════════════════════════════════════════════════════════════════════════
 
 const LAUNCH_AGENT_LABEL = "io.github.rule.rule-mcp";
@@ -105,7 +105,7 @@ export const WRAPPER_SCRIPT_PATH = join(HOME, ".local", "bin", "rule-mcpd");
  * macOS displays "rule-mcpd" in Login Items rather than "Node.js Foundation".
  *
  * @param {{ node: string, script: string }} ep
- * @returns {string} — shell script content
+ * @returns {string} - shell script content
  */
 export function generateWrapperScript(ep) {
   return `#!/usr/bin/env bash
@@ -129,7 +129,7 @@ exec ${escapePlist(ep.node)} ${escapePlist(ep.script)} serve --transport sse
  * so macOS shows "rule-mcpd" in Login Items.
  *
  * @param {{ node: string, script: string, command: string[] }} ep
- * @returns {string} — plist XML content
+ * @returns {string} - plist XML content
  */
 // eslint-disable-next-line no-unused-vars
 function generateLaunchAgentPlist(ep) {
@@ -285,7 +285,7 @@ function checkLaunchAgent() {
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
-// Linux — systemd user service
+// Linux - systemd user service
 // ═══════════════════════════════════════════════════════════════════════════
 
 const SYSTEMD_UNIT_NAME = "rule-mcp";
@@ -295,7 +295,7 @@ const SYSTEMD_UNIT_PATH = join(SYSTEMD_USER_DIR, `${SYSTEMD_UNIT_NAME}.service`)
 /**
  * Generate the systemd user service unit file.
  * @param {{ node: string, script: string, command: string[] }} ep
- * @returns {string} — systemd unit content
+ * @returns {string} - systemd unit content
  */
 function generateSystemdUnit(ep) {
   const p = getRuntimePaths();
@@ -433,12 +433,12 @@ function checkSystemdService() {
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
-// Windows — Windows Service
+// Windows - Windows Service
 // ═══════════════════════════════════════════════════════════════════════════
 
 const WINDOWS_SERVICE_NAME = "rule-mcp";
 
-/** @returns {string} — Windows command line for the service binary */
+/** @returns {string} - Windows command line for the service binary */
 function getWindowsServiceCommand() {
   const ep = resolveEntrypoint();
   return `"${ep.node}" "${ep.script}" serve --transport sse`;
@@ -463,7 +463,7 @@ function installWindowsService({ dryRun = false } = {}) {
   const isExists = !check.includes("NOT_FOUND") && !check.includes("FAILED") && !check.includes("1060");
 
   if (isExists) {
-    // Service exists — update config and restart
+    // Service exists - update config and restart
     tryExec(`sc config "${name}" binPath= "${command}" start= auto`);
     tryExec(`sc stop "${name}" 2>nul || true`);
     tryExec(`sc start "${name}" 2>nul || true`);
@@ -550,7 +550,7 @@ function checkWindowsService() {
 
 /**
  * Start a background daemon process (spawns SSE server as child).
- * This is the original implementation — works everywhere but won't
+ * This is the original implementation - works everywhere but won't
  * survive reboots or appear in Login Items.
  *
  * @param {{ dryRun?: boolean }} [opts]

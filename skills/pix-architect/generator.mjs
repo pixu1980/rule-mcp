@@ -1,4 +1,4 @@
-// rule-architect generator — .context/ file generation engine
+// rule-architect generator - .context/ file generation engine
 // Pure logic, no DOM, no server. Used by both rule-architect-cli and rule-architect-web.
 
 import { readFileSync, existsSync, mkdirSync, writeFileSync } from "node:fs";
@@ -25,7 +25,7 @@ function todoMarkdown(keys) {
 }
 
 // JSON placeholders all sit inside string values, so the marker must be
-// plain text — no markdown emphasis, no characters needing JSON escaping.
+// plain text - no markdown emphasis, no characters needing JSON escaping.
 function todoJson(key) {
   return `TODO: ${key}`;
 }
@@ -48,7 +48,7 @@ function substituteInline(line, marker) {
 // True when the only thing left after removing the unfilled placeholders is
 // list/quote/emphasis decoration or a bare label ("- **Context**:"). Such a
 // line carries no information of its own, so it is dropped rather than
-// TODO-marked — otherwise every scaffold line becomes its own TODO.
+// TODO-marked - otherwise every scaffold line becomes its own TODO.
 function isDecorationOnly(line) {
   const withoutTokens = line.replace(PLACEHOLDER_RE, (match, key) => (JUNK.has(key) ? match : ""));
   const withoutLabels = withoutTokens
@@ -59,7 +59,7 @@ function isDecorationOnly(line) {
 }
 
 // Markdown policy. Ordered, and deliberately biased towards deleting less:
-//   1. fenced code blocks are literal — never rewritten or dropped
+//   1. fenced code blocks are literal - never rewritten or dropped
 //   2. table rows are never dropped (one row can carry several placeholders
 //      alongside real content, e.g. a roadmap milestone)
 //   3. a line that is only decoration + unfilled placeholders is dropped
@@ -83,7 +83,7 @@ function applyMarkdownPolicy(content) {
     if (inFence) continue;
 
     // An unfilled placeholder that is the entire content of an inline-code span
-    // — `[KEY]` — would render the italic TODO marker's underscores literally
+    // - `[KEY]` - would render the italic TODO marker's underscores literally
     // inside the code span. Drop the backticks so the marker reads as prose.
     // (Filled placeholders were already substituted before this policy runs,
     // so any `[KEY]` remaining here is genuinely unfilled.)
@@ -167,7 +167,7 @@ function applyDataPolicy(content) {
 
 /**
  * Render one template against the answers. Single source of truth for both
- * generator entry points — the fill loop used to be duplicated, so the
+ * generator entry points - the fill loop used to be duplicated, so the
  * empty-placeholder policy could drift between the disk and in-memory paths.
  * @returns {{ path: string, content: string, filled: number, unfilled: number }}
  */
@@ -216,7 +216,7 @@ export function shouldEmit(tmpl, answers, spec) {
   // Gates are authored against stable option KEYS ("other"), but
   // normalizeAnswers rewrites a select answer to its prose label ("Other"),
   // and callers may hand us either raw or already-normalized answers. Accept
-  // both spellings so the gate does not depend on that ordering — or on
+  // both spellings so the gate does not depend on that ordering - or on
   // wizard UI copy.
   const accepted = new Set(wanted);
   for (const value of wanted) {
@@ -228,7 +228,7 @@ export function shouldEmit(tmpl, answers, spec) {
 
 // README.md's documentation map used to be hardcoded, which made it drift:
 // it linked a nonexistent `specs/10-rule-routing.md`, omitted specs 07-09
-// and 11-12 entirely, and — once `emitWhen` can withhold a template — would
+// and 11-12 entirely, and - once `emitWhen` can withhold a template - would
 // have pointed at files that were never written. Deriving it from the list
 // actually being emitted keeps the index true by construction.
 const DOC_MAP_GROUPS = [
@@ -259,7 +259,7 @@ function buildDocMap(emitted) {
 
 // One shared render path for both entry points: decide what emits, derive the
 // documentation map from that decision, then render. Keeping this in one place
-// is the point of Phase 5 Task 1 — the fill loop used to be duplicated and the
+// is the point of Phase 5 Task 1 - the fill loop used to be duplicated and the
 // two copies could drift.
 function renderAll(templates, answers, spec) {
   const emitted = templates.filter((tmpl) => shouldEmit(tmpl, answers, spec));
@@ -269,7 +269,7 @@ function renderAll(templates, answers, spec) {
 
 /**
  * Fan out the rendered AGENTS.md body to every other per-tool entry file.
- * Render ONCE (the AGENTS.md template), write N — these are NOT separate
+ * Render ONCE (the AGENTS.md template), write N - these are NOT separate
  * templates in templates.json, just the same final string re-framed per
  * tool. Frontmatter-framed tools (Cursor, Windsurf) get the RESOLVED
  * project name (not a literal placeholder) spliced into their frontmatter.
@@ -279,7 +279,7 @@ function renderAll(templates, answers, spec) {
  */
 // YAML frontmatter is line-oriented, so any newline in an interpolated value
 // terminates the block early and spills the remaining keys into the document
-// body — a project name of `Evil\n---\nalwaysApply: false` silently disabled
+// body - a project name of `Evil\n---\nalwaysApply: false` silently disabled
 // the Cursor rule. Collapse to a single line and strip the characters that
 // would otherwise start a new YAML node.
 function frontmatterSafe(value) {
@@ -311,7 +311,7 @@ function fanOutEntryPoints(agentsContent, projectName) {
  * Write one generated entry to disk. Root entry files (the AGENTS.md family
  * that lands in the project root, next to a user's own CLAUDE.md/AGENTS.md)
  * are GUARDED: an existing one is left untouched and reported "skipped" unless
- * the caller forces it. `.context/` scaffold is unguarded — it is architect-
+ * the caller forces it. `.context/` scaffold is unguarded - it is architect-
  * owned and always regenerated, so re-running the wizard keeps refreshing it.
  * @returns {"written"|"skipped"}
  */
@@ -325,7 +325,7 @@ function writeEntry(fullPath, content, { guard, force }) {
 /**
  * Generate .context/ files from wizard answers + wizard-spec. Templates
  * flagged `root: true` (e.g. AGENTS.md) are written to `targetDir` itself
- * instead of `targetDir/.context/` — everything else is unchanged.
+ * instead of `targetDir/.context/` - everything else is unchanged.
  *
  * Root entry files are never overwritten silently: an existing one is skipped
  * (and listed in the returned `skipped[]`) unless `options.force` is set.
@@ -353,7 +353,7 @@ export function generateContext(answers, spec, targetDir, options = {}) {
 
   const generated = renderAll(templates, answers, spec);
   // Root files that already existed and were left untouched, root-relative,
-  // so a CLI/server can report "CLAUDE.md exists — not overwritten".
+  // so a CLI/server can report "CLAUDE.md exists - not overwritten".
   const skipped = [];
   for (const rendered of generated) {
     // `root` tells a caller where the file landed, so a summary can say
@@ -361,7 +361,7 @@ export function generateContext(answers, spec, targetDir, options = {}) {
     const isRoot = rootOutputs.has(rendered.path);
     if (isRoot) rendered.root = true;
     // Root-output templates (e.g. AGENTS.md) are written to targetDir itself
-    // but still report a targetDir-relative path — same shape as the
+    // but still report a targetDir-relative path - same shape as the
     // .context/-relative entries, just anchored one level up.
     const fullPath = isRoot ? join(targetDir, rendered.path) : join(ctxDir, rendered.path);
     const status = writeEntry(fullPath, rendered.content, { guard: isRoot, force });
@@ -377,7 +377,7 @@ export function generateContext(answers, spec, targetDir, options = {}) {
 
   // Fan out the rendered AGENTS.md body to every other per-tool entry file
   // (CLAUDE.md, GEMINI.md, .clinerules, Copilot, Cursor, Windsurf). Render
-  // once above, write N here — same content, just re-framed per tool. Each is
+  // once above, write N here - same content, just re-framed per tool. Each is
   // guarded independently: a skipped AGENTS.md must not stop an absent
   // CLAUDE.md from being written from the freshly-rendered body.
   const agentsEntry = generated.find((f) => f.path === "AGENTS.md");
@@ -409,7 +409,7 @@ export function generateContext(answers, spec, targetDir, options = {}) {
 /**
  * Generate .context/ file contents in-memory (no disk write). `root: true`
  * templates (e.g. AGENTS.md) report a targetDir-relative `path` (e.g.
- * "AGENTS.md") instead of a .context/-relative one — same `output` value
+ * "AGENTS.md") instead of a .context/-relative one - same `output` value
  * either way, since this entry point never writes to disk.
  * @returns {Array<{path, content, filled, unfilled}>}
  */
@@ -430,7 +430,7 @@ export function generateContextContent(answers, spec) {
   }
 
   // Fan out the rendered AGENTS.md body to every other per-tool entry file
-  // (CLAUDE.md, GEMINI.md, .clinerules, Copilot, Cursor, Windsurf) — same
+  // (CLAUDE.md, GEMINI.md, .clinerules, Copilot, Cursor, Windsurf) - same
   // in-memory treatment as generateContext, just without disk writes.
   const agentsEntry = files.find((f) => f.path === "AGENTS.md");
   if (agentsEntry) {

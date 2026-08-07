@@ -11,7 +11,7 @@ Every source document below is preserved verbatim under its own heading so no pr
 > Original path: `docs/TOOLS.md`  
 > SHA-256: `c4d991959a0938b689972cd69ddae6462d0985743ae1dbd3dbe879623c3dc8d1`
 
-# rule-mcp — Tools Reference
+# rule-mcp - Tools Reference
 
 > Complete reference for all MCP tools, resources, and prompts.
 > Last updated: 2026-07-10
@@ -92,12 +92,12 @@ Every skill tool (`rule_tool_frontend_react`, `rule_tool_devops_docker`, etc.) s
 
 | Mode         | Description                        | Token savings |
 | ------------ | ---------------------------------- | ------------- |
-| `full`       | Full SKILL.md content              | —             |
+| `full`       | Full SKILL.md content              | -             |
 | `summary`    | First 30 lines                     | ~70%          |
 | `tldr`       | BM25-relevant sections for `query` | ~90-97%       |
 | `search`     | Lines containing `query` (grep)    | ~95%          |
 | `guardrails` | Only testable assertions           | ~80%          |
-| `check`      | Validate `code` against guardrails | —             |
+| `check`      | Validate `code` against guardrails | -             |
 
 `rule_tool_styleguide` and `rule_tool_architect` add `scaffold`.  
 `rule_tool_architect` also adds `interview` (context wizard server).
@@ -143,9 +143,9 @@ Uses keyword scoring across all skill sections, with framework bias (×2 for det
 
 | Param       | Type   | Required | Default | Description                                                                   |
 | ----------- | ------ | -------- | ------- | ----------------------------------------------------------------------------- |
-| `prompt`    | string | ✅       | —       | User's question about frontend development                                    |
-| `framework` | string | —        | —       | Framework hint (react, vue, svelte, angular, solid, astro, electron, vanilla) |
-| `path`      | string | —        | —       | Project path for auto-framework detection                                     |
+| `prompt`    | string | ✅       | -       | User's question about frontend development                                    |
+| `framework` | string | -        | -       | Framework hint (react, vue, svelte, angular, solid, astro, electron, vanilla) |
+| `path`      | string | -        | -       | Project path for auto-framework detection                                     |
 
 ### Output (JSON)
 
@@ -189,14 +189,14 @@ rule prompt="Create a responsive navbar" framework=react
 
 | Param         | Type    | Required | Default | Description                                                                                                                      |
 | ------------- | ------- | -------- | ------- | -------------------------------------------------------------------------------------------------------------------------------- |
-| `mode`        | enum    | —        | `full`  | `full`, `summary`, `tldr`, `search`, `guardrails`, `check` (+ `scaffold` for styleguides/architect, + `interview` for architect) |
-| `query`       | string  | —        | —       | Query for mode=search or mode=tldr                                                                                               |
-| `code`        | string  | —        | —       | Code to validate (required for mode=check)                                                                                       |
-| `framework`   | string  | —        | —       | Framework hint for mode=check                                                                                                    |
-| `fileName`    | string  | —        | —       | File name for naming convention checks                                                                                           |
-| `isComponent` | boolean | —        | —       | Whether this is a component file                                                                                                 |
-| `file`        | string  | —        | —       | Specific scaffold file (mode=scaffold)                                                                                           |
-| `target`      | string  | —        | —       | Project directory (architect interview)                                                                                          |
+| `mode`        | enum    | -        | `full`  | `full`, `summary`, `tldr`, `search`, `guardrails`, `check` (+ `scaffold` for styleguides/architect, + `interview` for architect) |
+| `query`       | string  | -        | -       | Query for mode=search or mode=tldr                                                                                               |
+| `code`        | string  | -        | -       | Code to validate (required for mode=check)                                                                                       |
+| `framework`   | string  | -        | -       | Framework hint for mode=check                                                                                                    |
+| `fileName`    | string  | -        | -       | File name for naming convention checks                                                                                           |
+| `isComponent` | boolean | -        | -       | Whether this is a component file                                                                                                 |
+| `file`        | string  | -        | -       | Specific scaffold file (mode=scaffold)                                                                                           |
+| `target`      | string  | -        | -       | Project directory (architect interview)                                                                                          |
 
 ### Examples
 
@@ -223,7 +223,7 @@ rule_tool_styleguide mode=scaffold file=.prettierrc
 rule_tool_architect mode=interview target=./my-project
 ```
 
-### Mode `tldr` — token savings
+### Mode `tldr` - token savings
 
 Uses BM25 to return ONLY sections matching the query, with snippets and scores. Saves 90-97% compared to `mode=full`.
 
@@ -253,8 +253,8 @@ Indexes by `##` sections, returns ranked results with score, snippet, skill, and
 
 | Param        | Type   | Required | Default | Description                |
 | ------------ | ------ | -------- | ------- | -------------------------- |
-| `query`      | string | ✅       | —       | Search query               |
-| `maxResults` | number | —        | 10      | Max ranked results (1–100) |
+| `query`      | string | ✅       | -       | Search query               |
+| `maxResults` | number | -        | 10      | Max ranked results (1–100) |
 
 ### Output
 
@@ -291,29 +291,29 @@ Supports smart iteration: pass `previousPassed` to skip already-verified guardra
 
 | Param                 | Type     | Required | Default | Description                                                                                   |
 | --------------------- | -------- | -------- | ------- | --------------------------------------------------------------------------------------------- |
-| `skill`               | string   | ✅       | —       | Target skill (e.g. `rule-frontend-react`)                                                      |
-| `code`                | string   | ✅       | —       | Source code to validate                                                                       |
-| `fileName`            | string   | —        | —       | File name (enables naming convention checks)                                                  |
-| `isComponent`         | boolean  | —        | —       | Whether this is a component file                                                              |
-| `framework`           | string   | —        | —       | Framework override                                                                            |
-| `mode`                | string   | —        | —       | Check mode (e.g. `scaffold` for config files)                                                 |
-| `previousPassed`      | string[] | —        | —       | Guardrail IDs already passed — skip on re-check                                               |
-| `allowedDependencies` | string[] | —        | —       | Manifest-derived packages allowed in external imports; enables dependency hallucination check |
+| `skill`               | string   | ✅       | -       | Target skill (e.g. `rule-frontend-react`)                                                      |
+| `code`                | string   | ✅       | -       | Source code to validate                                                                       |
+| `fileName`            | string   | -        | -       | File name (enables naming convention checks)                                                  |
+| `isComponent`         | boolean  | -        | -       | Whether this is a component file                                                              |
+| `framework`           | string   | -        | -       | Framework override                                                                            |
+| `mode`                | string   | -        | -       | Check mode (e.g. `scaffold` for config files)                                                 |
+| `previousPassed`      | string[] | -        | -       | Guardrail IDs already passed - skip on re-check                                               |
+| `allowedDependencies` | string[] | -        | -       | Manifest-derived packages allowed in external imports; enables dependency hallucination check |
 
 ### Guardrails checked
 
 **Shared (all skills):**
 
-- `no-css-classes` — Zero CSS classes. Element + `[data-part]` selectors only
-- `no-inline-styles` — Zero inline styles. No `style="..."`
-- `semantic-html` — Semantic HTML. No `<div>` where semantic element exists
-- `external-css` — External CSS (adoptedStyleSheets or framework-native import)
-- `barrel-file-tree` — Barrel pattern: `index.js` re-exports
-- `file-naming` — `_PascalCase.ext` for components
-- `data-part-naming` — `data-part="role"` for child elements
-- `jsdoc-required` — JSDoc on every exported symbol
-- `css-comments-required` — CSS file header comments
-- `a11y-test-required` — Playwright + axe-core a11y tests
+- `no-css-classes` - Zero CSS classes. Element + `[data-part]` selectors only
+- `no-inline-styles` - Zero inline styles. No `style="..."`
+- `semantic-html` - Semantic HTML. No `<div>` where semantic element exists
+- `external-css` - External CSS (adoptedStyleSheets or framework-native import)
+- `barrel-file-tree` - Barrel pattern: `index.js` re-exports
+- `file-naming` - `_PascalCase.ext` for components
+- `data-part-naming` - `data-part="role"` for child elements
+- `jsdoc-required` - JSDoc on every exported symbol
+- `css-comments-required` - CSS file header comments
+- `a11y-test-required` - Playwright + axe-core a11y tests
 
 **Framework-specific:**
 
@@ -322,15 +322,15 @@ Supports smart iteration: pass `previousPassed` to skip already-verified guardra
 - Angular: `angular-no-ngclass`
 - Svelte: `svelte-no-class-directive`
 
-**JavaScript/TypeScript idioms (all JS frameworks — eslint-plugin-unicorn rules):**
+**JavaScript/TypeScript idioms (all JS frameworks - eslint-plugin-unicorn rules):**
 
-- `js-throw-new-error` — `throw Error()` → `throw new Error()`
-- `js-new-for-builtins` — `Map()`/`Set()`/`Date()`/`Array()` → `new Map()`/…
-- `js-array-flat-map` — `.map().flat()` → `.flatMap()`
-- `js-prefer-set-has` — `Array.includes()` in loops → `Set.has()` (O(n²) → O(n))
-- `js-node-protocol` — `import fs from 'fs'` → `import fs from 'node:fs'`
-- `js-prefer-replace-all` — `str.replace(/x/g, …)` → `str.replaceAll('x', …)`
-- `js-no-array-for-each` — `.forEach()` → `for...of`
+- `js-throw-new-error` - `throw Error()` → `throw new Error()`
+- `js-new-for-builtins` - `Map()`/`Set()`/`Date()`/`Array()` → `new Map()`/…
+- `js-array-flat-map` - `.map().flat()` → `.flatMap()`
+- `js-prefer-set-has` - `Array.includes()` in loops → `Set.has()` (O(n²) → O(n))
+- `js-node-protocol` - `import fs from 'fs'` → `import fs from 'node:fs'`
+- `js-prefer-replace-all` - `str.replace(/x/g, …)` → `str.replaceAll('x', …)`
+- `js-no-array-for-each` - `.forEach()` → `for...of`
 
 **Scaffold (mode=scaffold):** verifies .prettierrc, .nvmrc, .editorconfig, .gitignore, eslint.config.mjs, tsconfig.json, jsconfig.json
 
@@ -364,10 +364,10 @@ Reads templates from the `## Project Scaffolding` section of `rule-styleguide`.
 
 | Param        | Type   | Required | Default    | Description                                                     |
 | ------------ | ------ | -------- | ---------- | --------------------------------------------------------------- |
-| `mode`       | enum   | —        | `generate` | `generate` (create), `list` (list), `validate` (check presence) |
-| `file`       | string | —        | —          | Specific file to generate (omit for all)                        |
-| `projectDir` | string | —        | —          | Project root (for mode=validate)                                |
-| `framework`  | string | —        | —          | Framework hint (tsconfig for TS projects)                       |
+| `mode`       | enum   | -        | `generate` | `generate` (create), `list` (list), `validate` (check presence) |
+| `file`       | string | -        | -          | Specific file to generate (omit for all)                        |
+| `projectDir` | string | -        | -          | Project root (for mode=validate)                                |
+| `framework`  | string | -        | -          | Framework hint (tsconfig for TS projects)                       |
 
 ### Available files
 
@@ -409,7 +409,7 @@ Reads `package.json` from the specified directory and matches dependencies again
 
 | Param  | Type   | Required | Default | Description            |
 | ------ | ------ | -------- | ------- | ---------------------- |
-| `path` | string | —        | `.`     | Project root directory |
+| `path` | string | -        | `.`     | Project root directory |
 
 ### Output (JSON)
 
@@ -454,10 +454,10 @@ Supports single-file output (`mode=generate`), multi-file tree (`mode=multi`), a
 
 | Param       | Type   | Required | Default    | Description                                                                                                                                    |
 | ----------- | ------ | -------- | ---------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
-| `component` | string | ✅       | —          | Type: `button`, `card`, `modal`, `formField`, `list`, `nav`, `playwright-config`, `a11y-test-basic`, `a11y-test-forms`, `a11y-test-components` |
-| `framework` | enum   | —        | `vanilla`  | `vanilla`, `react`, `vue`, `svelte`, `angular`, `solid`, `astro`                                                                               |
-| `mode`      | enum   | —        | `generate` | `generate` (single blob), `multi` (file tree), `guardrails` (checklist)                                                                        |
-| `name`      | string | —        | —          | Component name for mode=multi (PascalCase)                                                                                                     |
+| `component` | string | ✅       | -          | Type: `button`, `card`, `modal`, `formField`, `list`, `nav`, `playwright-config`, `a11y-test-basic`, `a11y-test-forms`, `a11y-test-components` |
+| `framework` | enum   | -        | `vanilla`  | `vanilla`, `react`, `vue`, `svelte`, `angular`, `solid`, `astro`                                                                               |
+| `mode`      | enum   | -        | `generate` | `generate` (single blob), `multi` (file tree), `guardrails` (checklist)                                                                        |
+| `name`      | string | -        | -          | Component name for mode=multi (PascalCase)                                                                                                     |
 
 ### Mode: `generate`
 
@@ -520,12 +520,12 @@ Framework-agnostic templates: `playwright-config`, `a11y-test-basic`, `a11y-test
 
 | Param          | Type     | Required           | Default             | Description                                        |
 | -------------- | -------- | ------------------ | ------------------- | -------------------------------------------------- |
-| `title`        | string   | ✅                 | —                   | ADR title                                          |
-| `status`       | enum     | —                  | `accepted`          | `proposed`, `accepted`, `deprecated`, `superseded` |
-| `context`      | string   | —                  | —                   | Decision context                                   |
-| `decision`     | string   | —                  | —                   | Decision made                                      |
-| `consequences` | string   | —                  | —                   | Positive and negative consequences                 |
-| `alternatives` | string[] | —                  | —                   | Alternatives considered                            |
+| `title`        | string   | ✅                 | -                   | ADR title                                          |
+| `status`       | enum     | -                  | `accepted`          | `proposed`, `accepted`, `deprecated`, `superseded` |
+| `context`      | string   | -                  | -                   | Decision context                                   |
+| `decision`     | string   | -                  | -                   | Decision made                                      |
+| `consequences` | string   | -                  | -                   | Positive and negative consequences                 |
+| `alternatives` | string[] | -                  | -                   | Alternatives considered                            |
 | `tags`         | string[] | `["architecture"]` | Categorization tags |
 | `projectDir`   | string   | `.`                | Project root        |
 
@@ -543,13 +543,13 @@ After every call to `rule_tool_architect`, `pix_tool`, `rule_tool_scaffold`, `ru
 
 | Param             | Type    | Required | Default | Description                 |
 | ----------------- | ------- | -------- | ------- | --------------------------- |
-| `projectDir`      | string  | —        | `.`     | Project root                |
-| `includeContext`  | boolean | —        | true    | Include `.context/` values  |
-| `includeAdrs`     | boolean | —        | true    | Include ADR summaries       |
-| `includeIdentity` | boolean | —        | true    | Include project identity    |
-| `compress`        | boolean | —        | false   | Compress output             |
-| `maxTokens`       | number  | —        | 0       | Token budget (0 = no limit) |
-| `format`          | enum    | —        | `full`  | `full`, `brief`, `minimal`  |
+| `projectDir`      | string  | -        | `.`     | Project root                |
+| `includeContext`  | boolean | -        | true    | Include `.context/` values  |
+| `includeAdrs`     | boolean | -        | true    | Include ADR summaries       |
+| `includeIdentity` | boolean | -        | true    | Include project identity    |
+| `compress`        | boolean | -        | false   | Compress output             |
+| `maxTokens`       | number  | -        | 0       | Token budget (0 = no limit) |
+| `format`          | enum    | -        | `full`  | `full`, `brief`, `minimal`  |
 
 ### Output formats
 
@@ -591,19 +591,19 @@ A bare `/rule-handoff` produces a quick `handoff`-mode summary with every includ
 
 ## 10. File Tree Fix: `rule_tool_fix`
 
-**Validates and auto-fixes project file tree structure** against rule conventions. Operates on disk — scans actual files and directories.
+**Validates and auto-fixes project file tree structure** against rule conventions. Operates on disk - scans actual files and directories.
 
 ### Parameters
 
 | Param       | Type    | Required | Default          | Description                                                                             |
 | ----------- | ------- | -------- | ---------------- | --------------------------------------------------------------------------------------- |
-| `path`      | string  | —        | `.`              | Project root directory                                                                  |
-| `srcDir`    | string  | —        | `src`            | Source directory relative to root                                                       |
-| `mode`      | enum    | —        | `lint`           | `lint` (scan + report), `fix` (scan + auto-correct), `generate` (create component tree) |
-| `dryRun`    | boolean | —        | `true`           | Preview fixes without applying (mode=fix)                                               |
-| `name`      | string  | —        | —                | Component name for mode=generate                                                        |
-| `framework` | enum    | —        | `vanilla`        | Framework for mode=generate: `react`, `vue`, `svelte`, `vanilla`                        |
-| `baseDir`   | string  | —        | `src/components` | Base output directory for mode=generate                                                 |
+| `path`      | string  | -        | `.`              | Project root directory                                                                  |
+| `srcDir`    | string  | -        | `src`            | Source directory relative to root                                                       |
+| `mode`      | enum    | -        | `lint`           | `lint` (scan + report), `fix` (scan + auto-correct), `generate` (create component tree) |
+| `dryRun`    | boolean | -        | `true`           | Preview fixes without applying (mode=fix)                                               |
+| `name`      | string  | -        | -                | Component name for mode=generate                                                        |
+| `framework` | enum    | -        | `vanilla`        | Framework for mode=generate: `react`, `vue`, `svelte`, `vanilla`                        |
+| `baseDir`   | string  | -        | `src/components` | Base output directory for mode=generate                                                 |
 
 ### What lint checks
 
@@ -674,7 +674,7 @@ Resources accessible via the MCP `resources/read` protocol.
 
 ## MCP Prompts
 
-Prompt templates accessible via the MCP `prompts/get` protocol. Every prompt takes a **single free-form argument** and supports `help` (or `--help` / `-h`) as its value to print the usage list, e.g. `/rule-frontend help` — help is returned as a ready-made assistant message and displayed instantly, without invoking the model.
+Prompt templates accessible via the MCP `prompts/get` protocol. Every prompt takes a **single free-form argument** and supports `help` (or `--help` / `-h`) as its value to print the usage list, e.g. `/rule-frontend help` - help is returned as a ready-made assistant message and displayed instantly, without invoking the model.
 
 | Name                     | Arguments                                                                                                                                                                                  | Description                                                                      |
 | ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------- |
@@ -765,7 +765,7 @@ previousPassed: ["no-css-classes", "no-inline-styles", "semantic-html",
 > Original path: `docs/PLUGINS.md`  
 > SHA-256: `d891cff9e5d94b939d4287c448a097c56676c17c469212b584110a121ca5c40d`
 
-# rule-mcp — Plugin System
+# rule-mcp - Plugin System
 
 > Create custom rule skills without modifying the MCP server.
 
@@ -886,7 +886,7 @@ rule-mcp tools call rule --json '{"prompt": "List available community skills"}'
 > Original path: `docs/RELEASE.md`  
 > SHA-256: `41361dd081e193d34e3005eb81e27066d9096ccd174dabd5493346337d80bed9`
 
-# Release Procedure — rule-mcp
+# Release Procedure - rule-mcp
 
 > Complete procedure for releasing rule-mcp in self-hosted mode.
 
@@ -920,7 +920,7 @@ Go to **GitHub → rule-mcp-rule-mcp → Settings → Secrets and variables → 
 | ----------- | -------------------------------------------------------------------------------------------------------------------------------- |
 | `NPM_TOKEN` | npm access token (create at [npmjs.com](https://www.npmjs.com/settings/~/tokens) with type **Automation** and scope **publish**) |
 
-`GITHUB_TOKEN` is automatic — no configuration needed.
+`GITHUB_TOKEN` is automatic - no configuration needed.
 
 ---
 
@@ -1063,8 +1063,8 @@ Tag v0.2.0
 | Service         | Required                 | Where to create                                                                                                      |
 | --------------- | ------------------------ | -------------------------------------------------------------------------------------------------------------------- |
 | **npm**         | `NPM_TOKEN` (Automation) | [npmjs.com tokens](https://www.npmjs.com/settings/~/tokens)                                                          |
-| **GitHub**      | `GITHUB_TOKEN` (auto)    | Already present — permissions: `contents: write`, `id-token: write`, `packages: write` (configured in `release.yml`) |
-| **Docker GHCR** | None                     | Login via `GITHUB_TOKEN` — already configured via `docker/login-action@v3`                                           |
+| **GitHub**      | `GITHUB_TOKEN` (auto)    | Already present - permissions: `contents: write`, `id-token: write`, `packages: write` (configured in `release.yml`) |
+| **Docker GHCR** | None                     | Login via `GITHUB_TOKEN` - already configured via `docker/login-action@v3`                                           |
 
 Everything else is already configured in existing workflows:
 
@@ -1081,7 +1081,7 @@ Everything else is already configured in existing workflows:
 > Original path: `docs/TROUBLESHOOTING.md`  
 > SHA-256: `666d843d4ba36d77182d0ee73863423c24b690a27c2cf3ce1eb37e0890c68d8b`
 
-# rule-mcp — Troubleshooting
+# rule-mcp - Troubleshooting
 
 > Common issues and solutions per agent, plus debugging techniques.
 
@@ -1260,7 +1260,7 @@ rule-mcp daemon logs
 > Original path: `docs/rule-mcp-skills-mcp-setup.md`  
 > SHA-256: `4ed94562e3aed0fb1d0305ddeaf23d59b7470af515017e29676471526f7ecf63`
 
-# rule AI Skills — MCP Server Setup
+# rule AI Skills - MCP Server Setup
 
 This document explains how to configure the `rule-mcp-skills` MCP server in your development environment so that any AI assistant (Windsurf Cascade, Claude Code, Claude Desktop) can access rule rules and skills from any repository.
 

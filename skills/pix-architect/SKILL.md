@@ -13,13 +13,13 @@ tags:
 frameworks: [all]
 ---
 
-# rule-architect — Architecture command center
+# rule-architect - Architecture command center
 
 `rule-architect` is the **engine** in a 3-skill architecture:
 
 | Skill                                              | Role                                                       | Reads                               |
 | -------------------------------------------------- | ---------------------------------------------------------- | ----------------------------------- |
-| **rule-architect** (this)                           | Engine: wizard-spec.json, templates, generator, validators | —                                   |
+| **rule-architect** (this)                           | Engine: wizard-spec.json, templates, generator, validators | -                                   |
 | [rule-architect-web](../rule-architect-web/SKILL.md) | Shell: browser interview via vanilla JS                    | wizard-spec.json from rule-architect |
 | [rule-architect-cli](../rule-architect-cli/SKILL.md) | Shell: terminal interview via opentui                      | wizard-spec.json from rule-architect |
 
@@ -27,11 +27,11 @@ frameworks: [all]
 
 ## Operating principles
 
-1. **Single source of routing truth** — Start from [`rule`](../rule/SKILL.md), then map every architecture choice to exact skills and tools.
-2. **Spec-driven by default** — Generate product, domain, architecture, quality, deployment, security, ADR, and rule-routing specs.
-3. **SOLID boundaries** — Separate platform, frontend, backend, data, DevOps, process, styleguide, and toolchain concerns.
-4. **Deterministic tooling first** — Prefer MCP tools before free-form generation: detect, search, scaffold/template, validate, ADR, fix, handoff.
-5. **LLM portability** — Output exact skill names, exact tool names, explicit quality gates, and no model-specific assumptions.
+1. **Single source of routing truth** - Start from [`rule`](../rule/SKILL.md), then map every architecture choice to exact skills and tools.
+2. **Spec-driven by default** - Generate product, domain, architecture, quality, deployment, security, ADR, and rule-routing specs.
+3. **SOLID boundaries** - Separate platform, frontend, backend, data, DevOps, process, styleguide, and toolchain concerns.
+4. **Deterministic tooling first** - Prefer MCP tools before free-form generation: detect, search, scaffold/template, validate, ADR, fix, handoff.
+5. **LLM portability** - Output exact skill names, exact tool names, explicit quality gates, and no model-specific assumptions.
 
 ## Tool workflow
 
@@ -83,7 +83,7 @@ Intent
   └─ Cross-domain routing   → rule + this skill
 ```
 
-## Complete skill coverage — Architecture choice mapping per category
+## Complete skill coverage - Architecture choice mapping per category
 
 Use this table to ensure the architecture package references all relevant skills.
 
@@ -116,7 +116,7 @@ Use this table to ensure the architecture package references all relevant skills
 | [rule-data-postgresql](../rule-data-postgresql/SKILL.md) | Relational backend with PostgreSQL 16+ (indexing, partitioning, replication, JSONB, full-text search).                |
 | [rule-data-mysql](../rule-data-mysql/SKILL.md)           | Relational backend with MySQL 8+ / MariaDB 11+ (InnoDB tuning, replication, query optimization).                      |
 | [rule-data-mongodb](../rule-data-mongodb/SKILL.md)       | Document database with MongoDB 7+ (schema design, aggregation pipeline, indexing, sharding).                          |
-| [rule-data-sql](../rule-data-sql/SKILL.md)               | SQL best practices, table design, index optimization, transactions — database-agnostic reference.                     |
+| [rule-data-sql](../rule-data-sql/SKILL.md)               | SQL best practices, table design, index optimization, transactions - database-agnostic reference.                     |
 | [rule-data-sqlite](../rule-data-sqlite/SKILL.md)         | SQLite 3.x embedded database: WAL/journal modes, FTS5 full-text search, JSON functions, local-first/offline patterns. |
 | [rule-data-duckdb](../rule-data-duckdb/SKILL.md)         | DuckDB 1.x embedded OLAP: columnar storage, Parquet/CSV/JSON import, PIVOT/UNNEST/QUALIFY, window functions.          |
 | [rule-data-indexed-db](../rule-data-indexed-db/SKILL.md) | IndexedDB / File System Access: browser persistence, object stores, indexes, cursors, offline sync, schema migration. |
@@ -170,7 +170,7 @@ Use this table to ensure the architecture package references all relevant skills
 | ------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------- |
 | [rule-process](../rule-process/SKILL.md)                                   | Umbrella routing for process decisions. Read first before specialized skills.                                           |
 | [rule-process-adr](../rule-process-adr/SKILL.md)                           | Recording architecture decisions: auto-numbered Nygard ADRs in docs/adr/ with index.                                    |
-| [rule-process-bmad](../rule-process-bmad/SKILL.md)                         | Full 4-phase delivery: Analysis, Planning, Solutioning, Implementation — choose Quick Flow, BMAD, or Enterprise.        |
+| [rule-process-bmad](../rule-process-bmad/SKILL.md)                         | Full 4-phase delivery: Analysis, Planning, Solutioning, Implementation - choose Quick Flow, BMAD, or Enterprise.        |
 | [rule-process-code-review](../rule-process-code-review/SKILL.md)           | Risk-based PR/MR review: readiness, high-risk inspection order, actionable feedback, approval, and follow-up ownership. |
 | [rule-process-documentation](../rule-process-documentation/SKILL.md)       | Setting up Mintlify documentation portal: mint.json, page templates, local preview, deploy.                             |
 | [rule-process-feature-workflow](../rule-process-feature-workflow/SKILL.md) | End-to-end feature procedure: branch creation through merge request with TDD and guardrails.                            |
@@ -189,7 +189,7 @@ Use this table to ensure the architecture package references all relevant skills
 | [rule-styleguide-patterns](../rule-styleguide-patterns/SKILL.md)     | Quick-reference cheat sheet for naming, property ordering, file tree, and common patterns.                        |
 | [rule-styleguide-json](../rule-styleguide-json/SKILL.md)             | JSON structure conventions: property naming, date formats, numeric precision, API response consistency.           |
 | [rule-styleguide-markdown](../rule-styleguide-markdown/SKILL.md)     | Markdown documentation style: structure, headings, lists, code blocks, tables, links.                             |
-| [rule-styleguide-validation](../rule-styleguide-validation/SKILL.md) | Business validation patterns: email, phone, VAT, tax IDs, postal codes, national IDs — EU/UK/US/global.           |
+| [rule-styleguide-validation](../rule-styleguide-validation/SKILL.md) | Business validation patterns: email, phone, VAT, tax IDs, postal codes, national IDs - EU/UK/US/global.           |
 
 ### Toolchain / Build & Config
 
@@ -217,13 +217,13 @@ Use this table to ensure the architecture package references all relevant skills
 
 The context interview must generate these industry-standard outputs from `templates.json`:
 
-- `README.md` — documentation map and project frame
-- `ROADMAP.md` — milestone tracker
-- `project-context.md` — compact AI working context
-- `analysis/functional-analysis.md` and `analysis/implementation-roadmap.md` — product analysis and execution order
-- `specs/00-sdd.md` through `specs/12-rule-routing.md` — SDD, product, domain, rules, architecture, quality, ADRs, deployment, security, devops, process/delivery, and rule routing
-- `schemas/ruleset.schema.json` — validation contract for reusable domain rules
-- `qa/checklist.md` — manual QA and a11y/resilience checks
+- `README.md` - documentation map and project frame
+- `ROADMAP.md` - milestone tracker
+- `project-context.md` - compact AI working context
+- `analysis/functional-analysis.md` and `analysis/implementation-roadmap.md` - product analysis and execution order
+- `specs/00-sdd.md` through `specs/12-rule-routing.md` - SDD, product, domain, rules, architecture, quality, ADRs, deployment, security, devops, process/delivery, and rule routing
+- `schemas/ruleset.schema.json` - validation contract for reusable domain rules
+- `qa/checklist.md` - manual QA and a11y/resilience checks
 - concrete support docs such as `constraints.concrete.md` and `use-cases.concrete.md`
 
 ## Placeholder and inventory governance
@@ -248,8 +248,8 @@ Before architecture work is complete:
 
 ## See also
 
-- [rule](../rule/SKILL.md) — Central skill and tool dispatcher
-- [rule-process-adr](../rule-process-adr/SKILL.md) — Architecture Decision Records
-- [rule-process-documentation](../rule-process-documentation/SKILL.md) — Documentation standards
-- [rule-devops-testing](../rule-devops-testing/SKILL.md) — Testing and coverage gates
-- [rule-toolchain-project](../rule-toolchain-project/SKILL.md) — Project configuration baseline
+- [rule](../rule/SKILL.md) - Central skill and tool dispatcher
+- [rule-process-adr](../rule-process-adr/SKILL.md) - Architecture Decision Records
+- [rule-process-documentation](../rule-process-documentation/SKILL.md) - Documentation standards
+- [rule-devops-testing](../rule-devops-testing/SKILL.md) - Testing and coverage gates
+- [rule-toolchain-project](../rule-toolchain-project/SKILL.md) - Project configuration baseline

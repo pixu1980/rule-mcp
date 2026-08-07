@@ -11,7 +11,7 @@ tags:
 frameworks: [all]
 ---
 
-# rule-data — Data & Database Skills Index
+# rule-data - Data & Database Skills Index
 
 ## Available Skills
 
@@ -33,5 +33,5 @@ Need SQL fundamentals + theory?        → rule-data-sql
 
 ## See also
 
-- [rule-backend-node](../rule-backend-node/SKILL.md) — Backend runtime with DB integration
-- [rule](../rule/SKILL.md) — Central skill index
+- [rule-backend-node](../rule-backend-node/SKILL.md) - Backend runtime with DB integration
+- [rule](../rule/SKILL.md) - Central skill index

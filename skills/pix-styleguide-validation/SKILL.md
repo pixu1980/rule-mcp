@@ -15,7 +15,7 @@ tags:
 frameworks: [all]
 ---
 
-# rule-styleguide-validation — Business Validation Patterns
+# rule-styleguide-validation - Business Validation Patterns
 
 ## Table of Contents
 
@@ -258,7 +258,7 @@ export const postalCodeSchemas: Record<string, z.ZodString> = {
 | India            | PAN                        | 10 chars               | `^[A-Z]{5}\d{4}[A-Z]$`                     |
 | India            | Aadhaar                    | 12 digits              | `^\d{12}$`                                 |
 
-### Italian Codice Fiscale — Checksum Verification
+### Italian Codice Fiscale - Checksum Verification
 
 ```typescript
 // Italian CF uses DPR 396/1974 algorithm
@@ -508,7 +508,7 @@ export const usCompanySchema = z.object({
 
 ## 8. Validation Library Integration
 
-### Zod (TypeScript — Frontend + Backend)
+### Zod (TypeScript - Frontend + Backend)
 
 ```bash
 pnpm add zod
@@ -556,6 +556,6 @@ export class CreateUserDto {
 
 ## See also
 
-- [rule-frontend-react](../rule-frontend-react/SKILL.md) — React implementation
-- [rule-backend-node](../rule-backend-node/SKILL.md) — Backend validation
-- [rule](../rule/SKILL.md) — Central skill index
+- [rule-frontend-react](../rule-frontend-react/SKILL.md) - React implementation
+- [rule-backend-node](../rule-backend-node/SKILL.md) - Backend validation
+- [rule](../rule/SKILL.md) - Central skill index

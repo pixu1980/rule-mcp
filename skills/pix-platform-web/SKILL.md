@@ -8,7 +8,7 @@ tags:
 frameworks: [all]
 ---
 
-# rule-platform-web — Web Applications with rule Principles
+# rule-platform-web - Web Applications with rule Principles
 
 This skill is the **umbrella for all web framework skills** (rule-frontend-react, rule-frontend-vue, rule-frontend-angular, rule-frontend-solidjs, rule-frontend-svelte, rule-frontend-astro, rule-frontend-vanilla-reactive).
 Choose one framework skill below the rule-platform-web layer.
@@ -23,14 +23,14 @@ Choose one framework skill below the rule-platform-web layer.
 
 ## Core Rules
 
-1. **Zero CSS classes** — only element selectors + `[data-part="..."]` + `[data-*]` attribute selectors
-2. **Zero inline styles** — all styling in external `.css` files via `<link>` or `adoptedStyleSheets`
-3. **Semantic HTML is mandatory** — never `<div>` where `<section>`, `<article>`, `<nav>`, `<main>`, `<header>`, `<footer>` exists
-4. **Barrel pattern** — every component folder has `index.js` re-export, files are `_PascalCase.ext`
-5. **No CSS-in-JS, no Tailwind** — external `.css` files only
-6. **ES modules** — `import`/`export` everywhere
-7. **TypeScript is optional** — JSDoc annotations suffice for type safety
-8. **WCAG 2.2 AA** — accessible by default, test with axe-core
+1. **Zero CSS classes** - only element selectors + `[data-part="..."]` + `[data-*]` attribute selectors
+2. **Zero inline styles** - all styling in external `.css` files via `<link>` or `adoptedStyleSheets`
+3. **Semantic HTML is mandatory** - never `<div>` where `<section>`, `<article>`, `<nav>`, `<main>`, `<header>`, `<footer>` exists
+4. **Barrel pattern** - every component folder has `index.js` re-export, files are `_PascalCase.ext`
+5. **No CSS-in-JS, no Tailwind** - external `.css` files only
+6. **ES modules** - `import`/`export` everywhere
+7. **TypeScript is optional** - JSDoc annotations suffice for type safety
+8. **WCAG 2.2 AA** - accessible by default, test with axe-core
 
 ## Framework Selection
 
@@ -93,7 +93,7 @@ project/
 ```
 
 Prefix public variables with `VITE_` (Vite), `NEXT_PUBLIC_` (Next.js), or `PUBLIC_` (Astro).
-Never commit secrets — use CI/CD secrets or server-only env.
+Never commit secrets - use CI/CD secrets or server-only env.
 
 ## Error Handling
 
@@ -134,7 +134,7 @@ Never commit secrets — use CI/CD secrets or server-only env.
 Tool:    Vite / Parcel / Astro
 Test:    Vitest + Playwright
 Lint:    ESLint + Prettier
-CI:      GitHub Actions — lint → test → build → deploy
+CI:      GitHub Actions - lint → test → build → deploy
 Deploy:  Netlify / Vercel / Cloudflare Pages / GitHub Pages
 ```
 
@@ -158,7 +158,7 @@ Deploy:  Netlify / Vercel / Cloudflare Pages / GitHub Pages
   `Intl` APIs; specify time-zone behavior at the product boundary.
 - Test pseudo-localized strings and an RTL locale when the product supports
   right-to-left languages; do not assume English string length or direction.
-- Never hardcode user-facing strings — always use translation keys.
+- Never hardcode user-facing strings - always use translation keys.
 
 ## Design System and CSS
 
@@ -170,7 +170,7 @@ zero CSS classes.
 
 | Approach        | Use                                                                         |
 | --------------- | --------------------------------------------------------------------------- |
-| **Vanilla CSS** | Custom properties, cascade layers, `@scope`, and external CSS — the rule way |
+| **Vanilla CSS** | Custom properties, cascade layers, `@scope`, and external CSS - the rule way |
 | **Open Props**  | Optional CSS custom-property tokens when approved by the project            |
 
 Do not introduce utility-class frameworks, CSS-in-JS, or component libraries
@@ -234,6 +234,6 @@ tests/
 
 ## See also
 
-- [rule](../rule/SKILL.md) — Central skill index and dispatcher
-- [rule-toolchain-vite](../rule-toolchain-vite/SKILL.md) — Vite build tool
-- [rule-frontend-react](../rule-frontend-react/SKILL.md) — React setup
+- [rule](../rule/SKILL.md) - Central skill index and dispatcher
+- [rule-toolchain-vite](../rule-toolchain-vite/SKILL.md) - Vite build tool
+- [rule-frontend-react](../rule-frontend-react/SKILL.md) - React setup

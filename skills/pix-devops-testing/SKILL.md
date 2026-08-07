@@ -28,7 +28,7 @@ a minimum safety net, not evidence that tests exercise meaningful behavior.
 - Use Playwright or an equivalent browser runner for critical E2E and
   accessibility journeys; keep those tests independent and deterministic.
 
-## Step 1 — Configure Vitest
+## Step 1 - Configure Vitest
 
 ### Backend / AI Agent
 
@@ -96,7 +96,7 @@ Create `tests/setup.ts` for frontend:
 import "@testing-library/jest-dom/vitest";
 ```
 
-## Step 2 — Write unit tests
+## Step 2 - Write unit tests
 
 ### Pattern: Arrange-Act-Assert
 
@@ -162,7 +162,7 @@ describe("UserService", () => {
 });
 ```
 
-## Step 3 — Write integration tests
+## Step 3 - Write integration tests
 
 ### Backend: Fastify inject
 
@@ -190,7 +190,7 @@ describe("Counter", () => {
 });
 ```
 
-## Step 4 — Run tests
+## Step 4 - Run tests
 
 ```bash
 # Run all tests
@@ -225,10 +225,10 @@ Or use `pnpm` alternatively.
 
 These thresholds are non-negotiable. They must be enforced in two places:
 
-1. **Locally** via `vitest.config.ts` — `pnpm test:coverage` (or `pnpm`) fails if below thresholds.
-2. **In CI** via `.gitlab-ci.yml` — pipeline fails if coverage check fails.
+1. **Locally** via `vitest.config.ts` - `pnpm test:coverage` (or `pnpm`) fails if below thresholds.
+2. **In CI** via `.gitlab-ci.yml` - pipeline fails if coverage check fails.
 
-### Step 1 — Configure local enforcement in vitest.config.ts
+### Step 1 - Configure local enforcement in vitest.config.ts
 
 The `thresholds` key causes the process to exit with a non-zero code if any threshold is not met:
 
@@ -247,19 +247,19 @@ coverage: {
 
 Developers run `pnpm test:coverage` (or `pnpm test:coverage`) before pushing. If it fails, they must add tests.
 
-### Step 2 — Configure CI enforcement in .gitlab-ci.yml
+### Step 2 - Configure CI enforcement in .gitlab-ci.yml
 
 Each test job in CI runs `pnpm test:coverage` (or `pnpm test:coverage`) (or the filtered equivalent for monorepos). Since Vitest exits non-zero on threshold failure, the CI job automatically fails.
 
-### Step 3 — Configure coverage reporters
+### Step 3 - Configure coverage reporters
 
 Always configure these three reporters:
 
-- **`text`** — Console output for developers.
-- **`lcov`** — For local HTML report viewing (`coverage/lcov-report/index.html`).
-- **`cobertura`** — For GitLab merge request integration.
+- **`text`** - Console output for developers.
+- **`lcov`** - For local HTML report viewing (`coverage/lcov-report/index.html`).
+- **`cobertura`** - For GitLab merge request integration.
 
-### Step 4 — Set include and exclude paths
+### Step 4 - Set include and exclude paths
 
 ### Include
 
@@ -280,7 +280,7 @@ coverage: {
 }
 ```
 
-### Step 5 — Verify the gate works
+### Step 5 - Verify the gate works
 
 After setting up coverage, verify by temporarily raising a threshold and confirming the command fails. Revert the temporary change after verification.
 
@@ -288,12 +288,12 @@ After setting up coverage, verify by temporarily raising a threshold and confirm
 
 - **Coverage drops below thresholds**: Identify uncovered lines using `coverage/lcov-report/index.html`. Write targeted tests for uncovered branches and functions.
 - **Do not lower thresholds**. Do not add `/* v8 ignore */` comments unless the code is genuinely untestable (e.g., platform-specific fallback).
-- **Hard-to-test functions**: Refactor to be more testable — extract pure logic, inject dependencies.
+- **Hard-to-test functions**: Refactor to be more testable - extract pure logic, inject dependencies.
 
 ---
 
 ## See also
 
-- [rule](../rule/SKILL.md) — Central skill index and dispatcher
-- [rule-devops](../rule-devops/SKILL.md) — DevOps skill index
-- [rule-toolchain-project](../rule-toolchain-project/SKILL.md) — Project configuration baseline
+- [rule](../rule/SKILL.md) - Central skill index and dispatcher
+- [rule-devops](../rule-devops/SKILL.md) - DevOps skill index
+- [rule-toolchain-project](../rule-toolchain-project/SKILL.md) - Project configuration baseline

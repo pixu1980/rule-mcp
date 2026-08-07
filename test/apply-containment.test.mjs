@@ -1,6 +1,6 @@
 // test/apply-containment.test.mjs
 //
-// Audit findings 01 + 02 — pix_apply is the only tool that writes files, so
+// Audit findings 01 + 02 - pix_apply is the only tool that writes files, so
 // its containment check carries all the security weight.
 //
 //   01. The containment root came from the caller's own `path` argument, so

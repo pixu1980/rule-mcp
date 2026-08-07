@@ -1,7 +1,7 @@
 /**
  * @module tools/apply
  *
- * pix_apply — The ONLY tool that writes files to disk.
+ * pix_apply - The ONLY tool that writes files to disk.
  *
  * Requires a valid receipt from pix_gateway proving that
  * the exact code being written passed all guardrails.
@@ -83,7 +83,7 @@ const isWithin = (candidate, base) => candidate === base || candidate.startsWith
  * Validate and resolve the project root a write is anchored to.
  * Throws when the root is not a plausible project directory.
  *
- * @param {string} rootPath — caller-supplied project root
+ * @param {string} rootPath - caller-supplied project root
  * @returns {string} the resolved root
  */
 export function resolveProjectRoot(rootPath) {
@@ -120,8 +120,8 @@ export function resolveProjectRoot(rootPath) {
  * escapes (checked against the real filesystem, not by string math), and
  * destinations that grant code execution or hold credentials.
  *
- * @param {string} rootDir — already validated by resolveProjectRoot
- * @param {string} targetPath — relative path supplied by the caller
+ * @param {string} rootDir - already validated by resolveProjectRoot
+ * @param {string} targetPath - relative path supplied by the caller
  * @returns {string} the absolute path to write
  */
 export function resolveWriteTarget(rootDir, targetPath) {
@@ -132,7 +132,7 @@ export function resolveWriteTarget(rootDir, targetPath) {
     throw new Error(`Refused: invalid NUL byte in path "${targetPath}".`);
   }
   if (isAbsolute(targetPath) || /^[A-Za-z]:[\\/]/.test(targetPath)) {
-    throw new Error(`Refused: "${targetPath}" is an absolute path — file paths must be relative to the project root.`);
+    throw new Error(`Refused: "${targetPath}" is an absolute path - file paths must be relative to the project root.`);
   }
 
   const resolved = resolve(rootDir, targetPath);
@@ -197,7 +197,7 @@ export async function registerApplyTool() {
     name: "rule_tool_apply",
     description:
       "Write files to disk after pix_gateway validation. Requires a valid receipt from pix_gateway " +
-      "proving that the code passed all guardrails. The receipt is tied to the exact code hash — " +
+      "proving that the code passed all guardrails. The receipt is tied to the exact code hash - " +
       "modified code will be rejected. Use dryRun=true (default) to preview without writing.",
     zodSchema: ApplySchema,
     inputSchema: {
@@ -238,7 +238,7 @@ export async function registerApplyTool() {
               type: "text",
               text:
                 `# pix_apply: Project root REJECTED\n\n**Root:** ${rootPath}\n**Error:** ${error.message}\n\n` +
-                `Pass the project directory you are working in — pix_apply never writes outside it.`,
+                `Pass the project directory you are working in - pix_apply never writes outside it.`,
             },
           ],
           _meta: { pixApply: { receiptValid: false, rootError: error.message, filesWritten: 0 } },
@@ -306,7 +306,7 @@ export async function registerApplyTool() {
         try {
           postProcessFiles(results);
         } catch {
-          // Post-processing is best-effort — don't block the response
+          // Post-processing is best-effort - don't block the response
         }
       }
 
@@ -321,7 +321,7 @@ export async function registerApplyTool() {
         "",
         ...results.map(
           (r) =>
-            `- ${r.status === "written" ? "✅" : r.status === "dry-run" ? "📋" : "❌"} ${r.path}${r.note ? ` (${r.note})` : ""}${r.error ? ` — ${r.error}` : ""}`,
+            `- ${r.status === "written" ? "✅" : r.status === "dry-run" ? "📋" : "❌"} ${r.path}${r.note ? ` (${r.note})` : ""}${r.error ? ` - ${r.error}` : ""}`,
         ),
         "",
         dryRun

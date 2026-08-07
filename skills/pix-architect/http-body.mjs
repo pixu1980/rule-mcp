@@ -1,4 +1,4 @@
-// rule-architect http-body helper — bounded request-body reader.
+// rule-architect http-body helper - bounded request-body reader.
 // Shared by both interview servers so a POST cannot buffer unbounded memory.
 
 // Interview payloads are a few KB (answers + repeatable entries); 2 MiB is a
@@ -20,7 +20,7 @@ export function collectBody(req, limit = DEFAULT_LIMIT) {
     let over = false;
 
     req.on("data", (chunk) => {
-      // Once over the limit, keep receiving but stop appending — the stream
+      // Once over the limit, keep receiving but stop appending - the stream
       // drains (bounded memory) while the handler sends its 413. Destroying
       // the request here would reset the socket before that response flushes.
       if (over) return;

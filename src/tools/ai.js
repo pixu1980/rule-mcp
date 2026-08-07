@@ -1,7 +1,7 @@
 /**
  * @module tools/ai
  *
- * rule routing tool — analyzes prompts and routes to the best rule skill.
+ * rule routing tool - analyzes prompts and routes to the best rule skill.
  * Uses keyword scoring across skill sections with framework biasing.
  *
  * Extracted from core/skills.js to keep the skill management module lean.

@@ -126,5 +126,5 @@ When not constrained by an external spec, prefer this order:
 
 ## See also
 
-- [rule-styleguide](../rule-styleguide/SKILL.md) — Style guides index
-- [rule](../rule/SKILL.md) — Central skill index
+- [rule-styleguide](../rule-styleguide/SKILL.md) - Style guides index
+- [rule](../rule/SKILL.md) - Central skill index

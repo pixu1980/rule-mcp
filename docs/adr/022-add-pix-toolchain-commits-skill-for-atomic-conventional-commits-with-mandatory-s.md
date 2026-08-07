@@ -19,6 +19,6 @@ Positive: commit/push prompts now deterministically route to rule-toolchain-comm
 
 ## Alternatives Considered
 
-1. rule-process group (rejected: process skills are lifecycle procedures — ADR/review/docs/handoff — not mechanical repo rules; a blocking convention would only apply if the workflow skill is read)
+1. rule-process group (rejected: process skills are lifecycle procedures - ADR/review/docs/handoff - not mechanical repo rules; a blocking convention would only apply if the workflow skill is read)
 1. rule-devops group (rejected: devops-version consumes commit messages for bumps; the convention is upstream of that automation)
 1. No new skill, only routing tweak to rule-toolchain-husky (rejected: husky covers hook tooling, not the convention/atomicity/push discipline itself)

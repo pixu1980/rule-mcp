@@ -1,33 +1,33 @@
-# Handoff Fase 11 — Integrazione nativa Claude Skills e multi-agente
+# Handoff Phase 11 - Native Claude Skills integration and multi-agent
 
-**Per:** deepseek-v4-flash  
-**Da:** gpt-5.6-sol (audit + remediation fasi 1-6)  
-**Data:** 2026-07-15  
-**File interessati:** `src/cli/skills-install.js`, `scripts/install.sh`, 70 `skills/*/SKILL.md`, `README.md`
-
----
-
-## Contesto
-
-Attualmente le 70 skill vivono in `~/.agents/skills/` (convenzione rule) e sono accessibili solo via tool MCP. Claude Code ha un meccanismo **nativo** di auto-discovery: cartelle in `.claude/skills/<name>/SKILL.md` con frontmatter YAML, scoperte e invocate automaticamente da Claude in base alla `description`.
-
-Il progetto **non usa questo meccanismo.** L'installer scrive solo in `~/.agents/skills/`, non in `.claude/skills/`.
+**To:** deepseek-v4-flash  
+**From:** gpt-5.6-sol (audit + remediation phases 1-6)  
+**Date:** 2026-07-15  
+**Files affected:** `src/cli/skills-install.js`, `scripts/install.sh`, 70 `skills/*/SKILL.md`, `README.md`
 
 ---
 
-## Cosa fare
+## Context
 
-### 11.1 — Generare skill anche in `.claude/skills/` (~30 min)
+Currently the 70 skills live in `~/.agents/skills/` (rule convention) and are accessible only via MCP tools. Claude Code has a **native** auto-discovery mechanism: folders in `.claude/skills/<name>/SKILL.md` with YAML frontmatter, discovered and invoked automatically by Claude based on the `description`.
 
-**Fix:** Aggiungere un'opzione `--format native-skills` all'installer che scrive anche in `.claude/skills/`:
+The project **does not use this mechanism.** The installer only writes to `~/.agents/skills/`, not to `.claude/skills/`.
+
+---
+
+## What to do
+
+### 11.1 - Generate skills also in `.claude/skills/` (~30 min)
+
+**Fix:** Add a `--format native-skills` option to the installer that also writes to `.claude/skills/`:
 
 ```js
 // src/cli/skills-install.js
 const CLAUDE_SKILLS_DIR = join(homedir(), ".claude", "skills");
 
-// Per ogni skill installata, creare symlink o copia in .claude/skills/
-// Formato Claude: YAML frontmatter con name + description
-// Esempio SKILL.md per Claude:
+// For each installed skill, create symlink or copy in .claude/skills/
+// Claude format: YAML frontmatter with name + description
+// Example SKILL.md for Claude:
 /*
 ---
 name: rule-frontend-react
@@ -36,16 +36,16 @@ description: React best practices aligned with rule-styleguide. Zero CSS classes
 */
 ```
 
-**Verifica:**
+**Verification:**
 
 ```bash
-# Dopo installazione:
-ls ~/.claude/skills/rule-*/SKILL.md | wc -l  # deve essere > 0
+# After installation:
+ls ~/.claude/skills/rule-*/SKILL.md | wc -l  # must be > 0
 ```
 
-### 11.2 — Riscrivere 59/70 descrizioni skill con "Use when..." (~2 ore)
+### 11.2 - Rewrite 59/70 skill descriptions with "Use when..." (~2 hours)
 
-L'audit ha rilevato che 59 skill su 70 non hanno una formula esplicita "Use when..." nella `description`. Questo è critico per l'auto-discovery nativo di Claude, che matcha la `description` contro il prompt utente.
+The audit found that 59 out of 70 skills don't have an explicit "Use when..." formula in the `description`. This is critical for Claude's native auto-discovery, which matches the `description` against the user prompt.
 
 **Template:**
 
@@ -54,7 +54,7 @@ description: >-
   Use when <condition> to <action>. Covers <topics>.
 ```
 
-**Esempi corretti (già presenti):**
+**Correct examples (already present):**
 
 ```yaml
 # rule-backend-express
@@ -69,37 +69,37 @@ description: >-
   full-text search, and production maintenance.
 ```
 
-**Esempi da migliorare (troppo vaghi):**
+**Examples to improve (too vague):**
 
 ```yaml
-# rule-backend (attuale)
+# rule-backend (current)
 description: >-
-  Backend application development umbrella — index of all backend skills.
+  Backend application development umbrella - index of all backend skills.
   Routes to specific framework, database, and deployment skills.
 
-# rule-backend (suggerito)
+# rule-backend (suggested)
 description: >-
   Use when designing or building backend services to route to the correct
   backend framework or database skill. Covers Express, Fastify, NestJS,
   Hono, and database integrations.
 ```
 
-**File da modificare:** tutti i 70 `skills/*/SKILL.md` che non hanno già "Use when" o formula equivalente nella description.
+**Files to modify:** all 70 `skills/*/SKILL.md` that don't already have "Use when" or equivalent formula in the description.
 
-**Verifica:**
+**Verification:**
 
 ```bash
-# Contare quante skill hanno "Use when" nella description
+# Count how many skills have "Use when" in the description
 grep -rl '^description:.*Use when' skills/*/SKILL.md | wc -l
 # Target: 70/70
 ```
 
-### 11.3 — Documentare `allowedTools` per ogni host (~15 min)
+### 11.3 - Document `allowedTools` for each host (~15 min)
 
-**Fix:** Aggiungere al README una sezione "Recommended tool filter" con esempi per Claude Code, Cursor, Pi, ecc.
+**Fix:** Add a "Recommended tool filter" section to README with examples for Claude Code, Cursor, Pi, etc.
 
 ```json
-// mcp.json con filtro consigliato
+// mcp.json with recommended filter
 {
   "mcpServers": {
     "rule_tool_ai_mcp": {
@@ -119,30 +119,30 @@ grep -rl '^description:.*Use when' skills/*/SKILL.md | wc -l
 }
 ```
 
-### 11.4 — Aggiornare conteggi README (~10 min)
+### 11.4 - Update README counts (~10 min)
 
-Il README dichiara 71 tool, ma sono 78 (normal mode) o 9 (strict mode). E le risorse non sono più 146 — vanno contate con `rule://skills`.
+The README declares 71 tools, but there are 78 (normal mode) or 9 (strict mode). And resources are no longer 146 - they need to be counted with `rule://skills`.
 
 **Fix:**
 
 ```bash
-# Ottenere conteggi reali
+# Get real counts
 HOME=/tmp/rule-audit-home RULE_MCP_DISABLE_AUTO_ADR=1 NODE_ENV=test \
   node -e 'import{loadAllSkills}from"./src/core/skills.js";import{listTools}from"./src/tools/router.js";import{listResources}from"./src/resources/index.js";await loadAllSkills();console.log("Tools:",listTools().length,"Resources:",listResources().length)'
-# Aggiornare README.md con i numeri corretti
+# Update README.md with correct numbers
 ```
 
 ---
 
-## Comandi di verifica
+## Verification commands
 
 ```bash
 pnpm test
 node test/repository-contract.test.mjs
 
-# Verifica conteggi
+# Verify counts
 grep -c '^description:.*Use when' skills/*/SKILL.md
 
-# Verifica descrizioni Claude-compatibili
+# Verify Claude-compatible descriptions
 node -e 'const fs=require("fs");for(const d of fs.readdirSync("skills")){const c=fs.readFileSync(`skills/${d}/SKILL.md`,"utf8");const desc=c.match(/^description:\s*(.+)$/m)?.[1]||"";if(desc.length>1024)console.log(d,"TOO_LONG",desc.length);if(!desc)console.log(d,"MISSING")}'
 ```

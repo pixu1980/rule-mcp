@@ -15,7 +15,7 @@ tags:
 frameworks: [all]
 ---
 
-# rule-process-bmad — BMAD Method Framework
+# rule-process-bmad - BMAD Method Framework
 
 The **BMad Method** (Build More Architect Dreams) is an AI-driven development framework for building software through the whole process from ideation and planning all the way through agentic implementation. It provides specialized AI agents, guided workflows, and intelligent planning that adapts to your project's complexity.
 
@@ -54,7 +54,7 @@ _\*Required for BMad Method and Enterprise tracks. Quick Flow skips to implement
 
 ### Workflows
 
-Each phase contains one or more **workflows** — named, invocable skills executed in an AI IDE:
+Each phase contains one or more **workflows** - named, invocable skills executed in an AI IDE:
 
 ```
 bmad-prd                     → Create/update/validate a PRD
@@ -101,9 +101,9 @@ _Story counts are guidance, not definitions. Choose based on planning needs, not
 
 ### Prerequisites
 
-- **Node.js 20.12+** — Required for the installer
-- **Git** — Recommended for version control
-- **AI-powered IDE** — Claude Code, Cursor, Codex CLI, or similar
+- **Node.js 20.12+** - Required for the installer
+- **Git** - Recommended for version control
+- **AI-powered IDE** - Claude Code, Cursor, Codex CLI, or similar
 
 ### Install
 
@@ -162,7 +162,7 @@ Explore the problem space and validate ideas before committing to planning.
 | `bmad-market-research`    | Validate market assumptions                                    | Research findings                                            |
 | `bmad-technical-research` | Validate technical assumptions                                 | Research findings                                            |
 | `bmad-product-brief`      | Capture strategic vision (concept is clear)                    | `brief.md` + `addendum.md` + optional HTML/presentation      |
-| `bmad-prfaq`              | Working Backwards — stress-test product concept customer-first | `prfaq-{project}.md`                                         |
+| `bmad-prfaq`              | Working Backwards - stress-test product concept customer-first | `prfaq-{project}.md`                                         |
 
 ### When to use each
 
@@ -192,9 +192,9 @@ The PRD workflow has three intents:
 
 | Intent       | Use case                                                                        |
 | ------------ | ------------------------------------------------------------------------------- |
-| **Create**   | Coached discovery from scratch — names the workspace folder and guides to a PRD |
-| **Update**   | Point at existing PRD + change signal — surfaces conflicts before applying      |
-| **Validate** | Critique a finished PRD against a checklist — produces HTML findings report     |
+| **Create**   | Coached discovery from scratch - names the workspace folder and guides to a PRD |
+| **Update**   | Point at existing PRD + change signal - surfaces conflicts before applying      |
+| **Validate** | Critique a finished PRD against a checklist - produces HTML findings report     |
 
 ### UX Design (optional)
 
@@ -202,7 +202,7 @@ If the project has a user interface, invoke the **UX-Designer agent** (`bmad-age
 
 ### Quick Flow alternative
 
-For simple features and bug fixes, skip directly to `bmad-quick-dev` — handles planning and implementation in a single workflow.
+For simple features and bug fixes, skip directly to `bmad-quick-dev` - handles planning and implementation in a single workflow.
 
 ---
 
@@ -264,8 +264,8 @@ Skip phases 1-3 for small, well-understood work.
 
 | Workflow         | Purpose                                                         | Produces           |
 | ---------------- | --------------------------------------------------------------- | ------------------ |
-| `bmad-quick-dev` | Unified flow — clarify intent, plan, implement, review, present | `spec-*.md` + code |
-| `bmad-dev-auto`  | One unattended dev-loop iteration — small intent in, code out   | `spec-*.md` + code |
+| `bmad-quick-dev` | Unified flow - clarify intent, plan, implement, review, present | `spec-*.md` + code |
+| `bmad-dev-auto`  | One unattended dev-loop iteration - small intent in, code out   | `spec-*.md` + code |
 
 ---
 
@@ -357,7 +357,7 @@ Every skill can be customized without modifying installed files. Customizations 
 | ---------------------------------------------- | -------------------------------------------------- |
 | Scalar (string, int, bool, float)              | Override wins                                      |
 | Table                                          | Deep merge (recursive)                             |
-| Array of tables with same `code` or `id` field | Merge by that key — matching replaces, new appends |
+| Array of tables with same `code` or `id` field | Merge by that key - matching replaces, new appends |
 | Any other array                                | Append (base, team, user)                          |
 
 ### Customization helper
@@ -380,7 +380,7 @@ uv run {project-root}/_bmad/scripts/resolve_customization.py \
   --key agent
 ```
 
-Requires Python 3.11+ (stdlib `tomllib` only — no pip dependencies).
+Requires Python 3.11+ (stdlib `tomllib` only - no pip dependencies).
 
 ---
 
@@ -388,7 +388,7 @@ Requires Python 3.11+ (stdlib `tomllib` only — no pip dependencies).
 
 | Workflow                 | Command                               | Agent       | Phase | Purpose                          |
 | ------------------------ | ------------------------------------- | ----------- | ----- | -------------------------------- |
-| **BMad-Help** ⭐         | `bmad-help`                           | Any         | —     | Intelligent guide — ask anything |
+| **BMad-Help** ⭐         | `bmad-help`                           | Any         | -     | Intelligent guide - ask anything |
 | Brainstorming            | `bmad-brainstorming`                  | Analyst     | 1     | Guided ideation                  |
 | Forge Idea               | `bmad-forge-idea`                     | Analyst     | 1     | Pressure-test an idea            |
 | Domain Research          | `bmad-domain-research`                | Analyst     | 1     | Domain assumptions               |
@@ -410,12 +410,12 @@ Requires Python 3.11+ (stdlib `tomllib` only — no pip dependencies).
 | Retrospective            | `bmad-retrospective`                  | DEV         | 4     | Lessons learned                  |
 | Quick Dev                | `bmad-quick-dev`                      | DEV         | 2-4   | Unified quick flow               |
 | Dev Auto                 | `bmad-dev-auto`                       | DEV         | 2-4   | Unattended dev loop              |
-| Generate Project Context | `bmad-generate-project-context`       | Analyst     | —     | Auto-generate context            |
-| Customize                | `bmad-customize`                      | —           | —     | Guided customization             |
+| Generate Project Context | `bmad-generate-project-context`       | Analyst     | -     | Auto-generate context            |
+| Customize                | `bmad-customize`                      | -           | -     | Guided customization             |
 
 ---
 
 ## See also
 
-- [rule](../rule/SKILL.md) — Central skill index and dispatcher
-- [rule-process](../rule-process/SKILL.md) — Process skill index
+- [rule](../rule/SKILL.md) - Central skill index and dispatcher
+- [rule-process](../rule-process/SKILL.md) - Process skill index

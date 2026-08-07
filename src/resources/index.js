@@ -37,7 +37,7 @@ export function listResources() {
     { uri: "rule://a11y/test-forms", name: "Form a11y test template", mimeType: "text/plain" },
   ];
 
-  // Add one resource per skill (skip plugins — they are published via their own mechanism)
+  // Add one resource per skill (skip plugins - they are published via their own mechanism)
   for (const name of getSkillNames()) {
     if (name === "rule" || isPluginSkill(name)) {
       continue;
@@ -63,11 +63,11 @@ export function listResources() {
 /**
  * Read a resource by its URI and return its contents.
  *
- * @param {string} uri — Resource URI (e.g. "rule://skills", "rule://rule-frontend-react")
+ * @param {string} uri - Resource URI (e.g. "rule://skills", "rule://rule-frontend-react")
  * @returns {Promise<{ contents: Array<{ uri: string, mimeType: string, text: string }> }>}
  */
 export async function readResource(uri) {
-  // Bundled skills only — the same single source of truth the tool surface uses.
+  // Bundled skills only - the same single source of truth the tool surface uses.
   const { embeddedSkills } = getSkillsDirectories();
 
   // ── Skill index ────────────────────────────────────────────────
@@ -142,7 +142,7 @@ export async function readResource(uri) {
     return { contents: [{ uri, mimeType: "text/plain", text: typeof tmpl === "string" ? tmpl : tmpl?.html || "" }] };
   }
 
-  // ── rule://community — list community skills ───────────────────
+  // ── rule://community - list community skills ───────────────────
   if (uri === "rule://community") {
     const { getSkillNames, isPluginSkill, readSkill } = await import("../tools/router.js");
     const allSkills = getSkillNames();
@@ -160,7 +160,7 @@ export async function readResource(uri) {
     return { contents: [{ uri, mimeType: "application/json", text: JSON.stringify(result, null, 2) }] };
   }
 
-  // ── rule://project — analyze project and suggest tools ──────────
+  // ── rule://project - analyze project and suggest tools ──────────
   if (uri === "rule://project") {
     const { detectProject, getFrameworkSuggestion } = await import("../core/detector.js");
     const profile = detectProject(process.cwd());

@@ -17,7 +17,7 @@ tags:
 frameworks: [all]
 ---
 
-# rule-toolchain — Toolchain Skills Index
+# rule-toolchain - Toolchain Skills Index
 
 ## Build Tools
 
@@ -65,5 +65,5 @@ Need commit/push discipline (atomic, scope)? → rule-toolchain-commits
 
 ## See also
 
-- [rule-devops-testing](../rule-devops-testing/SKILL.md) — Test configuration
-- [rule](../rule/SKILL.md) — Central skill index
+- [rule-devops-testing](../rule-devops-testing/SKILL.md) - Test configuration
+- [rule](../rule/SKILL.md) - Central skill index

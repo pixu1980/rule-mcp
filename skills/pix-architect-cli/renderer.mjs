@@ -1,4 +1,4 @@
-// rule-architect-cli renderer — Minimal interactive CLI wizard
+// rule-architect-cli renderer - Minimal interactive CLI wizard
 // Arrow keys for selects. Readline for text. Alternate screen buffer.
 // Each step screen replaces the previous one via ANSI alt screen.
 
@@ -6,12 +6,12 @@ import * as readline from "node:readline";
 import { isFieldVisible } from "../rule-architect/validators.mjs";
 
 // ══════════════════════════════════════════════════════════════════════════════
-// Alternate screen buffer — each step replaces the previous
+// Alternate screen buffer - each step replaces the previous
 // ══════════════════════════════════════════════════════════════════════════════
 
 let altScreen = false;
 
-/** Enter alternate screen buffer — saves main terminal content */
+/** Enter alternate screen buffer - saves main terminal content */
 export function enterAltScreen() {
   if (!altScreen) {
     process.stdout.write("\x1b[?1049h");
@@ -19,7 +19,7 @@ export function enterAltScreen() {
   }
 }
 
-/** Exit alternate screen buffer — restores main terminal content */
+/** Exit alternate screen buffer - restores main terminal content */
 export function exitAltScreen() {
   if (altScreen) {
     process.stdout.write("\x1b[?1049l");
@@ -100,7 +100,7 @@ function ask(prompt) {
 }
 
 // ══════════════════════════════════════════════════════════════════════════════
-// Select field — arrow-key picker
+// Select field - arrow-key picker
 // ══════════════════════════════════════════════════════════════════════════════
 
 async function pickOption(field, values, optGroups) {
@@ -174,7 +174,7 @@ async function pickOption(field, values, optGroups) {
 }
 
 // ══════════════════════════════════════════════════════════════════════════════
-// Text field — readline
+// Text field - readline
 // ══════════════════════════════════════════════════════════════════════════════
 
 async function inputText(field, values) {
@@ -191,7 +191,7 @@ async function inputText(field, values) {
 }
 
 // ══════════════════════════════════════════════════════════════════════════════
-// Textarea — line by line
+// Textarea - line by line
 // ══════════════════════════════════════════════════════════════════════════════
 
 async function inputTextarea(field, values) {
@@ -259,7 +259,7 @@ async function inputRepeatable(field, values) {
 }
 
 // ══════════════════════════════════════════════════════════════════════════════
-// Step nav — press Enter/→/n for next, Esc/←/p for back
+// Step nav - press Enter/→/n for next, Esc/←/p for back
 // ══════════════════════════════════════════════════════════════════════════════
 
 async function navPrompt(nav) {
@@ -290,7 +290,7 @@ async function navPrompt(nav) {
 }
 
 // ══════════════════════════════════════════════════════════════════════════════
-// Public API — called by wizard.mjs for each step
+// Public API - called by wizard.mjs for each step
 // ══════════════════════════════════════════════════════════════════════════════
 
 export async function renderStep(step, values, optionGroups, nav) {
@@ -300,7 +300,7 @@ export async function renderStep(step, values, optionGroups, nav) {
     return { action: nav.isLast ? "submit" : "next", values };
   }
 
-  // ── Clear screen — each step replaces previous ──
+  // ── Clear screen - each step replaces previous ──
   clearScreen();
 
   // ── Header ──

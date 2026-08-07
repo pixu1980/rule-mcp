@@ -20,9 +20,9 @@ tags:
 frameworks: [all]
 ---
 
-# Accessibility Framework — WCAG 2.2 AA + A11Y.md Protocol
+# Accessibility Framework - WCAG 2.2 AA + A11Y.md Protocol
 
-> **Based on:** [A11Y.md](https://github.com/fecarrico/A11Y.md) by Felipe A. Carriço — an accessibility validation protocol and persistent context architecture for developing certifiable software with AI.
+> **Based on:** [A11Y.md](https://github.com/fecarrico/A11Y.md) by Felipe A. Carriço - an accessibility validation protocol and persistent context architecture for developing certifiable software with AI.
 >
 > **See also:**
 >
@@ -36,7 +36,7 @@ frameworks: [all]
 
 ## 0. Principle Zero: Accessibility as Pre-condition
 
-Accessibility is **not a feature** — it is a **pre-condition for use**.
+Accessibility is **not a feature** - it is a **pre-condition for use**.
 
 - If a user cannot complete a task due to an accessibility barrier, the feature is considered **technically broken**.
 - **Task Completion** success is our primary quality metric.
@@ -52,17 +52,17 @@ Select the appropriate profile before generating or reviewing interface code. If
 | **⚖️ Standard (AA)** | WCAG AA  | 4.5:1 / 3:1 (SC 1.4.3, 1.4.11) | 12px†     | 24×24px (SC 2.5.8) · 44×44px† advised | **Default.** Production apps, public web |
 | **🚀 Launchpad (A)** | WCAG A   | 3:1† (house floor)             | 10px†     | 24×24px†                              | MVPs, internal tools, prototypes         |
 
-> **† House Rule:** non-normative — this framework's ergonomic policy where WCAG requires less or nothing at that level. WCAG defines no minimum font size at any level; Level A defines no contrast or target-size criteria; 44–48px targets come from Apple HIG / Material Design.
+> **† House Rule:** non-normative - this framework's ergonomic policy where WCAG requires less or nothing at that level. WCAG defines no minimum font size at any level; Level A defines no contrast or target-size criteria; 44–48px targets come from Apple HIG / Material Design.
 >
-> **Skipping a WCAG SC** at your target level **MUST** be logged in `templates/EXCEPTIONS.md`. Relaxing a **House Rule** is a product decision — record it in `templates/A11Y-DECISIONS.md`.
+> **Skipping a WCAG SC** at your target level **MUST** be logged in `templates/EXCEPTIONS.md`. Relaxing a **House Rule** is a product decision - record it in `templates/A11Y-DECISIONS.md`.
 >
 > **Launchpad** additionally requires explicit `EXCEPTIONS.md` documentation for each criterion relaxed below AA.
 >
-> **Launchpad does NOT relax critical rules** (Section 1 Severity). Keyboard operability, focus management, and semantic HTML remain mandatory at **ALL** levels — these are Level A requirements.
+> **Launchpad does NOT relax critical rules** (Section 1 Severity). Keyboard operability, focus management, and semantic HTML remain mandatory at **ALL** levels - these are Level A requirements.
 
 ### 0.2. Lazy Context Loading
 
-- This `SKILL.md` is the **normative core** — sufficient for most code generation tasks.
+- This `SKILL.md` is the **normative core** - sufficient for most code generation tasks.
 - Reference files in `references/` **MUST NOT** be preloaded. They **MUST** be consulted only when the task explicitly involves that component type.
 - For the authoritative upstream version of any reference, see: `https://github.com/fecarrico/A11Y.md/tree/main/docs/en/references/`
 
@@ -86,16 +86,16 @@ Evaluate the impact of any design or implementation decision:
 To ensure technical integrity, any agent interacting with this framework **MUST** follow these rules:
 
 1. **No Inference:** Never infer accessibility without direct evidence in the code or specification.
-2. **Lazy Context Loading:** Reference files (`references/`) MUST NOT be preloaded — consult only when the task explicitly involves that component type.
+2. **Lazy Context Loading:** Reference files (`references/`) MUST NOT be preloaded - consult only when the task explicitly involves that component type.
 3. **Reference APG:** Prioritize patterns from the [WAI-ARIA Authoring Practices Guide (APG)](https://www.w3.org/WAI/ARIA/apg/).
 4. **Protocol for Ambiguity:** Follow the _Complex Component Protocol_ (Section 6) in case of uncertainty.
 5. **Explain Trade-offs:** Explain impacts on Accessibility vs UX vs Business when suggesting changes.
 6. **UI Component Interrogation:** Before adding `onClick` to non-semantic elements, **MUST** propose replacing them with native elements or full ARIA patterns.
 7. **Framework Adaptation:** This guide uses React/TSX syntax. On **web** frameworks, transpose patterns to the active framework while preserving semantic equivalence. See [`references/guide-framework-mapping.md`](./references/guide-framework-mapping.md).
-8. **Platform Awareness:** Identify the target platform **before** loading any reference. The normative layer (Principle Zero, POUR, profiles, severity, governance) is platform-agnostic; technical references are web-first. On native platforms (iOS, Android, React Native, Flutter), web references are **semantic intent to translate — never implementation to copy**. See [`references/guide-platform-native.md`](./references/guide-platform-native.md).
+8. **Platform Awareness:** Identify the target platform **before** loading any reference. The normative layer (Principle Zero, POUR, profiles, severity, governance) is platform-agnostic; technical references are web-first. On native platforms (iOS, Android, React Native, Flutter), web references are **semantic intent to translate - never implementation to copy**. See [`references/guide-platform-native.md`](./references/guide-platform-native.md).
 9. **Component Reuse:** Before generating any interactive component, check for an existing implementation in the project or its design system and extend it. Generating a parallel implementation of an existing pattern is a violation.
-10. **Decision Memory:** Choices between equally conformant alternatives MUST be recorded in `templates/A11Y-DECISIONS.md` — indexed by pattern, never by screen — and reused in later turns.
-11. **Mode Awareness:** When generating new code, apply all rules proactively. When reviewing existing code, identify violations, classify by severity (Section 1), and suggest targeted fixes — do not propose full rewrites unless the structural damage is CRITICAL. If `templates/EXCEPTIONS.md` exists, consult it: an entry there is a legitimate dispensation, but an entry past its expiry date MUST be flagged as 🟠 HIGH technical debt.
+10. **Decision Memory:** Choices between equally conformant alternatives MUST be recorded in `templates/A11Y-DECISIONS.md` - indexed by pattern, never by screen - and reused in later turns.
+11. **Mode Awareness:** When generating new code, apply all rules proactively. When reviewing existing code, identify violations, classify by severity (Section 1), and suggest targeted fixes - do not propose full rewrites unless the structural damage is CRITICAL. If `templates/EXCEPTIONS.md` exists, consult it: an entry there is a legitimate dispensation, but an entry past its expiry date MUST be flagged as 🟠 HIGH technical debt.
 
 ---
 
@@ -117,8 +117,8 @@ To ensure technical integrity, any agent interacting with this framework **MUST*
 - **Keyboard (SC 2.1.1):** 100% of functionalities **MUST** be operable without a mouse. Avoid purely pointer-based listeners without keyboard event equivalents.
 - **Focus (SC 2.4.7, 2.4.11):** Focus **MUST** be visible, never entirely obscured by author content (e.g., sticky headers/footers), persistent, and never suppressed via CSS (`outline: none` without fallback is forbidden).
 - **SPA Routing (Single Page Applications):** After client-side routing changes, focus **MUST** be managed and properly reset (e.g., sending focus to the top or an H1).
-- **Targets (SC 2.5.8):** Interactive elements MUST have a minimum size of **24×24 CSS pixels** — the WCAG 2.2 AA floor. **House Rule†:** design to **44×44px** (48×48 under Shield), the ergonomic floor shared by Apple HIG and Material Design.
-- **Motion (SC 2.3.3 AAA — enforced as House Rule† at every profile):** **MUST** respect `@media (prefers-reduced-motion)`.
+- **Targets (SC 2.5.8):** Interactive elements MUST have a minimum size of **24×24 CSS pixels** - the WCAG 2.2 AA floor. **House Rule†:** design to **44×44px** (48×48 under Shield), the ergonomic floor shared by Apple HIG and Material Design.
+- **Motion (SC 2.3.3 AAA - enforced as House Rule† at every profile):** **MUST** respect `@media (prefers-reduced-motion)`.
 
 ### 3.3 Understandable
 
@@ -201,7 +201,7 @@ Every page must have at least these landmarks:
 </body>
 ```
 
-### Calendar Grids — Use `<table>`
+### Calendar Grids - Use `<table>`
 
 A month or week calendar **is tabular data**: it represents days (columns) × weeks (rows).
 
@@ -231,10 +231,10 @@ Benefits: No ARIA role conflicts, built-in screen reader semantics, `table-layou
 
 ## 5. Visual Directives (Strict UI Criteria)
 
-- **Focus Indicator (House Rule† — inspired by SC 2.4.13 AAA):** The focus ring **MUST** have a minimum thickness of 2px and a contrast of at least 3:1 against the background.
+- **Focus Indicator (House Rule† - inspired by SC 2.4.13 AAA):** The focus ring **MUST** have a minimum thickness of 2px and a contrast of at least 3:1 against the background.
 - **Typography (House Rule†):** Text **MUST NOT** be smaller than the minimum font size of the active Compliance Profile (Section 0.1); 12px under default Standard (AA).
-  - **Density Exception:** In complex dashboards or secondary metadata (badges), **min 10px** is allowed, provided the contrast is raised to **7:1** as mitigation — documented in `templates/EXCEPTIONS.md`.
-- **Target Spacing & Hit Area:** See _Section 3.2 — Targets_. In dense UIs, if visual size < 44px, the **hit area** MUST be expanded via CSS/padding. Adjacent targets **SHOULD** have 8px of spacing.
+  - **Density Exception:** In complex dashboards or secondary metadata (badges), **min 10px** is allowed, provided the contrast is raised to **7:1** as mitigation - documented in `templates/EXCEPTIONS.md`.
+- **Target Spacing & Hit Area:** See _Section 3.2 - Targets_. In dense UIs, if visual size < 44px, the **hit area** MUST be expanded via CSS/padding. Adjacent targets **SHOULD** have 8px of spacing.
 
 ### 5.1 Color and Contrast
 
@@ -285,7 +285,7 @@ Charts and dashboards **MUST NOT** rely exclusively on colors to differentiate d
 When identifying an unmapped or highly complex component:
 
 1. **Identify:** Look for a similar pattern in the [WAI-ARIA APG](https://www.w3.org/WAI/ARIA/apg/).
-2. **Validate:** Request human validation with a screen reader — the AI **MUST NOT** claim this test was performed, nor fabricate its results.
+2. **Validate:** Request human validation with a screen reader - the AI **MUST NOT** claim this test was performed, nor fabricate its results.
 3. **Document:** Document expected behavior (keyboard and announcements).
 4. **Scale:** Record the resolved pattern in `templates/A11Y-DECISIONS.md` so future components reuse it instead of re-deriving it.
 
@@ -312,10 +312,10 @@ Compliance must be verified through these steps:
 - [ ] **Technical Check:** Clean code, testable via integrated linter (`eslint-plugin-jsx-a11y` or similar), passing without critical violations through engines like **axe-core**.
 - [ ] **Tab Order:** `Tab` key path manually validated (ensures absence of frontend dead-ends).
 - [ ] **User Flow:** Dynamic interactions (SPAs) tested for feedback via `aria-live` in error and success scenarios without mouse use.
-- [ ] **Zoom & Reflow:** Text resizes up to 200% without loss of content or function (SC 1.4.4); content reflows at 320 CSS px width — equivalent to 400% zoom on a 1280px viewport — without two-dimensional scrolling (SC 1.4.10).
+- [ ] **Zoom & Reflow:** Text resizes up to 200% without loss of content or function (SC 1.4.4); content reflows at 320 CSS px width - equivalent to 400% zoom on a 1280px viewport - without two-dimensional scrolling (SC 1.4.10).
 - [ ] **Color & Perception:** No functional loss when losing the exclusive use of colors (vision deficiency simulators).
-- [ ] **Exceptions Audit:** `templates/EXCEPTIONS.md` reviewed — every active entry has a risk owner, approver, tracking issue and expiry; no expired entries left unaddressed.
-- [ ] **Screen Reader:** Manual validation with NVDA (Windows), VoiceOver (macOS/iOS), or TalkBack (Android) — the AI MUST NOT claim it performed this test.
+- [ ] **Exceptions Audit:** `templates/EXCEPTIONS.md` reviewed - every active entry has a risk owner, approver, tracking issue and expiry; no expired entries left unaddressed.
+- [ ] **Screen Reader:** Manual validation with NVDA (Windows), VoiceOver (macOS/iOS), or TalkBack (Android) - the AI MUST NOT claim it performed this test.
 - [ ] **EAA Compliance:** For EU-market products, verify compliance with EN 301 549 (see [`EAA.md`](./EAA.md)).
 
 ### CI/CD Integration
@@ -329,7 +329,7 @@ Compliance must be verified through these steps:
 
 ### Technical Guides (21 references)
 
-These files in `references/` are **lazy-loaded** — read only the guide relevant to the component type you are building.
+These files in `references/` are **lazy-loaded** - read only the guide relevant to the component type you are building.
 
 | Guide                         | Component Type             | File                                                                                     |
 | :---------------------------- | :------------------------- | :--------------------------------------------------------------------------------------- |
@@ -383,13 +383,13 @@ To use this framework with any AI coding agent, add **one rule** to your agent's
 | **GitHub Copilot** | `.github/copilot-instructions.md` | Same format                                                                                                                                  |
 | **Windsurf**       | `.windsurf/rules/a11y.md`         | Same format                                                                                                                                  |
 
-> **Do not duplicate** accessibility rules outside this skill — prevents rule fragmentation and ensures the AI always loads the complete context.
+> **Do not duplicate** accessibility rules outside this skill - prevents rule fragmentation and ensures the AI always loads the complete context.
 
 ---
 
 ## See also
 
-- [rule](../rule/SKILL.md) — Central skill index and dispatcher
-- [rule-frontend](../rule-frontend/SKILL.md) — Frontend framework skills (a11y applies to all UI work)
-- [rule-styleguide-html](../rule-styleguide-html/SKILL.md) — Semantic HTML conventions
-- [rule-ui-design-system](../rule-ui-design-system/SKILL.md) — UI design system and accessibility direction
+- [rule](../rule/SKILL.md) - Central skill index and dispatcher
+- [rule-frontend](../rule-frontend/SKILL.md) - Frontend framework skills (a11y applies to all UI work)
+- [rule-styleguide-html](../rule-styleguide-html/SKILL.md) - Semantic HTML conventions
+- [rule-ui-design-system](../rule-ui-design-system/SKILL.md) - UI design system and accessibility direction

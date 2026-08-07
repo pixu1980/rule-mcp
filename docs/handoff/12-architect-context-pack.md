@@ -1,14 +1,14 @@
-# Handoff — `feat/architect-context-pack` (rule-architect consolidation)
+# Handoff - `feat/architect-context-pack` (rule-architect consolidation)
 
 _Generated 2026-07-30 with `rule_tool_process_handoff`, augmented with the session narrative._
 
 ## Status at handoff
 
 - **Branch:** `feat/architect-context-pack` → pushed to `origin`, upstream set. **Not merged.**
-- **Ahead of `main`:** 52 commits (the entire P1–P8 consolidation — the branch was never merged, so all architect work lives here).
+- **Ahead of `main`:** 52 commits (the entire P1–P8 consolidation - the branch was never merged, so all architect work lives here).
 - **Open an MR:** https://gitlab.palmabit.cloud/rule/rule-mcp/rule-mcp/-/merge_requests/new?merge_request%5Bsource_branch%5D=feat%2Farchitect-context-pack
 - **Tests:** full architect suite **87 pass / 0 fail**. Working tree clean.
-- **Merge is a human decision** — see "Open items" for the two pre-existing CI reds that predate this branch.
+- **Merge is a human decision** - see "Open items" for the two pre-existing CI reds that predate this branch.
 
 ## What the branch delivers
 
@@ -30,27 +30,27 @@ Started from "review the architect work"; ended having closed the last two follo
 
 ```
 fc6b9a7 docs(architect): record P8 outcome
-547fa97 feat(architect): P8 T2-T4 — framework-neutral pack prose
-7e052fd feat(architect): P8 T1 — wizard fields for framework-neutral pack prose
-624ee71 docs(architect): phase-8 plan — framework-neutral templates
+547fa97 feat(architect): P8 T2-T4 - framework-neutral pack prose
+7e052fd feat(architect): P8 T1 - wizard fields for framework-neutral pack prose
+624ee71 docs(architect): phase-8 plan - framework-neutral templates
 20b3534 fix(architect): unwrap inline-code TODO markers (cosmetic)
 90e64bd fix(architect-web): escape error/summary/target sinks (XSS)
 769fcbb fix(architect): cap interview-server request bodies (413)
-823ed06 fix(architect): detect or stay silent — stop fabricating prefill values
+823ed06 fix(architect): detect or stay silent - stop fabricating prefill values
 4be5a79 fix(architect): substitute answer values literally, not as $-patterns
-43fbfee fix(architect): harden interview servers — traversal, bind, CORS (F7)
+43fbfee fix(architect): harden interview servers - traversal, bind, CORS (F7)
 dbdb999 feat(architect): guard root entry files from silent overwrite (F10)
 ```
 
-### F10 — root-file overwrite guard (`dbdb999`)
+### F10 - root-file overwrite guard (`dbdb999`)
 
 `generateContext` wrote 7 root entry files into the project root, clobbering a hand-authored `CLAUDE.md`/`AGENTS.md`. Now: existing root file → **skip + report**; overwrite only on `--force` (CLI) / `force:true` (web). `.context/` stays architect-owned (always regenerated). Guarded per-file. **User decisions locked.**
 
-### F7 — interview-server hardening (`43fbfee`)
+### F7 - interview-server hardening (`43fbfee`)
 
 Both servers (`rule-architect-web/server.mjs` + the MCP-spawned `assets/context-server.mjs`): path-traversal containment (`static-file.mjs` `containWithin`), bind `127.0.0.1` (`BIND_HOST`, was all-interfaces), dropped wildcard CORS. Main-guarded auto-listen + exported `createServer`/`BIND_HOST` for tests. Verified via real spawn (loopback serves, LAN unreachable, no leak).
 
-### Hardening sweep (high-confidence, full branch diff) — 5 fixes
+### Hardening sweep (high-confidence, full branch diff) - 5 fixes
 
 1. **`$`-substitution corruption** (`4be5a79`): `replaceAll(ph, str)` interpreted `$&`/`$$`/`` $` ``/`$'` in answers → function replacement.
 2. **detector fabrication** (`823ed06`): `detectProjectValues` returned 27 fixed TTRPG/Electron values for _any_ project (even empty). Rewrote to detect-or-stay-silent (PROJECT_NAME + lockfile-based pkg manager only).
@@ -58,7 +58,7 @@ Both servers (`rule-architect-web/server.mjs` + the MCP-spawned `assets/context-
 4. **4 residual XSS sinks** (`90e64bd`): error/summary/target → innerHTML now `esc()`-wrapped.
 5. **backtick cosmetic** (`20b3534`): `` `[KEY]` `` unfilled no longer renders literal marker underscores.
 
-### P8 — framework-neutral pack prose (`624ee71`, `7e052fd`, `547fa97`, `fc6b9a7`)
+### P8 - framework-neutral pack prose (`624ee71`, `7e052fd`, `547fa97`, `fc6b9a7`)
 
 The pack no longer asserts the prototype's vanilla-JS/Custom-Elements/Parcel stack as fact (a React project's README used to say "pure vanilla JavaScript only"). Grounding showed most content was already collected; only **3 new single-subfield repeatables** added (`ARCHITECTURE_PRINCIPLES`, `TECH_CONSTRAINTS`, `GUIDANCE_LINKS`). 7 templates de-overfit to answer-driven placeholders (`[BROWSER_SUPPORT]`, `[BUILD_COMMAND]`, `[STACK_CSS_APPROACH]`, `[ARCH_PRINCIPLE_*]`, working `[GUIDANCE_LINK_*]` refs replacing dead skill links). New CI gate `architect-framework-neutral.test.mjs`. Fill-coverage 100% (143/143), golden regenerated. **User decisions locked** (framework-neutral, answer-driven, new fields).
 
@@ -71,11 +71,11 @@ The pack no longer asserts the prototype's vanilla-JS/Custom-Elements/Parcel sta
 
 ## Open items / next
 
-1. **Merge decision** — the branch is ready but unmerged; that's a human call.
+1. **Merge decision** - the branch is ready but unmerged; that's a human call.
 2. **Project-structure overfit (out of P8 scope):** some templates still carry `./src/scripts/services/…`-style _structure_ assumptions in non-gated prose. Stack-neutral is done; structure-neutral would be a separate follow-up.
 3. **Pre-existing CI reds, NOT from this work** (reproduce identically on `main`): `rule-styleguide-a11y: missing See also` aborts full `node --run ci`; `docs-architect` "≤6 root docs, found 8". These predate the branch.
 4. **`architect-ui.test.mjs`** needs the Playwright runner + a live server (`ARCHITECT_WEB_URL`); it fails under `node --test` (wrong runner) and is **not in `ci`** by design.
-5. **`rule_tool_check` on the architect `.mjs`** files: a repo-wide block-spacing style gap fails identically on untouched code, and `jsdoc-required` is a confirmed **false positive** (fires on functions that have full JSDoc). Not a per-change regression — don't churn style to chase it.
+5. **`rule_tool_check` on the architect `.mjs`** files: a repo-wide block-spacing style gap fails identically on untouched code, and `jsdoc-required` is a confirmed **false positive** (fires on functions that have full JSDoc). Not a per-change regression - don't churn style to chase it.
 
 ## How to verify / resume
 

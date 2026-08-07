@@ -11,7 +11,7 @@ This document logs known deviations from accessibility standards (WCAG 2.2 AA / 
 3. Scope is the **narrowest practical**: one component/selector, never a whole rule.
 4. At expiry, the exception is reviewed: fixed and removed, or consciously renewed. **Never silently suppressed.**
 5. **AI duty:** in review mode, flag any exception past its expiry date as 🟠 HIGH technical debt.
-6. This log is a **versioned project record** — never add it to `.gitignore`.
+6. This log is a **versioned project record** - never add it to `.gitignore`.
 
 ---
 
@@ -23,7 +23,7 @@ This document logs known deviations from accessibility standards (WCAG 2.2 AA / 
 - **Component / Page:** [e.g., Financial Dashboard Dynamic Table]
 - **WCAG Guideline Affected:** [e.g., 2.1.1 Keyboard (A) and 1.4.3 Contrast (Minimum) (AA)]
 - **Severity (User Impact):** [🔴 Critical | 🟠 High | 🟡 Medium | 🔵 Low]
-- **Risk Owner:** [Who is accountable — a person, not a team]
+- **Risk Owner:** [Who is accountable - a person, not a team]
 - **Approved by:** [Lead/PO/QA]
 - **Tracking Issue:** [Link to the backlog item]
 
@@ -38,7 +38,7 @@ This document logs known deviations from accessibility standards (WCAG 2.2 AA / 
 
 ### 4. Resolution Plan and Expiry
 
-- **Expiry (review-by date):** [YYYY-MM-DD — mandatory]
+- **Expiry (review-by date):** [YYYY-MM-DD - mandatory]
 - **Resolution Criterion:** [What needs to happen for this exception to no longer exist?]
 
 ---

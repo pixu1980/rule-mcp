@@ -9,7 +9,7 @@ tags:
 frameworks: [remix, react]
 ---
 
-# rule-frontend-meta-remix — Remix / React Router Apps with rule Principles
+# rule-frontend-meta-remix - Remix / React Router Apps with rule Principles
 
 Remix (now React Router v7) is a React meta-framework with nested routing, loaders, actions, and progressive enhancement. Use alongside [rule-frontend-react](../rule-frontend-react/SKILL.md) for the UI layer.
 
@@ -124,7 +124,7 @@ function SubmitButton() {
 ### Nested Routes with Layouts
 
 ```jsx
-// app/routes/_layout.jsx — wraps all child routes
+// app/routes/_layout.jsx - wraps all child routes
 export default function DashboardLayout() {
   return (
     <section data-part="dashboard">
@@ -200,12 +200,12 @@ export async function loader({ request }) {
 
 ```
 ┌────────────────────────────────────────────────────────────┐
-│  rule-frontend-meta-remix — Remix / React Router (React Meta-framework)  │
+│  rule-frontend-meta-remix - Remix / React Router (React Meta-framework)  │
 │                                                           │
 │  Routing:   app/routes/, nested with _layout.jsx          │
 │  Data:      loader() → useLoaderData()                    │
 │  Mutations: action() → useActionData()                    │
-│  Forms:     <Form method="post"> — works without JS       │
+│  Forms:     <Form method="post"> - works without JS       │
 │  Sessions:  createCookieSessionStorage + cookie           │
 │  Deploy:    Node, Cloudflare Workers, Vercel, Netlify    │
 └────────────────────────────────────────────────────────────┘
@@ -215,6 +215,6 @@ export async function loader({ request }) {
 
 ## See also
 
-- [rule](../rule/SKILL.md) — Central skill index and dispatcher
-- [rule-frontend](../rule-frontend/SKILL.md) — Frontend skill index
-- [rule-styleguide](../rule-styleguide/SKILL.md) — Shared frontend standards
+- [rule](../rule/SKILL.md) - Central skill index and dispatcher
+- [rule-frontend](../rule-frontend/SKILL.md) - Frontend skill index
+- [rule-styleguide](../rule-styleguide/SKILL.md) - Shared frontend standards

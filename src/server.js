@@ -37,7 +37,7 @@ let serverInstance = null;
 
 /**
  * Configure an MCP Server instance with tool/resource/prompt handlers.
- * Does NOT connect a transport — that is done by startServer() (stdio)
+ * Does NOT connect a transport - that is done by startServer() (stdio)
  * or the SSE transport module.
  *
  * @returns {Server}
@@ -148,7 +148,7 @@ export function createServer() {
  * Reads JSON-RPC messages from stdin via StdioServerTransport,
  * dispatches to tool/resource/prompt handlers, writes responses to stdout.
  *
- * This function never returns — it keeps the process alive.
+ * This function never returns - it keeps the process alive.
  *
  * @returns {Promise<void>}
  */

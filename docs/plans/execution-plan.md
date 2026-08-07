@@ -1,49 +1,49 @@
-# Execution Plan — Prompt MCP preconfezionati (workflow + aree)
+# Execution Plan - Pre-packaged MCP Prompts (workflow + areas)
 
-Obiettivo: estendere il registro prompt del server (`src/prompts/index.js`) da 5 a **26 prompt**
-che velocizzano il lavoro dei dev, con schema argomenti rigido, stileguide invocate via tool,
-baseline TDD/a11y sempre coinvolte (o richiesta esplicita all'utente), e chiusura con
-**proposta di commit message con scope obbligatorio**.
+Goal: extend the server's prompt registry (`src/prompts/index.js`) from 5 to **26 prompts**
+that speed up developer work, with strict argument schema, styleguides invoked via tools,
+baseline TDD/a11y always involved (or explicit request to the user), and closing with
+**commit message proposal with mandatory scope**.
 
-Decisioni intervista (2025-08-01):
+Interview decisions (2025-08-01):
 
-1. Prompt one-shot workflow **e** per-fase (partire dai one-shot ad alto valore) — C
-2. Copertura **tutte** le 16 aree (da testare)
-3. **Un prompt per area** (argomento `framework` dove serve, non per-framework)
-4. **Schema argomenti rigido**
-5. Stileguide invocate via tool; **TDD/a11y sempre coinvolti o chiedere all'utente**
-6. Il workflow termina **proponendo il commit message con scope**
-7. Top 5: `rule-setup-project`, `rule-new-feature`, `rule-pull-request` (aggiorna anche ADR), `rule-write-tests`, `rule-handoff`
-8. Delivery: piano → TDD → registro prompt → completions → validazione
+1. One-shot workflow prompts **and** per-phase (start from high-value one-shots) - C
+2. Coverage: **all** 16 areas (to be tested)
+3. **One prompt per area** (`framework` argument where needed, not per-framework)
+4. **Strict argument schema**
+5. Styleguides invoked via tools; **TDD/a11y always involved or ask the user**
+6. The workflow ends **proposing the commit message with scope**
+7. Top 5: `rule-setup-project`, `rule-new-feature`, `rule-pull-request` (also updates ADR), `rule-write-tests`, `rule-handoff`
+8. Delivery: plan → TDD → prompt registry → completions → validation
 
 ---
 
-## Phase 1 — Test fallenti (TDD)
+## Phase 1 - Failing tests (TDD)
 
-- [x] 1. Nuovo `test/prompts.test.mjs`: struttura del registro (nomi unici kebab-case, schema argomenti rigido, getPrompt non-null per ogni prompt) + copertura attesa (5 workflow + 16 aree + 5 esistenti) + regole di contenuto (commit+scope, TDD/a11y/test) → RED oggi (5 prompt, niente regole)
+- [x] 1. New `test/prompts.test.mjs`: registry structure (unique kebab-case names, strict argument schema, getPrompt non-null for every prompt) + expected coverage (5 workflow + 16 area + 5 existing) + content rules (commit+scope, TDD/a11y/test) → RED today (5 prompts, no rules)
 
-## Phase 2 — Registro prompt (`src/prompts/index.js`)
+## Phase 2 - Prompt registry (`src/prompts/index.js`)
 
-- [x] 2. **5 workflow one-shot** (orchestrano i tool):
+- [x] 2. **5 one-shot workflows** (orchestrate the tools):
   - `rule-setup-project` (detect → scaffold → toolchain → architect context)
   - `rule-new-feature` (spec → feature_workflow → gateway → implement → check → test → commit scope)
-  - `rule-pull-request` (review + a11y + security + **ADR update** + commit scope + descrizione PR)
+  - `rule-pull-request` (review + a11y + security + **ADR update** + commit scope + PR description)
   - `rule-write-tests` (TDD + a11y tests + devops_testing)
-  - `rule-handoff` (process_handoff + adr + contesto compresso)
-- [x] 3. **16 prompt per area**: `rule-area-{...}` — **con tutti i 97 tool rinominati `rule_tool_*`** (decisione intervista) per evitare collisioni coi prompt — ognuno: route alla skill dell'area, baseline TDD/a11y o domanda all'utente, commit scope finale
-- [x] 4. **Aggiornare i 5 esistenti** (`rule-code-review`, `rule-generate-component`, `rule-a11y-test`, `rule-a11y-review`, `rule-architect-scaffold`) per rispettare le stesse regole (commit scope + baseline)
+  - `rule-handoff` (process_handoff + adr + compressed context)
+- [x] 3. **16 area prompts**: `rule-area-{...}` - **with all 97 tools renamed `rule_tool_*`** (interview decision) to avoid collisions with prompts - each: route to the area skill, baseline TDD/a11y or ask the user, final commit scope
+- [x] 4. **Update the 5 existing** (`rule-code-review`, `rule-generate-component`, `rule-a11y-test`, `rule-a11y-review`, `rule-architect-scaffold`) to comply with the same rules (commit scope + baseline)
 
-## Phase 3 — Completions (`src/server.js`)
+## Phase 3 - Completions (`src/server.js`)
 
-- [x] 5. Argument completion per i nuovi prompt (framework, area, testType, mode, tier…) — pattern già esistente
+- [x] 5. Argument completion for the new prompts (framework, area, testType, mode, tier…) - existing pattern
 
-## Phase 4 — Docs
+## Phase 4 - Docs
 
-- [x] 6. README: sezione prompt aggiornata con i 26 prompt
+- [x] 6. README: prompts section updated with the 26 prompts
 - [x] 7. CHANGELOG
 
-## Phase 5 — Validazione
+## Phase 5 - Validation
 
 - [x] 8. `node test/prompts.test.mjs` + `pnpm test:all` + smoke
-- [x] 9. Aggiungere `test/prompts.test.mjs` a `test:all` e `ci` in package.json
-- [x] 10. Verifica naming bare (`/rule-setup-project`, `/rule-area-frontend`…) — nessuna collisione coi tool
+- [x] 9. Add `test/prompts.test.mjs` to `test:all` and `ci` in package.json
+- [x] 10. Verify bare naming (`/rule-setup-project`, `/rule-area-frontend`…) - no collision with tools

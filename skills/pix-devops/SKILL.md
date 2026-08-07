@@ -14,7 +14,7 @@ tags:
 frameworks: [all]
 ---
 
-# rule-devops — DevOps & Engineering Skills Index
+# rule-devops - DevOps & Engineering Skills Index
 
 ## Available Skills
 
@@ -38,6 +38,6 @@ Need version management?                → rule-devops-version
 
 ## See also
 
-- [rule-toolchain-biome](../rule-toolchain-biome/SKILL.md) — Linting & formatting
-- [rule-toolchain-husky](../rule-toolchain-husky/SKILL.md) — Git hooks
-- [rule](../rule/SKILL.md) — Central skill index
+- [rule-toolchain-biome](../rule-toolchain-biome/SKILL.md) - Linting & formatting
+- [rule-toolchain-husky](../rule-toolchain-husky/SKILL.md) - Git hooks
+- [rule](../rule/SKILL.md) - Central skill index

@@ -15,7 +15,7 @@ tags:
 frameworks: [all]
 ---
 
-# rule-frontend — Frontend Framework Skills Index
+# rule-frontend - Frontend Framework Skills Index
 
 ## UI Frameworks
 
@@ -58,6 +58,6 @@ Need nested routing (Remix)?            → rule-frontend-meta-remix
 
 ## See also
 
-- [rule-toolchain-vite](../rule-toolchain-vite/SKILL.md) — Vite build tool
-- [rule-styleguide-a11y](../rule-styleguide-a11y/SKILL.md) — Accessibility
-- [rule](../rule/SKILL.md) — Central skill index
+- [rule-toolchain-vite](../rule-toolchain-vite/SKILL.md) - Vite build tool
+- [rule-styleguide-a11y](../rule-styleguide-a11y/SKILL.md) - Accessibility
+- [rule](../rule/SKILL.md) - Central skill index

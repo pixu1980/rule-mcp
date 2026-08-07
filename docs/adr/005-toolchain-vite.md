@@ -29,7 +29,7 @@ The `rule-frontend-react` skill now references `rule-toolchain-vite` for build c
 
 **Positive:**
 
-- Framework-agnostic Vite skill — usable by React, Vue, Svelte, Astro, and vanilla projects
+- Framework-agnostic Vite skill - usable by React, Vue, Svelte, Astro, and vanilla projects
 - Single source of truth for Vite configuration
 - `rule-toolchain-*` category is extensible (future: webpack, esbuild, tsc)
 - Cleaner separation of concerns

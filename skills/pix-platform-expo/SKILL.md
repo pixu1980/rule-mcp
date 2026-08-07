@@ -19,9 +19,9 @@ metadata:
 This skill covers the full EAS Build lifecycle for Expo projects:
 eas.json configuration, multi-environment profiles, secrets management, OTA updates, and GitLab CI/CD pipelines with tag-driven releases.
 
-Do **not** use the standard `gitlab-ci` skill for Expo projects — Expo apps use EAS Cloud Builds instead of Docker build/deploy stages.
+Do **not** use the standard `gitlab-ci` skill for Expo projects - Expo apps use EAS Cloud Builds instead of Docker build/deploy stages.
 
-## Step 1 — Generate eas.json
+## Step 1 - Generate eas.json
 
 Create `eas.json` at the project root with inheritable profiles.
 
@@ -122,11 +122,11 @@ Create `eas.json` at the project root with inheritable profiles.
 }
 ```
 
-Adapt `BUNDLE_ID`, `EXPO_PUBLIC_APP_NAME`, and `EXPO_PUBLIC_API_URL` to the actual project. Use `BUNDLE_ID` (no `EXPO_PUBLIC_` prefix) for the bundle identifier — it is a build-config-only value read in `app.config.ts`, not a runtime variable. Use distinct bundle IDs per environment so multiple variants can coexist on one device.
+Adapt `BUNDLE_ID`, `EXPO_PUBLIC_APP_NAME`, and `EXPO_PUBLIC_API_URL` to the actual project. Use `BUNDLE_ID` (no `EXPO_PUBLIC_` prefix) for the bundle identifier - it is a build-config-only value read in `app.config.ts`, not a runtime variable. Use distinct bundle IDs per environment so multiple variants can coexist on one device.
 
-## Step 2 — Configure EAS Secrets
+## Step 2 - Configure EAS Secrets
 
-Store sensitive build-time values in EAS Secrets — **never** in `.env` files committed to git.
+Store sensitive build-time values in EAS Secrets - **never** in `.env` files committed to git.
 
 ```bash
 pnpx eas secret:create --name API_KEY --value your-secret-value
@@ -136,7 +136,7 @@ pnpx eas secret:create --name API_KEY --value your-secret-value
 
 Secrets can also be managed via the Expo dashboard.
 
-## Step 3 — Configure EAS Credentials
+## Step 3 - Configure EAS Credentials
 
 Let EAS manage signing certificates and provisioning profiles:
 
@@ -146,28 +146,28 @@ pnpx eas credentials
 
 This keeps builds reproducible and signing setup consistent across environments and team members.
 
-## Step 4 — Build profiles and commands
+## Step 4 - Build profiles and commands
 
 | Profile               | Purpose                                                       | Command                                                            |
 | --------------------- | ------------------------------------------------------------- | ------------------------------------------------------------------ |
 | development           | Device dev client with Metro live reload                      | `pnpx eas build --profile development --platform ios`              |
 | development-simulator | iOS Simulator dev client (no provisioning needed)             | `pnpx eas build --profile development-simulator --platform ios`    |
-| preview               | Internal QA / demo — APK for Android, simulator build for iOS | `pnpx eas build --profile preview --platform all`                  |
-| staging               | UAT — submits to TestFlight / Play Console internal           | `pnpx eas build --profile staging --platform ios --auto-submit`    |
-| production            | Public release — App Store / Play Store (AAB for Android)     | `pnpx eas build --profile production --platform ios --auto-submit` |
+| preview               | Internal QA / demo - APK for Android, simulator build for iOS | `pnpx eas build --profile preview --platform all`                  |
+| staging               | UAT - submits to TestFlight / Play Console internal           | `pnpx eas build --profile staging --platform ios --auto-submit`    |
+| production            | Public release - App Store / Play Store (AAB for Android)     | `pnpx eas build --profile production --platform ios --auto-submit` |
 
 ### When to rebuild vs reload
 
 | Change Type                | Requires Rebuild?      |
 | -------------------------- | ---------------------- |
-| Editing JS/TS files        | No — reloads via Metro |
-| Changing images/assets     | No — reloads via Metro |
+| Editing JS/TS files        | No - reloads via Metro |
+| Changing images/assets     | No - reloads via Metro |
 | Updating native modules    | Yes                    |
 | Modifying app.config.ts    | Yes                    |
 | Changing EAS Secrets       | Yes                    |
 | OTA update with EAS Update | No rebuild needed      |
 
-## Step 5 — EAS Update (OTA)
+## Step 5 - EAS Update (OTA)
 
 For JavaScript-only changes that don't require a new binary:
 
@@ -177,7 +177,7 @@ pnpx eas update --branch production --message "Fix typo in settings screen"
 
 OTA updates are delivered to users on next app launch without going through store review.
 
-## Step 6 — Generate GitLab CI pipeline
+## Step 6 - Generate GitLab CI pipeline
 
 Copy the template from `assets/templates/.gitlab-ci.yml` to `.gitlab-ci.yml` at the project root.
 
@@ -185,13 +185,13 @@ Copy the template from `assets/templates/.gitlab-ci.yml` to `.gitlab-ci.yml` at 
 
 | Stage           | Jobs                                                                      | Trigger                |
 | --------------- | ------------------------------------------------------------------------- | ---------------------- |
-| `install`       | `install` — `pnpm ci`, caches `~/.pnpm`, exposes `node_modules/` artifact | Always                 |
-| `lint`          | `lint` — `type-check` + `lint`                                            | MRs, `develop`, `main` |
-| `test`          | `test` — `test:coverage`, cobertura coverage artifact                     | MRs, `develop`, `main` |
+| `install`       | `install` - `pnpm ci`, caches `~/.pnpm`, exposes `node_modules/` artifact | Always                 |
+| `lint`          | `lint` - `type-check` + `lint`                                            | MRs, `develop`, `main` |
+| `test`          | `test` - `test:coverage`, cobertura coverage artifact                     | MRs, `develop`, `main` |
 | `build-ios`     | `eas-build-ios-uat`, `eas-build-ios`                                      | Tags only              |
 | `build-android` | `eas-build-android-uat`, `eas-build-android`                              | Tags only              |
 
-EAS build jobs override `before_script` to skip `pnpm ci` — EAS Cloud manages its own dependencies.
+EAS build jobs override `before_script` to skip `pnpm ci` - EAS Cloud manages its own dependencies.
 
 ### Tag-driven release convention
 
@@ -212,7 +212,7 @@ EAS build jobs override `before_script` to skip `pnpm ci` — EAS Cloud manages 
 
 > **Note**: EAS jobs use `node:alpine` as the default image. Alpine does not include `git`, which is required by `eas-cli` to detect the project root. Add `apk add --no-cache git` as the first `before_script` step in every EAS job.
 
-## Step 7 — Health checks
+## Step 7 - Health checks
 
 Run regularly during development:
 
@@ -226,11 +226,11 @@ pnpx expo prebuild --clean
 
 ## Best practices
 
-- Set `coverageReporters: ["text", "cobertura"]` in `jest.config.js` — required for GitLab coverage reports
+- Set `coverageReporters: ["text", "cobertura"]` in `jest.config.js` - required for GitLab coverage reports
 - Use `pnpx expo install <package>` for all Expo-compatible packages
-- Keep `eas.json` profiles minimal — use `extends` for inheritance
+- Keep `eas.json` profiles minimal - use `extends` for inheritance
 - Use distinct bundle IDs per environment for side-by-side installs
-- Never hardcode values in `app.config.ts` — read from environment variables
+- Never hardcode values in `app.config.ts` - read from environment variables
 - Store private keys in EAS Secrets, not in `.env` or GitLab variables
 - Run `expo-doctor` before SDK upgrades
 - Use `--non-interactive` and `--auto-submit` flags in CI
@@ -245,7 +245,7 @@ pnpx expo prebuild --clean
 
 ## See also
 
-- [rule](../rule/SKILL.md) — Central skill index and dispatcher
-- [rule-architect](../rule-architect/SKILL.md) — Project architecture wizard
+- [rule](../rule/SKILL.md) - Central skill index and dispatcher
+- [rule-architect](../rule-architect/SKILL.md) - Project architecture wizard
 
 ---

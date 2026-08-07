@@ -136,7 +136,7 @@ Usage: rule-mcp install --agent <name> [options]
 
 Install rule-mcp into an agent/IDE (edits mcp.json).
 
-Supported agents (23 total — matching tokensave's 18+ agents):
+Supported agents (23 total - matching tokensave's 18+ agents):
   Coding Agents: claude, codex, cursor, copilot, gemini, pi,
                  cline, roo, zed, opencode, antigravity, windsurf,
                  kilo, kimi, vibe, grok, droid, kiro, qwen

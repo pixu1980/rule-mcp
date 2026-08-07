@@ -11,7 +11,7 @@ tags:
 frameworks: [all]
 ---
 
-# rule-toolchain-vite — Vite Build Toolchain
+# rule-toolchain-vite - Vite Build Toolchain
 
 ## Overview
 
@@ -87,4 +87,4 @@ VITE_API_BASE_URL=http://localhost:3000
 
 ## See also
 
-- [rule](../rule/SKILL.md) — Central skill index and dispatcher
+- [rule](../rule/SKILL.md) - Central skill index and dispatcher

@@ -9,8 +9,8 @@
  *
  * These helpers are pure and deterministic so they compose with the result cache.
  *
- * @see module:core/detector — hasTokensave
- * @see module:core/caveman — output compression (complementary token saving)
+ * @see module:core/detector - hasTokensave
+ * @see module:core/caveman - output compression (complementary token saving)
  */
 
 import { hasTokensave } from "./detector.js";
@@ -20,15 +20,15 @@ import { hasTokensave } from "./detector.js";
  * Tells the agent to use the code graph instead of re-reading files.
  */
 export const TOKENSAVE_DIRECTIVE =
-  "## TOKENSAVE ACTIVE — this project has a .tokensave code graph. " +
+  "## TOKENSAVE ACTIVE - this project has a .tokensave code graph. " +
   "Use tokensave_context / tokensave_search for code exploration; do NOT re-read files, " +
-  "glob, or grep. The context below is intentionally trimmed — query the graph for detail.";
+  "glob, or grep. The context below is intentionally trimmed - query the graph for detail.";
 
 /**
  * Whether tokensave-aware context suppression is enabled for a project path.
  * Honors the RULE_MCP_NO_TOKENSAVE opt-out.
  *
- * @param {string} [projectDir] — Project root (defaults to cwd)
+ * @param {string} [projectDir] - Project root (defaults to cwd)
  * @returns {boolean}
  */
 export function tokensaveActive(projectDir = process.cwd()) {
@@ -43,7 +43,7 @@ export function tokensaveActive(projectDir = process.cwd()) {
  * return either the block unchanged, or a trimmed placeholder + directive when
  * tokensave is active for the project.
  *
- * @param {string} block — The heavy context the tool would otherwise emit
+ * @param {string} block - The heavy context the tool would otherwise emit
  * @param {{ projectDir?: string, label?: string }} [opts]
  * @returns {string}
  */
@@ -52,7 +52,7 @@ export function suppressIfTokensave(block, opts = {}) {
   if (!tokensaveActive(projectDir)) {
     return block;
   }
-  return `${TOKENSAVE_DIRECTIVE}\n\n_(${label} suppressed — ${countLines(block)} lines omitted; query tokensave for detail.)_`;
+  return `${TOKENSAVE_DIRECTIVE}\n\n_(${label} suppressed - ${countLines(block)} lines omitted; query tokensave for detail.)_`;
 }
 
 /**

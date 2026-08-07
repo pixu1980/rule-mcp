@@ -45,7 +45,7 @@ const parsed = JSON.parse(r.content[0].text);
 const allRoutes = getAllRoutes(parsed);
 check("T6 defaults: rule-frontend-react in top results", allRoutes.includes("rule-frontend-react"));
 
-// Now with framework="vue" — rule-frontend-vue should rank higher
+// Now with framework="vue" - rule-frontend-vue should rank higher
 const rVue = await callTool("pix_tool", { prompt: "Vue 3 component with Composition API", framework: "vue" });
 const parsedVue = JSON.parse(rVue.content[0].text);
 const vueRoutes = getAllRoutes(parsedVue);

@@ -1,39 +1,39 @@
 // skills/rule-architect/field-map.mjs
 //
 // Declarative data that Phase 4 (Task 3, `normalizeAnswers`) will use to wire
-// existing interview answers to `templates.json` placeholders — no logic
+// existing interview answers to `templates.json` placeholders - no logic
 // lives here, only the mapping tables from the architect plan for
 // `normalizeAnswers` fill-wiring ("Concrete mapping" + Task 1). Grounded
 // against the real placeholder set in `templates.json` (177 unique `[KEY]`
 // tokens as of this writing) and the field list in `wizard-spec.json`.
 //
 // Shapes:
-//   RENAMES:       { wizardKey: templateKey }               — 1:1 flat renames
-//   COMPOSITION:   [{ group, subfield, template, aliases? }] — repeatable group
+//   RENAMES:       { wizardKey: templateKey }               - 1:1 flat renames
+//   COMPOSITION:   [{ group, subfield, template, aliases? }] - repeatable group
 //                  → numbered placeholder(s); `template`/`aliases` use `{i}`
 //                  for the 1-based index, expanded against
 //                  `${group}_${i}_${subfield}` answers (the
 //                  interview.js repeatable key convention).
-//   DERIVED:       [{ template, from(answers, spec) }]        — single
+//   DERIVED:       [{ template, from(answers, spec) }]        - single
 //                  placeholders computed from other answers (a specific
 //                  repeatable entry, or an optionGroup label lookup). `spec`
 //                  is the full `wizard-spec.json` content (Task 3's
 //                  `normalizeAnswers(answers, spec)` already receives it);
 //                  entries that don't need it just ignore the 2nd arg.
-//   DEFER_PHASE5:  Set<string>                                — meaningful
+//   DEFER_PHASE5:  Set<string>                                - meaningful
 //                  template placeholders with no interview source in this
 //                  phase; left for Phase 5's conditional-emit templates.
-//   JUNK:          Set<string>                                — placeholder-
+//   JUNK:          Set<string>                                - placeholder-
 //                  shaped tokens (`[A-Z_0-9]+`) that are literal prose in
 //                  templates.json, not real placeholders. Excluded from the
 //                  coverage metric entirely (not "deferred", just not real).
 
 // ---------------------------------------------------------------------------
-// RENAMES — direct wizard-key -> template-key renames.
+// RENAMES - direct wizard-key -> template-key renames.
 // ---------------------------------------------------------------------------
 // The 5 renames called out in the plan's "Concrete mapping", plus the
 // confirmed PROJECT_PITCH_SKETCH -> PROJECT_ELEVATOR_PITCH (the plan asked
-// Task 1 to "verify the template key exists" — confirmed present in
+// Task 1 to "verify the template key exists" - confirmed present in
 // specs/01-product.md), plus 2 more discovered while grounding the mapping
 // against real template prose (plan line 89: "Task 1 grounds them against
 // real template prose"):
@@ -57,7 +57,7 @@ export const RENAMES = {
 };
 
 // ---------------------------------------------------------------------------
-// COMPOSITION — repeatable group (wizard `${group}_${i}_${subfield}`) ->
+// COMPOSITION - repeatable group (wizard `${group}_${i}_${subfield}`) ->
 // numbered template placeholder(s) (`template` with `{i}`, plus optional
 // `aliases` fed from the SAME source).
 // ---------------------------------------------------------------------------
@@ -68,7 +68,7 @@ export const COMPOSITION = [
   { group: "DOMAIN_TERMS", subfield: "definition", template: "DOMAIN_TERM_{i}_DEF" },
 
   { group: "DOMAIN_CONSTRAINTS", subfield: "constraint", template: "DOMAIN_CONSTRAINT_{i}" },
-  // NOTE: DOMAIN_CONSTRAINTS.reason has no template placeholder — intentionally unmapped.
+  // NOTE: DOMAIN_CONSTRAINTS.reason has no template placeholder - intentionally unmapped.
 
   { group: "DOMAIN_NOTES", subfield: "note", template: "DOMAIN_NOTE_{i}" },
 
@@ -90,7 +90,7 @@ export const COMPOSITION = [
   { group: "ENTITIES", subfield: "name", template: "ENTITY_{i}" },
   { group: "ENTITIES", subfield: "description", template: "ENTITY_{i}_DESC" },
   // NOTE: ENTITIES.plural/attributes/relationships have no direct template
-  // placeholder in this phase — unmapped (attributes/relationships are also
+  // placeholder in this phase - unmapped (attributes/relationships are also
   // not flattened by interview.js's renderRepeatableGroup today; see
   // ENTITIES nested repeatable-inline subfields).
 
@@ -98,7 +98,7 @@ export const COMPOSITION = [
   { group: "PERSONAS", subfield: "description", template: "PERSONA_{i}_DESC" },
   // NOTE: PERSONAS.goal/pain/behavior have no direct template placeholder.
 
-  // DECISION (b): FEATURE_{i} precedence — the detailed FEATURES repeatable
+  // DECISION (b): FEATURE_{i} precedence - the detailed FEATURES repeatable
   // wins when present; TOP_FEATURE_1..3 (renamed to FEATURE_1..3 above) is
   // the fallback. This entry is the "wins" source; Task 3's
   // `normalizeAnswers` must apply COMPOSITION after RENAMES so FEATURES
@@ -121,12 +121,12 @@ export const COMPOSITION = [
   { group: "OUT_OF_SCOPE_ITEMS", subfield: "item", template: "OUT_OF_SCOPE_ITEM_{i}", aliases: ["NON_GOAL_{i}"] },
 
   // EXTERNAL_SERVICES (service, purpose): grepped templates.json for an
-  // integration/external-service placeholder family and found none — the
+  // integration/external-service placeholder family and found none - the
   // only "Integration" hit is unrelated prose ("Integration: persistence
   // adapters..." in 06-quality-acceptance.md). No template placeholder
   // exists for this group in the current template set, so there is
   // deliberately no COMPOSITION entry for it (not a defer-set placeholder
-  // either, since there's no placeholder to defer — this is a wizard group
+  // either, since there's no placeholder to defer - this is a wizard group
   // with no template consumer yet).
 
   // Phase 8: framework-neutral pack prose. These groups feed the placeholders
@@ -150,7 +150,7 @@ function labelForOption(optionGroup, key) {
 
 // STACK_NAME (fix-round 1, Finding 2): prefer FRONTEND_FRAMEWORK's human
 // label, else BACKEND_FRAMEWORK's, resolved via spec.optionGroups
-// (frontendFrameworks / backendFrameworks are `{key,label,...}` arrays — see
+// (frontendFrameworks / backendFrameworks are `{key,label,...}` arrays - see
 // wizard-spec.json). Neither is a hard requirement (a "library" or "agent"
 // project type may leave both at "none"), so when neither framework is set
 // this falls back to the selected PROJECT_TYPE's label, then to the raw
@@ -173,7 +173,7 @@ function resolveStackName(answers, spec) {
 }
 
 // ---------------------------------------------------------------------------
-// DERIVED — single placeholders computed from other answers.
+// DERIVED - single placeholders computed from other answers.
 // ---------------------------------------------------------------------------
 export const DERIVED = [
   { template: "PRIMARY_ENTITY", from: (answers) => answers["ENTITIES_1_name"] },
@@ -183,18 +183,18 @@ export const DERIVED = [
 ];
 
 // ---------------------------------------------------------------------------
-// DEFER_PHASE5 — meaningful placeholders with no wizard source in Phase 4.
+// DEFER_PHASE5 - meaningful placeholders with no wizard source in Phase 4.
 // ---------------------------------------------------------------------------
 // The plan's domain-overfit list, plus 3 more found while grounding the set
 // against real template prose (spec 08-deployment.md / 09-security.md ask
 // for things the wizard does not currently collect, and adding new
 // interview questions is out of scope for this phase per Global
 // Constraints): ANALYTICS_TOOL, BUILD_OUTPUT_DIR, PREVIEW_COMMAND.
-// (STACK_NAME was deferred here in the first pass, but a review — Finding 2,
-// fix round 1 — correctly pointed out DERIVED already handles non-1:1 cases;
+// (STACK_NAME was deferred here in the first pass, but a review - Finding 2,
+// fix round 1 - correctly pointed out DERIVED already handles non-1:1 cases;
 // it's now a DERIVED entry above, resolved from FRONTEND_FRAMEWORK/
 // BACKEND_FRAMEWORK via spec.optionGroups.)
-// F4 (DEVOPS_*/PROCESS_* gap): NOT deferred — every DEVOPS_*/PROCESS_*
+// F4 (DEVOPS_*/PROCESS_* gap): NOT deferred - every DEVOPS_*/PROCESS_*
 // template placeholder already has an identically-named flat wizard field
 // (e.g. DEVOPS_CI, PROCESS_ADR), so they are "already-collected flat keys"
 // today with zero wiring needed. Task 4 Step 1 can close F4 as a no-op.
@@ -256,12 +256,12 @@ export const DEFER_PHASE5 = new Set([
 ]);
 
 // ---------------------------------------------------------------------------
-// JUNK — placeholder-shaped tokens (`[A-Z_0-9]+`) that are literal prose in
+// JUNK - placeholder-shaped tokens (`[A-Z_0-9]+`) that are literal prose in
 // templates.json, confirmed by grepping context:
 //   - `[X]`  in analysis/implementation-roadmap.md: "flip a milestone to
-//     `[X]`" — describes the `- [X]` checkbox convention, not a placeholder.
+//     `[X]`" - describes the `- [X]` checkbox convention, not a placeholder.
 //   - `[NN]` in specs/07-architecture-decision-records.md, inside the ADR
-//     Template code fence: "# ADR [NN]: [Title]" — a literal example
+//     Template code fence: "# ADR [NN]: [Title]" - a literal example
 //     heading for humans to copy, not a placeholder (note `[Title]` isn't
 //     matched by the generator's `[A-Z_0-9]+` regex at all, since it's
 //     mixed-case).
@@ -269,7 +269,7 @@ export const DEFER_PHASE5 = new Set([
 export const JUNK = new Set(["X", "NN"]);
 
 // ---------------------------------------------------------------------------
-// GENERATOR_DERIVED — placeholders the GENERATOR fills, not the interview.
+// GENERATOR_DERIVED - placeholders the GENERATOR fills, not the interview.
 // ---------------------------------------------------------------------------
 // These cannot come from RENAMES/COMPOSITION/DERIVED because they depend on
 // the render itself rather than on any answer:

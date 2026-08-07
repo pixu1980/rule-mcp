@@ -1,5 +1,5 @@
-/* rule-architect Context Interview — rule-styleguide compliant */
-/* No CSS classes — only element + [data-part] selectors */
+/* rule-architect Context Interview - rule-styleguide compliant */
+/* No CSS classes - only element + [data-part] selectors */
 
 /* ── Reset & Base ────────────────────────────────────────────── */
 
@@ -71,7 +71,7 @@ p[data-part="app-desc"] {
   margin-inline: auto;
 }
 
-/* ── Wizard container — fills 70% column ───────────── */
+/* ── Wizard container - fills 70% column ───────────── */
 
 div[data-part="wizard-area"] {
   display: flex;

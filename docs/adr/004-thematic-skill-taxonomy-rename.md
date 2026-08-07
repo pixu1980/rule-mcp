@@ -1,4 +1,4 @@
-# 004 — Thematic Skill Taxonomy Rename
+# 004 - Thematic Skill Taxonomy Rename
 
 - **Date**: 2026-07-10
 - **Status**: accepted
@@ -57,7 +57,7 @@ Three skills keep their names (they are already correctly categorized or would l
 - The rename is performed atomically in a single commit
 - All 35 skill directories, all SKILL.md files, all docs, and the README are updated together
 - The MCP tool names change automatically (derived from directory names)
-- No code changes needed in the router or skill loader — tool names are derived from directory basenames
+- No code changes needed in the router or skill loader - tool names are derived from directory basenames
 
 ## Subsequent Updates (2026-07-10)
 
@@ -65,19 +65,19 @@ Three skills keep their names (they are already correctly categorized or would l
 
 Added `rule-backend-*` competitors:
 
-- `rule-backend-nestjs` — NestJS 10+ (modular, decorators, GraphQL)
-- `rule-backend-express` — Express.js 5+ (middleware, REST)
-- `rule-backend-fastify` — Fastify 5+ (schema validation, performance)
-- `rule-backend-hono` — Hono 4+ (edge, multi-runtime, RPC)
+- `rule-backend-nestjs` - NestJS 10+ (modular, decorators, GraphQL)
+- `rule-backend-express` - Express.js 5+ (middleware, REST)
+- `rule-backend-fastify` - Fastify 5+ (schema validation, performance)
+- `rule-backend-hono` - Hono 4+ (edge, multi-runtime, RPC)
 
 ### Phase 3: Database skills
 
 Added `rule-database-*`:
 
-- `rule-data-sql` — General SQL best practices
-- `rule-data-postgresql` — PostgreSQL 16+ (indexing, replication, pooling)
-- `rule-data-mysql` — MySQL 8+ / MariaDB 11+ (InnoDB, replication)
-- `rule-data-mongodb` — MongoDB 7+ (schema design, aggregation, sharding)
+- `rule-data-sql` - General SQL best practices
+- `rule-data-postgresql` - PostgreSQL 16+ (indexing, replication, pooling)
+- `rule-data-mysql` - MySQL 8+ / MariaDB 11+ (InnoDB, replication)
+- `rule-data-mongodb` - MongoDB 7+ (schema design, aggregation, sharding)
 
 ### Phase 4: Scaffold consolidation
 

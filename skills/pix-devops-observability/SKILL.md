@@ -26,13 +26,13 @@ contract vendor-neutral.
 
 For each critical journey, document:
 
-- **SLI** — the measurable indicator, such as successful checkout requests or
+- **SLI** - the measurable indicator, such as successful checkout requests or
   time to first usable response.
-- **SLO** — the target and window, such as 99.9% successful requests over 30
+- **SLO** - the target and window, such as 99.9% successful requests over 30
   days or p95 latency below 300 ms.
-- **Error budget** — the allowed failure rate implied by the SLO and the action
+- **Error budget** - the allowed failure rate implied by the SLO and the action
   when it is exhausted.
-- **Owner and response path** — who receives an alert and how they mitigate it.
+- **Owner and response path** - who receives an alert and how they mitigate it.
 
 Do not page on every infrastructure fluctuation. Page only for actionable,
 user-impacting symptoms; use tickets or dashboards for non-urgent signals.
@@ -98,8 +98,8 @@ changes, change failure rate, and mean time to restore.
 
 ## See also
 
-- [rule-devops](../rule-devops/SKILL.md) — DevOps skill index
-- [rule-devops-gitlab-ci](../rule-devops-gitlab-ci/SKILL.md) — CI/CD pipeline and deployment stages
-- [rule-backend-security](../rule-backend-security/SKILL.md) — Safe secrets, input, and transport handling
-- [rule-platform-web](../rule-platform-web/SKILL.md) — Web performance budgets and client error handling
-- [rule-process-feature-workflow](../rule-process-feature-workflow/SKILL.md) — Delivery validation and release workflow
+- [rule-devops](../rule-devops/SKILL.md) - DevOps skill index
+- [rule-devops-gitlab-ci](../rule-devops-gitlab-ci/SKILL.md) - CI/CD pipeline and deployment stages
+- [rule-backend-security](../rule-backend-security/SKILL.md) - Safe secrets, input, and transport handling
+- [rule-platform-web](../rule-platform-web/SKILL.md) - Web performance budgets and client error handling
+- [rule-process-feature-workflow](../rule-process-feature-workflow/SKILL.md) - Delivery validation and release workflow

@@ -1,6 +1,6 @@
-# rule-architect — 3-Skill Architecture & Wizard Reborn
+# rule-architect - 3-Skill Architecture & Wizard Reborn
 
-> **Author**: Architecture Review — 30+ years perspective  
+> **Author**: Architecture Review - 30+ years perspective  
 > **Status**: Design phase  
 > **Goal**: `rule-architect` engine + `rule-architect-cli` shell + `rule-architect-web` shell. One spec, two surfaces, zero drift.
 
@@ -16,18 +16,18 @@ rule-architect-web    ← shell:  vanilla JS Web, reads wizard-spec from rule-ar
 
 | Role                              | `rule-architect` |  `rule-architect-cli`  | `rule-architect-web` |
 | --------------------------------- | :-------------: | :-------------------: | :-----------------: |
-| wizard-spec.json source of truth  |       ✅        |           —           |          —          |
-| templates.json (.context/ output) |       ✅        |           —           |          —          |
-| generator engine                  |       ✅        |           —           |          —          |
+| wizard-spec.json source of truth  |       ✅        |           -           |          -          |
+| templates.json (.context/ output) |       ✅        |           -           |          -          |
+| generator engine                  |       ✅        |           -           |          -          |
 | showIf/validation logic           |   ✅ (shared)   | ✅ (copy for offline) |    ✅ (JS clone)    |
-| optionGroups (all skills)         |       ✅        |           —           |          —          |
-| SKILL.md (routing, docs)          |       ✅        |           —           |          —          |
-| CLI rendering (opentui)           |        —        |          ✅           |          —          |
-| Web rendering (vanilla JS)        |        —        |           —           |         ✅          |
-| HTTP server (context-server.mjs)  |        —        |           —           |         ✅          |
+| optionGroups (all skills)         |       ✅        |           -           |          -          |
+| SKILL.md (routing, docs)          |       ✅        |           -           |          -          |
+| CLI rendering (opentui)           |        -        |          ✅           |          -          |
+| Web rendering (vanilla JS)        |        -        |           -           |         ✅          |
+| HTTP server (context-server.mjs)  |        -        |           -           |         ✅          |
 | prefillMap logic                  |       ✅        |          ✅           |         ✅          |
 
-**Rule**: `rule-architect` holds ALL shared data. CLI and Web are thin renderers. No logic duplicated — only display code.
+**Rule**: `rule-architect` holds ALL shared data. CLI and Web are thin renderers. No logic duplicated - only display code.
 
 ---
 
@@ -49,13 +49,13 @@ rule-architect-web    ← shell:  vanilla JS Web, reads wizard-spec from rule-ar
 ## 2. New Flow: 25 Steps, 5 Phases
 
 ```
-PHASE 0 — CONTEXT           starter  1 step
+PHASE 0 - CONTEXT           starter  1 step
 ├─ 0.  Analysis Depth
 
-PHASE 1 — DOMAIN SKETCH     starter  1 step
+PHASE 1 - DOMAIN SKETCH     starter  1 step
 ├─ 1.  Domain Sketch (name, pitch, 3 features, persona, 5 terms)
 
-PHASE 2 — TECHNOLOGY STACK  starter  10 steps
+PHASE 2 - TECHNOLOGY STACK  starter  10 steps
 ├─ 2.  Project Type & Platform        ← rule-platform-*
 ├─ 3.  Frontend Framework             ← rule-frontend-*
 ├─ 4.  Meta / SSR Framework           ← rule-frontend-meta-*
@@ -67,7 +67,7 @@ PHASE 2 — TECHNOLOGY STACK  starter  10 steps
 ├─ 10. CSS / Design System            ← rule-styleguide-* / rule-ui-*
 ├─ 11. Package Manager + Linter       ← rule-toolchain-*
 
-PHASE 3 — DOMAIN DEEP-DIVE  standard  6 steps
+PHASE 3 - DOMAIN DEEP-DIVE  standard  6 steps
 ├─ 12. Project Identity              (pre-filled from sketch)
 ├─ 13. Domain Glossary               (pre-filled from sketch)
 ├─ 14. Entities & Data Model
@@ -75,7 +75,7 @@ PHASE 3 — DOMAIN DEEP-DIVE  standard  6 steps
 ├─ 16. Features, Flows, User Stories (features pre-filled from sketch)
 ├─ 17. Scope & MVP
 
-PHASE 4 — QUALITY & DELIVERY deep      8 steps
+PHASE 4 - QUALITY & DELIVERY deep      8 steps
 ├─ 18. Module Design
 ├─ 19. Integration Points
 ├─ 20. Quality, Testing, A11y
@@ -147,7 +147,7 @@ rule-architect/wizard-spec.json
 
 ---
 
-## 4. wizard-spec.json — Single Source of Truth
+## 4. wizard-spec.json - Single Source of Truth
 
 ```jsonc
 {
@@ -165,7 +165,7 @@ rule-architect/wizard-spec.json
       "key": "step-1-sketch",
       "phase": "sketch",
       "tier": "starter",
-      "label": "Step 1 — Domain Sketch",
+      "label": "Step 1 - Domain Sketch",
       "description": "Quick context to inform technology choices.",
       "fields": [/* ... */],
     },
@@ -192,7 +192,7 @@ rule-architect/wizard-spec.json
 
 ---
 
-## 5. `rule-architect` — The Engine (concentrator)
+## 5. `rule-architect` - The Engine (concentrator)
 
 ### SKILL.md roles
 
@@ -220,7 +220,7 @@ prefill.mjs       → apply prefillMap to values from earlier steps
 
 ---
 
-## 6. `rule-architect-cli` — The Terminal Surface
+## 6. `rule-architect-cli` - The Terminal Surface
 
 ### SKILL.md roles
 
@@ -255,7 +255,7 @@ rule-architect interview --output ./my-project
 
 ---
 
-## 7. `rule-architect-web` — The Browser Surface
+## 7. `rule-architect-web` - The Browser Surface
 
 ### SKILL.md roles
 
@@ -368,17 +368,17 @@ Data contract for every option in every optionGroup:
 
 ## 10. Implementation Plan
 
-### Milestone 1: Extract engine (`rule-architect`) — 2h
+### Milestone 1: Extract engine (`rule-architect`) - 2h
 
 - [ ] Create `skills/rule-architect/wizard-spec.json` from current placeholders.json
-- [ ] Add Phase 1 — Domain Sketch (step 1) with 5 prefill fields
+- [ ] Add Phase 1 - Domain Sketch (step 1) with 5 prefill fields
 - [ ] Move `templates.json` to `rule-architect/templates.json`
 - [ ] Create `rule-architect/generator.mjs` (extract from context-server.mjs)
 - [ ] Create `rule-architect/validators.mjs` (showIf, required, prefill)
-- [ ] Update `rule-architect/SKILL.md` — document 3-skill architecture, spec, API
+- [ ] Update `rule-architect/SKILL.md` - document 3-skill architecture, spec, API
 - [ ] Renumber all steps: 0-25 with new Phase 1 insertion
 
-### Milestone 2: Extract web (`rule-architect-web`) — 2h
+### Milestone 2: Extract web (`rule-architect-web`) - 2h
 
 - [ ] Create `skills/rule-architect-web/SKILL.md`
 - [ ] Move `assets/context-server/` content to `rule-architect-web/`
@@ -386,19 +386,19 @@ Data contract for every option in every optionGroup:
 - [ ] Update `interview.js` to read from `/api/wizard-spec`
 - [ ] Update `loadData()` to handle new 25-step structure
 - [ ] Add Phase 1 rendering (Domain Sketch)
-- [ ] Test: `node server.mjs --port 3000 .` — all 25 steps appear
+- [ ] Test: `node server.mjs --port 3000 .` - all 25 steps appear
 
-### Milestone 3: Create CLI (`rule-architect-cli`) — 3h
+### Milestone 3: Create CLI (`rule-architect-cli`) - 3h
 
 - [ ] Create `skills/rule-architect-cli/SKILL.md`
 - [ ] Install opentui: `pnpm add opentui` in workspace
-- [ ] Create `rule-architect-cli/wizard.mjs` — opentui multi-step form
-- [ ] Create `rule-architect-cli/renderer.mjs` — card components for each field type
+- [ ] Create `rule-architect-cli/wizard.mjs` - opentui multi-step form
+- [ ] Create `rule-architect-cli/renderer.mjs` - card components for each field type
 - [ ] Implement showIf + card rendering parity with Web
 - [ ] Add `--tier`, `--output`, `--answers` flags
-- [ ] Test: `rule-architect interview --tier starter` — 12 steps in terminal
+- [ ] Test: `rule-architect interview --tier starter` - 12 steps in terminal
 
-### Milestone 4: Parity verification — 2h
+### Milestone 4: Parity verification - 2h
 
 - [ ] Web: check all 25 steps render with correct showIf and card format
 - [ ] CLI: check all card renders (Title + Desc + Skill tag) match Web
@@ -410,7 +410,7 @@ Data contract for every option in every optionGroup:
 
 ## 11. Quality Gates
 
-- [ ] `wizard-spec.json` valid JSON — all 25 steps, 5 phases, all optionGroups
+- [ ] `wizard-spec.json` valid JSON - all 25 steps, 5 phases, all optionGroups
 - [ ] Every `[PLACEHOLDER]` in templates matches a wizard-spec field
 - [ ] CLI and Web produce identical `.context/` from identical answers
 - [ ] Empty options (`none`, `manual`) don't render empty cards

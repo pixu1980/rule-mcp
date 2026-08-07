@@ -74,7 +74,7 @@ export function addPostToolHook(toolName, function_) {
  * Register a hook that fires after a tool completes successfully.
  * Wildcard "*" hooks fire for every tool.
  *
- * @param {string} toolName — Tool name or "*" for all tools
+ * @param {string} toolName - Tool name or "*" for all tools
  * @param {(toolName: string, args: object, result: object) => Promise<void>} fn
  */
 export function addAfterToolHook(toolName, fn) {
@@ -163,8 +163,8 @@ export function listTools() {
  * Execute a tool by name with the given arguments.
  * Validates args against the tool's Zod schema (if provided) before calling the handler.
  *
- * @param {string} name — Tool name (e.g. "pix_tool", "rule_tool_frontend_react")
- * @param {object} args — Tool-specific arguments
+ * @param {string} name - Tool name (e.g. "pix_tool", "rule_tool_frontend_react")
+ * @param {object} args - Tool-specific arguments
  * @returns {Promise<{ isError?: boolean, content: Array<{ type: string, text: string }> }>}
  */
 export async function callTool(name, args) {
@@ -219,7 +219,7 @@ export async function callTool(name, args) {
     for (const function_ of postHooks) {
       result = (await function_(name, processedArguments, result, tool)) ?? result;
     }
-    // Deterministic core — validated + metadata, no env/state-dependent decoration.
+    // Deterministic core - validated + metadata, no env/state-dependent decoration.
     const core = postprocessToolResult(name, processedArguments, result, {
       toolNames: _tools.map((item) => item.name),
       skillNames: getSkillNames(),
@@ -256,8 +256,8 @@ export async function callTool(name, args) {
  * take precedence, which let a directory in the user's home silently replace the
  * content this server ships under the same tool name.
  *
- * @param {string} skillName — e.g. "rule-frontend-react", "rule-styleguide"
- * @returns {string|null} — The full SKILL.md content, or null if not found
+ * @param {string} skillName - e.g. "rule-frontend-react", "rule-styleguide"
+ * @returns {string|null} - The full SKILL.md content, or null if not found
  */
 export function readSkill(skillName) {
   const { embeddedSkills } = getSkillsDirectories();
@@ -332,7 +332,7 @@ export function isPluginSkill(skillName) {
  * home directory in-process at startup, with no isolation and failures swallowed
  * (2026-08-04 audit, finding 15). Bundled skills carry no plugin.js.
  *
- * @param {string} _pluginName — The plugin directory name
+ * @param {string} _pluginName - The plugin directory name
  * @returns {boolean}
  */
 export function hasPluginJs(_pluginName) {

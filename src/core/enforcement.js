@@ -104,7 +104,7 @@ function validateRouterResult(result, toolNames, skillNames) {
   const routes = [routing.route, ...(routing.alternatives ?? []).map((item) => item.route)];
   for (const route of routes) {
     // "none" and "unknown" are valid non-skill routes the router emits when no
-    // confident match exists — they are not invented skills.
+    // confident match exists - they are not invented skills.
     if (route !== "none" && route !== "unknown" && !skillNames.has(route)) {
       throw new Error(`rule router invented unknown skill: ${route}`);
     }
@@ -129,7 +129,7 @@ const _remindedTools = new Set();
 
 function enforcementContract(name, terse) {
   if (terse) {
-    return "## PIX WORKFLOW REMINDER — returned evidence is source of truth; validate generated code with pix_check.";
+    return "## PIX WORKFLOW REMINDER - returned evidence is source of truth; validate generated code with pix_check.";
   }
   const nextStep =
     name === "pix_check"

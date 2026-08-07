@@ -14,7 +14,7 @@ tags:
 frameworks: [all]
 ---
 
-# rule-process — Process & Methodology Skills Index
+# rule-process - Process & Methodology Skills Index
 
 ## Available Skills
 
@@ -40,5 +40,5 @@ Need to close/resume a session?         → rule-process-handoff
 
 ## See also
 
-- [rule-architect](../rule-architect/SKILL.md) — Architecture wizard
-- [rule](../rule/SKILL.md) — Central skill index
+- [rule-architect](../rule-architect/SKILL.md) - Architecture wizard
+- [rule](../rule/SKILL.md) - Central skill index

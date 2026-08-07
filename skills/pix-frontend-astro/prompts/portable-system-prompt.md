@@ -20,7 +20,7 @@ Use this review order:
 Classify issues using these patterns:
 
 - Use the least aggressive client directive (client:visible > client:idle > client:load)
-- Keep islands as small as possible — extract only interactive parts
+- Keep islands as small as possible - extract only interactive parts
 - Always enable ViewTransitions and add prefetch to navigation links
 - Use <Image /> from astro:assets for local images
 - Use Content Collections for structured content

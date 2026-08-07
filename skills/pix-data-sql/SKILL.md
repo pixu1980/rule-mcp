@@ -16,7 +16,7 @@ tags:
 frameworks: [all]
 ---
 
-# rule-data-sql — SQL Best Practices & Scripts
+# rule-data-sql - SQL Best Practices & Scripts
 
 ## Table of Contents
 
@@ -33,7 +33,7 @@ frameworks: [all]
 
 ## 1. DDL Scripts: CREATE / ALTER / DROP
 
-### CREATE TABLE — Standard Template
+### CREATE TABLE - Standard Template
 
 ```sql
 CREATE TABLE {schema}.{table} (
@@ -60,7 +60,7 @@ CREATE INDEX idx_{table}_status ON {table} (status) WHERE deleted_at IS NULL;
 CREATE INDEX idx_{table}_created_at ON {table} (created_at DESC);
 ```
 
-### CREATE TABLE — Junction (Many-to-Many)
+### CREATE TABLE - Junction (Many-to-Many)
 
 ```sql
 CREATE TABLE {table_a}_{table_b} (
@@ -74,7 +74,7 @@ CREATE TABLE {table_a}_{table_b} (
 CREATE INDEX idx_{table_a}_{table_b}_{b}_id ON {table_a}_{table_b} ({b}_id);
 ```
 
-### CREATE TABLE — Hierarchical (Adjacency List)
+### CREATE TABLE - Hierarchical (Adjacency List)
 
 ```sql
 CREATE TABLE categories (
@@ -90,7 +90,7 @@ CREATE TABLE categories (
 CREATE INDEX idx_categories_parent_id ON categories (parent_id);
 ```
 
-### ALTER TABLE — Common Operations
+### ALTER TABLE - Common Operations
 
 ```sql
 -- Add column
@@ -132,7 +132,7 @@ CREATE INDEX CONCURRENTLY IF NOT EXISTS idx_{table}_{col} ON {table} ({col});
 DROP INDEX IF EXISTS idx_{table}_{col};
 ```
 
-### DROP TABLE — Safe Patterns
+### DROP TABLE - Safe Patterns
 
 ```sql
 -- Check existence before dropping
@@ -152,7 +152,7 @@ DROP TABLE IF EXISTS {table} CASCADE;
 
 ### Schema authority and integrity
 
-The **database is the authority** for data invariants. Application and ORM validation improves user feedback, but it must complement—not replace—database constraints. A rule enforced only in service code protects one code path; a `NOT NULL`, `CHECK`, `UNIQUE`, or `FOREIGN KEY` constraint protects APIs, workers, scripts, migrations, and every future client.
+The **database is the authority** for data invariants. Application and ORM validation improves user feedback, but it must complement-not replace-database constraints. A rule enforced only in service code protects one code path; a `NOT NULL`, `CHECK`, `UNIQUE`, or `FOREIGN KEY` constraint protects APIs, workers, scripts, migrations, and every future client.
 
 ```sql
 CREATE TABLE payments (
@@ -199,7 +199,7 @@ Treat the schema as living code:
 | Check constraints  | `ck_{table}_{column}`     | `ck_users_status`                        |
 | Triggers           | `trg_{table}_{action}`    | `trg_users_updated_at`                   |
 
-### Column Types — Decision Matrix
+### Column Types - Decision Matrix
 
 | Data                | Type                                | Reason                                   |
 | ------------------- | ----------------------------------- | ---------------------------------------- |
@@ -292,7 +292,7 @@ CREATE TABLE {table}_closure (
 | Type                 | Use case                 | Syntax                                                  |
 | -------------------- | ------------------------ | ------------------------------------------------------- |
 | **B-tree** (default) | Equality + range queries | `CREATE INDEX ...`                                      |
-| **Composite**        | Multi-column queries     | `CREATE INDEX ON t (a, b)` — equality first, range last |
+| **Composite**        | Multi-column queries     | `CREATE INDEX ON t (a, b)` - equality first, range last |
 | **Covering**         | Index-only scans         | `CREATE INDEX ON t (a) INCLUDE (b, c)`                  |
 | **Partial**          | Filtered queries         | `CREATE INDEX ON t (a) WHERE status = 'active'`         |
 | **Unique**           | Uniqueness enforcement   | `CREATE UNIQUE INDEX ON t (a)`                          |
@@ -675,8 +675,8 @@ LIMIT 20;
 
 ## See also
 
-- [rule-data-postgresql](../rule-data-postgresql/SKILL.md) — PostgreSQL-specific
-- [rule-data-mysql](../rule-data-mysql/SKILL.md) — MySQL/MariaDB-specific
-- [rule-data-mongodb](../rule-data-mongodb/SKILL.md) — MongoDB document DB
-- [rule-backend-node](../rule-backend-node/SKILL.md) — Backend runtime patterns
-- [rule](../rule/SKILL.md) — Central skill index
+- [rule-data-postgresql](../rule-data-postgresql/SKILL.md) - PostgreSQL-specific
+- [rule-data-mysql](../rule-data-mysql/SKILL.md) - MySQL/MariaDB-specific
+- [rule-data-mongodb](../rule-data-mongodb/SKILL.md) - MongoDB document DB
+- [rule-backend-node](../rule-backend-node/SKILL.md) - Backend runtime patterns
+- [rule](../rule/SKILL.md) - Central skill index

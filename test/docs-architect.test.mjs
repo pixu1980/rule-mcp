@@ -118,7 +118,7 @@ assert.ok(inventory.includes("## Skill and tool routing"), "context inventory mi
 // Phase 2 Task 3: assets/context-server/placeholders.json was deleted (context-server
 // now serves the canonical wizard-spec.json + shared interview.js). This assertion is
 // repointed to skills/rule-architect/placeholders.json, which still exists on disk.
-// NOTE: this line is currently unreachable — the docs-count assertion above (line ~52)
+// NOTE: this line is currently unreachable - the docs-count assertion above (line ~52)
 // already aborts the script before execution reaches here, and even if that gate were
 // fixed, this assertion would still fail because skills/rule-architect/placeholders.json
 // is missing the DEVOPS_*/PROCESS_* keys (pre-existing F2/F4 gap, out of scope for this

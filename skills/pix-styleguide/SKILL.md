@@ -1,7 +1,7 @@
 ---
 name: rule-styleguide
 description: >-
-  Style guides index — entry point for all coding style, conventions, best practices, guidelines, naming, and formatting rules.
+  Style guides index - entry point for all coding style, conventions, best practices, guidelines, naming, and formatting rules.
   Use when the prompt mentions styleguides, coding standards, best practices, guidelines, conventions, or code formatting.
   Routes to the correct sub-skill based on topic: HTML semantics, CSS architecture, JS/TS conventions, JSON structure,
   Markdown formatting, naming/file-tree, accessibility (WCAG/a11y), or business validation.
@@ -24,7 +24,7 @@ tags:
 frameworks: [all]
 ---
 
-# rule-styleguide — Style Guides Index
+# rule-styleguide - Style Guides Index
 
 This is the **umbrella index** for all coding style guides.
 Use this as entry point for any prompt about coding style, conventions, best practices, or guidelines.
@@ -43,7 +43,7 @@ Once routed here, consult the table below and load the specific sub-skill's SKIL
 | [rule-styleguide-javascript](../rule-styleguide-javascript/SKILL.md) | Naming, functions, classes, async, JSDoc, Playwright + axe-core testing                        | Writing JS/TS modules                   |
 | [rule-styleguide-json](../rule-styleguide-json/SKILL.md)             | Structure, property naming, date formats, numeric precision                                    | API contracts or config files           |
 | [rule-styleguide-markdown](../rule-styleguide-markdown/SKILL.md)     | Headings, lists, code blocks, tables, links, tone                                              | Writing documentation                   |
-| [rule-styleguide-a11y](../rule-styleguide-a11y/SKILL.md)             | WCAG 2.2 AA, ARIA, AI Behavioral Contract, Compliance Profiles, platform-native mapping        | Every PR — accessibility is mandatory   |
+| [rule-styleguide-a11y](../rule-styleguide-a11y/SKILL.md)             | WCAG 2.2 AA, ARIA, AI Behavioral Contract, Compliance Profiles, platform-native mapping        | Every PR - accessibility is mandatory   |
 | [rule-styleguide-naming](../rule-styleguide-naming/SKILL.md)         | PascalCase, camelCase, UPPER_SNAKE_CASE, barrel pattern, `_` prefix, directory layout          | Creating new files, folders, or exports |
 | [rule-styleguide-patterns](../rule-styleguide-patterns/SKILL.md)     | Quick reference cheat sheet: naming, file tree, HTML elements, CSS property order, JS patterns | Daily reference during development      |
 | [rule-styleguide-validation](../rule-styleguide-validation/SKILL.md) | International business validation: email, phone, VAT, tax IDs, postal codes                    | Form/API validation rules               |
@@ -68,7 +68,7 @@ Run `pix_check skill=rule-styleguide code="..."` to validate code.
 
 Key guardrails enforced across all styleguides:
 
-- **no-css-classes**: Zero `.class` selectors — use element + `[data-part]` only
+- **no-css-classes**: Zero `.class` selectors - use element + `[data-part]` only
 - **no-inline-styles**: Zero `style="..."` attributes
 - **semantic-html**: Zero `<div>` where semantic element exists
 - **external-css**: CSS via `adoptedStyleSheets` or framework-native import
@@ -83,6 +83,6 @@ Key guardrails enforced across all styleguides:
 
 ## See also
 
-- [rule-toolchain-project](../rule-toolchain-project/SKILL.md) — Project config files (.gitignore, .editorconfig, etc.)
-- [rule-ui-design-system](../rule-ui-design-system/SKILL.md) — Design system component patterns
-- [rule](../rule/SKILL.md) — Central skill index
+- [rule-toolchain-project](../rule-toolchain-project/SKILL.md) - Project config files (.gitignore, .editorconfig, etc.)
+- [rule-ui-design-system](../rule-ui-design-system/SKILL.md) - Design system component patterns
+- [rule](../rule/SKILL.md) - Central skill index

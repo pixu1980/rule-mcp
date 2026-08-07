@@ -3,7 +3,7 @@
     "prefix": "rule-template",
     "body": [
       "<!-- ═══════════════════════════════════════════════",
-      "  ${1:ComponentName} — external template",
+      "  ${1:ComponentName} - external template",
       "  ═══════════════════════════════════════════════ -->",
       "<section data-part=\"${2:name}\">",
       "  $0",

@@ -8,12 +8,12 @@ Angular performance is about controlling **when change detection runs** and **ho
 
 Key levers:
 
-1. **ChangeDetectionStrategy.OnPush** — limits checks to input changes, events, and async pipes
-2. **Signals** — provide fine-grained reactivity without zone.js
-3. **Lazy loading** — defers code download until needed
-4. **`@defer`** — defers component rendering until conditions are met
+1. **ChangeDetectionStrategy.OnPush** - limits checks to input changes, events, and async pipes
+2. **Signals** - provide fine-grained reactivity without zone.js
+3. **Lazy loading** - defers code download until needed
+4. **`@defer`** - defers component rendering until conditions are met
 
-## Pattern 1 — OnPush by default
+## Pattern 1 - OnPush by default
 
 `ChangeDetectionStrategy.Default` checks every component in the tree on any async activity (timer, HTTP response, click, etc.). `OnPush` checks only when:
 
@@ -38,7 +38,7 @@ Key levers:
 - Using `async` pipe correctly (it marks for check on emission)
 - Using `signal()` correctly (tracks automatically in templates)
 
-## Pattern 2 — Signals over RxJS for state
+## Pattern 2 - Signals over RxJS for state
 
 ### When to use
 
@@ -65,7 +65,7 @@ export class CartService {
 }
 ```
 
-## Pattern 3 — Track in @for
+## Pattern 3 - Track in @for
 
 Angular 17+ `@for` with `track`:
 
@@ -77,9 +77,9 @@ Angular 17+ `@for` with `track`:
 }
 ```
 
-Without `track`, Angular identity-matches by index — same as React's key={index} bug.
+Without `track`, Angular identity-matches by index - same as React's key={index} bug.
 
-## Pattern 4 — computed() over effect() for derivation
+## Pattern 4 - computed() over effect() for derivation
 
 `effect()` runs as a side effect. Use it for logging, localStorage, imperative API calls. Do not use it to derive state.
 
@@ -100,7 +100,7 @@ readonly sortedItems = computed(() =>
 );
 ```
 
-## Pattern 5 — Subscription cleanup
+## Pattern 5 - Subscription cleanup
 
 Every subscription, interval, and event listener MUST be cleaned up.
 
@@ -137,12 +137,12 @@ ngOnDestroy() {
 }
 ```
 
-## Pattern 6 — State locality
+## Pattern 6 - State locality
 
 Global service state persists across routes and can cause stale data. Component-scoped `signal()` resets when the component is destroyed.
 
 ```typescript
-// ✅ Local search state — resets with component
+// ✅ Local search state - resets with component
 @Component({...})
 export class SearchComponent {
   private searchTerm = signal('');
@@ -152,7 +152,7 @@ export class SearchComponent {
 }
 ```
 
-## Pattern 7 — Lazy loading
+## Pattern 7 - Lazy loading
 
 All routes should be lazy unless the component is needed on every page.
 
@@ -163,7 +163,7 @@ export const routes: Routes = [
 ];
 ```
 
-## Pattern 8 — Component responsibility
+## Pattern 8 - Component responsibility
 
 ### Signs of mixed responsibility
 
@@ -192,7 +192,7 @@ export class UserProfile {
 }
 ```
 
-## Pattern 9 — @defer
+## Pattern 9 - @defer
 
 `@defer` renders content lazily when a trigger condition is met. Available in Angular 17+.
 
@@ -218,7 +218,7 @@ export class UserProfile {
 | `on timer(500ms)` | After a delay                          |
 | `when condition`  | When a boolean expression becomes true |
 
-## Pattern 10 — Avoid ngDoCheck
+## Pattern 10 - Avoid ngDoCheck
 
 `ngDoCheck` runs on every change detection cycle. It is almost always a sign that you are working against the framework.
 

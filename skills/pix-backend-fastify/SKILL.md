@@ -12,11 +12,11 @@ tags:
 frameworks: [all]
 ---
 
-# rule-backend-fastify — Fastify Best Practices
+# rule-backend-fastify - Fastify Best Practices
 
 ## fastify Architecture
 
-- **Plugin-based** — everything is a plugin. Encapsulation by design
+- **Plugin-based** - everything is a plugin. Encapsulation by design
 - `fastify-plugin` for shared context (DB, auth)
 - Auto-load plugins with `@fastify/autoload`
 - Register order: configuration → database → auth → routes → error handler
@@ -61,9 +61,9 @@ const createUserSchema = {
 
 ## Fastify Performance Tuning
 
-- **Fastest Node.js HTTP framework** — 2-3× faster than Express
+- **Fastest Node.js HTTP framework** - 2-3× faster than Express
 - Built-in schema-based serialization (JSON.stringify bypass)
-- Limited middleware — prefer hooks + plugins for encapsulation
+- Limited middleware - prefer hooks + plugins for encapsulation
 - `@fastify/compress` for response compression
 - Keep-alive connections for higher throughput
 
@@ -75,6 +75,6 @@ const createUserSchema = {
 
 ## See also
 
-- [rule](../rule/SKILL.md) — Central skill index and dispatcher
-- [rule-backend](../rule-backend/SKILL.md) — Backend umbrella
-- [rule-data-postgresql](../rule-data-postgresql/SKILL.md) — PostgreSQL
+- [rule](../rule/SKILL.md) - Central skill index and dispatcher
+- [rule-backend](../rule-backend/SKILL.md) - Backend umbrella
+- [rule-data-postgresql](../rule-data-postgresql/SKILL.md) - PostgreSQL

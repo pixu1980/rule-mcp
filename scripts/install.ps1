@@ -1,6 +1,6 @@
 #!/usr/bin/env pwsh
 # =============================================================================
-# rule-mcp — Universal Installer (Windows / PowerShell)
+# rule-mcp - Universal Installer (Windows / PowerShell)
 # =============================================================================
 #
 # Integrates rule-mcp with ALL coding agents, IDEs, and model providers.
@@ -45,7 +45,7 @@ param(
 )
 
 if ($Help) {
-  Write-Host "rule-mcp — Universal Installer (PowerShell)" -ForegroundColor Cyan
+  Write-Host "rule-mcp - Universal Installer (PowerShell)" -ForegroundColor Cyan
   Write-Host ""
   Write-Host "Usage:" -ForegroundColor Yellow
   Write-Host "  powershell -c `"irm https://rule-mcp.domain.example/install.ps1 | iex`""
@@ -92,7 +92,7 @@ function Write-Step  { Write-Host "  → $($args[0])" -ForegroundColor Cyan }
 function Show-Banner([string]$Subtitle) {
   Clear-Host
   Write-Host "╔══════════════════════════════════════════════════════╗" -ForegroundColor Cyan
-  Write-Host "║         rule-mcp — Universal Installer        ║" -ForegroundColor Cyan
+  Write-Host "║         rule-mcp - Universal Installer        ║" -ForegroundColor Cyan
   Write-Host ("║  " + $Subtitle.PadRight(50) + "║") -ForegroundColor Cyan
   Write-Host "╚══════════════════════════════════════════════════════╝" -ForegroundColor Cyan
   Write-Host ""
@@ -101,7 +101,7 @@ function Select-AgentsInteractive([string[]]$Items) {
   $flags = @{}; for($i=0; $i -lt $Items.Count; $i++){ $flags[$i] = $false }
   $cursor = 0
   while ($true) {
-    Show-Banner "Phase 3 — Agent Integration"
+    Show-Banner "Phase 3 - Agent Integration"
     Write-Host "Select agents (↑↓ move, Space toggle, Enter confirm, q quit)" -ForegroundColor Cyan
     Write-Host ""
     for($i=0; $i -lt $Items.Count; $i++) {
@@ -127,10 +127,10 @@ function Select-AgentsInteractive([string[]]$Items) {
 }
 function Select-ModeInteractive() {
   $modes = @('stdio','daemon','docker')
-  $labels = @('Stdio — agent starts a local process','Daemon — background SSE service on port 37999','Docker — containerized SSE service')
+  $labels = @('Stdio - agent starts a local process','Daemon - background SSE service on port 37999','Docker - containerized SSE service')
   $cursor = 0
   while ($true) {
-    Show-Banner "Phase 3 — Install Mode"
+    Show-Banner "Phase 3 - Install Mode"
     Write-Host "Select mode (↑↓ move, Enter confirm, q quit)" -ForegroundColor Cyan
     Write-Host ""
     for($i=0; $i -lt $modes.Count; $i++) {
@@ -156,7 +156,7 @@ function Test-Command($cmd) {
 # ── Banner ──
 Write-Host ""
 Write-Host "╔══════════════════════════════════════════════════════╗" -ForegroundColor Cyan
-Write-Host "║         rule-mcp — Universal Installer        ║" -ForegroundColor Cyan
+Write-Host "║         rule-mcp - Universal Installer        ║" -ForegroundColor Cyan
 Write-Host "║   MCP Server for the rule-* Skill Ecosystem      ║" -ForegroundColor Cyan
 Write-Host "╚══════════════════════════════════════════════════════╝" -ForegroundColor Cyan
 Write-Host ""
@@ -214,7 +214,7 @@ if ($DryRun) {
     if ($LASTEXITCODE -eq 0) {
       Write-Ok "${NpmPackage} installed globally via pnpm"
     } else {
-      Write-Warn "pnpm install failed — trying npm..."
+      Write-Warn "pnpm install failed - trying npm..."
       $result = npm install -g "${NpmPackage}@${PackageVersion}" 2>&1
       if ($LASTEXITCODE -eq 0) {
         Write-Ok "${NpmPackage} installed globally via npm"
@@ -485,7 +485,7 @@ if ($DryRun) {
   # Check if service already exists
   $existing = sc.exe query $serviceName 2>&1
   if ($LASTEXITCODE -eq 0) {
-    Write-Warn "Service '$serviceName' already exists — updating..."
+    Write-Warn "Service '$serviceName' already exists - updating..."
   }
 
   if (Test-Command rule-mcp) {
@@ -500,7 +500,7 @@ if ($DryRun) {
       Write-Step "  Run: rule-mcp daemon install"
     }
   } else {
-    Write-Warn "rule-mcp not on PATH — cannot install service automatically"
+    Write-Warn "rule-mcp not on PATH - cannot install service automatically"
     Write-Step "  After installing globally, run: rule-mcp daemon install"
   }
 }
@@ -563,7 +563,7 @@ if ($DryRun) {
 Write-Header "Installation Summary"
 
 if ($DryRun) {
-  Write-Host "⚠ Dry-run mode — no changes were made" -ForegroundColor Yellow
+  Write-Host "⚠ Dry-run mode - no changes were made" -ForegroundColor Yellow
   Write-Host ""
   Write-Host "To apply:  .\scripts\install.ps1"
   Write-Host ""

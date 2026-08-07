@@ -13,7 +13,7 @@ tags:
 frameworks: [all]
 ---
 
-# rule-toolchain-project — Base Project Configuration
+# rule-toolchain-project - Base Project Configuration
 
 ## .gitignore
 
@@ -109,9 +109,9 @@ VITE_API_BASE_URL=http://localhost:3000/api
 
 ## Repository health files
 
-- `README.md` — project name, description, quick start, prerequisites, scripts
-- `LICENSE` — MIT by default for open-source
-- `CONTRIBUTING.md` — branch policy, commit convention, PR process
+- `README.md` - project name, description, quick start, prerequisites, scripts
+- `LICENSE` - MIT by default for open-source
+- `CONTRIBUTING.md` - branch policy, commit convention, PR process
 
 ## Framework Configuration Files
 
@@ -127,7 +127,7 @@ VITE_API_BASE_URL=http://localhost:3000/api
 }
 ```
 
-### .eslintrc.json (Legacy — prefer Biome for new projects)
+### .eslintrc.json (Legacy - prefer Biome for new projects)
 
 ```json
 {
@@ -210,7 +210,7 @@ lts/*
 
 ## See also
 
-- [rule](../rule/SKILL.md) — Central skill index and dispatcher
-- [rule-toolchain](../rule-toolchain/SKILL.md) — Toolchain skill index
-- [rule-devops-docker](../rule-devops-docker/SKILL.md) — Docker configuration
-- [rule-devops-testing](../rule-devops-testing/SKILL.md) — Testing setup
+- [rule](../rule/SKILL.md) - Central skill index and dispatcher
+- [rule-toolchain](../rule-toolchain/SKILL.md) - Toolchain skill index
+- [rule-devops-docker](../rule-devops-docker/SKILL.md) - Docker configuration
+- [rule-devops-testing](../rule-devops-testing/SKILL.md) - Testing setup

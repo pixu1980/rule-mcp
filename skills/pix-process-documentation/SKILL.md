@@ -14,7 +14,7 @@ metadata:
 
 # Documentation
 
-## Step 1 — Create the directory structure
+## Step 1 - Create the directory structure
 
 All Mintlify files live in `docs/` at the repository root:
 
@@ -30,7 +30,7 @@ docs/
     └── logo.svg
 ```
 
-## Step 2 — Configure mint.json
+## Step 2 - Configure mint.json
 
 ```json
 {
@@ -73,7 +73,7 @@ For backend repositories with API endpoints, add an API reference group:
 }
 ```
 
-## Step 3 — Write page templates
+## Step 3 - Write page templates
 
 ### introduction.mdx
 
@@ -165,7 +165,7 @@ description: System architecture overview
 | Containers       | Docker              |
 ```
 
-## Step 4 — Add the docs script and dependency
+## Step 4 - Add the docs script and dependency
 
 Install last version of **mintlify** and add to root `package.json`:
 
@@ -177,7 +177,7 @@ Install last version of **mintlify** and add to root `package.json`:
 }
 ```
 
-## Step 5 — Add new pages
+## Step 5 - Add new pages
 
 1. Create a new `.mdx` file in `docs/`.
 2. Add frontmatter with `title` and `description`.
@@ -194,5 +194,5 @@ Install last version of **mintlify** and add to root `package.json`:
 
 ## See also
 
-- [rule](../rule/SKILL.md) — Central skill index and dispatcher
-- [rule-architect](../rule-architect/SKILL.md) — Project architecture wizard
+- [rule](../rule/SKILL.md) - Central skill index and dispatcher
+- [rule-architect](../rule-architect/SKILL.md) - Project architecture wizard

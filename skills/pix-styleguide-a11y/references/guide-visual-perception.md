@@ -39,6 +39,6 @@ While WCAG 2.1/2.2 uses the static ratio (e.g., 4.5:1), **APCA** (Advanced Perce
 
 1. **Grayscale Test:** Turn off screen colors. Can you still understand the hierarchy?
 2. **Simulator Check:** Use tools like **Color Oracle** or browser simulators for:
-   - **Protanopia/Deuteranopia:** (Red/green deficiency — most common)
-   - **Tritanopia:** (Blue/yellow deficiency — rare)
+   - **Protanopia/Deuteranopia:** (Red/green deficiency - most common)
+   - **Tritanopia:** (Blue/yellow deficiency - rare)
 3. **Luminance Check:** Ensure significant L difference (in OKLCH) between background and text.

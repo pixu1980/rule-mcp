@@ -19,26 +19,26 @@ metadata:
 
 Every repository must have these stages in order:
 
-1. **install** — Install dependencies with `pnpm install --frozen-lockfile`
-2. **lint** — Run `pnpm lint` (Biome check or other)
-3. **test** — Run `pnpm test:coverage` with coverage enforcement
-4. **build** — Run `pnpm build` (TypeScript compilation or Vite build)
-5. **docker** — Build and push Docker images to the GitLab container registry
-6. **deploy** — Deploy to staging and production environments
+1. **install** - Install dependencies with `pnpm install --frozen-lockfile`
+2. **lint** - Run `pnpm lint` (Biome check or other)
+3. **test** - Run `pnpm test:coverage` with coverage enforcement
+4. **build** - Run `pnpm build` (TypeScript compilation or Vite build)
+5. **docker** - Build and push Docker images to the GitLab container registry
+6. **deploy** - Deploy to staging and production environments
 
 Or use `pnpm` instead.
 
-## Step 1 — Generate the complete .gitlab-ci.yml
+## Step 1 - Generate the complete .gitlab-ci.yml
 
 Copy `assets/templates/.gitlab-ci.yml` to `.gitlab-ci.yml` at the project root.
 
-## Step 2 — Adapt for monorepos
+## Step 2 - Adapt for monorepos
 
 For monorepos with multiple packages, replace the `test` and `build` jobs with the per-package variants from `assets/templates/.gitlab-ci.monorepo.yml`. Adjust package names and coverage paths to match the actual monorepo structure.
 
 Test jobs run in parallel. Build jobs depend on their respective test jobs.
 
-## Step 3 — Configure CI variables in GitLab
+## Step 3 - Configure CI variables in GitLab
 
 Set these in **Settings > CI/CD > Variables**:
 
@@ -68,5 +68,5 @@ Set these in **Settings > CI/CD > Variables**:
 
 ## See also
 
-- [rule](../rule/SKILL.md) — Central skill index and dispatcher
-- [rule-architect](../rule-architect/SKILL.md) — Project architecture wizard
+- [rule](../rule/SKILL.md) - Central skill index and dispatcher
+- [rule-architect](../rule-architect/SKILL.md) - Project architecture wizard

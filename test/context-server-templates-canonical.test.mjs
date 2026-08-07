@@ -1,7 +1,7 @@
 // test/context-server-templates-canonical.test.mjs
 // Guards that context-server.mjs (and everything else in the pipeline) reads
 // templates from the single canonical skills/rule-architect/templates.json
-// — not a stale local duplicate. The duplicate under
+// - not a stale local duplicate. The duplicate under
 // assets/context-server/templates.json drifted (21 vs 23 templates) and has
 // been removed; this test locks that consolidation in place.
 import test from "node:test";

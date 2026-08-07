@@ -8,7 +8,7 @@ tags:
 frameworks: [react]
 ---
 
-# rule-frontend-react — React with rule Principles
+# rule-frontend-react - React with rule Principles
 
 This skill adapts [rule-styleguide](../rule-styleguide/SKILL.md) (file tree, naming, CSS, HTML)
 and [rule-frontend-vanilla-reactive](../rule-frontend-vanilla-reactive/SKILL.md) (component architecture, patterns)
@@ -16,11 +16,11 @@ to **React 18+ functional components with hooks**.
 
 ## Core Rules (inherited from rule skills)
 
-1. **Zero CSS classes** — only element selectors + `[data-part="..."]` + `[data-*]` attribute selectors
-2. **Zero inline styles** — all styling in external `.css` files via `adoptedStyleSheets`
-3. **Semantic HTML is mandatory** — never `<div>` where `<section>`, `<article>`, `<header>`, `<footer>`, `<nav>`, `<main>`, `<aside>`, `<form>`, `<ul>`, `<ol>`, `<li>`, `<search>` exists
-4. **Barrel pattern** — every component folder has `index.js` re-export, files are `_PascalCase.ext`
-5. **No CSS-in-JS, no CSS Modules, no Tailwind** — external `.css` files only
+1. **Zero CSS classes** - only element selectors + `[data-part="..."]` + `[data-*]` attribute selectors
+2. **Zero inline styles** - all styling in external `.css` files via `adoptedStyleSheets`
+3. **Semantic HTML is mandatory** - never `<div>` where `<section>`, `<article>`, `<header>`, `<footer>`, `<nav>`, `<main>`, `<aside>`, `<form>`, `<ul>`, `<ol>`, `<li>`, `<search>` exists
+4. **Barrel pattern** - every component folder has `index.js` re-export, files are `_PascalCase.ext`
+5. **No CSS-in-JS, no CSS Modules, no Tailwind** - external `.css` files only
 
 ## File Tree Convention
 
@@ -85,7 +85,7 @@ export function TodoItem({ todo, onToggle, onDelete }) {
 ```
 
 ```css
-/* components/TodoItem/_TodoItem.css — NO classes */
+/* components/TodoItem/_TodoItem.css - NO classes */
 article[data-part="item"] {
   display: flex;
   align-items: center;
@@ -227,9 +227,9 @@ Key rules enforced: **no-css-classes**, **no-inline-styles**, **semantic-html**,
 **external-css** (CSS Modules or adoptedStyleSheets), **barrel-file**, **data-part**,
 **react-no-classname** (no `className`, use `data-part`), **react-hooks-rules**
 (hooks at top level),
-**jsdoc-required** (every JS/TS file MUST have complete JSDoc — see rule-styleguide → javascript.md),
-**css-comments-required** (every CSS file MUST have file-level + section comments — see rule-styleguide → css.md),
-**a11y-test-required** (every project MUST have Playwright + @axe-core/playwright a11y tests in `tests/a11y/` — see rule-styleguide → a11y.md → Automated Testing).
+**jsdoc-required** (every JS/TS file MUST have complete JSDoc - see rule-styleguide → javascript.md),
+**css-comments-required** (every CSS file MUST have file-level + section comments - see rule-styleguide → css.md),
+**a11y-test-required** (every project MUST have Playwright + @axe-core/playwright a11y tests in `tests/a11y/` - see rule-styleguide → a11y.md → Automated Testing).
 
 ## Project Scaffolding
 
@@ -291,12 +291,12 @@ Review order: correctness risks → state consistency → state ownership and re
 Use `useReducer` when multiple state values must stay in sync.
 
 ```tsx
-// ❌ Separate setters — invalid states possible
+// ❌ Separate setters - invalid states possible
 const [loading, setLoading] = useState(true);
 const [error, setError] = useState(null);
 const [user, setUser] = useState(null);
 
-// ✅ Discriminated union — invalid states impossible
+// ✅ Discriminated union - invalid states impossible
 type UserState =
   | { status: "loading"; user: null; error: null }
   | { status: "success"; user: User; error: null }
@@ -366,7 +366,7 @@ Rule: _If you are calculating from existing React state, calculate during render
 #### 5. Do not use array index as `key` for changing lists
 
 ```tsx
-// ❌ Index key — state, focus, animations break on reorder
+// ❌ Index key - state, focus, animations break on reorder
 {
   tasks.map((task, i) => <TaskItem key={i} task={task} />);
 }
@@ -574,19 +574,19 @@ src/
 
 ## Step-by-step
 
-### Step 1 — App bootstrap
+### Step 1 - App bootstrap
 
 - `src/main.tsx` mounts app with `BrowserRouter`
 - `src/routes/index.tsx` defines base route table
 - Include at least `Home` and `NotFound` pages
 
-### Step 2 — Typed API layer
+### Step 2 - Typed API layer
 
 - `src/services/api.ts` exposes typed API helpers
 - `src/types/api.ts` defines API contracts
 - Validate critical payloads with `zod`
 
-### Step 3 — UI composition
+### Step 3 - UI composition
 
 - `src/components/Layout.tsx` wraps page-level layout
 - `src/pages/Home.tsx` demonstrates service usage
@@ -607,7 +607,7 @@ src/
 - Use `zod` with `@hookform/resolvers` for validation
 - Avoid form-level ad-hoc validation in individual inputs
 
-### Step 1 — Define controlled defaults
+### Step 1 - Define controlled defaults
 
 ```tsx
 import { useForm } from "react-hook-form";
@@ -650,7 +650,7 @@ function MyForm() {
 }
 ```
 
-### Step 2 — Scale complex forms
+### Step 2 - Scale complex forms
 
 - Split large forms into subcomponents bound via `FormProvider` + `useFormContext`
 - Use `useFieldArray` for dynamic collections
@@ -695,8 +695,8 @@ function OrderForm() {
 
 ## See also
 
-- [rule](../rule/SKILL.md) — Central skill index and dispatcher
-- [rule-frontend](../rule-frontend/SKILL.md) — Frontend skill index
-- [rule-styleguide](../rule-styleguide/SKILL.md) — Shared frontend standards
-- [rule-styleguide-validation](../rule-styleguide-validation/SKILL.md) — Business validation rules
-- [rule-toolchain-vite](../rule-toolchain-vite/SKILL.md) — Vite configuration
+- [rule](../rule/SKILL.md) - Central skill index and dispatcher
+- [rule-frontend](../rule-frontend/SKILL.md) - Frontend skill index
+- [rule-styleguide](../rule-styleguide/SKILL.md) - Shared frontend standards
+- [rule-styleguide-validation](../rule-styleguide-validation/SKILL.md) - Business validation rules
+- [rule-toolchain-vite](../rule-toolchain-vite/SKILL.md) - Vite configuration

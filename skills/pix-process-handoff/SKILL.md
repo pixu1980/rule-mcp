@@ -10,13 +10,13 @@ tags:
 frameworks: [all]
 ---
 
-# rule-process-handoff — LLM Context Handoff
+# rule-process-handoff - LLM Context Handoff
 
 ## Purpose
 
 When an AI-assisted session ends (chat timeout, model switch, context full, human handoff),
 **rule-process-handoff** generates a compact prompt that lets a **new LLM session** pick up exactly
-where the previous one left off — with zero Q&A to re-establish context.
+where the previous one left off - with zero Q&A to re-establish context.
 
 ## Use Cases
 
@@ -29,8 +29,8 @@ where the previous one left off — with zero Q&A to re-establish context.
 ## How It Works
 
 1. `rule-process-handoff` scans the project for:
-   - All ADR files in `docs/adr/` — extracts titles, statuses, tags
-   - `.context/` files — extracts project values and decisions
+   - All ADR files in `docs/adr/` - extracts titles, statuses, tags
+   - `.context/` files - extracts project values and decisions
    - Project identity from `package.json` or `CONTEXT.md`
 
 2. It compresses everything into a **single prompt block** (≈150–400 lines) that:
@@ -52,8 +52,8 @@ The handoff prompt has four sections:
 Project type, stack, framework, target.
 
 ### ADR Log
-001 | accepted | Initial architecture — chose layered pattern
-002 | proposed | Database selection — PostgreSQL vs SQLite
+001 | accepted | Initial architecture - chose layered pattern
+002 | proposed | Database selection - PostgreSQL vs SQLite
 
 ### State Snapshot
 PROJECT_TYPE=webapp
@@ -104,7 +104,7 @@ STACK=react
 /rule-handoff compress max=2000                # compressed, token-capped
 ```
 
-When in doubt, just run `/rule-handoff` — the defaults produce a complete handoff you can paste into a new session.
+When in doubt, just run `/rule-handoff` - the defaults produce a complete handoff you can paste into a new session.
 
 ## Recovery Flow
 
@@ -112,10 +112,10 @@ When in doubt, just run `/rule-handoff` — the defaults produce a complete hand
 2. **Target session**: Paste the handoff block as the **first message**
 3. The receiving LLM immediately understands the project, decisions, and what to do next
 
-No special tooling on the receiving side — the handoff is a plain-text prompt that any LLM can consume.
+No special tooling on the receiving side - the handoff is a plain-text prompt that any LLM can consume.
 ---
 
 ## See also
 
-- [rule](../rule/SKILL.md) — Central skill index and dispatcher
-- [rule-process](../rule-process/SKILL.md) — Process skill index
+- [rule](../rule/SKILL.md) - Central skill index and dispatcher
+- [rule-process](../rule-process/SKILL.md) - Process skill index

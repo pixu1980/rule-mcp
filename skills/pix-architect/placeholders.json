@@ -84,35 +84,35 @@
     {
       "key": "react",
       "label": "React 18+",
-      "description": "Functional components, hooks, Context API, JSX — SSR with Next.js or Remix",
+      "description": "Functional components, hooks, Context API, JSX - SSR with Next.js or Remix",
       "pixGalaxySkill": "rule-frontend-react",
       "build": "Vite"
     },
     {
       "key": "vue",
       "label": "Vue 3",
-      "description": "Composition API, SFC, ref/reactive/computed, scoped CSS — SSR with Nuxt.js",
+      "description": "Composition API, SFC, ref/reactive/computed, scoped CSS - SSR with Nuxt.js",
       "pixGalaxySkill": "rule-frontend-vue",
       "build": "Vite"
     },
     {
       "key": "angular",
       "label": "Angular",
-      "description": "Standalone components, signals, @Component, styleUrl — enterprise-grade",
+      "description": "Standalone components, signals, @Component, styleUrl - enterprise-grade",
       "pixGalaxySkill": "rule-frontend-angular",
       "build": "Angular CLI + Vite"
     },
     {
       "key": "svelte",
       "label": "Svelte 5",
-      "description": "Runes ($state, $derived, $effect), minimal boilerplate — SSR with SvelteKit",
+      "description": "Runes ($state, $derived, $effect), minimal boilerplate - SSR with SvelteKit",
       "pixGalaxySkill": "rule-frontend-svelte",
       "build": "Vite"
     },
     {
       "key": "solidjs",
       "label": "SolidJS",
-      "description": "Fine-grained reactivity, createSignal/createMemo, JSX — fastest runtime",
+      "description": "Fine-grained reactivity, createSignal/createMemo, JSX - fastest runtime",
       "pixGalaxySkill": "rule-frontend-solidjs",
       "build": "Vite"
     },
@@ -135,21 +135,21 @@
     {
       "key": "nextjs",
       "label": "Next.js",
-      "description": "App Router, SSR/SSG/ISR, API routes, middleware — requires React",
+      "description": "App Router, SSR/SSG/ISR, API routes, middleware - requires React",
       "pixGalaxySkill": "rule-frontend-meta-next",
       "build": "Next.js + Turbopack"
     },
     {
       "key": "nuxt",
       "label": "Nuxt.js",
-      "description": "File-based routing, SSR/SSG, server routes, Nitro engine — requires Vue",
+      "description": "File-based routing, SSR/SSG, server routes, Nitro engine - requires Vue",
       "pixGalaxySkill": "rule-frontend-meta-nuxt",
       "build": "Nuxt + Vite"
     },
     {
       "key": "remix",
       "label": "Remix",
-      "description": "Nested routing, loaders/actions, progressive enhancement — requires React",
+      "description": "Nested routing, loaders/actions, progressive enhancement - requires React",
       "pixGalaxySkill": "rule-frontend-meta-remix",
       "build": "Remix + Vite"
     }
@@ -174,7 +174,7 @@
     {
       "key": "none",
       "label": "None",
-      "description": "No backend server — client-only app",
+      "description": "No backend server - client-only app",
       "pixAISkill": "",
       "build": ""
     },
@@ -254,263 +254,263 @@
   "architectureSkills": [
     {
       "key": "rule",
-      "label": "rule — Skill Index & Dispatcher"
+      "label": "rule - Skill Index & Dispatcher"
     },
     {
       "key": "rule-platform-agent",
-      "label": "rule-platform-agent — AI Agent Scaffold"
+      "label": "rule-platform-agent - AI Agent Scaffold"
     },
     {
       "key": "rule-architect",
-      "label": "rule-architect — Enterprise Architecture Wizard"
+      "label": "rule-architect - Enterprise Architecture Wizard"
     },
     {
       "key": "rule-backend",
-      "label": "rule-backend — Backend Patterns"
+      "label": "rule-backend - Backend Patterns"
     },
     {
       "key": "rule-backend-api-design",
-      "label": "rule-backend-api-design — REST API Design"
+      "label": "rule-backend-api-design - REST API Design"
     },
     {
       "key": "rule-backend-express",
-      "label": "rule-backend-express — Express.js 5+"
+      "label": "rule-backend-express - Express.js 5+"
     },
     {
       "key": "rule-backend-fastify",
-      "label": "rule-backend-fastify — Fastify 5+"
+      "label": "rule-backend-fastify - Fastify 5+"
     },
     {
       "key": "rule-backend-hono",
-      "label": "rule-backend-hono — Hono 4+ Edge API"
+      "label": "rule-backend-hono - Hono 4+ Edge API"
     },
     {
       "key": "rule-backend-nestjs",
-      "label": "rule-backend-nestjs — NestJS 10+"
+      "label": "rule-backend-nestjs - NestJS 10+"
     },
     {
       "key": "rule-backend-node",
-      "label": "rule-backend-node — Node.js Backend Scaffold"
+      "label": "rule-backend-node - Node.js Backend Scaffold"
     },
     {
       "key": "rule-backend-security",
-      "label": "rule-backend-security — Security Hardening"
+      "label": "rule-backend-security - Security Hardening"
     },
     {
       "key": "rule-data",
-      "label": "rule-data — Database Index"
+      "label": "rule-data - Database Index"
     },
     {
       "key": "rule-data-sql",
-      "label": "rule-data-sql — SQL Best Practices"
+      "label": "rule-data-sql - SQL Best Practices"
     },
     {
       "key": "rule-data-postgresql",
-      "label": "rule-data-postgresql — PostgreSQL 16+"
+      "label": "rule-data-postgresql - PostgreSQL 16+"
     },
     {
       "key": "rule-data-mysql",
-      "label": "rule-data-mysql — MySQL 8+ / MariaDB 11+"
+      "label": "rule-data-mysql - MySQL 8+ / MariaDB 11+"
     },
     {
       "key": "rule-data-mongodb",
-      "label": "rule-data-mongodb — MongoDB 7+"
+      "label": "rule-data-mongodb - MongoDB 7+"
     },
     {
       "key": "rule-devops",
-      "label": "rule-devops — DevOps Index"
+      "label": "rule-devops - DevOps Index"
     },
     {
       "key": "rule-devops-docker",
-      "label": "rule-devops-docker — Docker & Container Standards"
+      "label": "rule-devops-docker - Docker & Container Standards"
     },
     {
       "key": "rule-devops-gitlab-ci",
-      "label": "rule-devops-gitlab-ci — GitLab CI/CD"
+      "label": "rule-devops-gitlab-ci - GitLab CI/CD"
     },
     {
       "key": "rule-devops-testing",
-      "label": "rule-devops-testing — Testing & Coverage Gates"
+      "label": "rule-devops-testing - Testing & Coverage Gates"
     },
     {
       "key": "rule-devops-version",
-      "label": "rule-devops-version — Version Management"
+      "label": "rule-devops-version - Version Management"
     },
     {
       "key": "rule-frontend",
-      "label": "rule-frontend — Frontend Index"
+      "label": "rule-frontend - Frontend Index"
     },
     {
       "key": "rule-frontend-react",
-      "label": "rule-frontend-react — React 18+"
+      "label": "rule-frontend-react - React 18+"
     },
     {
       "key": "rule-frontend-vue",
-      "label": "rule-frontend-vue — Vue 3"
+      "label": "rule-frontend-vue - Vue 3"
     },
     {
       "key": "rule-frontend-angular",
-      "label": "rule-frontend-angular — Angular Standalone"
+      "label": "rule-frontend-angular - Angular Standalone"
     },
     {
       "key": "rule-frontend-svelte",
-      "label": "rule-frontend-svelte — Svelte 5"
+      "label": "rule-frontend-svelte - Svelte 5"
     },
     {
       "key": "rule-frontend-solidjs",
-      "label": "rule-frontend-solidjs — SolidJS"
+      "label": "rule-frontend-solidjs - SolidJS"
     },
     {
       "key": "rule-frontend-vanilla-reactive",
-      "label": "rule-frontend-vanilla-reactive — Vanilla Reactive"
+      "label": "rule-frontend-vanilla-reactive - Vanilla Reactive"
     },
     {
       "key": "rule-frontend-astro",
-      "label": "rule-frontend-astro — Astro Islands"
+      "label": "rule-frontend-astro - Astro Islands"
     },
     {
       "key": "rule-frontend-meta-next",
-      "label": "rule-frontend-meta-next — Next.js"
+      "label": "rule-frontend-meta-next - Next.js"
     },
     {
       "key": "rule-frontend-meta-nuxt",
-      "label": "rule-frontend-meta-nuxt — Nuxt.js"
+      "label": "rule-frontend-meta-nuxt - Nuxt.js"
     },
     {
       "key": "rule-frontend-meta-remix",
-      "label": "rule-frontend-meta-remix — Remix"
+      "label": "rule-frontend-meta-remix - Remix"
     },
     {
       "key": "rule-platform",
-      "label": "rule-platform — Platform Index"
+      "label": "rule-platform - Platform Index"
     },
     {
       "key": "rule-platform-desktop",
-      "label": "rule-platform-desktop — Desktop (Electron/Tauri)"
+      "label": "rule-platform-desktop - Desktop (Electron/Tauri)"
     },
     {
       "key": "rule-platform-expo",
-      "label": "rule-platform-expo — Expo / React Native"
+      "label": "rule-platform-expo - Expo / React Native"
     },
     {
       "key": "rule-platform-library",
-      "label": "rule-platform-library — Library / Package"
+      "label": "rule-platform-library - Library / Package"
     },
     {
       "key": "rule-platform-web",
-      "label": "rule-platform-web — Web Platform"
+      "label": "rule-platform-web - Web Platform"
     },
     {
       "key": "rule-process",
-      "label": "rule-process — Process Index"
+      "label": "rule-process - Process Index"
     },
     {
       "key": "rule-process-adr",
-      "label": "rule-process-adr — Architecture Decision Records"
+      "label": "rule-process-adr - Architecture Decision Records"
     },
     {
       "key": "rule-process-bmad",
-      "label": "rule-process-bmad — BMAD Method"
+      "label": "rule-process-bmad - BMAD Method"
     },
     {
       "key": "rule-process-documentation",
-      "label": "rule-process-documentation — Mintlify Docs"
+      "label": "rule-process-documentation - Mintlify Docs"
     },
     {
       "key": "rule-process-feature-workflow",
-      "label": "rule-process-feature-workflow — Feature Implementation"
+      "label": "rule-process-feature-workflow - Feature Implementation"
     },
     {
       "key": "rule-process-handoff",
-      "label": "rule-process-handoff — LLM Handoff"
+      "label": "rule-process-handoff - LLM Handoff"
     },
     {
       "key": "rule-styleguide",
-      "label": "rule-styleguide — HTML, CSS, JS, a11y, naming"
+      "label": "rule-styleguide - HTML, CSS, JS, a11y, naming"
     },
     {
       "key": "rule-styleguide-a11y",
-      "label": "rule-styleguide-a11y — WCAG 2.2 AA"
+      "label": "rule-styleguide-a11y - WCAG 2.2 AA"
     },
     {
       "key": "rule-styleguide-css",
-      "label": "rule-styleguide-css — CSS Architecture"
+      "label": "rule-styleguide-css - CSS Architecture"
     },
     {
       "key": "rule-styleguide-html",
-      "label": "rule-styleguide-html — Semantic HTML"
+      "label": "rule-styleguide-html - Semantic HTML"
     },
     {
       "key": "rule-styleguide-javascript",
-      "label": "rule-styleguide-javascript — JS Conventions"
+      "label": "rule-styleguide-javascript - JS Conventions"
     },
     {
       "key": "rule-styleguide-json",
-      "label": "rule-styleguide-json — JSON Structure"
+      "label": "rule-styleguide-json - JSON Structure"
     },
     {
       "key": "rule-styleguide-markdown",
-      "label": "rule-styleguide-markdown — Markdown Docs"
+      "label": "rule-styleguide-markdown - Markdown Docs"
     },
     {
       "key": "rule-styleguide-naming",
-      "label": "rule-styleguide-naming — Naming & File Tree"
+      "label": "rule-styleguide-naming - Naming & File Tree"
     },
     {
       "key": "rule-styleguide-patterns",
-      "label": "rule-styleguide-patterns — Patterns Cheat Sheet"
+      "label": "rule-styleguide-patterns - Patterns Cheat Sheet"
     },
     {
       "key": "rule-styleguide-validation",
-      "label": "rule-styleguide-validation — Business Validation"
+      "label": "rule-styleguide-validation - Business Validation"
     },
     {
       "key": "rule-toolchain",
-      "label": "rule-toolchain — Toolchain Index"
+      "label": "rule-toolchain - Toolchain Index"
     },
     {
       "key": "rule-toolchain-biome",
-      "label": "rule-toolchain-biome — Biome Linter"
+      "label": "rule-toolchain-biome - Biome Linter"
     },
     {
       "key": "rule-toolchain-eslint",
-      "label": "rule-toolchain-eslint — ESLint 9+"
+      "label": "rule-toolchain-eslint - ESLint 9+"
     },
     {
       "key": "rule-toolchain-husky",
-      "label": "rule-toolchain-husky — Git Hooks"
+      "label": "rule-toolchain-husky - Git Hooks"
     },
     {
       "key": "rule-toolchain-parcel",
-      "label": "rule-toolchain-parcel — Parcel 2+"
+      "label": "rule-toolchain-parcel - Parcel 2+"
     },
     {
       "key": "rule-toolchain-pnpm",
-      "label": "rule-toolchain-pnpm — pnpm Package Manager"
+      "label": "rule-toolchain-pnpm - pnpm Package Manager"
     },
     {
       "key": "rule-toolchain-project",
-      "label": "rule-toolchain-project — Project Config Baseline"
+      "label": "rule-toolchain-project - Project Config Baseline"
     },
     {
       "key": "rule-toolchain-turborepo",
-      "label": "rule-toolchain-turborepo — Turborepo"
+      "label": "rule-toolchain-turborepo - Turborepo"
     },
     {
       "key": "rule-toolchain-typescript",
-      "label": "rule-toolchain-typescript — TypeScript Config"
+      "label": "rule-toolchain-typescript - TypeScript Config"
     },
     {
       "key": "rule-toolchain-vite",
-      "label": "rule-toolchain-vite — Vite Build Tool"
+      "label": "rule-toolchain-vite - Vite Build Tool"
     },
     {
       "key": "rule-ui",
-      "label": "rule-ui — UI Umbrella"
+      "label": "rule-ui - UI Umbrella"
     },
     {
       "key": "rule-ui-design-system",
-      "label": "rule-ui-design-system — Distinctive UI Design System"
+      "label": "rule-ui-design-system - Distinctive UI Design System"
     }
   ],
   "apiStyles": [
@@ -597,7 +597,7 @@
   "sections": [
     {
       "key": "step-1-project-type-and-stack",
-      "label": "Step 1 — Project Type & Stack",
+      "label": "Step 1 - Project Type & Stack",
       "tier": "starter",
       "skill": "rule-architect",
       "description": "Choose your project type to unlock relevant technology choices. Each selection maps to a specific rule-* skill.",
@@ -708,13 +708,13 @@
             {
               "key": "npm",
               "label": "npm",
-              "description": "npm — default Node.js package manager",
+              "description": "npm - default Node.js package manager",
               "pixAISkill": ""
             },
             {
               "key": "pnpm",
               "label": "pnpm",
-              "description": "pnpm — fast, disk-efficient, workspace-native",
+              "description": "pnpm - fast, disk-efficient, workspace-native",
               "pixGalaxySkill": "rule-toolchain-pnpm"
             }
           ],
@@ -727,14 +727,14 @@
           "options": [
             {
               "key": "biome",
-              "label": "Biome — rule-toolchain-biome",
-              "description": "Biome — all-in-one linter + formatter, zero-config",
+              "label": "Biome - rule-toolchain-biome",
+              "description": "Biome - all-in-one linter + formatter, zero-config",
               "pixGalaxySkill": "rule-toolchain-biome"
             },
             {
               "key": "eslint-prettier",
-              "label": "ESLint + Prettier — rule-toolchain-eslint",
-              "description": "ESLint 9+ flat config + Prettier — full plugin ecosystem",
+              "label": "ESLint + Prettier - rule-toolchain-eslint",
+              "description": "ESLint 9+ flat config + Prettier - full plugin ecosystem",
               "pixGalaxySkill": "rule-toolchain-eslint"
             }
           ],
@@ -745,7 +745,7 @@
     },
     {
       "key": "step-2-stack-versions",
-      "label": "Step 2 — Stack Versions",
+      "label": "Step 2 - Stack Versions",
       "tier": "starter",
       "description": "Pin major versions. Defaults are latest stable.",
       "fields": [
@@ -782,7 +782,7 @@
     },
     {
       "key": "step-3-architecture-pattern",
-      "label": "Step 3 — Architecture Pattern",
+      "label": "Step 3 - Architecture Pattern",
       "tier": "starter",
       "skill": "rule-architect",
       "description": "Choose the high-level architecture pattern that best fits your project.",
@@ -836,7 +836,7 @@
     },
     {
       "key": "step-4-devops-toolchain",
-      "label": "Step 4 — DevOps & Toolchain",
+      "label": "Step 4 - DevOps & Toolchain",
       "tier": "deep",
       "description": "Container, CI/CD, versioning, monorepo, hooks, and testing choices.",
       "fields": [
@@ -847,14 +847,14 @@
           "options": [
             {
               "key": "docker-multi-stage",
-              "label": "Multi-stage Dockerfile — Production-optimized image",
-              "description": "Multi-stage Dockerfile — production-optimized, minimal final image",
+              "label": "Multi-stage Dockerfile - Production-optimized image",
+              "description": "Multi-stage Dockerfile - production-optimized, minimal final image",
               "pixGalaxySkill": "rule-devops-docker"
             },
             {
               "key": "docker-simple",
-              "label": "Simple Dockerfile — Single stage",
-              "description": "Single-stage Dockerfile — simple, fast builds",
+              "label": "Simple Dockerfile - Single stage",
+              "description": "Single-stage Dockerfile - simple, fast builds",
               "pixGalaxySkill": "rule-devops-docker"
             },
             {
@@ -927,19 +927,19 @@
           "options": [
             {
               "key": "playwright",
-              "label": "Playwright — Cross-browser E2E",
+              "label": "Playwright - Cross-browser E2E",
               "description": "Cross-browser E2E testing with Playwright",
               "pixGalaxySkill": "rule-devops-testing"
             },
             {
               "key": "cypress",
-              "label": "Cypress — Developer-friendly E2E",
+              "label": "Cypress - Developer-friendly E2E",
               "description": "Developer-friendly E2E testing with Cypress",
               "pixAISkill": ""
             },
             {
               "key": "none",
-              "label": "None — Unit/integration only",
+              "label": "None - Unit/integration only",
               "description": "",
               "pixAISkill": ""
             }
@@ -965,7 +965,7 @@
     },
     {
       "key": "step-5-process-delivery",
-      "label": "Step 5 — Process & Delivery",
+      "label": "Step 5 - Process & Delivery",
       "tier": "deep",
       "description": "Delivery workflow methodology, documentation, and handoff strategy.",
       "fields": [
@@ -992,19 +992,19 @@
           "options": [
             {
               "key": "critical-only",
-              "label": "Critical decisions only — Irreversible or high-impact",
+              "label": "Critical decisions only - Irreversible or high-impact",
               "description": "ADR only for irreversible or high-impact decisions",
               "pixGalaxySkill": "rule-process-adr"
             },
             {
               "key": "all",
-              "label": "All decisions — Every structural choice recorded",
+              "label": "All decisions - Every structural choice recorded",
               "description": "Every structural choice recorded as ADR",
               "pixGalaxySkill": "rule-process-adr"
             },
             {
               "key": "none",
-              "label": "None — No ADR tracking",
+              "label": "None - No ADR tracking",
               "description": "",
               "pixAISkill": ""
             }
@@ -1019,13 +1019,13 @@
           "options": [
             {
               "key": "full",
-              "label": "Full handoff — ADR + git diff + roadmap + docs scan",
+              "label": "Full handoff - ADR + git diff + roadmap + docs scan",
               "description": "Complete handoff: ADR + git diff + roadmap + docs scan",
               "pixGalaxySkill": "rule-process-handoff"
             },
             {
               "key": "minimal",
-              "label": "Minimal — ADR summary only",
+              "label": "Minimal - ADR summary only",
               "description": "ADR summary only for quick context",
               "pixGalaxySkill": "rule-process-handoff"
             },
@@ -1046,19 +1046,19 @@
           "options": [
             {
               "key": "gitlab-mr",
-              "label": "GitLab MR — Branch → MR → review → merge",
+              "label": "GitLab MR - Branch → MR → review → merge",
               "description": "Branch → MR → review → merge (GitLab)",
               "pixGalaxySkill": "rule-process-feature-workflow"
             },
             {
               "key": "github-pr",
-              "label": "GitHub PR — Branch → PR → review → merge",
+              "label": "GitHub PR - Branch → PR → review → merge",
               "description": "Branch → PR → review → merge (GitHub)",
               "pixGalaxySkill": "rule-process-feature-workflow"
             },
             {
               "key": "trunk",
-              "label": "Trunk-based — Short-lived branches, direct merge",
+              "label": "Trunk-based - Short-lived branches, direct merge",
               "description": "Short-lived branches, direct merge",
               "pixGalaxySkill": "rule-process-feature-workflow"
             },
@@ -1087,20 +1087,20 @@
           "options": [
             {
               "key": "strict",
-              "label": "strict: true — Full strict mode",
+              "label": "strict: true - Full strict mode",
               "description": "Full strict mode: strict: true in tsconfig",
               "pixGalaxySkill": "rule-toolchain-typescript"
             },
             {
               "key": "standard",
-              "label": "Standard — Basic TypeScript config",
+              "label": "Standard - Basic TypeScript config",
               "description": "Basic TypeScript config without strict",
               "pixGalaxySkill": "rule-toolchain-typescript"
             },
             {
               "key": "none",
-              "label": "No TypeScript — Plain JavaScript",
-              "description": "Plain JavaScript — no TypeScript",
+              "label": "No TypeScript - Plain JavaScript",
+              "description": "Plain JavaScript - no TypeScript",
               "pixAISkill": ""
             }
           ],
@@ -1112,7 +1112,7 @@
     },
     {
       "key": "step-6-project-identity",
-      "label": "Step 6 — Project Identity",
+      "label": "Step 6 - Project Identity",
       "tier": "starter",
       "fields": [
         {
@@ -1137,7 +1137,7 @@
     },
     {
       "key": "step-7-project-glossary",
-      "label": "Step 7 — Project Glossary",
+      "label": "Step 7 - Project Glossary",
       "tier": "starter",
       "description": "Define domain terms, key concepts, and constraints.",
       "fields": [
@@ -1204,7 +1204,7 @@
     },
     {
       "key": "step-8-module-design",
-      "label": "Step 8 — Module Design",
+      "label": "Step 8 - Module Design",
       "tier": "starter",
       "fields": [
         {
@@ -1242,7 +1242,7 @@
     },
     {
       "key": "step-9-entities-data-model",
-      "label": "Step 9 — Entities & Data Model",
+      "label": "Step 9 - Entities & Data Model",
       "tier": "standard",
       "description": "Define entities with attributes and their relationships (1:1, 1:N, N:M).",
       "fields": [
@@ -1326,7 +1326,7 @@
     },
     {
       "key": "step-10-personas",
-      "label": "Step 10 — Personas",
+      "label": "Step 10 - Personas",
       "tier": "standard",
       "fields": [
         {
@@ -1371,7 +1371,7 @@
     },
     {
       "key": "step-11-features-core-flows",
-      "label": "Step 11 — Features & Core Flows",
+      "label": "Step 11 - Features & Core Flows",
       "tier": "standard",
       "fields": [
         {
@@ -1424,7 +1424,7 @@
     },
     {
       "key": "step-12-user-stories",
-      "label": "Step 12 — User Stories",
+      "label": "Step 12 - User Stories",
       "tier": "standard",
       "fields": [
         {
@@ -1457,7 +1457,7 @@
     },
     {
       "key": "step-13-scope",
-      "label": "Step 13 — Scope & Out of Scope",
+      "label": "Step 13 - Scope & Out of Scope",
       "tier": "standard",
       "fields": [
         {
@@ -1497,7 +1497,7 @@
     },
     {
       "key": "step-14-integration-points",
-      "label": "Step 14 — Integration Points",
+      "label": "Step 14 - Integration Points",
       "tier": "standard",
       "fields": [
         {
@@ -1514,19 +1514,19 @@
             {
               "key": "jwt",
               "label": "JWT",
-              "description": "JSON Web Token — stateless auth",
+              "description": "JSON Web Token - stateless auth",
               "pixGalaxySkill": "rule-backend-security"
             },
             {
               "key": "oauth2",
               "label": "OAuth 2.0",
-              "description": "OAuth 2.0 — delegated authorization",
+              "description": "OAuth 2.0 - delegated authorization",
               "pixGalaxySkill": "rule-backend-security"
             },
             {
               "key": "apikey",
               "label": "API Key",
-              "description": "API Key — simple token-based auth",
+              "description": "API Key - simple token-based auth",
               "pixGalaxySkill": "rule-backend-security"
             }
           ],
@@ -1568,7 +1568,7 @@
     },
     {
       "key": "step-15-rule-routing",
-      "label": "Step 15 — rule Skills & MCP Tools",
+      "label": "Step 15 - rule Skills & MCP Tools",
       "tier": "starter",
       "description": "Map the project to the canonical rule skill/tool workflow so all LLMs can follow the same routing contract.",
       "fields": [
@@ -1615,7 +1615,7 @@
     },
     {
       "key": "step-16-quality-testing",
-      "label": "Step 16 — Quality Assurance & Testing",
+      "label": "Step 16 - Quality Assurance & Testing",
       "tier": "deep",
       "fields": [
         {
@@ -1643,19 +1643,19 @@
             },
             {
               "key": "wcag21aa",
-              "label": "WCAG 2.1 AA — rule-styleguide-a11y",
-              "description": "WCAG 2.1 AA — web accessibility standard",
+              "label": "WCAG 2.1 AA - rule-styleguide-a11y",
+              "description": "WCAG 2.1 AA - web accessibility standard",
               "pixGalaxySkill": "rule-styleguide-a11y"
             },
             {
               "key": "wcag22aa",
-              "label": "WCAG 2.2 AA — rule-styleguide-a11y (default)",
-              "description": "WCAG 2.2 AA — latest accessibility standard",
+              "label": "WCAG 2.2 AA - rule-styleguide-a11y (default)",
+              "description": "WCAG 2.2 AA - latest accessibility standard",
               "pixGalaxySkill": "rule-styleguide-a11y"
             },
             {
               "key": "eaa",
-              "label": "WCAG 2.2 AA + EAA — European Accessibility Act",
+              "label": "WCAG 2.2 AA + EAA - European Accessibility Act",
               "description": "WCAG 2.2 AA + European Accessibility Act compliance",
               "pixGalaxySkill": "rule-styleguide-a11y"
             }
@@ -1669,25 +1669,25 @@
           "options": [
             {
               "key": "axe-playwright",
-              "label": "axe-core + Playwright — Automated a11y CI checks",
-              "description": "axe-core + Playwright — automated a11y CI checks",
+              "label": "axe-core + Playwright - Automated a11y CI checks",
+              "description": "axe-core + Playwright - automated a11y CI checks",
               "pixGalaxySkill": "rule-styleguide-a11y"
             },
             {
               "key": "axe-cypress",
-              "label": "axe-core + Cypress — Component-level a11y",
-              "description": "axe-core + Cypress — component-level a11y testing",
+              "label": "axe-core + Cypress - Component-level a11y",
+              "description": "axe-core + Cypress - component-level a11y testing",
               "pixGalaxySkill": "rule-styleguide-a11y"
             },
             {
               "key": "lighthouse",
-              "label": "Lighthouse CI — Performance + a11y audit",
-              "description": "Lighthouse CI — performance + a11y audit",
+              "label": "Lighthouse CI - Performance + a11y audit",
+              "description": "Lighthouse CI - performance + a11y audit",
               "pixAISkill": ""
             },
             {
               "key": "manual",
-              "label": "Manual only — Keyboard + screen reader testing",
+              "label": "Manual only - Keyboard + screen reader testing",
               "description": "",
               "pixAISkill": ""
             },
@@ -1744,7 +1744,7 @@
     },
     {
       "key": "step-17-deployment",
-      "label": "Step 17 — Deployment & Environments",
+      "label": "Step 17 - Deployment & Environments",
       "tier": "deep",
       "fields": [
         {
@@ -1755,19 +1755,19 @@
             {
               "key": "docker",
               "label": "Docker container",
-              "description": "Docker container — Dockerfile + docker-compose",
+              "description": "Docker container - Dockerfile + docker-compose",
               "pixGalaxySkill": "rule-devops-docker"
             },
             {
               "key": "electron",
               "label": "Electron build",
-              "description": "Electron build — desktop app distribution",
+              "description": "Electron build - desktop app distribution",
               "pixGalaxySkill": "rule-platform-desktop"
             },
             {
               "key": "static",
               "label": "Static hosting",
-              "description": "Static hosting — Vercel, Netlify, Cloudflare Pages",
+              "description": "Static hosting - Vercel, Netlify, Cloudflare Pages",
               "pixAISkill": ""
             },
             {
@@ -1779,7 +1779,7 @@
             {
               "key": "expo",
               "label": "EAS / App Store",
-              "description": "EAS / App Store — Expo Application Services",
+              "description": "EAS / App Store - Expo Application Services",
               "pixGalaxySkill": "rule-platform-expo"
             }
           ]
@@ -1792,13 +1792,13 @@
             {
               "key": "gitlab",
               "label": "GitLab CI",
-              "description": "GitLab CI — .gitlab-ci.yml pipeline",
+              "description": "GitLab CI - .gitlab-ci.yml pipeline",
               "pixGalaxySkill": "rule-devops-gitlab-ci"
             },
             {
               "key": "github",
               "label": "GitHub Actions",
-              "description": "GitHub Actions — .github/workflows",
+              "description": "GitHub Actions - .github/workflows",
               "pixAISkill": ""
             },
             {
@@ -1839,7 +1839,7 @@
     },
     {
       "key": "step-18-security",
-      "label": "Step 18 — Security & Compliance",
+      "label": "Step 18 - Security & Compliance",
       "tier": "deep",
       "fields": [
         {
@@ -1856,19 +1856,19 @@
             {
               "key": "jwt",
               "label": "JWT",
-              "description": "JWT — stateless token authentication",
+              "description": "JWT - stateless token authentication",
               "pixGalaxySkill": "rule-backend-security"
             },
             {
               "key": "session",
               "label": "Session-based",
-              "description": "Session-based — server-side session store",
+              "description": "Session-based - server-side session store",
               "pixGalaxySkill": "rule-backend-security"
             },
             {
               "key": "oauth2",
               "label": "OAuth 2.0",
-              "description": "OAuth 2.0 — social login / delegated auth",
+              "description": "OAuth 2.0 - social login / delegated auth",
               "pixGalaxySkill": "rule-backend-security"
             }
           ]
@@ -1916,297 +1916,297 @@
   "mcpTools": [
     {
       "key": "rule",
-      "label": "rule — Route a prompt to the correct rule skill. Returns structured routing with relevant sect"
+      "label": "rule - Route a prompt to the correct rule skill. Returns structured routing with relevant sect"
     },
     {
       "key": "pix_platform_agent",
-      "label": "pix_platform_agent — rule-platform-agent skill. Modes: full (rules), guardrails (testable assertions), check (val"
+      "label": "pix_platform_agent - rule-platform-agent skill. Modes: full (rules), guardrails (testable assertions), check (val"
     },
     {
       "key": "pix_architect",
-      "label": "pix_architect — rule-architect skill. Modes: full (rules), guardrails (testable assertions), check (val"
+      "label": "pix_architect - rule-architect skill. Modes: full (rules), guardrails (testable assertions), check (val"
     },
     {
       "key": "pix_backend",
-      "label": "pix_backend — rule-backend skill. Modes: full (rules), guardrails (testable assertions), check (valid"
+      "label": "pix_backend - rule-backend skill. Modes: full (rules), guardrails (testable assertions), check (valid"
     },
     {
       "key": "pix_backend_api_design",
-      "label": "pix_backend_api_design — rule-backend-api-design skill. Modes: full (rules), guardrails (testable assertions), c"
+      "label": "pix_backend_api_design - rule-backend-api-design skill. Modes: full (rules), guardrails (testable assertions), c"
     },
     {
       "key": "pix_backend_express",
-      "label": "pix_backend_express — rule-backend-express skill. Modes: full (rules), guardrails (testable assertions), chec"
+      "label": "pix_backend_express - rule-backend-express skill. Modes: full (rules), guardrails (testable assertions), chec"
     },
     {
       "key": "pix_backend_fastify",
-      "label": "pix_backend_fastify — rule-backend-fastify skill. Modes: full (rules), guardrails (testable assertions), chec"
+      "label": "pix_backend_fastify - rule-backend-fastify skill. Modes: full (rules), guardrails (testable assertions), chec"
     },
     {
       "key": "pix_backend_hono",
-      "label": "pix_backend_hono — rule-backend-hono skill. Modes: full (rules), guardrails (testable assertions), check ("
+      "label": "pix_backend_hono - rule-backend-hono skill. Modes: full (rules), guardrails (testable assertions), check ("
     },
     {
       "key": "pix_backend_nestjs",
-      "label": "pix_backend_nestjs — rule-backend-nestjs skill. Modes: full (rules), guardrails (testable assertions), check"
+      "label": "pix_backend_nestjs - rule-backend-nestjs skill. Modes: full (rules), guardrails (testable assertions), check"
     },
     {
       "key": "pix_backend_node",
-      "label": "pix_backend_node — rule-backend-node skill. Modes: full (rules), guardrails (testable assertions), check ("
+      "label": "pix_backend_node - rule-backend-node skill. Modes: full (rules), guardrails (testable assertions), check ("
     },
     {
       "key": "pix_backend_security",
-      "label": "pix_backend_security — rule-backend-security skill. Modes: full (rules), guardrails (testable assertions), che"
+      "label": "pix_backend_security - rule-backend-security skill. Modes: full (rules), guardrails (testable assertions), che"
     },
     {
       "key": "pix_data",
-      "label": "pix_data — rule-data skill. Modes: full (rules), guardrails (testable assertions), check (validate"
+      "label": "pix_data - rule-data skill. Modes: full (rules), guardrails (testable assertions), check (validate"
     },
     {
       "key": "pix_data_mongodb",
-      "label": "pix_data_mongodb — rule-data-mongodb skill. Modes: full (rules), guardrails (testable assertions), check ("
+      "label": "pix_data_mongodb - rule-data-mongodb skill. Modes: full (rules), guardrails (testable assertions), check ("
     },
     {
       "key": "pix_data_mysql",
-      "label": "pix_data_mysql — rule-data-mysql skill. Modes: full (rules), guardrails (testable assertions), check (va"
+      "label": "pix_data_mysql - rule-data-mysql skill. Modes: full (rules), guardrails (testable assertions), check (va"
     },
     {
       "key": "pix_data_postgresql",
-      "label": "pix_data_postgresql — rule-data-postgresql skill. Modes: full (rules), guardrails (testable assertions), chec"
+      "label": "pix_data_postgresql - rule-data-postgresql skill. Modes: full (rules), guardrails (testable assertions), chec"
     },
     {
       "key": "pix_data_sql",
-      "label": "pix_data_sql — rule-data-sql skill. Modes: full (rules), guardrails (testable assertions), check (vali"
+      "label": "pix_data_sql - rule-data-sql skill. Modes: full (rules), guardrails (testable assertions), check (vali"
     },
     {
       "key": "pix_devops",
-      "label": "pix_devops — rule-devops skill. Modes: full (rules), guardrails (testable assertions), check (valida"
+      "label": "pix_devops - rule-devops skill. Modes: full (rules), guardrails (testable assertions), check (valida"
     },
     {
       "key": "pix_devops_docker",
-      "label": "pix_devops_docker — rule-devops-docker skill. Modes: full (rules), guardrails (testable assertions), check "
+      "label": "pix_devops_docker - rule-devops-docker skill. Modes: full (rules), guardrails (testable assertions), check "
     },
     {
       "key": "pix_devops_gitlab_ci",
-      "label": "pix_devops_gitlab_ci — rule-devops-gitlab-ci skill. Modes: full (rules), guardrails (testable assertions), che"
+      "label": "pix_devops_gitlab_ci - rule-devops-gitlab-ci skill. Modes: full (rules), guardrails (testable assertions), che"
     },
     {
       "key": "pix_devops_testing",
-      "label": "pix_devops_testing — rule-devops-testing skill. Modes: full (rules), guardrails (testable assertions), check"
+      "label": "pix_devops_testing - rule-devops-testing skill. Modes: full (rules), guardrails (testable assertions), check"
     },
     {
       "key": "pix_devops_version",
-      "label": "pix_devops_version — rule-devops-version skill. Modes: full (rules), guardrails (testable assertions), check"
+      "label": "pix_devops_version - rule-devops-version skill. Modes: full (rules), guardrails (testable assertions), check"
     },
     {
       "key": "pix_frontend",
-      "label": "pix_frontend — rule-frontend skill. Modes: full (rules), guardrails (testable assertions), check (vali"
+      "label": "pix_frontend - rule-frontend skill. Modes: full (rules), guardrails (testable assertions), check (vali"
     },
     {
       "key": "pix_frontend_angular",
-      "label": "pix_frontend_angular — rule-frontend-angular skill. Modes: full (rules), guardrails (testable assertions), che"
+      "label": "pix_frontend_angular - rule-frontend-angular skill. Modes: full (rules), guardrails (testable assertions), che"
     },
     {
       "key": "pix_frontend_astro",
-      "label": "pix_frontend_astro — rule-frontend-astro skill. Modes: full (rules), guardrails (testable assertions), check"
+      "label": "pix_frontend_astro - rule-frontend-astro skill. Modes: full (rules), guardrails (testable assertions), check"
     },
     {
       "key": "pix_frontend_meta_next",
-      "label": "pix_frontend_meta_next — rule-frontend-meta-next skill. Modes: full (rules), guardrails (testable assertions), c"
+      "label": "pix_frontend_meta_next - rule-frontend-meta-next skill. Modes: full (rules), guardrails (testable assertions), c"
     },
     {
       "key": "pix_frontend_meta_nuxt",
-      "label": "pix_frontend_meta_nuxt — rule-frontend-meta-nuxt skill. Modes: full (rules), guardrails (testable assertions), c"
+      "label": "pix_frontend_meta_nuxt - rule-frontend-meta-nuxt skill. Modes: full (rules), guardrails (testable assertions), c"
     },
     {
       "key": "pix_frontend_meta_remix",
-      "label": "pix_frontend_meta_remix — rule-frontend-meta-remix skill. Modes: full (rules), guardrails (testable assertions), "
+      "label": "pix_frontend_meta_remix - rule-frontend-meta-remix skill. Modes: full (rules), guardrails (testable assertions), "
     },
     {
       "key": "pix_frontend_react",
-      "label": "pix_frontend_react — rule-frontend-react skill. Modes: full (rules), guardrails (testable assertions), check"
+      "label": "pix_frontend_react - rule-frontend-react skill. Modes: full (rules), guardrails (testable assertions), check"
     },
     {
       "key": "pix_frontend_solidjs",
-      "label": "pix_frontend_solidjs — rule-frontend-solidjs skill. Modes: full (rules), guardrails (testable assertions), che"
+      "label": "pix_frontend_solidjs - rule-frontend-solidjs skill. Modes: full (rules), guardrails (testable assertions), che"
     },
     {
       "key": "pix_frontend_svelte",
-      "label": "pix_frontend_svelte — rule-frontend-svelte skill. Modes: full (rules), guardrails (testable assertions), chec"
+      "label": "pix_frontend_svelte - rule-frontend-svelte skill. Modes: full (rules), guardrails (testable assertions), chec"
     },
     {
       "key": "pix_frontend_vanilla_reactive",
-      "label": "pix_frontend_vanilla_reactive — rule-frontend-vanilla-reactive skill. Modes: full (rules), guardrails (testable asserti"
+      "label": "pix_frontend_vanilla_reactive - rule-frontend-vanilla-reactive skill. Modes: full (rules), guardrails (testable asserti"
     },
     {
       "key": "pix_frontend_vue",
-      "label": "pix_frontend_vue — rule-frontend-vue skill. Modes: full (rules), guardrails (testable assertions), check ("
+      "label": "pix_frontend_vue - rule-frontend-vue skill. Modes: full (rules), guardrails (testable assertions), check ("
     },
     {
       "key": "pix_platform",
-      "label": "pix_platform — rule-platform skill. Modes: full (rules), guardrails (testable assertions), check (vali"
+      "label": "pix_platform - rule-platform skill. Modes: full (rules), guardrails (testable assertions), check (vali"
     },
     {
       "key": "pix_platform_desktop",
-      "label": "pix_platform_desktop — rule-platform-desktop skill. Modes: full (rules), guardrails (testable assertions), che"
+      "label": "pix_platform_desktop - rule-platform-desktop skill. Modes: full (rules), guardrails (testable assertions), che"
     },
     {
       "key": "pix_platform_expo",
-      "label": "pix_platform_expo — rule-platform-expo skill. Modes: full (rules), guardrails (testable assertions), check "
+      "label": "pix_platform_expo - rule-platform-expo skill. Modes: full (rules), guardrails (testable assertions), check "
     },
     {
       "key": "pix_platform_library",
-      "label": "pix_platform_library — rule-platform-library skill. Modes: full (rules), guardrails (testable assertions), che"
+      "label": "pix_platform_library - rule-platform-library skill. Modes: full (rules), guardrails (testable assertions), che"
     },
     {
       "key": "pix_platform_web",
-      "label": "pix_platform_web — rule-platform-web skill. Modes: full (rules), guardrails (testable assertions), check ("
+      "label": "pix_platform_web - rule-platform-web skill. Modes: full (rules), guardrails (testable assertions), check ("
     },
     {
       "key": "pix_process",
-      "label": "pix_process — rule-process skill. Modes: full (rules), guardrails (testable assertions), check (valid"
+      "label": "pix_process - rule-process skill. Modes: full (rules), guardrails (testable assertions), check (valid"
     },
     {
       "key": "pix_process_bmad",
-      "label": "pix_process_bmad — rule-process-bmad skill. Modes: full (rules), guardrails (testable assertions), check ("
+      "label": "pix_process_bmad - rule-process-bmad skill. Modes: full (rules), guardrails (testable assertions), check ("
     },
     {
       "key": "pix_process_documentation",
-      "label": "pix_process_documentation — rule-process-documentation skill. Modes: full (rules), guardrails (testable assertions)"
+      "label": "pix_process_documentation - rule-process-documentation skill. Modes: full (rules), guardrails (testable assertions)"
     },
     {
       "key": "pix_process_feature_workflow",
-      "label": "pix_process_feature_workflow — rule-process-feature-workflow skill. Modes: full (rules), guardrails (testable assertio"
+      "label": "pix_process_feature_workflow - rule-process-feature-workflow skill. Modes: full (rules), guardrails (testable assertio"
     },
     {
       "key": "pix_styleguide",
-      "label": "pix_styleguide — rule-styleguide skill. Modes: full (rules), guardrails (testable assertions), check (va"
+      "label": "pix_styleguide - rule-styleguide skill. Modes: full (rules), guardrails (testable assertions), check (va"
     },
     {
       "key": "pix_styleguide_a11y",
-      "label": "pix_styleguide_a11y — rule-styleguide-a11y skill. Modes: full (rules), guardrails (testable assertions), chec"
+      "label": "pix_styleguide_a11y - rule-styleguide-a11y skill. Modes: full (rules), guardrails (testable assertions), chec"
     },
     {
       "key": "pix_styleguide_css",
-      "label": "pix_styleguide_css — rule-styleguide-css skill. Modes: full (rules), guardrails (testable assertions), check"
+      "label": "pix_styleguide_css - rule-styleguide-css skill. Modes: full (rules), guardrails (testable assertions), check"
     },
     {
       "key": "pix_styleguide_html",
-      "label": "pix_styleguide_html — rule-styleguide-html skill. Modes: full (rules), guardrails (testable assertions), chec"
+      "label": "pix_styleguide_html - rule-styleguide-html skill. Modes: full (rules), guardrails (testable assertions), chec"
     },
     {
       "key": "pix_styleguide_javascript",
-      "label": "pix_styleguide_javascript — rule-styleguide-javascript skill. Modes: full (rules), guardrails (testable assertions)"
+      "label": "pix_styleguide_javascript - rule-styleguide-javascript skill. Modes: full (rules), guardrails (testable assertions)"
     },
     {
       "key": "pix_styleguide_json",
-      "label": "pix_styleguide_json — rule-styleguide-json skill. Modes: full (rules), guardrails (testable assertions), chec"
+      "label": "pix_styleguide_json - rule-styleguide-json skill. Modes: full (rules), guardrails (testable assertions), chec"
     },
     {
       "key": "pix_styleguide_markdown",
-      "label": "pix_styleguide_markdown — rule-styleguide-markdown skill. Modes: full (rules), guardrails (testable assertions), "
+      "label": "pix_styleguide_markdown - rule-styleguide-markdown skill. Modes: full (rules), guardrails (testable assertions), "
     },
     {
       "key": "pix_styleguide_naming",
-      "label": "pix_styleguide_naming — rule-styleguide-naming skill. Modes: full (rules), guardrails (testable assertions), ch"
+      "label": "pix_styleguide_naming - rule-styleguide-naming skill. Modes: full (rules), guardrails (testable assertions), ch"
     },
     {
       "key": "pix_styleguide_patterns",
-      "label": "pix_styleguide_patterns — rule-styleguide-patterns skill. Modes: full (rules), guardrails (testable assertions), "
+      "label": "pix_styleguide_patterns - rule-styleguide-patterns skill. Modes: full (rules), guardrails (testable assertions), "
     },
     {
       "key": "pix_styleguide_validation",
-      "label": "pix_styleguide_validation — rule-styleguide-validation skill. Modes: full (rules), guardrails (testable assertions)"
+      "label": "pix_styleguide_validation - rule-styleguide-validation skill. Modes: full (rules), guardrails (testable assertions)"
     },
     {
       "key": "pix_toolchain",
-      "label": "pix_toolchain — rule-toolchain skill. Modes: full (rules), guardrails (testable assertions), check (val"
+      "label": "pix_toolchain - rule-toolchain skill. Modes: full (rules), guardrails (testable assertions), check (val"
     },
     {
       "key": "pix_toolchain_biome",
-      "label": "pix_toolchain_biome — rule-toolchain-biome skill. Modes: full (rules), guardrails (testable assertions), chec"
+      "label": "pix_toolchain_biome - rule-toolchain-biome skill. Modes: full (rules), guardrails (testable assertions), chec"
     },
     {
       "key": "pix_toolchain_eslint",
-      "label": "pix_toolchain_eslint — rule-toolchain-eslint skill. Modes: full (rules), guardrails (testable assertions), che"
+      "label": "pix_toolchain_eslint - rule-toolchain-eslint skill. Modes: full (rules), guardrails (testable assertions), che"
     },
     {
       "key": "pix_toolchain_husky",
-      "label": "pix_toolchain_husky — rule-toolchain-husky skill. Modes: full (rules), guardrails (testable assertions), chec"
+      "label": "pix_toolchain_husky - rule-toolchain-husky skill. Modes: full (rules), guardrails (testable assertions), chec"
     },
     {
       "key": "pix_toolchain_parcel",
-      "label": "pix_toolchain_parcel — rule-toolchain-parcel skill. Modes: full (rules), guardrails (testable assertions), che"
+      "label": "pix_toolchain_parcel - rule-toolchain-parcel skill. Modes: full (rules), guardrails (testable assertions), che"
     },
     {
       "key": "pix_toolchain_pnpm",
-      "label": "pix_toolchain_pnpm — rule-toolchain-pnpm skill. Modes: full (rules), guardrails (testable assertions), check"
+      "label": "pix_toolchain_pnpm - rule-toolchain-pnpm skill. Modes: full (rules), guardrails (testable assertions), check"
     },
     {
       "key": "pix_toolchain_project",
-      "label": "pix_toolchain_project — rule-toolchain-project skill. Modes: full (rules), guardrails (testable assertions), ch"
+      "label": "pix_toolchain_project - rule-toolchain-project skill. Modes: full (rules), guardrails (testable assertions), ch"
     },
     {
       "key": "pix_toolchain_turborepo",
-      "label": "pix_toolchain_turborepo — rule-toolchain-turborepo skill. Modes: full (rules), guardrails (testable assertions), "
+      "label": "pix_toolchain_turborepo - rule-toolchain-turborepo skill. Modes: full (rules), guardrails (testable assertions), "
     },
     {
       "key": "pix_toolchain_typescript",
-      "label": "pix_toolchain_typescript — rule-toolchain-typescript skill. Modes: full (rules), guardrails (testable assertions),"
+      "label": "pix_toolchain_typescript - rule-toolchain-typescript skill. Modes: full (rules), guardrails (testable assertions),"
     },
     {
       "key": "pix_toolchain_vite",
-      "label": "pix_toolchain_vite — rule-toolchain-vite skill. Modes: full (rules), guardrails (testable assertions), check"
+      "label": "pix_toolchain_vite - rule-toolchain-vite skill. Modes: full (rules), guardrails (testable assertions), check"
     },
     {
       "key": "pix_search",
-      "label": "pix_search — Semantic search across ALL rule skills using BM25 ranking. Returns scored, relevant sec"
+      "label": "pix_search - Semantic search across ALL rule skills using BM25 ranking. Returns scored, relevant sec"
     },
     {
       "key": "pix_check",
-      "label": "pix_check — Run guardrail checks on code against any rule skill. Smart iteration: pass previousPass"
+      "label": "pix_check - Run guardrail checks on code against any rule skill. Smart iteration: pass previousPass"
     },
     {
       "key": "pix_scaffold",
-      "label": "pix_scaffold — Generate project scaffolding files. Returns one or all config file templates."
+      "label": "pix_scaffold - Generate project scaffolding files. Returns one or all config file templates."
     },
     {
       "key": "pix_detect",
-      "label": "pix_detect — Detect project framework, TypeScript usage, and build tool from package.json."
+      "label": "pix_detect - Detect project framework, TypeScript usage, and build tool from package.json."
     },
     {
       "key": "pix_process_adr",
-      "label": "pix_process_adr — Save an Architecture Decision Record (ADR) to docs/adr/. Auto-numbers, maintains index, us"
+      "label": "pix_process_adr - Save an Architecture Decision Record (ADR) to docs/adr/. Auto-numbers, maintains index, us"
     },
     {
       "key": "pix_fix",
-      "label": "pix_fix — Validate and auto-fix project file tree structure against rule conventions (barrel file"
+      "label": "pix_fix - Validate and auto-fix project file tree structure against rule conventions (barrel file"
     },
     {
       "key": "pix_process_handoff",
-      "label": "pix_process_handoff — Generate a compressed LLM handoff summary from ADR logs and project context. Paste the out"
+      "label": "pix_process_handoff - Generate a compressed LLM handoff summary from ADR logs and project context. Paste the out"
     },
     {
       "key": "pix_component",
-      "label": "pix_component — Generate component or test templates following rule principles."
+      "label": "pix_component - Generate component or test templates following rule principles."
     }
   ],
   "deliveryWorkflows": [
     {
       "key": "quick-flow",
-      "label": "Quick Flow — Lightweight spec → implement → test → ADR",
+      "label": "Quick Flow - Lightweight spec → implement → test → ADR",
       "pixGalaxySkill": "rule-process-feature-workflow",
       "description": "Lightweight: spec → implement → test → ADR. Best for solo devs and small teams"
     },
     {
       "key": "bmad",
-      "label": "BMAD Method — Full 4-phase (analysis → plan → solution → implement)",
+      "label": "BMAD Method - Full 4-phase (analysis → plan → solution → implement)",
       "pixGalaxySkill": "rule-process-bmad",
       "description": "BMAD Method: full 4-phase (Analysis → Planning → Solutioning → Implementation)"
     },
     {
       "key": "enterprise",
-      "label": "Enterprise — BMAD + ADR + Documentation + Handoff",
+      "label": "Enterprise - BMAD + ADR + Documentation + Handoff",
       "pixGalaxySkill": "rule-process",
       "description": "Enterprise: BMAD + ADR + Documentation + Handoff for regulated environments"
     }
@@ -2214,188 +2214,188 @@
   "docTools": [
     {
       "key": "mintlify",
-      "label": "Mintlify — Hosted docs portal with mint.json",
+      "label": "Mintlify - Hosted docs portal with mint.json",
       "pixGalaxySkill": "rule-process-documentation",
-      "description": "Mintlify — hosted documentation portal with mint.json config"
+      "description": "Mintlify - hosted documentation portal with mint.json config"
     },
     {
       "key": "readme-only",
-      "label": "README-only — Single markdown file",
+      "label": "README-only - Single markdown file",
       "pixGalaxySkill": "rule-styleguide-markdown",
-      "description": "README-only — single markdown file in repository root"
+      "description": "README-only - single markdown file in repository root"
     },
     {
       "key": "wiki",
-      "label": "GitLab/GitHub Wiki — Per-repo wiki pages",
+      "label": "GitLab/GitHub Wiki - Per-repo wiki pages",
       "pixGalaxySkill": "rule-process-documentation",
-      "description": "GitLab/GitHub Wiki — per-repository wiki pages"
+      "description": "GitLab/GitHub Wiki - per-repository wiki pages"
     },
     {
       "key": "none",
-      "label": "None — No documentation portal",
+      "label": "None - No documentation portal",
       "description": ""
     }
   ],
   "monorepoTools": [
     {
       "key": "turborepo",
-      "label": "Turborepo — Fast parallel builds + remote caching",
+      "label": "Turborepo - Fast parallel builds + remote caching",
       "pixGalaxySkill": "rule-toolchain-turborepo",
-      "description": "Turborepo — fast parallel builds + remote caching for pnpm workspaces"
+      "description": "Turborepo - fast parallel builds + remote caching for pnpm workspaces"
     },
     {
       "key": "nx",
-      "label": "Nx — Monorepo with dependency graph + affected commands",
-      "description": "Nx — monorepo with dependency graph, affected commands, and code generation"
+      "label": "Nx - Monorepo with dependency graph + affected commands",
+      "description": "Nx - monorepo with dependency graph, affected commands, and code generation"
     },
     {
       "key": "pnpm-workspaces",
-      "label": "pnpm workspaces only — Simple workspace protocol",
+      "label": "pnpm workspaces only - Simple workspace protocol",
       "pixGalaxySkill": "rule-toolchain-pnpm",
-      "description": "pnpm workspaces — built-in workspace protocol, simple config"
+      "description": "pnpm workspaces - built-in workspace protocol, simple config"
     },
     {
       "key": "none",
-      "label": "None — Single-package repo",
+      "label": "None - Single-package repo",
       "description": ""
     }
   ],
   "versionStrategies": [
     {
       "key": "manual",
-      "label": "Manual — Edit package.json by hand",
-      "description": "Manual — edit package.json version by hand"
+      "label": "Manual - Edit package.json by hand",
+      "description": "Manual - edit package.json version by hand"
     },
     {
       "key": "semantic-release",
-      "label": "semantic-release — Automated semver from commit messages",
-      "description": "semantic-release — automated semver from Conventional Commits"
+      "label": "semantic-release - Automated semver from commit messages",
+      "description": "semantic-release - automated semver from Conventional Commits"
     },
     {
       "key": "changesets",
-      "label": "Changesets — Manual bump with changelog generation",
-      "description": "Changesets — per-change bump with auto-changelog"
+      "label": "Changesets - Manual bump with changelog generation",
+      "description": "Changesets - per-change bump with auto-changelog"
     },
     {
       "key": "standard-version",
-      "label": "standard-version — Auto version + changelog",
-      "description": "standard-version — auto version bump + CHANGELOG generation"
+      "label": "standard-version - Auto version + changelog",
+      "description": "standard-version - auto version bump + CHANGELOG generation"
     }
   ],
   "commitHooks": [
     {
       "key": "husky",
-      "label": "Husky + lint-staged — Pre-commit lint + format + version",
+      "label": "Husky + lint-staged - Pre-commit lint + format + version",
       "pixGalaxySkill": "rule-toolchain-husky",
-      "description": "Husky + lint-staged — pre-commit lint + format + version checks"
+      "description": "Husky + lint-staged - pre-commit lint + format + version checks"
     },
     {
       "key": "manual",
-      "label": "Manual — No pre-commit hooks",
+      "label": "Manual - No pre-commit hooks",
       "description": ""
     }
   ],
   "ciTools": [
     {
       "key": "gitlab-ci",
-      "label": "GitLab CI — .gitlab-ci.yml",
+      "label": "GitLab CI - .gitlab-ci.yml",
       "pixGalaxySkill": "rule-devops-gitlab-ci",
-      "description": "GitLab CI pipeline with .gitlab-ci.yml — caching, Docker, coverage, deploy stages"
+      "description": "GitLab CI pipeline with .gitlab-ci.yml - caching, Docker, coverage, deploy stages"
     },
     {
       "key": "github-actions",
-      "label": "GitHub Actions — .github/workflows",
-      "description": "GitHub Actions workflows — .github/workflows CI/CD automation"
+      "label": "GitHub Actions - .github/workflows",
+      "description": "GitHub Actions workflows - .github/workflows CI/CD automation"
     },
     {
       "key": "none",
-      "label": "None — No CI/CD",
+      "label": "None - No CI/CD",
       "description": ""
     }
   ],
   "deploymentTargets": [
     {
       "key": "docker",
-      "label": "Docker container — Dockerfile + docker-compose",
+      "label": "Docker container - Dockerfile + docker-compose",
       "pixGalaxySkill": "rule-devops-docker",
-      "description": "Docker container — Dockerfile + docker-compose deployment"
+      "description": "Docker container - Dockerfile + docker-compose deployment"
     },
     {
       "key": "static",
-      "label": "Static hosting — Vercel, Netlify, Pages",
-      "description": "Static hosting — Vercel, Netlify, Cloudflare Pages"
+      "label": "Static hosting - Vercel, Netlify, Pages",
+      "description": "Static hosting - Vercel, Netlify, Cloudflare Pages"
     },
     {
       "key": "node-server",
-      "label": "Node.js server — Direct process deployment",
-      "description": "Node.js server — direct process deployment on VPS or PaaS"
+      "label": "Node.js server - Direct process deployment",
+      "description": "Node.js server - direct process deployment on VPS or PaaS"
     },
     {
       "key": "expo",
-      "label": "EAS / App Store — Expo Application Services",
+      "label": "EAS / App Store - Expo Application Services",
       "pixGalaxySkill": "rule-platform-expo",
-      "description": "EAS / App Store — Expo Application Services for mobile deployment"
+      "description": "EAS / App Store - Expo Application Services for mobile deployment"
     },
     {
       "key": "electron",
-      "label": "Electron build — Desktop app distribution",
+      "label": "Electron build - Desktop app distribution",
       "pixGalaxySkill": "rule-platform-desktop",
-      "description": "Electron build — desktop app distribution via GitHub Releases or auto-update"
+      "description": "Electron build - desktop app distribution via GitHub Releases or auto-update"
     }
   ],
   "testingFrameworks": [
     {
       "key": "vitest",
-      "label": "Vitest — Fast Vite-native test runner",
+      "label": "Vitest - Fast Vite-native test runner",
       "pixGalaxySkill": "rule-toolchain-vite",
-      "description": "Vitest — fast Vite-native test runner with Jest-compatible API"
+      "description": "Vitest - fast Vite-native test runner with Jest-compatible API"
     },
     {
       "key": "jest",
-      "label": "Jest — Mature test framework",
-      "description": "Jest — mature test framework with snapshot, mocking, coverage"
+      "label": "Jest - Mature test framework",
+      "description": "Jest - mature test framework with snapshot, mocking, coverage"
     },
     {
       "key": "playwright",
-      "label": "Playwright — E2E + component tests",
+      "label": "Playwright - E2E + component tests",
       "pixGalaxySkill": "rule-devops-testing",
-      "description": "Playwright — cross-browser E2E + component testing"
+      "description": "Playwright - cross-browser E2E + component testing"
     },
     {
       "key": "node-test",
-      "label": "node:test — Zero-dep Node.js built-in",
-      "description": "node:test — zero-dependency Node.js built-in test runner"
+      "label": "node:test - Zero-dep Node.js built-in",
+      "description": "node:test - zero-dependency Node.js built-in test runner"
     }
   ],
   "validationLibraries": [
     {
       "key": "zod",
-      "label": "Zod — TypeScript-first schema validation",
-      "description": "Zod — TypeScript-first schema validation with excellent type inference"
+      "label": "Zod - TypeScript-first schema validation",
+      "description": "Zod - TypeScript-first schema validation with excellent type inference"
     },
     {
       "key": "valibot",
-      "label": "Valibot — Lightweight bundle-free validation",
-      "description": "Valibot — lightweight (1KB) bundle-free validation library"
+      "label": "Valibot - Lightweight bundle-free validation",
+      "description": "Valibot - lightweight (1KB) bundle-free validation library"
     },
     {
       "key": "joi",
-      "label": "Joi — Mature JavaScript validation",
-      "description": "Joi — mature JavaScript validation with rich error messages"
+      "label": "Joi - Mature JavaScript validation",
+      "description": "Joi - mature JavaScript validation with rich error messages"
     },
     {
       "key": "yup",
-      "label": "Yup — Object schema validation",
-      "description": "Yup — object schema validation, React-friendly"
+      "label": "Yup - Object schema validation",
+      "description": "Yup - object schema validation, React-friendly"
     },
     {
       "key": "arktype",
-      "label": "ArkType — Ultra-fast TypeScript validation",
-      "description": "ArkType — ultra-fast TypeScript validation with discriminated unions"
+      "label": "ArkType - Ultra-fast TypeScript validation",
+      "description": "ArkType - ultra-fast TypeScript validation with discriminated unions"
     },
     {
       "key": "none",
-      "label": "None — Manual validation",
+      "label": "None - Manual validation",
       "description": ""
     }
   ],

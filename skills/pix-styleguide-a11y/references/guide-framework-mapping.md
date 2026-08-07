@@ -70,7 +70,7 @@ When generating or reviewing code, **transpose** these patterns into the active 
 | Concept            | Syntax                                                                                    |
 | :----------------- | :---------------------------------------------------------------------------------------- |
 | State binding      | `.ariaExpanded=${this.isOpen}` or `?aria-hidden=${this.isHidden}`                         |
-| Shadow DOM caution | `aria-controls` / `aria-describedby` IDs do not cross Shadow DOM — use `ElementInternals` |
+| Shadow DOM caution | `aria-controls` / `aria-describedby` IDs do not cross Shadow DOM - use `ElementInternals` |
 
 ```js
 html`<button .ariaPressed=${this.isActive} @click=${this.toggle}>Toggle</button>`;

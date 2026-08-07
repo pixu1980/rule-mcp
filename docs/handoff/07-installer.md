@@ -1,83 +1,83 @@
-# Handoff Fase 7 — Installer, uninstaller, configurazioni
+# Handoff Phase 7 - Installer, uninstaller, configurations
 
-**Per:** deepseek-v4-flash  
-**Da:** gpt-5.6-sol (audit + remediation fasi 1-6)  
-**Data:** 2026-07-15  
-**File interessati:** `src/cli/install.js`, `src/cli/skills-install.js`, `scripts/install.sh`
-
----
-
-## Contesto (cosa è già stato risolto)
-
-Nelle fasi 1-6 sono stati corretti: file-system safety, SSE auth, MCP protocol, build/CI, guardrail parser, router domain-aware, gateway deterministico, template conformi.
-
-**NON è stato toccato l'installer.** Tutti i bug riportati nell'audit sono ancora presenti.
+**To:** deepseek-v4-flash  
+**From:** gpt-5.6-sol (audit + remediation phases 1-6)  
+**Date:** 2026-07-15  
+**Files affected:** `src/cli/install.js`, `src/cli/skills-install.js`, `scripts/install.sh`
 
 ---
 
-## Cosa fare
+## Context (what was already resolved)
 
-### 7.1 — Installer lossless e idempotente (`src/cli/install.js`)
+In phases 1-6 the following were fixed: file-system safety, SSE auth, MCP protocol, build/CI, guardrail parser, domain-aware router, deterministic gateway, compliant templates.
 
-**Problema:** `parseJson()` a riga 137 trasforma JSON malformato in `{}`, cancellando silenziosamente la configurazione utente. `backupFile()` esiste ma non viene mai chiamato.
+**The installer was NOT touched.** All bugs reported in the audit are still present.
+
+---
+
+## What to do
+
+### 7.1 - Lossless and idempotent installer (`src/cli/install.js`)
+
+**Problem:** `parseJson()` at line 137 transforms malformed JSON into `{}`, silently wiping user configuration. `backupFile()` exists but is never called.
 
 **Fix:**
 
 ```js
-// src/cli/install.js — parseJson deve fallire, non restituire {}
+// src/cli/install.js - parseJson must fail, not return {}
 const parseJson = (text) => {
   try {
     return JSON.parse(text);
   } catch {
     return null;
-  } // null = errore
+  } // null = error
 };
 
-// Ogni upsert deve:
-// 1. Fare backup prima di scrivere: backupFile(file)
-// 2. Scrivere atomicamente: writeFileSync(tmp) + renameSync(tmp, target)
-// 3. Se parseJson restituisce null, ABORTIRE con errore, non sovrascrivere
+// Every upsert must:
+// 1. Backup before writing: backupFile(file)
+// 2. Write atomically: writeFileSync(tmp) + renameSync(tmp, target)
+// 3. If parseJson returns null, ABORT with error, don't overwrite
 ```
 
-**Verifica:** `pnpm test` + test manuale: `node bin/rule-mcp.js install --agent claude --force --dry-run` non deve corrompere file corrotti.
+**Verification:** `pnpm test` + manual test: `node bin/rule-mcp.js install --agent claude --force --dry-run` must not corrupt corrupted files.
 
-### 7.2 — `skills install --all` non-interattivo (`src/cli/skills-install.js`)
+### 7.2 - `skills install --all` non-interactive (`src/cli/skills-install.js`)
 
-**Problema:** `--all` chiama `setRawMode()` anche quando stdin non è TTY → crash. `copySkill()` duplica i path perché `parentPath` è già assoluto su Node 24.
+**Problem:** `--all` calls `setRawMode()` even when stdin is not a TTY → crash. `copySkill()` duplicates paths because `parentPath` is already absolute on Node 24.
 
 **Fix:**
 
 ```js
-// Se !process.stdin.isTTY && selectAll → installazione batch, no UI
-// copySkill: usare entry.parentPath ?? source (parentPath è già assoluto)
+// If !process.stdin.isTTY && selectAll → batch install, no UI
+// copySkill: use entry.parentPath ?? source (parentPath is already absolute)
 ```
 
-### 7.3 — Rimuovere raccolta API key dall'installer shell (`scripts/install.sh`)
+### 7.3 - Remove API key collection from shell installer (`scripts/install.sh`)
 
-**Problema:** L'installer shell raccoglie API key OpenAI/Anthropic, le scrive in `.bashrc`/`.zshrc` senza escaping, e salva copia in `~/.config/rule-mcp/openai-key` senza `chmod 600`.
+**Problem:** The shell installer collects OpenAI/Anthropic API keys, writes them to `.bashrc`/`.zshrc` without escaping, and saves a copy in `~/.config/rule-mcp/openai-key` without `chmod 600`.
 
-**Fix:** Rimuovere completamente la Phase 5 (Model Provider Configuration) da `scripts/install.sh`. Il server MCP non usa chiavi API. Se servono per l'utente, usare `read -s` (silent) e keychain.
+**Fix:** Completely remove Phase 5 (Model Provider Configuration) from `scripts/install.sh`. The MCP server doesn't use API keys. If needed by the user, use `read -s` (silent) and keychain.
 
-### 7.4 — Uninstaller path matching (`src/cli/uninstall.js`, `src/cli/install.js`)
+### 7.4 - Uninstaller path matching (`src/cli/uninstall.js`, `src/cli/install.js`)
 
-**Problema:** L'uninstaller usa mapping generici che non coincidono con i path/config speciali usati dall'installer (es. VS Code usa `servers` non `mcpServers`, Codex ha path diversi).
+**Problem:** The uninstaller uses generic mappings that don't match the special paths/configs used by the installer (e.g. VS Code uses `servers` not `mcpServers`, Codex has different paths).
 
-**Fix:** Verificare che ogni agente abbia install/uninstall/test round-trip coerente. I 23 agenti devono sopravvivere a `install → reinstall → uninstall` senza perdere configurazioni preesistenti.
+**Fix:** Verify that every agent has a consistent install/uninstall/test round-trip. All 23 agents must survive `install → reinstall → uninstall` without losing pre-existing configurations.
 
 ---
 
-## Comandi di verifica
+## Verification commands
 
 ```bash
 # Smoke test
 pnpm test
 
-# Installer test (esistente)
+# Installer test (existing)
 node test/agent-commands-install.test.mjs
 
-# Test round-trip manuale per ogni agente
+# Manual round-trip test for each agent
 node bin/rule-mcp.js install --agent claude --force
-node bin/rule-mcp.js install --agent claude --force  # reinstall idempotente
+node bin/rule-mcp.js install --agent claude --force  # idempotent reinstall
 node bin/rule-mcp.js uninstall --agent claude
 ```
 
@@ -85,7 +85,7 @@ node bin/rule-mcp.js uninstall --agent claude
 
 ## Pitfalls
 
-- Non toccare `src/cli/install.js` funzioni `installPi`, `installCodex` — sono usate dall'installer automatico
-- `backupFile` restituisce il path del backup, non scrive automaticamente
-- Su macOS, `~/.claude.json` è il file config di Claude Desktop, non Claude Code
-- L'installer `--global` richiede `rule-mcp` installato globalmente
+- Don't touch `src/cli/install.js` functions `installPi`, `installCodex` - they're used by the auto-installer
+- `backupFile` returns the backup path, doesn't write automatically
+- On macOS, `~/.claude.json` is Claude Desktop's config file, not Claude Code
+- The `--global` installer requires `rule-mcp` installed globally

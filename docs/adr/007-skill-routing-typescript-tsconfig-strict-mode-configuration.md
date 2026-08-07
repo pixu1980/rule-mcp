@@ -17,4 +17,4 @@ Use `rule-toolchain-typescript` for this task.
 
 ## Consequences
 
-None — informational entry.
+None - informational entry.

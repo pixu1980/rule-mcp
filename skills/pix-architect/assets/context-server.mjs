@@ -29,7 +29,7 @@ export const BIND_HOST = "127.0.0.1";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ASSETS = join(__dirname, "context-server");
 // Shared UI (index.html, interview.js, interview.css) lives once in the
-// canonical rule-architect-web/ dir and is served BY PATH from here —
+// canonical rule-architect-web/ dir and is served BY PATH from here -
 // not via symlink, which `pnpm pack` drops from published tarballs.
 // __dirname is skills/rule-architect/assets; rule-architect-web/ is a
 // sibling of rule-architect/, i.e. two levels up then back down.
@@ -79,14 +79,14 @@ export function createServer(targetDir) {
 
     // Same-origin enforcement. Loopback binding and absent CORS headers stop a
     // hostile page from READING these endpoints, not from sending a simple
-    // cross-origin POST — and /api/generate writes files, so the request itself
+    // cross-origin POST - and /api/generate writes files, so the request itself
     // is the attack. Origin / Sec-Fetch-Site / Host are browser-set and cannot
     // be forged by page script.
     if (url.pathname.startsWith("/api/") && denyForeignRequest(req, res, { port: server.address()?.port })) {
       return;
     }
 
-    // API: GET /api/placeholders — backward compat (flatten optionGroups to top level)
+    // API: GET /api/placeholders - backward compat (flatten optionGroups to top level)
     if (req.method === "GET" && url.pathname === "/api/placeholders") {
       const tiers = [
         { key: "starter", label: "Starter", description: "Domain Sketch + Tech Stack. 30 minutes." },
@@ -98,7 +98,7 @@ export function createServer(targetDir) {
       return res.end(JSON.stringify(compat));
     }
 
-    // API: GET /api/templates — return template list
+    // API: GET /api/templates - return template list
     if (req.method === "GET" && url.pathname === "/api/templates") {
       const summary = templates.map((t) => ({
         path: t.output || t.path.replace(/^templates\//, ""),
@@ -109,14 +109,14 @@ export function createServer(targetDir) {
       return res.end(JSON.stringify(summary));
     }
 
-    // API: GET /api/init-values — detect project values to pre-fill
+    // API: GET /api/init-values - detect project values to pre-fill
     if (req.method === "GET" && url.pathname === "/api/init-values") {
       const initValues = detectProjectValues(targetDir);
       res.writeHead(200, { "Content-Type": "application/json" });
       return res.end(JSON.stringify(initValues));
     }
 
-    // API: POST /api/generate — generate .context from submitted values
+    // API: POST /api/generate - generate .context from submitted values
     if (req.method === "POST" && url.pathname === "/api/generate") {
       collectBody(req)
         .then((body) => {
@@ -136,7 +136,7 @@ export function createServer(targetDir) {
               summary:
                 `Generated ${ctxCount} files in .context/ and ${rootWritten} agent entry files at the project root` +
                 (skipped.length
-                  ? ` (${skipped.length} existing root file(s) left untouched — pass force:true to overwrite)`
+                  ? ` (${skipped.length} existing root file(s) left untouched - pass force:true to overwrite)`
                   : ""),
             }),
           );
@@ -148,7 +148,7 @@ export function createServer(targetDir) {
       return;
     }
 
-    // API: POST /api/download — return file contents as JSON (no disk write)
+    // API: POST /api/download - return file contents as JSON (no disk write)
     if (req.method === "POST" && url.pathname === "/api/download") {
       collectBody(req)
         .then((body) => {
@@ -166,8 +166,8 @@ export function createServer(targetDir) {
 
     // Serve static files. The shared UI files (index.html, interview.js,
     // interview.css) are resolved from WEB_UI (the canonical
-    // rule-architect-web/ dir); everything else — notably /core/*, which
-    // the served interview.js imports via "./core/index.js" — resolves from
+    // rule-architect-web/ dir); everything else - notably /core/*, which
+    // the served interview.js imports via "./core/index.js" - resolves from
     // ASSETS, context-server's own real core/ implementation.
     const pathname = url.pathname === "/" ? "/index.html" : url.pathname;
     const basename = pathname.slice(pathname.lastIndexOf("/") + 1);
@@ -209,7 +209,7 @@ function extname(p) {
   return i >= 0 ? p.slice(i).toLowerCase() : "";
 }
 
-/** Main entry — only when run directly, so importing the module (tests) never
+/** Main entry - only when run directly, so importing the module (tests) never
  * starts a listener and leaks an open handle. */
 const isMain = process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url);
 

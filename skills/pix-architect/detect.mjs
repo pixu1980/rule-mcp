@@ -1,12 +1,12 @@
-// rule-architect detect — project value detection engine
+// rule-architect detect - project value detection engine
 // Pure logic, no DOM, no server. Used by both rule-architect-web and
 // rule-architect's context-server to pre-fill the interview wizard.
 //
 // PRINCIPLE: DETECT OR STAY SILENT. Only emit a value we can actually infer
 // from the project's own files. This detector used to invent ~27 fixed
 // TTRPG/Electron values (AUTH_MECHANISM, DEPLOY_TARGET, MVP_STEP_*, PERSONA_*,
-// hardcoded personas/user-stories/features) for EVERY project — even an empty
-// one — because the architect was prototyped against one specific desktop app
+// hardcoded personas/user-stories/features) for EVERY project - even an empty
+// one - because the architect was prototyped against one specific desktop app
 // and that seed data was never genericized. The result: a React SaaS was
 // pre-filled as "pure vanilla JavaScript / Electron desktop", contradicting
 // the user's own answers. A minimal prefill the user completes always beats a
@@ -55,7 +55,7 @@ export function detectProjectValues(projectDir) {
         values.PROJECT_NAME = pkg.name.trim();
       }
     } catch {
-      // malformed package.json — fall through to the doc/dir fallbacks
+      // malformed package.json - fall through to the doc/dir fallbacks
     }
   }
 
@@ -70,7 +70,7 @@ export function detectProjectValues(projectDir) {
           break;
         }
       } catch {
-        // unreadable doc — try the next candidate
+        // unreadable doc - try the next candidate
       }
     }
   }

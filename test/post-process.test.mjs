@@ -44,7 +44,7 @@ try {
   try {
     postProcessFiles([{ path: evilName, status: "written", absPath: evilAbs }]);
   } catch {
-    /* prettier may reject the file — irrelevant to the security assertion */
+    /* prettier may reject the file - irrelevant to the security assertion */
   }
   process.chdir(origCwd);
 

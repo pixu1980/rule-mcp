@@ -16,7 +16,7 @@ tags:
 frameworks: [all]
 ---
 
-# rule-data-duckdb — DuckDB 1.x Best Practices & Scripts
+# rule-data-duckdb - DuckDB 1.x Best Practices & Scripts
 
 ## Table of Contents
 
@@ -230,5 +230,5 @@ DETACH analytics;
 
 ## See also
 
-- [rule-data-sql](../rule-data-sql/SKILL.md) — SQL fundamentals
-- [rule-data-postgresql](../rule-data-postgresql/SKILL.md) — PostgreSQL reference
+- [rule-data-sql](../rule-data-sql/SKILL.md) - SQL fundamentals
+- [rule-data-postgresql](../rule-data-postgresql/SKILL.md) - PostgreSQL reference

@@ -8,18 +8,18 @@ tags:
 frameworks: [astro]
 ---
 
-# rule-frontend-astro — Astro with rule Principles
+# rule-frontend-astro - Astro with rule Principles
 
 This skill adapts [rule-styleguide](../rule-styleguide/SKILL.md) and
 [rule-frontend-vanilla-reactive](../rule-frontend-vanilla-reactive/SKILL.md) to **Astro** (islands architecture).
 
 ## Core Rules (inherited from rule skills)
 
-1. **Zero CSS classes** — only element selectors + `[data-part="..."]` + `[data-*]`
-2. **Zero inline styles** — external `.css` files via `adoptedStyleSheets` or `<style>` in `.astro`
-3. **Semantic HTML is mandatory** — never `<div>` where a semantic element exists
-4. **Barrel pattern** — every component folder has `index.js`
-5. **Minimal client JS** — Astro islands with `client:load` / `client:idle` only where needed
+1. **Zero CSS classes** - only element selectors + `[data-part="..."]` + `[data-*]`
+2. **Zero inline styles** - external `.css` files via `adoptedStyleSheets` or `<style>` in `.astro`
+3. **Semantic HTML is mandatory** - never `<div>` where a semantic element exists
+4. **Barrel pattern** - every component folder has `index.js`
+5. **Minimal client JS** - Astro islands with `client:load` / `client:idle` only where needed
 
 ## File Tree Convention
 
@@ -113,7 +113,7 @@ import "./_InteractiveTodoItem.css";
 
 ```js
 // _InteractiveTodoItem.client.js
-// Vanilla JS — no React/Vue needed for simple interactions
+// Vanilla JS - no React/Vue needed for simple interactions
 document.querySelectorAll("[data-part='delete']").forEach((btn) => {
   btn.addEventListener("click", () => {
     const item = btn.closest("[data-part='item']");
@@ -136,7 +136,7 @@ document.querySelectorAll("[data-part='delete']").forEach((btn) => {
 
 ## CSS in Astro
 
-Astro `<style>` tags are **scoped by default** — this is acceptable.
+Astro `<style>` tags are **scoped by default** - this is acceptable.
 For shared styles, use `adoptedStyleSheets` or `@import` in a global stylesheet.
 
 ```astro
@@ -170,9 +170,9 @@ Run `pix_frontend_astro` mode=check or `pix_check` to validate code against thes
 Key rules enforced: **no-css-classes**, **no-inline-styles**, **semantic-html**,
 **external-css** (Astro `<style>` scoped blocks or external CSS imports),
 **barrel-file**, **data-part**,
-**jsdoc-required** (every JS/TS file MUST have complete JSDoc — see rule-styleguide → javascript.md),
-**css-comments-required** (every CSS file MUST have file-level + section comments — see rule-styleguide → css.md),
-**a11y-test-required** (every project MUST have Playwright + @axe-core/playwright a11y tests in `tests/a11y/` — see rule-styleguide → a11y.md → Automated Testing).
+**jsdoc-required** (every JS/TS file MUST have complete JSDoc - see rule-styleguide → javascript.md),
+**css-comments-required** (every CSS file MUST have file-level + section comments - see rule-styleguide → css.md),
+**a11y-test-required** (every project MUST have Playwright + @axe-core/playwright a11y tests in `tests/a11y/` - see rule-styleguide → a11y.md → Automated Testing).
 
 ## Project Scaffolding
 
@@ -202,9 +202,9 @@ This section extends rule-frontend-astro with a structured performance review me
 
 1. **Zero JS by default** is Astro's superpower. Every byte of client JS must be justified.
 
-2. **Islands architecture** — interactive components are isolated. A client island loads only its own JS, not the entire page.
+2. **Islands architecture** - interactive components are isolated. A client island loads only its own JS, not the entire page.
 
-3. **Choose the right client directive.** `client:load` is the heaviest — use it sparingly.
+3. **Choose the right client directive.** `client:load` is the heaviest - use it sparingly.
 
 4. **Prefetch is free.** `data-astro-prefetch` gives SPA-like navigation without a framework.
 
@@ -225,7 +225,7 @@ This section extends rule-frontend-astro with a structured performance review me
 
 | Directive        | When                                              | Cost                    |
 | ---------------- | ------------------------------------------------- | ----------------------- |
-| `client:load`    | Immediately needed on page load                   | Highest — loads eagerly |
+| `client:load`    | Immediately needed on page load                   | Highest - loads eagerly |
 | `client:idle`    | Not urgent, load when browser is idle             | Medium                  |
 | `client:visible` | Below the fold, load when scrolled into view      | Low                     |
 | `client:media`   | Responsive component only on certain screen sizes | Low                     |
@@ -244,7 +244,7 @@ Rule: _Start with the least aggressive directive. Upgrade only when needed._
 
 #### 2. Islands should be small and focused
 
-An island is the unit of client JS. Make islands small — extract only the interactive part.
+An island is the unit of client JS. Make islands small - extract only the interactive part.
 
 ```astro
 <!-- ❌ Whole page as an island -->
@@ -346,7 +346,7 @@ export const prerender = false;
 
 Rule: _SSG by default. SSR only when you need per-request dynamic data._
 
-#### 7. Minimize framework islands — prefer vanilla JS or web components
+#### 7. Minimize framework islands - prefer vanilla JS or web components
 
 Each framework island (React, Vue, Svelte, SolidJS) loads that framework's runtime.
 
@@ -354,7 +354,7 @@ Each framework island (React, Vue, Svelte, SolidJS) loads that framework's runti
 <!-- ❌ React island for a simple counter (loads React runtime) -->
 <Counter client:load />
 
-<!-- ✅ Vanilla JS or web component — no framework overhead -->
+<!-- ✅ Vanilla JS or web component - no framework overhead -->
 <script>
   class Counter extends HTMLElement {
     // ...
@@ -371,7 +371,7 @@ Nested layouts avoid repeating HTML structure and enable efficient CSS sharing.
 
 ```astro
 ---
-// src/layouts/_BaseLayout.astro — global shell
+// src/layouts/_BaseLayout.astro - global shell
 import { ViewTransitions } from "astro:transitions";
 ---
 <!doctype html>
@@ -385,7 +385,7 @@ import { ViewTransitions } from "astro:transitions";
 
 ```astro
 ---
-// src/layouts/_BlogLayout.astro — blog-specific
+// src/layouts/_BlogLayout.astro - blog-specific
 import BaseLayout from "./_BaseLayout.astro";
 ---
 <BaseLayout>
@@ -518,6 +518,6 @@ import { actions } from "astro:actions";
 
 ## See also
 
-- [rule](../rule/SKILL.md) — Central skill index and dispatcher
-- [rule-frontend](../rule-frontend/SKILL.md) — Frontend skill index
-- [rule-styleguide](../rule-styleguide/SKILL.md) — Shared frontend standards
+- [rule](../rule/SKILL.md) - Central skill index and dispatcher
+- [rule-frontend](../rule-frontend/SKILL.md) - Frontend skill index
+- [rule-styleguide](../rule-styleguide/SKILL.md) - Shared frontend standards

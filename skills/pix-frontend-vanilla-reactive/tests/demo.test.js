@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════════════════════════════
-//  rule-vanilla-reactive — Playwright test suite
+//  rule-vanilla-reactive - Playwright test suite
 //  Run:  cd ~/.agents/skills/rule-vanilla-reactive/tests
 //  Server: cd examples && node ... serving src/
 // ═══════════════════════════════════════════════════════════════════════════════
@@ -108,7 +108,7 @@ test.describe("rule-vanilla-reactive demo", () => {
   });
 
   // ═══════════════════════════════════════════════════════════════════════════
-  //  @submit — form
+  //  @submit - form
   // ═══════════════════════════════════════════════════════════════════════════
 
   test("@submit adds todo", async ({ page }) => {
@@ -136,7 +136,7 @@ test.describe("rule-vanilla-reactive demo", () => {
   });
 
   // ═══════════════════════════════════════════════════════════════════════════
-  //  @click — filter buttons
+  //  @click - filter buttons
   // ═══════════════════════════════════════════════════════════════════════════
 
   test("@click filter Done hides open", async ({ page }) => {
@@ -162,7 +162,7 @@ test.describe("rule-vanilla-reactive demo", () => {
   });
 
   // ═══════════════════════════════════════════════════════════════════════════
-  //  model= — two-way binding
+  //  model= - two-way binding
   // ═══════════════════════════════════════════════════════════════════════════
 
   test("model checkbox toggle updates stats", async ({ page }) => {
@@ -185,7 +185,7 @@ test.describe("rule-vanilla-reactive demo", () => {
   });
 
   // ═══════════════════════════════════════════════════════════════════════════
-  //  @click — delete button
+  //  @click - delete button
   // ═══════════════════════════════════════════════════════════════════════════
 
   test("delete button removes item", async ({ page }) => {

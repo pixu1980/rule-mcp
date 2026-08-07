@@ -20,7 +20,7 @@ frameworks: [all]
 
 - Prefer `const` and `let` over `var`. Use `const` until the code really requires `let`.
 - Favor pure functions for core logic. Ensure functions do not mutate data they are called with.
-- Keep functions small and focused — one function, one responsibility.
+- Keep functions small and focused - one function, one responsibility.
 
 ## Naming and conventions
 
@@ -92,7 +92,7 @@ const add = function (a, b) {
 - Only work with the data you need.
 - Always use `===`. Triple equals checks value and type.
 - Avoid global variables unless you are creating a library.
-- Always initialize declarations. Never set `undefined` explicitly — use `null` instead.
+- Always initialize declarations. Never set `undefined` explicitly - use `null` instead.
 - Use default values when possible.
 
 ## Control flow
@@ -159,7 +159,7 @@ async function fetchData(url) {
 
 ## Loops and iteration
 
-- Prefer `for...of` over `.forEach()` — always. `for...of` gives better TypeScript narrowing, lets you `await` directly, and supports `break`/`continue` (none of which work cleanly inside a `.forEach()` callback).
+- Prefer `for...of` over `.forEach()` - always. `for...of` gives better TypeScript narrowing, lets you `await` directly, and supports `break`/`continue` (none of which work cleanly inside a `.forEach()` callback).
 - Use `for...of` for iterating values. Avoid `for...in`.
 - Avoid nesting or chaining loops when possible.
 - For membership checks inside a loop, prefer `Set.prototype.has()` over `Array.prototype.includes()`: `.includes()` rescans the whole array per call (O(n²) in a loop), while `Set.has()` is roughly constant-time.
@@ -184,7 +184,7 @@ const greeting = `Hello, ${name}!`;
 
 - Be specific in checks. Don't rely on truthy/falsy for edge cases.
 - Prefer ternary over logical `||` and `&&` for value selection.
-- Prefer a ternary over a simple `if/else` that only returns or assigns a value — it avoids `let` and lets `prefer-const` flag the variable.
+- Prefer a ternary over a simple `if/else` that only returns or assigns a value - it avoids `let` and lets `prefer-const` flag the variable.
 
 ```js
 // PREFERRED
@@ -217,7 +217,7 @@ These are the correctness and performance idioms rule expects in every JS/TS fil
 | Builtin constructors    | `const cache = Map()`                              | `const cache = new Map()`                  | `new` required for `Map`/`Set`/`Date`/`Array`/`WeakMap`/`WeakSet` (`String`/`Number`/`Boolean`/`Symbol`/`BigInt` are exempt) |
 | Regex                   | `/[0-9]/`                                          | `/\d/`                                     | Shorter, consistent                                                                                                          |
 
-> Tuning: `prevent-abbreviations`, `no-null`, `no-array-reduce`, and `filename-case` are opinionated — scope them per project (`warn` or `ignore` options) instead of fighting the codebase.
+> Tuning: `prevent-abbreviations`, `no-null`, `no-array-reduce`, and `filename-case` are opinionated - scope them per project (`warn` or `ignore` options) instead of fighting the codebase.
 
 ## Types and safety
 
@@ -284,7 +284,7 @@ class MyComponent extends HTMLElement {
 - IIFE is useful for early setup before the rest of the code runs.
 - Turn repeated logic into small generic utility functions.
 
-## Documentation — JSDoc (MANDATORY)
+## Documentation - JSDoc (MANDATORY)
 
 > **Every JS/TS file MUST have complete JSDoc.** No exceptions.
 > This rule is enforced by rule guardrails (`pix_check` includes `jsdoc-required`).
@@ -304,9 +304,9 @@ class MyComponent extends HTMLElement {
  * Brief description of what this does. Start with a verb.
  * Use a second paragraph for additional context if needed.
  *
- * @param {Type} paramName — Description of param
- * @param {Type} [optionalParam] — Description with default
- * @returns {Type} — Description of return value
+ * @param {Type} paramName - Description of param
+ * @param {Type} [optionalParam] - Description with default
+ * @returns {Type} - Description of return value
  */
 export function myFunction(paramName, optionalParam = "default") {
   // ...
@@ -350,9 +350,9 @@ export function TodoItem({ todo, onToggle, onDelete }) {
  * Custom element for rendering a todo item.
  * Uses adoptedStyleSheets for styling, data-part selectors for children.
  *
- * @attr {boolean} completed — Whether the todo is done
- * @attr {string} todo-id — Unique identifier
- * @fires toggle — When checkbox changes
+ * @attr {boolean} completed - Whether the todo is done
+ * @attr {string} todo-id - Unique identifier
+ * @fires toggle - When checkbox changes
  */
 export class TodoItem extends HTMLElement {
   // ...
@@ -378,7 +378,7 @@ function formatDate(date) { ... }
 
 For CSS file documentation rules, see [`css.md`][rule-styleguide-css](../rule-styleguide-css/SKILL.md) → Documentation section.
 
-## Testing — Playwright + axe-core (MANDATORY)
+## Testing - Playwright + axe-core (MANDATORY)
 
 > **Every project MUST have automated tests using Playwright, with mandatory a11y coverage via @axe-core/playwright.**
 > No exceptions. CI MUST fail on a11y violations.
@@ -435,7 +435,7 @@ export default defineConfig({
 
 ### Required a11y Tests
 
-**`tests/a11y/_basic.spec.js`** — page-level structure:
+**`tests/a11y/_basic.spec.js`** - page-level structure:
 
 ```js
 import { test, expect } from "@playwright/test";
@@ -475,7 +475,7 @@ test.describe("A11y: basic page structure", () => {
 });
 ```
 
-**`tests/a11y/_forms.spec.js`** — form a11y:
+**`tests/a11y/_forms.spec.js`** - form a11y:
 
 ```js
 import { test, expect } from "@playwright/test";
@@ -493,7 +493,7 @@ test.describe("A11y: forms", () => {
 });
 ```
 
-**`tests/a11y/_components.spec.js`** — component-level (shadow DOM):
+**`tests/a11y/_components.spec.js`** - component-level (shadow DOM):
 
 ```js
 import { test, expect } from "@playwright/test";
@@ -585,5 +585,5 @@ new AxeBuilder({ page }).withTags(["wcag2aa", "wcag21aa", "wcag22aa"]).analyze()
 
 ## See also
 
-- [rule-styleguide](../rule-styleguide/SKILL.md) — Style guides index
-- [rule](../rule/SKILL.md) — Central skill index
+- [rule-styleguide](../rule-styleguide/SKILL.md) - Style guides index
+- [rule](../rule/SKILL.md) - Central skill index

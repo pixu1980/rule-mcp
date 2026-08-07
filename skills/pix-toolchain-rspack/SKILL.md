@@ -11,7 +11,7 @@ tags:
 frameworks: [all]
 ---
 
-# rule-toolchain-rspack — Rspack Build Toolchain
+# rule-toolchain-rspack - Rspack Build Toolchain
 
 ## Overview
 
@@ -60,9 +60,9 @@ export default defineConfig({
 
 If `@rspack/cli` is installed:
 
-- `rspack dev` — local development server with HMR
-- `rspack build` — production build
-- `rspack preview` — local production preview
+- `rspack dev` - local development server with HMR
+- `rspack build` - production build
+- `rspack preview` - local production preview
 
 ## CSS Strategy
 
@@ -84,14 +84,14 @@ experiments: {
 
 This enables native CSS handling without extra loaders. Supports:
 
-- `type: "css"` — global CSS
-- `type: "css/auto"` — auto-detect CSS modules via `*.module.css`
-- `type: "css/module"` — CSS Modules
+- `type: "css"` - global CSS
+- `type: "css/auto"` - auto-detect CSS modules via `*.module.css`
+- `type: "css/module"` - CSS Modules
 
 Optional enhancements:
 
-- `builtin:lightningcss-loader` — syntax downgrade + vendor prefixing
-- `sass-loader` / `less-loader` — Sass/Less preprocessing
+- `builtin:lightningcss-loader` - syntax downgrade + vendor prefixing
+- `sass-loader` / `less-loader` - Sass/Less preprocessing
 - If using Tailwind CSS: use `@tailwindcss/vite` or PostCSS plugin with `postcss-loader`
 
 ## Bundle Optimization
@@ -145,7 +145,7 @@ optimization: {
 
 ### Key rules
 
-1. `splitChunks` only changes chunk topology — it does NOT affect JS execution order or tree shaking
+1. `splitChunks` only changes chunk topology - it does NOT affect JS execution order or tree shaking
 2. `maxSize` is safer than broad manual vendor buckets for reducing chunk size
 3. Keep default cache groups (`default`, `defaultVendors`) unless there's a concrete reason to replace them
 4. `chunks: "all"` deduplicates across both initial and async chunks without loading unnecessary modules
@@ -198,8 +198,8 @@ RSPACK_PROFILE=TRACE RSPACK_TRACE_LAYER=logger RSPACK_TRACE_OUTPUT=./trace.json 
 
 ## See also
 
-- [rule-toolchain-vite](../rule-toolchain-vite/SKILL.md) — Vite build tool (alternative bundler)
-- [rule-toolchain-parcel](../rule-toolchain-parcel/SKILL.md) — Parcel zero-config bundler
-- [rule-toolchain-pnpm](../rule-toolchain-pnpm/SKILL.md) — Package management
-- [rule-toolchain-typescript](../rule-toolchain-typescript/SKILL.md) — TypeScript config
-- [rule](../rule/SKILL.md) — Central skill index
+- [rule-toolchain-vite](../rule-toolchain-vite/SKILL.md) - Vite build tool (alternative bundler)
+- [rule-toolchain-parcel](../rule-toolchain-parcel/SKILL.md) - Parcel zero-config bundler
+- [rule-toolchain-pnpm](../rule-toolchain-pnpm/SKILL.md) - Package management
+- [rule-toolchain-typescript](../rule-toolchain-typescript/SKILL.md) - TypeScript config
+- [rule](../rule/SKILL.md) - Central skill index

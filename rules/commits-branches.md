@@ -4,13 +4,13 @@
 
 Use the following prefixes:
 
-- `feat/` — New feature
-- `fix/` — Bug fix
-- `refactor/` — Code refactoring without behavior change
-- `chore/` — Tooling, dependencies, CI changes
-- `docs/` — Documentation only
-- `test/` — Adding or updating tests
-- `hotfix/` — Urgent production fix
+- `feat/` - New feature
+- `fix/` - Bug fix
+- `refactor/` - Code refactoring without behavior change
+- `chore/` - Tooling, dependencies, CI changes
+- `docs/` - Documentation only
+- `test/` - Adding or updating tests
+- `hotfix/` - Urgent production fix
 
 Format: `<prefix>/<short-kebab-description>`
 

@@ -188,8 +188,8 @@ A task is complete when:
 
 ## See also
 
-- [rule-frontend-custom-element](../rule-frontend-custom-element/SKILL.md) — renders component templates via the tagged runtime
-- [rule-frontend-vanilla-reactive](../rule-frontend-vanilla-reactive/SKILL.md) — reactive client-side engine (`html`/`render`/signals) for DOM
-- [rule-styleguide-html](../rule-styleguide-html/SKILL.md) — semantic HTML conventions
-- [rule-frontend](../rule-frontend/SKILL.md) — frontend skill index
-- [rule](../rule/SKILL.md) — central skill index
+- [rule-frontend-custom-element](../rule-frontend-custom-element/SKILL.md) - renders component templates via the tagged runtime
+- [rule-frontend-vanilla-reactive](../rule-frontend-vanilla-reactive/SKILL.md) - reactive client-side engine (`html`/`render`/signals) for DOM
+- [rule-styleguide-html](../rule-styleguide-html/SKILL.md) - semantic HTML conventions
+- [rule-frontend](../rule-frontend/SKILL.md) - frontend skill index
+- [rule](../rule/SKILL.md) - central skill index

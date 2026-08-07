@@ -95,7 +95,7 @@ test("handoff command drives atomic scoped commits, a separate docs commit, and 
 });
 
 test("handoff command persists the generated handoff and commits it on its own", () => {
-  // A handoff that only ever exists in the chat is lost when the session ends —
+  // A handoff that only ever exists in the chat is lost when the session ends -
   // the next session has to reconstruct it from git log and ADRs.
   const body = listAgentCommands().find((c) => c.name === "rule-handoff").body;
   assert.match(body, /docs\/handoff\//, "must say where the handoff file is written");
@@ -105,7 +105,7 @@ test("handoff command persists the generated handoff and commits it on its own",
 
 test(
   "the MCP handoff prompt persists the handoff too",
-  { skip: "target has a minimal prompt registry — port prompts separately" },
+  { skip: "target has a minimal prompt registry - port prompts separately" },
   async () => {
     // Hosts that use the MCP prompt instead of the generated user command must get
     // the same instruction, or the behaviour depends on the client.

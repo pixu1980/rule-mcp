@@ -459,7 +459,7 @@ export const FILE_TREE_GUARDRAILS = [
         };
       }
 
-      // _store.js, _data.js, _config.js — data helpers are snake_case, not components
+      // _store.js, _data.js, _config.js - data helpers are snake_case, not components
       if (/^_[a-z][a-z_-]*\.js$/.test(fileName)) {
         return {
           pass: true,
@@ -798,7 +798,7 @@ export const JS_GUARDRAILS = [
     check: (code) => {
       const issues = [];
       if (!code.includes("class ")) {
-        return { pass: true, note: "Not a class — skipping" };
+        return { pass: true, note: "Not a class - skipping" };
       }
       const lines = code.split("\n");
       for (let index = 0; index < lines.length - 1; index++) {
@@ -973,7 +973,7 @@ export const JS_GUARDRAILS = [
     id: "js-prefer-set-has",
     label: "Set.has() over Array.includes() inside loops",
     description:
-      "Array.prototype.includes() inside a loop or iteration callback (for/filter/map/some/every/find) is O(n) per call — O(n²) total. Build a Set once and use Set.prototype.has() for O(1) membership.",
+      "Array.prototype.includes() inside a loop or iteration callback (for/filter/map/some/every/find) is O(n) per call - O(n²) total. Build a Set once and use Set.prototype.has() for O(1) membership.",
     check: (code) => {
       const violations = [];
       const arrayNames = [...code.matchAll(/const\s+(\w+)\s*=\s*\[/g)].map((m) => m[1]);
@@ -1125,7 +1125,7 @@ export const VANILLA_REACTIVE_GUARDRAILS = [
       const hasVrComponent = /vrComponent\(/.test(code);
       const isClass = /^export\s+class\s/.test(code.trim()) || /^class\s/.test(code.trim());
       if (!isClass) {
-        return { pass: true, note: "Not a class — skipping Pattern A check" };
+        return { pass: true, note: "Not a class - skipping Pattern A check" };
       }
       if (isExtendsHtmlelement && (hasStaticBlock || hasVrComponent)) {
         return { pass: true };
@@ -1174,7 +1174,7 @@ export const VANILLA_REACTIVE_GUARDRAILS = [
     description: "Pattern A connectedCallback must check _isMounted to prevent double-mounting.",
     check: (code) => {
       if (!code.includes("connectedCallback")) {
-        return { pass: true, note: "No connectedCallback — skipping" };
+        return { pass: true, note: "No connectedCallback - skipping" };
       }
       const hasGuard = /_isMounted/.test(code) || /_pixBound/.test(code) || /bindElement/.test(code);
       if (hasGuard) {
@@ -1197,7 +1197,7 @@ export const VANILLA_REACTIVE_GUARDRAILS = [
       const hasCssFetch = /CSSStyleSheet/.test(code) && /replaceSync/.test(code) && /adoptedStyleSheets/.test(code);
       const isCe = /extends\s+HTMLElement/.test(code);
       if (!isCe) {
-        return { pass: true, note: "Not a CE — skipping" };
+        return { pass: true, note: "Not a CE - skipping" };
       }
       if (hasCssFetch) {
         return { pass: true };
@@ -1212,7 +1212,7 @@ export const VANILLA_REACTIVE_GUARDRAILS = [
             "Use: const cssText = await (await fetch(new URL('./_Comp.css', import.meta.url))).text(); const sheet = new CSSStyleSheet(); sheet.replaceSync(cssText);",
         };
       }
-      return { pass: true, note: "No CSS detected — skipping" };
+      return { pass: true, note: "No CSS detected - skipping" };
     },
   },
 
@@ -1231,7 +1231,7 @@ export const VANILLA_REACTIVE_GUARDRAILS = [
         return { pass: true, note: "This is a Pattern A (CE). Pattern B check not applicable." };
       }
       if (!isPlainFunction) {
-        return { pass: true, note: "Not a Pattern B component — skipping" };
+        return { pass: true, note: "Not a Pattern B component - skipping" };
       }
       const isReturnsHtml = /return\s+html`/.test(code);
       if (!isReturnsHtml) {
@@ -1253,7 +1253,7 @@ export const VANILLA_REACTIVE_GUARDRAILS = [
     check: (code) => {
       const isPlainFunction = /^export\s+function\s/.test(code.trim()) || /^function\s/.test(code.trim());
       if (!isPlainFunction) {
-        return { pass: true, note: "Not a functional component — skipping" };
+        return { pass: true, note: "Not a functional component - skipping" };
       }
       const hasDefine = /customElements\.define\(/.test(code);
       if (hasDefine) {
@@ -1278,7 +1278,7 @@ export const VANILLA_REACTIVE_GUARDRAILS = [
       const isTemplate = context?.fileName?.endsWith(".template.html") || false;
       const hasDollarBraces = /\${[^}]+\}/.test(code);
       if (!isTemplate && hasDollarBraces) {
-        return { pass: true, note: "Not a .template.html file — ${} is valid here" };
+        return { pass: true, note: "Not a .template.html file - ${} is valid here" };
       }
       if (isTemplate && hasDollarBraces) {
         return {
@@ -1298,7 +1298,7 @@ export const VANILLA_REACTIVE_GUARDRAILS = [
     check: (code, context) => {
       const isTemplate = context?.fileName?.endsWith(".template.html") || false;
       if (!isTemplate) {
-        return { pass: true, note: "Not a template file — skipping" };
+        return { pass: true, note: "Not a template file - skipping" };
       }
       const classAttributes = code.match(/class\s*=\s*["'][^"']*["']/g);
       const dataPart = code.match(/data-part\s*=\s*["']/g);
@@ -1322,7 +1322,7 @@ export const VANILLA_REACTIVE_GUARDRAILS = [
       const hasBundleImport = /bundle-text:/.test(code) && /\.template\.html/.test(code);
       const isCe = /extends\s+HTMLElement/.test(code);
       if (!isCe) {
-        return { pass: true, note: "Not a CE — skipping" };
+        return { pass: true, note: "Not a CE - skipping" };
       }
       const hasHtmlCall = /html\(/.test(code) && /\.template\.html/.test(code);
       if (hasHtmlCall && (hasFetch || hasBundleImport)) {
@@ -1337,7 +1337,7 @@ export const VANILLA_REACTIVE_GUARDRAILS = [
             "Add: const templateStr = await (await fetch(new URL('./_Comp.template.html', import.meta.url))).text();",
         };
       }
-      return { pass: true, note: "No Pattern C detection needed — skipping" };
+      return { pass: true, note: "No Pattern C detection needed - skipping" };
     },
   },
 ];

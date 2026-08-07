@@ -8,19 +8,19 @@ tags:
 frameworks: [angular]
 ---
 
-# rule-frontend-angular — Angular with rule Principles
+# rule-frontend-angular - Angular with rule Principles
 
 This skill adapts [rule-styleguide](../rule-styleguide/SKILL.md) and
 [rule-frontend-vanilla-reactive](../rule-frontend-vanilla-reactive/SKILL.md) to **Angular standalone components**.
 
 ## Core Rules (inherited from rule skills)
 
-1. **Zero CSS classes** — only element selectors + `[data-part="..."]` + `[data-*]`
-2. **Zero inline styles** — external `.css` files only (`styleUrls` / `@Component.styles`)
-3. **Semantic HTML is mandatory** — never `<div>` where a semantic element exists
-4. **Barrel pattern** — every component folder has `index.ts`
-5. **No Angular Material CDK Overlay inline styles** — use CSS `[data-part]` instead
-6. **Standalone components** — no NgModules, `standalone: true`
+1. **Zero CSS classes** - only element selectors + `[data-part="..."]` + `[data-*]`
+2. **Zero inline styles** - external `.css` files only (`styleUrls` / `@Component.styles`)
+3. **Semantic HTML is mandatory** - never `<div>` where a semantic element exists
+4. **Barrel pattern** - every component folder has `index.ts`
+5. **No Angular Material CDK Overlay inline styles** - use CSS `[data-part]` instead
+6. **Standalone components** - no NgModules, `standalone: true`
 
 ## File Tree Convention
 
@@ -104,10 +104,10 @@ article[data-part="item"][data-state-completed="done"] {
 | `data-part="..."`             | `data-part="..."` or `[attr.data-part]="..."` |
 | `static {}` block             | Module-level CSS via `styleUrls`              |
 
-## CSS Loading — Angular Style
+## CSS Loading - Angular Style
 
 Use Angular's native `styleUrls` in the `@Component` decorator.
-No fetch/adoptedStyleSheets needed — Angular handles scoped CSS loading.
+No fetch/adoptedStyleSheets needed - Angular handles scoped CSS loading.
 
 ```typescript
 @Component({
@@ -233,7 +233,7 @@ Rule: _Set `OnPush` on every component. Use `Default` only when you have a speci
 private dataSubject = new BehaviorSubject<Data | null>(null);
 data$ = this.dataSubject.asObservable();
 
-// ✅ Signal — simpler, zoneless-ready
+// ✅ Signal - simpler, zoneless-ready
 private dataSignal = signal<Data | null>(null);
 readonly data = this.dataSignal.asReadonly();
 ```
@@ -284,7 +284,7 @@ Rule: _Use `computed()` for derived values, not `effect()` or lifecycle hooks._
 Every subscription, interval, and event listener MUST be cleaned up.
 
 ```typescript
-// ❌ Memory leak — no unsubscribe
+// ❌ Memory leak - no unsubscribe
 this.route.params.subscribe((params) => {
   this.loadData(params.id);
 });
@@ -304,7 +304,7 @@ Rule: _Every subscription must be cleaned up. Prefer `takeUntilDestroyed` over m
 Service state persists across routes. Component-scoped state via `signal()` should be the default.
 
 ```typescript
-// ✅ Local state — scoped to component
+// ✅ Local state - scoped to component
 @Component({ standalone: true, ... })
 export class SearchComponent {
   private searchTerm = signal("");
@@ -320,7 +320,7 @@ Rule: _Local state in `signal()`, shared state in service with `signal()`, async
 Every route should be lazy-loaded. Never import everything in the root module.
 
 ```typescript
-// routes.ts — lazy by default
+// routes.ts - lazy by default
 export const routes: Routes = [
   {
     path: "admin",
@@ -374,7 +374,7 @@ Rule: _Split when different changes affect different parts._
 
 Rule: _Defer heavy, non-critical components until they are visible or idle._
 
-#### 10. Avoid `ngDoCheck` — use Signals and `computed` instead
+#### 10. Avoid `ngDoCheck` - use Signals and `computed` instead
 
 `ngDoCheck` runs on every change detection cycle. It is almost always a performance smell.
 
@@ -432,7 +432,7 @@ Rule: _If you reach for `ngDoCheck`, you are fighting the framework. Use signals
 - Use `zod` with custom validators for schema validation
 - Prefer Reactive Forms over Template-Driven Forms
 
-### Step 1 — Define form with validation
+### Step 1 - Define form with validation
 
 ```typescript
 import { Component } from "@angular/core";
@@ -489,6 +489,6 @@ export class MyFormComponent {
 
 ## See also
 
-- [rule](../rule/SKILL.md) — Central skill index and dispatcher
-- [rule-frontend](../rule-frontend/SKILL.md) — Frontend skill index
-- [rule-styleguide](../rule-styleguide/SKILL.md) — Shared frontend standards
+- [rule](../rule/SKILL.md) - Central skill index and dispatcher
+- [rule-frontend](../rule-frontend/SKILL.md) - Frontend skill index
+- [rule-styleguide](../rule-styleguide/SKILL.md) - Shared frontend standards

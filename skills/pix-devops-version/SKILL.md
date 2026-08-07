@@ -14,7 +14,7 @@ metadata:
 
 # Version Management
 
-## Step 1 — Install Husky and lint-staged
+## Step 1 - Install Husky and lint-staged
 
 Add the required development dependencies:
 
@@ -22,7 +22,7 @@ Add the required development dependencies:
 pnpm add -D husky lint-staged
 ```
 
-## Step 2 — Initialize Husky
+## Step 2 - Initialize Husky
 
 Create the Husky configuration:
 
@@ -35,7 +35,7 @@ This creates:
 - `.husky/` directory
 - `package.json` script: `"prepare": "husky"`
 
-## Step 3 — Configure pre-commit hook
+## Step 3 - Configure pre-commit hook
 
 Create `.husky/pre-commit` with the following content:
 
@@ -62,7 +62,7 @@ Make the hook executable:
 chmod +x .husky/pre-commit
 ```
 
-## Step 4 — Configure lint-staged
+## Step 4 - Configure lint-staged
 
 Add lint-staged configuration to `package.json`:
 
@@ -75,7 +75,7 @@ Add lint-staged configuration to `package.json`:
 }
 ```
 
-## Step 5 — Add required scripts
+## Step 5 - Add required scripts
 
 Ensure `package.json` has these scripts:
 
@@ -90,7 +90,7 @@ Ensure `package.json` has these scripts:
 }
 ```
 
-## Step 6 — Verify the setup
+## Step 6 - Verify the setup
 
 Test the pre-commit hook:
 
@@ -109,7 +109,7 @@ Check that:
 2. `package.json` and `package-lock.json` were automatically added to the commit
 3. Type checking and linting ran successfully
 
-## Step 7 — Configure for different environments
+## Step 7 - Configure for different environments
 
 ### For monorepos
 
@@ -151,5 +151,5 @@ Remove the `pnpm run type-check` line from the pre-commit hook if the project do
 
 ## See also
 
-- [rule](../rule/SKILL.md) — Central skill index and dispatcher
-- [rule-architect](../rule-architect/SKILL.md) — Project architecture wizard
+- [rule](../rule/SKILL.md) - Central skill index and dispatcher
+- [rule-architect](../rule-architect/SKILL.md) - Project architecture wizard

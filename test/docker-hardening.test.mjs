@@ -1,6 +1,6 @@
 // test/docker-hardening.test.mjs
 //
-// Audit finding 07 — the container image and its compose file contradicted the
+// Audit finding 07 - the container image and its compose file contradicted the
 // loopback-only posture the rest of the server is built around:
 //
 //   * `ports: "37999:37999"` publishes on the host's 0.0.0.0, so the

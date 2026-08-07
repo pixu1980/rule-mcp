@@ -37,20 +37,20 @@ const DEFAULT_MAX_RESULTS = 20;
 
 /**
  * @typedef {Object} Bm25Index
- * @property {Map<string, Map<number, number>>} df — term → { docId → termFreq }
- * @property {Map<number, number>} docLength — docId → total terms in document
- * @property {Bm25Doc[]} docs — array of documents
- * @property {number} totalDocs — total number of indexed documents
- * @property {number} avgDocLength — average document length
+ * @property {Map<string, Map<number, number>>} df - term → { docId → termFreq }
+ * @property {Map<number, number>} docLength - docId → total terms in document
+ * @property {Bm25Doc[]} docs - array of documents
+ * @property {number} totalDocs - total number of indexed documents
+ * @property {number} avgDocLength - average document length
  */
 
 /**
  * @typedef {Object} Bm25Doc
- * @property {number} id — document ID
- * @property {string} skill — skill name (e.g. "rule-frontend-react")
- * @property {string} section — section heading (e.g. "CSS Architecture")
- * @property {string} text — full section text
- * @property {string} snippet — first 200 chars of text
+ * @property {number} id - document ID
+ * @property {string} skill - skill name (e.g. "rule-frontend-react")
+ * @property {string} section - section heading (e.g. "CSS Architecture")
+ * @property {string} text - full section text
+ * @property {string} snippet - first 200 chars of text
  */
 
 /** @type {Bm25Index | null} */
@@ -72,7 +72,7 @@ function tokenize(text) {
 
 /**
  * Stopwords filtered from index and query.
- * Curated for technical frontend content — keeps framework/language terms.
+ * Curated for technical frontend content - keeps framework/language terms.
  */
 const STOPWORDS = new Set([
   "the",
@@ -250,7 +250,7 @@ const STOPWORDS = new Set([
  * Extract sections from SKILL.md content.
  * Splits by `## Heading` and returns { heading, text } pairs.
  *
- * @param {string} content — Full SKILL.md content
+ * @param {string} content - Full SKILL.md content
  * @returns {Array<{ heading: string, text: string }>}
  */
 function extractSections(content) {
@@ -282,7 +282,7 @@ function extractSections(content) {
  * Build the BM25 inverted index from all loaded skills.
  * Index is cached in memory until `clearIndex()` or `buildIndex(true)`.
  *
- * @param {boolean} [force=false] — Force rebuild even if index exists
+ * @param {boolean} [force=false] - Force rebuild even if index exists
  */
 export function buildIndex(force = false) {
   if (_index && !force) {
@@ -377,11 +377,11 @@ export function getIndexStats() {
 /**
  * Compute BM25 score for a single term against a document.
  *
- * @param {number} tf — Term frequency in document
- * @param {number} docLen — Document length in terms
- * @param {number} avgDocLen — Average document length
- * @param {number} N — Total number of documents
- * @param {number} n — Number of documents containing the term
+ * @param {number} tf - Term frequency in document
+ * @param {number} docLen - Document length in terms
+ * @param {number} avgDocLen - Average document length
+ * @param {number} N - Total number of documents
+ * @param {number} n - Number of documents containing the term
  * @returns {number}
  */
 function bm25Score(tf, docLen, avgDocLen, N, n) {
@@ -403,8 +403,8 @@ function bm25Score(tf, docLen, avgDocLen, N, n) {
  * Search the BM25 index for a query.
  * Returns ranked results with scores, sorted by relevance descending.
  *
- * @param {string} query — Search query
- * @param {number} [maxResults=20] — Maximum results
+ * @param {string} query - Search query
+ * @param {number} [maxResults=20] - Maximum results
  * @returns {Array<{ skill: string, section: string, score: number, snippet: string }>}
  */
 export function search(query, maxResults = DEFAULT_MAX_RESULTS) {

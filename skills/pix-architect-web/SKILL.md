@@ -11,7 +11,7 @@ tags:
 frameworks: [vanilla-reactive]
 ---
 
-# rule-architect-web — Browser Interview Shell
+# rule-architect-web - Browser Interview Shell
 
 Thin rendering shell for the rule-architect engine. Reads `wizard-spec.json`
 from `../rule-architect/` and renders the 25-step interview wizard in a browser.
@@ -44,7 +44,7 @@ Open `http://localhost:3000`.
 | Method | Path                | Description                                                 |
 | ------ | ------------------- | ----------------------------------------------------------- |
 | `GET`  | `/api/wizard-spec`  | Returns wizard-spec.json from rule-architect engine          |
-| `GET`  | `/api/placeholders` | Backward compat — wizard-spec wrapped as placeholders shape |
+| `GET`  | `/api/placeholders` | Backward compat - wizard-spec wrapped as placeholders shape |
 | `GET`  | `/api/templates`    | Template list with placeholder counts                       |
 | `GET`  | `/api/init-values`  | Detect project values to pre-fill the interview             |
 | `POST` | `/api/generate`     | Write .context/ to disk, returns file list                  |
@@ -64,5 +64,5 @@ Zero npm dependencies. Uses vanilla-reactive engine bundled in `core/`.
 
 ## See also
 
-- [rule-architect](../rule-architect/SKILL.md) — The engine
-- [rule-architect-cli](../rule-architect-cli/SKILL.md) — Terminal alternative
+- [rule-architect](../rule-architect/SKILL.md) - The engine
+- [rule-architect-cli](../rule-architect-cli/SKILL.md) - Terminal alternative

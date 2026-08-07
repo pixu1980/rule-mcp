@@ -9,7 +9,7 @@ tags:
 frameworks: [next, react]
 ---
 
-# rule-frontend-meta-next — Next.js Applications with rule Principles
+# rule-frontend-meta-next - Next.js Applications with rule Principles
 
 Next.js is a React meta-framework providing file-based routing, SSR, SSG, ISR, API routes, and middleware. Use alongside [rule-frontend-react](../rule-frontend-react/SKILL.md) for the UI layer.
 
@@ -72,7 +72,7 @@ project/
 ### Server Components vs Client Components
 
 ```jsx
-// app/page.js — Server Component (default)
+// app/page.js - Server Component (default)
 // Can use async/await directly, access DB, read files
 export default async function Page() {
   const data = await db.query("SELECT * FROM posts");
@@ -81,7 +81,7 @@ export default async function Page() {
 ```
 
 ```jsx
-"use client"; // Client Component — for interactivity, state, effects
+"use client"; // Client Component - for interactivity, state, effects
 
 export function LikeButton({ postId }) {
   const [liked, setLiked] = useState(false);
@@ -92,7 +92,7 @@ export function LikeButton({ postId }) {
 ### Data Fetching
 
 ```js
-// Server Component — fetch with cache control
+// Server Component - fetch with cache control
 async function getPosts() {
   // SSG (default): fetch is cached and deduplicated
   const res = await fetch("https://api.example.com/posts");
@@ -143,7 +143,7 @@ import Image from "next/image";
   alt="Hero"
   width={1200}
   height={600}
-  priority // LCP image — preload
+  priority // LCP image - preload
   placeholder="blur" // Show blur-up while loading
   blurDataURL="data:image/webp;base64,..."
 />;
@@ -169,7 +169,7 @@ DATABASE_URL=postgres://...                     ← Server only
 
 | Target            | Config                               |
 | ----------------- | ------------------------------------ |
-| **Vercel**        | Zero config — automatic              |
+| **Vercel**        | Zero config - automatic              |
 | **Docker (Node)** | `next start` on port 3000            |
 | **Static**        | `output: 'export'` → any static host |
 
@@ -177,7 +177,7 @@ DATABASE_URL=postgres://...                     ← Server only
 
 ```
 ┌────────────────────────────────────────────────────────────┐
-│  rule-frontend-meta-next — Next.js (React Meta-framework)                 │
+│  rule-frontend-meta-next - Next.js (React Meta-framework)                 │
 │                                                           │
 │  Routing:   app/ directory, layout/page/loading/error     │
 │  Data:      fetch with cache/no-store/revalidate          │
@@ -192,6 +192,6 @@ DATABASE_URL=postgres://...                     ← Server only
 
 ## See also
 
-- [rule](../rule/SKILL.md) — Central skill index and dispatcher
-- [rule-frontend](../rule-frontend/SKILL.md) — Frontend skill index
-- [rule-styleguide](../rule-styleguide/SKILL.md) — Shared frontend standards
+- [rule](../rule/SKILL.md) - Central skill index and dispatcher
+- [rule-frontend](../rule-frontend/SKILL.md) - Frontend skill index
+- [rule-styleguide](../rule-styleguide/SKILL.md) - Shared frontend standards

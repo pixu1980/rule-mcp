@@ -10,7 +10,7 @@ tags:
 frameworks: [vanilla, web-workers]
 ---
 
-# rule-frontend-workers — Browser Web Workers & Off-Thread Computation
+# rule-frontend-workers - Browser Web Workers & Off-Thread Computation
 
 This skill helps you decide **when and how** to split CPU-bound JavaScript off the main UI thread in browser applications using Web Workers.
 
@@ -18,11 +18,11 @@ This skill helps you decide **when and how** to split CPU-bound JavaScript off t
 
 ## The Problem: Single-Threaded UI
 
-The browser's main thread handles **rendering, user input, and JavaScript execution** on a single thread. A long-running synchronous task **freezes the entire page** — no clicks, no scrolls, no typing.
+The browser's main thread handles **rendering, user input, and JavaScript execution** on a single thread. A long-running synchronous task **freezes the entire page** - no clicks, no scrolls, no typing.
 
 **Workers give you the ability to run scripts in background threads**, keeping the UI responsive.
 
-> Workers and the main thread run in **completely separate worlds** — no shared variables, no direct DOM access. Communication is by **message passing** only.
+> Workers and the main thread run in **completely separate worlds** - no shared variables, no direct DOM access. Communication is by **message passing** only.
 
 ---
 
@@ -101,7 +101,7 @@ self.onmessage = (event) => {
 
 ### Inline / Embedded Workers
 
-Create a worker from a string or function — no separate file needed:
+Create a worker from a string or function - no separate file needed:
 
 ```js
 // Convert a function to a worker URL
@@ -120,15 +120,15 @@ const worker = new Worker(
 );
 ```
 
-> ⚠️ `URL.createObjectURL()` creates a blob URL — call `URL.revokeObjectURL(url)` after the worker is created to avoid memory leaks.
+> ⚠️ `URL.createObjectURL()` creates a blob URL - call `URL.revokeObjectURL(url)` after the worker is created to avoid memory leaks.
 
 ### Terminating
 
 ```js
-// From main thread — kills the worker immediately
+// From main thread - kills the worker immediately
 worker.terminate();
 
-// From inside the worker — graceful shutdown
+// From inside the worker - graceful shutdown
 self.close();
 ```
 
@@ -136,7 +136,7 @@ self.close();
 
 ## Shared Workers
 
-Accessible by **multiple scripts** across different windows, tabs, iframes, or workers — same origin required.
+Accessible by **multiple scripts** across different windows, tabs, iframes, or workers - same origin required.
 
 ### Spawning
 
@@ -182,7 +182,7 @@ self.onconnect = (event) => {
 
 ```js
 const worker = new SharedWorker("worker.js", { extendedLifetime: true });
-// Worker lives a few seconds after all ports close —
+// Worker lives a few seconds after all ports close -
 // useful for flushing analytics or saving state on navigation
 ```
 
@@ -222,10 +222,10 @@ For large binary data, **transfer** ownership instead of copying:
 // Create a 32MB buffer
 const buffer = new ArrayBuffer(32 * 1024 * 1024);
 
-// Transfer ownership — buffer is now empty in the main thread
+// Transfer ownership - buffer is now empty in the main thread
 worker.postMessage({ buffer }, [buffer]);
 
-console.log(buffer.byteLength); // 0 — transferred!
+console.log(buffer.byteLength); // 0 - transferred!
 ```
 
 Transferable objects: `ArrayBuffer`, `MessagePort`, `ReadableStream`, `WritableStream`, `TransformStream`, `ImageBitmap`, `OffscreenCanvas`.
@@ -243,7 +243,7 @@ worker.postMessage({ shared });
 // worker.js
 self.onmessage = (e) => {
   const view = new Int32Array(e.data.shared);
-  console.log(view[0]); // 42 — same memory!
+  console.log(view[0]); // 42 - same memory!
   Atomics.add(view, 0, 1); // thread-safe increment
 };
 ```
@@ -252,7 +252,7 @@ self.onmessage = (e) => {
 
 ---
 
-## importScripts — Loading Libraries in Workers
+## importScripts - Loading Libraries in Workers
 
 Workers have a global `importScripts()` function that loads scripts synchronously:
 
@@ -343,7 +343,7 @@ const offscreen = canvas.transferControlToOffscreen();
 const worker = new Worker("renderer.js");
 worker.postMessage({ canvas: offscreen }, [offscreen]);
 
-// worker.js — can now render directly to canvas from a worker!
+// worker.js - can now render directly to canvas from a worker!
 self.onmessage = (e) => {
   const canvas = e.data.canvas;
   const ctx = canvas.getContext("2d");
@@ -379,7 +379,7 @@ function parallelMap(data, fn) {
 ### Pattern 4: QueryableWorker (RPC-Style)
 
 ```js
-// QueryableWorker class — abstracts postMessage into method calls
+// QueryableWorker class - abstracts postMessage into method calls
 class QueryableWorker {
   constructor(url) {
     this.worker = new Worker(url);
@@ -445,20 +445,20 @@ Transfer   Structured
 
 | Situation                           | Solution                                                          |
 | ----------------------------------- | ----------------------------------------------------------------- |
-| Heavy computation blocking UI       | **Dedicated Worker** — never run sync CPU work on the main thread |
-| Large binary data passing           | **Transferable objects** — zero-copy, ownership moves             |
-| Multiple tabs sharing state         | **Shared Worker** — single worker for all same-origin contexts    |
-| Offline / background sync / push    | **Service Worker** — network proxy, not for CPU work              |
-| Multi-core parallel processing      | **Multiple dedicated workers** — one per core                     |
-| Worker startup overhead > task time | Stay on **main thread** — workers have creation cost              |
-| Canvas rendering blocking UI        | **OffscreenCanvas** — transfer to worker                          |
+| Heavy computation blocking UI       | **Dedicated Worker** - never run sync CPU work on the main thread |
+| Large binary data passing           | **Transferable objects** - zero-copy, ownership moves             |
+| Multiple tabs sharing state         | **Shared Worker** - single worker for all same-origin contexts    |
+| Offline / background sync / push    | **Service Worker** - network proxy, not for CPU work              |
+| Multi-core parallel processing      | **Multiple dedicated workers** - one per core                     |
+| Worker startup overhead > task time | Stay on **main thread** - workers have creation cost              |
+| Canvas rendering blocking UI        | **OffscreenCanvas** - transfer to worker                          |
 
 ### When NOT to Use Workers
 
-- ❌ Simple DOM updates — workers can't touch the DOM
-- ❌ Trivial computations (< ~10ms) — worker creation cost outweighs benefit
-- ❌ Already-async operations (`fetch`, `setTimeout`) — won't block the UI
-- ❌ Tasks that need `localStorage` — use IndexedDB in workers instead
+- ❌ Simple DOM updates - workers can't touch the DOM
+- ❌ Trivial computations (< ~10ms) - worker creation cost outweighs benefit
+- ❌ Already-async operations (`fetch`, `setTimeout`) - won't block the UI
+- ❌ Tasks that need `localStorage` - use IndexedDB in workers instead
 
 ---
 
@@ -480,7 +480,7 @@ Workers have their **own execution context**, distinct from the creating documen
 | Edge    | `edge://inspect/#workers`               |
 | Firefox | `about:debugging#/runtime/this-firefox` |
 
-Workers appear in the Sources panel alongside main-thread scripts. You can set breakpoints, inspect variables, and use the console — just like debugging the main thread.
+Workers appear in the Sources panel alongside main-thread scripts. You can set breakpoints, inspect variables, and use the console - just like debugging the main thread.
 
 ---
 
@@ -490,27 +490,27 @@ Workers appear in the Sources panel alongside main-thread scripts. You can set b
 
 - ✅ Create workers **once**, not per-task
 - ✅ `terminate()` workers when no longer needed (SPA unmount)
-- ✅ Handle `worker.onerror` — unhandled errors are silent otherwise
+- ✅ Handle `worker.onerror` - unhandled errors are silent otherwise
 - ❌ Don't create workers in a loop or per-event
 
 ### Data Transfer
 
 - ✅ Use **transferables** for large binary data (>1MB)
 - ✅ `SharedArrayBuffer` only when you need true shared memory + `Atomics`
-- ❌ Don't send functions, DOM nodes, or class instances — structured clone drops them
-- ❌ Don't send the entire application state — be selective
+- ❌ Don't send functions, DOM nodes, or class instances - structured clone drops them
+- ❌ Don't send the entire application state - be selective
 
 ### Compatibility
 
 - ✅ Feature-detect: `if (window.Worker) { ... }`
 - ✅ Use `new URL('worker.js', import.meta.url)` for bundler compatibility
-- ✅ Test with your bundler (Vite, webpack, Parcel) — each has worker syntax
-- ❌ Workers require a server — `file://` URLs cannot create workers
+- ✅ Test with your bundler (Vite, webpack, Parcel) - each has worker syntax
+- ❌ Workers require a server - `file://` URLs cannot create workers
 
 ### Performance
 
 - ✅ Split work across `navigator.hardwareConcurrency` workers for CPU-bound parallelism
-- ✅ Profile before and after — workers are not free
+- ✅ Profile before and after - workers are not free
 - ❌ Don't create more workers than CPU cores for CPU-bound tasks
 
 ---
@@ -519,7 +519,7 @@ Workers appear in the Sources panel alongside main-thread scripts. You can set b
 
 ```
 ┌──────────────────────────────────────────────────────────────────┐
-│  rule-frontend-workers — Browser Web Workers                      │
+│  rule-frontend-workers - Browser Web Workers                      │
 │                                                                  │
 │  Worker types:  Dedicated | Shared | Service                     │
 │  Communication: postMessage + onmessage (structured clone)      │
@@ -546,9 +546,9 @@ Workers appear in the Sources panel alongside main-thread scripts. You can set b
 
 ## See also
 
-- [rule](../rule/SKILL.md) — Central skill index and dispatcher
-- [rule-frontend](../rule-frontend/SKILL.md) — Frontend skill index
-- [rule-backend-workers](../rule-backend-workers/SKILL.md) — Node.js Worker Threads skill
+- [rule](../rule/SKILL.md) - Central skill index and dispatcher
+- [rule-frontend](../rule-frontend/SKILL.md) - Frontend skill index
+- [rule-backend-workers](../rule-backend-workers/SKILL.md) - Node.js Worker Threads skill
 - [MDN: Web Workers API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API)
 - [MDN: Using Web Workers](https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Using_web_workers)
 - [Functions available to workers](https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Functions_and_classes_available_to_workers)

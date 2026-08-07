@@ -30,7 +30,7 @@ export class App extends HTMLElement {
         <code>tags | join:", "</code>: {{ tags | join:', ' | default:'no tags' }}
         <br />
         <code>appTitle | slugify | upper</code>: "{{ appTitle | slugify | upper }}" ·
-        <code>extraInfo | default:"—"</code>: {{ extraInfo | default:'—' }}
+        <code>extraInfo | default:"-"</code>: {{ extraInfo | default:'-' }}
       </aside>
 
       <section data-part="add-form">

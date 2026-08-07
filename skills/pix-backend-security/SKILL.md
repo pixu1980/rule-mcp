@@ -14,7 +14,7 @@ metadata:
 
 # Security Basics
 
-## Step 1 — Configure environment variables
+## Step 1 - Configure environment variables
 
 ### .env files
 
@@ -63,7 +63,7 @@ export type Env = z.infer<typeof envSchema>;
 
 Place this in `src/initEnv.ts`. Import and use `env` throughout the application instead of accessing `process.env` directly.
 
-## Step 2 — Secure Docker images
+## Step 2 - Secure Docker images
 
 - Run production containers as non-root user (UID 1001)
 - Never copy `.env` files into Docker images
@@ -73,7 +73,7 @@ Place this in `src/initEnv.ts`. Import and use `env` throughout the application 
 
 See **docker** skill for full Dockerfile patterns.
 
-## Step 3 — Audit dependencies
+## Step 3 - Audit dependencies
 
 - Run `pnpm audit` (or `pnpm audit`) regularly and before releases
 - Do not use packages with known critical vulnerabilities
@@ -82,7 +82,7 @@ See **docker** skill for full Dockerfile patterns.
 
 Validate dependency choices against the project's active ruleset and security policy.
 
-## Step 4 — Set HTTP security headers (backend)
+## Step 4 - Set HTTP security headers (backend)
 
 Use `helmet` or `@fastify/helmet` to set security headers:
 
@@ -101,7 +101,7 @@ await app.register(helmet, {
 });
 ```
 
-## Step 5 — Add rate limiting (backend)
+## Step 5 - Add rate limiting (backend)
 
 Use `express-rate-limit` or `@fastify/rate-limit`:
 
@@ -112,7 +112,7 @@ await app.register(rateLimit, {
 });
 ```
 
-## Step 6 — Configure CORS (backend)
+## Step 6 - Configure CORS (backend)
 
 Use `cors` or `@fastify/cors` with explicit origin configuration:
 
@@ -126,14 +126,14 @@ await app.register(cors, {
 });
 ```
 
-## Step 7 — Manage secrets in CI
+## Step 7 - Manage secrets in CI
 
 - Store secrets as masked CI/CD variables in GitLab
 - Never hardcode secrets in `.gitlab-ci.yml`
 - Use variable references: `${DEPLOY_TOKEN}`, `${DATABASE_URL}`
 - Mark sensitive variables as "protected" and "masked" in GitLab settings
 
-## Step 8 — Validate all external input
+## Step 8 - Validate all external input
 
 - Validate all external input (request bodies, query params, headers) using zod.
 - Never trust client-side validation alone.
@@ -167,5 +167,5 @@ app.post("/users", async (request, reply) => {
 
 ## See also
 
-- [rule](../rule/SKILL.md) — Central skill index and dispatcher
-- [rule-architect](../rule-architect/SKILL.md) — Project architecture wizard
+- [rule](../rule/SKILL.md) - Central skill index and dispatcher
+- [rule-architect](../rule-architect/SKILL.md) - Project architecture wizard

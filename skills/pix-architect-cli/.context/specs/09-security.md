@@ -42,7 +42,7 @@ Document security requirements, threat model, and compliance considerations.
 
 For **[STACK_NAME]** (**[STACK_VERSION]**), additional considerations:
 
-- **XSS prevention**: [Stack-specific guidance — e.g., React escapes by default in JSX, but dangerouslySetInnerHTML must be audited]
+- **XSS prevention**: [Stack-specific guidance - e.g., React escapes by default in JSX, but dangerouslySetInnerHTML must be audited]
 - **Dependency audit**: Run **[STACK_PKG_MANAGER]** audit in CI pipeline
 - **Build-time secrets**: Never bundle secrets; use server-side injection or runtime config
 

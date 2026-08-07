@@ -6,11 +6,11 @@
  * transport/sse.js, which is kept only as a back-compat alias.
  *
  * Single MCP endpoint:
- *   POST   /mcp   — client → server JSON-RPC (initialize + requests). Response is
+ *   POST   /mcp   - client → server JSON-RPC (initialize + requests). Response is
  *                   either a JSON body or an SSE stream, chosen by the SDK transport.
- *   GET    /mcp   — server → client SSE stream for notifications (needs session id).
- *   DELETE /mcp   — terminate a session.
- *   GET    /health — health check (no auth).
+ *   GET    /mcp   - server → client SSE stream for notifications (needs session id).
+ *   DELETE /mcp   - terminate a session.
+ *   GET    /health - health check (no auth).
  *
  * Session lifecycle is stateful: the SDK generates an Mcp-Session-Id on initialize;
  * subsequent requests must carry it. Each session owns its own MCP Server instance
@@ -20,8 +20,8 @@
  * 1 MB body cap, and the sandbox timeout/error wrapper. Bound to loopback unless
  * RULE_MCP_HOST overrides it.
  *
- * @see module:transport/sse — legacy transport
- * @see module:transport/sse-auth — shared bearer token
+ * @see module:transport/sse - legacy transport
+ * @see module:transport/sse-auth - shared bearer token
  */
 
 import http from "node:http";
@@ -49,7 +49,7 @@ let serverToken = null;
 /** Maximum POST body size (1 MB). */
 const MAX_BODY_BYTES = 1_048_576;
 
-/** Maximum concurrent MCP sessions — bounds memory against session-creation floods. */
+/** Maximum concurrent MCP sessions - bounds memory against session-creation floods. */
 const MAX_SESSIONS = 256;
 
 /** Allowed CORS origins (empty = deny all cross-origin). */

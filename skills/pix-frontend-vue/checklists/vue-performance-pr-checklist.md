@@ -57,7 +57,7 @@
 
 - Do composables return readonly refs for exposed state?
 - Do composables clean up watchers and event listeners on unmount?
-- Are composables pure — no global side effects?
+- Are composables pure - no global side effects?
 
 ## 10. Final review
 

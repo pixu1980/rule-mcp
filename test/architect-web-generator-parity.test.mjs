@@ -21,8 +21,8 @@ test("architect-web server has no inline generator copy", () => {
 // ---------------------------------------------------------------------------
 // Phase 5: both servers must hand the generator the SAME wizard spec.
 // ---------------------------------------------------------------------------
-// context-server.mjs — the server the MCP `rule_tool_architect` tool actually
-// spawns — passed `null` as the spec. normalizeAnswers needs it to resolve
+// context-server.mjs - the server the MCP `rule_tool_architect` tool actually
+// spawns - passed `null` as the spec. normalizeAnswers needs it to resolve
 // select option keys to human labels (and for DERIVED's STACK_NAME), and
 // shouldEmit needs it to accept a gate value in either spelling. Passing null
 // silently produced a different, worse pack than architect-web for the same

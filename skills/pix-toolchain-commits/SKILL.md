@@ -1,7 +1,7 @@
 ---
 name: rule-toolchain-commits
 description: >-
-  Use whenever writing, preparing, or validating git commits and pushes. Enforces atomic Conventional Commits with a MANDATORY scope on every commit — no bare `fix:` allowed.
+  Use whenever writing, preparing, or validating git commits and pushes. Enforces atomic Conventional Commits with a MANDATORY scope on every commit - no bare `fix:` allowed.
 tags:
   - "git"
   - "commit"
@@ -13,7 +13,7 @@ tags:
 frameworks: [all]
 ---
 
-# rule-toolchain-commits — Atomic Conventional Commits (scope mandatory)
+# rule-toolchain-commits - Atomic Conventional Commits (scope mandatory)
 
 ## Commit rule (non-negotiable)
 
@@ -24,7 +24,7 @@ frameworks: [all]
 ```
 
 - The `scope` is **always required**. A bare `fix: message` is **rejected**.
-- One logical change per commit (**atomic**). No exceptions — not for WIP, not for "fix of fix", not for merge noise.
+- One logical change per commit (**atomic**). No exceptions - not for WIP, not for "fix of fix", not for merge noise.
 - This applies to every developer, every branch, every repository in the rule ecosystem.
 
 ## Commit types
@@ -45,13 +45,13 @@ frameworks: [all]
 
 ## Commit scope
 
-- The scope is the module, domain, or area the change touches — e.g. `fix(skills): ...`, `feat(router): ...`, `docs(adr): ...`.
+- The scope is the module, domain, or area the change touches - e.g. `fix(skills): ...`, `feat(router): ...`, `docs(adr): ...`.
 - Reuse existing file/module/package names. Do **not** invent new scopes.
 - Exactly **one scope per commit**. If a change spans multiple areas, split it into multiple commits.
 
 ## Commit subject
 
-- Imperative mood: "add", "fix", "remove" — never "added", "fixes", "removing".
+- Imperative mood: "add", "fix", "remove" - never "added", "fixes", "removing".
 - ≤ 50 characters when possible, hard cap 72.
 - No trailing period. Lowercase after the colon unless the first word is a proper noun.
 
@@ -72,13 +72,13 @@ frameworks: [all]
 
 - Before pushing: run the pre-push checks, `git pull --rebase` on the target branch, and verify the commit message again.
 - Never force-push to `main`/`develop` or shared branches.
-- Never push a commit that does not follow this rule — fix it locally first with `git commit --amend` or a new commit.
+- Never push a commit that does not follow this rule - fix it locally first with `git commit --amend` or a new commit.
 
 ## Enforcement (make it mechanical)
 
-Do not rely on discipline — enforce with hooks so a violating commit is **rejected**:
+Do not rely on discipline - enforce with hooks so a violating commit is **rejected**:
 
-1. **`commit-msg` hook** (no Husky needed) — reject any message without `type(scope):`:
+1. **`commit-msg` hook** (no Husky needed) - reject any message without `type(scope):`:
 
 ```sh
 #!/bin/sh
@@ -107,9 +107,9 @@ export default {
 
 ## See also
 
-- [rule-toolchain-husky](../rule-toolchain-husky/SKILL.md) — Git hooks, commitlint, lint-staged setup
-- [rule-devops-version](../rule-devops-version/SKILL.md) — Automatic version bumps driven by commit types
-- [rule-process-feature-workflow](../rule-process-feature-workflow/SKILL.md) — Commit rules inside the feature delivery workflow
-- [rule](../rule/SKILL.md) — Central skill index and dispatcher
+- [rule-toolchain-husky](../rule-toolchain-husky/SKILL.md) - Git hooks, commitlint, lint-staged setup
+- [rule-devops-version](../rule-devops-version/SKILL.md) - Automatic version bumps driven by commit types
+- [rule-process-feature-workflow](../rule-process-feature-workflow/SKILL.md) - Commit rules inside the feature delivery workflow
+- [rule](../rule/SKILL.md) - Central skill index and dispatcher
 
 ---

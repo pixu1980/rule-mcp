@@ -75,7 +75,7 @@ function runUpdateIn(clone, environment = {}) {
   const out = execFileSync(process.execPath, ["--input-type=module", "--eval", script], {
     cwd: clone,
     // Force the module to treat `clone` as the repo root by running from there and
-    // relying on detectInstallType(.git) — but getRepoRoot resolves from module path.
+    // relying on detectInstallType(.git) - but getRepoRoot resolves from module path.
     // So instead we pass an explicit override the module honors:
     env: { ...process.env, RULE_MCP_REPO_ROOT: clone, ...environment },
     encoding: "utf8",
@@ -161,11 +161,11 @@ function runUpdateIn(clone, environment = {}) {
     isDaemonExited = true;
   });
   assert.match(daemonNote, /daemon/i, "daemon mode explains a manual/opt-in restart");
-  // Let any deferred (800ms) exit fire — a ref'd timer keeps the loop alive.
+  // Let any deferred (800ms) exit fire - a ref'd timer keeps the loop alive.
   await new Promise((r) => setTimeout(r, 900));
   assert.equal(isDaemonExited, false, "daemon mode must not force-exit by default");
 
-  // Single-client daemons can opt back in — the deferred restart returns.
+  // Single-client daemons can opt back in - the deferred restart returns.
   process.env.RULE_MCP_DAEMON_AUTORESTART = "1";
   let isOptInExited = false;
   const optInNote = scheduleRestartIfNeeded({ updated: true, changedCode: true }, () => {

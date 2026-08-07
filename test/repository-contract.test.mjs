@@ -29,10 +29,10 @@ function walk(dir, files = []) {
 
 console.log("repository contract test");
 
-// Only check src/, test/, prompts/, scripts/ — the project's own code.
+// Only check src/, test/, prompts/, scripts/ - the project's own code.
 // `forbidden` is the legacy token that must not appear in file names/contents.
-// When it is empty there is nothing to scan for — `"".includes("")` is always
-// true, which would flag every file — so skip the substring sweep entirely.
+// When it is empty there is nothing to scan for - `"".includes("")` is always
+// true, which would flag every file - so skip the substring sweep entirely.
 const sourceDirectories = ["src", "test", "prompts", "scripts", "extensions", "rules", "skills"];
 for (const sub of forbidden ? sourceDirectories : []) {
   const dir = join(root, sub);
@@ -102,7 +102,7 @@ execFileSync("bash", [universalInstallerPath, "--agent", "pi", "--force", "--dry
   env: { ...process.env, HOME: mkdtempSync(join(tmpdir(), "rule-mcp-install-")) },
   stdio: "pipe",
 });
-for (const tool of ["pix_tool —", "rule_tool_process_adr", "rule_tool_process_handoff"]) {
+for (const tool of ["pix_tool -", "rule_tool_process_adr", "rule_tool_process_handoff"]) {
   assert.ok(universalInstaller.includes(tool), `universal installer rules must reference ${tool}`);
 }
 for (const tool of ["rule_tool_ai", "pix_adr", "pix_handoff"]) {

@@ -8,7 +8,7 @@
  * Certificates are valid for 2 years (730 days) with the
  * subject CN "rule-mcp.local" and SAN DNS:localhost,127.0.0.1.
  *
- * @see module:transport/sse — startSseServer imports cert generation
+ * @see module:transport/sse - startSseServer imports cert generation
  */
 
 import { mkdirSync, writeFileSync, unlinkSync } from "node:fs";
@@ -26,7 +26,7 @@ import { tmpdir } from "node:os";
  *   commonName?: string,
  *   days?: number
  * }} options
- * @returns {boolean} — true on success, false on failure
+ * @returns {boolean} - true on success, false on failure
  */
 export function generateSelfSignedCert({ certPath, keyPath, commonName = "rule-mcp.local", days = 730 }) {
   // Config written to a real temp file (not /dev/stdin, which is POSIX-only) so

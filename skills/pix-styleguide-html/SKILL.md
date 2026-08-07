@@ -21,7 +21,7 @@ frameworks: [all]
 - A solid HTML structure should reduce CSS and JS complexity.
 - Every change must preserve accessibility and responsiveness. If either is broken, the change is not shippable.
 
-## Semantics first — MANDATORY RULE
+## Semantics first - MANDATORY RULE
 
 ### No `<div>` for layout. Ever.
 
@@ -43,20 +43,20 @@ If you cannot find a semantic element, use `<section>`.
 **Forbidden uses of `<div>`**:
 
 - `<div>` when `<section>`, `<article>`, `<nav>`, `<main>`, `<header>`, `<footer>`, `<aside>`, `<form>`, `<ul>`, `<ol>`, `<li>`, `<figure>`, `<details>`, `<summary>`, `<dialog>` exists
-- `<div data-part="header">` — use `<header>`
-- `<div data-part="body">` — use `<section>` or `<main>`
-- `<div data-part="footer">` — use `<footer>`
-- `<div data-part="list">` — use `<ul>` or `<ol>`
-- `<div data-part="nav">` — use `<nav>`
-- `<div data-part="form">` — use `<form>`
-- `<div data-part="search">` — use `<search>`
-- `<div data-part="card">` — use `<article>`
-- `<div data-part="modal">` — use `<article>` or `<dialog>`
-- `<div data-part="tabs">` — use `<nav>`
-- `<div data-part="item">` inside a list — use `<li>`
-- `<div data-part="summary">` — use `<section>` or `<details>`
-- `<div data-part="stats">` — use `<section>`
-- `<div>` for a button — use `<button>`
+- `<div data-part="header">` - use `<header>`
+- `<div data-part="body">` - use `<section>` or `<main>`
+- `<div data-part="footer">` - use `<footer>`
+- `<div data-part="list">` - use `<ul>` or `<ol>`
+- `<div data-part="nav">` - use `<nav>`
+- `<div data-part="form">` - use `<form>`
+- `<div data-part="search">` - use `<search>`
+- `<div data-part="card">` - use `<article>`
+- `<div data-part="modal">` - use `<article>` or `<dialog>`
+- `<div data-part="tabs">` - use `<nav>`
+- `<div data-part="item">` inside a list - use `<li>`
+- `<div data-part="summary">` - use `<section>` or `<details>`
+- `<div data-part="stats">` - use `<section>`
+- `<div>` for a button - use `<button>`
 
 ### Decision table
 
@@ -254,7 +254,7 @@ Prefer figure semantics.
 
 - Keep markup minimal and readable.
 - Prefer descriptive class names when classes are needed.
-- Do not add wrappers that exist only to compensate for unclear structure — fix the structure first.
+- Do not add wrappers that exist only to compensate for unclear structure - fix the structure first.
 
 ## Valid nesting and layout rules
 
@@ -326,11 +326,11 @@ Prefer an inline link inside a block container.
 ## Validation
 
 - W3C markup validation is mandatory.
-- Working markup is not enough — it must also follow best practices and remain valid.
+- Working markup is not enough - it must also follow best practices and remain valid.
 
 ---
 
 ## See also
 
-- [rule-styleguide](../rule-styleguide/SKILL.md) — Style guides index
-- [rule](../rule/SKILL.md) — Central skill index
+- [rule-styleguide](../rule-styleguide/SKILL.md) - Style guides index
+- [rule](../rule/SKILL.md) - Central skill index

@@ -16,7 +16,7 @@ tags:
 frameworks: [all]
 ---
 
-# rule-data-indexed-db — IndexedDB / File System Best Practices & Scripts
+# rule-data-indexed-db - IndexedDB / File System Best Practices & Scripts
 
 ## Table of Contents
 
@@ -305,9 +305,9 @@ async function processSyncQueue(apiEndpoint) {
 
 ## 10. Performance Best Practices
 
-1. Use explicit transactions — avoid auto-commit by reusing the same transaction.
-2. Keep transactions short — don't await network calls inside a transaction.
-3. Use indexes for query performance — avoid full store scans.
+1. Use explicit transactions - avoid auto-commit by reusing the same transaction.
+2. Keep transactions short - don't await network calls inside a transaction.
+3. Use indexes for query performance - avoid full store scans.
 4. Use `getAll()` for small result sets, cursors for large ones.
 5. Batch writes in a single transaction for bulk operations.
 6. Use `IDBKeyRange` for efficient range queries.
@@ -318,5 +318,5 @@ async function processSyncQueue(apiEndpoint) {
 
 ## See also
 
-- [rule-data-sql](../rule-data-sql/SKILL.md) — SQL fundamentals
-- [rule-data-postgresql](../rule-data-postgresql/SKILL.md) — PostgreSQL reference
+- [rule-data-sql](../rule-data-sql/SKILL.md) - SQL fundamentals
+- [rule-data-postgresql](../rule-data-postgresql/SKILL.md) - PostgreSQL reference

@@ -9,7 +9,7 @@ tags:
 frameworks: [nuxt, vue]
 ---
 
-# rule-frontend-meta-nuxt — Nuxt.js Applications with rule Principles
+# rule-frontend-meta-nuxt - Nuxt.js Applications with rule Principles
 
 Nuxt.js is a Vue meta-framework providing file-based routing, SSR, SSG, server routes, auto-imports, and the Nitro server engine. Use alongside [rule-frontend-vue](../rule-frontend-vue/SKILL.md) for the UI layer.
 
@@ -109,7 +109,7 @@ export default defineEventHandler(async (event) => {
 ### Auto-Imports
 
 ```js
-// composables/useAuth.js — auto-imported in any .vue file
+// composables/useAuth.js - auto-imported in any .vue file
 export const useAuth = () => {
   const user = useState("user", () => null);
   const login = async (email, password) => {
@@ -122,21 +122,21 @@ export const useAuth = () => {
 ### Modules
 
 ```bash
-pnpx nuxi module add content    # @nuxt/content — file-based CMS
-pnpx nuxi module add image      # @nuxt/image — optimized images
-pnpx nuxi module add icon       # nuxt-icon — SVG icon system
+pnpx nuxi module add content    # @nuxt/content - file-based CMS
+pnpx nuxi module add image      # @nuxt/image - optimized images
+pnpx nuxi module add icon       # nuxt-icon - SVG icon system
 pnpx nuxi module add color-mode # Dark/light mode toggle
 ```
 
 ### Data Fetching
 
 ```js
-// useFetch — SSR-friendly, deduplicated, cached
+// useFetch - SSR-friendly, deduplicated, cached
 const { data, pending, error, refresh } = await useFetch("/api/posts", {
   query: { page: 1 },
 });
 
-// $fetch — raw fetch with base URL
+// $fetch - raw fetch with base URL
 const user = await $fetch("/api/user", {
   method: "POST",
   body: { name: "Alice" },
@@ -157,12 +157,12 @@ const user = await $fetch("/api/user", {
 
 ```
 ┌────────────────────────────────────────────────────────────┐
-│  rule-frontend-meta-nuxt — Nuxt.js (Vue Meta-framework)                   │
+│  rule-frontend-meta-nuxt - Nuxt.js (Vue Meta-framework)                   │
 │                                                           │
 │  Routing:   pages/ directory, dynamic [slug]              │
 │  SSR/SSG:   nuxt.config routeRules (SWR, prerender, SPA)  │
 │  Server:    server/api/ + server/middleware/ (Nitro)       │
-│  Auto:      components/ composables/ — no imports needed  │
+│  Auto:      components/ composables/ - no imports needed  │
 │  Data:      useFetch (SSR-safe) + $fetch (raw)            │
 │  Deploy:    Node, Static, Vercel, Cloudflare, Netlify     │
 └────────────────────────────────────────────────────────────┘
@@ -172,6 +172,6 @@ const user = await $fetch("/api/user", {
 
 ## See also
 
-- [rule](../rule/SKILL.md) — Central skill index and dispatcher
-- [rule-frontend](../rule-frontend/SKILL.md) — Frontend skill index
-- [rule-styleguide](../rule-styleguide/SKILL.md) — Shared frontend standards
+- [rule](../rule/SKILL.md) - Central skill index and dispatcher
+- [rule-frontend](../rule-frontend/SKILL.md) - Frontend skill index
+- [rule-styleguide](../rule-styleguide/SKILL.md) - Shared frontend standards

@@ -14,7 +14,7 @@ tags:
 frameworks: [all]
 ---
 
-# rule-toolchain-turborepo — Turborepo Monorepo Orchestration
+# rule-toolchain-turborepo - Turborepo Monorepo Orchestration
 
 ## Overview
 
@@ -68,10 +68,10 @@ It caches task outputs, parallelizes execution, and only rebuilds changed packag
 
 ## Task Pipeline Semantics
 
-- `^build` — wait for all dependency builds before building this package
-- `outputs` — cached artifacts (restored on cache hit)
-- `inputs` — file globs that invalidate the cache
-- `persistent: true` — long-running dev servers (no caching)
+- `^build` - wait for all dependency builds before building this package
+- `outputs` - cached artifacts (restored on cache hit)
+- `inputs` - file globs that invalidate the cache
+- `persistent: true` - long-running dev servers (no caching)
 
 ## Remote Caching
 
@@ -93,13 +93,13 @@ pnpm turbo run dev --parallel            # Parallel dev servers
 
 ```bash
 pnpm add -D turbo
-# Remove lerna.json / nx.json — turbo.json replaces both
+# Remove lerna.json / nx.json - turbo.json replaces both
 # Add turbo.json with your pipeline
 pnpm turbo run build
 ```
 
 ## See also
 
-- [rule-toolchain-pnpm](../rule-toolchain-pnpm/SKILL.md) — pnpm workspace setup
-- [rule-devops-testing](../rule-devops-testing/SKILL.md) — Testing in CI
-- [rule](../rule/SKILL.md) — Central skill index
+- [rule-toolchain-pnpm](../rule-toolchain-pnpm/SKILL.md) - pnpm workspace setup
+- [rule-devops-testing](../rule-devops-testing/SKILL.md) - Testing in CI
+- [rule](../rule/SKILL.md) - Central skill index

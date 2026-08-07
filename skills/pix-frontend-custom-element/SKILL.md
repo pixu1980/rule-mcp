@@ -90,8 +90,8 @@ Flags:
 | `--components-dir` | `src/components`    | Where to put the component folder                                                                   |
 | `--shared-dir`     | `packages/rule-core` | Where to install `decorator/`, `events/`, and the browser-safe tagged `template-engine/` if missing |
 | `--extends`        | (none)              | Built-in tag for customized built-ins (e.g. `details`)                                              |
-| `--attributes`     | (empty)             | Comma list — becomes `static attributes` keys                                                       |
-| `--events`         | (empty)             | Comma list — becomes `static events` keys                                                           |
+| `--attributes`     | (empty)             | Comma list - becomes `static attributes` keys                                                       |
+| `--events`         | (empty)             | Comma list - becomes `static events` keys                                                           |
 | `--install-shared` | `false`             | Copy `decorator/`, `events/`, and the browser-safe tagged `template-engine/` if missing             |
 | `--force`          | `false`             | Allow overwriting existing files                                                                    |
 | `--dry-run`        | `false`             | Report what would be written without writing                                                        |
@@ -104,7 +104,7 @@ node --test <skill>/scripts/scaffold-component.test.mjs
 
 ## Manual workflow (when not using the CLI)
 
-### Step 1 — discover existing centralisation
+### Step 1 - discover existing centralisation
 
 ```bash
 # Direct: find a file that exports componentDecorator
@@ -115,7 +115,7 @@ grep -rl "export function componentDecorator" --include="*.js" --include="*.mjs"
 find . -path "*/packages/rule-core/decorator/index.js" -not -path "*/node_modules/*" -not -path "*/dist/*"
 ```
 
-### Step 2 — install once when missing
+### Step 2 - install once when missing
 
 | Project shape                         | Recommended path                                                         |
 | ------------------------------------- | ------------------------------------------------------------------------ |
@@ -123,7 +123,7 @@ find . -path "*/packages/rule-core/decorator/index.js" -not -path "*/node_module
 | rule-mcp monorepo component package | `packages/rule-core/`                                                     |
 | Existing workspace shared package     | Reuse that path and expose it through a stable import alias/package name |
 
-### Step 3 — scaffold the component
+### Step 3 - scaffold the component
 
 Naming convention: **folder name in PascalCase**, **file names in kebab-case** (matching the custom element tag).
 
@@ -165,8 +165,8 @@ Every rule component **must** split its source into focused modules:
 Anti-patterns:
 
 - Do not define constants or helper functions inside `ComponentName.js`.
-- Do not put `TemplateEngine` or `engine.html` calls inside `ComponentName.js` — they belong in `ComponentName.template.js`.
-- Do not inline SVG markup as template literals — use `icons/*.svg` files.
+- Do not put `TemplateEngine` or `engine.html` calls inside `ComponentName.js` - they belong in `ComponentName.template.js`.
+- Do not inline SVG markup as template literals - use `icons/*.svg` files.
 - Do not put DOM logic inside `consts.js` or `utils.js`.
 
 ## Class skeleton
@@ -210,10 +210,10 @@ The static block is the **only** site where the element is wired up.
 
 `componentDecorator(this)` runs four steps:
 
-1. **Adopt CSS** — the CSS string (or `CSSStyleSheet`, or array of either) stored on `static styles` is added to `document.adoptedStyleSheets` exactly once per class (guarded with a `WeakSet`).
-2. **Resolve tag** — `static isAttribute` wins; otherwise the class name is converted from PascalCase to kebab-case.
-3. **Safe `customElements.define`** — skips when already defined; passes `{ extends }` when `static extendsElement` is set.
-4. **Apply mixins to the prototype** — `componentName`, `handle<Name>AttributeChanged`, `handle<Type>Event`, `connectedCallback`, `disconnectedCallback`, `attributeChangedCallback`, `handleEvent`, `observedAttributes`.
+1. **Adopt CSS** - the CSS string (or `CSSStyleSheet`, or array of either) stored on `static styles` is added to `document.adoptedStyleSheets` exactly once per class (guarded with a `WeakSet`).
+2. **Resolve tag** - `static isAttribute` wins; otherwise the class name is converted from PascalCase to kebab-case.
+3. **Safe `customElements.define`** - skips when already defined; passes `{ extends }` when `static extendsElement` is set.
+4. **Apply mixins to the prototype** - `componentName`, `handle<Name>AttributeChanged`, `handle<Type>Event`, `connectedCallback`, `disconnectedCallback`, `attributeChangedCallback`, `handleEvent`, `observedAttributes`.
 
 Generated lifecycle behaviour:
 
@@ -237,7 +237,7 @@ export default {
 };
 ```
 
-`this` is the element. Keys become observed attributes automatically. Export `{}` when no attributes are observed — the file must still exist.
+`this` is the element. Keys become observed attributes automatically. Export `{}` when no attributes are observed - the file must still exist.
 
 ## Events file
 
@@ -257,7 +257,7 @@ export default {
 
 Each key is a DOM event type. `this` is the element. The decorator attaches and detaches listeners across `connectedCallback` / `disconnectedCallback`.
 
-## Bundler support — bundle-text vs ?raw
+## Bundler support - bundle-text vs ?raw
 
 | Bundler                      | Import form                                   | Notes                                                |
 | ---------------------------- | --------------------------------------------- | ---------------------------------------------------- |
@@ -266,7 +266,7 @@ Each key is a DOM event type. `this` is the element. The decorator attaches and 
 | esbuild                      | `import s from './x.css'`                     | Configure `loader: { '.css': 'text' }`               |
 | webpack 5+                   | `import s from './x.css?raw'` or asset/source | `webpack.config.js` rule with `type: 'asset/source'` |
 
-The decorator's `registerStylesheet` accepts either a CSS **string** or a pre-built **`CSSStyleSheet`** (or an array of either) — so any of those import strategies work without code changes.
+The decorator's `registerStylesheet` accepts either a CSS **string** or a pre-built **`CSSStyleSheet`** (or an array of either) - so any of those import strategies work without code changes.
 
 ## Render with rule-template-engine
 
@@ -290,8 +290,8 @@ onRender() {
 
 ## Customized built-in elements vs autonomous
 
-- **Customized built-in** (`<details is="rule-details">`) — class extends a specific HTML element (e.g. `HTMLDetailsElement`) and sets `static extendsElement = 'details'`. CSS targets `[is="rule-details"]`. Inherits all native semantics, accessibility, and form behaviour.
-- **Autonomous** (`<rule-card>`) — class extends `HTMLElement`, no `extendsElement`. CSS targets the tag itself: `rule-card { ... }`.
+- **Customized built-in** (`<details is="rule-details">`) - class extends a specific HTML element (e.g. `HTMLDetailsElement`) and sets `static extendsElement = 'details'`. CSS targets `[is="rule-details"]`. Inherits all native semantics, accessibility, and form behaviour.
+- **Autonomous** (`<rule-card>`) - class extends `HTMLElement`, no `extendsElement`. CSS targets the tag itself: `rule-card { ... }`.
 
 Safari does not natively support customized built-ins. When targeting Safari, ship the [@ungap/custom-elements](https://github.com/ungap/custom-elements) polyfill at app startup or use autonomous elements.
 
@@ -332,19 +332,19 @@ Declare component-scoped tokens (`--rule-details--*`) at the top of the `@layer`
 | `decorator/` or `events/` copied inside a component folder      | Move them to a project-shared path; update imports in every component                                                        |
 | Two `decorator/` installations in different folders             | Pick one as canonical, delete the others, update imports                                                                     |
 | Importing helpers from a sibling component (`../OtherComp/...`) | Always import from the central library path                                                                                  |
-| Styles applied twice after HMR                                  | Use `componentDecorator` / `registerStylesheet` — never adopt sheets manually in render                                      |
+| Styles applied twice after HMR                                  | Use `componentDecorator` / `registerStylesheet` - never adopt sheets manually in render                                      |
 | Listener not removed on detach                                  | Don't store `bound` references; rely on `addEventListener(type, this)` + `handleEvent` (the decorator does this for you)     |
 | `customElements.define` throws on second import                 | Decorator skips when `customElements.get(tag)` already returns; never call `define` directly                                 |
-| CSS file imported but `styles` is `undefined`                   | Bundler is treating the file as a CSS module/side-effect import — switch to `bundle-text:` (Parcel) or `?raw` (Vite/webpack) |
+| CSS file imported but `styles` is `undefined`                   | Bundler is treating the file as a CSS module/side-effect import - switch to `bundle-text:` (Parcel) or `?raw` (Vite/webpack) |
 | Inline SVG strings in `ComponentName.js`                        | Move each SVG to `icons/<name>.svg` and import with `bundle-text:./icons/<name>.svg`                                         |
 | Constants or helper functions defined in `ComponentName.js`     | Move constants to `ComponentName.consts.js`, pure helpers to `ComponentName.utils.js`                                        |
 | Customized built-in not upgrading on Safari                     | Ship the `@ungap/custom-elements` polyfill at app entry                                                                      |
 
 ## See also
 
-- [rule-frontend-vanilla-reactive](../rule-frontend-vanilla-reactive/SKILL.md) — Proxy Store, Signals, and the reactive template engine
-- [rule-styleguide](../rule-styleguide/SKILL.md) — HTML/CSS/JS conventions (semantics, layers, naming)
-- [rule-styleguide-a11y](../rule-styleguide-a11y/SKILL.md) — WCAG 2.2 AA requirements for components
-- [rule-ui-design-system](../rule-ui-design-system/SKILL.md) — design tokens, layers, and visual direction
-- [rule-frontend](../rule-frontend/SKILL.md) — frontend skill index
-- [rule](../rule/SKILL.md) — central skill index
+- [rule-frontend-vanilla-reactive](../rule-frontend-vanilla-reactive/SKILL.md) - Proxy Store, Signals, and the reactive template engine
+- [rule-styleguide](../rule-styleguide/SKILL.md) - HTML/CSS/JS conventions (semantics, layers, naming)
+- [rule-styleguide-a11y](../rule-styleguide-a11y/SKILL.md) - WCAG 2.2 AA requirements for components
+- [rule-ui-design-system](../rule-ui-design-system/SKILL.md) - design tokens, layers, and visual direction
+- [rule-frontend](../rule-frontend/SKILL.md) - frontend skill index
+- [rule](../rule/SKILL.md) - central skill index

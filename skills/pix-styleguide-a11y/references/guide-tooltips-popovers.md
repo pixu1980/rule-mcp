@@ -4,7 +4,7 @@
 
 ## Core Rules
 
-1. **Trigger:** Must be focusable (button, link) — not just hoverable.
+1. **Trigger:** Must be focusable (button, link) - not just hoverable.
 2. **Hover/Focus:** Tooltip MUST appear on both hover and keyboard focus.
 3. **Dismissible:** Tooltip MUST be dismissible via `Escape` key.
 4. **Persistent:** Tooltip MUST NOT disappear when the mouse moves over it (hoverable).

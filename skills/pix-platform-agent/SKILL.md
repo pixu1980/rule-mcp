@@ -12,11 +12,11 @@ metadata:
   version: "1.0"
 ---
 
-# AI Agent project — framework-agnostic guidance
+# AI Agent project - framework-agnostic guidance
 
-This skill describes how to structure an AI Agent project — an autonomous
+This skill describes how to structure an AI Agent project - an autonomous
 program that uses an LLM to reason, call tools, and persist conversation
-state — without mandating any particular SDK or core library.
+state - without mandating any particular SDK or core library.
 
 Every example uses plain TypeScript interfaces and functions that you can
 adapt to any agent framework (LangChain, Vercel AI SDK, OpenAI SDK, MCP
@@ -24,7 +24,7 @@ clients, custom runners, etc.).
 
 ---
 
-## Step 1 — Create the project structure
+## Step 1 - Create the project structure
 
 A typical agent project lives under `src/` with clear separation:
 
@@ -34,9 +34,9 @@ src/
 ├── types.ts               # Shared interfaces (LLMProvider, Tool, AgentConfig, Memory)
 ├── config/
 │   └── env.ts             # Environment validation with zod
-├── agents/                # Agent definitions — one file per agent
+├── agents/                # Agent definitions - one file per agent
 │   └── <name>.agent.ts    # Calls agentRegistry.register() at module level
-├── tools/                 # Tool definitions — one file per tool
+├── tools/                 # Tool definitions - one file per tool
 │   └── <name>.tool.ts     # Calls toolRegistry.register() at module level
 ├── providers/             # LLM provider wrappers
 │   └── <name>.ts
@@ -55,7 +55,7 @@ modules, triggering registration, then starts the runner.
 
 ---
 
-## Step 2 — Validate environment variables
+## Step 2 - Validate environment variables
 
 Create `.env.example`:
 
@@ -95,7 +95,7 @@ Fail fast: validation runs at process start, never at first request.
 
 ---
 
-## Step 3 — Implement a provider
+## Step 3 - Implement a provider
 
 A provider wraps an LLM API into a common interface. Example with OpenAI:
 
@@ -126,7 +126,7 @@ If you switch SDKs, you only rewrite this file and the type interface.
 
 ---
 
-## Step 4 — Define a tool
+## Step 4 - Define a tool
 
 Tools self-register at module level. Each file exports one tool and calls
 `toolRegistry.register()` on import:
@@ -157,7 +157,7 @@ import all modules so self-registration fires at startup.
 
 ---
 
-## Step 5 — Create the entry point
+## Step 5 - Create the entry point
 
 ```ts
 import "./agents/index.js";
@@ -177,13 +177,13 @@ try {
 }
 ```
 
-The `startRunner` function is your project's own runner — it reads registered
+The `startRunner` function is your project's own runner - it reads registered
 agents from `agentRegistry`, selects one based on config, and enters the
 LLM-request–tool-call loop. No external library is required for this loop.
 
 ---
 
-## Step 6 — Set up seed data
+## Step 6 - Set up seed data
 
 Place configuration in `seed/data/agent-config.json`:
 
@@ -202,7 +202,7 @@ idempotent (skips if marker exists).
 
 ---
 
-## Step 7 — Write tests
+## Step 7 - Write tests
 
 ### Unit tests for providers
 
@@ -280,12 +280,12 @@ interfaces. Before a user-facing launch:
 See [rule-devops-observability](../rule-devops-observability/SKILL.md)
 for telemetry, alerting, and incident handling.
 
-## Step 8 — Containerize
+## Step 8 - Containerize
 
 Use templates from [rule-devops-docker](../rule-devops-docker/SKILL.md):
 
-- **`Dockerfile`** — Node.js runner template
-- **`docker-compose.yml`** — Single service (or combined with dashboard)
+- **`Dockerfile`** - Node.js runner template
+- **`docker-compose.yml`** - Single service (or combined with dashboard)
 
 | Setting         | Value                     |
 | --------------- | ------------------------- |
@@ -304,10 +304,10 @@ Edge cases:
 
 ## See also
 
-- [rule](../rule/SKILL.md) — Central skill index and dispatcher
-- [rule-architect](../rule-architect/SKILL.md) — Project architecture wizard
-- [rule-devops-testing](../rule-devops-testing/SKILL.md) — Test thresholds and coverage
-- [rule-devops-docker](../rule-devops-docker/SKILL.md) — Dockerfile templates
-- [rule-devops-observability](../rule-devops-observability/SKILL.md) — Production telemetry and alerting
+- [rule](../rule/SKILL.md) - Central skill index and dispatcher
+- [rule-architect](../rule-architect/SKILL.md) - Project architecture wizard
+- [rule-devops-testing](../rule-devops-testing/SKILL.md) - Test thresholds and coverage
+- [rule-devops-docker](../rule-devops-docker/SKILL.md) - Dockerfile templates
+- [rule-devops-observability](../rule-devops-observability/SKILL.md) - Production telemetry and alerting
 
 ---

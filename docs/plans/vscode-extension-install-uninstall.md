@@ -1,38 +1,38 @@
-# Fix VS Code Extension Install/Uninstall Scripts (portato da rule-mcp)
+# Fix VS Code Extension Install/Uninstall Scripts (ported from rule-mcp)
 
-## Problema
+## Problem
 
-L'estensione VS Code rule-vanilla-reactive non viene installata correttamente:
+The VS Code extension rule-vanilla-reactive is not installed correctly:
 
-- `install.js` (`rule-mcp install --agent vscode`) scrive solo il MCP config ma NON installa il `.vsix`
-- `install.sh` Phase 4 silenzia gli errori con `2>/dev/null`
-- Manca supporto per derivati (Cursor, Windsurf, VS Code Insiders)
-- `uninstall.js` non rimuove l'estensione tramite CLI
+- `install.js` (`rule-mcp install --agent vscode`) only writes the MCP config but does NOT install the `.vsix`
+- `install.sh` Phase 4 silences errors with `2>/dev/null`
+- Missing support for derivatives (Cursor, Windsurf, VS Code Insiders)
+- `uninstall.js` doesn't remove the extension via CLI
 
 ## Checklist
 
-### Step 1: Fix `install.js` — Aggiungere installazione estensione `.vsix`
+### Step 1: Fix `install.js` - Add `.vsix` extension install
 
-- [x] Aggiungere `installVscodeExtension()` per `vscode`, `cursor`, `windsurf`, `code-insiders`, `code-oss`
-- [x] Integrare nell'installer `installVscode()`
+- [x] Add `installVscodeExtension()` for `vscode`, `cursor`, `windsurf`, `code-insiders`, `code-oss`
+- [x] Integrate into `installVscode()` installer
 
-### Step 2: Fix `install.js` — Uninstall estensione via CLI
+### Step 2: Fix `install.js` - Uninstall extension via CLI
 
-- [x] Aggiungere `uninstallVscodeExtension()` che usa i CLI appropriati
-- [x] Integrare in `uninstallVscode()`
+- [x] Add `uninstallVscodeExtension()` using appropriate CLIs
+- [x] Integrate into `uninstallVscode()`
 
 ### Step 3: Fix `install.sh` Phase 4
 
-- [x] Non silenziare errori build/install (`2>/dev/null` → mostrare output)
-- [x] Aggiungere install per Cursor, Windsurf, VS Code Insiders
-- [x] Usare `.vsix` pre-esistente se disponibile, evitando rebuild
+- [x] Don't silence build/install errors (`2>/dev/null` → show output)
+- [x] Add install for Cursor, Windsurf, VS Code Insiders
+- [x] Use pre-existing `.vsix` if available, avoiding rebuild
 
 ### Step 4: Fix `uninstall.sh` Phase 3b
 
-- [x] Aggiungere disinstallazione per Cursor, Windsurf, VS Code Insiders, Codium
-- [x] Usare `--uninstall-extension` via CLI appropriati
+- [x] Add uninstall for Cursor, Windsurf, VS Code Insiders, Codium
+- [x] Use `--uninstall-extension` via appropriate CLIs
 
 ### Step 5: Fix PowerShell scripts
 
-- [x] `install.ps1`: Aggiungere Phase 4 per installare .vsix
-- [x] `uninstall.ps1`: Aggiungere code-insiders e codium, global config cleanup
+- [x] `install.ps1`: Add Phase 4 to install .vsix
+- [x] `uninstall.ps1`: Add code-insiders and codium, global config cleanup

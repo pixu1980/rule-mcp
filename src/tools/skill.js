@@ -8,7 +8,7 @@ import { extractScaffoldSection, extractSingleScaffoldFile } from "../core/skill
  * Register a single skill as an MCP tool.
  * Supports both official rule-* skills and custom plugins.
  *
- * @param {string} skillName — The skill name (e.g. "rule-frontend-react" or "my-custom-rule")
+ * @param {string} skillName - The skill name (e.g. "rule-frontend-react" or "my-custom-rule")
  */
 export function registerSkillTool(skillName) {
   const isPlugin = isPluginSkill(skillName);
@@ -159,7 +159,7 @@ export function registerSkillTool(skillName) {
         if (!isIndexReady()) {
           buildIndex();
         }
-        // Search with larger limit (50) then filter by skill — avoids top-5-before-filter bug
+        // Search with larger limit (50) then filter by skill - avoids top-5-before-filter bug
         const results = query
           ? search(query, 50)
               .filter((r) => r.skill === skillName)

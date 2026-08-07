@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════════════════════════════
-//  rule Vanilla Reactive — Completion Provider
+//  rule Vanilla Reactive - Completion Provider
 //  ═══════════════════════════════════════════════════════════════════════════════
 //  Provides context-aware autocomplete for {{ }}, @click, data-part, filters.
 //  Scans ALL workspace files, not just the current document.

@@ -11,9 +11,9 @@ tags:
 frameworks: [all]
 ---
 
-# rule-backend — Backend Skill Index
+# rule-backend - Backend Skill Index
 
-This is the umbrella skill for backend development. It does not contain detailed guidance — that lives in the specialized skills below.
+This is the umbrella skill for backend development. It does not contain detailed guidance - that lives in the specialized skills below.
 
 ## Backend Frameworks
 
@@ -56,4 +56,4 @@ Deploy:      Node.js / Docker / Serverless / Electron
 
 ## See also
 
-- [rule](../rule/SKILL.md) — Central skill index and dispatcher
+- [rule](../rule/SKILL.md) - Central skill index and dispatcher

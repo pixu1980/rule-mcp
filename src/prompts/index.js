@@ -51,10 +51,10 @@ const PROMPT_EXAMPLES = {
 /**
  * Build the generic `/rule-* help` message for a prompt definition.
  *
- * @param {string} name — prompt name
- * @param {{ description: string, arguments: Array<{ name: string, description: string, required?: boolean }> }} def — prompt definition
- * @param {string[]} [examples] — example invocations
- * @returns {string} — the help block the model should present verbatim
+ * @param {string} name - prompt name
+ * @param {{ description: string, arguments: Array<{ name: string, description: string, required?: boolean }> }} def - prompt definition
+ * @param {string[]} [examples] - example invocations
+ * @returns {string} - the help block the model should present verbatim
  */
 function buildHelpMessage(name, def, examples = []) {
   const argumentList = def.arguments.map((a) => (a.required ? `<${a.name}>` : `[${a.name}]`)).join(" ");
@@ -74,8 +74,8 @@ function buildHelpMessage(name, def, examples = []) {
 /**
  * Shared system text for the 15 area prompts.
  *
- * @param {string} area — area name (e.g. "frontend")
- * @param {string} tools — comma-separated rule_tool_* tools of the area
+ * @param {string} area - area name (e.g. "frontend")
+ * @param {string} tools - comma-separated rule_tool_* tools of the area
  */
 function areaPromptText(area, tools) {
   const lines = [
@@ -190,7 +190,7 @@ export function listPrompts() {
     {
       name: "rule-handoff",
       description:
-        "Produce a compressed context handoff (ADR summary + git context) to resume in a new session. Usage: /rule-handoff [options] or /rule-handoff help — no arguments = quick handoff",
+        "Produce a compressed context handoff (ADR summary + git context) to resume in a new session. Usage: /rule-handoff [options] or /rule-handoff help - no arguments = quick handoff",
       arguments: [
         {
           name: "options",
@@ -302,7 +302,7 @@ export function listPrompts() {
       arguments: [
         {
           name: "scope",
-          description: "What to test (free text: include test type — tdd, a11y, devops, all)",
+          description: "What to test (free text: include test type - tdd, a11y, devops, all)",
           required: true,
         },
       ],
@@ -316,7 +316,7 @@ export function listPrompts() {
  * Claude Code exposes MCP prompts as `/<server>:<prompt> (MCP)` and offers no
  * client-side way to hide them. The installer ships clean `/rule-*` user
  * commands for Claude and sets this flag so the prefixed prompt duplicates are
- * not also listed. `listPrompts()` itself stays pure (the full registry) — only
+ * not also listed. `listPrompts()` itself stays pure (the full registry) - only
  * `listActivePrompts()` honours the flag.
  *
  * @returns {boolean}
@@ -338,8 +338,8 @@ export function listActivePrompts() {
 /**
  * Get a specific prompt by name with its system message content.
  *
- * @param {string} name — Prompt name
- * @param {Record<string, string>} [args] — Prompt arguments from the client
+ * @param {string} name - Prompt name
+ * @param {Record<string, string>} [args] - Prompt arguments from the client
  * @returns {{ name: string, description: string, messages: Array<{ role: string, content: { type: string, text: string } }> }|null}
  */
 export function getPrompt(name, args = {}) {
@@ -452,7 +452,7 @@ export function getPrompt(name, args = {}) {
         description: "Produce a compressed context handoff",
         messages: user(
           "You are a handoff specialist for rule-mcp.\n" +
-            "The user invoked `/rule-handoff`; every option is optional and defaults are applied server-side. The requested options are already resolved here into exact tool arguments — do not reinterpret them.\n" +
+            "The user invoked `/rule-handoff`; every option is optional and defaults are applied server-side. The requested options are already resolved here into exact tool arguments - do not reinterpret them.\n" +
             "Resolved arguments for `rule_tool_process_handoff` (mode: handoff | close-session):\n" +
             `- mode=${options.mode}\n` +
             `- compress=${options.compress ? "true" : "false"}\n` +
@@ -550,16 +550,16 @@ export function getPrompt(name, args = {}) {
         description: "Audit a11y end-to-end (review + tests)",
         messages: user(
           "You are an a11y auditor enforcing WCAG 2.2 AA.\n" +
-            "Part 1 — Review the code:\n" +
+            "Part 1 - Review the code:\n" +
             "  - semantic HTML, headings hierarchy, color contrast (4.5:1 text, 3:1 large),\n" +
             "  - focus styles, keyboard nav, form labels, alt text, ARIA usage.\n" +
-            "Part 2 — Ensure automated tests exist in tests/a11y/ using Playwright + @axe-core/playwright:\n" +
+            "Part 2 - Ensure automated tests exist in tests/a11y/ using Playwright + @axe-core/playwright:\n" +
             "  - tests/a11y/_basic.spec.js (page structure)\n" +
             "  - tests/a11y/_forms.spec.js (form a11y)\n" +
             "  - tests/a11y/_components.spec.js (component a11y)\n" +
             "  - playwright.config.js\n" +
             "Use AxeBuilder from @axe-core/playwright, assert expect(results.violations).toEqual([]).\n" +
-            "If the a11y tests are missing, generate them — use `rule_tool_component` for test templates.\n" +
+            "If the a11y tests are missing, generate them - use `rule_tool_component` for test templates.\n" +
             "Validate findings and generated tests with `rule_tool_check` against pix_styleguide_a11y.\n" +
             "Run the tests and report real outcomes; never claim unexecuted checks passed.\n" +
             'Finish by proposing a conventional commit message with a mandatory scope, e.g. "test(a11y): ...".',

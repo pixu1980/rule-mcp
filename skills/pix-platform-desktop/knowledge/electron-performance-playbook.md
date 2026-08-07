@@ -6,11 +6,11 @@ This playbook supports the rule-electron performance review skill. It covers IPC
 
 Electron performance is about three things:
 
-1. **IPC cost** — every cross-process call has overhead
-2. **Main process responsiveness** — the main process handles all system interactions
-3. **App startup** — first impression is everything
+1. **IPC cost** - every cross-process call has overhead
+2. **Main process responsiveness** - the main process handles all system interactions
+3. **App startup** - first impression is everything
 
-## Pattern 1 — IPC batching
+## Pattern 1 - IPC batching
 
 ### The problem
 
@@ -42,11 +42,11 @@ const c = await qt.getC();
 const [a, b, c] = await Promise.all([qt.getA(), qt.getB(), qt.getC()]);
 ```
 
-## Pattern 2 — Throttling IPC
+## Pattern 2 - Throttling IPC
 
 ### Problem
 
-Mouse moves, scroll events, resize — these fire at 60+ fps. Sending IPC for each frame is wasteful.
+Mouse moves, scroll events, resize - these fire at 60+ fps. Sending IPC for each frame is wasteful.
 
 ### Solutions
 
@@ -73,7 +73,7 @@ const debouncedSave = debounce((text) => {
 editor.addEventListener("input", (e) => debouncedSave(e.target.value));
 ```
 
-## Pattern 3 — Window creation
+## Pattern 3 - Window creation
 
 ### Eager → Lazy
 
@@ -111,7 +111,7 @@ win.once("ready-to-show", () => {
 win.loadURL("file://...");
 ```
 
-## Pattern 4 — Native modules
+## Pattern 4 - Native modules
 
 Native modules (`.node` files) are expensive. Each one:
 
@@ -132,7 +132,7 @@ Native modules (`.node` files) are expensive. Each one:
 | Compression | `zlib` module                         |
 | Events      | `EventEmitter`                        |
 
-## Pattern 5 — Startup optimization
+## Pattern 5 - Startup optimization
 
 ### Timeline
 
@@ -172,7 +172,7 @@ mainWin.once("ready-to-show", () => {
 });
 ```
 
-## Pattern 6 — Worker threads
+## Pattern 6 - Worker threads
 
 CPU-heavy work in the main process blocks all IPC and window management.
 
@@ -205,7 +205,7 @@ function runWorker(workerPath, data) {
 
 Good candidates for workers: PDF generation, image processing, data transformation, large JSON parsing.
 
-## Pattern 7 — Dependency audit
+## Pattern 7 - Dependency audit
 
 ### How to audit
 
@@ -233,7 +233,7 @@ pnpx depcheck
 | `uuid`        | `crypto.randomUUID()`                                |
 | `fs-extra`    | `fs` + manual mkdirp                                 |
 
-## Pattern 8 — ASAR and packaging
+## Pattern 8 - ASAR and packaging
 
 ASAR archives all files into a single blob for faster reads. However, native modules and external scripts may need to be unpacked.
 
@@ -247,7 +247,7 @@ ASAR archives all files into a single blob for faster reads. However, native mod
 }
 ```
 
-## Pattern 9 — Window cleanup
+## Pattern 9 - Window cleanup
 
 ```js
 let win = null;
@@ -263,7 +263,7 @@ function createWindow() {
 
 Without nullification, the window object remains in memory even after the window is closed.
 
-## Pattern 10 — Main process architecture
+## Pattern 10 - Main process architecture
 
 Keep the main entry point thin:
 

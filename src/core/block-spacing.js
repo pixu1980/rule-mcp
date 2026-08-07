@@ -1,10 +1,10 @@
 // ═══════════════════════════════════════════════════════════════════════════════
-//  Block spacing fixer — deterministic blank-line enforcement
+//  Block spacing fixer - deterministic blank-line enforcement
 //  ═══════════════════════════════════════════════════════════════════════════════
 //  Rules:
-//    Case 1 — block at START of parent → blank line BELOW only
-//    Case 2 — block at END of parent   → blank line ABOVE only
-//    Case 3 — block in middle          → blank line ABOVE AND BELOW
+//    Case 1 - block at START of parent → blank line BELOW only
+//    Case 2 - block at END of parent   → blank line ABOVE only
+//    Case 3 - block in middle          → blank line ABOVE AND BELOW
 //
 //  A "block" is any {…} containing ≥2 lines of code.
 //  Runs after Prettier so indentation is canonical.
@@ -50,7 +50,7 @@ function findBlocks(lines) {
       stack.push({ openLine: index, indent: indentOf(line) });
     }
 
-    // Closing brace — pop from stack and record the block
+    // Closing brace - pop from stack and record the block
     if (/^\s*\}\s*$/.test(line) && stack.length > 0) {
       const block = stack.pop();
       block.closeLine = index;
@@ -222,7 +222,7 @@ export function fixBlockSpacing(filePath) {
     const next = index + 1 < lines.length ? lines[index + 1].trim() : "";
     if (next === "};") {
       continue;
-    } // skip — handled by block rules
+    } // skip - handled by block rules
     // If current line closes a multi-line export body and next line is another export
     if (
       (current === "};" || current.startsWith("}")) &&

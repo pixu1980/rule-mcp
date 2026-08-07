@@ -16,7 +16,7 @@
  *   pi, vscode, jetbrains, neovim, emacs
  *
  * Verification tiers (honesty matters for a compatibility surface this wide):
- *   - stdio: universally tested — works with every MCP host. Default, preferred.
+ *   - stdio: universally tested - works with every MCP host. Default, preferred.
  *   - daemon / HTTP+SSE: interop-verified end-to-end only for `pi` and `vscode`
  *     (see remoteModeAgents). Other agents get a correct-shape `mcpServers` config
  *     that is NOT individually interop-tested and may need a manual tweak.
@@ -104,7 +104,7 @@ const readText = (file) => (existsSync(file) ? readFileSync(file, "utf8") : "");
 // eslint-disable-next-line no-unused-vars
 const atomicWrite = ({ file, content, dryRun }) => {
   if (content === null) {
-    throw new Error(`Cannot write null content to ${file} — parse error in source`);
+    throw new Error(`Cannot write null content to ${file} - parse error in source`);
   }
   if (dryRun) {
     return file;
@@ -132,7 +132,7 @@ const atomicWrite = ({ file, content, dryRun }) => {
 /** Write a file, optionally as a dry-run (no actual write). @deprecated Use atomicWrite for safety. */
 const writeText = ({ file, content, dryRun }) => {
   if (content === null) {
-    throw new Error(`Cannot write null content to ${file} — parse error in source`);
+    throw new Error(`Cannot write null content to ${file} - parse error in source`);
   }
   if (!dryRun) {
     mkdirSync(dirname(file), { recursive: true });
@@ -173,7 +173,7 @@ const backupFile = (file) => {
  *   - daemon / sse: client connects to the local SSE daemon
  *   - docker: client connects to the Docker-exposed local SSE endpoint
  *
- * @param {string} entrypoint — Path to the server entry script
+ * @param {string} entrypoint - Path to the server entry script
  * @param {{ global?: boolean, mode?: "stdio"|"daemon"|"sse"|"docker", port?: number }} [opts]
  * @returns {object}
  */
@@ -201,7 +201,7 @@ const resolveGlobalBinary = () => {
       return out;
     }
   } catch {
-    // Not found — fall back to local Node entrypoint.
+    // Not found - fall back to local Node entrypoint.
   }
   return null;
 };
@@ -215,7 +215,7 @@ const ENV_CONFIG_FILE = join(ENV_CONFIG_DIR, "env.json");
 /**
  * Opt-out feature flags, defaulted to "0" (feature ON) in generated config so
  * they are discoverable and easy to flip. Each is honored only when set to "1";
- * "0" is a no-op, so shipping them at "0" changes no behavior — it just documents
+ * "0" is a no-op, so shipping them at "0" changes no behavior - it just documents
  * the switches in the user's mcp.json / Docker config.
  */
 export const DEFAULT_OPTOUT_ENV = {
@@ -314,7 +314,7 @@ const commandConfig = (entrypoint, options = {}) => {
 /**
  * Return the MCP server config object with the server name key.
  *
- * @param {string} entrypoint — Path to the server entry script
+ * @param {string} entrypoint - Path to the server entry script
  * @param {{ global?: boolean, mode?: "stdio"|"daemon"|"sse"|"docker", port?: number }} [opts]
  * @returns {Record<string, object>}
  */
@@ -462,8 +462,8 @@ const removeTomlBlock = (current, blockName) => {
  * Append rule-mcp instruction marker to agent instructions file.
  * Uses HTML comments so it's compatible with Markdown and HTML-based formats.
  *
- * @param {string} current — Current file content
- * @returns {string} — Updated content with instruction marker
+ * @param {string} current - Current file content
+ * @returns {string} - Updated content with instruction marker
  */
 const appendInstruction = (current) => {
   const marker = "<!-- rule-mcp -->";
@@ -864,10 +864,10 @@ const installEmacs = ({ entrypoint, dryRun, global }) => {
 /**
  * Create a generic installer for agents that use standard JSON config files.
  *
- * @param {string} name — Agent name
+ * @param {string} name - Agent name
  * @param {object} [opts]
- * @param {string} [opts.configPath] — Custom config path (default: ~/.config/<name>/mcp.json)
- * @param {string} [opts.instructionsPath] — Custom instructions path
+ * @param {string} [opts.configPath] - Custom config path (default: ~/.config/<name>/mcp.json)
+ * @param {string} [opts.instructionsPath] - Custom instructions path
  * @returns {Function} Installer function
  */
 const createGenericInstaller = (name, opts = {}) => {
@@ -927,11 +927,11 @@ const installers = {
 /**
  * Write/update installed.md manifest in the state directory.
  *
- * @param {string[]} agents — List of installed agent names
- * @param {string} entrypoint — Server entry point path
- * @param {boolean} global — Whether using global install
- * @param {"stdio"|"daemon"|"docker"} mode — MCP transport/deployment mode
- * @returns {string} — Manifest file path
+ * @param {string[]} agents - List of installed agent names
+ * @param {string} entrypoint - Server entry point path
+ * @param {boolean} global - Whether using global install
+ * @param {"stdio"|"daemon"|"docker"} mode - MCP transport/deployment mode
+ * @returns {string} - Manifest file path
  */
 function writeInstalledManifest(agents, entrypoint, global, mode) {
   const stateDir = join(HOME, ".local", "share", "rule-mcp");
@@ -939,7 +939,7 @@ function writeInstalledManifest(agents, entrypoint, global, mode) {
   const manifestPath = join(stateDir, "installed.md");
   const timestamp = new Date().toISOString();
   const lines = [
-    "# rule-mcp — Installation Manifest",
+    "# rule-mcp - Installation Manifest",
     "",
     `Generated: ${timestamp}`,
     `Install source: ${global ? "global" : "local"}`,

@@ -3,7 +3,7 @@
 // Phase 8 acceptance gate. The generated pack must NOT assert the prototype's
 // vanilla-JS / Custom-Elements / Parcel stack as fact. A React (or any
 // non-vanilla) project must never receive prose claiming it is "pure vanilla
-// JavaScript", uses "Custom Elements v1", bundles with "Parcel", etc. — that
+// JavaScript", uses "Custom Elements v1", bundles with "Parcel", etc. - that
 // content is now answer-driven, so with neutral answers the hardcoded literals
 // must be absent entirely. Dead `../.agents/skills/rule-*` links must never
 // ship either.

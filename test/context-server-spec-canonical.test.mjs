@@ -3,10 +3,10 @@
 // + the shared rule-architect-web/interview.js instead of its own stale
 // placeholders.json / interview.js copies. This test locks that consolidation
 // in place: the stale placeholder schema must be gone, the shared UI files
-// must NOT exist as symlinks (or copies) under assets/context-server/ —
+// must NOT exist as symlinks (or copies) under assets/context-server/ -
 // symlinks get dropped by `pnpm pack`, breaking registry installs, so
 // context-server.mjs serves them BY PATH from the canonical
-// rule-architect-web/ dir instead — and the canonical spec must carry the
+// rule-architect-web/ dir instead - and the canonical spec must carry the
 // domain-sketch onboarding step context-server previously lacked.
 import test from "node:test";
 import assert from "node:assert/strict";
@@ -25,12 +25,12 @@ test("stale placeholders.json no longer exists under assets/context-server/", ()
 });
 
 for (const file of ["interview.js", "interview.css", "index.html"]) {
-  test(`assets/context-server/${file} does not exist — context-server serves it by path from rule-architect-web/`, () => {
+  test(`assets/context-server/${file} does not exist - context-server serves it by path from rule-architect-web/`, () => {
     const linkPath = CONTEXT_SERVER_DIR + file;
     assert.equal(
       existsSync(linkPath),
       false,
-      `${linkPath} should not exist (no symlink, no copy) — pnpm pack drops symlinks from the published tarball`,
+      `${linkPath} should not exist (no symlink, no copy) - pnpm pack drops symlinks from the published tarball`,
     );
   });
 }

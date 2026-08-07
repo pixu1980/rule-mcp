@@ -3,14 +3,14 @@
 // Two gates for the Phase 4 fill-wiring work:
 //
 // 1. A design-readiness gate over the MAPPING DATA in
-//    `skills/rule-architect/field-map.mjs` — is the declared design
+//    `skills/rule-architect/field-map.mjs` - is the declared design
 //    (RENAMES + COMPOSITION + DERIVED), combined with wizard fields that
 //    already share an identical name with a template placeholder, enough to
 //    account for every MEANINGFUL placeholder in templates.json?
 //
 //    "Meaningful" = every `[KEY]`-shaped token in templates.json, minus JUNK
 //    (literal prose, not real placeholders) minus DEFER_PHASE5 (deliberately
-//    deferred to Phase 5 — no interview source in this phase).
+//    deferred to Phase 5 - no interview source in this phase).
 //
 // 2. Task 3's real runtime-fill gate: feed the fully-answered fixture
 //    through `normalizeAnswers` (RENAMES + COMPOSITION + DERIVED applied)
@@ -18,7 +18,7 @@
 //    placeholders resolve to a real value (no `**[KEY]**` marker left).
 //    Before Task 3 this ran the fixture through the UNWIRED generator and
 //    measured ~32% (39/122) as an enforced pre-implementation baseline
-//    (fix round 1, Finding 1 — the original `pct > 0`/`pct >= 0` assertions
+//    (fix round 1, Finding 1 - the original `pct > 0`/`pct >= 0` assertions
 //    could never fail); Task 3 replaces that baseline with the wired gate.
 import test from "node:test";
 import assert from "node:assert/strict";
@@ -55,7 +55,7 @@ function allTemplatePlaceholders() {
   return found;
 }
 
-// Wizard flat fields (non-repeatable) — a placeholder is "already-collected"
+// Wizard flat fields (non-repeatable) - a placeholder is "already-collected"
 // if a flat wizard field key matches it verbatim (no wiring required).
 function flatWizardKeys() {
   const keys = new Set();
@@ -120,15 +120,15 @@ test("field-map + already-collected flat keys cover every meaningful placeholder
   assert.equal(
     uncovered.length,
     0,
-    `every meaningful placeholder must be covered by RENAMES/COMPOSITION/DERIVED/flat-keys — uncovered: ${uncovered.sort().join(", ")}`,
+    `every meaningful placeholder must be covered by RENAMES/COMPOSITION/DERIVED/flat-keys - uncovered: ${uncovered.sort().join(", ")}`,
   );
 });
 
 test("normalizeAnswers + generateContextContent fill >=95% of meaningful placeholders on the full fixture", () => {
   // This is the REAL post-Task-3 fill: run the fixture through
   // normalizeAnswers (RENAMES + COMPOSITION + DERIVED) before handing it to
-  // generateContextContent — the same order both generator entry points
-  // apply internally — and check how many meaningful placeholders no longer
+  // generateContextContent - the same order both generator entry points
+  // apply internally - and check how many meaningful placeholders no longer
   // carry the unfilled `**[KEY]**` marker anywhere in the generated output.
   const allPlaceholders = allTemplatePlaceholders();
   const meaningful = [...allPlaceholders].filter((k) => !JUNK.has(k) && !DEFER_PHASE5.has(k));
@@ -163,6 +163,6 @@ test("normalizeAnswers + generateContextContent fill >=95% of meaningful placeho
 
   assert.ok(
     pct >= 95,
-    `wired fill should be >=95% of meaningful placeholders (got ${pct.toFixed(1)}%) — still unfilled: ${unfilled.sort().join(", ")}`,
+    `wired fill should be >=95% of meaningful placeholders (got ${pct.toFixed(1)}%) - still unfilled: ${unfilled.sort().join(", ")}`,
   );
 });

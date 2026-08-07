@@ -19,13 +19,13 @@ tags:
 frameworks: [all]
 ---
 
-# rule-backend-hono — Hono Best Practices
+# rule-backend-hono - Hono Best Practices
 
 ## Hono Architecture
 
-- Lightweight, framework-agnostic — runs on Node.js, Cloudflare Workers, Bun, Deno
-- **Router-first** — choose `smartRouter` for broadest runtime compatibility
-- Middleware chain is the application — every feature is middleware
+- Lightweight, framework-agnostic - runs on Node.js, Cloudflare Workers, Bun, Deno
+- **Router-first** - choose `smartRouter` for broadest runtime compatibility
+- Middleware chain is the application - every feature is middleware
 - RPC-style type sharing between client and server
 
 ```typescript
@@ -54,8 +54,8 @@ app.get("/api/v1/users/:id", async (c) => {
 ## Hono Performance Characteristics
 
 - **Smallest and fastest** Node.js/edge framework (< 20KB bundle)
-- ~45k req/s on Node.js 20 — comparable to Fastify
-- Zero-dependency core — add only what you need
+- ~45k req/s on Node.js 20 - comparable to Fastify
+- Zero-dependency core - add only what you need
 - Built-in middleware tree for optimal performance
 
 ## Hono Multi-Runtime Deployment
@@ -73,7 +73,7 @@ export default app;
 
 - `@hono/rpc-client` for type-safe API calls from frontend
 - Shared types between `api/` and `web/` packages
-- No code generation — types inferred from server code
+- No code generation - types inferred from server code
 
 ## Hono Testing
 
@@ -83,6 +83,6 @@ export default app;
 
 ## See also
 
-- [rule](../rule/SKILL.md) — Central skill index and dispatcher
-- [rule-backend](../rule-backend/SKILL.md) — Backend umbrella
-- [rule-data-postgresql](../rule-data-postgresql/SKILL.md) — PostgreSQL
+- [rule](../rule/SKILL.md) - Central skill index and dispatcher
+- [rule-backend](../rule-backend/SKILL.md) - Backend umbrella
+- [rule-data-postgresql](../rule-data-postgresql/SKILL.md) - PostgreSQL

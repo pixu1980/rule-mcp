@@ -1,5 +1,5 @@
 /* ── TodoItem component styles ─────────────────────────────────── */
-/* Selectors use element names or [data-part="..."] — NO classes  */
+/* Selectors use element names or [data-part="..."] - NO classes  */
 
 :host {
   display: block;

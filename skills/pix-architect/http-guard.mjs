@@ -1,14 +1,14 @@
-// rule-architect http-guard helper — same-origin enforcement for the two
+// rule-architect http-guard helper - same-origin enforcement for the two
 // interview servers. Pure logic, no I/O, no server. Shared by both.
 //
 // Both servers bind loopback and send no CORS headers, which stops a hostile
-// page from READING their responses — not from SENDING requests. A cross-origin
+// page from READING their responses - not from SENDING requests. A cross-origin
 // POST with `Content-Type: text/plain` is a CORS "simple request": no preflight
 // is issued, so the absence of CORS headers never comes into play and the
 // handler runs. For POST /api/generate the side effect IS the attack: files
 // written into the user's project, overwriting root files when `force` is set.
 //
-// A web page cannot forge Origin, Sec-Fetch-Site, or Host — the browser sets
+// A web page cannot forge Origin, Sec-Fetch-Site, or Host - the browser sets
 // them. Validating those three closes the hole with no change to the wizard UI:
 //
 //   Sec-Fetch-Site  same-origin | none  → the served page, or a typed URL
@@ -51,7 +51,7 @@ function parseAuthority(authority) {
  * Decide whether a request may reach a loopback-only interview endpoint.
  *
  * @param {{ headers: Record<string, string|string[]|undefined> }} req
- * @param {{ port?: number|string }} [options] — the port the server listens on;
+ * @param {{ port?: number|string }} [options] - the port the server listens on;
  *   when given, an Origin or Host pointing at a different port is refused
  *   (another local server is still a different origin).
  * @returns {{ ok: true }|{ ok: false, status: number, reason: string }}

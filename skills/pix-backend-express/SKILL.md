@@ -14,7 +14,7 @@ tags:
 frameworks: [all]
 ---
 
-# rule-backend-express — Express.js Best Practices
+# rule-backend-express - Express.js Best Practices
 
 ## Express Application Structure
 
@@ -88,7 +88,7 @@ const asyncHandler =
 - Use `express.static` with `maxAge` for assets
 - Enable `trust proxy` behind reverse proxy (Nginx, Cloudflare)
 - Connection pooling for database (`pg-pool`, `mysql2/pool`)
-- Keep async middleware — blocking the event loop kills throughput
+- Keep async middleware - blocking the event loop kills throughput
 
 ## Express Request Validation
 
@@ -148,6 +148,6 @@ routes → handlers → services → repositories
 
 ## See also
 
-- [rule](../rule/SKILL.md) — Central skill index and dispatcher
-- [rule-backend](../rule-backend/SKILL.md) — Backend skill index
-- [rule-backend-api-design](../rule-backend-api-design/SKILL.md) — API design
+- [rule](../rule/SKILL.md) - Central skill index and dispatcher
+- [rule-backend](../rule-backend/SKILL.md) - Backend skill index
+- [rule-backend-api-design](../rule-backend-api-design/SKILL.md) - API design

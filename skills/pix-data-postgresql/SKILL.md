@@ -17,7 +17,7 @@ tags:
 frameworks: [all]
 ---
 
-# rule-data-postgresql — PostgreSQL 16+ Best Practices & Scripts
+# rule-data-postgresql - PostgreSQL 16+ Best Practices & Scripts
 
 ## Table of Contents
 
@@ -90,7 +90,7 @@ CREATE TRIGGER trg_organizations_updated_at
     FOR EACH ROW EXECUTE FUNCTION trg_set_updated_at();
 ```
 
-### ALTER TABLE — PostgreSQL Best Practices
+### ALTER TABLE - PostgreSQL Best Practices
 
 ```sql
 -- Add column with IF NOT EXISTS (use DO block)
@@ -691,8 +691,8 @@ Do not silently use features newer than the skill baseline. PostgreSQL 18-specif
 
 ## See also
 
-- [rule-data-sql](../rule-data-sql/SKILL.md) — General SQL fundamentals
-- [rule-data-mysql](../rule-data-mysql/SKILL.md) — MySQL/MariaDB
-- [rule-data-mongodb](../rule-data-mongodb/SKILL.md) — MongoDB document DB
-- [rule-backend-node](../rule-backend-node/SKILL.md) — Backend Node.js
-- [rule](../rule/SKILL.md) — Central skill index
+- [rule-data-sql](../rule-data-sql/SKILL.md) - General SQL fundamentals
+- [rule-data-mysql](../rule-data-mysql/SKILL.md) - MySQL/MariaDB
+- [rule-data-mongodb](../rule-data-mongodb/SKILL.md) - MongoDB document DB
+- [rule-backend-node](../rule-backend-node/SKILL.md) - Backend Node.js
+- [rule](../rule/SKILL.md) - Central skill index

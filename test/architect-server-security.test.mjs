@@ -3,14 +3,14 @@
 // F7: harden the two architect interview servers (rule-architect-web and
 // the MCP-spawned context-server). Three independent holes:
 //
-//   1. Path traversal — the static handler built a file path from the request
+//   1. Path traversal - the static handler built a file path from the request
 //      pathname with no containment check. `new URL()` normalization makes the
 //      classic ../ vector hard to reach over HTTP, but the file-resolution step
 //      must fail closed regardless (future refactor, non-URL input, symlinks).
 //      containWithin() is that primitive and carries the security weight here.
-//   2. All-interfaces bind — `listen(PORT)` with no host binds 0.0.0.0/::, so
+//   2. All-interfaces bind - `listen(PORT)` with no host binds 0.0.0.0/::, so
 //      the wizard was reachable from the whole LAN. Must bind loopback.
-//   3. Wildcard CORS — `Access-Control-Allow-Origin: *` let ANY website the
+//   3. Wildcard CORS - `Access-Control-Allow-Origin: *` let ANY website the
 //      user visits read these endpoints while the server ran. The UI is
 //      same-origin and needs no CORS header at all.
 //
@@ -42,7 +42,7 @@ test("containWithin returns null for a path that escapes the root via ../", () =
 test("containWithin blocks the sibling-prefix trick (assets vs assetsX)", () => {
   const root = resolve("/srv/app/assets");
   // /srv/app/assetsX starts with '/srv/app/assets' as a string but is NOT
-  // inside it — the `+ sep` guard is what rejects this.
+  // inside it - the `+ sep` guard is what rejects this.
   assert.equal(containWithin(resolve("/srv/app/assetsX/secret"), [root]), null);
 });
 

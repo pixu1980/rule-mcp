@@ -1,16 +1,16 @@
 /**
  * @module tools/fix
  *
- * pix_fix MCP tool — File tree validation and auto-fix.
+ * pix_fix MCP tool - File tree validation and auto-fix.
  * Scans a project's file tree, detects violations of the rule AI
  * barrel file convention, and optionally auto-fixes them.
  *
  * Two modes:
- *   lint  — scan and report issues without modifying anything
- *   fix   — scan and auto-fix (create barrels, rename files)
+ *   lint  - scan and report issues without modifying anything
+ *   fix   - scan and auto-fix (create barrels, rename files)
  *
- * @see module:core/file-tree — Core validation logic
- * @see module:cli/commands — CLI fix command handler
+ * @see module:core/file-tree - Core validation logic
+ * @see module:cli/commands - CLI fix command handler
  */
 
 import { z } from "zod/v4";
@@ -100,7 +100,7 @@ export function registerFixTool() {
           // Block path traversal: resolved path must stay inside rootDir
           const rel = relative(rootDir, fullPath);
           if (rel.startsWith("..") || rel === "") {
-            preview.push(`${file.path} — BLOCKED: path escapes project root`);
+            preview.push(`${file.path} - BLOCKED: path escapes project root`);
             continue;
           }
           if (isDryRun) {
@@ -112,7 +112,7 @@ export function registerFixTool() {
             writeFileSync(fullPath, file.content, "utf8");
             preview.push(file.path);
           } catch (error) {
-            preview.push(`${file.path} — ERROR: ${error.message}`);
+            preview.push(`${file.path} - ERROR: ${error.message}`);
           }
         }
 

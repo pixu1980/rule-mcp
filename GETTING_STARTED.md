@@ -53,7 +53,7 @@ Expected output: health report with `ok: true`, 78 tools registered, detected ag
 
 ## 3. B. pnpx/npx (no install, ephemeral)
 
-Use directly without installing — ideal for evaluation, CI, or occasional use:
+Use directly without installing - ideal for evaluation, CI, or occasional use:
 
 ```bash
 pnpx rule-mcp doctor

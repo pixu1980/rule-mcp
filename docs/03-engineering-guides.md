@@ -11,7 +11,7 @@ Every source document below is preserved verbatim under its own heading so no pr
 > Original path: `docs/EXAMPLES.md`  
 > SHA-256: `865f27e746c79f57df52732ac6743b84f98215992a6016704c7b33d196749920`
 
-# rule-mcp — Example Integrations
+# rule-mcp - Example Integrations
 
 > Guide for integrating rule-mcp into React, Vue, and a11y testing projects.
 
@@ -175,7 +175,7 @@ jobs:
 > Original path: `docs/BENCHMARKS.md`  
 > SHA-256: `f8ed63e49e8d26419ebb2dd9cfd2373c391c62b07a82f4c1acf74a80dde2f581`
 
-# rule-mcp — Performance Benchmarks
+# rule-mcp - Performance Benchmarks
 
 > Response times, token savings, and LLM-free hit rate.
 
@@ -245,14 +245,14 @@ Estimated % of common frontend queries answered without LLM inference:
 > **Note:** The live document is now at `docs/05-agent-instructions.md` with current workflow, environment variables table, and strict mode docs.
 > SHA-256 (original): `00eb6402344fc08184ba3c6254b6a7f5316847921299efcc134b7b57c3f3494a`
 
-_Content moved to `docs/05-agent-instructions.md` — see that file for the latest version._
+_Content moved to `docs/05-agent-instructions.md` - see that file for the latest version._
 
 ## Preserved source: `rules-vs-styleguides-comparison.md`
 
 > Original path: `docs/rules-vs-styleguides-comparison.md`  
 > SHA-256: `b50f384f9cd10fa85dc3397e2997d448b98fc3bac1a0f5f0e4fcf8a33bee90f2`
 
-# Rules vs Styleguides — Comparative Analysis
+# Rules vs Styleguides - Comparative Analysis
 
 > **Context**: The `rule-mcp-skills` project contains a system of **rules** (`rules/`) and **skills** that have been ported to `rule-mcp`.  
 > This document analyzes the overlap between `rules/` and `rule-styleguide`, and explains what to keep, what to ignore, and why.
@@ -308,27 +308,27 @@ The styleguides are **frontend style guides**: they define HTML semantics, CSS a
 | Area                   | `rules/` (rule-mcp-skills)                           | `rule-styleguide` (existing) | Overlap                                                                                 | Action                                                                                          |
 | ---------------------- | ------------------------------------------------------ | --------------------------- | --------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
 | **Semantic HTML**      | `accessibility.md` (section)                           | `html.md`                   | **High**: both require semantic HTML, landmarks, heading hierarchy                      | Styleguides are more complete. `accessibility.md` adds EAA (European Accessibility Act) context |
-| **CSS / Zero classes** | —                                                      | `css.md`                    | **None**: unique to styleguides                                                         | No action                                                                                       |
+| **CSS / Zero classes** | -                                                      | `css.md`                    | **None**: unique to styleguides                                                         | No action                                                                                       |
 | **A11y testing**       | `accessibility.md` (section)                           | `a11y.md`                   | **Medium**: both require axe-core, Playwright. Styleguides focus more on implementation | Merge EAA reference from `accessibility.md` into `a11y.md`                                      |
-| **TypeScript**         | `typescript.md`                                        | —                           | **None**: unique to rules                                                               | Integrate as new skill or part of styleguides                                                   |
-| **Testing / Coverage** | `testing-standards.md`, `coverage-gates` (skill)       | `javascript.md` (section)   | **Partial**: styleguides mention testing but without numeric thresholds                 | Rules have precise thresholds (60/50/60/60) — integrate                                         |
-| **Git / Commit**       | `commits-branches.md`                                  | —                           | **None**: unique to rules                                                               | Relevant for all devs — keep separate                                                           |
-| **API Security**       | `api-security.md`                                      | —                           | **None**: unique to rules                                                               | Backend-specific — keep                                                                         |
-| **Docker**             | `docker` (skill), `docker-standards` (skill)           | —                           | **None**: unique to skills                                                              | Already ported as separate skill                                                                |
-| **CI/CD**              | `gitlab-ci` (skill)                                    | —                           | **None**: unique to skills                                                              | Already ported as separate skill                                                                |
+| **TypeScript**         | `typescript.md`                                        | -                           | **None**: unique to rules                                                               | Integrate as new skill or part of styleguides                                                   |
+| **Testing / Coverage** | `testing-standards.md`, `coverage-gates` (skill)       | `javascript.md` (section)   | **Partial**: styleguides mention testing but without numeric thresholds                 | Rules have precise thresholds (60/50/60/60) - integrate                                         |
+| **Git / Commit**       | `commits-branches.md`                                  | -                           | **None**: unique to rules                                                               | Relevant for all devs - keep separate                                                           |
+| **API Security**       | `api-security.md`                                      | -                           | **None**: unique to rules                                                               | Backend-specific - keep                                                                         |
+| **Docker**             | `docker` (skill), `docker-standards` (skill)           | -                           | **None**: unique to skills                                                              | Already ported as separate skill                                                                |
+| **CI/CD**              | `gitlab-ci` (skill)                                    | -                           | **None**: unique to skills                                                              | Already ported as separate skill                                                                |
 | **Documentation**      | `documentation.md` (rule)                              | `markdown.md`               | **Partial**: rules say _what_ goes in README, styleguides say _how_ to format markdown  | Complementary: rules for content, styleguides for style                                         |
-| **i18n**               | `i18n.md`                                              | —                           | **None**: unique to rules                                                               | Integrate                                                                                       |
-| **Expo / Mobile**      | `expo.md` (rule), `expo-eas-builds` (skill)            | —                           | **None**: unique to rules+skills                                                        | Already ported                                                                                  |
-| **Scaffolding**        | `scaffolding*` (skills)                                | —                           | **None**: unique to skills                                                              | Already ported                                                                                  |
-| **Forms**              | `frontend-forms`, `frontend-forms-validation` (skills) | —                           | **None**: unique to skills                                                              | Already ported                                                                                  |
-| **Feature workflow**   | `feature-workflow` (skill)                             | —                           | **None**: unique to skills                                                              | Already ported                                                                                  |
-| **Security basics**    | `security-basics` (skill)                              | —                           | **None**: unique to skills                                                              | Already ported                                                                                  |
+| **i18n**               | `i18n.md`                                              | -                           | **None**: unique to rules                                                               | Integrate                                                                                       |
+| **Expo / Mobile**      | `expo.md` (rule), `expo-eas-builds` (skill)            | -                           | **None**: unique to rules+skills                                                        | Already ported                                                                                  |
+| **Scaffolding**        | `scaffolding*` (skills)                                | -                           | **None**: unique to skills                                                              | Already ported                                                                                  |
+| **Forms**              | `frontend-forms`, `frontend-forms-validation` (skills) | -                           | **None**: unique to skills                                                              | Already ported                                                                                  |
+| **Feature workflow**   | `feature-workflow` (skill)                             | -                           | **None**: unique to skills                                                              | Already ported                                                                                  |
+| **Security basics**    | `security-basics` (skill)                              | -                           | **None**: unique to skills                                                              | Already ported                                                                                  |
 
 ---
 
 ## 3. What to Keep and Why
 
-### HIGH PRIORITY — Integrate IMMEDIATELY into rule-styleguide or as separate skill
+### HIGH PRIORITY - Integrate IMMEDIATELY into rule-styleguide or as separate skill
 
 #### 3.1 `rules/accessibility.md` → EAA context in `rule-styleguide/a11y.md`
 
@@ -347,7 +347,7 @@ Missing:
 **Rationale**: TypeScript rules (`as const`, `readonly`, `satisfies`, discriminated unions, never `any`) are unique and valuable.  
 No equivalent exists in rule-styleguide (which focuses on vanilla HTML/CSS/JS).
 
-**Action**: Create `typescript.md` in styleguides, or — better — a dedicated `rule-typescript` skill.
+**Action**: Create `typescript.md` in styleguides, or - better - a dedicated `rule-typescript` skill.
 
 #### 3.3 `rules/testing-standards.md` → Integrate into `rule-coverage-gates` skill
 
@@ -370,7 +370,7 @@ No equivalent exists in rule-styleguide (which focuses on vanilla HTML/CSS/JS).
 - Commits: Conventional Commits 1.0.0 with types, scope, breaking changes
 - MR: title, description, squashing, approvals
 
-### MEDIUM PRIORITY — Integrate as reference
+### MEDIUM PRIORITY - Integrate as reference
 
 #### 3.5 `rules/i18n.md` → New `rule-i18n` skill
 
@@ -387,7 +387,7 @@ No equivalent exists in rule-styleguide (which focuses on vanilla HTML/CSS/JS).
 
 **Action**: Add a cross-reference in `rules/documentation.md` pointing to `rule-styleguide/markdown.md`.
 
-### LOW PRIORITY — New skills already ported, verify completeness
+### LOW PRIORITY - New skills already ported, verify completeness
 
 | Ported skill                                        | Status      |
 | --------------------------------------------------- | ----------- |
@@ -408,26 +408,26 @@ No equivalent exists in rule-styleguide (which focuses on vanilla HTML/CSS/JS).
 
 ## 4. Integration Plan
 
-### Phase 1 — Immediate (already done in this port)
+### Phase 1 - Immediate (already done in this port)
 
 - [x] Port all skills with `rule-*` rename
 - [x] Update `pix_tool` with new catalog
 - [x] Update cross-references between skills
 - [x] Copy `rules/` for reference
 
-### Phase 2 — Styleguides integration (to do)
+### Phase 2 - Styleguides integration (to do)
 
 - [ ] Add EAA section in `rule-styleguide/a11y.md`
 - [ ] Add coverage thresholds in `rule-styleguide/javascript.md`
 - [ ] Align nomenclature: "rules" vs "guardrails" (the two systems use different terms for similar concepts)
 
-### Phase 3 — New skills (to do)
+### Phase 3 - New skills (to do)
 
 - [ ] Create `rule-git-conventions` skill from `rules/commits-branches.md`
 - [ ] Create `rule-i18n` skill from `rules/i18n.md`
 - [ ] Create `rule-typescript` skill from `rules/typescript.md`
 
-### Phase 4 — Deduplication (to do)
+### Phase 4 - Deduplication (to do)
 
 - [ ] Evaluate whether `rule-backend` (existing skill, generic BE framework) can be merged with `rule-backend-node` (procedural) and `rule-backend-api-design` (API design)
 - [ ] Same evaluation for `rule-platform-web` vs `rule-frontend-react`

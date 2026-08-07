@@ -2,13 +2,13 @@
 # Install rule-mcp agent commands for all supported coding agents.
 #
 # Installs prompt templates / commands for:
-#   rule-mcp    — Route via rule-mcp
-#   rule-architect     — Route via rule-architect skill
-#   rule-handoff       — Generate handoff summary
-#   rule-tdd           — Test-driven development workflow
-#   rule-adr           — Architecture Decision Record
-#   rule-fix           — Validate/fix file tree
-#   rule-check         — Check code against guardrails
+#   rule-mcp    - Route via rule-mcp
+#   rule-architect     - Route via rule-architect skill
+#   rule-handoff       - Generate handoff summary
+#   rule-tdd           - Test-driven development workflow
+#   rule-adr           - Architecture Decision Record
+#   rule-fix           - Validate/fix file tree
+#   rule-check         - Check code against guardrails
 #
 # Supported agents: Pi, Claude Code, Gemini CLI, Windsurf, Cline, Cursor
 

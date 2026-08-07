@@ -28,7 +28,7 @@ Two expression systems: `${value}` for JS values, `{{ expr }}` for template expr
 
 ---
 
-## 1. Store — Proxy-based State Container
+## 1. Store - Proxy-based State Container
 
 ### API Reference
 
@@ -46,9 +46,9 @@ store.snapshot(); // Deep-cloned snapshot
 
 ### Key Rules
 
-1. **Mutate directly** on `store.state`: `store.state.todos[0].title = "x"` — Proxy traps handle change events.
+1. **Mutate directly** on `store.state`: `store.state.todos[0].title = "x"` - Proxy traps handle change events.
 2. **Replace arrays/objects** immutably: `store.state.todos = [...store.state.todos, newTodo]`.
-3. **`store.replace()`** doesn't trigger per-field traps — bump tickState manually after.
+3. **`store.replace()`** doesn't trigger per-field traps - bump tickState manually after.
 4. **Never pass raw proxy references** outside the store. Use `deepClone` for exports.
 5. **Change events** emit `store:change` CustomEvent with `{ path, oldValue, newValue }`.
 
@@ -65,7 +65,7 @@ Full source: `examples/src/core/store/`
 
 ---
 
-## 2. Signals — Fine-grained Reactivity
+## 2. Signals - Fine-grained Reactivity
 
 ### API Reference
 
@@ -108,11 +108,11 @@ Signal.subtle.untrack(() => {
 
 ### Key Rules
 
-1. **`get()`** triggers `track()` — registers dependency in active collector.
+1. **`get()`** triggers `track()` - registers dependency in active collector.
 2. **`set()`** triggers `notify()` if value changed (custom `equals` fn).
-3. **ComputedSignal** is lazy — only re-evaluates on `get()` when dirty.
+3. **ComputedSignal** is lazy - only re-evaluates on `get()` when dirty.
 4. **Effects** automatically re-collect dependencies on every run (dynamic graph).
-5. **Scheduler** batches by Set identity + microtask — multiple invalidations collapse to one run.
+5. **Scheduler** batches by Set identity + microtask - multiple invalidations collapse to one run.
 6. **`peek()`** reads without tracking. Use inside effects when you need a value without subscribing.
 
 ---
@@ -123,7 +123,7 @@ Signal.subtle.untrack(() => {
 const tickState = new Signal.State(0, { equals: () => false });
 ```
 
-**Always use `equals: () => false`** — every store write must notify.
+**Always use `equals: () => false`** - every store write must notify.
 
 ### Wiring
 
@@ -137,12 +137,12 @@ window.addEventListener("store:change", () => {
 
 - **Store is the truth**, signals are the notification mechanism.
 - Every computed that reads `store.state.X` MUST also read `tickState.get()`.
-- Computed signals still cache — if value didn't change, downstream not invalidated.
+- Computed signals still cache - if value didn't change, downstream not invalidated.
 - For large apps (>10k reactive nodes), consider path-based selective invalidation.
 
 ### Key Rules
 
-1. **Always use `equals: () => false`** — every store write must notify.
+1. **Always use `equals: () => false`** - every store write must notify.
 2. **Every computed reading `store.state.X` MUST also read `tickState.get()`**.
 3. **Two effects** typically read tickState: one for rendering, one for document-level side effects.
 
@@ -155,7 +155,7 @@ window.addEventListener("store:change", () => {
 ```js
 import { html, render, directive, model, registerFilter } from "./core/template-engine/index.js";
 
-// html tagged template (NOT a real tag — packages strings + values)
+// html tagged template (NOT a real tag - packages strings + values)
 const result = html`<h1>{{ title | upper }}</h1>`;
 
 // render into container
@@ -264,11 +264,11 @@ export class TodoItem extends HTMLElement {
 
 ### Rules
 
-1. **NO inline styles** — `style="..."` is forbidden in templates.
-2. **NO CSS classes** — use element selectors + `[data-part="..."]`.
+1. **NO inline styles** - `style="..."` is forbidden in templates.
+2. **NO CSS classes** - use element selectors + `[data-part="..."]`.
 3. **`static {}` block** for `customElements.define()` + `adoptedStyleSheets`.
 4. **`static render(item)`** used by `${Component(item)}` inside `<for>`.
-5. **Data flows through context** — components receive context as argument.
+5. **Data flows through context** - components receive context as argument.
 
 ---
 
@@ -372,7 +372,7 @@ src/
 ### 1. Forgetting `tickState.get()` in computed signals
 
 ```js
-// WRONG — won't re-evaluate on store changes:
+// WRONG - won't re-evaluate on store changes:
 const myComputed = new Signal.Computed(() => store.state.todos.length);
 // RIGHT:
 const myComputed = new Signal.Computed(() => {
@@ -384,7 +384,7 @@ const myComputed = new Signal.Computed(() => {
 ### 2. Forgetting `result._context`
 
 ```js
-// WRONG — {{ }} expressions have no data:
+// WRONG - {{ }} expressions have no data:
 effect(() => {
   render(App.render(ctx), root);
 });
@@ -401,11 +401,11 @@ effect(() => {
 - `{{ }}` → DATA expressions (context + filters): `{{ title | upper }}`
 - `${}` → JS values (handlers, directives): `@click=${fn}`, `model=${config}`
 
-### 4. Context must be a plain object — pass `signal.get()`, not the signal itself.
+### 4. Context must be a plain object - pass `signal.get()`, not the signal itself.
 
-### 5. Effect cleanup — `effect()` returns a disposer. Call when component unmounts.
+### 5. Effect cleanup - `effect()` returns a disposer. Call when component unmounts.
 
-### 6. Duplicate keys in `<for>` — each item needs unique `id` or stable identity.
+### 6. Duplicate keys in `<for>` - each item needs unique `id` or stable identity.
 
 ---
 
@@ -565,10 +565,10 @@ customElements.define("contact-form", ContactForm);
 
 - Use the rule reactive Store for form state
 - Use native HTML5 validation + custom validation functions
-- Pure JavaScript — no Zod, no external validation library
+- Pure JavaScript - no Zod, no external validation library
 - Custom Elements with Store subscriptions
 
-### Step 1 — Validation functions (pure JS)
+### Step 1 - Validation functions (pure JS)
 
 ```javascript
 export const validators = {
@@ -601,7 +601,7 @@ export function validate(schema, data) {
 }
 ```
 
-### Step 2 — Form store
+### Step 2 - Form store
 
 ```javascript
 import { Store } from "../core/store/index.js";
@@ -632,7 +632,7 @@ export async function submitForm() {
 }
 ```
 
-### Step 3 — Form component
+### Step 3 - Form component
 
 ```javascript
 import { formStore, submitForm } from "../../store/form.store.js";
@@ -683,4 +683,4 @@ customElements.define("contact-form", ContactForm);
 
 ## See also
 
-- [rule](../rule/SKILL.md) — Central skill index
+- [rule](../rule/SKILL.md) - Central skill index

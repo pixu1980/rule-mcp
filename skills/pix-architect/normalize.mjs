@@ -5,12 +5,12 @@
 // tables in `field-map.mjs`. Runs before placeholder replacement in
 // generator.mjs's `generateContext`/`generateContextContent`.
 //
-// Pipeline: RENAMES -> COMPOSITION -> DERIVED (in that order, every call —
+// Pipeline: RENAMES -> COMPOSITION -> DERIVED (in that order, every call -
 // see the idempotency note below).
 import { RENAMES, COMPOSITION, DERIVED } from "./field-map.mjs";
 
 // Sets `target[key] = value` unless `value` is empty/nullish and `target[key]`
-// already holds a non-empty value — i.e. never clobber a good fallback with
+// already holds a non-empty value - i.e. never clobber a good fallback with
 // an empty override. A non-empty `value` always wins: this is what gives a
 // detailed repeatable group (e.g. FEATURES) precedence over its flat-fallback
 // rename (TOP_FEATURE_* -> FEATURE_*) per the plan's documented precedence.
@@ -26,12 +26,12 @@ function setPreferNonEmpty(target, key, value) {
 }
 
 // Sets `target[key] = value` ONLY when `target[key]` is currently
-// absent/empty — a present non-empty value at `key` always wins and is
+// absent/empty - a present non-empty value at `key` always wins and is
 // never clobbered. Used for RENAMES: some rename targets (PROJECT_NAME,
 // PROJECT_ELEVATOR_PITCH) are ALSO directly-collected refined flat fields
 // (step-7 final answers), distinct from their rough step-1 `_SKETCH`
 // source. A rename must therefore only fill the target when the refined
-// field was left blank — never overwrite an already-answered refined value
+// field was left blank - never overwrite an already-answered refined value
 // with the rough sketch (fix round 1: this used to be `setPreferNonEmpty`,
 // which inverted the precedence and let the sketch clobber the refined
 // answer since the sketch is non-empty).
@@ -55,8 +55,8 @@ function applyRenames(answers) {
 // Mirrors interview.js's getRepeatableCount: an explicit `${group}_count`
 // wins; otherwise scan upward while ANY declared subfield has a non-empty
 // value at that index (same "stop at first empty index" rule the wizard
-// UI uses). Unlike the wizard UI — which always reports >=1 so it can render
-// an empty first row — a group that was never answered here yields count 0:
+// UI uses). Unlike the wizard UI - which always reports >=1 so it can render
+// an empty first row - a group that was never answered here yields count 0:
 // we never want to synthesize a phantom first entry for a group with no data.
 function getGroupCount(answers, group, subfields) {
   const stored = Number.parseInt(answers[`${group}_count`], 10);
@@ -123,13 +123,13 @@ function applyDerived(answers, spec) {
 // used to read "Frontend: react" / "CSS approach: vanilla-css".
 //
 // Some labels are decorated for the wizard UI rather than written as prose:
-// STACK_LINT_TOOL's label is "Biome — rule-toolchain-biome" and
-// DEVOPS_TEST_FRAMEWORK's is "Vitest — Fast Vite-native test runner". Taking
+// STACK_LINT_TOOL's label is "Biome - rule-toolchain-biome" and
+// DEVOPS_TEST_FRAMEWORK's is "Vitest - Fast Vite-native test runner". Taking
 // the bare label would make those lines WORSE than the key, so everything
 // from the em-dash separator onwards is dropped: the part before it is the
 // name, the part after is a hint for the person filling the form.
 function proseLabel(label) {
-  return String(label).split(" — ")[0].trim();
+  return String(label).split(" - ")[0].trim();
 }
 
 function optionsForField(field, spec) {
@@ -162,7 +162,7 @@ export function optionLabelFor(spec, fieldKey, value) {
 // Runs LAST, after DERIVED: `resolveStackName` looks its value up BY KEY via
 // spec.optionGroups, so it must still see the raw key when it runs.
 //
-// Only `select` fields are touched — free-text answers (BUILD_COMMAND,
+// Only `select` fields are touched - free-text answers (BUILD_COMMAND,
 // NODE_VERSION, the textareas) are never rewritten. Resolution is keyed on
 // an exact option-key match, which also makes this idempotent: on a second
 // pass the value is already a label and matches no key, so it is left alone.

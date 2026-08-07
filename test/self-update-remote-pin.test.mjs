@@ -1,6 +1,6 @@
 // test/self-update-remote-pin.test.mjs
 //
-// Audit finding 06 — the forced self-update fetches and fast-forwards on every
+// Audit finding 06 - the forced self-update fetches and fast-forwards on every
 // tool call, then hot-reloads skills and schedules a restart into the new code.
 // It verified nothing about WHERE the code came from: no remote allowlist, no
 // signature. Anyone able to write one line into .git/config (a dependency
@@ -9,7 +9,7 @@
 //
 // The fix pins the upstream: the remote URL must match what the shipped
 // server.json declares, or an explicit RULE_MCP_UPDATE_REMOTE override.
-// URL comparison has to survive the forms git actually uses — this repo's own
+// URL comparison has to survive the forms git actually uses - this repo's own
 // remote is scp-style SSH while server.json declares HTTPS.
 //
 // Signature verification is available but opt-in: most repositories do not sign

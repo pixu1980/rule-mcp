@@ -1,5 +1,5 @@
 /**
- * rule-architect Context Interview Wizard — Dynamic Stepper Mode
+ * rule-architect Context Interview Wizard - Dynamic Stepper Mode
  *
  * Fully data-driven: renders steps from placeholders.json sections.
  * Uses rule-frontend-vanilla-reactive: Store + Signal + html\`\` + render().
@@ -134,7 +134,7 @@ class ContextWizard extends HTMLElement {
   constructor() {
     super();
     this._dispose = null;
-    // Summary/Files panel state (element-local — not part of the reactive
+    // Summary/Files panel state (element-local - not part of the reactive
     // store, since switching views/tabs never needs to rebuild the wizard form).
     this._panelView = "summary"; // "summary" | "files"
     this._filesSelected = "AGENTS.md";
@@ -228,7 +228,7 @@ class ContextWizard extends HTMLElement {
     // Rebuild the field DOM only when the STRUCTURE changes: step, tier, which
     // fields are visible, repeatable counts, or a card-select value (drives both
     // visibility via showIf and the selected-card highlight). Free-text input
-    // values are deliberately EXCLUDED — the browser already holds what the user
+    // values are deliberately EXCLUDED - the browser already holds what the user
     // typed, so rebuilding the field on every keystroke would only destroy the
     // focused node and lose focus + caret. All showIf conditions depend on
     // `select` fields, so including select values here keeps visibility correct.
@@ -246,7 +246,7 @@ class ContextWizard extends HTMLElement {
         .map((f) => [f.key, this.getRepeatableCount(f.key, f.subfields || [])]),
     });
     if (this._lastFormSig === sig && this.querySelector("[data-part='wizard-step']")) {
-      // Value-only change — DOM already reflects it. Skip rebuild to preserve focus.
+      // Value-only change - DOM already reflects it. Skip rebuild to preserve focus.
       this.updateSummary();
       return;
     }
@@ -256,7 +256,7 @@ class ContextWizard extends HTMLElement {
     const tabData = sections.map((s, i) => ({
       id: "step-" + i,
       num: i,
-      label: s.label.replace(/^Step \d+ — /, ""),
+      label: s.label.replace(/^Step \d+ - /, ""),
       phase: (this.getPhase(s.key) || {}).label || "",
       isActiveStr: stepIdx === i ? "true" : "",
       isDoneStr: stepIdx > i ? "true" : "",
@@ -411,7 +411,7 @@ class ContextWizard extends HTMLElement {
     const ph = store.state.placeholders || {};
     const inputId = `f-${key}`;
 
-    // ALL select types render as cards — no dropdowns
+    // ALL select types render as cards - no dropdowns
     if (field.type === "select") {
       const list =
         typeof field.options === "string" ? ph[field.options] || [] : Array.isArray(field.options) ? field.options : [];
@@ -629,7 +629,7 @@ class ContextWizard extends HTMLElement {
     if (view === "files") {
       this.scheduleFilesFetch();
     } else if (this._filesDebounceTimer) {
-      // Leaving Files: cancel any pending debounced fetch — Summary stays
+      // Leaving Files: cancel any pending debounced fetch - Summary stays
       // purely client-side, it must never trigger a network request.
       clearTimeout(this._filesDebounceTimer);
       this._filesDebounceTimer = null;

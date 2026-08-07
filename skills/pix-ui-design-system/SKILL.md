@@ -12,7 +12,7 @@ tags:
 frameworks: [all]
 ---
 
-# rule-ui-design-system — Distinctive UI design within rule rules
+# rule-ui-design-system - Distinctive UI design within rule rules
 
 This skill adapts the creative intent of `frontend-design` to the rule MCP
 skill ecosystem. It is the design-direction layer: it helps agents create
@@ -26,18 +26,18 @@ any visible UI surface.
 
 Design ambition never overrides implementation rules:
 
-1. **Zero CSS classes** — use semantic elements plus `[data-part]`, `[data-*]`,
+1. **Zero CSS classes** - use semantic elements plus `[data-part]`, `[data-*]`,
    ARIA states, and element selectors.
-2. **Zero inline styles** — no `style="..."`, no JSX `style={{...}}`.
-3. **Semantic HTML first** — choose `main`, `section`, `article`, `header`,
+2. **Zero inline styles** - no `style="..."`, no JSX `style={{...}}`.
+3. **Semantic HTML first** - choose `main`, `section`, `article`, `header`,
    `nav`, `aside`, `form`, `fieldset`, `ul`, `ol`, `li`, `button`, `dialog`,
    and headings before generic containers.
-4. **External styling only** — framework-native CSS files or
+4. **External styling only** - framework-native CSS files or
    `CSSStyleSheet`/`adoptedStyleSheets` for web components.
-5. **Accessible by default** — WCAG 2.2 AA, visible focus, keyboard paths,
+5. **Accessible by default** - WCAG 2.2 AA, visible focus, keyboard paths,
    labels, reduced-motion fallback, and meaningful text alternatives.
-6. **Barrel file tree** — follow `rule-styleguide-naming` conventions.
-7. **No design shortcuts** — no Tailwind, CSS-in-JS, generic utility classes,
+6. **Barrel file tree** - follow `rule-styleguide-naming` conventions.
+7. **No design shortcuts** - no Tailwind, CSS-in-JS, generic utility classes,
    or remote font dependency unless the project explicitly accepts it.
 
 ## Design thinking sequence
@@ -94,7 +94,7 @@ Commit to one memorable direction. Do not blend unrelated trends.
 ### Background and texture
 
 - Build atmosphere with CSS gradients, masks, SVG backgrounds, borders, shadow,
-  noise assets, or layered transparency — never inline styles.
+  noise assets, or layered transparency - never inline styles.
 - Keep decorative effects non-essential and accessible.
 - Avoid generic purple gradients on white, stock SaaS cards, and predictable AI
   landing-page layouts.
@@ -203,7 +203,7 @@ For React, Vue, Angular, Svelte, SolidJS, Astro, Next, Nuxt, or Remix:
 
 ## See also
 
-- [rule](../rule/SKILL.md) — Central skill and tool dispatcher
-- [rule-styleguide](../rule-styleguide/SKILL.md) — Shared coding standards
-- [rule-frontend](../rule-frontend/SKILL.md) — Frontend framework index
-- [rule-architect](../rule-architect/SKILL.md) — Architecture and `.context` generation
+- [rule](../rule/SKILL.md) - Central skill and tool dispatcher
+- [rule-styleguide](../rule-styleguide/SKILL.md) - Shared coding standards
+- [rule-frontend](../rule-frontend/SKILL.md) - Frontend framework index
+- [rule-architect](../rule-architect/SKILL.md) - Architecture and `.context` generation

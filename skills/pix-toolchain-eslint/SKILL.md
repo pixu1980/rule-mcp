@@ -14,7 +14,7 @@ tags:
 frameworks: [all]
 ---
 
-# rule-toolchain-eslint — ESLint Configuration
+# rule-toolchain-eslint - ESLint Configuration
 
 ## Flat Config is the only format
 
@@ -89,7 +89,7 @@ pnpm add -D eslint eslint-plugin-unicorn
 
 ### Presets
 
-The plugin ships three presets — pick a starting point, don't enable rules one by one.
+The plugin ships three presets - pick a starting point, don't enable rules one by one.
 
 | Preset                          | Contents                                                                        | Use when                                                   |
 | ------------------------------- | ------------------------------------------------------------------------------- | ---------------------------------------------------------- |
@@ -103,7 +103,7 @@ These prevent a performance, correctness, or readability problem rather than enf
 
 | Rule                                          | Problem it solves                                                    | ❌ Before                                            | ✅ After                                                                                  |
 | --------------------------------------------- | -------------------------------------------------------------------- | ---------------------------------------------------- | ----------------------------------------------------------------------------------------- |
-| `prefer-set-has`                              | O(n²) membership scans inside loops                                  | `allowed.includes(scope)` in a `.filter()`           | `new Set([...])` + `allowed.has(scope)` — O(1) per lookup                                 |
+| `prefer-set-has`                              | O(n²) membership scans inside loops                                  | `allowed.includes(scope)` in a `.filter()`           | `new Set([...])` + `allowed.has(scope)` - O(1) per lookup                                 |
 | `no-array-for-each` _(removed in unicorn 70)_ | `.forEach()` blocks `break`/`continue`/`await`, weakens TS narrowing | `users.forEach((u) => sendEmail(u))`                 | `for (const u of users) { sendEmail(u); }`                                                |
 | `prefer-node-protocol`                        | Bare builtin imports can be shadowed by npm packages                 | `import fs from 'fs'`                                | `import fs from 'node:fs'`                                                                |
 | `throw-new-error`                             | `throw Error()` works but is inconsistent                            | `throw Error('boom')`                                | `throw new Error('boom')`                                                                 |
@@ -113,7 +113,7 @@ These prevent a performance, correctness, or readability problem rather than enf
 | `better-regex`                                | Regexes can be shorter and consistent                                | `/[0-9]/`                                            | `/\d/`                                                                                    |
 | `prefer-ternary`                              | Simple if/else that returns/assigns forces `let`                     | `if (ok) { return 'pass'; } else { return 'fail'; }` | `return ok ? 'pass' : 'fail';`                                                            |
 
-### Controversial rules — tune, don't blindly accept
+### Controversial rules - tune, don't blindly accept
 
 All four are enabled in `recommended` but enforce preference rather than correctness. The verdict column is the keep/warn/disable call for a typical codebase.
 
@@ -124,7 +124,7 @@ All four are enabled in `recommended` but enforce preference rather than correct
 | `no-array-reduce`       | Keep or `warn`            | Disallows `Array#reduce()`; reasonable for readability, but `reduce` is fine for many teams                        |
 | `filename-case`         | Scope ignores             | Clashes with framework-mandated filenames; keep it but exclude the exceptions                                      |
 
-The `unopinionated` preset leaves these off by default — the built-in middle ground.
+The `unopinionated` preset leaves these off by default - the built-in middle ground.
 
 ### Example overrides
 
@@ -152,16 +152,16 @@ Roll out in stages so the first run doesn't bury you in errors:
 
 1. **Start from a preset.** Extend `unicorn/recommended`, or `unicorn/unopinionated` if the opinionated rules are too noisy.
 2. **Autofix first.** Run `pnpm eslint . --fix`. Most rules are autofixable, so a large fraction of violations disappear as one mechanical diff.
-3. **Downgrade noisy rules to `warn`.** Anything firing in volume that isn't a correctness issue — `prevent-abbreviations` is the usual offender — goes to `warn` so it doesn't block CI while you migrate.
+3. **Downgrade noisy rules to `warn`.** Anything firing in volume that isn't a correctness issue - `prevent-abbreviations` is the usual offender - goes to `warn` so it doesn't block CI while you migrate.
 4. **Scope ignores instead of disabling outright.** Use the `ignore` option (as with `filename-case`) and `files` globs to carve out exceptions.
 5. **Layer in type-aware linting.** Add `@typescript-eslint/recommended-type-checked` alongside Unicorn.
-6. **Treat your config as a living document.** Releases land roughly monthly — re-check the rules table for new rules and renames, and revisit which `warn` rules are ready to promote to `error`.
+6. **Treat your config as a living document.** Releases land roughly monthly - re-check the rules table for new rules and renames, and revisit which `warn` rules are ready to promote to `error`.
 
 ## Migrating a legacy eslintrc-style plugin
 
 If a plugin ships only an eslintrc-style config, wrap it with `FlatCompat` from `@eslint/eslintrc` (use the latest `@eslint/eslintrc` on ESLint 10.x).
 
-## Legacy Config (.eslintrc) — deprecated, removed in ESLint 10
+## Legacy Config (.eslintrc) - deprecated, removed in ESLint 10
 
 ```json
 {
@@ -191,7 +191,7 @@ pnpm biome migrate eslint --include-prettier
 
 ## See also
 
-- [rule-toolchain-biome](../rule-toolchain-biome/SKILL.md) — Alternative: Biome linter (faster, unified)
-- [rule-toolchain-typescript](../rule-toolchain-typescript/SKILL.md) — tsconfig, strict mode, type discipline
-- [rule-styleguide-javascript](../rule-styleguide-javascript/SKILL.md) — Modern JS/TS idioms these rules enforce
-- [rule](../rule/SKILL.md) — Central skill index
+- [rule-toolchain-biome](../rule-toolchain-biome/SKILL.md) - Alternative: Biome linter (faster, unified)
+- [rule-toolchain-typescript](../rule-toolchain-typescript/SKILL.md) - tsconfig, strict mode, type discipline
+- [rule-styleguide-javascript](../rule-styleguide-javascript/SKILL.md) - Modern JS/TS idioms these rules enforce
+- [rule](../rule/SKILL.md) - Central skill index

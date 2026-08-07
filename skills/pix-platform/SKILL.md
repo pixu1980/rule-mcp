@@ -14,7 +14,7 @@ tags:
 frameworks: [all]
 ---
 
-# rule-platform — Platform Skills Index
+# rule-platform - Platform Skills Index
 
 ## Available Skills
 
@@ -36,6 +36,6 @@ Need PWA / offline web app?             → rule-platform-web
 
 ## See also
 
-- [rule-frontend-react](../rule-frontend-react/SKILL.md) — React UI for desktop/web
-- [rule-devops-docker](../rule-devops-docker/SKILL.md) — Docker deployment
-- [rule](../rule/SKILL.md) — Central skill index
+- [rule-frontend-react](../rule-frontend-react/SKILL.md) - React UI for desktop/web
+- [rule-devops-docker](../rule-devops-docker/SKILL.md) - Docker deployment
+- [rule](../rule/SKILL.md) - Central skill index

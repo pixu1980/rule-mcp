@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════════════════════════════
-//  rule-frontend-vanilla-reactive — Structured Demo Entry Point
+//  rule-frontend-vanilla-reactive - Structured Demo Entry Point
 //  ── App mounts via <app-root> custom element (connectedCallback)
 // ═══════════════════════════════════════════════════════════════════════════════
 

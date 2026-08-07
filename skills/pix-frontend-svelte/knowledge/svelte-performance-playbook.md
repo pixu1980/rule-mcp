@@ -4,15 +4,15 @@ This playbook supports the rule-frontend-svelte performance review skill. It cov
 
 ## Mental model
 
-Svelte 5 introduces **runes** (`$state`, `$derived`, `$effect`) — explicit reactive primitives that replace Svelte 4's implicit `let =` reactivity.
+Svelte 5 introduces **runes** (`$state`, `$derived`, `$effect`) - explicit reactive primitives that replace Svelte 4's implicit `let =` reactivity.
 
 Key differences from Svelte 4:
 
-- `$state()` is explicit — no more `let count = 0` magic
+- `$state()` is explicit - no more `let count = 0` magic
 - `$derived()` replaces `$:` reactive declarations
 - `$effect()` replaces `$:` for side effects and adds cleanup
 
-## Pattern 1 — $derived over $effect
+## Pattern 1 - $derived over $effect
 
 The most common Svelte 5 anti-pattern is using `$effect` to derive state.
 
@@ -40,12 +40,12 @@ The most common Svelte 5 anti-pattern is using `$effect` to derive state.
 | `$derived.by()` | Complex multi-statement derived values                     |
 | `$effect()`     | Side effects: sync, logging, localStorage, imperative APIs |
 
-## Pattern 2 — State locality
+## Pattern 2 - State locality
 
 A `$state` update triggers the component that owns it to update. Children that read the state also update.
 
 ```svelte
-<!-- App.svelte — don't put search state here -->
+<!-- App.svelte - don't put search state here -->
 <script>
   import Search from './Search.svelte';
   import Dashboard from './Dashboard.svelte';
@@ -56,19 +56,19 @@ A `$state` update triggers the component that owns it to update. Children that r
 ```
 
 ```svelte
-<!-- Search.svelte — state lives where it's used -->
+<!-- Search.svelte - state lives where it's used -->
 <script>
   let search = $state('');
 </script>
 <input bind:value={search} />
 ```
 
-## Pattern 3 — {#each} keys
+## Pattern 3 - {#each} keys
 
 Without a key, Svelte updates list items by index. Adding a key matches items across renders by identity.
 
 ```svelte
-<!-- ❌ Index key — state, focus, animations break -->
+<!-- ❌ Index key - state, focus, animations break -->
 {#each items as item, i (i)}
   <li>{item.name}</li>
 {/each}
@@ -84,7 +84,7 @@ Without a key, Svelte updates list items by index. Adding a key matches items ac
 {/each}
 ```
 
-## Pattern 4 — {#key} for component reset
+## Pattern 4 - {#key} for component reset
 
 `{#key expression}` destroys and recreates children when the expression changes.
 
@@ -97,7 +97,7 @@ Without a key, Svelte updates list items by index. Adding a key matches items ac
 
 This is cleaner than manually resetting every piece of state in `$effect`.
 
-## Pattern 5 — Snippets
+## Pattern 5 - Snippets
 
 Snippets are reusable template fragments compiled at build time. They replace slot-based patterns with better performance.
 
@@ -125,7 +125,7 @@ Snippets can be passed to other components:
 </DataTable>
 ```
 
-## Pattern 6 — Component responsibility
+## Pattern 6 - Component responsibility
 
 ### Signs of mixed responsibility
 
@@ -164,7 +164,7 @@ export async function loadUser(id) {
 ```
 
 ```svelte
-<!-- UserProfile.svelte — view only -->
+<!-- UserProfile.svelte - view only -->
 <script>
   import { getUser, isLoading, getError, loadUser } from './stores/_user.svelte.js';
   let { userId } = $props();
@@ -181,7 +181,7 @@ export async function loadUser(id) {
 {/if}
 ```
 
-## Pattern 7 — $effect cleanup
+## Pattern 7 - $effect cleanup
 
 `$effect` can return a cleanup function that runs when the component unmounts or before the effect re-runs.
 
@@ -204,7 +204,7 @@ export async function loadUser(id) {
 </script>
 ```
 
-## Pattern 8 — Async $effect with cancellation
+## Pattern 8 - Async $effect with cancellation
 
 Race conditions happen when async effects resolve out of order.
 
@@ -243,7 +243,7 @@ $effect(() => {
 });
 ```
 
-## Pattern 9 — Don't store what you can derive
+## Pattern 9 - Don't store what you can derive
 
 ```svelte
 <script>
@@ -259,7 +259,7 @@ $effect(() => {
 </script>
 ```
 
-## Pattern 10 — Shared state in .svelte.js modules
+## Pattern 10 - Shared state in .svelte.js modules
 
 `.svelte.js` files are compiled to use Svelte's reactive runtime. They are the correct place for shared state.
 
@@ -292,7 +292,7 @@ Components import these functions directly:
 
 Use browser Performance panel for scripting, layout, and paint cost.
 
-Svelte 5 compiles to efficient vanilla JS — the main performance concerns are:
+Svelte 5 compiles to efficient vanilla JS - the main performance concerns are:
 
 - Async `$effect` race conditions (correctness)
 - Missing `{#each}` keys

@@ -11,7 +11,7 @@ echo "pre-push: checking formatting..."
 
 if ! pnpm format --no-color 2>&1; then
   echo "" >&2
-  echo "pre-push: rejected — unformatted files detected." >&2
+  echo "pre-push: rejected - unformatted files detected." >&2
   echo "  Run: pnpm format:fix" >&2
   echo "  Then stage and push again." >&2
   exit 1

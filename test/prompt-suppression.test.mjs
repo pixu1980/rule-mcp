@@ -6,7 +6,7 @@
 // /mcp.rule-mcp.rule-handoff).
 //
 // listPrompts() stays pure (always the full registry); only listActivePrompts()
-// honours the suppression flag — exactly how the server's prompt/list handler
+// honours the suppression flag - exactly how the server's prompt/list handler
 // decides what to advertise.
 
 import test from "node:test";

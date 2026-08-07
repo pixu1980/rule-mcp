@@ -124,7 +124,7 @@ function installNativeSkills(skills) {
       process.stdout.write(`Added ${count} skills to ~/.claude/skills/ for native Claude auto-discovery.\n`);
     }
   } catch {
-    // Silently skip — .claude/skills/ is optional
+    // Silently skip - .claude/skills/ is optional
   }
 }
 
@@ -158,7 +158,7 @@ async function interactiveSelect(items, { title, selected = [] }) {
         const check = checked.includes(index) ? "✓" : " ";
         const pointer = index === cursor ? "▶" : " ";
         const label = item.displayName || item.name;
-        const desc = item.description ? ` — ${item.description}` : "";
+        const desc = item.description ? ` - ${item.description}` : "";
         output.write(`  ${pointer} [${check}] ${label}${desc}\n`);
       }
       output.write(`\n  ␣ toggle   ↵ confirm   q quit\n`);

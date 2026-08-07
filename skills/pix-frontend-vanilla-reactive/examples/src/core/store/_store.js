@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════════════════════════════
-//  PART 2 — Store (Proxy-based state container)
+//  PART 2 - Store (Proxy-based state container)
 // ═══════════════════════════════════════════════════════════════════════════════
 
 import { isObject } from "./_guards.js";

@@ -1,52 +1,52 @@
-# Handoff Fase 10 — Documentazione, skill e manutenzione
+# Handoff Phase 10 - Documentation, skills and maintenance
 
-**Per:** deepseek-v4-flash  
-**Da:** gpt-5.6-sol (audit + remediation fasi 1-6)  
-**Data:** 2026-07-15  
-**File interessati:** `skills/rule-data-*/SKILL.md`, `docs/`, `README.md`, `src/core/guardrail-defs.js`, `src/tools/handoff.js`, `src/tools/adr.js`, `src/cli/doctor.js`, `package.json`
+**To:** deepseek-v4-flash  
+**From:** gpt-5.6-sol (audit + remediation phases 1-6)  
+**Date:** 2026-07-15  
+**Files affected:** `skills/rule-data-*/SKILL.md`, `docs/`, `README.md`, `src/core/guardrail-defs.js`, `src/tools/handoff.js`, `src/tools/adr.js`, `src/cli/doctor.js`, `package.json`
 
 ---
 
-## Contesto (cosa è già stato risolto)
+## Context (what was already resolved)
 
-- ✅ `package.json`: self-dependency rimossa, descrizione "Zero npm dependencies" rimossa
+- ✅ `package.json`: self-dependency removed, "Zero npm dependencies" description removed
 - ✅ `server.json`: source=github, version=1.0.0
-- ✅ `LICENSE` aggiunto
+- ✅ `LICENSE` added
 - ✅ prompt template: "mandatory/enforced" → "recommended/advisory"
 - ✅ Enforcement contract: "ENFORCEMENT" → "WORKFLOW REMINDER"
 
 ---
 
-## Cosa fare
+## What to do
 
-### 10.1 — `See also` nelle skill mancanti (3 file, ~5 min)
+### 10.1 - `See also` in missing skills (3 files, ~5 min)
 
-Le skill `rule-data-duckdb`, `rule-data-indexed-db`, `rule-data-sqlite` non hanno sezione `## See also`. Questo rompe `test/skills-docs.test.mjs`.
+The skills `rule-data-duckdb`, `rule-data-indexed-db`, `rule-data-sqlite` don't have a `## See also` section. This breaks `test/skills-docs.test.mjs`.
 
-**Fix:** Aggiungere alla fine di ogni `SKILL.md`:
+**Fix:** Add to the end of each `SKILL.md`:
 
 ```markdown
 ## See also
 
-- [rule-data-sql](../rule-data-sql/SKILL.md) — SQL fundamentals
-- [rule-data-postgresql](../rule-data-postgresql/SKILL.md) — PostgreSQL reference
+- [rule-data-sql](../rule-data-sql/SKILL.md) - SQL fundamentals
+- [rule-data-postgresql](../rule-data-postgresql/SKILL.md) - PostgreSQL reference
 ```
 
-File da modificare:
+Files to modify:
 
 - `skills/rule-data-duckdb/SKILL.md`
 - `skills/rule-data-indexed-db/SKILL.md`
 - `skills/rule-data-sqlite/SKILL.md`
 
-**Verifica:**
+**Verification:**
 
 ```bash
-node test/skills-docs.test.mjs  # deve passare
+node test/skills-docs.test.mjs  # must pass
 ```
 
-### 10.2 — Documentazione obsoleta (32 token name, ~30 min)
+### 10.2 - Obsolete documentation (32 token names, ~30 min)
 
-`docs/01-product-architecture.md` e `docs/02-tools-operations.md` contengono ~32 riferimenti a nomi tool obsoleti:
+`docs/01-product-architecture.md` and `docs/02-tools-operations.md` contain ~32 references to obsolete tool names:
 
 - `pix_react` → `rule_tool_frontend_react`
 - `pix_vue` → `rule_tool_frontend_vue`
@@ -54,85 +54,85 @@ node test/skills-docs.test.mjs  # deve passare
 - `pix_svelte` → `rule_tool_frontend_svelte`
 - `pix_docker` → `rule_tool_devops_docker`
 - `rule_tool_testing` → `rule_tool_devops_testing`
-- ...e altri 26
+- ...and 26 more
 
-**Fix:** Sostituzione massiva con sed o modifica manuale.
+**Fix:** Bulk replacement with sed or manual editing.
 
-**Verifica:**
+**Verification:**
 
 ```bash
-# Estrarre i riferimenti e verificare contro il registry attuale
+# Extract references and verify against the current registry
 HOME=/tmp/rule-audit-home RULE_MCP_DISABLE_AUTO_ADR=1 NODE_ENV=test \
   node -e 'import{loadAllSkills}from"./src/core/skills.js";import{listTools}from"./src/tools/router.js";await loadAllSkills();const t=new Set(listTools().map(x=>x.name));const fs=require("fs");for(const f of["docs/01-product-architecture.md","docs/02-tools-operations.md"]){const c=fs.readFileSync(f,"utf8");for(const m of c.matchAll(/\bpix_[a-z0-9_]+\b/g)){if(!t.has(m[0]))console.log(f,m[0])}}'
-# Output deve essere vuoto
+# Output must be empty
 ```
 
-### 10.3 — Aggiungere `annotations` ai tool (~10 min)
+### 10.3 - Add `annotations` to tools (~10 min)
 
-Nessun tool ha `annotations` (`readOnlyHint`, `destructiveHint`, `idempotentHint`).
+No tool has `annotations` (`readOnlyHint`, `destructiveHint`, `idempotentHint`).
 
-**Fix:** In `src/tools/router.js` `registerTool()`, aggiungere supporto per `annotations`. Poi in ogni `registerTool` call:
+**Fix:** In `src/tools/router.js` `registerTool()`, add support for `annotations`. Then in each `registerTool` call:
 
 ```js
-// Tool read-only:
+// Read-only tools:
 registerTool({ name: "rule_tool_search", ..., annotations: { readOnlyHint: true } });
-// Tool distruttivi:
+// Destructive tools:
 registerTool({ name: "rule_tool_fix", ..., annotations: { destructiveHint: true } });
 ```
 
-### 10.4 — Fix handoff (`src/tools/handoff.js`, ~15 min)
+### 10.4 - Fix handoff (`src/tools/handoff.js`, ~15 min)
 
-**Problema:** Usa `process.cwd()` per il nome progetto anche quando `projectDir` punta altrove. Git diff non include untracked files.
+**Problem:** Uses `process.cwd()` for project name even when `projectDir` points elsewhere. Git diff doesn't include untracked files.
 
 **Fix:**
 
 ```js
-// Usare projectDir come cwd per execSync
+// Use projectDir as cwd for execSync
 execSync("git log ...", { cwd: projectDir });
-// Includere untracked: git status --porcelain
+// Include untracked: git status --porcelain
 execSync("git status --porcelain", { cwd: projectDir });
 ```
 
-### 10.5 — Auto-ADR opt-in (`src/tools/adr.js:327`, ~5 min)
+### 10.5 - Auto-ADR opt-in (`src/tools/adr.js:327`, ~5 min)
 
-**Problema:** Hook wildcard `addAfterToolHook("*", autoLog)` crea ADR automaticamente per ogni chiamata tool.
+**Problem:** Wildcard hook `addAfterToolHook("*", autoLog)` creates ADR automatically for every tool call.
 
 **Fix:**
 
 ```js
-// Disabilitare di default. Abilitare solo se RULE_MCP_AUTO_ADR=1
+// Disable by default. Enable only if RULE_MCP_AUTO_ADR=1
 if (process.env.RULE_MCP_AUTO_ADR === "1") {
   addAfterToolHook("*", autoLog);
 }
 ```
 
-### 10.6 — `test:all` corretto (`package.json`, ~5 min)
+### 10.6 - `test:all` fixed (`package.json`, ~5 min)
 
-Già fatto in Fase 3.2 ma verificare che `pnpm run ci` passi:
+Already done in Phase 3.2 but verify that `pnpm run ci` passes:
 
 ```bash
 pnpm run ci
-# Deve eseguire smoke + ai + detector + framework-routing + skills-docs + docs-architect + daemon-wrapper + doctor-ui + cli-tui
-# skills-docs e docs-architect devono passare dopo i fix 10.1 e 9.3
+# Must run smoke + ai + detector + framework-routing + skills-docs + docs-architect + daemon-wrapper + doctor-ui + cli-tui
+# skills-docs and docs-architect must pass after fixes 10.1 and 9.3
 ```
 
-### 10.7 — `doctor` migliorato (`src/cli/doctor.js`, ~10 min)
+### 10.7 - `doctor` improved (`src/cli/doctor.js`, ~10 min)
 
-`doctor` restituisce `ok: true` anche con prompt MCP invalidi o build rotta.
+`doctor` returns `ok: true` even with invalid MCP prompts or broken build.
 
-**Fix:** Aggiungere check per:
+**Fix:** Add checks for:
 
-- `prompts/get` risposta valida (chiamata MCP interna)
-- `skills/` contiene almeno 60 SKILL.md
-- `LICENSE` esiste
+- `prompts/get` valid response (internal MCP call)
+- `skills/` contains at least 60 SKILL.md
+- `LICENSE` exists
 
-### 10.8 — Dipendenze cicliche (`src/tools/router.js` ↔ `src/core/skills.js`)
+### 10.8 - Cyclic dependencies (`src/tools/router.js` ↔ `src/core/skills.js`)
 
-Identificare e rompere i cicli di import. Priority bassa (P2), non blocca la release.
+Identify and break import cycles. Low priority (P2), doesn't block release.
 
 ---
 
-## Comandi di verifica finale
+## Final verification commands
 
 ```bash
 pnpm test

@@ -5,7 +5,7 @@
  * Handles loading all rule skills from disk, registering them as MCP tools,
  * and providing skill content utility functions.
  *
- * This is the LEAN core module — tool-specific registration logic
+ * This is the LEAN core module - tool-specific registration logic
  * lives in tools/skill.js and tools/architect.js.
  *
  * Called once at startup, or on demand via `skills reload` CLI command.
@@ -54,7 +54,7 @@ let isLoaded = false;
 /** Simple in-memory LRU cache for skill content (read-through). */
 class LruCache {
   /**
-   * @param {number} maxSize — Max entries before eviction (default 50)
+   * @param {number} maxSize - Max entries before eviction (default 50)
    */
   constructor(maxSize = 50) {
     /** @type {Map<string, string>} */
@@ -116,9 +116,9 @@ class LruCache {
 export const skillCache = new LruCache(50);
 /**
  * Load all rule skills and register their corresponding MCP tools.
- * Idempotent — subsequent calls are no-ops unless `force` is true.
+ * Idempotent - subsequent calls are no-ops unless `force` is true.
  *
- * @param {boolean} [force=false] — Force re-load even if already loaded
+ * @param {boolean} [force=false] - Force re-load even if already loaded
  */
 export async function loadAllSkills(force = false) {
   if (isLoaded && !force) {
@@ -127,7 +127,7 @@ export async function loadAllSkills(force = false) {
   if (force) {
     skillCache.clear();
     clearTools();
-    // Skill content changed — invalidate the deterministic result cache so we
+    // Skill content changed - invalidate the deterministic result cache so we
     // never replay outputs computed from stale skills.
     const { cacheClear } = await import("./tool-cache.js");
     cacheClear();
@@ -141,7 +141,7 @@ export async function loadAllSkills(force = false) {
 
   const skillNames = getSkillNames();
   for (const name of skillNames) {
-    // In minimal mode, skip skill-specific tools — evidence is loaded via pix_gateway
+    // In minimal mode, skip skill-specific tools - evidence is loaded via pix_gateway
     if (name !== "rule" && name !== "rule-process-adr" && name !== "rule-process-handoff" && !IS_MINIMAL_TOOLS) {
       registerSkillTool(name);
     }
@@ -164,7 +164,7 @@ export async function loadAllSkills(force = false) {
   const { registerTemplateTool } = await import("./templates.js");
   registerTemplateTool();
 
-  // Enforce the minimal surface as a hard allowlist — guarantees a small, fixed
+  // Enforce the minimal surface as a hard allowlist - guarantees a small, fixed
   // tool list regardless of what the register* calls above added.
   if (IS_MINIMAL_TOOLS) {
     retainTools(MINIMAL_ALLOWLIST);
@@ -180,7 +180,7 @@ export async function loadAllSkills(force = false) {
  * - Literal block scalars: `description: |\n  line1\n  line2`
  * - Folded block scalars: `description: >\n  line1\n  line2`
  *
- * @param {string} content — Full SKILL.md content
+ * @param {string} content - Full SKILL.md content
  * @returns {{ name?: string, description?: string, tags?: string[], frameworks?: string[] }}
  */
 export function parseSkillFrontmatter(content) {
@@ -205,7 +205,7 @@ export function parseSkillFrontmatter(content) {
     if (descInline) {
       const afterColon = descInline[1];
       if (afterColon.startsWith("|") || afterColon.startsWith(">")) {
-        // Literal or folded block scalar — collect indented continuation lines
+        // Literal or folded block scalar - collect indented continuation lines
         const isFolded = afterColon.startsWith(">");
         const parts = [];
         for (let index_ = index + 1; index_ < lines.length; index_++) {
@@ -263,7 +263,7 @@ export function parseSkillFrontmatter(content) {
  * Get skill metadata (parsed from YAML frontmatter).
  * Results are cached in the LRU cache.
  *
- * @param {string} skillName — e.g. "rule-frontend-react"
+ * @param {string} skillName - e.g. "rule-frontend-react"
  * @returns {{ name?: string, description?: string, tags?: string[], frameworks?: string[] }}
  */
 export function getSkillMetadata(skillName) {
@@ -284,8 +284,8 @@ export function getSkillMetadata(skillName) {
  * Extract the "Project Scaffolding" section from a SKILL.md file.
  * Looks for the section between the scaffold heading and the next section.
  *
- * @param {string} content — Full SKILL.md content
- * @returns {string} — The extracted scaffolding section text
+ * @param {string} content - Full SKILL.md content
+ * @returns {string} - The extracted scaffolding section text
  */
 export function extractScaffoldSection(content) {
   const startMarker = "## Project Scaffolding";
@@ -301,8 +301,8 @@ export function extractScaffoldSection(content) {
  * Extract a single scaffold file's content from the scaffolding section.
  * Matches by file name in a markdown heading (e.g. ### `.prettierrc`).
  *
- * @param {string} section — The extracted scaffolding section text
- * @param {string} fileName — The config file name (e.g. ".prettierrc")
+ * @param {string} section - The extracted scaffolding section text
+ * @param {string} fileName - The config file name (e.g. ".prettierrc")
  * @returns {{ isError?: boolean, content: Array<{ type: string, text: string }> }}
  */
 export function extractSingleScaffoldFile(section, fileName) {

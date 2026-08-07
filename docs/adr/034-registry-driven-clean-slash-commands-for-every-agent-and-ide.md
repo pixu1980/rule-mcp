@@ -18,7 +18,7 @@ Consequences of that split: VS Code was never covered (its commands stayed prefi
 
 ## Decision
 
-Add `src/core/agent-command-targets.js` as the **single registry** of clean-command targets. One entry per (agent, scope): label, render format, scope (`global`/`project`), a `detect()` gate, and a pure `dirs(ctx)` resolver with `exists`/`listDir` injected — so the whole registry is unit-testable for any platform without touching the filesystem.
+Add `src/core/agent-command-targets.js` as the **single registry** of clean-command targets. One entry per (agent, scope): label, render format, scope (`global`/`project`), a `detect()` gate, and a pure `dirs(ctx)` resolver with `exists`/`listDir` injected - so the whole registry is unit-testable for any platform without touching the filesystem.
 
 Everything else derives from it:
 
@@ -26,7 +26,7 @@ Everything else derives from it:
 2. `commandConfig` sets `RULE_MCP_NO_PROMPTS=1` for any host flagged `namespacedPrompts` (Claude, VS Code) instead of hardcoding `"claude"`.
 3. `agent-commands --targets` and `agent-commands --sync [--remove]` expose the resolved directories; `scripts/install-agent-commands.sh` and `scripts/uninstall.sh` call them instead of listing paths.
 4. `doctor` reports installed/expected command files per directory and prints the `--sync` fix when a host is short.
-5. Agents with no verified command-file location live in `AGENTS_WITHOUT_COMMAND_SURFACE` **with a reason**. `test/agent-command-targets.test.mjs` fails when an agent appears in neither list — that test is the "always, for every agent/IDE" guarantee.
+5. Agents with no verified command-file location live in `AGENTS_WITHOUT_COMMAND_SURFACE` **with a reason**. `test/agent-command-targets.test.mjs` fails when an agent appears in neither list - that test is the "always, for every agent/IDE" guarantee.
 
 VS Code support arrives as a new `prompt` render format: `<name>.prompt.md` with `description` + `argument-hint` frontmatter, written to the user-data `prompts/` directory of every installed variant (Code, Insiders, Code-OSS, VSCodium) and every profile, since prompt files are profile-scoped. Formats whose host does not substitute arguments (`prompt`, `plain`, `workflow`) replace `$ARGUMENTS` with prose, so a meaningless literal token never reaches the model. Newly covered hosts: **VS Code, Roo Code, opencode**.
 
@@ -34,7 +34,7 @@ VS Code support arrives as a new `prompt` render format: `<name>.prompt.md` with
 
 **Positive**
 
-- A new agent cannot silently ship with prefixed-only commands — the coverage test blocks it.
+- A new agent cannot silently ship with prefixed-only commands - the coverage test blocks it.
 - Installer, uninstaller and doctor cannot drift from the registry.
 - VS Code finally gets bare `/rule-*` commands with no duplicate `/mcp.rule-mcp.*` entries.
 - The remaining gaps are explicit, reasoned and reviewable instead of invisible.
@@ -43,12 +43,12 @@ VS Code support arrives as a new `prompt` render format: `<name>.prompt.md` with
 
 - Existing installs must re-run `rule-mcp install --agent <name>` (or `agent-commands --sync`) and restart the host to pick up the files and the suppression flag.
 - Daemon/SSE installs carry no `env`, so those hosts still show the prefixed prompts (one daemon serves every client).
-- The VS Code workspace `.github/prompts` directory is deliberately not written — team-shared prompt files stay a manual opt-in — because 24 generated files would land in the user's git status.
+- The VS Code workspace `.github/prompts` directory is deliberately not written - team-shared prompt files stay a manual opt-in - because 24 generated files would land in the user's git status.
 - Every profile of every installed VS Code variant receives the full (~24 file) set.
 
 ## Alternatives considered
 
-- **Shorten the MCP server name** so the host prefix hurts less — rejected: `/mcp.w.rule-backend` is still prefixed and destroys discoverability.
-- **Ship a Claude plugin** — rejected in ADR 029: plugin commands are namespaced `/plugin:command`.
-- **Keep per-installer writes and add VS Code by hand to each script** — rejected: that drift is exactly what left VS Code uncovered.
-- **Auto-write `.github/prompts` in every repo** — rejected: pollutes the user's working tree.
+- **Shorten the MCP server name** so the host prefix hurts less - rejected: `/mcp.w.rule-backend` is still prefixed and destroys discoverability.
+- **Ship a Claude plugin** - rejected in ADR 029: plugin commands are namespaced `/plugin:command`.
+- **Keep per-installer writes and add VS Code by hand to each script** - rejected: that drift is exactly what left VS Code uncovered.
+- **Auto-write `.github/prompts` in every repo** - rejected: pollutes the user's working tree.

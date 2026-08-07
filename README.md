@@ -45,7 +45,7 @@ See **[`GETTING_STARTED.md`](./GETTING_STARTED.md)** for step-by-step installati
 - mcp.json configuration
 
 ```bash
-# TL;DR — install and go
+# TL;DR - install and go
 pnpm add -g rule-mcp
 rule-mcp doctor
 rule-mcp install --agent all
@@ -55,19 +55,19 @@ rule-mcp install --agent all
 
 ## What is rule-mcp
 
-rule-mcp is an [MCP](https://modelcontextprotocol.io) server that exposes **99 tools**, **146 resources**, and **24 prompts** to any MCP-compatible AI coding agent. Because the server never calls an LLM (every output is deterministic), it is **model-agnostic** — it behaves identically behind Claude, GPT, Gemini, Llama, Qwen, or any other model. It provides:
+rule-mcp is an [MCP](https://modelcontextprotocol.io) server that exposes **99 tools**, **146 resources**, and **24 prompts** to any MCP-compatible AI coding agent. Because the server never calls an LLM (every output is deterministic), it is **model-agnostic** - it behaves identically behind Claude, GPT, Gemini, Llama, Qwen, or any other model. It provides:
 
 - **89 modular skills** covering frontend, backend, database, devops, toolchain, styleguide, and architecture domains
 - **BM25 full-text search** across all skill content
 - **Guardrail engine** with 18 shared rules + framework/backend/database/devops-specific checks
 - **Deterministic gateway** (`pix_gateway` + `pix_apply`) with receipt-based validation
-- **Minimal tool surface** (`RULE_MCP_MINIMAL_TOOLS=1`, off by default) collapsing the surface to 10 dispatcher/action tools — for clients that cap MCP tool counts (Cursor, GitHub Copilot) and to cut per-turn token cost on every model
+- **Minimal tool surface** (`RULE_MCP_MINIMAL_TOOLS=1`, off by default) collapsing the surface to 10 dispatcher/action tools - for clients that cap MCP tool counts (Cursor, GitHub Copilot) and to cut per-turn token cost on every model
 
 ### Supported agents
 
 Claude Code, Cursor, Cline, Roo Code, Copilot, Gemini CLI, Codex CLI, Windsurf, OpenCode, Pi, and any MCP-compatible host.
 
-> **Transport support tiers.** **stdio** is the universally-tested path and works with every MCP host — prefer it. **Daemon / HTTP+SSE** is verified end-to-end for **Pi** and **VS Code**; the other agents receive a best-effort standard `mcpServers` config (correct shape, but not each individually interop-tested) and may need a manual tweak.
+> **Transport support tiers.** **stdio** is the universally-tested path and works with every MCP host - prefer it. **Daemon / HTTP+SSE** is verified end-to-end for **Pi** and **VS Code**; the other agents receive a best-effort standard `mcpServers` config (correct shape, but not each individually interop-tested) and may need a manual tweak.
 
 ---
 
@@ -89,9 +89,9 @@ Claude Code, Cursor, Cline, Roo Code, Copilot, Gemini CLI, Codex CLI, Windsurf, 
                ▼                               ▼
 ┌──────────────────────────────────────────────────────────────┐
 │                    MCP Server (SDK)                          │
-│  src/server.js — handler registration                        │
-│  src/transport/sse.js — SSE HTTP server                       │
-│  src/transport/cert.js — self-signed TLS cert generation      │
+│  src/server.js - handler registration                        │
+│  src/transport/sse.js - SSE HTTP server                       │
+│  src/transport/cert.js - self-signed TLS cert generation      │
 ├──────────────────────────────────────────────────────────────┤
 │  Tool Registry              │  Resources Registry            │
 │  src/tools/router.js        │  src/resources/index.js        │
@@ -123,7 +123,7 @@ Claude Code, Cursor, Cline, Roo Code, Copilot, Gemini CLI, Codex CLI, Windsurf, 
 | `src/tools/skill.js`         | Skill-tool generator + `pix_search`, `pix_check`, `pix_scaffold`         |
 | `src/core/guardrails.js`     | Guardrail engine (check runner + report)                                 |
 | `src/core/guardrail-defs.js` | All guardrail definitions (shared, framework, backend, database, devops) |
-| `src/core/enforcement.js`    | Pre/post processing (advisory — policy tag: `advisory`)                  |
+| `src/core/enforcement.js`    | Pre/post processing (advisory - policy tag: `advisory`)                  |
 | `src/core/bm25.js`           | BM25 full-text search index                                              |
 | `src/core/detector.js`       | Project framework detection                                              |
 
@@ -132,8 +132,8 @@ Claude Code, Cursor, Cline, Roo Code, Copilot, Gemini CLI, Codex CLI, Windsurf, 
 | Mode                                       | Tools exposed   | Use case                                                                                                          |
 | ------------------------------------------ | --------------- | ----------------------------------------------------------------------------------------------------------------- |
 | Normal (default)                           | 95              | Full access to all skills, tools, and features                                                                    |
-| Minimal (`RULE_MCP_MINIMAL_TOOLS=1`) | 10              | Dispatcher + action tools only — fits client tool caps (Cursor/Copilot), cheaper context, safe for untrusted code |
-| Allowed-tools filter                       | 8 (recommended) | Via `mcp.json` `allowedTools` — reduce token consumption                                                          |
+| Minimal (`RULE_MCP_MINIMAL_TOOLS=1`) | 10              | Dispatcher + action tools only - fits client tool caps (Cursor/Copilot), cheaper context, safe for untrusted code |
+| Allowed-tools filter                       | 8 (recommended) | Via `mcp.json` `allowedTools` - reduce token consumption                                                          |
 
 ---
 
@@ -238,7 +238,7 @@ Each skill directory under `skills/` becomes a tool `pix_<skill-name>`. All supp
 
 ### Minimal tool surface (10 tools)
 
-Set `RULE_MCP_MINIMAL_TOOLS=1` (off by default) to expose only the dispatcher + action tools. Skill-specific tools (`pix_backend_express`, `pix_frontend_react`, etc.) and mutation tools (`pix_fix`, `pix_process_adr`) are hidden — their guidance is reached through `pix_gateway` and `rule://` resources. Use this for clients that cap MCP tool counts (Cursor, GitHub Copilot) or to cut per-turn token overhead on any model. The set is enforced as a hard allowlist, so it stays fixed regardless of future additions.
+Set `RULE_MCP_MINIMAL_TOOLS=1` (off by default) to expose only the dispatcher + action tools. Skill-specific tools (`pix_backend_express`, `pix_frontend_react`, etc.) and mutation tools (`pix_fix`, `pix_process_adr`) are hidden - their guidance is reached through `pix_gateway` and `rule://` resources. Use this for clients that cap MCP tool counts (Cursor, GitHub Copilot) or to cut per-turn token overhead on any model. The set is enforced as a hard allowlist, so it stays fixed regardless of future additions.
 
 ```bash
 RULE_MCP_MINIMAL_TOOLS=1 rule-mcp serve
@@ -301,7 +301,7 @@ Each skill (except `rule` itself) has two resources:
 Every prompt routes through `pix_tool`, involves TDD/a11y baselines (or asks the user), and
 closes by proposing a commit message with mandatory scope. Every prompt takes a **single
 free-form argument** and supports `help` (or `--help` / `-h`) as its value to print the usage
-list, e.g. `/rule-frontend help` — help is returned as a ready-made assistant message and
+list, e.g. `/rule-frontend help` - help is returned as a ready-made assistant message and
 displayed instantly, without invoking the model.
 
 | Prompt                   | Description                                                                      | Arguments                                                                                                                                       |
@@ -336,7 +336,7 @@ displayed instantly, without invoking the model.
 
 The guardrail engine runs deterministic checks against code and returns structured pass/fail results.
 
-### Shared guardrails (18 rules — apply to ALL skills)
+### Shared guardrails (18 rules - apply to ALL skills)
 
 | ID                              | Label                | Description                                                       |
 | ------------------------------- | -------------------- | ----------------------------------------------------------------- |
@@ -427,8 +427,8 @@ rule-mcp tools call pix_check --json '{
 
 The guardrail engine is defined in:
 
-- [`src/core/guardrail-defs.js`](./src/core/guardrail-defs.js) — all 30+ guardrail checks
-- [`src/core/guardrails.js`](./src/core/guardrails.js) — engine (runner, reporter, merge)
+- [`src/core/guardrail-defs.js`](./src/core/guardrail-defs.js) - all 30+ guardrail checks
+- [`src/core/guardrails.js`](./src/core/guardrails.js) - engine (runner, reporter, merge)
 
 ---
 
@@ -486,8 +486,8 @@ rule-mcp <command> --help
 ## Forced self-update
 
 On git-clone installs the server keeps itself current automatically. Every
-tool invocation kicks a background check — the actual `git fetch` runs at most
-once per `RULE_MCP_AUTO_UPDATE_INTERVAL_SECONDS` (default 60s) — and
+tool invocation kicks a background check - the actual `git fetch` runs at most
+once per `RULE_MCP_AUTO_UPDATE_INTERVAL_SECONDS` (default 60s) - and
 fast-forwards if behind, hot-reloads skills, and restarts when server code
 changed. The check never blocks the tool call (fire-and-forget); a
 `🔄 Updating MCP server` banner is prepended to a later result.
@@ -630,4 +630,4 @@ The Docker image uses `node:22-alpine`, has no build step, and runs the server d
 
 ## License
 
-MIT — see [LICENSE](./LICENSE).
+MIT - see [LICENSE](./LICENSE).

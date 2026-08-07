@@ -25,5 +25,5 @@ Risk: Destructuring reads props once and severs Solid's reactive tracking. The c
 
 Suggested fix: Access `props.name` and `props.value` directly, or use `mergeProps()` if you need defaults.
 
-Rule of thumb: Never destructure SolidJS props — they are reactive proxies.
+Rule of thumb: Never destructure SolidJS props - they are reactive proxies.
 ````

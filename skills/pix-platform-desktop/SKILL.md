@@ -8,7 +8,7 @@ tags:
 frameworks: [electron, desktop]
 ---
 
-# rule-platform-desktop — Desktop Applications with rule Principles
+# rule-platform-desktop - Desktop Applications with rule Principles
 
 This skill is the **project type umbrella for desktop apps**.
 Choose a desktop framework below, then pair with a UI framework.
@@ -32,13 +32,13 @@ Choose a desktop framework below, then pair with a UI framework.
 
 ## Core Rules (inherited from rule skills)
 
-1. **Zero CSS classes** — only element selectors + `[data-part="..."]` + `[data-*]` attribute selectors
-2. **Zero inline styles** — all styling in external `.css` files via `adoptedStyleSheets`
-3. **Semantic HTML is mandatory** — never `<div>` where `<section>`, `<article>`, `<header>`, etc. exists
-4. **Barrel pattern** — every component folder has `index.js` re-export, files are `_PascalCase.ext`
-5. **No CSS-in-JS, no Tailwind** — external `.css` files only
-6. **IPC isolation** — `contextBridge` + `ipcRenderer` in preload, never `nodeIntegration: true`
-7. **Main process is thin orchestration** — defer business logic to modules
+1. **Zero CSS classes** - only element selectors + `[data-part="..."]` + `[data-*]` attribute selectors
+2. **Zero inline styles** - all styling in external `.css` files via `adoptedStyleSheets`
+3. **Semantic HTML is mandatory** - never `<div>` where `<section>`, `<article>`, `<header>`, etc. exists
+4. **Barrel pattern** - every component folder has `index.js` re-export, files are `_PascalCase.ext`
+5. **No CSS-in-JS, no Tailwind** - external `.css` files only
+6. **IPC isolation** - `contextBridge` + `ipcRenderer` in preload, never `nodeIntegration: true`
+7. **Main process is thin orchestration** - defer business logic to modules
 
 ---
 
@@ -83,7 +83,7 @@ Keep `electron/main.js` focused on app lifecycle and window creation.
 Delegate all IPC handlers to dedicated modules.
 
 ```js
-// electron/main.js — thin entry point
+// electron/main.js - thin entry point
 const { app, BrowserWindow } = require("electron");
 const { registerIpcHandlers } = require("./ipc/index.js");
 
@@ -165,10 +165,10 @@ contextBridge.exposeInMainWorld("qt", {
 
 ### Preload Rules
 
-- **Never expose `ipcRenderer.on`** to the renderer — use `invoke` for request/response.
-- **Never expose `nodeRequire`** or `process` — use `contextBridge` only.
-- **Keep preload minimal** — one function per IPC channel.
-- **Name channels with kebab-case** — `"load-archive"`, `"save-quote"`, `"generate-pdf"`.
+- **Never expose `ipcRenderer.on`** to the renderer - use `invoke` for request/response.
+- **Never expose `nodeRequire`** or `process` - use `contextBridge` only.
+- **Keep preload minimal** - one function per IPC channel.
+- **Name channels with kebab-case** - `"load-archive"`, `"save-quote"`, `"generate-pdf"`.
 
 ## Renderer Mocking (Browser Dev Mode for Electron)
 
@@ -281,7 +281,7 @@ project/
 | Auto-updater    | External (`update-electron-app`) | Built-in (`electron-updater`)       |
 | Config location | `forge.config.js`                | `package.json` → `build` key        |
 | Current stable  | v7.x (2026)                      | v26.15.x (2026)                     |
-| Next major      | —                                | v27 alpha (ESM-native, Node ≥22.12) |
+| Next major      | -                                | v27 alpha (ESM-native, Node ≥22.12) |
 
 **Decision rule**: Pick **Electron Forge** for official support and all-in-one pipeline. Pick **electron-builder** for the most mature built-in auto-updater and widest community footprint. Both produce signed, updatable installers for all platforms.
 
@@ -343,7 +343,7 @@ electron-builder produces native installers from a single `build` block in `pack
 npx electron-builder --mac --win --linux
 ```
 
-> ⚠️ You can only fully build a given platform's signed installers on (or for) that platform — which is why CI matters.
+> ⚠️ You can only fully build a given platform's signed installers on (or for) that platform - which is why CI matters.
 
 ### CSP for Electron
 
@@ -358,7 +358,7 @@ npx electron-builder --mac --win --linux
 
 ### The Dependency Chain (Critical)
 
-> 🔴 **macOS rule**: Your application MUST be signed for automatic updates to work — this is a requirement of **Squirrel.Mac**. Code signing → notarization → working silent updates is one unbreakable chain.
+> 🔴 **macOS rule**: Your application MUST be signed for automatic updates to work - this is a requirement of **Squirrel.Mac**. Code signing → notarization → working silent updates is one unbreakable chain.
 
 | Scenario           | macOS behavior                                              |
 | ------------------ | ----------------------------------------------------------- |
@@ -370,7 +370,7 @@ npx electron-builder --mac --win --linux
 `electron-updater` is electron-builder's companion. It supports GitHub Releases, Amazon S3, DigitalOcean Spaces, Keygen, and generic HTTP(S) servers.
 
 ```js
-// electron/main.js — minimal two-liner
+// electron/main.js - minimal two-liner
 const { autoUpdater } = require("electron-updater");
 
 app.whenReady().then(() => {
@@ -379,7 +379,7 @@ app.whenReady().then(() => {
 });
 ```
 
-> Do NOT call `setFeedURL` — electron-builder automatically creates an internal `app-update.yml` file on build.
+> Do NOT call `setFeedURL` - electron-builder automatically creates an internal `app-update.yml` file on build.
 
 With progress reporting:
 
@@ -471,7 +471,7 @@ Code Signing → Notarization → Working Silent Auto-Update
 </plist>
 ```
 
-**Environment variables** (supply at build time — NEVER in the repo):
+**Environment variables** (supply at build time - NEVER in the repo):
 
 ```bash
 # macOS signing certificate (base64-encoded .p12) and its password
@@ -498,7 +498,7 @@ export APPLE_TEAM_ID="XXXXXXXXXX"
 | -------- | -------------------------------------------------- | -------------- | ------------ | ------------------------------------------------------------------------------------ |
 | 1️⃣       | **Azure Artifact Signing**                         | ~$10/month     | ✅ Native    | USA, Canada, EU, UK (orgs); USA, Canada (individuals)                                |
 | 2️⃣       | **OV certificate** (DigiCert, Sectigo, GlobalSign) | ~$200-300/year | ❌ USB token | Fallback if outside Azure regions                                                    |
-| 3️⃣       | **Keep existing EV cert** until expiry             | ~$300-400/year | ❌ USB token | Still valid if already owned — don't buy new                                         |
+| 3️⃣       | **Keep existing EV cert** until expiry             | ~$300-400/year | ❌ USB token | Still valid if already owned - don't buy new                                         |
 | 🆓       | **Microsoft Store** (MSIX)                         | Free           | ✅           | Microsoft re-signs automatically → **no SmartScreen warning, no certificate needed** |
 
 **Azure Artifact Signing env vars**:
@@ -516,16 +516,16 @@ export CSC_LINK="$(base64 -i cert.pfx)"
 export CSC_KEY_PASSWORD="••••••"
 ```
 
-### Signed vs Unsigned — Quick Reference
+### Signed vs Unsigned - Quick Reference
 
 |                        | Signed + Notarized                          | Unsigned                                                      |
 | ---------------------- | ------------------------------------------- | ------------------------------------------------------------- |
 | macOS first launch     | Clean, Gatekeeper passes                    | "Unidentified developer" block; right-click → Open workaround |
 | Windows first download | SmartScreen warning until reputation builds | SmartScreen warning, no reputation inheritance                |
-| macOS auto-update      | ✅ Works silently                           | ❌ Can notify only — cannot replace binary                    |
+| macOS auto-update      | ✅ Works silently                           | ❌ Can notify only - cannot replace binary                    |
 | Mac App Store eligible | ✅ Yes                                      | ❌ No                                                         |
 
-> Unsigned builds are acceptable for a developer audience comfortable with override steps. For non-technical users — and for any app that auto-updates on macOS — signing is non-negotiable.
+> Unsigned builds are acceptable for a developer audience comfortable with override steps. For non-technical users - and for any app that auto-updates on macOS - signing is non-negotiable.
 
 ## Distribution Channels
 
@@ -545,7 +545,7 @@ Choose by audience reach and how much control/revenue you keep.
 - Apple's standard 30% commission, reduced to 15% under the App Store Small Business Program (under $1M USD annual proceeds)
 - Disables electron-updater (Store manages updates)
 
-### Microsoft Store — The SmartScreen Hack
+### Microsoft Store - The SmartScreen Hack
 
 Publishing an MSIX package through the Microsoft Store means **Microsoft re-signs your package automatically**. Users never see a SmartScreen warning and you never need to purchase or renew a certificate. The trade-off: store submission, review, and packaging as MSIX rather than distributing a standalone NSIS/MSI installer.
 
@@ -598,7 +598,7 @@ jobs:
 - Each runner builds only its own platform's targets
 - electron-builder signs using whichever credentials are present in that runner's environment
 - `--publish always` uploads every artifact + `latest*.yml` update metadata to a single GitHub Release
-- **Store every secret in repository or environment secrets — never in the workflow file**
+- **Store every secret in repository or environment secrets - never in the workflow file**
 - Because Azure Artifact Signing works with plain environment variables, the Windows job needs no USB token and no self-hosted runner
 
 ### Secrets to Configure in GitHub
@@ -728,8 +728,8 @@ app.on("open-url", (event, url) => {
 
 ### Security
 
-- ✅ `contextIsolation: true` — always
-- ✅ `nodeIntegration: false` — always
+- ✅ `contextIsolation: true` - always
+- ✅ `nodeIntegration: false` - always
 - ✅ Preload via `contextBridge` only
 - ✅ CSP header in HTML
 - ✅ Validate file paths with `path.resolve` + prefix check
@@ -737,7 +737,7 @@ app.on("open-url", (event, url) => {
 
 ### Main Process
 
-- ✅ Keep main.js thin — delegate to modules
+- ✅ Keep main.js thin - delegate to modules
 - ✅ Handle IPC errors with try/catch
 - ✅ Use `worker_threads` for CPU-heavy work
 - ✅ Clean up window references on close (nullify `closed` event)
@@ -753,7 +753,7 @@ app.on("open-url", (event, url) => {
 
 ```
 ┌──────────────────────────────────────────────────────────────────┐
-│  rule-platform-desktop — Desktop Application Project Type         │
+│  rule-platform-desktop - Desktop Application Project Type         │
 │                                                                  │
 │  Framework:  Electron (primary) / Tauri / Neutralinojs           │
 │  UI layer:   Any rule-* framework skill                           │
@@ -785,5 +785,5 @@ app.on("open-url", (event, url) => {
 
 ## See also
 
-- [rule](../rule/SKILL.md) — Central skill index and dispatcher
-- [rule-platform](../rule-platform/SKILL.md) — Platform skill index
+- [rule](../rule/SKILL.md) - Central skill index and dispatcher
+- [rule-platform](../rule-platform/SKILL.md) - Platform skill index

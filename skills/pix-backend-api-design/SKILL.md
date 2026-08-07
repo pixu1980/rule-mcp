@@ -19,15 +19,15 @@ metadata:
 
 Before applying this skill, load the rule **`api-security`** to ensure API authentication, authorization, and security hardening are properly implemented.
 
-## Step 1 — Define resource model
+## Step 1 - Define resource model
 
 - Use resource-oriented paths with plural nouns (for example: `/users`, `/orders/{id}`).
 - Use kebab-case for multi-word resources.
 - Keep nesting shallow (max 3 levels).
-- Do **not** expose raw database structures — design APIs around real user interactions and flows (e.g., sign-up, complete a purchase, view dashboard).
+- Do **not** expose raw database structures - design APIs around real user interactions and flows (e.g., sign-up, complete a purchase, view dashboard).
 - APIs must be intuitive for frontend and mobile developers, with clear relationships and logical workflows.
 
-## Step 2 — Map operations to HTTP verbs
+## Step 2 - Map operations to HTTP verbs
 
 | Method          | Purpose                        |
 | --------------- | ------------------------------ |
@@ -36,14 +36,14 @@ Before applying this skill, load the rule **`api-security`** to ensure API authe
 | `PUT` / `PATCH` | Update existing data           |
 | `DELETE`        | Remove data                    |
 
-## Step 3 — Apply versioning and transport policy
+## Step 3 - Apply versioning and transport policy
 
 - Version APIs in URI paths (for example: `/v1/users`).
 - Use HTTPS only.
 - Maintain backward compatibility across versions.
 - Deprecated versions must follow a clear deprecation policy and be communicated to clients before removal.
 
-## Step 4 — Define request/query conventions
+## Step 4 - Define request/query conventions
 
 - JSON request/response only. Client must include header: `Content-Type: application/json`.
 - Use query params for filtering: `/posts?tags=javascript`.
@@ -52,7 +52,7 @@ Before applying this skill, load the rule **`api-security`** to ensure API authe
 - Pagination with `offset` and `limit`. Backend must apply default values if not provided.
 - Include `Accept-Language` header for translated responses: `Accept-Language: en-US` or `it-IT`.
 
-## Step 5 — Define response and error contracts
+## Step 5 - Define response and error contracts
 
 ### HTTP status codes
 
@@ -94,7 +94,7 @@ Use this consistent structure:
 - Use the `Accept-Language` header to serve translated error messages when needed.
 - Avoid generic `500` responses unless the error is truly unexpected.
 
-## Step 6 — Document with OpenAPI
+## Step 6 - Document with OpenAPI
 
 - Maintain OpenAPI v3 spec for every endpoint.
 - Include request/response schemas, examples, and status codes.
@@ -151,6 +151,6 @@ API-first design: define the contract before implementation.
 
 ## See also
 
-- [rule](../rule/SKILL.md) — Central skill index and dispatcher
-- [rule-backend](../rule-backend/SKILL.md) — Backend skill index
-- [rule-backend-security](../rule-backend-security/SKILL.md) — Security hardening
+- [rule](../rule/SKILL.md) - Central skill index and dispatcher
+- [rule-backend](../rule-backend/SKILL.md) - Backend skill index
+- [rule-backend-security](../rule-backend-security/SKILL.md) - Security hardening

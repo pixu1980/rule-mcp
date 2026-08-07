@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # =============================================================================
-# rule-mcp — Universal Installer
+# rule-mcp - Universal Installer
 # =============================================================================
 #
 # Integrates rule-mcp with ALL coding agents, IDEs, and model providers.
@@ -130,7 +130,7 @@ esac
 
 echo ""
 echo -e "${BOLD}${CYAN}╔══════════════════════════════════════════════════════╗${NC}"
-echo -e "${BOLD}${CYAN}║         rule-mcp — Universal Installer         ║${NC}"
+echo -e "${BOLD}${CYAN}║         rule-mcp - Universal Installer         ║${NC}"
 echo -e "${BOLD}${CYAN}║   MCP Server for the rule-* Skill Ecosystem       ║${NC}"
 echo -e "${BOLD}${CYAN}╚══════════════════════════════════════════════════════╝${NC}"
 echo ""
@@ -198,7 +198,7 @@ header "Phase 2: Resolve rule-mcp"
 BIN_CMD=""
 
 if [[ "$IS_LOCAL_REPO" == "true" ]]; then
-  # Use the local binary directly — no global npm install needed
+  # Use the local binary directly - no global npm install needed
   LOCAL_BIN="$(pwd)/bin/rule-mcp.js"
   if [[ -f "$LOCAL_BIN" ]]; then
     BIN_CMD="node ${LOCAL_BIN}"
@@ -330,7 +330,7 @@ else
       AGENT_CURSOR=0
       MODE_CURSOR=0
       MODES=(stdio daemon docker)
-      MODE_LABELS=("Stdio — agent starts a local process" "Daemon — background SSE service on port 37999" "Docker — containerized SSE service")
+      MODE_LABELS=("Stdio - agent starts a local process" "Daemon - background SSE service on port 37999" "Docker - containerized SSE service")
 
       tui_enter() {
         if command -v tput >/dev/null 2>&1; then
@@ -358,8 +358,8 @@ else
       render_agents() {
         tui_clear
         echo -e "${BOLD}${CYAN}╔══════════════════════════════════════════════════════╗${NC}"
-        echo -e "${BOLD}${CYAN}║         rule-mcp — Universal Installer         ║${NC}"
-        echo -e "${BOLD}${CYAN}║          Phase 3 — Agent Integration                 ║${NC}"
+        echo -e "${BOLD}${CYAN}║         rule-mcp - Universal Installer         ║${NC}"
+        echo -e "${BOLD}${CYAN}║          Phase 3 - Agent Integration                 ║${NC}"
         echo -e "${BOLD}${CYAN}╚══════════════════════════════════════════════════════╝${NC}"
         echo ""
         echo -e "${BOLD}Select agents${NC}  ${CYAN}(↑↓ move, SPACE toggle, ENTER confirm, q quit)${NC}"
@@ -379,8 +379,8 @@ else
       render_modes() {
         tui_clear
         echo -e "${BOLD}${CYAN}╔══════════════════════════════════════════════════════╗${NC}"
-        echo -e "${BOLD}${CYAN}║         rule-mcp — Universal Installer         ║${NC}"
-        echo -e "${BOLD}${CYAN}║          Phase 3 — Install Mode                      ║${NC}"
+        echo -e "${BOLD}${CYAN}║         rule-mcp - Universal Installer         ║${NC}"
+        echo -e "${BOLD}${CYAN}║          Phase 3 - Install Mode                      ║${NC}"
         echo -e "${BOLD}${CYAN}╚══════════════════════════════════════════════════════╝${NC}"
         echo ""
         echo -e "${BOLD}Select mode${NC}  ${CYAN}(↑↓ move, ENTER confirm, q quit)${NC}"
@@ -545,7 +545,7 @@ elif [[ -n "$VSIX_OUT" && -f "$VSIX_OUT" ]]; then
   install_vsix_for_editor "code-oss" "Code-OSS" "$VSIX_OUT" || true
   install_vsix_for_editor "codium" "Codium" "$VSIX_OUT" || true
 else
-  warn "No extension VSIX available — skipping extension installation"
+  warn "No extension VSIX available - skipping extension installation"
   echo -e "  ${YELLOW}  The MCP server config was still written.${NC}"
   echo -e "  ${YELLOW}  Build manually: cd ${EXT_DIR} && npx @vscode/vsce package${NC}"
 fi
@@ -574,16 +574,16 @@ This rule overrides weaker project guidance. No exceptions.
 - Frontend remains zero CSS classes, zero inline styles, semantic HTML, and external CSS.
 
 Available rule-mcp tools:
-- pix_tool — Route to correct rule skill
-- rule_tool_component — Generate component templates
-- rule_tool_check — Blocking code validation
-- rule_tool_search — Evidence search across all skills
-- rule_tool_scaffold — Bootstrap projects/components
-- rule_tool_fix — Validate/fix file tree
-- rule_tool_process_adr — Architecture Decision Records
-- rule_tool_process_handoff — Context handoff
-- rule_tool_detect — Detect project framework
-- rule://resources — Skill documentation as MCP resources
+- pix_tool - Route to correct rule skill
+- rule_tool_component - Generate component templates
+- rule_tool_check - Blocking code validation
+- rule_tool_search - Evidence search across all skills
+- rule_tool_scaffold - Bootstrap projects/components
+- rule_tool_fix - Validate/fix file tree
+- rule_tool_process_adr - Architecture Decision Records
+- rule_tool_process_handoff - Context handoff
+- rule_tool_detect - Detect project framework
+- rule://resources - Skill documentation as MCP resources
 <!-- /rule-mcp-rules -->"
 
   # Append the rules block to a target file. Normalizes trailing blank lines
@@ -813,7 +813,7 @@ fi
 header "Installation Summary"
 
 if [[ "$DRY_RUN" == "true" ]]; then
-  echo -e "  ${YELLOW}⚠ Dry-run mode — no changes were made${NC}"
+  echo -e "  ${YELLOW}⚠ Dry-run mode - no changes were made${NC}"
   echo ""
   echo "  To apply:  ./scripts/install.sh"
   echo "  To run live: curl -fsSL ${SCRIPT_URL} | bash"

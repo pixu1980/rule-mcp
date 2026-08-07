@@ -13,7 +13,7 @@ tags:
 frameworks: [all]
 ---
 
-# rule-toolchain-husky — Git Hooks & Commit Quality
+# rule-toolchain-husky - Git Hooks & Commit Quality
 
 ## Overview
 
@@ -106,6 +106,6 @@ revert: rollback to v1.2.0
 
 ## See also
 
-- [rule-toolchain-biome](../rule-toolchain-biome/SKILL.md) — Linting & formatting
-- [rule-toolchain-project](../rule-toolchain-project/SKILL.md) — Repo conventions
-- [rule](../rule/SKILL.md) — Central skill index
+- [rule-toolchain-biome](../rule-toolchain-biome/SKILL.md) - Linting & formatting
+- [rule-toolchain-project](../rule-toolchain-project/SKILL.md) - Repo conventions
+- [rule](../rule/SKILL.md) - Central skill index

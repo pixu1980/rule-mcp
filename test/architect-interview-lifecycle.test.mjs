@@ -1,6 +1,6 @@
 // test/architect-interview-lifecycle.test.mjs
 //
-// Audit findings 04 + 05 — the interview server the MCP tool spawns had no
+// Audit findings 04 + 05 - the interview server the MCP tool spawns had no
 // lifecycle at all:
 //
 //   04. The promise resolved on the first URL line (or after a 5s timeout) and
@@ -9,8 +9,8 @@
 //       server itself, while stdout listeners kept appending to a string that
 //       was never read again.
 //   05. pix_architect was absent from the cache denylist, so the result
-//       "Server started! Open http://localhost:51234" was cached — persisted
-//       gzipped, surviving restarts — and every later identical call replayed
+//       "Server started! Open http://localhost:51234" was cached - persisted
+//       gzipped, surviving restarts - and every later identical call replayed
 //       that text WITHOUT spawning anything. The user opens a dead port while
 //       the tool reports success.
 //

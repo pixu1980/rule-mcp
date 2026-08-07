@@ -150,10 +150,10 @@ test("detectedOnly resolves nothing for agents that are not installed", () => {
 });
 
 test("hosts that namespace MCP prompts have them suppressed", () => {
-  assert.equal(suppressesMcpPrompts("claude"), true, "Claude shows /rule-mcp:* — suppress");
-  assert.equal(suppressesMcpPrompts("vscode"), true, "VS Code shows /mcp.rule-mcp.* — suppress");
+  assert.equal(suppressesMcpPrompts("claude"), true, "Claude shows /rule-mcp:* - suppress");
+  assert.equal(suppressesMcpPrompts("vscode"), true, "VS Code shows /mcp.rule-mcp.* - suppress");
   assert.equal(suppressesMcpPrompts("pi"), false, "Pi already exposes bare /rule-* prompts");
-  assert.equal(suppressesMcpPrompts("jetbrains"), false, "no clean files installed — keep the MCP prompts");
+  assert.equal(suppressesMcpPrompts("jetbrains"), false, "no clean files installed - keep the MCP prompts");
 });
 
 test("the prompt format renders .prompt.md with frontmatter and no $ARGUMENTS", () => {

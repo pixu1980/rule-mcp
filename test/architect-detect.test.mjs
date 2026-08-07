@@ -12,7 +12,7 @@ import { detectProjectValues } from "../skills/rule-architect/detect.mjs";
 // detectProjectValues follows a DETECT-OR-STAY-SILENT contract: it only emits
 // a value it can actually infer from the project's own files. It used to
 // invent ~27 fixed TTRPG/Electron values (AUTH_MECHANISM, DEPLOY_TARGET,
-// MVP_STEP_*, PERSONA_*, …) for EVERY project — even an empty one — which
+// MVP_STEP_*, PERSONA_*, …) for EVERY project - even an empty one - which
 // pre-filled the wizard with facts that were wrong for anything but the app it
 // was prototyped against. These tests pin the generic behavior and guard
 // against the invented content returning.

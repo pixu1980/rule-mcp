@@ -7,8 +7,8 @@
 1. **Semantic `<nav>`:** Use `<nav>` as a landmark for navigation regions.
 2. **`aria-current`:** Use on the current page link (`aria-current="page"`).
 3. **Skip Links:** Every page MUST have a "Skip to main content" link as the first focusable element.
-4. **Nested menus:** Must not rely on hover only — require JS to toggle on click/focus.
-5. **SPA Routing:** Focus MUST be managed after route changes — send focus to the top or the new H1.
+4. **Nested menus:** Must not rely on hover only - require JS to toggle on click/focus.
+5. **SPA Routing:** Focus MUST be managed after route changes - send focus to the top or the new H1.
 6. **Predictability:** Navigation order and location MUST be consistent across pages.
 
 ## Good Examples
@@ -41,13 +41,13 @@
 ## Bad Examples
 
 ```html
-<!-- ❌ Hover-only menu — inaccessible to keyboard users -->
+<!-- ❌ Hover-only menu - inaccessible to keyboard users -->
 <li onmouseover="showMenu()">Products</li>
 
 <!-- ❌ Non-standard link -->
 <span onclick="window.location='/new-page'">Go to Page</span>
 
-<!-- ❌ No skip link — keyboard users must Tab through all navigation -->
+<!-- ❌ No skip link - keyboard users must Tab through all navigation -->
 ```
 
 ## SPA Routing Focus Management

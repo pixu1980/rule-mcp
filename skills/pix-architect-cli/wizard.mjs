@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// rule-architect-cli — Terminal interview wizard
+// rule-architect-cli - Terminal interview wizard
 // Reads wizard-spec.json from rule-architect engine.
 
 import { readFileSync, existsSync } from "node:fs";
@@ -46,7 +46,7 @@ async function runInterview() {
     process.exit(130);
   });
 
-  // ── Step 0: Analysis Depth — always shown, no step counter ──
+  // ── Step 0: Analysis Depth - always shown, no step counter ──
   const depthStep = allSteps.find((s) => s.key === "step-0-depth");
 
   if (depthStep) {
@@ -54,7 +54,7 @@ async function runInterview() {
     const result = await renderStep(depthStep, answers, spec.optionGroups, {
       isFirst: true,
       isLast: false,
-      stepNum: 0, // 0 means "unknown" — renderer hides counter
+      stepNum: 0, // 0 means "unknown" - renderer hides counter
       totalSteps: 0,
     });
 
@@ -102,7 +102,7 @@ async function runInterview() {
   const written = gen.files.length - gen.skipped.length;
   console.log(`  Done. ${written} files written to ${opts.output}`);
   for (const path of gen.skipped) {
-    console.log(`  ⚠ ${path} exists — skipped (use --force to overwrite)`);
+    console.log(`  ⚠ ${path} exists - skipped (use --force to overwrite)`);
   }
   if (gen.skipped.length > 0) {
     console.log(`  Re-run with --force to overwrite ${gen.skipped.length} existing root file(s).`);

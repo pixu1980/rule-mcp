@@ -1,4 +1,4 @@
-// rule-architect validators — showIf logic, required fields, prefill engine
+// rule-architect validators - showIf logic, required fields, prefill engine
 // Pure logic, no DOM. Used by both rule-architect-cli and rule-architect-web.
 
 /**

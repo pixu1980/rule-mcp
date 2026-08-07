@@ -13,11 +13,11 @@ tags:
 frameworks: [all]
 ---
 
-# rule-toolchain-pnpm — pnpm Package Manager
+# rule-toolchain-pnpm - pnpm Package Manager
 
 ## Why pnpm
 
-- **Disk-efficient**: content-addressable store — one version of a package is saved once
+- **Disk-efficient**: content-addressable store - one version of a package is saved once
 - **Fast**: deterministic resolution, parallel downloads, hard-linked store
 - **Strict**: `pnpm-lock.yaml` is deterministic and auditable
 - **Workspace-native**: built-in monorepo support with `pnpm-workspace.yaml`
@@ -75,7 +75,7 @@ pnpm store path      # Show store path
 ## CI Optimization
 
 ```yaml
-# .github/workflows/ci.yml — pnpm cache
+# .github/workflows/ci.yml - pnpm cache
 steps:
   - uses: pnpm/action-setup@v4
   - uses: actions/setup-node@v4
@@ -88,8 +88,8 @@ steps:
 
 ## Monorepo Best Practices
 
-- Use `"link:"` protocol for internal dependencies — always resolves to workspace
-- `pnpm install --frozen-lockfile` in CI — never regenerate lockfile
+- Use `"link:"` protocol for internal dependencies - always resolves to workspace
+- `pnpm install --frozen-lockfile` in CI - never regenerate lockfile
 - `pnpm rebuild` to rebuild native modules after Node.js version change
 - Use `.npmrc` with `auto-install-peers=true` for React/TypeScript monorepos
 
@@ -107,5 +107,5 @@ pnpm install          # Fresh install with pnpm store
 
 ## See also
 
-- [rule-toolchain-vite](../rule-toolchain-vite/SKILL.md) — Vite build tool
-- [rule](../rule/SKILL.md) — Central skill index
+- [rule-toolchain-vite](../rule-toolchain-vite/SKILL.md) - Vite build tool
+- [rule](../rule/SKILL.md) - Central skill index

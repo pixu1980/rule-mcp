@@ -3,7 +3,7 @@
 // F10: generateContext writes seven "root" entry files (AGENTS.md, CLAUDE.md,
 // GEMINI.md, .clinerules, .github/copilot-instructions.md,
 // .cursor/rules/project.mdc, .windsurf/rules/project.md) straight into the
-// user's project root — right next to any hand-authored CLAUDE.md / AGENTS.md.
+// user's project root - right next to any hand-authored CLAUDE.md / AGENTS.md.
 // Before this guard it clobbered them silently. Contract:
 //
 //   - An EXISTING root file is skipped, never overwritten, unless the caller
@@ -64,13 +64,13 @@ test("fresh project: every root file is written and nothing is skipped", () => {
 test("an existing root file is preserved, not overwritten, and reported as skipped", () => {
   const dir = temporary();
   try {
-    const SENTINEL = "# MY HAND-WRITTEN CLAUDE.md — DO NOT TOUCH\n";
+    const SENTINEL = "# MY HAND-WRITTEN CLAUDE.md - DO NOT TOUCH\n";
     writeFileSync(join(dir, "CLAUDE.md"), SENTINEL, "utf-8");
 
     const { skipped } = generateContext(ANSWERS, spec, dir);
 
     assert.equal(readFileSync(join(dir, "CLAUDE.md"), "utf-8"), SENTINEL, "hand-authored CLAUDE.md must survive");
-    assert.ok(skipped.includes("CLAUDE.md"), `skipped must list CLAUDE.md — got ${JSON.stringify(skipped)}`);
+    assert.ok(skipped.includes("CLAUDE.md"), `skipped must list CLAUDE.md - got ${JSON.stringify(skipped)}`);
     // The other root files, which did not exist, are still written.
     assert.ok(existsSync(join(dir, "AGENTS.md")), "AGENTS.md (absent) must still be written");
     assert.ok(existsSync(join(dir, "GEMINI.md")), "GEMINI.md (absent) must still be written");
@@ -106,7 +106,7 @@ test("{ force: true } overwrites an existing root file", () => {
   }
 });
 
-test(".context/ is always regenerated, guard or not — it is not a guarded root file", () => {
+test(".context/ is always regenerated, guard or not - it is not a guarded root file", () => {
   const dir = temporary();
   try {
     // Seed a .context/ file with sentinel content, then regenerate WITHOUT force.
@@ -115,13 +115,13 @@ test(".context/ is always regenerated, guard or not — it is not a guarded root
     // Use a real .context path the generator emits. specs/00-sdd.md is stable.
     mkdirSync(join(dir, ".context", "specs"), { recursive: true });
     const sdd = join(dir, ".context", "specs", "00-sdd.md");
-    writeFileSync(sdd, "STALE CONTEXT — MUST BE OVERWRITTEN\n", "utf-8");
+    writeFileSync(sdd, "STALE CONTEXT - MUST BE OVERWRITTEN\n", "utf-8");
 
     const { skipped } = generateContext(ANSWERS, spec, dir);
 
     assert.notEqual(
       readFileSync(sdd, "utf-8"),
-      "STALE CONTEXT — MUST BE OVERWRITTEN\n",
+      "STALE CONTEXT - MUST BE OVERWRITTEN\n",
       ".context/ files must always be regenerated",
     );
     assert.ok(!skipped.includes("specs/00-sdd.md"), ".context files are never reported as skipped");

@@ -7,7 +7,7 @@
 // INTENTIONAL UX change (approved goal, not a regression): the MCP wizard
 // gains Step 0 (Analysis Depth onboarding) and Step 1 (Domain Sketch) ahead
 // of the former "Project Type & Stack" step, and the old `tier-btn` element
-// no longer exists — ANALYSIS_DEPTH now renders as `skill-card`s at step 0.
+// no longer exists - ANALYSIS_DEPTH now renders as `skill-card`s at step 0.
 // Live values below were verified against context-server on :19000 (not
 // hardcoded from the old spec):
 //   - default (standard tier): 15 step-dots (9 starter + 6 standard steps)
@@ -57,8 +57,8 @@ test.describe("rule-architect interview", () => {
     await expect(page.locator("[data-part='tech-card']").filter({ hasText: "PostgreSQL" })).toHaveCount(0);
   });
 
-  test("add/remove repeatable group — no infinite loop", async ({ page }) => {
-    // Navigate to the Project Glossary step — has repeatable groups
+  test("add/remove repeatable group - no infinite loop", async ({ page }) => {
+    // Navigate to the Project Glossary step - has repeatable groups
     await page.click("[data-part='nav-btn'][data-direction='next']"); // step 0 -> 1 (domain sketch)
     await page.click("[data-part='nav-btn'][data-direction='next']"); // step 1 -> 2 (project type & stack)
     await page.click("[data-part='project-type-card']:first-child");
@@ -68,7 +68,7 @@ test.describe("rule-architect interview", () => {
     await page.click("[data-part='nav-btn'][data-direction='next']"); // step 6 (project glossary)
 
     // The Glossary step has THREE repeatable field groups (Domain Terms, Constraints,
-    // Additional Details) — target one by its data-prefix to avoid a strict-mode
+    // Additional Details) - target one by its data-prefix to avoid a strict-mode
     // violation from the generic "[data-part='add-btn']" locator matching all three.
     const addButton = page.locator("[data-part='add-btn'][data-prefix='DOMAIN_TERMS']");
     if (await addButton.isVisible({ timeout: 3000 }).catch(() => false)) {
@@ -98,7 +98,7 @@ test.describe("rule-architect interview", () => {
     }
   });
 
-  test("generate creates files — no crash", async ({ page }) => {
+  test("generate creates files - no crash", async ({ page }) => {
     // Quick fill and generate
     await page.click("[data-part='nav-btn'][data-direction='next']"); // step 0 -> 1 (domain sketch)
     await page.click("[data-part='nav-btn'][data-direction='next']"); // step 1 -> 2 (project type & stack)
@@ -169,7 +169,7 @@ test.describe("rule-architect interview", () => {
 
     const id = await input.getAttribute("id");
     await input.fill(""); // clear any pre-filled default (e.g. version fields)
-    // Type character-by-character — each keystroke fires `oninput` and, before the
+    // Type character-by-character - each keystroke fires `oninput` and, before the
     // fix, rebuilt the field DOM via innerHTML and dropped focus after char 1.
     await input.pressSequentially("hello-world", { delay: 20 });
 
@@ -210,7 +210,7 @@ test.describe("rule-architect-web interview (card taxonomy)", () => {
     await expect(page.locator("[data-part='tech-card'][data-key='postgresql']")).toHaveCount(0);
     await expect(page.locator("[data-part='tech-card'][data-key='indexeddb']")).toBeVisible();
 
-    // Switch PROJECT_TYPE to Backend / API — the tech-card set must change accordingly.
+    // Switch PROJECT_TYPE to Backend / API - the tech-card set must change accordingly.
     await page.click("[data-part='project-type-card'][data-key='backend']");
     await expect(page.locator("[data-part='project-type-card'][data-key='backend']")).toHaveAttribute(
       "data-state-selected",
@@ -256,7 +256,7 @@ test.describe("rule-architect-web interview (card taxonomy)", () => {
 
     const panel = page.locator("[data-part='summary-panel']");
 
-    // Grouped under the section's human label ("Step 1 — " prefix stripped).
+    // Grouped under the section's human label ("Step 1 - " prefix stripped).
     await expect(panel.locator("[data-part='summary-group-title']").filter({ hasText: "Domain Sketch" })).toBeVisible();
     await expect(panel.locator("[data-part='summary-label']").filter({ hasText: "Project Name" })).toBeVisible();
     await expect(panel.locator("[data-part='summary-value']").filter({ hasText: "My RPG Builder" })).toBeVisible();
@@ -278,7 +278,7 @@ test.describe("rule-architect-web interview (card taxonomy)", () => {
 
   // Phase 7 Task 2: a [Summary • Files] segmented control switches the panel
   // body. Files debounce-POSTs the current answers to /api/download and
-  // renders a file-tab strip + the selected file's raw content — a live
+  // renders a file-tab strip + the selected file's raw content - a live
   // preview of exactly what generation would produce, no markdown renderer.
   test("Files toggle shows a live, switchable file preview; toggling back restores Summary", async ({ page }) => {
     // Step 0 -> Step 1 (Domain Sketch): fill the project name so it flows into generated files.
@@ -295,7 +295,7 @@ test.describe("rule-architect-web interview (card taxonomy)", () => {
     await expect(summaryTab).toHaveAttribute("data-state-active", "true");
     await expect(filesTab).toHaveAttribute("data-state-active", "");
 
-    // Switch to Files — triggers a debounced (~400ms) POST /api/download.
+    // Switch to Files - triggers a debounced (~400ms) POST /api/download.
     await filesTab.click();
     await expect(filesTab).toHaveAttribute("data-state-active", "true");
 
@@ -307,7 +307,7 @@ test.describe("rule-architect-web interview (card taxonomy)", () => {
     await expect(fileContent).toContainText("My RPG Builder", { timeout: 5000 });
     const agentsContent = await fileContent.innerText();
 
-    // Click a different file-tab — content switches to that file's own text.
+    // Click a different file-tab - content switches to that file's own text.
     const readmeTab = panel.locator("[data-part='file-tab']").filter({ hasText: "README.md" });
     await expect(readmeTab).toBeVisible();
     await readmeTab.click();
@@ -322,7 +322,7 @@ test.describe("rule-architect-web interview (card taxonomy)", () => {
     await nameInput.fill("Second Name Xyz");
     await expect(fileContent).toContainText("Second Name Xyz", { timeout: 5000 });
 
-    // Toggle back to Summary — the grouped, human-labeled summary reappears.
+    // Toggle back to Summary - the grouped, human-labeled summary reappears.
     await summaryTab.click();
     await expect(summaryTab).toHaveAttribute("data-state-active", "true");
     await expect(panel.locator("[data-part='summary-group-title']").filter({ hasText: "Domain Sketch" })).toBeVisible();
@@ -330,9 +330,9 @@ test.describe("rule-architect-web interview (card taxonomy)", () => {
   });
 
   // Fix round 1: switching to Summary while a Files debounce is still pending
-  // must cancel it — Summary is purely client-side and must never trigger
+  // must cancel it - Summary is purely client-side and must never trigger
   // /api/download, even for a request that was scheduled just before the toggle.
-  test("toggling to Summary cancels a pending Files debounce — no /api/download fires afterward", async ({ page }) => {
+  test("toggling to Summary cancels a pending Files debounce - no /api/download fires afterward", async ({ page }) => {
     let downloadCalls = 0;
     page.on("request", (r) => {
       if (r.method() === "POST" && r.url().includes("/api/download")) {
@@ -356,7 +356,7 @@ test.describe("rule-architect-web interview (card taxonomy)", () => {
     });
 
     // Type (schedules a new ~400ms debounced fetch), then immediately toggle
-    // back to Summary — well within the debounce window.
+    // back to Summary - well within the debounce window.
     await nameInput.fill("Should Not Fetch This");
     const callsAtToggle = downloadCalls;
     await summaryTab.click();
@@ -370,7 +370,7 @@ test.describe("rule-architect-web interview (card taxonomy)", () => {
     await expect(panel.locator("[data-part='summary-group-title']").filter({ hasText: "Domain Sketch" })).toBeVisible();
   });
 
-  // Final-review fix wave — Finding 1 (IMPORTANT): renderSummaryRow/renderSummaryBody
+  // Final-review fix wave - Finding 1 (IMPORTANT): renderSummaryRow/renderSummaryBody
   // interpolated field VALUES into innerHTML without escaping. Values are NOT
   // trusted (user free-text + /api/init-values -> detectProjectValues, which can
   // seed PROJECT_NAME from an untrusted repo's package.json name / README H1), so
@@ -397,7 +397,7 @@ test.describe("rule-architect-web interview (card taxonomy)", () => {
     const valueElement = panel.locator("[data-part='summary-value']").filter({ hasText: "img" });
     await expect(valueElement).toBeVisible({ timeout: 3000 });
 
-    // (a) The payload must appear as literal, escaped TEXT — not be parsed as markup.
+    // (a) The payload must appear as literal, escaped TEXT - not be parsed as markup.
     await expect(valueElement).toHaveText(payload);
 
     // (b) No injected element or handler actually ran.
@@ -410,7 +410,7 @@ test.describe("rule-architect-web interview (card taxonomy)", () => {
 // tabs must be reachable via accessible ROLE + NAME (not just data-part), and
 // the panel must be a genuine `complementary` landmark (a real <aside>, not a
 // styled <div>). No @axe-core/playwright dependency is installed and none is
-// added here — this asserts roles/names via the existing Playwright API only.
+// added here - this asserts roles/names via the existing Playwright API only.
 // Run against BOTH live servers: they serve the identical canonical
 // interview.js, so panel a11y semantics must not drift between them.
 test.describe("panel a11y (both servers serve the identical interview.js)", () => {
@@ -421,7 +421,7 @@ test.describe("panel a11y (both servers serve the identical interview.js)", () =
       await page.goto(url);
       await page.waitForSelector("[data-part='wizard-body']", { timeout: 10_000 });
 
-      // The panel must be reachable as a `complementary` landmark — i.e. a real <aside>.
+      // The panel must be reachable as a `complementary` landmark - i.e. a real <aside>.
       const panel = page.getByRole("complementary");
       await expect(panel).toBeVisible();
       await expect(panel).toHaveAttribute("data-part", "summary-panel");

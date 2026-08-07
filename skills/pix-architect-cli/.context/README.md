@@ -27,10 +27,10 @@ Core feature areas:
 
 The project stays intentionally simple:
 
-1. **Zero runtime dependencies** — pure vanilla JavaScript only
-2. **Light DOM UI** — Custom Elements v1 with shared cascade and native browser APIs
-3. **Deterministic domain logic** — business rules remain explicit, traceable, and testable
-4. **Local-first workflows** — persistence and recovery must protect user work
+1. **Zero runtime dependencies** - pure vanilla JavaScript only
+2. **Light DOM UI** - Custom Elements v1 with shared cascade and native browser APIs
+3. **Deterministic domain logic** - business rules remain explicit, traceable, and testable
+4. **Local-first workflows** - persistence and recovery must protect user work
 
 ## Documentation Map
 
@@ -83,9 +83,9 @@ Start from the shared guidance before changing implementation details:
 
 ## Tooling
 
-- `pnpm dev` — start the development server
-- `pnpm build` — build for production
-- `pnpm clean` — remove build artifacts
+- `pnpm dev` - start the development server
+- `pnpm build` - build for production
+- `pnpm clean` - remove build artifacts
 
 ## Browser Support
 

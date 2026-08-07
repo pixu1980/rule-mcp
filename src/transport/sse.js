@@ -3,9 +3,9 @@
  *
  * SSE (Server-Sent Events) transport for rule-mcp.
  * Provides an HTTP/HTTPS server with:
- *   - GET /sse    — SSE stream for MCP protocol
- *   - POST /message — MCP message handler
- *   - GET /health — Health check (no auth required)
+ *   - GET /sse    - SSE stream for MCP protocol
+ *   - POST /message - MCP message handler
+ *   - GET /health - Health check (no auth required)
  *
  * Uses the SDK's SSEServerTransport for MCP protocol compliance.
  * Supports optional HTTPS with --ssl-cert / --ssl-key flags.
@@ -13,7 +13,7 @@
  * Security: bearer token auth on /sse and /message endpoints.
  * The local daemon uses one persisted owner-only token across restarts.
  *
- * @see module:server — createServer is imported here
+ * @see module:server - createServer is imported here
  */
 
 import http from "node:http";
@@ -39,7 +39,7 @@ let serverToken = null;
 /** Maximum POST body size (1 MB). */
 const MAX_BODY_BYTES = 1_048_576;
 
-/** Maximum concurrent SSE sessions — bounds memory against connection floods. */
+/** Maximum concurrent SSE sessions - bounds memory against connection floods. */
 const MAX_SESSIONS = 256;
 
 /** Allowed CORS origins (empty = deny all cross-origin). */
@@ -51,7 +51,7 @@ const ALLOWED_ORIGINS = new Set();
  *
  * @param {http.IncomingMessage} req
  * @param {http.ServerResponse} res
- * @returns {boolean} — true if preflight was handled (caller should return)
+ * @returns {boolean} - true if preflight was handled (caller should return)
  */
 function handleCors(req, res) {
   const origin = req.headers.origin;
@@ -74,7 +74,7 @@ function handleCors(req, res) {
  *
  * @param {http.IncomingMessage} req
  * @param {string} pathname
- * @returns {boolean} — true if authorized
+ * @returns {boolean} - true if authorized
  */
 function checkAuth(req, pathname) {
   // Health check is public
@@ -89,7 +89,7 @@ function checkAuth(req, pathname) {
   const expected = `Bearer ${serverToken}`;
   const provided = Buffer.from(auth);
   const wanted = Buffer.from(expected);
-  // Length guard first — timingSafeEqual throws on unequal-length buffers.
+  // Length guard first - timingSafeEqual throws on unequal-length buffers.
   // The length of the expected token is not secret.
   if (provided.length !== wanted.length) {
     return false;
@@ -132,7 +132,7 @@ async function requestHandler(request, res) {
       return;
     }
 
-    // ── GET /sse — Establish SSE stream ──────────────────────
+    // ── GET /sse - Establish SSE stream ──────────────────────
     if (request.method === "GET" && parsedUrl.pathname === "/sse") {
       if (sessions.size >= MAX_SESSIONS) {
         res.writeHead(503, { "Content-Type": "application/json" });
@@ -165,7 +165,7 @@ async function requestHandler(request, res) {
       return;
     }
 
-    // ── POST /message — Handle MCP request ───────────────────
+    // ── POST /message - Handle MCP request ───────────────────
     if (request.method === "POST" && parsedUrl.pathname.startsWith("/message")) {
       // Body size limit (1 MB)
       let bodyLength = 0;
@@ -230,7 +230,7 @@ async function requestHandler(request, res) {
  *   port?: number,
  *   sslCert?: string,
  *   sslKey?: string
- * }} [options] — Port and optional TLS cert paths
+ * }} [options] - Port and optional TLS cert paths
  * @returns {Promise<{ port: number, token: string }>}
  */
 export async function startSseServer(options = {}) {

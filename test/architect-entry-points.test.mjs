@@ -9,7 +9,7 @@
 //   2. `generateContextContent` (in-memory) reports it at a root-relative
 //      `path` ("AGENTS.md", not "AGENTS.md" nested under .context).
 //   3. `generateContext` (disk write) physically writes it to
-//      `<targetDir>/AGENTS.md` — NOT `<targetDir>/.context/AGENTS.md` — while
+//      `<targetDir>/AGENTS.md` - NOT `<targetDir>/.context/AGENTS.md` - while
 //      leaving the rest of the .context/ pack untouched.
 //   4. The rendered body carries real fixture values (PROJECT_NAME, stack,
 //      BUILD_COMMAND) with no leftover `**[KEY]**` marker, plus the
@@ -17,7 +17,7 @@
 //
 // Phase 6, Task 2: fan the rendered AGENTS.md body out to every per-tool
 // entry file (CLAUDE.md, GEMINI.md, .clinerules, Copilot, Cursor, Windsurf).
-// Render ONCE, write N — this gates:
+// Render ONCE, write N - this gates:
 //
 //   5. Every target path in the plan's "Target entry files" table is
 //      produced (in `files[]`) with the FULL body (not a pointer/symlink).
@@ -158,7 +158,7 @@ test("generateContext writes every fanned-out entry file to disk, byte-identical
       assert.equal(written, entry.content, `written ${path} content must match the returned files[] entry`);
     }
 
-    // Fan-out is root-only — the .context/ pack must be byte-identical to
+    // Fan-out is root-only - the .context/ pack must be byte-identical to
     // what Task 1 (and the Phase-1/4 suites) already established.
     assert.ok(!existsSync(join(dir, ".context", "CLAUDE.md")), "fan-out files must NOT be duplicated under .context/");
     assert.ok(existsSync(join(dir, ".context", "README.md")), ".context/README.md must still be generated as before");
@@ -176,8 +176,8 @@ test("generateContext writes every fanned-out entry file to disk, byte-identical
 // repo's front door for seven coding agents, so it has to read properly.
 //
 // The catch: some option labels are decorated FOR THE WIZARD UI and are not
-// prose — STACK_LINT_TOOL's label is "Biome — rule-toolchain-biome" and
-// DEVOPS_TEST_FRAMEWORK's is "Vitest — Fast Vite-native test runner".
+// prose - STACK_LINT_TOOL's label is "Biome - rule-toolchain-biome" and
+// DEVOPS_TEST_FRAMEWORK's is "Vitest - Fast Vite-native test runner".
 // Resolving to the bare label would make those lines worse than the key, so
 // the em-dash suffix is stripped.
 
@@ -232,7 +232,7 @@ test("frontmatter survives a hostile project name (F9)", () => {
 
   // Each file's own frontmatter keys must still be INSIDE the block. A
   // newline in the project name previously terminated the block early, so
-  // the real keys spilled into the document body — which is what makes this
+  // the real keys spilled into the document body - which is what makes this
   // an injection rather than a cosmetic glitch.
   const expected = [
     ["cursor", cursor, "alwaysApply: true"],
@@ -248,11 +248,11 @@ test("frontmatter survives a hostile project name (F9)", () => {
     const block = lines.slice(1, close);
     assert.ok(
       block.includes(requiredKey),
-      `${label}: "${requiredKey}" must stay inside the frontmatter block — got ${JSON.stringify(block)}`,
+      `${label}: "${requiredKey}" must stay inside the frontmatter block - got ${JSON.stringify(block)}`,
     );
     assert.ok(
       block.every((line) => /^[a-zA-Z][\w-]*:/.test(line)),
-      `${label}: every frontmatter line must be a single key — got ${JSON.stringify(block)}`,
+      `${label}: every frontmatter line must be a single key - got ${JSON.stringify(block)}`,
     );
     assert.ok(
       block.every((line) => !line.includes("alwaysApply: false")),

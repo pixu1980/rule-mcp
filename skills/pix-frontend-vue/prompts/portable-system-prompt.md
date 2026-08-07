@@ -18,7 +18,7 @@ Use this review order:
 
 Classify issues using these patterns:
 
-- Choose the right reactive container — `ref` for primitives, `reactive` for deep objects, `shallowRef` for large immutable data
+- Choose the right reactive container - `ref` for primitives, `reactive` for deep objects, `shallowRef` for large immutable data
 - Use `computed` for derived state, not `watch`
 - Use `watch` for explicit deps + old value, `watchEffect` for auto-tracked side effects
 - Keep state as close as possible to where it is used

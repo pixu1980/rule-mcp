@@ -12,12 +12,12 @@ tags:
 frameworks: [all]
 ---
 
-# rule-toolchain-biome — Biome Linter & Formatter
+# rule-toolchain-biome - Biome Linter & Formatter
 
 ## Overview
 
 Biome is a unified linter and formatter for JavaScript, TypeScript, and JSON/JSX.
-It replaces ESLint + Prettier with a single, fast binary — written in Rust.
+It replaces ESLint + Prettier with a single, fast binary - written in Rust.
 
 ## Configuration (biome.json)
 
@@ -94,5 +94,5 @@ lint:
 
 ## See also
 
-- [rule-toolchain-vite](../rule-toolchain-vite/SKILL.md) — Vite build tool
-- [rule](../rule/SKILL.md) — Central skill index
+- [rule-toolchain-vite](../rule-toolchain-vite/SKILL.md) - Vite build tool
+- [rule](../rule/SKILL.md) - Central skill index

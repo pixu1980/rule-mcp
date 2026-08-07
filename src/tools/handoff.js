@@ -1,11 +1,11 @@
 /**
  * @module tools/handoff
  *
- * rule_tool_process_handoff MCP tool — LLM Context Handoff.
+ * rule_tool_process_handoff MCP tool - LLM Context Handoff.
  * Reads ADR logs + .context/ values and generates a compressed handoff prompt
  * that lets a new LLM session resume work seamlessly.
  *
- * @see module:tools/router — registered via registerProcessHandoffTool()
+ * @see module:tools/router - registered via registerProcessHandoffTool()
  */
 
 import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
@@ -66,7 +66,7 @@ function readAdrs(projectDir) {
             .slice(0, 200) || "";
         adrs.push({ number, title, date, status, tags, decision });
       } catch {
-        /* malformed ADR file — skip */
+        /* malformed ADR file - skip */
       }
     }
     return adrs.sort((a, b) => b.number - a.number);
@@ -103,7 +103,7 @@ function readContextValues(projectDir) {
           }
         }
       } catch {
-        /* unreadable context file — skip */
+        /* unreadable context file - skip */
       }
     }
   } catch {
@@ -164,8 +164,8 @@ function estimateTokens(text) {
  * Compress a value: truncate long strings, deduplicate, etc.
  */
 function compressValue(v, maxLength = 80) {
-  if (!v || v === "—") {
-    return "—";
+  if (!v || v === "-") {
+    return "-";
   }
   const string_ = String(v);
   if (string_.length <= maxLength) {

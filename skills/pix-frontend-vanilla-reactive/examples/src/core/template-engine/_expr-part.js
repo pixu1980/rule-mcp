@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════════════════════════════
-//  PART 3c — ExprPart ({{ }} interpolation with filters)
+//  PART 3c - ExprPart ({{ }} interpolation with filters)
 // ═══════════════════════════════════════════════════════════════════════════════
 
 import { evaluateExpression } from "./_expression-parser.js";

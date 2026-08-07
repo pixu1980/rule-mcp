@@ -10,7 +10,7 @@ tags:
 frameworks: [all]
 ---
 
-# rule-styleguide — Pattern Quick Reference
+# rule-styleguide - Pattern Quick Reference
 
 ## Naming Quick Reference
 
@@ -80,7 +80,7 @@ src/
     └── _components.css
 ```
 
-## HTML — Semantic Elements Cheat Sheet (MANDATORY)
+## HTML - Semantic Elements Cheat Sheet (MANDATORY)
 
 | Instead of `<div>`             | Use                         |
 | ------------------------------ | --------------------------- |
@@ -104,7 +104,7 @@ src/
 | Expandable section             | `<details>` + `<summary>`   |
 | Flex row / CSS wrapper         | `<section>`                 |
 
-## CSS — Property Ordering
+## CSS - Property Ordering
 
 1. Custom properties
 2. Positioning (`position`, `inset`, `z-index`)
@@ -118,7 +118,7 @@ src/
 
 ### Selector Rules
 
-- **NO CSS classes** — use only element + attribute selectors
+- **NO CSS classes** - use only element + attribute selectors
 - Scope children under the custom element tag
 - Use `data-part="name"` for child element identification
 - Use `data-*` attributes for state (boolean presence)
@@ -136,7 +136,7 @@ my-component [data-open] {
 } /* ❌ class */
 ```
 
-## JavaScript — Static Init Block Pattern
+## JavaScript - Static Init Block Pattern
 
 ```js
 import styles from "./_MyComponent.css" with { type: "css" };
@@ -155,7 +155,7 @@ class MyComponent extends HTMLElement {
 }
 ```
 
-## JavaScript — Modern Idioms (unicorn-enforced)
+## JavaScript - Modern Idioms (unicorn-enforced)
 
 | Instead of                         | Use                           | Why                                          |
 | ---------------------------------- | ----------------------------- | -------------------------------------------- |
@@ -183,9 +183,9 @@ import { addTodo } from "@helpers/index.js";
 import "@styles/index.css";
 ```
 
-## Accessibility — Minimum Viable Checklist
+## Accessibility - Minimum Viable Checklist
 
-- [ ] No `<div>` anywhere — use `<section>` for flex wrappers, `<dialog>` for modals
+- [ ] No `<div>` anywhere - use `<section>` for flex wrappers, `<dialog>` for modals
 - [ ] One `<h1>`, no skipped heading levels
 - [ ] Every `<input>` has `<label for="id">`
 - [ ] All images have `alt` (or `alt=""`)
@@ -200,5 +200,5 @@ import "@styles/index.css";
 
 ## See also
 
-- [rule-styleguide](../rule-styleguide/SKILL.md) — Style guides index
-- [rule](../rule/SKILL.md) — Central skill index
+- [rule-styleguide](../rule-styleguide/SKILL.md) - Style guides index
+- [rule](../rule/SKILL.md) - Central skill index
