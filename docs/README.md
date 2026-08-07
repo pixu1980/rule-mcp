@@ -15,11 +15,11 @@ This directory is intentionally consolidated into a small handbook. Historical f
 
 ## Architecture decisions
 
-- [ADR index](./adr/README.md) — 17 decisions numbered by logical dependency
+- [ADR index](./adr/README.md) - 17 decisions numbered by logical dependency
 - [Decision summary](./adr/DECISIONS.md)
 
 ## Maintenance rules
 
 - Add new long-form docs to one of the numbered handbook files unless a separate file is justified.
 - Keep ADRs in `docs/adr/` because they are immutable decision records.
-- When a plan is fully implemented, delete the plan file — no stale docs.
+- When a plan is fully implemented, delete the plan file - no stale docs.

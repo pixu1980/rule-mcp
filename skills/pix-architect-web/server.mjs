@@ -70,20 +70,20 @@ export function createServer(targetDir) {
 
     // Same-origin enforcement. Loopback binding and absent CORS headers stop a
     // hostile page from READING these endpoints, not from sending a simple
-    // cross-origin POST — and /api/generate writes files, so the request itself
+    // cross-origin POST - and /api/generate writes files, so the request itself
     // is the attack. Origin / Sec-Fetch-Site / Host are browser-set and cannot
     // be forged by page script.
     if (url.pathname.startsWith("/api/") && denyForeignRequest(req, res, { port: server.address()?.port })) {
       return;
     }
 
-    // API: GET /api/wizard-spec — return wizard spec (primary source)
+    // API: GET /api/wizard-spec - return wizard spec (primary source)
     if (req.method === "GET" && url.pathname === "/api/wizard-spec") {
       res.writeHead(200, { "Content-Type": "application/json" });
       return res.end(JSON.stringify(wizardSpec));
     }
 
-    // API: GET /api/placeholders — backward compat (flatten optionGroups to top level)
+    // API: GET /api/placeholders - backward compat (flatten optionGroups to top level)
     if (req.method === "GET" && url.pathname === "/api/placeholders") {
       const tiers = [
         { key: "starter", label: "Starter", description: "Domain Sketch + Tech Stack. 30 minutes." },
@@ -101,7 +101,7 @@ export function createServer(targetDir) {
       return res.end(JSON.stringify(compat));
     }
 
-    // API: GET /api/templates — return template list
+    // API: GET /api/templates - return template list
     if (req.method === "GET" && url.pathname === "/api/templates") {
       const summary = templates.map((t) => ({
         path: t.output || t.path.replace(/^templates\//, ""),
@@ -112,14 +112,14 @@ export function createServer(targetDir) {
       return res.end(JSON.stringify(summary));
     }
 
-    // API: GET /api/init-values — detect project values to pre-fill
+    // API: GET /api/init-values - detect project values to pre-fill
     if (req.method === "GET" && url.pathname === "/api/init-values") {
       const initValues = detectProjectValues(targetDir);
       res.writeHead(200, { "Content-Type": "application/json" });
       return res.end(JSON.stringify(initValues));
     }
 
-    // API: POST /api/generate — generate .context from submitted values
+    // API: POST /api/generate - generate .context from submitted values
     if (req.method === "POST" && url.pathname === "/api/generate") {
       collectBody(req)
         .then((body) => {
@@ -139,7 +139,7 @@ export function createServer(targetDir) {
               summary:
                 `Generated ${ctxCount} files in .context/ and ${rootWritten} agent entry files at the project root` +
                 (skipped.length
-                  ? ` (${skipped.length} existing root file(s) left untouched — pass force:true to overwrite)`
+                  ? ` (${skipped.length} existing root file(s) left untouched - pass force:true to overwrite)`
                   : ""),
             }),
           );
@@ -151,7 +151,7 @@ export function createServer(targetDir) {
       return;
     }
 
-    // API: POST /api/download — return file contents as JSON (no disk write)
+    // API: POST /api/download - return file contents as JSON (no disk write)
     if (req.method === "POST" && url.pathname === "/api/download") {
       collectBody(req)
         .then((body) => {
@@ -167,7 +167,7 @@ export function createServer(targetDir) {
       return;
     }
 
-    // Serve static files — contained within ASSETS. The candidate path is
+    // Serve static files - contained within ASSETS. The candidate path is
     // rejected (404) if it would resolve outside the served directory, so a
     // traversal can never read an arbitrary file off disk.
     let filePath = join(ASSETS, url.pathname === "/" ? "index.html" : url.pathname);
@@ -205,7 +205,7 @@ function extname(p) {
   return i >= 0 ? p.slice(i).toLowerCase() : "";
 }
 
-/** Main entry — only when run directly, so importing the module (tests) never
+/** Main entry - only when run directly, so importing the module (tests) never
  * starts a listener and leaks an open handle. */
 const isMain = process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url);
 

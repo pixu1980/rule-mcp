@@ -57,7 +57,7 @@ Three skills keep their names (they are already correctly categorized or would l
 - The rename is performed atomically in a single commit
 - All 35 skill directories, all SKILL.md files, all docs, and the README are updated together
 - The MCP tool names change automatically (derived from directory names)
-- No code changes needed in the router or skill loader — tool names are derived from directory basenames
+- No code changes needed in the router or skill loader - tool names are derived from directory basenames
 
 ## Subsequent Updates (2026-07-10)
 
@@ -65,19 +65,19 @@ Three skills keep their names (they are already correctly categorized or would l
 
 Added `pix-backend-*` competitors:
 
-- `pix-backend-nestjs` — NestJS 10+ (modular, decorators, GraphQL)
-- `pix-backend-express` — Express.js 5+ (middleware, REST)
-- `pix-backend-fastify` — Fastify 5+ (schema validation, performance)
-- `pix-backend-hono` — Hono 4+ (edge, multi-runtime, RPC)
+- `pix-backend-nestjs` - NestJS 10+ (modular, decorators, GraphQL)
+- `pix-backend-express` - Express.js 5+ (middleware, REST)
+- `pix-backend-fastify` - Fastify 5+ (schema validation, performance)
+- `pix-backend-hono` - Hono 4+ (edge, multi-runtime, RPC)
 
 ### Phase 3: Database skills
 
 Added `pix-database-*`:
 
-- `pix-data-sql` — General SQL best practices
-- `pix-data-postgresql` — PostgreSQL 16+ (indexing, replication, pooling)
-- `pix-data-mysql` — MySQL 8+ / MariaDB 11+ (InnoDB, replication)
-- `pix-data-mongodb` — MongoDB 7+ (schema design, aggregation, sharding)
+- `pix-data-sql` - General SQL best practices
+- `pix-data-postgresql` - PostgreSQL 16+ (indexing, replication, pooling)
+- `pix-data-mysql` - MySQL 8+ / MariaDB 11+ (InnoDB, replication)
+- `pix-data-mongodb` - MongoDB 7+ (schema design, aggregation, sharding)
 
 ### Phase 4: Scaffold consolidation
 

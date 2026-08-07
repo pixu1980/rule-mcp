@@ -4,12 +4,12 @@
 
 ## Core Rules
 
-1. **Every input MUST have a label** — associated via `for` + `id` or wrapping.
+1. **Every input MUST have a label** - associated via `for` + `id` or wrapping.
 2. **Required fields** MUST have `required` attribute and/or `aria-required="true"`.
 3. **Error messages** MUST be programmatically associated using `aria-describedby` or `aria-errormessage`.
 4. **Error state** MUST use `aria-invalid="true"`.
-5. **Placeholder is NOT a label** — it disappears when typing and often fails contrast.
-6. **Do not convey information via color alone** — add icons or text.
+5. **Placeholder is NOT a label** - it disappears when typing and often fails contrast.
+6. **Do not convey information via color alone** - add icons or text.
 
 ## Good Examples
 
@@ -48,7 +48,7 @@
 ## Bad Examples
 
 ```html
-<!-- ❌ Placeholder as label — disappears when typing -->
+<!-- ❌ Placeholder as label - disappears when typing -->
 <input type="text" placeholder="Enter your username" />
 
 <!-- ❌ No label -->

@@ -3,7 +3,7 @@
  *
  * Tests the throttled, per-invocation, fire-and-forget self-update trigger
  * (ADR 023):
- *   a) the check re-runs once the interval elapses — not once per process
+ *   a) the check re-runs once the interval elapses - not once per process
  *   b) maybeSelfUpdate() returns immediately (does not block the tool call)
  *   c) interval env parsing: default 60s, 0 = check on every call,
  *      invalid/negative → default
@@ -122,7 +122,7 @@ const fetchCount = (logPath) =>
   console.log("  ✅ interval elapsed triggers a new fetch (not once-per-process)");
 }
 
-// ── S2: non-blocking — maybeSelfUpdate returns before the fetch completes ──
+// ── S2: non-blocking - maybeSelfUpdate returns before the fetch completes ──
 {
   const { clone, base } = makeClonePair();
   const upstream = execFileSync("git", ["remote", "get-url", "origin"], { cwd: clone, encoding: "utf8" }).trim();

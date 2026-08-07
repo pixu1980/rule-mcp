@@ -12,7 +12,7 @@ tags:
 frameworks: [all]
 ---
 
-# pix — Skill and tool dispatcher
+# pix - Skill and tool dispatcher
 
 `pix` is the canonical entry point for the full pix ecosystem. It routes user intent to the smallest set of specialized skills and MCP tools needed to complete the task without duplicating context.
 
@@ -99,7 +99,7 @@ Design and implement APIs, runtime frameworks, security, and scaffolds.
 
 | Skill                                                        | Tool                     | Frameworks         | Use when                                                                                                                 |
 | ------------------------------------------------------------ | ------------------------ | ------------------ | ------------------------------------------------------------------------------------------------------------------------ |
-| [pix-backend](../pix-backend/SKILL.md)                       | `pix_backend`            | all                | Backend application development umbrella — routes REST, GraphQL, runtime, security, and database work to focused skills. |
+| [pix-backend](../pix-backend/SKILL.md)                       | `pix_backend`            | all                | Backend application development umbrella - routes REST, GraphQL, runtime, security, and database work to focused skills. |
 | [pix-backend-api-design](../pix-backend-api-design/SKILL.md) | `pix_backend_api_design` | node, api          | Design REST APIs for pix backend services. Use when defining endpoints, HTTP methods, versioning, request/respons...     |
 | [pix-backend-express](../pix-backend-express/SKILL.md)       | `pix_backend_express`    | all                | Express.js 5+ best practices: middleware patterns, error handling, routing, performance optimization, security header... |
 | [pix-backend-fastify](../pix-backend-fastify/SKILL.md)       | `pix_backend_fastify`    | all                | Fastify 5+ best practices: plugins, hooks, schema validation, serialization, lifecycle, logging, and performance tuni... |
@@ -182,7 +182,7 @@ Write ADRs/docs, follow BMAD, feature workflow, and handoff.
 | ------------------------------------------------------------------------ | ------------------------------ | ---------- | ------------------------------------------------------------------------------------------------------------------------ |
 | [pix-process](../pix-process/SKILL.md)                                   | `pix_process`                  | all        | Index of process skills: ADR, BMAD, code review, documentation, feature workflow, and LLM handoff.                       |
 | [pix-process-adr](../pix-process-adr/SKILL.md)                           | `pix_process_adr`              | all        | Architecture Decision Records (ADR) for pix projects. Capture, store, and manage architectural decisions in docs/...     |
-| [pix-process-bmad](../pix-process-bmad/SKILL.md)                         | `pix_process_bmad`             | all        | BMAD Method (Build More Architect Dreams) — AI-driven development framework for structured software delivery through...  |
+| [pix-process-bmad](../pix-process-bmad/SKILL.md)                         | `pix_process_bmad`             | all        | BMAD Method (Build More Architect Dreams) - AI-driven development framework for structured software delivery through...  |
 | [pix-process-code-review](../pix-process-code-review/SKILL.md)           | `pix_process_code_review`      | all        | Prepare and conduct risk-based PR/MR reviews with explicit quality, safety, and follow-up gates.                         |
 | [pix-process-documentation](../pix-process-documentation/SKILL.md)       | `pix_process_documentation`    | all        | Set up and maintain Mintlify documentation for pix repositories. Use when creating the docs/ directory, configuri...     |
 | [pix-process-feature-workflow](../pix-process-feature-workflow/SKILL.md) | `pix_process_feature_workflow` | all        | End-to-end procedure for adding a new feature to any pix repository. Use when implementing a feature in a backend...     |
@@ -262,7 +262,7 @@ Design and route visible interface work while preserving pix implementation cons
 
 ## See also
 
-- [pix-architect](../pix-architect/SKILL.md) — Architecture wizard and SDD workflow
-- [pix-styleguide](../pix-styleguide/SKILL.md) — Shared coding standards
-- [pix-process-feature-workflow](../pix-process-feature-workflow/SKILL.md) — Feature delivery workflow
-- [pix-toolchain](../pix-toolchain/SKILL.md) — Toolchain index
+- [pix-architect](../pix-architect/SKILL.md) - Architecture wizard and SDD workflow
+- [pix-styleguide](../pix-styleguide/SKILL.md) - Shared coding standards
+- [pix-process-feature-workflow](../pix-process-feature-workflow/SKILL.md) - Feature delivery workflow
+- [pix-toolchain](../pix-toolchain/SKILL.md) - Toolchain index

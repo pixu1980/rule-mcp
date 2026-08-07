@@ -11,7 +11,7 @@ Every source document below is preserved verbatim under its own heading so no pr
 > Original path: `docs/plans/execution-plan.md`  
 > SHA-256: `4d75abac2a4bda7c62b99dc6e9b00eba5c8c8e559e8960374a3b6de3e786d00b`
 
-# Execution Plan — Phase 3: Token-Saving Tools
+# Execution Plan - Phase 3: Token-Saving Tools
 
 > Started: 2026-06-27
 
@@ -38,7 +38,7 @@ Every source document below is preserved verbatim under its own heading so no pr
   - Matching skills get 2.0x boost; universally relevant skills (styleguides, web) get 1.15x
   - Non-matching skills get 0.85x penalty
 
-### 3.3 Template engine — multi-file generation
+### 3.3 Template engine - multi-file generation
 
 - [x] **T7** `pix_tool_component` generates multi-file output: `_Component.jsx` + `_Component.css` + `index.js`
 - [x] **T8** Variable interpolation: component name, props, data-part attributes
@@ -75,7 +75,7 @@ Every source document below is preserved verbatim under its own heading so no pr
 > Original path: `docs/plans/refactor-roadmap.md`  
 > SHA-256: `57940d22e47b5a763fc9d275d86380ddb5910f781411053b2858f2eebd99e3d9`
 
-# pix-galaxy-mcp — Refactor Roadmap
+# pix-galaxy-mcp - Refactor Roadmap
 
 > **Author**: Enterprise Architecture Review  
 > **Scope**: 36 skills → audit, merge, split, redesign pix-architect, create pix-process-adr  
@@ -122,48 +122,48 @@ Target: **32 skills** after 4 merges, plus 1 new skill (`pix-process-adr`), with
 | 🔀 Merge      | Merge into another skill   |
 | ✂️ Split      | Split into multiple skills |
 | 📦 New        | Create new skill           |
-| 📏 Oversized  | Exceeds 500 lines — split  |
-| 📐 Undersized | Below 100 lines — merge    |
+| 📏 Oversized  | Exceeds 500 lines - split  |
+| 📐 Undersized | Below 100 lines - merge    |
 
 ### Audit table
 
 | #   | Skill                         | Lines | Verdict | Action                            |
 | --- | ----------------------------- | ----- | ------- | --------------------------------- |
-| 1   | pix-galaxy                    | ~190  | ✅      | Keep — ai router                  |
-| 2   | pix-architect                 | ~320  | ✅      | Keep — architecture wizard        |
-| 4   | pix-backend                   | ~180  | ✅      | Keep — backend rules              |
-| 5   | pix-backend-api-design        | ~150  | ✅      | Keep — API design                 |
-| 6   | pix-backend-node              | ~130  | ✅      | Keep — Backend scaffold           |
-| 7   | pix-backend-security          | ~150  | ✅      | Keep — security                   |
+| 1   | pix-galaxy                    | ~190  | ✅      | Keep - ai router                  |
+| 2   | pix-architect                 | ~320  | ✅      | Keep - architecture wizard        |
+| 4   | pix-backend                   | ~180  | ✅      | Keep - backend rules              |
+| 5   | pix-backend-api-design        | ~150  | ✅      | Keep - API design                 |
+| 6   | pix-backend-node              | ~130  | ✅      | Keep - Backend scaffold           |
+| 7   | pix-backend-security          | ~150  | ✅      | Keep - security                   |
 | 8   | pix-coverage-gates            | ~80   | 🔀      | Merge into pix-devops-testing     |
-| 9   | pix-devops-docker             | ~170  | ✅      | Keep — Docker rules               |
+| 9   | pix-devops-docker             | ~170  | ✅      | Keep - Docker rules               |
 | 10  | pix-devops-docker-standards   | ~60   | 🔀      | Merge into pix-devops-docker      |
-| 11  | pix-devops-gitlab-ci          | ~160  | ✅      | Keep — CI rules                   |
-| 12  | pix-devops-testing            | ~180  | ✅      | Keep — testing                    |
-| 13  | pix-devops-version            | ~100  | ✅      | Keep — versioning                 |
-| 14  | pix-frontend-angular          | ~280  | ✅      | Keep — Angular-specific rules     |
-| 15  | pix-frontend-astro            | ~250  | ✅      | Keep — Astro-specific             |
-| 16  | pix-frontend-forms            | ~220  | ✅      | Keep — forms rules                |
+| 11  | pix-devops-gitlab-ci          | ~160  | ✅      | Keep - CI rules                   |
+| 12  | pix-devops-testing            | ~180  | ✅      | Keep - testing                    |
+| 13  | pix-devops-version            | ~100  | ✅      | Keep - versioning                 |
+| 14  | pix-frontend-angular          | ~280  | ✅      | Keep - Angular-specific rules     |
+| 15  | pix-frontend-astro            | ~250  | ✅      | Keep - Astro-specific             |
+| 16  | pix-frontend-forms            | ~220  | ✅      | Keep - forms rules                |
 | 17  | pix-frontend-forms-validation | ~80   | 🔀      | Merge into pix-frontend-forms     |
-| 18  | pix-frontend-meta-next        | ~220  | ✅      | Keep — Next.js                    |
-| 19  | pix-frontend-meta-nuxt        | ~190  | ✅      | Keep — Nuxt                       |
-| 20  | pix-frontend-meta-remix       | ~160  | ✅      | Keep — Remix                      |
-| 21  | pix-frontend-react            | ~380  | ✅      | Keep — React rules                |
-| 22  | pix-frontend-react            | ~100  | ✅      | Keep — React+ Vite scaffold       |
-| 23  | pix-frontend-solidjs          | ~240  | ✅      | Keep — SolidJS                    |
-| 24  | pix-frontend-svelte           | ~260  | ✅      | Keep — Svelte                     |
-| 25  | pix-frontend-vanilla-reactive | ~340  | ✅      | Keep — vanilla reactive           |
-| 26  | pix-frontend-vue              | ~300  | ✅      | Keep — Vue                        |
-| 27  | pix-platform-desktop          | ~200  | ✅      | Keep — desktop rules              |
-| 28  | pix-platform-expo             | ~180  | ✅      | Keep — Expo rules                 |
-| 29  | pix-platform-expo             | ~100  | ✅      | Keep — Expo scaffold              |
-| 30  | pix-platform-library          | ~170  | ✅      | Keep — library rules              |
-| 31  | pix-platform-web              | ~140  | ✅      | Keep — web platform               |
-| 32  | pix-process-documentation     | ~140  | ✅      | Keep — docs practices             |
-| 33  | pix-process-feature-workflow  | ~110  | ✅      | Keep — workflow                   |
+| 18  | pix-frontend-meta-next        | ~220  | ✅      | Keep - Next.js                    |
+| 19  | pix-frontend-meta-nuxt        | ~190  | ✅      | Keep - Nuxt                       |
+| 20  | pix-frontend-meta-remix       | ~160  | ✅      | Keep - Remix                      |
+| 21  | pix-frontend-react            | ~380  | ✅      | Keep - React rules                |
+| 22  | pix-frontend-react            | ~100  | ✅      | Keep - React+ Vite scaffold       |
+| 23  | pix-frontend-solidjs          | ~240  | ✅      | Keep - SolidJS                    |
+| 24  | pix-frontend-svelte           | ~260  | ✅      | Keep - Svelte                     |
+| 25  | pix-frontend-vanilla-reactive | ~340  | ✅      | Keep - vanilla reactive           |
+| 26  | pix-frontend-vue              | ~300  | ✅      | Keep - Vue                        |
+| 27  | pix-platform-desktop          | ~200  | ✅      | Keep - desktop rules              |
+| 28  | pix-platform-expo             | ~180  | ✅      | Keep - Expo rules                 |
+| 29  | pix-platform-expo             | ~100  | ✅      | Keep - Expo scaffold              |
+| 30  | pix-platform-library          | ~170  | ✅      | Keep - library rules              |
+| 31  | pix-platform-web              | ~140  | ✅      | Keep - web platform               |
+| 32  | pix-process-documentation     | ~140  | ✅      | Keep - docs practices             |
+| 33  | pix-process-feature-workflow  | ~110  | ✅      | Keep - workflow                   |
 | 34  | pix-process-handoff           | ~120  | 📦      | Extract from pix-architect        |
 | 35  | pix-scaffolding               | ~90   | 🔀      | Merge into pix-architect          |
-| 36  | pix-styleguide                | ~480  | ✅      | Keep (at limit) — main styleguide |
+| 36  | pix-styleguide                | ~480  | ✅      | Keep (at limit) - main styleguide |
 
 ### Summary
 
@@ -184,7 +184,7 @@ Target: **32 skills** after 4 merges, plus 1 new skill (`pix-process-adr`), with
 
 **Action**: Move content from `pix-coverage-gates/SKILL.md` into `pix-devops-testing/SKILL.md` under a new `## Coverage Gates` section.
 
-**Loss**: None — all rules preserved.
+**Loss**: None - all rules preserved.
 
 ### M2: docker-standards → pix-devops-docker
 
@@ -214,7 +214,7 @@ Target: **32 skills** after 4 merges, plus 1 new skill (`pix-process-adr`), with
 
 ## 4. Split Proposals
 
-No skills exceed the 500-line threshold with sufficient margin. `pix-styleguide` is at 480 lines — monitored but not split.
+No skills exceed the 500-line threshold with sufficient margin. `pix-styleguide` is at 480 lines - monitored but not split.
 
 ---
 
@@ -291,11 +291,11 @@ Total: **32 skills** (36 − 4 merges + 1 new = 33, minus 1 scaffolding removal 
 
 ### Phase 1: Merge (1 day)
 
-- [x] Merge coverage-gates → testing — verified in `pix-devops-testing`
-- [x] Merge docker-standards → docker — verified in `pix-devops-docker`
-- [x] Merge forms-validation → forms — validation lives in framework/styleguide coverage
-- [x] Merge scaffolding → architect — verified in `pix-architect`
-- [x] Remove merged skill directories — stale directories are absent
+- [x] Merge coverage-gates → testing - verified in `pix-devops-testing`
+- [x] Merge docker-standards → docker - verified in `pix-devops-docker`
+- [x] Merge forms-validation → forms - validation lives in framework/styleguide coverage
+- [x] Merge scaffolding → architect - verified in `pix-architect`
+- [x] Remove merged skill directories - stale directories are absent
 
 ### Phase 2: pix-process-adr (1 day)
 
@@ -315,9 +315,9 @@ Total: **32 skills** (36 − 4 merges + 1 new = 33, minus 1 scaffolding removal 
 ### Phase 4: Testing & verification (1 day)
 
 - [x] Run smoke tests
-- [x] Verify MCP tool listing — current taxonomy exposes 71 MCP tools
+- [x] Verify MCP tool listing - current taxonomy exposes 71 MCP tools
 - [x] Verify CLI commands
-- [x] Remove migration guide requirement — package has not been released yet
+- [x] Remove migration guide requirement - package has not been released yet
 
 ---
 

@@ -2,13 +2,13 @@
 
 ## Scope
 
-These rules apply to all frontend services (web and mobile). Accessibility (a11y) is a legal requirement under the **European Accessibility Act (EAA, Directive 2019/882)**, enforceable from June 28, 2025, and must be integrated into design, development, and QA workflows — not treated as an afterthought.
+These rules apply to all frontend services (web and mobile). Accessibility (a11y) is a legal requirement under the **European Accessibility Act (EAA, Directive 2019/882)**, enforceable from June 28, 2025, and must be integrated into design, development, and QA workflows - not treated as an afterthought.
 
 ## Core principles
 
 - Products must comply with the **EAA** and follow **WCAG 2.1 AA** standards. WCAG 2.1 AAA is recommended for critical use cases (e.g., healthcare, public services, enterprise clients).
 - Use semantic HTML before introducing ARIA attributes.
-- Accessibility validation starts early — at design stage, not just at release (shift-left).
+- Accessibility validation starts early - at design stage, not just at release (shift-left).
 - Combine automated testing (axe-core, Lighthouse) with manual validation (screen readers, keyboard navigation, contrast checks).
 
 ## WCAG 2.1 compliance levels
@@ -53,7 +53,7 @@ Use ARIA only when native HTML is insufficient (e.g., custom UI components).
   ...
 </ul>
 
-<!-- ❌ Wrong — no role, not keyboard accessible -->
+<!-- ❌ Wrong - no role, not keyboard accessible -->
 <div onClick="openMenu()">Menu</div>
 ```
 
@@ -84,10 +84,10 @@ Use ARIA only when native HTML is insufficient (e.g., custom UI components).
 
 ## Validation tools
 
-- **axe-core** — automated validation in CI/CD. Integrates with Vitest, Cypress, and Playwright.
-- **Lighthouse** (Chrome DevTools) — accessibility audits.
-- **Wave** — manual WCAG verification tool.
-- **Contrast Checker** (e.g., WebAIM) — AA/AAA color contrast compliance.
+- **axe-core** - automated validation in CI/CD. Integrates with Vitest, Cypress, and Playwright.
+- **Lighthouse** (Chrome DevTools) - accessibility audits.
+- **Wave** - manual WCAG verification tool.
+- **Contrast Checker** (e.g., WebAIM) - AA/AAA color contrast compliance.
 - **Screen readers**: NVDA (Windows), JAWS (Windows), VoiceOver (macOS/iOS), TalkBack (Android).
 - Keyboard-only navigation testing is mandatory before release.
 

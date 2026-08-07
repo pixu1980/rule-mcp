@@ -11,7 +11,7 @@ tags:
 frameworks: [all]
 ---
 
-# pix-toolchain-vite — Vite Build Toolchain
+# pix-toolchain-vite - Vite Build Toolchain
 
 ## Overview
 
@@ -87,4 +87,4 @@ VITE_API_BASE_URL=http://localhost:3000
 
 ## See also
 
-- [pix](../pix/SKILL.md) — Central skill index and dispatcher
+- [pix](../pix/SKILL.md) - Central skill index and dispatcher

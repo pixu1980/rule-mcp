@@ -14,7 +14,7 @@ tags:
 frameworks: [all]
 ---
 
-# pix-platform — Platform Skills Index
+# pix-platform - Platform Skills Index
 
 ## Available Skills
 
@@ -36,6 +36,6 @@ Need PWA / offline web app?             → pix-platform-web
 
 ## See also
 
-- [pix-frontend-react](../pix-frontend-react/SKILL.md) — React UI for desktop/web
-- [pix-devops-docker](../pix-devops-docker/SKILL.md) — Docker deployment
-- [pix](../pix/SKILL.md) — Central skill index
+- [pix-frontend-react](../pix-frontend-react/SKILL.md) - React UI for desktop/web
+- [pix-devops-docker](../pix-devops-docker/SKILL.md) - Docker deployment
+- [pix](../pix/SKILL.md) - Central skill index

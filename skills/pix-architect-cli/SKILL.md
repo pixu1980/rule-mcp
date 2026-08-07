@@ -12,7 +12,7 @@ tags:
 frameworks: [node, agents]
 ---
 
-# pix-architect-cli — Terminal Interview Shell
+# pix-architect-cli - Terminal Interview Shell
 
 Thin rendering shell for the pix-architect engine. Reads `wizard-spec.json`
 from `../pix-architect/` and renders the 25-step interview wizard in a terminal.
@@ -68,12 +68,12 @@ Navigation: ← → arrow keys, Enter to confirm, Ctrl+C to quit.
 
 ## Dependencies
 
-- `opentui` — terminal UI toolkit (https://opentui.com)
-- `../pix-architect/wizard-spec.json` — interview spec
-- `../pix-architect/validators.mjs` — showIf + prefill logic
-- `../pix-architect/generator.mjs` — .context/ generation
+- `opentui` - terminal UI toolkit (https://opentui.com)
+- `../pix-architect/wizard-spec.json` - interview spec
+- `../pix-architect/validators.mjs` - showIf + prefill logic
+- `../pix-architect/generator.mjs` - .context/ generation
 
 ## See also
 
-- [pix-architect](../pix-architect/SKILL.md) — The engine
-- [pix-architect-web](../pix-architect-web/SKILL.md) — Browser alternative
+- [pix-architect](../pix-architect/SKILL.md) - The engine
+- [pix-architect-web](../pix-architect-web/SKILL.md) - Browser alternative

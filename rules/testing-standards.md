@@ -4,7 +4,7 @@
 
 - **Vitest** is the only allowed test framework
 - Never use Jest, Mocha, Jasmine, or other test frameworks
-- **Exception — Expo/React Native projects**: use `jest` + `jest-expo` + `@testing-library/react-native` (React Native's native module layer is incompatible with Vitest). See `expo` rule.
+- **Exception - Expo/React Native projects**: use `jest` + `jest-expo` + `@testing-library/react-native` (React Native's native module layer is incompatible with Vitest). See `expo` rule.
 - Coverage thresholds are mandatory in local config and CI
 
 | Metric     | Minimum |

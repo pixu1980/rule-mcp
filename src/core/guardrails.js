@@ -76,8 +76,8 @@ const PLUGIN_GUARDRAILS = new Map();
  * Merge custom guardrails from a plugin into the guardrails engine.
  * Called during loadAllSkills() for each plugin with a plugin.js file.
  *
- * @param {string} pluginName — The plugin directory name
- * @param {Array} guardrails — Array of guardrail objects { id, label, description, check }
+ * @param {string} pluginName - The plugin directory name
+ * @param {Array} guardrails - Array of guardrail objects { id, label, description, check }
  */
 export function mergePluginGuardrails(pluginName, guardrails) {
   if (!Array.isArray(guardrails) || guardrails.length === 0) {
@@ -122,7 +122,7 @@ export function getGuardrails(skillName, mode) {
 
 export function checkCode(skillName, code, context = {}) {
   const guardrails = getGuardrails(skillName, context?.mode);
-  const previousPassed = new Set(); // ← always start fresh — no client bypass
+  const previousPassed = new Set(); // ← always start fresh - no client bypass
 
   const results = guardrails.map((g) => {
     if (previousPassed.has(g.id)) {
@@ -133,7 +133,7 @@ export function checkCode(skillName, code, context = {}) {
         failCount: 0,
         detail: [],
         suggestion: "",
-        note: "Skipped — previously passed",
+        note: "Skipped - previously passed",
         skipped: true,
       };
     }

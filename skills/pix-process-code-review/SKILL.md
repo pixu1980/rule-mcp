@@ -61,10 +61,10 @@ solely because its diff appears reasonable.
 Every blocking comment should state the location, observed risk, and expected
 outcome or concrete fix. Mark severity clearly:
 
-- **blocking** — correctness, security, data loss, compatibility, or required
+- **blocking** - correctness, security, data loss, compatibility, or required
   policy violation.
-- **non-blocking** — improvement that does not prevent safe merge.
-- **question** — seek context before assuming a defect.
+- **non-blocking** - improvement that does not prevent safe merge.
+- **question** - seek context before assuming a defect.
 
 Discuss the code, not the author. Avoid vague comments such as “this feels
 wrong”; explain the failure mode. Resolve threads only after the concern is
@@ -92,8 +92,8 @@ follow-up items instead of leaving ambiguous TODOs.
 
 ## See also
 
-- [pix-process](../pix-process/SKILL.md) — Process skill index
-- [pix-process-feature-workflow](../pix-process-feature-workflow/SKILL.md) — Feature delivery flow
-- [pix-devops-testing](../pix-devops-testing/SKILL.md) — Tests and coverage gates
-- [pix-backend-security](../pix-backend-security/SKILL.md) — Security review concerns
-- [pix-process-adr](../pix-process-adr/SKILL.md) — Record durable architecture decisions
+- [pix-process](../pix-process/SKILL.md) - Process skill index
+- [pix-process-feature-workflow](../pix-process-feature-workflow/SKILL.md) - Feature delivery flow
+- [pix-devops-testing](../pix-devops-testing/SKILL.md) - Tests and coverage gates
+- [pix-backend-security](../pix-backend-security/SKILL.md) - Security review concerns
+- [pix-process-adr](../pix-process-adr/SKILL.md) - Record durable architecture decisions

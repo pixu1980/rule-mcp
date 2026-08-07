@@ -11,7 +11,7 @@ tags:
 frameworks: [all]
 ---
 
-# pix-data — Data & Database Skills Index
+# pix-data - Data & Database Skills Index
 
 ## Available Skills
 
@@ -33,5 +33,5 @@ Need SQL fundamentals + theory?        → pix-data-sql
 
 ## See also
 
-- [pix-backend-node](../pix-backend-node/SKILL.md) — Backend runtime with DB integration
-- [pix](../pix/SKILL.md) — Central skill index
+- [pix-backend-node](../pix-backend-node/SKILL.md) - Backend runtime with DB integration
+- [pix](../pix/SKILL.md) - Central skill index

@@ -15,7 +15,7 @@ tags:
 frameworks: [all]
 ---
 
-# pix-data-mysql — MySQL 8+ / MariaDB 11+ Best Practices & Scripts
+# pix-data-mysql - MySQL 8+ / MariaDB 11+ Best Practices & Scripts
 
 ## Table of Contents
 
@@ -81,7 +81,7 @@ SHOW INDEX FROM payments;
 
 `CHECK` constraints are enforced by MySQL 8.0.16+; verify enforcement and syntax for the target MariaDB release. Keep `DATETIME` values in an explicit UTC convention when they represent instants, or use `TIMESTAMP` with a documented conversion policy. Neither choice replaces documenting whether a value is an instant or a local civil time.
 
-### ALTER TABLE — MySQL-Safe
+### ALTER TABLE - MySQL-Safe
 
 ```sql
 -- Add column (safe with IF NOT EXISTS simulation)
@@ -451,7 +451,7 @@ mysqlbinlog --stop-datetime="2024-01-15 14:30:00" \
 
 ```bash
 #!/bin/bash
-# verify_backup.sh — restore backup to temp instance and run checks
+# verify_backup.sh - restore backup to temp instance and run checks
 BACKUP_DIR=$1
 TEMP_DATA_DIR=/tmp/mysql_verify
 MYSQLD_CMD=$(which mysqld)
@@ -626,7 +626,7 @@ SET GLOBAL server_audit_events = 'CONNECT, QUERY';
 
 ## See also
 
-- [pix-data-sql](../pix-data-sql/SKILL.md) — General SQL fundamentals
-- [pix-data-postgresql](../pix-data-postgresql/SKILL.md) — PostgreSQL-specific
-- [pix-data-mongodb](../pix-data-mongodb/SKILL.md) — MongoDB document DB
-- [pix](../pix/SKILL.md) — Central skill index
+- [pix-data-sql](../pix-data-sql/SKILL.md) - General SQL fundamentals
+- [pix-data-postgresql](../pix-data-postgresql/SKILL.md) - PostgreSQL-specific
+- [pix-data-mongodb](../pix-data-mongodb/SKILL.md) - MongoDB document DB
+- [pix](../pix/SKILL.md) - Central skill index

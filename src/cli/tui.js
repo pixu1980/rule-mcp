@@ -112,7 +112,7 @@ export function formatInstallResult(result) {
       ["Mode", result.global ? "global command" : "local node entrypoint"],
       ["Dry run", result.dryRun ? "yes" : "no"],
       ["Agents", `${agents.length}`],
-      ["Manifest", result.manifest || "—"],
+      ["Manifest", result.manifest || "-"],
     ]),
   ];
   if (rows.length > 0) {
@@ -137,7 +137,7 @@ export function formatUninstallResult(result) {
       ["Status", result.ok ? color("ok", "green") : color("failed", "red")],
       ["Dry run", result.dryRun ? "yes" : "no"],
       ["Agents", `${result.agents?.length ?? rows.length}`],
-      ["Note", result.note || "—"],
+      ["Note", result.note || "-"],
     ]),
   ];
   if (rows.length > 0) {

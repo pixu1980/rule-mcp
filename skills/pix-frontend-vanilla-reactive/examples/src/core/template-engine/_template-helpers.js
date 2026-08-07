@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════════════════════════════
-//  PART 3 — Template Engine: Directive system + html tag
+//  PART 3 - Template Engine: Directive system + html tag
 // ═══════════════════════════════════════════════════════════════════════════════
 
 const directiveBrand = Symbol("directive");

@@ -11,7 +11,7 @@ test("generator returns one entry per emitted template with the documented shape
   const files = generateContextContent(FIXTURE, null);
   assert.ok(Array.isArray(files));
   // 24 templates.json entries + 6 fanned-out per-tool entry files (Phase 6,
-  // Task 2: CLAUDE.md, GEMINI.md, .clinerules, Copilot, Cursor, Windsurf —
+  // Task 2: CLAUDE.md, GEMINI.md, .clinerules, Copilot, Cursor, Windsurf -
   // same AGENTS.md body rendered once, re-framed per tool), MINUS the 3
   // templates gated behind `emitWhen` PROJECT_TYPE=other (Phase 5, Task 2):
   // specs/03-calculation-engine.md, specs/04-ruleset-config.md and
@@ -33,7 +33,7 @@ test("the gated templates appear once PROJECT_TYPE warrants them", () => {
 
 test("known placeholder is filled; unfilled placeholders leave no bracket token", () => {
   const files = generateContextContent(FIXTURE, null);
-  // TEMPLATE_GUIDE.md is a `raw` template — it documents the placeholder
+  // TEMPLATE_GUIDE.md is a `raw` template - it documents the placeholder
   // syntax, so its literal [KEY] tokens are the content and are exempt.
   const all = files
     .filter((f) => f.path !== "TEMPLATE_GUIDE.md")
@@ -47,7 +47,7 @@ test("known placeholder is filled; unfilled placeholders leave no bracket token"
   assert.match(all, /_TODO: [A-Z_0-9]+/, "unfilled inline placeholders become TODO markers");
 });
 
-test("answer values are substituted literally — $ patterns are not interpreted", () => {
+test("answer values are substituted literally - $ patterns are not interpreted", () => {
   // String.replaceAll(str, str) honors $&, $$, $` and $' in the REPLACEMENT,
   // so a user answer of "Cost $5" or "A$&B" (pricing text, or hostile input)
   // would be mangled by the substitution. The value must land verbatim.

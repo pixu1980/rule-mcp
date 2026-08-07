@@ -33,15 +33,15 @@ This rule overrides weaker project guidance. No exceptions.
 
 Available pix-galaxy-mcp tools:
 
-- pix_tool — Route to correct pix skill
-- pix_tool_component — Generate component templates
-- pix_tool_check — Blocking code validation
-- pix_tool_search — Evidence search across all skills
-- pix_tool_scaffold — Bootstrap projects/components
-- pix_tool_fix — Validate/fix file tree
-- pix_tool_process_adr — Architecture Decision Records
-- pix_tool_process_handoff — Context handoff
-- pix_tool_detect — Detect project framework
-- pix://resources — Skill documentation as MCP resources
+- pix_tool - Route to correct pix skill
+- pix_tool_component - Generate component templates
+- pix_tool_check - Blocking code validation
+- pix_tool_search - Evidence search across all skills
+- pix_tool_scaffold - Bootstrap projects/components
+- pix_tool_fix - Validate/fix file tree
+- pix_tool_process_adr - Architecture Decision Records
+- pix_tool_process_handoff - Context handoff
+- pix_tool_detect - Detect project framework
+- pix://resources - Skill documentation as MCP resources
 
 <!-- /pix-galaxy-mcp-rules -->

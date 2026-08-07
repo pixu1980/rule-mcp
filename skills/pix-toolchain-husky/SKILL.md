@@ -13,7 +13,7 @@ tags:
 frameworks: [all]
 ---
 
-# pix-toolchain-husky — Git Hooks & Commit Quality
+# pix-toolchain-husky - Git Hooks & Commit Quality
 
 ## Overview
 
@@ -106,6 +106,6 @@ revert: rollback to v1.2.0
 
 ## See also
 
-- [pix-toolchain-biome](../pix-toolchain-biome/SKILL.md) — Linting & formatting
-- [pix-toolchain-project](../pix-toolchain-project/SKILL.md) — Repo conventions
-- [pix](../pix/SKILL.md) — Central skill index
+- [pix-toolchain-biome](../pix-toolchain-biome/SKILL.md) - Linting & formatting
+- [pix-toolchain-project](../pix-toolchain-project/SKILL.md) - Repo conventions
+- [pix](../pix/SKILL.md) - Central skill index

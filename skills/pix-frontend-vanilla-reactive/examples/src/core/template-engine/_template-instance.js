@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════════════════════════════
-//  PART 3d — Template Parser (getTemplate) + TemplateInstance
+//  PART 3d - Template Parser (getTemplate) + TemplateInstance
 // ═══════════════════════════════════════════════════════════════════════════════
 
 import { parseExpression, evaluateExpression } from "./_expression-parser.js";
@@ -46,7 +46,7 @@ export function getTemplate(strings) {
   let rec = templateCache.get(strings);
   if (rec) return rec;
 
-  // Step 1: Assemble full HTML — use __attr_N__ for attribute positions,
+  // Step 1: Assemble full HTML - use __attr_N__ for attribute positions,
   //         <!--val:N--> for child positions (--> breaks HTML attribute parsing)
   let markup = "";
   for (let i = 0; i < strings.length - 1; i++) {
@@ -327,7 +327,7 @@ export class TemplateInstance {
         exprPart.setValue(parsedExpr, context);
       }
     }
-    // 3. Init <for> / <if> — pass renderFn from ${} values
+    // 3. Init <for> / <if> - pass renderFn from ${} values
     for (const fp of this.forParts) {
       if (fp._renderAttrIdx >= 0) fp.renderFn = values[fp._renderAttrIdx];
       fp.init(context);

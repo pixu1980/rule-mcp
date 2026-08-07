@@ -1,4 +1,4 @@
-// pix-architect validators — showIf logic, required fields, prefill engine
+// pix-architect validators - showIf logic, required fields, prefill engine
 // Pure logic, no DOM. Used by both pix-architect-cli and pix-architect-web.
 
 /**

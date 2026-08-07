@@ -11,7 +11,7 @@
  * Adoption policy (ADR 028, per OpenReplay eslint-plugin-unicorn guide):
  *   1. Start from unicorn/recommended, autofix first (done in this migration).
  *   2. Rules below are turned off because they are opinionated or fight this
- *      codebase's conventions — revisit on a future pass.
+ *      codebase's conventions - revisit on a future pass.
  *   3. Genuine correctness issues found by the migration were FIXED, not
  *      suppressed: no-undef (completions bash template), no-array-sort kept
  *      as error (comparators already present), no-useless-escape, no-empty,

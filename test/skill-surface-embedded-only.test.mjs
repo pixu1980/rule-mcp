@@ -6,7 +6,7 @@
 // It used to merge ~/.agents/skills into the surface, and any directory holding
 // a SKILL.md became a tool under the pix_ prefix. On the machine that ran
 // the 2026-08-04 audit that meant 79 stale `pix-*` directories from the previous
-// brand resurfaced as callable `pix_pix_*` tools — plus generic skills such
+// brand resurfaced as callable `pix_pix_*` tools - plus generic skills such
 // as `test-driven-development` renamed to `pix_test_driven_development`.
 // 176 tools instead of 88, half of them foreign, ~54k tokens of tool schemas in
 // every model turn.
@@ -54,7 +54,7 @@ function surfaceWith(home) {
 function makeHostileHome() {
   const home = mkdtempSync(join(tmpdir(), "pix-home-"));
   const skills = join(home, ".agents", "skills");
-  // A stale skill from a previous brand — pix-* in home must NOT become
+  // A stale skill from a previous brand - pix-* in home must NOT become
   // a pix_* tool because pix only scans pix-* from embedded.
   mkdirSync(join(skills, "pix-frontend-react"), { recursive: true });
   writeFileSync(join(skills, "pix-frontend-react", "SKILL.md"), "---\nname: pix-frontend-react\n---\nstale\n");
@@ -152,5 +152,5 @@ test("the surface size matches the embedded skill count", () => {
   // the dispatcher tool rather than a skill tool.
   const expectedSkills = embeddedSkillDirs.filter((d) => d.startsWith("pix-")).length;
   assert.equal(surface.skills.length, expectedSkills);
-  assert.ok(surface.bytes < 130_000, `tool schemas grew to ${surface.bytes} bytes — the surface is leaking again`);
+  assert.ok(surface.bytes < 130_000, `tool schemas grew to ${surface.bytes} bytes - the surface is leaking again`);
 });

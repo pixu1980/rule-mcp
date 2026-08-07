@@ -8,7 +8,7 @@
  * the expected number of SKILL.md files and copies them
  * into the build staging area.
  *
- * NEVER reads $HOME — builds must be reproducible.
+ * NEVER reads $HOME - builds must be reproducible.
  */
 
 import { existsSync, mkdirSync, readdirSync, rmSync, copyFileSync, readFileSync } from "node:fs";

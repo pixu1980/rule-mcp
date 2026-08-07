@@ -1,11 +1,11 @@
 // test/architect-server-csrf.test.mjs
 //
-// Audit finding 03 — both interview servers write files into the user's project
+// Audit finding 03 - both interview servers write files into the user's project
 // on POST /api/generate with no authentication. They bind loopback and send no
 // CORS headers, which stops a cross-site page from *reading* the response but
 // not from *sending the request*: with Content-Type: text/plain a cross-origin
 // POST is a CORS "simple request", so no preflight is issued and the write
-// happens. The attacker never needs to read the reply — the side effect is the
+// happens. The attacker never needs to read the reply - the side effect is the
 // attack (with `force: true`, an overwrite of files at the project root).
 //
 // A browser cannot forge Origin, Sec-Fetch-Site, or Host, so validating those

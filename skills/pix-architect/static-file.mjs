@@ -1,4 +1,4 @@
-// pix-architect static-file helper — path-traversal containment.
+// pix-architect static-file helper - path-traversal containment.
 // Pure logic, no I/O, no server. Shared by both interview servers.
 
 import { resolve, sep } from "node:path";

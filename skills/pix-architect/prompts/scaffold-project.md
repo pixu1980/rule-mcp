@@ -24,9 +24,9 @@ Fill in:
 
 ## Output Structure
 
-- `.agents/` — Full agent infrastructure
-- `cli/` — Context generation CLI
-- `cli/.context/` — Template files with placeholders
-- `.context/` — Generated domain documentation
-- `AGENTS.md` — Agent entry point
-- `AI_WORKFLOW.md` — Development workflow
+- `.agents/` - Full agent infrastructure
+- `cli/` - Context generation CLI
+- `cli/.context/` - Template files with placeholders
+- `.context/` - Generated domain documentation
+- `AGENTS.md` - Agent entry point
+- `AI_WORKFLOW.md` - Development workflow

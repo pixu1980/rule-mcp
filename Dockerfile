@@ -1,4 +1,4 @@
-# pix-galaxy-mcp — Docker image
+# pix-galaxy-mcp - Docker image
 # Source is the app. Skills are embedded from the repository.
 
 FROM node:22-alpine

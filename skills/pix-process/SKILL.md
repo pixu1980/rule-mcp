@@ -14,7 +14,7 @@ tags:
 frameworks: [all]
 ---
 
-# pix-process — Process & Methodology Skills Index
+# pix-process - Process & Methodology Skills Index
 
 ## Available Skills
 
@@ -40,5 +40,5 @@ Need to close/resume a session?         → pix-process-handoff
 
 ## See also
 
-- [pix-architect](../pix-architect/SKILL.md) — Architecture wizard
-- [pix](../pix/SKILL.md) — Central skill index
+- [pix-architect](../pix-architect/SKILL.md) - Architecture wizard
+- [pix](../pix/SKILL.md) - Central skill index

@@ -38,7 +38,7 @@ assert.ok(package_.dependencies["@modelcontextprotocol/sdk"], "Missing @modelcon
 assert.ok(package_.dependencies["zod"], "Missing zod dependency");
 console.log("  ✅ package.json valid with SDK + Zod deps");
 
-// 3. Check src files (SDK-based layout — no mcp/ directory)
+// 3. Check src files (SDK-based layout - no mcp/ directory)
 const sourceFiles = [
   "server.js",
   "index.js",
@@ -107,7 +107,7 @@ try {
 }
 
 if (failures > 0) {
-  console.log(`\n❌ ${failures} failure(s) — see above`);
+  console.log(`\n❌ ${failures} failure(s) - see above`);
   process.exit(1);
 }
 console.log("\n  ✅ All checks passed");

@@ -11,7 +11,7 @@ tags:
 frameworks: [vanilla-reactive]
 ---
 
-# pix-architect-web — Browser Interview Shell
+# pix-architect-web - Browser Interview Shell
 
 Thin rendering shell for the pix-architect engine. Reads `wizard-spec.json`
 from `../pix-architect/` and renders the 25-step interview wizard in a browser.
@@ -44,7 +44,7 @@ Open `http://localhost:3000`.
 | Method | Path                | Description                                                 |
 | ------ | ------------------- | ----------------------------------------------------------- |
 | `GET`  | `/api/wizard-spec`  | Returns wizard-spec.json from pix-architect engine          |
-| `GET`  | `/api/placeholders` | Backward compat — wizard-spec wrapped as placeholders shape |
+| `GET`  | `/api/placeholders` | Backward compat - wizard-spec wrapped as placeholders shape |
 | `GET`  | `/api/templates`    | Template list with placeholder counts                       |
 | `GET`  | `/api/init-values`  | Detect project values to pre-fill the interview             |
 | `POST` | `/api/generate`     | Write .context/ to disk, returns file list                  |
@@ -64,5 +64,5 @@ Zero npm dependencies. Uses vanilla-reactive engine bundled in `core/`.
 
 ## See also
 
-- [pix-architect](../pix-architect/SKILL.md) — The engine
-- [pix-architect-cli](../pix-architect-cli/SKILL.md) — Terminal alternative
+- [pix-architect](../pix-architect/SKILL.md) - The engine
+- [pix-architect-cli](../pix-architect-cli/SKILL.md) - Terminal alternative

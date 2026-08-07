@@ -26,4 +26,4 @@ Classify issues using these patterns:
 - Keep state in the component, share via services
 - Lazy-load every route, `@defer` heavy components
 - Split components by reason to change
-- Never use `ngDoCheck` — use signals instead
+- Never use `ngDoCheck` - use signals instead

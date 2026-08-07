@@ -12,11 +12,11 @@ tags:
 frameworks: [all]
 ---
 
-# pix-backend-fastify — Fastify Best Practices
+# pix-backend-fastify - Fastify Best Practices
 
 ## fastify Architecture
 
-- **Plugin-based** — everything is a plugin. Encapsulation by design
+- **Plugin-based** - everything is a plugin. Encapsulation by design
 - `fastify-plugin` for shared context (DB, auth)
 - Auto-load plugins with `@fastify/autoload`
 - Register order: configuration → database → auth → routes → error handler
@@ -61,9 +61,9 @@ const createUserSchema = {
 
 ## Fastify Performance Tuning
 
-- **Fastest Node.js HTTP framework** — 2-3× faster than Express
+- **Fastest Node.js HTTP framework** - 2-3× faster than Express
 - Built-in schema-based serialization (JSON.stringify bypass)
-- Limited middleware — prefer hooks + plugins for encapsulation
+- Limited middleware - prefer hooks + plugins for encapsulation
 - `@fastify/compress` for response compression
 - Keep-alive connections for higher throughput
 
@@ -75,6 +75,6 @@ const createUserSchema = {
 
 ## See also
 
-- [pix](../pix/SKILL.md) — Central skill index and dispatcher
-- [pix-backend](../pix-backend/SKILL.md) — Backend umbrella
-- [pix-data-postgresql](../pix-data-postgresql/SKILL.md) — PostgreSQL
+- [pix](../pix/SKILL.md) - Central skill index and dispatcher
+- [pix-backend](../pix-backend/SKILL.md) - Backend umbrella
+- [pix-data-postgresql](../pix-data-postgresql/SKILL.md) - PostgreSQL

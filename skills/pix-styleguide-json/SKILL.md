@@ -126,5 +126,5 @@ When not constrained by an external spec, prefer this order:
 
 ## See also
 
-- [pix-styleguide](../pix-styleguide/SKILL.md) — Style guides index
-- [pix](../pix/SKILL.md) — Central skill index
+- [pix-styleguide](../pix-styleguide/SKILL.md) - Style guides index
+- [pix](../pix/SKILL.md) - Central skill index

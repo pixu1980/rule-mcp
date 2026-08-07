@@ -10,11 +10,11 @@
  *     └── index.js           ← Barrel file re-exporting public API
  *
  * Two modes of operation:
- *   1. **Lint** — scan a directory and report all violations
- *   2. **Fix** — auto-correct violations where possible (rename, create barrels, etc.)
+ *   1. **Lint** - scan a directory and report all violations
+ *   2. **Fix** - auto-correct violations where possible (rename, create barrels, etc.)
  *
- * @see module:tools/fix — MCP tool registration
- * @see module:cli/commands — CLI fix command
+ * @see module:tools/fix - MCP tool registration
+ * @see module:cli/commands - CLI fix command
  */
 
 import {
@@ -63,26 +63,26 @@ const COMPONENT_EXTENSIONS = new Set([".js", ".jsx", ".ts", ".tsx", ".vue", ".sv
 
 /**
  * @typedef {Object} FileTreeIssue
- * @property {IssueType} type — Type of issue detected
- * @property {string} path — Absolute path to the problematic file/directory
- * @property {string} message — Human-readable description
- * @property {boolean} fixable — Whether auto-fix is available
- * @property {string} [suggestion] — How to fix it
- * @property {string} [fixAction] — Description of what auto-fix would do
- * @property {number} [line] — Line number if applicable
+ * @property {IssueType} type - Type of issue detected
+ * @property {string} path - Absolute path to the problematic file/directory
+ * @property {string} message - Human-readable description
+ * @property {boolean} fixable - Whether auto-fix is available
+ * @property {string} [suggestion] - How to fix it
+ * @property {string} [fixAction] - Description of what auto-fix would do
+ * @property {number} [line] - Line number if applicable
  */
 
 /**
  * @typedef {Object} FileTreeReport
- * @property {boolean} pass — true if zero issues
- * @property {FileTreeIssue[]} issues — All detected issues
- * @property {Object} stats — Summary statistics
- * @property {number} stats.totalFiles — Files scanned
- * @property {number} stats.totalDirs — Directories scanned
- * @property {number} stats.missingBarrel — Barrel count
- * @property {number} stats.wrongPrefix — Wrong prefix count
- * @property {number} stats.bareFiles — Bare file count
- * @property {number} stats.fixable — Fixable issue count
+ * @property {boolean} pass - true if zero issues
+ * @property {FileTreeIssue[]} issues - All detected issues
+ * @property {Object} stats - Summary statistics
+ * @property {number} stats.totalFiles - Files scanned
+ * @property {number} stats.totalDirs - Directories scanned
+ * @property {number} stats.missingBarrel - Barrel count
+ * @property {number} stats.wrongPrefix - Wrong prefix count
+ * @property {number} stats.bareFiles - Bare file count
+ * @property {number} stats.fixable - Fixable issue count
  */
 
 // ─── Scanning logic ──────────────────────────────────────────────────────────
@@ -153,10 +153,10 @@ function isBareComponent(name) {
 /**
  * Scan a directory recursively and collect all file tree issues.
  *
- * @param {string} rootDir — Project root to scan
+ * @param {string} rootDir - Project root to scan
  * @param {object} [options]
- * @param {string} [options.srcDir="src"] — Source directory to scan (default: src)
- * @param {boolean} [options.autoFix=false] — Whether to apply fixes
+ * @param {string} [options.srcDir="src"] - Source directory to scan (default: src)
+ * @param {boolean} [options.autoFix=false] - Whether to apply fixes
  * @returns {FileTreeReport}
  */
 export function scanFileTree(rootDir, options = {}) {
@@ -228,7 +228,7 @@ export function scanFileTree(rootDir, options = {}) {
       }
 
       // ── Check 3: Bare PascalCase files (not in a component folder) ──
-      // This is checked at the parent level — files that look like components
+      // This is checked at the parent level - files that look like components
       // but are directly inside a non-component folder
     }
 
@@ -337,10 +337,10 @@ export function scanFileTree(rootDir, options = {}) {
  *   2. Rename unprefixed component files
  *   3. Report unfixable issues
  *
- * @param {string} rootDir — Project root
+ * @param {string} rootDir - Project root
  * @param {object} [options]
- * @param {string} [options.srcDir="src"] — Source directory
- * @param {boolean} [options.dryRun=false] — Preview without applying
+ * @param {string} [options.srcDir="src"] - Source directory
+ * @param {boolean} [options.dryRun=false] - Preview without applying
  * @returns {{
  *   ok: boolean,
  *   fixed: Array<{ path: string, action: string }>,
@@ -520,8 +520,8 @@ export function autoFixFileTree(rootDir, options = {}) {
  * Guardrail: check if the code represents a valid barrel file.
  * Used by the guardrails engine in guardrail-defs.js.
  *
- * @param {string} code — File content
- * @param {object} context — { fileName, srcDir, ... }
+ * @param {string} code - File content
+ * @param {object} context - { fileName, srcDir, ... }
  * @returns {{ pass: boolean, failCount: number, detail: string[], suggestion: string, note?: string }}
  */
 export function checkBarrelFile(code, context = {}) {
@@ -557,8 +557,8 @@ export function checkBarrelFile(code, context = {}) {
 /**
  * Guardrail: check if a component file name follows the _PascalCase convention.
  *
- * @param {string} code — File content (unused, we check the fileName context)
- * @param {object} context — { fileName, isComponent }
+ * @param {string} code - File content (unused, we check the fileName context)
+ * @param {object} context - { fileName, isComponent }
  * @returns {{ pass: boolean, failCount: number, detail: string[], suggestion: string, note?: string }}
  */
 export function checkFileNameConvention(code, context = {}) {
@@ -612,9 +612,9 @@ function toKebab(name) {
  * Returns an array of { path, content } objects.
  *
  * @param {object} options
- * @param {string} options.name — Component name (PascalCase)
- * @param {string} options.framework — Framework (react, vue, svelte, angular, solid, astro, vanilla)
- * @param {string} [options.baseDir="src/components"] — Base output directory
+ * @param {string} options.name - Component name (PascalCase)
+ * @param {string} options.framework - Framework (react, vue, svelte, angular, solid, astro, vanilla)
+ * @param {string} [options.baseDir="src/components"] - Base output directory
  * @returns {Array<{ path: string, content: string }>}
  */
 export function generateComponentFiles(options) {

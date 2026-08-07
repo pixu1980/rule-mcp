@@ -11,7 +11,7 @@ frameworks: [all]
 compatibility: Designed for AI coding assistants
 ---
 
-# pix-ai — AI Agent Skills Index
+# pix-ai - AI Agent Skills Index
 
 ## AI Agent Skills
 
@@ -29,8 +29,8 @@ Need framework-agnostic agent project structure (any SDK)?            → pix-pl
 
 ## See also
 
-- [pix](../pix/SKILL.md) — Central skill index and dispatcher
-- [pix-devops-testing](../pix-devops-testing/SKILL.md) — Test coverage thresholds for agent code
-- [pix-devops-docker](../pix-devops-docker/SKILL.md) — Containerizing agent services
+- [pix](../pix/SKILL.md) - Central skill index and dispatcher
+- [pix-devops-testing](../pix-devops-testing/SKILL.md) - Test coverage thresholds for agent code
+- [pix-devops-docker](../pix-devops-docker/SKILL.md) - Containerizing agent services
 
 ---

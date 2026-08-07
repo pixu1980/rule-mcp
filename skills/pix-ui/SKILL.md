@@ -12,7 +12,7 @@ tags:
 frameworks: [all]
 ---
 
-# pix-ui — UI umbrella and routing layer
+# pix-ui - UI umbrella and routing layer
 
 `pix-ui` is the UI topic umbrella. It sits above visual design,
 frontend frameworks, component templates, and styleguide validation so agents
@@ -68,8 +68,8 @@ validate any visible interface.
 
 ## See also
 
-- [pix](../pix/SKILL.md) — Central skill and tool dispatcher
-- [pix-ui-design-system](../pix-ui-design-system/SKILL.md) — Visual design direction
-- [pix-frontend](../pix-frontend/SKILL.md) — Frontend framework routing
-- [pix-styleguide](../pix-styleguide/SKILL.md) — Shared implementation standards
-- [pix-architect](../pix-architect/SKILL.md) — Architecture and `.context` generation
+- [pix](../pix/SKILL.md) - Central skill and tool dispatcher
+- [pix-ui-design-system](../pix-ui-design-system/SKILL.md) - Visual design direction
+- [pix-frontend](../pix-frontend/SKILL.md) - Frontend framework routing
+- [pix-styleguide](../pix-styleguide/SKILL.md) - Shared implementation standards
+- [pix-architect](../pix-architect/SKILL.md) - Architecture and `.context` generation

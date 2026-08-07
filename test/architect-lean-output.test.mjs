@@ -1,6 +1,6 @@
 // test/architect-lean-output.test.mjs
 //
-// Phase 5 gates — "lean + conditional" generated output.
+// Phase 5 gates - "lean + conditional" generated output.
 //
 // The invariant: a generated pack must never ship a raw `[KEY]` or a bold
 // `**[KEY]**` unfilled-placeholder marker, and making it lean must not
@@ -14,7 +14,7 @@
 //     examples must survive VERBATIM (`[PROJECT_NAME] -> "Project Tracker"`),
 //     so it is a `raw: true` template that skips substitution entirely.
 //   - JUNK tokens (`[X]`, `[NN]`) are literal prose inside fenced code
-//     blocks, not placeholders (see field-map.mjs) — they must not be
+//     blocks, not placeholders (see field-map.mjs) - they must not be
 //     rewritten or bolded.
 //   - `analysis/implementation-roadmap.md` carries several placeholders per
 //     table row; dropping a row would delete a real milestone.
@@ -92,7 +92,7 @@ test("JSON output stays parseable after the lean policy runs", () => {
   const json = byPath(render(rulesetAnswers), "schemas/ruleset.schema.json");
   assert.doesNotThrow(
     () => JSON.parse(json.content),
-    "schemas/ruleset.schema.json must remain valid JSON — line-dropping breaks it",
+    "schemas/ruleset.schema.json must remain valid JSON - line-dropping breaks it",
   );
   assert.doesNotMatch(json.content, BRACKET_TOKEN_RE, "no bracket token may survive in the schema");
 });
@@ -153,7 +153,7 @@ test("fenced code blocks are left untouched by the lean policy", () => {
   assert.ok(roadmap.content.length > 0);
 });
 
-test("table rows are never dropped — milestones survive with their real text", () => {
+test("table rows are never dropped - milestones survive with their real text", () => {
   const roadmap = byPath(render(), "analysis/implementation-roadmap.md");
   // M5.1's row carries four EDGE_CASE_* placeholders, all unfilled in the
   // fixture; the row itself is real content and must stay.
@@ -174,7 +174,7 @@ test("an all-unfilled section keeps its heading and gets one explicit TODO", () 
 test("an empty-string answer counts as unfilled, not as filled (F8)", () => {
   // QUALITY_GATES renders as "- Quality gates: [QUALITY_GATES]" in AGENTS.md.
   // Treating "" as FILLED (today's `val || ""` substitution) leaves a dangling
-  // "- Quality gates:" label with nothing after it — which reads as a fact
+  // "- Quality gates:" label with nothing after it - which reads as a fact
   // ("there are no quality gates") rather than as missing information.
   const blanked = { ...fixture, QUALITY_GATES: "" };
   const agents = byPath(render(blanked), "AGENTS.md");
@@ -189,7 +189,7 @@ test("an empty-string answer counts as unfilled, not as filled (F8)", () => {
 
 test("an unfilled placeholder inside inline code does not trap the marker underscores", () => {
   // `- Preview: `[PREVIEW_COMMAND]`` must not render as `- Preview:
-  // `_TODO: PREVIEW_COMMAND_`` — inside a code span the italic marker's
+  // `_TODO: PREVIEW_COMMAND_`` - inside a code span the italic marker's
   // underscores are literal. The backticks are dropped so the marker is prose.
   for (const file of render()) {
     assert.doesNotMatch(

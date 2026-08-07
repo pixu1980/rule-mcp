@@ -14,7 +14,7 @@ The `pix-scaffold-*` skill family was fragmented. Four separate scaffolding skil
 - `pix-scaffold-expo` duplicated content that belonged in `platform-expo`
 - `pix-scaffold-frontend-react-vite` mixed three concerns: React setup, Vite config, and generic frontend tooling
 
-Additionally, the `pix-scaffold` umbrella directory itself served no purpose as a skill — the `pix_tool_scaffold` core MCP tool already handles config file generation.
+Additionally, the `pix-scaffold` umbrella directory itself served no purpose as a skill - the `pix_tool_scaffold` core MCP tool already handles config file generation.
 
 ## Decision
 
@@ -49,7 +49,7 @@ The `pix_tool_scaffold` core MCP tool continues to handle `.prettierrc`, `.edito
 - Skills now live in their semantic category (`backend-*`, `platform-*`, `frontend-*`, `toolchain-*`)
 - No more `scaffold-*` as a catch-all category
 - Vite has its own dedicated skill (framework-agnostic, usable with React, Vue, Svelte, etc.)
-- All content preserved — no deletions, only moves and merges
+- All content preserved - no deletions, only moves and merges
 
 **Negative:**
 

@@ -2,7 +2,7 @@
 
 This report compiles the compliance evidence for a given _Feature_, ensuring its development reached the "Certification Ready" definition.
 
-> This report is a **versioned project record** — never add it to `.gitignore`. Evidence hidden from version control is not evidence.
+> This report is a **versioned project record** - never add it to `.gitignore`. Evidence hidden from version control is not evidence.
 
 ---
 

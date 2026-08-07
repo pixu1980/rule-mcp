@@ -6,11 +6,11 @@
 // PROJECT_NAME_SKETCH -> PROJECT_NAME and PROJECT_PITCH_SKETCH ->
 // PROJECT_ELEVATOR_PITCH are renames whose TARGET is also a directly
 // collected, separate flat wizard field (step-1 rough sketch vs. step-7
-// refined final answer — see wizard-spec.json field keys at both the
+// refined final answer - see wizard-spec.json field keys at both the
 // `_SKETCH` and the plain-named steps). The original implementation used
 // the same "non-empty always wins" helper for RENAMES as for COMPOSITION,
 // which meant a present, non-empty sketch value silently overwrote an
-// already-answered refined value — regressing the two most prominent
+// already-answered refined value - regressing the two most prominent
 // identity placeholders (`[PROJECT_NAME]`, `[PROJECT_ELEVATOR_PITCH]`)
 // across every generated file whenever a user answered both steps (the
 // normal path). Fixed: RENAMES now only fill an absent/empty target; a
@@ -20,7 +20,7 @@
 // COMPOSITION's precedence is intentionally NOT changed by that fix: the
 // detailed repeatable group (e.g. FEATURES) must still overwrite its
 // flat-fallback rename (TOP_FEATURE_* -> FEATURE_*) when both are present,
-// per the plan's documented precedence — asserted here too so a future
+// per the plan's documented precedence - asserted here too so a future
 // "fix" to RENAMES doesn't accidentally flatten COMPOSITION's precedence
 // the same way.
 import test from "node:test";

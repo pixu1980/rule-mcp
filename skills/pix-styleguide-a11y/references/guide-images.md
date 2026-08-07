@@ -6,8 +6,8 @@
 
 1. **Informative images:** `alt` must convey the **conclusion**, not describe the file.
 2. **Functional images (links/buttons):** `alt` must describe the **action**, not the appearance.
-3. **Decorative images:** Use `alt=""` (empty) — never omit the `alt` attribute.
-4. **No "Image of..." or "Photo of..."** — screen readers already announce it's an image.
+3. **Decorative images:** Use `alt=""` (empty) - never omit the `alt` attribute.
+4. **No "Image of..." or "Photo of..."** - screen readers already announce it's an image.
 5. **SVG icons:** Use `aria-hidden="true"` + `focusable="false"` on decorative SVGs.
 
 ## Good Examples
@@ -28,10 +28,10 @@
 ## Bad Examples
 
 ```html
-<!-- ❌ Vague — doesn't convey information -->
+<!-- ❌ Vague - doesn't convey information -->
 <img src="sales-chart.png" alt="Sales chart" />
 
-<!-- ❌ Missing alt — screen reader reads filename -->
+<!-- ❌ Missing alt - screen reader reads filename -->
 <img src="image-123-final.png" />
 ```
 

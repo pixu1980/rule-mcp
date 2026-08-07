@@ -5,7 +5,7 @@
  * Each command is a named export that receives parsed arguments
  * and performs its action.
  *
- * @see module:index — CLI entry point that dispatches to these commands
+ * @see module:index - CLI entry point that dispatches to these commands
  */
 
 // eslint-disable-next-line no-unused-vars
@@ -74,7 +74,7 @@ function tryExec(command, options = {}) {
  */
 export function helpCommand() {
   print(`
-pix-galaxy-mcp — MCP server for the pix-* skill ecosystem.
+pix-galaxy-mcp - MCP server for the pix-* skill ecosystem.
 
 Usage:
   pix-galaxy-mcp <command> [options]
@@ -163,8 +163,8 @@ Aliases:
 
 Examples:
   pix-galaxy-mcp help
-  pnpm start / pnpm dev           # STDIO — spawnable by IDE/agent via mcp.json
-  pnpm up                          # SSE — on-demand HTTP daemon from repo
+  pnpm start / pnpm dev           # STDIO - spawnable by IDE/agent via mcp.json
+  pnpm up                          # SSE - on-demand HTTP daemon from repo
   pix-galaxy-mcp serve --transport sse
   pix-galaxy-mcp tools list
   pix-galaxy-mcp doctor --telemetry
@@ -174,8 +174,8 @@ Examples:
   pix-galaxy-mcp config --global
 
 Install modes:
-  local (default)    Uses node + script path — works without global install
-  --global           Clean command — requires \`npm install -g pix-galaxy-mcp\`
+  local (default)    Uses node + script path - works without global install
+  --global           Clean command - requires \`npm install -g pix-galaxy-mcp\`
 
 Universal installer:
   ./scripts/install.sh             Auto-detect + configure all agents
@@ -196,7 +196,7 @@ Windows:
  *   port?: number,
  *   sslCert?: string,
  *   sslKey?: string
- * }} [opts] — Transport type (stdio/sse) and optional TLS cert paths
+ * }} [opts] - Transport type (stdio/sse) and optional TLS cert paths
  */
 export async function serveCommand(opts = {}) {
   await loadAllSkills();
@@ -256,9 +256,9 @@ export async function serveCommand(opts = {}) {
  * Manage the MCP daemon process and native platform services.
  *
  * Sub-commands:
- *   start|stop|status|logs  — Process-based daemon (no reboot persistence)
- *   install|uninstall       — Platform-native service (LaunchAgent / systemd / Win Service)
- *   enable|disable          — Load/unload the native service without removing it
+ *   start|stop|status|logs  - Process-based daemon (no reboot persistence)
+ *   install|uninstall       - Platform-native service (LaunchAgent / systemd / Win Service)
+ *   enable|disable          - Load/unload the native service without removing it
  *
  * Platform-native services (install):
  *   macOS:   LaunchAgent plist → appears in System Settings → General → Login Items
@@ -647,7 +647,7 @@ export async function updateCommand() {
     print("✅ Already up to date.");
   }
   if (result.skipped) {
-    print(`Skipped: ${result.reason}${result.note ? ` — ${result.note}` : ""}`);
+    print(`Skipped: ${result.reason}${result.note ? ` - ${result.note}` : ""}`);
   }
   const restart = scheduleRestartIfNeeded(result, () => {});
   if (restart) {
@@ -686,7 +686,7 @@ export function completionsCommand(opts = {}) {
 export { skillsInstallCommand, skillsListCommand } from "./skills-install.js";
 
 /**
- * Resolve the command-file directories for this machine — the single answer to
+ * Resolve the command-file directories for this machine - the single answer to
  * "where do the bare `/pix-*` commands have to be written?".
  *
  * @param {{ agent?: string }} opts
@@ -696,7 +696,7 @@ function resolvedTargets(opts) {
 }
 
 /**
- * Print the resolved command targets — `agent<TAB>format<TAB>scope<TAB>dir`, or
+ * Print the resolved command targets - `agent<TAB>format<TAB>scope<TAB>dir`, or
  * JSON with `--json`. Installer/uninstaller scripts consume this so they can
  * never drift from the registry.
  *

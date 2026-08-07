@@ -2,12 +2,12 @@
 //
 // Phase 5, Task 4: pin the generated pack so the lean + conditional policy
 // cannot drift silently. The empty-section policy is the one change in Phase 5
-// with a broad blast radius — it rewrites every markdown file — so a snapshot
+// with a broad blast radius - it rewrites every markdown file - so a snapshot
 // is the only thing that catches an accidental over-deletion.
 //
 // Two variants, because `emitWhen` makes the pack shape input-dependent:
-//   - generic  (PROJECT_TYPE=webapp) — the 3 domain-overfit templates omitted
-//   - domain   (PROJECT_TYPE=other)  — all templates emitted, including the
+//   - generic  (PROJECT_TYPE=webapp) - the 3 domain-overfit templates omitted
+//   - domain   (PROJECT_TYPE=other)  - all templates emitted, including the
 //                                      JSON schema whose format policy differs
 //
 // The snapshot stores a manifest (path + size + sha256 of every emitted file)
@@ -66,7 +66,7 @@ if (process.env.UPDATE_ARCHITECT_SNAPSHOT === "1") {
 test("the generated pack matches the committed golden snapshot", () => {
   assert.ok(
     existsSync(SNAPSHOT_PATH),
-    `missing snapshot — create it with UPDATE_ARCHITECT_SNAPSHOT=1 node --test ${relative(ROOT, import.meta.filename)}`,
+    `missing snapshot - create it with UPDATE_ARCHITECT_SNAPSHOT=1 node --test ${relative(ROOT, import.meta.filename)}`,
   );
   const expected = JSON.parse(readFileSync(SNAPSHOT_PATH, "utf-8"));
 
@@ -79,7 +79,7 @@ test("the generated pack matches the committed golden snapshot", () => {
     assert.deepEqual(
       actual[variant],
       expected[variant],
-      `${variant}: generated content changed — inspect the diff, then re-run with UPDATE_ARCHITECT_SNAPSHOT=1 if intended`,
+      `${variant}: generated content changed - inspect the diff, then re-run with UPDATE_ARCHITECT_SNAPSHOT=1 if intended`,
     );
   }
 });

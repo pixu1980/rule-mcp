@@ -6,11 +6,11 @@
  * every external operation in safe handlers.
  *
  * Provides:
- * - safeJsonParse — never throws
- * - withTimeout — async timeout guard
- * - trySafe — wraps any function to never throw
- * - wrapRequestHandler — http request handler with timeout + error recovery
- * - installProcessErrorHandlers — catches uncaughtException + unhandledRejection
+ * - safeJsonParse - never throws
+ * - withTimeout - async timeout guard
+ * - trySafe - wraps any function to never throw
+ * - wrapRequestHandler - http request handler with timeout + error recovery
+ * - installProcessErrorHandlers - catches uncaughtException + unhandledRejection
  */
 
 /**
@@ -31,8 +31,8 @@ export function safeJsonParse(text) {
  * Execute an async function with a timeout.
  *
  * @param {Promise|Function} promiseOrFn
- * @param {number} ms — Timeout in milliseconds
- * @param {string} [label] — For error messages
+ * @param {number} ms - Timeout in milliseconds
+ * @param {string} [label] - For error messages
  * @returns {Promise<any>}
  */
 export async function withTimeout(promiseOrFn, ms, label = "operation") {
@@ -100,7 +100,7 @@ export function wrapRequestHandler(handler, options = {}) {
         `${request.method} ${request.url}`,
       );
 
-      // Handler didn't send a response — send fallback
+      // Handler didn't send a response - send fallback
       if (!res.writableEnded && !res.headersSent) {
         res.writeHead(500, { "Content-Type": "application/json", Connection: "close" });
         res.end(JSON.stringify({ error: "Handler did not send a response" }));

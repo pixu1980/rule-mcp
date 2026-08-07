@@ -2,13 +2,13 @@
 # Install pix-galaxy-mcp agent commands for all supported coding agents.
 #
 # Installs prompt templates / commands for:
-#   pix-galaxy-mcp    — Route via pix-galaxy-mcp
-#   pix-architect     — Route via pix-architect skill
-#   pix-handoff       — Generate handoff summary
-#   pix-tdd           — Test-driven development workflow
-#   pix-adr           — Architecture Decision Record
-#   pix-fix           — Validate/fix file tree
-#   pix-check         — Check code against guardrails
+#   pix-galaxy-mcp    - Route via pix-galaxy-mcp
+#   pix-architect     - Route via pix-architect skill
+#   pix-handoff       - Generate handoff summary
+#   pix-tdd           - Test-driven development workflow
+#   pix-adr           - Architecture Decision Record
+#   pix-fix           - Validate/fix file tree
+#   pix-check         - Check code against guardrails
 #
 # Supported agents: Pi, Claude Code, Gemini CLI, Windsurf, Cline, Cursor
 

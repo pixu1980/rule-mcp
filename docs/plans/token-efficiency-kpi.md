@@ -51,12 +51,12 @@ shorter sentence structures. It operates on the _output_ side.
 | pix_tool_check result       | ~600 token output    | ~150 token output   | **75 %**                          |
 | pix_tool_component template | ~500 token output    | ~500 token output   | **0 %** (code unchanged)          |
 | pix_tool_process_adr result | ~1 200 token output  | ~300 token output   | **75 %**                          |
-| Aggregate response savings  | —                    | —                   | **~70 %**                         |
+| Aggregate response savings  | -                    | -                   | **~70 %**                         |
 
 ### How to enable
 
 Caveman is loaded by the agent (pi), not by pix-galaxy-mcp. The MCP server has no
-automatic integration — it does not invoke caveman, does not know about it, and does
+automatic integration - it does not invoke caveman, does not know about it, and does
 not need to. The user or the agent runtime activates caveman via `/caveman` or
 "caveman mode" before starting to interact with pix-galaxy-mcp.
 
@@ -173,8 +173,8 @@ tree-sitter AST extraction.
 | pix-architect references tokensave in `.context/`                            | Low (docs + templates)  | Medium | ⭐       |
 | pix-architect interview includes tokensave tools in workflow recommendations | Low (placeholders.json) | Medium | ⭐       |
 | pix-architect `.context/` contains tokensave-specific quality gates          | Low (templates.json)    | Medium | ⭐       |
-| pix-galaxy-mcp detects tokensave presence and adapts routing                 | Medium                  | High   | —        |
-| caveman-aware TLDR mode                                                      | Medium                  | High   | —        |
+| pix-galaxy-mcp detects tokensave presence and adapts routing                 | Medium                  | High   | -        |
+| caveman-aware TLDR mode                                                      | Medium                  | High   | -        |
 
 ---
 
@@ -188,5 +188,5 @@ tree-sitter AST extraction.
 | All three           | Maximum                             | ✅ Live now (stack independently) | Best overall for complex tasks            |
 
 The three tools are **independent and additive**. No integration work is required to
-realise the combined savings — the agent runtime (pi) connects to both MCP servers
+realise the combined savings - the agent runtime (pi) connects to both MCP servers
 and loads both agent skills independently.

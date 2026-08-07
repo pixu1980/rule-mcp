@@ -17,8 +17,8 @@
  *   node scripts/post-process.mjs --help              # Show help
  *
  * Exit codes:
- *   0 — No issues found or all fixed
- *   1 — Issues found (lint mode) or errors during fix
+ *   0 - No issues found or all fixed
+ *   1 - Issues found (lint mode) or errors during fix
  */
 
 import { scanFileTree, autoFixFileTree } from "../src/core/file-tree.js";
@@ -61,8 +61,8 @@ Examples:
   node scripts/post-process.mjs --json | jq .         # JSON output
 
 Exit codes:
-  0 — All clean (or all fixed)
-  1 — Issues remain (or errors during fix)
+  0 - All clean (or all fixed)
+  1 - Issues remain (or errors during fix)
 `);
   process.exit(0);
 }

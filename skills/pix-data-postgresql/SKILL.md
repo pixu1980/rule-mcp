@@ -17,7 +17,7 @@ tags:
 frameworks: [all]
 ---
 
-# pix-data-postgresql — PostgreSQL 16+ Best Practices & Scripts
+# pix-data-postgresql - PostgreSQL 16+ Best Practices & Scripts
 
 ## Table of Contents
 
@@ -90,7 +90,7 @@ CREATE TRIGGER trg_organizations_updated_at
     FOR EACH ROW EXECUTE FUNCTION trg_set_updated_at();
 ```
 
-### ALTER TABLE — PostgreSQL Best Practices
+### ALTER TABLE - PostgreSQL Best Practices
 
 ```sql
 -- Add column with IF NOT EXISTS (use DO block)
@@ -691,8 +691,8 @@ Do not silently use features newer than the skill baseline. PostgreSQL 18-specif
 
 ## See also
 
-- [pix-data-sql](../pix-data-sql/SKILL.md) — General SQL fundamentals
-- [pix-data-mysql](../pix-data-mysql/SKILL.md) — MySQL/MariaDB
-- [pix-data-mongodb](../pix-data-mongodb/SKILL.md) — MongoDB document DB
-- [pix-backend-node](../pix-backend-node/SKILL.md) — Backend Node.js
-- [pix](../pix/SKILL.md) — Central skill index
+- [pix-data-sql](../pix-data-sql/SKILL.md) - General SQL fundamentals
+- [pix-data-mysql](../pix-data-mysql/SKILL.md) - MySQL/MariaDB
+- [pix-data-mongodb](../pix-data-mongodb/SKILL.md) - MongoDB document DB
+- [pix-backend-node](../pix-backend-node/SKILL.md) - Backend Node.js
+- [pix](../pix/SKILL.md) - Central skill index

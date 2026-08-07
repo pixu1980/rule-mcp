@@ -29,7 +29,7 @@ The `pix-frontend-react` skill now references `pix-toolchain-vite` for build con
 
 **Positive:**
 
-- Framework-agnostic Vite skill — usable by React, Vue, Svelte, Astro, and vanilla projects
+- Framework-agnostic Vite skill - usable by React, Vue, Svelte, Astro, and vanilla projects
 - Single source of truth for Vite configuration
 - `pix-toolchain-*` category is extensible (future: webpack, esbuild, tsc)
 - Cleaner separation of concerns

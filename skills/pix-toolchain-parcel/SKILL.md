@@ -12,11 +12,11 @@ tags:
 frameworks: [all]
 ---
 
-# pix-toolchain-parcel — Parcel Bundler
+# pix-toolchain-parcel - Parcel Bundler
 
 ## Overview
 
-Parcel is a zero-configuration web application bundler. It requires no configuration file to start — it just works. Built-in support for TypeScript, JSX, CSS modules, images, and more.
+Parcel is a zero-configuration web application bundler. It requires no configuration file to start - it just works. Built-in support for TypeScript, JSX, CSS modules, images, and more.
 
 ## Quick Start
 
@@ -116,5 +116,5 @@ Output goes to `dist/`. Optimizations applied automatically:
 
 ## See also
 
-- [pix-toolchain-vite](../pix-toolchain-vite/SKILL.md) — Vite build tool
-- [pix](../pix/SKILL.md) — Central skill index
+- [pix-toolchain-vite](../pix-toolchain-vite/SKILL.md) - Vite build tool
+- [pix](../pix/SKILL.md) - Central skill index

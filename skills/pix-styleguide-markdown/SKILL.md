@@ -126,5 +126,5 @@ console.log("Hello, docs");
 
 ## See also
 
-- [pix-styleguide](../pix-styleguide/SKILL.md) — Style guides index
-- [pix](../pix/SKILL.md) — Central skill index
+- [pix-styleguide](../pix-styleguide/SKILL.md) - Style guides index
+- [pix](../pix/SKILL.md) - Central skill index

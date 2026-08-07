@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * docs-scan.mjs — Scans docs/ for stale `pix_` tool references.
+ * docs-scan.mjs - Scans docs/ for stale `pix_` tool references.
  *
  * Run after refactoring/renaming tools to ensure docs are up to date.
  * Usage: node test/docs-scan.mjs
@@ -45,6 +45,6 @@ function scan(dir) {
 
 const total = scan("docs");
 console.log(
-  total === 0 ? "✅ ALL CLEAN — 0 stale references across live docs/" : "❌ " + total + " stale references found",
+  total === 0 ? "✅ ALL CLEAN - 0 stale references across live docs/" : "❌ " + total + " stale references found",
 );
 process.exit(total > 0 ? 1 : 0);

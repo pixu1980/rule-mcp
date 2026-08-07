@@ -1,6 +1,6 @@
 // test/gateway-receipt-paths.test.mjs
 //
-// Audit finding 02 — the gateway receipt proved "these bytes passed the
+// Audit finding 02 - the gateway receipt proved "these bytes passed the
 // guardrails" and nothing about where they would land, so a receipt earned for
 // benign content authorised a write to any path under the project root.
 //
@@ -8,7 +8,7 @@
 // ordered (path, contentHash) tuple list. Two rules carry the weight:
 //
 //   * a path-bound receipt must reject a different path for the same content;
-//   * the two binding kinds must not be interchangeable — a content-only
+//   * the two binding kinds must not be interchangeable - a content-only
 //     receipt must never validate a multi-file write, and a path-bound receipt
 //     must never validate through the legacy content-only route (otherwise the
 //     caller just picks the weaker check).

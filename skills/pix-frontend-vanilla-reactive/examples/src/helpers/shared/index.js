@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════════════════════════════
-//  Shared — re-exports store, tickState for the demo app
+//  Shared - re-exports store, tickState for the demo app
 // ═══════════════════════════════════════════════════════════════════════════════
 
 import { Store, StateSignal } from "../../core/index.js";

@@ -15,7 +15,7 @@ tags:
 frameworks: [all]
 ---
 
-# pix-frontend — Frontend Framework Skills Index
+# pix-frontend - Frontend Framework Skills Index
 
 ## UI Frameworks
 
@@ -58,6 +58,6 @@ Need nested routing (Remix)?            → pix-frontend-meta-remix
 
 ## See also
 
-- [pix-toolchain-vite](../pix-toolchain-vite/SKILL.md) — Vite build tool
-- [pix-styleguide-a11y](../pix-styleguide-a11y/SKILL.md) — Accessibility
-- [pix](../pix/SKILL.md) — Central skill index
+- [pix-toolchain-vite](../pix-toolchain-vite/SKILL.md) - Vite build tool
+- [pix-styleguide-a11y](../pix-styleguide-a11y/SKILL.md) - Accessibility
+- [pix](../pix/SKILL.md) - Central skill index

@@ -188,8 +188,8 @@ A task is complete when:
 
 ## See also
 
-- [pix-frontend-custom-element](../pix-frontend-custom-element/SKILL.md) — renders component templates via the tagged runtime
-- [pix-frontend-vanilla-reactive](../pix-frontend-vanilla-reactive/SKILL.md) — reactive client-side engine (`html`/`render`/signals) for DOM
-- [pix-styleguide-html](../pix-styleguide-html/SKILL.md) — semantic HTML conventions
-- [pix-frontend](../pix-frontend/SKILL.md) — frontend skill index
-- [pix](../pix/SKILL.md) — central skill index
+- [pix-frontend-custom-element](../pix-frontend-custom-element/SKILL.md) - renders component templates via the tagged runtime
+- [pix-frontend-vanilla-reactive](../pix-frontend-vanilla-reactive/SKILL.md) - reactive client-side engine (`html`/`render`/signals) for DOM
+- [pix-styleguide-html](../pix-styleguide-html/SKILL.md) - semantic HTML conventions
+- [pix-frontend](../pix-frontend/SKILL.md) - frontend skill index
+- [pix](../pix/SKILL.md) - central skill index

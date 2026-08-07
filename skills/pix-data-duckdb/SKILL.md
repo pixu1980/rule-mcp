@@ -16,7 +16,7 @@ tags:
 frameworks: [all]
 ---
 
-# pix-data-duckdb — DuckDB 1.x Best Practices & Scripts
+# pix-data-duckdb - DuckDB 1.x Best Practices & Scripts
 
 ## Table of Contents
 
@@ -230,5 +230,5 @@ DETACH analytics;
 
 ## See also
 
-- [pix-data-sql](../pix-data-sql/SKILL.md) — SQL fundamentals
-- [pix-data-postgresql](../pix-data-postgresql/SKILL.md) — PostgreSQL reference
+- [pix-data-sql](../pix-data-sql/SKILL.md) - SQL fundamentals
+- [pix-data-postgresql](../pix-data-postgresql/SKILL.md) - PostgreSQL reference

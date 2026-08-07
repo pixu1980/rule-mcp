@@ -6,10 +6,10 @@ The `.agents/` directory centralizes everything an AI agent needs to work effect
 
 ## Philosophy
 
-1. **Single source of truth** — All agent-facing guidance lives in `.agents/`
-2. **Link, don't duplicate** — Reference existing docs instead of copying
-3. **Minimal surface** — Only what's needed, nothing speculative
-4. **Discovery by convention** — Agents find `.agents/` by following standard structure
+1. **Single source of truth** - All agent-facing guidance lives in `.agents/`
+2. **Link, don't duplicate** - Reference existing docs instead of copying
+3. **Minimal surface** - Only what's needed, nothing speculative
+4. **Discovery by convention** - Agents find `.agents/` by following standard structure
 
 ## Directory Structure
 
@@ -68,21 +68,21 @@ Every project should have an `AGENTS.md` in the root. This is the first file an 
 
 Structure:
 
-1. **Golden rules** — 5-8 universal rules (read before writing, minimal diffs, match repo style, test what you change, etc.)
-2. **Where to look first** — Table mapping needs to file locations
-3. **Workflow** — The Spec → Plan → Implement → Test → Docs → PR flow
-4. **Task routing** — What to read for each task type
-5. **Definition of Done** — Checklist before PR
-6. **Commands** — Project commands (install, dev, build, test, lint)
-7. **Output format** — How to format responses (summary, files changed, how to verify, notes)
+1. **Golden rules** - 5-8 universal rules (read before writing, minimal diffs, match repo style, test what you change, etc.)
+2. **Where to look first** - Table mapping needs to file locations
+3. **Workflow** - The Spec → Plan → Implement → Test → Docs → PR flow
+4. **Task routing** - What to read for each task type
+5. **Definition of Done** - Checklist before PR
+6. **Commands** - Project commands (install, dev, build, test, lint)
+7. **Output format** - How to format responses (summary, files changed, how to verify, notes)
 
 ## Symlinks for Tool Configs
 
 Tool-specific configs live in their canonical locations:
 
-- `.github/` — GitHub Copilot
-- `.cursor/` — Cursor editor
-- `.claude/` — Claude Code
+- `.github/` - GitHub Copilot
+- `.cursor/` - Cursor editor
+- `.claude/` - Claude Code
 
 Symlinks in `.agents/` make them discoverable from the centralized location:
 
@@ -98,10 +98,10 @@ This avoids duplication while keeping discovery simple.
 
 Good prompt templates are:
 
-1. **Specific** — Name the phase, inputs, outputs, and format
-2. **Minimal** — Short enough to read, complete enough to act
-3. **Actionable** — End with a clear ask (code, plan, review)
-4. **Link-based** — Reference other docs rather than duplicating
+1. **Specific** - Name the phase, inputs, outputs, and format
+2. **Minimal** - Short enough to read, complete enough to act
+3. **Actionable** - End with a clear ask (code, plan, review)
+4. **Link-based** - Reference other docs rather than duplicating
 
 Example structure:
 

@@ -3,7 +3,7 @@
  * agent instruction files (CLAUDE.md, GEMINI.md, AGENTS.md, .cursorrules).
  *
  * The old install.sh prefixed RULES_CONTENT with a "\n", and uninstall.sh's
- * sed range-delete left that blank line behind — so every cycle grew the file
+ * sed range-delete left that blank line behind - so every cycle grew the file
  * by one empty line. The fix:
  *   - install: append_rules_block() normalizes trailing newlines and inserts
  *     exactly one separator line;

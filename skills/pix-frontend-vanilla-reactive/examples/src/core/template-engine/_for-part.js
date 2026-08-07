@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════════════════════════════
-//  PART 3c — ForPart (<for each="item in items" [render=${Fn}]>)
+//  PART 3c - ForPart (<for each="item in items" [render=${Fn}]>)
 // ═══════════════════════════════════════════════════════════════════════════════
 
 import { evaluateExpression, parseExpression } from "./_expression-parser.js";
@@ -72,7 +72,7 @@ export class ForPart {
     this.blocks = nextBlocks;
   }
   renderTemplateString(template, itemCtx) {
-    // 1. Process <if condition="..."> — remove blocks, keep content
+    // 1. Process <if condition="..."> - remove blocks, keep content
     let processed = template.replace(/<if\s+condition="([^"]*)">([\s\S]*?)<\/if>/gi, (_, condition, content) => {
       const val = evaluateExpression(parseExpression(condition), itemCtx);
       return Boolean(val) ? content : "";

@@ -6,7 +6,7 @@ SDD ensures that every project has a complete, consistent set of specifications 
 
 ## The 7 Specs
 
-### Spec 00 — SDD Foundation
+### Spec 00 - SDD Foundation
 
 **Goal**: Define the development approach and project guardrails.
 
@@ -25,7 +25,7 @@ When writing, be explicit about:
 - The technical constraints (why vanilla JS, why no Shadow DOM, etc.)
 - How delivery works (iterations, PR flow)
 
-### Spec 01 — Product Vision
+### Spec 01 - Product Vision
 
 **Goal**: Paint a clear picture of what the product is and who it serves.
 
@@ -43,7 +43,7 @@ When writing:
 - User stories follow "As [persona], I want [goal]"
 - Non-goals prevent scope creep
 
-### Spec 02 — Domain Glossary
+### Spec 02 - Domain Glossary
 
 **Goal**: Establish a shared vocabulary.
 
@@ -59,7 +59,7 @@ When writing:
 - Be precise about what each term means in THIS domain
 - Include examples when the term is abstract
 
-### Spec 03 — Business Logic
+### Spec 03 - Business Logic
 
 **Goal**: Document all domain calculations, rules, and algorithms.
 
@@ -74,9 +74,9 @@ When writing:
 
 - Rules should be testable (pass/fail criteria)
 - Edge cases should be explicit
-- Don't assume knowledge — write for someone new to the domain
+- Don't assume knowledge - write for someone new to the domain
 
-### Spec 04 — Configuration
+### Spec 04 - Configuration
 
 **Goal**: Document what users can configure and how.
 
@@ -92,7 +92,7 @@ When writing:
 - Document default values
 - Explain which configs affect which features
 
-### Spec 05 — Architecture & Data
+### Spec 05 - Architecture & Data
 
 **Goal**: Define how the system is structured and how data flows.
 
@@ -110,7 +110,7 @@ When writing:
 - Workflow contracts describe what happens, not how
 - Error handling should cover recovery paths
 
-### Spec 06 — Quality & Acceptance
+### Spec 06 - Quality & Acceptance
 
 **Goal**: Define what "done" means.
 

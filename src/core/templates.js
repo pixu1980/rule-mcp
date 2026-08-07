@@ -1,7 +1,7 @@
 /**
  * @module core/templates
  *
- * Design system component templates — public API.
+ * Design system component templates - public API.
  * Template data (COMPONENT_TEMPLATES + helpers) lives in template-data.js.
  *
  * Provides: generateMultiFile, getTemplate, registerTemplateTool.
@@ -30,7 +30,7 @@ const FRAMEWORK_SKILL = {
  * component generation, not only when the agent later calls pix_check.
  *
  * @param {string} framework
- * @param {string} code — the emitted code (concatenated for multi-file)
+ * @param {string} code - the emitted code (concatenated for multi-file)
  * @returns {string} markdown summary line(s)
  */
 function guardrailSummary(framework, code) {
@@ -41,7 +41,7 @@ function guardrailSummary(framework, code) {
   }
   const lines = [`## Guardrails\n\n⚠️ ${report.failCount}/${report.total} FAIL (${skillName}). Fix before shipping:`];
   for (const f of report.failed) {
-    lines.push(`- **${f.id}**: ${f.label} — ${f.suggestion}`);
+    lines.push(`- **${f.id}**: ${f.label} - ${f.suggestion}`);
   }
   return lines.join("\n");
 }

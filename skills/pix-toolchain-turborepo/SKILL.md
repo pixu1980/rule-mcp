@@ -14,7 +14,7 @@ tags:
 frameworks: [all]
 ---
 
-# pix-toolchain-turborepo — Turborepo Monorepo Orchestration
+# pix-toolchain-turborepo - Turborepo Monorepo Orchestration
 
 ## Overview
 
@@ -68,10 +68,10 @@ It caches task outputs, parallelizes execution, and only rebuilds changed packag
 
 ## Task Pipeline Semantics
 
-- `^build` — wait for all dependency builds before building this package
-- `outputs` — cached artifacts (restored on cache hit)
-- `inputs` — file globs that invalidate the cache
-- `persistent: true` — long-running dev servers (no caching)
+- `^build` - wait for all dependency builds before building this package
+- `outputs` - cached artifacts (restored on cache hit)
+- `inputs` - file globs that invalidate the cache
+- `persistent: true` - long-running dev servers (no caching)
 
 ## Remote Caching
 
@@ -93,13 +93,13 @@ pnpm turbo run dev --parallel            # Parallel dev servers
 
 ```bash
 pnpm add -D turbo
-# Remove lerna.json / nx.json — turbo.json replaces both
+# Remove lerna.json / nx.json - turbo.json replaces both
 # Add turbo.json with your pipeline
 pnpm turbo run build
 ```
 
 ## See also
 
-- [pix-toolchain-pnpm](../pix-toolchain-pnpm/SKILL.md) — pnpm workspace setup
-- [pix-devops-testing](../pix-devops-testing/SKILL.md) — Testing in CI
-- [pix](../pix/SKILL.md) — Central skill index
+- [pix-toolchain-pnpm](../pix-toolchain-pnpm/SKILL.md) - pnpm workspace setup
+- [pix-devops-testing](../pix-devops-testing/SKILL.md) - Testing in CI
+- [pix](../pix/SKILL.md) - Central skill index

@@ -17,4 +17,4 @@ Use `pix-toolchain-parcel` for this task.
 
 ## Consequences
 
-None — informational entry.
+None - informational entry.

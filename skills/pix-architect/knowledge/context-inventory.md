@@ -43,77 +43,77 @@ This inventory is generated from `../templates.json`, `../wizard-spec.json`, the
 
 ### MCP tools
 
-- `pix` — Route a prompt to the correct pix skill. Returns structured routing with relevant sections.
-- `pix_platform_agent` — pix-platform-agent skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
-- `pix_architect` — pix-architect skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content), scaffold (project structure), interview (context wizard).
-- `pix_backend` — pix-backend skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
-- `pix_backend_api_design` — pix-backend-api-design skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
-- `pix_backend_express` — pix-backend-express skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
-- `pix_backend_fastify` — pix-backend-fastify skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
-- `pix_backend_hono` — pix-backend-hono skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
-- `pix_backend_nestjs` — pix-backend-nestjs skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
-- `pix_backend_node` — pix-backend-node skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
-- `pix_backend_security` — pix-backend-security skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
-- `pix_data` — pix-data skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
-- `pix_data_mongodb` — pix-data-mongodb skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
-- `pix_data_mysql` — pix-data-mysql skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
-- `pix_data_postgresql` — pix-data-postgresql skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
-- `pix_data_sql` — pix-data-sql skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
-- `pix_devops` — pix-devops skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
-- `pix_devops_docker` — pix-devops-docker skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
-- `pix_devops_gitlab_ci` — pix-devops-gitlab-ci skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
-- `pix_devops_testing` — pix-devops-testing skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
-- `pix_devops_version` — pix-devops-version skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
-- `pix_frontend` — pix-frontend skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
-- `pix_frontend_angular` — pix-frontend-angular skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
-- `pix_frontend_astro` — pix-frontend-astro skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
-- `pix_frontend_meta_next` — pix-frontend-meta-next skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
-- `pix_frontend_meta_nuxt` — pix-frontend-meta-nuxt skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
-- `pix_frontend_meta_remix` — pix-frontend-meta-remix skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
-- `pix_frontend_react` — pix-frontend-react skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
-- `pix_frontend_solidjs` — pix-frontend-solidjs skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
-- `pix_frontend_svelte` — pix-frontend-svelte skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
-- `pix_frontend_vanilla_reactive` — pix-frontend-vanilla-reactive skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
-- `pix_frontend_vue` — pix-frontend-vue skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
-- `pix_platform` — pix-platform skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
-- `pix_platform_desktop` — pix-platform-desktop skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
-- `pix_platform_expo` — pix-platform-expo skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
-- `pix_platform_library` — pix-platform-library skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
-- `pix_platform_web` — pix-platform-web skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
-- `pix_process` — pix-process skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
-- `pix_process_bmad` — pix-process-bmad skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
-- `pix_process_documentation` — pix-process-documentation skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
-- `pix_process_feature_workflow` — pix-process-feature-workflow skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
-- `pix_styleguide` — pix-styleguide skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content), scaffold (project structure).
-- `pix_styleguide_a11y` — pix-styleguide-a11y skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
-- `pix_styleguide_css` — pix-styleguide-css skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
-- `pix_styleguide_html` — pix-styleguide-html skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
-- `pix_styleguide_javascript` — pix-styleguide-javascript skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
-- `pix_styleguide_json` — pix-styleguide-json skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
-- `pix_styleguide_markdown` — pix-styleguide-markdown skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
-- `pix_styleguide_naming` — pix-styleguide-naming skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
-- `pix_styleguide_patterns` — pix-styleguide-patterns skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
-- `pix_styleguide_validation` — pix-styleguide-validation skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
-- `pix_toolchain` — pix-toolchain skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
-- `pix_toolchain_biome` — pix-toolchain-biome skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
-- `pix_toolchain_eslint` — pix-toolchain-eslint skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
-- `pix_toolchain_husky` — pix-toolchain-husky skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
-- `pix_toolchain_parcel` — pix-toolchain-parcel skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
-- `pix_toolchain_pnpm` — pix-toolchain-pnpm skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
-- `pix_toolchain_project` — pix-toolchain-project skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
-- `pix_toolchain_turborepo` — pix-toolchain-turborepo skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
-- `pix_toolchain_typescript` — pix-toolchain-typescript skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
-- `pix_toolchain_vite` — pix-toolchain-vite skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
-- `pix_ui` — pix-ui skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
-- `pix_ui_design_system` — pix-ui-design-system skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
-- `pix_search` — Semantic search across ALL pix skills using BM25 ranking. Returns scored, relevant sections.
-- `pix_check` — Run guardrail checks on code against any pix skill. Smart iteration: pass previousPassed to skip already-passed checks. Iterate: check → fix → re-check until all pass.
-- `pix_scaffold` — Generate project scaffolding files. Returns one or all config file templates.
-- `pix_detect` — Detect project framework, TypeScript usage, and build tool from package.json.
-- `pix_process_adr` — Save an Architecture Decision Record (ADR) to docs/adr/. Auto-numbers, maintains index, uses Nygard template.
-- `pix_fix` — Validate and auto-fix project file tree structure against pix conventions (barrel files, _PascalCase naming, etc.).
-- `pix_process_handoff` — Generate a compressed LLM handoff summary from ADR logs and project context. Paste the output into a new chat to resume work seamlessly.
-- `pix_component` — Generate component or test templates following pix principles.
+- `pix` - Route a prompt to the correct pix skill. Returns structured routing with relevant sections.
+- `pix_platform_agent` - pix-platform-agent skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+- `pix_architect` - pix-architect skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content), scaffold (project structure), interview (context wizard).
+- `pix_backend` - pix-backend skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+- `pix_backend_api_design` - pix-backend-api-design skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+- `pix_backend_express` - pix-backend-express skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+- `pix_backend_fastify` - pix-backend-fastify skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+- `pix_backend_hono` - pix-backend-hono skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+- `pix_backend_nestjs` - pix-backend-nestjs skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+- `pix_backend_node` - pix-backend-node skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+- `pix_backend_security` - pix-backend-security skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+- `pix_data` - pix-data skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+- `pix_data_mongodb` - pix-data-mongodb skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+- `pix_data_mysql` - pix-data-mysql skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+- `pix_data_postgresql` - pix-data-postgresql skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+- `pix_data_sql` - pix-data-sql skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+- `pix_devops` - pix-devops skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+- `pix_devops_docker` - pix-devops-docker skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+- `pix_devops_gitlab_ci` - pix-devops-gitlab-ci skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+- `pix_devops_testing` - pix-devops-testing skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+- `pix_devops_version` - pix-devops-version skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+- `pix_frontend` - pix-frontend skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+- `pix_frontend_angular` - pix-frontend-angular skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+- `pix_frontend_astro` - pix-frontend-astro skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+- `pix_frontend_meta_next` - pix-frontend-meta-next skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+- `pix_frontend_meta_nuxt` - pix-frontend-meta-nuxt skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+- `pix_frontend_meta_remix` - pix-frontend-meta-remix skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+- `pix_frontend_react` - pix-frontend-react skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+- `pix_frontend_solidjs` - pix-frontend-solidjs skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+- `pix_frontend_svelte` - pix-frontend-svelte skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+- `pix_frontend_vanilla_reactive` - pix-frontend-vanilla-reactive skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+- `pix_frontend_vue` - pix-frontend-vue skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+- `pix_platform` - pix-platform skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+- `pix_platform_desktop` - pix-platform-desktop skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+- `pix_platform_expo` - pix-platform-expo skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+- `pix_platform_library` - pix-platform-library skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+- `pix_platform_web` - pix-platform-web skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+- `pix_process` - pix-process skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+- `pix_process_bmad` - pix-process-bmad skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+- `pix_process_documentation` - pix-process-documentation skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+- `pix_process_feature_workflow` - pix-process-feature-workflow skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+- `pix_styleguide` - pix-styleguide skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content), scaffold (project structure).
+- `pix_styleguide_a11y` - pix-styleguide-a11y skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+- `pix_styleguide_css` - pix-styleguide-css skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+- `pix_styleguide_html` - pix-styleguide-html skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+- `pix_styleguide_javascript` - pix-styleguide-javascript skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+- `pix_styleguide_json` - pix-styleguide-json skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+- `pix_styleguide_markdown` - pix-styleguide-markdown skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+- `pix_styleguide_naming` - pix-styleguide-naming skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+- `pix_styleguide_patterns` - pix-styleguide-patterns skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+- `pix_styleguide_validation` - pix-styleguide-validation skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+- `pix_toolchain` - pix-toolchain skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+- `pix_toolchain_biome` - pix-toolchain-biome skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+- `pix_toolchain_eslint` - pix-toolchain-eslint skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+- `pix_toolchain_husky` - pix-toolchain-husky skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+- `pix_toolchain_parcel` - pix-toolchain-parcel skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+- `pix_toolchain_pnpm` - pix-toolchain-pnpm skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+- `pix_toolchain_project` - pix-toolchain-project skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+- `pix_toolchain_turborepo` - pix-toolchain-turborepo skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+- `pix_toolchain_typescript` - pix-toolchain-typescript skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+- `pix_toolchain_vite` - pix-toolchain-vite skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+- `pix_ui` - pix-ui skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+- `pix_ui_design_system` - pix-ui-design-system skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+- `pix_search` - Semantic search across ALL pix skills using BM25 ranking. Returns scored, relevant sections.
+- `pix_check` - Run guardrail checks on code against any pix skill. Smart iteration: pass previousPassed to skip already-passed checks. Iterate: check → fix → re-check until all pass.
+- `pix_scaffold` - Generate project scaffolding files. Returns one or all config file templates.
+- `pix_detect` - Detect project framework, TypeScript usage, and build tool from package.json.
+- `pix_process_adr` - Save an Architecture Decision Record (ADR) to docs/adr/. Auto-numbers, maintains index, uses Nygard template.
+- `pix_fix` - Validate and auto-fix project file tree structure against pix conventions (barrel files, _PascalCase naming, etc.).
+- `pix_process_handoff` - Generate a compressed LLM handoff summary from ADR logs and project context. Paste the output into a new chat to resume work seamlessly.
+- `pix_component` - Generate component or test templates following pix principles.
 
 ### pix skills
 

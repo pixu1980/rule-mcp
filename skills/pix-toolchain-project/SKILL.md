@@ -13,7 +13,7 @@ tags:
 frameworks: [all]
 ---
 
-# pix-toolchain-project — Base Project Configuration
+# pix-toolchain-project - Base Project Configuration
 
 ## .gitignore
 
@@ -109,9 +109,9 @@ VITE_API_BASE_URL=http://localhost:3000/api
 
 ## Repository health files
 
-- `README.md` — project name, description, quick start, prerequisites, scripts
-- `LICENSE` — MIT by default for open-source
-- `CONTRIBUTING.md` — branch policy, commit convention, PR process
+- `README.md` - project name, description, quick start, prerequisites, scripts
+- `LICENSE` - MIT by default for open-source
+- `CONTRIBUTING.md` - branch policy, commit convention, PR process
 
 ## Framework Configuration Files
 
@@ -127,7 +127,7 @@ VITE_API_BASE_URL=http://localhost:3000/api
 }
 ```
 
-### .eslintrc.json (Legacy — prefer Biome for new projects)
+### .eslintrc.json (Legacy - prefer Biome for new projects)
 
 ```json
 {
@@ -210,7 +210,7 @@ lts/*
 
 ## See also
 
-- [pix](../pix/SKILL.md) — Central skill index and dispatcher
-- [pix-toolchain](../pix-toolchain/SKILL.md) — Toolchain skill index
-- [pix-devops-docker](../pix-devops-docker/SKILL.md) — Docker configuration
-- [pix-devops-testing](../pix-devops-testing/SKILL.md) — Testing setup
+- [pix](../pix/SKILL.md) - Central skill index and dispatcher
+- [pix-toolchain](../pix-toolchain/SKILL.md) - Toolchain skill index
+- [pix-devops-docker](../pix-devops-docker/SKILL.md) - Docker configuration
+- [pix-devops-testing](../pix-devops-testing/SKILL.md) - Testing setup

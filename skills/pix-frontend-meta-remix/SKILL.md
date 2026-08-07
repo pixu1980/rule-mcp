@@ -9,7 +9,7 @@ tags:
 frameworks: [remix, react]
 ---
 
-# pix-frontend-meta-remix — Remix / React Router Apps with pix Principles
+# pix-frontend-meta-remix - Remix / React Router Apps with pix Principles
 
 Remix (now React Router v7) is a React meta-framework with nested routing, loaders, actions, and progressive enhancement. Use alongside [pix-frontend-react](../pix-frontend-react/SKILL.md) for the UI layer.
 
@@ -124,7 +124,7 @@ function SubmitButton() {
 ### Nested Routes with Layouts
 
 ```jsx
-// app/routes/_layout.jsx — wraps all child routes
+// app/routes/_layout.jsx - wraps all child routes
 export default function DashboardLayout() {
   return (
     <section data-part="dashboard">
@@ -200,12 +200,12 @@ export async function loader({ request }) {
 
 ```
 ┌────────────────────────────────────────────────────────────┐
-│  pix-frontend-meta-remix — Remix / React Router (React Meta-framework)  │
+│  pix-frontend-meta-remix - Remix / React Router (React Meta-framework)  │
 │                                                           │
 │  Routing:   app/routes/, nested with _layout.jsx          │
 │  Data:      loader() → useLoaderData()                    │
 │  Mutations: action() → useActionData()                    │
-│  Forms:     <Form method="post"> — works without JS       │
+│  Forms:     <Form method="post"> - works without JS       │
 │  Sessions:  createCookieSessionStorage + cookie           │
 │  Deploy:    Node, Cloudflare Workers, Vercel, Netlify    │
 └────────────────────────────────────────────────────────────┘
@@ -215,6 +215,6 @@ export async function loader({ request }) {
 
 ## See also
 
-- [pix](../pix/SKILL.md) — Central skill index and dispatcher
-- [pix-frontend](../pix-frontend/SKILL.md) — Frontend skill index
-- [pix-styleguide](../pix-styleguide/SKILL.md) — Shared frontend standards
+- [pix](../pix/SKILL.md) - Central skill index and dispatcher
+- [pix-frontend](../pix-frontend/SKILL.md) - Frontend skill index
+- [pix-styleguide](../pix-styleguide/SKILL.md) - Shared frontend standards

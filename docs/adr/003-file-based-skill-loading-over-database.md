@@ -1,4 +1,4 @@
-# 003 — File-Based Skill Loading over Database
+# 003 - File-Based Skill Loading over Database
 
 **Status**: Accepted  
 **Date**: 2026-06-20  

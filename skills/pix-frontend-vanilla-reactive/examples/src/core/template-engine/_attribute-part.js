@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════════════════════════════
-//  PART 3c — AttributePart (includes model directive support)
+//  PART 3c - AttributePart (includes model directive support)
 // ═══════════════════════════════════════════════════════════════════════════════
 
 import { Part } from "./_part.js";

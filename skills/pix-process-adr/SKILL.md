@@ -10,12 +10,12 @@ tags:
 frameworks: [all]
 ---
 
-# pix-process-adr — Architecture Decision Records
+# pix-process-adr - Architecture Decision Records
 
 ## Purpose
 
 Capture every architectural decision with context, rationale, and consequences.
-ADRs live in `docs/adr/` and are **immutable once accepted** — superseded decisions
+ADRs live in `docs/adr/` and are **immutable once accepted** - superseded decisions
 get a new ADR that references the old one.
 
 ## Format
@@ -46,8 +46,8 @@ What was decided and why.
 
 ## Alternatives Considered
 
-1. **Alternative A** — Why not chosen
-2. **Alternative B** — Why not chosen
+1. **Alternative A** - Why not chosen
+2. **Alternative B** - Why not chosen
 ```
 
 ## Tools
@@ -90,5 +90,5 @@ proposed → accepted → deprecated
 
 ## See also
 
-- [pix](../pix/SKILL.md) — Central skill index and dispatcher
-- [pix-process](../pix-process/SKILL.md) — Process skill index
+- [pix](../pix/SKILL.md) - Central skill index and dispatcher
+- [pix-process](../pix-process/SKILL.md) - Process skill index

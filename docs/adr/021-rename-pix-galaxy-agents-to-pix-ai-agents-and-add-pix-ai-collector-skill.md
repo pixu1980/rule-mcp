@@ -11,7 +11,7 @@ The skill `pix-galaxy-agents` was the only AI-domain skill and its name leaked t
 
 ## Decision
 
-Rename `pix-galaxy-agents` to `pix-ai-agents` (tool becomes `pix_tool_ai_agents`) and add a new `pix-ai` collector skill that indexes AI/agent skills — `pix-ai-agents` (@pix/pix-galaxy-core based) and `pix-platform-agent` (framework-agnostic) — mirroring the `pix-frontend` / `pix-frontend-*` pattern. Router gains AI domain classification and treats `pix-ai` as a collector in framework bias; detector maps `@pix/pix-galaxy-core` to the `agents` framework → `pix-ai-agents`.
+Rename `pix-galaxy-agents` to `pix-ai-agents` (tool becomes `pix_tool_ai_agents`) and add a new `pix-ai` collector skill that indexes AI/agent skills - `pix-ai-agents` (@pix/pix-galaxy-core based) and `pix-platform-agent` (framework-agnostic) - mirroring the `pix-frontend` / `pix-frontend-*` pattern. Router gains AI domain classification and treats `pix-ai` as a collector in framework bias; detector maps `@pix/pix-galaxy-core` to the `agents` framework → `pix-ai-agents`.
 
 ## Consequences
 

@@ -1,4 +1,4 @@
-# 010 — Fail-closed MCP enforcement and reusable agent commands
+# 010 - Fail-closed MCP enforcement and reusable agent commands
 
 - **Date**: 2026-07-11
 - **Status**: accepted

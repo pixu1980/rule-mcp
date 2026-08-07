@@ -22,7 +22,7 @@ All work remains vanilla JS, zero runtime dependencies, Custom Elements v1 witho
 
 ## Roadmap by milestone
 
-## Milestone 0 — Product baseline
+## Milestone 0 - Product baseline
 
 - [ ] Milestone complete
 
@@ -32,7 +32,7 @@ All work remains vanilla JS, zero runtime dependencies, Custom Elements v1 witho
 | [ ]    | M0.2 | Map **[USER_PERSONA]** needs to **[KEY_VALUE_PROP_1]**, **[KEY_VALUE_PROP_2]**, **[KEY_VALUE_PROP_3]** | M0.1       | clear value narrative |
 | [ ]    | M0.3 | Freeze MVP scope and non-goals                                                                         | M0.1       | accepted v1 scope     |
 
-## Milestone 1 — Domain foundation
+## Milestone 1 - Domain foundation
 
 - [ ] Milestone complete
 
@@ -42,7 +42,7 @@ All work remains vanilla JS, zero runtime dependencies, Custom Elements v1 witho
 | [ ]    | M1.2 | Encode glossary terms **[DOMAIN_TERM_1]** to **[DOMAIN_TERM_5]** in docs/code | M1.1       | shared vocabulary                 |
 | [ ]    | M1.3 | Formalize **[DOMAIN_ENTITY_MANAGER]** rules and lifecycle                     | M1.1       | validated reference-data contract |
 
-## Milestone 2 — Primary flows
+## Milestone 2 - Primary flows
 
 - [ ] Milestone complete
 
@@ -53,7 +53,7 @@ All work remains vanilla JS, zero runtime dependencies, Custom Elements v1 witho
 | [ ]    | M2.3 | Deliver **[FLOW_3]** and **[FLOW_4]**                 | M2.2       | core workflow coverage      |
 | [ ]    | M2.4 | Align UI states and recovery paths with user stories  | M2.3       | predictable user experience |
 
-## Milestone 3 — Core logic
+## Milestone 3 - Core logic
 
 - [ ] Milestone complete
 
@@ -64,7 +64,7 @@ All work remains vanilla JS, zero runtime dependencies, Custom Elements v1 witho
 | [ ]    | M3.3 | Implement **[CORE_FUNCTION_5]** and **[CORE_FUNCTION_6]**                      | M3.2       | complete capability surface  |
 | [ ]    | M3.4 | Encode **[UNIT_CONVENTION_1]** and **[UNIT_CONVENTION_2]** across the codebase | M3.1       | consistent calculations/data |
 
-## Milestone 4 — Persistence and reference data
+## Milestone 4 - Persistence and reference data
 
 - [ ] Milestone complete
 
@@ -74,7 +74,7 @@ All work remains vanilla JS, zero runtime dependencies, Custom Elements v1 witho
 | [ ]    | M4.2 | Support creation and validation of **[DOMAIN_ENTITY_MANAGER]** | M1.3       | reusable rules/preset handling |
 | [ ]    | M4.3 | Add import, export, and recovery paths where applicable        | M4.1       | safe data portability          |
 
-## Milestone 5 — Quality and hardening
+## Milestone 5 - Quality and hardening
 
 - [ ] Milestone complete
 

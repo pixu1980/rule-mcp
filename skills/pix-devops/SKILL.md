@@ -14,7 +14,7 @@ tags:
 frameworks: [all]
 ---
 
-# pix-devops — DevOps & Engineering Skills Index
+# pix-devops - DevOps & Engineering Skills Index
 
 ## Available Skills
 
@@ -38,6 +38,6 @@ Need version management?                → pix-devops-version
 
 ## See also
 
-- [pix-toolchain-biome](../pix-toolchain-biome/SKILL.md) — Linting & formatting
-- [pix-toolchain-husky](../pix-toolchain-husky/SKILL.md) — Git hooks
-- [pix](../pix/SKILL.md) — Central skill index
+- [pix-toolchain-biome](../pix-toolchain-biome/SKILL.md) - Linting & formatting
+- [pix-toolchain-husky](../pix-toolchain-husky/SKILL.md) - Git hooks
+- [pix](../pix/SKILL.md) - Central skill index

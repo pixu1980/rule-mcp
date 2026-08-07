@@ -6,7 +6,7 @@
  * `/pix-handoff` accepts a single free-form `options` string of
  * space-separated tokens. This module translates that vocabulary into the
  * concrete arguments of the `pix_tool_process_handoff` tool, so the prompt
- * handler can tell the model exactly which values to pass — no ambiguity.
+ * handler can tell the model exactly which values to pass - no ambiguity.
  *
  * Vocabulary:
  *   handoff | close-session   → mode
@@ -63,7 +63,7 @@ Examples:
   /pix-handoff close-session no-diff no-log     # close without diff/log
   /pix-handoff compress max=2000                # compressed, token-capped`;
 
-/** Default parsed values — identical to the tool's own defaults. */
+/** Default parsed values - identical to the tool's own defaults. */
 const DEFAULTS = Object.freeze({
   mode: "handoff",
   compress: false,
@@ -81,7 +81,7 @@ const DEFAULTS = Object.freeze({
  * Translate a `/pix-handoff` options string into concrete tool arguments.
  * Unknown tokens are ignored (the tool's zod schema validates the rest).
  *
- * @param {string} [raw] — space-separated token list (may be undefined/empty)
+ * @param {string} [raw] - space-separated token list (may be undefined/empty)
  * @returns {{ mode: string, compress: boolean, format: string,
  *             includeGitDiff: boolean, includeGitLog: boolean,
  *             includeContext: boolean, includeAdrs: boolean,

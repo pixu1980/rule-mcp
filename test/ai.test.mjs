@@ -34,12 +34,12 @@ const r1 = await callTool("pix_tool", { prompt: "I need a React button component
 const text = r1.content?.[0]?.text ?? "";
 check("T1 returns content", text.length > 0);
 
-// Try to parse as JSON — new format should be JSON
+// Try to parse as JSON - new format should be JSON
 let isParsed = false;
 try {
   isParsed = JSON.parse(text);
 } catch {
-  // Old plain text format — will need update
+  // Old plain text format - will need update
 }
 
 if (isParsed) {
@@ -62,7 +62,7 @@ let isParsed2 = false;
 try {
   isParsed2 = JSON.parse(text2);
 } catch {
-  /* invalid JSON — treated as false */
+  /* invalid JSON - treated as false */
 }
 
 if (isParsed2) {
@@ -78,7 +78,7 @@ let isParsed3 = false;
 try {
   isParsed3 = JSON.parse(text3);
 } catch {
-  /* invalid JSON — treated as false */
+  /* invalid JSON - treated as false */
 }
 if (isParsed3) {
   const allRoutes = [isParsed3.route, ...(isParsed3.alternatives || []).map((a) => a.route)];
@@ -95,7 +95,7 @@ let isParsed4 = false;
 try {
   isParsed4 = JSON.parse(r4.content?.[0]?.text ?? "");
 } catch {
-  /* invalid JSON — treated as false */
+  /* invalid JSON - treated as false */
 }
 check("T4.1 low-confidence prompt routes to 'unknown'", isParsed4 && isParsed4.route === "unknown");
 

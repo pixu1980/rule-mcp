@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════════════════════════════
-//  PART 3c — IfPart (<if condition="expr">)
+//  PART 3c - IfPart (<if condition="expr">)
 // ═══════════════════════════════════════════════════════════════════════════════
 
 import { evaluateExpression, parseExpression } from "./_expression-parser.js";

@@ -56,9 +56,9 @@
 ## Bad Examples
 
 ```javascript
-// ❌ No close button — user trapped
-// ❌ Focus stays on trigger — screen reader interacts with background
-// ❌ No focus trap — Tab moves outside modal
+// ❌ No close button - user trapped
+// ❌ Focus stays on trigger - screen reader interacts with background
+// ❌ No focus trap - Tab moves outside modal
 ```
 
 ## Keyboard interactions

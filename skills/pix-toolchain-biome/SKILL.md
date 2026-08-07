@@ -12,12 +12,12 @@ tags:
 frameworks: [all]
 ---
 
-# pix-toolchain-biome — Biome Linter & Formatter
+# pix-toolchain-biome - Biome Linter & Formatter
 
 ## Overview
 
 Biome is a unified linter and formatter for JavaScript, TypeScript, and JSON/JSX.
-It replaces ESLint + Prettier with a single, fast binary — written in Rust.
+It replaces ESLint + Prettier with a single, fast binary - written in Rust.
 
 ## Configuration (biome.json)
 
@@ -94,5 +94,5 @@ lint:
 
 ## See also
 
-- [pix-toolchain-vite](../pix-toolchain-vite/SKILL.md) — Vite build tool
-- [pix](../pix/SKILL.md) — Central skill index
+- [pix-toolchain-vite](../pix-toolchain-vite/SKILL.md) - Vite build tool
+- [pix](../pix/SKILL.md) - Central skill index

@@ -16,7 +16,7 @@ tags:
 frameworks: [all]
 ---
 
-# pix-data-mongodb — MongoDB 7+ Best Practices & Scripts
+# pix-data-mongodb - MongoDB 7+ Best Practices & Scripts
 
 ## Table of Contents
 
@@ -300,10 +300,10 @@ db.orders
   .explain("executionStats");
 /*
 Look for:
-- winningPlan.stage: "IXSCAN" (index scan) — good
-- winningPlan.stage: "COLLSCAN" (collection scan) — bad, need index
+- winningPlan.stage: "IXSCAN" (index scan) - good
+- winningPlan.stage: "COLLSCAN" (collection scan) - bad, need index
 - totalDocsExamined should equal nReturned
-- executionTimeMillis — should be < 100ms for OLTP
+- executionTimeMillis - should be < 100ms for OLTP
 */
 
 // List all indexes with sizes
@@ -428,9 +428,9 @@ rs.printReplicationInfo();
 db.orders.insertOne(
   { user_id: ObjectId("..."), total: 100 },
   { writeConcern: { w: "majority", j: true, wtimeout: 5000 } },
-  // w: "majority" — acknowledged by majority of replicas
-  // j: true — written to journal
-  // wtimeout: 5000ms — fail after 5 seconds
+  // w: "majority" - acknowledged by majority of replicas
+  // j: true - written to journal
+  // wtimeout: 5000ms - fail after 5 seconds
 );
 
 // Read preference
@@ -737,7 +737,7 @@ db.createUser({
 
 ## See also
 
-- [pix-data-sql](../pix-data-sql/SKILL.md) — SQL fundamentals (for comparison)
-- [pix-data-postgresql](../pix-data-postgresql/SKILL.md) — PostgreSQL
-- [pix-data-mysql](../pix-data-mysql/SKILL.md) — MySQL/MariaDB
-- [pix](../pix/SKILL.md) — Central skill index
+- [pix-data-sql](../pix-data-sql/SKILL.md) - SQL fundamentals (for comparison)
+- [pix-data-postgresql](../pix-data-postgresql/SKILL.md) - PostgreSQL
+- [pix-data-mysql](../pix-data-mysql/SKILL.md) - MySQL/MariaDB
+- [pix](../pix/SKILL.md) - Central skill index

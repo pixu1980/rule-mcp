@@ -13,13 +13,13 @@ tags:
 frameworks: [all]
 ---
 
-# pix-architect — Architecture command center
+# pix-architect - Architecture command center
 
 `pix-architect` is the **engine** in a 3-skill architecture:
 
 | Skill                                              | Role                                                       | Reads                               |
 | -------------------------------------------------- | ---------------------------------------------------------- | ----------------------------------- |
-| **pix-architect** (this)                           | Engine: wizard-spec.json, templates, generator, validators | —                                   |
+| **pix-architect** (this)                           | Engine: wizard-spec.json, templates, generator, validators | -                                   |
 | [pix-architect-web](../pix-architect-web/SKILL.md) | Shell: browser interview via vanilla JS                    | wizard-spec.json from pix-architect |
 | [pix-architect-cli](../pix-architect-cli/SKILL.md) | Shell: terminal interview via opentui                      | wizard-spec.json from pix-architect |
 
@@ -27,11 +27,11 @@ frameworks: [all]
 
 ## Operating principles
 
-1. **Single source of routing truth** — Start from [`pix`](../pix/SKILL.md), then map every architecture choice to exact skills and tools.
-2. **Spec-driven by default** — Generate product, domain, architecture, quality, deployment, security, ADR, and pix-routing specs.
-3. **SOLID boundaries** — Separate platform, frontend, backend, data, DevOps, process, styleguide, and toolchain concerns.
-4. **Deterministic tooling first** — Prefer MCP tools before free-form generation: detect, search, scaffold/template, validate, ADR, fix, handoff.
-5. **LLM portability** — Output exact skill names, exact tool names, explicit quality gates, and no model-specific assumptions.
+1. **Single source of routing truth** - Start from [`pix`](../pix/SKILL.md), then map every architecture choice to exact skills and tools.
+2. **Spec-driven by default** - Generate product, domain, architecture, quality, deployment, security, ADR, and pix-routing specs.
+3. **SOLID boundaries** - Separate platform, frontend, backend, data, DevOps, process, styleguide, and toolchain concerns.
+4. **Deterministic tooling first** - Prefer MCP tools before free-form generation: detect, search, scaffold/template, validate, ADR, fix, handoff.
+5. **LLM portability** - Output exact skill names, exact tool names, explicit quality gates, and no model-specific assumptions.
 
 ## Tool workflow
 
@@ -83,7 +83,7 @@ Intent
   └─ Cross-domain routing   → pix + this skill
 ```
 
-## Complete skill coverage — Architecture choice mapping per category
+## Complete skill coverage - Architecture choice mapping per category
 
 Use this table to ensure the architecture package references all relevant skills.
 
@@ -116,7 +116,7 @@ Use this table to ensure the architecture package references all relevant skills
 | [pix-data-postgresql](../pix-data-postgresql/SKILL.md) | Relational backend with PostgreSQL 16+ (indexing, partitioning, replication, JSONB, full-text search).                |
 | [pix-data-mysql](../pix-data-mysql/SKILL.md)           | Relational backend with MySQL 8+ / MariaDB 11+ (InnoDB tuning, replication, query optimization).                      |
 | [pix-data-mongodb](../pix-data-mongodb/SKILL.md)       | Document database with MongoDB 7+ (schema design, aggregation pipeline, indexing, sharding).                          |
-| [pix-data-sql](../pix-data-sql/SKILL.md)               | SQL best practices, table design, index optimization, transactions — database-agnostic reference.                     |
+| [pix-data-sql](../pix-data-sql/SKILL.md)               | SQL best practices, table design, index optimization, transactions - database-agnostic reference.                     |
 | [pix-data-sqlite](../pix-data-sqlite/SKILL.md)         | SQLite 3.x embedded database: WAL/journal modes, FTS5 full-text search, JSON functions, local-first/offline patterns. |
 | [pix-data-duckdb](../pix-data-duckdb/SKILL.md)         | DuckDB 1.x embedded OLAP: columnar storage, Parquet/CSV/JSON import, PIVOT/UNNEST/QUALIFY, window functions.          |
 | [pix-data-indexed-db](../pix-data-indexed-db/SKILL.md) | IndexedDB / File System Access: browser persistence, object stores, indexes, cursors, offline sync, schema migration. |
@@ -170,7 +170,7 @@ Use this table to ensure the architecture package references all relevant skills
 | ------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------- |
 | [pix-process](../pix-process/SKILL.md)                                   | Umbrella routing for process decisions. Read first before specialized skills.                                           |
 | [pix-process-adr](../pix-process-adr/SKILL.md)                           | Recording architecture decisions: auto-numbered Nygard ADRs in docs/adr/ with index.                                    |
-| [pix-process-bmad](../pix-process-bmad/SKILL.md)                         | Full 4-phase delivery: Analysis, Planning, Solutioning, Implementation — choose Quick Flow, BMAD, or Enterprise.        |
+| [pix-process-bmad](../pix-process-bmad/SKILL.md)                         | Full 4-phase delivery: Analysis, Planning, Solutioning, Implementation - choose Quick Flow, BMAD, or Enterprise.        |
 | [pix-process-code-review](../pix-process-code-review/SKILL.md)           | Risk-based PR/MR review: readiness, high-risk inspection order, actionable feedback, approval, and follow-up ownership. |
 | [pix-process-documentation](../pix-process-documentation/SKILL.md)       | Setting up Mintlify documentation portal: mint.json, page templates, local preview, deploy.                             |
 | [pix-process-feature-workflow](../pix-process-feature-workflow/SKILL.md) | End-to-end feature procedure: branch creation through merge request with TDD and guardrails.                            |
@@ -189,7 +189,7 @@ Use this table to ensure the architecture package references all relevant skills
 | [pix-styleguide-patterns](../pix-styleguide-patterns/SKILL.md)     | Quick-reference cheat sheet for naming, property ordering, file tree, and common patterns.                        |
 | [pix-styleguide-json](../pix-styleguide-json/SKILL.md)             | JSON structure conventions: property naming, date formats, numeric precision, API response consistency.           |
 | [pix-styleguide-markdown](../pix-styleguide-markdown/SKILL.md)     | Markdown documentation style: structure, headings, lists, code blocks, tables, links.                             |
-| [pix-styleguide-validation](../pix-styleguide-validation/SKILL.md) | Business validation patterns: email, phone, VAT, tax IDs, postal codes, national IDs — EU/UK/US/global.           |
+| [pix-styleguide-validation](../pix-styleguide-validation/SKILL.md) | Business validation patterns: email, phone, VAT, tax IDs, postal codes, national IDs - EU/UK/US/global.           |
 
 ### Toolchain / Build & Config
 
@@ -217,13 +217,13 @@ Use this table to ensure the architecture package references all relevant skills
 
 The context interview must generate these industry-standard outputs from `templates.json`:
 
-- `README.md` — documentation map and project frame
-- `ROADMAP.md` — milestone tracker
-- `project-context.md` — compact AI working context
-- `analysis/functional-analysis.md` and `analysis/implementation-roadmap.md` — product analysis and execution order
-- `specs/00-sdd.md` through `specs/12-pix-routing.md` — SDD, product, domain, rules, architecture, quality, ADRs, deployment, security, devops, process/delivery, and pix routing
-- `schemas/ruleset.schema.json` — validation contract for reusable domain rules
-- `qa/checklist.md` — manual QA and a11y/resilience checks
+- `README.md` - documentation map and project frame
+- `ROADMAP.md` - milestone tracker
+- `project-context.md` - compact AI working context
+- `analysis/functional-analysis.md` and `analysis/implementation-roadmap.md` - product analysis and execution order
+- `specs/00-sdd.md` through `specs/12-pix-routing.md` - SDD, product, domain, rules, architecture, quality, ADRs, deployment, security, devops, process/delivery, and pix routing
+- `schemas/ruleset.schema.json` - validation contract for reusable domain rules
+- `qa/checklist.md` - manual QA and a11y/resilience checks
 - concrete support docs such as `constraints.concrete.md` and `use-cases.concrete.md`
 
 ## Placeholder and inventory governance
@@ -248,8 +248,8 @@ Before architecture work is complete:
 
 ## See also
 
-- [pix](../pix/SKILL.md) — Central skill and tool dispatcher
-- [pix-process-adr](../pix-process-adr/SKILL.md) — Architecture Decision Records
-- [pix-process-documentation](../pix-process-documentation/SKILL.md) — Documentation standards
-- [pix-devops-testing](../pix-devops-testing/SKILL.md) — Testing and coverage gates
-- [pix-toolchain-project](../pix-toolchain-project/SKILL.md) — Project configuration baseline
+- [pix](../pix/SKILL.md) - Central skill and tool dispatcher
+- [pix-process-adr](../pix-process-adr/SKILL.md) - Architecture Decision Records
+- [pix-process-documentation](../pix-process-documentation/SKILL.md) - Documentation standards
+- [pix-devops-testing](../pix-devops-testing/SKILL.md) - Testing and coverage gates
+- [pix-toolchain-project](../pix-toolchain-project/SKILL.md) - Project configuration baseline

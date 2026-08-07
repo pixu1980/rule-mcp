@@ -17,7 +17,7 @@ tags:
 frameworks: [all]
 ---
 
-# pix-toolchain — Toolchain Skills Index
+# pix-toolchain - Toolchain Skills Index
 
 ## Build Tools
 
@@ -65,5 +65,5 @@ Need commit/push discipline (atomic, scope)? → pix-toolchain-commits
 
 ## See also
 
-- [pix-devops-testing](../pix-devops-testing/SKILL.md) — Test configuration
-- [pix](../pix/SKILL.md) — Central skill index
+- [pix-devops-testing](../pix-devops-testing/SKILL.md) - Test configuration
+- [pix](../pix/SKILL.md) - Central skill index

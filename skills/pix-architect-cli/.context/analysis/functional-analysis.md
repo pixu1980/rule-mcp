@@ -74,12 +74,12 @@ The product is organized around these functional areas:
 
 ## 7. Core capabilities
 
-1. ****[CORE_FUNCTION_1]**** — **[CORE_FUNCTION_1_DESC]**
-2. ****[CORE_FUNCTION_2]**** — **[CORE_FUNCTION_2_DESC]**
-3. ****[CORE_FUNCTION_3]**** — **[CORE_FUNCTION_3_DESC]**
-4. ****[CORE_FUNCTION_4]**** — **[CORE_FUNCTION_4_DESC]**
-5. ****[CORE_FUNCTION_5]**** — **[CORE_FUNCTION_5_DESC]**
-6. ****[CORE_FUNCTION_6]**** — **[CORE_FUNCTION_6_DESC]**
+1. ****[CORE_FUNCTION_1]**** - **[CORE_FUNCTION_1_DESC]**
+2. ****[CORE_FUNCTION_2]**** - **[CORE_FUNCTION_2_DESC]**
+3. ****[CORE_FUNCTION_3]**** - **[CORE_FUNCTION_3_DESC]**
+4. ****[CORE_FUNCTION_4]**** - **[CORE_FUNCTION_4_DESC]**
+5. ****[CORE_FUNCTION_5]**** - **[CORE_FUNCTION_5_DESC]**
+6. ****[CORE_FUNCTION_6]**** - **[CORE_FUNCTION_6_DESC]**
 
 ## 8. Navigation and screens
 
