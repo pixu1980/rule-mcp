@@ -6,7 +6,7 @@
  * and providing skill content utility functions.
  *
  * This is the LEAN core module - tool-specific registration logic
- * lives in tools/skill.js and tools/architect.js.
+ * lives in tools/skill.js.
  *
  * Called once at startup, or on demand via `skills reload` CLI command.
  */

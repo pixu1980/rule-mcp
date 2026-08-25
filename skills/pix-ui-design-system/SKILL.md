@@ -193,7 +193,6 @@ For React, Vue, Angular, Svelte, SolidJS, Astro, Next, Nuxt, or Remix:
 | Need              | Skill                                                      |
 | ----------------- | ---------------------------------------------------------- |
 | Routing           | [pix](../pix/SKILL.md)                                     |
-| Architecture      | [pix-architect](../pix-architect/SKILL.md)                 |
 | Frontend umbrella | [pix-frontend](../pix-frontend/SKILL.md)                   |
 | CSS rules         | [pix-styleguide-css](../pix-styleguide-css/SKILL.md)       |
 | Semantic HTML     | [pix-styleguide-html](../pix-styleguide-html/SKILL.md)     |
@@ -206,4 +205,3 @@ For React, Vue, Angular, Svelte, SolidJS, Astro, Next, Nuxt, or Remix:
 - [pix](../pix/SKILL.md) - Central skill and tool dispatcher
 - [pix-styleguide](../pix-styleguide/SKILL.md) - Shared coding standards
 - [pix-frontend](../pix-frontend/SKILL.md) - Frontend framework index
-- [pix-architect](../pix-architect/SKILL.md) - Architecture and `.context` generation

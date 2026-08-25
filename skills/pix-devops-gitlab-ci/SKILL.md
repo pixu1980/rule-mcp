@@ -69,4 +69,3 @@ Set these in **Settings > CI/CD > Variables**:
 ## See also
 
 - [pix](../pix/SKILL.md) - Central skill index and dispatcher
-- [pix-architect](../pix-architect/SKILL.md) - Project architecture wizard

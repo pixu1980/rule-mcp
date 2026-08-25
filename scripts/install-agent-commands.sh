@@ -3,7 +3,6 @@
 #
 # Installs prompt templates / commands for:
 #   pix-galaxy-mcp    - Route via pix-galaxy-mcp
-#   pix-architect     - Route via pix-architect skill
 #   pix-handoff       - Generate handoff summary
 #   pix-tdd           - Test-driven development workflow
 #   pix-adr           - Architecture Decision Record
@@ -67,20 +66,6 @@ argument-hint: "[request]"
 Use the pix-galaxy-mcp MCP server explicitly for this request: $ARGUMENTS
 
 Call `pix_tool` first to select the correct skill, follow the returned guidance, and use `pix_tool_check` to validate relevant code before finishing. If no arguments were supplied, apply this workflow to the current user request.
-EOF
-      ;;
-    "pix-architect")
-      cat <<'EOF'
----
-description: Route to pix-architect for project scaffolding and ADR decisions
-argument-hint: "<request>"
----
-Process this request through pix-architect skill: $ARGUMENTS
-
-1. Call `pix_tool` to route to architect skill.
-2. Load full pix-architect skill evidence.
-3. Execute architect workflow: project scaffolding, skill mapping, context generation, ADR.
-4. Use `pix_tool_process_adr` for architecture decisions.
 EOF
       ;;
     "pix-handoff")
@@ -167,16 +152,6 @@ Explicitly use the pix-galaxy-mcp MCP server for the request supplied with this 
 3. Run `pix_tool_check` against relevant code before finishing.
 EOF
       ;;
-    "pix-architect")
-      cat <<'EOF'
-# pix-architect
-
-Route through pix-architect for project structure, ADRs, and skill mapping.
-
-1. Call `pix_tool` to route to architect skill.
-2. Execute architect workflow with ADR recording.
-EOF
-      ;;
     "pix-handoff")
       cat <<'EOF'
 # pix-handoff
@@ -243,18 +218,6 @@ Call `pix_tool` first to select the correct skill, follow the returned guidance,
 """
 EOF
       ;;
-    "pix-architect")
-      cat <<'EOF'
-description = "Route to pix-architect for project scaffolding"
-prompt = """
-Process through pix-architect skill: {{args}}
-
-1. Call `pix_tool` to route to architect skill.
-2. Load skill evidence and execute architect workflow.
-3. Use `pix_tool_process_adr` for decisions.
-"""
-EOF
-      ;;
     "pix-handoff")
       cat <<'EOF'
 description = "Generate LLM handoff summary"
@@ -311,7 +274,6 @@ EOF
 
 COMMAND_NAMES=(
   "pix-galaxy-mcp"
-  "pix-architect"
   "pix-handoff"
   "pix-tdd"
   "pix-adr"
@@ -388,5 +350,5 @@ fi
 echo ""
 echo "Installed ${installed} command(s); skipped ${skipped}."
 echo ""
-echo "Available commands for Pi: /pix-galaxy-mcp, /pix-architect, /pix-handoff,"
+echo "Available commands for Pi: /pix-galaxy-mcp, /pix-handoff,"
 echo "  /pix-tdd, /pix-adr, /pix-fix, /pix-check"

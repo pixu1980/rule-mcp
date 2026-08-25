@@ -305,7 +305,6 @@ Edge cases:
 ## See also
 
 - [pix](../pix/SKILL.md) - Central skill index and dispatcher
-- [pix-architect](../pix-architect/SKILL.md) - Project architecture wizard
 - [pix-devops-testing](../pix-devops-testing/SKILL.md) - Test thresholds and coverage
 - [pix-devops-docker](../pix-devops-docker/SKILL.md) - Dockerfile templates
 - [pix-devops-observability](../pix-devops-observability/SKILL.md) - Production telemetry and alerting

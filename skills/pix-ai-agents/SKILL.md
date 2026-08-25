@@ -246,6 +246,5 @@ The monorepo has two Dockerfiles. Use templates from [skills/docker/SKILL.md](..
 ## See also
 
 - [pix](../pix/SKILL.md) - Central skill index and dispatcher
-- [pix-architect](../pix-architect/SKILL.md) - Project architecture wizard
 
 ---

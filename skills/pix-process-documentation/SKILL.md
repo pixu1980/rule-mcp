@@ -195,4 +195,3 @@ Install last version of **mintlify** and add to root `package.json`:
 ## See also
 
 - [pix](../pix/SKILL.md) - Central skill index and dispatcher
-- [pix-architect](../pix-architect/SKILL.md) - Project architecture wizard

@@ -449,7 +449,6 @@ header "Phase 2b: Agent Command Files"
 
 COMMAND_NAMES=(
   "pix-galaxy-mcp"
-  "pix-architect"
   "pix-handoff"
   "pix-tdd"
   "pix-adr"

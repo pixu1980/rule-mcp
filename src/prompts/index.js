@@ -25,8 +25,6 @@ const HELP_TOKENS = new Set(["help", "--help", "-h"]);
 const PROMPT_EXAMPLES = {
   "pix-a11y-audit": ["/pix-a11y-audit help", "/pix-a11y-audit review the login form for WCAG 2.2 AA"],
   "pix-ai": ["/pix-ai help", "/pix-ai add a web-search tool to the agent"],
-  "pix-architect": ["/pix-architect help", "/pix-architect generate .context/ for my project"],
-  "pix-architect-scaffold": ["/pix-architect-scaffold help", "/pix-architect-scaffold my-app react deep"],
   "pix-backend": ["/pix-backend help", "/pix-backend express REST API with zod validation"],
   "pix-caveman": ["/pix-caveman help", "/pix-caveman write a commit for the pending changes"],
   "pix-code-review": ["/pix-code-review help", "/pix-code-review review this component for styleguide compliance"],
@@ -113,22 +111,7 @@ export function listPrompts() {
       description: "AI agent work: pix-ai-agents patterns for agent integrations",
       arguments: [{ name: "request", description: "Agent integration task", required: true }],
     },
-    {
-      name: "pix-architect",
-      description: "Project architecture: context packs, interview flows (CLI + web), scaffolding",
-      arguments: [{ name: "request", description: "Architecture, scaffold, or context-pack task", required: true }],
-    },
-    {
-      name: "pix-architect-scaffold",
-      description: "Scaffold a new project with .agents/ + .context/ infrastructure",
-      arguments: [
-        {
-          name: "projectName",
-          description: 'Project name (free text: append framework/tier, e.g. "my-app react deep")',
-          required: true,
-        },
-      ],
-    },
+
     {
       name: "pix-backend",
       description: "Backend/API work: node, express, fastify, hono, nestjs, graphql, api design, security",
@@ -255,7 +238,7 @@ export function listPrompts() {
     {
       name: "pix-setup-project",
       description:
-        "Bootstrap a project end-to-end: detect framework, scaffold config, toolchain, and architect context",
+        "Bootstrap a project end-to-end: detect framework, scaffold config, toolchain, and context-pack generation",
       arguments: [
         {
           name: "projectName",
@@ -374,7 +357,7 @@ export function getPrompt(name, args = {}) {
             "1. Call `pix_tool_detect` on the project path (or use the framework name from the request text) to detect the stack.\n" +
             "2. Route through `pix_tool` with the detected framework to load the primary pix-* skill evidence.\n" +
             "3. Call `pix_tool_scaffold` for the project config files, then `pix_toolchain_project` (or the area toolchain skill) for tooling setup.\n" +
-            "4. Generate architect context (`.agents/` + `.context/`) via the architect skill (`pix_architect_cli` or `pix_architect_web`, mode=interview/scaffold) at the requested tier.\n" +
+            "4. Generate the project context pack (`.context/`) with the pix-galaxy-architect web app (or its SDK) at the requested tier.\n" +
             "5. Validate every generated file with `pix_tool_check` and iterate until all guardrails pass.\n" +
             "Baseline: if the scaffold produces code, include failing tests first (TDD) and a11y checks; if not applicable, ask the user what to cover.\n" +
             'Finish by proposing a conventional commit message with a mandatory scope, e.g. "chore(setup): ...".',
@@ -515,7 +498,6 @@ export function getPrompt(name, args = {}) {
       "caveman",
       "pix_caveman, pix_caveman_commit, pix_caveman_review, pix_caveman_compress, pix_caveman_help",
     ),
-    "pix-architect": areaPromptText("architect", "pix_architect_cli, pix_architect_web"),
     "pix-ai": areaPromptText("ai", "pix_ai_agents"),
     "pix-skills": areaPromptText("skills", "pix_find_skills"),
     "pix-tdd": areaPromptText("tdd", "pix_test_driven_development"),
@@ -563,25 +545,6 @@ export function getPrompt(name, args = {}) {
             "Validate findings and generated tests with `pix_tool_check` against pix_styleguide_a11y.\n" +
             "Run the tests and report real outcomes; never claim unexecuted checks passed.\n" +
             'Finish by proposing a conventional commit message with a mandatory scope, e.g. "test(a11y): ...".',
-        ),
-      };
-    }
-
-    case "pix-architect-scaffold": {
-      return {
-        name,
-        description: "Scaffold a new project with .agents/ + .context/ infrastructure",
-        messages: user(
-          "You are a project scaffold generator following pix-architect principles.\n" +
-            "Create:\n" +
-            "1. .agents/ directory with instructions/, prompts/, skills/, styleguides/\n" +
-            "2. AGENTS.md with golden rules, where to look, workflow\n" +
-            "3. AI_WORKFLOW.md with Spec → Plan → Implement → Test → Docs → PR phases\n" +
-            "4. cli/ with .context/ templates and cli.js generator\n" +
-            "5. .context/ directory structure (can be generated via pix_architect mode=interview)\n" +
-            "Call pix_architect mode=scaffold for file templates; validate with `pix_tool_check`.\n" +
-            "Baseline: if generated files include code, cover it with failing tests first (TDD); otherwise ask the user what to cover.\n" +
-            'Finish by proposing a conventional commit message with a mandatory scope, e.g. "chore(scaffold): ...".',
         ),
       };
     }

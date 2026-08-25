@@ -72,4 +72,3 @@ validate any visible interface.
 - [pix-ui-design-system](../pix-ui-design-system/SKILL.md) - Visual design direction
 - [pix-frontend](../pix-frontend/SKILL.md) - Frontend framework routing
 - [pix-styleguide](../pix-styleguide/SKILL.md) - Shared implementation standards
-- [pix-architect](../pix-architect/SKILL.md) - Architecture and `.context` generation

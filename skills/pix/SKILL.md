@@ -41,7 +41,7 @@ frameworks: [all]
 ```text
 Prompt
   ├─ unsure / broad / multi-domain      → pix + pix_search
-  ├─ architecture / SDD / plan          → pix-architect
+  ├─ architecture / SDD / plan          → pix-process-adr + pix-galaxy-architect (web app)
   ├─ UI / component / page              → pix-frontend + framework skill + pix-styleguide
   ├─ meta-framework                     → pix-frontend-meta-* + base framework skill
   ├─ AI / agent / LLM application       → pix-ai + focused AI skill
@@ -89,9 +89,8 @@ Build AI agent repositories, providers, tools, registries, and tests.
 
 Plan architecture, SDD, context, and scaffolding flow.
 
-| Skill                                      | Tool            | Frameworks | Use when                                                                                                                |
-| ------------------------------------------ | --------------- | ---------- | ----------------------------------------------------------------------------------------------------------------------- |
-| [pix-architect](../pix-architect/SKILL.md) | `pix_architect` | all        | Enterprise project architecture wizard. Guides through technology choices, scaffolding, standards, and documentation... |
+| Skill | Tool | Frameworks | Use when |
+| ----- | ---- | ---------- | -------- |
 
 ### Backend
 
@@ -236,7 +235,7 @@ Design and route visible interface work while preserving pix implementation cons
 
 | Task                     | Primary                                             | Secondary                                             | Deterministic tools                      |
 | ------------------------ | --------------------------------------------------- | ----------------------------------------------------- | ---------------------------------------- |
-| Unknown project          | `pix`                                               | `pix-architect`                                       | `pix_detect`, `pix_search`               |
+| Unknown project          | `pix`                                               | `pix-process-adr`                                     | `pix_detect`, `pix_search`               |
 | AI agent app             | `pix-ai-agents`                                     | `pix-ai`, `pix-devops-testing`                        | `pix_check`, `pix_process_adr`           |
 | New web UI               | `pix-ui` + `pix-ui-design-system` + framework skill | `pix-styleguide`, `pix-platform-web`                  | `pix_component`, `pix_check`             |
 | React/Vite app           | `pix-frontend-react`                                | `pix-toolchain-vite`, `pix-styleguide`                | `pix_scaffold`, `pix_check`              |
@@ -262,7 +261,6 @@ Design and route visible interface work while preserving pix implementation cons
 
 ## See also
 
-- [pix-architect](../pix-architect/SKILL.md) - Architecture wizard and SDD workflow
 - [pix-styleguide](../pix-styleguide/SKILL.md) - Shared coding standards
 - [pix-process-feature-workflow](../pix-process-feature-workflow/SKILL.md) - Feature delivery workflow
 - [pix-toolchain](../pix-toolchain/SKILL.md) - Toolchain index

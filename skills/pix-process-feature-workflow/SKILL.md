@@ -136,6 +136,5 @@ for the review workflow.
 ## See also
 
 - [pix](../pix/SKILL.md) - Central skill index and dispatcher
-- [pix-architect](../pix-architect/SKILL.md) - Project architecture wizard
 - [pix-process-code-review](../pix-process-code-review/SKILL.md) - Risk-based PR/MR review
 - [pix-devops-observability](../pix-devops-observability/SKILL.md) - Production health and rollback verification

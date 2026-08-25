@@ -30,14 +30,13 @@ const AREA_PROMPTS = [
   "pix-devops",
   "pix-platform",
   "pix-caveman",
-  "pix-architect",
   "pix-ai",
   "pix-skills",
   "pix-tdd",
   "pix-ui",
 ];
 
-const LEGACY_PROMPTS = ["pix-code-review", "pix-a11y-audit", "pix-architect-scaffold"];
+const LEGACY_PROMPTS = ["pix-code-review", "pix-a11y-audit"];
 
 const EXPECTED = [...WORKFLOW_PROMPTS, ...AREA_PROMPTS, ...LEGACY_PROMPTS];
 

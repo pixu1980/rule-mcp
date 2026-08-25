@@ -304,7 +304,7 @@ function skillNextTools(skillName) {
   const suggestions = [];
   const base = skillName.replace(/^pix-/, "").replaceAll("-", "_");
   suggestions.push(`pix_tool_${base}`);
-  if (skillName === "pix-styleguide" || skillName === "pix-architect") {
+  if (skillName === "pix-styleguide") {
     suggestions.push("pix_tool_scaffold");
   }
   suggestions.push("pix_tool_check", "pix_tool_search");
@@ -502,14 +502,7 @@ export function registerAiTool() {
           if (skillName === detectedSkillName) {
             finalScore = Math.max(rawScore * 2, 20);
           } else if (
-            [
-              "pix-styleguide",
-              "pix-frontend",
-              "pix-platform-web",
-              "pix-architect",
-              "pix-ui-design-system",
-              "pix-ai",
-            ].includes(skillName)
+            ["pix-styleguide", "pix-frontend", "pix-platform-web", "pix-ui-design-system", "pix-ai"].includes(skillName)
           ) {
             finalScore *= 1.15;
           } else {

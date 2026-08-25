@@ -168,4 +168,3 @@ app.post("/users", async (request, reply) => {
 ## See also
 
 - [pix](../pix/SKILL.md) - Central skill index and dispatcher
-- [pix-architect](../pix-architect/SKILL.md) - Project architecture wizard

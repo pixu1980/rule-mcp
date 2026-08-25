@@ -104,7 +104,6 @@ test("every tool traces back to a pix-* directory in ./skills", () => {
     "pix_tool_scaffold",
     "pix_tool_search",
     "pix_tool_update",
-    "pix_tool_architect",
   ]);
   for (const name of surface.tools) {
     if (ACTION.has(name)) {

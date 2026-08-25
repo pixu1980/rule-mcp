@@ -38,7 +38,6 @@ Each file contains: context, specific fixes with code, verification commands, pi
 | ----- | ------------------------------------------------ | -------------- | ------------- |
 | 7     | [07-installer.md](07-installer.md)               | ~1 hour        | 🟠 P1         |
 | 8     | [08-server-sse.md](08-server-sse.md)             | ~45 min        | 🟠 P1         |
-| 9     | [09-architect-wizard.md](09-architect-wizard.md) | ~1.5 hours     | 🔴 P0         |
 | 10    | [10-docs-maintenance.md](10-docs-maintenance.md) | ~1 hour        | 🟡 P2         |
 | 11    | [11-claude-native.md](11-claude-native.md)       | ~2.5 hours     | 🟠 P1 / 🟢 P3 |
 
