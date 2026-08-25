@@ -32,23 +32,22 @@ Serve rule-* skill rules, styleguides, component templates, and framework best p
 
 ### Current Tools (14)
 
-| Tool                                 | Purpose                                                                                                       | LLM-free?                                 |
-| ------------------------------------ | ------------------------------------------------------------------------------------------------------------- | ----------------------------------------- |
-| `pix_tool`                           | Route prompt to best skill                                                                                    | ✅ Yes (keyword matching)                 |
-| `rule_tool_styleguide`                | HTML/CSS/JS/a11y/naming rules                                                                                 | Partial                                   |
-| `rule_tool_frontend_vanilla_reactive` | Vanilla JS reactive pattern rules                                                                             | Partial                                   |
-| `rule_tool_frontend_react`            | React 18+ rule best practices                                                                                  | Partial                                   |
-| `rule_tool_frontend_vue`              | Vue 3 Composition API rule rules                                                                               | Partial                                   |
-| `rule_tool_frontend_svelte`           | Svelte 5 runes rule rules                                                                                      | Partial                                   |
-| `rule_tool_frontend_solidjs`          | SolidJS fine-grained reactivity rules                                                                         | Partial                                   |
-| `rule_tool_frontend_angular`          | Angular standalone component rules                                                                            | Partial                                   |
-| `rule_tool_frontend_astro`            | Astro islands architecture rules                                                                              | Partial                                   |
-| `rule_tool_platform_desktop`          | Electron app patterns                                                                                         | Partial                                   |
-| `rule_tool_search`                    | Full-text search across ALL skills                                                                            | ✅ Yes (local grep)                       |
-| `rule_tool_component`                 | Component template generation                                                                                 | ✅ Yes (template engine)                  |
-| `rule_tool_architect`                 | Project architecture & agent infrastructure; scaffold .agents/, .context/, SDD docs; context interview wizard | ✅ Yes (template engine + context server) |
-| `rule_tool_check`                     | Guardrail code validation (17 shared + 8 architect)                                                           | ✅ Yes (pure functions)                   |
-| `rule_tool_scaffold`                  | Project config file generation                                                                                | ✅ Yes (template engine)                  |
+| Tool                                 | Purpose                                             | LLM-free?                 |
+| ------------------------------------ | --------------------------------------------------- | ------------------------- |
+| `pix_tool`                           | Route prompt to best skill                          | ✅ Yes (keyword matching) |
+| `rule_tool_styleguide`                | HTML/CSS/JS/a11y/naming rules                       | Partial                   |
+| `rule_tool_frontend_vanilla_reactive` | Vanilla JS reactive pattern rules                   | Partial                   |
+| `rule_tool_frontend_react`            | React 18+ rule best practices                        | Partial                   |
+| `rule_tool_frontend_vue`              | Vue 3 Composition API rule rules                     | Partial                   |
+| `rule_tool_frontend_svelte`           | Svelte 5 runes rule rules                            | Partial                   |
+| `rule_tool_frontend_solidjs`          | SolidJS fine-grained reactivity rules               | Partial                   |
+| `rule_tool_frontend_angular`          | Angular standalone component rules                  | Partial                   |
+| `rule_tool_frontend_astro`            | Astro islands architecture rules                    | Partial                   |
+| `rule_tool_platform_desktop`          | Electron app patterns                               | Partial                   |
+| `rule_tool_search`                    | Full-text search across ALL skills                  | ✅ Yes (local grep)       |
+| `rule_tool_component`                 | Component template generation                       | ✅ Yes (template engine)  |
+| `rule_tool_check`                     | Guardrail code validation (17 shared + 8 architect) | ✅ Yes (pure functions)   |
+| `rule_tool_scaffold`                  | Project config file generation                      | ✅ Yes (template engine)  |
 
 ### Current Resources (6)
 
@@ -63,31 +62,29 @@ Serve rule-* skill rules, styleguides, component templates, and framework best p
 
 ### Current Prompts (24)
 
-| Name                     | Purpose                                                                          |
-| ------------------------ | -------------------------------------------------------------------------------- |
-| `rule-a11y-audit`         | Audit a11y end-to-end: WCAG 2.2 AA review + Playwright/axe-core tests            |
-| `rule-ai`                 | AI agent integrations                                                            |
-| `rule-architect`          | Context packs, interview flows (CLI + web), scaffolding                          |
-| `rule-architect-scaffold` | Scaffold project with .agents/ + .context/                                       |
-| `rule-backend`            | Node, Express, Fastify, Hono, NestJS, GraphQL, API design, security              |
-| `rule-caveman`            | Compressed communication, commits, reviews                                       |
-| `rule-code-review`        | Review code against rule styleguides                                              |
-| `rule-data`               | PostgreSQL, MySQL, SQLite, MongoDB, DuckDB, IndexedDB, SQL                       |
-| `rule-devops`             | Docker, GitLab CI, observability, testing, versioning                            |
-| `rule-frontend`           | React, Vue, Svelte, Angular, Solid, Astro, Next, Nuxt, Remix, vanilla            |
-| `rule-handoff`            | Compressed context handoff for a new session                                     |
-| `rule-meta`               | Dispatcher/action toolset (gateway, apply, search, check, scaffold…)             |
-| `rule-new-feature`        | Feature end-to-end with TDD + a11y + commit scope                                |
-| `rule-platform`           | Web, desktop, Expo, agent, library                                               |
-| `rule-process`            | Code review, feature workflow, documentation, ADR, handoff, BMAD                 |
-| `rule-pull-request`       | Prepare PR: review + a11y + security + ADR + commit scope                        |
-| `rule-setup-project`      | Bootstrap project end-to-end (detect → scaffold → toolchain → architect context) |
-| `rule-skills`             | Skill discovery (find-skills)                                                    |
-| `rule-styleguide`         | a11y, CSS, HTML, JS, JSON, Markdown, naming, patterns, validation                |
-| `rule-tdd`                | Test-driven development workflow                                                 |
-| `rule-toolchain`          | Vite, pnpm, Turborepo, Rspack, Parcel, TypeScript, ESLint, Biome, Husky, commits |
-| `rule-ui`                 | UI design-system work                                                            |
-| `rule-write-tests`        | Write TDD + a11y + devops tests                                                  |
+| Name                | Purpose                                                                          |
+| ------------------- | -------------------------------------------------------------------------------- |
+| `rule-a11y-audit`    | Audit a11y end-to-end: WCAG 2.2 AA review + Playwright/axe-core tests            |
+| `rule-ai`            | AI agent integrations                                                            |
+| `rule-backend`       | Node, Express, Fastify, Hono, NestJS, GraphQL, API design, security              |
+| `rule-caveman`       | Compressed communication, commits, reviews                                       |
+| `rule-code-review`   | Review code against rule styleguides                                              |
+| `rule-data`          | PostgreSQL, MySQL, SQLite, MongoDB, DuckDB, IndexedDB, SQL                       |
+| `rule-devops`        | Docker, GitLab CI, observability, testing, versioning                            |
+| `rule-frontend`      | React, Vue, Svelte, Angular, Solid, Astro, Next, Nuxt, Remix, vanilla            |
+| `rule-handoff`       | Compressed context handoff for a new session                                     |
+| `rule-meta`          | Dispatcher/action toolset (gateway, apply, search, check, scaffold…)             |
+| `rule-new-feature`   | Feature end-to-end with TDD + a11y + commit scope                                |
+| `rule-platform`      | Web, desktop, Expo, agent, library                                               |
+| `rule-process`       | Code review, feature workflow, documentation, ADR, handoff, BMAD                 |
+| `rule-pull-request`  | Prepare PR: review + a11y + security + ADR + commit scope                        |
+| `rule-setup-project` | Bootstrap project end-to-end (detect → scaffold → toolchain → architect context) |
+| `rule-skills`        | Skill discovery (find-skills)                                                    |
+| `rule-styleguide`    | a11y, CSS, HTML, JS, JSON, Markdown, naming, patterns, validation                |
+| `rule-tdd`           | Test-driven development workflow                                                 |
+| `rule-toolchain`     | Vite, pnpm, Turborepo, Rspack, Parcel, TypeScript, ESLint, Biome, Husky, commits |
+| `rule-ui`            | UI design-system work                                                            |
+| `rule-write-tests`   | Write TDD + a11y + devops tests                                                  |
 
 ---
 
@@ -194,19 +191,18 @@ No TypeScript compilation needed. The SDK ships JavaScript with `.d.ts` declarat
 
 ### 9 rule-* skills available
 
-| Skill                         | Files                                                            | Lines  | Maturity  |
-| ----------------------------- | ---------------------------------------------------------------- | ------ | --------- |
-| rule-styleguide                | 8 (.md)                                                          | ~2,500 | ✅ Mature |
-| rule-frontend-vanilla-reactive | 3 (md + patterns + tests)                                        | ~1,200 | ✅ Mature |
-| rule-frontend-react            | 4 (md + checklists + knowledge)                                  | ~800   | ✅ Stable |
-| rule-frontend-vue              | 4                                                                | ~700   | ✅ Stable |
-| rule-frontend-angular          | 4                                                                | ~700   | ✅ Stable |
-| rule-frontend-svelte           | 4                                                                | ~650   | ✅ Stable |
-| rule-frontend-solidjs          | 4                                                                | ~600   | ✅ Stable |
-| rule-frontend-astro            | 4                                                                | ~550   | ✅ Stable |
-| rule-architect                 | 20+ (md + knowledge + assets + checklists + prompts + templates) | ~3,500 | ✅ Mature |
-| rule-electron                  | 4                                                                | ~800   | ✅ Stable |
-| rule                           | 1 (SKILL.md)                                                     | ~200   | ✅ Mature |
+| Skill                         | Files                           | Lines  | Maturity  |
+| ----------------------------- | ------------------------------- | ------ | --------- |
+| rule-styleguide                | 8 (.md)                         | ~2,500 | ✅ Mature |
+| rule-frontend-vanilla-reactive | 3 (md + patterns + tests)       | ~1,200 | ✅ Mature |
+| rule-frontend-react            | 4 (md + checklists + knowledge) | ~800   | ✅ Stable |
+| rule-frontend-vue              | 4                               | ~700   | ✅ Stable |
+| rule-frontend-angular          | 4                               | ~700   | ✅ Stable |
+| rule-frontend-svelte           | 4                               | ~650   | ✅ Stable |
+| rule-frontend-solidjs          | 4                               | ~600   | ✅ Stable |
+| rule-frontend-astro            | 4                               | ~550   | ✅ Stable |
+| rule-electron                  | 4                               | ~800   | ✅ Stable |
+| rule                           | 1 (SKILL.md)                    | ~200   | ✅ Mature |
 
 ### Content types per skill
 
@@ -461,7 +457,6 @@ rule-mcp/
 │       └── cache.js              ← LRU cache for skill content
 │
 ├── skills/                       ← Embedded at build time
-│   ├── rule-architect/             ← Project architecture & agent infrastructure
 │   ├── rule-styleguide/
 │   ├── rule-frontend-react/
 │   ├── rule-frontend-vue/
@@ -883,11 +878,11 @@ All data stays on the filesystem. The MCP server is a read-only/validate-only se
 - [x] **0.2** Implement SDK Server bootstrap (`src/server.js`) - `Server` instance with `rule-mcp` name + version - Capabilities: `tools`, `resources`, `prompts`, `logging` - `StdioServerTransport` (default) - `SetLevelRequest` handled automatically by SDK when `logging: {}` capability declared - `createServer()` exported for reuse by SSE transport
 
 - [x] **0.3** Port tool system (`src/tools/`) - `ToolRegistry` in `src/tools/router.js` with `registerTool`, `listTools`, `callTool` - All 15 tools have Zod input schemas with runtime validation - Tools registered via SDK `setRequestHandler` in `src/server.js` - Ported 15 tools: - `pix_tool`, `pix_*` (10 skill tools), `rule_tool_search`, `rule_tool_component`,
-      `rule_tool_architect`, `rule_tool_check`, `rule_tool_scaffold`
+      `rule_tool_check`, `rule_tool_scaffold`
 
 - [x] **0.4** Port resource system (`src/resources/`) - All `rule://*` URIs via SDK's `ReadResourceRequestSchema` - Dynamic `rule://<skill-name>/summary` (first 30 lines) - 6+ resources: `skills`, `templates`, `ai`, `a11y`, `a11y/test-basic`, `a11y/test-forms`, plus per-skill URIs
 
-- [x] **0.5** Port prompt system (`src/prompts/`) - All 4 prompts via SDK's `GetPromptRequestSchema` - Plus `rule-architect-scaffold` (5 total)
+- [x] **0.5** Port prompt system (`src/prompts/`) - All 4 prompts via SDK's `GetPromptRequestSchema` - (5 total)
 
 - [x] **0.6** Remove obsolete files - `src/mcp/protocol.js` - deleted - `src/mcp/stdio.js` - deleted (replaced by `StdioServerTransport`) - `src/tools/router.js` - kept as ToolRegistry (rename in P1) - `src/cli.js` → `src/cli/commands.js` + `src/index.js` (Phase 1)
 
@@ -1055,9 +1050,6 @@ All data stays on the filesystem. The MCP server is a read-only/validate-only se
 
 - [x] **6.1** Consolidate documentation for unreleased package - No migration guide is needed before first release - Documentation lives in the consolidated numbered handbook under `docs/`
 
-- [x] **6.1a** rule-architect correctly routed: `pix_tool` → architecture query → rule-architect 100%
-- [x] **6.1b** rule-architect guardrails verified: `rule_tool_check` for rule-architect returns 8 architect-specific checks
-- [x] **6.1c** rule_tool_architect tool registered with full mode support (interview, scaffold, check)
 - [x] **6.2** Troubleshooting guide (`docs/TROUBLESHOOTING.md`) - Per-agent issues: Claude, Cursor, VS Code, Copilot, Pi - Daemon, Docker, Skills troubleshooting - General debugging table with common symptoms and fixes
 
 - [x] **6.3** Performance benchmarks (`docs/BENCHMARKS.md`) - Response times: all tools <15ms P95 - Token savings: 94-99.5% vs LLM-only - LLM-free hit rate: ∼85% of common queries - Cache performance metrics

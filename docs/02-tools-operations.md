@@ -20,71 +20,70 @@ Every source document below is preserved verbatim under its own heading so no pr
 
 ## Quick Reference
 
-| Tool                                 | Category   | Description                                   |
-| ------------------------------------ | ---------- | --------------------------------------------- |
-| `pix_tool`                           | Router     | Route a prompt to the correct rule skill       |
-| `rule_tool_search`                    | Search     | Full-text BM25 search across ALL skills       |
-| `rule_tool_check`                     | Validation | Run guardrail checks on code                  |
-| `rule_tool_scaffold`                  | Scaffold   | Generate project config files                 |
-| `rule_tool_detect`                    | Detection  | Auto-detect project framework                 |
-| `rule_tool_component`                 | Templates  | Generate component/test templates             |
-| `rule_tool_process_adr`               | ADR        | Architecture Decision Records                 |
-| `rule_tool_process_handoff`           | Handoff    | LLM context summary                           |
-| `rule_tool_fix`                       | Fix        | Validate and auto-fix file tree structure     |
-|                                      |            |                                               |
-| **UI Frameworks**                    |            |                                               |
-| `rule_tool_frontend_vanilla_reactive` | Skill      | Vanilla JS reactive pattern                   |
-| `rule_tool_frontend_react`            | Skill      | React 18+ best practices                      |
-| `rule_tool_frontend_vue`              | Skill      | Vue 3 Composition API                         |
-| `rule_tool_frontend_svelte`           | Skill      | Svelte 5 runes                                |
-| `rule_tool_frontend_angular`          | Skill      | Angular standalone components                 |
-| `rule_tool_frontend_solidjs`          | Skill      | SolidJS fine-grained reactivity               |
-|                                      |            |                                               |
-| **Meta-Frameworks**                  |            |                                               |
-| `rule_tool_frontend_astro`            | Skill      | Astro islands architecture                    |
-| `rule_tool_frontend_meta_next`        | Skill      | Next.js App Router                            |
-| `rule_tool_frontend_meta_nuxt`        | Skill      | Nuxt 3 best practices                         |
-| `rule_tool_frontend_meta_remix`       | Skill      | Remix best practices                          |
-|                                      |            |                                               |
-| **Project Types**                    |            |                                               |
-| `rule_tool_platform_web`              | Skill      | Web platform best practices                   |
-| `rule_tool_platform_desktop`          | Skill      | Desktop app patterns (Electron)               |
-| `rule_tool_platform_library`          | Skill      | Library authoring                             |
-| `rule_tool_backend`                   | Skill      | Backend/API best practices                    |
-|                                      |            |                                               |
-| **Architecture**                     |            |                                               |
-| `rule_tool_architect`                 | Skill      | Enterprise architecture wizard & SDD workflow |
-| `rule_tool_styleguide`                | Skill      | HTML, CSS, JS, a11y, naming, file tree        |
-|                                      |            |                                               |
-| **Scaffolding**                      |            |                                               |
-| `rule_tool_backend_node`              | Skill      | Backend Node.js scaffold                      |
-| `rule_tool_frontend_react`            | Skill      | Frontend React + Vite scaffold                |
-| `rule_tool_platform_agent`            | Skill      | AI Agents monorepo scaffold                   |
-| `rule_tool_platform_expo`             | Skill      | Expo mobile scaffold                          |
-|                                      |            |                                               |
-| **Engineering & DevOps**             |            |                                               |
-| `rule_tool_devops_docker`             | Skill      | Dockerfile + compose generation               |
-| `rule_tool_devops_docker`             | Skill      | Docker standards                              |
-| `rule_tool_devops_gitlab_ci`          | Skill      | GitLab CI/CD pipelines                        |
-| `rule_tool_devops_testing`            | Skill      | Vitest setup & test patterns                  |
-| `rule_tool_devops_testing`            | Skill      | Coverage enforcement (60/50/60/60)            |
-| `rule_tool_devops_version`            | Skill      | Husky version auto-increment                  |
-|                                      |            |                                               |
-| **Backend**                          |            |                                               |
-| `rule_tool_backend_security`          | Skill      | Security hardening                            |
-| `rule_tool_backend_api_design`        | Skill      | REST API design & OpenAPI                     |
-| `rule_tool_platform_agent`            | Skill      | AI Agent structure and tools                  |
-|                                      |            |                                               |
-| **Frontend**                         |            |                                               |
-| `rule_tool_frontend_react`            | Skill      | React forms with validation                   |
-| `rule_tool_styleguide_validation`     | Skill      | Business field validation                     |
-|                                      |            |                                               |
-| **Mobile**                           |            |                                               |
-| `rule_tool_platform_expo`             | Skill      | EAS Build & Expo CI/CD                        |
-|                                      |            |                                               |
-| **Workflow**                         |            |                                               |
-| `rule_tool_process_feature_workflow`  | Skill      | End-to-end feature workflow                   |
-| `rule_tool_process_documentation`     | Skill      | Mintlify documentation setup                  |
+| Tool                                 | Category   | Description                               |
+| ------------------------------------ | ---------- | ----------------------------------------- |
+| `pix_tool`                           | Router     | Route a prompt to the correct rule skill   |
+| `rule_tool_search`                    | Search     | Full-text BM25 search across ALL skills   |
+| `rule_tool_check`                     | Validation | Run guardrail checks on code              |
+| `rule_tool_scaffold`                  | Scaffold   | Generate project config files             |
+| `rule_tool_detect`                    | Detection  | Auto-detect project framework             |
+| `rule_tool_component`                 | Templates  | Generate component/test templates         |
+| `rule_tool_process_adr`               | ADR        | Architecture Decision Records             |
+| `rule_tool_process_handoff`           | Handoff    | LLM context summary                       |
+| `rule_tool_fix`                       | Fix        | Validate and auto-fix file tree structure |
+|                                      |            |                                           |
+| **UI Frameworks**                    |            |                                           |
+| `rule_tool_frontend_vanilla_reactive` | Skill      | Vanilla JS reactive pattern               |
+| `rule_tool_frontend_react`            | Skill      | React 18+ best practices                  |
+| `rule_tool_frontend_vue`              | Skill      | Vue 3 Composition API                     |
+| `rule_tool_frontend_svelte`           | Skill      | Svelte 5 runes                            |
+| `rule_tool_frontend_angular`          | Skill      | Angular standalone components             |
+| `rule_tool_frontend_solidjs`          | Skill      | SolidJS fine-grained reactivity           |
+|                                      |            |                                           |
+| **Meta-Frameworks**                  |            |                                           |
+| `rule_tool_frontend_astro`            | Skill      | Astro islands architecture                |
+| `rule_tool_frontend_meta_next`        | Skill      | Next.js App Router                        |
+| `rule_tool_frontend_meta_nuxt`        | Skill      | Nuxt 3 best practices                     |
+| `rule_tool_frontend_meta_remix`       | Skill      | Remix best practices                      |
+|                                      |            |                                           |
+| **Project Types**                    |            |                                           |
+| `rule_tool_platform_web`              | Skill      | Web platform best practices               |
+| `rule_tool_platform_desktop`          | Skill      | Desktop app patterns (Electron)           |
+| `rule_tool_platform_library`          | Skill      | Library authoring                         |
+| `rule_tool_backend`                   | Skill      | Backend/API best practices                |
+|                                      |            |                                           |
+| **Architecture**                     |            |                                           |
+| `rule_tool_styleguide`                | Skill      | HTML, CSS, JS, a11y, naming, file tree    |
+|                                      |            |                                           |
+| **Scaffolding**                      |            |                                           |
+| `rule_tool_backend_node`              | Skill      | Backend Node.js scaffold                  |
+| `rule_tool_frontend_react`            | Skill      | Frontend React + Vite scaffold            |
+| `rule_tool_platform_agent`            | Skill      | AI Agents monorepo scaffold               |
+| `rule_tool_platform_expo`             | Skill      | Expo mobile scaffold                      |
+|                                      |            |                                           |
+| **Engineering & DevOps**             |            |                                           |
+| `rule_tool_devops_docker`             | Skill      | Dockerfile + compose generation           |
+| `rule_tool_devops_docker`             | Skill      | Docker standards                          |
+| `rule_tool_devops_gitlab_ci`          | Skill      | GitLab CI/CD pipelines                    |
+| `rule_tool_devops_testing`            | Skill      | Vitest setup & test patterns              |
+| `rule_tool_devops_testing`            | Skill      | Coverage enforcement (60/50/60/60)        |
+| `rule_tool_devops_version`            | Skill      | Husky version auto-increment              |
+|                                      |            |                                           |
+| **Backend**                          |            |                                           |
+| `rule_tool_backend_security`          | Skill      | Security hardening                        |
+| `rule_tool_backend_api_design`        | Skill      | REST API design & OpenAPI                 |
+| `rule_tool_platform_agent`            | Skill      | AI Agent structure and tools              |
+|                                      |            |                                           |
+| **Frontend**                         |            |                                           |
+| `rule_tool_frontend_react`            | Skill      | React forms with validation               |
+| `rule_tool_styleguide_validation`     | Skill      | Business field validation                 |
+|                                      |            |                                           |
+| **Mobile**                           |            |                                           |
+| `rule_tool_platform_expo`             | Skill      | EAS Build & Expo CI/CD                    |
+|                                      |            |                                           |
+| **Workflow**                         |            |                                           |
+| `rule_tool_process_feature_workflow`  | Skill      | End-to-end feature workflow               |
+| `rule_tool_process_documentation`     | Skill      | Mintlify documentation setup              |
 
 ### Modes common to all skill tools
 
@@ -99,8 +98,7 @@ Every skill tool (`rule_tool_frontend_react`, `rule_tool_devops_docker`, etc.) s
 | `guardrails` | Only testable assertions           | ~80%          |
 | `check`      | Validate `code` against guardrails | -             |
 
-`rule_tool_styleguide` and `rule_tool_architect` add `scaffold`.  
-`rule_tool_architect` also adds `interview` (context wizard server).
+`rule_tool_styleguide` adds `scaffold`.
 
 ---
 
@@ -175,7 +173,7 @@ rule prompt="Create a responsive navbar" framework=react
 1. Tokenizes the prompt into keywords (filters ~120 stopwords)
 2. For each skill, extracts `##` sections and scores them
 3. Per-word score: 3× if in section heading, 1× in body, +2× in YAML description, +3× if skill base name matches
-4. Framework bias: ×2 for matching framework skill, ×1.15 for styleguides/web/architect, ×0.85 for others
+4. Framework bias: ×2 for matching framework skill, ×1.15 for styleguides/web, ×0.85 for others
 5. Normalizes: confidence = raw / maxRaw
 6. Returns top 6 skills + relevant sections + suggested next_tools
 
@@ -187,16 +185,16 @@ rule prompt="Create a responsive navbar" framework=react
 
 ### Parameters
 
-| Param         | Type    | Required | Default | Description                                                                                                                      |
-| ------------- | ------- | -------- | ------- | -------------------------------------------------------------------------------------------------------------------------------- |
-| `mode`        | enum    | -        | `full`  | `full`, `summary`, `tldr`, `search`, `guardrails`, `check` (+ `scaffold` for styleguides/architect, + `interview` for architect) |
-| `query`       | string  | -        | -       | Query for mode=search or mode=tldr                                                                                               |
-| `code`        | string  | -        | -       | Code to validate (required for mode=check)                                                                                       |
-| `framework`   | string  | -        | -       | Framework hint for mode=check                                                                                                    |
-| `fileName`    | string  | -        | -       | File name for naming convention checks                                                                                           |
-| `isComponent` | boolean | -        | -       | Whether this is a component file                                                                                                 |
-| `file`        | string  | -        | -       | Specific scaffold file (mode=scaffold)                                                                                           |
-| `target`      | string  | -        | -       | Project directory (architect interview)                                                                                          |
+| Param         | Type    | Required | Default | Description                                                                               |
+| ------------- | ------- | -------- | ------- | ----------------------------------------------------------------------------------------- |
+| `mode`        | enum    | -        | `full`  | `full`, `summary`, `tldr`, `search`, `guardrails`, `check` (+ `scaffold` for styleguides) |
+| `query`       | string  | -        | -       | Query for mode=search or mode=tldr                                                        |
+| `code`        | string  | -        | -       | Code to validate (required for mode=check)                                                |
+| `framework`   | string  | -        | -       | Framework hint for mode=check                                                             |
+| `fileName`    | string  | -        | -       | File name for naming convention checks                                                    |
+| `isComponent` | boolean | -        | -       | Whether this is a component file                                                          |
+| `file`        | string  | -        | -       | Specific scaffold file (mode=scaffold)                                                    |
+| `target`      | string  | -        | -       | Project directory (used from the CLI, not the skill tool)                                 |
 
 ### Examples
 
@@ -216,11 +214,9 @@ rule_tool_frontend_react mode=check code="..." fileName="_Button.jsx" isComponen
 # Guardrails
 rule_tool_frontend_svelte mode=guardrails
 
-# Scaffolding (styleguides/architect only)
+# Scaffolding (styleguides only)
 rule_tool_styleguide mode=scaffold file=.prettierrc
 
-# Context wizard (architect only)
-rule_tool_architect mode=interview target=./my-project
 ```
 
 ### Mode `tldr` - token savings
@@ -233,13 +229,13 @@ rule_tool_frontend_react mode=tldr query="state management hooks"
 # No Overview, Setup, Installation, License
 ```
 
-### Special: rule_tool_architect interview mode
+### Context interview: rule-mcp-architect app
 
-1. Call `rule_tool_architect mode=interview target=./my-project`
-2. A local HTTP server opens at `http://localhost:19000`
-3. Guides the user through 16 project specification steps (from Analysis Depth to Security & Compliance)
-4. Generates `.context/` files with SDD specs
-5. Stop the server with Ctrl+C
+The context interview wizard moved out of rule-mcp into the standalone
+`rule-mcp-architect` web app (repo: `~/Projects/pixu1980/ai/rule-mcp-architect`).
+Run `node src/context-server.mjs --port 19000` from that repo and open the
+printed URL: it guides the user through the project specification steps and
+writes `.context/` to the target directory. 4. Generates `.context/` files with SDD specs 5. Stop the server with Ctrl+C
 
 ---
 
@@ -531,7 +527,7 @@ Framework-agnostic templates: `playwright-config`, `a11y-test-basic`, `a11y-test
 
 ### Auto-ADR hooks
 
-After every call to `rule_tool_architect`, `pix_tool`, `rule_tool_scaffold`, `rule_tool_detect`, the server automatically logs a summary ADR in `docs/adr/` with tool name, args, and timestamp. Fire-and-forget, non-blocking.
+After every call to `pix_tool`, `rule_tool_scaffold`, `rule_tool_detect`, the server automatically logs a summary ADR in `docs/adr/` with tool name, args, and timestamp. Fire-and-forget, non-blocking.
 
 ---
 
@@ -676,31 +672,29 @@ Resources accessible via the MCP `resources/read` protocol.
 
 Prompt templates accessible via the MCP `prompts/get` protocol. Every prompt takes a **single free-form argument** and supports `help` (or `--help` / `-h`) as its value to print the usage list, e.g. `/rule-frontend help` - help is returned as a ready-made assistant message and displayed instantly, without invoking the model.
 
-| Name                     | Arguments                                                                                                                                                                                  | Description                                                                      |
-| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------- |
-| `rule-a11y-audit`         | `code` (req, free text)                                                                                                                                                                    | Audit a11y end-to-end: WCAG 2.2 AA review + Playwright/axe-core tests            |
-| `rule-ai`                 | `request` (req)                                                                                                                                                                            | AI agent integrations                                                            |
-| `rule-architect`          | `request` (req)                                                                                                                                                                            | Context packs, interview flows (CLI + web), scaffolding                          |
-| `rule-architect-scaffold` | `projectName` (req, free text: framework/tier)                                                                                                                                             | Scaffold project with .agents/ + .context/                                       |
-| `rule-backend`            | `request` (req, free text: framework)                                                                                                                                                      | Node, Express, Fastify, Hono, NestJS, GraphQL, API design, security              |
-| `rule-caveman`            | `request` (req)                                                                                                                                                                            | Compressed communication, commits, reviews                                       |
-| `rule-code-review`        | `code` (req, free text)                                                                                                                                                                    | Review code against rule styleguides                                              |
-| `rule-data`               | `request` (req, free text: database)                                                                                                                                                       | PostgreSQL, MySQL, SQLite, MongoDB, DuckDB, IndexedDB, SQL                       |
-| `rule-devops`             | `request` (req)                                                                                                                                                                            | Docker, GitLab CI, observability, testing, versioning                            |
-| `rule-frontend`           | `request` (req, free text: framework)                                                                                                                                                      | React, Vue, Svelte, Angular, Solid, Astro, Next, Nuxt, Remix, vanilla            |
-| `rule-handoff`            | `options` (opt, free-form tokens: `handoff` \| `close-session`, `compress`, `full` \| `brief` \| `minimal`, `no-diff`, `no-log`, `no-context`, `no-adrs`, `no-roadmap`, `max=<n>`, `help`) | Compressed context handoff for a new session                                     |
-| `rule-meta`               | `request` (req)                                                                                                                                                                            | Dispatcher/action toolset (gateway, apply, search, check, scaffold…)             |
-| `rule-new-feature`        | `feature` (req, free text: framework/area/"no tests")                                                                                                                                      | Feature end-to-end with TDD + a11y + commit scope                                |
-| `rule-platform`           | `request` (req, free text: platform)                                                                                                                                                       | Web, desktop, Expo, agent, library                                               |
-| `rule-process`            | `request` (req)                                                                                                                                                                            | Code review, feature workflow, documentation, ADR, handoff, BMAD                 |
-| `rule-pull-request`       | `description` (req, free text: "no adr")                                                                                                                                                   | Prepare PR: review + a11y + security + ADR + commit scope                        |
-| `rule-setup-project`      | `projectName` (req, free text: framework/toolchain/tier)                                                                                                                                   | Bootstrap project: detect → scaffold → toolchain → architect context             |
-| `rule-skills`             | `request` (req)                                                                                                                                                                            | Skill discovery (find-skills)                                                    |
-| `rule-styleguide`         | `request` (req)                                                                                                                                                                            | a11y, CSS, HTML, JS, JSON, Markdown, naming, patterns, validation                |
-| `rule-tdd`                | `request` (req)                                                                                                                                                                            | Test-driven development workflow                                                 |
-| `rule-toolchain`          | `request` (req, free text: tool)                                                                                                                                                           | Vite, pnpm, Turborepo, Rspack, Parcel, TypeScript, ESLint, Biome, Husky, commits |
-| `rule-ui`                 | `request` (req)                                                                                                                                                                            | UI design-system work                                                            |
-| `rule-write-tests`        | `scope` (req, free text: tdd/a11y/devops/all)                                                                                                                                              | Write TDD + a11y (axe-core) + devops tests                                       |
+| Name                | Arguments                                                                                                                                                                                  | Description                                                                                           |
+| ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------- |
+| `rule-a11y-audit`    | `code` (req, free text)                                                                                                                                                                    | Audit a11y end-to-end: WCAG 2.2 AA review + Playwright/axe-core tests                                 |
+| `rule-ai`            | `request` (req)                                                                                                                                                                            | AI agent integrations                                                                                 |
+| `rule-backend`       | `request` (req, free text: framework)                                                                                                                                                      | Node, Express, Fastify, Hono, NestJS, GraphQL, API design, security                                   |
+| `rule-caveman`       | `request` (req)                                                                                                                                                                            | Compressed communication, commits, reviews                                                            |
+| `rule-code-review`   | `code` (req, free text)                                                                                                                                                                    | Review code against rule styleguides                                                                   |
+| `rule-data`          | `request` (req, free text: database)                                                                                                                                                       | PostgreSQL, MySQL, SQLite, MongoDB, DuckDB, IndexedDB, SQL                                            |
+| `rule-devops`        | `request` (req)                                                                                                                                                                            | Docker, GitLab CI, observability, testing, versioning                                                 |
+| `rule-frontend`      | `request` (req, free text: framework)                                                                                                                                                      | React, Vue, Svelte, Angular, Solid, Astro, Next, Nuxt, Remix, vanilla                                 |
+| `rule-handoff`       | `options` (opt, free-form tokens: `handoff` \| `close-session`, `compress`, `full` \| `brief` \| `minimal`, `no-diff`, `no-log`, `no-context`, `no-adrs`, `no-roadmap`, `max=<n>`, `help`) | Compressed context handoff for a new session                                                          |
+| `rule-meta`          | `request` (req)                                                                                                                                                                            | Dispatcher/action toolset (gateway, apply, search, check, scaffold…)                                  |
+| `rule-new-feature`   | `feature` (req, free text: framework/area/"no tests")                                                                                                                                      | Feature end-to-end with TDD + a11y + commit scope                                                     |
+| `rule-platform`      | `request` (req, free text: platform)                                                                                                                                                       | Web, desktop, Expo, agent, library                                                                    |
+| `rule-process`       | `request` (req)                                                                                                                                                                            | Code review, feature workflow, documentation, ADR, handoff, BMAD                                      |
+| `rule-pull-request`  | `description` (req, free text: "no adr")                                                                                                                                                   | Prepare PR: review + a11y + security + ADR + commit scope                                             |
+| `rule-setup-project` | `projectName` (req, free text: framework/toolchain/tier)                                                                                                                                   | Bootstrap project: detect → scaffold → toolchain → context pack (rule-mcp-architect web app or SDK) |
+| `rule-skills`        | `request` (req)                                                                                                                                                                            | Skill discovery (find-skills)                                                                         |
+| `rule-styleguide`    | `request` (req)                                                                                                                                                                            | a11y, CSS, HTML, JS, JSON, Markdown, naming, patterns, validation                                     |
+| `rule-tdd`           | `request` (req)                                                                                                                                                                            | Test-driven development workflow                                                                      |
+| `rule-toolchain`     | `request` (req, free text: tool)                                                                                                                                                           | Vite, pnpm, Turborepo, Rspack, Parcel, TypeScript, ESLint, Biome, Husky, commits                      |
+| `rule-ui`            | `request` (req)                                                                                                                                                                            | UI design-system work                                                                                 |
+| `rule-write-tests`   | `scope` (req, free text: tdd/a11y/devops/all)                                                                                                                                              | Write TDD + a11y (axe-core) + devops tests                                                            |
 
 ---
 
@@ -758,7 +752,6 @@ previousPassed: ["no-css-classes", "no-inline-styles", "semantic-html",
 | Web platform       | rule-platform-web              | `rule_tool_platform_web`              |
 | Library authoring  | rule-platform-library          | `rule_tool_platform_library`          |
 | Styleguides        | rule-styleguide                | `rule_tool_styleguide`                |
-| Architecture       | rule-architect                 | `rule_tool_architect`                 |
 
 ## Preserved source: `PLUGINS.md`
 

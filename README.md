@@ -57,7 +57,7 @@ rule-mcp install --agent all
 
 rule-mcp is an [MCP](https://modelcontextprotocol.io) server that exposes **99 tools**, **146 resources**, and **24 prompts** to any MCP-compatible AI coding agent. Because the server never calls an LLM (every output is deterministic), it is **model-agnostic** - it behaves identically behind Claude, GPT, Gemini, Llama, Qwen, or any other model. It provides:
 
-- **89 modular skills** covering frontend, backend, database, devops, toolchain, styleguide, and architecture domains
+- **89 modular skills** covering frontend, backend, database, devops, toolchain, and styleguide domains
 - **BM25 full-text search** across all skill content
 - **Guardrail engine** with 18 shared rules + framework/backend/database/devops-specific checks
 - **Deterministic gateway** (`pix_gateway` + `pix_apply`) with receipt-based validation
@@ -160,75 +160,72 @@ Claude Code, Cursor, Cline, Roo Code, Copilot, Gemini CLI, Codex CLI, Windsurf, 
 
 Each skill directory under `skills/` becomes a tool `pix_<skill-name>`. All support 6 modes: `full`, `summary`, `search`, `guardrails`, `check`, `tldr`.
 
-| Tool                            | Skill name                    | Lines | Domain       |
-| ------------------------------- | ----------------------------- | ----- | ------------ |
-| `pix_architect`                 | rule-architect                 | 253   | Architecture |
-| `pix_architect_cli`             | rule-architect-cli             | 82    | Architecture |
-| `pix_architect_web`             | rule-architect-web             | 71    | Architecture |
-| `pix_backend`                   | rule-backend                   | 61    | Backend      |
-| `pix_backend_api_design`        | rule-backend-api-design        | 158   | Backend      |
-| `pix_backend_express`           | rule-backend-express           | 147   | Backend      |
-| `pix_backend_fastify`           | rule-backend-fastify           | 82    | Backend      |
-| `pix_backend_hono`              | rule-backend-hono              | 91    | Backend      |
-| `pix_backend_nestjs`            | rule-backend-nestjs            | 94    | Backend      |
-| `pix_backend_node`              | rule-backend-node              | 214   | Backend      |
-| `pix_backend_security`          | rule-backend-security          | 174   | Backend      |
-| `pix_data`                      | rule-data                      | 39    | Data         |
-| `pix_data_duckdb`               | rule-data-duckdb               | 234   | Data         |
-| `pix_data_indexed_db`           | rule-data-indexed-db           | 317   | Data         |
-| `pix_data_mongodb`              | rule-data-mongodb              | 743   | Data         |
-| `pix_data_mysql`                | rule-data-mysql                | 595   | Data         |
-| `pix_data_postgresql`           | rule-data-postgresql           | 649   | Data         |
-| `pix_data_sql`                  | rule-data-sql                  | 632   | Data         |
-| `pix_data_sqlite`               | rule-data-sqlite               | 242   | Data         |
-| `pix_devops`                    | rule-devops                    | 42    | DevOps       |
-| `pix_devops_docker`             | rule-devops-docker             | 128   | DevOps       |
-| `pix_devops_gitlab_ci`          | rule-devops-gitlab-ci          | 75    | DevOps       |
-| `pix_devops_testing`            | rule-devops-testing            | 300   | DevOps       |
-| `pix_devops_version`            | rule-devops-version            | 161   | DevOps       |
-| `pix_frontend`                  | rule-frontend                  | 61    | Frontend     |
-| `pix_frontend_angular`          | rule-frontend-angular          | 504   | Frontend     |
-| `pix_frontend_astro`            | rule-frontend-astro            | 526   | Frontend     |
-| `pix_frontend_meta_next`        | rule-frontend-meta-next        | 201   | Frontend     |
-| `pix_frontend_meta_nuxt`        | rule-frontend-meta-nuxt        | 181   | Frontend     |
-| `pix_frontend_meta_remix`       | rule-frontend-meta-remix       | 224   | Frontend     |
-| `pix_frontend_react`            | rule-frontend-react            | 688   | Frontend     |
-| `pix_frontend_solidjs`          | rule-frontend-solidjs          | 532   | Frontend     |
-| `pix_frontend_svelte`           | rule-frontend-svelte           | 508   | Frontend     |
-| `pix_frontend_vanilla_reactive` | rule-frontend-vanilla-reactive | 640   | Frontend     |
-| `pix_frontend_vue`              | rule-frontend-vue              | 522   | Frontend     |
-| `pix_platform`                  | rule-platform                  | 43    | Platform     |
-| `pix_platform_agent`            | rule-platform-agent            | 294   | Platform     |
-| `pix_platform_desktop`          | rule-platform-desktop          | 542   | Platform     |
-| `pix_platform_expo`             | rule-platform-expo             | 254   | Platform     |
-| `pix_platform_library`          | rule-platform-library          | 259   | Platform     |
-| `pix_platform_web`              | rule-platform-web              | 241   | Platform     |
-| `pix_process`                   | rule-process                   | 43    | Process      |
-| `pix_process_bmad`              | rule-process-bmad              | 422   | Process      |
-| `pix_process_documentation`     | rule-process-documentation     | 201   | Process      |
-| `pix_process_feature_workflow`  | rule-process-feature-workflow  | 121   | Process      |
-| `pix_styleguide`                | rule-styleguide                | 58    | Styleguide   |
-| `pix_styleguide_a11y`           | rule-styleguide-a11y           | 514   | Styleguide   |
-| `pix_styleguide_css`            | rule-styleguide-css            | 488   | Styleguide   |
-| `pix_styleguide_html`           | rule-styleguide-html           | 339   | Styleguide   |
-| `pix_styleguide_javascript`     | rule-styleguide-javascript     | 553   | Styleguide   |
-| `pix_styleguide_json`           | rule-styleguide-json           | 132   | Styleguide   |
-| `pix_styleguide_markdown`       | rule-styleguide-markdown       | 132   | Styleguide   |
-| `pix_styleguide_naming`         | rule-styleguide-naming         | 228   | Styleguide   |
-| `pix_styleguide_patterns`       | rule-styleguide-patterns       | 183   | Styleguide   |
-| `pix_styleguide_validation`     | rule-styleguide-validation     | 472   | Styleguide   |
-| `pix_toolchain`                 | rule-toolchain                 | 69    | Toolchain    |
-| `pix_toolchain_biome`           | rule-toolchain-biome           | 101   | Toolchain    |
-| `pix_toolchain_eslint`          | rule-toolchain-eslint          | 81    | Toolchain    |
-| `pix_toolchain_husky`           | rule-toolchain-husky           | 116   | Toolchain    |
-| `pix_toolchain_parcel`          | rule-toolchain-parcel          | 120   | Toolchain    |
-| `pix_toolchain_pnpm`            | rule-toolchain-pnpm            | 114   | Toolchain    |
-| `pix_toolchain_project`         | rule-toolchain-project         | 217   | Toolchain    |
-| `pix_toolchain_turborepo`       | rule-toolchain-turborepo       | 108   | Toolchain    |
-| `pix_toolchain_typescript`      | rule-toolchain-typescript      | 132   | Toolchain    |
-| `pix_toolchain_vite`            | rule-toolchain-vite            | 93    | Toolchain    |
-| `pix_ui`                        | rule-ui                        | 79    | UI           |
-| `pix_ui_design_system`          | rule-ui-design-system          | 214   | UI           |
+| Tool                            | Skill name                    | Lines | Domain     |
+| ------------------------------- | ----------------------------- | ----- | ---------- |
+| `pix_backend`                   | rule-backend                   | 61    | Backend    |
+| `pix_backend_api_design`        | rule-backend-api-design        | 158   | Backend    |
+| `pix_backend_express`           | rule-backend-express           | 147   | Backend    |
+| `pix_backend_fastify`           | rule-backend-fastify           | 82    | Backend    |
+| `pix_backend_hono`              | rule-backend-hono              | 91    | Backend    |
+| `pix_backend_nestjs`            | rule-backend-nestjs            | 94    | Backend    |
+| `pix_backend_node`              | rule-backend-node              | 214   | Backend    |
+| `pix_backend_security`          | rule-backend-security          | 174   | Backend    |
+| `pix_data`                      | rule-data                      | 39    | Data       |
+| `pix_data_duckdb`               | rule-data-duckdb               | 234   | Data       |
+| `pix_data_indexed_db`           | rule-data-indexed-db           | 317   | Data       |
+| `pix_data_mongodb`              | rule-data-mongodb              | 743   | Data       |
+| `pix_data_mysql`                | rule-data-mysql                | 595   | Data       |
+| `pix_data_postgresql`           | rule-data-postgresql           | 649   | Data       |
+| `pix_data_sql`                  | rule-data-sql                  | 632   | Data       |
+| `pix_data_sqlite`               | rule-data-sqlite               | 242   | Data       |
+| `pix_devops`                    | rule-devops                    | 42    | DevOps     |
+| `pix_devops_docker`             | rule-devops-docker             | 128   | DevOps     |
+| `pix_devops_gitlab_ci`          | rule-devops-gitlab-ci          | 75    | DevOps     |
+| `pix_devops_testing`            | rule-devops-testing            | 300   | DevOps     |
+| `pix_devops_version`            | rule-devops-version            | 161   | DevOps     |
+| `pix_frontend`                  | rule-frontend                  | 61    | Frontend   |
+| `pix_frontend_angular`          | rule-frontend-angular          | 504   | Frontend   |
+| `pix_frontend_astro`            | rule-frontend-astro            | 526   | Frontend   |
+| `pix_frontend_meta_next`        | rule-frontend-meta-next        | 201   | Frontend   |
+| `pix_frontend_meta_nuxt`        | rule-frontend-meta-nuxt        | 181   | Frontend   |
+| `pix_frontend_meta_remix`       | rule-frontend-meta-remix       | 224   | Frontend   |
+| `pix_frontend_react`            | rule-frontend-react            | 688   | Frontend   |
+| `pix_frontend_solidjs`          | rule-frontend-solidjs          | 532   | Frontend   |
+| `pix_frontend_svelte`           | rule-frontend-svelte           | 508   | Frontend   |
+| `pix_frontend_vanilla_reactive` | rule-frontend-vanilla-reactive | 640   | Frontend   |
+| `pix_frontend_vue`              | rule-frontend-vue              | 522   | Frontend   |
+| `pix_platform`                  | rule-platform                  | 43    | Platform   |
+| `pix_platform_agent`            | rule-platform-agent            | 294   | Platform   |
+| `pix_platform_desktop`          | rule-platform-desktop          | 542   | Platform   |
+| `pix_platform_expo`             | rule-platform-expo             | 254   | Platform   |
+| `pix_platform_library`          | rule-platform-library          | 259   | Platform   |
+| `pix_platform_web`              | rule-platform-web              | 241   | Platform   |
+| `pix_process`                   | rule-process                   | 43    | Process    |
+| `pix_process_bmad`              | rule-process-bmad              | 422   | Process    |
+| `pix_process_documentation`     | rule-process-documentation     | 201   | Process    |
+| `pix_process_feature_workflow`  | rule-process-feature-workflow  | 121   | Process    |
+| `pix_styleguide`                | rule-styleguide                | 58    | Styleguide |
+| `pix_styleguide_a11y`           | rule-styleguide-a11y           | 514   | Styleguide |
+| `pix_styleguide_css`            | rule-styleguide-css            | 488   | Styleguide |
+| `pix_styleguide_html`           | rule-styleguide-html           | 339   | Styleguide |
+| `pix_styleguide_javascript`     | rule-styleguide-javascript     | 553   | Styleguide |
+| `pix_styleguide_json`           | rule-styleguide-json           | 132   | Styleguide |
+| `pix_styleguide_markdown`       | rule-styleguide-markdown       | 132   | Styleguide |
+| `pix_styleguide_naming`         | rule-styleguide-naming         | 228   | Styleguide |
+| `pix_styleguide_patterns`       | rule-styleguide-patterns       | 183   | Styleguide |
+| `pix_styleguide_validation`     | rule-styleguide-validation     | 472   | Styleguide |
+| `pix_toolchain`                 | rule-toolchain                 | 69    | Toolchain  |
+| `pix_toolchain_biome`           | rule-toolchain-biome           | 101   | Toolchain  |
+| `pix_toolchain_eslint`          | rule-toolchain-eslint          | 81    | Toolchain  |
+| `pix_toolchain_husky`           | rule-toolchain-husky           | 116   | Toolchain  |
+| `pix_toolchain_parcel`          | rule-toolchain-parcel          | 120   | Toolchain  |
+| `pix_toolchain_pnpm`            | rule-toolchain-pnpm            | 114   | Toolchain  |
+| `pix_toolchain_project`         | rule-toolchain-project         | 217   | Toolchain  |
+| `pix_toolchain_turborepo`       | rule-toolchain-turborepo       | 108   | Toolchain  |
+| `pix_toolchain_typescript`      | rule-toolchain-typescript      | 132   | Toolchain  |
+| `pix_toolchain_vite`            | rule-toolchain-vite            | 93    | Toolchain  |
+| `pix_ui`                        | rule-ui                        | 79    | UI         |
+| `pix_ui_design_system`          | rule-ui-design-system          | 214   | UI         |
 
 #### Mutating tools (2)
 
@@ -305,31 +302,29 @@ free-form argument** and supports `help` (or `--help` / `-h`) as its value to pr
 list, e.g. `/rule-frontend help` - help is returned as a ready-made assistant message and
 displayed instantly, without invoking the model.
 
-| Prompt                   | Description                                                                      | Arguments                                                                                                                                       |
-| ------------------------ | -------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
-| `rule-a11y-audit`         | Audit a11y end-to-end: WCAG 2.2 AA review + Playwright/axe-core tests            | `code` (required, free text)                                                                                                                    |
-| `rule-ai`                 | AI agent integrations                                                            | `request` (required)                                                                                                                            |
-| `rule-architect`          | Project architecture: context packs, interview flows (CLI + web), scaffolding    | `request` (required)                                                                                                                            |
-| `rule-architect-scaffold` | Scaffold project with `.agents/` + `.context/`                                   | `projectName` (required, free text: framework/tier)                                                                                             |
-| `rule-backend`            | Node, Express, Fastify, Hono, NestJS, GraphQL, API design, security              | `request` (required, free text: framework)                                                                                                      |
-| `rule-caveman`            | Compressed communication, commits, reviews                                       | `request` (required)                                                                                                                            |
-| `rule-code-review`        | Review code against rule styleguides                                              | `code` (required, free text)                                                                                                                    |
-| `rule-data`               | PostgreSQL, MySQL, SQLite, MongoDB, DuckDB, IndexedDB, SQL                       | `request` (required, free text: database)                                                                                                       |
-| `rule-devops`             | Docker, GitLab CI, observability, testing, versioning                            | `request` (required)                                                                                                                            |
-| `rule-frontend`           | React, Vue, Svelte, Angular, Solid, Astro, Next, Nuxt, Remix, vanilla            | `request` (required, free text: framework)                                                                                                      |
-| `rule-handoff`            | Compressed context handoff (ADR + git) for a new session                         | `options` (optional: `handoff` \| `close-session`, `compress`, `full` \| `brief` \| `minimal`, `no-*`, `max=<n>`, `help`; empty = all defaults) |
-| `rule-meta`               | Dispatcher/action toolset (gateway, apply, search, check, scaffold…)             | `request` (required)                                                                                                                            |
-| `rule-new-feature`        | Feature end-to-end: route → evidence → failing tests → code → guardrails         | `feature` (required, free text: framework/area/"no tests")                                                                                      |
-| `rule-platform`           | Web, desktop, Expo, agent, library                                               | `request` (required, free text: platform)                                                                                                       |
-| `rule-process`            | Code review, feature workflow, documentation, ADR, handoff, BMAD                 | `request` (required)                                                                                                                            |
-| `rule-pull-request`       | Prepare PR: review + a11y + security + ADR + commit scope + description          | `description` (required, free text: "no adr")                                                                                                   |
-| `rule-setup-project`      | Bootstrap project: detect → scaffold → toolchain → architect context             | `projectName` (required, free text: framework/toolchain/tier)                                                                                   |
-| `rule-skills`             | Skill discovery (find-skills)                                                    | `request` (required)                                                                                                                            |
-| `rule-styleguide`         | a11y, CSS, HTML, JS, JSON, Markdown, naming, patterns, validation                | `request` (required)                                                                                                                            |
-| `rule-tdd`                | Test-driven development workflow                                                 | `request` (required)                                                                                                                            |
-| `rule-toolchain`          | Vite, pnpm, Turborepo, Rspack, Parcel, TypeScript, ESLint, Biome, Husky, commits | `request` (required, free text: tool)                                                                                                           |
-| `rule-ui`                 | UI design-system work                                                            | `request` (required)                                                                                                                            |
-| `rule-write-tests`        | Write tests: TDD + a11y (Playwright + axe-core) + devops                         | `scope` (required, free text: tdd/a11y/devops/all)                                                                                              |
+| Prompt              | Description                                                                      | Arguments                                                                                                                                       |
+| ------------------- | -------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| `rule-a11y-audit`    | Audit a11y end-to-end: WCAG 2.2 AA review + Playwright/axe-core tests            | `code` (required, free text)                                                                                                                    |
+| `rule-ai`            | AI agent integrations                                                            | `request` (required)                                                                                                                            |
+| `rule-backend`       | Node, Express, Fastify, Hono, NestJS, GraphQL, API design, security              | `request` (required, free text: framework)                                                                                                      |
+| `rule-caveman`       | Compressed communication, commits, reviews                                       | `request` (required)                                                                                                                            |
+| `rule-code-review`   | Review code against rule styleguides                                              | `code` (required, free text)                                                                                                                    |
+| `rule-data`          | PostgreSQL, MySQL, SQLite, MongoDB, DuckDB, IndexedDB, SQL                       | `request` (required, free text: database)                                                                                                       |
+| `rule-devops`        | Docker, GitLab CI, observability, testing, versioning                            | `request` (required)                                                                                                                            |
+| `rule-frontend`      | React, Vue, Svelte, Angular, Solid, Astro, Next, Nuxt, Remix, vanilla            | `request` (required, free text: framework)                                                                                                      |
+| `rule-handoff`       | Compressed context handoff (ADR + git) for a new session                         | `options` (optional: `handoff` \| `close-session`, `compress`, `full` \| `brief` \| `minimal`, `no-*`, `max=<n>`, `help`; empty = all defaults) |
+| `rule-meta`          | Dispatcher/action toolset (gateway, apply, search, check, scaffold…)             | `request` (required)                                                                                                                            |
+| `rule-new-feature`   | Feature end-to-end: route → evidence → failing tests → code → guardrails         | `feature` (required, free text: framework/area/"no tests")                                                                                      |
+| `rule-platform`      | Web, desktop, Expo, agent, library                                               | `request` (required, free text: platform)                                                                                                       |
+| `rule-process`       | Code review, feature workflow, documentation, ADR, handoff, BMAD                 | `request` (required)                                                                                                                            |
+| `rule-pull-request`  | Prepare PR: review + a11y + security + ADR + commit scope + description          | `description` (required, free text: "no adr")                                                                                                   |
+| `rule-setup-project` | Bootstrap project: detect → scaffold → toolchain → architect context             | `projectName` (required, free text: framework/toolchain/tier)                                                                                   |
+| `rule-skills`        | Skill discovery (find-skills)                                                    | `request` (required)                                                                                                                            |
+| `rule-styleguide`    | a11y, CSS, HTML, JS, JSON, Markdown, naming, patterns, validation                | `request` (required)                                                                                                                            |
+| `rule-tdd`           | Test-driven development workflow                                                 | `request` (required)                                                                                                                            |
+| `rule-toolchain`     | Vite, pnpm, Turborepo, Rspack, Parcel, TypeScript, ESLint, Biome, Husky, commits | `request` (required, free text: tool)                                                                                                           |
+| `rule-ui`            | UI design-system work                                                            | `request` (required)                                                                                                                            |
+| `rule-write-tests`   | Write tests: TDD + a11y (Playwright + axe-core) + devops                         | `scope` (required, free text: tdd/a11y/devops/all)                                                                                              |
 
 ---
 

@@ -304,7 +304,7 @@ function skillNextTools(skillName) {
   const suggestions = [];
   const base = skillName.replace(/^rule-/, "").replaceAll("-", "_");
   suggestions.push(`rule_tool_${base}`);
-  if (skillName === "rule-styleguide" || skillName === "rule-architect") {
+  if (skillName === "rule-styleguide") {
     suggestions.push("rule_tool_scaffold");
   }
   suggestions.push("rule_tool_check", "rule_tool_search");
@@ -502,14 +502,7 @@ export function registerAiTool() {
           if (skillName === detectedSkillName) {
             finalScore = Math.max(rawScore * 2, 20);
           } else if (
-            [
-              "rule-styleguide",
-              "rule-frontend",
-              "rule-platform-web",
-              "rule-architect",
-              "rule-ui-design-system",
-              "rule-ai",
-            ].includes(skillName)
+            ["rule-styleguide", "rule-frontend", "rule-platform-web", "rule-ui-design-system", "rule-ai"].includes(skillName)
           ) {
             finalScore *= 1.15;
           } else {

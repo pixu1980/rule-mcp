@@ -28,7 +28,7 @@ Every ADR follows the [Michael Nygard template](https://github.com/joelparkerhen
 - **Date**: YYYY-MM-DD
 - **Status**: proposed | accepted | deprecated | superseded
 - **Tags**: tag1, tag2
-- **Author**: rule-architect
+- **Author**: rule-mcp
 
 ## Context
 

@@ -58,7 +58,7 @@ function generateAdr({ number, title, status, context, decision, consequences, a
     `- **Date**: ${date}`,
     `- **Status**: ${status}`,
     `- **Tags**: ${tags.join(", ")}`,
-    "- **Author**: rule-architect",
+    "- **Author**: rule-mcp",
     "",
     "## Context",
     "",
@@ -234,7 +234,7 @@ export function registerProcessAdrTool() {
       return;
     }
 
-    const relevant = ["rule_tool_architect", "pix_tool", "rule_tool_scaffold", "rule_tool_detect", "rule_tool_fix"];
+    const relevant = ["pix_tool", "rule_tool_scaffold", "rule_tool_detect", "rule_tool_fix"];
     if (!relevant.includes(toolName)) {
       return;
     }
@@ -322,7 +322,7 @@ export function registerProcessAdrTool() {
         break;
       }
       default: {
-        // Generic (pix_architect and others)
+        // Generic (any rule_tool_* action)
         title = `Tool: ${toolName} - ${arguments_.action || arguments_.mode || "execute"}`;
         contextLines = [`Tool: ${toolName}`, `Args: ${JSON.stringify(arguments_).slice(0, 200)}`];
         decisionLines = [`Tool executed successfully.`];
@@ -335,7 +335,7 @@ export function registerProcessAdrTool() {
       `- **Date**: ${dateString} ${timeString}`,
       `- **Status**: accepted`,
       `- **Tags**: ${tags}`,
-      "- **Author**: rule-architect",
+      "- **Author**: rule-mcp",
       "",
       "## Context",
       "",

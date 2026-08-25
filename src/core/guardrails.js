@@ -11,7 +11,6 @@ import {
   SHARED_GUARDRAILS,
   FRAMEWORK_GUARDRAILS,
   SCAFFOLD_GUARDRAILS,
-  ARCHITECT_GUARDRAILS,
   BACKEND_GUARDRAILS,
   DATABASE_GUARDRAILS,
   DEVOPS_GUARDRAILS,
@@ -64,7 +63,6 @@ const SKILL_FRAMEWORK_MAP = {
   "rule-styleguide-validation": "vanilla",
   "rule-frontend-vanilla-reactive": "vanilla-reactive",
   rule: "vanilla",
-  "rule-architect": "architect",
 };
 
 // ─── Plugin guardrails registry ───
@@ -93,7 +91,6 @@ export function getGuardrails(skillName, mode) {
   const framework = SKILL_FRAMEWORK_MAP[skillName] || "vanilla";
   const frameworkSpecific = FRAMEWORK_GUARDRAILS[framework] || [];
   const scaffold = skillName === "rule-styleguide" && mode === "scaffold" ? SCAFFOLD_GUARDRAILS : [];
-  const architect = skillName === "rule-architect" ? ARCHITECT_GUARDRAILS : [];
   const plugin = PLUGIN_GUARDRAILS.get(skillName) || [];
 
   // Backend guardrails for backend/api skills
@@ -108,16 +105,7 @@ export function getGuardrails(skillName, mode) {
   const isDevops = /^rule-devops(?:-|$)/.test(skillName);
   const devops = isDevops ? DEVOPS_GUARDRAILS : [];
 
-  return [
-    ...SHARED_GUARDRAILS,
-    ...frameworkSpecific,
-    ...scaffold,
-    ...architect,
-    ...backend,
-    ...database,
-    ...devops,
-    ...plugin,
-  ];
+  return [...SHARED_GUARDRAILS, ...frameworkSpecific, ...scaffold, ...backend, ...database, ...devops, ...plugin];
 }
 
 export function checkCode(skillName, code, context = {}) {
@@ -209,13 +197,6 @@ export function getGuardrailsReport(skillName, mode) {
       lines.push(`- [ ] **${g.id}**: ${g.label}`, `  ${g.description}`, "");
     }
     lines.push("Run `pix_styleguide mode=scaffold` to generate these files.", "");
-  }
-
-  if (skillName === "rule-architect") {
-    lines.push(`## Architecture & Documentation (${ARCHITECT_GUARDRAILS.length} checks)`, "");
-    for (const g of ARCHITECT_GUARDRAILS) {
-      lines.push(`- [ ] **${g.id}**: ${g.label}`, `  ${g.description}`, "");
-    }
   }
 
   if (/^rule-(?:backend|backend-)/.test(skillName)) {

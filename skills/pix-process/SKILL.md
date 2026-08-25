@@ -40,5 +40,4 @@ Need to close/resume a session?         → rule-process-handoff
 
 ## See also
 
-- [rule-architect](../rule-architect/SKILL.md) - Architecture wizard
 - [rule](../rule/SKILL.md) - Central skill index

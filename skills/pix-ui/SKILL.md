@@ -72,4 +72,3 @@ validate any visible interface.
 - [rule-ui-design-system](../rule-ui-design-system/SKILL.md) - Visual design direction
 - [rule-frontend](../rule-frontend/SKILL.md) - Frontend framework routing
 - [rule-styleguide](../rule-styleguide/SKILL.md) - Shared implementation standards
-- [rule-architect](../rule-architect/SKILL.md) - Architecture and `.context` generation

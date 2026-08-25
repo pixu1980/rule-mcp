@@ -449,7 +449,6 @@ header "Phase 2b: Agent Command Files"
 
 COMMAND_NAMES=(
   "rule-mcp"
-  "rule-architect"
   "rule-handoff"
   "rule-tdd"
   "rule-adr"

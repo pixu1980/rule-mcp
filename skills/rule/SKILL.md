@@ -41,7 +41,7 @@ frameworks: [all]
 ```text
 Prompt
   ├─ unsure / broad / multi-domain      → rule + pix_search
-  ├─ architecture / SDD / plan          → rule-architect
+  ├─ architecture / SDD / plan          → rule-process-adr + rule-mcp-architect (web app)
   ├─ UI / component / page              → rule-frontend + framework skill + rule-styleguide
   ├─ meta-framework                     → rule-frontend-meta-* + base framework skill
   ├─ AI / agent / LLM application       → rule-ai + focused AI skill
@@ -89,9 +89,8 @@ Build AI agent repositories, providers, tools, registries, and tests.
 
 Plan architecture, SDD, context, and scaffolding flow.
 
-| Skill                                      | Tool            | Frameworks | Use when                                                                                                                |
-| ------------------------------------------ | --------------- | ---------- | ----------------------------------------------------------------------------------------------------------------------- |
-| [rule-architect](../rule-architect/SKILL.md) | `pix_architect` | all        | Enterprise project architecture wizard. Guides through technology choices, scaffolding, standards, and documentation... |
+| Skill | Tool | Frameworks | Use when |
+| ----- | ---- | ---------- | -------- |
 
 ### Backend
 
@@ -236,7 +235,7 @@ Design and route visible interface work while preserving rule implementation con
 
 | Task                     | Primary                                             | Secondary                                             | Deterministic tools                      |
 | ------------------------ | --------------------------------------------------- | ----------------------------------------------------- | ---------------------------------------- |
-| Unknown project          | `rule`                                               | `rule-architect`                                       | `pix_detect`, `pix_search`               |
+| Unknown project          | `rule`                                               | `rule-process-adr`                                     | `pix_detect`, `pix_search`               |
 | AI agent app             | `rule-ai-agents`                                     | `rule-ai`, `rule-devops-testing`                        | `pix_check`, `pix_process_adr`           |
 | New web UI               | `rule-ui` + `rule-ui-design-system` + framework skill | `rule-styleguide`, `rule-platform-web`                  | `pix_component`, `pix_check`             |
 | React/Vite app           | `rule-frontend-react`                                | `rule-toolchain-vite`, `rule-styleguide`                | `pix_scaffold`, `pix_check`              |
@@ -262,7 +261,6 @@ Design and route visible interface work while preserving rule implementation con
 
 ## See also
 
-- [rule-architect](../rule-architect/SKILL.md) - Architecture wizard and SDD workflow
 - [rule-styleguide](../rule-styleguide/SKILL.md) - Shared coding standards
 - [rule-process-feature-workflow](../rule-process-feature-workflow/SKILL.md) - Feature delivery workflow
 - [rule-toolchain](../rule-toolchain/SKILL.md) - Toolchain index

@@ -3,7 +3,6 @@
 #
 # Installs prompt templates / commands for:
 #   rule-mcp    - Route via rule-mcp
-#   rule-architect     - Route via rule-architect skill
 #   rule-handoff       - Generate handoff summary
 #   rule-tdd           - Test-driven development workflow
 #   rule-adr           - Architecture Decision Record
@@ -67,20 +66,6 @@ argument-hint: "[request]"
 Use the rule-mcp MCP server explicitly for this request: $ARGUMENTS
 
 Call `pix_tool` first to select the correct skill, follow the returned guidance, and use `rule_tool_check` to validate relevant code before finishing. If no arguments were supplied, apply this workflow to the current user request.
-EOF
-      ;;
-    "rule-architect")
-      cat <<'EOF'
----
-description: Route to rule-architect for project scaffolding and ADR decisions
-argument-hint: "<request>"
----
-Process this request through rule-architect skill: $ARGUMENTS
-
-1. Call `pix_tool` to route to architect skill.
-2. Load full rule-architect skill evidence.
-3. Execute architect workflow: project scaffolding, skill mapping, context generation, ADR.
-4. Use `rule_tool_process_adr` for architecture decisions.
 EOF
       ;;
     "rule-handoff")
@@ -167,16 +152,6 @@ Explicitly use the rule-mcp MCP server for the request supplied with this comman
 3. Run `rule_tool_check` against relevant code before finishing.
 EOF
       ;;
-    "rule-architect")
-      cat <<'EOF'
-# rule-architect
-
-Route through rule-architect for project structure, ADRs, and skill mapping.
-
-1. Call `pix_tool` to route to architect skill.
-2. Execute architect workflow with ADR recording.
-EOF
-      ;;
     "rule-handoff")
       cat <<'EOF'
 # rule-handoff
@@ -243,18 +218,6 @@ Call `pix_tool` first to select the correct skill, follow the returned guidance,
 """
 EOF
       ;;
-    "rule-architect")
-      cat <<'EOF'
-description = "Route to rule-architect for project scaffolding"
-prompt = """
-Process through rule-architect skill: {{args}}
-
-1. Call `pix_tool` to route to architect skill.
-2. Load skill evidence and execute architect workflow.
-3. Use `rule_tool_process_adr` for decisions.
-"""
-EOF
-      ;;
     "rule-handoff")
       cat <<'EOF'
 description = "Generate LLM handoff summary"
@@ -311,7 +274,6 @@ EOF
 
 COMMAND_NAMES=(
   "rule-mcp"
-  "rule-architect"
   "rule-handoff"
   "rule-tdd"
   "rule-adr"
@@ -388,5 +350,5 @@ fi
 echo ""
 echo "Installed ${installed} command(s); skipped ${skipped}."
 echo ""
-echo "Available commands for Pi: /rule-mcp, /rule-architect, /rule-handoff,"
+echo "Available commands for Pi: /rule-mcp, /rule-handoff,"
 echo "  /rule-tdd, /rule-adr, /rule-fix, /rule-check"

@@ -69,4 +69,3 @@ Set these in **Settings > CI/CD > Variables**:
 ## See also
 
 - [rule](../rule/SKILL.md) - Central skill index and dispatcher
-- [rule-architect](../rule-architect/SKILL.md) - Project architecture wizard

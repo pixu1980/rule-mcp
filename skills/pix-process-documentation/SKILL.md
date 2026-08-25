@@ -195,4 +195,3 @@ Install last version of **mintlify** and add to root `package.json`:
 ## See also
 
 - [rule](../rule/SKILL.md) - Central skill index and dispatcher
-- [rule-architect](../rule-architect/SKILL.md) - Project architecture wizard

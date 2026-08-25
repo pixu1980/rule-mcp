@@ -136,6 +136,5 @@ for the review workflow.
 ## See also
 
 - [rule](../rule/SKILL.md) - Central skill index and dispatcher
-- [rule-architect](../rule-architect/SKILL.md) - Project architecture wizard
 - [rule-process-code-review](../rule-process-code-review/SKILL.md) - Risk-based PR/MR review
 - [rule-devops-observability](../rule-devops-observability/SKILL.md) - Production health and rollback verification

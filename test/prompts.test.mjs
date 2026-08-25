@@ -30,14 +30,13 @@ const AREA_PROMPTS = [
   "rule-devops",
   "rule-platform",
   "rule-caveman",
-  "rule-architect",
   "rule-ai",
   "rule-skills",
   "rule-tdd",
   "rule-ui",
 ];
 
-const LEGACY_PROMPTS = ["rule-code-review", "rule-a11y-audit", "rule-architect-scaffold"];
+const LEGACY_PROMPTS = ["rule-code-review", "rule-a11y-audit"];
 
 const EXPECTED = [...WORKFLOW_PROMPTS, ...AREA_PROMPTS, ...LEGACY_PROMPTS];
 

@@ -193,7 +193,6 @@ For React, Vue, Angular, Svelte, SolidJS, Astro, Next, Nuxt, or Remix:
 | Need              | Skill                                                      |
 | ----------------- | ---------------------------------------------------------- |
 | Routing           | [rule](../rule/SKILL.md)                                     |
-| Architecture      | [rule-architect](../rule-architect/SKILL.md)                 |
 | Frontend umbrella | [rule-frontend](../rule-frontend/SKILL.md)                   |
 | CSS rules         | [rule-styleguide-css](../rule-styleguide-css/SKILL.md)       |
 | Semantic HTML     | [rule-styleguide-html](../rule-styleguide-html/SKILL.md)     |
@@ -206,4 +205,3 @@ For React, Vue, Angular, Svelte, SolidJS, Astro, Next, Nuxt, or Remix:
 - [rule](../rule/SKILL.md) - Central skill and tool dispatcher
 - [rule-styleguide](../rule-styleguide/SKILL.md) - Shared coding standards
 - [rule-frontend](../rule-frontend/SKILL.md) - Frontend framework index
-- [rule-architect](../rule-architect/SKILL.md) - Architecture and `.context` generation

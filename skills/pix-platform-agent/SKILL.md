@@ -305,7 +305,6 @@ Edge cases:
 ## See also
 
 - [rule](../rule/SKILL.md) - Central skill index and dispatcher
-- [rule-architect](../rule-architect/SKILL.md) - Project architecture wizard
 - [rule-devops-testing](../rule-devops-testing/SKILL.md) - Test thresholds and coverage
 - [rule-devops-docker](../rule-devops-docker/SKILL.md) - Dockerfile templates
 - [rule-devops-observability](../rule-devops-observability/SKILL.md) - Production telemetry and alerting

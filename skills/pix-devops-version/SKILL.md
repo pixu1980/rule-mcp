@@ -152,4 +152,3 @@ Remove the `pnpm run type-check` line from the pre-commit hook if the project do
 ## See also
 
 - [rule](../rule/SKILL.md) - Central skill index and dispatcher
-- [rule-architect](../rule-architect/SKILL.md) - Project architecture wizard

@@ -14,12 +14,9 @@ export function registerSkillTool(skillName) {
   const isPlugin = isPluginSkill(skillName);
   const displayName = isPlugin ? skillName.replaceAll("-", "_") : skillName.replace(/^rule-/, "").replaceAll("-", "_");
   const isStyleguides = skillName === "rule-styleguide";
-  const isArchitect = skillName === "rule-architect";
   const modes = isStyleguides
     ? ["full", "summary", "search", "guardrails", "check", "scaffold", "tldr"]
-    : isArchitect
-      ? ["full", "summary", "search", "guardrails", "check", "scaffold", "interview", "tldr"]
-      : ["full", "summary", "search", "guardrails", "check", "tldr"];
+    : ["full", "summary", "search", "guardrails", "check", "tldr"];
   const SkillSchema = z.object({
     query: z.string().optional().describe("Optional search query within skill (used by mode=search and mode=tldr)"),
     mode: z
@@ -31,7 +28,7 @@ export function registerSkillTool(skillName) {
     code: z.string().optional().describe("Code to validate (required for mode=check)"),
     framework: z.string().optional().describe("Framework hint for check mode"),
     file: z.string().optional().describe("Specific scaffold file to return (e.g. .prettierrc, .gitignore)"),
-    target: z.string().optional().describe("Target project directory (for architect interview mode)"),
+    target: z.string().optional().describe("Target project directory (used from the CLI, not the skill tool)"),
     fileName: z.string().optional().describe("File name for naming convention checks"),
     isComponent: z.boolean().optional().describe("Whether this is a component file"),
     allowedDependencies: z.array(z.string()).optional().describe("Manifest-derived package names allowed in imports"),
@@ -41,8 +38,7 @@ export function registerSkillTool(skillName) {
     description:
       skillName +
       " skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content)" +
-      (isStyleguides || isArchitect ? ", scaffold (project structure)" : "") +
-      (isArchitect ? ", interview (context wizard)" : "") +
+      (isStyleguides ? ", scaffold (project structure)" : "") +
       ".",
     zodSchema: SkillSchema,
     inputSchema: {
@@ -53,7 +49,7 @@ export function registerSkillTool(skillName) {
         code: { type: "string", description: "Code to validate (required for mode=check)" },
         framework: { type: "string", description: "Framework hint for check mode (auto-detected from skill)" },
         file: { type: "string", description: "Specific scaffold file to return (e.g. .prettierrc, .gitignore)" },
-        target: { type: "string", description: "Target project directory (for architect interview mode)" },
+        target: { type: "string", description: "Target project directory (used from the CLI, not the skill tool)" },
         fileName: { type: "string", description: "File name for naming convention checks" },
         isComponent: { type: "boolean", description: "Whether this is a component file" },
         allowedDependencies: {
@@ -67,13 +63,7 @@ export function registerSkillTool(skillName) {
       const mode = arguments_.mode || "full";
       const query = (arguments_.query || "").toLowerCase();
       const content = readSkill(skillName) || "Skill not found.";
-      // rule-architect interview mode: start context server
-      if (mode === "interview" && isArchitect) {
-        const { startContextServer } = await import("./architect.js");
-        const targetDir = arguments_.target || process.cwd();
-        return await startContextServer(skillName, targetDir);
-      }
-      if (mode === "scaffold" && (isStyleguides || isArchitect)) {
+      if (mode === "scaffold" && isStyleguides) {
         const scaffoldSection = extractScaffoldSection(content);
         if (arguments_.file) {
           return extractSingleScaffoldFile(scaffoldSection, arguments_.file);

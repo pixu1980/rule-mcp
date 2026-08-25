@@ -104,7 +104,6 @@ test("every tool traces back to a rule-* directory in ./skills", () => {
     "rule_tool_scaffold",
     "rule_tool_search",
     "rule_tool_update",
-    "rule_tool_architect",
   ]);
   for (const name of surface.tools) {
     if (ACTION.has(name)) {

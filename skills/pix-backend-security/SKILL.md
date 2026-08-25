@@ -168,4 +168,3 @@ app.post("/users", async (request, reply) => {
 ## See also
 
 - [rule](../rule/SKILL.md) - Central skill index and dispatcher
-- [rule-architect](../rule-architect/SKILL.md) - Project architecture wizard
