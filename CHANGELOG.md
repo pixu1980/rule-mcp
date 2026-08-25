@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- **Docs accuracy guard**: `test/docs-accuracy.test.mjs` verifies the README-advertised tool/resource/prompt/skill counts against the runtime surface, so a removal can never silently leave stale claims behind.
+- **Split hotspot modules**: `src/core/guardrail-defs.js` (1771 lines) split into domain modules under `src/core/guardrails/`; `src/cli/install.js` (1273 lines) split into `src/cli/agent-installers.js` with `install.js` keeping the orchestrators. Zero behavior change (full installer + guardrail suites green).
+
+## [1.0.0] - 2026-08-25
+
+**First release**: MCP server for the rule skill ecosystem - deterministic tool surface,
+skill-driven routing, guardrails, gateway/publish with receipts, installer for 23 agents,
+SSE daemon. Historically all changes lived under [Unreleased]; they were promoted into this
+milestone when the repository reached its stable shape (installer hardening, architect split,
+docs accuracy guard).
+
 ### Security
 
 - **Write containment:** `pix_apply` now validates the project root itself, refuses the filesystem root, home directory, system directories, and absolute/`..`/symlink-escape paths. Sensitive destinations (`.git`, `.ssh`, `.gnupg`, shell rc files, key material) are blocked by destination, not just by content. Receipts are path-bound with length-prefixed canonical digests - a receipt for one path never authorises another.

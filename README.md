@@ -19,7 +19,7 @@ Serves styleguides, component templates, framework best practices, and design sy
 - [What is rule-mcp](#what-is-rule-mcp)
 - [Architecture overview](#architecture-overview)
 - [Tool reference](#tool-reference)
-  - [All 99 tools (normal mode)](#all-99-tools-normal-mode)
+  - [All 90 tools (normal mode)](#all-90-tools-normal-mode)
   - [Minimal tool surface (10 tools)](#minimal-tool-surface-10-tools)
   - [Gateway deterministic mode](#gateway-deterministic-mode)
 - [MCP Resources (146)](#mcp-resources-146)
@@ -32,6 +32,25 @@ Serves styleguides, component templates, framework best practices, and design sy
 - [Further reading](#further-reading)
 
 ---
+
+## Project status
+
+Deterministic MCP server for the rule skill ecosystem. Live surface (enforced by
+`test/docs-accuracy.test.mjs` - the README and reality cannot drift):
+
+| Surface   | Count | Notes                                                                             |
+| --------- | ----- | --------------------------------------------------------------------------------- |
+| Tools     | 90    | ~80 per-skill tools + dispatcher/action tools                                     |
+| Resources | 168   | rule:// per-skill index + summary + template URIs                                  |
+| Prompts   | 21    | workflow + area + legacy prompts                                                  |
+| Skills    | 80    | frontend, backend, database, devops, toolchain, styleguide, process, platform, ai |
+| Tests     | 212   | `pnpm test:all` green (incl. installer + PTY TUI)                                 |
+
+Architecture decisions live in [`docs/adr/`](docs/adr/README.md) (36 records:
+installer self-heal, architect split, doc-accuracy guard, v1.0.0 release).
+The former architect wizard now lives in the standalone
+[`rule-mcp-architect`](https://github.com/pixu1980/rule-mcp-architect) web
+app + SDK repo.
 
 ## Quick start
 
@@ -55,9 +74,9 @@ rule-mcp install --agent all
 
 ## What is rule-mcp
 
-rule-mcp is an [MCP](https://modelcontextprotocol.io) server that exposes **99 tools**, **146 resources**, and **24 prompts** to any MCP-compatible AI coding agent. Because the server never calls an LLM (every output is deterministic), it is **model-agnostic** - it behaves identically behind Claude, GPT, Gemini, Llama, Qwen, or any other model. It provides:
+rule-mcp is an [MCP](https://modelcontextprotocol.io) server that exposes **90 tools**, **168 resources**, and **21 prompts** to any MCP-compatible AI coding agent. Because the server never calls an LLM (every output is deterministic), it is **model-agnostic** - it behaves identically behind Claude, GPT, Gemini, Llama, Qwen, or any other model. It provides:
 
-- **89 modular skills** covering frontend, backend, database, devops, toolchain, and styleguide domains
+- **80 modular skills** covering frontend, backend, database, devops, toolchain, and styleguide domains
 - **BM25 full-text search** across all skill content
 - **Guardrail engine** with 18 shared rules + framework/backend/database/devops-specific checks
 - **Deterministic gateway** (`pix_gateway` + `pix_apply`) with receipt-based validation
@@ -95,7 +114,7 @@ Claude Code, Cursor, Cline, Roo Code, Copilot, Gemini CLI, Codex CLI, Windsurf, 
 ├──────────────────────────────────────────────────────────────┤
 │  Tool Registry              │  Resources Registry            │
 │  src/tools/router.js        │  src/resources/index.js        │
-│  99 tools                   │  146 resources                 │
+│  90 tools                   │  168 resources                 │
 ├──────────────────┬───────────┴────────────────┬──────────────┤
 │  Orchestration   │  Skills & BM25            │  Guardrails  │
 │  pix_gateway     │  89 skill dirs            │  18 shared   │
@@ -140,7 +159,7 @@ Claude Code, Cursor, Cline, Roo Code, Copilot, Gemini CLI, Codex CLI, Windsurf, 
 
 ## Tool reference
 
-### All 99 tools (normal mode)
+### All 90 tools (normal mode)
 
 #### Deterministic tools (9)
 
@@ -149,7 +168,7 @@ Claude Code, Cursor, Cline, Roo Code, Copilot, Gemini CLI, Codex CLI, Windsurf, 
 | `rule`                 | Route a prompt to the correct rule skill via BM25 keyword scoring + framework bias            | ✅        |
 | `pix_gateway`         | **Single-entry orchestrator:** routes → loads evidence → checks guardrails → returns receipt | ✅        |
 | `pix_apply`           | Write files to disk, requires valid receipt from `pix_gateway`                               | ❌        |
-| `pix_search`          | BM25 full-text search across all 89 skills                                                   | ✅        |
+| `pix_search`          | BM25 full-text search across all 80 skills                                                   | ✅        |
 | `pix_check`           | Run guardrail checks on code against any rule skill                                           | ✅        |
 | `pix_scaffold`        | Generate project config files (`.prettierrc`, `.editorconfig`, `.gitignore`, etc.)           | ✅        |
 | `pix_detect`          | Auto-detect project framework and suggest relevant skills/tools                              | ✅        |
@@ -267,13 +286,13 @@ See [docs/plans/determinism-backend-guardrails.md](./docs/plans/determinism-back
 
 ## MCP Resources (146)
 
-146 resources accessible via the MCP `resources/read` protocol.
+168 resources accessible via the MCP `resources/read` protocol.
 
 ### Static resources (8)
 
 | URI                     | Description                                                    |
 | ----------------------- | -------------------------------------------------------------- |
-| `rule://skills`          | Index of all 89 skills with paths and sizes                    |
+| `rule://skills`          | Index of all 80 skills with paths and sizes                    |
 | `rule://templates`       | Design system component template catalog                       |
 | `rule://project`         | Project analysis: detected framework + suggested tools/ skills |
 | `rule://community`       | Community / plugin rule skills index                            |
