@@ -335,7 +335,7 @@ export function formatDoctorTerminal(report) {
   return lines.join("\n") + "\n";
 }
 
-export function runDoctor(telemetry = false) {
+export async function runDoctor(telemetry = false) {
   const p = getRuntimePaths();
   // eslint-disable-next-line no-unused-vars
   const __dirname = fileURLToPath(new URL(".", import.meta.url));
@@ -359,6 +359,28 @@ export function runDoctor(telemetry = false) {
   // Environment
   const environment = getEnvironmentInfo();
 
+  // Surface snapshot (tools / resources / prompts / skills)
+  let surface = { tools: 0, resources: 0, prompts: 0, skills: 0 };
+  try {
+    const { loadAllSkills } = await import("../core/skills.js");
+    await loadAllSkills(true);
+    const { listTools } = await import("../tools/router.js");
+    const { listResources } = await import("../resources/index.js");
+    const { listPrompts } = await import("../prompts/index.js");
+    const len = (r) => (Array.isArray(r) ? r.length : (r.tools ?? r.resources ?? r.prompts).length);
+    surface.tools = len(await listTools({}));
+    surface.resources = len(await listResources({}));
+    surface.prompts = len(await listPrompts());
+  } catch {
+    /* surface probe is best-effort */
+  }
+  const { readdirSync } = await import("node:fs");
+  try {
+    surface.skills = readdirSync(new URL("../../skills", import.meta.url)).filter((d) => d.startsWith("rule-")).length;
+  } catch {
+    /* no skills dir next to the module (installed elsewhere) */
+  }
+
   // Daemon status
   let isDaemonRunning = false;
   let daemonPid = null;
@@ -376,6 +398,7 @@ export function runDoctor(telemetry = false) {
   const report = {
     ok: true,
     version: package_.version,
+    surface,
     sdk: getSdkVersion(),
     node: environment.node,
     platform: environment.platform,

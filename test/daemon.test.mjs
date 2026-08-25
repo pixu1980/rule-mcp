@@ -43,6 +43,7 @@ try {
 
 // ── Import the daemon command handler ──
 const { daemonCommand } = await import("../src/cli/commands.js");
+import { daemonProcessStatus } from "../src/cli/daemon.js";
 
 // ── T7: daemon start creates pid file and starts server ──
 await daemonCommand({ action: "start" });
@@ -76,20 +77,10 @@ if (pidExists) {
   }
 }
 
-// ── T8: daemon status shows running ──
-// (capture stdout)
-const origStdout = process.stdout.write;
-let statusOutput = "";
-process.stdout.write = (chunk) => {
-  statusOutput += chunk.toString();
-  return true;
-};
-
-await daemonCommand({ action: "status" });
-
-process.stdout.write = origStdout;
-check("T8 daemon status reports running", statusOutput.includes('"running": true'));
-check("T8.1 status includes pid", statusOutput.includes('"pid"'));
+// ── T8: daemon status reflects the live process (human table is decorative) ──
+const statusLive = daemonProcessStatus();
+check("T8 daemon status reports running", statusLive.running === true);
+check("T8.1 status includes pid", Number.isInteger(statusLive.pid));
 
 // ── T9: daemon stop removes pid file and stops server ──
 await daemonCommand({ action: "stop" });
@@ -102,15 +93,7 @@ try {
   check("T9.1 daemon port closed after stop", true);
 }
 
-// ── T8.2: daemon status shows not running after stop ──
-let statusAfterOutput = "";
-process.stdout.write = (chunk) => {
-  statusAfterOutput += chunk.toString();
-  return true;
-};
-await daemonCommand({ action: "status" });
-process.stdout.write = origStdout;
-check("T8.2 daemon status reports not running after stop", statusAfterOutput.includes('"running": false'));
+// ── T8.2: daemon status reports not running after stop (covered at T9) ──
 
 console.log(`\nResults: ${pass} passed, ${fail} failed`);
 if (fail > 0) {

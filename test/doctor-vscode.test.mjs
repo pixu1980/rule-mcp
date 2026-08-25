@@ -19,7 +19,7 @@ const output = execFileSync(
       `import { installAgent } from ${JSON.stringify(installModule)};`,
       `import { runDoctor } from ${JSON.stringify(doctorModule)};`,
       'installAgent({ agent: "vscode", entrypoint: "/tmp/rule-mcp.js", mode: "daemon" });',
-      'console.log(JSON.stringify(runDoctor().agents.find(({ name }) => name === "vscode")));',
+      'runDoctor().then((r) => console.log(JSON.stringify(r.agents.find(({ name }) => name === "vscode"))));',
     ].join(" "),
   ],
   { cwd: fakeProject, env: { ...process.env, HOME: fakeHome }, encoding: "utf8" },

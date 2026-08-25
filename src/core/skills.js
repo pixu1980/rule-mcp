@@ -11,7 +11,7 @@
  * Called once at startup, or on demand via `skills reload` CLI command.
  */
 import { z } from "zod/v4";
-import { readSkill, getSkillNames, registerTool, clearTools, retainTools } from "../tools/router.js";
+import { getSkillNames, registerTool, clearTools, retainTools } from "../tools/router.js";
 import { registerSkillTool, registerSearchTool, registerCheckTool, registerScaffoldTool } from "../tools/skill.js";
 import { registerAiTool } from "../tools/ai.js";
 import { registerProcessAdrTool } from "../tools/adr.js";
@@ -183,82 +183,7 @@ export async function loadAllSkills(force = false) {
  * @param {string} content - Full SKILL.md content
  * @returns {{ name?: string, description?: string, tags?: string[], frameworks?: string[] }}
  */
-export function parseSkillFrontmatter(content) {
-  const result = {};
-  const match = content?.match(/^---\s*\n([\s\S]*?)\n---\s*\n/);
-  if (!match) {
-    return result;
-  }
-  const frontmatter = match[1];
-  const lines = frontmatter.split("\n");
-  for (let index = 0; index < lines.length; index++) {
-    const line = lines[index];
-    const trimmed = line.trim();
-    // name: inline scalar
-    const nameMatch = line.match(/^name:\s*(.+)$/);
-    if (nameMatch) {
-      result.name = nameMatch[1].trim();
-      continue;
-    }
-    // description: could be inline or block scalar
-    const descInline = line.match(/^description:\s*(.+)$/);
-    if (descInline) {
-      const afterColon = descInline[1];
-      if (afterColon.startsWith("|") || afterColon.startsWith(">")) {
-        // Literal or folded block scalar - collect indented continuation lines
-        const isFolded = afterColon.startsWith(">");
-        const parts = [];
-        for (let index_ = index + 1; index_ < lines.length; index_++) {
-          const nextLine = lines[index_];
-          // Block ends when a line is NOT indented (starts at col 0 or is empty)
-          if (nextLine.length === 0 || (!nextLine.startsWith(" ") && !nextLine.startsWith("\t"))) {
-            break;
-          }
-          const stripped = nextLine.trim();
-          if (stripped.length > 0 || !isFolded) {
-            parts.push(stripped);
-          }
-        }
-        result.description = isFolded ? parts.join(" ").replaceAll(/\s+/g, " ") : parts.join("\n");
-        if (result.description) {
-          result.description = result.description.trim();
-        }
-      } else {
-        // Inline scalar
-        result.description = afterColon.trim();
-      }
-      continue;
-    }
-    // tags: YAML list (block)
-    if (trimmed === "tags:") {
-      const tags = [];
-      for (let index_ = index + 1; index_ < lines.length; index_++) {
-        const tagLine = lines[index_].trim();
-        if (tagLine.startsWith("- ")) {
-          tags.push(
-            tagLine
-              .slice(2)
-              .trim()
-              .replace(/^"(.*)"$/, "$1")
-              .replace(/^'(.*)'$/, "$1"),
-          );
-        } else if (!tagLine.startsWith("-")) {
-          break;
-        }
-      }
-      if (tags.length > 0) {
-        result.tags = tags;
-      }
-      continue;
-    }
-    // frameworks: inline scalar
-    const fwMatch = line.match(/^frameworks:\s*(.+)$/);
-    if (fwMatch) {
-      result.frameworks = fwMatch[1].split(",").map((s) => s.trim().replaceAll(/^\[|\]$/g, ""));
-    }
-  }
-  return result;
-}
+export { parseSkillFrontmatter } from "./skill-frontmatter.js";
 /**
  * Get skill metadata (parsed from YAML frontmatter).
  * Results are cached in the LRU cache.
@@ -266,20 +191,7 @@ export function parseSkillFrontmatter(content) {
  * @param {string} skillName - e.g. "rule-frontend-react"
  * @returns {{ name?: string, description?: string, tags?: string[], frameworks?: string[] }}
  */
-export function getSkillMetadata(skillName) {
-  const cacheKey = `meta:${skillName}`;
-  const cached = skillCache.get(cacheKey);
-  if (cached) {
-    return JSON.parse(cached);
-  }
-  const content = readSkill(skillName);
-  if (!content) {
-    return {};
-  }
-  const meta = parseSkillFrontmatter(content);
-  skillCache.set(cacheKey, JSON.stringify(meta));
-  return meta;
-}
+export { getSkillMetadata } from "../tools/router.js";
 /**
  * Extract the "Project Scaffolding" section from a SKILL.md file.
  * Looks for the section between the scaffold heading and the next section.
@@ -287,16 +199,7 @@ export function getSkillMetadata(skillName) {
  * @param {string} content - Full SKILL.md content
  * @returns {string} - The extracted scaffolding section text
  */
-export function extractScaffoldSection(content) {
-  const startMarker = "## Project Scaffolding";
-  const endMarker = "## Guardrails";
-  const start = content.indexOf(startMarker);
-  if (start === -1) {
-    return "Scaffolding section not found. Use pix_styleguide mode=full to read the full skill.";
-  }
-  const end = content.indexOf(endMarker, start + 1);
-  return content.slice(start, end > start ? end : undefined).trim();
-}
+export { extractScaffoldSection } from "./scaffold-parser.js";
 /**
  * Extract a single scaffold file's content from the scaffolding section.
  * Matches by file name in a markdown heading (e.g. ### `.prettierrc`).
@@ -305,49 +208,7 @@ export function extractScaffoldSection(content) {
  * @param {string} fileName - The config file name (e.g. ".prettierrc")
  * @returns {{ isError?: boolean, content: Array<{ type: string, text: string }> }}
  */
-export function extractSingleScaffoldFile(section, fileName) {
-  const lines = section.split("\n");
-  const headers = ["### `" + fileName + "`", "### " + fileName, "#### `" + fileName + "`", "#### " + fileName];
-  let startIndex = -1;
-  for (const [index, line] of lines.entries()) {
-    if (headers.some((h) => line.trim() === h)) {
-      startIndex = index;
-      break;
-    }
-  }
-  if (startIndex < 0) {
-    return {
-      isError: true,
-      content: [
-        {
-          type: "text",
-          text:
-            'File "' +
-            fileName +
-            '" not found. Available: .prettierrc, .nvmrc, .editorconfig, .gitignore, eslint.config.mjs, tsconfig.json, jsconfig.json',
-        },
-      ],
-    };
-  }
-  let fenceStart = -1;
-  for (let index = startIndex + 1; index < lines.length; index++) {
-    if (lines[index].trimStart().startsWith("```")) {
-      fenceStart = index;
-      break;
-    }
-  }
-  if (fenceStart < 0) {
-    return { isError: true, content: [{ type: "text", text: 'No code block found for "' + fileName + '".' }] };
-  }
-  const contentLines = [];
-  for (let index = fenceStart + 1; index < lines.length; index++) {
-    if (lines[index].trimStart().startsWith("```")) {
-      break;
-    }
-    contentLines.push(lines[index]);
-  }
-  return { content: [{ type: "text", text: contentLines.join("\n") }] };
-}
+export { extractSingleScaffoldFile } from "./scaffold-parser.js";
 /**
  * Register the pix_detect tool for project framework detection.
  */

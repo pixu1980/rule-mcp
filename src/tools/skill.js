@@ -2,7 +2,7 @@ import { z } from "zod/v4";
 // eslint-disable-next-line no-unused-vars
 import { registerTool, readSkill, getSkillNames, isPluginSkill, hasPluginJs } from "./router.js";
 import { getGuardrailsReport, checkCode } from "../core/guardrails.js";
-import { extractScaffoldSection, extractSingleScaffoldFile } from "../core/skills.js";
+import { extractScaffoldSection, extractSingleScaffoldFile } from "../core/scaffold-parser.js";
 
 /**
  * Register a single skill as an MCP tool.

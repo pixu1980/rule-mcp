@@ -55,21 +55,6 @@ export function suppressIfTokensave(block, opts = {}) {
   return `${TOKENSAVE_DIRECTIVE}\n\n_(${label} suppressed - ${countLines(block)} lines omitted; query tokensave for detail.)_`;
 }
 
-/**
- * Prepend the tokensave directive to a text when active, otherwise return as-is.
- *
- * @param {string} text
- * @param {{ projectDir?: string }} [opts]
- * @returns {string}
- */
-export function annotateTokensave(text, opts = {}) {
-  const { projectDir = process.cwd() } = opts;
-  if (!tokensaveActive(projectDir)) {
-    return text;
-  }
-  return `${TOKENSAVE_DIRECTIVE}\n\n${text}`;
-}
-
 /** @param {string} s @returns {number} */
 function countLines(s) {
   if (!s) {
