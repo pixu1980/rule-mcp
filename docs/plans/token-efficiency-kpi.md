@@ -90,7 +90,7 @@ tree-sitter AST extraction.
 | Complexity scores            | ❌                               | ✅ tokensave_complexity            | None    |
 | Guardrail validation         | ✅ `rule_tool_check`              | ❌                                 | None    |
 | ADR records                  | ✅ `rule_tool_process_adr`        | ❌                                 | None    |
-| Architecture interview       | ✅ `rule-architect`               | ❌                                 | None    |
+| Architecture interview       | ✅ `rule-mcp-architect`        | ❌                                 | None    |
 | Architecture decisions       | ✅ `rule_tool_process_adr`        | ❌                                 | None    |
 | Circular deps detection      | ❌                               | ✅ tokensave_circular              | None    |
 | Unused imports               | ❌                               | ✅ tokensave_unused_imports        | None    |
@@ -142,7 +142,7 @@ tree-sitter AST extraction.
 | "Record an architecture decision"      | rule_tool_process_adr       | Template-based ADR       |
 | "Optimize for minimum token usage"     | caveman + tldr             | 97 % + 75 % stacking     |
 | "Map tests to source code"             | tokensave_test_map         | Coverage graph           |
-| "Set up a new project"                 | rule-architect              | Context interview        |
+| "Set up a new project"                 | rule-mcp-architect       | Context interview        |
 
 ---
 
@@ -168,13 +168,13 @@ tree-sitter AST extraction.
 
 ### Priority for native integration
 
-| Integration                                                                  | Effort                  | Impact | Priority |
-| ---------------------------------------------------------------------------- | ----------------------- | ------ | -------- |
-| rule-architect references tokensave in `.context/`                            | Low (docs + templates)  | Medium | ⭐       |
-| rule-architect interview includes tokensave tools in workflow recommendations | Low (placeholders.json) | Medium | ⭐       |
-| rule-architect `.context/` contains tokensave-specific quality gates          | Low (templates.json)    | Medium | ⭐       |
-| rule-mcp detects tokensave presence and adapts routing                 | Medium                  | High   | -        |
-| caveman-aware TLDR mode                                                      | Medium                  | High   | -        |
+| Integration                                                                         | Effort                  | Impact | Priority |
+| ----------------------------------------------------------------------------------- | ----------------------- | ------ | -------- |
+| rule-mcp-architect references tokensave in `.context/`                            | Low (docs + templates)  | Medium | ⭐       |
+| rule-mcp-architect interview includes tokensave tools in workflow recommendations | Low (placeholders.json) | Medium | ⭐       |
+| rule-mcp-architect `.context/` contains tokensave-specific quality gates          | Low (templates.json)    | Medium | ⭐       |
+| rule-mcp detects tokensave presence and adapts routing                        | Medium                  | High   | -        |
+| caveman-aware TLDR mode                                                             | Medium                  | High   | -        |
 
 ---
 

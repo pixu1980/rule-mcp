@@ -3,7 +3,7 @@
 - **Date**: 2026-07-10
 - **Status**: accepted
 - **Tags**: skills, toolchain, vite, build
-- **Author**: rule-architect
+- **Author**: rule-mcp-architect
 
 ## Context
 

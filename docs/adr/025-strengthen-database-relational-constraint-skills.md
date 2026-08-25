@@ -3,7 +3,7 @@
 - **Date**: 2026-08-02
 - **Status**: accepted
 - **Tags**: database, sql, postgresql, mysql, schema
-- **Author**: rule-architect
+- **Author**: rule-mcp-architect
 
 ## Context
 

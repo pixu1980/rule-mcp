@@ -3,7 +3,7 @@
 - **Date**: 2026-08-01
 - **Status**: accepted
 - **Tags**: self-update, mcp-server, operational, background
-- **Author**: rule-architect
+- **Author**: rule-mcp-architect
 
 ## Context
 

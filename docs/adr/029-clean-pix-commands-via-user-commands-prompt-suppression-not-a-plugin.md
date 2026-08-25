@@ -3,7 +3,7 @@
 - **Date**: 2026-08-03
 - **Status**: accepted
 - **Tags**: commands, claude, mcp, installer
-- **Author**: rule-architect
+- **Author**: rule-mcp-architect
 
 ## Context
 

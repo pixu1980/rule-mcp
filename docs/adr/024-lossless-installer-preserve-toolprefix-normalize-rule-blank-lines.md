@@ -3,7 +3,7 @@
 - **Date**: 2026-08-01
 - **Status**: accepted
 - **Tags**: installer, idempotency, toolPrefix, mcp-config
-- **Author**: rule-architect
+- **Author**: rule-mcp-architect
 
 ## Context
 

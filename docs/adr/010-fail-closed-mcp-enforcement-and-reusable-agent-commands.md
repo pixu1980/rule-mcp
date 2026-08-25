@@ -3,7 +3,7 @@
 - **Date**: 2026-07-11
 - **Status**: accepted
 - **Tags**: architecture, security, mcp, guardrails, agents
-- **Author**: rule-architect
+- **Author**: rule-mcp-architect
 
 ## Context
 

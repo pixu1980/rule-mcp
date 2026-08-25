@@ -3,7 +3,7 @@
 - **Date**: 2026-08-03
 - **Status**: accepted
 - **Tags**: eslint, toolchain, unicorn, flat-config, migration, security, brace-expansion
-- **Author**: rule-architect
+- **Author**: rule-mcp-architect
 
 ## Context
 

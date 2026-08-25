@@ -3,7 +3,7 @@
 - **Date**: 2026-07-16
 - **Status**: accepted
 - **Tags**: architecture, security, mcp, daemon
-- **Author**: rule-architect
+- **Author**: rule-mcp-architect
 
 ## Context
 

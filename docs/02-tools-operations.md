@@ -229,9 +229,9 @@ rule_tool_frontend_react mode=tldr query="state management hooks"
 # No Overview, Setup, Installation, License
 ```
 
-### Context interview: rule-mcp-architect app
+### Context interview
 
-The context interview wizard moved out of rule-mcp into the standalone
+The context interview wizard lives in the standalone
 `rule-mcp-architect` web app (repo: `~/Projects/pixu1980/ai/rule-mcp-architect`).
 Run `node src/context-server.mjs --port 19000` from that repo and open the
 printed URL: it guides the user through the project specification steps and

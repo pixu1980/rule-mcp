@@ -357,7 +357,7 @@ export function getPrompt(name, args = {}) {
             "1. Call `rule_tool_detect` on the project path (or use the framework name from the request text) to detect the stack.\n" +
             "2. Route through `pix_tool` with the detected framework to load the primary rule-* skill evidence.\n" +
             "3. Call `rule_tool_scaffold` for the project config files, then `pix_toolchain_project` (or the area toolchain skill) for tooling setup.\n" +
-            "4. Generate the project context pack (`.context/`) with the rule-mcp-architect web app (or its SDK) at the requested tier.\n" +
+            "4. Generate the project context pack (`.context/`) in the target project at the requested tier.\n" +
             "5. Validate every generated file with `rule_tool_check` and iterate until all guardrails pass.\n" +
             "Baseline: if the scaffold produces code, include failing tests first (TDD) and a11y checks; if not applicable, ask the user what to cover.\n" +
             'Finish by proposing a conventional commit message with a mandatory scope, e.g. "chore(setup): ...".',

@@ -26,7 +26,7 @@
 
 ## Cross-cutting conventions
 
-- **Automatic rename rule→rule:** env vars (`RULE_MCP_*`→`RULE_MCP_*`, `RULE_MCP_*`→`RULE_MCP_*`), tool prefix (`pix_`→`pix_`), commands (`/rule-*`→`/rule-*`), skill folders (`rule-architect`→`rule-architect`), bin, messages and test.
+- **Automatic rename rule→rule:** env vars (`RULE_MCP_*`→`RULE_MCP_*`, `RULE_MCP_*`→`RULE_MCP_*`), tool prefix (`pix_`→`pix_`), commands (`/rule-*`→`/rule-*`), skill folders (`rule-architect`→`rule-mcp-architect`), bin, messages and test.
 - **3-way merge:** for each divergent file → diff source vs target, apply the source's new logic **on top** of the target's rule logic, never blindly overwrite.
 - **Self-update remote pinning:** the source verifies the remote against the declaration in `server.json`; in the target the declared remote is `https://github.com/rule/rule-mcp` (github, not gitlab) → adapt.
 - **Verification per phase:** after each phase `pnpm lint` + targeted phase tests; full `pnpm run ci` only at the end (note: `pnpm ci` is a pnpm builtin, not the script - always use `pnpm run ci`).
@@ -51,10 +51,10 @@
 
 ## Phase 2 - Architect interview servers (finding 03, 04, 05)
 
-- [ ] `skills/rule-architect/http-guard.mjs` - new file: guard `Sec-Fetch-Site` + `Origin` + `Host` on every `/api/*` of **both** interview servers
-- [ ] `skills/rule-architect-web/server.mjs` and `skills/rule-architect/assets/context-server.mjs` - import + apply the guard
+- [ ] `skills/rule-mcp-architect/http-guard.mjs` - new file: guard `Sec-Fetch-Site` + `Origin` + `Host` on every `/api/*` of **both** interview servers
+- [ ] `skills/rule-mcp-architect-web/server.mjs` and `skills/rule-mcp-architect/assets/context-server.mjs` - import + apply the guard
 - [ ] `src/tools/architect.js` - child registry keyed by target dir (reuse, listener detached, output cap 64 KB, kill after 30 min and on exit/SIGINT/SIGTERM, `process.execPath`)
-- [ ] `src/core/tool-cache.js` - add `pix_architect` to `NON_CACHEABLE`
+- [ ] `src/core/tool-cache.js` - add `rule-mcp-architect` to `NON_CACHEABLE`
 - [ ] Test: `test/architect-server-csrf.test.mjs`, `test/architect-interview-lifecycle.test.mjs`
 - [ ] Verify: `node --test test/architect-server-csrf.test.mjs test/architect-interview-lifecycle.test.mjs`
 - [ ] Commit: `fix(security): enforce same-origin on interview servers and own their lifecycle`

@@ -31,7 +31,7 @@ Interview decisions (2025-08-01):
   - `rule-write-tests` (TDD + a11y tests + devops_testing)
   - `rule-handoff` (process_handoff + adr + compressed context)
 - [x] 3. **16 area prompts**: `rule-area-{...}` - **with all 97 tools renamed `rule_tool_*`** (interview decision) to avoid collisions with prompts - each: route to the area skill, baseline TDD/a11y or ask the user, final commit scope
-- [x] 4. **Update the 5 existing** (`rule-code-review`, `rule-generate-component`, `rule-a11y-test`, `rule-a11y-review`, `rule-architect-scaffold`) to comply with the same rules (commit scope + baseline)
+- [x] 4. **Update the 5 existing** (`rule-code-review`, `rule-generate-component`, `rule-a11y-test`, `rule-a11y-review`, `rule-mcp-architect`) to comply with the same rules (commit scope + baseline)
 
 ## Phase 3 - Completions (`src/server.js`)
 

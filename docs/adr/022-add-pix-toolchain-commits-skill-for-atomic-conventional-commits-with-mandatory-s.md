@@ -3,7 +3,7 @@
 - **Date**: 2026-08-01
 - **Status**: accepted
 - **Tags**: taxonomy, skills, routing, git, toolchain
-- **Author**: rule-architect
+- **Author**: rule-mcp-architect
 
 ## Context
 

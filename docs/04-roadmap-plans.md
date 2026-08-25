@@ -78,7 +78,7 @@ Every source document below is preserved verbatim under its own heading so no pr
 # rule-mcp - Refactor Roadmap
 
 > **Author**: Enterprise Architecture Review  
-> **Scope**: 36 skills → audit, merge, split, redesign rule-architect, create rule-process-adr  
+> **Scope**: 36 skills → audit, merge, split, redesign rule-mcp-architect, create rule-process-adr  
 > **Status**: Draft v1.0
 
 ---
@@ -90,7 +90,7 @@ Every source document below is preserved verbatim under its own heading so no pr
 3. [Merge Proposals](#3-merge-proposals)
 4. [Split Proposals](#4-split-proposals)
 5. [New Skill: rule-process-adr](#5-new-skill-rule-process-adr)
-6. [Redesign: rule-architect Interview](#6-redesign-rule-architect-interview)
+6. [Redesign: rule-mcp-architect Interview](#6-redesign-rule-mcp-architect-interview)
 7. [Target Taxonomy (post-refactor)](#7-target-taxonomy-post-refactor)
 8. [Implementation Roadmap](#8-implementation-roadmap)
 
@@ -130,7 +130,7 @@ Target: **32 skills** after 4 merges, plus 1 new skill (`rule-process-adr`), wit
 | #   | Skill                         | Lines | Verdict | Action                            |
 | --- | ----------------------------- | ----- | ------- | --------------------------------- |
 | 1   | rule-mcp                    | ~190  | ✅      | Keep - ai router                  |
-| 2   | rule-architect                 | ~320  | ✅      | Keep - architecture wizard        |
+| 2   | rule-mcp-architect          | ~320  | ✅      | Keep - architecture wizard        |
 | 4   | rule-backend                   | ~180  | ✅      | Keep - backend rules              |
 | 5   | rule-backend-api-design        | ~150  | ✅      | Keep - API design                 |
 | 6   | rule-backend-node              | ~130  | ✅      | Keep - Backend scaffold           |
@@ -161,8 +161,8 @@ Target: **32 skills** after 4 merges, plus 1 new skill (`rule-process-adr`), wit
 | 31  | rule-platform-web              | ~140  | ✅      | Keep - web platform               |
 | 32  | rule-process-documentation     | ~140  | ✅      | Keep - docs practices             |
 | 33  | rule-process-feature-workflow  | ~110  | ✅      | Keep - workflow                   |
-| 34  | rule-process-handoff           | ~120  | 📦      | Extract from rule-architect        |
-| 35  | rule-scaffolding               | ~90   | 🔀      | Merge into rule-architect          |
+| 34  | rule-process-handoff           | ~120  | 📦      | Extract from rule-mcp-architect |
+| 35  | rule-scaffolding               | ~90   | 🔀      | Merge into rule-mcp-architect   |
 | 36  | rule-styleguide                | ~480  | ✅      | Keep (at limit) - main styleguide |
 
 ### Summary
@@ -202,11 +202,11 @@ Target: **32 skills** after 4 merges, plus 1 new skill (`rule-process-adr`), wit
 
 **Loss**: None.
 
-### M4: scaffolding → rule-architect
+### M4: scaffolding → rule-mcp-architect
 
 **Rationale**: Project scaffolding is an architectural concern. The scaffolding router (`rule-scaffolding`) only dispatches to sub-scaffolders. This belongs in the architect skill as a section.
 
-**Action**: Move scaffolding section into `rule-architect/SKILL.md`. Keep sub-scaffolders as standalone.
+**Action**: Move scaffolding section into `rule-mcp-architect/SKILL.md`. Keep sub-scaffolders as standalone.
 
 **Loss**: None.
 
@@ -220,7 +220,7 @@ No skills exceed the 500-line threshold with sufficient margin. `rule-styleguide
 
 ## 5. New Skill: rule-process-adr
 
-**Rationale**: The ADR system was prototyped in `rule-architect`. It deserves to be a first-class skill with dedicated features.
+**Rationale**: The ADR system was prototyped in `rule-mcp-architect`. It deserves to be a first-class skill with dedicated features.
 
 **Scope**:
 
@@ -234,7 +234,7 @@ No skills exceed the 500-line threshold with sufficient margin. `rule-styleguide
 
 ---
 
-## 6. Redesign: rule-architect Interview
+## 6. Redesign: rule-mcp-architect Interview
 
 The context interview is currently a 16-step wizard. Proposed improvements:
 
@@ -251,7 +251,7 @@ The context interview is currently a 16-step wizard. Proposed improvements:
 ```
 rule-*
 ├── rule             # Skill router
-├── rule-architect          # Architecture + scaffolding router
+├── rule-mcp-architect          # Architecture + scaffolding router
 ├── rule-backend            # Backend patterns
 ├── rule-backend-api-design # API design + OpenAPI
 ├── rule-backend-node
@@ -294,7 +294,7 @@ Total: **32 skills** (36 − 4 merges + 1 new = 33, minus 1 scaffolding removal 
 - [x] Merge coverage-gates → testing - verified in `rule-devops-testing`
 - [x] Merge docker-standards → docker - verified in `rule-devops-docker`
 - [x] Merge forms-validation → forms - validation lives in framework/styleguide coverage
-- [x] Merge scaffolding → architect - verified in `rule-architect`
+- [x] Merge scaffolding → architect - verified in `rule-mcp-architect`
 - [x] Remove merged skill directories - stale directories are absent
 
 ### Phase 2: rule-process-adr (1 day)
@@ -321,14 +321,14 @@ Total: **32 skills** (36 − 4 merges + 1 new = 33, minus 1 scaffolding removal 
 
 ---
 
-## 9. Final rule-architect UI/UX Implementation Plan
+## 9. Final rule-mcp-architect UI/UX Implementation Plan
 
-This plan defines the definitive mirrored UX for `rule-architect` in CLI and Web modes. The two interfaces must expose the same information architecture, step order, validation rules, preview output, generation behavior, and handoff flow.
+This plan defines the definitive mirrored UX for `rule-mcp-architect` in CLI and Web modes. The two interfaces must expose the same information architecture, step order, validation rules, preview output, generation behavior, and handoff flow.
 
 ### 9.1 Product principles
 
-- **One flow, two shells**: CLI and Web share the same step schema from `skills/rule-architect/wizard-spec.json`.
-- **Same state model**: both shells read/write the same `values` object and generate from `skills/rule-architect/templates.json`.
+- **One flow, two shells**: CLI and Web share the same step schema from `skills/rule-mcp-architect/wizard-spec.json`.
+- **Same state model**: both shells read/write the same `values` object and generate from `skills/rule-mcp-architect/templates.json`.
 - **Progressive depth**: Starter, Standard, and Deep expose the same subsets in both shells.
 - **Deterministic output**: generated `.context/` files are byte-equivalent for the same input values.
 - **LLM-ready handoff**: both shells end with validation status, generated file list, ADR reminders, and `rule_tool_process_handoff` guidance.

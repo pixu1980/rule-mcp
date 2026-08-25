@@ -55,7 +55,7 @@ The receipt is `sha256(code)`. `rule_tool_apply` recomputes that hash over `file
 
 ### 3. Architect interview server: unauthenticated, CSRF-able file writer
 
-**Where:** `skills/rule-architect/assets/context-server.mjs:68-130` (handler, `POST /api/generate`)
+**Where:** `skills/rule-mcp-architect/assets/context-server.mjs:68-130` (handler, `POST /api/generate`)
 
 The server binds loopback (`BIND_HOST = "127.0.0.1"`, line 26) and deliberately sets no CORS headers - good. But it has **no authentication token, no `Origin` check, and no `Host` check**, and `POST /api/generate` writes generated files into `targetDir` including agent entry files at the project root, honouring `force: true` from the request body (line 113).
 
@@ -63,7 +63,7 @@ The server binds loopback (`BIND_HOST = "127.0.0.1"`, line 26) and deliberately 
 
 **Fix:** mint a one-time token at spawn, put it in the URL the MCP tool prints, and require it on every `/api/*` request; reject requests whose `Origin` is present and not same-origin, whose `Host` is not `localhost`/`127.0.0.1`, or whose `Sec-Fetch-Site` is not `same-origin`. Drop `force` from the wire protocol or gate it behind the token too.
 
-**Fixed (header validation)** - new shared `skills/rule-architect/http-guard.mjs` enforces `Sec-Fetch-Site`, `Origin` and `Host` on every `/api/*` request in both servers. Browser-set headers cannot be forged by page script, so CSRF and DNS rebinding are closed with no change to the duplicated `interview.js` copies. ADR 031, `test/architect-server-csrf.test.mjs` (12 assertions, including a live cross-site POST against both servers). The one-time token was **not** added: it needs UI changes in both interview copies, and `force` stays on the wire - residual work, tracked here.
+**Fixed (header validation)** - new shared `skills/rule-mcp-architect/http-guard.mjs` enforces `Sec-Fetch-Site`, `Origin` and `Host` on every `/api/*` request in both servers. Browser-set headers cannot be forged by page script, so CSRF and DNS rebinding are closed with no change to the duplicated `interview.js` copies. ADR 031, `test/architect-server-csrf.test.mjs` (12 assertions, including a live cross-site POST against both servers). The one-time token was **not** added: it needs UI changes in both interview copies, and `force` stays on the wire - residual work, tracked here.
 
 ### 4. Spawned interview server is never reaped
 
@@ -71,7 +71,7 @@ The server binds loopback (`BIND_HOST = "127.0.0.1"`, line 26) and deliberately 
 
 `spawn("node", [serverPath, targetDir], { detached: false })` resolves the promise either when the URL appears on stdout or after a 5s timeout (line 106-115) - and then **nothing ever kills the child**. Listeners stay attached and keep appending to `output` for the process lifetime.
 
-**Failure scenario:** each `rule_tool_architect mode=interview` call leaves another HTTP server listening on a random port with write access to a project directory, indefinitely, multiplying the exposure in finding 3. `output` grows without bound. Orphans survive the MCP server's own shutdown because nothing tracks them.
+**Failure scenario:** each `rule-mcp-architect mode=interview` call leaves another HTTP server listening on a random port with write access to a project directory, indefinitely, multiplying the exposure in finding 3. `output` grows without bound. Orphans survive the MCP server's own shutdown because nothing tracks them.
 
 **Also:** `spawn("node", …)` resolves `node` through `PATH` instead of `process.execPath` - wrong runtime version at best, PATH hijack at worst.
 
@@ -79,17 +79,17 @@ The server binds loopback (`BIND_HOST = "127.0.0.1"`, line 26) and deliberately 
 
 **Fixed** - children are tracked in a registry keyed by target directory: a second call reuses the running server, listeners detach once the URL is found, `output` is capped at 64 KB, each server dies after a 30-minute lifetime, and `exit`/`SIGINT`/`SIGTERM` stop all of them. `spawn` now uses `process.execPath`. ADR 031, `test/architect-interview-lifecycle.test.mjs` (asserts the child is actually dead, not merely forgotten).
 
-### 5. `rule_tool_architect mode=interview` is cached - the second call hands out a dead URL
+### 5. `rule-mcp-architect mode=interview` is cached - the second call hands out a dead URL
 
-**Where:** `src/core/tool-cache.js:35-43` (`NON_CACHEABLE` - `rule_tool_architect` is absent), `src/tools/skill.js:58-62`, `src/tools/router.js:180-184`
+**Where:** `src/core/tool-cache.js:35-43` (`NON_CACHEABLE` - `rule-mcp-architect` is absent), `src/tools/skill.js:58-62`, `src/tools/router.js:180-184`
 
-`rule_tool_architect` is treated as a deterministic read-only tool, but `mode: "interview"` has a process-spawning side effect and returns a URL containing an ephemeral port.
+`rule-mcp-architect` is treated as a deterministic read-only tool, but `mode: "interview"` has a process-spawning side effect and returns a URL containing an ephemeral port.
 
 **Failure scenario:** first call spawns the server and caches `"Server started! Open your browser to http://localhost:51234"`. The cache is persisted gzipped and survives restarts (`tool-cache.js:132-144`). Every later identical call returns that text **without spawning anything**, so the user opens a dead port and the tool reports success. This is a correctness break in the cache's own core invariant: only deterministic, side-effect-free tools may be cached.
 
-**Fix:** add `rule_tool_architect` to `NON_CACHEABLE`, or split the interview mode into its own non-cacheable tool. Then add a registration-time assertion so a tool that can spawn or write cannot be registered as cacheable.
+**Fix:** add `rule-mcp-architect` to `NON_CACHEABLE`, or split the interview mode into its own non-cacheable tool. Then add a registration-time assertion so a tool that can spawn or write cannot be registered as cacheable.
 
-**Fixed (denylist)** - `rule_tool_architect` is in `NON_CACHEABLE`; `test/architect-interview-lifecycle.test.mjs` pins both that entry and the fact that the denylist stayed narrow. The registration-time assertion that would prevent the next such mistake is **not** implemented - residual work.
+**Fixed (denylist)** - `rule-mcp-architect` is in `NON_CACHEABLE`; `test/architect-interview-lifecycle.test.mjs` pins both that entry and the fact that the denylist stayed narrow. The registration-time assertion that would prevent the next such mistake is **not** implemented - residual work.
 
 ### 6. Self-update executes unverified remote code on every tool call
 
@@ -237,7 +237,7 @@ The installer appends a `post-commit` hook running `rule-mcp doctor` in the back
 
 ### 21. `collectBody` corrupts multibyte input
 
-**Where:** `skills/rule-architect/http-body.mjs`
+**Where:** `skills/rule-mcp-architect/http-body.mjs`
 
 `body += chunk` implicitly stringifies each `Buffer` with no `setEncoding("utf8")`, so a multibyte character split across a chunk boundary decodes to replacement characters. The limit is also compared against `body.length` (UTF-16 code units), not bytes, so the documented "2 MiB" ceiling is neither a byte count nor consistent across inputs.
 

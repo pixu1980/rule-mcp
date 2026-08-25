@@ -3,7 +3,7 @@
 - **Date**: 2026-08-02
 - **Status**: accepted
 - **Tags**: typescript, toolchain, strict, monorepo, quality
-- **Author**: rule-architect
+- **Author**: rule-mcp-architect
 
 ## Context
 

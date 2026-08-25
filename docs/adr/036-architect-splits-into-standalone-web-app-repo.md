@@ -1,4 +1,4 @@
-# 036: rule-architect splits into a standalone web app repo (rule-mcp-architect)
+# 036: rule-mcp-architect splits into a standalone web app repo (rule-mcp-architect)
 
 - **Date**: 2026-08-25
 - **Status**: accepted
@@ -8,7 +8,7 @@
 ## Context
 
 The architect concept was embedded in rule-mcp three times over: the
-`rule-architect` / `rule-architect-cli` / `rule-architect-web` skills, the
+`rule-mcp-architect` / `rule-mcp-architect-cli` / `rule-mcp-architect-web` skills, the
 `src/tools/architect.js` MCP tool (a thin spawner for a context-interview
 HTTP server that already lived _inside_ the skill assets), and a deep trail of
 tests, ADRs, handoffs, installer agent-commands and docs (182 files in the
@@ -34,7 +34,7 @@ Split the architect product out of rule-mcp:
    every active doc reference. Historical records (old ADRs, roadmaps,
    reports, CHANGELOG) keep their mentions as history.
 3. ADR authoring (`src/tools/adr.js`) stays in the family but no longer stamps
-   `rule-architect`: author becomes `rule-mcp`; the new repo ships its own
+   `rule-mcp-architect`: author becomes `rule-mcp`; the new repo ships its own
    ADR manager SDK (`src/adr.mjs`, Nygard template + auto-numbering + index).
 
 ## Consequences
@@ -55,5 +55,5 @@ Split the architect product out of rule-mcp:
 - Teams that want the wizard inside an MCP agent must run the new repo's
   server and integrate it manually (or build a thin adapter) - no MCP server
   ships with it.
-- Historical ADR/roadmap/report documents still mention rule-architect; a
+- Historical ADR/roadmap/report documents still mention rule-mcp-architect; a
   future reader must know the concept moved (this ADR is that pointer).

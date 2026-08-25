@@ -250,9 +250,9 @@ Other limits:
 
 **Fix:** random bearer token at startup, CORS deny-by-default/allowlist, `Origin` validation, body limit, consent for mutating tools and stdio preference. Loopback binding reduces network exposure but doesn't protect from local browsers.
 
-### P0-07 - `rule_tool_architect interview` is broken in the current snapshot
+### P0-07 - `rule-mcp-architect interview` is broken in the current snapshot
 
-The tool looks for `skills/rule-architect/assets/context-server.mjs`, but the working tree deleted the entire asset tree. The new implementation is spread across `rule-architect-cli`/`rule-architect-web`, still untracked and not connected to the official tool. The 402-call matrix has a single operational error: `rule_tool_architect` in `check` mode, consistent with the incomplete migration.
+The tool looks for `skills/rule-mcp-architect/assets/context-server.mjs`, but the working tree deleted the entire asset tree. The new implementation is spread across `rule-mcp-architect-cli`/`rule-mcp-architect-web`, still untracked and not connected to the official tool. The 402-call matrix has a single operational error: `rule-mcp-architect` in `check` mode, consistent with the incomplete migration.
 
 **Fix:** complete a single atomic migration, update tool, tests, package files and documentation in the same commit; avoid two concurrent wizards.
 
@@ -319,7 +319,7 @@ TypeError: stdin.setRawMode is not a function
 
 ### P1-09 - New web wizard: XSS and exposed server
 
-The untracked version in `skills/rule-architect-web/`:
+The untracked version in `skills/rule-mcp-architect-web/`:
 
 - interpolates input and error messages into `innerHTML` without escaping;
 - uses numerous inline `onclick`/`oninput` and one inline `style=`, violating its own principles;
@@ -398,7 +398,7 @@ Cross-cutting gaps:
 
 - `rule-data-duckdb`, `rule-data-indexed-db`, `rule-data-sqlite` missing `See also` and break the suite;
 - 30 canonical TLDR queries return no sections due to global top-k bug;
-- `rule-architect-cli`, `rule-architect-web` and the three new data skills are untracked, therefore not part of a reproducible Git release;
+- `rule-mcp-architect-cli`, `rule-mcp-architect-web` and the three new data skills are untracked, therefore not part of a reproducible Git release;
 - descriptions and APIs often describe enforcement stronger than actually achievable;
 - many assets are duplicated (`assets/assets`) or generate code that doesn't satisfy guardrails.
 
@@ -417,7 +417,7 @@ For each of the 67 skill-tools, the following modes were called:
 5. `check`;
 6. `tldr`.
 
-Total: **402 calls**. The transport and MCP shape are operational. This proves callability, not semantic correctness of every returned text. `rule_tool_architect check` is the runtime exception in the migration snapshot.
+Total: **402 calls**. The transport and MCP shape are operational. This proves callability, not semantic correctness of every returned text. `rule-mcp-architect check` is the runtime exception in the migration snapshot.
 
 ### 10.2 Deterministic tools
 
@@ -526,9 +526,9 @@ Deterministic tests must remain the primary gate; live tests are a probabilistic
 | Skill                           | Lines | MCP tool                             | Metadata/links              | TLDR canonical query | Result                                       |
 | ------------------------------- | ----: | ------------------------------------ | --------------------------- | -------------------- | -------------------------------------------- |
 | `pix_tool`                      |   254 | `pix_tool`                           | Pass                        | n/a                  | **Pass**                                     |
-| `rule-architect`                 |   253 | `rule_tool_architect`                 | Pass                        | No result            | **Blocked: interview asset missing**         |
-| `rule-architect-cli`             |    82 | `rule_tool_architect_cli`             | Pass                        | Result               | **Warning: untracked/WIP**                   |
-| `rule-architect-web`             |    71 | `rule_tool_architect_web`             | Pass                        | Result               | **Blocked: untracked + UI/security defects** |
+| `rule-mcp-architect`          |   253 | `rule-mcp-architect`               | Pass                        | No result            | **Blocked: interview asset missing**         |
+| `rule-mcp-architect-cli`      |    82 | `rule-mcp-architect_cli`           | Pass                        | Result               | **Warning: untracked/WIP**                   |
+| `rule-mcp-architect-web`      |    71 | `rule-mcp-architect_web`           | Pass                        | Result               | **Blocked: untracked + UI/security defects** |
 | `rule-backend`                   |    61 | `rule_tool_backend`                   | Pass                        | Result               | **Pass**                                     |
 | `rule-backend-api-design`        |   158 | `rule_tool_backend_api_design`        | Pass                        | Result               | **Pass**                                     |
 | `rule-backend-express`           |   147 | `rule_tool_backend_express`           | Pass                        | Result               | **Pass**                                     |
@@ -605,9 +605,9 @@ Isolated package state: **76 tools**. Live workstation state: **87 tools** becau
 | Tool                                 | Kind          | Exercised                                     | Finding                                 |
 | ------------------------------------ | ------------- | --------------------------------------------- | --------------------------------------- |
 | `pix_tool`                           | Router        | 60 curated + 69 self-description + live model | Partial: not mandatory; routing defects |
-| `rule_tool_architect`                 | Skill         | 6 modes                                       | Blocked: interview missing              |
-| `rule_tool_architect_cli`             | Skill         | 6 modes                                       | Modes callable                          |
-| `rule_tool_architect_web`             | Skill         | 6 modes                                       | Modes callable                          |
+| `rule-mcp-architect`               | Skill         | 6 modes                                       | Blocked: interview missing              |
+| `rule-mcp-architect_cli`           | Skill         | 6 modes                                       | Modes callable                          |
+| `rule-mcp-architect_web`           | Skill         | 6 modes                                       | Modes callable                          |
 | `rule_tool_backend`                   | Skill         | 6 modes                                       | Modes callable                          |
 | `rule_tool_backend_api_design`        | Skill         | 6 modes                                       | Modes callable                          |
 | `rule_tool_backend_express`           | Skill         | 6 modes                                       | Modes callable                          |

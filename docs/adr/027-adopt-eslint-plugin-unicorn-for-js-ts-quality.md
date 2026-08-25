@@ -3,7 +3,7 @@
 - **Date**: 2026-08-03
 - **Status**: accepted
 - **Tags**: eslint, toolchain, unicorn, javascript, typescript, styleguide, guardrails, quality
-- **Author**: rule-architect
+- **Author**: rule-mcp-architect
 
 ## Context
 

@@ -3,7 +3,7 @@
 - **Date**: 2026-07-10
 - **Status**: accepted
 - **Tags**: infrastructure, naming, taxonomy, breaking-change
-- **Author**: rule-architect
+- **Author**: rule-mcp-architect
 
 ## Context
 

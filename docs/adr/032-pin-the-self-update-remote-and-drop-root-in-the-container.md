@@ -3,7 +3,7 @@
 - **Date**: 2026-08-04
 - **Status**: accepted
 - **Tags**: architecture
-- **Author**: rule-architect
+- **Author**: rule-mcp-architect
 
 ## Context
 

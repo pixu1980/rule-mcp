@@ -41,7 +41,7 @@ frameworks: [all]
 ```text
 Prompt
   ├─ unsure / broad / multi-domain      → rule + pix_search
-  ├─ architecture / SDD / plan          → rule-process-adr + rule-mcp-architect (web app)
+  ├─ architecture / SDD / plan          → rule-process-adr
   ├─ UI / component / page              → rule-frontend + framework skill + rule-styleguide
   ├─ meta-framework                     → rule-frontend-meta-* + base framework skill
   ├─ AI / agent / LLM application       → rule-ai + focused AI skill

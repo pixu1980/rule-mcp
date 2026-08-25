@@ -3,7 +3,7 @@
 - **Date**: 2026-07-11 09:09:06
 - **Status**: accepted
 - **Tags**: tool, auto-log, routing
-- **Author**: rule-architect
+- **Author**: rule-mcp-architect
 
 ## Context
 

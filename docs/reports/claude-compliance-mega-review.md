@@ -116,7 +116,7 @@ Fixed shape but role='system' still present. success: false
 
 ### Impact
 
-Any MCP client that validates responses against the official schema (the TypeScript/Python reference client, and presumably Claude Desktop/Claude Code when using `prompts/get`) **rejects the response with a parsing error**. The 5 server slash-prompts (`rule-code-review`, `rule-generate-component`, `rule-a11y-test`, `rule-a11y-review`, `rule-architect-scaffold`) are therefore **unusable by any compliant client**, regardless of the model. `tools/*` and `resources/*` on the other hand were successfully validated against the official schemas (see Appendix) - the problem is isolated to the `prompts` subsystem.
+Any MCP client that validates responses against the official schema (the TypeScript/Python reference client, and presumably Claude Desktop/Claude Code when using `prompts/get`) **rejects the response with a parsing error**. The 5 server slash-prompts (`rule-code-review`, `rule-generate-component`, `rule-a11y-test`, `rule-a11y-review`, `rule-mcp-architect`) are therefore **unusable by any compliant client**, regardless of the model. `tools/*` and `resources/*` on the other hand were successfully validated against the official schemas (see Appendix) - the problem is isolated to the `prompts` subsystem.
 
 ### Recommended fix
 

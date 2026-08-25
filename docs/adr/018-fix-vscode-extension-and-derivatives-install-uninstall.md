@@ -3,7 +3,7 @@
 - **Date**: 2026-07-19
 - **Status**: accepted
 - **Tags**: vscode, extension, installer, cursor, windsurf
-- **Author**: rule-architect
+- **Author**: rule-mcp-architect
 
 ## Context
 
