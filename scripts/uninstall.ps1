@@ -73,6 +73,10 @@ function Test-Command($cmd) {
   catch { return $false }
 }
 
+# Output gating: colors and box-drawing render only on an interactive console
+# without NO_COLOR - redirected/CI output stays plain (mirrors uninstall.sh).
+$script:NoColor = [Console]::IsOutputRedirected -or [bool]$env:NO_COLOR
+
 # ── JSON entry removal helper ──
 function Remove-McpEntryDual {
   param(
@@ -255,14 +259,40 @@ function Remove-Lines {
 }
 
 # ── Confirmation ──
+# Count agents that currently reference this server, so the confirmation
+# screen reflects reality instead of a fixed list.
+$PixFoundCount = 0
+$confCheckPaths = @(
+  "$HOME\.claude.json",
+  "$HOME\.cursor\mcp.json",
+  "$HOME\.config\github-copilot",
+  "$HOME\.gemini\settings.json",
+  "$HOME\.pi\agent\mcp.json",
+  "$HOME\.config\cline\mcp.json",
+  "$HOME\.config\roo\mcp.json",
+  "$HOME\.config\zed\mcp.json",
+  "$HOME\.config\opencode\mcp.json",
+  "$HOME\.config\windsurf\mcp.json"
+)
+foreach ($cfgPath in $confCheckPaths) {
+  $raw = Get-Content $cfgPath -Raw -ErrorAction SilentlyContinue
+  if ($raw -and $raw.Contains($McpServerName)) { $PixFoundCount++ }
+}
+
 if (-not $DryRun -and -not $Force) {
-  Write-Host ""
-  Write-Host "╔══════════════════════════════════════════════════════╗" -ForegroundColor Yellow
-  Write-Host "║      rule-mcp - Uninstall Confirmation         ║" -ForegroundColor Yellow
-  Write-Host "╚══════════════════════════════════════════════════════╝" -ForegroundColor Yellow
-  Write-Host ""
+  if ($script:NoColor) {
+    Write-Host ""
+    Write-Host "── rule-mcp - Uninstall Confirmation ──"
+    Write-Host ""
+  } else {
+    Write-Host ""
+    Write-Host "╔══════════════════════════════════════════════════════╗" -ForegroundColor Yellow
+    Write-Host "║      rule-mcp - Uninstall Confirmation         ║" -ForegroundColor Yellow
+    Write-Host "╚══════════════════════════════════════════════════════╝" -ForegroundColor Yellow
+    Write-Host ""
+  }
   Write-Host "  This will remove rule-mcp configuration from:"
-  Write-Host "   • All detected coding agents (mcp.json entries)"
+  Write-Host "   • $PixFoundCount agent config(s) currently reference rule-mcp"
   Write-Host "   • Agent instruction files (CLAUDE.md, AGENTS.md, GEMINI.md)"
   Write-Host "   • IDE configurations (VS Code, Neovim, JetBrains)"
   Write-Host "   • Environment variables"
@@ -282,11 +312,17 @@ if (-not $DryRun -and -not $Force) {
   }
 }
 
-Write-Host ""
-Write-Host "╔══════════════════════════════════════════════════════╗" -ForegroundColor Red
-Write-Host "║       rule-mcp - Universal Uninstaller        ║" -ForegroundColor Red
-Write-Host "╚══════════════════════════════════════════════════════╝" -ForegroundColor Red
-Write-Host ""
+if ($script:NoColor) {
+  Write-Host ""
+  Write-Host "── rule-mcp - Universal Uninstaller ──"
+  Write-Host ""
+} else {
+  Write-Host ""
+  Write-Host "╔══════════════════════════════════════════════════════╗" -ForegroundColor Red
+  Write-Host "║       rule-mcp - Universal Uninstaller        ║" -ForegroundColor Red
+  Write-Host "╚══════════════════════════════════════════════════════╝" -ForegroundColor Red
+  Write-Host ""
+}
 
 # ─────────────────────────────────────────────────────────────────────────────
 # PHASE 1: Agent MCP Configs
@@ -589,17 +625,40 @@ if (Test-Command rule-mcp) {
   Write-Step "Global binary found: $globalPath"
 
   if ($DryRun) {
-    Write-Step "[dry-run] Would run: npm uninstall -g rule-mcp"
+    Write-Step "[dry-run] Would unlink/remove the global rule-mcp shim"
   } else {
-    $result = npm uninstall -g rule-mcp 2>&1
-    if ($LASTEXITCODE -eq 0) {
-      Write-Ok "Global package removed"
+    # pnpm-linked packages need `pnpm unlink --global`, not `remove -g`.
+    if (Test-Command pnpm) { pnpm unlink --global rule-mcp 2>&1 | Out-Null }
+    if ((Test-Command rule-mcp) -and (Test-Command npm)) { npm uninstall -g rule-mcp 2>&1 | Out-Null }
+    if (Test-Command rule-mcp) {
+      Write-Ok "Global package unlinked/removed"
     } else {
-      Write-Step "Package not installed globally or already removed"
+      Write-Ok "Global package removed"
     }
   }
 } else {
   Write-Step "No global rule-mcp found, skipping"
+}
+
+# Belt-and-braces: remove the bin shims npm/pnpm leave behind even when the
+# package metadata is already gone - a stale shim keeps Get-Command resolving
+# forever and silently breaks reinstalls. Mirrors uninstall.sh Phase 7.
+$globalShimDirs = @()
+if ($env:APPDATA) { $globalShimDirs += "$env:APPDATA\npm" }
+if ($env:LOCALAPPDATA) { $globalShimDirs += "$env:LOCALAPPDATA\pnpm" }
+foreach ($shimDir in $globalShimDirs) {
+  if (-not (Test-Path $shimDir -PathType Container)) { continue }
+  foreach ($shimName in @("rule-mcp", "rule-mcp.cmd", "rule-mcp.ps1", "rule-mcp.exe")) {
+    $shimPath = Join-Path $shimDir $shimName
+    if (Test-Path $shimPath) {
+      if ($DryRun) {
+        Write-Step "[dry-run] Would remove global shim: $shimPath"
+      } else {
+        Remove-Item $shimPath -Force -ErrorAction SilentlyContinue
+        Write-Ok "Removed global shim: $shimPath"
+      }
+    }
+  }
 }
 
 # ─────────────────────────────────────────────────────────────────────────────

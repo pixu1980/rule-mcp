@@ -31,14 +31,48 @@ set -euo pipefail
 MCP_SERVER_NAME="rule-mcp"
 SCRIPT_URL="https://rule-mcp.domain.example/uninstall.sh"
 
-# ── Colors ───────────────────────────────────────────────────────────────────
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
-CYAN='\033[0;36m'
-BLUE='\033[1;34m'
-BOLD='\033[1m'
-NC='\033[0m'
+# ── Terminal rendering ──────────────────────────────────────────────────────
+# Colors and box-drawing only render on a real TTY without NO_COLOR: piped and
+# CI output stays plain and machine-parseable.
+USE_COLOR=false
+if [[ -t 1 ]] && [[ "${TERM:-dumb}" != "dumb" ]] && [[ -z "${NO_COLOR:-}" ]]; then
+  USE_COLOR=true
+fi
+if [[ "$USE_COLOR" == "true" ]]; then
+  RED='\033[0;31m'
+  GREEN='\033[0;32m'
+  YELLOW='\033[1;33m'
+  CYAN='\033[0;36m'
+  BLUE='\033[1;34m'
+  BOLD='\033[1m'
+  NC='\033[0m'
+else
+  RED=''
+  GREEN=''
+  YELLOW=''
+  CYAN=''
+  BLUE=''
+  BOLD=''
+  NC=''
+fi
+
+# Multi-line box banner; degrades to plain separator lines when not a TTY.
+box_banner() {
+  local color="${1:-$CYAN}"
+  shift
+  if [[ "$USE_COLOR" == "true" ]]; then
+    echo -e "${BOLD}${color}╔══════════════════════════════════════════════════════╗${NC}"
+    for line in "$@"; do
+      echo -e "${BOLD}${color}║  ${line}${NC}"
+    done
+    echo -e "${BOLD}${color}╚══════════════════════════════════════════════════════╝${NC}"
+  else
+    for line in "$@"; do
+      echo -e "${BOLD}── ${line} ──${NC}"
+    done
+  fi
+  echo ""
+}
 
 # ── State ───────────────────────────────────────────────────────────────────
 REMOVED_COUNT=0
@@ -104,14 +138,33 @@ while [[ $# -gt 0 ]]; do
 done
 
 # ── Confirmation ─────────────────────────────────────────────────────────────
+# Count agents that currently reference this server, so the confirmation
+# screen reflects reality instead of a fixed list.
+RULE_MCP_FOUND_COUNT=0
+for cfg_path in \
+  "$HOME_DIR/.claude.json" \
+  "$HOME_DIR/.cursor/mcp.json" \
+  "$HOME_DIR/.codex/config.toml" \
+  "$HOME_DIR/.config/github-copilot/hosts.json" \
+  "$HOME_DIR/.gemini/settings.json" \
+  "$HOME_DIR/.pi/agent/mcp.json" \
+  "$HOME_DIR/.config/cline/mcp.json" \
+  "$HOME_DIR/.config/roo/mcp.json" \
+  "$HOME_DIR/.config/zed/mcp.json" \
+  "$HOME_DIR/.config/opencode/mcp.json" \
+  "$HOME_DIR/.config/antigravity/mcp.json" \
+  "$HOME_DIR/.config/windsurf/mcp.json"
+do
+  if [[ -f "$cfg_path" ]] && grep -q "rule-mcp" "$cfg_path" 2>/dev/null; then
+    RULE_MCP_FOUND_COUNT=$((RULE_MCP_FOUND_COUNT + 1))
+  fi
+done
+
 if [[ "$DRY_RUN" == "false" && "$FORCE" == "false" ]]; then
-  echo ""
-  echo -e "${YELLOW}${BOLD}╔══════════════════════════════════════════════════════╗${NC}"
-  echo -e "${YELLOW}${BOLD}║      rule-mcp - Uninstall Confirmation         ║${NC}"
-  echo -e "${YELLOW}${BOLD}╚══════════════════════════════════════════════════════╝${NC}"
+  box_banner "$YELLOW" "rule-mcp - Uninstall Confirmation"
   echo ""
   echo -e "  This will remove rule-mcp configuration from:"
-  echo -e "   • All detected coding agents (mcp.json entries)"
+  echo -e "   • ${RULE_MCP_FOUND_COUNT} agent config(s) currently reference rule-mcp"
   echo -e "   • Agent instruction files (CLAUDE.md, AGENTS.md, GEMINI.md)"
   echo -e "   • IDE configurations (VS Code, Neovim, JetBrains, Emacs)"
   echo -e "   • Shell profile environment variables"
@@ -136,11 +189,8 @@ if [[ "$DRY_RUN" == "false" && "$FORCE" == "false" ]]; then
   fi
 fi
 
-echo ""
-echo -e "${BOLD}${RED}╔══════════════════════════════════════════════════════╗${NC}"
-echo -e "${BOLD}${RED}║       rule-mcp - Universal Uninstaller         ║${NC}"
-echo -e "${BOLD}${RED}╚══════════════════════════════════════════════════════╝${NC}"
-echo ""
+box_banner "$RED" \
+  "rule-mcp - Universal Uninstaller"
 
 # ─────────────────────────────────────────────────────────────────────────────
 # PHASE 1: Agent MCP Configs
@@ -816,29 +866,73 @@ fi
 # ─────────────────────────────────────────────────────────────────────────────
 header "Phase 7: Global Package"
 
+# install.sh creates a `pnpm link --global` shim (scripts/install.sh →
+# ensure_global_shim) so agent configs can call `rule-mcp` directly.
+# Uninstall must reverse that: unlink the linked package, then remove the bin
+# shim and any leftover link in the per-user pnpm store.
 if command -v rule-mcp &>/dev/null; then
   global_path=$(command -v rule-mcp 2>/dev/null || true)
   if [[ -n "$global_path" ]]; then
     sub "Global binary found: ${global_path}"
     if [[ "$DRY_RUN" == "true" ]]; then
-      sub "[dry-run] Would run: pnpm remove -g rule-mcp (or npm uninstall -g)"
+      sub "[dry-run] Would unlink/remove the global rule-mcp shim"
     else
+      # pnpm-linked packages need `pnpm unlink --global`, not `remove -g`.
       if command -v pnpm &>/dev/null; then
-        pnpm remove -g rule-mcp 2>/dev/null && ok "Global package removed (pnpm)" && \
-          sub "  ✓ Run \`which rule-mcp\` to verify removal" || \
-          warn "pnpm uninstall had issues (may not be installed globally)"
+        pnpm unlink --global rule-mcp >/dev/null 2>&1 && ok "Global package unlinked (pnpm unlink)" || true
       fi
-      # Fallback to npm if pnpm didn't handle it
-      if command -v rule-mcp &>/dev/null; then
-        npm uninstall -g rule-mcp 2>/dev/null && \
-          ok "Global package removed (npm)" || \
-          sub "Package not installed globally via npm"
+      # Fallback to npm for a real global install.
+      if command -v rule-mcp &>/dev/null && command -v npm &>/dev/null; then
+        npm uninstall -g rule-mcp >/dev/null 2>&1 && ok "Global package removed (npm)" || true
       fi
     fi
   fi
 else
   sub "No global rule-mcp binary found, skipping"
 fi
+
+# Belt-and-braces: remove the bin shims + linked store entry even when pnpm
+# metadata is gone. A stale shim keeps `command -v rule-mcp` resolving
+# forever and silently breaks reinstalls.
+shim_candidates=()
+[[ -n "${PNPM_HOME:-}" ]] && shim_candidates+=("$PNPM_HOME/bin/rule-mcp")
+shim_candidates+=(
+  "$HOME_DIR/Library/pnpm/bin/rule-mcp"
+  "$HOME_DIR/.local/share/pnpm/bin/rule-mcp"
+  "$HOME_DIR/.pnpm-global/bin/rule-mcp"
+  "$HOME_DIR/.npm-global/bin/rule-mcp"
+)
+shim_seen=()
+for shim in "${shim_candidates[@]}"; do
+  # Skip duplicates (e.g. PNPM_HOME coinciding with the default dir).
+  if [[ ${#shim_seen[@]} -gt 0 ]] && [[ " ${shim_seen[*]} " == *" $shim "* ]]; then
+    continue
+  fi
+  shim_seen+=("$shim")
+  if [[ -f "$shim" ]] || [[ -L "$shim" ]]; then
+    if [[ "$DRY_RUN" == "true" ]]; then
+      sub "[dry-run] Would remove global shim: ${shim}"
+    else
+      rm -f "$shim"
+      ok "Removed global shim: ${shim}"
+    fi
+  fi
+done
+# Linked package entry inside pnpm's per-user global store (a symlink to the
+# project repo when created by `pnpm link --global .`).
+for linked in \
+  "$HOME_DIR/Library/pnpm/global/"*/node_modules/rule-mcp \
+  "$HOME_DIR/.local/share/pnpm/global/"*/node_modules/rule-mcp
+do
+  if [[ -e "$linked" ]] || [[ -L "$linked" ]]; then
+    if [[ "$DRY_RUN" == "true" ]]; then
+      sub "[dry-run] Would remove global link: ${linked}"
+    else
+      rm -rf "$linked"
+      ok "Removed global link: ${linked}"
+    fi
+  fi
+done
 
 # ─────────────────────────────────────────────────────────────────────────────
 # PHASE 8: Daemon Service Removal
@@ -924,6 +1018,7 @@ echo ""
 echo -e "  ${GREEN}✓ rule-mcp has been uninstalled from your system.${NC}"
 echo -e "  ${CYAN}The following were removed:${NC}"
 echo -e "   • MCP server entries from coding agent configs"
+echo -e "   • Global pnpm shim/link (so \`command -v rule-mcp\` resolves to nothing)"
 echo -e "   • Instruction rules from agent instruction files"
 echo -e "   • IDE configurations (VS Code, Neovim, JetBrains, Emacs)"
 echo -e "   • Daemon service (LaunchAgent / systemd / Windows Service)"

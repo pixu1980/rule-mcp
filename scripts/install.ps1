@@ -90,6 +90,10 @@ function Write-Fail  { Write-Host "✗ $($args[0])" -ForegroundColor Red; $globa
 function Write-Header{ Write-Host "`n── $($args[0]) ──`n" -ForegroundColor Blue }
 function Write-Step  { Write-Host "  → $($args[0])" -ForegroundColor Cyan }
 function Show-Banner([string]$Subtitle) {
+  if ($script:NoColor) {
+    Write-Host "`n── $Subtitle ──`n"
+    return
+  }
   Clear-Host
   Write-Host "╔══════════════════════════════════════════════════════╗" -ForegroundColor Cyan
   Write-Host "║         rule-mcp - Universal Installer        ║" -ForegroundColor Cyan
@@ -101,25 +105,38 @@ function Select-AgentsInteractive([string[]]$Items) {
   $flags = @{}; for($i=0; $i -lt $Items.Count; $i++){ $flags[$i] = $false }
   $cursor = 0
   while ($true) {
+    $done = $false
     Show-Banner "Phase 3 - Agent Integration"
-    Write-Host "Select agents (↑↓ move, Space toggle, Enter confirm, q quit)" -ForegroundColor Cyan
+    Write-Host "Select agents (↑↓/jk move, Space/1-9 toggle, a all, n none, Enter confirm, q quit)" -ForegroundColor Cyan
     Write-Host ""
     for($i=0; $i -lt $Items.Count; $i++) {
       $mark = if($flags[$i]){ 'x' } else { ' ' }
       $prefix = if($i -eq $cursor){ '> ' } else { '  ' }
-      Write-Host ("{0}[{1}] {2}" -f $prefix,$mark,$Items[$i])
+      Write-Host ("{0}[{1}] {2} {3}" -f $prefix,$mark,($i + 1),$Items[$i])
     }
     $selectedCount = (@($flags.Values | Where-Object { $_ })).Count
     Write-Host ""
     Write-Host ("Selected: {0}/{1}" -f $selectedCount, $Items.Count) -ForegroundColor Cyan
     $key = [Console]::ReadKey($true)
+    $char = [string]$key.KeyChar
     switch ($key.Key) {
       'UpArrow' { $cursor--; if($cursor -lt 0){ $cursor = $Items.Count - 1 } }
       'DownArrow' { $cursor++; if($cursor -ge $Items.Count){ $cursor = 0 } }
       'Spacebar' { $flags[$cursor] = -not $flags[$cursor] }
-      'Enter' { break }
+      # NB: `break` inside a PS `switch` exits only the switch, not the loop,
+      # so Enter must set a flag instead (the old code never confirmed).
+      'Enter' { $done = $true }
       'Q' { return @() }
     }
+    if ($char -eq 'j') { $cursor++; if($cursor -ge $Items.Count){ $cursor = 0 } }
+    elseif ($char -eq 'k') { $cursor--; if($cursor -lt 0){ $cursor = $Items.Count - 1 } }
+    elseif ($char -eq 'a' -or $char -eq 'A') { for($i=0; $i -lt $Items.Count; $i++){ $flags[$i] = $true } }
+    elseif ($char -eq 'n' -or $char -eq 'N') { for($i=0; $i -lt $Items.Count; $i++){ $flags[$i] = $false } }
+    elseif ($char -match '^[1-9]$') {
+      $idx = [int]$char - 1
+      if ($idx -lt $Items.Count) { $flags[$idx] = -not $flags[$idx]; $cursor = $idx }
+    }
+    if ($done) { break }
   }
   $selected = @()
   for($i=0; $i -lt $Items.Count; $i++){ if($flags[$i]){ $selected += $Items[$i] } }
@@ -130,21 +147,27 @@ function Select-ModeInteractive() {
   $labels = @('Stdio - agent starts a local process','Daemon - background SSE service on port 37999','Docker - containerized SSE service')
   $cursor = 0
   while ($true) {
+    $done = $false
     Show-Banner "Phase 3 - Install Mode"
-    Write-Host "Select mode (↑↓ move, Enter confirm, q quit)" -ForegroundColor Cyan
+    Write-Host "Select mode (↑↓/jk move, 1-3 select, Enter confirm, q quit)" -ForegroundColor Cyan
     Write-Host ""
     for($i=0; $i -lt $modes.Count; $i++) {
       $radio = if($i -eq $cursor){ '•' } else { ' ' }
       $prefix = if($i -eq $cursor){ '> ' } else { '  ' }
-      Write-Host ("{0}({1}) {2}" -f $prefix,$radio,$labels[$i])
+      Write-Host ("{0}({1}) {2} {3}" -f $prefix,$radio,($i + 1),$labels[$i])
     }
     $key = [Console]::ReadKey($true)
+    $char = [string]$key.KeyChar
     switch ($key.Key) {
       'UpArrow' { $cursor--; if($cursor -lt 0){ $cursor = $modes.Count - 1 } }
       'DownArrow' { $cursor++; if($cursor -ge $modes.Count){ $cursor = 0 } }
-      'Enter' { return $modes[$cursor] }
+      'Enter' { $done = $true }
       'Q' { return $null }
     }
+    if ($char -eq 'j') { $cursor++; if($cursor -ge $modes.Count){ $cursor = 0 } }
+    elseif ($char -eq 'k') { $cursor--; if($cursor -lt 0){ $cursor = $modes.Count - 1 } }
+    elseif ($char -match '^[1-3]$') { $cursor = [int]$char - 1; $done = $true }
+    if ($done) { return $modes[$cursor] }
   }
 }
 
@@ -153,13 +176,39 @@ function Test-Command($cmd) {
   catch { return $false }
 }
 
+# Output gating: colors and box-drawing render only on an interactive console
+# without NO_COLOR - redirected/CI output stays plain and machine-parseable
+# (mirrors the TTY gate in scripts/install.sh).
+$script:NoColor = [Console]::IsOutputRedirected -or [bool]$env:NO_COLOR
+
+# The global binary must not just exist - it must launch. A stale pnpm/npm
+# shim can stay on PATH while crashing at startup (e.g. after a repo move),
+# which used to fail every agent install silently. Mirrors shim_works() in
+# scripts/install.sh.
+function Test-PixCli {
+  if (-not (Test-Command rule-mcp)) { return $false }
+  try {
+    & rule-mcp --version *> $null
+    return $LASTEXITCODE -eq 0
+  } catch {
+    return $false
+  }
+}
+
 # ── Banner ──
-Write-Host ""
-Write-Host "╔══════════════════════════════════════════════════════╗" -ForegroundColor Cyan
-Write-Host "║         rule-mcp - Universal Installer        ║" -ForegroundColor Cyan
-Write-Host "║   MCP Server for the rule-* Skill Ecosystem      ║" -ForegroundColor Cyan
-Write-Host "╚══════════════════════════════════════════════════════╝" -ForegroundColor Cyan
-Write-Host ""
+if ($script:NoColor) {
+  Write-Host ""
+  Write-Host "── rule-mcp - Universal Installer ──"
+  Write-Host "── MCP Server for the rule-* Skill Ecosystem ──"
+  Write-Host ""
+} else {
+  Write-Host ""
+  Write-Host "╔══════════════════════════════════════════════════════╗" -ForegroundColor Cyan
+  Write-Host "║         rule-mcp - Universal Installer        ║" -ForegroundColor Cyan
+  Write-Host "║   MCP Server for the rule-* Skill Ecosystem      ║" -ForegroundColor Cyan
+  Write-Host "╚══════════════════════════════════════════════════════╝" -ForegroundColor Cyan
+  Write-Host ""
+}
 
 # ─────────────────────────────────────────────────────────────────────────────
 # PHASE 1: Prerequisites
@@ -232,24 +281,45 @@ if ($DryRun) {
   }
 }
 
-# Determine the command. Keep executable and arguments separate from display text.
+# Determine the command. Keep executable and arguments separate from display
+# text. Prefer the global binary only when it actually launches (Test-PixCli):
+# a stale shim still resolves with Test-Command but crashes at startup and
+# used to fail every agent install silently.
 $BinCmd = ""
 $BinExecutable = ""
 $BinArguments = @()
-if (Test-Command rule-mcp) {
+if (Test-PixCli) {
   $BinCmd = "rule-mcp"
   $BinExecutable = "rule-mcp"
-  Write-Ok "Global binary found: $(Get-Command rule-mcp).Source"
-} elseif ($PM -eq "pnpm") {
-  $BinCmd = "pnpx rule-mcp"
-  $BinExecutable = "pnpx"
-  $BinArguments = @("rule-mcp")
-  Write-Warn "Using: $BinCmd"
-} else {
-  $BinCmd = "npx rule-mcp"
-  $BinExecutable = "npx"
-  $BinArguments = @("rule-mcp")
-  Write-Warn "Using: $BinCmd"
+  Write-Ok "Global binary verified: $((Get-Command rule-mcp).Source)"
+} elseif (Test-Command rule-mcp) {
+  # It exists but does not launch - try to repair it before falling back to
+  # pnpx/npx (mirrors ensure_global_shim() in scripts/install.sh).
+  Write-Warn "Global rule-mcp exists but fails to launch - reinstalling"
+  if ($DryRun) {
+    Write-Step "[dry-run] Would reinstall the global ${NpmPackage} package"
+  } else {
+    if ($PM -eq "pnpm") { pnpm add -g "${NpmPackage}@${PackageVersion}" *> $null }
+    if (-not (Test-PixCli)) { npm install -g "${NpmPackage}@${PackageVersion}" *> $null }
+  }
+  if (Test-PixCli) {
+    $BinCmd = "rule-mcp"
+    $BinExecutable = "rule-mcp"
+    Write-Ok "Global binary repaired: $((Get-Command rule-mcp).Source)"
+  }
+}
+if (-not $BinExecutable) {
+  if ($PM -eq "pnpm") {
+    $BinCmd = "pnpx rule-mcp"
+    $BinExecutable = "pnpx"
+    $BinArguments = @("rule-mcp")
+    Write-Warn "Using: $BinCmd"
+  } else {
+    $BinCmd = "npx rule-mcp"
+    $BinExecutable = "npx"
+    $BinArguments = @("rule-mcp")
+    Write-Warn "Using: $BinCmd"
+  }
 }
 
 function Invoke-PixCli {
@@ -272,7 +342,10 @@ if ($TargetAgent) {
     if ($LASTEXITCODE -eq 0) {
       Write-Ok "Installed for $TargetAgent"
     } else {
+      # Surface the CLI error instead of swallowing it: a missing/broken
+      # binary used to look like a successful-but-skipped install.
       Write-Warn "Failed to install for $TargetAgent"
+      $result | ForEach-Object { Write-Host "    $_" -ForegroundColor Gray }
     }
   }
 } else {
@@ -335,6 +408,7 @@ if ($TargetAgent) {
       Write-Info "Install mode: $InstallMode"
     } else {
       $SelectedAgents = $DetectedAgents
+      Write-Step "Non-interactive run: configuring $($DetectedAgents.Count) detected agent(s) (use -Agent <name> to target one)"
     }
 
     if ($DryRun) {
@@ -351,6 +425,7 @@ if ($TargetAgent) {
           $ConfiguredCount++
         } else {
           Write-Warn "$agent skipped (may already be configured)"
+          $result | ForEach-Object { Write-Host "    $_" -ForegroundColor Gray }
           $SkippedCount++
         }
       }
@@ -497,6 +572,7 @@ if ($DryRun) {
       Write-Step "  Manage with: sc start/stop/query rule-mcp"
     } else {
       Write-Warn "Windows Service installation had issues"
+      $result | ForEach-Object { Write-Host "    $_" -ForegroundColor Gray }
       Write-Step "  Run: rule-mcp daemon install"
     }
   } else {
@@ -551,6 +627,7 @@ if ($DryRun) {
     Write-Ok "Health check passed"
   } else {
     Write-Warn "Health check had issues"
+    $result | ForEach-Object { Write-Host "    $_" -ForegroundColor Gray }
   }
 } else {
   Write-Warn "Cannot run doctor: rule-mcp not on PATH"
