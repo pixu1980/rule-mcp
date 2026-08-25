@@ -9,7 +9,7 @@
 
 import { z } from "zod/v4";
 import { readSkill, getSkillNames, registerTool } from "./router.js";
-import { getSkillMetadata } from "../core/skills.js";
+import { getSkillMetadata } from "./router.js";
 import { detectProject, getFrameworkSuggestion } from "../core/detector.js";
 
 // ─── Schema ───────────────────────────────────────────────────────

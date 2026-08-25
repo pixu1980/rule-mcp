@@ -438,10 +438,3 @@ export function consumeUpdateBanner() {
   _pendingBanner = null;
   return b;
 }
-
-/** Test hook: reset throttle/banner state. */
-export function _resetForTests() {
-  _lastCheckAt = 0;
-  _inflight = null;
-  _pendingBanner = null;
-}

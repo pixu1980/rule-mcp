@@ -14,6 +14,7 @@ import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 import { z } from "zod/v4";
 import { getSkillsDirs as getSkillsDirectories } from "../cli/paths.js";
+import { parseSkillFrontmatter } from "../core/skill-frontmatter.js";
 import {
   decorateWorkflowReminder,
   enforcementError,
@@ -287,6 +288,24 @@ export function readSkill(skillName) {
  *
  * @returns {string[]}
  */
+
+const skillCache = new Map();
+
+export function getSkillMetadata(skillName) {
+  const cacheKey = `meta:${skillName}`;
+  const cached = skillCache.get(cacheKey);
+  if (cached) {
+    return JSON.parse(cached);
+  }
+  const content = readSkill(skillName);
+  if (!content) {
+    return {};
+  }
+  const meta = parseSkillFrontmatter(content);
+  skillCache.set(cacheKey, JSON.stringify(meta));
+  return meta;
+}
+
 export function getSkillNames() {
   const names = new Set();
   const { embeddedSkills } = getSkillsDirectories();
