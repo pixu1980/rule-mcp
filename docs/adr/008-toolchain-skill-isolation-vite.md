@@ -3,7 +3,7 @@
 - **Date**: 2026-07-10
 - **Status**: accepted
 - **Tags**: skills, toolchain, vite, build
-- **Author**: pix-architect
+- **Author**: pix-galaxy-architect
 
 ## Context
 

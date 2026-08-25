@@ -31,7 +31,7 @@ Interview decisions (2025-08-01):
   - `pix-write-tests` (TDD + a11y tests + devops_testing)
   - `pix-handoff` (process_handoff + adr + compressed context)
 - [x] 3. **16 area prompts**: `pix-area-{...}` - **with all 97 tools renamed `pix_tool_*`** (interview decision) to avoid collisions with prompts - each: route to the area skill, baseline TDD/a11y or ask the user, final commit scope
-- [x] 4. **Update the 5 existing** (`pix-code-review`, `pix-generate-component`, `pix-a11y-test`, `pix-a11y-review`, `pix-architect-scaffold`) to comply with the same rules (commit scope + baseline)
+- [x] 4. **Update the 5 existing** (`pix-code-review`, `pix-generate-component`, `pix-a11y-test`, `pix-a11y-review`, `pix-galaxy-architect`) to comply with the same rules (commit scope + baseline)
 
 ## Phase 3 - Completions (`src/server.js`)
 

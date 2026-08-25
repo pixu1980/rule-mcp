@@ -116,7 +116,7 @@ Fixed shape but role='system' still present. success: false
 
 ### Impact
 
-Any MCP client that validates responses against the official schema (the TypeScript/Python reference client, and presumably Claude Desktop/Claude Code when using `prompts/get`) **rejects the response with a parsing error**. The 5 server slash-prompts (`pix-code-review`, `pix-generate-component`, `pix-a11y-test`, `pix-a11y-review`, `pix-architect-scaffold`) are therefore **unusable by any compliant client**, regardless of the model. `tools/*` and `resources/*` on the other hand were successfully validated against the official schemas (see Appendix) - the problem is isolated to the `prompts` subsystem.
+Any MCP client that validates responses against the official schema (the TypeScript/Python reference client, and presumably Claude Desktop/Claude Code when using `prompts/get`) **rejects the response with a parsing error**. The 5 server slash-prompts (`pix-code-review`, `pix-generate-component`, `pix-a11y-test`, `pix-a11y-review`, `pix-galaxy-architect`) are therefore **unusable by any compliant client**, regardless of the model. `tools/*` and `resources/*` on the other hand were successfully validated against the official schemas (see Appendix) - the problem is isolated to the `prompts` subsystem.
 
 ### Recommended fix
 

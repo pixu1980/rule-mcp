@@ -26,7 +26,7 @@
 
 ## Cross-cutting conventions
 
-- **Automatic rename pix→pix:** env vars (`PIX_GALAXY_MCP_*`→`PIX_GALAXY_MCP_*`, `PIX_*`→`PIX_*`), tool prefix (`pix_`→`pix_`), commands (`/pix-*`→`/pix-*`), skill folders (`pix-architect`→`pix-architect`), bin, messages and test.
+- **Automatic rename pix→pix:** env vars (`PIX_GALAXY_MCP_*`→`PIX_GALAXY_MCP_*`, `PIX_*`→`PIX_*`), tool prefix (`pix_`→`pix_`), commands (`/pix-*`→`/pix-*`), skill folders (`pix-architect`→`pix-galaxy-architect`), bin, messages and test.
 - **3-way merge:** for each divergent file → diff source vs target, apply the source's new logic **on top** of the target's pix logic, never blindly overwrite.
 - **Self-update remote pinning:** the source verifies the remote against the declaration in `server.json`; in the target the declared remote is `https://github.com/pix/pix-galaxy-mcp` (github, not gitlab) → adapt.
 - **Verification per phase:** after each phase `pnpm lint` + targeted phase tests; full `pnpm run ci` only at the end (note: `pnpm ci` is a pnpm builtin, not the script - always use `pnpm run ci`).
@@ -51,10 +51,10 @@
 
 ## Phase 2 - Architect interview servers (finding 03, 04, 05)
 
-- [ ] `skills/pix-architect/http-guard.mjs` - new file: guard `Sec-Fetch-Site` + `Origin` + `Host` on every `/api/*` of **both** interview servers
-- [ ] `skills/pix-architect-web/server.mjs` and `skills/pix-architect/assets/context-server.mjs` - import + apply the guard
+- [ ] `skills/pix-galaxy-architect/http-guard.mjs` - new file: guard `Sec-Fetch-Site` + `Origin` + `Host` on every `/api/*` of **both** interview servers
+- [ ] `skills/pix-galaxy-architect-web/server.mjs` and `skills/pix-galaxy-architect/assets/context-server.mjs` - import + apply the guard
 - [ ] `src/tools/architect.js` - child registry keyed by target dir (reuse, listener detached, output cap 64 KB, kill after 30 min and on exit/SIGINT/SIGTERM, `process.execPath`)
-- [ ] `src/core/tool-cache.js` - add `pix_architect` to `NON_CACHEABLE`
+- [ ] `src/core/tool-cache.js` - add `pix-galaxy-architect` to `NON_CACHEABLE`
 - [ ] Test: `test/architect-server-csrf.test.mjs`, `test/architect-interview-lifecycle.test.mjs`
 - [ ] Verify: `node --test test/architect-server-csrf.test.mjs test/architect-interview-lifecycle.test.mjs`
 - [ ] Commit: `fix(security): enforce same-origin on interview servers and own their lifecycle`

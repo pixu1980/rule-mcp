@@ -3,7 +3,7 @@
 - **Date**: 2026-08-01
 - **Status**: accepted
 - **Tags**: taxonomy, skills, routing, git, toolchain
-- **Author**: pix-architect
+- **Author**: pix-galaxy-architect
 
 ## Context
 

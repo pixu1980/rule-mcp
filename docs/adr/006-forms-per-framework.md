@@ -3,7 +3,7 @@
 - **Date**: 2026-07-11
 - **Status**: accepted
 - **Tags**: architecture, forms, frontend, refactoring, solid
-- **Author**: pix-architect
+- **Author**: pix-galaxy-architect
 
 ## Context
 

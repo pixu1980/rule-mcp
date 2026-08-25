@@ -229,9 +229,9 @@ pix_tool_frontend_react mode=tldr query="state management hooks"
 # No Overview, Setup, Installation, License
 ```
 
-### Context interview: pix-galaxy-architect app
+### Context interview
 
-The context interview wizard moved out of pix-galaxy-mcp into the standalone
+The context interview wizard lives in the standalone
 `pix-galaxy-architect` web app (repo: `~/Projects/pixu1980/ai/pix-galaxy-architect`).
 Run `node src/context-server.mjs --port 19000` from that repo and open the
 printed URL: it guides the user through the project specification steps and

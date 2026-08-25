@@ -250,9 +250,9 @@ Other limits:
 
 **Fix:** random bearer token at startup, CORS deny-by-default/allowlist, `Origin` validation, body limit, consent for mutating tools and stdio preference. Loopback binding reduces network exposure but doesn't protect from local browsers.
 
-### P0-07 - `pix_tool_architect interview` is broken in the current snapshot
+### P0-07 - `pix-galaxy-architect interview` is broken in the current snapshot
 
-The tool looks for `skills/pix-architect/assets/context-server.mjs`, but the working tree deleted the entire asset tree. The new implementation is spread across `pix-architect-cli`/`pix-architect-web`, still untracked and not connected to the official tool. The 402-call matrix has a single operational error: `pix_tool_architect` in `check` mode, consistent with the incomplete migration.
+The tool looks for `skills/pix-galaxy-architect/assets/context-server.mjs`, but the working tree deleted the entire asset tree. The new implementation is spread across `pix-galaxy-architect-cli`/`pix-galaxy-architect-web`, still untracked and not connected to the official tool. The 402-call matrix has a single operational error: `pix-galaxy-architect` in `check` mode, consistent with the incomplete migration.
 
 **Fix:** complete a single atomic migration, update tool, tests, package files and documentation in the same commit; avoid two concurrent wizards.
 
@@ -319,7 +319,7 @@ TypeError: stdin.setRawMode is not a function
 
 ### P1-09 - New web wizard: XSS and exposed server
 
-The untracked version in `skills/pix-architect-web/`:
+The untracked version in `skills/pix-galaxy-architect-web/`:
 
 - interpolates input and error messages into `innerHTML` without escaping;
 - uses numerous inline `onclick`/`oninput` and one inline `style=`, violating its own principles;
@@ -398,7 +398,7 @@ Cross-cutting gaps:
 
 - `pix-data-duckdb`, `pix-data-indexed-db`, `pix-data-sqlite` missing `See also` and break the suite;
 - 30 canonical TLDR queries return no sections due to global top-k bug;
-- `pix-architect-cli`, `pix-architect-web` and the three new data skills are untracked, therefore not part of a reproducible Git release;
+- `pix-galaxy-architect-cli`, `pix-galaxy-architect-web` and the three new data skills are untracked, therefore not part of a reproducible Git release;
 - descriptions and APIs often describe enforcement stronger than actually achievable;
 - many assets are duplicated (`assets/assets`) or generate code that doesn't satisfy guardrails.
 
@@ -417,7 +417,7 @@ For each of the 67 skill-tools, the following modes were called:
 5. `check`;
 6. `tldr`.
 
-Total: **402 calls**. The transport and MCP shape are operational. This proves callability, not semantic correctness of every returned text. `pix_tool_architect check` is the runtime exception in the migration snapshot.
+Total: **402 calls**. The transport and MCP shape are operational. This proves callability, not semantic correctness of every returned text. `pix-galaxy-architect check` is the runtime exception in the migration snapshot.
 
 ### 10.2 Deterministic tools
 
@@ -526,9 +526,9 @@ Deterministic tests must remain the primary gate; live tests are a probabilistic
 | Skill                           | Lines | MCP tool                             | Metadata/links              | TLDR canonical query | Result                                       |
 | ------------------------------- | ----: | ------------------------------------ | --------------------------- | -------------------- | -------------------------------------------- |
 | `pix_tool`                      |   254 | `pix_tool`                           | Pass                        | n/a                  | **Pass**                                     |
-| `pix-architect`                 |   253 | `pix_tool_architect`                 | Pass                        | No result            | **Blocked: interview asset missing**         |
-| `pix-architect-cli`             |    82 | `pix_tool_architect_cli`             | Pass                        | Result               | **Warning: untracked/WIP**                   |
-| `pix-architect-web`             |    71 | `pix_tool_architect_web`             | Pass                        | Result               | **Blocked: untracked + UI/security defects** |
+| `pix-galaxy-architect`          |   253 | `pix-galaxy-architect`               | Pass                        | No result            | **Blocked: interview asset missing**         |
+| `pix-galaxy-architect-cli`      |    82 | `pix-galaxy-architect_cli`           | Pass                        | Result               | **Warning: untracked/WIP**                   |
+| `pix-galaxy-architect-web`      |    71 | `pix-galaxy-architect_web`           | Pass                        | Result               | **Blocked: untracked + UI/security defects** |
 | `pix-backend`                   |    61 | `pix_tool_backend`                   | Pass                        | Result               | **Pass**                                     |
 | `pix-backend-api-design`        |   158 | `pix_tool_backend_api_design`        | Pass                        | Result               | **Pass**                                     |
 | `pix-backend-express`           |   147 | `pix_tool_backend_express`           | Pass                        | Result               | **Pass**                                     |
@@ -605,9 +605,9 @@ Isolated package state: **76 tools**. Live workstation state: **87 tools** becau
 | Tool                                 | Kind          | Exercised                                     | Finding                                 |
 | ------------------------------------ | ------------- | --------------------------------------------- | --------------------------------------- |
 | `pix_tool`                           | Router        | 60 curated + 69 self-description + live model | Partial: not mandatory; routing defects |
-| `pix_tool_architect`                 | Skill         | 6 modes                                       | Blocked: interview missing              |
-| `pix_tool_architect_cli`             | Skill         | 6 modes                                       | Modes callable                          |
-| `pix_tool_architect_web`             | Skill         | 6 modes                                       | Modes callable                          |
+| `pix-galaxy-architect`               | Skill         | 6 modes                                       | Blocked: interview missing              |
+| `pix-galaxy-architect_cli`           | Skill         | 6 modes                                       | Modes callable                          |
+| `pix-galaxy-architect_web`           | Skill         | 6 modes                                       | Modes callable                          |
 | `pix_tool_backend`                   | Skill         | 6 modes                                       | Modes callable                          |
 | `pix_tool_backend_api_design`        | Skill         | 6 modes                                       | Modes callable                          |
 | `pix_tool_backend_express`           | Skill         | 6 modes                                       | Modes callable                          |

@@ -3,7 +3,7 @@
 - **Date**: 2026-07-16
 - **Status**: accepted
 - **Tags**: architecture, security, mcp, daemon
-- **Author**: pix-architect
+- **Author**: pix-galaxy-architect
 
 ## Context
 

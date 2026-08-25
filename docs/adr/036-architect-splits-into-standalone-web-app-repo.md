@@ -1,4 +1,4 @@
-# 036: pix-architect splits into a standalone web app repo (pix-galaxy-architect)
+# 036: pix-galaxy-architect splits into a standalone web app repo (pix-galaxy-architect)
 
 - **Date**: 2026-08-25
 - **Status**: accepted
@@ -8,7 +8,7 @@
 ## Context
 
 The architect concept was embedded in pix-galaxy-mcp three times over: the
-`pix-architect` / `pix-architect-cli` / `pix-architect-web` skills, the
+`pix-galaxy-architect` / `pix-galaxy-architect-cli` / `pix-galaxy-architect-web` skills, the
 `src/tools/architect.js` MCP tool (a thin spawner for a context-interview
 HTTP server that already lived _inside_ the skill assets), and a deep trail of
 tests, ADRs, handoffs, installer agent-commands and docs (182 files in the
@@ -34,7 +34,7 @@ Split the architect product out of pix-galaxy-mcp:
    every active doc reference. Historical records (old ADRs, roadmaps,
    reports, CHANGELOG) keep their mentions as history.
 3. ADR authoring (`src/tools/adr.js`) stays in the family but no longer stamps
-   `pix-architect`: author becomes `pix-galaxy-mcp`; the new repo ships its own
+   `pix-galaxy-architect`: author becomes `pix-galaxy-mcp`; the new repo ships its own
    ADR manager SDK (`src/adr.mjs`, Nygard template + auto-numbering + index).
 
 ## Consequences
@@ -55,5 +55,5 @@ Split the architect product out of pix-galaxy-mcp:
 - Teams that want the wizard inside an MCP agent must run the new repo's
   server and integrate it manually (or build a thin adapter) - no MCP server
   ships with it.
-- Historical ADR/roadmap/report documents still mention pix-architect; a
+- Historical ADR/roadmap/report documents still mention pix-galaxy-architect; a
   future reader must know the concept moved (this ADR is that pointer).

@@ -1,4 +1,4 @@
-# Wizard Reborn - pix-architect Interview Restructure
+# Wizard Reborn - pix-galaxy-architect Interview Restructure
 
 > **Author**: Enterprise Architecture Review  
 > **Status**: Draft  
@@ -267,7 +267,7 @@ This table is auto-generated from the collected values - no manual entry.
 
 ### Phase D - SKILL.md rewrite (1h)
 
-- [ ] Rewrite `skills/pix-architect/SKILL.md` interview section to match new 22-step flow
+- [ ] Rewrite `skills/pix-galaxy-architect/SKILL.md` interview section to match new 22-step flow
 - [ ] Write complete "When to use each skill" table (already done)
 - [ ] Add step-by-step table with skill mappings
 

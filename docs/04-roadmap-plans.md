@@ -78,7 +78,7 @@ Every source document below is preserved verbatim under its own heading so no pr
 # pix-galaxy-mcp - Refactor Roadmap
 
 > **Author**: Enterprise Architecture Review  
-> **Scope**: 36 skills → audit, merge, split, redesign pix-architect, create pix-process-adr  
+> **Scope**: 36 skills → audit, merge, split, redesign pix-galaxy-architect, create pix-process-adr  
 > **Status**: Draft v1.0
 
 ---
@@ -90,7 +90,7 @@ Every source document below is preserved verbatim under its own heading so no pr
 3. [Merge Proposals](#3-merge-proposals)
 4. [Split Proposals](#4-split-proposals)
 5. [New Skill: pix-process-adr](#5-new-skill-pix-process-adr)
-6. [Redesign: pix-architect Interview](#6-redesign-pix-architect-interview)
+6. [Redesign: pix-galaxy-architect Interview](#6-redesign-pix-galaxy-architect-interview)
 7. [Target Taxonomy (post-refactor)](#7-target-taxonomy-post-refactor)
 8. [Implementation Roadmap](#8-implementation-roadmap)
 
@@ -130,7 +130,7 @@ Target: **32 skills** after 4 merges, plus 1 new skill (`pix-process-adr`), with
 | #   | Skill                         | Lines | Verdict | Action                            |
 | --- | ----------------------------- | ----- | ------- | --------------------------------- |
 | 1   | pix-galaxy                    | ~190  | ✅      | Keep - ai router                  |
-| 2   | pix-architect                 | ~320  | ✅      | Keep - architecture wizard        |
+| 2   | pix-galaxy-architect          | ~320  | ✅      | Keep - architecture wizard        |
 | 4   | pix-backend                   | ~180  | ✅      | Keep - backend rules              |
 | 5   | pix-backend-api-design        | ~150  | ✅      | Keep - API design                 |
 | 6   | pix-backend-node              | ~130  | ✅      | Keep - Backend scaffold           |
@@ -161,8 +161,8 @@ Target: **32 skills** after 4 merges, plus 1 new skill (`pix-process-adr`), with
 | 31  | pix-platform-web              | ~140  | ✅      | Keep - web platform               |
 | 32  | pix-process-documentation     | ~140  | ✅      | Keep - docs practices             |
 | 33  | pix-process-feature-workflow  | ~110  | ✅      | Keep - workflow                   |
-| 34  | pix-process-handoff           | ~120  | 📦      | Extract from pix-architect        |
-| 35  | pix-scaffolding               | ~90   | 🔀      | Merge into pix-architect          |
+| 34  | pix-process-handoff           | ~120  | 📦      | Extract from pix-galaxy-architect |
+| 35  | pix-scaffolding               | ~90   | 🔀      | Merge into pix-galaxy-architect   |
 | 36  | pix-styleguide                | ~480  | ✅      | Keep (at limit) - main styleguide |
 
 ### Summary
@@ -202,11 +202,11 @@ Target: **32 skills** after 4 merges, plus 1 new skill (`pix-process-adr`), with
 
 **Loss**: None.
 
-### M4: scaffolding → pix-architect
+### M4: scaffolding → pix-galaxy-architect
 
 **Rationale**: Project scaffolding is an architectural concern. The scaffolding router (`pix-scaffolding`) only dispatches to sub-scaffolders. This belongs in the architect skill as a section.
 
-**Action**: Move scaffolding section into `pix-architect/SKILL.md`. Keep sub-scaffolders as standalone.
+**Action**: Move scaffolding section into `pix-galaxy-architect/SKILL.md`. Keep sub-scaffolders as standalone.
 
 **Loss**: None.
 
@@ -220,7 +220,7 @@ No skills exceed the 500-line threshold with sufficient margin. `pix-styleguide`
 
 ## 5. New Skill: pix-process-adr
 
-**Rationale**: The ADR system was prototyped in `pix-architect`. It deserves to be a first-class skill with dedicated features.
+**Rationale**: The ADR system was prototyped in `pix-galaxy-architect`. It deserves to be a first-class skill with dedicated features.
 
 **Scope**:
 
@@ -234,7 +234,7 @@ No skills exceed the 500-line threshold with sufficient margin. `pix-styleguide`
 
 ---
 
-## 6. Redesign: pix-architect Interview
+## 6. Redesign: pix-galaxy-architect Interview
 
 The context interview is currently a 16-step wizard. Proposed improvements:
 
@@ -251,7 +251,7 @@ The context interview is currently a 16-step wizard. Proposed improvements:
 ```
 pix-*
 ├── pix             # Skill router
-├── pix-architect          # Architecture + scaffolding router
+├── pix-galaxy-architect          # Architecture + scaffolding router
 ├── pix-backend            # Backend patterns
 ├── pix-backend-api-design # API design + OpenAPI
 ├── pix-backend-node
@@ -294,7 +294,7 @@ Total: **32 skills** (36 − 4 merges + 1 new = 33, minus 1 scaffolding removal 
 - [x] Merge coverage-gates → testing - verified in `pix-devops-testing`
 - [x] Merge docker-standards → docker - verified in `pix-devops-docker`
 - [x] Merge forms-validation → forms - validation lives in framework/styleguide coverage
-- [x] Merge scaffolding → architect - verified in `pix-architect`
+- [x] Merge scaffolding → architect - verified in `pix-galaxy-architect`
 - [x] Remove merged skill directories - stale directories are absent
 
 ### Phase 2: pix-process-adr (1 day)
@@ -321,14 +321,14 @@ Total: **32 skills** (36 − 4 merges + 1 new = 33, minus 1 scaffolding removal 
 
 ---
 
-## 9. Final pix-architect UI/UX Implementation Plan
+## 9. Final pix-galaxy-architect UI/UX Implementation Plan
 
-This plan defines the definitive mirrored UX for `pix-architect` in CLI and Web modes. The two interfaces must expose the same information architecture, step order, validation rules, preview output, generation behavior, and handoff flow.
+This plan defines the definitive mirrored UX for `pix-galaxy-architect` in CLI and Web modes. The two interfaces must expose the same information architecture, step order, validation rules, preview output, generation behavior, and handoff flow.
 
 ### 9.1 Product principles
 
-- **One flow, two shells**: CLI and Web share the same step schema from `skills/pix-architect/wizard-spec.json`.
-- **Same state model**: both shells read/write the same `values` object and generate from `skills/pix-architect/templates.json`.
+- **One flow, two shells**: CLI and Web share the same step schema from `skills/pix-galaxy-architect/wizard-spec.json`.
+- **Same state model**: both shells read/write the same `values` object and generate from `skills/pix-galaxy-architect/templates.json`.
 - **Progressive depth**: Starter, Standard, and Deep expose the same subsets in both shells.
 - **Deterministic output**: generated `.context/` files are byte-equivalent for the same input values.
 - **LLM-ready handoff**: both shells end with validation status, generated file list, ADR reminders, and `pix_tool_process_handoff` guidance.

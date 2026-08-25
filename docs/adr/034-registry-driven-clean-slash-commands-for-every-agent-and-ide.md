@@ -3,7 +3,7 @@
 - **Date**: 2026-08-04
 - **Status**: accepted
 - **Tags**: architecture, cli, agents, slash-commands, vscode
-- **Author**: pix-architect
+- **Author**: pix-galaxy-architect
 
 ## Context
 

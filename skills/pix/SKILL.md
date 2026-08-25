@@ -41,7 +41,7 @@ frameworks: [all]
 ```text
 Prompt
   ├─ unsure / broad / multi-domain      → pix + pix_search
-  ├─ architecture / SDD / plan          → pix-process-adr + pix-galaxy-architect (web app)
+  ├─ architecture / SDD / plan          → pix-process-adr
   ├─ UI / component / page              → pix-frontend + framework skill + pix-styleguide
   ├─ meta-framework                     → pix-frontend-meta-* + base framework skill
   ├─ AI / agent / LLM application       → pix-ai + focused AI skill

@@ -3,7 +3,7 @@
 - **Date**: 2026-08-03
 - **Status**: accepted
 - **Tags**: commands, claude, mcp, installer
-- **Author**: pix-architect
+- **Author**: pix-galaxy-architect
 
 ## Context
 
