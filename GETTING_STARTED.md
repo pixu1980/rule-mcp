@@ -177,6 +177,16 @@ Supported agents: `claude`, `codex`, `cursor`, `copilot`, `gemini`, `pi`, `cline
 
 `daemon` and `docker` are deliberately limited to **Pi and VS Code** until the HTTP configuration schema of every other host is verified. Other adapters fail clearly rather than silently receiving a stdio configuration.
 
+### Installer CLI health (bash + PowerShell)
+
+`scripts/install.sh` and `scripts/install.ps1` never trust a binary that cannot launch:
+
+- The global `rule-mcp` is only used when `rule-mcp --version` succeeds. A stale shim (e.g. left behind by a repo move) is **detected, warned about, and rewritten** as a plain launcher in the global bin dir; the install falls back to the local entrypoint (`node bin/rule-mcp.js`) instead of failing silently.
+- The installer **never runs `pnpm link --global`** (pnpm 10/11 rewrites `pnpm-workspace.yaml` overrides and the lockfile). Set `RULE_MCP_SKIP_GLOBAL_LINK=1` to skip writing the shim entirely.
+- CLI failures print their real output (indented) instead of being swallowed.
+- Colors and box-drawing render only on an interactive TTY without `NO_COLOR`; piped/CI output stays plain. The interactive selector supports `↑↓/jk`, `1-9`, `a` (all), `n` (none), `Enter`/`q`.
+- `uninstall.sh` / `uninstall.ps1` fully reverse the shim/global package, and the rules block appended to agent instruction files is prettier-clean, so the project `CLAUDE.md` no longer churns after install/uninstall cycles.
+
 ### Manual mcp.json configuration
 
 For agents that support MCP, add this to their `mcp.json`:

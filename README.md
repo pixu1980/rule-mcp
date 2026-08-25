@@ -107,7 +107,8 @@ Claude Code, Cursor, Cline, Roo Code, Copilot, Gemini CLI, Codex CLI, Windsurf, 
 │  CLI                         │  Installer                    │
 │  src/cli/commands.js         │  src/cli/install.js           │
 │  src/cli/daemon.js           │  23 agents supported          │
-│  src/cli/doctor.js           │  scripts/install.sh           │
+│  src/cli/doctor.js           │  scripts/install.sh | .ps1    │
+│                              │  scripts/uninstall.sh | .ps1   │
 └──────────────────────────────┴──────────────────────────────┘
 ```
 
