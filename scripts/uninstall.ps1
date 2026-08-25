@@ -84,8 +84,8 @@ function Remove-McpEntryDual {
     [string]$Label,
     [string]$ServiceName = $McpServerName
   )
-  Remove-McpEntry -FilePath $FilePath -Label $Label -ServiceName $ServiceName
-  Remove-McpEntry -FilePath $FilePath -Label "$Label (legacy)" -ServiceName "pix_ai_mcp"
+  $null = Remove-McpEntry -FilePath $FilePath -Label $Label -ServiceName $ServiceName
+  $null = Remove-McpEntry -FilePath $FilePath -Label "$Label (legacy)" -ServiceName "pix_ai_mcp"
 }
 
 function Remove-McpEntry {
@@ -362,14 +362,14 @@ if ($TargetAgent) {
   if ($TargetAgent -eq "vscode") {
     # VS Code global + project
     $vscodeGlobal = Join-Path $env:APPDATA "Code\User\mcp.json"
-    if (Test-Path $vscodeGlobal) { Remove-McpEntryDual -FilePath $vscodeGlobal -Label "VS Code (global)" }
-    Remove-McpEntryDual -FilePath $VscodeMcp -Label "VS Code (project)"
+    if (Test-Path $vscodeGlobal) { $null = Remove-McpEntryDual -FilePath $vscodeGlobal -Label "VS Code (global)" }
+    $null = Remove-McpEntryDual -FilePath $VscodeMcp -Label "VS Code (project)"
   } elseif ($AgentConfigs.ContainsKey($TargetAgent)) {
     $path = $AgentConfigs[$TargetAgent]
     if ($TargetAgent -eq "codex") {
       Remove-Lines -FilePath $path -Label "Codex CLI" -Pattern "rule"
     } else {
-      Remove-McpEntry -FilePath $path -Label $TargetAgent
+      $null = Remove-McpEntry -FilePath $path -Label $TargetAgent
     }
   } else {
     Write-Warn "Unknown agent: $TargetAgent"
@@ -383,7 +383,7 @@ if ($TargetAgent) {
       if ($agent -eq "codex") {
         Remove-Lines -FilePath $path -Label "Codex CLI" -Pattern "rule"
       } else {
-        Remove-McpEntry -FilePath $path -Label $agent
+        $null = Remove-McpEntry -FilePath $path -Label $agent
       }
     }
   }
@@ -399,13 +399,13 @@ if ($TargetAgent) {
   foreach ($dir in $vscodeGlobalDirs) {
     $mcp = "$dir\mcp.json"
     if (Test-Path $mcp) {
-      Remove-McpEntryDual -FilePath $mcp -Label "$(Split-Path $dir -Leaf) (global)"
+      $null = Remove-McpEntryDual -FilePath $mcp -Label "$(Split-Path $dir -Leaf) (global)"
     }
   }
 
   # VS Code project-level
   if (Test-Path $VscodeMcp -PathType Leaf) {
-    Remove-McpEntryDual -FilePath $VscodeMcp -Label "VS Code (project)"
+    $null = Remove-McpEntryDual -FilePath $VscodeMcp -Label "VS Code (project)"
     if (-not $DryRun) {
       $remaining = Get-Content $VscodeMcp -Raw
       if ($remaining -and -not $remaining.Contains('mcpServers') -and -not $remaining.Contains('servers')) {
@@ -467,7 +467,7 @@ if ($IsMacOS -or $IsLinux) {
     elseif ($dir -match "Code - OSS") { $label = "Code-OSS" }
     elseif ($dir -match "Code/User") { $label = "VS Code" }
     if (Test-Path $mcp -PathType Leaf) {
-      Remove-McpEntryDual -FilePath $mcp -Label $label
+      $null = Remove-McpEntryDual -FilePath $mcp -Label $label
     }
   }
 }
@@ -480,7 +480,7 @@ if ($IsMacOS -or $IsLinux) {
   $NeovimMcp = "$HomeDir\AppData\Local\nvim\mcp.json"
 }
 if (Test-Path $NeovimMcp) {
-  Remove-McpEntryDual -FilePath $NeovimMcp -Label "Neovim"
+  $null = Remove-McpEntryDual -FilePath $NeovimMcp -Label "Neovim"
   if (-not $DryRun) {
     $remaining = Get-Content $NeovimMcp -Raw
     if ($remaining -and -not $remaining.Contains('mcpServers') -and -not $remaining.Contains('servers')) {
@@ -494,7 +494,7 @@ if (Test-Path $NeovimMcp) {
 $IdeaDir = "$ProjectDir\.idea"
 $IdeaMcp = "$IdeaDir\mcp.json"
 if (Test-Path $IdeaMcp) {
-  Remove-McpEntryDual -FilePath $IdeaMcp -Label "JetBrains"
+  $null = Remove-McpEntryDual -FilePath $IdeaMcp -Label "JetBrains"
   if (-not $DryRun) {
     $remaining = Get-Content $IdeaMcp -Raw
     if ($remaining -and -not $remaining.Contains('mcpServers') -and -not $remaining.Contains('servers')) {

@@ -49,6 +49,18 @@ assert.match(
   "uninstaller must collapse trailing blank lines after removing the rules block",
 );
 
+// ── Prettier drift guard: the committed project CLAUDE.md must embed the
+// installer's rules block byte-for-byte. If the committed block drifts from
+// RULES_CONTENT (e.g. blank lines inside the block), then every install is
+// followed by a `pnpm format` diff and the repo churns forever. Compared in
+// bash (below, harness step F) because RULES_CONTENT is bash-escaped here.
+const projectClaude = readFileSync(new URL(`../CLAUDE.md`, import.meta.url), "utf8");
+assert.match(
+  projectClaude,
+  /<!-- rule-mcp-rules -->[\s\S]*?<!-- \/rule-mcp-rules -->/,
+  "CLAUDE.md must contain the rule-mcp-rules block",
+);
+
 // ── Behavioral: real functions extracted from the scripts ───────────────────
 
 const rulesMarker = installSh.match(/^ {2}RULES_MARKER="[^"]*"$/m)?.[0];
@@ -78,7 +90,6 @@ ${removeFunction}
 fail() { echo "HARNESS FAIL: $1"; exit 1; }
 tmp="$(mktemp -d)"
 trap 'rm -rf "$tmp"' EXIT
-
 # A) Fresh file: install → uninstall must restore the exact original bytes.
 printf 'line1\nline2\n' > "$tmp/a.md"
 printf 'line1\nline2\n' > "$tmp/a.expected"
@@ -123,6 +134,16 @@ append_rules_block "$tmp/e.md"
 first="$(head -c 1 "$tmp/e.md")"
 [[ "$first" == "<" ]] || fail "E: empty file install must start with the marker"
 echo "E ok"
+
+# F) Prettier drift guard: the block install.sh appends must be byte-identical
+# to the block committed in ./CLAUDE.md, so install/uninstall cycles never
+# leave a backtick-pnpm-format-backtick diff behind.
+: > "$tmp/f.md"
+append_rules_block "$tmp/f.md"
+sed -n '/<!-- rule-mcp-rules -->/,/<!-- \/rule-mcp-rules -->/p' "$tmp/f.md" > "$tmp/f.block"
+sed -n '/<!-- rule-mcp-rules -->/,/<!-- \/rule-mcp-rules -->/p' "CLAUDE.md" > "$tmp/f.committed"
+cmp -s "$tmp/f.block" "$tmp/f.committed" || fail "F: committed CLAUDE.md rules block differs from install.sh output"
+echo "F ok"
 
 echo "ALL OK"
 `;
