@@ -54,8 +54,13 @@ check(
   "T2 suppresses heavy block when active",
   suppressed.includes("TOKENSAVE ACTIVE") && !suppressed.includes("line 49"),
 );
-const kept = suppressIfTokensave(heavy, { projectDir: withoutTs });
-check("T2.1 keeps block verbatim when inactive", kept === heavy);
+// Multi-source note: with no explicit dir, env var or cwd can activate
+// tokensave - so the "inactive" scenario must run from a neutral cwd.
+const prevCwd = process.cwd();
+process.chdir(withoutTs);
+const keptNeutral = suppressIfTokensave(heavy, { label: "file tree" });
+process.chdir(prevCwd);
+check("T2.1 keeps block verbatim when inactive", keptNeutral === heavy);
 
 // ── T3: opt-out ──
 process.env.RULE_MCP_NO_TOKENSAVE = "1";
@@ -68,7 +73,11 @@ await loadAllSkills();
 const gw = await callTool("rule_tool_gateway", { prompt: "make a react button", path: withTs });
 const gwText = gw.content.map((c) => c.text).join("\n");
 check("T4 gateway emits tokensave directive for graphed project", gwText.includes("TOKENSAVE ACTIVE"));
+// Run from the plain project so cwd-walk-up cannot re-activate tokensave.
+const gwPrevCwd = process.cwd();
+process.chdir(withoutTs);
 const gw2 = await callTool("rule_tool_gateway", { prompt: "make a react button", path: withoutTs });
+process.chdir(gwPrevCwd);
 check(
   "T4.1 gateway omits directive for plain project",
   !gw2.content
