@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **Docs accuracy guard**: `test/docs-accuracy.test.mjs` verifies the README-advertised tool/resource/prompt/skill counts against the runtime surface, so a removal can never silently leave stale claims behind.
 - **Split hotspot modules**: `src/core/guardrail-defs.js` (1771 lines) split into domain modules under `src/core/guardrails/`; `src/cli/install.js` (1273 lines) split into `src/cli/agent-installers.js` with `install.js` keeping the orchestrators. Zero behavior change (full installer + guardrail suites green).
+- **Token-efficiency pipeline**: decoration moved to the MCP boundary (internal callers keep raw payloads); multi-source `.tokensave` detection (args > env > cwd > walk-up); directive emitted once (JSON-deferred) and threshold-based suppression of heavy allowlisted outputs; caveman aggressive pass on by default; runtime counters exposed via `doctor`.
 - **Round-2 hardening**: broke the module-init cycles (skill metadata + scaffold parsers now live in neutral modules), split `cli/daemon.js` (→ `daemon-platform.js`) and `cli/commands.js` (→ `help-text.js`), removed dead exports, enriched `doctor` with version + live surface counts, and added daemon log rotation (5 MB → `.1`). Verified the SDK-based Streamable HTTP transport (`serve --transport http`).
 
 ## [1.0.0] - 2026-08-25

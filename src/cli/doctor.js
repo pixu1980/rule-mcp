@@ -22,6 +22,7 @@ import { getRuntimePaths } from "./paths.js";
 import { detectInstalledAgents } from "./install.js";
 import { checkDaemonService, WRAPPER_SCRIPT_PATH } from "./daemon.js";
 import { banner, color, section } from "./tui.js";
+import { getTokenStats } from "../core/token-stats.js";
 
 const HOME = homedir();
 
@@ -398,6 +399,7 @@ export async function runDoctor(telemetry = false) {
   const report = {
     ok: true,
     version: package_.version,
+    tokenSavings: getTokenStats(),
     surface,
     sdk: getSdkVersion(),
     node: environment.node,
