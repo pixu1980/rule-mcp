@@ -15,6 +15,17 @@ Every commit MUST use conventional commits **with a scope**: `type(scope): subje
 Commits without a scope (e.g. `docs: ...`) are rejected by the `commit-msg` hook (`.githooks/commit-msg`). Generated merge/revert messages are exempt.
 <!-- /pix-galaxy-mcp-commit-rules -->
 
+<!-- pix-galaxy-mcp-repo-state -->
+
+## Repository state
+
+- **Two repos**: `pix-galaxy-mcp` (this - MCP server, 90 tools / 168 resources / 21 prompts / 80 skills, 212 checks) and `pix-galaxy-architect` (standalone web app + SDK; former architect wizard lives there).
+- **Release**: v1.0.0 cut from the changelog; `git tag v1.0.0` pushes a GitHub Release via `.github/workflows/release.yml`. No npm publish yet.
+- **Docs accuracy**: `test/docs-accuracy.test.mjs` enforces that README counts match the runtime surface - update both together.
+- **ADR**: decisions in `docs/adr/` (001-040).
+
+<!-- /pix-galaxy-mcp-repo-state -->
+
 <!-- pix-galaxy-mcp-rules -->
 
 ## MANDATORY: Use pix-galaxy-mcp enforced workflow for coding work
@@ -45,14 +56,3 @@ Available pix-galaxy-mcp tools:
 - pix://resources - Skill documentation as MCP resources
 
 <!-- /pix-galaxy-mcp-rules -->
-
-<!-- pix-galaxy-mcp-repo-state -->
-
-## Repository state
-
-- **Two repos**: `pix-galaxy-mcp` (this - MCP server, 90 tools / 168 resources / 21 prompts / 80 skills, 212 checks) and `pix-galaxy-architect` (standalone web app + SDK; former architect wizard lives there).
-- **Release**: v1.0.0 cut from the changelog; `git tag v1.0.0` pushes a GitHub Release via `.github/workflows/release.yml`. No npm publish yet.
-- **Docs accuracy**: `test/docs-accuracy.test.mjs` enforces that README counts match the runtime surface - update both together.
-- **ADR**: decisions in `docs/adr/` (001-038).
-
-<!-- /pix-galaxy-mcp-repo-state -->
