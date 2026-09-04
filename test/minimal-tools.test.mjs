@@ -16,7 +16,7 @@ import { strict as assert } from "node:assert";
 
 const bin = fileURLToPath(new URL("../bin/rule-mcp.js", import.meta.url));
 
-const ACTION_TOOL_COUNT = 10;
+const ACTION_TOOL_COUNT = 11; // rule_tool_compress joined the surface (item 9 subset)
 // Derived from disk, not a threshold: the old `> 90` only held on machines whose
 // ~/.agents/skills inflated the surface with stale directories from another brand.
 const embeddedSkillCount = readdirSync(new URL("../skills", import.meta.url).pathname, { withFileTypes: true }).filter(

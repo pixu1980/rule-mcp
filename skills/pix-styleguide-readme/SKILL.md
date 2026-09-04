@@ -1,5 +1,5 @@
 ---
-name: rule-styleguides-readme
+name: rule-styleguide-readme
 description: 'Write or improve a README.md for an open source project. Use this for any request to create, rewrite, review, or polish a README, project description, or "getting started" docs for a library, framework, or tool, or to make an open source project more popular or attractive to users. Do NOT use for internal/private repo docs, API reference generation, or CHANGELOG/CONTRIBUTING files.'
 tags:
   - "styleguide"
@@ -97,3 +97,10 @@ Step-by-step, explicit commands for adding the tool to an existing project. The 
 3. The example is self-explanatory, 4–10 lines, and shows its output.
 4. Getting started works from a clean machine.
 5. Skimming only headings + bold text still tells the story.
+
+## See also
+
+- [rule-styleguide-patterns](../rule-styleguide-patterns/SKILL.md)
+- [rule-styleguide-validation](../rule-styleguide-validation/SKILL.md)
+- [rule-toolchain-project](../rule-toolchain-project/SKILL.md)
+- [rule-process-documentation](../rule-process-documentation/SKILL.md)

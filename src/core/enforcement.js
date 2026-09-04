@@ -158,19 +158,43 @@ export function postprocessToolResult(name, arguments_, result, context = {}) {
     return result;
   }
 
-  const requestId = context.requestId ?? randomUUID();
   return {
     ...result,
     _meta: {
       ...result._meta,
       pixEnforcement: {
-        requestId,
         policy: "advisory",
         preprocessed: true,
         postprocessed: true,
         tool: name,
         validatedArguments: Object.keys(arguments_ ?? {}).sort(),
       },
+    },
+  };
+}
+
+/**
+ * Stamp the per-call identity onto a request after the cache.
+ *
+ * A core that carries a fresh request id can never match a recompute: two runs
+ * of the same call would differ, and a replay would hand back an older call's
+ * id. So the id is minted here, at the edge, and only on the response that is
+ * actually returned - never inside the stored core (ADR 062).
+ *
+ * @param {object} result - a postprocessed, de-identified core
+ * @param {string} [requestId] - injected by the tests
+ * @returns {object} the same result, now carrying its per-call identity
+ */
+export function stampRequestId(result, requestId = randomUUID()) {
+  if (!result || result.isError || !result._meta?.pixEnforcement) {
+    return result;
+  }
+
+  return {
+    ...result,
+    _meta: {
+      ...result._meta,
+      pixEnforcement: { requestId, ...result._meta.pixEnforcement },
     },
   };
 }
@@ -188,8 +212,13 @@ export function decorateWorkflowReminder(name, result) {
   if (process.env.RULE_MCP_NO_REMINDER === "1") {
     return result;
   }
-  const isTerse = _remindedTools.has(name);
-  _remindedTools.add(name);
+  // RULE_MCP_REMINDER_EVERY=1 keeps the full reminder on every call, for
+  // the accounting suites that must measure the reminder on each turn.
+  const every = process.env.RULE_MCP_REMINDER_EVERY === "1";
+  const isTerse = !every && _remindedTools.has(name);
+  if (!every) {
+    _remindedTools.add(name);
+  }
   return {
     ...result,
     content: [...result.content, { type: "text", text: enforcementContract(name, isTerse) }],

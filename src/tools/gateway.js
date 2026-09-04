@@ -25,6 +25,31 @@ import { createHash } from "node:crypto";
  * The two are never interchangeable. A caller that could downgrade a path-bound
  * receipt to the content-only check would simply pick the weaker one.
  */
+/**
+ * The cache name the gateway's deterministic core is stored under.
+ *
+ * Distinct from the gateway tool itself, which is on the cache denylist: the
+ * core (route, evidence, guardrail verdict) is a pure function of the
+ * arguments, while the receipt must be minted per call. Storing them under
+ * different names is what lets the split stay honest (see
+ * test/gateway-cache-receipt.test.mjs).
+ */
+export const GATEWAY_CORE_TOOL = "rule_tool_gateway_core";
+
+/**
+ * The arguments the core cache key is derived from.
+ *
+ * A full call also carries fields that must change the answer (file content,
+ * prompt); nothing is dropped here - the projection exists so a future
+ * caller can narrow it deliberately. Different content, different key.
+ *
+ * @param {object} args - the raw gateway arguments
+ * @returns {object}
+ */
+export function gatewayCoreArguments(args) {
+  return { ...args };
+}
+
 const receiptStore = new Map();
 
 /** Receipt lifetime (ms). */
@@ -260,42 +285,138 @@ export async function registerGatewayTool() {
         lines.push(TOKENSAVE_DIRECTIVE, "");
       }
 
-      // ── Step 1: Route the prompt ──
-      const { callTool } = await import("./router.js");
-      const routeResult = await callTool("pix_tool", {
-        prompt,
-        ...(path && { path }),
-        ...(framework && { framework }),
-      });
-      let route = { route: "unknown", confidence: 0, sections: [], next_tools: [] };
-      try {
-        const parsed = JSON.parse(routeResult.content[0]?.text || "{}");
-        route = parsed;
-      } catch {
-        /* keep defaults */
+      // ── Deterministic core cache (the routing evidence split) ──
+      //
+      // The route, the evidence it loaded and the guardrail verdict are pure
+      // functions of the arguments: caching them makes a repeat call skip the
+      // routing + evidence reads. The receipt is NEVER part of the core - it is
+      // minted per call, bound to the content of THIS call and expiring from the
+      // current clock, so a replay can never hand back a stale token.
+      const { cacheLookup, cacheStore, skillDigest } = await import("../core/tool-cache.js");
+      const coreArgs = gatewayCoreArguments(arguments_);
+      const cached = cacheLookup(GATEWAY_CORE_TOOL, coreArgs);
+      let core = cached?.result;
+
+      if (!core) {
+        // ── Step 1: Route the prompt ──
+        const { callTool } = await import("./router.js");
+        const routeResult = await callTool("pix_tool", {
+          prompt,
+          ...(path && { path }),
+          ...(framework && { framework }),
+        });
+        let route = { route: "unknown", confidence: 0, sections: [], next_tools: [] };
+        try {
+          const parsed = JSON.parse(routeResult.content[0]?.text || "{}");
+          route = parsed;
+        } catch {
+          /* keep defaults */
+        }
+
+        // ── Domain override: when framework is backend/data/devops, force correct domain skill ──
+        const BACKEND_FRAMEWORKS = ["express", "fastify", "nestjs", "hono"];
+        const DOMAIN_OVERRIDE = {
+          express: "rule-backend-express",
+          fastify: "rule-backend-fastify",
+          nestjs: "rule-backend-nestjs",
+          hono: "rule-backend-hono",
+          postgresql: "rule-data-postgresql",
+          mysql: "rule-data-mysql",
+          mongodb: "rule-data-mongodb",
+          sqlite: "rule-data-sqlite",
+          duckdb: "rule-data-duckdb",
+          sql: "rule-data-sql",
+          docker: "rule-devops-docker",
+          "gitlab-ci": "rule-devops-gitlab-ci",
+        };
+        const isBackendFramework = framework && BACKEND_FRAMEWORKS.includes(framework);
+        const isFrontendRoute = route.route?.startsWith("rule-frontend") || route.route?.startsWith("rule-platform");
+        const effectiveRoute =
+          isBackendFramework && isFrontendRoute
+            ? DOMAIN_OVERRIDE[framework] || `rule-backend-${framework}`
+            : route.route;
+        const primarySkill = effectiveRoute?.startsWith("rule-") ? effectiveRoute : null;
+
+        // ── Step 2: Load primary skill evidence ──
+        let evidence = "";
+        if (primarySkill) {
+          const skillResult = await callTool(`pix_${primarySkill.replace(/^rule-/, "").replaceAll("-", "_")}`, {
+            mode: "tldr",
+            query: prompt.slice(0, 300),
+          });
+          evidence = skillResult.content?.[0]?.text || "";
+        }
+
+        // ── Step 3: Run guardrails if code provided ──
+        let checkResult = null;
+        if (fileSet || code) {
+          const skillName = primarySkill || "rule-ui-design-system";
+          const { checkCode } = await import("../core/guardrails.js");
+          const checkContext = {
+            framework: framework || "vanilla",
+            isComponent: false,
+          };
+
+          const units = fileSet
+            ? fileSet.map((file) => ({ label: file.path, code: file.content }))
+            : [{ label: "code", code }];
+          const checks = units.map((unit) => ({
+            label: unit.label,
+            result: checkCode(skillName, unit.code, { ...checkContext, fileName: unit.label }),
+          }));
+
+          const total = checks.reduce((sum, entry) => sum + entry.result.total, 0);
+          const failCount = checks.reduce((sum, entry) => sum + entry.result.failCount, 0);
+          const passCount = checks.reduce((sum, entry) => sum + entry.result.passCount, 0);
+          const failed = checks.flatMap((entry) =>
+            entry.result.failed.map((f) => ({
+              id: f.id,
+              label: f.label,
+              suggestion: f.suggestion,
+              ...(fileSet && { file: entry.label }),
+            })),
+          );
+
+          checkResult = { allPass: checks.every((entry) => entry.result.allPass), failCount, passCount, total, failed };
+        }
+
+        core = {
+          effectiveRoute,
+          originalRoute: route.route === effectiveRoute ? undefined : route.route,
+          confidence: route.confidence,
+          matchedSections: route.sections ?? [],
+          evidence,
+          checkResult,
+          routeNextTools: route.next_tools ?? [],
+        };
+
+        // The answer depends on the skill whose evidence produced it; the
+        // guardrail corpus is deterministic. This is what lets one skill edit
+        // invalidate exactly these entries (cache-invalidation).
+        const deps = {};
+        if (primarySkill) {
+          const digest = skillDigest(primarySkill);
+          if (digest) {
+            deps[primarySkill] = digest;
+          }
+        }
+        cacheStore(GATEWAY_CORE_TOOL, coreArgs, core, deps);
       }
 
-      // ── Domain override: when framework is backend/data/devops, force correct domain skill ──
-      const BACKEND_FRAMEWORKS = ["express", "fastify", "nestjs", "hono"];
-      const DOMAIN_OVERRIDE = {
-        express: "rule-backend-express",
-        fastify: "rule-backend-fastify",
-        nestjs: "rule-backend-nestjs",
-        hono: "rule-backend-hono",
-        postgresql: "rule-data-postgresql",
-        mysql: "rule-data-mysql",
-        mongodb: "rule-data-mongodb",
-        sqlite: "rule-data-sqlite",
-        duckdb: "rule-data-duckdb",
-        sql: "rule-data-sql",
-        docker: "rule-devops-docker",
-        "gitlab-ci": "rule-devops-gitlab-ci",
+      // ── Render (shared by cache hit and miss; the receipt is always fresh) ──
+      const effectiveRoute = core.effectiveRoute;
+      const route = {
+        route: core.effectiveRoute,
+        confidence: core.confidence,
+        sections: core.matchedSections,
+        next_tools: core.routeNextTools,
       };
-      // If the router gave us a frontend skill but framework is backend, override
-      const isBackendFramework = framework && BACKEND_FRAMEWORKS.includes(framework);
-      const isFrontendRoute = route.route?.startsWith("rule-frontend") || route.route?.startsWith("rule-platform");
-      const effectiveRoute =
-        isBackendFramework && isFrontendRoute ? DOMAIN_OVERRIDE[framework] || `rule-backend-${framework}` : route.route;
+      const primarySkill = effectiveRoute?.startsWith("rule-") ? effectiveRoute : null;
+      const checkResult = core.checkResult;
+      const truncated =
+        core.evidence.length > 8000
+          ? core.evidence.slice(0, 8000) + "\n\n... (truncated, use pix_* tool for full content)"
+          : core.evidence;
 
       lines.push(`## Route: ${effectiveRoute} (confidence: ${Math.round((route.confidence || 0) * 100)}%)`);
       if (route.sections?.length) {
@@ -303,60 +424,21 @@ export async function registerGatewayTool() {
       }
       lines.push("");
 
-      // ── Step 2: Load primary skill evidence ──
-      const primarySkill = effectiveRoute?.startsWith("rule-") ? effectiveRoute : null;
       if (primarySkill) {
-        const skillResult = await callTool(`pix_${primarySkill.replace(/^rule-/, "").replaceAll("-", "_")}`, {
-          mode: "tldr",
-          query: prompt.slice(0, 300),
-        });
-        const evidence = skillResult.content?.[0]?.text || "";
-        const truncated =
-          evidence.length > 8000
-            ? evidence.slice(0, 8000) + "\n\n... (truncated, use pix_* tool for full content)"
-            : evidence;
         lines.push("## Evidence", "", truncated, "");
       }
 
-      // ── Step 3: Run guardrails if code provided ──
-      let checkResult = null;
+      // ── Step 3 (render): guardrails and the fresh receipt ──
       let receipt = null;
       if (fileSet || code) {
         const skillName = primarySkill || "rule-ui-design-system";
-        const { checkCode } = await import("../core/guardrails.js");
-        const checkContext = {
-          framework: framework || "vanilla",
-          isComponent: false,
-          // Don't restrict dependencies for backend code
-        };
-
-        // Every file is checked on its own so a failure names the file it came
-        // from, and so the receipt covers exactly what was checked.
-        const units = fileSet
-          ? fileSet.map((file) => ({ label: file.path, code: file.content }))
-          : [{ label: "code", code }];
-        const checks = units.map((unit) => ({
-          label: unit.label,
-          result: checkCode(skillName, unit.code, { ...checkContext, fileName: unit.label }),
-        }));
-
-        const allPass = checks.every((entry) => entry.result.allPass);
-        const total = checks.reduce((sum, entry) => sum + entry.result.total, 0);
-        const failCount = checks.reduce((sum, entry) => sum + entry.result.failCount, 0);
-        const passCount = checks.reduce((sum, entry) => sum + entry.result.passCount, 0);
-        const failed = checks.flatMap((entry) =>
-          entry.result.failed.map((f) => ({
-            id: f.id,
-            label: f.label,
-            suggestion: f.suggestion,
-            ...(fileSet && { file: entry.label }),
-          })),
-        );
-
         lines.push("## Guardrail Check", "");
-        if (allPass) {
-          lines.push(`✅ All ${total} guardrails pass${fileSet ? ` across ${fileSet.length} file(s)` : ""}.`);
-          // Issue receipt only on full pass
+        if (checkResult.allPass) {
+          lines.push(
+            `✅ All ${checkResult.total} guardrails pass${fileSet ? ` across ${fileSet.length} file(s)` : ""}.`,
+          );
+          // Issue receipt only on full pass: minted HERE, on every call, so a
+          // cache hit still gets a token bound to this call and expiring now.
           receipt = fileSet ? issueFilesReceipt(fileSet, skillName, true) : issueReceipt(code, skillName, true);
           lines.push(
             `**Receipt:** \`${receipt}\` (valid 5 min, pass to pix_apply)`,
@@ -365,15 +447,13 @@ export async function registerGatewayTool() {
               : "Content-only receipt: authorises a single-file write. Pass `files` here for a path-bound receipt.",
           );
         } else {
-          lines.push(`❌ ${failCount} guardrails FAIL. Fix and re-check via pix_gateway.`);
-          for (const f of failed) {
+          lines.push(`❌ ${checkResult.failCount} guardrails FAIL. Fix and re-check via pix_gateway.`);
+          for (const f of checkResult.failed) {
             lines.push(`- **${f.id}**${f.file ? ` (${f.file})` : ""}: ${f.label} - ${f.suggestion}`);
           }
         }
         lines.push("");
-        checkResult = { allPass, failCount, passCount, total, failed };
       }
-
       // ── Step 4: Next tools hint ──
       const nextTools = [...new Set([...(route.next_tools || []), "pix_gateway", "pix_apply", "pix_search"])].slice(
         0,

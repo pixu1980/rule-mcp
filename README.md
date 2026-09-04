@@ -19,7 +19,7 @@ Serves styleguides, component templates, framework best practices, and design sy
 - [What is rule-mcp](#what-is-rule-mcp)
 - [Architecture overview](#architecture-overview)
 - [Tool reference](#tool-reference)
-  - [All 90 tools (normal mode)](#all-90-tools-normal-mode)
+  - [All 91 tools (normal mode)](#all-91-tools-normal-mode)
   - [Minimal tool surface (10 tools)](#minimal-tool-surface-10-tools)
   - [Gateway deterministic mode](#gateway-deterministic-mode)
 - [MCP Resources (146)](#mcp-resources-146)
@@ -74,7 +74,7 @@ rule-mcp install --agent all
 
 ## What is rule-mcp
 
-rule-mcp is an [MCP](https://modelcontextprotocol.io) server that exposes **90 tools**, **168 resources**, and **21 prompts** to any MCP-compatible AI coding agent. Because the server never calls an LLM (every output is deterministic), it is **model-agnostic** - it behaves identically behind Claude, GPT, Gemini, Llama, Qwen, or any other model. It provides:
+rule-mcp is an [MCP](https://modelcontextprotocol.io) server that exposes **91 tools**, **168 resources**, and **21 prompts** to any MCP-compatible AI coding agent. Because the server never calls an LLM (every output is deterministic), it is **model-agnostic** - it behaves identically behind Claude, GPT, Gemini, Llama, Qwen, or any other model. It provides:
 
 - **80 modular skills** covering frontend, backend, database, devops, toolchain, and styleguide domains
 - **BM25 full-text search** across all skill content
@@ -114,7 +114,7 @@ Claude Code, Cursor, Cline, Roo Code, Copilot, Gemini CLI, Codex CLI, Windsurf, 
 ├───────────────────────────────────────────────────────────────┤
 │  Tool Registry              │  Resources Registry             │
 │  src/tools/router.js        │  src/resources/index.js         │
-│  90 tools                   │  168 resources                  │
+│  91 tools                   │  168 resources                  │
 ├──────────────────┬───────────┴────────────────┬───────────────┤
 │  Orchestration   │  Skills & BM25            │  Guardrails    │
 │  pix_gateway     │  89 skill dirs            │  18 shared     │
@@ -159,7 +159,7 @@ Claude Code, Cursor, Cline, Roo Code, Copilot, Gemini CLI, Codex CLI, Windsurf, 
 
 ## Tool reference
 
-### All 90 tools (normal mode)
+### All 91 tools (normal mode)
 
 #### Deterministic tools (9)
 

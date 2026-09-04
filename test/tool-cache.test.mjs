@@ -60,7 +60,7 @@ flush();
 const file = join(stateDir, "tool-cache.json.gz");
 check("T4 persistent gzip file written", existsSync(file));
 const disk = JSON.parse(gunzipSync(readFileSync(file)).toString("utf8"));
-check("T4.1 persisted payload holds the stored entry", disk.entries[k]?.content?.[0]?.text === "hit");
+check("T4.1 persisted payload holds the stored entry", disk.entries[k]?.result?.content?.[0]?.text === "hit");
 
 // ── T5: end-to-end replay through callTool (handler runs once) ──
 let calls = 0;

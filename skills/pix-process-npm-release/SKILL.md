@@ -309,3 +309,10 @@ Show the user which dependency branches pull in the most nested packages, and of
 6. No `NPM_TOKEN` left in workflows or repo secrets.
 7. Tag ruleset active; immutable releases enabled; 2FA required.
 8. User knows the tag → approve release flow and has run a test release.
+
+## See also
+
+- [rule-toolchain-pnpm](../rule-toolchain-pnpm/SKILL.md)
+- [rule-devops-gitlab-ci](../rule-devops-gitlab-ci/SKILL.md)
+- [rule-devops-observability](../rule-devops-observability/SKILL.md)
+- [rule-devops-version](../rule-devops-version/SKILL.md)

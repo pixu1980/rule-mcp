@@ -98,6 +98,7 @@ test("every tool traces back to a rule-* directory in ./skills", () => {
     "rule_tool_apply",
     "rule_tool_check",
     "rule_tool_component",
+    "rule_tool_compress",
     "rule_tool_detect",
     "rule_tool_fix",
     "rule_tool_gateway",
