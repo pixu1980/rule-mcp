@@ -572,15 +572,6 @@ export function registerProcessHandoffTool() {
     description:
       "Generate a compressed LLM handoff summary from ADR logs and project context. Paste the output into a new chat to resume work seamlessly.",
     zodSchema: HandoffSchema,
-    inputSchema: {
-      type: "object",
-      properties: {
-        projectDir: { type: "string", default: ".", description: "Project root directory" },
-        includeContext: { type: "boolean", default: true, description: "Include .context/ values" },
-        includeAdrs: { type: "boolean", default: true, description: "Include ADR summaries" },
-        includeIdentity: { type: "boolean", default: true, description: "Include project identity" },
-      },
-    },
     handler: async (arguments_) => {
       const result = buildHandoff({
         projectDir: arguments_.projectDir || ".",

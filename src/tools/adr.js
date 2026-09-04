@@ -162,20 +162,6 @@ export function registerProcessAdrTool() {
     description:
       "Save an Architecture Decision Record (ADR) to docs/adr/. Auto-numbers, maintains index, uses Nygard template.",
     zodSchema: ADRSchema,
-    inputSchema: {
-      type: "object",
-      properties: {
-        title: { type: "string", description: "ADR title" },
-        status: { type: "string", enum: ["proposed", "accepted", "deprecated", "superseded"], default: "accepted" },
-        context: { type: "string", description: "Context forcing factors" },
-        decision: { type: "string", description: "Decision made" },
-        consequences: { type: "string", description: "Positive and negative consequences" },
-        alternatives: { type: "array", items: { type: "string" }, description: "Alternatives considered" },
-        tags: { type: "array", items: { type: "string" }, default: ["architecture"] },
-        projectDir: { type: "string", default: ".", description: "Project root" },
-      },
-      required: ["title"],
-    },
     handler: async (arguments_) => {
       const projectDir = arguments_.projectDir || ".";
       const adrDir = join(projectDir, ADR_DIR);

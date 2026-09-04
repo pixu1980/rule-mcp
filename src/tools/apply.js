@@ -200,26 +200,6 @@ export async function registerApplyTool() {
       "proving that the code passed all guardrails. The receipt is tied to the exact code hash - " +
       "modified code will be rejected. Use dryRun=true (default) to preview without writing.",
     zodSchema: ApplySchema,
-    inputSchema: {
-      type: "object",
-      properties: {
-        files: {
-          type: "array",
-          items: {
-            type: "object",
-            properties: {
-              path: { type: "string", description: "Relative file path" },
-              content: { type: "string", description: "File content" },
-            },
-            required: ["path", "content"],
-          },
-        },
-        receipt: { type: "string", description: "Receipt from pix_gateway" },
-        path: { type: "string", default: ".", description: "Project root" },
-        dryRun: { type: "boolean", default: true, description: "Preview without writing" },
-      },
-      required: ["files", "receipt"],
-    },
     handler: async (arguments_) => {
       const { files, receipt, path: rootPath = ".", dryRun } = arguments_;
       const results = [];

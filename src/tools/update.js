@@ -26,7 +26,6 @@ export function registerUpdateTool() {
       "hot-reload skills, and restart if server code changed. Also runs automatically " +
       "(throttled, in the background) on tool calls; call directly to update on demand.",
     zodSchema: z.object({}),
-    inputSchema: { type: "object", properties: {} },
     handler: async () => {
       const result = await runSelfUpdate();
       const restartNote = scheduleRestartIfNeeded(result);
