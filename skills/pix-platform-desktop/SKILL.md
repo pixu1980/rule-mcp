@@ -770,13 +770,13 @@ app.on("open-url", (event, url) => {
 │   └── helpers/          ← fs, path, venv utilities               │
 │                                                                  │
 │  IPC pattern:                                                    │
-│   preload: qt.fn = () => ipcRenderer.invoke('channel')          │
+│   preload: qt.fn = () => ipcRenderer.invoke('channel')           │
 │   main:    ipcMain.handle('channel', handler)                    │
 │                                                                  │
 │  Security: contextIsolation=true, nodeIntegration=false          │
 │  Styling:  data-part attributes, zero classes                    │
 │  Build:    electron-builder, asar, multi-platform                │
-│  Signing chain: sign → notarize → silent auto-update (macOS)    │
+│  Signing chain: sign → notarize → silent auto-update (macOS)     │
 │  Distribution: Web, GitHub Releases, App Stores, Homebrew        │
 └──────────────────────────────────────────────────────────────────┘
 ```

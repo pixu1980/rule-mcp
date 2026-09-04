@@ -93,42 +93,42 @@ Claude Code, Cursor, Cline, Roo Code, Copilot, Gemini CLI, Codex CLI, Windsurf, 
 ## Architecture overview
 
 ```
-┌─────────────────────────────────────────────────────────────┐
+┌──────────────────────────────────────────────────────────────┐
 │                    AI Coding Agent                           │
-│  (Claude Code / Cursor / Pi / Gemini CLI / etc.)            │
+│  (Claude Code / Cursor / Pi / Gemini CLI / etc.)             │
 └──────────────┬──────────────────────────────┬────────────────┘
                │ MCP protocol (tools/list,     │
                │ tools/call, resources/read,    │
                │ prompts/get, completion)       │
                ▼                                ▼
-┌──────────────────────────────┬──────────────────────────────┐
+┌──────────────────────────────┬───────────────────────────────┐
 │      STDIO Transport         │       SSE Transport           │
 │  (default, for agents)       │  (optional, for IDE/HTTP)     │
-└──────────────┬───────────────┴──────────────┬───────────────┘
+└──────────────┬───────────────┴──────────────┬────────────────┘
                ▼                               ▼
-┌──────────────────────────────────────────────────────────────┐
-│                    MCP Server (SDK)                          │
-│  src/server.js - handler registration                        │
+┌───────────────────────────────────────────────────────────────┐
+│                    MCP Server (SDK)                           │
+│  src/server.js - handler registration                         │
 │  src/transport/sse.js - SSE HTTP server                       │
 │  src/transport/cert.js - self-signed TLS cert generation      │
-├──────────────────────────────────────────────────────────────┤
-│  Tool Registry              │  Resources Registry            │
-│  src/tools/router.js        │  src/resources/index.js        │
-│  90 tools                   │  168 resources                 │
-├──────────────────┬───────────┴────────────────┬──────────────┤
-│  Orchestration   │  Skills & BM25            │  Guardrails  │
-│  pix_gateway     │  89 skill dirs            │  18 shared   │
-│  pix_apply       │  src/core/bm25.js         │  + framework  │
-│  receipt system  │  src/core/skills.js        │  + backend   │
-│                  │                            │  + database  │
-│                  │                            │  + devops    │
-├──────────────────┴────────────────────────────┴──────────────┤
-│  CLI                         │  Installer                    │
-│  src/cli/commands.js         │  src/cli/install.js           │
-│  src/cli/daemon.js           │  23 agents supported          │
-│  src/cli/doctor.js           │  scripts/install.sh | .ps1    │
+├───────────────────────────────────────────────────────────────┤
+│  Tool Registry              │  Resources Registry             │
+│  src/tools/router.js        │  src/resources/index.js         │
+│  90 tools                   │  168 resources                  │
+├──────────────────┬───────────┴────────────────┬───────────────┤
+│  Orchestration   │  Skills & BM25            │  Guardrails    │
+│  pix_gateway     │  89 skill dirs            │  18 shared     │
+│  pix_apply       │  src/core/bm25.js         │  + framework   │
+│  receipt system  │  src/core/skills.js        │  + backend    │
+│                  │                            │  + database   │
+│                  │                            │  + devops     │
+├──────────────────┴────────────────────────────┴───────────────┤
+│  CLI                         │  Installer                     │
+│  src/cli/commands.js         │  src/cli/install.js            │
+│  src/cli/daemon.js           │  23 agents supported           │
+│  src/cli/doctor.js           │  scripts/install.sh | .ps1     │
 │                              │  scripts/uninstall.sh | .ps1   │
-└──────────────────────────────┴──────────────────────────────┘
+└──────────────────────────────┴────────────────────────────────┘
 ```
 
 **Key files:**
