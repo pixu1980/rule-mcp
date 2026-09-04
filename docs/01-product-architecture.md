@@ -338,57 +338,57 @@ No `tsconfig.json`, no `tsc` build step, no `.ts` files. The project stays as Ja
 ## 2. High-Level Architecture
 
 ```
-┌─────────────────────────────────────────────────────────────────┐
+┌──────────────────────────────────────────────────────────────────┐
 │                        MCP Client (Agent)                        │
 │           Claude / Codex / Cursor / Copilot / Gemini / etc.      │
-└──────────────────────┬──────────────────────────────────────────┘
+└──────────────────────┬───────────────────────────────────────────┘
                        │ MCP Protocol (JSON-RPC 2.0)
                        │ stdio or SSE transport
                        ▼
-┌─────────────────────────────────────────────────────────────────┐
-│                     rule-mcp Server                         │
-├─────────────────────────────────────────────────────────────────┤
-│                                                                   │
-│  ┌──────────────────────────────────────────────────────────┐   │
-│  │            MCP SDK (@modelcontextprotocol/sdk)            │   │
-│  │  ┌─────────────┐  ┌──────────────┐  ┌────────────────┐  │   │
-│  │  │ Server Class │  │ Transport    │  │ Capabilities   │  │   │
-│  │  │ (tool/res/   │  │ StdioServer  │  │ tools: {}      │  │   │
-│  │  │  prompt reg) │  │ SSEServer    │  │ resources: {}  │  │   │
-│  │  └─────────────┘  └──────────────┘  │ prompts: {}    │  │   │
-│  │                                      │ logging: {}    │  │   │
-│  │                                      └────────────────┘  │   │
-│  └──────────────────────────────────────────────────────────┘   │
-│                              │                                    │
-│  ┌──────────────────────────────────────────────────────────┐   │
-│  │                    Tool Handlers                           │   │
-│  │  ┌─────────────┐ ┌──────────┐ ┌───────────┐ ┌─────────┐  │   │
+┌──────────────────────────────────────────────────────────────────────┐
+│                     rule-mcp Server                            │
+├──────────────────────────────────────────────────────────────────────┤
+│                                                                      │
+│  ┌──────────────────────────────────────────────────────────┐        │
+│  │            MCP SDK (@modelcontextprotocol/sdk)            │       │
+│  │  ┌─────────────┐  ┌──────────────┐  ┌────────────────┐  │         │
+│  │  │ Server Class │  │ Transport    │  │ Capabilities   │  │        │
+│  │  │ (tool/res/   │  │ StdioServer  │  │ tools: {}      │  │        │
+│  │  │  prompt reg) │  │ SSEServer    │  │ resources: {}  │  │        │
+│  │  └─────────────┘  └──────────────┘  │ prompts: {}    │  │         │
+│  │                                      │ logging: {}    │  │        │
+│  │                                      └────────────────┘  │        │
+│  └──────────────────────────────────────────────────────────┘        │
+│                              │                                       │
+│  ┌──────────────────────────────────────────────────────────┐        │
+│  │                    Tool Handlers                           │      │
+│  │  ┌─────────────┐ ┌──────────┐ ┌───────────┐ ┌─────────┐  │        │
 │  │  │ rule         │ │ pix_*    │ │ rule_tool_check │ │ pix_    │  │   │
-│  │  │ (router)    │ │ (skills) │ │(blocking) │ │ search  │  │   │
-│  │  └─────────────┘ └──────────┘ └───────────┘ └─────────┘  │   │
-│  │  ┌─────────────┐ ┌──────────┐ ┌───────────┐ ┌─────────┐  │   │
-│  │  │ pix_        │ │ pix_     │ │ pix_      │ │ pix_    │  │   │
-│  │  │ architect   │ │ component│ │ scaffold  │ │ detect  │  │   │
-│  │  │(scaffold +  │ │          │ │           │ │(future) │  │   │
-│  │  │ interview)  │ │          │ │           │ │         │  │   │
-│  │  └─────────────┘ └──────────┘ └───────────┘ └─────────┘  │   │
-│  └──────────────────────────────────────────────────────────┘   │
-│                              │                                    │
-│  ┌──────────────────────────────────────────────────────────┐   │
-│  │                     Core Services                          │   │
-│  │  ┌─────────────┐ ┌──────────────┐ ┌──────────────────┐   │   │
-│  │  │ Skills      │ │ Guardrails   │ │ Template Engine  │   │   │
-│  │  │ Loader      │ │ Engine       │ │ (25 patterns)   │   │   │
-│  │  │ (FS + cache)│ │ (25 checks)  │ │                  │   │   │
-│  │  └─────────────┘ └──────────────┘ └──────────────────┘   │   │
-│  │  ┌─────────────┐ ┌──────────────┐ ┌──────────────────┐   │   │
-│  │  │ Semantic    │ │ Project      │ │ Installer        │   │   │
-│  │  │ Search      │ │ Detector     │ │ (15 agents)      │   │   │
-│  │  │ (BM25)      │ │ (package.json)│ │                  │   │   │
-│  │  └─────────────┘ └──────────────┘ └──────────────────┘   │   │
-│  └──────────────────────────────────────────────────────────┘   │
-│                                                                   │
-└─────────────────────────────────────────────────────────────────┘
+│  │  │ (router)    │ │ (skills) │ │(blocking) │ │ search  │  │        │
+│  │  └─────────────┘ └──────────┘ └───────────┘ └─────────┘  │        │
+│  │  ┌─────────────┐ ┌──────────┐ ┌───────────┐ ┌─────────┐  │        │
+│  │  │ pix_        │ │ pix_     │ │ pix_      │ │ pix_    │  │        │
+│  │  │ architect   │ │ component│ │ scaffold  │ │ detect  │  │        │
+│  │  │(scaffold +  │ │          │ │           │ │(future) │  │        │
+│  │  │ interview)  │ │          │ │           │ │         │  │        │
+│  │  └─────────────┘ └──────────┘ └───────────┘ └─────────┘  │        │
+│  └──────────────────────────────────────────────────────────┘        │
+│                              │                                       │
+│  ┌──────────────────────────────────────────────────────────┐        │
+│  │                     Core Services                          │      │
+│  │  ┌─────────────┐ ┌──────────────┐ ┌──────────────────┐   │        │
+│  │  │ Skills      │ │ Guardrails   │ │ Template Engine  │   │        │
+│  │  │ Loader      │ │ Engine       │ │ (25 patterns)   │   │         │
+│  │  │ (FS + cache)│ │ (25 checks)  │ │                  │   │        │
+│  │  └─────────────┘ └──────────────┘ └──────────────────┘   │        │
+│  │  ┌─────────────┐ ┌──────────────┐ ┌──────────────────┐   │        │
+│  │  │ Semantic    │ │ Project      │ │ Installer        │   │        │
+│  │  │ Search      │ │ Detector     │ │ (15 agents)      │   │        │
+│  │  │ (BM25)      │ │ (package.json)│ │                  │   │       │
+│  │  └─────────────┘ └──────────────┘ └──────────────────┘   │        │
+│  └──────────────────────────────────────────────────────────┘        │
+│                                                                      │
+└──────────────────────────────────────────────────────────────────────┘
 ```
 
 ### Enforcement boundary
@@ -565,53 +565,53 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 ## 5. Data Flow
 
 ```
-                         ┌─────────────────────┐
+                         ┌──────────────────────┐
                          │   User prompt        │
                          │  "React button"      │
-                         └──────────┬──────────┘
+                         └──────────┬───────────┘
                                     │
                           MCP calls `pix_tool`
                                     │
                                     ▼
-┌──────────────────────────────────────────────────────┐
-│  rule (router)                                   │
-│  • Prompt → keyword analysis                          │
-│  • Score skills by keyword match                      │
-│  • Return top-3 ranked skills + confidence scores     │
+┌─────────────────────────────────────────────────────────────────────┐
+│  rule (router)                                                       │
+│  • Prompt → keyword analysis                                        │
+│  • Score skills by keyword match                                    │
+│  • Return top-3 ranked skills + confidence scores                   │
 │  • Result: ["rule-frontend-react (92%)", "rule_tool_component (88%)"] │
-└───────────────────────┬──────────────────────────────┘
+└───────────────────────┬─────────────────────────────────────────────┘
                         │
             MCP calls `rule_tool_frontend_react` + `rule_tool_component`
                         │
                         ▼
-┌──────────────────────────────────────────────────────┐
+┌──────────────────────────────────────────────────────────────────────┐
 │  rule_tool_frontend_react (skill tool)                                │
-│  • mode=full → full SKILL.md                           │
-│  • mode=summary → first 30 lines                       │
-│  • mode=search → grep matching lines                   │
-│  • mode=guardrails → list checkable assertions          │
-│  • mode=check → validate code against guardrails        │
-└───────────────────────┬──────────────────────────────┘
+│  • mode=full → full SKILL.md                                         │
+│  • mode=summary → first 30 lines                                     │
+│  • mode=search → grep matching lines                                 │
+│  • mode=guardrails → list checkable assertions                       │
+│  • mode=check → validate code against guardrails                     │
+└───────────────────────┬──────────────────────────────────────────────┘
                         │
             MCP calls `rule_tool_component`
                         │
                         ▼
-┌──────────────────────────────────────────────────────┐
+┌────────────────────────────────────────────────────────────┐
 │  rule_tool_component (LLM-free generator)                   │
-│  • component=button, framework=react                   │
-│  • Returns: JSX + CSS code blocks                     │
-│  • Zero LLM context consumed                           │
-│  • ~200 tokens saved per call                          │
-└───────────────────────┬──────────────────────────────┘
+│  • component=button, framework=react                       │
+│  • Returns: JSX + CSS code blocks                          │
+│  • Zero LLM context consumed                               │
+│  • ~200 tokens saved per call                              │
+└───────────────────────┬────────────────────────────────────┘
                         │
                         ▼
-┌──────────────────────────────────────────────────────┐
-│  Agent generates final code                           │
-│  • Uses React skill rules as context                  │
-│  • Uses component template as base                    │
+┌────────────────────────────────────────────────────────────┐
+│  Agent generates final code                                │
+│  • Uses React skill rules as context                       │
+│  • Uses component template as base                         │
 │  • Applies guardrails via rule_tool_check                   │
-│  • Iterates: generate → check → fix → until pass      │
-└──────────────────────────────────────────────────────┘
+│  • Iterates: generate → check → fix → until pass           │
+└────────────────────────────────────────────────────────────┘
 ```
 
 ---

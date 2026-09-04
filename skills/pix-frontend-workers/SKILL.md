@@ -522,23 +522,23 @@ Workers appear in the Sources panel alongside main-thread scripts. You can set b
 │  rule-frontend-workers - Browser Web Workers                      │
 │                                                                  │
 │  Worker types:  Dedicated | Shared | Service                     │
-│  Communication: postMessage + onmessage (structured clone)      │
+│  Communication: postMessage + onmessage (structured clone)       │
 │  Zero-copy:     Transferable objects (ArrayBuffer, Offscreen)    │
-│  Shared memory: SharedArrayBuffer + Atomics (needs COOP/COEP)   │
-│  Libs in worker: importScripts() or { type: 'module' }          │
+│  Shared memory: SharedArrayBuffer + Atomics (needs COOP/COEP)    │
+│  Libs in worker: importScripts() or { type: 'module' }           │
 │                                                                  │
-│  CAN do:     fetch, IndexedDB, WebSocket, Canvas, WebGL, Crypto │
-│  CANNOT do:  DOM, localStorage, window, alert, parent vars      │
+│  CAN do:     fetch, IndexedDB, WebSocket, Canvas, WebGL, Crypto  │
+│  CANNOT do:  DOM, localStorage, window, alert, parent vars       │
 │                                                                  │
 │  Decision:                                                       │
-│   UI freezing?   → Dedicated Worker                             │
-│   Multi-tab?     → Shared Worker                                │
-│   Offline/PWA?   → Service Worker (not for CPU)                 │
-│   Large binary?  → Transferable (zero-copy)                     │
-│   Multi-core?    → One worker per CPU core                      │
-│   Trivial task?  → Main thread (worker cost > benefit)          │
+│   UI freezing?   → Dedicated Worker                              │
+│   Multi-tab?     → Shared Worker                                 │
+│   Offline/PWA?   → Service Worker (not for CPU)                  │
+│   Large binary?  → Transferable (zero-copy)                      │
+│   Multi-core?    → One worker per CPU core                       │
+│   Trivial task?  → Main thread (worker cost > benefit)           │
 │                                                                  │
-│  Debug:  chrome://inspect/#workers                              │
+│  Debug:  chrome://inspect/#workers                               │
 └──────────────────────────────────────────────────────────────────┘
 ```
 

@@ -386,19 +386,19 @@ piscina
 ┌──────────────────────────────────────────────────────────────────┐
 │  rule-backend-workers - Node.js Concurrency & Workers             │
 │                                                                  │
-│  Event loop:  6 phases, microtasks drain between macrotasks     │
-│  libuv pool:  4 threads (default), max 1024, C-level only       │
-│  Workers:     Separate V8 isolate + event loop, CPU-bound JS    │
-│  Pool:        piscina - reuse workers, tune to CPU count        │
-│  Cluster:     Fork processes, share socket, scale I/O           │
+│  Event loop:  6 phases, microtasks drain between macrotasks      │
+│  libuv pool:  4 threads (default), max 1024, C-level only        │
+│  Workers:     Separate V8 isolate + event loop, CPU-bound JS     │
+│  Pool:        piscina - reuse workers, tune to CPU count         │
+│  Cluster:     Fork processes, share socket, scale I/O            │
 │                                                                  │
 │  Decision:                                                       │
-│   I/O-bound    → async/await (already fast)                     │
-│   CPU-bound    → worker_threads + piscina pool                  │
-│   Core-satur.  → cluster or container replicas                  │
-│   Pool tuning  → UV_THREADPOOL_SIZE (I/O only, never CPU)      │
+│   I/O-bound    → async/await (already fast)                      │
+│   CPU-bound    → worker_threads + piscina pool                   │
+│   Core-satur.  → cluster or container replicas                   │
+│   Pool tuning  → UV_THREADPOOL_SIZE (I/O only, never CPU)        │
 │                                                                  │
-│  Detect:  monitorEventLoopDelay → high p99 = loop saturated     │
+│  Detect:  monitorEventLoopDelay → high p99 = loop saturated      │
 └──────────────────────────────────────────────────────────────────┘
 ```
 

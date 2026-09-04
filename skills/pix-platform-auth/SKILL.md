@@ -635,29 +635,29 @@ These only surface in the browser - session replay captures them, error logs don
 │  rule-platform-auth - Authentication Strategy                     │
 │                                                                  │
 │  The two axes:                                                   │
-│   State:  Sessions (server)  vs  JWTs (client)                  │
+│   State:  Sessions (server)  vs  JWTs (client)                   │
 │   Transport:  Cookies  vs  Authorization header                  │
 │                                                                  │
 │  Decision by archetype:                                          │
-│   Monolith     → Server-side sessions + HttpOnly cookies        │
-│   SPA/API      → JWTs with refresh rotation, HttpOnly cookies   │
-│   Social/SSO   → OAuth 2.1 + OIDC                               │
-│   Not-product  → Managed provider (Auth0/Clerk/Supabase)        │
-│   High-sec     → Any base + passkeys (opt-in, with recovery)    │
+│   Monolith     → Server-side sessions + HttpOnly cookies         │
+│   SPA/API      → JWTs with refresh rotation, HttpOnly cookies    │
+│   Social/SSO   → OAuth 2.1 + OIDC                                │
+│   Not-product  → Managed provider (Auth0/Clerk/Supabase)         │
+│   High-sec     → Any base + passkeys (opt-in, with recovery)     │
 │                                                                  │
 │  Golden rules:                                                   │
-│   ✅ Tokens in HttpOnly cookies - NEVER localStorage            │
+│   ✅ Tokens in HttpOnly cookies - NEVER localStorage             │
 │   ✅ Argon2id for passwords                                      │
 │   ✅ PKCE for all OAuth flows                                    │
-│   ✅ Refresh-token rotation + reuse detection                   │
-│   ✅ Design recovery before launch (passkeys)                   │
+│   ✅ Refresh-token rotation + reuse detection                    │
+│   ✅ Design recovery before launch (passkeys)                    │
 │                                                                  │
 │  Anti-patterns:                                                  │
-│   ❌ JWTs in localStorage                                       │
-│   ❌ JWTs without a stateless-scaling reason                    │
-│   ❌ OAuth for MVP with first-party login only                  │
-│   ❌ Passkeys without a password fallback                       │
-│   ❌ "none" algorithm in JWT verification                       │
+│   ❌ JWTs in localStorage                                        │
+│   ❌ JWTs without a stateless-scaling reason                     │
+│   ❌ OAuth for MVP with first-party login only                   │
+│   ❌ Passkeys without a password fallback                        │
+│   ❌ "none" algorithm in JWT verification                        │
 └──────────────────────────────────────────────────────────────────┘
 ```
 

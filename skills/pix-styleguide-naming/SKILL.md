@@ -211,15 +211,15 @@ import "@styles/index.css";
 ## 4. Quick Reference
 
 ```
-┌──────────────────────────────────────────────────┐
-│   PascalCase  →  class, functional component,    │
+┌───────────────────────────────────────────────────┐
+│   PascalCase  →  class, functional component,     │
 │                  component file/folder            │
 │   camelCase   →  variable, function, property     │
 │   UPPER_SNAKE →  constant                         │
 │   kebab-case  →  custom element tag, generic file │
 │   _ prefix    →  non-index file inside a folder   │
 │   index.*     →  barrel export                    │
-└──────────────────────────────────────────────────┘
+└───────────────────────────────────────────────────┘
 ```
 
 ---

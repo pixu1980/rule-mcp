@@ -199,16 +199,16 @@ export async function loader({ request }) {
 ## Quick Reference
 
 ```
-┌────────────────────────────────────────────────────────────┐
+┌─────────────────────────────────────────────────────────────────────────┐
 │  rule-frontend-meta-remix - Remix / React Router (React Meta-framework)  │
-│                                                           │
-│  Routing:   app/routes/, nested with _layout.jsx          │
-│  Data:      loader() → useLoaderData()                    │
-│  Mutations: action() → useActionData()                    │
-│  Forms:     <Form method="post"> - works without JS       │
-│  Sessions:  createCookieSessionStorage + cookie           │
-│  Deploy:    Node, Cloudflare Workers, Vercel, Netlify    │
-└────────────────────────────────────────────────────────────┘
+│                                                                         │
+│  Routing:   app/routes/, nested with _layout.jsx                        │
+│  Data:      loader() → useLoaderData()                                  │
+│  Mutations: action() → useActionData()                                  │
+│  Forms:     <Form method="post"> - works without JS                     │
+│  Sessions:  createCookieSessionStorage + cookie                         │
+│  Deploy:    Node, Cloudflare Workers, Vercel, Netlify                   │
+└─────────────────────────────────────────────────────────────────────────┘
 ```
 
 ---

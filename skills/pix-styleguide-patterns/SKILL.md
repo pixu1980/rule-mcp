@@ -15,36 +15,36 @@ frameworks: [all]
 ## Naming Quick Reference
 
 ```
-┌──────────────────────────────────────────────────┐
-│   PASCAL CASE                                    │
-│   ├── Class names          class TodoItem         │
-│   ├── Functional components  function TodoItem()  │
-│   ├── Component folders     components/TodoItem/  │
-│   ├── Component files       _TodoItem.js          │
+┌────────────────────────────────────────────────────┐
+│   PASCAL CASE                                      │
+│   ├── Class names          class TodoItem          │
+│   ├── Functional components  function TodoItem()   │
+│   ├── Component folders     components/TodoItem/   │
+│   ├── Component files       _TodoItem.js           │
 │                                                    │
-│   CAMEL CASE                                      │
-│   ├── Variables             const userName = ''   │
-│   ├── Functions             function fetchData()  │
-│   ├── Properties            obj.firstName         │
+│   CAMEL CASE                                       │
+│   ├── Variables             const userName = ''    │
+│   ├── Functions             function fetchData()   │
+│   ├── Properties            obj.firstName          │
 │                                                    │
-│   UPPER_SNAKE_CASE                                │
-│   ├── Constants (all)       const MAX_RETRIES = 3 │
+│   UPPER_SNAKE_CASE                                 │
+│   ├── Constants (all)       const MAX_RETRIES = 3  │
 │                                                    │
-│   kebab-case                                      │
-│   ├── Custom element tags   'todo-item'           │
-│   ├── Generic files         api-client.js         │
-│   ├── Non-component folders  helpers/  core/      │
-│   ├── CSS custom props     --color-primary-500    │
+│   kebab-case                                       │
+│   ├── Custom element tags   'todo-item'            │
+│   ├── Generic files         api-client.js          │
+│   ├── Non-component folders  helpers/  core/       │
+│   ├── CSS custom props     --color-primary-500     │
 │                                                    │
 │   _ PREFIX                                         │
-│   ├── Non-index files       _TodoItem.js          │
-│   ├── Test files            _TodoItem.test.js     │
+│   ├── Non-index files       _TodoItem.js           │
+│   ├── Test files            _TodoItem.test.js      │
 │                                                    │
 │   INDEX                                            │
-│   ├── Barrel export         index.js              │
-│   ├── Entry point HTML      index.html            │
-│   └── CSS barrel            index.css             │
-└──────────────────────────────────────────────────┘
+│   ├── Barrel export         index.js               │
+│   ├── Entry point HTML      index.html             │
+│   └── CSS barrel            index.css              │
+└────────────────────────────────────────────────────┘
 ```
 
 ## File Tree Convention

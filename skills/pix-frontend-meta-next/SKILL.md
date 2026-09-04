@@ -176,16 +176,16 @@ DATABASE_URL=postgres://...                     ← Server only
 ## Quick Reference
 
 ```
-┌────────────────────────────────────────────────────────────┐
+┌──────────────────────────────────────────────────────────────────────────┐
 │  rule-frontend-meta-next - Next.js (React Meta-framework)                 │
-│                                                           │
-│  Routing:   app/ directory, layout/page/loading/error     │
-│  Data:      fetch with cache/no-store/revalidate          │
-│  API:       app/api/route.js                              │
-│  Midlleware: middleware.js at root                         │
-│  Images:    next/image with priority + blur placeholder   │
-│  Deploy:    Vercel (auto), Docker, Static export          │
-└────────────────────────────────────────────────────────────┘
+│                                                                          │
+│  Routing:   app/ directory, layout/page/loading/error                    │
+│  Data:      fetch with cache/no-store/revalidate                         │
+│  API:       app/api/route.js                                             │
+│  Midlleware: middleware.js at root                                       │
+│  Images:    next/image with priority + blur placeholder                  │
+│  Deploy:    Vercel (auto), Docker, Static export                         │
+└──────────────────────────────────────────────────────────────────────────┘
 ```
 
 ---

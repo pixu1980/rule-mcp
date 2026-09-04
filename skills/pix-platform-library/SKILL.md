@@ -238,16 +238,16 @@ Keep a human-readable `CHANGELOG.md`:
 ## Quick Reference
 
 ```
-┌────────────────────────────────────────────────────────────┐
-│  Structure:  src/   dist/   CHANGELOG.md   LICENSE         │
-│  API:        index.js barrel, _internal.js private         │
-│  Format:     ESM (dist/index.mjs) + CJS (dist/index.cjs)  │
-│  Build:      esbuild / tsup / microbundle                  │
-│  Test:       node:test / Vitest, ≥80% coverage            │
-│  Version:    semver, CHANGELOG.md per release              │
+┌─────────────────────────────────────────────────────────────┐
+│  Structure:  src/   dist/   CHANGELOG.md   LICENSE          │
+│  API:        index.js barrel, _internal.js private          │
+│  Format:     ESM (dist/index.mjs) + CJS (dist/index.cjs)    │
+│  Build:      esbuild / tsup / microbundle                   │
+│  Test:       node:test / Vitest, ≥80% coverage              │
+│  Version:    semver, CHANGELOG.md per release               │
 │  Deploy:     pnpm publish -access public                    │
-│  Deps:       zero runtime preferred, audit before adding   │
-└────────────────────────────────────────────────────────────┘
+│  Deps:       zero runtime preferred, audit before adding    │
+└─────────────────────────────────────────────────────────────┘
 ```
 
 ---

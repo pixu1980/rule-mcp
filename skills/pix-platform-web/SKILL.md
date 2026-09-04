@@ -179,21 +179,21 @@ that require their own class names or inline styling.
 ## Quick Reference
 
 ```
-┌────────────────────────────────────────────────────────────┐
-│  Framework:  choose one rule-* skill                        │
+┌─────────────────────────────────────────────────────────────┐
+│  Framework:  choose one rule-* skill                         │
 │  Design:     Vanilla CSS / approved CSS tokens              │
 │  Styling:    data-part, zero classes, external CSS          │
-│  Semantic:   <header> <nav> <main> <article> <footer>      │
-│  Barrel:     index.js re-export per folder                 │
-│  PWA:        service worker + manifest.json                │
-│  Split:      route-based + vendor chunks                   │
-│  Testing:    Vitest (unit) + Playwright (E2E)              │
-│  A11y:       WCAG 2.2 AA, axe-core in CI                  │
-│  i18n:       JSON locale files, ICU messages               │
-│  Perf:       LCP < 2.5s, bundle < 150KB gzipped           │
-│  Deploy:     Netlify / Vercel / CF Pages / GitHub Pages    │
-│  CI:         GitHub Actions → lint → test → build → deploy │
-└────────────────────────────────────────────────────────────┘
+│  Semantic:   <header> <nav> <main> <article> <footer>       │
+│  Barrel:     index.js re-export per folder                  │
+│  PWA:        service worker + manifest.json                 │
+│  Split:      route-based + vendor chunks                    │
+│  Testing:    Vitest (unit) + Playwright (E2E)               │
+│  A11y:       WCAG 2.2 AA, axe-core in CI                    │
+│  i18n:       JSON locale files, ICU messages                │
+│  Perf:       LCP < 2.5s, bundle < 150KB gzipped             │
+│  Deploy:     Netlify / Vercel / CF Pages / GitHub Pages     │
+│  CI:         GitHub Actions → lint → test → build → deploy  │
+└─────────────────────────────────────────────────────────────┘
 ```
 
 ---
