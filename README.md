@@ -280,7 +280,7 @@ Exposed tools: `rule`, `pix_update`, `pix_gateway`, `pix_apply`, `pix_search`, `
 }
 ```
 
-See [docs/plans/determinism-backend-guardrails.md](./docs/plans/determinism-backend-guardrails.md) for the full design.
+See [ADR 044](./docs/adr/044-gateway-as-the-single-entrypoint-with-server-side-receipts-backend-data-devops-g.md) for the full design.
 
 ---
 
@@ -629,7 +629,7 @@ The Docker image uses `node:22-alpine`, has no build step, and runs the server d
 | [`docs/03-engineering-guides.md`](./docs/03-engineering-guides.md)                               | Engineering practices and conventions         |
 | [`docs/04-roadmap-plans.md`](./docs/04-roadmap-plans.md)                                         | Roadmap and planned features                  |
 | [`docs/plans/execution-plan.md`](./docs/plans/execution-plan.md)                                 | Execution plan from mega-review audit         |
-| [`docs/plans/determinism-backend-guardrails.md`](./docs/plans/determinism-backend-guardrails.md) | Gateway + backend guardrail design            |
+| [ADR 044](./docs/adr/044-gateway-as-the-single-entrypoint-with-server-side-receipts-backend-data-devops-g.md) | Gateway + backend guardrail design            |
 | [`docs/adr/README.md`](./docs/adr/README.md)                                                     | Architecture Decision Records index           |
 | [`docs/agent-instructions.md`](./docs/agent-instructions.md)                                     | Agent instruction templates                   |
 | [`docs/handoff/README.md`](./docs/handoff/README.md)                                             | Handoff documents for LLM session continuity  |

@@ -34,8 +34,13 @@ Port the complete tracked behavior of `~/Projects/work/rule/ai/rule-mcp/` into t
   - surface trim: 27k -> 19.6k tokens (deleted zodSchema-shadow inputSchema + duplicated per-skill property descriptions); ragged-box pass fixed 13 files
   - deferred with their modules: SessionRegistry (+tests) -> item 7; cli/guard decide/skillForPath (+CLI tests) -> item 6; handon tool registration + cache denylist -> Phase 4; toFlight export test -> item 4; sandbox/transport storm + session tests -> items 4/7
   - ADR 042: pix_check brace-style guardrails conflict with the prettier gate on backend modules — repo gates are binding
-- [ ] 3. Port cache evolution: catalog, tiering, freshness, dependency-aware invalidation, routing evidence cache, reports, and telemetry accounting while preserving the target token pipeline.
-- [ ] 4. Port telemetry and flight recorder modules, privacy redaction, retention, share-safe exports, transport accounting, and process hygiene.
+- [x] 3. Port cache evolution: catalog, tiering, freshness, dependency-aware invalidation, routing evidence cache, reports, and telemetry accounting while preserving the target token pipeline.
+  - landed: bm25 canonicalizeQuery + persisted index; tool-cache L0/L1 tiers, per-entry skill digests, freshness eviction, hits, cacheStore/cacheLookup/cachePrime/cacheEntries/promotableEntries; cache-catalog (rule-catalog.json, MIN_HITS=3); router _meta.pixCache + dependenciesOf/entryPathOf + recomputeCore; gateway routing-evidence core cache (rule_tool_gateway_core) with per-call receipts; rule_tool_compress; requestId moved after cache (ADR 062)
+  - tests: cache-tiers (24), cache-invalidation (23), cache-catalog (15), gateway-cache-receipt (7), routing-corpus
+- [x] 4. Port telemetry and flight recorder modules, privacy redaction, retention, share-safe exports, transport accounting, and process hygiene.
+  - landed: telemetry-store (JSONL + rollups + purge/drain), telemetry (recordToolCall, prompt opt-out), telemetry-transport (local-only + redactForRemote), telemetry-flight (toFlight/redactFlight/exportFlight/pruneExports); router accounting (measured vs estimated split, reminder/caveman measured at the step)
+  - tests: telemetry, flight-recorder (110 checks), flight-redact, flight-exports-retention, token-accounting
+  - deferred: process-hygiene integration test -> item 7 (needs serve wiring); SessionRegistry tests -> item 7
 - [ ] 5. Port guarded/worker-thread guardrail execution, input/output bounds, ReDoS protections, self-guardrails, and corpus validation into the target’s modular guardrail architecture.
 
 ## Phase 3 — CLI, transport, installer, and operational behavior
