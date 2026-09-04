@@ -15,14 +15,8 @@ import { mkdirSync, mkdtempSync, writeFileSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 
-const {
-  TOKENSAVE_DIRECTIVE,
-  autoTrackBranch,
-  branchState,
-  enableAutoTrack,
-  staleLine,
-  tokensaveDirective,
-} = await import("../src/core/tokensave.js");
+const { TOKENSAVE_DIRECTIVE, autoTrackBranch, branchState, enableAutoTrack, staleLine, tokensaveDirective } =
+  await import("../src/core/tokensave.js");
 
 /** A git repo with a tokensave metadata file, on the named branch. */
 function graphProject({ branch = "feat/x", defaultBranch = "main", branches = {}, config = {} } = {}) {

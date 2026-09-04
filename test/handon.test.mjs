@@ -473,7 +473,6 @@ test("a path git never tracked is not reported as deleted", () => {
   assert.match(verdictFor("src/removed.js") ?? "", /deleted/, "and a path git knew about is still reported deleted");
 });
 
-
 test("an end this repository cannot find is not reported as HEAD", () => {
   // After a message rewrite the shas move, and a handoff that names the old one
   // is naming a commit that no longer exists. Falling back to counting from the
