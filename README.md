@@ -621,18 +621,18 @@ The Docker image uses `node:22-alpine`, has no build step, and runs the server d
 
 ## Further reading
 
-| Document                                                                                         | Description                                   |
-| ------------------------------------------------------------------------------------------------ | --------------------------------------------- |
-| [`GETTING_STARTED.md`](./GETTING_STARTED.md)                                                     | Step-by-step installation & agent integration |
-| [`docs/01-product-architecture.md`](./docs/01-product-architecture.md)                           | Full skill taxonomy and product architecture  |
-| [`docs/02-tools-operations.md`](./docs/02-tools-operations.md)                                   | Detailed tool operations reference            |
-| [`docs/03-engineering-guides.md`](./docs/03-engineering-guides.md)                               | Engineering practices and conventions         |
-| [`docs/04-roadmap-plans.md`](./docs/04-roadmap-plans.md)                                         | Roadmap and planned features                  |
-| [`docs/plans/execution-plan.md`](./docs/plans/execution-plan.md)                                 | Execution plan from mega-review audit         |
+| Document                                                                                                      | Description                                   |
+| ------------------------------------------------------------------------------------------------------------- | --------------------------------------------- |
+| [`GETTING_STARTED.md`](./GETTING_STARTED.md)                                                                  | Step-by-step installation & agent integration |
+| [`docs/01-product-architecture.md`](./docs/01-product-architecture.md)                                        | Full skill taxonomy and product architecture  |
+| [`docs/02-tools-operations.md`](./docs/02-tools-operations.md)                                                | Detailed tool operations reference            |
+| [`docs/03-engineering-guides.md`](./docs/03-engineering-guides.md)                                            | Engineering practices and conventions         |
+| [`docs/04-roadmap-plans.md`](./docs/04-roadmap-plans.md)                                                      | Roadmap and planned features                  |
+| [`docs/plans/execution-plan.md`](./docs/plans/execution-plan.md)                                              | Execution plan from mega-review audit         |
 | [ADR 044](./docs/adr/044-gateway-as-the-single-entrypoint-with-server-side-receipts-backend-data-devops-g.md) | Gateway + backend guardrail design            |
-| [`docs/adr/README.md`](./docs/adr/README.md)                                                     | Architecture Decision Records index           |
-| [`docs/agent-instructions.md`](./docs/agent-instructions.md)                                     | Agent instruction templates                   |
-| [`docs/handoff/README.md`](./docs/handoff/README.md)                                             | Handoff documents for LLM session continuity  |
+| [`docs/adr/README.md`](./docs/adr/README.md)                                                                  | Architecture Decision Records index           |
+| [`docs/agent-instructions.md`](./docs/agent-instructions.md)                                                  | Agent instruction templates                   |
+| [`docs/handoff/README.md`](./docs/handoff/README.md)                                                          | Handoff documents for LLM session continuity  |
 
 ### Audit reports
 
