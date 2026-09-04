@@ -87,4 +87,4 @@ src/
 - `docs/reports/gpt-5.6-sol-compliance-mega-review.md` - GPT-5.6 full audit
 - `docs/reports/claude-compliance-mega-review.md` - Claude audit
 - `docs/plans/execution-plan.md` - original plan with all phases
-- `docs/plans/determinism-backend-guardrails.md` - gateway + backend guardrails plan
+- `docs/adr/044` - gateway + backend guardrails (plan converted to ADR)
