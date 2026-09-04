@@ -26,8 +26,7 @@ import { test } from "node:test";
 // recording lands in a temporary home instead of the person's own.
 process.env.HOME = mkdtempSync(join(tmpdir(), "rule-init-home-"));
 
-const { GIT_HOOK_MARKER, HOOKED_GIT_EVENTS, gitHooksDir, uninstallGitHooks } =
-  await import("../src/core/git-hooks.js");
+const { GIT_HOOK_MARKER, HOOKED_GIT_EVENTS, gitHooksDir, uninstallGitHooks } = await import("../src/core/git-hooks.js");
 const { initProject } = await import("../src/cli/init.js");
 const { getProjectPaths } = await import("../src/cli/paths.js");
 

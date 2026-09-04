@@ -9,8 +9,16 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 
-const { CRITERIA, EARL_OUTCOMES, WCAG_EM_STEPS, WCAG_GENERATED, WCAG_SOURCE, WCAG_VERSION, criteriaForLevel, criterion } =
-  await import("../src/core/wcag-data.js");
+const {
+  CRITERIA,
+  EARL_OUTCOMES,
+  WCAG_EM_STEPS,
+  WCAG_GENERATED,
+  WCAG_SOURCE,
+  WCAG_VERSION,
+  criteriaForLevel,
+  criterion,
+} = await import("../src/core/wcag-data.js");
 
 test("the data is pinned to WCAG 2.2", () => {
   assert.equal(WCAG_VERSION, "2.2");

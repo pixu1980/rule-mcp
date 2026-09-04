@@ -25,8 +25,7 @@ process.env.RULE_MCP_NO_AUTOUPDATE = "1";
 
 const { getProjectPaths, getRuntimePaths, migrateProjectData, projectSlug } = await import("../src/cli/paths.js");
 
-const git = (cwd, ...args) =>
-  execFileSync("git", args, { cwd, encoding: "utf8", stdio: ["ignore", "pipe", "ignore"] });
+const git = (cwd, ...args) => execFileSync("git", args, { cwd, encoding: "utf8", stdio: ["ignore", "pipe", "ignore"] });
 
 /** @returns {string} the projects root, mirroring projectsRoot() in paths.js */
 const projectsRoot = () => join(getRuntimePaths().stateDir, "projects");
@@ -36,9 +35,9 @@ function legacyProject({ direction = ".rule-mcp", ignoreLine = true } = {}) {
   const root = mkdtempSync(join(tmpdir(), "rule-central-project-"));
   git(root, "init", "-q");
   mkdirSync(join(root, direction, "exports"), { recursive: true });
-  writeFileSync(join(root, direction, "telemetry.jsonl"), "{\"ts\":1,\"tool\":\"pix_tool\"}\n");
+  writeFileSync(join(root, direction, "telemetry.jsonl"), '{"ts":1,"tool":"pix_tool"}\n');
   writeFileSync(join(root, direction, "project-id"), "kept-across-the-move\n");
-  writeFileSync(join(root, direction, "exports", "one.flight"), "{\"version\":\"2\"}\n");
+  writeFileSync(join(root, direction, "exports", "one.flight"), '{"version":"2"}\n');
   writeFileSync(join(root, ".gitignore"), ignoreLine ? `node_modules\n${direction}/\n` : "node_modules\n");
 
   return root;

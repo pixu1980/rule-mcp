@@ -16,9 +16,8 @@ import { mkdirSync, mkdtempSync, writeFileSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 
-const { AGENT_TRANSCRIPTS, detectAgentUsage, readAgentUsage, supportedAgents, unsupportedAgents } = await import(
-  "../src/core/agent-transcripts.js"
-);
+const { AGENT_TRANSCRIPTS, detectAgentUsage, readAgentUsage, supportedAgents, unsupportedAgents } =
+  await import("../src/core/agent-transcripts.js");
 
 const home = mkdtempSync(join(tmpdir(), "rule-transcripts-home-"));
 
@@ -48,13 +47,17 @@ test("readAgentUsage folds a pi session, counting only human turns as turns", ()
       model: "test-model",
     },
   });
-  piSession(projectDir, {
-    timestamp: "2026-01-01T00:00:00Z",
-    message: {
-      role: "toolResult",
-      usage: { input: 0, output: 25, cacheRead: 10 },
+  piSession(
+    projectDir,
+    {
+      timestamp: "2026-01-01T00:00:00Z",
+      message: {
+        role: "toolResult",
+        usage: { input: 0, output: 25, cacheRead: 10 },
+      },
     },
-  }, "s2.jsonl");
+    "s2.jsonl",
+  );
 
   const usage = readAgentUsage({ agent: "pi", projectDir, home });
 
@@ -79,10 +82,14 @@ test("detectAgentUsage picks the busiest agent and honors the client hint", () =
     timestamp: "2026-01-01T00:00:00Z",
     message: { role: "user", usage: { input: 10, output: 10 }, model: "m1" },
   });
-  piSession(projectDir, {
-    timestamp: "2026-01-01T00:00:01Z",
-    message: { role: "assistant", usage: { input: 10, output: 10 }, model: "m1" },
-  }, "s2.jsonl");
+  piSession(
+    projectDir,
+    {
+      timestamp: "2026-01-01T00:00:01Z",
+      message: { role: "assistant", usage: { input: 10, output: 10 }, model: "m1" },
+    },
+    "s2.jsonl",
+  );
 
   const detected = detectAgentUsage({ projectDir, home });
   assert.ok(detected, "a project with a session is detected");

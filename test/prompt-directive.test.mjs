@@ -53,7 +53,10 @@ check("T2.4 plain ASCII only", /^[ -~\n]*$/.test(session));
 const line = promptDirective();
 check("T3 a single line", !line.includes("\n"));
 check("T3.1 short enough to ride on every prompt", line.length <= 120);
-check("T3.2 it still names all three rules", /rule/i.test(line) && /caveman/i.test(line) && /subagent/i.test(line) && /token/i.test(line));
+check(
+  "T3.2 it still names all three rules",
+  /rule/i.test(line) && /caveman/i.test(line) && /subagent/i.test(line) && /token/i.test(line),
+);
 
 // ── T4: one opt-out, honored by both forms ──
 const previous = process.env.RULE_MCP_NO_PROMPT_DIRECTIVE;

@@ -29,7 +29,11 @@ Port the complete tracked behavior of `~/Projects/work/rule/ai/rule-mcp/` into t
 
 ## Phase 2 — Runtime foundations and architecture-aware merge
 
-- [ ] 2. Port source-only core foundations: project/home paths, lifecycle and reclaim, directives/hooks/resume, untrusted-content fencing, code signatures/fingerprints, ASCII output, Tokensave integration, WCAG data, KPI and project snapshots.
+- [x] 2. Port source-only core foundations: project/home paths, lifecycle and reclaim, directives/hooks/resume, untrusted-content fencing, code signatures/fingerprints, ASCII output, Tokensave integration, WCAG data, KPI and project snapshots.
+  - landed: ascii-box, untrusted, fingerprint, tool-budget, lifecycle, sandbox storm guard, tool-cache memory tier, reclaim, wcag-data, code-signature, paths (findProjectRoot/projectSlug/getProjectPaths/migrateProjectData), git-hooks, directive, agent-hooks, tokensave, telemetry-stats, kpi, project-snapshot, agent-transcripts, handon (core; registration lands Phase 4), resume, cli/init
+  - surface trim: 27k -> 19.6k tokens (deleted zodSchema-shadow inputSchema + duplicated per-skill property descriptions); ragged-box pass fixed 13 files
+  - deferred with their modules: SessionRegistry (+tests) -> item 7; cli/guard decide/skillForPath (+CLI tests) -> item 6; handon tool registration + cache denylist -> Phase 4; toFlight export test -> item 4; sandbox/transport storm + session tests -> items 4/7
+  - ADR 042: pix_check brace-style guardrails conflict with the prettier gate on backend modules — repo gates are binding
 - [ ] 3. Port cache evolution: catalog, tiering, freshness, dependency-aware invalidation, routing evidence cache, reports, and telemetry accounting while preserving the target token pipeline.
 - [ ] 4. Port telemetry and flight recorder modules, privacy redaction, retention, share-safe exports, transport accounting, and process hygiene.
 - [ ] 5. Port guarded/worker-thread guardrail execution, input/output bounds, ReDoS protections, self-guardrails, and corpus validation into the target’s modular guardrail architecture.

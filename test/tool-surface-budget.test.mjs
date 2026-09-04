@@ -81,7 +81,13 @@ test("no mutating tool is advertised as read-only", () => {
   // annotations surface lands (Phase 4) the invariant that holds on the target
   // is the negative one: a mutating tool must never claim to be read-only.
   const byName = new Map(listTools().map((tool) => [tool.name, tool]));
-  for (const name of ["rule_tool_apply", "rule_tool_gateway", "rule_tool_fix", "rule_tool_process_adr", "rule_tool_update"]) {
+  for (const name of [
+    "rule_tool_apply",
+    "rule_tool_gateway",
+    "rule_tool_fix",
+    "rule_tool_process_adr",
+    "rule_tool_update",
+  ]) {
     assert.notEqual(
       byName.get(name)?.annotations?.readOnlyHint,
       true,
