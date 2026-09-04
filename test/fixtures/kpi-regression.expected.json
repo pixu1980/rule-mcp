@@ -1,0 +1,48 @@
+{
+  "calls": {
+    "total": 5,
+    "tools": 4,
+    "resources": 1,
+    "distinctTools": 5,
+    "errors": 1,
+    "errorRate": 0.2,
+    "sessions": 2
+  },
+  "tokens": {
+    "measuredSaved": 130,
+    "savedBySource": {
+      "caveman": 130
+    },
+    "estimatedRouting": 7200,
+    "coreTokens": 3600,
+    "finalTokens": 3510,
+    "cavemanRatio": 0.03611111111111111,
+    "reminderOverhead": 0
+  },
+  "cache": {
+    "hits": 1,
+    "hitRate": 0.2,
+    "byTier": {
+      "miss": 3,
+      "exact": 1
+    },
+    "replayedTokens": 1000,
+    "recomputeSavedMsPerHit": 4
+  },
+  "guardrails": {
+    "failures": 2,
+    "byRule": {
+      "no-css-classes": 2
+    }
+  },
+  "mcp": {
+    "resultBytes": 38900,
+    "resultTokens": 9725,
+    "argsBytes": 816,
+    "argsTokens": 0,
+    "avgResultTokens": 1945,
+    "shareOfLlmTokens": 0.0759765625,
+    "costUsd": 0.11396484375,
+    "shareOfSessionCost": 0.0759765625
+  }
+}
