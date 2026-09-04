@@ -18,20 +18,18 @@ export function registerSkillTool(skillName) {
     ? ["full", "summary", "search", "guardrails", "check", "scaffold", "tldr"]
     : ["full", "summary", "search", "guardrails", "check", "tldr"];
   const SkillSchema = z.object({
-    query: z.string().optional().describe("Optional search query within skill (used by mode=search and mode=tldr)"),
+    query: z.string().optional().describe("Search query (mode=search/tldr)"),
     mode: z
       .enum(modes)
       .default("full")
-      .describe(
-        "Skill tool mode: full (all), summary (30 lines), tldr (BM25-compressed), search (line grep), guardrails, check, scaffold",
-      ),
-    code: z.string().optional().describe("Code to validate (required for mode=check)"),
-    framework: z.string().optional().describe("Framework hint for check mode"),
-    file: z.string().optional().describe("Specific scaffold file to return (e.g. .prettierrc, .gitignore)"),
-    target: z.string().optional().describe("Target project directory (used from the CLI, not the skill tool)"),
-    fileName: z.string().optional().describe("File name for naming convention checks"),
-    isComponent: z.boolean().optional().describe("Whether this is a component file"),
-    allowedDependencies: z.array(z.string()).optional().describe("Manifest-derived package names allowed in imports"),
+      .describe("Tool mode: full, summary, tldr, search, guardrails, check" + (isStyleguides ? ", scaffold" : "")),
+    code: z.string().optional().describe("Code to check (mode=check)"),
+    framework: z.string().optional().describe("Framework hint"),
+    file: z.string().optional().describe("Scaffold file"),
+    target: z.string().optional().describe("Target dir"),
+    fileName: z.string().optional().describe("File name"),
+    isComponent: z.boolean().optional(),
+    allowedDependencies: z.array(z.string()).optional(),
   });
   registerTool({
     name: "rule_tool_" + displayName,
@@ -41,24 +39,6 @@ export function registerSkillTool(skillName) {
       (isStyleguides ? ", scaffold (project structure)" : "") +
       ".",
     zodSchema: SkillSchema,
-    inputSchema: {
-      type: "object",
-      properties: {
-        query: { type: "string", description: "Optional search query within skill" },
-        mode: { type: "string", enum: modes, default: "full" },
-        code: { type: "string", description: "Code to validate (required for mode=check)" },
-        framework: { type: "string", description: "Framework hint for check mode (auto-detected from skill)" },
-        file: { type: "string", description: "Specific scaffold file to return (e.g. .prettierrc, .gitignore)" },
-        target: { type: "string", description: "Target project directory (used from the CLI, not the skill tool)" },
-        fileName: { type: "string", description: "File name for naming convention checks" },
-        isComponent: { type: "boolean", description: "Whether this is a component file" },
-        allowedDependencies: {
-          type: "array",
-          items: { type: "string" },
-          description: "Manifest-derived package names allowed in imports",
-        },
-      },
-    },
     handler: async (arguments_) => {
       const mode = arguments_.mode || "full";
       const query = (arguments_.query || "").toLowerCase();
@@ -190,11 +170,6 @@ export function registerSearchTool() {
     name: "rule_tool_search",
     description: "Semantic search across ALL rule skills using BM25 ranking. Returns scored, relevant sections.",
     zodSchema: SearchSchema,
-    inputSchema: {
-      type: "object",
-      properties: { query: { type: "string" }, maxResults: { type: "number", default: 10 } },
-      required: ["query"],
-    },
     handler: async (arguments_) => {
       const { search, buildIndex, isIndexReady, getIndexStats } = await getBm25();
       // Ensure index is built
@@ -247,23 +222,6 @@ export function registerCheckTool() {
     description:
       "Run guardrail checks on code against any rule skill. Returns guardrail results with a re-check hint containing the current passing set. Run until allPass: true.",
     zodSchema: CheckSchema,
-    inputSchema: {
-      type: "object",
-      properties: {
-        skill: { type: "string", description: "Target rule skill" },
-        code: { type: "string", description: "Code to validate" },
-        framework: { type: "string", description: "Framework (react, vue, svelte, angular, solid, astro, vanilla)" },
-        fileName: { type: "string", description: "File name for naming convention checks" },
-        isComponent: { type: "boolean", description: "Whether this is a component file" },
-        mode: { type: "string", description: "Check mode (e.g. 'scaffold' to validate project config files)" },
-        allowedDependencies: {
-          type: "array",
-          items: { type: "string" },
-          description: "Manifest-derived package names allowed in imports",
-        },
-      },
-      required: ["skill", "code"],
-    },
     handler: async (arguments_) => {
       const { skill, code, fileName, isComponent, framework, mode, allowedDependencies } = arguments_;
       if (!readSkill(skill)) {
@@ -361,15 +319,6 @@ export function registerScaffoldTool() {
     name: "rule_tool_scaffold",
     description: "Generate project scaffolding files. Returns one or all config file templates.",
     zodSchema: ScaffoldSchema,
-    inputSchema: {
-      type: "object",
-      properties: {
-        mode: { type: "string", enum: ["generate", "list", "validate"], default: "generate" },
-        file: { type: "string", description: "Specific file to generate (omit for all)" },
-        projectDir: { type: "string", description: "Project root path (for validate mode)" },
-        framework: { type: "string", description: "Framework hint (tsconfig only for TS projects)" },
-      },
-    },
     handler: async (arguments_) => {
       const mode = arguments_.mode || "generate";
       if (mode === "list") {

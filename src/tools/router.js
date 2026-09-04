@@ -125,6 +125,16 @@ export function registerTool(tool) {
 }
 
 /**
+ * The raw registered tool definitions (including zodSchema and annotations),
+ * for audits that need more than the advertised surface.
+ *
+ * @returns {Array<object>}
+ */
+export function declaredTools() {
+  return _tools;
+}
+
+/**
  * List all registered tools with their names, descriptions, and input schemas.
  * Converts Zod schemas to JSON Schema via the built-in toJSONSchema() method.
  *

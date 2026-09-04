@@ -247,28 +247,6 @@ export async function registerGatewayTool() {
       "Use this as the primary entry point instead of calling rule + skill tools separately. " +
       "The returned receipt must be passed to pix_apply when writing files.",
     zodSchema: GatewaySchema,
-    inputSchema: {
-      type: "object",
-      properties: {
-        prompt: { type: "string", description: "Complete coding request" },
-        code: { type: "string", description: "Code to validate (single file, legacy)" },
-        files: {
-          type: "array",
-          description: "Files to validate - yields a path-bound receipt, required for multi-file writes",
-          items: {
-            type: "object",
-            properties: {
-              path: { type: "string", description: "Relative file path" },
-              content: { type: "string", description: "File content" },
-            },
-            required: ["path", "content"],
-          },
-        },
-        path: { type: "string", description: "Project path" },
-        framework: { type: "string", description: "Target framework" },
-      },
-      required: ["prompt"],
-    },
     handler: async (arguments_) => {
       const { prompt, code, files, path, framework } = arguments_;
       // A file set yields a path-bound receipt; a bare `code` string cannot name

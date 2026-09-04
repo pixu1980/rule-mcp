@@ -44,18 +44,6 @@ export function registerFixTool() {
     description:
       "Validate and auto-fix project file tree structure against rule AI conventions (barrel files, _PascalCase naming, etc.).",
     zodSchema: FixSchema,
-    inputSchema: {
-      type: "object",
-      properties: {
-        path: { type: "string", default: ".", description: "Project root" },
-        srcDir: { type: "string", default: "src", description: "Source directory" },
-        mode: { type: "string", enum: ["lint", "fix", "generate"], default: "lint" },
-        name: { type: "string", description: "Component name for generate mode" },
-        framework: { type: "string", default: "vanilla", description: "Framework for generate mode" },
-        baseDir: { type: "string", default: "src/components", description: "Base dir for generate mode" },
-        dryRun: { type: "boolean", default: true, description: "Preview without applying" },
-      },
-    },
     handler: async (arguments_) => {
       const mode = arguments_.mode || "lint";
 

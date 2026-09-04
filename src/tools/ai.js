@@ -326,11 +326,6 @@ export function registerAiTool() {
     name: "pix_tool",
     description: "Route a prompt to the correct rule skill. Returns structured routing with relevant sections.",
     zodSchema: GalaxySchema,
-    inputSchema: {
-      type: "object",
-      properties: { prompt: { type: "string", description: "User's question" } },
-      required: ["prompt"],
-    },
     handler: async (arguments_) => {
       const allSkills = getSkillNames();
       const skills = allSkills.filter((skillName) => skillName !== "rule");

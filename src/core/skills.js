@@ -220,12 +220,6 @@ function registerDetectTool() {
     name: "rule_tool_detect",
     description: "Detect project framework, TypeScript usage, and build tool from package.json.",
     zodSchema: DetectSchema,
-    inputSchema: {
-      type: "object",
-      properties: {
-        path: { type: "string", default: ".", description: "Project root path" },
-      },
-    },
     handler: async (arguments_) => {
       const projectDir = arguments_.path || ".";
       const profile = detectProject(projectDir);
