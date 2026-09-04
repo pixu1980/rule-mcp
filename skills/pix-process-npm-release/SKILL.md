@@ -309,3 +309,10 @@ Show the user which dependency branches pull in the most nested packages, and of
 6. No `NPM_TOKEN` left in workflows or repo secrets.
 7. Tag ruleset active; immutable releases enabled; 2FA required.
 8. User knows the tag → approve release flow and has run a test release.
+
+## See also
+
+- [pix-toolchain-pnpm](../pix-toolchain-pnpm/SKILL.md)
+- [pix-devops-gitlab-ci](../pix-devops-gitlab-ci/SKILL.md)
+- [pix-devops-observability](../pix-devops-observability/SKILL.md)
+- [pix-devops-version](../pix-devops-version/SKILL.md)

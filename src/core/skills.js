@@ -129,8 +129,9 @@ export async function loadAllSkills(force = false) {
     clearTools();
     // Skill content changed - invalidate the deterministic result cache so we
     // never replay outputs computed from stale skills.
-    const { cacheClear } = await import("./tool-cache.js");
+    const { cacheClear, clearSkillDigests } = await import("./tool-cache.js");
     cacheClear();
+    clearSkillDigests();
   }
   isLoaded = true;
   registerAiTool();
@@ -150,6 +151,8 @@ export async function loadAllSkills(force = false) {
   registerCheckTool();
   registerScaffoldTool();
   registerDetectTool();
+  const { registerCompressTool } = await import("../tools/compress.js");
+  registerCompressTool();
   // Mutation tools: hidden in minimal mode
   if (!IS_MINIMAL_TOOLS) {
     registerProcessAdrTool();
