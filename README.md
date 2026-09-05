@@ -38,13 +38,13 @@ Serves styleguides, component templates, framework best practices, and design sy
 Deterministic MCP server for the rule skill ecosystem. Live surface (enforced by
 `test/docs-accuracy.test.mjs` - the README and reality cannot drift):
 
-| Surface   | Count | Notes                                                                             |
-| --------- | ----- | --------------------------------------------------------------------------------- |
-| Tools     | 110    | ~100 per-skill tools + dispatcher/action tools                                    |
-| Resources | 194    | rule:// per-skill index + summary + template URIs                                 |
-| Prompts   | 34     | workflow + review-persona (rule-plan-<role>) + one-shot workflow prompts          |
-| Skills    | 94     | frontend, backend, data, devops, toolchain, styleguide, process, platform, ai    |
-| Tests     | 212   | `pnpm test:all` green (incl. installer + PTY TUI)                                 |
+| Surface   | Count | Notes                                                                         |
+| --------- | ----- | ----------------------------------------------------------------------------- |
+| Tools     | 110   | ~100 per-skill tools + dispatcher/action tools                                |
+| Resources | 194   | rule:// per-skill index + summary + template URIs                              |
+| Prompts   | 34    | workflow + review-persona (rule-plan-<role>) + one-shot workflow prompts       |
+| Skills    | 94    | frontend, backend, data, devops, toolchain, styleguide, process, platform, ai |
+| Tests     | 212   | `pnpm test:all` green (incl. installer + PTY TUI)                             |
 
 Architecture decisions live in [`docs/adr/`](docs/adr/README.md) (36 records:
 installer self-heal, architect split, doc-accuracy guard, v1.0.0 release).
