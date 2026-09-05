@@ -13,12 +13,16 @@ import { z } from "zod/v4";
 
 import { allRoles, roleById } from "../core/review-roles.js";
 import { loadRoleOverlays } from "../core/review-roles-overlays.js";
-import { fillRoleTemplate } from "../core/review-roles-template.js";
+import { fillRoleTemplate, OPERATIONS } from "../core/review-roles-template.js";
 import { fenceUntrusted } from "../core/untrusted.js";
 import { registerTool } from "./router.js";
 
 const PlanSchema = z.object({
   role: z.string().describe("Role id (security, privacy, a11y...)"),
+  operation: z
+    .enum(OPERATIONS)
+    .optional()
+    .describe("Which document this run produces: plan, audit, or review (default: all three)"),
   years: z.number().int().positive().optional(),
   skills: z.array(z.string()).optional(),
   topic: z.string().optional(),
@@ -29,10 +33,9 @@ const PlanSchema = z.object({
 export function registerPlanTool() {
   registerTool({
     name: "rule_tool_plan",
-    description:
-      "Ask an expert review persona to audit this project and plan the work; returns the operation contract.",
+    description: "Ask an expert review persona to audit, review or plan this project; returns the operation contract.",
     zodSchema: PlanSchema,
-    advertise: ["role", "topic"],
+    advertise: ["role", "topic", "operation"],
     handler: async (arguments_) => {
       const { roles: overlays, problems } = loadRoleOverlays({ projectDir: arguments_.projectDir });
       const role = roleById(arguments_.role, overlays);
@@ -52,6 +55,7 @@ export function registerPlanTool() {
         years: arguments_.years,
         skills: arguments_.skills,
         topic: arguments_.topic,
+        operation: arguments_.operation ?? "all",
       });
       // An overlay role is repository- or user-supplied text on its way to a
       // model: it is data, and it says so (hardening 4.4).

@@ -434,6 +434,13 @@
       "rule-a11y-audit",
       "rule-adr",
       "rule-ai",
+      "rule-audit-a11y",
+      "rule-audit-ai-engineer",
+      "rule-audit-architect",
+      "rule-audit-docs-engineer",
+      "rule-audit-performance",
+      "rule-audit-privacy",
+      "rule-audit-security",
       "rule-backend",
       "rule-caveman",
       "rule-check",
@@ -457,6 +464,13 @@
       "rule-platform",
       "rule-process",
       "rule-pull-request",
+      "rule-review-a11y",
+      "rule-review-ai-engineer",
+      "rule-review-architect",
+      "rule-review-docs-engineer",
+      "rule-review-performance",
+      "rule-review-privacy",
+      "rule-review-security",
       "rule-setup-project",
       "rule-skills",
       "rule-styleguide",
@@ -628,7 +642,18 @@
       "src/core/skill-frontmatter.js",
       "src/core/token-stats.js"
     ],
-    "tests": ["test/docs-accuracy.test.mjs", "test/install-script-shim-heal.test.mjs", "test/token-pipeline.test.mjs"],
-    "preservedRoots": ["extensions", "rules", ".clinerules", ".cursor", ".roo", ".windsurf"]
+    "tests": [
+      "test/docs-accuracy.test.mjs",
+      "test/install-script-shim-heal.test.mjs",
+      "test/token-pipeline.test.mjs"
+    ],
+    "preservedRoots": [
+      "extensions",
+      "rules",
+      ".clinerules",
+      ".cursor",
+      ".roo",
+      ".windsurf"
+    ]
   }
 }

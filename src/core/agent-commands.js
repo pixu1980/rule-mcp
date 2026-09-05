@@ -23,6 +23,8 @@
  */
 
 import { listPrompts } from "../prompts/index.js";
+import { activeRoles } from "./review-roles.js";
+import { OPERATIONS } from "./review-roles-template.js";
 
 /** The router command, pinned first in every agent's command list. */
 export const ROUTER_COMMAND = "rule-mcp";
@@ -155,6 +157,60 @@ function areaBody(description) {
 }
 
 /**
+ * A persona command's target: which role and which operation it runs.
+ *
+ * @param {string} name
+ * @returns {{ role: string, roleName: string, operation: string }|null} null for non-persona commands
+ */
+function personaTarget(name) {
+  for (const operation of OPERATIONS) {
+    const prefix = `rule-${operation}-`;
+
+    if (!name.startsWith(prefix)) {
+      continue;
+    }
+
+    const roleId = name.slice(prefix.length);
+    const role = activeRoles().find((entry) => entry.id === roleId);
+
+    if (role) {
+      return { role: role.id, roleName: role.role, operation };
+    }
+  }
+
+  return null;
+}
+
+/**
+ * Body for a persona command: it routes through the tools, not a hand-written
+ * recap. `rule_tool_plan` hands back the operation contract for this role and
+ * operation; `rule_tool_plan_docs` does the trio bookkeeping. Everything else is
+ * judgment the agent fills in.
+ *
+ * @param {{ role: string, roleName: string, operation: string }} target
+ * @returns {string}
+ */
+function personaBody(target) {
+  const subject = `${target.operation} as a ${target.roleName}`;
+
+  return [
+    `${subject[0].toUpperCase() + subject.slice(1)}: $ARGUMENTS`,
+    "",
+    `1. Call \`rule_tool_plan\` with \`role=${target.role}\` (and \`operation=${target.operation}\` and a topic`,
+    "   if one was given) to get this run's operation contract.",
+    "2. Load the evidence skills the contract names and treat them as source of truth; never invent",
+    "   APIs, files, dependencies, commands, or requirements not in the evidence.",
+    `3. Perform the ${target.operation} the contract describes and gather what it needs - measure rather`,
+    "   than assume, and quote commands and their output for every number.",
+    `4. Call \`rule_tool_plan_docs\` with \`role=${target.role}\` and the findings to write/refresh the trio`,
+    "   bookkeeping (headers, tables, statuses). Fill in the evidence, the finding wording and the steps.",
+    "5. If a decision belongs to the user, stop and ask instead of guessing.",
+    "6. Finish by proposing a conventional commit with a mandatory scope for the documents this run",
+    `   wrote, e.g. \`docs(${target.role}): ${target.operation}\`.`,
+  ].join("\n");
+}
+
+/**
  * Full definition for a single command: name, description, argument hint, body.
  *
  * @param {string} name
@@ -173,7 +229,8 @@ export function commandDefinition(name) {
 
   const primary = prompt.arguments?.[0];
   const argumentHint = primary ? (primary.required ? `<${primary.name}>` : `[${primary.name}]`) : "<request>";
-  const body = name === "rule-handoff" ? HANDOFF_BODY : areaBody(prompt.description);
+  const persona = personaTarget(name);
+  const body = persona ? personaBody(persona) : name === "rule-handoff" ? HANDOFF_BODY : areaBody(prompt.description);
 
   return { name, description: prompt.description, argumentHint, body };
 }
