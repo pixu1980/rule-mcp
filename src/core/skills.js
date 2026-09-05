@@ -162,6 +162,21 @@ export async function loadAllSkills(force = false) {
   registerDetectTool();
   const { registerCompressTool } = await import("../tools/compress.js");
   registerCompressTool();
+  // Action tools: the collection-helpers of the rule surface. All read-only
+  // except the plan/plan-docs writers, which are operationally useful in every
+  // mode.
+  const { registerPlanTool } = await import("../tools/plan.js");
+  registerPlanTool();
+  const { registerPlanDocsTool } = await import("../tools/plan-docs.js");
+  registerPlanDocsTool();
+  const { registerStatsTool } = await import("../tools/stats.js");
+  registerStatsTool();
+  const { registerUsageTool } = await import("../tools/usage.js");
+  registerUsageTool();
+  const { registerA11yReportTool } = await import("../tools/a11y.js");
+  registerA11yReportTool();
+  const { registerProcessHandonTool } = await import("../tools/handon.js");
+  registerProcessHandonTool();
   // Mutation tools: hidden in minimal mode
   if (!IS_MINIMAL_TOOLS) {
     registerProcessAdrTool();

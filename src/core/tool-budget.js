@@ -80,4 +80,12 @@
  * question. The number that would reopen it is in ADR 055 and in this phase's
  * own ADR, and the sample behind it remains one machine.
  */
-export const TOOL_SURFACE_BUDGET_TOKENS = 20_000;
+export const TOOL_SURFACE_BUDGET_TOKENS = 21_000;
+
+// The first raise on the rule surface happened when the 6 item-9 action tools
+// landed (plan, plan-docs, stats, usage, a11y_report, process_handon at 97
+// tools): their schemas are naturally wide (usage carries the agent's token
+// fields one by one), a 400-token trim of descriptions was taken first, and
+// the remaining ~870 tokens are the schemas' real weight rather than
+// duplication. The ceiling moves once and the note is the rule keeping it
+// honest: trim first, and if the trim is not there, say so.
