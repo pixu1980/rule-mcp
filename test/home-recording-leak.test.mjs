@@ -14,7 +14,7 @@
  * invariant is enforced where the fixture is made, and what is checked here is
  * that they go through it.
  *
- * Ported from rule-mcp (hardening 4.6) with the recorder paths rebranded
+ * Ported from rule-ai-mcp (hardening 4.6) with the recorder paths rebranded
  * to the rule layout.
  */
 import { strict as assert } from "node:assert";
@@ -26,8 +26,7 @@ import { test } from "node:test";
 import { fileURLToPath } from "node:url";
 
 const testDir = fileURLToPath(new URL(".", import.meta.url));
-const stateDir = join(homedir(), ".local", "state", "rule-mcp");
-const realProjects = join(stateDir, "projects");
+const realProjects = join(homedir(), ".rule-mcp", "projects");
 
 /** What the real projects root holds right now, sorted for comparison. */
 const listing = () => (existsSync(realProjects) ? readdirSync(realProjects).sort() : []);

@@ -166,6 +166,11 @@ export function createServer() {
  * @returns {Promise<void>}
  */
 export async function startServer() {
+  // A previous install (upstream `~/.rule-mcp`) may own the state we
+  // need; adopt it before anything reads the paths so the installation id,
+  // token and recordings survive the rebrand.
+  const { migrateHomeData } = await import("./cli/paths.js");
+  migrateHomeData();
   // A long-lived server shared by every client gets guarded checks: one
   // runaway regex must not freeze the daemon (hardening F-S1). The CLI
   // one-shot keeps running checks inline - a hung CLI is ctrl-C.

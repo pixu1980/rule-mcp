@@ -113,6 +113,24 @@ Step 6 (env:24 prompt path) ──┬──── Step 1 (env paths) ──┐
 
 Execution order: **Step 6 → Step 1 → Step 4 → Step 2 → Step 3 → Step 5** (each later step depends only on the earlier ones; docs/README index edits happen once all files exist).
 
+---
+
+### Step 7 — Retire the compliance mega-reviews and historical handoffs (F7, medium)
+
+**Finding:** `docs/reports/claude-compliance-mega-review.md`, `gpt-5.6-sol-compliance-mega-review.md` and `security-performance-audit-2026-08-04.md`, plus handoffs `07/08/10/11/13-*.md`, describe remediation that is fully implemented and already recorded in ADRs 017, 030-035, 037-044. They repeat history instead of pointing at the living record; the audit analysis and finding→ADR mapping is preserved in `docs/reports/README.md` and handoff `09` is the current-session record.
+
+**What it takes:**
+1. Delete the three report files and the five historical handoff files.
+2. Keep and update `docs/reports/README.md` (index + this analysis) and `docs/handoff/README.md` (drop deleted entries).
+3. Re-run the link-walk: no surviving doc may reference a deleted file.
+4. Do NOT create new ADRs — every deleted document's decisions already have numbers; duplicates would violate the "point, don't repeat" rule.
+
+**Dependencies:** Step 2 (handbook index) — do the deletion before re-indexing so broken links cannot be reintroduced.
+**Verify:** link-walk returns 0 broken; `git status` shows exactly the 8 deleted + 2 updated files.
+**Done when:** the three reports and five historical handoffs are gone, their content reachable via ADR numbers + report README, and the link-walk is clean.
+
+---
+
 ## Definition of done
 
 - `docs/06-env-variables.md` contains no fictional `~/.rule-mcp` state paths (F1, F6).

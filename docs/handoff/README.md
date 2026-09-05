@@ -1,90 +1,27 @@
-# Handoff: rule-mcp → deepseek-v4-flash
+# Handoff records
 
-**From:** gpt-5.6-sol (Pi 0.80.6)  
-**To:** deepseek-v4-flash  
-**Date:** 2026-07-15  
-**Repository:** `rule-mcp@1.0.0`, commit `4d9764b` baseline
+Session handoffs archived in this directory. Each numbered file is the paste-ready
+record of one session; the newest number is the current one. Historical session
+handoffs (07/08/10/11/13, dated 2026-07-15) documented remediation that is fully
+implemented and recorded in the ADRs; they were retired so history lives in one
+place — the ADR index (docs/adr/ADR.md) — instead of being repeated here.
 
----
+## Current records
 
-## What was already done (phases 1-6, 7 commits)
-
-All P0s and most P1s from the audit were resolved. **Do not redo these fixes.**
-
-| Commit    | Phase   | What                                                                   |
-| --------- | ------- | ---------------------------------------------------------------------- |
-| `5a8e35f` | 1.1     | `rule_tool_fix` sandbox (dryRun, path traversal, custom element tag)    |
-| `1f2338e` | 1.2-1.3 | SSE auth/CORS/body-limit, `previousPassed` removed                     |
-| `9e89c42` | 2       | `prompts/get` MCP-compliant, completion `ref/prompt`                   |
-| `47cd1aa` | 3       | Reproducible build/CI, LICENSE, metadata, Docker                       |
-| `42e542b` | 4       | CSS/JSX guardrails, "advisory" terminology                             |
-| `db0f40b` | 5       | Domain-aware router, multilingual, confidence, TLDR                    |
-| `a1752fc` | A+B+C   | `rule_tool_gateway` + `rule_tool_apply` + backend/data/devops guardrails |
-| `7042789` | 6       | React/Svelte templates compliant with guardrails                       |
-
-## Getting started
-
-```bash
-cd /Users/emilianopisu/Projects/rule/rule-mcp
-pnpm install
-pnpm test  # smoke test, must pass
-```
-
-## Handoff documents per phase
-
-Each file contains: context, specific fixes with code, verification commands, pitfalls.
-
-| Phase | File                                             | Estimated time | Severity      |
-| ----- | ------------------------------------------------ | -------------- | ------------- |
-| 7     | [07-installer.md](07-installer.md)               | ~1 hour        | 🟠 P1         |
-| 8     | [08-server-sse.md](08-server-sse.md)             | ~45 min        | 🟠 P1         |
-| 10    | [10-docs-maintenance.md](10-docs-maintenance.md) | ~1 hour        | 🟡 P2         |
-| 11    | [11-claude-native.md](11-claude-native.md)       | ~2.5 hours     | 🟠 P1 / 🟢 P3 |
-
-## Essential architecture
-
-```
-src/
-├── server.js              ← MCP server bootstrap (stdio)
-├── transport/sse.js       ← SSE HTTP server
-├── tools/
-│   ├── router.js          ← Tool registry (registerTool, listTools, callTool)
-│   ├── ai.js              ← rule router (BM25 keyword scoring)
-│   ├── skill.js           ← Skill-tool generator + rule_tool_check + rule_tool_search
-│   ├── gateway.js         ← NEW: single-entry orchestrator
-│   ├── apply.js           ← NEW: file writing with receipt
-│   ├── adr.js             ← ADR auto-log (wildcard hook to disable)
-│   ├── fix.js             ← File tree scan/fix/generate
-│   └── handoff.js         ← Context handoff
-├── core/
-│   ├── skills.js          ← loadAllSkills() + strict mode flag
-│   ├── guardrails.js      ← Guardrail engine (checkCode, getGuardrails)
-│   ├── guardrail-defs.js  ← 18 shared + framework + backend + db + devops
-│   ├── enforcement.js     ← Pre/post processing (advisory)
-│   ├── bm25.js            ← BM25 search index
-│   ├── detector.js        ← Project framework detection
-│   ├── templates.js       ← Component template generation
-│   └── template-data.js   ← Framework template strings
-├── cli/
-│   ├── commands.js        ← serve, daemon, install, doctor CLI
-│   ├── install.js         ← Multi-agent installer (23 agents)
-│   └── skills-install.js  ← Interactive skill installer
-├── resources/index.js     ← rule:// MCP resources
-└── prompts/index.js       ← MCP prompts
-```
+| # | File | Topic | Date |
+| --- | --- | --- | --- |
+| 09 | [09-census-and-handoff-autocommit.md](09-census-and-handoff-autocommit.md) | Census + handoff auto-commit | 2026-09-05 |
 
 ## Conventions
 
-- **pnpm**, not npm
-- **Node ≥20**, ESM (`"type": "module"`)
-- **Test:** `pnpm test` (smoke), `pnpm run ci` (complete)
-- **Auto-ADR disabled for tests:** `RULE_MCP_DISABLE_AUTO_ADR=1`
-- **Strict mode:** `RULE_MCP_STRICT_MODE=1` (9 tools instead of 78)
-- **Commit:** conventional commits (`feat/fix/docs/chore(scope): message`)
+- **pnpm**, not npm; Node ≥20, ESM (`"type": "module"`).
+- **Commit:** conventional commits with a mandatory scope (`type(scope): message`); the `commit-msg` hook rejects scope-less subjects.
+- **Persistence rule:** a handoff exists as a file, not only in the chat — write
+  `docs/handoff/<NN>-<slug>.md` (next free two-digit number) and commit it alone as
+  `chore(handoff): add session handoff <NN>-<slug>`. Never push; commits stay local for review.
 
 ## Reference documents
 
-- `docs/reports/gpt-5.6-sol-compliance-mega-review.md` - GPT-5.6 full audit
-- `docs/reports/claude-compliance-mega-review.md` - Claude audit
-- `docs/plans/execution-plan.md` - original plan with all phases
-- `docs/adr/044` - gateway + backend guardrails (plan converted to ADR)
+- `docs/adr/ADR.md` — the living decision index (supersedes the retired reports/handoffs)
+- `docs/reports/README.md` — audit history and the finding→ADR map
+- `docs/07-census.md` — full MCP tool + slash-command census

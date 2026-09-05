@@ -29,8 +29,8 @@ const report = {
   ],
   ides: [{ name: "VS Code", configured: true, configFile: "/repo/.vscode/mcp.json" }],
   models: { totalConfigured: 1 },
-  stateDir: "/home/.local/state/rule-mcp",
-  dataDir: "/home/.local/share/rule-mcp",
+  stateDir: "/home/.rule-mcp/state",
+  dataDir: "/home/.rule-mcp/data",
   configDir: "/home/.config/rule-mcp",
   daemon: {
     running: true,

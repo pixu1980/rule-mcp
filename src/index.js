@@ -371,7 +371,7 @@ export async function cli() {
           return;
         }
 
-        daemonCommand({ action: arguments_[1] ?? "status", dryRun: hasFlag("--dry-run") });
+        await daemonCommand({ action: arguments_[1] ?? "status", dryRun: hasFlag("--dry-run") });
         break;
       }
 

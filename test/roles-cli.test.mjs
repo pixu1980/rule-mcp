@@ -40,12 +40,12 @@ function roles(box, ...args) {
       ...process.env,
       HOME: box.home,
       RULE_MCP_NO_AUTOUPDATE: "1",
-      RULE_MCP_STATE_DIR: join(box.home, ".local", "state", "rule-mcp"),
+      RULE_MCP_STATE_DIR: join(box.home, ".rule-mcp", "state"),
     },
   });
 }
 
-const overlayFile = (box, id) => join(box.home, ".config", "rule-mcp", "roles", `${id}.json`);
+const overlayFile = (box, id) => join(box.home, ".rule-mcp", "config", "roles", `${id}.json`);
 
 test("list prints the catalog and says which layer each role came from", () => {
   const box = sandbox();

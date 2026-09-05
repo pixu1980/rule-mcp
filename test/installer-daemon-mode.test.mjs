@@ -20,7 +20,7 @@ const output = execFileSync(process.execPath, ["--input-type=module", "--eval", 
   encoding: "utf8",
 });
 const config = JSON.parse(output)["rule-mcp"];
-const tokenFile = join(fakeHome, ".local", "state", "rule-mcp", "sse-token");
+const tokenFile = join(fakeHome, ".rule-mcp", "state", "sse-token");
 
 assert.equal(config.command, undefined, "daemon config must not spawn a stdio process");
 assert.equal(config.url, "http://127.0.0.1:37999/sse", "daemon config must target local SSE");
