@@ -201,7 +201,7 @@ Totale risorse `read-*`: **194** (94 skill × 2 = 188 risorse full/summary, più
 
 ---
 
-## 2. Comandi slash `/pix-*` (41 generati)
+## 2. Comandi slash `/pix-*` (44 generati)
 
 I comandi slash vengono generati da `src/core/agent-commands.js`, che parte dai prompt registrati in `src/prompts/index.js` e dai ruoli attivi di `src/core/review-roles.js` (OPERATIONS = `plan`, `audit`, `review`).
 
@@ -240,11 +240,11 @@ I comandi slash vengono generati da `src/core/agent-commands.js`, che parte dai 
 | `/pix-process-check` | Check/route del workflow di processo                                                 |
 | `/pix-update`        | Update del server pix-galaxy-mcp                                                     |
 
-### 2.4 Persona role × operazione (21)
+### 2.4 Persona role × operazione (24)
 
 Per ogni ruolo attivo, 3 operazioni: `plan`, `audit`, `review`.
 
-**Ruoli attivi (7):** `architect`, `security`, `privacy`, `a11y`, `ai-engineer`, `performance`, `docs-engineer`
+**Ruoli attivi (8):** `architect`, `security`, `privacy`, `a11y`, `ai-engineer`, `performance`, `docs-engineer`, `web-engineer`
 
 | Ruolo         | Plan                      | Audit                      | Review                      |
 | ------------- | ------------------------- | -------------------------- | --------------------------- |
@@ -255,6 +255,7 @@ Per ogni ruolo attivo, 3 operazioni: `plan`, `audit`, `review`.
 | ai-engineer   | `/pix-plan-ai-engineer`   | `/pix-audit-ai-engineer`   | `/pix-review-ai-engineer`   |
 | performance   | `/pix-plan-performance`   | `/pix-audit-performance`   | `/pix-review-performance`   |
 | docs-engineer | `/pix-plan-docs-engineer` | `/pix-audit-docs-engineer` | `/pix-review-docs-engineer` |
+| web-engineer  | `/pix-plan-web-engineer`  | `/pix-audit-web-engineer`  | `/pix-review-web-engineer`  |
 
 ---
 
@@ -289,14 +290,14 @@ La cartella `.roo/commands/` contiene gli snapshot `.md` installati (per agent c
 | — Tool core                                                                                           | 19        |
 | — Tool per-skill (`pix-tool-<skill>`)                                                                 | 94        |
 | — Risorse `read-*`                                                                                    | 194       |
-| Comandi slash generati (`/pix-*`)                                                                     | **41**    |
+| Comandi slash generati (`/pix-*`)                                                                     | **44**    |
 | — Router `/pix`                                                                                       | 1         |
 | — Area / workflow (`/pix-area-*`, `/pix-adr`, `/pix-flight`)                                          | 14        |
 | — Gestione sessione (`/pix-handoff`, `/pix-handon`, `/pix-init`, `/pix-process-check`, `/pix-update`) | 5         |
-| — Persona (`/pix-{plan,audit,review}-<role>`)                                                         | 21        |
+| — Persona (`/pix-{plan,audit,review}-<role>`)                                                         | 24        |
 | Macro file in `.roo/commands/`                                                                        | 35        |
 
-> **Nota ruoli:** `src/core/review-roles.js` registra 14 ruoli; solo 7 sono attivi e generano comandi slash. Gli altri: `devops-sre`, `qa-testing`, `data-engineer`, `design-system-lead`, `dx-toolchain`, `simplicity-staff-eng`, `oss-compliance`.
+> **Nota ruoli:** `src/core/review-roles.js` registra 16 ruoli; solo 8 sono attivi e generano comandi slash. Gli altri: `devops-sre`, `qa-testing`, `data-engineer`, `design-system-lead`, `dx-toolchain`, `simplicity-staff-eng`, `oss-compliance`, `localization-engineer`.
 
 ---
 
