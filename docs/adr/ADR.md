@@ -8,6 +8,7 @@ this directory are the source of truth; this index is generated from them by
 
 | # | Title | Date | Status | Tags |
 |---|-------|------|--------|------|
+| [047](047-drop-the-vs-code-extension-and-its-installers.md) | Drop the VS Code extension and its installers | 2026-09-05 | accepted | vscode, extension, installer, lean-web |
 | [046](046-restructure-the-command-surface-rule-router-rule-area-caveman-implicit-rule-process.md) | Restructure the command surface: /rule router, rule-area-*, caveman implicit, rule-process-tdd skill | 2026-09-05 | accepted | commands, prompts, surface, skills, installer |
 | [045](045-split-review-personas-into-per-operation-commands-plan-audit-review.md) | Split review personas into per-operation commands (plan/audit/review) | 2026-09-05 | accepted | personas, commands, prompts, surface |
 | [044](044-gateway-as-the-single-entrypoint-with-server-side-receipts-backend-data-devops-g.md) | Gateway as the single entrypoint with server-side receipts; backend/data/devops guardrail families | 2026-09-04 | accepted | gateway, guardrails, determinism, receipt, backend |
@@ -74,6 +75,7 @@ file. Where a line stops short the rest is in the ADR.
 
 | ADR | Decision | Consequence |
 |-----|----------|-------------|
+| [047](047-drop-the-vs-code-extension-and-its-installers.md) | Delete extensions/ (vscode-rule source + rule-vanilla-reactive.vsix). | Positive: installers shrink (no vsce build, no six-editor probing), no committed binary .vsix, surface and supply chain simpler, aligns with upstream ADR 088 and the lean-web direction. |
 | [046](046-restructure-the-command-surface-rule-router-rule-area-caveman-implicit-rule-process.md) | Restructure the command surface: router rule-mcp -> rule; the 12 area prompts become rule-area-*; delete rule-a11y-audit, rule-code-review, rule-caveman, rule-new-feature, rule-pull-request, rule-setup-project,... | Positive: the command surface shrinks 49 -> 41; one namespace per concern (rule-area-* for areas, rule-process-* for the process family incl. the new rule-process-tdd skill/tool and rule-process-check); caveman is implicit... |
 | [045](045-split-review-personas-into-per-operation-commands-plan-audit-review.md) | Give each active role three slash commands - rule-plan-<role>, rule-audit-<role>, rule-review-<role> (21 persona commands total), all generated from the same registry and all routing through the tools under the hood: the... | Positive: the user can run just the step they need; every command body names the exact tools to call, so agent behavior no longer depends on which surface the host exposes; proposed roles still stay out of the surfaces... |
 | [044](044-gateway-as-the-single-entrypoint-with-server-side-receipts-backend-data-devops-g.md) | Gateway is the single server-side orchestrating entrypoint for every implementation flow; it issues a bound receipt the write path must present; backend/database/devops/security guardrails are first-class families mapped... | Positive: unvalidated code cannot be delivered (fail-closed at a single server-side entrypoint), server-side receipts bind writes to what was checked, and backend/database/devops/security guardrail families run on every... |
@@ -176,6 +178,16 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [008](008-skill-routing-eslint-flat-config-for-typescript-react-proje.md) Skill routing: ESLint flat config for TypeScript React project
 - [007](007-skill-routing-typescript-tsconfig-strict-mode-configuration.md) Skill routing: TypeScript tsconfig strict mode configuration
 
+### installer
+
+- [047](047-drop-the-vs-code-extension-and-its-installers.md) Drop the VS Code extension and its installers
+- [046](046-restructure-the-command-surface-rule-router-rule-area-caveman-implicit-rule-process.md) Restructure the command surface: /rule router, rule-area-*, caveman implicit, rule-process-tdd skill
+- [038](038-split-hotspot-modules.md) Split the hotspot modules (guardrails + installer)
+- [035](035-installer-self-heals-global-shim-surfaces-failures-gates-tui-rendering.md) Installer self-heals its global shim, surfaces failures, and gates TUI rendering
+- [029](029-clean-rule-commands-via-user-commands-prompt-suppression-not-a-plugin.md) Clean /rule-* commands via user commands + prompt suppression, not a plugin
+- [024](024-lossless-installer-preserve-toolprefix-normalize-rule-blank-lines.md) Lossless installer: preserve toolPrefix and normalize rule blank lines
+- [018](018-fix-vscode-extension-and-derivatives-install-uninstall.md) Fix VS Code extension and derivatives install/uninstall
+
 ### auto-log
 
 - [012](012-skill-routing-pnpm-package-manager-workspace-monorepo-setup.md) Skill routing: pnpm package manager workspace monorepo setup
@@ -184,15 +196,6 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [009](009-skill-routing-turborepo-monorepo-pipeline-caching-parallel.md) Skill routing: Turborepo monorepo pipeline caching parallel builds
 - [008](008-skill-routing-eslint-flat-config-for-typescript-react-proje.md) Skill routing: ESLint flat config for TypeScript React project
 - [007](007-skill-routing-typescript-tsconfig-strict-mode-configuration.md) Skill routing: TypeScript tsconfig strict mode configuration
-
-### installer
-
-- [046](046-restructure-the-command-surface-rule-router-rule-area-caveman-implicit-rule-process.md) Restructure the command surface: /rule router, rule-area-*, caveman implicit, rule-process-tdd skill
-- [038](038-split-hotspot-modules.md) Split the hotspot modules (guardrails + installer)
-- [035](035-installer-self-heals-global-shim-surfaces-failures-gates-tui-rendering.md) Installer self-heals its global shim, surfaces failures, and gates TUI rendering
-- [029](029-clean-rule-commands-via-user-commands-prompt-suppression-not-a-plugin.md) Clean /rule-* commands via user commands + prompt suppression, not a plugin
-- [024](024-lossless-installer-preserve-toolprefix-normalize-rule-blank-lines.md) Lossless installer: preserve toolPrefix and normalize rule blank lines
-- [018](018-fix-vscode-extension-and-derivatives-install-uninstall.md) Fix VS Code extension and derivatives install/uninstall
 
 ### tool
 
@@ -288,6 +291,12 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [025](025-strengthen-database-relational-constraint-skills.md) Strengthen database relational constraint skills
 - [007](007-database-skills.md) database skills
 - [004](004-database-skills.md) Database Skills
+
+### vscode
+
+- [047](047-drop-the-vs-code-extension-and-its-installers.md) Drop the VS Code extension and its installers
+- [034](034-registry-driven-clean-slash-commands-for-every-agent-and-ide.md) Registry-driven clean slash commands for every agent and IDE
+- [018](018-fix-vscode-extension-and-derivatives-install-uninstall.md) Fix VS Code extension and derivatives install/uninstall
 
 ### no tags
 

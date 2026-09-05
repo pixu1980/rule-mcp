@@ -201,7 +201,7 @@ Totale risorse `read-*`: **194** (94 skill × 2 = 188 risorse full/summary, più
 
 ---
 
-## 2. Comandi slash `/rule-*` (41 generati)
+## 2. Comandi slash `/rule-*` (44 generati)
 
 I comandi slash vengono generati da `src/core/agent-commands.js`, che parte dai prompt registrati in `src/prompts/index.js` e dai ruoli attivi di `src/core/review-roles.js` (OPERATIONS = `plan`, `audit`, `review`).
 
@@ -240,11 +240,11 @@ I comandi slash vengono generati da `src/core/agent-commands.js`, che parte dai 
 | `/rule-process-check` | Check/route del workflow di processo                                                 |
 | `/rule-update`        | Update del server rule-mcp                                                     |
 
-### 2.4 Persona role × operazione (21)
+### 2.4 Persona role × operazione (24)
 
 Per ogni ruolo attivo, 3 operazioni: `plan`, `audit`, `review`.
 
-**Ruoli attivi (7):** `architect`, `security`, `privacy`, `a11y`, `ai-engineer`, `performance`, `docs-engineer`
+**Ruoli attivi (8):** `architect`, `security`, `privacy`, `a11y`, `ai-engineer`, `performance`, `docs-engineer`, `web-engineer`
 
 | Ruolo         | Plan                      | Audit                      | Review                      |
 | ------------- | ------------------------- | -------------------------- | --------------------------- |
@@ -255,6 +255,7 @@ Per ogni ruolo attivo, 3 operazioni: `plan`, `audit`, `review`.
 | ai-engineer   | `/rule-plan-ai-engineer`   | `/rule-audit-ai-engineer`   | `/rule-review-ai-engineer`   |
 | performance   | `/rule-plan-performance`   | `/rule-audit-performance`   | `/rule-review-performance`   |
 | docs-engineer | `/rule-plan-docs-engineer` | `/rule-audit-docs-engineer` | `/rule-review-docs-engineer` |
+| web-engineer  | `/rule-plan-web-engineer`  | `/rule-audit-web-engineer`  | `/rule-review-web-engineer`  |
 
 ---
 
@@ -289,14 +290,14 @@ La cartella `.roo/commands/` contiene gli snapshot `.md` installati (per agent c
 | — Tool core                                                                                           | 19        |
 | — Tool per-skill (`rule-tool-<skill>`)                                                                 | 94        |
 | — Risorse `read-*`                                                                                    | 194       |
-| Comandi slash generati (`/rule-*`)                                                                     | **41**    |
+| Comandi slash generati (`/rule-*`)                                                                     | **44**    |
 | — Router `/rule`                                                                                       | 1         |
 | — Area / workflow (`/rule-area-*`, `/rule-adr`, `/rule-flight`)                                          | 14        |
 | — Gestione sessione (`/rule-handoff`, `/rule-handon`, `/rule-init`, `/rule-process-check`, `/rule-update`) | 5         |
-| — Persona (`/rule-{plan,audit,review}-<role>`)                                                         | 21        |
+| — Persona (`/rule-{plan,audit,review}-<role>`)                                                         | 24        |
 | Macro file in `.roo/commands/`                                                                        | 35        |
 
-> **Nota ruoli:** `src/core/review-roles.js` registra 14 ruoli; solo 7 sono attivi e generano comandi slash. Gli altri: `devops-sre`, `qa-testing`, `data-engineer`, `design-system-lead`, `dx-toolchain`, `simplicity-staff-eng`, `oss-compliance`.
+> **Nota ruoli:** `src/core/review-roles.js` registra 16 ruoli; solo 8 sono attivi e generano comandi slash. Gli altri: `devops-sre`, `qa-testing`, `data-engineer`, `design-system-lead`, `dx-toolchain`, `simplicity-staff-eng`, `oss-compliance`, `localization-engineer`.
 
 ---
 

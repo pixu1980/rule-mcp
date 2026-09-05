@@ -1,7 +1,9 @@
 # 018: Fix VS Code extension and derivatives install/uninstall
 
+> **Superseded by [ADR 047](047-drop-the-vs-code-extension-and-its-installers.md)** — the extension and its installers were removed on the lean-web decision; kept for attribution.
+
 - **Date**: 2026-07-19
-- **Status**: accepted
+- **Status**: superseded
 - **Tags**: vscode, extension, installer, cursor, windsurf
 - **Author**: rule-mcp-architect
 
