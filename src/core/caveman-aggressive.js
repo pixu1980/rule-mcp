@@ -37,32 +37,42 @@ export function compressTextAggressive(text) {
   if (typeof text !== "string" || text.length === 0 || text.trimStart().startsWith("```")) {
     return text;
   }
+
   let isInFence = false;
+
   return text
     .split("\n")
     .map((line) => {
       const trimmed = line.trimStart();
+
       if (trimmed.startsWith("```")) {
         isInFence = !isInFence;
+
         return line;
       }
+
       if (isInFence || trimmed.startsWith("#") || trimmed.startsWith("|") || trimmed.startsWith(">")) {
         return line;
       }
+
       const protectedSpans = [];
       const protect = (m) => {
         protectedSpans.push(m);
+
         return `\x00${protectedSpans.length - 1}\x00`;
       };
       let work = line.replaceAll(/`[^`]*`/g, protect).replaceAll(/https?:\/\/\S+/g, protect);
+
       for (const [i, PHRASE_RE] of PHRASE_RES.entries()) {
         work = work.replace(PHRASE_RE, PHRASE_TOS[i]);
       }
+
       work = work
         .replaceAll(AGGRESSIVE_RE, "")
         .replaceAll(/[ \t]{2,}/g, " ")
         .replace(/[ \t]+$/, "");
       work = work.replaceAll(/\x00(\d+)\x00/g, (_, index) => protectedSpans[Number(index)]);
+
       return work;
     })
     .join("\n");

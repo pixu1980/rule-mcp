@@ -8,6 +8,7 @@ export const REACT_GUARDRAILS = [
     description: "React components must use data-part instead of className for styling hooks.",
     check: (code) => {
       const cn = code.match(/className=/g);
+
       return {
         pass: !cn,
         failCount: cn?.length || 0,
@@ -25,10 +26,13 @@ export const REACT_GUARDRAILS = [
       const hooks = code.match(
         /\b(useState|useEffect|useMemo|useCallback|useRef|useReducer|useContext|useImperativeHandle|useLayoutEffect|useDebugValue|useTransition|useDeferredValue|useId|useSyncExternalStore|useInsertionEffect)\(/g,
       );
+
       if (!hooks) {
         return { pass: true, note: "No hooks found" };
       }
+
       const conditionalHooks = code.match(/if\s*\(.*\)\s*\{[^}]*\b(useState|useEffect|useMemo)\(/g);
+
       return {
         pass: !conditionalHooks,
         failCount: conditionalHooks?.length || 0,
@@ -45,6 +49,7 @@ export const VUE_GUARDRAILS = [
     description: "Vue templates must use data-part instead of :class bindings.",
     check: (code) => {
       const classBindings = code.match(/:class\s*=|v-bind:class\s*=/g);
+
       return {
         pass: !classBindings,
         failCount: classBindings?.length || 0,
@@ -61,6 +66,7 @@ export const ANGULAR_GUARDRAILS = [
     description: "Angular templates must use [attr.data-part] instead of [ngClass].",
     check: (code) => {
       const n = code.match(/\[ngClass\]/g);
+
       return { pass: !n, failCount: n?.length || 0, suggestion: 'Replace [ngClass] with [attr.data-part]="...".' };
     },
   },
@@ -73,6 +79,7 @@ export const SVELTE_GUARDRAILS = [
     description: "Svelte should use data-part attributes, not class:name directives.",
     check: (code) => {
       const n = code.match(/class:\w+/g);
+
       return {
         pass: !n,
         failCount: n?.length || 0,
@@ -93,15 +100,36 @@ export const JS_GUARDRAILS = [
     label: "if/else always use braces",
     description: "Every if, else, else if must use {} braces. Single-line if without braces is forbidden.",
     check: (code) => {
-      const matches = code.match(/if\s*\([^)]*\)\s*[^{]*(?:;|\n)/g);
-      if (matches && matches.length > 0) {
+      // Line-oriented on purpose. Balancing parentheses means counting the
+      // ones inside regex literals too, and a condition like
+      // `/\([^)]*\)/.test(line)` then reads as a braceless if (finding F-A1).
+      const offenders = [];
+      const lines = code.split("\n");
+      for (const [index, raw] of lines.entries()) {
+        const line = raw.trim();
+        if (!/\bif\s*\(/.test(line) || line.startsWith("*") || line.startsWith("//")) {
+          continue;
+        }
+        if (line.endsWith("{") || /[&|(,+]$/.test(line)) {
+          continue;
+        }
+        if (line.endsWith(")")) {
+          const next = lines.slice(index + 1).find((candidate) => candidate.trim() !== "");
+          if (next?.trim().startsWith("{")) {
+            continue;
+          }
+        }
+        offenders.push(line);
+      }
+      if (offenders.length > 0) {
         return {
           pass: false,
-          failCount: matches.length,
-          detail: matches.slice(0, 5),
+          failCount: offenders.length,
+          detail: offenders.slice(0, 5),
           suggestion: "Add braces: if (condition) { ... }",
         };
       }
+
       return { pass: true };
     },
   },
@@ -111,10 +139,24 @@ export const JS_GUARDRAILS = [
     description:
       "All { } blocks (if/for/while/arrow functions/promises) must span multiple lines. No inline { doThing(); }.",
     check: (code) => {
-      // Match if/for/while/try/catch with { code } on same line
-      const matches = code.match(/(?:if|for|while|switch|try|catch|else|=>)\s*\(?[^)]*\)?\s*\{[^{}]+\}/g);
+      // Match if/for/while/try/catch with { code } on the SAME line.
+      //
+      // Two things this pattern has to get right, and it got both wrong. The
+      // leading \b is what stops `for` matching inside `platform`, `before` or
+      // `information`; without it any such word followed anywhere by a braced
+      // group was a violation, and JSDoc is full of `{HTMLElement}`. And the
+      // block body excludes newlines, because a block that spans lines is the
+      // thing this rule asks for rather than the thing it forbids.
+      // A destructuring pattern in a header (`for (const { a, b } of xs)`) is
+      // not an inline block: the block, when there is one, opens AFTER the
+      // header's closing parenthesis (finding F-A1).
+      const matches = code.match(
+        /\b(?:if|for|while|switch|catch)\b\s*\([^\n]*\)\s*\{[^{}\n]+\}|\b(?:try|else)\b\s*\{[^{}\n]+\}|=>\s*\{[^{}\n]+\}/g,
+      );
+
       if (matches && matches.length > 0) {
         const filtered = matches.filter((m) => m !== "=> {}");
+
         if (filtered.length > 0) {
           return {
             pass: false,
@@ -124,6 +166,7 @@ export const JS_GUARDRAILS = [
           };
         }
       }
+
       return { pass: true };
     },
   },
@@ -134,14 +177,17 @@ export const JS_GUARDRAILS = [
     check: (code) => {
       const issues = [];
       const lines = code.split("\n");
+
       for (let index = 0; index < lines.length; index++) {
         if (/\{\s*$/.test(lines[index]) && index + 1 < lines.length && /^\s*$/.test(lines[index + 1])) {
           issues.push(`Line ${index + 1}: blank line after {`);
         }
+
         if (/^\s*\}\s*$/.test(lines[index]) && index > 0 && /^\s*$/.test(lines[index - 1])) {
           issues.push(`Line ${index + 1}: blank line before }`);
         }
       }
+
       if (issues.length > 0) {
         return {
           pass: false,
@@ -150,6 +196,7 @@ export const JS_GUARDRAILS = [
           suggestion: "Remove blank lines at block start/end.",
         };
       }
+
       return { pass: true };
     },
   },
@@ -158,24 +205,34 @@ export const JS_GUARDRAILS = [
     label: "Class method bodies must be multi-line",
     description: "Every method body must span multiple lines. No method() { stmt; } on one line.",
     check: (code) => {
-      const matches = code.match(/(?:constructor|\w+)\s*\([^)]*\)\s*\{[^}]+\}/g);
-      if (matches && matches.length > 0) {
-        const filtered = matches.filter((m) => {
+      // Judged per line: a 2-line owner over a single statement must not read
+      // as a one-liner once the surrounding newlines are trimmed (F-A1), and
+      // `\w+\s*\(` stays linear on a long generated line (F-S1).
+      const filtered = [];
+      const scannable = code.split("\n").filter((l) => l.length > 0 && l.length <= 2000);
+
+      for (const line of scannable) {
+        for (const m of line.match(/(?:constructor|\w+)\s*\([^)]*\)\s*\{[^}]+\}/g) ?? []) {
           const inner = m
             .replace(/^\w+\s*\([^)]*\)\s*\{/, "")
             .replace(/\}$/, "")
             .trim();
-          return inner.length > 0 && !inner.includes("\n");
-        });
-        if (filtered.length > 0) {
-          return {
-            pass: false,
-            failCount: filtered.length,
-            detail: filtered.slice(0, 5),
-            suggestion: "Split method body across multiple lines.",
-          };
+
+          if (inner.length > 0) {
+            filtered.push(m);
+          }
         }
       }
+
+      if (filtered.length > 0) {
+        return {
+          pass: false,
+          failCount: filtered.length,
+          detail: filtered.slice(0, 5),
+          suggestion: "Split method body across multiple lines.",
+        };
+      }
+
       return { pass: true };
     },
   },
@@ -184,24 +241,33 @@ export const JS_GUARDRAILS = [
     label: "for loops must have braces and be multi-line",
     description: "Every for/for...of/for...in body must use {} and span multiple lines. No for (...) stmt;",
     check: (code) => {
-      const matches = code.match(/for\s*\([^)]*\)\s*\{[^}]+\}/g);
-      if (matches && matches.length > 0) {
-        const filtered = matches.filter((m) => {
+      // Judged per line: a two-line for over a single statement must not read
+      // as a one-liner once the surrounding newlines are trimmed (F-A1).
+      const filtered = [];
+      const scannable = code.split("\n").filter((l) => l.length > 0 && l.length <= 2000);
+
+      for (const line of scannable) {
+        for (const m of line.match(/for\s*\([^)]*\)\s*\{[^}]+\}/g) ?? []) {
           const inner = m
             .replace(/^for\s*\([^)]*\)\s*\{/, "")
             .replace(/\}$/, "")
             .trim();
-          return !inner.includes("\n");
-        });
-        if (filtered.length > 0) {
-          return {
-            pass: false,
-            failCount: filtered.length,
-            detail: filtered.slice(0, 5),
-            suggestion: "Place for loop body on separate lines.",
-          };
+
+          if (inner.length > 0) {
+            filtered.push(m);
+          }
         }
       }
+
+      if (filtered.length > 0) {
+        return {
+          pass: false,
+          failCount: filtered.length,
+          detail: filtered.slice(0, 5),
+          suggestion: "Place for loop body on separate lines.",
+        };
+      }
+
       return { pass: true };
     },
   },
@@ -212,9 +278,11 @@ export const JS_GUARDRAILS = [
     check: (code) => {
       const issues = [];
       const lines = code.split("\n");
+
       for (let index = 1; index < lines.length; index++) {
         const line = lines[index].trim();
         const previous = lines[index - 1].trim();
+
         if (
           (line.startsWith("return ") || line === "return;") &&
           previous !== "" &&
@@ -226,6 +294,7 @@ export const JS_GUARDRAILS = [
           issues.push(`Line ${index + 1}: no blank line before return`);
         }
       }
+
       if (issues.length > 0) {
         return {
           pass: false,
@@ -234,6 +303,7 @@ export const JS_GUARDRAILS = [
           suggestion: "Add a blank line before each return statement.",
         };
       }
+
       return { pass: true };
     },
   },
@@ -243,16 +313,20 @@ export const JS_GUARDRAILS = [
     description: "Every pair of class methods must have a blank line between them.",
     check: (code) => {
       const issues = [];
+
       if (!code.includes("class ")) {
         return { pass: true, note: "Not a class - skipping" };
       }
+
       const lines = code.split("\n");
+
       for (let index = 0; index < lines.length - 1; index++) {
         // Check if line is a closing brace of a method, followed by another method
         if (/^\s*\}\s*$/.test(lines[index]) && /^\s*(\w+|static|get|set)\s/.test(lines[index + 1])) {
           issues.push(`Line ${index + 1}: no blank line before method`);
         }
       }
+
       if (issues.length > 0) {
         return {
           pass: false,
@@ -261,6 +335,7 @@ export const JS_GUARDRAILS = [
           suggestion: "Add a blank line between class methods.",
         };
       }
+
       return { pass: true };
     },
   },
@@ -272,6 +347,7 @@ export const JS_GUARDRAILS = [
     check: (code) => {
       const issues = [];
       const lines = code.split("\n");
+
       for (let index = 1; index < lines.length - 1; index++) {
         const line = lines[index];
         const previous = lines[index - 1];
@@ -281,27 +357,42 @@ export const JS_GUARDRAILS = [
           /^\s*(if|for|while|switch|try)\s*\(/.test(line) ||
           /^\.(then|catch|finally|map|filter|reduce|forEach)\s*\(/.test(line)
         ) {
-          const hasPreviousCode =
-            previous.trim() && !/^\s*(\/\/|\/\*|\*|\}\s*$|\{\s*$|if|for|while|switch|try|case|default)/.test(previous);
-          if (hasPreviousCode && previous.trim() !== "{" && !previous.trimStart().startsWith("//")) {
+          // A line that opens or continues a block (`{`, `} else {`,
+          // `} finally {`, `} catch (e) {`) is scaffolding, not a statement
+          // that needs separating from the block below it (finding F-A1).
+          const previousTrimmed = previous.trim();
+          const isScaffolding =
+            previousTrimmed === "" ||
+            previousTrimmed.endsWith("{") ||
+            previousTrimmed.startsWith("}") ||
+            /^\s*(\/\/|\/\*|\*|if|for|while|switch|try|case|default)/.test(previous);
+
+          if (!isScaffolding) {
             issues.push(`Line ${index + 1}: no blank line before block`);
           }
         }
         // Check closing brace followed by code
         if (/^\s*\}\s*$/.test(line) && !/catch|else|finally/.test(next)) {
-          const hasNextCode = next.trim() && !/^\s*(\/\/|\/\*|\*|\}|\)|case|default)/.test(next);
+          // `:` `,` `.` and `]` after a closing brace continue an expression
+          // (an object literal in a ternary, an argument list, a chain) - the
+          // brace closed a value, not a block, and a blank line there splits
+          // the expression instead of separating two of them.
+          const hasNextCode = next.trim() && !/^\s*(\/\/|\/\*|\*|\}|\)|\]|[:,.]|case|default)/.test(next);
+
           if (hasNextCode && next.trim() !== "{" && index > 2) {
             // Check this is not the last block in parent
             const afterBlock = lines
               .slice(index + 1)
               .join("\n")
               .trim();
+
             if (afterBlock && !afterBlock.startsWith("}") && !afterBlock.startsWith(")")) {
               issues.push(`Line ${index + 1}: no blank line after closing brace`);
             }
           }
         }
       }
+
       if (issues.length > 0) {
         return {
           pass: false,
@@ -310,6 +401,7 @@ export const JS_GUARDRAILS = [
           suggestion: "Add blank lines around multi-line blocks (see styleguide).",
         };
       }
+
       return { pass: true };
     },
   },
@@ -321,24 +413,42 @@ export const JS_GUARDRAILS = [
     check: (code) => {
       const lines = code.split("\n");
       let lastDeclaration = -1;
-      let firstNonDeclaration = -1;
-      for (const [index, line] of lines.entries()) {
-        const trimmed = line.trim();
-        if (/^(const|let|var)\s/.test(trimmed)) {
-          lastDeclaration = index;
-          if (firstNonDeclaration < 0) {
-            firstNonDeclaration = index;
-          }
-        } else if (
-          trimmed &&
-          !/^(\/\/|\/\*|\*|\s*$|import|export|'use strict'|})/.test(trimmed) &&
-          lastDeclaration >= 0
-        ) {
-          break;
+      // A declaration can span lines (an arrow function, an object literal, a
+      // template string). Its continuation lines belong to the declaration, so
+      // the separator this rule asks for goes after the statement ENDS - not
+      // after its first line, which used to flag every multi-line const in the
+      // repository (finding F-A1).
+      for (let index = 0; index < lines.length; index++) {
+        if (!/^(const|let|var)\s/.test(lines[index].trim())) {
+          continue;
         }
+
+        let depth = 0;
+        let end = index;
+
+        for (; end < lines.length; end++) {
+          for (const char of lines[end]) {
+            if ("({[".includes(char)) {
+              depth += 1;
+            } else if (")}]".includes(char)) {
+              depth -= 1;
+            }
+          }
+          // A statement ends at its semicolon. Bracket balance alone stops at
+          // the first line of a multi-line ternary, which has no brackets at
+          // all and would ask for a blank line inside the expression.
+          if (depth <= 0 && lines[end].trimEnd().endsWith(";")) {
+            break;
+          }
+        }
+
+        lastDeclaration = Math.min(end, lines.length - 1);
+        index = lastDeclaration;
       }
+
       if (lastDeclaration > 0 && lastDeclaration < lines.length - 1) {
         const nextLine = lines[lastDeclaration + 1].trim();
+
         if (nextLine && !/^(\/\/|\/\*|\*|export|import|'use strict'|}|case|default)/.test(nextLine)) {
           return {
             pass: false,
@@ -348,6 +458,7 @@ export const JS_GUARDRAILS = [
           };
         }
       }
+
       return { pass: true };
     },
   },
@@ -361,9 +472,11 @@ export const JS_GUARDRAILS = [
         code.match(
           /throw\s+(?!new\s+)(?:Error|TypeError|RangeError|SyntaxError|ReferenceError|EvalError|URIError)\s*\(/g,
         ) || [];
+
       if (violations.length === 0) {
         return { pass: true, note: "No bare error constructor throws found" };
       }
+
       return {
         pass: false,
         failCount: violations.length,
@@ -379,16 +492,20 @@ export const JS_GUARDRAILS = [
       "Builtin constructors Map, Set, Date, Array, WeakMap, WeakSet must be called with new. Calling them as functions (const m = Map()) is forbidden. String, Number, Boolean, Symbol, BigInt are exempt.",
     check: (code) => {
       const violations = [];
+
       for (const name of ["Map", "Set", "Date", "Array", "WeakMap", "WeakSet"]) {
         const re = new RegExp(String.raw`(?:=|:)\s*${name}\s*\(`, "g");
         let m;
+
         while ((m = re.exec(code)) !== null) {
           violations.push(m[0].trim());
         }
       }
+
       if (violations.length === 0) {
         return { pass: true, note: "No bare builtin constructor calls found" };
       }
+
       return {
         pass: false,
         failCount: violations.length,
@@ -404,9 +521,11 @@ export const JS_GUARDRAILS = [
       "rows.map(fn).flat() allocates an intermediate array; use rows.flatMap(fn) instead. Only .flat() with no depth argument is flagged.",
     check: (code) => {
       const violations = code.match(/\.map\s*\([^()]*(?:\([^()]*\))?[^()]*\)\s*\.flat\s*\(\s*\)/g) || [];
+
       if (violations.length === 0) {
         return { pass: true, note: "No map().flat() chains found" };
       }
+
       return {
         pass: false,
         failCount: violations.length,
@@ -423,16 +542,21 @@ export const JS_GUARDRAILS = [
     check: (code) => {
       const violations = [];
       const arrayNames = [...code.matchAll(/const\s+(\w+)\s*=\s*\[/g)].map((m) => m[1]);
+
       if (arrayNames.length === 0) {
         return { pass: true, note: "No array literals found, skipping" };
       }
+
       const lines = code.split("\n");
+
       for (const line of lines) {
         const isInIteration =
           /\bfor\s*\(|\.filter\s*\(|\.map\s*\(|\.some\s*\(|\.every\s*\(|\.find\s*\(|\.findIndex\s*\(/.test(line);
+
         if (!isInIteration) {
           continue;
         }
+
         for (const name of arrayNames) {
           if (new RegExp(String.raw`\b${name}\.includes\(`).test(line)) {
             violations.push(line.trim());
@@ -446,13 +570,16 @@ export const JS_GUARDRAILS = [
         const multi = code.match(
           new RegExp(String.raw`\.(?:filter|map|some|every|find)\s*\([\s\S]{0,200}?\b${name}\.includes\(`, "g"),
         );
+
         if (multi) {
           violations.push(...multi.map((v) => v.replaceAll("\n", " ").trim().slice(0, 80)));
         }
       }
+
       if (violations.length === 0) {
         return { pass: true, note: "No includes-in-loop lookups found" };
       }
+
       return {
         pass: false,
         failCount: violations.length,
@@ -511,9 +638,11 @@ export const JS_GUARDRAILS = [
       ];
       const re = new RegExp(String.raw`from\s*['"](?:${builtins.join("|")})(?:/[\w.-]*)?['"]`, "g");
       const violations = code.match(re) || [];
+
       if (violations.length === 0) {
         return { pass: true, note: "No bare node builtin imports found" };
       }
+
       return {
         pass: false,
         failCount: violations.length,
@@ -528,9 +657,11 @@ export const JS_GUARDRAILS = [
     description: "str.replace(/x/g, y) with a global regex literal should be str.replaceAll('x', y).",
     check: (code) => {
       const violations = code.match(/\.replace\s*\(\s*\/[^/]*\/g\s*[,)]/g) || [];
+
       if (violations.length === 0) {
         return { pass: true, note: "No global-regex replace found" };
       }
+
       return {
         pass: false,
         failCount: violations.length,
@@ -546,9 +677,11 @@ export const JS_GUARDRAILS = [
       "Prefer for...of loops over Array.prototype.forEach: better type narrowing, direct await, and break/continue support.",
     check: (code) => {
       const violations = code.match(/\b\w+\.forEach\s*\(/g) || [];
+
       if (violations.length === 0) {
         return { pass: true, note: "No .forEach() calls found" };
       }
+
       return {
         pass: false,
         failCount: violations.length,
@@ -570,19 +703,25 @@ export const VANILLA_REACTIVE_GUARDRAILS = [
       const hasStaticBlock = /static\s*\{/.test(code) && /customElements\.define\(/.test(code);
       const hasVrComponent = /vrComponent\(/.test(code);
       const isClass = /^export\s+class\s/.test(code.trim()) || /^class\s/.test(code.trim());
+
       if (!isClass) {
         return { pass: true, note: "Not a class - skipping Pattern A check" };
       }
+
       if (isExtendsHtmlelement && (hasStaticBlock || hasVrComponent)) {
         return { pass: true };
       }
+
       const failures = [];
+
       if (!isExtendsHtmlelement) {
         failures.push("Must extend HTMLElement");
       }
+
       if (!hasStaticBlock && !hasVrComponent) {
         failures.push("Must have static {} block with vrComponent() or customElements.define()");
       }
+
       return {
         pass: false,
         failCount: failures.length,
@@ -600,9 +739,11 @@ export const VANILLA_REACTIVE_GUARDRAILS = [
       const isFunction =
         /^export\s+function\s/.test(code.trim()) || /^function\s/.test(code.trim()) || /=>\s*\{/.test(code);
       const isCe = /extends\s+HTMLElement/.test(code);
+
       if (!isFunction && !isCe) {
         return { pass: true, note: "Not a component \u{2014} skipping" };
       }
+
       if (!isUsesHtml) {
         return {
           pass: false,
@@ -611,6 +752,7 @@ export const VANILLA_REACTIVE_GUARDRAILS = [
           suggestion: "Use html`` tagged template for the template.",
         };
       }
+
       return { pass: true };
     },
   },
@@ -622,10 +764,13 @@ export const VANILLA_REACTIVE_GUARDRAILS = [
       if (!code.includes("connectedCallback")) {
         return { pass: true, note: "No connectedCallback - skipping" };
       }
+
       const hasGuard = /_isMounted/.test(code) || /_pixBound/.test(code) || /bindElement/.test(code);
+
       if (hasGuard) {
         return { pass: true };
       }
+
       return {
         pass: false,
         failCount: 1,
@@ -642,13 +787,17 @@ export const VANILLA_REACTIVE_GUARDRAILS = [
     check: (code) => {
       const hasCssFetch = /CSSStyleSheet/.test(code) && /replaceSync/.test(code) && /adoptedStyleSheets/.test(code);
       const isCe = /extends\s+HTMLElement/.test(code);
+
       if (!isCe) {
         return { pass: true, note: "Not a CE - skipping" };
       }
+
       if (hasCssFetch) {
         return { pass: true };
       }
+
       const isNoFetch = /\.css['"]/.test(code) && !code.includes("CSSStyleSheet");
+
       if (isNoFetch) {
         return {
           pass: false,
@@ -658,6 +807,7 @@ export const VANILLA_REACTIVE_GUARDRAILS = [
             "Use: const cssText = await (await fetch(new URL('./_Comp.css', import.meta.url))).text(); const sheet = new CSSStyleSheet(); sheet.replaceSync(cssText);",
         };
       }
+
       return { pass: true, note: "No CSS detected - skipping" };
     },
   },
@@ -673,13 +823,17 @@ export const VANILLA_REACTIVE_GUARDRAILS = [
         /^function\s/.test(code.trim()) ||
         /^export\s+const\s/.test(code.trim());
       const isClass = /extends\s+HTMLElement/.test(code);
+
       if (isClass) {
         return { pass: true, note: "This is a Pattern A (CE). Pattern B check not applicable." };
       }
+
       if (!isPlainFunction) {
         return { pass: true, note: "Not a Pattern B component - skipping" };
       }
+
       const isReturnsHtml = /return\s+html`/.test(code);
+
       if (!isReturnsHtml) {
         return {
           pass: false,
@@ -688,6 +842,7 @@ export const VANILLA_REACTIVE_GUARDRAILS = [
           suggestion: "Add: return html`...`; at the end of the function.",
         };
       }
+
       return { pass: true };
     },
   },
@@ -698,10 +853,13 @@ export const VANILLA_REACTIVE_GUARDRAILS = [
       "Pattern B functions must NOT register themselves as custom elements. That is the parent CE's responsibility.",
     check: (code) => {
       const isPlainFunction = /^export\s+function\s/.test(code.trim()) || /^function\s/.test(code.trim());
+
       if (!isPlainFunction) {
         return { pass: true, note: "Not a functional component - skipping" };
       }
+
       const hasDefine = /customElements\.define\(/.test(code);
+
       if (hasDefine) {
         return {
           pass: false,
@@ -711,6 +869,7 @@ export const VANILLA_REACTIVE_GUARDRAILS = [
             "Remove customElements.define() from functional components. Register in the parent CE's static {} block.",
         };
       }
+
       return { pass: true };
     },
   },
@@ -723,9 +882,11 @@ export const VANILLA_REACTIVE_GUARDRAILS = [
     check: (code, context) => {
       const isTemplate = context?.fileName?.endsWith(".template.html") || false;
       const hasDollarBraces = /\${[^}]+\}/.test(code);
+
       if (!isTemplate && hasDollarBraces) {
         return { pass: true, note: "Not a .template.html file - ${} is valid here" };
       }
+
       if (isTemplate && hasDollarBraces) {
         return {
           pass: false,
@@ -734,6 +895,7 @@ export const VANILLA_REACTIVE_GUARDRAILS = [
           suggestion: 'Replace ${} closures with @click="handler" and use {{ expr }} for data expressions.',
         };
       }
+
       return { pass: true };
     },
   },
@@ -743,11 +905,14 @@ export const VANILLA_REACTIVE_GUARDRAILS = [
     description: '.template.html files must use data-part="role" attributes, not CSS class names.',
     check: (code, context) => {
       const isTemplate = context?.fileName?.endsWith(".template.html") || false;
+
       if (!isTemplate) {
         return { pass: true, note: "Not a template file - skipping" };
       }
+
       const classAttributes = code.match(/class\s*=\s*["'][^"']*["']/g);
       const dataPart = code.match(/data-part\s*=\s*["']/g);
+
       if (classAttributes && (!dataPart || classAttributes.length > dataPart.length)) {
         return {
           pass: false,
@@ -756,6 +921,7 @@ export const VANILLA_REACTIVE_GUARDRAILS = [
           suggestion: 'Replace class="..." with data-part="role" attributes.',
         };
       }
+
       return { pass: true };
     },
   },
@@ -767,13 +933,17 @@ export const VANILLA_REACTIVE_GUARDRAILS = [
       const hasFetch = /fetch\(/.test(code) && /\.template\.html/.test(code);
       const hasBundleImport = /bundle-text:/.test(code) && /\.template\.html/.test(code);
       const isCe = /extends\s+HTMLElement/.test(code);
+
       if (!isCe) {
         return { pass: true, note: "Not a CE - skipping" };
       }
+
       const hasHtmlCall = /html\(/.test(code) && /\.template\.html/.test(code);
+
       if (hasHtmlCall && (hasFetch || hasBundleImport)) {
         return { pass: true };
       }
+
       if (hasHtmlCall && !hasFetch && !hasBundleImport) {
         return {
           pass: false,
@@ -783,6 +953,7 @@ export const VANILLA_REACTIVE_GUARDRAILS = [
             "Add: const templateStr = await (await fetch(new URL('./_Comp.template.html', import.meta.url))).text();",
         };
       }
+
       return { pass: true, note: "No Pattern C detection needed - skipping" };
     },
   },

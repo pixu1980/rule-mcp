@@ -225,6 +225,7 @@ export function toPascal(string_) {
   if (/^[A-Z][a-zA-Z0-9]*$/.test(string_)) {
     return string_;
   }
+
   return string_
     .split(/[-_\s]+/)
     .map((s) => s.charAt(0).toUpperCase() + s.slice(1).toLowerCase())

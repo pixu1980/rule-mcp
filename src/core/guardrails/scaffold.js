@@ -7,13 +7,16 @@ const SCAFFOLD_CHECK = (fileName, label, checkFunction) => ({
     if (context?.mode !== "scaffold") {
       return { pass: true, note: "Only checked in scaffold mode" };
     }
+
     return checkFunction(code, context);
   },
 });
 
+/** The scaffold guardrail family. */
 export const SCAFFOLD_GUARDRAILS = [
   SCAFFOLD_CHECK(".prettierrc", "Prettier config present", (code) => {
     const hasConfig = code.includes('"printWidth"') && code.includes('"tabWidth"') && code.includes('"semi"');
+
     return {
       pass: hasConfig,
       failCount: hasConfig ? 0 : 1,
@@ -23,10 +26,24 @@ export const SCAFFOLD_GUARDRAILS = [
   }),
   SCAFFOLD_CHECK(".nvmrc", "NVM config present", (code) => {
     const hasNvmrc = code.trim() === "lts/*" || code.includes("lts/*");
+
     return { pass: hasNvmrc, failCount: hasNvmrc ? 0 : 1, suggestion: "Create .nvmrc with content: lts/*" };
   }),
+  SCAFFOLD_CHECK(".npmrc", "npmrc pins exactly", (code) => {
+    // The value, not the key: `save-exact=false` is the default spelled out.
+    const exact = /^\s*save-exact\s*=\s*true\s*$/m.test(code);
+
+    return {
+      pass: exact,
+      failCount: exact ? 0 : 1,
+      suggestion:
+        "Create .npmrc at project root with save-exact=true, so `pnpm add` writes an exact version instead of a caret range (guardrail pkg-exact-versions).",
+    };
+  }),
+
   SCAFFOLD_CHECK(".editorconfig", "EditorConfig present", (code) => {
     const hasEc = code.includes("root = true") && code.includes("indent_size = 2");
+
     return {
       pass: hasEc,
       failCount: hasEc ? 0 : 1,
@@ -37,6 +54,7 @@ export const SCAFFOLD_GUARDRAILS = [
     const hasOs = code.includes(".DS_Store") || code.includes("Thumbs.db");
     const hasNode = code.includes("node_modules/");
     const hasBuild = code.includes("dist/") || code.includes("build/");
+
     return {
       pass: hasOs && hasNode && hasBuild,
       failCount: [hasOs, hasNode, hasBuild].filter(Boolean).length,
@@ -45,6 +63,7 @@ export const SCAFFOLD_GUARDRAILS = [
   }),
   SCAFFOLD_CHECK("eslint.config.mjs", "ESLint flat config present", (code) => {
     const hasEslint = code.includes("unicorn") || code.includes("@eslint/js") || code.includes("defineConfig");
+
     return {
       pass: hasEslint,
       failCount: hasEslint ? 0 : 1,
@@ -53,6 +72,7 @@ export const SCAFFOLD_GUARDRAILS = [
   }),
   SCAFFOLD_CHECK("tsconfig.json", "TypeScript config present", (code) => {
     const hasTs = code.includes('"strict"') && code.includes('"include"') && code.includes('"src"');
+
     return {
       pass: hasTs,
       failCount: hasTs ? 0 : 1,
@@ -61,6 +81,7 @@ export const SCAFFOLD_GUARDRAILS = [
   }),
   SCAFFOLD_CHECK("jsconfig.json", "JSConfig present", (code) => {
     const hasJs = code.includes('"checkJs"') && code.includes('"include"') && code.includes('"src"');
+
     return {
       pass: hasJs,
       failCount: hasJs ? 0 : 1,

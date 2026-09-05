@@ -51,7 +51,6 @@ export function registerFixTool() {
       if (mode === "generate") {
         const { generateComponentFiles } = await import("../core/file-tree.js");
         const { writeFileSync, mkdirSync } = await import("node:fs");
-        // eslint-disable-next-line no-unused-vars
         const { dirname, join, resolve, relative } = await import("node:path");
 
         if (!arguments_.name) {
@@ -67,6 +66,7 @@ export function registerFixTool() {
 
         // Validate: no path traversal in name or baseDir
         const sanitizedBase = relative(rootDir, resolve(rootDir, baseDir));
+
         if (sanitizedBase.startsWith("..") || sanitizedBase === "") {
           return {
             isError: true,
@@ -83,18 +83,22 @@ export function registerFixTool() {
         });
 
         const preview = [];
+
         for (const file of files) {
           const fullPath = resolve(rootDir, file.path);
           // Block path traversal: resolved path must stay inside rootDir
           const rel = relative(rootDir, fullPath);
+
           if (rel.startsWith("..") || rel === "") {
             preview.push(`${file.path} - BLOCKED: path escapes project root`);
             continue;
           }
+
           if (isDryRun) {
             preview.push(`${file.path} (dry-run, not written)`);
             continue;
           }
+
           try {
             mkdirSync(dirname(fullPath), { recursive: true });
             writeFileSync(fullPath, file.content, "utf8");
@@ -154,13 +158,16 @@ export function registerFixTool() {
         for (const issue of report.issues) {
           const icon = issue.fixable ? "🔧" : "⚠️";
           lines.push(`### ${icon} ${issue.type}`, `**Path**: \`${issue.path}\``, `**Message**: ${issue.message}`);
+
           if (issue.fixAction) {
             lines.push(`**Auto-fix**: ${issue.fixAction}`);
           }
+
           lines.push("");
         }
 
         lines.push("---");
+
         if (report.stats.fixable > 0) {
           lines.push(`Run with \`mode=fix dryRun=false\` to auto-fix ${report.stats.fixable} issues.`);
         }
@@ -184,25 +191,31 @@ export function registerFixTool() {
 
         if (result.fixed.length > 0) {
           lines.push(`## Fixed (${result.fixed.length})`, "");
+
           for (const f of result.fixed) {
             lines.push(`- ${f.action}: \`${f.path}\``);
           }
+
           lines.push("");
         }
 
         if (result.errors.length > 0) {
           lines.push(`## Errors (${result.errors.length})`, "");
+
           for (const e of result.errors) {
             lines.push(`- ❌ \`${e.path}\`: ${e.error}`);
           }
+
           lines.push("");
         }
 
         if (result.remaining.length > 0) {
           lines.push(`## Remaining Issues (${result.remaining.length})`, "");
+
           for (const r of result.remaining) {
             lines.push(`- ⚠️ \`${r.path}\`: ${r.message}`);
           }
+
           lines.push("");
         }
 

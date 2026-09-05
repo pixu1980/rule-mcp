@@ -19,18 +19,14 @@
 
 import {
   existsSync,
-  // eslint-disable-next-line no-unused-vars
   mkdirSync,
   readdirSync,
   readFileSync,
   renameSync,
   writeFileSync,
-  // eslint-disable-next-line no-unused-vars
   statSync,
-  // eslint-disable-next-line no-unused-vars
   unlinkSync,
 } from "node:fs";
-// eslint-disable-next-line no-unused-vars
 import { join, dirname, basename, extname, relative, parse } from "node:path";
 
 // ─── Constants ───────────────────────────────────────────────────────────────
@@ -98,7 +94,6 @@ function isIgnored(name) {
  * Check if a directory is a potential component folder:
  * contains at least one component-like file.
  */
-// eslint-disable-next-line no-unused-vars
 function isComponentDir(dirPath, entries) {
   for (const entry of entries) {
     if (!entry.isFile()) {
@@ -106,10 +101,12 @@ function isComponentDir(dirPath, entries) {
     }
 
     const extension = extname(entry.name);
+
     if (COMPONENT_EXTENSIONS.has(extension)) {
       return true;
     }
   }
+
   return false;
 }
 
@@ -135,10 +132,13 @@ function isBareComponent(name) {
   if (isBarrelFile(name)) {
     return false;
   }
+
   if (name.startsWith("_")) {
     return false;
   }
+
   const extension = extname(name);
+
   if (!COMPONENT_EXTENSIONS.has(extension)) {
     return false;
   }
@@ -250,6 +250,7 @@ export function scanFileTree(rootDir, options = {}) {
 
     // ── Check 5: Orphan CSS files (CSS without matching component) ──
     const cssFiles = files.filter((f) => extname(f.name) === ".css");
+
     for (const css of cssFiles) {
       if (!css.name.startsWith("_")) {
         continue;
@@ -258,6 +259,7 @@ export function scanFileTree(rootDir, options = {}) {
       // Check if there's a matching component
       const baseName = css.name.replace(extname(css.name), "");
       const matchingComponent = files.some((f) => parse(f.name).name === baseName && f.name !== css.name);
+
       if (!matchingComponent) {
         issues.push({
           type: "orphan-css",
@@ -278,6 +280,7 @@ export function scanFileTree(rootDir, options = {}) {
       const fullPath = join(currentPath, file.name);
       try {
         const content = readFileSync(fullPath, "utf8").trim();
+
         if (content.length === 0) {
           issues.push({
             type: "empty-barrel",
@@ -349,7 +352,6 @@ export function scanFileTree(rootDir, options = {}) {
  * }}
  */
 export function autoFixFileTree(rootDir, options = {}) {
-  // eslint-disable-next-line no-unused-vars
   const srcDir = options.srcDir || "src";
   const isDryRun = options.dryRun !== false;
   const report = scanFileTree(rootDir, options);
@@ -376,6 +378,7 @@ export function autoFixFileTree(rootDir, options = {}) {
           errors.push({ path: oldPath, error: `Target "${newName}" already exists. Skipping.` });
           continue;
         }
+
         renameSync(oldPath, newPath);
         fixed.push({ path: oldPath, action: `Renamed to ${newName}` });
       } catch (error) {
@@ -407,11 +410,11 @@ export function autoFixFileTree(rootDir, options = {}) {
 
     for (const file of files) {
       const name = file.name;
-      // eslint-disable-next-line no-unused-vars
       const extension = extname(name);
 
       // Get the component name from _PascalCase.ext
       const componentMatch = name.match(/^_([A-Z][a-zA-Z0-9]*)\.\w+$/);
+
       if (componentMatch) {
         const componentName = componentMatch[1];
         componentExports.push(componentName);
@@ -420,10 +423,12 @@ export function autoFixFileTree(rootDir, options = {}) {
 
     // Build barrel content
     let barrelContent;
+
     if (componentExports.length > 0) {
       const esm = componentExports
         .map((c) => {
           const fileName = `_${c}`;
+
           return `export { ${c} } from './${fileName}';\n`;
         })
         .join("");
@@ -431,6 +436,7 @@ export function autoFixFileTree(rootDir, options = {}) {
     } else {
       // No underscore-prefixed files found; try to build from what's available
       const jsFiles = files.filter((f) => COMPONENT_EXTENSIONS.has(extname(f.name)) && !isBarrelFile(f.name));
+
       if (jsFiles.length > 0) {
         const firstFile = parse(jsFiles[0].name).name;
         const componentName = firstFile.startsWith("_") ? firstFile.slice(1) : firstFile;
@@ -476,6 +482,7 @@ export function autoFixFileTree(rootDir, options = {}) {
     for (const file of files) {
       const name = file.name;
       const componentMatch = name.match(/^_([A-Z][a-zA-Z0-9]*)\.\w+$/);
+
       if (componentMatch) {
         componentExports.push(componentMatch[1]);
       }
@@ -532,6 +539,7 @@ export function checkBarrelFile(code, context = {}) {
   }
 
   const trimmed = code.trim();
+
   if (trimmed.length === 0) {
     return {
       pass: false,
@@ -542,6 +550,7 @@ export function checkBarrelFile(code, context = {}) {
   }
 
   const hasExport = trimmed.includes("export ") || trimmed.includes("module.exports");
+
   if (!hasExport) {
     return {
       pass: false,
@@ -574,6 +583,7 @@ export function checkFileNameConvention(code, context = {}) {
   }
 
   const isValid = /^_[A-Z][a-zA-Z0-9]*\.\w+$/.test(fileName);
+
   if (isValid) {
     return {
       pass: true,
@@ -585,6 +595,7 @@ export function checkFileNameConvention(code, context = {}) {
   }
 
   const correctName = `_${fileName}`;
+
   return {
     pass: false,
     failCount: 1,
@@ -638,26 +649,31 @@ export function generateComponentFiles(options) {
       files.push({ path: `${componentFilePath}.jsx`, content: componentContent });
       break;
     }
+
     case "vue": {
       componentContent = `<script setup>\n/**\n * @module ${name}\n * @description ${name} component\n */\ndefineProps({});\n</script>\n\n<template>\n  <article data-part="${name.toLowerCase()}">\n    <slot />\n  </article>\n</template>\n`;
       files.push({ path: `${componentFilePath}.vue`, content: componentContent });
       break;
     }
+
     case "svelte": {
       componentContent = `<script>\n/**\n * @module ${name}\n * @description ${name} component\n */\nlet { children } = $props();\n</script>\n\n<article data-part="${name.toLowerCase()}">\n  {@render children()}\n</article>\n`;
       files.push({ path: `${componentFilePath}.svelte`, content: componentContent });
       break;
     }
+
     case "angular": {
       componentContent = `import { Component } from '@angular/core';\n\n/**\n * @module ${name}\n * @description ${name} component\n */\n@Component({\n  selector: '${tag}',\n  standalone: true,\n  template: \`<article data-part="${name.toLowerCase()}"><ng-content /></article>\`,\n})\nexport class ${name} {}\n`;
       files.push({ path: `${componentFilePath}.ts`, content: componentContent });
       break;
     }
+
     case "astro": {
       componentContent = `---\n/**\n * @module ${name}\n * @description ${name} component\n */\n---\n<article data-part="${name.toLowerCase()}">\n  <slot />\n</article>\n`;
       files.push({ path: `${componentFilePath}.astro`, content: componentContent });
       break;
     }
+
     case "vanilla":
     default: {
       componentContent = `/**\n * @module ${name}\n * @description ${name} component\n */\n\nexport class ${name} extends HTMLElement {\n  connectedCallback() {\n    this.innerHTML = \`<article data-part="${name.toLowerCase()}"></article>\`;\n  }\n}\n\ncustomElements.define("${tag}", ${name});\n`;

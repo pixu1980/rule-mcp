@@ -89,6 +89,7 @@ const DEFAULTS = Object.freeze({
  */
 export function parseHandoffOptions(raw) {
   const result = { ...DEFAULTS };
+
   if (!raw) {
     return result;
   }
@@ -97,6 +98,7 @@ export function parseHandoffOptions(raw) {
     if (!token) {
       continue;
     }
+
     switch (token) {
       case "handoff":
       case "close-session": {
@@ -141,9 +143,11 @@ export function parseHandoffOptions(raw) {
       }
       default: {
         const max = /^max=(\d+)$/.exec(token);
+
         if (max) {
           result.maxTokens = parseInt(max[1], 10);
         }
+
         break; // unknown token: ignore
       }
     }

@@ -2,7 +2,7 @@
  * @module server
  *
  * MCP Server bootstrap using @modelcontextprotocol/sdk.
- * Replaces the old hand-rolled src/mcp/protocol.js + src/mcp/stdio.js.
+ * Replaces the hand-rolled src/mcp/protocol.js + src/mcp/stdio.js.
  *
  * Creates a Server instance, registers tool/resource/prompt handlers
  * that delegate to the existing tool registry and core modules,
@@ -85,14 +85,17 @@ export function createServer() {
 
   server.setRequestHandler(ListResourcesRequestSchema, async () => {
     const resources = listResources();
+
     return { resources };
   });
 
   server.setRequestHandler(ReadResourceRequestSchema, async (request) => {
     const { uri } = request.params;
+
     if (!uri) {
       throw new McpError(ErrorCode.InvalidParams, "Resource URI is required");
     }
+
     return readResource(uri);
   });
 
@@ -110,6 +113,7 @@ export function createServer() {
       const promptName = ref.name;
       const complete = (values, prefix = argument.value ?? "") => {
         const filtered = values.filter((v) => v.startsWith(prefix));
+
         return { completion: { values: filtered.slice(0, 10), total: filtered.length, hasMore: filtered.length > 10 } };
       };
 
@@ -119,6 +123,7 @@ export function createServer() {
         // Token-aware completion: complete the last token of a space-separated list.
         const value = argument.value ?? "";
         const last = value.split(/\s+/).pop() ?? "";
+
         return complete(HANDOFF_COMPLETIONS, last);
       }
     }
@@ -134,13 +139,17 @@ export function createServer() {
 
   server.setRequestHandler(GetPromptRequestSchema, async (request) => {
     const { name } = request.params;
+
     if (!name) {
       throw new McpError(ErrorCode.InvalidParams, "Prompt name is required");
     }
+
     const prompt = getPrompt(name, request.params.arguments ?? {});
+
     if (!prompt) {
       throw new McpError(ErrorCode.InvalidParams, `Unknown prompt: ${name}`);
     }
+
     return { description: prompt.description, messages: prompt.messages };
   });
 
@@ -157,8 +166,14 @@ export function createServer() {
  * @returns {Promise<void>}
  */
 export async function startServer() {
+  // A long-lived server shared by every client gets guarded checks: one
+  // runaway regex must not freeze the daemon (hardening F-S1). The CLI
+  // one-shot keeps running checks inline - a hung CLI is ctrl-C.
+  const { enableGuardedChecks } = await import("./core/guardrails-guarded.js");
+  enableGuardedChecks();
   const server = createServer();
   const transport = new StdioServerTransport();
+
   await server.connect(transport);
 }
 
@@ -175,5 +190,6 @@ export async function stopServer() {
   } catch {
     // ignore close errors
   }
+
   serverInstance = null;
 }

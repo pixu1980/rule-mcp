@@ -44,6 +44,7 @@ export async function withTimeout(promiseOrFn, ms, label = "operation") {
   });
   try {
     const value = typeof promiseOrFn === "function" ? promiseOrFn() : promiseOrFn;
+
     return await Promise.race([value, timeoutPromise]);
   } finally {
     clearTimeout(timer);
@@ -60,6 +61,7 @@ export async function withTimeout(promiseOrFn, ms, label = "operation") {
 export async function trySafe(fn) {
   try {
     const value = typeof fn === "function" ? await fn() : await fn;
+
     return { ok: true, value };
   } catch (error) {
     return { ok: false, error: error?.message ?? String(error ?? "Unknown error") };
@@ -80,7 +82,6 @@ export function wrapRequestHandler(handler, options = {}) {
 
   return async (request, res) => {
     // Track if the handler was aborted (timeout)
-    // eslint-disable-next-line no-unused-vars
     let isAborted = false;
 
     // On timeout or error, destroy the request socket to unblock the handler

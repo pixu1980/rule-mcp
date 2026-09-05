@@ -66,12 +66,15 @@ export function detectPlatform() {
   if (IS_MACOS) {
     return "macos";
   }
+
   if (IS_LINUX) {
     return "linux";
   }
+
   if (IS_WINDOWS) {
     return "windows";
   }
+
   return "unknown";
 }
 
@@ -99,6 +102,11 @@ function rotateDaemonLog(logFile) {
   }
 }
 
+/**
+ * Spawn the resident daemon process.
+ *
+ * @param {{ dryRun?: boolean }} [opts]
+ */
 export function startDaemonProcess({ dryRun = false } = {}) {
   const p = getRuntimePaths();
   mkdirSync(p.stateDir, { recursive: true });
@@ -108,6 +116,7 @@ export function startDaemonProcess({ dryRun = false } = {}) {
     const pid = Number(readFileSync(p.pidFile, "utf8").trim());
     try {
       process.kill(pid, 0);
+
       return { ok: true, pid, action: "already-running" };
     } catch {
       rmSync(p.pidFile, { force: true });
@@ -137,6 +146,7 @@ export function startDaemonProcess({ dryRun = false } = {}) {
       }
     });
   }
+
   if (child.stderr) {
     child.stderr.on("data", (data) => {
       try {
@@ -149,6 +159,7 @@ export function startDaemonProcess({ dryRun = false } = {}) {
 
   child.unref();
   writeFileSync(p.pidFile, String(child.pid));
+
   return { ok: true, pid: child.pid, action: "started" };
 }
 
@@ -160,6 +171,7 @@ export function startDaemonProcess({ dryRun = false } = {}) {
  */
 export function stopDaemonProcess({ dryRun = false } = {}) {
   const p = getRuntimePaths();
+
   if (!existsSync(p.pidFile)) {
     return { ok: true, action: "not-running" };
   }
@@ -174,6 +186,7 @@ export function stopDaemonProcess({ dryRun = false } = {}) {
   } catch {
     /* ok */
   }
+
   rmSync(p.pidFile, { force: true });
 
   return { ok: true, action: "stopped" };
@@ -237,6 +250,7 @@ export function installDaemonService({ dryRun = false } = {}) {
     default: {
       // Fallback: start process-based daemon
       const proc = startDaemonProcess({ dryRun });
+
       return { ok: proc.ok, platform: "unknown", service: "process", result: proc };
     }
   }
@@ -268,6 +282,7 @@ export function uninstallDaemonService({ dryRun = false } = {}) {
     default: {
       // Fallback: stop process-based daemon
       const proc = stopDaemonProcess({ dryRun });
+
       return { ok: proc.ok, platform: "unknown", service: "process", result: proc };
     }
   }
@@ -294,6 +309,7 @@ export function checkDaemonService() {
   switch (platform) {
     case "macos": {
       const ls = checkLaunchAgent();
+
       return {
         platform,
         service: "launchd",
@@ -306,6 +322,7 @@ export function checkDaemonService() {
     }
     case "linux": {
       const sd = checkSystemdService();
+
       return {
         platform,
         service: "systemd",
@@ -318,6 +335,7 @@ export function checkDaemonService() {
     }
     case "windows": {
       const ws = checkWindowsService();
+
       return {
         platform,
         service: "windows-service",
@@ -367,9 +385,11 @@ export function formatDaemonStatus() {
   if (status.platform === "macos" && status.details.launchAgent) {
     lines.push(`Plist:      ${status.details.launchAgent.path}`);
   }
+
   if (status.platform === "linux" && status.details.systemd) {
     lines.push(`Unit:       ${status.details.systemd.path}`);
   }
+
   if (status.platform === "windows" && status.details.windowsService) {
     lines.push(`Service:    ${status.details.windowsService.name}`);
   }
@@ -387,6 +407,7 @@ export function formatDaemonStatus() {
  */
 export function getServiceFilePath() {
   const platform = detectPlatform();
+
   switch (platform) {
     case "macos": {
       return LAUNCH_AGENT_PATH;
@@ -407,6 +428,7 @@ export function getServiceFilePath() {
  */
 export function getServiceName() {
   const platform = detectPlatform();
+
   switch (platform) {
     case "macos": {
       return LAUNCH_AGENT_LABEL;

@@ -1,6 +1,43 @@
 // Auto-split from src/core/guardrail-defs.js - see ./index.js
 import { extractRealCSS } from "./util.js";
 
+/** Mask string literals, template literals and comments so patterns never see quoted code. */
+function maskLiterals(code) {
+  const out = [...code];
+  let quote;
+  let escaped = false;
+
+  for (const [index, char] of out.entries()) {
+    if (quote) {
+      if (escaped) {
+        escaped = false;
+        out[index] = char === "\n" ? "\n" : " ";
+        continue;
+      }
+
+      if (char === "\\") {
+        escaped = true;
+        out[index] = " ";
+        continue;
+      }
+
+      if (char === quote) {
+        quote = undefined;
+        continue;
+      }
+
+      out[index] = char === "\n" ? "\n" : " ";
+      continue;
+    }
+
+    if (char === "'" || char === '"' || char === "`") {
+      quote = char;
+    }
+  }
+
+  return out.join("");
+}
+
 export const SHARED_GUARDRAILS = [
   {
     id: "no-css-classes",
@@ -9,11 +46,13 @@ export const SHARED_GUARDRAILS = [
       "CSS must use only element selectors + [data-part] + [data-*] attribute selectors. No .class selectors (including pseudo-classes and combinators).",
     check: (code, context) => {
       const cssBlock = extractRealCSS(code, context);
+
       if (!cssBlock) {
         return { pass: true, note: "No CSS block found, skipping" };
       }
       // Match class selectors including: .foo, .foo:hover, .foo > span, .foo.bar, .foo::before
       const classRules = cssBlock.match(/^\s*\.[a-zA-Z][\w-]*(?:\s*[{,:.\s>+~])/gm);
+
       return {
         pass: !classRules || classRules.length === 0,
         failCount: classRules?.length || 0,
@@ -33,11 +72,14 @@ export const SHARED_GUARDRAILS = [
       // JSX/TSX: style={{...}} (React, Solid)
       const jsxStyle = code.match(/style\s*=\s*\{\{[^}]*\}\}/g) || [];
       inlineAttributes.push(...inlineSingle, ...jsxStyle);
+
       if (inlineAttributes.length === 0) {
         return { pass: true, note: "No inline style attributes found" };
       }
+
       const exceptions = code.match(/accent-option|contextmenu|context-menu/g);
       const effective = inlineAttributes.filter((a) => !exceptions || exceptions.every((e) => !a.includes(e)));
+
       return {
         pass: effective.length === 0,
         failCount: effective.length,
@@ -58,15 +100,19 @@ export const SHARED_GUARDRAILS = [
         /<div[^>]*role="(banner|contentinfo|navigation|main|complementary|form|search|tablist|list|listitem)"/gi,
       ];
       const violations = [];
+
       for (const re of nonSemanticDivPatterns) {
         const m = code.match(re);
+
         if (m) {
           violations.push(...m);
         }
       }
+
       if (violations.length === 0) {
         return { pass: true, note: "No semantic-violating <div> found" };
       }
+
       return {
         pass: false,
         failCount: violations.length,
@@ -87,12 +133,15 @@ export const SHARED_GUARDRAILS = [
       if (context?.fileName && /\.css$/i.test(context.fileName)) {
         return { pass: true, note: "CSS file is external CSS by definition" };
       }
+
       if (framework === "angular" && code.includes("styleUrls")) {
         return { pass: true, note: "Angular styleUrls OK" };
       }
+
       if (framework === "angular" && code.includes("@Component") && code.includes(".css")) {
         return { pass: true, note: "Angular external CSS via component styles" };
       }
+
       if (framework === "svelte" && (/import\s+['"].*\.css['"]/.test(code) || code.includes("<style>"))) {
         return { pass: true, note: "Svelte CSS import or scoped style OK" };
       }
@@ -100,13 +149,17 @@ export const SHARED_GUARDRAILS = [
       if ((framework === "react" || framework === "solid") && /import\s+.*['"].*\.css['"]/.test(code)) {
         return { pass: true, note: "CSS import or CSS Modules OK" };
       }
+
       if (code.includes("adoptedStyleSheets") && code.includes("CSSStyleSheet")) {
         return { pass: true, note: "adoptedStyleSheets OK" };
       }
+
       const hasCssContent = extractRealCSS(code, context);
+
       if (!hasCssContent) {
         return { pass: true, note: "No CSS content found, skipping" };
       }
+
       return {
         pass: false,
         failCount: 1,
@@ -125,14 +178,20 @@ export const SHARED_GUARDRAILS = [
         context?.fileName === "index.ts" ||
         context?.fileName === "index.jsx" ||
         context?.fileName === "index.tsx";
+
       if (isBarrel) {
-        const hasBarrelExport = code.includes("export {") || code.includes("export * from");
+        // A barrel states a public API; re-exporting is one way to do it, and
+        // exporting the symbols directly is another. Demanding the first shape
+        // failed every entry point in this repository (finding F-A1).
+        const hasBarrelExport = /\bexport\s+(\{|\*|default|async\s+function|function|const|let|var|class)/.test(code);
+
         return {
           pass: hasBarrelExport,
           failCount: hasBarrelExport ? 0 : 1,
           suggestion: "Barrel files (index.js) must re-export: export { ComponentName } from './_ComponentName.js';",
         };
       }
+
       return { pass: true, note: "Not a barrel file, skipping" };
     },
   },
@@ -144,12 +203,16 @@ export const SHARED_GUARDRAILS = [
       if (!context?.fileName) {
         return { pass: true, note: "No filename context" };
       }
+
       const name = context.fileName;
       const isComponent = context.isComponent;
+
       if (!isComponent) {
         return { pass: true, note: "Not a component file" };
       }
+
       const isValid = /^_[A-Z][a-zA-Z0-9]*\.\w+$/.test(name);
+
       return {
         pass: isValid,
         failCount: isValid ? 0 : 1,
@@ -161,13 +224,19 @@ export const SHARED_GUARDRAILS = [
     id: "data-part-naming",
     label: "data-part attribute for child elements",
     description: 'Component child elements with semantic roles must use data-part="role" attributes.',
-    check: (code) => {
+    check: (rawCode) => {
+      // Markup inside a string is a sample a generator emits, not markup this
+      // file renders: a template catalog was being told to add data-part to
+      // the examples it quotes (finding F-A1).
+      const code = maskLiterals(rawCode);
       const hasDataPart = code.includes('data-part="');
       const hasChildren =
         code.includes("<div") || code.includes("<section") || code.includes("<header") || code.includes("<nav");
+
       if (!hasChildren) {
         return { pass: true, note: "No child elements found" };
       }
+
       return {
         pass: hasDataPart,
         failCount: hasDataPart ? 0 : 1,
@@ -183,6 +252,7 @@ export const SHARED_GUARDRAILS = [
       "Every JS/TS file must have JSDoc on all exported functions, classes, constants, and types. Module-level JSDoc recommended.",
     check: (code, context) => {
       const fileName = context?.fileName || "";
+
       if (fileName === "index.js" || fileName === "index.ts") {
         return { pass: true, note: "Barrel file, skipping JSDoc check" };
       }
@@ -196,16 +266,29 @@ export const SHARED_GUARDRAILS = [
       ];
 
       const missingDocs = [];
+      const scannable = maskLiterals(code);
+
       for (const pattern of exportPatterns) {
         const re = new RegExp(pattern.source, "g");
         let match;
-        while ((match = re.exec(code)) !== null) {
+
+        while ((match = re.exec(scannable)) !== null) {
           const symbol = match.at(-1) || match[2] || "";
+
           if (!symbol) {
             continue;
           }
-          const before = code.slice(Math.max(0, match.index - 200), match.index);
-          if (!before.includes("/**")) {
+          // Adjacency, not a fixed window: a JSDoc block longer than the
+          // window used to read as "missing", which failed every documented
+          // export in this repository (finding F-A1).
+          const before = scannable.slice(0, match.index).split("\n");
+          let cursor = before.length - 1;
+
+          while (cursor >= 0 && (before[cursor].trim() === "" || before[cursor].trimStart().startsWith("@"))) {
+            cursor -= 1;
+          }
+
+          if (!before[cursor]?.trim().endsWith("*/")) {
             missingDocs.push(symbol);
           }
         }
@@ -214,6 +297,7 @@ export const SHARED_GUARDRAILS = [
       if (missingDocs.length === 0) {
         return { pass: true, note: "All exported symbols have JSDoc" };
       }
+
       return {
         pass: false,
         failCount: missingDocs.length,
@@ -235,7 +319,13 @@ export const SHARED_GUARDRAILS = [
       if (!isCssFile && !hasCssBlock) {
         return { pass: true, note: "Not a CSS file and no CSS block detected, skipping" };
       }
-      const hasCSSRules = /[\w-]+\s*\{/.test(code);
+      // Single char before the brace: `[\w-]+` re-scans the whole run at every
+      // start position on brace-less input (quadratic on a long line).
+      //
+      // `]` and `)` belong in that class: `[data-part="card"] {` is the
+      // selector this styleguide asks everyone to write, and a probe that
+      // accepts only word characters skips every stylesheet that follows it.
+      const hasCSSRules = /[\w)\]-]\s*\{/.test(code);
       if (!hasCSSRules) {
         return { pass: true, note: "No CSS rules detected, skipping" };
       }
@@ -284,7 +374,29 @@ export const SHARED_GUARDRAILS = [
       const hasAxeBuilder = /new\s+AxeBuilder/.test(code) || /AxeBuilder/.test(code);
       const hasViolationCheck = /\.violations\s*\.toEqual/.test(code) || /expect\(.*\.violations\)/.test(code);
       const hasPlaywright = /from\s+['"]@playwright\/test['"]/.test(code);
-      const hasPlaywrightConfig = /playwright\.config/.test(code);
+      // Read from code, not from prose: a prompt registry that mentions
+      // "playwright.config" in a description is not a Playwright project.
+      const hasPlaywrightConfig = /playwright\.config/.test(
+        maskLiterals(code)
+          .replaceAll(/\/\*[\s\S]*?\*\//g, "")
+          .replaceAll(/(?:^|[^:])\/\/.*$/gm, ""),
+      );
+
+      // A module with no markup and no component role cannot carry a UI test:
+      // asking a telemetry module for a Playwright import is noise, and noise
+      // is how a rule teaches people to stop reading its output (F-A1).
+      // Comments are not markup: a JSDoc `{ReturnType<typeof f>}` used to read
+      // as a UI and pulled a Playwright requirement into a prompt registry.
+      const codeOnly = maskLiterals(code)
+        .replaceAll(/\/\*[\s\S]*?\*\//g, "")
+        .replaceAll(/(?:^|[^:])\/\/.*$/gm, "");
+      const looksLikeUi =
+        context?.isComponent === true ||
+        /<[A-Za-z][^>]*>/.test(codeOnly) ||
+        /\.(jsx|tsx|vue|svelte)$/.test(context?.fileName ?? "");
+      if (!isTestFile && !looksLikeUi && !hasPlaywrightConfig) {
+        return { pass: true, note: "No UI surface in this file, skipping" };
+      }
 
       const details = [];
       if (!hasPlaywright && !isTestFile) {
@@ -302,6 +414,7 @@ export const SHARED_GUARDRAILS = [
 
       if (context?.mode === "scaffold" || context?.fileName === "playwright.config.js") {
         const isConfigValid = hasPlaywrightConfig || (hasPlaywright && hasAxeImport);
+
         return {
           pass: isConfigValid,
           failCount: isConfigValid ? 0 : 1,
@@ -313,6 +426,7 @@ export const SHARED_GUARDRAILS = [
 
       if (isTestFile || hasPlaywright || hasAxeImport) {
         const failCount = details.length;
+
         return {
           pass: failCount === 0,
           failCount,
@@ -338,6 +452,7 @@ export const SHARED_GUARDRAILS = [
         /throw\s+new\s+Error\s*\(\s*["'](?:not implemented|todo)/gi,
       ];
       const violations = patterns.flatMap((pattern) => code.match(pattern) || []);
+
       return {
         pass: violations.length === 0,
         failCount: violations.length,
@@ -353,6 +468,7 @@ export const SHARED_GUARDRAILS = [
     check: (code) => {
       const patterns = [/@ts-ignore/g, /eslint-disable/g, /biome-ignore/g, /catch\s*(?:\([^)]*\))?\s*\{\s*\}/g];
       const violations = patterns.flatMap((pattern) => code.match(pattern) || []);
+
       return {
         pass: violations.length === 0,
         failCount: violations.length,
@@ -370,6 +486,7 @@ export const SHARED_GUARDRAILS = [
       if (!Array.isArray(context?.allowedDependencies)) {
         return { pass: true, note: "No manifest dependency context supplied, skipping" };
       }
+
       const allowed = new Set(context.allowedDependencies);
       const specifiers = [
         ...code.matchAll(/(?:import|export)\s+(?:[\s\S]*?\s+from\s+)?["']([^"']+)["']/g),
@@ -379,6 +496,7 @@ export const SHARED_GUARDRAILS = [
         .filter((name) => !name.startsWith(".") && !name.startsWith("/") && !name.startsWith("node:"))
         .map((name) => (name.startsWith("@") ? name.split("/").slice(0, 2).join("/") : name.split("/", 1)[0]));
       const unknown = [...new Set(packages.filter((name) => !allowed.has(name)))];
+
       return {
         pass: unknown.length === 0,
         failCount: unknown.length,

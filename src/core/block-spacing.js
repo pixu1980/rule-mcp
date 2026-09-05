@@ -6,7 +6,7 @@
 //    Case 2 - block at END of parent   → blank line ABOVE only
 //    Case 3 - block in middle          → blank line ABOVE AND BELOW
 //
-//  A "block" is any {…} containing ≥2 lines of code.
+//  A "block" is any {...} containing ≥2 lines of code.
 //  Runs after Prettier so indentation is canonical.
 //  ═══════════════════════════════════════════════════════════════════════════════
 
@@ -17,12 +17,13 @@ import { readFileSync, writeFileSync } from "node:fs";
  */
 function indentOf(line) {
   const m = line.match(/^(\s*)/);
+
   return m ? m[1] : "";
 }
 
 /**
  * Scan an array of lines and return the line numbers (0-indexed)
- * that are block boundaries: `if () {`, `}`, etc.
+ * that are block boundaries: an `if` opener and its closing brace, etc.
  */
 function findBlocks(lines) {
   const blocks = [];
@@ -30,7 +31,6 @@ function findBlocks(lines) {
 
   for (let index = 0; index < lines.length; index++) {
     const line = lines[index];
-    // eslint-disable-next-line no-unused-vars
     const trimmed = line.trim();
 
     // Opening brace (not including object literals like { key: val })
@@ -82,6 +82,7 @@ function classifyBlock(block, allBlocks, lines) {
   // Find parent block: the nearest ancestor whose openLine < block.openLine
   // and closeLine > block.closeLine
   let parent = null;
+
   for (const other of allBlocks) {
     if (
       other.openLine < block.openLine &&
@@ -98,6 +99,7 @@ function classifyBlock(block, allBlocks, lines) {
 
   // Check if block is at start of parent
   let isAtStart = true;
+
   for (let index = parent.openLine + 1; index < block.openLine; index++) {
     if (
       lines[index].trim() !== "" &&
@@ -112,6 +114,7 @@ function classifyBlock(block, allBlocks, lines) {
 
   // Check if block is at end of parent
   let isAtEnd = true;
+
   for (let index = block.closeLine + 1; index < parent.closeLine; index++) {
     if (
       lines[index].trim() !== "" &&
@@ -130,9 +133,11 @@ function classifyBlock(block, allBlocks, lines) {
   if (isAtStart) {
     return "start";
   }
+
   if (isAtEnd) {
     return "end";
   }
+
   return "middle";
 }
 
@@ -178,6 +183,7 @@ export function fixBlockSpacing(filePath) {
           other.openLine++;
           other.closeLine++;
         }
+
         block.closeLine++; // our block's close also moved
       }
     }
@@ -203,6 +209,7 @@ export function fixBlockSpacing(filePath) {
       ) {
         // Insert blank line after the block
         lines.splice(block.closeLine + 1, 0, "");
+
         for (const other of blocks) {
           if (!(other.openLine > block.closeLine)) {
             continue;
@@ -220,6 +227,7 @@ export function fixBlockSpacing(filePath) {
   for (let index = lines.length - 1; index >= 0; index--) {
     const current = lines[index].trim();
     const next = index + 1 < lines.length ? lines[index + 1].trim() : "";
+
     if (next === "};") {
       continue;
     } // skip - handled by block rules
@@ -240,8 +248,10 @@ export function fixBlockSpacing(filePath) {
 
   if (result !== orig) {
     writeFileSync(filePath, result, "utf8");
+
     return true;
   }
+
   return false;
 }
 
@@ -250,6 +260,7 @@ export function fixBlockSpacing(filePath) {
  */
 export function fixBlockSpacingOnFiles(files) {
   let count = 0;
+
   for (const file of files) {
     try {
       if (fixBlockSpacing(file)) {
@@ -259,5 +270,6 @@ export function fixBlockSpacingOnFiles(files) {
       // skip files that can't be read/written
     }
   }
+
   return count;
 }

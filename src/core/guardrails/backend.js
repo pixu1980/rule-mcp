@@ -1,4 +1,5 @@
 // Auto-split from src/core/guardrail-defs.js - see ./index.js
+/** The backend guardrail family. */
 export const BACKEND_GUARDRAILS = [
   {
     id: "sql-injection",
@@ -6,29 +7,33 @@ export const BACKEND_GUARDRAILS = [
     description:
       "All SQL queries must use parameterized placeholders ($1, ?, :name). No string concatenation with user input.",
     check: (code) => {
+      // Any receiver, not only one called `db`: this project's own naming rules
+      // would call it `database` or `pool`, and a rule that misses those is a
+      // rule that passes the code most likely to be written here.
+      // The receiver is not part of the pattern - `.query(` is the anchor, so a
+      // query on `database` or `pool` is caught as readily as one on `db`. Every
+      // quantifier is bounded: an unbounded scan from every position in a long
+      // line is the backtracking the 1.1 corpus exists to catch.
       const concatPatterns = [
-        /db\.query\(["']SELECT[^"']*["']\s*\+\s*\w+/gi,
-        /db\.query\(["']INSERT[^"']*["']\s*\+\s*\w+/gi,
-        /db\.query\(["']UPDATE[^"']*["']\s*\+\s*\w+/gi,
-        /db\.query\(["']DELETE[^"']*["']\s*\+\s*\w+/gi,
-        /db\.query\(`SELECT[^`]*\${/gi,
-        /db\.query\(`INSERT[^`]*\${/gi,
-        /db\.query\(`UPDATE[^`]*\${/gi,
-        /db\.query\(`DELETE[^`]*\${/gi,
-        /\.query\(["']SELECT.*["']\s*\+\s*req\./gi,
-        /\.query\(["']SELECT.*["']\s*\+\s*ctx\./gi,
+        /\.(?:query|execute)\(["'](?:SELECT|INSERT|UPDATE|DELETE)[^"']{0,200}["'][\t ]{0,4}\+[\t ]{0,4}[\w.]{1,64}/gi,
+        /\.(?:query|execute)\(`(?:SELECT|INSERT|UPDATE|DELETE)[^`]{0,200}\${/gi,
       ];
       const violations = [];
+
       for (const re of concatPatterns) {
         const m = code.match(re);
+
         if (m) {
           violations.push(...m);
         }
       }
+
       const hasQuery = /\.query\(|\.execute\(|Model\.find/i.test(code);
+
       if (!hasQuery) {
         return { pass: true, note: "No SQL queries found, skipping" };
       }
+
       return {
         pass: violations.length === 0,
         failCount: violations.length,
@@ -43,20 +48,24 @@ export const BACKEND_GUARDRAILS = [
     label: "No internal error details in responses",
     description: "Production error responses must not expose stack traces or internal error messages.",
     check: (code) => {
+      // The receiver is whatever the handler called it: `res`, `response`, `reply`.
+      // Same shape as sql-injection above: `.json(` is the anchor rather than the
+      // name the handler gave its response, and the spans are bounded.
       const patterns = [
-        /res\.(?:status|json|send)\(.*err\.stack/gi,
-        /res\.(?:status|json|send)\(.*error\.stack/gi,
-        /\.json\(\{\s*error:\s*err\.message/gi,
-        /\.json\(\{\s*error:\s*e\.message/gi,
-        /\.send\(err\.message\)/gi,
+        /\.(?:status|json|send)\([^;\n]{0,200}\b(?:err|error|e)\.stack/gi,
+        /\.json\(\{[\t ]{0,4}error:[\t ]{0,4}(?:err|error|e)\.message/gi,
+        /\.send\((?:err|error|e)\.message\)/gi,
       ];
       const violations = [];
+
       for (const re of patterns) {
         const m = code.match(re);
+
         if (m) {
           violations.push(...m);
         }
       }
+
       return {
         pass: violations.length === 0,
         failCount: violations.length,
@@ -72,13 +81,16 @@ export const BACKEND_GUARDRAILS = [
     description: "Request body and params must be validated (Zod, Joi, class-validator).",
     check: (code) => {
       const hasInput = /req\.body|req\.params|req\.query|request\.body|@Body\(\)|@Param\(\)|@Query\(\)/i.test(code);
+
       if (!hasInput) {
         return { pass: true, note: "No request input detected, skipping" };
       }
+
       const hasValidation =
         /z\.(?:object|string|number|boolean)|\.parse\(|\.safeParse\(|Joi\.(?:object|string)|class-validator|@Validate|express-validator/i.test(
           code,
         );
+
       return {
         pass: hasValidation,
         failCount: hasValidation ? 0 : 1,
@@ -92,11 +104,17 @@ export const BACKEND_GUARDRAILS = [
     label: "CORS configured with explicit origins",
     description: "CORS must not use wildcard origin (*). Specify explicit allowed origins.",
     check: (code) => {
-      const hasCors = /cors\(\)|@fastify\/cors|app\.enableCors/i.test(code);
+      // `cors(` with any arguments, not only the empty call: the wildcard is
+      // almost always written as cors({ origin: "*" }), which the narrower
+      // pattern skipped entirely.
+      const hasCors = /cors\(|@fastify\/cors|app\.enableCors/i.test(code);
+
       if (!hasCors) {
         return { pass: true, note: "CORS not configured, skipping" };
       }
+
       const isCorsWildcard = /origin:\s*["']\*["']/gi.test(code);
+
       return {
         pass: !isCorsWildcard,
         failCount: isCorsWildcard ? 1 : 0,
@@ -114,10 +132,13 @@ export const BACKEND_GUARDRAILS = [
         /app\.(?:listen|get|post|put|delete|patch)/i.test(code) ||
         /createServer/i.test(code) ||
         /bootstrap\(\)/i.test(code);
+
       if (!isServer) {
         return { pass: true, note: "Not a server file, skipping" };
       }
+
       const hasRateLimit = /express-rate-limit|rateLimit\(|@fastify\/rate-limit|ThrottlerModule|@Throttle/i.test(code);
+
       return {
         pass: hasRateLimit,
         failCount: hasRateLimit ? 0 : 1,
@@ -134,10 +155,13 @@ export const BACKEND_GUARDRAILS = [
     check: (code) => {
       const isServer =
         /app\.(?:listen|get|post|use)/i.test(code) || /createServer/i.test(code) || /bootstrap\(\)/i.test(code);
+
       if (!isServer) {
         return { pass: true, note: "Not a server file, skipping" };
       }
+
       const hasHelmet = /helmet\(\)|require\(["']helmet["']\)|@fastify\/helmet|from ["']helmet["']/i.test(code);
+
       return {
         pass: hasHelmet,
         failCount: hasHelmet ? 0 : 1,
