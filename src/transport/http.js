@@ -32,6 +32,7 @@ import { URL } from "node:url";
 import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/streamableHttp.js";
 import { isInitializeRequest } from "@modelcontextprotocol/sdk/types.js";
 import { createServer } from "../server.js";
+import { createAuthRateLimiter } from "./auth-rate-limit.js";
 import { generateSelfSignedCert } from "./cert.js";
 import { wrapRequestHandler, safeJsonParse } from "../utils/sandbox.js";
 import { getOrCreateSseBearerToken } from "./sse-auth.js";
@@ -85,6 +86,9 @@ function handleCors(request, res) {
  *
  * @returns {boolean} true if authorized
  */
+/** Failed-auth rate limiter: 401 below budget, 429 above it (hardening F-S7). */
+const authLimiter = createAuthRateLimiter({});
+
 function checkAuth(request, pathname) {
   if (pathname === "/health") {
     return true;
@@ -153,10 +157,21 @@ async function requestHandler(request, res) {
   const parsedUrl = new URL(request.url ?? "/", `${prototype}://${request.headers.host ?? "localhost"}`);
   const pathname = parsedUrl.pathname;
 
-  // Auth (skipped for /health)
+  // Auth (skipped for /health). Failures are rate-limited per remote address
+  // (hardening F-S7): only failures consume budget, loopback gets a bigger
+  // bucket than the network.
   if (!checkAuth(request, pathname)) {
-    res.writeHead(401, { "Content-Type": "application/json" });
-    res.end(JSON.stringify({ error: "Unauthorized. Provide Authorization: Bearer <token> header." }));
+    const remote = request.socket?.remoteAddress ?? "unknown";
+    const verdict = authLimiter.recordFailure(remote);
+
+    res.writeHead(verdict.limited ? 429 : 401, { "Content-Type": "application/json" });
+    res.end(
+      JSON.stringify({
+        error: verdict.limited
+          ? "Too many failed auth attempts. Wait before retrying."
+          : "Unauthorized. Provide Authorization: Bearer <token> header.",
+      }),
+    );
 
     return;
   }
