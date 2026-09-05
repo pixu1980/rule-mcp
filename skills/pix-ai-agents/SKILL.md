@@ -1,7 +1,7 @@
 ---
-name: pix-ai-agents
+name: pix-galaxy-agents
 description: >
-  Scaffold and maintain AI Agent repositories built on @pix/pix-ai-core.
+  Scaffold and maintain AI Agent repositories built on @pix/pix-galaxy-core.
   Use when creating a new AI agent project, adding tools to an existing agent,
   configuring environment variables, writing tests, setting up seed data, or
   containerizing an agent service. Also covers choosing a retrieval layer:
@@ -16,15 +16,15 @@ metadata:
   version: "1.0"
 ---
 
-# AI Agents app with pix-ai-core
+# AI Agents app with pix-galaxy-core
 
 ## Core dependency
 
-| Field          | Value                                                        |
-| -------------- | ------------------------------------------------------------ |
-| **Package**    | `@pix/pix-ai-core`                                           |
-| **Repository** | `https://gitlab.palmabit.cloud/pix/pix-ai/pix-ai-core`       |
-| **Install**    | `pnpm add @pix/pix-ai-core` (or `pnpm add @pix/pix-ai-core`) |
+| Field          | Value                                                                |
+| -------------- | -------------------------------------------------------------------- |
+| **Package**    | `@pix/pix-galaxy-core`                                               |
+| **Repository** | `https://gitlab.palmabit.cloud/pix/pix-ai/pix-galaxy-core`           |
+| **Install**    | `pnpm add @pix/pix-galaxy-core` (or `pnpm add @pix/pix-galaxy-core`) |
 
 This must be the primary dependency for all AI Agents app repositories.
 
@@ -43,7 +43,7 @@ src/server/
 │   │   └── <name>.agent.ts    # Calls agentRegistry.register() at module level
 │   ├── tools/                 # Tool definitions - one file per tool
 │   │   └── <name>.tool.ts     # Calls toolRegistry.register() at module level
-│   ├── providers/             # LLMProvider implementations using @pix/pix-ai-core
+│   ├── providers/             # LLMProvider implementations using @pix/pix-galaxy-core
 │   │   └── <name>.ts
 │   ├── registries/            # Agent, tool, and provider singletons
 │   ├── memory/                # MemoryProvider implementations + factory
@@ -95,10 +95,10 @@ export type Env = z.infer<typeof envSchema>;
 
 ## Step 3 - Implement a provider
 
-Create `src/server/src/providers/<name>.ts`. Each provider wraps `@pix/pix-ai-core` and implements the `LLMProvider` interface defined in `src/server/src/types.ts`:
+Create `src/server/src/providers/<name>.ts`. Each provider wraps `@pix/pix-galaxy-core` and implements the `LLMProvider` interface defined in `src/server/src/types.ts`:
 
 ```ts
-import { createAgent } from "@pix/pix-ai-core";
+import { createAgent } from "@pix/pix-galaxy-core";
 import type { LLMProvider, Message, LLMResponse } from "../types.js";
 import { env } from "../config/env.js";
 
@@ -148,7 +148,7 @@ Create `src/server/src/index.ts`. It imports all registries (triggering self-reg
 import "./agents/index.js";
 import "./tools/index.js";
 import "./providers/index.js";
-import { AgentRunner } from "@pix/pix-ai-core";
+import { AgentRunner } from "@pix/pix-galaxy-core";
 import { agentRegistry } from "./registries/index.js";
 import { env } from "./config/env.js";
 import pino from "pino";
@@ -181,12 +181,12 @@ Create `seed/run-seed.ts` following the seed policy in `rules/common.md`. The se
 
 ### Unit tests
 
-Mock `@pix/pix-ai-core` to isolate provider and tool logic:
+Mock `@pix/pix-galaxy-core` to isolate provider and tool logic:
 
 ```ts
 import { describe, expect, it, vi } from "vitest";
 
-vi.mock("@pix/pix-ai-core", () => ({
+vi.mock("@pix/pix-galaxy-core", () => ({
   createAgent: vi.fn(() => ({
     chat: vi.fn().mockResolvedValue({ content: "mocked response" }),
   })),

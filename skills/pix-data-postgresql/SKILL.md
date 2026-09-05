@@ -278,6 +278,43 @@ ALTER TABLE app.orders DETACH PARTITION app.orders_2023_01;
 
 ---
 
+### Choosing a partition key, and the hot partition it decides
+
+Partitioning splits a table by a key so that queries touch one piece and old
+pieces can be dropped whole. The key is the whole decision, and it is made once.
+
+Two rules pull against each other:
+
+- **Queries should name the partition.** A filter that includes the partition key
+  reads one partition. A filter that does not reads all of them, which is the
+  same table scan with more planning overhead.
+- **Writes should spread across partitions.** A key that concentrates today's
+  inserts into one piece has created a **hot partition**: one lock, one buffer,
+  one disk, while the rest of the table is idle.
+
+Time is the common key because it satisfies the first rule and fails the second
+in exactly one place, the current period, which is also where every insert
+lands. That is usually acceptable, since the alternative is worse and the
+partition rotates. It stops being acceptable when the write rate alone exceeds
+what one partition can absorb, and then the key becomes time plus something that
+distributes, a tenant or a hash bucket, at the cost of every query having to
+carry both.
+
+Signs the key was wrong, in the order they usually appear:
+
+1. Queries that read every partition, visible as a plan touching all of them
+   rather than one.
+2. Lock contention and buffer pressure concentrated on one child table.
+3. Partitions of wildly different size, which makes maintenance windows
+   unpredictable.
+4. A tenant large enough to be a partition of its own, sitting inside one shared
+   with a thousand small ones.
+
+Retention is the payoff, so design for it: dropping a partition is instant, while
+deleting the same rows is a long transaction that produces dead tuples and a
+vacuum bill. If the plan is to keep data forever, partitioning buys less than it
+costs, and the honest answer may be an index and a bigger machine.
+
 ## 4. JSONB Patterns
 
 ```json

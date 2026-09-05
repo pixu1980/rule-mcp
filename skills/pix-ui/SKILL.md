@@ -28,10 +28,10 @@ validate any visible interface.
 | --------------------------------------- | ------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
 | Visual direction, aesthetics, UI polish | [pix-ui-design-system](../pix-ui-design-system/SKILL.md)      | [pix-styleguide](../pix-styleguide/SKILL.md)                                                           |
 | Framework component implementation      | [pix-frontend](../pix-frontend/SKILL.md) or a framework skill | [pix-ui-design-system](../pix-ui-design-system/SKILL.md), [pix-styleguide](../pix-styleguide/SKILL.md) |
-| Component template generation           | MCP `pix_component`                                           | `pix_check`                                                                                            |
-| Accessibility review                    | [pix-styleguide-a11y](../pix-styleguide-a11y/SKILL.md)        | `pix_check`                                                                                            |
+| Component template generation           | MCP `pix_tool_component`                                      | `pix_tool_check`                                                                                       |
+| Accessibility review                    | [pix-styleguide-a11y](../pix-styleguide-a11y/SKILL.md)        | `pix_tool_check`                                                                                       |
 | CSS architecture                        | [pix-styleguide-css](../pix-styleguide-css/SKILL.md)          | [pix-styleguide-naming](../pix-styleguide-naming/SKILL.md)                                             |
-| File tree and naming                    | [pix-styleguide-naming](../pix-styleguide-naming/SKILL.md)    | MCP `pix_fix`                                                                                          |
+| File tree and naming                    | [pix-styleguide-naming](../pix-styleguide-naming/SKILL.md)    | MCP `pix_tool_fix`                                                                                     |
 
 ## Required workflow
 
@@ -40,8 +40,8 @@ validate any visible interface.
 3. Use `pix-ui-design-system` to define the aesthetic direction.
 4. Use the framework skill (`pix-frontend-react`, `pix-frontend-vue`,
    `pix-frontend-svelte`, etc.) for implementation details.
-5. Generate deterministic templates with `pix_component` when possible.
-6. Validate with `pix_check` before final handoff.
+5. Generate deterministic templates with `pix_tool_component` when possible.
+6. Validate with `pix_tool_check` before final handoff.
 
 ## Non-negotiable UI constraints
 
@@ -63,7 +63,7 @@ validate any visible interface.
 - [ ] Semantic HTML and accessibility requirements are mapped.
 - [ ] CSS selectors avoid classes and inline styles.
 - [ ] Component/file tree follows `pix-styleguide-naming`.
-- [ ] `pix_component` is used where a template exists.
+- [ ] `pix_tool_component` is used where a template exists.
 - [ ] `pix_tool_check` passes or reports known exceptions.
 
 ## See also

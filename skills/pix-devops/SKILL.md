@@ -7,6 +7,7 @@ tags:
   - "ci"
   - "cd"
   - "docker"
+  - "preview"
   - "testing"
   - "observability"
   - "version"
@@ -30,6 +31,7 @@ frameworks: [all]
 
 ```
 Need container setup?                   → pix-devops-docker
+Need a preview app per merge request?   → pix-devops-deploy-preview
 Need CI/CD pipeline?                    → pix-devops-gitlab-ci
 Need production telemetry or SLOs?      → pix-devops-observability
 Need test configuration?                → pix-devops-testing

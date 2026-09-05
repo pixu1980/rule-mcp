@@ -28,7 +28,7 @@ Every ADR follows the [Michael Nygard template](https://github.com/joelparkerhen
 - **Date**: YYYY-MM-DD
 - **Status**: proposed | accepted | deprecated | superseded
 - **Tags**: tag1, tag2
-- **Author**: pix-ai-mcp
+- **Author**: pix-galaxy-mcp
 
 ## Context
 
@@ -66,7 +66,7 @@ What was decided and why.
 }
 ```
 
-### CLI: `pix-ai-mcp adr new <title> [--status]`
+### CLI: `pix-galaxy-mcp adr new <title> [--status]`
 
 ## Directory Structure
 

@@ -32,7 +32,8 @@ git pull origin develop
 git checkout -b feat/<feature-name>
 ```
 
-Follow branch and commit rules from [pix-toolchain-husky](../pix-toolchain-husky/SKILL.md).
+Branch and commit naming are in [pix-toolchain-commits](../pix-toolchain-commits/SKILL.md);
+[pix-toolchain-husky](../pix-toolchain-husky/SKILL.md) is what enforces them.
 
 ## Step 2 - Plan the implementation
 

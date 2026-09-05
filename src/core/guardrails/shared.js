@@ -1,5 +1,5 @@
 // Auto-split from src/core/guardrail-defs.js - see ./index.js
-import { extractRealCSS } from "./util.js";
+import { extractRealCSS, unjustifiedGrids, looksLikeStylesheet } from "./util.js";
 
 /** Mask string literals, template literals and comments so patterns never see quoted code. */
 function maskLiterals(code) {
@@ -37,6 +37,116 @@ function maskLiterals(code) {
 
   return out.join("");
 }
+
+export const SIMPLICITY_GUARDRAILS = [
+  {
+    id: "no-speculative-audit-table",
+    label: "No audit/history table without a consumer",
+    description:
+      "A new audit/history/log/event/archive table that nothing else in the change reads or writes is speculative structure. Covers SQL `CREATE TABLE` and Prisma `model` blocks, in snake_case or PascalCase. Add it when a consumer exists.",
+    check: (code) => {
+      // Name-shape check, not a naming-convention check: the first version of
+      // this rule matched `_events` and silently passed `PaymentWebhookEvent`,
+      // which is exactly the table a real session had to remove ten hours and
+      // one applied migration later. Split on separators AND case boundaries.
+      const suffix =
+        /^(?:audit|audits|history|histories|log|logs|event|events|archive|archives|journal|trail|snapshot|snapshots)$/i;
+      const lastToken = (name) =>
+        name
+          .replaceAll(/["`']/g, "")
+          .split(".")
+          .pop()
+          .split(/[_\s-]+|(?<=[a-z0-9])(?=[A-Z])/)
+          .findLast(Boolean) ?? "";
+      const created = [
+        ...[...code.matchAll(/create\s+table\s+(?:if\s+not\s+exists\s+)?["`']?([\w.]+)["`']?/gi)].map(
+          (match) => match[1],
+        ),
+        ...[...code.matchAll(/^\s*model\s+([A-Za-z_]\w*)\s*\{/gm)].map((match) => match[1]),
+      ].map((name) => name.replaceAll(/["`']/g, "").split(".").pop());
+      const auditLike = [...new Set(created.filter((name) => suffix.test(lastToken(name))))];
+
+      if (auditLike.length === 0) {
+        return { pass: true, note: "No audit-style table created" };
+      }
+
+      const orphans = auditLike.filter((name) => {
+        // Strip the table's own definition - its DDL statements and, for Prisma,
+        // the whole model block - then look for any surviving mention.
+        const ddl = new RegExp(String.raw`create\s+(?:unique\s+)?(?:table|index)[^;]*?\b${name}\b[^;]*;?`, "gi");
+        const model = new RegExp(String.raw`^\s*model\s+${name}\s*\{[\s\S]*?^\}`, "gm");
+
+        return !new RegExp(String.raw`\b${name}\b`, "i").test(code.replace(ddl, " ").replace(model, " "));
+      });
+
+      return {
+        pass: orphans.length === 0,
+        failCount: orphans.length,
+        detail: orphans,
+        suggestion: "Drop the table until something reads or writes it, or show the consumer in the same change.",
+      };
+    },
+  },
+  {
+    id: "no-future-use-code",
+    label: "No code kept for an imagined future",
+    description:
+      'Markers like "for future use", "in case we need", or "just in case" mark code written for a requirement that does not exist yet.',
+    check: (code) => {
+      const markers =
+        code.match(
+          /(?:for future use|for now unused|not used yet|in case we (?:need|want)|might need (?:it|this|them) later|will be needed later|just in case|reserved for future|future-proof(?:ing|ed)?|placeholder for future)/gi,
+        ) || [];
+
+      return {
+        pass: markers.length === 0,
+        failCount: markers.length,
+        detail: [...new Set(markers)].slice(0, 10),
+        suggestion: "Delete the speculative code. Write it when the requirement arrives - version control remembers.",
+      };
+    },
+  },
+  {
+    id: "no-commented-out-code",
+    label: "No implementations parked in comments",
+    description:
+      "Three or more consecutive commented-out lines of code are a parked implementation. Delete them; git keeps the history.",
+    check: (code) => {
+      const codeish =
+        /[;{}]$|=>|^(?:const|let|var|function|class|return|if|for|while|switch|import|export|await|async)\b|^\}/;
+      let run = 0;
+      let longest = 0;
+      let sample = [];
+      let current = [];
+
+      for (const line of code.split("\n")) {
+        const comment = line.match(/^\s*(?:\/\/|#)\s?(.*)$/);
+        const body = comment ? comment[1].trim() : null;
+
+        if (body && codeish.test(body)) {
+          run += 1;
+          current.push(body);
+
+          if (run > longest) {
+            longest = run;
+            sample = [...current];
+          }
+        } else {
+          run = 0;
+          current = [];
+        }
+      }
+
+      return {
+        pass: longest < 3,
+        failCount: longest >= 3 ? longest : 0,
+        detail: longest >= 3 ? sample.slice(0, 5) : [],
+        suggestion:
+          "Delete the commented-out block. If it is a documented alternative, put the reasoning in an ADR instead.",
+      };
+    },
+  },
+];
 
 export const SHARED_GUARDRAILS = [
   {
@@ -132,6 +242,12 @@ export const SHARED_GUARDRAILS = [
       // CSS files are themselves external CSS
       if (context?.fileName && /\.css$/i.test(context.fileName)) {
         return { pass: true, note: "CSS file is external CSS by definition" };
+      }
+      // So is a stylesheet handed over without a name: this rule exists to keep
+      // CSS out of JS and markup, and there is no host document here to inline
+      // it into.
+      if (looksLikeStylesheet(code)) {
+        return { pass: true, note: "A stylesheet is external CSS by definition" };
       }
 
       if (framework === "angular" && code.includes("styleUrls")) {
@@ -506,4 +622,34 @@ export const SHARED_GUARDRAILS = [
       };
     },
   },
+  {
+    id: "css-flex-first",
+    label: "Flex first, grid only when flex cannot do it",
+    description:
+      "display:grid has to earn itself: named template areas, subgrid, explicit item placement or overlap, " +
+      "auto-fit/auto-fill tracks, or a stated `/* grid: why */` reason. Anything a flex row or column can do is flex.",
+    check: (code, context) => {
+      const cssBlock = extractRealCSS(code, context);
+      if (!cssBlock) {
+        return { pass: true, note: "No CSS block found, skipping" };
+      }
+      const offenders = unjustifiedGrids(cssBlock);
+      if (offenders.length === 0) {
+        return { pass: true, note: "Layout is flex, or the grid says why it has to be one" };
+      }
+
+      return {
+        pass: false,
+        failCount: offenders.length,
+        detail: offenders.slice(0, 10),
+        suggestion:
+          "Use flex: `display: flex` with `gap` for a row or column, `flex-wrap: wrap` plus `flex: 1 1 <basis>` on the " +
+          "items for a wrapping set, and `margin-inline-start: auto` to push one item to the end. Keep grid for named " +
+          "areas, subgrid, explicit placement or overlap, and auto-fit tracks - and when it is one of those, say which " +
+          "in a `/* grid: why */` comment above the rule.",
+      };
+    },
+  },
+
+  ...SIMPLICITY_GUARDRAILS,
 ];

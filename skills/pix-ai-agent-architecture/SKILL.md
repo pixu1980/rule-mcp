@@ -1,5 +1,5 @@
 ---
-name: pix-ai-agent-architecture
+name: pix-galaxy-agent-architecture
 description: >-
   Use when building or reviewing an agent, an MCP server, or a tool surface. Covers what actually happens at the API boundary when a tool call happens, why the harness and not the model decides quality, loops against graphs, what MCP does and does not give you, tool granularity and naming, and exposing an application as a tool surface.
 tags:
@@ -16,11 +16,11 @@ tags:
 frameworks: [all]
 ---
 
-# pix-ai-agent-architecture - The harness is the product
+# pix-galaxy-agent-architecture - The harness is the product
 
 ## Purpose
 
-[pix-ai-agents](../pix-ai-agents/SKILL.md) is how to scaffold an agent
+[pix-galaxy-agents](../pix-galaxy-agents/SKILL.md) is how to scaffold an agent
 repository here. This is the architecture underneath: what the loop is, what the
 protocol carries, and which decisions determine whether an agent is any good.
 
@@ -200,8 +200,8 @@ not features:
 
 ## See also
 
-- [pix-ai-agents](../pix-ai-agents/SKILL.md) - scaffolding an agent repository here
-- [pix-ai-context-engineering](../pix-ai-context-engineering/SKILL.md) - the window the loop fills
-- [pix-ai-evals](../pix-ai-evals/SKILL.md) - deciding whether a harness change helped
+- [pix-galaxy-agents](../pix-galaxy-agents/SKILL.md) - scaffolding an agent repository here
+- [pix-galaxy-context-engineering](../pix-galaxy-context-engineering/SKILL.md) - the window the loop fills
+- [pix-galaxy-evals](../pix-galaxy-evals/SKILL.md) - deciding whether a harness change helped
 - [pix-process-ai-sdlc](../pix-process-ai-sdlc/SKILL.md) - where an agent sits in the delivery process
 - [pix-backend-security](../pix-backend-security/SKILL.md) - authorizing the operation rather than the claim

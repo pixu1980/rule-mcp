@@ -8,6 +8,7 @@ import { fileURLToPath } from "node:url";
 import { execSync } from "node:child_process";
 import { getOrCreateSseBearerToken } from "../transport/sse-auth.js";
 import { DEFAULT_SSE_PORT } from "./paths.js";
+import { renderAgentCommandFiles } from "../core/agent-commands.js";
 
 /** Resolve a path relative to the project root (3 levels up from src/cli/). */
 const resolvePath = (relative) => resolve(fileURLToPath(new URL("../../", import.meta.url)), relative);
@@ -33,7 +34,9 @@ const allAgents = [
   "zed", // Zed editor
   "opencode", // OpenCode
   "antigravity", // Antigravity (formerly Windsurf)
-  "windsurf", // Windsurf (legacy name)
+  "windsurf", // Windsurf - deprecated, superseded by Devin
+  "devin", // Devin (Cognition)
+  "pi", // Pi coding agent (pi.dev)
   "kilo", // Kilo CLI
   "kimi", // Moonshot Kimi CLI
   "vibe", // Mistral Vibe
@@ -852,6 +855,23 @@ const uninstallVscodeExtension = ({ dryRun }) => {
 };
 
 /** @param {{ entrypoint: string, dryRun: boolean, global?: boolean, mode?: "stdio"|"daemon"|"sse"|"docker" }} */
+/**
+ * Devin's user-level MCP config.
+ *
+ * Documented at docs.devin.ai as `~/.config/devin/mcp_config.json` on macOS and
+ * Linux, `%APPDATA%\\devin\\mcp_config.json` on Windows. Note the file name is
+ * `mcp_config.json`, not the `mcp.json` most other agents use.
+ *
+ * @returns {string}
+ */
+const devinConfigPath = () => {
+  if (process.platform === "win32") {
+    return join(process.env.APPDATA || join(HOME, "AppData", "Roaming"), "devin", "mcp_config.json");
+  }
+
+  return join(HOME, ".config", "devin", "mcp_config.json");
+};
+
 const installVscode = ({ entrypoint, dryRun, global, mode }) => {
   // The universal installer is user-level. Workspace config is opt-in outside it.
   const globalFile = join(vscodeGlobalDir(), "mcp.json");
@@ -954,6 +974,33 @@ const createGenericInstaller = (name, opts = {}) => {
   };
 };
 
+/**
+ * Devin gets the standard mcpServers config plus the clean slash-command set
+ * rendered as one directory per command (each holding a SKILL.md), because the
+ * devin host invokes commands as /<name> from ~/.config/devin/skills.
+ */
+const installDevin = ({ entrypoint, dryRun, global }) => {
+  const results = [
+    writeText({
+      file: devinConfigPath(),
+      content: upsertJsonServer(readText(devinConfigPath()), commandConfig(entrypoint, { global, agentName: "devin" })),
+      dryRun,
+    }),
+  ];
+  // Devin invokes commands as /<name> from ~/.config/devin/skills: the clean
+  // slash-command set, one directory per command, each holding a SKILL.md.
+  const base = join(HOME, ".config", "devin", "skills");
+
+  for (const { filename, content } of renderAgentCommandFiles("devin")) {
+    results.push(writeText({ file: join(base, filename), content, dryRun }));
+  }
+
+  return results;
+};
+
+/** Agents kept installable for existing users but no longer offered by default. */
+const deprecatedAgents = new Map([["windsurf", "devin"]]);
+
 // ─── Agent registry ─────────────────────────────────────────────────────────
 
 /** Map of agent names to their installer functions. */
@@ -980,6 +1027,10 @@ const installers = {
   droid: createGenericInstaller("droid", { configPath: join(HOME, ".config", "factory", "mcp.json") }),
   kiro: createGenericInstaller("kiro"),
   qwen: createGenericInstaller("qwen"),
+  // Devin reads ~/.config/devin/mcp_config.json (%APPDATA%\devin on Windows)
+  // and uses the standard mcpServers shape; it documents no global
+  // instructions file, so none is written.
+  devin: installDevin,
 
   // IDEs
   vscode: installVscode,
@@ -1229,4 +1280,6 @@ export {
   installers,
   uninstallers,
   vscodeGlobalDir,
+  devinConfigPath,
+  deprecatedAgents,
 };

@@ -116,6 +116,13 @@ src/
 8. Transforms + motion
 9. Behavior (`cursor`, `appearance`)
 
+### Layout Rules
+
+- **Flex first** - `display: flex` is the default container. `display: grid` is
+  for named areas, subgrid, explicit placement or overlap, and auto-fit tracks,
+  and says which in a `/* grid: why */` comment. A two-column row, a toolbar, a
+  wrapping card set and centering are all flex.
+
 ### Selector Rules
 
 - **NO CSS classes** - use only element + attribute selectors
@@ -190,7 +197,7 @@ import "@styles/index.css";
 - [ ] Every `<input>` has `<label for="id">`
 - [ ] All images have `alt` (or `alt=""`)
 - [ ] Focus styles visible (never `outline: none`)
-- [ ] Color contrast ≥ 4.5:1 for text
+- [ ] Color contrast >= 4.5:1 for text
 - [ ] No color-only information
 - [ ] Keyboard navigation works
 - [ ] `lang` attribute on `<html>`

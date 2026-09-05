@@ -21,7 +21,7 @@ frameworks: [all]
 
 - Start with exactly one `# Title` at the top.
 - Follow with a short intro paragraph stating what the document is and who it is for.
-- Use headings in order, do not skip levels (`##` → `###`, never `##` → `####`).
+- Use headings in order, do not skip levels (`##` -> `###`, never `##` -> `####`).
 - Keep sections focused; split long sections into subheadings.
 
 ## Headings

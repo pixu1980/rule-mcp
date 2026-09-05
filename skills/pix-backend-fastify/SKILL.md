@@ -19,7 +19,7 @@ frameworks: [all]
 - **Plugin-based** - everything is a plugin. Encapsulation by design
 - `fastify-plugin` for shared context (DB, auth)
 - Auto-load plugins with `@fastify/autoload`
-- Register order: configuration → database → auth → routes → error handler
+- Register order: configuration -> database -> auth -> routes -> error handler
 
 ```typescript
 const app = fastify({ logger: true });
@@ -55,13 +55,13 @@ const createUserSchema = {
 
 ## Fastify Hooks Lifecycle
 
-- `onRequest` → `preParsing` → `preValidation` → `preHandler` → handler → `preSerialization` → `onSend` → `onResponse`
+- `onRequest` -> `preParsing` -> `preValidation` -> `preHandler` -> handler -> `preSerialization` -> `onSend` -> `onResponse`
 - Auth in `preHandler`, logging in `onResponse`, response transformation in `preSerialization`
 - Use `onError` for centralized error handling
 
 ## Fastify Performance Tuning
 
-- **Fastest Node.js HTTP framework** - 2-3× faster than Express
+- **Fastest Node.js HTTP framework** - 2-3x faster than Express
 - Built-in schema-based serialization (JSON.stringify bypass)
 - Limited middleware - prefer hooks + plugins for encapsulation
 - `@fastify/compress` for response compression

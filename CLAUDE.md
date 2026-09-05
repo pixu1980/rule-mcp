@@ -53,6 +53,7 @@ Available pix-galaxy-mcp tools:
 - pix_tool_process_adr - Architecture Decision Records
 - pix_tool_process_handoff - Context handoff
 - pix_tool_detect - Detect project framework
+- Flex first: layout with display:flex; display:grid only for named areas, subgrid, explicit placement, or auto-fit tracks, justified with /* grid: why */
 - pix://resources - Skill documentation as MCP resources
 
 <!-- /pix-galaxy-mcp-rules -->

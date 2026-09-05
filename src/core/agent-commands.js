@@ -46,7 +46,12 @@ const FORMATS = {
   workflow: { ext: ".md", frontmatter: null, placeholder: null },
   // Gemini CLI (and forks) - TOML with {{args}}
   gemini: { ext: ".toml", frontmatter: "toml", placeholder: "{{args}}" },
+  // Devin - one directory per command, each holding a SKILL.md
+  devin: { ext: "/SKILL.md", frontmatter: "devin", placeholder: null },
 };
+
+/** Devin skills: one directory per command, each holding a SKILL.md. */
+const DEVIN_SKILL = { ext: "/SKILL.md", frontmatter: "devin" };
 
 /** Supported render formats → file extension. */
 export const FORMAT_EXT = Object.fromEntries(Object.entries(FORMATS).map(([format, spec]) => [format, spec.ext]));
@@ -206,6 +211,14 @@ export function renderAgentCommand(command, format) {
   if (spec.frontmatter === "yaml") {
     // Claude Code / Pi / Cursor / Roo / VS Code prompt files all read this shape.
     return ["---", `description: ${quoted(description)}`, `argument-hint: "${argumentHint}"`, "---", body, ""].join(
+      "\n",
+    );
+  }
+
+  if (spec.frontmatter === "devin") {
+    // Devin reads one directory per command, each containing a SKILL.md whose
+    // name field is the slash command.
+    return ["---", `name: /${name}`, `description: ${quoted(description)}`, "---", "", `# ${name}`, "", body, ""].join(
       "\n",
     );
   }
