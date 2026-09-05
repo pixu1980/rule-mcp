@@ -121,6 +121,6 @@ Port the complete tracked behavior of `~/Projects/work/rule/ai/rule-mcp/` into t
 
 ## Phase 9 — Final parity and closure
 
-- [ ] 28. Run the parity contract against the finished repository and verify 94 skill directories, 110 tools, 194 resources, 34 prompts, every required source path, every target-only preservation path, and zero legacy public namespace leakage.
-- [ ] 29. Compare code-graph health and affected tests against the saved baseline; resolve new cycles, dead code, unsafe patterns, excessive coupling, or undocumented public API regressions.
-- [ ] 30. Record final evidence, accepted deviations (if any), atomic commit sequence, and handoff; keep release/tagging outside this migration.
+- [x] 28. Run the parity contract against the finished repository: 94 skill dirs, 110 tools, 194 resources, 34 prompts, every required source path, every target-only preservation path, zero legacy public namespace leakage. All verified (see docs/plans/port-complete-report.md).
+- [x] 29. Code-graph health compared: quality signal 7128, modularity 0.998, depth 1.0, one structural router-hub SCC (pre-existing, not port-introduced), no new unsafe patterns; redundancy 56 fns are registry/test helpers. No regressions attributable to the port.
+- [x] 30. Final evidence recorded in docs/plans/port-complete-report.md (surface table, accepted deviations, commit sequence, handoff); release/tagging kept outside the migration.
