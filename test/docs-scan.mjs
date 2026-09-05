@@ -6,6 +6,7 @@
  * Usage: node test/docs-scan.mjs
  */
 
+import { validateTrio } from "../src/core/review-docs.js";
 import { loadAllSkills } from "../src/core/skills.js";
 import { listTools } from "../src/tools/router.js";
 import { readFileSync, readdirSync } from "node:fs";
@@ -47,4 +48,17 @@ const total = scan("docs");
 console.log(
   total === 0 ? "✅ ALL CLEAN - 0 stale references across live docs/" : "❌ " + total + " stale references found",
 );
-process.exit(total > 0 ? 1 : 0);
+
+// Persona trios are checked here too (personas C.3): a review that lost its
+// audit, a plan whose steps point at findings nobody has open, a document that
+// cannot say when it was written.
+const trio = validateTrio({ projectDir: "." });
+for (const problem of trio) {
+  console.log("TRIO:", problem.file + " " + problem.reason);
+}
+console.log(
+  trio.length === 0
+    ? "✅ TRIO CLEAN - 0 problems in docs/audits, reviews, plans"
+    : "❌ " + trio.length + " trio problems found",
+);
+process.exit(total + trio.length > 0 ? 1 : 0);
