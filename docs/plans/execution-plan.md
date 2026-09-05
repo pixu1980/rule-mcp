@@ -41,7 +41,11 @@ Port the complete tracked behavior of `~/Projects/work/rule/ai/rule-mcp/` into t
   - landed: telemetry-store (JSONL + rollups + purge/drain), telemetry (recordToolCall, prompt opt-out), telemetry-transport (local-only + redactForRemote), telemetry-flight (toFlight/redactFlight/exportFlight/pruneExports); router accounting (measured vs estimated split, reminder/caveman measured at the step)
   - tests: telemetry, flight-recorder (110 checks), flight-redact, flight-exports-retention, token-accounting
   - deferred: process-hygiene integration test -> item 7 (needs serve wiring); SessionRegistry tests -> item 7
-- [ ] 5. Port guarded/worker-thread guardrail execution, input/output bounds, ReDoS protections, self-guardrails, and corpus validation into the target’s modular guardrail architecture.
+- [x] 5. Port guarded/worker-thread guardrail execution, input/output bounds, ReDoS protections, self-guardrails, and corpus validation into the target's modular guardrail architecture.
+  - landed: guardrails-guarded (worker + hard timeout + terminate/respawn, F-S1), guardrails-worker-thread (env-gated slow-check kill switch), input cap 256 KiB refused fast (hardening 0.1), guardrails/quality.js (26 rules: 9 a11y WCAG + 17 quality families), ReDoS linearization of css-comments-required / js-single-line-method / js-for-loop-braces
+  - source quality fixes spliced onto target rules (jsdoc adjacency, scaffolding blank-lines, destructuring no-inline, multi-line const-top, line-oriented if-braces, barrel/data-part, sql-injection/error-exposure/cors-explicit, a11y-test-required exemption, scaffold-npmrc/nvmrc)
+  - self-guardrails: whole src passes rule-styleguide-javascript (blank-line discipline, JSDoc on exports, ASCII typography, eslint-disable removal)
+  - tests: worker/input-cap/false-positives/redos/precision-recall (84/92)/self-guardrails - green, wired into test:foundations
 
 ## Phase 3 — CLI, transport, installer, and operational behavior
 
