@@ -1,10 +1,11 @@
 /**
  * Home-data migration test.
  *
- * A machine that ran the upstream server (or an earlier layout) keeps its
- * state under ~/.pix-galaxy-mcp. migrateHomeData() must adopt it into
- * ~/.pix-galaxy-mcp (state/, data/, projects/) exactly once, non-destructively,
- * so the installation id, the SSE token and the per-project recordings survive.
+ * A machine that ran an earlier layout keeps its state in a legacy home
+ * directory named by PIX_GALAXY_MCP_LEGACY_HOME. migrateHomeData() must adopt
+ * it into ~/.pix-galaxy-mcp (state/, data/, projects/) exactly once,
+ * non-destructively, so the installation id, the SSE token and the per-project
+ * recordings survive.
  */
 import { strict as assert } from "node:assert";
 import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, existsSync, rmSync } from "node:fs";
@@ -13,11 +14,12 @@ import { join } from "node:path";
 import { after, before } from "node:test";
 
 const HOME = mkdtempSync(join(tmpdir(), "pix-home-migrate-"));
-const OLD_HOME = join(HOME, ".pix-galaxy-mcp");
+const OLD_HOME = join(HOME, ".legacy-home");
 
 before(() => {
   process.env.HOME = HOME;
   process.env.PIX_GALAXY_MCP_HOME = join(HOME, ".pix-galaxy-mcp");
+  process.env.PIX_GALAXY_MCP_LEGACY_HOME = OLD_HOME;
   delete process.env.PIX_GALAXY_MCP_STATE_DIR;
 
   // Simulate a previous install.
