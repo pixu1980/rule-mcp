@@ -65,7 +65,10 @@ Port the complete tracked behavior of `~/Projects/work/rule/ai/rule-mcp/` into t
 
 ## Phase 4 — MCP public surface
 
-- [ ] 9. Port source action tools as rule-native tools: plan, plan-docs, compress, accessibility report, stats, usage, and handon.
+- [x] 9. Port source action tools as rule-native tools: plan, plan-docs, compress, accessibility report, stats, usage, and handon.
+  - landed: rule_tool_plan, rule_tool_plan_docs, rule_tool_stats, rule_tool_usage, rule_tool_a11y_report, rule_tool_process_handon registration (compress ported in item 3)
+  - surface: 97 tools; descriptions trimmed, budget raised 20k->21k once with the made-up gap stated (6 tools' schema weight)
+  - tests: handon registration + cache-denylist re-enabled, review-roles surfaces tool half (role prompts -> item 12); README/minimal/skill-surface counts updated
 - [ ] 10. Merge router, gateway, apply, skill, ADR, AI, handoff, update, fix, scaffold, detection, cache, enforcement, annotations, and receipt behavior.
 - [ ] 11. Reach and lock the complete public union of 110 tools, including all 20 source-only mapped tools and all 4 target-only tools.
 - [ ] 12. Reach and lock 34 prompts, retaining `rule-write-tests` and adding the source-only ADR/check/flight/handon/init/plan/update commands with instant help and command generation.
