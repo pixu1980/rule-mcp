@@ -103,20 +103,16 @@ test("handoff command persists the generated handoff and commits it on its own",
   assert.match(body, /next free|next available/i, "must state how the file number is chosen");
 });
 
-test(
-  "the MCP handoff prompt persists the handoff too",
-  { skip: "target has a minimal prompt registry - port prompts separately" },
-  async () => {
-    // Hosts that use the MCP prompt instead of the generated user command must get
-    // the same instruction, or the behaviour depends on the client.
-    const { getPrompt } = await import("../src/prompts/index.js");
-    const text = getPrompt("rule-handoff", {})
-      .messages.map((m) => m.content.text)
-      .join("\n");
-    assert.match(text, /docs\/handoff\//, "prompt must say where the handoff file is written");
-    assert.match(text, /chore\(handoff\)/, "prompt must ask for the chore(handoff) commit");
-  },
-);
+test("the MCP handoff prompt persists the handoff too", async () => {
+  // Hosts that use the MCP prompt instead of the generated user command must get
+  // the same instruction, or the behaviour depends on the client.
+  const { getPrompt } = await import("../src/prompts/index.js");
+  const text = getPrompt("rule-handoff", {})
+    .messages.map((m) => m.content.text)
+    .join("\n");
+  assert.match(text, /docs\/handoff\//, "prompt must say where the handoff file is written");
+  assert.match(text, /chore\(handoff\)/, "prompt must ask for the chore(handoff) commit");
+});
 
 test("renderAgentCommandFiles emits router-first files with the format extension", () => {
   for (const [format, ext] of Object.entries(FORMAT_EXT)) {

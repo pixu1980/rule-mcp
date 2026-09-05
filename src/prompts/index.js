@@ -142,12 +142,12 @@ export function listPrompts() {
     {
       name: "rule-handoff",
       description:
-        "Produce a compressed context handoff (ADR summary + git context) to resume in a new session. Usage: /rule-handoff [options] or /rule-handoff help - no arguments = quick handoff",
+        "Produce a compressed context handoff (ADR summary + git context) to resume in a new session, commiting pending work as scoped Conventional Commits first. Usage: /rule-handoff [options] or /rule-handoff help - no arguments = quick handoff",
       arguments: [
         {
           name: "options",
           description:
-            "Space-separated tokens: handoff | close-session (default: handoff), compress, full | brief | minimal (default: full), no-diff, no-log, no-context, no-adrs, no-roadmap, max=<n> (default: 0), or help. Empty = all defaults.",
+            "Space-separated tokens: handoff | close-session (default: handoff), compress | no-compress (default: compress), full | brief | minimal (default: full), no-diff, no-log, no-context, no-adrs, no-roadmap, max=<n> (default: 0), or help. Empty = all defaults.",
           required: false,
         },
       ],
@@ -391,11 +391,18 @@ export function getPrompt(name, args = {}) {
             `- format=${options.format}\n` +
             `- ${includeFlags}\n` +
             `- maxTokens=${options.maxTokens}\n` +
-            "Run `rule_tool_process_handoff` with EXACTLY these arguments; do not change them.\n" +
+            "Step 1 - Commit pending work FIRST, before running the handoff tool:\n" +
+            "  a. If the working tree has uncommitted changes, group them by concern and stage each group explicitly (pathspecs or `git add -p`).\n" +
+            "  b. Commit each group atomically with Conventional Commits AND a mandatory scope: `type(scope): subject` (e.g. `feat(cli): ...`, `chore(eslint): ...`). The `commit-msg` hook rejects scope-less messages - a scope is never optional.\n" +
+            "  c. Make ONE SEPARATE final commit for decision documents already pending in the tree (ADR, CHANGELOG, docs/): `docs(adr): ...` or `docs(handoff): ...`.\n" +
+            "  d. NEVER push. Leave every commit local for review.\n" +
+            "  e. If the grouping into atomic commits is ambiguous, ask the user how to split before committing.\n" +
+            "Step 2 - Run `rule_tool_process_handoff` with EXACTLY the resolved arguments above; do not change them.\n" +
             "Include the ADR summary (docs/adr) and git context in the output.\n" +
-            "Present the handoff as a paste-ready block for a new session; include the commit-scope convention reminder.\n" +
+            "Step 3 - Persist the handoff: write its text to `docs/handoff/<NN>-<slug>.md` where NN is the next free two-digit number and <slug> is kebab-case (e.g. `13-security-audit-remediation.md`). Open with the branch, the commit range it covers, and the date. Then commit that file ALONE - no other paths - as `chore(handoff): add session handoff <NN>-<slug>`. A handoff that exists only in the chat is lost when the session ends.\n" +
+            "Step 4 - Present the handoff as a paste-ready block for the next session, including the commit-scope convention reminder, the path of the handoff file, and the list of commits just created.\n" +
             "If the resolved arguments are ambiguous, ask the user which parts to include.\n" +
-            "Finish by proposing the next conventional commit message with a mandatory scope for the pending changes.",
+            "Finish by listing the commits just made (or proposing the next conventional commit message with a mandatory scope if nothing needed committing).",
         ),
       };
     }

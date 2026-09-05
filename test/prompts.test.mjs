@@ -110,7 +110,7 @@ test("rule-handoff takes a single free-form options argument", () => {
 test("parseHandoffOptions translates the compact vocabulary", () => {
   const DEFAULTS = {
     mode: "handoff",
-    compress: false,
+    compress: true,
     format: "full",
     includeGitDiff: true,
     includeGitLog: true,
@@ -128,6 +128,7 @@ test("parseHandoffOptions translates the compact vocabulary", () => {
   const c = parseHandoffOptions("compress minimal");
   assert.equal(c.compress, true, "compress token sets compress");
   assert.equal(c.format, "minimal", "minimal token sets format");
+  assert.equal(parseHandoffOptions("no-compress").compress, false, "no-compress token clears compress");
   assert.equal(parseHandoffOptions("brief").format, "brief");
   assert.equal(parseHandoffOptions("full").format, "full");
   assert.equal(parseHandoffOptions("no-diff").includeGitDiff, false);
@@ -166,7 +167,7 @@ test("rule-handoff help returns the usage list as an instant assistant message",
   const text = full.messages[0].content.text;
   assert.match(text, /^Usage: \/rule-handoff/, "help message must start with the usage line");
   assert.match(text, /close-session/, "usage block must list close-session");
-  assert.match(text, /compress minimal/, "usage block must show the compress minimal example");
+  assert.match(text, /no-compress/, "usage block must show a no-compress example");
   assert.match(text, /max=/i, "usage block must list the max token option");
   assert.ok(!/Do NOT call/i.test(text), "help must be pure content, no meta-instruction");
 });

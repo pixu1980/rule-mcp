@@ -9,12 +9,12 @@
  * handler can tell the model exactly which values to pass - no ambiguity.
  *
  * Vocabulary:
- *   handoff | close-session   → mode
- *   compress                  → compress = true
- *   full | brief | minimal    → format
+ *   handoff | close-session     → mode
+ *   compress | no-compress      → compress = true | false (default: compress)
+ *   full | brief | minimal      → format
  *   no-diff | no-log | no-context | no-adrs | no-roadmap → include* = false
- *   max=<n>                   → maxTokens = n
- *   help | --help | -h        → help (print usage, do not run the tool)
+ *   max=<n>                     → maxTokens = n
+ *   help | --help | -h          → help (print usage, do not run the tool)
  */
 
 /** Handoff mode values accepted by the underlying tool. */
@@ -28,6 +28,7 @@ export const HANDOFF_COMPLETIONS = [
   "handoff",
   "close-session",
   "compress",
+  "no-compress",
   "full",
   "brief",
   "minimal",
@@ -44,7 +45,7 @@ export const HANDOFF_COMPLETIONS = [
 export const HANDOFF_USAGE = `Usage: /rule-handoff [options]
 Options (space-separated, all optional):
   handoff | close-session   mode (default: handoff)
-  compress                  aggressively compress the output
+  compress | no-compress    aggressively compress / keep output verbose (default: compress)
   full | brief | minimal    output format (default: full)
   no-diff                   omit the working-tree diff
   no-log                    omit the recent commit log
@@ -55,18 +56,18 @@ Options (space-separated, all optional):
   help                      show this usage list
 
 Examples:
-  /rule-handoff                                  # all defaults → quick handoff
-  /rule-handoff close-session                    # full session close
-  /rule-handoff compress minimal                 # compressed one-line JSON
-  /rule-handoff brief                            # brief format
-  /rule-handoff no-diff                          # handoff without the diff
-  /rule-handoff close-session no-diff no-log     # close without diff/log
-  /rule-handoff compress max=2000                # compressed, token-capped`;
+  /rule-handoff                         # all defaults → quick handoff
+  /rule-handoff close-session           # full session close
+  /rule-handoff no-compress minimal     # verbose, compressed one-line JSON
+  /rule-handoff no-compress brief       # verbose brief format
+  /rule-handoff no-diff                 # handoff without the diff
+  /rule-handoff close-session no-diff no-log  # close without diff/log
+  /rule-handoff no-compress max=2000    # verbose, token-capped`;
 
 /** Default parsed values - identical to the tool's own defaults. */
 const DEFAULTS = Object.freeze({
   mode: "handoff",
-  compress: false,
+  compress: true,
   format: "full",
   includeGitDiff: true,
   includeGitLog: true,
@@ -107,6 +108,10 @@ export function parseHandoffOptions(raw) {
       }
       case "compress": {
         result.compress = true;
+        break;
+      }
+      case "no-compress": {
+        result.compress = false;
         break;
       }
       case "full":
