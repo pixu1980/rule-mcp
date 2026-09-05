@@ -16,12 +16,12 @@ loose ends as open, and all of them closed.
 Four numbers this server reports about itself were wrong, each for its own
 reason, and each is now measured where the work happens:
 
-| Number                  | Was                              | Is                                                       |
-| ----------------------- | -------------------------------- | -------------------------------------------------------- |
-| Reminder overhead       | 3820 tokens, on 30 of 30 calls   | **581** tokens, 7 reminders, cadence configurable        |
-| `savedBySource.caveman` | 0, always                        | **1004** on a 16-call session; the zero was the recorder |
-| `reminderOverhead`      | net of compression, read 0       | **511**, measured across the reminder itself             |
-| `saved.cache`           | 26864 of 27868 "tokens saved"    | **gone from the total**; reported as replayed output     |
+| Number                  | Was                            | Is                                                       |
+| ----------------------- | ------------------------------ | -------------------------------------------------------- |
+| Reminder overhead       | 3820 tokens, on 30 of 30 calls | **581** tokens, 7 reminders, cadence configurable        |
+| `savedBySource.caveman` | 0, always                      | **1004** on a 16-call session; the zero was the recorder |
+| `reminderOverhead`      | net of compression, read 0     | **511**, measured across the reminder itself             |
+| `saved.cache`           | 26864 of 27868 "tokens saved"  | **gone from the total**; reported as replayed output     |
 
 The compression bug is the one worth remembering: `saved.caveman` was booked as
 `core - final`, and `final` is the result **after** the reminder was appended in
@@ -78,16 +78,16 @@ binary - which had silently truncated the audit's own first measurement.
 
 ## New defaults a reader must know
 
-| Default                 | Was                            | Now                                                    | Escape hatch                      |
-| ----------------------- | ------------------------------ | ------------------------------------------------------ | --------------------------------- |
-| Workflow reminder       | every result                   | full once a session, terse every 5th call              | `RULE_MCP_REMINDER_EVERY=1` |
-| Project recording       | `./.rule-mcp/`           | `~/.rule-mcp/projects/<slug>/`                   | `RULE_MCP_STATE_DIR`        |
-| Router command          | `/rule-mcp`              | `/rule`                                             | none, by design (ADR 077)         |
-| Test command            | `tdd` + `write-tests`          | `/rule-tdd` only                                    | none                              |
-| Role layers             | project > user > embedded      | user > embedded                                        | none (ADR 082)                    |
-| ci                      | 76 sequential steps, 118.2s    | one parallel `node --test` plus the scripts, 67.7s     | none                              |
-| Result cache key        | package version                | version plus a signature of `src/`                     | `RULE_MCP_NO_CACHE=1`       |
-| ADR template            | context/decision/consequences  | plus **What would end this**                           | leave `--ends-when` unset         |
+| Default           | Was                           | Now                                                | Escape hatch                      |
+| ----------------- | ----------------------------- | -------------------------------------------------- | --------------------------------- |
+| Workflow reminder | every result                  | full once a session, terse every 5th call          | `RULE_MCP_REMINDER_EVERY=1` |
+| Project recording | `./.rule-mcp/`          | `~/.rule-mcp/projects/<slug>/`               | `RULE_MCP_STATE_DIR`        |
+| Router command    | `/rule-mcp`             | `/rule`                                         | none, by design (ADR 077)         |
+| Test command      | `tdd` + `write-tests`         | `/rule-tdd` only                                | none                              |
+| Role layers       | project > user > embedded     | user > embedded                                    | none (ADR 082)                    |
+| ci                | 76 sequential steps, 118.2s   | one parallel `node --test` plus the scripts, 67.7s | none                              |
+| Result cache key  | package version               | version plus a signature of `src/`                 | `RULE_MCP_NO_CACHE=1`       |
+| ADR template      | context/decision/consequences | plus **What would end this**                       | leave `--ends-when` unset         |
 
 Surface: **108 tools**, **190 resources**, **33 prompts**, **34 commands**,
 **78 ADRs**. The ADR count is files, not numbers: 082 is the highest number and

@@ -225,23 +225,23 @@ graph TD
 
 ## Execution status (2026-09-04)
 
-| Step                           | Status      | Where                                                                                             |
-| ------------------------------ | ----------- | ------------------------------------------------------------------------------------------------- |
-| A.1 registry                   | done        | `src/core/review-roles.js` - 14 roles, 7 active, validation without a new dependency              |
-| A.2 overlay loader             | done        | `src/core/review-roles-overlays.js` - user > embedded since ADR 082, invalid files reported not fatal |
-| A.3 template engine            | done        | `src/core/review-roles-template.js` - byte-stable, contract appended                              |
-| B.1 pix_plan               | done        | `src/tools/plan.js`, overrides + unknown-role listing                                             |
-| B.2 MCP prompts                | done        | one per active role, generated in `listPrompts()`                                                 |
-| B.3 agent commands             | done        | derived from the prompts; the persona commands carry their own body (fetch the role, write the trio) since the generic one only routes |
-| B.4 per-role skills            | deferred    | seven more tools against the tools/list budget for what `pix_plan` already does (ADR 072)     |
-| B.5 roles CLI                  | done        | `rule-mcp roles list|show|new|deprecate` in `src/cli/roles.js`; writes through the validator, embedded catalog never edited |
-| C.1 trio contract              | done        | in the template output                                                                            |
-| C.2 pix_plan_docs helper   | done        | `src/core/review-docs.js` + `pix_plan_docs`; merge, flip, prune and delete are code; the template names it; ADR 075 |
-| C.3 docs gates for the trio    | done        | `validateTrio()` in `src/core/review-docs.js`, wired into `test/docs-scan.mjs`: headers, cross-links, dangling finding ids, plan-outlives-findings |
-| C.4 ADR + docs                 | done        | ADR 072                                                                                           |
-| D.1 project-overlay trust gate | removed     | the project layer it guarded is gone (ADR 082): nothing this server reads comes from a checkout, so the gate has no subject. ADR 076 superseded |
-| D.2 test sweep                 | done        | `test/review-roles.test.mjs`, `test/review-roles-surfaces.test.mjs` in ci                         |
-| D.3 routing evals              | done        | `detectRole()` in the registry + `persona` in the route payload; 14 it/en phrasings and 8 negatives in the corpus |
+| Step                           | Status   | Where                                                                                                                                              |
+| ------------------------------ | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| A.1 registry                   | done     | `src/core/review-roles.js` - 14 roles, 7 active, validation without a new dependency                                                               |
+| A.2 overlay loader             | done     | `src/core/review-roles-overlays.js` - user > embedded since ADR 082, invalid files reported not fatal                                              |
+| A.3 template engine            | done     | `src/core/review-roles-template.js` - byte-stable, contract appended                                                                               |
+| B.1 pix_plan               | done     | `src/tools/plan.js`, overrides + unknown-role listing                                                                                              |
+| B.2 MCP prompts                | done     | one per active role, generated in `listPrompts()`                                                                                                  |
+| B.3 agent commands             | done     | derived from the prompts; the persona commands carry their own body (fetch the role, write the trio) since the generic one only routes             |
+| B.4 per-role skills            | deferred | seven more tools against the tools/list budget for what `pix_plan` already does (ADR 072)                                                      |
+| B.5 roles CLI                  | done     | `rule-mcp roles list                                                                                                                         | show | new | deprecate`in`src/cli/roles.js`; writes through the validator, embedded catalog never edited |
+| C.1 trio contract              | done     | in the template output                                                                                                                             |
+| C.2 pix_plan_docs helper   | done     | `src/core/review-docs.js` + `pix_plan_docs`; merge, flip, prune and delete are code; the template names it; ADR 075                            |
+| C.3 docs gates for the trio    | done     | `validateTrio()` in `src/core/review-docs.js`, wired into `test/docs-scan.mjs`: headers, cross-links, dangling finding ids, plan-outlives-findings |
+| C.4 ADR + docs                 | done     | ADR 072                                                                                                                                            |
+| D.1 project-overlay trust gate | removed  | the project layer it guarded is gone (ADR 082): nothing this server reads comes from a checkout, so the gate has no subject. ADR 076 superseded    |
+| D.2 test sweep                 | done     | `test/review-roles.test.mjs`, `test/review-roles-surfaces.test.mjs` in ci                                                                          |
+| D.3 routing evals              | done     | `detectRole()` in the registry + `persona` in the route payload; 14 it/en phrasings and 8 negatives in the corpus                                  |
 
 **Naming deviation from the contract above**: the prompt and the agent command
 share `rule-plan-<role>`. The command generator derives its set from the

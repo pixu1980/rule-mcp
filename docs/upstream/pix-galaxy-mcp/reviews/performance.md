@@ -6,11 +6,11 @@
 Findings distilled from [the audit](../audits/performance.md). A finding this run no longer reports is
 flipped to resolved and kept one run for visibility, then removed.
 
-| Finding | Severity | Status | Evidence | Summary |
-| --- | --- | --- | --- | --- |
-| PERF-1 | low | resolved | docs/audits/performance.md#suites | Attributed and cut: ci is 118.2s -> 82s by batching, but the floor is now process-hygiene at 25.6s, which starts real processes |
-| PERF-2 | low | resolved | docs/audits/performance.md#startup | The index half is cached (95ms -> 18ms, CLI 0.76s -> 0.28s); the 263ms loadAllSkills spends reading 91 skills is untouched |
-| PERF-3 | low | open | docs/audits/performance.md#guardrails | A guardrail check costs 40ms on a 29KB file, and the self-guardrail suite runs it over every file in src/ |
+| Finding | Severity | Status   | Evidence                              | Summary                                                                                                                         |
+| ------- | -------- | -------- | ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| PERF-1  | low      | resolved | docs/audits/performance.md#suites     | Attributed and cut: ci is 118.2s -> 82s by batching, but the floor is now process-hygiene at 25.6s, which starts real processes |
+| PERF-2  | low      | resolved | docs/audits/performance.md#startup    | The index half is cached (95ms -> 18ms, CLI 0.76s -> 0.28s); the 263ms loadAllSkills spends reading 91 skills is untouched      |
+| PERF-3  | low      | open     | docs/audits/performance.md#guardrails | A guardrail check costs 40ms on a 29KB file, and the self-guardrail suite runs it over every file in src/                       |
 
 ## What changed, and what is left
 

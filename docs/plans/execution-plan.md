@@ -111,10 +111,13 @@ Port the complete tracked behavior of `~/Projects/work/rule/ai/rule-mcp/` into t
 
 ## Phase 8 — Documentation and upstream history
 
-- [ ] 24. Import source ADRs, handoffs, audits, reviews, plans, privacy policy, and threat model under `docs/upstream/rule-mcp/` with source commit and hash provenance.
-- [ ] 25. Maintain bridge ADR 041 as the target decision record; update its status only after the parity contract is green.
-- [ ] 26. Merge current operator/product/engineering/environment docs source-first while preserving target-only architect split, release, modularization, and token-pipeline guidance.
-- [ ] 27. Update README, GETTING_STARTED, SECURITY, CHANGELOG, CLAUDE/AGENTS instructions, diagrams, counts, and command/tool/resource tables to verified runtime values.
+- [x] 24. Import source ADRs, handoffs, audits, reviews, plans, privacy policy, and threat model under `docs/upstream/rule-mcp/` with source commit and hash provenance.
+  - 108 files archived verbatim at commit 12d60a9e0eb312010314e5b800e31cf71663d926; per-file SHA-256 manifest with refresh script (scripts/refresh-upstream-manifest.mjs); docs-scan exempts the archive
+- [x] 25. Maintain bridge ADR 041 as the target decision record; status moved to accepted now the parity contract is green; ADR.md regenerated
+- [x] 26. Merge current operator/product/engineering/environment docs source-first while preserving target-only architect split, release, modularization, and token-pipeline guidance.
+  - 05/06 adopt the upstream bodies (rebranded) with target-only additions retained (flex-first, AUTO_ADR/REMINDER/SKILL_UNIVERSE); 01/02/03 keep the evolved target form which already embeds source-preserved sections
+- [x] 27. Update README, GETTING_STARTED, SECURITY, CHANGELOG, CLAUDE/AGENTS instructions, diagrams, counts, and command/tool/resource tables to verified runtime values.
+  - README summary + surface tables verified at 110/194/34/94; Test Evidence section (307/307); SECURITY.md added (hardening posture + upstream threat model pointer); CHANGELOG generated; GETTING_STARTED/CLAUDE/AGENTS verified
 
 ## Phase 9 — Final parity and closure
 

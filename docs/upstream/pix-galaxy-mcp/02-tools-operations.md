@@ -136,11 +136,11 @@ project or user overlay can replace one by id.
 One run owns three documents with stable per-role paths, so a re-run updates in
 place instead of littering:
 
-| Document                 | Lifecycle                                                                  |
-| ------------------------ | -------------------------------------------------------------------------- |
-| `docs/audits/<role>.md`  | Overwritten - evidence only, a snapshot of now                             |
+| Document                 | Lifecycle                                                                   |
+| ------------------------ | --------------------------------------------------------------------------- |
+| `docs/audits/<role>.md`  | Overwritten - evidence only, a snapshot of now                              |
 | `docs/reviews/<role>.md` | Merged - new findings appended, closed ones flipped to resolved then pruned |
-| `docs/plans/<role>.md`   | Re-derived from the open findings, deleted when none are open              |
+| `docs/plans/<role>.md`   | Re-derived from the open findings, deleted when none are open               |
 
 `pix_plan_docs` does that bookkeeping. Give it the role and the findings the
 run reported; it writes the skeletons and the headers, merges the findings
@@ -188,28 +188,28 @@ which agents surface as slash commands.
 rule-mcp <command> [options]
 ```
 
-| Command          | Does                                                      |
-| ---------------- | --------------------------------------------------------- |
-| `serve`          | Start the server on stdio, Streamable HTTP or SSE         |
-| `daemon`         | Install, start, stop or inspect a background service      |
-| `install`        | Write the MCP config and command files for an agent       |
-| `uninstall`      | Remove them                                               |
-| `config`         | Print the config snippet without writing it               |
-| `tools`          | List the registered tools, or call one directly           |
-| `doctor`         | Check the installation and report what is wrong           |
-| `skills`         | Install, list or reload skills                            |
-| `adr`            | Create an ADR and regenerate the index                    |
-| `handoff`        | Write a session handoff                                   |
-| `handon`         | Verify the newest handoff against the repository now      |
-| `cache`          | Inspect, verify, export, prime or clear the result cache  |
+| Command          | Does                                                              |
+| ---------------- | ----------------------------------------------------------------- |
+| `serve`          | Start the server on stdio, Streamable HTTP or SSE                 |
+| `daemon`         | Install, start, stop or inspect a background service              |
+| `install`        | Write the MCP config and command files for an agent               |
+| `uninstall`      | Remove them                                                       |
+| `config`         | Print the config snippet without writing it                       |
+| `tools`          | List the registered tools, or call one directly                   |
+| `doctor`         | Check the installation and report what is wrong                   |
+| `skills`         | Install, list or reload skills                                    |
+| `adr`            | Create an ADR and regenerate the index                            |
+| `handoff`        | Write a session handoff                                           |
+| `handon`         | Verify the newest handoff against the repository now              |
+| `cache`          | Inspect, verify, export, prime or clear the result cache          |
 | `init`           | Prepare a project: its directory under the install, and tokensave |
-| `stats`          | Report what was saved, from the local telemetry           |
-| `telemetry`      | Export one `.flight`, read one back, or prune the log     |
-| `fix`            | Lint or repair a file tree                                |
-| `agent-commands` | Write the clean `/rule-*` command set                  |
-| `a11y-update`    | Refresh the vendored WCAG criteria from the W3C           |
-| `completions`    | Print a shell completion script                           |
-| `update`         | Update this server from its pinned remote                 |
+| `stats`          | Report what was saved, from the local telemetry                   |
+| `telemetry`      | Export one `.flight`, read one back, or prune the log             |
+| `fix`            | Lint or repair a file tree                                        |
+| `agent-commands` | Write the clean `/rule-*` command set                          |
+| `a11y-update`    | Refresh the vendored WCAG criteria from the W3C                   |
+| `completions`    | Print a shell completion script                                   |
+| `update`         | Update this server from its pinned remote                         |
 
 `--help` after any command prints its own options.
 

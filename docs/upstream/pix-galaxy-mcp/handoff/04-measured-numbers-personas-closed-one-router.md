@@ -98,15 +98,15 @@ to one.
 
 ## New defaults a reader must know
 
-| Default                       | Was                                | Now                                                   | Escape hatch                       |
-| ----------------------------- | ---------------------------------- | ----------------------------------------------------- | ---------------------------------- |
-| Workflow reminder             | every result, full once per tool   | full once a session, terse every 5th call             | `RULE_MCP_REMINDER_EVERY=1`  |
-| `savedBySource.caveman`       | core minus final (always 0)        | measured across the compression step                  | none - the old number was wrong    |
-| `reminderOverhead`            | net growth (0 when compression won)| measured across the reminder                          | none                               |
-| Cache-hit telemetry           | cache saving only                  | core/final tokens, compression and reminder as well   | none                               |
-| Router command                | `/rule-mcp`                  | `/rule`, old file pruned                           | none by design (ADR 077)           |
-| Test command                  | `/rule-tdd` + `/rule-write-tests` | `/rule-tdd` only, with the hand-written body  | none                              |
-| Project-layer role            | loaded silently                    | refused until `roles accept <id>` for that version    | none - it is the gate              |
+| Default                 | Was                                     | Now                                                 | Escape hatch                      |
+| ----------------------- | --------------------------------------- | --------------------------------------------------- | --------------------------------- |
+| Workflow reminder       | every result, full once per tool        | full once a session, terse every 5th call           | `RULE_MCP_REMINDER_EVERY=1` |
+| `savedBySource.caveman` | core minus final (always 0)             | measured across the compression step                | none - the old number was wrong   |
+| `reminderOverhead`      | net growth (0 when compression won)     | measured across the reminder                        | none                              |
+| Cache-hit telemetry     | cache saving only                       | core/final tokens, compression and reminder as well | none                              |
+| Router command          | `/rule-mcp`                       | `/rule`, old file pruned                         | none by design (ADR 077)          |
+| Test command            | `/rule-tdd` + `/rule-write-tests` | `/rule-tdd` only, with the hand-written body     | none                              |
+| Project-layer role      | loaded silently                         | refused until `roles accept <id>` for that version  | none - it is the gate             |
 
 Surface: **108 tools** (`pix_plan_docs` added), **34 commands** (router
 renamed, one test command removed).

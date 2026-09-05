@@ -92,14 +92,14 @@ Added `rule-database-*`:
 
 ### Final taxonomy
 
-| Prefix                | Count  | Skills                                                                                                 |
-| --------------------- | ------ | ------------------------------------------------------------------------------------------------------ |
-| `rule-` (core)     | 9      | ai, backend, check, component, detect, fix, scaffold, search, styleguides                              |
-| `rule-backend-*`   | 7      | api-design, express, fastify, hono, nestjs, node, security                                             |
-| `rule-database-*`  | 4      | mongodb, mysql, postgresql, sql                                                                        |
-| `rule-devops-*`    | 4      | docker, gitlab-ci, testing, version                                                                    |
+| Prefix                | Count  | Skills                                                                               |
+| --------------------- | ------ | ------------------------------------------------------------------------------------ |
+| `rule-` (core)     | 9      | ai, backend, check, component, detect, fix, scaffold, search, styleguides            |
+| `rule-backend-*`   | 7      | api-design, express, fastify, hono, nestjs, node, security                           |
+| `rule-database-*`  | 4      | mongodb, mysql, postgresql, sql                                                      |
+| `rule-devops-*`    | 4      | docker, gitlab-ci, testing, version                                                  |
 | `rule-frontend-*`  | 10     | angular, astro, forms, meta-next, meta-nuxt, meta-remix, react, solidjs, svelte, vue |
-| `rule-platform-*`  | 4      | desktop, expo, library, web                                                                            |
-| `rule-process-*`   | 6      | adr, bmad, documentation, feature-workflow, handoff                                                    |
-| `rule-toolchain-*` | 1      | vite                                                                                                   |
-| **Total**             | **46** |                                                                                                        |
+| `rule-platform-*`  | 4      | desktop, expo, library, web                                                          |
+| `rule-process-*`   | 6      | adr, bmad, documentation, feature-workflow, handoff                                  |
+| `rule-toolchain-*` | 1      | vite                                                                                 |
+| **Total**             | **46** |                                                                                      |
