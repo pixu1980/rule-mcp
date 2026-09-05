@@ -434,6 +434,13 @@
       "pix-a11y-audit",
       "pix-adr",
       "pix-ai",
+      "pix-audit-a11y",
+      "pix-audit-ai-engineer",
+      "pix-audit-architect",
+      "pix-audit-docs-engineer",
+      "pix-audit-performance",
+      "pix-audit-privacy",
+      "pix-audit-security",
       "pix-backend",
       "pix-caveman",
       "pix-check",
@@ -457,6 +464,13 @@
       "pix-platform",
       "pix-process",
       "pix-pull-request",
+      "pix-review-a11y",
+      "pix-review-ai-engineer",
+      "pix-review-architect",
+      "pix-review-docs-engineer",
+      "pix-review-performance",
+      "pix-review-privacy",
+      "pix-review-security",
       "pix-setup-project",
       "pix-skills",
       "pix-styleguide",
@@ -628,7 +642,18 @@
       "src/core/skill-frontmatter.js",
       "src/core/token-stats.js"
     ],
-    "tests": ["test/docs-accuracy.test.mjs", "test/install-script-shim-heal.test.mjs", "test/token-pipeline.test.mjs"],
-    "preservedRoots": ["extensions", "rules", ".clinerules", ".cursor", ".roo", ".windsurf"]
+    "tests": [
+      "test/docs-accuracy.test.mjs",
+      "test/install-script-shim-heal.test.mjs",
+      "test/token-pipeline.test.mjs"
+    ],
+    "preservedRoots": [
+      "extensions",
+      "rules",
+      ".clinerules",
+      ".cursor",
+      ".roo",
+      ".windsurf"
+    ]
   }
 }

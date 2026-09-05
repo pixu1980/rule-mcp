@@ -16,7 +16,7 @@
 
 import { parseHandoffOptions, HANDOFF_USAGE } from "./handoff-options.js";
 import { activeRoles, roleById } from "../core/review-roles.js";
-import { fillRoleTemplate } from "../core/review-roles-template.js";
+import { fillRoleTemplate, OPERATIONS } from "../core/review-roles-template.js";
 
 /** Tokens that trigger the generic per-prompt help message. */
 const HELP_TOKENS = new Set(["help", "--help", "-h"]);
@@ -358,26 +358,32 @@ export function listPrompts() {
 }
 
 /**
- * One prompt per active review persona, generated from the registry.
+ * One prompt per active review persona per operation, generated from the
+ * registry: `pix-plan-<role>`, `pix-audit-<role>`, `pix-review-<role>` - 21
+ * persona commands for the 7 active roles.
  *
- * The name is shared with the agent command on purpose: the command generator
- * derives its set from this registry, so a second name for the same operation
- * would be the drift ADR 029 removed.
+ * The names are shared with the agent commands on purpose: the command
+ * generator derives its set from this registry, so a second name for the same
+ * operation would be the drift ADR 029 removed.
  *
  * @returns {Array<{ name: string, description: string, arguments: object[] }>}
  */
 function rolePrompts() {
-  return activeRoles().map((role) => ({
-    name: `pix-plan-${role.id}`,
-    description: `Audit, review and plan as a ${role.role} with ${role.yearsOfExperience} years of experience`,
-    arguments: [
-      {
-        name: "topic",
-        description: "Focus for this run (free text). Default: the whole project.",
-        required: false,
-      },
-    ],
-  }));
+  const verb = { plan: "Plan", audit: "Audit", review: "Review" };
+
+  return activeRoles().flatMap((role) =>
+    OPERATIONS.map((operation) => ({
+      name: `pix-${operation}-${role.id}`,
+      description: `${verb[operation]} as a ${role.role} with ${role.yearsOfExperience} years of experience`,
+      arguments: [
+        {
+          name: "topic",
+          description: "Focus for this run (free text). Default: the whole project.",
+          required: false,
+        },
+      ],
+    })),
+  );
 }
 
 /**
@@ -434,15 +440,18 @@ export function getPrompt(name, args = {}) {
     };
   }
 
-  // ── Review personas: one prompt per active role, filled from the registry ──
-  if (name.startsWith("pix-plan-")) {
-    const role = roleById(name.slice("pix-plan-".length));
+  // ── Review personas: one prompt per active role and operation, filled from the registry ──
+  const personaOp = /^pix-(plan|audit|review)-/.exec(name);
+
+  if (personaOp) {
+    const operation = personaOp[1];
+    const role = roleById(name.slice(`pix-${operation}-`.length));
 
     if (role) {
       return {
         name,
-        description: `Audit, review and plan as a ${role.role}`,
-        messages: user(fillRoleTemplate(role, { topic: args?.topic })),
+        description: `${operation[0].toUpperCase() + operation.slice(1)} as a ${role.role}`,
+        messages: user(fillRoleTemplate(role, { operation, topic: args?.topic })),
       };
     }
   }
