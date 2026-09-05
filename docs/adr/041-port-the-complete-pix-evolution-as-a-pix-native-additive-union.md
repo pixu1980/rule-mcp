@@ -1,7 +1,7 @@
 # 041: Port the complete pix evolution as a pix-native additive union
 
 - **Date**: 2026-09-04
-- **Status**: proposed
+- **Status**: accepted
 - **Tags**: architecture, porting, parity, tdd
 - **Author**: pix-galaxy-mcp
 
