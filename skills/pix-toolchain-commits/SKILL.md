@@ -52,7 +52,7 @@ frameworks: [all]
 ## Commit subject
 
 - Imperative mood: "add", "fix", "remove" - never "added", "fixes", "removing".
-- ≤ 50 characters when possible, hard cap 72.
+- <= 50 characters when possible, hard cap 72.
 - No trailing period. Lowercase after the colon unless the first word is a proper noun.
 
 ## Commit body
@@ -68,11 +68,88 @@ frameworks: [all]
 - Never mix concerns in one commit (e.g. a `feat` bundled with an unrelated `chore`).
 - A commit is the smallest unit that can be **reviewed**, **reverted**, and **released** safely.
 
+## Branch names
+
+Same vocabulary as the commit types, so a branch announces its own kind of
+change: `feat/`, `fix/`, `refactor/`, `chore/`, `docs/`, `test/`, and `hotfix/`
+for the urgent production path. Format is `<prefix>/<short-kebab-description>`.
+
+Three names that keep appearing and should not:
+
+- **An author name.** The branch belongs to the change, not the person; the
+  author is already in every commit.
+- **A bare ticket number.** `1423` requires a second lookup to mean anything.
+  Put the id in the description if it helps: `fix/1423-duplicate-invoice`.
+- **`update` or `fixes`.** Generic to the point of being no name at all. The
+  opposite failure, a name that repeats the whole ticket title, is only slightly
+  better.
+
+## Merge requests
+
+- Title follows the same Conventional Commits format, scope included.
+- Description says what changed, why, and how to verify it. Screenshots for UI.
+- Squash into `develop`; rebase `develop` into `main`.
+- Pipelines green and at least one approval before merge - both, not either.
+
 ## Push
 
 - Before pushing: run the pre-push checks, `git pull --rebase` on the target branch, and verify the commit message again.
 - Never force-push to `main`/`develop` or shared branches.
 - Never push a commit that does not follow this rule - fix it locally first with `git commit --amend` or a new commit.
+
+## Three ways to ignore a file, and which one your case needs
+
+`.gitignore` is one of three, and it only works on files git has never seen.
+Answer this first:
+
+```bash
+git ls-files --error-unmatch path/to/file   # prints the path: tracked. errors: untracked
+```
+
+| Situation                                          | Use                                       | Notes                                                                                 |
+| -------------------------------------------------- | ----------------------------------------- | ------------------------------------------------------------------------------------- |
+| Untracked, and the whole team should ignore it     | `.gitignore`                              | Committed, shared, reviewed                                                           |
+| Untracked, and it is only your mess                | `.git/info/exclude`                       | Same syntax, never committed. For scratch files nobody else should have to read about |
+| Untracked, and it is your mess in every repository | `core.excludesfile`                       | `git config --global core.excludesfile ~/.gitignore_global`                           |
+| Tracked, and you keep a local variant on purpose   | `git update-index --skip-worktree <path>` | The override sticks. Undo with `--no-skip-worktree`                                   |
+
+**Adding a tracked file to `.gitignore` does nothing.** It keeps being tracked
+and keeps appearing in diffs. Untrack it first, in its own commit, and expect it
+to disappear from everyone's checkout when they pull:
+
+```bash
+git rm --cached path/to/file
+```
+
+**Do not reach for `--assume-unchanged` to hold a local edit.** It is a
+performance hint that says nothing here is changing, and git is free to stop
+believing it: a pull can clear the flag, and the local secret you forgot about
+is staged again. `--skip-worktree` says the difference is deliberate, which is
+the thing you actually meant. `git ls-files -v` shows the flags, lowercase `h`
+for assume-unchanged and uppercase `S` for skip-worktree.
+
+## Getting work back
+
+Most of what feels lost in git is reachable. `git reflog` lists where HEAD has
+been, including the commit a bad reset left unreferenced, so `git reset --hard
+<hash>` from that list is usually the whole recovery. It is the first command to
+reach for after any destructive mistake, before trying anything cleverer.
+
+The rest, by the question they answer:
+
+| Question                                                  | Command                                                      |
+| --------------------------------------------------------- | ------------------------------------------------------------ |
+| Which commit introduced this?                             | `git bisect`                                                 |
+| Who wrote this line and in what change?                   | `git blame`, then `git show` on the hash it names            |
+| What does this history actually look like?                | `git log --graph --oneline --decorate`                       |
+| Can I take just this commit?                              | `git cherry-pick <hash>`                                     |
+| Can I park this and come back?                            | `git stash push -m "..."`, `git stash list`, `git stash pop` |
+| Can I work on another branch without disturbing this one? | `git worktree add ../branch-name branch-name`                |
+| How do I remove untracked junk?                           | `git clean -nd` first, always, then `-fd`                    |
+
+Two cautions. `git reset` and `git rebase` rewrite history, which is safe before
+a push and a coordination problem after one. And `git clean -fd` deletes files
+git has never seen, so the dry run is not optional.
 
 ## Enforcement (make it mechanical)
 

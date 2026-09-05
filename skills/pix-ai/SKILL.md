@@ -1,7 +1,7 @@
 ---
 name: pix-ai
 description: >-
-  Use when building AI Agent applications to route to the correct skill. Covers agent scaffolding on @pix/pix-galaxy-core and framework-agnostic agent guidance.
+  Use when building AI Agent applications to route to the correct skill. Covers agent scaffolding on @pix/pix-ai-core and framework-agnostic agent guidance.
 tags:
   - "ai"
   - "agents"
@@ -15,17 +15,52 @@ compatibility: Designed for AI coding assistants
 
 ## AI Agent Skills
 
-| Skill                                                | Core Library              | Use when                                                                                                                                    |
-| ---------------------------------------------------- | ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
-| [pix-ai-agents](../pix-ai-agents/SKILL.md)           | `@pix/pix-galaxy-core`    | Scaffolding AI Agent repositories on `@pix/pix-galaxy-core`: providers, tools, registries, testing, containerization.                       |
-| [pix-platform-agent](../pix-platform-agent/SKILL.md) | none (framework-agnostic) | Structuring an AI Agent project without prescribing a specific SDK or core library (LangChain, Vercel AI SDK, MCP clients, custom runners). |
+| Skill                                                                | Core Library                                                                                                 | Use when                                                                                                                                    |
+| -------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| [pix-ai-evals](../pix-ai-evals/SKILL.md)                             | Error analysis, LLM-as-judge, judge calibration, RAG evals                                                   | Measuring whether an AI feature works                                                                                                       |
+| [pix-ai-context-engineering](../pix-ai-context-engineering/SKILL.md) | The window as a budget, less-beats-more, delegation levels, compaction and handoff, usage limits             | A session is getting expensive, slow or worse                                                                                               |
+| [pix-ai-agent-architecture](../pix-ai-agent-architecture/SKILL.md)   | What happens at the API boundary, the harness over the model, loops against graphs, MCP, tool surface design | Building or reviewing an agent or an MCP server                                                                                             |
+| [pix-ai-prompting](../pix-ai-prompting/SKILL.md)                     | Prompt anatomy, context engineering, learning mode                                                           | Working with an agent, or teaching someone to                                                                                               |
+| [pix-ai-agents](../pix-ai-agents/SKILL.md)                           | `@pix/pix-ai-core`                                                                                           | Scaffolding AI Agent repositories on `@pix/pix-ai-core`: providers, tools, registries, testing, containerization.                           |
+| [pix-platform-agent](../pix-platform-agent/SKILL.md)                 | none (framework-agnostic)                                                                                    | Structuring an AI Agent project without prescribing a specific SDK or core library (LangChain, Vercel AI SDK, MCP clients, custom runners). |
 
 ## Quick Selection Guide
 
 ```
-Need agents on @pix/pix-galaxy-core (providers, tools, seed, Docker)?  → pix-ai-agents
+Need agents on @pix/pix-ai-core (providers, tools, seed, Docker)?  → pix-ai-agents
 Need framework-agnostic agent project structure (any SDK)?            → pix-platform-agent
 ```
+
+## AI features to build that are not another chatbot
+
+A chat box is the least imaginative place to put a model: it makes the user
+describe what they want in prose, wait, then read prose back. These put the same
+capability where the work already happens.
+
+| Feature                           | What it replaces                                                             | Watch for                                                                   |
+| --------------------------------- | ---------------------------------------------------------------------------- | --------------------------------------------------------------------------- |
+| Smart form autofill               | Typing what the app could infer from a paste, an upload, or a previous entry | Always show what was filled and let it be corrected, never submit silently  |
+| Search that understands intent    | Exact-match search that fails on a synonym                                   | Keep keyword search as the floor; embeddings on top, not instead            |
+| Automatic content tagging         | A taxonomy nobody maintains                                                  | Suggest, do not assign. Track acceptance rate as the quality metric         |
+| Writing assistance in place       | Copying into another tool and back                                           | Edit the user's text, do not replace their voice                            |
+| Suggested replies in the workflow | A separate assistant window                                                  | Three short options beat one long draft                                     |
+| Feedback and sentiment rollups    | Reading every review by hand                                                 | Report counts and examples, never a single sentiment score                  |
+| Moderation and safety checks      | Manual review of everything                                                  | A model triages, a person decides on the borderline cases                   |
+| Voice notes turned into work      | A recording nobody can search                                                | Transcribe, then extract the actions; keep the audio                        |
+| Recommendations with a reason     | "You may also like" with no explanation                                      | Show why it was recommended; it is the difference between useful and creepy |
+| Insight lines on dashboards       | A chart the reader has to interpret                                          | State the change and the likely cause, link to the underlying rows          |
+
+Common rules for all of them:
+
+- **Put it where the work is.** A feature the user has to go somewhere to use is
+  a feature they forget.
+- **Suggest, do not act.** Anything irreversible needs a human confirmation step.
+- **Show the source.** A recommendation, a tag or an insight with no visible
+  reason cannot be trusted or debugged.
+- **Degrade cleanly.** The model is a dependency with latency and an error rate:
+  design the version of the screen where it is unavailable.
+- **Measure acceptance, not output.** How often a suggestion is kept unedited is
+  the only quality signal that matters.
 
 ## See also
 

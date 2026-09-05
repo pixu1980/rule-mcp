@@ -18,14 +18,18 @@ frameworks: [all]
 
 ## Available Skills
 
-| Skill                                                                    | Purpose                       | When to Use                                      |
-| ------------------------------------------------------------------------ | ----------------------------- | ------------------------------------------------ |
-| [pix-process-adr](../pix-process-adr/SKILL.md)                           | Architecture Decision Records | After every architect/scaffold/detect call       |
-| [pix-process-bmad](../pix-process-bmad/SKILL.md)                         | BMAD Method Framework         | Full-project AI-driven delivery lifecycle        |
-| [pix-process-code-review](../pix-process-code-review/SKILL.md)           | Code Review Workflow          | Preparing and conducting risk-based PR/MR review |
-| [pix-process-documentation](../pix-process-documentation/SKILL.md)       | Documentation Standards       | Setting up project docs, Mintlify                |
-| [pix-process-feature-workflow](../pix-process-feature-workflow/SKILL.md) | Feature Workflow              | End-to-end feature lifecycle management          |
-| [pix-process-handoff](../pix-process-handoff/SKILL.md)                   | LLM Session Handoff           | Closing a session, resuming in new chat          |
+| Skill                                                                    | Purpose                                             | When to Use                                                                       |
+| ------------------------------------------------------------------------ | --------------------------------------------------- | --------------------------------------------------------------------------------- |
+| [pix-process-ai-sdlc](../pix-process-ai-sdlc/SKILL.md)                   | Intent to incident, plan before code, gates, review | Planning how AI fits the lifecycle, not one task                                  |
+| [pix-process-adr](../pix-process-adr/SKILL.md)                           | Architecture Decision Records                       | After every scaffold/detect/detect call                                           |
+| [pix-process-bmad](../pix-process-bmad/SKILL.md)                         | BMAD Method Framework                               | Full-project AI-driven delivery lifecycle                                         |
+| [pix-process-code-review](../pix-process-code-review/SKILL.md)           | Code Review Workflow                                | Preparing and conducting risk-based PR/MR review                                  |
+| [pix-process-changelog](../pix-process-changelog/SKILL.md)               | Changelog generated from the commits                | Adding a changelog, or fixing one that drifted from the history                   |
+| [pix-process-documentation](../pix-process-documentation/SKILL.md)       | Documentation Standards                             | Setting up project docs, Mintlify                                                 |
+| [pix-process-feature-workflow](../pix-process-feature-workflow/SKILL.md) | Feature Workflow                                    | End-to-end feature lifecycle management                                           |
+| [pix-process-handoff](../pix-process-handoff/SKILL.md)                   | LLM Session Handoff                                 | Closing a session, resuming in new chat                                           |
+| [pix-process-npm-release](../pix-process-npm-release/SKILL.md)           | Secure npm Release                                  | Publishing a package: Trusted Publishing, staged releases, supply-chain hardening |
+| [pix-process-simplicity](../pix-process-simplicity/SKILL.md)             | Build Only What Was Asked                           | Before and during implementation, to keep the change minimal                      |
 
 ## Quick Selection Guide
 
@@ -36,6 +40,8 @@ Need PR/MR review guidance?             → pix-process-code-review
 Need documentation standards?           → pix-process-documentation
 Need a feature workflow?                → pix-process-feature-workflow
 Need to close/resume a session?         → pix-process-handoff
+Need to publish an npm package safely?  → pix-process-npm-release
+Need to keep a change minimal?          → pix-process-simplicity
 ```
 
 ## See also

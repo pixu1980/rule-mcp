@@ -66,8 +66,8 @@ outcome or concrete fix. Mark severity clearly:
 - **non-blocking** - improvement that does not prevent safe merge.
 - **question** - seek context before assuming a defect.
 
-Discuss the code, not the author. Avoid vague comments such as “this feels
-wrong”; explain the failure mode. Resolve threads only after the concern is
+Discuss the code, not the author. Avoid vague comments such as "this feels
+wrong"; explain the failure mode. Resolve threads only after the concern is
 addressed or explicitly accepted with an owner and follow-up.
 
 ## 4. Approve and close the loop
@@ -78,6 +78,75 @@ After merge, verify deployment or release signals when the change affects a
 running system. Record major design choices as ADRs and schedule debt or
 follow-up items instead of leaving ambiguous TODOs.
 
+## 5. Reviewing code you did not write
+
+Generated code is cheap to produce and expensive to own, so the question the
+review asks has to change. Not "is this clever" and not even "is this correct",
+but **can I explain every decision in this diff at three in the morning**. If the
+answer is no for any part of it, that part is not reviewed yet.
+
+Count what the change added, and not in lines:
+
+- packages
+- abstractions and layers
+- configuration and flags
+- network calls and services
+- build steps
+
+Then five questions, in order, before it merges:
+
+1. **What did it add?** The list above, made explicit.
+2. **Why did it add each one?** Any addition the author cannot explain is an
+   addition nobody owns.
+3. **Could the platform already do this?** The runtime has grown. A retry loop, a
+   deadline, a unique ID, a date format, a deep clone: check before installing.
+4. **What does this cost in six months?** Upgrades, advisories, debugging,
+   onboarding, the reading time of every future maintainer.
+5. **Would the same architectural decision have been made without the
+   assistant?** If no, stop and review the decision rather than the code.
+
+**The assistant may propose code and dependencies. It does not get to approve
+architecture.** That line sounds obvious and is not, because the fast path runs
+prompt, generate, run, commit, and never passes through a place where anyone
+decided.
+
+### Dependencies, now that adding one is free
+
+Adding a dependency used to cost something: search, read, compare alternatives,
+check whether it was maintained, install, learn the API, debug the integration.
+That was annoying and it forced a decision. Now the same package arrives in one
+sentence. **When the cost of adding something approaches zero, a team needs a new
+mechanism for deciding what deserves to exist**, because the old mechanism was
+the friction.
+
+For a new package, answer five things before approving: why it is here, what
+depends on it, what it executes on install, who maintains it, and what happens
+if it is removed.
+
+### Debt arrives as a series of reasonable merges
+
+The dangerous shape is not one bad pull request. It is: refactor this module,
+four hundred readable lines, tests pass, merge. Add caching, two hundred and
+fifty more, merge. Add retry, another abstraction, merge. Three months later the
+author has moved on and nobody can say why two caching layers exist, why a
+wrapper wraps a wrapper, or why the code handles an edge case nobody can
+reproduce.
+
+Nothing looked catastrophic at the time. That is the point: **complexity
+accumulates one successful pull request at a time**, and each one was defensible
+on its own.
+
+So the review reads the diff against the request, not only against itself:
+
+- **What was added beyond what was asked?** An unrequested table, flag, layer or
+  service is a scope decision wearing an implementation's clothes.
+- **Does any new abstraction have exactly one caller?** Then it is a name, not an
+  abstraction.
+- **What does the test not assert?** A generated test that passes on the first
+  run has proved nothing yet.
+- **Is there code for a future that has not been asked for?** Delete it; the
+  future can add it with better information.
+
 ## Checklist
 
 - [ ] Scope, intent, non-goals, risks, and verification steps are clear.
@@ -86,7 +155,7 @@ follow-up items instead of leaving ambiguous TODOs.
       reviewed where relevant.
 - [ ] Tests cover behavior and important failure paths, not implementation
       details alone.
-- [ ] Feedback is specific, respectful, and severity-labelled.
+- [ ] Feedback is specific, respectful, and severity-labeled.
 - [ ] Required changes and accepted follow-ups have an owner.
 - [ ] Release, flag, migration, and rollback implications are understood.
 

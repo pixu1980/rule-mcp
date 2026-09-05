@@ -18,12 +18,13 @@ frameworks: [all]
 
 ## Available Skills
 
-| Skill                                                    | Platform           | Best For                                           |
-| -------------------------------------------------------- | ------------------ | -------------------------------------------------- |
-| [pix-platform-desktop](../pix-platform-desktop/SKILL.md) | Desktop (Electron) | Cross-platform desktop apps, IPC, native APIs      |
-| [pix-platform-expo](../pix-platform-expo/SKILL.md)       | Mobile (Expo/RN)   | Cross-platform mobile apps, EAS Build              |
-| [pix-platform-library](../pix-platform-library/SKILL.md) | npm package        | Library authoring, dual CJS/ESM, public API        |
-| [pix-platform-web](../pix-platform-web/SKILL.md)         | Web platform       | PWA, service workers, offline, performance budgets |
+| Skill                                                    | Platform           | Best For                                                    |
+| -------------------------------------------------------- | ------------------ | ----------------------------------------------------------- |
+| [pix-platform-desktop](../pix-platform-desktop/SKILL.md) | Desktop (Electron) | Cross-platform desktop apps, IPC, native APIs               |
+| [pix-platform-expo](../pix-platform-expo/SKILL.md)       | Mobile (Expo/RN)   | Cross-platform mobile apps, EAS Build                       |
+| [pix-platform-library](../pix-platform-library/SKILL.md) | npm package        | Library authoring, dual CJS/ESM, public API                 |
+| [pix-platform-web](../pix-platform-web/SKILL.md)         | Web platform       | PWA, service workers, offline, performance budgets          |
+| [pix-platform-agent](../pix-platform-agent/SKILL.md)     | Agent runtime      | Agent-facing projects: skills, MCP surfaces, tool contracts |
 
 ## Quick Selection Guide
 
@@ -32,6 +33,7 @@ Need desktop app (Electron)?            → pix-platform-desktop
 Need mobile app (Expo)?                 → pix-platform-expo
 Need to publish an npm package?         → pix-platform-library
 Need PWA / offline web app?             → pix-platform-web
+Need to build for an AI agent host?     → pix-platform-agent
 ```
 
 ## See also
