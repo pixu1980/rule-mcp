@@ -427,7 +427,7 @@ test("a repository with no git history still reports the handoff", () => {
 process.on("exit", () => rmSync(fixture.root, { recursive: true, force: true }));
 
 test("a path git never tracked is not reported as deleted", () => {
-  // A handoff names `.rule-ai-mcp/roles-accepted.json` to explain where an
+  // A handoff names `.internal/roles-accepted.json` to explain where an
   // acceptance is recorded. The directory is gitignored, so the file is absent
   // from a fresh clone and calling it deleted invents a fact - the same failure
   // the glob case fixed, from the other direction.
@@ -436,7 +436,7 @@ test("a path git never tracked is not reported as deleted", () => {
   git(root, "init", "-q");
   git(root, "config", "user.email", "fixture@example.com");
   git(root, "config", "user.name", "Fixture");
-  write(root, ".gitignore", ".rule-ai-mcp/\n");
+  write(root, ".gitignore", ".internal/\n");
   write(root, "src/real.js", "export const real = 1;\n");
   // A real deletion, so the "deleted" verdict has something to be right about.
   write(root, "src/removed.js", "export const removed = 1;\n");
@@ -449,7 +449,7 @@ test("a path git never tracked is not reported as deleted", () => {
       "- **Branch**: `main`",
       "- **Date**: 2026-09-04",
       "",
-      "The acceptance lands in `.rule-ai-mcp/roles-accepted.json`, and the work is in `src/real.js`.",
+      "The acceptance lands in `.internal/roles-accepted.json`, and the work is in `src/real.js`.",
       "A file that really is gone: `src/removed.js`.",
       "",
     ].join("\n"),
@@ -463,9 +463,9 @@ test("a path git never tracked is not reported as deleted", () => {
   const report = handon({ projectDir: root });
   const verdictFor = (path) => report.claims.find((claim) => claim.kind === "file" && claim.value === path)?.verdict;
 
-  assert.doesNotMatch(verdictFor(".rule-ai-mcp/roles-accepted.json") ?? "", /deleted/, "git never tracked it");
+  assert.doesNotMatch(verdictFor(".internal/roles-accepted.json") ?? "", /deleted/, "git never tracked it");
   assert.match(
-    verdictFor(".rule-ai-mcp/roles-accepted.json") ?? "",
+    verdictFor(".internal/roles-accepted.json") ?? "",
     /untracked|ignored|does not track/i,
     "the verdict says why it cannot be checked",
   );

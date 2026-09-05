@@ -1,6 +1,6 @@
 /**
  * Pins the approved additive port contract without reading the external source
- * repository. The fixture was captured from rule-ai-mcp develop@12d60a9 and
+ * repository. The fixture was captured from the archived upstream develop@12d60a9 and
  * rule-mcp main@bd413da. It stays RED until the complete union lands.
  */
 import assert from "node:assert/strict";

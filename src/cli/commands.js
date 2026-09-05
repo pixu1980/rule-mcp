@@ -80,8 +80,6 @@ export function helpCommand() {
  * @param {object} [opts]
  */
 export async function serveCommand(opts = {}) {
-  const { migrateHomeData } = await import("./paths.js");
-  migrateHomeData();
   await loadAllSkills();
   const transport = opts.transport ?? "stdio";
 
@@ -89,7 +87,7 @@ export async function serveCommand(opts = {}) {
     const scheme = opts.sslCert && opts.sslKey ? "https" : "http";
     // Port/host resolution (explicit --port > RULE_MCP_PORT > canonical default)
     // is centralized in the transport module so CLI, daemon, and Docker all agree.
-    // "http" = Streamable HTTP (current spec); "sse" = legacy HTTP+SSE (back-compat).
+    // "http" = Streamable HTTP (current spec); "sse" = HTTP+SSE (back-compat).
     const start = transport === "http" ? startHttpServer : startSseServer;
     const endpoint = transport === "http" ? "mcp" : "sse";
     const { port, host } = await start({
@@ -165,9 +163,6 @@ export async function serveCommand(opts = {}) {
  * @param {{ action: string, dryRun?: boolean }} opts
  */
 export async function daemonCommand(opts) {
-  // Adopt a previous install's state before the daemon reads its paths.
-  const { migrateHomeData } = await import("./paths.js");
-  migrateHomeData();
   const p = getRuntimePaths();
   const { action = "status", dryRun = false } = opts;
 

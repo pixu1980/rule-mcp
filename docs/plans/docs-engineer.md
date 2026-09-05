@@ -81,11 +81,11 @@ first. This file is deleted by the run that finds nothing open.
 
 ### Step 5 — Unify ADR front matter and status casing (F5, medium)
 
-**Finding:** the legacy ADR series (001–016) lacks `Author` and in places `Date` front matter and mixes casing (`**Status**: accepted` vs `**Status**: Accepted`); editing 018 to `superseded` was not reflected anywhere machine-checkable.
+**Finding:** the early ADR series (001–016) lacks `Author` and in places `Date` front matter and mixes casing (`**Status**: accepted` vs `**Status**: Accepted`); editing 018 to `superseded` was not reflected anywhere machine-checkable.
 
 **What it takes:**
 
-1. Normalize the legacy ADR files to the modern template: `# NNN: title`, `- **Date**: YYYY-MM-DD`, `- **Status**: accepted|proposed|deprecated|superseded`, `- **Tags**: …`, `- **Author**: rule-mcp-architect` (the original author, not the modern one) — lowest-touch: only the front-matter block, never the Decision/Consequences prose.
+1. Normalize the early ADR files to the modern template: `# NNN: title`, `- **Date**: YYYY-MM-DD`, `- **Status**: accepted|proposed|deprecated|superseded`, `- **Tags**: …`, `- **Author**: rule-mcp-architect` (the original author, not the modern one) — lowest-touch: only the front-matter block, never the Decision/Consequences prose.
 2. Standardize status casing to lowercase everywhere (`Accepted` → `accepted`).
 3. Extend the docs-numbering-doctor (or a new guard in `docs-accuracy`) to assert every ADR has Date/Status/Author and a lowercase status, so front-matter drift fails CI.
 4. Re-run `rule_tool_process_adr`-generated index check to ensure the index regenerates cleanly.
@@ -129,14 +129,14 @@ Execution order: **Step 6 → Step 1 → Step 4 → Step 2 → Step 3 → Step 5
 
 ### Step 7 — Retire the compliance mega-reviews and historical handoffs (F7, medium)
 
-> **RESOLVED** — the three reports and handoffs 07/08/10/11/13 were deleted; the finding→ADR map lives in `docs/reports/README.md`; handoff 09 and the indexes were kept.
+> **RESOLVED** — the three reports, the five historical handoffs and both index files were deleted; every decision is recorded in the ADR index (docs/adr/ADR.md); handoff 09 is the current-session record.
 
-**Finding:** `docs/reports/claude-compliance-mega-review.md`, `gpt-5.6-sol-compliance-mega-review.md` and `security-performance-audit-2026-08-04.md`, plus handoffs `07/08/10/11/13-*.md`, describe remediation that is fully implemented and already recorded in ADRs 017, 030-035, 037-044. They repeat history instead of pointing at the living record; the audit analysis and finding→ADR mapping is preserved in `docs/reports/README.md` and handoff `09` is the current-session record.
+**Finding:** `docs/reports/claude-compliance-mega-review.md`, `gpt-5.6-sol-compliance-mega-review.md` and `security-performance-audit-2026-08-04.md`, plus handoffs `07/08/10/11/13-*.md`, describe remediation that is fully implemented and already recorded in ADRs 017, 030-035, 037-044. They repeat history instead of pointing at the living record; the decisions live in the ADR index and handoff `09` is the current-session record.
 
 **What it takes:**
 
 1. Delete the three report files and the five historical handoff files.
-2. Keep and update `docs/reports/README.md` (index + this analysis) and `docs/handoff/README.md` (drop deleted entries).
+2. Remove the index files too — the ADR index (docs/adr/ADR.md) is the single pointer to every decision.
 3. Re-run the link-walk: no surviving doc may reference a deleted file.
 4. Do NOT create new ADRs — every deleted document's decisions already have numbers; duplicates would violate the "point, don't repeat" rule.
 

@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "policy": {
-    "sourceRepository": "rule-ai-mcp (archived upstream, refs kept in ADRs)",
+    "sourceRepository": "source unavailable (archived upstream; decisions in the ADR index)",
     "sourceBranch": "develop",
     "sourceCommit": "12d60a9e0eb312010314e5b800e31cf71663d926",
     "targetBaselineCommit": "bd413da527685ca0bb6c1250ad4a0d9eb8140f6c",

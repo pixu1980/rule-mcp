@@ -2,7 +2,7 @@
  * @module transport/http
  *
  * Streamable HTTP transport for rule-mcp (MCP spec 2025-03-26+, current
- * 2025-06-18 / 2025-11-25). Supersedes the legacy HTTP+SSE transport in
+ * 2025-06-18 / 2025-11-25). Supersedes the HTTP+SSE transport in
  * transport/sse.js, which is kept only as a back-compat alias.
  *
  * Single MCP endpoint:
@@ -20,7 +20,7 @@
  * 1 MB body cap, and the sandbox timeout/error wrapper. Bound to loopback unless
  * RULE_MCP_HOST overrides it.
  *
- * @see module:transport/sse - legacy transport
+ * @see module:transport/sse - alternate transport
  * @see module:transport/sse-auth - shared bearer token
  */
 

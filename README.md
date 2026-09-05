@@ -46,7 +46,7 @@ Deterministic MCP server for the rule skill ecosystem. Live surface (enforced by
 | Skills    | 95    | frontend, backend, data, devops, toolchain, styleguide, process, platform, ai                               |
 | Tests     | 212   | `pnpm test:all` green (incl. installer + PTY TUI)                                                           |
 
-Architecture decisions live in [`docs/adr/`](docs/adr/README.md) (36 records:
+Architecture decisions live in [`docs/adr/`](docs/adr/ADR.md) (47 records:
 installer self-heal, architect split, doc-accuracy guard, v1.0.0 release).
 The former architect wizard now lives in the standalone
 [`rule-mcp-architect`](https://github.com/pixu1980/rule-mcp-architect) web
@@ -605,32 +605,24 @@ The Docker image uses `node:22-alpine`, has no build step, and runs the server d
 ├── prompts/                       ← System prompt templates
 ├── scripts/                       ← Install/build scripts
 ├── test/                          ← 20 test files
-└── docs/                          ← Architecture, guides, plans, reports, handoffs
+└── docs/                          ← Architecture, guides, plans, decisions
 ```
 
 ---
 
 ## Further reading
 
-| Document                                                                                                      | Description                                   |
-| ------------------------------------------------------------------------------------------------------------- | --------------------------------------------- |
-| [`GETTING_STARTED.md`](./GETTING_STARTED.md)                                                                  | Step-by-step installation & agent integration |
-| [`docs/01-product-architecture.md`](./docs/01-product-architecture.md)                                        | Full skill taxonomy and product architecture  |
-| [`docs/02-tools-operations.md`](./docs/02-tools-operations.md)                                                | Detailed tool operations reference            |
-| [`docs/03-engineering-guides.md`](./docs/03-engineering-guides.md)                                            | Engineering practices and conventions         |
-| [`docs/04-roadmap-plans.md`](./docs/04-roadmap-plans.md)                                                      | Roadmap and planned features                  |
-| [`docs/plans/execution-plan.md`](./docs/plans/execution-plan.md)                                              | Execution plan from mega-review audit         |
-| [ADR 044](./docs/adr/044-gateway-as-the-single-entrypoint-with-server-side-receipts-backend-data-devops-g.md) | Gateway + backend guardrail design            |
-| [`docs/adr/README.md`](./docs/adr/README.md)                                                                  | Architecture Decision Records index           |
-| [`docs/agent-instructions.md`](./docs/agent-instructions.md)                                                  | Agent instruction templates                   |
-| [`docs/handoff/README.md`](./docs/handoff/README.md)                                                          | Handoff documents for LLM session continuity  |
-
-### Audit reports
-
-| Document                                                                                                     | Description                          |
-| ------------------------------------------------------------------------------------------------------------ | ------------------------------------ |
-| [`docs/reports/claude-compliance-mega-review.md`](./docs/reports/claude-compliance-mega-review.md)           | Full protocol-level audit for Claude |
-| [`docs/reports/gpt-5.6-sol-compliance-mega-review.md`](./docs/reports/gpt-5.6-sol-compliance-mega-review.md) | Comprehensive audit for GPT-5.6-sol  |
+| Document                                                               | Description                                     |
+| ---------------------------------------------------------------------- | ----------------------------------------------- |
+| [`GETTING_STARTED.md`](./GETTING_STARTED.md)                           | Step-by-step installation & agent integration   |
+| [`docs/01-product-architecture.md`](./docs/01-product-architecture.md) | Full skill taxonomy and product architecture    |
+| [`docs/02-tools-operations.md`](./docs/02-tools-operations.md)         | Detailed tool operations reference              |
+| [`docs/03-engineering-guides.md`](./docs/03-engineering-guides.md)     | Engineering practices and conventions           |
+| [`docs/04-roadmap-plans.md`](./docs/04-roadmap-plans.md)               | Roadmap and planned features                    |
+| [`docs/05-agent-instructions.md`](./docs/05-agent-instructions.md)     | Agent instruction templates                     |
+| [`docs/06-env-variables.md`](./docs/06-env-variables.md)               | Complete `RULE_MCP_*` environment variable reference |
+| [`docs/07-census.md`](./docs/07-census.md)                             | Full census of MCP tools and `/rule-*` commands  |
+| [`docs/adr/ADR.md`](./docs/adr/ADR.md)                                 | Architecture Decision Records index             |
 
 ---
 

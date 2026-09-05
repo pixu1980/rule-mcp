@@ -7,7 +7,7 @@
 
 ## Context
 
-Security audit 2026-08-04 (see docs/reports/README.md, retired reports) found that rule_tool_apply, the only tool that writes files, anchored its path-traversal check to the caller-supplied `path` argument. A call with path:"/" made every destination "inside the project", so the guard could not fail. Containment was pure path.resolve string math, so a symlinked directory inside a real project escaped it. Separately, the rule_tool_gateway receipt hashed only concatenated file contents joined with an in-band "\n---FILE---\n" separator: it never covered file paths (a receipt earned for benign code authorised writing that code to .git/hooks/pre-commit) and the separator made [{a:"X\n---FILE---\nY"}] collide with [{a:"X"},{b:"Y"}]. Guardrails validated WHAT was written and nothing about WHERE.
+Security audit 2026-08-04 (findings retired; the decisions are recorded here and in ADRs 031-044) found that rule_tool_apply, the only tool that writes files, anchored its path-traversal check to the caller-supplied `path` argument. A call with path:"/" made every destination "inside the project", so the guard could not fail. Containment was pure path.resolve string math, so a symlinked directory inside a real project escaped it. Separately, the rule_tool_gateway receipt hashed only concatenated file contents joined with an in-band "\n---FILE---\n" separator: it never covered file paths (a receipt earned for benign code authorised writing that code to .git/hooks/pre-commit) and the separator made [{a:"X\n---FILE---\nY"}] collide with [{a:"X"},{b:"Y"}]. Guardrails validated WHAT was written and nothing about WHERE.
 
 ## Decision
 

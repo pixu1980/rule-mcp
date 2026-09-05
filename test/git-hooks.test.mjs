@@ -24,8 +24,8 @@ function hookTree() {
   return dir;
 }
 
-/** A legacy hook file carrying our begin/end block around a foreign chain line. */
-function legacyPostCheckout() {
+/** A hook file carrying our begin/end block around a foreign chain line. */
+function foreignChainedHook() {
   return [
     "#!/bin/sh",
     "",
@@ -45,7 +45,7 @@ function legacyPostCheckout() {
 test("uninstall removes our block and keeps every other line", () => {
   const dir = hookTree();
   const file = join(dir, "post-checkout");
-  writeFileSync(file, legacyPostCheckout());
+  writeFileSync(file, foreignChainedHook());
 
   const result = uninstallGitHooks({ dir });
 

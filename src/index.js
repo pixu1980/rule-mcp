@@ -79,7 +79,7 @@ Start the MCP server.
 
 Options:
   --transport <type>   Transport: stdio (default), http (Streamable HTTP, current
-                       MCP spec), or sse (legacy HTTP+SSE, back-compat)
+                       MCP spec), or sse (HTTP+SSE, back-compat)
   --port <number>      Port for http/sse transport (default: 37999, or $RULE_MCP_PORT)
   --ssl-cert <path>    TLS certificate (requires --ssl-key)
   --ssl-key <path>     TLS private key (requires --ssl-cert)

@@ -65,7 +65,7 @@ const BLOCKING = new Set(["failed", "cantTell", "untested"]);
  * @returns {{ markdown: string, earl: string, summary: object }}
  */
 export function buildReport(input) {
-  const { scope, sample = [], results = [], evaluator = "rule-ai-mcp", date } = input ?? {};
+  const { scope, sample = [], results = [], evaluator = "rule-mcp", date } = input ?? {};
 
   if (!scope?.title || !scope?.url) {
     throw new Error(

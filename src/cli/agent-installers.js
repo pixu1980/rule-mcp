@@ -379,7 +379,7 @@ const removeJsonServer = (current) => {
 
 /**
  * VS Code `servers` entries carry an explicit transport `type`. It MUST match
- * the endpoint the server actually speaks: the legacy HTTP+SSE transport lives
+ * the endpoint the server actually speaks: the HTTP+SSE transport lives
  * at /sse (type "sse"); Streamable HTTP lives at /mcp (type "http"). A stdio
  * config (no url) is "stdio". Mislabeling /sse as "http" makes VS Code POST
  * Streamable-HTTP frames the SSE transport rejects.

@@ -505,12 +505,11 @@ remove_command_files "Cline project" "${CWD}/.clinerules/workflows" ".md"
 # ─────────────────────────────────────────────────────────────────────────────
 header "Phase 3: IDE Configurations"
 
-# ── Helper: remove entry for both service names (rule-mcp + legacy) ──
+# ── Helper: remove the MCP entry for this server ──
 remove_mcp_entry_dual() {
   local file="$1"
   local label="$2"
   remove_mcp_entry "$file" "$label" "rule-mcp"
-  remove_mcp_entry "$file" "$label" "pix_ai_mcp"
 }
 
 # VS Code global config (user-level - this is where VS Code 1.90+ stores MCP)
@@ -542,7 +541,7 @@ try {
   fi
 fi
 
-# VS Code project-level config (legacy)
+# VS Code project-level config
 VSCODE_MCP="$(pwd)/.vscode/mcp.json"
 if [[ -f "$VSCODE_MCP" ]]; then
   remove_mcp_entry_dual "$VSCODE_MCP" "VS Code (project)"
@@ -734,21 +733,14 @@ if [[ -f "$POST_COMMIT" ]]; then
       # Remove the WHOLE block, not just the lines matching "rule-mcp":
       # a line-wise delete strips the `if`/body but leaves the closing `fi`,
       # which makes every later commit fail with a shell syntax error.
-      # Marker-delimited blocks (current installs) go first; the legacy
-      # 4-line shape (pre-marker installs, and any orphan `fi` an older
-      # uninstall already left behind) is repaired after.
+      # Marker-delimited blocks go first; any orphan `fi` an earlier removal
+      # already left behind is repaired after.
       if [[ "$OS" == "macos" ]]; then
         SED_INPLACE=(sed -i '')
       else
         SED_INPLACE=(sed -i)
       fi
       "${SED_INPLACE[@]}" '/^# >>> rule-mcp >>>$/,/^# <<< rule-mcp <<<$/d' "$POST_COMMIT" 2>/dev/null || true
-      # Legacy: the unmarked block was exactly
-      #   # rule-mcp: auto-sync after commit
-      #   if command -v rule-mcp ...; then
-      #     rule-mcp doctor ... &
-      #   fi
-      "${SED_INPLACE[@]}" '/^# rule-mcp: auto-sync after commit$/,/^fi$/d' "$POST_COMMIT" 2>/dev/null || true
       # Repair orphan `fi` lines a previous line-wise uninstall left behind:
       # drop any `fi` that has no still-open `if` above it.
       if ! sh -n "$POST_COMMIT" 2>/dev/null; then

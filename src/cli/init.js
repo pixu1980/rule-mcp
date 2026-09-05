@@ -19,7 +19,7 @@
 
 import { execFileSync } from "node:child_process";
 import { mkdirSync } from "node:fs";
-import { findProjectRoot, getProjectPaths, migrateProjectData } from "./paths.js";
+import { findProjectRoot, getProjectPaths } from "./paths.js";
 
 /**
  * Find the tokensave binary, or nothing.
@@ -49,13 +49,10 @@ function findTokensave() {
  *   tokensaveBinary?: () => (string|undefined),
  *   run?: (binary: string, args: string[], options: object) => void,
  * }} [options]
- * @returns {{ projectDir: string, dir: string, created: boolean, migrated: boolean, tokensave?: string }}
+ * @returns {{ projectDir: string, dir: string, created: boolean, tokensave?: string }}
  */
 export function initProject(options = {}) {
   const projectDir = options.projectDir ? findProjectRoot(options.projectDir) : getProjectPaths().projectDir;
-  // A project recorded by an earlier version has a local directory to move; one
-  // that never was has nothing to do here (ADR 082).
-  const migrated = migrateProjectData({ projectDir });
   const { dir } = getProjectPaths(projectDir);
 
   let created = true;
@@ -84,7 +81,7 @@ export function initProject(options = {}) {
     }
   }
 
-  return { projectDir, dir, created, migrated: migrated.migrated, tokensave };
+  return { projectDir, dir, created, tokensave };
 }
 
 /**
@@ -98,10 +95,6 @@ export function renderInit(result) {
     `Project:      ${result.projectDir}`,
     `Recorder dir: ${result.dir}${result.created ? "" : " (could not be created)"}`,
   ];
-
-  if (result.migrated) {
-    lines.push("Migrated:     ./.rule-mcp moved out of the project");
-  }
 
   if (result.tokensave) {
     lines.push(`tokensave:    ${result.tokensave}`);

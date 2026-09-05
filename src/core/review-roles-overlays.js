@@ -4,7 +4,7 @@
  * Where a role can come from besides this repository (personas plan A.2).
  *
  * One layer sits above the embedded catalog: the user's own
- * (`~/.rule-ai-mcp/config/roles/*.json`). A match by id replaces the
+ * (`~/.rule-mcp/config/roles/*.json`). A match by id replaces the
  * embedded entry WHOLESALE - field-level merging would make "which lens applies
  * here" undebuggable.
  *

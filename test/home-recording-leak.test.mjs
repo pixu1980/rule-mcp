@@ -14,7 +14,7 @@
  * invariant is enforced where the fixture is made, and what is checked here is
  * that they go through it.
  *
- * Ported from rule-ai-mcp (hardening 4.6) with the recorder paths rebranded
+ * Ported upstream behavior (hardening 4.6) with the recorder paths rebranded
  * to the rule layout.
  */
 import { strict as assert } from "node:assert";

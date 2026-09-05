@@ -239,7 +239,7 @@ export async function registerApplyTool() {
 
       // ── Step 1: Validate the receipt against the exact file set ──
       // The receipt binds (path, content) tuples when pix_gateway received
-      // `files`; a legacy content-only receipt still covers a single file.
+      // `files`; a content-only receipt still covers a single file.
       const receiptCheck = validateApply(receipt, files);
 
       if (!receiptCheck.valid) {
@@ -308,7 +308,7 @@ export async function registerApplyTool() {
         "",
         dryRun ? "> This is a preview. Set `dryRun: false` to write files." : "",
         "",
-        `Receipt: **valid** ✅ (${receiptCheck.binding === "files" ? "path-bound" : "content-only, legacy single file"})`,
+        `Receipt: **valid** ✅ (${receiptCheck.binding === "files" ? "path-bound" : "content-only, single file"})`,
         `Root: \`${rootDir}\``,
         `Files: ${results.length}`,
         "",

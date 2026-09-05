@@ -3,7 +3,7 @@
  *
  * Validates the MCP prompt registry (src/prompts/index.js):
  *   - structure: unique kebab-case names, strict argument schema, getPrompt impl
- *   - coverage: 5 workflow one-shot + 15 area prompts + 3 legacy prompts
+ *   - coverage: 5 workflow one-shot + 15 area prompts
  *   - content rules: every prompt message proposes a commit with scope and
  *     involves TDD/a11y baselines (or asks the user what to do)
  */
@@ -36,9 +36,7 @@ const AREA_PROMPTS = [
 
 const ONE_SHOT_PROMPTS = ["rule-adr", "rule-flight", "rule-handon", "rule-init", "rule-process-check", "rule-update"];
 
-const LEGACY_PROMPTS = [];
-
-const EXPECTED = [...WORKFLOW_PROMPTS, ...AREA_PROMPTS, ...LEGACY_PROMPTS];
+const EXPECTED = [...WORKFLOW_PROMPTS, ...AREA_PROMPTS];
 
 // ── Structure ────────────────────────────────────────────────────
 

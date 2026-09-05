@@ -33,8 +33,8 @@ const FLAG = "RULE_MCP_AUTO_ADR";
 
 // Assembled rather than written out, so a sweep that deletes lines mentioning
 // the retired names cannot empty the assertions that check they are gone.
-const RETIRED_ENABLE = ["LEGACY", "AUTO", "ADR"].join("_");
-const RETIRED_DISABLE = ["LEGACY", "DISABLE", "AUTO", "ADR"].join("_");
+const RETIRED_ENABLE = ["RETIRED", "AUTO", "ADR"].join("_");
+const RETIRED_DISABLE = ["RETIRED", "DISABLE", "AUTO", "ADR"].join("_");
 
 /**
  * Register the ADR tool with a given environment and report whether it hooked

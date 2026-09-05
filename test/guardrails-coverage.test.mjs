@@ -83,7 +83,7 @@ for (const [component, framework, skill] of [
   check(`T3 ${component}/${framework} passes core principles (no classes/inline styles)`, failedCore.length === 0);
 }
 
-// ── T4: JS/TS idiom guardrails (eslint-plugin-unicorn rules) fire on legacy
+// ── T4: JS/TS idiom guardrails (eslint-plugin-unicorn rules) fire on stale
 //    patterns and pass on the modern idioms the styleguide mandates. ──
 const JS_IDIOM_IDS = [
   "js-prefer-set-has",

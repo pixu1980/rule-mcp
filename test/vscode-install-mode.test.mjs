@@ -1,6 +1,6 @@
 /**
  * Regression: VS Code installs are user-global by default. Daemon installs
- * must use VS Code's HTTP MCP schema and migrate only this server's legacy
+ * must use VS Code's HTTP MCP schema and migrate only this server's earlier
  * mcpServers entry without creating a workspace .vscode/mcp.json.
  */
 import { strict as assert } from "node:assert";
@@ -52,7 +52,7 @@ execFileSync(
 
 const globalConfig = JSON.parse(readFileSync(globalFile, "utf8"));
 const globalServer = globalConfig.servers["rule-mcp"];
-// The daemon serves the legacy HTTP+SSE transport at /sse, so the declared
+// The daemon serves the HTTP+SSE transport at /sse, so the declared
 // client type must be "sse" (VS Code's "http" type speaks Streamable HTTP and
 // would POST to /sse, which the SSE transport does not accept).
 assert.equal(globalServer.type, "sse");

@@ -22,8 +22,6 @@ import { homedir } from "node:os";
 import { basename, dirname, join, resolve, sep } from "node:path";
 import { fileURLToPath } from "node:url";
 
-import { uninstallGitHooks } from "../core/git-hooks.js";
-
 /** @type {{ name: string, version: string }} */
 export const pkg = JSON.parse(readFileSync(new URL("../../package.json", import.meta.url), "utf8"));
 
@@ -76,75 +74,6 @@ export function getRuntimePaths() {
     logFile: join(stateDir, "daemon.log"),
     configDir: join(root, "config"),
   };
-}
-
-/**
- * Migrate a previous install's home directory into the current root.
- *
- * A machine that ran an earlier layout may hold its state under a legacy home
- * path named by `RULE_MCP_LEGACY_HOME` (state/data/projects). Adopting
- * it keeps the token, the installation id, cached results and per-project
- * recordings instead of restarting from scratch. Runs once per process, is
- * non-destructive, and degrades to a no-op when no legacy home is configured
- * or present.
- *
- * @returns {{ migrated: boolean, from?: string, to?: string }}
- */
-export function migrateHomeData() {
-  // Nothing to do when state was relocated on purpose (tests, containers):
-  // the caller pointed state elsewhere, so adopting the home is not wanted.
-  if (process.env.RULE_MCP_STATE_DIR) {
-    return { migrated: false };
-  }
-
-  const legacyHome = process.env.RULE_MCP_LEGACY_HOME;
-
-  if (!legacyHome) {
-    return { migrated: false };
-  }
-
-  const fromRoot = resolve(legacyHome);
-
-  if (existsSync(fromRoot)) {
-    return migrateHomeDataFrom(fromRoot);
-  }
-
-  return { migrated: false };
-}
-
-/** Adopt each known subdirectory of an old home root, non-destructively. */
-function migrateHomeDataFrom(fromRoot) {
-  const paths = getRuntimePaths();
-  const moved = [];
-
-  for (const sub of ["state", "data", "projects"]) {
-    const from = join(fromRoot, sub);
-    const to = join(paths.homeDir, sub);
-
-    if (!existsSync(from)) {
-      continue;
-    }
-
-    try {
-      mkdirSync(paths.homeDir, { recursive: true });
-
-      if (existsSync(to)) {
-        for (const entry of readdirSync(from, { withFileTypes: true })) {
-          if (!existsSync(join(to, entry.name))) {
-            renameSync(join(from, entry.name), join(to, entry.name));
-          }
-        }
-      } else {
-        renameSync(from, to);
-      }
-
-      moved.push(sub);
-    } catch {
-      /* a migration that fails degrades to a fresh start */
-    }
-  }
-
-  return { migrated: moved.length > 0, from: fromRoot, to: paths.homeDir };
 }
 
 /**
@@ -234,107 +163,6 @@ export function getProjectPaths(cwd = process.cwd()) {
 function projectsRoot() {
   return join(getRuntimePaths().homeDir, "projects");
 }
-
-/**
- * The directories a previous install may have written INTO a project.
- *
- * The port migrates both the upstream recorder name and this server's own
- * earlier local layout, so a machine that ran either one converges.
- */
-const LEGACY_PROJECT_DIRS = [".rule-ai-mcp", ".rule-mcp"];
-
-/**
- * Move a project's recording out of the project and into the state directory.
- *
- * An install from an earlier version has a local recorder directory in every
- * repository it observed, kept out of version control by a rule the git hooks
- * re-asserted. Neither exists now. The data does: a log that took months to
- * accumulate is not something a refactor gets to discard, so it is moved once,
- * appended if a central log already exists, and the rule that was written for
- * it is taken out of the `.gitignore` on the way past.
- *
- * Runs at most once per project per process. Every failure is swallowed: a
- * migration that cannot happen must degrade to recording in the new place, not
- * to a crash.
- *
- * @param {{ projectDir?: string }} [options]
- * @returns {{ migrated: boolean, from?: string, to?: string }}
- */
-export function migrateProjectData(options = {}) {
-  const projectDir = findProjectRoot(options.projectDir ?? process.cwd());
-
-  if (_migratedProjects.has(projectDir)) {
-    return { migrated: false };
-  }
-
-  _migratedProjects.add(projectDir);
-  const from = LEGACY_PROJECT_DIRS.map((name) => join(projectDir, name)).find((path) => existsSync(path));
-
-  if (!from) {
-    return { migrated: false };
-  }
-
-  const { dir: to } = getProjectPaths(projectDir);
-
-  try {
-    mkdirSync(to, { recursive: true });
-
-    for (const entry of readdirSync(from, { withFileTypes: true })) {
-      const source = join(from, entry.name);
-      const target = join(to, entry.name);
-
-      if (entry.name === "telemetry.jsonl" && existsSync(target)) {
-        // Two recordings of the same project: keep both, oldest first.
-        appendFileSync(target, readFileSync(source, "utf8"));
-        continue;
-      }
-
-      if (existsSync(target) && entry.isDirectory()) {
-        for (const nested of readdirSync(source)) {
-          if (!existsSync(join(target, nested))) {
-            renameSync(join(source, nested), join(target, nested));
-          }
-        }
-
-        continue;
-      }
-
-      if (!existsSync(target)) {
-        renameSync(source, target);
-      }
-    }
-
-    rmSync(from, { recursive: true, force: true });
-    dropProjectIgnoreRule(projectDir);
-    // The hooks existed only to keep that directory ignored, so they go with it.
-    uninstallGitHooks();
-
-    return { migrated: true, from, to };
-  } catch {
-    return { migrated: false };
-  }
-}
-
-/** Take the recorder's line out of a `.gitignore` the server wrote it into. */
-function dropProjectIgnoreRule(projectDir) {
-  const file = join(projectDir, ".gitignore");
-
-  try {
-    if (!existsSync(file)) {
-      return;
-    }
-
-    const kept = readFileSync(file, "utf8")
-      .split("\n")
-      .filter((line) => !/^\.?(?:rule-ai-mcp|rule-mcp)\/?$/.test(line.trim()));
-    writeFileSync(file, kept.join("\n"));
-  } catch {
-    /* a read-only checkout keeps a rule for a directory that no longer exists */
-  }
-}
-
-/** Projects whose local recording this process has already moved. */
-const _migratedProjects = new Set();
 
 /**
  * Get skill directory paths.
