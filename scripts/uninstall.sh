@@ -447,30 +447,26 @@ fi
 # ─────────────────────────────────────────────────────────────────────────────
 header "Phase 2b: Agent Command Files"
 
-COMMAND_NAMES=(
-  "rule-mcp"
-  "rule-handoff"
-  "rule-tdd"
-  "rule-adr"
-  "rule-fix"
-  "rule-check"
-)
-
 remove_command_files() {
   local label="$1"
-  local pattern="$2"
+  local dir="$2"
+  local ext="$3"
+
+  if [[ ! -d "$dir" ]]; then
+    return
+  fi
 
   local found=0
-  for cmd in "${COMMAND_NAMES[@]}"; do
-    local file="${pattern/\{cmd\}/$cmd}"
-    if [[ -f "$file" ]]; then
-      if [[ "$DRY_RUN" == "true" ]]; then
-        sub "[dry-run] Would remove: ${file}"
-      else
-        rm -f "$file"
-      fi
-      found=$((found + 1))
+  for file in "$dir"/rule-*"$ext"; do
+    # No rule-* file matches: the glob stays literal under `set -o nullglob` off
+    [[ -e "$file" ]] || continue
+
+    if [[ "$DRY_RUN" == "true" ]]; then
+      sub "[dry-run] Would remove: ${file}"
+    else
+      rm -f "$file"
     fi
+    found=$((found + 1))
   done
 
   if [[ "$DRY_RUN" != "true" && $found -gt 0 ]]; then
@@ -482,27 +478,27 @@ remove_command_files() {
   fi
 }
 
-remove_command_files "Pi" "$HOME_DIR/.pi/agent/prompts/{cmd}.md"
-remove_command_files "Claude Code" "$HOME_DIR/.claude/commands/{cmd}.md"
-remove_command_files "Gemini CLI" "$HOME_DIR/.gemini/commands/{cmd}.toml"
+remove_command_files "Pi" "$HOME_DIR/.pi/agent/prompts" ".md"
+remove_command_files "Claude Code" "$HOME_DIR/.claude/commands" ".md"
+remove_command_files "Gemini CLI" "$HOME_DIR/.gemini/commands" ".toml"
 
 if [[ -d "$HOME_DIR/.codeium/windsurf" ]]; then
-  remove_command_files "Windsurf global" "$HOME_DIR/.codeium/windsurf/global_workflows/{cmd}.md"
+  remove_command_files "Windsurf global" "$HOME_DIR/.codeium/windsurf/global_workflows" ".md"
 fi
 if [[ -d "$HOME_DIR/.config/windsurf" ]]; then
-  remove_command_files "Windsurf global" "$HOME_DIR/.config/windsurf/global_workflows/{cmd}.md"
+  remove_command_files "Windsurf global" "$HOME_DIR/.config/windsurf/global_workflows" ".md"
 fi
 if [[ -d "$HOME_DIR/.cline" ]]; then
-  remove_command_files "Cline global" "$HOME_DIR/.cline/data/workflows/{cmd}.md"
+  remove_command_files "Cline global" "$HOME_DIR/.cline/data/workflows" ".md"
 fi
 if [[ -d "$HOME_DIR/.config/cline" ]]; then
-  remove_command_files "Cline global" "$HOME_DIR/.config/cline/data/workflows/{cmd}.md"
+  remove_command_files "Cline global" "$HOME_DIR/.config/cline/data/workflows" ".md"
 fi
 
 CWD="$(pwd 2>/dev/null || echo '.')"
-remove_command_files "Cursor project" "${CWD}/.cursor/commands/{cmd}.md"
-remove_command_files "Windsurf project" "${CWD}/.windsurf/workflows/{cmd}.md"
-remove_command_files "Cline project" "${CWD}/.clinerules/workflows/{cmd}.md"
+remove_command_files "Cursor project" "${CWD}/.cursor/commands" ".md"
+remove_command_files "Windsurf project" "${CWD}/.windsurf/workflows" ".md"
+remove_command_files "Cline project" "${CWD}/.clinerules/workflows" ".md"
 
 # ─────────────────────────────────────────────────────────────────────────────
 # PHASE 3: IDE Configurations

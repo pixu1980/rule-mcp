@@ -23,10 +23,10 @@ execFileSync(
 );
 
 const expectations = [
-  [join(piDir, "prompts", "rule-mcp.md"), "$ARGUMENTS", "Pi slash command"],
-  [join(fakeHome, ".claude", "commands", "rule-mcp.md"), "$ARGUMENTS", "Claude command"],
-  [join(fakeHome, ".gemini", "commands", "rule-mcp.toml"), "{{args}}", "Gemini custom command"],
-  [join(fakeProject, ".cursor", "commands", "rule-mcp.md"), "$ARGUMENTS", "Cursor project command"],
+  [join(piDir, "prompts", "rule.md"), "$ARGUMENTS", "Pi slash command"],
+  [join(fakeHome, ".claude", "commands", "rule.md"), "$ARGUMENTS", "Claude command"],
+  [join(fakeHome, ".gemini", "commands", "rule.toml"), "{{args}}", "Gemini custom command"],
+  [join(fakeProject, ".cursor", "commands", "rule.md"), "$ARGUMENTS", "Cursor project command"],
   [join(fakeHome, ".copilot", "agents", "rule-mcp.agent.md"), "rule-mcp", "Copilot custom agent"],
 ];
 

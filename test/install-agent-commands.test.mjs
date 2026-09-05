@@ -41,29 +41,48 @@ try {
   assert.equal(result.status, 0, result.stderr || result.stdout);
 
   const commandFiles = [
-    join(home, ".pi", "agent", "prompts", "rule-mcp.md"),
-    join(home, ".claude", "commands", "rule-mcp.md"),
-    join(home, ".gemini", "commands", "rule-mcp.toml"),
-    join(home, ".codeium", "windsurf", "global_workflows", "rule-mcp.md"),
-    join(home, ".cline", "data", "workflows", "rule-mcp.md"),
-    join(project, ".cursor", "commands", "rule-mcp.md"),
-    join(project, ".windsurf", "workflows", "rule-mcp.md"),
-    join(project, ".clinerules", "workflows", "rule-mcp.md"),
+    join(home, ".pi", "agent", "prompts", "rule.md"),
+    join(home, ".claude", "commands", "rule.md"),
+    join(home, ".gemini", "commands", "rule.toml"),
+    join(home, ".codeium", "windsurf", "global_workflows", "rule.md"),
+    join(home, ".cline", "data", "workflows", "rule.md"),
+    join(project, ".cursor", "commands", "rule.md"),
+    join(project, ".windsurf", "workflows", "rule.md"),
+    join(project, ".clinerules", "workflows", "rule.md"),
   ];
 
   for (const file of commandFiles) {
     assert.ok(existsSync(file), `missing command file: ${file}`);
     const content = readFileSync(file, "utf8");
-    assert.ok(content.includes("rule-mcp"), `${file} must name rule-mcp`);
-    assert.ok(content.includes("rule"), `${file} must explicitly route through rule`);
+    assert.ok(content.includes("rule"), `${file} must route through rule`);
+  }
+
+  // The full registry set lands, not just the router: an area command, a
+  // one-shot and a persona command.
+  const piPrompts = join(home, ".pi", "agent", "prompts");
+  for (const expected of ["rule-area-frontend.md", "rule-process-check.md", "rule-plan-security.md"]) {
+    assert.ok(existsSync(join(piPrompts, expected)), `missing registry command: ${expected}`);
+  }
+
+  // Renamed/deleted commands never surface: the installer is registry-driven.
+  const stale = [
+    "rule-mcp.md",
+    "rule-tdd.md",
+    "rule-check.md",
+    "rule-caveman.md",
+    "rule-new-feature.md",
+    "rule-a11y-audit.md",
+    "rule-code-review.md",
+    "rule-pull-request.md",
+    "rule-setup-project.md",
+    "rule-write-tests.md",
+  ];
+  for (const name of stale) {
+    assert.ok(!existsSync(join(piPrompts, name)), `stale command must not be installed: ${name}`);
   }
 
   const installScript = readFileSync(join(root, "scripts", "install.sh"), "utf8");
   assert.ok(installScript.includes("install-agent-commands.sh"), "install.sh must install explicit agent commands");
-  assert.ok(
-    installScript.includes("if [[ ${#COMMAND_ARGS[@]} -gt 0 ]]"),
-    "install.sh must handle an empty command argument array on Bash 3",
-  );
 
   console.log(`  ✅ ${commandFiles.length} explicit agent command integrations installed`);
 } finally {

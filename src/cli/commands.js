@@ -9,7 +9,7 @@
  */
 
 import { spawn, execSync } from "node:child_process";
-import { appendFileSync, existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { appendFileSync, existsSync, mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync } from "node:fs";
 import { resolve, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { startServer } from "../server.js";
@@ -682,24 +682,38 @@ function syncCommandTargets(opts) {
       mkdirSync(dir, { recursive: true });
     }
 
+    // Remove sweeps the whole `rule-*` namespace in the target dir, so names
+    // that left the registry (a rename, a deletion) are purged too instead of
+    // lingering as stale commands next to the new set.
+    if (opts.remove) {
+      const stale = readdirSync(dir)
+        .filter((entry) => entry.startsWith("rule-"))
+        .filter((entry) => entry.endsWith(".md") || entry.endsWith(".toml") || entry.endsWith(".prompt.md"));
+
+      for (const entry of stale) {
+        const file = resolve(dir, entry);
+
+        if (!opts.dryRun) {
+          rmSync(file, { force: true });
+        }
+      }
+
+      files += stale.length;
+      print(`  ${opts.dryRun ? "[dry-run] " : ""}${label}: removed ${stale.length} rule* command file(s) → ${dir}`);
+      continue;
+    }
+
     for (const { filename, content } of rendered) {
       const file = resolve(dir, filename);
 
-      if (opts.remove) {
-        if (existsSync(file) && !opts.dryRun) {
-          rmSync(file, { force: true });
-        }
-      } else if (!opts.dryRun) {
+      if (!opts.dryRun) {
         writeFileSync(file, content);
       }
 
       files += 1;
     }
 
-    const verb = opts.remove ? "removed" : "wrote";
-    print(
-      `  ${opts.dryRun ? "[dry-run] " : ""}${label}: ${verb} ${rendered.length} ${format} command file(s) → ${dir}`,
-    );
+    print(`  ${label}: wrote ${rendered.length} ${format} command file(s) → ${dir}`);
   }
 
   print(

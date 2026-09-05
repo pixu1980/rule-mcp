@@ -9,7 +9,7 @@
  * hand-maintained per-agent heredocs so the command set never drifts from the
  * prompts and stays consistently ordered.
  *
- * Ordering (see {@link commandNames}): the `rule-mcp` router is pinned
+ * Ordering (see {@link commandNames}): the `rule` router is pinned
  * first; every remaining command follows in locale-alphabetical order.
  *
  * Why clean commands at all: Claude Code exposes MCP prompts as
@@ -27,7 +27,7 @@ import { activeRoles } from "./review-roles.js";
 import { OPERATIONS } from "./review-roles-template.js";
 
 /** The router command, pinned first in every agent's command list. */
-export const ROUTER_COMMAND = "rule-mcp";
+export const ROUTER_COMMAND = "rule";
 
 /**
  * Render formats, as data. Two independent axes:
@@ -90,11 +90,11 @@ function quoted(text) {
 }
 
 /**
- * The router command's description + body (mirrors prompts/rule-mcp.md).
+ * The router command's description + body (mirrors prompts/rule.md).
  * Kept inline so the generator has no filesystem dependency.
  */
 const ROUTER = {
-  description: "Explicitly route a request through rule-mcp",
+  description: "Explicitly route a request through rule",
   argumentHint: "<request>",
   body: [
     "Process this request through the recommended rule workflow:",
@@ -110,6 +110,8 @@ const ROUTER = {
     "6. Run `pix_check` against generated code. Fix every failure and rerun until all guardrails pass.",
     "7. Run project tests/typecheck. Report commands and real outcomes; never claim unexecuted checks passed.",
     "8. Finish by proposing a conventional commit message with a mandatory scope.",
+    "",
+    "Caveman is implicit: if the user is working in caveman mode, keep every response compressed.",
   ].join("\n"),
 };
 
@@ -133,6 +135,7 @@ const HANDOFF_BODY = [
   "3. Persist the handoff: write it to `docs/handoff/<NN>-<slug>.md` where NN is the next free two-digit number in that directory and <slug> is a kebab-case topic (e.g. `13-security-audit-remediation.md`). Open with the branch, the commit range it covers, and the date. Then commit that file ALONE - no other paths - as `chore(handoff): add session handoff <NN>-<slug>`. A handoff that exists only in the chat is lost when the session ends.",
   "4. Present the handoff as a paste-ready block for the next session, including the commit-scope convention reminder, the path of the handoff file, and the list of commits just created.",
   "5. If the grouping into atomic commits is ambiguous, ask the user how to split before committing.",
+  "6. Caveman is implicit: if the user is working in caveman mode, keep the handoff and every response compressed.",
 ].join("\n");
 
 /**
@@ -144,7 +147,7 @@ const HANDOFF_BODY = [
  */
 function areaBody(description) {
   return [
-    "Route this request through rule-mcp: $ARGUMENTS",
+    "Route this request through rule: $ARGUMENTS",
     "",
     `Scope: ${description}`,
     "",
@@ -153,6 +156,7 @@ function areaBody(description) {
     "3. Baseline: write failing tests first (TDD) and cover a11y (WCAG 2.2 AA) where applicable; if there is no test/a11y surface, ask the user what to cover.",
     "4. Validate generated code with `pix_check`; iterate until all guardrails pass.",
     "5. Finish by proposing a conventional commit message with a mandatory scope.",
+    "6. Caveman is implicit: if the user is working in caveman mode, keep the response compressed.",
   ].join("\n");
 }
 
@@ -205,7 +209,8 @@ function personaBody(target) {
     `4. Call \`rule_tool_plan_docs\` with \`role=${target.role}\` and the findings to write/refresh the trio`,
     "   bookkeeping (headers, tables, statuses). Fill in the evidence, the finding wording and the steps.",
     "5. If a decision belongs to the user, stop and ask instead of guessing.",
-    "6. Finish by proposing a conventional commit with a mandatory scope for the documents this run",
+    "6. Caveman is implicit: if the user is working in caveman mode, keep the response compressed.",
+    "7. Finish by proposing a conventional commit with a mandatory scope for the documents this run",
     `   wrote, e.g. \`docs(${target.role}): ${target.operation}\`.`,
   ].join("\n");
 }

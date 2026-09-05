@@ -25,27 +25,20 @@ const HELP_TOKENS = new Set(["help", "--help", "-h"]);
  * Examples shown by the generic `/rule-* help` message, keyed by prompt name.
  */
 const PROMPT_EXAMPLES = {
-  "rule-a11y-audit": ["/rule-a11y-audit help", "/rule-a11y-audit review the login form for WCAG 2.2 AA"],
-  "rule-ai": ["/rule-ai help", "/rule-ai add a web-search tool to the agent"],
-  "rule-backend": ["/rule-backend help", "/rule-backend express REST API with zod validation"],
-  "rule-caveman": ["/rule-caveman help", "/rule-caveman write a commit for the pending changes"],
-  "rule-code-review": ["/rule-code-review help", "/rule-code-review review this component for styleguide compliance"],
-  "rule-data": ["/rule-data help", "/rule-data postgresql schema for the users table"],
-  "rule-devops": ["/rule-devops help", "/rule-devops multi-stage docker build for node"],
-  "rule-frontend": ["/rule-frontend help", "/rule-frontend react login form with validation"],
+  "rule-area-ai": ["/rule-area-ai help", "/rule-area-ai add a web-search tool to the agent"],
+  "rule-area-backend": ["/rule-area-backend help", "/rule-area-backend express REST API with zod validation"],
+  "rule-area-data": ["/rule-area-data help", "/rule-area-data postgresql schema for the users table"],
+  "rule-area-devops": ["/rule-area-devops help", "/rule-area-devops multi-stage docker build for node"],
+  "rule-area-frontend": ["/rule-area-frontend help", "/rule-area-frontend react login form with validation"],
+  "rule-area-meta": ["/rule-area-meta help", "/rule-area-meta search for the a11y skill"],
+  "rule-area-platform": ["/rule-area-platform help", "/rule-area-platform electron desktop app scaffold"],
+  "rule-area-process": ["/rule-area-process help", "/rule-area-process run a code review on the pending changes"],
+  "rule-area-skills": ["/rule-area-skills help", "/rule-area-skills find a skill for docker"],
+  "rule-area-styleguide": ["/rule-area-styleguide help", "/rule-area-styleguide check this HTML for semantics"],
+  "rule-area-toolchain": ["/rule-area-toolchain help", "/rule-area-toolchain set up vite + biome"],
+  "rule-area-ui": ["/rule-area-ui help", "/rule-area-ui design-system button component"],
   "rule-handoff": ["/rule-handoff help", "/rule-handoff close-session"],
-  "rule-meta": ["/rule-meta help", "/rule-meta search for the a11y skill"],
-  "rule-new-feature": ["/rule-new-feature help", "/rule-new-feature add dark mode to the header (react, include tests)"],
-  "rule-platform": ["/rule-platform help", "/rule-platform electron desktop app scaffold"],
-  "rule-process": ["/rule-process help", "/rule-process run a code review on the pending changes"],
-  "rule-pull-request": ["/rule-pull-request help", "/rule-pull-request login form with tests and ADR"],
-  "rule-setup-project": ["/rule-setup-project help", "/rule-setup-project my-app vite react"],
-  "rule-skills": ["/rule-skills help", "/rule-skills find a skill for docker"],
-  "rule-styleguide": ["/rule-styleguide help", "/rule-styleguide check this HTML for semantics"],
-  "rule-tdd": ["/rule-tdd help", "/rule-tdd write failing tests for the shopping cart"],
-  "rule-toolchain": ["/rule-toolchain help", "/rule-toolchain set up vite + biome"],
-  "rule-ui": ["/rule-ui help", "/rule-ui design-system button component"],
-  "rule-write-tests": ["/rule-write-tests help", "/rule-write-tests a11y tests for the modal (component)"],
+  "rule-process-check": ["/rule-process-check help", "/rule-process-check the current diff"],
 };
 
 /**
@@ -86,6 +79,7 @@ function areaPromptText(area, tools) {
     "The request is free text: extract the target framework/platform/database/tool from it when present; never invent APIs, files, dependencies, commands, or requirements not present in the skill evidence.",
     "Baseline: involve TDD (write failing tests first) and a11y (WCAG 2.2 AA, axe-core where applicable). If the request has no test/a11y surface, ask the user what to cover before finishing.",
     "Validate generated code with `rule_tool_check` and iterate until all guardrails pass.",
+    "Caveman is implicit: if the user is working in caveman mode, keep the response compressed.",
     `When the work is done, propose a conventional commit message with a mandatory scope, e.g. "feat(${area}): ...".`,
   ];
 
@@ -100,25 +94,13 @@ function areaPromptText(area, tools) {
 export function listPrompts() {
   return [
     {
-      name: "rule-a11y-audit",
-      description:
-        "Audit a11y end-to-end: review code for WCAG 2.2 AA compliance and generate Playwright + axe-core tests",
-      arguments: [
-        {
-          name: "code",
-          description: "Code to review for a11y compliance (free text: include framework/component if relevant)",
-          required: true,
-        },
-      ],
-    },
-    {
-      name: "rule-ai",
+      name: "rule-area-ai",
       description: "AI agent work: rule-ai-agents patterns for agent integrations",
       arguments: [{ name: "request", description: "Agent integration task", required: true }],
     },
 
     {
-      name: "rule-backend",
+      name: "rule-area-backend",
       description: "Backend/API work: node, express, fastify, hono, nestjs, graphql, api design, security",
       arguments: [
         {
@@ -129,25 +111,7 @@ export function listPrompts() {
       ],
     },
     {
-      name: "rule-caveman",
-      description: "Ultra-compressed communication and review: caveman modes, compressed commits, compressed reviews",
-      arguments: [
-        {
-          name: "request",
-          description: "Text to compress, or commit/review to write in caveman style",
-          required: true,
-        },
-      ],
-    },
-    {
-      name: "rule-code-review",
-      description: "Review code against rule styleguides",
-      arguments: [
-        { name: "code", description: "Code to review (free text: include framework if relevant)", required: true },
-      ],
-    },
-    {
-      name: "rule-data",
+      name: "rule-area-data",
       description: "Data-layer work: postgresql, mysql, sqlite, mongodb, duckdb, indexed-db, SQL",
       arguments: [
         {
@@ -158,14 +122,14 @@ export function listPrompts() {
       ],
     },
     {
-      name: "rule-devops",
+      name: "rule-area-devops",
       description: "DevOps work: docker, gitlab-ci, observability, testing, versioning",
       arguments: [
         { name: "request", description: "CI/CD, container, observability, or versioning task", required: true },
       ],
     },
     {
-      name: "rule-frontend",
+      name: "rule-area-frontend",
       description: "Frontend work following rule styleguides: zero CSS classes, semantic HTML, external CSS, TDD + a11y",
       arguments: [
         {
@@ -189,7 +153,7 @@ export function listPrompts() {
       ],
     },
     {
-      name: "rule-meta",
+      name: "rule-area-meta",
       description:
         "Work with the rule dispatcher/action toolset: routing, gateway, apply, search, check, scaffold, detect, fix, ADR, handoff",
       arguments: [
@@ -197,20 +161,7 @@ export function listPrompts() {
       ],
     },
     {
-      name: "rule-new-feature",
-      description:
-        "Implement a feature end-to-end: route → evidence → failing tests → code → guardrails → tests → commit scope",
-      arguments: [
-        {
-          name: "feature",
-          description:
-            'Feature description or requirement (free text: include framework/area and "no tests" to skip TDD/a11y tests)',
-          required: true,
-        },
-      ],
-    },
-    {
-      name: "rule-platform",
+      name: "rule-area-platform",
       description: "Platform work: web, desktop, expo, agent, library",
       arguments: [
         {
@@ -221,54 +172,24 @@ export function listPrompts() {
       ],
     },
     {
-      name: "rule-process",
-      description: "Process work: code review, feature workflow, documentation, ADR, handoff, BMAD",
+      name: "rule-area-process",
+      description: "Process work: code review, TDD, feature workflow, documentation, ADR, handoff, BMAD",
       arguments: [
-        { name: "request", description: "Review, workflow, documentation, or decision task", required: true },
+        { name: "request", description: "Review, TDD, workflow, documentation, or decision task", required: true },
       ],
     },
     {
-      name: "rule-pull-request",
-      description:
-        "Prepare a pull request: review + a11y + security, update the ADR, commit with scope, PR description",
-      arguments: [
-        {
-          name: "description",
-          description:
-            'What changed / PR summary (free text: append "no adr" to skip the Architecture Decision Record)',
-          required: true,
-        },
-      ],
-    },
-    {
-      name: "rule-setup-project",
-      description:
-        "Bootstrap a project end-to-end: detect framework, scaffold config, toolchain, and context-pack generation",
-      arguments: [
-        {
-          name: "projectName",
-          description: 'Project name (free text: append framework/toolchain/tier, e.g. "my-app vite react")',
-          required: true,
-        },
-      ],
-    },
-    {
-      name: "rule-skills",
+      name: "rule-area-skills",
       description: "Skill discovery: find, install, and evaluate agent skills",
       arguments: [{ name: "request", description: "Skill you are looking for", required: true }],
     },
     {
-      name: "rule-styleguide",
+      name: "rule-area-styleguide",
       description: "Styleguide work: a11y, css, html, javascript, json, markdown, naming, patterns, validation",
       arguments: [{ name: "request", description: "Styleguide check or authoring task", required: true }],
     },
     {
-      name: "rule-tdd",
-      description: "Test-driven development workflow: red → green → refactor, failing tests first",
-      arguments: [{ name: "request", description: "Feature or bugfix to develop test-first", required: true }],
-    },
-    {
-      name: "rule-toolchain",
+      name: "rule-area-toolchain",
       description:
         "Toolchain configuration: vite, pnpm, turborepo, rspack, parcel, typescript, eslint, biome, husky, commits, project",
       arguments: [
@@ -280,20 +201,9 @@ export function listPrompts() {
       ],
     },
     {
-      name: "rule-ui",
+      name: "rule-area-ui",
       description: "UI design-system work: design-system components, tokens, patterns",
       arguments: [{ name: "request", description: "UI/design-system task", required: true }],
-    },
-    {
-      name: "rule-write-tests",
-      description: "Write tests: TDD unit tests, a11y Playwright + axe-core specs, and devops test setup",
-      arguments: [
-        {
-          name: "scope",
-          description: "What to test (free text: include test type - tdd, a11y, devops, all)",
-          required: true,
-        },
-      ],
     },
     {
       name: "rule-adr",
@@ -303,7 +213,7 @@ export function listPrompts() {
       ],
     },
     {
-      name: "rule-check",
+      name: "rule-process-check",
       description: "Validate code against the rule guardrails and fix what fails",
       arguments: [
         {
@@ -458,78 +368,6 @@ export function getPrompt(name, args = {}) {
 
   // ── One-shot workflow prompts ──────────────────────────────────
   switch (name) {
-    case "rule-setup-project": {
-      return {
-        name,
-        description: "Bootstrap a project end-to-end",
-        messages: user(
-          "You are a project bootstrap specialist for rule-mcp.\n" +
-            "Sequence:\n" +
-            "1. Call `rule_tool_detect` on the project path (or use the framework name from the request text) to detect the stack.\n" +
-            "2. Route through `pix_tool` with the detected framework to load the primary rule-* skill evidence.\n" +
-            "3. Call `rule_tool_scaffold` for the project config files, then `pix_toolchain_project` (or the area toolchain skill) for tooling setup.\n" +
-            "4. Generate the project context pack (`.context/`) in the target project at the requested tier.\n" +
-            "5. Validate every generated file with `rule_tool_check` and iterate until all guardrails pass.\n" +
-            "Baseline: if the scaffold produces code, include failing tests first (TDD) and a11y checks; if not applicable, ask the user what to cover.\n" +
-            'Finish by proposing a conventional commit message with a mandatory scope, e.g. "chore(setup): ...".',
-        ),
-      };
-    }
-
-    case "rule-new-feature": {
-      return {
-        name,
-        description: "Implement a feature end-to-end",
-        messages: user(
-          "You are a feature-implementation specialist for rule-mcp.\n" +
-            "Sequence:\n" +
-            "1. Route the feature through `pix_tool` (extract framework/area from the request text when present) and load the routed skill evidence as source of truth.\n" +
-            "2. If a feature-workflow skill applies (pix_process_feature_workflow or BMAD), run it first to define scope.\n" +
-            "3. Write failing tests first (TDD) for the feature; include a11y tests (Playwright + axe-core) when the change has UI surface.\n" +
-            "4. Implement against the skill evidence; call `rule_tool_component` for component templates when applicable.\n" +
-            "5. Run `rule_tool_check` against the generated code and iterate until all guardrails pass.\n" +
-            "6. Run the project tests/typecheck and report real outcomes.\n" +
-            "If the request is ambiguous, ask the user what to cover before finishing.\n" +
-            'Finish by proposing a conventional commit message with a mandatory scope, e.g. "feat(<area>): <summary>".',
-        ),
-      };
-    }
-
-    case "rule-pull-request": {
-      return {
-        name,
-        description: "Prepare a pull request (review + ADR + commit scope + description)",
-        messages: user(
-          "You are a pull-request specialist for rule-mcp.\n" +
-            "Sequence:\n" +
-            "1. Review the changes: run the code-review skill (`pix_process_code_review`), caveman review (`pix_caveman_review`), a11y review (`pix_styleguide_a11y`), and backend security review (`pix_backend_security`) when the change touches those surfaces.\n" +
-            "2. Fix every guardrail failure with `rule_tool_check` until all pass.\n" +
-            '3. Generate or update the Architecture Decision Record with `rule_tool_process_adr` for any structural decision (updated by default; append "no adr" to the request to skip).\n' +
-            "4. Ensure the work includes tests (TDD + a11y where applicable); if missing, flag it and ask the user.\n" +
-            "5. Write the PR description: summary, why, test evidence, and any ADR references.\n" +
-            'Finish by proposing a conventional commit message with a mandatory scope, e.g. "feat(<scope>): <summary>".',
-        ),
-      };
-    }
-
-    case "rule-write-tests": {
-      return {
-        name,
-        description: "Write tests (TDD + a11y + devops)",
-        messages: user(
-          "You are a test-writing specialist for rule-mcp.\n" +
-            "Sequence:\n" +
-            "1. Route through `pix_tool` (with framework when known) and load the test-driven-development skill evidence (pix_test_driven_development).\n" +
-            "2. Depending on the test types named in the request (tdd, a11y, devops, all): write failing unit tests first (TDD), generate Playwright + @axe-core/playwright a11y specs (pix_styleguide_a11y / pix_devops_testing), or both.\n" +
-            "3. For component tests use `rule_tool_component` (component=a11y-test-basic/forms/components, playwright-config).\n" +
-            "4. Run the tests and report real outcomes; never claim unexecuted checks passed.\n" +
-            "5. Validate the test code with `rule_tool_check`.\n" +
-            "If the scope is ambiguous, ask the user what to cover before finishing.\n" +
-            'Finish by proposing a conventional commit message with a mandatory scope, e.g. "test(<scope>): add ... tests".',
-        ),
-      };
-    }
-
     case "rule-handoff": {
       const options = parseHandoffOptions(args?.options);
 
@@ -569,50 +407,45 @@ export function getPrompt(name, args = {}) {
 
   // ── Area prompts ───────────────────────────────────────────────
   const AREAS = {
-    "rule-meta": areaPromptText(
+    "rule-area-meta": areaPromptText(
       "meta",
       "pix_tool, rule_tool_gateway, rule_tool_apply, rule_tool_search, rule_tool_check, rule_tool_scaffold, rule_tool_detect, rule_tool_fix, rule_tool_process_adr, rule_tool_process_handoff",
     ),
-    "rule-frontend": areaPromptText(
+    "rule-area-frontend": areaPromptText(
       "frontend",
       "pix_frontend_react, pix_frontend_vue, pix_frontend_svelte, pix_frontend_angular, pix_frontend_solidjs, pix_frontend_astro, pix_frontend_meta_next, pix_frontend_meta_nuxt, pix_frontend_meta_remix, pix_frontend_vanilla_reactive, pix_frontend_design",
     ),
-    "rule-backend": areaPromptText(
+    "rule-area-backend": areaPromptText(
       "backend",
       "pix_backend_node, pix_backend_express, pix_backend_fastify, pix_backend_hono, pix_backend_nestjs, pix_backend_graphql, pix_backend_api_design, pix_backend_security",
     ),
-    "rule-data": areaPromptText(
+    "rule-area-data": areaPromptText(
       "data",
       "pix_data_postgresql, pix_data_mysql, pix_data_sqlite, pix_data_mongodb, pix_data_duckdb, pix_data_indexed_db, pix_data_sql",
     ),
-    "rule-toolchain": areaPromptText(
+    "rule-area-toolchain": areaPromptText(
       "toolchain",
       "pix_toolchain_vite, pix_toolchain_pnpm, pix_toolchain_turborepo, pix_toolchain_rspack, pix_toolchain_parcel, pix_toolchain_typescript, pix_toolchain_eslint, pix_toolchain_biome, pix_toolchain_husky, pix_toolchain_commits, pix_toolchain_project",
     ),
-    "rule-styleguide": areaPromptText(
+    "rule-area-styleguide": areaPromptText(
       "styleguide",
       "pix_styleguide_a11y, pix_styleguide_css, pix_styleguide_html, pix_styleguide_javascript, pix_styleguide_json, pix_styleguide_markdown, pix_styleguide_naming, pix_styleguide_patterns, pix_styleguide_validation",
     ),
-    "rule-process": areaPromptText(
+    "rule-area-process": areaPromptText(
       "process",
-      "pix_process_code_review, pix_process_feature_workflow, pix_process_documentation, pix_process_bmad, rule_tool_process_adr, rule_tool_process_handoff",
+      "pix_process_code_review, pix_process_tdd, pix_process_feature_workflow, pix_process_documentation, pix_process_bmad, rule_tool_process_adr, rule_tool_process_handoff",
     ),
-    "rule-devops": areaPromptText(
+    "rule-area-devops": areaPromptText(
       "devops",
       "pix_devops_docker, pix_devops_gitlab_ci, pix_devops_observability, pix_devops_testing, pix_devops_version",
     ),
-    "rule-platform": areaPromptText(
+    "rule-area-platform": areaPromptText(
       "platform",
       "pix_platform_web, pix_platform_desktop, pix_platform_expo, pix_platform_agent, pix_platform_library",
     ),
-    "rule-caveman": areaPromptText(
-      "caveman",
-      "pix_caveman, pix_caveman_commit, pix_caveman_review, pix_caveman_compress, pix_caveman_help",
-    ),
-    "rule-ai": areaPromptText("ai", "pix_ai_agents"),
-    "rule-skills": areaPromptText("skills", "pix_find_skills"),
-    "rule-tdd": areaPromptText("tdd", "pix_test_driven_development"),
-    "rule-ui": areaPromptText("ui", "pix_ui_design_system"),
+    "rule-area-ai": areaPromptText("ai", "pix_ai_agents"),
+    "rule-area-skills": areaPromptText("skills", "pix_find_skills"),
+    "rule-area-ui": areaPromptText("ui", "pix_ui_design_system"),
   };
 
   if (AREAS[name]) {
@@ -621,46 +454,6 @@ export function getPrompt(name, args = {}) {
 
   // ── Legacy prompts (updated to the shared rules) ───────────────
   switch (name) {
-    case "rule-code-review": {
-      return {
-        name,
-        description: "Review code against rule styleguides",
-        messages: user(
-          "You are a code reviewer that enforces rule styleguide rules:\n" +
-            "- Zero CSS classes (use element + [data-part] selectors only)\n" +
-            "- Zero inline styles\n" +
-            "- Semantic HTML mandatory (no <div> where semantic element exists)\n" +
-            "- Barrel file tree (index.js re-exports, _PascalCase.ext files)\n" +
-            "Run `rule_tool_check` against the code and the routed styleguide skill; iterate until all guardrails pass.\n" +
-            "Verify TDD/a11y baselines apply to the reviewed change; if tests are missing, flag it and ask the user.\n" +
-            "Finish by proposing a conventional commit message with a mandatory scope.",
-        ),
-      };
-    }
-
-    case "rule-a11y-audit": {
-      return {
-        name,
-        description: "Audit a11y end-to-end (review + tests)",
-        messages: user(
-          "You are an a11y auditor enforcing WCAG 2.2 AA.\n" +
-            "Part 1 - Review the code:\n" +
-            "  - semantic HTML, headings hierarchy, color contrast (4.5:1 text, 3:1 large),\n" +
-            "  - focus styles, keyboard nav, form labels, alt text, ARIA usage.\n" +
-            "Part 2 - Ensure automated tests exist in tests/a11y/ using Playwright + @axe-core/playwright:\n" +
-            "  - tests/a11y/_basic.spec.js (page structure)\n" +
-            "  - tests/a11y/_forms.spec.js (form a11y)\n" +
-            "  - tests/a11y/_components.spec.js (component a11y)\n" +
-            "  - playwright.config.js\n" +
-            "Use AxeBuilder from @axe-core/playwright, assert expect(results.violations).toEqual([]).\n" +
-            "If the a11y tests are missing, generate them - use `rule_tool_component` for test templates.\n" +
-            "Validate findings and generated tests with `rule_tool_check` against pix_styleguide_a11y.\n" +
-            "Run the tests and report real outcomes; never claim unexecuted checks passed.\n" +
-            'Finish by proposing a conventional commit message with a mandatory scope, e.g. "test(a11y): ...".',
-        ),
-      };
-    }
-
     case "rule-adr": {
       return {
         name,
@@ -684,7 +477,7 @@ export function getPrompt(name, args = {}) {
       };
     }
 
-    case "rule-check": {
+    case "rule-process-check": {
       return {
         name,
         description: "Validate code against the guardrails",
@@ -755,9 +548,12 @@ export function getPrompt(name, args = {}) {
             "1. Run `rule-mcp init` - it prepares this project's directory under the state dir,",
             "   moves a local `./.rule-mcp` left by an earlier version, and runs tokensave init",
             "   unless told not to.",
-            "2. Confirm nothing was written into the repository: the recording lives in the state directory,",
+            "2. For a brand-new project with no config yet (absorbed from the removed rule-setup-project),",
+            "   bootstrap it first: `rule_tool_detect` to detect the stack, `rule_tool_scaffold` for the",
+            "   project config files, and the toolchain area for the tooling setup before step 3.",
+            "3. Confirm nothing was written into the repository: the recording lives in the state directory,",
             "   so the project needs no ignore rule and no git hook.",
-            "3. Check the project's test setup exists; if there is no test surface, ask the user what to cover.",
+            "4. Check the project's test setup exists; if there is no test surface, ask the user what to cover.",
             "",
             "Finish by proposing a conventional commit with a mandatory scope, e.g. `chore(init): ...`.",
           ].join("\n"),

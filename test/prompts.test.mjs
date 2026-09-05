@@ -17,26 +17,26 @@ console.log("prompts registry test");
 
 // ── Expected registry ────────────────────────────────────────────
 
-const WORKFLOW_PROMPTS = ["rule-setup-project", "rule-new-feature", "rule-pull-request", "rule-write-tests", "rule-handoff"];
+const WORKFLOW_PROMPTS = ["rule-handoff"];
 
 const AREA_PROMPTS = [
-  "rule-meta",
-  "rule-frontend",
-  "rule-backend",
-  "rule-data",
-  "rule-toolchain",
-  "rule-styleguide",
-  "rule-process",
-  "rule-devops",
-  "rule-platform",
-  "rule-caveman",
-  "rule-ai",
-  "rule-skills",
-  "rule-tdd",
-  "rule-ui",
+  "rule-area-meta",
+  "rule-area-frontend",
+  "rule-area-backend",
+  "rule-area-data",
+  "rule-area-toolchain",
+  "rule-area-styleguide",
+  "rule-area-process",
+  "rule-area-devops",
+  "rule-area-platform",
+  "rule-area-ai",
+  "rule-area-skills",
+  "rule-area-ui",
 ];
 
-const LEGACY_PROMPTS = ["rule-code-review", "rule-a11y-audit"];
+const ONE_SHOT_PROMPTS = ["rule-adr", "rule-flight", "rule-handon", "rule-init", "rule-process-check", "rule-update"];
+
+const LEGACY_PROMPTS = [];
 
 const EXPECTED = [...WORKFLOW_PROMPTS, ...AREA_PROMPTS, ...LEGACY_PROMPTS];
 
@@ -58,12 +58,12 @@ test("prompts are listed in alphabetical order", () => {
 });
 
 test("registry covers workflow, area, one-shot, and persona prompts", () => {
-  for (const expected of EXPECTED) {
+  for (const expected of [...EXPECTED, ...ONE_SHOT_PROMPTS]) {
     assert.ok(names.includes(expected), `missing prompt ${expected}`);
   }
-  // 21 target prompts + 6 one-shot workflow prompts (adr/check/flight/handon/
-  // init/update) + 21 review-persona prompts (rule-plan-<role> + rule-audit-<role>
-  // + rule-review-<role>) = 48.
+  // 13 expected (handoff + 12 areas) + 6 one-shot workflow prompts
+  // (adr/flight/handon/init/process-check/update) + 21 review-persona prompts
+  // (rule-plan-<role> + rule-audit-<role> + rule-review-<role>) = 40.
   assert.equal(names.length, EXPECTED.length + 27, "no unexpected prompts");
 });
 
@@ -181,21 +181,34 @@ test("every listed prompt has a getPrompt implementation with messages", () => {
   }
 });
 
-test("refactor: rule-area- prefix gone, a11y merged into rule-a11y-audit, rule-generate-component removed", () => {
-  const names = listPrompts().map((p) => p.name);
-  assert.ok(
-    names.every((n) => !n.startsWith("rule-area-")),
-    "no rule-area- prefixed prompt must remain",
-  );
-  for (const removed of ["rule-generate-component", "rule-a11y-test", "rule-a11y-review"]) {
-    assert.ok(!names.includes(removed), `${removed} must be removed`);
+test("refactor: areas are rule-area-*, removed commands gone, check renamed to process-check", () => {
+  const names = new Set(listPrompts().map((p) => p.name));
+  // The area prompts live under the rule-area-* namespace now.
+  for (const area of AREA_PROMPTS) {
+    assert.ok(names.has(area), `${area} must exist`);
   }
-  const audit = getPrompt("rule-a11y-audit");
-  assert.ok(audit, "rule-a11y-audit must exist");
-  const text = audit.messages.map((m) => m.content?.text ?? "").join("\n");
-  assert.match(text, /WCAG 2\.2 AA/, "rule-a11y-audit must review WCAG 2.2 AA compliance");
-  assert.match(text, /axe-core|AxeBuilder/, "rule-a11y-audit must generate axe-core tests");
-  assert.match(text, /tests\/a11y/, "rule-a11y-audit must cover the tests/a11y suite");
+  for (const removed of [
+    "rule-a11y-audit",
+    "rule-code-review",
+    "rule-caveman",
+    "rule-tdd",
+    "rule-new-feature",
+    "rule-pull-request",
+    "rule-setup-project",
+    "rule-write-tests",
+    "rule-generate-component",
+    "rule-a11y-test",
+    "rule-a11y-review",
+  ]) {
+    assert.ok(!names.has(removed), `${removed} must be removed`);
+  }
+  assert.ok(names.has("rule-process-check"), "rule-check must be renamed to rule-process-check");
+  assert.ok(!names.has("rule-check"), "plain rule-check must be gone");
+  const processCheck = getPrompt("rule-process-check");
+  assert.ok(processCheck, "rule-process-check must exist");
+  const text = processCheck.messages.map((m) => m.content?.text ?? "").join("\n");
+  assert.match(text, /rule_tool_check/, "rule-process-check must validate with rule_tool_check");
+  assert.match(text, /commit/, "rule-process-check must close with a scoped commit");
 });
 
 // ── Content rules (commit scope + TDD/a11y baselines) ────────────

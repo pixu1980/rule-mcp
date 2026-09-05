@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
-# Install rule-mcp agent commands for all supported coding agents.
+# Install rule agent commands for all supported coding agents.
 #
-# Installs prompt templates / commands for:
-#   rule-mcp    - Route via rule-mcp
-#   rule-handoff       - Generate handoff summary
-#   rule-tdd           - Test-driven development workflow
-#   rule-adr           - Architecture Decision Record
-#   rule-fix           - Validate/fix file tree
-#   rule-check         - Check code against guardrails
+# Registry-driven: each target directory is fed to `rule-mcp
+# agent-commands --dir <dir>`, which renders the command set from the same
+# generator that serves the MCP prompt registry (src/core/agent-commands.js).
+# A command renamed or deleted in the registry disappears from this installer
+# too - there is no second, hand-maintained list to drift. The set includes
+# the /rule router, the /rule-area-* commands, the one-shot workflow prompts
+# and the review-persona commands (rule-plan-* / rule-audit-* / rule-review-*).
 #
 # Supported agents: Pi, Claude Code, Gemini CLI, Windsurf, Cline, Cursor
 
@@ -28,327 +28,33 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
-installed=0
-skipped=0
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPO_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
 
-write_command() {
-  local label="$1"
-  local destination="$2"
-  local content="$3"
+command_files() {
+  local dir="$1" format="$2" label="$3"
+  local extra=()
+  [[ "$FORCE" == "true" ]] && extra+=(--force)
+  [[ "$DRY_RUN" == "true" ]] && extra+=(--dry-run)
 
-  if [[ -f "$destination" && "$FORCE" != "true" ]]; then
-    echo "  - ${label}: already exists (${destination})"
-    skipped=$((skipped + 1))
-    return
-  fi
-
-  if [[ "$DRY_RUN" == "true" ]]; then
-    echo "  → [dry-run] ${label}: ${destination}"
-  else
-    mkdir -p "$(dirname "$destination")"
-    printf '%s\n' "$content" > "$destination"
-    echo "  ✓ ${label}: ${destination}"
-  fi
-  installed=$((installed + 1))
+  # ${extra[@]+...}: keep `set -u` happy when the array is empty
+  node "${REPO_ROOT}/bin/rule-mcp.js" agent-commands --dir "$dir" --format "$format" \
+    "${extra[@]+"${extra[@]}"}" 2>/dev/null | sed "s/^/  [${label}] /"
 }
 
-# ── Commands ─────────────────────────────────────────────────────────────────
+HOME_DIR="${HOME:-}"
+CWD="$(pwd)"
 
-content_args() {
-  local name="$1"
-  case "$name" in
-    "rule-mcp")
-      cat <<'EOF'
----
-description: Explicitly route a request through rule-mcp
-argument-hint: "[request]"
----
-Use the rule-mcp MCP server explicitly for this request: $ARGUMENTS
-
-Call `pix_tool` first to select the correct skill, follow the returned guidance, and use `rule_tool_check` to validate relevant code before finishing. If no arguments were supplied, apply this workflow to the current user request.
-EOF
-      ;;
-    "rule-handoff")
-      cat <<'EOF'
----
-description: Generate compressed LLM handoff summary via rule-process-handoff
-argument-hint: "[mode] [projectDir]"
----
-Generate a handoff summary for session continuity: $ARGUMENTS
-
-1. Call `rule_tool_process_handoff` with provided arguments.
-2. Default mode "handoff" with all includes enabled.
-3. Use mode "close-session" for full git diff + roadmap + doc scan.
-4. Output result for pasting into next session.
-EOF
-      ;;
-    "rule-tdd")
-      cat <<'EOF'
----
-description: Run test-driven development workflow via rule
-argument-hint: "<feature>"
----
-Run test-driven development workflow: $ARGUMENTS
-
-1. Call `pix_tool` to route to test-driven-development skill.
-2. Load full TDD skill evidence.
-3. Follow the Red-Green-Refactor cycle.
-4. Write failing tests before implementation.
-EOF
-      ;;
-    "rule-adr")
-      cat <<'EOF'
----
-description: Record an Architecture Decision Record via rule_tool_process_adr
-argument-hint: "<title>"
----
-Record an Architecture Decision Record: $ARGUMENTS
-
-1. Call `rule_tool_process_adr` with the ADR details.
-2. Uses Nygard template with auto-numbering.
-3. Saves to docs/adr/ with index maintenance.
-EOF
-      ;;
-    "rule-fix")
-      cat <<'EOF'
----
-description: Validate and fix project file tree structure via rule_tool_fix
-argument-hint: "[path]"
----
-Validate and fix project file tree: $ARGUMENTS
-
-1. Call `rule_tool_fix` to scan project structure.
-2. Fixes barrel files, naming conventions, directory layout.
-3. Pass path parameter to limit scope.
-EOF
-      ;;
-    "rule-check")
-      cat <<'EOF'
----
-description: Check code against rule guardrails via rule_tool_check
-argument-hint: "<skill> <code>"
----
-Check code against rule guardrails: $ARGUMENTS
-
-1. Call `rule_tool_check` with the target skill name and code.
-2. Fix every failure.
-3. Rerun until allPass: true.
-EOF
-      ;;
-  esac
-}
-
-content_workflow() {
-  local name="$1"
-  case "$name" in
-    "rule-mcp")
-      cat <<'EOF'
-# rule-mcp
-
-Explicitly use the rule-mcp MCP server for the request supplied with this command.
-
-1. Call `pix_tool` first to select the correct skill.
-2. Follow the routed skill guidance while completing the request.
-3. Run `rule_tool_check` against relevant code before finishing.
-EOF
-      ;;
-    "rule-handoff")
-      cat <<'EOF'
-# rule-handoff
-
-Generate handoff summary for session continuity.
-
-1. Call `rule_tool_process_handoff`.
-2. Default: mode "handoff" with all includes.
-EOF
-      ;;
-    "rule-tdd")
-      cat <<'EOF'
-# rule-tdd
-
-Run test-driven development workflow (Red-Green-Refactor).
-
-1. Call `pix_tool` to route to test-driven-development skill.
-2. Write failing tests first, then implement, then refactor.
-EOF
-      ;;
-    "rule-adr")
-      cat <<'EOF'
-# rule-adr
-
-Record an Architecture Decision Record.
-
-1. Call `rule_tool_process_adr` with title and details.
-2. Auto-numbered in docs/adr/ with Nygard template.
-EOF
-      ;;
-    "rule-fix")
-      cat <<'EOF'
-# rule-fix
-
-Validate and fix project file tree structure.
-
-1. Call `rule_tool_fix` to scan and fix.
-2. Barrel files, naming, directory layout.
-EOF
-      ;;
-    "rule-check")
-      cat <<'EOF'
-# rule-check
-
-Check code against rule guardrails.
-
-1. Call `rule_tool_check` with skill name and code.
-2. Fix failures and rerun until all pass.
-EOF
-      ;;
-  esac
-}
-
-content_gemini() {
-  local name="$1"
-  case "$name" in
-    "rule-mcp")
-      cat <<'EOF'
-description = "Explicitly route a request through rule-mcp"
-prompt = """
-Use the rule-mcp MCP server explicitly for this request: {{args}}
-
-Call `pix_tool` first to select the correct skill, follow the returned guidance, and use `rule_tool_check` to validate relevant code before finishing. If no arguments were supplied, apply this workflow to the current user request.
-"""
-EOF
-      ;;
-    "rule-handoff")
-      cat <<'EOF'
-description = "Generate LLM handoff summary"
-prompt = """
-Generate handoff summary via rule_tool_process_handoff: {{args}}
-
-Default mode "handoff". Use "close-session" for full context dump.
-"""
-EOF
-      ;;
-    "rule-tdd")
-      cat <<'EOF'
-description = "Run test-driven development workflow"
-prompt = """
-Run TDD workflow: {{args}}
-
-Call `pix_tool` to route to test-driven-development skill.
-Follow Red-Green-Refactor cycle. Write failing tests first.
-"""
-EOF
-      ;;
-    "rule-adr")
-      cat <<'EOF'
-description = "Record Architecture Decision Record"
-prompt = """
-Record ADR via rule_tool_process_adr: {{args}}
-
-Auto-numbered Nygard template in docs/adr/.
-"""
-EOF
-      ;;
-    "rule-fix")
-      cat <<'EOF'
-description = "Validate/fix project file tree"
-prompt = """
-Fix project file tree via rule_tool_fix: {{args}}
-
-Scans and fixes barrel files, naming, directory layout.
-"""
-EOF
-      ;;
-    "rule-check")
-      cat <<'EOF'
-description = "Check code against rule guardrails"
-prompt = """
-Check code via rule_tool_check: {{args}}
-
-Call with skill name and code. Fix failures. Rerun until all pass.
-"""
-EOF
-      ;;
-  esac
-}
-
-COMMAND_NAMES=(
-  "rule-mcp"
-  "rule-handoff"
-  "rule-tdd"
-  "rule-adr"
-  "rule-fix"
-  "rule-check"
-)
-
-install_for_agent() {
-  local agent_label="$1"
-  local dest_dir="$2"
-  local format="$3"
-
-  local ext=".md"
-  [[ "$format" == "gemini" ]] && ext=".toml"
-
-  for cmd in "${COMMAND_NAMES[@]}"; do
-    local content
-    content=$("content_${format}" "$cmd" 2>/dev/null) || continue
-    [[ -z "$content" ]] && continue
-
-    local destination="${dest_dir}/${cmd}${ext}"
-    write_command "${agent_label}:${cmd}" "$destination" "$content"
-  done
-}
+command_files "${HOME_DIR}/.pi/agent/prompts"                             "args"     "Pi"
+command_files "${HOME_DIR}/.claude/commands"                              "args"     "Claude Code"
+command_files "${HOME_DIR}/.gemini/commands"                              "gemini"   "Gemini CLI"
+command_files "${HOME_DIR}/.codeium/windsurf/global_workflows"            "workflow" "Windsurf global"
+command_files "${HOME_DIR}/.config/windsurf/global_workflows"             "workflow" "Windsurf global"
+command_files "${HOME_DIR}/.cline/data/workflows"                         "workflow" "Cline global"
+command_files "${HOME_DIR}/.config/cline/data/workflows"                  "workflow" "Cline global"
+command_files "${CWD}/.cursor/commands"                                   "args"     "Cursor project"
+command_files "${CWD}/.windsurf/workflows"                                "workflow" "Windsurf project"
+command_files "${CWD}/.clinerules/workflows"                              "workflow" "Cline project"
 
 echo ""
-echo "Installing rule-mcp agent commands..."
-echo ""
-
-# ── Pi (global prompt templates) ──
-if [[ -d "$HOME/.pi" ]]; then
-  install_for_agent "Pi" "$HOME/.pi/agent/prompts" "args"
-fi
-
-# ── Claude Code (global commands) ──
-if [[ -d "$HOME/.claude" ]]; then
-  install_for_agent "Claude Code" "$HOME/.claude/commands" "args"
-fi
-
-# ── Gemini CLI (global commands) ──
-if [[ -d "$HOME/.gemini" ]]; then
-  install_for_agent "Gemini CLI" "$HOME/.gemini/commands" "gemini"
-fi
-
-# ── Windsurf (global workflows) ──
-if [[ -d "$HOME/.codeium/windsurf" ]]; then
-  install_for_agent "Windsurf" "${HOME}/.codeium/windsurf/global_workflows" "workflow"
-elif [[ -d "$HOME/.config/windsurf" ]]; then
-  install_for_agent "Windsurf" "${HOME}/.config/windsurf/global_workflows" "workflow"
-fi
-
-# ── Cline (global workflows) ──
-if [[ -d "$HOME/.cline" ]]; then
-  install_for_agent "Cline" "${HOME}/.cline/data/workflows" "workflow"
-elif [[ -d "$HOME/.config/cline" ]]; then
-  install_for_agent "Cline" "${HOME}/.config/cline/data/workflows" "workflow"
-fi
-
-# ── Cursor (project commands) ──
-if [[ -d ".cursor" ]]; then
-  install_for_agent "Cursor" ".cursor/commands" "workflow"
-fi
-
-# ── Windsurf (project workflows) ──
-if [[ -d ".windsurf" ]]; then
-  install_for_agent "Windsurf project" ".windsurf/workflows" "workflow"
-fi
-
-# ── Cline (project workflows) ──
-if [[ -d ".clinerules" ]]; then
-  install_for_agent "Cline project" ".clinerules/workflows" "workflow"
-fi
-
-echo ""
-echo "Installed ${installed} command(s); skipped ${skipped}."
-echo ""
-echo "Available commands for Pi: /rule-mcp, /rule-handoff,"
-echo "  /rule-tdd, /rule-adr, /rule-fix, /rule-check"
+echo "Agent commands installed for all targets above"
