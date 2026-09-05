@@ -19,7 +19,7 @@ import { createHash } from "node:crypto";
  * Maps receipt token → { codeHash, binding, skillName, allPass, expiresAt }
  *
  * `binding` records WHAT the receipt proves:
- *   - "content" - legacy: a hash of the checked code, no destination bound
+ *   - "content" - a hash of the checked code, no destination bound
  *   - "files"   - a hash of the ordered (path, content) tuples that were checked
  *
  * The two are never interchangeable. A caller that could downgrade a path-bound
@@ -202,7 +202,7 @@ export function validateReceipt(token, code, now = Date.now()) {
  * path uses; it accepts both bindings and states which one carried the proof.
  *
  * - "files"   receipt: the ordered (path, content) tuples must match exactly.
- * - "content" receipt: legacy single-file flow only. The gateway issues these
+ * - "content" receipt: single-file flow only. The gateway issues these
  *   from a bare `code` string, which cannot describe more than one destination,
  *   so a multi-file write requires the path-bound flow.
  *
@@ -265,7 +265,7 @@ export async function registerGatewayTool() {
 
   const GatewaySchema = z.object({
     prompt: z.string().describe("Complete coding request"),
-    code: z.string().optional().describe("Code to validate against guardrails (single file, legacy)"),
+    code: z.string().optional().describe("Code to validate against guardrails (single file)"),
     files: z
       .array(
         z.object({
@@ -294,7 +294,7 @@ export async function registerGatewayTool() {
     handler: async (arguments_) => {
       const { prompt, code, files, path, framework } = arguments_;
       // A file set yields a path-bound receipt; a bare `code` string cannot name
-      // a destination, so it stays limited to the legacy single-file write.
+      // a destination, so it stays limited to the single-file write.
       const fileSet = Array.isArray(files) && files.length > 0 ? files : null;
       const lines = [];
 

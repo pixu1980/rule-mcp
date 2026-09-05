@@ -17,7 +17,7 @@
  * prompt) lands when the gateway wires the output layer. The module semantics
  * are pinned here.
  *
- * Ported from pix-ai-mcp with the tool names rebranded to pix-native.
+ * Ported upstream behavior with the tool names rebranded to pix-native.
  */
 
 import { execFileSync } from "node:child_process";

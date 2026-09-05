@@ -10,10 +10,10 @@
 //   * a path-bound receipt must reject a different path for the same content;
 //   * the two binding kinds must not be interchangeable - a content-only
 //     receipt must never validate a multi-file write, and a path-bound receipt
-//     must never validate through the legacy content-only route (otherwise the
+//     must never validate through the content-only route (otherwise the
 //     caller just picks the weaker check).
 //
-// The legacy single-file flow (gateway receives `code`, apply writes one file)
+// The single-file flow (gateway receives `code`, apply writes one file)
 // keeps working: that is the back-compat contract.
 
 import test from "node:test";
@@ -93,10 +93,10 @@ test("validateReceipt refuses a path-bound token (no downgrade to content-only)"
   assert.match(result.reason, /path-bound|binding/i);
 });
 
-test("a content-only receipt still authorises the legacy single-file write", () => {
-  const code = "const legacy = 1;";
+test("a content-only receipt still authorises the single-file write", () => {
+  const code = "const code = 1;";
   const token = issueReceipt(code, SKILL, true, T0);
-  const result = validateApply(token, [{ path: "src/legacy.js", content: code }], T0);
+  const result = validateApply(token, [{ path: "src/example.js", content: code }], T0);
   assert.equal(result.valid, true);
   assert.equal(result.binding, "content");
 });

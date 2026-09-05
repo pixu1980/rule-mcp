@@ -85,7 +85,6 @@ function Remove-McpEntryDual {
     [string]$ServiceName = $McpServerName
   )
   $null = Remove-McpEntry -FilePath $FilePath -Label $Label -ServiceName $ServiceName
-  $null = Remove-McpEntry -FilePath $FilePath -Label "$Label (legacy)" -ServiceName "pix_ai_mcp"
 }
 
 function Remove-McpEntry {

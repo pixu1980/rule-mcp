@@ -64,14 +64,14 @@ const minimal = toolNames({ PIX_GALAXY_MCP_MINIMAL_TOOLS: "1" });
 assert.deepEqual([...minimal].sort(), MINIMAL, "minimal mode exposes exactly the allowlist");
 console.log(`  ✅ PIX_GALAXY_MCP_MINIMAL_TOOLS → ${minimal.length} tools`);
 
-// ── Default is OFF (opt-in): the legacy PIX_STRICT_MODE no longer applies ──
-const legacyIgnored = toolNames({ PIX_STRICT_MODE: "1" });
+// ── Default is OFF (opt-in): the retired PIX_STRICT_MODE no longer applies ──
+const retiredAliasIgnored = toolNames({ PIX_STRICT_MODE: "1" });
 assert.equal(
-  legacyIgnored.length,
+  retiredAliasIgnored.length,
   embeddedSkillCount + ACTION_TOOL_COUNT,
-  `removed PIX_STRICT_MODE alias must NOT trigger minimal mode (got ${legacyIgnored.length}, expected ${embeddedSkillCount + ACTION_TOOL_COUNT})`,
+  `removed PIX_STRICT_MODE alias must NOT trigger minimal mode (got ${retiredAliasIgnored.length}, expected ${embeddedSkillCount + ACTION_TOOL_COUNT})`,
 );
-console.log(`  ✅ legacy PIX_STRICT_MODE ignored → ${legacyIgnored.length} tools (full)`);
+console.log(`  ✅ retired PIX_STRICT_MODE ignored → ${retiredAliasIgnored.length} tools (full)`);
 
 // ── The dispatcher/action tools an agent needs are all present ──
 for (const t of ["pix_tool", "pix_tool_gateway", "pix_tool_apply", "pix_tool_check"]) {

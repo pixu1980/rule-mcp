@@ -4,7 +4,7 @@
  * MCP Prompt registry for pix-galaxy-mcp.
  * Provides reusable prompt templates that guide agents through pix AI
  * workflow phases: 5 one-shot workflow prompts (orchestrate multiple tools),
- * 15 area prompts (one per tool area), and 3 legacy prompts.
+ * 15 area prompts (one per tool area).
  *
  * Every prompt:
  *   - routes through the pix_tool dispatcher to the right pix-* skill
@@ -459,7 +459,7 @@ export function getPrompt(name, args = {}) {
     return { name, description: name, messages: user(AREAS[name]) };
   }
 
-  // ── Legacy prompts (updated to the shared rules) ───────────────
+  // ── Area prompts (shared rules) ───────────────────────────────
   switch (name) {
     case "pix-adr": {
       return {

@@ -12,7 +12,7 @@
  * The block is marked, so removing it never touches tokensave's hooks, which
  * share the same directory, or anything the user wrote themselves.
  *
- * @see module:cli/paths - migrateProjectData, which calls this on the way past
+ * @see module:cli/paths - the init flow that keeps recordings out of the project
  */
 
 import { execFileSync } from "node:child_process";

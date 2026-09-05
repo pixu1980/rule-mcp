@@ -30,7 +30,7 @@ function walk(dir, files = []) {
 console.log("repository contract test");
 
 // Only check src/, test/, prompts/, scripts/ - the project's own code.
-// `forbidden` is the legacy token that must not appear in file names/contents.
+// `forbidden` is the token that must not appear in file names/contents.
 // When it is empty there is nothing to scan for - `"".includes("")` is always
 // true, which would flag every file - so skip the substring sweep entirely.
 const sourceDirectories = ["src", "test", "prompts", "scripts", "rules", "skills"];
@@ -65,7 +65,7 @@ for (const sub of forbidden ? sourceDirectories : []) {
     if (!text.includes(forbidden)) {
       continue;
     }
-    // Skip lines that are intentional legacy references (env vars, git username, server names)
+    // Skip lines that are intentional product names (env vars, git username, server names)
     const lines = text.split("\n");
     const hasRealPix = lines.some((l) => {
       return !!l.includes(forbidden);

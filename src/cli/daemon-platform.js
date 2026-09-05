@@ -223,7 +223,7 @@ function checkLaunchAgent() {
           result.pid = pid;
         }
       } else {
-        // Legacy format: "PID\tStatus\tLabel"
+        // Alternative format: "PID\tStatus\tLabel"
         const oldPidMatch = out.match(/^(\d+)\t/m);
 
         if (oldPidMatch) {

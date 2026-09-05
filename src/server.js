@@ -166,11 +166,6 @@ export function createServer() {
  * @returns {Promise<void>}
  */
 export async function startServer() {
-  // An earlier install may keep its state under a configured legacy home;
-  // adopt it before anything reads the paths so the installation id, token
-  // and recordings survive.
-  const { migrateHomeData } = await import("./cli/paths.js");
-  migrateHomeData();
   // A long-lived server shared by every client gets guarded checks: one
   // runaway regex must not freeze the daemon (hardening F-S1). The CLI
   // one-shot keeps running checks inline - a hung CLI is ctrl-C.

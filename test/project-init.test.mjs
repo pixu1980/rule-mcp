@@ -13,7 +13,7 @@
  * into the project - and the removal path, which still has to strip a block
  * from a hook file it shares with tokensave without touching anything else.
  *
- * Ported from pix-ai-mcp (ADR 082) with the names rebranded to pix.
+ * Ported upstream behavior (ADR 082) with the names rebranded to pix.
  */
 
 import assert from "node:assert/strict";
@@ -48,34 +48,6 @@ test("init writes nothing into the project", () => {
   assert.equal(existsSync(join(project, ".gitignore")), false, "and no ignore rule written for one");
   assert.equal(result.dir, getProjectPaths(project).dir, "it reports the central directory it prepared");
   assert.ok(existsSync(result.dir), "which exists afterwards");
-});
-
-test("init moves a directory an earlier version left behind", () => {
-  const project = workspace();
-  mkdirSync(join(project, ".git"), { recursive: true });
-  mkdirSync(join(project, ".pix-galaxy-mcp"), { recursive: true });
-  writeFileSync(join(project, ".pix-galaxy-mcp", "telemetry.jsonl"), '{"ts":1}\n');
-  writeFileSync(join(project, ".gitignore"), ".pix-galaxy-mcp/\n");
-
-  const result = initProject({ projectDir: project, tokensave: false });
-
-  assert.equal(result.migrated, true, "the move is reported, so a user knows their history went somewhere");
-  assert.equal(existsSync(join(project, ".pix-galaxy-mcp")), false);
-  assert.equal(readFileSync(join(project, ".gitignore"), "utf8").includes("pix-galaxy-mcp"), false);
-  assert.equal(readFileSync(join(result.dir, "telemetry.jsonl"), "utf8").trim(), '{"ts":1}');
-});
-
-test("init also moves an upstream-name legacy directory", () => {
-  const project = workspace();
-  mkdirSync(join(project, ".git"), { recursive: true });
-  mkdirSync(join(project, ".pix-ai-mcp"), { recursive: true });
-  writeFileSync(join(project, ".pix-ai-mcp", "telemetry.jsonl"), '{"ts":2}\n');
-
-  const result = initProject({ projectDir: project, tokensave: false });
-
-  assert.equal(result.migrated, true);
-  assert.equal(existsSync(join(project, ".pix-ai-mcp")), false);
-  assert.equal(readFileSync(join(result.dir, "telemetry.jsonl"), "utf8").trim(), '{"ts":2}');
 });
 
 test("removal takes our block out of a shared hook and leaves the rest", () => {

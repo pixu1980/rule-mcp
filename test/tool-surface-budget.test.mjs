@@ -11,7 +11,7 @@
  *     reason
  *   - JSON tool output stays JSON, so the decoration layer never corrupts data
  *
- * Ported from pix-ai-mcp with the tool names rebranded to the pix-native
+ * Ported upstream behavior with the tool names rebranded to the pix-native
  * surface and the annotation assertions adapted to the current target surface.
  */
 
