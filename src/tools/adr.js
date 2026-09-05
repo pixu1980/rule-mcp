@@ -7,6 +7,7 @@
  * @see module:tools/router - registered via registerProcessAdrTool()
  */
 
+import { execFileSync } from "node:child_process";
 import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync, appendFileSync } from "node:fs";
 import { join } from "node:path";
 import { z } from "zod/v4";
@@ -119,7 +120,7 @@ function updateAdrIndex(adrDir, entries) {
  * Parse existing ADRs from the index or directory.
  * Returns array of { number, title, date, status, tags }.
  */
-function listExistingAdrs(adrDir) {
+export function listExistingAdrs(adrDir) {
   try {
     const files = readdirSync(adrDir);
     const adrs = [];
@@ -160,6 +161,65 @@ const ADRSchema = z.object({
     .describe("Tags for categorization (e.g. database, api, frontend)"),
   projectDir: z.string().optional().default(".").describe("Project root directory"),
 });
+
+/**
+ * The author stamped on new ADRs from git identity.
+ *
+ * @param {() => string} [read] - injected by the tests
+ * @returns {string}
+ */
+export function adrAuthor(read = gitConfig) {
+  try {
+    const name = read("user.name");
+
+    if (!name) {
+      return "rule-mcp";
+    }
+
+    const email = read("user.email");
+
+    return email ? `${name} <${email}>` : name;
+  } catch {
+    return "rule-mcp";
+  }
+}
+
+/** Read one git config key, or "" when it is not set. */
+function gitConfig(key) {
+  try {
+    return execFileSync("git", ["config", "--get", key], {
+      encoding: "utf8",
+      stdio: ["ignore", "pipe", "ignore"],
+    }).trim();
+  } catch {
+    return "";
+  }
+}
+
+/**
+ * Rendered ADR index as text, the shape the docs-numbering tool rewrites.
+ *
+ * @param {Array<{ file?: string, number: number, title: string, date?: string, status: string, tags?: string[] }>} entries
+ * @returns {string}
+ */
+export function buildAdrIndex(entries) {
+  const sorted = [...entries].sort((a, b) => b.number - a.number);
+  const label = (entry) => String(entry.number).padStart(3, "0");
+  const link = (entry) => `[${label(entry)}](${entry.file || adrFilename(entry.number, entry.title)})`;
+  const lines = [
+    "# Architecture Decision Records",
+    "",
+    "| # | Title | Date | Status | Tags |",
+    "|---|-------|------|--------|------|",
+    ...sorted.map(
+      (entry) =>
+        `| ${link(entry)} | ${entry.title} | ${entry.date || "-"} | ${entry.status} | ${(entry.tags ?? []).join(", ") || "-"} |`,
+    ),
+    "",
+  ];
+
+  return lines.join("\n");
+}
 
 /**
  * Register the rule_tool_process_adr tool.

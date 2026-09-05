@@ -423,6 +423,46 @@ export function registerTool(tool) {
   _tools.push(tool);
 }
 
+/** Tools that change something on disk or in the project. Everything else is a
+ * read, so clients use readOnlyHint to skip a confirmation prompt. */
+const MUTATING_TOOLS = new Set([
+  "rule_tool_apply",
+  "rule_tool_fix",
+  "rule_tool_process_adr",
+  "rule_tool_plan_docs",
+  "rule_tool_process_handoff",
+  "rule_tool_update",
+  "rule_tool_process_handon",
+]);
+
+/** Tools whose answer depends on state outside their arguments, so a repeat
+ * call can legitimately differ: the working tree, the clock, the code graph. */
+const NON_IDEMPOTENT_READS = new Set([
+  "rule_tool_detect",
+  "rule_tool_gateway",
+  "rule_tool_stats",
+  "rule_tool_usage",
+  "rule_tool_a11y_report",
+  "rule_tool_process_handon",
+]);
+
+/**
+ * MCP tool annotations, emitting only what differs from the spec defaults.
+ *
+ * The defaults are readOnlyHint: false and idempotentHint: false, so a
+ * mutating tool needs no annotation at all (client treats it as read-write).
+ *
+ * @param {string} name
+ * @returns {object|undefined}
+ */
+function annotationsFor(name) {
+  if (MUTATING_TOOLS.has(name)) {
+    return;
+  }
+
+  return NON_IDEMPOTENT_READS.has(name) ? { readOnlyHint: true } : { readOnlyHint: true, idempotentHint: true };
+}
+
 /**
  * The raw registered tool definitions (including zodSchema and annotations),
  * for audits that need more than the advertised surface.
@@ -465,7 +505,11 @@ export function listTools() {
       }
     }
 
-    return { name: t.name, description: t.description, inputSchema };
+    const annotations = annotationsFor(t.name);
+
+    return annotations
+      ? { name: t.name, description: t.description, inputSchema, annotations }
+      : { name: t.name, description: t.description, inputSchema };
   });
 }
 
