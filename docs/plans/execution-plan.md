@@ -82,10 +82,14 @@ Port the complete tracked behavior of `~/Projects/work/rule/ai/rule-mcp/` into t
 
 ## Phase 5 — Skills and routing corpus
 
-- [ ] 14. Port the 13 source-only skills: AI agent architecture, context engineering, evals, prompting, caveman, deploy preview, AI SDLC, changelog, simplicity, baseline, fingerprint, i18n, and TypeScript styleguide.
-- [ ] 15. Replace common skill bodies with the source versions, rebrand them to rule-native identifiers, and retain any target-only assets that are not represented upstream.
-- [ ] 16. Keep the four target-only skills active and update routing/BM25 corpora, frontmatter, cross-links, command surfaces, resources, and skill documentation tests for the 94-directory union.
-- [ ] 17. Port the complete frontend-worker examples/patterns and deploy-preview templates; retain custom-element, template-engine, vanilla-reactive, and VS Code extension assets.
+- [x] 14. Port the 13 source-only skills: AI agent architecture, context engineering, evals, prompting, caveman, deploy preview, AI SDLC, changelog, simplicity, baseline, fingerprint, i18n, and TypeScript styleguide.
+  - done as part of item 11 (skill dirs pulled forward so the 110-tool lock could land); each now ships its SKILL.md + assets, rule-branded
+- [x] 15. Replace common skill bodies with the source versions, rebrand them to rule-native identifiers, and retain any target-only assets that are not represented upstream.
+  - 28 common skills upgraded where the source body is >15% richer (rebranded rule->rule); per-skill assets (examples/, patterns.md) synced; target-only 4 skill dirs untouched
+- [x] 16. Keep the four target-only skills active and update routing/BM25 corpora, frontmatter, cross-links, command surfaces, resources, and skill documentation tests for the 94-directory union.
+  - skills-docs/frontmatter/See-also/tool-surface/routing verified on 94 dirs; 4 target-only dirs active; resources lock 194
+- [x] 17. Port the complete frontend-worker examples/patterns and deploy-preview templates; retain custom-element, template-engine, vanilla-reactive, and VS Code extension assets.
+  - rule-frontend-workers now ships examples/ + patterns.md from source; deploy-preview ported with rule-devops-deploy-preview; target-only assets + extension retained
 
 ## Phase 6 — Scripts, supply chain, CI, and release mechanics
 
