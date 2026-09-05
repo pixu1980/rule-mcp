@@ -53,6 +53,8 @@ export const AGENTS_WITHOUT_COMMAND_SURFACE = {
   jetbrains: "JetBrains AI Assistant has no user-authored slash-command files; MCP prompts are the only entry point.",
   neovim: "Editor-level MCP plugins expose prompts directly; there is no command-file convention to write to.",
   emacs: "mcp.el exposes prompts directly; there is no command-file convention to write to.",
+  devin:
+    "Devin runs commands in its own workspace runtime, not from local slash-command files; MCP prompts remain the entry point.",
 };
 
 /** Default resolution context - real filesystem, real HOME. */
