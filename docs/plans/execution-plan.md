@@ -57,7 +57,11 @@ Port the complete tracked behavior of `~/Projects/work/rule/ai/rule-mcp/` into t
   - landed: session-registry (idle sweep + reap + closeAll) with sse.js migrated onto it; auth-rate-limit (401/429 per remote, loopback bucket) in sse.js + http.js; stdio-guard (peer-loss: stdin/close/error, fatal write codes, ppid->1 backstop) in stdio serve
   - retained: target CORS same-origin controls, daemon cleanup, log rotation (target daemon), shutdown via lifecycle (register/installSignalHandlers) ported in item 2
   - tests: session-registry (5 re-enabled), auth-rate-limit (4), stdio-guard (6); sse/http/auth/multi-client/persistent suites green
-- [ ] 8. Merge installer/uninstaller evolution, global-home data placement, command synchronization, role acceptance, backups/force semantics, cross-platform scripts, and source updates while retaining target shim healing and packaging integrations.
+- [x] 8. Merge installer/uninstaller evolution, global-home data placement, command synchronization, role acceptance, backups/force semantics, cross-platform scripts, and source updates while retaining target shim healing and packaging integrations.
+  - landed: --force actually overwrites (writeText force+skipIfExists), config upsert via atomicWrite (.bak backup), CLAUDE.md instruction-block refresh on force (current rules, dedupe, keep user notes), dry-run untouched
+  - retained: target shim healing, packaging, cross-platform scripts, daemon/platform installers (target-only, untouched)
+  - tests: install-force-and-backup (14); installer suite green
+  - deferred: install-agent-catalog -> surface phase; install-integrity (SHA256SUMS) -> scripts phase
 
 ## Phase 4 — MCP public surface
 
