@@ -643,6 +643,21 @@ The Docker image uses `node:22-alpine`, has no build step, and runs the server d
 
 ---
 
+## Test Evidence
+
+The parity contract with the upstream `rule-mcp` evolution is enforced by
+`test/porting-parity.test.mjs` against the frozen fixture
+`test/fixtures/rule-porting-baseline.json`. As of the finished port:
+
+- `pnpm test:foundations` - **307/307 passing** (parity contract fully green:
+  every source runtime, script and test path present)
+- routing corpus pinned at 80/99 exact and 99/99 top-or-alternative (BM25
+  scorer parity with the source, ADR 048 numbers reproduced on the union)
+- lint zero errors, prettier clean, self-guardrails green over the whole `src/`
+  tree, installer/transport suites green
+- upstream evidence archived under `docs/upstream/rule-mcp/` at commit
+  `12d60a9e0eb312010314e5b800e31cf71663d926` with a per-file hash manifest
+
 ## License
 
 MIT - see [LICENSE](./LICENSE).
