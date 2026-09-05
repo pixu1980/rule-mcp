@@ -1,0 +1,16 @@
+# docs-engineer review
+
+- **Role**: docs-engineer v1
+- **Date**: 2026-09-05
+
+Findings distilled from [the audit](../audits/docs-engineer.md). A finding this run no longer reports is
+flipped to resolved and kept one run for visibility, then removed.
+
+| Finding | Severity | Status | Evidence | Summary |
+| --- | --- | --- | --- | --- |
+| F1 | high | open | docs/06-env-variables.md:76-80 vs src/cli/paths.js:61 | 06-env-variables.md documents ~/.rule-mcp/ paths but the runtime uses ~/.local/state/rule-mcp (src/cli/paths.js); the doc says the opposite of what the code does. |
+| F2 | high | open | docs/README.md:18-19; docs/adr/ADR.md | docs/README.md links to ./adr/README.md and ./adr/DECISIONS.md which do not exist (index is ADR.md), and does not list 07-census.md; the handbook points at files the project does not have. |
+| F3 | medium | open | docs/adr/ listing; docs/adr/ADR.md | Two overlapping ADR series: 001-009 numbers are duplicated (upstream-ported series + native series, 2-3 files per number) and 010+ collide; ADR.md index lists a subset and does not note TR-018 is superseded by TR-047. |
+| F4 | medium | open | docs/agent-instructions.md vs docs/05-agent-instructions.md | docs/agent-instructions.md (unnumbered) duplicates docs/05-agent-instructions.md with diverging, outdated content; documentation repeats itself instead of pointing. |
+| F5 | medium | open | grep -L Author docs/adr/*.md (16 files); docs/adr/018 | ADR legacy series (001-016) lacks Author/Date front matter and uses mixed status casing; ADR 018 was edited to superseded but the ADR.md index does not reflect it. |
+| F6 | low | open | docs/06-env-variables.md:24 vs src/cli/paths.js | 06-env-variables.md:24 claims prompt text is recorded into the project's own .rule-mcp/ directory, inconsistent with the runtime stateDir resolution. |
