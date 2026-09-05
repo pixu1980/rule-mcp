@@ -73,7 +73,7 @@ const IS_MACOS = platform() === "darwin";
 const IS_LINUX = platform() === "linux";
 
 const HOME = homedir();
-const COMMAND_TEMPLATE_PATH = fileURLToPath(new URL("../../prompts/pix-galaxy-mcp.md", import.meta.url));
+const COMMAND_TEMPLATE_PATH = fileURLToPath(new URL("../../prompts/pix.md", import.meta.url));
 
 // ─── File helpers ───────────────────────────────────────────────────────────
 
@@ -548,7 +548,7 @@ const copilotAgent = () =>
 const installClaude = ({ entrypoint, dryRun, global, force = false }) => {
   const file = join(HOME, ".claude.json");
   const mdFile = join(HOME, ".claude", "CLAUDE.md");
-  const commandFile = join(HOME, ".claude", "commands", "pix-galaxy-mcp.md");
+  const commandFile = join(HOME, ".claude", "commands", "pix.md");
 
   return [
     // The config is an upsert where a merge can go wrong, so the pre-write
@@ -580,7 +580,7 @@ const installCodex = ({ entrypoint, dryRun, global }) => {
 const installCursor = ({ entrypoint, dryRun, global }) => {
   const files = [];
   const cursorGlobal = join(HOME, ".cursor", "mcp.json");
-  const cursorCommand = join(process.cwd(), ".cursor", "commands", "pix-galaxy-mcp.md");
+  const cursorCommand = join(process.cwd(), ".cursor", "commands", "pix.md");
   files.push(
     writeText({
       file: cursorGlobal,
@@ -622,7 +622,7 @@ const installCopilot = ({ entrypoint, dryRun, global }) => {
 const installGemini = ({ entrypoint, dryRun, global }) => {
   const file = join(HOME, ".gemini", "settings.json");
   const mdFile = join(HOME, ".gemini", "GEMINI.md");
-  const commandFile = join(HOME, ".gemini", "commands", "pix-galaxy-mcp.toml");
+  const commandFile = join(HOME, ".gemini", "commands", "pix.toml");
 
   return [
     writeText({
@@ -640,7 +640,7 @@ const installPi = ({ entrypoint, dryRun, global, mode }) => {
   // Pi uses $PI_CODING_AGENT_DIR/mcp.json or ~/.pi/agent/mcp.json
   const piDir = process.env.PI_CODING_AGENT_DIR ? join(process.env.PI_CODING_AGENT_DIR) : join(HOME, ".pi", "agent");
   const file = join(piDir, "mcp.json");
-  const promptFile = join(piDir, "prompts", "pix-galaxy-mcp.md");
+  const promptFile = join(piDir, "prompts", "pix.md");
 
   return [
     writeText({
@@ -1051,7 +1051,7 @@ const installers = {
 const uninstallClaude = ({ dryRun }) => {
   const file = join(HOME, ".claude.json");
   const mdFile = join(HOME, ".claude", "CLAUDE.md");
-  const commandFile = join(HOME, ".claude", "commands", "pix-galaxy-mcp.md");
+  const commandFile = join(HOME, ".claude", "commands", "pix.md");
 
   if (!dryRun) {
     removeFile(commandFile);
@@ -1078,7 +1078,7 @@ const uninstallCodex = ({ dryRun }) => {
 /** @param {{ dryRun: boolean }} */
 const uninstallCursor = ({ dryRun }) => {
   const cursorGlobal = join(HOME, ".cursor", "mcp.json");
-  const commandFile = join(process.cwd(), ".cursor", "commands", "pix-galaxy-mcp.md");
+  const commandFile = join(process.cwd(), ".cursor", "commands", "pix.md");
 
   if (!dryRun) {
     removeFile(commandFile);
@@ -1110,7 +1110,7 @@ const uninstallCopilot = ({ dryRun }) => {
 const uninstallGemini = ({ dryRun }) => {
   const file = join(HOME, ".gemini", "settings.json");
   const mdFile = join(HOME, ".gemini", "GEMINI.md");
-  const commandFile = join(HOME, ".gemini", "commands", "pix-galaxy-mcp.toml");
+  const commandFile = join(HOME, ".gemini", "commands", "pix.toml");
 
   if (!dryRun) {
     removeFile(commandFile);
@@ -1127,7 +1127,7 @@ const uninstallGemini = ({ dryRun }) => {
 const uninstallPi = ({ dryRun }) => {
   const piDir = process.env.PI_CODING_AGENT_DIR ? join(process.env.PI_CODING_AGENT_DIR) : join(HOME, ".pi", "agent");
   const file = join(piDir, "mcp.json");
-  const promptFile = join(piDir, "prompts", "pix-galaxy-mcp.md");
+  const promptFile = join(piDir, "prompts", "pix.md");
 
   if (!dryRun) {
     removeFile(promptFile);

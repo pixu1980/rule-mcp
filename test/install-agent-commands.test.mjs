@@ -41,29 +41,48 @@ try {
   assert.equal(result.status, 0, result.stderr || result.stdout);
 
   const commandFiles = [
-    join(home, ".pi", "agent", "prompts", "pix-galaxy-mcp.md"),
-    join(home, ".claude", "commands", "pix-galaxy-mcp.md"),
-    join(home, ".gemini", "commands", "pix-galaxy-mcp.toml"),
-    join(home, ".codeium", "windsurf", "global_workflows", "pix-galaxy-mcp.md"),
-    join(home, ".cline", "data", "workflows", "pix-galaxy-mcp.md"),
-    join(project, ".cursor", "commands", "pix-galaxy-mcp.md"),
-    join(project, ".windsurf", "workflows", "pix-galaxy-mcp.md"),
-    join(project, ".clinerules", "workflows", "pix-galaxy-mcp.md"),
+    join(home, ".pi", "agent", "prompts", "pix.md"),
+    join(home, ".claude", "commands", "pix.md"),
+    join(home, ".gemini", "commands", "pix.toml"),
+    join(home, ".codeium", "windsurf", "global_workflows", "pix.md"),
+    join(home, ".cline", "data", "workflows", "pix.md"),
+    join(project, ".cursor", "commands", "pix.md"),
+    join(project, ".windsurf", "workflows", "pix.md"),
+    join(project, ".clinerules", "workflows", "pix.md"),
   ];
 
   for (const file of commandFiles) {
     assert.ok(existsSync(file), `missing command file: ${file}`);
     const content = readFileSync(file, "utf8");
-    assert.ok(content.includes("pix-galaxy-mcp"), `${file} must name pix-galaxy-mcp`);
-    assert.ok(content.includes("pix"), `${file} must explicitly route through pix`);
+    assert.ok(content.includes("pix"), `${file} must route through pix`);
+  }
+
+  // The full registry set lands, not just the router: an area command, a
+  // one-shot and a persona command.
+  const piPrompts = join(home, ".pi", "agent", "prompts");
+  for (const expected of ["pix-area-frontend.md", "pix-process-check.md", "pix-plan-security.md"]) {
+    assert.ok(existsSync(join(piPrompts, expected)), `missing registry command: ${expected}`);
+  }
+
+  // Renamed/deleted commands never surface: the installer is registry-driven.
+  const stale = [
+    "pix-galaxy-mcp.md",
+    "pix-tdd.md",
+    "pix-check.md",
+    "pix-caveman.md",
+    "pix-new-feature.md",
+    "pix-a11y-audit.md",
+    "pix-code-review.md",
+    "pix-pull-request.md",
+    "pix-setup-project.md",
+    "pix-write-tests.md",
+  ];
+  for (const name of stale) {
+    assert.ok(!existsSync(join(piPrompts, name)), `stale command must not be installed: ${name}`);
   }
 
   const installScript = readFileSync(join(root, "scripts", "install.sh"), "utf8");
   assert.ok(installScript.includes("install-agent-commands.sh"), "install.sh must install explicit agent commands");
-  assert.ok(
-    installScript.includes("if [[ ${#COMMAND_ARGS[@]} -gt 0 ]]"),
-    "install.sh must handle an empty command argument array on Bash 3",
-  );
 
   console.log(`  ✅ ${commandFiles.length} explicit agent command integrations installed`);
 } finally {

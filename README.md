@@ -19,11 +19,11 @@ Serves styleguides, component templates, framework best practices, and design sy
 - [What is pix-galaxy-mcp](#what-is-pix-galaxy-mcp)
 - [Architecture overview](#architecture-overview)
 - [Tool reference](#tool-reference)
-  - [All 110 tools (normal mode)](#all-110-tools-normal-mode)
+  - [All 111 tools (normal mode)](#all-111-tools-normal-mode)
   - [Minimal tool surface (10 tools)](#minimal-tool-surface-10-tools)
   - [Gateway deterministic mode](#gateway-deterministic-mode)
-- [MCP Resources (146)](#mcp-resources-146)
-- [MCP Prompts (48)](#mcp-prompts-48)
+- [MCP Resources (196)](#mcp-resources-196)
+- [MCP Prompts (40)](#mcp-prompts-40)
 - [Guardrail engine](#guardrail-engine)
 - [CLI reference](#cli-reference)
 - [Daemon & services](#daemon--services)
@@ -38,13 +38,13 @@ Serves styleguides, component templates, framework best practices, and design sy
 Deterministic MCP server for the pix skill ecosystem. Live surface (enforced by
 `test/docs-accuracy.test.mjs` - the README and reality cannot drift):
 
-| Surface   | Count | Notes                                                                                               |
-| --------- | ----- | --------------------------------------------------------------------------------------------------- |
-| Tools     | 110   | ~100 per-skill tools + dispatcher/action tools                                                      |
-| Resources | 194   | pix:// per-skill index + summary + template URIs                                                    |
-| Prompts   | 48    | workflow + one-shot workflow + 21 review-persona commands (pix-plan-* / pix-audit-* / pix-review-*) |
-| Skills    | 94    | frontend, backend, data, devops, toolchain, styleguide, process, platform, ai                       |
-| Tests     | 212   | `pnpm test:all` green (incl. installer + PTY TUI)                                                   |
+| Surface   | Count | Notes                                                                                                       |
+| --------- | ----- | ----------------------------------------------------------------------------------------------------------- |
+| Tools     | 111   | ~100 per-skill tools + dispatcher/action tools                                                              |
+| Resources | 196   | pix:// per-skill index + summary + template URIs                                                            |
+| Prompts   | 40    | pix-area-* areas + one-shot workflow + 21 review-persona commands (pix-plan-* / pix-audit-* / pix-review-*) |
+| Skills    | 95    | frontend, backend, data, devops, toolchain, styleguide, process, platform, ai                               |
+| Tests     | 212   | `pnpm test:all` green (incl. installer + PTY TUI)                                                           |
 
 Architecture decisions live in [`docs/adr/`](docs/adr/README.md) (36 records:
 installer self-heal, architect split, doc-accuracy guard, v1.0.0 release).
@@ -74,9 +74,9 @@ pix-galaxy-mcp install --agent all
 
 ## What is pix-galaxy-mcp
 
-pix-galaxy-mcp is an [MCP](https://modelcontextprotocol.io) server that exposes **110 tools**, **194 resources**, and **48 prompts** to any MCP-compatible AI coding agent. Because the server never calls an LLM (every output is deterministic), it is **model-agnostic** - it behaves identically behind Claude, GPT, Gemini, Llama, Qwen, or any other model. It provides:
+pix-galaxy-mcp is an [MCP](https://modelcontextprotocol.io) server that exposes **111 tools**, **196 resources**, and **40 prompts** to any MCP-compatible AI coding agent. Because the server never calls an LLM (every output is deterministic), it is **model-agnostic** - it behaves identically behind Claude, GPT, Gemini, Llama, Qwen, or any other model. It provides:
 
-- **94 modular skills** covering frontend, backend, database, devops, toolchain, and styleguide domains
+- **95 modular skills** covering frontend, backend, database, devops, toolchain, and styleguide domains
 - **BM25 full-text search** across all skill content
 - **Guardrail engine** with 18 shared rules + framework/backend/database/devops-specific checks
 - **Deterministic gateway** (`pix_gateway` + `pix_apply`) with receipt-based validation
@@ -114,7 +114,7 @@ Claude Code, Cursor, Cline, Roo Code, Copilot, Gemini CLI, Codex CLI, Windsurf, 
 ├───────────────────────────────────────────────────────────────┤
 │  Tool Registry              │  Resources Registry             │
 │  src/tools/router.js        │  src/resources/index.js         │
-│  110 tools                  │  194 resources                  │
+│  111 tools                  │  196 resources                  │
 ├──────────────────┬───────────┴────────────────┬───────────────┤
 │  Orchestration   │  Skills & BM25            │  Guardrails    │
 │  pix_gateway     │  89 skill dirs            │  18 shared     │
@@ -159,7 +159,7 @@ Claude Code, Cursor, Cline, Roo Code, Copilot, Gemini CLI, Codex CLI, Windsurf, 
 
 ## Tool reference
 
-### All 110 tools (normal mode)
+### All 111 tools (normal mode)
 
 #### Deterministic tools (9)
 
@@ -168,7 +168,7 @@ Claude Code, Cursor, Cline, Roo Code, Copilot, Gemini CLI, Codex CLI, Windsurf, 
 | `pix`                 | Route a prompt to the correct pix skill via BM25 keyword scoring + framework bias            | ✅        |
 | `pix_gateway`         | **Single-entry orchestrator:** routes → loads evidence → checks guardrails → returns receipt | ✅        |
 | `pix_apply`           | Write files to disk, requires valid receipt from `pix_gateway`                               | ❌        |
-| `pix_search`          | BM25 full-text search across all 80 skills                                                   | ✅        |
+| `pix_search`          | BM25 full-text search across all 95 skills                                                   | ✅        |
 | `pix_check`           | Run guardrail checks on code against any pix skill                                           | ✅        |
 | `pix_scaffold`        | Generate project config files (`.prettierrc`, `.editorconfig`, `.gitignore`, etc.)           | ✅        |
 | `pix_detect`          | Auto-detect project framework and suggest relevant skills/tools                              | ✅        |
@@ -223,6 +223,7 @@ Each skill directory under `skills/` becomes a tool `pix_<skill-name>`. All supp
 | `pix_process_bmad`              | pix-process-bmad              | 422   | Process    |
 | `pix_process_documentation`     | pix-process-documentation     | 201   | Process    |
 | `pix_process_feature_workflow`  | pix-process-feature-workflow  | 121   | Process    |
+| `pix_process_tdd`               | pix-process-tdd               | 205   | Process    |
 | `pix_styleguide`                | pix-styleguide                | 58    | Styleguide |
 | `pix_styleguide_a11y`           | pix-styleguide-a11y           | 514   | Styleguide |
 | `pix_styleguide_css`            | pix-styleguide-css            | 488   | Styleguide |
@@ -284,15 +285,15 @@ See [ADR 044](./docs/adr/044-gateway-as-the-single-entrypoint-with-server-side-r
 
 ---
 
-## MCP Resources (146)
+## MCP Resources (196)
 
-168 resources accessible via the MCP `resources/read` protocol.
+196 resources accessible via the MCP `resources/read` protocol.
 
 ### Static resources (8)
 
 | URI                     | Description                                                    |
 | ----------------------- | -------------------------------------------------------------- |
-| `pix://skills`          | Index of all 80 skills with paths and sizes                    |
+| `pix://skills`          | Index of all 95 skills with paths and sizes                    |
 | `pix://templates`       | Design system component template catalog                       |
 | `pix://project`         | Project analysis: detected framework + suggested tools/ skills |
 | `pix://community`       | Community / plugin pix skills index                            |
@@ -301,7 +302,7 @@ See [ADR 044](./docs/adr/044-gateway-as-the-single-entrypoint-with-server-side-r
 | `pix://a11y/test-basic` | Basic a11y test template                                       |
 | `pix://a11y/test-forms` | Form a11y test template                                        |
 
-### Skill resources (138 = 69 × 2)
+### Skill resources (188 = 94 × 2)
 
 Each skill (except `pix` itself) has two resources:
 
@@ -312,43 +313,26 @@ Each skill (except `pix` itself) has two resources:
 
 ---
 
-## MCP Prompts (48)
+## MCP Prompts (40)
 
-48 prompts accessible via the MCP `prompts/get` protocol. The workflow/area prompts are listed
-individually below; the 21 review-persona commands (7 roles x plan/audit/review) are grouped in
-one row. The same registry drives the clean `/pix-*` agent commands,
-so every prompt takes a **single free-form argument** and supports `help` (or `--help` / `-h`) as
-its value to print the usage list, e.g. `/pix-frontend help` - help is returned as a ready-made
-assistant message and displayed instantly, without invoking the model.
+40 prompts accessible via the MCP `prompts/get` protocol. The 12 `pix-area-*` commands and the
+21 review-persona commands (7 roles x plan/audit/review) are grouped in a row each; the one-shot
+workflow prompts are listed individually. The same registry drives the clean `/pix-*` agent
+commands (pinned by the `/pix` router), so every prompt takes a **single free-form argument** and
+supports `help` (or `--help` / `-h`) as its value to print the usage list, e.g. `/pix-area-frontend
+help` - help is returned as a ready-made assistant message and displayed instantly, without
+invoking the model.
 
 | Prompt                                        | Description                                                                                                                                                                                                                 | Arguments                                                                                                                                       |
 | --------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
-| `pix-a11y-audit`                              | Audit a11y end-to-end: WCAG 2.2 AA review + Playwright/axe-core tests                                                                                                                                                       | `code` (required, free text)                                                                                                                    |
-| `pix-ai`                                      | AI agent integrations                                                                                                                                                                                                       | `request` (required)                                                                                                                            |
-| `pix-backend`                                 | Node, Express, Fastify, Hono, NestJS, GraphQL, API design, security                                                                                                                                                         | `request` (required, free text: framework)                                                                                                      |
-| `pix-caveman`                                 | Compressed communication, commits, reviews                                                                                                                                                                                  | `request` (required)                                                                                                                            |
-| `pix-code-review`                             | Review code against pix styleguides                                                                                                                                                                                         | `code` (required, free text)                                                                                                                    |
-| `pix-data`                                    | PostgreSQL, MySQL, SQLite, MongoDB, DuckDB, IndexedDB, SQL                                                                                                                                                                  | `request` (required, free text: database)                                                                                                       |
-| `pix-devops`                                  | Docker, GitLab CI, observability, testing, versioning                                                                                                                                                                       | `request` (required)                                                                                                                            |
-| `pix-frontend`                                | React, Vue, Svelte, Angular, Solid, Astro, Next, Nuxt, Remix, vanilla                                                                                                                                                       | `request` (required, free text: framework)                                                                                                      |
+| `pix` (router)                                | Route a request through the pix workflow (`/pix-galaxy-mcp` became `/pix`)                                                                                                                                                  | `<request>` (required)                                                                                                                          |
+| `pix-area-*` (12)                             | Area specialists: `ai`, `backend`, `data`, `devops`, `frontend`, `meta`, `platform`, `process`, `skills`, `styleguide`, `toolchain`, `ui`                                                                                   | `request` (required, free text)                                                                                                                 |
 | `pix-handoff`                                 | Compressed context handoff (ADR + git) for a new session                                                                                                                                                                    | `options` (optional: `handoff` \| `close-session`, `compress`, `full` \| `brief` \| `minimal`, `no-*`, `max=<n>`, `help`; empty = all defaults) |
-| `pix-meta`                                    | Dispatcher/action toolset (gateway, apply, search, check, scaffold…)                                                                                                                                                        | `request` (required)                                                                                                                            |
-| `pix-new-feature`                             | Feature end-to-end: route → evidence → failing tests → code → guardrails                                                                                                                                                    | `feature` (required, free text: framework/area/"no tests")                                                                                      |
-| `pix-platform`                                | Web, desktop, Expo, agent, library                                                                                                                                                                                          | `request` (required, free text: platform)                                                                                                       |
-| `pix-process`                                 | Code review, feature workflow, documentation, ADR, handoff, BMAD                                                                                                                                                            | `request` (required)                                                                                                                            |
-| `pix-pull-request`                            | Prepare PR: review + a11y + security + ADR + commit scope + description                                                                                                                                                     | `description` (required, free text: "no adr")                                                                                                   |
-| `pix-setup-project`                           | Bootstrap project: detect → scaffold → toolchain → architect context                                                                                                                                                        | `projectName` (required, free text: framework/toolchain/tier)                                                                                   |
-| `pix-skills`                                  | Skill discovery (find-skills)                                                                                                                                                                                               | `request` (required)                                                                                                                            |
-| `pix-styleguide`                              | a11y, CSS, HTML, JS, JSON, Markdown, naming, patterns, validation                                                                                                                                                           | `request` (required)                                                                                                                            |
-| `pix-tdd`                                     | Test-driven development workflow                                                                                                                                                                                            | `request` (required)                                                                                                                            |
-| `pix-toolchain`                               | Vite, pnpm, Turborepo, Rspack, Parcel, TypeScript, ESLint, Biome, Husky, commits                                                                                                                                            | `request` (required, free text: tool)                                                                                                           |
-| `pix-ui`                                      | UI design-system work                                                                                                                                                                                                       | `request` (required)                                                                                                                            |
-| `pix-write-tests`                             | Write tests: TDD + a11y (Playwright + axe-core) + devops                                                                                                                                                                    | `scope` (required, free text: tdd/a11y/devops/all)                                                                                              |
 | `pix-adr`                                     | Record an architecture decision: context, decision, alternatives, consequences                                                                                                                                              | `decision` (required)                                                                                                                           |
-| `pix-check`                                   | Validate code against the pix guardrails and fix what fails                                                                                                                                                                 | `target` (optional; default: current diff)                                                                                                      |
 | `pix-flight`                                  | Read the flight recorder: what this server cost and what to do about it                                                                                                                                                     | `options` (optional: export \| show <file> \| prune \| redact)                                                                                  |
 | `pix-handon`                                  | Resume: verify the last handoff against the repository as it is now                                                                                                                                                         | `options` (optional: list \| file=<path>)                                                                                                       |
 | `pix-init`                                    | Prepare a project for pix-galaxy-mcp: recorder dir + tokensave                                                                                                                                                              | `options` (optional: no-tokensave)                                                                                                              |
+| `pix-process-check`                           | Validate code against the pix guardrails and fix what fails (`pix-check` became `pix-process-check`)                                                                                                                        | `target` (optional; default: current diff)                                                                                                      |
 | `pix-update`                                  | Apply an available server update explicitly, and report what changed                                                                                                                                                        | `options` (optional: check \| apply)                                                                                                            |
 | `pix-plan-*` / `pix-audit-*` / `pix-review-*` | 21 review-persona commands: one per operation (plan/audit/review) per active role (architect, security, privacy, a11y, ai-engineer, performance, docs-engineer); each routes through `pix_tool_plan` + `pix_tool_plan_docs` | `topic` (optional)                                                                                                                              |
 

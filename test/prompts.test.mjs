@@ -17,26 +17,26 @@ console.log("prompts registry test");
 
 // ── Expected registry ────────────────────────────────────────────
 
-const WORKFLOW_PROMPTS = ["pix-setup-project", "pix-new-feature", "pix-pull-request", "pix-write-tests", "pix-handoff"];
+const WORKFLOW_PROMPTS = ["pix-handoff"];
 
 const AREA_PROMPTS = [
-  "pix-meta",
-  "pix-frontend",
-  "pix-backend",
-  "pix-data",
-  "pix-toolchain",
-  "pix-styleguide",
-  "pix-process",
-  "pix-devops",
-  "pix-platform",
-  "pix-caveman",
-  "pix-ai",
-  "pix-skills",
-  "pix-tdd",
-  "pix-ui",
+  "pix-area-meta",
+  "pix-area-frontend",
+  "pix-area-backend",
+  "pix-area-data",
+  "pix-area-toolchain",
+  "pix-area-styleguide",
+  "pix-area-process",
+  "pix-area-devops",
+  "pix-area-platform",
+  "pix-area-ai",
+  "pix-area-skills",
+  "pix-area-ui",
 ];
 
-const LEGACY_PROMPTS = ["pix-code-review", "pix-a11y-audit"];
+const ONE_SHOT_PROMPTS = ["pix-adr", "pix-flight", "pix-handon", "pix-init", "pix-process-check", "pix-update"];
+
+const LEGACY_PROMPTS = [];
 
 const EXPECTED = [...WORKFLOW_PROMPTS, ...AREA_PROMPTS, ...LEGACY_PROMPTS];
 
@@ -58,12 +58,12 @@ test("prompts are listed in alphabetical order", () => {
 });
 
 test("registry covers workflow, area, one-shot, and persona prompts", () => {
-  for (const expected of EXPECTED) {
+  for (const expected of [...EXPECTED, ...ONE_SHOT_PROMPTS]) {
     assert.ok(names.includes(expected), `missing prompt ${expected}`);
   }
-  // 21 target prompts + 6 one-shot workflow prompts (adr/check/flight/handon/
-  // init/update) + 21 review-persona prompts (pix-plan-<role> + pix-audit-<role>
-  // + pix-review-<role>) = 48.
+  // 13 expected (handoff + 12 areas) + 6 one-shot workflow prompts
+  // (adr/flight/handon/init/process-check/update) + 21 review-persona prompts
+  // (pix-plan-<role> + pix-audit-<role> + pix-review-<role>) = 40.
   assert.equal(names.length, EXPECTED.length + 27, "no unexpected prompts");
 });
 
@@ -181,21 +181,34 @@ test("every listed prompt has a getPrompt implementation with messages", () => {
   }
 });
 
-test("refactor: pix-area- prefix gone, a11y merged into pix-a11y-audit, pix-generate-component removed", () => {
-  const names = listPrompts().map((p) => p.name);
-  assert.ok(
-    names.every((n) => !n.startsWith("pix-area-")),
-    "no pix-area- prefixed prompt must remain",
-  );
-  for (const removed of ["pix-generate-component", "pix-a11y-test", "pix-a11y-review"]) {
-    assert.ok(!names.includes(removed), `${removed} must be removed`);
+test("refactor: areas are pix-area-*, removed commands gone, check renamed to process-check", () => {
+  const names = new Set(listPrompts().map((p) => p.name));
+  // The area prompts live under the pix-area-* namespace now.
+  for (const area of AREA_PROMPTS) {
+    assert.ok(names.has(area), `${area} must exist`);
   }
-  const audit = getPrompt("pix-a11y-audit");
-  assert.ok(audit, "pix-a11y-audit must exist");
-  const text = audit.messages.map((m) => m.content?.text ?? "").join("\n");
-  assert.match(text, /WCAG 2\.2 AA/, "pix-a11y-audit must review WCAG 2.2 AA compliance");
-  assert.match(text, /axe-core|AxeBuilder/, "pix-a11y-audit must generate axe-core tests");
-  assert.match(text, /tests\/a11y/, "pix-a11y-audit must cover the tests/a11y suite");
+  for (const removed of [
+    "pix-a11y-audit",
+    "pix-code-review",
+    "pix-caveman",
+    "pix-tdd",
+    "pix-new-feature",
+    "pix-pull-request",
+    "pix-setup-project",
+    "pix-write-tests",
+    "pix-generate-component",
+    "pix-a11y-test",
+    "pix-a11y-review",
+  ]) {
+    assert.ok(!names.has(removed), `${removed} must be removed`);
+  }
+  assert.ok(names.has("pix-process-check"), "pix-check must be renamed to pix-process-check");
+  assert.ok(!names.has("pix-check"), "plain pix-check must be gone");
+  const processCheck = getPrompt("pix-process-check");
+  assert.ok(processCheck, "pix-process-check must exist");
+  const text = processCheck.messages.map((m) => m.content?.text ?? "").join("\n");
+  assert.match(text, /pix_tool_check/, "pix-process-check must validate with pix_tool_check");
+  assert.match(text, /commit/, "pix-process-check must close with a scoped commit");
 });
 
 // ── Content rules (commit scope + TDD/a11y baselines) ────────────

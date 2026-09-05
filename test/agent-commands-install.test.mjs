@@ -23,10 +23,10 @@ execFileSync(
 );
 
 const expectations = [
-  [join(piDir, "prompts", "pix-galaxy-mcp.md"), "$ARGUMENTS", "Pi slash command"],
-  [join(fakeHome, ".claude", "commands", "pix-galaxy-mcp.md"), "$ARGUMENTS", "Claude command"],
-  [join(fakeHome, ".gemini", "commands", "pix-galaxy-mcp.toml"), "{{args}}", "Gemini custom command"],
-  [join(fakeProject, ".cursor", "commands", "pix-galaxy-mcp.md"), "$ARGUMENTS", "Cursor project command"],
+  [join(piDir, "prompts", "pix.md"), "$ARGUMENTS", "Pi slash command"],
+  [join(fakeHome, ".claude", "commands", "pix.md"), "$ARGUMENTS", "Claude command"],
+  [join(fakeHome, ".gemini", "commands", "pix.toml"), "{{args}}", "Gemini custom command"],
+  [join(fakeProject, ".cursor", "commands", "pix.md"), "$ARGUMENTS", "Cursor project command"],
   [join(fakeHome, ".copilot", "agents", "pix-galaxy-mcp.agent.md"), "pix-galaxy-mcp", "Copilot custom agent"],
 ];
 
