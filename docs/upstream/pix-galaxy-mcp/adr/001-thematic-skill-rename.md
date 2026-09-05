@@ -92,14 +92,14 @@ Added `pix-database-*`:
 
 ### Final taxonomy
 
-| Prefix                | Count  | Skills                                                                                                 |
-| --------------------- | ------ | ------------------------------------------------------------------------------------------------------ |
-| `pix-` (core)     | 9      | ai, backend, check, component, detect, fix, scaffold, search, styleguides                              |
-| `pix-backend-*`   | 7      | api-design, express, fastify, hono, nestjs, node, security                                             |
-| `pix-database-*`  | 4      | mongodb, mysql, postgresql, sql                                                                        |
-| `pix-devops-*`    | 4      | docker, gitlab-ci, testing, version                                                                    |
+| Prefix                | Count  | Skills                                                                               |
+| --------------------- | ------ | ------------------------------------------------------------------------------------ |
+| `pix-` (core)     | 9      | ai, backend, check, component, detect, fix, scaffold, search, styleguides            |
+| `pix-backend-*`   | 7      | api-design, express, fastify, hono, nestjs, node, security                           |
+| `pix-database-*`  | 4      | mongodb, mysql, postgresql, sql                                                      |
+| `pix-devops-*`    | 4      | docker, gitlab-ci, testing, version                                                  |
 | `pix-frontend-*`  | 10     | angular, astro, forms, meta-next, meta-nuxt, meta-remix, react, solidjs, svelte, vue |
-| `pix-platform-*`  | 4      | desktop, expo, library, web                                                                            |
-| `pix-process-*`   | 6      | adr, bmad, documentation, feature-workflow, handoff                                                    |
-| `pix-toolchain-*` | 1      | vite                                                                                                   |
-| **Total**             | **46** |                                                                                                        |
+| `pix-platform-*`  | 4      | desktop, expo, library, web                                                          |
+| `pix-process-*`   | 6      | adr, bmad, documentation, feature-workflow, handoff                                  |
+| `pix-toolchain-*` | 1      | vite                                                                                 |
+| **Total**             | **46** |                                                                                      |

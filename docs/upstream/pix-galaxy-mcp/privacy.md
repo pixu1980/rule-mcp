@@ -14,16 +14,16 @@ sharing your prompts.
 
 ## What is recorded
 
-| Data category                                                                           | Where                                                | Retention                                      | Kill switch                                 |
-| --------------------------------------------------------------------------------------- | ---------------------------------------------------- | ---------------------------------------------- | ------------------------------------------- |
-| Tool call metadata (tool name, timestamps, latency, byte and token counts, error flags) | `~/.pix-galaxy-mcp/projects/<project>/events.jsonl` in the project      | 7 days raw, then rolled up to daily aggregates | `PIX_GALAXY_MCP_NO_TELEMETRY=1`             |
-| Prompt text, verbatim                                                                   | same file, `prompt` field                            | same 7 days                                    | `PIX_GALAXY_MCP_NO_PROMPTS=1`               |
-| File paths passed to tools                                                              | same file, `path` field (clear text locally)         | same 7 days                                    | `PIX_GALAXY_MCP_NO_TELEMETRY=1`             |
-| Daily rollups (counts only)                                                             | `~/.pix-galaxy-mcp/projects/<project>/rollups.json`                     | kept until deleted                             | `PIX_GALAXY_MCP_NO_TELEMETRY=1`             |
-| Exported recordings                                                                     | `~/.pix-galaxy-mcp/projects/<project>/exports/*.flight`                 | newest 10 or 90 days, whichever is larger      | do not run `telemetry export`               |
-| Agent token usage                                                                       | read at export time from the agent's own transcripts | not copied - read, summarized, discarded       | `PIX_GALAXY_MCP_NO_TELEMETRY=1`             |
-| Bearer token for SSE/HTTP                                                               | `~/.pix-galaxy-mcp/state/sse-token` (mode 0600)      | until deleted                                  | n/a - required for authenticated transports |
-| Failed-auth audit lines                                                                 | stderr of the server process                         | wherever your process manager keeps stderr     | n/a - security logging                      |
+| Data category                                                                           | Where                                                              | Retention                                      | Kill switch                                 |
+| --------------------------------------------------------------------------------------- | ------------------------------------------------------------------ | ---------------------------------------------- | ------------------------------------------- |
+| Tool call metadata (tool name, timestamps, latency, byte and token counts, error flags) | `~/.pix-galaxy-mcp/projects/<project>/events.jsonl` in the project | 7 days raw, then rolled up to daily aggregates | `PIX_GALAXY_MCP_NO_TELEMETRY=1`             |
+| Prompt text, verbatim                                                                   | same file, `prompt` field                                          | same 7 days                                    | `PIX_GALAXY_MCP_NO_PROMPTS=1`               |
+| File paths passed to tools                                                              | same file, `path` field (clear text locally)                       | same 7 days                                    | `PIX_GALAXY_MCP_NO_TELEMETRY=1`             |
+| Daily rollups (counts only)                                                             | `~/.pix-galaxy-mcp/projects/<project>/rollups.json`                | kept until deleted                             | `PIX_GALAXY_MCP_NO_TELEMETRY=1`             |
+| Exported recordings                                                                     | `~/.pix-galaxy-mcp/projects/<project>/exports/*.flight`            | newest 10 or 90 days, whichever is larger      | do not run `telemetry export`               |
+| Agent token usage                                                                       | read at export time from the agent's own transcripts               | not copied - read, summarized, discarded       | `PIX_GALAXY_MCP_NO_TELEMETRY=1`             |
+| Bearer token for SSE/HTTP                                                               | `~/.pix-galaxy-mcp/state/sse-token` (mode 0600)                    | until deleted                                  | n/a - required for authenticated transports |
+| Failed-auth audit lines                                                                 | stderr of the server process                                       | wherever your process manager keeps stderr     | n/a - security logging                      |
 
 A recording never enters a repository: it is written under the home directory, filed per
 project, so there is nothing in a checkout to ignore and nothing to commit by accident (ADR 082).
