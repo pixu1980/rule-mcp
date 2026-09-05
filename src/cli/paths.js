@@ -3,7 +3,9 @@
  *
  * Runtime path resolution for pix-galaxy-mcp.
  * Provides paths for state, data, config, and skill directories.
- * All paths are derived from the user's home directory and OS conventions.
+ * All paths derive from a single home directory: `~/.pix-galaxy-mcp` — the
+ * same convention the upstream `~/.pix-galaxy-mcp` used, kept for continuity
+ * (`state/`, `data/`, `projects/`, `config/` under one root the user can see).
  */
 
 import { createHash } from "node:crypto";
@@ -47,7 +49,14 @@ export function getSseHost() {
 /**
  * Get runtime paths for state files, data, config, and skills.
  *
+ * Everything lives under one root the user can see: `~/.pix-galaxy-mcp`.
+ * `state/` holds the mutable caches (result cache, bm25, token, daemon pid/log),
+ * `data/` the install-time artifacts, `config/` the user configuration.
+ * `PIX_GALAXY_MCP_STATE_DIR` relocates just the mutable state for containers and
+ * tests; `PIX_GALAXY_MCP_HOME` relocates the whole root.
+ *
  * @returns {{
+ *   homeDir: string,
  *   stateDir: string,
  *   dataDir: string,
  *   pidFile: string,
@@ -56,18 +65,80 @@ export function getSseHost() {
  * }}
  */
 export function getRuntimePaths() {
-  // PIX_GALAXY_MCP_STATE_DIR lets containers and tests relocate mutable state
-  // (tokens, caches, daemon pid) off the default ~/.local/state path.
-  const stateDir = process.env.PIX_GALAXY_MCP_STATE_DIR || join(homedir(), ".local", "state", "pix-galaxy-mcp");
-  const dataDir = join(homedir(), ".local", "share", "pix-galaxy-mcp");
+  const root = process.env.PIX_GALAXY_MCP_HOME || join(homedir(), ".pix-galaxy-mcp");
+  const stateDir = process.env.PIX_GALAXY_MCP_STATE_DIR || join(root, "state");
+  const dataDir = join(root, "data");
 
   return {
+    homeDir: root,
     stateDir,
     dataDir,
     pidFile: join(stateDir, "daemon.pid"),
     logFile: join(stateDir, "daemon.log"),
-    configDir: join(homedir(), ".config", "pix-galaxy-mcp"),
+    configDir: join(root, "config"),
   };
+}
+
+/**
+ * Migrate a previous install's home directory into the current root.
+ *
+ * The upstream server kept its state under `~/.pix-galaxy-mcp` (state/projects/data).
+ * A machine that ran it already has a token, an installation id, cached tool
+ * results and per-project recordings; losing them would restart telemetry and
+ * force a fresh SSE credential. This runs once per process, is non-destructive,
+ * and degrades to a no-op when the old home is absent.
+ *
+ * @returns {{ migrated: boolean, from?: string, to?: string }}
+ */
+export function migrateHomeData() {
+  // Nothing to do when state was relocated on purpose (tests, containers):
+  // the caller pointed state elsewhere, so adopting the home is not wanted.
+  if (process.env.PIX_GALAXY_MCP_STATE_DIR) {
+    return { migrated: false };
+  }
+
+  const fromRoot = join(homedir(), ".pix-galaxy-mcp");
+
+  if (existsSync(fromRoot)) {
+    return migrateHomeDataFrom(fromRoot);
+  }
+
+  return { migrated: false };
+}
+
+/** Adopt each known subdirectory of an old home root, non-destructively. */
+function migrateHomeDataFrom(fromRoot) {
+  const paths = getRuntimePaths();
+  const moved = [];
+
+  for (const sub of ["state", "data", "projects"]) {
+    const from = join(fromRoot, sub);
+    const to = join(paths.homeDir, sub);
+
+    if (!existsSync(from)) {
+      continue;
+    }
+
+    try {
+      mkdirSync(paths.homeDir, { recursive: true });
+
+      if (existsSync(to)) {
+        for (const entry of readdirSync(from, { withFileTypes: true })) {
+          if (!existsSync(join(to, entry.name))) {
+            renameSync(join(from, entry.name), join(to, entry.name));
+          }
+        }
+      } else {
+        renameSync(from, to);
+      }
+
+      moved.push(sub);
+    } catch {
+      /* a migration that fails degrades to a fresh start */
+    }
+  }
+
+  return { migrated: moved.length > 0, from: fromRoot, to: paths.homeDir };
 }
 
 /**
@@ -155,7 +226,7 @@ export function getProjectPaths(cwd = process.cwd()) {
  * @returns {string}
  */
 function projectsRoot() {
-  return join(getRuntimePaths().stateDir, "projects");
+  return join(getRuntimePaths().homeDir, "projects");
 }
 
 /**
@@ -164,7 +235,7 @@ function projectsRoot() {
  * The port migrates both the upstream recorder name and this server's own
  * earlier local layout, so a machine that ran either one converges.
  */
-const LEGACY_PROJECT_DIRS = [".pix-galaxy-mcp", ".pix-galaxy-mcp"];
+const LEGACY_PROJECT_DIRS = [".pix-ai-mcp", ".pix-galaxy-mcp"];
 
 /**
  * Move a project's recording out of the project and into the state directory.
@@ -249,7 +320,7 @@ function dropProjectIgnoreRule(projectDir) {
 
     const kept = readFileSync(file, "utf8")
       .split("\n")
-      .filter((line) => !/^\.?(?:pix-galaxy-mcp|pix-galaxy-mcp)\/?$/.test(line.trim()));
+      .filter((line) => !/^\.?(?:pix-ai-mcp|pix-galaxy-mcp)\/?$/.test(line.trim()));
     writeFileSync(file, kept.join("\n"));
   } catch {
     /* a read-only checkout keeps a rule for a directory that no longer exists */

@@ -80,6 +80,8 @@ export function helpCommand() {
  * @param {object} [opts]
  */
 export async function serveCommand(opts = {}) {
+  const { migrateHomeData } = await import("./paths.js");
+  migrateHomeData();
   await loadAllSkills();
   const transport = opts.transport ?? "stdio";
 
@@ -162,7 +164,10 @@ export async function serveCommand(opts = {}) {
  *
  * @param {{ action: string, dryRun?: boolean }} opts
  */
-export function daemonCommand(opts) {
+export async function daemonCommand(opts) {
+  // Adopt a previous install's state before the daemon reads its paths.
+  const { migrateHomeData } = await import("./paths.js");
+  migrateHomeData();
   const p = getRuntimePaths();
   const { action = "status", dryRun = false } = opts;
 
@@ -331,7 +336,7 @@ export function daemonCommand(opts) {
         break;
       }
       // Fallback to process daemon
-      const result = stopDaemonProcess({ dryRun });
+      const result = await stopDaemonProcess({ dryRun });
       print(result.action === "not-running" ? "Daemon not running" : "Daemon stopped");
       break;
     }

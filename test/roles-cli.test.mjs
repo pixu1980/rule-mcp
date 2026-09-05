@@ -40,12 +40,12 @@ function roles(box, ...args) {
       ...process.env,
       HOME: box.home,
       PIX_GALAXY_MCP_NO_AUTOUPDATE: "1",
-      PIX_GALAXY_MCP_STATE_DIR: join(box.home, ".local", "state", "pix-galaxy-mcp"),
+      PIX_GALAXY_MCP_STATE_DIR: join(box.home, ".pix-galaxy-mcp", "state"),
     },
   });
 }
 
-const overlayFile = (box, id) => join(box.home, ".config", "pix-galaxy-mcp", "roles", `${id}.json`);
+const overlayFile = (box, id) => join(box.home, ".pix-galaxy-mcp", "config", "roles", `${id}.json`);
 
 test("list prints the catalog and says which layer each role came from", () => {
   const box = sandbox();

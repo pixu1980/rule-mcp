@@ -52,9 +52,9 @@ const { getProjectPaths, getRuntimePaths } = await import("../src/cli/paths.js")
 
 // ── F1: one home directory, one project directory ──
 const paths = getRuntimePaths();
-check("F1 state lives under the state dir/state", paths.stateDir === join(home, ".local", "state", "pix-galaxy-mcp"));
-check("F1.1 data lives beside it", paths.dataDir === join(home, ".local", "share", "pix-galaxy-mcp"));
-check("F1.2 config lives beside it", paths.configDir === join(home, ".config", "pix-galaxy-mcp"));
+check("F1 state lives under the state dir/state", paths.stateDir === join(home, ".pix-galaxy-mcp", "state"));
+check("F1.1 data lives beside it", paths.dataDir === join(home, ".pix-galaxy-mcp", "data"));
+check("F1.2 config lives beside it", paths.configDir === join(home, ".pix-galaxy-mcp", "config"));
 check(
   "F1.3 the state override still works",
   (() => {

@@ -2,14 +2,14 @@
  * Everything this server records about a project lives under the state
  * directory, and nothing lives in the project.
  *
- * `./.pix-galaxy-mcp/` (and the local `./.pix-galaxy-mcp/` layout) was a
+ * `./.pix-ai-mcp/` (and the local `./.pix-galaxy-mcp/` layout) was a
  * directory in repositories the server recorded, kept out of git by a rule the
  * hooks re-asserted on every checkout. It is all under the central projects
  * root now, and the migration is what makes the change safe rather than lossy:
  * a recording that took months to accumulate is not something a refactor gets
  * to discard.
  *
- * Ported from pix-galaxy-mcp (ADR 082) with the recorder name rebranded to the
+ * Ported from pix-ai-mcp (ADR 082) with the recorder name rebranded to the
  * pix layout and the legacy project directories widened to both names.
  */
 import { strict as assert } from "node:assert";
@@ -28,10 +28,10 @@ const { getProjectPaths, getRuntimePaths, migrateProjectData, projectSlug } = aw
 const git = (cwd, ...args) => execFileSync("git", args, { cwd, encoding: "utf8", stdio: ["ignore", "pipe", "ignore"] });
 
 /** @returns {string} the projects root, mirroring projectsRoot() in paths.js */
-const projectsRoot = () => join(getRuntimePaths().stateDir, "projects");
+const projectsRoot = () => join(getRuntimePaths().homeDir, "projects");
 
 /** A repository with a local recorder directory, the way one exists today. */
-function legacyProject({ direction = ".pix-galaxy-mcp", ignoreLine = true } = {}) {
+function legacyProject({ direction = ".pix-ai-mcp", ignoreLine = true } = {}) {
   const root = mkdtempSync(join(tmpdir(), "pix-central-project-"));
   git(root, "init", "-q");
   mkdirSync(join(root, direction, "exports"), { recursive: true });
@@ -68,11 +68,11 @@ test("migrateProjectData moves a legacy recording out of the project", () => {
 
   assert.equal(result.migrated, true);
   assert.equal(after.dir, before.dir, "the destinations are the same dir");
-  assert.equal(existsSync(join(root, ".pix-galaxy-mcp")), false, "the local directory is gone");
+  assert.equal(existsSync(join(root, ".pix-ai-mcp")), false, "the local directory is gone");
   assert.equal(existsSync(join(after.dir, "telemetry.jsonl")), true, "the telemetry log moved");
   assert.equal(readFileSync(join(after.dir, "project-id"), "utf8"), "kept-across-the-move\n");
   assert.equal(existsSync(join(after.dir, "exports", "one.flight")), true, "exports move too");
-  assert.ok(!readFileSync(join(root, ".gitignore"), "utf8").includes("pix-galaxy-mcp"), "the ignore rule is dropped");
+  assert.ok(!readFileSync(join(root, ".gitignore"), "utf8").includes("pix-ai-mcp"), "the ignore rule is dropped");
 });
 
 test("a second migrate is a no-op", () => {

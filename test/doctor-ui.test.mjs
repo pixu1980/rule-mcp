@@ -29,8 +29,8 @@ const report = {
   ],
   ides: [{ name: "VS Code", configured: true, configFile: "/repo/.vscode/mcp.json" }],
   models: { totalConfigured: 1 },
-  stateDir: "/home/.local/state/pix-galaxy-mcp",
-  dataDir: "/home/.local/share/pix-galaxy-mcp",
+  stateDir: "/home/.pix-galaxy-mcp/state",
+  dataDir: "/home/.pix-galaxy-mcp/data",
   configDir: "/home/.config/pix-galaxy-mcp",
   daemon: {
     running: true,
