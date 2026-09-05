@@ -53,7 +53,10 @@ Port the complete tracked behavior of `~/Projects/work/rule/ai/rule-mcp/` into t
   - landed: guard (decide/inject + bin subcommand), cache (stats/export/verify/prime/clear), roles (list/show/new/deprecate) over the review-roles subsystem (EMBEDDED_ROLES, overlays, template), handon + stats CLI cases, completions/help updated; review-docs trio bookkeeping + docs-scan trio gate
   - deferred: rule_tool_plan / rule_tool_plan_docs registration -> item 9 (surfaces test stub notes it)
   - tests: hooks-guard (10), review-roles (12), roles-cli (10), review-docs (13), prompt-directive T7
-- [ ] 7. Merge lifecycle-safe stdio/SSE/HTTP behavior, auth rate limiting, session registry, same-origin controls, daemon cleanup, log rotation, and shutdown guarantees.
+- [x] 7. Merge lifecycle-safe stdio/SSE/HTTP behavior, auth rate limiting, session registry, same-origin controls, daemon cleanup, log rotation, and shutdown guarantees.
+  - landed: session-registry (idle sweep + reap + closeAll) with sse.js migrated onto it; auth-rate-limit (401/429 per remote, loopback bucket) in sse.js + http.js; stdio-guard (peer-loss: stdin/close/error, fatal write codes, ppid->1 backstop) in stdio serve
+  - retained: target CORS same-origin controls, daemon cleanup, log rotation (target daemon), shutdown via lifecycle (register/installSignalHandlers) ported in item 2
+  - tests: session-registry (5 re-enabled), auth-rate-limit (4), stdio-guard (6); sse/http/auth/multi-client/persistent suites green
 - [ ] 8. Merge installer/uninstaller evolution, global-home data placement, command synchronization, role acceptance, backups/force semantics, cross-platform scripts, and source updates while retaining target shim healing and packaging integrations.
 
 ## Phase 4 — MCP public surface
