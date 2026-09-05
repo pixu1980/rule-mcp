@@ -30,6 +30,17 @@ a minimum safety net, not evidence that tests exercise meaningful behavior.
 
 ## Step 1 - Configure Vitest
 
+Vitest is the runner, and the only one. Jest, Mocha and Jasmine are not
+alternatives to weigh per project; picking a second runner means two configs,
+two mocking dialects and two coverage reports to reconcile.
+
+**One exception: Expo and React Native.** That stack uses `jest` with the
+`jest-expo` preset and `@testing-library/react-native`, because the native
+module layer does not run under Vitest. Everything else in this skill still
+applies - the same `*.test.ts(x)` naming, the same package-level `tests/`
+directory, the same thresholds enforced locally and in CI. See
+[rule-platform-expo](../rule-platform-expo/SKILL.md).
+
 ### Backend / AI Agent
 
 Create `vitest.config.ts`:
@@ -151,7 +162,7 @@ describe("UserService", () => {
   });
 
   it("returns user when found", async () => {
-    const user = { id: "1", email: "test@rule-mcp.domain.example" };
+    const user = { id: "1", email: "test@rule-ai.domain.example" };
     vi.mocked(mockRepo.findById).mockResolvedValue(user);
 
     const result = await service.getUser("1");
@@ -211,6 +222,62 @@ Or use `pnpm` alternatively.
 - **Mock reset**: Check that mocks are reset between tests (`beforeEach` with fresh mocks). Stale mocks are the most common cause of flaky tests.
 - **Async tests**: Ensure all promises are awaited. Unhandled rejections cause misleading failures.
 - **Coverage thresholds**: This skill owns coverage enforcement. Thresholds are configured in `vitest.config.ts` and verified in CI.
+
+## What a flaky test actually costs: DORA metrics and the rerun habit
+
+A flaky test is usually filed as an annoyance. It is a delivery cost, and it is
+measurable in the four delivery metrics even though none of them has a flakiness
+category.
+
+| Metric                | How flakiness shows up                                                                                                                                                  |
+| --------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Deployment frequency  | Lower than the team's merge rate predicts. Reruns delay releases, and an unreliable pipeline makes people less willing to ship on a green run they do not fully believe |
+| Lead time for changes | Elevated and, more tellingly, **variable**. Consistent processes produce consistent lead times, so high variance points at something unstable in the pipeline           |
+| Change failure rate   | Elevated, with incidents tracing to the integration layer rather than to logic in the new code                                                                          |
+| Rework rate           | Trending up over time as more upstream dependencies age at different rates                                                                                              |
+
+The behavioral costs are larger than the mechanical ones. **A rerun habit is a
+policy: it says failures are not signals.** Once a team reruns before
+investigating, a genuine failure in a noisy pipeline is treated as probably
+flaky, and if it passes on retry the real problem ships. Developers also start
+batching changes to be worth the rerun risk, and a bigger batch is a riskier
+deploy that needs a slower review, so testing noise arrives in the numbers
+looking like a process problem.
+
+### Where JavaScript makes it worse
+
+- **Asynchrony.** Race conditions that do not reproduce, assertions that depend
+  on timers under variable load, promises settling in a different order than the
+  author assumed.
+- **HTTP mock registries.** Interceptors are process-global. Under concurrent
+  execution one test's interceptor leaks into another, or a handler absorbs a
+  request it was not written for. The behavior is deterministic once you know
+  how the library keeps its registry, and nothing tells you that until CI fails
+  on something that passed locally.
+- **Module mocking.** Replacing modules in the module cache means state leaks
+  between tests when teardown is incomplete. A test that passes alone fails after
+  a test that left a mock behind.
+
+### Two problems, two fixes
+
+They look identical on a dashboard and do not respond to the same treatment.
+
+**Genuine flakiness** is a test-isolation problem: reset state between tests,
+replace timer-dependent assertions with deterministic control of the clock,
+audit interceptor registration and teardown, isolate the module registry where a
+test needs a clean one.
+
+**Stale mocks are not flaky at all.** They pass consistently, against behavior
+the upstream dependency had when they were written. That is why flakiness
+remediation never fixes them: nothing is unstable. The fix is maintenance, either
+a process that updates the fake whenever the real thing changes, or deriving it
+from observed traffic so it cannot silently describe last year's API. See
+[rule-ai-evals](../rule-ai-evals/SKILL.md) on generated tests for the same
+failure seen from the other side.
+
+Track the rerun. A pipeline that records how often a job passed only on retry
+turns an invisible tax into a number, and it is the number that gets the fix
+prioritized.
 
 ## Coverage Gates
 

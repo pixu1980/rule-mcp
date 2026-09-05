@@ -63,6 +63,36 @@ Need Git hooks?                         → rule-toolchain-husky
 Need commit/push discipline (atomic, scope)? → rule-toolchain-commits
 ```
 
+## Choosing a formatter and a linter: Prettier, Biome, ESLint, dprint, oxfmt
+
+Two different jobs that get confused. A **formatter** rewrites layout and never
+changes meaning. A **linter** finds problems, and only some are about layout.
+
+| Tool                   | Job                          | When it fits                                                       |
+| ---------------------- | ---------------------------- | ------------------------------------------------------------------ |
+| Prettier               | Formatter                    | The default answer. Widest ecosystem and editor support            |
+| Biome                  | Formatter + linter           | One fast Rust binary instead of two tools; smaller rule set        |
+| ESLint                 | Linter                       | The rules that catch bugs, not layout. Plugins for every framework |
+| eslint-config-prettier | Peacekeeper                  | Turns off ESLint's layout rules so the two stop fighting           |
+| ESLint Stylistic       | Formatting inside the linter | If you want one tool and already run ESLint                        |
+| dprint                 | Formatter                    | Pluggable and configurable, Rust, smaller community                |
+| oxfmt                  | Formatter                    | Very fast newcomer, part of the Oxc toolchain                      |
+| Standard               | Formatter + linter           | Zero configuration, and no configuration                           |
+| EditorConfig           | The layer underneath         | Indentation and line endings for editors that read nothing else    |
+| husky + lint-staged    | Automation                   | Run both on staged files, at commit time                           |
+
+**The rule default: Prettier for formatting, ESLint 10 flat config with
+`eslint-plugin-unicorn` for linting, `eslint-config-prettier` between them, and
+husky plus lint-staged to run them.** See ADR 027 and ADR 028 for why.
+
+One gotcha worth knowing: line endings. Set `end_of_line` in `.editorconfig` and
+`* text=auto eol=lf` in `.gitattributes`, or every Windows checkout produces a
+diff nobody wrote.
+
+The choice matters less than making it once and enforcing it in CI. A formatter
+argument settled by a config file costs nothing; one settled per pull request
+costs a review every time.
+
 ## See also
 
 - [rule-devops-testing](../rule-devops-testing/SKILL.md) - Test configuration

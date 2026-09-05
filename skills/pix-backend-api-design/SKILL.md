@@ -6,6 +6,14 @@ tags:
   - "backend"
   - "api"
   - "design"
+  - "rest"
+  - "pagination"
+  - "errors"
+  - "status-codes"
+  - "idempotency"
+  - "versioning"
+  - "filters"
+  - "openapi"
 frameworks: [node, api]
 compatibility: Designed for AI coding assistants
 metadata:
@@ -100,6 +108,48 @@ Use this consistent structure:
 - Include request/response schemas, examples, and status codes.
 - Update docs in the same change as API updates.
 
+## Idempotency: the same request twice, the same outcome once
+
+The table above says to accept an `Idempotency-Key` on anything that costs money
+or sends mail. This is what accepting it means, because the header alone changes
+nothing.
+
+**Assume every write will arrive twice.** A client retries on a timeout without
+knowing whether the first attempt landed, a proxy replays, a user double-clicks,
+a queue redelivers after a worker died between doing the work and acknowledging
+it. At-least-once is what the network gives you; exactly-once is something the
+server constructs.
+
+The mechanism, in order:
+
+1. **The client generates the key**, one per logical operation, and reuses it on
+   every retry of that operation. A key the server generates cannot help, since
+   the retry would get a new one.
+2. **The server records the key before doing the work**, in the same transaction
+   as the work where possible, or in a table with a unique constraint on the key.
+   The constraint is what makes the second attempt lose a race rather than
+   duplicate the effect.
+3. **A repeat returns the first response**, status and body, rather than
+   reprocessing. That is the contract: same key, same outcome, however many
+   times it arrives.
+4. **A key is scoped and expires.** Scope it to the caller and the operation, so
+   two clients cannot collide, and give it a documented lifetime long enough to
+   outlive any retry policy pointed at you.
+
+Two cases worth stating explicitly:
+
+- **A key reused with a different body is a client bug, not a duplicate.** Reject
+  it with a conflict rather than silently returning the earlier answer, or a
+  mistake becomes a silently dropped write.
+- **An in-flight repeat is not a duplicate yet.** If the first attempt has not
+  finished, the honest answer is that it is in progress, not a fabricated success.
+
+Idempotency is cheaper than distributed transactions and covers most of what
+people reach for them to solve. Where a workflow spans services and a later step
+can fail, the compensating action, undoing what earlier steps did, belongs in
+the design from the start rather than being added after the first partial
+failure.
+
 ## Checklist
 
 - [ ] Resource-based, plural noun paths (no raw DB structures exposed)
@@ -148,6 +198,40 @@ servers:
 Link the OpenAPI spec for type generation and documentation.
 API-first design: define the contract before implementation.
 ---
+
+## What frustrates API consumers: response shape, errors, status codes, pagination, idempotency
+
+The steps above produce a correct API. These are the ten things that make a
+correct API unpleasant, and they share one root: it was designed for the
+server's convenience rather than the client's experience.
+
+| Mistake                                       | What the client experiences                         | Fix                                                           |
+| --------------------------------------------- | --------------------------------------------------- | ------------------------------------------------------------- |
+| Every endpoint invents its own response shape | Custom parsing per endpoint, no shared client code  | One envelope, everywhere, including errors                    |
+| Errors written for nobody (`{"error": true}`) | Cannot tell the user anything, cannot branch on it  | Stable machine `code`, human `message`, the offending `field` |
+| Status codes that lie (200 on failure)        | Retry logic, monitoring and caches all mislead      | The code states what happened; the body explains              |
+| Pagination as an afterthought                 | Results jump, duplicate or vanish while paging      | Cursor pagination for feeds, and say whether more exists      |
+| Filters and sorting different per endpoint    | Every screen relearns the query language            | One convention: same parameter names, same operators          |
+| Confusing auth failures                       | Hours lost to "is my token wrong or my permission?" | 401 means authenticate, 403 means not allowed, and say which  |
+| Breaking changes shipped quietly              | Clients break in production with no warning         | Additive by default; a rename is a new version                |
+| Documentation with only the happy path        | Every error is discovered in production             | Document failures, limits, and what retry is safe             |
+| No idempotency                                | A double-click charges twice                        | `Idempotency-Key` on anything that costs money or sends mail  |
+| No operational context                        | Support cannot correlate a report with a log line   | Request id in every response, echoed in logs                  |
+
+### Before shipping an endpoint
+
+- Does it use the same response and error envelope as its neighbors?
+- Does the status code match what actually happened, on every path?
+- Is the list paginated, and does the client learn whether more exists?
+- Do filters and sorting use the project convention, not this endpoint's?
+- Does a permission failure say whether to re-authenticate or give up?
+- Is this additive for existing clients, or does it need a version?
+- Are the failure modes documented, not only the success case?
+- If it charges, sends or creates, is a repeat call safe?
+- Does the response carry a request id support can search for?
+
+Predictable beats elegant. An API is good when a developer can trust the shape,
+the errors, the status codes and the next release.
 
 ## See also
 

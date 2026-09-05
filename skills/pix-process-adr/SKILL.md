@@ -28,7 +28,7 @@ Every ADR follows the [Michael Nygard template](https://github.com/joelparkerhen
 - **Date**: YYYY-MM-DD
 - **Status**: proposed | accepted | deprecated | superseded
 - **Tags**: tag1, tag2
-- **Author**: rule-mcp
+- **Author**: rule-ai-mcp
 
 ## Context
 
@@ -52,7 +52,7 @@ What was decided and why.
 
 ## Tools
 
-### MCP Tool: `pix_process_adr`
+### MCP Tool: `rule_tool_process_adr`
 
 ```json
 {
@@ -66,17 +66,23 @@ What was decided and why.
 }
 ```
 
-### CLI: `rule-mcp adr new <title> [--status]`
+### CLI: `rule-ai-mcp adr new <title> [--status]`
 
 ## Directory Structure
 
 ```
 docs/adr/
-├── README.md                    # Indice cronologico
+├── ADR.md                       # generated: index, one-liners, themes, rules
 ├── 001-initial-architecture.md
 ├── 002-database-selection.md
 └── 003-api-design.md
 ```
+
+`ADR.md` is the only index and nobody edits it. Every column in it is read back
+out of the numbered files, so the way to correct the index is to correct the
+ADR and let the next `rule_tool_process_adr` call rewrite it. There is no second
+summary to keep in sync: there was one, and it went stale ten decisions before
+anybody noticed.
 
 ## Status Flow
 

@@ -157,6 +157,277 @@ async function fetchData(url) {
 }
 ```
 
+### What await actually waits for: promises, callbacks, streams
+
+`await` waits for one promise to settle. It does not wait for the work you had
+in mind unless that promise represents it. Most async bugs live in that gap.
+
+- **It waits for settlement, not for side effects.** If a function starts work
+  and returns before that work finishes, awaiting it tells you nothing about the
+  work.
+- **An `async` function can return before its internal work completes.** Anything
+  it kicked off without awaiting outlives the call.
+- **It does not understand callbacks.** An `await` on a function whose result
+  arrives in a callback resolves immediately. Promisify first.
+- **It accepts any thenable**, not only a native promise - including one that
+  never settles.
+- **It waits for rejection too**, which is why the `try` must wrap the `await`
+  and not the call that created the promise.
+- **`await Promise.all(...)` waits for one combined promise**, so the first
+  rejection wins and the rest keep running unobserved.
+- **A stream is not done because the call returned.** Await the promise that
+  represents completion (`finished`, `pipeline`), not the one that starts it.
+- **Settled does not mean still relevant.** By the time it resolves, the user may
+  have navigated away or typed something newer.
+
+### Async mistakes that produce the strangest bugs: missing await, forEach, race conditions
+
+```js
+// Missing await: returns a pending promise, the try/catch never fires
+const user = getUser(id);
+
+// forEach ignores the promises it creates: the loop finishes before any work does
+items.forEach(async (item) => {
+  await save(item);
+});
+for (const item of items) {
+  await save(item);
+} // sequential, and correct
+await Promise.all(items.map((item) => save(item))); // parallel, if the count is bounded
+
+// Accidentally sequential: two independent calls, awaited one after the other
+const a = await loadA();
+const b = await loadB();
+const [a, b] = await Promise.all([loadA(), loadB()]); // when they are independent
+
+// try/catch in the wrong place: the promise was created inside, rejection escapes
+try {
+  doWork();
+} catch {
+  /* never runs */
+}
+try {
+  await doWork();
+} catch {
+  /* runs */
+}
+
+// Stale read: the response that arrives last wins, not the one requested last
+```
+
+Not returning a promise inside a function hides it from the caller's `await` and
+from its error handling. Mixing callbacks, promises and `async/await` in one flow
+is where race conditions come from.
+
+### Promise patterns: allSettled, any, race, timeout, retry, dedupe, cancel
+
+```js
+// Partial failure is acceptable: allSettled never rejects
+const results = await Promise.allSettled(tasks);
+const ok = results.filter((r) => r.status === "fulfilled").map((r) => r.value);
+
+// First success wins, e.g. mirrors. `any` rejects only if all reject
+const fastest = await Promise.any([fromCache(), fromOrigin()]);
+
+// Timeout: race the work against a rejection
+const withTimeout = (promise, ms) =>
+  Promise.race([promise, new Promise((_, reject) => setTimeout(() => reject(new Error("timeout")), ms))]);
+
+// Retry with backoff. Retry only what is safe to repeat: idempotent reads,
+// 429 and 5xx. Never a POST that charges a card without an idempotency key.
+async function retry(fn, attempts = 3, delay = 200) {
+  for (let index = 0; ; index++) {
+    try {
+      return await fn();
+    } catch (error) {
+      if (index >= attempts - 1 || !isRetryable(error)) {
+        throw error;
+      }
+      await new Promise((resolve) => setTimeout(resolve, delay * 2 ** index));
+    }
+  }
+}
+
+// Deduplicate concurrent identical work: one request, many callers
+const inFlight = new Map();
+function once(key, fn) {
+  if (!inFlight.has(key)) {
+    inFlight.set(
+      key,
+      fn().finally(() => inFlight.delete(key)),
+    );
+  }
+  return inFlight.get(key);
+}
+
+// Cancel work nobody is waiting for any more
+const controller = new AbortController();
+fetch(url, { signal: controller.signal });
+controller.abort();
+```
+
+Bounded concurrency belongs here too, and it is a backend concern as much as a
+frontend one: see
+[rule-backend-node](../rule-backend-node/SKILL.md) for why an unbounded
+`Promise.all` over request-sized input is a resource attack.
+
+### Stale responses and ownership: who may write the state when a response lands
+
+`await` made concurrency readable, not simple. The bug class that survives
+review lives here, and it is not a caching bug: every response is valid relative
+to its own request, and the wrong one still wins.
+
+Type `j`, then `jav`. Both requests are in flight. The response for `jav` arrives
+first and renders. The response for `j` arrives second and overwrites it with
+results that were correct when they were asked for. **Completion is not
+relevance, and the code treated finishing as permission to write.**
+
+The same shape, wearing other clothes:
+
+- A record loads, the user opens a second one, the first response arrives last.
+- A dashboard filter changes while the earlier query is still running.
+- Validation for a field value that the user has already corrected.
+- A background refresh overwriting a local edit.
+- Two saves competing for the same row.
+
+**The fix is not "cancel the previous request". The fix is to decide ownership**,
+and cancellation is only one way to express the decision:
+
+| Rule                            | When                                                                     |
+| ------------------------------- | ------------------------------------------------------------------------ |
+| Newest wins                     | Search, filters, anything where the user's latest intent is the truth    |
+| Serialize                       | Operations that must not interleave, such as ordered writes              |
+| Independent state per operation | Several uploads, each with its own progress                              |
+| The database decides            | Several servers or users compete, so the guard belongs where the data is |
+
+Give the operation an identity and check it before writing. Not the input value,
+which repeats and can be requested twice, but the operation:
+
+```js
+let latestRequest = 0;
+
+async function search(query) {
+  const request = ++latestRequest;
+  setLoading(true);
+  try {
+    const response = await fetch(`/api/users?query=${encodeURIComponent(query)}`);
+    const users = await response.json();
+    if (request !== latestRequest) {
+      return;
+    }
+
+    setResults(users);
+  } catch (error) {
+    if (request === latestRequest) {
+      setError(error);
+    }
+  } finally {
+    if (request === latestRequest) {
+      setLoading(false);
+    }
+  }
+}
+```
+
+Note that loading and error are guarded too. **Whatever owns the data owns its
+loading and error state**, or a stale rejection clears a spinner that belongs to
+a newer request.
+
+### Reviewing async code: read the timeline, not the function
+
+A review follows files and functions, and a race lives in a timeline. Read once
+from top to bottom, the handler above is obviously correct: the query goes in,
+the request uses it, the result renders. Seeing the bug requires simulating two
+overlapping runs of the same function, and nothing in the source hints that
+another copy may be in flight. Async syntax is designed to read sequentially,
+which is exactly what hides this.
+
+Four questions that put time back into the review:
+
+1. What happens if this starts again before it finishes?
+2. Does completion still imply relevance when the response arrives?
+3. Do the loading and error states have the same owner as the data?
+4. Does the test control the order in which the promises settle?
+
+The last one matters because **tests pass when time is too cooperative**. A test
+whose mocks resolve in call order proves the happy path and nothing about the
+bug. Resolve them out of order on purpose, newest first, and assert that the
+older response changes nothing.
+
+### Streaming instead of collecting
+
+For a paginated source, an async generator gives the caller pages as they arrive
+instead of after the last one, and it stops when the caller stops:
+
+```js
+async function* pages(url) {
+  let next = url;
+  while (next) {
+    const response = await fetch(next);
+    const { data, nextPage } = await response.json();
+    yield data;
+    next = nextPage;
+  }
+}
+
+for await (const page of pages("/api/posts")) {
+  render(page);
+}
+```
+
+Collecting the whole thing into an array is `await Array.fromAsync(pages(url))`,
+which is the right call only when the caller genuinely needs all of it at once.
+
+## Built-ins that replaced a lodash import
+
+Check availability in the runtimes you actually target before reaching for one
+of these. They arrived across recent language editions rather than all at once,
+and the point is to look before installing a package, not to assume.
+
+| Instead of                                          | Use                             | Because                                                                     |
+| --------------------------------------------------- | ------------------------------- | --------------------------------------------------------------------------- |
+| A utility sum over floats                           | `Math.sumPrecise(iterable)`     | Accumulating in a loop compounds binary floating point error; this does not |
+| `if (!map.has(k)) map.set(k, d); return map.get(k)` | `map.getOrInsert(k, d)`         | One lookup instead of three, and no branch to get wrong                     |
+| A loop that pushes from an async iterable           | `await Array.fromAsync(source)` | Consumes an async iterable directly, with an optional mapping function      |
+| `_.chain()` and friends                             | Iterator helpers                | Real laziness in the language, described below                              |
+
+Iterator helpers are the one worth reading twice, because the array version is
+not merely more verbose, it does more work:
+
+```js
+// Maps all 10,000, filters all 10,000, then throws away all but five.
+const first = big
+  .map(expensive)
+  .filter((x) => x > 100)
+  .slice(0, 5);
+
+// Runs `expensive` only until five items have passed the filter.
+const first = big
+  .values()
+  .map(expensive)
+  .filter((x) => x > 100)
+  .take(5)
+  .toArray();
+```
+
+Each array method builds a whole new array before the next one starts. The
+iterator pipeline pulls one value through every stage and stops the moment the
+caller has enough.
+
+### Proposals worth knowing, not yet worth depending on
+
+- **Decorators**, standardized rather than compiler-flagged, with the decorated
+  value and a context object passed in and a replacement returned. Relevant if a
+  framework in the stack already leans on them.
+- **Temporal**, an immutable date and time API with real time-zone handling,
+  which is the long-awaited answer to the parts of `Date` nobody defends.
+- **Signals**, a reactive primitive in the language rather than one per
+  framework. Early, and the direction of travel is the interesting part.
+
+The rule for all three: know them, do not build on them until the runtimes you
+ship to have them, and never add a polyfill to a project for a feature nothing
+in it needs yet.
+
 ## Loops and iteration
 
 - Prefer `for...of` over `.forEach()` - always. `for...of` gives better TypeScript narrowing, lets you `await` directly, and supports `break`/`continue` (none of which work cleanly inside a `.forEach()` callback).
@@ -208,7 +479,7 @@ These are the correctness and performance idioms rule expects in every JS/TS fil
 
 | Idiom                   | ❌ Avoid                                           | ✅ Prefer                                  | Why                                                                                                                          |
 | ----------------------- | -------------------------------------------------- | ------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------- |
-| Set membership in loops | `allowed.includes(scope)` inside `.filter()`/loops | `new Set([...])` + `allowed.has(scope)`    | `.includes()` is O(n) per call → O(n²) in loops; `Set.has()` is O(1)                                                         |
+| Set membership in loops | `allowed.includes(scope)` inside `.filter()`/loops | `new Set([...])` + `allowed.has(scope)`    | `.includes()` is O(n) per call -> O(n²) in loops; `Set.has()` is O(1)                                                        |
 | Iteration               | `users.forEach(u => sendEmail(u))`                 | `for (const u of users) { sendEmail(u); }` | `break`/`continue`/`await` + better TS narrowing                                                                             |
 | Node builtins           | `import fs from 'fs'`                              | `import fs from 'node:fs'`                 | Unambiguous; can't be shadowed by an npm package                                                                             |
 | Throwing errors         | `throw Error('boom')`                              | `throw new Error('boom')`                  | Consistency; `new` required for error constructors                                                                           |
@@ -287,7 +558,7 @@ class MyComponent extends HTMLElement {
 ## Documentation - JSDoc (MANDATORY)
 
 > **Every JS/TS file MUST have complete JSDoc.** No exceptions.
-> This rule is enforced by rule guardrails (`pix_check` includes `jsdoc-required`).
+> This rule is enforced by rule guardrails (`rule_tool_check` includes `jsdoc-required`).
 
 ### Rules
 
@@ -296,6 +567,32 @@ class MyComponent extends HTMLElement {
 3. **Every function** (exported or internal) MUST have JSDoc describing purpose, parameters, and return value.
 4. **Every class** MUST have JSDoc describing its purpose and usage.
 5. **Every type/interface** (TS) MUST have JSDoc.
+
+### What a comment may contain
+
+**Say what the code does and why it is that way now. Never say what it used to
+be.** The history of a decision belongs to the ADR that took it and to git. A
+copy in a comment is a second record with no generator behind it, so it goes
+stale first and contradicts the one that did not.
+
+Enforced by `js-comment-no-history`, which is shared across every skill.
+
+| Instead of                            | Write                                                             |
+| ------------------------------------- | ----------------------------------------------------------------- |
+| `// This used to be two functions.`   | `// One writer, so a second without the backup cannot appear.`    |
+| `// Previously this returned null.`   | `// Returns undefined when nothing is stored.`                    |
+| `// The old guard accepted any root.` | `// Accepting any root makes the traversal check unable to fail.` |
+| `// We changed this to a Map.`        | `// A Map, because the key is looked up per request.`             |
+
+Verbosity is minimal by default. That means:
+
+- **JSDoc on every exported symbol, every function, every class, every type.**
+  This is not the part to trim, and `jsdoc-required` blocks a file that skips it.
+- **A comment where the logic is genuinely hard**, explaining what it does and
+  what would go wrong otherwise. A non-obvious invariant, an ordering that
+  matters, a bound that has a reason.
+- **Nothing else.** A comment restating the line below it is noise, and a
+  comment narrating a change is duplication.
 
 ### JSDoc Format
 
@@ -370,13 +667,13 @@ function formatDate(date) { ... }
 
 ### Enforcement
 
-- The `pix_check` tool validates JSDoc presence on all exported symbols.
-- Run `pix_<skill> mode=check` on your code to verify documentation compliance.
+- The `rule_tool_check` tool validates JSDoc presence on all exported symbols.
+- Run `rule_tool_<skill> mode=check` on your code to verify documentation compliance.
 - **CI MUST fail** if any JS/TS file lacks required JSDoc.
 
 ### Documenting CSS
 
-For CSS file documentation rules, see [`css.md`][rule-styleguide-css](../rule-styleguide-css/SKILL.md) → Documentation section.
+For CSS file documentation rules, see [`css.md`][rule-styleguide-css](../rule-styleguide-css/SKILL.md) -> Documentation section.
 
 ## Testing - Playwright + axe-core (MANDATORY)
 
@@ -399,7 +696,7 @@ tests/
 
 ```bash
 pnpm install --save-dev playwright @axe-core/playwright
-ppnpx playwright install chromium
+pnpx playwright install chromium
 ```
 
 ### Required `playwright.config.js`
@@ -512,16 +809,16 @@ test.describe("A11y: components", () => {
 
 ```bash
 # Run all tests
-ppnpx playwright test
+pnpx playwright test
 
 # Run only a11y tests
-ppnpx playwright test tests/a11y/
+pnpx playwright test tests/a11y/
 
 # Single test file
-ppnpx playwright test tests/a11y/_basic.spec.js
+pnpx playwright test tests/a11y/_basic.spec.js
 
 # With UI mode (debugging)
-ppnpx playwright test --ui
+pnpx playwright test --ui
 ```
 
 ### CI Integration
@@ -537,8 +834,8 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
       - run: pnpm install --frozen-lockfile
-      - run: ppnpx playwright install chromium
-      - run: ppnpx playwright test
+      - run: pnpx playwright install chromium
+      - run: pnpx playwright test
 ```
 
 ### axe-core Tags Reference
@@ -569,9 +866,9 @@ new AxeBuilder({ page }).withTags(["wcag2aa", "wcag21aa", "wcag22aa"]).analyze()
 
 ### Enforcement
 
-- The `pix_check` tool validates: `tests/a11y/` exists, axe-core import present, `playwright.config.js` exists.
-- Run `pix_<skill> mode=check` on your project to verify testing compliance.
-- See [`a11y.md`][rule-styleguide-a11y](../rule-styleguide-a11y/SKILL.md) → Section 12 for full a11y testing guide.
+- The `rule_tool_check` tool validates: `tests/a11y/` exists, axe-core import present, `playwright.config.js` exists.
+- Run `rule_tool_<skill> mode=check` on your project to verify testing compliance.
+- See [`a11y.md`][rule-styleguide-a11y](../rule-styleguide-a11y/SKILL.md) -> Section 12 for full a11y testing guide.
 
 ## Project scaffolding reminders
 

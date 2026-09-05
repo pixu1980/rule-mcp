@@ -1,10 +1,11 @@
 ---
 name: rule-ai-agents
 description: >
-  Scaffold and maintain AI Agent repositories built on @rule/rule-mcp-core.
+  Scaffold and maintain AI Agent repositories built on @rule/rule-ai-core.
   Use when creating a new AI agent project, adding tools to an existing agent,
   configuring environment variables, writing tests, setting up seed data, or
-  containerizing an agent service.
+  containerizing an agent service. Also covers choosing a retrieval layer:
+  vector search, a code graph, or structured knowledge files.
 tags:
   - "ai"
   - "agents"
@@ -15,15 +16,15 @@ metadata:
   version: "1.0"
 ---
 
-# AI Agents app with rule-mcp-core
+# AI Agents app with rule-ai-core
 
 ## Core dependency
 
-| Field          | Value                                                                |
-| -------------- | -------------------------------------------------------------------- |
-| **Package**    | `@rule/rule-mcp-core`                                               |
-| **Repository** | `https://github.com/rule/rule-mcp-core`                             |
-| **Install**    | `pnpm add @rule/rule-mcp-core` (or `pnpm add @rule/rule-mcp-core`) |
+| Field          | Value                                                        |
+| -------------- | ------------------------------------------------------------ |
+| **Package**    | `@rule/rule-ai-core`                                           |
+| **Repository** | `https://gitlab.palmabit.cloud/rule/rule-ai/rule-ai-core`       |
+| **Install**    | `pnpm add @rule/rule-ai-core` (or `pnpm add @rule/rule-ai-core`) |
 
 This must be the primary dependency for all AI Agents app repositories.
 
@@ -42,7 +43,7 @@ src/server/
 │   │   └── <name>.agent.ts    # Calls agentRegistry.register() at module level
 │   ├── tools/                 # Tool definitions - one file per tool
 │   │   └── <name>.tool.ts     # Calls toolRegistry.register() at module level
-│   ├── providers/             # LLMProvider implementations using @rule/rule-mcp-core
+│   ├── providers/             # LLMProvider implementations using @rule/rule-ai-core
 │   │   └── <name>.ts
 │   ├── registries/            # Agent, tool, and provider singletons
 │   ├── memory/                # MemoryProvider implementations + factory
@@ -94,10 +95,10 @@ export type Env = z.infer<typeof envSchema>;
 
 ## Step 3 - Implement a provider
 
-Create `src/server/src/providers/<name>.ts`. Each provider wraps `@rule/rule-mcp-core` and implements the `LLMProvider` interface defined in `src/server/src/types.ts`:
+Create `src/server/src/providers/<name>.ts`. Each provider wraps `@rule/rule-ai-core` and implements the `LLMProvider` interface defined in `src/server/src/types.ts`:
 
 ```ts
-import { createAgent } from "@rule/rule-mcp-core";
+import { createAgent } from "@rule/rule-ai-core";
 import type { LLMProvider, Message, LLMResponse } from "../types.js";
 import { env } from "../config/env.js";
 
@@ -147,7 +148,7 @@ Create `src/server/src/index.ts`. It imports all registries (triggering self-reg
 import "./agents/index.js";
 import "./tools/index.js";
 import "./providers/index.js";
-import { AgentRunner } from "@rule/rule-mcp-core";
+import { AgentRunner } from "@rule/rule-ai-core";
 import { agentRegistry } from "./registries/index.js";
 import { env } from "./config/env.js";
 import pino from "pino";
@@ -180,12 +181,12 @@ Create `seed/run-seed.ts` following the seed policy in `rules/common.md`. The se
 
 ### Unit tests
 
-Mock `@rule/rule-mcp-core` to isolate provider and tool logic:
+Mock `@rule/rule-ai-core` to isolate provider and tool logic:
 
 ```ts
 import { describe, expect, it, vi } from "vitest";
 
-vi.mock("@rule/rule-mcp-core", () => ({
+vi.mock("@rule/rule-ai-core", () => ({
   createAgent: vi.fn(() => ({
     chat: vi.fn().mockResolvedValue({ content: "mocked response" }),
   })),
@@ -235,6 +236,85 @@ The monorepo has two Dockerfiles. Use templates from [skills/docker/SKILL.md](..
 | **Port**        | `3001`                    | `8080`    |
 | **Entry**       | `dist/index.js`           | nginx     |
 | **Healthcheck** | Omit if no HTTP interface | `GET /`   |
+
+## When a vector database is the wrong answer
+
+Retrieval is three layers, not three competitors, and each one holds a different
+kind of thing:
+
+| Layer                      | Holds                                                                    | How it retrieves                       | What it costs when it breaks                         |
+| -------------------------- | ------------------------------------------------------------------------ | -------------------------------------- | ---------------------------------------------------- |
+| Vector search              | Unstructured prose: tickets, threads, the long tail of docs              | Nearest neighbor, probabilistic        | Embedding drift, reindexing, a plausible wrong chunk |
+| Code graph                 | What the code is: calls, imports, inheritance                            | Deterministic traversal of typed edges | Staleness between builds                             |
+| Structured knowledge files | What the team knows: schemas, conventions, why a thing is built this way | Explicit links between documents       | Silent rot, because nothing fails a build            |
+
+Pick by the failure you observed, never by the layer with the newest name.
+
+**Chunking flattens hierarchy, and no embedding model fixes that.** If a cause
+and its effect do not land in the same chunk, the index has no idea they are
+related. Splitting text into fixed blocks is what destroys the relation, so a
+better embedder, a larger context window and more careful prompting all leave it
+exactly where it was.
+
+**A graph is what you reach for when an answer needs several hops.** "What breaks
+in the API layer if I change this migration" is a question about foreign keys,
+interfaces and cross-file calls, and none of those were ever in vector space.
+Parse them instead: a syntax-tree pass extracts `calls`, `imports` and `inherits`
+with no model in the loop, so the structural layer costs no tokens and cannot
+hallucinate an edge.
+
+**A structured knowledge format is what you reach for when the code is fine and
+the intent is missing.** The symptom is an agent writing valid code that violates
+a convention, reaches for a deprecated internal API, or ignores a rule everyone
+on the team knows and nobody wrote down. A parser cannot find business intent,
+because it is not in the source. Plain Markdown with a little frontmatter, kept
+in git and linked document to document, is enough: it reviews like code, diffs
+like code, and an agent walks the links instead of guessing at a neighborhood.
+
+### Where a vector database still wins
+
+Similarity search is the right tool for a large, messy, mostly-prose corpus where
+the question is fuzzy and the cost of a near-miss is low. Support archives,
+historical threads, exploratory reading. What it should not be asked for is a
+canonical fact: a metric definition, a tax identifier, a schema. Asking a
+probabilistic index for the one true answer is a design error, not a tuning
+problem.
+
+Two numbers worth carrying, both vendor-reported and neither independently
+reproduced. On a long-memory question-answering benchmark, graph-expanded
+retrieval and a well-tuned vector pipeline scored the same accuracy on the same
+model with the same token budget, and the graph was slightly behind on recall. On
+a second benchmark the graph scored lower than the best memory system and cost
+roughly an order of magnitude less to ingest. **The graph does not out-retrieve a
+good vector pipeline. It costs less to build and it cannot invent an edge.** Sell
+it on that, and treat any benchmark from the people shipping the tool as a
+direction rather than a number.
+
+### Before adding a layer
+
+Most retrieval that disappoints is disappointing for ordinary reasons: bad chunk
+boundaries, an index nobody rebuilt, an embedding model chosen by default. A
+graph on top of a bad pipeline is the same bad pipeline with more operations.
+Fix the retrieval you have, then add a layer against a named failure.
+
+The two failures that justify one:
+
+- **Several hops.** The answer requires linking facts that live in different
+  files and were never adjacent in any chunk. Add the structural graph.
+- **Scattered knowledge.** The rules exist only in chat logs, stale wikis and
+  people's heads. Add the curated narrative layer.
+
+And two ways the new layer betrays you:
+
+- **A stale graph is worse than no graph**, because it answers confidently and
+  wrongly. Rebuild it in a hook or in CI, not by remembering to.
+- **A knowledge bundle with no schema and no validation degrades quietly.**
+  Nothing errors when a link breaks or a document goes a year without a change,
+  so make the update part of the change that caused it.
+
+This server took that argument seriously: it routes with a lexical index and
+reads code through a graph, and it runs no embedding model at all. The corpus is
+small, the questions are specific, and a deterministic answer can be cached.
 
 ## Edge cases
 

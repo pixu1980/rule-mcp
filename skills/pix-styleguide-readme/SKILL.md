@@ -40,7 +40,7 @@ If you don't know the real differentiators, ask the user.
 
 Right after the first paragraph, put a bullet list of the project's most important facts, features, and numbers.
 
-Optimize the list for scanning, not word-by-word reading (the reader still doesn't have enough motivation): lead each bullet with 1–2 bold keywords, then the evidence.
+Optimize the list for scanning, not word-by-word reading (the reader still doesn't have enough motivation): lead each bullet with 1-2 bold keywords, then the evidence.
 
 Concrete evidence beats promises:
 
@@ -53,9 +53,9 @@ Concrete evidence beats promises:
 
 Then put a small example, because scanning code or a screenshot is faster than reading text.
 
-For libraries, show a small self-explanatory usage example. It doesn't need every real setup step - it only illustrates (the real guide comes below). Keep it in 4–10 lines of code and show the output in a comment, so the reader sees the result without running anything.
+For libraries, show a small self-explanatory usage example. It doesn't need every real setup step - it only illustrates (the real guide comes below). Keep it in 4-10 lines of code and show the output in a comment, so the reader sees the result without running anything.
 
-Nano ID's opener demonstrates steps 1–3 on one screen:
+Nano ID's opener demonstrates steps 1-3 on one screen:
 
 ````markdown
 # Nano ID
@@ -82,6 +82,37 @@ Step-by-step, explicit commands for adding the tool to an existing project. The 
 
 **Validate by following the guide from scratch** as if you'd never seen the project. Wipe your memory clean - pretend you're a new user. Fix every gap, every assumption, every missing step. If you can't follow it, neither can they.
 
+## Required sections in an internal repository
+
+The structure above is written for an open source project, where the README's
+job is to win a reader who has no reason to stay. An internal service has a
+reader who has to stay, and a different failure: they can clone the repository
+and still not run it. Those READMEs carry a fixed set of sections, and a review
+checks the list rather than the prose.
+
+| Section                   | Answers                                                                            |
+| ------------------------- | ---------------------------------------------------------------------------------- |
+| Name and one-line purpose | What is this, in a sentence a stranger repeats correctly                           |
+| Architecture overview     | The components, how they talk, and where this one sits. A text diagram if it helps |
+| Prerequisites             | Node version, package manager, Docker, anything installed before step one          |
+| Quick start               | Install, seed, run. Copy-pasteable, in order, from a clean machine                 |
+| Development workflow      | Dev mode, tests, lint, format - the commands, not a description of them            |
+| Seed policy               | Whether seeding is required before the first run, how to run it, how to re-seed    |
+| Docker usage              | Building the image, compose, which ports come up                                   |
+| Documentation             | Running the docs locally and adding a page                                         |
+| License                   | Even when the answer is unlicensed                                                 |
+
+An agent repository adds one more: how to register an agent and how to give it a
+tool, because that is the change every newcomer makes first.
+
+Two things stay out. **No directory tree** - it is generated once, wrong within a
+month, and says less than the architecture paragraph it displaced. **No
+hand-maintained changelog** - release notes come from the tags.
+
+Copy-pasteable is the standard the whole list is held to. "Configure as needed"
+and "set the appropriate environment variables" are not instructions; they are
+the author remembering something they did not write down.
+
 ## Formatting for skimmers
 
 - Headings for hierarchy, bold for key points, horizontal rules between layers.
@@ -94,13 +125,15 @@ Step-by-step, explicit commands for adding the tool to an existing project. The 
 
 1. First paragraph alone sells the project (what / benefit / difference).
 2. Every number and claim is real, sourced from the repo, the user, or an actual measurement.
-3. The example is self-explanatory, 4–10 lines, and shows its output.
+3. The example is self-explanatory, 4-10 lines, and shows its output.
 4. Getting started works from a clean machine.
 5. Skimming only headings + bold text still tells the story.
 
 ## See also
 
-- [rule-styleguide-patterns](../rule-styleguide-patterns/SKILL.md)
-- [rule-styleguide-validation](../rule-styleguide-validation/SKILL.md)
-- [rule-toolchain-project](../rule-toolchain-project/SKILL.md)
-- [rule-process-documentation](../rule-process-documentation/SKILL.md)
+- [rule](../rule/SKILL.md) - Central skill index and dispatcher
+- [rule-styleguide](../rule-styleguide/SKILL.md) - Styleguide skill index
+- [rule-styleguide-markdown](../rule-styleguide-markdown/SKILL.md) - Markdown conventions this README must follow
+- [rule-process-documentation](../rule-process-documentation/SKILL.md) - Documentation process beyond the README
+- [rule-process-npm-release](../rule-process-npm-release/SKILL.md) - Publishing the package the README advertises
+- [How to make your open source popular](https://evilmartians.com/chronicles/how-to-make-your-open-source-popular) - The Evil Martians article this structure comes from

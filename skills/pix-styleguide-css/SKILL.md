@@ -126,7 +126,7 @@ Key advantages of avoiding classes:
 ### CSS custom property naming
 
 - Custom properties must start with `--`.
-- Use a structured naming model: target → declination → state → property.
+- Use a structured naming model: target -> declination -> state -> property.
 
 ```css
 .selector {
@@ -407,10 +407,71 @@ my-component {
 - Keep CSS ordering aligned with markup order.
 - Avoid ids inside reusable components.
 
+## One-liners that replace the workaround: clamp fluid type, aspect ratio, flex centering, auto-fit grid, color-scheme dark mode, line-clamp, sticky
+
+Each of these replaces a pattern that used to need a wrapper, a media query
+stack, or JavaScript. They are all baseline in current browsers.
+
+```css
+/* Centering, without the translate(-50%, -50%) dance */
+display: flex;
+align-items: center;
+justify-content: center;
+
+/* Fluid type with a floor and a ceiling, instead of three breakpoints */
+font-size: clamp(1rem, 2.5vw, 2rem);
+
+/* Reserve the box before the media loads: no layout shift, no padding-top hack */
+aspect-ratio: 16 / 9;
+
+/* Responsive columns with no breakpoints at all, and the one grid case a
+   wrapping flex row does not cover: identical tracks on every row */
+grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+
+/* Truncate to a line count, ellipsis included */
+line-clamp: 3;
+
+/* Anchor scrolling, without window.scrollTo animation code */
+scroll-behavior: smooth;
+
+/* Let the UA theme form controls, scrollbars and the canvas for both modes */
+color-scheme: light dark;
+
+/* Headings that break into even lines instead of one orphan word */
+text-wrap: balance; /* pretty: for body copy */
+
+/* Table headers that stay put while the body scrolls */
+th {
+  position: sticky;
+  top: 0;
+}
+
+/* Tint checkboxes, radios, ranges and progress with the brand colour */
+accent-color: var(--brand);
+
+/* Stop a scrolling modal from scrolling the page behind it */
+overscroll-behavior: contain;
+```
+
+Two more worth knowing, for the same reason:
+
+```css
+/* Skip rendering work for offscreen sections */
+content-visibility: auto;
+contain-intrinsic-size: auto 400px; /* so the scrollbar stays honest */
+
+/* Inputs that size to their content */
+field-sizing: content;
+```
+
+Reach for the property before the wrapper. Most of these exist because the
+workaround they replace was common enough to standardize, and every one of them
+removes markup, a media query, or a script.
+
 ## Documentation - CSS Comments (MANDATORY)
 
 > **Every CSS file MUST have clear, meaningful comments.** No exceptions.
-> This is enforced by rule guardrails (`pix_check` includes `css-comments-required`).
+> This is enforced by rule guardrails (`rule_tool_check` includes `css-comments-required`).
 
 ### Rules
 
@@ -469,8 +530,8 @@ Use clear section headers to group related rules:
 
 ### Enforcement
 
-- The `pix_check` tool validates CSS file comments.
-- Run `pix_<skill> mode=check` to verify documentation compliance.
+- The `rule_tool_check` tool validates CSS file comments.
+- Run `rule_tool_<skill> mode=check` to verify documentation compliance.
 - **CI MUST fail** if any CSS file lacks required comments.
 
 ## Quality gates and maintenance
@@ -479,6 +540,105 @@ Use clear section headers to group related rules:
 - Minify before shipping.
 - Remove unused CSS when possible.
 - **Documentation is NOT optional.** Every CSS file needs clear comments.
+
+## Flex first, grid only when it is the only thing that works: the four cases that earn a grid
+
+Flex and grid are not two equal tools to pick between by taste. A flex container
+declares one axis and hands the rest to the content: a row, a column, a toolbar,
+a stack, a wrapping set of cards. That is what interfaces are made of. A grid
+declares a coordinate system, and the tracks have to exist before anything
+occupies them - which is power when the layout genuinely has two dimensions, and
+maintenance for nothing when it does not. A `grid-template-columns` written for a
+label and a button is a second thing to keep in step every time either changes.
+
+**So the rule has no exceptions to weigh: if flex produces the same visual
+result, flex is what gets written.** Grid is the second choice, and it is
+reached for only when one of these four is true.
+
+```css
+/* 1. Named areas: a structure flex cannot name at all. */
+[data-part="page"] {
+  display: grid;
+  grid-template-areas:
+    "nav main"
+    "nav footer";
+  grid-template-columns: 16rem 1fr;
+}
+
+/* 2. Subgrid: a child aligning to its parent's tracks. */
+[data-part="row"] {
+  display: grid;
+  grid-template-columns: subgrid;
+}
+
+/* 3. Explicit placement or deliberate overlap. */
+[data-part="hero"] {
+  display: grid;
+}
+[data-part="hero-media"],
+[data-part="hero-caption"] {
+  grid-area: 1 / 1;
+}
+
+/* 4. auto-fit tracks: columns that appear and disappear with no breakpoint,
+      where every row keeps the same track widths. */
+[data-part="catalog"] {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr));
+  gap: 1.25rem;
+}
+```
+
+Everything else is flex, and the conversions are short:
+
+| Reached for grid because                | Flex instead                                                                   |
+| --------------------------------------- | ------------------------------------------------------------------------------ |
+| `grid-template-columns: 1fr auto`       | `display: flex` + `margin-inline-start: auto` on the item that goes to the end |
+| `grid-template-columns: repeat(2, 1fr)` | `display: flex` + `flex: 1 1 0` on the children                                |
+| `grid-auto-flow: column`                | `display: flex` (that is what a flex row is)                                   |
+| `place-items: center`                   | `display: flex` + `align-items: center` + `justify-content: center`            |
+| A wrapping set of cards                 | `display: flex` + `flex-wrap: wrap` + `flex: 1 1 <basis>`                      |
+| Spacing between children                | `gap`, which flex has had for years                                            |
+
+```css
+/* The row that gets written as a two-column grid, and should not be */
+[data-part="field"] {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+[data-part="field-action"] {
+  margin-inline-start: auto;
+}
+
+/* The wrapping set, without a track definition */
+[data-part="card-set"] {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.25rem;
+}
+[data-part="card"] {
+  flex: 1 1 17rem;
+}
+```
+
+**The one honest difference.** A wrapping flex row lets its last line stretch to
+fill: three cards on a row of four leave three wider cards, where auto-fit tracks
+would leave three normal cards and a gap. Both are defensible, and the flex
+behaviour is the one most designs actually want. When the design requires the
+track widths to be identical on every row - a price table read down its columns,
+a comparison grid - that is case 4 above, and it is a grid.
+
+**Saying so is part of the rule.** `rule_tool_check` runs `css-flex-first`, which
+fails a `display: grid` that shows none of the four signals. A grid that is
+legitimate for a reason the stylesheet does not spell out declares it:
+
+```css
+/* grid: the tracks have to line up across every row of the ledger */
+[data-part="ledger"] {
+  display: grid;
+}
+```
 
 ## Box model and layout fundamentals
 
@@ -494,7 +654,89 @@ Use clear section headers to group related rules:
 
 - Let the parent handle layout concerns. Components should avoid embedding margin and positional layout unless the component is meant to be layout-aware.
 
-## Responsive and fluid design
+## Six layout rules that end the fight with CSS
+
+Most CSS frustration comes from treating the browser as a renderer of one fixed
+composition. It is solving a constraint problem: requested sizes against
+available space, against minimums and maximums, against what the content itself
+needs. These six rules are that solver, described.
+
+**1. Normal flow is the layout system, not the fallback.** A heading takes the
+height its text needs, a longer paragraph pushes what follows, a translated
+string that wraps to two lines moves its neighbors instead of overlapping them.
+That is the strongest responsiveness available, and absolute positioning, fixed
+heights and visual transforms opt out of it. Leave content in flow unless it
+genuinely needs its own layer: tooltips, badges, dropdowns, backdrops. Headings,
+descriptions, form fields and card actions should keep influencing the size of
+what contains them. **First debugging question: should this have left flow at
+all?**
+
+**2. The parent usually made the decision.** A flex container picks the axis,
+distributes free space and decides wrapping - and it is the default, per
+flex-first. A grid container defines tracks before anything occupies them, which
+is why it is the exception rather than the other half of a choice. A containing block decides what a percentage is a
+percentage of. So a child can be doing exactly what it was told while the parent
+solves a different problem: `inline-size: 100%` is correct and still narrow
+inside a constrained ancestor. **Inspect outward before editing the child**, and
+keep going until you find the element that owns the space. A child needing a
+negative margin or an odd percentage to look right is usually counteracting a
+parent nobody fixed.
+
+**3. Width is a negotiation, not a command.** A flex item asking for `300px` can
+still shrink. A grid item fills its track whatever it asks for. An image brings
+an intrinsic contribution. Think in ranges: `min()`, `max()`, `clamp()`,
+`min-content`, `max-content`, `fit-content` are how the boundaries of the
+negotiation get expressed, not advanced features.
+
+```css
+main {
+  inline-size: min(100% - 2rem, 72rem);
+  margin-inline: auto;
+}
+
+[data-part="card-grid"] {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.25rem;
+}
+
+[data-part="card"] {
+  flex: 1 1 17rem;
+}
+```
+
+Neither rule describes a screenshot. The first says use the width available and
+stop before the line length gets uncomfortable; the second says each card needs a
+useful minimum, share what is left, and wrap when the container narrows. The last
+line stretches to fill; if the tracks have to be identical on every row instead,
+that is the auto-fit case and it is a grid.
+
+**4. Content arrives with a size.** Text, images, tables and form controls are not
+empty boxes waiting for dimensions. A long unbroken token has a minimum width
+that will win. A flex item's automatic minimum size is its content, which is why
+it refuses to shrink until `min-inline-size: 0` says otherwise.
+
+**5. Overflow is a symptom, not a problem.** Something is larger than the space
+meant to hold it, and the useful question is why: a fixed-width child in a fluid
+parent, a token that cannot wrap, a `100vw` section that includes the scrollbar,
+an absolutely positioned decoration extending the scroll area, a flex child that
+will not shrink. **Hiding overflow on a distant ancestor turns a local sizing
+mistake into a global clipping policy**, and it clips focus outlines with it, so
+a keyboard user can reach something they cannot see. Some overflow is
+legitimate: an editor scrolls, a wide table scrolls in its own container. That
+overflow belongs to the component, deliberately.
+
+**6. Components experience containers, not devices.** A card is narrow beside a
+sidebar on a large screen and wide on a small one. Breakpoints named after device
+categories encode an assumption about where a component will be placed. Prefer
+intrinsic layouts first, grid adding and removing columns by the minimum each
+item needs, and reach for a container query when a component genuinely has to
+restructure on its own width. **Breakpoints come from where the design stops
+working**, found by narrowing until it does, not from a list of popular screen
+sizes. Viewport queries keep their place for page-level structure and for
+environmental preferences.
+
+## Responsive and fluid design: breakpoints from content, not from device names
 
 - Design for fluidity by default.
 - Let content drive sizing. Prefer padding plus max sizes over hard coded width and height.

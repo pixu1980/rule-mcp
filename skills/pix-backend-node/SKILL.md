@@ -1,10 +1,21 @@
 ---
 name: rule-backend-node
 description: >-
-  Use when scaffolding a new Node.js backend repository. Covers Express + TypeScript structure, baseline config, tests, Docker, and CI files.
+  Use when scaffolding or hardening a Node.js backend. Covers project structure, required libraries, quality gates, and the patterns that break under real traffic: blocking the event loop, unbounded Promise.all, buffering payloads, in-memory state, backpressure, missing timeouts, and fire-and-forget work.
 tags:
   - "backend"
   - "node"
+  - "traffic"
+  - "load"
+  - "concurrency"
+  - "promise-all"
+  - "backpressure"
+  - "timeout"
+  - "streaming"
+  - "memory"
+  - "event-loop"
+  - "queue"
+  - "packages"
 frameworks: [node, api]
 compatibility: Designed for AI coding assistants
 metadata:
@@ -204,6 +215,210 @@ const prefs = await get("user-preferences");
 | **DuckDB**     | Analytics / OLAP          | duckdb (in-process OLAP)             |
 
 ---
+
+## Patterns that break under real traffic: slow endpoints, Promise.all, memory, timeouts
+
+Node handles concurrency well while work stays small, bounded and mostly
+asynchronous. Every pattern below is correct for one request and fails when many
+arrive together, which is why staging never catches them.
+
+### Synchronous work in a request blocks every other request
+
+JavaScript on the main thread stops that thread from running any other
+JavaScript. `readFileSync`, `pbkdf2Sync`, `execSync` are the obvious cases; large
+JSON serialization, expensive regexes, sorting big collections and image
+metadata are the ones that surprise people.
+
+The symptom rarely points at the cause. Database calls look slow because their
+callbacks cannot run. Timers fire late. Health checks time out and the load
+balancer marks the instance unhealthy. The event loop is not slow, it is
+unavailable.
+
+Measure with realistic input sizes: 2 ms on test data can be several seconds on
+a document a user actually uploads. Move real computation to a worker thread or
+a separate service ([rule-backend-workers](../rule-backend-workers/SKILL.md)).
+
+### Unbounded Promise.all: slow under load, and a resource attack you wrote yourself
+
+```js
+// Bad: concurrency comes from the input, so the caller decides how hard to hit the database
+return Promise.all(orders.map((order) => enrich(order)));
+```
+
+With five orders this is faster. With five thousand it starts thousands of
+operations at once, each one taking a pool connection, a socket, buffers and
+downstream queue slots. The pool has twenty connections; the other requests wait
+in memory. Ten concurrent users produce ten thousand in-flight operations before
+anything applies pressure.
+
+Bound it to what the slowest dependency can take, or batch, or replace N queries
+with one join. Concurrency is a resource decision, not a syntax improvement: the
+question is not whether these can run in parallel but how many should.
+
+The bound belongs in code, not in a comment. A pool that keeps exactly `limit`
+operations in flight and starts the next one as a slot frees:
+
+```js
+/**
+ * Run tasks with at most `limit` in flight, preserving input order in the result.
+ *
+ * @param {Array<() => Promise<unknown>>} tasks - Thunks, not promises: a promise
+ *   has already started, so an array of promises cannot be throttled.
+ * @param {number} limit - Maximum concurrent operations.
+ * @returns {Promise<unknown[]>} Results in the order the tasks were given.
+ */
+async function runWithLimit(tasks, limit) {
+  const results = Array.from({ length: tasks.length });
+  let next = 0;
+
+  const worker = async () => {
+    while (next < tasks.length) {
+      const index = next++;
+      results[index] = await tasks[index]();
+    }
+  };
+
+  await Promise.all(Array.from({ length: Math.min(limit, tasks.length) }, worker));
+
+  return results;
+}
+```
+
+Two details decide whether this works. **Tasks are thunks**: an array of promises
+is already running, so nothing downstream can throttle it. And the limit comes
+from the narrowest dependency in the path, usually the connection pool, not from
+a number that looked reasonable.
+
+The failure semantics are `Promise.all`'s: the first rejection rejects the whole
+call while the other workers keep going. If partial success is acceptable, have
+each task settle rather than throw, and read the outcomes.
+
+### Fan-out at scale: one event, a million deliveries
+
+Sending to one recipient is a function call. Sending to a million is a
+different system, and the request that triggers it must not be the thing doing
+it. The request writes one job and returns; workers expand it.
+
+Expand in stages rather than in one query. One job per batch of recipients keeps
+each unit of work small enough to retry, and small enough that a crash loses
+seconds of progress rather than an hour of it.
+
+**The constraint is never your own throughput.** A hundred workers at a hundred
+sends a second is ten thousand a second, and the delivery provider will rate
+limit long before your fleet is busy. So the rate limit belongs at the worker
+layer, matched to what the downstream accepts, not to what the fleet can
+produce.
+
+That builds a backlog, and **a backlog is the queue doing its job**. A growing
+queue is almost always safer than a saturated dependency: one recovers by
+waiting, the other by being restarted. Scale the worker fleet on queue depth,
+independently of the servers serving requests, since the two have nothing to do
+with each other.
+
+Three failures to design for before the first send:
+
+- **Redelivery.** A worker that sends successfully and dies before acknowledging
+  will see the message again. At-least-once is the guarantee you actually have,
+  so the send has to be idempotent, keyed on something stable per recipient per
+  event. See
+  [rule-backend-api-design](../rule-backend-api-design/SKILL.md) for the
+  key and its lifetime.
+- **The poison message.** One recipient whose record makes the worker throw will
+  be retried forever and will block progress. Cap the attempts and move it to a
+  dead-letter queue that somebody actually reads, with the failure attached.
+- **Per-recipient duplication.** Several events can target the same person in a
+  minute. Deduplicate on the recipient and a window, not only on the job, or the
+  first incident of the day sends five copies of the same alert.
+
+Track delivery as data: accepted, sent, failed, dead-lettered, per event. Without
+it, "did it go out" is answered by looking at logs, and the answer arrives after
+the question stopped mattering.
+
+### Buffering a whole payload works until several users do it together
+
+A 50 MB upload is fine. Twenty concurrent ones are a gigabyte of raw buffers
+before parsing, validating or re-uploading makes copies. No single request
+violates its limit and the process still dies.
+
+Memory pressure rarely produces one clean OOM. Garbage collection gets more
+frequent and more expensive, latency turns irregular, then the process restarts.
+Stream when the work is incremental, and keep input limits anyway: streaming
+stops the buffer, it does not make unlimited data free to receive.
+
+The number that matters is not the memory one successful request needs. It is
+the memory the concurrency limit allows.
+
+### In-memory state stops being shared the moment you scale
+
+A `Map` of sessions, a rate-limit counter, a webhook dedup set. All correct on
+one process. Production runs several, each with its own heap: the user logs in
+on one instance and the next request lands on another, a limit of 100 becomes
+100 per instance, and a webhook already handled is accepted again.
+
+Restarts erase it too - deployments, crashes, scaling events. Process memory is
+for values that are local, temporary and safe to lose. Correctness-critical
+shared state needs a store with shared visibility.
+
+### Backpressure, or the slow consumer wins
+
+Streams solve the memory problem only with backpressure. The database produces
+rows faster than a mobile connection accepts them; without a rule for slowing
+down, the difference accumulates in the process. The endpoint is fine on office
+wifi and expensive on real networks.
+
+Use `pipeline`, which coordinates flow and propagates errors. Writing manually,
+a `false` from `write` means wait for `drain`. The same applies past streams: a
+queue consumer should not accept work faster than it finishes it.
+
+### A request with no timeout is an unbounded claim on capacity
+
+A dependency that accepts the socket and answers very slowly is worse than one
+that refuses. The request stays pending and holds memory, socket and context.
+One is invisible; hundreds exhaust the pool and file descriptors, and the
+failure spreads to handlers that only needed the database.
+
+Set separate limits for connect, headers, body and the whole operation, chosen
+from the user journey rather than one global number. Propagate an `AbortSignal`
+so an abandoned request releases resources. And note that a timeout does not
+stop the remote work - retrying a timed-out mutation duplicates it unless the
+API is idempotent.
+
+### Fire-and-forget work disappears with the process
+
+```js
+// Bad: the user was told the order succeeded; the email has no owner
+sendConfirmationEmail(order).catch(console.error);
+res.status(201).json(order);
+```
+
+The response got faster and the work lost its guarantee. A deployment can
+terminate the instance a millisecond later. Analytics may be safe to lose; a
+password-reset email or a financial event is not.
+
+Durable background work is a queue or a transactional outbox: the request
+records that the work must happen, a worker retries it, and the response stays
+fast without depending on this process staying alive. Workers need idempotency,
+a retry limit and a dead-letter path, because a redelivered job is normal and a
+poison message must not block every job behind it.
+
+## Packages worth the dependency
+
+Vetted against the project rules: exact versions, pnpm, and a real reason each
+one beats the platform.
+
+| Package   | For                                | Note                                                                              |
+| --------- | ---------------------------------- | --------------------------------------------------------------------------------- |
+| `zod`     | Runtime validation at the boundary | The one that earns its place most often: parse untrusted input into a typed value |
+| `pino`    | Structured JSON logging            | Low overhead, child loggers carry request context                                 |
+| `p-retry` | Retry with backoff                 | Pair with a timeout and idempotency, never retry blindly                          |
+| `execa`   | Child processes                    | Sane promise API, no shell injection by default                                   |
+| `tsx`     | Running TypeScript directly        | Development only                                                                  |
+| `cheerio` | Server-side HTML parsing           | Only when you actually parse HTML                                                 |
+
+Node covers what used to need a package: `--env-file` replaces `dotenv`,
+`node:test` replaces a runner for most projects, `fetch` is global, and
+`structuredClone` replaces deep-clone helpers. Check the platform before adding
+a dependency ([rule-toolchain-pnpm](../rule-toolchain-pnpm/SKILL.md)).
 
 ## See also
 

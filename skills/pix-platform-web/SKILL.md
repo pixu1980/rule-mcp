@@ -10,7 +10,7 @@ frameworks: [all]
 
 # rule-platform-web - Web Applications with rule Principles
 
-This skill is the **umbrella for all web framework skills** (rule-frontend-react, rule-frontend-vue, rule-frontend-angular, rule-frontend-solidjs, rule-frontend-svelte, rule-frontend-astro, rule-frontend-vanilla-reactive).
+This skill is the **umbrella for all web framework skills** (rule-frontend-react, rule-frontend-vue, rule-frontend-angular, rule-frontend-solidjs, rule-frontend-svelte, rule-frontend-astro).
 Choose one framework skill below the rule-platform-web layer.
 
 ## When to use rule-platform-web
@@ -25,26 +25,26 @@ Choose one framework skill below the rule-platform-web layer.
 
 1. **Zero CSS classes** - only element selectors + `[data-part="..."]` + `[data-*]` attribute selectors
 2. **Zero inline styles** - all styling in external `.css` files via `<link>` or `adoptedStyleSheets`
-3. **Semantic HTML is mandatory** - never `<div>` where `<section>`, `<article>`, `<nav>`, `<main>`, `<header>`, `<footer>` exists
-4. **Barrel pattern** - every component folder has `index.js` re-export, files are `_PascalCase.ext`
-5. **No CSS-in-JS, no Tailwind** - external `.css` files only
-6. **ES modules** - `import`/`export` everywhere
-7. **TypeScript is optional** - JSDoc annotations suffice for type safety
-8. **WCAG 2.2 AA** - accessible by default, test with axe-core
+3. **Flex first** - `display: grid` only for named areas, subgrid, explicit placement, or auto-fit tracks; anything a flex row or column can do is flex.
+4. **Semantic HTML is mandatory** - never `<div>` where `<section>`, `<article>`, `<nav>`, `<main>`, `<header>`, `<footer>` exists
+5. **Barrel pattern** - every component folder has `index.js` re-export, files are `_PascalCase.ext`
+6. **No CSS-in-JS, no Tailwind** - external `.css` files only
+7. **ES modules** - `import`/`export` everywhere
+8. **TypeScript is optional** - JSDoc annotations suffice for type safety
+9. **WCAG 2.2 AA** - accessible by default, test with axe-core
 
 ## Framework Selection
 
 Choose ONE framework skill below rule-platform-web:
 
-| Framework   | Skill                                                                      | Best for                                          |
-| ----------- | -------------------------------------------------------------------------- | ------------------------------------------------- |
-| Vanilla JS  | [rule-frontend-vanilla-reactive](../rule-frontend-vanilla-reactive/SKILL.md) | Simple apps, widgets, embedded UIs                |
-| React 18+   | [rule-frontend-react](../rule-frontend-react/SKILL.md)                       | Complex UIs with rich interactivity               |
-| Vue 3       | [rule-frontend-vue](../rule-frontend-vue/SKILL.md)                           | Progressive adoption, balance of power/simplicity |
-| Angular 16+ | [rule-frontend-angular](../rule-frontend-angular/SKILL.md)                   | Large enterprise applications                     |
-| SolidJS     | [rule-frontend-solidjs](../rule-frontend-solidjs/SKILL.md)                   | Fine-grained reactivity, fastest runtime          |
-| Svelte 5    | [rule-frontend-svelte](../rule-frontend-svelte/SKILL.md)                     | Minimal boilerplate, smallest bundles             |
-| Astro       | [rule-frontend-astro](../rule-frontend-astro/SKILL.md)                       | Content-first, islands architecture               |
+| Framework   | Skill                                                    | Best for                                          |
+| ----------- | -------------------------------------------------------- | ------------------------------------------------- |
+| React 18+   | [rule-frontend-react](../rule-frontend-react/SKILL.md)     | Complex UIs with rich interactivity               |
+| Vue 3       | [rule-frontend-vue](../rule-frontend-vue/SKILL.md)         | Progressive adoption, balance of power/simplicity |
+| Angular 16+ | [rule-frontend-angular](../rule-frontend-angular/SKILL.md) | Large enterprise applications                     |
+| SolidJS     | [rule-frontend-solidjs](../rule-frontend-solidjs/SKILL.md) | Fine-grained reactivity, fastest runtime          |
+| Svelte 5    | [rule-frontend-svelte](../rule-frontend-svelte/SKILL.md)   | Minimal boilerplate, smallest bundles             |
+| Astro       | [rule-frontend-astro](../rule-frontend-astro/SKILL.md)     | Content-first, islands architecture               |
 
 ## File Tree Convention
 
@@ -160,6 +160,47 @@ Deploy:  Netlify / Vercel / Cloudflare Pages / GitHub Pages
   right-to-left languages; do not assume English string length or direction.
 - Never hardcode user-facing strings - always use translation keys.
 
+## Browser APIs that replace a dependency: Intersection Observer, Resize Observer, dialog modal, Web Crypto, Web Locks, lazy loading, file upload
+
+Check the platform before adding a package. Each of these is baseline and
+replaces something that used to be a dependency.
+
+| Instead of                              | Use                                    | Note                                                              |
+| --------------------------------------- | -------------------------------------- | ----------------------------------------------------------------- |
+| axios, request                          | `fetch` + `AbortSignal.timeout()`      | Global in browsers and Node                                       |
+| a state library, for simple persistence | `localStorage` / `sessionStorage`      | Synchronous: keep writes small                                    |
+| scroll-event libraries                  | `IntersectionObserver`                 | Lazy loading, infinite scroll, view tracking, off the main thread |
+| resize-detection utilities              | `ResizeObserver`                       | Element-level, not just viewport                                  |
+| custom share menus                      | `navigator.share()`                    | Native sheet, needs a user gesture and HTTPS                      |
+| upload helpers                          | File API + `FormData`                  | `URL.createObjectURL` for previews                                |
+| desktop-style file pickers              | File System Access API                 | Real read/write handles; Chromium for now, feature-detect         |
+| worker-pool libraries                   | `Worker` + `structuredClone`           | See [rule-frontend-workers](../rule-frontend-workers/SKILL.md)      |
+| crypto packages                         | `crypto.subtle`, `crypto.randomUUID()` | Never hand-roll what SubtleCrypto already does                    |
+| modal libraries                         | `<dialog>` + `showModal()`             | Focus trap, `Esc`, inert background, `::backdrop` - all free      |
+| lock/mutex helpers                      | Web Locks API                          | Coordinate across tabs of the same origin                         |
+| gzip helpers                            | Compression Streams API                | `CompressionStream("gzip")`                                       |
+| date libraries                          | `Temporal`, `Intl.DateTimeFormat`      | Feature-detect Temporal, it is still landing                      |
+
+### Second pass: clipboard, mutations, tabs, visibility, measurement, routing
+
+| Instead of                                    | Use                               | Note                                                                                                    |
+| --------------------------------------------- | --------------------------------- | ------------------------------------------------------------------------------------------------------- |
+| copy-to-clipboard helpers                     | `navigator.clipboard.writeText()` | Needs a user gesture and a secure context; read access prompts                                          |
+| polling for DOM changes                       | `MutationObserver`                | Batched, asynchronous. Disconnect it or it outlives the thing it watched                                |
+| cross-tab state via `storage` events          | Broadcast Channel API             | A named channel between same-origin contexts, including workers                                         |
+| timers that keep running in a hidden tab      | Page Visibility API               | Stop polling and pause media on `visibilitychange`; background throttling will distort the timer anyway |
+| hand-rolled timing instrumentation            | `PerformanceObserver`             | Subscribes to real entries: paint, layout shift, long tasks, resources                                  |
+| a routing library's matcher, for simple cases | URL Pattern API                   | Feature-detect; it is not everywhere yet                                                                |
+| a hack to stop the screen dimming             | Screen Wake Lock API              | Release it explicitly, and re-acquire after the tab becomes visible again                               |
+| an animation library, for discrete effects    | Web Animations API                | `element.animate()` returns a controllable animation with a promise                                     |
+| a recorder dependency                         | MediaRecorder API                 | Chunks arrive as events; container support varies, so check it                                          |
+| a toast for something that happened elsewhere | Notification API                  | Permission is a one-shot request. Asking on page load is how you get denied permanently                 |
+
+Native is not automatically better. A library still wins when it covers browser
+quirks you would otherwise handle yourself, when the API is behind a flag or
+Chromium-only, or when you need behavior the platform does not offer. Decide per
+case, feature-detect, and keep a fallback where support is partial.
+
 ## Design System and CSS
 
 The design system is independent from the UI framework but must comply with the
@@ -179,21 +220,21 @@ that require their own class names or inline styling.
 ## Quick Reference
 
 ```
-┌─────────────────────────────────────────────────────────────┐
-│  Framework:  choose one rule-* skill                         │
-│  Design:     Vanilla CSS / approved CSS tokens              │
-│  Styling:    data-part, zero classes, external CSS          │
-│  Semantic:   <header> <nav> <main> <article> <footer>       │
-│  Barrel:     index.js re-export per folder                  │
-│  PWA:        service worker + manifest.json                 │
-│  Split:      route-based + vendor chunks                    │
-│  Testing:    Vitest (unit) + Playwright (E2E)               │
-│  A11y:       WCAG 2.2 AA, axe-core in CI                    │
-│  i18n:       JSON locale files, ICU messages                │
-│  Perf:       LCP < 2.5s, bundle < 150KB gzipped             │
-│  Deploy:     Netlify / Vercel / CF Pages / GitHub Pages     │
-│  CI:         GitHub Actions → lint → test → build → deploy  │
-└─────────────────────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────────┐
+│  Framework:  choose one rule-* skill                            │
+│  Design:     Vanilla CSS / approved CSS tokens                 │
+│  Styling:    data-part, zero classes, external CSS             │
+│  Semantic:   <header> <nav> <main> <article> <footer>          │
+│  Barrel:     index.js re-export per folder                     │
+│  PWA:        service worker + manifest.json                    │
+│  Split:      route-based + vendor chunks                       │
+│  Testing:    Vitest (unit) + Playwright (E2E)                  │
+│  A11y:       WCAG 2.2 AA, axe-core in CI                       │
+│  i18n:       JSON locale files, ICU messages                   │
+│  Perf:       LCP < 2.5s, bundle < 150KB gzipped                │
+│  Deploy:     Netlify / Vercel / CF Pages / GitHub Pages        │
+│  CI:         GitHub Actions → lint → test → build → deploy     │
+└────────────────────────────────────────────────────────────────┘
 ```
 
 ---
@@ -237,3 +278,4 @@ tests/
 - [rule](../rule/SKILL.md) - Central skill index and dispatcher
 - [rule-toolchain-vite](../rule-toolchain-vite/SKILL.md) - Vite build tool
 - [rule-frontend-react](../rule-frontend-react/SKILL.md) - React setup
+- [rule-frontend-workers](../rule-frontend-workers/SKILL.md) - Off-main-thread JavaScript, INP and long-task budgets

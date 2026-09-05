@@ -18,12 +18,13 @@ frameworks: [all]
 
 ## Available Skills
 
-| Skill                                                    | Platform           | Best For                                           |
-| -------------------------------------------------------- | ------------------ | -------------------------------------------------- |
-| [rule-platform-desktop](../rule-platform-desktop/SKILL.md) | Desktop (Electron) | Cross-platform desktop apps, IPC, native APIs      |
-| [rule-platform-expo](../rule-platform-expo/SKILL.md)       | Mobile (Expo/RN)   | Cross-platform mobile apps, EAS Build              |
-| [rule-platform-library](../rule-platform-library/SKILL.md) | npm package        | Library authoring, dual CJS/ESM, public API        |
-| [rule-platform-web](../rule-platform-web/SKILL.md)         | Web platform       | PWA, service workers, offline, performance budgets |
+| Skill                                                    | Platform           | Best For                                                    |
+| -------------------------------------------------------- | ------------------ | ----------------------------------------------------------- |
+| [rule-platform-desktop](../rule-platform-desktop/SKILL.md) | Desktop (Electron) | Cross-platform desktop apps, IPC, native APIs               |
+| [rule-platform-expo](../rule-platform-expo/SKILL.md)       | Mobile (Expo/RN)   | Cross-platform mobile apps, EAS Build                       |
+| [rule-platform-library](../rule-platform-library/SKILL.md) | npm package        | Library authoring, dual CJS/ESM, public API                 |
+| [rule-platform-web](../rule-platform-web/SKILL.md)         | Web platform       | PWA, service workers, offline, performance budgets          |
+| [rule-platform-agent](../rule-platform-agent/SKILL.md)     | Agent runtime      | Agent-facing projects: skills, MCP surfaces, tool contracts |
 
 ## Quick Selection Guide
 
@@ -32,6 +33,7 @@ Need desktop app (Electron)?            → rule-platform-desktop
 Need mobile app (Expo)?                 → rule-platform-expo
 Need to publish an npm package?         → rule-platform-library
 Need PWA / offline web app?             → rule-platform-web
+Need to build for an AI agent host?     → rule-platform-agent
 ```
 
 ## See also

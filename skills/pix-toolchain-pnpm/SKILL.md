@@ -22,6 +22,84 @@ frameworks: [all]
 - **Strict**: `pnpm-lock.yaml` is deterministic and auditable
 - **Workspace-native**: built-in monorepo support with `pnpm-workspace.yaml`
 
+## Exact versions, never a caret range
+
+**Mandatory.** Every entry in `dependencies`, `devDependencies` and
+`optionalDependencies` is one exact version. No `^`, no `~`, no comparator, no
+alternation, no wildcard, no dist-tag.
+
+```json
+{
+  "devDependencies": {
+    "prettier": "3.9.4"
+  }
+}
+```
+
+```json
+{
+  "devDependencies": {
+    "prettier": "^3.9.4"
+  }
+}
+```
+
+The caret does not only leave prettier free to move. It leaves everything
+prettier depends on free to move, and that is where the breakage comes from: two
+installs of the same commit, a week apart, resolve different subdependency trees.
+The lockfile pins the tree for whoever has the lockfile, and the caret undoes it
+the moment anyone runs `pnpm up`, adds a package, or resolves a merge conflict in
+the lock.
+
+Make it the default so nobody has to remember:
+
+```ini
+# .npmrc
+save-exact=true
+```
+
+Then `pnpm add prettier` writes `"3.9.4"` and `pnpm add --save-exact` is what it
+already does. When converting an existing range to an exact pin, bump to the
+latest published release and run the test suite: exact-latest is the default
+policy (it keeps security patches flowing), and staying on an older version is
+the documented exception, not the habit. Overrides in `pnpm-workspace.yaml`
+follow the same rule: exact versions, latest release. Opt out of the policy
+line with `RULE_MCP_LOOSE_DEPS=1` when a project manages versions
+elsewhere.
+
+`peerDependencies` are the exception and stay ranges. A peer range states which
+versions a library is compatible with; it installs nothing, so pinning it is a
+false claim that only one version works.
+
+Guardrail: `pkg-exact-versions`.
+
+## No packageManager field, no corepack
+
+**Mandatory.** Neither field goes in `package.json`:
+
+```json
+{
+  "packageManager": "pnpm@11.24.0",
+  "devEngines": {
+    "packageManager": { "name": "pnpm", "version": "11.8.0", "onFail": "download" }
+  }
+}
+```
+
+Both activate corepack, which then gets a vote on whether the install runs at
+all: it downloads a package manager on a machine that is offline, verifies a
+signature from behind a proxy that rewrites it, and shadows the pnpm that was
+already on the PATH with a shim that reports a different version. What they buy
+is an assertion about a version. `.nvmrc` plus `pnpm-lock.yaml` already give
+that, without a component in the middle that can refuse.
+
+State the package manager where a human reads it - the README, the contributing
+guide, the CI job - not where a tool will act on it.
+
+`engines` is fine and unrelated: it asserts a Node version and fetches nothing.
+
+Guardrail: `pkg-no-corepack`.
+
 ## Quick Start
 
 ```bash

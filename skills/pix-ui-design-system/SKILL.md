@@ -1,7 +1,7 @@
 ---
 name: rule-ui-design-system
 description: >-
-  Use when creating production-grade UI components and design systems. Covers component composition, interaction design, accessibility states, and external CSS.
+  Use when creating production-grade UI components and design systems. Covers component composition, interaction design, accessibility states, external CSS, and design critique of a generated interface one axis at a time.
 tags:
   - ui
   - design-system
@@ -29,15 +29,16 @@ Design ambition never overrides implementation rules:
 1. **Zero CSS classes** - use semantic elements plus `[data-part]`, `[data-*]`,
    ARIA states, and element selectors.
 2. **Zero inline styles** - no `style="..."`, no JSX `style={{...}}`.
-3. **Semantic HTML first** - choose `main`, `section`, `article`, `header`,
+3. **Flex first** - `display: grid` only for named areas, subgrid, explicit placement, or auto-fit tracks; anything a flex row or column can do is flex.
+4. **Semantic HTML first** - choose `main`, `section`, `article`, `header`,
    `nav`, `aside`, `form`, `fieldset`, `ul`, `ol`, `li`, `button`, `dialog`,
    and headings before generic containers.
-4. **External styling only** - framework-native CSS files or
+5. **External styling only** - framework-native CSS files or
    `CSSStyleSheet`/`adoptedStyleSheets` for web components.
-5. **Accessible by default** - WCAG 2.2 AA, visible focus, keyboard paths,
+6. **Accessible by default** - WCAG 2.2 AA, visible focus, keyboard paths,
    labels, reduced-motion fallback, and meaningful text alternatives.
-6. **Barrel file tree** - follow `rule-styleguide-naming` conventions.
-7. **No design shortcuts** - no Tailwind, CSS-in-JS, generic utility classes,
+7. **Barrel file tree** - follow `rule-styleguide-naming` conventions.
+8. **No design shortcuts** - no Tailwind, CSS-in-JS, generic utility classes,
    or remote font dependency unless the project explicitly accepts it.
 
 ## Design thinking sequence
@@ -172,6 +173,61 @@ For React, Vue, Angular, Svelte, SolidJS, Astro, Next, Nuxt, or Remix:
 3. Read `rule-styleguide` and focused styleguide sub-skills for semantics,
    CSS, a11y, naming, and validation.
 4. Generate code using the framework's accepted external CSS mechanism.
+
+## Design critique of a generated interface, one axis per pass
+
+"Review this design and tell me what is wrong" returns a list nobody can act on:
+a dozen observations across five axes, none of them ranked, most of them true and
+useless. A critique is worth having when it is **one pass per axis, in order,
+with the other axes explicitly out of scope.**
+
+Four passes, and the order is the argument:
+
+| Pass                  | Ask for                                                                                                             | Why here                                                                                            |
+| --------------------- | ------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
+| 1. Accessibility      | Contrast, target size, focus order, semantic hierarchy, anything carried by color alone                             | It is the foundation. Fixing it later means redoing the passes that assumed it                      |
+| 2. Visual hierarchy   | Whether prominence matches importance, ignoring whether it is attractive                                            | Says what a user sees first, second, third, which is a functional question wearing a visual costume |
+| 3. Content            | Labels that are ambiguous, jargon, longer than they need to be, or that fail to state the consequence of the action | Polish, if the context was right. Repair, if it was not                                             |
+| 4. Interaction states | Missing hover, focus, loading, empty, error, success, disabled                                                      | Everything above assumed the happy path. This is where generated work is thinnest                   |
+
+Say the exclusion out loud in each pass. "Ignore whether it looks attractive,
+evaluate whether the hierarchy reflects the importance of the information and the
+actions" gets a usable answer; asking about hierarchy without the exclusion gets
+opinions about the color palette.
+
+**Fix one finding at a time, not the list.** Each change is then reviewable
+against the thing it was supposed to address, and a later pass cannot quietly
+undo an earlier one. A batch fix that repairs the hierarchy and breaks the
+contrast is indistinguishable from success at the end.
+
+### Where a generated interface is predictably thin
+
+- **Every state that is not the happy path.** Empty, loading, error, partial,
+  offline, too-long, too-many. A generated screen is almost always the screen
+  with plausible data in it.
+- **Hierarchy that follows visual weight rather than importance.** Everything is
+  emphasized, so nothing is, and the primary action sits at the same level as a
+  secondary one.
+- **Copy that names the mechanism instead of the consequence.** "Submit" and
+  "Confirm" where the honest label is what the user will have done.
+- **Color doing a job alone.** Status, validity and selection each need a second
+  signal that survives grayscale.
+- **A design-system component reimplemented locally** because generating one is
+  easier than finding the one that exists. Search the system before accepting a
+  new component.
+
+### Give the context that removes the critique
+
+Two inputs change what comes back on the first attempt: the design system to work
+inside, and a short specification of the information architecture and what the
+screen is for. Supplied up front, pass 3 becomes polish. Withheld, it becomes
+repair, and passes 1 and 2 are repairing decisions that should never have been
+made.
+
+Accessibility findings do not have to stay prose. Run the a11y pass as a
+conformance report against the criteria that apply, so what comes back is a list
+of criteria with an outcome each, including the ones nothing tested, rather than
+a paragraph of impressions.
 
 ## Design review checklist
 

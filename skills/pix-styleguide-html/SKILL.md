@@ -1,9 +1,16 @@
 ---
 name: rule-styleguide-html
 description: >-
-  Use when writing semantic HTML following rule conventions. Covers document structure, template engine syntax, accessibility, and element selection.
+  Use when writing semantic HTML following rule conventions. Covers the mandatory document boilerplate (doctype, charset, viewport, title, icons, canonical, Open Graph), semantic elements over div, document structure, accessibility, and element selection.
 tags:
   - "html"
+  - "boilerplate"
+  - "doctype"
+  - "head"
+  - "meta"
+  - "viewport"
+  - "favicon"
+  - "canonical"
   - "semantic"
   - "markup"
   - "accessibility"
@@ -21,6 +28,89 @@ frameworks: [all]
 - A solid HTML structure should reduce CSS and JS complexity.
 - Every change must preserve accessibility and responsiveness. If either is broken, the change is not shippable.
 
+## The document boilerplate - MANDATORY, every page
+
+Start here. Not a starting point to adapt: the shell below is what a page has
+before anything else is written, and a review that finds a page without it has
+found a defect.
+
+```html
+<!DOCTYPE html>
+<html lang="en" data-js="off">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+
+    <title>Unique page title - Site name</title>
+
+    <script>
+      document.documentElement.dataset.js = "on";
+    </script>
+
+    <link rel="stylesheet" href="/css/index.css" />
+    <link rel="stylesheet" href="/css/print.css" media="print" />
+    <script src="/js/index.js" type="module"></script>
+
+    <link rel="icon" href="/favicon.ico" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+
+    <link rel="canonical" href="https://example.com/page" />
+    <meta name="description" content="What this page is, in one sentence." />
+    <meta name="color-scheme" content="light dark" />
+    <meta property="og:url" content="https://example.com/page" />
+    <meta property="og:image" content="https://example.com/og.jpg" />
+  </head>
+  <body>
+    <!-- content -->
+  </body>
+</html>
+```
+
+### Line by line, and why
+
+| Line                              | Why it is there                                                                                                                                               |
+| --------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `<!DOCTYPE html>`                 | Without it the browser goes into quirks mode, and every layout rule changes underneath you                                                                    |
+| `lang="en"`                       | A screen reader picks its pronunciation from this. Wrong or missing, and the page is read in the wrong language                                               |
+| `charset="utf-8"`                 | **Before `<title>`.** The parser needs the encoding before it reads text, or the first non-ASCII character is already corrupt                                 |
+| `viewport`, `width=device-width`  | Without it a phone renders at desktop width and scales down. Nothing else responsive matters until this is present                                            |
+| `<title>`                         | Read in the tab, the bookmark, the history entry and the search result. Unique per page, and the distinctive part first                                       |
+| `data-js`                         | Set to `off` in the markup and flipped by one inline script, so CSS can style the no-JavaScript case. An attribute, not a class - see the selector rule below |
+| Stylesheet                        | Render-blocking by design: it is what prevents the flash of unstyled content                                                                                  |
+| Print stylesheet, `media="print"` | Loaded without blocking, and someone will print the page                                                                                                      |
+| `type="module"`                   | Deferred implicitly, so it runs after parsing without a `defer` attribute to forget                                                                           |
+| `.ico` and `.svg` icons           | The `.ico` for older browsers, the SVG because it can respond to the color scheme                                                                             |
+| `apple-touch-icon`                | The only icon iOS uses on the home screen                                                                                                                     |
+| `manifest`                        | What Android reads for the installed name and icons                                                                                                           |
+| `canonical`                       | One address for one page. Without it, tracking parameters become duplicate pages                                                                              |
+| `description`                     | Search engines often rewrite it; social platforms use it as given                                                                                             |
+| `color-scheme`                    | Tells the browser both themes are supported, so form controls and scrollbars follow the page instead of staying light                                         |
+| `og:url`, `og:image`              | The preview a link produces when someone shares it. `og:url` also keeps a shared address free of the parameters it was copied with                            |
+
+### What is deliberately not in it
+
+- **`initial-scale=1`.** No longer necessary, and it has been copied forward for
+  a decade past the devices that needed it.
+- **`http-equiv="X-UA-Compatible"`.** For a browser nobody supports.
+- **A `class` on `<html>`.** The zero-classes rule is not suspended for the
+  document element. Use `data-js`, and select with `[data-js="off"]`.
+- **`theme-color`.** One engine reads it, and it fights a page that supports both
+  color schemes. Add it when a designer asks for it, not by default.
+- **Render-blocking script in `<head>`.** Only when a script must run before
+  first paint, which is rarer than it is claimed to be, and it must be justified
+  in review.
+
+### Add when the page needs it
+
+`dir="rtl"` from the locale rather than hardcoded (see
+[rule-styleguide-i18n](../rule-styleguide-i18n/SKILL.md)); `og:title` and
+`og:type` when they differ from the page defaults; `preload` for a font the first
+paint genuinely waits on; an RSS `alternate`; `viewport-fit=cover` for an
+edge-to-edge layout on a notched device. Each of those is a decision. The shell
+above is not.
+
 ## Semantics first - MANDATORY RULE
 
 ### No `<div>` for layout. Ever.
@@ -32,11 +122,11 @@ This is **not a suggestion**. Every `<div>` in the codebase must be justified:
 
 **`<div>` is always forbidden.** Every `<div>` in the codebase is a bug.
 
-- Flex rows → `<section>`
-- CSS-only wrappers → `<section>`
-- Modal overlays → `<dialog>` with `::backdrop`
-- Selection overlays → `<section>`
-- SVG containers → `<svg>`
+- Flex rows -> `<section>`
+- CSS-only wrappers -> `<section>`
+- Modal overlays -> `<dialog>` with `::backdrop`
+- Selection overlays -> `<section>`
+- SVG containers -> `<svg>`
 
 If you cannot find a semantic element, use `<section>`.
 
@@ -145,6 +235,74 @@ Prefer semantic landmarks and meaningful containers.
   <p>Copyright 2026</p>
 </footer>
 ```
+
+## HTML that replaced a library: dialog, popover, details, datalist, inert
+
+Each of these removes a dependency and, more importantly, removes an
+accessibility implementation that every team wrote slightly differently and
+slightly wrong.
+
+### Popover is not a modal, and the difference is what it does to the page
+
+A **popover** is non-blocking: a menu, a tooltip, a card floating beside its
+trigger. The page behind stays scrollable, clickable and tabbable. A **modal**
+blocks: it adds a backdrop, traps focus, and makes everything behind it inert
+until it is dismissed.
+
+Both escape normal flow into the browser's top layer, which sits above every
+stacking context. That is what makes `overflow: hidden` on an ancestor, a
+`transform` that creates a containing block, and `z-index` arithmetic all stop
+mattering, and it is what the portal pattern existed to fake.
+
+```html
+<button popovertarget="account-menu">Account</button>
+<nav id="account-menu" popover>
+  <a href="/profile">Profile</a>
+</nav>
+```
+
+That is the whole implementation. The `popovertarget` attribute declares the
+relationship in the markup, so the browser owns it: light dismiss on an outside
+click, the Escape key, focus returning to the trigger, and the expanded state
+exposed to assistive technology without a hand-written attribute.
+
+For the blocking case, `<dialog>` with `showModal()`. The browser adds the
+backdrop, traps the tab ring, makes the rest of the document inert, and returns
+focus on close. **Accessible focus trapping is genuinely hard, which is why the
+libraries existed; the browser always knew how, it just had no element to attach
+it to.**
+
+Reach for `open()` rather than `showModal()` when the dialog should not block,
+and prefer a popover when it should not block at all.
+
+### Accordion, combobox, focus trap: the rest, without JavaScript
+
+| Instead of                                         | Use                                                       | What the browser then owns                                                                  |
+| -------------------------------------------------- | --------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
+| An accordion component                             | `<details>`, and `name` on several to make them exclusive | Open and closed state, keyboard operation, find-in-page opening a closed panel              |
+| A combobox for a plain suggestion list             | `<input list>` with `<datalist>`                          | Suggestions, filtering, and a free-text value that stays valid                              |
+| A focus-trap utility around background content     | The `inert` attribute                                     | Removing a subtree from focus, from the tab ring and from assistive technology in one place |
+| Hand-rolled hydration of a component's shadow tree | `<template shadowrootmode>`                               | Shadow DOM present in the parsed markup, so it renders before script runs                   |
+| A preload heuristic                                | `fetchpriority` on the element that matters               | Ordering the request against everything else the parser found                               |
+
+### What each semantic element buys, beyond not being a div
+
+The rule that no `<div>` survives review is above. The reason it is worth
+enforcing is that each replacement carries behavior a `<div>` cannot:
+
+- `<button>`: keyboard activation on both Enter and Space, focus, and a role that
+  says an action will happen.
+- `<nav>`, `<main>`, `<header>`, `<footer>`, `<aside>`: landmarks a screen reader
+  user jumps between, which is how they skip what they have already heard.
+- `<h1>` through `<h6>` in order: the document outline, and the other list a
+  screen reader user navigates by.
+- `<ul>` and `<ol>`: the count, announced up front, so a listener knows how long
+  the list is before entering it.
+- `<label>` bound to its control: a click target, and the name announced when the
+  field takes focus.
+- `<table>` with `<th scope>`: cells announced with the header they belong to
+  rather than as loose values.
+- `<time datetime>`: a machine-readable instant beside the human wording.
 
 ## Accessibility essentials
 
@@ -275,47 +433,6 @@ Prefer an inline link inside a block container.
 <p>
   <a href="https://example.com">Company Software</a>
 </p>
-```
-
-## Template engine syntax rules
-
-- This project uses a custom template engine with `<for>`, `<if>`, `<switch>`, `<extends>`, `<block>`, `<include>` directives.
-- Never use Liquid or Jekyll `{% %}` syntax.
-
-### Conditionals
-
-```html
-<if condition="expression">
-  <p>Content when truthy</p>
-  <elseif condition="otherExpression"></elseif>
-  <p>Other content</p>
-  <else></else>
-  <p>Fallback content</p>
-</if>
-```
-
-### Loops
-
-```html
-<for each="item in items"> {{ item.property }} </for>
-
-<for each="todo in visibleTodos"> ${TodoItem(todo)} </for>
-```
-
-### Template inheritance
-
-```html
-<extends src="layouts/base.html"></extends>
-<block name="title">Page Title</block>
-<block name="content">
-  <p>Content</p>
-</block>
-```
-
-### Includes with data
-
-```html
-<include src="../components/header.html" data='{ "current": "home" }'></include>
 ```
 
 ## Formatting rules

@@ -271,6 +271,44 @@ CREATE TABLE {table}_closure (
 
 ## 3. Indexing Strategy
 
+### Why a random primary key hurts at volume
+
+The table pattern above is not a style preference. A primary key decides the
+physical order rows are stored in, and that order decides how much work every
+future insert costs.
+
+A primary key index is a B-tree. With a sequential key, every new row lands at
+the end: the same page stays hot, it fills, a new one opens. With a random key,
+every insert lands somewhere else in the tree, in a page that is probably not in
+memory. The database reads it, splits it when it is full, and writes it back.
+
+```text
+Sequential:  [1..500][501..1000][1001..1500][1501..2000]
+               full      full        full      filling      one hot page
+
+Random:      [a1 f8 22 c9][90 b3 1e d4][f0 33 a7 6c]
+              half full     half full     half full         every page cold
+```
+
+Millions of rows later the index is a patchwork of half-empty pages, so it is
+larger than it should be, less of it fits in cache, and the maintenance window
+that rebuilds it grows with it. **A random key is a loan against future write
+performance, and the interest comes due when the table stops being small.**
+
+Under a million rows none of this is visible, which is why it survives review
+and load tests: nobody tests the version of the table that exists in three
+years.
+
+Keep the random identifier, stop sorting by it. The pattern is the one in the
+DDL above: a sequential identity primary key, and the UUID as a separate column
+with its own unique index, used where a client needs an opaque identifier.
+Foreign keys carry eight bytes instead of sixteen everywhere in the schema, and
+joins get lighter with them.
+
+A time-ordered UUID is the middle ground: globally unique, and sorted by time
+first, so inserts behave close to sequential. It embeds creation time, which is
+information the identifier now leaks, so decide that deliberately.
+
 ### When to Index
 
 ```sql
@@ -348,6 +386,47 @@ EXPLAIN (ANALYZE, BUFFERS) SELECT ...;
 
 ---
 
+### Read and write paths, caching layers, and keeping them coherent
+
+Reads and writes are not the same workload and rarely need the same machine.
+Splitting them is the first scaling move that costs almost nothing: writes go to
+the primary, reads go to replicas, and the application knows which is which.
+
+The bill arrives as **replication lag**. A user who writes and immediately reads
+can be served by a replica that has not caught up, and sees their own change
+missing. The rule that fixes it is narrow rather than global: **read your own
+writes from the primary**, for that user, for a short window after a write.
+Everything else can tolerate a replica being a moment behind, and pretending
+otherwise sends all the traffic back to one machine.
+
+Caching is the same trade said differently: **speed against freshness**, and the
+only question is how stale an answer is allowed to be.
+
+| Layer                | Holds                                   | Stale for                                                            |
+| -------------------- | --------------------------------------- | -------------------------------------------------------------------- |
+| Client and CDN       | Immutable assets, public responses      | As long as the URL is versioned                                      |
+| Application memory   | Small, hot, per-process values          | Seconds, and inconsistent between instances                          |
+| Shared cache         | Query results, computed views, sessions | Whatever the invalidation guarantees                                 |
+| Database buffer pool | Pages, transparently                    | Not your problem, but it is why an index that fits in memory matters |
+
+Coherence is where this goes wrong, and there are only a few honest strategies:
+
+- **Expire on time.** Simplest and always correct within its window. Choose the
+  window from what the data is for, not from a habit.
+- **Invalidate on write.** Precise, and it fails when two things write the same
+  derived value or when the invalidation happens before the transaction commits.
+  Invalidate after commit, or the next read caches what was rolled back.
+- **Write through.** The cache is updated with the database in one path, which
+  removes the race and adds a dependency to the write.
+- **Never cache it.** Correct for anything where a stale answer is a wrong
+  answer: balances, permissions, anything the next decision is made on.
+
+Two failure modes worth naming. **The stampede**: a popular key expires and
+every request recomputes it at once, so the cache miss becomes the outage.
+Serve the stale value while one caller refreshes it. And **the cache that hides
+a missing index**: the query was always slow, the cache made it invisible, and
+the first cold start after a deploy is when everyone finds out.
+
 ## 4. Query Optimization
 
 ### SELECT Best Practices
@@ -371,6 +450,65 @@ SELECT * FROM orders ORDER BY id LIMIT 20 OFFSET 100000;
 -- ✅ GOOD: Keyset pagination (cursor-based)
 SELECT * FROM orders WHERE id > 100000 ORDER BY id LIMIT 20;
 ```
+
+### Queries that look harmless and scale terribly: wildcards, functions on indexed columns, COUNT, OR, sorting
+
+`SELECT *`, N+1 and deep `OFFSET` are above. These are the other six, all of
+which pass review and pass a test database.
+
+```sql
+-- 1. Leading wildcard: no index can help, every row gets scanned
+--    Bad
+SELECT id FROM products WHERE name LIKE '%phone%';
+--    Full-text search, a trigram index, or an anchored prefix
+SELECT id FROM products WHERE name LIKE 'phone%';                  -- index usable
+SELECT id FROM products WHERE to_tsvector('english', name) @@ plainto_tsquery('phone');
+
+-- 2. A function on an indexed column makes the predicate non-sargable
+--    Bad: the index on email is ignored
+SELECT id FROM users WHERE LOWER(email) = 'a@b.com';
+--    Store it normalised, or index the expression
+CREATE INDEX users_email_lower_idx ON users (LOWER(email));
+
+-- 3. Counting everything on every request
+--    Bad: a full count of a growing table, per page view
+SELECT COUNT(*) FROM events WHERE org_id = $1;
+--    Bound it, or accept an estimate for a "1000+" label
+SELECT COUNT(*) FROM (SELECT 1 FROM events WHERE org_id = $1 LIMIT 1000) t;
+
+-- 4. Joining several one-to-many relations before aggregating
+--    Bad: orders x items x shipments multiplies rows, so every SUM is wrong AND slow
+SELECT o.id, SUM(i.qty), SUM(s.weight)
+FROM orders o JOIN items i ON i.order_id = o.id JOIN shipments s ON s.order_id = o.id
+GROUP BY o.id;
+--    Aggregate each side first
+SELECT o.id, i.qty, s.weight
+FROM orders o
+LEFT JOIN (SELECT order_id, SUM(qty) qty FROM items GROUP BY order_id) i ON i.order_id = o.id
+LEFT JOIN (SELECT order_id, SUM(weight) weight FROM shipments GROUP BY order_id) s ON s.order_id = o.id;
+
+-- 5. Unrelated conditions joined by OR: the planner usually gives up on indexes
+--    Bad
+SELECT * FROM users WHERE email = $1 OR phone = $1 OR username = $1;
+--    UNION ALL lets each branch use its own index
+SELECT * FROM users WHERE email = $1
+UNION ALL SELECT * FROM users WHERE phone = $1
+UNION ALL SELECT * FROM users WHERE username = $1;
+
+-- 6. Sorting or grouping an unbounded set before the limit applies
+--    Bad: sorts every matching row, then throws away all but 20
+SELECT * FROM events WHERE org_id = $1 ORDER BY created_at DESC LIMIT 20;
+--    Give it an index that already provides the order
+CREATE INDEX events_org_created_idx ON events (org_id, created_at DESC);
+```
+
+The query plan matters more than how the query reads. Before shipping one that
+runs per request, look at `EXPLAIN ANALYZE` with production-sized data: a
+sequential scan over 500 rows and over 5 million rows look identical in the SQL
+and nothing alike in the plan.
+
+Fast queries start from bounded questions. "Every row matching this" has no
+upper limit; "the 20 most recent for this org" does.
 
 ### JOIN Patterns
 
