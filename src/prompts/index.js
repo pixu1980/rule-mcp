@@ -15,6 +15,8 @@
  */
 
 import { parseHandoffOptions, HANDOFF_USAGE } from "./handoff-options.js";
+import { activeRoles, roleById } from "../core/review-roles.js";
+import { fillRoleTemplate } from "../core/review-roles-template.js";
 
 /** Tokens that trigger the generic per-prompt help message. */
 const HELP_TOKENS = new Set(["help", "--help", "-h"]);
@@ -293,7 +295,89 @@ export function listPrompts() {
         },
       ],
     },
-  ];
+    {
+      name: "rule-adr",
+      description: "Record an architecture decision: context, decision, alternatives, consequences",
+      arguments: [
+        { name: "decision", description: "The decision to record (free text: what changed and why)", required: true },
+      ],
+    },
+    {
+      name: "rule-check",
+      description: "Validate code against the rule guardrails and fix what fails",
+      arguments: [
+        {
+          name: "target",
+          description: "What to check (free text: paths, or the current diff). Default: the current diff.",
+          required: false,
+        },
+      ],
+    },
+    {
+      name: "rule-flight",
+      description: "Read the flight recorder: what this server cost, and what to do about it",
+      arguments: [
+        {
+          name: "options",
+          description: "Space-separated: export, show <file>, prune, redact. Default: export.",
+          required: false,
+        },
+      ],
+    },
+    {
+      name: "rule-handon",
+      description: "Resume: verify the last handoff against the repository as it is now",
+      arguments: [
+        {
+          name: "options",
+          description: "Space-separated: list, file=<path>. Default: the newest handoff.",
+          required: false,
+        },
+      ],
+    },
+    {
+      name: "rule-init",
+      description: "Prepare a project for rule-mcp: the central recorder directory and tokensave",
+      arguments: [
+        { name: "options", description: "Space-separated: no-tokensave. Default: the full init.", required: false },
+      ],
+    },
+    {
+      name: "rule-update",
+      description: "Apply an available server update explicitly, and report what changed",
+      arguments: [
+        {
+          name: "options",
+          description: "Space-separated: check (report only). Default: apply the update.",
+          required: false,
+        },
+      ],
+    },
+    ...rolePrompts(),
+  ].sort((left, right) => left.name.localeCompare(right.name));
+}
+
+/**
+ * One prompt per active review persona, generated from the registry.
+ *
+ * The name is shared with the agent command on purpose: the command generator
+ * derives its set from this registry, so a second name for the same operation
+ * would be the drift ADR 029 removed.
+ *
+ * @returns {Array<{ name: string, description: string, arguments: object[] }>}
+ */
+function rolePrompts() {
+  return activeRoles().map((role) => ({
+    name: `rule-plan-${role.id}`,
+    description: `Audit, review and plan as a ${role.role} with ${role.yearsOfExperience} years of experience`,
+    arguments: [
+      {
+        name: "topic",
+        description: "Focus for this run (free text). Default: the whole project.",
+        required: false,
+      },
+    ],
+  }));
 }
 
 /**
@@ -348,6 +432,19 @@ export function getPrompt(name, args = {}) {
       description: `${name} usage`,
       messages: [{ role: "assistant", content: { type: "text", text: helpText } }],
     };
+  }
+
+  // ── Review personas: one prompt per active role, filled from the registry ──
+  if (name.startsWith("rule-plan-")) {
+    const role = roleById(name.slice("rule-plan-".length));
+
+    if (role) {
+      return {
+        name,
+        description: `Audit, review and plan as a ${role.role}`,
+        messages: user(fillRoleTemplate(role, { topic: args?.topic })),
+      };
+    }
   }
 
   // ── One-shot workflow prompts ──────────────────────────────────
@@ -555,6 +652,131 @@ export function getPrompt(name, args = {}) {
       };
     }
 
+    case "rule-adr": {
+      return {
+        name,
+        description: "Record an architecture decision",
+        messages: user(
+          [
+            "Record this decision as an ADR:",
+            "",
+            args.decision ?? "",
+            "",
+            "1. Call `rule` first, then `rule_tool_process_adr` - it auto-numbers and maintains the index.",
+            "2. Context states the forcing factors, not the history. Decision states what is true now.",
+            "3. List the alternatives you actually considered and why each lost.",
+            "4. Consequences name the cost as well as the benefit, including what tests now enforce it.",
+            "5. If an earlier ADR is reversed in part, mark it superseded and link both ways.",
+            "6. Ask the user rather than guessing when the decision is theirs to make.",
+            "",
+            "Finish by proposing a conventional commit with a mandatory scope, e.g. `docs(adr): ...`.",
+          ].join("\n"),
+        ),
+      };
+    }
+
+    case "rule-check": {
+      return {
+        name,
+        description: "Validate code against the guardrails",
+        messages: user(
+          [
+            `Validate this against the rule guardrails: ${args.target ?? "the current diff"}.`,
+            "",
+            "1. Call `rule` to route, then `rule_tool_check` per file - input above 256 KiB is refused, so check",
+            "   source files in units rather than bundles.",
+            "2. Fix every reported failure and re-run until `allPass` is true. Do not silence a rule; a suppression",
+            "   is acceptable only when it states its reason.",
+            "3. Run the project's tests and report the commands you actually executed.",
+            "",
+            "Finish by proposing a conventional commit with a mandatory scope, e.g. `fix(guardrails): ...`.",
+          ].join("\n"),
+        ),
+      };
+    }
+
+    case "rule-flight": {
+      return {
+        name,
+        description: "Read the flight recorder",
+        messages: user(
+          [
+            `Report what this server cost. Options: ${args.options ?? "export"}.`,
+            "",
+            "1. `rule-mcp telemetry export` writes one .flight and empties the local log; add `--redact`",
+            "   for a copy that carries no prompt text and no absolute paths before sharing it.",
+            "2. `telemetry show <file>` renders an existing recording; `telemetry prune` rolls up and applies",
+            "   retention to both the log and exports/.",
+            "3. Read the KPI block: measured savings, reminder overhead, cache hit rate, error rate, latency.",
+            "4. Say what the numbers justify changing. A claim the recorder does not support is not a finding;",
+            "   ask the user before acting on an ambiguous one.",
+            "",
+            "Finish by proposing a conventional commit with a mandatory scope, e.g. `docs(telemetry): ...`.",
+          ].join("\n"),
+        ),
+      };
+    }
+
+    case "rule-handon": {
+      return {
+        name,
+        description: "Verify the last handoff against the repository now",
+        messages: user(
+          [
+            "Call `rule_tool_process_handon` for this project (or `rule-mcp handon --dir .`).",
+            "",
+            "1. Every claim it returns carries its own verdict: act on what is still true, re-derive what changed,",
+            "   and treat unverified as unknown.",
+            "2. Start from the suggested first move unless the user asks for something else.",
+            "",
+            "Finish by proposing a conventional commit with a mandatory scope if the repo changed.",
+          ].join("\n"),
+        ),
+      };
+    }
+
+    case "rule-init": {
+      return {
+        name,
+        description: "Prepare a project for rule-mcp",
+        messages: user(
+          [
+            `Initialise this project for rule-mcp. Options: ${args.options ?? "the full init"}.`,
+            "",
+            "1. Run `rule-mcp init` - it prepares this project's directory under the state dir,",
+            "   moves a local `./.rule-mcp` left by an earlier version, and runs tokensave init",
+            "   unless told not to.",
+            "2. Confirm nothing was written into the repository: the recording lives in the state directory,",
+            "   so the project needs no ignore rule and no git hook.",
+            "3. Check the project's test setup exists; if there is no test surface, ask the user what to cover.",
+            "",
+            "Finish by proposing a conventional commit with a mandatory scope, e.g. `chore(init): ...`.",
+          ].join("\n"),
+        ),
+      };
+    }
+
+    case "rule-update": {
+      return {
+        name,
+        description: "Apply an available server update",
+        messages: user(
+          [
+            `Update the server. Options: ${args.options ?? "apply the update"}.`,
+            "",
+            "1. Updates are notify-only by default: the banner announces what is available and the merge happens",
+            "   explicitly, via `rule_tool_update` or `rule-mcp update`.",
+            "2. Report the commit range that was merged and whether skills or server code changed - code changes",
+            "   schedule a restart.",
+            "3. Run the project's tests afterwards and report the real outcome, not an assumed one.",
+            "4. If the update is refused (remote not allowed, dirty tree, unsigned upstream), say which gate",
+            "   refused it and ask the user before working around it.",
+            "",
+            "Finish by proposing a conventional commit with a mandatory scope if anything in the repo changed.",
+          ].join("\n"),
+        ),
+      };
+    }
     default: {
       return null;
     }

@@ -57,11 +57,13 @@ test("prompts are listed in alphabetical order", () => {
   assert.deepEqual(names, sorted, "prompt names must be listed alphabetically");
 });
 
-test("registry covers workflow, all 15 areas, and the 3 legacy prompts", () => {
+test("registry covers workflow, area, one-shot, and persona prompts", () => {
   for (const expected of EXPECTED) {
     assert.ok(names.includes(expected), `missing prompt ${expected}`);
   }
-  assert.equal(names.length, EXPECTED.length, "no unexpected prompts");
+  // 21 target prompts + 6 one-shot workflow prompts (adr/check/flight/handon/
+  // init/update) + 7 review-persona prompts (rule-plan-<role>) = 34.
+  assert.equal(names.length, EXPECTED.length + 13, "no unexpected prompts");
 });
 
 test("strict argument schema on every prompt", () => {

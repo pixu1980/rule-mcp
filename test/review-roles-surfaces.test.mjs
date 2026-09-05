@@ -13,16 +13,42 @@
 import { strict as assert } from "node:assert";
 import test from "node:test";
 
-import { commandNames } from "../src/core/agent-commands.js";
 import { activeRoles } from "../src/core/review-roles.js";
 import { getPrompt, listPrompts } from "../src/prompts/index.js";
+import { listAgentCommands } from "../src/core/agent-commands.js"; // eslint-disable-line no-unused-vars
 import { callTool, listTools } from "../src/tools/router.js";
 
 const { registerPlanTool } = await import("../src/tools/plan.js");
 registerPlanTool();
 
-// The per-role PROMPTS and AGENT COMMANDS (rule-plan-<role>) land with the
-// prompts surface phase (item 12); the tool half is pinned below.
+test("every active role has a prompt", () => {
+  const names = new Set(listPrompts().map((prompt) => prompt.name));
+  for (const role of activeRoles()) {
+    assert.ok(names.has(`rule-plan-${role.id}`), `missing prompt for ${role.id}`);
+  }
+});
+
+test("a role prompt carries the filled template", () => {
+  const prompt = getPrompt("rule-plan-security", {});
+  const text = prompt.messages.map((message) => message.content.text).join("\n");
+  assert.match(text, /Security Engineer/);
+  assert.match(text, /docs\/plans\/security\.md/);
+  assert.ok(!text.includes("{{"), "no placeholder reaches the client");
+});
+
+test("a role prompt takes an optional topic", () => {
+  const prompt = getPrompt("rule-plan-privacy", { topic: "the flight recorder exports" });
+  const text = prompt.messages.map((message) => message.content.text).join("\n");
+  assert.match(text, /the flight recorder exports/);
+});
+
+test("every active role has an agent command", () => {
+  const commands = new Set(listAgentCommands().map((command) => command.name));
+  for (const role of activeRoles()) {
+    assert.ok(commands.has(`rule-plan-${role.id}`), `missing command for ${role.id}`);
+  }
+});
+
 test("rule_tool_plan is registered and answers for a role", async () => {
   assert.ok(
     listTools().some((tool) => tool.name === "rule_tool_plan"),
