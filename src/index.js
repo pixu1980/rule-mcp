@@ -491,6 +491,46 @@ export async function cli() {
           return;
         }
 
+        // `handoff doctor` repairs numbering after parallel branches merge:
+        // two branches both allocate 069, and the duplicate survives the merge
+        // because a number in a filename is an alias nothing validates.
+        if (arguments_[1] === "doctor") {
+          const { applyRenumber, planRenumber, renderRenumberPlan, rewriteCommitReferences } =
+            await import("./core/docs-numbering.js");
+          const projectDir = getArgument("--dir", ".");
+          const onProgress = ({ message }) => process.stdout.write(`  ${message}\n`);
+          const plan = planRenumber({ projectDir, onProgress });
+          process.stdout.write(`${renderRenumberPlan(plan, { fix: hasFlag("--fix") })}\n`);
+
+          const authors = plan.authors?.length ?? 0;
+          const somethingToFix = plan.renames.length > 0 || plan.indexUnordered || authors > 0;
+
+          if (hasFlag("--fix-commits")) {
+            const rewrite = rewriteCommitReferences(plan, { projectDir, onProgress });
+            process.stdout.write(
+              rewrite.refused
+                ? `Commit messages left alone: ${rewrite.refused}.\n`
+                : `Rewrote ${rewrite.rewritten} commit message(s); ${rewrite.skipped} left for a human.\n`,
+            );
+          }
+
+          if (hasFlag("--fix") && somethingToFix) {
+            const applied = applyRenumber(plan, { projectDir, onProgress });
+            process.stdout.write(
+              `Renumbered ${applied.renamed} document(s); ${applied.referencesUpdated} file(s) had references updated` +
+                `${applied.indexRegenerated ? "; ADR.md regenerated" : ""}` +
+                `${applied.authorsNamed > 0 ? `; ${applied.authorsNamed} author(s) named` : ""}.\n`,
+            );
+
+            if (!hasFlag("--fix-commits") && plan.renames.length > 0) {
+              process.stdout.write("Commit messages were not touched. Add --fix-commits to amend the local ones.\n");
+            }
+          }
+
+          process.exitCode = somethingToFix && !hasFlag("--fix") ? 1 : 0;
+          break;
+        }
+
         const { registerProcessHandoffTool } = await import("./tools/handoff.js");
         const { callTool: ct } = await import("./tools/router.js");
         registerProcessHandoffTool();

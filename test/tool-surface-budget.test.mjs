@@ -81,11 +81,14 @@ test("no mutating tool is advertised as read-only", () => {
   // annotations surface lands (Phase 4) the invariant that holds on the target
   // is the negative one: a mutating tool must never claim to be read-only.
   const byName = new Map(listTools().map((tool) => [tool.name, tool]));
+  // pix_tool_gateway is read-only (receipts live in memory, no writes), so it
+  // may advertise readOnlyHint and is absent here.
   for (const name of [
     "pix_tool_apply",
-    "pix_tool_gateway",
     "pix_tool_fix",
     "pix_tool_process_adr",
+    "pix_tool_plan_docs",
+    "pix_tool_process_handoff",
     "pix_tool_update",
   ]) {
     assert.notEqual(
