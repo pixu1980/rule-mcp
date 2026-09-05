@@ -112,8 +112,9 @@ test("pix_tool_plan applies overrides, an operation, and lists roles for an unkn
 test("a proposed role is reachable by the tool but has no generated surface", async () => {
   const names = new Set(listPrompts().map((prompt) => prompt.name));
   for (const operation of OPERATIONS) {
-    assert.equal(names.has(`pix-${operation}-qa-testing`), false, "proposed roles stay out of the surfaces");
+    assert.equal(names.has(`pix-${operation}-api-design`), false, "proposed roles stay out of the surfaces");
+    assert.equal(names.has(`pix-${operation}-simplicity-staff-eng`), false, "proposed roles stay out of the surfaces");
   }
-  const result = await callTool("pix_tool_plan", { role: "qa-testing" });
-  assert.match(result.content.map((part) => part.text).join("\n"), /QA and Test Engineer/);
+  const result = await callTool("pix_tool_plan", { role: "api-design" });
+  assert.match(result.content.map((part) => part.text).join("\n"), /API Design Engineer/);
 });
