@@ -1,85 +1,255 @@
 # Changelog
 
-All notable changes to rule-mcp will be documented in this file.
+Generated from the commits by `scripts/build-changelog.mjs`. Run
+`pnpm changelog` to refresh it; the release workflow regenerates it when a
+version is tagged. Edits made here are overwritten.
 
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
-and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+Every commit is `type(scope): subject`. Features, fixes, performance and
+refactoring work and documentation become entries; `chore`, `ci`, `build`,
+`test` and `style` commits do not, because a changelog that lists a
+dependency bump is one nobody reads. All of them are in `git log`.
+
+The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
+and the versions follow [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
 ### Added
 
-- **Docs accuracy guard**: `test/docs-accuracy.test.mjs` verifies the README-advertised tool/resource/prompt/skill counts against the runtime surface, so a removal can never silently leave stale claims behind.
-- **Split hotspot modules**: `src/core/guardrail-defs.js` (1771 lines) split into domain modules under `src/core/guardrails/`; `src/cli/install.js` (1273 lines) split into `src/cli/agent-installers.js` with `install.js` keeping the orchestrators. Zero behavior change (full installer + guardrail suites green).
-- **Token-efficiency pipeline**: decoration moved to the MCP boundary (internal callers keep raw payloads); multi-source `.tokensave` detection (args > env > cwd > walk-up); directive emitted once (JSON-deferred) and threshold-based suppression of heavy allowlisted outputs; caveman aggressive pass on by default; runtime counters exposed via `doctor`.
-- **Round-2 hardening**: broke the module-init cycles (skill metadata + scaffold parsers now live in neutral modules), split `cli/daemon.js` (→ `daemon-platform.js`) and `cli/commands.js` (→ `help-text.js`), removed dead exports, enriched `doctor` with version + live surface counts, and added daemon log rotation (5 MB → `.1`). Verified the SDK-based Streamable HTTP transport (`serve --transport http`).
-
-## [1.0.0] - 2026-08-25
-
-**First release**: MCP server for the rule skill ecosystem - deterministic tool surface,
-skill-driven routing, guardrails, gateway/publish with receipts, installer for 23 agents,
-SSE daemon. Historically all changes lived under [Unreleased]; they were promoted into this
-milestone when the repository reached its stable shape (installer hardening, architect split,
-docs accuracy guard).
-
-### Security
-
-- **Write containment:** `pix_apply` now validates the project root itself, refuses the filesystem root, home directory, system directories, and absolute/`..`/symlink-escape paths. Sensitive destinations (`.git`, `.ssh`, `.gnupg`, shell rc files, key material) are blocked by destination, not just by content. Receipts are path-bound with length-prefixed canonical digests - a receipt for one path never authorises another.
-- **Interview server CSRF:** Both `rule-mcp-architect` interview servers now enforce `Sec-Fetch-Site` + `Origin` + `Host` on every `/api/*` request. A cross-origin POST to `/api/generate` is refused even though the browser allows it as a CORS simple request.
-- **Self-update hardening:** The upstream remote is verified BEFORE any fetch or merge. Only the repository declared in `server.json` (or an explicit `RULE_MCP_UPDATE_REMOTE`) is trusted. No trust-on-first-use. `RULE_MCP_UPDATE_REQUIRE_SIGNATURE=1` adds `git verify-commit`. Phantom updates (branch ahead of upstream, `--ff-only` exits 0 without moving HEAD) are no longer reported.
-- **Container hardening:** The Docker image drops to `USER node` before `CMD`, installs with `--ignore-scripts`, and sets `RULE_MCP_DOCKER=1`. The compose file publishes only on `127.0.0.1:37999:37999`.
+- **skills**: source-wins body upgrade for ~28 common skills + asset sync (`589b838`)
+- **prompts**: reach and lock the 34-prompt union (`f911616`)
+- **skills**: port the 13 source-only skills -> 110 tools, 194 resources, 94 skills (`77f6cc3`)
+- **adr**: annotations surface + docs-numbering doctor + handoff doctor CLI (`ac7e048`)
+- **tools**: port plan, plan-docs, stats, usage, a11y report; register handon (`535c4b7`)
+- **installer**: force/backup/instruction-refresh promises, role-aware write paths (`2a55e38`)
+- **transport**: session registry, auth rate limiting, stdio guard, shutdown sweeps (`f1df46c`)
+- **cli**: guard, cache, roles, handon, stats commands + review-roles subsystem, review-docs (`7935647`)
+- **guardrails**: guarded worker checks, input cap, quality families, self-guardrails sweep (`5874e91`)
+- **cache**: cache tiers, dependency invalidation, catalog, routing-evidence split, telemetry recorder (`b8558dc`)
+- **handon**: port handon verification, resume, and init commands (`487a153`)
+- **telemetry**: port telemetry-stats, kpi, project-snapshot, agent transcripts (`0de620a`)
+- **paths**: project paths, home migration, hooks, and tokensave awareness (`59f81b2`)
+- **core**: port lifecycle, reclaim, budgets, and cache memory tier (`522b119`)
+- **core**: port ascii-box, untrusted, fingerprint foundations (`ce82a94`)
+- **efficiency**: token-efficiency pipeline at the MCP boundary (`67a4422`)
 
 ### Changed
 
-- **Tool surface:** Only `./skills` is scanned for tool registration. Nothing in `~/.agents/skills` can add, rename, or shadow a tool. The `plugin.js` import from the home directory is removed (audit finding 15). Tools reduced from ~176 to 88.
-- **Architect lifecycle:** Interview servers are tracked in a registry keyed by target directory, reused instead of duplicated, output-capped at 64 KB, killed after 30 minutes and on exit/SIGINT/SIGTERM. `rule-mcp-architect` added to the cache denylist so a replayed result never hands out a dead port.
-- **Agent commands registry:** Clean `/rule-*` commands are now driven by a single registry (`agent-command-targets.js` + `agent-commands.js`) covering 13 agent/IDE combinations with 5 render formats. The CLI gains `agent-commands` with `--list`, `--targets`, `--sync`, and per-directory generation.
+- **quality**: round-2 hardening - break init cycles, split daemon/commands, richer doctor, daemon log rotation (`7647d6c`)
 
-- Tooling: repository lint migrated to **ESLint 10 flat config** (`eslint.config.mjs` + `@eslint/js` + `eslint-plugin-unicorn`), replacing the legacy `.eslintrc.json`. Applied the unicorn autofix pass (modern idioms: `node:` protocol, `replaceAll`, `flatMap`, `new` for builtins, ternary/curly/assert consistency) and fixed real issues it surfaced (`no-undef` bash-completion template interpolation, `no-empty` catches, `no-useless-escape`, dead assignments). Opinionated unicorn rules (`no-null`, `no-array-reduce`, `name-replacements`, `import-style`, …) are scoped/tuned per ADR 028; CI lint step no longer passes `--ext` (removed in ESLint 10). `pnpm lint`: 0 errors / 48 warnings. Scaffold guardrail now verifies `eslint.config.mjs`.
+### Documentation
 
-### Fixed
+- **plans**: close items 14-17 (Phase 5 complete) (`e5b2a97`)
+- **plans**: close items 10-13 (Phase 4 complete) (`e507945`)
+- **plans**: close item 9 in the execution plan (`d6d7942`)
+- **plans**: close item 8 in the execution plan (`2324f7a`)
+- **plans**: close item 7 in the execution plan (`4f8e46e`)
+- **plans**: close item 6 in the execution plan (`7c755f6`)
+- **plans**: close item 5 in the execution plan (`4fd4652`)
+- **plans**: close items 3-4, convert executed plans to ADRs 043/044, drop redundant plans (`2acbab6`)
+- **agent**: move repo-state block to top of CLAUDE.md and refresh ADR range (`bd413da`)
 
-- Installer: uninstall→install cycles no longer accumulate blank lines in agent instruction files (`CLAUDE.md`, `GEMINI.md`, `AGENTS.md`, `.cursorrules`). `install.sh` normalizes trailing newlines and inserts exactly one separator via `append_rules_block`; `uninstall.sh` collapses trailing blank lines after removing the rules block
-- Installer: reinstall no longer drops per-server user keys from JSON MCP configs (`upsertJsonServer`/`upsertVscode` now merge instead of replacing) - a user-set `toolPrefix` on the `rule-mcp` entry survives uninstall+install
-- Installer: fresh pi installs now default to `toolPrefix: "none"` - bare `rule-tool-*` tools and `/rule-*` prompts instead of the `mcp__pix_galaxy_mcp__*` prefix form
+## [1.0.0]
 
 ### Added
 
-- Prompts: MCP registry extended from 5 to **24 prompts**, listed alphabetically - 5 one-shot workflow prompts (`rule-setup-project`, `rule-new-feature`, `rule-pull-request`, `rule-write-tests`, `rule-handoff`), 16 area prompts (`rule-*`, one per tool area), plus the 3 legacy prompts (`rule-code-review`, `rule-a11y-audit`, `rule-mcp-architect`) updated to the shared rules (route via `pix_tool`, TDD/a11y baselines or explicit user ask, commit message with mandatory scope). `rule-a11y-test` and `rule-a11y-review` were merged into `rule-a11y-audit` (review + test generation), and `rule-generate-component` was removed. Argument completion for the new prompt schemas in server.js
-- Initial MCP SDK port (Phase 0) - replaces hand-rolled protocol
-- 22 MCP tools: rule-mcp, 16 skill tools, pix_search, pix_component, pix_check, pix_scaffold, rule-mcp-architect, pix_detect
-- Context-aware skill routing with framework-biased scoring
-- Project framework auto-detector (pix_detect)
-- BM25 full-text search across all skills
-- Multi-file component generation (React, Vue, Svelte, vanilla)
-- Guardrails engine with smart iteration (skip passed checks)
-- SSE transport for IDE integration
-- HTTPS support with auto-generated self-signed certs
-- Sandbox/resilience layer
-- CLI installer for 15+ agents
-- Homebrew formula
-- Docker image (ghcr.io)
-- Windows package manifests (Winget, Scoop)
-- CI/CD pipeline with lint, test, audit, release
+- **release**: v1.0.0 - docs accuracy guard, hotspot split, agent/IDE settings (`912d9cb`)
+- **styleguide**: add rule-styleguides-readme skill (`87187d8`)
+- **process**: add rule-process-npm-release supply chain skill (`6b087f9`)
+- **auth**: add rule-platform-auth strategy skill (`eb00cc9`)
+- **workers**: add rule-backend-workers and rule-frontend-workers skills (`2bcb291`)
+- **platform-desktop**: add packaging, signing, CI/CD, and distribution compliance (`91cbc2f`)
+- **commands**: registry-driven clean /rule-* command targets (`0372795`)
+- **eslint**: migrate repo tooling to ESLint 10 flat config + unicorn (`a7efa6e`)
+- **eslint**: adopt eslint-plugin-unicorn for JS/TS quality (`861952f`)
+- **prompts**: unify rule-* commands with instant help (`a9d7001`)
+- **types**: strengthen large-project TypeScript (`5e7ce24`)
+- **data**: strengthen relational SQL skills (`2550ade`)
+- **skills**: add rule-frontend-template-engine skill (`e14d86e`)
+- **skills**: add rule-frontend-custom-element skill (`c9d838e`)
+- **prompts**: consolidate registry to 24 alphabetical rule-* prompts (`649c167`)
+- **prompts**: extend MCP prompt registry to 26 prompts (`09640c7`)
+- **tools**: prefix all MCP tools with rule_tool_ (`dd1d4f0`)
+- **self-update**: throttled per-invocation async check (`6f85604`)
+- **skills**: add rule-toolchain-commits skill enforcing atomic conventional commits (`1af9b74`)
+- **routing**: classify ai and git domains for agent and commit prompts (`2a5b3a0`)
+- **skills**: add rule-ai collector and rename rule-mcp-agents to rule-ai-agents (`225d82e`)
+- **rules**: add rules pack (`8bbbb03`)
+- **architect**: add architect context-pack pipeline (`53841ff`)
+- **skills**: port skill ecosystem to rule naming (`c4639ed`)
+- **skills**: update existing skills and add rule-toolchain-rspack (`7804d78`)
+- **test**: add 12 test suites for new core modules and transports (`604aa9d`)
+- **scripts**: add install-skills and MCP inspector scripts (`b129908`)
+- **skills**: add vanilla-reactive todo example app and patterns reference (`c9dbafb`)
+- **a11y**: add 21 accessibility reference guides and 3 templates (`2cb50eb`)
+- **skills**: add rule-backend-graphql, rule-devops-observability, rule-mcp-agents, rule-process-code-review (`8c7abba`)
+- **gateway**: enforce receipt TTL, deterministic validation, and improve sandbox (`a342673`)
+- **cli**: add update command and Streamable HTTP support (`c727c78`)
+- **transport**: add Streamable HTTP transport and unify port/host config (`e943aeb`)
+- **core**: add deterministic tool cache, caveman compression, self-update, and tokensave integration (`2cfe131`)
+- **install**: improve install/uninstall scripts and remove cursor commands (`0ef2356`)
+- **config**: RULE_MCP_* env var configuration via CLI + installer support (`5a3acbf`)
+- **styleguide**: enforce blank line between consecutive multi-line exports (`f66b2ff`)
+- **core**: deterministic block-spacing fixer, 3 cases for all code blocks (`8965246`)
+- **format**: auto-format post-processing in pix_apply (Prettier + blank-line fixer) (`2b80280`)
+- **styleguide**: enforce multi-line blocks and no blank lines inside blocks (`3a446c1`)
+- **styleguide**: JS styleguide rules + guardrails for blank lines, braces, const grouping (`75bc05b`)
+- **engine**: loadCSS helper, same pattern as loadTemplate for templates (`e23e189`)
+- **engine**: add CSS to fn-component (Pattern B, no vrComponent) (`4fab83e`)
+- **engine**: implicit context and template option in vrComponent (`8705f5b`)
+- **examples**: add where filter, simplify TodoStats to pure html (`b2309d0`)
+- **engine**: re-enable dollar-brace for text positions only (`2c5f47b`)
+- **extension**: add context-aware autocomplete provider (`0f0f523`)
+- **vsce**: build, install, and manage VS Code extension (`a6a509d`)
+- **extension**: add VS Code extension for syntax highlighting + snippets (`202b7f0`)
+- **guardrails**: strengthen FILE_TREE rules for naming + exports (`f5f65c8`)
+- **engine**: add withContext and compose helpers to reduce boilerplate (`8cc9432`)
+- **engine**: auto-tick on Store construction, loadTemplate helper, code-split demos (`97fd700`)
+- **engine**: automate tickState, extract DOM parts, rename app dir (`9850040`)
+- **examples**: add 4 standalone example apps (A, B, C, combo) (`592bc88`)
+- **engine**: add if-elseif-else and switch-case-default directives (`571d15f`)
+- **examples**: phase 4 - add Pattern B and C examples (`4c38042`)
+- **guardrails**: phase 5 - update for v2 syntax and vrComponent (`d53f3dd`)
+- **engine**: phase 2 - vrComponent decorator for reactive custom elements (`1329706`)
+- **engine**: phase 0 - remove dollar-brace, add click handler and fn call parser (`831ba67`)
+- **guardrails**: add vanilla-reactive guardrails for 3 component patterns (`cbeb2e9`)
+- **server**: change default SSE port from 37999 to 38000 (`4c73c05`)
+- **install**: auto-create global rule-mcp shim via pnpm link (`08048d6`)
+- **install**: prefer global rule-mcp binary in stdio config (`427c4d6`)
+- **cli**: add version command (rule-mcp --version) (`f059ef3`)
+- **install**: arrow key + space navigation for agent/mode selection (`7b2215f`)
+- **architect**: add new wizard CLI, web UI, and generator modules (`4e356e0`)
+- **claude**: native skills bridge, Use when descriptions, README counts (`ec546d6`)
+- **gateway**: deterministic single-entry orchestrator with receipt validation (`0e1ae1c`)
+- **sse**: bearer token auth, CORS deny-by-default, body size limit (`6cbf21f`)
 
 ### Changed
 
-- Tools: all 97 MCP tools renamed with the `rule_tool_` prefix (`rule` → `pix_tool`, `pix_gateway` → `rule_tool_gateway`, `pix_frontend_react` → `rule_tool_frontend_react`, …). Dispatcher/action allowlist, cache exclusions, agent-command templates, installer rules, and docs updated accordingly
-- Self-update: check now runs on every tool invocation (throttled, fire-and-forget) instead of once per session - configurable via `RULE_MCP_AUTO_UPDATE_INTERVAL_SECONDS` (default 60s, `0` = every call); the git fetch is async so the tool call never blocks (ADR 023)
-- Architecture: monolithic cli.js → modular cli/, tools/, core/, transport/
-- Module sizes: all behavioral modules ≤300 lines
-- YAML frontmatter parsing: handles multi-line descriptions
-- Scoring algorithm: holistic word-match scoring with framework bias
-- Skill rename: `rule-mcp-agents` → `rule-ai-agents` (tool `pix_galaxy_agents` → `pix_ai_agents`)
-- New collector skill `rule-ai` routing AI/agent work to `rule-ai-agents` and `rule-platform-agent` (mirrors `rule-frontend` pattern)
-- Router: AI domain classification added to prompt routing; `rule-ai` treated as collector in framework bias
-- Detector: `@rule/rule-mcp-core` dependency maps to `agents` framework → `rule-ai-agents`
-- New skill `rule-toolchain-commits` (tool `pix_toolchain_commits`): atomic Conventional Commits with mandatory scope; commit/push prompts route to it deterministically via a new git domain classification
+- **architect**: split rule-mcp-architect into its own repo and remove all references (`ede3ded`)
+- **skills**: rename rule-styleguides-readme to rule-styleguide-readme (`9f00cce`)
+- **core**: align cli and utils tool names to rule naming (`15b9b9e`)
+- **skills**: get all 14 oversized skills under 500 lines (`ee06bff`)
+- **skills**: split 14 oversized SKILL.md files per agentskills.io spec (`8ab4986`)
+- **styleguide**: split JS_GUARDRAILS from VANILLA_REACTIVE_GUARDRAILS (`ee483c9`)
+- **engine**: fn-component mounts to body by default, no #root container (`ebc3fed`)
+- **examples**: flatten examples/ structure, remove apps/ dir (`3ee4357`)
+- **skills**: move core to skill root, add ARCHITECTURE.md (`02de7d0`)
+- **core**: Store, Signal, DOM Parts optimizations (`2be73a9`)
+- **engine**: remove compose/withContext from examples, simplify to html only (`57110fd`)
+- **examples**: split example apps into _store + _App + _components (`3c85571`)
+- **core**: rename klass -> component in vrComponent (`f03d1d0`)
+- **core**: rename ClickHandlerPart to EventPart (`bc01718`)
+- **install**: rename server key from pix_galaxy_mcp to rule-mcp (`6da7496`)
+- **core**: update code-level naming - router skip dir, provider name, package.json (`9f4da4a`)
 
 ### Fixed
 
-- Security: patched transitive vulnerabilities via pnpm overrides - fast-uri ≥3.1.4 (GHSA-v2hh-gcrm-f6hx), @hono/node-server ≥2.0.5 (GHSA-frvp-7c67-39w9), brace-expansion ≥1.1.17 (GHSA-mh99-v99m-4gvg)
-- Security: bumped @modelcontextprotocol/sdk 1.29.0 → 1.30.0 (resolves @hono/node-server 2.x compatibility; `pnpm audit` now clean)
-- Galaxy routing: multi-skill queries now return styleguides for accessibility
-- Section extraction: YAML frontmatter excluded from content matching
-- Stopword filtering: added generic words to reduce routing noise
+- **installer**: prettier-clean rules block stops CLAUDE.md churn; silence PS output noise (`4993651`)
+- **installer**: heal stale global shim, surface CLI errors, harden TUI rendering (`e4a78c5`)
+- **ci**: remove explicit pnpm version to use packageManager from package.json (`17d21a8`)
+- **ci**: resolve pnpm version conflict, drop Node 20 (`9026c69`)
+- **ci**: keep single pnpm packageManager pin (`d00cd75`)
+- **ci**: remove duplicate packageManager fields (`a0f1031`)
+- **config**: add packageManager field to package.json for pnpm/action-setup@v4 (`6f7175a`)
+- **ci**: declare pnpm package manager version (`98c5049`)
+- **ci**: add packageManager field to fix pnpm version detection (`757b25f`)
+- **config**: add packageManager field to fix pnpm/action-setup@v4 CI failure (`d5e2484`)
+- **ci**: declare pnpm package manager (`00018fa`)
+- **ci**: add packageManager field to fix pnpm version detection (`8dca2b8`)
+- **docs**: raise docs cap to 8, dedupe ADR index entries, drop no-op skills:install (`6678188`)
+- **security**: drop root in the container and bind to loopback (`f891a3a`)
+- **skills**: the tool surface is ./skills and nothing else (`a9cbe36`)
+- **security**: pin the self-update remote and stop reporting phantom updates (`84d8398`)
+- **security**: enforce same-origin on interview servers and own their lifecycle (`0047541`)
+- **security**: bind writes to destinations and receipts to paths (`827ede6`)
+- **handoff**: parse 4-digit Nygard ADRs and fix CLI invocation (`ed36178`)
+- **installer**: make agent rules append/remove blank-line idempotent (`f37a03f`)
+- **installer**: preserve per-server user config on reinstall (`4e792ad`)
+- **deps**: patch transitive vulnerabilities (fast-uri, @hono/node-server, brace-expansion) (`f264bcc`)
+- **styleguide**: add See also section to a11y skill (`2331972`)
+- **cli**: parse folded description scalars and expose skills:install script (`4ac5d60`)
+- **server**: suppress startup banner on stderr when spawned by VS Code/IDE (`8975bdb`)
+- **build**: build script path, remove stale compliance reports (`e877fae`)
+- **core**: block-spacing now catches function declarations, 1-line blocks, let (`c08084f`)
+- **engine**: remove :host from CSS, no Shadow DOM in engine (`d620de2`)
+- **core**: security, broken imports, dead code, docs cleanup (`c855230`)
+- **extension**: scan all workspace files for autocomplete data (`0093aa8`)
+- **build**: clean VSIX build with @vscode/vsce, no warnings (`3a7a71a`)
+- **skills**: proper component folders with index.js barrels (`306b1a3`)
+- **skills**: rule-styleguide compliance, proper folders and naming (`54912b7`)
+- **scripts**: repair sed artifacts and finalize pattern renames (`127126b`)
+- **install**: remove stale project-level .vscode/mcp.json (`0f8bedc`)
+- **doctor**: clarify rule-mcpd daemon wrapper naming in output (`1dd96fb`)
+- **install**: implement mode propagation, persistent SSE auth, VS Code global config (`18b0e73`)
+- **install**: absolute stdio paths, daemon/docker SSE modes, VS Code user-level config (`f9a30d4`)
+- **install**: robust full-screen TUI and align PowerShell installer (`b71f525`)
+- **install**: IFS= before read to prevent space stripping on bash 3.2 (macOS) (`8c1f592`)
+- **install**: use read -N1 for raw byte capture, SPACE checked before Enter (`94143d3`)
+- **install**: safe array access for set -u, SPACE-only toggle (`7bcf706`)
+- **install**: remove duplicate render loops in checkbox/radio UI (`413662c`)
+- **install**: stable terminal UI with save/restore cursor (`34ea969`)
+- **install**: remove duplicate fi in toggle logic (`dcf2a59`)
+- **install**: unbound variable FIRST_RENDER, seq compatibility, toggle input validation (`cf512f2`)
+- **install**: fix shell syntax in interactive agent selection (`4abfd02`)
+- **vscode**: add global VS Code config path for macOS/Linux (`d7ef3f1`)
+- **architect**: restore deleted wizard assets, fix all 6 tool modes (`f02a054`)
+- **sse**: AbortController in sandbox, reload idempotent, resource plugin filter (`860224e`)
+- **installer**: parseJson fail-closed, atomic writes, batch mode, no API keys (`5b0a5cb`)
+- **templates**: React/Svelte components pass own guardrails (`670d691`)
+- **router**: domain-aware routing, multilingual aliases, confidence scoring (`81df0d3`)
+- **guardrails**: CSS/JSX parser coverage, advisory terminology (`01d3e75`)
+- **build**: reproducible embed, CI gates, package metadata (`092aadf`)
+- **mcp**: prompts/get returns spec-compliant shape and role (`460caad`)
+- **pix_fix**: sandbox file writes with dryRun, path traversal guard, valid custom element tags (`6a4c8a0`)
+- **test**: restore rule-mcp path literals in repository-contract assertions (`aa4c326`)
+- **skills**: update rule-architect refs from rule-mcp-agents to rule-platform-agent (`27f4bdf`)
+- **skills**: update rule dispatcher inventory for rule-platform-agent (`de9adcd`)
+
+### Removed
+
+- **engine**: remove dollar-brace support entirely (`04b50b6`)
+
+### Documentation
+
+- **adr**: record ADR 036 architect split into standalone repo (`3048cbd`)
+- **adr**: record installer shim/TUI decisions as ADR 035 and update usage docs (`f13cdc3`)
+- **i18n**: translate all Italian content to English (`065bf8e`)
+- **adr**: record decisions 029-034 and the security audit (`e9c7c05`)
+- **project**: document installer lossless fix (ADR 024, changelog) (`a84223a`)
+- **project**: update CLAUDE tool references to rule_tool_* (`811edfd`)
+- **plans**: mark prompt/tools plan items done (`75ce4e0`)
+- **project**: update changelog and relocate commit-scope rule in CLAUDE (`d02f6e4`)
+- **project**: document mandatory commit scope rule (`7315f89`)
+- **project**: port documentation and ADRs to rule naming (`b89d48f`)
+- **readme**: align documentation with current state and rule naming (`4d322bd`)
+- **env**: extract env vars table to docs/06-env-variables.md (`00de251`)
+- **env**: rename agent-instructions -> 05-agent-instructions, add RULE_MCP_* env table (`97c4a55`)
+- **skills**: move analysis.md -> skills/rule-frontend-vanilla-reactive/DESIGN.md (`05c1907`)
+- **readme**: update README.md and agent-instructions.md to reflect current state (`bdcde64`)
+- **adr**: renumber ADRs by logical dependency order (`39c41b2`)
+- **adr**: convert handoff docs to ADRs, delete docs/handoff/ (`00e7c2f`)
+- **styleguide**: align styleguide examples with enforced rules (`3be5703`)
+- **arch**: merge patterns.md into ARCHITECTURE.md, delete patterns.md (`5dee01d`)
+- **arch**: merge TEMPLATE_ENGINE.md into ARCHITECTURE.md, delete TEMPLATE_ENGINE.md (`d7f5a1d`)
+- **patterns**: rename Pattern A/B/C to descriptive names (`73642d1`)
+- **qa**: fix all 11 review issues for 0.1.0 (`bfd8b6f`)
+- **skills**: final cleanup - remove remaining v2 refs, add elseif/switch to SKILL.md (`5d44c8b`)
+- **engine**: align all docs with v2 decisions (`6a5182c`)
+- **skill**: phase 3 - rewrite SKILL.md for v2 syntax and 3 patterns (`157ebad`)
+- **engine**: align scope resolution docs with _scope mechanism (`83faee8`)
+- **template-engine**: clarify scope resolution, CE vs fn composition (`fa770f1`)
+- **engine**: trim event binding section to examples + resolution only (`8f3e45a`)
+- **skills**: replace _handlers with _scope, move ref into skill dir (`40fe9d2`)
+- **skills**: move template engine reference into skill directory (`3b4f3fb`)
+- **engine**: add template-engine-reference.md with full v2 capabilities (`0342914`)
+- **plan**: add nesting validation section, fn call parser to phase 0 (`a351534`)
+- **plan**: rename VanillaReactiveComponent to vrComponent (`caa70e8`)
+- **plan**: add vanilla-reactive v2 execution plan with 6 phases (`a44e08a`)
+- **adr**: update roadmap, ADR refs, architect inventory (`3de410b`)
+- **reports**: add audit reports, handoff index, determinism plan (`a194bcf`)
+- **skills**: add Use when descriptions to all 69 rule-* skills (`d2fcac7`)
+- **docs**: final compliance sweep, live docs 0 stale refs (`6a50f59`)
+- **readme**: full rewrite - GETTING_STARTED as install guide, README as comprehensive WIKI (`67bc1a9`)
+- **skills**: See also, stale refs, auto-ADR opt-in, handoff, doctor (`527f527`)
+- **architecture**: normalize naming in architecture docs and README (`9b2704a`)
+- **skills**: normalize naming - rule-mcp -> rule across all skill files (`73e3cdf`)
