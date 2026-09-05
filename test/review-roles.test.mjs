@@ -25,8 +25,17 @@ test("the catalog ships the agreed active set", () => {
   const active = activeRoles()
     .map((role) => role.id)
     .sort();
-  assert.deepEqual(active, ["a11y", "ai-engineer", "architect", "docs-engineer", "performance", "privacy", "security"]);
-  assert.ok(allRoles().length >= 14, "the proposed roles stay in the catalog");
+  assert.deepEqual(active, [
+    "a11y",
+    "ai-engineer",
+    "architect",
+    "docs-engineer",
+    "performance",
+    "privacy",
+    "security",
+    "web-engineer",
+  ]);
+  assert.ok(allRoles().length >= 16, "the proposed roles stay in the catalog");
 });
 
 test("validateRole rejects what a surface cannot generate from", () => {
