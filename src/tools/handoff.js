@@ -162,7 +162,7 @@ const HandoffSchema = z.object({
   includeGitDiff: z.boolean().optional().default(true).describe("Include git working tree diff"),
   includeGitLog: z.boolean().optional().default(true).describe("Include recent git log"),
   includeRoadmap: z.boolean().optional().default(true).describe("Include roadmap/docs scan"),
-  compress: z.boolean().optional().default(false).describe("Aggressively compress output"),
+  compress: z.boolean().optional().default(true).describe("Aggressively compress output (default: on)"),
   maxTokens: z.number().optional().default(0).describe("Target max tokens (0 = no limit)"),
   format: z.enum(["full", "brief", "minimal"]).optional().default("full").describe("Output detail level"),
 });
