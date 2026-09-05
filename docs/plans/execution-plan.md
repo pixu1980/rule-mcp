@@ -93,9 +93,12 @@ Port the complete tracked behavior of `~/Projects/work/rule/ai/rule-mcp/` into t
 
 ## Phase 6 — Scripts, supply chain, CI, and release mechanics
 
-- [ ] 18. Port the nine source-only scripts/artifacts: checksums, audit gate, changelog builder, cache reports, prose cleaner, tool-surface report, and WCAG updater.
-- [ ] 19. Merge package scripts and exact dependency policy, lockfile checks, formatting/lint gates, build/prepublish checksums, Docker constraints, and CI parallelization without changing version `1.0.0`.
-- [ ] 20. Preserve GitHub release/Scoop/Winget assets and target docs-accuracy behavior while integrating source provenance and supply-chain checks.
+- [x] 18. Port the nine source-only scripts/artifacts: checksums, audit gate, changelog builder, cache reports, prose cleaner, tool-surface report, and WCAG updater.
+  - all 9 ported (rule-branded); SHA256SUMS regenerated; CHANGELOG.md regenerated in generated style; scripts parity 0 missing
+- [x] 19. Merge package scripts and exact dependency policy, lockfile checks, formatting/lint gates, build/prepublish checksums, Docker constraints, and CI parallelization without changing version 1.0.0.
+  - package.json tasks merged (checksums/audit/changelog/cache/clean-prose/surface/wcag); lockfile-lint test; lint/format gates; version stays 1.0.0
+- [x] 20. Preserve GitHub release/Scoop/Winget assets and target docs-accuracy behavior while integrating source provenance and supply-chain checks.
+  - .github ci.yml/release.yml + scoop manifest preserved; docs-accuracy verified on 110/194/34/94; install-integrity pins script digests
 
 ## Phase 7 — Tests and evidence
 
