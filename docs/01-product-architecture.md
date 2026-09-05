@@ -1023,7 +1023,7 @@ All data stays on the filesystem. The MCP server is a read-only/validate-only se
 
 ### Steps
 
-- [x] **5.1** Verify all 15 agent installers - All 16 agents have installer functions with JSON/TOML/INI config format detection - `installed.md` manifest written to `~/.local/share/pix-galaxy-mcp/installed.md` after install - `pix-galaxy-mcp doctor` reports which agents are configured (scans 15 common config file locations)
+- [x] **5.1** Verify all 15 agent installers - All 16 agents have installer functions with JSON/TOML/INI config format detection - `installed.md` manifest written to `~/.pix-galaxy-mcp/data/installed.md` after install - `pix-galaxy-mcp doctor` reports which agents are configured (scans 15 common config file locations)
 
 - [x] **5.2** Add `pix://project` resource - Reads CWD → detects framework + TypeScript + build tool via `detectProject()` - Returns JSON with framework, node version, suggested skills, suggested tools
 

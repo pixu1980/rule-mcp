@@ -125,12 +125,12 @@ docker run -i pix-galaxy-mcp
 pix-galaxy-mcp install --agent pi --mode docker
 
 # Run in SSE mode (for Pi or VS Code over HTTP)
-PIX_GALAXY_MCP_SSE_TOKEN="$(cat ~/.local/state/pix-galaxy-mcp/sse-token)" \
+PIX_GALAXY_MCP_SSE_TOKEN="$(cat ~/.pix-galaxy-mcp/state/sse-token)" \
   docker run -e PIX_GALAXY_MCP_SSE_TOKEN -p 37999:37999 \
   pix-galaxy-mcp node src/index.js serve --transport sse
 
 # Or use docker-compose from this repository.
-PIX_GALAXY_MCP_SSE_TOKEN="$(cat ~/.local/state/pix-galaxy-mcp/sse-token)" \
+PIX_GALAXY_MCP_SSE_TOKEN="$(cat ~/.pix-galaxy-mcp/state/sse-token)" \
   docker compose up -d
 # → SSE endpoint: http://localhost:37999/sse
 # → Health: http://localhost:37999/health
@@ -144,7 +144,7 @@ The included `docker-compose.yml` exposes:
 - Automatic restarts
 - Health check endpoint at `/health`
 
-The Compose service requires `PIX_GALAXY_MCP_SSE_TOKEN`; the installer creates the owner-only token at `~/.local/state/pix-galaxy-mcp/sse-token`. Do not commit that token or copy it into shared configuration.
+The Compose service requires `PIX_GALAXY_MCP_SSE_TOKEN`; the installer creates the owner-only token at `~/.pix-galaxy-mcp/state/sse-token`. Do not commit that token or copy it into shared configuration.
 
 ---
 

@@ -7,7 +7,7 @@
 
 ## Context
 
-pix-galaxy-mcp develop@12d60a9 has evolved to 90 skills, 106 tools, 186 resources, 33 prompts, 43 source-only runtime modules, 9 source-only scripts, and 61 source-only tests. pix-galaxy-mcp contains target-only skills, rules, extensions, modular runtime structure, and release safeguards that must not be removed.
+pix-ai-mcp develop@12d60a9 has evolved to 90 skills, 106 tools, 186 resources, 33 prompts, 43 source-only runtime modules, 9 source-only scripts, and 61 source-only tests. pix-galaxy-mcp contains target-only skills, rules, extensions, modular runtime structure, and release safeguards that must not be removed.
 
 ## Decision
 

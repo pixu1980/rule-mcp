@@ -1187,14 +1187,14 @@ pix-galaxy-mcp daemon logs
 - **Kill the existing process**:
   ```bash
   pix-galaxy-mcp daemon stop
-  # Or manually: kill $(cat ~/.local/share/pix-galaxy-mcp/daemon.pid)
+  # Or manually: kill $(cat ~/.pix-galaxy-mcp/state/daemon.pid)
   ```
 
 **Issue**: Daemon started but health check fails.
 
 - **Debug**: Check the daemon log:
   ```bash
-  cat ~/.local/share/pix-galaxy-mcp/daemon.log
+  cat ~/.pix-galaxy-mcp/state/daemon.log
   ```
 
 **Issue**: SSE connection drops.

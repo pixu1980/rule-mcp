@@ -13,7 +13,7 @@
  * into the project - and the removal path, which still has to strip a block
  * from a hook file it shares with tokensave without touching anything else.
  *
- * Ported from pix-galaxy-mcp (ADR 082) with the names rebranded to pix.
+ * Ported from pix-ai-mcp (ADR 082) with the names rebranded to pix.
  */
 
 import assert from "node:assert/strict";
@@ -68,13 +68,13 @@ test("init moves a directory an earlier version left behind", () => {
 test("init also moves an upstream-name legacy directory", () => {
   const project = workspace();
   mkdirSync(join(project, ".git"), { recursive: true });
-  mkdirSync(join(project, ".pix-galaxy-mcp"), { recursive: true });
-  writeFileSync(join(project, ".pix-galaxy-mcp", "telemetry.jsonl"), '{"ts":2}\n');
+  mkdirSync(join(project, ".pix-ai-mcp"), { recursive: true });
+  writeFileSync(join(project, ".pix-ai-mcp", "telemetry.jsonl"), '{"ts":2}\n');
 
   const result = initProject({ projectDir: project, tokensave: false });
 
   assert.equal(result.migrated, true);
-  assert.equal(existsSync(join(project, ".pix-galaxy-mcp")), false);
+  assert.equal(existsSync(join(project, ".pix-ai-mcp")), false);
   assert.equal(readFileSync(join(result.dir, "telemetry.jsonl"), "utf8").trim(), '{"ts":2}');
 });
 
