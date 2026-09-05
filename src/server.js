@@ -171,6 +171,11 @@ export async function startServer() {
   // one-shot keeps running checks inline - a hung CLI is ctrl-C.
   const { enableGuardedChecks } = await import("./core/guardrails-guarded.js");
   enableGuardedChecks();
+  // A stdio server lives and dies with its client: when the parent process
+  // exits, stdin closes and this process must go with it. The guard polls
+  // the parent pulse and exits (the orphaned-server trap).
+  const { installStdioGuard } = await import("./transport/stdio-guard.js");
+  installStdioGuard({ onLost: () => process.exit(0) });
   const server = createServer();
   const transport = new StdioServerTransport();
 

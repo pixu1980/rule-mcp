@@ -27,9 +27,16 @@ import { generateSelfSignedCert } from "./cert.js";
 import { wrapRequestHandler, safeJsonParse } from "../utils/sandbox.js";
 import { getOrCreateSseBearerToken } from "./sse-auth.js";
 
-/** Active MCP sessions, keyed by sessionId. */
-const sessions = new Map();
+import { SessionRegistry } from "./session-registry.js";
+import { createAuthRateLimiter } from "./auth-rate-limit.js";
 
+/**
+ * The sessions an SSE daemon holds, swept by the registry: a client that is
+ * killed, a laptop that sleeps, a network that drops mid-stream leave a
+ * session whose stream is dead and whose onclose never fires, so the sweep
+ * asks each session whether its stream is still there and when it was last
+ * used (hardening F-S7).
+ */
 /** Active HTTP/HTTPS server instance. */
 let httpServer = null;
 
@@ -39,8 +46,21 @@ let serverToken = null;
 /** Maximum POST body size (1 MB). */
 const MAX_BODY_BYTES = 1_048_576;
 
+/** Failed-auth rate limiter: 401 below budget, 429 above it. Loopback gets more room. */
+const authLimiter = createAuthRateLimiter({});
+
 /** Maximum concurrent SSE sessions - bounds memory against connection floods. */
 const MAX_SESSIONS = 256;
+
+/**
+ * Idle sweep over the sessions: a client that is killed, a laptop that
+ * sleeps, a network that drops mid-stream leave a session whose stream is
+ * dead, so closing is driven by the transport's own callback AND by a sweep
+ * that evicts sessions nobody touched for the idle ceiling (hardening F-S7).
+ */
+const sessions = new Map();
+
+const registry = new SessionRegistry({ maxSessions: MAX_SESSIONS });
 
 /** Allowed CORS origins (empty = deny all cross-origin). */
 const ALLOWED_ORIGINS = new Set();
@@ -116,10 +136,20 @@ async function requestHandler(request, res) {
   const parsedUrl = new URL(request.url ?? "/", `${prototype}://${request.headers.host ?? "localhost"}`);
   const pathname = parsedUrl.pathname;
 
-  // Auth check (skipped for /health)
+  // Auth check (skipped for /health). Failures are rate-limited per remote
+  // address: only failures consume budget, loopback gets a larger bucket.
   if (!checkAuth(request, pathname)) {
-    res.writeHead(401, { "Content-Type": "application/json" });
-    res.end(JSON.stringify({ error: "Unauthorized. Provide Authorization: Bearer <token> header." }));
+    const remote = request.socket?.remoteAddress ?? "unknown";
+    const verdict = authLimiter.recordFailure(remote);
+
+    res.writeHead(verdict.limited ? 429 : 401, { "Content-Type": "application/json" });
+    res.end(
+      JSON.stringify({
+        error: verdict.limited
+          ? "Too many failed auth attempts. Wait before retrying."
+          : "Unauthorized. Provide Authorization: Bearer <token> header.",
+      }),
+    );
 
     return;
   }
@@ -145,7 +175,7 @@ async function requestHandler(request, res) {
 
     // ── GET /sse - Establish SSE stream ──────────────────────
     if (request.method === "GET" && parsedUrl.pathname === "/sse") {
-      if (sessions.size >= MAX_SESSIONS) {
+      if (registry.atCapacity() || registry.size >= MAX_SESSIONS) {
         res.writeHead(503, { "Content-Type": "application/json" });
         res.end(JSON.stringify({ error: "Server session limit reached. Close an existing session and retry." }));
 
@@ -157,6 +187,13 @@ async function requestHandler(request, res) {
       const server = createServer();
       const session = { transport, server };
       sessions.set(transport.sessionId, session);
+      registry.add(transport.sessionId, {
+        close: () => {
+          if (sessions.delete(transport.sessionId)) {
+            void server.close().catch(() => {});
+          }
+        },
+      });
 
       const closeSession = () => {
         if (!sessions.delete(transport.sessionId)) {
@@ -199,6 +236,14 @@ async function requestHandler(request, res) {
 
       const body = Buffer.concat(buffers).toString("utf-8");
 
+      // A live message marks the session in use: the sweep only evicts what
+      // has been idle past the ceiling.
+      const messagePathMatch = parsedUrl.pathname.match(/\/message\/([^/?#]+)/);
+
+      if (messagePathMatch) {
+        registry.touch(messagePathMatch[1]);
+      }
+
       const sessionId = parsedUrl.searchParams.get("sessionId") ?? "";
       const session = sessions.get(sessionId);
       const transport = session?.transport;
@@ -220,6 +265,16 @@ async function requestHandler(request, res) {
         return;
       }
 
+      let logged = false;
+      const originalEnd = res.end.bind(res);
+      res.end = (...args) => {
+        if (!logged) {
+          logged = true;
+          console.error("[sse-debug] POST /message status:", res.statusCode);
+        }
+
+        return originalEnd(...args);
+      };
       await transport.handlePostMessage(request, res, parsed);
 
       return;
@@ -256,6 +311,7 @@ async function requestHandler(request, res) {
  * @returns {Promise<{ port: number, token: string }>}
  */
 export async function startSseServer(options = {}) {
+  registry.startSweeper();
   const { DEFAULT_SSE_PORT, getSseHost } = await import("../cli/paths.js");
   const port = options.port ?? (Number(process.env.RULE_MCP_PORT) || DEFAULT_SSE_PORT);
   const host = options.host ?? getSseHost();
