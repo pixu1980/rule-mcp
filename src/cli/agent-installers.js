@@ -111,9 +111,14 @@ const atomicWrite = ({ file, content, dryRun }) => {
 };
 
 /** Write a file, optionally as a dry-run (no actual write). @deprecated Use atomicWrite for safety. */
-const writeText = ({ file, content, dryRun }) => {
+const writeText = ({ file, content, dryRun, force = true, skipIfExists = false }) => {
   if (content === null) {
     throw new Error(`Cannot write null content to ${file} - parse error in source`);
+  }
+  // The forced-overwrite promise: without --force, a file the user (or a
+  // previous install) wrote is left alone; with it, it is replaced.
+  if (skipIfExists && existsSync(file) && !force) {
+    return file;
   }
 
   if (!dryRun) {
@@ -479,14 +484,24 @@ const removeTomlBlock = (current, blockName) => {
  * @param {string} current - Current file content
  * @returns {string} - Updated content with instruction marker
  */
-const appendInstruction = (current) => {
-  const marker = "<!-- rule-mcp -->";
+const INSTRUCTION_BLOCK =
+  `${"<!-- rule-mcp -->"}\n` +
+  "Before writing any frontend/styling code, call `rule` to route the task to the correct rule skill. " +
+  "Follow rule AI principles: zero CSS classes, zero inline styles, semantic HTML, external CSS via " +
+  "adoptedStyleSheets. Available tools: rule, pix_component, pix_check, pix_search, pix_scaffold, " +
+  "pix_process_adr. Flex first: display:grid only for named areas, subgrid, explicit placement, or " +
+  "auto-fit tracks - what a flex row or column can do, flex does.\n" +
+  "<!-- /rule-mcp -->";
 
-  if (current.includes(marker)) {
-    return current;
+/** Append the marked instruction block, or refresh a stale one when forced. */
+const appendInstruction = (current, { refresh = false } = {}) => {
+  if (current.includes("<!-- rule-mcp -->")) {
+    // A stale block is replaced so an install ships the CURRENT rules, never
+    // the text a user installed once. Without --force the existing block wins.
+    return refresh ? removeInstruction(current) + `\n\n${INSTRUCTION_BLOCK}\n` : current;
   }
 
-  return `${current.trimEnd()}\n\n${marker}\nBefore writing any frontend/styling code, call \`rule\` to route the task to the correct rule skill. Follow rule AI principles: zero CSS classes, zero inline styles, semantic HTML, external CSS via adoptedStyleSheets. Available tools: rule, pix_component, pix_check, pix_search, pix_scaffold, pix_process_adr.\n<!-- /rule-mcp -->\n`;
+  return `${current.trimEnd()}\n\n${INSTRUCTION_BLOCK}\n`;
 };
 
 /** Remove the rule-mcp instruction marker. */
@@ -526,20 +541,22 @@ const copilotAgent = () =>
 
 // ─── Agent installers ───────────────────────────────────────────────────────
 
-/** @param {{ entrypoint: string, dryRun: boolean, global?: boolean }} */
-const installClaude = ({ entrypoint, dryRun, global }) => {
+/** @param {{ entrypoint: string, dryRun: boolean, global?: boolean, force?: boolean }} */
+const installClaude = ({ entrypoint, dryRun, global, force = false }) => {
   const file = join(HOME, ".claude.json");
   const mdFile = join(HOME, ".claude", "CLAUDE.md");
   const commandFile = join(HOME, ".claude", "commands", "rule-mcp.md");
 
   return [
-    writeText({
+    // The config is an upsert where a merge can go wrong, so the pre-write
+    // content is backed up before it is replaced (the backup promise).
+    atomicWrite({
       file,
       content: upsertJsonServer(readText(file), commandConfig(entrypoint, { global, agentName: "claude" })),
       dryRun,
     }),
-    writeText({ file: mdFile, content: appendInstruction(readText(mdFile)), dryRun }),
-    writeText({ file: commandFile, content: commandTemplate(), dryRun }),
+    writeText({ file: mdFile, content: appendInstruction(readText(mdFile), { refresh: force }), dryRun }),
+    writeText({ file: commandFile, content: commandTemplate(), dryRun, skipIfExists: !force, force }),
   ];
 };
 
