@@ -40,10 +40,10 @@ Deterministic MCP server for the rule skill ecosystem. Live surface (enforced by
 
 | Surface   | Count | Notes                                                                             |
 | --------- | ----- | --------------------------------------------------------------------------------- |
-| Tools     | 90    | ~80 per-skill tools + dispatcher/action tools                                     |
-| Resources | 168   | rule:// per-skill index + summary + template URIs                                  |
-| Prompts   | 21    | workflow + area + legacy prompts                                                  |
-| Skills    | 80    | frontend, backend, database, devops, toolchain, styleguide, process, platform, ai |
+| Tools     | 110    | ~100 per-skill tools + dispatcher/action tools                                    |
+| Resources | 194    | rule:// per-skill index + summary + template URIs                                 |
+| Prompts   | 34     | workflow + review-persona (rule-plan-<role>) + one-shot workflow prompts          |
+| Skills    | 94     | frontend, backend, data, devops, toolchain, styleguide, process, platform, ai    |
 | Tests     | 212   | `pnpm test:all` green (incl. installer + PTY TUI)                                 |
 
 Architecture decisions live in [`docs/adr/`](docs/adr/README.md) (36 records:
