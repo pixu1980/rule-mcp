@@ -29,13 +29,19 @@ test("the catalog ships the agreed active set", () => {
     "a11y",
     "ai-engineer",
     "architect",
+    "data-engineer",
+    "design-system-lead",
+    "devops-sre",
     "docs-engineer",
+    "dx-toolchain",
+    "oss-compliance",
     "performance",
     "privacy",
+    "qa-testing",
     "security",
     "web-engineer",
   ]);
-  assert.ok(allRoles().length >= 16, "the proposed roles stay in the catalog");
+  assert.ok(allRoles().length >= 22, "the proposed roles stay in the catalog");
 });
 
 test("validateRole rejects what a surface cannot generate from", () => {

@@ -62,9 +62,9 @@ test("registry covers workflow, area, one-shot, and persona prompts", () => {
     assert.ok(names.includes(expected), `missing prompt ${expected}`);
   }
   // 13 expected (handoff + 12 areas) + 6 one-shot workflow prompts
-  // (adr/flight/handon/init/process-check/update) + 24 review-persona prompts
-  // (rule-plan-<role> + rule-audit-<role> + rule-review-<role> for 8 active roles) = 43.
-  assert.equal(names.length, EXPECTED.length + 30, "no unexpected prompts");
+  // (adr/flight/handon/init/process-check/update) + 42 review-persona prompts
+  // (rule-plan-<role> + rule-audit-<role> + rule-review-<role> for 14 active roles) = 61.
+  assert.equal(names.length, EXPECTED.length + 48, "no unexpected prompts");
 });
 
 test("strict argument schema on every prompt", () => {
