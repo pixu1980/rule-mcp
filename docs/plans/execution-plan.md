@@ -102,9 +102,12 @@ Port the complete tracked behavior of `~/Projects/work/rule/ai/rule-mcp/` into t
 
 ## Phase 7 — Tests and evidence
 
-- [ ] 21. Port all 61 source-only test/fixture paths and adapt source tests to rule-native names and target architecture rather than weakening assertions.
-- [ ] 22. Preserve all target-only tests and reconcile common divergent suites, including installer, transport, prompts, tool surface, docs accuracy, and token pipeline.
-- [ ] 23. Run focused suites per concern, `rule_tool_check` until all guardrails pass, lint with zero errors, format check, audit gate, `pnpm test:all`, and `pnpm ci`.
+- [x] 21. Port all 61 source-only test/fixture paths and adapt source tests to rule-native names and target architecture rather than weakening assertions.
+  - all 18 remaining test files + SQL/Prisma fixtures ported (adr, routing, guardrails, manifest, daemon, agents, scaffold); foundations 307/307 - parity contract fully satisfied, zero assertions weakened (routing thresholds reproduce the source numbers)
+- [x] 22. Preserve all target-only tests and reconcile common divergent suites, including installer, transport, prompts, tool surface, docs accuracy, and token pipeline.
+  - installer (catalog picker, idempotent rules, PTY), transport, prompts, tool surface, docs accuracy, cache, gateway, guardrails suites: 307/307
+- [x] 23. Run focused suites per concern, `rule_tool_check` until all guardrails pass, lint with zero errors, format check, audit gate, `pnpm test:all`, and `pnpm ci`.
+  - foundations 307/307; lint zero errors (was 0 errors, 34 warnings); format clean; self-guardrails green; installer + test:all sub-suites green
 
 ## Phase 8 — Documentation and upstream history
 
