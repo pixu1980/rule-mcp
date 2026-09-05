@@ -201,7 +201,7 @@ Totale risorse `read-*`: **194** (94 skill × 2 = 188 risorse full/summary, più
 
 ---
 
-## 2. Comandi slash `/pix-*` (44 generati)
+## 2. Comandi slash `/pix-*` (62 generati)
 
 I comandi slash vengono generati da `src/core/agent-commands.js`, che parte dai prompt registrati in `src/prompts/index.js` e dai ruoli attivi di `src/core/review-roles.js` (OPERATIONS = `plan`, `audit`, `review`).
 
@@ -240,22 +240,28 @@ I comandi slash vengono generati da `src/core/agent-commands.js`, che parte dai 
 | `/pix-process-check` | Check/route del workflow di processo                                                 |
 | `/pix-update`        | Update del server pix-galaxy-mcp                                                     |
 
-### 2.4 Persona role × operazione (24)
+### 2.4 Persona role × operazione (42)
 
 Per ogni ruolo attivo, 3 operazioni: `plan`, `audit`, `review`.
 
-**Ruoli attivi (8):** `architect`, `security`, `privacy`, `a11y`, `ai-engineer`, `performance`, `docs-engineer`, `web-engineer`
+**Ruoli attivi (14):** `architect`, `security`, `privacy`, `a11y`, `ai-engineer`, `performance`, `docs-engineer`, `web-engineer`, `devops-sre`, `qa-testing`, `data-engineer`, `oss-compliance`, `design-system-lead`, `dx-toolchain`
 
-| Ruolo         | Plan                      | Audit                      | Review                      |
-| ------------- | ------------------------- | -------------------------- | --------------------------- |
-| architect     | `/pix-plan-architect`     | `/pix-audit-architect`     | `/pix-review-architect`     |
-| security      | `/pix-plan-security`      | `/pix-audit-security`      | `/pix-review-security`      |
-| privacy       | `/pix-plan-privacy`       | `/pix-audit-privacy`       | `/pix-review-privacy`       |
-| a11y          | `/pix-plan-a11y`          | `/pix-audit-a11y`          | `/pix-review-a11y`          |
-| ai-engineer   | `/pix-plan-ai-engineer`   | `/pix-audit-ai-engineer`   | `/pix-review-ai-engineer`   |
-| performance   | `/pix-plan-performance`   | `/pix-audit-performance`   | `/pix-review-performance`   |
-| docs-engineer | `/pix-plan-docs-engineer` | `/pix-audit-docs-engineer` | `/pix-review-docs-engineer` |
-| web-engineer  | `/pix-plan-web-engineer`  | `/pix-audit-web-engineer`  | `/pix-review-web-engineer`  |
+| Ruolo              | Plan                           | Audit                           | Review                           |
+| ------------------ | ------------------------------ | ------------------------------- | -------------------------------- |
+| architect          | `/pix-plan-architect`          | `/pix-audit-architect`          | `/pix-review-architect`          |
+| security           | `/pix-plan-security`           | `/pix-audit-security`           | `/pix-review-security`           |
+| privacy            | `/pix-plan-privacy`            | `/pix-audit-privacy`            | `/pix-review-privacy`            |
+| a11y               | `/pix-plan-a11y`               | `/pix-audit-a11y`               | `/pix-review-a11y`               |
+| ai-engineer        | `/pix-plan-ai-engineer`        | `/pix-audit-ai-engineer`        | `/pix-review-ai-engineer`        |
+| performance        | `/pix-plan-performance`        | `/pix-audit-performance`        | `/pix-review-performance`        |
+| docs-engineer      | `/pix-plan-docs-engineer`      | `/pix-audit-docs-engineer`      | `/pix-review-docs-engineer`      |
+| web-engineer       | `/pix-plan-web-engineer`       | `/pix-audit-web-engineer`       | `/pix-review-web-engineer`       |
+| devops-sre         | `/pix-plan-devops-sre`         | `/pix-audit-devops-sre`         | `/pix-review-devops-sre`         |
+| qa-testing         | `/pix-plan-qa-testing`         | `/pix-audit-qa-testing`         | `/pix-review-qa-testing`         |
+| data-engineer      | `/pix-plan-data-engineer`      | `/pix-audit-data-engineer`      | `/pix-review-data-engineer`      |
+| oss-compliance     | `/pix-plan-oss-compliance`     | `/pix-audit-oss-compliance`     | `/pix-review-oss-compliance`     |
+| design-system-lead | `/pix-plan-design-system-lead` | `/pix-audit-design-system-lead` | `/pix-review-design-system-lead` |
+| dx-toolchain       | `/pix-plan-dx-toolchain`       | `/pix-audit-dx-toolchain`       | `/pix-review-dx-toolchain`       |
 
 ---
 
@@ -290,14 +296,14 @@ La cartella `.roo/commands/` contiene gli snapshot `.md` installati (per agent c
 | — Tool core                                                                                           | 19        |
 | — Tool per-skill (`pix-tool-<skill>`)                                                                 | 94        |
 | — Risorse `read-*`                                                                                    | 194       |
-| Comandi slash generati (`/pix-*`)                                                                     | **44**    |
+| Comandi slash generati (`/pix-*`)                                                                     | **62**    |
 | — Router `/pix`                                                                                       | 1         |
 | — Area / workflow (`/pix-area-*`, `/pix-adr`, `/pix-flight`)                                          | 14        |
 | — Gestione sessione (`/pix-handoff`, `/pix-handon`, `/pix-init`, `/pix-process-check`, `/pix-update`) | 5         |
-| — Persona (`/pix-{plan,audit,review}-<role>`)                                                         | 24        |
+| — Persona (`/pix-{plan,audit,review}-<role>`)                                                         | 42        |
 | Macro file in `.roo/commands/`                                                                        | 35        |
 
-> **Nota ruoli:** `src/core/review-roles.js` registra 16 ruoli; solo 8 sono attivi e generano comandi slash. Gli altri: `devops-sre`, `qa-testing`, `data-engineer`, `design-system-lead`, `dx-toolchain`, `simplicity-staff-eng`, `oss-compliance`, `localization-engineer`.
+> **Nota ruoli:** `src/core/review-roles.js` registra 22 ruoli; 14 sono attivi e generano comandi slash. Proposti (solo catalogo, raggiungibili via `pix_tool_plan`): `simplicity-staff-eng`, `localization-engineer`, `frontend-engineer`, `api-design`, `release-engineering`, `platform-packaging`, `data-quality`, `auth-identity`.
 
 ---
 
