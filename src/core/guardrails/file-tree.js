@@ -1,4 +1,5 @@
 // Auto-split from src/core/guardrail-defs.js - see ./index.js
+/** The file_tree guardrail family. */
 export const FILE_TREE_GUARDRAILS = [
   {
     id: "component-folder-barrel",
@@ -7,14 +8,19 @@ export const FILE_TREE_GUARDRAILS = [
       "Every component folder must have an index.js (or index.ts) that re-exports the public API. The barrel must contain at least one export statement.",
     check: (code, context) => {
       const fileName = context?.fileName || "";
+
       if (!/^index\.(js|ts|jsx|tsx)$/.test(fileName)) {
         return { pass: true, note: "Not a barrel file, skipping" };
       }
+
       const trimmed = (code || "").trim();
+
       if (trimmed.length === 0) {
         return { pass: false, failCount: 1, detail: ["Barrel file is empty"], suggestion: "Add export statements." };
       }
+
       const hasExport = trimmed.includes("export ") || trimmed.includes("module.exports");
+
       return {
         pass: hasExport,
         failCount: hasExport ? 0 : 1,
@@ -35,6 +41,7 @@ export const FILE_TREE_GUARDRAILS = [
       if (!isComponent) {
         return { pass: true, failCount: 0, detail: [], suggestion: "", note: "Not a component file, skipping" };
       }
+
       if (!fileName) {
         return { pass: true, failCount: 0, detail: [], suggestion: "", note: "No filename context, skipping" };
       }
@@ -45,6 +52,7 @@ export const FILE_TREE_GUARDRAILS = [
       }
 
       const isValid = /^_[A-Z][a-zA-Z0-9]*\.\w+$/.test(fileName);
+
       if (isValid) {
         return {
           pass: true,
@@ -67,6 +75,7 @@ export const FILE_TREE_GUARDRAILS = [
       }
 
       const correctName = fileName.startsWith("_") ? fileName : `_${fileName}`;
+
       return {
         pass: false,
         failCount: 1,
@@ -88,7 +97,9 @@ export const FILE_TREE_GUARDRAILS = [
       if (!/^_[A-Z][a-zA-Z0-9]*\.\w+$/.test(fileName)) {
         return { pass: true, note: "Not a component file, skipping" };
       }
+
       const hasExport = /^export\s+(class|function|const)/m.test(code.trim());
+
       if (!hasExport) {
         return {
           pass: false,
@@ -97,6 +108,7 @@ export const FILE_TREE_GUARDRAILS = [
           suggestion: "Add: export class MyComponent extends HTMLElement { ... }",
         };
       }
+
       return { pass: true };
     },
   },
@@ -107,29 +119,35 @@ export const FILE_TREE_GUARDRAILS = [
       "The barrel file's export statements must reference existing component files with the correct _PascalCase names.",
     check: (code, context) => {
       const fileName = context?.fileName || "";
+
       if (!/^index\.(js|ts|jsx|tsx)$/.test(fileName)) {
         return { pass: true, note: "Not a barrel file, skipping" };
       }
 
       const exports = [...code.matchAll(/export\s+\{\s*(\w+)\s*\}\s+from\s+['"]\.\/([^'"]+)['"]/g)];
+
       if (exports.length === 0) {
         return { pass: true, note: "No named exports with relative paths found, skipping" };
       }
 
       const violations = [];
+
       for (const [, exportedName, sourcePath] of exports) {
         // Check that the source path starts with _ and matches PascalCase
         const sourceBase = sourcePath.replace(/\.[a-z]+$/, "");
+
         if (!sourceBase.startsWith("_")) {
           violations.push(
             `Export "${exportedName}" references "${sourcePath}" which does not start with underscore prefix`,
           );
         }
+
         if (!/^_[A-Z]/.test(sourceBase)) {
           violations.push(`Export "${exportedName}" references "${sourcePath}" which is not PascalCase`);
         }
         // Check that the exported name matches the file name
         const expectedFile = `_${exportedName}`;
+
         if (sourceBase !== expectedFile) {
           violations.push(`Export "${exportedName}" should reference "./${expectedFile}" but got "${sourcePath}"`);
         }

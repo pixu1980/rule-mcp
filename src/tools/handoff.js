@@ -25,6 +25,7 @@ const DOCS_DIR = "docs";
  */
 function readAdrs(projectDir) {
   const adrDir = join(projectDir, ADR_DIR);
+
   if (!existsSync(adrDir)) {
     return [];
   }
@@ -32,11 +33,14 @@ function readAdrs(projectDir) {
   try {
     const files = readdirSync(adrDir);
     const adrs = [];
+
     for (const f of files) {
       const m = f.match(/^(\d{3,4})-(.+)\.md$/);
+
       if (!m) {
         continue;
       }
+
       try {
         const content = readFileSync(join(adrDir, f), "utf8");
         const number = parseInt(m[1]);
@@ -69,6 +73,7 @@ function readAdrs(projectDir) {
         /* malformed ADR file - skip */
       }
     }
+
     return adrs.sort((a, b) => b.number - a.number);
   } catch {
     return [];
@@ -80,6 +85,7 @@ function readAdrs(projectDir) {
  */
 function readContextValues(projectDir) {
   const ctxDir = join(projectDir, CONTEXT_DIR);
+
   if (!existsSync(ctxDir)) {
     return {};
   }
@@ -87,17 +93,22 @@ function readContextValues(projectDir) {
   const values = {};
   try {
     const files = readdirSync(ctxDir).filter((f) => f.endsWith(".md"));
+
     for (const f of files) {
       try {
         const content = readFileSync(join(ctxDir, f), "utf8");
         // Extract YAML-like or markdown list items
         const lines = content.split("\n");
+
         for (const line of lines) {
           const m = line.match(/^\*\*(\w+)\*\*:\s*(.+)/);
+
           if (m) {
             values[m[1]] = m[2].trim();
           }
+
           const m2 = line.match(/^- \*\*(\w+)\*\*:\s*(.+)/);
+
           if (m2) {
             values[m2[1]] = m2[2].trim();
           }
@@ -109,6 +120,7 @@ function readContextValues(projectDir) {
   } catch {
     /* context dir unreadable */
   }
+
   return values;
 }
 
@@ -117,11 +129,14 @@ function readContextValues(projectDir) {
  */
 function readProjectIdentity(projectDir) {
   const packagePath = join(projectDir, "package.json");
+
   if (!existsSync(packagePath)) {
     return {};
   }
+
   try {
     const package_ = JSON.parse(readFileSync(packagePath, "utf8"));
+
     return {
       name: package_.name || "",
       description: package_.description || "",
@@ -167,10 +182,13 @@ function compressValue(v, maxLength = 80) {
   if (!v || v === "-") {
     return "-";
   }
+
   const string_ = String(v);
+
   if (string_.length <= maxLength) {
     return string_;
   }
+
   return string_.slice(0, maxLength - 3) + "...";
 }
 
@@ -181,21 +199,27 @@ function priorityScore(key) {
   if (/ADR|decision|arch/i.test(key)) {
     return 100;
   }
+
   if (/PROJECT_TYPE|STACK|BUILD/i.test(key)) {
     return 80;
   }
+
   if (/DOMAIN|ENTITY|PERSONA|FEATURE/i.test(key)) {
     return 60;
   }
+
   if (/VERSION|NODE|TYPESCRIPT/i.test(key)) {
     return 40;
   }
+
   if (/DESCRIPTION|NAME|PITCH/i.test(key)) {
     return 50;
   }
+
   if (/NOTES|CONSTRAINT|NEED/i.test(key)) {
     return 30;
   }
+
   return 10;
 }
 
@@ -216,6 +240,7 @@ function tryExec(command, options = {}) {
  */
 function getGitDiff(projectDir) {
   const gitDir = join(projectDir, ".git");
+
   if (!existsSync(gitDir)) {
     return { summary: "", files: [], diff: "" };
   }
@@ -248,6 +273,7 @@ function getGitDiff(projectDir) {
  */
 function getGitLog(projectDir) {
   const gitDir = join(projectDir, ".git");
+
   if (!existsSync(gitDir)) {
     return "";
   }
@@ -265,6 +291,7 @@ function getGitLog(projectDir) {
  */
 function scanProjectDocs(projectDir) {
   const docsPath = join(projectDir, DOCS_DIR);
+
   if (!existsSync(docsPath)) {
     return { roadmaps: [], changelogs: [], keyDocs: [], scanDate: new Date().toISOString() };
   }
@@ -273,10 +300,12 @@ function scanProjectDocs(projectDir) {
 
   try {
     const entries = readdirSync(docsPath, { withFileTypes: true, recursive: true });
+
     for (const entry of entries) {
       if (!entry.isFile()) {
         continue;
       }
+
       const fullPath = join(entry.parentPath, entry.name);
       const relPath = relative(projectDir, fullPath);
       const isRoadmap = /roadmap|plan/i.test(entry.name);
@@ -358,13 +387,16 @@ function buildHandoff({
       lines.push(`Project: ${identity.name}${identity.version ? ` v${identity.version}` : ""}`);
     } else {
       lines.push("### Project Identity");
+
       if (identity.description) {
         lines.push(`- Description: ${compressValue(identity.description, 150)}`);
       }
+
       if (identity.version) {
         lines.push(`- Version: ${identity.version}`);
       }
     }
+
     lines.push("");
   }
 
@@ -372,11 +404,13 @@ function buildHandoff({
   if (adrs.length > 0) {
     if (isMinimal) {
       lines.push(`ADRs:${adrs.length}`);
+
       for (const a of adrs.slice(0, 3)) {
         lines.push(`- ${String(a.number).padStart(3, "0")}|${a.status}|${compressValue(a.title, 60)}`);
       }
     } else if (isBrief) {
       lines.push(`ADRs (${adrs.length}):`);
+
       for (const a of adrs) {
         lines.push(`- ${String(a.number).padStart(3, "0")}: [${a.status}] ${compressValue(a.title, 80)}`);
       }
@@ -387,12 +421,14 @@ function buildHandoff({
         "| # | Status | Title | Tags | Decision |",
         "|---|--------|-------|------|----------|",
       );
+
       for (const a of adrs) {
         lines.push(
           `| ${String(a.number).padStart(3, "0")} | ${a.status} | ${compressValue(a.title, 60)} | ${a.tags.slice(0, 3).join(", ")} | ${compressValue(a.decision, 100)} |`,
         );
       }
     }
+
     lines.push("");
   } else if (!isMinimal) {
     lines.push("### ADR Log", "*No ADRs recorded yet.*", "");
@@ -400,6 +436,7 @@ function buildHandoff({
 
   // ── Context Values (sorted by priority, then compressed) ──
   const contextEntries = Object.entries(contextValues);
+
   if (contextEntries.length > 0) {
     // Sort by priority score descending
     const sorted = contextEntries.sort((a, b) => priorityScore(b[0]) - priorityScore(a[0]));
@@ -407,9 +444,11 @@ function buildHandoff({
     if (isMinimal) {
       // Compact JSON on one line
       const minimal = {};
+
       for (const [k, v] of sorted.slice(0, 15)) {
         minimal[k] = compressValue(v, 40);
       }
+
       lines.push(`Ctx:${JSON.stringify(minimal)}`);
     } else if (compress) {
       // Compressed: short key=value format, skip _count fields
@@ -422,12 +461,14 @@ function buildHandoff({
     } else {
       // Full table
       lines.push("### Context Snapshot", "");
+
       for (const [k, v] of sorted) {
         if (!k.endsWith("_count")) {
           lines.push(`- \`${k}\`: ${compressValue(v, isBrief ? 50 : 200)}`);
         }
       }
     }
+
     lines.push("");
   }
 
@@ -437,10 +478,13 @@ function buildHandoff({
       lines.push(`Changed:${gitDiff.files.length} files`);
     } else {
       lines.push("### Working Tree Changes (uncommitted)", "", `Changed ${gitDiff.files.length} file(s):`);
+
       for (const f of gitDiff.files) {
         lines.push(`- \`${f}\``);
       }
+
       lines.push("");
+
       if (!compress && gitDiff.unstaged.length > 0) {
         if (tokensaveActive(projectDir)) {
           // Defer to the code graph instead of dumping a raw diff.
@@ -462,22 +506,27 @@ function buildHandoff({
   // ── Docs & Roadmap Scan ──
   if (docsScan && !isMinimal) {
     const hasContent = docsScan.roadmaps.length > 0 || docsScan.changelogs.length > 0;
+
     if (hasContent) {
       lines.push("### Documentation Status", "");
 
       if (docsScan.roadmaps.length > 0) {
         lines.push("**Roadmaps:**");
+
         for (const r of docsScan.roadmaps) {
           lines.push(`- \`${r.path}\` (${r.size}B, last modified: ${r.modified})`);
         }
+
         lines.push("");
       }
 
       if (docsScan.changelogs.length > 0) {
         lines.push("**Changelogs:**");
+
         for (const c of docsScan.changelogs) {
           lines.push(`- \`${c.path}\` (${c.size}B, last modified: ${c.modified})`);
         }
+
         lines.push("");
       }
     }
@@ -485,9 +534,11 @@ function buildHandoff({
     if (docsScan.keyDocs.length > 0 && !isBrief) {
       lines.push("**Key documents:**");
       const sorted = docsScan.keyDocs.sort((a, b) => b.modified.localeCompare(a.modified)).slice(0, 10);
+
       for (const d of sorted) {
         lines.push(`- \`${d.path}\` (${d.size}B, ${d.modified})`);
       }
+
       lines.push("");
     }
   }
@@ -539,6 +590,7 @@ function buildHandoff({
       format: "brief",
     });
   }
+
   if (maxTokens > 0 && tokens > maxTokens && isBrief && !isMinimal) {
     return buildHandoff({
       projectDir,
@@ -589,6 +641,7 @@ export function registerProcessHandoffTool() {
 
       const text = [result.text];
       const modeLabel = arguments_.mode === "close-session" ? "Session Close" : "Handoff";
+
       text.push(
         "---",
         `_${modeLabel}: ${result.stats.format}, ${result.stats.adrs} ADRs, ${result.stats.contextKeys} keys, ${result.stats.lines} lines, ~${result.stats.tokens} tokens._`,

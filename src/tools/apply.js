@@ -19,7 +19,7 @@ import { postProcessFiles } from "../core/post-process.js";
 export { canonicalFilesDigest } from "./gateway.js";
 
 /**
- * Directories that are never a project. The old guard accepted any root the
+ * Directories that are never a project. An earlier guard accepted any root the
  * caller named, so `path: "/"` made every destination "inside the project" and
  * the traversal check could not fail. Refusing implausible roots is what puts
  * a floor under the containment check.
@@ -92,6 +92,7 @@ export function resolveProjectRoot(rootPath) {
   if (root === parse(root).root) {
     throw new Error(`Refused: "${root}" is the filesystem root, not a project root.`);
   }
+
   if (root === realOrSelf(homedir()) || root === resolve(homedir())) {
     throw new Error(`Refused: "${root}" is the home directory, not a project root.`);
   }
@@ -99,11 +100,13 @@ export function resolveProjectRoot(rootPath) {
   // Temp directories are legitimate scaffolding targets even though they sit
   // under /var on macOS, so they are checked before the system-root denylist.
   const temporaryRoots = [resolve(tmpdir()), realOrSelf(tmpdir())];
+
   if (temporaryRoots.some((temporary) => isWithin(root, temporary))) {
     return root;
   }
 
   const real = realOrSelf(root);
+
   for (const system of SYSTEM_ROOTS) {
     if (isWithin(root, system) || isWithin(real, system)) {
       throw new Error(`Refused: "${root}" is a system directory, not a project root.`);
@@ -128,27 +131,32 @@ export function resolveWriteTarget(rootDir, targetPath) {
   if (typeof targetPath !== "string" || targetPath.trim() === "") {
     throw new Error("Refused: empty file path.");
   }
+
   if (targetPath.includes("\0")) {
     throw new Error(`Refused: invalid NUL byte in path "${targetPath}".`);
   }
+
   if (isAbsolute(targetPath) || /^[A-Za-z]:[\\/]/.test(targetPath)) {
     throw new Error(`Refused: "${targetPath}" is an absolute path - file paths must be relative to the project root.`);
   }
 
   const resolved = resolve(rootDir, targetPath);
   const relativePath = relative(rootDir, resolved);
+
   if (relativePath === "" || relativePath.startsWith("..")) {
     throw new Error(`Path traversal blocked: "${targetPath}" escapes project root "${rootDir}".`);
   }
 
-  // Sensitive destinations are judged on the normalised path, so "src/../.git"
+  // Sensitive destinations are judged on the normalized path, so "src/../.git"
   // is refused for the same reason as ".git".
   const segments = relativePath.split(sep).filter(Boolean);
+
   for (const segment of segments) {
     if (PROTECTED_SEGMENTS.has(segment)) {
       throw new Error(`Refused: "${targetPath}" writes into the protected directory "${segment}".`);
     }
   }
+
   if (PROTECTED_NAMES.has(segments.at(-1))) {
     throw new Error(`Refused: "${targetPath}" is a protected file (${segments.at(-1)}).`);
   }
@@ -158,13 +166,17 @@ export function resolveWriteTarget(rootDir, targetPath) {
   // the deepest ancestor that actually exists.
   const realRoot = realOrSelf(rootDir);
   let ancestor = resolved;
+
   while (!existsSync(ancestor)) {
     const parent = dirname(ancestor);
+
     if (parent === ancestor) {
       break;
     }
+
     ancestor = parent;
   }
+
   if (!isWithin(realOrSelf(ancestor), realRoot)) {
     throw new Error(`Refused: "${targetPath}" escapes the project root through a symlink.`);
   }
@@ -248,6 +260,7 @@ export async function registerApplyTool() {
 
       // ── Step 2: Validate each file path ──
       const resolvedPaths = [];
+
       for (const file of files) {
         try {
           const resolved = resolveWriteTarget(rootDir, file.path);

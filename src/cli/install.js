@@ -59,11 +59,14 @@ function writeInstalledManifest(agents, entrypoint, global, mode) {
     "## Installed Agents",
     "",
   ];
+
   for (const name of agents) {
     lines.push(`- [x] ${name}`);
   }
+
   lines.push("", "---", "", `To reinstall: \`rule-mcp install --agent all --mode ${mode}\``);
   writeFileSync(manifestPath, lines.join("\n") + "\n");
+
   return manifestPath;
 }
 
@@ -91,17 +94,20 @@ export const installAgent = ({
   }
 
   const result = {};
+
   for (const name of selected) {
     if (!installers[name]) {
       result[name] = { error: `No installer for "${name}"` };
       continue;
     }
+
     if (normalizedMode !== "stdio" && !remoteModeAgents.has(name)) {
       result[name] = {
         error: `Install mode "${normalizedMode}" is currently supported only for Pi and VS Code; use stdio for ${name}.`,
       };
       continue;
     }
+
     try {
       result[name] = installers[name]({ entrypoint, dryRun, global, mode: normalizedMode });
     } catch (error) {
@@ -110,15 +116,23 @@ export const installAgent = ({
   }
 
   const ok = Object.values(result).every((entry) => !entry?.error);
+
   if (!dryRun) {
     const manifestPath = writeInstalledManifest(selected, entrypoint, global, normalizedMode);
+
     return { ok, dryRun, global, mode: normalizedMode, installed: result, manifest: manifestPath };
   }
+
   return { ok, dryRun, global, mode: normalizedMode, installed: result };
 };
 
 // ─── Uninstallers ───────────────────────────────────────────────────────────
 
+/**
+ * Remove this server's install from one agent.
+ *
+ * @param {{ agent: string, dryRun?: boolean }} args
+ */
 export const uninstallAgent = ({ agent, dryRun = false }) => {
   const selected = agent === "all" ? allAgents : [agent];
 
@@ -127,17 +141,20 @@ export const uninstallAgent = ({ agent, dryRun = false }) => {
   }
 
   const result = {};
+
   for (const name of selected) {
     if (!uninstallers[name]) {
       result[name] = { error: `No uninstaller for "${name}"` };
       continue;
     }
+
     try {
       result[name] = uninstallers[name]({ dryRun });
     } catch (error) {
       result[name] = { error: error.message };
     }
   }
+
   return { ok: true, dryRun, uninstalled: result };
 };
 
@@ -177,6 +194,7 @@ export function detectInstalledAgents() {
     "neovim",
     "emacs",
   ];
+
   for (const name of genericAgents) {
     const agentPath =
       name === "droid" ? join(HOME, ".config", "factory", "mcp.json") : join(HOME, ".config", name, "mcp.json");
@@ -187,9 +205,11 @@ export function detectInstalledAgents() {
     if (!existsSync(path)) {
       return { name, configured: false, configFile: null };
     }
+
     try {
       const content = readFileSync(path, "utf8");
       const configured = key ? content.includes(key) : content.includes(serverName);
+
       return { name, configured, configFile: path };
     } catch {
       return { name, configured: false, configFile: path };

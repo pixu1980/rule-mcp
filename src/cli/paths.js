@@ -273,6 +273,7 @@ export function getSkillsDirs() {
   // fileURLToPath handles Windows drive letters and percent-encoding correctly;
   // URL.pathname would yield a leading "/" and keep "%20" on non-POSIX platforms.
   const embeddedSkills = fileURLToPath(new URL("../../skills", import.meta.url));
+
   return { homeSkills, embeddedSkills };
 }
 
@@ -294,6 +295,7 @@ export function getRepoRoot() {
  */
 export function detectInstallType() {
   const root = getRepoRoot();
+
   try {
     // A git clone can pull; this is the only self-updatable install.
     if (existsSync(join(root, ".git"))) {
@@ -302,11 +304,14 @@ export function detectInstallType() {
   } catch {
     /* ignore */
   }
+
   if (existsSync("/.dockerenv") || process.env.RULE_MCP_DOCKER === "1") {
     return "docker";
   }
+
   if (root.includes(`${sep}node_modules${sep}`) || root.endsWith(`${sep}node_modules`)) {
     return "npm";
   }
+
   return "unknown";
 }

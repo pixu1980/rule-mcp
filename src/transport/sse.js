@@ -55,16 +55,20 @@ const ALLOWED_ORIGINS = new Set();
  */
 function handleCors(req, res) {
   const origin = req.headers.origin;
+
   if (origin && ALLOWED_ORIGINS.has(origin)) {
     res.setHeader("Access-Control-Allow-Origin", origin);
     res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
     res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
   }
+
   if (req.method === "OPTIONS") {
     res.writeHead(204);
     res.end();
+
     return true;
   }
+
   return false;
 }
 
@@ -83,9 +87,11 @@ function checkAuth(req, pathname) {
   }
   // SSE and message endpoints require bearer token
   const auth = req.headers.authorization;
+
   if (!auth) {
     return false;
   }
+
   const expected = `Bearer ${serverToken}`;
   const provided = Buffer.from(auth);
   const wanted = Buffer.from(expected);
@@ -94,6 +100,7 @@ function checkAuth(req, pathname) {
   if (provided.length !== wanted.length) {
     return false;
   }
+
   return timingSafeEqual(provided, wanted);
 }
 
@@ -113,14 +120,17 @@ async function requestHandler(request, res) {
   if (!checkAuth(request, pathname)) {
     res.writeHead(401, { "Content-Type": "application/json" });
     res.end(JSON.stringify({ error: "Unauthorized. Provide Authorization: Bearer <token> header." }));
+
     return;
   }
 
   // Block cross-origin requests on protected endpoints
   const origin = request.headers.origin;
+
   if (origin && !ALLOWED_ORIGINS.has(origin)) {
     res.writeHead(403, { "Content-Type": "application/json" });
     res.end(JSON.stringify({ error: "Cross-origin requests are not allowed." }));
+
     return;
   }
 
@@ -129,6 +139,7 @@ async function requestHandler(request, res) {
     if (request.method === "GET" && parsedUrl.pathname === "/health") {
       res.writeHead(200, { "Content-Type": "application/json" });
       res.end(JSON.stringify({ ok: true, uptime: process.uptime() }));
+
       return;
     }
 
@@ -137,6 +148,7 @@ async function requestHandler(request, res) {
       if (sessions.size >= MAX_SESSIONS) {
         res.writeHead(503, { "Content-Type": "application/json" });
         res.end(JSON.stringify({ error: "Server session limit reached. Close an existing session and retry." }));
+
         return;
       }
       // Each connection owns a server instance. This lets Pi, VS Code, and
@@ -162,6 +174,7 @@ async function requestHandler(request, res) {
         await server.close().catch(() => {});
         throw error;
       }
+
       return;
     }
 
@@ -173,13 +186,17 @@ async function requestHandler(request, res) {
       const maxBytes = MAX_BODY_BYTES;
       for await (const chunk of request) {
         bodyLength += chunk.length;
+
         if (bodyLength > maxBytes) {
           res.writeHead(413, { "Content-Type": "application/json" });
           res.end(JSON.stringify({ error: "Request body too large. Maximum: " + maxBytes + " bytes." }));
+
           return;
         }
+
         buffers.push(chunk);
       }
+
       const body = Buffer.concat(buffers).toString("utf-8");
 
       const sessionId = parsedUrl.searchParams.get("sessionId") ?? "";
@@ -189,18 +206,22 @@ async function requestHandler(request, res) {
       if (!transport) {
         res.writeHead(404, { "Content-Type": "application/json" });
         res.end(JSON.stringify({ error: "No SSE session found for sessionId: " + sessionId }));
+
         return;
       }
 
       // Safe JSON parse with error handling
       const parsed = safeJsonParse(body);
+
       if (!parsed) {
         res.writeHead(400, { "Content-Type": "application/json" });
         res.end(JSON.stringify({ error: "Invalid JSON in request body" }));
+
         return;
       }
 
       await transport.handlePostMessage(request, res, parsed);
+
       return;
     }
 
@@ -214,6 +235,7 @@ async function requestHandler(request, res) {
     process.stderr.write(
       `[rule-mcp] [${requestId}] ${request.method} ${request.url}: ${error?.stack ?? error?.message ?? error}\n`,
     );
+
     if (!res.headersSent) {
       res.writeHead(500, { "Content-Type": "application/json" });
       res.end(JSON.stringify({ error: "Internal server error", requestId }));
@@ -253,11 +275,13 @@ export async function startSseServer(options = {}) {
       readFileSync(resolvedKey);
     } catch {
       const generated = generateSelfSignedCert({ certPath: resolvedCert, keyPath: resolvedKey });
+
       if (!generated) {
         throw new Error(
           `Failed to generate self-signed cert at ${resolvedCert}. Provide valid --ssl-cert and --ssl-key.`,
         );
       }
+
       console.error(`[rule-mcp] Generated self-signed cert: ${resolvedCert}`);
     }
   }
@@ -286,6 +310,7 @@ export async function startSseServer(options = {}) {
     httpServer.on("error", reject);
     httpServer.listen(port, host, () => {
       const addr = httpServer.address();
+
       resolve({ port: addr?.port ?? port, host, token: serverToken });
     });
   });
@@ -306,11 +331,13 @@ export async function stopSseServer() {
     } catch {
       /* ignore */
     }
+
     try {
       await server.close();
     } catch {
       /* ignore */
     }
+
     sessions.delete(id);
   }
 

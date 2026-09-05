@@ -40,6 +40,7 @@ export function generateSelfSignedCert({ certPath, keyPath, commonName = "rule-m
     // `which`/`where` differ per OS, but `openssl version` does not).
     if (!isOpenSslAvailable()) {
       console.error("openssl not found. Install openssl or provide --ssl-cert and --ssl-key manually.");
+
       return false;
     }
 
@@ -48,6 +49,7 @@ export function generateSelfSignedCert({ certPath, keyPath, commonName = "rule-m
 
     if (keyResult.status !== 0) {
       console.error("Failed to generate RSA key:", keyResult.stderr);
+
       return false;
     }
 
@@ -96,12 +98,14 @@ export function generateSelfSignedCert({ certPath, keyPath, commonName = "rule-m
 
     if (certResult.status !== 0) {
       console.error("Failed to generate certificate:", certResult.stderr);
+
       return false;
     }
 
     return true;
   } catch (error) {
     console.error("Failed to generate self-signed cert:", error.message);
+
     return false;
   } finally {
     try {
@@ -120,6 +124,7 @@ export function generateSelfSignedCert({ certPath, keyPath, commonName = "rule-m
 export function isOpenSslAvailable() {
   try {
     const result = spawnSync("openssl", ["version"], { stdio: "pipe", encoding: "utf-8" });
+
     return result.status === 0;
   } catch {
     return false;

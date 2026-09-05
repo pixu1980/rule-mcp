@@ -63,9 +63,11 @@ function buildHelpMessage(name, def, examples = []) {
     "",
     ...def.arguments.map((a) => `  ${a.name}  ${a.description}`),
   ];
+
   if (examples.length > 0) {
     lines.push("", "Examples:", ...examples.map((e) => `  ${e}`));
   }
+
   return lines.join("\n");
 }
 
@@ -84,6 +86,7 @@ function areaPromptText(area, tools) {
     "Validate generated code with `rule_tool_check` and iterate until all guardrails pass.",
     `When the work is done, propose a conventional commit message with a mandatory scope, e.g. "feat(${area}): ...".`,
   ];
+
   return lines.join("\n");
 }
 
@@ -300,7 +303,7 @@ export function listPrompts() {
  * client-side way to hide them. The installer ships clean `/rule-*` user
  * commands for Claude and sets this flag so the prefixed prompt duplicates are
  * not also listed. `listPrompts()` itself stays pure (the full registry) - only
- * `listActivePrompts()` honours the flag.
+ * `listActivePrompts()` honors the flag.
  *
  * @returns {boolean}
  */
@@ -334,10 +337,12 @@ export function getPrompt(name, args = {}) {
   const def = listPrompts().find((p) => p.name === name);
   const primary = def?.arguments?.[0];
   const primaryValue = primary ? args?.[primary.name] : undefined;
+
   if (primaryValue !== undefined && HELP_TOKENS.has(String(primaryValue).trim().toLowerCase())) {
     // Help is returned as a ready-made assistant message: the client displays it
     // immediately instead of asking the model to generate it (no reasoning, no tokens).
     const helpText = name === "rule-handoff" ? HANDOFF_USAGE : buildHelpMessage(name, def, PROMPT_EXAMPLES[name] ?? []);
+
     return {
       name,
       description: `${name} usage`,
@@ -503,6 +508,7 @@ export function getPrompt(name, args = {}) {
     "rule-tdd": areaPromptText("tdd", "pix_test_driven_development"),
     "rule-ui": areaPromptText("ui", "pix_ui_design_system"),
   };
+
   if (AREAS[name]) {
     return { name, description: name, messages: user(AREAS[name]) };
   }

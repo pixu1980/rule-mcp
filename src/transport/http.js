@@ -14,7 +14,7 @@
  *
  * Session lifecycle is stateful: the SDK generates an Mcp-Session-Id on initialize;
  * subsequent requests must carry it. Each session owns its own MCP Server instance
- * so multiple local clients (Pi, VS Code, …) can share one daemon.
+ * so multiple local clients (Pi, VS Code, ...) can share one daemon.
  *
  * Security: bearer token auth (shared with the SSE daemon), cross-origin denial,
  * 1 MB body cap, and the sandbox timeout/error wrapper. Bound to loopback unless
@@ -62,17 +62,21 @@ const ALLOWED_ORIGINS = new Set();
  */
 function handleCors(request, res) {
   const origin = request.headers.origin;
+
   if (origin && ALLOWED_ORIGINS.has(origin)) {
     res.setHeader("Access-Control-Allow-Origin", origin);
     res.setHeader("Access-Control-Allow-Methods", "GET, POST, DELETE, OPTIONS");
     res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization, Mcp-Session-Id, MCP-Protocol-Version");
     res.setHeader("Access-Control-Expose-Headers", "Mcp-Session-Id");
   }
+
   if (request.method === "OPTIONS") {
     res.writeHead(204);
     res.end();
+
     return true;
   }
+
   return false;
 }
 
@@ -85,15 +89,20 @@ function checkAuth(request, pathname) {
   if (pathname === "/health") {
     return true;
   }
+
   const auth = request.headers.authorization;
+
   if (!auth) {
     return false;
   }
+
   const provided = Buffer.from(auth);
   const wanted = Buffer.from(`Bearer ${serverToken}`);
+
   if (provided.length !== wanted.length) {
     return false;
   }
+
   return timingSafeEqual(provided, wanted);
 }
 
@@ -102,6 +111,7 @@ function sendJsonRpcError(res, status, code, message) {
   if (res.headersSent) {
     return;
   }
+
   res.writeHead(status, { "Content-Type": "application/json" });
   res.end(JSON.stringify({ jsonrpc: "2.0", error: { code, message }, id: null }));
 }
@@ -117,13 +127,17 @@ async function readBody(request, res) {
   const buffers = [];
   for await (const chunk of request) {
     bodyLength += chunk.length;
+
     if (bodyLength > MAX_BODY_BYTES) {
       res.writeHead(413, { "Content-Type": "application/json" });
       res.end(JSON.stringify({ error: "Request body too large. Maximum: " + MAX_BODY_BYTES + " bytes." }));
+
       return null;
     }
+
     buffers.push(chunk);
   }
+
   return Buffer.concat(buffers).toString("utf-8");
 }
 
@@ -143,14 +157,17 @@ async function requestHandler(request, res) {
   if (!checkAuth(request, pathname)) {
     res.writeHead(401, { "Content-Type": "application/json" });
     res.end(JSON.stringify({ error: "Unauthorized. Provide Authorization: Bearer <token> header." }));
+
     return;
   }
 
   // Cross-origin denial on protected endpoints (DNS-rebinding hardening)
   const origin = request.headers.origin;
+
   if (origin && !ALLOWED_ORIGINS.has(origin)) {
     res.writeHead(403, { "Content-Type": "application/json" });
     res.end(JSON.stringify({ error: "Cross-origin requests are not allowed." }));
+
     return;
   }
 
@@ -159,12 +176,14 @@ async function requestHandler(request, res) {
     if (request.method === "GET" && pathname === "/health") {
       res.writeHead(200, { "Content-Type": "application/json" });
       res.end(JSON.stringify({ ok: true, uptime: process.uptime() }));
+
       return;
     }
 
     if (pathname !== "/mcp") {
       res.writeHead(404, { "Content-Type": "application/json" });
       res.end(JSON.stringify({ error: "Not found" }));
+
       return;
     }
 
@@ -174,26 +193,34 @@ async function requestHandler(request, res) {
     // ── POST /mcp ──
     if (request.method === "POST") {
       const body = await readBody(request, res);
+
       if (body === null) {
         return;
       } // 413 already sent
       const parsed = safeJsonParse(body);
+
       if (parsed === undefined) {
         sendJsonRpcError(res, 400, -32_700, "Parse error: invalid JSON in request body");
+
         return;
       }
 
       let transport = existing?.transport;
+
       if (!transport) {
         // A new session is only allowed on an initialize request with no session id.
         if (sessionId || !isInitializeRequest(parsed)) {
           sendJsonRpcError(res, 400, -32_000, "Bad Request: no valid session id for a non-initialize request");
+
           return;
         }
+
         if (transports.size >= MAX_SESSIONS) {
           sendJsonRpcError(res, 503, -32_000, "Server session limit reached. Close an existing session and retry.");
+
           return;
         }
+
         const server = createServer();
         transport = new StreamableHTTPServerTransport({
           sessionIdGenerator: () => randomUUID(),
@@ -203,6 +230,7 @@ async function requestHandler(request, res) {
         });
         transport.onclose = () => {
           const sid = transport.sessionId;
+
           if (sid && transports.delete(sid)) {
             void server.close().catch(() => {});
           }
@@ -211,6 +239,7 @@ async function requestHandler(request, res) {
       }
 
       await transport.handleRequest(request, res, parsed);
+
       return;
     }
 
@@ -219,9 +248,12 @@ async function requestHandler(request, res) {
       if (!existing) {
         res.writeHead(404, { "Content-Type": "application/json" });
         res.end(JSON.stringify({ error: "No session found for Mcp-Session-Id." }));
+
         return;
       }
+
       await existing.transport.handleRequest(request, res);
+
       return;
     }
 
@@ -232,6 +264,7 @@ async function requestHandler(request, res) {
     process.stderr.write(
       `[rule-mcp] [${requestId}] ${request.method} ${request.url}: ${error?.stack ?? error?.message ?? error}\n`,
     );
+
     if (!res.headersSent) {
       res.writeHead(500, { "Content-Type": "application/json" });
       res.end(JSON.stringify({ error: "Internal server error", requestId }));
@@ -259,9 +292,11 @@ export async function startHttpServer(options = {}) {
       readFileSync(sslKey);
     } catch {
       const generated = generateSelfSignedCert({ certPath: sslCert, keyPath: sslKey });
+
       if (!generated) {
         throw new Error(`Failed to generate self-signed cert at ${sslCert}. Provide valid --ssl-cert and --ssl-key.`);
       }
+
       console.error(`[rule-mcp] Generated self-signed cert: ${sslCert}`);
     }
   }
@@ -281,6 +316,7 @@ export async function startHttpServer(options = {}) {
     httpServer.on("error", reject);
     httpServer.listen(port, host, () => {
       const addr = httpServer.address();
+
       resolve({ port: addr?.port ?? port, host, token: serverToken });
     });
   });
@@ -299,11 +335,13 @@ export async function stopHttpServer() {
     } catch {
       /* ignore */
     }
+
     try {
       await server.close();
     } catch {
       /* ignore */
     }
+
     transports.delete(id);
   }
 

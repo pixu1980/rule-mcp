@@ -7,7 +7,6 @@
  * @see module:tools/router - registered via registerProcessAdrTool()
  */
 
-// eslint-disable-next-line no-unused-vars
 import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync, appendFileSync } from "node:fs";
 import { join } from "node:path";
 import { z } from "zod/v4";
@@ -37,6 +36,7 @@ function nextAdrNumber(adrDir) {
   try {
     const files = readdirSync(adrDir);
     const nums = files.filter((f) => /^\d{3}-/.test(f)).map((f) => parseInt(f.match(/^(\d{3})-/)[1], 10));
+
     return nums.length > 0 ? Math.max(...nums) + 1 : 1;
   } catch {
     return 1;
@@ -46,6 +46,7 @@ function nextAdrNumber(adrDir) {
 /** Generate ADR filename. */
 function adrFilename(number, title) {
   const slug = slugify(title);
+
   return `${String(number).padStart(3, "0")}-${slug}.md`;
 }
 
@@ -76,9 +77,11 @@ function generateAdr({ number, title, status, context, decision, consequences, a
 
   if (alternatives?.length > 0) {
     lines.push("## Alternatives Considered", "");
+
     for (const alt of alternatives) {
       lines.push(`1. ${alt}`);
     }
+
     lines.push("");
   }
 
@@ -99,12 +102,14 @@ function updateAdrIndex(adrDir, entries) {
 
   // Sort by number descending (newest first)
   const sorted = [...entries].sort((a, b) => b.number - a.number);
+
   for (const e of sorted) {
     const file = e.file || adrFilename(e.number, e.title);
     lines.push(
       `| [${String(e.number).padStart(3, "0")}](${file}) | ${e.title} | ${e.date} | ${e.status} | ${e.tags.join(", ")} |`,
     );
   }
+
   lines.push("");
 
   writeFileSync(indexFile, lines.join("\n"));
@@ -118,8 +123,10 @@ function listExistingAdrs(adrDir) {
   try {
     const files = readdirSync(adrDir);
     const adrs = [];
+
     for (const f of files) {
       const m = f.match(/^(\d{3})-(.+)\.md$/);
+
       if (m) {
         const content = readFileSync(join(adrDir, f), "utf8");
         const title = content.match(/^# \d{3}: (.+)$/m)?.[1] || m[2].replaceAll("-", " ");
@@ -133,6 +140,7 @@ function listExistingAdrs(adrDir) {
         adrs.push({ file: f, number: parseInt(m[1]), title, date, status, tags });
       }
     }
+
     return adrs;
   } catch {
     return [];
@@ -216,11 +224,13 @@ export function registerProcessAdrTool() {
    */
   const autoLog = async (toolName, arguments_, result) => {
     const testProcess = process.argv.some((argument) => /(?:^|[\\/])test[\\/]/.test(argument));
+
     if (process.env.RULE_MCP_DISABLE_AUTO_ADR === "1" || process.env.NODE_ENV === "test" || testProcess) {
       return;
     }
 
     const relevant = ["pix_tool", "rule_tool_scaffold", "rule_tool_detect", "rule_tool_fix"];
+
     if (!relevant.includes(toolName)) {
       return;
     }
@@ -251,12 +261,15 @@ export function registerProcessAdrTool() {
         try {
           const resultText = result?.content?.[0]?.text || "{}";
           const parsed = JSON.parse(resultText);
+
           if (parsed.route) {
             route = parsed.route;
           }
+
           if (parsed.confidence) {
             confidence = String(parsed.confidence);
           }
+
           if (parsed.alternatives?.length > 0) {
             alternatives = parsed.alternatives
               .slice(0, 3)
@@ -270,9 +283,11 @@ export function registerProcessAdrTool() {
         title = `Skill routing: ${prompt.slice(0, 80)}`;
         tags = "tool, auto-log, routing";
         contextLines = [`Prompt: "${prompt}"`, `Routed to: **${route}** (confidence: ${confidence})`];
+
         if (alternatives) {
           contextLines.push(`Alternatives: ${alternatives}`);
         }
+
         decisionLines = [`Use \`${route}\` for this task.`];
 
         break;
@@ -294,6 +309,7 @@ export function registerProcessAdrTool() {
         } catch {
           /* result may not be valid JSON */
         }
+
         contextLines = [`Path: ${arguments_.path || "."}`, `Detected framework: ${framework}`];
         decisionLines = [`Use ${framework} tooling for this project.`];
 

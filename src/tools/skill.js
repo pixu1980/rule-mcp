@@ -1,7 +1,7 @@
 import { z } from "zod/v4";
-// eslint-disable-next-line no-unused-vars
 import { registerTool, readSkill, getSkillNames, isPluginSkill, hasPluginJs } from "./router.js";
-import { getGuardrailsReport, checkCode } from "../core/guardrails.js";
+import { getGuardrailsReport } from "../core/guardrails.js";
+import { checkCodeGuarded } from "../core/guardrails-guarded.js";
 import { extractScaffoldSection, extractSingleScaffoldFile } from "../core/scaffold-parser.js";
 
 /**
@@ -43,17 +43,23 @@ export function registerSkillTool(skillName) {
       const mode = arguments_.mode || "full";
       const query = (arguments_.query || "").toLowerCase();
       const content = readSkill(skillName) || "Skill not found.";
+
       if (mode === "scaffold" && isStyleguides) {
         const scaffoldSection = extractScaffoldSection(content);
+
         if (arguments_.file) {
           return extractSingleScaffoldFile(scaffoldSection, arguments_.file);
         }
+
         return { content: [{ type: "text", text: "# Project Scaffolding\n\n" + scaffoldSection }] };
       }
+
       if (mode === "guardrails") {
         const gr = getGuardrailsReport(skillName, arguments_.mode);
+
         return { content: [{ type: "text", text: gr }] };
       }
+
       if (mode === "check") {
         if (!arguments_.code) {
           return {
@@ -61,7 +67,8 @@ export function registerSkillTool(skillName) {
             content: [{ type: "text", text: "mode=check requires a `code` argument with the code to validate." }],
           };
         }
-        const result = checkCode(skillName, arguments_.code, {
+
+        const result = await checkCodeGuarded(skillName, arguments_.code, {
           fileName: arguments_.fileName,
           isComponent: arguments_.isComponent,
           framework: arguments_.framework,
@@ -77,37 +84,47 @@ export function registerSkillTool(skillName) {
           "Failed: " + result.failCount + "/" + result.total,
           "",
         ];
+
         for (const f of result.failed) {
           lines.push("## ❌ " + f.id + ": " + f.label);
+
           if (f.failCount > 0) {
             lines.push("Violations: " + f.failCount);
           }
+
           if (f.detail.length > 0) {
             lines.push("Details: " + f.detail.join(", "));
           }
+
           lines.push("Fix: " + f.suggestion, "");
         }
+
         if (result.allPass) {
           lines.push("✅ All guardrails pass. Code is rule-compliant.");
         }
+
         return {
           isError: !result.allPass,
           content: [{ type: "text", text: lines.join("\n") }],
           _meta: { pixGuardrails: result },
         };
       }
+
       if (mode === "summary") {
         const lines = content.split("\n").slice(0, 30);
+
         return {
           content: [{ type: "text", text: "# " + skillName + " (summary)\n\n" + lines.join("\n") + "\n\n..." }],
         };
       }
+
       if (mode === "search" && query) {
         const lines = content.split("\n");
         const matches = lines
           .map((l, index) => ({ i: index + 1, t: l }))
           .filter((l) => l.t.toLowerCase().includes(query))
           .slice(0, 20);
+
         return {
           content: [
             {
@@ -123,9 +140,11 @@ export function registerSkillTool(skillName) {
           ],
         };
       }
+
       if (mode === "tldr") {
         // BM25-compressed: return only relevant sections
         const { search, buildIndex, isIndexReady } = await import("../core/bm25.js");
+
         if (!isIndexReady()) {
           buildIndex();
         }
@@ -135,17 +154,23 @@ export function registerSkillTool(skillName) {
               .filter((r) => r.skill === skillName)
               .slice(0, 5)
           : [];
+
         if (results.length > 0) {
           const lines = ["# " + skillName + " (TLDR)", ""];
+
           for (const r of results) {
             const snippet = r.snippet.length > 300 ? r.snippet.slice(0, 300) + "..." : r.snippet;
             lines.push("## " + r.section + " _(score: " + r.score + ")", "", snippet, "");
           }
+
           lines.push("---", "Full skill: call `pix_" + displayName + "` mode=full");
+
           return { content: [{ type: "text", text: lines.join("\n") }] };
         }
+
         return { content: [{ type: "text", text: "# " + skillName + " (TLDR)\n\nNo relevant sections found." }] };
       }
+
       return { content: [{ type: "text", text: "# " + skillName + "\n\n" + content }] };
     },
   });
@@ -160,8 +185,10 @@ export function registerSearchTool() {
     if (!_bm25) {
       _bm25 = await import("../core/bm25.js");
     }
+
     return _bm25;
   }
+
   const SearchSchema = z.object({
     query: z.string().describe("Search query to find across all rule skills"),
     maxResults: z.number().int().min(1).max(100).default(10).describe("Maximum number of ranked results"),
@@ -179,6 +206,7 @@ export function registerSearchTool() {
       // Stats line for diagnostics
       const stats = getIndexStats();
       const results = search(arguments_.query, arguments_.maxResults || 10);
+
       if (!results || results.length === 0) {
         return {
           content: [
@@ -196,10 +224,12 @@ export function registerSearchTool() {
         `Index: ${stats ? `${stats.totalDocs} sections, ${stats.uniqueTerms} unique terms, avg ${stats.avgDocLength} terms/doc` : ""}`,
         "",
       ];
+
       for (const r of results) {
         const snippet = r.snippet.length > 150 ? r.snippet.slice(0, 150) + "..." : r.snippet;
         lines.push(`### ${r.skill} \u{2192} ${r.section} _(score: ${r.score})_`, "", `${snippet}`, "");
       }
+
       return { content: [{ type: "text", text: lines.join("\n") }] };
     },
   });
@@ -224,13 +254,15 @@ export function registerCheckTool() {
     zodSchema: CheckSchema,
     handler: async (arguments_) => {
       const { skill, code, fileName, isComponent, framework, mode, allowedDependencies } = arguments_;
+
       if (!readSkill(skill)) {
         return {
           isError: true,
           content: [{ type: "text", text: "Unknown skill: " + skill + ". Available: " + getSkillNames().join(", ") }],
         };
       }
-      const result = checkCode(skill, code, {
+
+      const result = await checkCodeGuarded(skill, code, {
         fileName,
         isComponent,
         framework,
@@ -241,26 +273,33 @@ export function registerCheckTool() {
       const lines = ["# Guardrail check: " + skill, ""];
       // Summary line
       const summaryParts = [];
+
       if (result.failCount > 0) {
         summaryParts.push("❌ " + result.failCount + " FAILING");
       }
+
       if (result.passCount > 0) {
         summaryParts.push("✅ " + result.passCount + " passing");
       }
+
       if (result.skippedCount > 0) {
         summaryParts.push("⏩ " + result.skippedCount + " skipped (from previous)");
       }
+
       lines.push("**" + summaryParts.join(", ") + "** (" + result.total + " total)", "");
       // Show NEW failures only (failures from current code, not skipped ones)
       if (result.failed.length > 0) {
         for (const f of result.failed) {
           lines.push("## ❌ " + f.id + ": " + f.label);
+
           if (f.failCount > 0) {
             lines.push("- Violations: " + f.failCount);
           }
+
           if (f.detail.length > 0) {
             lines.push("- Details: `" + f.detail.join("`, `") + "`");
           }
+
           lines.push("- Fix: " + f.suggestion, "");
         }
       } else if (result.allPass) {
@@ -269,13 +308,16 @@ export function registerCheckTool() {
       // Show skipped count if any
       if (result.skippedCount > 0) {
         lines.push("### Skipped (previously passed)", "");
+
         for (const s of result.skipped) {
           lines.push("- ✅ " + s.id + ": " + s.label);
         }
+
         lines.push("");
       }
       // Re-check hint: emit the passing set so the model can use it on next iteration
       const newPassed = result.previousPassed || [];
+
       if (!result.allPass) {
         lines.push(
           "---",
@@ -288,6 +330,7 @@ export function registerCheckTool() {
         );
         lines.push(newPassed.join(", "), "```");
       }
+
       return {
         isError: !result.allPass,
         content: [{ type: "text", text: lines.join("\n") }],
@@ -321,8 +364,10 @@ export function registerScaffoldTool() {
     zodSchema: ScaffoldSchema,
     handler: async (arguments_) => {
       const mode = arguments_.mode || "generate";
+
       if (mode === "list") {
         const list = SCAFFOLD_FILES.map((f) => "- `" + f.name + "`: " + f.description).join("\n");
+
         return {
           content: [
             {
@@ -335,27 +380,34 @@ export function registerScaffoldTool() {
           ],
         };
       }
+
       if (mode === "validate") {
         const { existsSync } = await import("node:fs");
         const { join } = await import("node:path");
         const dir = arguments_.projectDir || ".";
         const results = [];
+
         for (const f of SCAFFOLD_FILES) {
           const path = join(dir, f.name);
           const exists = existsSync(path);
           results.push("- " + (exists ? "✅" : "❌") + " `" + f.name + "`: " + (exists ? "found" : "missing"));
         }
+
         return { content: [{ type: "text", text: "# Scaffold Validation: " + dir + "\n\n" + results.join("\n") }] };
       }
       // mode === "generate"
       const content = readSkill("rule-styleguide");
+
       if (!content) {
         return { isError: true, content: [{ type: "text", text: "rule-styleguide skill not found." }] };
       }
+
       const scaffoldSection = extractScaffoldSection(content);
+
       if (arguments_.file) {
         return extractSingleScaffoldFile(scaffoldSection, arguments_.file);
       }
+
       return { content: [{ type: "text", text: "# Project Scaffolding\n\n" + scaffoldSection }] };
     },
   });

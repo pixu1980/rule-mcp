@@ -34,6 +34,7 @@ export function getSdkVersion() {
   try {
     const sdkPackagePath = new URL("../../node_modules/@modelcontextprotocol/sdk/package.json", import.meta.url);
     const sdkPackage = JSON.parse(readFileSync(sdkPackagePath, "utf8"));
+
     return sdkPackage.version || "unknown";
   } catch {
     return "unknown";
@@ -61,6 +62,7 @@ function validateAgentConfigs(agents) {
         try {
           const json = JSON.parse(content);
           const mcpEntry = json.servers?.["rule-mcp"];
+
           return {
             ...agent,
             validated: !!mcpEntry,
@@ -78,6 +80,7 @@ function validateAgentConfigs(agents) {
         try {
           const json = JSON.parse(content);
           const mcpEntry = json.mcpServers?.["rule-mcp"];
+
           return {
             ...agent,
             validated: !!mcpEntry,
@@ -94,6 +97,7 @@ function validateAgentConfigs(agents) {
         try {
           const json = JSON.parse(content);
           const mcpEntry = json.mcpServers?.["rule-mcp"];
+
           return {
             ...agent,
             validated: !!mcpEntry,
@@ -151,6 +155,7 @@ function detectIdeConfigs() {
     if (typeof ok === "boolean") {
       return { name, configured: ok, configFile: null, detail };
     }
+
     return {
       name,
       configured: existsSync(path),
@@ -198,6 +203,7 @@ function detectStoredModelKeys() {
   return keyFiles.map((file) => {
     const fullPath = join(configDir, file);
     const exists = existsSync(fullPath);
+
     return {
       provider: file
         .replace("-key", "")
@@ -248,6 +254,7 @@ function agentIcon(agent) {
   if (!agent.configured) {
     return color("○", "dim");
   }
+
   return agent.validated === false ? color("⚠️", "yellow") : color("✅", "green");
 }
 
@@ -257,7 +264,8 @@ function yesNo(value) {
 
 function truncate(value, max = 96) {
   const text = String(value ?? "");
-  return text.length > max ? text.slice(0, max - 1) + "…" : text;
+
+  return text.length > max ? text.slice(0, max - 1) + "..." : text;
 }
 
 /**
@@ -287,7 +295,7 @@ export function formatDoctorTerminal(report) {
     "",
     section("MCP Tools", "🧰"),
     `Registered:  ${color((report.tools || []).length, "green")}`,
-    `Examples:    ${sampleTools.map((tool) => color(tool, "cyan")).join(", ")}${(report.tools || []).length > sampleTools.length ? color(", …", "dim") : ""}`,
+    `Examples:    ${sampleTools.map((tool) => color(tool, "cyan")).join(", ")}${(report.tools || []).length > sampleTools.length ? color(", ...", "dim") : ""}`,
     "",
     section("Agents", "🤖"),
     `Configured:  ${color(report.agentsConfigured, "green")}/${report.agentsTotal}`,
@@ -298,12 +306,14 @@ export function formatDoctorTerminal(report) {
       `  ${agentIcon(agent)} ${color(agent.name.padEnd(12), agent.validated === false ? "yellow" : "bold")} ${color(truncate(agent.configFile || "", 90), "dim")}`,
     );
   }
+
   if (configuredAgents.length > 12) {
-    lines.push(color(`  … ${configuredAgents.length - 12} more configured agents`, "dim"));
+    lines.push(color(`  ... ${configuredAgents.length - 12} more configured agents`, "dim"));
   }
+
   if (missingAgents.length > 0) {
     lines.push(
-      `⚠️  ${color("Missing", "yellow")}: ${missingAgents.map((agent) => color(agent, "yellow")).join(", ")}${(report.unconfigured || []).length > missingAgents.length ? color(", …", "dim") : ""}`,
+      `⚠️  ${color("Missing", "yellow")}: ${missingAgents.map((agent) => color(agent, "yellow")).join(", ")}${(report.unconfigured || []).length > missingAgents.length ? color(", ...", "dim") : ""}`,
     );
   }
 
@@ -338,7 +348,6 @@ export function formatDoctorTerminal(report) {
 
 export async function runDoctor(telemetry = false) {
   const p = getRuntimePaths();
-  // eslint-disable-next-line no-unused-vars
   const __dirname = fileURLToPath(new URL(".", import.meta.url));
   const package_ = JSON.parse(readFileSync(new URL("../../package.json", import.meta.url), "utf8"));
 
@@ -375,6 +384,7 @@ export async function runDoctor(telemetry = false) {
   } catch {
     /* surface probe is best-effort */
   }
+
   const { readdirSync } = await import("node:fs");
   try {
     surface.skills = readdirSync(new URL("../../skills", import.meta.url)).filter((d) => d.startsWith("rule-")).length;
@@ -385,6 +395,7 @@ export async function runDoctor(telemetry = false) {
   // Daemon status
   let isDaemonRunning = false;
   let daemonPid = null;
+
   if (existsSync(p.pidFile)) {
     try {
       const pid = Number(readFileSync(p.pidFile, "utf8").trim());

@@ -32,6 +32,7 @@ const GalaxySchema = z.object({
 function extractSections(content) {
   let body = content;
   const fmMatch = body.match(/^---\s*\n[\s\S]*?\n---\s*\n/);
+
   if (fmMatch) {
     body = body.slice(fmMatch[0].length);
   }
@@ -44,10 +45,12 @@ function extractSections(content) {
   for (const line of lines) {
     const h2Match = line.match(/^##\s+(.+)/);
     const h3Match = h2Match ? null : line.match(/^###\s+(.+)/);
+
     if (h2Match) {
       if (currentContent.length > 0) {
         sections.push({ heading: currentHeading, content: currentContent.join("\n") });
       }
+
       currentHeading = h2Match[1].trim();
       currentContent = [];
     } else if (h3Match) {
@@ -55,12 +58,14 @@ function extractSections(content) {
       if (currentContent.length > 0) {
         sections.push({ heading: currentHeading, content: currentContent.join("\n") });
       }
+
       currentHeading = h3Match[1].trim();
       currentContent = [];
     } else {
       currentContent.push(line);
     }
   }
+
   if (currentContent.length > 0) {
     sections.push({ heading: currentHeading, content: currentContent.join("\n") });
   }
@@ -197,11 +202,13 @@ const MULTILINGUAL_ALIASES = {
 function expandPrompt(prompt) {
   const lower = prompt.toLowerCase();
   const aliases = [];
+
   for (const [native, en] of Object.entries(MULTILINGUAL_ALIASES)) {
     if (lower.includes(native)) {
       aliases.push(en);
     }
   }
+
   return aliases.length > 0 ? prompt + " " + aliases.join(" ") : prompt;
 }
 
@@ -221,9 +228,11 @@ function scoreSectionWord(section, word, skillBase, descText) {
   if (wordPattern.test(headingText)) {
     return weight * 3;
   }
+
   if (wordPattern.test(contentText)) {
     return weight;
   }
+
   return 0;
 }
 
@@ -240,8 +249,10 @@ function scoreSkill(sections, meta, promptWords, skillName) {
     }
 
     let wordScore = 0;
+
     for (const section of sections) {
       const w = scoreSectionWord(section, word, skillBase, descText);
+
       if (w > wordScore) {
         wordScore = w;
       }
@@ -261,6 +272,7 @@ function scoreSkill(sections, meta, promptWords, skillName) {
 
 function extractTopSections(skillName, promptWords) {
   const content = readSkill(skillName);
+
   if (!content) {
     return [];
   }
@@ -273,12 +285,15 @@ function extractTopSections(skillName, promptWords) {
   const scored = sections
     .map((s) => {
       let score = 0;
+
       for (const word of promptWords) {
         if (STOPWORDS.has(word)) {
           continue;
         }
+
         score += scoreSectionWord(s, word, skillBase, descText);
       }
+
       return { heading: s.heading, score };
     })
     .filter((s) => s.score > 0)
@@ -290,6 +305,7 @@ function extractTopSections(skillName, promptWords) {
     const hasMeta = promptWords.some(
       (w) => !STOPWORDS.has(w) && (descText.includes(w) || (meta.tags || []).join(" ").toLowerCase().includes(w)),
     );
+
     if (hasMeta) {
       return ["(matches skill description)"];
     }
@@ -304,13 +320,17 @@ function skillNextTools(skillName) {
   const suggestions = [];
   const base = skillName.replace(/^rule-/, "").replaceAll("-", "_");
   suggestions.push(`rule_tool_${base}`);
+
   if (skillName === "rule-styleguide") {
     suggestions.push("rule_tool_scaffold");
   }
+
   suggestions.push("rule_tool_check", "rule_tool_search");
+
   if (skillName !== "rule-frontend-vanilla-reactive") {
     suggestions.push("rule_tool_component");
   }
+
   return suggestions;
 }
 
@@ -330,6 +350,7 @@ export function registerAiTool() {
       const allSkills = getSkillNames();
       const skills = allSkills.filter((skillName) => skillName !== "rule");
       const prompt = expandPrompt((arguments_.prompt || "").trim());
+
       if (!prompt) {
         return {
           content: [
@@ -429,23 +450,29 @@ export function registerAiTool() {
         if (g >= 2 || g > f + b + d) {
           return "git";
         }
+
         if (a >= 2 || a > b + f + d) {
           return "ai";
         }
+
         if (b >= 2 || b > f + d) {
           return "backend";
         }
+
         if (d >= 2 || d > b + f) {
           return "data";
         }
+
         if (o >= 2) {
           return "devops";
         }
+
         return null; // unknown, use full scoring
       })();
 
       // Detect framework from args
       let detectedFramework = arguments_.framework;
+
       if (!detectedFramework && arguments_.path) {
         try {
           const profile = detectProject(arguments_.path);
@@ -478,6 +505,7 @@ export function registerAiTool() {
 
       for (const skillName of skills) {
         const content = readSkill(skillName);
+
         if (!content) {
           continue;
         }

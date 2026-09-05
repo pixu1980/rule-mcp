@@ -31,19 +31,24 @@ export const getSseTokenFile = () => join(getRuntimePaths().stateDir, "sse-token
  */
 export function getOrCreateSseBearerToken() {
   const environmentToken = process.env[SSE_TOKEN_ENV];
+
   if (environmentToken !== undefined) {
     if (!TOKEN_PATTERN.test(environmentToken)) {
       throw new Error(`${SSE_TOKEN_ENV} must be a 64-character hexadecimal token`);
     }
+
     return environmentToken;
   }
 
   const tokenFile = getSseTokenFile();
+
   if (existsSync(tokenFile)) {
     const token = readFileSync(tokenFile, "utf8").trim();
+
     if (!TOKEN_PATTERN.test(token)) {
       throw new Error(`Invalid SSE bearer token at ${tokenFile}`);
     }
+
     return token;
   }
 
@@ -57,17 +62,20 @@ export function getOrCreateSseBearerToken() {
 
   const token = randomBytes(32).toString("hex");
   const temporaryFile = `${tokenFile}.${process.pid}.tmp`;
+
   writeFileSync(temporaryFile, `${token}\n`, { encoding: "utf8", mode: 0o600 });
   try {
     chmodSync(temporaryFile, 0o600);
   } catch {
     /* Windows or unsupported filesystem */
   }
+
   renameSync(temporaryFile, tokenFile);
   try {
     chmodSync(tokenFile, 0o600);
   } catch {
     /* Windows or unsupported filesystem */
   }
+
   return token;
 }

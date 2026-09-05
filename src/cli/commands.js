@@ -8,9 +8,7 @@
  * @see module:index - CLI entry point that dispatches to these commands
  */
 
-// eslint-disable-next-line no-unused-vars
 import { spawn, execSync } from "node:child_process";
-// eslint-disable-next-line no-unused-vars
 import { appendFileSync, existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { resolve, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -41,7 +39,6 @@ import {
   formatDaemonStatus,
   startDaemonProcess,
   stopDaemonProcess,
-  // eslint-disable-next-line no-unused-vars
   daemonProcessStatus,
   detectPlatform,
   getServiceFilePath,
@@ -77,6 +74,11 @@ export function helpCommand() {
   print(HELP_TEXT);
 }
 
+/**
+ * The serve subcommand: start the MCP server over the chosen transport.
+ *
+ * @param {object} [opts]
+ */
 export async function serveCommand(opts = {}) {
   await loadAllSkills();
   const transport = opts.transport ?? "stdio";
@@ -154,15 +156,18 @@ export function daemonCommand(opts) {
     case "install": {
       print(`Installing ${detectPlatform()} daemon service...`);
       const result = installDaemonService({ dryRun });
+
       if (result.ok) {
         switch (result.platform) {
           case "macos": {
             print(`✓ LaunchAgent created: ${result.result.path}`);
             print(`  The daemon should now appear in:`);
             print(`    System Settings → General → Login Items & Extensions`);
+
             if (result.result.action === "loaded") {
               print(`  ✓ launchctl loaded the service (it will start at next login)`);
               const svcName = getServiceName();
+
               if (svcName) {
                 print(`  To start now: launchctl start ${svcName}`);
               }
@@ -172,6 +177,7 @@ export function daemonCommand(opts) {
           }
           case "linux": {
             print(`✓ systemd unit created: ${result.result.path}`);
+
             if (result.result.action === "enabled-and-started") {
               print(`  ✓ Service enabled and started`);
             }
@@ -180,6 +186,7 @@ export function daemonCommand(opts) {
           }
           case "windows": {
             print(`✓ Windows service created: ${result.result.name}`);
+
             if (result.result.action.includes("started")) {
               print(`  ✓ Service started`);
             }
@@ -193,26 +200,32 @@ export function daemonCommand(opts) {
       } else {
         print(`✗ Failed: ${result.result.error || "unknown error"}`);
       }
+
       break;
     }
     case "uninstall": {
       print(`Removing ${detectPlatform()} daemon service...`);
       const result = uninstallDaemonService({ dryRun });
+
       if (result.ok) {
         print(`✓ ${result.service} service removed (${result.result.action})`);
       } else {
         print(`✗ Failed: ${result.result.error || "unknown error"}`);
       }
+
       break;
     }
     case "enable": {
       const svcPath = getServiceFilePath();
       const svcName = getServiceName();
+
       if (!svcPath) {
         print("No native service file for this platform. Try: rule-mcp daemon install");
         break;
       }
+
       print(`Enabling service: ${svcName}`);
+
       if (detectPlatform() === "macos") {
         tryExec(`launchctl load -w "${svcPath}"`);
         print(`✓ Service loaded (${svcPath})`);
@@ -226,16 +239,20 @@ export function daemonCommand(opts) {
         tryExec(`sc start "${svcName}"`);
         print(`✓ Service enabled and started`);
       }
+
       break;
     }
     case "disable": {
       const svcPath = getServiceFilePath();
       const svcName = getServiceName();
+
       if (!svcPath) {
         print("No native service file for this platform. Try: rule-mcp daemon uninstall");
         break;
       }
+
       print(`Disabling service: ${svcName}`);
+
       if (detectPlatform() === "macos") {
         tryExec(`launchctl unload -w "${svcPath}"`);
         print(`✓ Service unloaded (${svcPath})`);
@@ -249,12 +266,15 @@ export function daemonCommand(opts) {
         tryExec(`sc config "${svcName}" start= demand`);
         print(`✓ Service stopped and disabled`);
       }
+
       break;
     }
     case "start": {
       const nativeStatus = checkDaemonService();
+
       if (nativeStatus.installed && detectPlatform() !== "unknown") {
         print(`Using native service (${nativeStatus.service})`);
+
         if (detectPlatform() === "macos") {
           tryExec(`launchctl start ${getServiceName()}`);
           print(`✓ Service started via launchctl`);
@@ -265,10 +285,12 @@ export function daemonCommand(opts) {
           tryExec(`sc start "${getServiceName()}"`);
           print(`✓ Service started via sc`);
         }
+
         break;
       }
       // Fallback to process daemon
       const proc = startDaemonProcess({ dryRun });
+
       if (proc.pid) {
         print(`Daemon started (pid ${proc.pid})`);
       } else if (proc.action === "already-running") {
@@ -276,10 +298,12 @@ export function daemonCommand(opts) {
       } else {
         print(`Daemon: ${proc.action}`);
       }
+
       break;
     }
     case "stop": {
       const nativeStatus = checkDaemonService();
+
       if (nativeStatus.installed && detectPlatform() !== "unknown") {
         if (detectPlatform() === "macos") {
           tryExec(`launchctl kill SIGTERM ${getServiceName()}`);
@@ -288,6 +312,7 @@ export function daemonCommand(opts) {
         } else if (detectPlatform() === "windows") {
           tryExec(`sc stop "${getServiceName()}"`);
         }
+
         print(`✓ Service stopped`);
         break;
       }
@@ -303,8 +328,10 @@ export function daemonCommand(opts) {
     case "logs": {
       if (!existsSync(p.logFile)) {
         print("No logs yet");
+
         return;
       }
+
       print(readFileSync(p.logFile, "utf8"));
       break;
     }
@@ -335,6 +362,7 @@ export function installCommand(opts) {
   } else {
     print(formatInstallResult(result));
   }
+
   if (!result.ok) {
     process.exitCode = 1;
   }
@@ -348,6 +376,7 @@ export function installCommand(opts) {
  */
 export function uninstallCommand(opts) {
   const result = uninstallFromAgent({ agent: opts.agent, dryRun: opts.dryRun });
+
   if (opts.json) {
     printJson(result);
   } else {
@@ -366,6 +395,7 @@ export async function toolsCommand(opts) {
 
   if (subcommand === "list") {
     const tools = listTools().map((t) => ({ name: t.name, description: t.description }));
+
     if (opts.jsonOutput) {
       printJson(tools);
     } else {
@@ -418,11 +448,14 @@ export function configureCommand(opts = {}) {
   if (opts.list) {
     const saved = readEnvironmentConfig();
     const lines = ["Current RULE_MCP_* environment variables:", ""];
+
     for (const [key, meta] of Object.entries(RULE_MCP_VARS)) {
       const value = saved[key] || "(not set)";
       lines.push(`  ${key}=${value}`, `    ${meta.desc}`, `    Values: ${meta.values}`, "");
     }
+
     print(lines.join("\n"));
+
     return;
   }
 
@@ -431,20 +464,26 @@ export function configureCommand(opts = {}) {
     delete saved[opts.unset];
     writeEnvironmentConfig(saved);
     print(`Unset ${opts.unset}`);
+
     return;
   }
 
   if (opts.set && opts.set.length > 0) {
     const environment = {};
+
     for (const pair of opts.set) {
       const eqIndex = pair.indexOf("=");
+
       if (eqIndex < 1) {
         throw new Error(`Invalid env format: "${pair}". Use KEY=VALUE.`);
       }
+
       environment[pair.slice(0, eqIndex)] = pair.slice(eqIndex + 1);
     }
+
     writeEnvironmentConfig(environment);
     print(`Saved ${Object.keys(environment).length} environment variable(s).`);
+
     return;
   }
 
@@ -462,8 +501,10 @@ export function configureCommand(opts = {}) {
       writeEnvironmentConfig(saved);
       print("");
       print(`Configuration saved. Run "rule configure --list" to review.`);
+
       return;
     }
+
     const key = keys[index];
     const meta = RULE_MCP_VARS[key];
     const current = saved[key] || "";
@@ -471,6 +512,7 @@ export function configureCommand(opts = {}) {
       if (answer.trim()) {
         saved[key] = answer.trim();
       }
+
       index++;
       ask();
     });
@@ -495,10 +537,12 @@ export async function doctorCommand(options = {}) {
 
   if (isJson) {
     printJson(report);
+
     return;
   }
 
   print(formatDoctorTerminal(report));
+
   if (jsonOut) {
     print(`JSON exported to ${resolve(jsonOut)}`);
   }
@@ -520,15 +564,19 @@ export async function updateCommand() {
   const { runSelfUpdate, buildBanner, scheduleRestartIfNeeded } = await import("../core/self-update.js");
   const result = await runSelfUpdate({ reloadSkills: false });
   const banner = buildBanner(result);
+
   if (banner) {
     print(banner);
   } else if (result.updated === false && !result.skipped) {
     print("✅ Already up to date.");
   }
+
   if (result.skipped) {
     print(`Skipped: ${result.reason}${result.note ? ` - ${result.note}` : ""}`);
   }
+
   const restart = scheduleRestartIfNeeded(result, () => {});
+
   if (restart) {
     print(restart);
   }
@@ -583,10 +631,13 @@ function resolvedTargets(opts) {
  */
 function printCommandTargets(opts) {
   const targets = resolvedTargets(opts);
+
   if (opts.json) {
     print(JSON.stringify(targets, null, 2));
+
     return;
   }
+
   print(targets.map((t) => [t.agent, t.format, t.scope, t.dir].join("\t")).join("\n"));
 }
 
@@ -598,19 +649,25 @@ function printCommandTargets(opts) {
  */
 function syncCommandTargets(opts) {
   const targets = resolvedTargets(opts);
+
   if (targets.length === 0) {
     print("agent-commands: no agent command directories found on this machine");
+
     return;
   }
 
   let files = 0;
+
   for (const { label, format, dir } of targets) {
     const rendered = renderAgentCommandFiles(format);
+
     if (!opts.dryRun && !opts.remove) {
       mkdirSync(dir, { recursive: true });
     }
+
     for (const { filename, content } of rendered) {
       const file = resolve(dir, filename);
+
       if (opts.remove) {
         if (existsSync(file) && !opts.dryRun) {
           rmSync(file, { force: true });
@@ -618,13 +675,16 @@ function syncCommandTargets(opts) {
       } else if (!opts.dryRun) {
         writeFileSync(file, content);
       }
+
       files += 1;
     }
+
     const verb = opts.remove ? "removed" : "wrote";
     print(
       `  ${opts.dryRun ? "[dry-run] " : ""}${label}: ${verb} ${rendered.length} ${format} command file(s) → ${dir}`,
     );
   }
+
   print(
     `agent-commands: ${opts.remove ? "removed" : "synced"} ${files} file(s) across ${targets.length} directory(ies)`,
   );
@@ -640,24 +700,32 @@ function syncCommandTargets(opts) {
 export function agentCommandsCommand(opts = {}) {
   if (opts.list) {
     print(commandNames().join("\n"));
+
     return;
   }
+
   if (opts.targets) {
     printCommandTargets(opts);
+
     return;
   }
+
   if (opts.sync) {
     syncCommandTargets(opts);
+
     return;
   }
 
   const format = opts.format || "args";
+
   if (!FORMAT_EXT[format]) {
     throw new Error(`Unknown --format "${format}". Use one of: ${Object.keys(FORMAT_EXT).join(", ")}.`);
   }
+
   if (!opts.dir) {
     throw new Error("agent-commands requires --dir <dir> (or --list).");
   }
+
   const dir = resolve(opts.dir);
   const files = renderAgentCommandFiles(format);
 
@@ -668,30 +736,39 @@ export function agentCommandsCommand(opts = {}) {
   if (opts.remove) {
     for (const { filename } of files) {
       const file = resolve(dir, filename);
+
       if (existsSync(file)) {
         if (!opts.dryRun) {
           rmSync(file, { force: true });
         }
+
         removed += 1;
       }
     }
+
     print(`agent-commands: removed ${removed} file(s) from ${dir}`);
+
     return;
   }
 
   if (!opts.dryRun) {
     mkdirSync(dir, { recursive: true });
   }
+
   for (const { filename, content } of files) {
     const file = resolve(dir, filename);
+
     if (existsSync(file) && !opts.force) {
       skipped += 1;
       continue;
     }
+
     if (!opts.dryRun) {
       writeFileSync(file, content);
     }
+
     written += 1;
   }
+
   print(`agent-commands: wrote ${written}, skipped ${skipped} (${format}) → ${dir}`);
 }

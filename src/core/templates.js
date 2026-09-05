@@ -36,13 +36,17 @@ const FRAMEWORK_SKILL = {
 function guardrailSummary(framework, code) {
   const skillName = FRAMEWORK_SKILL[framework] || "rule-styleguide";
   const report = checkCode(skillName, code, { framework, isComponent: true });
+
   if (report.allPass) {
     return `## Guardrails\n\n✅ ${report.passCount}/${report.total} guardrails pass (${skillName}). Validated with pix_check.`;
   }
+
   const lines = [`## Guardrails\n\n⚠️ ${report.failCount}/${report.total} FAIL (${skillName}). Fix before shipping:`];
+
   for (const f of report.failed) {
     lines.push(`- **${f.id}**: ${f.label} - ${f.suggestion}`);
   }
+
   return lines.join("\n");
 }
 
@@ -54,6 +58,7 @@ export function generateMultiFile(component, framework = "vanilla", name) {
   const pascal = toPascal(name || component);
   const kebab = toKebab(pascal);
   const t = COMPONENT_TEMPLATES[component];
+
   if (!t) {
     return null;
   }
@@ -70,6 +75,7 @@ export function generateMultiFile(component, framework = "vanilla", name) {
       const extension = ".jsx";
       const source = t[framework] || t.react;
       let compSource;
+
       if (source && typeof source === "string") {
         compSource = interpolate(source, variables);
       } else if (t.vanilla?.html) {
@@ -77,13 +83,17 @@ export function generateMultiFile(component, framework = "vanilla", name) {
       } else {
         return null;
       }
+
       if (!compSource.includes(`export function ${pascal}`)) {
         compSource = compSource.replace(/export function \w+/, `export function ${pascal}`);
       }
+
       files.push({ path: `${basePath}/_${pascal}${extension}`, language: "jsx", content: compSource });
+
       if (interpCss) {
         files.push({ path: `${basePath}/_${pascal}.css`, language: "css", content: interpCss });
       }
+
       files.push({
         path: `${basePath}/index.js`,
         language: "javascript",
@@ -91,9 +101,11 @@ export function generateMultiFile(component, framework = "vanilla", name) {
       });
       break;
     }
+
     case "vue": {
       const source = t.vue;
       let content;
+
       if (source && typeof source === "string") {
         content = interpolate(source, variables);
       } else if (t.vanilla?.html) {
@@ -101,6 +113,7 @@ export function generateMultiFile(component, framework = "vanilla", name) {
       } else {
         return null;
       }
+
       files.push(
         { path: `${basePath}/_${pascal}.vue`, language: "vue", content },
         {
@@ -111,9 +124,11 @@ export function generateMultiFile(component, framework = "vanilla", name) {
       );
       break;
     }
+
     case "svelte": {
       const source = t.svelte;
       let content;
+
       if (source && typeof source === "string") {
         content = interpolate(source, variables);
       } else if (t.vanilla?.html) {
@@ -121,6 +136,7 @@ export function generateMultiFile(component, framework = "vanilla", name) {
       } else {
         return null;
       }
+
       files.push(
         { path: `${basePath}/_${pascal}.svelte`, language: "svelte", content },
         {
@@ -135,12 +151,15 @@ export function generateMultiFile(component, framework = "vanilla", name) {
       if (!t.vanilla) {
         return null;
       }
+
       const html = interpolate(t.vanilla.html || "", variables);
       const jsContent = `/**\n * @module ${basePath}/_${pascal}\n * @description ${t.description}\n */\n\nconst template = document.createElement("template");\ntemplate.innerHTML = \`${html.replaceAll("`", "\\`")}\`;\n\nexport class ${pascal} extends HTMLElement {\n  connectedCallback() {\n    this.append(template.content.cloneNode(true));\n  }\n}\n\ncustomElements.define("${kebab}", ${pascal});\n`;
       files.push({ path: `${basePath}/_${pascal}.js`, language: "javascript", content: jsContent });
+
       if (interpCss) {
         files.push({ path: `${basePath}/_${pascal}.css`, language: "css", content: interpCss });
       }
+
       files.push({
         path: `${basePath}/index.js`,
         language: "javascript",
@@ -148,6 +167,7 @@ export function generateMultiFile(component, framework = "vanilla", name) {
       });
     }
   }
+
   return files;
 }
 
@@ -161,24 +181,31 @@ export function listTemplateCategories() {
 
 export function getTemplate(component, framework = "vanilla") {
   const t = COMPONENT_TEMPLATES[component];
+
   if (!t) {
     return null;
   }
+
   if (framework === "vanilla" && t.vanilla) {
     return t.vanilla;
   }
+
   const key = framework;
+
   if (t[key]) {
     return t[key];
   }
+
   if (t.vanilla) {
     return t.vanilla;
   }
+
   return null;
 }
 
 function indent(string_, spaces) {
   const pad = " ".repeat(spaces);
+
   return string_
     .split("\n")
     .map((l) => (l ? pad + l : l))
@@ -208,11 +235,11 @@ function buildGuardrailsText() {
     "Use rule_tool_check for automated validation.",
     "Iterate: generate, rule_tool_check, fix, rule_tool_check, all pass.",
   ];
+
   return lines.join("\n");
 }
 
 export function registerTemplateTool() {
-  // eslint-disable-next-line no-unused-vars
   const componentKeys = Object.keys(COMPONENT_TEMPLATES);
   const ComponentSchema = z.object({
     component: z.string().describe("Component or test type"),
@@ -229,8 +256,10 @@ export function registerTemplateTool() {
       if (arguments_.mode === "guardrails") {
         return { content: [{ type: "text", text: buildGuardrailsText() }] };
       }
+
       const component = arguments_.component;
       const framework = arguments_.framework || "vanilla";
+
       if (!COMPONENT_TEMPLATES[component]) {
         return {
           isError: true,
@@ -242,8 +271,10 @@ export function registerTemplateTool() {
           ],
         };
       }
+
       if (arguments_.mode === "multi") {
         const files = generateMultiFile(component, framework, arguments_.name);
+
         if (!files || files.length === 0) {
           return {
             isError: true,
@@ -255,7 +286,9 @@ export function registerTemplateTool() {
             ],
           };
         }
+
         const combined = files.map((f) => f.content).join("\n\n");
+
         return {
           content: [
             {
@@ -277,10 +310,13 @@ export function registerTemplateTool() {
           ],
         };
       }
+
       const template = getTemplate(component, framework);
+
       if (!template) {
         return { isError: true, content: [{ type: "text", text: "Unknown: " + component }] };
       }
+
       if (typeof template === "object" && template.html && template.css) {
         return {
           content: [
@@ -301,6 +337,7 @@ export function registerTemplateTool() {
           ],
         };
       }
+
       return {
         content: [
           {

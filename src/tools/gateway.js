@@ -61,7 +61,7 @@ const RECEIPT_TTL_MS = 300_000;
  * The previous digest hashed `contents.join("\n---FILE---\n")`, an in-band
  * separator that made [{a:"X\n---FILE---\nY"}] and [{a:"X"},{b:"Y"}] collide -
  * and it never covered paths at all, so a receipt earned for benign code
- * authorised writing that code to `.git/hooks/pre-commit`. Length prefixes make
+ * authorized writing that code to `.git/hooks/pre-commit`. Length prefixes make
  * every field unambiguous; including the path binds the destination.
  *
  * @param {Array<{ path: string, content: string }>} files
@@ -70,6 +70,7 @@ const RECEIPT_TTL_MS = 300_000;
 export function canonicalFilesDigest(files) {
   const hash = createHash("sha256");
   hash.update(`files:${files.length}\n`);
+
   for (const file of files) {
     const path = String(file?.path ?? "");
     const content = String(file?.content ?? "");
@@ -78,6 +79,7 @@ export function canonicalFilesDigest(files) {
     hash.update(content, "utf8");
     hash.update("\n");
   }
+
   return hash.digest("hex");
 }
 
@@ -88,6 +90,7 @@ function getServerSecret() {
   if (!SERVER_SECRET) {
     SERVER_SECRET = randomUUID();
   }
+
   return SERVER_SECRET;
 }
 
@@ -103,12 +106,13 @@ function getServerSecret() {
  */
 export function issueReceipt(code, skillName, allPass, now = Date.now()) {
   const codeHash = createHash("sha256").update(code).digest("hex");
+
   return storeReceipt({ codeHash, binding: "content", skillName, allPass, now });
 }
 
 /**
  * Generate a PATH-BOUND receipt: the digest covers the ordered
- * (path, content) tuples, so the receipt authorises writing exactly these
+ * (path, content) tuples, so the receipt authorizes writing exactly these
  * contents to exactly these destinations and nothing else.
  *
  * @param {Array<{ path: string, content: string }>} files
@@ -132,25 +136,30 @@ function storeReceipt({ codeHash, binding, skillName, allPass, now }) {
   const payload = `${binding}:${codeHash}:${skillName}:${allPass}:${now}`;
   const token = createHmac("sha256", getServerSecret()).update(payload).digest("hex");
   receiptStore.set(token, { codeHash, binding, skillName, allPass, expiresAt: now + RECEIPT_TTL_MS });
-  // Cleanup receipts that expired over one TTL ago (i.e. issued > 2×TTL back).
+  // Cleanup receipts that expired over one TTL ago (i.e. issued > 2xTTL back).
   for (const [key, value] of receiptStore) {
     if (now - value.expiresAt > RECEIPT_TTL_MS) {
       receiptStore.delete(key);
     }
   }
+
   return token;
 }
 
 /** Shared checks: existence, TTL, guardrail outcome. */
 function openReceipt(token, now) {
   const entry = receiptStore.get(token);
+
   if (!entry) {
     return { error: "Receipt not found or expired" };
   }
+
   if (now > entry.expiresAt) {
     receiptStore.delete(token);
+
     return { error: "Receipt expired - re-run pix_gateway" };
   }
+
   return { entry };
 }
 
@@ -164,6 +173,7 @@ function openReceipt(token, now) {
  */
 export function validateReceipt(token, code, now = Date.now()) {
   const { entry, error } = openReceipt(token, now);
+
   if (error) {
     return { valid: false, reason: error };
   }
@@ -172,13 +182,17 @@ export function validateReceipt(token, code, now = Date.now()) {
   if (entry.binding === "files") {
     return { valid: false, reason: "Receipt is path-bound - validate it against the file set, not the raw code" };
   }
+
   const codeHash = createHash("sha256").update(code).digest("hex");
+
   if (codeHash !== entry.codeHash) {
     return { valid: false, reason: "Code hash mismatch - code was modified after check" };
   }
+
   if (!entry.allPass) {
     return { valid: false, allPass: false, reason: "Guardrails did not pass" };
   }
+
   return { valid: true, allPass: true };
 }
 
@@ -201,7 +215,9 @@ export function validateApply(token, files, now = Date.now()) {
   if (!Array.isArray(files) || files.length === 0) {
     return { valid: false, reason: "No files to validate" };
   }
+
   const { entry, error } = openReceipt(token, now);
+
   if (error) {
     return { valid: false, reason: error };
   }
@@ -220,12 +236,14 @@ export function validateApply(token, files, now = Date.now()) {
         valid: false,
         binding: "content",
         reason:
-          "Content-only receipt cannot authorise a multi-file write - pass `files` to pix_gateway for a path-bound receipt",
+          "Content-only receipt cannot authorize a multi-file write - pass `files` to pix_gateway for a path-bound receipt",
       };
     }
+
     const codeHash = createHash("sha256")
       .update(String(files[0].content ?? ""))
       .digest("hex");
+
     if (codeHash !== entry.codeHash) {
       return { valid: false, binding: "content", reason: "Code hash mismatch - code was modified after check" };
     }
@@ -234,6 +252,7 @@ export function validateApply(token, files, now = Date.now()) {
   if (!entry.allPass) {
     return { valid: false, binding: entry.binding, allPass: false, reason: "Guardrails did not pass" };
   }
+
   return { valid: true, binding: entry.binding, allPass: true };
 }
 
@@ -281,6 +300,7 @@ export async function registerGatewayTool() {
 
       // ── Token-saving: nudge the agent toward the code graph when present ──
       const { tokensaveActive, TOKENSAVE_DIRECTIVE } = await import("../core/agent-integrations.js");
+
       if (path && tokensaveActive(path)) {
         lines.push(TOKENSAVE_DIRECTIVE, "");
       }
@@ -339,6 +359,7 @@ export async function registerGatewayTool() {
 
         // ── Step 2: Load primary skill evidence ──
         let evidence = "";
+
         if (primarySkill) {
           const skillResult = await callTool(`pix_${primarySkill.replace(/^rule-/, "").replaceAll("-", "_")}`, {
             mode: "tldr",
@@ -349,9 +370,10 @@ export async function registerGatewayTool() {
 
         // ── Step 3: Run guardrails if code provided ──
         let checkResult = null;
+
         if (fileSet || code) {
           const skillName = primarySkill || "rule-ui-design-system";
-          const { checkCode } = await import("../core/guardrails.js");
+          const { checkCodeGuarded } = await import("../core/guardrails-guarded.js");
           const checkContext = {
             framework: framework || "vanilla",
             isComponent: false,
@@ -360,10 +382,12 @@ export async function registerGatewayTool() {
           const units = fileSet
             ? fileSet.map((file) => ({ label: file.path, code: file.content }))
             : [{ label: "code", code }];
-          const checks = units.map((unit) => ({
-            label: unit.label,
-            result: checkCode(skillName, unit.code, { ...checkContext, fileName: unit.label }),
-          }));
+          const checks = await Promise.all(
+            units.map(async (unit) => ({
+              label: unit.label,
+              result: await checkCodeGuarded(skillName, unit.code, { ...checkContext, fileName: unit.label }),
+            })),
+          );
 
           const total = checks.reduce((sum, entry) => sum + entry.result.total, 0);
           const failCount = checks.reduce((sum, entry) => sum + entry.result.failCount, 0);
@@ -394,12 +418,15 @@ export async function registerGatewayTool() {
         // guardrail corpus is deterministic. This is what lets one skill edit
         // invalidate exactly these entries (cache-invalidation).
         const deps = {};
+
         if (primarySkill) {
           const digest = skillDigest(primarySkill);
+
           if (digest) {
             deps[primarySkill] = digest;
           }
         }
+
         cacheStore(GATEWAY_CORE_TOOL, coreArgs, core, deps);
       }
 
@@ -419,9 +446,11 @@ export async function registerGatewayTool() {
           : core.evidence;
 
       lines.push(`## Route: ${effectiveRoute} (confidence: ${Math.round((route.confidence || 0) * 100)}%)`);
+
       if (route.sections?.length) {
         lines.push(`**Matched sections:** ${route.sections.join(", ")}`);
       }
+
       lines.push("");
 
       if (primarySkill) {
@@ -430,9 +459,11 @@ export async function registerGatewayTool() {
 
       // ── Step 3 (render): guardrails and the fresh receipt ──
       let receipt = null;
+
       if (fileSet || code) {
         const skillName = primarySkill || "rule-ui-design-system";
         lines.push("## Guardrail Check", "");
+
         if (checkResult.allPass) {
           lines.push(
             `✅ All ${checkResult.total} guardrails pass${fileSet ? ` across ${fileSet.length} file(s)` : ""}.`,
@@ -444,14 +475,16 @@ export async function registerGatewayTool() {
             `**Receipt:** \`${receipt}\` (valid 5 min, pass to pix_apply)`,
             fileSet
               ? "Bound to these exact paths and contents - writing elsewhere is refused."
-              : "Content-only receipt: authorises a single-file write. Pass `files` here for a path-bound receipt.",
+              : "Content-only receipt: authorizes a single-file write. Pass `files` here for a path-bound receipt.",
           );
         } else {
           lines.push(`❌ ${checkResult.failCount} guardrails FAIL. Fix and re-check via pix_gateway.`);
+
           for (const f of checkResult.failed) {
             lines.push(`- **${f.id}**${f.file ? ` (${f.file})` : ""}: ${f.label} - ${f.suggestion}`);
           }
         }
+
         lines.push("");
       }
       // ── Step 4: Next tools hint ──

@@ -14,6 +14,8 @@ import {
   BACKEND_GUARDRAILS,
   DATABASE_GUARDRAILS,
   DEVOPS_GUARDRAILS,
+  A11Y_GUARDRAILS,
+  QUALITY_GUARDRAILS,
 } from "./guardrail-defs.js";
 
 // ─── Framework aliases ───
@@ -28,17 +30,19 @@ const FRAMEWORK_ALIASES = {
   vanilla: ["vanilla", "vanilla-js", "js", "javascript"],
 };
 
-// eslint-disable-next-line no-unused-vars
 function resolveFramework(framework) {
   if (!framework) {
     return "vanilla";
   }
+
   const f = framework.toLowerCase();
+
   for (const [key, aliases] of Object.entries(FRAMEWORK_ALIASES)) {
     if (aliases.includes(f) || key === f) {
       return key;
     }
   }
+
   return "vanilla";
 }
 
@@ -81,12 +85,22 @@ export function mergePluginGuardrails(pluginName, guardrails) {
   if (!Array.isArray(guardrails) || guardrails.length === 0) {
     return;
   }
+
   const existing = PLUGIN_GUARDRAILS.get(pluginName) || [];
   PLUGIN_GUARDRAILS.set(pluginName, [...existing, ...guardrails]);
 }
 
 // ─── Public API ───
 
+/**
+ * The guardrail rule families applicable to a skill: the quality families,
+ * shared rules, framework/scaffold rules and the backend/database/devops/a11y
+ * groups.
+ *
+ * @param {string} skillName
+ * @param {string} [mode]
+ * @returns {Array<object>}
+ */
 export function getGuardrails(skillName, mode) {
   const framework = SKILL_FRAMEWORK_MAP[skillName] || "vanilla";
   const frameworkSpecific = FRAMEWORK_GUARDRAILS[framework] || [];
@@ -105,10 +119,68 @@ export function getGuardrails(skillName, mode) {
   const isDevops = /^rule-devops(?:-|$)/.test(skillName);
   const devops = isDevops ? DEVOPS_GUARDRAILS : [];
 
-  return [...SHARED_GUARDRAILS, ...frameworkSpecific, ...scaffold, ...backend, ...database, ...devops, ...plugin];
+  // Accessibility guardrails: the a11y skill always, and any skill checking
+  // markup or styles - a React component is as much an a11y surface as a page.
+  const isA11y = skillName === "rule-styleguide-a11y" || /^rule-(?:frontend|platform|ui|styleguide)/.test(skillName);
+  const a11y = isA11y ? A11Y_GUARDRAILS : [];
+
+  return [
+    ...QUALITY_GUARDRAILS,
+    ...SHARED_GUARDRAILS,
+    ...frameworkSpecific,
+    ...scaffold,
+    ...backend,
+    ...database,
+    ...devops,
+    ...a11y,
+    ...plugin,
+  ];
 }
 
+/**
+ * Hard cap on the input handed to guardrail regexes. Above it the check is
+ * refused outright: pattern time grows super-linearly on adversarial input
+ * (67 s measured on ~200 KB) and the regexes run synchronously on the only
+ * thread, so a size gate is the one defense that cannot be backtracked around.
+ */
+export const MAX_CHECK_INPUT_BYTES = 256 * 1024;
+
+/**
+ * Run every guardrail for a skill over a body of code.
+ *
+ * @param {string} skillName
+ * @param {string} code
+ * @param {object} [context]
+ * @returns {object} the check report
+ */
 export function checkCode(skillName, code, context = {}) {
+  // Refuse oversize input fast instead of scanning it (hardening 0.1).
+  if (typeof code === "string" && Buffer.byteLength(code, "utf8") > MAX_CHECK_INPUT_BYTES) {
+    return {
+      skill: skillName,
+      total: 1,
+      passCount: 0,
+      failCount: 1,
+      skippedCount: 0,
+      passed: [],
+      failed: [
+        {
+          id: "input-size-cap",
+          wcag: "",
+          label: "Input exceeds the size cap",
+          failCount: 1,
+          detail: [`Input is ${Buffer.byteLength(code, "utf8")} bytes; the cap is ${MAX_CHECK_INPUT_BYTES} (256 KiB).`],
+          suggestion: "Split the input into smaller units (256 KiB cap), or exclude generated/vendored files.",
+        },
+      ],
+      skipped: [],
+      inputTooLarge: true,
+      summary: "❌ Refused to check: input exceeds the 256 KiB cap. Split it into smaller units.",
+      allPass: false,
+      previousPassed: [],
+    };
+  }
+
   const guardrails = getGuardrails(skillName, context?.mode);
   const previousPassed = new Set(); // ← always start fresh - no client bypass
 
@@ -125,7 +197,9 @@ export function checkCode(skillName, code, context = {}) {
         skipped: true,
       };
     }
+
     const result = g.check(code, context);
+
     return {
       id: g.id,
       label: g.label,
@@ -168,6 +242,20 @@ export function checkCode(skillName, code, context = {}) {
   };
 }
 
+/**
+ * Render the guardrail ruleset for a skill as text.
+ *
+ * @param {string} skillName
+ * @param {string} [mode]
+ * @returns {string}
+ */
+/**
+ * Render the guardrail ruleset for a skill as text.
+ *
+ * @param {string} skillName
+ * @param {string} [mode]
+ * @returns {string}
+ */
 export function getGuardrailsReport(skillName, mode) {
   const guardrails = getGuardrails(skillName, mode);
   const lines = [
@@ -178,14 +266,17 @@ export function getGuardrailsReport(skillName, mode) {
     "## Shared (all rule skills)",
     "",
   ];
+
   for (const g of SHARED_GUARDRAILS) {
     lines.push(`- [ ] **${g.id}**: ${g.label}`, `  ${g.description}`, "");
   }
 
   const framework = SKILL_FRAMEWORK_MAP[skillName];
   const fg = FRAMEWORK_GUARDRAILS[framework] || [];
+
   if (fg.length > 0) {
     lines.push(`## Framework-specific (${framework})`, "");
+
     for (const g of fg) {
       lines.push(`- [ ] **${g.id}**: ${g.label}`, `  ${g.description}`, "");
     }
@@ -193,14 +284,17 @@ export function getGuardrailsReport(skillName, mode) {
 
   if (skillName === "rule-styleguide") {
     lines.push(`## Project Scaffolding (${SCAFFOLD_GUARDRAILS.length} config files)`, "");
+
     for (const g of SCAFFOLD_GUARDRAILS) {
       lines.push(`- [ ] **${g.id}**: ${g.label}`, `  ${g.description}`, "");
     }
+
     lines.push("Run `pix_styleguide mode=scaffold` to generate these files.", "");
   }
 
   if (/^rule-(?:backend|backend-)/.test(skillName)) {
     lines.push(`## Backend Security & API (${BACKEND_GUARDRAILS.length} checks)`, "");
+
     for (const g of BACKEND_GUARDRAILS) {
       lines.push(`- [ ] **${g.id}**: ${g.label}`, `  ${g.description}`, "");
     }
@@ -208,6 +302,7 @@ export function getGuardrailsReport(skillName, mode) {
 
   if (/^rule-data(?:-|$)/.test(skillName)) {
     lines.push(`## Database Safety (${DATABASE_GUARDRAILS.length} checks)`, "");
+
     for (const g of DATABASE_GUARDRAILS) {
       lines.push(`- [ ] **${g.id}**: ${g.label}`, `  ${g.description}`, "");
     }
@@ -215,6 +310,7 @@ export function getGuardrailsReport(skillName, mode) {
 
   if (/^rule-devops(?:-|$)/.test(skillName)) {
     lines.push(`## DevOps & Security (${DEVOPS_GUARDRAILS.length} checks)`, "");
+
     for (const g of DEVOPS_GUARDRAILS) {
       lines.push(`- [ ] **${g.id}**: ${g.label}`, `  ${g.description}`, "");
     }

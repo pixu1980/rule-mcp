@@ -31,8 +31,10 @@ export function registerUpdateTool() {
       const restartNote = scheduleRestartIfNeeded(result);
 
       const lines = [];
+
       if (result.updated) {
         lines.push(buildBanner(result));
+
         if (restartNote) {
           lines.push(restartNote);
         }
@@ -54,7 +56,9 @@ export function registerUpdateTool() {
           docker: "Running in Docker.",
           unknown: "Install type is not a git clone.",
         };
+
         lines.push(`ℹ️ No update applied: ${reasons[result.reason] ?? result.reason}`);
+
         if (result.note) {
           lines.push(result.note);
         }

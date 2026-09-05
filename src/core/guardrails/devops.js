@@ -1,4 +1,5 @@
 // Auto-split from src/core/guardrail-defs.js - see ./index.js
+/** The devops guardrail family. */
 export const DEVOPS_GUARDRAILS = [
   {
     id: "docker-non-root",
@@ -8,7 +9,9 @@ export const DEVOPS_GUARDRAILS = [
       if (!/^FROM\s+/im.test(code)) {
         return { pass: true, note: "Not a Dockerfile, skipping" };
       }
+
       const hasUser = /^USER\s+(?!root\b)\w+/im.test(code);
+
       return {
         pass: hasUser,
         failCount: hasUser ? 0 : 1,
@@ -25,7 +28,9 @@ export const DEVOPS_GUARDRAILS = [
       if (!/^FROM\s+/im.test(code)) {
         return { pass: true, note: "Not a Dockerfile, skipping" };
       }
+
       const isOk = /^HEALTHCHECK\s+/im.test(code);
+
       return {
         pass: isOk,
         failCount: isOk ? 0 : 1,
@@ -44,6 +49,7 @@ export const DEVOPS_GUARDRAILS = [
       const nonEnvironment = secrets.filter(
         (s) => !/process\.env/i.test(code.slice(Math.max(0, code.indexOf(s) - 80), code.indexOf(s))),
       );
+
       return {
         pass: nonEnvironment.length === 0,
         failCount: nonEnvironment.length,
@@ -60,7 +66,9 @@ export const DEVOPS_GUARDRAILS = [
       if (!context?.fileName?.includes(".gitignore")) {
         return { pass: true, note: "Not .gitignore, skipping" };
       }
+
       const isOk = /\.env\b/.test(code);
+
       return {
         pass: isOk,
         failCount: isOk ? 0 : 1,

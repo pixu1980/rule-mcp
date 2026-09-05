@@ -42,6 +42,7 @@ export function addDirective(kind) {
 /** Immutable snapshot plus derived totals. */
 export function getTokenStats() {
   const compressionSaved = Math.max(0, stats.compressionBytesIn - stats.compressionBytesOut);
+
   return {
     ...stats,
     compressionSaved,

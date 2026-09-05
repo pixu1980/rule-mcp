@@ -82,8 +82,7 @@ exec ${escapePlist(ep.node)} ${escapePlist(ep.script)} serve --transport sse
  * @param {{ node: string, script: string, command: string[] }} ep
  * @returns {string} - plist XML content
  */
-// eslint-disable-next-line no-unused-vars
-function generateLaunchAgentPlist(ep) {
+function generateLaunchAgentPlist(_ep) {
   const p = getRuntimePaths();
   const logPath = p.logFile;
   mkdirSync(p.stateDir, { recursive: true });
@@ -162,6 +161,7 @@ function installLaunchAgent({ dryRun = false } = {}) {
 
   // Load the new plist
   const out = tryExec(`launchctl load -w "${LAUNCH_AGENT_PATH}"`);
+
   if (out.includes("Error") || out.includes("error")) {
     return { ok: false, path: LAUNCH_AGENT_PATH, error: `launchctl load failed: ${out}` };
   }
@@ -210,20 +210,25 @@ function checkLaunchAgent() {
 
   if (result.installed) {
     const out = tryExec(`launchctl list ${LAUNCH_AGENT_LABEL} 2>/dev/null || true`);
+
     if (out.includes(LAUNCH_AGENT_LABEL)) {
       result.loaded = true;
       // New macOS format (Ventura+): plist-style dict with "PID" = 12345;
       const newPidMatch = out.match(/"PID"\s*=\s*(\d+)/);
+
       if (newPidMatch) {
         const pid = parseInt(newPidMatch[1], 10);
+
         if (pid > 0) {
           result.pid = pid;
         }
       } else {
         // Legacy format: "PID\tStatus\tLabel"
         const oldPidMatch = out.match(/^(\d+)\t/m);
+
         if (oldPidMatch) {
           const pid = parseInt(oldPidMatch[1], 10);
+
           if (pid > 0) {
             result.pid = pid;
           }
@@ -373,8 +378,10 @@ function checkSystemdService() {
 
   const pidOut = tryExec(`systemctl --user show -p MainPID "${SYSTEMD_UNIT_NAME}" 2>/dev/null || echo "MainPID=0"`);
   const pidMatch = pidOut.match(/MainPID=(\d+)/);
+
   if (pidMatch) {
     const pid = parseInt(pidMatch[1], 10);
+
     if (pid > 0) {
       result.pid = pid;
     }
@@ -392,6 +399,7 @@ const WINDOWS_SERVICE_NAME = "rule-mcp";
 /** @returns {string} - Windows command line for the service binary */
 function getWindowsServiceCommand() {
   const ep = resolveEntrypoint();
+
   return `"${ep.node}" "${ep.script}" serve --transport sse`;
 }
 
@@ -418,6 +426,7 @@ function installWindowsService({ dryRun = false } = {}) {
     tryExec(`sc config "${name}" binPath= "${command}" start= auto`);
     tryExec(`sc stop "${name}" 2>nul || true`);
     tryExec(`sc start "${name}" 2>nul || true`);
+
     return { ok: true, name, action: "updated-and-started" };
   }
 
@@ -432,6 +441,7 @@ function installWindowsService({ dryRun = false } = {}) {
       `sc description "${name}" "MCP server for the rule-* skill ecosystem. Serves styleguides, component templates, and framework best practices."`,
     );
     tryExec(`sc start "${name}"`);
+
     return { ok: true, name, action: "created-and-started" };
   } catch {
     // Fallback: try PowerShell New-Service
@@ -440,6 +450,7 @@ function installWindowsService({ dryRun = false } = {}) {
         `powershell -Command "New-Service -Name '${name}' -BinaryPathName '${command}' -StartupType Automatic -Description 'MCP server for the rule-* skill ecosystem' ; Start-Service -Name '${name}'"`,
         { encoding: "utf8", timeout: 30_000, stdio: "pipe", shell: true },
       );
+
       return { ok: true, name, action: "created-and-started (PowerShell)" };
     } catch (error) {
       return { ok: false, name, error: `Failed to create service: ${error.message}` };
@@ -458,6 +469,7 @@ function uninstallWindowsService({ dryRun = false } = {}) {
 
   // Check if service exists
   const check = tryExec(`sc query "${name}" 2>nul || echo NOT_FOUND`);
+
   if (check.includes("NOT_FOUND") || check.includes("FAILED") || check.includes("1060")) {
     return { ok: true, name, action: "not-installed" };
   }
@@ -468,6 +480,7 @@ function uninstallWindowsService({ dryRun = false } = {}) {
 
   tryExec(`sc stop "${name}" 2>nul || true`);
   tryExec(`sc delete "${name}"`);
+
   return { ok: true, name, action: "stopped-and-deleted" };
 }
 
@@ -487,6 +500,7 @@ function checkWindowsService() {
     result.running = out.includes("RUNNING") || (out.includes("STATE") && out.includes("4"));
     // sc query PID is optional; only shown with qc or extra flags
     const pidMatch = out.match(/PID\s+:\s+(\d+)/i);
+
     if (pidMatch) {
       result.pid = parseInt(pidMatch[1], 10);
     }

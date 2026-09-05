@@ -49,17 +49,20 @@ const command = arguments_[0] ?? "serve";
 /** Get a named CLI argument value. */
 const getArgument = (name, fallback) => {
   const index = arguments_.indexOf(name);
+
   return index === -1 ? fallback : (arguments_[index + 1] ?? fallback);
 };
 
 /** Get all values for a repeated flag (e.g. --set KEY=VALUE --set KEY2=VALUE2). */
 const getArguments = (name) => {
   const values = [];
+
   for (let index = 0; index < arguments_.length - 1; index++) {
     if (arguments_[index] === name) {
       values.push(arguments_[index + 1]);
     }
   }
+
   return values.length > 0 ? values : undefined;
 };
 
@@ -104,7 +107,7 @@ const printDaemonHelp = () =>
   process.stdout.write(`
 Usage: rule-mcp daemon <action> [options]
 
-Manage the MCP daemon (SSE on first free port in range 3000–6000).
+Manage the MCP daemon (SSE on first free port in range 3000-6000).
 
 Process actions (cross-platform, no reboot persistence):
   start    Start background daemon process
@@ -319,12 +322,14 @@ export async function cli() {
   try {
     if (command === "help") {
       helpCommand();
+
       return;
     }
 
     if (command === "version" || hasFlag("--version") || hasFlag("-v")) {
       const package_ = JSON.parse(readFileSync(new URL("../package.json", import.meta.url), "utf8"));
       console.log(package_.version);
+
       return;
     }
 
@@ -332,6 +337,7 @@ export async function cli() {
       case "serve": {
         if (hasFlag("--help") || hasFlag("-h")) {
           printServeHelp();
+
           return;
         }
         {
@@ -343,14 +349,17 @@ export async function cli() {
             sslKey: getArgument("--ssl-key"),
           });
         }
+
         break;
       }
 
       case "daemon": {
         if (hasFlag("--help") || hasFlag("-h")) {
           printDaemonHelp();
+
           return;
         }
+
         daemonCommand({ action: arguments_[1] ?? "status", dryRun: hasFlag("--dry-run") });
         break;
       }
@@ -358,8 +367,10 @@ export async function cli() {
       case "install": {
         if (hasFlag("--help") || hasFlag("-h")) {
           printInstallHelp();
+
           return;
         }
+
         installCommand({
           agent: getArgument("--agent", "all"),
           dryRun: hasFlag("--dry-run"),
@@ -374,8 +385,10 @@ export async function cli() {
       case "uninstall": {
         if (hasFlag("--help") || hasFlag("-h")) {
           printUninstallHelp();
+
           return;
         }
+
         uninstallCommand({
           agent: getArgument("--agent", "all"),
           dryRun: hasFlag("--dry-run"),
@@ -387,8 +400,10 @@ export async function cli() {
       case "tools": {
         if (hasFlag("--help") || hasFlag("-h")) {
           printToolsHelp();
+
           return;
         }
+
         await toolsCommand({
           subcommand: arguments_[1] ?? "list",
           toolName: arguments_[2],
@@ -401,21 +416,26 @@ export async function cli() {
       case "config": {
         if (hasFlag("--help") || hasFlag("-h")) {
           printConfigHelp();
+
           return;
         }
+
         if (arguments_[1] === "env") {
           configureCommand({ set: getArguments("--set"), list: hasFlag("--list"), unset: getArgument("--unset") });
         } else {
           configCommand({ global: hasFlag("--global"), mode: getArgument("--mode", "stdio") });
         }
+
         break;
       }
 
       case "doctor": {
         if (hasFlag("--help") || hasFlag("-h")) {
           printDoctorHelp();
+
           return;
         }
+
         await doctorCommand({
           telemetry: hasFlag("--telemetry"),
           json: hasFlag("--json"),
@@ -427,8 +447,10 @@ export async function cli() {
       case "adr": {
         if (hasFlag("--help") || hasFlag("-h") || !arguments_[1]) {
           printAdrHelp();
+
           return;
         }
+
         if (arguments_[1] === "new" && arguments_[2]) {
           const { callTool } = await import("./tools/router.js");
           const { loadAllSkills } = await import("./core/skills.js");
@@ -447,14 +469,17 @@ export async function cli() {
         } else {
           printAdrHelp();
         }
+
         break;
       }
 
       case "handoff": {
         if (hasFlag("--help") || hasFlag("-h")) {
           printHandoffHelp();
+
           return;
         }
+
         const { registerProcessHandoffTool } = await import("./tools/handoff.js");
         const { callTool: ct } = await import("./tools/router.js");
         registerProcessHandoffTool();
@@ -471,8 +496,10 @@ export async function cli() {
       case "skills": {
         if (hasFlag("--help") || hasFlag("-h")) {
           printSkillsHelp();
+
           return;
         }
+
         switch (arguments_[1]) {
           case "install": {
             const { skillsInstallCommand } = await import("./cli/skills-install.js");
@@ -482,6 +509,7 @@ export async function cli() {
           }
           case "list": {
             const { skillsListCommand } = await import("./cli/skills-install.js");
+
             skillsListCommand({ json: hasFlag("--json") });
 
             break;
@@ -495,17 +523,21 @@ export async function cli() {
             if (arguments_[1]) {
               throw new Error(`Unknown skills action: ${arguments_[1] ?? ""}. Use 'rule-mcp skills --help'.`);
             }
+
             printSkillsHelp();
           }
         }
+
         break;
       }
 
       case "fix": {
         if (hasFlag("--help") || hasFlag("-h")) {
           printFixHelp();
+
           return;
         }
+
         await fixCommand({
           dir: getArgument("--dir", "."),
           srcDir: getArgument("--src-dir", "src"),
@@ -518,8 +550,10 @@ export async function cli() {
       case "completions": {
         if (hasFlag("--help") || hasFlag("-h")) {
           printCompletionsHelp();
+
           return;
         }
+
         completionsCommand({ shell: getArgument("--shell", "zsh") });
         break;
       }
@@ -544,8 +578,10 @@ export async function cli() {
               `  --dry-run        Preview without writing\n` +
               `  --agent <name>   Limit to one agent\n`,
           );
+
           return;
         }
+
         agentCommandsCommand({
           dir: getArgument("--dir"),
           format: getArgument("--format", "args"),

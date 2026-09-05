@@ -62,6 +62,7 @@ export function codeSignature() {
       }
     }
   };
+
   walk(root);
   _signature = createHash("sha256").update(`${package_.version}:${newest}`).digest("hex").slice(0, 12);
 

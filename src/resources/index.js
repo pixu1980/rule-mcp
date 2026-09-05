@@ -10,7 +10,6 @@
  * @see module:core/skills
  */
 
-// eslint-disable-next-line no-unused-vars
 import { readFileSync, readdirSync, existsSync } from "node:fs";
 import { join } from "node:path";
 import { getSkillsDirs as getSkillsDirectories } from "../cli/paths.js";
@@ -73,6 +72,7 @@ export async function readResource(uri) {
   // ── Skill index ────────────────────────────────────────────────
   if (uri === "rule://skills") {
     const directories = [];
+
     for (const base of [embeddedSkills]) {
       try {
         for (const entry of readdirSync(base, { withFileTypes: true })) {
@@ -92,12 +92,14 @@ export async function readResource(uri) {
         /* no dir */
       }
     }
+
     return { contents: [{ uri, mimeType: "application/json", text: JSON.stringify(directories, null, 2) }] };
   }
 
   // ── Templates catalog ──────────────────────────────────────────
   if (uri === "rule://templates") {
     const { listTemplateCategories } = await import("../core/templates.js");
+
     return {
       contents: [
         {
@@ -133,12 +135,14 @@ export async function readResource(uri) {
   if (uri === "rule://a11y/test-basic") {
     const { getTemplate } = await import("../core/templates.js");
     const tmpl = getTemplate("a11y-test-basic");
+
     return { contents: [{ uri, mimeType: "text/plain", text: typeof tmpl === "string" ? tmpl : tmpl?.html || "" }] };
   }
 
   if (uri === "rule://a11y/test-forms") {
     const { getTemplate } = await import("../core/templates.js");
     const tmpl = getTemplate("a11y-test-forms");
+
     return { contents: [{ uri, mimeType: "text/plain", text: typeof tmpl === "string" ? tmpl : tmpl?.html || "" }] };
   }
 
@@ -147,6 +151,7 @@ export async function readResource(uri) {
     const { getSkillNames, isPluginSkill, readSkill } = await import("../tools/router.js");
     const allSkills = getSkillNames();
     const plugins = [];
+
     for (const name of allSkills) {
       if (!isPluginSkill(name)) {
         continue;
@@ -156,7 +161,9 @@ export async function readResource(uri) {
       const desc = content?.match(/^description:\s*(.+)$/m)?.[1]?.trim() || "User-defined plugin skill";
       plugins.push({ name, description: desc, type: "plugin", source: "~/.agents/skills/" });
     }
+
     const result = { plugins, known_community: [], total: plugins.length };
+
     return { contents: [{ uri, mimeType: "application/json", text: JSON.stringify(result, null, 2) }] };
   }
 
@@ -171,19 +178,24 @@ export async function readResource(uri) {
       suggested_tools: [toolName, "rule_tool_check", "rule_tool_scaffold", "rule_tool_component"],
       message: `Detected ${profile.framework} project "${profile.projectName}". Use ${toolName} for rule-compliant code generation.`,
     };
+
     return { contents: [{ uri, mimeType: "application/json", text: JSON.stringify(result, null, 2) }] };
   }
 
   // ── Dynamic: rule://<skill-name> or rule://<skill-name>/<section> ──
   const m = uri?.match(/^rule:\/\/(rule(?:-[a-z0-9]+)*)(?:\/(\w+))?$/);
+
   if (m) {
     const [, skillName, section] = m;
     const content = readSkill(skillName);
+
     if (content) {
       if (section === "summary") {
         const lines = content.split("\n").slice(0, 30).join("\n");
+
         return { contents: [{ uri, mimeType: "text/markdown", text: `# ${skillName} (summary)\n\n${lines}\n\n...` }] };
       }
+
       return { contents: [{ uri, mimeType: "text/markdown", text: content }] };
     }
   }

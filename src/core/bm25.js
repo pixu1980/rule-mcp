@@ -22,8 +22,7 @@ import { gzipSync, gunzipSync } from "node:zlib";
 import { getRuntimePaths, getSkillsDirs as getSkillsDirectories } from "../cli/paths.js";
 import { codeSignature } from "./code-signature.js";
 import { getSkillNames, readSkill } from "../tools/router.js";
-// eslint-disable-next-line no-unused-vars
-import { skillCache } from "./skills.js";
+import { skillCache } from "./skills.js"; // load-order side effect; referenced lazily below
 
 // ─── BM25 parameters ──────────────────────────────────────────────
 
@@ -381,16 +380,19 @@ function extractSections(content) {
 
   for (const line of lines) {
     const m = line.match(/^##\s+(.+)/);
+
     if (m) {
       if (currentHeading && currentLines.length > 0) {
         sections.push({ heading: currentHeading, text: currentLines.join("\n") });
       }
+
       currentHeading = m[1].trim();
       currentLines = [];
     } else {
       currentLines.push(line);
     }
   }
+
   if (currentHeading && currentLines.length > 0) {
     sections.push({ heading: currentHeading, text: currentLines.join("\n") });
   }
@@ -425,11 +427,13 @@ export function buildIndex(force = false) {
 
   for (const skillName of skillNames) {
     const content = readSkill(skillName);
+
     if (!content) {
       continue;
     }
 
     const sections = extractSections(content);
+
     for (const section of sections) {
       if (!section.text.trim()) {
         continue;
@@ -459,6 +463,7 @@ export function buildIndex(force = false) {
         if (!df.has(term)) {
           df.set(term, new Map());
         }
+
         df.get(term).set(id, freq);
       }
     }
@@ -468,6 +473,7 @@ export function buildIndex(force = false) {
   const avgDocumentLength = totalDocs > 0 ? [...documentLength.values()].reduce((a, b) => a + b, 0) / totalDocs : 0;
 
   _index = { df, docLength: documentLength, docs, totalDocs, avgDocLength: avgDocumentLength };
+  void skillCache; // loaded for its side effects (module graph order)
   persistIndex();
 }
 
@@ -601,6 +607,7 @@ export function getIndexStats() {
   if (!_index) {
     return null;
   }
+
   return {
     totalDocs: _index.totalDocs,
     avgDocLength: Math.round(_index.avgDocLength * 10) / 10,
@@ -649,6 +656,7 @@ export function search(query, maxResults = DEFAULT_MAX_RESULTS) {
   }
 
   const queryTerms = tokenize(query);
+
   if (queryTerms.length === 0) {
     return [];
   }
@@ -658,6 +666,7 @@ export function search(query, maxResults = DEFAULT_MAX_RESULTS) {
 
   for (const term of queryTerms) {
     const posting = df.get(term);
+
     if (!posting) {
       continue;
     }
@@ -678,6 +687,7 @@ export function search(query, maxResults = DEFAULT_MAX_RESULTS) {
     .slice(0, maxResults)
     .map(([documentId, score]) => {
       const document = docs[documentId];
+
       return {
         skill: document.skill,
         section: document.section,

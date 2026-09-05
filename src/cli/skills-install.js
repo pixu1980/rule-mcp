@@ -11,13 +11,11 @@
  *   rule-mcp skills install --scope global --all
  */
 
-// eslint-disable-next-line no-unused-vars
 import { copyFileSync, existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync, rmSync } from "node:fs";
 import { join, relative, dirname } from "node:path";
 import { createInterface } from "node:readline";
 import { homedir } from "node:os";
 import { stdin as input, stdout as output } from "node:process";
-// eslint-disable-next-line no-unused-vars
 import { getSkillsDirs as getSkillsDirectories, pkg as package_ } from "./paths.js";
 import { formatSkillsList } from "./tui.js";
 import { parseSkillFrontmatter } from "../core/skills.js";
@@ -32,6 +30,7 @@ function readSkillMeta(skillDir) {
   try {
     const content = readFileSync(join(skillDir, "SKILL.md"), "utf8");
     const meta = parseSkillFrontmatter(content);
+
     return {
       name: meta.name || "",
       desc: meta.description || "",
@@ -48,17 +47,22 @@ function readSkillMeta(skillDir) {
 function getAvailableSkills() {
   const { embeddedSkills } = getSkillsDirectories();
   const skills = [];
+
   if (!existsSync(embeddedSkills)) {
     return skills;
   }
+
   for (const entry of readdirSync(embeddedSkills, { withFileTypes: true })) {
     if (!entry.isDirectory()) {
       continue;
     }
+
     const skillDir = join(embeddedSkills, entry.name);
+
     if (!existsSync(join(skillDir, "SKILL.md"))) {
       continue;
     }
+
     const meta = readSkillMeta(skillDir);
     skills.push({
       name: entry.name,
@@ -68,6 +72,7 @@ function getAvailableSkills() {
       source: skillDir,
     });
   }
+
   return skills.sort((a, b) => a.name.localeCompare(b.name));
 }
 
@@ -83,16 +88,20 @@ function isInstalled(name, targetDir) {
  */
 function copySkill(source, targetDir, name) {
   const destination = join(targetDir, name);
+
   if (existsSync(destination)) {
     rmSync(destination, { recursive: true });
   }
+
   mkdirSync(destination, { recursive: true });
 
   const entries = readdirSync(source, { withFileTypes: true, recursive: true });
+
   for (const entry of entries) {
     const sourcePath = join(entry.parentPath ?? source, entry.name);
     const relPath = relative(source, sourcePath);
     const destinationPath = join(destination, relPath);
+
     if (entry.isDirectory()) {
       mkdirSync(destinationPath, { recursive: true });
     } else {
@@ -113,13 +122,16 @@ function installNativeSkills(skills) {
   let count = 0;
   try {
     mkdirSync(claudeDir, { recursive: true });
+
     for (const skill of skills) {
       const destination = join(claudeDir, skill.name);
+
       if (!existsSync(destination)) {
         copySkill(skill.source, join(homedir(), ".claude"), skill.name);
         count++;
       }
     }
+
     if (count > 0) {
       process.stdout.write(`Added ${count} skills to ~/.claude/skills/ for native Claude auto-discovery.\n`);
     }
@@ -153,6 +165,7 @@ async function interactiveSelect(items, { title, selected = [] }) {
       output.write(`\n  ${title}\n\n`);
       const start = Math.max(0, Math.min(cursor - Math.floor(pageSize / 2), items.length - pageSize));
       const end = Math.min(start + pageSize, items.length);
+
       for (let index = start; index < end; index++) {
         const item = items[index];
         const check = checked.includes(index) ? "✓" : " ";
@@ -161,6 +174,7 @@ async function interactiveSelect(items, { title, selected = [] }) {
         const desc = item.description ? ` - ${item.description}` : "";
         output.write(`  ${pointer} [${check}] ${label}${desc}\n`);
       }
+
       output.write(`\n  ␣ toggle   ↵ confirm   q quit\n`);
       output.write(`\u{1B}[${end - start + 4}A`); // move up
     }
@@ -188,11 +202,13 @@ async function interactiveSelect(items, { title, selected = [] }) {
         case " ": {
           // Toggle
           const index = checked.indexOf(cursor);
+
           if (index === -1) {
             checked.push(cursor);
           } else {
             checked.splice(index, 1);
           }
+
           render();
 
           break;
@@ -231,6 +247,7 @@ async function interactiveSelect(items, { title, selected = [] }) {
               }
             }
           }
+
           render();
 
           break;
@@ -251,8 +268,10 @@ export async function skillsInstallCommand(options = {}) {
   const selectAll = options.selectAll || false;
 
   const skills = getAvailableSkills();
+
   if (skills.length === 0) {
     process.stdout.write("No skills found to install.\n");
+
     return;
   }
 
@@ -264,23 +283,30 @@ export async function skillsInstallCommand(options = {}) {
   // Batch mode: when --all is set or stdin is not a TTY, skip interactive UI
   if (selectAll || !process.stdin.isTTY) {
     const toInstall = selectAll ? skills : skills.filter((s) => isInstalled(s.name, targetDir));
+
     if (toInstall.length === 0) {
       process.stdout.write("No skills selected. Nothing installed.\n");
+
       return;
     }
+
     mkdirSync(targetDir, { recursive: true });
     let installed = 0;
+
     for (const skill of toInstall) {
       copySkill(skill.source, targetDir, skill.name);
       installed++;
     }
+
     process.stdout.write(`Installed ${installed}/${skills.length} skills to ${targetDir}\n`);
     installNativeSkills(skills);
+
     return;
   }
 
   // Pre-check installed
   const preSelected = [];
+
   for (const [index, s] of skills.entries()) {
     if (isInstalled(s.name, targetDir)) {
       preSelected.push(index);
@@ -302,12 +328,14 @@ export async function skillsInstallCommand(options = {}) {
 
   if (selected.length === 0) {
     process.stdout.write("No skills selected. Nothing installed.\n");
+
     return;
   }
 
   // Install
   mkdirSync(targetDir, { recursive: true });
   let installed = 0;
+
   for (const index of selected) {
     const skill = skills[index];
     copySkill(skill.source, targetDir, skill.name);
@@ -325,7 +353,6 @@ export async function skillsInstallCommand(options = {}) {
  */
 export function skillsListCommand(options = {}) {
   const skills = getAvailableSkills();
-  // eslint-disable-next-line no-unused-vars
   const { homeSkills, embeddedSkills } = getSkillsDirectories();
   const installed = existsSync(homeSkills) ? readdirSync(homeSkills) : [];
   const rows = skills.map((s) => ({

@@ -78,9 +78,11 @@ const editorDataRoot = ({ home, platform, env }) => {
   if (platform === "darwin") {
     return join(home, "Library", "Application Support");
   }
+
   if (platform === "win32") {
     return env.APPDATA || join(home, "AppData", "Roaming");
   }
+
   return join(home, ".config");
 };
 
@@ -93,6 +95,7 @@ const VSCODE_VARIANTS = ["Code", "Code - Insiders", "Code - OSS", "VSCodium"];
 const vscodePromptDirs = (ctx) => {
   const root = editorDataRoot(ctx);
   const dirs = [];
+
   for (const [index, variant] of VSCODE_VARIANTS.entries()) {
     const userDir = join(root, variant, "User");
     // The stable channel is always targeted (it is the default install); other
@@ -100,11 +103,14 @@ const vscodePromptDirs = (ctx) => {
     if (index > 0 && !ctx.exists(userDir)) {
       continue;
     }
+
     dirs.push(join(userDir, "prompts"));
+
     for (const profile of ctx.listDir(join(userDir, "profiles"))) {
       dirs.push(join(userDir, "profiles", profile, "prompts"));
     }
   }
+
   return dirs;
 };
 
@@ -115,9 +121,11 @@ const vscodePromptDirs = (ctx) => {
  */
 const firstExisting = (ctx, candidates) => {
   const found = candidates.find(({ gate }) => ctx.exists(gate));
+
   if (found) {
     return [found.dir];
   }
+
   return ctx.force ? [candidates[0].dir] : [];
 };
 
@@ -315,9 +323,11 @@ export function resolveCommandTargets(options = {}) {
     // existence; project directories are never created on spec, and a sweep over
     // every agent (detectedOnly) only fills what is already there.
     const ctx = { ...base, force: Boolean(options.agent) && !options.detectedOnly && target.scope === "global" };
+
     if (options.detectedOnly && !target.detect(ctx)) {
       continue;
     }
+
     for (const dir of target.dirs(ctx)) {
       resolved.push({ agent: target.agent, label: target.label, format: target.format, scope: target.scope, dir });
     }

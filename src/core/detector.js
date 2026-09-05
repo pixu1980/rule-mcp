@@ -70,6 +70,7 @@ const FRAMEWORK_SKILL_MAP = {
 export function getFrameworkSuggestion(framework) {
   const skillName = FRAMEWORK_SKILL_MAP[framework] || "rule-frontend-vanilla-reactive";
   const displayName = skillName.replace(/^rule-/, "").replaceAll("-", "_");
+
   return { skillName, toolName: `rule_tool_${displayName}` };
 }
 
@@ -120,6 +121,7 @@ export function detectProject(projectDir = ".") {
 
     // Detect framework
     let framework = "vanilla";
+
     for (const rule of FRAMEWORK_RULES) {
       if (hasDependencies(dependencies, rule.deps)) {
         framework = rule.key;
@@ -132,6 +134,7 @@ export function detectProject(projectDir = ".") {
 
     // Detect build tool
     let buildTool = "unknown";
+
     for (const rule of BUILD_TOOL_RULES) {
       if (hasDependencies(dependencies, rule.deps)) {
         buildTool = rule.key;

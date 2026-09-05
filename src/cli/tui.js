@@ -23,9 +23,11 @@ export function shouldUseColor() {
   if (process.env.NO_COLOR) {
     return false;
   }
+
   if (process.env.FORCE_COLOR) {
     return true;
   }
+
   return Boolean(process.stdout.isTTY);
 }
 
@@ -34,6 +36,7 @@ export function color(text, tone = "reset") {
   if (!shouldUseColor()) {
     return String(text);
   }
+
   return `${ANSI[tone] || ""}${text}${ANSI.reset}`;
 }
 
@@ -47,7 +50,8 @@ export function truncate(value, max = 80) {
   const text = String(value ?? "")
     .replaceAll(/\s+/g, " ")
     .trim();
-  return text.length > max ? `${text.slice(0, Math.max(0, max - 1))}…` : text;
+
+  return text.length > max ? `${text.slice(0, Math.max(0, max - 1))}...` : text;
 }
 
 /** Render a command title banner. */
@@ -58,13 +62,17 @@ export function banner(title, subtitle = "") {
   const line = (text) => {
     const raw = String(text);
     const pad = Math.max(0, width - 6 - visibleLength(raw));
+
     return `║  ${raw}${" ".repeat(pad)}  ║`;
   };
   const lines = [top, line(title)];
+
   if (subtitle) {
     lines.push(line(color(subtitle, "dim")));
   }
+
   lines.push(bottom);
+
   return color(lines.join("\n"), "cyan");
 }
 
@@ -76,9 +84,11 @@ export function section(title, icon = "✨") {
 /** Render a key-value list. */
 export function kv(rows) {
   let maxKey = 0;
+
   for (const [key] of rows) {
     maxKey = Math.max(maxKey, visibleLength(key));
   }
+
   return rows.map(([key, value]) => `${color(String(key).padEnd(maxKey), "dim")}  ${value}`).join("\n");
 }
 
@@ -91,6 +101,7 @@ export function table(headers, rows, { maxWidth = 54 } = {}) {
     Math.min(maxWidth, Math.max(visibleLength(header), ...normalized.map((row) => visibleLength(row[index] ?? "")))),
   );
   const renderRow = (row) => row.map((cell, index) => String(cell ?? "").padEnd(widths[index])).join("  ");
+
   return [
     color(renderRow(headers), "bold"),
     color(widths.map((w) => "─".repeat(w)).join("  "), "dim"),
@@ -115,10 +126,13 @@ export function formatInstallResult(result) {
       ["Manifest", result.manifest || "-"],
     ]),
   ];
+
   if (rows.length > 0) {
     lines.push("", section("Configured agents", "🤖"), table(["", "Agent", "Files"], rows));
   }
+
   lines.push("", color("Tip: use `rule-mcp doctor --json` for automation output.", "dim"));
+
   return `${lines.join("\n")}\n`;
 }
 
@@ -140,15 +154,18 @@ export function formatUninstallResult(result) {
       ["Note", result.note || "-"],
     ]),
   ];
+
   if (rows.length > 0) {
     lines.push("", section("Updated configs", "📁"), table(["", "Agent", "Files"], rows));
   }
+
   return `${lines.join("\n")}\n`;
 }
 
 /** Format registered MCP tools for humans. */
 export function formatToolsList(tools) {
   const rows = tools.map((tool) => ["🔧", tool.name, tool.description || ""]);
+
   return `${[
     banner("rule-mcp tools", `${tools.length} registered tools`),
     "",
@@ -167,6 +184,7 @@ export function formatSkillsList(skills) {
     skill.installed ? "installed" : "available",
     skill.description || "",
   ]);
+
   return `${[
     banner("rule-mcp skills", `${skills.length} available skills`),
     "",

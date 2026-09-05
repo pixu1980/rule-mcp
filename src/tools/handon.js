@@ -203,7 +203,9 @@ function openItems(body) {
 
   flush();
 
-  return [...boxes, ...listed.filter((item) => !boxes.includes(item))];
+  const seen = new Set(boxes);
+
+  return [...boxes, ...listed.filter((item) => !seen.has(item))];
 }
 
 /**
@@ -226,6 +228,7 @@ function parseHandoff(body) {
 
   const adrs = new Set();
   const pending = new Set();
+
   for (const match of body.matchAll(/\bADRs?\s+(\d{3})(?:\s+(?:to|-|through)\s+(\d{3}))?/gi)) {
     const from = Number.parseInt(match[1], 10);
     const to = match[2] ? Number.parseInt(match[2], 10) : from;
@@ -233,9 +236,11 @@ function parseHandoff(body) {
     const claimsPending = /\b(?:pending|proposed|not written|unwritten|still to|to be accepted|outstanding)\b/i.test(
       around,
     );
+
     for (let number = from; number <= to && number - from < 20; number += 1) {
       const id = String(number).padStart(3, "0");
       adrs.add(id);
+
       if (claimsPending) {
         pending.add(id);
       }
@@ -252,6 +257,7 @@ function parseHandoff(body) {
     if (!looksLikeCommand(span)) {
       return false;
     }
+
     const at = body.indexOf(`\`${span}\``);
     const around = body.slice(at, at + span.length + PENDING_WINDOW);
 
@@ -577,8 +583,10 @@ function lines(claims, bucket) {
  */
 function runs(ids) {
   const groups = [];
+
   for (const id of ids) {
     const last = groups.at(-1);
+
     if (last && Number.parseInt(id, 10) === Number.parseInt(last.at(-1), 10) + 1) {
       last.push(id);
     } else {
@@ -599,6 +607,7 @@ function firstMove(claims, claimed) {
   const command = claims.find((claim) => claim.kind === "command");
   const range = claims.find((claim) => claim.kind === "range");
   const since = range?.verdict.match(/^(\d+) commits/)?.[1];
+
   if (command) {
     const age = ageLabel(claimed.date);
     const reason = [age && `the claim is ${age}`, since && since !== "0" && `${since} commits have landed since`]

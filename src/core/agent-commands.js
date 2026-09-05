@@ -40,7 +40,7 @@ const FORMATS = {
   args: { ext: ".md", frontmatter: "yaml", placeholder: "$ARGUMENTS" },
   // Roo Code / forks - frontmatter menu entry, arguments typed by hand
   plain: { ext: ".md", frontmatter: "yaml", placeholder: null },
-  // VS Code Copilot Chat prompt files - `/name`, ${input:…} only, no $ARGUMENTS
+  // VS Code Copilot Chat prompt files - `/name`, ${input:...} only, no $ARGUMENTS
   prompt: { ext: ".prompt.md", frontmatter: "yaml", placeholder: null },
   // Windsurf, Cline - workflow files, no argument substitution
   workflow: { ext: ".md", frontmatter: null, placeholder: null },
@@ -129,7 +129,7 @@ const HANDOFF_BODY = [
 ].join("\n");
 
 /**
- * Uniform body for an area/workflow command: route through rule, honour the
+ * Uniform body for an area/workflow command: route through rule, honor the
  * TDD/a11y baseline, validate, and close with a scoped commit.
  *
  * @param {string} description - the prompt's registry description
@@ -159,10 +159,13 @@ export function commandDefinition(name) {
   if (name === ROUTER_COMMAND) {
     return { name, description: ROUTER.description, argumentHint: ROUTER.argumentHint, body: ROUTER.body };
   }
+
   const prompt = listPrompts().find((p) => p.name === name);
+
   if (!prompt) {
     throw new Error(`Unknown command: ${name}`);
   }
+
   const primary = prompt.arguments?.[0];
   const argumentHint = primary ? (primary.required ? `<${primary.name}>` : `[${primary.name}]`) : "<request>";
   const body = name === "rule-handoff" ? HANDOFF_BODY : areaBody(prompt.description);
@@ -188,6 +191,7 @@ export function listAgentCommands() {
  */
 export function renderAgentCommand(command, format) {
   const spec = FORMATS[format];
+
   if (!spec) {
     throw new Error(`Unknown agent command format: ${format}`);
   }
@@ -198,6 +202,7 @@ export function renderAgentCommand(command, format) {
   if (spec.frontmatter === "toml") {
     return [`description = ${quoted(description)}`, 'prompt = """', body, '"""', ""].join("\n");
   }
+
   if (spec.frontmatter === "yaml") {
     // Claude Code / Pi / Cursor / Roo / VS Code prompt files all read this shape.
     return ["---", `description: ${quoted(description)}`, `argument-hint: "${argumentHint}"`, "---", body, ""].join(
@@ -217,6 +222,7 @@ export function renderAgentCommand(command, format) {
  */
 export function renderAgentCommandFiles(format) {
   const ext = FORMAT_EXT[format];
+
   if (!ext) {
     throw new Error(`Unknown agent command format: ${format}`);
   }

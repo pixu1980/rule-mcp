@@ -77,9 +77,11 @@ class LruCache {
     if (!this._map.has(key)) {
       return;
     }
+
     const value = this._map.get(key);
     this._map.delete(key);
     this._map.set(key, value);
+
     return value;
   }
   /**
@@ -91,9 +93,12 @@ class LruCache {
     if (this._map.has(key)) {
       this._map.delete(key);
     }
+
     this._map.set(key, value);
+
     if (this._map.size > this._maxSize) {
       const firstKey = this._map.keys().next().value;
+
       if (firstKey !== undefined) {
         this._map.delete(firstKey);
       }
@@ -124,6 +129,7 @@ export async function loadAllSkills(force = false) {
   if (isLoaded && !force) {
     return;
   }
+
   if (force) {
     skillCache.clear();
     clearTools();
@@ -133,6 +139,7 @@ export async function loadAllSkills(force = false) {
     cacheClear();
     clearSkillDigests();
   }
+
   isLoaded = true;
   registerAiTool();
   const { registerUpdateTool } = await import("../tools/update.js");
@@ -141,12 +148,14 @@ export async function loadAllSkills(force = false) {
   await registerApplyTool();
 
   const skillNames = getSkillNames();
+
   for (const name of skillNames) {
     // In minimal mode, skip skill-specific tools - evidence is loaded via pix_gateway
     if (name !== "rule" && name !== "rule-process-adr" && name !== "rule-process-handoff" && !IS_MINIMAL_TOOLS) {
       registerSkillTool(name);
     }
   }
+
   registerSearchTool();
   registerCheckTool();
   registerScaffoldTool();
@@ -158,11 +167,14 @@ export async function loadAllSkills(force = false) {
     registerProcessAdrTool();
     registerFixTool();
   }
+
   registerProcessHandoffTool(); // Build BM25 search index (async, non-blocking)
   const { buildIndex, clearIndex } = await import("./bm25.js");
+
   if (force) {
     clearIndex();
   }
+
   buildIndex();
   const { registerTemplateTool } = await import("./templates.js");
   registerTemplateTool();
@@ -237,6 +249,7 @@ function registerDetectTool() {
           `Detected ${profile.framework === "vanilla" ? "vanilla JS" : profile.framework} project "${profile.projectName}". ` +
           `Use ${suggestions.join(", ")} for rule-compliant code generation.`,
       };
+
       return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
     },
   });

@@ -1,5 +1,8 @@
 // Auto-extracted from src/cli/commands.js - help/usage text.
 
+/**
+ * The help text shown by the top-level CLI command.
+ */
 export const HELP_TEXT = `rule-mcp - MCP server for the rule-* skill ecosystem.
 
 Usage:
@@ -23,7 +26,7 @@ Commands:
   daemon <action>        Manage daemon (process or native service)
     start|stop|status|logs           Process-based daemon
     install|uninstall|enable|disable Native service (macOS: LaunchAgent)
-    Port: dynamic (first free port in range 3000–6000)
+    Port: dynamic (first free port in range 3000-6000)
 
   install --agent <n>    Install into agent/IDE config (Terminal UI by default)
     --agent <name>         One of: claude, codex, cursor, copilot, gemini,

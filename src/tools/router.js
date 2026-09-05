@@ -36,6 +36,7 @@ function withBanner(banner, result) {
   if (!banner || !result || !Array.isArray(result.content)) {
     return result;
   }
+
   return { ...result, content: [{ type: "text", text: banner }, ...result.content] };
 }
 
@@ -354,6 +355,7 @@ export function addBeforeToolHook(toolName, function_) {
   if (!_beforeHooks[toolName]) {
     _beforeHooks[toolName] = [];
   }
+
   _beforeHooks[toolName].push(function_);
 }
 
@@ -362,6 +364,7 @@ export function addPostToolHook(toolName, function_) {
   if (!_postHooks[toolName]) {
     _postHooks[toolName] = [];
   }
+
   _postHooks[toolName].push(function_);
 }
 
@@ -376,6 +379,7 @@ export function addAfterToolHook(toolName, fn) {
   if (!_afterHooks[toolName]) {
     _afterHooks[toolName] = [];
   }
+
   _afterHooks[toolName].push(fn);
 }
 
@@ -396,6 +400,7 @@ export function clearTools() {
  */
 export function retainTools(allowed) {
   const keep = allowed instanceof Set ? allowed : new Set(allowed);
+
   for (let index = _tools.length - 1; index >= 0; index--) {
     if (!keep.has(_tools[index].name)) {
       _tools.splice(index, 1);
@@ -509,6 +514,7 @@ export async function callTool(name, args) {
   const banner = [consumeUpdateBanner(), notice].filter(Boolean).join("\n\n");
 
   const tool = _tools.find((t) => t.name === name);
+
   if (!tool) {
     return withBanner(banner, { isError: true, content: [{ type: "text", text: `Unknown tool: ${name}` }] });
   }
@@ -637,8 +643,8 @@ export async function callTool(name, args) {
 /**
  * Read the SKILL.md file for a given skill name.
  *
- * The bundled `skills/` directory is the ONLY source. `~/.agents/skills` used to
- * take precedence, which let a directory in the user's home silently replace the
+ * The bundled `skills/` directory is the only source: giving the home skills
+ * dir precedence would let a directory in the user's home silently replace the
  * content this server ships under the same tool name.
  *
  * @param {string} skillName - e.g. "rule-frontend-react", "rule-styleguide"
@@ -678,34 +684,43 @@ const skillCache = new Map();
 export function getSkillMetadata(skillName) {
   const cacheKey = `meta:${skillName}`;
   const cached = skillCache.get(cacheKey);
+
   if (cached) {
     return JSON.parse(cached);
   }
+
   const content = readSkill(skillName);
+
   if (!content) {
     return {};
   }
+
   const meta = parseSkillFrontmatter(content);
   skillCache.set(cacheKey, JSON.stringify(meta));
+
   return meta;
 }
 
 export function getSkillNames() {
   const names = new Set();
   const { embeddedSkills } = getSkillsDirectories();
+
   try {
     for (const entry of readdirSync(embeddedSkills, { withFileTypes: true })) {
       if (!entry.isDirectory() || !entry.name.startsWith("rule-")) {
         continue;
       }
+
       if (!existsSync(join(embeddedSkills, entry.name, "SKILL.md"))) {
         continue;
       }
+
       names.add(entry.name);
     }
   } catch {
     /* no dir */
   }
+
   return [...names].sort();
 }
 
@@ -724,6 +739,7 @@ export function isPluginSkill(skillName) {
   if (skillName === "rule") {
     return false;
   }
+
   return !skillName.startsWith("rule-");
 }
 
