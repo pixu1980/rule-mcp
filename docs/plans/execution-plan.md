@@ -49,7 +49,10 @@ Port the complete tracked behavior of `~/Projects/work/rule/ai/rule-mcp/` into t
 
 ## Phase 3 — CLI, transport, installer, and operational behavior
 
-- [ ] 6. Port CLI commands and UX for `init`, `cache`, `guard`, `roles`, plan operations, handon, stats, usage, and updated completions/help without collapsing target CLI module boundaries.
+- [x] 6. Port CLI commands and UX for `init`, `cache`, `guard`, `roles`, plan operations, handon, stats, usage, and updated completions/help without collapsing target CLI module boundaries.
+  - landed: guard (decide/inject + bin subcommand), cache (stats/export/verify/prime/clear), roles (list/show/new/deprecate) over the review-roles subsystem (EMBEDDED_ROLES, overlays, template), handon + stats CLI cases, completions/help updated; review-docs trio bookkeeping + docs-scan trio gate
+  - deferred: rule_tool_plan / rule_tool_plan_docs registration -> item 9 (surfaces test stub notes it)
+  - tests: hooks-guard (10), review-roles (12), roles-cli (10), review-docs (13), prompt-directive T7
 - [ ] 7. Merge lifecycle-safe stdio/SSE/HTTP behavior, auth rate limiting, session registry, same-origin controls, daemon cleanup, log rotation, and shutdown guarantees.
 - [ ] 8. Merge installer/uninstaller evolution, global-home data placement, command synchronization, role acceptance, backups/force semantics, cross-platform scripts, and source updates while retaining target shim healing and packaging integrations.
 
