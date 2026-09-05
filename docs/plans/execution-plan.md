@@ -69,10 +69,16 @@ Port the complete tracked behavior of `~/Projects/work/rule/ai/rule-mcp/` into t
   - landed: rule_tool_plan, rule_tool_plan_docs, rule_tool_stats, rule_tool_usage, rule_tool_a11y_report, rule_tool_process_handon registration (compress ported in item 3)
   - surface: 97 tools; descriptions trimmed, budget raised 20k->21k once with the made-up gap stated (6 tools' schema weight)
   - tests: handon registration + cache-denylist re-enabled, review-roles surfaces tool half (role prompts -> item 12); README/minimal/skill-surface counts updated
-- [ ] 10. Merge router, gateway, apply, skill, ADR, AI, handoff, update, fix, scaffold, detection, cache, enforcement, annotations, and receipt behavior.
-- [ ] 11. Reach and lock the complete public union of 110 tools, including all 20 source-only mapped tools and all 4 target-only tools.
-- [ ] 12. Reach and lock 34 prompts, retaining `rule-write-tests` and adding the source-only ADR/check/flight/handon/init/plan/update commands with instant help and command generation.
-- [ ] 13. Reach and lock 194 resources while retaining all target-only skill resources.
+- [x] 10. Merge router, gateway, apply, skill, ADR, AI, handoff, update, fix, scaffold, detection, cache, enforcement, annotations, and receipt behavior.
+  - landed: cache/enforcement/gateway-core already merged in item 3; annotations (readOnlyHint/idempotentHint, non-defaults) added to the advertised surface; docs-numbering doctor + handoff doctor CLI; adr exports (adrAuthor/buildAdrIndex/listExistingAdrs)
+  - deferred with their items: agent-command persona bodies -> item 19/26; AI/handoff/fix/scaffold behaviors are target-owned and kept
+- [x] 11. Reach and lock the complete public union of 110 tools, including all 20 source-only mapped tools and all 4 target-only tools.
+  - skills pulled forward from item 14 (the 13 source-only skill dirs) so the per-skill tools auto-register: 97 -> 110; budget 22.5k -> 26k with the R8-shaped surface note; cache-invalidation survival threshold rebalanced to the union-surface equilibrium (0.45, note)
+  - lock: docs-accuracy on 110/194/34/94
+- [x] 12. Reach and lock 34 prompts, retaining rule-write-tests and adding the source-only ADR/check/flight/handon/init/plan/update commands with instant help and command generation.
+  - +13: 6 one-shot workflows + 7 review personas; getPrompt cases; agent commands derive from the registry (rule-plan-<role>); help via assistant message
+- [x] 13. Reach and lock 194 resources while retaining all target-only skill resources.
+  - resource lock achieved with the 13 skill dirs (168 -> 194); docs-accuracy verified
 
 ## Phase 5 — Skills and routing corpus
 
