@@ -81,7 +81,7 @@ export const installAgent = ({
   agent,
   entrypoint,
   dryRun = false,
-  _force = false,
+  force = false,
   global = false,
   mode = "stdio",
   _env = {},
@@ -109,7 +109,7 @@ export const installAgent = ({
     }
 
     try {
-      result[name] = installers[name]({ entrypoint, dryRun, global, mode: normalizedMode });
+      result[name] = installers[name]({ entrypoint, dryRun, global, force, mode: normalizedMode });
     } catch (error) {
       result[name] = { error: error.message };
     }
