@@ -653,73 +653,6 @@ const installPi = ({ entrypoint, dryRun, global, mode }) => {
 };
 
 /** Return the VS Code user-level global config directory. */
-/**
- * Return VS Code extension directories for all known variants.
- */
-const vscodeExtensionDirectories = () => {
-  const directories = [];
-
-  if (IS_MACOS) {
-    directories.push(
-      join(HOME, ".vscode", "extensions"),
-      join(HOME, ".vscode-oss", "extensions"),
-      join(HOME, "Library", "Application Support", "Code - Insiders", "extensions"),
-      join(HOME, ".cursor", "extensions"),
-      join(HOME, ".windsurf", "extensions"),
-    );
-  } else if (IS_LINUX) {
-    directories.push(
-      join(HOME, ".vscode", "extensions"),
-      join(HOME, ".vscode-oss", "extensions"),
-      join(HOME, ".config", "Code - Insiders", "extensions"),
-      join(HOME, ".cursor", "extensions"),
-    );
-  } else if (IS_WINDOWS) {
-    const appData = process.env.APPDATA || join(HOME, "AppData", "Roaming");
-    directories.push(
-      join(HOME, ".vscode", "extensions"),
-      join(HOME, "AppData", "Local", "Programs", "Microsoft VS Code", "resources", "app", "extensions"),
-      join(appData, "Code - Insiders", "extensions"),
-      join(HOME, ".cursor", "extensions"),
-    );
-  }
-
-  return [...new Set(directories.filter(Boolean))];
-};
-
-/**
- * Remove the rule-vanilla-reactive extension directory from all known VS Code variants.
- */
-const removeVscodeExtensionDirectories = ({ dryRun }) => {
-  const extensionId = "rule.rule-vanilla-reactive";
-  const removed = [];
-
-  for (const dir of vscodeExtensionDirectories()) {
-    if (!existsSync(dir)) {
-      continue;
-    }
-
-    const entries = readdirSync(dir, { withFileTypes: true });
-
-    for (const entry of entries) {
-      if (!(entry.isDirectory() && entry.name.startsWith(extensionId))) {
-        continue;
-      }
-
-      const fullPath = join(dir, entry.name);
-
-      if (!dryRun) {
-        rmSync(fullPath, { recursive: true, force: true });
-      }
-
-      removed.push(fullPath);
-    }
-  }
-
-  return removed;
-};
-
-/** Return the VS Code user-level global config directory. */
 const vscodeGlobalDir = () => {
   if (process.platform === "darwin") {
     return join(HOME, "Library", "Application Support", "Code", "User");
@@ -732,129 +665,6 @@ const vscodeGlobalDir = () => {
   return join(HOME, ".config", "Code", "User");
 };
 
-/**
- * Try to build and install the rule-vanilla-reactive extension for a given editor CLI.
- * Returns true if the extension was installed successfully.
- */
-const tryInstallExtension = (cli, vsixPath, label) => {
-  try {
-    const result = execSync(`${cli} --install-extension "${vsixPath}" --force`, {
-      encoding: "utf8",
-      timeout: 30_000,
-      stdio: "pipe",
-    });
-    if (result.includes("already installed") || result.includes("Successfully installed")) {
-      return true;
-    }
-
-    return true;
-  } catch {
-    return false;
-  }
-};
-
-/**
- * Install the rule-vanilla-reactive VSIX extension for VS Code and all derivatives.
- * Tries: code, cursor, windsurf, code-insiders, code-oss, codium
- */
-const installVscodeExtension = ({ dryRun, vsixPath }) => {
-  if (dryRun) {
-    return [];
-  }
-
-  if (!existsSync(vsixPath)) {
-    console.warn(`  \u{26A0} Extension VSIX not found at: ${vsixPath}`);
-
-    return [];
-  }
-
-  const editors = [
-    { cli: "code", label: "VS Code" },
-    { cli: "cursor", label: "Cursor" },
-    { cli: "windsurf", label: "Windsurf" },
-    { cli: "code-insiders", label: "VS Code Insiders" },
-    { cli: "code-oss", label: "Code-OSS" },
-    { cli: "codium", label: "Codium" },
-  ];
-
-  const installed = [];
-
-  for (const { cli, label } of editors) {
-    try {
-      const found = execSync(`command -v ${cli} 2>/dev/null || which ${cli} 2>/dev/null`, {
-        encoding: "utf8",
-        timeout: 2000,
-      }).trim();
-      if (!found) {
-        continue;
-      }
-
-      const ok = tryInstallExtension(cli, vsixPath, label);
-
-      if (ok) {
-        installed.push(label);
-      }
-    } catch {
-      // CLI not found, skip
-    }
-  }
-
-  return installed;
-};
-
-/**
- * Uninstall the rule-vanilla-reactive extension for VS Code and all derivatives.
- * Uses each editor's CLI --uninstall-extension.
- */
-const uninstallVscodeExtension = ({ dryRun }) => {
-  if (dryRun) {
-    return [];
-  }
-
-  const extensionId = "rule.rule-vanilla-reactive";
-  const editors = [
-    { cli: "code", label: "VS Code" },
-    { cli: "cursor", label: "Cursor" },
-    { cli: "windsurf", label: "Windsurf" },
-    { cli: "code-insiders", label: "VS Code Insiders" },
-    { cli: "code-oss", label: "Code-OSS" },
-    { cli: "codium", label: "Codium" },
-  ];
-
-  const uninstalled = [];
-
-  for (const { cli, label } of editors) {
-    try {
-      const found = execSync(`command -v ${cli} 2>/dev/null || which ${cli} 2>/dev/null`, {
-        encoding: "utf8",
-        timeout: 2000,
-      }).trim();
-      if (!found) {
-        continue;
-      }
-
-      execSync(`${cli} --uninstall-extension ${extensionId}`, {
-        encoding: "utf8",
-        timeout: 30_000,
-        stdio: "pipe",
-      });
-      uninstalled.push(label);
-    } catch {
-      // CLI not found or extension not installed, skip
-    }
-  }
-
-  // Safety net: also remove extension directories from disk
-  try {
-    removeVscodeExtensionDirectories({ dryRun });
-  } catch {
-    // non-critical
-  }
-
-  return uninstalled;
-};
-
-/** @param {{ entrypoint: string, dryRun: boolean, global?: boolean, mode?: "stdio"|"daemon"|"sse"|"docker" }} */
 /**
  * Devin's user-level MCP config.
  *
@@ -882,17 +692,6 @@ const installVscode = ({ entrypoint, dryRun, global, mode }) => {
       dryRun,
     }),
   ];
-
-  // Also install the rule-vanilla-reactive VSIX extension (syntax highlighting, autocomplete)
-  const vsixPath = resolvePath("extensions/rule-vanilla-reactive.vsix");
-
-  if (!dryRun) {
-    const editors = installVscodeExtension({ dryRun, vsixPath });
-
-    if (editors.length > 0) {
-      results.push(`extension installed: ${editors.join(", ")}`);
-    }
-  }
 
   return results;
 };
@@ -1138,9 +937,6 @@ const uninstallPi = ({ dryRun }) => {
 
 /** @param {{ dryRun: boolean }} */
 const uninstallVscode = ({ dryRun }) => {
-  // Also uninstall the VSIX extension from all editor variants
-  uninstallVscodeExtension({ dryRun });
-
   const removeFromExistingFile = (file) => {
     if (!existsSync(file)) {
       return null;

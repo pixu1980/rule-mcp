@@ -10,7 +10,7 @@
 #   1. Installs/updates the rule-mcp npm package globally
 #   2. Auto-detects installed coding agents on your system (18+ supported)
 #   3. Registers rule-mcp as an MCP server in each detected agent
-#   4. Installs IDE extensions / configs for supported editors
+#   4. Writes IDE configs / user settings for supported editors
 #   5. Optionally configures model provider API keys
 #   6. Appends instruction rules so agents prefer rule-mcp skills
 #   7. Runs a health check to confirm everything works
@@ -672,69 +672,6 @@ else
 fi
 
 # Agent and IDE configurations are written only for selections made in Phase 3.
-
-# ─────────────────────────────────────────────────────────────────────────────
-# PHASE 4: VS Code Extension
-# ─────────────────────────────────────────────────────────────────────────────
-header "Phase 4: VS Code Extension"
-
-SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
-EXT_DIR="${PROJECT_ROOT}/extensions/vscode-rule"
-VSIX_OUT="${PROJECT_ROOT}/extensions/rule-vanilla-reactive.vsix"
-
-install_vsix_for_editor() {
-  local cli="$1"
-  local label="$2"
-  local vsix="$3"
-
-  if ! command -v "$cli" &>/dev/null; then
-    sub "${label}: CLI not found, skipping"
-    return 1
-  fi
-
-  echo -e "  ${CYAN}Installing rule Vanilla Reactive for ${label}...${NC}"
-  if "$cli" --install-extension "$vsix" --force 2>&1; then
-    echo -e "  ${GREEN}✓ ${label} extension installed${NC}"
-    return 0
-  else
-    warn "${label} extension install failed"
-    return 1
-  fi
-}
-
-# Use existing .vsix if available, otherwise build it
-if [[ "$DRY_RUN" == "true" ]]; then
-  sub "[dry-run] Would use VSIX: ${VSIX_OUT}"
-elif [[ -f "$VSIX_OUT" ]]; then
-  ok "Extension VSIX found: ${VSIX_OUT}"
-else
-  echo -e "  ${CYAN}Building VS Code extension...${NC}"
-  if cd "$EXT_DIR" && npx --yes @vscode/vsce package --out "$VSIX_OUT" 2>&1; then
-    cd "$PROJECT_ROOT"
-    ok "Extension VSIX built: ${VSIX_OUT}"
-  else
-    cd "$PROJECT_ROOT"
-    warn "VS Code extension build failed (non-critical)"
-    echo -e "  ${YELLOW}  cd $EXT_DIR && npx @vscode/vsce package${NC}"
-    VSIX_OUT=""
-  fi
-fi
-
-if [[ "$DRY_RUN" == "true" ]]; then
-  sub "[dry-run] Would install extension for: code, cursor, windsurf, code-insiders, code-oss, codium"
-elif [[ -n "$VSIX_OUT" && -f "$VSIX_OUT" ]]; then
-  install_vsix_for_editor "code" "VS Code" "$VSIX_OUT" || true
-  install_vsix_for_editor "cursor" "Cursor" "$VSIX_OUT" || true
-  install_vsix_for_editor "windsurf" "Windsurf" "$VSIX_OUT" || true
-  install_vsix_for_editor "code-insiders" "VS Code Insiders" "$VSIX_OUT" || true
-  install_vsix_for_editor "code-oss" "Code-OSS" "$VSIX_OUT" || true
-  install_vsix_for_editor "codium" "Codium" "$VSIX_OUT" || true
-else
-  warn "No extension VSIX available - skipping extension installation"
-  echo -e "  ${YELLOW}  The MCP server config was still written.${NC}"
-  echo -e "  ${YELLOW}  Build manually: cd ${EXT_DIR} && npx @vscode/vsce package${NC}"
-fi
 
 # ─────────────────────────────────────────────────────────────────────────────
 # PHASE 6: Agent Instruction Files

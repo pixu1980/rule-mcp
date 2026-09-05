@@ -33,7 +33,7 @@ console.log("repository contract test");
 // `forbidden` is the legacy token that must not appear in file names/contents.
 // When it is empty there is nothing to scan for - `"".includes("")` is always
 // true, which would flag every file - so skip the substring sweep entirely.
-const sourceDirectories = ["src", "test", "prompts", "scripts", "extensions", "rules", "skills"];
+const sourceDirectories = ["src", "test", "prompts", "scripts", "rules", "skills"];
 for (const sub of forbidden ? sourceDirectories : []) {
   const dir = join(root, sub);
   if (!existsSync(dir)) {

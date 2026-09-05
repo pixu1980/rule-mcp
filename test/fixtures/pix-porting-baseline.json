@@ -644,7 +644,6 @@
       "test/token-pipeline.test.mjs"
     ],
     "preservedRoots": [
-      "extensions",
       "rules",
       ".clinerules",
       ".cursor",
