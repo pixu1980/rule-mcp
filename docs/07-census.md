@@ -201,7 +201,7 @@ Totale risorse `read-*`: **194** (94 skill × 2 = 188 risorse full/summary, più
 
 ---
 
-## 2. Comandi slash `/rule-*` (44 generati)
+## 2. Comandi slash `/rule-*` (62 generati)
 
 I comandi slash vengono generati da `src/core/agent-commands.js`, che parte dai prompt registrati in `src/prompts/index.js` e dai ruoli attivi di `src/core/review-roles.js` (OPERATIONS = `plan`, `audit`, `review`).
 
@@ -240,22 +240,28 @@ I comandi slash vengono generati da `src/core/agent-commands.js`, che parte dai 
 | `/rule-process-check` | Check/route del workflow di processo                                                 |
 | `/rule-update`        | Update del server rule-mcp                                                     |
 
-### 2.4 Persona role × operazione (24)
+### 2.4 Persona role × operazione (42)
 
 Per ogni ruolo attivo, 3 operazioni: `plan`, `audit`, `review`.
 
-**Ruoli attivi (8):** `architect`, `security`, `privacy`, `a11y`, `ai-engineer`, `performance`, `docs-engineer`, `web-engineer`
+**Ruoli attivi (14):** `architect`, `security`, `privacy`, `a11y`, `ai-engineer`, `performance`, `docs-engineer`, `web-engineer`, `devops-sre`, `qa-testing`, `data-engineer`, `oss-compliance`, `design-system-lead`, `dx-toolchain`
 
-| Ruolo         | Plan                      | Audit                      | Review                      |
-| ------------- | ------------------------- | -------------------------- | --------------------------- |
-| architect     | `/rule-plan-architect`     | `/rule-audit-architect`     | `/rule-review-architect`     |
-| security      | `/rule-plan-security`      | `/rule-audit-security`      | `/rule-review-security`      |
-| privacy       | `/rule-plan-privacy`       | `/rule-audit-privacy`       | `/rule-review-privacy`       |
-| a11y          | `/rule-plan-a11y`          | `/rule-audit-a11y`          | `/rule-review-a11y`          |
-| ai-engineer   | `/rule-plan-ai-engineer`   | `/rule-audit-ai-engineer`   | `/rule-review-ai-engineer`   |
-| performance   | `/rule-plan-performance`   | `/rule-audit-performance`   | `/rule-review-performance`   |
-| docs-engineer | `/rule-plan-docs-engineer` | `/rule-audit-docs-engineer` | `/rule-review-docs-engineer` |
-| web-engineer  | `/rule-plan-web-engineer`  | `/rule-audit-web-engineer`  | `/rule-review-web-engineer`  |
+| Ruolo              | Plan                           | Audit                           | Review                           |
+| ------------------ | ------------------------------ | ------------------------------- | -------------------------------- |
+| architect          | `/rule-plan-architect`          | `/rule-audit-architect`          | `/rule-review-architect`          |
+| security           | `/rule-plan-security`           | `/rule-audit-security`           | `/rule-review-security`           |
+| privacy            | `/rule-plan-privacy`            | `/rule-audit-privacy`            | `/rule-review-privacy`            |
+| a11y               | `/rule-plan-a11y`               | `/rule-audit-a11y`               | `/rule-review-a11y`               |
+| ai-engineer        | `/rule-plan-ai-engineer`        | `/rule-audit-ai-engineer`        | `/rule-review-ai-engineer`        |
+| performance        | `/rule-plan-performance`        | `/rule-audit-performance`        | `/rule-review-performance`        |
+| docs-engineer      | `/rule-plan-docs-engineer`      | `/rule-audit-docs-engineer`      | `/rule-review-docs-engineer`      |
+| web-engineer       | `/rule-plan-web-engineer`       | `/rule-audit-web-engineer`       | `/rule-review-web-engineer`       |
+| devops-sre         | `/rule-plan-devops-sre`         | `/rule-audit-devops-sre`         | `/rule-review-devops-sre`         |
+| qa-testing         | `/rule-plan-qa-testing`         | `/rule-audit-qa-testing`         | `/rule-review-qa-testing`         |
+| data-engineer      | `/rule-plan-data-engineer`      | `/rule-audit-data-engineer`      | `/rule-review-data-engineer`      |
+| oss-compliance     | `/rule-plan-oss-compliance`     | `/rule-audit-oss-compliance`     | `/rule-review-oss-compliance`     |
+| design-system-lead | `/rule-plan-design-system-lead` | `/rule-audit-design-system-lead` | `/rule-review-design-system-lead` |
+| dx-toolchain       | `/rule-plan-dx-toolchain`       | `/rule-audit-dx-toolchain`       | `/rule-review-dx-toolchain`       |
 
 ---
 
@@ -290,14 +296,14 @@ La cartella `.roo/commands/` contiene gli snapshot `.md` installati (per agent c
 | — Tool core                                                                                           | 19        |
 | — Tool per-skill (`rule-tool-<skill>`)                                                                 | 94        |
 | — Risorse `read-*`                                                                                    | 194       |
-| Comandi slash generati (`/rule-*`)                                                                     | **44**    |
+| Comandi slash generati (`/rule-*`)                                                                     | **62**    |
 | — Router `/rule`                                                                                       | 1         |
 | — Area / workflow (`/rule-area-*`, `/rule-adr`, `/rule-flight`)                                          | 14        |
 | — Gestione sessione (`/rule-handoff`, `/rule-handon`, `/rule-init`, `/rule-process-check`, `/rule-update`) | 5         |
-| — Persona (`/rule-{plan,audit,review}-<role>`)                                                         | 24        |
+| — Persona (`/rule-{plan,audit,review}-<role>`)                                                         | 42        |
 | Macro file in `.roo/commands/`                                                                        | 35        |
 
-> **Nota ruoli:** `src/core/review-roles.js` registra 16 ruoli; solo 8 sono attivi e generano comandi slash. Gli altri: `devops-sre`, `qa-testing`, `data-engineer`, `design-system-lead`, `dx-toolchain`, `simplicity-staff-eng`, `oss-compliance`, `localization-engineer`.
+> **Nota ruoli:** `src/core/review-roles.js` registra 22 ruoli; 14 sono attivi e generano comandi slash. Proposti (solo catalogo, raggiungibili via `rule_tool_plan`): `simplicity-staff-eng`, `localization-engineer`, `frontend-engineer`, `api-design`, `release-engineering`, `platform-packaging`, `data-quality`, `auth-identity`.
 
 ---
 
