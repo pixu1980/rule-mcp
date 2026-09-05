@@ -299,6 +299,17 @@ Examples:
   rule-mcp fix --mode fix --no-dry-run
 `);
 
+const printHandonHelp = () =>
+  console.log(`rule-mcp handon - verify the last handoff against the repo now
+
+Usage: rule-mcp handon [--dir <project>] [--file <path>] [--list]
+
+Reads the newest handoff in docs/handoff/ and reports which of its claims are
+still true: branch, commit range, files, ADRs, open work. Read-only - it never
+runs a claimed command.
+
+Resume: rule-mcp handon`);
+
 const printCompletionsHelp = () =>
   process.stdout.write(`
 Usage: rule-mcp completions [options]
@@ -555,6 +566,72 @@ export async function cli() {
         }
 
         completionsCommand({ shell: getArgument("--shell", "zsh") });
+        break;
+      }
+
+      case "handon": {
+        if (hasFlag("--help") || hasFlag("-h")) {
+          printHandonHelp();
+
+          return;
+        }
+
+        const { handon } = await import("./tools/handon.js");
+        process.stdout.write(
+          handon({
+            projectDir: getArgument("--dir", "."),
+            file: getArgument("--file", "") || undefined,
+            list: hasFlag("--list"),
+          }).text + "\n",
+        );
+
+        break;
+      }
+
+      case "stats": {
+        const { aggregate, renderStats } = await import("./core/telemetry-stats.js");
+        const { readEvents } = await import("./core/telemetry-store.js");
+        const { telemetryEnabled } = await import("./core/telemetry.js");
+
+        if (telemetryEnabled()) {
+          console.log(renderStats(aggregate(readEvents()), { title: "rule telemetry: local log" }));
+        } else {
+          console.log("Telemetry is disabled (RULE_MCP_NO_TELEMETRY=1). Nothing has been recorded.");
+        }
+
+        break;
+      }
+
+      case "cache": {
+        const { cacheCommand } = await import("./cli/cache.js");
+        await cacheCommand(arguments_[1] ?? "stats", { dir: getArgument("--dir") });
+
+        break;
+      }
+
+      case "roles": {
+        const { rolesCommand } = await import("./cli/roles.js");
+        rolesCommand(arguments_[1] ?? "list", {
+          id: arguments_[2],
+          json: hasFlag("--json"),
+          role: getArgument("--role"),
+          skills: getArgument("--skills"),
+          years: getArgument("--years"),
+          lenses: getArgument("--lenses"),
+          evidenceSkills: getArgument("--evidence-skills"),
+          by: getArgument("--by"),
+        });
+
+        break;
+      }
+
+      case "guard": {
+        // Invoked by the PreToolUse hooks, never by a human: reads the hook
+        // payload on stdin and answers with a permission decision on stdout.
+        const { runGuard } = await import("./cli/guard.js");
+
+        await runGuard(arguments_[1] ?? "bash");
+
         break;
       }
 

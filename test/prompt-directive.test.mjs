@@ -114,8 +114,33 @@ check(
 );
 check("T6.5 empty containers are dropped", withoutHooks(withHooks({}, LAUNCHER)).hooks === undefined);
 
-// ── T7/T8 (CLI guard contract, generated agent commands) land with their
-//    modules: cli/guard.js in the CLI phase, agent-integrations in the tools phase.
+// ── T7: the CLI contract the harness actually invokes (cli/guard.js) ──
+import { execFileSync } from "node:child_process";
+import { fileURLToPath } from "node:url";
+
+const BIN = fileURLToPath(new URL("../bin/rule-mcp.js", import.meta.url));
+const run = (subcommand, input = "{}", env = {}) =>
+  JSON.parse(
+    execFileSync(process.execPath, [BIN, "guard", subcommand], {
+      input,
+      encoding: "utf8",
+      env: { ...process.env, ...env },
+    }),
+  );
+const start = run("session-start");
+check("T7 session-start answers on its own event", start.hookSpecificOutput.hookEventName === "SessionStart");
+check("T7.1 it injects the full directive", start.hookSpecificOutput.additionalContext.includes(NO_SUBAGENTS));
+const submit = run("prompt-submit", JSON.stringify({ prompt: "add a button" }));
+check("T7.2 prompt-submit answers on its own event", submit.hookSpecificOutput.hookEventName === "UserPromptSubmit");
+check("T7.3 it injects the one-liner", submit.hookSpecificOutput.additionalContext === promptDirective());
+check(
+  "T7.4 a malformed payload never blocks the prompt",
+  run("prompt-submit", "not json").hookSpecificOutput.hookEventName === "UserPromptSubmit",
+);
+check(
+  "T7.5 the opt-out silences the hook",
+  !run("prompt-submit", "{}", { RULE_MCP_NO_PROMPT_DIRECTIVE: "1" }).hookSpecificOutput.additionalContext,
+);
 
 console.log(`\n${pass} passed, ${fail} failed`);
 if (fail > 0) {
