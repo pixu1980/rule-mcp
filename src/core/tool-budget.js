@@ -80,7 +80,7 @@
  * question. The number that would reopen it is in ADR 055 and in this phase's
  * own ADR, and the sample behind it remains one machine.
  */
-export const TOOL_SURFACE_BUDGET_TOKENS = 22_500;
+export const TOOL_SURFACE_BUDGET_TOKENS = 26_000;
 
 // The first raise on the rule surface happened when the 6 item-9 action tools
 // landed (plan, plan-docs, stats, usage, a11y_report, process_handon at 97

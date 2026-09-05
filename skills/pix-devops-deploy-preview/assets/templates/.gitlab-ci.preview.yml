@@ -1,0 +1,180 @@
+# Merge request preview environments on DigitalOcean App Platform.
+# Merge these three jobs into the existing .gitlab-ci.yml: the only top-level keys
+# that collide are `stages` and `variables`.
+
+stages:
+  - build
+  - deploy
+  - cleanup
+
+variables:
+  DOCKER_TLS_CERTDIR: "/certs"
+  APP_NAME: "review-mr-${CI_MERGE_REQUEST_IID}"
+  IMAGE_TAG: "mr-${CI_MERGE_REQUEST_IID}-${CI_COMMIT_SHORT_SHA}"
+
+# ---------------------------------------------------------------------------
+# 1) Build the image and push it to the DigitalOcean Container Registry.
+# ---------------------------------------------------------------------------
+build_review_image:
+  stage: build
+  image: docker:cli
+  services:
+    - name: docker:dind
+  # Two alternatives, `|` binds loosest: the branch either STARTS WITH feat/preview,
+  # or ENDS WITH preview/(preview). Adapt it to the team convention, or drop the
+  # second condition to preview every merge request - each preview is a real
+  # billable DigitalOcean app. Keep this rule identical in deploy_review_app.
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME =~ /^(feat|preview).*$|^.*(preview|\(preview\))$/'
+  before_script:
+    # The DigitalOcean token doubles as both registry username and password.
+    - echo "$DIGITALOCEAN_TOKEN" |
+      docker login registry.digitalocean.com
+      --username "$DIGITALOCEAN_TOKEN"
+      --password-stdin
+  script:
+    - export IMAGE_URL="registry.digitalocean.com/${DO_REGISTRY_NAME}/${DO_REPOSITORY_NAME}:${IMAGE_TAG}"
+    - echo "Build $IMAGE_URL"
+    - docker build --pull --tag "$IMAGE_URL" .
+    - docker push "$IMAGE_URL"
+
+# ---------------------------------------------------------------------------
+# 2) Create or update the DigitalOcean app and register the dynamic environment.
+# ---------------------------------------------------------------------------
+deploy_review_app:
+  stage: deploy
+  image:
+    name: digitalocean/doctl:latest
+    entrypoint: [""]
+  # Must stay identical to the rule in build_review_image.
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME =~ /^(feat|preview).*$|^.*(preview|\(preview\))$/'
+  environment:
+    name: review/$CI_MERGE_REQUEST_IID
+    url: $DYNAMIC_ENVIRONMENT_URL
+    on_stop: stop_review_app
+    # Safety net: a leaked preview keeps billing until someone notices.
+    auto_stop_in: 3 days
+  before_script:
+    - apk add --no-cache gettext jq
+    # The digitalocean/doctl image exposes the binary only through its ENTRYPOINT
+    # (/app/doctl). With entrypoint overridden to [""], /app is not on the PATH,
+    # so it has to be added explicitly.
+    - export PATH="$PATH:/app"
+    - doctl auth init --access-token "$DIGITALOCEAN_TOKEN"
+  script:
+    # Explicit whitelist: envsubst must not touch any other variable in the spec.
+    # Every ${PLACEHOLDER} used in .do/review-app.yaml must be listed here.
+    - >
+      envsubst '${APP_NAME} ${DO_REGISTRY_NAME} ${DO_REPOSITORY_NAME} ${IMAGE_TAG} ${CI_MERGE_REQUEST_IID} ${CI_COMMIT_SHORT_SHA} ${CI_COMMIT_REF_NAME}'
+      < .do/review-app.yaml > /tmp/review-app.yaml
+    - cat /tmp/review-app.yaml
+    - doctl apps spec validate /tmp/review-app.yaml
+    - |
+      APP_ID="$(
+        doctl apps list --output json |
+        jq -r --arg app_name "$APP_NAME" \
+          '.[] | select(.spec.name == $app_name) | .id' |
+        head -n 1
+      )"
+      if [ -z "$APP_ID" ]; then
+        echo "Creating DigitalOcean app: $APP_NAME"
+        # --wait is mandatory: without waiting for provisioning, default_ingress
+        # stays empty and the environment URL would be broken.
+        doctl apps create --spec /tmp/review-app.yaml --wait --output json > /dev/null
+      else
+        echo "Updating DigitalOcean app: $APP_NAME ($APP_ID)"
+        doctl apps update "$APP_ID" --spec /tmp/review-app.yaml --wait --output json > /dev/null
+      fi
+
+      # Id and URL are always re-read from "apps list"/"apps get": both branches
+      # converge here and nothing depends on the output shape of create.
+      APP_ID="$(
+        doctl apps list --output json |
+        jq -r --arg app_name "$APP_NAME" \
+          '.[] | select(.spec.name == $app_name) | .id' |
+        head -n 1
+      )"
+      if [ -z "$APP_ID" ]; then
+        echo "App not found after deploy: $APP_NAME"
+        exit 1
+      fi
+
+      APP_URL=""
+      i=0
+      while [ -z "$APP_URL" ] && [ "$i" -lt 30 ]; do
+        APP_URL="$(
+          doctl apps get "$APP_ID" --output json |
+          jq -r '.[0].default_ingress // .[0].live_url // empty'
+        )"
+        [ -n "$APP_URL" ] && break
+        sleep 10
+        i=$((i + 1))
+      done
+
+      if [ -z "$APP_URL" ]; then
+        echo "Could not determine the URL of app $APP_NAME ($APP_ID)"
+        exit 1
+      fi
+
+      case "$APP_URL" in
+        http://*|https://*) ;;
+        *) APP_URL="https://${APP_URL}" ;;
+      esac
+
+      echo "Feature preview available at: $APP_URL"
+      echo "DYNAMIC_ENVIRONMENT_URL=$APP_URL" > deploy.env
+  artifacts:
+    # GitLab reads the URL from here and renders the "View app" button on the
+    # merge request. No GitLab API token is needed.
+    reports:
+      dotenv: deploy.env
+
+# ---------------------------------------------------------------------------
+# 3) Cleanup: delete the app when the merge request is merged or closed.
+#    GitLab runs this job automatically when the environment stops (source branch
+#    deleted after the merge) or when auto_stop_in expires.
+# ---------------------------------------------------------------------------
+stop_review_app:
+  stage: cleanup
+  image:
+    name: digitalocean/doctl:latest
+    entrypoint: [""]
+  # No branch filter here on purpose: with a stricter rule than the deploy job,
+  # GitLab would never create this job and nothing would ever be deleted.
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+      when: manual
+      allow_failure: true
+  environment:
+    name: review/$CI_MERGE_REQUEST_IID
+    action: stop
+  variables:
+    GIT_STRATEGY: none
+  before_script:
+    - apk add --no-cache jq
+    # See the note in deploy_review_app: /app is not on the PATH with entrypoint [""].
+    - export PATH="$PATH:/app"
+    - doctl auth init --access-token "$DIGITALOCEAN_TOKEN"
+  script:
+    # If CI_MERGE_REQUEST_IID were out of scope, APP_NAME would be "review-mr-"
+    # and the delete would become a silent no-op: it has to show up in the log.
+    - echo "APP_NAME=$APP_NAME CI_MERGE_REQUEST_IID=$CI_MERGE_REQUEST_IID"
+    - |
+      case "$APP_NAME" in
+        review-mr-?*) ;;
+        *) echo "APP_NAME not resolved, cleanup aborted"; exit 1 ;;
+      esac
+      APP_ID="$(
+        doctl apps list --output json |
+        jq -r --arg app_name "$APP_NAME" \
+          '.[] | select(.spec.name == $app_name) | .id' |
+        head -n 1
+      )"
+      if [ -n "$APP_ID" ]; then
+        echo "Deleting DigitalOcean app: $APP_NAME ($APP_ID)"
+        doctl apps delete "$APP_ID" --force
+      else
+        # Already gone: an idempotent delete must not fail the job.
+        echo "DigitalOcean app not found: $APP_NAME"
+      fi

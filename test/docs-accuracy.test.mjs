@@ -8,9 +8,11 @@
  */
 import test from "node:test";
 import assert from "node:assert/strict";
-import { readdirSync, readFileSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
+import { join } from "node:path";
 
+const skillsRoot = fileURLToPath(new URL("../skills", import.meta.url));
 const actual = {};
 {
   const { loadAllSkills } = await import("../src/core/skills.js");
@@ -22,7 +24,9 @@ const actual = {};
   actual.tools = len(await listTools({}));
   actual.resources = len(await listResources({}));
   actual.prompts = len(await listPrompts());
-  actual.skills = readdirSync(new URL("../skills", import.meta.url)).filter((d) => d.startsWith("rule-")).length;
+  actual.skills = readdirSync(new URL("../skills", import.meta.url).pathname, { withFileTypes: true }).filter(
+    (entry) => entry.isDirectory() && existsSync(join(skillsRoot, entry.name, "SKILL.md")),
+  ).length;
 }
 
 const README = readFileSync(fileURLToPath(new URL("../README.md", import.meta.url)), "utf8");

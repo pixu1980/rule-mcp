@@ -1,0 +1,46 @@
+# DigitalOcean App Spec template for merge request preview environments.
+# The GitLab pipeline renders this file with envsubst before sending it to DigitalOcean.
+# Every ${PLACEHOLDER} below must also appear in the envsubst whitelist in .gitlab-ci.yml.
+name: ${APP_NAME}
+# TODO adapt: closest region to the team. fra, ams, nyc, sfo, sgp, lon, tor, blr, syd.
+region: fra
+services:
+  # TODO adapt: name of the main service of the target project.
+  - name: web
+    image:
+      registry_type: DOCR
+      registry: ${DO_REGISTRY_NAME}
+      repository: ${DO_REPOSITORY_NAME}
+      tag: ${IMAGE_TAG}
+    instance_count: 1
+    # Smallest paid size: a preview should never cost more than this.
+    instance_size_slug: apps-s-1vcpu-0.5gb
+    # TODO adapt: must match the EXPOSE of the Dockerfile and the port the app listens on.
+    http_port: 3000
+    routes:
+      - path: /
+    # TODO adapt: point at a real health endpoint of the project.
+    # Remove this whole block if the project exposes none - a health check against a
+    # missing path fails the deployment instead of protecting it.
+    health_check:
+      http_path: /health
+      initial_delay_seconds: 10
+      period_seconds: 10
+      timeout_seconds: 3
+      failure_threshold: 3
+    envs:
+      # TODO adapt: add the runtime variables the project needs.
+      # Secrets belong in DigitalOcean as type: SECRET, never in this file.
+      - key: NODE_ENV
+        value: review
+        scope: RUN_TIME
+      # Merge request metadata: lets the running preview identify itself.
+      - key: MERGE_REQUEST_ID
+        value: "${CI_MERGE_REQUEST_IID}"
+        scope: RUN_TIME
+      - key: COMMIT_SHA
+        value: "${CI_COMMIT_SHORT_SHA}"
+        scope: RUN_TIME
+      - key: SOURCE_BRANCH
+        value: "${CI_COMMIT_REF_NAME}"
+        scope: RUN_TIME
