@@ -276,7 +276,7 @@ payments/  payment.types.ts  payment.service.ts  payment.repository.ts
 
 ## Guardrails
 
-Enforced by `pix_check` on any file ending `.ts`, `.tsx`, `.mts` or `.cts`,
+Enforced by `rule_tool_check` on any file ending `.ts`, `.tsx`, `.mts` or `.cts`,
 whichever skill is checking. String and comment contents are stripped first, so
 prose never trips a rule.
 

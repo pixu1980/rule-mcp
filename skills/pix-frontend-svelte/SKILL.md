@@ -11,15 +11,16 @@ frameworks: [svelte]
 # rule-frontend-svelte - Svelte 5 with rule Principles
 
 This skill adapts [rule-styleguide](../rule-styleguide/SKILL.md) and
-[rule-frontend-vanilla-reactive](../rule-frontend-vanilla-reactive/SKILL.md) to **Svelte 5 runes API**.
+a store-and-signals architecture to **Svelte 5 runes API**.
 
 ## Core Rules (inherited from rule skills)
 
 1. **Zero CSS classes** - only element selectors + `[data-part="..."]` + `[data-*]`
 2. **Zero inline styles** - CSS via `<style>` tag in `.svelte` (scoped by Svelte) or external `.css` imports
-3. **Semantic HTML is mandatory** - never `<div>` where a semantic element exists
-4. **Barrel pattern** - every component folder has `index.js`
-5. **`<style>` is the primary mechanism** - Svelte scopes `<style>` tags per component. Use external CSS imports only for truly global styles.
+3. **Flex first** - `display: grid` only for named areas, subgrid, explicit placement, or auto-fit tracks; anything a flex row or column can do is flex.
+4. **Semantic HTML is mandatory** - never `<div>` where a semantic element exists
+5. **Barrel pattern** - every component folder has `index.js`
+6. **`<style>` is the primary mechanism** - Svelte scopes `<style>` tags per component. Use external CSS imports only for truly global styles.
 
 ## File Tree Convention
 
@@ -102,24 +103,24 @@ For shared/global CSS, import at module level:
 
 **No `adoptedStyleSheets` needed in Svelte** - the framework handles CSS scoping natively.
 
-## Svelte ↔ rule-frontend-vanilla-reactive Mapping
+## Svelte ↔ store-and-signals mapping
 
-| rule-frontend-vanilla-reactive | Svelte 5 Equivalent                            |
-| ----------------------------- | ---------------------------------------------- |
-| `StateSignal`                 | `$state()` rune                                |
-| `ComputedSignal`              | `$derived()` rune                              |
-| `effect()`                    | `$effect()` rune                               |
-| `Store (Proxy)`               | `$state()` object or Svelte store              |
-| `tickState` bridge            | `$state()` deep reactivity (automatic)         |
-| `html\`\`` tagged templates   | Template in `.svelte` file                     |
-| `{{ expr \| filter }}`        | `{expression}` + `$derived`                    |
-| `${value}`                    | `{value}`                                      |
-| `@click=${fn}`                | `onclick={fn}`                                 |
-| `model={...}` directive       | `bind:value` / `bind:checked`                  |
-| `<for each="x in xs">`        | `{#each xs as x (x.id)}`                       |
-| `<if condition="c">`          | `{#if c}`                                      |
-| `<switch expr="x">`           | `{#if}` / `{:else if}` chain                   |
-| `adoptedStyleSheets`          | `<style>` tag in `.svelte` (scoped by default) |
+| Store and signals           | Svelte 5 Equivalent                            |
+| --------------------------- | ---------------------------------------------- |
+| `StateSignal`               | `$state()` rune                                |
+| `ComputedSignal`            | `$derived()` rune                              |
+| `effect()`                  | `$effect()` rune                               |
+| `Store (Proxy)`             | `$state()` object or Svelte store              |
+| `tickState` bridge          | `$state()` deep reactivity (automatic)         |
+| `html\`\`` tagged templates | Template in `.svelte` file                     |
+| `{{ expr \| filter }}`      | `{expression}` + `$derived`                    |
+| `${value}`                  | `{value}`                                      |
+| `@click=${fn}`              | `onclick={fn}`                                 |
+| `model={...}` directive     | `bind:value` / `bind:checked`                  |
+| `<for each="x in xs">`      | `{#each xs as x (x.id)}`                       |
+| `<if condition="c">`        | `{#if c}`                                      |
+| `<switch expr="x">`         | `{#if}` / `{:else if}` chain                   |
+| `adoptedStyleSheets`        | `<style>` tag in `.svelte` (scoped by default) |
 
 ## Lists and Conditionals
 
@@ -176,14 +177,14 @@ export { default as TodoItem } from "./_TodoItem.svelte";
 - [ ] **guardrail-data-part**: Child elements use data-part="role" instead of class names.
 - [ ] **guardrail-no-framework-css**: No CSS-in-JS, no CSS Modules, no Tailwind. Pure external CSS only.
 - [ ] **guardrail-svelte-specific**: Follows Svelte 5 rule-frontend-svelte conventions. Use `<style>` tag, runes API, `$props()`, `$state()`, `$derived()`, `$effect()`.
-- [ ] **guardrail-jsdoc-required**: Every JS/TS file MUST have complete JSDoc on all exported symbols (see rule-styleguide → javascript.md).
-- [ ] **guardrail-css-comments-required**: Every CSS file MUST have file-level + section comments (see rule-styleguide → css.md).
-- [ ] **guardrail-a11y-test-required**: Every project MUST have Playwright + @axe-core/playwright a11y tests in `tests/a11y/` (see rule-styleguide → a11y.md → Automated Testing).
+- [ ] **guardrail-jsdoc-required**: Every JS/TS file MUST have complete JSDoc on all exported symbols (see rule-styleguide -> javascript.md).
+- [ ] **guardrail-css-comments-required**: Every CSS file MUST have file-level + section comments (see rule-styleguide -> css.md).
+- [ ] **guardrail-a11y-test-required**: Every project MUST have Playwright + @axe-core/playwright a11y tests in `tests/a11y/` (see rule-styleguide -> a11y.md -> Automated Testing).
 
 ## Project Scaffolding
 
-All rule projects include standard config files. See [`rule-styleguide`](../rule-styleguide/SKILL.md) → Project Scaffolding.
-Use `pix_styleguide mode=scaffold` or `pix_scaffold` to generate: `.prettierrc`, `.nvmrc`, `.editorconfig`,
+All rule projects include standard config files. See [`rule-styleguide`](../rule-styleguide/SKILL.md) -> Project Scaffolding.
+Use `rule_tool_styleguide mode=scaffold` or `rule_tool_scaffold` to generate: `.prettierrc`, `.nvmrc`, `.editorconfig`,
 `.gitignore`, `.eslintrc.json`, `tsconfig.json`, `jsconfig.json`.
 
 ---
@@ -434,7 +435,7 @@ Rule: _Component `$state` for local state. `.svelte.js` module `$state` for shar
 
 | Resource               | Path                                            |
 | ---------------------- | ----------------------------------------------- |
-| 10 detailed examples   | `examples/performance/01-*.md` … `10-*.md`      |
+| 10 detailed examples   | `examples/performance/01-*.md` ... `10-*.md`    |
 | PR review checklist    | `checklists/svelte-performance-pr-checklist.md` |
 | Decision matrix        | `checklists/decision-matrix.md`                 |
 | System prompt          | `prompts/portable-system-prompt.md`             |

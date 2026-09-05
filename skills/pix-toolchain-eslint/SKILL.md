@@ -18,7 +18,7 @@ frameworks: [all]
 
 ## Flat Config is the only format
 
-ESLint 10 removed the legacy `.eslintrc` system entirely: **flat config** (`eslint.config.mjs`) and **ESM** are the only supported formats. Any tutorial showing `.eslintrc.json` + `extends: "plugin:unicorn/recommended"` is out of date. Requirements: ESLint ≥ 10.4 and a current Node.js runtime (Node 20.19+, 22.13+, or 24+).
+ESLint 10 removed the legacy `.eslintrc` system entirely: **flat config** (`eslint.config.mjs`) and **ESM** are the only supported formats. Any tutorial showing `.eslintrc.json` + `extends: "plugin:unicorn/recommended"` is out of date. Requirements: ESLint >= 10.4 and a current Node.js runtime (Node 20.19+, 22.13+, or 24+).
 
 Scope Unicorn's JS rules to their own config object with `files` once you lint non-JavaScript languages in the same config.
 
@@ -81,7 +81,7 @@ export default defineConfig([
 
 ## eslint-plugin-unicorn
 
-300+ rules, mostly **autofixable**, releases roughly monthly. `eslint-plugin-unicorn` v69+ requires ESLint ≥ 10.4, flat config, and ESM.
+300+ rules, mostly **autofixable**, releases roughly monthly. `eslint-plugin-unicorn` v69+ requires ESLint >= 10.4, flat config, and ESM.
 
 ```bash
 pnpm add -D eslint eslint-plugin-unicorn
@@ -91,11 +91,11 @@ pnpm add -D eslint eslint-plugin-unicorn
 
 The plugin ships three presets - pick a starting point, don't enable rules one by one.
 
-| Preset                          | Contents                                                                        | Use when                                                   |
-| ------------------------------- | ------------------------------------------------------------------------------- | ---------------------------------------------------------- |
-| `unicorn.configs.recommended`   | Curated default: correctness + opinionated rules                                | Default starting point                                     |
-| `unicorn.configs.unopinionated` | recommended minus the opinionated rules (`no-null`, `prevent-abbreviations`, …) | Existing codebase where opinionated rules fight your style |
-| `unicorn.configs.all`           | Every non-deprecated rule                                                       | Maximum coverage                                           |
+| Preset                          | Contents                                                                          | Use when                                                   |
+| ------------------------------- | --------------------------------------------------------------------------------- | ---------------------------------------------------------- |
+| `unicorn.configs.recommended`   | Curated default: correctness + opinionated rules                                  | Default starting point                                     |
+| `unicorn.configs.unopinionated` | recommended minus the opinionated rules (`no-null`, `prevent-abbreviations`, ...) | Existing codebase where opinionated rules fight your style |
+| `unicorn.configs.all`           | Every non-deprecated rule                                                         | Maximum coverage                                           |
 
 ### Highest-value rules (in recommended, autofixable)
 
@@ -117,12 +117,12 @@ These prevent a performance, correctness, or readability problem rather than enf
 
 All four are enabled in `recommended` but enforce preference rather than correctness. The verdict column is the keep/warn/disable call for a typical codebase.
 
-| Rule                    | Verdict                   | Reason                                                                                                             |
-| ----------------------- | ------------------------- | ------------------------------------------------------------------------------------------------------------------ |
-| `prevent-abbreviations` | `warn` or scope           | Renames `e` → `error`, `req` → `request`, `props` → `properties`; fights names your framework and team already use |
-| `no-null`               | Disable if you use `null` | Unicorn prefers `undefined`, but `null` is legitimate when an ORM or API returns it                                |
-| `no-array-reduce`       | Keep or `warn`            | Disallows `Array#reduce()`; reasonable for readability, but `reduce` is fine for many teams                        |
-| `filename-case`         | Scope ignores             | Clashes with framework-mandated filenames; keep it but exclude the exceptions                                      |
+| Rule                    | Verdict                   | Reason                                                                                                                |
+| ----------------------- | ------------------------- | --------------------------------------------------------------------------------------------------------------------- |
+| `prevent-abbreviations` | `warn` or scope           | Renames `e` -> `error`, `req` -> `request`, `props` -> `properties`; fights names your framework and team already use |
+| `no-null`               | Disable if you use `null` | Unicorn prefers `undefined`, but `null` is legitimate when an ORM or API returns it                                   |
+| `no-array-reduce`       | Keep or `warn`            | Disallows `Array#reduce()`; reasonable for readability, but `reduce` is fine for many teams                           |
+| `filename-case`         | Scope ignores             | Clashes with framework-mandated filenames; keep it but exclude the exceptions                                         |
 
 The `unopinionated` preset leaves these off by default - the built-in middle ground.
 
@@ -178,7 +178,7 @@ If a plugin ships only an eslintrc-style config, wrap it with `FlatCompat` from 
 }
 ```
 
-This format only works on ESLint ≤ 9. New projects MUST use flat config.
+This format only works on ESLint <= 9. New projects MUST use flat config.
 
 ## Migration from ESLint to Biome
 

@@ -53,6 +53,7 @@ Available rule-mcp tools:
 - rule_tool_process_adr - Architecture Decision Records
 - rule_tool_process_handoff - Context handoff
 - rule_tool_detect - Detect project framework
+- Flex first: layout with display:flex; display:grid only for named areas, subgrid, explicit placement, or auto-fit tracks, justified with /* grid: why */
 - rule://resources - Skill documentation as MCP resources
 
 <!-- /rule-mcp-rules -->

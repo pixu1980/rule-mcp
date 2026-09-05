@@ -39,3 +39,7 @@ See `src/core/enforcement.js` for details.
 ## Environment variables
 
 See [06-env-variables.md](06-env-variables.md) for the complete reference table, persistence, and configuration.
+
+## Layout default
+
+Flex first is the default layout: `display: flex` for rows and columns. `display: grid` only for named template areas, subgrid, explicit item placement or overlap, and auto-fit/auto-fill tracks, and justify it with a `/* grid: why */` comment (rule-styleguide-css).

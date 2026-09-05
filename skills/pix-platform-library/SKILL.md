@@ -225,7 +225,7 @@ Keep a human-readable `CHANGELOG.md`:
 
 ### Fixed
 
-- Memory leak in `html`` template engine when used with SVG
+- Memory leak in the render helper when used with SVG
 - Type export for `StoreOptions` interface
 
 ## [1.0.0] - 2026-05-01

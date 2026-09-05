@@ -11,16 +11,17 @@ frameworks: [vue]
 # rule-frontend-vue - Vue 3 with rule Principles
 
 This skill adapts [rule-styleguide](../rule-styleguide/SKILL.md) and
-[rule-frontend-vanilla-reactive](../rule-frontend-vanilla-reactive/SKILL.md) to **Vue 3 Composition API**.
+a store-and-signals architecture to **Vue 3 Composition API**.
 
 ## Core Rules (inherited from rule skills)
 
 1. **Zero CSS classes** - only element selectors + `[data-part="..."]` + `[data-*]` attribute selectors
 2. **Zero inline styles** - all styling in external `.css` files via `adoptedStyleSheets`
-3. **Semantic HTML is mandatory** - never `<div>` where a semantic element exists
-4. **Barrel pattern** - every component folder has `index.js`
-5. **No scoped `<style>` blocks** - external `.css` files only, loaded at module scope
-6. **No utility CSS frameworks** (Tailwind, UnoCSS, etc.)
+3. **Flex first** - `display: grid` only for named areas, subgrid, explicit placement, or auto-fit tracks; anything a flex row or column can do is flex.
+4. **Semantic HTML is mandatory** - never `<div>` where a semantic element exists
+5. **Barrel pattern** - every component folder has `index.js`
+6. **No scoped `<style>` blocks** - external `.css` files only, loaded at module scope
+7. **No utility CSS frameworks** (Tailwind, UnoCSS, etc.)
 
 ## File Tree Convention
 
@@ -90,25 +91,25 @@ article[data-part="item"][data-state-completed="done"] {
 }
 ```
 
-## Vue ↔ rule-frontend-vanilla-reactive Mapping
+## Vue ↔ store-and-signals mapping
 
-| rule-frontend-vanilla-reactive | Vue 3 Equivalent                  |
-| ----------------------------- | --------------------------------- |
-| `StateSignal`                 | `ref()` / `reactive()`            |
-| `ComputedSignal`              | `computed()`                      |
-| `effect()`                    | `watchEffect()` / `watch()`       |
-| `Store (Proxy)`               | `reactive()` or Pinia store       |
-| `tickState` bridge            | Deep reactivity (automatic)       |
-| `html\`\`` tagged templates   | `<template>` block                |
-| `{{ expr \| filter }}`        | `{{ expr }}` + computed / methods |
-| `${value}`                    | `{{ value }}`                     |
-| `@click=${fn}`                | `@click="fn"`                     |
-| `model={...}` directive       | `v-model`                         |
-| `<for each="x in xs">`        | `v-for="x in xs" :key="x.id"`     |
-| `<if condition="c">`          | `v-if="c"`                        |
-| `<switch expr="x">`           | `v-if / v-else-if / v-else` chain |
-| `adoptedStyleSheets`          | `onMounted` to adopt once         |
-| `data-part="..."`             | `:data-part="..."` (Vue binding)  |
+| Store and signals           | Vue 3 Equivalent                  |
+| --------------------------- | --------------------------------- |
+| `StateSignal`               | `ref()` / `reactive()`            |
+| `ComputedSignal`            | `computed()`                      |
+| `effect()`                  | `watchEffect()` / `watch()`       |
+| `Store (Proxy)`             | `reactive()` or Pinia store       |
+| `tickState` bridge          | Deep reactivity (automatic)       |
+| `html\`\`` tagged templates | `<template>` block                |
+| `{{ expr \| filter }}`      | `{{ expr }}` + computed / methods |
+| `${value}`                  | `{{ value }}`                     |
+| `@click=${fn}`              | `@click="fn"`                     |
+| `model={...}` directive     | `v-model`                         |
+| `<for each="x in xs">`      | `v-for="x in xs" :key="x.id"`     |
+| `<if condition="c">`        | `v-if="c"`                        |
+| `<switch expr="x">`         | `v-if / v-else-if / v-else` chain |
+| `adoptedStyleSheets`        | `onMounted` to adopt once         |
+| `data-part="..."`           | `:data-part="..."` (Vue binding)  |
 
 ## CSS Loading - Module Scope
 
@@ -146,7 +147,7 @@ onMounted(() => {
 </template>
 ```
 
-## State Management (Store → reactive)
+## State Management (Store -> reactive)
 
 ```js
 // composables/_useAppStore.js
@@ -180,22 +181,22 @@ export { default as TodoItem } from "./_TodoItem.vue";
 
 ## Guardrails
 
-Run `pix_frontend_vue` mode=check or `pix_check` to validate code against these rules.
+Run `rule_tool_frontend_vue` mode=check or `rule_tool_check` to validate code against these rules.
 
 Key rules enforced: **no-css-classes**, **no-inline-styles**, **semantic-html**,
 **external-css** (external .css files), **barrel-file**, **data-part**,
 **vue-no-class-binding** (use `data-part` not `:class`),
-**jsdoc-required** (every JS/TS file MUST have complete JSDoc - see rule-styleguide → javascript.md),
-**css-comments-required** (every CSS file MUST have file-level + section comments - see rule-styleguide → css.md),
-**a11y-test-required** (every project MUST have Playwright + @axe-core/playwright a11y tests in `tests/a11y/` - see rule-styleguide → a11y.md → Automated Testing).
+**jsdoc-required** (every JS/TS file MUST have complete JSDoc - see rule-styleguide -> javascript.md),
+**css-comments-required** (every CSS file MUST have file-level + section comments - see rule-styleguide -> css.md),
+**a11y-test-required** (every project MUST have Playwright + @axe-core/playwright a11y tests in `tests/a11y/` - see rule-styleguide -> a11y.md -> Automated Testing).
 
 ## Project Scaffolding
 
-All rule projects include standard config files. See [`rule-styleguide`](../rule-styleguide/SKILL.md) → Project Scaffolding.
-Use `pix_styleguide mode=scaffold` or `pix_scaffold` to generate: `.prettierrc`, `.nvmrc`, `.editorconfig`,
+All rule projects include standard config files. See [`rule-styleguide`](../rule-styleguide/SKILL.md) -> Project Scaffolding.
+Use `rule_tool_styleguide mode=scaffold` or `rule_tool_scaffold` to generate: `.prettierrc`, `.nvmrc`, `.editorconfig`,
 `.gitignore`, `.eslintrc.json`, `tsconfig.json`, `jsconfig.json`.
 
-Iterate: `generate → pix_check → fix → pix_check → all pass`.
+Iterate: `generate → rule_tool_check → fix → rule_tool_check → all pass`.
 
 ---
 
@@ -425,7 +426,7 @@ Rule: _Template refs are `null` during render. Access them after mount._
 
 | Resource               | Path                                         |
 | ---------------------- | -------------------------------------------- |
-| 10 detailed examples   | `examples/performance/01-*.md` … `10-*.md`   |
+| 10 detailed examples   | `examples/performance/01-*.md` ... `10-*.md` |
 | PR review checklist    | `checklists/vue-performance-pr-checklist.md` |
 | Decision matrix        | `checklists/decision-matrix.md`              |
 | System prompt          | `prompts/portable-system-prompt.md`          |

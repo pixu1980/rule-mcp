@@ -346,6 +346,7 @@ export function registerScaffoldTool() {
   const SCAFFOLD_FILES = [
     { name: ".prettierrc", description: "Prettier formatter config (printWidth=120, tabWidth=2)" },
     { name: ".nvmrc", description: "Node version manager config (lts/*)" },
+    { name: ".npmrc", description: "Package manager config (save-exact=true, so `pnpm add` writes an exact version)" },
     { name: ".editorconfig", description: "EditorConfig for cross-IDE consistency" },
     { name: ".gitignore", description: "Git ignore rules (OS + Node + build)" },
     { name: "eslint.config.mjs", description: "ESLint flat config (@eslint/js + eslint-plugin-unicorn, ESLint 10)" },

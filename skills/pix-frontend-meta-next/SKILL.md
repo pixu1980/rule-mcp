@@ -167,25 +167,25 @@ DATABASE_URL=postgres://...                     ← Server only
 
 ## Deployment
 
-| Target            | Config                               |
-| ----------------- | ------------------------------------ |
-| **Vercel**        | Zero config - automatic              |
-| **Docker (Node)** | `next start` on port 3000            |
-| **Static**        | `output: 'export'` → any static host |
+| Target            | Config                                |
+| ----------------- | ------------------------------------- |
+| **Vercel**        | Zero config - automatic               |
+| **Docker (Node)** | `next start` on port 3000             |
+| **Static**        | `output: 'export'` -> any static host |
 
 ## Quick Reference
 
 ```
-┌──────────────────────────────────────────────────────────────────────────┐
-│  rule-frontend-meta-next - Next.js (React Meta-framework)                 │
-│                                                                          │
-│  Routing:   app/ directory, layout/page/loading/error                    │
-│  Data:      fetch with cache/no-store/revalidate                         │
-│  API:       app/api/route.js                                             │
-│  Midlleware: middleware.js at root                                       │
-│  Images:    next/image with priority + blur placeholder                  │
-│  Deploy:    Vercel (auto), Docker, Static export                         │
-└──────────────────────────────────────────────────────────────────────────┘
+┌──────────────────────────────────────────────────────────────────────────────┐
+│  rule-frontend-meta-next - Next.js (React Meta-framework)                     │
+│                                                                              │
+│  Routing:   app/ directory, layout/page/loading/error                        │
+│  Data:      fetch with cache/no-store/revalidate                             │
+│  API:       app/api/route.js                                                 │
+│  Midlleware: middleware.js at root                                           │
+│  Images:    next/image with priority + blur placeholder                      │
+│  Deploy:    Vercel (auto), Docker, Static export                             │
+└──────────────────────────────────────────────────────────────────────────────┘
 ```
 
 ---

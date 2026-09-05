@@ -87,11 +87,11 @@ Every workflow runs in a **fresh chat**. This prevents context window limitation
 
 Based on project complexity, choose one of three tracks:
 
-| Track           | Best For                                               | Docs Created                           | Phases                                                   |
-| --------------- | ------------------------------------------------------ | -------------------------------------- | -------------------------------------------------------- |
-| **Quick Flow**  | Bug fixes, simple features, clear scope (1-15 stories) | Tech-spec only                         | Planning → Implementation (single workflow)              |
-| **BMad Method** | Products, platforms, complex features (10-50+ stories) | PRD + Architecture + UX                | Analysis (opt) → Planning → Solutioning → Implementation |
-| **Enterprise**  | Compliance, multi-tenant systems (30+ stories)         | PRD + Architecture + Security + DevOps | Analysis (opt) → Planning → Solutioning → Implementation |
+| Track           | Best For                                               | Docs Created                           | Phases                                                      |
+| --------------- | ------------------------------------------------------ | -------------------------------------- | ----------------------------------------------------------- |
+| **Quick Flow**  | Bug fixes, simple features, clear scope (1-15 stories) | Tech-spec only                         | Planning -> Implementation (single workflow)                |
+| **BMad Method** | Products, platforms, complex features (10-50+ stories) | PRD + Architecture + UX                | Analysis (opt) -> Planning -> Solutioning -> Implementation |
+| **Enterprise**  | Compliance, multi-tenant systems (30+ stories)         | PRD + Architecture + Security + DevOps | Analysis (opt) -> Planning -> Solutioning -> Implementation |
 
 _Story counts are guidance, not definitions. Choose based on planning needs, not story math._
 
@@ -166,12 +166,12 @@ Explore the problem space and validate ideas before committing to planning.
 
 ### When to use each
 
-- **Not sure which to use?** → Ask `bmad-help`
-- **Pure ideation** → `bmad-brainstorming`
-- **Validate an idea cheaply** → `bmad-forge-idea`
-- **Clear concept** → `bmad-product-brief`
-- **Customer-first validation** → `bmad-prfaq`
-- **Specific research needed** → pick the research workflow
+- **Not sure which to use?** -> Ask `bmad-help`
+- **Pure ideation** -> `bmad-brainstorming`
+- **Validate an idea cheaply** -> `bmad-forge-idea`
+- **Clear concept** -> `bmad-product-brief`
+- **Customer-first validation** -> `bmad-prfaq`
+- **Specific research needed** -> pick the research workflow
 
 ---
 

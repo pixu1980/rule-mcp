@@ -62,13 +62,13 @@ Node.js executes your **JavaScript on a single thread**, driven by the event loo
 
 ### Microtasks Are NOT a Phase
 
-Three-tier priority: **process.nextTick → promise microtasks → macrotasks** (timers, I/O, setImmediate).
+Three-tier priority: **process.nextTick -> promise microtasks -> macrotasks** (timers, I/O, setImmediate).
 
 ```js
 // Run inside an I/O callback - order is deterministic
-const fs = require("node:fs");
+import { readFile } from "node:fs";
 
-fs.readFile(__filename, () => {
+readFile(import.meta.filename, () => {
   setTimeout(() => console.log("1: setTimeout(0)"), 0);
   setImmediate(() => console.log("2: setImmediate"));
   Promise.resolve().then(() => console.log("3: promise"));
@@ -130,16 +130,17 @@ Worker threads run JavaScript **in parallel** on separate threads. Each worker i
 
 ```js
 // main.js
-const { Worker } = require("node:worker_threads");
+import { Worker } from "node:worker_threads";
 
-const worker = new Worker("./fib-worker.js", { workerData: { n: 42 } });
+const worker = new Worker(new URL("./fib-worker.js", import.meta.url), { workerData: { n: 42 } });
+
 worker.on("message", (result) => console.log("fib(42) =", result));
-worker.on("error", (err) => console.error(err));
+worker.on("error", (error) => console.error(error));
 ```
 
 ```js
 // fib-worker.js
-const { parentPort, workerData } = require("node:worker_threads");
+import { parentPort, workerData } from "node:worker_threads";
 
 function fib(n) {
   return n < 2 ? n : fib(n - 1) + fib(n - 2);
@@ -152,7 +153,7 @@ parentPort.postMessage(fib(workerData.n));
 
 ```js
 // fib.js - same file, two roles
-const { isMainThread, parentPort, workerData } = require("node:worker_threads");
+import { isMainThread, parentPort, workerData, Worker } from "node:worker_threads";
 
 function fib(n) {
   return n < 2 ? n : fib(n - 1) + fib(n - 2);
@@ -160,14 +161,17 @@ function fib(n) {
 
 if (isMainThread) {
   // Main: spawn workers
-  const { Worker } = require("node:worker_threads");
-  const w = new Worker(__filename, { workerData: { n: 42 } });
-  w.on("message", console.log);
+  const worker = new Worker(import.meta.filename, { workerData: { n: 42 } });
+
+  worker.on("message", console.log);
 } else {
   // Worker: compute
   parentPort.postMessage(fib(workerData.n));
 }
 ```
+
+> `import.meta.filename` needs Node 20.11+. On older runtimes use
+> `fileURLToPath(import.meta.url)` from `node:url`.
 
 ### Message Passing & Isolation
 
@@ -197,34 +201,35 @@ pnpm add piscina
 
 ```js
 // server-pooled.js
-const express = require("express");
-const Piscina = require("piscina");
-const path = require("node:path");
+import express from "express";
+import { Piscina } from "piscina";
 
 const pool = new Piscina({
-  filename: path.resolve(__dirname, "fib-task.js"),
+  filename: new URL("./fib-task.js", import.meta.url).href,
   minThreads: 2,
   maxThreads: 4,
 });
 
 const app = express();
 
-app.get("/report", async (req, res) => {
+app.get("/report", async (request, response) => {
   const value = await pool.run({ n: 45 }); // runs on a worker; loop stays free
-  res.json({ value });
+
+  response.json({ value });
 });
 
-app.get("/health", (req, res) => res.send("ok"));
+app.get("/health", (request, response) => response.send("ok"));
 
 app.listen(3000);
 ```
 
 ```js
 // fib-task.js
-module.exports = ({ n }) => {
+export default function fibTask({ n }) {
   const fib = (x) => (x < 2 ? x : fib(x - 1) + fib(x - 2));
+
   return fib(n);
-};
+}
 ```
 
 > ✅ `/health` answers immediately while `fib(45)` computes in the background.
@@ -232,11 +237,15 @@ module.exports = ({ n }) => {
 ### Piscina Config Reference
 
 ```js
+import { availableParallelism } from "node:os";
+
+const cores = availableParallelism(); // honours cgroup limits; os.cpus() does not
+
 const pool = new Piscina({
-  filename: path.resolve(__dirname, "task.js"),
-  minThreads: Math.max(1, Math.floor(os.cpus().length / 2)),
-  maxThreads: os.cpus().length - 1, // leave one core for the main thread
-  idleTimeout: 30000, // kill idle workers after 30s
+  filename: new URL("./task.js", import.meta.url).href,
+  minThreads: Math.max(1, Math.floor(cores / 2)),
+  maxThreads: Math.max(1, cores - 1), // leave one core for the main thread
+  idleTimeout: 30_000, // kill idle workers after 30s
   maxQueue: 100, // reject when queue is full
 });
 ```
@@ -256,27 +265,26 @@ Cluster forks **multiple processes** (not threads), each with its own event loop
 
 ```js
 // cluster-server.js
-const cluster = require("node:cluster");
-const http = require("node:http");
-const os = require("node:os");
+import cluster from "node:cluster";
+import { createServer } from "node:http";
+import { availableParallelism } from "node:os";
 
 if (cluster.isPrimary) {
   // Fork one worker per CPU core
-  for (let i = 0; i < os.cpus().length; i++) {
+  for (let index = 0; index < availableParallelism(); index++) {
     cluster.fork();
   }
+
   cluster.on("exit", (worker) => {
     console.log(`Worker ${worker.process.pid} died - restarting`);
     cluster.fork();
   });
 } else {
   // Workers share the same port
-  http
-    .createServer((req, res) => {
-      res.writeHead(200);
-      res.end(`Handled by ${process.pid}\n`);
-    })
-    .listen(3000);
+  createServer((request, response) => {
+    response.writeHead(200);
+    response.end(`Handled by ${process.pid}\n`);
+  }).listen(3000);
 }
 ```
 
@@ -301,8 +309,10 @@ app.get("/health", (req, res) => res.send("ok"));
 ### Detection
 
 ```js
-const { monitorEventLoopDelay } = require("node:perf_hooks");
+import { monitorEventLoopDelay } from "node:perf_hooks";
+
 const histogram = monitorEventLoopDelay({ resolution: 20 });
+
 histogram.enable();
 
 setInterval(() => {
@@ -383,23 +393,23 @@ piscina
 ## Quick Reference
 
 ```
-┌──────────────────────────────────────────────────────────────────┐
-│  rule-backend-workers - Node.js Concurrency & Workers             │
-│                                                                  │
-│  Event loop:  6 phases, microtasks drain between macrotasks      │
-│  libuv pool:  4 threads (default), max 1024, C-level only        │
-│  Workers:     Separate V8 isolate + event loop, CPU-bound JS     │
-│  Pool:        piscina - reuse workers, tune to CPU count         │
-│  Cluster:     Fork processes, share socket, scale I/O            │
-│                                                                  │
-│  Decision:                                                       │
-│   I/O-bound    → async/await (already fast)                      │
-│   CPU-bound    → worker_threads + piscina pool                   │
-│   Core-satur.  → cluster or container replicas                   │
-│   Pool tuning  → UV_THREADPOOL_SIZE (I/O only, never CPU)        │
-│                                                                  │
-│  Detect:  monitorEventLoopDelay → high p99 = loop saturated      │
-└──────────────────────────────────────────────────────────────────┘
+┌──────────────────────────────────────────────────────────────────────┐
+│  rule-backend-workers - Node.js Concurrency & Workers                 │
+│                                                                      │
+│  Event loop:  6 phases, microtasks drain between macrotasks          │
+│  libuv pool:  4 threads (default), max 1024, C-level only            │
+│  Workers:     Separate V8 isolate + event loop, CPU-bound JS         │
+│  Pool:        piscina - reuse workers, tune to CPU count             │
+│  Cluster:     Fork processes, share socket, scale I/O                │
+│                                                                      │
+│  Decision:                                                           │
+│   I/O-bound    → async/await (already fast)                          │
+│   CPU-bound    → worker_threads + piscina pool                       │
+│   Core-satur.  → cluster or container replicas                       │
+│   Pool tuning  → UV_THREADPOOL_SIZE (I/O only, never CPU)            │
+│                                                                      │
+│  Detect:  monitorEventLoopDelay → high p99 = loop saturated          │
+└──────────────────────────────────────────────────────────────────────┘
 ```
 
 ---

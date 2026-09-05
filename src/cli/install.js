@@ -1,6 +1,13 @@
 /**
  * @module cli/install
  *
+ * The instruction block agents receive carries the flex first layout rule
+ * (display:grid only when flex cannot do it) - see INSTRUCTION_BLOCK in
+ * ./agent-installers.js, re-exported below.
+ */
+/*
+ * @module cli/install
+ *
  * Agent/IDE/model installation support for rule-mcp.
  * Generates MCP configuration files for ALL supported coding agents.
  *
@@ -40,6 +47,7 @@ import {
 } from "./agent-installers.js";
 
 export * from "./agent-installers.js";
+import { deprecatedAgents } from "./agent-installers.js";
 
 function writeInstalledManifest(agents, entrypoint, global, mode) {
   const stateDir = join(HOME, ".local", "share", "rule-mcp");
@@ -87,7 +95,16 @@ export const installAgent = ({
   _env = {},
 }) => {
   const normalizedMode = normalizeInstallMode(mode);
-  const selected = agent === "all" ? allAgents : [agent];
+  // `--agent all` sweeps the live catalog: deprecated agents (windsurf ->
+  // devin) stay installable when named, but are never swept.
+  const selected = agent === "all" ? allAgents.filter((name) => !deprecatedAgents.has(name)) : [agent];
+  const warnings =
+    agent === "all"
+      ? []
+      : deprecatedAgents.has(agent)
+        ? [`"${agent}" is deprecated - use "${deprecatedAgents.get(agent)}" instead.`]
+        : [];
+  const surfacedWarnings = warnings.length > 0 ? warnings : undefined;
 
   if (!installers[agent] && agent !== "all") {
     throw new Error(`Unsupported agent: "${agent}". Supported agents: ${allAgents.join(", ")}`);
@@ -120,10 +137,18 @@ export const installAgent = ({
   if (!dryRun) {
     const manifestPath = writeInstalledManifest(selected, entrypoint, global, normalizedMode);
 
-    return { ok, dryRun, global, mode: normalizedMode, installed: result, manifest: manifestPath };
+    return {
+      ok,
+      dryRun,
+      global,
+      mode: normalizedMode,
+      installed: result,
+      manifest: manifestPath,
+      warnings: surfacedWarnings,
+    };
   }
 
-  return { ok, dryRun, global, mode: normalizedMode, installed: result };
+  return { ok, dryRun, global, mode: normalizedMode, installed: result, warnings: surfacedWarnings };
 };
 
 // ─── Uninstallers ───────────────────────────────────────────────────────────
@@ -134,7 +159,16 @@ export const installAgent = ({
  * @param {{ agent: string, dryRun?: boolean }} args
  */
 export const uninstallAgent = ({ agent, dryRun = false }) => {
-  const selected = agent === "all" ? allAgents : [agent];
+  // `--agent all` sweeps the live catalog: deprecated agents (windsurf ->
+  // devin) stay installable when named, but are never swept.
+  const selected = agent === "all" ? allAgents.filter((name) => !deprecatedAgents.has(name)) : [agent];
+  const warnings =
+    agent === "all"
+      ? []
+      : deprecatedAgents.has(agent)
+        ? [`"${agent}" is deprecated - use "${deprecatedAgents.get(agent)}" instead.`]
+        : [];
+  const surfacedWarnings = warnings.length > 0 ? warnings : undefined;
 
   if (!uninstallers[agent] && agent !== "all") {
     throw new Error(`Unsupported agent: "${agent}". Supported agents: ${allAgents.join(", ")}`);

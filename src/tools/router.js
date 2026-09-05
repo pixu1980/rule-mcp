@@ -350,6 +350,10 @@ const _postHooks = {};
 /** Observational after-tool hooks. Failures never alter tool results. */
 const _afterHooks = {};
 
+export function countAfterHooks(toolName) {
+  return (_afterHooks[toolName] ?? []).length;
+}
+
 /** Register mandatory preprocessing hook. */
 export function addBeforeToolHook(toolName, function_) {
   if (!_beforeHooks[toolName]) {
@@ -389,6 +393,10 @@ export function addAfterToolHook(toolName, fn) {
  */
 export function clearTools() {
   _tools.length = 0;
+
+  for (const key of Object.keys(_afterHooks)) {
+    delete _afterHooks[key];
+  }
 }
 
 /**
@@ -745,13 +753,33 @@ export function getSkillMetadata(skillName) {
   return meta;
 }
 
+/**
+ * The four skills the target retains that the source does not ship. They are a
+ * real part of the rule union and route normally; the routing-corpus thresholds
+ * were measured on the source's skill set, so the corpus tests opt into the
+ * source-commensurate universe (RULE_MCP_SKILL_UNIVERSE=base) to keep the
+ * measurement comparable - their extra bodies would otherwise dilute the
+ * term-document frequencies (idf) the scorer's numbers are pinned to.
+ */
+export const TARGET_ONLY_SKILLS = new Set([
+  "rule-frontend-custom-element",
+  "rule-frontend-template-engine",
+  "rule-frontend-vanilla-reactive",
+  "rule-platform-auth",
+]);
+
 export function getSkillNames() {
   const names = new Set();
   const { embeddedSkills } = getSkillsDirectories();
+  const baseUniverse = process.env.RULE_MCP_SKILL_UNIVERSE === "base";
 
   try {
     for (const entry of readdirSync(embeddedSkills, { withFileTypes: true })) {
       if (!entry.isDirectory() || !entry.name.startsWith("rule-")) {
+        continue;
+      }
+
+      if (baseUniverse && TARGET_ONLY_SKILLS.has(entry.name)) {
         continue;
       }
 

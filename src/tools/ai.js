@@ -9,8 +9,11 @@
 
 import { z } from "zod/v4";
 import { readSkill, getSkillNames, registerTool } from "./router.js";
-import { getSkillMetadata } from "./router.js";
+import { getSkillMetadata, listTools } from "./router.js";
 import { detectProject, getFrameworkSuggestion } from "../core/detector.js";
+import { detectRole } from "../core/review-roles.js";
+import { loadRoleOverlays } from "../core/review-roles-overlays.js";
+import { FLEX_FIRST } from "../core/directive.js";
 
 // ─── Schema ───────────────────────────────────────────────────────
 
@@ -270,6 +273,100 @@ function scoreSkill(sections, meta, promptWords, skillName) {
 
 // ─── Section display ──────────────────────────────────────────────
 
+/** Suffixes that make a word a different form of the same word. */
+const INFLECTIONS = new Set(["s", "es", "ed", "ing", "ion", "ions", "er", "ers", "al"]);
+
+/** How much the prompt names this skill (three tiers, same/stem/prefix). */
+function nameAffinity(skillName, promptWords) {
+  const parts = skillName
+    .replace(/^rule(?:-|$)/, "")
+    .split("-")
+    .filter((part) => part.length > 2);
+  const sameWord = (long, short) => INFLECTIONS.has(long.slice(short.length));
+  let score = 0;
+
+  for (const word of promptWords) {
+    if (word.length < 3 || STOPWORDS.has(word)) {
+      continue;
+    }
+
+    for (const part of parts) {
+      if (part === word) {
+        score += 12;
+      } else if (part.startsWith(word) && sameWord(part, word)) {
+        score += 12;
+      } else if (word.startsWith(part) && sameWord(word, part)) {
+        score += 12;
+      } else if (part.startsWith(word) || word.startsWith(part)) {
+        score += 6;
+      }
+    }
+  }
+
+  return score;
+}
+
+/** How much the prompt names one of the skill's tags. */
+function tagAffinity(meta, promptWords) {
+  const tags = new Set((meta?.tags ?? []).map((tag) => String(tag).toLowerCase()));
+
+  if (tags.size === 0) {
+    return 0;
+  }
+
+  let score = 0;
+
+  for (const word of promptWords) {
+    if (word.length < 3 || STOPWORDS.has(word)) {
+      continue;
+    }
+
+    if (tags.has(word)) {
+      score += 3;
+    }
+  }
+
+  return score;
+}
+
+const REDUCTION_SIGNALS = [
+  "over engineering",
+  "over-engineering",
+  "over engineered",
+  "over-engineered",
+  "overengineer",
+  "unnecessary complexity",
+  "reduce complexity",
+  "simplify",
+  "simpler",
+  "smaller footprint",
+  "can we avoid",
+  "do we need",
+  "is it required",
+  "not in our scope",
+  "out of scope",
+  "too much",
+  "too many",
+  "too hard",
+  "keep it minimal",
+  "remove",
+  "redundant",
+  "yagni",
+  "should i extract",
+  "should i abstract",
+  "should i split",
+  "worth extracting",
+  "into a helper",
+  "separate module",
+  "own abstraction",
+  "premature",
+];
+
+/** @param {string} promptLower @returns {string|null} */
+function reductionSignal(promptLower) {
+  return REDUCTION_SIGNALS.find((signal) => promptLower.includes(signal)) ?? null;
+}
+
 function extractTopSections(skillName, promptWords) {
   const content = readSkill(skillName);
 
@@ -500,7 +597,17 @@ export function registerAiTool() {
       // Only apply framework bias when domains match (or prompt domain is unknown)
       const isApplyFrameworkBias = !promptDomain || promptDomain === detectedDomain;
 
-      // Score each skill
+      // BM25 scoring runs on the same index the search tool uses: the previous
+      // scorer had no IDF and no length normalization, so common words and
+      // big files dominated routing.
+      const { buildIndex, isIndexReady, searchSkills } = await import("../core/bm25.js");
+
+      if (!isIndexReady()) {
+        buildIndex();
+      }
+
+      const ranked = new Map(searchSkills(prompt).map((hit) => [hit.skill, hit]));
+      const isReduction = Boolean(reductionSignal(promptLower));
       const skillRawScores = [];
 
       for (const skillName of skills) {
@@ -510,15 +617,23 @@ export function registerAiTool() {
           continue;
         }
 
-        const sections = extractSections(content);
         const meta = getSkillMetadata(skillName);
-        const rawScore = scoreSkill(sections, meta, promptWords, skillName);
+        const hit = ranked.get(skillName);
+        // Naming the skill is the strongest signal a prompt can carry, and BM25
+        // cannot see it: the name is metadata, not section text.
+        const rawScore = (hit?.score ?? 0) + nameAffinity(skillName, promptWords) + tagAffinity(meta, promptWords);
 
         let finalScore = rawScore;
 
         // Commit/push prompts deterministically route to the commits discipline skill.
         if (promptDomain === "git" && skillName === "rule-toolchain-commits") {
           finalScore = Math.max(rawScore * 2, 25);
+        }
+
+        // A scope challenge routes to the simplicity skill; on a plain build
+        // request it stays an alternative (finalScore halved).
+        if (skillName === "rule-process-simplicity") {
+          finalScore = isReduction ? Math.max(rawScore * 2, 30) : rawScore * 0.5;
         }
 
         if (detectedFramework && isApplyFrameworkBias) {
@@ -546,7 +661,7 @@ export function registerAiTool() {
         skill,
         relativeScore: maxRaw > 0 ? Math.min(1, rawScore / maxRaw) : 0,
         absoluteScore: rawScore,
-        sections: extractTopSections(skill, promptWords),
+        sections: ranked.get(skill)?.sections ?? extractTopSections(skill, promptWords),
         next_tools: skillNextTools(skill),
       }));
 
@@ -565,13 +680,97 @@ export function registerAiTool() {
       const ABSOLUTE_THRESHOLD = 5;
       const isUncertain = primaryRoute.absoluteScore < ABSOLUTE_THRESHOLD;
 
+      const SCOPE_CONTRACT = {
+        rule: "Build exactly what the request states. Anything beyond it is proposed in prose, never written into the codebase.",
+        declare_first: ["files_to_change", "out_of_scope"],
+        forbidden_without_explicit_request: [
+          "new tables, columns, or indexes",
+          "audit, history, or soft-delete structures",
+          "config flags, feature toggles, or env vars",
+          "interfaces, base classes, or layers with a single caller",
+          "caching, retries, queues, or background jobs",
+          "new packages, services, or endpoints",
+        ],
+        when_in_doubt: "Ship the smaller version and list what you deliberately left out.",
+      };
+
+      const STRUCTURAL_KEYWORDS = [
+        "migration",
+        "schema",
+        "data model",
+        "table",
+        "column",
+        "database",
+        "architecture",
+        "architectural",
+      ];
+
+      /** A structural change in the prompt asks for the ADR, unprompted. */
+      function docsFollowup(promptLower) {
+        if (reductionSignal(promptLower)) {
+          return null;
+        }
+
+        const signal = STRUCTURAL_KEYWORDS.find((keyword) => promptLower.includes(keyword));
+
+        if (!signal) {
+          return null;
+        }
+
+        return {
+          tool: "rule_tool_process_adr",
+          signal,
+          why: "The request changes something structural; the decision is worth an ADR.",
+        };
+      }
+
+      const STYLING_CONTRACT = {
+        layout: FLEX_FIRST,
+        grid_only_for: [
+          "named template areas (grid-template-areas)",
+          "subgrid",
+          "explicit item placement or deliberate overlap (grid-area, grid-column, grid-row)",
+          "auto-fit / auto-fill tracks (repeat(auto-fit, minmax(...)))",
+        ],
+        otherwise: "display: flex with gap; flex-wrap: wrap plus flex: 1 1 <basis> for a wrapping set.",
+        when_grid_is_right: "Say which of the four it is in a `/* grid: why */` comment above the rule.",
+      };
+
+      /** Routes that end in stylesheets, and therefore carry the layout contract. */
+      const STYLING_ROUTES = /^rule-(?:frontend|ui|platform-(?:web|desktop|expo))|^rule-styleguide-(?:css|html|a11y)$/;
+
+      const followup = docsFollowup(promptLower);
+      // Only advertise tools this process actually registered.
+      const registered = new Set(listTools().map((tool) => tool.name));
+      const nextTools = [
+        ...new Set([...top.flatMap((t) => t.next_tools), ...(followup ? [followup.tool] : [])]),
+      ].filter((tool) => {
+        return registered.has(tool);
+      });
+
+      // A persona request asks for a role's lenses and its three documents, not
+      // for a skill on its own. The scorer cannot see that, so the role is
+      // detected from the registry and the answer says which tool serves it.
+      const persona = detectRole(prompt, loadRoleOverlays().roles);
+
       const result = {
         route: isUncertain ? "unknown" : primaryRoute.skill,
         confidence: Math.round(primaryRoute.relativeScore * 100) / 100,
         absoluteScore: Math.round(primaryRoute.absoluteScore * 100) / 100,
         uncertain: isUncertain,
         sections: primaryRoute.sections,
-        next_tools: [...new Set(top.flatMap((t) => t.next_tools))],
+        next_tools: persona ? ["rule_tool_plan", ...nextTools.filter((name) => name !== "rule_tool_plan")] : nextTools,
+        ...(persona && {
+          persona: {
+            role: persona.id,
+            title: persona.role,
+            tool: "rule_tool_plan",
+            how: `Call rule_tool_plan with role "${persona.id}", then rule_tool_plan_docs with the findings.`,
+          },
+        }),
+        scope_contract: SCOPE_CONTRACT,
+        ...(!isUncertain && STYLING_ROUTES.test(primaryRoute.skill) && { styling_contract: STYLING_CONTRACT }),
+        ...(followup && { docs_followup: followup }),
         alternatives: top.slice(1).map((t) => ({
           route: t.skill,
           confidence: Math.round(t.relativeScore * 100) / 100,
@@ -581,7 +780,9 @@ export function registerAiTool() {
         summary: isUncertain
           ? `No strong match for "${prompt}". Try rephrasing or use rule_tool_search for full-text search.`
           : top.length > 0
-            ? `Top match: ${primaryRoute.skill} (${Math.round(primaryRoute.relativeScore * 100)}%). Relevant sections: ${primaryRoute.sections.join(", ")}. Try: ${[...new Set(top.flatMap((t) => t.next_tools))].join(", ")}.`
+            ? `Top match: ${primaryRoute.skill} (${Math.round(primaryRoute.relativeScore * 100)}%). Relevant sections: ${primaryRoute.sections.join(", ")}. ` +
+              `Try: ${nextTools.join(", ")}. Build only what was asked; propose anything extra instead of writing it.` +
+              (followup ? ` Structural change: generate the ADR with ${followup.tool} without being asked.` : "")
             : `No matching skill for "${prompt}". Try rule_tool_search for full-text search.`,
       };
 

@@ -48,11 +48,11 @@ Select the appropriate profile before generating or reviewing interface code. If
 
 | Profile              | Target   | Contrast (text / UI)           | Min Font† | Min Target                            | Use Case                                 |
 | :------------------- | :------- | :----------------------------- | :-------- | :------------------------------------ | :--------------------------------------- |
-| **🛡️ Shield (AAA)**  | WCAG AAA | 7:1 / 3:1 (SC 1.4.6, 1.4.11)   | 14px†     | 44×44px (SC 2.5.5) · 48×48px† advised | Regulated industries, healthcare, gov    |
-| **⚖️ Standard (AA)** | WCAG AA  | 4.5:1 / 3:1 (SC 1.4.3, 1.4.11) | 12px†     | 24×24px (SC 2.5.8) · 44×44px† advised | **Default.** Production apps, public web |
-| **🚀 Launchpad (A)** | WCAG A   | 3:1† (house floor)             | 10px†     | 24×24px†                              | MVPs, internal tools, prototypes         |
+| **🛡️ Shield (AAA)**  | WCAG AAA | 7:1 / 3:1 (SC 1.4.6, 1.4.11)   | 14px†     | 44x44px (SC 2.5.5) - 48x48px† advised | Regulated industries, healthcare, gov    |
+| **⚖️ Standard (AA)** | WCAG AA  | 4.5:1 / 3:1 (SC 1.4.3, 1.4.11) | 12px†     | 24x24px (SC 2.5.8) - 44x44px† advised | **Default.** Production apps, public web |
+| **🚀 Launchpad (A)** | WCAG A   | 3:1† (house floor)             | 10px†     | 24x24px†                              | MVPs, internal tools, prototypes         |
 
-> **† House Rule:** non-normative - this framework's ergonomic policy where WCAG requires less or nothing at that level. WCAG defines no minimum font size at any level; Level A defines no contrast or target-size criteria; 44–48px targets come from Apple HIG / Material Design.
+> **† House Rule:** non-normative - this framework's ergonomic policy where WCAG requires less or nothing at that level. WCAG defines no minimum font size at any level; Level A defines no contrast or target-size criteria; 44-48px targets come from Apple HIG / Material Design.
 >
 > **Skipping a WCAG SC** at your target level **MUST** be logged in `templates/EXCEPTIONS.md`. Relaxing a **House Rule** is a product decision - record it in `templates/A11Y-DECISIONS.md`.
 >
@@ -117,7 +117,7 @@ To ensure technical integrity, any agent interacting with this framework **MUST*
 - **Keyboard (SC 2.1.1):** 100% of functionalities **MUST** be operable without a mouse. Avoid purely pointer-based listeners without keyboard event equivalents.
 - **Focus (SC 2.4.7, 2.4.11):** Focus **MUST** be visible, never entirely obscured by author content (e.g., sticky headers/footers), persistent, and never suppressed via CSS (`outline: none` without fallback is forbidden).
 - **SPA Routing (Single Page Applications):** After client-side routing changes, focus **MUST** be managed and properly reset (e.g., sending focus to the top or an H1).
-- **Targets (SC 2.5.8):** Interactive elements MUST have a minimum size of **24×24 CSS pixels** - the WCAG 2.2 AA floor. **House Rule†:** design to **44×44px** (48×48 under Shield), the ergonomic floor shared by Apple HIG and Material Design.
+- **Targets (SC 2.5.8):** Interactive elements MUST have a minimum size of **24x24 CSS pixels** - the WCAG 2.2 AA floor. **House Rule†:** design to **44x44px** (48x48 under Shield), the ergonomic floor shared by Apple HIG and Material Design.
 - **Motion (SC 2.3.3 AAA - enforced as House Rule† at every profile):** **MUST** respect `@media (prefers-reduced-motion)`.
 
 ### 3.3 Understandable
@@ -157,7 +157,7 @@ Semantic HTML is the foundation of accessibility. **Do not use `<div>` or `<span
 | `<label>`                    | Describing a form control                                               | A form input needs a descriptive label        |
 | `<form>`                     | A group of interactive controls for submitting data                     | Inputs collect and submit data                |
 | `<table>`                    | Tabular data with rows and columns                                      | Data requires row/column relationships        |
-| `<table>` for calendar grids | A month/week calendar **is** tabular data (days × weeks)                | A grid of days/weeks is rendered              |
+| `<table>` for calendar grids | A month/week calendar **is** tabular data (days x weeks)                | A grid of days/weeks is rendered              |
 
 ### Example: semantic vs non-semantic
 
@@ -203,7 +203,7 @@ Every page must have at least these landmarks:
 
 ### Calendar Grids - Use `<table>`
 
-A month or week calendar **is tabular data**: it represents days (columns) × weeks (rows).
+A month or week calendar **is tabular data**: it represents days (columns) x weeks (rows).
 
 ```html
 <!-- ✅ CORRECT: semantic <table> for calendar grid -->
@@ -238,7 +238,7 @@ Benefits: No ARIA role conflicts, built-in screen reader semantics, `table-layou
 
 ### 5.1 Color and Contrast
 
-- **Text**: minimum contrast ratio of **4.5:1** (AA normal text), **3:1** for large text (≥18px bold or ≥24px).
+- **Text**: minimum contrast ratio of **4.5:1** (AA normal text), **3:1** for large text (>=18px bold or >=24px).
 - **Non-text**: UI components and graphical objects must have at least **3:1** contrast against adjacent colors.
 - Do not use color alone to convey information. Add icons, underlines, or text labels.
 
@@ -267,7 +267,7 @@ Prefer the **OKLCH** color space (Luminance, Chroma, Hue) for perceptually unifo
 - **Delta E (ΔE):** Measure of distance between two colors.
   - ΔE > 20: Noticeable difference for most users.
   - ΔE > 40: High-security difference for colorblind users.
-- **APCA** (Advanced Perceptual Contrast Algorithm): Future standard (WCAG 3). Aim for **Lc (Lightness Contrast) ≥ 60** for body text.
+- **APCA** (Advanced Perceptual Contrast Algorithm): Future standard (WCAG 3). Aim for **Lc (Lightness Contrast) >= 60** for body text.
 
 ### 5.3 Visual Redundancy for Charts
 
@@ -325,7 +325,78 @@ Compliance must be verified through these steps:
 
 ---
 
-## 9. Reference & Templates Library
+## 9. WCAG-EM evaluation methodology and the conformance report
+
+A conformance claim is a claim someone may have to defend. What makes one
+defensible is not the number of things checked; it is that every criterion in
+the target is accounted for and that anything unchecked says so.
+
+WCAG-EM is the W3C methodology for exactly that. Five steps, and skipping any of
+them produces a result that cannot be reproduced or disputed:
+
+| Step                              | What it fixes                                                             |
+| --------------------------------- | ------------------------------------------------------------------------- |
+| 1. Define the evaluation scope    | Which pages, which conformance level, which technologies and user agents  |
+| 2. Explore the target             | Common pages, functionality, content types, technologies relied upon      |
+| 3. Select a representative sample | A structured sample plus a random one, with the reason each page is in it |
+| 4. Audit the sample               | One outcome per criterion per page, with the evidence behind it           |
+| 5. Report the findings            | Scope, sample, outcomes, and the claim they actually support              |
+
+Results use the five EARL outcomes, and they are not interchangeable:
+`passed`, `failed`, `cantTell` (checked, undecidable without more information),
+`inapplicable` (the content this criterion governs is absent), `untested`.
+Reporting `inapplicable` where you mean `untested` is how a claim becomes wrong.
+
+### Building the report
+
+`rule_tool_a11y_report` turns per-criterion outcomes into a WCAG-EM structured
+report plus EARL JSON-LD. It is deterministic: no model, no network.
+
+```
+rule_tool_a11y_report
+  scope:   { title: "Checkout flow", url: "https://example.com/checkout", level: "AA" }
+  sample:  ["/checkout", "/checkout/payment", "/checkout/confirmation"]
+  results: [{ criterion: "1.1.1", outcome: "failed", note: "Product images have no alt", location: "img.product" },
+            { criterion: "1.4.3", outcome: "passed" },
+            { criterion: "1.2.2", outcome: "inapplicable", note: "No prerecorded media" }]
+```
+
+Three behaviors are deliberate:
+
+- **Every criterion in the target appears.** Level AA means 55 criteria, not the
+  ones you remembered. Whatever you did not report comes back as `untested`.
+- **An unknown criterion or outcome is an error**, never a silent skip. A typo
+  that drops a row would claim coverage the audit does not have.
+- **Any failure, cantTell or untested blocks the claim.** "Mostly conforms" is
+  not a conformance level.
+
+The criteria are vendored from the W3C's published WCAG 2.2 data, so the answer
+does not depend on the network. Refresh them with `rule-mcp a11y-update`.
+
+### What the guardrails cover, and what they cannot
+
+`rule_tool_check` runs the regex-decidable subset against markup and styles, and
+each failure names the criterion rather than only the fix:
+
+| Guardrail                    | Criterion                    |
+| ---------------------------- | ---------------------------- |
+| `a11y-img-alt`               | 1.1.1 Non-text Content       |
+| `a11y-video-captions`        | 1.2.2 Captions (Prerecorded) |
+| `a11y-no-autoplay`           | 1.4.2 Audio Control          |
+| `a11y-positive-tabindex`     | 2.4.3 Focus Order            |
+| `a11y-focus-visible`         | 2.4.11 Focus Appearance      |
+| `a11y-html-lang`             | 3.1.1 Language of Page       |
+| `a11y-form-label`            | 3.3.2 Labels or Instructions |
+| `a11y-iframe-title`          | 4.1.2 Name, Role, Value      |
+| `a11y-aria-hidden-focusable` | 4.1.2 Name, Role, Value      |
+
+**These are a floor, not an audit.** A clean run means no machine-detectable
+violation of nine criteria out of 55. Contrast ratios need rendering; whether
+alt text is meaningful, whether focus order matches reading order, and whether
+an error message actually helps all need a person. A tool that claimed otherwise
+would be the most expensive kind of false confidence.
+
+## 10. Reference & Templates Library
 
 ### Technical Guides (21 references)
 
@@ -372,7 +443,7 @@ These files in `references/` are **lazy-loaded** - read only the guide relevant 
 
 ---
 
-## 10. Setup Guide: Integration with AI Agents
+## 11. Setup Guide: Integration with AI Agents
 
 To use this framework with any AI coding agent, add **one rule** to your agent's configuration file:
 

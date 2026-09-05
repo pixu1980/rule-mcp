@@ -28,7 +28,7 @@ Every ADR follows the [Michael Nygard template](https://github.com/joelparkerhen
 - **Date**: YYYY-MM-DD
 - **Status**: proposed | accepted | deprecated | superseded
 - **Tags**: tag1, tag2
-- **Author**: rule-ai-mcp
+- **Author**: rule-mcp
 
 ## Context
 
@@ -66,7 +66,7 @@ What was decided and why.
 }
 ```
 
-### CLI: `rule-ai-mcp adr new <title> [--status]`
+### CLI: `rule-mcp adr new <title> [--status]`
 
 ## Directory Structure
 

@@ -35,3 +35,7 @@ Environment variables set in your shell profile override the persisted config.
 
 Set `RULE_MCP_MINIMAL_TOOLS=1` (off by default) to expose only the 10 dispatcher/action tools:
 `pix_tool`, `rule_tool_update`, `rule_tool_gateway`, `rule_tool_apply`, `rule_tool_search`, `rule_tool_check`, `rule_tool_scaffold`, `rule_tool_detect`, `rule_tool_process_handoff`, `rule_tool_component`.
+
+## RULE_MCP_AUTO_ADR
+
+Set to `1` to auto-log an ADR when `rule_tool_process_adr` sees a structural change (off by default). `RULE_MCP_DISABLE_AUTO_ADR=1` forces it off.

@@ -1,6 +1,8 @@
 /**
  * macOS PTY acceptance test for the interactive installer.
- * Select Pi with Space, choose daemon with Down, then confirm with Enter.
+ * The picker renders the full agent catalog (claude, cursor, codex, ...), so
+ * Pi is row 6: press 6, confirm agents with Enter, move to daemon with Down,
+ * confirm mode with Enter.
  */
 import { strict as assert } from "node:assert";
 import { execFileSync } from "node:child_process";
@@ -22,7 +24,7 @@ const output = execFileSync(
   "bash",
   [
     "-c",
-    String.raw`printf ' \r\033[B\r' | HOME=${JSON.stringify(fakeHome)} TERM=xterm /usr/bin/script -q /dev/null bash scripts/install.sh --dry-run --no-rules`,
+    String.raw`printf '6\r\033[B\r' | HOME=${JSON.stringify(fakeHome)} TERM=xterm /usr/bin/script -q /dev/null bash scripts/install.sh --dry-run --no-rules`,
   ],
   { cwd: root, encoding: "utf8" },
 );
@@ -31,4 +33,4 @@ assert.match(output, /Selected 1 agent\(s\): pi/);
 assert.match(output, /Install mode: daemon/);
 assert.match(output, /Would install daemon service/);
 
-console.log("  ✅ PTY installer handles Space, arrows, and Enter");
+console.log("  ✅ PTY installer handles the catalog picker, arrows, and Enter");

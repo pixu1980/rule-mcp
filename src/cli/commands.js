@@ -112,7 +112,21 @@ export async function serveCommand(opts = {}) {
     console.error(``);
     console.error(`Then start an agent configured for HTTP/SSE.`);
     console.error(``);
-    await new Promise(() => {});
+    // The daemon runs until it is told to stop, and the signal is what tells
+    // it: the wait ends when the cleanups the transport registered have run, so
+    // sessions, sockets and buffered metrics are closed before the exit rather
+    // than dropped by it.
+    const { installSignalHandlers, registerCleanup, whenShutdown } = await import("../core/lifecycle.js");
+    const { startIdleReclaim, stopIdleReclaim } = await import("../core/reclaim.js");
+
+    registerCleanup("idle-reclaim", () => stopIdleReclaim());
+    installSignalHandlers();
+    startIdleReclaim();
+    // Printed AFTER the handlers exist: "listening" only says the socket is
+    // open, and a signal delivered between those two moments killed the
+    // process with Node's default disposition instead of the graceful path.
+    console.error("rule-mcp ready (signal handlers installed)");
+    await whenShutdown();
   } else {
     const configSnippet = JSON.stringify(
       {
@@ -441,7 +455,10 @@ export function configureCommand(opts = {}) {
       values: "1 = enable",
     },
     RULE_MCP_AUTO_ADR: { desc: "Automatically log architecture decisions.", values: "1 = enable" },
-    RULE_MCP_DISABLE_AUTO_ADR: { desc: "Disable automatic ADR logging (used internally).", values: "1 = disable" },
+    RULE_MCP_DISABLE_AUTO_ADR: {
+      desc: "Disable automatic ADR logging (used internally).",
+      values: "1 = disable",
+    },
     RULE_MCP_DAEMON: { desc: "Run as daemon process.", values: "1 = enable" },
   };
 

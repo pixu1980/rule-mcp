@@ -171,8 +171,8 @@ gates before automating anything that writes.
 
 ## See also
 
-- [rule-ai-evals](../rule-ai-evals/SKILL.md) - the test stage in detail
+- [rule-mcp-evals](../rule-mcp-evals/SKILL.md) - the test stage in detail
 - [rule-process-feature-workflow](../rule-process-feature-workflow/SKILL.md) - the same flow for one feature
 - [rule-process-adr](../rule-process-adr/SKILL.md) - decisions that outlive the plan that produced them
 - [rule-process-code-review](../rule-process-code-review/SKILL.md) - what the review passes look for
-- [rule-ai-prompting](../rule-ai-prompting/SKILL.md) - working with the agent inside these stages
+- [rule-mcp-prompting](../rule-mcp-prompting/SKILL.md) - working with the agent inside these stages

@@ -47,7 +47,7 @@ Adapt the branch filter to the team convention, or drop its second condition to 
 
 ## Step 2 - Generate the DigitalOcean App Spec template
 
-Copy `assets/templates/review-app.yaml` to `.do/review-app.yaml`, then adapt every `# TODO` marker to the target project. Run `pix_detect` on the project path for the runtime and port instead of guessing.
+Copy `assets/templates/review-app.yaml` to `.do/review-app.yaml`, then adapt every `# TODO` marker to the target project. Run `rule_tool_detect` on the project path for the runtime and port instead of guessing.
 
 | App Spec field           | Where it comes from in the target project                                                                                                                  |
 | ------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |

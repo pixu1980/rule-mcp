@@ -1,4 +1,6 @@
 import { randomUUID } from "node:crypto";
+import { FLEX_FIRST } from "./directive.js";
+import { looksLikeStyling } from "./guardrail-defs.js";
 
 const MAX_ARGUMENT_BYTES = 256 * 1024;
 const MAX_OUTPUT_BYTES = 1024 * 1024;
@@ -160,9 +162,9 @@ function validateRouterResult(result, toolNames, skillNames) {
  */
 const _remindedTools = new Set();
 
-function enforcementContract(name, terse) {
+function enforcementContract(name, terse, styling = false) {
   if (terse) {
-    return "## PIX WORKFLOW REMINDER - returned evidence is source of truth; validate generated code with pix_check.";
+    return `## PIX WORKFLOW REMINDER - evidence is source of truth; minimal change, no unrequested scope; pix_check before done; rule_tool_process_adr without being asked;${styling ? ` ${FLEX_FIRST}` : ""}`;
   }
 
   const nextStep =
@@ -173,9 +175,13 @@ function enforcementContract(name, terse) {
   return [
     "## PIX WORKFLOW REMINDER",
     "",
+    "- Work with the minimal change: build exactly what was asked, propose anything extra in prose.",
+    "- No unrequested scope: no new tables, flags, packages, interfaces, or endpoints without an explicit request.",
+    "- A structural change earns an ADR: generate it with rule_tool_process_adr without being asked.",
     "- Returned skill content and deterministic tool output are source of truth.",
     "- Missing evidence means unknown: call pix_search or state uncertainty.",
     `- ${nextStep}`,
+    ...(styling ? [`- ${FLEX_FIRST}`] : []),
   ].join("\n");
 }
 
@@ -259,9 +265,11 @@ export function decorateWorkflowReminder(name, result) {
     _remindedTools.add(name);
   }
 
+  const styling = looksLikeStyling((result?.content ?? []).map((part) => part?.text ?? "").join("\n"));
+
   return {
     ...result,
-    content: [...result.content, { type: "text", text: enforcementContract(name, isTerse) }],
+    content: [...result.content, { type: "text", text: enforcementContract(name, isTerse, styling) }],
   };
 }
 

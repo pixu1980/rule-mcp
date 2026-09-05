@@ -28,10 +28,10 @@ validate any visible interface.
 | --------------------------------------- | ------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
 | Visual direction, aesthetics, UI polish | [rule-ui-design-system](../rule-ui-design-system/SKILL.md)      | [rule-styleguide](../rule-styleguide/SKILL.md)                                                           |
 | Framework component implementation      | [rule-frontend](../rule-frontend/SKILL.md) or a framework skill | [rule-ui-design-system](../rule-ui-design-system/SKILL.md), [rule-styleguide](../rule-styleguide/SKILL.md) |
-| Component template generation           | MCP `pix_component`                                           | `pix_check`                                                                                            |
-| Accessibility review                    | [rule-styleguide-a11y](../rule-styleguide-a11y/SKILL.md)        | `pix_check`                                                                                            |
+| Component template generation           | MCP `rule_tool_component`                                      | `rule_tool_check`                                                                                       |
+| Accessibility review                    | [rule-styleguide-a11y](../rule-styleguide-a11y/SKILL.md)        | `rule_tool_check`                                                                                       |
 | CSS architecture                        | [rule-styleguide-css](../rule-styleguide-css/SKILL.md)          | [rule-styleguide-naming](../rule-styleguide-naming/SKILL.md)                                             |
-| File tree and naming                    | [rule-styleguide-naming](../rule-styleguide-naming/SKILL.md)    | MCP `pix_fix`                                                                                          |
+| File tree and naming                    | [rule-styleguide-naming](../rule-styleguide-naming/SKILL.md)    | MCP `rule_tool_fix`                                                                                     |
 
 ## Required workflow
 
@@ -40,8 +40,8 @@ validate any visible interface.
 3. Use `rule-ui-design-system` to define the aesthetic direction.
 4. Use the framework skill (`rule-frontend-react`, `rule-frontend-vue`,
    `rule-frontend-svelte`, etc.) for implementation details.
-5. Generate deterministic templates with `pix_component` when possible.
-6. Validate with `pix_check` before final handoff.
+5. Generate deterministic templates with `rule_tool_component` when possible.
+6. Validate with `rule_tool_check` before final handoff.
 
 ## Non-negotiable UI constraints
 
@@ -63,7 +63,7 @@ validate any visible interface.
 - [ ] Semantic HTML and accessibility requirements are mapped.
 - [ ] CSS selectors avoid classes and inline styles.
 - [ ] Component/file tree follows `rule-styleguide-naming`.
-- [ ] `pix_component` is used where a template exists.
+- [ ] `rule_tool_component` is used where a template exists.
 - [ ] `rule_tool_check` passes or reports known exceptions.
 
 ## See also

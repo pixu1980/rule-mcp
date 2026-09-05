@@ -32,7 +32,8 @@ git pull origin develop
 git checkout -b feat/<feature-name>
 ```
 
-Follow branch and commit rules from [rule-toolchain-husky](../rule-toolchain-husky/SKILL.md).
+Branch and commit naming are in [rule-toolchain-commits](../rule-toolchain-commits/SKILL.md);
+[rule-toolchain-husky](../rule-toolchain-husky/SKILL.md) is what enforces them.
 
 ## Step 2 - Plan the implementation
 

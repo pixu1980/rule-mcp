@@ -7,6 +7,7 @@ tags:
   - "ci"
   - "cd"
   - "docker"
+  - "preview"
   - "testing"
   - "observability"
   - "version"
@@ -30,6 +31,7 @@ frameworks: [all]
 
 ```
 Need container setup?                   → rule-devops-docker
+Need a preview app per merge request?   → rule-devops-deploy-preview
 Need CI/CD pipeline?                    → rule-devops-gitlab-ci
 Need production telemetry or SLOs?      → rule-devops-observability
 Need test configuration?                → rule-devops-testing

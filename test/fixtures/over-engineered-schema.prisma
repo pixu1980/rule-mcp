@@ -1,0 +1,47 @@
+// Reduced from a real session: the model added seven columns and a new
+// append-only table nobody reads. Four columns and the whole table were
+// removed under review, ten hours and one applied migration later.
+
+model Payment {
+    id Int @id @default(autoincrement())
+    order   Order @relation(fields: [orderID], references: [id], onDelete: Cascade)
+    orderID Int
+    status PaymentStatus @default(PENDING)
+
+    /// Provider-side order/intent id. Revolut: the order uuid.
+    providerOrderID String? @unique
+
+    /// Kept for backwards compatibility; mirrors providerOrderID for REVOLUT.
+    transactionID String?
+
+    /// Opaque token for the client SDK. Short-lived, single payment session.
+    clientToken String?
+
+    amount   Decimal @db.Decimal(10, 2)
+    currency String  @default("EUR")
+
+    /// Our idempotency key for provider session creation.
+    idempotencyKey String @unique
+
+    expiresAt DateTime?
+    providerData Json?
+
+    @@index([status])
+    @@index([orderID, status])
+    @@index([status, expiresAt])
+}
+
+/// Append-only audit of verified provider webhooks.
+model PaymentWebhookEvent {
+    id Int @id @default(autoincrement())
+    provider        PaymentProvider
+    eventType       String
+    providerOrderID String
+    payload Json
+    receivedAt      DateTime  @default(now())
+    processedAt     DateTime?
+    processingError String?
+
+    @@index([providerOrderID])
+    @@index([receivedAt])
+}

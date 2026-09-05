@@ -156,16 +156,16 @@ const user = await $fetch("/api/user", {
 ## Quick Reference
 
 ```
-┌──────────────────────────────────────────────────────────────────────────┐
-│  rule-frontend-meta-nuxt - Nuxt.js (Vue Meta-framework)                   │
-│                                                                          │
-│  Routing:   pages/ directory, dynamic [slug]                             │
-│  SSR/SSG:   nuxt.config routeRules (SWR, prerender, SPA)                 │
-│  Server:    server/api/ + server/middleware/ (Nitro)                     │
-│  Auto:      components/ composables/ - no imports needed                 │
-│  Data:      useFetch (SSR-safe) + $fetch (raw)                           │
-│  Deploy:    Node, Static, Vercel, Cloudflare, Netlify                    │
-└──────────────────────────────────────────────────────────────────────────┘
+┌──────────────────────────────────────────────────────────────────────────────┐
+│  rule-frontend-meta-nuxt - Nuxt.js (Vue Meta-framework)                       │
+│                                                                              │
+│  Routing:   pages/ directory, dynamic [slug]                                 │
+│  SSR/SSG:   nuxt.config routeRules (SWR, prerender, SPA)                     │
+│  Server:    server/api/ + server/middleware/ (Nitro)                         │
+│  Auto:      components/ composables/ - no imports needed                     │
+│  Data:      useFetch (SSR-safe) + $fetch (raw)                               │
+│  Deploy:    Node, Static, Vercel, Cloudflare, Netlify                        │
+└──────────────────────────────────────────────────────────────────────────────┘
 ```
 
 ---

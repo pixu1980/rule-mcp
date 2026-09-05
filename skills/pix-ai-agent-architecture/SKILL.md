@@ -1,5 +1,5 @@
 ---
-name: rule-ai-agent-architecture
+name: rule-mcp-agent-architecture
 description: >-
   Use when building or reviewing an agent, an MCP server, or a tool surface. Covers what actually happens at the API boundary when a tool call happens, why the harness and not the model decides quality, loops against graphs, what MCP does and does not give you, tool granularity and naming, and exposing an application as a tool surface.
 tags:
@@ -16,11 +16,11 @@ tags:
 frameworks: [all]
 ---
 
-# rule-ai-agent-architecture - The harness is the product
+# rule-mcp-agent-architecture - The harness is the product
 
 ## Purpose
 
-[rule-ai-agents](../rule-ai-agents/SKILL.md) is how to scaffold an agent
+[rule-mcp-agents](../rule-mcp-agents/SKILL.md) is how to scaffold an agent
 repository here. This is the architecture underneath: what the loop is, what the
 protocol carries, and which decisions determine whether an agent is any good.
 
@@ -200,8 +200,8 @@ not features:
 
 ## See also
 
-- [rule-ai-agents](../rule-ai-agents/SKILL.md) - scaffolding an agent repository here
-- [rule-ai-context-engineering](../rule-ai-context-engineering/SKILL.md) - the window the loop fills
-- [rule-ai-evals](../rule-ai-evals/SKILL.md) - deciding whether a harness change helped
+- [rule-mcp-agents](../rule-mcp-agents/SKILL.md) - scaffolding an agent repository here
+- [rule-mcp-context-engineering](../rule-mcp-context-engineering/SKILL.md) - the window the loop fills
+- [rule-mcp-evals](../rule-mcp-evals/SKILL.md) - deciding whether a harness change helped
 - [rule-process-ai-sdlc](../rule-process-ai-sdlc/SKILL.md) - where an agent sits in the delivery process
 - [rule-backend-security](../rule-backend-security/SKILL.md) - authorizing the operation rather than the claim

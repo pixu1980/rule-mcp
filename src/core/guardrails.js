@@ -203,6 +203,7 @@ export function checkCode(skillName, code, context = {}) {
     return {
       id: g.id,
       label: g.label,
+      wcag: g.wcag || "",
       pass: result.pass,
       failCount: result.failCount || 0,
       detail: result.detail || [],
@@ -228,6 +229,7 @@ export function checkCode(skillName, code, context = {}) {
     failed: failed.map((r) => ({
       id: r.id,
       label: r.label,
+      wcag: r.wcag || "",
       failCount: r.failCount,
       detail: r.detail,
       suggestion: r.suggestion,

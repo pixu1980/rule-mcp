@@ -42,7 +42,7 @@ src/
 
 ## Express Middleware Pipeline
 
-- Order matters: logging → security → body parser → auth → routes → error handler
+- Order matters: logging -> security -> body parser -> auth -> routes -> error handler
 - `helmet` for security headers (first middleware)
 - `cors` with explicit origin whitelist
 - `pino-http` for structured request logging

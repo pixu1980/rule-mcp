@@ -1,7 +1,7 @@
 ---
 name: rule-ai
 description: >-
-  Use when building AI Agent applications to route to the correct skill. Covers agent scaffolding on @rule/rule-ai-core and framework-agnostic agent guidance.
+  Use when building AI Agent applications to route to the correct skill. Covers agent scaffolding on @rule/rule-mcp-core and framework-agnostic agent guidance.
 tags:
   - "ai"
   - "agents"
@@ -15,19 +15,19 @@ compatibility: Designed for AI coding assistants
 
 ## AI Agent Skills
 
-| Skill                                                                | Core Library                                                                                                 | Use when                                                                                                                                    |
-| -------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------- |
-| [rule-ai-evals](../rule-ai-evals/SKILL.md)                             | Error analysis, LLM-as-judge, judge calibration, RAG evals                                                   | Measuring whether an AI feature works                                                                                                       |
-| [rule-ai-context-engineering](../rule-ai-context-engineering/SKILL.md) | The window as a budget, less-beats-more, delegation levels, compaction and handoff, usage limits             | A session is getting expensive, slow or worse                                                                                               |
-| [rule-ai-agent-architecture](../rule-ai-agent-architecture/SKILL.md)   | What happens at the API boundary, the harness over the model, loops against graphs, MCP, tool surface design | Building or reviewing an agent or an MCP server                                                                                             |
-| [rule-ai-prompting](../rule-ai-prompting/SKILL.md)                     | Prompt anatomy, context engineering, learning mode                                                           | Working with an agent, or teaching someone to                                                                                               |
-| [rule-ai-agents](../rule-ai-agents/SKILL.md)                           | `@rule/rule-ai-core`                                                                                           | Scaffolding AI Agent repositories on `@rule/rule-ai-core`: providers, tools, registries, testing, containerization.                           |
-| [rule-platform-agent](../rule-platform-agent/SKILL.md)                 | none (framework-agnostic)                                                                                    | Structuring an AI Agent project without prescribing a specific SDK or core library (LangChain, Vercel AI SDK, MCP clients, custom runners). |
+| Skill                                                                        | Core Library                                                                                                 | Use when                                                                                                                                    |
+| ---------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| [rule-mcp-evals](../rule-mcp-evals/SKILL.md)                             | Error analysis, LLM-as-judge, judge calibration, RAG evals                                                   | Measuring whether an AI feature works                                                                                                       |
+| [rule-mcp-context-engineering](../rule-mcp-context-engineering/SKILL.md) | The window as a budget, less-beats-more, delegation levels, compaction and handoff, usage limits             | A session is getting expensive, slow or worse                                                                                               |
+| [rule-mcp-agent-architecture](../rule-mcp-agent-architecture/SKILL.md)   | What happens at the API boundary, the harness over the model, loops against graphs, MCP, tool surface design | Building or reviewing an agent or an MCP server                                                                                             |
+| [rule-mcp-prompting](../rule-mcp-prompting/SKILL.md)                     | Prompt anatomy, context engineering, learning mode                                                           | Working with an agent, or teaching someone to                                                                                               |
+| [rule-mcp-agents](../rule-mcp-agents/SKILL.md)                           | `@rule/rule-mcp-core`                                                                                       | Scaffolding AI Agent repositories on `@rule/rule-mcp-core`: providers, tools, registries, testing, containerization.                       |
+| [rule-platform-agent](../rule-platform-agent/SKILL.md)                         | none (framework-agnostic)                                                                                    | Structuring an AI Agent project without prescribing a specific SDK or core library (LangChain, Vercel AI SDK, MCP clients, custom runners). |
 
 ## Quick Selection Guide
 
 ```
-Need agents on @rule/rule-ai-core (providers, tools, seed, Docker)?  → rule-ai-agents
+Need agents on @rule/rule-mcp-core (providers, tools, seed, Docker)?  → rule-mcp-agents
 Need framework-agnostic agent project structure (any SDK)?            → rule-platform-agent
 ```
 

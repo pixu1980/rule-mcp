@@ -117,7 +117,7 @@ result, both opt-out:
 | Fingerprint | `src/core/fingerprint.js` | Em dashes, curly quotes, British spelling | `RULE_MCP_NO_FINGERPRINT=1` |
 
 Both skip fenced code, inline spans, URLs and JSON, and both are idempotent.
-Call `pix_compress` to run the same passes over arbitrary prose before
+Call `rule_tool_compress` to run the same passes over arbitrary prose before
 writing it out.
 
 ## Never spawn subagents

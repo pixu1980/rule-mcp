@@ -69,9 +69,9 @@ let _index = null;
  * @returns {string[]}
  */
 function tokenize(text) {
-  return text
-    .toLowerCase()
-    .split(/[^a-z0-9]+/)
+  return splitWords(text)
+    .flatMap(splitCompound)
+    .map(stem)
     .filter((t) => t.length >= MIN_TERM_LENGTH && !STOPWORDS.has(t));
 }
 
@@ -80,6 +80,18 @@ function splitWords(text) {
   return String(text)
     .split(/[^A-Za-z0-9]+/)
     .filter(Boolean);
+}
+
+function splitCompound(word) {
+  const lower = word.toLowerCase();
+  const parts = word
+    .replaceAll(/([a-z0-9])([A-Z])/g, "$1 $2")
+    .replaceAll(/([A-Z]+)([A-Z][a-z])/g, "$1 $2")
+    .toLowerCase()
+    .split(" ")
+    .filter(Boolean);
+
+  return parts.length > 1 ? [lower, ...parts] : [lower];
 }
 
 /**
@@ -400,6 +412,9 @@ function extractSections(content) {
   return sections;
 }
 
+/** Weight of a term that appears in a section heading. */
+const HEADING_BOOST = 3;
+
 /**
  * Build the BM25 inverted index from all loaded skills.
  * Index is cached in memory until `clearIndex()` or `buildIndex(true)`.
@@ -426,6 +441,14 @@ export function buildIndex(force = false) {
   let documentId = 0;
 
   for (const skillName of skillNames) {
+    // The hub skill ("rule") is the router's own directory, not a body of
+    // knowledge: indexed, its near-ubiquitous vocabulary dilutes the
+    // document frequency of every common term and drags the whole routing
+    // surface down with it.
+    if (skillName === "rule") {
+      continue;
+    }
+
     const content = readSkill(skillName);
 
     if (!content) {
@@ -439,11 +462,20 @@ export function buildIndex(force = false) {
         continue;
       }
 
+      // The heading is the routing surface: a term appearing only in a heading
+      // would otherwise score zero. Counting it HEADING_BOOST times is the
+      // single-field way to weight a field, and docLength counts them too so
+      // BM25 normalization stays honest.
       const terms = tokenize(section.text);
+      const headingTerms = tokenize(section.heading);
       const termFreq = new Map();
 
       for (const term of terms) {
         termFreq.set(term, (termFreq.get(term) || 0) + 1);
+      }
+
+      for (const term of headingTerms) {
+        termFreq.set(term, (termFreq.get(term) || 0) + HEADING_BOOST);
       }
 
       // Store document
@@ -456,7 +488,7 @@ export function buildIndex(force = false) {
         snippet: section.text.replaceAll(/\s+/g, " ").slice(0, 200).trim(),
       });
 
-      documentLength.set(id, terms.length);
+      documentLength.set(id, terms.length + headingTerms.length * HEADING_BOOST);
 
       // Update inverted index
       for (const [term, freq] of termFreq) {
@@ -697,4 +729,61 @@ export function search(query, maxResults = DEFAULT_MAX_RESULTS) {
     });
 
   return ranked;
+}
+
+/** Rank skills by how well they answer a query (per-skill rollup of search). */
+export function searchSkills(query, options = {}) {
+  const results = search(query, options.maxSections ?? 200);
+
+  if (results.length === 0) {
+    return [];
+  }
+
+  const bySkill = new Map();
+
+  for (const result of results) {
+    if (!bySkill.has(result.skill)) {
+      bySkill.set(result.skill, []);
+    }
+
+    bySkill.get(result.skill).push(result);
+  }
+
+  // How many of the query's terms this skill actually contains.
+  //
+  // IDF makes a term that appears in exactly one skill enormously valuable,
+  // which is right for search and wrong for routing: "jwt verification best
+  // practices" was routing to the one skill that happened to contain "jwt" in
+  // an example, beating the skill that matched three terms out of four.
+  // Nonsense did the same, matching a stray token in a regex sample.
+  const queryTerms = new Set(tokenize(query));
+  const coverage = (skill) => {
+    if (queryTerms.size === 0) {
+      return 0;
+    }
+
+    let matched = 0;
+
+    for (const term of queryTerms) {
+      const posting = _index.df.get(term);
+
+      if (posting && [..._index.docs].some((document_) => document_.skill === skill && posting.has(document_.id))) {
+        matched += 1;
+      }
+    }
+
+    return matched / queryTerms.size;
+  };
+
+  return [...bySkill]
+    .map(([skill, hits]) => {
+      const sorted = hits.sort((a, b) => b.score - a.score);
+      // Best section in full, the next ones at a decreasing share: corroboration
+      // is worth something, repetition is not.
+      const raw = sorted.reduce((total, hit, index) => total + hit.score / (index + 1), 0);
+
+      return { skill, score: raw * coverage(skill), sections: sorted.slice(0, 5).map((hit) => hit.section) };
+    })
+    .filter((entry) => entry.score > 0)
+    .sort((a, b) => b.score - a.score);
 }

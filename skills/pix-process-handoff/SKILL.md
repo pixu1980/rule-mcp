@@ -42,7 +42,7 @@ where the previous one left off - with zero Q&A to re-establish context.
    - Condenses `.context/` values into a flat key-value table
    - Ends with a handoff instruction for the receiving LLM
 
-3. The output is emitted via the **MCP tool** `rule_tool_process_handoff` or the **CLI** `rule-ai-mcp handoff`.
+3. The output is emitted via the **MCP tool** `rule_tool_process_handoff` or the **CLI** `rule-mcp handoff`.
 
 ## Output Format
 
@@ -74,13 +74,13 @@ STACK=react
 > rule_tool_process_handoff { "projectDir": "." }
 
 # CLI
-> rule-ai-mcp handoff
+> rule-mcp handoff
 # → prints the full handoff block to stdout
 
 # CLI with pipe to clipboard
-> rule-ai-mcp handoff | pbcopy    # macOS
-> rule-ai-mcp handoff | clip       # Windows
-> rule-ai-mcp handoff | xclip      # Linux
+> rule-mcp handoff | pbcopy    # macOS
+> rule-mcp handoff | clip       # Windows
+> rule-mcp handoff | xclip      # Linux
 ```
 
 ## Slash command: `/rule-handoff`
@@ -126,14 +126,14 @@ wrong in all three clauses, and nothing in the file says so. Pasting it whole
 also costs more than the situation warrants: most of a handoff is narrative the
 resuming reader already lived.
 
-`rule_tool_process_handon` (CLI `rule-ai-mcp handon`, slash `/rule-handon`)
+`rule_tool_process_handon` (CLI `rule-mcp handon`, slash `/rule-handon`)
 answers the only two questions that matter on resume: **what is still true, and
 what do I do next?**
 
 ```bash
-rule-ai-mcp handon                 # the newest handoff, verified
-rule-ai-mcp handon --list          # what handoffs exist
-rule-ai-mcp handon --file docs/handoff/01-token-first-upgrade.md
+rule-mcp handon                 # the newest handoff, verified
+rule-mcp handon --list          # what handoffs exist
+rule-mcp handon --file docs/handoff/01-token-first-upgrade.md
 ```
 
 It parses what the handoff claims and checks each claim against the repository
@@ -163,9 +163,9 @@ handoff it lands at about a quarter of the source.
 
 ## Recovery Flow
 
-1. **Source session**: Before closing, run `rule-ai-mcp handoff` -> copy output
+1. **Source session**: Before closing, run `rule-mcp handoff` -> copy output
 2. **Target session**: Paste the handoff block as the **first message**, or run
-   `rule-ai-mcp handon` if the handoff was persisted to `docs/handoff/`
+   `rule-mcp handon` if the handoff was persisted to `docs/handoff/`
 3. The receiving LLM understands the project, the decisions, and which parts of
    the previous session's account no longer hold
 

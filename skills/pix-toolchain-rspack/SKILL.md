@@ -18,7 +18,7 @@ frameworks: [all]
 Rspack is a Rust-based bundler compatible with webpack 5 APIs and plugin ecosystem.
 This skill covers configuration, CSS strategy, bundle optimization, split chunks, type checking, and debugging.
 
-Official docs: http://rspack.rs/llms.txt (v2) · http://v1.rspack.rs/llms.txt (v1)
+Official docs: http://rspack.rs/llms.txt (v2) - http://v1.rspack.rs/llms.txt (v1)
 
 ## Rspack Configuration (rspack.config.ts)
 
@@ -185,7 +185,7 @@ RSPACK_PROFILE=TRACE RSPACK_TRACE_LAYER=logger RSPACK_TRACE_OUTPUT=./trace.json 
 2. Run analysis: `node node_modules/@rspack/tracing/scripts/analyze_trace.js trace.json`
 3. Map slow spans to actionable fixes using the official bottleneck reference
 
-## Migration: Rspack 1.x → v2
+## Migration: Rspack 1.x -> v2
 
 1. Read the official migration guide: https://rspack.rs/guide/migration/rspack_1.x
 2. Upgrade packages: `@rspack/core`, `@rspack/cli`, `@rspack/dev-server`, `@rspack/plugin-react-refresh`

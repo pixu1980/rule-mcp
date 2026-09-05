@@ -366,11 +366,18 @@ else
   # ── Agent detection matrix ──
   # Uses the same agent list as tokensave (18+ agents)
   # Note: using parallel arrays instead of associative array (bash 3.2 compat)
+  is_deprecated_agent() {
+    case "$1" in
+      windsurf) return 0 ;;
+      *) return 1 ;;
+    esac
+  }
+
   AGENT_NAMES=(
     "claude" "cursor" "codex" "copilot" "gemini" "pi"
     "cline" "roo" "zed" "opencode" "antigravity"
     "windsurf" "kilo" "kimi" "vibe" "grok"
-    "droid" "kiro" "qwen" "vscode" "jetbrains"
+    "droid" "kiro" "qwen" "devin" "vscode" "jetbrains"
   )
   AGENT_PATHS=(
     "$HOME_DIR/.claude.json"
@@ -397,18 +404,21 @@ else
   )
   # VS Code + JetBrains paths OS-dependent
   if [[ "$OS" == "macos" ]]; then
+    AGENT_PATHS[18]="$HOME_DIR/.config/devin/mcp_config.json"
     AGENT_PATHS[19]="$HOME_DIR/Library/Application Support/Code/User/mcp.json"
     AGENT_PATHS[20]="$HOME_DIR/Library/Application Support/JetBrains"
   elif [[ "$OS" == "linux" ]]; then
+    AGENT_PATHS[18]="$HOME_DIR/.config/devin/mcp_config.json"
     AGENT_PATHS[19]="$HOME_DIR/.config/Code/User/mcp.json"
     AGENT_PATHS[20]="$HOME_DIR/.config/JetBrains"
   else
+    AGENT_PATHS[18]="$HOME_DIR/.config/devin/mcp_config.json"
     AGENT_PATHS[19]="$(pwd)/.vscode/mcp.json"
   fi
 
   for i in "${!AGENT_NAMES[@]}"; do
     agent="${AGENT_NAMES[$i]}"
-    local_path="${AGENT_PATHS[$i]}"
+    local_path="${AGENT_PATHS[$i]:-}"
     [[ -z "$local_path" ]] && continue
     # For glob-style paths (JetBrains), check if parent dir exists
     if [[ "$agent" == "jetbrains" ]]; then
@@ -421,7 +431,7 @@ else
   done
 
   if [[ ${#DETECTED_AGENTS[@]} -eq 0 ]]; then
-    warn "No supported coding agents detected."
+    warn "No supported coding agents detected on this machine."
     warn "Install an agent first (Claude Code, Cursor, Cline, etc.),"
     warn "or pass --agent <name> to target a specific one."
   else
@@ -432,7 +442,15 @@ else
     [[ -z "$INSTALL_MODE" ]] && INSTALL_MODE="stdio"
     if [[ "$INTERACTIVE" == "true" ]] && [[ -t 0 ]]; then
       AGENT_FLAGS=()
-      for ((ai=0; ai<${#DETECTED_AGENTS[@]}; ai++)); do AGENT_FLAGS+=(0); done
+      for ((ai=0; ai<${#AGENT_NAMES[@]}; ai++)); do AGENT_FLAGS+=(0); done
+      # Detected agents are pre-selected: the picker renders the full catalog,
+      # not the detection result, so an agent absent from disk can still be
+      # added by hand and the cursor never leaves a row the catalog has.
+      for ((ai=0; ai<${#AGENT_NAMES[@]}; ai++)); do
+        if [[ ${AGENT_DETECTED[$ai]:-0} -eq 1 ]] && ! is_deprecated_agent "${AGENT_NAMES[$ai]}"; then
+          AGENT_FLAGS[$ai]=1
+        fi
+      done
       AGENT_CURSOR=0
       MODE_CURSOR=0
       MODES=(stdio daemon docker)
@@ -499,8 +517,8 @@ else
           AGENT_FLAGS[$1]=1
         fi
       }
-      cursor_up()   { AGENT_CURSOR=$((AGENT_CURSOR - 1)); [[ $AGENT_CURSOR -lt 0 ]] && AGENT_CURSOR=$((${#DETECTED_AGENTS[@]} - 1)); return 0; }
-      cursor_down() { AGENT_CURSOR=$((AGENT_CURSOR + 1)); [[ $AGENT_CURSOR -ge ${#DETECTED_AGENTS[@]} ]] && AGENT_CURSOR=0; return 0; }
+      cursor_up()   { AGENT_CURSOR=$((AGENT_CURSOR - 1)); [[ $AGENT_CURSOR -lt 0 ]] && AGENT_CURSOR=$((${#AGENT_NAMES[@]} - 1)); return 0; }
+      cursor_down() { AGENT_CURSOR=$((AGENT_CURSOR + 1)); [[ $AGENT_CURSOR -ge ${#AGENT_NAMES[@]} ]] && AGENT_CURSOR=0; return 0; }
       render_agents() {
         tui_clear
         echo -e "${BOLD}${CYAN}╔══════════════════════════════════════════════════════╗${NC}"
@@ -511,15 +529,22 @@ else
         echo -e "${BOLD}Select agents${NC}"
         echo -e "  ${CYAN}↑↓/jk move · SPACE or 1-9 toggle · a all · n none · ENTER confirm · q quit${NC}"
         echo ""
-        for i in "${!DETECTED_AGENTS[@]}"; do
+        for i in "${!AGENT_NAMES[@]}"; do
           mark=" "
           [[ ${AGENT_FLAGS[$i]} -eq 1 ]] && mark="x"
           pointer="  "
           [[ $i -eq $AGENT_CURSOR ]] && pointer="${BOLD}>${NC} "
-          echo -e "${pointer}[${mark}] $((i + 1)) ${DETECTED_AGENTS[$i]}"
+          note=""
+          [[ ${AGENT_DETECTED[$i]:-0} -eq 1 ]] && note=" ${GREEN}(detected)${NC}"
+          if is_deprecated_agent "${AGENT_NAMES[$i]}"; then
+            note="${note} ${YELLOW}(deprecated - use devin)${NC}"
+          fi
+          echo -e "${pointer}[${mark}] $((i + 1)) ${AGENT_NAMES[$i]}${note}"
         done
+        selected_count=0
+        for flag in "${AGENT_FLAGS[@]}"; do [[ "$flag" -eq 1 ]] && selected_count=$((selected_count + 1)); done
         echo ""
-        echo -e "${CYAN}Selected:${NC} $(count_selected)/${#DETECTED_AGENTS[@]}    ${CYAN}Mode:${NC} ${MODE_LABELS[$MODE_CURSOR]%% -*}"
+        echo -e "${CYAN}Selected:${NC} ${selected_count}/${#AGENT_NAMES[@]}    ${CYAN}Mode:${NC} ${MODE_LABELS[$MODE_CURSOR]%% -*}"
       }
       render_modes() {
         tui_clear
@@ -556,10 +581,10 @@ else
           j) cursor_down ;;
           k) cursor_up ;;
           a|A)
-            for ((ai=0; ai<${#DETECTED_AGENTS[@]}; ai++)); do AGENT_FLAGS[$ai]=1; done
+            for ((ai=0; ai<${#AGENT_NAMES[@]}; ai++)); do AGENT_FLAGS[$ai]=1; done
             ;;
           n|N)
-            for ((ai=0; ai<${#DETECTED_AGENTS[@]}; ai++)); do AGENT_FLAGS[$ai]=0; done
+            for ((ai=0; ai<${#AGENT_NAMES[@]}; ai++)); do AGENT_FLAGS[$ai]=0; done
             ;;
           q)
             tui_leave
@@ -570,7 +595,7 @@ else
             ;;
           [1-9])
             idx=$((10#$KEY - 1))
-            if [[ $idx -lt ${#DETECTED_AGENTS[@]} ]]; then
+            if [[ $idx -lt ${#AGENT_NAMES[@]} ]]; then
               toggle_agent "$idx"
               AGENT_CURSOR=$idx
             fi
@@ -578,8 +603,8 @@ else
         esac
       done
 
-      for i in "${!DETECTED_AGENTS[@]}"; do
-        [[ ${AGENT_FLAGS[$i]} -eq 1 ]] && SELECTED_AGENTS+=("${DETECTED_AGENTS[$i]}")
+      for i in "${!AGENT_NAMES[@]}"; do
+        [[ ${AGENT_FLAGS[$i]} -eq 1 ]] && SELECTED_AGENTS+=("${AGENT_NAMES[$i]}")
       done
       if [[ ${#SELECTED_AGENTS[@]} -eq 0 ]]; then
         tui_leave
@@ -746,6 +771,7 @@ Available rule-mcp tools:
 - rule_tool_process_adr - Architecture Decision Records
 - rule_tool_process_handoff - Context handoff
 - rule_tool_detect - Detect project framework
+- Flex first: layout with display:flex; display:grid only for named areas, subgrid, explicit placement, or auto-fit tracks, justified with /* grid: why */
 - rule://resources - Skill documentation as MCP resources
 
 <!-- /rule-mcp-rules -->"

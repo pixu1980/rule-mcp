@@ -11,15 +11,16 @@ frameworks: [astro]
 # rule-frontend-astro - Astro with rule Principles
 
 This skill adapts [rule-styleguide](../rule-styleguide/SKILL.md) and
-[rule-frontend-vanilla-reactive](../rule-frontend-vanilla-reactive/SKILL.md) to **Astro** (islands architecture).
+a store-and-signals architecture to **Astro** (islands architecture).
 
 ## Core Rules (inherited from rule skills)
 
 1. **Zero CSS classes** - only element selectors + `[data-part="..."]` + `[data-*]`
 2. **Zero inline styles** - external `.css` files via `adoptedStyleSheets` or `<style>` in `.astro`
-3. **Semantic HTML is mandatory** - never `<div>` where a semantic element exists
-4. **Barrel pattern** - every component folder has `index.js`
-5. **Minimal client JS** - Astro islands with `client:load` / `client:idle` only where needed
+3. **Flex first** - `display: grid` only for named areas, subgrid, explicit placement, or auto-fit tracks; anything a flex row or column can do is flex.
+4. **Semantic HTML is mandatory** - never `<div>` where a semantic element exists
+5. **Barrel pattern** - every component folder has `index.js`
+6. **Minimal client JS** - Astro islands with `client:load` / `client:idle` only where needed
 
 ## File Tree Convention
 
@@ -122,17 +123,17 @@ document.querySelectorAll("[data-part='delete']").forEach((btn) => {
 });
 ```
 
-## Astro ↔ rule-frontend-vanilla-reactive Mapping
+## Astro ↔ store-and-signals mapping
 
-| rule-frontend-vanilla-reactive | Astro Equivalent                                                 |
-| ----------------------------- | ---------------------------------------------------------------- |
-| `html\`\`` tagged templates   | `.astro` template (JSX-like)                                     |
-| `{{ expr }}`                  | `{expression}`                                                   |
-| `@click=${fn}`                | Client island JS or framework island                             |
-| `adoptedStyleSheets`          | `<style>` in `.astro` (scoped by default) or external CSS import |
-| `data-part="..."`             | `data-part="..."` (same)                                         |
-| Component folder              | `components/PascalCase/`                                         |
-| Barrel                        | `index.js` in component folder                                   |
+| Store and signals           | Astro Equivalent                                                 |
+| --------------------------- | ---------------------------------------------------------------- |
+| `html\`\`` tagged templates | `.astro` template (JSX-like)                                     |
+| `{{ expr }}`                | `{expression}`                                                   |
+| `@click=${fn}`              | Client island JS or framework island                             |
+| `adoptedStyleSheets`        | `<style>` in `.astro` (scoped by default) or external CSS import |
+| `data-part="..."`           | `data-part="..."` (same)                                         |
+| Component folder            | `components/PascalCase/`                                         |
+| Barrel                      | `index.js` in component folder                                   |
 
 ## CSS in Astro
 
@@ -165,22 +166,22 @@ export { default as TodoItem } from "./_TodoItem.astro";
 
 ## Guardrails
 
-Run `pix_frontend_astro` mode=check or `pix_check` to validate code against these rules.
+Run `rule_tool_frontend_astro` mode=check or `rule_tool_check` to validate code against these rules.
 
 Key rules enforced: **no-css-classes**, **no-inline-styles**, **semantic-html**,
 **external-css** (Astro `<style>` scoped blocks or external CSS imports),
 **barrel-file**, **data-part**,
-**jsdoc-required** (every JS/TS file MUST have complete JSDoc - see rule-styleguide → javascript.md),
-**css-comments-required** (every CSS file MUST have file-level + section comments - see rule-styleguide → css.md),
-**a11y-test-required** (every project MUST have Playwright + @axe-core/playwright a11y tests in `tests/a11y/` - see rule-styleguide → a11y.md → Automated Testing).
+**jsdoc-required** (every JS/TS file MUST have complete JSDoc - see rule-styleguide -> javascript.md),
+**css-comments-required** (every CSS file MUST have file-level + section comments - see rule-styleguide -> css.md),
+**a11y-test-required** (every project MUST have Playwright + @axe-core/playwright a11y tests in `tests/a11y/` - see rule-styleguide -> a11y.md -> Automated Testing).
 
 ## Project Scaffolding
 
-All rule projects include standard config files. See [`rule-styleguide`](../rule-styleguide/SKILL.md) → Project Scaffolding.
-Use `pix_styleguide mode=scaffold` or `pix_scaffold` to generate: `.prettierrc`, `.nvmrc`, `.editorconfig`,
+All rule projects include standard config files. See [`rule-styleguide`](../rule-styleguide/SKILL.md) -> Project Scaffolding.
+Use `rule_tool_styleguide mode=scaffold` or `rule_tool_scaffold` to generate: `.prettierrc`, `.nvmrc`, `.editorconfig`,
 `.gitignore`, `.eslintrc.json`, `tsconfig.json`, `jsconfig.json`.
 
-Iterate: `generate → pix_check → fix → pix_check → all pass`.
+Iterate: `generate → rule_tool_check → fix → rule_tool_check → all pass`.
 
 ---
 
@@ -394,7 +395,7 @@ import BaseLayout from "./_BaseLayout.astro";
 </BaseLayout>
 ```
 
-Rule: _Compose layouts like components. A base layout → page type layout → page._
+Rule: _Compose layouts like components. A base layout -> page type layout -> page._
 
 #### 9. Lazy-load non-critical CSS and JS
 
@@ -449,7 +450,7 @@ Rule: _Separate data fetching, formatting, and presentation into distinct module
 
 | Resource               | Path                                           |
 | ---------------------- | ---------------------------------------------- |
-| 10 detailed examples   | `examples/performance/01-*.md` … `10-*.md`     |
+| 10 detailed examples   | `examples/performance/01-*.md` ... `10-*.md`   |
 | PR review checklist    | `checklists/astro-performance-pr-checklist.md` |
 | Decision matrix        | `checklists/decision-matrix.md`                |
 | System prompt          | `prompts/portable-system-prompt.md`            |

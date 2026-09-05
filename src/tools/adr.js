@@ -16,6 +16,8 @@ import { addAfterToolHook } from "./router.js";
 
 /** ADR directory relative to project root. */
 const ADR_DIR = "docs/adr";
+const THEME_THRESHOLD = 3;
+const SUMMARY_LIMIT = 220;
 
 /** Strip diacritics and special chars for slug. */
 function slugify(text) {
@@ -33,6 +35,8 @@ function slugify(text) {
 }
 
 /** Get next ADR number. */
+export const ADR_INDEX_FILE = "ADR.md";
+
 function nextAdrNumber(adrDir) {
   try {
     const files = readdirSync(adrDir);
@@ -52,27 +56,46 @@ function adrFilename(number, title) {
 }
 
 /** Generate ADR markdown content. */
-function generateAdr({ number, title, status, context, decision, consequences, alternatives, tags }) {
-  const date = new Date().toISOString().slice(0, 10);
+function generateAdr({
+  number,
+  title,
+  status,
+  context,
+  decision,
+  consequences,
+  alternatives,
+  endsWhen,
+  tags,
+  date,
+  author,
+}) {
+  date ??= new Date().toISOString().slice(0, 10);
   const lines = [
     `# ${String(number).padStart(3, "0")}: ${title}`,
     "",
     `- **Date**: ${date}`,
     `- **Status**: ${status}`,
     `- **Tags**: ${tags.join(", ")}`,
-    "- **Author**: rule-mcp",
+    `- **Author**: ${author || adrAuthor()}`,
     "",
     "## Context",
     "",
-    context || "Inserire il contesto che ha portato a questa decisione.",
+    context || "The forcing factors that led to this decision.",
     "",
     "## Decision",
     "",
-    decision || "Inserire la decisione presa.",
+    decision || "The decision taken, and why.",
     "",
     "## Consequences",
     "",
-    consequences || "Inserire le conseguenze positive e negative.",
+    consequences || "What this costs and what it buys, both stated.",
+    "",
+    // Written now, because the assumptions a decision leans on are clear while
+    // it is being taken and invisible a year later. Without it a reversal is
+    // only ever noticed by accident.
+    "## What would end this",
+    "",
+    endsWhen || "The assumption this leans on, and the observation that would make it wrong.",
     "",
   ];
 
@@ -89,37 +112,41 @@ function generateAdr({ number, title, status, context, decision, consequences, a
   return lines.join("\n");
 }
 
-/** Update ADR index (docs/adr/README.md). */
-function updateAdrIndex(adrDir, entries) {
-  const indexFile = join(adrDir, "README.md");
-  const lines = [
-    "# Architecture Decision Records",
-    "",
-    "Questo indice elenca tutti gli ADR in ordine cronologico.",
-    "",
-    "| # | Title | Date | Status | Tags |",
-    "|---|-------|------|--------|------|",
-  ];
-
-  // Sort by number descending (newest first)
-  const sorted = [...entries].sort((a, b) => b.number - a.number);
-
-  for (const e of sorted) {
-    const file = e.file || adrFilename(e.number, e.title);
-    lines.push(
-      `| [${String(e.number).padStart(3, "0")}](${file}) | ${e.title} | ${e.date} | ${e.status} | ${e.tags.join(", ")} |`,
-    );
-  }
-
-  lines.push("");
-
-  writeFileSync(indexFile, lines.join("\n"));
+/** Exported so the template can be asserted without writing a file. */
+export function buildAdrBody(fields) {
+  return generateAdr(fields);
 }
 
 /**
- * Parse existing ADRs from the index or directory.
- * Returns array of { number, title, date, status, tags }.
+ * The first sentence of a prose section, flattened for a table cell.
  */
+function firstSentence(text) {
+  const flat = (text ?? "").replaceAll(/\s+/g, " ").trim();
+
+  if (flat.length === 0) {
+    return "";
+  }
+
+  const [sentence] = flat.split(/(?<=[a-z)\]"])\.\s+(?=[A-Z`])/, 1);
+  let out = sentence.endsWith(".") ? sentence : `${sentence}.`;
+
+  if (out.length > SUMMARY_LIMIT) {
+    out = `${out.slice(0, out.lastIndexOf(" ", SUMMARY_LIMIT))}...`;
+  }
+
+  return out.replaceAll("|", String.raw`\|`);
+}
+
+/**
+ * Pull one `## Heading` section out of an ADR body.
+ */
+/**
+ * Pull one `## Heading` section out of an ADR body.
+ */
+function section(body, heading) {
+  return new RegExp(String.raw`^## ${heading}\s*\n([\s\S]*?)(?=\n## |$)`, "m").exec(body ?? "")?.[1] ?? "";
+}
+
 export function listExistingAdrs(adrDir) {
   try {
     const files = readdirSync(adrDir);
@@ -138,7 +165,16 @@ export function listExistingAdrs(adrDir) {
           .split(",")
           .map((s) => s.trim())
           .filter(Boolean);
-        adrs.push({ file: f, number: parseInt(m[1]), title, date, status, tags });
+        adrs.push({
+          file: f,
+          number: parseInt(m[1]),
+          title,
+          date,
+          status,
+          tags,
+          decision: firstSentence(section(content, "Decision")),
+          consequence: firstSentence(section(content, "Consequences")),
+        });
       }
     }
 
@@ -206,19 +242,81 @@ export function buildAdrIndex(entries) {
   const sorted = [...entries].sort((a, b) => b.number - a.number);
   const label = (entry) => String(entry.number).padStart(3, "0");
   const link = (entry) => `[${label(entry)}](${entry.file || adrFilename(entry.number, entry.title)})`;
+
   const lines = [
     "# Architecture Decision Records",
+    "",
+    "Every decision this project has taken, newest first. The numbered files in",
+    "this directory are the source of truth; this index is generated from them by",
+    "`rule_tool_process_adr`, so editing it by hand is work the next call throws away.",
+    "",
+    "## Index",
     "",
     "| # | Title | Date | Status | Tags |",
     "|---|-------|------|--------|------|",
     ...sorted.map(
       (entry) =>
-        `| ${link(entry)} | ${entry.title} | ${entry.date || "-"} | ${entry.status} | ${(entry.tags ?? []).join(", ") || "-"} |`,
+        `| ${link(entry)} | ${entry.title} | ${entry.date || "-"} | ${entry.status} | ${entry.tags.join(", ") || "-"} |`,
     ),
+    "",
+    "## What each decision says",
+    "",
+    "The opening sentence of each decision and of what it cost, lifted from the",
+    "file. Where a line stops short the rest is in the ADR.",
+    "",
+    "| ADR | Decision | Consequence |",
+    "|-----|----------|-------------|",
+    ...sorted.map((entry) => `| ${link(entry)} | ${entry.decision || "-"} | ${entry.consequence || "-"} |`),
+    "",
+    "## By theme",
     "",
   ];
 
+  const counts = new Map();
+
+  for (const entry of entries) {
+    for (const tag of entry.tags) {
+      counts.set(tag, (counts.get(tag) ?? 0) + 1);
+    }
+  }
+
+  const themes = [...counts]
+    .filter(([, count]) => count >= THEME_THRESHOLD)
+    .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
+    .map(([tag]) => tag);
+
+  lines.push(
+    `Tags carried by ${THEME_THRESHOLD} or more decisions. A decision appears under every`,
+    "theme it carries, and the early ADRs that predate the tag field are listed last.",
+    "",
+  );
+
+  for (const theme of themes) {
+    const members = sorted.filter((entry) => entry.tags.includes(theme));
+    lines.push(`### ${theme}`, "", ...members.map((entry) => `- ${link(entry)} ${entry.title}`), "");
+  }
+
+  const untagged = sorted.filter((entry) => entry.tags.length === 0);
+
+  if (untagged.length > 0) {
+    lines.push("### no tags", "", ...untagged.map((entry) => `- ${link(entry)} ${entry.title}`), "");
+  }
+
+  lines.push(
+    "## Operating rules",
+    "",
+    "- Record a structural decision with `rule_tool_process_adr`, when it is taken.",
+    "- Never rewrite an accepted decision. Supersede it with a new one that says why.",
+    "- Never edit this file. Edit the ADR and let the next call regenerate it.",
+    "",
+  );
+
   return lines.join("\n");
+}
+
+/** Write the ADR index. */
+function updateAdrIndex(adrDir, entries) {
+  writeFileSync(join(adrDir, ADR_INDEX_FILE), buildAdrIndex(entries));
 }
 
 /**

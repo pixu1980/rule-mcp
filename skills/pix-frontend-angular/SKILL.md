@@ -11,16 +11,17 @@ frameworks: [angular]
 # rule-frontend-angular - Angular with rule Principles
 
 This skill adapts [rule-styleguide](../rule-styleguide/SKILL.md) and
-[rule-frontend-vanilla-reactive](../rule-frontend-vanilla-reactive/SKILL.md) to **Angular standalone components**.
+a store-and-signals architecture to **Angular standalone components**.
 
 ## Core Rules (inherited from rule skills)
 
 1. **Zero CSS classes** - only element selectors + `[data-part="..."]` + `[data-*]`
 2. **Zero inline styles** - external `.css` files only (`styleUrls` / `@Component.styles`)
-3. **Semantic HTML is mandatory** - never `<div>` where a semantic element exists
-4. **Barrel pattern** - every component folder has `index.ts`
-5. **No Angular Material CDK Overlay inline styles** - use CSS `[data-part]` instead
-6. **Standalone components** - no NgModules, `standalone: true`
+3. **Flex first** - `display: grid` only for named areas, subgrid, explicit placement, or auto-fit tracks; anything a flex row or column can do is flex.
+4. **Semantic HTML is mandatory** - never `<div>` where a semantic element exists
+5. **Barrel pattern** - every component folder has `index.ts`
+6. **No Angular Material CDK Overlay inline styles** - use CSS `[data-part]` instead
+7. **Standalone components** - no NgModules, `standalone: true`
 
 ## File Tree Convention
 
@@ -86,23 +87,23 @@ article[data-part="item"][data-state-completed="done"] {
 }
 ```
 
-## Angular ↔ rule-frontend-vanilla-reactive Mapping
+## Angular ↔ store-and-signals mapping
 
-| rule-frontend-vanilla-reactive | Angular Equivalent                            |
-| ----------------------------- | --------------------------------------------- |
-| `StateSignal`                 | `signal()` (Angular 16+) / `BehaviorSubject`  |
-| `ComputedSignal`              | `computed()`                                  |
-| `effect()`                    | `effect()`                                    |
-| `Store (Proxy)`               | Service + `signal()`                          |
-| `html\`\`` tagged templates   | Component `template`                          |
-| `{{ expr }}`                  | `{{ expr }}`                                  |
-| `@click=${fn}`                | `(click)="fn()"`                              |
-| `model={...}` directive       | `[(ngModel)]` or `[value]` + `(input)`        |
-| `<for each="x in xs">`        | `*ngFor="let x of xs"` or `@for (x of xs)`    |
-| `<if condition="c">`          | `*ngIf="c"` or `@if (c)`                      |
-| `adoptedStyleSheets`          | `styleUrls` in @Component decorator           |
-| `data-part="..."`             | `data-part="..."` or `[attr.data-part]="..."` |
-| `static {}` block             | Module-level CSS via `styleUrls`              |
+| Store and signals           | Angular Equivalent                            |
+| --------------------------- | --------------------------------------------- |
+| `StateSignal`               | `signal()` (Angular 16+) / `BehaviorSubject`  |
+| `ComputedSignal`            | `computed()`                                  |
+| `effect()`                  | `effect()`                                    |
+| `Store (Proxy)`             | Service + `signal()`                          |
+| `html\`\`` tagged templates | Component `template`                          |
+| `{{ expr }}`                | `{{ expr }}`                                  |
+| `@click=${fn}`              | `(click)="fn()"`                              |
+| `model={...}` directive     | `[(ngModel)]` or `[value]` + `(input)`        |
+| `<for each="x in xs">`      | `*ngFor="let x of xs"` or `@for (x of xs)`    |
+| `<if condition="c">`        | `*ngIf="c"` or `@if (c)`                      |
+| `adoptedStyleSheets`        | `styleUrls` in @Component decorator           |
+| `data-part="..."`           | `data-part="..."` or `[attr.data-part]="..."` |
+| `static {}` block           | Module-level CSS via `styleUrls`              |
 
 ## CSS Loading - Angular Style
 
@@ -161,14 +162,14 @@ export { TodoItem } from "./_TodoItem.component";
 - [ ] **guardrail-data-part**: Child elements use data-part="role" instead of class names.
 - [ ] **guardrail-no-framework-css**: No CSS-in-JS, no CSS Modules, no Tailwind. Pure external CSS only.
 - [ ] **guardrail-angular-specific**: Follows Angular rule-frontend-angular conventions. Use `styleUrls`, `standalone: true`, signals for state management.
-- [ ] **guardrail-jsdoc-required**: Every JS/TS file MUST have complete JSDoc on all exported symbols (see rule-styleguide → javascript.md).
-- [ ] **guardrail-css-comments-required**: Every CSS file MUST have file-level + section comments (see rule-styleguide → css.md).
-- [ ] **guardrail-a11y-test-required**: Every project MUST have Playwright + @axe-core/playwright a11y tests in `tests/a11y/` (see rule-styleguide → a11y.md → Automated Testing).
+- [ ] **guardrail-jsdoc-required**: Every JS/TS file MUST have complete JSDoc on all exported symbols (see rule-styleguide -> javascript.md).
+- [ ] **guardrail-css-comments-required**: Every CSS file MUST have file-level + section comments (see rule-styleguide -> css.md).
+- [ ] **guardrail-a11y-test-required**: Every project MUST have Playwright + @axe-core/playwright a11y tests in `tests/a11y/` (see rule-styleguide -> a11y.md -> Automated Testing).
 
 ## Project Scaffolding
 
-All rule projects include standard config files. See [`rule-styleguide`](../rule-styleguide/SKILL.md) → Project Scaffolding.
-Use `pix_styleguide mode=scaffold` or `pix_scaffold` to generate: `.prettierrc`, `.nvmrc`, `.editorconfig`,
+All rule projects include standard config files. See [`rule-styleguide`](../rule-styleguide/SKILL.md) -> Project Scaffolding.
+Use `rule_tool_styleguide mode=scaffold` or `rule_tool_scaffold` to generate: `.prettierrc`, `.nvmrc`, `.editorconfig`,
 `.gitignore`, `.eslintrc.json`, `tsconfig.json`, `jsconfig.json`.
 
 ---
@@ -410,7 +411,7 @@ Rule: _If you reach for `ngDoCheck`, you are fighting the framework. Use signals
 
 | Resource               | Path                                             |
 | ---------------------- | ------------------------------------------------ |
-| 10 detailed examples   | `examples/performance/01-*.md` … `10-*.md`       |
+| 10 detailed examples   | `examples/performance/01-*.md` ... `10-*.md`     |
 | PR review checklist    | `checklists/angular-performance-pr-checklist.md` |
 | Decision matrix        | `checklists/decision-matrix.md`                  |
 | System prompt          | `prompts/portable-system-prompt.md`              |

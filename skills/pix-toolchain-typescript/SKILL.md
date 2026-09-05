@@ -44,29 +44,10 @@ Keep `strict` explicit and verify compiler-version-specific behavior in CI. Type
 
 ## Type Design at Scale
 
-### Make impossible states unrepresentable
-
-Prefer discriminated unions over independent boolean flags when a value has mutually exclusive states. The discriminant makes illegal combinations unrepresentable and gives switches a finite set of cases to handle.
-
-```ts
-type RequestState<T> =
-  { status: "idle" } | { status: "loading" } | { status: "success"; data: T } | { status: "error"; error: Error };
-```
-
-### Consistent type choices
-
-- Use `interface` for public, extensible object contracts.
-- Use `type` for unions, intersections, mapped types, and conditional types.
-- Use branded types for domain identifiers that share a runtime representation but must not be interchangeable.
-- Prefer `unknown over any`: narrow unknown values before use; do not let `any` disable checking and spread through the codebase.
-- Use `as const` for literal configuration and lookup tables when widened primitives would lose useful information.
-
-```ts
-declare const brand: unique symbol;
-type Brand<T, B> = T & { readonly [brand]: B };
-type UserId = Brand<string, "UserId">;
-type OrderId = Brand<string, "OrderId">;
-```
+Moved. Discriminated unions, branded types, `as const`, and the `interface` vs
+`type` rule are code style, not compiler configuration: they live in
+[rule-styleguide-typescript](../rule-styleguide-typescript/SKILL.md)
+alongside the `any`, `as` and `enum` rules and the guardrails that enforce them.
 
 ## Base tsconfig.json (Frontend)
 
@@ -196,6 +177,8 @@ Conventions that are not enforced will decay. Run `typescript-eslint` with type-
 Prefer clear, boring types over clever nested conditional or mapped types. If a type takes several minutes to understand, simplify it or isolate it behind a named domain abstraction.
 
 ## See also
+
+- [rule-styleguide-typescript](../rule-styleguide-typescript/SKILL.md) - the code-style half: any, as, enum, generics, narrowing
 
 - [rule-toolchain-project](../rule-toolchain-project/SKILL.md) - Base project config
 - [rule-toolchain-biome](../rule-toolchain-biome/SKILL.md) - Linting & formatting

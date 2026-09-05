@@ -158,7 +158,7 @@ Guardrails cover the same ground for code and docs under review:
 | `fp-american-english`     | a British spelling from the table above                        |
 | `fp-box-rectangular`      | a box line short of its right edge, or a box that never closes |
 
-Run `pix_compress` to apply the passes to arbitrary prose before writing it.
+Run `rule_tool_compress` to apply the passes to arbitrary prose before writing it.
 
 ## See also
 

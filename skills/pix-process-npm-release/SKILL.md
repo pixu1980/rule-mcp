@@ -92,7 +92,7 @@ For a personal account, ask the user to confirm 2FA is on at <https://github.com
 
 The core rules, whatever the project's shape:
 
-- Trigger on version tags, matching the repo's existing tag format (`v*`, `[0-9]*`, …).
+- Trigger on version tags, matching the repo's existing tag format (`v*`, `[0-9]*`, ...).
 - **The publish job installs no dependencies, uses no cache, and no third-party actions** beyond checkout/setup-node/download-artifact. Anything running in a job with `id-token: write` can publish the package.
 - Build in a **separate job**, pass output via artifacts. Only the publish job gets `id-token: write`; every job gets `contents: read` and `persist-credentials: false` on checkout.
 - `--ignore-scripts` on every install and on publish.
@@ -245,8 +245,8 @@ minimumReleaseAge = 259200
 
 Dependency `postinstall`/`preinstall` scripts run arbitrary code on every developer machine. npm 12, pnpm 10, yarn 4.14, and bun disable them by default - check the version actually in use (`packageManager` field, `npm --version` etc.):
 
-- Version is new enough → nothing to add, just confirm.
-- Older → add an explicit config:
+- Version is new enough -> nothing to add, just confirm.
+- Older -> add an explicit config:
 
   ```bash
   npm config set --location=project ignore-scripts true
@@ -264,7 +264,7 @@ Trusted Publishing is configured on the package's npm settings page, which doesn
 1. Check the name is actually free (an E404 with the registry reachable) and warn about typosquatting-adjacent names.
 2. The **first release happens manually** from the maintainer's machine: `npm publish --ignore-scripts` (add `--access public` for a scoped package), authenticating interactively with 2FA. No token, no CI for this one release; it won't have the provenance badge - every later release will.
 3. Immediately after the first publish, run the full Step 2 checklist for the new package (Trusted Publisher, stage-only, disallow tokens).
-4. All later releases go through the tag → CI → staged approval flow.
+4. All later releases go through the tag -> CI -> staged approval flow.
 
 In a monorepo, some packages may be published and others not - split the checklist accordingly.
 
@@ -308,11 +308,14 @@ Show the user which dependency branches pull in the most nested packages, and of
 5. Every public package has a Trusted Publisher (stage-only) and tokens disallowed - confirmed by the user, per package.
 6. No `NPM_TOKEN` left in workflows or repo secrets.
 7. Tag ruleset active; immutable releases enabled; 2FA required.
-8. User knows the tag → approve release flow and has run a test release.
+8. User knows the tag -> approve release flow and has run a test release.
 
 ## See also
 
-- [rule-toolchain-pnpm](../rule-toolchain-pnpm/SKILL.md)
-- [rule-devops-gitlab-ci](../rule-devops-gitlab-ci/SKILL.md)
-- [rule-devops-observability](../rule-devops-observability/SKILL.md)
-- [rule-devops-version](../rule-devops-version/SKILL.md)
+- [rule](../rule/SKILL.md) - Central skill index and dispatcher
+- [rule-process](../rule-process/SKILL.md) - Process skill index
+- [rule-platform-library](../rule-platform-library/SKILL.md) - Package structure and public API design for the thing being published
+- [rule-devops-version](../rule-devops-version/SKILL.md) - Version bumping that produces the release tag
+- [rule-toolchain-commits](../rule-toolchain-commits/SKILL.md) - Conventional commits behind the changelog
+- [rule-toolchain-pnpm](../rule-toolchain-pnpm/SKILL.md) - pnpm settings referenced by the cooldown step
+- [rule-styleguide-readme](../rule-styleguide-readme/SKILL.md) - The README users land on after install

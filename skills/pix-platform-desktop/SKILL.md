@@ -34,11 +34,12 @@ Choose a desktop framework below, then pair with a UI framework.
 
 1. **Zero CSS classes** - only element selectors + `[data-part="..."]` + `[data-*]` attribute selectors
 2. **Zero inline styles** - all styling in external `.css` files via `adoptedStyleSheets`
-3. **Semantic HTML is mandatory** - never `<div>` where `<section>`, `<article>`, `<header>`, etc. exists
-4. **Barrel pattern** - every component folder has `index.js` re-export, files are `_PascalCase.ext`
-5. **No CSS-in-JS, no Tailwind** - external `.css` files only
-6. **IPC isolation** - `contextBridge` + `ipcRenderer` in preload, never `nodeIntegration: true`
-7. **Main process is thin orchestration** - defer business logic to modules
+3. **Flex first** - `display: grid` only for named areas, subgrid, explicit placement, or auto-fit tracks; anything a flex row or column can do is flex.
+4. **Semantic HTML is mandatory** - never `<div>` where `<section>`, `<article>`, `<header>`, etc. exists
+5. **Barrel pattern** - every component folder has `index.js` re-export, files are `_PascalCase.ext`
+6. **No CSS-in-JS, no Tailwind** - external `.css` files only
+7. **IPC isolation** - `contextBridge` + `ipcRenderer` in preload, never `nodeIntegration: true`
+8. **Main process is thin orchestration** - defer business logic to modules
 
 ---
 
@@ -273,15 +274,15 @@ project/
 
 ## Electron Forge vs electron-builder
 
-| Criterion       | Electron Forge                   | electron-builder                    |
-| --------------- | -------------------------------- | ----------------------------------- |
-| Maintainer      | Electron project (official)      | Community                           |
-| Support model   | Official Electron support        | Community-maintained                |
-| Downloads       | Lower                            | ~2-3M weekly                        |
-| Auto-updater    | External (`update-electron-app`) | Built-in (`electron-updater`)       |
-| Config location | `forge.config.js`                | `package.json` → `build` key        |
-| Current stable  | v7.x (2026)                      | v26.15.x (2026)                     |
-| Next major      | -                                | v27 alpha (ESM-native, Node ≥22.12) |
+| Criterion       | Electron Forge                   | electron-builder                     |
+| --------------- | -------------------------------- | ------------------------------------ |
+| Maintainer      | Electron project (official)      | Community                            |
+| Support model   | Official Electron support        | Community-maintained                 |
+| Downloads       | Lower                            | ~2-3M weekly                         |
+| Auto-updater    | External (`update-electron-app`) | Built-in (`electron-updater`)        |
+| Config location | `forge.config.js`                | `package.json` -> `build` key        |
+| Current stable  | v7.x (2026)                      | v26.15.x (2026)                      |
+| Next major      | -                                | v27 alpha (ESM-native, Node >=22.12) |
 
 **Decision rule**: Pick **Electron Forge** for official support and all-in-one pipeline. Pick **electron-builder** for the most mature built-in auto-updater and widest community footprint. Both produce signed, updatable installers for all platforms.
 
@@ -358,7 +359,7 @@ npx electron-builder --mac --win --linux
 
 ### The Dependency Chain (Critical)
 
-> 🔴 **macOS rule**: Your application MUST be signed for automatic updates to work - this is a requirement of **Squirrel.Mac**. Code signing → notarization → working silent updates is one unbreakable chain.
+> 🔴 **macOS rule**: Your application MUST be signed for automatic updates to work - this is a requirement of **Squirrel.Mac**. Code signing -> notarization -> working silent updates is one unbreakable chain.
 
 | Scenario           | macOS behavior                                              |
 | ------------------ | ----------------------------------------------------------- |
@@ -411,7 +412,7 @@ Where you host releases is set by the `publish` block in your build config:
 }]
 ```
 
-This means: push a tag → CI uploads artifacts to GitHub Release → updater finds them automatically.
+This means: push a tag -> CI uploads artifacts to GitHub Release -> updater finds them automatically.
 
 ### Tauri (built-in updater)
 
@@ -443,7 +444,7 @@ Code Signing → Notarization → Working Silent Auto-Update
 
 **Prerequisites**: Apple Developer Program membership (99 USD/year; notarization is included at no extra cost). Notarization has been mandatory for Developer-ID apps distributed outside the Mac App Store since macOS 10.15 Catalina.
 
-**electron-builder config** (set in `package.json` → `build.mac`):
+**electron-builder config** (set in `package.json` -> `build.mac`):
 
 ```json
 "mac": {
@@ -494,12 +495,12 @@ export APPLE_TEAM_ID="XXXXXXXXXX"
 
 **Decision order for 2026**:
 
-| Priority | Option                                             | Cost           | CI-friendly  | Notes                                                                                |
-| -------- | -------------------------------------------------- | -------------- | ------------ | ------------------------------------------------------------------------------------ |
-| 1️⃣       | **Azure Artifact Signing**                         | ~$10/month     | ✅ Native    | USA, Canada, EU, UK (orgs); USA, Canada (individuals)                                |
-| 2️⃣       | **OV certificate** (DigiCert, Sectigo, GlobalSign) | ~$200-300/year | ❌ USB token | Fallback if outside Azure regions                                                    |
-| 3️⃣       | **Keep existing EV cert** until expiry             | ~$300-400/year | ❌ USB token | Still valid if already owned - don't buy new                                         |
-| 🆓       | **Microsoft Store** (MSIX)                         | Free           | ✅           | Microsoft re-signs automatically → **no SmartScreen warning, no certificate needed** |
+| Priority | Option                                             | Cost           | CI-friendly  | Notes                                                                                 |
+| -------- | -------------------------------------------------- | -------------- | ------------ | ------------------------------------------------------------------------------------- |
+| 1️⃣       | **Azure Artifact Signing**                         | ~$10/month     | ✅ Native    | USA, Canada, EU, UK (orgs); USA, Canada (individuals)                                 |
+| 2️⃣       | **OV certificate** (DigiCert, Sectigo, GlobalSign) | ~$200-300/year | ❌ USB token | Fallback if outside Azure regions                                                     |
+| 3️⃣       | **Keep existing EV cert** until expiry             | ~$300-400/year | ❌ USB token | Still valid if already owned - don't buy new                                          |
+| 🆓       | **Microsoft Store** (MSIX)                         | Free           | ✅           | Microsoft re-signs automatically -> **no SmartScreen warning, no certificate needed** |
 
 **Azure Artifact Signing env vars**:
 
@@ -518,12 +519,12 @@ export CSC_KEY_PASSWORD="••••••"
 
 ### Signed vs Unsigned - Quick Reference
 
-|                        | Signed + Notarized                          | Unsigned                                                      |
-| ---------------------- | ------------------------------------------- | ------------------------------------------------------------- |
-| macOS first launch     | Clean, Gatekeeper passes                    | "Unidentified developer" block; right-click → Open workaround |
-| Windows first download | SmartScreen warning until reputation builds | SmartScreen warning, no reputation inheritance                |
-| macOS auto-update      | ✅ Works silently                           | ❌ Can notify only - cannot replace binary                    |
-| Mac App Store eligible | ✅ Yes                                      | ❌ No                                                         |
+|                        | Signed + Notarized                          | Unsigned                                                       |
+| ---------------------- | ------------------------------------------- | -------------------------------------------------------------- |
+| macOS first launch     | Clean, Gatekeeper passes                    | "Unidentified developer" block; right-click -> Open workaround |
+| Windows first download | SmartScreen warning until reputation builds | SmartScreen warning, no reputation inheritance                 |
+| macOS auto-update      | ✅ Works silently                           | ❌ Can notify only - cannot replace binary                     |
+| Mac App Store eligible | ✅ Yes                                      | ❌ No                                                          |
 
 > Unsigned builds are acceptable for a developer audience comfortable with override steps. For non-technical users - and for any app that auto-updates on macOS - signing is non-negotiable.
 
@@ -636,7 +637,7 @@ Sentry.init({
 
 | Task         | Technique                                                                |
 | ------------ | ------------------------------------------------------------------------ |
-| Main process | `electron --inspect=5858 .` → Chrome DevTools → Node.js icon             |
+| Main process | `electron --inspect=5858 .` -> Chrome DevTools -> Node.js icon           |
 | Renderer     | Open DevTools with `win.webContents.openDevTools()`                      |
 | Preload      | `console.log` statements appear in the renderer DevTools console         |
 | IPC tracing  | Add `ipcMain` / `ipcRenderer` event listeners for `'before-input-event'` |
@@ -752,38 +753,60 @@ app.on("open-url", (event, url) => {
 ## Quick Reference
 
 ```
-┌──────────────────────────────────────────────────────────────────┐
-│  rule-platform-desktop - Desktop Application Project Type         │
-│                                                                  │
-│  Framework:  Electron (primary) / Tauri / Neutralinojs           │
-│  UI layer:   Any rule-* framework skill                           │
-│  Packaging:  electron-builder (community) / Forge (official)     │
-│  Update:     electron-updater / Tauri updater                    │
-│  Signing:    macOS notarization + Windows Azure/OV certificate   │
-│  CI/CD:      GitHub Actions matrix (macOS + Windows + Linux)     │
-│  Crash:      Sentry for main + renderer processes                │
-│                                                                  │
-│  electron/                                                       │
-│   ├── main.js           ← app lifecycle + createWindow           │
-│   ├── preload.js        ← contextBridge only                     │
-│   ├── ipc/              ← domain handler modules                 │
-│   └── helpers/          ← fs, path, venv utilities               │
-│                                                                  │
-│  IPC pattern:                                                    │
-│   preload: qt.fn = () => ipcRenderer.invoke('channel')           │
-│   main:    ipcMain.handle('channel', handler)                    │
-│                                                                  │
-│  Security: contextIsolation=true, nodeIntegration=false          │
-│  Styling:  data-part attributes, zero classes                    │
-│  Build:    electron-builder, asar, multi-platform                │
-│  Signing chain: sign → notarize → silent auto-update (macOS)     │
-│  Distribution: Web, GitHub Releases, App Stores, Homebrew        │
-└──────────────────────────────────────────────────────────────────┘
+┌──────────────────────────────────────────────────────────────────────┐
+│  rule-platform-desktop - Desktop Application Project Type             │
+│                                                                      │
+│  Framework:  Electron (primary) / Tauri / Neutralinojs               │
+│  UI layer:   Any rule-* framework skill                               │
+│  Packaging:  electron-builder (community) / Forge (official)         │
+│  Update:     electron-updater / Tauri updater                        │
+│  Signing:    macOS notarization + Windows Azure/OV certificate       │
+│  CI/CD:      GitHub Actions matrix (macOS + Windows + Linux)         │
+│  Crash:      Sentry for main + renderer processes                    │
+│                                                                      │
+│  electron/                                                           │
+│   ├── main.js           ← app lifecycle + createWindow               │
+│   ├── preload.js        ← contextBridge only                         │
+│   ├── ipc/              ← domain handler modules                     │
+│   └── helpers/          ← fs, path, venv utilities                   │
+│                                                                      │
+│  IPC pattern:                                                        │
+│   preload: qt.fn = () => ipcRenderer.invoke('channel')               │
+│   main:    ipcMain.handle('channel', handler)                        │
+│                                                                      │
+│  Security: contextIsolation=true, nodeIntegration=false              │
+│  Styling:  data-part attributes, zero classes                        │
+│  Build:    electron-builder, asar, multi-platform                    │
+│  Signing chain: sign → notarize → silent auto-update (macOS)         │
+│  Distribution: Web, GitHub Releases, App Stores, Homebrew            │
+└──────────────────────────────────────────────────────────────────────┘
 ```
 
 ---
+
+## Performance review resources
+
+This skill ships a performance review kit alongside the guidance above. Load the
+piece that matches the task instead of re-deriving it:
+
+| File                                                                                               | Use for                                                                 |
+| -------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------- |
+| [knowledge/electron-performance-playbook.md](knowledge/electron-performance-playbook.md)           | IPC, window management, main-process responsiveness, startup and memory |
+| [checklists/decision-matrix.md](checklists/decision-matrix.md)                                     | Symptom to likely cause to recommended move                             |
+| [checklists/electron-performance-pr-checklist.md](checklists/electron-performance-pr-checklist.md) | Reviewing a PR that touches Electron internals                          |
+| [prompts/code-review-prompt.md](prompts/code-review-prompt.md)                                     | Driving a performance-focused review pass                               |
+| [prompts/refactor-prompt.md](prompts/refactor-prompt.md)                                           | Refactoring existing Electron code                                      |
+| [prompts/teaching-prompt.md](prompts/teaching-prompt.md)                                           | Explaining a finding to the team                                        |
+| [prompts/portable-system-prompt.md](prompts/portable-system-prompt.md)                             | Running the reviewer outside this MCP server                            |
+| [templates/audit-report-template.md](templates/audit-report-template.md)                           | Writing up an audit                                                     |
+| [templates/pr-comment-template.md](templates/pr-comment-template.md)                               | Leaving an actionable PR comment                                        |
+| [templates/refactor-plan-template.md](templates/refactor-plan-template.md)                         | Planning a staged refactor                                              |
 
 ## See also
 
 - [rule](../rule/SKILL.md) - Central skill index and dispatcher
 - [rule-platform](../rule-platform/SKILL.md) - Platform skill index
+- [rule-platform-web](../rule-platform-web/SKILL.md) - The renderer is a web app; its rules still apply
+- [rule-frontend-workers](../rule-frontend-workers/SKILL.md) - Off-main-thread work in the renderer
+- [rule-backend-workers](../rule-backend-workers/SKILL.md) - The main process is Node: same event loop, same worker_threads
+- [rule-devops-version](../rule-devops-version/SKILL.md) - Version bumping that drives the release tag

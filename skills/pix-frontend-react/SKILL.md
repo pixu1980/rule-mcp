@@ -11,16 +11,17 @@ frameworks: [react]
 # rule-frontend-react - React with rule Principles
 
 This skill adapts [rule-styleguide](../rule-styleguide/SKILL.md) (file tree, naming, CSS, HTML)
-and [rule-frontend-vanilla-reactive](../rule-frontend-vanilla-reactive/SKILL.md) (component architecture, patterns)
+and a store-and-signals architecture
 to **React 18+ functional components with hooks**.
 
 ## Core Rules (inherited from rule skills)
 
 1. **Zero CSS classes** - only element selectors + `[data-part="..."]` + `[data-*]` attribute selectors
 2. **Zero inline styles** - all styling in external `.css` files via `adoptedStyleSheets`
-3. **Semantic HTML is mandatory** - never `<div>` where `<section>`, `<article>`, `<header>`, `<footer>`, `<nav>`, `<main>`, `<aside>`, `<form>`, `<ul>`, `<ol>`, `<li>`, `<search>` exists
-4. **Barrel pattern** - every component folder has `index.js` re-export, files are `_PascalCase.ext`
-5. **No CSS-in-JS, no CSS Modules, no Tailwind** - external `.css` files only
+3. **Flex first** - `display: grid` only for named areas, subgrid, explicit placement, or auto-fit tracks; anything a flex row or column can do is flex.
+4. **Semantic HTML is mandatory** - never `<div>` where `<section>`, `<article>`, `<header>`, `<footer>`, `<nav>`, `<main>`, `<aside>`, `<form>`, `<ul>`, `<ol>`, `<li>`, `<search>` exists
+5. **Barrel pattern** - every component folder has `index.js` re-export, files are `_PascalCase.ext`
+6. **No CSS-in-JS, no CSS Modules, no Tailwind** - external `.css` files only
 
 ## File Tree Convention
 
@@ -116,26 +117,26 @@ button[data-part="delete"] {
 export { TodoItem } from "./_TodoItem.jsx";
 ```
 
-## React ↔ rule-frontend-vanilla-reactive Mapping
+## React ↔ store-and-signals mapping
 
-| rule-frontend-vanilla-reactive | React Equivalent                          |
-| ----------------------------- | ----------------------------------------- |
-| `StateSignal`                 | `useState` / `useReducer`                 |
-| `ComputedSignal`              | `useMemo`                                 |
-| `effect()`                    | `useEffect`                               |
-| `Store (Proxy)`               | React Context + `useReducer`              |
-| `tickState` bridge            | Context dispatch                          |
-| `html\`\`` tagged templates   | JSX                                       |
-| `{{ expr \| filter }}`        | `{expression}` inline                     |
-| `${value}`                    | `{value}`                                 |
-| `@click=${fn}`                | `onClick={fn}`                            |
-| `model={...}` directive       | `value` + `onChange`                      |
-| `<for each="x in xs">`        | `{xs.map(x => <Component key={x.id} />)}` |
-| `<if condition="c">`          | `{c && <Content />}` or ternary           |
-| `<switch expr="x">`           | `{switch(x) { ... }}` or object map       |
-| `adoptedStyleSheets`          | `useEffect` to adopt once                 |
-| `data-part="..."`             | `data-part="..."` (same)                  |
-| `static {}` block             | Module-level CSS fetch                    |
+| Store and signals           | React Equivalent                          |
+| --------------------------- | ----------------------------------------- |
+| `StateSignal`               | `useState` / `useReducer`                 |
+| `ComputedSignal`            | `useMemo`                                 |
+| `effect()`                  | `useEffect`                               |
+| `Store (Proxy)`             | React Context + `useReducer`              |
+| `tickState` bridge          | Context dispatch                          |
+| `html\`\`` tagged templates | JSX                                       |
+| `{{ expr \| filter }}`      | `{expression}` inline                     |
+| `${value}`                  | `{value}`                                 |
+| `@click=${fn}`              | `onClick={fn}`                            |
+| `model={...}` directive     | `value` + `onChange`                      |
+| `<for each="x in xs">`      | `{xs.map(x => <Component key={x.id} />)}` |
+| `<if condition="c">`        | `{c && <Content />}` or ternary           |
+| `<switch expr="x">`         | `{switch(x) { ... }}` or object map       |
+| `adoptedStyleSheets`        | `useEffect` to adopt once                 |
+| `data-part="..."`           | `data-part="..."` (same)                  |
+| `static {}` block           | Module-level CSS fetch                    |
 
 ## CSS Loading Pattern
 
@@ -153,7 +154,7 @@ useEffect(() => {
 }, []);
 ```
 
-## State Management (Store → Context)
+## State Management (Store -> Context)
 
 ```jsx
 // helpers/_AppContext.jsx
@@ -215,29 +216,29 @@ export function useAppDispatch() {
 ## Complete Example: TodoApp
 
 See the full working example in `examples/react/` of the rule-frontend-react skill directory,
-or refer to rule-frontend-vanilla-reactive Section 14 (Hello World) adapted to JSX syntax.
+or adapt the vanilla Hello World to JSX syntax.
 
 ---
 
 ## Guardrails
 
-Run `pix_frontend_react` mode=check or `pix_check` to validate code against these rules.
+Run `rule_tool_frontend_react` mode=check or `rule_tool_check` to validate code against these rules.
 
 Key rules enforced: **no-css-classes**, **no-inline-styles**, **semantic-html**,
 **external-css** (CSS Modules or adoptedStyleSheets), **barrel-file**, **data-part**,
 **react-no-classname** (no `className`, use `data-part`), **react-hooks-rules**
 (hooks at top level),
-**jsdoc-required** (every JS/TS file MUST have complete JSDoc - see rule-styleguide → javascript.md),
-**css-comments-required** (every CSS file MUST have file-level + section comments - see rule-styleguide → css.md),
-**a11y-test-required** (every project MUST have Playwright + @axe-core/playwright a11y tests in `tests/a11y/` - see rule-styleguide → a11y.md → Automated Testing).
+**jsdoc-required** (every JS/TS file MUST have complete JSDoc - see rule-styleguide -> javascript.md),
+**css-comments-required** (every CSS file MUST have file-level + section comments - see rule-styleguide -> css.md),
+**a11y-test-required** (every project MUST have Playwright + @axe-core/playwright a11y tests in `tests/a11y/` - see rule-styleguide -> a11y.md -> Automated Testing).
 
 ## Project Scaffolding
 
-All rule projects include standard config files. See [`rule-styleguide`](../rule-styleguide/SKILL.md) → Project Scaffolding.
-Use `pix_styleguide mode=scaffold` or `pix_scaffold` to generate: `.prettierrc`, `.nvmrc`, `.editorconfig`,
+All rule projects include standard config files. See [`rule-styleguide`](../rule-styleguide/SKILL.md) -> Project Scaffolding.
+Use `rule_tool_styleguide mode=scaffold` or `rule_tool_scaffold` to generate: `.prettierrc`, `.nvmrc`, `.editorconfig`,
 `.gitignore`, `.eslintrc.json`, `tsconfig.json`, `jsconfig.json`.
 
-Iterate: `generate → pix_check → fix → pix_check → all pass`.
+Iterate: `generate → rule_tool_check → fix → rule_tool_check → all pass`.
 
 ---
 
@@ -282,7 +283,7 @@ Activate this performance lens when the user asks for any of:
 6. Add a before/after example when useful
 7. End with a rule of thumb
 
-Review order: correctness risks → state consistency → state ownership and render boundaries → effects and derived values → keys and component identity → network frequency vs UI rendering → memoization discipline → DOM measurement timing → component responsibility boundaries → component API design.
+Review order: correctness risks -> state consistency -> state ownership and render boundaries -> effects and derived values -> keys and component identity -> network frequency vs UI rendering -> memoization discipline -> DOM measurement timing -> component responsibility boundaries -> component API design.
 
 ### The 10 patterns
 
@@ -526,7 +527,7 @@ All materials from the companion performance skill are integrated into the rule-
 
 | Resource               | Path                                           |
 | ---------------------- | ---------------------------------------------- |
-| 10 detailed examples   | `examples/performance/01-*.md` … `10-*.md`     |
+| 10 detailed examples   | `examples/performance/01-*.md` ... `10-*.md`   |
 | PR review checklist    | `checklists/react-performance-pr-checklist.md` |
 | Decision matrix        | `checklists/decision-matrix.md`                |
 | System prompt          | `prompts/portable-system-prompt.md`            |

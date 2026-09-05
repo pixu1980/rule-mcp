@@ -40,8 +40,10 @@ export * from "./daemon-platform.js";
 
 import { spawn } from "node:child_process";
 import {
+  closeSync,
   existsSync,
   mkdirSync,
+  openSync,
   readFileSync,
   writeFileSync,
   rmSync,
@@ -49,6 +51,7 @@ import {
   statSync,
   renameSync,
 } from "node:fs";
+import { setTimeout as sleep } from "node:timers/promises";
 import { platform } from "node:os";
 import { getRuntimePaths } from "./paths.js";
 
@@ -130,31 +133,23 @@ export function startDaemonProcess({ dryRun = false } = {}) {
   rotateDaemonLog(p.logFile);
 
   const ep = resolveEntrypoint();
-  const child = spawn(ep.node, ep.command.slice(1), {
-    detached: true,
-    stdio: ["ignore", "pipe", "pipe"],
-    env: { ...process.env, RULE_MCP_DAEMON: "1" },
-  });
-
-  // Capture output to log file
-  if (child.stdout) {
-    child.stdout.on("data", (data) => {
-      try {
-        appendFileSync(p.logFile, data.toString());
-      } catch {
-        /* log Error */
-      }
+  // The daemon writes to the log file itself, through an inherited descriptor.
+  //
+  // Piping its output here instead would make "detached" a claim rather than a
+  // fact: unref() releases the child handle but not the stdio pipes, so this
+  // process would never exit, and would stay as a second node process whose
+  // only job is copying bytes - one whose death breaks the daemon's writes.
+  const logFd = openSync(p.logFile, "a", 0o600);
+  let child;
+  try {
+    child = spawn(ep.node, ep.command.slice(1), {
+      detached: true,
+      stdio: ["ignore", logFd, logFd],
+      env: { ...process.env, RULE_MCP_DAEMON: "1" },
     });
-  }
-
-  if (child.stderr) {
-    child.stderr.on("data", (data) => {
-      try {
-        appendFileSync(p.logFile, "[stderr] " + data.toString());
-      } catch {
-        /* log Error */
-      }
-    });
+  } finally {
+    // The child has its own copy of the descriptor now.
+    closeSync(logFd);
   }
 
   child.unref();
@@ -169,7 +164,7 @@ export function startDaemonProcess({ dryRun = false } = {}) {
  * @param {{ dryRun?: boolean }} [opts]
  * @returns {{ ok: boolean, action: string }}
  */
-export function stopDaemonProcess({ dryRun = false } = {}) {
+export async function stopDaemonProcess({ dryRun = false } = {}) {
   const p = getRuntimePaths();
 
   if (!existsSync(p.pidFile)) {
@@ -181,15 +176,73 @@ export function stopDaemonProcess({ dryRun = false } = {}) {
   }
 
   const pid = Number(readFileSync(p.pidFile, "utf8").trim());
+  const action = await terminate(pid);
+  // The pid file is removed only once the process is gone: removing it after a
+  // single SIGTERM would throw away the only record of a daemon that ignored
+  // the signal, leaving nothing able to stop it.
+  if (action !== "still-running") {
+    rmSync(p.pidFile, { force: true });
+  }
+
+  return { ok: action !== "still-running", action };
+}
+
+/** Whether a pid is alive, without signaling it. */
+function isAlive(pid) {
+  try {
+    process.kill(pid, 0);
+
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * Ask a process to stop, then insist.
+ *
+ * SIGTERM first, because a graceful daemon closes its sessions and flushes what
+ * it buffered. SIGKILL after the grace period, because a daemon that will not
+ * die is worse than one that dies badly: it holds the port, and the next start
+ * fails for a reason nobody can see. The pid file outlives neither.
+ *
+ * `still-running` means the SIGKILL itself was refused - the process belongs to
+ * somebody else.
+ *
+ * @param {number} pid
+ * @param {{ graceMs?: number, stepMs?: number }} [options]
+ * @returns {Promise<"stopped"|"killed"|"already-gone"|"still-running">}
+ */
+export async function terminate(pid, options = {}) {
+  const graceMs = options.graceMs ?? 3000;
+  const stepMs = options.stepMs ?? 50;
+
+  if (!Number.isInteger(pid) || pid <= 1 || !isAlive(pid)) {
+    return "already-gone";
+  }
+
   try {
     process.kill(pid, "SIGTERM");
   } catch {
-    /* ok */
+    return "already-gone";
   }
 
-  rmSync(p.pidFile, { force: true });
+  for (let waited = 0; waited < graceMs; waited += stepMs) {
+    await sleep(stepMs);
 
-  return { ok: true, action: "stopped" };
+    if (!isAlive(pid)) {
+      return "stopped";
+    }
+  }
+
+  try {
+    process.kill(pid, "SIGKILL");
+  } catch (error) {
+    // ESRCH: it died in the gap between the last check and this signal.
+    return error?.code === "ESRCH" ? "stopped" : "still-running";
+  }
+
+  return "killed";
 }
 
 /**

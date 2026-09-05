@@ -11,15 +11,16 @@ frameworks: [solidjs]
 # rule-frontend-solidjs - SolidJS with rule Principles
 
 This skill adapts [rule-styleguide](../rule-styleguide/SKILL.md) and
-[rule-frontend-vanilla-reactive](../rule-frontend-vanilla-reactive/SKILL.md) to **SolidJS** (fine-grained reactivity).
+a store-and-signals architecture to **SolidJS** (fine-grained reactivity).
 
 ## Core Rules (inherited from rule skills)
 
 1. **Zero CSS classes** - only element selectors + `[data-part="..."]` + `[data-*]`
 2. **Zero inline styles** - external `.css` files via `adoptedStyleSheets`
-3. **Semantic HTML is mandatory** - never `<div>` where a semantic element exists
-4. **Barrel pattern** - every component folder has `index.js`
-5. **No CSS-in-JS, no Tailwind** - external `.css` files only
+3. **Flex first** - `display: grid` only for named areas, subgrid, explicit placement, or auto-fit tracks; anything a flex row or column can do is flex.
+4. **Semantic HTML is mandatory** - never `<div>` where a semantic element exists
+5. **Barrel pattern** - every component folder has `index.js`
+6. **No CSS-in-JS, no Tailwind** - external `.css` files only
 
 ## File Tree Convention
 
@@ -90,25 +91,25 @@ article[data-part="item"][data-state-completed="done"] {
 }
 ```
 
-## SolidJS ↔ rule-frontend-vanilla-reactive Mapping
+## SolidJS ↔ store-and-signals mapping
 
-| rule-frontend-vanilla-reactive | SolidJS Equivalent                                     |
-| ----------------------------- | ------------------------------------------------------ |
-| `StateSignal`                 | `createSignal()`                                       |
-| `ComputedSignal`              | `createMemo()`                                         |
-| `effect()`                    | `createEffect()`                                       |
-| `Store (Proxy)`               | `createStore()` (proxied) or plain signals             |
-| `tickState` bridge            | Solid's fine-grained reactivity (automatic)            |
-| `html\`\`` tagged templates   | JSX                                                    |
-| `{{ expr \| filter }}`        | `{expression}`                                         |
-| `${value}`                    | `{value}`                                              |
-| `@click=${fn}`                | `onClick={fn}`                                         |
-| `model={...}` directive       | `value` + `onInput` / `checked` + `onChange`           |
-| `<for each="x in xs">`        | `<For each={items}>{(item) => <Component />}</For>`    |
-| `<if condition="c">`          | `<Show when={c}>` / `<Switch>` / `<Match>`             |
-| `<switch expr="x">`           | `<Switch><Match when={x === "a"}>...</Match></Switch>` |
-| `adoptedStyleSheets`          | `onMount` to adopt once                                |
-| `data-part="..."`             | `data-part="..."` (same)                               |
+| Store and signals           | SolidJS Equivalent                                     |
+| --------------------------- | ------------------------------------------------------ |
+| `StateSignal`               | `createSignal()`                                       |
+| `ComputedSignal`            | `createMemo()`                                         |
+| `effect()`                  | `createEffect()`                                       |
+| `Store (Proxy)`             | `createStore()` (proxied) or plain signals             |
+| `tickState` bridge          | Solid's fine-grained reactivity (automatic)            |
+| `html\`\`` tagged templates | JSX                                                    |
+| `{{ expr \| filter }}`      | `{expression}`                                         |
+| `${value}`                  | `{value}`                                              |
+| `@click=${fn}`              | `onClick={fn}`                                         |
+| `model={...}` directive     | `value` + `onInput` / `checked` + `onChange`           |
+| `<for each="x in xs">`      | `<For each={items}>{(item) => <Component />}</For>`    |
+| `<if condition="c">`        | `<Show when={c}>` / `<Switch>` / `<Match>`             |
+| `<switch expr="x">`         | `<Switch><Match when={x === "a"}>...</Match></Switch>` |
+| `adoptedStyleSheets`        | `onMount` to adopt once                                |
+| `data-part="..."`           | `data-part="..."` (same)                               |
 
 ## CSS Loading Pattern
 
@@ -178,21 +179,21 @@ export { TodoItem } from "./_TodoItem.jsx";
 
 ## Guardrails
 
-Run `pix_frontend_solidjs` mode=check or `pix_check` to validate code against these rules.
+Run `rule_tool_frontend_solidjs` mode=check or `rule_tool_check` to validate code against these rules.
 
 Key rules enforced: **no-css-classes**, **no-inline-styles**, **semantic-html**,
 **external-css** (adoptedStyleSheets or CSS imports), **barrel-file**, **data-part**,
-**jsdoc-required** (every JS/TS file MUST have complete JSDoc - see rule-styleguide → javascript.md),
-**css-comments-required** (every CSS file MUST have file-level + section comments - see rule-styleguide → css.md),
-**a11y-test-required** (every project MUST have Playwright + @axe-core/playwright a11y tests in `tests/a11y/` - see rule-styleguide → a11y.md → Automated Testing).
+**jsdoc-required** (every JS/TS file MUST have complete JSDoc - see rule-styleguide -> javascript.md),
+**css-comments-required** (every CSS file MUST have file-level + section comments - see rule-styleguide -> css.md),
+**a11y-test-required** (every project MUST have Playwright + @axe-core/playwright a11y tests in `tests/a11y/` - see rule-styleguide -> a11y.md -> Automated Testing).
 
 ## Project Scaffolding
 
-All rule projects include standard config files. See [`rule-styleguide`](../rule-styleguide/SKILL.md) → Project Scaffolding.
-Use `pix_styleguide mode=scaffold` or `pix_scaffold` to generate: `.prettierrc`, `.nvmrc`, `.editorconfig`,
+All rule projects include standard config files. See [`rule-styleguide`](../rule-styleguide/SKILL.md) -> Project Scaffolding.
+Use `rule_tool_styleguide mode=scaffold` or `rule_tool_scaffold` to generate: `.prettierrc`, `.nvmrc`, `.editorconfig`,
 `.gitignore`, `.eslintrc.json`, `tsconfig.json`, `jsconfig.json`.
 
-Iterate: `generate → pix_check → fix → pix_check → all pass`.
+Iterate: `generate → rule_tool_check → fix → rule_tool_check → all pass`.
 
 ---
 
@@ -446,7 +447,7 @@ Rule: _Split when different changes affect different parts._
 
 | Resource               | Path                                             |
 | ---------------------- | ------------------------------------------------ |
-| 10 detailed examples   | `examples/performance/01-*.md` … `10-*.md`       |
+| 10 detailed examples   | `examples/performance/01-*.md` ... `10-*.md`     |
 | PR review checklist    | `checklists/solidjs-performance-pr-checklist.md` |
 | Decision matrix        | `checklists/decision-matrix.md`                  |
 | System prompt          | `prompts/portable-system-prompt.md`              |

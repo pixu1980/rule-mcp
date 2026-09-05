@@ -224,6 +224,18 @@ pnpx expo prebuild --clean
 
 `expo-doctor` validates SDK compatibility, native module alignment, and missing dependencies.
 
+## Testing: jest-expo, not Vitest
+
+This is the one place the house runner does not apply. React Native's native
+module layer is incompatible with Vitest, so Expo projects use `jest` with the
+`jest-expo` preset and `@testing-library/react-native`, configured in
+`jest.config.js`.
+
+Nothing else changes: test files stay `*.test.ts` or `*.test.tsx`, they live in
+the package-level `tests/` directory, and the coverage thresholds from
+[rule-devops-testing](../rule-devops-testing/SKILL.md) are enforced the
+same way.
+
 ## Best practices
 
 - Set `coverageReporters: ["text", "cobertura"]` in `jest.config.js` - required for GitLab coverage reports

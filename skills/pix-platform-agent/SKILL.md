@@ -179,7 +179,7 @@ try {
 
 The `startRunner` function is your project's own runner - it reads registered
 agents from `agentRegistry`, selects one based on config, and enters the
-LLM-request–tool-call loop. No external library is required for this loop.
+LLM-request-tool-call loop. No external library is required for this loop.
 
 ---
 

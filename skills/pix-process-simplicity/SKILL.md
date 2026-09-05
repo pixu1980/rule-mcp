@@ -76,7 +76,7 @@ For every new column:
 For every new table:
 
 - Name the consumer. An append-only table nothing queries is a log you are not
-  reading. `pix_check` fails on this (`no-speculative-audit-table`, covering
+  reading. `rule_tool_check` fails on this (`no-speculative-audit-table`, covering
   both SQL and Prisma models).
 - If the reason is deduplication, idempotency or retries, check whether the
   queue, the provider, or a unique constraint already gives you that.
@@ -100,7 +100,7 @@ migration, the rollback, and everything written on top of it.
 3. Implement. Write failing tests first (see
    [rule-devops-testing](../rule-devops-testing/SKILL.md)).
 4. Run the removal pass (below) on your own diff.
-5. Run `pix_check`. The simplicity guardrails
+5. Run `rule_tool_check`. The simplicity guardrails
    (`no-speculative-audit-table`, `no-future-use-code`, `no-commented-out-code`)
    block completion.
 6. If the change is structural, record it with
@@ -231,7 +231,7 @@ Two consequences worth acting on:
 - The **workflow reminder** on every tool result states the minimal-change rule.
 - The **router** returns a `scope_contract` with the forbidden-without-request
   list and asks you to declare `out_of_scope` first.
-- **pix_check** fails on speculative audit tables, future-use markers, and
+- **rule_tool_check** fails on speculative audit tables, future-use markers, and
   commented-out implementations.
 - The **removal pass** is yours; nothing static can judge whether a requested
   field is necessary.
