@@ -1,10 +1,11 @@
 /**
  * Home-data migration test.
  *
- * A machine that ran the upstream server (or an earlier layout) keeps its
- * state under ~/.rule-mcp. migrateHomeData() must adopt it into
- * ~/.rule-mcp (state/, data/, projects/) exactly once, non-destructively,
- * so the installation id, the SSE token and the per-project recordings survive.
+ * A machine that ran an earlier layout keeps its state in a legacy home
+ * directory named by RULE_MCP_LEGACY_HOME. migrateHomeData() must adopt
+ * it into ~/.rule-mcp (state/, data/, projects/) exactly once,
+ * non-destructively, so the installation id, the SSE token and the per-project
+ * recordings survive.
  */
 import { strict as assert } from "node:assert";
 import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, existsSync, rmSync } from "node:fs";
@@ -13,11 +14,12 @@ import { join } from "node:path";
 import { after, before } from "node:test";
 
 const HOME = mkdtempSync(join(tmpdir(), "rule-home-migrate-"));
-const OLD_HOME = join(HOME, ".rule-mcp");
+const OLD_HOME = join(HOME, ".legacy-home");
 
 before(() => {
   process.env.HOME = HOME;
   process.env.RULE_MCP_HOME = join(HOME, ".rule-mcp");
+  process.env.RULE_MCP_LEGACY_HOME = OLD_HOME;
   delete process.env.RULE_MCP_STATE_DIR;
 
   // Simulate a previous install.

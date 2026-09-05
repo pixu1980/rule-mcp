@@ -3,9 +3,8 @@
  *
  * Runtime path resolution for rule-mcp.
  * Provides paths for state, data, config, and skill directories.
- * All paths derive from a single home directory: `~/.rule-mcp` — the
- * same convention the upstream `~/.rule-mcp` used, kept for continuity
- * (`state/`, `data/`, `projects/`, `config/` under one root the user can see).
+ * All paths derive from a single home directory: `~/.rule-mcp` — one
+ * visible root with `state/`, `data/`, `projects/`, `config/` underneath.
  */
 
 import { createHash } from "node:crypto";
@@ -82,11 +81,12 @@ export function getRuntimePaths() {
 /**
  * Migrate a previous install's home directory into the current root.
  *
- * The upstream server kept its state under `~/.rule-mcp` (state/projects/data).
- * A machine that ran it already has a token, an installation id, cached tool
- * results and per-project recordings; losing them would restart telemetry and
- * force a fresh SSE credential. This runs once per process, is non-destructive,
- * and degrades to a no-op when the old home is absent.
+ * A machine that ran an earlier layout may hold its state under a legacy home
+ * path named by `RULE_MCP_LEGACY_HOME` (state/data/projects). Adopting
+ * it keeps the token, the installation id, cached results and per-project
+ * recordings instead of restarting from scratch. Runs once per process, is
+ * non-destructive, and degrades to a no-op when no legacy home is configured
+ * or present.
  *
  * @returns {{ migrated: boolean, from?: string, to?: string }}
  */
@@ -97,7 +97,13 @@ export function migrateHomeData() {
     return { migrated: false };
   }
 
-  const fromRoot = join(homedir(), ".rule-mcp");
+  const legacyHome = process.env.RULE_MCP_LEGACY_HOME;
+
+  if (!legacyHome) {
+    return { migrated: false };
+  }
+
+  const fromRoot = resolve(legacyHome);
 
   if (existsSync(fromRoot)) {
     return migrateHomeDataFrom(fromRoot);

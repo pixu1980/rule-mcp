@@ -166,9 +166,9 @@ export function createServer() {
  * @returns {Promise<void>}
  */
 export async function startServer() {
-  // A previous install (upstream `~/.rule-mcp`) may own the state we
-  // need; adopt it before anything reads the paths so the installation id,
-  // token and recordings survive the rebrand.
+  // An earlier install may keep its state under a configured legacy home;
+  // adopt it before anything reads the paths so the installation id, token
+  // and recordings survive.
   const { migrateHomeData } = await import("./cli/paths.js");
   migrateHomeData();
   // A long-lived server shared by every client gets guarded checks: one
