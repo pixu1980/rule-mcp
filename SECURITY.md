@@ -29,11 +29,13 @@ its inputs. That is the security posture the whole design leans on.
 
 ## Upstream threat model
 
-The upstream `rule-mcp` evolution was archived verbatim, including its
-security analysis, under `docs/upstream/rule-mcp/security/` (pinned at
-commit `12d60a9e0eb312010314e5b800e31cf71663d926`). The threat model there
-still describes this codebase: the rule union is a rebranded, surface-merged
-superset of that project.
+The current security posture is documented in this file and enforced by the
+hardening suites (`test/guardrails-*`, `test/apply-containment.test.mjs`,
+`test/gateway-receipt-paths.test.mjs`, `test/auth-rate-limit.test.mjs`,
+`test/self-update-remote-pin.test.mjs`, `test/docker-hardening.test.mjs`).
+Decisions about the trust boundaries (write containment, receipts, SSE auth,
+self-update remote pinning, container non-root) are recorded in the
+[ADR index](docs/adr/ADR.md).
 
 ## Reporting
 

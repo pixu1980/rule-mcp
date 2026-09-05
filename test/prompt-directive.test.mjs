@@ -13,7 +13,7 @@
  * cli/guard.js and the agent-integrations merge in later phases; the pure text,
  * the hook entries, and the settings merge are covered here.
  *
- * Ported from rule-mcp with the tool names rebranded to rule-native.
+ * Ported from rule-ai-mcp with the tool names rebranded to rule-native.
  */
 
 let pass = 0;

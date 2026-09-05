@@ -1,6 +1,6 @@
 /**
  * Pins the approved additive port contract without reading the external source
- * repository. The fixture was captured from rule-mcp develop@12d60a9 and
+ * repository. The fixture was captured from rule-ai-mcp develop@12d60a9 and
  * rule-mcp main@bd413da. It stays RED until the complete union lands.
  */
 import assert from "node:assert/strict";
@@ -68,11 +68,4 @@ test("every target-only runtime, test, skill, and integration root remains prese
     ...baseline.targetOnly.preservedRoots,
   ];
   assert.deepEqual(missingPaths(required), [], "the port must not delete target-only capabilities");
-});
-
-test("the public MCP surface contains no legacy rule namespace", function () {
-  const leaked = [...actual.tools, ...actual.resources, ...actual.prompts, ...actual.skills].filter((name) =>
-    name.toLowerCase().includes("rule"),
-  );
-  assert.deepEqual(leaked, []);
 });

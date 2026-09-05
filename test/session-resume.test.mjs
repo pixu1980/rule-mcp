@@ -17,7 +17,7 @@
  * prompt) lands when the gateway wires the output layer. The module semantics
  * are pinned here.
  *
- * Ported from rule-mcp with the tool names rebranded to rule-native.
+ * Ported from rule-ai-mcp with the tool names rebranded to rule-native.
  */
 
 import { execFileSync } from "node:child_process";

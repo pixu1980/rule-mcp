@@ -10,7 +10,7 @@
  * regenerate the expected block in the same commit as the ADR that changed the
  * definition, or fix what drifted.
  *
- * Ported from rule-mcp (hardening 4.5). The export-block test (toFlight)
+ * Ported from rule-ai-mcp (hardening 4.5). The export-block test (toFlight)
  * lands with core/telemetry-flight in the telemetry phase.
  */
 import { strict as assert } from "node:assert";

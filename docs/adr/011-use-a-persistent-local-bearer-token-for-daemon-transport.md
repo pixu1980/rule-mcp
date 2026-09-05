@@ -11,7 +11,7 @@ The daemon's old per-start random SSE token made client configuration stale afte
 
 ## Decision
 
-Store one 256-bit token at ~/.local/state/rule-mcp/sse-token with owner-only permissions. Daemon/SSE and Pi/VS Code daemon or Docker configs use that token. Remote mode is limited to verified Pi and VS Code schemas.
+Store one 256-bit token at ~/.rule-mcp/state/sse-token with owner-only permissions. Daemon/SSE and Pi/VS Code daemon or Docker configs use that token. Remote mode is limited to verified Pi and VS Code schemas.
 
 ## Consequences
 

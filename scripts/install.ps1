@@ -542,7 +542,7 @@ if ($DryRun) {
 }
 } elseif ($InstallMode -eq 'docker') {
   Write-Header "Phase 6: Docker Service"
-  $SseTokenFile = Join-Path $HomeDir ".local\state\rule-mcp\sse-token"
+  $SseTokenFile = Join-Path $HomeDir ".rule-mcp\state\sse-token"
   if ($DryRun) {
     Write-Step "[dry-run] Would run: docker compose up -d with the local SSE token"
   } elseif (-not (Test-Command docker)) {

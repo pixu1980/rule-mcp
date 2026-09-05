@@ -1187,14 +1187,14 @@ rule-mcp daemon logs
 - **Kill the existing process**:
   ```bash
   rule-mcp daemon stop
-  # Or manually: kill $(cat ~/.local/share/rule-mcp/daemon.pid)
+  # Or manually: kill $(cat ~/.rule-mcp/state/daemon.pid)
   ```
 
 **Issue**: Daemon started but health check fails.
 
 - **Debug**: Check the daemon log:
   ```bash
-  cat ~/.local/share/rule-mcp/daemon.log
+  cat ~/.rule-mcp/state/daemon.log
   ```
 
 **Issue**: SSE connection drops.

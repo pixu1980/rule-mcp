@@ -54,10 +54,11 @@ function surfaceWith(home) {
 function makeHostileHome() {
   const home = mkdtempSync(join(tmpdir(), "rule-home-"));
   const skills = join(home, ".agents", "skills");
-  // A stale skill from a previous brand - rule-* in home must NOT become
-  // a pix_* tool because rule only scans rule-* from embedded.
-  mkdirSync(join(skills, "rule-frontend-react"), { recursive: true });
-  writeFileSync(join(skills, "rule-frontend-react", "SKILL.md"), "---\nname: rule-frontend-react\n---\nstale\n");
+  // A stale skill from a previous brand - a rule-* name not in the embedded
+  // corpus must NOT become a pix_* tool because rule only scans rule-* from
+  // the embedded ./skills tree.
+  mkdirSync(join(skills, "rule-outdated-brand"), { recursive: true });
+  writeFileSync(join(skills, "rule-outdated-brand", "SKILL.md"), "---\nname: rule-outdated-brand\n---\nstale\n");
   // A generic third-party skill.
   mkdirSync(join(skills, "test-driven-development"), { recursive: true });
   writeFileSync(join(skills, "test-driven-development", "SKILL.md"), "---\nname: tdd\n---\ngeneric\n");
@@ -129,8 +130,8 @@ test("every skill the registry reports starts with rule-", () => {
 // ── Invariant 2: the home directory cannot influence the surface ────────────
 
 test("a stale brand directory in ~/.agents/skills adds no tool", () => {
-  assert.ok(!surface.skills.includes("rule-frontend-react"));
-  assert.ok(!surface.tools.includes("pix_pix_frontend_react"));
+  assert.ok(!surface.skills.includes("rule-outdated-brand"));
+  assert.ok(!surface.tools.includes("pix_pix_outdated_brand"));
 });
 
 test("a generic third-party skill in ~/.agents/skills adds no tool", () => {

@@ -125,12 +125,12 @@ docker run -i rule-mcp
 rule-mcp install --agent pi --mode docker
 
 # Run in SSE mode (for Pi or VS Code over HTTP)
-RULE_MCP_SSE_TOKEN="$(cat ~/.local/state/rule-mcp/sse-token)" \
+RULE_MCP_SSE_TOKEN="$(cat ~/.rule-mcp/state/sse-token)" \
   docker run -e RULE_MCP_SSE_TOKEN -p 37999:37999 \
   rule-mcp node src/index.js serve --transport sse
 
 # Or use docker-compose from this repository.
-RULE_MCP_SSE_TOKEN="$(cat ~/.local/state/rule-mcp/sse-token)" \
+RULE_MCP_SSE_TOKEN="$(cat ~/.rule-mcp/state/sse-token)" \
   docker compose up -d
 # → SSE endpoint: http://localhost:37999/sse
 # → Health: http://localhost:37999/health
@@ -144,7 +144,7 @@ The included `docker-compose.yml` exposes:
 - Automatic restarts
 - Health check endpoint at `/health`
 
-The Compose service requires `RULE_MCP_SSE_TOKEN`; the installer creates the owner-only token at `~/.local/state/rule-mcp/sse-token`. Do not commit that token or copy it into shared configuration.
+The Compose service requires `RULE_MCP_SSE_TOKEN`; the installer creates the owner-only token at `~/.rule-mcp/state/sse-token`. Do not commit that token or copy it into shared configuration.
 
 ---
 

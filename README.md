@@ -533,7 +533,7 @@ The daemon always listens on `127.0.0.1:37999` over SSE. Health endpoint: `http:
 
 ### Security
 
-- Bearer token auth required for `/sse` and `/message`; the local daemon keeps an owner-only token at `~/.local/state/rule-mcp/sse-token` across restarts
+- Bearer token auth required for `/sse` and `/message`; the local daemon keeps an owner-only token at `~/.rule-mcp/state/sse-token` across restarts
 - `/health` is public (no auth)
 - CORS deny-by-default (only explicit origins allowed)
 - 1 MB max POST body size
@@ -551,12 +551,12 @@ docker build -t rule-mcp .
 docker run -i rule-mcp
 
 # SSE (Pi or VS Code integration)
-RULE_MCP_SSE_TOKEN="$(cat ~/.local/state/rule-mcp/sse-token)" \
+RULE_MCP_SSE_TOKEN="$(cat ~/.rule-mcp/state/sse-token)" \
   docker run -e RULE_MCP_SSE_TOKEN -p 37999:37999 \
   rule-mcp node src/index.js serve --transport sse
 
 # With docker-compose (after `rule-mcp install --agent pi --mode docker`)
-RULE_MCP_SSE_TOKEN="$(cat ~/.local/state/rule-mcp/sse-token)" \
+RULE_MCP_SSE_TOKEN="$(cat ~/.rule-mcp/state/sse-token)" \
   docker compose up -d
 # → authenticated SSE: http://localhost:37999/sse
 ```
@@ -636,7 +636,7 @@ The Docker image uses `node:22-alpine`, has no build step, and runs the server d
 
 ## Test Evidence
 
-The parity contract with the upstream `rule-mcp` evolution is enforced by
+The parity contract with the archived upstream evolution is enforced by
 `test/porting-parity.test.mjs` against the frozen fixture
 `test/fixtures/rule-porting-baseline.json`. As of the finished port:
 
@@ -646,8 +646,7 @@ The parity contract with the upstream `rule-mcp` evolution is enforced by
   scorer parity with the source, ADR 048 numbers reproduced on the union)
 - lint zero errors, prettier clean, self-guardrails green over the whole `src/`
   tree, installer/transport suites green
-- upstream evidence archived under `docs/upstream/rule-mcp/` at commit
-  `12d60a9e0eb312010314e5b800e31cf71663d926` with a per-file hash manifest
+- port provenance and decisions recorded in the [ADR index](docs/adr/ADR.md)
 
 ## License
 

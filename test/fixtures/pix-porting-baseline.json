@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "policy": {
-    "sourceRepository": "~/Projects/work/rule/ai/rule-mcp",
+    "sourceRepository": "rule-ai-mcp (archived upstream, refs kept in ADRs)",
     "sourceBranch": "develop",
     "sourceCommit": "12d60a9e0eb312010314e5b800e31cf71663d926",
     "targetBaselineCommit": "bd413da527685ca0bb6c1250ad4a0d9eb8140f6c",
@@ -451,10 +451,17 @@
       "rule-audit-a11y",
       "rule-audit-ai-engineer",
       "rule-audit-architect",
+      "rule-audit-data-engineer",
+      "rule-audit-design-system-lead",
+      "rule-audit-devops-sre",
       "rule-audit-docs-engineer",
+      "rule-audit-dx-toolchain",
+      "rule-audit-oss-compliance",
       "rule-audit-performance",
       "rule-audit-privacy",
+      "rule-audit-qa-testing",
       "rule-audit-security",
+      "rule-audit-web-engineer",
       "rule-flight",
       "rule-handoff",
       "rule-handon",
@@ -462,18 +469,32 @@
       "rule-plan-a11y",
       "rule-plan-ai-engineer",
       "rule-plan-architect",
+      "rule-plan-data-engineer",
+      "rule-plan-design-system-lead",
+      "rule-plan-devops-sre",
       "rule-plan-docs-engineer",
+      "rule-plan-dx-toolchain",
+      "rule-plan-oss-compliance",
       "rule-plan-performance",
       "rule-plan-privacy",
+      "rule-plan-qa-testing",
       "rule-plan-security",
+      "rule-plan-web-engineer",
       "rule-process-check",
       "rule-review-a11y",
       "rule-review-ai-engineer",
       "rule-review-architect",
+      "rule-review-data-engineer",
+      "rule-review-design-system-lead",
+      "rule-review-devops-sre",
       "rule-review-docs-engineer",
+      "rule-review-dx-toolchain",
+      "rule-review-oss-compliance",
       "rule-review-performance",
       "rule-review-privacy",
+      "rule-review-qa-testing",
       "rule-review-security",
+      "rule-review-web-engineer",
       "rule-update"
     ]
   },
@@ -638,17 +659,7 @@
       "src/core/skill-frontmatter.js",
       "src/core/token-stats.js"
     ],
-    "tests": [
-      "test/docs-accuracy.test.mjs",
-      "test/install-script-shim-heal.test.mjs",
-      "test/token-pipeline.test.mjs"
-    ],
-    "preservedRoots": [
-      "rules",
-      ".clinerules",
-      ".cursor",
-      ".roo",
-      ".windsurf"
-    ]
+    "tests": ["test/docs-accuracy.test.mjs", "test/install-script-shim-heal.test.mjs", "test/token-pipeline.test.mjs"],
+    "preservedRoots": ["rules", ".clinerules", ".cursor", ".roo", ".windsurf"]
   }
 }

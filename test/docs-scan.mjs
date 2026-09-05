@@ -14,7 +14,7 @@ import { join } from "node:path";
 
 await loadAllSkills();
 const tools = new Set(listTools().map((x) => x.name));
-const archivalDirectories = new Set(["adr", "handoff", "plans", "reports", "upstream"]);
+const archivalDirectories = new Set(["adr", "handoff", "plans", "reports"]);
 
 function scan(dir) {
   let stale = 0;

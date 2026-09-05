@@ -36,7 +36,7 @@ export const CORPUS = [
 
   // ── Inflection in the name signal ──
   // "test" against the skill part "testing" was scoring half credit, so this
-  // routed to rule-mcp-prompting. A different inflection of a word is the same
+  // routed to rule-ai-prompting. A different inflection of a word is the same
   // word, and the name signal now says so.
   { prompt: "how do I test my code", expect: "devops-testing", area: "devops" },
 
@@ -49,7 +49,7 @@ export const CORPUS = [
   { prompt: "agent loop or a graph for orchestration", expect: "ai-agent-architecture", area: "ai" },
 
   // ── Session boundaries: handoff writes, handon reads back ──
-  // Passed until R4 added two AI skills, then lost to rule-mcp-prompting: two
+  // Passed until R4 added two AI skills, then lost to rule-ai-prompting: two
   // more documents shift the term statistics for every query, and this one has
   // no distinctive term left after stopwords - "leave", "off" and "last" are all
   // filtered, so it is competing on "session" alone. Kept as a near miss rather

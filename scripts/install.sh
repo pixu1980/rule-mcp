@@ -900,7 +900,7 @@ else
   fi
 elif [[ "$INSTALL_MODE" == "docker" ]]; then
   header "Phase 8: Docker Service"
-  SSE_TOKEN_FILE="$HOME_DIR/.local/state/rule-mcp/sse-token"
+  SSE_TOKEN_FILE="$HOME_DIR/.rule-mcp/state/sse-token"
   if [[ "$DRY_RUN" == "true" ]]; then
     sub "[dry-run] Would run: docker compose up -d with the local SSE token"
   elif ! command -v docker >/dev/null 2>&1 || ! docker compose version >/dev/null 2>&1; then

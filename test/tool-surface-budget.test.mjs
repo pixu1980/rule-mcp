@@ -11,7 +11,7 @@
  *     reason
  *   - JSON tool output stays JSON, so the decoration layer never corrupts data
  *
- * Ported from rule-mcp with the tool names rebranded to the rule-native
+ * Ported from rule-ai-mcp with the tool names rebranded to the rule-native
  * surface and the annotation assertions adapted to the current target surface.
  */
 
