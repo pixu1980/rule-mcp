@@ -267,7 +267,7 @@ function generateSystemdUnit(ep) {
 
   return `[Unit]
 Description=rule-mcp MCP Server
-Documentation=https://github.com/rule/rule-mcp
+Documentation=https://github.com/pixu1980/rule-mcp
 After=network.target network-online.target
 Wants=network-online.target
 

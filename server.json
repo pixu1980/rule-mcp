@@ -4,18 +4,25 @@
   "title": "rule-mcp",
   "description": "MCP server for the rule-* skill ecosystem. Serves styleguides, component templates, framework best practices, and design system patterns.",
   "repository": {
-    "url": "https://github.com/rule/rule-mcp",
+    "url": "https://github.com/pixu1980/rule-mcp",
     "source": "github"
   },
-  "websiteUrl": "https://github.com/rule/rule-mcp",
+  "websiteUrl": "https://github.com/pixu1980/rule-mcp",
   "version": "1.0.0",
   "packages": [
     {
       "registryType": "npm",
       "identifier": "rule-mcp",
       "version": "1.0.0",
-      "packageArguments": [{ "type": "positional", "valueHint": "serve" }],
-      "transport": { "type": "stdio" }
+      "packageArguments": [
+        {
+          "type": "positional",
+          "valueHint": "serve"
+        }
+      ],
+      "transport": {
+        "type": "stdio"
+      }
     }
   ]
 }

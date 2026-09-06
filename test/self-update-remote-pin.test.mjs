@@ -18,7 +18,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
-import { mkdtempSync, mkdirSync, writeFileSync, rmSync } from "node:fs";
+import { readFileSync, mkdtempSync, mkdirSync, writeFileSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 
@@ -61,11 +61,11 @@ test("an unusable remote value normalises to null rather than matching anything"
 // ── Allowlist resolution ───────────────────────────────────────────────────
 
 test("the shipped server.json repository is trusted by default", () => {
+  const manifest = JSON.parse(readFileSync(new URL("../server.json", import.meta.url), "utf8"));
+  const declared = manifest.repository.url;
+  assert.ok(declared, "server.json must declare a repository url");
   const allowed = resolveAllowedRemotes({});
-  assert.ok(
-    allowed.includes(normalizeRemoteUrl("https://github.com/rule/rule-mcp")),
-    "server.json declares where updates may come from",
-  );
+  assert.ok(allowed.includes(normalizeRemoteUrl(declared)), "server.json declares where updates may come from");
 });
 
 test("the env override replaces the declared remote and accepts a list", () => {
