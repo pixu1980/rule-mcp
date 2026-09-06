@@ -21,7 +21,7 @@
  *   1 - Issues found (lint mode) or errors during fix
  */
 
-import { scanFileTree, autoFixFileTree } from "../../../src/core/file-tree.js";
+import { scanFileTree, autoFixFileTree } from "../../../src/core/file-tree/index.js";
 
 // ─── CLI args ────────────────────────────────────────────────────────────────
 
