@@ -106,13 +106,23 @@
   `tools/adr.js` (580) -> 10 files, `tools/gateway.js` (530) -> 6 files.
 - [x] `core/text/_fingerprint.js` and `_en-english.js` dictionaries extracted to
   `*.data.js` (494->290 and 490->247 logic lines).
-- [ ] Remaining oversized (ratchet at 107, worst first): `core/agents/_transcripts.js` 583,
-  `cli/daemon/_platform.js` 548, `reports/census/index.mjs` 530 (byte-exact test guards
-  the refactor), `cli/program.js` 501, `cli/daemon/_daemon.js` 499, `core/self-update.js`
-  483, `cli/doctor.js` 478, `core/telemetry/_flight.js` 449, `core/review/_docs.js` 449, ...
-- [ ] Oversized test suites to split per feature: `flight-recorder.test.mjs` 540,
-  `handon.test.mjs` 517, `docs-numbering-doctor.test.mjs` 507 (update the
-  `test:foundations` list with each split).
+- [x] Third pass (2026-09-06, session 4): `core/agents/_transcripts.js` (583) -> 8
+  per-agent readers; `cli/daemon/_platform.js` (548) -> per-service-manager adapters;
+  `cli/daemon/_daemon.js` (501) -> process/service/status modules; `cli/program.js`
+  (501) -> one registrar per command in five theme files (original order preserved);
+  `core/self-update.js` (483) -> 7 files; `cli/doctor.js` (478) -> 6 files;
+  `reports/census/index.mjs` 530 -> 369 (markdown/env/CLI-reference extracted,
+  byte-identical output); `flight-recorder.test.mjs` (540) -> 9 focused files with a
+  shared sandbox fixture.
+- [x] New guard: `tests/docs/import-paths.test.mjs` resolves every relative specifier
+  (static, dynamic, new URL) - it caught four dormant broken dynamic imports on landing.
+- [ ] Remaining oversized (ratchet at 100, worst first): `core/review/_docs.js` 449,
+  `core/telemetry/_flight.js` 449, `tools/skill.js` 415, `transport/_sse.js` 414,
+  `core/telemetry/_telemetry.js` 409, `_stats.js` 386, `transport/_http.js` 376,
+  `core/telemetry/_store.js` 363, `core/scaffold/_templates.js` 359, ...
+- [ ] Oversized test suites to split per feature: `handon.test.mjs` 517,
+  `docs-numbering-doctor.test.mjs` 507 (same fixture-module pattern as
+  tests/core/flight-recorder/).
 - [ ] Each split: underscore-barrel folder, one concern per file, ratchet entries deleted,
   surface tests (`cli-commander-surface`, `tool-surface-budget`) green.
 
