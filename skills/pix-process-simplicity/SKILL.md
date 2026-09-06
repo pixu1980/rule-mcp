@@ -226,6 +226,31 @@ Two consequences worth acting on:
   was already the easiest to explain. Optimize the decision that precedes it and
   the ownership that follows it.
 
+## Code splitting and file size
+
+Simplicity has a unit: the file. A file someone can read top to bottom in one
+sitting stays honest; a file that cannot be read whole hides its coupling.
+
+- **100 lines of code per file, with a +50 tolerance.** At 150 lines the file
+  must be split - not negotiated. The tolerance absorbs a legitimate long
+  function; it is not a second budget.
+- **Split by meaning, never by count.** Each new file holds one nameable
+  concern - one rule, one function, one command. A file named for its position
+  (`js-1.js`, `parts-2.js`, `utils-3.js`) is a split that happened without a
+  design decision; the name is the test. If you cannot name the piece, you have
+  not found the seam yet.
+- **Folders follow the barrel convention** (see rule-styleguide-patterns): the
+  folder's `index.js` is the only public entry and carries no underscore;
+  every implementation file inside is prefixed with `_`. Nesting to a third,
+  fourth or fifth level is fine as long as every level is a theme, not a bucket.
+- **Pure data is exempt, and says so in its name.** Word lists, criteria
+  tables and test corpora gain nothing from being cut in half; name them
+  `*.data.js` (or `*.corpus.mjs` / `*.fixture.mjs` in tests) and keep them
+  whole. The exemption is for data only - a 500-line file with one function in
+  it is not data.
+- **The threshold ratchets.** Grandfathered files may only shrink; a fixed file
+  leaves the allowlist and can never come back over the cap.
+
 ## Enforcement in this server
 
 - The **workflow reminder** on every tool result states the minimal-change rule.
@@ -233,6 +258,9 @@ Two consequences worth acting on:
   list and asks you to declare `out_of_scope` first.
 - **rule_tool_check** fails on speculative audit tables, future-use markers, and
   commented-out implementations.
+- The **file-size budget test** (`tests/docs/file-size-budget.test.mjs`) holds
+  this repository to the 150-line cap and the junk-name ban above; its ratchet
+  of grandfathered files only ever shrinks.
 - The **removal pass** is yours; nothing static can judge whether a requested
   field is necessary.
 
