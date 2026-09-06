@@ -1,15 +1,8 @@
 /** macOS launchd adapter: the LaunchAgent plist, install, uninstall, check. */
 import { writeFileSync, mkdirSync, existsSync, rmSync } from "node:fs";
-import { join } from "node:path";
-import { getRuntimePaths } from "../paths.js";
-import {
-  HOME,
-  resolveEntrypoint,
-  tryExec,
-  WRAPPER_SCRIPT_PATH,
-  generateWrapperScript,
-  escapePlist,
-} from "./_service-shared.js";
+import { dirname, join } from "node:path";
+import { generateLaunchAgentPlist } from "./_launchd-plist.js";
+import { HOME, resolveEntrypoint, tryExec, WRAPPER_SCRIPT_PATH, generateWrapperScript } from "./_service-shared.js";
 
 // ═══════════════════════════════════════════════════════════════════════════
 // macOS - LaunchAgent plist
@@ -49,9 +42,7 @@ export function installLaunchAgent({ dryRun = false } = {}) {
   writeFileSync(LAUNCH_AGENT_PATH, generateLaunchAgentPlist(ep), "utf8");
 
   // Unload first if already loaded (to overwrite)
-  tryExec(
-    `launchctl unload -w "${LAUNCH_AGENT_PATH}" 2>/dev/null || launchctl remove ${LAUNCH_AGENT_LABEL} 2>/dev/null || true`,
-  );
+  tryExec(`launchctl unload -w "${LAUNCH_AGENT_PATH}" 2>/dev/null || launchctl remove ${LAUNCH_AGENT_LABEL} 2>/dev/null || true`);
 
   // Load the new plist
   const out = tryExec(`launchctl load -w "${LAUNCH_AGENT_PATH}"`);
@@ -79,9 +70,7 @@ export function uninstallLaunchAgent({ dryRun = false } = {}) {
   }
 
   // Unload first
-  tryExec(
-    `launchctl unload -w "${LAUNCH_AGENT_PATH}" 2>/dev/null || launchctl remove ${LAUNCH_AGENT_LABEL} 2>/dev/null || true`,
-  );
+  tryExec(`launchctl unload -w "${LAUNCH_AGENT_PATH}" 2>/dev/null || launchctl remove ${LAUNCH_AGENT_LABEL} 2>/dev/null || true`);
 
   // Remove plist
   rmSync(LAUNCH_AGENT_PATH, { force: true });

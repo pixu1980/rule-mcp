@@ -1,5 +1,4 @@
 /** Render the update banner from one run result. */
-import { manualHint } from "./_config.js";
 
 /**
  * Build the user-visible banner for an update result, or null when there is
@@ -35,11 +34,11 @@ export function buildBanner(r) {
   }
 
   if (r.reason === "no-allowed-remote") {
-    return "⚠️ pix-galaxy-mcp self-update REFUSED - no allowed update remote is configured. " + "Set PIX_GALAXY_MCP_UPDATE_REMOTE to the upstream you trust. No code was fetched.";
+    return "⚠️ pix-galaxy-mcp self-update REFUSED - no allowed update remote is configured. Set PIX_GALAXY_MCP_UPDATE_REMOTE to the upstream you trust. No code was fetched.";
   }
 
   if (r.reason === "unsigned-upstream") {
-    return `⚠️ pix-galaxy-mcp self-update REFUSED - upstream commit ${r.to ?? ""} has no valid signature and ` + "PIX_GALAXY_MCP_UPDATE_REQUIRE_SIGNATURE=1. No code was merged.";
+    return `⚠️ pix-galaxy-mcp self-update REFUSED - upstream commit ${r.to ?? ""} has no valid signature and PIX_GALAXY_MCP_UPDATE_REQUIRE_SIGNATURE=1. No code was merged.`;
   }
   // Non-git installs get a one-line hint so the user knows how to update.
   if (r.skipped && r.note) {

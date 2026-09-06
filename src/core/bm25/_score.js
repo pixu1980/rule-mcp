@@ -1,9 +1,6 @@
 /** BM25 scoring and search entry points. */
 
-import { getSkillNames, readSkill } from "../../tools/router/index.js";
 import { K1, B, tokenize, DEFAULT_MAX_RESULTS } from "./_terms.js";
-import { canonicalizeQuery, INTERROGATIVES } from "./_canonicalize.js";
-import { STOPWORDS } from "./_stopwords.data.js";
 import { _index } from "./_state.js";
 
 function bm25Score(tf, docLen, avgDocLen, N, n) {

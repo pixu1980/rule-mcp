@@ -1,7 +1,7 @@
 /** Read Codex transcripts for one project window. */
 import { join } from "node:path";
 import { inWindow, emptyUsage } from "./_window.js";
-import { readJsonl, readJson, list, mtime, filesUnder, slugsFor, isToolResult } from "./_fs.js";
+import { readJsonl, filesUnder } from "./_fs.js";
 
 /**
  * Codex: a rollout JSONL per session, dated directories, and a `token_count`

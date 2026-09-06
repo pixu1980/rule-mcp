@@ -1,5 +1,5 @@
 /** Daemon process introspection: liveness, termination, the status read. */
-import { existsSync, readFileSync, rmSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { setTimeout as sleep } from "node:timers/promises";
 import { getRuntimePaths } from "../paths.js";
 

@@ -1,7 +1,7 @@
 /** Read Claude Code transcripts for one project window. */
 import { join } from "node:path";
 import { inWindow, emptyUsage } from "./_window.js";
-import { readJsonl, list, mtime, filesUnder, slugsFor, isToolResult } from "./_fs.js";
+import { readJsonl, filesUnder, slugsFor, isToolResult } from "./_fs.js";
 
 /**
  * Claude Code: one JSONL per session under a per-project directory, Anthropic's

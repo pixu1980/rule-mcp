@@ -2,7 +2,7 @@
 import { git } from "./_git.js";
 import { reloadSkillsAfterMerge } from "./_reload.js";
 import { getRepoRoot, detectInstallType } from "../../cli/paths.js";
-import { autoUpdateEnabled, normalizeRemoteUrl, declaredRepository, resolveAllowedRemotes, manualHint } from "./_config.js";
+import { autoUpdateEnabled, normalizeRemoteUrl, resolveAllowedRemotes, manualHint } from "./_config.js";
 
 /**
  * Perform the actual fetch / fast-forward / classify. Pure of process-lifecycle

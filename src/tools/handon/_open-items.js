@@ -1,5 +1,4 @@
 /** The still-open items a handoff hands to the next session. */
-import { looksLikeBranch, looksLikeCommand } from "./_shapes.js";
 
 /**
  * What the handoff says is left to do.

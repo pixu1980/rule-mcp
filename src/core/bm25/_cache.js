@@ -1,7 +1,7 @@
 /** On-disk index cache: read, write, signatures, stats. */
 
 import { createHash } from "node:crypto";
-import { existsSync, mkdirSync, readdirSync, readFileSync, rmSync, statSync, writeFileSync } from "node:fs";
+import { mkdirSync, readdirSync, readFileSync, rmSync, statSync, writeFileSync } from "node:fs";
 import { basename, dirname, join } from "node:path";
 import { gzipSync, gunzipSync } from "node:zlib";
 import { getRuntimePaths, getSkillsDirs as getSkillsDirectories } from "../../cli/paths.js";
@@ -153,14 +153,4 @@ function getIndexStats() {
  * @param {number} n - Number of documents containing the term
  * @returns {number}
  */
-export {
-  indexCacheKey,
-  indexCacheFile,
-  skillsSignature,
-  indexCacheEnabled,
-  restoreIndex,
-  persistIndex,
-  clearIndex,
-  isIndexReady,
-  getIndexStats,
-};
+export { indexCacheKey, indexCacheFile, skillsSignature, indexCacheEnabled, restoreIndex, persistIndex, clearIndex, isIndexReady, getIndexStats };

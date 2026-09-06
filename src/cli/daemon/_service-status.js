@@ -2,8 +2,6 @@
 import { LAUNCH_AGENT_LABEL, LAUNCH_AGENT_PATH, checkLaunchAgent } from "./_launchd.js";
 import { SYSTEMD_UNIT_NAME, SYSTEMD_UNIT_PATH, checkSystemdService } from "./_systemd.js";
 import { WINDOWS_SERVICE_NAME, checkWindowsService } from "./_windows-service.js";
-import { platform } from "node:os";
-import { getRuntimePaths } from "../paths.js";
 import { detectPlatform } from "./_service.js";
 import { daemonProcessStatus } from "./_process-status.js";
 
@@ -30,7 +28,6 @@ export function checkDaemonService() {
       const ls = checkLaunchAgent();
 
       return {
-        platform,
         service: "launchd",
         installed: ls.installed,
         loaded: ls.loaded,

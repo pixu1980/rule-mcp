@@ -1,14 +1,13 @@
 /** Assemble the doctor report: SDK, agents, daemon, environment, telemetry. */
-import { existsSync, readFileSync, readdirSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { listTools } from "../../tools/router/index.js";
 import { getRuntimePaths } from "../paths.js";
 import { detectInstalledAgents } from "../install.js";
-import { checkDaemonService, WRAPPER_SCRIPT_PATH } from "../daemon/index.js";
+import { checkDaemonService } from "../daemon/index.js";
 import { getTokenStats } from "../../core/telemetry/_token-stats.js";
 import { validateAgentConfigs } from "./_detect-agents.js";
 import { detectIdeConfigs, detectModelConfig, detectStoredModelKeys, getEnvironmentInfo } from "./_detect-env.js";
-import { formatDoctorTerminal } from "./_format.js";
 import { getSdkVersion } from "./_sdk-version.js";
 
 /** Assemble and print the full doctor report. */

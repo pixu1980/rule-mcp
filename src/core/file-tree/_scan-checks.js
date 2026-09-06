@@ -63,7 +63,9 @@ export function bareFileIssues(files, currentPath) {
 export function orphanCssIssues(files, currentPath) {
   const issues = [];
 
-  for (const css of files.filter((f) => extname(f.name) === ".css")) {
+  const cssFiles = files.filter((f) => extname(f.name) === ".css");
+
+  for (const css of cssFiles) {
     if (!css.name.startsWith("_")) {
       continue;
     }

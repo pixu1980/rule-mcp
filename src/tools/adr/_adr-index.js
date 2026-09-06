@@ -1,7 +1,7 @@
 /** The generated docs/adr/ADR.md index: tables, themes, and the rewrite. */
 import { writeFileSync } from "node:fs";
 import { join } from "node:path";
-import { ADR_INDEX_FILE, adrFilename, firstSentence, section } from "./_files.js";
+import { ADR_INDEX_FILE, adrFilename } from "./_files.js";
 
 /** Tags carried by this many decisions form a theme section in the index. */
 export const THEME_THRESHOLD = 3;
@@ -28,10 +28,7 @@ export function buildAdrIndex(entries) {
     "",
     "| # | Title | Date | Status | Tags |",
     "|---|-------|------|--------|------|",
-    ...sorted.map(
-      (entry) =>
-        `| ${link(entry)} | ${entry.title} | ${entry.date || "-"} | ${entry.status} | ${entry.tags.join(", ") || "-"} |`,
-    ),
+    ...sorted.map((entry) => `| ${link(entry)} | ${entry.title} | ${entry.date || "-"} | ${entry.status} | ${entry.tags.join(", ") || "-"} |`),
     "",
     "## What each decision says",
     "",

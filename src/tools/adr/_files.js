@@ -1,5 +1,5 @@
 /** ADR files on disk: directory, numbering, slugs, filenames, the existing set. */
-import { existsSync, readFileSync, readdirSync } from "node:fs";
+import { readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 
 /** Longest decision/consequence summary the index shows per row. */

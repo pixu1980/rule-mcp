@@ -1,6 +1,6 @@
 /** The systemd user unit template. */
+import { mkdirSync } from "node:fs";
 import { getRuntimePaths } from "../paths.js";
-import { WRAPPER_SCRIPT_PATH } from "./_service-shared.js";
 
 /**
  * Generate the systemd user service unit file.

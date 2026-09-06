@@ -1,8 +1,7 @@
 /** Detect IDE configs, model configuration, stored keys, environment info. */
-import { existsSync, readFileSync, readdirSync } from "node:fs";
+import { existsSync, readdirSync } from "node:fs";
 import { platform, arch } from "node:os";
 import { join } from "node:path";
-import { getRuntimePaths } from "../paths.js";
 import { HOME } from "./_detect-agents.js";
 
 /**
