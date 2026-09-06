@@ -16,7 +16,7 @@ import { registerSkillTool, registerSearchTool, registerCheckTool, registerScaff
 import { registerAiTool } from "../../tools/ai/index.js";
 import { registerProcessAdrTool } from "../../tools/adr.js";
 import { registerFixTool } from "../../tools/fix.js";
-import { registerProcessHandoffTool } from "../../tools/handoff.js";
+import { registerProcessHandoffTool } from "../../tools/handoff/index.js";
 import { registerGatewayTool } from "../../tools/gateway.js";
 import { registerApplyTool } from "../../tools/apply.js";
 import { detectProject, getFrameworkSuggestion } from "../detector.js";
