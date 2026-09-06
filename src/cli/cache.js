@@ -27,7 +27,7 @@ import {
   cacheEnabled,
   normalizedTierEnabled,
   promotableEntries,
-} from "../core/cache/_tool-cache.js";
+} from "../core/cache/tool-cache/index.js";
 
 const print = (value) => process.stdout.write(`${value}\n`);
 

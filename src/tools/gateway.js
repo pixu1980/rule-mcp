@@ -312,7 +312,7 @@ export async function registerGatewayTool() {
       // routing + evidence reads. The receipt is NEVER part of the core - it is
       // minted per call, bound to the content of THIS call and expiring from the
       // current clock, so a replay can never hand back a stale token.
-      const { cacheLookup, cacheStore, skillDigest } = await import("../core/cache/_tool-cache.js");
+      const { cacheLookup, cacheStore, skillDigest } = await import("../core/cache/tool-cache/index.js");
       const coreArgs = gatewayCoreArguments(arguments_);
       const cached = cacheLookup(GATEWAY_CORE_TOOL, coreArgs);
       let core = cached?.result;

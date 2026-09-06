@@ -135,7 +135,7 @@ export async function loadAllSkills(force = false) {
     clearTools();
     // Skill content changed - invalidate the deterministic result cache so we
     // never replay outputs computed from stale skills.
-    const { cacheClear, clearSkillDigests } = await import("../cache/_tool-cache.js");
+    const { cacheClear, clearSkillDigests } = await import("../cache/tool-cache/index.js");
     cacheClear();
     clearSkillDigests();
   }
