@@ -56,7 +56,7 @@ async function hooksAutoLog(environment) {
   process.env.RULE_MCP_STATE_DIR = mkdtempSync(join(tmpdir(), "auto-adr-"));
 
   const { clearTools, countAfterHooks } = await import("../../src/tools/router/index.js");
-  const { registerProcessAdrTool } = await import("../../src/tools/adr.js");
+  const { registerProcessAdrTool } = await import("../../src/tools/adr/index.js");
   clearTools();
   registerProcessAdrTool();
   const hooked = countAfterHooks("*") > 0;
