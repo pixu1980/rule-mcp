@@ -79,7 +79,6 @@ export const FILE_SIZE_RATCHET = new Map([
   ["tests/core/process-hygiene.test.mjs", 383],
   ["tests/core/simplicity.test.mjs", 238],
   ["tests/core/telemetry.test.mjs", 359],
-  ["tests/docs/docs-numbering-doctor.test.mjs", 507],
   ["tests/docs/review-docs.test.mjs", 271],
   ["tests/prompts/prompts.test.mjs", 252],
   ["tests/prompts/reminder-diet.test.mjs", 158],
@@ -91,7 +90,6 @@ export const FILE_SIZE_RATCHET = new Map([
   ["tests/tools/a11y-wcag.test.mjs", 216],
   ["tests/tools/apply-containment.test.mjs", 152],
   ["tests/tools/gateway-cache-receipt.test.mjs", 183],
-  ["tests/tools/handon.test.mjs", 517],
   ["tests/tools/session-resume.test.mjs", 206],
   ["tests/transport/sse.test.mjs", 151],
 ]);
