@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 /**
  * Template Engine Tests - Core functionality tests
- * Tests per la funzionalità principale del Template Engine
- * Conforme agli standard definiti in COPILOT_RULES.md
+ * Core functionality of the Template Engine
+ * Conforms to the standards defined in COPILOT_RULES.md
  */
 
 import assert from "node:assert/strict";

@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 /**
  * Template Engine Tests - Expression Parser Complete Suite
- * Test completi per expression-parser.js con copertura avanzata
- * Conforme agli standard definiti in COPILOT_RULES.md
+ * Complete suites for expression-parser.js with advanced coverage
+ * Conforms to the standards defined in COPILOT_RULES.md
  */
 
 import assert, { equal } from "node:assert";
