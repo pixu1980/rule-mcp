@@ -1,4 +1,3 @@
-// Auto-split from src/tools/router/index.js - see ./router/index.js
 /** Core computation with cache write-through: shared computeCore and the public recomputeCore. */
 
 import { _beforeHooks, _postHooks, _tools } from "./_hooks.js";

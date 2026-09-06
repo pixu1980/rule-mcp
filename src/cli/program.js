@@ -378,9 +378,9 @@ export function buildProgram() {
     .description("Show telemetry statistics from the local log")
     .allowExcessArguments(false)
     .action(async () => {
-      const { aggregate, renderStats } = await import("../core/telemetry-stats.js");
-      const { readEvents } = await import("../core/telemetry-store.js");
-      const { telemetryEnabled } = await import("../core/telemetry.js");
+      const { aggregate, renderStats } = await import("../core/telemetry/_stats.js");
+      const { readEvents } = await import("../core/telemetry/_store.js");
+      const { telemetryEnabled } = await import("../core/telemetry/_telemetry.js");
 
       if (telemetryEnabled()) {
         console.log(renderStats(aggregate(readEvents()), { title: "rule telemetry: local log" }));

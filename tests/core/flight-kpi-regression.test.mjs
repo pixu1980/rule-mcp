@@ -20,7 +20,7 @@ import { test } from "node:test";
 
 process.env.RULE_MCP_NO_AUTOUPDATE = "1";
 
-const { computeKpi } = await import("../../src/core/kpi.js");
+const { computeKpi } = await import("../../src/core/telemetry/_kpi.js");
 
 const fixture = (name) => fileURLToPath(new URL(`../fixtures/${name}`, import.meta.url));
 

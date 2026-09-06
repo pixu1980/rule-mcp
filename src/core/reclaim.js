@@ -20,13 +20,13 @@
  * The timer is unref'd, and reclaim is skipped entirely while the process is
  * being used, so this can only ever run in the gap where nothing else is.
  *
- * @see module:core/bm25, module:core/skills, module:core/tool-cache - the three heaps
+ * @see module:core/bm25, module:core/skills, module:core/cache/tool-cache - the three heaps
  * @see module:tools/router - marks activity on every tool call
  */
 
 import { clearIndex, isIndexReady } from "./bm25/index.js";
 import { skillCache } from "./skills.js";
-import { flush, memoryEntryCount, releaseMemory } from "./tool-cache.js";
+import { flush, memoryEntryCount, releaseMemory } from "./cache/_tool-cache.js";
 
 /** Silence after which the rebuildable heaps are dropped. */
 export const IDLE_RECLAIM_MS = 600_000;

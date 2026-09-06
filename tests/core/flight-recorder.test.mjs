@@ -73,12 +73,12 @@ check("F1.6 exports live under it", projectPaths.exportsDir === join(projectPath
 check("F1.7 the project itself is left alone", !existsSync(join(project, ".rule-mcp")));
 
 // ── F2: the log is project-scoped ──
-const { eventsFile, rollupFile, drain, readEvents, readRollups } = await import("../../src/core/telemetry-store.js");
+const { eventsFile, rollupFile, drain, readEvents, readRollups } = await import("../../src/core/telemetry/_store.js");
 check("F2 the event log is in the project directory", eventsFile() === join(projectPaths.dir, "telemetry.jsonl"));
 check("F2.1 the rollup is beside it", rollupFile() === join(projectPaths.dir, "telemetry-rollup.json"));
 
 // ── F3: what a call records now ──
-const telemetry = await import("../../src/core/telemetry.js");
+const telemetry = await import("../../src/core/telemetry/_telemetry.js");
 const { endSession, flush, projectId, recordToolCall, setClientInfo, startSession } = telemetry;
 
 setClientInfo({ name: "claude-code", version: "2.4.1" });
@@ -152,7 +152,7 @@ delete process.env.RULE_MCP_NO_PROMPTS;
 
 // ── F4: usage comes from the coding agent's own transcript ──
 const { AGENT_TRANSCRIPTS, detectAgentUsage, readAgentUsage, supportedAgents, unsupportedAgents } =
-  await import("../../src/core/agent-transcripts.js");
+  await import("../../src/core/agents/_transcripts.js");
 check(
   "F4 every adapter names the agent it reads",
   AGENT_TRANSCRIPTS.every((a) => typeof a.agent === "string"),
@@ -397,7 +397,7 @@ const withGraph = snapshotProject(project);
 check("F5.9 a missing graph is reported as absent, not as zero", withGraph.tokensave.present === true);
 
 // ── F6: the numbers the reports had to work out by hand ──
-const { computeKpi } = await import("../../src/core/kpi.js");
+const { computeKpi } = await import("../../src/core/telemetry/_kpi.js");
 const kpi = computeKpi({
   events: readEvents(),
   usage: { ...piUsage, agent: "pi", userTurns: 0 },
@@ -448,7 +448,7 @@ check("F6.12 cost per thousand output tokens is reported", kpi.productivity.cost
 check("F6.13 the session's active time is measured", kpi.productivity.activeMs === 299_900);
 
 // ── F7: one file out, nothing left behind ──
-const { FLIGHT_FILE_VERSION, exportFlight } = await import("../../src/core/telemetry-flight.js");
+const { FLIGHT_FILE_VERSION, exportFlight } = await import("../../src/core/telemetry/_flight.js");
 endSession({ now: T0 + 400_000 });
 const exported = exportFlight({ projectDir: project, home: fake, exportedAt: T0 + 500_000 });
 check("F7 the export is a single file", typeof exported.file === "string" && exported.file.endsWith(".flight"));
@@ -496,7 +496,7 @@ check(
 );
 
 // ── F8: readable without a JSON viewer ──
-const { renderFlight } = await import("../../src/core/telemetry-stats.js");
+const { renderFlight } = await import("../../src/core/telemetry/_stats.js");
 const rendered = renderFlight(flight);
 check("F8 the renderer reports the server's token footprint", rendered.includes("MCP token footprint"));
 check("F8.1 it reports the model's usage", rendered.includes("peak context") || rendered.includes("Peak context"));
@@ -504,7 +504,7 @@ check("F8.2 it keeps the routing estimate out of the measured total", rendered.i
 check("F8.3 it reports the project snapshot", rendered.includes("Components"));
 
 // ── F9: the agent can declare its own usage when its transcript cannot be read ──
-const { readSidecarUsage, writeSidecarUsage } = await import("../../src/core/telemetry-store.js");
+const { readSidecarUsage, writeSidecarUsage } = await import("../../src/core/telemetry/_store.js");
 writeSidecarUsage({ agent: "copilot", model: "gpt-5.6", output: 1234, costUsd: 0.5 });
 check("F9 a declared usage is read back", readSidecarUsage()?.output === 1234);
 check("F9.1 it is labeled as declared, not measured", readSidecarUsage()?.source === "sidecar");

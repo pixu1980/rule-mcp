@@ -323,7 +323,7 @@ test("releaseMemory hands the heap back and reloads from disk", async () => {
   const previous = process.env.RULE_MCP_STATE_DIR;
   process.env.RULE_MCP_STATE_DIR = stateDir;
   try {
-    const cache = await import("../../src/core/tool-cache.js");
+    const cache = await import("../../src/core/cache/_tool-cache.js");
     const key = cache.cacheKey("rule_tool_search", { query: "release" });
     cache.cacheSet(key, { content: [{ type: "text", text: "kept" }] });
     assert.ok(cache.cacheGet(key), "the entry was not stored");

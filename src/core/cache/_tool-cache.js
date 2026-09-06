@@ -1,5 +1,5 @@
 /**
- * @module core/tool-cache
+ * @module core/cache/tool-cache
  *
  * Deterministic tool-result cache. This server never calls an LLM, every tool
  * output is a pure function of (tool name, arguments, on-disk skills). So identical
@@ -25,11 +25,11 @@ import { createHash } from "node:crypto";
 import { gzipSync, gunzipSync } from "node:zlib";
 import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync, renameSync } from "node:fs";
 import { join } from "node:path";
-import { canonicalizeQuery } from "./bm25/index.js";
-import { codeSignature } from "./code-signature.js";
+import { canonicalizeQuery } from "../bm25/index.js";
+import { codeSignature } from "../code-signature.js";
 
-export { codeSignature } from "./code-signature.js";
-import { pkg as package_, getRuntimePaths, getSkillsDirs as getSkillsDirectories } from "../cli/paths.js";
+export { codeSignature } from "../code-signature.js";
+import { pkg as package_, getRuntimePaths, getSkillsDirs as getSkillsDirectories } from "../../cli/paths.js";
 
 /**
  * Tools that must never be served from cache: they mutate the filesystem, read

@@ -27,11 +27,11 @@ process.env.RULE_MCP_NO_AUTOUPDATE = "1";
 delete process.env.RULE_MCP_NO_TELEMETRY;
 delete process.env.RULE_MCP_NO_CAVEMAN;
 
-const { compressResult } = await import("../../src/core/caveman.js");
+const { compressResult } = await import("../../src/core/text/_caveman.js");
 const { loadAllSkills } = await import("../../src/core/skills.js");
 const { callTool, recomputeCore } = await import("../../src/tools/router/index.js");
-const { flush } = await import("../../src/core/telemetry.js");
-const { readEvents } = await import("../../src/core/telemetry-store.js");
+const { flush } = await import("../../src/core/telemetry/_telemetry.js");
+const { readEvents } = await import("../../src/core/telemetry/_store.js");
 
 /**
  * Real results, not fixtures: the corpus is what this server actually returns.
@@ -108,7 +108,7 @@ test("compressing twice changes nothing the second time", () => {
 });
 
 test("the reported compression ratio is the measured saving, not the net shrink", async () => {
-  const { computeKpi } = await import("../../src/core/kpi.js");
+  const { computeKpi } = await import("../../src/core/telemetry/_kpi.js");
   // The case that separates the two definitions: the reminder grew this result
   // by more than compression shrank it, so core-minus-final reports nothing
   // while 120 tokens were demonstrably removed.

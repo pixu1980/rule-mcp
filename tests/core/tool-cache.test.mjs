@@ -33,7 +33,7 @@ delete process.env.RULE_MCP_NO_CACHE;
 process.env.RULE_MCP_DISABLE_AUTO_ADR = "1";
 process.env.RULE_MCP_NO_AUTOUPDATE = "1"; // no self-update banner shifting cached content
 
-const { cacheKey, cacheGet, cacheSet, cacheClear, flush } = await import("../../src/core/tool-cache.js");
+const { cacheKey, cacheGet, cacheSet, cacheClear, flush } = await import("../../src/core/cache/_tool-cache.js");
 const { registerTool, callTool } = await import("../../src/tools/router/index.js");
 
 // ── T1: keying + denylist ──

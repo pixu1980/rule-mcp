@@ -27,7 +27,7 @@ delete process.env.RULE_MCP_NO_CACHE;
 process.env.RULE_MCP_NO_AUTOUPDATE = "1";
 process.env.RULE_MCP_NO_TELEMETRY = "1";
 
-const { cacheKey, normalizedKey, cacheLookup, cacheStore, cacheClear } = await import("../../src/core/tool-cache.js");
+const { cacheKey, normalizedKey, cacheLookup, cacheStore, cacheClear } = await import("../../src/core/cache/_tool-cache.js");
 const { registerTool, callTool, entryPathOf } = await import("../../src/tools/router/index.js");
 
 const result = (text) => ({ content: [{ type: "text", text }] });
@@ -257,7 +257,7 @@ test("every call is classified by the path it arrived on", () => {
 // ── Aggregation reports both facets ──
 
 test("the aggregate reports hit rate per tier and calls per entry path", async () => {
-  const { aggregate } = await import("../../src/core/telemetry-stats.js");
+  const { aggregate } = await import("../../src/core/telemetry/_stats.js");
   const stats = aggregate([
     { tool: "pix_tool", cacheHit: false, cacheTier: "miss", entry: "router" },
     { tool: "pix_tool", cacheHit: true, cacheTier: "exact", entry: "router" },
@@ -271,7 +271,7 @@ test("the aggregate reports hit rate per tier and calls per entry path", async (
 });
 
 test("the rendered report names the tiers and the entry paths", async () => {
-  const { aggregate, renderStats } = await import("../../src/core/telemetry-stats.js");
+  const { aggregate, renderStats } = await import("../../src/core/telemetry/_stats.js");
   const text = renderStats(
     aggregate([
       { tool: "pix_tool", cacheHit: true, cacheTier: "normalized", entry: "router" },
@@ -340,7 +340,7 @@ test("no tier above the normalized key is wired in", async () => {
   // This test exists so the absence is deliberate rather than forgotten. If a
   // future tier lands, it changes this assertion and has to bring a report
   // showing a threshold with zero wrong replays and a non-zero hit count.
-  const { cacheLookup: lookup } = await import("../../src/core/tool-cache.js");
+  const { cacheLookup: lookup } = await import("../../src/core/cache/_tool-cache.js");
   const TIERS = new Set(["exact", "normalized"]);
   cacheClear();
 

@@ -6,4 +6,4 @@
  * one concern per file (ADR 061).
  */
 
-export { registerAiTool } from "./_register.js";
+export * from "./_register.js";

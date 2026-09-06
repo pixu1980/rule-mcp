@@ -16,10 +16,10 @@ import { join } from "node:path";
 
 const BASE = new URL("../..", import.meta.url).pathname;
 const { resolveTokensaveDir, tokensaveActive, suppressIfTokensave, decorateWithTokensave, resetTokenPipeline } =
-  await import(join(BASE, "src/core/agent-integrations.js"));
-const { compressResult } = await import(join(BASE, "src/core/caveman.js"));
-const { compressTextAggressive } = await import(join(BASE, "src/core/caveman-aggressive.js"));
-const { getTokenStats, resetTokenStats } = await import(join(BASE, "src/core/token-stats.js"));
+  await import(join(BASE, "src/core/agents/_integrations.js"));
+const { compressResult } = await import(join(BASE, "src/core/text/_caveman.js"));
+const { compressTextAggressive } = await import(join(BASE, "src/core/text/_caveman-aggressive.js"));
+const { getTokenStats, resetTokenStats } = await import(join(BASE, "src/core/telemetry/_token-stats.js"));
 
 test("multi-source detection: env var wins over a tokensave-less cwd", () => {
   const withTs = mkdtempSync(join(tmpdir(), "pipe-ts-"));

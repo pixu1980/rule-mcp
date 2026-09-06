@@ -1,5 +1,5 @@
 /**
- * @module core/telemetry-flight
+ * @module core/telemetry/flight
  *
  * Exports a recording as a single `.flight` file.
  *
@@ -27,7 +27,7 @@
  *
  * Inspired by https://github.com/AllThingsSmitty/ai-flight-recorder (MIT).
  *
- * @see module:core/telemetry-store - the JSONL this reads
+ * @see module:core/telemetry/store - the JSONL this reads
  * @see module:core/kpi - the numbers in the kpi block
  */
 
@@ -35,13 +35,13 @@ import { createHash } from "node:crypto";
 import { mkdirSync, readdirSync, rmSync, statSync, writeFileSync } from "node:fs";
 import { homedir } from "node:os";
 import { basename, join } from "node:path";
-import { getProjectPaths } from "../cli/paths.js";
-import { hashValue } from "./telemetry.js";
-import { detectAgentUsage, unsupportedAgents } from "./agent-transcripts.js";
-import { computeKpi } from "./kpi.js";
-import { snapshotProject } from "./project-snapshot.js";
-import { drain, readEvents, readRollups, readSidecarUsage } from "./telemetry-store.js";
-import { resetProjectId } from "./telemetry.js";
+import { getProjectPaths } from "../../cli/paths.js";
+import { hashValue } from "./_telemetry.js";
+import { detectAgentUsage, unsupportedAgents } from "../agents/_transcripts.js";
+import { computeKpi } from "./_kpi.js";
+import { snapshotProject } from "../project-snapshot.js";
+import { drain, readEvents, readRollups, readSidecarUsage } from "./_store.js";
+import { resetProjectId } from "./_telemetry.js";
 
 /** The `.flight` envelope version this writer produces. */
 export const FLIGHT_FILE_VERSION = "2";

@@ -1,4 +1,3 @@
-// Auto-split from src/core/guardrail-defs.js - see ./index.js
 /** The devops guardrail family. */
 export const DEVOPS_GUARDRAILS = [
   {

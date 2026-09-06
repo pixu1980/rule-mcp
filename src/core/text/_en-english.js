@@ -1,5 +1,5 @@
 /**
- * @module core/en-english
+ * @module core/text/en-english
  *
  * English-only prose detection (hardening: every generated comment, identifier
  * and document is English, American spelling).

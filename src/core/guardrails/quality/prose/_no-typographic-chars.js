@@ -1,4 +1,4 @@
-import { findFingerprints } from "../../../fingerprint.js";
+import { findFingerprints } from "../../../text/_fingerprint.js";
 
 /** Guardrail `fp-no-typographic-chars`: No curly quotes or ellipsis glyphs */
 export const fpNoTypographicChars = {

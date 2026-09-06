@@ -22,7 +22,7 @@ import { fileURLToPath } from "node:url";
 process.env.RULE_MCP_NO_CACHE = "1";
 process.env.RULE_MCP_NO_AUTOUPDATE = "1";
 
-const { readFindings, syncRoleDocs, validateTrio } = await import("../../src/core/review-docs.js");
+const { readFindings, syncRoleDocs, validateTrio } = await import("../../src/core/review/_docs.js");
 
 /** A project of its own for each case: these tests write files. */
 function project() {

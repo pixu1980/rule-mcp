@@ -1,4 +1,3 @@
-// Auto-split from src/core/guardrail-defs.js - see ./index.js
 /** The database guardrail family. */
 export const DATABASE_GUARDRAILS = [
   {

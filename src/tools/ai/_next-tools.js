@@ -2,6 +2,7 @@
 export function skillNextTools(skillName) {
   const suggestions = [];
   const base = skillName.replace(/^rule-/, "").replaceAll("-", "_");
+
   suggestions.push(`rule_tool_${base}`);
 
   if (skillName === "rule-styleguide") {

@@ -13,15 +13,15 @@
  * separate figures. Adding them would produce a bigger headline and a claim
  * nobody could defend.
  *
- * @see module:core/telemetry-stats - the aggregation
- * @see module:core/telemetry-store - the log
+ * @see module:core/telemetry/stats - the aggregation
+ * @see module:core/telemetry/store - the log
  */
 
 import { readFileSync } from "node:fs";
 import { z } from "zod/v4";
-import { aggregate, renderFlight, renderStats } from "../core/telemetry-stats.js";
-import { readEvents, readRollups } from "../core/telemetry-store.js";
-import { telemetryEnabled } from "../core/telemetry.js";
+import { aggregate, renderFlight, renderStats } from "../core/telemetry/_stats.js";
+import { readEvents, readRollups } from "../core/telemetry/_store.js";
+import { telemetryEnabled } from "../core/telemetry/_telemetry.js";
 import { registerTool } from "./router/index.js";
 
 const DAY_MS = 86_400_000;
@@ -65,7 +65,7 @@ export function registerStatsTool() {
       }
 
       const scope = arguments_.scope ?? "week";
-      const { sessionId } = await import("../core/telemetry.js");
+      const { sessionId } = await import("../core/telemetry/_telemetry.js");
       let events = readEvents();
 
       if (scope === "session") {

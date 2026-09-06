@@ -1,5 +1,5 @@
 /**
- * @module core/agent-commands
+ * @module core/agents/commands
  *
  * Registry-driven generator for agent slash-command files.
  *
@@ -22,9 +22,9 @@
  * @see module:cli/install - installClaude sets RULE_MCP_NO_PROMPTS
  */
 
-import { listPrompts } from "../prompts/index.js";
-import { activeRoles } from "./review-roles.js";
-import { OPERATIONS } from "./review-roles-template.js";
+import { listPrompts } from "../../prompts/index.js";
+import { activeRoles } from "../review/_roles.js";
+import { OPERATIONS } from "../review/_template.js";
 
 /** The router command, pinned first in every agent's command list. */
 export const ROUTER_COMMAND = "rule";

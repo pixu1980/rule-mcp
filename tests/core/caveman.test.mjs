@@ -19,7 +19,7 @@ const check = (label, ok) => {
 
 console.log("=== Caveman Compressor Tests ===\n");
 
-import { compressText, compressResult } from "../../src/core/caveman.js";
+import { compressText, compressResult } from "../../src/core/text/_caveman.js";
 
 // ── T1: filler + leading articles removed from prose ──
 const prose = "This is really just the button component that you actually want.";

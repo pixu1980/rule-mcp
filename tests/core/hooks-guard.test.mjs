@@ -35,7 +35,7 @@ import {
   isMigrationCommand,
   withHooks,
   withoutHooks,
-} from "../../src/core/agent-hooks.js";
+} from "../../src/core/agents/_hooks.js";
 import { decide, skillForPath } from "../../src/cli/guard.js";
 
 const LAUNCHER = { command: "/usr/local/bin/rule-mcp", args: [] };

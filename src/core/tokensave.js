@@ -17,7 +17,7 @@
  * the one side-effecting helper (autoTrackBranch) is fire-and-forget and
  * env-gated.
  *
- * @see module:core/agent-integrations - where the directive is emitted
+ * @see module:core/agents/integrations - where the directive is emitted
  * @see https://github.com/aovestdipaperino/tokensave/blob/master/docs/BRANCHING-USER-GUIDE.md
  */
 

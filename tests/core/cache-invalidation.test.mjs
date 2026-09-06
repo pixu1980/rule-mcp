@@ -27,7 +27,7 @@ delete process.env.RULE_MCP_NO_CACHE;
 process.env.RULE_MCP_NO_AUTOUPDATE = "1";
 process.env.RULE_MCP_NO_TELEMETRY = "1";
 
-const { cacheStore, cacheLookup, cacheClear, skillDigest, cacheEntries } = await import("../../src/core/tool-cache.js");
+const { cacheStore, cacheLookup, cacheClear, skillDigest, cacheEntries } = await import("../../src/core/cache/_tool-cache.js");
 const { callTool, dependenciesOf } = await import("../../src/tools/router/index.js");
 const { loadAllSkills } = await import("../../src/core/skills.js");
 
@@ -283,7 +283,7 @@ test("the cache key moves when the server's code changes", async () => {
   // what a tool returns was invisible: this project installs by git pull, where
   // the version rarely moves per commit. The routing suite read back cores
   // computed before the code under test existed and reported green.
-  const { cacheKey, codeSignature } = await import("../../src/core/tool-cache.js");
+  const { cacheKey, codeSignature } = await import("../../src/core/cache/_tool-cache.js");
   const before = cacheKey("pix_tool", { prompt: "same question" });
   const signature = codeSignature();
 
@@ -291,7 +291,7 @@ test("the cache key moves when the server's code changes", async () => {
 
   // A source edit is what the signature has to notice.
   const { utimesSync } = await import("node:fs");
-  const source = new URL("../../src/core/caveman.js", import.meta.url).pathname;
+  const source = new URL("../../src/core/text/_caveman.js", import.meta.url).pathname;
   const later = new Date(Date.now() + 60_000);
   utimesSync(source, later, later);
 

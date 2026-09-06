@@ -1,5 +1,5 @@
 /**
- * @module core/review-roles-overlays
+ * @module core/review/overlays
  *
  * Where a role can come from besides this repository (personas plan A.2).
  *
@@ -23,9 +23,9 @@
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 
-import { parsePersonaFile } from "./persona-file.js";
-import { validateRole } from "./review-roles.js";
-import { getRuntimePaths } from "../cli/paths.js";
+import { parsePersonaFile } from "./_persona-file.js";
+import { validateRole } from "./_roles.js";
+import { getRuntimePaths } from "../../cli/paths.js";
 
 /**
  * Where a user's own roles live.

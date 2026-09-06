@@ -1,5 +1,5 @@
 /**
- * @module core/review-roles
+ * @module core/review/roles
  *
  * The expert review personas: who can be asked to audit this project, what
  * they know, and what they look at (personas plan, phase A.1).
@@ -19,9 +19,9 @@ import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { pathToFileURL, fileURLToPath } from "node:url";
 
-import { parsePersonaFile } from "./persona-file.js";
+import { parsePersonaFile } from "./_persona-file.js";
 
-const PERSONA_DIR = new URL("../roles/", import.meta.url);
+const PERSONA_DIR = new URL("../../roles/", import.meta.url);
 const ROLES_DIR = process.env.RULE_MCP_ROLES_DIR || PERSONA_DIR;
 
 /** Every field a role must have, and what counts as valid. */

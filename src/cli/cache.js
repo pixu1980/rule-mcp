@@ -8,7 +8,7 @@
  * what no longer reproduces. A deterministic cache whose determinism nobody
  * checks is an assumption.
  *
- * @see module:core/cache-catalog - promotion, the file format, and priming
+ * @see module:core/cache/catalog - promotion, the file format, and priming
  */
 
 import {
@@ -20,14 +20,14 @@ import {
   writeCatalog,
   CATALOG_FILE,
   MIN_HITS,
-} from "../core/cache-catalog.js";
+} from "../core/cache/_catalog.js";
 import {
   cacheClear,
   cacheEntries,
   cacheEnabled,
   normalizedTierEnabled,
   promotableEntries,
-} from "../core/tool-cache.js";
+} from "../core/cache/_tool-cache.js";
 
 const print = (value) => process.stdout.write(`${value}\n`);
 
@@ -90,7 +90,7 @@ async function statsCommand(directory) {
       : `Catalog: none at ${catalogPath(directory)}`,
   );
 
-  const { readEvents } = await import("../core/telemetry-store.js");
+  const { readEvents } = await import("../core/telemetry/_store.js");
   const events = readEvents();
 
   if (events.length === 0) {

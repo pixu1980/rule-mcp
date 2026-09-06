@@ -1,4 +1,3 @@
-// Auto-split from src/cli/commands/index.js - see ./commands/index.js
 /** Doctor, skills reload, self-update, fix and completions commands. */
 
 import { callTool } from "../../tools/router/index.js";

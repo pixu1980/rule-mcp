@@ -1,5 +1,5 @@
 /**
- * @module core/caveman-aggressive
+ * @module core/text/caveman-aggressive
  *
  * Aggressive extra compression pass applied ON TOP of the standard caveman
  * output (default since v1.0.0; opt out entirely with RULE_MCP_NO_CAVEMAN=1).

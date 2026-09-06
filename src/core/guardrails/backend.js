@@ -1,4 +1,3 @@
-// Auto-split from src/core/guardrail-defs.js - see ./index.js
 /** The backend guardrail family. */
 export const BACKEND_GUARDRAILS = [
   {

@@ -24,7 +24,7 @@ import { join } from "node:path";
 import test from "node:test";
 
 import { getGuardrails, checkCode } from "../../src/core/guardrails.js";
-import { findFingerprints } from "../../src/core/fingerprint.js";
+import { findFingerprints } from "../../src/core/text/_fingerprint.js";
 import { loadAllSkills } from "../../src/core/skills.js";
 
 await loadAllSkills(true);
@@ -152,7 +152,7 @@ test("the skill's wordlist matches the fingerprint dictionary exactly (no drift)
 });
 
 test("every shared prompt/command surface carries the English mandate", async () => {
-  const { commandDefinition } = await import("../../src/core/agent-commands.js");
+  const { commandDefinition } = await import("../../src/core/agents/_commands.js");
   const surfaces = [
     ["router command", commandDefinition("rule").body],
     ["handoff command", commandDefinition("rule-handoff").body],
@@ -161,8 +161,8 @@ test("every shared prompt/command surface carries the English mandate", async ()
     assert.match(body, /American spelling|American English|US spelling/i, `${label} must carry the mandate`);
   }
 
-  const { fillRoleTemplate } = await import("../../src/core/review-roles-template.js");
-  const { roleById } = await import("../../src/core/review-roles.js");
+  const { fillRoleTemplate } = await import("../../src/core/review/_template.js");
+  const { roleById } = await import("../../src/core/review/_roles.js");
   const filled = fillRoleTemplate(roleById("security"));
   assert.match(filled, /American spelling|English/i, "the persona template carries the mandate");
 });

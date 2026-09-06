@@ -1,5 +1,5 @@
 /**
- * @module core/agent-integrations
+ * @module core/agents/integrations
  *
  * Cross-agent integrations that reduce token usage:
  *
@@ -10,10 +10,10 @@
  * These helpers are pure and deterministic so they compose with the result cache.
  *
  * @see module:core/detector - hasTokensave
- * @see module:core/caveman - output compression (complementary token saving)
+ * @see module:core/text/caveman - output compression (complementary token saving)
  */
 
-import { hasTokensave } from "./detector.js";
+import { hasTokensave } from "../detector.js";
 import { dirname } from "node:path";
 
 /**
@@ -40,7 +40,12 @@ export function tokensaveActive(projectDir = process.cwd()) {
   return resolveTokensaveDir(projectDir) !== null;
 }
 
-import { addDirective, addSuppression, getTokenStats, resetTokenStats as _resetStats } from "./token-stats.js";
+import {
+  addDirective,
+  addSuppression,
+  getTokenStats,
+  resetTokenStats as _resetStats,
+} from "../telemetry/_token-stats.js";
 
 /** Multi-source project resolution: explicit arg > env var > cwd, then walk-up. */
 export function resolveTokensaveDir(explicitDir) {

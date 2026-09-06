@@ -15,7 +15,7 @@
  * One canonical wording, one grep. Anything that repeats these rules imports
  * them from this module instead of paraphrasing.
  *
- * @see module:core/agent-hooks - the hook entries that carry it
+ * @see module:core/agents/hooks - the hook entries that carry it
  * @see module:cli/guard - the command those hooks invoke
  */
 

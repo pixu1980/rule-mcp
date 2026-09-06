@@ -1,5 +1,5 @@
 /**
- * @module core/agent-command-targets
+ * @module core/agents/command-targets
  *
  * Where the clean `/rule-*` slash commands are written, per agent/IDE.
  *
@@ -23,7 +23,7 @@
  * Resolution is pure: `exists`/`listDir` are injected, so the whole registry is
  * unit-testable for any platform without touching the filesystem.
  *
- * @see module:core/agent-commands - the command bodies and render formats
+ * @see module:core/agents/commands - the command bodies and render formats
  * @see module:cli/install - installs/removes the resolved targets
  */
 
@@ -138,7 +138,7 @@ const ifParentExists = (ctx, parent, dir) => (ctx.force || ctx.exists(parent) ? 
  * The registry. One entry per (agent, scope) pair:
  *   - `agent`               install-registry agent name
  *   - `label`               human label used in installer/uninstaller output
- *   - `format`              render format (see module:core/agent-commands FORMATS)
+ *   - `format`              render format (see module:core/agents/commands FORMATS)
  *   - `scope`               "global" (user-level) or "project" (cwd)
  *   - `namespacedPrompts`   the host prefixes MCP prompts, so suppress them
  *   - `detect(ctx)`         is the agent present on this machine?

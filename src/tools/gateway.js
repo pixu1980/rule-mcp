@@ -299,7 +299,7 @@ export async function registerGatewayTool() {
       const lines = [];
 
       // ── Token-saving: nudge the agent toward the code graph when present ──
-      const { tokensaveActive, TOKENSAVE_DIRECTIVE } = await import("../core/agent-integrations.js");
+      const { tokensaveActive, TOKENSAVE_DIRECTIVE } = await import("../core/agents/_integrations.js");
 
       if (path && tokensaveActive(path)) {
         lines.push(TOKENSAVE_DIRECTIVE, "");
@@ -312,7 +312,7 @@ export async function registerGatewayTool() {
       // routing + evidence reads. The receipt is NEVER part of the core - it is
       // minted per call, bound to the content of THIS call and expiring from the
       // current clock, so a replay can never hand back a stale token.
-      const { cacheLookup, cacheStore, skillDigest } = await import("../core/tool-cache.js");
+      const { cacheLookup, cacheStore, skillDigest } = await import("../core/cache/_tool-cache.js");
       const coreArgs = gatewayCoreArguments(arguments_);
       const cached = cacheLookup(GATEWAY_CORE_TOOL, coreArgs);
       let core = cached?.result;

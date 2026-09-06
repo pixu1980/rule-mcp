@@ -1,5 +1,5 @@
 /**
- * @module core/token-stats
+ * @module core/telemetry/token-stats
  *
  * Runtime accounting of the token-efficiency pipeline (caveman compression +
  * tokensave suppression + directives). Pure counters, zero dependencies.

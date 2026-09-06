@@ -1,5 +1,5 @@
 /**
- * @module core/telemetry-stats
+ * @module core/telemetry/stats
  *
  * Reading the telemetry back.
  *
@@ -13,7 +13,7 @@
  * Every count here is a char/4 heuristic for tokens, which is why the tilde
  * belongs on the measured numbers too.
  *
- * @see module:core/telemetry-store - where the events come from
+ * @see module:core/telemetry/store - where the events come from
  */
 
 /**

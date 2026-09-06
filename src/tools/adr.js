@@ -13,7 +13,7 @@ import { join } from "node:path";
 import { z } from "zod/v4";
 import { registerTool } from "./router/index.js";
 import { addAfterToolHook } from "./router/index.js";
-import { scanDocumentForForeign, scanPathForForeign } from "../core/en-english.js";
+import { scanDocumentForForeign, scanPathForForeign } from "../core/text/_en-english.js";
 
 /** ADR directory relative to project root. */
 const ADR_DIR = "docs/adr";

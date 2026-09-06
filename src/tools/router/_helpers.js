@@ -1,10 +1,9 @@
-// Auto-split from src/tools/router/index.js - see ./router/index.js
 /** Result shaping helpers: banner, finalize, token/size estimates, and the skill-independent set. */
 
-import { alignAsciiBoxesResult } from "../../core/ascii-box.js";
-import { compressResult } from "../../core/caveman.js";
+import { alignAsciiBoxesResult } from "../../core/text/_ascii-box.js";
+import { compressResult } from "../../core/text/_caveman.js";
 import { decorateWorkflowReminder, stampRequestId } from "../../core/enforcement.js";
-import { stripFingerprintResult } from "../../core/fingerprint.js";
+import { stripFingerprintResult } from "../../core/text/_fingerprint.js";
 function withBanner(banner, result) {
   if (!banner || !result || !Array.isArray(result.content)) {
     return result;

@@ -31,7 +31,7 @@ const check = (label, ok) => {
 console.log("=== Per-prompt directive ===\n");
 
 import { MANTRA, NO_SUBAGENTS, directiveEnabled, promptDirective, sessionDirective } from "../../src/core/directive.js";
-import { HOOK_MARKER, hasHooks, hookEntries, withHooks, withoutHooks } from "../../src/core/agent-hooks.js";
+import { HOOK_MARKER, hasHooks, hookEntries, withHooks, withoutHooks } from "../../src/core/agents/_hooks.js";
 
 const LAUNCHER = { command: "/usr/local/bin/rule-mcp", args: [] };
 const EVENTS = ["PreToolUse", "SessionStart", "UserPromptSubmit"];

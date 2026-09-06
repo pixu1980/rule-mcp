@@ -1,4 +1,3 @@
-// Auto-split from src/core/guardrail-defs.js - see ./index.js
 /** The file_tree guardrail family. */
 export const FILE_TREE_GUARDRAILS = [
   {

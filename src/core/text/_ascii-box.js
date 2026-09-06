@@ -1,5 +1,5 @@
 /**
- * @module core/ascii-box
+ * @module core/text/ascii-box
  *
  * Makes a drawn box an actual rectangle.
  *

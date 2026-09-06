@@ -5,7 +5,6 @@
  * @module core/guardrails/util
  */
 
-// Auto-split from src/core/guardrail-defs.js - see ./index.js
 /**
  * The real CSS out of whatever was handed over: a .css file, fenced css,
  * replaceSync sheets, style blocks, or a bare stylesheet.

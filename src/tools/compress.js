@@ -12,15 +12,15 @@
  * No model call, no filesystem, no clock: same input, same output, so the
  * result cache can replay it.
  *
- * @see module:core/caveman - filler removal
- * @see module:core/fingerprint - typographic and spelling conversion
- * @see module:core/ascii-box - box alignment, which the fingerprint mode carries
+ * @see module:core/text/caveman - filler removal
+ * @see module:core/text/fingerprint - typographic and spelling conversion
+ * @see module:core/text/ascii-box - box alignment, which the fingerprint mode carries
  */
 
 import { z } from "zod/v4";
-import { alignAsciiBoxes } from "../core/ascii-box.js";
-import { compressText } from "../core/caveman.js";
-import { stripFingerprint } from "../core/fingerprint.js";
+import { alignAsciiBoxes } from "../core/text/_ascii-box.js";
+import { compressText } from "../core/text/_caveman.js";
+import { stripFingerprint } from "../core/text/_fingerprint.js";
 import { registerTool } from "./router/index.js";
 
 /** Rough token estimate, good enough to report a saving. */

@@ -55,11 +55,11 @@ mkdirSync(join(projectDir, ".git"), { recursive: true });
 process.chdir(projectDir);
 
 const { DAY_MS, RAW_RETENTION_DAYS, endSession, flush, recordToolCall, sessionId, startSession, telemetryEnabled } =
-  await import("../../src/core/telemetry.js");
+  await import("../../src/core/telemetry/_telemetry.js");
 const { eventsFile, purge, readEvents, readRollups, rollup, stateSize } =
-  await import("../../src/core/telemetry-store.js");
-const { aggregate, renderStats } = await import("../../src/core/telemetry-stats.js");
-const { REMOTE_ENABLED, redactForRemote } = await import("../../src/core/telemetry-transport.js");
+  await import("../../src/core/telemetry/_store.js");
+const { aggregate, renderStats } = await import("../../src/core/telemetry/_stats.js");
+const { REMOTE_ENABLED, redactForRemote } = await import("../../src/core/telemetry/_transport.js");
 
 const DAY = 86_400_000;
 const T0 = 1_760_000_000_000;
@@ -271,7 +271,7 @@ check("T10.2 that directory is under the home directory", !projectStateDir.start
 check("T10.3 and the project itself is untouched", !existsSync(join(projectDir, ".rule-mcp")));
 
 // ── T11: the .flight export ──
-const { FLIGHT_FILE_VERSION, exportFlight, toFlight } = await import("../../src/core/telemetry-flight.js");
+const { FLIGHT_FILE_VERSION, exportFlight, toFlight } = await import("../../src/core/telemetry/_flight.js");
 const recorded = readEvents();
 const exported = exportFlight({ exportedAt: T0 + 5000, keep: true });
 const flight = exported.flight;

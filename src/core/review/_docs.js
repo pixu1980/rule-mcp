@@ -1,5 +1,5 @@
 /**
- * @module core/review-docs
+ * @module core/review/docs
  *
  * The bookkeeping half of a review persona's run (personas C.2).
  *
@@ -16,7 +16,7 @@
  * here calls a model, and the same inputs always produce the same files.
  *
  * @see module:tools/plan-docs - the rule_tool_plan_docs tool over it
- * @see module:core/review-roles - where a role and its version come from
+ * @see module:core/review/roles - where a role and its version come from
  */
 
 import { existsSync, mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";

@@ -1,5 +1,5 @@
 /**
- * @module core/telemetry
+ * @module core/telemetry/telemetry
  *
  * What this server records about its own work, and what it refuses to record.
  *
@@ -31,18 +31,18 @@
  *
  * Off with RULE_MCP_NO_TELEMETRY=1.
  *
- * @see module:core/telemetry-store - persistence and retention
- * @see module:core/telemetry-stats - reading it back
- * @see module:core/telemetry-transport - the remote path, disabled
+ * @see module:core/telemetry/store - persistence and retention
+ * @see module:core/telemetry/stats - reading it back
+ * @see module:core/telemetry/transport - the remote path, disabled
  */
 
 import { createHash, randomUUID } from "node:crypto";
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
-import { getRuntimePaths } from "../cli/paths.js";
-import { appendEvents, projectIdFile } from "./telemetry-store.js";
+import { getRuntimePaths } from "../../cli/paths.js";
+import { appendEvents, projectIdFile } from "./_store.js";
 
-export { RAW_RETENTION_DAYS } from "./telemetry-store.js";
+export { RAW_RETENTION_DAYS } from "./_store.js";
 
 /** One day, in milliseconds. */
 export const DAY_MS = 86_400_000;

@@ -1,5 +1,5 @@
 /**
- * @module core/telemetry-transport
+ * @module core/telemetry/transport
  *
  * The remote path, built and switched off.
  *
