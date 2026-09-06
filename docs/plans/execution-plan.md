@@ -103,7 +103,9 @@ Skill candidate e ruolo:
   - [x] `src/core/guardrails/framework.js` (971 → barrel 1) → `guardrails/framework/` (10 moduli, livello 3)
   - [x] `src/core/wcag-data.js` (779 → barrel 1) → `wcag-data/` (meta + 13 per-guideline, livello 4)
   - [x] fix corollari: esenzioni CATALOGS per cartelle in self-guardrails, refs doc rinumerate (css-flex-first, auto-adr-flag)
-- [ ] Prossimi candidati (per valore): `guardrails/quality.js` 850, `bm25.js` 789, `router.js` 831, `commands.js` 807,
+- [x] `src/core/guardrails/quality.js` (850 → barrel 2) → `guardrails/quality/` (8 moduli)
+- [x] `src/core/bm25.js` (789 → barrel 2) → `bm25/` (11 moduli: terms, stopwords×3+union, extract, build, cache, score, state)
+- [ ] Prossimi candidati (per valore): `router.js` 831, `commands.js` 807,
   `ai.js` 792, `docs-numbering.js` 740, `handon.js` 737, `tool-cache.js` 720, `file-tree.js` 686,
   `handoff.js` 660, `guardrails/shared.js` 655, `prompts/index.js` 629, `agent-transcripts.js` 583,
   `daemon-platform.js` 548, `gateway.js` 530, `adr.js` 525, `daemon.js` 499, `fingerprint.js` 494…
