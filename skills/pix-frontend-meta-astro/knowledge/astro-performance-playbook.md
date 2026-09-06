@@ -1,6 +1,6 @@
 # Astro Performance Playbook
 
-This playbook supports the rule-frontend-astro performance review skill. It covers islands architecture, client directives, rendering strategies, and asset optimization.
+This playbook supports the rule-frontend-meta-astro performance review skill. It covers islands architecture, client directives, rendering strategies, and asset optimization.
 
 ## Mental model
 

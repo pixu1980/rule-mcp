@@ -54,7 +54,7 @@ const SKILL_FRAMEWORK_MAP = {
   "rule-frontend-svelte": "svelte",
   "rule-frontend-solidjs": "solid",
   "rule-frontend-angular": "angular",
-  "rule-frontend-astro": "astro",
+  "rule-frontend-meta-astro": "astro",
   "rule-styleguide": "vanilla",
   "rule-styleguide-html": "vanilla",
   "rule-styleguide-css": "vanilla",

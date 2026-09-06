@@ -10,7 +10,7 @@ frameworks: [all]
 
 # rule-platform-web - Web Applications with rule Principles
 
-This skill is the **umbrella for all web framework skills** (rule-frontend-react, rule-frontend-vue, rule-frontend-angular, rule-frontend-solidjs, rule-frontend-svelte, rule-frontend-astro).
+This skill is the **umbrella for all web framework skills** (rule-frontend-react, rule-frontend-vue, rule-frontend-angular, rule-frontend-solidjs, rule-frontend-svelte, rule-frontend-meta-astro).
 Choose one framework skill below the rule-platform-web layer.
 
 ## When to use rule-platform-web
@@ -37,14 +37,14 @@ Choose one framework skill below the rule-platform-web layer.
 
 Choose ONE framework skill below rule-platform-web:
 
-| Framework   | Skill                                                    | Best for                                          |
-| ----------- | -------------------------------------------------------- | ------------------------------------------------- |
-| React 18+   | [rule-frontend-react](../rule-frontend-react/SKILL.md)     | Complex UIs with rich interactivity               |
-| Vue 3       | [rule-frontend-vue](../rule-frontend-vue/SKILL.md)         | Progressive adoption, balance of power/simplicity |
-| Angular 16+ | [rule-frontend-angular](../rule-frontend-angular/SKILL.md) | Large enterprise applications                     |
-| SolidJS     | [rule-frontend-solidjs](../rule-frontend-solidjs/SKILL.md) | Fine-grained reactivity, fastest runtime          |
-| Svelte 5    | [rule-frontend-svelte](../rule-frontend-svelte/SKILL.md)   | Minimal boilerplate, smallest bundles             |
-| Astro       | [rule-frontend-astro](../rule-frontend-astro/SKILL.md)     | Content-first, islands architecture               |
+| Framework   | Skill                                                          | Best for                                          |
+| ----------- | -------------------------------------------------------------- | ------------------------------------------------- |
+| React 18+   | [rule-frontend-react](../rule-frontend-react/SKILL.md)           | Complex UIs with rich interactivity               |
+| Vue 3       | [rule-frontend-vue](../rule-frontend-vue/SKILL.md)               | Progressive adoption, balance of power/simplicity |
+| Angular 16+ | [rule-frontend-angular](../rule-frontend-angular/SKILL.md)       | Large enterprise applications                     |
+| SolidJS     | [rule-frontend-solidjs](../rule-frontend-solidjs/SKILL.md)       | Fine-grained reactivity, fastest runtime          |
+| Svelte 5    | [rule-frontend-svelte](../rule-frontend-svelte/SKILL.md)         | Minimal boilerplate, smallest bundles             |
+| Astro       | [rule-frontend-meta-astro](../rule-frontend-meta-astro/SKILL.md) | Content-first, islands architecture               |
 
 ## File Tree Convention
 

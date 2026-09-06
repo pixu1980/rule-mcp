@@ -19,14 +19,14 @@ frameworks: [all]
 
 ## UI Frameworks
 
-| Skill                                                    | Framework                | Reactive Model | State Mgmt      |
-| -------------------------------------------------------- | ------------------------ | -------------- | --------------- |
-| [rule-frontend-react](../rule-frontend-react/SKILL.md)     | React 18+                | useState/hooks | Context + hooks |
-| [rule-frontend-vue](../rule-frontend-vue/SKILL.md)         | Vue 3                    | ref()/reactive | Pinia           |
-| [rule-frontend-angular](../rule-frontend-angular/SKILL.md) | Angular 16+ (standalone) | signal()       | Signals         |
-| [rule-frontend-svelte](../rule-frontend-svelte/SKILL.md)   | Svelte 5                 | $state (runes) | Runes           |
-| [rule-frontend-solidjs](../rule-frontend-solidjs/SKILL.md) | SolidJS                  | createSignal   | Signals         |
-| [rule-frontend-astro](../rule-frontend-astro/SKILL.md)     | Astro (islands)          | Per-framework  | Per-framework   |
+| Skill                                                          | Framework                | Reactive Model | State Mgmt      |
+| -------------------------------------------------------------- | ------------------------ | -------------- | --------------- |
+| [rule-frontend-react](../rule-frontend-react/SKILL.md)           | React 18+                | useState/hooks | Context + hooks |
+| [rule-frontend-vue](../rule-frontend-vue/SKILL.md)               | Vue 3                    | ref()/reactive | Pinia           |
+| [rule-frontend-angular](../rule-frontend-angular/SKILL.md)       | Angular 16+ (standalone) | signal()       | Signals         |
+| [rule-frontend-svelte](../rule-frontend-svelte/SKILL.md)         | Svelte 5                 | $state (runes) | Runes           |
+| [rule-frontend-solidjs](../rule-frontend-solidjs/SKILL.md)       | SolidJS                  | createSignal   | Signals         |
+| [rule-frontend-meta-astro](../rule-frontend-meta-astro/SKILL.md) | Astro (islands)          | Per-framework  | Per-framework   |
 
 ## Rules that hold whichever framework you route to
 
@@ -86,7 +86,7 @@ Two things worth saying out loud when this comes up:
 
 The mixed answer is usually the correct one: server-rendered pages by default,
 with a component island where the interaction genuinely justifies one. See
-[rule-frontend-astro](../rule-frontend-astro/SKILL.md) for that shape as a
+[rule-frontend-meta-astro](../rule-frontend-meta-astro/SKILL.md) for that shape as a
 default. Where a small amount of client state does not need a framework at
 all, plain custom elements and a stylesheet are the whole answer:
 [rule-styleguide-javascript](../rule-styleguide-javascript/SKILL.md) and
@@ -101,7 +101,7 @@ Need SPA with Vue?                      → rule-frontend-vue
 Need enterprise Angular?                → rule-frontend-angular
 Need lightweight Svelte?                → rule-frontend-svelte
 Need fine-grained reactivity?           → rule-frontend-solidjs
-Need static + islands?                  → rule-frontend-astro
+Need static + islands?                  → rule-frontend-meta-astro
 Need pure vanilla (no framework)?       → rule-styleguide-javascript
 UI freezes on heavy JS?                 → rule-frontend-workers
 Need full-stack React (Next.js)?        → rule-frontend-meta-next

@@ -20,7 +20,7 @@ const FRAMEWORK_SKILL = {
   svelte: "rule-frontend-svelte",
   angular: "rule-frontend-angular",
   solid: "rule-frontend-solidjs",
-  astro: "rule-frontend-astro",
+  astro: "rule-frontend-meta-astro",
   vanilla: "rule-styleguide",
 };
 
