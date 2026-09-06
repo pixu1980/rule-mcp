@@ -10,7 +10,7 @@ import { strict as assert } from "node:assert";
 import { existsSync } from "node:fs";
 import { homedir } from "node:os";
 import { join } from "node:path";
-import { mcpServerConfig, DEFAULT_OPTOUT_ENV } from "../../src/cli/install.js";
+import { mcpServerConfig, DEFAULT_OPTOUT_ENV } from "../../src/cli/install/index.js";
 
 const HOME = homedir();
 const entrypoint = join(HOME, "Projects", "rule-mcp", "bin", "rule-mcp.js");

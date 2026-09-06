@@ -39,7 +39,7 @@ process.env.HOME = home;
 process.env.USERPROFILE = home;
 process.env.RULE_MCP_NO_AUTOUPDATE = "1";
 
-const { installAgent } = await import("../../src/cli/install.js");
+const { installAgent } = await import("../../src/cli/install/index.js");
 const entrypoint = join(sandbox, "rule-mcp.js");
 writeFileSync(entrypoint, "// entrypoint\n");
 

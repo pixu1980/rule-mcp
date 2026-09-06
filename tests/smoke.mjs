@@ -50,7 +50,7 @@ const sourceFiles = [
   "resources/index.js",
   "prompts/index.js",
   "cli/paths.js",
-  "cli/install.js",
+  "cli/install/index.js",
   "cli/commands/index.js",
   "cli/doctor/index.js",
   "cli/uninstall.js",

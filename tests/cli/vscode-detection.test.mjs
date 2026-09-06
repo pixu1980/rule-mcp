@@ -8,7 +8,7 @@ import { join } from "node:path";
 const fakeHome = mkdtempSync(join(tmpdir(), "rule-vscode-detection-"));
 const fakeProject = join(fakeHome, "project");
 mkdirSync(fakeProject, { recursive: true });
-const installModule = new URL("../../src/cli/install.js", import.meta.url).href;
+const installModule = new URL("../../src/cli/install/index.js", import.meta.url).href;
 const output = execFileSync(
   process.execPath,
   [

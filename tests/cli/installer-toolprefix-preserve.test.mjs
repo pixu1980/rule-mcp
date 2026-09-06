@@ -15,7 +15,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 
 const root = new URL("../..", import.meta.url).pathname;
-const installModule = new URL("../../src/cli/install.js", import.meta.url).href;
+const installModule = new URL("../../src/cli/install/index.js", import.meta.url).href;
 
 const installForPi = (home, piDir) =>
   execFileSync(

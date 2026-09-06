@@ -10,7 +10,7 @@ assert.ok(packageJson.files.includes("prompts/"), "Published package must includ
 
 const fakeHome = mkdtempSync(join(tmpdir(), "rule-mcp-pi-"));
 const piDir = join(fakeHome, ".pi", "agent");
-const installModule = new URL("../../src/cli/install.js", import.meta.url).href;
+const installModule = new URL("../../src/cli/install/index.js", import.meta.url).href;
 
 execFileSync(
   process.execPath,

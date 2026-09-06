@@ -8,7 +8,7 @@ import {
   mcpServerConfig,
   readEnvConfig as readEnvironmentConfig,
   writeEnvConfig as writeEnvironmentConfig,
-} from "../install.js";
+} from "../install/index.js";
 async function toolsCommand(opts) {
   await loadAllSkills();
   const { subcommand = "list", toolName, json } = opts;

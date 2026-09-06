@@ -9,7 +9,7 @@ const root = new URL("../..", import.meta.url).pathname;
 const fakeHome = mkdtempSync(join(tmpdir(), "rule-agent-commands-"));
 const fakeProject = join(fakeHome, "project");
 const piDir = join(fakeHome, ".pi", "agent");
-const installModule = new URL("../../src/cli/install.js", import.meta.url).href;
+const installModule = new URL("../../src/cli/install/index.js", import.meta.url).href;
 mkdirSync(fakeProject, { recursive: true });
 
 execFileSync(

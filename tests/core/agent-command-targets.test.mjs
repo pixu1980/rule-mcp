@@ -32,7 +32,7 @@ import {
   renderAgentCommandFiles,
   listAgentCommands,
 } from "../../src/core/agents/commands/index.js";
-import { getAllAgents } from "../../src/cli/install.js";
+import { getAllAgents } from "../../src/cli/install/index.js";
 
 console.log("agent command targets test");
 

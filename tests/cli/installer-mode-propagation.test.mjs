@@ -10,7 +10,7 @@ import { join } from "node:path";
 
 const fakeHome = mkdtempSync(join(tmpdir(), "rule-mode-propagation-"));
 const piDir = join(fakeHome, ".pi", "agent");
-const installModule = new URL("../../src/cli/install.js", import.meta.url).href;
+const installModule = new URL("../../src/cli/install/index.js", import.meta.url).href;
 const source = [
   `import { installAgent } from ${JSON.stringify(installModule)};`,
   'installAgent({ agent: "pi", entrypoint: "/tmp/rule-mcp.js", mode: "daemon" });',

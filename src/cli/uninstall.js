@@ -13,7 +13,7 @@
  * @see module:cli/install for the install counterparts
  */
 
-import { uninstallAgent } from "./install.js";
+import { uninstallAgent } from "./install/index.js";
 
 /**
  * Uninstall rule-mcp from one or more agents.
