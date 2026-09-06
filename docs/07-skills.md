@@ -2,7 +2,6 @@
 
 Run `pnpm census` after changing a tool, skill, prompt, command, persona or env var.
 
-
 # Skills (96)
 
 Every skill is a `skills/*/SKILL.md` document, registered as a corresponding

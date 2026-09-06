@@ -2,7 +2,6 @@
 
 Run `pnpm census` after changing a tool, skill, prompt, command, persona or env var.
 
-
 # Tools (112)
 
 **LLM-free: every tool below is deterministic and never calls an LLM** - the
@@ -12,22 +11,22 @@ server is model-agnostic; an LLM is the caller, never the implementation.
 
 | Tool                   | Purpose                                                                                  | LLM Free |
 | ---------------------- | ---------------------------------------------------------------------------------------- | -------- |
-| `rule-tool`             | Router: routes a prompt to the correct skill and returns the relevant sections           | ✅        |
-| `rule-tool-update`      | MCP server update (fast-forward) + skill hot-reload; restarts when the code changed      | ✅        |
-| `rule-tool-gateway`     | Single-entry orchestrator: prompt to skill evidence to guardrail to receipt              | ✅        |
-| `rule-tool-apply`       | Writes files to disk after gateway validation (requires the receipt; dry-run by default) | ✅        |
-| `rule-tool-search`      | Semantic BM25 search across every rule skill                                              | ✅        |
-| `rule-tool-check`       | Guardrail check on a skill; iterate until allPass: true                                  | ✅        |
-| `rule-tool-scaffold`    | Generates project scaffolding/config files                                               | ✅        |
-| `rule-tool-detect`      | Detects framework, TypeScript usage and build tooling from package.json                  | ✅        |
-| `rule-tool-compress`    | Deterministic prose compression (filler, punctuation, spellings)                         | ✅        |
-| `rule-tool-plan`        | Expert persona (security, privacy, simplicity, ...) to plan/audit/review contract        | ✅        |
-| `rule-tool-plan-docs`   | Audit/review/plan bookkeeping (headers, tables, status)                                  | ✅        |
-| `rule-tool-stats`       | Telemetry: call counts, cache hit rates, saved/estimated tokens, latency                 | ✅        |
-| `rule-tool-usage`       | Agent usage sidecar: input/output/cache tokens, USD cost, model                          | ✅        |
-| `rule-tool-a11y-report` | WCAG-EM report from criterion plus audit results                                         | ✅        |
-| `rule-tool-fix`         | Lint/auto-fix of the project file tree (barrel files, naming, ...)                       | ✅        |
-| `rule-tool-component`   | Component/test templates following the rule principles                                    | ✅        |
+| `rule-tool`             | Router: routes a prompt to the correct skill and returns the relevant sections           | ✅       |
+| `rule-tool-update`      | MCP server update (fast-forward) + skill hot-reload; restarts when the code changed      | ✅       |
+| `rule-tool-gateway`     | Single-entry orchestrator: prompt to skill evidence to guardrail to receipt              | ✅       |
+| `rule-tool-apply`       | Writes files to disk after gateway validation (requires the receipt; dry-run by default) | ✅       |
+| `rule-tool-search`      | Semantic BM25 search across every rule skill                                              | ✅       |
+| `rule-tool-check`       | Guardrail check on a skill; iterate until allPass: true                                  | ✅       |
+| `rule-tool-scaffold`    | Generates project scaffolding/config files                                               | ✅       |
+| `rule-tool-detect`      | Detects framework, TypeScript usage and build tooling from package.json                  | ✅       |
+| `rule-tool-compress`    | Deterministic prose compression (filler, punctuation, spellings)                         | ✅       |
+| `rule-tool-plan`        | Expert persona (security, privacy, simplicity, ...) to plan/audit/review contract        | ✅       |
+| `rule-tool-plan-docs`   | Audit/review/plan bookkeeping (headers, tables, status)                                  | ✅       |
+| `rule-tool-stats`       | Telemetry: call counts, cache hit rates, saved/estimated tokens, latency                 | ✅       |
+| `rule-tool-usage`       | Agent usage sidecar: input/output/cache tokens, USD cost, model                          | ✅       |
+| `rule-tool-a11y-report` | WCAG-EM report from criterion plus audit results                                         | ✅       |
+| `rule-tool-fix`         | Lint/auto-fix of the project file tree (barrel files, naming, ...)                       | ✅       |
+| `rule-tool-component`   | Component/test templates following the rule principles                                    | ✅       |
 
 ## Per-skill tools (96) - all LLM-free
 

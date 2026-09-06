@@ -2,7 +2,6 @@
 
 Run `pnpm census` after changing a tool, skill, prompt, command, persona or env var.
 
-
 # Prompts (73)
 
 Each prompt is exposed over MCP `prompts/get` and generates a clean `/rule-*`

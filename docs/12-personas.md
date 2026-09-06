@@ -2,7 +2,6 @@
 
 Run `pnpm census` after changing a tool, skill, prompt, command, persona or env var.
 
-
 # Personas (18 active)
 
 The persona catalog lives in `src/roles/*.md` (markdown + frontmatter, with a

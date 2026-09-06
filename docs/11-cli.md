@@ -2,7 +2,6 @@
 
 Run `pnpm census` after changing a tool, skill, prompt, command, persona or env var.
 
-
 # CLI reference
 
 `rule-mcp` (binary: `bin/rule-mcp.js`). Invoked with no command it
@@ -66,9 +65,9 @@ rule-mcp daemon action
 
 ### Arguments
 
-| Argument | Description                                             | Default |
-| -------- | ------------------------------------------------------- | ------- |
-| `action` | start|stop|status|logs|install|uninstall|enable|disable | status  |
+| Argument | Description | Default |
+| -------- | ----------- | ------- |
+| `action` | start       | stop    | status | logs | install | uninstall | enable | disable | status |
 
 ### Options
 
@@ -129,7 +128,7 @@ rule-mcp tools subcommand name
 
 | Argument     | Description               | Default |
 | ------------ | ------------------------- | ------- |
-| `subcommand` | list | call               | -       |
+| `subcommand` | list                      | call    | -   |
 | `name`       | tool name (only for call) | -       |
 
 ### Options
@@ -202,13 +201,13 @@ rule-mcp adr action title
 
 ### Options
 
-| Flag                    | Description                                             | Default | Choices |
-| ----------------------- | ------------------------------------------------------- | ------- | ------- |
-| `--status <s>`          | proposed | accepted (default) | deprecated | superseded | -       | -       |
-| `--context <text>`      | context forcing factors                                 | -       | -       |
-| `--decision <text>`     | decision made and why                                   | -       | -       |
-| `--consequences <text>` | positive and negative consequences                      | -       | -       |
-| `--tags <list>`         | comma-separated tags (default: architecture)            | -       | -       |
+| Flag                    | Description                                  | Default            | Choices    |
+| ----------------------- | -------------------------------------------- | ------------------ | ---------- |
+| `--status <s>`          | proposed                                     | accepted (default) | deprecated | superseded | -   | -   |
+| `--context <text>`      | context forcing factors                      | -                  | -          |
+| `--decision <text>`     | decision made and why                        | -                  | -          |
+| `--consequences <text>` | positive and negative consequences           | -                  | -          |
+| `--tags <list>`         | comma-separated tags (default: architecture) | -                  | -          |
 
 ---
 
@@ -249,9 +248,9 @@ rule-mcp skills action
 
 ### Arguments
 
-| Argument | Description             | Default |
-| -------- | ----------------------- | ------- |
-| `action` | install | list | reload | -       |
+| Argument | Description | Default |
+| -------- | ----------- | ------- |
+| `action` | install     | list    | reload | -   |
 
 ### Options
 
@@ -360,7 +359,7 @@ rule-mcp roles action id
 
 | Argument | Description                 | Default |
 | -------- | --------------------------- | ------- |
-| `action` | list | new | deprecate      | list    |
+| `action` | list                        | new     | deprecate | list |
 | `id`     | role id (for new/deprecate) | -       |
 
 ### Options

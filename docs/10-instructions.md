@@ -2,7 +2,6 @@
 
 Run `pnpm census` after changing a tool, skill, prompt, command, persona or env var.
 
-
 # Instructions: the agent command surface (74 commands)
 
 The `/rule-*` command set is generated from the prompt registry and the

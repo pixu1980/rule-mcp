@@ -114,6 +114,7 @@ session for the AI Flight Recorder DevTools timeline with
 - `RULE_MCP_SKILL_UNIVERSE=base`: route on the source-commensurate skill set for the routing-corpus measurement (see src/tools/router.js TARGET_ONLY_SKILLS).
 
 <!-- census:begin:env-registry -->
+
 ## Environment registry (generated census snapshot)
 
 | Variable                           | Effect                                                      |
@@ -137,4 +138,3 @@ session for the AI Flight Recorder DevTools timeline with
 Refresh with `pnpm census`.
 
 <!-- census:end:env-registry -->
-
