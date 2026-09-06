@@ -8,7 +8,8 @@ this directory are the source of truth; this index is generated from them by
 
 | # | Title | Date | Status | Tags |
 |---|-------|------|--------|------|
-| [060](060-riorganizzare-scripts-src-test-in-sottocartelle-tematiche-con-code-splitting-a-1.md) | Riorganizzare scripts/src/test in sottocartelle tematiche con code splitting a 150 righe | 2026-09-06 | accepted | architecture, refactor, testing, structure |
+| [061](061-one-file-per-rule-with-underscore-barrel-folders-and-a-size-ratchet.md) | One file per rule with underscore-barrel folders and a size ratchet | 2026-09-06 | accepted | architecture, refactor, structure, guardrails |
+| [060](060-reorganize-scripts-src-tests-with-150-line-code-splitting.md) | Reorganize scripts, src and tests with 150-line code splitting | 2026-09-06 | accepted | architecture, refactor, testing, structure |
 | [059](059-drop-the-vs-code-extension-and-its-installers.md) | Drop the VS Code extension and its installers | 2026-09-05 | accepted | vscode, extension, installer, lean-web |
 | [058](058-restructure-the-command-surface-rule-router-rule-area-caveman-implicit-rule-process.md) | Restructure the command surface: /rule router, rule-area-*, caveman implicit, rule-process-tdd skill | 2026-09-05 | accepted | commands, prompts, surface, skills, installer |
 | [057](057-split-review-personas-into-per-operation-commands-plan-audit-review.md) | Split review personas into per-operation commands (plan/audit/review) | 2026-09-05 | accepted | personas, commands, prompts, surface |
@@ -73,7 +74,8 @@ file. Where a line stops short the rest is in the ADR.
 
 | ADR | Decision | Consequence |
 |-----|----------|-------------|
-| [060](060-riorganizzare-scripts-src-test-in-sottocartelle-tematiche-con-code-splitting-a-1.md) | Riorganizzare scripts/, src/ e test/ (rinominate in tests/) in sottocartelle tematiche per funzionalità; applicare code splitting con soglia 150 righe (100 + 50 tolleranza) ai file JS/MJS, esentando gli installer shell;... | Positivi: navigabilità, isolamento, coverage misurabile e gate CI. Negativi: grande blast radius meccanico (147 path test, elenchi package.json/workflow/docs), rischio regressioni implicite negli split (mitigato da... |
+| [061](061-one-file-per-rule-with-underscore-barrel-folders-and-a-size-ratchet.md) | Split rule catalogs one file per rule under family folders (framework/js, framework/vanilla, quality/typescript-prose-manifest-simplicity-comments) with kebab-case underscore-prefixed names and index.js barrels... | Positive: file names say what they contain, duplicate rules are impossible by construction, one canonical import path per module, and the language and size rules are regression-tested. |
+| [060](060-reorganize-scripts-src-tests-with-150-line-code-splitting.md) | Reorganize scripts/, src/ and test/ (renamed to tests/) into thematic subfolders by feature; apply code splitting with a 150-line threshold (100 + 50 tolerance) to JS/MJS files, exempting the shell installers; adopt the... | Positive: navigability, isolation, measurable coverage and a CI gate. |
 | [059](059-drop-the-vs-code-extension-and-its-installers.md) | Delete extensions/ (vscode-rule source + rule-vanilla-reactive.vsix). | Positive: installers shrink (no vsce build, no six-editor probing), no committed binary .vsix, surface and supply chain simpler, aligns with upstream ADR 088 and the lean-web direction. |
 | [058](058-restructure-the-command-surface-rule-router-rule-area-caveman-implicit-rule-process.md) | Restructure the command surface: router rule-mcp -> rule; the 12 area prompts become rule-area-_; delete rule-a11y-audit, rule-code-review, rule-caveman, rule-new-feature, rule-pull-request, rule-setup-project,... | Positive: the command surface shrinks 49 -> 41; one namespace per concern (rule-area-* for areas, rule-process-* for the process family incl. the new rule-process-tdd skill/tool and rule-process-check); caveman is implicit... |
 | [057](057-split-review-personas-into-per-operation-commands-plan-audit-review.md) | Give each active role three slash commands - rule-plan-<role>, rule-audit-<role>, rule-review-<role> (21 persona commands total), all generated from the same registry and all routing through the tools under the hood: the... | Positive: the user can run just the step they need; every command body names the exact tools to call, so agent behavior no longer depends on which surface the host exposes; proposed roles still stay out of the surfaces... |
@@ -138,7 +140,8 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 
 ### architecture
 
-- [060](060-riorganizzare-scripts-src-test-in-sottocartelle-tematiche-con-code-splitting-a-1.md) Riorganizzare scripts/src/test in sottocartelle tematiche con code splitting a 150 righe
+- [061](061-one-file-per-rule-with-underscore-barrel-folders-and-a-size-ratchet.md) One file per rule with underscore-barrel folders and a size ratchet
+- [060](060-reorganize-scripts-src-tests-with-150-line-code-splitting.md) Reorganize scripts, src and tests with 150-line code splitting
 - [034](034-registry-driven-clean-slash-commands-for-every-agent-and-ide.md) Registry-driven clean slash commands for every agent and IDE
 - [033](033-the-tool-surface-is-skills-and-nothing-else.md) The tool surface is ./skills and nothing else
 - [032](032-pin-the-self-update-remote-and-drop-root-in-the-container.md) Pin the self-update remote and drop root in the container
@@ -212,6 +215,7 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 
 ### guardrails
 
+- [061](061-one-file-per-rule-with-underscore-barrel-folders-and-a-size-ratchet.md) One file per rule with underscore-barrel folders and a size ratchet
 - [056](056-gateway-as-the-single-entrypoint-with-server-side-receipts-backend-data-devops-g.md) Gateway as the single entrypoint with server-side receipts; backend/data/devops guardrail families
 - [050](050-split-hotspot-modules.md) Split the hotspot modules (guardrails + installer)
 - [045](045-adopt-eslint-plugin-unicorn-for-js-ts-quality.md) Adopt eslint-plugin-unicorn for JS/TS quality
@@ -223,6 +227,13 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [008](008-thematic-skill-taxonomy-rename.md) thematic skill taxonomy rename
 - [004](004-scaffold-consolidation.md) Scaffold Skill Consolidation
 - [001](001-thematic-skill-rename.md) Thematic Skill Taxonomy Rename
+
+### refactor
+
+- [061](061-one-file-per-rule-with-underscore-barrel-folders-and-a-size-ratchet.md) One file per rule with underscore-barrel folders and a size ratchet
+- [060](060-reorganize-scripts-src-tests-with-150-line-code-splitting.md) Reorganize scripts, src and tests with 150-line code splitting
+- [051](051-round-two-hardening-cycles-daemon-cleanup-diagnostics.md) Round-2 hardening - cycles, daemon/commands split, diagnostics, HTTP verification
+- [050](050-split-hotspot-modules.md) Split the hotspot modules (guardrails + installer)
 
 ### taxonomy
 
@@ -266,12 +277,6 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [051](051-round-two-hardening-cycles-daemon-cleanup-diagnostics.md) Round-2 hardening - cycles, daemon/commands split, diagnostics, HTTP verification
 - [045](045-adopt-eslint-plugin-unicorn-for-js-ts-quality.md) Adopt eslint-plugin-unicorn for JS/TS quality
 - [044](044-strengthen-typescript-discipline-for-large-codebases.md) Strengthen TypeScript discipline for large codebases
-
-### refactor
-
-- [060](060-riorganizzare-scripts-src-test-in-sottocartelle-tematiche-con-code-splitting-a-1.md) Riorganizzare scripts/src/test in sottocartelle tematiche con code splitting a 150 righe
-- [051](051-round-two-hardening-cycles-daemon-cleanup-diagnostics.md) Round-2 hardening - cycles, daemon/commands split, diagnostics, HTTP verification
-- [050](050-split-hotspot-modules.md) Split the hotspot modules (guardrails + installer)
 
 ### security
 
