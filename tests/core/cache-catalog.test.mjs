@@ -250,7 +250,7 @@ test("no cache means no catalog either", () => {
 // ── The reason verify exists ──
 
 test("the cached core carries no per-call identity", async () => {
-  const { postprocessToolResult, stampRequestId } = await import("../../src/core/enforcement.js");
+  const { postprocessToolResult, stampRequestId } = await import("../../src/core/enforcement/index.js");
   const core = postprocessToolResult("rule_tool_search", { query: "x" }, result("found"));
 
   assert.equal(
