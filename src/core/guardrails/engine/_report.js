@@ -2,7 +2,7 @@
 
 import { SHARED_GUARDRAILS } from "../shared/index.js";
 import { SCAFFOLD_GUARDRAILS } from "../_scaffold.js";
-import { BACKEND_GUARDRAILS } from "../_backend.js";
+import { BACKEND_GUARDRAILS } from "../backend/index.js";
 import { DATABASE_GUARDRAILS } from "../_database.js";
 import { DEVOPS_GUARDRAILS } from "../_devops.js";
 import { FRAMEWORK_GUARDRAILS } from "../framework/index.js";
