@@ -1,5 +1,5 @@
 ---
-name: rule-mcp-context-engineering
+name: rule-ai-context-engineering
 description: >-
   Use when an agent session is getting expensive, slow or worse at its job. Covers the context window as a budget, why adding files degrades answers, the levels of delegation from autocomplete to autonomous, compaction and handoff, pointing at evidence instead of pasting it, and what actually consumes a usage limit.
 tags:
@@ -17,11 +17,11 @@ tags:
 frameworks: [all]
 ---
 
-# rule-mcp-context-engineering - The window is the product
+# rule-ai-context-engineering - The window is the product
 
 ## Purpose
 
-[rule-mcp-prompting](../rule-mcp-prompting/SKILL.md) is about what you write.
+[rule-ai-prompting](../rule-ai-prompting/SKILL.md) is about what you write.
 This is about what is in the window when the model reads it, which decides more.
 
 One idea underneath all of it: **the window is not storage, it is attention.**
@@ -188,8 +188,8 @@ start fresh more often, index instead of reading, then improve the prompts.
 
 ## See also
 
-- [rule-mcp-prompting](../rule-mcp-prompting/SKILL.md) - what to write, once the window is right
-- [rule-mcp-agent-architecture](../rule-mcp-agent-architecture/SKILL.md) - the loop that fills the window
+- [rule-ai-prompting](../rule-ai-prompting/SKILL.md) - what to write, once the window is right
+- [rule-ai-agent-architecture](../rule-ai-agent-architecture/SKILL.md) - the loop that fills the window
 - [rule-process-handoff](../rule-process-handoff/SKILL.md) - writing a boundary down, and reading it back verified
 - [rule-caveman](../rule-caveman/SKILL.md) - compressing output without losing substance
-- [rule-mcp-evals](../rule-mcp-evals/SKILL.md) - measuring whether any of this helped
+- [rule-ai-evals](../rule-ai-evals/SKILL.md) - measuring whether any of this helped

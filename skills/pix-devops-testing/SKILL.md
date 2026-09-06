@@ -272,7 +272,7 @@ the upstream dependency had when they were written. That is why flakiness
 remediation never fixes them: nothing is unstable. The fix is maintenance, either
 a process that updates the fake whenever the real thing changes, or deriving it
 from observed traffic so it cannot silently describe last year's API. See
-[rule-mcp-evals](../rule-mcp-evals/SKILL.md) on generated tests for the same
+[rule-ai-evals](../rule-ai-evals/SKILL.md) on generated tests for the same
 failure seen from the other side.
 
 Track the rerun. A pipeline that records how often a job passed only on retry

@@ -1,5 +1,5 @@
 ---
-name: rule-mcp-evals
+name: rule-ai-evals
 description: >-
   Use when building or auditing evals for an AI feature. Covers error analysis before writing any eval, binary LLM-as-judge design, judge calibration against human labels with TPR and TNR, RAG evaluation, synthetic test inputs, and running evals in CI.
 tags:
@@ -16,7 +16,7 @@ tags:
 frameworks: [all]
 ---
 
-# rule-mcp-evals - Measure the feature, not the model
+# rule-ai-evals - Measure the feature, not the model
 
 ## Purpose
 
@@ -242,6 +242,6 @@ nothing is reproduced from anyone else's material.
 ## See also
 
 - [rule-process-ai-sdlc](../rule-process-ai-sdlc/SKILL.md) - where evals sit in the lifecycle
-- [rule-mcp-agents](../rule-mcp-agents/SKILL.md) - building the agent these evals measure
+- [rule-ai-agents](../rule-ai-agents/SKILL.md) - building the agent these evals measure
 - [rule-devops-testing](../rule-devops-testing/SKILL.md) - the deterministic tests underneath
-- [rule-mcp-prompting](../rule-mcp-prompting/SKILL.md) - writing the prompts being evaluated
+- [rule-ai-prompting](../rule-ai-prompting/SKILL.md) - writing the prompts being evaluated
