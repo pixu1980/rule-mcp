@@ -11,8 +11,9 @@ import { execFileSync } from "node:child_process";
 import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync, appendFileSync } from "node:fs";
 import { join } from "node:path";
 import { z } from "zod/v4";
-import { registerTool } from "./router.js";
-import { addAfterToolHook } from "./router.js";
+import { registerTool } from "./router/index.js";
+import { addAfterToolHook } from "./router/index.js";
+import { scanDocumentForForeign, scanPathForForeign } from "../core/en-english.js";
 
 /** ADR directory relative to project root. */
 const ADR_DIR = "docs/adr";
@@ -184,8 +185,42 @@ export function listExistingAdrs(adrDir) {
   }
 }
 
+/**
+ * Non-English content in the ADR fields, one offense per finding.
+ *
+ * The title feeds the file name (ADR 060 landed with an Italian slug), so it
+ * runs through the path scanner word by word; the prose fields run through
+ * both the document scanner (function words, accents) and the path scanner
+ * (name-plausible content words).
+ *
+ * @param {{ title?: string, context?: string, decision?: string, consequences?: string, alternatives?: string[] }} fields
+ * @returns {string[]} human-readable offenses, empty when everything is English
+ */
+export function adrEnglishOffenses(fields) {
+  const offenses = [];
+  const prose = [
+    ["title", fields.title ?? ""],
+    ["context", fields.context ?? ""],
+    ["decision", fields.decision ?? ""],
+    ["consequences", fields.consequences ?? ""],
+    ["alternatives", (fields.alternatives ?? []).join("\n")],
+  ];
+
+  for (const [field, text] of prose) {
+    if (text === "") {
+      continue;
+    }
+
+    for (const finding of [...scanDocumentForForeign(text), ...scanPathForForeign(text.replaceAll(/[\\/]+/g, " "))]) {
+      offenses.push(`${field}: ${finding}`);
+    }
+  }
+
+  return offenses;
+}
+
 const ADRSchema = z.object({
-  title: z.string().min(1).describe("ADR title (e.g. 'Usare PostgreSQL come database')"),
+  title: z.string().min(1).describe("ADR title, in English (e.g. 'Use PostgreSQL as the primary database')"),
   status: z.enum(["proposed", "accepted", "deprecated", "superseded"]).default("accepted").describe("ADR status"),
   context: z.string().optional().describe("Context: what forcing factors led to this decision"),
   decision: z.string().optional().describe("The decision made and why"),
@@ -329,6 +364,26 @@ export function registerProcessAdrTool() {
       "Save an Architecture Decision Record (ADR) to docs/adr/. Auto-numbers, maintains index, uses Nygard template.",
     zodSchema: ADRSchema,
     handler: async (arguments_) => {
+      const offenses = adrEnglishOffenses(arguments_);
+
+      if (offenses.length > 0) {
+        return {
+          isError: true,
+          content: [
+            {
+              type: "text",
+              text: [
+                "❌ ADR rejected: every ADR is written in English, filename included.",
+                "",
+                ...offenses.slice(0, 10).map((offense) => `- ${offense}`),
+                "",
+                "Rewrite the title and body in English (American spelling) and call the tool again.",
+              ].join("\n"),
+            },
+          ],
+        };
+      }
+
       const projectDir = arguments_.projectDir || ".";
       const adrDir = join(projectDir, ADR_DIR);
       mkdirSync(adrDir, { recursive: true });
