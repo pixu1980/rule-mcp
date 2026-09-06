@@ -1,4 +1,4 @@
-import { detectProject, getFrameworkSuggestion } from "../../core/detector.js";
+import { detectProject, getFrameworkSuggestion } from "../../core/detector/index.js";
 
 /**
  * Resolve the framework hint (argument or project detection) to a skill and

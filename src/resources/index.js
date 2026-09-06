@@ -169,7 +169,7 @@ export async function readResource(uri) {
 
   // ── rule://project - analyze project and suggest tools ──────────
   if (uri === "rule://project") {
-    const { detectProject, getFrameworkSuggestion } = await import("../core/detector.js");
+    const { detectProject, getFrameworkSuggestion } = await import("../core/detector/index.js");
     const profile = detectProject(process.cwd());
     const { skillName, toolName } = getFrameworkSuggestion(profile.framework);
     const result = {

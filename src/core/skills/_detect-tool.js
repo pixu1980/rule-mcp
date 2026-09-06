@@ -2,7 +2,7 @@
 
 import { z } from "zod/v4";
 import { registerTool } from "../../tools/router/index.js";
-import { detectProject, getFrameworkSuggestion } from "../detector.js";
+import { detectProject, getFrameworkSuggestion } from "../detector/index.js";
 
 /** Register the rule_tool_detect tool. */
 export function registerDetectTool() {

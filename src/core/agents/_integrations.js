@@ -13,7 +13,7 @@
  * @see module:core/text/caveman - output compression (complementary token saving)
  */
 
-import { hasTokensave } from "../detector.js";
+import { hasTokensave } from "../detector/index.js";
 import { dirname } from "node:path";
 
 /**

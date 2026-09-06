@@ -1,57 +1,12 @@
-/** On-disk index cache: read, write, signatures, stats. */
+/** On-disk index cache: read, write, stats. */
 
-import { createHash } from "node:crypto";
-import { mkdirSync, readdirSync, readFileSync, rmSync, statSync, writeFileSync } from "node:fs";
-import { basename, dirname, join } from "node:path";
+import { mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { dirname } from "node:path";
 import { gzipSync, gunzipSync } from "node:zlib";
-import { getRuntimePaths, getSkillsDirs as getSkillsDirectories } from "../../cli/paths/index.js";
-import { codeSignature } from "../code-signature.js";
 import { _index, setIndex } from "./_state.js";
+import { indexCacheEnabled, indexCacheFile, indexCacheKey } from "./_cache-signature.js";
 
-function indexCacheKey() {
-  return createHash("sha256").update(`${codeSignature()}:${skillsSignature()}`).digest("hex").slice(0, 12);
-}
-
-/** Where a built index is kept, keyed by the code and the skills that produced it. */
-function indexCacheFile() {
-  return join(getRuntimePaths().stateDir, `bm25-${indexCacheKey()}.json.gz`);
-}
-
-/** The newest modification time and file count across every skills directory. */
-function skillsSignature() {
-  let newest = 0;
-  let count = 0;
-
-  for (const dir of Object.values(getSkillsDirectories())) {
-    const walk = (path) => {
-      let entries;
-      try {
-        entries = readdirSync(path, { withFileTypes: true });
-      } catch {
-        return;
-      }
-
-      for (const entry of entries) {
-        const child = join(path, entry.name);
-
-        if (entry.isDirectory()) {
-          walk(child);
-        } else if (entry.name.endsWith(".md")) {
-          count += 1;
-          newest = Math.max(newest, statSync(child).mtimeMs);
-        }
-      }
-    };
-    walk(dir);
-  }
-
-  return `${count}:${newest}`;
-}
-
-/** Whether an index may be read from or written to disk at all. */
-function indexCacheEnabled() {
-  return process.env.RULE_MCP_NO_CACHE !== "1";
-}
+export { indexCacheEnabled, indexCacheFile, indexCacheKey, skillsSignature } from "./_cache-signature.js";
 
 /**
  * Load an index already built for this exact code and these skills.
@@ -143,14 +98,4 @@ function getIndexStats() {
 
 // ─── BM25 scoring ─────────────────────────────────────────────────
 
-/**
- * Compute BM25 score for a single term against a document.
- *
- * @param {number} tf - Term frequency in document
- * @param {number} docLen - Document length in terms
- * @param {number} avgDocLen - Average document length
- * @param {number} N - Total number of documents
- * @param {number} n - Number of documents containing the term
- * @returns {number}
- */
-export { indexCacheKey, indexCacheFile, skillsSignature, indexCacheEnabled, restoreIndex, persistIndex, clearIndex, isIndexReady, getIndexStats };
+export { restoreIndex, persistIndex, clearIndex, isIndexReady, getIndexStats };

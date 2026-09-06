@@ -27,7 +27,7 @@ process.env.RULE_MCP_NO_AUTOUPDATE = "1"; // hermetic: no real git ops in tests
 import { mkdtempSync, mkdirSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { detectProject, hasTokensave } from "../../src/core/detector.js";
+import { detectProject, hasTokensave } from "../../src/core/detector/index.js";
 // eslint-disable-next-line no-unused-vars
 import { suppressIfTokensave, tokensaveActive, TOKENSAVE_DIRECTIVE } from "../../src/core/agents/_integrations.js";
 import { loadAllSkills } from "../../src/core/skills/index.js";
