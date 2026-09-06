@@ -82,8 +82,8 @@ Skill candidate e ruolo:
 - [x] Baseline registrata nel piano e in ADR 060 (no nuovo doc numerato, la numerazione docs è vincolata dal census).
 
 ### Fase 1 — `test/` → `tests/` + sottocartelle tematiche
-- [ ] `git mv test tests`
-- [ ] Sottocartelle per dominio:
+- [x] `git mv test tests`
+- [x] Sottocartelle per dominio:
   - `tests/cli/` — install*, cli-*, doctor*, daemon*, vscode*, pi-install, skills-install, uninstall*, self-update*
   - `tests/core/` — guardrails*, cache*, flight*, telemetry*, token-*, fingerprint, bm25, ascii-box, block-spacing, caveman*, enforcement, lifecycle, detector, directive, cifra…
   - `tests/tools/` — adr, ai, gateway, handon, handoff, fix, a11y, skill, plan, apply, router, a11y
@@ -92,8 +92,10 @@ Skill candidate e ruolo:
   - `tests/prompts/` — prompts, reminder-diet, prompt-*
   - `tests/docs/` — docs-*, census-generated, changelog, skills-docs, repository-contract, adr-*
   - `tests/fixtures/` (già esistente) + aggegatori in radice (`smoke.mjs`, `routing-corpus.mjs`, …)
-- [ ] Aggiornare `package.json` (7 righe di elenchi), `.github/workflows/*` (5 righe), `docs/*` e `README.md`.
-- [ ] `pnpm test:all` verde.
+- [x] Aggiornare `package.json`, `.github/workflows/ci.yml`, `docs/*`, `README.md` (mapping token 142 file).
+- [x] Fix path relativi post-move (`../` → `../../`, fixtures → `../fixtures`, `new URL("..")` → `new URL("../..")`); fix `auto-adr-flag` (doc rinominata 06→05).
+- [x] `pnpm test:foundations` 298/299 (1 pre-esistente) + `pnpm test:installer` 0 fail + lint 0 errori.
+- [x] **porting-parity rimosso completamente**: test, `rule-porting-baseline.json`, ADR 053/054 + indice, blocco ROADMAP (piano porting) in docs/01, refs README.
 
 ### Fase 2 — Code splitting `src/` (regola 100/150)
 - [ ] Split dei file-torero per responsabilità, priorità = peggiori e più usati:

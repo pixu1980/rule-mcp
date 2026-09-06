@@ -36,7 +36,7 @@ Serves styleguides, component templates, framework best practices, and design sy
 ## Project status
 
 Deterministic MCP server for the rule skill ecosystem. Live surface (enforced by
-`test/docs-accuracy.test.mjs` - the README and reality cannot drift):
+`tests/docs/docs-accuracy.test.mjs` - the README and reality cannot drift):
 
 | Surface   | Count | Notes                                                                                                       |
 | --------- | ----- | ----------------------------------------------------------------------------------------------------------- |
@@ -604,7 +604,7 @@ The Docker image uses `node:22-alpine`, has no build step, and runs the server d
 ├── skills/                        ← 89 skill directories
 ├── prompts/                       ← System prompt templates
 ├── scripts/                       ← Install/build scripts
-├── test/                          ← 20 test files
+├── tests/                          ← 20 test files
 └── docs/                          ← Architecture, guides, plans, decisions
 ```
 
@@ -627,17 +627,12 @@ The Docker image uses `node:22-alpine`, has no build step, and runs the server d
 
 ## Test Evidence
 
-The parity contract with the archived upstream evolution is enforced by
-`test/porting-parity.test.mjs` against the frozen fixture
-`test/fixtures/rule-porting-baseline.json`. As of the finished port:
-
-- `pnpm test:foundations` - **307/307 passing** (parity contract fully green:
-  every source runtime, script and test path present)
+- `pnpm test:foundations` - the unit batch is green over `src/`
 - routing corpus pinned at 80/99 exact and 99/99 top-or-alternative (BM25
   scorer parity with the source, ADR 048 numbers reproduced on the union)
 - lint zero errors, prettier clean, self-guardrails green over the whole `src/`
   tree, installer/transport suites green
-- port provenance and decisions recorded in the [ADR index](docs/adr/ADR.md)
+- decisions recorded in the [ADR index](docs/adr/ADR.md)
 
 ## License
 

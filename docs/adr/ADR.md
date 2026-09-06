@@ -14,8 +14,6 @@ this directory are the source of truth; this index is generated from them by
 | [057](057-split-review-personas-into-per-operation-commands-plan-audit-review.md) | Split review personas into per-operation commands (plan/audit/review) | 2026-09-05 | accepted | personas, commands, prompts, surface |
 | [056](056-gateway-as-the-single-entrypoint-with-server-side-receipts-backend-data-devops-g.md) | Gateway as the single entrypoint with server-side receipts; backend/data/devops guardrail families | 2026-09-04 | accepted | gateway, guardrails, determinism, receipt, backend |
 | [055](055-pre-packaged-mcp-prompt-registry-26-prompts-strict-schemas-commit-scope-closer.md) | Pre-packaged MCP prompt registry (26 prompts, strict schemas, commit-scope closer) | 2026-09-04 | accepted | prompts, registry, tdd, a11y |
-| [054](054-port-fidelity-rules-over-rule-check-brace-style-guardrails-on-backend-modules.md) | Port fidelity rules over pix_check brace-style guardrails on backend modules | 2026-09-04 | accepted | port, guardrails, linters, decision |
-| [053](053-port-the-complete-rule-evolution-as-a-rule-native-additive-union.md) | Port the complete rule evolution as a rule-native additive union | 2026-09-04 | accepted | architecture, porting, parity, tdd |
 | [052](052-token-efficiency-pipeline.md) | Token-efficiency pipeline (caveman aggressive + tokensave-aware decoration) | 2026-08-25 | accepted | token-efficiency, caveman, tokensave, mcp-boundary, diagnostics |
 | [051](051-round-two-hardening-cycles-daemon-cleanup-diagnostics.md) | Round-2 hardening - cycles, daemon/commands split, diagnostics, HTTP verification | 2026-08-25 | accepted | refactor, cycles, daemon, doctor, transport, logs, quality |
 | [050](050-split-hotspot-modules.md) | Split the hotspot modules (guardrails + installer) | 2026-08-25 | accepted | refactor, maintainability, guardrails, installer |
@@ -81,8 +79,6 @@ file. Where a line stops short the rest is in the ADR.
 | [057](057-split-review-personas-into-per-operation-commands-plan-audit-review.md) | Give each active role three slash commands - rule-plan-<role>, rule-audit-<role>, rule-review-<role> (21 persona commands total), all generated from the same registry and all routing through the tools under the hood: the... | Positive: the user can run just the step they need; every command body names the exact tools to call, so agent behavior no longer depends on which surface the host exposes; proposed roles still stay out of the surfaces... |
 | [056](056-gateway-as-the-single-entrypoint-with-server-side-receipts-backend-data-devops-g.md) | Gateway is the single server-side orchestrating entrypoint for every implementation flow; it issues a bound receipt the write path must present; backend/database/devops/security guardrails are first-class families mapped... | Positive: unvalidated code cannot be delivered (fail-closed at a single server-side entrypoint), server-side receipts bind writes to what was checked, and backend/database/devops/security guardrail families run on every... |
 | [055](055-pre-packaged-mcp-prompt-registry-26-prompts-strict-schemas-commit-scope-closer.md) | Adopt the 26-prompt pre-packaged registry in src/prompts/index.js with strict argument schemas, tool-invoked styleguides, TDD/a11y baseline, and a mandatory commit-scope closer; keep prompt names distinct from the... | Positive: one prompt per area with strict zod-validated arguments, styleguides invoked via tools, TDD/a11y baseline or explicit opt-out, every one-shot ends by proposing a commit message with mandatory scope. |
-| [054](054-port-fidelity-rules-over-rule-check-brace-style-guardrails-on-backend-modules.md) | Keep upstream port fidelity and the repository's own gates (eslint, prettier, test suites, audit, docs-accuracy) as the binding contract for backend modules; treat pix_check as binding for frontend/component code only. | Positive: port diffs stay minimal and reviewable; the repo's CI contract (lint/format/tests) remains the single enforceable gate. |
-| [053](053-port-the-complete-rule-evolution-as-a-rule-native-additive-union.md) | Port source behavior into rule-mcp without modifying the source repository. | Expected final public surface is 94 skills, 110 tools, 194 resources and 34 prompts before any registry-derived adjustments. |
 | [052](052-token-efficiency-pipeline.md) | 1. **Decoration lives at the MCP boundary** (`src/server.js`. | **Positive**: in `.tokensave` projects every call steers the model to the code. |
 | [051](051-round-two-hardening-cycles-daemon-cleanup-diagnostics.md) | 1. **Break the init cycles**: `getSkillMetadata` moved into the skill store. | **Positive**: runtime init cycles eliminated (no TDZ surprises); each hotspot. |
 | [050](050-split-hotspot-modules.md) | 1. **Guardrails**: each family moves to `src/core/guardrails/` —. | **Positive**: each guardrail domain is a standalone reviewable file; the. |
@@ -143,7 +139,6 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 ### architecture
 
 - [060](060-riorganizzare-scripts-src-test-in-sottocartelle-tematiche-con-code-splitting-a-1.md) Riorganizzare scripts/src/test in sottocartelle tematiche con code splitting a 150 righe
-- [053](053-port-the-complete-rule-evolution-as-a-rule-native-additive-union.md) Port the complete rule evolution as a rule-native additive union
 - [034](034-registry-driven-clean-slash-commands-for-every-agent-and-ide.md) Registry-driven clean slash commands for every agent and IDE
 - [033](033-the-tool-surface-is-skills-and-nothing-else.md) The tool surface is ./skills and nothing else
 - [032](032-pin-the-self-update-remote-and-drop-root-in-the-container.md) Pin the self-update remote and drop root in the container
@@ -218,7 +213,6 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 ### guardrails
 
 - [056](056-gateway-as-the-single-entrypoint-with-server-side-receipts-backend-data-devops-g.md) Gateway as the single entrypoint with server-side receipts; backend/data/devops guardrail families
-- [054](054-port-fidelity-rules-over-rule-check-brace-style-guardrails-on-backend-modules.md) Port fidelity rules over pix_check brace-style guardrails on backend modules
 - [050](050-split-hotspot-modules.md) Split the hotspot modules (guardrails + installer)
 - [045](045-adopt-eslint-plugin-unicorn-for-js-ts-quality.md) Adopt eslint-plugin-unicorn for JS/TS quality
 - [019](019-fail-closed-mcp-enforcement-and-reusable-agent-commands.md) fail closed mcp enforcement and reusable agent commands
