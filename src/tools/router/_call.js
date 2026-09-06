@@ -4,7 +4,7 @@ import { _afterHooks, _tools } from "./_hooks.js";
 import { argsBytes, estimateTokens, finalize, guardrailRulesOf, textBytes, withBanner } from "./_helpers.js";
 import { cacheLookup, cacheStore } from "../../core/cache/tool-cache/index.js";
 import { computeCore, estimateRoutingSaving } from "./_compute.js";
-import { consumeUpdateBanner, maybeSelfUpdate } from "../../core/self-update.js";
+import { consumeUpdateBanner, maybeSelfUpdate } from "../../core/self-update/index.js";
 import { dependenciesOf, entryPathOf, routedSkillOf } from "./_entry.js";
 import { enforcementError } from "../../core/enforcement.js";
 import { recordToolCall } from "../../core/telemetry/_telemetry.js";

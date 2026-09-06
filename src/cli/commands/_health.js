@@ -44,7 +44,7 @@ async function skillsReloadCommand() {
  * Prints a human-readable report.
  */
 async function updateCommand() {
-  const { runSelfUpdate, buildBanner, scheduleRestartIfNeeded } = await import("../core/self-update.js");
+  const { runSelfUpdate, buildBanner, scheduleRestartIfNeeded } = await import("../../core/self-update/index.js");
   const result = await runSelfUpdate({ reloadSkills: false });
   const banner = buildBanner(result);
 

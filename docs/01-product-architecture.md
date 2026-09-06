@@ -463,10 +463,7 @@ import {
 } from "@modelcontextprotocol/sdk/server/index.js";
 
 /** @type {Server} */
-const server = new Server(
-  { name: "rule-mcp", version: "0.2.0" },
-  { capabilities: { tools: {}, resources: {}, prompts: {}, logging: {} } },
-);
+const server = new Server({ name: "rule-mcp", version: "0.2.0" }, { capabilities: { tools: {}, resources: {}, prompts: {}, logging: {} } });
 
 // Zod validates input at runtime - no TS needed
 server.setRequestHandler(ListToolsRequestSchema, async () => ({

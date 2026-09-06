@@ -77,7 +77,7 @@ exec ${REAL_GIT} "$@"
  */
 function runScenario(clone, scriptBody, environment = {}) {
   const stub = makeGitStub();
-  const moduleUrl = new URL("../../src/core/self-update.js", import.meta.url).href;
+  const moduleUrl = new URL("../../src/core/self-update/index.js", import.meta.url).href;
   const script = `
     const { maybeSelfUpdate } = await import(${JSON.stringify(moduleUrl)});
     ${scriptBody}

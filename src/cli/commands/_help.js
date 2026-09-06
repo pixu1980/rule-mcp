@@ -41,9 +41,7 @@ async function serveCommand(opts = {}) {
       null,
       2,
     );
-    console.error(
-      `\nrule-mcp ${transport === "http" ? "Streamable HTTP" : "SSE"} server listening on ${scheme}://${connectHost}:${port}/${endpoint}\n`,
-    );
+    console.error(`\nrule-mcp ${transport === "http" ? "Streamable HTTP" : "SSE"} server listening on ${scheme}://${connectHost}:${port}/${endpoint}\n`);
     console.error(`Config for agent's mcp.json:\n`);
     console.error(configSnippet);
     console.error(``);
@@ -53,8 +51,8 @@ async function serveCommand(opts = {}) {
     // it: the wait ends when the cleanups the transport registered have run, so
     // sessions, sockets and buffered metrics are closed before the exit rather
     // than dropped by it.
-    const { installSignalHandlers, registerCleanup, whenShutdown } = await import("../core/lifecycle.js");
-    const { startIdleReclaim, stopIdleReclaim } = await import("../core/reclaim.js");
+    const { installSignalHandlers, registerCleanup, whenShutdown } = await import("../../core/session/_lifecycle.js");
+    const { startIdleReclaim, stopIdleReclaim } = await import("../../core/session/_reclaim.js");
 
     registerCleanup("idle-reclaim", () => stopIdleReclaim());
     installSignalHandlers();
