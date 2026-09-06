@@ -33,9 +33,8 @@ const allAgents = [
   "roo", // Roo Code
   "zed", // Zed editor
   "opencode", // OpenCode
-  "antigravity", // Antigravity (formerly Windsurf)
-  "windsurf", // Windsurf - deprecated, superseded by Devin
-  "devin", // Devin (Cognition)
+  "antigravity", // Antigravity (Google)
+  "devin", // Devin (formerly Windsurf)
   "pi", // Pi coding agent (pi.dev)
   "kilo", // Kilo CLI
   "kimi", // Moonshot Kimi CLI
@@ -44,7 +43,6 @@ const allAgents = [
   "droid", // Factory Droid
   "kiro", // AWS Kiro
   "qwen", // Qwen Code (Alibaba)
-  "pi", // Pi coding agent (pi.dev)
 
   // ── IDEs ──
   "vscode", // VS Code (user-level config)
@@ -797,7 +795,11 @@ const installDevin = ({ entrypoint, dryRun, global }) => {
   return results;
 };
 
-/** Agents kept installable for existing users but no longer offered by default. */
+/**
+ * Legacy names removed from the catalog but kept as courtesy redirects.
+ * Naming one installs/uninstalls the replacement and warns once.
+ * windsurf -> devin: Cognition acquired Windsurf and renamed it Devin.
+ */
 const deprecatedAgents = new Map([["windsurf", "devin"]]);
 
 // ─── Agent registry ─────────────────────────────────────────────────────────
@@ -818,7 +820,6 @@ const installers = {
   zed: createGenericInstaller("zed"),
   opencode: createGenericInstaller("opencode"),
   antigravity: createGenericInstaller("antigravity"),
-  windsurf: createGenericInstaller("windsurf"),
   kilo: createGenericInstaller("kilo"),
   kimi: createGenericInstaller("kimi"),
   vibe: createGenericInstaller("vibe"),
@@ -988,6 +989,13 @@ const uninstallVscode = ({ dryRun }) => {
 };
 
 /** @param {{ dryRun: boolean }} */
+const uninstallDevin = ({ dryRun }) => {
+  const file = devinConfigPath();
+
+  return [writeText({ file, content: removeJsonServer(readText(file)), dryRun })];
+};
+
+/** @param {{ dryRun: boolean }} */
 const uninstallJetbrains = ({ dryRun }) => {
   const file = join(process.cwd(), ".idea", "mcp.json");
 
@@ -1018,7 +1026,7 @@ const uninstallers = {
   zed: uninstallGeneric("zed"),
   opencode: uninstallGeneric("opencode"),
   antigravity: uninstallGeneric("antigravity"),
-  windsurf: uninstallGeneric("windsurf"),
+  devin: uninstallDevin,
   kilo: uninstallGeneric("kilo"),
   kimi: uninstallGeneric("kimi"),
   vibe: uninstallGeneric("vibe"),

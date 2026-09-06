@@ -31,7 +31,7 @@ Commands:
   install --agent <n>    Install into agent/IDE config (Terminal UI by default)
     --agent <name>         One of: claude, codex, cursor, copilot, gemini,
                            cline, roo, zed, opencode, antigravity, kilo,
-                           kimi, vibe, vscode, windsurf, pi
+                           kimi, vibe, vscode, devin, pi
     --mode <name>          stdio (default), daemon (SSE), or docker
     --global               Use clean command (requires global install)
     --force                Override existing config

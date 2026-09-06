@@ -18,8 +18,8 @@
  *
  * Supported agents (matching tokensave's full list):
  *   claude, codex, cursor, copilot, gemini,
- *   cline, roo, zed, opencode, antigravity, windsurf,
- *   kilo, kimi, vibe, grok, droid, kiro, qwen,
+ *   cline, roo, zed, opencode, antigravity,
+ *   devin, kilo, kimi, vibe, grok, droid, kiro, qwen,
  *   pi, vscode, jetbrains, neovim, emacs
  *
  * Verification tiers (honesty matters for a compatibility surface this wide):
@@ -95,18 +95,16 @@ export const installAgent = ({
   _env = {},
 }) => {
   const normalizedMode = normalizeInstallMode(mode);
-  // `--agent all` sweeps the live catalog: deprecated agents (windsurf ->
-  // devin) stay installable when named, but are never swept.
-  const selected = agent === "all" ? allAgents.filter((name) => !deprecatedAgents.has(name)) : [agent];
-  const warnings =
-    agent === "all"
-      ? []
-      : deprecatedAgents.has(agent)
-        ? [`"${agent}" is deprecated - use "${deprecatedAgents.get(agent)}" instead.`]
-        : [];
+  // Legacy names redirect to their successor (windsurf -> devin): the
+  // catalog no longer offers them, but naming one still works and warns.
+  const redirect = agent === "all" ? undefined : deprecatedAgents.get(agent);
+  const target = redirect ?? agent;
+  // `--agent all` sweeps the live catalog (which holds no deprecated names).
+  const selected = target === "all" ? allAgents.filter((name) => !deprecatedAgents.has(name)) : [target];
+  const warnings = redirect ? [`"${agent}" is deprecated - use "${redirect}" instead.`] : agent === "all" ? [] : [];
   const surfacedWarnings = warnings.length > 0 ? warnings : undefined;
 
-  if (!installers[agent] && agent !== "all") {
+  if (!installers[target] && target !== "all") {
     throw new Error(`Unsupported agent: "${agent}". Supported agents: ${allAgents.join(", ")}`);
   }
 
@@ -159,18 +157,15 @@ export const installAgent = ({
  * @param {{ agent: string, dryRun?: boolean }} args
  */
 export const uninstallAgent = ({ agent, dryRun = false }) => {
-  // `--agent all` sweeps the live catalog: deprecated agents (windsurf ->
-  // devin) stay installable when named, but are never swept.
-  const selected = agent === "all" ? allAgents.filter((name) => !deprecatedAgents.has(name)) : [agent];
-  const warnings =
-    agent === "all"
-      ? []
-      : deprecatedAgents.has(agent)
-        ? [`"${agent}" is deprecated - use "${deprecatedAgents.get(agent)}" instead.`]
-        : [];
+  // Legacy names redirect to their successor (windsurf -> devin).
+  const redirect = agent === "all" ? undefined : deprecatedAgents.get(agent);
+  const target = redirect ?? agent;
+  // `--agent all` sweeps the live catalog (which holds no deprecated names).
+  const selected = target === "all" ? allAgents.filter((name) => !deprecatedAgents.has(name)) : [target];
+  const warnings = redirect ? [`"${agent}" is deprecated - use "${redirect}" instead.`] : [];
   const surfacedWarnings = warnings.length > 0 ? warnings : undefined;
 
-  if (!uninstallers[agent] && agent !== "all") {
+  if (!uninstallers[target] && target !== "all") {
     throw new Error(`Unsupported agent: "${agent}". Supported agents: ${allAgents.join(", ")}`);
   }
 
@@ -189,7 +184,7 @@ export const uninstallAgent = ({ agent, dryRun = false }) => {
     }
   }
 
-  return { ok: true, dryRun, uninstalled: result };
+  return { ok: true, dryRun, uninstalled: result, warnings: surfacedWarnings };
 };
 
 /**
@@ -217,7 +212,6 @@ export function detectInstalledAgents() {
     "zed",
     "opencode",
     "antigravity",
-    "windsurf",
     "kilo",
     "kimi",
     "vibe",
@@ -228,6 +222,9 @@ export function detectInstalledAgents() {
     "neovim",
     "emacs",
   ];
+
+  // Devin reads mcp_config.json, not the generic mcp.json.
+  checks.push({ name: "devin", path: join(HOME, ".config", "devin", "mcp_config.json"), key: serverName });
 
   for (const name of genericAgents) {
     const agentPath =
