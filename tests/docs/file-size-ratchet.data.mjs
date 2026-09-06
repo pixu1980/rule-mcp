@@ -86,7 +86,6 @@ export const FILE_SIZE_RATCHET = new Map([
   ["tests/core/caveman-efficacy.test.mjs", 168],
   ["tests/core/css-flex-first.test.mjs", 369],
   ["tests/core/en-english-language.test.mjs", 199],
-  ["tests/core/flight-recorder.test.mjs", 540],
   ["tests/core/guardrails-precision-recall.test.mjs", 155],
   ["tests/core/lifecycle.test.mjs", 380],
   ["tests/core/manifest-guardrails.test.mjs", 184],
