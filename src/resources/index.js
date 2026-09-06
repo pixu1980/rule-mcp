@@ -10,7 +10,7 @@
  * @see module:core/skills
  */
 
-import { readFileSync, readdirSync, existsSync } from "node:fs";
+import { readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 import { getSkillsDirs as getSkillsDirectories } from "../cli/paths.js";
 import { readSkill, getSkillNames, isPluginSkill } from "../tools/router/index.js";

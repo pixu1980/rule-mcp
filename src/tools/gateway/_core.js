@@ -26,7 +26,7 @@ export function gatewayCoreArguments(args) {
 }
 
 /** Frameworks whose gateway calls must never land on a frontend route. */
-const BACKEND_FRAMEWORKS = ["express", "fastify", "nestjs", "hono"];
+const BACKEND_FRAMEWORKS = new Set(["express", "fastify", "nestjs", "hono"]);
 
 /** Domain override per framework, when the router picked a frontend skill. */
 const DOMAIN_OVERRIDE = {
@@ -71,10 +71,9 @@ export async function computeGatewayCore(arguments_, fileSet) {
   }
 
   // ── Domain override: when framework is backend/data/devops, force correct domain skill ──
-  const isBackendFramework = framework && BACKEND_FRAMEWORKS.includes(framework);
+  const isBackendFramework = framework && BACKEND_FRAMEWORKS.has(framework);
   const isFrontendRoute = route.route?.startsWith("rule-frontend") || route.route?.startsWith("rule-platform");
-  const effectiveRoute =
-    isBackendFramework && isFrontendRoute ? DOMAIN_OVERRIDE[framework] || `rule-backend-${framework}` : route.route;
+  const effectiveRoute = isBackendFramework && isFrontendRoute ? DOMAIN_OVERRIDE[framework] || `rule-backend-${framework}` : route.route;
   const primarySkill = effectiveRoute?.startsWith("rule-") ? effectiveRoute : null;
 
   // ── Step 2: Load primary skill evidence ──
@@ -100,9 +99,7 @@ export async function computeGatewayCore(arguments_, fileSet) {
       isComponent: false,
     };
 
-    const units = fileSet
-      ? fileSet.map((file) => ({ label: file.path, code: file.content }))
-      : [{ label: "code", code }];
+    const units = fileSet ? fileSet.map((file) => ({ label: file.path, code: file.content })) : [{ label: "code", code }];
     const checks = await Promise.all(
       units.map(async (unit) => ({
         label: unit.label,

@@ -1,5 +1,5 @@
 import { z } from "zod/v4";
-import { registerTool, readSkill, getSkillNames, isPluginSkill, hasPluginJs } from "./router/index.js";
+import { registerTool, readSkill, getSkillNames, isPluginSkill } from "./router/index.js";
 import { getGuardrailsReport } from "../core/guardrails/index.js";
 import { checkCodeGuarded } from "../core/guardrails/index.js";
 import { extractScaffoldSection, extractSingleScaffoldFile } from "../core/scaffold/_parser.js";
@@ -14,9 +14,7 @@ export function registerSkillTool(skillName) {
   const isPlugin = isPluginSkill(skillName);
   const displayName = isPlugin ? skillName.replaceAll("-", "_") : skillName.replace(/^rule-/, "").replaceAll("-", "_");
   const isStyleguides = skillName === "rule-styleguide";
-  const modes = isStyleguides
-    ? ["full", "summary", "search", "guardrails", "check", "scaffold", "tldr"]
-    : ["full", "summary", "search", "guardrails", "check", "tldr"];
+  const modes = isStyleguides ? ["full", "summary", "search", "guardrails", "check", "scaffold", "tldr"] : ["full", "summary", "search", "guardrails", "check", "tldr"];
   const SkillSchema = z.object({
     query: z.string().optional().describe("Search query (mode=search/tldr)"),
     mode: z
@@ -129,13 +127,7 @@ export function registerSkillTool(skillName) {
           content: [
             {
               type: "text",
-              text:
-                '# Search "' +
-                query +
-                '" in ' +
-                skillName +
-                "\n\n" +
-                (matches.length > 0 ? matches.map((x) => "L" + x.i + ": " + x.t).join("\n") : "No matches."),
+              text: '# Search "' + query + '" in ' + skillName + "\n\n" + (matches.length > 0 ? matches.map((x) => "L" + x.i + ": " + x.t).join("\n") : "No matches."),
             },
           ],
         };
@@ -249,8 +241,7 @@ export function registerCheckTool() {
   });
   registerTool({
     name: "rule_tool_check",
-    description:
-      "Run guardrail checks on code against any rule skill. Returns guardrail results with a re-check hint containing the current passing set. Run until allPass: true.",
+    description: "Run guardrail checks on code against any rule skill. Returns guardrail results with a re-check hint containing the current passing set. Run until allPass: true.",
     zodSchema: CheckSchema,
     handler: async (arguments_) => {
       const { skill, code, fileName, isComponent, framework, mode, allowedDependencies } = arguments_;
@@ -373,10 +364,7 @@ export function registerScaffoldTool() {
           content: [
             {
               type: "text",
-              text:
-                "# Scaffold Files\n\n" +
-                list +
-                "\n\nUse `pix_scaffold mode=generate` to create all files, or `pix_scaffold mode=generate file=.prettierrc` for one.",
+              text: "# Scaffold Files\n\n" + list + "\n\nUse `pix_scaffold mode=generate` to create all files, or `pix_scaffold mode=generate file=.prettierrc` for one.",
             },
           ],
         };

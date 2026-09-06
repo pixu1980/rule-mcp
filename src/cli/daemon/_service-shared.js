@@ -1,10 +1,8 @@
 /** Shared service plumbing: the entrypoint, safe exec, the wrapper script. */
-import { writeFileSync, mkdirSync, existsSync } from "node:fs";
 import { homedir } from "node:os";
-import { join, dirname } from "node:path";
+import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { execSync } from "node:child_process";
-import { getRuntimePaths } from "../paths.js";
 
 /** The user home directory. */
 export const HOME = homedir();

@@ -1,5 +1,5 @@
 /** Windows service adapter: the sc.exe command, install, uninstall, check. */
-import { getRuntimePaths } from "../paths.js";
+import { execSync } from "node:child_process";
 import { resolveEntrypoint, tryExec } from "./_service-shared.js";
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -50,9 +50,7 @@ export function installWindowsService({ dryRun = false } = {}) {
       timeout: 10_000,
       stdio: "pipe",
     });
-    tryExec(
-      `sc description "${name}" "MCP server for the rule-* skill ecosystem. Serves styleguides, component templates, and framework best practices."`,
-    );
+    tryExec(`sc description "${name}" "MCP server for the rule-* skill ecosystem. Serves styleguides, component templates, and framework best practices."`);
     tryExec(`sc start "${name}"`);
 
     return { ok: true, name, action: "created-and-started" };

@@ -1,6 +1,6 @@
 /** The agent transcript registry and the usage reads over it. */
 import { homedir } from "node:os";
-import { USAGE_WINDOW_SLACK_MS, emptyUsage } from "./_window.js";
+import { USAGE_WINDOW_SLACK_MS } from "./_window.js";
 import { readPi } from "./_read-pi.js";
 import { readClaude } from "./_read-claude.js";
 import { readCodex } from "./_read-codex.js";
@@ -90,10 +90,7 @@ export function readAgentUsage(options) {
       return;
     }
 
-    const window =
-      options.since === undefined && options.until === undefined
-        ? undefined
-        : { since: options.since, until: options.until, slackMs: USAGE_WINDOW_SLACK_MS };
+    const window = options.since === undefined && options.until === undefined ? undefined : { since: options.since, until: options.until, slackMs: USAGE_WINDOW_SLACK_MS };
 
     return { ...usage, agent: entry.agent, ...(window && { window }) };
   } catch {

@@ -1,7 +1,6 @@
 /** Literal-masking and context helpers used by the a11y guardrail family. */
 
 /** Lines short enough to hand-write; a kilobytes-long line is generated output. */
-import { maskLiterals } from "../_util.js";
 function scannableLines(code, cap = 2000) {
   return code.split("\n").filter((line) => line.length > 0 && line.length <= cap);
 }

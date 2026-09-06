@@ -1,19 +1,9 @@
 /** Daemon process lifecycle: log rotation, detached start, graceful stop. */
 import { spawn } from "node:child_process";
-import {
-  closeSync,
-  existsSync,
-  mkdirSync,
-  openSync,
-  readFileSync,
-  writeFileSync,
-  rmSync,
-  statSync,
-  renameSync,
-} from "node:fs";
+import { closeSync, existsSync, mkdirSync, openSync, readFileSync, writeFileSync, rmSync, statSync, renameSync } from "node:fs";
 import { getRuntimePaths } from "../paths.js";
 import { resolveEntrypoint } from "./_service-shared.js";
-import { isAlive, terminate } from "./_process-status.js";
+import { terminate } from "./_process-status.js";
 
 // ─── Entry-point resolution ───────────────────────────────────────────────
 

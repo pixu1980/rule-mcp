@@ -1,7 +1,7 @@
 /** Read opencode transcripts for one project window. */
 import { dirname, join } from "node:path";
 import { inWindow, emptyUsage } from "./_window.js";
-import { readJsonl, readJson, list, mtime, filesUnder, slugsFor, isToolResult } from "./_fs.js";
+import { readJson, filesUnder } from "./_fs.js";
 
 /**
  * opencode: one JSON file per message, grouped by session directory, and the
@@ -22,11 +22,7 @@ export function readOpencode({ projectDir, home, ...window }) {
   // recognized from the assistant messages it shares a session directory with.
   // Two passes: find this project's sessions, then read everything in them.
   const rows = files.map((file) => ({ file, row: readJson(file) })).filter((entry) => entry.row);
-  const sessions = new Set(
-    rows
-      .filter((entry) => (entry.row.path?.root ?? entry.row.path?.cwd) === projectDir)
-      .map((entry) => entry.row.sessionID ?? dirname(entry.file)),
-  );
+  const sessions = new Set(rows.filter((entry) => (entry.row.path?.root ?? entry.row.path?.cwd) === projectDir).map((entry) => entry.row.sessionID ?? dirname(entry.file)));
 
   if (sessions.size === 0) {
     return;

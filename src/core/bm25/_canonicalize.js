@@ -1,6 +1,6 @@
 /** Interrogative words, canonical stopwords and query canonicalization. */
 
-import { MIN_TERM_LENGTH, splitWords, splitCompound, stem } from "./_terms.js";
+import { MIN_TERM_LENGTH, splitWords, stem } from "./_terms.js";
 import { STOPWORDS } from "./_stopwords.data.js";
 const INTERROGATIVES = new Set([
   "how",

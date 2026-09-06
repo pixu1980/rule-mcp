@@ -1,5 +1,6 @@
 /** Service management: the platform detection and the install/uninstall dispatch. */
 import { platform } from "node:os";
+import { startDaemonProcess, stopDaemonProcess } from "./_process.js";
 import { installLaunchAgent, uninstallLaunchAgent } from "./_launchd.js";
 import { installSystemdService, uninstallSystemdService } from "./_systemd.js";
 import { installWindowsService, uninstallWindowsService } from "./_windows-service.js";

@@ -54,6 +54,6 @@ telemetry.recordToolCall({ tool: "pix_tool", durationMs: 1, ok: true, now: T0 + 
 telemetry.flush();
 check("F10 no directory is created in the project", !existsSync(join(untouched, ".rule-mcp")));
 check("F10.1 and no .gitignore is written", !existsSync(join(untouched, ".gitignore")));
-check("F10.2 the log still recorded the call", readEvents().length >= 1);
+check("F10.2 the log still recorded the call", readEvents().length > 0);
 
 finish();

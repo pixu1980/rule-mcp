@@ -1,8 +1,7 @@
 /** Linux systemd adapter: the user unit, install, uninstall, check. */
 import { writeFileSync, mkdirSync, existsSync, rmSync } from "node:fs";
 import { join } from "node:path";
-import { getRuntimePaths } from "../paths.js";
-import { HOME, resolveEntrypoint, tryExec, WRAPPER_SCRIPT_PATH, generateWrapperScript } from "./_service-shared.js";
+import { HOME, resolveEntrypoint, tryExec } from "./_service-shared.js";
 import { generateSystemdUnit } from "./_systemd-unit.js";
 
 // ═══════════════════════════════════════════════════════════════════════════

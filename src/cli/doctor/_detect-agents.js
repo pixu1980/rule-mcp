@@ -1,5 +1,5 @@
 /** Validate each installed agent's mcp.json entry. */
-import { existsSync, readFileSync } from "node:fs";
+import { readFileSync } from "node:fs";
 import { homedir } from "node:os";
 
 export const HOME = homedir();

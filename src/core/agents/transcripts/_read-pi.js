@@ -1,7 +1,7 @@
 /** Read pi transcripts for one project window. */
 import { join } from "node:path";
 import { inWindow, emptyUsage } from "./_window.js";
-import { readJsonl, list, mtime, filesUnder, slugsFor, isToolResult } from "./_fs.js";
+import { readJsonl, filesUnder, slugsFor } from "./_fs.js";
 
 /**
  * pi: one JSONL per session, every row an envelope whose `message` carries the

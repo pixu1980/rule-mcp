@@ -1,5 +1,7 @@
 /** Git reads for the handoff: safe exec, working-tree diff, recent log. */
 import { execSync } from "node:child_process";
+import { existsSync } from "node:fs";
+import { join } from "node:path";
 
 /**
  * Safely run a shell command, returning stdout or empty string on failure.
