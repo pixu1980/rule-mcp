@@ -15,7 +15,7 @@ export const FILE_SIZE_RATCHET = new Map([
   ["scripts/fix/self-guardrails/index.mjs", 233],
   ["scripts/reports/cache-similarity/index.mjs", 170],
   ["scripts/reports/cache/index.mjs", 277],
-  ["scripts/reports/census/index.mjs", 530],
+  ["scripts/reports/census/index.mjs", 369],
   ["src/cli/cache.js", 239],
   ["src/cli/commands/_daemon.js", 219],
   ["src/cli/commands/_targets.js", 178],
