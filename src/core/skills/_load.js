@@ -5,8 +5,7 @@
  * Handles loading all rule skills from disk, registering them as MCP tools,
  * and providing skill content utility functions.
  *
- * This is the LEAN core module - tool-specific registration logic
- * lives in tools/skill.js.
+ * The tool-specific registration logic lives in tools/skill/.
  *
  * Called once at startup, or on demand via `skills reload` CLI command.
  */
