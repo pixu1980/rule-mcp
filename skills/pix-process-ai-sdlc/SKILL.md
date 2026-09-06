@@ -171,8 +171,8 @@ gates before automating anything that writes.
 
 ## See also
 
-- [pix-galaxy-evals](../pix-galaxy-evals/SKILL.md) - the test stage in detail
+- [pix-ai-evals](../pix-ai-evals/SKILL.md) - the test stage in detail
 - [pix-process-feature-workflow](../pix-process-feature-workflow/SKILL.md) - the same flow for one feature
 - [pix-process-adr](../pix-process-adr/SKILL.md) - decisions that outlive the plan that produced them
 - [pix-process-code-review](../pix-process-code-review/SKILL.md) - what the review passes look for
-- [pix-galaxy-prompting](../pix-galaxy-prompting/SKILL.md) - working with the agent inside these stages
+- [pix-ai-prompting](../pix-ai-prompting/SKILL.md) - working with the agent inside these stages
