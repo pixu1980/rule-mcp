@@ -22,7 +22,6 @@ export const FILE_SIZE_RATCHET = new Map([
   ["src/core/agents/_hooks.js", 167],
   ["src/core/agents/_integrations.js", 205],
   ["src/core/bm25/_cache.js", 166],
-  ["src/core/cache/_catalog.js", 294],
   ["src/core/detector.js", 179],
   ["src/core/enforcement.js", 288],
   ["src/core/guardrails/_backend.js", 173],

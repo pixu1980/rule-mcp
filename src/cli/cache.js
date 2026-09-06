@@ -20,7 +20,7 @@ import {
   writeCatalog,
   CATALOG_FILE,
   MIN_HITS,
-} from "../core/cache/_catalog.js";
+} from "../core/cache/catalog/index.js";
 import {
   cacheClear,
   cacheEntries,
