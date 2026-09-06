@@ -1,5 +1,5 @@
 /**
- * @module core/telemetry-store
+ * @module core/telemetry/store
  *
  * Where telemetry lives on disk, and how it stops growing.
  *
@@ -29,7 +29,7 @@
 
 import { appendFileSync, existsSync, mkdirSync, readFileSync, rmSync, statSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
-import { getProjectPaths } from "../cli/paths.js";
+import { getProjectPaths } from "../../cli/paths.js";
 
 /** Raw events are kept this long, then dropped. Aggregates outlive them. */
 export const RAW_RETENTION_DAYS = 7;

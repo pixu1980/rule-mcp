@@ -1,4 +1,4 @@
-import { findFingerprints } from "../../../fingerprint.js";
+import { findFingerprints } from "../../../text/_fingerprint.js";
 
 /** Guardrail `fp-no-emdash`: No em or en dashes */
 export const fpNoEmdash = {

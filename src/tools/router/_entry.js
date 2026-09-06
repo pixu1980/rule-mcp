@@ -1,9 +1,8 @@
-// Auto-split from src/tools/router/index.js - see ./router/index.js
 /** Tool entry resolution: entry path, dependency edge mapping, and the routed-skill lookup. */
 
 import { SKILL_INDEPENDENT } from "./_helpers.js";
 import { getSkillNames } from "./_skills.js";
-import { skillDigest } from "../../core/tool-cache.js";
+import { skillDigest } from "../../core/cache/_tool-cache.js";
 function entryPathOf(name) {
   if (name === "pix_tool") {
     return "router";

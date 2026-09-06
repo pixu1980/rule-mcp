@@ -1,4 +1,3 @@
-// Auto-split from src/cli/commands/index.js - see ./commands/index.js
 /** Tools/config commands: list+call tools, env config and the interactive configure flow. */
 
 import { callTool, listTools } from "../../tools/router/index.js";

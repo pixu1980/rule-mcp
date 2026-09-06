@@ -1,6 +1,6 @@
 import { getSkillNames, registerTool, listTools } from "../router/index.js";
-import { detectRole } from "../../core/review-roles.js";
-import { loadRoleOverlays } from "../../core/review-roles-overlays.js";
+import { detectRole } from "../../core/review/_roles.js";
+import { loadRoleOverlays } from "../../core/review/_overlays.js";
 import { GalaxySchema } from "./_schema.js";
 import { expandPrompt } from "./_expand-prompt.js";
 import { classifyPromptDomain } from "./_domain.js";

@@ -2,6 +2,7 @@
 export function skillNextTools(skillName) {
   const suggestions = [];
   const base = skillName.replace(/^pix-/, "").replaceAll("-", "_");
+
   suggestions.push(`pix_tool_${base}`);
 
   if (skillName === "pix-styleguide") {

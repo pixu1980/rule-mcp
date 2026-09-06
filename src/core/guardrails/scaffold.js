@@ -1,4 +1,3 @@
-// Auto-split from src/core/guardrail-defs.js - see ./index.js
 const SCAFFOLD_CHECK = (fileName, label, checkFunction) => ({
   id: `scaffold-${fileName.replace(/^[.]/, "")}`,
   label: `${fileName} present`,

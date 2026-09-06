@@ -1,4 +1,4 @@
-import { findFingerprints } from "../../../fingerprint.js";
+import { findFingerprints } from "../../../text/_fingerprint.js";
 
 /** Guardrail `fp-american-english`: American English spelling */
 export const fpAmericanEnglish = {

@@ -1,4 +1,4 @@
-import { findRaggedBoxes } from "../../../ascii-box.js";
+import { findRaggedBoxes } from "../../../text/_ascii-box.js";
 
 /** Guardrail `fp-box-rectangular`: A drawn box is a rectangle */
 export const fpBoxRectangular = {

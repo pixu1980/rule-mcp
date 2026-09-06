@@ -1,5 +1,5 @@
 /**
- * @module core/review-roles-template
+ * @module core/review/template
  *
  * One role becomes one prompt (personas plan A.3).
  *

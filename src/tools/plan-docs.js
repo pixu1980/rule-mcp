@@ -9,14 +9,14 @@
  * gets back three documents whose headers, tables and statuses are already
  * correct, so the only thing left to write is the content.
  *
- * @see module:core/review-docs - the merge rules and the file formats
+ * @see module:core/review/docs - the merge rules and the file formats
  */
 
 import { z } from "zod/v4";
 
-import { allRoles, roleById } from "../core/review-roles.js";
-import { loadRoleOverlays } from "../core/review-roles-overlays.js";
-import { syncRoleDocs } from "../core/review-docs.js";
+import { allRoles, roleById } from "../core/review/_roles.js";
+import { loadRoleOverlays } from "../core/review/_overlays.js";
+import { syncRoleDocs } from "../core/review/_docs.js";
 import { registerTool } from "./router/index.js";
 
 const FindingSchema = z.object({

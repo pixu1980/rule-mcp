@@ -13,7 +13,7 @@ import { join, relative } from "node:path";
 import { execSync } from "node:child_process";
 import { z } from "zod/v4";
 import { registerTool } from "./router/index.js";
-import { TOKENSAVE_DIRECTIVE, tokensaveActive } from "../core/agent-integrations.js";
+import { TOKENSAVE_DIRECTIVE, tokensaveActive } from "../core/agents/_integrations.js";
 
 /** Default project directory. */
 const ADR_DIR = "docs/adr";

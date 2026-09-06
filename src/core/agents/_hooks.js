@@ -1,5 +1,5 @@
 /**
- * @module core/agent-hooks
+ * @module core/agents/hooks
  *
  * Harness hooks for the two steps a prompt cannot enforce.
  *

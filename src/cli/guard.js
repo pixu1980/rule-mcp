@@ -12,14 +12,14 @@
  * Kept as pure functions plus a thin IO wrapper so the whole contract is
  * testable without spawning a shell, and so the hook command needs no `jq`.
  *
- * @see module:core/agent-hooks - the hook entries that invoke this
+ * @see module:core/agents/hooks - the hook entries that invoke this
  * @see module:core/directive - the injected text
  */
 
 import { execFileSync } from "node:child_process";
 import { readFileSync } from "node:fs";
 import { extname } from "node:path";
-import { isCommitCommand, isMigrationCommand } from "../core/agent-hooks.js";
+import { isCommitCommand, isMigrationCommand } from "../core/agents/_hooks.js";
 import { promptDirective, sessionDirective } from "../core/directive.js";
 import { checkCode } from "../core/guardrails.js";
 import { resumeContext } from "../core/resume.js";

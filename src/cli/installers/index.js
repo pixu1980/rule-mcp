@@ -10,58 +10,18 @@
  * names they always did, so the split is invisible outside.
  */
 
-export { allAgents, remoteModeAgents, normalizeInstallMode } from "./_catalog.js";
+export * from "./_catalog.js";
 
-export {
-  serverName,
-  IS_WINDOWS,
-  IS_MACOS,
-  IS_LINUX,
-  HOME,
-  COMMAND_TEMPLATE_PATH,
-  resolvePath,
-  readText,
-  atomicWrite,
-  writeText,
-  removeFile,
-  backupFile,
-  resolveGlobalBinary,
-} from "./_paths.js";
+export * from "./_paths.js";
 
-export {
-  ENV_CONFIG_DIR,
-  ENV_CONFIG_FILE,
-  DEFAULT_OPTOUT_ENV,
-  readEnvConfig,
-  writeEnvConfig,
-  resolveEnvironment,
-  commandConfig,
-  mcpServerConfig,
-} from "./_env.js";
+export * from "./_env.js";
 
-export {
-  parseJson,
-  toJson,
-  upsertJsonServer,
-  removeJsonServer,
-  vscodeServerType,
-  upsertVscode,
-  removeVscodeServer,
-} from "./_writers-json.js";
+export * from "./_writers-json.js";
 
-export {
-  upsertTomlBlock,
-  removeTomlBlock,
-  appendInstruction,
-  removeInstruction,
-  commandTemplate,
-  commandBody,
-  geminiCommand,
-  copilotAgent,
-} from "./_writers-text.js";
+export * from "./_writers-text.js";
 
-export { vscodeGlobalDir, devinConfigPath } from "./_agents-ide.js";
+export * from "./_agents-ide.js";
 
-export { deprecatedAgents, installers } from "./_registry.js";
+export * from "./_registry.js";
 
-export { uninstallers } from "./_uninstall.js";
+export * from "./_uninstall.js";

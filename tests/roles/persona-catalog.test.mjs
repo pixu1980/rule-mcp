@@ -18,8 +18,8 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 
-import { EMBEDDED_ROLES, loadPersonaCatalog, activeRoles, validateRole } from "../../src/core/review-roles.js";
-import { parsePersonaFile, formatPersonaFile } from "../../src/core/persona-file.js";
+import { EMBEDDED_ROLES, loadPersonaCatalog, activeRoles, validateRole } from "../../src/core/review/_roles.js";
+import { parsePersonaFile, formatPersonaFile } from "../../src/core/review/_persona-file.js";
 
 const PERSONA_DIR = fileURLToPath(new URL("../../src/roles/", import.meta.url));
 

@@ -1,5 +1,5 @@
 /**
- * @module core/agent-transcripts
+ * @module core/agents/transcripts
  *
  * What the model spent, read from the coding agent's own transcript.
  *
@@ -22,8 +22,8 @@
  * window are skipped; rows with no timestamp are kept, because dropping them
  * would silently lose a whole agent whose format does not stamp its messages.
  *
- * @see module:core/agent-command-targets - the same agents, as install targets
- * @see module:core/telemetry-flight - what does the reading
+ * @see module:core/agents/command-targets - the same agents, as install targets
+ * @see module:core/telemetry/flight - what does the reading
  */
 
 import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";

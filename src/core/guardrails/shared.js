@@ -1,4 +1,3 @@
-// Auto-split from src/core/guardrail-defs.js - see ./index.js
 import { extractRealCSS, unjustifiedGrids, looksLikeStylesheet } from "./util.js";
 
 /** Mask string literals, template literals and comments so patterns never see quoted code. */

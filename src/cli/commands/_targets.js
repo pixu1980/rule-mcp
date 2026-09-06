@@ -1,11 +1,10 @@
-// Auto-split from src/cli/commands/index.js - see ./commands/index.js
 /** Agent-command target resolution, printing and syncing helpers. */
 
-import { FORMAT_EXT, commandNames, renderAgentCommandFiles } from "../../core/agent-commands.js";
+import { FORMAT_EXT, commandNames, renderAgentCommandFiles } from "../../core/agents/_commands.js";
 import { existsSync, mkdirSync, readdirSync, rmSync, writeFileSync } from "node:fs";
 import { print } from "./_shared.js";
 import { resolve } from "node:path";
-import { resolveCommandTargets } from "../../core/agent-command-targets.js";
+import { resolveCommandTargets } from "../../core/agents/_command-targets.js";
 function resolvedTargets(opts) {
   return resolveCommandTargets(opts.agent ? { agent: opts.agent } : { detectedOnly: true });
 }

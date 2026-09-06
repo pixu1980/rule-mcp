@@ -14,7 +14,7 @@
  * styleguide" is a judgment and stays out; "how many directories have a barrel
  * file" is a count and stays in.
  *
- * @see module:core/telemetry-flight - what puts this in the export
+ * @see module:core/telemetry/flight - what puts this in the export
  */
 
 import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";

@@ -13,15 +13,15 @@
  * whenever one exists. A benchmark that cannot say which of its numbers were
  * measured is not a benchmark.
  *
- * @see module:core/agent-transcripts - the agents whose usage is read directly
- * @see module:core/telemetry-flight - what the declaration ends up in
+ * @see module:core/agents/transcripts - the agents whose usage is read directly
+ * @see module:core/telemetry/flight - what the declaration ends up in
  */
 
 import { z } from "zod/v4";
-import { unsupportedAgents } from "../core/agent-transcripts.js";
-import { writeSidecarUsage } from "../core/telemetry-store.js";
-import { telemetryEnabled } from "../core/telemetry.js";
-import { clientInfo } from "../core/telemetry.js";
+import { unsupportedAgents } from "../core/agents/_transcripts.js";
+import { writeSidecarUsage } from "../core/telemetry/_store.js";
+import { telemetryEnabled } from "../core/telemetry/_telemetry.js";
+import { clientInfo } from "../core/telemetry/_telemetry.js";
 import { registerTool } from "./router/index.js";
 
 /** A usage declaration is a handful of integers; anything larger is not one. */

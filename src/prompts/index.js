@@ -15,8 +15,8 @@
  */
 
 import { parseHandoffOptions, HANDOFF_USAGE } from "./_handoff-options.js";
-import { activeRoles, roleById } from "../core/review-roles.js";
-import { fillRoleTemplate, OPERATIONS } from "../core/review-roles-template.js";
+import { activeRoles, roleById } from "../core/review/_roles.js";
+import { fillRoleTemplate, OPERATIONS } from "../core/review/_template.js";
 
 /** Tokens that trigger the generic per-prompt help message. */
 const HELP_TOKENS = new Set(["help", "--help", "-h"]);

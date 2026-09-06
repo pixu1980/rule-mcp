@@ -22,7 +22,7 @@ import { getRuntimePaths } from "./paths.js";
 import { detectInstalledAgents } from "./install.js";
 import { checkDaemonService, WRAPPER_SCRIPT_PATH } from "./daemon.js";
 import { banner, color, section } from "./tui.js";
-import { getTokenStats } from "../core/token-stats.js";
+import { getTokenStats } from "../core/telemetry/_token-stats.js";
 
 const HOME = homedir();
 

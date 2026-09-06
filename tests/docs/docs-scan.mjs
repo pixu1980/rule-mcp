@@ -6,7 +6,7 @@
  * Usage: node test/docs-scan.mjs
  */
 
-import { validateTrio } from "../../src/core/review-docs.js";
+import { validateTrio } from "../../src/core/review/_docs.js";
 import { loadAllSkills } from "../../src/core/skills.js";
 import { listTools } from "../../src/tools/router/index.js";
 import { readFileSync, readdirSync } from "node:fs";

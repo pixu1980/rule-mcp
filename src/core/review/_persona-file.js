@@ -1,5 +1,5 @@
 /**
- * @module core/persona-file
+ * @module core/review/persona-file
  *
  * One persona, one file: read and write a persona as markdown.
  *

@@ -10,7 +10,7 @@
 import { strict as assert } from "node:assert";
 import test from "node:test";
 
-import { redactFlight } from "../../src/core/telemetry-flight.js";
+import { redactFlight } from "../../src/core/telemetry/_flight.js";
 
 const flight = () => ({
   version: 2,
@@ -60,7 +60,7 @@ test("redaction marks itself and leaves the KPI block identical", () => {
 });
 
 test("the renderer announces a redacted flight", async () => {
-  const { renderFlight } = await import("../../src/core/telemetry-stats.js");
+  const { renderFlight } = await import("../../src/core/telemetry/_stats.js");
   const full = renderFlight(flight());
   const shared = renderFlight(redactFlight(flight()));
   assert.ok(!full.includes("Redacted export"), "a complete export carries no banner");

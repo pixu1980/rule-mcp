@@ -18,11 +18,11 @@
  * numbers, so merging it would be the most flattering and least defensible
  * thing this server could report.
  *
- * @see module:core/telemetry-stats - percentiles and rendering
- * @see module:core/agent-transcripts - where the model's usage comes from
+ * @see module:core/telemetry/stats - percentiles and rendering
+ * @see module:core/agents/transcripts - where the model's usage comes from
  */
 
-import { percentile } from "./telemetry-stats.js";
+import { percentile } from "./_stats.js";
 
 /**
  * A pause longer than this between two prompts is read as the user coming back

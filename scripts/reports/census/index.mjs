@@ -35,10 +35,10 @@ const { loadAllSkills, parseSkillFrontmatter } = await import("../../../src/core
 const { listTools } = await import("../../../src/tools/router/index.js");
 const { listResources } = await import("../../../src/resources/index.js");
 const { listPrompts } = await import("../../../src/prompts/index.js");
-const { commandNames } = await import("../../../src/core/agent-commands.js");
-const { resolveCommandTargets } = await import("../../../src/core/agent-command-targets.js");
-const { activeRoles, EMBEDDED_ROLES } = await import("../../../src/core/review-roles.js");
-const { OPERATIONS } = await import("../../../src/core/review-roles-template.js");
+const { commandNames } = await import("../../../src/core/agents/_commands.js");
+const { resolveCommandTargets } = await import("../../../src/core/agents/_command-targets.js");
+const { activeRoles, EMBEDDED_ROLES } = await import("../../../src/core/review/_roles.js");
+const { OPERATIONS } = await import("../../../src/core/review/_template.js");
 const { buildProgram } = await import("../../../src/cli/program.js");
 
 await loadAllSkills(true);

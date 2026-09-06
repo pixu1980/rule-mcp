@@ -13,10 +13,10 @@
 import { strict as assert } from "node:assert";
 import test from "node:test";
 
-import { activeRoles } from "../../src/core/review-roles.js";
-import { OPERATIONS } from "../../src/core/review-roles-template.js";
+import { activeRoles } from "../../src/core/review/_roles.js";
+import { OPERATIONS } from "../../src/core/review/_template.js";
 import { getPrompt, listPrompts } from "../../src/prompts/index.js";
-import { listAgentCommands } from "../../src/core/agent-commands.js";
+import { listAgentCommands } from "../../src/core/agents/_commands.js";
 import { callTool, listTools } from "../../src/tools/router/index.js";
 
 const { registerPlanTool } = await import("../../src/tools/plan.js");

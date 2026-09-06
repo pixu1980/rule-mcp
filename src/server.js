@@ -28,7 +28,7 @@ import {
 } from "@modelcontextprotocol/sdk/types.js";
 import { pkg as package_ } from "./cli/paths.js";
 import { listTools, callTool } from "./tools/router/index.js";
-import { decorateWithTokensave } from "./core/agent-integrations.js";
+import { decorateWithTokensave } from "./core/agents/_integrations.js";
 import { listResources, readResource } from "./resources/index.js";
 import { listPrompts, getPrompt } from "./prompts/index.js";
 import { HANDOFF_COMPLETIONS } from "./prompts/_handoff-options.js";

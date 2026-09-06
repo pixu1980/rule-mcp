@@ -9,7 +9,7 @@ import { HOME, IS_WINDOWS, readText, writeText, serverName } from "./_paths.js";
 import { commandConfig } from "./_env.js";
 import { upsertJsonServer, upsertVscode } from "./_writers-json.js";
 import { appendInstruction } from "./_writers-text.js";
-import { renderAgentCommandFiles } from "../../core/agent-commands.js";
+import { renderAgentCommandFiles } from "../../core/agents/_commands.js";
 
 const vscodeGlobalDir = () => {
   if (process.platform === "darwin") {

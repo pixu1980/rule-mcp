@@ -1,4 +1,4 @@
-import { scanPathForForeign } from "../../../en-english.js";
+import { scanPathForForeign } from "../../../text/_en-english.js";
 
 /** Guardrail `en-english-only-filenames`: English-only file and folder names */
 export const enEnglishOnlyFilenames = {

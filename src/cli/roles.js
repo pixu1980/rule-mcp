@@ -17,15 +17,15 @@
  * catalog is never edited: deprecating a built-in role writes the user's own
  * copy of it, which is what the precedence rules were for.
  *
- * @see module:core/review-roles-overlays - where the layers live
+ * @see module:core/review/overlays - where the layers live
  */
 
 import { existsSync, mkdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 
-import { formatPersonaFile } from "../core/persona-file.js";
-import { allRoles, roleById, validateRole } from "../core/review-roles.js";
-import { loadRoleOverlays } from "../core/review-roles-overlays.js";
+import { formatPersonaFile } from "../core/review/_persona-file.js";
+import { allRoles, roleById, validateRole } from "../core/review/_roles.js";
+import { loadRoleOverlays } from "../core/review/_overlays.js";
 import { getRuntimePaths } from "./paths.js";
 import { color } from "./tui.js";
 

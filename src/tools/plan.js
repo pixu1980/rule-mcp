@@ -11,9 +11,9 @@
 
 import { z } from "zod/v4";
 
-import { allRoles, roleById } from "../core/review-roles.js";
-import { loadRoleOverlays } from "../core/review-roles-overlays.js";
-import { fillRoleTemplate, OPERATIONS } from "../core/review-roles-template.js";
+import { allRoles, roleById } from "../core/review/_roles.js";
+import { loadRoleOverlays } from "../core/review/_overlays.js";
+import { fillRoleTemplate, OPERATIONS } from "../core/review/_template.js";
 import { fenceUntrusted } from "../core/untrusted.js";
 import { registerTool } from "./router/index.js";
 
@@ -21,7 +21,7 @@ import { registerTool } from "./router/index.js";
  * Resolve a role by exact id first, then by any name it answers to (title,
  * alias). The registry keeps old ids alive as aliases - e.g. `api-design` is
  * what `backend` is an alias of - so the tool should answer to them, same
- * as {@link module:core/review-roles.detectRole} does for free-form prompts.
+ * as {@link module:core/review/roles.detectRole} does for free-form prompts.
  */
 function resolveRole(requested, overlays) {
   const exact = roleById(requested, overlays);
