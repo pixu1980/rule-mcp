@@ -3,8 +3,10 @@ import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 
 /** Default project directory. */
+/** Where the ADR log lives, relative to the project root. */
 export const ADR_DIR = "docs/adr";
 
+/** Where planning context values live, relative to the project root. */
 export const CONTEXT_DIR = ".context";
 
 /**
