@@ -34,7 +34,7 @@ process.env.PIX_DISABLE_AUTO_ADR = "1";
 process.env.PIX_GALAXY_MCP_NO_AUTOUPDATE = "1"; // no self-update banner shifting cached content
 
 const { cacheKey, cacheGet, cacheSet, cacheClear, flush } = await import("../../src/core/tool-cache.js");
-const { registerTool, callTool } = await import("../../src/tools/router.js");
+const { registerTool, callTool } = await import("../../src/tools/router/index.js");
 
 // ── T1: keying + denylist ──
 check("T1 read-only tool gets a key", typeof cacheKey("pix", { prompt: "x" }) === "string");

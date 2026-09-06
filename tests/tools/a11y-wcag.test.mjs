@@ -31,7 +31,7 @@ import {
   WCAG_VERSION,
   criteriaForLevel,
   criterion,
-} from "../../src/core/wcag-data.js";
+} from "../../src/core/wcag-data/index.js";
 import { checkCode } from "../../src/core/guardrails.js";
 import { buildReport } from "../../src/tools/a11y.js";
 

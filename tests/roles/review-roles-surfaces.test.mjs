@@ -17,7 +17,7 @@ import { activeRoles } from "../../src/core/review-roles.js";
 import { OPERATIONS } from "../../src/core/review-roles-template.js";
 import { getPrompt, listPrompts } from "../../src/prompts/index.js";
 import { listAgentCommands } from "../../src/core/agent-commands.js";
-import { callTool, listTools } from "../../src/tools/router.js";
+import { callTool, listTools } from "../../src/tools/router/index.js";
 
 const { registerPlanTool } = await import("../../src/tools/plan.js");
 registerPlanTool();

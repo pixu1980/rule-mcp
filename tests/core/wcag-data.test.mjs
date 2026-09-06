@@ -18,7 +18,7 @@ const {
   WCAG_VERSION,
   criteriaForLevel,
   criterion,
-} = await import("../../src/core/wcag-data.js");
+} = await import("../../src/core/wcag-data/index.js");
 
 test("the data is pinned to WCAG 2.2", () => {
   assert.equal(WCAG_VERSION, "2.2");

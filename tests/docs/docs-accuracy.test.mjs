@@ -17,7 +17,7 @@ const actual = {};
 {
   const { loadAllSkills } = await import("../../src/core/skills.js");
   await loadAllSkills(true);
-  const { listTools } = await import("../../src/tools/router.js");
+  const { listTools } = await import("../../src/tools/router/index.js");
   const { listResources } = await import("../../src/resources/index.js");
   const { listPrompts } = await import("../../src/prompts/index.js");
   const len = (r) => (Array.isArray(r) ? r.length : (r.tools ?? r.resources ?? r.prompts).length);
