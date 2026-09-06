@@ -13,10 +13,10 @@
 import { writeFileSync, mkdirSync, existsSync, realpathSync } from "node:fs";
 import { homedir, tmpdir } from "node:os";
 import { dirname, resolve, relative, parse, sep, isAbsolute } from "node:path";
-import { validateApply } from "./gateway.js";
+import { validateApply } from "./gateway/index.js";
 import { postProcessFiles } from "../core/post-process.js";
 
-export { canonicalFilesDigest } from "./gateway.js";
+export { canonicalFilesDigest } from "./gateway/index.js";
 
 /**
  * Directories that are never a project. An earlier guard accepted any root the

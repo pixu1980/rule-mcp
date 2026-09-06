@@ -19,7 +19,7 @@ const check = (label, ok) => {
 
 console.log("=== Gateway Receipt Tests ===\n");
 
-const { issueReceipt, validateReceipt } = await import("../../src/tools/gateway.js");
+const { issueReceipt, validateReceipt } = await import("../../src/tools/gateway/index.js");
 
 const T0 = 1_000_000; // injected clock base (ms)
 const TTL = 300_000;
