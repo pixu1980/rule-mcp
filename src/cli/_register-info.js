@@ -84,7 +84,7 @@ export function registerRolesCommand(program) {
     .option("--by <role>", "role that deprecates this one")
     .allowExcessArguments(false)
     .action(async (action, id, options) => {
-      const { rolesCommand } = await import("./roles.js");
+      const { rolesCommand } = await import("./roles/index.js");
       rolesCommand(action ?? "list", {
         id,
         json: options.json,
