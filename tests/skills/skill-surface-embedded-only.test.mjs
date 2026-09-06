@@ -32,7 +32,7 @@ import { join } from "node:path";
  */
 function surfaceWith(home) {
   const script = `
-    const { loadAllSkills } = await import(${JSON.stringify(new URL("../../src/core/skills.js", import.meta.url).href)});
+    const { loadAllSkills } = await import(${JSON.stringify(new URL("../../src/core/skills/_skills.js", import.meta.url).href)});
     await loadAllSkills();
     const { listTools, getSkillNames } = await import(${JSON.stringify(new URL("../../src/tools/router/index.js", import.meta.url).href)});
     process.stdout.write(JSON.stringify({

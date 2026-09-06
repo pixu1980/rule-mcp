@@ -17,7 +17,7 @@ import { mkdtempSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 
-const lifecycle = await import("../../src/core/lifecycle.js");
+const lifecycle = await import("../../src/core/session/_lifecycle.js");
 
 /**
  * A stand-in for `process` as a signal source: the handlers under test only
@@ -347,9 +347,9 @@ test("releaseMemory hands the heap back and reloads from disk", async () => {
 });
 
 test("an idle server drops the search index and the skill cache", async () => {
-  const { loadAllSkills, skillCache } = await import("../../src/core/skills.js");
+  const { loadAllSkills, skillCache } = await import("../../src/core/skills/_skills.js");
   const { isIndexReady, buildIndex } = await import("../../src/core/bm25/index.js");
-  const reclaim = await import("../../src/core/reclaim.js");
+  const reclaim = await import("../../src/core/session/_reclaim.js");
 
   await loadAllSkills();
   buildIndex();
@@ -373,7 +373,7 @@ test("an idle server drops the search index and the skill cache", async () => {
 });
 
 test("the idle timer never holds the event loop open", async () => {
-  const reclaim = await import("../../src/core/reclaim.js");
+  const reclaim = await import("../../src/core/session/_reclaim.js");
   const timer = reclaim.startIdleReclaim();
   assert.equal(timer.hasRef(), false, "the reclaim interval must be unref'd");
   reclaim.stopIdleReclaim();

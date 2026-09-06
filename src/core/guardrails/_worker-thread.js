@@ -12,8 +12,8 @@
 
 import { parentPort } from "node:worker_threads";
 
-import { checkCode } from "./guardrails.js";
-import { loadAllSkills } from "./skills.js";
+import { checkCode } from "./_engine.js";
+import { loadAllSkills } from "../skills/_skills.js";
 
 await loadAllSkills();
 

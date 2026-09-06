@@ -10,7 +10,7 @@ import { strict as assert } from "node:assert";
 import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import { parseSkillFrontmatter, loadAllSkills } from "../../src/core/skills.js";
+import { parseSkillFrontmatter, loadAllSkills } from "../../src/core/skills/_skills.js";
 import { listTools } from "../../src/tools/router/index.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));

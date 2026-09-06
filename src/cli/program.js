@@ -229,7 +229,7 @@ export function buildProgram() {
       }
 
       const { callTool } = await import("../tools/router/index.js");
-      const { loadAllSkills } = await import("../core/skills.js");
+      const { loadAllSkills } = await import("../core/skills/_skills.js");
       await loadAllSkills();
       const result = await callTool("pix_process_adr", {
         title,

@@ -3,7 +3,7 @@
 import { callTool } from "../../tools/router/index.js";
 import { formatDoctorTerminal, runDoctor } from "../doctor.js";
 import { generateCompletions } from "../completions.js";
-import { loadAllSkills } from "../../core/skills.js";
+import { loadAllSkills } from "../../core/skills/_skills.js";
 import { print, printJson } from "./_shared.js";
 import { resolve } from "node:path";
 import { writeFileSync } from "node:fs";

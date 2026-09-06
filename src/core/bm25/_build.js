@@ -4,7 +4,7 @@ import { mkdirSync, readdirSync, rmSync, statSync, writeFileSync } from "node:fs
 import { basename, dirname, join } from "node:path";
 import { getRuntimePaths, getSkillsDirs as getSkillsDirectories } from "../../cli/paths.js";
 import { getSkillNames, readSkill } from "../../tools/router/index.js";
-import { skillCache } from "../skills.js";
+import { skillCache } from "../skills/_skills.js";
 import { tokenize } from "./_terms.js";
 import { extractSections, HEADING_BOOST } from "./_extract.js";
 import { _index, setIndex } from "./_state.js";

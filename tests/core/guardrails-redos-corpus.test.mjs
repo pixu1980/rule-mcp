@@ -12,8 +12,8 @@ import { strict as assert } from "node:assert";
 import { readdirSync } from "node:fs";
 import test from "node:test";
 
-import { checkCode, getGuardrails } from "../../src/core/guardrails.js";
-import { loadAllSkills } from "../../src/core/skills.js";
+import { checkCode, getGuardrails } from "../../src/core/guardrails/index.js";
+import { loadAllSkills } from "../../src/core/skills/_skills.js";
 
 await loadAllSkills();
 

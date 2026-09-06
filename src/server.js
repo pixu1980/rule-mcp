@@ -169,7 +169,7 @@ export async function startServer() {
   // A long-lived server shared by every client gets guarded checks: one
   // runaway regex must not freeze the daemon (hardening F-S1). The CLI
   // one-shot keeps running checks inline - a hung CLI is ctrl-C.
-  const { enableGuardedChecks } = await import("./core/guardrails-guarded.js");
+  const { enableGuardedChecks } = await import("./core/guardrails/index.js");
   enableGuardedChecks();
   // A stdio server lives and dies with its client: when the parent process
   // exits, stdin closes and this process must go with it. The guard polls

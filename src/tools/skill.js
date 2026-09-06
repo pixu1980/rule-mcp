@@ -1,8 +1,8 @@
 import { z } from "zod/v4";
 import { registerTool, readSkill, getSkillNames, isPluginSkill, hasPluginJs } from "./router/index.js";
-import { getGuardrailsReport } from "../core/guardrails.js";
-import { checkCodeGuarded } from "../core/guardrails-guarded.js";
-import { extractScaffoldSection, extractSingleScaffoldFile } from "../core/scaffold-parser.js";
+import { getGuardrailsReport } from "../core/guardrails/index.js";
+import { checkCodeGuarded } from "../core/guardrails/index.js";
+import { extractScaffoldSection, extractSingleScaffoldFile } from "../core/scaffold/_parser.js";
 
 /**
  * Register a single skill as an MCP tool.

@@ -1,4 +1,4 @@
-import { extractRealCSS, unjustifiedGrids, looksLikeStylesheet } from "./util.js";
+import { extractRealCSS, unjustifiedGrids, looksLikeStylesheet } from "./_util.js";
 
 /** Mask string literals, template literals and comments so patterns never see quoted code. */
 function maskLiterals(code) {

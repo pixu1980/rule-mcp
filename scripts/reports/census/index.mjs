@@ -31,7 +31,7 @@ const GENERATED_HEADER = [
   "",
 ].join("\n");
 
-const { loadAllSkills, parseSkillFrontmatter } = await import("../../../src/core/skills.js");
+const { loadAllSkills, parseSkillFrontmatter } = await import("../../../src/core/skills/_skills.js");
 const { listTools } = await import("../../../src/tools/router/index.js");
 const { listResources } = await import("../../../src/resources/index.js");
 const { listPrompts } = await import("../../../src/prompts/index.js");

@@ -304,7 +304,7 @@ export async function runSelfUpdate(opts = {}) {
 
   if (changedSkills && reloadSkills) {
     try {
-      const { loadAllSkills } = await import("./skills.js");
+      const { loadAllSkills } = await import("./skills/_skills.js");
       await loadAllSkills(true); // re-register tools + flush skill/result caches
     } catch {
       /* skills reload best-effort */

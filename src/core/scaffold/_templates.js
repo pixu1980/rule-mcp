@@ -8,9 +8,9 @@
  */
 
 import { z } from "zod/v4";
-import { registerTool } from "../tools/router/index.js";
-import { COMPONENT_TEMPLATES, toPascal, toKebab, interpolate } from "./template-data.js";
-import { checkCode } from "./guardrails.js";
+import { registerTool } from "../../tools/router/index.js";
+import { COMPONENT_TEMPLATES, toPascal, toKebab, interpolate } from "./_template-data.js";
+import { checkCode } from "../guardrails/index.js";
 
 /** Framework → canonical skill name, so component output is validated against
  *  the same guardrails the agent's own code would face. */
@@ -163,7 +163,7 @@ export function generateMultiFile(component, framework = "vanilla", name) {
       files.push({
         path: `${basePath}/index.js`,
         language: "javascript",
-        content: `export { ${pascal} } from './_${pascal}.js';\n`,
+        content: `export { ${pascal} } from '../_${pascal}.js';\n`,
       });
     }
   }

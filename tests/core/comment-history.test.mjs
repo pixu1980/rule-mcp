@@ -25,8 +25,8 @@ const check = (label, ok) => {
 
 console.log("comment history test");
 
-const { checkCode } = await import("../../src/core/guardrails.js");
-const { getGuardrails } = await import("../../src/core/guardrails.js");
+const { checkCode } = await import("../../src/core/guardrails/index.js");
+const { getGuardrails } = await import("../../src/core/guardrails/index.js");
 
 const RULE = "js-comment-no-history";
 const context = { framework: "vanilla", isComponent: false, fileName: "sample.js" };

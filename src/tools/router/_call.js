@@ -8,8 +8,8 @@ import { consumeUpdateBanner, maybeSelfUpdate } from "../../core/self-update.js"
 import { dependenciesOf, entryPathOf, routedSkillOf } from "./_entry.js";
 import { enforcementError } from "../../core/enforcement.js";
 import { recordToolCall } from "../../core/telemetry/_telemetry.js";
-import { resumeAnnouncement } from "../../core/resume.js";
-import { touchActivity } from "../../core/reclaim.js";
+import { resumeAnnouncement } from "../../core/session/_resume.js";
+import { touchActivity } from "../../core/session/_reclaim.js";
 import { z } from "zod/v4";
 async function callTool(name, args) {
   // A call is the only evidence that anyone still wants this process's heap.
