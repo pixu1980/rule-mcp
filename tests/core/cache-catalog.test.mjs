@@ -25,7 +25,7 @@ delete process.env.RULE_MCP_NO_CACHE;
 const { cacheStore, cacheLookup, cacheClear, cacheEntries, promotableEntries, skillDigest } =
   await import("../../src/core/cache/tool-cache/index.js");
 const { CATALOG_FILE, MIN_HITS, catalogPath, buildCatalog, writeCatalog, readCatalog, primeFromCatalog, verifyCache } =
-  await import("../../src/core/cache/_catalog.js");
+  await import("../../src/core/cache/catalog/index.js");
 
 /** A skill that exists, so its digest is real and freshness can be checked. */
 const SKILL = "rule-frontend-react";
