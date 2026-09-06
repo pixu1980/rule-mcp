@@ -267,7 +267,7 @@ function generateSystemdUnit(ep) {
 
   return `[Unit]
 Description=pix-galaxy-mcp MCP Server
-Documentation=https://github.com/pix/pix-galaxy-mcp
+Documentation=https://github.com/pixu1980/pix-galaxy-mcp
 After=network.target network-online.target
 Wants=network-online.target
 
