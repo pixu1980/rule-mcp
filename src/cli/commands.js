@@ -448,7 +448,7 @@ export function configCommand(opts = {}) {
  *
  * @param {{ set?: string[], list?: boolean, unset?: string }} opts
  */
-export function configureCommand(opts = {}) {
+export async function configureCommand(opts = {}) {
   const PIX_VARS = {
     PIX_GALAXY_MCP_MINIMAL_TOOLS: {
       desc: "Expose only the 10 dispatcher/action tools (fits client tool caps, cheaper context).",
@@ -504,37 +504,39 @@ export function configureCommand(opts = {}) {
     return;
   }
 
-  // Interactive mode: readline prompts
-  print("Configure PIX_* environment variables (leave empty to skip):");
-  print("");
-  const saved = readEnvironmentConfig();
-  const readline = require("node:readline").createInterface({ input: process.stdin, output: process.stdout });
-  const keys = Object.keys(PIX_VARS);
-  let index = 0;
+  // Interactive mode: @clack/prompts (esc = cancel and save nothing).
+  // Non-TTY shells cannot drive prompts, so they are told the flag form
+  // instead of being left in a broken raw-mode state.
+  if (!process.stdin.isTTY) {
+    print("Non-interactive shell: pass --set KEY=VALUE (or --list / --unset).");
 
-  const ask = () => {
-    if (index >= keys.length) {
-      readline.close();
-      writeEnvironmentConfig(saved);
-      print("");
-      print(`Configuration saved. Run "pix configure --list" to review.`);
+    return;
+  }
+
+  const { text, isCancel, cancel, intro, outro } = await import("@clack/prompts");
+  intro("Configure PIX_* environment variables (leave empty to skip)");
+  const saved = readEnvironmentConfig();
+
+  for (const [key, meta] of Object.entries(PIX_VARS)) {
+    const answer = await text({
+      message: `${key} - ${meta.desc}`,
+      placeholder: saved[key] || "skip",
+    });
+
+    if (isCancel(answer)) {
+      cancel("Configuration aborted - nothing saved.");
+      process.exitCode = 1;
 
       return;
     }
 
-    const key = keys[index];
-    const meta = PIX_VARS[key];
-    const current = saved[key] || "";
-    readline.question(`${key} (${meta.desc}) [${current}]: `, (answer) => {
-      if (answer.trim()) {
-        saved[key] = answer.trim();
-      }
+    if (answer.trim()) {
+      saved[key] = answer.trim();
+    }
+  }
 
-      index++;
-      ask();
-    });
-  };
-  ask();
+  writeEnvironmentConfig(saved);
+  outro(`Saved ${Object.keys(PIX_VARS).length} variable(s). Run 'pix-galaxy-mcp config env --list' to review.`);
 }
 
 /**

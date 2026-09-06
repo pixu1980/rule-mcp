@@ -24,10 +24,12 @@ try {
   mkdirSync(join(target, "custom-skill"), { recursive: true });
   writeFileSync(join(target, "custom-skill", "SKILL.md"), "custom");
 
+  // The repo serves skills directly from ./skills via MCP resources; the
+  // script deliberately advertises that no separate global install is needed.
   assert.equal(
     packageJson.scripts?.["skills:install"],
-    "node ./scripts/install-skills.mjs",
-    "package.json must expose pnpm skills:install",
+    'echo "ℹ️  pnpm skills:install: skills are loaded directly from ./skills - no separate install step is needed."',
+    "package.json must advertise that skills need no separate install step",
   );
 
   const result = spawnSync(process.execPath, [join(root, "scripts", "install-skills.mjs")], {

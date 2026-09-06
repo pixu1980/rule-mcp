@@ -23,7 +23,7 @@ execFileSync(
 );
 
 const mcpConfig = join(piDir, "mcp.json");
-const prompt = join(piDir, "prompts", "pix-galaxy-mcp.md");
+const prompt = join(piDir, "prompts", "pix.md");
 assert.ok(existsSync(mcpConfig), "Pi MCP config must be installed");
 assert.ok(readFileSync(mcpConfig, "utf8").includes("pix-galaxy-mcp"), "Pi MCP config must register server");
 assert.ok(existsSync(prompt), "Pi slash-command prompt must be installed");
