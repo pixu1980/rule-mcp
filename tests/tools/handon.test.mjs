@@ -25,7 +25,7 @@ process.env.PIX_GALAXY_MCP_NO_AUTOUPDATE = "1";
 // the home directory. homedir() reads HOME, so this keeps them in a temp one.
 process.env.HOME = mkdtempSync(join(tmpdir(), "pix-handon-home-"));
 
-const { handon } = await import("../../src/tools/handon.js");
+const { handon } = await import("../../src/tools/handon/index.js");
 
 const git = (cwd, ...arguments_) =>
   execFileSync("git", arguments_, { cwd, encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] }).trim();

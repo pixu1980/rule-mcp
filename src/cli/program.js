@@ -367,7 +367,7 @@ export function buildProgram() {
     .option("--list", "list handoffs")
     .allowExcessArguments(false)
     .action(async (options) => {
-      const { handon } = await import("../tools/handon.js");
+      const { handon } = await import("../tools/handon/index.js");
       process.stdout.write(
         `${handon({ projectDir: options.dir, file: options.file || undefined, list: options.list }).text}\n`,
       );
