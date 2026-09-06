@@ -116,15 +116,58 @@
   shared sandbox fixture.
 - [x] New guard: `tests/docs/import-paths.test.mjs` resolves every relative specifier
   (static, dynamic, new URL) - it caught four dormant broken dynamic imports on landing.
-- [ ] Remaining oversized (ratchet at 100, worst first): `core/review/_docs.js` 449,
-  `core/telemetry/_flight.js` 449, `tools/skill.js` 415, `transport/_sse.js` 414,
-  `core/telemetry/_telemetry.js` 409, `_stats.js` 386, `transport/_http.js` 376,
-  `core/telemetry/_store.js` 363, `core/scaffold/_templates.js` 359, ...
-- [ ] Oversized test suites to split per feature: `handon.test.mjs` 517,
-  `docs-numbering-doctor.test.mjs` 507 (same fixture-module pattern as
-  tests/core/flight-recorder/).
-- [ ] Each split: underscore-barrel folder, one concern per file, ratchet entries deleted,
-  surface tests (`cli-commander-surface`, `tool-surface-budget`) green.
+- [x] Fourth pass (2026-09-07, session 5) - the src ratchet is down from 93 to 40 entries:
+  - `core/telemetry`: `_flight` 449, `_telemetry` 409, `_stats` 386, `_store` 363,
+    `_kpi` 283 -> `flight/`, `recorder/`, `stats/`, `store/`, `kpi/` (24 files, all <=133).
+  - `core/review`: `_docs` 449, `_roles` 272, `_template` 182, `_persona-file` 167 ->
+    `docs/`, `roles/`, `template/`, `persona-file/` (21 files).
+  - `transport`: `_sse` 414, `_http` 376 -> `sse/`, `http/` (state, guards, routes,
+    handler, start, stop per transport).
+  - `tools`: `skill.js` 415 -> `skill/` (per-skill tool + mode handlers + search/check/
+    scaffold); `apply.js` 340 -> `apply/` (roots/target containment, tool, render);
+    `a11y.js` 268 -> `a11y/` (evaluate, markdown, earl); `fix.js` 232 -> `fix/` (one
+    module per mode).
+  - `core`: `scaffold/_templates` 359 -> `templates/`; `agents/_command-targets` 339 ->
+    `command-targets/` (registry as `_registry.data.js`); `agents/_commands` 314 ->
+    `commands/`; `guardrails/_engine` 338 -> `engine/`; `guardrails/_backend` and
+    `_file-tree` -> per-rule `backend/` and `file-tree/` families (verified
+    behavior-identical); `text/_ascii-box` 323 -> `ascii-box/`; `text/_fingerprint` 289
+    -> `fingerprint/`; `text/_block-spacing` 275 -> `block-spacing/`; `text/_en-english`
+    245 -> `en-english/`; `cache/_catalog` 294 -> `catalog/`; `session/_resume` 292 ->
+    `resume/`; `session/_snapshot` 252 -> `snapshot/`; `enforcement.js` 288 ->
+    `enforcement/`; `skills/_skills` 271 -> four siblings; `detector.js` -> `detector/`
+    with `_rules.data.js`; `scaffold/_template-data.js` renamed `.data.js`.
+  - `cli`: `skills-install` 293, `guard` 273, `roles` 257, `install` 257,
+    `completions` 252, `cache` 239, `paths` 222 (40+ importers moved), `tui` 196 all
+    became folders or shed a sibling; `installers/_uninstall`, `commands/_tools`,
+    `commands/_targets` split one concern out.
+  - `server.js` 200 -> `server/` (completions + prompt handlers as modules);
+    `resources/index` split `_read.js`; `utils/_sandbox` split `_request-wrapper.js`
+    and `_storm-guard.js`; `agents/_integrations` split `_token-pipeline.js`;
+    `core/text/_caveman` split `_caveman-line.js`; `bm25/_cache` split
+    `_cache-signature.js`; `prompts/_handoff-options` moved its tables to `.data.js`.
+  - The paths folder move initially pointed `getSkillsDirs` one level short (19 tools
+    instead of 112); caught by minimal-tools and fixed - depth bugs in `new URL` do not
+    show up in import-paths, only in behavior tests.
+- [x] Test suites split per feature: `handon.test.mjs` (517) -> fixture + five files,
+  `docs-numbering-doctor.test.mjs` (507) -> fixture + six files (flight-recorder pattern);
+  package.json globs updated.
+- [x] `scripts/` fully cleared: census 369 -> surface/labels/generated-files/
+  instructions-file/marker-targets (byte-identical docs, verified); cache report 277 ->
+  context/workload/measure/render (verified end-to-end); self-guardrails 233 -> five
+  per-rule passes (identical 277-file dry-run); changelog 229 -> sections/history/render;
+  wcag 186 -> flatten/render; blank-lines, cache-similarity, post-process, prose each
+  shed one module.
+- [ ] Deliberate keeps, grandfathered with a rationale: `session/_lifecycle.js` 228 and
+  `transport/_session-registry.js` 221 (single state machines whose reset reassigns
+  module state), `guardrails/_guarded.js` 179 (worker lifecycle), `cli/commands/_daemon.js`
+  219 and `tools/router/_call.js` 188 (one dispatcher function each).
+- [ ] `core/tokensave.js` 273 is runtime-orphaned - only tests/core/tokensave-branch.test.mjs
+  imports it; the live integration is `core/agents/_integrations.js`. Decide: delete the
+  module and retarget or retire the test.
+- [ ] Remaining in the ratchet: ~32 test suites between 151 and 383 lines
+  (worst: process-hygiene 383, lifecycle 380, css-flex-first 369, cache-tiers 363,
+  telemetry 359, cache-invalidation 334) - same fixture-module split, next session.
 
 ### Phase 5 - `scripts/` folders per script (done)
 - [x] `reports/` (census, cache, cache-similarity, tool-surface, coverage), `fix/`
@@ -133,7 +176,8 @@
   folder's `index.mjs`, shell installers stay flat.
 - [x] package.json, ci.yml, package.sh, pre-commit hook, docs and census header updated;
   SHA256SUMS refreshed; stale `../test/routing-corpus.mjs` import in the cache reports fixed.
-- [ ] Split the oversized scripts into `_helper.mjs` parts (census 530, cache 277, ...).
+- [x] Split the oversized scripts into underscore parts (fourth pass, session 5): every
+  script ratchet entry is gone.
 
 ### Phase 6 - co-located `__tests__/`
 - [ ] Glob-based runner (`node --test` patterns) replacing the hardcoded lists in
