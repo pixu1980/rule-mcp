@@ -44,8 +44,12 @@ Keep `strict` explicit and verify compiler-version-specific behavior in CI. Type
 
 ## Type Design at Scale
 
-Moved. Discriminated unions, branded types, `as const`, and the `interface` vs
-`type` rule are code style, not compiler configuration: they live in
+Prefer **unknown over any** for values whose shape you do not own: `any` silently disables
+checking, `unknown` forces a narrowing step before use and keeps the compiler honest at every
+boundary (see `Boundary Types and Runtime Validation` below).
+
+The advanced design rules - **discriminated unions**, branded types, `as const`, and the
+`interface` vs `type` rule - are code style, not compiler configuration: they live in
 [rule-styleguide-typescript](../rule-styleguide-typescript/SKILL.md)
 alongside the `any`, `as` and `enum` rules and the guardrails that enforce them.
 
