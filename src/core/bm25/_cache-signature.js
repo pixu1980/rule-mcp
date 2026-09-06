@@ -1,8 +1,8 @@
 /** @module core/bm25/cache-signature - the cache key, file and skills signature */
 
 import { createHash } from "node:crypto";
-import { readdirSync, readFileSync, statSync } from "node:fs";
-import { basename, join } from "node:path";
+import { readdirSync, statSync } from "node:fs";
+import { join } from "node:path";
 import { getRuntimePaths, getSkillsDirs as getSkillsDirectories } from "../../cli/paths/index.js";
 import { codeSignature } from "../code-signature.js";
 

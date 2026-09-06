@@ -6,6 +6,7 @@ import { HOME, IS_MACOS, IS_WINDOWS, readText, removeFile, writeText } from "./_
 import { removeJsonServer, removeVscodeServer } from "./_writers-json.js";
 import { vscodeGlobalDir, devinConfigPath } from "./_agents-ide.js";
 import { uninstallClaude, uninstallCodex, uninstallCursor, uninstallCopilot, uninstallGemini, uninstallPi } from "./_uninstall-clis.js";
+export * from "./_uninstall-clis.js";
 
 const uninstallVscode = ({ dryRun }) => {
   const removeFromExistingFile = (file) => {
@@ -104,16 +105,4 @@ const uninstallers = {
   emacs: uninstallGeneric("emacs"),
 };
 
-export {
-  uninstallClaude,
-  uninstallCodex,
-  uninstallCursor,
-  uninstallCopilot,
-  uninstallGemini,
-  uninstallPi,
-  uninstallVscode,
-  uninstallDevin,
-  uninstallJetbrains,
-  uninstallGeneric,
-  uninstallers,
-};
+export { uninstallVscode, uninstallDevin, uninstallJetbrains, uninstallGeneric, uninstallers };

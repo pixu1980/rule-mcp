@@ -1,6 +1,7 @@
 /** @module cli/guard/staged - guardrail failures over the staged files */
 
 import { execFileSync } from "node:child_process";
+import { CHECKABLE, skillForPath } from "./_decide.js";
 import { readFileSync } from "node:fs";
 import { extname } from "node:path";
 import { checkCode } from "../../core/guardrails/index.js";

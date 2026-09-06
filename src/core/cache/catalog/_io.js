@@ -2,7 +2,6 @@
 
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
-import { pkg as package_ } from "../../../cli/paths/index.js";
 
 
 /** The committed file. One name, so a reader always knows what they are looking at. */
@@ -18,15 +17,6 @@ export const CATALOG_VERSION = 1;
 export function catalogPath(directory = process.cwd()) {
   return join(directory, CATALOG_FILE);
 }
-
-/**
- * Markers of a path that belongs to one machine.
- *
- * The catalog is committed, so an absolute path in it is both useless to the
- * next reader and a small leak of whoever exported it. Rather than scrubbing a
- * value and hoping, an entry carrying one is not exported at all.
- */
-const LOCAL_PATH = /^[/~]|^[A-Za-z]:[/\\]|\/(?:Users|home)\/|[A-Za-z]:\\Users\\/;
 
 /**
  * Write the catalog where a person can read and commit it.

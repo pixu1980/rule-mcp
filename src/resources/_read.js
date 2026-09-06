@@ -3,7 +3,7 @@
 import { readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 import { getSkillsDirs as getSkillsDirectories } from "../cli/paths/index.js";
-import { readSkill, getSkillNames, isPluginSkill } from "../tools/router/index.js";
+import { readSkill } from "../tools/router/index.js";
 
 /**
  * Read a resource by its URI and return its contents.

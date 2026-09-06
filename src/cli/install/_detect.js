@@ -2,7 +2,7 @@
 
 import { readFileSync, existsSync } from "node:fs";
 import { join } from "node:path";
-import { serverName, allAgents, HOME, installers, vscodeGlobalDir } from "../installers/index.js";
+import { serverName, allAgents, HOME, vscodeGlobalDir } from "../installers/index.js";
 
 export * from "../installers/index.js";
 

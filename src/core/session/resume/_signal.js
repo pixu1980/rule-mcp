@@ -1,6 +1,5 @@
 /** @module core/session/resume/signal - is this prompt a resume request? */
 
-import { handon } from "../../../tools/handon/index.js";
 
 /**
  * Prompts that mean "carry on from where we stopped" and nothing else.
@@ -61,5 +60,3 @@ export function isResumeSignal(prompt) {
   return RESUME_PHRASES.has(normalized);
 }
 
-/** Once per process. A handoff is what to work on, stated once, not per call. */
-let announced = false;

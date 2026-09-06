@@ -1,6 +1,6 @@
 /** @module cli/skills-install/picker - the interactive multi-select */
 
-import { multiselect, isCancel, cancel } from "@clack/prompts";
+import { multiselect, isCancel } from "@clack/prompts";
 
 /**
  * Interactive multiselect over the skill catalog, backed by @clack/prompts.

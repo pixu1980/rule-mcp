@@ -1,6 +1,6 @@
 /** @module core/text/en-english/tokenize - split code into the prose that can be judged */
 
-import { FOREIGN_NAME_SET, FOREIGN_SUFFIX_RE, NON_ASCII_LETTER } from "./_patterns.js";
+import { FOREIGN_NAME_SET, FOREIGN_SUFFIX_RE } from "./_patterns.js";
 
 /** True when a single word is recognizably not English. */
 export function foreignWord(word) {

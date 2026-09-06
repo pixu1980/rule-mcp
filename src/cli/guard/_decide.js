@@ -19,7 +19,7 @@ const MIGRATION_REASON = [
 ].join(" ");
 
 /** Extensions worth running guardrails on. */
-const CHECKABLE = new Set([
+export const CHECKABLE = new Set([
   ".js",
   ".mjs",
   ".cjs",
