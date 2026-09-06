@@ -23,6 +23,7 @@ export function summarizeSessions(events) {
       endedAt: event.ts,
       calls: 0,
     };
+
     row.startedAt = Math.min(row.startedAt, event.ts);
     row.endedAt = Math.max(row.endedAt, event.ts);
     row.calls += 1;

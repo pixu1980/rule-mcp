@@ -24,6 +24,7 @@ export const authLimiter = createAuthRateLimiter({});
  */
 export const sessions = new Map();
 
+/** The capped, evictable registry that sweeps the sessions map. */
 export const registry = new SessionRegistry({ maxSessions: MAX_SESSIONS });
 
 /** Active HTTP/HTTPS server instance. */
@@ -32,14 +33,18 @@ let httpServer = null;
 /** Bearer token for the active local SSE server. */
 let serverToken = null;
 
+/** @returns {object|null} the active HTTP/HTTPS server */
 export const getHttpServer = () => httpServer;
 
+/** Replace the active HTTP/HTTPS server instance. */
 export const setHttpServer = (server) => {
   httpServer = server;
 };
 
+/** @returns {string|null} the bearer token clients must present */
 export const getServerToken = () => serverToken;
 
+/** Remember the bearer token for this daemon run. */
 export const setServerToken = (token) => {
   serverToken = token;
 };

@@ -27,9 +27,9 @@
  * @see module:cli/paths - where the project directory is
  */
 
-export { MAX_EVENTS_BYTES, RAW_RETENTION_DAYS } from "./_constants.js";
-export { eventsFile, projectIdFile, rollupFile, usageFile } from "./_paths.js";
-export { readSidecarUsage, writeSidecarUsage } from "./_sidecar.js";
-export { appendEvents, readEvents, stateSize } from "./_events.js";
-export { readRollups, rollup } from "./_rollup.js";
-export { drain, maintain, purge } from "./_retention.js";
+export * from "./_constants.js";
+export * from "./_paths.js";
+export * from "./_sidecar.js";
+export * from "./_events.js";
+export * from "./_rollup.js";
+export * from "./_retention.js";

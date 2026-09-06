@@ -17,6 +17,7 @@ let _client;
  */
 export function setClientInfo(info) {
   const name = info?.name;
+
   _client = name ? (info.version ? `${name}/${info.version}` : name) : undefined;
 }
 

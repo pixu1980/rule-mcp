@@ -63,6 +63,7 @@ export function installationId() {
   }
 
   const file = join(getRuntimePaths().stateDir, "installation-id");
+
   try {
     if (existsSync(file)) {
       _installation = readFileSync(file, "utf8").trim();

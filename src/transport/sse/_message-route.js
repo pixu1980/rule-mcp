@@ -61,6 +61,7 @@ export async function handleMessagePost(request, res, parsedUrl) {
 
   let logged = false;
   const originalEnd = res.end.bind(res);
+
   res.end = (...args) => {
     if (!logged) {
       logged = true;

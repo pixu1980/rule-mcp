@@ -16,5 +16,5 @@
  * @see module:server - createServer is imported here
  */
 
-export { startSseServer } from "./_start.js";
-export { stopSseServer } from "./_stop.js";
+export * from "./_start.js";
+export * from "./_stop.js";

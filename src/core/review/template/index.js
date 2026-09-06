@@ -13,5 +13,5 @@
  * will say.
  */
 
-export { OPERATIONS } from "./_operation.js";
-export { fillRoleTemplate } from "./_fill.js";
+export * from "./_operation.js";
+export * from "./_fill.js";

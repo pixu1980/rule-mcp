@@ -15,7 +15,7 @@
  * their documents - deleting an id would make an old audit unattributable.
  */
 
-export { EMBEDDED_ROLES, loadPersonaCatalog } from "./_catalog.js";
-export { validateRole } from "./_validate.js";
-export { activeRoles, allRoles, roleById } from "./_query.js";
-export { detectRole } from "./_detect.js";
+export * from "./_catalog.js";
+export * from "./_validate.js";
+export * from "./_query.js";
+export * from "./_detect.js";

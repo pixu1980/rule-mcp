@@ -98,7 +98,7 @@ export async function readResource(uri) {
 
   // ── Templates catalog ──────────────────────────────────────────
   if (uri === "rule://templates") {
-    const { listTemplateCategories } = await import("../core/scaffold/_templates.js");
+    const { listTemplateCategories } = await import("../core/scaffold/templates/index.js");
 
     return {
       contents: [
@@ -133,14 +133,14 @@ export async function readResource(uri) {
   }
 
   if (uri === "rule://a11y/test-basic") {
-    const { getTemplate } = await import("../core/scaffold/_templates.js");
+    const { getTemplate } = await import("../core/scaffold/templates/index.js");
     const tmpl = getTemplate("a11y-test-basic");
 
     return { contents: [{ uri, mimeType: "text/plain", text: typeof tmpl === "string" ? tmpl : tmpl?.html || "" }] };
   }
 
   if (uri === "rule://a11y/test-forms") {
-    const { getTemplate } = await import("../core/scaffold/_templates.js");
+    const { getTemplate } = await import("../core/scaffold/templates/index.js");
     const tmpl = getTemplate("a11y-test-forms");
 
     return { contents: [{ uri, mimeType: "text/plain", text: typeof tmpl === "string" ? tmpl : tmpl?.html || "" }] };

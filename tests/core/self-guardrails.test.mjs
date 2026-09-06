@@ -27,7 +27,7 @@ const CATALOGS = new Map([
   ["core/file-tree/", "the file-tree checker and generator carry sample trees and generated file shapes as data"],
   ["_block-spacing.js", "the block-spacing checker quotes the one-line blocks it forbids as examples"],
   ["_template-data.js", "component templates are emitted as strings, stubs included"],
-  ["_templates.js", "the template catalog quotes the markup and CSS it generates"],
+  ["core/scaffold/templates/", "the template catalog quotes the markup and CSS it generates"],
   ["_fingerprint.js", "the fingerprint scanner quotes typographic samples in its patterns"],
   ["_fingerprint.data.js", "the British-vs-American dictionary contains the words it flags"],
   ["core/wcag-data/", "the WCAG criteria tables are reference data per guideline"],

@@ -73,6 +73,7 @@ export function sendJsonRpcError(res, status, code, message) {
 export async function readBody(request, res) {
   let bodyLength = 0;
   const buffers = [];
+
   for await (const chunk of request) {
     bodyLength += chunk.length;
 

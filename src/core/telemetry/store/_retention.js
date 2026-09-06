@@ -1,7 +1,10 @@
 /** @module core/telemetry/store/retention */
 
 import { rmSync } from "node:fs";
-import { DAY_MS, MAX_EVENTS_BYTES, RAW_RETENTION_DAYS } from "./_constants.js";
+import { MAX_EVENTS_BYTES, RAW_RETENTION_DAYS } from "./_constants.js";
+
+/** One day, in milliseconds. */
+const DAY_MS = 86_400_000;
 import { readEvents, stateSize, writeEvents } from "./_events.js";
 import { eventsFile, projectIdFile, rollupFile, usageFile } from "./_paths.js";
 import { rollup } from "./_rollup.js";

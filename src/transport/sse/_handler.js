@@ -78,6 +78,7 @@ export async function requestHandler(request, res) {
     // Log full detail server-side; return only a generic message + correlation id
     // to the client to avoid leaking internal state.
     const requestId = randomUUID();
+
     process.stderr.write(
       `[rule-mcp] [${requestId}] ${request.method} ${request.url}: ${error?.stack ?? error?.message ?? error}\n`,
     );

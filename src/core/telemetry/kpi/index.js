@@ -22,5 +22,5 @@
  * @see module:core/agents/transcripts - where the model's usage comes from
  */
 
-export { IDLE_GAP_MS } from "./_iterations.js";
-export { computeKpi } from "./_compute.js";
+export * from "./_iterations.js";
+export * from "./_compute.js";

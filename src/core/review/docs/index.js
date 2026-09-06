@@ -19,7 +19,7 @@
  * @see module:core/review/roles - where a role and its version come from
  */
 
-export { trioPaths } from "./_paths.js";
-export { readFindings } from "./_findings.js";
-export { validateTrio } from "./_validate.js";
-export { syncRoleDocs } from "./_sync.js";
+export * from "./_paths.js";
+export * from "./_findings.js";
+export * from "./_validate.js";
+export * from "./_sync.js";

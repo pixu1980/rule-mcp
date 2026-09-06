@@ -14,6 +14,7 @@ export function flush() {
   }
 
   const pending = _buffer;
+
   _buffer = [];
   try {
     appendEvents(pending);
