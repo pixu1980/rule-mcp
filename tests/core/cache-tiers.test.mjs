@@ -257,7 +257,7 @@ test("every call is classified by the path it arrived on", () => {
 // ── Aggregation reports both facets ──
 
 test("the aggregate reports hit rate per tier and calls per entry path", async () => {
-  const { aggregate } = await import("../../src/core/telemetry/_stats.js");
+  const { aggregate } = await import("../../src/core/telemetry/stats/index.js");
   const stats = aggregate([
     { tool: "pix_tool", cacheHit: false, cacheTier: "miss", entry: "router" },
     { tool: "pix_tool", cacheHit: true, cacheTier: "exact", entry: "router" },
@@ -271,7 +271,7 @@ test("the aggregate reports hit rate per tier and calls per entry path", async (
 });
 
 test("the rendered report names the tiers and the entry paths", async () => {
-  const { aggregate, renderStats } = await import("../../src/core/telemetry/_stats.js");
+  const { aggregate, renderStats } = await import("../../src/core/telemetry/stats/index.js");
   const text = renderStats(
     aggregate([
       { tool: "pix_tool", cacheHit: true, cacheTier: "normalized", entry: "router" },

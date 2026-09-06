@@ -11,9 +11,9 @@ import { makeCheck, makeSandbox, recordSampleSession, writePiFixture, T0 } from 
 const { check, finish } = makeCheck("Flight recorder: sidecar and no-write");
 const { workspace, project } = makeSandbox();
 
-const { readSidecarUsage, writeSidecarUsage, readEvents } = await import("../../../src/core/telemetry/_store.js");
-const telemetry = await import("../../../src/core/telemetry/_telemetry.js");
-const { exportFlight } = await import("../../../src/core/telemetry/_flight.js");
+const { readSidecarUsage, writeSidecarUsage, readEvents } = await import("../../../src/core/telemetry/store/index.js");
+const telemetry = await import("../../../src/core/telemetry/recorder/index.js");
+const { exportFlight } = await import("../../../src/core/telemetry/flight/index.js");
 
 recordSampleSession(telemetry);
 
