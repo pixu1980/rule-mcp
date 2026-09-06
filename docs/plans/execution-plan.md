@@ -95,13 +95,26 @@
   (`_engine`, `_guarded`, `_worker-thread`, catalogs underscored); `cli/daemon/` pair.
   Five more 1-2 line shims removed (guardrail-defs.js, guardrails/framework.js,
   guardrails/quality.js and the flat daemon/commands aliases).
-- [ ] Remaining oversized (ratchet, worst first): `tools/handon.js` 737,
-  `core/cache/_tool-cache.js` 720, `core/file-tree.js` 686, `tools/handoff.js` 660,
-  `guardrails/_shared.js` 655, `prompts/index.js` 629, `core/agents/_transcripts.js` 583,
-  `cli/daemon/_platform.js` 548, `tools/gateway.js` 530, `reports/census/index.mjs` 530, ...
+- [x] Second pass (2026-09-06, session 3): `guardrails/_shared.js` (654) -> 15 per-rule
+  files under `guardrails/shared/` - the three simplicity rules it duplicated from the
+  quality family are now shared objects and **getGuardrails dedupes by id** (they ran
+  twice per check before); maskLiterals single-sourced in `guardrails/_util.js`.
+- [x] `tools/handon.js` (737) -> 12 files, `tools/handoff.js` (660) -> 10 files,
+  `core/cache/_tool-cache.js` (720) -> 10 files (shared cacheState object),
+  `core/file-tree.js` (686) -> 9 files (dead isComponentDir dropped),
+  `prompts/index.js` (629) -> 8 files (definitions as `_defs.data.js`),
+  `tools/adr.js` (580) -> 10 files, `tools/gateway.js` (530) -> 6 files.
+- [x] `core/text/_fingerprint.js` and `_en-english.js` dictionaries extracted to
+  `*.data.js` (494->290 and 490->247 logic lines).
+- [ ] Remaining oversized (ratchet at 107, worst first): `core/agents/_transcripts.js` 583,
+  `cli/daemon/_platform.js` 548, `reports/census/index.mjs` 530 (byte-exact test guards
+  the refactor), `cli/program.js` 501, `cli/daemon/_daemon.js` 499, `core/self-update.js`
+  483, `cli/doctor.js` 478, `core/telemetry/_flight.js` 449, `core/review/_docs.js` 449, ...
+- [ ] Oversized test suites to split per feature: `flight-recorder.test.mjs` 540,
+  `handon.test.mjs` 517, `docs-numbering-doctor.test.mjs` 507 (update the
+  `test:foundations` list with each split).
 - [ ] Each split: underscore-barrel folder, one concern per file, ratchet entries deleted,
   surface tests (`cli-commander-surface`, `tool-surface-budget`) green.
-- [ ] Move `core/text/_en-english.js` dictionaries to `*.data.js` when next touched.
 
 ### Phase 5 - `scripts/` folders per script (done)
 - [x] `reports/` (census, cache, cache-similarity, tool-surface, coverage), `fix/`
