@@ -28,7 +28,7 @@ delete process.env.RULE_MCP_NO_CACHE;
 const { loadAllSkills } = await import("../../src/core/skills/_skills.js");
 const { callTool } = await import("../../src/tools/router/index.js");
 const { cacheKey, cacheGet, cacheSet, cacheClear } = await import("../../src/core/cache/tool-cache/index.js");
-const { GATEWAY_CORE_TOOL, gatewayCoreArguments, validateApply } = await import("../../src/tools/gateway.js");
+const { GATEWAY_CORE_TOOL, gatewayCoreArguments, validateApply } = await import("../../src/tools/gateway/index.js");
 
 /** Receipt lifetime, mirrored from the module under test. */
 const TTL = 300_000;

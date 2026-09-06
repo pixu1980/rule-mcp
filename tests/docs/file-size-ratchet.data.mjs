@@ -73,7 +73,6 @@ export const FILE_SIZE_RATCHET = new Map([
   ["src/tools/a11y.js", 268],
   ["src/tools/apply.js", 340],
   ["src/tools/fix.js", 232],
-  ["src/tools/gateway.js", 530],
   ["src/tools/router/_call.js", 188],
   ["src/tools/skill.js", 415],
   ["src/transport/_http.js", 376],
