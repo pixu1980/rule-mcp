@@ -1,0 +1,108 @@
+/**
+ * RULE_MCP_* environment configuration: where it lives on disk, the opt-out
+ * defaults, and the mcpServerConfig builders that merge env + CLI args.
+ * @module cli/installers/env
+ */
+
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { homedir } from "node:os";
+import { join } from "node:path";
+import { resolveGlobalBinary, serverName } from "./paths.js";
+import { normalizeInstallMode } from "./catalog.js";
+import { getOrCreateSseBearerToken } from "../../transport/sse-auth.js";
+import { DEFAULT_SSE_PORT } from "../paths.js";
+
+const ENV_CONFIG_DIR = join(homedir(), ".config", "rule-mcp");
+
+const ENV_CONFIG_FILE = join(ENV_CONFIG_DIR, "env.json");
+
+const DEFAULT_OPTOUT_ENV = {
+  RULE_MCP_NO_AUTOUPDATE: "0",
+  RULE_MCP_NO_AUTORESTART: "0",
+  RULE_MCP_NO_CACHE: "0",
+  RULE_MCP_NO_CAVEMAN: "0",
+  RULE_MCP_NO_TOKENSAVE: "0",
+  RULE_MCP_NO_REMINDER: "0",
+};
+
+function readEnvConfig() {
+  try {
+    if (!existsSync(ENV_CONFIG_FILE)) {
+      return {};
+    }
+
+    return JSON.parse(readFileSync(ENV_CONFIG_FILE, "utf8"));
+  } catch {
+    return {};
+  }
+}
+
+function writeEnvConfig(environment) {
+  mkdirSync(ENV_CONFIG_DIR, { recursive: true });
+  writeFileSync(ENV_CONFIG_FILE, JSON.stringify(environment, null, 2) + "\n", "utf8");
+}
+
+function resolveEnvironment(options = {}) {
+  const saved = readEnvConfig();
+  // Opt-out defaults are the base so they always appear in generated config;
+  // saved preferences and explicit opts override them.
+  return { ...DEFAULT_OPTOUT_ENV, ...saved, ...options.env };
+}
+
+const commandConfig = (entrypoint, options = {}) => {
+  const mode = normalizeInstallMode(options.mode);
+  const environment = resolveEnvironment(options);
+  // Only pi.dev coding agent supports directTools + lifecycle
+  const isPi = options.agentName === "pi";
+
+  if (mode === "daemon" || mode === "docker") {
+    const port =
+      Number.isInteger(options.port) && options.port > 0 && options.port < 65_536 ? options.port : DEFAULT_SSE_PORT;
+    const token = getOrCreateSseBearerToken();
+    const config = {
+      url: `http://127.0.0.1:${port}/sse`,
+      headers: { Authorization: `Bearer ${token}` },
+    };
+    if (isPi) {
+      config.directTools = true;
+      config.lifecycle = "keep-alive";
+      // Bare per-server tool naming: tools become `rule-tool-*` and prompts
+      // `/rule-*` instead of the `mcp__pix_galaxy_mcp__*` prefix form.
+      config.toolPrefix = "none";
+    }
+
+    return config;
+  }
+
+  // Build stdio config
+  let config;
+  const globalBin = resolveGlobalBinary();
+
+  if (globalBin) {
+    const home = homedir();
+    config = { command: globalBin, args: ["serve"], type: "stdio" };
+  } else {
+    config = { command: process.execPath, args: [entrypoint, "serve"] };
+  }
+
+  if (isPi) {
+    config.directTools = true;
+    config.lifecycle = "keep-alive";
+    // Same clean naming as the daemon branch: bare `rule-tool-*` tools and
+    // `/rule-*` prompts instead of `mcp__pix_galaxy_mcp__*`.
+    config.toolPrefix = "none";
+  }
+
+  // Attach env vars if any (supported by MCP stdio transport)
+  if (Object.keys(environment).length > 0) {
+    config.env = environment;
+  }
+
+  return config;
+};
+
+function mcpServerConfig(entrypoint, opts = {}) {
+  return { [serverName]: commandConfig(entrypoint, opts) };
+}
+
+export { ENV_CONFIG_DIR, ENV_CONFIG_FILE, DEFAULT_OPTOUT_ENV, readEnvConfig, writeEnvConfig, resolveEnvironment, commandConfig, mcpServerConfig };
