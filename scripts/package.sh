@@ -9,7 +9,7 @@ ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 echo "=== Packaging $NAME v$VERSION ==="
 
 # 1. Embed skills
-node "$ROOT/scripts/embed-skills.mjs"
+node "$ROOT/scripts/build/embed-skills/index.mjs"
 
 # 2. Verify
 if [ ! -f "$ROOT/bin/rule-mcp.js" ]; then

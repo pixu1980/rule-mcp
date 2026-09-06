@@ -137,6 +137,6 @@ test("no tracked file ships a ragged box", () => {
       .map((entry) => `${file}:${entry.line} is ${entry.width} columns, expected ${entry.expected}`),
   );
 
-  assert.deepEqual(ragged, [], "run node scripts/clean-prose.mjs --apply");
+  assert.deepEqual(ragged, [], "run node scripts/fix/prose/index.mjs --apply");
   console.log(`  ${files.length} files, no ragged box`);
 });

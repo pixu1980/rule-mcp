@@ -13,7 +13,7 @@ import { readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
-const scriptsDir = dirname(fileURLToPath(import.meta.url));
+const scriptsDir = join(dirname(fileURLToPath(import.meta.url)), "..", "..");
 const OUTPUT = join(scriptsDir, "SHA256SUMS");
 
 const files = readdirSync(scriptsDir)

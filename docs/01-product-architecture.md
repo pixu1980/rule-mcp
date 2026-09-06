@@ -19,7 +19,7 @@ Serve rule-* skill rules, styleguides, component templates, and framework best p
 
 ### Current surface
 
-The inventories live in one generated source - `scripts/generate-census.mjs`,
+The inventories live in one generated source - `scripts/reports/census/index.mjs`,
 refreshed by `pnpm census` (on every build and every pre-commit) - and are
 rendered into dedicated registry files that the docs link to instead of
 re-listing:
@@ -87,7 +87,7 @@ The current MCP protocol is **hand-rolled**:
 7. **No notification support** (e.g. `notifications/initialized`)
 8. **No proper error taxonomy** - all errors are `-32603` (Internal error)
 9. **No standardized test framework** - single smoke test, no unit tests
-10. **Skill embedding at build time** - requires `node scripts/embed-skills.mjs` before every release
+10. **Skill embedding at build time** - requires `node scripts/build/embed-skills/index.mjs` before every release
 11. **CI not exhaustive** - no linting, no test coverage, no audit
 
 ---

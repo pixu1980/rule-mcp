@@ -10,7 +10,7 @@ import { homedir } from "node:os";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
-const repositoryRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
+const repositoryRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
 const sourceRoot = join(repositoryRoot, "skills");
 const targetRoot = join(homedir(), ".agents", "skills");
 

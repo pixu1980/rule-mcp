@@ -25,8 +25,8 @@
 process.env.RULE_MCP_NO_TELEMETRY ??= "1";
 process.env.RULE_MCP_NO_AUTOUPDATE ??= "1";
 
-const { loadAllSkills } = await import("../src/core/skills.js");
-const { listTools } = await import("../src/tools/router/index.js");
+const { loadAllSkills } = await import("../../../src/core/skills.js");
+const { listTools } = await import("../../../src/tools/router/index.js");
 
 /** The char/4 heuristic used everywhere in this project. */
 const tokens = (text) => Math.ceil(text.length / 4);
@@ -89,7 +89,7 @@ if (process.argv.includes("--json")) {
 }
 
 if (process.argv.includes("--check")) {
-  const { TOOL_SURFACE_BUDGET_TOKENS } = await import("../src/core/tool-budget.js");
+  const { TOOL_SURFACE_BUDGET_TOKENS } = await import("../../../src/core/tool-budget.js");
   if (report.totalTokens > TOOL_SURFACE_BUDGET_TOKENS) {
     console.error(`\nOver budget: ~${report.totalTokens} > ${TOOL_SURFACE_BUDGET_TOKENS} tokens.`);
     console.error("Every token here is paid on every model turn. Trim the surface or raise the budget deliberately.");
