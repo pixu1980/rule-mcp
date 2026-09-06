@@ -13,7 +13,7 @@ import { test } from "node:test";
 import { existsSync, mkdirSync, mkdtempSync, readdirSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { promptSkillSelection, isCancelSelection, skillsInstallCommand } from "../../src/cli/skills-install.js";
+import { promptSkillSelection, isCancelSelection, skillsInstallCommand } from "../../src/cli/skills-install/index.js";
 
 const items = [
   { name: "one", displayName: "one", description: "a deliberately long description" },

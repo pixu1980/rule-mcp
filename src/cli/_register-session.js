@@ -55,12 +55,12 @@ export function registerSkillsCommand(program) {
 
       switch (action) {
         case "install": {
-          const { skillsInstallCommand } = await import("./skills-install.js");
+          const { skillsInstallCommand } = await import("./skills-install/index.js");
           await skillsInstallCommand({ scope: options.scope, selectAll: options.all });
           break;
         }
         case "list": {
-          const { skillsListCommand } = await import("./skills-install.js");
+          const { skillsListCommand } = await import("./skills-install/index.js");
           skillsListCommand({ json: options.json });
           break;
         }

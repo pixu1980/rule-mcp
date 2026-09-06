@@ -17,7 +17,6 @@ export const FILE_SIZE_RATCHET = new Map([
   ["src/cli/installers/_uninstall.js", 205],
   ["src/cli/paths.js", 222],
   ["src/cli/roles.js", 257],
-  ["src/cli/skills-install.js", 293],
   ["src/cli/tui.js", 196],
   ["src/core/agents/_hooks.js", 167],
   ["src/core/agents/_integrations.js", 205],

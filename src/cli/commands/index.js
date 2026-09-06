@@ -5,4 +5,4 @@ export * from "./_lifecycle.js";
 export * from "./_tools.js";
 export * from "./_health.js";
 export * from "./_targets.js";
-export { skillsInstallCommand, skillsListCommand } from "../skills-install.js";
+export { skillsInstallCommand, skillsListCommand } from "../skills-install/index.js";
