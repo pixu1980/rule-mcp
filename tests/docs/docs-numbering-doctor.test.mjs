@@ -24,7 +24,7 @@ import {
   applyRenumber,
   rewriteCommitReferences,
   staleCommitReferences,
-} from "../../src/core/docs-numbering.js";
+} from "../../src/core/docs-numbering/index.js";
 
 const git = (args, cwd) => execFileSync("git", args, { cwd, encoding: "utf8", stdio: ["ignore", "pipe", "ignore"] });
 
