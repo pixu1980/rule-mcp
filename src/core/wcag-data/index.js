@@ -1,4 +1,4 @@
-// Auto-split from src/core/wcag-data.js - see ./wcag-data/index.js
+/** WCAG 2.2 criteria catalog barrel: meta plus per-guideline tables. */
 export * from "./meta.js";
 import { CRITERIA_1_1 } from "./criteria-1-1.js";
 import { CRITERIA_1_2 } from "./criteria-1-2.js";

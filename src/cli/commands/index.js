@@ -1,4 +1,4 @@
-// Auto-split from src/cli/commands.js - see ./commands/index.js
+/** CLI command barrel: one module per command family. */
 export * from "./help.js";
 export * from "./daemon.js";
 export * from "./lifecycle.js";

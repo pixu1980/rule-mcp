@@ -1,4 +1,4 @@
-// Auto-split from src/tools/router.js - see ./router/index.js
+// Auto-split from src/tools/router/index.js - see ./router/index.js
 /** Tool entry resolution: entry path, dependency edge mapping, and the routed-skill lookup. */
 
 import { SKILL_INDEPENDENT } from "./helpers.js";

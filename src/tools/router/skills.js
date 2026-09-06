@@ -1,4 +1,4 @@
-// Auto-split from src/tools/router.js - see ./router/index.js
+// Auto-split from src/tools/router/index.js - see ./router/index.js
 /** Skill file access: read SKILL.md, metadata, target-only set, name listing and plugin detection. */
 
 import { existsSync, readFileSync, readdirSync } from "node:fs";

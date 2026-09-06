@@ -1,4 +1,4 @@
-// Auto-split from src/cli/commands.js - see ./commands/index.js
+// Auto-split from src/cli/commands/index.js - see ./commands/index.js
 /** Install and uninstall commands (agent catalog + service). */
 
 import { entrypoint, print, printJson } from "./shared.js";

@@ -1,5 +1,5 @@
 import { z } from "zod/v4";
-import { registerTool, readSkill, getSkillNames, isPluginSkill, hasPluginJs } from "./router.js";
+import { registerTool, readSkill, getSkillNames, isPluginSkill, hasPluginJs } from "./router/index.js";
 import { getGuardrailsReport } from "../core/guardrails.js";
 import { checkCodeGuarded } from "../core/guardrails-guarded.js";
 import { extractScaffoldSection, extractSingleScaffoldFile } from "../core/scaffold-parser.js";
@@ -143,7 +143,7 @@ export function registerSkillTool(skillName) {
 
       if (mode === "tldr") {
         // BM25-compressed: return only relevant sections
-        const { search, buildIndex, isIndexReady } = await import("../core/bm25.js");
+        const { search, buildIndex, isIndexReady } = await import("../core/bm25/index.js");
 
         if (!isIndexReady()) {
           buildIndex();
@@ -183,7 +183,7 @@ export function registerSearchTool() {
   let _bm25 = null;
   async function getBm25() {
     if (!_bm25) {
-      _bm25 = await import("../core/bm25.js");
+      _bm25 = await import("../core/bm25/index.js");
     }
 
     return _bm25;

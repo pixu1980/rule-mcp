@@ -1,4 +1,4 @@
-// Auto-split from src/cli/commands.js - see ./commands/index.js
+// Auto-split from src/cli/commands/index.js - see ./commands/index.js
 /** Daemon lifecycle command: install/enable/disable/start/stop/status/logs arms. */
 
 import {

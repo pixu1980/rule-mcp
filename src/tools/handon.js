@@ -34,7 +34,7 @@ import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { neutralizeDirectives } from "../core/untrusted.js";
 import { join } from "node:path";
 import { z } from "zod/v4";
-import { registerTool } from "./router.js";
+import { registerTool } from "./router/index.js";
 
 /** Where handoffs live, relative to the project root. */
 const HANDOFF_DIR = "docs/handoff";

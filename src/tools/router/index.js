@@ -1,4 +1,4 @@
-// Auto-split from src/tools/router.js - see ./router/index.js
+/** Tool router barrel: registry, surface, call dispatch and skill catalog. */
 export * from "./helpers.js";
 export * from "./entry.js";
 export * from "./compute.js";

@@ -24,7 +24,7 @@
  * @see module:tools/router - marks activity on every tool call
  */
 
-import { clearIndex, isIndexReady } from "./bm25.js";
+import { clearIndex, isIndexReady } from "./bm25/index.js";
 import { skillCache } from "./skills.js";
 import { flush, memoryEntryCount, releaseMemory } from "./tool-cache.js";
 

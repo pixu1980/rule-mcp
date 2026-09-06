@@ -1,4 +1,4 @@
-// Auto-split from src/cli/commands.js - see ./commands/index.js
+// Auto-split from src/cli/commands/index.js - see ./commands/index.js
 /** Shared command runtime helpers: entry point, console printers, JSON parse, safe exec. */
 import { resolve, dirname } from "node:path";
 import { fileURLToPath } from "node:url";

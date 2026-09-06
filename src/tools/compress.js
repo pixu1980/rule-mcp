@@ -21,7 +21,7 @@ import { z } from "zod/v4";
 import { alignAsciiBoxes } from "../core/ascii-box.js";
 import { compressText } from "../core/caveman.js";
 import { stripFingerprint } from "../core/fingerprint.js";
-import { registerTool } from "./router.js";
+import { registerTool } from "./router/index.js";
 
 /** Rough token estimate, good enough to report a saving. */
 const estimateTokens = (text) => Math.ceil(text.length / 4);

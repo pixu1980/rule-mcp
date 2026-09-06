@@ -8,7 +8,7 @@
  */
 
 import { z } from "zod/v4";
-import { registerTool } from "../tools/router.js";
+import { registerTool } from "../tools/router/index.js";
 import { COMPONENT_TEMPLATES, toPascal, toKebab, interpolate } from "./template-data.js";
 import { checkCode } from "./guardrails.js";
 

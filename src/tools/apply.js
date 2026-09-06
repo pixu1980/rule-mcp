@@ -188,7 +188,7 @@ export function resolveWriteTarget(rootDir, targetPath) {
  * Register the pix_apply write tool.
  */
 export async function registerApplyTool() {
-  const { registerTool } = await import("./router.js");
+  const { registerTool } = await import("./router/index.js");
   const { z } = await import("zod");
 
   const ApplySchema = z.object({

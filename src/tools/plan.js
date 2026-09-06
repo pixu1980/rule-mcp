@@ -15,7 +15,7 @@ import { allRoles, roleById } from "../core/review-roles.js";
 import { loadRoleOverlays } from "../core/review-roles-overlays.js";
 import { fillRoleTemplate, OPERATIONS } from "../core/review-roles-template.js";
 import { fenceUntrusted } from "../core/untrusted.js";
-import { registerTool } from "./router.js";
+import { registerTool } from "./router/index.js";
 
 /**
  * Resolve a role by exact id first, then by any name it answers to (title,

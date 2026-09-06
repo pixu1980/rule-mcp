@@ -1,4 +1,4 @@
-// Auto-extracted from src/cli/commands.js - help/usage text.
+// Auto-extracted from src/cli/commands/index.js - help/usage text.
 
 /**
  * The help text shown by the top-level CLI command.

@@ -17,7 +17,7 @@ import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { homedir, platform, arch } from "node:os";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { listTools } from "../tools/router.js";
+import { listTools } from "../tools/router/index.js";
 import { getRuntimePaths } from "./paths.js";
 import { detectInstalledAgents } from "./install.js";
 import { checkDaemonService, WRAPPER_SCRIPT_PATH } from "./daemon.js";
@@ -374,7 +374,7 @@ export async function runDoctor(telemetry = false) {
   try {
     const { loadAllSkills } = await import("../core/skills.js");
     await loadAllSkills(true);
-    const { listTools } = await import("../tools/router.js");
+    const { listTools } = await import("../tools/router/index.js");
     const { listResources } = await import("../resources/index.js");
     const { listPrompts } = await import("../prompts/index.js");
     const len = (r) => (Array.isArray(r) ? r.length : (r.tools ?? r.resources ?? r.prompts).length);
