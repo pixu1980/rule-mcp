@@ -34,7 +34,6 @@ export const FILE_SIZE_RATCHET = new Map([
   ["src/core/session/_snapshot.js", 252],
   ["src/core/skills/_skills.js", 271],
   ["src/core/text/_caveman.js", 198],
-  ["src/core/text/_en-english.js", 245],
   ["src/core/tokensave.js", 273],
   ["src/prompts/_handoff-options.js", 162],
   ["src/resources/index.js", 204],
