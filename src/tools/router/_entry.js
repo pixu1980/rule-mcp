@@ -2,7 +2,7 @@
 
 import { SKILL_INDEPENDENT } from "./_helpers.js";
 import { getSkillNames } from "./_skills.js";
-import { skillDigest } from "../../core/cache/_tool-cache.js";
+import { skillDigest } from "../../core/cache/tool-cache/index.js";
 function entryPathOf(name) {
   if (name === "pix_tool") {
     return "router";

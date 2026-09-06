@@ -27,7 +27,7 @@ delete process.env.RULE_MCP_NO_CACHE;
 process.env.RULE_MCP_NO_AUTOUPDATE = "1";
 process.env.RULE_MCP_NO_TELEMETRY = "1";
 
-const { cacheKey, normalizedKey, cacheLookup, cacheStore, cacheClear } = await import("../../src/core/cache/_tool-cache.js");
+const { cacheKey, normalizedKey, cacheLookup, cacheStore, cacheClear } = await import("../../src/core/cache/tool-cache/index.js");
 const { registerTool, callTool, entryPathOf } = await import("../../src/tools/router/index.js");
 
 const result = (text) => ({ content: [{ type: "text", text }] });
@@ -340,7 +340,7 @@ test("no tier above the normalized key is wired in", async () => {
   // This test exists so the absence is deliberate rather than forgotten. If a
   // future tier lands, it changes this assertion and has to bring a report
   // showing a threshold with zero wrong replays and a non-zero hit count.
-  const { cacheLookup: lookup } = await import("../../src/core/cache/_tool-cache.js");
+  const { cacheLookup: lookup } = await import("../../src/core/cache/tool-cache/index.js");
   const TIERS = new Set(["exact", "normalized"]);
   cacheClear();
 

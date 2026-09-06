@@ -22,9 +22,9 @@
 
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
-import { cacheEntries, cacheIsFresh, cachePrime, cacheEnabled, promotableEntries } from "./_tool-cache.js";
+import { cacheEntries, cacheIsFresh, cachePrime, cacheEnabled, promotableEntries } from "./tool-cache/index.js";
 
-export { MIN_HITS } from "./_tool-cache.js";
+export { MIN_HITS } from "./tool-cache/index.js";
 import { pkg as package_ } from "../../cli/paths.js";
 
 /** The committed file. One name, so a reader always knows what they are looking at. */
