@@ -17,6 +17,28 @@ import { fillRoleTemplate, OPERATIONS } from "../core/review-roles-template.js";
 import { fenceUntrusted } from "../core/untrusted.js";
 import { registerTool } from "./router.js";
 
+/**
+ * Resolve a role by exact id first, then by any name it answers to (title,
+ * alias). The registry keeps old ids alive as aliases - e.g. `api-design` is
+ * what `backend` is an alias of - so the tool should answer to them, same
+ * as {@link module:core/review-roles.detectRole} does for free-form prompts.
+ */
+function resolveRole(requested, overlays) {
+  const exact = roleById(requested, overlays);
+
+  if (exact) {
+    return exact;
+  }
+
+  const normalized = String(requested).toLowerCase();
+
+  return allRoles(overlays).find((role) =>
+    [role.id, role.id.replaceAll("-", " "), role.role.toLowerCase(), ...(role.aliases ?? [])].some(
+      (name) => String(name).toLowerCase() === normalized,
+    ),
+  );
+}
+
 const PlanSchema = z.object({
   role: z.string().describe("Role id (security, privacy, a11y...)"),
   operation: z
@@ -38,7 +60,7 @@ export function registerPlanTool() {
     advertise: ["role", "topic", "operation"],
     handler: async (arguments_) => {
       const { roles: overlays, problems } = loadRoleOverlays({ projectDir: arguments_.projectDir });
-      const role = roleById(arguments_.role, overlays);
+      const role = resolveRole(arguments_.role, overlays);
 
       if (!role) {
         const known = allRoles(overlays)
