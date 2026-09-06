@@ -11,7 +11,7 @@
 import { strict as assert } from "node:assert";
 import { test } from "node:test";
 import { listPrompts, getPrompt } from "../../src/prompts/index.js";
-import { parseHandoffOptions } from "../../src/prompts/handoff-options.js";
+import { parseHandoffOptions } from "../../src/prompts/_handoff-options.js";
 
 console.log("prompts registry test");
 

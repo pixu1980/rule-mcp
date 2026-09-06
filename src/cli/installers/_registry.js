@@ -5,9 +5,16 @@
  */
 
 import { join } from "node:path";
-import { HOME } from "./paths.js";
-import { installClaude, installCodex, installCursor, installCopilot, installGemini, installPi } from "./agents-cli.js";
-import { installVscode, installJetbrains, installNeovim, installEmacs, installDevin, createGenericInstaller } from "./agents-ide.js";
+import { HOME } from "./_paths.js";
+import { installClaude, installCodex, installCursor, installCopilot, installGemini, installPi } from "./_agents-cli.js";
+import {
+  installVscode,
+  installJetbrains,
+  installNeovim,
+  installEmacs,
+  installDevin,
+  createGenericInstaller,
+} from "./_agents-ide.js";
 
 const deprecatedAgents = new Map([["windsurf", "devin"]]);
 

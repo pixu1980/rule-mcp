@@ -2,12 +2,12 @@
 /** Help and serve: the usage text command and the STDIO/HTTP/SSE server entry. */
 
 import { HELP_TEXT } from "../help-text.js";
-import { entrypoint, print } from "./shared.js";
+import { entrypoint, print } from "./_shared.js";
 import { loadAllSkills } from "../../core/skills.js";
 import { mcpServerConfig } from "../install.js";
-import { startHttpServer } from "../../transport/http.js";
+import { startHttpServer } from "../../transport/index.js";
 import { startServer } from "../../server.js";
-import { startSseServer } from "../../transport/sse.js";
+import { startSseServer } from "../../transport/index.js";
 function helpCommand() {
   print(HELP_TEXT);
 }
@@ -72,7 +72,6 @@ async function serveCommand(opts = {}) {
       },
       null,
       2,
-
     );
 
     console.error(`rule-mcp starting (STDIO transport)`);

@@ -31,7 +31,7 @@ mkdirSync(tmpDir, { recursive: true });
 
 try {
   // ── T1: Self-signed cert generation ──
-  const { generateSelfSignedCert, isOpenSslAvailable } = await import("../../src/transport/cert.js");
+  const { generateSelfSignedCert, isOpenSslAvailable } = await import("../../src/transport/_cert.js");
 
   if (isOpenSslAvailable()) {
     const certPath = join(tmpDir, "cert.pem");
@@ -49,7 +49,7 @@ try {
     check("T1.4 has BEGIN PRIVATE KEY", keyContent.includes("BEGIN PRIVATE KEY"));
 
     // ── T2: HTTPS server startup with generated cert ──
-    const { startSseServer, stopSseServer } = await import("../../src/transport/sse.js");
+    const { startSseServer, stopSseServer } = await import("../../src/transport/_sse.js");
 
     const httpsServer = await startSseServer({
       port: 0,

@@ -14,7 +14,7 @@
  * @see https://spec.modelcontextprotocol.io/specification/2025-04-01/#prompts
  */
 
-import { parseHandoffOptions, HANDOFF_USAGE } from "./handoff-options.js";
+import { parseHandoffOptions, HANDOFF_USAGE } from "./_handoff-options.js";
 import { activeRoles, roleById } from "../core/review-roles.js";
 import { fillRoleTemplate, OPERATIONS } from "../core/review-roles-template.js";
 

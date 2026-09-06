@@ -1,7 +1,7 @@
 // Auto-split from src/tools/router/index.js - see ./router/index.js
 /** Registered-tool inventory: mutation classification, annotations, declared and public tool lists. */
 
-import { _tools } from "./hooks.js";
+import { _tools } from "./_hooks.js";
 const MUTATING_TOOLS = new Set([
   "rule_tool_apply",
   "rule_tool_fix",

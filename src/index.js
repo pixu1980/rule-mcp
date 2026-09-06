@@ -20,7 +20,7 @@
  *   rule-mcp skills reload
  */
 
-import { installProcessErrorHandlers } from "./utils/sandbox.js";
+import { installProcessErrorHandlers } from "./utils/index.js";
 import { runCli } from "./cli/program.js";
 
 // Install global error handlers at process level

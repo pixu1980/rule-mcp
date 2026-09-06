@@ -7,9 +7,9 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { homedir } from "node:os";
 import { join } from "node:path";
-import { resolveGlobalBinary, serverName } from "./paths.js";
-import { normalizeInstallMode } from "./catalog.js";
-import { getOrCreateSseBearerToken } from "../../transport/sse-auth.js";
+import { resolveGlobalBinary, serverName } from "./_paths.js";
+import { normalizeInstallMode } from "./_catalog.js";
+import { getOrCreateSseBearerToken } from "../../transport/index.js";
 import { DEFAULT_SSE_PORT } from "../paths.js";
 
 const ENV_CONFIG_DIR = join(homedir(), ".config", "rule-mcp");
@@ -105,4 +105,13 @@ function mcpServerConfig(entrypoint, opts = {}) {
   return { [serverName]: commandConfig(entrypoint, opts) };
 }
 
-export { ENV_CONFIG_DIR, ENV_CONFIG_FILE, DEFAULT_OPTOUT_ENV, readEnvConfig, writeEnvConfig, resolveEnvironment, commandConfig, mcpServerConfig };
+export {
+  ENV_CONFIG_DIR,
+  ENV_CONFIG_FILE,
+  DEFAULT_OPTOUT_ENV,
+  readEnvConfig,
+  writeEnvConfig,
+  resolveEnvironment,
+  commandConfig,
+  mcpServerConfig,
+};

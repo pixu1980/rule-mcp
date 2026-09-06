@@ -1,7 +1,7 @@
 // Auto-split from src/cli/commands/index.js - see ./commands/index.js
 /** Install and uninstall commands (agent catalog + service). */
 
-import { entrypoint, print, printJson } from "./shared.js";
+import { entrypoint, print, printJson } from "./_shared.js";
 import { formatInstallResult, formatUninstallResult } from "../tui.js";
 import { installAgent } from "../install.js";
 import { uninstallFromAgent } from "../uninstall.js";

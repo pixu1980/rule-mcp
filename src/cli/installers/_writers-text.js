@@ -4,7 +4,7 @@
  * @module cli/installers/writers-text
  */
 
-import { COMMAND_TEMPLATE_PATH, readText } from "./paths.js";
+import { COMMAND_TEMPLATE_PATH, readText } from "./_paths.js";
 
 const upsertTomlBlock = (current, blockName, block) => {
   const escapedName = blockName.replaceAll(".", String.raw`\.`);
@@ -82,4 +82,13 @@ const copilotAgent = () =>
     "",
   ].join("\n");
 
-export { upsertTomlBlock, removeTomlBlock, appendInstruction, removeInstruction, commandTemplate, commandBody, geminiCommand, copilotAgent };
+export {
+  upsertTomlBlock,
+  removeTomlBlock,
+  appendInstruction,
+  removeInstruction,
+  commandTemplate,
+  commandBody,
+  geminiCommand,
+  copilotAgent,
+};

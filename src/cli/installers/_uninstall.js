@@ -5,10 +5,10 @@
 
 import { existsSync } from "node:fs";
 import { join } from "node:path";
-import { HOME, IS_MACOS, IS_WINDOWS, readText, removeFile, serverName, writeText } from "./paths.js";
-import { parseJson, toJson, removeJsonServer, removeVscodeServer } from "./writers-json.js";
-import { removeInstruction, removeTomlBlock } from "./writers-text.js";
-import { vscodeGlobalDir, devinConfigPath } from "./agents-ide.js";
+import { HOME, IS_MACOS, IS_WINDOWS, readText, removeFile, serverName, writeText } from "./_paths.js";
+import { parseJson, toJson, removeJsonServer, removeVscodeServer } from "./_writers-json.js";
+import { removeInstruction, removeTomlBlock } from "./_writers-text.js";
+import { vscodeGlobalDir, devinConfigPath } from "./_agents-ide.js";
 
 const uninstallClaude = ({ dryRun }) => {
   const file = join(HOME, ".claude.json");
@@ -190,4 +190,16 @@ const uninstallers = {
   emacs: uninstallGeneric("emacs"),
 };
 
-export { uninstallClaude, uninstallCodex, uninstallCursor, uninstallCopilot, uninstallGemini, uninstallPi, uninstallVscode, uninstallDevin, uninstallJetbrains, uninstallGeneric, uninstallers };
+export {
+  uninstallClaude,
+  uninstallCodex,
+  uninstallCursor,
+  uninstallCopilot,
+  uninstallGemini,
+  uninstallPi,
+  uninstallVscode,
+  uninstallDevin,
+  uninstallJetbrains,
+  uninstallGeneric,
+  uninstallers,
+};

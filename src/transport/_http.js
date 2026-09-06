@@ -3,7 +3,7 @@
  *
  * Streamable HTTP transport for rule-mcp (MCP spec 2025-03-26+, current
  * 2025-06-18 / 2025-11-25). Supersedes the HTTP+SSE transport in
- * transport/sse.js, which is kept only as a back-compat alias.
+ * transport/_sse.js, which is kept only as a back-compat alias.
  *
  * Single MCP endpoint:
  *   POST   /mcp   - client → server JSON-RPC (initialize + requests). Response is
@@ -32,10 +32,10 @@ import { URL } from "node:url";
 import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/streamableHttp.js";
 import { isInitializeRequest } from "@modelcontextprotocol/sdk/types.js";
 import { createServer } from "../server.js";
-import { createAuthRateLimiter } from "./auth-rate-limit.js";
-import { generateSelfSignedCert } from "./cert.js";
-import { wrapRequestHandler, safeJsonParse } from "../utils/sandbox.js";
-import { getOrCreateSseBearerToken } from "./sse-auth.js";
+import { createAuthRateLimiter } from "./_auth-rate-limit.js";
+import { generateSelfSignedCert } from "./_cert.js";
+import { wrapRequestHandler, safeJsonParse } from "../utils/index.js";
+import { getOrCreateSseBearerToken } from "./_sse-auth.js";
 import { DEFAULT_SSE_PORT, getSseHost } from "../cli/paths.js";
 
 /** Active MCP transports, keyed by session id. */

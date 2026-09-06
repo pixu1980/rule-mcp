@@ -14,7 +14,7 @@ import {
 } from "../daemon.js";
 import { existsSync, readFileSync } from "node:fs";
 import { getRuntimePaths } from "../paths.js";
-import { print, tryExec } from "./shared.js";
+import { print, tryExec } from "./_shared.js";
 async function daemonCommand(opts) {
   const p = getRuntimePaths();
   const { action = "status", dryRun = false } = opts;

@@ -5,10 +5,10 @@
  */
 
 import { join } from "node:path";
-import { HOME, IS_WINDOWS, readText, writeText, serverName } from "./paths.js";
-import { commandConfig } from "./env.js";
-import { upsertJsonServer, upsertVscode } from "./writers-json.js";
-import { appendInstruction } from "./writers-text.js";
+import { HOME, IS_WINDOWS, readText, writeText, serverName } from "./_paths.js";
+import { commandConfig } from "./_env.js";
+import { upsertJsonServer, upsertVscode } from "./_writers-json.js";
+import { appendInstruction } from "./_writers-text.js";
 import { renderAgentCommandFiles } from "../../core/agent-commands.js";
 
 const vscodeGlobalDir = () => {
@@ -129,4 +129,13 @@ const installDevin = ({ entrypoint, dryRun, global }) => {
   return results;
 };
 
-export { vscodeGlobalDir, devinConfigPath, installVscode, installJetbrains, installNeovim, installEmacs, createGenericInstaller, installDevin };
+export {
+  vscodeGlobalDir,
+  devinConfigPath,
+  installVscode,
+  installJetbrains,
+  installNeovim,
+  installEmacs,
+  createGenericInstaller,
+  installDevin,
+};

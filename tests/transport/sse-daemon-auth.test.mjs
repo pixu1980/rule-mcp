@@ -12,8 +12,8 @@ process.env.HOME = mkdtempSync(join(tmpdir(), "rule-sse-auth-"));
 
 try {
   const { loadAllSkills } = await import("../../src/core/skills.js");
-  const { getOrCreateSseBearerToken } = await import("../../src/transport/sse-auth.js");
-  const { startSseServer, stopSseServer } = await import("../../src/transport/sse.js");
+  const { getOrCreateSseBearerToken } = await import("../../src/transport/_sse-auth.js");
+  const { startSseServer, stopSseServer } = await import("../../src/transport/_sse.js");
 
   await loadAllSkills();
   const token = getOrCreateSseBearerToken();

@@ -1,12 +1,12 @@
 // Auto-split from src/tools/router/index.js - see ./router/index.js
 /** Tool invocation entry: hooks, cache read-through, self-update banner, telemetry, compress-ascii-fingerprint post. */
 
-import { _afterHooks, _tools } from "./hooks.js";
-import { argsBytes, estimateTokens, finalize, guardrailRulesOf, textBytes, withBanner } from "./helpers.js";
+import { _afterHooks, _tools } from "./_hooks.js";
+import { argsBytes, estimateTokens, finalize, guardrailRulesOf, textBytes, withBanner } from "./_helpers.js";
 import { cacheLookup, cacheStore } from "../../core/tool-cache.js";
-import { computeCore, estimateRoutingSaving } from "./compute.js";
+import { computeCore, estimateRoutingSaving } from "./_compute.js";
 import { consumeUpdateBanner, maybeSelfUpdate } from "../../core/self-update.js";
-import { dependenciesOf, entryPathOf, routedSkillOf } from "./entry.js";
+import { dependenciesOf, entryPathOf, routedSkillOf } from "./_entry.js";
 import { enforcementError } from "../../core/enforcement.js";
 import { recordToolCall } from "../../core/telemetry.js";
 import { resumeAnnouncement } from "../../core/resume.js";

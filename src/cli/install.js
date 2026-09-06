@@ -44,10 +44,10 @@ import {
   installers,
   uninstallers,
   vscodeGlobalDir,
-} from "./agent-installers.js";
+} from "./installers/index.js";
 
-export * from "./agent-installers.js";
-import { deprecatedAgents } from "./agent-installers.js";
+export * from "./installers/index.js";
+import { deprecatedAgents } from "./installers/index.js";
 
 function writeInstalledManifest(agents, entrypoint, global, mode) {
   const stateDir = join(HOME, ".local", "share", "rule-mcp");

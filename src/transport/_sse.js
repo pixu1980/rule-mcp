@@ -23,12 +23,12 @@ import { randomUUID, timingSafeEqual } from "node:crypto";
 import { URL } from "node:url";
 import { SSEServerTransport } from "@modelcontextprotocol/sdk/server/sse.js";
 import { createServer } from "../server.js";
-import { generateSelfSignedCert } from "./cert.js";
-import { wrapRequestHandler, safeJsonParse } from "../utils/sandbox.js";
-import { getOrCreateSseBearerToken } from "./sse-auth.js";
+import { generateSelfSignedCert } from "./_cert.js";
+import { wrapRequestHandler, safeJsonParse } from "../utils/index.js";
+import { getOrCreateSseBearerToken } from "./_sse-auth.js";
 
-import { SessionRegistry } from "./session-registry.js";
-import { createAuthRateLimiter } from "./auth-rate-limit.js";
+import { SessionRegistry } from "./_session-registry.js";
+import { createAuthRateLimiter } from "./_auth-rate-limit.js";
 
 /**
  * The sessions an SSE daemon holds, swept by the registry: a client that is
