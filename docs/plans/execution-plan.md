@@ -98,10 +98,15 @@ Skill candidate e ruolo:
 - [x] **porting-parity rimosso completamente**: test, `rule-porting-baseline.json`, ADR 053/054 + indice, blocco ROADMAP (piano porting) in docs/01, refs README.
 
 ### Fase 2 — Code splitting `src/` (regola 100/150)
-- [ ] Split dei file-torero per responsabilità, priorità = peggiori e più usati:
-  `agent-installers.js`, `guardrails/framework.js`, `guardrails/quality.js`, `router.js`, `commands.js`,
-  `ai.js`, `bm25.js`, `wcag-data.js`, `docs-numbering.js`, `handon.js`, `tool-cache.js`, `file-tree.js`,
-  `handoff.js`, `guardrails/shared.js`, `prompts/index.js`.
+- [x] Split dei file-torero per responsabilità — completati e verificati (test verdi + self-guardrails + lint):
+  - [x] `src/cli/agent-installers.js` (1089 → barrel 73) → `installers/` (9 moduli, livello 3)
+  - [x] `src/core/guardrails/framework.js` (971 → barrel 1) → `guardrails/framework/` (10 moduli, livello 3)
+  - [x] `src/core/wcag-data.js` (779 → barrel 1) → `wcag-data/` (meta + 13 per-guideline, livello 4)
+  - [x] fix corollari: esenzioni CATALOGS per cartelle in self-guardrails, refs doc rinumerate (css-flex-first, auto-adr-flag)
+- [ ] Prossimi candidati (per valore): `guardrails/quality.js` 850, `bm25.js` 789, `router.js` 831, `commands.js` 807,
+  `ai.js` 792, `docs-numbering.js` 740, `handon.js` 737, `tool-cache.js` 720, `file-tree.js` 686,
+  `handoff.js` 660, `guardrails/shared.js` 655, `prompts/index.js` 629, `agent-transcripts.js` 583,
+  `daemon-platform.js` 548, `gateway.js` 530, `adr.js` 525, `daemon.js` 499, `fingerprint.js` 494…
 - [ ] Ogni split: estrazione di moduli ≥150 righe con re-export dall'entry (API pubbliche invariate) +
       test di superficie (`cli-commander-surface`, `tool-surface-budget`) verdi.
 - [ ] Gradino successivo: tutti i file >200, poi >150.
