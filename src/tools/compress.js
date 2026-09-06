@@ -20,7 +20,7 @@
 import { z } from "zod/v4";
 import { alignAsciiBoxes } from "../core/text/ascii-box/index.js";
 import { compressText } from "../core/text/_caveman.js";
-import { stripFingerprint } from "../core/text/_fingerprint.js";
+import { stripFingerprint } from "../core/text/fingerprint/index.js";
 import { registerTool } from "./router/index.js";
 
 /** Rough token estimate, good enough to report a saving. */

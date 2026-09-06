@@ -1,6 +1,7 @@
 /** Registered-tool inventory: mutation classification, annotations, declared and public tool lists. */
 
 import { _tools } from "./_hooks.js";
+
 const MUTATING_TOOLS = new Set([
   "pix_tool_apply",
   "pix_tool_fix",
