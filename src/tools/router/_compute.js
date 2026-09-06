@@ -1,11 +1,11 @@
 // Auto-split from src/tools/router/index.js - see ./router/index.js
 /** Core computation with cache write-through: shared computeCore and the public recomputeCore. */
 
-import { _beforeHooks, _postHooks, _tools } from "./hooks.js";
-import { estimateTokens } from "./helpers.js";
-import { getSkillNames, readSkill } from "./skills.js";
+import { _beforeHooks, _postHooks, _tools } from "./_hooks.js";
+import { estimateTokens } from "./_helpers.js";
+import { getSkillNames, readSkill } from "./_skills.js";
 import { postprocessToolResult, preprocessToolCall } from "../../core/enforcement.js";
-import { routedSkillOf } from "./entry.js";
+import { routedSkillOf } from "./_entry.js";
 function estimateRoutingSaving(name, core, final) {
   if (name !== "pix_tool") {
     return;

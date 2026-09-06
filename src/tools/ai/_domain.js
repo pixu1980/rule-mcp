@@ -35,7 +35,18 @@ const DATA_KEYWORDS = [
   "prisma",
   "drizzle",
 ];
-const DEVOPS_KEYWORDS = ["docker", "ci", "cd", "pipeline", "deploy", "container", "kubernetes", "gitlab", "github", "actions"];
+const DEVOPS_KEYWORDS = [
+  "docker",
+  "ci",
+  "cd",
+  "pipeline",
+  "deploy",
+  "container",
+  "kubernetes",
+  "gitlab",
+  "github",
+  "actions",
+];
 const FRONTEND_KEYWORDS = [
   "react",
   "vue",

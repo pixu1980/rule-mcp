@@ -28,7 +28,7 @@ const check = (label, ok) => {
 console.log("=== SSE Transport Tests ===\n");
 
 await loadAllSkills();
-const { startSseServer, stopSseServer } = await import("../../src/transport/sse.js");
+const { startSseServer, stopSseServer } = await import("../../src/transport/_sse.js");
 const server = await startSseServer({ port: 0 });
 const token = server.token;
 

@@ -128,4 +128,18 @@ const resolveGlobalBinary = () => {
   return null;
 };
 
-export { serverName, IS_WINDOWS, IS_MACOS, IS_LINUX, HOME, COMMAND_TEMPLATE_PATH, resolvePath, readText, atomicWrite, writeText, removeFile, backupFile, resolveGlobalBinary };
+export {
+  serverName,
+  IS_WINDOWS,
+  IS_MACOS,
+  IS_LINUX,
+  HOME,
+  COMMAND_TEMPLATE_PATH,
+  resolvePath,
+  readText,
+  atomicWrite,
+  writeText,
+  removeFile,
+  backupFile,
+  resolveGlobalBinary,
+};

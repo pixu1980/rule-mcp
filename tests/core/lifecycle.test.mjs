@@ -176,7 +176,7 @@ test("a child that exits on its own is forgotten", async () => {
 
 // ── Error storm ───────────────────────────────────────────────────
 
-const { installProcessErrorHandlers, STORM_LIMIT } = await import("../../src/utils/sandbox.js");
+const { installProcessErrorHandlers, STORM_LIMIT } = await import("../../src/utils/_sandbox.js");
 
 test("swallowing errors stops when swallowing is all that is happening", () => {
   const target = signalTarget();
@@ -223,7 +223,7 @@ test("errors spread over time never count as a storm", () => {
 
 // ── Session registry ──────────────────────────────────────────────
 
-const { SessionRegistry } = await import("../../src/transport/session-registry.js");
+const { SessionRegistry } = await import("../../src/transport/_session-registry.js");
 
 /** A session double: records whether it was closed. */
 function fakeSession(overrides = {}) {

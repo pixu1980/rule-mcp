@@ -3,7 +3,7 @@
 
 import { FORMAT_EXT, commandNames, renderAgentCommandFiles } from "../../core/agent-commands.js";
 import { existsSync, mkdirSync, readdirSync, rmSync, writeFileSync } from "node:fs";
-import { print } from "./shared.js";
+import { print } from "./_shared.js";
 import { resolve } from "node:path";
 import { resolveCommandTargets } from "../../core/agent-command-targets.js";
 function resolvedTargets(opts) {

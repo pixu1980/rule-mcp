@@ -31,7 +31,7 @@ import { listTools, callTool } from "./tools/router/index.js";
 import { decorateWithTokensave } from "./core/agent-integrations.js";
 import { listResources, readResource } from "./resources/index.js";
 import { listPrompts, getPrompt } from "./prompts/index.js";
-import { HANDOFF_COMPLETIONS } from "./prompts/handoff-options.js";
+import { HANDOFF_COMPLETIONS } from "./prompts/_handoff-options.js";
 
 /** @type {Server|null} */
 let serverInstance = null;
@@ -174,7 +174,7 @@ export async function startServer() {
   // A stdio server lives and dies with its client: when the parent process
   // exits, stdin closes and this process must go with it. The guard polls
   // the parent pulse and exits (the orphaned-server trap).
-  const { installStdioGuard } = await import("./transport/stdio-guard.js");
+  const { installStdioGuard } = await import("./transport/index.js");
   installStdioGuard({ onLost: () => process.exit(0) });
   const server = createServer();
   const transport = new StdioServerTransport();

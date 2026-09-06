@@ -4,7 +4,7 @@
  * @module cli/installers/writers-json
  */
 
-import { serverName } from "./paths.js";
+import { serverName } from "./_paths.js";
 
 const parseJson = (text) => {
   try {

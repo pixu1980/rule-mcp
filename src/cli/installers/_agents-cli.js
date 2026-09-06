@@ -5,10 +5,10 @@
 
 import { existsSync } from "node:fs";
 import { join } from "node:path";
-import { HOME, atomicWrite, readText, writeText, serverName } from "./paths.js";
-import { commandConfig } from "./env.js";
-import { parseJson, toJson, upsertJsonServer } from "./writers-json.js";
-import { commandTemplate, geminiCommand, copilotAgent, appendInstruction, upsertTomlBlock } from "./writers-text.js";
+import { HOME, atomicWrite, readText, writeText, serverName } from "./_paths.js";
+import { commandConfig } from "./_env.js";
+import { parseJson, toJson, upsertJsonServer } from "./_writers-json.js";
+import { commandTemplate, geminiCommand, copilotAgent, appendInstruction, upsertTomlBlock } from "./_writers-text.js";
 
 const installClaude = ({ entrypoint, dryRun, global, force = false }) => {
   const file = join(HOME, ".claude.json");

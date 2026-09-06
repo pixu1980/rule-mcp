@@ -1,5 +1,5 @@
 /**
- * @module cli/agent-installers
+ * @module cli/installers
  *
  * Agent installer registry facade.
  *
@@ -10,11 +10,7 @@
  * names they always did, so the split is invisible outside.
  */
 
-export {
-  allAgents,
-  remoteModeAgents,
-  normalizeInstallMode,
-} from "./installers/catalog.js";
+export { allAgents, remoteModeAgents, normalizeInstallMode } from "./_catalog.js";
 
 export {
   serverName,
@@ -30,7 +26,7 @@ export {
   removeFile,
   backupFile,
   resolveGlobalBinary,
-} from "./installers/paths.js";
+} from "./_paths.js";
 
 export {
   ENV_CONFIG_DIR,
@@ -41,7 +37,7 @@ export {
   resolveEnvironment,
   commandConfig,
   mcpServerConfig,
-} from "./installers/env.js";
+} from "./_env.js";
 
 export {
   parseJson,
@@ -51,7 +47,7 @@ export {
   vscodeServerType,
   upsertVscode,
   removeVscodeServer,
-} from "./installers/writers-json.js";
+} from "./_writers-json.js";
 
 export {
   upsertTomlBlock,
@@ -62,13 +58,10 @@ export {
   commandBody,
   geminiCommand,
   copilotAgent,
-} from "./installers/writers-text.js";
+} from "./_writers-text.js";
 
-export {
-  vscodeGlobalDir,
-  devinConfigPath,
-} from "./installers/agents-ide.js";
+export { vscodeGlobalDir, devinConfigPath } from "./_agents-ide.js";
 
-export { deprecatedAgents, installers } from "./installers/registry.js";
+export { deprecatedAgents, installers } from "./_registry.js";
 
-export { uninstallers } from "./installers/uninstall.js";
+export { uninstallers } from "./_uninstall.js";
