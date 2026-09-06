@@ -31,7 +31,7 @@ import { detectProject, hasTokensave } from "../../src/core/detector.js";
 // eslint-disable-next-line no-unused-vars
 import { suppressIfTokensave, tokensaveActive, TOKENSAVE_DIRECTIVE } from "../../src/core/agent-integrations.js";
 import { loadAllSkills } from "../../src/core/skills.js";
-import { callTool } from "../../src/tools/router.js";
+import { callTool } from "../../src/tools/router/index.js";
 
 // Project WITH a tokensave graph.
 const withTs = mkdtempSync(join(tmpdir(), "rule-ts-"));

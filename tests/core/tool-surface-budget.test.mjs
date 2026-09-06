@@ -22,13 +22,13 @@ process.env.RULE_MCP_NO_TELEMETRY = "1";
 process.env.RULE_MCP_NO_AUTOUPDATE = "1";
 
 const { loadAllSkills } = await import("../../src/core/skills.js");
-const { callTool, listTools } = await import("../../src/tools/router.js");
+const { callTool, listTools } = await import("../../src/tools/router/index.js");
 const { TOOL_SURFACE_BUDGET_TOKENS } = await import("../../src/core/tool-budget.js");
 
 await loadAllSkills(true);
 
 test("no tool declares two schemas", async () => {
-  const { declaredTools } = await import("../../src/tools/router.js");
+  const { declaredTools } = await import("../../src/tools/router/index.js");
   const both = declaredTools()
     .filter((tool) => tool.zodSchema && tool.inputSchema)
     .map((tool) => tool.name);

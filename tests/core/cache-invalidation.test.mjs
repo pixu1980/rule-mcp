@@ -28,7 +28,7 @@ process.env.RULE_MCP_NO_AUTOUPDATE = "1";
 process.env.RULE_MCP_NO_TELEMETRY = "1";
 
 const { cacheStore, cacheLookup, cacheClear, skillDigest, cacheEntries } = await import("../../src/core/tool-cache.js");
-const { callTool, dependenciesOf } = await import("../../src/tools/router.js");
+const { callTool, dependenciesOf } = await import("../../src/tools/router/index.js");
 const { loadAllSkills } = await import("../../src/core/skills.js");
 
 await loadAllSkills(true);
@@ -135,7 +135,7 @@ test("a template tool depends on no skill", () => {
 });
 
 test("a tool whose dependencies cannot be attributed depends on all of them", async () => {
-  const { getSkillNames } = await import("../../src/tools/router.js");
+  const { getSkillNames } = await import("../../src/tools/router/index.js");
   const deps = dependenciesOf("rule_tool_search", { query: "container query" }, result("x"));
 
   assert.equal(
@@ -308,7 +308,7 @@ test("routing off a restored index answers exactly as a freshly built one", asyn
   // invocation and every hook. Worth it only if the answers are identical, so
   // that is what this asserts rather than the timing.
   const { loadAllSkills } = await import("../../src/core/skills.js");
-  const { buildIndex, clearIndex, search, getIndexStats } = await import("../../src/core/bm25.js");
+  const { buildIndex, clearIndex, search, getIndexStats } = await import("../../src/core/bm25/index.js");
   await loadAllSkills();
 
   const PROBES = ["react button component", "postgres index slow query", "docker healthcheck", "enum or union type"];
@@ -327,7 +327,7 @@ test("routing off a restored index answers exactly as a freshly built one", asyn
 });
 
 test("a code change drops the stored index", async () => {
-  const { indexCacheKey } = await import("../../src/core/bm25.js");
+  const { indexCacheKey } = await import("../../src/core/bm25/index.js");
 
   assert.equal(typeof indexCacheKey, "function", "the key is exposed so invalidation can be checked");
   assert.match(indexCacheKey(), /^[0-9a-f]{12}$/, "it is a short digest of the code and the skills");

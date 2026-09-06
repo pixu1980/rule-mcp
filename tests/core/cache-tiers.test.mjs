@@ -28,7 +28,7 @@ process.env.RULE_MCP_NO_AUTOUPDATE = "1";
 process.env.RULE_MCP_NO_TELEMETRY = "1";
 
 const { cacheKey, normalizedKey, cacheLookup, cacheStore, cacheClear } = await import("../../src/core/tool-cache.js");
-const { registerTool, callTool, entryPathOf } = await import("../../src/tools/router.js");
+const { registerTool, callTool, entryPathOf } = await import("../../src/tools/router/index.js");
 
 const result = (text) => ({ content: [{ type: "text", text }] });
 
@@ -53,7 +53,7 @@ test("a field whose value reaches the output is not normalizable", async () => {
   // The reason, checked rather than assumed: `mode=search` prints the query in
   // its own heading, so replaying a stored answer for a rephrased query would
   // hand back a header for a question nobody asked.
-  const { callTool: call } = await import("../../src/tools/router.js");
+  const { callTool: call } = await import("../../src/tools/router/index.js");
   const { loadAllSkills } = await import("../../src/core/skills.js");
   await loadAllSkills(true);
 
@@ -76,7 +76,7 @@ test("an answer that quotes the question gets no normalized entry", async () => 
   // uncertain answer carries `No strong match for "<prompt>"`. Replaying that
   // for a differently worded question hands back a sentence about a prompt
   // nobody typed, and the uncertain answer is the least worth replaying.
-  const { callTool: call } = await import("../../src/tools/router.js");
+  const { callTool: call } = await import("../../src/tools/router/index.js");
   cacheClear();
 
   const uncertain = await call("pix_tool", { prompt: "zzmarkerzz zzothermarkerzz" });
@@ -197,7 +197,7 @@ test("the opt-out disables every tier", () => {
 // ── End to end through callTool ──
 
 test("a rephrased prompt is served from cache without recomputing", async () => {
-  const { callTool: call } = await import("../../src/tools/router.js");
+  const { callTool: call } = await import("../../src/tools/router/index.js");
   cacheClear();
 
   const first = await call("pix_tool", { prompt: "angular standalone component with signals" });
@@ -209,7 +209,7 @@ test("a rephrased prompt is served from cache without recomputing", async () => 
 });
 
 test("the tier is reported to the caller at every tier", async () => {
-  const { callTool: call } = await import("../../src/tools/router.js");
+  const { callTool: call } = await import("../../src/tools/router/index.js");
   cacheClear();
 
   const miss = await call("pix_tool", { prompt: "vue 3 composition api component" });
@@ -286,7 +286,7 @@ test("the rendered report names the tiers and the entry paths", async () => {
 // ── The number, held at a floor ──
 
 test("a rephrased corpus mostly replays, and L0 alone cannot do it", async () => {
-  const { callTool: call } = await import("../../src/tools/router.js");
+  const { callTool: call } = await import("../../src/tools/router/index.js");
   const { CORPUS } = await import("../fixtures/routing-corpus.mjs");
 
   const rephrase = (prompt) => {

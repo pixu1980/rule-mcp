@@ -31,7 +31,7 @@ import { join } from "node:path";
 import { SHARED_GUARDRAILS, SIMPLICITY_GUARDRAILS } from "../../src/core/guardrail-defs.js";
 import { getGuardrails } from "../../src/core/guardrails.js";
 import { loadAllSkills } from "../../src/core/skills.js";
-import { callTool } from "../../src/tools/router.js";
+import { callTool } from "../../src/tools/router/index.js";
 
 await loadAllSkills();
 
@@ -175,7 +175,7 @@ check("T8.4 a build request still routes to its domain", build.route !== "rule-p
 //    once at load time - a live server that saw a new skill on disk offered a
 //    tool it had never registered, and its own output validation then rejected
 //    the whole call as invented. ──
-const { listTools, retainTools } = await import("../../src/tools/router.js");
+const { listTools, retainTools } = await import("../../src/tools/router/index.js");
 const before = listTools().map((t) => t.name);
 retainTools(before.filter((name) => name !== "rule_tool_process_simplicity"));
 const degraded = await callTool("pix_tool", { prompt: REDUCTION });

@@ -29,13 +29,13 @@ process.env.RULE_MCP_NO_AUTOUPDATE = "1"; // hermetic: no real git ops in tests
 
 import { loadAllSkills } from "../../src/core/skills.js";
 // eslint-disable-next-line no-unused-vars
-import { callTool, registerTool } from "../../src/tools/router.js";
+import { callTool, registerTool } from "../../src/tools/router/index.js";
 import { detectProject } from "../../src/core/detector.js";
 
 await loadAllSkills();
 
 // ── T4: rule_tool_detect tool exists and returns project profile ──
-const tools = (await import("../../src/tools/router.js")).listTools();
+const tools = (await import("../../src/tools/router/index.js")).listTools();
 const hasDetect = tools.some((t) => t.name === "rule_tool_detect");
 check("T4 rule_tool_detect tool registered", hasDetect);
 

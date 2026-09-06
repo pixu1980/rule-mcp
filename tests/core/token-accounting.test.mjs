@@ -30,7 +30,7 @@ delete process.env.RULE_MCP_NO_CAVEMAN;
 
 const { computeKpi } = await import("../../src/core/kpi.js");
 const { loadAllSkills } = await import("../../src/core/skills.js");
-const { callTool } = await import("../../src/tools/router.js");
+const { callTool } = await import("../../src/tools/router/index.js");
 const { flush } = await import("../../src/core/telemetry.js");
 const { readEvents } = await import("../../src/core/telemetry-store.js");
 

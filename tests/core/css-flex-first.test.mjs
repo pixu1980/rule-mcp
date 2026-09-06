@@ -224,7 +224,7 @@ test("raw CSS with no file name is still CSS", () => {
 
 test("generated components pass their own rule", async () => {
   const { loadAllSkills } = await import("../../src/core/skills.js");
-  const { callTool } = await import("../../src/tools/router.js");
+  const { callTool } = await import("../../src/tools/router/index.js");
   await loadAllSkills();
 
   for (const component of ["button", "card", "modal", "list", "nav", "form", "table"]) {
@@ -327,7 +327,7 @@ test("the reminder carries it when CSS is on the table, and not otherwise", asyn
 
 test("a CSS route carries it, a backend route does not", async () => {
   const { loadAllSkills } = await import("../../src/core/skills.js");
-  const { callTool } = await import("../../src/tools/router.js");
+  const { callTool } = await import("../../src/tools/router/index.js");
   await loadAllSkills();
 
   const styling = await callTool("pix_tool", { prompt: "style a card component with CSS" });

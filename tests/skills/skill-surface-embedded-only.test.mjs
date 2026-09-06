@@ -34,7 +34,7 @@ function surfaceWith(home) {
   const script = `
     const { loadAllSkills } = await import(${JSON.stringify(new URL("../../src/core/skills.js", import.meta.url).href)});
     await loadAllSkills();
-    const { listTools, getSkillNames } = await import(${JSON.stringify(new URL("../../src/tools/router.js", import.meta.url).href)});
+    const { listTools, getSkillNames } = await import(${JSON.stringify(new URL("../../src/tools/router/index.js", import.meta.url).href)});
     process.stdout.write(JSON.stringify({
       tools: listTools().map((t) => t.name),
       skills: getSkillNames(),
@@ -141,7 +141,7 @@ test("a generic third-party skill in ~/.agents/skills adds no tool", () => {
 
 test("a home copy cannot shadow the content of an embedded skill", async () => {
   const script = `
-    const { readSkill } = await import(${JSON.stringify(new URL("../../src/tools/router.js", import.meta.url).href)});
+    const { readSkill } = await import(${JSON.stringify(new URL("../../src/tools/router/index.js", import.meta.url).href)});
     process.stdout.write(readSkill("rule-frontend-react") ?? "");
   `;
   const content = execFileSync(process.execPath, ["--input-type=module", "--eval", script], {

@@ -30,11 +30,11 @@ process.env.RULE_MCP_NO_CACHE = "1";
 // skills (custom-element, template-engine, vanilla-reactive, auth) are real
 // routing targets in the union, but their bodies dilute the term-document
 // frequencies the pinned scores assume - measure on the source-commensurate
-// universe (note in src/tools/router.js TARGET_ONLY_SKILLS).
+// universe (note in src/tools/router/index.js TARGET_ONLY_SKILLS).
 process.env.RULE_MCP_SKILL_UNIVERSE = "base";
 
 const { loadAllSkills } = await import("../../src/core/skills.js");
-const { callTool } = await import("../../src/tools/router.js");
+const { callTool } = await import("../../src/tools/router/index.js");
 const { CORPUS, NONSENSE, PERSONAS, NOT_PERSONAS } = await import("../fixtures/routing-corpus.mjs");
 
 /** Measured at 87% exact and 100% top-or-alt when BM25 landed (ADR 048). */

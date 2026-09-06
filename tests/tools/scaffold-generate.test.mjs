@@ -18,7 +18,7 @@
 
 import { checkCode } from "../../src/core/guardrails.js";
 import { loadAllSkills } from "../../src/core/skills.js";
-import { callTool } from "../../src/tools/router.js";
+import { callTool } from "../../src/tools/router/index.js";
 
 let pass = 0;
 let fail = 0;

@@ -30,7 +30,7 @@ process.env.RULE_MCP_NO_AUTOUPDATE = "1"; // hermetic: no real git ops in tests
 import { getGuardrails, checkCode } from "../../src/core/guardrails.js";
 import { SHARED_GUARDRAILS } from "../../src/core/guardrail-defs.js";
 import { loadAllSkills } from "../../src/core/skills.js";
-import { callTool } from "../../src/tools/router.js";
+import { callTool } from "../../src/tools/router/index.js";
 
 const sharedIds = SHARED_GUARDRAILS.map((g) => g.id);
 
