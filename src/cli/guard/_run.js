@@ -1,6 +1,6 @@
 /** @module cli/guard/run - stdin payload handling and the guard entrypoint */
 
-import { ALLOW, ask, decide } from "./_decide.js";
+import { ALLOW, decide } from "./_decide.js";
 import { inject } from "./_inject.js";
 import { stagedFailures } from "./_staged.js";
 

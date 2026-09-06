@@ -5,7 +5,7 @@ import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node
 import { join, resolve } from "node:path";
 import { getRuntimePaths } from "../../../cli/paths/index.js";
 
-import { handoffBlock, resumeContext } from "./_context.js";
+import { handoffBlock } from "./_context.js";
 import { isResumeSignal } from "./_signal.js";
 
 /** Once per process. A handoff is what to work on, stated once, not per call. */

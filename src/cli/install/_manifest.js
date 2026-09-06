@@ -3,7 +3,7 @@
 import { mkdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { platform } from "node:os";
-import { HOME, installers } from "../installers/index.js";
+import { HOME } from "../installers/index.js";
 
 export * from "../installers/index.js";
 

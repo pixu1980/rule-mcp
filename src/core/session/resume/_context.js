@@ -1,6 +1,5 @@
 /** @module core/session/resume/context - the verified handon block a resumed session receives */
 
-import { join } from "node:path";
 import { handon } from "../../../tools/handon/index.js";
 import { markAnnounced } from "./_announce.js";
 

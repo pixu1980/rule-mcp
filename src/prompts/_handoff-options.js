@@ -17,7 +17,7 @@
  *   help | --help | -h          → help (print usage, do not run the tool)
  */
 
-import { DEFAULTS, HANDOFF_FORMATS, HANDOFF_MODES } from "./_handoff-options.data.js";
+import { DEFAULTS } from "./_handoff-options.data.js";
 
 export { HANDOFF_COMPLETIONS, HANDOFF_FORMATS, HANDOFF_MODES, HANDOFF_USAGE } from "./_handoff-options.data.js";
 

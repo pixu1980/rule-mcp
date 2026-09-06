@@ -1,10 +1,10 @@
 /** On-disk index cache: read, write, stats. */
 
-import { mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
-import { dirname } from "node:path";
+import { mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { basename, dirname, join } from "node:path";
 import { gzipSync, gunzipSync } from "node:zlib";
 import { _index, setIndex } from "./_state.js";
-import { indexCacheEnabled, indexCacheFile, indexCacheKey } from "./_cache-signature.js";
+import { indexCacheEnabled, indexCacheFile } from "./_cache-signature.js";
 
 export { indexCacheEnabled, indexCacheFile, indexCacheKey, skillsSignature } from "./_cache-signature.js";
 

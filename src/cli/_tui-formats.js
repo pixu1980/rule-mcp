@@ -1,6 +1,6 @@
 /** @module cli/tui-formats - the install/uninstall/tools/skills result views */
 
-import { color, kv, section, table, truncate } from "./tui.js";
+import { banner, color, kv, section, table } from "./tui.js";
 
 /** Format install command result for humans. */
 export function formatInstallResult(result) {

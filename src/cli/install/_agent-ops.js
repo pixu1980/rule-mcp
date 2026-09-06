@@ -1,6 +1,5 @@
 /** @module cli/install/agent-ops - install into and remove from one agent config */
 
-import { join } from "node:path";
 import { allAgents, normalizeInstallMode, remoteModeAgents, installers, uninstallers } from "../installers/index.js";
 
 export * from "../installers/index.js";

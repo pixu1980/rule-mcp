@@ -1,9 +1,9 @@
 /** @module cli/skills-install/commands - the install and list CLI commands */
 
 import { existsSync, mkdirSync, readdirSync } from "node:fs";
+import { cancel } from "@clack/prompts";
 import { join } from "node:path";
 import { homedir } from "node:os";
-import { multiselect, cancel } from "@clack/prompts";
 import { getSkillsDirs as getSkillsDirectories } from "../paths/index.js";
 import { formatSkillsList } from "../tui.js";
 import { copySkill, getAvailableSkills, isInstalled } from "./_catalog.js";

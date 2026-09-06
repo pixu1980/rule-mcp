@@ -2,6 +2,7 @@
 
 import { existsSync, mkdirSync } from "node:fs";
 import { join } from "node:path";
+import { copySkill } from "./_catalog.js";
 import { homedir } from "node:os";
 
 /**
