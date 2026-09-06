@@ -1,5 +1,5 @@
 ---
-name: pix-galaxy-agents
+name: pix-ai-agents
 description: >
   Scaffold and maintain AI Agent repositories built on @pix/pix-galaxy-core.
   Use when creating a new AI agent project, adding tools to an existing agent,

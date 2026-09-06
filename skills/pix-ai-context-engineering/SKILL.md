@@ -1,5 +1,5 @@
 ---
-name: pix-galaxy-context-engineering
+name: pix-ai-context-engineering
 description: >-
   Use when an agent session is getting expensive, slow or worse at its job. Covers the context window as a budget, why adding files degrades answers, the levels of delegation from autocomplete to autonomous, compaction and handoff, pointing at evidence instead of pasting it, and what actually consumes a usage limit.
 tags:
@@ -17,11 +17,11 @@ tags:
 frameworks: [all]
 ---
 
-# pix-galaxy-context-engineering - The window is the product
+# pix-ai-context-engineering - The window is the product
 
 ## Purpose
 
-[pix-galaxy-prompting](../pix-galaxy-prompting/SKILL.md) is about what you write.
+[pix-ai-prompting](../pix-ai-prompting/SKILL.md) is about what you write.
 This is about what is in the window when the model reads it, which decides more.
 
 One idea underneath all of it: **the window is not storage, it is attention.**
@@ -188,8 +188,8 @@ start fresh more often, index instead of reading, then improve the prompts.
 
 ## See also
 
-- [pix-galaxy-prompting](../pix-galaxy-prompting/SKILL.md) - what to write, once the window is right
-- [pix-galaxy-agent-architecture](../pix-galaxy-agent-architecture/SKILL.md) - the loop that fills the window
+- [pix-ai-prompting](../pix-ai-prompting/SKILL.md) - what to write, once the window is right
+- [pix-ai-agent-architecture](../pix-ai-agent-architecture/SKILL.md) - the loop that fills the window
 - [pix-process-handoff](../pix-process-handoff/SKILL.md) - writing a boundary down, and reading it back verified
 - [pix-caveman](../pix-caveman/SKILL.md) - compressing output without losing substance
-- [pix-galaxy-evals](../pix-galaxy-evals/SKILL.md) - measuring whether any of this helped
+- [pix-ai-evals](../pix-ai-evals/SKILL.md) - measuring whether any of this helped

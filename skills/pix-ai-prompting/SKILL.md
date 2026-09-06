@@ -1,5 +1,5 @@
 ---
-name: pix-galaxy-prompting
+name: pix-ai-prompting
 description: >-
   Use when working with an AI coding agent, and when teaching someone to. Covers what a prompt needs, context engineering, the mistakes that waste the most tokens, when NOT to let AI write the code, and how to keep learning while using it.
 tags:
@@ -16,7 +16,7 @@ tags:
 frameworks: [all]
 ---
 
-# pix-galaxy-prompting - Working with an agent without outsourcing the thinking
+# pix-ai-prompting - Working with an agent without outsourcing the thinking
 
 ## Purpose
 
@@ -49,7 +49,7 @@ Then read the answer as a proposal, not a result.
 
 The phrasing matters far less than what is in the window when the model reads it.
 The levers below are the short version;
-[pix-galaxy-context-engineering](../pix-galaxy-context-engineering/SKILL.md) is
+[pix-ai-context-engineering](../pix-ai-context-engineering/SKILL.md) is
 the skill that owns the window - what earns a place in it, why adding a file can
 make an answer worse, and when to compact, hand off or start fresh.
 
@@ -155,5 +155,5 @@ reading often beats three more attempts, and it leaves you knowing something.
 - [pix-process-ai-sdlc](../pix-process-ai-sdlc/SKILL.md) - where these prompts sit in the lifecycle
 - [pix-caveman](../pix-caveman/SKILL.md) - keeping the answers short
 - [pix-process-simplicity](../pix-process-simplicity/SKILL.md) - the scope contract to hold agents to
-- [pix-galaxy-context-engineering](../pix-galaxy-context-engineering/SKILL.md) - managing the window this prompt lands in
-- [pix-galaxy-evals](../pix-galaxy-evals/SKILL.md) - measuring an AI feature rather than trusting it
+- [pix-ai-context-engineering](../pix-ai-context-engineering/SKILL.md) - managing the window this prompt lands in
+- [pix-ai-evals](../pix-ai-evals/SKILL.md) - measuring an AI feature rather than trusting it

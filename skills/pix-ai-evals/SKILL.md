@@ -1,5 +1,5 @@
 ---
-name: pix-galaxy-evals
+name: pix-ai-evals
 description: >-
   Use when building or auditing evals for an AI feature. Covers error analysis before writing any eval, binary LLM-as-judge design, judge calibration against human labels with TPR and TNR, RAG evaluation, synthetic test inputs, and running evals in CI.
 tags:
@@ -16,7 +16,7 @@ tags:
 frameworks: [all]
 ---
 
-# pix-galaxy-evals - Measure the feature, not the model
+# pix-ai-evals - Measure the feature, not the model
 
 ## Purpose
 
@@ -242,6 +242,6 @@ nothing is reproduced from anyone else's material.
 ## See also
 
 - [pix-process-ai-sdlc](../pix-process-ai-sdlc/SKILL.md) - where evals sit in the lifecycle
-- [pix-galaxy-agents](../pix-galaxy-agents/SKILL.md) - building the agent these evals measure
+- [pix-ai-agents](../pix-ai-agents/SKILL.md) - building the agent these evals measure
 - [pix-devops-testing](../pix-devops-testing/SKILL.md) - the deterministic tests underneath
-- [pix-galaxy-prompting](../pix-galaxy-prompting/SKILL.md) - writing the prompts being evaluated
+- [pix-ai-prompting](../pix-ai-prompting/SKILL.md) - writing the prompts being evaluated
