@@ -18,7 +18,7 @@
  */
 
 import { z } from "zod/v4";
-import { alignAsciiBoxes } from "../core/text/_ascii-box.js";
+import { alignAsciiBoxes } from "../core/text/ascii-box/index.js";
 import { compressText } from "../core/text/_caveman.js";
 import { stripFingerprint } from "../core/text/_fingerprint.js";
 import { registerTool } from "./router/index.js";

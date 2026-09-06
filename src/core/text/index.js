@@ -1,5 +1,5 @@
 /** Text-processing barrel: ascii boxes, block spacing, caveman compression, English checks, fingerprints. */
-export * from "./_ascii-box.js";
+export * from "./ascii-box/index.js";
 export * from "./_block-spacing.js";
 export * from "./_caveman.js";
 export * from "./_caveman-aggressive.js";

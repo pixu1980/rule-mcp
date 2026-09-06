@@ -8,7 +8,7 @@
  * this repository that a spell-check cannot see, so it needs its own pass and
  * its own guard.
  *
- * @see src/core/text/_ascii-box.js - the transformer
+ * @see src/core/text/ascii-box/index.js - the transformer
  * @see src/core/guardrail-defs.js - fp-box-rectangular
  */
 
@@ -17,7 +17,7 @@ import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
 import { existsSync, readFileSync } from "node:fs";
 
-const { alignAsciiBoxes, findRaggedBoxes, displayWidth } = await import("../../src/core/text/_ascii-box.js");
+const { alignAsciiBoxes, findRaggedBoxes, displayWidth } = await import("../../src/core/text/ascii-box/index.js");
 
 /** @param {string} text @returns {string[]} */
 const widths = (text) =>

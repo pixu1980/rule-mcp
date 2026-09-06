@@ -1,6 +1,6 @@
 /** Result shaping helpers: banner, finalize, token/size estimates, and the skill-independent set. */
 
-import { alignAsciiBoxesResult } from "../../core/text/_ascii-box.js";
+import { alignAsciiBoxesResult } from "../../core/text/ascii-box/index.js";
 import { compressResult } from "../../core/text/_caveman.js";
 import { decorateWorkflowReminder, stampRequestId } from "../../core/enforcement.js";
 import { stripFingerprintResult } from "../../core/text/_fingerprint.js";
