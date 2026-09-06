@@ -68,7 +68,6 @@ export const FILE_SIZE_RATCHET = new Map([
   ["src/core/text/_fingerprint.js", 289],
   ["src/core/tokensave.js", 273],
   ["src/prompts/_handoff-options.js", 162],
-  ["src/prompts/index.js", 629],
   ["src/resources/index.js", 204],
   ["src/server.js", 200],
   ["src/tools/a11y.js", 268],
