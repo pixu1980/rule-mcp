@@ -1065,6 +1065,7 @@ All data stays on the filesystem. The MCP server is a read-only/validate-only se
 | User needs TS             | Very low   | Very low          | SDK ships `.d.ts` - editors get autocomplete anyway |
 
 <!-- census:begin:family-counts -->
+
 ## Tools at a glance (generated census snapshot)
 
 | Family                            | Count |
@@ -1077,4 +1078,3 @@ All data stays on the filesystem. The MCP server is a read-only/validate-only se
 Refresh with `pnpm census`; full inventories in `docs/07-` .. `docs/12-`.
 
 <!-- census:end:family-counts -->
-
