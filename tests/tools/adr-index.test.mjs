@@ -11,7 +11,7 @@
  * The assertion that makes drift impossible is the last one: regenerating the
  * index from the ADR files on disk has to reproduce the committed file exactly.
  *
- * @see src/tools/adr.js - buildAdrIndex
+ * @see src/tools/adr/index.js - buildAdrIndex
  */
 
 import test from "node:test";
@@ -19,7 +19,7 @@ import assert from "node:assert/strict";
 import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 
-const { buildAdrIndex, listExistingAdrs, ADR_INDEX_FILE } = await import("../../src/tools/adr.js");
+const { buildAdrIndex, listExistingAdrs, ADR_INDEX_FILE } = await import("../../src/tools/adr/index.js");
 
 const adrDir = "docs/adr";
 const indexPath = join(adrDir, ADR_INDEX_FILE);
@@ -90,7 +90,7 @@ test("a new ADR is asked what would end it", async () => {
   // Outside practice: write the drift triggers while you still remember which
   // assumptions the decision leans on. Nothing here did, so a decision was only
   // ever noticed as stale by accident - 069 kept its definitions for three ADRs.
-  const { buildAdrBody } = await import("../../src/tools/adr.js");
+  const { buildAdrBody } = await import("../../src/tools/adr/index.js");
   const withAnswer = buildAdrBody({
     number: "099",
     title: "A decision that says when it ends",

@@ -1,6 +1,6 @@
 import { existsSync, readFileSync, renameSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
-import { buildAdrIndex, listExistingAdrs } from "../../tools/adr.js";
+import { buildAdrIndex, listExistingAdrs } from "../../tools/adr/index.js";
 import { markdownFiles } from "./_families.js";
 import { nameAuthorIn } from "./_authors.js";
 

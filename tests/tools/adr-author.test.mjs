@@ -16,7 +16,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 
-const { adrAuthor, buildAdrBody } = await import("../../src/tools/adr.js");
+const { adrAuthor, buildAdrBody } = await import("../../src/tools/adr/index.js");
 
 test("the author is the git identity, name and address", () => {
   const author = adrAuthor((key) => (key === "user.name" ? "Ada Lovelace" : "ada@example.com"));

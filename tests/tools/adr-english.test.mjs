@@ -13,7 +13,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 
-const { adrEnglishOffenses } = await import("../../src/tools/adr.js");
+const { adrEnglishOffenses } = await import("../../src/tools/adr/index.js");
 
 test("the Italian title that produced ADR 060 is rejected", () => {
   const offenses = adrEnglishOffenses({
@@ -51,7 +51,7 @@ test("an English ADR passes untouched", () => {
 
 test("the tool schema no longer advertises an Italian example title", async () => {
   const { readFileSync } = await import("node:fs");
-  const source = readFileSync("src/tools/adr.js", "utf8");
+  const source = readFileSync("src/tools/adr/index.js", "utf8");
 
   assert.ok(!source.includes("Usare PostgreSQL come database"), "the zod example title must be English");
 });

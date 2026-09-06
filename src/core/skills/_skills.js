@@ -14,7 +14,7 @@ import { z } from "zod/v4";
 import { getSkillNames, registerTool, clearTools, retainTools } from "../../tools/router/index.js";
 import { registerSkillTool, registerSearchTool, registerCheckTool, registerScaffoldTool } from "../../tools/skill.js";
 import { registerAiTool } from "../../tools/ai/index.js";
-import { registerProcessAdrTool } from "../../tools/adr.js";
+import { registerProcessAdrTool } from "../../tools/adr/index.js";
 import { registerFixTool } from "../../tools/fix.js";
 import { registerProcessHandoffTool } from "../../tools/handoff/index.js";
 import { registerGatewayTool } from "../../tools/gateway.js";

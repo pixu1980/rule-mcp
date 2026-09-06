@@ -1,6 +1,6 @@
 import { readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
-import { adrAuthor } from "../../tools/adr.js";
+import { adrAuthor } from "../../tools/adr/index.js";
 import { FAMILIES, documentsIn } from "./_families.js";
 import { addedBy } from "./_git.js";
 
