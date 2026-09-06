@@ -58,10 +58,12 @@ export function registerProcessAdrTool() {
 
       const filename = adrFilename(number, arguments_.title);
       const filePath = join(adrDir, filename);
+
       writeFileSync(filePath, content);
 
       // Update index - listExistingAdrs reads from disk (already includes the new ADR)
       const existing = listExistingAdrs(adrDir);
+
       updateAdrIndex(adrDir, existing);
 
       return {
