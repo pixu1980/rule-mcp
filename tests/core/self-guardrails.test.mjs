@@ -30,6 +30,7 @@ const CATALOGS = new Map([
   ["core/scaffold/templates/", "the template catalog quotes the markup and CSS it generates"],
   ["core/text/fingerprint/", "the fingerprint scanner quotes typographic samples in its patterns"],
   ["_fingerprint.data.js", "the British-vs-American dictionary contains the words it flags"],
+  ["_read.js", "resource payloads quote the markup and template content they serve"],
   ["core/wcag-data/", "the WCAG criteria tables are reference data per guideline"],
   ["core/bm25/", "the stopword tables and filter clauses quote the words and syntax they operate on"],
 ]);

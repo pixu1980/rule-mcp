@@ -8,18 +8,13 @@
 
 export const FILE_SIZE_RATCHET = new Map([
   ["src/cli/commands/_daemon.js", 219],
-  ["src/cli/installers/_uninstall.js", 205],
-  ["src/cli/tui.js", 196],
-  ["src/core/agents/_integrations.js", 205],
   ["src/core/guardrails/_guarded.js", 179],
   ["src/core/session/_lifecycle.js", 228],
   ["src/core/text/_caveman.js", 198],
   ["src/core/tokensave.js", 273],
-  ["src/resources/index.js", 204],
   ["src/server.js", 200],
   ["src/tools/router/_call.js", 188],
   ["src/transport/_session-registry.js", 221],
-  ["src/utils/_sandbox.js", 218],
   ["tests/cli/install-rules-idempotent.test.mjs", 184],
   ["tests/cli/install-script-shim-heal.test.mjs", 209],
   ["tests/cli/self-update-remote-pin.test.mjs", 217],
