@@ -1,0 +1,102 @@
+// Auto-split from src/tools/router.js - see ./router/index.js
+/** Registered-tool inventory: mutation classification, annotations, declared and public tool lists. */
+
+import { _tools } from "./hooks.js";
+const MUTATING_TOOLS = new Set([
+  "rule_tool_apply",
+  "rule_tool_fix",
+  "rule_tool_process_adr",
+  "rule_tool_plan_docs",
+  "rule_tool_process_handoff",
+  "rule_tool_update",
+  "rule_tool_process_handon",
+]);
+
+/** Tools whose answer depends on state outside their arguments, so a repeat
+ * call can legitimately differ: the working tree, the clock, the code graph. */
+const NON_IDEMPOTENT_READS = new Set([
+  "rule_tool_detect",
+  "rule_tool_gateway",
+  "rule_tool_stats",
+  "rule_tool_usage",
+  "rule_tool_a11y_report",
+  "rule_tool_process_handon",
+]);
+
+/**
+ * MCP tool annotations, emitting only what differs from the spec defaults.
+ *
+ * The defaults are readOnlyHint: false and idempotentHint: false, so a
+ * mutating tool needs no annotation at all (client treats it as read-write).
+ *
+ * @param {string} name
+ * @returns {object|undefined}
+ */
+function annotationsFor(name) {
+  if (MUTATING_TOOLS.has(name)) {
+    return;
+  }
+
+  return NON_IDEMPOTENT_READS.has(name) ? { readOnlyHint: true } : { readOnlyHint: true, idempotentHint: true };
+}
+
+/**
+ * The raw registered tool definitions (including zodSchema and annotations),
+ * for audits that need more than the advertised surface.
+ *
+ * @returns {Array<object>}
+ */
+function declaredTools() {
+  return _tools;
+}
+
+/**
+ * List all registered tools with their names, descriptions, and input schemas.
+ * Converts Zod schemas to JSON Schema via the built-in toJSONSchema() method.
+ *
+ * @returns {Array<{ name: string, description: string, inputSchema: object }>}
+ */
+function listTools() {
+  return _tools.map((t) => {
+    let inputSchema = t.inputSchema ?? { type: "object", properties: {} };
+
+    // If a Zod schema is provided, convert it to JSON Schema
+    if (t.zodSchema) {
+      try {
+        const jsonSchema = t.zodSchema.toJSONSchema();
+        // Properties with .default() should not be in required
+        // because the server fills them in automatically
+        const hasDefault = new Set(
+          Object.entries(jsonSchema.properties ?? {})
+            .filter(([, v]) => v && typeof v === "object" && "default" in v)
+            .map(([k]) => k),
+        );
+        const required = (jsonSchema.required ?? []).filter((k) => !hasDefault.has(k));
+        inputSchema = {
+          type: jsonSchema.type ?? "object",
+          properties: jsonSchema.properties ?? {},
+          required,
+        };
+      } catch {
+        // Fall back to plain inputSchema if conversion fails
+      }
+    }
+
+    const annotations = annotationsFor(t.name);
+
+    return annotations
+      ? { name: t.name, description: t.description, inputSchema, annotations }
+      : { name: t.name, description: t.description, inputSchema };
+  });
+}
+
+/**
+ * Execute a tool by name with the given arguments.
+ * Validates args against the tool's Zod schema (if provided) before calling the handler.
+ *
+ * @param {string} name - Tool name (e.g. "pix_tool", "rule_tool_frontend_react")
+ * @param {object} args - Tool-specific arguments
+ * @returns {Promise<{ isError?: boolean, content: Array<{ type: string, text: string }> }>}
+ */
+
+export { declaredTools, listTools };
