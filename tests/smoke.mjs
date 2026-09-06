@@ -49,7 +49,7 @@ const sourceFiles = [
   "core/guardrails/index.js",
   "resources/index.js",
   "prompts/index.js",
-  "cli/paths.js",
+  "cli/paths/index.js",
   "cli/install/index.js",
   "cli/commands/index.js",
   "cli/doctor/index.js",

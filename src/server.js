@@ -26,7 +26,7 @@ import {
   ErrorCode,
   McpError,
 } from "@modelcontextprotocol/sdk/types.js";
-import { pkg as package_ } from "./cli/paths.js";
+import { pkg as package_ } from "./cli/paths/index.js";
 import { listTools, callTool } from "./tools/router/index.js";
 import { decorateWithTokensave } from "./core/agents/_integrations.js";
 import { listResources, readResource } from "./resources/index.js";

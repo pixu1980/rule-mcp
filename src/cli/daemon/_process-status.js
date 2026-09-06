@@ -1,7 +1,7 @@
 /** Daemon process introspection: liveness, termination, the status read. */
 import { existsSync, readFileSync } from "node:fs";
 import { setTimeout as sleep } from "node:timers/promises";
-import { getRuntimePaths } from "../paths.js";
+import { getRuntimePaths } from "../paths/index.js";
 
 /** Whether a pid is alive, without signaling it. */
 export function isAlive(pid) {

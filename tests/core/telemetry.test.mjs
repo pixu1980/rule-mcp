@@ -260,7 +260,7 @@ delete process.env.RULE_MCP_NO_TELEMETRY;
 // The recording is filed per project under the home directory, never inside the
 // project: nothing this server writes needs a rule in somebody's .gitignore
 // (ADR 082).
-const { getProjectPaths } = await import("../../src/cli/paths.js");
+const { getProjectPaths } = await import("../../src/cli/paths/index.js");
 const projectStateDir = getProjectPaths(projectDir).dir;
 check("T10 the events file lives in this project's own directory", eventsFile().startsWith(projectStateDir));
 check(

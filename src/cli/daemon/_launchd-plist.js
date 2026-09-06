@@ -1,6 +1,6 @@
 /** The LaunchAgent plist template. */
 import { mkdirSync } from "node:fs";
-import { getRuntimePaths } from "../paths.js";
+import { getRuntimePaths } from "../paths/index.js";
 import { escapePlist, HOME, WRAPPER_SCRIPT_PATH } from "./_service-shared.js";
 import { LAUNCH_AGENT_LABEL } from "./_launchd.js";
 

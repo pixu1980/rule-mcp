@@ -4,7 +4,7 @@ import { createHash } from "node:crypto";
 import { mkdirSync, readdirSync, readFileSync, rmSync, statSync, writeFileSync } from "node:fs";
 import { basename, dirname, join } from "node:path";
 import { gzipSync, gunzipSync } from "node:zlib";
-import { getRuntimePaths, getSkillsDirs as getSkillsDirectories } from "../../cli/paths.js";
+import { getRuntimePaths, getSkillsDirs as getSkillsDirectories } from "../../cli/paths/index.js";
 import { codeSignature } from "../code-signature.js";
 import { _index, setIndex } from "./_state.js";
 

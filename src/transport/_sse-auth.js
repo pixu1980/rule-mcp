@@ -8,7 +8,7 @@
 import { randomBytes } from "node:crypto";
 import { chmodSync, existsSync, mkdirSync, readFileSync, renameSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
-import { getRuntimePaths } from "../cli/paths.js";
+import { getRuntimePaths } from "../cli/paths/index.js";
 
 /* ─── Persistent token configuration ─── */
 

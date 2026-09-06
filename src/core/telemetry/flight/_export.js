@@ -2,7 +2,7 @@
 
 import { mkdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
-import { getProjectPaths } from "../../../cli/paths.js";
+import { getProjectPaths } from "../../../cli/paths/index.js";
 import { drain, readEvents } from "../store/index.js";
 import { resetProjectId } from "../recorder/_identity.js";
 import { toFlight } from "./_envelope.js";

@@ -11,7 +11,7 @@ import { makeCheck, makeSandbox, recordSampleSession, writePiFixture, T0 } from 
 const { check, finish } = makeCheck("Flight recorder: export");
 const { workspace, project } = makeSandbox();
 
-const { getProjectPaths } = await import("../../../src/cli/paths.js");
+const { getProjectPaths } = await import("../../../src/cli/paths/index.js");
 const { drain, readEvents, readRollups } = await import("../../../src/core/telemetry/store/index.js");
 const telemetry = await import("../../../src/core/telemetry/recorder/index.js");
 

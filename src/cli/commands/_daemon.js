@@ -12,7 +12,7 @@ import {
   uninstallDaemonService,
 } from "../daemon/index.js";
 import { existsSync, readFileSync } from "node:fs";
-import { getRuntimePaths } from "../paths.js";
+import { getRuntimePaths } from "../paths/index.js";
 import { print, tryExec } from "./_shared.js";
 async function daemonCommand(opts) {
   const p = getRuntimePaths();

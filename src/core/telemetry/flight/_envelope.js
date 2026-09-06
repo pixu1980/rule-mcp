@@ -1,7 +1,7 @@
 /** @module core/telemetry/flight/envelope */
 
 import { homedir } from "node:os";
-import { getProjectPaths } from "../../../cli/paths.js";
+import { getProjectPaths } from "../../../cli/paths/index.js";
 import { detectAgentUsage, unsupportedAgents } from "../../agents/transcripts/index.js";
 import { snapshotProject } from "../../session/snapshot/index.js";
 import { computeKpi } from "../kpi/index.js";

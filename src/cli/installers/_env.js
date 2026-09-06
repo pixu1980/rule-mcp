@@ -10,7 +10,7 @@ import { join } from "node:path";
 import { resolveGlobalBinary, serverName } from "./_paths.js";
 import { normalizeInstallMode } from "./_catalog.js";
 import { getOrCreateSseBearerToken } from "../../transport/index.js";
-import { DEFAULT_SSE_PORT } from "../paths.js";
+import { DEFAULT_SSE_PORT } from "../paths/index.js";
 
 const ENV_CONFIG_DIR = join(homedir(), ".config", "rule-mcp");
 

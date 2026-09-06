@@ -23,7 +23,7 @@ import { registry, setHttpServer, setServerToken } from "./_state.js";
  */
 export async function startSseServer(options = {}) {
   registry.startSweeper();
-  const { DEFAULT_SSE_PORT, getSseHost } = await import("../../cli/paths.js");
+  const { DEFAULT_SSE_PORT, getSseHost } = await import("../../cli/paths/index.js");
   const port = options.port ?? (Number(process.env.RULE_MCP_PORT) || DEFAULT_SSE_PORT);
   const host = options.host ?? getSseHost();
   const { sslCert, sslKey } = options;

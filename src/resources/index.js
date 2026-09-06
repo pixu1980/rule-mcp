@@ -12,7 +12,7 @@
 
 import { readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
-import { getSkillsDirs as getSkillsDirectories } from "../cli/paths.js";
+import { getSkillsDirs as getSkillsDirectories } from "../cli/paths/index.js";
 import { readSkill, getSkillNames, isPluginSkill } from "../tools/router/index.js";
 
 /**

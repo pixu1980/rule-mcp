@@ -2,7 +2,7 @@
 
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
-import { pkg as package_ } from "../../../cli/paths.js";
+import { pkg as package_ } from "../../../cli/paths/index.js";
 
 
 /** The committed file. One name, so a reader always knows what they are looking at. */

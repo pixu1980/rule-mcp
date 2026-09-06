@@ -12,7 +12,7 @@ const { check, finish } = makeCheck("Flight recorder: paths and store");
 const { workspace, project } = makeSandbox();
 const home = homedir();
 
-const { getProjectPaths, getRuntimePaths } = await import("../../../src/cli/paths.js");
+const { getProjectPaths, getRuntimePaths } = await import("../../../src/cli/paths/index.js");
 
 // ── F1: one home directory, one project directory ──
 const paths = getRuntimePaths();

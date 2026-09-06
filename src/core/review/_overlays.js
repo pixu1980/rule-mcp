@@ -25,7 +25,7 @@ import { join } from "node:path";
 
 import { parsePersonaFile } from "./persona-file/index.js";
 import { validateRole } from "./roles/_validate.js";
-import { getRuntimePaths } from "../../cli/paths.js";
+import { getRuntimePaths } from "../../cli/paths/index.js";
 
 /**
  * Where a user's own roles live.

@@ -1,6 +1,6 @@
 /**
  * uninstall --purge must delete the runtime home ~/.rule-mcp/ (state,
- * projects, data, config — the layout src/cli/paths.js defines), and install
+ * projects, data, config — the layout src/cli/paths/index.js defines), and install
  * must recreate it on the next run.
  *
  * Regression: `./scripts/uninstall.sh --purge` only removed

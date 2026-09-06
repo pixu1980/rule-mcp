@@ -3,7 +3,7 @@
 import http from "node:http";
 import https from "node:https";
 import { readFileSync } from "node:fs";
-import { DEFAULT_SSE_PORT, getSseHost } from "../../cli/paths.js";
+import { DEFAULT_SSE_PORT, getSseHost } from "../../cli/paths/index.js";
 import { wrapRequestHandler } from "../../utils/index.js";
 import { generateSelfSignedCert } from "../_cert.js";
 import { getOrCreateSseBearerToken } from "../_sse-auth.js";

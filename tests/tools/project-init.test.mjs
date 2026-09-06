@@ -28,7 +28,7 @@ process.env.HOME = mkdtempSync(join(tmpdir(), "rule-init-home-"));
 
 const { GIT_HOOK_MARKER, HOOKED_GIT_EVENTS, gitHooksDir, uninstallGitHooks } = await import("../../src/core/git-hooks.js");
 const { initProject } = await import("../../src/cli/init.js");
-const { getProjectPaths } = await import("../../src/cli/paths.js");
+const { getProjectPaths } = await import("../../src/cli/paths/index.js");
 
 const workspace = () => realpathSync(mkdtempSync(join(tmpdir(), "rule-init-")));
 

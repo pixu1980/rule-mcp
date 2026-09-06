@@ -1,6 +1,6 @@
 /** Index construction over the skills catalog. */
 
-import { getSkillsDirs as getSkillsDirectories } from "../../cli/paths.js";
+import { getSkillsDirs as getSkillsDirectories } from "../../cli/paths/index.js";
 import { getSkillNames, readSkill } from "../../tools/router/index.js";
 import { skillCache } from "../skills/index.js";
 import { tokenize } from "./_terms.js";
