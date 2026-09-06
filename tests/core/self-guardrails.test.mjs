@@ -12,7 +12,7 @@
  * examples, not the file.
  */
 import { strict as assert } from "node:assert";
-import { readdirSync, readFileSync, statSync } from "node:fs";
+import { readdirSync, readFileSync, statSync, existsSync } from "node:fs";
 import { join } from "node:path";
 import test from "node:test";
 
@@ -25,7 +25,7 @@ await loadAllSkills();
 const CATALOGS = new Map([
   ["quality.js", "every ported rule's counterexample lives here as a pattern or a sample"],
   ["shared.js", "every shared rule's counterexample lives here (catalog grouping)"],
-  ["framework.js", "the framework rule catalogs quote the markup and CSS they generate"],
+  ["core/guardrails/framework/", "the framework rule catalogs (react/vue/angular/svelte/js/vanilla slices) quote the markup and CSS they generate"],
   ["file-tree.js", "file-tree rules carry their own sample trees and generated file shapes as data"],
   ["block-spacing.js", "the block-spacing checker quotes the one-line blocks it forbids as examples"],
   ["file-tree.js", "file-tree rules carry their own sample trees and generated file shapes as data"],
@@ -56,7 +56,9 @@ test("every source file passes the JavaScript guardrails", () => {
   const failures = [];
   for (const file of sourceFiles()) {
     const fileName = file.split("/").at(-1);
-    if (CATALOGS.has(fileName)) {
+    const rel = file.slice(SOURCE_ROOT.pathname.length).replace(/^\//, "");
+    const cataloguedDir = [...CATALOGS.keys()].some((key) => key.endsWith("/") && rel.startsWith(key));
+    if (CATALOGS.has(fileName) || cataloguedDir) {
       continue;
     }
     const result = checkCode("rule-styleguide-javascript", readFileSync(file, "utf8"), { fileName });
@@ -71,7 +73,11 @@ test("every source file passes the JavaScript guardrails", () => {
 test("the catalog exclusions still exist and still are catalogs", () => {
   const present = new Set(sourceFiles().map((file) => file.split("/").at(-1)));
   for (const [name] of CATALOGS) {
-    assert.ok(present.has(name), `${name} is excluded but no longer exists - drop the exclusion`);
+    const dirKey = name.endsWith("/");
+    const exists = dirKey
+      ? existsSync(join(SOURCE_ROOT.pathname, name))
+      : present.has(name);
+    assert.ok(exists, `${name} is excluded but no longer exists - drop the exclusion`);
   }
   assert.ok(CATALOGS.size <= 10, "the exclusion list is a short, argued list - not a place to hide failures");
 });
