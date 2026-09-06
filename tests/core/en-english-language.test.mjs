@@ -43,6 +43,7 @@ for (const skill of SKILLS) {
     const ids = new Set(getGuardrails(skill).map((g) => g.id));
     assert.ok(ids.has("fp-american-english"), `${skill}: fp-american-english must run`);
     assert.ok(ids.has("en-english-only-prose"), `${skill}: en-english-only-prose must run`);
+    assert.ok(ids.has("en-english-only-filenames"), `${skill}: en-english-only-filenames must run`);
   });
 }
 
@@ -120,7 +121,7 @@ test("the rule-styleguide-english skill exists and is routed", async () => {
   assert.equal(meta.name, "rule-styleguide-english", "frontmatter name matches the directory");
   assert.match(meta.description, /english/i, "the description advertises English/American spelling");
 
-  const { callTool } = await import("../../src/tools/router.js");
+  const { callTool } = await import("../../src/tools/router/index.js");
   const answer = JSON.parse(
     (await callTool("pix_tool", { prompt: "americanize this comment: colour -> color, behaviour -> behavior" }))
       .content[0].text,
@@ -164,4 +165,35 @@ test("every shared prompt/command surface carries the English mandate", async ()
   const { roleById } = await import("../../src/core/review-roles.js");
   const filled = fillRoleTemplate(roleById("security"));
   assert.match(filled, /American spelling|English/i, "the persona template carries the mandate");
+});
+
+test("file and folder names must be English", () => {
+  const source = "export const x = 1;\n";
+
+  const english = checkCode("rule-styleguide-javascript", source, {
+    fileName: "src/components/user-table/summary-report.js",
+  });
+  assert.equal(
+    english.failed.find((r) => r.id === "en-english-only-filenames"),
+    undefined,
+    "an English path must pass",
+  );
+
+  for (const [label, fileName] of [
+    ["Italian kebab-case segments", "src/components/tabella-utenti/riepilogo.js"],
+    ["Italian folder name", "src/cartella/index.js"],
+    ["accented file name", "src/città.js"],
+    ["Italian camelCase file name", "src/helpers/aggiungiElemento.js"],
+  ]) {
+    const result = checkCode("rule-styleguide-javascript", source, { fileName });
+    const rule = result.failed.find((r) => r.id === "en-english-only-filenames");
+    assert.ok(rule, `${label} ("${fileName}") must fail en-english-only-filenames`);
+  }
+
+  const noName = checkCode("rule-styleguide-javascript", source, {});
+  assert.equal(
+    noName.failed.find((r) => r.id === "en-english-only-filenames"),
+    undefined,
+    "no fileName in context means nothing to check",
+  );
 });
