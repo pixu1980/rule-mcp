@@ -2,7 +2,7 @@
 
 import { callTool } from "../../tools/router/index.js";
 import { formatDoctorTerminal, runDoctor } from "../doctor/index.js";
-import { generateCompletions } from "../completions.js";
+import { generateCompletions } from "../completions/index.js";
 import { loadAllSkills } from "../../core/skills/index.js";
 import { print, printJson } from "./_shared.js";
 import { resolve } from "node:path";
