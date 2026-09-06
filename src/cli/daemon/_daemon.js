@@ -1,22 +1,24 @@
+import { resolveEntrypoint } from "./_service-shared.js";
 import {
-  resolveEntrypoint,
   LAUNCH_AGENT_LABEL,
   LAUNCH_AGENT_PATH,
-  SYSTEMD_UNIT_NAME,
-  SYSTEMD_UNIT_PATH,
-  WINDOWS_SERVICE_NAME,
   installLaunchAgent,
   uninstallLaunchAgent,
   checkLaunchAgent,
+} from "./_launchd.js";
+import {
+  SYSTEMD_UNIT_NAME,
+  SYSTEMD_UNIT_PATH,
   installSystemdService,
   uninstallSystemdService,
   checkSystemdService,
+} from "./_systemd.js";
+import {
+  WINDOWS_SERVICE_NAME,
   installWindowsService,
   uninstallWindowsService,
   checkWindowsService,
-} from "./_platform.js";
-
-export * from "./_platform.js";
+} from "./_windows-service.js";
 
 /**
  * @module cli/daemon

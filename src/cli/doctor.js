@@ -20,7 +20,7 @@ import { fileURLToPath } from "node:url";
 import { listTools } from "../tools/router/index.js";
 import { getRuntimePaths } from "./paths.js";
 import { detectInstalledAgents } from "./install.js";
-import { checkDaemonService, WRAPPER_SCRIPT_PATH } from "./daemon/_daemon.js";
+import { checkDaemonService, WRAPPER_SCRIPT_PATH } from "./daemon/index.js";
 import { banner, color, section } from "./tui.js";
 import { getTokenStats } from "../core/telemetry/_token-stats.js";
 

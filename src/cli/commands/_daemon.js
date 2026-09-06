@@ -10,7 +10,7 @@ import {
   startDaemonProcess,
   stopDaemonProcess,
   uninstallDaemonService,
-} from "../daemon/_daemon.js";
+} from "../daemon/index.js";
 import { existsSync, readFileSync } from "node:fs";
 import { getRuntimePaths } from "../paths.js";
 import { print, tryExec } from "./_shared.js";
