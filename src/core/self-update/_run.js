@@ -1,7 +1,7 @@
 /** One self-update pass: gates, fetch, merge, the structured result. */
 import { git } from "./_git.js";
 import { reloadSkillsAfterMerge } from "./_reload.js";
-import { getRepoRoot, detectInstallType } from "../../cli/paths.js";
+import { getRepoRoot, detectInstallType } from "../../cli/paths/index.js";
 import { autoUpdateEnabled, normalizeRemoteUrl, resolveAllowedRemotes, manualHint } from "./_config.js";
 
 /**

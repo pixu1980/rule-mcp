@@ -19,7 +19,7 @@
 
 import { execFileSync } from "node:child_process";
 import { mkdirSync } from "node:fs";
-import { findProjectRoot, getProjectPaths } from "./paths.js";
+import { findProjectRoot, getProjectPaths } from "./paths/index.js";
 
 /**
  * Find the tokensave binary, or nothing.

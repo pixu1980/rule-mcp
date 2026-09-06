@@ -2,7 +2,7 @@
 
 import { copyFileSync, existsSync, mkdirSync, readdirSync, readFileSync, rmSync } from "node:fs";
 import { join, relative, dirname } from "node:path";
-import { getSkillsDirs as getSkillsDirectories } from "../paths.js";
+import { getSkillsDirs as getSkillsDirectories } from "../paths/index.js";
 import { parseSkillFrontmatter } from "../../core/skills/index.js";
 
 /**

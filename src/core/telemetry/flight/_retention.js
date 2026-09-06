@@ -2,7 +2,7 @@
 
 import { readdirSync, rmSync, statSync } from "node:fs";
 import { join } from "node:path";
-import { getProjectPaths } from "../../../cli/paths.js";
+import { getProjectPaths } from "../../../cli/paths/index.js";
 
 /** Exports kept regardless of age, and the age window kept regardless of count. */
 const EXPORT_KEEP = 10;

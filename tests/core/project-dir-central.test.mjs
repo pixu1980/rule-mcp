@@ -18,7 +18,7 @@ const home = mkdtempSync(join(tmpdir(), "pix-central-home-"));
 process.env.HOME = home; // homedir() reads it, so no new knob is needed
 process.env.PIX_GALAXY_MCP_NO_AUTOUPDATE = "1";
 
-const { getProjectPaths, getRuntimePaths, projectSlug } = await import("../../src/cli/paths.js");
+const { getProjectPaths, getRuntimePaths, projectSlug } = await import("../../src/cli/paths/index.js");
 
 const git = (cwd, ...args) => execFileSync("git", args, { cwd, encoding: "utf8", stdio: ["ignore", "pipe", "ignore"] });
 

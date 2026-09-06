@@ -6,7 +6,7 @@ import { join } from "node:path";
 import { formatPersonaFile } from "../../core/review/persona-file/index.js";
 import { allRoles, validateRole } from "../../core/review/roles/index.js";
 import { loadRoleOverlays } from "../../core/review/_overlays.js";
-import { getRuntimePaths } from "../paths.js";
+import { getRuntimePaths } from "../paths/index.js";
 
 /** Write one line to stdout. */
 export const print = (value) => process.stdout.write(`${value}\n`);

@@ -3,7 +3,7 @@
 import { createHash, randomUUID } from "node:crypto";
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
-import { getRuntimePaths } from "../../../cli/paths.js";
+import { getRuntimePaths } from "../../../cli/paths/index.js";
 import { projectIdFile } from "../store/index.js";
 
 let _installation;

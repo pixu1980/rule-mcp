@@ -13,7 +13,7 @@
 import { z } from "zod/v4";
 import { registerTool } from "./router/index.js";
 import { runSelfUpdate, buildBanner, scheduleRestartIfNeeded } from "../core/self-update/index.js";
-import { detectInstallType } from "../cli/paths.js";
+import { detectInstallType } from "../cli/paths/index.js";
 
 /**
  * Register the pix_update tool.
