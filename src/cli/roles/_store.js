@@ -8,6 +8,7 @@ import { allRoles, validateRole } from "../../core/review/roles/index.js";
 import { loadRoleOverlays } from "../../core/review/_overlays.js";
 import { getRuntimePaths } from "../paths.js";
 
+/** Write one line to stdout. */
 export const print = (value) => process.stdout.write(`${value}\n`);
 
 /** The user's own roles directory, the same path the overlay loader reads. */
@@ -45,6 +46,7 @@ export function writeUserRole(role) {
   }
 
   const directory = userRolesDir();
+
   mkdirSync(directory, { recursive: true });
   writeFileSync(join(directory, `${role.id}.md`), formatPersonaFile(role));
 
