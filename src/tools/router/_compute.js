@@ -3,7 +3,7 @@
 import { _beforeHooks, _postHooks, _tools } from "./_hooks.js";
 import { estimateTokens } from "./_helpers.js";
 import { getSkillNames, readSkill } from "./_skills.js";
-import { postprocessToolResult, preprocessToolCall } from "../../core/enforcement.js";
+import { postprocessToolResult, preprocessToolCall } from "../../core/enforcement/index.js";
 import { routedSkillOf } from "./_entry.js";
 
 function estimateRoutingSaving(name, core, final) {

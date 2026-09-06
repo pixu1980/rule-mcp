@@ -15,7 +15,7 @@ import { execFileSync } from "node:child_process";
 import { test } from "node:test";
 import { fileURLToPath } from "node:url";
 
-const ENFORCEMENT = fileURLToPath(new URL("../../src/core/enforcement.js", import.meta.url));
+const ENFORCEMENT = fileURLToPath(new URL("../../src/core/enforcement/index.js", import.meta.url));
 
 /**
  * The pre-diet cost of this exact session, measured on the decoration path

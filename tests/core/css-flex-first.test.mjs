@@ -302,7 +302,7 @@ test("compression cannot invert the rule on its way out", async () => {
 });
 
 test("the reminder carries it when CSS is on the table, and not otherwise", async () => {
-  const { decorateWorkflowReminder } = await import("../../src/core/enforcement.js");
+  const { decorateWorkflowReminder } = await import("../../src/core/enforcement/index.js");
   // The reminder is on a cadence (hardening 4.2), so the second call would carry
   // nothing at all and prove nothing about the layout rule. Re-anchor on every
   // call here: what is under test is which reminder carries FLEX_FIRST.

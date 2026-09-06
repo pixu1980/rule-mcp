@@ -6,7 +6,7 @@ import { cacheLookup, cacheStore } from "../../core/cache/tool-cache/index.js";
 import { computeCore, estimateRoutingSaving } from "./_compute.js";
 import { consumeUpdateBanner, maybeSelfUpdate } from "../../core/self-update/index.js";
 import { dependenciesOf, entryPathOf, routedSkillOf } from "./_entry.js";
-import { enforcementError } from "../../core/enforcement.js";
+import { enforcementError } from "../../core/enforcement/index.js";
 import { recordToolCall } from "../../core/telemetry/recorder/index.js";
 import { resumeAnnouncement } from "../../core/session/resume/index.js";
 import { touchActivity } from "../../core/session/_reclaim.js";

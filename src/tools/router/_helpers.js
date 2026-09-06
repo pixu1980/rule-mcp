@@ -2,7 +2,7 @@
 
 import { alignAsciiBoxesResult } from "../../core/text/ascii-box/index.js";
 import { compressResult } from "../../core/text/_caveman.js";
-import { decorateWorkflowReminder, stampRequestId } from "../../core/enforcement.js";
+import { decorateWorkflowReminder, stampRequestId } from "../../core/enforcement/index.js";
 import { stripFingerprintResult } from "../../core/text/fingerprint/index.js";
 
 function withBanner(banner, result) {
