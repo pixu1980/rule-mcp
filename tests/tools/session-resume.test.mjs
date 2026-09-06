@@ -31,7 +31,7 @@ import {
   resumeAnnouncement,
   resumeContext,
   wasAnnouncedThisSession,
-} from "../../src/core/session/_resume.js";
+} from "../../src/core/session/resume/index.js";
 
 let pass = 0;
 let fail = 0;

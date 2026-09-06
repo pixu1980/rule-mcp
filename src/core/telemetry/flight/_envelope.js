@@ -3,7 +3,7 @@
 import { homedir } from "node:os";
 import { getProjectPaths } from "../../../cli/paths.js";
 import { detectAgentUsage, unsupportedAgents } from "../../agents/transcripts/index.js";
-import { snapshotProject } from "../../session/_snapshot.js";
+import { snapshotProject } from "../../session/snapshot/index.js";
 import { computeKpi } from "../kpi/index.js";
 import { readRollups, readSidecarUsage } from "../store/index.js";
 import { FLIGHT_FILE_VERSION, SERVER_NAME } from "./_constants.js";
