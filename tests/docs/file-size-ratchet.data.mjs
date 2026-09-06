@@ -7,13 +7,6 @@
  */
 
 export const FILE_SIZE_RATCHET = new Map([
-  ["scripts/build/changelog/index.mjs", 229],
-  ["scripts/data/wcag/index.mjs", 186],
-  ["scripts/fix/blank-lines/index.mjs", 176],
-  ["scripts/fix/post-process/index.mjs", 161],
-  ["scripts/fix/prose/index.mjs", 157],
-  ["scripts/fix/self-guardrails/index.mjs", 233],
-  ["scripts/reports/cache-similarity/index.mjs", 170],
   ["src/cli/cache.js", 239],
   ["src/cli/commands/_daemon.js", 219],
   ["src/cli/commands/_targets.js", 178],
