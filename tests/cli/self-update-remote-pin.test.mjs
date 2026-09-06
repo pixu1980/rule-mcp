@@ -22,7 +22,7 @@ import { readFileSync, mkdtempSync, mkdirSync, writeFileSync, rmSync } from "nod
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 
-import { normalizeRemoteUrl, resolveAllowedRemotes } from "../../src/core/self-update.js";
+import { normalizeRemoteUrl, resolveAllowedRemotes } from "../../src/core/self-update/index.js";
 
 // ── URL normalisation ──────────────────────────────────────────────────────
 
@@ -116,7 +116,7 @@ function makeClonePair() {
 /** Run the real runSelfUpdate against `clone` in a child process. */
 function runUpdateIn(clone, environment = {}) {
   const script = `
-    import { runSelfUpdate } from ${JSON.stringify(new URL("../../src/core/self-update.js", import.meta.url).href)};
+    import { runSelfUpdate } from ${JSON.stringify(new URL("../../src/core/self-update/index.js", import.meta.url).href)};
     process.stdout.write(JSON.stringify(await runSelfUpdate({ reloadSkills: false })));
   `;
   const out = execFileSync(process.execPath, ["--input-type=module", "--eval", script], {
@@ -149,7 +149,7 @@ test("a repointed remote is refused instead of executed", () => {
 });
 
 test("a refused remote is reported to the user, not swallowed", async () => {
-  const { buildBanner } = await import("../../src/core/self-update.js");
+  const { buildBanner } = await import("../../src/core/self-update/index.js");
   const banner = buildBanner({
     checked: true,
     updated: false,
@@ -205,12 +205,12 @@ test("a branch ahead of upstream reports no update", () => {
 });
 
 test("buildBanner stays silent for a no-op check", async () => {
-  const { buildBanner } = await import("../../src/core/self-update.js");
+  const { buildBanner } = await import("../../src/core/self-update/index.js");
   assert.equal(buildBanner({ checked: true, updated: false }), null);
 });
 
 test("the update banner does not say 'files file(s)'", async () => {
-  const { buildBanner } = await import("../../src/core/self-update.js");
+  const { buildBanner } = await import("../../src/core/self-update/index.js");
   const banner = buildBanner({ updated: true, from: "aaaaaaa", to: "bbbbbbb", count: 3 });
   assert.doesNotMatch(banner, /files file/);
   assert.match(banner, /3 file\(s\)/);

@@ -13,7 +13,7 @@ import { mkdtempSync, mkdirSync, writeFileSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 
-import { buildBanner, scheduleRestartIfNeeded } from "../../src/core/self-update.js";
+import { buildBanner, scheduleRestartIfNeeded } from "../../src/core/self-update/index.js";
 
 console.log("self-update engine test");
 
@@ -68,7 +68,7 @@ function pushUpstreamChange(seed, files) {
  */
 function runUpdateIn(clone, environment = {}) {
   const script = `
-    import { runSelfUpdate } from ${JSON.stringify(new URL("../../src/core/self-update.js", import.meta.url).href)};
+    import { runSelfUpdate } from ${JSON.stringify(new URL("../../src/core/self-update/index.js", import.meta.url).href)};
     const r = await runSelfUpdate({ reloadSkills: false });
     process.stdout.write(JSON.stringify(r));
   `;

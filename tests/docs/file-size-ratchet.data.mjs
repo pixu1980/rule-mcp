@@ -47,7 +47,6 @@ export const FILE_SIZE_RATCHET = new Map([
   ["src/core/review/_template.js", 182],
   ["src/core/scaffold/_template-data.js", 248],
   ["src/core/scaffold/_templates.js", 359],
-  ["src/core/self-update.js", 483],
   ["src/core/session/_lifecycle.js", 228],
   ["src/core/session/_resume.js", 292],
   ["src/core/session/_snapshot.js", 252],
