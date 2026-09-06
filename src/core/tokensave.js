@@ -24,7 +24,7 @@
 import { spawn } from "node:child_process";
 import { existsSync, readFileSync, statSync, writeFileSync } from "node:fs";
 import { isAbsolute, join } from "node:path";
-import { hasTokensave } from "./detector.js";
+import { hasTokensave } from "./detector/index.js";
 
 /**
  * One-line directive appended to outputs when a project has a healthy graph.
