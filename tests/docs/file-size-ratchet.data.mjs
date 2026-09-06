@@ -21,7 +21,6 @@ export const FILE_SIZE_RATCHET = new Map([
   ["src/cli/commands/_targets.js", 178],
   ["src/cli/commands/_tools.js", 153],
   ["src/cli/completions.js", 252],
-  ["src/cli/daemon/_daemon.js", 501],
   ["src/cli/doctor.js", 478],
   ["src/cli/guard.js", 273],
   ["src/cli/install.js", 257],
