@@ -32,7 +32,7 @@ const realProjects = join(homedir(), ".rule-mcp", "projects");
 const listing = () => (existsSync(realProjects) ? readdirSync(realProjects).sort() : []);
 
 /** Run these, because they are fast on their scripted repos. */
-const RUN = ["project-init.test.mjs", "session-resume.test.mjs", "handon.test.mjs"];
+const RUN = ["project-init.test.mjs", "session-resume.test.mjs", "handon/claims.test.mjs"];
 
 // The SANDBOXED self-update suites are target-only tests that carry their own
 // HOME pins; the per-suite fixture assertions from the source do not apply here.
