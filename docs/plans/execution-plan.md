@@ -78,21 +78,39 @@
   `test:foundations`.
 - [x] Code-splitting section in `skills/rule-process-simplicity/SKILL.md`; ADR 061.
 
-### Phase 4 - shrink the ratchet (next sessions, one family per commit)
-- [ ] Split the worst offenders by value: `tools/ai.js` 792, `core/docs-numbering.js` 740,
-  `tools/handon.js` 737, `core/tool-cache.js` 720, `core/file-tree.js` 686,
-  `tools/handoff.js` 660, `guardrails/shared.js` 655, `prompts/index.js` 629, ...
+### Phase 4 - shrink the ratchet (in progress, one family per commit)
+- [x] `tools/ai.js` (792) -> 15 files under `tools/ai/` (schema, sections, stopwords/aliases
+  data, scoring, affinities, domain, framework bias, contracts, ranking, register); dead
+  `scoreSkill` dropped.
+- [x] `core/docs-numbering.js` (740) -> 9 files under `core/docs-numbering/` (git plumbing,
+  families, authors, orphans, stale commits, plan, apply, rewrite, render).
+- [x] `core/wcag-data/`: generator/split desync fixed - the vendored catalog is one
+  `_criteria.data.js` (generator target), lookup helpers in `_lookup.js`; the 13
+  `criteria-N-N.js` slices and `meta.js` are gone.
+- [x] Underscore-barrel convention in every existing subfolder: `cli/commands`,
+  `cli/installers` (agent-installers.js became the folder index), `tools/router`,
+  `prompts`, `transport` (+barrel), `utils` (+barrel).
+- [x] `src/core` thematic folders: `agents/`, `telemetry/`, `cache/`, `text/`, `review/`,
+  `skills/`, `scaffold/`, `session/`, guardrails engine folded into `guardrails/`
+  (`_engine`, `_guarded`, `_worker-thread`, catalogs underscored); `cli/daemon/` pair.
+  Five more 1-2 line shims removed (guardrail-defs.js, guardrails/framework.js,
+  guardrails/quality.js and the flat daemon/commands aliases).
+- [ ] Remaining oversized (ratchet, worst first): `tools/handon.js` 737,
+  `core/cache/_tool-cache.js` 720, `core/file-tree.js` 686, `tools/handoff.js` 660,
+  `guardrails/_shared.js` 655, `prompts/index.js` 629, `core/agents/_transcripts.js` 583,
+  `cli/daemon/_platform.js` 548, `tools/gateway.js` 530, `reports/census/index.mjs` 530, ...
 - [ ] Each split: underscore-barrel folder, one concern per file, ratchet entries deleted,
   surface tests (`cli-commander-surface`, `tool-surface-budget`) green.
-- [ ] Move remaining flat-file modules into their convention folders as they are touched
-  (`core/en-english.js` dictionaries -> `*.data.js`, `wcag-data/criteria-*` -> `_criteria-*.data.js`).
+- [ ] Move `core/text/_en-english.js` dictionaries to `*.data.js` when next touched.
 
-### Phase 5 - `scripts/` folders per script
-- [ ] `scripts/install/`, `scripts/reports/` (census, cache, cache-similarity, tool-surface),
-  `scripts/fix/` (blank-lines, self-guardrails, clean-prose), `scripts/build/` (changelog,
-  embed-skills, checksums, package), `scripts/data/` (update-wcag-data).
-- [ ] Each multi-file script: `<name>/index.mjs` entry + `_helper.mjs` parts; update
-  package.json script paths + CI; shell installers stay flat.
+### Phase 5 - `scripts/` folders per script (done)
+- [x] `reports/` (census, cache, cache-similarity, tool-surface, coverage), `fix/`
+  (blank-lines, self-guardrails, prose, post-process), `build/` (changelog, embed-skills,
+  checksums), `ci/` (audit-gate), `data/` (wcag), `install/` (skills); each script is its
+  folder's `index.mjs`, shell installers stay flat.
+- [x] package.json, ci.yml, package.sh, pre-commit hook, docs and census header updated;
+  SHA256SUMS refreshed; stale `../test/routing-corpus.mjs` import in the cache reports fixed.
+- [ ] Split the oversized scripts into `_helper.mjs` parts (census 530, cache 277, ...).
 
 ### Phase 6 - co-located `__tests__/`
 - [ ] Glob-based runner (`node --test` patterns) replacing the hardcoded lists in
