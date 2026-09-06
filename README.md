@@ -19,11 +19,11 @@ Serves styleguides, component templates, framework best practices, and design sy
 - [What is rule-mcp](#what-is-rule-mcp)
 - [Architecture overview](#architecture-overview)
 - [Tool reference](#tool-reference)
-  - [All 111 tools (normal mode)](#all-111-tools-normal-mode)
+  - [All 112 tools (normal mode)](#all-112-tools-normal-mode)
   - [Minimal tool surface (10 tools)](#minimal-tool-surface-10-tools)
   - [Gateway deterministic mode](#gateway-deterministic-mode)
-- [MCP Resources (196)](#mcp-resources-196)
-- [MCP Prompts (40)](#mcp-prompts-40)
+- [MCP Resources (198)](#mcp-resources-198)
+- [MCP Prompts (73)](#mcp-prompts-73)
 - [Guardrail engine](#guardrail-engine)
 - [CLI reference](#cli-reference)
 - [Daemon & services](#daemon--services)
@@ -40,10 +40,10 @@ Deterministic MCP server for the rule skill ecosystem. Live surface (enforced by
 
 | Surface   | Count | Notes                                                                                                       |
 | --------- | ----- | ----------------------------------------------------------------------------------------------------------- |
-| Tools     | 111   | ~100 per-skill tools + dispatcher/action tools                                                              |
-| Resources | 196   | rule:// per-skill index + summary + template URIs                                                            |
-| Prompts   | 61    | rule-area-* areas + one-shot workflow + 42 review-persona commands (rule-plan-* / rule-audit-* / rule-review-*) |
-| Skills    | 95    | frontend, backend, data, devops, toolchain, styleguide, process, platform, ai                               |
+| Tools     | 112   | ~100 per-skill tools + dispatcher/action tools                                                              |
+| Resources | 198   | rule:// per-skill index + summary + template URIs                                                            |
+| Prompts   | 73    | rule-area-* areas + one-shot workflow + 54 review-persona commands (rule-plan-* / rule-audit-* / rule-review-*) |
+| Skills    | 96    | frontend, backend, data, devops, toolchain, styleguide, process, platform, ai                               |
 | Tests     | 212   | `pnpm test:all` green (incl. installer + PTY TUI)                                                           |
 
 Architecture decisions live in [`docs/adr/`](docs/adr/ADR.md) (47 records:
@@ -54,7 +54,7 @@ app + SDK repo.
 
 ## Quick start
 
-See **[`GETTING_STARTED.md`](./GETTING_STARTED.md)** for step-by-step installation:
+See **[`docs/GETTING_STARTED.md`](./docs/GETTING_STARTED.md)** for step-by-step installation:
 
 - Global npm / pnpm install
 - pnpx ephemeral (no install)
@@ -74,9 +74,9 @@ rule-mcp install --agent all
 
 ## What is rule-mcp
 
-rule-mcp is an [MCP](https://modelcontextprotocol.io) server that exposes **111 tools**, **196 resources**, and **61 prompts** to any MCP-compatible AI coding agent. Because the server never calls an LLM (every output is deterministic), it is **model-agnostic** - it behaves identically behind Claude, GPT, Gemini, Llama, Qwen, or any other model. It provides:
+rule-mcp is an [MCP](https://modelcontextprotocol.io) server that exposes **112 tools**, **198 resources**, and **73 prompts** to any MCP-compatible AI coding agent. Because the server never calls an LLM (every output is deterministic), it is **model-agnostic** - it behaves identically behind Claude, GPT, Gemini, Llama, Qwen, or any other model. It provides:
 
-- **95 modular skills** covering frontend, backend, database, devops, toolchain, and styleguide domains
+- **96 modular skills** covering frontend, backend, database, devops, toolchain, and styleguide domains
 - **BM25 full-text search** across all skill content
 - **Guardrail engine** with 18 shared rules + framework/backend/database/devops-specific checks
 - **Deterministic gateway** (`pix_gateway` + `pix_apply`) with receipt-based validation
@@ -84,7 +84,7 @@ rule-mcp is an [MCP](https://modelcontextprotocol.io) server that exposes **111 
 
 ### Supported agents
 
-Claude Code, Cursor, Cline, Roo Code, Copilot, Gemini CLI, Codex CLI, Windsurf, OpenCode, Pi, and any MCP-compatible host.
+Claude Code, Cursor, Cline, Roo Code, Copilot, Gemini CLI, Codex CLI, Devin (formerly Windsurf), OpenCode, Pi, and any MCP-compatible host.
 
 > **Transport support tiers.** **stdio** is the universally-tested path and works with every MCP host - prefer it. **Daemon / HTTP+SSE** is verified end-to-end for **Pi** and **VS Code**; the other agents receive a best-effort standard `mcpServers` config (correct shape, but not each individually interop-tested) and may need a manual tweak.
 
@@ -114,7 +114,7 @@ Claude Code, Cursor, Cline, Roo Code, Copilot, Gemini CLI, Codex CLI, Windsurf, 
 ├───────────────────────────────────────────────────────────────┤
 │  Tool Registry              │  Resources Registry             │
 │  src/tools/router.js        │  src/resources/index.js         │
-│  111 tools                  │  196 resources                  │
+│  112 tools                  │  198 resources                  │
 ├──────────────────┬───────────┴────────────────┬───────────────┤
 │  Orchestration   │  Skills & BM25            │  Guardrails    │
 │  pix_gateway     │  89 skill dirs            │  18 shared     │
@@ -151,7 +151,7 @@ Claude Code, Cursor, Cline, Roo Code, Copilot, Gemini CLI, Codex CLI, Windsurf, 
 
 | Mode                                       | Tools exposed   | Use case                                                                                                          |
 | ------------------------------------------ | --------------- | ----------------------------------------------------------------------------------------------------------------- |
-| Normal (default)                           | 95              | Full access to all skills, tools, and features                                                                    |
+| Normal (default)                           | 96              | Full access to all skills, tools, and features                                                                    |
 | Minimal (`RULE_MCP_MINIMAL_TOOLS=1`) | 10              | Dispatcher + action tools only - fits client tool caps (Cursor/Copilot), cheaper context, safe for untrusted code |
 | Allowed-tools filter                       | 8 (recommended) | Via `mcp.json` `allowedTools` - reduce token consumption                                                          |
 
@@ -159,7 +159,7 @@ Claude Code, Cursor, Cline, Roo Code, Copilot, Gemini CLI, Codex CLI, Windsurf, 
 
 ## Tool reference
 
-### All 111 tools (normal mode)
+### All 112 tools (normal mode)
 
 #### Deterministic tools (9)
 
@@ -168,7 +168,7 @@ Claude Code, Cursor, Cline, Roo Code, Copilot, Gemini CLI, Codex CLI, Windsurf, 
 | `rule`                 | Route a prompt to the correct rule skill via BM25 keyword scoring + framework bias            | ✅        |
 | `pix_gateway`         | **Single-entry orchestrator:** routes → loads evidence → checks guardrails → returns receipt | ✅        |
 | `pix_apply`           | Write files to disk, requires valid receipt from `pix_gateway`                               | ❌        |
-| `pix_search`          | BM25 full-text search across all 95 skills                                                   | ✅        |
+| `pix_search`          | BM25 full-text search across all 96 skills                                                   | ✅        |
 | `pix_check`           | Run guardrail checks on code against any rule skill                                           | ✅        |
 | `pix_scaffold`        | Generate project config files (`.prettierrc`, `.editorconfig`, `.gitignore`, etc.)           | ✅        |
 | `pix_detect`          | Auto-detect project framework and suggest relevant skills/tools                              | ✅        |
@@ -204,7 +204,7 @@ Each skill directory under `skills/` becomes a tool `pix_<skill-name>`. All supp
 | `pix_devops_version`            | rule-devops-version            | 161   | DevOps     |
 | `pix_frontend`                  | rule-frontend                  | 61    | Frontend   |
 | `pix_frontend_angular`          | rule-frontend-angular          | 504   | Frontend   |
-| `pix_frontend_astro`            | rule-frontend-astro            | 526   | Frontend   |
+| `pix_frontend_meta_astro`       | rule-frontend-meta-astro       | 526   | Frontend   |
 | `pix_frontend_meta_next`        | rule-frontend-meta-next        | 201   | Frontend   |
 | `pix_frontend_meta_nuxt`        | rule-frontend-meta-nuxt        | 181   | Frontend   |
 | `pix_frontend_meta_remix`       | rule-frontend-meta-remix       | 224   | Frontend   |
@@ -285,7 +285,7 @@ See [ADR 044](./docs/adr/044-gateway-as-the-single-entrypoint-with-server-side-r
 
 ---
 
-## MCP Resources (196)
+## MCP Resources (198)
 
 196 resources accessible via the MCP `resources/read` protocol.
 
@@ -313,28 +313,28 @@ Each skill (except `rule` itself) has two resources:
 
 ---
 
-## MCP Prompts (40)
+## MCP Prompts (73)
 
-61 prompts accessible via the MCP `prompts/get` protocol. The 12 `rule-area-*` commands and the
-42 review-persona commands (14 roles x plan/audit/review) are grouped in a row each; the one-shot
+73 prompts accessible via the MCP `prompts/get` protocol. The 12 `rule-area-*` commands and the
+54 review-persona commands (18 roles x plan/audit/review) are grouped in a row each; the one-shot
 workflow prompts are listed individually. The same registry drives the clean `/rule-*` agent
 commands (pinned by the `/rule` router), so every prompt takes a **single free-form argument** and
 supports `help` (or `--help` / `-h`) as its value to print the usage list, e.g. `/rule-area-frontend
 help` - help is returned as a ready-made assistant message and displayed instantly, without
 invoking the model.
 
-| Prompt                                        | Description                                                                                                                                                                                                                                                                                                                        | Arguments                                                                                                                                                                            |
-| --------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `rule` (router)                                | Route a request through the rule workflow (`/rule-mcp` became `/rule`)                                                                                                                                                                                                                                                         | `<request>` (required)                                                                                                                                                               |
-| `rule-area-*` (12)                             | Area specialists: `ai`, `backend`, `data`, `devops`, `frontend`, `meta`, `platform`, `process`, `skills`, `styleguide`, `toolchain`, `ui`                                                                                                                                                                                          | `request` (required, free text)                                                                                                                                                      |
-| `rule-handoff`                                 | Compressed context handoff (ADR + git) for a new session; commits pending work first                                                                                                                                                                                                                                               | `options` (optional: `handoff` \| `close-session`, `compress` \| `no-compress` (default: compress), `full` \| `brief` \| `minimal`, `no-*`, `max=<n>`, `help`; empty = all defaults) |
-| `rule-adr`                                     | Record an architecture decision: context, decision, alternatives, consequences                                                                                                                                                                                                                                                     | `decision` (required)                                                                                                                                                                |
-| `rule-flight`                                  | Read the flight recorder: what this server cost and what to do about it                                                                                                                                                                                                                                                            | `options` (optional: export \| show <file> \| prune \| redact)                                                                                                                       |
-| `rule-handon`                                  | Resume: verify the last handoff against the repository as it is now                                                                                                                                                                                                                                                                | `options` (optional: list \| file=<path>)                                                                                                                                            |
-| `rule-init`                                    | Prepare a project for rule-mcp: recorder dir + tokensave                                                                                                                                                                                                                                                                     | `options` (optional: no-tokensave)                                                                                                                                                   |
-| `rule-process-check`                           | Validate code against the rule guardrails and fix what fails (`rule-check` became `rule-process-check`)                                                                                                                                                                                                                               | `target` (optional; default: current diff)                                                                                                                                           |
-| `rule-update`                                  | Apply an available server update explicitly, and report what changed                                                                                                                                                                                                                                                               | `options` (optional: check \| apply)                                                                                                                                                 |
-| `rule-plan-*` / `rule-audit-*` / `rule-review-*` | 42 review-persona commands: one per operation (plan/audit/review) per active role (architect, security, privacy, a11y, ai-engineer, performance, docs-engineer, web-engineer, devops-sre, qa-testing, data-engineer, oss-compliance, design-system-lead, dx-toolchain); each routes through `rule_tool_plan` + `rule_tool_plan_docs` | `topic` (optional)                                                                                                                                                                   |
+| Prompt                                        | Description                                                                                                                                                                                                                                                                                               | Arguments                                                                                                                                                                            |
+| --------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `rule` (router)                                | Route a request through the rule workflow (`/rule-mcp` became `/rule`)                                                                                                                                                                                                                                | `<request>` (required)                                                                                                                                                               |
+| `rule-area-*` (12)                             | Area specialists: `ai`, `backend`, `data`, `devops`, `frontend`, `meta`, `platform`, `process`, `skills`, `styleguide`, `toolchain`, `ui`                                                                                                                                                                 | `request` (required, free text)                                                                                                                                                      |
+| `rule-handoff`                                 | Compressed context handoff (ADR + git) for a new session; commits pending work first                                                                                                                                                                                                                      | `options` (optional: `handoff` \| `close-session`, `compress` \| `no-compress` (default: compress), `full` \| `brief` \| `minimal`, `no-*`, `max=<n>`, `help`; empty = all defaults) |
+| `rule-adr`                                     | Record an architecture decision: context, decision, alternatives, consequences                                                                                                                                                                                                                            | `decision` (required)                                                                                                                                                                |
+| `rule-flight`                                  | Read the flight recorder: what this server cost and what to do about it                                                                                                                                                                                                                                   | `options` (optional: export \| show <file> \| prune \| redact)                                                                                                                       |
+| `rule-handon`                                  | Resume: verify the last handoff against the repository as it is now                                                                                                                                                                                                                                       | `options` (optional: list \| file=<path>)                                                                                                                                            |
+| `rule-init`                                    | Prepare a project for rule-mcp: recorder dir + tokensave                                                                                                                                                                                                                                            | `options` (optional: no-tokensave)                                                                                                                                                   |
+| `rule-process-check`                           | Validate code against the rule guardrails and fix what fails (`rule-check` became `rule-process-check`)                                                                                                                                                                                                      | `target` (optional; default: current diff)                                                                                                                                           |
+| `rule-update`                                  | Apply an available server update explicitly, and report what changed                                                                                                                                                                                                                                      | `options` (optional: check \| apply)                                                                                                                                                 |
+| `rule-plan-*` / `rule-audit-*` / `rule-review-*` | 54 review-persona commands: one per operation (plan/audit/review) per active role (architect, simplicity, docs, backend, security, auth, supply-chain, privacy, qa, performance, ai, devx, a11y, design-system, frontend, i18n, data, devops); each routes through `rule_tool_plan` + `rule_tool_plan_docs` | `topic` (optional)                                                                                                                                                                   |
 
 ---
 
@@ -612,17 +612,16 @@ The Docker image uses `node:22-alpine`, has no build step, and runs the server d
 
 ## Further reading
 
-| Document                                                               | Description                                     |
-| ---------------------------------------------------------------------- | ----------------------------------------------- |
-| [`GETTING_STARTED.md`](./GETTING_STARTED.md)                           | Step-by-step installation & agent integration   |
-| [`docs/01-product-architecture.md`](./docs/01-product-architecture.md) | Full skill taxonomy and product architecture    |
-| [`docs/02-tools-operations.md`](./docs/02-tools-operations.md)         | Detailed tool operations reference              |
-| [`docs/03-engineering-guides.md`](./docs/03-engineering-guides.md)     | Engineering practices and conventions           |
-| [`docs/04-roadmap-plans.md`](./docs/04-roadmap-plans.md)               | Roadmap and planned features                    |
-| [`docs/05-agent-instructions.md`](./docs/05-agent-instructions.md)     | Agent instruction templates                     |
-| [`docs/06-env-variables.md`](./docs/06-env-variables.md)               | Complete `RULE_MCP_*` environment variable reference |
-| [`docs/07-census.md`](./docs/07-census.md)                             | Full census of MCP tools and `/rule-*` commands  |
-| [`docs/adr/ADR.md`](./docs/adr/ADR.md)                                 | Architecture Decision Records index             |
+| Document                                                               | Description                                             |
+| ---------------------------------------------------------------------- | ------------------------------------------------------- |
+| [`docs/GETTING_STARTED.md`](./docs/GETTING_STARTED.md)                 | Step-by-step installation & agent integration           |
+| [`docs/01-product-architecture.md`](./docs/01-product-architecture.md) | Full skill taxonomy and product architecture            |
+| [`docs/02-tools-operations.md`](./docs/02-tools-operations.md)         | Detailed tool operations reference                      |
+| [`docs/03-engineering-guides.md`](./docs/03-engineering-guides.md)     | Engineering practices and conventions                   |
+| [`docs/04-agent-instructions.md`](./docs/04-agent-instructions.md)     | Agent instruction templates (generated command surface) |
+| [`docs/05-env-variables.md`](./docs/05-env-variables.md)               | Complete `RULE_MCP_*` environment variable reference         |
+| [`docs/02-tools-operations.md`](./docs/02-tools-operations.md)         | Operator handbook + generated census blocks             |
+| [`docs/adr/ADR.md`](./docs/adr/ADR.md)                                 | Architecture Decision Records index                     |
 
 ---
 

@@ -81,6 +81,14 @@ Every agent receives the same **registry-driven** clean command set - the `/rule
 - GitHub Copilot CLI: `/agent`, select `rule-mcp`.
 - Codex CLI: invoke globally installed `rule` skill; exact custom prompt support varies by version.
 
+## Minimal tool surface
+
+Set `RULE_MCP_MINIMAL_TOOLS=1` (off by default) to expose only the 10 dispatcher/action
+tools instead of the full per-skill surface (fits clients that cap or truncate the tool list, and
+costs less context on every turn): `pix_tool`, `rule_tool_update`, `rule_tool_gateway`,
+`rule_tool_apply`, `rule_tool_search`, `rule_tool_check`, `rule_tool_scaffold`, `rule_tool_detect`,
+`rule_tool_process_handoff`, `rule_tool_component`.
+
 ## Environment variables
 
 See [06-env-variables.md](06-env-variables.md) for the complete reference table, persistence, and configuration.

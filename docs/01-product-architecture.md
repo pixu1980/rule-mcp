@@ -1,22 +1,9 @@
-# Product and architecture
+# rule-mcp - Product and architecture
 
-Project mission, architecture, migration notes, and roadmap. This file consolidates the previous analysis/architecture/roadmap docs without dropping source content.
-
-## Source preservation
-
-Every source document below is preserved verbatim under its own heading so no project knowledge is lost during consolidation.
-
-## Preserved source: `ANALYSIS.md`
-
-> Original path: `docs/ANALYSIS.md`  
-> SHA-256: `b75589534e7ca82579c14a1a3b749bf0c262a1da701ac9376d4b2d204425bc10`
-
-# rule-mcp - Analysis
+Project mission, architecture, migration notes, and roadmap.
 
 > Comprehensive analysis of current state, architecture gaps, and migration plan to official MCP SDK.  
 > **Vanilla JS throughout** - no TypeScript compilation. SDK consumed as published ESM.
-
----
 
 ## 1. Project Overview
 
@@ -30,61 +17,22 @@ Every source document below is preserved verbatim under its own heading so no pr
 
 Serve rule-* skill rules, styleguides, component templates, and framework best practices directly to AI coding agents via MCP - without leaving the editor. Bypass the LLM for well-defined patterns; enrich context when LLM reasoning is needed.
 
-### Current Tools (14)
+### Current surface
 
-| Tool                                 | Purpose                                             | LLM-free?                 |
-| ------------------------------------ | --------------------------------------------------- | ------------------------- |
-| `pix_tool`                           | Route prompt to best skill                          | ✅ Yes (keyword matching) |
-| `rule_tool_styleguide`                | HTML/CSS/JS/a11y/naming rules                       | Partial                   |
-| `rule_tool_frontend_vanilla_reactive` | Vanilla JS reactive pattern rules                   | Partial                   |
-| `rule_tool_frontend_react`            | React 18+ rule best practices                        | Partial                   |
-| `rule_tool_frontend_vue`              | Vue 3 Composition API rule rules                     | Partial                   |
-| `rule_tool_frontend_svelte`           | Svelte 5 runes rule rules                            | Partial                   |
-| `rule_tool_frontend_solidjs`          | SolidJS fine-grained reactivity rules               | Partial                   |
-| `rule_tool_frontend_angular`          | Angular standalone component rules                  | Partial                   |
-| `rule_tool_frontend_astro`            | Astro islands architecture rules                    | Partial                   |
-| `rule_tool_platform_desktop`          | Electron app patterns                               | Partial                   |
-| `rule_tool_search`                    | Full-text search across ALL skills                  | ✅ Yes (local grep)       |
-| `rule_tool_component`                 | Component template generation                       | ✅ Yes (template engine)  |
-| `rule_tool_check`                     | Guardrail code validation (17 shared + 8 architect) | ✅ Yes (pure functions)   |
-| `rule_tool_scaffold`                  | Project config file generation                      | ✅ Yes (template engine)  |
+The inventories live in one generated source - `scripts/generate-census.mjs`,
+refreshed by `pnpm census` (on every build and every pre-commit) - and are
+rendered into dedicated registry files that the docs link to instead of
+re-listing:
 
-### Current Resources (6)
+- **Skills** -> [`docs/07-skills.md`](./07-skills.md)
+- **Tools (all LLM-free, deterministic)** -> [`docs/08-tools.md`](./08-tools.md)
+- **Prompts** -> [`docs/09-prompts.md`](./09-prompts.md)
+- **Instructions / agent command surface** -> [`docs/10-instructions.md`](./10-instructions.md)
+- **CLI reference (commands, options, arguments)** -> [`docs/11-cli.md`](./11-cli.md)
+- **Personas** -> [`docs/12-personas.md`](./12-personas.md)
 
-| URI                     | Purpose                    |
-| ----------------------- | -------------------------- |
-| `rule://skills`          | JSON index of all skills   |
-| `rule://templates`       | Component template catalog |
-| `rule://ai`              | rule skill full content     |
-| `rule://a11y`            | A11y testing guide         |
-| `rule://a11y/test-basic` | Basic a11y test template   |
-| `rule://a11y/test-forms` | Forms a11y test template   |
-
-### Current Prompts (24)
-
-| Name                | Purpose                                                                          |
-| ------------------- | -------------------------------------------------------------------------------- |
-| `rule-a11y-audit`    | Audit a11y end-to-end: WCAG 2.2 AA review + Playwright/axe-core tests            |
-| `rule-ai`            | AI agent integrations                                                            |
-| `rule-backend`       | Node, Express, Fastify, Hono, NestJS, GraphQL, API design, security              |
-| `rule-caveman`       | Compressed communication, commits, reviews                                       |
-| `rule-code-review`   | Review code against rule styleguides                                              |
-| `rule-data`          | PostgreSQL, MySQL, SQLite, MongoDB, DuckDB, IndexedDB, SQL                       |
-| `rule-devops`        | Docker, GitLab CI, observability, testing, versioning                            |
-| `rule-frontend`      | React, Vue, Svelte, Angular, Solid, Astro, Next, Nuxt, Remix, vanilla            |
-| `rule-handoff`       | Compressed context handoff for a new session                                     |
-| `rule-meta`          | Dispatcher/action toolset (gateway, apply, search, check, scaffold…)             |
-| `rule-new-feature`   | Feature end-to-end with TDD + a11y + commit scope                                |
-| `rule-platform`      | Web, desktop, Expo, agent, library                                               |
-| `rule-process`       | Code review, feature workflow, documentation, ADR, handoff, BMAD                 |
-| `rule-pull-request`  | Prepare PR: review + a11y + security + ADR + commit scope                        |
-| `rule-setup-project` | Bootstrap project end-to-end (detect → scaffold → toolchain → architect context) |
-| `rule-skills`        | Skill discovery (find-skills)                                                    |
-| `rule-styleguide`    | a11y, CSS, HTML, JS, JSON, Markdown, naming, patterns, validation                |
-| `rule-tdd`           | Test-driven development workflow                                                 |
-| `rule-toolchain`     | Vite, pnpm, Turborepo, Rspack, Parcel, TypeScript, ESLint, Biome, Husky, commits |
-| `rule-ui`            | UI design-system work                                                            |
-| `rule-write-tests`   | Write TDD + a11y + devops tests                                                  |
+Tool-family counts for this document: the generated snapshot at the end of
+this file.
 
 ---
 
@@ -200,7 +148,7 @@ No TypeScript compilation needed. The SDK ships JavaScript with `.d.ts` declarat
 | rule-frontend-angular          | 4                               | ~700   | ✅ Stable |
 | rule-frontend-svelte           | 4                               | ~650   | ✅ Stable |
 | rule-frontend-solidjs          | 4                               | ~600   | ✅ Stable |
-| rule-frontend-astro            | 4                               | ~550   | ✅ Stable |
+| rule-frontend-meta-astro       | 4                               | ~550   | ✅ Stable |
 | rule-electron                  | 4                               | ~800   | ✅ Stable |
 | rule                           | 1 (SKILL.md)                    | ~200   | ✅ Mature |
 
@@ -463,7 +411,7 @@ rule-mcp/
 │   ├── rule-frontend-svelte/
 │   ├── rule-frontend-solidjs/
 │   ├── rule-frontend-angular/
-│   ├── rule-frontend-astro/
+│   ├── rule-frontend-meta-astro/
 │   ├── rule-electron/
 │   ├── rule-frontend-vanilla-reactive/
 │   └── rule/
@@ -682,7 +630,7 @@ MCP Client               rule-mcp
     │←── diagnostics ──────────│ stderr
 ```
 
-Used by: Claude, Codex, Cursor, Cline, Roo, Zed, Windsurf, OpenCode, etc.
+Used by: Claude, Codex, Cursor, Cline, Roo, Zed, Devin, OpenCode, etc.
 
 ### SSE (daemon mode)
 
@@ -1115,3 +1063,18 @@ All data stays on the filesystem. The MCP server is a read-only/validate-only se
 | Windows path issues       | Medium     | Medium            | CI on Windows, normalize with `node:path`           |
 | Zod validation too strict | Low        | Low               | Schema errors return clear messages via `McpError`  |
 | User needs TS             | Very low   | Very low          | SDK ships `.d.ts` - editors get autocomplete anyway |
+
+<!-- census:begin:family-counts -->
+## Tools at a glance (generated census snapshot)
+
+| Family                            | Count |
+| --------------------------------- | ----- |
+| Core tools                        | 16    |
+| Per-skill tools (from `skills/*`) | 96    |
+| `rule://` resources                | 198   |
+| Skills (`skills/*/SKILL.md`)      | 96    |
+
+Refresh with `pnpm census`; full inventories in `docs/07-` .. `docs/12-`.
+
+<!-- census:end:family-counts -->
+

@@ -173,7 +173,7 @@ rule-mcp install --agent vscode --mode daemon
 rule-mcp install --agent all --dry-run
 ```
 
-Supported agents: `claude`, `codex`, `cursor`, `copilot`, `gemini`, `pi`, `cline`, `roo`, `zed`, `opencode`, `antigravity`, `windsurf`, `kilo`, `kimi`, `vibe`, `grok`, `droid`, `kiro`, `qwen`, `vscode`, `jetbrains`, `neovim`, `emacs`.
+Supported agents: `claude`, `codex`, `cursor`, `copilot`, `gemini`, `pi`, `cline`, `roo`, `zed`, `opencode`, `antigravity`, `devin` (formerly Windsurf), `kilo`, `kimi`, `vibe`, `grok`, `droid`, `kiro`, `qwen`, `vscode`, `jetbrains`, `neovim`, `emacs`.
 
 `daemon` and `docker` are deliberately limited to **Pi and VS Code** until the HTTP configuration schema of every other host is verified. Other adapters fail clearly rather than silently receiving a stdio configuration.
 
@@ -284,7 +284,7 @@ It writes an entry equivalent to:
 | Cline       | `~/.config/cline/mcp.json`                                                                                                                                       |
 | Roo Code    | `~/.config/roo/mcp.json`                                                                                                                                         |
 | Zed         | `~/.config/zed/mcp.json`                                                                                                                                         |
-| Windsurf    | `~/.config/windsurf/mcp.json`                                                                                                                                    |
+| Devin       | `~/.config/devin/mcp_config.json` (formerly Windsurf)                                                                                                            |
 | Pi          | `~/.pi/agent/mcp.json`                                                                                                                                           |
 | Gemini CLI  | `~/.gemini/settings.json`                                                                                                                                        |
 | JetBrains   | `.idea/mcp.json` (project-level)                                                                                                                                 |
@@ -321,8 +321,8 @@ Every successful MCP tool response includes `_meta.pixEnforcement` metadata.
 Once the server is running and integrated with your agent:
 
 - Read the [full documentation README](README.md) for complete architecture, tool reference, and guardrail system
-- Explore skill content via `docs/01-product-architecture.md` for the skill taxonomy
+- Explore skill content via `./01-product-architecture.md` for the skill taxonomy
 - Run `rule-mcp tools list` to see all available tools
 - Run `rule-mcp tools call rule -j '{"prompt":"..."}'` to test routing
 
-For a complete workflow walkthrough (detect, route, generate, validate, fix, handoff), see the main [README.md](README.md).
+For a complete workflow walkthrough (detect, route, generate, validate, fix, handoff), see the root [../README.md](../README.md).
