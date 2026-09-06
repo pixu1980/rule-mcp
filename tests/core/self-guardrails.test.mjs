@@ -26,7 +26,7 @@ const CATALOGS = new Map([
   ["core/guardrails/", "the rule catalogs (shared/file-tree/framework/quality slices) quote the counterexamples they flag"],
   ["core/file-tree/", "the file-tree checker and generator carry sample trees and generated file shapes as data"],
   ["core/text/block-spacing/", "the block-spacing checker quotes the one-line blocks it forbids as examples"],
-  ["_template-data.js", "component templates are emitted as strings, stubs included"],
+  ["_template-data.data.js", "component templates are emitted as strings, stubs included"],
   ["core/scaffold/templates/", "the template catalog quotes the markup and CSS it generates"],
   ["core/text/fingerprint/", "the fingerprint scanner quotes typographic samples in its patterns"],
   ["_fingerprint.data.js", "the British-vs-American dictionary contains the words it flags"],
