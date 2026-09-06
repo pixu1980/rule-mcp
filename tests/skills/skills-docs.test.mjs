@@ -11,10 +11,10 @@ import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { parseSkillFrontmatter, loadAllSkills } from "../../src/core/skills.js";
-import { listTools } from "../../src/tools/router.js";
+import { listTools } from "../../src/tools/router/index.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const root = join(__dirname, "..");
+const root = join(__dirname, "..", "..");
 const skillsRoot = join(root, "skills");
 
 const removedSkillNames = [
