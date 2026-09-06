@@ -175,7 +175,7 @@ export async function loadAllSkills(force = false) {
   registerUsageTool();
   const { registerA11yReportTool } = await import("../../tools/a11y.js");
   registerA11yReportTool();
-  const { registerProcessHandonTool } = await import("../../tools/handon.js");
+  const { registerProcessHandonTool } = await import("../../tools/handon/index.js");
   registerProcessHandonTool();
   // Mutation tools: hidden in minimal mode
   if (!IS_MINIMAL_TOOLS) {
