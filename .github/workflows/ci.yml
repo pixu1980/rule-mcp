@@ -28,7 +28,7 @@ jobs:
       - name: Check syntax (all source files)
         run: find bin src -name "*.js" -exec node --check {} \;
       - name: ESLint
-        run: pnpm exec eslint bin/ src/ test/ --max-warnings 50
+        run: pnpm exec eslint bin/ src/ tests/ --max-warnings 50
       - name: Prettier check
         run: pnpm exec prettier --check '**/*.{js,mjs,json,md}' --ignore-path .gitignore
 
@@ -52,13 +52,13 @@ jobs:
       - name: Embed skills
         run: node scripts/embed-skills.mjs
       - name: Run unit tests
-        run: node test/smoke.mjs
+        run: node tests/smoke.mjs
       - name: Run ai routing tests
-        run: node test/ai.test.mjs
+        run: node tests/tools/ai.test.mjs
       - name: Run detector tests
-        run: node test/detector.test.mjs
+        run: node tests/core/detector.test.mjs
       - name: Run framework routing tests
-        run: node test/framework-routing.test.mjs
+        run: node tests/tools/framework-routing.test.mjs
 
   audit:
     name: Security audit

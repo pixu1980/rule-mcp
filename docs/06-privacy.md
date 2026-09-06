@@ -6,8 +6,8 @@
   ADR 041 (per-invocation self-update with throttle, fire-and-forget), ADR 052
   (token-efficiency pipeline), `docs/01-product-architecture.md`,
   `docs/03-engineering-guides.md`
-- **Enforced by**: `test/self-guardrails.test.mjs`, `test/flight-redact.test.mjs`,
-  `test/flight-exports-retention.test.mjs`, `test/uninstall-purge-home.test.mjs`
+- **Enforced by**: `tests/core/self-guardrails.test.mjs`, `tests/core/flight-redact.test.mjs`,
+  `tests/core/flight-exports-retention.test.mjs`, `tests/cli/uninstall-purge-home.test.mjs`
 
 ## The short version
 
