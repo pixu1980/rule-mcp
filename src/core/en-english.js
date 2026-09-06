@@ -137,6 +137,156 @@ const FOREIGN_TOKENS = [
 
 const FOREIGN_RE = new RegExp(String.raw`\b(?:${FOREIGN_TOKENS.join("|")})\b`, "gi");
 
+/**
+ * Foreign content words that plausibly appear in file and folder names.
+ * File names rarely carry function words, so the path scanner needs nouns and
+ * verbs too. Same contract as FOREIGN_TOKENS: every entry is unambiguous -
+ * words that double as English (`modulo`, `pasta`, `fine`, `rapport`, `data`)
+ * are deliberately left out to keep precision high.
+ */
+const FOREIGN_NAME_TOKENS = [
+  // Italian
+  "tabella",
+  "cartella",
+  "cartelle",
+  "riepilogo",
+  "utente",
+  "utenti",
+  "gestione",
+  "aggiungi",
+  "aggiungere",
+  "elenco",
+  "ricerca",
+  "scheda",
+  "schede",
+  "esempio",
+  "esempi",
+  "prova",
+  "dati",
+  "codice",
+  "impostazioni",
+  "configurazione",
+  "servizio",
+  "servizi",
+  "componente",
+  "componenti",
+  "nuovo",
+  "nuova",
+  "modifica",
+  "cancella",
+  "elimina",
+  "salva",
+  "invia",
+  "messaggio",
+  "messaggi",
+  "errore",
+  "errori",
+  "guida",
+  "pagina",
+  "pagine",
+  "documento",
+  "documenti",
+  "archivio",
+  "immagine",
+  "immagini",
+  "traduzione",
+  "traduzioni",
+  "sottocartella",
+  "sottocartelle",
+  "tematica",
+  "tematiche",
+  "tematico",
+  "righe",
+  "soglia",
+  "copertura",
+  "funzionalita",
+  // Spanish
+  "usuario",
+  "usuarios",
+  "tabla",
+  "tablas",
+  "datos",
+  "busqueda",
+  "ejemplo",
+  "ejemplos",
+  "prueba",
+  "pruebas",
+  "ajustes",
+  "configuracion",
+  "archivo",
+  "archivos",
+  "carpeta",
+  "carpetas",
+  "nuevo",
+  "nueva",
+  "informe",
+  "informes",
+  "mensaje",
+  "mensajes",
+  "envio",
+  // French
+  "fichier",
+  "fichiers",
+  "dossier",
+  "dossiers",
+  "utilisateur",
+  "utilisateurs",
+  "exemple",
+  "exemples",
+  "recherche",
+  "tableau",
+  "tableaux",
+  "donnees",
+  "reglages",
+  "parametres",
+  "nouveau",
+  "nouvelle",
+  // German
+  "datei",
+  "dateien",
+  "benutzer",
+  "beispiel",
+  "beispiele",
+  "suche",
+  "tabelle",
+  "tabellen",
+  "einstellungen",
+  "bericht",
+  "berichte",
+  "seite",
+  "seiten",
+  "uebersicht",
+  "verzeichnis",
+  "ordner",
+  // Portuguese
+  "arquivo",
+  "arquivos",
+  "exemplo",
+  "exemplos",
+  "busca",
+  "tabela",
+  "tabelas",
+  "dados",
+  "relatorio",
+  "configuracao",
+  "pesquisa",
+];
+
+const FOREIGN_NAME_SET = new Set([...FOREIGN_TOKENS, ...FOREIGN_NAME_TOKENS].map((t) => t.toLowerCase()));
+
+/**
+ * Word endings that only occur in non-English words. Same precision contract:
+ * endings that English shares (`-mento`/memento, `-ung`/lung, `-are`/share)
+ * are deliberately absent.
+ */
+const FOREIGN_SUFFIX_RE =
+  /(?:zione|zioni|izzare|izzata|izzato|aggio|anza|enza|encia|miento|mientos|ungen|keit|schaft)$/i;
+
+/** True when a single word is recognizably not English. */
+function foreignWord(word) {
+  return FOREIGN_NAME_SET.has(word.toLowerCase()) || FOREIGN_SUFFIX_RE.test(word);
+}
+
 /** Mask string literals and template literals so comments stay but strings go. */
 function maskStrings(code) {
   const out = [...code];
@@ -256,6 +406,42 @@ export function scanCodeForForeign(code) {
 
     if (FOREIGN_TOKENS.includes(lower)) {
       hits.push(hit("foreign identifier", token, "identifier"));
+    }
+  }
+
+  return hits;
+}
+
+/**
+ * Flag non-English file and folder names in a path.
+ *
+ * Each path segment is split into words on separators and camelCase
+ * boundaries; a segment fails on a non-ASCII letter or on any word from the
+ * foreign dictionaries (function words plus name-plausible content words).
+ *
+ * @param {string} filePath
+ * @returns {string[]} human-readable offenders, empty when the path is English
+ */
+export function scanPathForForeign(filePath) {
+  const hits = [];
+
+  for (const segment of String(filePath).split(/[\\/]+/)) {
+    if (segment === "") {
+      continue;
+    }
+
+    const accented = segment.match(NON_ASCII_LETTER);
+
+    if (accented) {
+      hits.push(hit("accent", accented[0], `path segment "${segment}"`));
+      continue;
+    }
+
+    const words = segment.split(/[^A-Za-z]+|(?<=[a-z0-9])(?=[A-Z])/).filter(Boolean);
+    const foreign = words.find((word) => foreignWord(word));
+
+    if (foreign) {
+      hits.push(hit("non-English name", foreign, `path segment "${segment}"`));
     }
   }
 
