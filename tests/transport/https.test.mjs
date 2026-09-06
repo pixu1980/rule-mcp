@@ -49,7 +49,7 @@ try {
     check("T1.4 has BEGIN PRIVATE KEY", keyContent.includes("BEGIN PRIVATE KEY"));
 
     // ── T2: HTTPS server startup with generated cert ──
-    const { startSseServer, stopSseServer } = await import("../../src/transport/_sse.js");
+    const { startSseServer, stopSseServer } = await import("../../src/transport/sse/index.js");
 
     const httpsServer = await startSseServer({
       port: 0,
