@@ -11,12 +11,11 @@
  *   rule-mcp skills install --scope global --all
  */
 
-import { copyFileSync, existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync, rmSync } from "node:fs";
+import { copyFileSync, existsSync, mkdirSync, readdirSync, readFileSync, rmSync } from "node:fs";
 import { join, relative, dirname } from "node:path";
-import { createInterface } from "node:readline";
 import { homedir } from "node:os";
-import { stdin as input, stdout as output } from "node:process";
-import { getSkillsDirs as getSkillsDirectories, pkg as package_ } from "./paths.js";
+import { multiselect, isCancel, cancel } from "@clack/prompts";
+import { getSkillsDirs as getSkillsDirectories } from "./paths.js";
 import { formatSkillsList } from "./tui.js";
 import { parseSkillFrontmatter } from "../core/skills.js";
 
@@ -141,127 +140,40 @@ function installNativeSkills(skills) {
 }
 
 /**
- * Render a checkbox-style interactive list.
- * Returns indices of selected items.
+ * Interactive multiselect over the skill catalog, backed by @clack/prompts.
+ *
+ * Returns the selected skill indices (ordered), or the clack cancel symbol.
+ * `prompt` is injectable so tests can drive the selection without a TTY; the
+ * default is @clack/prompts `multiselect` (battle-tested raw-mode handling on
+ * macOS/Linux/Windows and Escape-to-cancel for free).
  */
-async function interactiveSelect(items, { title, selected = [] }) {
-  let cursor = 0;
-  const checked = [...selected];
-  const pageSize = Math.min(items.length, process.stdout.rows - 6 || 20);
+export async function promptSkillSelection(items, { message, initialValues = [], prompt } = {}) {
+  const run = prompt ?? ((options) => multiselect(options));
 
-  // Raw mode for keypress handling
-  const readline = createInterface({ input, output });
-  readline.close();
-
-  return new Promise((resolve) => {
-    const stdin = process.stdin;
-    const wasRaw = stdin.isRaw;
-    stdin.setRawMode(true);
-    stdin.resume();
-    stdin.setEncoding("utf8");
-
-    function render() {
-      output.write("\u{1B}[?25l"); // hide cursor
-      output.write(`\n  ${title}\n\n`);
-      const start = Math.max(0, Math.min(cursor - Math.floor(pageSize / 2), items.length - pageSize));
-      const end = Math.min(start + pageSize, items.length);
-
-      for (let index = start; index < end; index++) {
-        const item = items[index];
-        const check = checked.includes(index) ? "✓" : " ";
-        const pointer = index === cursor ? "▶" : " ";
-        const label = item.displayName || item.name;
-        const desc = item.description ? ` - ${item.description}` : "";
-        output.write(`  ${pointer} [${check}] ${label}${desc}\n`);
-      }
-
-      output.write(`\n  ␣ toggle   ↵ confirm   q quit\n`);
-      output.write(`\u{1B}[${end - start + 4}A`); // move up
-    }
-
-    render();
-
-    const onData = (key) => {
-      switch (key) {
-        case "\u{1B}[A":
-        case "k": {
-          // Up
-          cursor = Math.max(0, cursor - 1);
-          render();
-
-          break;
-        }
-        case "\u{1B}[B":
-        case "j": {
-          // Down
-          cursor = Math.min(items.length - 1, cursor + 1);
-          render();
-
-          break;
-        }
-        case " ": {
-          // Toggle
-          const index = checked.indexOf(cursor);
-
-          if (index === -1) {
-            checked.push(cursor);
-          } else {
-            checked.splice(index, 1);
-          }
-
-          render();
-
-          break;
-        }
-        case "\r":
-        case "\n": {
-          // Confirm
-          stdin.setRawMode(wasRaw ?? false);
-          stdin.pause();
-          stdin.removeListener("data", onData);
-          output.write("\u{1B}[2K\u{1B}[?25h"); // show cursor
-          output.write(`\u{1B}[${pageSize + 4}A`); // clear lines
-          resolve([...checked]);
-
-          break;
-        }
-        case "q": {
-          // Quit
-          stdin.setRawMode(wasRaw ?? false);
-          stdin.pause();
-          stdin.removeListener("data", onData);
-          output.write("\u{1B}[2K\u{1B}[?25h");
-          output.write(`\u{1B}[${pageSize + 4}A`);
-          resolve([]);
-
-          break;
-        }
-        case "a": {
-          // Toggle all
-          if (checked.length === items.length) {
-            checked.length = 0;
-          } else {
-            for (let index = 0; index < items.length; index++) {
-              if (!checked.includes(index)) {
-                checked.push(index);
-              }
-            }
-          }
-
-          render();
-
-          break;
-        }
-        // No default
-      }
-    };
-
-    stdin.on("data", onData);
+  return run({
+    message,
+    options: items.map((skill, index) => ({
+      value: index,
+      label: skill.displayName || skill.name,
+      hint: skill.description,
+    })),
+    initialValues,
+    required: false,
   });
 }
 
 /**
+ * True when a prompt result means "user aborted".
+ *
+ * @clack/prompts returns its own cancel symbol; `undefined` also aborts so an
+ * injected prompt (tests) and a failed raw-mode setup follow the same path.
+ */
+export const isCancelSelection = (value) => value === undefined || isCancel(value);
+
+/**
  * Interactive skill install command.
+ * `prompt` is an optional injected selection function (tests); defaults to
+ * @clack/prompts multiselect.
  */
 export async function skillsInstallCommand(options = {}) {
   const scope = options.scope || "global";
@@ -280,8 +192,9 @@ export async function skillsInstallCommand(options = {}) {
   const localDir = ".agents/skills";
   const targetDir = scope === "project" ? localDir : globalDir;
 
-  // Batch mode: when --all is set or stdin is not a TTY, skip interactive UI
-  if (selectAll || !process.stdin.isTTY) {
+  // Batch mode: when --all is set or stdin is not a TTY, skip interactive UI.
+  // `interactive: true` (tests) forces the interactive path anyway.
+  if ((selectAll || !process.stdin.isTTY) && !options.interactive) {
     const toInstall = selectAll ? skills : skills.filter((s) => isInstalled(s.name, targetDir));
 
     if (toInstall.length === 0) {
@@ -313,18 +226,26 @@ export async function skillsInstallCommand(options = {}) {
     }
   }
 
-  // Interactive selection
-  const selected = await interactiveSelect(
+  // Interactive selection (TTY only; batch path above handles non-TTY/--all)
+  const selected = await promptSkillSelection(
     skills.map((s) => ({
       name: s.name,
       displayName: s.name,
       description: s.description,
     })),
     {
-      title: `Select skills to install (scope: ${scope} → ${targetDir})`,
-      selected: preSelected,
+      message: `Select skills to install (scope: ${scope} → ${targetDir})`,
+      initialValues: preSelected,
+      prompt: options.prompt,
     },
   );
+
+  if (isCancelSelection(selected)) {
+    cancel("Selection canceled - nothing installed.");
+    process.exitCode = 1;
+
+    return;
+  }
 
   if (selected.length === 0) {
     process.stdout.write("No skills selected. Nothing installed.\n");
@@ -353,7 +274,7 @@ export async function skillsInstallCommand(options = {}) {
  */
 export function skillsListCommand(options = {}) {
   const skills = getAvailableSkills();
-  const { homeSkills, embeddedSkills } = getSkillsDirectories();
+  const { homeSkills } = getSkillsDirectories();
   const installed = existsSync(homeSkills) ? readdirSync(homeSkills) : [];
   const rows = skills.map((s) => ({
     name: s.name,
