@@ -191,18 +191,19 @@ Write ADRs/docs, follow BMAD, feature workflow, and handoff.
 
 Apply HTML/CSS/JS/JSON/Markdown/a11y/naming/validation standards.
 
-| Skill                                                              | Tool                        | Frameworks | Use when                                                                                                                 |
-| ------------------------------------------------------------------ | --------------------------- | ---------- | ------------------------------------------------------------------------------------------------------------------------ |
-| [pix-styleguide](../pix-styleguide/SKILL.md)                       | `pix_styleguide`            | all        | Central index of all pix coding style guides. Delegates to specialized sub-skills: HTML semantics, CSS architectu...     |
-| [pix-styleguide-a11y](../pix-styleguide-a11y/SKILL.md)             | `pix_styleguide_a11y`       | all        | WCAG 2.2 AA accessibility: semantic HTML, ARIA, keyboard navigation, color contrast, forms, media, automated testing...  |
-| [pix-styleguide-css](../pix-styleguide-css/SKILL.md)               | `pix_styleguide_css`        | all        | CSS architecture, selector strategy (data-part, element), naming conventions, property ordering, custom properties, c... |
-| [pix-styleguide-html](../pix-styleguide-html/SKILL.md)             | `pix_styleguide_html`       | all        | Semantic HTML, document structure, template engine syntax, accessibility essentials, and element conventions for fron... |
-| [pix-styleguide-javascript](../pix-styleguide-javascript/SKILL.md) | `pix_styleguide_javascript` | all        | JavaScript conventions: naming, functions, classes, async patterns, DOM manipulation, custom elements, static initial... |
-| [pix-styleguide-json](../pix-styleguide-json/SKILL.md)             | `pix_styleguide_json`       | all        | JSON structure conventions: validity, property naming, date formats, numeric precision, schema mindset, and API respo... |
-| [pix-styleguide-markdown](../pix-styleguide-markdown/SKILL.md)     | `pix_styleguide_markdown`   | all        | Markdown documentation style: document structure, headings, lists, code blocks, formatting, tables, links, and tone f... |
-| [pix-styleguide-naming](../pix-styleguide-naming/SKILL.md)         | `pix_styleguide_naming`     | all        | Naming conventions and file tree structure: PascalCase, camelCase, UPPER_SNAKE_CASE, underscore prefix rule, barrel p... |
-| [pix-styleguide-patterns](../pix-styleguide-patterns/SKILL.md)     | `pix_styleguide_patterns`   | all        | Quick reference cheat sheet for naming conventions, property ordering, file tree structure, and common patterns. Cond... |
-| [pix-styleguide-validation](../pix-styleguide-validation/SKILL.md) | `pix_styleguide_validation` | all        | Cross-border business validation patterns: email, phone, VAT, tax IDs, postal codes, national identification numbers,... |
+| Skill                                                              | Tool                        | Frameworks | Use when                                                                                                                            |
+| ------------------------------------------------------------------ | --------------------------- | ---------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| [pix-styleguide](../pix-styleguide/SKILL.md)                       | `pix_styleguide`            | all        | Central index of all pix coding style guides. Delegates to specialized sub-skills: HTML semantics, CSS architectu...                |
+| [pix-styleguide-a11y](../pix-styleguide-a11y/SKILL.md)             | `pix_styleguide_a11y`       | all        | WCAG 2.2 AA accessibility: semantic HTML, ARIA, keyboard navigation, color contrast, forms, media, automated testing...             |
+| [pix-styleguide-css](../pix-styleguide-css/SKILL.md)               | `pix_styleguide_css`        | all        | CSS architecture, selector strategy (data-part, element), naming conventions, property ordering, custom properties, c...            |
+| [pix-styleguide-html](../pix-styleguide-html/SKILL.md)             | `pix_styleguide_html`       | all        | Semantic HTML, document structure, template engine syntax, accessibility essentials, and element conventions for fron...            |
+| [pix-styleguide-javascript](../pix-styleguide-javascript/SKILL.md) | `pix_styleguide_javascript` | all        | JavaScript conventions: naming, functions, classes, async patterns, DOM manipulation, custom elements, static initial...            |
+| [pix-styleguide-json](../pix-styleguide-json/SKILL.md)             | `pix_styleguide_json`       | all        | JSON structure conventions: validity, property naming, date formats, numeric precision, schema mindset, and API respo...            |
+| [pix-styleguide-markdown](../pix-styleguide-markdown/SKILL.md)     | `pix_styleguide_markdown`   | all        | Markdown documentation style: document structure, headings, lists, code blocks, formatting, tables, links, and tone f...            |
+| [pix-styleguide-english](../pix-styleguide-english/SKILL.md)       | `pix_styleguide_english`    | all        | English-only prose and American spelling: comments, identifiers and documents in English, US spellings (color, behavior, organiz... |
+| [pix-styleguide-naming](../pix-styleguide-naming/SKILL.md)         | `pix_styleguide_naming`     | all        | Naming conventions and file tree structure: PascalCase, camelCase, UPPER_SNAKE_CASE, underscore prefix rule, barrel p...            |
+| [pix-styleguide-patterns](../pix-styleguide-patterns/SKILL.md)     | `pix_styleguide_patterns`   | all        | Quick reference cheat sheet for naming conventions, property ordering, file tree structure, and common patterns. Cond...            |
+| [pix-styleguide-validation](../pix-styleguide-validation/SKILL.md) | `pix_styleguide_validation` | all        | Cross-border business validation patterns: email, phone, VAT, tax IDs, postal codes, national identification numbers,...            |
 
 ### Toolchain
 

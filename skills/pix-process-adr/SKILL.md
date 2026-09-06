@@ -58,10 +58,10 @@ What was decided and why.
 {
   "title": "Usare PostgreSQL",
   "status": "accepted",
-  "context": "Il progetto richiede JOIN complessi",
-  "decision": "Useremo PostgreSQL 16",
-  "consequences": "Positive: integrità referenziale. Negative: scaling orizzontale",
-  "alternatives": ["MongoDB: scartato per mancanza relazioni"],
+  "context": "The project requires complex JOINs",
+  "decision": "We will use PostgreSQL 16",
+  "consequences": "Positive: referential integrity. Negative: horizontal scaling",
+  "alternatives": ["MongoDB: rejected for lack of relations"],
   "tags": ["database"]
 }
 ```
