@@ -76,7 +76,40 @@ test("persona command bodies route through the tools, not a recap", () => {
     assert.match(command.body, /rule_tool_plan/, `${command.name}: body must get the contract from rule_tool_plan`);
     assert.match(command.body, /rule_tool_plan_docs/, `${command.name}: body must hand the trio to rule_tool_plan_docs`);
     assert.match(command.body, /commit/, `${command.name}: body must close with a scoped commit`);
+    // The request typed after the command is the run's focus: it must be
+    // forwarded into rule_tool_plan as `topic` (handoff-style pass-through).
+    assert.match(command.body, /\$ARGUMENTS/, `${command.name}: body must carry the request placeholder`);
+    assert.match(
+      command.body,
+      /typed after this command passed through unchanged as `topic`/,
+      `${command.name}: body must forward the request as topic`,
+    );
   }
+});
+
+test("persona prompts and commands accept a free-form request like every other prompt", () => {
+  const personaDefs = listPrompts().filter((p) => /^rule-(plan|audit|review)-/.test(p.name));
+
+  for (const prompt of personaDefs) {
+    assert.equal(prompt.arguments.length, 1, `${prompt.name}: exactly one argument, the free-form request`);
+    assert.equal(prompt.arguments[0].name, "topic", `${prompt.name}: the argument is the request`);
+    assert.match(
+      prompt.arguments[0].description,
+      /request/,
+      `${prompt.name}: the argument description must call it a request`,
+    );
+  }
+
+  // Help surfaces an invocation example, so the user sees how the request slots in.
+  const help = getPrompt("rule-plan-security", { topic: "help" });
+  const helpText = help.messages[0].content.text;
+  assert.match(helpText, /^Usage: \/rule-plan-security/, "persona help must start with the usage line");
+  assert.match(helpText, /Examples:/, "persona help must show a request example");
+
+  // The request reaches the model: a persona prompt with a topic must say so.
+  const withRequest = getPrompt("rule-audit-security", { topic: "the SSE daemon token handling" });
+  const text = withRequest.messages.map((message) => message.content.text).join("\n");
+  assert.match(text, /the SSE daemon token handling/, "the request must land in the filled template");
 });
 
 test("rule_tool_plan is registered and answers for a role", async () => {
@@ -95,7 +128,7 @@ test("rule_tool_plan applies overrides, an operation, and lists roles for an unk
   // assertion is on the substance ("CLI output"), never on the filler.
   const overridden = await callTool("rule_tool_plan", { role: "a11y", years: 40, topic: "the CLI output" });
   const text = overridden.content.map((part) => part.text).join("\n");
-  assert.match(text, /40 anni di esperienza/);
+  assert.match(text, /40 years/);
   assert.match(text, /CLI output/);
 
   const audited = await callTool("rule_tool_plan", { role: "a11y", operation: "audit" });
@@ -109,12 +142,15 @@ test("rule_tool_plan applies overrides, an operation, and lists roles for an unk
   assert.match(unknownText, /security/, "an unknown role is answered with the ones that exist");
 });
 
-test("a proposed role is reachable by the tool but has no generated surface", async () => {
+test("an aliased id is reachable by the tool but has no generated surface", async () => {
+  // The adopted registry keeps legacy ids as aliases (`api-design` → backend,
+  // `simplicity-staff-eng` → simplicity): no generated surface exists under
+  // the old name, but the tool must still answer with the owning role.
   const names = new Set(listPrompts().map((prompt) => prompt.name));
   for (const operation of OPERATIONS) {
-    assert.equal(names.has(`rule-${operation}-api-design`), false, "proposed roles stay out of the surfaces");
-    assert.equal(names.has(`rule-${operation}-simplicity-staff-eng`), false, "proposed roles stay out of the surfaces");
+    assert.equal(names.has(`rule-${operation}-api-design`), false, "aliased ids stay out of the surfaces");
+    assert.equal(names.has(`rule-${operation}-simplicity-staff-eng`), false, "aliased ids stay out of the surfaces");
   }
   const result = await callTool("rule_tool_plan", { role: "api-design" });
-  assert.match(result.content.map((part) => part.text).join("\n"), /API Design Engineer/);
+  assert.match(result.content.map((part) => part.text).join("\n"), /Backend and API Design Engineer/);
 });

@@ -200,8 +200,9 @@ function personaBody(target) {
   return [
     `${subject[0].toUpperCase() + subject.slice(1)}: $ARGUMENTS`,
     "",
-    `1. Call \`rule_tool_plan\` with \`role=${target.role}\` (and \`operation=${target.operation}\` and a topic`,
-    "   if one was given) to get this run's operation contract.",
+    `1. Call \`rule_tool_plan\` with \`role=${target.role}\`, \`operation=${target.operation}\` and the request`,
+    "   typed after this command passed through unchanged as `topic` - that text is this run's focus.",
+    "   With no request after the command, omit topic and the focus is the whole project.",
     "2. Load the evidence skills the contract names and treat them as source of truth; never invent",
     "   APIs, files, dependencies, commands, or requirements not in the evidence.",
     `3. Perform the ${target.operation} the contract describes and gather what it needs - measure rather`,

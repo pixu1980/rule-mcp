@@ -27,21 +27,29 @@ test("the catalog ships the agreed active set", () => {
     .sort();
   assert.deepEqual(active, [
     "a11y",
-    "ai-engineer",
+    "ai",
     "architect",
-    "data-engineer",
-    "design-system-lead",
-    "devops-sre",
-    "docs-engineer",
-    "dx-toolchain",
-    "oss-compliance",
+    "auth",
+    "backend",
+    "data",
+    "design-system",
+    "devops",
+    "devx",
+    "docs",
+    "frontend",
+    "i18n",
     "performance",
     "privacy",
-    "qa-testing",
+    "qa",
     "security",
-    "web-engineer",
+    "simplicity",
+    "supply-chain",
   ]);
-  assert.ok(allRoles().length >= 22, "the proposed roles stay in the catalog");
+  assert.equal(
+    allRoles().length,
+    EMBEDDED_ROLES.length,
+    "the catalog is exactly the adopted original set - nothing else rides along",
+  );
 });
 
 test("validateRole rejects what a surface cannot generate from", () => {
@@ -88,8 +96,10 @@ test("an overlay replaces an entry wholesale, by id", async () => {
     mkdirSync(join(home, "config", "roles"), { recursive: true });
     // Only the user's layer remains: a project layer read roles out of a
     // checkout, which is why it needed a trust gate, and both are gone (ADR 082).
+    // Overlays use the same persona-file format as the embedded catalog.
+    const { formatPersonaFile } = await import("../src/core/persona-file.js");
     const replacement = { ...roleById("performance"), version: 2, yearsOfExperience: 11 };
-    writeFileSync(join(home, "config", "roles", "performance.json"), JSON.stringify(replacement));
+    writeFileSync(join(home, "config", "roles", "performance.md"), formatPersonaFile(replacement));
 
     const { roles, problems } = loadRoleOverlays({ home });
     assert.deepEqual(problems, [], "a valid overlay loads without complaint");
@@ -108,8 +118,8 @@ test("an invalid or unreadable overlay is reported, never fatal", async () => {
   const home = mkdtempSync(join(tmpdir(), "rule-roles-bad-"));
   try {
     mkdirSync(join(home, "config", "roles"), { recursive: true });
-    writeFileSync(join(home, "config", "roles", "broken.json"), "{ not json");
-    writeFileSync(join(home, "config", "roles", "invalid.json"), JSON.stringify({ id: "X X", role: "" }));
+    writeFileSync(join(home, "config", "roles", "broken.md"), "---\nnot a persona file");
+    writeFileSync(join(home, "config", "roles", "invalid.md"), '---\nid: "X X"\nrole: ""\n---\n');
     const { roles, problems } = loadRoleOverlays({ home, projectDir: home });
     assert.equal(roles.length, 0, "nothing invalid enters the registry");
     assert.equal(problems.length, 2, "both files are reported");
@@ -124,13 +134,13 @@ test("the template is filled verbatim from the role", async () => {
   const filled = fillRoleTemplate(roleById("security"));
   assert.ok(!filled.includes("{{"), "no placeholder survives");
   assert.match(filled, /Security Engineer/);
-  assert.match(filled, /25 anni di esperienza/, "the template stays in the wording the user wrote");
+  assert.match(filled, /25 years of experience/, "the template stays in the wording the user wrote");
   assert.match(filled, /application security/);
   assert.match(filled, /docs\/audits\/security\.md/, "the operation contract names the trio");
   assert.match(filled, /docs\/reviews\/security\.md/);
   assert.match(filled, /docs\/plans\/security\.md/);
   assert.match(filled, /rule-backend-security/, "evidence skills are named");
-  assert.match(filled, /modalità intervista/, "interview mode survives");
+  assert.match(filled, /interview mode/, "interview mode survives the translation");
   assert.match(
     filled,
     /rule_tool_plan_docs/,
@@ -150,7 +160,7 @@ test("overrides refine a role without editing the registry", async () => {
     skills: ["ePrivacy"],
     topic: "the flight recorder",
   });
-  assert.match(filled, /33 anni di esperienza/);
+  assert.match(filled, /33 years of experience/);
   assert.match(filled, /ePrivacy/);
   assert.match(filled, /the flight recorder/);
 });

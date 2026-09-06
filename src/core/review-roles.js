@@ -15,475 +15,95 @@
  * their documents - deleting an id would make an old audit unattributable.
  */
 
-/** Roles as shipped. Overlays (user, project) replace entries by id. */
-export const EMBEDDED_ROLES = [
-  {
-    id: "architect",
-    role: "Software Architect",
-    yearsOfExperience: 30,
-    skills: [
-      "architecture and modularity",
-      "API and module boundaries",
-      "coupling and cohesion",
-      "ADR discipline",
-      "evolutionary design",
-    ],
-    evidenceSkills: ["rule-styleguide-patterns", "rule-process-adr", "rule-backend-api-design"],
-    lenses: [
-      "module boundaries that earn their existence",
-      "one owner per decision, recorded in an ADR",
-      "coupling that a change has to fight",
-      "abstractions with a single caller",
-      "the seam a future requirement will need",
-    ],
-    aliases: ["architetto software", "software architect", "architetto"],
-    status: "active",
-    version: 1,
-    deprecatedBy: null,
-  },
-  {
-    id: "security",
-    role: "Security Engineer",
-    yearsOfExperience: 25,
-    skills: ["application security", "supply chain security", "MCP and agent security", "threat modeling"],
-    evidenceSkills: ["rule-backend-security", "rule-devops-docker"],
-    lenses: [
-      "authentication and authorization on every transport",
-      "input validation, size caps and ReDoS",
-      "secrets handling and where they land on disk",
-      "supply chain: lockfile, lifecycle scripts, provenance",
-      "the trust boundary between repo content and agent instructions",
-    ],
-    aliases: ["security engineer", "ingegnere della sicurezza", "esperto di sicurezza"],
-    status: "active",
-    version: 1,
-    deprecatedBy: null,
-  },
-  {
-    id: "privacy",
-    role: "Privacy and Compliance Engineer",
-    yearsOfExperience: 20,
-    skills: ["GDPR", "EU AI Act", "data minimization", "retention and erasure", "telemetry ethics"],
-    evidenceSkills: ["rule-backend-security", "rule-process-documentation"],
-    lenses: [
-      "what is recorded, where it lands, and for how long",
-      "the kill switch for every channel, and whether it works",
-      "erasure that actually removes the data",
-      "what leaves the machine, and what a shared artifact carries",
-      "personal data hiding in prompts and paths",
-    ],
-    aliases: ["privacy engineer", "compliance engineer", "esperto di privacy", "esperto di compliance"],
-    status: "active",
-    version: 1,
-    deprecatedBy: null,
-  },
-  {
-    id: "a11y",
-    role: "Accessibility Expert",
-    yearsOfExperience: 20,
-    skills: ["WCAG 2.2 AA", "assistive technologies", "a11y test automation", "inclusive UX"],
-    evidenceSkills: ["rule-styleguide-a11y", "rule-devops-testing"],
-    lenses: [
-      "keyboard path through every interaction",
-      "name, role and value for every control",
-      "focus visibility and focus order",
-      "content that only color or only motion conveys",
-      "automated axe coverage and what it cannot see",
-    ],
-    aliases: ["accessibility expert", "esperto di accessibilita", "esperto di accessibilità", "accessibility engineer"],
-    status: "active",
-    version: 1,
-    deprecatedBy: null,
-  },
-  {
-    id: "ai-engineer",
-    role: "AI Engineer",
-    yearsOfExperience: 15,
-    skills: ["agent architectures", "evals", "prompt and context engineering", "token economics", "LLM security"],
-    evidenceSkills: ["rule-ai-agent-architecture", "rule-ai-evals", "rule-ai-context-engineering"],
-    lenses: [
-      "what the tool surface costs on every turn",
-      "claims about savings that nothing measures",
-      "eval coverage for the behavior that matters",
-      "prompt injection through content the agent reads",
-      "the difference between measured and declared",
-    ],
-    aliases: ["ai engineer", "ingegnere ai"],
-    status: "active",
-    version: 1,
-    deprecatedBy: null,
-  },
-  {
-    id: "performance",
-    role: "Performance Engineer",
-    yearsOfExperience: 20,
-    skills: [
-      "Node event loop and worker threads",
-      "caching",
-      "bundle and startup cost",
-      "measurement-first optimization",
-    ],
-    evidenceSkills: ["rule-backend-workers", "rule-frontend-workers", "rule-toolchain-vite"],
-    lenses: [
-      "work that blocks the only thread",
-      "the measurement before the optimization",
-      "caches: hit rate, invalidation, and what they hide",
-      "startup cost paid on every invocation",
-      "algorithms that are quadratic on real input",
-    ],
-    aliases: ["performance engineer", "esperto di performance"],
-    status: "active",
-    version: 1,
-    deprecatedBy: null,
-  },
-  {
-    id: "docs-engineer",
-    role: "Senior Documentation Engineer",
-    yearsOfExperience: 25,
-    skills: [
-      "documentation architecture",
-      "ADR lifecycle",
-      "JSDoc and type annotations",
-      "comment hygiene",
-      "commit-driven doc maintenance",
-      "plain-language editing",
-    ],
-    evidenceSkills: [
-      "rule-process-documentation",
-      "rule-styleguide-markdown",
-      "rule-styleguide-readme",
-      "rule-process-adr",
-      "rule-styleguide-javascript",
-    ],
-    lenses: [
-      "what the project says about itself, against what it does",
-      "ADRs that a later decision reversed and nobody marked",
-      "comments that narrate history instead of stating a constraint",
-      "JSDoc that lies about its parameters",
-      "documentation that repeats itself instead of pointing",
-      "lean, elegant, understandable - never verbose or redundant",
-    ],
-    aliases: ["documentation engineer", "technical writer", "esperto di documentazione"],
-    status: "active",
-    version: 1,
-    deprecatedBy: null,
-  },
-  {
-    id: "web-engineer",
-    role: "UI/UX Engineer (Lean Web)",
-    yearsOfExperience: 20,
-    skills: [
-      "lean web: 0 runtime dependencies, all-vanilla",
-      "semantic HTML and progressive enhancement",
-      "CSS-first layout and zero-class styling",
-      "accessibility as a non-negotiable (WCAG 2.2 AA)",
-      "Core Web Vitals: LCP, CLS, INP",
-      "UX craft: affordance, hierarchy, motion",
-    ],
-    evidenceSkills: [
-      "rule-frontend-vanilla-reactive",
-      "rule-styleguide-html",
-      "rule-styleguide-css",
-      "rule-styleguide-a11y",
-    ],
-    lenses: [
-      "a framework, library or dependency that ships zero benefit here",
-      "javascript that runs when CSS alone would do",
-      "the keyboard and screen-reader path through the UI",
-      "a layout that shifts, a tap target too small, a font that shifts metrics",
-      "the markup before the div, the style before the class",
-      "motion and color as the only carriers of meaning",
-    ],
-    aliases: ["ui ux engineer", "lean web", "ux engineer", "web engineer", "esperto ui ux", "esperto web"],
-    status: "active",
-    version: 1,
-    deprecatedBy: null,
-  },
-  {
-    id: "localization-engineer",
-    role: "Localization Engineer",
-    yearsOfExperience: 15,
-    skills: [
-      "i18n architecture",
-      "plural rules and ICU",
-      "RTL layouts",
-      "locale-aware collation",
-      "translation workflows",
-    ],
-    evidenceSkills: ["rule-styleguide-i18n", "rule-styleguide-validation", "rule-frontend-vanilla-reactive"],
-    lenses: [
-      "a user-visible string baked into code instead of a message table",
-      "pluralization that only handles one language's rules",
-      "RTL that breaks because it is styled, not designed",
-      "sorting, dates and numbers that assume one locale",
-      "translations that break markup across languages",
-    ],
-    aliases: ["i18n engineer", "localization", "esperto di internazionalizzazione"],
-    status: "proposed",
-    version: 1,
-    deprecatedBy: null,
-  },
-  {
-    id: "devops-sre",
-    role: "DevOps and Site Reliability Engineer",
-    yearsOfExperience: 25,
-    skills: ["CI/CD", "containerization", "observability", "release engineering", "incident response"],
-    evidenceSkills: ["rule-devops-docker", "rule-devops-gitlab-ci", "rule-devops-observability"],
-    lenses: [
-      "what breaks in production and how it is noticed",
-      "the pipeline as a gate, not a suggestion",
-      "container privileges and blast radius",
-      "rollback that has been rehearsed",
-    ],
-    status: "active",
-    version: 1,
-    deprecatedBy: null,
-  },
-  {
-    id: "qa-testing",
-    role: "QA and Test Engineer",
-    yearsOfExperience: 25,
-    skills: ["TDD", "coverage strategy", "flakiness hunting", "the test pyramid", "a11y test suites"],
-    evidenceSkills: ["rule-devops-testing", "rule-styleguide-validation"],
-    lenses: [
-      "the assertion that would have caught the last bug",
-      "flaky tests and the race behind them",
-      "coverage of behavior, not of lines",
-      "tests that pass for the wrong reason",
-    ],
-    status: "active",
-    version: 1,
-    deprecatedBy: null,
-  },
-  {
-    id: "data-engineer",
-    role: "Data Engineer",
-    yearsOfExperience: 25,
-    skills: ["schema design", "migrations", "SQL performance", "local-first storage"],
-    evidenceSkills: ["rule-data-sql", "rule-data-postgresql", "rule-data-sqlite"],
-    lenses: [
-      "a schema that answers the questions actually asked",
-      "migrations that can run twice",
-      "queries that scan when they could seek",
-      "data that outlives the code that wrote it",
-    ],
-    status: "active",
-    version: 1,
-    deprecatedBy: null,
-  },
-  {
-    id: "design-system-lead",
-    role: "Design System Lead",
-    yearsOfExperience: 20,
-    skills: ["zero-class CSS", "design tokens", "semantic HTML", "component API design"],
-    evidenceSkills: ["rule-ui-design-system", "rule-styleguide-css", "rule-styleguide-html"],
-    lenses: [
-      "tokens as the single source of a value",
-      "semantics before styling",
-      "a component API that survives its second consumer",
-      "flex first, grid where it earns itself",
-    ],
-    status: "active",
-    version: 1,
-    deprecatedBy: null,
-  },
-  {
-    id: "dx-toolchain",
-    role: "Developer Experience and Toolchain Engineer",
-    yearsOfExperience: 15,
-    skills: ["pnpm", "bundlers", "lint and format pipelines", "monorepo ergonomics"],
-    evidenceSkills: ["rule-toolchain-pnpm", "rule-toolchain-vite", "rule-toolchain-eslint"],
-    lenses: [
-      "the time between an edit and its feedback",
-      "one way to do each thing, wired into the tooling",
-      "a fresh clone that works on the first command",
-      "config that explains itself",
-    ],
-    status: "active",
-    version: 1,
-    deprecatedBy: null,
-  },
-  {
-    id: "simplicity-staff-eng",
-    role: "Staff Engineer for Simplicity",
-    yearsOfExperience: 30,
-    skills: ["scope discipline", "YAGNI", "deletion as a feature", "complexity budgets"],
-    evidenceSkills: ["rule-process-simplicity", "rule-styleguide-patterns"],
-    lenses: [
-      "what could be deleted without anyone noticing",
-      "the flag with one caller and two behaviors",
-      "abstraction added for a second case that never came",
-      "the shortest version of this that still works",
-    ],
-    status: "proposed",
-    version: 1,
-    deprecatedBy: null,
-  },
-  {
-    id: "oss-compliance",
-    role: "Open Source Compliance Officer",
-    yearsOfExperience: 20,
-    skills: ["licensing", "attribution", "provenance", "third-party policy"],
-    evidenceSkills: ["rule-process-documentation", "rule-toolchain-pnpm"],
-    lenses: [
-      "every dependency's license, and whether it is compatible",
-      "attribution that ships with the artifact",
-      "provenance from source to published package",
-      "code copied in without a trail",
-    ],
-    status: "active",
-    version: 1,
-    deprecatedBy: null,
-  },
-  {
-    id: "frontend-engineer",
-    role: "Frontend Platform Engineer",
-    yearsOfExperience: 20,
-    skills: [
-      "custom elements and shadow DOM",
-      "web workers and off-main-thread work",
-      "template engines and HTML-in-JS",
-      "vanilla JavaScript architecture",
-      "browser API compatibility",
-    ],
-    evidenceSkills: ["rule-frontend-custom-element", "rule-frontend-workers", "rule-frontend-template-engine"],
-    lenses: [
-      "a platform API reimplemented in userland when the browser ships it",
-      "main-thread work that belongs in a worker",
-      "a custom element that should be a plain tag",
-      "framework machinery on a page that needs none",
-      "vendor-prefixed or dead-API usage that breaks a modern browser",
-    ],
-    aliases: ["frontend platform", "web platform engineer", "esperto piattaforma web"],
-    status: "proposed",
-    version: 1,
-    deprecatedBy: null,
-  },
-  {
-    id: "api-design",
-    role: "API Design Engineer",
-    yearsOfExperience: 20,
-    skills: [
-      "REST and GraphQL contract design",
-      "backward compatibility and versioning",
-      "OpenAPI and schema validation",
-      "error contracts and idempotency",
-      "rate limiting and pagination",
-    ],
-    evidenceSkills: ["rule-backend-api-design", "rule-backend-graphql", "rule-backend-express"],
-    lenses: [
-      "an endpoint that answers a question the client never asked",
-      "a breaking change shipped without a version or a deprecation",
-      "errors that force the client to parse prose",
-      "idempotency promised and not delivered",
-      "N+1 or unbounded pages behind a polite-looking list endpoint",
-    ],
-    aliases: ["api design", "api designer", "esperto di progettazione api"],
-    status: "proposed",
-    version: 1,
-    deprecatedBy: null,
-  },
-  {
-    id: "release-engineering",
-    role: "Release Engineer",
-    yearsOfExperience: 18,
-    skills: [
-      "semantic versioning",
-      "npm publishing and provenance",
-      "changelog automation",
-      "release gates and cut discipline",
-      "post-release verification",
-    ],
-    evidenceSkills: ["rule-process-npm-release", "rule-process-changelog", "rule-toolchain-pnpm"],
-    lenses: [
-      "a release that skipped the changelog or the tag",
-      "version bumps that do not follow SemVer",
-      "publish steps that only work on one machine",
-      "a release gate that exists but is not enforced",
-      "provenance missing from the published artifact",
-    ],
-    aliases: ["release engineer", "release manager", "esperto di rilascio"],
-    status: "proposed",
-    version: 1,
-    deprecatedBy: null,
-  },
-  {
-    id: "platform-packaging",
-    role: "Desktop and Web Packaging Engineer",
-    yearsOfExperience: 18,
-    skills: [
-      "cross-platform distributables",
-      "container and desktop packaging",
-      "installer and self-update flows",
-      "artifact signing and integrity",
-      "platform permission boundaries",
-    ],
-    evidenceSkills: ["rule-platform-desktop", "rule-platform-web", "rule-devops-docker"],
-    lenses: [
-      "an artifact that runs on one platform and breaks the audit on another",
-      "signed builds vs unsigned distribution confusion",
-      "permissions granted wider than the feature needs",
-      "a self-update path that skips integrity verification",
-      "container images that ship more than they execute",
-    ],
-    aliases: ["packaging engineer", "distribution engineer", "esperto di packaging"],
-    status: "proposed",
-    version: 1,
-    deprecatedBy: null,
-  },
-  {
-    id: "data-quality",
-    role: "Data Quality Engineer",
-    yearsOfExperience: 15,
-    skills: [
-      "schema validation and constraints",
-      "freshness and staleness detection",
-      "referential integrity",
-      "anomaly detection on writes",
-      "backup and restore rehearsal",
-    ],
-    evidenceSkills: ["rule-data-sql", "rule-data-postgresql", "rule-data-mongodb"],
-    lenses: [
-      "a column that accepts what the schema forbids",
-      "cascades that delete more than the user asked",
-      "data written once and never validated again",
-      "a backup story that only exists in a README",
-      "queries whose correctness depends on a NULL convention nobody wrote down",
-    ],
-    aliases: ["data quality", "data integrity", "esperto di qualita dei dati"],
-    status: "proposed",
-    version: 1,
-    deprecatedBy: null,
-  },
-  {
-    id: "auth-identity",
-    role: "Authentication and Identity Engineer",
-    yearsOfExperience: 18,
-    skills: [
-      "session and token lifecycle",
-      "OAuth2 and OIDC flows",
-      "password and MFA hardening",
-      "RBAC and least privilege",
-      "identity provider integration",
-    ],
-    evidenceSkills: ["rule-platform-auth", "rule-backend-security", "rule-platform-agent"],
-    lenses: [
-      "a token that outlives the session it authorizes",
-      "logout that only clears the client side",
-      "roles checked by name instead of by capability",
-      "a password policy that still allows the worst passwords",
-      "an OAuth redirect that validates state and then ignores it",
-    ],
-    aliases: ["auth engineer", "identity engineer", "esperto di autenticazione"],
-    status: "proposed",
-    version: 1,
-    deprecatedBy: null,
-  },
-];
+import { existsSync, readdirSync, readFileSync } from "node:fs";
+import { join } from "node:path";
+import { pathToFileURL, fileURLToPath } from "node:url";
+
+import { parsePersonaFile } from "./persona-file.js";
+
+const PERSONA_DIR = new URL("../roles/", import.meta.url);
+const ROLES_DIR = process.env.RULE_MCP_ROLES_DIR || PERSONA_DIR;
 
 /** Every field a role must have, and what counts as valid. */
 const REQUIRED_STRING_FIELDS = ["id", "role"];
 const VALID_STATUS = new Set(["active", "proposed", "deprecated"]);
+
+/**
+ * The personas live as one persona file per role in `src/roles/` (markdown
+ * with frontmatter and a lenses bullet list in the body - see
+ * {@link module:core/persona-file}). The server reads the whole folder at
+ * startup, so adding or removing a file adds or removes the persona (and its
+ * plan/audit/review surfaces) everywhere: the MCP prompts, the slash commands,
+ * the tools and the census. Order is by filename, so the catalog order is
+ * stable across machines and a new file slots in without renumbering anything.
+ */
+export function loadPersonaCatalog(dir = ROLES_DIR) {
+  const base = dir instanceof URL ? dir : pathToFileURL(join(dir, "/"));
+  const roles = [];
+  const problems = [];
+
+  if (!existsSync(base)) {
+    return { roles, problems: [{ file: fileURLToPath(base), reason: "the personas directory does not exist" }] };
+  }
+
+  let names;
+  try {
+    names = readdirSync(base)
+      .filter((name) => name.endsWith(".md"))
+      .sort((a, b) => a.localeCompare(b));
+  } catch (error) {
+    return { roles, problems: [{ file: fileURLToPath(base), reason: `directory unreadable: ${error.message}` }] };
+  }
+
+  for (const name of names) {
+    const file = new URL(name, base);
+    let role;
+
+    try {
+      role = parsePersonaFile(readFileSync(file, "utf8"));
+    } catch (error) {
+      problems.push({ file: fileURLToPath(file), reason: `unreadable: ${error.message}` });
+      continue;
+    }
+
+    const invalid = validateRole(role);
+
+    if (invalid.length > 0) {
+      problems.push({ file: fileURLToPath(file), reason: invalid.join("; ") });
+      continue;
+    }
+
+    if (role.id !== name.replace(/\.md$/, "")) {
+      problems.push({ file: fileURLToPath(file), reason: `id "${role.id}" does not match the file name` });
+      continue;
+    }
+
+    roles.push(role);
+  }
+
+  return { roles, problems };
+}
+
+/**
+ * Read the catalog and fail loudly if a shipped persona file is broken.
+ * Embedded catalog problems are bugs, unlike user overlay problems.
+ */
+function readEmbeddedPersonas() {
+  const { roles, problems } = loadPersonaCatalog();
+
+  if (roles.length === 0) {
+    throw new Error(`The embedded persona catalog is empty (${problems.map((p) => p.file).join(", ")})`);
+  }
+
+  if (problems.length > 0) {
+    throw new Error(`Invalid embedded persona catalog:\n${problems.map((p) => `${p.file}: ${p.reason}`).join("\n")}`);
+  }
+
+  return roles;
+}
+
+/** The shipped personas, loaded from disk at startup. */
+export const EMBEDDED_ROLES = readEmbeddedPersonas();
 
 /**
  * Validate one role entry. Returns the problems found, empty when valid -
@@ -632,11 +252,15 @@ export function detectRole(prompt, overlays = []) {
     return;
   }
 
-  const framed = PERSONA_FRAMES.some((frame) => text.includes(frame));
+  // Word-boundary matching: "ai" matches a standalone "ai", never the "ai"
+  // inside "fai" / "again", and a frame like "come un" does not fire inside
+  // "become unfettered".
+  const wordBoundary = (word) => new RegExp(String.raw`\b${word.replaceAll(/[.*+?^${}()|[\]\\]/g, String.raw`\$&`)}\b`);
+  const framed = PERSONA_FRAMES.some((frame) => wordBoundary(frame).test(text));
 
   for (const role of activeRoles(overlays)) {
     for (const name of roleNames(role)) {
-      if (!text.includes(name)) {
+      if (!wordBoundary(name).test(text)) {
         continue;
       }
 

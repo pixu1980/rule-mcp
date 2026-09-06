@@ -19,6 +19,7 @@ import { join } from "node:path";
 import { test } from "node:test";
 import { fileURLToPath } from "node:url";
 
+import { parsePersonaFile } from "../src/core/persona-file.js";
 import { validateRole } from "../src/core/review-roles.js";
 
 const BIN = fileURLToPath(new URL("../bin/rule-mcp.js", import.meta.url));
@@ -45,7 +46,7 @@ function roles(box, ...args) {
   });
 }
 
-const overlayFile = (box, id) => join(box.home, ".rule-mcp", "config", "roles", `${id}.json`);
+const overlayFile = (box, id) => join(box.home, ".rule-mcp", "config", "roles", `${id}.md`);
 
 test("list prints the catalog and says which layer each role came from", () => {
   const box = sandbox();
@@ -73,7 +74,7 @@ test("new writes an overlay the validator accepts", () => {
   assert.equal(run.status, 0, `${run.stdout}${run.stderr}`);
   assert.ok(existsSync(overlayFile(box, "perf-hawk")), "the overlay lands in the user layer");
 
-  const written = JSON.parse(readFileSync(overlayFile(box, "perf-hawk"), "utf8"));
+  const written = parsePersonaFile(readFileSync(overlayFile(box, "perf-hawk"), "utf8"));
   assert.deepEqual(validateRole(written), [], `the file must be valid: ${JSON.stringify(written)}`);
   assert.equal(written.role, "Performance Hawk");
   assert.equal(written.yearsOfExperience, 12);
@@ -125,7 +126,7 @@ test("deprecate flips the status in the user layer", () => {
   const run = roles(box, "deprecate", "perf-hawk", "--by", "security");
   assert.equal(run.status, 0, `${run.stdout}${run.stderr}`);
 
-  const written = JSON.parse(readFileSync(overlayFile(box, "perf-hawk"), "utf8"));
+  const written = parsePersonaFile(readFileSync(overlayFile(box, "perf-hawk"), "utf8"));
   assert.equal(written.status, "deprecated");
   assert.equal(written.deprecatedBy, "security");
   assert.deepEqual(validateRole(written), [], "a deprecated role still has to validate");
@@ -136,7 +137,7 @@ test("deprecating an embedded role writes the user's own copy of it", () => {
   const run = roles(box, "deprecate", "architect", "--by", "security");
 
   assert.equal(run.status, 0, `${run.stdout}${run.stderr}`);
-  const written = JSON.parse(readFileSync(overlayFile(box, "architect"), "utf8"));
+  const written = parsePersonaFile(readFileSync(overlayFile(box, "architect"), "utf8"));
   assert.equal(written.status, "deprecated", "the embedded catalog is never edited; the overlay wins instead");
   assert.equal(written.role, "Software Architect", "and the copy keeps what the embedded role said");
 });

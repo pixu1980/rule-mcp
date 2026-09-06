@@ -42,6 +42,38 @@ const PROMPT_EXAMPLES = {
 };
 
 /**
+ * Invocation examples for the help block. Area/workflow prompts carry
+ * hand-written examples; persona prompts (`/rule-plan-*`, `/rule-audit-*`,
+ * `/rule-review-*`) get one generated per operation so the help shows how the
+ * free-form request slots into the command, exactly like the other prompts.
+ *
+ * @param {string} name
+ * @returns {string[]}
+ */
+function promptExamples(name) {
+  const hand = PROMPT_EXAMPLES[name];
+
+  if (hand) {
+    return hand;
+  }
+
+  const persona = /^rule-(plan|audit|review)-(\w+)$/.exec(name);
+
+  if (!persona) {
+    return [];
+  }
+
+  const operation = persona[1];
+  const focus = {
+    plan: "fix the SSE daemon auth flow",
+    audit: "the /rule-handoff commit flow",
+    review: "the new checkout page",
+  }[operation];
+
+  return [`/${name} help`, `/${name} ${focus}`];
+}
+
+/**
  * Build the generic `/rule-* help` message for a prompt definition.
  *
  * @param {string} name - prompt name
@@ -269,8 +301,8 @@ export function listPrompts() {
 
 /**
  * One prompt per active review persona per operation, generated from the
- * registry: `rule-plan-<role>`, `rule-audit-<role>`, `rule-review-<role>` - 21
- * persona commands for the 7 active roles.
+ * registry: `rule-plan-<role>`, `rule-audit-<role>`, `rule-review-<role>` - 54
+ * persona commands for the 18 active roles.
  *
  * The names are shared with the agent commands on purpose: the command
  * generator derives its set from this registry, so a second name for the same
@@ -288,7 +320,8 @@ function rolePrompts() {
       arguments: [
         {
           name: "topic",
-          description: "Focus for this run (free text). Default: the whole project.",
+          description:
+            "Extra request for this run (free text: what to audit/review/plan, e.g. a component, a directory, a concern). Default: the whole project.",
           required: false,
         },
       ],
@@ -341,7 +374,7 @@ export function getPrompt(name, args = {}) {
   if (primaryValue !== undefined && HELP_TOKENS.has(String(primaryValue).trim().toLowerCase())) {
     // Help is returned as a ready-made assistant message: the client displays it
     // immediately instead of asking the model to generate it (no reasoning, no tokens).
-    const helpText = name === "rule-handoff" ? HANDOFF_USAGE : buildHelpMessage(name, def, PROMPT_EXAMPLES[name] ?? []);
+    const helpText = name === "rule-handoff" ? HANDOFF_USAGE : buildHelpMessage(name, def, promptExamples(name));
 
     return {
       name,

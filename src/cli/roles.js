@@ -11,7 +11,8 @@
  *
  * The write side exists because the alternative was a hand-written JSON file
  * whose first contact with the validator happened after it was already on disk
- * and already wrong. `new` and `deprecate` write through the same validator the
+ * and already wrong. Overlays are written as persona files (markdown with
+ * frontmatter and a lenses list in the body), the same format the loader reads. `new` and `deprecate` write through the same validator the
  * loader uses, and refuse rather than leave an invalid file behind. The embedded
  * catalog is never edited: deprecating a built-in role writes the user's own
  * copy of it, which is what the precedence rules were for.
@@ -22,6 +23,7 @@
 import { existsSync, mkdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 
+import { formatPersonaFile } from "../core/persona-file.js";
 import { allRoles, roleById, validateRole } from "../core/review-roles.js";
 import { loadRoleOverlays } from "../core/review-roles-overlays.js";
 import { getRuntimePaths } from "./paths.js";
@@ -121,7 +123,7 @@ function writeUserRole(role) {
 
   const directory = userRolesDir();
   mkdirSync(directory, { recursive: true });
-  writeFileSync(join(directory, `${role.id}.json`), `${JSON.stringify(role, null, 2)}\n`);
+  writeFileSync(join(directory, `${role.id}.md`), formatPersonaFile(role));
 
   return true;
 }
@@ -179,9 +181,9 @@ export function rolesCommand(subcommand = "list", options = {}) {
         return;
       }
 
-      if (existsSync(join(userRolesDir(), `${options.id}.json`))) {
+      if (existsSync(join(userRolesDir(), `${options.id}.md`))) {
         print(
-          `The user layer already has "${options.id}". Edit or delete ${join(userRolesDir(), `${options.id}.json`)}.`,
+          `The user layer already has "${options.id}". Edit or delete ${join(userRolesDir(), `${options.id}.md`)}.`,
         );
         process.exitCode = 1;
 
@@ -208,7 +210,7 @@ export function rolesCommand(subcommand = "list", options = {}) {
       };
 
       if (writeUserRole(created)) {
-        print(`Wrote ${join(userRolesDir(), `${created.id}.json`)}. It takes precedence over the embedded catalog.`);
+        print(`Wrote ${join(userRolesDir(), `${created.id}.md`)}. It takes precedence over the embedded catalog.`);
       }
 
       return;

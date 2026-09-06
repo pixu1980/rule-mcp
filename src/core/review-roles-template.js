@@ -20,39 +20,36 @@
 function templateLines(operation) {
   const action =
     operation === "audit"
-      ? "ed esegui un audit del progetto per individuare bug, rework e il necessario"
+      ? "and run an audit of the project to surface bugs, rework, and whatever else needs doing"
       : operation === "review"
-        ? "ed effettua una review del progetto per individuare bug, rework e il necessario"
-        : "e crea un piano di bugfix/rework/il necessario per sistemare il progetto nel migliore dei modi";
+        ? "and review the project to surface bugs, rework, and whatever else needs doing"
+        : "and build a bugfix/rework plan of everything it takes to put this project in its best possible shape";
 
   const output =
     operation === "audit"
       ? [
-          "l'output di questo lavoro deve essere l'evidenza raccolta, senza opinioni,",
-          "in formato markdown nella cartella ./docs/audits",
+          "the output of this run must be the evidence collected, without opinions,",
+          "in markdown, in the ./docs/audits folder",
         ]
       : operation === "review"
-        ? [
-            "l'output di questo lavoro deve essere l'elenco dei findings,",
-            "in formato markdown nella cartella ./docs/reviews",
-          ]
+        ? ["the output of this run must be the list of findings,", "in markdown, in the ./docs/reviews folder"]
         : [
-            "l'output di questo lavoro deve essere un piano con roadmap organizzate in step e dipendenze,",
-            "in formato markdown nella cartella ./docs/plans",
+            "the output of this run must be a plan with roadmaps organized into steps and dependencies,",
+            "in markdown, in the ./docs/plans folder",
           ];
 
   return [
-    "agisci come un {{ROLE}} con più di {{YEARS_OF_EXPERIENCE}} anni di esperienza,",
-    "con specializzazione in {{SKILLS}}",
+    "Act as a {{ROLE}} with more than {{YEARS_OF_EXPERIENCE}} years of experience,",
+    "specializing in {{SKILLS}}",
     action,
-    "anche in modo che sia inappuntabile sotto i punti di vista di quelle tematiche relative alle sue skills,",
-    "cerca notizie su internet o articoli per capire meglio se c'è qualcos'altro che possiamo fare a questa repo",
+    "so the run is above reproach across the very areas those skills cover.",
+    "Search the web or look for recent articles to find anything else this repo could do better.",
     "",
-    "se hai bisogno andiamo in modalità intervista per sciogliere tutti i nodi",
+    "If needed, switch to interview mode to untangle any open point.",
     "",
     ...output,
     "",
-    `il resto del contratto operativo per \`${operation}\` è sotto: segui quello.`,
+    `The rest of the operating contract for \`${operation}\` is below: follow it.`,
   ].join("\n");
 }
 
@@ -72,6 +69,11 @@ function operationSection(role, operation) {
   const common = [
     "",
     `Each document opens with the run date, the role id and version (\`${role.id} v${role.version ?? 1}\`).`,
+    "",
+    "Write every finding, review, plan step and document in English, American spelling",
+    "(color, behavior, organize). A user's prompt in another language does not change that.",
+    "Run `rule_tool_check` with rule-styleguide-english (or rule-styleguide-markdown) over each written",
+    "document and iterate until `allPass: true` before closing the run.",
     "",
     "Call `rule_tool_plan_docs` with this role and the findings of this run rather than writing that",
     "bookkeeping by hand: it writes the headers and tables, merges the findings against the last run,",
