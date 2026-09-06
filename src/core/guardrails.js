@@ -54,7 +54,7 @@ const SKILL_FRAMEWORK_MAP = {
   "pix-frontend-svelte": "svelte",
   "pix-frontend-solidjs": "solid",
   "pix-frontend-angular": "angular",
-  "pix-frontend-astro": "astro",
+  "pix-frontend-meta-astro": "astro",
   "pix-styleguide": "vanilla",
   "pix-styleguide-html": "vanilla",
   "pix-styleguide-css": "vanilla",

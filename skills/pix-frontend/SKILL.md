@@ -19,14 +19,14 @@ frameworks: [all]
 
 ## UI Frameworks
 
-| Skill                                                    | Framework                | Reactive Model | State Mgmt      |
-| -------------------------------------------------------- | ------------------------ | -------------- | --------------- |
-| [pix-frontend-react](../pix-frontend-react/SKILL.md)     | React 18+                | useState/hooks | Context + hooks |
-| [pix-frontend-vue](../pix-frontend-vue/SKILL.md)         | Vue 3                    | ref()/reactive | Pinia           |
-| [pix-frontend-angular](../pix-frontend-angular/SKILL.md) | Angular 16+ (standalone) | signal()       | Signals         |
-| [pix-frontend-svelte](../pix-frontend-svelte/SKILL.md)   | Svelte 5                 | $state (runes) | Runes           |
-| [pix-frontend-solidjs](../pix-frontend-solidjs/SKILL.md) | SolidJS                  | createSignal   | Signals         |
-| [pix-frontend-astro](../pix-frontend-astro/SKILL.md)     | Astro (islands)          | Per-framework  | Per-framework   |
+| Skill                                                          | Framework                | Reactive Model | State Mgmt      |
+| -------------------------------------------------------------- | ------------------------ | -------------- | --------------- |
+| [pix-frontend-react](../pix-frontend-react/SKILL.md)           | React 18+                | useState/hooks | Context + hooks |
+| [pix-frontend-vue](../pix-frontend-vue/SKILL.md)               | Vue 3                    | ref()/reactive | Pinia           |
+| [pix-frontend-angular](../pix-frontend-angular/SKILL.md)       | Angular 16+ (standalone) | signal()       | Signals         |
+| [pix-frontend-svelte](../pix-frontend-svelte/SKILL.md)         | Svelte 5                 | $state (runes) | Runes           |
+| [pix-frontend-solidjs](../pix-frontend-solidjs/SKILL.md)       | SolidJS                  | createSignal   | Signals         |
+| [pix-frontend-meta-astro](../pix-frontend-meta-astro/SKILL.md) | Astro (islands)          | Per-framework  | Per-framework   |
 
 ## Rules that hold whichever framework you route to
 
@@ -86,7 +86,7 @@ Two things worth saying out loud when this comes up:
 
 The mixed answer is usually the correct one: server-rendered pages by default,
 with a component island where the interaction genuinely justifies one. See
-[pix-frontend-astro](../pix-frontend-astro/SKILL.md) for that shape as a
+[pix-frontend-meta-astro](../pix-frontend-meta-astro/SKILL.md) for that shape as a
 default. Where a small amount of client state does not need a framework at
 all, plain custom elements and a stylesheet are the whole answer:
 [pix-styleguide-javascript](../pix-styleguide-javascript/SKILL.md) and
@@ -101,7 +101,7 @@ Need SPA with Vue?                      → pix-frontend-vue
 Need enterprise Angular?                → pix-frontend-angular
 Need lightweight Svelte?                → pix-frontend-svelte
 Need fine-grained reactivity?           → pix-frontend-solidjs
-Need static + islands?                  → pix-frontend-astro
+Need static + islands?                  → pix-frontend-meta-astro
 Need pure vanilla (no framework)?       → pix-styleguide-javascript
 UI freezes on heavy JS?                 → pix-frontend-workers
 Need full-stack React (Next.js)?        → pix-frontend-meta-next

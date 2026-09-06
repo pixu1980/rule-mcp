@@ -52,7 +52,7 @@ const BUILD_TOOL_RULES = [
 const FRAMEWORK_SKILL_MAP = {
   agents: "pix-ai-agents",
   angular: "pix-frontend-angular",
-  astro: "pix-frontend-astro",
+  astro: "pix-frontend-meta-astro",
   electron: "pix-platform-desktop",
   react: "pix-frontend-react",
   solid: "pix-frontend-solidjs",

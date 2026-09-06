@@ -20,7 +20,7 @@ const FRAMEWORK_SKILL = {
   svelte: "pix-frontend-svelte",
   angular: "pix-frontend-angular",
   solid: "pix-frontend-solidjs",
-  astro: "pix-frontend-astro",
+  astro: "pix-frontend-meta-astro",
   vanilla: "pix-styleguide",
 };
 

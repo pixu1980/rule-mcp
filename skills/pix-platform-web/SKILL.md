@@ -10,7 +10,7 @@ frameworks: [all]
 
 # pix-platform-web - Web Applications with pix Principles
 
-This skill is the **umbrella for all web framework skills** (pix-frontend-react, pix-frontend-vue, pix-frontend-angular, pix-frontend-solidjs, pix-frontend-svelte, pix-frontend-astro).
+This skill is the **umbrella for all web framework skills** (pix-frontend-react, pix-frontend-vue, pix-frontend-angular, pix-frontend-solidjs, pix-frontend-svelte, pix-frontend-meta-astro).
 Choose one framework skill below the pix-platform-web layer.
 
 ## When to use pix-platform-web
@@ -37,14 +37,14 @@ Choose one framework skill below the pix-platform-web layer.
 
 Choose ONE framework skill below pix-platform-web:
 
-| Framework   | Skill                                                    | Best for                                          |
-| ----------- | -------------------------------------------------------- | ------------------------------------------------- |
-| React 18+   | [pix-frontend-react](../pix-frontend-react/SKILL.md)     | Complex UIs with rich interactivity               |
-| Vue 3       | [pix-frontend-vue](../pix-frontend-vue/SKILL.md)         | Progressive adoption, balance of power/simplicity |
-| Angular 16+ | [pix-frontend-angular](../pix-frontend-angular/SKILL.md) | Large enterprise applications                     |
-| SolidJS     | [pix-frontend-solidjs](../pix-frontend-solidjs/SKILL.md) | Fine-grained reactivity, fastest runtime          |
-| Svelte 5    | [pix-frontend-svelte](../pix-frontend-svelte/SKILL.md)   | Minimal boilerplate, smallest bundles             |
-| Astro       | [pix-frontend-astro](../pix-frontend-astro/SKILL.md)     | Content-first, islands architecture               |
+| Framework   | Skill                                                          | Best for                                          |
+| ----------- | -------------------------------------------------------------- | ------------------------------------------------- |
+| React 18+   | [pix-frontend-react](../pix-frontend-react/SKILL.md)           | Complex UIs with rich interactivity               |
+| Vue 3       | [pix-frontend-vue](../pix-frontend-vue/SKILL.md)               | Progressive adoption, balance of power/simplicity |
+| Angular 16+ | [pix-frontend-angular](../pix-frontend-angular/SKILL.md)       | Large enterprise applications                     |
+| SolidJS     | [pix-frontend-solidjs](../pix-frontend-solidjs/SKILL.md)       | Fine-grained reactivity, fastest runtime          |
+| Svelte 5    | [pix-frontend-svelte](../pix-frontend-svelte/SKILL.md)         | Minimal boilerplate, smallest bundles             |
+| Astro       | [pix-frontend-meta-astro](../pix-frontend-meta-astro/SKILL.md) | Content-first, islands architecture               |
 
 ## File Tree Convention
 
