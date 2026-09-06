@@ -1,132 +1,108 @@
-# Execution plan — riorganizzazione `scripts/`, `src/`, `test/` e copertura ≥95%
+# Execution plan - reorganize `scripts/`, `src/`, `tests/` + coverage >= 95%
 
-> Stato: avviato. Analisi completata (2026-09-06). Baseline copertura misurata con
-> `node --experimental-test-coverage` (Node 24, line+branch).
+> Status: in progress. Interview-locked design (2026-09-06, session 2) recorded in ADR 061.
+> Coverage baseline measured with `node --experimental-test-coverage` (Node 24, line+branch).
 
-## Analisi (fatti)
+## Locked design decisions (interview, 2026-09-06)
 
-### Copertura test — risposta: NO, oggi non è ≥95% (nemmeno sui branch)
+1. **One file per rule/function** at the deepest level - maximum granularity, no semantic clusters.
+2. **Barrel + underscore convention everywhere** (rule-styleguide-patterns): each folder has
+   `index.js` as its only public entry (no `_`); every implementation file is `_`-prefixed,
+   kebab-case (`_if-braces.js` exports `jsIfBraces`).
+3. **One size rule for src, scripts and tests**: 100 lines + 50 tolerance = 150-line cap.
+4. **Pure data is exempt via filename convention**: `*.data.js|mjs`, `*.corpus.mjs`,
+   `*.fixture.mjs`, plus everything under `tests/fixtures/`.
+5. **Legacy 2-line shims are dead**: import the folder `index.js` path; no dual paths.
+6. **Scripts become one folder per script** (`scripts/reports/census/index.mjs` + `_part.mjs`
+   helpers), grouped thematically; shell installers stay flat and exempt.
+7. **Tests co-locate as `__tests__/` next to their subject** (later phase); repo-level suites
+   (docs contracts, e2e, fixtures) keep a top-level `tests/` home. Requires a glob-based
+   runner to replace the hardcoded lists in package.json and ci.yml.
+8. **The code-splitting rule lives in `rule-process-simplicity`** ("Code splitting and file size").
+9. **Enforcement is layered**: `tests/docs/file-size-budget.test.mjs` (150-line cap with a
+   shrink-only ratchet in `file-size-ratchet.data.mjs` + numbered junk-name ban) and the
+   `en-english-only-filenames` guardrail in `rule_tool_check`.
+10. **English everywhere, enforced**: ADR titles/bodies gate through `adrEnglishOffenses`
+    in `rule_tool_process_adr`; file and folder names gate through the new guardrail.
 
-- **Grafo (tokensave)**: 918 funzioni, solo 237 (26%) raggiunte da test visibili nel call graph.
-  È un *lower bound*: molti test lanciano subprocessi (CLI, installer, daemon) invisibili al grafo.
-- **Node nativo (line+branch) sul batch unit `test:foundations`**: `71.57%` righe / `80.91%` branch / `72.66%` funzioni
-  (misurato sui file caricati: src + scripts + bin; i file test sono esclusi dal report).
-- **Buchi principali (line% / branch%)**:
-  - `src/tools/gateway.js` 87.9/43.3, `src/tools/adr.js` 43.1/76.7, `src/tools/fix.js` 21.6, `src/tools/handoff.js` 15.3,
-  - `src/core/file-tree.js` 26.2, `src/core/block-spacing.js` 15.3, `src/core/agent-integrations.js` 38.5, `src/core/agent-commands.js` 61.5,
-  - `src/cli/commands.js` 23.2, `src/cli/completions.js` 8.7, `src/cli/doctor.js` 19.9, `src/cli/daemon.js` 38.5, `src/cli/skills-install.js` 25.9, `src/cli/tui.js` 33.2, `src/cli/agent-installers.js` 59.6,
-  - `src/tools/a11y.js` 38.4, `src/tools/apply.js` 38.2, `src/tools/plan.js` 50.5.
-- Completamento: CLI/installer/transport sono coperti *black-box* via subprocess; la copertura reale è più alta di 71.57% ma
-  **ancora sotto 95% sui branch**. Serve strumentazione c8 (per i subprocess) + test mirati.
+## Analysis (facts)
 
-### Dimensione file — regola 100 righe (+50 tolleranza = 150)
+### Test coverage - answer: NO, not >= 95% today (not even branches)
 
-File `src/` oltre 150 righe (i 24 peggiori, totale 32993 righe / 108 file):
+- **Graph (tokensave)**: 918 functions, only 237 (26%) reached by tests visible in the call
+  graph. A lower bound: many tests drive subprocesses (CLI, installer, daemon) the graph
+  cannot see.
+- **Native Node (line+branch) on the `test:foundations` unit batch**: 71.57% lines /
+  80.91% branches / 72.66% functions (measured on loaded files: src + scripts + bin).
+- **Main gaps (line% / branch%)**: `tools/gateway.js` 87.9/43.3, `tools/adr.js` 43.1/76.7,
+  `tools/fix.js` 21.6, `tools/handoff.js` 15.3, `core/file-tree.js` 26.2,
+  `core/block-spacing.js` 15.3, `cli/completions.js` 8.7, `cli/doctor.js` 19.9,
+  `cli/tui.js` 33.2, `cli/daemon.js` 38.5.
+- CLI/installer/transport are covered black-box via subprocess; real coverage is higher than
+  71.57% but **still under 95% on branches**. Needs c8 instrumentation + targeted tests.
 
-| righe | file |
-| ----: | ---- |
-| 1089 | src/cli/agent-installers.js |
-|  971 | src/core/guardrails/framework.js |
-|  850 | src/core/guardrails/quality.js |
-|  831 | src/tools/router.js |
-|  807 | src/cli/commands.js |
-|  792 | src/tools/ai.js |
-|  789 | src/core/bm25.js |
-|  779 | src/core/wcag-data.js |
-|  740 | src/core/docs-numbering.js |
-|  737 | src/tools/handon.js |
-|  720 | src/core/tool-cache.js |
-|  686 | src/core/file-tree.js |
-|  660 | src/tools/handoff.js |
-|  655 | src/core/guardrails/shared.js |
-|  629 | src/prompts/index.js |
-|  583 | src/core/agent-transcripts.js |
-|  548 | src/cli/daemon-platform.js |
-|  530 | src/tools/gateway.js |
-|  525 | src/tools/adr.js |
-|  501 | src/cli/program.js |
-|  499 | src/cli/daemon.js |
-|  494 | src/core/fingerprint.js |
-|  483 | src/core/self-update.js |
-|  478 | src/cli/doctor.js |
+## Phases
 
-`test/`: 147 file flat (solo `fixtures/`), totale 18540 righe; `scripts/`: 23 file, totale 6145 righe
-(installer shell: install.sh 1098, uninstall.sh 982, install.ps1 726 — gli installer restano esenti dalla regola linee,
-si splittano in moduli `source` condivisi solo dove sicuro).
+### Phase 0 - measurable coverage baseline (done)
+- [x] Line+branch coverage with native Node (71.57/80.91/72.66 on foundations).
+- [x] `test:coverage` npm script (`scripts/test-coverage.mjs`).
+- [x] Baseline recorded here and in ADR 060.
 
-### Struttura attuale
+### Phase 1 - `test/` -> `tests/` + thematic subfolders (done)
+- [x] `git mv test tests`; domain subfolders (cli, core, tools, transport, roles, prompts, docs, e2e, skills, fixtures).
+- [x] package.json / ci.yml / docs path updates; relative-path fixes; porting-parity removed.
 
-- `src/`: già tematico (cli, core, core/guardrails, prompts, resources, roles, tools, transport, utils) ma con file-torero.
-- `test/`: piatta → va rinominata in `tests/` e raggruppata per dominio.
-- `scripts/`: 23 file, no sottocartelle.
+### Phase 2 - first splits (done, produced the junk names this plan now bans)
+- [x] `cli/agent-installers.js` -> `installers/`, `guardrails/framework.js` -> `framework/`,
+  `wcag-data.js` -> `wcag-data/`, `guardrails/quality.js` -> `quality/`, `bm25.js` -> `bm25/`,
+  `tools/router.js` -> `router/`, `cli/commands.js` -> `commands/`.
 
-## Skill rule per il code splitting — raccomandazione
+### Phase 3 - convention rework (this session)
+- [x] Codemod: framework `js-1..4` + `vanilla-1..2` -> one rule per file under
+  `framework/js/` (16) and `framework/vanilla/` (9), underscore names, order preserved.
+- [x] Codemod: quality `parts-1..4` -> family folders `typescript/` (4), `prose/` (5+1),
+  `manifest/` (2), `simplicity/` (1), `comments/` (3); **two duplicated rules dropped**
+  (`no-future-use-code`, `no-commented-out-code` appeared in both parts-3 and parts-4).
+- [x] bm25: `stopwords-a/b/union` merged into `_stopwords.data.js` (union side effect moved
+  into `_canonicalize.js`, import cycle removed); all bm25 modules renamed to `_` prefix.
+- [x] Underscore renames: `_react/_vue/_angular/_svelte.js`, `_a11y.js`, `_guards-meta.js`,
+  `_a11y-helpers.js`; dead `helpers-css.js` deleted (duplicate of `guardrails/util.js`).
+- [x] Shims killed: `core/bm25.js`, `core/wcag-data.js`, `tools/router.js`, `cli/commands.js`;
+  every importer now uses the folder `index.js` path.
+- [x] New guardrail `en-english-only-filenames` (+ `scanPathForForeign`, foreign-name
+  dictionary and suffix heuristic in `core/en-english.js`), test-first.
+- [x] English gate in `rule_tool_process_adr` (`adrEnglishOffenses`), test-first; ADR 060
+  translated to English (filename + content); index regenerated.
+- [x] `tests/docs/file-size-budget.test.mjs`: junk-name ban + 150-line cap + shrink-only
+  ratchet (117 grandfathered files in `file-size-ratchet.data.mjs`); wired into
+  `test:foundations`.
+- [x] Code-splitting section in `skills/rule-process-simplicity/SKILL.md`; ADR 061.
 
-Il requisito "file ≤100 righe (+50 tolleranza)" **non è imposto da nessuna skill rule per JS server**.
-Skill candidate e ruolo:
+### Phase 4 - shrink the ratchet (next sessions, one family per commit)
+- [ ] Split the worst offenders by value: `tools/ai.js` 792, `core/docs-numbering.js` 740,
+  `tools/handon.js` 737, `core/tool-cache.js` 720, `core/file-tree.js` 686,
+  `tools/handoff.js` 660, `guardrails/shared.js` 655, `prompts/index.js` 629, ...
+- [ ] Each split: underscore-barrel folder, one concern per file, ratchet entries deleted,
+  surface tests (`cli-commander-surface`, `tool-surface-budget`) green.
+- [ ] Move remaining flat-file modules into their convention folders as they are touched
+  (`core/en-english.js` dictionaries -> `*.data.js`, `wcag-data/criteria-*` -> `_criteria-*.data.js`).
 
-1. **rule-frontend-custom-element → Code-splitting rules** (la più adatta): regola di organizzazione
-   del sorgente in moduli per responsabilità (`ComponentName.js`, `.consts.js`, `.utils.js`, `.events.js`, …),
-   anti-pattern espliciti (niente helper inline nel file principale). È il pattern da adottare per ogni split.
-2. **rule-styleguide-css** (modello di soglia): "each file should stay roughly between 50 and 100 lines… split into sub files".
-3. **rule-platform-web → Code Splitting** (runtime/bundle: route/component/vendor chunk) — non applicabile a questo server (no bundler).
+### Phase 5 - `scripts/` folders per script
+- [ ] `scripts/install/`, `scripts/reports/` (census, cache, cache-similarity, tool-surface),
+  `scripts/fix/` (blank-lines, self-guardrails, clean-prose), `scripts/build/` (changelog,
+  embed-skills, checksums, package), `scripts/data/` (update-wcag-data).
+- [ ] Each multi-file script: `<name>/index.mjs` entry + `_helper.mjs` parts; update
+  package.json script paths + CI; shell installers stay flat.
 
-> Decisione: adottare il pattern module-per-concern di rule-frontend-custom-element + regola di soglia 150 righe
-> codificata come guardrail/test di repo (stile `tool-surface-budget`), con riferimento alla skill nel CLAUDE.md.
+### Phase 6 - co-located `__tests__/`
+- [ ] Glob-based runner (`node --test` patterns) replacing the hardcoded lists in
+  `test:foundations` / `test:installer` / `test:all` / `ci` and `.github/workflows/ci.yml`.
+- [ ] Move unit tests next to their subject as `__tests__/_name.test.mjs`; repo-level suites
+  stay in `tests/`; `files` in package.json excludes `**/__tests__/`.
 
-## Fasi
-
-### Fase 0 — Baseline di copertura misurabile
-- [x] Misurare coverage line+branch con Node nativo (fatto: 71.57/80.91/72.66 su foundations).
-- [x] Script npm `test:coverage` (wrapper sul batch unit con `--experimental-test-coverage`) — `scripts/test-coverage.mjs`.
-- [x] Baseline registrata nel piano e in ADR 060 (no nuovo doc numerato, la numerazione docs è vincolata dal census).
-
-### Fase 1 — `test/` → `tests/` + sottocartelle tematiche
-- [x] `git mv test tests`
-- [x] Sottocartelle per dominio:
-  - `tests/cli/` — install*, cli-*, doctor*, daemon*, vscode*, pi-install, skills-install, uninstall*, self-update*
-  - `tests/core/` — guardrails*, cache*, flight*, telemetry*, token-*, fingerprint, bm25, ascii-box, block-spacing, caveman*, enforcement, lifecycle, detector, directive, cifra…
-  - `tests/tools/` — adr, ai, gateway, handon, handoff, fix, a11y, skill, plan, apply, router, a11y
-  - `tests/transport/` — sse*, http, https, stdio-guard, auth-rate-limit, docker-mode, daemon-wrapper
-  - `tests/roles/` — persona-catalog, review-roles*, roles-cli
-  - `tests/prompts/` — prompts, reminder-diet, prompt-*
-  - `tests/docs/` — docs-*, census-generated, changelog, skills-docs, repository-contract, adr-*
-  - `tests/fixtures/` (già esistente) + aggegatori in radice (`smoke.mjs`, `routing-corpus.mjs`, …)
-- [x] Aggiornare `package.json`, `.github/workflows/ci.yml`, `docs/*`, `README.md` (mapping token 142 file).
-- [x] Fix path relativi post-move (`../` → `../../`, fixtures → `../fixtures`, `new URL("..")` → `new URL("../..")`); fix `auto-adr-flag` (doc rinominata 06→05).
-- [x] `pnpm test:foundations` 298/299 (1 pre-esistente) + `pnpm test:installer` 0 fail + lint 0 errori.
-- [x] **porting-parity rimosso completamente**: test, `rule-porting-baseline.json`, ADR 053/054 + indice, blocco ROADMAP (piano porting) in docs/01, refs README.
-
-### Fase 2 — Code splitting `src/` (regola 100/150)
-- [x] Split dei file-torero per responsabilità — completati e verificati (test verdi + self-guardrails + lint):
-  - [x] `src/cli/agent-installers.js` (1089 → barrel 73) → `installers/` (9 moduli, livello 3)
-  - [x] `src/core/guardrails/framework.js` (971 → barrel 1) → `guardrails/framework/` (10 moduli, livello 3)
-  - [x] `src/core/wcag-data.js` (779 → barrel 1) → `wcag-data/` (meta + 13 per-guideline, livello 4)
-  - [x] fix corollari: esenzioni CATALOGS per cartelle in self-guardrails, refs doc rinumerate (css-flex-first, auto-adr-flag)
-- [x] `src/core/guardrails/quality.js` (850 → barrel 2) → `guardrails/quality/` (8 moduli)
-- [x] `src/core/bm25.js` (789 → barrel 2) → `bm25/` (11 moduli: terms, stopwords×3+union, extract, build, cache, score, state)
-- [x] `src/tools/router.js` (831 → barrel 2) → `router/` (7 moduli: helpers, entry, compute, hooks, surface, call, skills) — 86/86 test surface
-- [x] `src/cli/commands.js` (807 → barrel) → `commands/` (8 moduli: shared, help, daemon, lifecycle, tools, health, targets)
-- [ ] Prossimi candidati (per valore): `ai.js` 792,
-  `ai.js` 792, `docs-numbering.js` 740, `handon.js` 737, `tool-cache.js` 720, `file-tree.js` 686,
-  `handoff.js` 660, `guardrails/shared.js` 655, `prompts/index.js` 629, `agent-transcripts.js` 583,
-  `daemon-platform.js` 548, `gateway.js` 530, `adr.js` 525, `daemon.js` 499, `fingerprint.js` 494…
-- [ ] Ogni split: estrazione di moduli ≥150 righe con re-export dall'entry (API pubbliche invariate) +
-      test di superficie (`cli-commander-surface`, `tool-surface-budget`) verdi.
-- [ ] Gradino successivo: tutti i file >200, poi >150.
-
-### Fase 3 — Riorganizzazione tematica `src/` e `scripts/`
-- [ ] `src/core/` → sub-cartelle: `telemetry/` (telemetry*, flight*), `cache/` (cache-*, tool-cache), `agents/` (agent-*), `text/` (bm25, ascii-box, fingerprint, block-spacing, directive, en-english, caveman).
-- [ ] `src/tools/` → resta per modulo (già tematico).
-- [ ] `scripts/` → `scripts/census/`, `scripts/installer/` (estrazione helper shell comuni: agents detection, TUI, paths) con split di install.sh/uninstall.sh solo dove sicuro.
-- [ ] Verifica: `pnpm lint`, `pnpm test:all`, census invariato.
-
-### Fase 4 — Copertura ≥95% branch
-- [ ] Strumentazione cross-process completa: aggiungere `c8` (o `NODE_V8_COVERAGE` + report) così subprocess CLI/installer contano.
-- [ ] Test mirati sulle aree sotto soglia: gateway (branch 43%), adr (43%), fix (21%), handoff (15%), file-tree (26%), block-spacing (15%), tui (33%), daemon (38%), doctor (20%), commands (23%), completions (8.7%).
-- [ ] Gate CI: `pnpm test:coverage` con soglia branch 95% (fail sotto soglia).
-- [ ] Risolvere o documentare i 2 test falliti pre-esistenti (untrusted-fence, home-recording-leak race).
-
-### Fase 5 — Regola di guardia dimensione file
-- [ ] Test/guardrail "file ≤150 righe" in stile `tool-surface-budget` (es. `test/…/file-size-budget.test.mjs`).
-- [ ] Riferimento a rule-frontend-custom-element (code-splitting) nel CLAUDE.md e nella skill di riferimento.
+### Phase 7 - coverage >= 95% branches
+- [ ] c8 (or `NODE_V8_COVERAGE`) so subprocess CLI/installer runs count.
+- [ ] Targeted tests on the under-threshold areas listed in the analysis.
+- [ ] CI gate: `pnpm test:coverage` fails under 95% branch coverage.
+- [ ] Resolve or document the 2 pre-existing flaky failures (untrusted-fence,
+  home-recording-leak race).
