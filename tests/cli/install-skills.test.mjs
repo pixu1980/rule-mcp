@@ -11,7 +11,7 @@ import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import { spawnSync } from "node:child_process";
 
-const root = resolve(import.meta.dirname, "..");
+const root = resolve(import.meta.dirname, "../..");
 const packageJson = JSON.parse(readFileSync(join(root, "package.json"), "utf8"));
 const testHome = join(tmpdir(), `rule-skills-install-${process.pid}`);
 const target = join(testHome, ".agents", "skills");

@@ -10,7 +10,7 @@ import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import { spawnSync } from "node:child_process";
 
-const root = resolve(import.meta.dirname, "..");
+const root = resolve(import.meta.dirname, "../..");
 const sandbox = mkdtempSync(join(tmpdir(), "rule-agent-commands-"));
 const home = join(sandbox, "home");
 const project = join(sandbox, "project");
