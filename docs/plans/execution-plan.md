@@ -105,7 +105,8 @@ Skill candidate e ruolo:
   - [x] fix corollari: esenzioni CATALOGS per cartelle in self-guardrails, refs doc rinumerate (css-flex-first, auto-adr-flag)
 - [x] `src/core/guardrails/quality.js` (850 → barrel 2) → `guardrails/quality/` (8 moduli)
 - [x] `src/core/bm25.js` (789 → barrel 2) → `bm25/` (11 moduli: terms, stopwords×3+union, extract, build, cache, score, state)
-- [ ] Prossimi candidati (per valore): `router.js` 831, `commands.js` 807,
+- [x] `src/tools/router.js` (831 → barrel 2) → `router/` (7 moduli: helpers, entry, compute, hooks, surface, call, skills) — 86/86 test surface
+- [ ] Prossimi candidati (per valore): `commands.js` 807,
   `ai.js` 792, `docs-numbering.js` 740, `handon.js` 737, `tool-cache.js` 720, `file-tree.js` 686,
   `handoff.js` 660, `guardrails/shared.js` 655, `prompts/index.js` 629, `agent-transcripts.js` 583,
   `daemon-platform.js` 548, `gateway.js` 530, `adr.js` 525, `daemon.js` 499, `fingerprint.js` 494…
