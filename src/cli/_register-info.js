@@ -63,7 +63,7 @@ export function registerCacheCommand(program) {
     .option("--dir <path>", "cache directory to inspect")
     .allowExcessArguments(false)
     .action(async (action, options) => {
-      const { cacheCommand } = await import("./cache.js");
+      const { cacheCommand } = await import("./cache/index.js");
       await cacheCommand(action ?? "stats", { dir: options.dir });
     });
 }
