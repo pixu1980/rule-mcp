@@ -11,9 +11,9 @@
 
 import { z } from "zod/v4";
 
-import { allRoles, roleById } from "../core/review/_roles.js";
+import { allRoles, roleById } from "../core/review/roles/index.js";
 import { loadRoleOverlays } from "../core/review/_overlays.js";
-import { fillRoleTemplate, OPERATIONS } from "../core/review/_template.js";
+import { fillRoleTemplate, OPERATIONS } from "../core/review/template/index.js";
 import { fenceUntrusted } from "../core/untrusted.js";
 import { registerTool } from "./router/index.js";
 

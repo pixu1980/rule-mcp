@@ -1,6 +1,6 @@
 /** The prompt registry: static definitions plus generated persona prompts. */
-import { activeRoles } from "../core/review/_roles.js";
-import { OPERATIONS } from "../core/review/_template.js";
+import { activeRoles } from "../core/review/roles/index.js";
+import { OPERATIONS } from "../core/review/template/index.js";
 import { PROMPT_DEFS } from "./_defs.data.js";
 
 /**

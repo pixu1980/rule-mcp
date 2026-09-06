@@ -161,8 +161,8 @@ test("every shared prompt/command surface carries the English mandate", async ()
     assert.match(body, /American spelling|American English|US spelling/i, `${label} must carry the mandate`);
   }
 
-  const { fillRoleTemplate } = await import("../../src/core/review/_template.js");
-  const { roleById } = await import("../../src/core/review/_roles.js");
+  const { fillRoleTemplate } = await import("../../src/core/review/template/index.js");
+  const { roleById } = await import("../../src/core/review/roles/index.js");
   const filled = fillRoleTemplate(roleById("security"));
   assert.match(filled, /American spelling|English/i, "the persona template carries the mandate");
 });

@@ -1,7 +1,7 @@
 /** Resolve one prompt by name: help, persona, workflow, area or task. */
 import { HANDOFF_USAGE } from "./_handoff-options.js";
-import { roleById } from "../core/review/_roles.js";
-import { fillRoleTemplate } from "../core/review/_template.js";
+import { roleById } from "../core/review/roles/index.js";
+import { fillRoleTemplate } from "../core/review/template/index.js";
 import { HELP_TOKENS, promptExamples, buildHelpMessage } from "./_help.js";
 import { listPrompts } from "./_registry.js";
 import { AREAS } from "./_areas.js";

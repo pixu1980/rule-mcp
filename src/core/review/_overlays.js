@@ -23,8 +23,8 @@
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 
-import { parsePersonaFile } from "./_persona-file.js";
-import { validateRole } from "./_roles.js";
+import { parsePersonaFile } from "./persona-file/index.js";
+import { validateRole } from "./roles/_validate.js";
 import { getRuntimePaths } from "../../cli/paths.js";
 
 /**
