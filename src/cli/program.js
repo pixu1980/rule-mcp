@@ -256,7 +256,7 @@ export function buildProgram() {
     .action(async function handoffAction(subcommand, options) {
       if (subcommand === "doctor") {
         const { applyRenumber, planRenumber, renderRenumberPlan, rewriteCommitReferences } =
-          await import("../core/docs-numbering.js");
+          await import("../core/docs-numbering/index.js");
         const projectDir = options.dir;
         const onProgress = ({ message }) => process.stdout.write(`  ${message}\n`);
         const plan = planRenumber({ projectDir, onProgress });
