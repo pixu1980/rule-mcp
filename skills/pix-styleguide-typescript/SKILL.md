@@ -287,6 +287,22 @@ prose never trips a rule.
 | `ts-no-double-assertion` | `as unknown as`                                   |
 | `ts-union-over-enum`     | `enum X {`, including `const enum`                |
 
+## Conventions (rules -> skills merge)
+
+# TypeScript Rules
+
+## Enums
+
+- Prefer `as const` objects over TypeScript enums
+- If an enum is unavoidable, use `const enum`
+
+## Type safety patterns
+
+- Never use `any`. Use `unknown` and narrow with type guards
+- Prefer `readonly` arrays and properties where mutation is not needed
+- Use `satisfies` operator for type validation without widening
+- Use discriminated unions over optional properties when modeling variants
+
 ## See also
 
 - [rule-toolchain-typescript](../rule-toolchain-typescript/SKILL.md) - tsconfig, strict mode, path aliases, build strategy
