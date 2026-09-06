@@ -50,7 +50,7 @@ function areaOf(skill) {
  */
 async function makeRecompute() {
   const { loadAllSkills } = await import("../core/skills.js");
-  const { recomputeCore, listTools } = await import("../tools/router.js");
+  const { recomputeCore, listTools } = await import("../tools/router/index.js");
   await loadAllSkills();
   const registered = new Set(listTools().map((tool) => tool.name));
 

@@ -1,7 +1,7 @@
-// Auto-split from src/cli/commands.js - see ./commands/index.js
+// Auto-split from src/cli/commands/index.js - see ./commands/index.js
 /** Doctor, skills reload, self-update, fix and completions commands. */
 
-import { callTool } from "../../tools/router.js";
+import { callTool } from "../../tools/router/index.js";
 import { formatDoctorTerminal, runDoctor } from "../doctor.js";
 import { generateCompletions } from "../completions.js";
 import { loadAllSkills } from "../../core/skills.js";

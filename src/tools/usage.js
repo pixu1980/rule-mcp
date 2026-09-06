@@ -22,7 +22,7 @@ import { unsupportedAgents } from "../core/agent-transcripts.js";
 import { writeSidecarUsage } from "../core/telemetry-store.js";
 import { telemetryEnabled } from "../core/telemetry.js";
 import { clientInfo } from "../core/telemetry.js";
-import { registerTool } from "./router.js";
+import { registerTool } from "./router/index.js";
 
 /** A usage declaration is a handful of integers; anything larger is not one. */
 const MAX_DECLARED_BYTES = 4096;

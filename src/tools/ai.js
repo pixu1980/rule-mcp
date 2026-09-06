@@ -8,8 +8,8 @@
  */
 
 import { z } from "zod/v4";
-import { readSkill, getSkillNames, registerTool } from "./router.js";
-import { getSkillMetadata, listTools } from "./router.js";
+import { readSkill, getSkillNames, registerTool } from "./router/index.js";
+import { getSkillMetadata, listTools } from "./router/index.js";
 import { detectProject, getFrameworkSuggestion } from "../core/detector.js";
 import { detectRole } from "../core/review-roles.js";
 import { loadRoleOverlays } from "../core/review-roles-overlays.js";
@@ -600,7 +600,7 @@ export function registerAiTool() {
       // BM25 scoring runs on the same index the search tool uses: the previous
       // scorer had no IDF and no length normalization, so common words and
       // big files dominated routing.
-      const { buildIndex, isIndexReady, searchSkills } = await import("../core/bm25.js");
+      const { buildIndex, isIndexReady, searchSkills } = await import("../core/bm25/index.js");
 
       if (!isIndexReady()) {
         buildIndex();

@@ -1,7 +1,7 @@
-// Auto-split from src/cli/commands.js - see ./commands/index.js
+// Auto-split from src/cli/commands/index.js - see ./commands/index.js
 /** Tools/config commands: list+call tools, env config and the interactive configure flow. */
 
-import { callTool, listTools } from "../../tools/router.js";
+import { callTool, listTools } from "../../tools/router/index.js";
 import { entrypoint, parseJson, print, printJson } from "./shared.js";
 import { formatToolsList } from "../tui.js";
 import { loadAllSkills } from "../../core/skills.js";

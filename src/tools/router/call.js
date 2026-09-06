@@ -1,4 +1,4 @@
-// Auto-split from src/tools/router.js - see ./router/index.js
+// Auto-split from src/tools/router/index.js - see ./router/index.js
 /** Tool invocation entry: hooks, cache read-through, self-update banner, telemetry, compress-ascii-fingerprint post. */
 
 import { _afterHooks, _tools } from "./hooks.js";

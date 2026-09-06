@@ -22,7 +22,7 @@ import { z } from "zod/v4";
 import { aggregate, renderFlight, renderStats } from "../core/telemetry-stats.js";
 import { readEvents, readRollups } from "../core/telemetry-store.js";
 import { telemetryEnabled } from "../core/telemetry.js";
-import { registerTool } from "./router.js";
+import { registerTool } from "./router/index.js";
 
 const DAY_MS = 86_400_000;
 

@@ -1,4 +1,4 @@
-// Auto-split from src/cli/commands.js - see ./commands/index.js
+// Auto-split from src/cli/commands/index.js - see ./commands/index.js
 /** Help and serve: the usage text command and the STDIO/HTTP/SSE server entry. */
 
 import { HELP_TEXT } from "../help-text.js";

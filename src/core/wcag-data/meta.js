@@ -1,4 +1,4 @@
-// Auto-split from src/core/wcag-data.js - see ./wcag-data/index.js
+// Auto-split from src/core/wcag-data/index.js - see ./wcag-data/index.js
 /** WCAG version metadata, EARL outcome set, and the EM workflow steps. */
 export const WCAG_VERSION = "2.2";
 

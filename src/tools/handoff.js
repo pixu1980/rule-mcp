@@ -12,7 +12,7 @@ import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
 import { join, relative } from "node:path";
 import { execSync } from "node:child_process";
 import { z } from "zod/v4";
-import { registerTool } from "./router.js";
+import { registerTool } from "./router/index.js";
 import { TOKENSAVE_DIRECTIVE, tokensaveActive } from "../core/agent-integrations.js";
 
 /** Default project directory. */

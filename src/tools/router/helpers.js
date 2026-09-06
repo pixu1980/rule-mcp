@@ -1,4 +1,4 @@
-// Auto-split from src/tools/router.js - see ./router/index.js
+// Auto-split from src/tools/router/index.js - see ./router/index.js
 /** Result shaping helpers: banner, finalize, token/size estimates, and the skill-independent set. */
 
 import { alignAsciiBoxesResult } from "../../core/ascii-box.js";

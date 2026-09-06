@@ -1,4 +1,4 @@
-// Auto-split from src/cli/commands.js - see ./commands/index.js
+// Auto-split from src/cli/commands/index.js - see ./commands/index.js
 /** Agent-command target resolution, printing and syncing helpers. */
 
 import { FORMAT_EXT, commandNames, renderAgentCommandFiles } from "../../core/agent-commands.js";

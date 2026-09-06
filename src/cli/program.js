@@ -38,7 +38,7 @@ import {
   fixCommand,
   updateCommand,
   agentCommandsCommand,
-} from "./commands.js";
+} from "./commands/index.js";
 
 const version = JSON.parse(readFileSync(new URL("../../package.json", import.meta.url), "utf8")).version;
 
@@ -228,7 +228,7 @@ export function buildProgram() {
         return;
       }
 
-      const { callTool } = await import("../tools/router.js");
+      const { callTool } = await import("../tools/router/index.js");
       const { loadAllSkills } = await import("../core/skills.js");
       await loadAllSkills();
       const result = await callTool("pix_process_adr", {
@@ -292,7 +292,7 @@ export function buildProgram() {
       }
 
       const { registerProcessHandoffTool } = await import("../tools/handoff.js");
-      const { callTool: ct } = await import("../tools/router.js");
+      const { callTool: ct } = await import("../tools/router/index.js");
       registerProcessHandoffTool();
       const handoffRes = await ct("rule_tool_process_handoff", {
         projectDir: options.dir,

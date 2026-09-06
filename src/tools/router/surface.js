@@ -1,4 +1,4 @@
-// Auto-split from src/tools/router.js - see ./router/index.js
+// Auto-split from src/tools/router/index.js - see ./router/index.js
 /** Registered-tool inventory: mutation classification, annotations, declared and public tool lists. */
 
 import { _tools } from "./hooks.js";

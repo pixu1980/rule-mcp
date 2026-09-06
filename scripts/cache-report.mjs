@@ -60,7 +60,7 @@ process.env.RULE_MCP_NO_AUTOUPDATE = "1";
 delete process.env.RULE_MCP_NO_CACHE;
 
 const { loadAllSkills } = await import("../src/core/skills.js");
-const { callTool, entryPathOf } = await import("../src/tools/router.js");
+const { callTool, entryPathOf } = await import("../src/tools/router/index.js");
 const { cacheClear, cacheEntries } = await import("../src/core/tool-cache.js");
 const { CORPUS } = await import("../test/routing-corpus.mjs");
 

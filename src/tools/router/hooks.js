@@ -1,4 +1,4 @@
-// Auto-split from src/tools/router.js - see ./router/index.js
+// Auto-split from src/tools/router/index.js - see ./router/index.js
 /** Tool registry state and hook management (before/post/after), plus register/clear/retain. */
 
 const _tools = [];

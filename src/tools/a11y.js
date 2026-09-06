@@ -35,8 +35,8 @@ import {
   WCAG_VERSION,
   criteriaForLevel,
   criterion,
-} from "../core/wcag-data.js";
-import { registerTool } from "./router.js";
+} from "../core/wcag-data/index.js";
+import { registerTool } from "./router/index.js";
 
 /** JSON-LD context for the EARL output. */
 const EARL_CONTEXT = {

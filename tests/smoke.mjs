@@ -42,7 +42,7 @@ console.log("  ✅ package.json valid with SDK + Zod deps");
 const sourceFiles = [
   "server.js",
   "index.js",
-  "tools/router.js",
+  "tools/router/index.js",
   "tools/skill.js",
   "core/skills.js",
   "core/templates.js",
@@ -51,7 +51,7 @@ const sourceFiles = [
   "prompts/index.js",
   "cli/paths.js",
   "cli/install.js",
-  "cli/commands.js",
+  "cli/commands/index.js",
   "cli/doctor.js",
   "cli/uninstall.js",
 ];
@@ -95,13 +95,13 @@ try {
 
 // 7. Check tool router exports
 try {
-  const router = await import("../src/tools/router.js");
+  const router = await import("../src/tools/router/index.js");
   assert.ok(typeof router.registerTool === "function", "registerTool not exported");
   assert.ok(typeof router.listTools === "function", "listTools not exported");
   assert.ok(typeof router.callTool === "function", "callTool not exported");
-  console.log("  ✅ src/tools/router.js exports registerTool, listTools, callTool");
+  console.log("  ✅ src/tools/router/index.js exports registerTool, listTools, callTool");
 } catch (error) {
-  console.log("  ❌ src/tools/router.js export check failed:", error.message);
+  console.log("  ❌ src/tools/router/index.js export check failed:", error.message);
   failures++;
 }
 

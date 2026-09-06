@@ -25,7 +25,7 @@ import { createHash } from "node:crypto";
 import { gzipSync, gunzipSync } from "node:zlib";
 import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync, renameSync } from "node:fs";
 import { join } from "node:path";
-import { canonicalizeQuery } from "./bm25.js";
+import { canonicalizeQuery } from "./bm25/index.js";
 import { codeSignature } from "./code-signature.js";
 
 export { codeSignature } from "./code-signature.js";

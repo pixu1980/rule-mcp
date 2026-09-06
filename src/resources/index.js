@@ -13,7 +13,7 @@
 import { readFileSync, readdirSync, existsSync } from "node:fs";
 import { join } from "node:path";
 import { getSkillsDirs as getSkillsDirectories } from "../cli/paths.js";
-import { readSkill, getSkillNames, isPluginSkill } from "../tools/router.js";
+import { readSkill, getSkillNames, isPluginSkill } from "../tools/router/index.js";
 
 /**
  * List all available resources with their URIs and metadata.
@@ -148,7 +148,7 @@ export async function readResource(uri) {
 
   // ── rule://community - list community skills ───────────────────
   if (uri === "rule://community") {
-    const { getSkillNames, isPluginSkill, readSkill } = await import("../tools/router.js");
+    const { getSkillNames, isPluginSkill, readSkill } = await import("../tools/router/index.js");
     const allSkills = getSkillNames();
     const plugins = [];
 

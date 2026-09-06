@@ -2,7 +2,7 @@
 /**
  * @module scripts/update-wcag-data
  *
- * Regenerates `src/core/wcag-data.js` from the W3C's published WCAG JSON.
+ * Regenerates `src/core/wcag-data/index.js` from the W3C's published WCAG JSON.
  *
  * The criteria are vendored rather than fetched at runtime for the same reason
  * every other rule output is deterministic: a tool that reaches the network
@@ -25,7 +25,7 @@ import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 
 const SOURCE = "https://www.w3.org/WAI/WCAG22/wcag.json";
-const TARGET = fileURLToPath(new URL("../src/core/wcag-data.js", import.meta.url));
+const TARGET = fileURLToPath(new URL("../src/core/wcag-data/index.js", import.meta.url));
 const apply = process.argv.includes("--apply");
 
 /** Flatten the principle/guideline/criterion tree into one keyed record. */

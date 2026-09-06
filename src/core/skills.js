@@ -11,7 +11,7 @@
  * Called once at startup, or on demand via `skills reload` CLI command.
  */
 import { z } from "zod/v4";
-import { getSkillNames, registerTool, clearTools, retainTools } from "../tools/router.js";
+import { getSkillNames, registerTool, clearTools, retainTools } from "../tools/router/index.js";
 import { registerSkillTool, registerSearchTool, registerCheckTool, registerScaffoldTool } from "../tools/skill.js";
 import { registerAiTool } from "../tools/ai.js";
 import { registerProcessAdrTool } from "../tools/adr.js";
@@ -184,7 +184,7 @@ export async function loadAllSkills(force = false) {
   }
 
   registerProcessHandoffTool(); // Build BM25 search index (async, non-blocking)
-  const { buildIndex, clearIndex } = await import("./bm25.js");
+  const { buildIndex, clearIndex } = await import("./bm25/index.js");
 
   if (force) {
     clearIndex();
@@ -221,7 +221,7 @@ export { parseSkillFrontmatter } from "./skill-frontmatter.js";
  * @param {string} skillName - e.g. "rule-frontend-react"
  * @returns {{ name?: string, description?: string, tags?: string[], frameworks?: string[] }}
  */
-export { getSkillMetadata } from "../tools/router.js";
+export { getSkillMetadata } from "../tools/router/index.js";
 /**
  * Extract the "Project Scaffolding" section from a SKILL.md file.
  * Looks for the section between the scaffold heading and the next section.

@@ -11,7 +11,7 @@
  */
 
 import { z } from "zod/v4";
-import { registerTool } from "./router.js";
+import { registerTool } from "./router/index.js";
 import { runSelfUpdate, buildBanner, scheduleRestartIfNeeded } from "../core/self-update.js";
 import { detectInstallType } from "../cli/paths.js";
 

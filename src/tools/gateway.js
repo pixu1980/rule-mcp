@@ -260,7 +260,7 @@ export function validateApply(token, files, now = Date.now()) {
  * Register the rule_tool_gateway orchestration tool.
  */
 export async function registerGatewayTool() {
-  const { registerTool } = await import("./router.js");
+  const { registerTool } = await import("./router/index.js");
   const { z } = await import("zod/v4");
 
   const GatewaySchema = z.object({
@@ -319,7 +319,7 @@ export async function registerGatewayTool() {
 
       if (!core) {
         // ── Step 1: Route the prompt ──
-        const { callTool } = await import("./router.js");
+        const { callTool } = await import("./router/index.js");
         const routeResult = await callTool("pix_tool", {
           prompt,
           ...(path && { path }),

@@ -1,4 +1,4 @@
-// Auto-split from src/core/wcag-data.js - see ./wcag-data/index.js
+// Auto-split from src/core/wcag-data/index.js - see ./wcag-data/index.js
 /** WCAG 2.2 guideline 3.3 Understandable criteria. */
 export const CRITERIA_3_3 = {
   "3.3.1": {

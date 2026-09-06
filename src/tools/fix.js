@@ -14,7 +14,7 @@
  */
 
 import { z } from "zod/v4";
-import { registerTool } from "./router.js";
+import { registerTool } from "./router/index.js";
 import { scanFileTree, autoFixFileTree } from "../core/file-tree.js";
 
 const FixSchema = z.object({
