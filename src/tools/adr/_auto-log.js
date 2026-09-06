@@ -59,6 +59,7 @@ export async function autoLog(toolName, arguments_, result) {
   writeFileSync(join(adrDir, filename), content);
 
   const existing = listExistingAdrs(adrDir);
+
   updateAdrIndex(adrDir, existing);
 }
 
