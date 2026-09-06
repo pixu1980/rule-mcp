@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 /**
  * Template Engine Tests - Directives (loops, conditionals, etc.)
- * Tests per le direttive del Template Engine - Sintassi XML corretta
- * Conforme agli standard definiti in COPILOT_RULES.md
+ * Template Engine directives - correct XML syntax
+ * Conforms to the standards defined in COPILOT_RULES.md
  */
 
 import assert from "node:assert/strict";

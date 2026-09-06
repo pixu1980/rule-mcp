@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 /**
  * Template Engine Tests - Template Inheritance Complete Suite
- * Test completi per l'ereditarietà dei template e gli include con sintassi XML
- * Conforme agli standard definiti in COPILOT_RULES.md
+ * Complete suites for template inheritance and XML-syntax includes
+ * Conforms to the standards defined in COPILOT_RULES.md
  */
 
 import assert from "node:assert/strict";

@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 /**
  * Template Engine Tests - Built-in Filters Complete Suite
- * Test completi per i filtri built-in del template engine con copertura avanzata
- * Conforme agli standard definiti in COPILOT_RULES.md
+ * Complete suites for the template engine built-in filters with advanced coverage
+ * Conforms to the standards defined in COPILOT_RULES.md
  */
 
 import assert from "node:assert/strict";
