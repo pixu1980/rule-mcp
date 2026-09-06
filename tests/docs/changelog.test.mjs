@@ -28,7 +28,7 @@ const check = (label, ok) => {
 
 console.log("changelog generator test");
 
-const { buildChangelog, SECTION_FOR_TYPE } = await import("../../scripts/build-changelog.mjs");
+const { buildChangelog, SECTION_FOR_TYPE } = await import("../../scripts/build/changelog/index.mjs");
 
 const git = (root, ...args) => execFileSync("git", args, { cwd: root, encoding: "utf8" }).trim();
 

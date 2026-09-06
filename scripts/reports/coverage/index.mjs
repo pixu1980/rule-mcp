@@ -13,7 +13,7 @@
 import { spawnSync } from "node:child_process";
 import { readFileSync } from "node:fs";
 
-const packageRoot = new URL("../", import.meta.url);
+const packageRoot = new URL("../../../", import.meta.url);
 const { scripts } = JSON.parse(readFileSync(new URL("package.json", packageRoot), "utf8"));
 
 const batch = scripts["test:foundations"].replace(/^node --test /, "");

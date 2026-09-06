@@ -22,7 +22,7 @@ test("every shipped script has a published digest", () => {
   for (const name of scripts) {
     assert.ok(
       published.includes(`  scripts/${name}\n`),
-      `${name} has no published digest - run node scripts/checksums.mjs`,
+      `${name} has no published digest - run node scripts/build/checksums/index.mjs`,
     );
   }
 });

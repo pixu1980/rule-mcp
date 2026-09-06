@@ -644,7 +644,7 @@ pix-galaxy-mcp fix
 pix-galaxy-mcp fix --mode fix --no-dry-run
 
 # Standalone script
-node scripts/post-process.mjs --fix --no-dry-run
+node scripts/fix/post-process/index.mjs --fix --no-dry-run
 ```
 
 ---

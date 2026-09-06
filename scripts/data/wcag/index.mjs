@@ -25,7 +25,7 @@ import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 
 const SOURCE = "https://www.w3.org/WAI/WCAG22/wcag.json";
-const TARGET = fileURLToPath(new URL("../src/core/wcag-data/_criteria.data.js", import.meta.url));
+const TARGET = fileURLToPath(new URL("../../../src/core/wcag-data/_criteria.data.js", import.meta.url));
 const apply = process.argv.includes("--apply");
 
 /** Flatten the principle/guideline/criterion tree into one keyed record. */

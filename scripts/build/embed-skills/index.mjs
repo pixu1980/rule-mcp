@@ -16,7 +16,7 @@ import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const root = join(__dirname, "..");
+const root = join(__dirname, "..", "..", "..");
 const sourceSkillsDir = join(root, "skills");
 const targetSkillsDir = join(root, "skills"); // In-place: repo IS the source
 

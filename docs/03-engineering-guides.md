@@ -47,7 +47,7 @@ per skill by `src/core/guardrails.js` (`getGuardrails` / `checkCode`).
 
 ## The docs pipeline
 
-Numbered docs are partly generated. `scripts/generate-census.mjs` refreshes the
+Numbered docs are partly generated. `scripts/reports/census/index.mjs` refreshes the
 blocks between `<!-- census:begin/end:<marker> -->` markers in the numbered
 docs and is wired into `prebuild`:
 

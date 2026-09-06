@@ -335,7 +335,7 @@ test("no tier above the normalized key is wired in", async () => {
   // Measured over 224 rephrasings the normalized key cannot answer, no threshold
   // both replays something and replays it correctly: 0.90 replays nothing, 0.85
   // is 13% wrong, 0.80 is 16% wrong. ADR 056 has the reasoning, and
-  // scripts/cache-similarity-report.mjs reproduces the number.
+  // scripts/reports/cache-similarity/index.mjs reproduces the number.
   //
   // This test exists so the absence is deliberate rather than forgotten. If a
   // future tier lands, it changes this assertion and has to bring a report

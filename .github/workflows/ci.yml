@@ -24,7 +24,7 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
       - name: Embed skills
-        run: node scripts/embed-skills.mjs
+        run: node scripts/build/embed-skills/index.mjs
       - name: Check syntax (all source files)
         run: find bin src -name "*.js" -exec node --check {} \;
       - name: ESLint
@@ -50,7 +50,7 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
       - name: Embed skills
-        run: node scripts/embed-skills.mjs
+        run: node scripts/build/embed-skills/index.mjs
       - name: Run unit tests
         run: node tests/smoke.mjs
       - name: Run ai routing tests
