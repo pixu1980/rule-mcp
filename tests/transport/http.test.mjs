@@ -1,7 +1,7 @@
 /**
  * @module test/http.test
  *
- * Integration tests for the Streamable HTTP transport (transport/_http.js).
+ * Integration tests for the Streamable HTTP transport (transport/http/index.js).
  * Exercises the MCP spec 2025-03-26+ handshake: initialize → session id →
  * authenticated tools/list, plus auth and session-validation edge cases.
  */
@@ -28,7 +28,7 @@ const TOKEN = process.env.RULE_MCP_SSE_TOKEN;
 const ACCEPT = "application/json, text/event-stream";
 
 import { loadAllSkills } from "../../src/core/skills/_skills.js";
-import { startHttpServer, stopHttpServer } from "../../src/transport/_http.js";
+import { startHttpServer, stopHttpServer } from "../../src/transport/http/index.js";
 
 await loadAllSkills();
 
