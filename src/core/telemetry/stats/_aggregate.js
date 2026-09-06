@@ -51,6 +51,7 @@ export function aggregate(events = []) {
 
     for (const [source, value] of Object.entries(event.saved ?? {})) {
       const amount = Number(value) || 0;
+
       savedTokens += amount;
       savedBySource[source] = (savedBySource[source] ?? 0) + amount;
     }

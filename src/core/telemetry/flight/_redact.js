@@ -50,6 +50,7 @@ export function redactFlight(flight) {
       }
     }
   };
+
   scrubPath(copy.session);
   scrubPath(copy.sessions);
   scrubPath(copy.rollups);

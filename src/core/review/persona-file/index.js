@@ -19,5 +19,5 @@
  * into that chain.
  */
 
-export { parsePersonaFile } from "./_parse.js";
-export { formatPersonaFile } from "./_format.js";
+export * from "./_parse.js";
+export * from "./_format.js";

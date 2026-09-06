@@ -16,7 +16,7 @@
  * @see module:core/telemetry/store - where the events come from
  */
 
-export { percentile } from "./_percentile.js";
-export { aggregate } from "./_aggregate.js";
-export { renderStats } from "./_render-stats.js";
-export { renderFlight } from "./_render-flight.js";
+export * from "./_percentile.js";
+export * from "./_aggregate.js";
+export * from "./_render-stats.js";
+export * from "./_render-flight.js";

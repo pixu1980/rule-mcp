@@ -74,6 +74,7 @@ export function rollup(options = {}) {
 
   for (const [date, day] of byDay) {
     const previous = existing.get(date);
+
     existing.set(
       date,
       previous

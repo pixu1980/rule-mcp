@@ -36,6 +36,7 @@ export async function handleSseOpen(res) {
     }
     void server.close().catch(() => {});
   };
+
   transport.onclose = closeSession;
   transport.onerror = closeSession;
 

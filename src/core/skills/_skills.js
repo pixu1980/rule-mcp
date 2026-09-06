@@ -12,7 +12,7 @@
  */
 import { z } from "zod/v4";
 import { getSkillNames, registerTool, clearTools, retainTools } from "../../tools/router/index.js";
-import { registerSkillTool, registerSearchTool, registerCheckTool, registerScaffoldTool } from "../../tools/skill.js";
+import { registerSkillTool, registerSearchTool, registerCheckTool, registerScaffoldTool } from "../../tools/skill/index.js";
 import { registerAiTool } from "../../tools/ai/index.js";
 import { registerProcessAdrTool } from "../../tools/adr/index.js";
 import { registerFixTool } from "../../tools/fix.js";
@@ -191,7 +191,7 @@ export async function loadAllSkills(force = false) {
   }
 
   buildIndex();
-  const { registerTemplateTool } = await import("../scaffold/_templates.js");
+  const { registerTemplateTool } = await import("../scaffold/templates/index.js");
   registerTemplateTool();
 
   // Enforce the minimal surface as a hard allowlist - guarantees a small, fixed

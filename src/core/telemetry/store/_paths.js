@@ -28,6 +28,7 @@ export function usageFile() {
 export function ensureDirectory() {
   try {
     const { dir } = getProjectPaths();
+
     mkdirSync(dir, { recursive: true });
 
     return true;

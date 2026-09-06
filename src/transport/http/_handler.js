@@ -92,6 +92,7 @@ export async function requestHandler(request, res) {
     res.end(JSON.stringify({ error: "Method not allowed" }));
   } catch (error) {
     const requestId = randomUUID();
+
     process.stderr.write(
       `[pix-galaxy-mcp] [${requestId}] ${request.method} ${request.url}: ${error?.stack ?? error?.message ?? error}\n`,
     );

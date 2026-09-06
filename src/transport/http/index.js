@@ -24,5 +24,5 @@
  * @see module:transport/sse-auth - shared bearer token
  */
 
-export { startHttpServer } from "./_start.js";
-export { stopHttpServer } from "./_stop.js";
+export * from "./_start.js";
+export * from "./_stop.js";

@@ -43,6 +43,7 @@ export function renderStats(stats, options = {}) {
     const rows = order
       .filter((tier) => stats.byTier[tier] !== undefined)
       .map((tier) => `  ${String(stats.byTier[tier]).padStart(5)}  ${tier}`);
+
     lines.push("## Cache, by tier", "", ...rows, "");
   }
 

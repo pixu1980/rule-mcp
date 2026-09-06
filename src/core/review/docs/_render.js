@@ -7,6 +7,7 @@ function header(title, role, version, date) {
   return [`# ${title}`, "", `- **Role**: ${role} v${version}`, `- **Date**: ${date}`, ""];
 }
 
+/** Render the audit skeleton: header plus the empty evidence table. */
 export function renderAudit(role, version, date) {
   return [
     ...header(`${role} audit`, role, version, date),
@@ -21,6 +22,7 @@ export function renderAudit(role, version, date) {
   ].join("\n");
 }
 
+/** Render the review: header, provenance note and the findings table. */
 export function renderReview(role, version, date, findings) {
   const rows = findings.map((finding) => [
     finding.id,
@@ -40,6 +42,7 @@ export function renderReview(role, version, date, findings) {
   ].join("\n");
 }
 
+/** Render the plan: header, provenance note and one step per open finding. */
 export function renderPlan(role, version, date, open) {
   const rows = open.map((finding, index) => [String(index + 1), finding.id, finding.severity, finding.summary]);
 
