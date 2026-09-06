@@ -22,6 +22,7 @@
  */
 
 import { scanFileTree, autoFixFileTree } from "../../../src/core/file-tree/index.js";
+import { printHelp } from "./_help.mjs";
 
 // ─── CLI args ────────────────────────────────────────────────────────────────
 
@@ -39,34 +40,10 @@ const SRC_IDX = args.indexOf("--src-dir");
 const SRC_DIR = SRC_IDX === -1 ? "src" : args[SRC_IDX + 1];
 
 // ─── Help ────────────────────────────────────────────────────────────────────
-
 if (HELP) {
-  console.log(`
-Usage: node scripts/post-process.mjs [options]
-
-Validate and auto-fix project file tree structure against rule AI conventions.
-
-Options:
-  --dir <path>      Project root directory (default: .)
-  --src-dir <path>  Source directory relative to root (default: src)
-  --fix             Apply auto-fixes (default: lint-only)
-  --no-dry-run      Actually apply fixes (default: dry-run preview)
-  --json            Output as JSON (machine-readable)
-  --help            Show this help
-
-Examples:
-  node scripts/post-process.mjs                      # Lint project
-  node scripts/post-process.mjs --fix --no-dry-run   # Auto-fix project
-  node scripts/post-process.mjs --src-dir app         # Custom source dir
-  node scripts/post-process.mjs --json | jq .         # JSON output
-
-Exit codes:
-  0 - All clean (or all fixed)
-  1 - Issues remain (or errors during fix)
-`);
+  printHelp();
   process.exit(0);
 }
-
 // ─── Main ────────────────────────────────────────────────────────────────────
 
 async function main() {

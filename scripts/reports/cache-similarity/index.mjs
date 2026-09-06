@@ -41,7 +41,6 @@ const asJson = process.argv.includes("--json");
 
 const { loadAllSkills } = await import("../../../src/core/skills/_skills.js");
 const { callTool } = await import("../../../src/tools/router/index.js");
-const { canonicalizeQuery } = await import("../../../src/core/bm25/index.js");
 const { CORPUS } = await import("../../../tests/fixtures/routing-corpus.mjs");
 
 await loadAllSkills(true);
@@ -49,38 +48,8 @@ await loadAllSkills(true);
 /** Thresholds worth reporting. Below 0.6 the candidates stop being rephrasings. */
 const THRESHOLDS = [0.9, 0.85, 0.8, 0.75, 0.7, 0.65, 0.6];
 
-/**
- * What a second person plausibly types for the same question.
- *
- * Deliberately not paraphrases: each variant keeps the words and changes the
- * framing, which is the case a similarity tier is supposed to catch and the
- * hardest case to distinguish from a different question.
- *
- * @param {string} prompt
- * @returns {string[]}
- */
-function variants(prompt) {
-  const words = prompt.trim().split(/\s+/);
+const { jaccard, terms, variants } = await import("./_similarity.mjs");
 
-  return [
-    words.slice(0, -1).join(" "),
-    `${prompt} in my project`,
-    words.slice(1).join(" "),
-    `${words.slice(0, -1).join(" ")} best approach`,
-  ].filter((variant) => variant.trim().split(/\s+/).length >= 2);
-}
-
-const terms = (text) => new Set(canonicalizeQuery(text).split(" ").filter(Boolean));
-
-/** @param {Set<string>} a @param {Set<string>} b @returns {number} */
-function jaccard(a, b) {
-  const union = new Set([...a, ...b]);
-  if (union.size === 0) {
-    return 0;
-  }
-
-  return [...a].filter((term) => b.has(term)).length / union.size;
-}
 
 /** @param {string} prompt @returns {Promise<string>} */
 async function routeOf(prompt) {
