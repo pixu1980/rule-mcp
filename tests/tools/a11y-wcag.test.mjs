@@ -33,7 +33,7 @@ import {
   criterion,
 } from "../../src/core/wcag-data/index.js";
 import { checkCode } from "../../src/core/guardrails/index.js";
-import { buildReport } from "../../src/tools/a11y.js";
+import { buildReport } from "../../src/tools/a11y/index.js";
 
 // ── T1: the vendored criteria ──
 check("T1 WCAG 2.2 is what we vendored", WCAG_VERSION === "2.2");

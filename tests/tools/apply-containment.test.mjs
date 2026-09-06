@@ -22,7 +22,7 @@ import { mkdtempSync, mkdirSync, symlinkSync, realpathSync, writeFileSync } from
 import { tmpdir, homedir } from "node:os";
 import { join, parse, sep } from "node:path";
 
-import { resolveProjectRoot, resolveWriteTarget, canonicalFilesDigest } from "../../src/tools/apply.js";
+import { resolveProjectRoot, resolveWriteTarget, canonicalFilesDigest } from "../../src/tools/apply/index.js";
 
 /** A realpath'd temp project root (macOS /tmp is a symlink to /private/tmp). */
 const project = realpathSync(mkdtempSync(join(tmpdir(), "rule-apply-")));

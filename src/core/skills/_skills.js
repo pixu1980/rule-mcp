@@ -15,10 +15,10 @@ import { getSkillNames, registerTool, clearTools, retainTools } from "../../tool
 import { registerSkillTool, registerSearchTool, registerCheckTool, registerScaffoldTool } from "../../tools/skill/index.js";
 import { registerAiTool } from "../../tools/ai/index.js";
 import { registerProcessAdrTool } from "../../tools/adr/index.js";
-import { registerFixTool } from "../../tools/fix.js";
+import { registerFixTool } from "../../tools/fix/index.js";
 import { registerProcessHandoffTool } from "../../tools/handoff/index.js";
 import { registerGatewayTool } from "../../tools/gateway/index.js";
-import { registerApplyTool } from "../../tools/apply.js";
+import { registerApplyTool } from "../../tools/apply/index.js";
 import { detectProject, getFrameworkSuggestion } from "../detector.js";
 
 /**
@@ -173,7 +173,7 @@ export async function loadAllSkills(force = false) {
   registerStatsTool();
   const { registerUsageTool } = await import("../../tools/usage.js");
   registerUsageTool();
-  const { registerA11yReportTool } = await import("../../tools/a11y.js");
+  const { registerA11yReportTool } = await import("../../tools/a11y/index.js");
   registerA11yReportTool();
   const { registerProcessHandonTool } = await import("../../tools/handon/index.js");
   registerProcessHandonTool();
