@@ -191,18 +191,19 @@ Write ADRs/docs, follow BMAD, feature workflow, and handoff.
 
 Apply HTML/CSS/JS/JSON/Markdown/a11y/naming/validation standards.
 
-| Skill                                                              | Tool                        | Frameworks | Use when                                                                                                                 |
-| ------------------------------------------------------------------ | --------------------------- | ---------- | ------------------------------------------------------------------------------------------------------------------------ |
-| [rule-styleguide](../rule-styleguide/SKILL.md)                       | `pix_styleguide`            | all        | Central index of all rule coding style guides. Delegates to specialized sub-skills: HTML semantics, CSS architectu...     |
-| [rule-styleguide-a11y](../rule-styleguide-a11y/SKILL.md)             | `pix_styleguide_a11y`       | all        | WCAG 2.2 AA accessibility: semantic HTML, ARIA, keyboard navigation, color contrast, forms, media, automated testing...  |
-| [rule-styleguide-css](../rule-styleguide-css/SKILL.md)               | `pix_styleguide_css`        | all        | CSS architecture, selector strategy (data-part, element), naming conventions, property ordering, custom properties, c... |
-| [rule-styleguide-html](../rule-styleguide-html/SKILL.md)             | `pix_styleguide_html`       | all        | Semantic HTML, document structure, template engine syntax, accessibility essentials, and element conventions for fron... |
-| [rule-styleguide-javascript](../rule-styleguide-javascript/SKILL.md) | `pix_styleguide_javascript` | all        | JavaScript conventions: naming, functions, classes, async patterns, DOM manipulation, custom elements, static initial... |
-| [rule-styleguide-json](../rule-styleguide-json/SKILL.md)             | `pix_styleguide_json`       | all        | JSON structure conventions: validity, property naming, date formats, numeric precision, schema mindset, and API respo... |
-| [rule-styleguide-markdown](../rule-styleguide-markdown/SKILL.md)     | `pix_styleguide_markdown`   | all        | Markdown documentation style: document structure, headings, lists, code blocks, formatting, tables, links, and tone f... |
-| [rule-styleguide-naming](../rule-styleguide-naming/SKILL.md)         | `pix_styleguide_naming`     | all        | Naming conventions and file tree structure: PascalCase, camelCase, UPPER_SNAKE_CASE, underscore prefix rule, barrel p... |
-| [rule-styleguide-patterns](../rule-styleguide-patterns/SKILL.md)     | `pix_styleguide_patterns`   | all        | Quick reference cheat sheet for naming conventions, property ordering, file tree structure, and common patterns. Cond... |
-| [rule-styleguide-validation](../rule-styleguide-validation/SKILL.md) | `pix_styleguide_validation` | all        | Cross-border business validation patterns: email, phone, VAT, tax IDs, postal codes, national identification numbers,... |
+| Skill                                                              | Tool                        | Frameworks | Use when                                                                                                                            |
+| ------------------------------------------------------------------ | --------------------------- | ---------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| [rule-styleguide](../rule-styleguide/SKILL.md)                       | `pix_styleguide`            | all        | Central index of all rule coding style guides. Delegates to specialized sub-skills: HTML semantics, CSS architectu...                |
+| [rule-styleguide-a11y](../rule-styleguide-a11y/SKILL.md)             | `pix_styleguide_a11y`       | all        | WCAG 2.2 AA accessibility: semantic HTML, ARIA, keyboard navigation, color contrast, forms, media, automated testing...             |
+| [rule-styleguide-css](../rule-styleguide-css/SKILL.md)               | `pix_styleguide_css`        | all        | CSS architecture, selector strategy (data-part, element), naming conventions, property ordering, custom properties, c...            |
+| [rule-styleguide-html](../rule-styleguide-html/SKILL.md)             | `pix_styleguide_html`       | all        | Semantic HTML, document structure, template engine syntax, accessibility essentials, and element conventions for fron...            |
+| [rule-styleguide-javascript](../rule-styleguide-javascript/SKILL.md) | `pix_styleguide_javascript` | all        | JavaScript conventions: naming, functions, classes, async patterns, DOM manipulation, custom elements, static initial...            |
+| [rule-styleguide-json](../rule-styleguide-json/SKILL.md)             | `pix_styleguide_json`       | all        | JSON structure conventions: validity, property naming, date formats, numeric precision, schema mindset, and API respo...            |
+| [rule-styleguide-markdown](../rule-styleguide-markdown/SKILL.md)     | `pix_styleguide_markdown`   | all        | Markdown documentation style: document structure, headings, lists, code blocks, formatting, tables, links, and tone f...            |
+| [rule-styleguide-english](../rule-styleguide-english/SKILL.md)       | `pix_styleguide_english`    | all        | English-only prose and American spelling: comments, identifiers and documents in English, US spellings (color, behavior, organiz... |
+| [rule-styleguide-naming](../rule-styleguide-naming/SKILL.md)         | `pix_styleguide_naming`     | all        | Naming conventions and file tree structure: PascalCase, camelCase, UPPER_SNAKE_CASE, underscore prefix rule, barrel p...            |
+| [rule-styleguide-patterns](../rule-styleguide-patterns/SKILL.md)     | `pix_styleguide_patterns`   | all        | Quick reference cheat sheet for naming conventions, property ordering, file tree structure, and common patterns. Cond...            |
+| [rule-styleguide-validation](../rule-styleguide-validation/SKILL.md) | `pix_styleguide_validation` | all        | Cross-border business validation patterns: email, phone, VAT, tax IDs, postal codes, national identification numbers,...            |
 
 ### Toolchain
 

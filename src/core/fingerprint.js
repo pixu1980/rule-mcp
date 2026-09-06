@@ -128,6 +128,7 @@ const ISE_STEMS = [
   "idealis",
   "individualis",
   "initialis",
+  "internationalis",
   "itemis",
   "legalis",
   "liberalis",

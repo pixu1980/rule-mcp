@@ -329,6 +329,36 @@ export const CORPUS = [
     why: "the American spelling of the same word",
     code: `// Normalize the path before comparing it.\nexport function normalize(path) {\n  return path;\n}\n`,
   },
+  {
+    rule: "en-english-only-prose",
+    skill: JS,
+    label: "bad",
+    why: "an Italian comment in a codebase that declared English-only",
+    code: `// il totale è calcolato senza considerare lo sconto\nexport function total(rows) {\n  return rows.length;\n}\n`,
+  },
+  {
+    rule: "en-english-only-prose",
+    skill: JS,
+    label: "bad",
+    fileName: "docs/audits/security.md",
+    why: "a generated markdown document with foreign prose must fire in docs mode",
+    code: `# Audit\n\nEvidence collected during the run, senza opinioni personali.\n`,
+  },
+  {
+    rule: "en-english-only-prose",
+    skill: JS,
+    label: "good",
+    why: "English comment and English identifier",
+    code: `// Total the rows without applying any discount.\nexport function total(rows) {\n  return rows.length;\n}\n`,
+  },
+  {
+    rule: "en-english-only-prose",
+    skill: JS,
+    label: "good",
+    fileName: "docs/audits/security.md",
+    why: "an English markdown document passes whole-prose",
+    code: `# Audit\n\nEvidence collected during the run, without any personal opinions.\n`,
+  },
 
   // ── TypeScript ──
   {

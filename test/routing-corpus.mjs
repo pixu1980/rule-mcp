@@ -23,7 +23,7 @@ export const CORPUS = [
   { prompt: "Vue 3 component with Composition API", expect: "frontend-vue", area: "frontend" },
   { prompt: "svelte store for shared state", expect: "frontend-svelte", area: "frontend" },
   { prompt: "angular standalone component with signals", expect: "frontend-angular", area: "frontend" },
-  { prompt: "astro island that hydrates on visible", expect: "frontend-astro", area: "frontend" },
+  { prompt: "astro island that hydrates on visible", expect: "frontend-meta-astro", area: "frontend" },
 
   // ── TypeScript: the split added in P3 ──
   { prompt: "should I use enum or a union type", expect: "styleguide-typescript", area: "styleguide" },
@@ -103,7 +103,12 @@ export const CORPUS = [
   { prompt: "make this text shorter and less verbose", expect: "caveman", area: "output" },
   {
     prompt: "remove em dashes and use american english spelling",
-    expect: "styleguide-fingerprint",
+    expect: "styleguide-english",
+    area: "styleguide",
+  },
+  {
+    prompt: "americanize the comments: colour -> color, behaviour -> behavior",
+    expect: "styleguide-english",
     area: "styleguide",
   },
   {
@@ -196,9 +201,9 @@ export const PERSONAS = [
   { prompt: "agisci come un esperto di privacy e verifica cosa finisce su disco", role: "privacy" },
   { prompt: "as a performance engineer, find what is slow and plan it", role: "performance" },
   { prompt: "agisci come un performance engineer e trova cosa e lento", role: "performance" },
-  { prompt: "act as a documentation engineer and audit the docs", role: "docs-engineer" },
-  { prompt: "agisci come un documentation engineer e controlla la documentazione", role: "docs-engineer" },
-  { prompt: "act as an AI engineer and review the agent loop", role: "ai-engineer" },
+  { prompt: "act as a documentation engineer and audit the docs", role: "docs" },
+  { prompt: "agisci come un documentation engineer e controlla la documentazione", role: "docs" },
+  { prompt: "act as an AI engineer and review the agent loop", role: "ai" },
   { prompt: "in the role of a security engineer, threat model the transports", role: "security" },
 ];
 

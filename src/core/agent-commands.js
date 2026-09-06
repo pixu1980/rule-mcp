@@ -106,10 +106,11 @@ const ROUTER = {
     "2. Load the primary routed `rule-*` skill and only the necessary secondary skills.",
     "3. Use the returned skill/tool evidence as source of truth. Never invent APIs, files, dependencies, commands, requirements, or successful checks.",
     "4. If evidence is missing, call `pix_search`; if still missing, state uncertainty instead of guessing.",
-    "5. Implement with failing tests first when code changes.",
-    "6. Run `pix_check` against generated code. Fix every failure and rerun until all guardrails pass.",
-    "7. Run project tests/typecheck. Report commands and real outcomes; never claim unexecuted checks passed.",
-    "8. Finish by proposing a conventional commit message with a mandatory scope.",
+    "5. Write every comment, identifier, commit message and generated document in English, American spelling (color, behavior, organize - see rule-styleguide-english).",
+    "6. Implement with failing tests first when code changes.",
+    "7. Run `pix_check` against generated code. Fix every failure and rerun until all guardrails pass.",
+    "8. Run project tests/typecheck. Report commands and real outcomes; never claim unexecuted checks passed.",
+    "9. Finish by proposing a conventional commit message with a mandatory scope.",
     "",
     "Caveman is implicit: if the user is working in caveman mode, keep every response compressed.",
   ].join("\n"),
@@ -135,7 +136,8 @@ const HANDOFF_BODY = [
   "3. Persist the handoff: write it to `docs/handoff/<NN>-<slug>.md` where NN is the next free two-digit number in that directory and <slug> is a kebab-case topic (e.g. `13-security-audit-remediation.md`). Open with the branch, the commit range it covers, and the date. Then commit that file ALONE - no other paths - as `chore(handoff): add session handoff <NN>-<slug>`. A handoff that exists only in the chat is lost when the session ends.",
   "4. Present the handoff as a paste-ready block for the next session, including the commit-scope convention reminder, the path of the handoff file, and the list of commits just created.",
   "5. If the grouping into atomic commits is ambiguous, ask the user how to split before committing.",
-  "6. Caveman is implicit: if the user is working in caveman mode, keep the handoff and every response compressed.",
+  "6. Write the handoff and every commit message in English, American spelling (color, behavior, organize).",
+  "7. Caveman is implicit: if the user is working in caveman mode, keep the handoff and every response compressed.",
 ].join("\n");
 
 /**
@@ -155,8 +157,9 @@ function areaBody(description) {
     "2. Never invent APIs, files, dependencies, commands, or requirements not present in the evidence; if evidence is missing, call `pix_search` or state uncertainty.",
     "3. Baseline: write failing tests first (TDD) and cover a11y (WCAG 2.2 AA) where applicable; if there is no test/a11y surface, ask the user what to cover.",
     "4. Validate generated code with `pix_check`; iterate until all guardrails pass.",
-    "5. Finish by proposing a conventional commit message with a mandatory scope.",
-    "6. Caveman is implicit: if the user is working in caveman mode, keep the response compressed.",
+    "5. Write every comment, identifier and generated document in English, American spelling (color, behavior, organize - see rule-styleguide-english).",
+    "6. Finish by proposing a conventional commit message with a mandatory scope.",
+    "7. Caveman is implicit: if the user is working in caveman mode, keep the response compressed.",
   ].join("\n");
 }
 
