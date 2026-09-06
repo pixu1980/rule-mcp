@@ -23,7 +23,7 @@ await loadAllSkills();
 
 /** Files that carry violating code as data, with the reason each one does. */
 const CATALOGS = new Map([
-  ["quality.js", "every ported rule's counterexample lives here as a pattern or a sample"],
+  ["core/guardrails/quality/", "every ported rule's counterexample lives here as a pattern or a sample"],
   ["shared.js", "every shared rule's counterexample lives here (catalog grouping)"],
   ["core/guardrails/framework/", "the framework rule catalogs (react/vue/angular/svelte/js/vanilla slices) quote the markup and CSS they generate"],
   ["file-tree.js", "file-tree rules carry their own sample trees and generated file shapes as data"],
