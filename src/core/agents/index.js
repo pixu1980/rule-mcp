@@ -3,4 +3,4 @@ export * from "./_commands.js";
 export * from "./_command-targets.js";
 export * from "./_hooks.js";
 export * from "./_integrations.js";
-export * from "./_transcripts.js";
+export * from "./transcripts/index.js";
