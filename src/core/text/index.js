@@ -4,4 +4,4 @@ export * from "./_block-spacing.js";
 export * from "./_caveman.js";
 export * from "./_caveman-aggressive.js";
 export * from "./_en-english.js";
-export * from "./_fingerprint.js";
+export * from "./fingerprint/index.js";

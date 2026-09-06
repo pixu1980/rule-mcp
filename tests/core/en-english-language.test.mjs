@@ -24,7 +24,7 @@ import { join } from "node:path";
 import test from "node:test";
 
 import { getGuardrails, checkCode } from "../../src/core/guardrails/index.js";
-import { findFingerprints } from "../../src/core/text/_fingerprint.js";
+import { findFingerprints } from "../../src/core/text/fingerprint/index.js";
 import { loadAllSkills } from "../../src/core/skills/_skills.js";
 
 await loadAllSkills(true);

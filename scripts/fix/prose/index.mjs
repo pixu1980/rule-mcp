@@ -27,7 +27,7 @@ import { execFileSync } from "node:child_process";
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { compressText } from "../../../src/core/text/_caveman.js";
 import { alignAsciiBoxes, findRaggedBoxes } from "../../../src/core/text/ascii-box/index.js";
-import { findFingerprints, stripFingerprint } from "../../../src/core/text/_fingerprint.js";
+import { findFingerprints, stripFingerprint } from "../../../src/core/text/fingerprint/index.js";
 import { SKIP, TRACKED } from "./_targets.data.mjs";
 
 const arguments_ = process.argv.slice(2);

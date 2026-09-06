@@ -36,7 +36,6 @@ export const FILE_SIZE_RATCHET = new Map([
   ["src/core/text/_block-spacing.js", 275],
   ["src/core/text/_caveman.js", 198],
   ["src/core/text/_en-english.js", 245],
-  ["src/core/text/_fingerprint.js", 289],
   ["src/core/tokensave.js", 273],
   ["src/prompts/_handoff-options.js", 162],
   ["src/resources/index.js", 204],

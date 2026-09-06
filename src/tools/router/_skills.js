@@ -4,6 +4,7 @@ import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { getSkillsDirs as getSkillsDirectories } from "../../cli/paths.js";
 import { join } from "node:path";
 import { parseSkillFrontmatter } from "../../core/skills/_frontmatter.js";
+
 function readSkill(skillName) {
   const { embeddedSkills } = getSkillsDirectories();
   try {
