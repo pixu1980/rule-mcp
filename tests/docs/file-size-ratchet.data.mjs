@@ -19,8 +19,6 @@ export const FILE_SIZE_RATCHET = new Map([
   ["src/cli/roles.js", 257],
   ["src/cli/skills-install.js", 293],
   ["src/cli/tui.js", 196],
-  ["src/core/agents/_command-targets.js", 339],
-  ["src/core/agents/_commands.js", 314],
   ["src/core/agents/_hooks.js", 167],
   ["src/core/agents/_integrations.js", 205],
   ["src/core/bm25/_cache.js", 166],

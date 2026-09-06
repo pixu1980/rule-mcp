@@ -2,7 +2,7 @@
  * @module test/agent-commands-generator
  *
  * Validates the registry-driven agent slash-command generator
- * (src/core/agents/_commands.js):
+ * (src/core/agents/commands/index.js):
  *   - canonical order: rule-mcp router pinned first, rest alphabetical
  *   - coverage: one command per MCP prompt + the router
  *   - render formats: args (md frontmatter), workflow (md heading), gemini (toml)
@@ -20,7 +20,7 @@ import {
   listAgentCommands,
   renderAgentCommand,
   renderAgentCommandFiles,
-} from "../../src/core/agents/_commands.js";
+} from "../../src/core/agents/commands/index.js";
 
 console.log("agent-commands generator test");
 

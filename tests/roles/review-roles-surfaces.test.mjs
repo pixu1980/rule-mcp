@@ -16,7 +16,7 @@ import test from "node:test";
 import { activeRoles } from "../../src/core/review/roles/index.js";
 import { OPERATIONS } from "../../src/core/review/template/index.js";
 import { getPrompt, listPrompts } from "../../src/prompts/index.js";
-import { listAgentCommands } from "../../src/core/agents/_commands.js";
+import { listAgentCommands } from "../../src/core/agents/commands/index.js";
 import { callTool, listTools } from "../../src/tools/router/index.js";
 
 const { registerPlanTool } = await import("../../src/tools/plan.js");

@@ -25,13 +25,13 @@ import {
   agentsWithCleanCommands,
   resolveCommandTargets,
   suppressesMcpPrompts,
-} from "../../src/core/agents/_command-targets.js";
+} from "../../src/core/agents/command-targets/index.js";
 import {
   FORMAT_EXT,
   renderAgentCommand,
   renderAgentCommandFiles,
   listAgentCommands,
-} from "../../src/core/agents/_commands.js";
+} from "../../src/core/agents/commands/index.js";
 import { getAllAgents } from "../../src/cli/install.js";
 
 console.log("agent command targets test");

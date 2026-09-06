@@ -152,7 +152,7 @@ test("the skill's wordlist matches the fingerprint dictionary exactly (no drift)
 });
 
 test("every shared prompt/command surface carries the English mandate", async () => {
-  const { commandDefinition } = await import("../../src/core/agents/_commands.js");
+  const { commandDefinition } = await import("../../src/core/agents/commands/index.js");
   const surfaces = [
     ["router command", commandDefinition("rule").body],
     ["handoff command", commandDefinition("rule-handoff").body],

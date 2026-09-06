@@ -1,10 +1,10 @@
 /** Agent-command target resolution, printing and syncing helpers. */
 
-import { FORMAT_EXT, commandNames, renderAgentCommandFiles } from "../../core/agents/_commands.js";
+import { FORMAT_EXT, commandNames, renderAgentCommandFiles } from "../../core/agents/commands/index.js";
 import { existsSync, mkdirSync, readdirSync, rmSync, writeFileSync } from "node:fs";
 import { print } from "./_shared.js";
 import { resolve } from "node:path";
-import { resolveCommandTargets } from "../../core/agents/_command-targets.js";
+import { resolveCommandTargets } from "../../core/agents/command-targets/index.js";
 function resolvedTargets(opts) {
   return resolveCommandTargets(opts.agent ? { agent: opts.agent } : { detectedOnly: true });
 }
