@@ -14,7 +14,7 @@
 
 import { Worker } from "node:worker_threads";
 
-import { checkCode } from "./_engine.js";
+import { checkCode } from "./engine/index.js";
 
 /** Default per-check budget; RULE_MCP_CHECK_TIMEOUT_MS overrides. */
 const DEFAULT_TIMEOUT_MS = 5000;

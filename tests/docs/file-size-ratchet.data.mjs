@@ -26,7 +26,6 @@ export const FILE_SIZE_RATCHET = new Map([
   ["src/core/detector.js", 179],
   ["src/core/enforcement.js", 288],
   ["src/core/guardrails/_backend.js", 173],
-  ["src/core/guardrails/_engine.js", 338],
   ["src/core/guardrails/_file-tree.js", 167],
   ["src/core/guardrails/_guarded.js", 179],
   ["src/core/scaffold/_template-data.js", 248],
