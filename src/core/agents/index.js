@@ -1,6 +1,6 @@
 /** Agent integration barrel: commands, targets, hooks, integrations, transcripts. */
-export * from "./_commands.js";
-export * from "./_command-targets.js";
+export * from "./commands/index.js";
+export * from "./command-targets/index.js";
 export * from "./_hooks.js";
 export * from "./_integrations.js";
 export * from "./transcripts/index.js";
