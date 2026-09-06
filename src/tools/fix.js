@@ -15,7 +15,7 @@
 
 import { z } from "zod/v4";
 import { registerTool } from "./router/index.js";
-import { scanFileTree, autoFixFileTree } from "../core/file-tree.js";
+import { scanFileTree, autoFixFileTree } from "../core/file-tree/index.js";
 
 const FixSchema = z.object({
   path: z.string().optional().default(".").describe("Project root directory to scan"),
@@ -49,7 +49,7 @@ export function registerFixTool() {
 
       // ── Generate mode: create component file tree ──
       if (mode === "generate") {
-        const { generateComponentFiles } = await import("../core/file-tree.js");
+        const { generateComponentFiles } = await import("../core/file-tree/index.js");
         const { writeFileSync, mkdirSync } = await import("node:fs");
         const { dirname, join, resolve, relative } = await import("node:path");
 

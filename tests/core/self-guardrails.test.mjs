@@ -24,7 +24,7 @@ await loadAllSkills();
 /** Files that carry violating code as data, with the reason each one does. */
 const CATALOGS = new Map([
   ["core/guardrails/", "the rule catalogs (shared/file-tree/framework/quality slices) quote the counterexamples they flag"],
-  ["file-tree.js", "the file-tree checker carries its own sample trees and generated file shapes as data"],
+  ["core/file-tree/", "the file-tree checker and generator carry sample trees and generated file shapes as data"],
   ["_block-spacing.js", "the block-spacing checker quotes the one-line blocks it forbids as examples"],
   ["_template-data.js", "component templates are emitted as strings, stubs included"],
   ["_templates.js", "the template catalog quotes the markup and CSS it generates"],
