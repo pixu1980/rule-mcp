@@ -25,7 +25,7 @@ mkdirSync(join(project, "src", "components", "ContactCard"), { recursive: true }
 writeFileSync(join(project, "src", "components", "ContactCard", "index.js"), "export * from './_ContactCard.jsx';\n");
 writeFileSync(join(project, "src", "components", "ContactCard", "_ContactCard.jsx"), "const a = 1;\nconst b = 2;\n");
 
-const { snapshotProject } = await import("../../../src/core/session/_snapshot.js");
+const { snapshotProject } = await import("../../../src/core/session/snapshot/index.js");
 const snapshot = snapshotProject(project);
 
 const { computeKpi } = await import("../../../src/core/telemetry/kpi/index.js");

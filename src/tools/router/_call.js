@@ -8,7 +8,7 @@ import { consumeUpdateBanner, maybeSelfUpdate } from "../../core/self-update/ind
 import { dependenciesOf, entryPathOf, routedSkillOf } from "./_entry.js";
 import { enforcementError } from "../../core/enforcement.js";
 import { recordToolCall } from "../../core/telemetry/recorder/index.js";
-import { resumeAnnouncement } from "../../core/session/_resume.js";
+import { resumeAnnouncement } from "../../core/session/resume/index.js";
 import { touchActivity } from "../../core/session/_reclaim.js";
 import { z } from "zod/v4";
 async function callTool(name, args) {

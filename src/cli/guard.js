@@ -22,7 +22,7 @@ import { extname } from "node:path";
 import { isCommitCommand, isMigrationCommand } from "../core/agents/_hooks.js";
 import { promptDirective, sessionDirective } from "../core/directive.js";
 import { checkCode } from "../core/guardrails/index.js";
-import { resumeContext } from "../core/session/_resume.js";
+import { resumeContext } from "../core/session/resume/index.js";
 
 /** Silent pass-through: the hook says nothing and the tool call proceeds. */
 const ALLOW = { hookSpecificOutput: { hookEventName: "PreToolUse", permissionDecision: "allow" } };
