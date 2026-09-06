@@ -18,7 +18,7 @@
  */
 
 import { z } from "zod/v4";
-import { unsupportedAgents } from "../core/agents/_transcripts.js";
+import { unsupportedAgents } from "../core/agents/transcripts/index.js";
 import { writeSidecarUsage } from "../core/telemetry/_store.js";
 import { telemetryEnabled } from "../core/telemetry/_telemetry.js";
 import { clientInfo } from "../core/telemetry/_telemetry.js";

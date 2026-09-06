@@ -37,7 +37,7 @@ import { homedir } from "node:os";
 import { basename, join } from "node:path";
 import { getProjectPaths } from "../../cli/paths.js";
 import { hashValue } from "./_telemetry.js";
-import { detectAgentUsage, unsupportedAgents } from "../agents/_transcripts.js";
+import { detectAgentUsage, unsupportedAgents } from "../agents/transcripts/index.js";
 import { computeKpi } from "./_kpi.js";
 import { snapshotProject } from "../session/_snapshot.js";
 import { drain, readEvents, readRollups, readSidecarUsage } from "./_store.js";

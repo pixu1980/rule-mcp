@@ -152,7 +152,7 @@ delete process.env.RULE_MCP_NO_PROMPTS;
 
 // ── F4: usage comes from the coding agent's own transcript ──
 const { AGENT_TRANSCRIPTS, detectAgentUsage, readAgentUsage, supportedAgents, unsupportedAgents } =
-  await import("../../src/core/agents/_transcripts.js");
+  await import("../../src/core/agents/transcripts/index.js");
 check(
   "F4 every adapter names the agent it reads",
   AGENT_TRANSCRIPTS.every((a) => typeof a.agent === "string"),
