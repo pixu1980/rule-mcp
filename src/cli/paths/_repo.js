@@ -18,7 +18,7 @@ export function getSkillsDirs() {
   const homeSkills = join(homedir(), ".agents", "skills");
   // fileURLToPath handles Windows drive letters and percent-encoding correctly;
   // URL.pathname would yield a leading "/" and keep "%20" on non-POSIX platforms.
-  const embeddedSkills = fileURLToPath(new URL("../../skills", import.meta.url));
+  const embeddedSkills = fileURLToPath(new URL("../../../skills", import.meta.url));
 
   return { homeSkills, embeddedSkills };
 }
@@ -30,7 +30,7 @@ export function getSkillsDirs() {
  */
 export function getRepoRoot() {
   // RULE_MCP_REPO_ROOT overrides for non-standard installs and tests.
-  return process.env.RULE_MCP_REPO_ROOT || fileURLToPath(new URL("../../", import.meta.url));
+  return process.env.RULE_MCP_REPO_ROOT || fileURLToPath(new URL("../../../", import.meta.url));
 }
 
 /**

@@ -3,7 +3,7 @@
 import { randomUUID } from "node:crypto";
 import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/streamableHttp.js";
 import { isInitializeRequest } from "@modelcontextprotocol/sdk/types.js";
-import { createServer } from "../../server.js";
+import { createServer } from "../../server/index.js";
 import { safeJsonParse } from "../../utils/index.js";
 import { readBody, sendJsonRpcError } from "./_guards.js";
 import { MAX_SESSIONS, transports } from "./_state.js";

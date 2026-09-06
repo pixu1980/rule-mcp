@@ -40,7 +40,7 @@ console.log("  ✅ package.json valid with SDK + Zod deps");
 
 // 3. Check src files (SDK-based layout - no mcp/ directory)
 const sourceFiles = [
-  "server.js",
+  "server/index.js",
   "index.js",
   "tools/router/index.js",
   "tools/skill/index.js",
@@ -84,7 +84,7 @@ try {
 
 // 6. Check server exports
 try {
-  const server = await import("../src/server.js");
+  const server = await import("../src/server/index.js");
   assert.ok(typeof server.startServer === "function", "startServer not exported");
   assert.ok(typeof server.stopServer === "function", "stopServer not exported");
   console.log("  ✅ src/server.js exports startServer + stopServer");

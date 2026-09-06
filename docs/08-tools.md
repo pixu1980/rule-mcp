@@ -2,7 +2,7 @@
 
 Run `pnpm census` after changing a tool, skill, prompt, command, persona or env var.
 
-# Tools (19)
+# Tools (112)
 
 **LLM-free: every tool below is deterministic and never calls an LLM** - the
 server is model-agnostic; an LLM is the caller, never the implementation.
@@ -28,30 +28,133 @@ server is model-agnostic; an LLM is the caller, never the implementation.
 | `rule-tool-fix`         | Lint/auto-fix of the project file tree (barrel files, naming, ...)                       | ✅       |
 | `rule-tool-component`   | Component/test templates following the rule principles                                    | ✅       |
 
-## Per-skill tools (3) - all LLM-free
+## Per-skill tools (96) - all LLM-free
 
-### rule-ai (0)
+### rule-ai (6)
 
-### rule-backend (0)
+- `rule_tool_ai`
+- `rule_tool_ai_agent_architecture`
+- `rule_tool_ai_agents`
+- `rule_tool_ai_context_engineering`
+- `rule_tool_ai_evals`
+- `rule_tool_ai_prompting`
 
-### rule-caveman (0)
+### rule-backend (10)
 
-### rule-data (0)
+- `rule_tool_backend`
+- `rule_tool_backend_api_design`
+- `rule_tool_backend_express`
+- `rule_tool_backend_fastify`
+- `rule_tool_backend_graphql`
+- `rule_tool_backend_hono`
+- `rule_tool_backend_nestjs`
+- `rule_tool_backend_node`
+- `rule_tool_backend_security`
+- `rule_tool_backend_workers`
 
-### rule-devops (0)
+### rule-caveman (1)
 
-### rule-frontend (0)
+- `rule_tool_caveman`
 
-### rule-platform (0)
+### rule-data (8)
 
-### rule-process (3)
+- `rule_tool_data`
+- `rule_tool_data_duckdb`
+- `rule_tool_data_indexed_db`
+- `rule_tool_data_mongodb`
+- `rule_tool_data_mysql`
+- `rule_tool_data_postgresql`
+- `rule_tool_data_sql`
+- `rule_tool_data_sqlite`
 
+### rule-devops (7)
+
+- `rule_tool_devops`
+- `rule_tool_devops_deploy_preview`
+- `rule_tool_devops_docker`
+- `rule_tool_devops_gitlab_ci`
+- `rule_tool_devops_observability`
+- `rule_tool_devops_testing`
+- `rule_tool_devops_version`
+
+### rule-frontend (14)
+
+- `rule_tool_frontend`
+- `rule_tool_frontend_angular`
+- `rule_tool_frontend_custom_element`
+- `rule_tool_frontend_meta_astro`
+- `rule_tool_frontend_meta_next`
+- `rule_tool_frontend_meta_nuxt`
+- `rule_tool_frontend_meta_remix`
+- `rule_tool_frontend_react`
+- `rule_tool_frontend_solidjs`
+- `rule_tool_frontend_svelte`
+- `rule_tool_frontend_template_engine`
+- `rule_tool_frontend_vanilla_reactive`
+- `rule_tool_frontend_vue`
+- `rule_tool_frontend_workers`
+
+### rule-platform (7)
+
+- `rule_tool_platform`
+- `rule_tool_platform_agent`
+- `rule_tool_platform_auth`
+- `rule_tool_platform_desktop`
+- `rule_tool_platform_expo`
+- `rule_tool_platform_library`
+- `rule_tool_platform_web`
+
+### rule-process (13)
+
+- `rule_tool_process`
 - `rule_tool_process_adr`
+- `rule_tool_process_ai_sdlc`
+- `rule_tool_process_bmad`
+- `rule_tool_process_changelog`
+- `rule_tool_process_code_review`
+- `rule_tool_process_documentation`
+- `rule_tool_process_feature_workflow`
 - `rule_tool_process_handoff`
 - `rule_tool_process_handon`
+- `rule_tool_process_npm_release`
+- `rule_tool_process_simplicity`
+- `rule_tool_process_tdd`
 
-### rule-styleguide (0)
+### rule-styleguide (16)
 
-### rule-toolchain (0)
+- `rule_tool_styleguide`
+- `rule_tool_styleguide_a11y`
+- `rule_tool_styleguide_baseline`
+- `rule_tool_styleguide_css`
+- `rule_tool_styleguide_english`
+- `rule_tool_styleguide_fingerprint`
+- `rule_tool_styleguide_html`
+- `rule_tool_styleguide_i18n`
+- `rule_tool_styleguide_javascript`
+- `rule_tool_styleguide_json`
+- `rule_tool_styleguide_markdown`
+- `rule_tool_styleguide_naming`
+- `rule_tool_styleguide_patterns`
+- `rule_tool_styleguide_readme`
+- `rule_tool_styleguide_typescript`
+- `rule_tool_styleguide_validation`
 
-### rule-ui (0)
+### rule-toolchain (12)
+
+- `rule_tool_toolchain`
+- `rule_tool_toolchain_biome`
+- `rule_tool_toolchain_commits`
+- `rule_tool_toolchain_eslint`
+- `rule_tool_toolchain_husky`
+- `rule_tool_toolchain_parcel`
+- `rule_tool_toolchain_pnpm`
+- `rule_tool_toolchain_project`
+- `rule_tool_toolchain_rspack`
+- `rule_tool_toolchain_turborepo`
+- `rule_tool_toolchain_typescript`
+- `rule_tool_toolchain_vite`
+
+### rule-ui (2)
+
+- `rule_tool_ui`
+- `rule_tool_ui_design_system`

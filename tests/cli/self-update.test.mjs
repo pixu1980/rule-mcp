@@ -98,7 +98,7 @@ function runUpdateIn(clone, environment = {}) {
 // ── T2: code change classified as code ──
 {
   const { clone, seed, base, upstream } = makeClonePair();
-  pushUpstreamChange(seed, { "src/server.js": "// v2\n" });
+  pushUpstreamChange(seed, { "src/server/index.js": "// v2\n" });
   const r = runUpdateIn(clone, { RULE_MCP_UPDATE_REMOTE: upstream });
   assert.equal(r.updated, true, "should fast-forward a code change");
   assert.equal(r.changedCode, true, "code change detected");

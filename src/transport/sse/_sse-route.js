@@ -1,7 +1,7 @@
 /** @module transport/sse/sse-route - GET /sse: open one stream, one server instance */
 
 import { SSEServerTransport } from "@modelcontextprotocol/sdk/server/sse.js";
-import { createServer } from "../../server.js";
+import { createServer } from "../../server/index.js";
 import { MAX_SESSIONS, registry, sessions } from "./_state.js";
 
 /**
