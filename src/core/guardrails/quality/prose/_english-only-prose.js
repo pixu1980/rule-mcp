@@ -1,4 +1,4 @@
-import { scanCodeForForeign, scanDocumentForForeign } from "../../../text/_en-english.js";
+import { scanCodeForForeign, scanDocumentForForeign } from "../../../text/en-english/index.js";
 
 /** Guardrail `en-english-only-prose`: English-only prose */
 export const enEnglishOnlyProse = {
