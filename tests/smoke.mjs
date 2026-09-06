@@ -52,7 +52,7 @@ const sourceFiles = [
   "cli/paths.js",
   "cli/install.js",
   "cli/commands/index.js",
-  "cli/doctor.js",
+  "cli/doctor/index.js",
   "cli/uninstall.js",
 ];
 for (const f of sourceFiles) {

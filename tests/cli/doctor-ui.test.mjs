@@ -7,7 +7,7 @@
  */
 
 import { strict as assert } from "node:assert";
-import { formatDoctorTerminal } from "../../src/cli/doctor.js";
+import { formatDoctorTerminal } from "../../src/cli/doctor/index.js";
 
 console.log("rule doctor UI test");
 

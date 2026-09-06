@@ -1,7 +1,7 @@
 /** Doctor, skills reload, self-update, fix and completions commands. */
 
 import { callTool } from "../../tools/router/index.js";
-import { formatDoctorTerminal, runDoctor } from "../doctor.js";
+import { formatDoctorTerminal, runDoctor } from "../doctor/index.js";
 import { generateCompletions } from "../completions.js";
 import { loadAllSkills } from "../../core/skills/_skills.js";
 import { print, printJson } from "./_shared.js";

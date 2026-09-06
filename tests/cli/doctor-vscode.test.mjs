@@ -9,7 +9,7 @@ const fakeHome = mkdtempSync(join(tmpdir(), "rule-doctor-vscode-"));
 const fakeProject = join(fakeHome, "project");
 mkdirSync(fakeProject, { recursive: true });
 const installModule = new URL("../../src/cli/install.js", import.meta.url).href;
-const doctorModule = new URL("../../src/cli/doctor.js", import.meta.url).href;
+const doctorModule = new URL("../../src/cli/doctor/index.js", import.meta.url).href;
 const output = execFileSync(
   process.execPath,
   [
