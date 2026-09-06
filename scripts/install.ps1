@@ -102,21 +102,49 @@ function Show-Banner([string]$Subtitle) {
   Write-Host ""
 }
 function Select-AgentsInteractive([string[]]$Items) {
+  # Differential renderer (parity with install.sh): draws the frame once,
+  # then rewrites only the rows a key changes via SetCursorPosition. No
+  # Clear-Host and no full re-render per key -> no flicker.
+  try { [Console]::CursorVisible = $false } catch {}
+  try { $cols = [Console]::WindowWidth } catch { $cols = 80 }
+  if ($cols -lt 60) { $cols = 60 }
   $flags = @{}; for($i=0; $i -lt $Items.Count; $i++){ $flags[$i] = $false }
   $cursor = 0
+  $rowY = @{}
+
+  function Write-At([int]$y, [string]$text) {
+    [Console]::SetCursorPosition(0, $y)
+    Write-Host $text.PadRight($cols) -NoNewline
+  }
+  function Render-Row([int]$i) {
+    $mark = if($flags[$i]){ 'x' } else { ' ' }
+    $prefix = if($i -eq $cursor){ '> ' } else { '  ' }
+    $name = $Items[$i]
+    if ($name -eq 'devin') { $name = 'Devin (formerly Windsurf)' }
+    Write-At $rowY[$i] ("{0}[{1}] {2} {3}" -f $prefix,$mark,($i + 1),$name)
+  }
+  function Render-Footer {
+    $selectedCount = (@($flags.Values | Where-Object { $_ })).Count
+    Write-At $footerY ("Selected: {0}/{1}" -f $selectedCount, $Items.Count)
+  }
+
+  try { [Console]::Clear() } catch {}
+  Show-Banner "Phase 3 - Agent Integration"
+  Write-Host "Select agents (↑↓/jk move, Space/1-9 toggle, a all, n none, Enter confirm, q quit)" -ForegroundColor Cyan
+  Write-Host ""
+  for($i=0; $i -lt $Items.Count; $i++) {
+    $rowY[$i] = [Console]::CursorTop
+    Render-Row $i
+  }
+  $footerY = [Console]::CursorTop
+  Write-Host ""
+  Render-Footer
+
+  $changedRows = New-Object System.Collections.ArrayList
   while ($true) {
     $done = $false
-    Show-Banner "Phase 3 - Agent Integration"
-    Write-Host "Select agents (↑↓/jk move, Space/1-9 toggle, a all, n none, Enter confirm, q quit)" -ForegroundColor Cyan
-    Write-Host ""
-    for($i=0; $i -lt $Items.Count; $i++) {
-      $mark = if($flags[$i]){ 'x' } else { ' ' }
-      $prefix = if($i -eq $cursor){ '> ' } else { '  ' }
-      Write-Host ("{0}[{1}] {2} {3}" -f $prefix,$mark,($i + 1),$Items[$i])
-    }
-    $selectedCount = (@($flags.Values | Where-Object { $_ })).Count
-    Write-Host ""
-    Write-Host ("Selected: {0}/{1}" -f $selectedCount, $Items.Count) -ForegroundColor Cyan
+    $changedRows.Clear() | Out-Null
+    $oldCursor = $cursor
     $key = [Console]::ReadKey($true)
     $char = [string]$key.KeyChar
     switch ($key.Key) {
@@ -126,48 +154,80 @@ function Select-AgentsInteractive([string[]]$Items) {
       # NB: `break` inside a PS `switch` exits only the switch, not the loop,
       # so Enter must set a flag instead (the old code never confirmed).
       'Enter' { $done = $true }
-      'Q' { return @() }
+      'Q' { try { [Console]::CursorVisible = $true } catch {}; return @() }
     }
     if ($char -eq 'j') { $cursor++; if($cursor -ge $Items.Count){ $cursor = 0 } }
     elseif ($char -eq 'k') { $cursor--; if($cursor -lt 0){ $cursor = $Items.Count - 1 } }
-    elseif ($char -eq 'a' -or $char -eq 'A') { for($i=0; $i -lt $Items.Count; $i++){ $flags[$i] = $true } }
-    elseif ($char -eq 'n' -or $char -eq 'N') { for($i=0; $i -lt $Items.Count; $i++){ $flags[$i] = $false } }
+    elseif ($char -eq 'a' -or $char -eq 'A') {
+      for($i=0; $i -lt $Items.Count; $i++){ $flags[$i] = $true; $null = $changedRows.Add($i) }
+    }
+    elseif ($char -eq 'n' -or $char -eq 'N') {
+      for($i=0; $i -lt $Items.Count; $i++){ $flags[$i] = $false; $null = $changedRows.Add($i) }
+    }
     elseif ($char -match '^[1-9]$') {
       $idx = [int]$char - 1
       if ($idx -lt $Items.Count) { $flags[$idx] = -not $flags[$idx]; $cursor = $idx }
     }
+    if ($oldCursor -ne $cursor) { $null = $changedRows.Add($oldCursor) }
+    $null = $changedRows.Add($cursor)
+    foreach ($i in ($changedRows | Select-Object -Unique)) { Render-Row $i }
+    Render-Footer
     if ($done) { break }
   }
   $selected = @()
   for($i=0; $i -lt $Items.Count; $i++){ if($flags[$i]){ $selected += $Items[$i] } }
+  try { [Console]::CursorVisible = $true } catch {}
+  [Console]::SetCursorPosition(0, $footerY + 1)
   return $selected
 }
 function Select-ModeInteractive() {
+  try { [Console]::CursorVisible = $false } catch {}
+  try { $cols = [Console]::WindowWidth } catch { $cols = 80 }
+  if ($cols -lt 60) { $cols = 60 }
   $modes = @('stdio','daemon','docker')
   $labels = @('Stdio - agent starts a local process','Daemon - background SSE service on port 37999','Docker - containerized SSE service')
   $cursor = 0
+  $rowY = @{}
+
+  function Write-At([int]$y, [string]$text) {
+    [Console]::SetCursorPosition(0, $y)
+    Write-Host $text.PadRight($cols) -NoNewline
+  }
+  function Render-Mode-Row([int]$i) {
+    $radio = if($i -eq $cursor){ '•' } else { ' ' }
+    $prefix = if($i -eq $cursor){ '> ' } else { '  ' }
+    Write-At $rowY[$i] ("{0}({1}) {2} {3}" -f $prefix,$radio,($i + 1),$labels[$i])
+  }
+
+  try { [Console]::Clear() } catch {}
+  Show-Banner "Phase 3 - Install Mode"
+  Write-Host "Select mode (↑↓/jk move, 1-3 select, Enter confirm, q quit)" -ForegroundColor Cyan
+  Write-Host ""
+  for($i=0; $i -lt $modes.Count; $i++) {
+    $rowY[$i] = [Console]::CursorTop
+    Render-Mode-Row $i
+  }
   while ($true) {
     $done = $false
-    Show-Banner "Phase 3 - Install Mode"
-    Write-Host "Select mode (↑↓/jk move, 1-3 select, Enter confirm, q quit)" -ForegroundColor Cyan
-    Write-Host ""
-    for($i=0; $i -lt $modes.Count; $i++) {
-      $radio = if($i -eq $cursor){ '•' } else { ' ' }
-      $prefix = if($i -eq $cursor){ '> ' } else { '  ' }
-      Write-Host ("{0}({1}) {2} {3}" -f $prefix,$radio,($i + 1),$labels[$i])
-    }
+    $oldCursor = $cursor
     $key = [Console]::ReadKey($true)
     $char = [string]$key.KeyChar
     switch ($key.Key) {
       'UpArrow' { $cursor--; if($cursor -lt 0){ $cursor = $modes.Count - 1 } }
       'DownArrow' { $cursor++; if($cursor -ge $modes.Count){ $cursor = 0 } }
       'Enter' { $done = $true }
-      'Q' { return $null }
+      'Q' { try { [Console]::CursorVisible = $true } catch {}; return $null }
     }
     if ($char -eq 'j') { $cursor++; if($cursor -ge $modes.Count){ $cursor = 0 } }
     elseif ($char -eq 'k') { $cursor--; if($cursor -lt 0){ $cursor = $modes.Count - 1 } }
     elseif ($char -match '^[1-3]$') { $cursor = [int]$char - 1; $done = $true }
-    if ($done) { return $modes[$cursor] }
+    if ($oldCursor -ne $cursor) { Render-Mode-Row $oldCursor }
+    Render-Mode-Row $cursor
+    if ($done) {
+      try { [Console]::CursorVisible = $true } catch {}
+      [Console]::SetCursorPosition(0, $rowY[$modes.Count - 1] + 1)
+      return $modes[$cursor]
+    }
   }
 }
 
@@ -247,6 +307,17 @@ if (Test-Command git) {
 
 $HomeDir = $HOME
 Write-Ok "Home: $HomeDir"
+
+# Runtime home: uninstall -Purge removes ~/.rule-mcp/ entirely (state,
+# data, projects, config - the layout src/cli/paths.js expects), so a
+# reinstall must recreate it explicitly.
+$pixHomeDir = Join-Path $HomeDir ".rule-mcp"
+if ($DryRun) {
+  Write-Step "[dry-run] Would create runtime home: $pixHomeDir"
+} else {
+  New-Item -ItemType Directory -Force -Path $pixHomeDir\state, $pixHomeDir\data, $pixHomeDir\projects, $pixHomeDir\config | Out-Null
+  Write-Ok "Runtime home ready: $pixHomeDir"
+}
 
 # ─────────────────────────────────────────────────────────────────────────────
 # PHASE 2: Install/Update npm Package
@@ -364,7 +435,6 @@ if ($TargetAgent) {
     "zed"         = "$HomeDir\.config\zed\mcp.json"
     "opencode"    = "$HomeDir\.config\opencode\mcp.json"
     "antigravity" = "$HomeDir\.config\antigravity\mcp.json"
-    "windsurf"    = "$HomeDir\.config\windsurf\mcp.json"
     "kilo"        = "$HomeDir\.config\kilo\mcp.json"
     "kimi"        = "$HomeDir\.config\kimi\mcp.json"
     "vibe"        = "$HomeDir\.config\vibe\mcp.json"
@@ -372,6 +442,7 @@ if ($TargetAgent) {
     "droid"       = "$HomeDir\.config\factory\mcp.json"
     "kiro"        = "$HomeDir\.config\kiro\mcp.json"
     "qwen"        = "$HomeDir\.config\qwen\mcp.json"
+    "devin"       = "$HomeDir\.config\devin\mcp_config.json"
     "vscode"      = (Join-Path $env:APPDATA "Code\User\mcp.json")
   }
 

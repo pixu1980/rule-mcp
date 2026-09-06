@@ -62,7 +62,7 @@ _pix_galaxy_mcp_options() {
     '--transport[Transport type]:transport:(stdio sse)'
     '--ssl-cert[TLS certificate path]:file:_files'
     '--ssl-key[TLS private key path]:file:_files'
-    '--agent[Agent name]:agent:(claude codex cursor copilot gemini cline roo zed opencode antigravity windsurf kilo kimi vibe grok droid kiro qwen pi vscode jetbrains neovim emacs)'
+    '--agent[Agent name]:agent:(claude codex cursor copilot gemini cline roo zed opencode antigravity devin kilo kimi vibe grok droid kiro qwen pi vscode jetbrains neovim emacs)'
     '--global:Use global install'
     '--dry-run:Preview without applying'
     '--force:Override existing configuration'
@@ -148,7 +148,7 @@ _pix_galaxy_mcp() {
   local tools_sub="list call"
   local skills_actions="reload"
   local adr_actions="new"
-  local agents="claude codex cursor copilot gemini cline roo zed opencode antigravity windsurf kilo kimi vibe grok droid kiro qwen pi vscode jetbrains neovim emacs"
+  local agents="claude codex cursor copilot gemini cline roo zed opencode antigravity devin kilo kimi vibe grok droid kiro qwen pi vscode jetbrains neovim emacs"
   local handoff_format="full brief minimal"
   local adr_status="proposed accepted deprecated superseded"
   local shells="zsh bash fish"
@@ -239,7 +239,7 @@ complete -c rule-mcp -n "__fish_seen_subcommand_from adr" -a "new" -f
 # Global options
 complete -c rule-mcp -l help -s h -d "Show help"
 complete -c rule-mcp -l transport -x -a "stdio sse" -d "Transport type"
-complete -c rule-mcp -l agent -x -a "claude codex cursor copilot gemini cline roo zed opencode antigravity windsurf kilo kimi vibe grok droid kiro qwen pi vscode jetbrains neovim emacs" -d "Agent name"
+complete -c rule-mcp -l agent -x -a "claude codex cursor copilot gemini cline roo zed opencode antigravity devin kilo kimi vibe grok droid kiro qwen pi vscode jetbrains neovim emacs" -d "Agent name"
 complete -c rule-mcp -l format -x -a "full brief minimal" -d "Handoff format"
 complete -c rule-mcp -l status -x -a "proposed accepted deprecated superseded" -d "ADR status"
 complete -c rule-mcp -l shell -x -a "zsh bash fish" -d "Shell type"

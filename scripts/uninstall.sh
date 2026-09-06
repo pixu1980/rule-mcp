@@ -7,7 +7,8 @@
 #   1. Removes rule-mcp entries from ALL coding agent configs (18+)
 #   2. Removes rule-mcp rules from CLAUDE.md / AGENTS.md / GEMINI.md
 #   3. Removes IDE configurations (VS Code, Neovim, JetBrains, Emacs)
-#   4. Removes config directory (~/.config/rule-mcp/)
+#   4. Removes config directory (~/.config/rule-mcp/) and, with --purge,
+#      the runtime home directory (~/.rule-mcp/ - state, data, projects)
 #   5. Removes environment variables from shell profiles
 #   6. Removes git hooks
 #   7. Optionally unlinks/removes global npm package
@@ -18,8 +19,8 @@
 #
 # Options:
 #   --agent <name>       Uninstall for a specific agent only
-#   --purge              Also delete ~/.config/rule-mcp/ and API keys
-#   --keep-config        Keep ~/.config/rule-mcp/ (default with --purge)
+#   --purge              Also delete ~/.config/rule-mcp/, ~/.rule-mcp/ and API keys
+#   --keep-config        With --purge, keep the config directories
 #   --dry-run            Preview changes without writing
 #   --force              Don't ask for confirmation
 #
@@ -126,8 +127,8 @@ while [[ $# -gt 0 ]]; do
       echo ""
       echo "Options:"
       echo "  --agent <name>   Uninstall for a specific agent only"
-      echo "  --purge          Also delete ~/.config/rule-mcp/ and API keys"
-      echo "  --keep-config    Keep ~/.config/rule-mcp/ (default with --purge)"
+      echo "  --purge          Also delete ~/.config/rule-mcp/, ~/.rule-mcp/ and API keys"
+      echo "  --keep-config    With --purge, keep the config directories"
       echo "  --dry-run        Preview changes without writing"
       echo "  --force          Don't ask for confirmation"
       echo "  --help           Show this help"
@@ -170,11 +171,11 @@ if [[ "$DRY_RUN" == "false" && "$FORCE" == "false" ]]; then
   echo -e "   • Shell profile environment variables"
   echo -e "   • Git hooks"
   if [[ "$PURGE" == "true" ]]; then
-    echo -e "   • ${RED}~/.config/rule-mcp/ (API keys & config)${NC}"
+    echo -e "   • ${RED}~/.config/rule-mcp/ and ~/.rule-mcp/ (API keys, config, state)${NC}"
   fi
   echo ""
   echo -e "  ${YELLOW}The npm package and project files will NOT be deleted.${NC}"
-  echo -e "  ${YELLOW}Run with --purge to also remove config/keys.${NC}"
+  echo -e "  ${YELLOW}Run with --purge to also remove config/keys/state.${NC}"
   echo ""
   if [[ ! -t 0 ]]; then
     CONFIRM="y"
@@ -304,7 +305,9 @@ if [[ -n "$TARGET_AGENT" ]]; then
     zed)          FILE="$HOME_DIR/.config/zed/mcp.json" ;;
     opencode)     FILE="$HOME_DIR/.config/opencode/mcp.json" ;;
     antigravity)  FILE="$HOME_DIR/.config/antigravity/mcp.json" ;;
-    windsurf)     FILE="$HOME_DIR/.config/windsurf/mcp.json" ;;
+    windsurf)     warn "windsurf is deprecated - use devin"
+                  FILE="$HOME_DIR/.config/devin/mcp_config.json" ;;
+    devin)        FILE="$HOME_DIR/.config/devin/mcp_config.json" ;;
     kilo)         FILE="$HOME_DIR/.config/kilo/mcp.json" ;;
     kimi)         FILE="$HOME_DIR/.config/kimi/mcp.json" ;;
     vibe)         FILE="$HOME_DIR/.config/vibe/mcp.json" ;;
@@ -315,7 +318,7 @@ if [[ -n "$TARGET_AGENT" ]]; then
     vscode)       FILE="$(pwd)/.vscode/mcp.json" ;;
     *)
       warn "Unknown agent: ${TARGET_AGENT}"
-      warn "Supported agents: claude, cursor, codex, copilot, gemini, pi, cline, roo, zed, opencode, antigravity, windsurf, kilo, kimi, vibe, grok, droid, kiro, qwen, vscode"
+      warn "Supported agents: claude, cursor, codex, copilot, gemini, pi, cline, roo, zed, opencode, antigravity, devin, kilo, kimi, vibe, grok, droid, kiro, qwen, vscode"
       exit 1
       ;;
   esac
@@ -332,8 +335,8 @@ else
   AGENT_NAMES=(
     "claude" "cursor" "codex" "copilot" "gemini" "pi"
     "cline" "roo" "zed" "opencode" "antigravity"
-    "windsurf" "kilo" "kimi" "vibe" "grok"
-    "droid" "kiro" "qwen" "vscode" "jetbrains"
+    "kilo" "kimi" "vibe" "grok" "droid"
+    "kiro" "qwen" "devin" "vscode" "jetbrains"
   )
   AGENT_PATHS=(
     "$HOME_DIR/.claude.json"
@@ -347,7 +350,6 @@ else
     "$HOME_DIR/.config/zed/mcp.json"
     "$HOME_DIR/.config/opencode/mcp.json"
     "$HOME_DIR/.config/antigravity/mcp.json"
-    "$HOME_DIR/.config/windsurf/mcp.json"
     "$HOME_DIR/.config/kilo/mcp.json"
     "$HOME_DIR/.config/kimi/mcp.json"
     "$HOME_DIR/.config/vibe/mcp.json"
@@ -355,6 +357,7 @@ else
     "$HOME_DIR/.config/factory/mcp.json"
     "$HOME_DIR/.config/kiro/mcp.json"
     "$HOME_DIR/.config/qwen/mcp.json"
+    "$HOME_DIR/.config/devin/mcp_config.json"
     "$(pwd)/.vscode/mcp.json"
     ""
   )
@@ -716,6 +719,33 @@ else
   sub "No config directory found, skipping"
 fi
 
+# The runtime home (~/.rule-mcp/) holds state/, data/, projects/ and
+# config/ (see src/cli/paths.js) - the daemon SSE token, telemetry, caches and
+# per-project recordings. install.sh recreates it on every reinstall, and
+# --purge must remove it too: leaving it behind means stale state, an orphaned
+# token and old telemetry survive an uninstall.
+RULE_MCP_HOME_DIR="$HOME_DIR/.rule-mcp"
+
+if [[ -d "$RULE_MCP_HOME_DIR" ]]; then
+  if [[ "$KEEP_CONFIG" == "true" ]]; then
+    sub "Keeping runtime home (--keep-config): ${RULE_MCP_HOME_DIR}"
+  elif [[ "$PURGE" == "true" ]]; then
+    if [[ "$DRY_RUN" == "true" ]]; then
+      sub "[dry-run] Would delete: ${RULE_MCP_HOME_DIR}/"
+    else
+      rm -rf "$RULE_MCP_HOME_DIR"
+      ok "Runtime home deleted: ${RULE_MCP_HOME_DIR}"
+    fi
+  else
+    # Default: list what's there without deleting
+    home_file_count=$(find "$RULE_MCP_HOME_DIR" -type f 2>/dev/null | wc -l | tr -d ' ')
+    sub "Runtime home exists with ${home_file_count} file(s): ${RULE_MCP_HOME_DIR}"
+    sub "Use --purge to delete state, telemetry and config"
+  fi
+else
+  sub "No runtime home found, skipping"
+fi
+
 # ─────────────────────────────────────────────────────────────────────────────
 # PHASE 6: Git Hooks
 # ─────────────────────────────────────────────────────────────────────────────
@@ -928,7 +958,7 @@ echo -e "   • Daemon service (LaunchAgent / systemd / Windows Service)"
 echo -e "   • Environment variables from shell profiles"
 echo -e "   • Git hooks"
 if [[ "$PURGE" == "true" ]]; then
-  echo -e "   • Config directory and API keys"
+  echo -e "   • Config directory, runtime home and API keys"
 fi
 echo ""
 

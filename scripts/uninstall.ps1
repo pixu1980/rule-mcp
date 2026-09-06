@@ -17,8 +17,8 @@
 #
 # Parameters:
 #   -Agent <name>    Uninstall for a specific agent only
-#   -Purge           Also delete ~/.config/rule-mcp/ and API keys
-#   -KeepConfig      Keep ~/.config/rule-mcp/ (default with -Purge)
+#   -Purge           Also delete ~/.config/rule-mcp/, ~/.rule-mcp/ and API keys
+#   -KeepConfig      With -Purge, keep the config directories
 #   -DryRun          Preview changes without writing
 #   -Force           Don't ask for confirmation
 #   -Help            Show this help
@@ -43,8 +43,8 @@ if ($Help) {
   Write-Host ""
   Write-Host "Parameters:" -ForegroundColor Yellow
   Write-Host "  -Agent <name>    Uninstall for a specific agent only"
-  Write-Host "  -Purge           Also delete ~/.config/rule-mcp/ and API keys"
-  Write-Host "  -KeepConfig      Keep ~/.config/rule-mcp/ (default with -Purge)"
+  Write-Host "  -Purge           Also delete ~/.config/rule-mcp/, ~/.rule-mcp/ and API keys"
+  Write-Host "  -KeepConfig      With -Purge, keep the config directories"
   Write-Host "  -DryRun          Preview changes without writing"
   Write-Host "  -Force           Don't ask for confirmation"
   exit 0
@@ -271,7 +271,7 @@ $confCheckPaths = @(
   "$HOME\.config\roo\mcp.json",
   "$HOME\.config\zed\mcp.json",
   "$HOME\.config\opencode\mcp.json",
-  "$HOME\.config\windsurf\mcp.json"
+  "$HOME\.config\devin\mcp_config.json"
 )
 foreach ($cfgPath in $confCheckPaths) {
   $raw = Get-Content $cfgPath -Raw -ErrorAction SilentlyContinue
@@ -296,7 +296,7 @@ if (-not $DryRun -and -not $Force) {
   Write-Host "   • IDE configurations (VS Code, Neovim, JetBrains)"
   Write-Host "   • Environment variables"
   if ($Purge) {
-    Write-Host "   • ~/.config/rule-mcp/ (API keys & config)" -ForegroundColor Red
+    Write-Host "   • ~/.config/rule-mcp/ and ~/.rule-mcp/ (API keys, config, state)" -ForegroundColor Red
   }
   Write-Host ""
   Write-Host "  The npm package and project files will NOT be deleted." -ForegroundColor Yellow
@@ -342,7 +342,6 @@ $AgentConfigs = @{
   "zed"         = "$HomeDir\.config\zed\mcp.json"
   "opencode"    = "$HomeDir\.config\opencode\mcp.json"
   "antigravity" = "$HomeDir\.config\antigravity\mcp.json"
-  "windsurf"    = "$HomeDir\.config\windsurf\mcp.json"
   "kilo"        = "$HomeDir\.config\kilo\mcp.json"
   "kimi"        = "$HomeDir\.config\kimi\mcp.json"
   "vibe"        = "$HomeDir\.config\vibe\mcp.json"
@@ -350,6 +349,7 @@ $AgentConfigs = @{
   "droid"       = "$HomeDir\.config\factory\mcp.json"
   "kiro"        = "$HomeDir\.config\kiro\mcp.json"
   "qwen"        = "$HomeDir\.config\qwen\mcp.json"
+  "devin"       = "$HomeDir\.config\devin\mcp_config.json"
 }
 
 $ProjectDir = (Get-Location).Path
@@ -528,6 +528,31 @@ if (Test-Path $configDir -PathType Container) {
   Write-Step "No config directory found, skipping"
 }
 
+# The runtime home (~/.rule-mcp/) holds state/, data/, projects/ and
+# config/ (see src/cli/paths.js) - the daemon SSE token, telemetry, caches and
+# per-project recordings. install.ps1 recreates it on every reinstall, and
+# -Purge must remove it too: leaving it behind means stale state and an
+# orphaned token survive an uninstall.
+$pixHomeDir = Join-Path $HomeDir ".rule-mcp"
+if (Test-Path $pixHomeDir -PathType Container) {
+  if ($KeepConfig) {
+    Write-Step "Keeping runtime home (-KeepConfig): $pixHomeDir"
+  } elseif ($Purge) {
+    if ($DryRun) {
+      Write-Step "[dry-run] Would delete: $pixHomeDir"
+    } else {
+      Remove-Item $pixHomeDir -Recurse -Force -ErrorAction SilentlyContinue
+      Write-Ok "Runtime home deleted: $pixHomeDir"
+    }
+  } else {
+    $homeFileCount = (Get-ChildItem $pixHomeDir -File -Recurse -ErrorAction SilentlyContinue).Count
+    Write-Step "Runtime home exists with $homeFileCount file(s): $pixHomeDir"
+    Write-Step "Use -Purge to delete state, telemetry and config"
+  }
+} else {
+  Write-Step "No runtime home found, skipping"
+}
+
 # ─────────────────────────────────────────────────────────────────────────────
 # PHASE 5: Environment Variables
 # ─────────────────────────────────────────────────────────────────────────────
@@ -614,7 +639,7 @@ Write-Host " • Instruction rules from agent instruction files"
 Write-Host " • IDE configurations (VS Code, Neovim, JetBrains)"
 Write-Host " • Environment variables"
 if ($Purge) {
-  Write-Host " • Config directory and API keys"
+  Write-Host " • Config directory, runtime home and API keys"
 }
 Write-Host ""
 

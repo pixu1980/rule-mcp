@@ -6,7 +6,7 @@
  *
  * This is the inverse of the install logic in install.js.
  * Supports 23 agents: claude, codex, cursor, copilot, gemini,
- * cline, roo, zed, opencode, antigravity, windsurf,
+ * cline, roo, zed, opencode, antigravity, devin,
  * kilo, kimi, vibe, grok, droid, kiro, qwen,
  * pi, vscode, jetbrains, neovim, emacs.
  *

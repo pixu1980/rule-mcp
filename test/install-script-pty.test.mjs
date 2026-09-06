@@ -1,8 +1,8 @@
 /**
  * macOS PTY acceptance test for the interactive installer.
- * The picker renders the full agent catalog (claude, cursor, codex, ...), so
- * Pi is row 6: press 6, confirm agents with Enter, move to daemon with Down,
- * confirm mode with Enter.
+ * The picker renders the full agent catalog and pre-selects detected agents:
+ * the fake HOME only has Pi configured, so Pi starts checked. Confirm with
+ * Enter, move to daemon with Down, confirm mode with Enter.
  */
 import { strict as assert } from "node:assert";
 import { execFileSync } from "node:child_process";
@@ -24,13 +24,15 @@ const output = execFileSync(
   "bash",
   [
     "-c",
-    String.raw`printf '6\r\033[B\r' | HOME=${JSON.stringify(fakeHome)} TERM=xterm /usr/bin/script -q /dev/null bash scripts/install.sh --dry-run --no-rules`,
+    String.raw`printf '\r\033[B\r' | HOME=${JSON.stringify(fakeHome)} TERM=xterm /usr/bin/script -q /dev/null bash scripts/install.sh --dry-run --no-rules`,
   ],
   { cwd: root, encoding: "utf8" },
 );
 
+// Pi is detected (fake HOME) and therefore pre-selected: Enter confirms it.
 assert.match(output, /Selected 1 agent\(s\): pi/);
 assert.match(output, /Install mode: daemon/);
 assert.match(output, /Would install daemon service/);
+assert.match(output, /\[x\] 6 pi/, "detected agents must render pre-checked in the picker");
 
-console.log("  ✅ PTY installer handles the catalog picker, arrows, and Enter");
+console.log("  ✅ PTY installer pre-selects detected agents, handles arrows and Enter");

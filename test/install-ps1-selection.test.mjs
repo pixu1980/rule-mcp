@@ -29,6 +29,32 @@ assert.match(
   "Windows service phase must run only in daemon mode",
 );
 
+// Windsurf is gone from the Windows installer; Devin (formerly Windsurf)
+// takes its place with the documented mcp_config.json path.
+assert.doesNotMatch(script, /\bwindsurf\b/, "the Windows installer must not offer windsurf");
+assert.match(
+  script,
+  /"devin"\s*=\s*"\$HomeDir\\.config\\devin\\mcp_config\.json"/,
+  "the Windows installer must probe Devin's mcp_config.json",
+);
+assert.match(script, /Devin \(formerly Windsurf\)/, "the Windows picker must brand Devin with its Windsurf heritage");
+
+// Flicker guard: the Windows picker redraws changed rows in place with
+// SetCursorPosition instead of Clear-Host + full re-render per keystroke.
+assert.match(
+  script,
+  /\[Console\]::SetCursorPosition\(0, \$y\)/,
+  "the Windows picker must use cursor-addressed row redraw (no flicker)",
+);
+const readStart = script.indexOf("$key = [Console]::ReadKey($true)");
+const readEnd = script.indexOf("if ($done) { break }", readStart);
+const pickerLoop = readStart !== -1 && readEnd !== -1 ? script.slice(readStart, readEnd) : "";
+assert.ok(pickerLoop, "the picker must contain a ReadKey loop");
+assert.ok(
+  pickerLoop.includes("Render-") && !pickerLoop.includes("Clear-Host"),
+  "the picker loop must rewrite rows in place and never Clear-Host per key",
+);
+
 if (existsSync("/usr/local/bin/pwsh") || existsSync("/opt/homebrew/bin/pwsh")) {
   execFileSync(
     "pwsh",

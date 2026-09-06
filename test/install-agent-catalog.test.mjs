@@ -1,16 +1,19 @@
 /**
  * @module test/install-agent-catalog
  *
- * Three invariants of the agent catalog.
+ * Agent catalog invariants.
  *
  * 1. The interactive picker offers every supported target, not only the ones
  *    detected on this machine. A user reported the list collapsing to Claude and
  *    Codex because nothing else had a config file yet - which is exactly when
  *    you need the installer to offer the rest.
- * 2. Devin is installable, and at the path Devin documents
- *    (`mcp_config.json`, not the `mcp.json` every other agent uses).
- * 3. Windsurf is deprecated: never swept by `--agent all`, still installable and
- *    still uninstallable when named.
+ * 2. Devin is installable, at the path Devin documents
+ *    (`mcp_config.json`, not the `mcp.json` every other agent uses), and is
+ *    branded "(formerly Windsurf)" - Cognition acquired Windsurf.
+ * 3. Windsurf is removed from the catalog: no picker row, no sweep entry.
+ *    Naming it still works as a courtesy redirect to Devin, with a warning.
+ * 4. The picker redraws rows incrementally (ANSI cursor addressing) instead of
+ *    full-screen clearing on every keypress - the flicker regression guard.
  */
 
 import { strict as assert } from "node:assert";
@@ -39,17 +42,20 @@ function assertInstallSh(needle, message) {
 }
 
 assertInstallSh(
-  'for i in "${!AGENT_NAMES[@]}"; do\n          mark=" "',
+  'for i in "${!AGENT_NAMES[@]}"',
   "the agent checkbox list must iterate AGENT_NAMES (the catalog), not DETECTED_AGENTS",
 );
-assertInstallSh("${selected_count}/${#AGENT_NAMES[@]}", "the selected counter must be out of the full catalog");
+assertInstallSh(
+  "AGENT_CURSOR -ge ${#AGENT_NAMES[@]}",
+  "cursor wrapping must follow the catalog, or the lower entries are unreachable",
+);
 assert.ok(
   !installSh.includes("AGENT_CURSOR -ge ${#DETECTED_AGENTS[@]}"),
   "cursor wrapping must follow the catalog, or the lower entries are unreachable",
 );
 assertInstallSh(
-  "${AGENT_DETECTED[$ai]} -eq 1 ]] && ! is_deprecated_agent",
-  "detected non-deprecated agents must start pre-selected",
+  "${AGENT_DETECTED[$ai]} -eq 1 ]] && AGENT_FLAGS[$ai]=1",
+  "detected agents must start pre-selected (AGENT_DETECTED is a per-row flag, populated from the detection result)",
 );
 assertInstallSh("No supported coding agents detected on this machine.", "an empty detection must not abort the picker");
 console.log("  ✅ the picker offers every supported target");
@@ -57,6 +63,8 @@ console.log("  ✅ the picker offers every supported target");
 // ── 2. Devin ────────────────────────────────────────────────────────────────
 
 assert.ok(getAllAgents().includes("devin"), "devin must be a supported agent");
+assertInstallSh("(formerly Windsurf)", "install.sh must brand Devin with its Windsurf heritage");
+assertInstallSh("$HOME_DIR/.config/devin/mcp_config.json", "install.sh must probe the devin config");
 
 const devin = installAgent({ agent: "devin", entrypoint, dryRun: true });
 const devinPath = devin.installed.devin;
@@ -84,30 +92,52 @@ assert.ok(
 );
 // The router is `pix_tool` with no suffix; every other command is rule-<area>.
 assert.match(skillFiles[0], /rule(?:-[\w-]+)?\/SKILL\.md$/, "each command is its own directory containing SKILL.md");
-assertInstallSh("$HOME_DIR/.config/devin/mcp_config.json", "install.sh must probe the devin config");
-console.log("  ✅ devin installs to its documented config path");
+console.log("  ✅ devin installs to its documented config path, branded (formerly Windsurf)");
 
-// ── 3. Windsurf is deprecated, not removed ──────────────────────────────────
+// ── 3. Windsurf is gone from the catalog; naming it redirects to Devin ─────
+
+assert.ok(
+  !getAllAgents().includes("windsurf"),
+  "windsurf must not be offered by the catalog - Cognition renamed it Devin",
+);
+assert.ok(!installSh.includes("windsurf"), "install.sh must not contain a windsurf entry anywhere");
+assert.ok(
+  !/\bwindsurf\b/.test(readFileSync(join(root, "scripts", "install.ps1"), "utf8")),
+  "install.ps1 must not list windsurf",
+);
 
 const sweep = installAgent({ agent: "all", entrypoint, dryRun: true });
 
-assert.ok(!Object.keys(sweep.installed).includes("windsurf"), "--agent all must skip a deprecated agent");
+assert.ok(!Object.keys(sweep.installed).includes("windsurf"), "--agent all must not include windsurf");
 assert.ok(Object.keys(sweep.installed).includes("devin"), "--agent all must include devin");
 
-const explicit = installAgent({ agent: "windsurf", entrypoint, dryRun: true });
+const redirect = installAgent({ agent: "windsurf", entrypoint, dryRun: true });
 
-assert.ok(Array.isArray(explicit.installed.windsurf), "an explicitly requested windsurf must still install");
+assert.ok(
+  !Object.prototype.hasOwnProperty.call(redirect.installed, "windsurf"),
+  "a windsurf request must be redirected, not installed under the legacy name",
+);
+assert.ok(Array.isArray(redirect.installed.devin), "a windsurf request must install Devin instead");
 assert.deepEqual(
-  explicit.warnings,
+  redirect.warnings,
   ['"windsurf" is deprecated - use "devin" instead.'],
-  "naming a deprecated agent must warn, and must point at Devin - Cognition acquired Windsurf",
+  "naming windsurf must warn and point at Devin - Cognition acquired Windsurf",
 );
 assert.ok(!sweep.warnings, "a sweep that skipped the deprecated agent has nothing to warn about");
 
 const removed = uninstallAgent({ agent: "windsurf", dryRun: true });
 
-assert.ok(removed.uninstalled?.windsurf ?? removed.windsurf, "windsurf must stay uninstallable for existing installs");
-assertInstallSh("deprecated - use devin", "the picker must label windsurf as deprecated");
-console.log("  ✅ windsurf is deprecated in favor of devin, and still removable");
+assert.ok(Array.isArray(removed.uninstalled?.devin), "uninstalling windsurf must redirect to the devin cleanup");
+console.log("  ✅ windsurf removed from the catalog; --agent windsurf redirects to devin");
+
+// ── 4. no full re-render on every keypress (flicker guard) ─────────────────
+
+assertInstallSh("print_at", "the picker must redraw rows with ANSI cursor addressing (differential renderer)");
+assertInstallSh("draw_row", "the picker must own per-row drawing");
+assert.ok(
+  !installSh.includes("tui_clear"),
+  "the picker must never full-screen clear during interaction - that is the flicker source",
+);
+console.log("  ✅ picker redraws rows incrementally, no full-screen clear per key");
 
 console.log("  ✅ agent catalog invariants hold");

@@ -211,6 +211,18 @@ fi
 HOME_DIR="$HOME"
 ok "Home: ${HOME_DIR}"
 
+# Runtime home: uninstall --purge removes ~/.rule-mcp/ entirely (state,
+# data, projects, config - the layout src/cli/paths.js expects), so a
+# reinstall must recreate it explicitly instead of relying on a lazy side
+# effect from the health check.
+RULE_MCP_HOME_DIR="$HOME_DIR/.rule-mcp"
+if [[ "$DRY_RUN" == "true" ]]; then
+  sub "[dry-run] Would create runtime home: ${RULE_MCP_HOME_DIR}/"
+else
+  mkdir -p "$RULE_MCP_HOME_DIR/state" "$RULE_MCP_HOME_DIR/data" "$RULE_MCP_HOME_DIR/projects" "$RULE_MCP_HOME_DIR/config"
+  ok "Runtime home ready: ${RULE_MCP_HOME_DIR}/"
+fi
+
 # Check if running from within the rule-mcp repo
 IS_LOCAL_REPO=false
 if [[ -f "package.json" ]]; then
@@ -366,18 +378,13 @@ else
   # ── Agent detection matrix ──
   # Uses the same agent list as tokensave (18+ agents)
   # Note: using parallel arrays instead of associative array (bash 3.2 compat)
-  is_deprecated_agent() {
-    case "$1" in
-      windsurf) return 0 ;;
-      *) return 1 ;;
-    esac
-  }
-
+  # Windsurf is gone: Cognition renamed it Devin, which is in the catalog
+  # under its own name (row below shows "Devin (formerly Windsurf)").
   AGENT_NAMES=(
     "claude" "cursor" "codex" "copilot" "gemini" "pi"
     "cline" "roo" "zed" "opencode" "antigravity"
-    "windsurf" "kilo" "kimi" "vibe" "grok"
-    "droid" "kiro" "qwen" "devin" "vscode" "jetbrains"
+    "kilo" "kimi" "vibe" "grok" "droid"
+    "kiro" "qwen" "devin" "vscode" "jetbrains"
   )
   AGENT_PATHS=(
     "$HOME_DIR/.claude.json"
@@ -391,7 +398,6 @@ else
     "$HOME_DIR/.config/zed/mcp.json"
     "$HOME_DIR/.config/opencode/mcp.json"
     "$HOME_DIR/.config/antigravity/mcp.json"
-    "$HOME_DIR/.config/windsurf/mcp.json"
     "$HOME_DIR/.config/kilo/mcp.json"
     "$HOME_DIR/.config/kimi/mcp.json"
     "$HOME_DIR/.config/vibe/mcp.json"
@@ -401,8 +407,9 @@ else
     "$HOME_DIR/.config/qwen/mcp.json"
     ""
     ""
+    ""
   )
-  # VS Code + JetBrains paths OS-dependent
+  # OS-dependent paths: Devin (mcp_config.json, not mcp.json), VS Code, JetBrains
   if [[ "$OS" == "macos" ]]; then
     AGENT_PATHS[18]="$HOME_DIR/.config/devin/mcp_config.json"
     AGENT_PATHS[19]="$HOME_DIR/Library/Application Support/Code/User/mcp.json"
@@ -437,24 +444,43 @@ else
   else
     info "Detected ${#DETECTED_AGENTS[@]} agent(s): ${DETECTED_AGENTS[*]}"
 
-    # ── Interactive agent + mode selection (full-screen TUI) ──
+    # ── Interactive agent + mode selection (TUI) ──
+    # Differential renderer: draws the static frame once, then rewrites only
+    # the rows a keystroke changes (toggled row, cursor line, footer counter)
+    # via ANSI cursor addressing + selective line erase. No full-screen clear
+    # and no per-key re-render, so there is no flicker: each key costs ~2-4
+    # tiny writes instead of clearing and redrawing ~30 lines. tput is used
+    # for the alt screen + hidden cursor when available, raw ANSI otherwise.
     SELECTED_AGENTS=()
     [[ -z "$INSTALL_MODE" ]] && INSTALL_MODE="stdio"
     if [[ "$INTERACTIVE" == "true" ]] && [[ -t 0 ]]; then
       AGENT_FLAGS=()
-      for ((ai=0; ai<${#AGENT_NAMES[@]}; ai++)); do AGENT_FLAGS+=(0); done
-      # Detected agents are pre-selected: the picker renders the full catalog,
-      # not the detection result, so an agent absent from disk can still be
-      # added by hand and the cursor never leaves a row the catalog has.
+      AGENT_DETECTED=()
+      ROW_Y=()
       for ((ai=0; ai<${#AGENT_NAMES[@]}; ai++)); do
-        if [[ ${AGENT_DETECTED[$ai]:-0} -eq 1 ]] && ! is_deprecated_agent "${AGENT_NAMES[$ai]}"; then
-          AGENT_FLAGS[$ai]=1
-        fi
+        AGENT_FLAGS[$ai]=0
+        AGENT_DETECTED[$ai]=0
+      done
+      # Detected agents start pre-selected: mirror DETECTED_AGENTS into a
+      # per-row flag array (previously never populated, so interactive runs
+      # always started with an empty selection). An agent absent from disk
+      # stays in the catalog, unselected, and the cursor can still reach it.
+      for agent in "${DETECTED_AGENTS[@]}"; do
+        for ((ai=0; ai<${#AGENT_NAMES[@]}; ai++)); do
+          [[ "${AGENT_NAMES[$ai]}" == "$agent" ]] && AGENT_DETECTED[$ai]=1
+        done
+      done
+      for ((ai=0; ai<${#AGENT_NAMES[@]}; ai++)); do
+        [[ ${AGENT_DETECTED[$ai]} -eq 1 ]] && AGENT_FLAGS[$ai]=1
       done
       AGENT_CURSOR=0
       MODE_CURSOR=0
       MODES=(stdio daemon docker)
       MODE_LABELS=("Stdio - agent starts a local process" "Daemon - background SSE service on port 37999" "Docker - containerized SSE service")
+      # The first AGENT_SECTIONS[0] entries are coding agents, the rest IDEs.
+      AGENT_SECTIONS=(19)
+      FOOTER_ROW=0
+      MODE_BASE=0
 
       # Key reader: returns a single key or a canonical token for escape
       # sequences. Handles both ESC [ A (normal) and ESC O A (application
@@ -498,12 +524,11 @@ else
           printf '\033[?25h\033[?1049l'
         fi
       }
-      tui_clear() {
-        if command -v tput >/dev/null 2>&1; then
-          tput clear 2>/dev/null || printf '\033[H\033[2J'
-        else
-          printf '\033[H\033[2J'
-        fi
+      # Print `text` (ANSI escapes expanded) at absolute row $1, erasing the
+      # line first. This is the only write path the picker uses - no
+      # clear-screen, ever.
+      print_at() {
+        printf '\033[%d;1H\033[2K%b\n' "$1" "$2"
       }
       count_selected() {
         local n=0 flag
@@ -519,85 +544,127 @@ else
       }
       cursor_up()   { AGENT_CURSOR=$((AGENT_CURSOR - 1)); [[ $AGENT_CURSOR -lt 0 ]] && AGENT_CURSOR=$((${#AGENT_NAMES[@]} - 1)); return 0; }
       cursor_down() { AGENT_CURSOR=$((AGENT_CURSOR + 1)); [[ $AGENT_CURSOR -ge ${#AGENT_NAMES[@]} ]] && AGENT_CURSOR=0; return 0; }
-      render_agents() {
-        tui_clear
-        echo -e "${BOLD}${CYAN}╔══════════════════════════════════════════════════════╗${NC}"
-        echo -e "${BOLD}${CYAN}║         rule-mcp - Universal Installer         ║${NC}"
-        echo -e "${BOLD}${CYAN}║          Phase 3 - Agent Integration                 ║${NC}"
-        echo -e "${BOLD}${CYAN}╚══════════════════════════════════════════════════════╝${NC}"
-        echo ""
-        echo -e "${BOLD}Select agents${NC}"
-        echo -e "  ${CYAN}↑↓/jk move · SPACE or 1-9 toggle · a all · n none · ENTER confirm · q quit${NC}"
-        echo ""
-        for i in "${!AGENT_NAMES[@]}"; do
-          mark=" "
-          [[ ${AGENT_FLAGS[$i]} -eq 1 ]] && mark="x"
-          pointer="  "
-          [[ $i -eq $AGENT_CURSOR ]] && pointer="${BOLD}>${NC} "
-          note=""
-          [[ ${AGENT_DETECTED[$i]:-0} -eq 1 ]] && note=" ${GREEN}(detected)${NC}"
-          if is_deprecated_agent "${AGENT_NAMES[$i]}"; then
-            note="${note} ${YELLOW}(deprecated - use devin)${NC}"
-          fi
-          echo -e "${pointer}[${mark}] $((i + 1)) ${AGENT_NAMES[$i]}${note}"
-        done
-        selected_count=0
-        for flag in "${AGENT_FLAGS[@]}"; do [[ "$flag" -eq 1 ]] && selected_count=$((selected_count + 1)); done
-        echo ""
-        echo -e "${CYAN}Selected:${NC} ${selected_count}/${#AGENT_NAMES[@]}    ${CYAN}Mode:${NC} ${MODE_LABELS[$MODE_CURSOR]%% -*}"
+      agent_display() {
+        if [[ "$1" == "devin" ]]; then
+          printf 'Devin (formerly Windsurf)'
+        else
+          printf '%s' "$1"
+        fi
       }
-      render_modes() {
-        tui_clear
-        echo -e "${BOLD}${CYAN}╔══════════════════════════════════════════════════════╗${NC}"
-        echo -e "${BOLD}${CYAN}║         rule-mcp - Universal Installer         ║${NC}"
-        echo -e "${BOLD}${CYAN}║          Phase 3 - Install Mode                      ║${NC}"
-        echo -e "${BOLD}${CYAN}╚══════════════════════════════════════════════════════╝${NC}"
-        echo ""
-        echo -e "${BOLD}Select mode${NC}"
-        echo -e "  ${CYAN}↑↓/jk move · 1-3 select · ENTER confirm · q quit${NC}"
-        echo ""
-        for i in "${!MODES[@]}"; do
-          radio=" "
-          [[ $i -eq $MODE_CURSOR ]] && radio="•"
-          pointer="  "
-          [[ $i -eq $MODE_CURSOR ]] && pointer="${BOLD}>${NC} "
-          echo -e "${pointer}(${radio}) $((i + 1)) ${MODE_LABELS[$i]}"
+      row_text() {
+        local i=$1 mark=" " note="" pointer="  "
+        [[ ${AGENT_FLAGS[$i]} -eq 1 ]] && mark="x"
+        [[ $i -eq $AGENT_CURSOR ]] && pointer="${BOLD}›${NC} "
+        [[ ${AGENT_DETECTED[$i]:-0} -eq 1 ]] && note=" ${GREEN}● detected${NC}"
+        printf '%b' "${pointer}[${mark}] $((i + 1)) $(agent_display "${AGENT_NAMES[$i]}")${note}"
+      }
+      draw_row() { # redraw a single picker row in place
+        print_at "${ROW_Y[$1]}" "$(row_text "$1")"
+      }
+      draw_footer() {
+        local n bar="" filled b
+        n=$(count_selected)
+        # integer ceiling so even 1/21 shows a sliver instead of an empty bar
+        filled=$(((n * 20 + ${#AGENT_NAMES[@]} - 1) / ${#AGENT_NAMES[@]}))
+        for ((b=0; b<20; b++)); do
+          if [[ $b -lt $filled ]]; then bar+="█"; else bar+="░"; fi
+        done
+        print_at "$FOOTER_ROW" "${CYAN}Selected:${NC} ${n}/${#AGENT_NAMES[@]} ${bar}  ${CYAN}Mode:${NC} ${MODE_LABELS[$MODE_CURSOR]%% -*}"
+      }
+      draw_frame() {
+        local y=8 s
+        print_at 1 "${BOLD}${CYAN}╔══════════════════════════════════════════════════════╗${NC}"
+        print_at 2 "${BOLD}${CYAN}║   rule-mcp - Universal Installer               ${CYAN}║${NC}"
+        print_at 3 "${BOLD}${CYAN}║   Phase 3 - Agent Integration                       ${CYAN}║${NC}"
+        print_at 4 "${BOLD}${CYAN}╚══════════════════════════════════════════════════════╝${NC}"
+        print_at 5 ""
+        print_at 6 "${BOLD}Select agents${NC}"
+        print_at 7 "  ${CYAN}↑↓/jk move · SPACE/1-9 toggle · a all · n none · ENTER confirm · q quit${NC}"
+        print_at $y "${BLUE}── Coding agents ──${NC}"; y=$((y + 1))
+        s=${AGENT_SECTIONS[0]}
+        for ((i=0; i<s; i++)); do
+          ROW_Y[$i]=$y
+          print_at $y "$(row_text "$i")"
+          y=$((y + 1))
+        done
+        print_at $y "${BLUE}── IDEs ──${NC}"; y=$((y + 1))
+        for ((i=s; i<${#AGENT_NAMES[@]}; i++)); do
+          ROW_Y[$i]=$y
+          print_at $y "$(row_text "$i")"
+          y=$((y + 1))
+        done
+        FOOTER_ROW=$((y + 1))
+        draw_footer
+      }
+      mode_text() {
+        local i=$1 radio=" " pointer="  "
+        [[ $i -eq $MODE_CURSOR ]] && radio="•"
+        [[ $i -eq $MODE_CURSOR ]] && pointer="${BOLD}›${NC} "
+        printf '%b' "${pointer}(${radio}) $((i + 1)) ${MODE_LABELS[$i]}"
+      }
+      draw_mode_panel() {
+        local y
+        y=$((FOOTER_ROW + 1))
+        print_at $y "${BLUE}── Install mode ──${NC}"
+        MODE_BASE=$((y + 1))
+        print_at $MODE_BASE "  ${CYAN}↑↓/jk move · 1-3 select · ENTER confirm · q quit${NC}"
+        for ((i=0; i<${#MODES[@]}; i++)); do
+          draw_mode_row "$i"
         done
       }
+      draw_mode_row() { print_at "$((MODE_BASE + 1 + $1))" "$(mode_text "$1")"; }
+      mode_up()   { MODE_CURSOR=$((MODE_CURSOR - 1)); [[ $MODE_CURSOR -lt 0 ]] && MODE_CURSOR=$((${#MODES[@]} - 1)); return 0; }
+      mode_down() { MODE_CURSOR=$((MODE_CURSOR + 1)); [[ $MODE_CURSOR -ge ${#MODES[@]} ]] && MODE_CURSOR=0; return 0; }
 
       tui_enter
       trap 'tui_leave' EXIT INT TERM
+      draw_frame
 
-      # Step 1: agents (checkboxes)
+      # Step 1: agents (checkboxes) - every key rewrites at most 2 rows.
       while true; do
-        render_agents
         KEY=$(read_key)
         case "$KEY" in
           " ")
             toggle_agent "$AGENT_CURSOR"
+            draw_row "$AGENT_CURSOR"
+            draw_footer
             ;;
-          UP) cursor_up ;;
-          DOWN) cursor_down ;;
-          j) cursor_down ;;
-          k) cursor_up ;;
+          UP|k)
+            prev=$AGENT_CURSOR
+            cursor_up
+            draw_row "$prev"
+            draw_row "$AGENT_CURSOR"
+            ;;
+          DOWN|j)
+            prev=$AGENT_CURSOR
+            cursor_down
+            draw_row "$prev"
+            draw_row "$AGENT_CURSOR"
+            ;;
           a|A)
-            for ((ai=0; ai<${#AGENT_NAMES[@]}; ai++)); do AGENT_FLAGS[$ai]=1; done
+            for ((ai=0; ai<${#AGENT_NAMES[@]}; ai++)); do AGENT_FLAGS[$ai]=1; draw_row "$ai"; done
+            draw_footer
             ;;
           n|N)
-            for ((ai=0; ai<${#AGENT_NAMES[@]}; ai++)); do AGENT_FLAGS[$ai]=0; done
+            for ((ai=0; ai<${#AGENT_NAMES[@]}; ai++)); do AGENT_FLAGS[$ai]=0; draw_row "$ai"; done
+            draw_footer
             ;;
           q)
             tui_leave
             exit 0
             ;;
-          "")
+          ""|$'\r'|$'\n')
             break
             ;;
           [1-9])
             idx=$((10#$KEY - 1))
             if [[ $idx -lt ${#AGENT_NAMES[@]} ]]; then
-              toggle_agent "$idx"
+              prev=$AGENT_CURSOR
               AGENT_CURSOR=$idx
+              toggle_agent "$idx"
+              draw_row "$prev"
+              draw_row "$idx"
+              draw_footer
             fi
             ;;
         esac
@@ -614,26 +681,36 @@ else
 
       # Step 2: mode (radio), unless a caller supplied --mode.
       if [[ "$MODE_WAS_REQUESTED" != "true" ]]; then
-        mode_up()   { MODE_CURSOR=$((MODE_CURSOR - 1)); [[ $MODE_CURSOR -lt 0 ]] && MODE_CURSOR=$((${#MODES[@]} - 1)); return 0; }
-        mode_down() { MODE_CURSOR=$((MODE_CURSOR + 1)); [[ $MODE_CURSOR -ge ${#MODES[@]} ]] && MODE_CURSOR=0; return 0; }
+        draw_mode_panel
         while true; do
-          render_modes
           KEY=$(read_key)
           case "$KEY" in
-            UP) mode_up ;;
-            DOWN) mode_down ;;
-            j) mode_down ;;
-            k) mode_up ;;
+            UP|k)
+              prev=$MODE_CURSOR
+              mode_up
+              draw_mode_row "$prev"
+              draw_mode_row "$MODE_CURSOR"
+              draw_footer
+              ;;
+            DOWN|j)
+              prev=$MODE_CURSOR
+              mode_down
+              draw_mode_row "$prev"
+              draw_mode_row "$MODE_CURSOR"
+              draw_footer
+              ;;
             q)
               tui_leave
               exit 0
               ;;
-            "")
+            ""|$'\r'|$'\n')
               break
               ;;
             [1-3])
               idx=$((10#$KEY - 1))
               MODE_CURSOR=$idx
+              draw_mode_row "$idx"
+              draw_footer
               break
               ;;
           esac
