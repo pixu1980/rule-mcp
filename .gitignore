@@ -10,6 +10,13 @@ dist/
 
 .git
 
-.pi/
-.roo/
+.claude/
+.clinerules/
+.cursor/
+.gemini/
+.git/
 .idea/
+.roo/
+.pi/
+.windsurf/
+.windsurf/
