@@ -81,6 +81,14 @@ Every agent receives the same **registry-driven** clean command set - the `/pix`
 - GitHub Copilot CLI: `/agent`, select `pix-galaxy-mcp`.
 - Codex CLI: invoke globally installed `pix` skill; exact custom prompt support varies by version.
 
+## Minimal tool surface
+
+Set `PIX_GALAXY_MCP_MINIMAL_TOOLS=1` (off by default) to expose only the 10 dispatcher/action
+tools instead of the full per-skill surface (fits clients that cap or truncate the tool list, and
+costs less context on every turn): `pix_tool`, `pix_tool_update`, `pix_tool_gateway`,
+`pix_tool_apply`, `pix_tool_search`, `pix_tool_check`, `pix_tool_scaffold`, `pix_tool_detect`,
+`pix_tool_process_handoff`, `pix_tool_component`.
+
 ## Environment variables
 
 See [06-env-variables.md](06-env-variables.md) for the complete reference table, persistence, and configuration.

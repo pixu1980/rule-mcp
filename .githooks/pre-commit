@@ -1,0 +1,26 @@
+#!/bin/sh
+# Regenerate the census docs and stage them, so every commit ships the docs
+# that match the code. Runs the generator on the working tree and adds every
+# owned file; a changed surface therefore lands in the commit instead of a
+# stale doc. Exits 0 even when nothing changed.
+set -e
+cd "$(git rev-parse --show-toplevel)" || exit 1
+
+[ -f node_modules/prettier/bin/prettier.cjs ] || exit 0
+
+node scripts/generate-census.mjs >/dev/null
+node node_modules/prettier/bin/prettier.cjs --write \
+  docs/01-product-architecture.md \
+  docs/05-env-variables.md \
+  docs/07-skills.md \
+  docs/08-tools.md \
+  docs/09-prompts.md \
+  docs/10-instructions.md \
+  docs/11-cli.md \
+  docs/12-personas.md >/dev/null
+
+git add docs/01-product-architecture.md docs/05-env-variables.md \
+  docs/07-skills.md docs/08-tools.md docs/09-prompts.md \
+  docs/10-instructions.md docs/11-cli.md docs/12-personas.md
+
+exit 0
