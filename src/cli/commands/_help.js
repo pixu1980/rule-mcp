@@ -5,7 +5,7 @@ import { entrypoint, print } from "./_shared.js";
 import { loadAllSkills } from "../../core/skills/index.js";
 import { mcpServerConfig } from "../install/index.js";
 import { startHttpServer } from "../../transport/index.js";
-import { startServer } from "../../server.js";
+import { startServer } from "../../server/index.js";
 import { startSseServer } from "../../transport/index.js";
 function helpCommand() {
   print(HELP_TEXT);
