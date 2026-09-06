@@ -5,7 +5,7 @@
  */
 import { strict as assert } from "node:assert";
 import { get as httpGet, request as httpRequest } from "node:http";
-import { loadAllSkills } from "../../src/core/skills/_skills.js";
+import { loadAllSkills } from "../../src/core/skills/index.js";
 import { getOrCreateSseBearerToken } from "../../src/transport/_sse-auth.js";
 import { startSseServer, stopSseServer } from "../../src/transport/sse/index.js";
 

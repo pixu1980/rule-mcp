@@ -347,7 +347,7 @@ test("releaseMemory hands the heap back and reloads from disk", async () => {
 });
 
 test("an idle server drops the search index and the skill cache", async () => {
-  const { loadAllSkills, skillCache } = await import("../../src/core/skills/_skills.js");
+  const { loadAllSkills, skillCache } = await import("../../src/core/skills/index.js");
   const { isIndexReady, buildIndex } = await import("../../src/core/bm25/index.js");
   const reclaim = await import("../../src/core/session/_reclaim.js");
 

@@ -17,7 +17,7 @@ import { homedir } from "node:os";
 import { multiselect, isCancel, cancel } from "@clack/prompts";
 import { getSkillsDirs as getSkillsDirectories } from "./paths.js";
 import { formatSkillsList } from "./tui.js";
-import { parseSkillFrontmatter } from "../core/skills/_skills.js";
+import { parseSkillFrontmatter } from "../core/skills/index.js";
 
 /**
  * Read SKILL.md frontmatter for name/description/tags.

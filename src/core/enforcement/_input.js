@@ -1,6 +1,7 @@
 /** @module core/enforcement/input - argument limits, prototype-pollution guard, normalization */
 
 export const MAX_ARGUMENT_BYTES = 256 * 1024;
+/** Hard cap on a tool result before it leaves the server. */
 export const MAX_OUTPUT_BYTES = 1024 * 1024;
 const MAX_DEPTH = 12;
 const MAX_KEYS = 1000;

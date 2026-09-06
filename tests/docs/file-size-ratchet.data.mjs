@@ -27,7 +27,6 @@ export const FILE_SIZE_RATCHET = new Map([
   ["src/core/guardrails/_file-tree.js", 167],
   ["src/core/guardrails/_guarded.js", 179],
   ["src/core/session/_lifecycle.js", 228],
-  ["src/core/skills/_skills.js", 271],
   ["src/core/text/_caveman.js", 198],
   ["src/core/tokensave.js", 273],
   ["src/prompts/_handoff-options.js", 162],

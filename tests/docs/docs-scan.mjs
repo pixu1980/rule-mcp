@@ -7,7 +7,7 @@
  */
 
 import { validateTrio } from "../../src/core/review/docs/index.js";
-import { loadAllSkills } from "../../src/core/skills/_skills.js";
+import { loadAllSkills } from "../../src/core/skills/index.js";
 import { listTools } from "../../src/tools/router/index.js";
 import { readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";

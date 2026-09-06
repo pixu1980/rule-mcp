@@ -3,7 +3,7 @@
 /** Re-register tools and flush the skill/result caches, best-effort. */
 export async function reloadSkillsAfterMerge() {
   try {
-    const { loadAllSkills } = await import("../skills/_skills.js");
+    const { loadAllSkills } = await import("../skills/index.js");
 
     await loadAllSkills(true);
   } catch {
