@@ -1,6 +1,7 @@
 /** Input schema of the ADR tool. */
 import { z } from "zod/v4";
 
+/** Input schema of the rule_tool_process_adr tool. */
 export const ADRSchema = z.object({
   title: z.string().min(1).describe("ADR title, in English (e.g. 'Use PostgreSQL as the primary database')"),
   status: z.enum(["proposed", "accepted", "deprecated", "superseded"]).default("accepted").describe("ADR status"),
