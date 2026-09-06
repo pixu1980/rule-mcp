@@ -1,4 +1,4 @@
-// Auto-split from src/core/guardrail-defs.js -- see ./guardrails/index.js
+/** Guardrail catalog barrel: shared, file-tree, framework and quality families. */
 export * from "./shared.js";
 export * from "./file-tree.js";
 export * from "./framework.js";

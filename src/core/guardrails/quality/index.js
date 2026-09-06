@@ -1,16 +1,17 @@
-// Auto-split from src/core/guardrails/quality.js - see ./quality/index.js
-import { A11Y_GUARDRAILS } from "./a11y.js";
-import { QUALITY_GUARDRAILS_PART1 } from "./parts-1.js";
-import { QUALITY_GUARDRAILS_PART2 } from "./parts-2.js";
-import { QUALITY_GUARDRAILS_PART3 } from "./parts-3.js";
-import { QUALITY_GUARDRAILS_PART4 } from "./parts-4.js";
+/** Quality guardrail catalog: one rule per file, grouped in family folders. */
+import { TYPESCRIPT_GUARDRAILS } from "./typescript/index.js";
+import { PROSE_GUARDRAILS } from "./prose/index.js";
+import { MANIFEST_GUARDRAILS } from "./manifest/index.js";
+import { SIMPLICITY_GUARDRAILS } from "./simplicity/index.js";
+import { COMMENT_GUARDRAILS } from "./comments/index.js";
 
-/** Reassembled quality family: a11y-cited rules plus TS/manifest/simplicity/comment/layout checks. */
+/** Assembled quality family: TS, prose/typography, manifest, simplicity and comment checks. */
 export const QUALITY_GUARDRAILS = [
-  ...QUALITY_GUARDRAILS_PART1,
-  ...QUALITY_GUARDRAILS_PART2,
-  ...QUALITY_GUARDRAILS_PART3,
-  ...QUALITY_GUARDRAILS_PART4,
+  ...TYPESCRIPT_GUARDRAILS,
+  ...PROSE_GUARDRAILS,
+  ...MANIFEST_GUARDRAILS,
+  ...SIMPLICITY_GUARDRAILS,
+  ...COMMENT_GUARDRAILS,
 ];
 
-export { A11Y_GUARDRAILS } from "./a11y.js";
+export { A11Y_GUARDRAILS } from "./_a11y.js";
