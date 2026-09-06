@@ -17,7 +17,7 @@ import { join } from "node:path";
 import test from "node:test";
 
 import { checkCode } from "../../src/core/guardrails/index.js";
-import { loadAllSkills } from "../../src/core/skills/_skills.js";
+import { loadAllSkills } from "../../src/core/skills/index.js";
 
 await loadAllSkills();
 

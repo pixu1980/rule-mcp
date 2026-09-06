@@ -26,7 +26,7 @@ process.env.RULE_MCP_NO_CACHE = "1";
 delete process.env.RULE_MCP_NO_TELEMETRY;
 
 const { computeKpi } = await import("../../src/core/telemetry/kpi/index.js");
-const { loadAllSkills } = await import("../../src/core/skills/_skills.js");
+const { loadAllSkills } = await import("../../src/core/skills/index.js");
 const { callTool, readSkill } = await import("../../src/tools/router/index.js");
 const { flush } = await import("../../src/core/telemetry/recorder/index.js");
 const { readEvents } = await import("../../src/core/telemetry/store/index.js");

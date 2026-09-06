@@ -25,7 +25,7 @@
 process.env.RULE_MCP_NO_TELEMETRY ??= "1";
 process.env.RULE_MCP_NO_AUTOUPDATE ??= "1";
 
-const { loadAllSkills } = await import("../../../src/core/skills/_skills.js");
+const { loadAllSkills } = await import("../../../src/core/skills/index.js");
 const { listTools } = await import("../../../src/tools/router/index.js");
 
 /** The char/4 heuristic used everywhere in this project. */

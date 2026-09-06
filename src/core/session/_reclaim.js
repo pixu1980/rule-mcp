@@ -25,7 +25,7 @@
  */
 
 import { clearIndex, isIndexReady } from "../bm25/index.js";
-import { skillCache } from "../skills/_skills.js";
+import { skillCache } from "../skills/index.js";
 import { flush, memoryEntryCount, releaseMemory } from "../cache/tool-cache/index.js";
 
 /** Silence after which the rebuildable heaps are dropped. */

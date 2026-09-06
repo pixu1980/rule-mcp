@@ -9,7 +9,7 @@ import { fileURLToPath } from "node:url";
 export const root = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
 export const DOCS_DIR = process.env.RULE_MCP_CENSUS_DOCS_DIR || join(root, "docs");
 
-const { loadAllSkills, parseSkillFrontmatter } = await import("../../../src/core/skills/_skills.js");
+const { loadAllSkills, parseSkillFrontmatter } = await import("../../../src/core/skills/index.js");
 const { listTools } = await import("../../../src/tools/router/index.js");
 const { listResources } = await import("../../../src/resources/index.js");
 const { listPrompts } = await import("../../../src/prompts/index.js");

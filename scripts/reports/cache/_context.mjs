@@ -18,7 +18,7 @@ process.env.RULE_MCP_NO_TELEMETRY = "1";
 process.env.RULE_MCP_NO_AUTOUPDATE = "1";
 delete process.env.RULE_MCP_NO_CACHE;
 
-const { loadAllSkills } = await import("../../../src/core/skills/_skills.js");
+const { loadAllSkills } = await import("../../../src/core/skills/index.js");
 export const { callTool, entryPathOf } = await import("../../../src/tools/router/index.js");
 export const { cacheClear, cacheEntries } = await import("../../../src/core/cache/tool-cache/index.js");
 export const { CORPUS } = await import("../../../tests/fixtures/routing-corpus.mjs");

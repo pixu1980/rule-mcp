@@ -39,7 +39,7 @@ process.env.RULE_MCP_NO_CACHE = "1";
 
 const asJson = process.argv.includes("--json");
 
-const { loadAllSkills } = await import("../../../src/core/skills/_skills.js");
+const { loadAllSkills } = await import("../../../src/core/skills/index.js");
 const { callTool } = await import("../../../src/tools/router/index.js");
 const { CORPUS } = await import("../../../tests/fixtures/routing-corpus.mjs");
 

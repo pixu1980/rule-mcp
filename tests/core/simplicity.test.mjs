@@ -30,7 +30,7 @@ import { readdirSync, readFileSync, statSync } from "node:fs";
 import { join } from "node:path";
 import { SHARED_GUARDRAILS, SIMPLICITY_GUARDRAILS } from "../../src/core/guardrails/index.js";
 import { getGuardrails } from "../../src/core/guardrails/index.js";
-import { loadAllSkills } from "../../src/core/skills/_skills.js";
+import { loadAllSkills } from "../../src/core/skills/index.js";
 import { callTool } from "../../src/tools/router/index.js";
 
 await loadAllSkills();

@@ -33,7 +33,7 @@ process.env.RULE_MCP_NO_CACHE = "1";
 // universe (note in src/tools/router/index.js TARGET_ONLY_SKILLS).
 process.env.RULE_MCP_SKILL_UNIVERSE = "base";
 
-const { loadAllSkills } = await import("../../src/core/skills/_skills.js");
+const { loadAllSkills } = await import("../../src/core/skills/index.js");
 const { callTool } = await import("../../src/tools/router/index.js");
 const { CORPUS, NONSENSE, PERSONAS, NOT_PERSONAS } = await import("../fixtures/routing-corpus.mjs");
 

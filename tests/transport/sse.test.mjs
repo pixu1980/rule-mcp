@@ -11,7 +11,7 @@
 // eslint-disable-next-line no-unused-vars
 import { strict as assert } from "node:assert";
 import { get as httpGet, request as httpRequest } from "node:http";
-import { loadAllSkills } from "../../src/core/skills/_skills.js";
+import { loadAllSkills } from "../../src/core/skills/index.js";
 
 let pass = 0;
 let fail = 0;

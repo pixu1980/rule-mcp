@@ -25,7 +25,7 @@ process.env.RULE_MCP_NO_AUTOUPDATE = "1";
 process.env.RULE_MCP_NO_TELEMETRY = "1";
 delete process.env.RULE_MCP_NO_CACHE;
 
-const { loadAllSkills } = await import("../../src/core/skills/_skills.js");
+const { loadAllSkills } = await import("../../src/core/skills/index.js");
 const { callTool } = await import("../../src/tools/router/index.js");
 const { cacheKey, cacheGet, cacheSet, cacheClear } = await import("../../src/core/cache/tool-cache/index.js");
 const { GATEWAY_CORE_TOOL, gatewayCoreArguments, validateApply } = await import("../../src/tools/gateway/index.js");

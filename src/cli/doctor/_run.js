@@ -36,7 +36,7 @@ export async function runDoctor(telemetry = false) {
   // Surface snapshot (tools / resources / prompts / skills)
   let surface = { tools: 0, resources: 0, prompts: 0, skills: 0 };
   try {
-    const { loadAllSkills } = await import("../../core/skills/_skills.js");
+    const { loadAllSkills } = await import("../../core/skills/index.js");
     await loadAllSkills(true);
     const { listTools } = await import("../../tools/router/index.js");
     const { listResources } = await import("../../resources/index.js");

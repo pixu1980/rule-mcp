@@ -44,7 +44,7 @@ const sourceFiles = [
   "index.js",
   "tools/router/index.js",
   "tools/skill/index.js",
-  "core/skills/_skills.js",
+  "core/skills/index.js",
   "core/scaffold/templates/index.js",
   "core/guardrails/index.js",
   "resources/index.js",

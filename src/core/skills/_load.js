@@ -1,5 +1,5 @@
 /**
- * @module core/skills
+ * @module core/skills/load
  *
  * Skill loading and registration orchestration.
  * Handles loading all rule skills from disk, registering them as MCP tools,
@@ -10,8 +10,8 @@
  *
  * Called once at startup, or on demand via `skills reload` CLI command.
  */
-import { z } from "zod/v4";
-import { getSkillNames, registerTool, clearTools, retainTools } from "../../tools/router/index.js";
+
+import { getSkillNames, clearTools, retainTools } from "../../tools/router/index.js";
 import { registerSkillTool, registerSearchTool, registerCheckTool, registerScaffoldTool } from "../../tools/skill/index.js";
 import { registerAiTool } from "../../tools/ai/index.js";
 import { registerProcessAdrTool } from "../../tools/adr/index.js";
@@ -19,106 +19,12 @@ import { registerFixTool } from "../../tools/fix/index.js";
 import { registerProcessHandoffTool } from "../../tools/handoff/index.js";
 import { registerGatewayTool } from "../../tools/gateway/index.js";
 import { registerApplyTool } from "../../tools/apply/index.js";
-import { detectProject, getFrameworkSuggestion } from "../detector.js";
+import { registerDetectTool } from "./_detect-tool.js";
+import { IS_MINIMAL_TOOLS, MINIMAL_ALLOWLIST } from "./_minimal.js";
+import { skillCache } from "./_lru.js";
 
-/**
- * Minimal tool surface: expose only the dispatcher + action tools and hide the
- * ~85 per-skill tools (their guidance is reached via pix_gateway / resources).
- *
- * The full 95-tool surface costs tokens on every model turn and exceeds the
- * tool-count limits some clients impose (Cursor, GitHub Copilot), which then
- * silently truncate the list. Off by default; enable with
- * RULE_MCP_MINIMAL_TOOLS=1.
- */
-const IS_MINIMAL_TOOLS = process.env.RULE_MCP_MINIMAL_TOOLS === "1";
-
-/**
- * The exact, fixed tool surface exposed in minimal mode. Enforced as an
- * allowlist AFTER registration (see loadAllSkills), so the set stays small no
- * matter what upstream registration adds.
- */
-const MINIMAL_ALLOWLIST = new Set([
-  "pix_tool", // router / dispatcher
-  "rule_tool_update", // self-update
-  "rule_tool_gateway", // route + evidence + guardrails + receipt (single entry)
-  "rule_tool_apply", // the only writer
-  "rule_tool_search",
-  "rule_tool_check",
-  "rule_tool_scaffold",
-  "rule_tool_detect",
-  "rule_tool_process_handoff",
-  "rule_tool_component",
-]);
-/** Whether skills have been loaded yet. */
 let isLoaded = false;
-/** Simple in-memory LRU cache for skill content (read-through). */
-class LruCache {
-  /**
-   * @param {number} maxSize - Max entries before eviction (default 50)
-   */
-  constructor(maxSize = 50) {
-    /** @type {Map<string, string>} */
-    this._map = new Map();
-    this._maxSize = maxSize;
-  }
-  /**
-   * @param {string} key
-   * @returns {boolean}
-   */
-  has(key) {
-    return this._map.has(key);
-  }
-  /**
-   * Get a value, promoting it to MRU position.
-   * @param {string} key
-   * @returns {string|undefined}
-   */
-  get(key) {
-    if (!this._map.has(key)) {
-      return;
-    }
 
-    const value = this._map.get(key);
-    this._map.delete(key);
-    this._map.set(key, value);
-
-    return value;
-  }
-  /**
-   * Set a value, evicting LRU if over maxSize.
-   * @param {string} key
-   * @param {string} value
-   */
-  set(key, value) {
-    if (this._map.has(key)) {
-      this._map.delete(key);
-    }
-
-    this._map.set(key, value);
-
-    if (this._map.size > this._maxSize) {
-      const firstKey = this._map.keys().next().value;
-
-      if (firstKey !== undefined) {
-        this._map.delete(firstKey);
-      }
-    }
-  }
-  /** Clear all entries. */
-  clear() {
-    this._map.clear();
-  }
-  /** @returns {number} */
-  get size() {
-    return this._map.size;
-  }
-}
-/**
- * Global LRU cache for skill content.
- * Allows caching frequently accessed SKILL.md content
- * and parsed metadata across requests.
- */
-export const skillCache = new LruCache(50);
 /**
  * Load all rule skills and register their corresponding MCP tools.
  * Idempotent - subsequent calls are no-ops unless `force` is true.
@@ -192,6 +98,7 @@ export async function loadAllSkills(force = false) {
 
   buildIndex();
   const { registerTemplateTool } = await import("../scaffold/templates/index.js");
+
   registerTemplateTool();
 
   // Enforce the minimal surface as a hard allowlist - guarantees a small, fixed
@@ -242,30 +149,3 @@ export { extractSingleScaffoldFile } from "../scaffold/_parser.js";
 /**
  * Register the pix_detect tool for project framework detection.
  */
-function registerDetectTool() {
-  const DetectSchema = z.object({
-    path: z.string().optional().default(".").describe("Project directory path"),
-  });
-  registerTool({
-    name: "rule_tool_detect",
-    description: "Detect project framework, TypeScript usage, and build tool from package.json.",
-    zodSchema: DetectSchema,
-    handler: async (arguments_) => {
-      const projectDir = arguments_.path || ".";
-      const profile = detectProject(projectDir);
-      // Suggest relevant skill tools based on detected framework
-      const { skillName, toolName } = getFrameworkSuggestion(profile.framework);
-      const suggestions = [toolName, "rule_tool_check", "rule_tool_scaffold", "rule_tool_component"];
-      const result = {
-        ...profile,
-        suggested_skills: [skillName],
-        suggested_tools: suggestions,
-        message:
-          `Detected ${profile.framework === "vanilla" ? "vanilla JS" : profile.framework} project "${profile.projectName}". ` +
-          `Use ${suggestions.join(", ")} for rule-compliant code generation.`,
-      };
-
-      return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
-    },
-  });
-}

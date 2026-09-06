@@ -25,7 +25,7 @@ import test from "node:test";
 
 import { getGuardrails, checkCode } from "../../src/core/guardrails/index.js";
 import { findFingerprints } from "../../src/core/text/fingerprint/index.js";
-import { loadAllSkills } from "../../src/core/skills/_skills.js";
+import { loadAllSkills } from "../../src/core/skills/index.js";
 
 await loadAllSkills(true);
 
@@ -116,7 +116,7 @@ test("the rule-styleguide-english skill exists and is routed", async () => {
   const skillDir = "skills/rule-styleguide-english";
   assert.ok(existsSync(join(skillDir, "SKILL.md")), `${skillDir}/SKILL.md exists`);
 
-  const { parseSkillFrontmatter } = await import("../../src/core/skills/_skills.js");
+  const { parseSkillFrontmatter } = await import("../../src/core/skills/index.js");
   const meta = parseSkillFrontmatter(readFileSync(join(skillDir, "SKILL.md"), "utf8"));
   assert.equal(meta.name, "rule-styleguide-english", "frontmatter name matches the directory");
   assert.match(meta.description, /english/i, "the description advertises English/American spelling");

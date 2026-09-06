@@ -223,7 +223,7 @@ test("raw CSS with no file name is still CSS", () => {
 // ── What the server generates ─────────────────────────────────────
 
 test("generated components pass their own rule", async () => {
-  const { loadAllSkills } = await import("../../src/core/skills/_skills.js");
+  const { loadAllSkills } = await import("../../src/core/skills/index.js");
   const { callTool } = await import("../../src/tools/router/index.js");
   await loadAllSkills();
 
@@ -326,7 +326,7 @@ test("the reminder carries it when CSS is on the table, and not otherwise", asyn
 });
 
 test("a CSS route carries it, a backend route does not", async () => {
-  const { loadAllSkills } = await import("../../src/core/skills/_skills.js");
+  const { loadAllSkills } = await import("../../src/core/skills/index.js");
   const { callTool } = await import("../../src/tools/router/index.js");
   await loadAllSkills();
 

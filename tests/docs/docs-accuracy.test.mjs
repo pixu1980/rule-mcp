@@ -15,7 +15,7 @@ import { join } from "node:path";
 const skillsRoot = fileURLToPath(new URL("../../skills", import.meta.url));
 const actual = {};
 {
-  const { loadAllSkills } = await import("../../src/core/skills/_skills.js");
+  const { loadAllSkills } = await import("../../src/core/skills/index.js");
   await loadAllSkills(true);
   const { listTools } = await import("../../src/tools/router/index.js");
   const { listResources } = await import("../../src/resources/index.js");

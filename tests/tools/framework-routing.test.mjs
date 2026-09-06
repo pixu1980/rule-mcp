@@ -28,7 +28,7 @@ process.env.RULE_MCP_DISABLE_AUTO_ADR = "1";
 process.env.RULE_MCP_NO_CACHE = "1"; // hermetic: deterministic tool behavior, not the cache
 process.env.RULE_MCP_NO_AUTOUPDATE = "1"; // hermetic: no real git ops in tests
 
-import { loadAllSkills } from "../../src/core/skills/_skills.js";
+import { loadAllSkills } from "../../src/core/skills/index.js";
 import { callTool } from "../../src/tools/router/index.js";
 
 await loadAllSkills();

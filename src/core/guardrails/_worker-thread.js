@@ -13,7 +13,7 @@
 import { parentPort } from "node:worker_threads";
 
 import { checkCode } from "./engine/index.js";
-import { loadAllSkills } from "../skills/_skills.js";
+import { loadAllSkills } from "../skills/index.js";
 
 await loadAllSkills();
 

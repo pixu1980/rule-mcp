@@ -13,7 +13,7 @@ import { readdirSync } from "node:fs";
 import test from "node:test";
 
 import { checkCode, getGuardrails } from "../../src/core/guardrails/index.js";
-import { loadAllSkills } from "../../src/core/skills/_skills.js";
+import { loadAllSkills } from "../../src/core/skills/index.js";
 
 await loadAllSkills();
 

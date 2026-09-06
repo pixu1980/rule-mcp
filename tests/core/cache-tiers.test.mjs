@@ -54,7 +54,7 @@ test("a field whose value reaches the output is not normalizable", async () => {
   // its own heading, so replaying a stored answer for a rephrased query would
   // hand back a header for a question nobody asked.
   const { callTool: call } = await import("../../src/tools/router/index.js");
-  const { loadAllSkills } = await import("../../src/core/skills/_skills.js");
+  const { loadAllSkills } = await import("../../src/core/skills/index.js");
   await loadAllSkills(true);
 
   const searched = await call("rule_tool_styleguide_css", { mode: "search", query: "zzmarkerzz container" });
