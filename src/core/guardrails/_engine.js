@@ -9,7 +9,7 @@
  * The agent iterates: generate → check → fix → re-check → until all pass.
  */
 
-import { SHARED_GUARDRAILS } from "./_shared.js";
+import { SHARED_GUARDRAILS } from "./shared/index.js";
 import { SCAFFOLD_GUARDRAILS } from "./_scaffold.js";
 import { BACKEND_GUARDRAILS } from "./_backend.js";
 import { DATABASE_GUARDRAILS } from "./_database.js";
@@ -123,7 +123,7 @@ export function getGuardrails(skillName, mode) {
   const isA11y = skillName === "rule-styleguide-a11y" || /^rule-(?:frontend|platform|ui|styleguide)/.test(skillName);
   const a11y = isA11y ? A11Y_GUARDRAILS : [];
 
-  return [
+  const families = [
     ...QUALITY_GUARDRAILS,
     ...SHARED_GUARDRAILS,
     ...frameworkSpecific,
@@ -134,6 +134,13 @@ export function getGuardrails(skillName, mode) {
     ...a11y,
     ...plugin,
   ];
+
+  // One run per rule id: the simplicity rules belong to the quality family AND
+  // to the shared set (the simplicity test pins that), so the assembly dedupes
+  // instead of running the same rule twice for every skill.
+  const seen = new Set();
+
+  return families.filter((guardrail) => !seen.has(guardrail.id) && seen.add(guardrail.id));
 }
 
 /**

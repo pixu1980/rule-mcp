@@ -1,41 +1,7 @@
 /** Literal-masking and context helpers used by the a11y guardrail family. */
-function maskLiterals(code) {
-  const out = [...code];
-  let quote;
-  let escaped = false;
-
-  for (const [index, char] of out.entries()) {
-    if (quote) {
-      if (escaped) {
-        escaped = false;
-        out[index] = char === "\n" ? "\n" : " ";
-        continue;
-      }
-
-      if (char === "\\") {
-        escaped = true;
-        out[index] = " ";
-        continue;
-      }
-
-      if (char === quote) {
-        quote = undefined;
-        continue;
-      }
-
-      out[index] = char === "\n" ? "\n" : " ";
-      continue;
-    }
-
-    if (char === "'" || char === '"' || char === "`") {
-      quote = char;
-    }
-  }
-
-  return out.join("");
-}
 
 /** Lines short enough to hand-write; a kilobytes-long line is generated output. */
+import { maskLiterals } from "../_util.js";
 function scannableLines(code, cap = 2000) {
   return code.split("\n").filter((line) => line.length > 0 && line.length <= cap);
 }
@@ -91,4 +57,6 @@ function a11yRule(spec) {
  * replaceSync sheets, <style> blocks, or a bare stylesheet.
  */
 
-export { maskLiterals, scannableLines, MARKUP_EXTENSION, STYLE_EXTENSION, isMarkup, isStyles, a11yRule };
+export { scannableLines, MARKUP_EXTENSION, STYLE_EXTENSION, isMarkup, isStyles, a11yRule };
+
+export { maskLiterals } from "../_util.js";

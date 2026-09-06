@@ -111,3 +111,40 @@ export function looksLikeStyling(text) {
     String(text ?? ""),
   );
 }
+
+/** Mask string/template literal contents so scanners see code, not quoted samples. */
+export function maskLiterals(code) {
+  const out = [...code];
+  let quote;
+  let escaped = false;
+
+  for (const [index, char] of out.entries()) {
+    if (quote) {
+      if (escaped) {
+        escaped = false;
+        out[index] = char === "\n" ? "\n" : " ";
+        continue;
+      }
+
+      if (char === "\\") {
+        escaped = true;
+        out[index] = " ";
+        continue;
+      }
+
+      if (char === quote) {
+        quote = undefined;
+        continue;
+      }
+
+      out[index] = char === "\n" ? "\n" : " ";
+      continue;
+    }
+
+    if (char === "'" || char === '"' || char === "`") {
+      quote = char;
+    }
+  }
+
+  return out.join("");
+}
