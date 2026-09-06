@@ -10,7 +10,7 @@ import { join } from "node:path";
 import { mkdtempSync } from "node:fs";
 
 const fakeHome = mkdtempSync(join(tmpdir(), "pix-daemon-install-"));
-const installModule = new URL("../../src/cli/install.js", import.meta.url).href;
+const installModule = new URL("../../src/cli/install/index.js", import.meta.url).href;
 const source = [
   `import { mcpServerConfig } from ${JSON.stringify(installModule)};`,
   'console.log(JSON.stringify(mcpServerConfig("/tmp/pix-galaxy-mcp.js", { mode: "daemon" })));',

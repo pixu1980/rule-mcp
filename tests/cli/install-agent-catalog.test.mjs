@@ -20,7 +20,7 @@ import { strict as assert } from "node:assert";
 import { readFileSync } from "node:fs";
 import { homedir } from "node:os";
 import { join } from "node:path";
-import { getAllAgents, installAgent, uninstallAgent } from "../../src/cli/install.js";
+import { getAllAgents, installAgent, uninstallAgent } from "../../src/cli/install/index.js";
 
 const root = new URL("../..", import.meta.url).pathname;
 const installSh = readFileSync(join(root, "scripts", "install.sh"), "utf8");

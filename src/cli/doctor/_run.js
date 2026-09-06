@@ -3,7 +3,7 @@ import { existsSync, readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { listTools } from "../../tools/router/index.js";
 import { getRuntimePaths } from "../paths.js";
-import { detectInstalledAgents } from "../install.js";
+import { detectInstalledAgents } from "../install/index.js";
 import { checkDaemonService } from "../daemon/index.js";
 import { getTokenStats } from "../../core/telemetry/_token-stats.js";
 import { validateAgentConfigs } from "./_detect-agents.js";

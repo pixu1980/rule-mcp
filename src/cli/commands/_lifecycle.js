@@ -2,7 +2,7 @@
 
 import { entrypoint, print, printJson } from "./_shared.js";
 import { formatInstallResult, formatUninstallResult } from "../tui.js";
-import { installAgent } from "../install.js";
+import { installAgent } from "../install/index.js";
 import { uninstallFromAgent } from "../uninstall.js";
 function installCommand(opts) {
   const result = installAgent({

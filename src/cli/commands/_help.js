@@ -3,7 +3,7 @@
 import { HELP_TEXT } from "../help-text.js";
 import { entrypoint, print } from "./_shared.js";
 import { loadAllSkills } from "../../core/skills/index.js";
-import { mcpServerConfig } from "../install.js";
+import { mcpServerConfig } from "../install/index.js";
 import { startHttpServer } from "../../transport/index.js";
 import { startServer } from "../../server.js";
 import { startSseServer } from "../../transport/index.js";
