@@ -1,6 +1,6 @@
 /** @module core/scaffold/templates/lookup */
 
-import { COMPONENT_TEMPLATES } from "../_template-data.js";
+import { COMPONENT_TEMPLATES } from "../_template-data.data.js";
 
 export function listTemplateCategories() {
   return Object.entries(COMPONENT_TEMPLATES).map(([name, t]) => ({

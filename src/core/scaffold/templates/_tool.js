@@ -2,7 +2,7 @@
 
 import { z } from "zod/v4";
 import { registerTool } from "../../../tools/router/index.js";
-import { COMPONENT_TEMPLATES } from "../_template-data.js";
+import { COMPONENT_TEMPLATES } from "../_template-data.data.js";
 import { guardrailSummary } from "./_guardrail-summary.js";
 import { buildGuardrailsText } from "./_guardrails-text.js";
 import { generateMultiFile } from "./_multi-file.js";

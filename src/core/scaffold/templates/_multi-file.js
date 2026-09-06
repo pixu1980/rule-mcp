@@ -1,6 +1,6 @@
 /** @module core/scaffold/templates/multi-file */
 
-import { COMPONENT_TEMPLATES, toPascal, toKebab, interpolate } from "../_template-data.js";
+import { COMPONENT_TEMPLATES, toPascal, toKebab, interpolate } from "../_template-data.data.js";
 
 function indent(string_, spaces) {
   const pad = " ".repeat(spaces);
