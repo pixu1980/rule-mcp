@@ -2,4 +2,6 @@
 
 export let _index = null;
 
-export function setIndex(value) { _index = value; }
+export function setIndex(value) {
+  _index = value;
+}

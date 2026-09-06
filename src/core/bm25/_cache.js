@@ -71,7 +71,8 @@ function restoreIndex() {
       docLength: new Map(stored.docLength),
       docs: stored.docs,
       totalDocs: stored.totalDocs,
-      avgDocLength: stored.avgDocLength,    });
+      avgDocLength: stored.avgDocLength,
+    });
 
     return true;
   } catch {
@@ -152,4 +153,14 @@ function getIndexStats() {
  * @param {number} n - Number of documents containing the term
  * @returns {number}
  */
-export { indexCacheKey, indexCacheFile, skillsSignature, indexCacheEnabled, restoreIndex, persistIndex, clearIndex, isIndexReady, getIndexStats };
+export {
+  indexCacheKey,
+  indexCacheFile,
+  skillsSignature,
+  indexCacheEnabled,
+  restoreIndex,
+  persistIndex,
+  clearIndex,
+  isIndexReady,
+  getIndexStats,
+};

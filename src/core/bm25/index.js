@@ -1,10 +1,8 @@
-// Auto-split from src/core/bm25.js - see ./bm25/index.js
-export * from "./terms.js";
-export * from "./stopwords.js";
-export * from "./stopwords-a.js";
-export * from "./stopwords-b.js";
-export * from "./stopwords-union.js";
-export * from "./extract.js";
-export * from "./build.js";
-export * from "./cache.js";
-export * from "./score.js";
+/** BM25 skill-search engine: tokenizer, stopwords, index build/cache and scoring. */
+export * from "./_terms.js";
+export * from "./_canonicalize.js";
+export { STOPWORDS } from "./_stopwords.data.js";
+export * from "./_extract.js";
+export * from "./_build.js";
+export * from "./_cache.js";
+export * from "./_score.js";
