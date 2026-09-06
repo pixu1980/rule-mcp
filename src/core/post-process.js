@@ -7,7 +7,7 @@
 
 import { execFileSync } from "node:child_process";
 import { readFileSync, writeFileSync } from "node:fs";
-import { fixBlockSpacing } from "./text/_block-spacing.js";
+import { fixBlockSpacing } from "./text/block-spacing/index.js";
 
 /**
  * Post-process an array of written files.
