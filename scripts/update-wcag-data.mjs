@@ -25,7 +25,7 @@ import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 
 const SOURCE = "https://www.w3.org/WAI/WCAG22/wcag.json";
-const TARGET = fileURLToPath(new URL("../src/core/wcag-data/index.js", import.meta.url));
+const TARGET = fileURLToPath(new URL("../src/core/wcag-data/_criteria.data.js", import.meta.url));
 const apply = process.argv.includes("--apply");
 
 /** Flatten the principle/guideline/criterion tree into one keyed record. */
@@ -60,9 +60,9 @@ function render(criteria, generatedOn) {
     .join("\n");
 
   return `/**
- * @module core/wcag-data
+ * @module core/wcag-data/criteria
  *
- * WCAG 2.2 success criteria, vendored.
+ * WCAG 2.2 success criteria, vendored. Data file: exempt from the size cap.
  *
  * GENERATED FILE - do not edit by hand.
  * Regenerate with \`node scripts/update-wcag-data.mjs --apply\`, or
@@ -101,40 +101,37 @@ export const EARL_OUTCOMES = ["passed", "failed", "cantTell", "inapplicable", "u
  * @see https://www.w3.org/TR/WCAG-EM/
  */
 export const WCAG_EM_STEPS = [
-  { step: 1, name: "Define the evaluation scope", asks: "Which pages, which conformance target, which technologies and user agents" },
-  { step: 2, name: "Explore the target", asks: "Common pages, functionality, types of content, technologies relied upon" },
-  { step: 3, name: "Select a representative sample", asks: "Structured sample plus a random sample; record why each page is in it" },
-  { step: 4, name: "Audit the selected sample", asks: "One outcome per criterion per page, with the evidence that produced it" },
-  { step: 5, name: "Report the findings", asks: "Scope, sample, outcomes, and the conformance claim they support" },
+  {
+    step: 1,
+    name: "Define the evaluation scope",
+    asks: "Which pages, which conformance target, which technologies and user agents",
+  },
+  {
+    step: 2,
+    name: "Explore the target",
+    asks: "Common pages, functionality, types of content, technologies relied upon",
+  },
+  {
+    step: 3,
+    name: "Select a representative sample",
+    asks: "Structured sample plus a random sample; record why each page is in it",
+  },
+  {
+    step: 4,
+    name: "Audit the selected sample",
+    asks: "One outcome per criterion per page, with the evidence that produced it",
+  },
+  {
+    step: 5,
+    name: "Report the findings",
+    asks: "Scope, sample, outcomes, and the conformance claim they support",
+  },
 ];
 
 /** Every success criterion, keyed by number. */
 export const CRITERIA = {
 ${entries}
 };
-
-/**
- * One criterion by number.
- *
- * @param {string} number_ - e.g. "1.4.3"
- * @returns {{ num: string, id: string, handle: string, level: string, guideline: string, principle: string }|undefined}
- */
-export function criterion(number_) {
-  return CRITERIA[number_];
-}
-
-/**
- * Every criterion at or below a conformance level. "AA" returns A and AA, which
- * is what a conformance claim at AA actually requires.
- *
- * @param {"A"|"AA"|"AAA"} level
- * @returns {Array<object>}
- */
-export function criteriaForLevel(level) {
-  const included = { A: ["A"], AA: ["A", "AA"], AAA: ["A", "AA", "AAA"] }[level] ?? ["A", "AA"];
-
-  return Object.values(CRITERIA).filter((c) => included.includes(c.level));
-}
 `;
 }
 
