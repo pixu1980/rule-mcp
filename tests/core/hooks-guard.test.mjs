@@ -36,7 +36,7 @@ import {
   withHooks,
   withoutHooks,
 } from "../../src/core/agents/_hooks.js";
-import { decide, skillForPath } from "../../src/cli/guard.js";
+import { decide, skillForPath } from "../../src/cli/guard/index.js";
 
 const LAUNCHER = { command: "/usr/local/bin/pix-galaxy-mcp", args: [] };
 const BIN = fileURLToPath(new URL("../../bin/pix-galaxy-mcp.js", import.meta.url));

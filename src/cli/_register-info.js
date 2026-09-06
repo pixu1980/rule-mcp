@@ -106,7 +106,7 @@ export function registerGuardCommand(program) {
     .argument("[action]", "bash or other guard scope", "bash")
     .allowExcessArguments(false)
     .action(async (action) => {
-      const { runGuard } = await import("./guard.js");
+      const { runGuard } = await import("./guard/index.js");
 
       await runGuard(action ?? "bash");
     });
