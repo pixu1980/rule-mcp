@@ -41,7 +41,7 @@ check("F1.6 exports live under it", projectPaths.exportsDir === join(projectPath
 check("F1.7 the project itself is left alone", !existsSync(join(project, ".rule-mcp")));
 
 // ── F2: the log is project-scoped ──
-const { eventsFile, rollupFile } = await import("../../../src/core/telemetry/_store.js");
+const { eventsFile, rollupFile } = await import("../../../src/core/telemetry/store/index.js");
 
 check("F2 the event log is in the project directory", eventsFile() === join(projectPaths.dir, "telemetry.jsonl"));
 check("F2.1 the rollup is beside it", rollupFile() === join(projectPaths.dir, "telemetry-rollup.json"));

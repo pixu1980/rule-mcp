@@ -12,8 +12,8 @@ const { check, finish } = makeCheck("Flight recorder: recording");
 const { project } = makeSandbox();
 
 const { getProjectPaths } = await import("../../../src/cli/paths.js");
-const { readEvents } = await import("../../../src/core/telemetry/_store.js");
-const telemetry = await import("../../../src/core/telemetry/_telemetry.js");
+const { readEvents } = await import("../../../src/core/telemetry/store/index.js");
+const telemetry = await import("../../../src/core/telemetry/recorder/index.js");
 
 recordSampleSession(telemetry);
 

@@ -10,7 +10,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 
-const { aggregate, percentile, renderFlight, renderStats } = await import("../../src/core/telemetry/_stats.js");
+const { aggregate, percentile, renderFlight, renderStats } = await import("../../src/core/telemetry/stats/index.js");
 
 test("percentile is nearest-rank over a sorted copy", () => {
   assert.equal(percentile([], 0.5), 0);

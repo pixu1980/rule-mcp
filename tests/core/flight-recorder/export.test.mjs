@@ -12,8 +12,8 @@ const { check, finish } = makeCheck("Flight recorder: export");
 const { workspace, project } = makeSandbox();
 
 const { getProjectPaths } = await import("../../../src/cli/paths.js");
-const { drain, readEvents, readRollups } = await import("../../../src/core/telemetry/_store.js");
-const telemetry = await import("../../../src/core/telemetry/_telemetry.js");
+const { drain, readEvents, readRollups } = await import("../../../src/core/telemetry/store/index.js");
+const telemetry = await import("../../../src/core/telemetry/recorder/index.js");
 
 recordSampleSession(telemetry);
 
@@ -25,7 +25,7 @@ mkdirSync(join(project, "src", "components", "ContactCard"), { recursive: true }
 writeFileSync(join(project, "src", "components", "ContactCard", "index.js"), "export * from './_ContactCard.jsx';\n");
 writeFileSync(join(project, "src", "components", "ContactCard", "_ContactCard.jsx"), "const a = 1;\n");
 
-const { FLIGHT_FILE_VERSION, exportFlight } = await import("../../../src/core/telemetry/_flight.js");
+const { FLIGHT_FILE_VERSION, exportFlight } = await import("../../../src/core/telemetry/flight/index.js");
 
 telemetry.endSession({ now: T0 + 400_000 });
 
@@ -76,7 +76,7 @@ check("F7.13 drain empties the log on demand", readEvents().length === 0);
 check("F7.14 every export is its own file", readdirSync(projectPaths.exportsDir).filter((f) => f.endsWith(".flight")).length === 2);
 
 // ── F8: readable without a JSON viewer ──
-const { renderFlight } = await import("../../../src/core/telemetry/_stats.js");
+const { renderFlight } = await import("../../../src/core/telemetry/stats/index.js");
 const rendered = renderFlight(flight);
 
 check("F8 the renderer reports the server's token footprint", rendered.includes("MCP token footprint"));

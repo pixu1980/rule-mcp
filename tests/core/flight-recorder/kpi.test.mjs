@@ -11,8 +11,8 @@ import { makeCheck, makeSandbox, recordSampleSession, writePiFixture, T0 } from 
 const { check, finish } = makeCheck("Flight recorder: KPI block");
 const { workspace, project } = makeSandbox();
 
-const { readEvents } = await import("../../../src/core/telemetry/_store.js");
-const telemetry = await import("../../../src/core/telemetry/_telemetry.js");
+const { readEvents } = await import("../../../src/core/telemetry/store/index.js");
+const telemetry = await import("../../../src/core/telemetry/recorder/index.js");
 
 recordSampleSession(telemetry);
 
@@ -28,7 +28,7 @@ writeFileSync(join(project, "src", "components", "ContactCard", "_ContactCard.js
 const { snapshotProject } = await import("../../../src/core/session/_snapshot.js");
 const snapshot = snapshotProject(project);
 
-const { computeKpi } = await import("../../../src/core/telemetry/_kpi.js");
+const { computeKpi } = await import("../../../src/core/telemetry/kpi/index.js");
 const kpi = computeKpi({
   events: readEvents(),
   usage: { ...piUsage, agent: "pi", userTurns: 0 },

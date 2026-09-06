@@ -90,7 +90,7 @@ async function statsCommand(directory) {
       : `Catalog: none at ${catalogPath(directory)}`,
   );
 
-  const { readEvents } = await import("../core/telemetry/_store.js");
+  const { readEvents } = await import("../core/telemetry/store/index.js");
   const events = readEvents();
 
   if (events.length === 0) {

@@ -7,7 +7,7 @@ import { computeCore, estimateRoutingSaving } from "./_compute.js";
 import { consumeUpdateBanner, maybeSelfUpdate } from "../../core/self-update/index.js";
 import { dependenciesOf, entryPathOf, routedSkillOf } from "./_entry.js";
 import { enforcementError } from "../../core/enforcement.js";
-import { recordToolCall } from "../../core/telemetry/_telemetry.js";
+import { recordToolCall } from "../../core/telemetry/recorder/index.js";
 import { resumeAnnouncement } from "../../core/session/_resume.js";
 import { touchActivity } from "../../core/session/_reclaim.js";
 import { z } from "zod/v4";
