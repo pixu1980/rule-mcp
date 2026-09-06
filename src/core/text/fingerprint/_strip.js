@@ -1,7 +1,7 @@
 /** @module core/text/fingerprint/strip - rewrite the fingerprints away, line by line */
 
 import { cleanLine, looksLikeJson } from "./_rewrite-line.js";
-import { fingerprintEnabled, scannableProse } from "./_scan.js";
+import { fingerprintEnabled } from "./_scan.js";
 
 /**
  * Clean a block of prose/markdown. Fenced code passes through untouched, and
