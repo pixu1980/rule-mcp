@@ -79,19 +79,21 @@
     "web"
   ],
   "dependencies": {
+    "@clack/prompts": "1.7.0",
     "@modelcontextprotocol/sdk": "1.30.0",
+    "commander": "15.0.0",
     "rule-mcp": "link:",
-    "zod": "4.4.3"
+    "zod": "4.5.4"
   },
   "devDependencies": {
-    "@modelcontextprotocol/inspector": "1.0.1",
-    "@playwright/test": "1.52.0",
-    "eslint": "10.8.0",
-    "jsdom": "29.1.1",
-    "marked": "18.0.5",
-    "prettier": "3.9.6",
-    "eslint-plugin-unicorn": "72.0.0",
     "@eslint/js": "10.0.1",
-    "globals": "17.9.0"
+    "@modelcontextprotocol/inspector": "2.5.0",
+    "@playwright/test": "1.63.0",
+    "eslint": "10.8.0",
+    "eslint-plugin-unicorn": "72.0.0",
+    "globals": "17.12.0",
+    "jsdom": "30.0.1",
+    "marked": "18.0.11",
+    "prettier": "3.9.6"
   }
 }
