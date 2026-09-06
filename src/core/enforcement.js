@@ -1,6 +1,6 @@
 import { randomUUID } from "node:crypto";
 import { FLEX_FIRST } from "./directive.js";
-import { looksLikeStyling } from "./guardrail-defs.js";
+import { looksLikeStyling } from "./guardrails/index.js";
 
 const MAX_ARGUMENT_BYTES = 256 * 1024;
 const MAX_OUTPUT_BYTES = 1024 * 1024;

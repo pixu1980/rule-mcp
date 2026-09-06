@@ -16,8 +16,8 @@ import { strict as assert } from "node:assert";
 import { test } from "node:test";
 
 import { CORPUS } from "../fixtures/guardrail-corpus.mjs";
-import { checkCode } from "../../src/core/guardrails.js";
-import * as DEFS from "../../src/core/guardrail-defs.js";
+import { checkCode } from "../../src/core/guardrails/index.js";
+import * as DEFS from "../../src/core/guardrails/index.js";
 
 /**
  * How many rules carry a corpus entry today.

@@ -173,7 +173,7 @@ test("daemon stop escalates to SIGKILL and only then forgets the pid", async (t)
   const previous = process.env.RULE_MCP_STATE_DIR;
   process.env.RULE_MCP_STATE_DIR = stateDir;
   try {
-    const { stopDaemonProcess } = await import("../../src/cli/daemon.js");
+    const { stopDaemonProcess } = await import("../../src/cli/daemon/_daemon.js");
     // The pid is a child of this test process, so it stays in the process table
     // as a zombie until the runtime reaps it. Its exit event is the honest
     // signal that it is dead, which kill(pid, 0) is not.
@@ -204,7 +204,7 @@ test("daemon stop takes the graceful path when the daemon has one", async (t) =>
   const previous = process.env.RULE_MCP_STATE_DIR;
   process.env.RULE_MCP_STATE_DIR = stateDir;
   try {
-    const { stopDaemonProcess } = await import("../../src/cli/daemon.js");
+    const { stopDaemonProcess } = await import("../../src/cli/daemon/_daemon.js");
     const startedAt = Date.now();
     const result = await stopDaemonProcess({});
     assert.equal(result.action, "stopped");

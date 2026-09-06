@@ -29,7 +29,7 @@ process.env.RULE_MCP_NO_TELEMETRY = "1";
 
 const { cacheStore, cacheLookup, cacheClear, skillDigest, cacheEntries } = await import("../../src/core/cache/_tool-cache.js");
 const { callTool, dependenciesOf } = await import("../../src/tools/router/index.js");
-const { loadAllSkills } = await import("../../src/core/skills.js");
+const { loadAllSkills } = await import("../../src/core/skills/_skills.js");
 
 await loadAllSkills(true);
 
@@ -307,7 +307,7 @@ test("routing off a restored index answers exactly as a freshly built one", asyn
   // 95ms of tokenizing against 18ms of reading it back, paid by every CLI
   // invocation and every hook. Worth it only if the answers are identical, so
   // that is what this asserts rather than the timing.
-  const { loadAllSkills } = await import("../../src/core/skills.js");
+  const { loadAllSkills } = await import("../../src/core/skills/_skills.js");
   const { buildIndex, clearIndex, search, getIndexStats } = await import("../../src/core/bm25/index.js");
   await loadAllSkills();
 

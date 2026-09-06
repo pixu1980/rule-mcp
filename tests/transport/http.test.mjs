@@ -27,7 +27,7 @@ process.env.RULE_MCP_DISABLE_AUTO_ADR = "1";
 const TOKEN = process.env.RULE_MCP_SSE_TOKEN;
 const ACCEPT = "application/json, text/event-stream";
 
-import { loadAllSkills } from "../../src/core/skills.js";
+import { loadAllSkills } from "../../src/core/skills/_skills.js";
 import { startHttpServer, stopHttpServer } from "../../src/transport/_http.js";
 
 await loadAllSkills();

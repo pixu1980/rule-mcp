@@ -22,7 +22,7 @@
 
 import { readFileSync } from "node:fs";
 import { execFileSync } from "node:child_process";
-import { checkCode, getGuardrails } from "../../src/core/guardrails.js";
+import { checkCode, getGuardrails } from "../../src/core/guardrails/index.js";
 
 let pass = 0;
 let fail = 0;

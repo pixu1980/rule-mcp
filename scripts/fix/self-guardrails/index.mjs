@@ -13,7 +13,7 @@
  *  - js-blank-line-between-methods: blank between class methods
  *  - fp-*: plain ASCII typography, American spelling (prose only)
  *
- * Run: node scripts/fix-self-guardrails.mjs [--dry-run]
+ * Run: node scripts/fix/self-guardrails/index.mjs [--dry-run]
  * Iterates to a fixed point (bounded) so insertions satisfying one rule never
  * break another.
  */

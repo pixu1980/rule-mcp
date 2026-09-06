@@ -20,7 +20,7 @@ import { fileURLToPath } from "node:url";
 import { listTools } from "../tools/router/index.js";
 import { getRuntimePaths } from "./paths.js";
 import { detectInstalledAgents } from "./install.js";
-import { checkDaemonService, WRAPPER_SCRIPT_PATH } from "./daemon.js";
+import { checkDaemonService, WRAPPER_SCRIPT_PATH } from "./daemon/_daemon.js";
 import { banner, color, section } from "./tui.js";
 import { getTokenStats } from "../core/telemetry/_token-stats.js";
 
@@ -372,7 +372,7 @@ export async function runDoctor(telemetry = false) {
   // Surface snapshot (tools / resources / prompts / skills)
   let surface = { tools: 0, resources: 0, prompts: 0, skills: 0 };
   try {
-    const { loadAllSkills } = await import("../core/skills.js");
+    const { loadAllSkills } = await import("../core/skills/_skills.js");
     await loadAllSkills(true);
     const { listTools } = await import("../tools/router/index.js");
     const { listResources } = await import("../resources/index.js");

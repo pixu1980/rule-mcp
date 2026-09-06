@@ -14,7 +14,7 @@
 
 import { Worker } from "node:worker_threads";
 
-import { checkCode } from "./guardrails.js";
+import { checkCode } from "./_engine.js";
 
 /** Default per-check budget; RULE_MCP_CHECK_TIMEOUT_MS overrides. */
 const DEFAULT_TIMEOUT_MS = 5000;
@@ -45,7 +45,7 @@ function defaultTimeoutMs() {
 }
 
 function spawn() {
-  const worker = new Worker(new URL("guardrails-worker-thread.js", import.meta.url));
+  const worker = new Worker(new URL("_worker-thread.js", import.meta.url));
   worker.unref();
   _ready = new Promise((resolve) => {
     const onReady = (message) => {

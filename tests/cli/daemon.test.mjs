@@ -43,7 +43,7 @@ try {
 
 // ── Import the daemon command handler ──
 const { daemonCommand } = await import("../../src/cli/commands/index.js");
-import { daemonProcessStatus } from "../../src/cli/daemon.js";
+import { daemonProcessStatus } from "../../src/cli/daemon/_daemon.js";
 
 // ── T7: daemon start creates pid file and starts server ──
 await daemonCommand({ action: "start" });

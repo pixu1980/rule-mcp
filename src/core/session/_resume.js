@@ -46,8 +46,8 @@
 import { createHash } from "node:crypto";
 import { existsSync, mkdirSync, rmSync, readFileSync, writeFileSync } from "node:fs";
 import { join, resolve } from "node:path";
-import { getRuntimePaths } from "../cli/paths.js";
-import { handon } from "../tools/handon.js";
+import { getRuntimePaths } from "../../cli/paths.js";
+import { handon } from "../../tools/handon.js";
 
 /** Session sources that mean "the user came back to unfinished work". */
 const RESUMED = new Set(["resume"]);

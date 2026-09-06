@@ -16,8 +16,8 @@
  *   - an unknown file lists what is really there, not a hardcoded list
  */
 
-import { checkCode } from "../../src/core/guardrails.js";
-import { loadAllSkills } from "../../src/core/skills.js";
+import { checkCode } from "../../src/core/guardrails/index.js";
+import { loadAllSkills } from "../../src/core/skills/_skills.js";
 import { callTool } from "../../src/tools/router/index.js";
 
 let pass = 0;

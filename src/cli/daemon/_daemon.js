@@ -14,9 +14,9 @@ import {
   installWindowsService,
   uninstallWindowsService,
   checkWindowsService,
-} from "./daemon-platform.js";
+} from "./_platform.js";
 
-export * from "./daemon-platform.js";
+export * from "./_platform.js";
 
 /**
  * @module cli/daemon
@@ -35,7 +35,7 @@ export * from "./daemon-platform.js";
  *   import { installDaemonService, uninstallDaemonService, checkDaemonService,
  *            startDaemonProcess, stopDaemonProcess, daemonProcessStatus,
  *            formatDaemonStatus, detectPlatform }
- *     from "./cli/daemon.js";
+ *     from "../cli/daemon.js";
  */
 
 import { spawn } from "node:child_process";
@@ -53,7 +53,7 @@ import {
 } from "node:fs";
 import { setTimeout as sleep } from "node:timers/promises";
 import { platform } from "node:os";
-import { getRuntimePaths } from "./paths.js";
+import { getRuntimePaths } from "../paths.js";
 
 // ─── Platform detection ───────────────────────────────────────────────────
 

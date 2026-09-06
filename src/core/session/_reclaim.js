@@ -24,9 +24,9 @@
  * @see module:tools/router - marks activity on every tool call
  */
 
-import { clearIndex, isIndexReady } from "./bm25/index.js";
-import { skillCache } from "./skills.js";
-import { flush, memoryEntryCount, releaseMemory } from "./cache/_tool-cache.js";
+import { clearIndex, isIndexReady } from "../bm25/index.js";
+import { skillCache } from "../skills/_skills.js";
+import { flush, memoryEntryCount, releaseMemory } from "../cache/_tool-cache.js";
 
 /** Silence after which the rebuildable heaps are dropped. */
 export const IDLE_RECLAIM_MS = 600_000;

@@ -2,21 +2,20 @@
  * rule-mcp Guardrails Engine
  *
  * Public API for guardrails: getGuardrails, checkCode, getGuardrailsReport.
- * Guardrail definitions live in guardrail-defs.js (imported below).
+ * Guardrail definitions live in the sibling catalog modules (imported below,
+ * per module rather than through the barrel: the barrel re-exports this
+ * engine, so importing it back would be a cycle).
  *
  * The agent iterates: generate → check → fix → re-check → until all pass.
  */
 
-import {
-  SHARED_GUARDRAILS,
-  FRAMEWORK_GUARDRAILS,
-  SCAFFOLD_GUARDRAILS,
-  BACKEND_GUARDRAILS,
-  DATABASE_GUARDRAILS,
-  DEVOPS_GUARDRAILS,
-  A11Y_GUARDRAILS,
-  QUALITY_GUARDRAILS,
-} from "./guardrail-defs.js";
+import { SHARED_GUARDRAILS } from "./_shared.js";
+import { SCAFFOLD_GUARDRAILS } from "./_scaffold.js";
+import { BACKEND_GUARDRAILS } from "./_backend.js";
+import { DATABASE_GUARDRAILS } from "./_database.js";
+import { DEVOPS_GUARDRAILS } from "./_devops.js";
+import { FRAMEWORK_GUARDRAILS } from "./framework/index.js";
+import { A11Y_GUARDRAILS, QUALITY_GUARDRAILS } from "./quality/index.js";
 
 // ─── Framework aliases ───
 

@@ -16,22 +16,18 @@ import { readdirSync, readFileSync, statSync, existsSync } from "node:fs";
 import { join } from "node:path";
 import test from "node:test";
 
-import { checkCode } from "../../src/core/guardrails.js";
-import { loadAllSkills } from "../../src/core/skills.js";
+import { checkCode } from "../../src/core/guardrails/index.js";
+import { loadAllSkills } from "../../src/core/skills/_skills.js";
 
 await loadAllSkills();
 
 /** Files that carry violating code as data, with the reason each one does. */
 const CATALOGS = new Map([
-  ["core/guardrails/quality/", "every ported rule's counterexample lives here as a pattern or a sample"],
-  ["shared.js", "every shared rule's counterexample lives here (catalog grouping)"],
-  ["core/guardrails/framework/", "the framework rule catalogs (react/vue/angular/svelte/js/vanilla slices) quote the markup and CSS they generate"],
-  ["file-tree.js", "file-tree rules carry their own sample trees and generated file shapes as data"],
+  ["core/guardrails/", "the rule catalogs (shared/file-tree/framework/quality slices) quote the counterexamples they flag"],
+  ["file-tree.js", "the file-tree checker carries its own sample trees and generated file shapes as data"],
   ["_block-spacing.js", "the block-spacing checker quotes the one-line blocks it forbids as examples"],
-  ["file-tree.js", "file-tree rules carry their own sample trees and generated file shapes as data"],
-  ["_block-spacing.js", "the block-spacing checker quotes the one-line blocks it forbids as examples"],
-  ["template-data.js", "component templates are emitted as strings, stubs included"],
-  ["templates.js", "the template catalog quotes the markup and CSS it generates"],
+  ["_template-data.js", "component templates are emitted as strings, stubs included"],
+  ["_templates.js", "the template catalog quotes the markup and CSS it generates"],
   ["_fingerprint.js", "the British-vs-American dictionary contains the words it flags"],
   ["core/wcag-data/", "the WCAG criteria tables are reference data per guideline"],
   ["core/bm25/", "the stopword tables and filter clauses quote the words and syntax they operate on"],

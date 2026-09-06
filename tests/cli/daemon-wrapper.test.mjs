@@ -7,7 +7,7 @@
  */
 
 import { strict as assert } from "node:assert";
-import { generateWrapperScript } from "../../src/cli/daemon.js";
+import { generateWrapperScript } from "../../src/cli/daemon/_daemon.js";
 
 console.log("rule daemon wrapper test");
 

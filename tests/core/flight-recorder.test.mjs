@@ -380,7 +380,7 @@ writeFileSync(join(project, "docs", "adr", "001-pick-react.md"), "# 001\n");
 writeFileSync(join(project, "src", "_contacts.test.js"), "test('x', () => {});\n");
 writeFileSync(join(project, "node_modules", "left-pad", "index.js"), "// noise\n".repeat(50));
 
-const { snapshotProject } = await import("../../src/core/project-snapshot.js");
+const { snapshotProject } = await import("../../src/core/session/_snapshot.js");
 const snapshot = snapshotProject(project);
 check("F5 source lines are counted", snapshot.lines.total > 0);
 check("F5.1 lines are broken down by extension", snapshot.lines.byExtension[".jsx"] === 2);

@@ -9,7 +9,7 @@
 import { strict as assert } from "node:assert";
 import test from "node:test";
 
-import { checkCode, MAX_CHECK_INPUT_BYTES } from "../../src/core/guardrails.js";
+import { checkCode, MAX_CHECK_INPUT_BYTES } from "../../src/core/guardrails/index.js";
 
 const adversarial = (bytes) => {
   // Nested-quantifier bait repeated far past the cap.

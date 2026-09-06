@@ -1,7 +1,7 @@
 import { strict as assert } from "node:assert";
 import { readdirSync } from "node:fs";
-import { checkCode } from "../../src/core/guardrails.js";
-import { loadAllSkills } from "../../src/core/skills.js";
+import { checkCode } from "../../src/core/guardrails/index.js";
+import { loadAllSkills } from "../../src/core/skills/_skills.js";
 import { addBeforeToolHook, addPostToolHook, callTool, listTools, registerTool } from "../../src/tools/router/index.js";
 
 // Hermetic: this suite asserts deterministic tool behavior and side effects,

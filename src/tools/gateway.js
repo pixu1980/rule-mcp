@@ -373,7 +373,7 @@ export async function registerGatewayTool() {
 
         if (fileSet || code) {
           const skillName = primarySkill || "rule-ui-design-system";
-          const { checkCodeGuarded } = await import("../core/guardrails-guarded.js");
+          const { checkCodeGuarded } = await import("../core/guardrails/index.js");
           const checkContext = {
             framework: framework || "vanilla",
             isComponent: false,

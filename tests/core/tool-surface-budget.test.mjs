@@ -21,7 +21,7 @@ import assert from "node:assert/strict";
 process.env.RULE_MCP_NO_TELEMETRY = "1";
 process.env.RULE_MCP_NO_AUTOUPDATE = "1";
 
-const { loadAllSkills } = await import("../../src/core/skills.js");
+const { loadAllSkills } = await import("../../src/core/skills/_skills.js");
 const { callTool, listTools } = await import("../../src/tools/router/index.js");
 const { TOOL_SURFACE_BUDGET_TOKENS } = await import("../../src/core/tool-budget.js");
 

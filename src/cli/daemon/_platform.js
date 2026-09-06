@@ -6,7 +6,7 @@ import { homedir } from "node:os";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { execSync } from "node:child_process";
-import { getRuntimePaths } from "./paths.js";
+import { getRuntimePaths } from "../paths.js";
 
 const HOME = homedir();
 

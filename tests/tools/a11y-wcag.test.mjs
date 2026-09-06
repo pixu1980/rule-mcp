@@ -32,7 +32,7 @@ import {
   criteriaForLevel,
   criterion,
 } from "../../src/core/wcag-data/index.js";
-import { checkCode } from "../../src/core/guardrails.js";
+import { checkCode } from "../../src/core/guardrails/index.js";
 import { buildReport } from "../../src/tools/a11y.js";
 
 // ── T1: the vendored criteria ──
@@ -115,7 +115,7 @@ check(
 );
 
 // ── T3: every a11y guardrail maps to a criterion that exists ──
-const { getGuardrails } = await import("../../src/core/guardrails.js");
+const { getGuardrails } = await import("../../src/core/guardrails/index.js");
 const a11yRules = getGuardrails("rule-styleguide-a11y").filter((g) => g.id.startsWith("a11y-") && g.wcag);
 check("T9 there are a11y rules with a criterion", a11yRules.length >= 8);
 check(

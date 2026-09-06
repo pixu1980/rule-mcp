@@ -28,9 +28,9 @@ process.env.RULE_MCP_NO_AUTOUPDATE = "1";
 
 import { readdirSync, readFileSync, statSync } from "node:fs";
 import { join } from "node:path";
-import { SHARED_GUARDRAILS, SIMPLICITY_GUARDRAILS } from "../../src/core/guardrail-defs.js";
-import { getGuardrails } from "../../src/core/guardrails.js";
-import { loadAllSkills } from "../../src/core/skills.js";
+import { SHARED_GUARDRAILS, SIMPLICITY_GUARDRAILS } from "../../src/core/guardrails/index.js";
+import { getGuardrails } from "../../src/core/guardrails/index.js";
+import { loadAllSkills } from "../../src/core/skills/_skills.js";
 import { callTool } from "../../src/tools/router/index.js";
 
 await loadAllSkills();
