@@ -33,7 +33,7 @@ const CATALOGS = new Map([
   ["template-data.js", "component templates are emitted as strings, stubs included"],
   ["templates.js", "the template catalog quotes the markup and CSS it generates"],
   ["fingerprint.js", "the British-vs-American dictionary contains the words it flags"],
-  ["wcag-data.js", "the WCAG criteria table is reference data"],
+  ["core/wcag-data/", "the WCAG criteria tables are reference data per guideline"],
 ]);
 
 const SOURCE_ROOT = new URL("../../src", import.meta.url);

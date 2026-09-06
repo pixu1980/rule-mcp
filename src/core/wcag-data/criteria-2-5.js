@@ -1,0 +1,68 @@
+// Auto-split from src/core/wcag-data.js - see ./wcag-data/index.js
+/** WCAG 2.2 guideline 2.5 Operable criteria. */
+export const CRITERIA_2_5 = {
+  "2.5.1": {
+    num: "2.5.1",
+    id: "pointer-gestures",
+    handle: "Pointer Gestures",
+    level: "A",
+    guideline: "2.5 Input Modalities",
+    principle: "2 Operable",
+  },
+  "2.5.2": {
+    num: "2.5.2",
+    id: "pointer-cancellation",
+    handle: "Pointer Cancellation",
+    level: "A",
+    guideline: "2.5 Input Modalities",
+    principle: "2 Operable",
+  },
+  "2.5.3": {
+    num: "2.5.3",
+    id: "label-in-name",
+    handle: "Label in Name",
+    level: "A",
+    guideline: "2.5 Input Modalities",
+    principle: "2 Operable",
+  },
+  "2.5.4": {
+    num: "2.5.4",
+    id: "motion-actuation",
+    handle: "Motion Actuation",
+    level: "A",
+    guideline: "2.5 Input Modalities",
+    principle: "2 Operable",
+  },
+  "2.5.5": {
+    num: "2.5.5",
+    id: "target-size-enhanced",
+    handle: "Target Size (Enhanced)",
+    level: "AAA",
+    guideline: "2.5 Input Modalities",
+    principle: "2 Operable",
+  },
+  "2.5.6": {
+    num: "2.5.6",
+    id: "concurrent-input-mechanisms",
+    handle: "Concurrent Input Mechanisms",
+    level: "AAA",
+    guideline: "2.5 Input Modalities",
+    principle: "2 Operable",
+  },
+  "2.5.7": {
+    num: "2.5.7",
+    id: "dragging-movements",
+    handle: "Dragging Movements",
+    level: "AA",
+    guideline: "2.5 Input Modalities",
+    principle: "2 Operable",
+  },
+  "2.5.8": {
+    num: "2.5.8",
+    id: "target-size-minimum",
+    handle: "Target Size (Minimum)",
+    level: "AA",
+    guideline: "2.5 Input Modalities",
+    principle: "2 Operable",
+  },
+};
