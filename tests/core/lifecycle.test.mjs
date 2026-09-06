@@ -176,7 +176,7 @@ test("a child that exits on its own is forgotten", async () => {
 
 // ── Error storm ───────────────────────────────────────────────────
 
-const { installProcessErrorHandlers, STORM_LIMIT } = await import("../../src/utils/_sandbox.js");
+const { installProcessErrorHandlers, STORM_LIMIT } = await import("../../src/utils/index.js");
 
 test("swallowing errors stops when swallowing is all that is happening", () => {
   const target = signalTarget();
