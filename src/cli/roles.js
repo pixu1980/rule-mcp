@@ -23,8 +23,8 @@
 import { existsSync, mkdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 
-import { formatPersonaFile } from "../core/review/_persona-file.js";
-import { allRoles, roleById, validateRole } from "../core/review/_roles.js";
+import { formatPersonaFile } from "../core/review/persona-file/index.js";
+import { allRoles, roleById, validateRole } from "../core/review/roles/index.js";
 import { loadRoleOverlays } from "../core/review/_overlays.js";
 import { getRuntimePaths } from "./paths.js";
 import { color } from "./tui.js";

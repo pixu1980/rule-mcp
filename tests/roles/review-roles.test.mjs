@@ -12,7 +12,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import test from "node:test";
 
-import { activeRoles, allRoles, EMBEDDED_ROLES, roleById, validateRole } from "../../src/core/review/_roles.js";
+import { activeRoles, allRoles, EMBEDDED_ROLES, roleById, validateRole } from "../../src/core/review/roles/index.js";
 
 test("every embedded role is valid", () => {
   for (const role of EMBEDDED_ROLES) {
@@ -97,7 +97,7 @@ test("an overlay replaces an entry wholesale, by id", async () => {
     // Only the user's layer remains: a project layer read roles out of a
     // checkout, which is why it needed a trust gate, and both are gone (ADR 082).
     // Overlays use the same persona-file format as the embedded catalog.
-    const { formatPersonaFile } = await import("../../src/core/review/_persona-file.js");
+    const { formatPersonaFile } = await import("../../src/core/review/persona-file/index.js");
     const replacement = { ...roleById("performance"), version: 2, yearsOfExperience: 11 };
     writeFileSync(join(home, "config", "roles", "performance.md"), formatPersonaFile(replacement));
 
@@ -130,7 +130,7 @@ test("an invalid or unreadable overlay is reported, never fatal", async () => {
 });
 
 test("the template is filled verbatim from the role", async () => {
-  const { fillRoleTemplate } = await import("../../src/core/review/_template.js");
+  const { fillRoleTemplate } = await import("../../src/core/review/template/index.js");
   const filled = fillRoleTemplate(roleById("security"));
   assert.ok(!filled.includes("{{"), "no placeholder survives");
   assert.match(filled, /Security Engineer/);
@@ -149,12 +149,12 @@ test("the template is filled verbatim from the role", async () => {
 });
 
 test("the filled template is byte-stable", async () => {
-  const { fillRoleTemplate } = await import("../../src/core/review/_template.js");
+  const { fillRoleTemplate } = await import("../../src/core/review/template/index.js");
   assert.equal(fillRoleTemplate(roleById("a11y")), fillRoleTemplate(roleById("a11y")));
 });
 
 test("overrides refine a role without editing the registry", async () => {
-  const { fillRoleTemplate } = await import("../../src/core/review/_template.js");
+  const { fillRoleTemplate } = await import("../../src/core/review/template/index.js");
   const filled = fillRoleTemplate(roleById("privacy"), {
     years: 33,
     skills: ["ePrivacy"],

@@ -19,8 +19,8 @@ import { join } from "node:path";
 import { test } from "node:test";
 import { fileURLToPath } from "node:url";
 
-import { parsePersonaFile } from "../../src/core/review/_persona-file.js";
-import { validateRole } from "../../src/core/review/_roles.js";
+import { parsePersonaFile } from "../../src/core/review/persona-file/index.js";
+import { validateRole } from "../../src/core/review/roles/index.js";
 
 const BIN = fileURLToPath(new URL("../../bin/rule-mcp.js", import.meta.url));
 

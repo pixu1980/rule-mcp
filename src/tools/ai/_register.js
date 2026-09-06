@@ -1,5 +1,5 @@
 import { getSkillNames, registerTool, listTools } from "../router/index.js";
-import { detectRole } from "../../core/review/_roles.js";
+import { detectRole } from "../../core/review/roles/index.js";
 import { loadRoleOverlays } from "../../core/review/_overlays.js";
 import { GalaxySchema } from "./_schema.js";
 import { expandPrompt } from "./_expand-prompt.js";

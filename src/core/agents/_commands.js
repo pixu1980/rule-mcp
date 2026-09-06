@@ -23,8 +23,8 @@
  */
 
 import { listPrompts } from "../../prompts/index.js";
-import { activeRoles } from "../review/_roles.js";
-import { OPERATIONS } from "../review/_template.js";
+import { activeRoles } from "../review/roles/index.js";
+import { OPERATIONS } from "../review/template/index.js";
 
 /** The router command, pinned first in every agent's command list. */
 export const ROUTER_COMMAND = "rule";
