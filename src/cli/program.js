@@ -291,7 +291,7 @@ export function buildProgram() {
         return;
       }
 
-      const { registerProcessHandoffTool } = await import("../tools/handoff.js");
+      const { registerProcessHandoffTool } = await import("../tools/handoff/index.js");
       const { callTool: ct } = await import("../tools/router/index.js");
       registerProcessHandoffTool();
       const handoffRes = await ct("rule_tool_process_handoff", {
