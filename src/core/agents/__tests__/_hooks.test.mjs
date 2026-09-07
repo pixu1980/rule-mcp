@@ -38,7 +38,10 @@ test("promotableEntries merges tiers and filters below the hit floor", () => {
   cacheStore("pix_tool", args("cold"), { content: [] }, {});
 
   const promoted = promotableEntries();
-  assert.ok(promoted.some((entry) => entry.tool === "pix_tool" && JSON.stringify(entry.args) === JSON.stringify(args("hot"))), "the hot call earns promotion");
+  assert.ok(
+    promoted.some((entry) => entry.tool === "pix_tool" && JSON.stringify(entry.args) === JSON.stringify(args("hot"))),
+    "the hot call earns promotion",
+  );
   assert.ok(!promoted.some((entry) => JSON.stringify(entry.args) === JSON.stringify(args("cold"))), "the cold call stays below the floor");
   cacheClear();
 });
@@ -54,7 +57,10 @@ test("the hook registry merges our hooks idempotently and drops them cleanly", (
   assert.equal(twice.hooks.PreToolUse.length, once.hooks.PreToolUse.length, "re-merging does not duplicate");
 
   const removed = withoutHooks(twice);
-  assert.ok(removed.hooks.PreToolUse.some((entry) => entry.hooks[0].command.includes("user hook")), "user hooks remain");
+  assert.ok(
+    removed.hooks.PreToolUse.some((entry) => entry.hooks[0].command.includes("user hook")),
+    "user hooks remain",
+  );
   assert.ok(!removed.hooks.PreToolUse.some((entry) => entry.hooks[0].command.includes("rule-mcp")), "our hooks go");
   assert.equal(withoutHooks({ hooks: {} }).hooks, undefined, "an empty hooks container is dropped");
 });

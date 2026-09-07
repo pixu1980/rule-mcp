@@ -38,6 +38,12 @@ test("listTools converts zod schemas and tolerates plain schemas", () => {
   registerTool({ name: "rule_tool_plain", description: "plain", inputSchema: { type: "object", properties: { a: { type: "string" } } }, handler: async () => ({ content: [] }) });
 
   const listed = listTools();
-  assert.ok(listed.some((t) => t.name === "rule_tool_z" && t.inputSchema?.properties?.count), "the zod schema converts");
-  assert.ok(listed.some((t) => t.name === "rule_tool_plain" && t.inputSchema?.properties?.a), "a plain schema passes through");
+  assert.ok(
+    listed.some((t) => t.name === "rule_tool_z" && t.inputSchema?.properties?.count),
+    "the zod schema converts",
+  );
+  assert.ok(
+    listed.some((t) => t.name === "rule_tool_plain" && t.inputSchema?.properties?.a),
+    "a plain schema passes through",
+  );
 });

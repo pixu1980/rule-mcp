@@ -35,17 +35,32 @@ test("verify consults the repository for branches, ranges and commands", () => {
     open: [],
   });
 
-  assert.ok(claims.some((c) => c.kind === "branch" && c.value === "main" && c.bucket === "still-true"), "current branches hold");
-  assert.ok(claims.some((c) => c.kind === "branch" && c.value === "ghost" && c.bucket === "changed"), "gone branches change");
-  assert.ok(claims.some((c) => c.kind === "range"), "the range is verified");
-  assert.ok(claims.some((c) => c.kind === "command"), "the command is verified");
+  assert.ok(
+    claims.some((c) => c.kind === "branch" && c.value === "main" && c.bucket === "still-true"),
+    "current branches hold",
+  );
+  assert.ok(
+    claims.some((c) => c.kind === "branch" && c.value === "ghost" && c.bucket === "changed"),
+    "gone branches change",
+  );
+  assert.ok(
+    claims.some((c) => c.kind === "range"),
+    "the range is verified",
+  );
+  assert.ok(
+    claims.some((c) => c.kind === "command"),
+    "the command is verified",
+  );
   rmSync(root, { recursive: true, force: true });
 });
 
 test("verify answers unverified without a git repository", () => {
   const bare = mkdtempSync(join(tmpdir(), "rule-verify-nogit-"));
   const claims = verify(bare, { branches: ["main"], files: [], ranges: [], commands: [], adrs: [], open: [] });
-  assert.ok(claims.some((c) => c.bucket === "unverified"), "no repo means unverified");
+  assert.ok(
+    claims.some((c) => c.bucket === "unverified"),
+    "no repo means unverified",
+  );
   rmSync(bare, { recursive: true, force: true });
 });
 

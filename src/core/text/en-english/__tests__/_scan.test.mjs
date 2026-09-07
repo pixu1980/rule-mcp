@@ -17,27 +17,32 @@ test("scanText finds accents and foreign function words", () => {
 test("scanCodeForForeign flags accented comments, foreign comments and identifiers", () => {
   const hits = scanCodeForForeign("// caf\u00e9 con crema\nconst invece = 1;\n// we can use resto fine qui\n");
   const kinds = hits.map((h) => h);
-  assert.ok(kinds.some((h) => h.includes("accent")), "an accented comment is flagged");
-  assert.ok(kinds.some((h) => h.includes("foreign identifier")), "a foreign identifier is flagged");
+  assert.ok(
+    kinds.some((h) => h.includes("accent")),
+    "an accented comment is flagged",
+  );
+  assert.ok(
+    kinds.some((h) => h.includes("foreign identifier")),
+    "a foreign identifier is flagged",
+  );
   assert.equal(scanCodeForForeign("// pure english\nconst name = 1;").length, 0, "english code stays clean");
 });
 
 test("scanPathForForeign flags accented and foreign path segments", () => {
-  assert.ok(scanPathForForeign("src/componenti/bottone.js").some((h) => h.includes("non-English name")), "foreign segments are flagged");
-  assert.ok(scanPathForForeign("src/caf\u00e9.js").some((h) => h.includes("accent")), "accented segments are flagged");
+  assert.ok(
+    scanPathForForeign("src/componenti/bottone.js").some((h) => h.includes("non-English name")),
+    "foreign segments are flagged",
+  );
+  assert.ok(
+    scanPathForForeign("src/caf\u00e9.js").some((h) => h.includes("accent")),
+    "accented segments are flagged",
+  );
   assert.deepEqual(scanPathForForeign("src/button/index.js"), [], "english paths stay clean");
   assert.deepEqual(scanPathForForeign(""), [], "an empty path is clean");
 });
 
 test("scanDocumentForForeign ignores fenced code, inline code and urls", () => {
-  const doc = [
-    "plain english prose",
-    "```js",
-    "const x = 'caf\u00e9';",
-    "```",
-    "see https://example.com/caf\u00e9 for details",
-    "il problema \u00e8 che",
-  ].join("\n");
+  const doc = ["plain english prose", "```js", "const x = 'caf\u00e9';", "```", "see https://example.com/caf\u00e9 for details", "il problema \u00e8 che"].join("\n");
   const hits = scanDocumentForForeign(doc);
   assert.equal(hits.length, 1, "only the prose line with accents is flagged");
   assert.match(hits[0], /accent/, "the accent offender is named");

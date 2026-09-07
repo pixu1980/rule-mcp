@@ -12,10 +12,7 @@ test("a clean plan says so, with or without authors", () => {
   const plain = renderRenumberPlan({ renames: [], indexUnordered: false, authors: [] }, {});
   assert.match(plain, /Numbering is clean/, "a clean plan reports it");
 
-  const withAuthors = renderRenumberPlan(
-    { renames: [], indexUnordered: false, authors: [{ file: "docs/adr/001-x.md", current: "no author line", author: "me" }] },
-    { fix: true },
-  );
+  const withAuthors = renderRenumberPlan({ renames: [], indexUnordered: false, authors: [{ file: "docs/adr/001-x.md", current: "no author line", author: "me" }] }, { fix: true });
   assert.match(withAuthors, /1 ADR\(s\) name a tool or nobody/, "the author count renders");
   assert.doesNotMatch(withAuthors, /Run with --fix to name/, "with fix the hint goes away");
 });
