@@ -49,3 +49,15 @@ test("resumeAnnouncement announces a resume prompt and stays quiet otherwise", (
   assert.equal(other, "", "a non-resume prompt never announces");
   rmSync(root, { recursive: true, force: true });
 });
+test("the handoff block can be switched off and the latch closes without force", async () => {
+  const { root } = scriptedRepository();
+  process.env.RULE_MCP_NO_RESUME_HANDON = "1";
+  const off = resumeAnnouncement({ prompt: "resume", cwd: root, force: true });
+  assert.equal(off, "", "the opt-out silences the block");
+  delete process.env.RULE_MCP_NO_RESUME_HANDON;
+
+  const first = resumeAnnouncement({ prompt: "resume", cwd: root, force: true });
+  assert.ok(first !== "", "the block returns once the opt-out is off");
+  const latched = resumeAnnouncement({ prompt: "resume" });
+  assert.equal(latched, "", "the once-per-process latch closes without force");
+});
