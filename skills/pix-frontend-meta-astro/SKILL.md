@@ -166,7 +166,7 @@ export { default as TodoItem } from "./_TodoItem.astro";
 
 ## Guardrails
 
-Run `rule_tool_frontend_astro` mode=check or `rule_tool_check` to validate code against these rules.
+Run `rule_tool_frontend_meta_astro` mode=check or `rule_tool_check` to validate code against these rules.
 
 Key rules enforced: **no-css-classes**, **no-inline-styles**, **semantic-html**,
 **external-css** (Astro `<style>` scoped blocks or external CSS imports),

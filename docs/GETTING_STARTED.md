@@ -260,14 +260,14 @@ It writes an entry equivalent to:
       "args": ["serve"],
       "directTools": true,
       "allowedTools": [
-        "pix_gateway",
-        "pix_apply",
-        "rule",
-        "pix_search",
-        "pix_check",
-        "pix_detect",
-        "pix_scaffold",
-        "pix_component"
+        "rule_tool_gateway",
+        "rule_tool_apply",
+        "pix_tool",
+        "rule_tool_search",
+        "rule_tool_check",
+        "rule_tool_detect",
+        "rule_tool_scaffold",
+        "rule_tool_component"
       ]
     }
   }
@@ -303,7 +303,7 @@ rule-mcp doctor
 rule-mcp tools list | head -n 20
 
 # 3. Test framework detection
-rule-mcp tools call pix_detect --json '{"path": "."}'
+rule-mcp tools call rule_tool_detect --json '{"path": "."}'
 
 # 4. Test the router
 rule-mcp tools call rule --json '{"prompt": "Create a React button component"}'
