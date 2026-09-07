@@ -42,10 +42,7 @@ export async function startHttpServer(options = {}) {
 
   const safeHandler = wrapRequestHandler(requestHandler, { timeout: 60_000 });
 
-  const httpServer =
-    sslCert && sslKey
-      ? https.createServer({ cert: readFileSync(sslCert), key: readFileSync(sslKey) }, safeHandler)
-      : http.createServer(safeHandler);
+  const httpServer = sslCert && sslKey ? https.createServer({ cert: readFileSync(sslCert), key: readFileSync(sslKey) }, safeHandler) : http.createServer(safeHandler);
 
   // Streams are long-lived; disable the generic idle timeout.
   httpServer.timeout = 0;

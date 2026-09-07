@@ -55,9 +55,7 @@ assert.equal(
   embeddedSkillCount + ACTION_TOOL_COUNT,
   `full surface must be ./skills + action tools (got ${full.length}, expected ${embeddedSkillCount + ACTION_TOOL_COUNT})`,
 );
-console.log(
-  `  ✅ full surface exposes ${full.length} tools (${embeddedSkillCount} skills + ${ACTION_TOOL_COUNT} action)`,
-);
+console.log(`  ✅ full surface exposes ${full.length} tools (${embeddedSkillCount} skills + ${ACTION_TOOL_COUNT} action)`);
 
 // ── Minimal via PIX_GALAXY_MCP_MINIMAL_TOOLS (convention-aligned name) ──
 const minimal = toolNames({ PIX_GALAXY_MCP_MINIMAL_TOOLS: "1" });

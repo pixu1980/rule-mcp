@@ -17,11 +17,5 @@ import { dispatchCustomEvent } from "./_dispatchCustomEvent.js";
 export const dispatchComponentEvent = function (eventName, detail, originalEvent = undefined) {
   const { componentName } = this;
 
-  dispatchCustomEvent.call(
-    this,
-    componentName,
-    eventName,
-    detail,
-    originalEvent ?? new Event(`${componentName}.${eventName}`),
-  );
+  dispatchCustomEvent.call(this, componentName, eventName, detail, originalEvent ?? new Event(`${componentName}.${eventName}`));
 };

@@ -34,12 +34,7 @@ const { readEvents } = await import("../../src/core/telemetry/store/index.js");
 await loadAllSkills();
 process.chdir(projectDir);
 
-const PROMPTS = [
-  "I need a React button component",
-  "postgres index for a slow query",
-  "docker healthcheck for a node service",
-  "should I use enum or a union type",
-];
+const PROMPTS = ["I need a React button component", "postgres index for a slow query", "docker healthcheck for a node service", "should I use enum or a union type"];
 
 const answers = [];
 for (const prompt of PROMPTS) {
@@ -72,11 +67,7 @@ test("the estimate is the routed skill's own size, not a constant", () => {
 
     assert.ok(skill, `${route} has to be a skill on disk, or the estimate is about nothing`);
     const expected = Math.max(0, tokens(skill) - tokens(answers[index].text));
-    assert.equal(
-      event.estimatedRouting,
-      expected,
-      `${route}: the estimate has to be the file minus the answer, measured (got ${event.estimatedRouting}, recomputed ${expected})`,
-    );
+    assert.equal(event.estimatedRouting, expected, `${route}: the estimate has to be the file minus the answer, measured (got ${event.estimatedRouting}, recomputed ${expected})`);
   }
 });
 
@@ -84,10 +75,7 @@ test("the estimate never claims more than reading the file would cost", () => {
   for (const [index, event] of routerEvents.entries()) {
     const route = JSON.parse(answers[index].text.split("## PIX WORKFLOW REMINDER", 1)[0]).route;
 
-    assert.ok(
-      event.estimatedRouting <= tokens(readSkill(route)),
-      `${route}: a saving larger than the file it avoids reading is not a saving`,
-    );
+    assert.ok(event.estimatedRouting <= tokens(readSkill(route)), `${route}: a saving larger than the file it avoids reading is not a saving`);
     assert.ok(event.estimatedRouting >= 0, "and it is never negative");
   }
 });
@@ -122,13 +110,6 @@ test("only the router estimates, and the estimate stays out of the measured tota
 
   const kpi = computeKpi({ events });
   assert.ok(kpi.tokens.estimatedRouting > 0, "the estimate is reported");
-  assert.equal(
-    Object.keys(kpi.tokens.savedBySource).includes("estimatedRouting"),
-    false,
-    "and never as a source of measured saving",
-  );
-  assert.ok(
-    kpi.tokens.measuredSaved < kpi.tokens.estimatedRouting,
-    "on this corpus the model dwarfs what was measured, which is why the two are kept apart",
-  );
+  assert.equal(Object.keys(kpi.tokens.savedBySource).includes("estimatedRouting"), false, "and never as a source of measured saving");
+  assert.ok(kpi.tokens.measuredSaved < kpi.tokens.estimatedRouting, "on this corpus the model dwarfs what was measured, which is why the two are kept apart");
 });

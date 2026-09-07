@@ -38,9 +38,7 @@ export const PROMPT_DEFS = [
   {
     name: "pix-area-devops",
     description: "DevOps work: docker, gitlab-ci, observability, testing, versioning",
-    arguments: [
-      { name: "request", description: "CI/CD, container, observability, or versioning task", required: true },
-    ],
+    arguments: [{ name: "request", description: "CI/CD, container, observability, or versioning task", required: true }],
   },
   {
     name: "pix-area-frontend",
@@ -68,11 +66,8 @@ export const PROMPT_DEFS = [
   },
   {
     name: "pix-area-meta",
-    description:
-      "Work with the pix dispatcher/action toolset: routing, gateway, apply, search, check, scaffold, detect, fix, ADR, handoff",
-    arguments: [
-      { name: "request", description: "What to route, search, validate, scaffold, or record", required: true },
-    ],
+    description: "Work with the pix dispatcher/action toolset: routing, gateway, apply, search, check, scaffold, detect, fix, ADR, handoff",
+    arguments: [{ name: "request", description: "What to route, search, validate, scaffold, or record", required: true }],
   },
   {
     name: "pix-area-platform",
@@ -88,9 +83,7 @@ export const PROMPT_DEFS = [
   {
     name: "pix-area-process",
     description: "Process work: code review, TDD, feature workflow, documentation, ADR, handoff, BMAD",
-    arguments: [
-      { name: "request", description: "Review, TDD, workflow, documentation, or decision task", required: true },
-    ],
+    arguments: [{ name: "request", description: "Review, TDD, workflow, documentation, or decision task", required: true }],
   },
   {
     name: "pix-area-skills",
@@ -104,8 +97,7 @@ export const PROMPT_DEFS = [
   },
   {
     name: "pix-area-toolchain",
-    description:
-      "Toolchain configuration: vite, pnpm, turborepo, rspack, parcel, typescript, eslint, biome, husky, commits, project",
+    description: "Toolchain configuration: vite, pnpm, turborepo, rspack, parcel, typescript, eslint, biome, husky, commits, project",
     arguments: [
       {
         name: "request",
@@ -122,9 +114,7 @@ export const PROMPT_DEFS = [
   {
     name: "pix-adr",
     description: "Record an architecture decision: context, decision, alternatives, consequences",
-    arguments: [
-      { name: "decision", description: "The decision to record (free text: what changed and why)", required: true },
-    ],
+    arguments: [{ name: "decision", description: "The decision to record (free text: what changed and why)", required: true }],
   },
   {
     name: "pix-process-check",
@@ -162,9 +152,7 @@ export const PROMPT_DEFS = [
   {
     name: "pix-init",
     description: "Prepare a project for pix-galaxy-mcp: the central recorder directory and tokensave",
-    arguments: [
-      { name: "options", description: "Space-separated: no-tokensave. Default: the full init.", required: false },
-    ],
+    arguments: [{ name: "options", description: "Space-separated: no-tokensave. Default: the full init.", required: false }],
   },
   {
     name: "pix-update",

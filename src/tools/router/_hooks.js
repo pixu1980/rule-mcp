@@ -95,16 +95,4 @@ function registerTool(tool) {
 /** Tools that change something on disk or in the project. Everything else is a
  * read, so clients use readOnlyHint to skip a confirmation prompt. */
 
-export {
-  countAfterHooks,
-  addBeforeToolHook,
-  addPostToolHook,
-  addAfterToolHook,
-  clearTools,
-  retainTools,
-  registerTool,
-  _tools,
-  _beforeHooks,
-  _postHooks,
-  _afterHooks,
-};
+export { countAfterHooks, addBeforeToolHook, addPostToolHook, addAfterToolHook, clearTools, retainTools, registerTool, _tools, _beforeHooks, _postHooks, _afterHooks };

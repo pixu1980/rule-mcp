@@ -62,12 +62,7 @@ export function TodoItem(props) {
 
   return (
     <article data-part="item" data-state-completed={props.todo.completed ? "done" : null}>
-      <input
-        type="checkbox"
-        data-part="toggle"
-        checked={props.todo.completed}
-        onChange={() => props.onToggle?.(props.todo.id)}
-      />
+      <input type="checkbox" data-part="toggle" checked={props.todo.completed} onChange={() => props.onToggle?.(props.todo.id)} />
       <span data-part="title">{props.todo.title}</span>
       <button data-part="delete" onClick={() => props.onDelete?.(props.todo.id)}>
         Delete

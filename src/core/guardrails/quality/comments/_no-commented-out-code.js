@@ -2,11 +2,9 @@
 export const noCommentedOutCode = {
   id: "no-commented-out-code",
   label: "No implementations parked in comments",
-  description:
-    "Three or more consecutive commented-out lines of code are a parked implementation. Delete them; git keeps the history.",
+  description: "Three or more consecutive commented-out lines of code are a parked implementation. Delete them; git keeps the history.",
   check: (code) => {
-    const codeish =
-      /[;{}]$|=>|^(?:const|let|var|function|class|return|if|for|while|switch|import|export|await|async)\b|^\}/;
+    const codeish = /[;{}]$|=>|^(?:const|let|var|function|class|return|if|for|while|switch|import|export|await|async)\b|^\}/;
     let run = 0;
     let longest = 0;
     let sample = [];
@@ -34,8 +32,7 @@ export const noCommentedOutCode = {
       pass: longest < 3,
       failCount: longest >= 3 ? longest : 0,
       detail: longest >= 3 ? sample.slice(0, 5) : [],
-      suggestion:
-        "Delete the commented-out block. If it is a documented alternative, put the reasoning in an ADR instead.",
+      suggestion: "Delete the commented-out block. If it is a documented alternative, put the reasoning in an ADR instead.",
     };
   },
 };

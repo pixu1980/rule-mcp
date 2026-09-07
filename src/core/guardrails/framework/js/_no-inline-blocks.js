@@ -2,8 +2,7 @@
 export const jsNoInlineBlocks = {
   id: "js-no-inline-blocks",
   label: "Blocks must be multi-line (no inline { code })",
-  description:
-    "All { } blocks (if/for/while/arrow functions/promises) must span multiple lines. No inline { doThing(); }.",
+  description: "All { } blocks (if/for/while/arrow functions/promises) must span multiple lines. No inline { doThing(); }.",
   check: (code) => {
     // Match if/for/while/try/catch with { code } on the SAME line.
     //
@@ -16,9 +15,7 @@ export const jsNoInlineBlocks = {
     // A destructuring pattern in a header (`for (const { a, b } of xs)`) is
     // not an inline block: the block, when there is one, opens AFTER the
     // header's closing parenthesis (finding F-A1).
-    const matches = code.match(
-      /\b(?:if|for|while|switch|catch)\b\s*\([^\n]*\)\s*\{[^{}\n]+\}|\b(?:try|else)\b\s*\{[^{}\n]+\}|=>\s*\{[^{}\n]+\}/g,
-    );
+    const matches = code.match(/\b(?:if|for|while|switch|catch)\b\s*\([^\n]*\)\s*\{[^{}\n]+\}|\b(?:try|else)\b\s*\{[^{}\n]+\}|=>\s*\{[^{}\n]+\}/g);
 
     if (matches && matches.length > 0) {
       const filtered = matches.filter((m) => m !== "=> {}");

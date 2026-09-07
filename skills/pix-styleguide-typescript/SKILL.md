@@ -246,8 +246,7 @@ mutually exclusive states. The discriminant makes illegal combinations
 unrepresentable and gives switches a finite set of cases.
 
 ```ts
-type RequestState<T> =
-  { status: "idle" } | { status: "loading" } | { status: "success"; data: T } | { status: "error"; error: Error };
+type RequestState<T> = { status: "idle" } | { status: "loading" } | { status: "success"; data: T } | { status: "error"; error: Error };
 ```
 
 Use branded types for domain identifiers that share a runtime representation but

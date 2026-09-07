@@ -19,48 +19,9 @@ const BACKEND_KEYWORDS = [
   "jwt",
   "middleware",
 ];
-const DATA_KEYWORDS = [
-  "database",
-  "sql",
-  "query",
-  "table",
-  "postgresql",
-  "mysql",
-  "mongodb",
-  "schema",
-  "migration",
-  "index",
-  "transaction",
-  "orm",
-  "prisma",
-  "drizzle",
-];
-const DEVOPS_KEYWORDS = [
-  "docker",
-  "ci",
-  "cd",
-  "pipeline",
-  "deploy",
-  "container",
-  "kubernetes",
-  "gitlab",
-  "github",
-  "actions",
-];
-const FRONTEND_KEYWORDS = [
-  "react",
-  "vue",
-  "svelte",
-  "angular",
-  "component",
-  "button",
-  "modal",
-  "css",
-  "style",
-  "ui",
-  "layout",
-  "responsive",
-];
+const DATA_KEYWORDS = ["database", "sql", "query", "table", "postgresql", "mysql", "mongodb", "schema", "migration", "index", "transaction", "orm", "prisma", "drizzle"];
+const DEVOPS_KEYWORDS = ["docker", "ci", "cd", "pipeline", "deploy", "container", "kubernetes", "gitlab", "github", "actions"];
+const FRONTEND_KEYWORDS = ["react", "vue", "svelte", "angular", "component", "button", "modal", "css", "style", "ui", "layout", "responsive"];
 
 /**
  * Classify the prompt's domain from keyword hits, or null when unknown.

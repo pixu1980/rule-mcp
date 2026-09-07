@@ -36,9 +36,7 @@ export function extractTopSections(skillName, promptWords) {
     .map((s) => s.heading);
 
   if (scored.length === 0) {
-    const hasMeta = promptWords.some(
-      (w) => !STOPWORDS.has(w) && (descText.includes(w) || (meta.tags || []).join(" ").toLowerCase().includes(w)),
-    );
+    const hasMeta = promptWords.some((w) => !STOPWORDS.has(w) && (descText.includes(w) || (meta.tags || []).join(" ").toLowerCase().includes(w)));
 
     if (hasMeta) {
       return ["(matches skill description)"];

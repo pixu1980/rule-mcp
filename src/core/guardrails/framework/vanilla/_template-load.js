@@ -23,8 +23,7 @@ export const vanillaTemplateLoad = {
         pass: false,
         failCount: 1,
         detail: ["html() used with template but no fetch/import"],
-        suggestion:
-          "Add: const templateStr = await (await fetch(new URL('./_Comp.template.html', import.meta.url))).text();",
+        suggestion: "Add: const templateStr = await (await fetch(new URL('./_Comp.template.html', import.meta.url))).text();",
       };
     }
 

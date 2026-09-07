@@ -28,9 +28,7 @@ export function parseHandoff(body) {
     const from = Number.parseInt(match[1], 10);
     const to = match[2] ? Number.parseInt(match[2], 10) : from;
     const around = body.slice(Math.max(0, match.index - PENDING_WINDOW), match.index + PENDING_WINDOW);
-    const claimsPending = /\b(?:pending|proposed|not written|unwritten|still to|to be accepted|outstanding)\b/i.test(
-      around,
-    );
+    const claimsPending = /\b(?:pending|proposed|not written|unwritten|still to|to be accepted|outstanding)\b/i.test(around);
 
     for (let number = from; number <= to && number - from < 20; number += 1) {
       const id = String(number).padStart(3, "0");

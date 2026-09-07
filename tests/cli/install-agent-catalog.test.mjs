@@ -41,18 +41,9 @@ function assertInstallSh(needle, message) {
   assert.ok(installSh.includes(needle), `${message}\n  missing from scripts/install.sh: ${needle}`);
 }
 
-assertInstallSh(
-  'for i in "${!AGENT_NAMES[@]}"',
-  "the agent checkbox list must iterate AGENT_NAMES (the catalog), not DETECTED_AGENTS",
-);
-assertInstallSh(
-  "AGENT_CURSOR -ge ${#AGENT_NAMES[@]}",
-  "cursor wrapping must follow the catalog, or the lower entries are unreachable",
-);
-assert.ok(
-  !installSh.includes("AGENT_CURSOR -ge ${#DETECTED_AGENTS[@]}"),
-  "cursor wrapping must follow the catalog, or the lower entries are unreachable",
-);
+assertInstallSh('for i in "${!AGENT_NAMES[@]}"', "the agent checkbox list must iterate AGENT_NAMES (the catalog), not DETECTED_AGENTS");
+assertInstallSh("AGENT_CURSOR -ge ${#AGENT_NAMES[@]}", "cursor wrapping must follow the catalog, or the lower entries are unreachable");
+assert.ok(!installSh.includes("AGENT_CURSOR -ge ${#DETECTED_AGENTS[@]}"), "cursor wrapping must follow the catalog, or the lower entries are unreachable");
 assertInstallSh(
   "${AGENT_DETECTED[$ai]} -eq 1 ]] && AGENT_FLAGS[$ai]=1",
   "detected agents must start pre-selected (AGENT_DETECTED is a per-row flag, populated from the detection result)",
@@ -96,15 +87,9 @@ console.log("  ✅ devin installs to its documented config path, branded (former
 
 // ── 3. Windsurf is gone from the catalog; naming it redirects to Devin ─────
 
-assert.ok(
-  !getAllAgents().includes("windsurf"),
-  "windsurf must not be offered by the catalog - Cognition renamed it Devin",
-);
+assert.ok(!getAllAgents().includes("windsurf"), "windsurf must not be offered by the catalog - Cognition renamed it Devin");
 assert.ok(!installSh.includes("windsurf"), "install.sh must not contain a windsurf entry anywhere");
-assert.ok(
-  !/\bwindsurf\b/.test(readFileSync(join(root, "scripts", "install.ps1"), "utf8")),
-  "install.ps1 must not list windsurf",
-);
+assert.ok(!/\bwindsurf\b/.test(readFileSync(join(root, "scripts", "install.ps1"), "utf8")), "install.ps1 must not list windsurf");
 
 const sweep = installAgent({ agent: "all", entrypoint, dryRun: true });
 
@@ -113,16 +98,9 @@ assert.ok(Object.keys(sweep.installed).includes("devin"), "--agent all must incl
 
 const redirect = installAgent({ agent: "windsurf", entrypoint, dryRun: true });
 
-assert.ok(
-  !Object.prototype.hasOwnProperty.call(redirect.installed, "windsurf"),
-  "a windsurf request must be redirected, not installed under the legacy name",
-);
+assert.ok(!Object.prototype.hasOwnProperty.call(redirect.installed, "windsurf"), "a windsurf request must be redirected, not installed under the legacy name");
 assert.ok(Array.isArray(redirect.installed.devin), "a windsurf request must install Devin instead");
-assert.deepEqual(
-  redirect.warnings,
-  ['"windsurf" is deprecated - use "devin" instead.'],
-  "naming windsurf must warn and point at Devin - Cognition acquired Windsurf",
-);
+assert.deepEqual(redirect.warnings, ['"windsurf" is deprecated - use "devin" instead.'], "naming windsurf must warn and point at Devin - Cognition acquired Windsurf");
 assert.ok(!sweep.warnings, "a sweep that skipped the deprecated agent has nothing to warn about");
 
 const removed = uninstallAgent({ agent: "windsurf", dryRun: true });
@@ -134,10 +112,7 @@ console.log("  ✅ windsurf removed from the catalog; --agent windsurf redirects
 
 assertInstallSh("print_at", "the picker must redraw rows with ANSI cursor addressing (differential renderer)");
 assertInstallSh("draw_row", "the picker must own per-row drawing");
-assert.ok(
-  !installSh.includes("tui_clear"),
-  "the picker must never full-screen clear during interaction - that is the flicker source",
-);
+assert.ok(!installSh.includes("tui_clear"), "the picker must never full-screen clear during interaction - that is the flicker source");
 console.log("  ✅ picker redraws rows incrementally, no full-screen clear per key");
 
 console.log("  ✅ agent catalog invariants hold");

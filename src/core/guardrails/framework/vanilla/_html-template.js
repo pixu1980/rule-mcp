@@ -5,8 +5,7 @@ export const vanillaHtmlTemplate = {
   description: "Pattern A and B components must return html`` (TemplateResult) for their template.",
   check: (code) => {
     const isUsesHtml = /html`/.test(code);
-    const isFunction =
-      /^export\s+function\s/.test(code.trim()) || /^function\s/.test(code.trim()) || /=>\s*\{/.test(code);
+    const isFunction = /^export\s+function\s/.test(code.trim()) || /^function\s/.test(code.trim()) || /=>\s*\{/.test(code);
     const isCe = /extends\s+HTMLElement/.test(code);
 
     if (!isFunction && !isCe) {

@@ -4,8 +4,7 @@ import { extractRealCSS } from "../_util.js";
 export const noCssClasses = {
   id: "no-css-classes",
   label: "Zero CSS classes in stylesheets",
-  description:
-    "CSS must use only element selectors + [data-part] + [data-*] attribute selectors. No .class selectors (including pseudo-classes and combinators).",
+  description: "CSS must use only element selectors + [data-part] + [data-*] attribute selectors. No .class selectors (including pseudo-classes and combinators).",
   check: (code, context) => {
     const cssBlock = extractRealCSS(code, context);
 

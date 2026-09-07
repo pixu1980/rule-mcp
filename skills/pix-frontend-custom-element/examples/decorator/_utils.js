@@ -39,8 +39,6 @@ export const strings = {
    * @returns {string}
    */
   guid() {
-    return `pix-${
-      globalThis.crypto?.randomUUID ? globalThis.crypto.randomUUID() : Math.random().toString(36).slice(2, 10)
-    }`;
+    return `pix-${globalThis.crypto?.randomUUID ? globalThis.crypto.randomUUID() : Math.random().toString(36).slice(2, 10)}`;
   },
 };

@@ -84,22 +84,10 @@ export function productivitySection(kpi) {
     "## Productivity",
     "",
     ...table([
-      [
-        "Lines per prompt",
-        kpi.productivity?.linesPerPrompt === undefined ? undefined : num(Math.round(kpi.productivity.linesPerPrompt)),
-      ],
-      [
-        "Lines per minute",
-        kpi.productivity?.linesPerMinute === undefined ? undefined : num(Math.round(kpi.productivity.linesPerMinute)),
-      ],
-      [
-        "Cost per 1k output",
-        kpi.productivity?.costPer1kOutput === undefined ? undefined : usd(kpi.productivity.costPer1kOutput),
-      ],
-      [
-        "Cost per prompt",
-        kpi.productivity?.costPerPrompt === undefined ? undefined : usd(kpi.productivity.costPerPrompt),
-      ],
+      ["Lines per prompt", kpi.productivity?.linesPerPrompt === undefined ? undefined : num(Math.round(kpi.productivity.linesPerPrompt))],
+      ["Lines per minute", kpi.productivity?.linesPerMinute === undefined ? undefined : num(Math.round(kpi.productivity.linesPerMinute))],
+      ["Cost per 1k output", kpi.productivity?.costPer1kOutput === undefined ? undefined : usd(kpi.productivity.costPer1kOutput)],
+      ["Cost per prompt", kpi.productivity?.costPerPrompt === undefined ? undefined : usd(kpi.productivity.costPerPrompt)],
       ["Average per call", `${num(kpi.productivity?.avgPerCallMs)} ms`],
     ]),
   ];

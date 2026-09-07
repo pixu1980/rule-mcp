@@ -2,8 +2,7 @@
 export const noInlineStyles = {
   id: "no-inline-styles",
   label: "Zero inline styles in templates",
-  description:
-    'Templates must not use style="..." attributes or JSX style={{...}} objects. All styling in external CSS files.',
+  description: 'Templates must not use style="..." attributes or JSX style={{...}} objects. All styling in external CSS files.',
   check: (code) => {
     const inlineAttributes = code.match(/style\s*=\s*"[^"]*"/g) || [];
     const inlineSingle = code.match(/style\s*=\s*'[^']*'/g) || [];

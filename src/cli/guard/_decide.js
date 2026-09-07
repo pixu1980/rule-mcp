@@ -19,20 +19,7 @@ const MIGRATION_REASON = [
 ].join(" ");
 
 /** Extensions worth running guardrails on. */
-export const CHECKABLE = new Set([
-  ".js",
-  ".mjs",
-  ".cjs",
-  ".jsx",
-  ".ts",
-  ".tsx",
-  ".vue",
-  ".svelte",
-  ".astro",
-  ".css",
-  ".sql",
-  ".prisma",
-]);
+export const CHECKABLE = new Set([".js", ".mjs", ".cjs", ".jsx", ".ts", ".tsx", ".vue", ".svelte", ".astro", ".css", ".sql", ".prisma"]);
 
 /**
  * Map a path to the skill whose guardrails apply. Shared guardrails run for

@@ -116,11 +116,7 @@ test("no tier above the normalized key is wired in", async () => {
   }
 
   // A prompt that only overlaps must miss, not approximate.
-  assert.equal(
-    lookup("pix_tool", { prompt: "store for state" }),
-    undefined,
-    "partial overlap must miss: replaying it is the wrong replay the report measured",
-  );
+  assert.equal(lookup("pix_tool", { prompt: "store for state" }), undefined, "partial overlap must miss: replaying it is the wrong replay the report measured");
 });
 
 process.on("exit", () => rmSync(stateDir, { recursive: true, force: true }));

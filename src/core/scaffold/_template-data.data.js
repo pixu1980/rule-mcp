@@ -242,7 +242,5 @@ export function toKebab(string_) {
 
 /** Interpolate template variables. */
 export function interpolate(template, variables) {
-  return template.replaceAll(/\{\{\s*(\w[\w-]*)\s*\}\}/g, (match, key) =>
-    variables[key] === undefined ? match : variables[key],
-  );
+  return template.replaceAll(/\{\{\s*(\w[\w-]*)\s*\}\}/g, (match, key) => (variables[key] === undefined ? match : variables[key]));
 }

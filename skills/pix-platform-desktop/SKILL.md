@@ -349,10 +349,7 @@ npx electron-builder --mac --win --linux
 ### CSP for Electron
 
 ```html
-<meta
-  http-equiv="Content-Security-Policy"
-  content="default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'"
-/>
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'" />
 ```
 
 ## Auto-Update Patterns

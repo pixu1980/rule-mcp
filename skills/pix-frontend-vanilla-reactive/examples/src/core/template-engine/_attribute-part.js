@@ -40,12 +40,7 @@ export class AttributePart extends Part {
   commitModel(config) {
     const eventName = config.event ?? "input";
     const property = config.prop ?? inferModelProperty(this.element);
-    if (
-      this._modelBinding &&
-      this._modelBinding.eventName === eventName &&
-      this._modelBinding.property === property &&
-      this._modelBinding.signal === config.signal
-    ) {
+    if (this._modelBinding && this._modelBinding.eventName === eventName && this._modelBinding.property === property && this._modelBinding.signal === config.signal) {
       this._modelBinding.config = config;
       this._modelBinding.sync();
       return;

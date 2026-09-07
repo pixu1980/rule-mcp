@@ -60,17 +60,7 @@ test("uninstall removes our block and keeps every other line", () => {
 test("the chain block without an end marker is removed up to the blank line", () => {
   const dir = hookTree();
   const file = join(dir, "post-merge");
-  writeFileSync(
-    file,
-    [
-      "#!/bin/sh",
-      `# ${GIT_HOOK_MARKER}: chain`,
-      "git config core.hooksPath .git/hooks",
-      "",
-      "echo still-here",
-      "",
-    ].join("\n"),
-  );
+  writeFileSync(file, ["#!/bin/sh", `# ${GIT_HOOK_MARKER}: chain`, "git config core.hooksPath .git/hooks", "", "echo still-here", ""].join("\n"));
 
   const result = uninstallGitHooks({ dir });
 

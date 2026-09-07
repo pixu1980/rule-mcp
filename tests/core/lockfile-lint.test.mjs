@@ -15,9 +15,7 @@ const lock = readFileSync(new URL("../../pnpm-lock.yaml", import.meta.url), "utf
 test("every resolution carries an integrity hash or a local link", () => {
   const resolutions = [...lock.matchAll(/^\s+resolution: \{(.+)\}$/gm)].map(([, body]) => body);
   assert.ok(resolutions.length > 100, `expected a populated lockfile, saw ${resolutions.length} resolutions`);
-  const unverifiable = resolutions.filter(
-    (body) => !body.includes("integrity:") && !body.includes("directory:") && !body.includes("type: directory"),
-  );
+  const unverifiable = resolutions.filter((body) => !body.includes("integrity:") && !body.includes("directory:") && !body.includes("type: directory"));
   assert.deepEqual(unverifiable, [], "a resolution without an integrity hash is not reproducible");
 });
 

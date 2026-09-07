@@ -60,9 +60,5 @@ export function splitRow(line) {
 
 /** One markdown table, header row included. */
 export function table(columns, rows) {
-  return [
-    `| ${columns.join(" | ")} |`,
-    `| ${columns.map(() => "---").join(" | ")} |`,
-    ...rows.map((row) => `| ${row.map((cell) => escapeCell(cell)).join(" | ")} |`),
-  ];
+  return [`| ${columns.join(" | ")} |`, `| ${columns.map(() => "---").join(" | ")} |`, ...rows.map((row) => `| ${row.map((cell) => escapeCell(cell)).join(" | ")} |`)];
 }

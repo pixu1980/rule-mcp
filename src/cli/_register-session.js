@@ -85,9 +85,7 @@ export function registerFixCommand(program) {
     .option("--mode <m>", "lint (scan + report) or fix (scan + auto-correct)", "lint")
     .option("--no-dry-run", "apply fixes instead of previewing")
     .allowExcessArguments(false)
-    .action((options) =>
-      fixCommand({ dir: options.dir, srcDir: options.srcDir, mode: options.mode, dryRun: options.dryRun }),
-    );
+    .action((options) => fixCommand({ dir: options.dir, srcDir: options.srcDir, mode: options.mode, dryRun: options.dryRun }));
 }
 
 /** Register the `handon` command. */
@@ -102,8 +100,6 @@ export function registerHandonCommand(program) {
     .action(async (options) => {
       const { handon } = await import("../tools/handon/index.js");
 
-      process.stdout.write(
-        `${handon({ projectDir: options.dir, file: options.file || undefined, list: options.list }).text}\n`,
-      );
+      process.stdout.write(`${handon({ projectDir: options.dir, file: options.file || undefined, list: options.list }).text}\n`);
     });
 }

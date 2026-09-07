@@ -9,8 +9,7 @@ export const noSpeculativeAuditTable = {
     // this rule matched `_events` and silently passed `PaymentWebhookEvent`,
     // which is exactly the table a real session had to remove ten hours and
     // one applied migration later. Split on separators AND case boundaries.
-    const suffix =
-      /^(?:audit|audits|history|histories|log|logs|event|events|archive|archives|journal|trail|snapshot|snapshots)$/i;
+    const suffix = /^(?:audit|audits|history|histories|log|logs|event|events|archive|archives|journal|trail|snapshot|snapshots)$/i;
     const lastToken = (name) =>
       name
         .replaceAll(/["`']/g, "")
@@ -19,9 +18,7 @@ export const noSpeculativeAuditTable = {
         .split(/[_\s-]+|(?<=[a-z0-9])(?=[A-Z])/)
         .findLast(Boolean) ?? "";
     const created = [
-      ...[...code.matchAll(/create\s+table\s+(?:if\s+not\s+exists\s+)?["`']?([\w.]+)["`']?/gi)].map(
-        (match) => match[1],
-      ),
+      ...[...code.matchAll(/create\s+table\s+(?:if\s+not\s+exists\s+)?["`']?([\w.]+)["`']?/gi)].map((match) => match[1]),
       ...[...code.matchAll(/^\s*model\s+([A-Za-z_]\w*)\s*\{/gm)].map((match) => match[1]),
     ].map((name) => name.replaceAll(/["`']/g, "").split(".").pop());
     const auditLike = [...new Set(created.filter((name) => suffix.test(lastToken(name))))];

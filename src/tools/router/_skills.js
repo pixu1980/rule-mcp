@@ -64,12 +64,7 @@ function getSkillMetadata(skillName) {
  * measurement comparable - their extra bodies would otherwise dilute the
  * term-document frequencies (idf) the scorer's numbers are pinned to.
  */
-const TARGET_ONLY_SKILLS = new Set([
-  "pix-frontend-custom-element",
-  "pix-frontend-template-engine",
-  "pix-frontend-vanilla-reactive",
-  "pix-platform-auth",
-]);
+const TARGET_ONLY_SKILLS = new Set(["pix-frontend-custom-element", "pix-frontend-template-engine", "pix-frontend-vanilla-reactive", "pix-platform-auth"]);
 
 function getSkillNames() {
   const names = new Set();

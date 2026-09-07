@@ -80,15 +80,4 @@ function isPinned(spec) {
 // rules, flex-first layout and comment hygiene. Mirrors the upstream SHARED
 // composition: these run everywhere.
 
-export {
-  TS_EXTENSION,
-  TS_SYNTAX,
-  isTypeScript,
-  stripLiterals,
-  MANIFEST_FILE,
-  INSTALLED_GROUPS,
-  NOT_A_RANGE,
-  EXACT_VERSION,
-  manifestOf,
-  isPinned,
-};
+export { TS_EXTENSION, TS_SYNTAX, isTypeScript, stripLiterals, MANIFEST_FILE, INSTALLED_GROUPS, NOT_A_RANGE, EXACT_VERSION, manifestOf, isPinned };

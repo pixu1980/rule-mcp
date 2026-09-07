@@ -7,8 +7,7 @@ export const A11Y_GUARDRAILS = [
     id: "a11y-img-alt",
     wcag: "1.1.1",
     label: "Images carry a text alternative",
-    description:
-      "Every img needs alt. An empty alt is a valid answer for decoration; a missing one is not an answer at all.",
+    description: "Every img needs alt. An empty alt is a valid answer for decoration; a missing one is not an answer at all.",
     suggestion: 'Add alt="..." with the information the image carries, or alt="" if it is decorative',
     find: (code) => [...code.matchAll(/<img\b[^>]*>/gi)].map((m) => m[0]).filter((tag) => !/\balt\s*=/i.test(tag)),
   }),
@@ -16,8 +15,7 @@ export const A11Y_GUARDRAILS = [
     id: "a11y-positive-tabindex",
     wcag: "2.4.3",
     label: "No positive tabindex",
-    description:
-      "A positive tabindex takes the element out of document order, so focus order stops matching reading order.",
+    description: "A positive tabindex takes the element out of document order, so focus order stops matching reading order.",
     suggestion: 'Use tabindex="0" and fix the DOM order instead, or tabindex="-1" for programmatic focus',
     find: (code) => [...code.matchAll(/tabindex\s*=\s*["']?([1-9]\d*)["']?/gi)].map((m) => m[0]),
   }),
@@ -33,8 +31,7 @@ export const A11Y_GUARDRAILS = [
     id: "a11y-iframe-title",
     wcag: "4.1.2",
     label: "Frames are named",
-    description:
-      'An iframe with no title is announced as "frame", which tells the user nothing about whether to enter it.',
+    description: 'An iframe with no title is announced as "frame", which tells the user nothing about whether to enter it.',
     suggestion: 'Add title="..." describing what the frame contains',
     find: (code) => [...code.matchAll(/<iframe\b[^>]*>/gi)].map((m) => m[0]).filter((tag) => !/\btitle\s*=/i.test(tag)),
   }),
@@ -42,8 +39,7 @@ export const A11Y_GUARDRAILS = [
     id: "a11y-aria-hidden-focusable",
     wcag: "4.1.2",
     label: "Nothing focusable is aria-hidden",
-    description:
-      "aria-hidden on a focusable element leaves it in the tab order while removing it from the accessibility tree, so focus lands on nothing announceable.",
+    description: "aria-hidden on a focusable element leaves it in the tab order while removing it from the accessibility tree, so focus lands on nothing announceable.",
     suggestion: "Remove aria-hidden, or remove the element from the tab order too",
     find: (code) =>
       [
@@ -55,32 +51,23 @@ export const A11Y_GUARDRAILS = [
     id: "a11y-no-autoplay",
     wcag: "1.4.2",
     label: "Media does not autoplay with sound",
-    description:
-      "Audio starting on load competes with a screen reader and cannot be stopped by someone who has not found the control yet.",
+    description: "Audio starting on load competes with a screen reader and cannot be stopped by someone who has not found the control yet.",
     suggestion: "Remove autoplay, or add muted and a visible control",
-    find: (code) =>
-      [...code.matchAll(/<(?:audio|video)\b[^>]*\bautoplay\b[^>]*>/gi)]
-        .map((m) => m[0])
-        .filter((tag) => !/\bmuted\b/i.test(tag)),
+    find: (code) => [...code.matchAll(/<(?:audio|video)\b[^>]*\bautoplay\b[^>]*>/gi)].map((m) => m[0]).filter((tag) => !/\bmuted\b/i.test(tag)),
   }),
   a11yRule({
     id: "a11y-video-captions",
     wcag: "1.2.2",
     label: "Video offers captions",
-    description:
-      "A video element with no captions track excludes anyone who cannot hear it, and anyone in a room where sound is not an option.",
+    description: "A video element with no captions track excludes anyone who cannot hear it, and anyone in a room where sound is not an option.",
     suggestion: 'Add <track kind="captions" src="..." srclang="..." label="...">',
-    find: (code) =>
-      [...code.matchAll(/<video\b[^>]*>[\s\S]*?<\/video>/gi)]
-        .map((m) => m[0])
-        .filter((block) => !/kind\s*=\s*["']?captions/i.test(block)),
+    find: (code) => [...code.matchAll(/<video\b[^>]*>[\s\S]*?<\/video>/gi)].map((m) => m[0]).filter((block) => !/kind\s*=\s*["']?captions/i.test(block)),
   }),
   a11yRule({
     id: "a11y-form-label",
     wcag: "3.3.2",
     label: "Inputs are labeled",
-    description:
-      'An input with no label, aria-label or aria-labelledby is announced by its type alone, so the user hears "edit text" and nothing else.',
+    description: 'An input with no label, aria-label or aria-labelledby is announced by its type alone, so the user hears "edit text" and nothing else.',
     suggestion: "Associate a label element, or add aria-label / aria-labelledby",
     find: (code) =>
       [...code.matchAll(/<input\b[^>]*>/gi)]

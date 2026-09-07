@@ -2,13 +2,7 @@
 import { strict as assert } from "node:assert";
 import { test } from "node:test";
 
-import {
-  FORMAT_EXT,
-  listAgentCommands,
-  renderAgentCommand,
-  renderAgentCommandFiles,
-  suppressesMcpPrompts,
-} from "./_targets.fixture.mjs";
+import { FORMAT_EXT, listAgentCommands, renderAgentCommand, renderAgentCommandFiles, suppressesMcpPrompts } from "./_targets.fixture.mjs";
 
 console.log("agent command targets test: rendering");
 

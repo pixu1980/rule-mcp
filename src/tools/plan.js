@@ -33,18 +33,13 @@ function resolveRole(requested, overlays) {
   const normalized = String(requested).toLowerCase();
 
   return allRoles(overlays).find((role) =>
-    [role.id, role.id.replaceAll("-", " "), role.role.toLowerCase(), ...(role.aliases ?? [])].some(
-      (name) => String(name).toLowerCase() === normalized,
-    ),
+    [role.id, role.id.replaceAll("-", " "), role.role.toLowerCase(), ...(role.aliases ?? [])].some((name) => String(name).toLowerCase() === normalized),
   );
 }
 
 const PlanSchema = z.object({
   role: z.string().describe("Role id (security, privacy, a11y...)"),
-  operation: z
-    .enum(OPERATIONS)
-    .optional()
-    .describe("Which document this run produces: plan, audit, or review (default: all three)"),
+  operation: z.enum(OPERATIONS).optional().describe("Which document this run produces: plan, audit, or review (default: all three)"),
   years: z.number().int().positive().optional(),
   skills: z.array(z.string()).optional(),
   topic: z.string().optional(),

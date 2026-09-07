@@ -94,13 +94,7 @@ export function fixBlockSpacing(filePath) {
       continue;
     } // skip - handled by block rules
     // If current line closes a multi-line export body and next line is another export
-    if (
-      (current === "};" || current.startsWith("}")) &&
-      next.startsWith("export ") &&
-      !next.startsWith("export {") &&
-      index + 1 < lines.length &&
-      lines[index + 1].trim() !== ""
-    ) {
+    if ((current === "};" || current.startsWith("}")) && next.startsWith("export ") && !next.startsWith("export {") && index + 1 < lines.length && lines[index + 1].trim() !== "") {
       lines.splice(index + 1, 0, "");
     }
   }

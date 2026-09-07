@@ -3,15 +3,7 @@
 ## Problem
 
 ```tsx
-<Accordion
-  items={items}
-  renderHeader={renderHeader}
-  renderBody={renderBody}
-  icon="chevron"
-  iconPosition="right"
-  allowMultiple={false}
-  onToggle={handleToggle}
-/>
+<Accordion items={items} renderHeader={renderHeader} renderBody={renderBody} icon="chevron" iconPosition="right" allowMultiple={false} onToggle={handleToggle} />
 ```
 
 This API is flexible at first, but every new requirement adds more props.

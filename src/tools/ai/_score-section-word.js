@@ -7,10 +7,7 @@ export function scoreSectionWord(section, word, skillBase, descText) {
   const descBonus = descText.includes(word) ? 2 : 0;
   const weight = 1 + nameBonus + descBonus;
 
-  const wordPattern = new RegExp(
-    String.raw`\b` + word.replaceAll(/[.*+?^${}()|[\]\\]/g, String.raw`\$&`) + String.raw`\b`,
-    "i",
-  );
+  const wordPattern = new RegExp(String.raw`\b` + word.replaceAll(/[.*+?^${}()|[\]\\]/g, String.raw`\$&`) + String.raw`\b`, "i");
 
   if (wordPattern.test(headingText)) {
     return weight * 3;

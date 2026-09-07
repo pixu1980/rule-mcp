@@ -5,10 +5,7 @@ import { execFileSync } from "node:child_process";
 import { join } from "node:path";
 import test from "node:test";
 
-import {
-  planRenumber,
-  applyRenumber,
-} from "../../../src/core/docs-numbering/index.js";
+import { planRenumber, applyRenumber } from "../../../src/core/docs-numbering/index.js";
 import { seedRepo } from "./_doctor.fixture.mjs";
 
 test("progress is reported while the work happens, not only at the end", () => {
@@ -51,10 +48,7 @@ test("the CLI prints its steps while it works, not just a summary", () => {
     assert.match(out, /Scanning docs[/\\]adr/, "the scan announces itself");
     assert.match(out, /Read \d+ ADR document\(s\)/, "and says what it found");
     assert.match(out, /collision\(s\) found/, "the summary still arrives");
-    assert.ok(
-      out.indexOf("Scanning") < out.indexOf("collision(s) found"),
-      "the steps come before the summary, which is the point of printing them",
-    );
+    assert.ok(out.indexOf("Scanning") < out.indexOf("collision(s) found"), "the steps come before the summary, which is the point of printing them");
   } catch (error) {
     // exit 1 is the dry-run verdict, and execFileSync throws on it.
     const out = String(error.stdout ?? "");

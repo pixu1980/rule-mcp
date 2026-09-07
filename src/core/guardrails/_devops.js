@@ -43,11 +43,8 @@ export const DEVOPS_GUARDRAILS = [
     label: "No hardcoded secrets",
     description: "Passwords, API keys, and tokens must use environment variables.",
     check: (code) => {
-      const secrets =
-        code.match(/(?:password|passwd|secret|apiKey|api_key|token|api_secret)\s*[:=]\s*["'][^"']{8,}["']/gi) || [];
-      const nonEnvironment = secrets.filter(
-        (s) => !/process\.env/i.test(code.slice(Math.max(0, code.indexOf(s) - 80), code.indexOf(s))),
-      );
+      const secrets = code.match(/(?:password|passwd|secret|apiKey|api_key|token|api_secret)\s*[:=]\s*["'][^"']{8,}["']/gi) || [];
+      const nonEnvironment = secrets.filter((s) => !/process\.env/i.test(code.slice(Math.max(0, code.indexOf(s) - 80), code.indexOf(s))));
 
       return {
         pass: nonEnvironment.length === 0,

@@ -2,7 +2,23 @@
 import test, { beforeEach } from "node:test";
 import assert from "node:assert/strict";
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
-import { CATALOG_FILE, MIN_HITS, SKILL, args, buildCatalog, cacheClear, cacheLookup, cacheStore, catalogPath, primeFromCatalog, project, readCatalog, result, skillDigest, writeCatalog } from "./_catalog.fixture.mjs";
+import {
+  CATALOG_FILE,
+  MIN_HITS,
+  SKILL,
+  args,
+  buildCatalog,
+  cacheClear,
+  cacheLookup,
+  cacheStore,
+  catalogPath,
+  primeFromCatalog,
+  project,
+  readCatalog,
+  result,
+  skillDigest,
+  writeCatalog,
+} from "./_catalog.fixture.mjs";
 
 beforeEach(() => {
   cacheClear();
@@ -18,10 +34,7 @@ test("a written catalog reads back as it was written", async () => {
   writeCatalog(project, catalog);
   assert.ok(existsSync(catalogPath(project)), `writes ${CATALOG_FILE}`);
   assert.deepEqual(readCatalog(project), catalog);
-  assert.ok(
-    readFileSync(catalogPath(project), "utf8").endsWith("\n"),
-    "ends with a newline, like every other committed file",
-  );
+  assert.ok(readFileSync(catalogPath(project), "utf8").endsWith("\n"), "ends with a newline, like every other committed file");
 });
 
 // ── Reading it back ──

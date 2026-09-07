@@ -14,18 +14,12 @@ export function codeSpans(body) {
  * test files reports three branches that never existed.
  */
 export const looksLikeBranch = (text) =>
-  !/\.[a-z]{1,5}$/i.test(text) &&
-  (/^(?:feat|fix|chore|docs|refactor|test|perf|ci|hotfix|release|spike)\/[\w.-]+$/.test(text) || TRUNKS.has(text));
+  !/\.[a-z]{1,5}$/i.test(text) && (/^(?:feat|fix|chore|docs|refactor|test|perf|ci|hotfix|release|spike)\/[\w.-]+$/.test(text) || TRUNKS.has(text));
 
 /**
  * A glob is not a path. `src/core/telemetry*.js` matched nothing on disk and was
  * reported as deleted, which is a fabricated fact from a real handoff.
  */
-export const looksLikePath = (text) =>
-  !text.includes(" ") &&
-  !/[*?[\]]/.test(text) &&
-  text.includes("/") &&
-  /\.[a-z]{1,5}$/i.test(text) &&
-  !looksLikeBranch(text);
+export const looksLikePath = (text) => !text.includes(" ") && !/[*?[\]]/.test(text) && text.includes("/") && /\.[a-z]{1,5}$/i.test(text) && !looksLikeBranch(text);
 
 export const looksLikeCommand = (text) => /^(?:pnpm|npm|pnpx|node|bash|git|sh)\s+\S/.test(text);

@@ -15,8 +15,7 @@ export function registerHandoffCommand(program) {
     .allowExcessArguments(false)
     .action(async function handoffAction(subcommand, options) {
       if (subcommand === "doctor") {
-        const { applyRenumber, planRenumber, renderRenumberPlan, rewriteCommitReferences } =
-          await import("../core/docs-numbering/index.js");
+        const { applyRenumber, planRenumber, renderRenumberPlan, rewriteCommitReferences } = await import("../core/docs-numbering/index.js");
         const projectDir = options.dir;
         const onProgress = ({ message }) => process.stdout.write(`  ${message}\n`);
         const plan = planRenumber({ projectDir, onProgress });
@@ -27,9 +26,7 @@ export function registerHandoffCommand(program) {
         if (options.fixCommits) {
           const rewrite = rewriteCommitReferences(plan, { projectDir, onProgress });
           process.stdout.write(
-            rewrite.refused
-              ? `Commit messages left alone: ${rewrite.refused}.\n`
-              : `Rewrote ${rewrite.rewritten} commit message(s); ${rewrite.skipped} left for a human.\n`,
+            rewrite.refused ? `Commit messages left alone: ${rewrite.refused}.\n` : `Rewrote ${rewrite.rewritten} commit message(s); ${rewrite.skipped} left for a human.\n`,
           );
         }
 

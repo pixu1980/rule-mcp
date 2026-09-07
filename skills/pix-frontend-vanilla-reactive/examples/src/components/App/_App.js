@@ -26,11 +26,10 @@ export class App extends HTMLElement {
       <aside data-part="demo-note">
         <strong>✦ Template engine syntax in action</strong><br />
         Description: {{ description | raw }}<br />
-        Pulse count: <code>{{ pulseCount }}</code> · <code>total</code>: <strong>{{ total }}</strong> todos ·
-        <code>tags | join:", "</code>: {{ tags | join:', ' | default:'no tags' }}
+        Pulse count: <code>{{ pulseCount }}</code> · <code>total</code>: <strong>{{ total }}</strong> todos · <code>tags | join:", "</code>: {{ tags | join:', ' | default:'no tags'
+        }}
         <br />
-        <code>appTitle | slugify | upper</code>: "{{ appTitle | slugify | upper }}" ·
-        <code>extraInfo | default:"-"</code>: {{ extraInfo | default:'-' }}
+        <code>appTitle | slugify | upper</code>: "{{ appTitle | slugify | upper }}" · <code>extraInfo | default:"-"</code>: {{ extraInfo | default:'-' }}
       </aside>
 
       <section data-part="add-form">

@@ -6,10 +6,7 @@ export const vanillaFnComponent = {
   label: "Functional component is a plain function",
   description: "Pattern B components must be plain functions, NOT classes extending HTMLElement.",
   check: (code) => {
-    const isPlainFunction =
-      /^export\s+function\s/.test(code.trim()) ||
-      /^function\s/.test(code.trim()) ||
-      /^export\s+const\s/.test(code.trim());
+    const isPlainFunction = /^export\s+function\s/.test(code.trim()) || /^function\s/.test(code.trim()) || /^export\s+const\s/.test(code.trim());
     const isClass = /extends\s+HTMLElement/.test(code);
 
     if (isClass) {

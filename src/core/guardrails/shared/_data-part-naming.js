@@ -11,8 +11,7 @@ export const dataPartNaming = {
     // the examples it quotes (finding F-A1).
     const code = maskLiterals(rawCode);
     const hasDataPart = code.includes('data-part="');
-    const hasChildren =
-      code.includes("<div") || code.includes("<section") || code.includes("<header") || code.includes("<nav");
+    const hasChildren = code.includes("<div") || code.includes("<section") || code.includes("<header") || code.includes("<nav");
 
     if (!hasChildren) {
       return { pass: true, note: "No child elements found" };
@@ -21,8 +20,7 @@ export const dataPartNaming = {
     return {
       pass: hasDataPart,
       failCount: hasDataPart ? 0 : 1,
-      suggestion:
-        'Add data-part="role" attributes to child elements: <section data-part="list">, <button data-part="delete">.',
+      suggestion: 'Add data-part="role" attributes to child elements: <section data-part="list">, <button data-part="delete">.',
     };
   },
 };

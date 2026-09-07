@@ -13,16 +13,10 @@ export function apply(text) {
       const line = ls[i];
       const prev = ls[i - 1];
       const next = ls[i + 1];
-      const needsBefore =
-        /^\s*(if|for|while|switch|try)\s*\(/.test(line) ||
-        /^\s*\.(then|catch|finally|map|filter|reduce|forEach)\s*\(/.test(line);
+      const needsBefore = /^\s*(if|for|while|switch|try)\s*\(/.test(line) || /^\s*\.(then|catch|finally|map|filter|reduce|forEach)\s*\(/.test(line);
       if (needsBefore && i > 0 && prev !== undefined) {
         const pt = prev.trim();
-        const scaffolding =
-          pt === "" ||
-          pt.endsWith("{") ||
-          pt.startsWith("}") ||
-          /^\s*(\/\/|\/\*|\*|if|for|while|switch|try|case|default)/.test(prev);
+        const scaffolding = pt === "" || pt.endsWith("{") || pt.startsWith("}") || /^\s*(\/\/|\/\*|\*|if|for|while|switch|try|case|default)/.test(prev);
         if (!scaffolding) {
           o.push("");
           localChanged = true;

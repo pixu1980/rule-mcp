@@ -31,8 +31,7 @@ export function verifyBranch(projectDir, branch, current) {
       continue;
     }
 
-    const merged =
-      git(projectDir, ["merge-base", "--is-ancestor", branch, trunk]) === "" && isAncestor(projectDir, branch, trunk);
+    const merged = git(projectDir, ["merge-base", "--is-ancestor", branch, trunk]) === "" && isAncestor(projectDir, branch, trunk);
 
     if (merged) {
       return `merged into ${trunk}`;

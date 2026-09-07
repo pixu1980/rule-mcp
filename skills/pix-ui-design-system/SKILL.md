@@ -146,8 +146,7 @@ article[data-part="panel"] {
 
   color: var(--ink);
   background:
-    radial-gradient(circle at 12% 12%, color-mix(in oklch, var(--accent), transparent 64%), transparent 32rem),
-    linear-gradient(135deg, var(--surface), oklch(10% 0.04 260));
+    radial-gradient(circle at 12% 12%, color-mix(in oklch, var(--accent), transparent 64%), transparent 32rem), linear-gradient(135deg, var(--surface), oklch(10% 0.04 260));
   border: 0.1rem solid color-mix(in oklch, var(--ink), transparent 80%);
 }
 

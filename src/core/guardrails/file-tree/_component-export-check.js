@@ -3,8 +3,7 @@
 export const componentExportCheck = {
   id: "component-export-check",
   label: "Component file exports a class or function",
-  description:
-    "_PascalCase.js component files must export at least one class or function. Store/data files (_store.js) are exempt.",
+  description: "_PascalCase.js component files must export at least one class or function. Store/data files (_store.js) are exempt.",
   check: (code, context) => {
     const fileName = context?.fileName || "";
     // Only check _PascalCase files (actual components)

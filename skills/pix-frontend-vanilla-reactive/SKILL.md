@@ -653,9 +653,7 @@ export class ContactForm extends HTMLElement {
       e.preventDefault();
       submitForm();
     });
-    this.querySelectorAll("[data-bind]").forEach((el) =>
-      el.addEventListener("input", () => formStore.set({ [el.dataset.bind]: el.value })),
-    );
+    this.querySelectorAll("[data-bind]").forEach((el) => el.addEventListener("input", () => formStore.set({ [el.dataset.bind]: el.value })));
     formStore.subscribe(() => {
       const s = formStore.get();
       const btn = this.querySelector("[data-part=submit]");

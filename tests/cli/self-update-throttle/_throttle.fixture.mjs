@@ -18,8 +18,7 @@ import { chmodSync, existsSync, mkdirSync, mkdtempSync, readFileSync, writeFileS
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 
-export const g = (arguments_, cwd) =>
-  execFileSync("git", arguments_, { cwd, stdio: ["ignore", "pipe", "ignore"], encoding: "utf8" });
+export const g = (arguments_, cwd) => execFileSync("git", arguments_, { cwd, stdio: ["ignore", "pipe", "ignore"], encoding: "utf8" });
 
 /** Build a bare "upstream" + a working clone that tracks it (same as self-update.test). */
 export function makeClonePair() {
@@ -99,5 +98,4 @@ export const fetchCount = (logPath) =>
     .filter((l) => l === "fetch").length;
 
 /** The clone's upstream URL, so the pin allows the fetch. */
-export const upstreamOf = (clone) =>
-  execFileSync("git", ["remote", "get-url", "origin"], { cwd: clone, encoding: "utf8" }).trim();
+export const upstreamOf = (clone) => execFileSync("git", ["remote", "get-url", "origin"], { cwd: clone, encoding: "utf8" }).trim();

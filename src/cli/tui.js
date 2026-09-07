@@ -94,19 +94,11 @@ export function kv(rows) {
 
 /** Render a compact table. */
 export function table(headers, rows, { maxWidth = 54 } = {}) {
-  const normalized = rows.map((row) =>
-    row.map((cell, index) => (index === row.length - 1 ? truncate(cell, maxWidth) : String(cell ?? ""))),
-  );
-  const widths = headers.map((header, index) =>
-    Math.min(maxWidth, Math.max(visibleLength(header), ...normalized.map((row) => visibleLength(row[index] ?? "")))),
-  );
+  const normalized = rows.map((row) => row.map((cell, index) => (index === row.length - 1 ? truncate(cell, maxWidth) : String(cell ?? ""))));
+  const widths = headers.map((header, index) => Math.min(maxWidth, Math.max(visibleLength(header), ...normalized.map((row) => visibleLength(row[index] ?? "")))));
   const renderRow = (row) => row.map((cell, index) => String(cell ?? "").padEnd(widths[index])).join("  ");
 
-  return [
-    color(renderRow(headers), "bold"),
-    color(widths.map((w) => "─".repeat(w)).join("  "), "dim"),
-    ...normalized.map(renderRow),
-  ].join("\n");
+  return [color(renderRow(headers), "bold"), color(widths.map((w) => "─".repeat(w)).join("  "), "dim"), ...normalized.map(renderRow)].join("\n");
 }
 
 export * from "./_tui-formats.js";

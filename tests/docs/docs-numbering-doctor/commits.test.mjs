@@ -5,12 +5,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import test from "node:test";
 
-import {
-  planRenumber,
-  applyRenumber,
-  rewriteCommitReferences,
-  staleCommitReferences,
-} from "../../../src/core/docs-numbering/index.js";
+import { planRenumber, applyRenumber, rewriteCommitReferences, staleCommitReferences } from "../../../src/core/docs-numbering/index.js";
 import { git, seedRepo } from "./_doctor.fixture.mjs";
 
 test("commit messages that name a renumbered document are reported", () => {
@@ -41,11 +36,7 @@ test("a message naming only the number is reported as ambiguous, not as stale", 
   const hit = stale.find((entry) => entry.subject === "docs(adr): accept ADR 069");
 
   assert.ok(hit, "it still has to be surfaced");
-  assert.equal(
-    hit.match,
-    "number",
-    "two documents held 069, so which one the message meant cannot be read from the message",
-  );
+  assert.equal(hit.match, "number", "two documents held 069, so which one the message meant cannot be read from the message");
 });
 
 test("a commit that names the document keeping its number is left alone", () => {

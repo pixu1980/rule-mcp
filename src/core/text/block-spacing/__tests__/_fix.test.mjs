@@ -21,20 +21,14 @@ function fix(name, code) {
 }
 
 test("a block jammed against the previous statement gains a blank line above", () => {
-  const { changed, content } = fix(
-    "above.js",
-    ["const a = 1;", "if (a) {", "  use(a);", "}", "done(a);", ""].join("\n"),
-  );
+  const { changed, content } = fix("above.js", ["const a = 1;", "if (a) {", "  use(a);", "}", "done(a);", ""].join("\n"));
 
   assert.equal(changed, true);
   assert.match(content, /const a = 1;\n\nif \(a\) \{/);
 });
 
 test("a comment above the block does not force a blank line", () => {
-  const { content } = fix(
-    "comment.js",
-    ["// the guard", "if (a) {", "  use(a);", "}", "", "done(a);", ""].join("\n"),
-  );
+  const { content } = fix("comment.js", ["// the guard", "if (a) {", "  use(a);", "}", "", "done(a);", ""].join("\n"));
 
   assert.doesNotMatch(content, /\/\/ the guard\n\n/, "a comment binds to the block below it");
 });
@@ -46,20 +40,7 @@ test("a statement right after the closing brace gains a blank line below", () =>
 });
 
 test("else, catch and chained closers stay glued to the brace", () => {
-  const source = [
-    "try {",
-    "  work();",
-    "} catch {",
-    "  recover();",
-    "}",
-    "",
-    "if (a) {",
-    "  one();",
-    "} else {",
-    "  two();",
-    "}",
-    "",
-  ].join("\n");
+  const source = ["try {", "  work();", "} catch {", "  recover();", "}", "", "if (a) {", "  one();", "} else {", "  two();", "}", ""].join("\n");
   const { content } = fix("closers.js", source);
 
   assert.match(content, /\} catch \{/, "catch must not be separated from its try");
@@ -67,10 +48,7 @@ test("else, catch and chained closers stay glued to the brace", () => {
 });
 
 test("consecutive multi-line exports get a separating blank line, barrels do not", () => {
-  const { content } = fix(
-    "exports.js",
-    ["export function one() {", "  return 1;", "}", "export function two() {", "  return 2;", "}", ""].join("\n"),
-  );
+  const { content } = fix("exports.js", ["export function one() {", "  return 1;", "}", "export function two() {", "  return 2;", "}", ""].join("\n"));
 
   assert.match(content, /\}\n\nexport function two/);
 

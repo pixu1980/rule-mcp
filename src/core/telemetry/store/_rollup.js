@@ -86,10 +86,7 @@ export function rollup(options = {}) {
             savedTokens: previous.savedTokens + day.savedTokens,
             estimatedTokens: previous.estimatedTokens + day.estimatedTokens,
             byTool: Object.fromEntries(
-              [...new Set([...Object.keys(previous.byTool ?? {}), ...Object.keys(day.byTool)])].map((tool) => [
-                tool,
-                (previous.byTool?.[tool] ?? 0) + (day.byTool[tool] ?? 0),
-              ]),
+              [...new Set([...Object.keys(previous.byTool ?? {}), ...Object.keys(day.byTool)])].map((tool) => [tool, (previous.byTool?.[tool] ?? 0) + (day.byTool[tool] ?? 0)]),
             ),
           }
         : day,

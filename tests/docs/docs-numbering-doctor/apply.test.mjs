@@ -4,10 +4,7 @@ import { existsSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import test from "node:test";
 
-import {
-  planRenumber,
-  applyRenumber,
-} from "../../../src/core/docs-numbering/index.js";
+import { planRenumber, applyRenumber } from "../../../src/core/docs-numbering/index.js";
 import { seedRepo } from "./_doctor.fixture.mjs";
 
 test("applying moves the file, fixes its header, and follows the references", () => {

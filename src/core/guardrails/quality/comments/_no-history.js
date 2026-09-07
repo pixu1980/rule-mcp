@@ -5,9 +5,7 @@ export const jsCommentNoHistory = {
   description:
     "A comment describes the current behavior and the reason for it. The story of how the code got here belongs to the ADR log and to git, and a copy in a comment is a second record that goes stale.",
   check: (code) => {
-    const comments = [...code.matchAll(/\/\*[\s\S]*?\*\//g), ...code.matchAll(/(?:^|[^:"'`\\])\/\/(.*)$/gm)].map(
-      (match) => match[0],
-    );
+    const comments = [...code.matchAll(/\/\*[\s\S]*?\*\//g), ...code.matchAll(/(?:^|[^:"'`\\])\/\/(.*)$/gm)].map((match) => match[0]);
     if (comments.length === 0) {
       return { pass: true };
     }

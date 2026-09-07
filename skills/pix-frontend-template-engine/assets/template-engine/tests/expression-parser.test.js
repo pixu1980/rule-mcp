@@ -104,11 +104,7 @@ describe("TemplateEngine - Expression Parser", () => {
     const result2 = evaluateExpression(parseExpression("user.profile.name"), { user: undefined }, filters);
     assert.strictEqual(result2, undefined);
 
-    const result3 = evaluateExpression(
-      parseExpression("user.missing.property"),
-      { user: { existing: "value" } },
-      filters,
-    );
+    const result3 = evaluateExpression(parseExpression("user.missing.property"), { user: { existing: "value" } }, filters);
     assert.strictEqual(result3, undefined);
   });
 

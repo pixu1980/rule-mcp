@@ -18,14 +18,8 @@ check("T1.3 fork gets nothing: it inherits the context", resumeContext({ source:
 check("T1.4 a missing source gets nothing", resumeContext({ cwd: withHandoff }) === "");
 
 // ── T2: no handoff, no injection ──
-check(
-  "T2 a project without a handoff injects nothing",
-  resumeContext({ source: "resume", cwd: withoutHandoff }) === "",
-);
-check(
-  "T2.1 a directory that does not exist injects nothing",
-  resumeContext({ source: "resume", cwd: join(withoutHandoff, "nope") }) === "",
-);
+check("T2 a project without a handoff injects nothing", resumeContext({ source: "resume", cwd: withoutHandoff }) === "");
+check("T2.1 a directory that does not exist injects nothing", resumeContext({ source: "resume", cwd: join(withoutHandoff, "nope") }) === "");
 
 // ── T3: verified, not restated ──
 check("T3 the claims are verified, not repeated", resumed.includes("Still true"));

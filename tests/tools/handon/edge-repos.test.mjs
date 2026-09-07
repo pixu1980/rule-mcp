@@ -63,11 +63,7 @@ test("a path git never tracked is not reported as deleted", () => {
   const verdictFor = (path) => report.claims.find((claim) => claim.kind === "file" && claim.value === path)?.verdict;
 
   assert.doesNotMatch(verdictFor(".internal/roles-accepted.json") ?? "", /deleted/, "git never tracked it");
-  assert.match(
-    verdictFor(".internal/roles-accepted.json") ?? "",
-    /untracked|ignored|does not track/i,
-    "the verdict says why it cannot be checked",
-  );
+  assert.match(verdictFor(".internal/roles-accepted.json") ?? "", /untracked|ignored|does not track/i, "the verdict says why it cannot be checked");
   assert.equal(verdictFor("src/real.js") !== undefined, true, "a tracked file is still verified");
   assert.match(verdictFor("src/removed.js") ?? "", /deleted/, "and a path git knew about is still reported deleted");
 });

@@ -202,11 +202,7 @@ db.orders.countDocuments({ status: "pending" }); // slow, exact
 db.users.updateOne({ email: "john@example.com" }, { $set: { name: "John Updated", updated_at: new Date() } });
 
 // Upsert (insert if not exist)
-db.users.updateOne(
-  { email: "new@example.com" },
-  { $set: { name: "New User", created_at: new Date() } },
-  { upsert: true },
-);
+db.users.updateOne({ email: "new@example.com" }, { $set: { name: "New User", created_at: new Date() } }, { upsert: true });
 
 // Array operations
 db.orders.updateOne(
@@ -350,12 +346,7 @@ db.orders.aggregate([
   {
     $facet: {
       metadata: [{ $count: "total" }],
-      data: [
-        { $sort: { created_at: -1 } },
-        { $skip: 0 },
-        { $limit: 20 },
-        { $project: { _id: 1, total: 1, status: 1, created_at: 1 } },
-      ],
+      data: [{ $sort: { created_at: -1 } }, { $skip: 0 }, { $limit: 20 }, { $project: { _id: 1, total: 1, status: 1, created_at: 1 } }],
     },
   },
 ]);

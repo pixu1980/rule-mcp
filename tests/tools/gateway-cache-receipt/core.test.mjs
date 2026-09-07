@@ -2,19 +2,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 
-import {
-  ARGUMENTS,
-  CLEAN,
-  GATEWAY_CORE_TOOL,
-  answerOf,
-  cacheClear,
-  cacheGet,
-  cacheKey,
-  cacheSet,
-  callTool,
-  gatewayCoreArguments,
-  textOf,
-} from "./_receipt.fixture.mjs";
+import { ARGUMENTS, CLEAN, GATEWAY_CORE_TOOL, answerOf, cacheClear, cacheGet, cacheKey, cacheSet, callTool, gatewayCoreArguments, textOf } from "./_receipt.fixture.mjs";
 
 test("the deterministic core is cached under its own key", async () => {
   cacheClear();
@@ -63,11 +51,7 @@ test("a hit and a miss render the same answer apart from the receipt", async () 
   assert.equal(withoutReceipt(hit), withoutReceipt(miss), "a replayed core must render the same prose");
 
   const stripReceipt = (answer) => ({ ...answer, receipt: undefined });
-  assert.deepEqual(
-    stripReceipt(answerOf(hit)),
-    stripReceipt(answerOf(miss)),
-    "a replayed core must render the same JSON",
-  );
+  assert.deepEqual(stripReceipt(answerOf(hit)), stripReceipt(answerOf(miss)), "a replayed core must render the same JSON");
 });
 
 test("the core key separates calls that differ in what is checked", () => {

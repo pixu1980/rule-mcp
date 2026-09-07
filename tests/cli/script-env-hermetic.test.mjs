@@ -26,9 +26,7 @@ test("every test that runs install.sh or uninstall.sh sandboxes PNPM_HOME", () =
 
   /** A split suite may sandbox in its _*.fixture.mjs; the folder counts as one unit. */
   const dirNamesPnpmHome = (dir) =>
-    readdirSync(dir, { withFileTypes: true }).some(
-      (entry) => entry.isFile() && entry.name.endsWith(".mjs") && readFileSync(join(dir, entry.name), "utf8").includes("PNPM_HOME"),
-    );
+    readdirSync(dir, { withFileTypes: true }).some((entry) => entry.isFile() && entry.name.endsWith(".mjs") && readFileSync(join(dir, entry.name), "utf8").includes("PNPM_HOME"));
 
   const walk = (dir) => {
     for (const entry of readdirSync(dir, { withFileTypes: true })) {
@@ -50,9 +48,5 @@ test("every test that runs install.sh or uninstall.sh sandboxes PNPM_HOME", () =
   };
   walk(CLI_DIR);
 
-  assert.deepEqual(
-    offenders,
-    [],
-    `these tests spawn the shell scripts with the real PNPM_HOME leaking in - set env.PNPM_HOME to a sandbox dir: ${offenders.join(", ")}`,
-  );
+  assert.deepEqual(offenders, [], `these tests spawn the shell scripts with the real PNPM_HOME leaking in - set env.PNPM_HOME to a sandbox dir: ${offenders.join(", ")}`);
 });

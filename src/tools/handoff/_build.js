@@ -7,19 +7,7 @@ import { headerLines, identityLines, adrLines, contextLines } from "./_sections-
 import { workingTreeLines, gitLogLines, docsLines, footerLines } from "./_sections-repo.js";
 
 /** Build one handoff, re-running itself one format tighter when it exceeds maxTokens. */
-export function buildHandoff({
-  projectDir,
-  includeContext,
-  includeAdrs,
-  includeIdentity,
-  includeGitDiff,
-  includeGitLog,
-  includeRoadmap,
-  compress,
-  maxTokens,
-  format,
-  mode,
-}) {
+export function buildHandoff({ projectDir, includeContext, includeAdrs, includeIdentity, includeGitDiff, includeGitLog, includeRoadmap, compress, maxTokens, format, mode }) {
   const identity = includeIdentity ? readProjectIdentity(projectDir) : {};
   const adrs = includeAdrs ? readAdrs(projectDir) : [];
   const contextValues = includeContext ? readContextValues(projectDir) : {};
@@ -27,8 +15,7 @@ export function buildHandoff({
   const gitLog = includeGitLog === false ? null : getGitLog(projectDir);
   const docsScan = includeRoadmap === false ? null : scanProjectDocs(projectDir);
 
-  const projectName =
-    identity.name || (projectDir === "." ? process.cwd().split("/").pop() : projectDir.split("/").pop());
+  const projectName = identity.name || (projectDir === "." ? process.cwd().split("/").pop() : projectDir.split("/").pop());
   const shape = {
     projectName,
     projectDir,

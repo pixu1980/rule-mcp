@@ -101,11 +101,7 @@ const backupFile = (file) => {
 const resolveGlobalBinary = () => {
   // Check common pnpm/Homebrew locations (fast path, no shell overhead).
   const HOME = homedir();
-  const candidates = [
-    join(HOME, "Library", "pnpm", "bin", "pix-galaxy-mcp"),
-    "/opt/homebrew/bin/pix-galaxy-mcp",
-    "/usr/local/bin/pix-galaxy-mcp",
-  ];
+  const candidates = [join(HOME, "Library", "pnpm", "bin", "pix-galaxy-mcp"), "/opt/homebrew/bin/pix-galaxy-mcp", "/usr/local/bin/pix-galaxy-mcp"];
 
   for (const candidate of candidates) {
     if (existsSync(candidate)) {
@@ -128,18 +124,4 @@ const resolveGlobalBinary = () => {
   return null;
 };
 
-export {
-  serverName,
-  IS_WINDOWS,
-  IS_MACOS,
-  IS_LINUX,
-  HOME,
-  COMMAND_TEMPLATE_PATH,
-  resolvePath,
-  readText,
-  atomicWrite,
-  writeText,
-  removeFile,
-  backupFile,
-  resolveGlobalBinary,
-};
+export { serverName, IS_WINDOWS, IS_MACOS, IS_LINUX, HOME, COMMAND_TEMPLATE_PATH, resolvePath, readText, atomicWrite, writeText, removeFile, backupFile, resolveGlobalBinary };

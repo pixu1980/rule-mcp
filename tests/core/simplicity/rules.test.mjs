@@ -27,24 +27,15 @@ const byId = Object.fromEntries(SIMPLICITY_GUARDRAILS.map((g) => [g.id, g]));
 const SPECULATIVE_SQL = `CREATE TABLE orders (id uuid primary key, total numeric);
 CREATE TABLE orders_audit (id uuid primary key, order_id uuid, changed_at timestamptz);
 INSERT INTO orders (id, total) VALUES ($1, $2);`;
-check(
-  "T5 no-speculative-audit-table fires on a write-only audit table",
-  byId["no-speculative-audit-table"].check(SPECULATIVE_SQL, {}).pass === false,
-);
+check("T5 no-speculative-audit-table fires on a write-only audit table", byId["no-speculative-audit-table"].check(SPECULATIVE_SQL, {}).pass === false);
 
 const USED_SQL = `${SPECULATIVE_SQL}
 SELECT changed_at FROM orders_audit WHERE order_id = $1;`;
-check(
-  "T5.1 it stays silent when the table is actually read",
-  byId["no-speculative-audit-table"].check(USED_SQL, {}).pass === true,
-);
+check("T5.1 it stays silent when the table is actually read", byId["no-speculative-audit-table"].check(USED_SQL, {}).pass === true);
 
 const FUTURE_CODE = `// kept for future use, we might need it later
 export const retryBudget = 3;`;
-check(
-  "T5.2 no-future-use-code fires on speculative markers",
-  byId["no-future-use-code"].check(FUTURE_CODE, {}).pass === false,
-);
+check("T5.2 no-future-use-code fires on speculative markers", byId["no-future-use-code"].check(FUTURE_CODE, {}).pass === false);
 
 const COMMENTED_OUT = `function send(payload) {
   return post(payload);
@@ -53,10 +44,7 @@ const COMMENTED_OUT = `function send(payload) {
 //   const enriched = enrich(payload);
 //   return post(enriched);
 // }`;
-check(
-  "T5.3 no-commented-out-code fires on a parked implementation",
-  byId["no-commented-out-code"].check(COMMENTED_OUT, {}).pass === false,
-);
+check("T5.3 no-commented-out-code fires on a parked implementation", byId["no-commented-out-code"].check(COMMENTED_OUT, {}).pass === false);
 
 const PROSE_COMMENTS = `// Send the payload.
 // Retries are handled by the caller, deliberately: the queue owns backoff.
@@ -64,10 +52,7 @@ const PROSE_COMMENTS = `// Send the payload.
 function send(payload) {
   return post(payload);
 }`;
-check(
-  "T5.4 prose comments are not commented-out code",
-  byId["no-commented-out-code"].check(PROSE_COMMENTS, {}).pass === true,
-);
+check("T5.4 prose comments are not commented-out code", byId["no-commented-out-code"].check(PROSE_COMMENTS, {}).pass === true);
 
 // ── T7: the case this was built for - a real session added a
 //    `PaymentWebhookEvent` model plus its migration, and nothing read either.

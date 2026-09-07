@@ -67,9 +67,7 @@ export function renderRenumberPlan(plan, options = {}) {
         "",
         "Naming the moved file, so certainly stale:",
         "",
-        ...certain.map(
-          (entry) => `- ${entry.sha} ${entry.subject} (${entry.file} -> ${entry.family} ${entry.toNumber})`,
-        ),
+        ...certain.map((entry) => `- ${entry.sha} ${entry.subject} (${entry.file} -> ${entry.family} ${entry.toNumber})`),
       );
     }
 

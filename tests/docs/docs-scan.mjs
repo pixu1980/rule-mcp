@@ -20,11 +20,7 @@ function scan(dir) {
   let stale = 0;
   for (const e of readdirSync(dir, { withFileTypes: true })) {
     const p = join(dir, e.name);
-    if (
-      e.isDirectory() &&
-      !["node_modules", ".git", ".context", ".tokensave", ".pi"].includes(e.name) &&
-      !archivalDirectories.has(e.name)
-    ) {
+    if (e.isDirectory() && !["node_modules", ".git", ".context", ".tokensave", ".pi"].includes(e.name) && !archivalDirectories.has(e.name)) {
       stale += scan(p);
     } else if (e.name.endsWith(".md")) {
       const c = readFileSync(p, "utf8");
@@ -45,9 +41,7 @@ function scan(dir) {
 }
 
 const total = scan("docs");
-console.log(
-  total === 0 ? "✅ ALL CLEAN - 0 stale references across live docs/" : "❌ " + total + " stale references found",
-);
+console.log(total === 0 ? "✅ ALL CLEAN - 0 stale references across live docs/" : "❌ " + total + " stale references found");
 
 // Persona trios are checked here too (personas C.3): a review that lost its
 // audit, a plan whose steps point at findings nobody has open, a document that
@@ -56,9 +50,5 @@ const trio = validateTrio({ projectDir: "." });
 for (const problem of trio) {
   console.log("TRIO:", problem.file + " " + problem.reason);
 }
-console.log(
-  trio.length === 0
-    ? "✅ TRIO CLEAN - 0 problems in docs/audits, reviews, plans"
-    : "❌ " + trio.length + " trio problems found",
-);
+console.log(trio.length === 0 ? "✅ TRIO CLEAN - 0 problems in docs/audits, reviews, plans" : "❌ " + trio.length + " trio problems found");
 process.exit(total + trio.length > 0 ? 1 : 0);

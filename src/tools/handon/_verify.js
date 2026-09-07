@@ -22,12 +22,7 @@ export function verify(projectDir, claimed) {
       kind,
       value,
       verdict,
-      bucket:
-        verdict.startsWith("unverified") || verdict.includes("not re-verified")
-          ? "unverified"
-          : HOLDS.has(verdict)
-            ? "still-true"
-            : "changed",
+      bucket: verdict.startsWith("unverified") || verdict.includes("not re-verified") ? "unverified" : HOLDS.has(verdict) ? "still-true" : "changed",
     });
 
   for (const branch of claimed.branches) {
@@ -57,17 +52,9 @@ export function verify(projectDir, claimed) {
       // this repository no longer has, which is what a rewritten message
       // leaves behind.
       const why = openEnded ? "which ends at HEAD" : "whose end is gone from this repository";
-      add(
-        "range",
-        `${start}..${end}`,
-        endFixed ? `${count} commits since the range ended` : `${count} commits in and since the range, ${why}`,
-      );
+      add("range", `${start}..${end}`, endFixed ? `${count} commits since the range ended` : `${count} commits in and since the range, ${why}`);
     } else {
-      add(
-        "range",
-        `${start}..${end}`,
-        hasGit ? "unverified, commit not in this repository" : "unverified, no git repository",
-      );
+      add("range", `${start}..${end}`, hasGit ? "unverified, commit not in this repository" : "unverified, no git repository");
     }
   }
 

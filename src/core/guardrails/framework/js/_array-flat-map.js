@@ -2,8 +2,7 @@
 export const jsArrayFlatMap = {
   id: "js-array-flat-map",
   label: "prefer flatMap over map().flat()",
-  description:
-    "rows.map(fn).flat() allocates an intermediate array; use rows.flatMap(fn) instead. Only .flat() with no depth argument is flagged.",
+  description: "rows.map(fn).flat() allocates an intermediate array; use rows.flatMap(fn) instead. Only .flat() with no depth argument is flagged.",
   check: (code) => {
     const violations = code.match(/\.map\s*\([^()]*(?:\([^()]*\))?[^()]*\)\s*\.flat\s*\(\s*\)/g) || [];
 

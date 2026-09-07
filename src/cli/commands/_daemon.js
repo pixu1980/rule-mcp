@@ -203,9 +203,7 @@ async function daemonCommand(opts) {
       break;
     }
     default: {
-      throw new Error(
-        `Unknown daemon action: ${action}. Available: start, stop, status, logs, install, uninstall, enable, disable`,
-      );
+      throw new Error(`Unknown daemon action: ${action}. Available: start, stop, status, logs, install, uninstall, enable, disable`);
     }
   }
 }

@@ -6,13 +6,7 @@ import { join, resolve } from "node:path";
 import { parseSkillFrontmatter } from "../../../src/core/skills/index.js";
 import { markdownLinks, skillDirectories, skillsRoot } from "./_docs.fixture.mjs";
 
-const removedSkillNames = [
-  "pix-scaffolding",
-  "pix-coverage-gates",
-  "pix-devops-docker-standards",
-  "pix-frontend-forms",
-  "pix-frontend-forms-validation",
-];
+const removedSkillNames = ["pix-scaffolding", "pix-coverage-gates", "pix-devops-docker-standards", "pix-frontend-forms", "pix-frontend-forms-validation"];
 
 console.log("pix skill documentation test: corpus");
 

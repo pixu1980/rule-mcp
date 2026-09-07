@@ -16,8 +16,6 @@ import { CORPUS } from "../../fixtures/guardrail-corpus.mjs";
 import { checkCode } from "../../../src/core/guardrails/index.js";
 import * as DEFS from "../../../src/core/guardrails/index.js";
 
-
-
 /** Every rule id the checker knows about, across every group. */
 export function allRuleIds() {
   const ids = new Set();
@@ -73,4 +71,4 @@ function score() {
 
 export const scores = score();
 
-export {CORPUS} from "../../fixtures/guardrail-corpus.mjs";
+export { CORPUS } from "../../fixtures/guardrail-corpus.mjs";

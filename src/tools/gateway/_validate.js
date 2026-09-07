@@ -74,8 +74,7 @@ export function validateApply(token, files, now = Date.now()) {
       return {
         valid: false,
         binding: "content",
-        reason:
-          "Content-only receipt cannot authorize a multi-file write - pass `files` to pix_gateway for a path-bound receipt",
+        reason: "Content-only receipt cannot authorize a multi-file write - pass `files` to pix_gateway for a path-bound receipt",
       };
     }
 

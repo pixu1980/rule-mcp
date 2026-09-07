@@ -33,8 +33,7 @@ function rolePrompts() {
       arguments: [
         {
           name: "topic",
-          description:
-            "Extra request for this run (free text: what to audit/review/plan, e.g. a component, a directory, a concern). Default: the whole project.",
+          description: "Extra request for this run (free text: what to audit/review/plan, e.g. a component, a directory, a concern). Default: the whole project.",
           required: false,
         },
       ],

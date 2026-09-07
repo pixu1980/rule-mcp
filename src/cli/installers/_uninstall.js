@@ -47,9 +47,7 @@ const uninstallVscode = ({ dryRun }) => {
 
   // Code-OSS global
   if (!IS_WINDOWS) {
-    const ossDir = IS_MACOS
-      ? join(HOME, "Library", "Application Support", "Code - OSS", "User")
-      : join(HOME, ".config", "Code - OSS", "User");
+    const ossDir = IS_MACOS ? join(HOME, "Library", "Application Support", "Code - OSS", "User") : join(HOME, ".config", "Code - OSS", "User");
     results.push(removeFromExistingFile(join(ossDir, "mcp.json")));
   }
 

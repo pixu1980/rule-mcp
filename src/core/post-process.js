@@ -20,9 +20,7 @@ import { fixBlockSpacing } from "./text/block-spacing/index.js";
  * @param {Array<{path: string, status: string, absPath?: string}>} results
  */
 export function postProcessFiles(results) {
-  const jsFiles = results
-    .filter((r) => r.status === "written" && r.absPath && r.path.endsWith(".js"))
-    .map((r) => r.absPath);
+  const jsFiles = results.filter((r) => r.status === "written" && r.absPath && r.path.endsWith(".js")).map((r) => r.absPath);
 
   if (jsFiles.length === 0) {
     return;

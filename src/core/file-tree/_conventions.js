@@ -1,20 +1,7 @@
 import { extname } from "node:path";
 
 /** Directories to ignore during scan. */
-export const IGNORE_DIRS = new Set([
-  "node_modules",
-  ".git",
-  ".tokensave",
-  "dist",
-  "build",
-  ".next",
-  ".nuxt",
-  ".output",
-  "coverage",
-  ".vscode",
-  ".idea",
-  ".agents",
-]);
+export const IGNORE_DIRS = new Set(["node_modules", ".git", ".tokensave", "dist", "build", ".next", ".nuxt", ".output", "coverage", ".vscode", ".idea", ".agents"]);
 
 /** File names that count as a folder's barrel. */
 export const BARREL_FILE_NAMES = new Set(["index.js", "index.ts", "index.jsx", "index.tsx"]);

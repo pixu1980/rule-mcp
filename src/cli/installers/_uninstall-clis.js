@@ -18,11 +18,7 @@ const uninstallClaude = ({ dryRun }) => {
     removeFile(commandFile);
   }
 
-  return [
-    writeText({ file, content: removeJsonServer(readText(file)), dryRun }),
-    writeText({ file: mdFile, content: removeInstruction(readText(mdFile)), dryRun }),
-    commandFile,
-  ];
+  return [writeText({ file, content: removeJsonServer(readText(file)), dryRun }), writeText({ file: mdFile, content: removeInstruction(readText(mdFile)), dryRun }), commandFile];
 };
 
 const uninstallCodex = ({ dryRun }) => {
@@ -73,11 +69,7 @@ const uninstallGemini = ({ dryRun }) => {
     removeFile(commandFile);
   }
 
-  return [
-    writeText({ file, content: removeJsonServer(readText(file)), dryRun }),
-    writeText({ file: mdFile, content: removeInstruction(readText(mdFile)), dryRun }),
-    commandFile,
-  ];
+  return [writeText({ file, content: removeJsonServer(readText(file)), dryRun }), writeText({ file: mdFile, content: removeInstruction(readText(mdFile)), dryRun }), commandFile];
 };
 
 const uninstallPi = ({ dryRun }) => {

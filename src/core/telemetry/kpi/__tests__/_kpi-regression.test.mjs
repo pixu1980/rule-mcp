@@ -42,8 +42,7 @@ test("the fixture log still produces the KPI block committed beside it", () => {
     assert.deepEqual(
       kpi[block],
       EXPECTED[block],
-      `${block} moved. If that was deliberate, regenerate test/fixtures/kpi-regression.expected.json ` +
-        "in the same commit as the ADR that redefined it.",
+      `${block} moved. If that was deliberate, regenerate test/fixtures/kpi-regression.expected.json ` + "in the same commit as the ADR that redefined it.",
     );
   }
 });
@@ -52,15 +51,8 @@ test("the measured total is what the sources add up to, and nothing else", () =>
   const sum = Object.values(kpi.tokens.savedBySource).reduce((total, value) => total + value, 0);
 
   assert.equal(kpi.tokens.measuredSaved, sum, "a measured total that is not its parts is a number nobody can audit");
-  assert.ok(
-    kpi.tokens.measuredSaved < kpi.tokens.estimatedRouting + kpi.tokens.measuredSaved,
-    "the routing estimate has to stay outside the measured total",
-  );
-  assert.equal(
-    Object.keys(kpi.tokens.savedBySource).includes("estimatedRouting"),
-    false,
-    "the estimate must never be booked as a source of measured saving",
-  );
+  assert.ok(kpi.tokens.measuredSaved < kpi.tokens.estimatedRouting + kpi.tokens.measuredSaved, "the routing estimate has to stay outside the measured total");
+  assert.equal(Object.keys(kpi.tokens.savedBySource).includes("estimatedRouting"), false, "the estimate must never be booked as a source of measured saving");
 });
 
 test("no reported quantity is negative and no ratio leaves its range", () => {

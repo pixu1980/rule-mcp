@@ -110,15 +110,7 @@ export function registerTemplateTool() {
         content: [
           {
             type: "text",
-            text:
-              "# " +
-              component +
-              " - " +
-              framework +
-              "\n\n```\n" +
-              template +
-              "\n```\n\n" +
-              guardrailSummary(framework, String(template)),
+            text: "# " + component + " - " + framework + "\n\n```\n" + template + "\n```\n\n" + guardrailSummary(framework, String(template)),
           },
         ],
       };

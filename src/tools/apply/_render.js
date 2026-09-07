@@ -16,14 +16,9 @@ export function renderApplyResult({ dryRun, receiptCheck, rootDir, results }) {
     `Root: \`${rootDir}\``,
     `Files: ${results.length}`,
     "",
-    ...results.map(
-      (r) =>
-        `- ${r.status === "written" ? "✅" : r.status === "dry-run" ? "📋" : "❌"} ${r.path}${r.note ? ` (${r.note})` : ""}${r.error ? ` - ${r.error}` : ""}`,
-    ),
+    ...results.map((r) => `- ${r.status === "written" ? "✅" : r.status === "dry-run" ? "📋" : "❌"} ${r.path}${r.note ? ` (${r.note})` : ""}${r.error ? ` - ${r.error}` : ""}`),
     "",
-    dryRun
-      ? "Run again with `dryRun: false` to apply changes."
-      : `Wrote ${results.filter((r) => r.status === "written").length} files.`,
+    dryRun ? "Run again with `dryRun: false` to apply changes." : `Wrote ${results.filter((r) => r.status === "written").length} files.`,
   ].filter(Boolean);
 
   return {

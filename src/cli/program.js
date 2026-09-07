@@ -33,12 +33,7 @@ import {
   registerAgentCommandsCommand,
 } from "./_register-setup.js";
 import { registerHandoffCommand } from "./_register-handoff.js";
-import {
-  registerAdrCommand,
-  registerSkillsCommand,
-  registerFixCommand,
-  registerHandonCommand,
-} from "./_register-session.js";
+import { registerAdrCommand, registerSkillsCommand, registerFixCommand, registerHandonCommand } from "./_register-session.js";
 import {
   registerHelpCommand,
   registerToolsCommand,

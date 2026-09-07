@@ -11,12 +11,7 @@ export function apply(text) {
   for (let i = 0; i < scope.length; i++) {
     sOut.push(scope[i]);
     const isDeclGroupEnd =
-      i + 1 < scope.length &&
-      DECL.test(scope[i]) &&
-      !DECL.test(scope[i + 1]) &&
-      !CONTINUES(scope[i + 1]) &&
-      scope[i + 1].trim() !== "" &&
-      !scope[i + 1].trim().startsWith("//");
+      i + 1 < scope.length && DECL.test(scope[i]) && !DECL.test(scope[i + 1]) && !CONTINUES(scope[i + 1]) && scope[i + 1].trim() !== "" && !scope[i + 1].trim().startsWith("//");
     if (isDeclGroupEnd && sOut.at(-1) !== "") {
       // only when the declaration block itself was preceded by a blank or scope opener
       const prevLocal = scope[i].trimEnd();

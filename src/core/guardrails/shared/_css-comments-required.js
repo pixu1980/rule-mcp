@@ -2,8 +2,7 @@
 export const cssCommentsRequired = {
   id: "css-comments-required",
   label: "CSS file-level comments",
-  description:
-    "Every CSS file must start with a file-level comment describing its purpose, scope, and usage. Sections should be separated by comment headers.",
+  description: "Every CSS file must start with a file-level comment describing its purpose, scope, and usage. Sections should be separated by comment headers.",
   check: (code, context) => {
     // Only check CSS files or files with explicit CSS blocks
     const isCssFile = context?.fileName && /\.css$/i.test(context.fileName);
@@ -23,18 +22,13 @@ export const cssCommentsRequired = {
     }
 
     const trimmed = code.trimStart();
-    const hasFileComment =
-      /\/\*\*\s*\n/.test(trimmed) ||
-      /\/\*\s*FILE:/i.test(trimmed) ||
-      /\/\*\s*USAGE:/i.test(trimmed) ||
-      /\/\*\s*SCOPE:/i.test(trimmed);
+    const hasFileComment = /\/\*\*\s*\n/.test(trimmed) || /\/\*\s*FILE:/i.test(trimmed) || /\/\*\s*USAGE:/i.test(trimmed) || /\/\*\s*SCOPE:/i.test(trimmed);
     if (!hasFileComment) {
       return {
         pass: false,
         failCount: 1,
         detail: ["Missing file-level comment"],
-        suggestion:
-          "Add a file-level comment at the top: /**\n * FILE: _Component.css\n * USAGE: Styles for ComponentName\n * SCOPE: selector\n */",
+        suggestion: "Add a file-level comment at the top: /**\n * FILE: _Component.css\n * USAGE: Styles for ComponentName\n * SCOPE: selector\n */",
       };
     }
 

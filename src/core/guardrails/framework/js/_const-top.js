@@ -2,8 +2,7 @@
 export const jsConstTop = {
   id: "js-const-top",
   label: "Variable declarations grouped at top",
-  description:
-    "const/let/var declarations should be grouped at the top of their scope, separated from code by a blank line.",
+  description: "const/let/var declarations should be grouped at the top of their scope, separated from code by a blank line.",
   check: (code) => {
     const lines = code.split("\n");
     let lastDeclaration = -1;

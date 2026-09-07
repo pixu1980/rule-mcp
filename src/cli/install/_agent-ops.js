@@ -13,15 +13,7 @@ import { writeInstalledManifest } from "./_manifest.js";
  * @param {{ agent: string, entrypoint: string, dryRun?: boolean, force?: boolean, global?: boolean, mode?: "stdio"|"daemon"|"sse"|"docker" }} opts
  * @returns {{ ok: boolean, dryRun: boolean, global: boolean, installed: object, manifest?: string }}
  */
-export const installAgent = ({
-  agent,
-  entrypoint,
-  dryRun = false,
-  force = false,
-  global = false,
-  mode = "stdio",
-  _env = {},
-}) => {
+export const installAgent = ({ agent, entrypoint, dryRun = false, force = false, global = false, mode = "stdio", _env = {} }) => {
   const normalizedMode = normalizeInstallMode(mode);
   // Legacy names redirect to their successor (windsurf -> devin): the
   // catalog no longer offers them, but naming one still works and warns.

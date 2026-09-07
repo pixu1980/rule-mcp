@@ -4,8 +4,7 @@ import { isTypeScript, stripLiterals } from "../_guards-meta.js";
 export const tsCatchUnknown = {
   id: "ts-catch-unknown",
   label: "Catch clauses use unknown",
-  description:
-    "JavaScript can throw anything - a string, null, an object that is not an Error. any lets the handler assume otherwise and crash.",
+  description: "JavaScript can throw anything - a string, null, an object that is not an Error. any lets the handler assume otherwise and crash.",
   check: (code, context) => {
     if (!isTypeScript(code, context)) {
       return { pass: true, note: "Not a TypeScript file, skipping" };
@@ -16,8 +15,7 @@ export const tsCatchUnknown = {
       pass: hits.length === 0,
       failCount: hits.length,
       detail: hits.slice(0, 10),
-      suggestion:
-        "Type the catch variable as unknown and check with instanceof before touching it. strict mode already does this.",
+      suggestion: "Type the catch variable as unknown and check with instanceof before touching it. strict mode already does this.",
     };
   },
 };

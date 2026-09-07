@@ -259,16 +259,7 @@ It writes an entry equivalent to:
       "command": "pix-galaxy-mcp",
       "args": ["serve"],
       "directTools": true,
-      "allowedTools": [
-        "pix_tool_gateway",
-        "pix_tool_apply",
-        "pix_tool",
-        "pix_tool_search",
-        "pix_tool_check",
-        "pix_tool_detect",
-        "pix_tool_scaffold",
-        "pix_tool_component"
-      ]
+      "allowedTools": ["pix_tool_gateway", "pix_tool_apply", "pix_tool", "pix_tool_search", "pix_tool_check", "pix_tool_detect", "pix_tool_scaffold", "pix_tool_component"]
     }
   }
 }

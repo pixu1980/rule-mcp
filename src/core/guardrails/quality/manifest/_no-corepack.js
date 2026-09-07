@@ -27,8 +27,7 @@ export const pkgNoCorepack = {
       pass: offenders.length === 0,
       failCount: offenders.length,
       detail: offenders,
-      suggestion:
-        "Delete the field. Pin Node with .nvmrc and the dependency tree with the lockfile; state the package manager in the README if a human needs to know.",
+      suggestion: "Delete the field. Pin Node with .nvmrc and the dependency tree with the lockfile; state the package manager in the README if a human needs to know.",
     };
   },
 };

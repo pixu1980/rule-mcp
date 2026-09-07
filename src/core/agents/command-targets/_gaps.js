@@ -6,10 +6,8 @@
  * the namespaced MCP prompts (still functional, just prefixed).
  */
 export const AGENTS_WITHOUT_COMMAND_SURFACE = {
-  codex:
-    "Codex CLI exposes MCP prompts as slash commands itself; its custom-prompt directory is not verified against a published spec, so writing files there would be a guess.",
-  copilot:
-    "GitHub Copilot CLI gets a custom agent file (~/.copilot/agents); its prompt-file directory is not verified against a published spec.",
+  codex: "Codex CLI exposes MCP prompts as slash commands itself; its custom-prompt directory is not verified against a published spec, so writing files there would be a guess.",
+  copilot: "GitHub Copilot CLI gets a custom agent file (~/.copilot/agents); its prompt-file directory is not verified against a published spec.",
   zed: "Zed stores its rules/prompt library in profile storage, not in discoverable per-command files.",
   antigravity: "No published custom-command file location; MCP prompts remain the entry point.",
   kilo: "Kilo CLI command directory is not verified against a published spec.",
@@ -22,6 +20,5 @@ export const AGENTS_WITHOUT_COMMAND_SURFACE = {
   jetbrains: "JetBrains AI Assistant has no user-authored slash-command files; MCP prompts are the only entry point.",
   neovim: "Editor-level MCP plugins expose prompts directly; there is no command-file convention to write to.",
   emacs: "mcp.el exposes prompts directly; there is no command-file convention to write to.",
-  devin:
-    "Devin runs commands in its own workspace runtime, not from local slash-command files; MCP prompts remain the entry point.",
+  devin: "Devin runs commands in its own workspace runtime, not from local slash-command files; MCP prompts remain the entry point.",
 };

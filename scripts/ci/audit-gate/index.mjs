@@ -33,8 +33,7 @@ const advisories = advisoriesOf(output);
 if (advisories === undefined) {
   const reason = `${result.stderr ?? ""}`.trim().split("\n").slice(0, 3).join(" ") || "no parseable report";
   process.stderr.write(
-    `[audit-gate] WARNING: the dependency audit could not run (${reason}).\n` +
-      "[audit-gate] This is NOT a clean result. Re-run `pnpm audit --prod` before trusting the build.\n",
+    `[audit-gate] WARNING: the dependency audit could not run (${reason}).\n` + "[audit-gate] This is NOT a clean result. Re-run `pnpm audit --prod` before trusting the build.\n",
   );
   process.exit(0);
 }

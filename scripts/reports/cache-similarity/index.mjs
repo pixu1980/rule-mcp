@@ -50,7 +50,6 @@ const THRESHOLDS = [0.9, 0.85, 0.8, 0.75, 0.7, 0.65, 0.6];
 
 const { jaccard, terms, variants } = await import("./_similarity.mjs");
 
-
 /** @param {string} prompt @returns {Promise<string>} */
 async function routeOf(prompt) {
   return JSON.parse((await callTool("pix_tool", { prompt })).content[0].text).route;
@@ -111,9 +110,7 @@ const report = {
 if (asJson) {
   console.log(JSON.stringify(report, undefined, 2));
 } else {
-  console.log(
-    `similarity report: ${report.corpus} corpus prompts, ${report.variants} variants the normalized key cannot answer`,
-  );
+  console.log(`similarity report: ${report.corpus} corpus prompts, ${report.variants} variants the normalized key cannot answer`);
   console.log("");
   console.log("  threshold   replayed   wrong   wrong rate");
   for (const row of report.rows) {

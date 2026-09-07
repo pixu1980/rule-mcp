@@ -64,8 +64,7 @@ export const SEQUENCE_MAP = [
  * "unrecognised" was not. A prefix on a stem already in the list cannot produce
  * a false positive - if `<stem>ise` is British then so is `un<stem>ise`.
  */
-export const OUR_STEMS =
-  "col|behavi|fav|hon|lab|neighb|hum|rum|flav|harb|od|vap|val|endeav|splend|arm|savi|rig|vig|clam|arb";
+export const OUR_STEMS = "col|behavi|fav|hon|lab|neighb|hum|rum|flav|harb|od|vap|val|endeav|splend|arm|savi|rig|vig|clam|arb";
 export const ISE_STEMS = [
   "organis",
   "realis",

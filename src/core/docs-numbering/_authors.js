@@ -66,10 +66,7 @@ export function nameAuthorIn(file, author) {
   const existing = AUTHOR_LINE.exec(body);
   const next = existing
     ? body.replace(AUTHOR_LINE, `- **Author${existing[1]} ${author}`)
-    : body.replace(
-        TAGS_LINE,
-        (line, punctuation, tags) => `- **Tags${punctuation} ${tags}\n- **Author${punctuation} ${author}`,
-      );
+    : body.replace(TAGS_LINE, (line, punctuation, tags) => `- **Tags${punctuation} ${tags}\n- **Author${punctuation} ${author}`);
 
   if (next === body) {
     return false;

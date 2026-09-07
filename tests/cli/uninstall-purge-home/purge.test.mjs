@@ -13,10 +13,7 @@ import { runUninstall, seedHome } from "./_purge.fixture.mjs";
     assert.match(output, /Runtime home deleted/, "uninstall.sh --purge must report the runtime home deletion");
     assert.doesNotMatch(output, /No runtime home found/, "the runtime home must have been found, not skipped");
     assert.ok(!existsSync(join(home, ".pix-galaxy-mcp")), "--purge must delete ~/.pix-galaxy-mcp/");
-    assert.ok(
-      !existsSync(join(home, ".config", "pix-galaxy-mcp")),
-      "--purge must also delete ~/.config/pix-galaxy-mcp/",
-    );
+    assert.ok(!existsSync(join(home, ".config", "pix-galaxy-mcp")), "--purge must also delete ~/.config/pix-galaxy-mcp/");
   } finally {
     rmSync(home, { recursive: true, force: true });
   }
@@ -29,15 +26,10 @@ import { runUninstall, seedHome } from "./_purge.fixture.mjs";
     runUninstall(home, ["--keep-config"]);
     assert.ok(existsSync(join(home, ".pix-galaxy-mcp")), "--keep-config must keep the runtime home");
     assert.ok(existsSync(join(home, ".config", "pix-galaxy-mcp")), "--keep-config must keep ~/.config/pix-galaxy-mcp/");
-    assert.ok(
-      existsSync(join(home, ".pix-galaxy-mcp", "state", "sse-token")),
-      "--keep-config must keep the SSE token untouched",
-    );
+    assert.ok(existsSync(join(home, ".pix-galaxy-mcp", "state", "sse-token")), "--keep-config must keep the SSE token untouched");
   } finally {
     rmSync(home, { recursive: true, force: true });
   }
 }
 
-console.log(
-  "  \u{2705} uninstall --purge removes ~/.pix-galaxy-mcp/ (+ ~/.config/pix-galaxy-mcp/), --keep-config keeps both",
-);
+console.log("  \u{2705} uninstall --purge removes ~/.pix-galaxy-mcp/ (+ ~/.config/pix-galaxy-mcp/), --keep-config keeps both");

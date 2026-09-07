@@ -24,13 +24,7 @@ export function renderAudit(role, version, date) {
 
 /** Render the review: header, provenance note and the findings table. */
 export function renderReview(role, version, date, findings) {
-  const rows = findings.map((finding) => [
-    finding.id,
-    finding.severity,
-    finding.status,
-    finding.evidence,
-    finding.summary,
-  ]);
+  const rows = findings.map((finding) => [finding.id, finding.severity, finding.status, finding.evidence, finding.summary]);
 
   return [
     ...header(`${role} review`, role, version, date),
@@ -69,9 +63,7 @@ export function renderPlan(role, version, date, open, checked = new Set()) {
     "",
     ...open.flatMap((finding, index) => [
       `${box(checked.has(finding.id))} **Step ${index + 1} - ${finding.id} (${finding.severity})**: ${finding.summary}`,
-      ...(finding.steps ?? []).map(
-        (sub, subIndex) => `  ${box(checked.has(`${finding.id}#${subIndex + 1}`))} **${index + 1}.${subIndex + 1}**: ${sub}`,
-      ),
+      ...(finding.steps ?? []).map((sub, subIndex) => `  ${box(checked.has(`${finding.id}#${subIndex + 1}`))} **${index + 1}.${subIndex + 1}**: ${sub}`),
     ]),
     "",
   ].join("\n");

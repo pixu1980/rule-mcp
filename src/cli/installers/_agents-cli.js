@@ -74,10 +74,7 @@ const installCopilot = ({ entrypoint, dryRun, global }) => {
   const json = current.trim() ? parseJson(current) : {};
   json[`copilot-mcp-${serverName}`] = commandConfig(entrypoint, { global });
 
-  return [
-    writeText({ file: hostsFile, content: toJson(json), dryRun }),
-    writeText({ file: agentFile, content: copilotAgent(), dryRun }),
-  ];
+  return [writeText({ file: hostsFile, content: toJson(json), dryRun }), writeText({ file: agentFile, content: copilotAgent(), dryRun })];
 };
 
 const installGemini = ({ entrypoint, dryRun, global }) => {

@@ -68,8 +68,7 @@ export function initProject(options = {}) {
     const binary = (options.tokensaveBinary ?? findTokensave)();
 
     if (binary) {
-      const run =
-        options.run ?? ((command, args, runOptions) => execFileSync(command, args, { ...runOptions, stdio: "ignore" }));
+      const run = options.run ?? ((command, args, runOptions) => execFileSync(command, args, { ...runOptions, stdio: "ignore" }));
       try {
         run(binary, ["init"], { cwd: projectDir });
         tokensave = "initialized";
@@ -91,10 +90,7 @@ export function initProject(options = {}) {
  * @returns {string}
  */
 export function renderInit(result) {
-  const lines = [
-    `Project:      ${result.projectDir}`,
-    `Recorder dir: ${result.dir}${result.created ? "" : " (could not be created)"}`,
-  ];
+  const lines = [`Project:      ${result.projectDir}`, `Recorder dir: ${result.dir}${result.created ? "" : " (could not be created)"}`];
 
   if (result.tokensave) {
     lines.push(`tokensave:    ${result.tokensave}`);

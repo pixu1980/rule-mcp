@@ -55,15 +55,9 @@ test("serve shuts down on a signal", async (t) => {
     // Wait for the readiness marker, not "listening": the socket opens before
     // the signal handlers are installed, and a signal in that window exits
     // through Node's default disposition (deflake, hardening 4.6).
-    assert.equal(
-      await until(() => stderr.includes("ready (signal handlers installed)"), 15_000),
-      true,
-      `the server never became ready:\n${stderr}`,
-    );
+    assert.equal(await until(() => stderr.includes("ready (signal handlers installed)"), 15_000), true, `the server never became ready:\n${stderr}`);
 
-    const exit = new Promise((resolve) =>
-      child.once("exit", (exitCode, exitSignal) => resolve({ exitCode, exitSignal })),
-    );
+    const exit = new Promise((resolve) => child.once("exit", (exitCode, exitSignal) => resolve({ exitCode, exitSignal })));
     child.kill(signal);
     const raced = await within(exit, 5000, null);
     assert.ok(raced, `${signal} did not stop the server`);

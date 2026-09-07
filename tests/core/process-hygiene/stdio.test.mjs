@@ -42,11 +42,7 @@ test("a stdio server exits when its client is killed", async (t) => {
   assert.equal(await until(() => alive(serverPid)), true, "the server never started");
 
   reap(client.pid);
-  assert.equal(
-    await until(() => !alive(serverPid), 20_000),
-    true,
-    "the stdio server outlived its client - this is the orphan that spins at 100% CPU",
-  );
+  assert.equal(await until(() => !alive(serverPid), 20_000), true, "the stdio server outlived its client - this is the orphan that spins at 100% CPU");
 });
 
 test("a stdio server exits when its peer socket loses its other end", async (t) => {
@@ -90,9 +86,5 @@ test("a stdio server exits when its peer socket loses its other end", async (t) 
   serverSide.destroy();
 
   const exit = new Promise((resolve) => server.once("exit", () => resolve(true)));
-  assert.equal(
-    await within(exit, 20_000, false),
-    true,
-    "the server kept running with nothing on the other end of its stdio",
-  );
+  assert.equal(await within(exit, 20_000, false), true, "the server kept running with nothing on the other end of its stdio");
 });

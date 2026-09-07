@@ -117,10 +117,7 @@ test("one step may close several findings", () => {
   const dir = project();
   syncRoleDocs({ role: "security", findings: FINDINGS, projectDir: dir });
   const plan = join(dir, "docs/plans/security.md");
-  writeFileSync(
-    plan,
-    `${readFileSync(plan, "utf8")}\n| Step | Fixes | What it takes |\n| --- | --- | --- |\n| 9 | SEC-1, SEC-2 | one commit |\n`,
-  );
+  writeFileSync(plan, `${readFileSync(plan, "utf8")}\n| Step | Fixes | What it takes |\n| --- | --- | --- |\n| 9 | SEC-1, SEC-2 | one commit |\n`);
 
   assert.deepEqual(validateTrio({ projectDir: dir }), [], "a list of open ids in one cell is not a dangling id");
 });
@@ -129,10 +126,7 @@ test("a step that names an unknown finding among known ones still fails", () => 
   const dir = project();
   syncRoleDocs({ role: "security", findings: FINDINGS, projectDir: dir });
   const plan = join(dir, "docs/plans/security.md");
-  writeFileSync(
-    plan,
-    `${readFileSync(plan, "utf8")}\n| Step | Fixes | What it takes |\n| --- | --- | --- |\n| 9 | SEC-1, SEC-404 | one commit |\n`,
-  );
+  writeFileSync(plan, `${readFileSync(plan, "utf8")}\n| Step | Fixes | What it takes |\n| --- | --- | --- |\n| 9 | SEC-1, SEC-404 | one commit |\n`);
 
   assert.match(
     validateTrio({ projectDir: dir })

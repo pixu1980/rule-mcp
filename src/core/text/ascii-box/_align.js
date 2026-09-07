@@ -105,11 +105,7 @@ export function alignAsciiBoxesResult(result) {
     return result;
   }
 
-  const content = result.content.map((item) =>
-    item && item.type === "text" && typeof item.text === "string"
-      ? { ...item, text: alignAsciiBoxes(item.text) }
-      : item,
-  );
+  const content = result.content.map((item) => (item && item.type === "text" && typeof item.text === "string" ? { ...item, text: alignAsciiBoxes(item.text) } : item));
 
   return { ...result, content };
 }

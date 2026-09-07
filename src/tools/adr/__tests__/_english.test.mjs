@@ -26,8 +26,7 @@ test("the Italian title that produced ADR 060 is rejected", () => {
 test("Italian prose in the decision body is rejected", () => {
   const offenses = adrEnglishOffenses({
     title: "Reorganize scripts into thematic subfolders",
-    decision:
-      "Riorganizzare scripts/, src/ e test/ in sottocartelle tematiche per funzionalità; applicare code splitting.",
+    decision: "Riorganizzare scripts/, src/ e test/ in sottocartelle tematiche per funzionalità; applicare code splitting.",
   });
 
   assert.ok(offenses.length > 0, "Italian decision prose must be flagged");

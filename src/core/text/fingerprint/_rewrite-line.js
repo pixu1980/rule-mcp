@@ -44,18 +44,10 @@ export function looksLikeJson(text) {
 export function americanise(line) {
   return line
     .replaceAll(WORD_RE, (match) => matchCase(match, WORDS.get(match.toLowerCase())))
-    .replaceAll(OUR_RE, (match, stem, suffix = "") =>
-      matchCase(match, `${stem.toLowerCase()}or${suffix.toLowerCase()}`),
-    )
-    .replaceAll(ISE_RE, (match, stem, suffix) =>
-      matchCase(match, `${stem.toLowerCase().slice(0, -1)}z${suffix.toLowerCase()}`),
-    )
-    .replaceAll(RE_RE, (match, stem, ending) =>
-      matchCase(match, `${stem.toLowerCase()}${RE_ENDINGS.get(ending.toLowerCase())}`),
-    )
-    .replaceAll(OGUE_RE, (match, stem, plural = "") =>
-      matchCase(match, `${stem.toLowerCase()}og${plural.toLowerCase()}`),
-    );
+    .replaceAll(OUR_RE, (match, stem, suffix = "") => matchCase(match, `${stem.toLowerCase()}or${suffix.toLowerCase()}`))
+    .replaceAll(ISE_RE, (match, stem, suffix) => matchCase(match, `${stem.toLowerCase().slice(0, -1)}z${suffix.toLowerCase()}`))
+    .replaceAll(RE_RE, (match, stem, ending) => matchCase(match, `${stem.toLowerCase()}${RE_ENDINGS.get(ending.toLowerCase())}`))
+    .replaceAll(OGUE_RE, (match, stem, plural = "") => matchCase(match, `${stem.toLowerCase()}og${plural.toLowerCase()}`));
 }
 
 /** @param {string} line @returns {string} */
@@ -91,8 +83,5 @@ export function cleanLine(line, spellingOnly = false) {
   };
   const work = line.replaceAll(/`[^`]*`/g, protect).replaceAll(/https?:\/\/\S+/g, protect);
 
-  return americanise(spellingOnly ? work : asciify(work)).replaceAll(
-    /__FP_SPAN_(\d+)__/g,
-    (_, index) => spans[Number(index)],
-  );
+  return americanise(spellingOnly ? work : asciify(work)).replaceAll(/__FP_SPAN_(\d+)__/g, (_, index) => spans[Number(index)]);
 }

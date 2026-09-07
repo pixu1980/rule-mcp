@@ -64,7 +64,5 @@ export function syncCommandTargets(opts) {
     print(`  ${label}: wrote ${rendered.length} ${format} command file(s) → ${dir}`);
   }
 
-  print(
-    `agent-commands: ${opts.remove ? "removed" : "synced"} ${files} file(s) across ${targets.length} directory(ies)`,
-  );
+  print(`agent-commands: ${opts.remove ? "removed" : "synced"} ${files} file(s) across ${targets.length} directory(ies)`);
 }

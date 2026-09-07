@@ -42,10 +42,7 @@ console.log("self-update throttle test: interval and non-blocking");
   `,
     { PIX_GALAXY_MCP_GIT_SLEEP: "2", PIX_GALAXY_MCP_UPDATE_REMOTE: upstream }, // every git call takes 2s
   );
-  assert.ok(
-    out.returnedMs < 1500,
-    `fire-and-forget: call returned in ${out.returnedMs}ms, must not block on the fetch`,
-  );
+  assert.ok(out.returnedMs < 1500, `fire-and-forget: call returned in ${out.returnedMs}ms, must not block on the fetch`);
   rmSync(base, { recursive: true, force: true });
   console.log("  ✅ maybeSelfUpdate returns immediately (background check)");
 }

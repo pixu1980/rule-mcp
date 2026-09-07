@@ -40,7 +40,6 @@ export function tokensaveActive(projectDir = process.cwd()) {
   return resolveTokensaveDir(projectDir) !== null;
 }
 
-
 /** Multi-source project resolution: explicit arg > env var > cwd, then walk-up. */
 export function resolveTokensaveDir(explicitDir) {
   const candidates = [];

@@ -17,11 +17,7 @@ export async function statsCommand(directory) {
   print(`Promotable: ${promotable} call(s) reused ${MIN_HITS} times or more`);
 
   const catalog = readCatalog(directory);
-  print(
-    catalog
-      ? `Catalog: ${catalog.entries.length} entries, generated ${catalog.generatedAt} by ${catalog.serverVersion}`
-      : `Catalog: none at ${catalogPath(directory)}`,
-  );
+  print(catalog ? `Catalog: ${catalog.entries.length} entries, generated ${catalog.generatedAt} by ${catalog.serverVersion}` : `Catalog: none at ${catalogPath(directory)}`);
 
   const { readEvents } = await import("../../core/telemetry/store/index.js");
   const events = readEvents();

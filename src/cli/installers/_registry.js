@@ -7,14 +7,7 @@
 import { join } from "node:path";
 import { HOME } from "./_paths.js";
 import { installClaude, installCodex, installCursor, installCopilot, installGemini, installPi } from "./_agents-cli.js";
-import {
-  installVscode,
-  installJetbrains,
-  installNeovim,
-  installEmacs,
-  installDevin,
-  createGenericInstaller,
-} from "./_agents-ide.js";
+import { installVscode, installJetbrains, installNeovim, installEmacs, installDevin, createGenericInstaller } from "./_agents-ide.js";
 
 const deprecatedAgents = new Map([["windsurf", "devin"]]);
 

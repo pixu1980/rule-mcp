@@ -9,9 +9,6 @@ export const ADRSchema = z.object({
   decision: z.string().optional().describe("The decision made and why"),
   consequences: z.string().optional().describe("Consequences: positive and negative outcomes"),
   alternatives: z.array(z.string()).optional().describe("Alternative options considered"),
-  tags: z
-    .array(z.string())
-    .default(["architecture"])
-    .describe("Tags for categorization (e.g. database, api, frontend)"),
+  tags: z.array(z.string()).default(["architecture"]).describe("Tags for categorization (e.g. database, api, frontend)"),
   projectDir: z.string().optional().default(".").describe("Project root directory"),
 });

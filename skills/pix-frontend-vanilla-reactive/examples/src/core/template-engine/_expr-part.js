@@ -37,11 +37,7 @@ export class ExprPart {
     this.commit(sig.get(), this.hasRaw());
   }
   hasRaw() {
-    return (
-      this.parsedExpr &&
-      this.parsedExpr.filters.length > 0 &&
-      this.parsedExpr.filters[this.parsedExpr.filters.length - 1].name === "raw"
-    );
+    return this.parsedExpr && this.parsedExpr.filters.length > 0 && this.parsedExpr.filters[this.parsedExpr.filters.length - 1].name === "raw";
   }
   disposeSignal() {
     if (this.signalCleanup) {

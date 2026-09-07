@@ -7,12 +7,7 @@ export function apply(text) {
   const mid = text.split("\n");
   const midOut = [];
   for (let i = 0; i < mid.length; i++) {
-    if (
-      /^\s*\}\s*$/.test(mid[i]) &&
-      i + 1 < mid.length &&
-      /^\s*(\w+|static|get|set)\s/.test(mid[i + 1]) &&
-      !/^\s*(\w+)\s*\([^)]*\)\s*\{[^}]*\}\s*$/.test(mid[i + 1])
-    ) {
+    if (/^\s*\}\s*$/.test(mid[i]) && i + 1 < mid.length && /^\s*(\w+|static|get|set)\s/.test(mid[i + 1]) && !/^\s*(\w+)\s*\([^)]*\)\s*\{[^}]*\}\s*$/.test(mid[i + 1])) {
       midOut.push(mid[i]);
       midOut.push("");
       changed = true;

@@ -16,11 +16,7 @@ const healthBody = await healthRes.json();
 check("T2.1 health body ok:true", healthBody.ok === true);
 
 // CORS deny-by-default on health (Phase 1.2)
-check(
-  "T5 CORS deny-by-default",
-  healthRes.headers.get("access-control-allow-origin") === null ||
-    healthRes.headers.get("access-control-allow-origin") !== "*",
-);
+check("T5 CORS deny-by-default", healthRes.headers.get("access-control-allow-origin") === null || healthRes.headers.get("access-control-allow-origin") !== "*");
 
 // ── T6: Server stops gracefully ──
 await stopSseServer();

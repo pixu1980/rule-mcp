@@ -21,5 +21,4 @@ export const FOREIGN_NAME_SET = new Set([...FOREIGN_TOKENS, ...FOREIGN_NAME_TOKE
  * endings that English shares (`-mento`/memento, `-ung`/lung, `-are`/share)
  * are deliberately absent.
  */
-export const FOREIGN_SUFFIX_RE =
-  /(?:zione|zioni|izzare|izzata|izzato|aggio|anza|enza|encia|miento|mientos|ungen|keit|schaft)$/i;
+export const FOREIGN_SUFFIX_RE = /(?:zione|zioni|izzare|izzata|izzato|aggio|anza|enza|encia|miento|mientos|ungen|keit|schaft)$/i;

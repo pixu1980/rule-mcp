@@ -9,7 +9,7 @@ import { scanFileTree } from "../../core/file-tree/index.js";
  * @returns {object} an MCP tool result
  */
 export function lintMode(arguments_) {
-        const report = scanFileTree(arguments_.path || ".", { srcDir: arguments_.srcDir || "src" });
+  const report = scanFileTree(arguments_.path || ".", { srcDir: arguments_.srcDir || "src" });
 
   if (report.pass) {
     return {

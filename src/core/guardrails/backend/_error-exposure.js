@@ -27,8 +27,7 @@ export const errorExposure = {
       pass: violations.length === 0,
       failCount: violations.length,
       detail: violations.slice(0, 5),
-      suggestion:
-        "Return generic messages: res.status(500).json({ error: 'Internal server error' }). Log details server-side only.",
+      suggestion: "Return generic messages: res.status(500).json({ error: 'Internal server error' }). Log details server-side only.",
     };
   },
 };

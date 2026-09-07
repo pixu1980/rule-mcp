@@ -82,11 +82,7 @@ try {
     check("T3.1 HTTPS health body ok:true", parsed.ok === true);
 
     // ── T5: CORS on HTTPS (denied for unknown origins since Phase 1.2) ──
-    check(
-      "T5 CORS deny-by-default on HTTPS",
-      httpsBody.headers["access-control-allow-origin"] === undefined ||
-        httpsBody.headers["access-control-allow-origin"] !== "*",
-    );
+    check("T5 CORS deny-by-default on HTTPS", httpsBody.headers["access-control-allow-origin"] === undefined || httpsBody.headers["access-control-allow-origin"] !== "*");
 
     // ── T4: Graceful shutdown ──
     await stopSseServer();

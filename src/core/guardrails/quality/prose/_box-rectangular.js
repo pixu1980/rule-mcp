@@ -4,8 +4,7 @@ import { findRaggedBoxes } from "../../../text/ascii-box/index.js";
 export const fpBoxRectangular = {
   id: "fp-box-rectangular",
   label: "A drawn box is a rectangle",
-  description:
-    "Every line of a box ends in the same column. A right edge that steps in and out is the one tell a spell-check cannot see.",
+  description: "Every line of a box ends in the same column. A right edge that steps in and out is the one tell a spell-check cannot see.",
   check: (code) => {
     const ragged = findRaggedBoxes(code);
 
@@ -14,11 +13,7 @@ export const fpBoxRectangular = {
       failCount: ragged.length,
       detail: ragged
         .slice(0, 10)
-        .map((entry) =>
-          entry.reason === "box never closes"
-            ? `line ${entry.line}: box never closes`
-            : `line ${entry.line}: ${entry.width} columns, expected ${entry.expected}`,
-        ),
+        .map((entry) => (entry.reason === "box never closes" ? `line ${entry.line}: box never closes` : `line ${entry.line}: ${entry.width} columns, expected ${entry.expected}`)),
       suggestion: "Pad the short lines out to the widest line of the same box, or run pix_compress.",
     };
   },

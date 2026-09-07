@@ -15,8 +15,7 @@ export const jsPreferSetHas = {
     const lines = code.split("\n");
 
     for (const line of lines) {
-      const isInIteration =
-        /\bfor\s*\(|\.filter\s*\(|\.map\s*\(|\.some\s*\(|\.every\s*\(|\.find\s*\(|\.findIndex\s*\(/.test(line);
+      const isInIteration = /\bfor\s*\(|\.filter\s*\(|\.map\s*\(|\.some\s*\(|\.every\s*\(|\.find\s*\(|\.findIndex\s*\(/.test(line);
 
       if (!isInIteration) {
         continue;
@@ -32,9 +31,7 @@ export const jsPreferSetHas = {
     // Multi-line callbacks: .filter(
     //   x => allowed.includes(x)
     for (const name of arrayNames) {
-      const multi = code.match(
-        new RegExp(String.raw`\.(?:filter|map|some|every|find)\s*\([\s\S]{0,200}?\b${name}\.includes\(`, "g"),
-      );
+      const multi = code.match(new RegExp(String.raw`\.(?:filter|map|some|every|find)\s*\([\s\S]{0,200}?\b${name}\.includes\(`, "g"));
 
       if (multi) {
         violations.push(...multi.map((v) => v.replaceAll("\n", " ").trim().slice(0, 80)));
@@ -49,8 +46,7 @@ export const jsPreferSetHas = {
       pass: false,
       failCount: violations.length,
       detail: [...new Set(violations)].slice(0, 5),
-      suggestion:
-        "Build a Set once outside the loop and use set.has(x): const allowed = new Set([...]); allowed.has(scope).",
+      suggestion: "Build a Set once outside the loop and use set.has(x): const allowed = new Set([...]); allowed.has(scope).",
     };
   },
 };

@@ -122,9 +122,7 @@ async function main() {
       console.log("");
     }
 
-    console.log(
-      `  Summary: ${report.stats.missingBarrel} missing barrels, ${report.stats.wrongPrefix} wrong prefixes, ${report.stats.bareFiles} bare files`,
-    );
+    console.log(`  Summary: ${report.stats.missingBarrel} missing barrels, ${report.stats.wrongPrefix} wrong prefixes, ${report.stats.bareFiles} bare files`);
     console.log(`  Fixable: ${report.stats.fixable}/${report.issues.length}`);
     console.log(`  Run with --fix --no-dry-run to auto-fix.`);
     console.log("");
