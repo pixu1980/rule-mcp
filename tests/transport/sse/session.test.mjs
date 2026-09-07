@@ -1,55 +1,13 @@
-/**
- * @module test/sse.test
- *
- * TDD tests for SSE transport layer.
- * SSEServerTransport flow:
- *   1. Client opens GET /sse → receives endpoint event with sessionId
- *   2. Client POSTs MCP messages to /message?sessionId=XXX
- *   3. Responses come back via the SSE stream
- */
-
-// eslint-disable-next-line no-unused-vars
-import { strict as assert } from "node:assert";
+/** The session flow: endpoint event, sessionId, and the POST /message channel. */
 import { get as httpGet, request as httpRequest } from "node:http";
-import { loadAllSkills } from "../../src/core/skills/index.js";
 
-let pass = 0;
-let fail = 0;
-const check = (label, ok) => {
-  if (ok) {
-    pass++;
-    console.log(`  ✅ ${label}`);
-  } else {
-    fail++;
-    console.log(`  ❌ ${label}`);
-  }
-};
+import { check, finish, startSseServer, stopSseServer } from "./_sse.fixture.mjs";
 
-console.log("=== SSE Transport Tests ===\n");
+console.log("=== SSE Transport Tests: session ===\n");
 
-await loadAllSkills();
-const { startSseServer, stopSseServer } = await import("../../src/transport/sse/index.js");
 const server = await startSseServer({ port: 0 });
-const token = server.token;
 
-check("T0 bearer token generated", token.length === 64);
-check("T1 server started, port assigned", typeof server.port === "number" && server.port > 0);
-
-// Helper: auth header for all protected requests
-const authHeader = { Authorization: `Bearer ${token}` };
-
-// ── T2: GET /health (public, no auth needed) ──
-const healthRes = await fetch(`http://127.0.0.1:${server.port}/health`);
-check("T2 health returns 200", healthRes.status === 200);
-const healthBody = await healthRes.json();
-check("T2.1 health body ok:true", healthBody.ok === true);
-
-// CORS deny-by-default on health (Phase 1.2)
-check(
-  "T5 CORS deny-by-default",
-  healthRes.headers.get("access-control-allow-origin") === null ||
-    healthRes.headers.get("access-control-allow-origin") !== "*",
-);
+const authHeader = { Authorization: `Bearer ${server.token}` };
 
 // ── T3 + T4: Open SSE connection with auth, get sessionId, POST MCP message ──
 let sessionId = "";
@@ -133,19 +91,6 @@ const postResult = await new Promise((resolve, reject) => {
 check("T4.2 POST /message status 202", postResult.status === 202);
 check("T4.3 POST body Accepted", postResult.body?.includes("Accepted"));
 
-// ── T6: Server stops gracefully ──
 await stopSseServer();
-check("T6 server stops gracefully", true);
 
-// Verify port is closed
-try {
-  await fetch(`http://127.0.0.1:${server.port}/health`);
-  check("T6.1 port closed after stop", false);
-} catch {
-  check("T6.1 port closed after stop", true);
-}
-
-console.log(`\nResults: ${pass} passed, ${fail} failed`);
-if (fail > 0) {
-  process.exit(1);
-}
+finish();
