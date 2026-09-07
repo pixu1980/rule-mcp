@@ -59,19 +59,15 @@ Every source document below is preserved verbatim under its own heading so no pr
 | `rule_tool_backend_node`              | Skill      | Backend Node.js scaffold                  |
 | `rule_tool_frontend_react`            | Skill      | Frontend React + Vite scaffold            |
 | `rule_tool_platform_agent`            | Skill      | AI Agents monorepo scaffold               |
-| `rule_tool_platform_expo`             | Skill      | Expo mobile scaffold                      |
 |                                      |            |                                           |
 | **Engineering & DevOps**             |            |                                           |
 | `rule_tool_devops_docker`             | Skill      | Dockerfile + compose generation           |
 | `rule_tool_devops_docker`             | Skill      | Docker standards                          |
-| `rule_tool_devops_gitlab_ci`          | Skill      | GitLab CI/CD pipelines                    |
 | `rule_tool_devops_testing`            | Skill      | Vitest setup & test patterns              |
 | `rule_tool_devops_testing`            | Skill      | Coverage enforcement (60/50/60/60)        |
-| `rule_tool_devops_version`            | Skill      | Husky version auto-increment              |
 |                                      |            |                                           |
 | **Backend**                          |            |                                           |
 | `rule_tool_backend_security`          | Skill      | Security hardening                        |
-| `rule_tool_backend_api_design`        | Skill      | REST API design & OpenAPI                 |
 | `rule_tool_platform_agent`            | Skill      | AI Agent structure and tools              |
 |                                      |            |                                           |
 | **Frontend**                         |            |                                           |
@@ -79,11 +75,8 @@ Every source document below is preserved verbatim under its own heading so no pr
 | `rule_tool_styleguide_validation`     | Skill      | Business field validation                 |
 |                                      |            |                                           |
 | **Mobile**                           |            |                                           |
-| `rule_tool_platform_expo`             | Skill      | EAS Build & Expo CI/CD                    |
 |                                      |            |                                           |
 | **Workflow**                         |            |                                           |
-| `rule_tool_process_feature_workflow`  | Skill      | End-to-end feature workflow               |
-| `rule_tool_process_documentation`     | Skill      | Mintlify documentation setup              |
 
 ### Modes common to all skill tools
 
