@@ -24,8 +24,14 @@ test.after(() => {
 test("getAvailableSkills reads the shipped catalog and tolerates a bad SKILL.md", () => {
   const skills = getAvailableSkills();
   assert.ok(skills.length >= 80, "the embedded catalog is not empty");
-  assert.ok(skills.every((skill) => skill.name && skill.source), "every skill has a name and a source");
-  assert.ok(skills.every((skill) => skill.displayName), "a display name falls back to the entry name");
+  assert.ok(
+    skills.every((skill) => skill.name && skill.source),
+    "every skill has a name and a source",
+  );
+  assert.ok(
+    skills.every((skill) => skill.displayName),
+    "a display name falls back to the entry name",
+  );
 
   const root = mkdtempSync(join(tmpdir(), "rule-skills-empty-"));
   const meta = readSkillMeta(join(root, "not-a-skill"));
@@ -67,7 +73,10 @@ test("skillsInstallCommand batch-installs to the sandboxed home and lists it", (
   process.stdout.write = write;
   const parsed = JSON.parse(listForced.join(""));
   assert.ok(parsed.length >= 80, "the json list carries every skill");
-  assert.ok(parsed.every((entry) => entry.name && entry.installPath.includes(home)), "install paths point at the sandbox home");
+  assert.ok(
+    parsed.every((entry) => entry.name && entry.installPath.includes(home)),
+    "install paths point at the sandbox home",
+  );
 });
 
 test("skillsInstallCommand reports when there is nothing to install", () => {

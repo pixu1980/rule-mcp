@@ -25,7 +25,22 @@ function codexSession(file, cwd, { inWindowRows = true } = {}) {
     { type: "session_meta", payload: { cwd, model_provider: "openai" } },
     { type: "turn_context", payload: { model: "gpt-codex" } },
     { type: "user_message", payload: { type: "user_message", content: "hi" } },
-    ...(inWindowRows ? [{ type: "token_count", timestamp: ts, payload: { type: "token_count", info: { model_context_window: 128_000, last_token_usage: { total_tokens: 9000 }, total_token_usage: { input_tokens: 8000, output_tokens: 900, cached_input_tokens: 100, reasoning_output_tokens: 200 } } } }] : []),
+    ...(inWindowRows
+      ? [
+          {
+            type: "token_count",
+            timestamp: ts,
+            payload: {
+              type: "token_count",
+              info: {
+                model_context_window: 128_000,
+                last_token_usage: { total_tokens: 9000 },
+                total_token_usage: { input_tokens: 8000, output_tokens: 900, cached_input_tokens: 100, reasoning_output_tokens: 200 },
+              },
+            },
+          },
+        ]
+      : []),
     { type: "token_count", timestamp: "2030-01-01T00:00:00Z", payload: { type: "token_count", info: { total_token_usage: { input_tokens: 999_999 } } } },
   ];
 

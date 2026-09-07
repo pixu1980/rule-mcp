@@ -21,7 +21,15 @@ const fullCore = (overrides = {}) => ({
 });
 
 test("a passing core with files renders evidence, truncation and a files receipt", () => {
-  const { lines, receipt, response } = renderGatewayReply(fullCore(), { code: "x" }, [{ path: "a.js", content: "1" }, { path: "b.js", content: "2" }], []);
+  const { lines, receipt, response } = renderGatewayReply(
+    fullCore(),
+    { code: "x" },
+    [
+      { path: "a.js", content: "1" },
+      { path: "b.js", content: "2" },
+    ],
+    [],
+  );
 
   assert.match(lines.join("\n"), /## Route: rule-frontend-react \(confidence: 50%\)/, "the route line renders the rounded confidence");
   assert.match(lines.join("\n"), /Matched sections:/, "the matched sections render");

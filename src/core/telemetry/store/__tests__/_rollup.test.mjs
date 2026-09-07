@@ -65,13 +65,14 @@ test("rollup folds errors, cache hits, tool names and missing fields from old ev
   withHome(() => {
     const dayAts = NOW - 2 * DAY;
     const dayBts = NOW - 3 * DAY;
-    const lines = [
-      { tool: "a", ts: dayAts, ok: false, cacheHit: true, saved: { caveman: 10 }, estimatedRouting: 100 },
-      { tool: "a", ts: dayAts + 1, ok: true, cacheHit: false, saved: { zeroed: 0 } },
-      { tool: "b", ts: dayBts, ok: true },
-    ]
-      .map((event) => JSON.stringify(event))
-      .join("\n") + "\n";
+    const lines =
+      [
+        { tool: "a", ts: dayAts, ok: false, cacheHit: true, saved: { caveman: 10 }, estimatedRouting: 100 },
+        { tool: "a", ts: dayAts + 1, ok: true, cacheHit: false, saved: { zeroed: 0 } },
+        { tool: "b", ts: dayBts, ok: true },
+      ]
+        .map((event) => JSON.stringify(event))
+        .join("\n") + "\n";
     write(eventsFile(), lines);
 
     const days = rollup({ now: NOW });

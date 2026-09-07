@@ -15,7 +15,11 @@ test("an unregistered child is ignored and a kill failure is silent", () => {
   const mockChild = (kill) => ({ pid: 42, kill, once() {}, removeListener() {} });
   trackChild(mockChild(() => {}));
   assert.equal(trackedChildCount(), 1, "a child with a pid is tracked");
-  trackChild(mockChild(() => { throw new Error("already gone"); }));
+  trackChild(
+    mockChild(() => {
+      throw new Error("already gone");
+    }),
+  );
   assert.doesNotThrow(() => killTrackedChildren("SIGTERM"), "a stale child kill is silent");
 });
 

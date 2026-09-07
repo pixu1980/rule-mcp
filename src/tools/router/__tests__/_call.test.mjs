@@ -19,7 +19,7 @@ before(() => {
     name: "rule_tool_probe",
     description: "a probe tool",
     zodSchema: z.object({ count: z.number().min(1).max(3) }),
-    handler: (args) => args.boom ? Promise.reject(new Error("boom")) : Promise.resolve({ content: [{ type: "text", text: `ok ${args.count}` }] }),
+    handler: (args) => (args.boom ? Promise.reject(new Error("boom")) : Promise.resolve({ content: [{ type: "text", text: `ok ${args.count}` }] })),
   });
   registerTool({
     name: "rule_tool_probe_boom",

@@ -42,21 +42,22 @@ test("fillRoleTemplate refuses a missing role", () => {
   assert.throws(() => fillRoleTemplate(undefined), /needs a role/, "no role throws");
 });
 
-const PERSONA = (id) => [
-  `---`,
-  `id: "${id}"`,
-  "role: \"Tester\"",
-  "yearsOfExperience: 3",
-  "status: \"active\"",
-  "version: 1",
-  "skills:",
-  "  - \"testing\"",
-  "---",
-  "# Tester",
-  "",
-  "- edge cases first",
-  "",
-].join("\n");
+const PERSONA = (id) =>
+  [
+    `---`,
+    `id: "${id}"`,
+    'role: "Tester"',
+    "yearsOfExperience: 3",
+    'status: "active"',
+    "version: 1",
+    "skills:",
+    '  - "testing"',
+    "---",
+    "# Tester",
+    "",
+    "- edge cases first",
+    "",
+  ].join("\n");
 
 test("loadPersonaCatalog reads, validates and orders persona files", () => {
   const dir = mkdtempSync(join(tmpdir(), "rule-personas-"));
@@ -66,7 +67,11 @@ test("loadPersonaCatalog reads, validates and orders persona files", () => {
 
   const { roles, problems } = loadPersonaCatalog(dir);
 
-  assert.deepEqual(roles.map((entry) => entry.id), ["a", "b"], "files sort by name and non-md is ignored");
+  assert.deepEqual(
+    roles.map((entry) => entry.id),
+    ["a", "b"],
+    "files sort by name and non-md is ignored",
+  );
   assert.deepEqual(problems, [], "no problems with well-formed files");
   rmSync(dir, { recursive: true, force: true });
 });

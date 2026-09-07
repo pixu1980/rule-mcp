@@ -36,10 +36,7 @@ export function sum(a, b) {
 `;
 
 test("a backend framework overrides a frontend route and names the original", async () => {
-  const core = await computeGatewayCore(
-    { prompt: "center a div with flexbox", framework: "express", path: "/tmp/x" },
-    null,
-  );
+  const core = await computeGatewayCore({ prompt: "center a div with flexbox", framework: "express", path: "/tmp/x" }, null);
 
   assert.equal(core.effectiveRoute, "rule-backend-express", "express demands the backend domain");
   assert.equal(core.originalRoute, "rule-frontend-vanilla-reactive", "the overridden route is named");
@@ -86,7 +83,10 @@ test("path and framework are optional on the routed call", async () => {
 });
 
 test("a failing code-only unit carries no file label", async () => {
-  const core = await computeGatewayCore({ prompt: "center a div with flexbox", framework: "react", path: "/tmp/x", code: "/** Doc. */\nexport const x = 1; // \u2013 stray em dash" }, null);
+  const core = await computeGatewayCore(
+    { prompt: "center a div with flexbox", framework: "react", path: "/tmp/x", code: "/** Doc. */\nexport const x = 1; // \u2013 stray em dash" },
+    null,
+  );
 
   assert.equal(core.checkResult.allPass, false, "the inline code fails");
   assert.equal(core.checkResult.failed[0]?.file, undefined, "a code-only unit has no file name");

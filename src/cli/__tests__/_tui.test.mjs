@@ -71,7 +71,10 @@ test("section renders the icon, bold title and a dim underline", () => {
 
 test("kv aligns keys and passes values through", () => {
   noColor();
-  const out = kv([["abc", "1"], ["x", "2"]]);
+  const out = kv([
+    ["abc", "1"],
+    ["x", "2"],
+  ]);
   assert.match(out, /abc {2}1/, "the first key renders inline with its value");
   assert.match(out, /x +2/, "the shorter key is padded to the longest");
 });

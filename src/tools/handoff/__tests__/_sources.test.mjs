@@ -13,7 +13,10 @@ test.before(() => {
   mkdirSync(join(project, "docs", "adr"), { recursive: true });
   mkdirSync(join(project, ".context"), { recursive: true });
 
-  writeFileSync(join(project, "docs/adr/010-title-with-hyphen.md"), "# 010: A Title With Hyphens\n\n- **Date**: 2026-09-01\n- **Status**: [accepted](link)\n- **Tags**: a,b, c\n\n## Decision\n\nFirst line of the decision.\nSecond line stays.\nThird line is dropped.\n");
+  writeFileSync(
+    join(project, "docs/adr/010-title-with-hyphen.md"),
+    "# 010: A Title With Hyphens\n\n- **Date**: 2026-09-01\n- **Status**: [accepted](link)\n- **Tags**: a,b, c\n\n## Decision\n\nFirst line of the decision.\nSecond line stays.\nThird line is dropped.\n",
+  );
   writeFileSync(join(project, "docs/adr/011-status-section.md"), "not a title line\n\n## Status\n\nsuperseded\n\n## Decision\n\nShort.\n");
   writeFileSync(join(project, "docs/adr/012-no-decision.md"), "# 012: Empty Decision\n\n- **Status**: proposed\n");
 

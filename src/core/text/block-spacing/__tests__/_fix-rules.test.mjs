@@ -20,18 +20,21 @@ const fix = (name, code) => {
 };
 
 test("an inserted blank above a block shifts its siblings", () => {
-  const { content } = fix("shift.js", [
-    "function f() {", // 0
-    "  if (x) {", // 1
-    "    b();",
-    "  }", // 3
-    "  const c = 1;",
-    "  while (y) {", // 5
-    "    d();",
-    "  }", // 7
-    "}", // 8
-    "",
-  ].join("\n"));
+  const { content } = fix(
+    "shift.js",
+    [
+      "function f() {", // 0
+      "  if (x) {", // 1
+      "    b();",
+      "  }", // 3
+      "  const c = 1;",
+      "  while (y) {", // 5
+      "    d();",
+      "  }", // 7
+      "}", // 8
+      "",
+    ].join("\n"),
+  );
 
   // The if block is a middle block: its closing brace gets a blank above it
   // and a blank below, and the while block must still land at the same depth.

@@ -61,11 +61,7 @@ test("an occupied port rejects the start", async () => {
     blocker.listen(0, "127.0.0.1", () => resolve(blocker.address().port));
   });
   try {
-    await assert.rejects(
-      () => startHttpServer({ port, host: "127.0.0.1" }),
-      /EADDRINUSE|couldn't be reached|error/i,
-      "the caller learns the port is taken",
-    );
+    await assert.rejects(() => startHttpServer({ port, host: "127.0.0.1" }), /EADDRINUSE|couldn't be reached|error/i, "the caller learns the port is taken");
   } finally {
     await new Promise((resolve) => blocker.close(resolve));
     await stopHttpServer();

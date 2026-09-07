@@ -2,7 +2,21 @@
 import { beforeEach, test } from "node:test";
 import assert from "node:assert/strict";
 
-import { MIN_HITS, SKILL, args, cacheClear, cacheEntries, cacheLookup, cacheStore, primeFromCatalog, project, result, skillDigest, verifyCache, writeCatalog } from "./_catalog.fixture.mjs";
+import {
+  MIN_HITS,
+  SKILL,
+  args,
+  cacheClear,
+  cacheEntries,
+  cacheLookup,
+  cacheStore,
+  primeFromCatalog,
+  project,
+  result,
+  skillDigest,
+  verifyCache,
+  writeCatalog,
+} from "./_catalog.fixture.mjs";
 
 beforeEach(() => {
   cacheClear();
@@ -23,11 +37,7 @@ test("primeFromCatalog skips entries without a tool or a result", () => {
     version: 1,
     generatedAt: "2026-09-01",
     serverVersion: "test",
-    entries: [
-      { result: result("no tool") },
-      { tool: 42, result: result("bad tool") },
-      { tool: "pix_tool", args: args("rule ui"), result: result("good") },
-    ],
+    entries: [{ result: result("no tool") }, { tool: 42, result: result("bad tool") }, { tool: "pix_tool", args: args("rule ui"), result: result("good") }],
   };
   writeCatalog(project, catalog);
 
@@ -41,8 +51,7 @@ test("verifyCache reports drift, failures and skips together", async () => {
   const { tool, entryArgs } = await readyEntry("pix_tool", args("react button"), "blessed");
 
   const verify = await verifyCache({
-    recompute: (name, candidateArgs) =>
-      name === "pix_tool" && candidateArgs.prompt === "react button" ? result("blessed") : result("different"),
+    recompute: (name, candidateArgs) => (name === "pix_tool" && candidateArgs.prompt === "react button" ? result("blessed") : result("different")),
     canRun: (name) => name === "pix_tool",
   });
 

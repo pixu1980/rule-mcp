@@ -66,7 +66,11 @@ test("decorateWithTokensave skips errors, test tools and unknown dirs", () => {
   assert.deepEqual(decorateWithTokensave("pix_tool", { isError: true, content: [] }), { isError: true, content: [] }, "an error core passes through");
   assert.deepEqual(decorateWithTokensave("pix_tool", { content: "nope" }), { content: "nope" }, "non-array content passes through");
   assert.deepEqual(decorateWithTokensave("test_pix_tool", { content: [{ type: "text", text: "x" }] }), { content: [{ type: "text", text: "x" }] }, "test tools keep payloads");
-  assert.deepEqual(decorateWithTokensave("pix_tool", { content: [{ type: "text", text: "x" }] }, {}), { content: [{ type: "text", text: "x" }] }, "no tokensave dir means no decoration");
+  assert.deepEqual(
+    decorateWithTokensave("pix_tool", { content: [{ type: "text", text: "x" }] }, {}),
+    { content: [{ type: "text", text: "x" }] },
+    "no tokensave dir means no decoration",
+  );
 });
 
 test("decorateWithTokensave emits once and defers for JSON payloads", () => {

@@ -24,7 +24,16 @@ test("argsBytes measures json length and tolerates the unmeasurable", () => {
 });
 
 test("textBytes counts the text in content and estimateTokens rounds up", () => {
-  assert.equal(textBytes({ content: [{ type: "text", text: "abcd" }, { type: "text", text: "ef" }] }), 6, "text fields sum");
+  assert.equal(
+    textBytes({
+      content: [
+        { type: "text", text: "abcd" },
+        { type: "text", text: "ef" },
+      ],
+    }),
+    6,
+    "text fields sum",
+  );
   assert.equal(textBytes({}), 0, "no content means zero bytes");
   assert.equal(textBytes({ content: [{}] }), 0, "an item without text contributes nothing");
   assert.equal(estimateTokens({ content: [{ type: "text", text: "abcdefgh" }] }), 2, "characters over four round up");
