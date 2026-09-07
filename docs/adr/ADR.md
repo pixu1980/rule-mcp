@@ -8,6 +8,7 @@ this directory are the source of truth; this index is generated from them by
 
 | # | Title | Date | Status | Tags |
 |---|-------|------|--------|------|
+| [064](064-one-global-shim-and-hermetic-pnpm-home-in-script-tests.md) | One global shim, and hermetic PNPM_HOME in script tests | 2026-09-07 | accepted | installer, cli, shim, testing, hermeticity |
 | [063](063-plans-carry-nested-sub-steps-and-an-exhaustiveness-mandate.md) | Plans carry nested sub-steps and an exhaustiveness mandate | 2026-09-07 | accepted | documentation, personas, plans |
 | [062](062-persona-plans-are-checklists-with-marks-that-survive-the-sync.md) | Persona plans are checklists with marks that survive the sync | 2026-09-07 | accepted | documentation, personas, plans |
 | [061](061-one-file-per-rule-with-underscore-barrel-folders-and-a-size-ratchet.md) | One file per rule with underscore-barrel folders and a size ratchet | 2026-09-06 | accepted | architecture, refactor, structure, guardrails |
@@ -76,6 +77,7 @@ file. Where a line stops short the rest is in the ADR.
 
 | ADR | Decision | Consequence |
 |-----|----------|-------------|
+| [064](064-one-global-shim-and-hermetic-pnpm-home-in-script-tests.md) | Three layers. (1) Every test that spawns the shell scripts sets `env.PNPM_HOME` to a. | Positive: the installer suite ran end to end with the real shim verified byte-identical. |
 | [063](063-plans-carry-nested-sub-steps-and-an-exhaustiveness-mandate.md) | A finding passed to `rule_tool_plan_docs` may carry a `steps` array; the renderer nests each. | Positive: execution is trackable at the action level, plans are development-ready documents. |
 | [062](062-persona-plans-are-checklists-with-marks-that-survive-the-sync.md) | The plan renderer emits a checklist instead of a table: one. | Positive: executed steps are markable in place, the mark survives re-syncs, and every. |
 | [061](061-one-file-per-rule-with-underscore-barrel-folders-and-a-size-ratchet.md) | Split rule catalogs one file per rule under family folders (framework/js, framework/vanilla, quality/typescript-prose-manifest-simplicity-comments) with kebab-case underscore-prefixed names and index.js barrels... | Positive: file names say what they contain, duplicate rules are impossible by construction, one canonical import path per module, and the language and size rules are regression-tested. |
@@ -169,6 +171,17 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [005](005-backend-framework-skills.md) Backend Framework Skills
 - [004](004-scaffold-consolidation.md) Scaffold Skill Consolidation
 
+### installer
+
+- [064](064-one-global-shim-and-hermetic-pnpm-home-in-script-tests.md) One global shim, and hermetic PNPM_HOME in script tests
+- [059](059-drop-the-vs-code-extension-and-its-installers.md) Drop the VS Code extension and its installers
+- [058](058-restructure-the-command-surface-rule-router-rule-area-caveman-implicit-rule-process.md) Restructure the command surface: /rule router, rule-area-*, caveman implicit, rule-process-tdd skill
+- [050](050-split-hotspot-modules.md) Split the hotspot modules (guardrails + installer)
+- [047](047-installer-self-heals-global-shim-surfaces-failures-gates-tui-rendering.md) Installer self-heals its global shim, surfaces failures, and gates TUI rendering
+- [042](042-lossless-installer-preserve-toolprefix-normalize-rule-blank-lines.md) Lossless installer: preserve toolPrefix and normalize rule blank lines
+- [040](040-fix-vscode-extension-and-derivatives-install-uninstall.md) Fix VS Code extension and derivatives install/uninstall
+- [029](029-clean-rule-commands-via-user-commands-prompt-suppression-not-a-plugin.md) Clean /rule-* commands via user commands + prompt suppression, not a plugin
+
 ### routing
 
 - [028](028-add-rule-toolchain-commits-skill-for-atomic-conventional-commits-with-mandatory-s.md) Add rule-toolchain-commits skill for atomic conventional commits with mandatory scope
@@ -179,16 +192,6 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [023](023-skill-routing-turborepo-monorepo-pipeline-caching-parallel.md) Skill routing: Turborepo monorepo pipeline caching parallel builds
 - [022](022-skill-routing-eslint-flat-config-for-typescript-react-proje.md) Skill routing: ESLint flat config for TypeScript React project
 - [021](021-skill-routing-typescript-tsconfig-strict-mode-configuration.md) Skill routing: TypeScript tsconfig strict mode configuration
-
-### installer
-
-- [059](059-drop-the-vs-code-extension-and-its-installers.md) Drop the VS Code extension and its installers
-- [058](058-restructure-the-command-surface-rule-router-rule-area-caveman-implicit-rule-process.md) Restructure the command surface: /rule router, rule-area-*, caveman implicit, rule-process-tdd skill
-- [050](050-split-hotspot-modules.md) Split the hotspot modules (guardrails + installer)
-- [047](047-installer-self-heals-global-shim-surfaces-failures-gates-tui-rendering.md) Installer self-heals its global shim, surfaces failures, and gates TUI rendering
-- [042](042-lossless-installer-preserve-toolprefix-normalize-rule-blank-lines.md) Lossless installer: preserve toolPrefix and normalize rule blank lines
-- [040](040-fix-vscode-extension-and-derivatives-install-uninstall.md) Fix VS Code extension and derivatives install/uninstall
-- [029](029-clean-rule-commands-via-user-commands-prompt-suppression-not-a-plugin.md) Clean /rule-* commands via user commands + prompt suppression, not a plugin
 
 ### auto-log
 
@@ -252,6 +255,12 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [011](011-backend-framework-skills.md) backend framework skills
 - [005](005-backend-framework-skills.md) Backend Framework Skills
 
+### cli
+
+- [064](064-one-global-shim-and-hermetic-pnpm-home-in-script-tests.md) One global shim, and hermetic PNPM_HOME in script tests
+- [047](047-installer-self-heals-global-shim-surfaces-failures-gates-tui-rendering.md) Installer self-heals its global shim, surfaces failures, and gates TUI rendering
+- [034](034-registry-driven-clean-slash-commands-for-every-agent-and-ide.md) Registry-driven clean slash commands for every agent and IDE
+
 ### commands
 
 - [058](058-restructure-the-command-surface-rule-router-rule-area-caveman-implicit-rule-process.md) Restructure the command surface: /rule router, rule-area-*, caveman implicit, rule-process-tdd skill
@@ -293,6 +302,12 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [046](046-migrate-repo-tooling-to-eslint-10-flat-config-with-eslint-plugin-unicorn.md) Migrate repo tooling to ESLint 10 flat config with eslint-plugin-unicorn
 - [020](020-use-a-persistent-local-bearer-token-for-daemon-transport.md) use a persistent local bearer token for daemon transport
 - [019](019-fail-closed-mcp-enforcement-and-reusable-agent-commands.md) fail closed mcp enforcement and reusable agent commands
+
+### testing
+
+- [064](064-one-global-shim-and-hermetic-pnpm-home-in-script-tests.md) One global shim, and hermetic PNPM_HOME in script tests
+- [060](060-reorganize-scripts-src-tests-with-150-line-code-splitting.md) Reorganize scripts, src and tests with 150-line code splitting
+- [049](049-v100-release-and-docs-accuracy-guard.md) v1.0.0 release and the docs-accuracy guard
 
 ### vscode
 

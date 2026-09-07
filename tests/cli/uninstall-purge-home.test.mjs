@@ -104,7 +104,7 @@ function seedHome() {
 
 /** env without the runtime-relocation vars, so the real ~/.rule-mcp is used. */
 function hermeticEnv(home, path) {
-  const env = { ...process.env, HOME: home, PATH: path };
+  const env = { ...process.env, HOME: home, PATH: path, PNPM_HOME: join(home, ".pnpm") };
   delete env.RULE_MCP_HOME;
   delete env.RULE_MCP_STATE_DIR;
   delete env.RULE_MCP_SKIP_GLOBAL_LINK;

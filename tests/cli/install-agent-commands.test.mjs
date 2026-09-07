@@ -34,7 +34,7 @@ try {
 
   const result = spawnSync("bash", [installer], {
     cwd: project,
-    env: { ...process.env, HOME: home },
+    env: { ...process.env, HOME: home, PNPM_HOME: join(home, ".pnpm") },
     encoding: "utf8",
   });
 

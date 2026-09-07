@@ -57,7 +57,7 @@ assert.match(installSh, /USE_COLOR=false/, "install.sh must gate colors behind a
 assert.match(installSh, /\[\[ -t 1 \]\]/, "install.sh must check stdout is a TTY before coloring");
 
 assert.match(uninstallSh, /pnpm unlink --global rule-mcp/, "uninstall.sh must unlink the pnpm-linked package");
-assert.match(uninstallSh, /Library\/pnpm\/bin\/rule-mcp/, "uninstall.sh must remove the pnpm bin shim");
+assert.match(uninstallSh, /for shim_name in rule-mcp rule-mcpd/, "uninstall.sh must remove both pnpm bin shims, the retired -mcpd alias included");
 assert.match(
   uninstallSh,
   /global\/"\*\/node_modules\/rule-mcp/,
@@ -116,8 +116,7 @@ sub()   { echo "$1"; }
 IS_LOCAL_REPO=true
 LOCAL_BIN="${localBin}"
 RULE_MCP_SKIP_GLOBAL_LINK=1
-PATH="${fakeBin}:${process.env.PATH}"
-export PATH
+export PATH="${fakeBin}:${process.env.PATH}" PNPM_HOME="${fakeHome}/.pnpm"
 ${shimWorks}
 ${shimPath}
 ${ensureGlobalShim}
@@ -181,6 +180,7 @@ try {
       ...process.env,
       HOME: e2eHome,
       PATH: e2ePath,
+      PNPM_HOME: join(e2eHome, ".pnpm"), // never the real one: uninstall/install write here
       RULE_MCP_SKIP_GLOBAL_LINK: "1",
     },
     timeout: 120_000,
