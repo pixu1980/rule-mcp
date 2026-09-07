@@ -13,7 +13,6 @@ export const FILE_SIZE_RATCHET = new Map([
   ["src/tools/router/_call.js", 188],
   ["src/transport/_session-registry.js", 221],
   ["tests/cli/install-rules-idempotent.test.mjs", 184],
-  ["tests/cli/self-update-throttle.test.mjs", 205],
   ["tests/cli/self-update.test.mjs", 182],
   ["tests/core/agent-command-targets.test.mjs", 186],
   ["tests/core/caveman-efficacy.test.mjs", 168],
@@ -25,9 +24,7 @@ export const FILE_SIZE_RATCHET = new Map([
   ["tests/roles/review-roles.test.mjs", 166],
   ["tests/roles/roles-cli.test.mjs", 160],
   ["tests/skills/skill-surface-embedded-only.test.mjs", 163],
-  ["tests/skills/skills-docs.test.mjs", 208],
   ["tests/tools/apply-containment.test.mjs", 152],
   ["tests/tools/gateway-cache-receipt.test.mjs", 183],
-  ["tests/tools/session-resume.test.mjs", 206],
   ["tests/transport/sse.test.mjs", 151],
 ]);
