@@ -163,7 +163,7 @@
       per-rule passes (identical 277-file dry-run); changelog 229 -> sections/history/render;
       wcag 186 -> flatten/render; blank-lines, cache-similarity, post-process, prose each
       shed one module.
-- [ ] Deliberate keeps, grandfathered with a rationale: `session/_lifecycle.js` 228 and
+- [x] Deliberate keeps, grandfathered with a rationale: `session/_lifecycle.js` 228 and
       `transport/_session-registry.js` 221 (single state machines whose reset reassigns
       module state), `guardrails/_guarded.js` 179 (worker lifecycle), `cli/commands/_daemon.js`
       219 and `tools/router/_call.js` 188 (one dispatcher function each).
