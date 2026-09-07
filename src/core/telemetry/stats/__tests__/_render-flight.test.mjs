@@ -42,7 +42,11 @@ test("evaluate validates the scope, the results and the conformance claim", () =
   assert.throws(() => evaluate({}), /scope/, "a missing scope throws");
   assert.throws(() => evaluate({ scope: { title: "t", url: "u" }, results: [{ criterion: "1.1.x", outcome: "passed" }] }), /Unknown WCAG criterion/, "an unknown criterion throws");
   assert.throws(() => evaluate({ scope: { title: "t", url: "u" }, results: [{ criterion: "1.1.1", outcome: "maybe" }] }), /Unknown outcome/, "an unknown outcome throws");
-  assert.throws(() => evaluate({ scope: { title: "t", url: "u" }, results: [{ criterion: "1.4.9", outcome: "passed" }] }), /outside a level AA/, "a level AAA criterion outside target throws");
+  assert.throws(
+    () => evaluate({ scope: { title: "t", url: "u" }, results: [{ criterion: "1.4.9", outcome: "passed" }] }),
+    /outside a level AA/,
+    "a level AAA criterion outside target throws",
+  );
 });
 
 test("evaluate counts outcomes and settles the conformance verdict", () => {
