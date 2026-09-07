@@ -8,6 +8,7 @@ this directory are the source of truth; this index is generated from them by
 
 | #                                                                                              | Title                                                                                              | Date       | Status     | Tags                                                                                |
 | ---------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- | ---------- | ---------- | ----------------------------------------------------------------------------------- |
+| [068](068-coverage-floor-raised-to-90.md)                                                      | Coverage floor raised to 90                                                                        | 2026-09-07 | accepted   | testing, coverage, ci, ratchet                                                      |
 | [067](067-coverage-floor-raised-to-89-toward-the-95-endpoint.md)                               | Coverage floor raised to 89 toward the 95 endpoint                                                 | 2026-09-07 | accepted   | testing, coverage, ci, ratchet                                                      |
 | [066](066-coverage-floor-raised-to-87-95-remains-the-ratchet-endpoint.md)                      | Coverage floor raised to 87; 95 remains the ratchet endpoint                                       | 2026-09-07 | accepted   | testing, coverage, ci, ratchet                                                      |
 | [065](065-glob-suite-runner-colocated-tests-and-a-branch-coverage-ratchet.md)                  | Glob suite runner, co-located tests, and a branch-coverage ratchet                                 | 2026-09-07 | accepted   | testing, ci, coverage, structure                                                    |
@@ -80,6 +81,7 @@ file. Where a line stops short the rest is in the ADR.
 
 | ADR                                                                                            | Decision                                                                                                                                                                                                                        | Consequence                                                                                                                                                                                                                    |
 | ---------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| [068](068-coverage-floor-raised-to-90.md)                                                      | Raise BRANCH_FLOOR from 89 to 90 in scripts/reports/coverage/_threshold.data.mjs.                                                                                                                                               | Positive: floor 83 -> 87 -> 89 -> 90 with ~850 tests green locally.                                                                                                                                                            |
 | [067](067-coverage-floor-raised-to-89-toward-the-95-endpoint.md)                               | Raise BRANCH_FLOOR in scripts/reports/coverage/_threshold.data.mjs from 87 to 89. The ratchet mechanics are unchanged: pnpm test:coverage fails below the floor, the floor may only rise, and 95 stays where the phase...       | Positive: floor 83 -> 87 -> 89, ~790 tests green locally, and the coverage work surfaced further real defects (the ADR index byte-equal gate and the gateway evidence tool-name bug are fixed; the handoff/transcripts...      |
 | [066](066-coverage-floor-raised-to-87-95-remains-the-ratchet-endpoint.md)                      | Raise BRANCH_FLOOR in scripts/reports/coverage/_threshold.data.mjs from 83 to 87. The gate and the ratchet mechanics are unchanged: pnpm test:coverage fails below the floor, the floor may only rise, and 95 is when the...    | Positive: the branch floor moved 83 to 87, and the coverage work surfaced and fixed two real defects - the ADR index generator emitted tables prettier immediately reformatted (byte-equal gate was red on main), and the...   |
 | [065](065-glob-suite-runner-colocated-tests-and-a-branch-coverage-ratchet.md)                  | Four pieces. (1) `scripts/ci/run-tests/index.mjs` resolves a suite from glob patterns in.                                                                                                                                       | Positive: adding a test is writing a file; the orphan class is gone (204 files run where.                                                                                                                                      |
@@ -199,6 +201,16 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [022](022-skill-routing-eslint-flat-config-for-typescript-react-proje.md) Skill routing: ESLint flat config for TypeScript React project
 - [021](021-skill-routing-typescript-tsconfig-strict-mode-configuration.md) Skill routing: TypeScript tsconfig strict mode configuration
 
+### testing
+
+- [068](068-coverage-floor-raised-to-90.md) Coverage floor raised to 90
+- [067](067-coverage-floor-raised-to-89-toward-the-95-endpoint.md) Coverage floor raised to 89 toward the 95 endpoint
+- [066](066-coverage-floor-raised-to-87-95-remains-the-ratchet-endpoint.md) Coverage floor raised to 87; 95 remains the ratchet endpoint
+- [065](065-glob-suite-runner-colocated-tests-and-a-branch-coverage-ratchet.md) Glob suite runner, co-located tests, and a branch-coverage ratchet
+- [064](064-one-global-shim-and-hermetic-pnpm-home-in-script-tests.md) One global shim, and hermetic PNPM_HOME in script tests
+- [060](060-reorganize-scripts-src-tests-with-150-line-code-splitting.md) Reorganize scripts, src and tests with 150-line code splitting
+- [049](049-v100-release-and-docs-accuracy-guard.md) v1.0.0 release and the docs-accuracy guard
+
 ### auto-log
 
 - [026](026-skill-routing-pnpm-package-manager-workspace-monorepo-setup.md) Skill routing: pnpm package manager workspace monorepo setup
@@ -207,15 +219,6 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [023](023-skill-routing-turborepo-monorepo-pipeline-caching-parallel.md) Skill routing: Turborepo monorepo pipeline caching parallel builds
 - [022](022-skill-routing-eslint-flat-config-for-typescript-react-proje.md) Skill routing: ESLint flat config for TypeScript React project
 - [021](021-skill-routing-typescript-tsconfig-strict-mode-configuration.md) Skill routing: TypeScript tsconfig strict mode configuration
-
-### testing
-
-- [067](067-coverage-floor-raised-to-89-toward-the-95-endpoint.md) Coverage floor raised to 89 toward the 95 endpoint
-- [066](066-coverage-floor-raised-to-87-95-remains-the-ratchet-endpoint.md) Coverage floor raised to 87; 95 remains the ratchet endpoint
-- [065](065-glob-suite-runner-colocated-tests-and-a-branch-coverage-ratchet.md) Glob suite runner, co-located tests, and a branch-coverage ratchet
-- [064](064-one-global-shim-and-hermetic-pnpm-home-in-script-tests.md) One global shim, and hermetic PNPM_HOME in script tests
-- [060](060-reorganize-scripts-src-tests-with-150-line-code-splitting.md) Reorganize scripts, src and tests with 150-line code splitting
-- [049](049-v100-release-and-docs-accuracy-guard.md) v1.0.0 release and the docs-accuracy guard
 
 ### tool
 
@@ -242,6 +245,20 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [050](050-split-hotspot-modules.md) Split the hotspot modules (guardrails + installer)
 - [045](045-adopt-eslint-plugin-unicorn-for-js-ts-quality.md) Adopt eslint-plugin-unicorn for JS/TS quality
 - [019](019-fail-closed-mcp-enforcement-and-reusable-agent-commands.md) fail closed mcp enforcement and reusable agent commands
+
+### ci
+
+- [068](068-coverage-floor-raised-to-90.md) Coverage floor raised to 90
+- [067](067-coverage-floor-raised-to-89-toward-the-95-endpoint.md) Coverage floor raised to 89 toward the 95 endpoint
+- [066](066-coverage-floor-raised-to-87-95-remains-the-ratchet-endpoint.md) Coverage floor raised to 87; 95 remains the ratchet endpoint
+- [065](065-glob-suite-runner-colocated-tests-and-a-branch-coverage-ratchet.md) Glob suite runner, co-located tests, and a branch-coverage ratchet
+
+### coverage
+
+- [068](068-coverage-floor-raised-to-90.md) Coverage floor raised to 90
+- [067](067-coverage-floor-raised-to-89-toward-the-95-endpoint.md) Coverage floor raised to 89 toward the 95 endpoint
+- [066](066-coverage-floor-raised-to-87-95-remains-the-ratchet-endpoint.md) Coverage floor raised to 87; 95 remains the ratchet endpoint
+- [065](065-glob-suite-runner-colocated-tests-and-a-branch-coverage-ratchet.md) Glob suite runner, co-located tests, and a branch-coverage ratchet
 
 ### infrastructure
 
@@ -270,12 +287,6 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [011](011-backend-framework-skills.md) backend framework skills
 - [005](005-backend-framework-skills.md) Backend Framework Skills
 
-### ci
-
-- [067](067-coverage-floor-raised-to-89-toward-the-95-endpoint.md) Coverage floor raised to 89 toward the 95 endpoint
-- [066](066-coverage-floor-raised-to-87-95-remains-the-ratchet-endpoint.md) Coverage floor raised to 87; 95 remains the ratchet endpoint
-- [065](065-glob-suite-runner-colocated-tests-and-a-branch-coverage-ratchet.md) Glob suite runner, co-located tests, and a branch-coverage ratchet
-
 ### cli
 
 - [064](064-one-global-shim-and-hermetic-pnpm-home-in-script-tests.md) One global shim, and hermetic PNPM_HOME in script tests
@@ -287,12 +298,6 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [058](058-restructure-the-command-surface-rule-router-rule-area-caveman-implicit-rule-process.md) Restructure the command surface: /rule router, rule-area-*, caveman implicit, rule-process-tdd skill
 - [057](057-split-review-personas-into-per-operation-commands-plan-audit-review.md) Split review personas into per-operation commands (plan/audit/review)
 - [029](029-clean-rule-commands-via-user-commands-prompt-suppression-not-a-plugin.md) Clean /rule-* commands via user commands + prompt suppression, not a plugin
-
-### coverage
-
-- [067](067-coverage-floor-raised-to-89-toward-the-95-endpoint.md) Coverage floor raised to 89 toward the 95 endpoint
-- [066](066-coverage-floor-raised-to-87-95-remains-the-ratchet-endpoint.md) Coverage floor raised to 87; 95 remains the ratchet endpoint
-- [065](065-glob-suite-runner-colocated-tests-and-a-branch-coverage-ratchet.md) Glob suite runner, co-located tests, and a branch-coverage ratchet
 
 ### mcp
 
@@ -323,6 +328,12 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [051](051-round-two-hardening-cycles-daemon-cleanup-diagnostics.md) Round-2 hardening - cycles, daemon/commands split, diagnostics, HTTP verification
 - [045](045-adopt-eslint-plugin-unicorn-for-js-ts-quality.md) Adopt eslint-plugin-unicorn for JS/TS quality
 - [044](044-strengthen-typescript-discipline-for-large-codebases.md) Strengthen TypeScript discipline for large codebases
+
+### ratchet
+
+- [068](068-coverage-floor-raised-to-90.md) Coverage floor raised to 90
+- [067](067-coverage-floor-raised-to-89-toward-the-95-endpoint.md) Coverage floor raised to 89 toward the 95 endpoint
+- [066](066-coverage-floor-raised-to-87-95-remains-the-ratchet-endpoint.md) Coverage floor raised to 87; 95 remains the ratchet endpoint
 
 ### security
 
