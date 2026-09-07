@@ -28,8 +28,10 @@ test("verify consults the repository for branches, ranges and commands", () => {
 
   const claims = verify(root, {
     branches: ["main", "feat/x", "ghost"],
-    ranges: [{ start: "HEAD", end: "HEAD" }],
+    files: [],
+    ranges: [{ start: "HEAD", end: "HEAD", fixedEnd: true }],
     commands: ["git status"],
+    adrs: [],
   });
 
   assert.ok(claims.some((c) => c.kind === "branch" && c.value === "main" && c.bucket === "still-true"), "current branches hold");
@@ -41,7 +43,7 @@ test("verify consults the repository for branches, ranges and commands", () => {
 
 test("verify answers unverified without a git repository", () => {
   const bare = mkdtempSync(join(tmpdir(), "rule-verify-nogit-"));
-  const claims = verify(bare, { branches: ["main"], ranges: [], commands: [] });
+  const claims = verify(bare, { branches: ["main"], files: [], ranges: [], commands: [], adrs: [] });
   assert.ok(claims.some((c) => c.bucket === "unverified"), "no repo means unverified");
   rmSync(bare, { recursive: true, force: true });
 });
