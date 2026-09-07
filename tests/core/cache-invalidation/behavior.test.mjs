@@ -1,149 +1,10 @@
-/**
- * @module test/cache-invalidation
- *
- * R3: an edit to one skill drops the entries that depend on it, and nothing else.
- *
- * The namespace was `pkg.version : mtime of skills/`, so a heading changed in
- * one skill dropped every entry for all 88. On this repository, where most
- * sessions edit skills, that made the cache close to ornamental.
- *
- * The tests deliberately do not mutate `skills/`. An entry stored with a stale
- * digest for a real skill is indistinguishable, from the cache's point of view,
- * from an entry stored before that skill was edited - and it is the mechanism
- * that needs proving, not the filesystem.
- *
- * @see docs/plans/deterministic-cache.md - section 4
- */
-
+/** End to end: recorded dependencies, surgical invalidation, determinism, hit parity. */
 import test from "node:test";
+import { rmSync } from "node:fs";
 import assert from "node:assert/strict";
-import { mkdtempSync, rmSync } from "node:fs";
-import { tmpdir } from "node:os";
-import { join } from "node:path";
-
-const stateDir = mkdtempSync(join(tmpdir(), "rule-invalidation-"));
-process.env.RULE_MCP_STATE_DIR = stateDir;
-delete process.env.RULE_MCP_NO_CACHE;
-process.env.RULE_MCP_NO_AUTOUPDATE = "1";
-process.env.RULE_MCP_NO_TELEMETRY = "1";
-
-const { cacheStore, cacheLookup, cacheClear, skillDigest, cacheEntries } = await import("../../src/core/cache/tool-cache/index.js");
-const { callTool, dependenciesOf } = await import("../../src/tools/router/index.js");
-const { loadAllSkills } = await import("../../src/core/skills/index.js");
+import { cacheClear, cacheEntries, callTool, loadAllSkills, result, skillDigest, stateDir } from "./_invalidation.fixture.mjs";
 
 await loadAllSkills(true);
-
-const result = (text) => ({ content: [{ type: "text", text }] });
-const REAL_SKILL = "rule-frontend-react";
-
-// ── The digest itself ──
-
-test("a skill has a stable content digest", () => {
-  const digest = skillDigest(REAL_SKILL);
-
-  assert.match(digest, /^[0-9a-f]{16,64}$/, "a hex digest");
-  assert.equal(digest, skillDigest(REAL_SKILL), "stable across calls");
-  assert.notEqual(digest, skillDigest("rule-styleguide-css"), "two skills differ");
-});
-
-test("an unknown skill has no digest", () => {
-  assert.equal(skillDigest("rule-does-not-exist"), undefined);
-});
-
-// ── Invalidation is per dependency ──
-
-test("an entry survives when its dependencies are unchanged", () => {
-  cacheClear();
-  const args = { prompt: "react button component" };
-  cacheStore("pix_tool", args, result("kept"), { [REAL_SKILL]: skillDigest(REAL_SKILL) });
-
-  assert.equal(cacheLookup("pix_tool", args)?.result.content[0].text, "kept");
-});
-
-test("an entry is dropped when a dependency's digest no longer matches", () => {
-  cacheClear();
-  const args = { prompt: "react button component" };
-  cacheStore("pix_tool", args, result("stale"), { [REAL_SKILL]: "0000000000000000" });
-
-  assert.equal(cacheLookup("pix_tool", args), undefined, "a changed skill invalidates its dependents");
-});
-
-test("a dependency that no longer exists invalidates the entry", () => {
-  cacheClear();
-  const args = { prompt: "deleted skill" };
-  cacheStore("pix_tool", args, result("orphan"), { "rule-deleted-skill": "abcabcabcabcabca" });
-
-  assert.equal(cacheLookup("pix_tool", args), undefined, "unverifiable is not the same as valid");
-});
-
-test("one skill changing leaves the entries that do not depend on it alone", () => {
-  cacheClear();
-  const react = { prompt: "react button component" };
-  const css = { prompt: "css selector strategy" };
-  cacheStore("pix_tool", react, result("react"), { [REAL_SKILL]: "0000000000000000" });
-  cacheStore("pix_tool", css, result("css"), { "rule-styleguide-css": skillDigest("rule-styleguide-css") });
-
-  assert.equal(cacheLookup("pix_tool", react), undefined, "the dependent is dropped");
-  assert.equal(cacheLookup("pix_tool", css)?.result.content[0].text, "css", "the independent survives");
-});
-
-test("an entry with no dependencies survives every skill edit", () => {
-  cacheClear();
-  const args = { component: "button", framework: "react" };
-  cacheStore("rule_tool_component", args, result("template"), {});
-
-  assert.equal(cacheLookup("rule_tool_component", args)?.result.content[0].text, "template");
-});
-
-test("a dropped entry is actually removed, not merely hidden", () => {
-  cacheClear();
-  const args = { prompt: "react button component" };
-  cacheStore("pix_tool", args, result("stale"), { [REAL_SKILL]: "0000000000000000" });
-  assert.equal(cacheLookup("pix_tool", args), undefined);
-
-  assert.equal(cacheEntries().length, 0, "the stale entry is evicted on the miss that found it");
-});
-
-// ── What each tool depends on ──
-
-test("the router depends on the route it chose and its alternatives", async () => {
-  const routed = await callTool("pix_tool", { prompt: "I need a React button component" });
-  const deps = dependenciesOf("pix_tool", { prompt: "I need a React button component" }, routed);
-
-  assert.ok(Object.keys(deps).length > 0, "a route produces dependencies");
-  assert.ok(REAL_SKILL in deps, `expected ${REAL_SKILL} in ${Object.keys(deps).join(", ")}`);
-  for (const [name, digest] of Object.entries(deps)) {
-    assert.equal(digest, skillDigest(name), `${name} must record its current digest`);
-  }
-});
-
-test("a skill tool depends on its own skill and nothing else", () => {
-  const deps = dependenciesOf("rule_tool_styleguide_css", { mode: "full" }, result("x"));
-
-  assert.deepEqual(Object.keys(deps), ["rule-styleguide-css"]);
-});
-
-test("a check depends on the skill it checked", () => {
-  const deps = dependenciesOf("rule_tool_check", { skill: "rule-styleguide-css", code: "a{}" }, result("x"));
-
-  assert.deepEqual(Object.keys(deps), ["rule-styleguide-css"]);
-});
-
-test("a template tool depends on no skill", () => {
-  assert.deepEqual(dependenciesOf("rule_tool_component", { component: "button" }, result("x")), {});
-  assert.deepEqual(dependenciesOf("rule_tool_compress", { text: "x" }, result("x")), {});
-});
-
-test("a tool whose dependencies cannot be attributed depends on all of them", async () => {
-  const { getSkillNames } = await import("../../src/tools/router/index.js");
-  const deps = dependenciesOf("rule_tool_search", { query: "container query" }, result("x"));
-
-  assert.equal(
-    Object.keys(deps).length,
-    getSkillNames().length,
-    "a full-text search across the corpus genuinely depends on the corpus",
-  );
-});
 
 // ── End to end ──
 
@@ -173,7 +34,7 @@ test("a template call records no dependencies, so no skill edit can touch it", a
 
 test("editing one skill no longer empties the cache", async () => {
   cacheClear();
-  const { CORPUS } = await import("../fixtures/routing-corpus.mjs");
+  const { CORPUS } = await import("../../fixtures/routing-corpus.mjs");
   for (const item of CORPUS) {
     await callTool("pix_tool", { prompt: item.prompt });
   }
@@ -283,7 +144,7 @@ test("the cache key moves when the server's code changes", async () => {
   // what a tool returns was invisible: this project installs by git pull, where
   // the version rarely moves per commit. The routing suite read back cores
   // computed before the code under test existed and reported green.
-  const { cacheKey, codeSignature } = await import("../../src/core/cache/tool-cache/index.js");
+  const { cacheKey, codeSignature } = await import("../../../src/core/cache/tool-cache/index.js");
   const before = cacheKey("pix_tool", { prompt: "same question" });
   const signature = codeSignature();
 
@@ -291,12 +152,12 @@ test("the cache key moves when the server's code changes", async () => {
 
   // A source edit is what the signature has to notice.
   const { utimesSync } = await import("node:fs");
-  const source = new URL("../../src/core/text/_caveman.js", import.meta.url).pathname;
+  const source = new URL("../../../src/core/text/_caveman.js", import.meta.url).pathname;
   const later = new Date(Date.now() + 60_000);
   utimesSync(source, later, later);
 
   // The memo lives in code-signature.js, so that is the module to re-import.
-  const { codeSignature: fresh } = await import(`../../src/core/code-signature.js?edited=${Date.now()}`);
+  const { codeSignature: fresh } = await import(`../../../src/core/code-signature.js?edited=${Date.now()}`);
   assert.notEqual(fresh(), signature, "an edited source file changes the signature");
   assert.ok(before.length > 0, "and the key is built from it");
 });
@@ -307,8 +168,8 @@ test("routing off a restored index answers exactly as a freshly built one", asyn
   // 95ms of tokenizing against 18ms of reading it back, paid by every CLI
   // invocation and every hook. Worth it only if the answers are identical, so
   // that is what this asserts rather than the timing.
-  const { loadAllSkills } = await import("../../src/core/skills/index.js");
-  const { buildIndex, clearIndex, search, getIndexStats } = await import("../../src/core/bm25/index.js");
+  const { loadAllSkills } = await import("../../../src/core/skills/index.js");
+  const { buildIndex, clearIndex, search, getIndexStats } = await import("../../../src/core/bm25/index.js");
   await loadAllSkills();
 
   const PROBES = ["react button component", "postgres index slow query", "docker healthcheck", "enum or union type"];
@@ -327,7 +188,7 @@ test("routing off a restored index answers exactly as a freshly built one", asyn
 });
 
 test("a code change drops the stored index", async () => {
-  const { indexCacheKey } = await import("../../src/core/bm25/index.js");
+  const { indexCacheKey } = await import("../../../src/core/bm25/index.js");
 
   assert.equal(typeof indexCacheKey, "function", "the key is exposed so invalidation can be checked");
   assert.match(indexCacheKey(), /^[0-9a-f]{12}$/, "it is a short digest of the code and the skills");
