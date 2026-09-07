@@ -21,13 +21,11 @@ compatibility: Designed for AI coding assistants
 | [pix-ai-context-engineering](../pix-ai-context-engineering/SKILL.md) | The window as a budget, less-beats-more, delegation levels, compaction and handoff, usage limits             | A session is getting expensive, slow or worse                                                                                               |
 | [pix-ai-agent-architecture](../pix-ai-agent-architecture/SKILL.md)   | What happens at the API boundary, the harness over the model, loops against graphs, MCP, tool surface design | Building or reviewing an agent or an MCP server                                                                                             |
 | [pix-ai-prompting](../pix-ai-prompting/SKILL.md)                     | Prompt anatomy, context engineering, learning mode                                                           | Working with an agent, or teaching someone to                                                                                               |
-| [pix-ai-agents](../pix-ai-agents/SKILL.md)                           | `@pix/pix-galaxy-core`                                                                                       | Scaffolding AI Agent repositories on `@pix/pix-galaxy-core`: providers, tools, registries, testing, containerization.                       |
 | [pix-platform-agent](../pix-platform-agent/SKILL.md)                 | none (framework-agnostic)                                                                                    | Structuring an AI Agent project without prescribing a specific SDK or core library (LangChain, Vercel AI SDK, MCP clients, custom runners). |
 
 ## Quick Selection Guide
 
 ```
-Need agents on @pix/pix-galaxy-core (providers, tools, seed, Docker)?  → pix-ai-agents
 Need framework-agnostic agent project structure (any SDK)?            → pix-platform-agent
 ```
 

@@ -162,7 +162,6 @@ So the review reads the diff against the request, not only against itself:
 ## See also
 
 - [pix-process](../pix-process/SKILL.md) - Process skill index
-- [pix-process-feature-workflow](../pix-process-feature-workflow/SKILL.md) - Feature delivery flow
 - [pix-devops-testing](../pix-devops-testing/SKILL.md) - Tests and coverage gates
 - [pix-backend-security](../pix-backend-security/SKILL.md) - Security review concerns
 - [pix-process-adr](../pix-process-adr/SKILL.md) - Record durable architecture decisions

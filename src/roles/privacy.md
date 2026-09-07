@@ -12,8 +12,7 @@ skills:
   - "telemetry ethics"
 evidenceSkills:
   - "pix-backend-security"
-  - "pix-process-documentation"
-  - "pix-devops-observability"
+    - "pix-devops-observability"
 aliases:
   - "privacy engineer"
   - "compliance engineer"

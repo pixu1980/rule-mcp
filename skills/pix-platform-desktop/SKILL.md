@@ -806,4 +806,3 @@ piece that matches the task instead of re-deriving it:
 - [pix-platform-web](../pix-platform-web/SKILL.md) - The renderer is a web app; its rules still apply
 - [pix-frontend-workers](../pix-frontend-workers/SKILL.md) - Off-main-thread work in the renderer
 - [pix-backend-workers](../pix-backend-workers/SKILL.md) - The main process is Node: same event loop, same worker_threads
-- [pix-devops-version](../pix-devops-version/SKILL.md) - Version bumping that drives the release tag

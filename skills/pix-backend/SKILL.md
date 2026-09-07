@@ -38,7 +38,6 @@ This is the umbrella skill for backend development. It does not contain detailed
 
 | Skill                                                        | Focus                                                             |
 | ------------------------------------------------------------ | ----------------------------------------------------------------- |
-| [pix-backend-api-design](../pix-backend-api-design/SKILL.md) | REST API design, OpenAPI, client patterns                         |
 | [pix-backend-graphql](../pix-backend-graphql/SKILL.md)       | GraphQL schema, resolver, performance, and abuse controls         |
 | [pix-backend-security](../pix-backend-security/SKILL.md)     | Security hardening, auth, validation                              |
 | [pix-backend-workers](../pix-backend-workers/SKILL.md)       | Event loop, libuv thread pool, `worker_threads`, piscina, cluster |

@@ -150,4 +150,3 @@ routes → handlers → services → repositories
 
 - [pix](../pix/SKILL.md) - Central skill index and dispatcher
 - [pix-backend](../pix-backend/SKILL.md) - Backend skill index
-- [pix-backend-api-design](../pix-backend-api-design/SKILL.md) - API design

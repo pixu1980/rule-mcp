@@ -271,7 +271,7 @@ tests/
 - Docker: `pix-devops-docker`
 - Accessibility: `pix-styleguide`
 - i18n: `pix-frontend-react`
-- Documentation: `pix-process-documentation`
+- Documentation: `pix-styleguide-markdown`
 
 ## See also
 

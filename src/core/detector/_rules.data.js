@@ -37,7 +37,7 @@ export const BUILD_TOOL_RULES = [
  * registerSkillTool(): strip `pix-`, replace `-` with `_`, prefix `pix_`.
  */
 export const FRAMEWORK_SKILL_MAP = {
-  agents: "pix-ai-agents",
+  agents: "pix-ai",
   angular: "pix-frontend-angular",
   astro: "pix-frontend-meta-astro",
   electron: "pix-platform-desktop",

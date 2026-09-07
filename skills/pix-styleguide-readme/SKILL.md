@@ -134,6 +134,5 @@ the author remembering something they did not write down.
 - [pix](../pix/SKILL.md) - Central skill index and dispatcher
 - [pix-styleguide](../pix-styleguide/SKILL.md) - Styleguide skill index
 - [pix-styleguide-markdown](../pix-styleguide-markdown/SKILL.md) - Markdown conventions this README must follow
-- [pix-process-documentation](../pix-process-documentation/SKILL.md) - Documentation process beyond the README
 - [pix-process-npm-release](../pix-process-npm-release/SKILL.md) - Publishing the package the README advertises
 - [How to make your open source popular](https://evilmartians.com/chronicles/how-to-make-your-open-source-popular) - The Evil Martians article this structure comes from

@@ -254,8 +254,6 @@ Use the package or module name: `backend`, `frontend`, `agent`, `docker`, `ci`, 
 ## See also
 
 - [pix-toolchain-husky](../pix-toolchain-husky/SKILL.md) - Git hooks, commitlint, lint-staged setup
-- [pix-devops-version](../pix-devops-version/SKILL.md) - Automatic version bumps driven by commit types
-- [pix-process-feature-workflow](../pix-process-feature-workflow/SKILL.md) - Commit rules inside the feature delivery workflow
 - [pix](../pix/SKILL.md) - Central skill index and dispatcher
 
 ---

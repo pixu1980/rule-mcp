@@ -106,6 +106,5 @@ Teardown runs through the GitLab environment lifecycle:
 ## See also
 
 - [pix-devops](../pix-devops/SKILL.md) - DevOps skills index
-- [pix-devops-gitlab-ci](../pix-devops-gitlab-ci/SKILL.md) - Base GitLab CI pipeline this merges into
 - [pix-devops-docker](../pix-devops-docker/SKILL.md) - The Dockerfile the preview image is built from
 - [pix](../pix/SKILL.md) - Central skill index and dispatcher

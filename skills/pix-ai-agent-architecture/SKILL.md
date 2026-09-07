@@ -20,8 +20,8 @@ frameworks: [all]
 
 ## Purpose
 
-[pix-ai-agents](../pix-ai-agents/SKILL.md) is how to scaffold an agent
-repository here. This is the architecture underneath: what the loop is, what the
+[pix-platform-agent](../pix-platform-agent/SKILL.md) is how a scaffold is
+structured. This is the architecture underneath: This is the architecture underneath: what the loop is, what the
 protocol carries, and which decisions determine whether an agent is any good.
 
 One fact sits under all of it, and misunderstanding it produces most bad agent
@@ -200,7 +200,7 @@ not features:
 
 ## See also
 
-- [pix-ai-agents](../pix-ai-agents/SKILL.md) - scaffolding an agent repository here
+- [pix-platform-agent](../pix-platform-agent/SKILL.md) - scaffold structure for an agent repository
 - [pix-ai-context-engineering](../pix-ai-context-engineering/SKILL.md) - the window the loop fills
 - [pix-ai-evals](../pix-ai-evals/SKILL.md) - deciding whether a harness change helped
 - [pix-process-ai-sdlc](../pix-process-ai-sdlc/SKILL.md) - where an agent sits in the delivery process

@@ -242,6 +242,6 @@ nothing is reproduced from anyone else's material.
 ## See also
 
 - [pix-process-ai-sdlc](../pix-process-ai-sdlc/SKILL.md) - where evals sit in the lifecycle
-- [pix-ai-agents](../pix-ai-agents/SKILL.md) - building the agent these evals measure
+- [pix-ai-agent-architecture](../pix-ai-agent-architecture/SKILL.md) - building the agent these evals measure
 - [pix-devops-testing](../pix-devops-testing/SKILL.md) - the deterministic tests underneath
 - [pix-ai-prompting](../pix-ai-prompting/SKILL.md) - writing the prompts being evaluated

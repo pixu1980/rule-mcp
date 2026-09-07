@@ -14,8 +14,7 @@ skills:
   - "artifact signing and integrity"
 evidenceSkills:
   - "pix-devops-docker"
-  - "pix-devops-gitlab-ci"
-  - "pix-devops-observability"
+    - "pix-devops-observability"
   - "pix-process-npm-release"
   - "pix-process-changelog"
   - "pix-platform-desktop"

@@ -78,6 +78,5 @@ When `pix_tool_check` reports `en-english-only-prose` or
 ## See also
 
 - [pix-styleguide-markdown](../pix-styleguide-markdown/SKILL.md) - Markdown style and tone
-- [pix-process-documentation](../pix-process-documentation/SKILL.md) - doc-driven workflow
 - [pix-styleguide-i18n](../pix-styleguide-i18n/SKILL.md) - where translated strings belong
 - [pix](../pix/SKILL.md) - Central skill index

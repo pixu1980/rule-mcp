@@ -9,13 +9,13 @@
 export const PROMPT_DEFS = [
   {
     name: "pix-area-ai",
-    description: "AI agent work: pix-ai-agents patterns for agent integrations",
+    description: "AI agent work: pix-ai and agent-architecture patterns for agent integrations",
     arguments: [{ name: "request", description: "Agent integration task", required: true }],
   },
 
   {
     name: "pix-area-backend",
-    description: "Backend/API work: node, express, fastify, hono, nestjs, graphql, api design, security",
+    description: "Backend/API work: node, express, fastify, hono, nestjs, graphql, security",
     arguments: [
       {
         name: "request",
@@ -37,8 +37,8 @@ export const PROMPT_DEFS = [
   },
   {
     name: "pix-area-devops",
-    description: "DevOps work: docker, gitlab-ci, observability, testing, versioning",
-    arguments: [{ name: "request", description: "CI/CD, container, observability, or versioning task", required: true }],
+    description: "DevOps work: docker, observability, testing",
+    arguments: [{ name: "request", description: "Container, observability, or testing task", required: true }],
   },
   {
     name: "pix-area-frontend",
@@ -71,7 +71,7 @@ export const PROMPT_DEFS = [
   },
   {
     name: "pix-area-platform",
-    description: "Platform work: web, desktop, expo, agent, library",
+    description: "Platform work: web, desktop, agent, library",
     arguments: [
       {
         name: "request",

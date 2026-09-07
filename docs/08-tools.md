@@ -2,7 +2,7 @@
 
 Run `pnpm census` after changing a tool, skill, prompt, command, persona or env var.
 
-# Tools (112)
+# Tools (105)
 
 **LLM-free: every tool below is deterministic and never calls an LLM** - the
 server is model-agnostic; an LLM is the caller, never the implementation.
@@ -28,21 +28,19 @@ server is model-agnostic; an LLM is the caller, never the implementation.
 | `pix-tool-fix`         | Lint/auto-fix of the project file tree (barrel files, naming, ...)                       | ✅       |
 | `pix-tool-component`   | Component/test templates following the pix principles                                    | ✅       |
 
-## Per-skill tools (96) - all LLM-free
+## Per-skill tools (89) - all LLM-free
 
-### pix-ai (6)
+### pix-ai (5)
 
 - `pix_tool_ai`
 - `pix_tool_ai_agent_architecture`
-- `pix_tool_ai_agents`
 - `pix_tool_ai_context_engineering`
 - `pix_tool_ai_evals`
 - `pix_tool_ai_prompting`
 
-### pix-backend (10)
+### pix-backend (9)
 
 - `pix_tool_backend`
-- `pix_tool_backend_api_design`
 - `pix_tool_backend_express`
 - `pix_tool_backend_fastify`
 - `pix_tool_backend_graphql`
@@ -67,15 +65,13 @@ server is model-agnostic; an LLM is the caller, never the implementation.
 - `pix_tool_data_sql`
 - `pix_tool_data_sqlite`
 
-### pix-devops (7)
+### pix-devops (5)
 
 - `pix_tool_devops`
 - `pix_tool_devops_deploy_preview`
 - `pix_tool_devops_docker`
-- `pix_tool_devops_gitlab_ci`
 - `pix_tool_devops_observability`
 - `pix_tool_devops_testing`
-- `pix_tool_devops_version`
 
 ### pix-frontend (14)
 
@@ -94,17 +90,16 @@ server is model-agnostic; an LLM is the caller, never the implementation.
 - `pix_tool_frontend_vue`
 - `pix_tool_frontend_workers`
 
-### pix-platform (7)
+### pix-platform (6)
 
 - `pix_tool_platform`
 - `pix_tool_platform_agent`
 - `pix_tool_platform_auth`
 - `pix_tool_platform_desktop`
-- `pix_tool_platform_expo`
 - `pix_tool_platform_library`
 - `pix_tool_platform_web`
 
-### pix-process (13)
+### pix-process (11)
 
 - `pix_tool_process`
 - `pix_tool_process_adr`
@@ -112,8 +107,6 @@ server is model-agnostic; an LLM is the caller, never the implementation.
 - `pix_tool_process_bmad`
 - `pix_tool_process_changelog`
 - `pix_tool_process_code_review`
-- `pix_tool_process_documentation`
-- `pix_tool_process_feature_workflow`
 - `pix_tool_process_handoff`
 - `pix_tool_process_handon`
 - `pix_tool_process_npm_release`

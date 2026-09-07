@@ -11,8 +11,7 @@ skills:
   - "error contracts and idempotency"
   - "rate limiting and pagination"
 evidenceSkills:
-  - "pix-backend-api-design"
-  - "pix-backend-graphql"
+    - "pix-backend-graphql"
   - "pix-styleguide-validation"
 aliases:
   - "api-design"

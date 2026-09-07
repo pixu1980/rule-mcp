@@ -107,7 +107,6 @@ not contain business logic or directly expose ORM entities.
 ## See also
 
 - [pix-backend](../pix-backend/SKILL.md) - Backend skill index
-- [pix-backend-api-design](../pix-backend-api-design/SKILL.md) - REST and OpenAPI contracts
 - [pix-backend-security](../pix-backend-security/SKILL.md) - Input, auth, secret, and transport hardening
 - [pix-devops-observability](../pix-devops-observability/SKILL.md) - Production telemetry and alerting
 - [pix-devops-testing](../pix-devops-testing/SKILL.md) - Test strategy and coverage gates

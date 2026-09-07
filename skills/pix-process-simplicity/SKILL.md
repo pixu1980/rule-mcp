@@ -268,5 +268,4 @@ sitting stays honest; a file that cannot be read whole hides its coupling.
 
 - [pix-process-adr](../pix-process-adr/SKILL.md) - record the decision instead of building for it
 - [pix-process-code-review](../pix-process-code-review/SKILL.md) - reviewing someone else's scope creep
-- [pix-process-feature-workflow](../pix-process-feature-workflow/SKILL.md) - the end-to-end feature lifecycle
 - [pix-styleguide-patterns](../pix-styleguide-patterns/SKILL.md) - when a pattern is actually warranted

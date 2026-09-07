@@ -12,8 +12,7 @@ skills:
   - "commit-driven doc maintenance"
   - "plain-language editing"
 evidenceSkills:
-  - "pix-process-documentation"
-  - "pix-styleguide-markdown"
+    - "pix-styleguide-markdown"
   - "pix-styleguide-readme"
   - "pix-process-adr"
   - "pix-styleguide-javascript"

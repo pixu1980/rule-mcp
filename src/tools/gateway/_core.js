@@ -40,8 +40,6 @@ const DOMAIN_OVERRIDE = {
   sqlite: "pix-data-sqlite",
   duckdb: "pix-data-duckdb",
   sql: "pix-data-sql",
-  docker: "pix-devops-docker",
-  "gitlab-ci": "pix-devops-gitlab-ci",
 };
 
 /**

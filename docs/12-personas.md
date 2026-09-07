@@ -59,7 +59,7 @@ or remove a persona and its `/pix-{plan,audit,review}-<role>` commands
 ### Backend and API Design Engineer (`backend`)
 
 - **Lenses**: `an endpoint that answers a question the client never asked`; `a breaking change shipped without a version or a deprecation`; `errors that force the client to parse prose`; `idempotency promised and not delivered`; `N+1 or unbounded pages behind a polite-looking list endpoint`
-- **Evidence skills**: `pix-backend-api-design`, `pix-backend-graphql`, `pix-styleguide-validation`
+- **Evidence skills**: `pix-backend-graphql`, `pix-styleguide-validation`
 - **Aliases**: `api-design`, `api design engineer`, `backend engineer`, `ingegnere backend`
 
 ### Data Engineer (`data`)
@@ -77,7 +77,7 @@ or remove a persona and its `/pix-{plan,audit,review}-<role>` commands
 ### DevOps, Release and Distribution Engineer (`devops`)
 
 - **Lenses**: `what breaks in production and how it is noticed`; `the pipeline as a gate, not a suggestion, release gates included`; `privileges and blast radius, in the container and in the installed artifact`; `rollback that has been rehearsed`; `an alert nobody acts on, and a failure nobody alerts for`; `a release that skipped the changelog, the tag, or SemVer`; `publish steps that only work on one machine`; `what a consumer has to do to upgrade, and whether anyone wrote it`; `an artifact that runs on one platform and breaks on another`; `signed builds vs unsigned distribution, and which one users get`; `a self-update path that skips integrity verification`; `an image or bundle that ships more than it runs`
-- **Evidence skills**: `pix-devops-docker`, `pix-devops-gitlab-ci`, `pix-devops-observability`, `pix-process-npm-release`, `pix-process-changelog`, `pix-platform-desktop`
+- **Evidence skills**: `pix-devops-docker`, `pix-devops-observability`, `pix-process-npm-release`, `pix-process-changelog`, `pix-platform-desktop`
 - **Aliases**: `devops-sre`, `release-engineering`, `platform-packaging`, `sre`, `release engineer`
 
 ### Developer Experience and Toolchain Engineer (`devx`)
@@ -89,7 +89,7 @@ or remove a persona and its `/pix-{plan,audit,review}-<role>` commands
 ### Senior Documentation Engineer (`docs`)
 
 - **Lenses**: `what the project says about itself, against what it does`; `one owner per decision, and an ADR that records it`; `ADRs that a later decision reversed and nobody marked`; `comments that narrate history instead of stating a constraint`; `JSDoc that lies about its parameters`; `documentation that repeats itself instead of pointing`; `counts and lists in the docs, against what the code generates`
-- **Evidence skills**: `pix-process-documentation`, `pix-styleguide-markdown`, `pix-styleguide-readme`, `pix-process-adr`, `pix-styleguide-javascript`
+- **Evidence skills**: `pix-styleguide-markdown`, `pix-styleguide-readme`, `pix-process-adr`, `pix-styleguide-javascript`
 - **Aliases**: `docs-engineer`, `documentation engineer`, `technical writer`, `redattore tecnico`
 
 ### Frontend Platform Engineer (`frontend`)
@@ -113,7 +113,7 @@ or remove a persona and its `/pix-{plan,audit,review}-<role>` commands
 ### Privacy and Compliance Engineer (`privacy`)
 
 - **Lenses**: `what is recorded, where it lands, and for how long`; `the kill switch for every channel, and whether it works`; `erasure that actually removes the data`; `what leaves the machine, and what a shared artifact carries`; `personal data hiding in prompts and paths`; `how this system classifies under the EU AI Act, and what it owes the user`
-- **Evidence skills**: `pix-backend-security`, `pix-process-documentation`, `pix-devops-observability`
+- **Evidence skills**: `pix-backend-security`, `pix-devops-observability`
 - **Aliases**: `privacy engineer`, `compliance engineer`, `esperto di privacy`, `esperto di compliance`
 
 ### QA and Test Engineer (`qa`)

@@ -209,7 +209,5 @@ recorded so a hit rate is explainable rather than merely reported.
 ## See also
 
 - [pix-devops](../pix-devops/SKILL.md) - DevOps skill index
-- [pix-devops-gitlab-ci](../pix-devops-gitlab-ci/SKILL.md) - CI/CD pipeline and deployment stages
 - [pix-backend-security](../pix-backend-security/SKILL.md) - Safe secrets, input, and transport handling
 - [pix-platform-web](../pix-platform-web/SKILL.md) - Web performance budgets and client error handling
-- [pix-process-feature-workflow](../pix-process-feature-workflow/SKILL.md) - Delivery validation and release workflow
