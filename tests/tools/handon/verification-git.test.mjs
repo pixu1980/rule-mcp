@@ -29,7 +29,7 @@ test("verify consults the repository for branches, ranges and commands", () => {
   const claims = verify(root, {
     branches: ["main", "feat/x", "ghost"],
     files: [],
-    ranges: [{ start: "HEAD", end: "HEAD", fixedEnd: true }],
+    range: { start: "HEAD", end: "HEAD" },
     commands: ["git status"],
     adrs: [],
     open: [],
