@@ -30,11 +30,7 @@ after(() => stopHttpServer());
 async function req(method, path = "/mcp", options = {}) {
   const headers = { Authorization: `Bearer ${TOKEN}`, ...(options.headers ?? {}) };
   const res = await fetch(`http://127.0.0.1:${port}${path}`, { method, headers, body: options.body });
-  return {
-    status: res.status,
-    body: await res.text(),
-    headers: Object.fromEntries(res.headers.entries()),
-  };
+  return { status: res.status, body: await res.text(), headers: Object.fromEntries(res.headers.entries()) };
 }
 
 const initBody = JSON.stringify({
