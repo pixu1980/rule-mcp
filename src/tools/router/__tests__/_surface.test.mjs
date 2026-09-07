@@ -13,7 +13,9 @@ test("annotations mark reads idempotent and non-idempotent, nothing for mutators
   registerTool({ name: "rule_tool_stats", description: "r", handler: async () => ({}) });
   registerTool({ name: "rule_tool_compress", description: "r", handler: async () => ({}) });
 
-  const tools = declaredTools();
+  const tools = listTools();
+  const raw = declaredTools();
+  assert.equal(raw.length, 3, "all three are declared");
   const apply = tools.find((t) => t.name === "rule_tool_apply");
   assert.equal(apply.annotations, undefined, "a mutator carries no annotation");
 
