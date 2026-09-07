@@ -1,20 +1,5 @@
 /** TypeScript and manifest-policy helpers consulted by the quality checks. */
-
-const TS_EXTENSION = /\.(?:ts|tsx|mts|cts)$/;
-
-/** Syntax that only compiles as TypeScript, for calls that pass no file name. */
-const TS_SYNTAX = /^\s*(?:export\s+)?(?:interface|type)\s+\w+\s*[=<{]|:\s*(?:string|number|boolean|unknown|any)\b/m;
-
-/** @param {string} code @param {object} context @returns {boolean} */
-function isTypeScript(code, context) {
-  const fileName = context?.fileName ?? "";
-
-  if (fileName) {
-    return TS_EXTENSION.test(fileName);
-  }
-
-  return TS_SYNTAX.test(code);
-}
+export { TS_EXTENSION, TS_SYNTAX, isTypeScriptFile as isTypeScript } from "../../../shared/index.js";
 
 /** Strip strings, template literals and comments so prose never trips a rule. */
 function stripLiterals(code) {
@@ -80,4 +65,4 @@ function isPinned(spec) {
 // rules, flex-first layout and comment hygiene. Mirrors the upstream SHARED
 // composition: these run everywhere.
 
-export { TS_EXTENSION, TS_SYNTAX, isTypeScript, stripLiterals, MANIFEST_FILE, INSTALLED_GROUPS, NOT_A_RANGE, EXACT_VERSION, manifestOf, isPinned };
+export { stripLiterals, MANIFEST_FILE, INSTALLED_GROUPS, NOT_A_RANGE, EXACT_VERSION, manifestOf, isPinned };

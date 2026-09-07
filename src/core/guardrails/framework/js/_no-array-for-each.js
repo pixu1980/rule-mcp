@@ -1,4 +1,5 @@
 /** Guardrail `js-no-array-for-each`: for...of over Array.forEach() */
+import { countedVerdict } from "../../../../shared/index.js";
 export const jsNoArrayForEach = {
   id: "js-no-array-for-each",
   label: "for...of over Array.forEach()",
@@ -10,11 +11,6 @@ export const jsNoArrayForEach = {
       return { pass: true, note: "No .forEach() calls found" };
     }
 
-    return {
-      pass: false,
-      failCount: violations.length,
-      detail: violations.slice(0, 5),
-      suggestion: "Rewrite .forEach() as a for...of loop: for (const item of items) { ... }.",
-    };
+    return countedVerdict(violations, { suggestion: "Rewrite .forEach() as a for...of loop: for (const item of items) { ... }." });
   },
 };

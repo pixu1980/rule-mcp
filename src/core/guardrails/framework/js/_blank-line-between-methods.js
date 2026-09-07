@@ -1,4 +1,5 @@
 /** Guardrail `js-blank-line-between-methods`: Blank line between class methods */
+import { countedVerdict } from "../../../../shared/index.js";
 export const jsBlankLineBetweenMethods = {
   id: "js-blank-line-between-methods",
   label: "Blank line between class methods",
@@ -20,12 +21,7 @@ export const jsBlankLineBetweenMethods = {
     }
 
     if (issues.length > 0) {
-      return {
-        pass: false,
-        failCount: issues.length,
-        detail: issues.slice(0, 5),
-        suggestion: "Add a blank line between class methods.",
-      };
+      return countedVerdict(issues, { suggestion: "Add a blank line between class methods." });
     }
 
     return { pass: true };

@@ -1,7 +1,7 @@
 /** Shared command runtime helpers: entry point, console printers, JSON parse, safe exec. */
 import { resolve, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
-import { execSync } from "node:child_process";
+export { tryExec } from "../../shared/index.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -22,12 +22,3 @@ export const parseJson = (raw) => {
     return {};
   }
 };
-
-/** Safely run a shell command, ignoring errors. */
-export function tryExec(command, options = {}) {
-  try {
-    return execSync(command, { encoding: "utf8", timeout: 10_000, stdio: "pipe", ...options });
-  } catch {
-    return "";
-  }
-}

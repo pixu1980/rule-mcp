@@ -1,6 +1,6 @@
 /** Cache switches and locations: enable flags, the persistent file, the namespace fingerprint. */
 import { join } from "node:path";
-import { codeSignature } from "../../code-signature.js";
+import { codeSignature } from "../../index.js";
 import { pkg as package_, getRuntimePaths } from "../../../cli/paths/index.js";
 
 /** @returns {boolean} */

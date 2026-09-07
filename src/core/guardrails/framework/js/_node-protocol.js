@@ -1,4 +1,5 @@
 /** Guardrail `js-node-protocol`: node: protocol for Node builtins */
+import { countedVerdict } from "../../../../shared/index.js";
 export const jsNodeProtocol = {
   id: "js-node-protocol",
   label: "node: protocol for Node builtins",
@@ -52,11 +53,6 @@ export const jsNodeProtocol = {
       return { pass: true, note: "No bare node builtin imports found" };
     }
 
-    return {
-      pass: false,
-      failCount: violations.length,
-      detail: violations.slice(0, 5),
-      suggestion: "Use the node: prefix: import fs from 'node:fs'; import { join } from 'node:path'.",
-    };
+    return countedVerdict(violations, { suggestion: "Use the node: prefix: import fs from 'node:fs'; import { join } from 'node:path'." });
   },
 };

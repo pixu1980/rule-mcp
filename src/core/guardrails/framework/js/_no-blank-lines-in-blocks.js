@@ -1,4 +1,5 @@
 /** Guardrail `js-no-blank-lines-in-blocks`: No blank line immediately after { or before } */
+import { countedVerdict } from "../../../../shared/index.js";
 export const jsNoBlankLinesInBlocks = {
   id: "js-no-blank-lines-in-blocks",
   label: "No blank line immediately after { or before }",
@@ -18,12 +19,7 @@ export const jsNoBlankLinesInBlocks = {
     }
 
     if (issues.length > 0) {
-      return {
-        pass: false,
-        failCount: issues.length,
-        detail: issues.slice(0, 5),
-        suggestion: "Remove blank lines at block start/end.",
-      };
+      return countedVerdict(issues, { suggestion: "Remove blank lines at block start/end." });
     }
 
     return { pass: true };

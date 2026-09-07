@@ -1,6 +1,6 @@
 /** @module cli/roles/render - the list and detail views */
 
-import { color } from "../tui.js";
+import { color } from "../index.js";
 import { print } from "./_store.js";
 
 /** The merged catalog as a table a human can scan. */

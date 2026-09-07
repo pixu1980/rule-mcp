@@ -87,7 +87,7 @@ if (process.argv.includes("--json")) {
 }
 
 if (process.argv.includes("--check")) {
-  const { TOOL_SURFACE_BUDGET_TOKENS } = await import("../../../src/core/tool-budget.js");
+  const { TOOL_SURFACE_BUDGET_TOKENS } = await import("../../../src/core/index.js");
   if (report.totalTokens > TOOL_SURFACE_BUDGET_TOKENS) {
     console.error(`\nOver budget: ~${report.totalTokens} > ${TOOL_SURFACE_BUDGET_TOKENS} tokens.`);
     console.error("Every token here is paid on every model turn. Trim the surface or raise the budget deliberately.");

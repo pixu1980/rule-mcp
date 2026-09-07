@@ -1,4 +1,5 @@
 /** @module core/guardrails/file-tree/component-file-prefix */
+import { passResult } from "../../../shared/index.js";
 
 export const componentFilePrefix = {
   id: "component-file-prefix",
@@ -24,24 +25,12 @@ export const componentFilePrefix = {
     const isValid = /^_[A-Z][a-zA-Z0-9]*\.\w+$/.test(fileName);
 
     if (isValid) {
-      return {
-        pass: true,
-        failCount: 0,
-        detail: [],
-        suggestion: "",
-        note: "File name follows _PascalCase.ext convention",
-      };
+      return passResult("File name follows _PascalCase.ext convention");
     }
 
     // _store.js, _data.js, _config.js - data helpers are snake_case, not components
     if (/^_[a-z][a-z_-]*\.js$/.test(fileName)) {
-      return {
-        pass: true,
-        failCount: 0,
-        detail: [],
-        suggestion: "",
-        note: "Helper file (_snake_case), not a component",
-      };
+      return passResult("Helper file (_snake_case), not a component");
     }
 
     const correctName = fileName.startsWith("_") ? fileName : `_${fileName}`;

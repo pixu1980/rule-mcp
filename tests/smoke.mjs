@@ -53,7 +53,7 @@ const sourceFiles = [
   "cli/install/index.js",
   "cli/commands/index.js",
   "cli/doctor/index.js",
-  "cli/uninstall.js",
+  "cli/index.js",
 ];
 for (const f of sourceFiles) {
   const p = join(root, "src", f);

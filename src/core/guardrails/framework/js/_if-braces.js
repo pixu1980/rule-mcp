@@ -1,4 +1,5 @@
 /** Guardrail `js-if-braces`: if/else always use braces */
+import { countedVerdict } from "../../../../shared/index.js";
 export const jsIfBraces = {
   id: "js-if-braces",
   label: "if/else always use braces",
@@ -26,12 +27,7 @@ export const jsIfBraces = {
       offenders.push(line);
     }
     if (offenders.length > 0) {
-      return {
-        pass: false,
-        failCount: offenders.length,
-        detail: offenders.slice(0, 5),
-        suggestion: "Add braces: if (condition) { ... }",
-      };
+      return countedVerdict(offenders, { suggestion: "Add braces: if (condition) { ... }" });
     }
 
     return { pass: true };

@@ -1,4 +1,5 @@
 /** Guardrail `js-blank-line-before-return`: Blank line before return statements */
+import { countedVerdict } from "../../../../shared/index.js";
 export const jsBlankLineBeforeReturn = {
   id: "js-blank-line-before-return",
   label: "Blank line before return statements",
@@ -24,12 +25,7 @@ export const jsBlankLineBeforeReturn = {
     }
 
     if (issues.length > 0) {
-      return {
-        pass: false,
-        failCount: issues.length,
-        detail: issues.slice(0, 5),
-        suggestion: "Add a blank line before each return statement.",
-      };
+      return countedVerdict(issues, { suggestion: "Add a blank line before each return statement." });
     }
 
     return { pass: true };

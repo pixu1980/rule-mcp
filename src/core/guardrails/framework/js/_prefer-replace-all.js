@@ -1,4 +1,5 @@
 /** Guardrail `js-prefer-replace-all`: replaceAll over replace with /g regex */
+import { countedVerdict } from "../../../../shared/index.js";
 export const jsPreferReplaceAll = {
   id: "js-prefer-replace-all",
   label: "replaceAll over replace with /g regex",
@@ -10,11 +11,6 @@ export const jsPreferReplaceAll = {
       return { pass: true, note: "No global-regex replace found" };
     }
 
-    return {
-      pass: false,
-      failCount: violations.length,
-      detail: violations.slice(0, 5),
-      suggestion: "Use String.prototype.replaceAll with a string pattern: str.replaceAll('-', ' ').",
-    };
+    return countedVerdict(violations, { suggestion: "Use String.prototype.replaceAll with a string pattern: str.replaceAll('-', ' ')." });
   },
 };

@@ -2,7 +2,7 @@
 
 import { mkdirSync, writeFileSync } from "node:fs";
 import { dirname } from "node:path";
-import { postProcessFiles } from "../../core/post-process.js";
+import { postProcessFiles } from "../../core/index.js";
 import { validateApply } from "../gateway/index.js";
 import { renderApplyResult } from "./_render.js";
 import { resolveProjectRoot } from "./_roots.js";

@@ -4,7 +4,7 @@ import { createHash } from "node:crypto";
 import { readdirSync, statSync } from "node:fs";
 import { join } from "node:path";
 import { getRuntimePaths, getSkillsDirs as getSkillsDirectories } from "../../cli/paths/index.js";
-import { codeSignature } from "../code-signature.js";
+import { codeSignature } from "../index.js";
 
 export function indexCacheKey() {
   return createHash("sha256").update(`${codeSignature()}:${skillsSignature()}`).digest("hex").slice(0, 12);

@@ -1,4 +1,5 @@
 /** Guardrail `js-blank-lines-blocks`: Multi-line blocks have blank lines above/below */
+import { countedVerdict } from "../../../../shared/index.js";
 export const jsBlankLinesBlocks = {
   id: "js-blank-lines-blocks",
   label: "Multi-line blocks have blank lines above/below",
@@ -47,12 +48,7 @@ export const jsBlankLinesBlocks = {
     }
 
     if (issues.length > 0) {
-      return {
-        pass: false,
-        failCount: issues.length,
-        detail: issues.slice(0, 5),
-        suggestion: "Add blank lines around multi-line blocks (see styleguide).",
-      };
+      return countedVerdict(issues, { suggestion: "Add blank lines around multi-line blocks (see styleguide)." });
     }
 
     return { pass: true };

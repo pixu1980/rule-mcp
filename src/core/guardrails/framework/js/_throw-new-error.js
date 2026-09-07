@@ -1,4 +1,5 @@
 /** Guardrail `js-throw-new-error`: throw requires new for error constructors */
+import { countedVerdict } from "../../../../shared/index.js";
 export const jsThrowNewError = {
   id: "js-throw-new-error",
   label: "throw requires new for error constructors",
@@ -10,11 +11,6 @@ export const jsThrowNewError = {
       return { pass: true, note: "No bare error constructor throws found" };
     }
 
-    return {
-      pass: false,
-      failCount: violations.length,
-      detail: violations.slice(0, 5),
-      suggestion: "Use new when throwing errors: throw new Error('message').",
-    };
+    return countedVerdict(violations, { suggestion: "Use new when throwing errors: throw new Error('message')." });
   },
 };

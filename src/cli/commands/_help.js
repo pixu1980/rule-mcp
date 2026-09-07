@@ -1,6 +1,6 @@
 /** Help and serve: the usage text command and the STDIO/HTTP/SSE server entry. */
 
-import { HELP_TEXT } from "../help-text.js";
+import { HELP_TEXT } from "../index.js";
 import { entrypoint, print } from "./_shared.js";
 import { loadAllSkills } from "../../core/skills/index.js";
 import { mcpServerConfig } from "../install/index.js";
@@ -51,7 +51,7 @@ async function serveCommand(opts = {}) {
     // it: the wait ends when the cleanups the transport registered have run, so
     // sessions, sockets and buffered metrics are closed before the exit rather
     // than dropped by it.
-    const { installSignalHandlers, registerCleanup, whenShutdown } = await import("../../core/session/_lifecycle.js");
+    const { installSignalHandlers, registerCleanup, whenShutdown } = await import("../../core/session/lifecycle/index.js");
     const { startIdleReclaim, stopIdleReclaim } = await import("../../core/session/_reclaim.js");
 
     registerCleanup("idle-reclaim", () => stopIdleReclaim());

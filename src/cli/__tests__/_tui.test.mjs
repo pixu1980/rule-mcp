@@ -2,7 +2,7 @@
 import { strict as assert } from "node:assert";
 import test from "node:test";
 
-import { banner, color, kv, section, shouldUseColor, table, truncate } from "../tui.js";
+import { banner, color, kv, section, shouldUseColor, table, truncate } from "../index.js";
 
 const PREV_NO_COLOR = process.env.NO_COLOR;
 const PREV_FORCE_COLOR = process.env.FORCE_COLOR;

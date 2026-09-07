@@ -10,7 +10,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 
-const { codeSignature } = await import("../../../src/core/code-signature.js");
+const { codeSignature } = await import("../../../src/core/index.js");
 
 test("the signature is the promised shape", () => {
   const signature = codeSignature();

@@ -5,7 +5,7 @@ import { cancel } from "@clack/prompts";
 import { join } from "node:path";
 import { homedir } from "node:os";
 import { getSkillsDirs as getSkillsDirectories } from "../paths/index.js";
-import { formatSkillsList } from "../tui.js";
+import { formatSkillsList } from "../index.js";
 import { copySkill, getAvailableSkills, isInstalled } from "./_catalog.js";
 import { installNativeSkills } from "./_native.js";
 import { isCancelSelection, promptSkillSelection } from "./_picker.js";

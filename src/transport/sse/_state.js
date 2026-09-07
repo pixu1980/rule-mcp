@@ -1,6 +1,6 @@
 /** @module transport/sse/state - what one running SSE daemon shares across its routes */
 
-import { SessionRegistry } from "../_session-registry.js";
+import { SessionRegistry } from "../session-registry/index.js";
 import { createAuthRateLimiter } from "../_auth-rate-limit.js";
 
 /** Maximum POST body size (1 MB). */

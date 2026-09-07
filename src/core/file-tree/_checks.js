@@ -1,4 +1,5 @@
 /** Guardrail checks the engine runs on barrels and component file names. */
+import { passResult } from "../../shared/index.js";
 import { isBarrelFile } from "./_conventions.js";
 
 /**
@@ -63,13 +64,7 @@ export function checkFileNameConvention(code, context = {}) {
   const isValid = /^_[A-Z][a-zA-Z0-9]*\.\w+$/.test(fileName);
 
   if (isValid) {
-    return {
-      pass: true,
-      failCount: 0,
-      detail: [],
-      suggestion: "",
-      note: "File name follows _PascalCase.ext convention",
-    };
+    return passResult("File name follows _PascalCase.ext convention");
   }
 
   const correctName = `_${fileName}`;

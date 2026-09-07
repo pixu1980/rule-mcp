@@ -1,6 +1,6 @@
 /** Guardrails barrel: the check engine plus every rule catalog family. */
 export * from "./engine/index.js";
-export * from "./_guarded.js";
+export * from "./guarded/index.js";
 export * from "./shared/index.js";
 export * from "./file-tree/index.js";
 export * from "./framework/index.js";

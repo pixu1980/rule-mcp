@@ -17,7 +17,7 @@ const { commandNames } = await import("../../../src/core/agents/commands/index.j
 const { resolveCommandTargets } = await import("../../../src/core/agents/command-targets/index.js");
 const { activeRoles, EMBEDDED_ROLES } = await import("../../../src/core/review/roles/index.js");
 const { OPERATIONS } = await import("../../../src/core/review/template/index.js");
-export const { buildProgram } = await import("../../../src/cli/program.js");
+export const { buildProgram } = await import("../../../src/cli/index.js");
 
 await loadAllSkills(true);
 
