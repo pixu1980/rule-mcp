@@ -18,7 +18,7 @@ const project = (deps = {}, devDeps = {}, extra = {}) => {
 };
 
 test("detectProject reads react, typescript and vite from package.json", () => {
-  const root = project({ react: "^19.0.0" }, { typescript: "^5.0.0" }, { engines: { node: ">=20" } });
+  const root = project({ react: "^19.0.0", vite: "^5.0.0" }, { typescript: "^5.0.0" }, { engines: { node: ">=20" } });
   writeFileSync(join(root, "vite.config.ts"), "");
   const detected = detectProject(root);
 
