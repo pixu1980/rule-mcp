@@ -51,7 +51,7 @@ test("evaluate counts outcomes and settles the conformance verdict", () => {
     results: [
       { criterion: "1.1.1", outcome: "passed", note: "yep" },
       { criterion: "1.3.1", outcome: "failed" },
-      { criterion: "1.4.3", outcome: "cantTell" },
+      { criterion: "1.4.2", outcome: "cantTell" },
     ],
   });
 
