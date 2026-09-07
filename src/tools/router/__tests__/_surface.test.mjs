@@ -21,7 +21,7 @@ test("annotations mark reads idempotent and non-idempotent, nothing for mutators
 
   const stats = tools.find((t) => t.name === "rule_tool_stats");
   assert.equal(stats.annotations?.readOnlyHint, true, "a non-idempotent read is read-only");
-  assert.equal(stats.annotations?.idempotentHint, false, "but not idempotent");
+  assert.equal(stats.annotations?.idempotentHint, undefined, "but no idempotent hint");
 
   const compress = tools.find((t) => t.name === "rule_tool_compress");
   assert.equal(compress.annotations?.readOnlyHint, true, "an idempotent read is read-only");
