@@ -1,7 +1,7 @@
 /** The handon entry: read the handoff, verify it, render the resume report. */
 import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
-import { neutralizeDirectives } from "../../core/untrusted.js";
+import { neutralizeDirectives } from "../../core/index.js";
 import { HANDOFF_DIR } from "./_constants.js";
 import { listHandoffs } from "./_handoffs.js";
 import { parseHandoff } from "./_parse.js";

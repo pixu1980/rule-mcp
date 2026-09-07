@@ -1,4 +1,5 @@
 /** Guardrail `js-new-for-builtins`: new required for Map/Set/Date/Array/WeakMap/WeakSet */
+import { countedVerdict } from "../../../../shared/index.js";
 export const jsNewForBuiltins = {
   id: "js-new-for-builtins",
   label: "new required for Map/Set/Date/Array/WeakMap/WeakSet",
@@ -20,11 +21,6 @@ export const jsNewForBuiltins = {
       return { pass: true, note: "No bare builtin constructor calls found" };
     }
 
-    return {
-      pass: false,
-      failCount: violations.length,
-      detail: violations.slice(0, 5),
-      suggestion: "Use new with builtin constructors: const cache = new Map();",
-    };
+    return countedVerdict(violations, { suggestion: "Use new with builtin constructors: const cache = new Map();" });
   },
 };

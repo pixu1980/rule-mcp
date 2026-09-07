@@ -1,6 +1,6 @@
 /** CLI command barrel: one module per command family. */
 export * from "./_help.js";
-export * from "./_daemon.js";
+export * from "./daemon/index.js";
 export * from "./_lifecycle.js";
 export * from "./_tools.js";
 export * from "./_configure.js";

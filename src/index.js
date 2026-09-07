@@ -21,7 +21,7 @@
  */
 
 import { installProcessErrorHandlers } from "./utils/index.js";
-import { runCli } from "./cli/program.js";
+import { runCli } from "./cli/index.js";
 
 // Install global error handlers at process level
 // Prevents uncaught exceptions from crashing the server

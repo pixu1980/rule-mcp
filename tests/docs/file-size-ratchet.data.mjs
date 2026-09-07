@@ -6,10 +6,4 @@
  * Data file: exempt from the size cap itself.
  */
 
-export const FILE_SIZE_RATCHET = new Map([
-  ["src/cli/commands/_daemon.js", 219],
-  ["src/core/guardrails/_guarded.js", 179],
-  ["src/core/session/_lifecycle.js", 228],
-  ["src/tools/router/_call.js", 188],
-  ["src/transport/_session-registry.js", 221],
-]);
+export const FILE_SIZE_RATCHET = new Map();

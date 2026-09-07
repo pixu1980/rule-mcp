@@ -1,6 +1,6 @@
 /** @module core/enforcement/reminder - the model-visible workflow contract on a session cadence */
 
-import { FLEX_FIRST } from "../directive.js";
+import { FLEX_FIRST } from "../index.js";
 import { looksLikeStyling } from "../guardrails/index.js";
 
 /**

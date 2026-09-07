@@ -1,4 +1,5 @@
 /** The database guardrail family. */
+import { countedVerdict } from "../../shared/index.js";
 export const DATABASE_GUARDRAILS = [
   {
     id: "migration-safety",
@@ -15,12 +16,7 @@ export const DATABASE_GUARDRAILS = [
       const unsafeDrop = code.match(/DROP\s+TABLE\s+(?!.*IF\s+EXISTS)/gi) || [];
       const violations = [...unsafeCreate, ...unsafeDrop];
 
-      return {
-        pass: violations.length === 0,
-        failCount: violations.length,
-        detail: violations.slice(0, 5),
-        suggestion: "Use CREATE TABLE IF NOT EXISTS, DROP TABLE IF EXISTS for safe, idempotent migrations.",
-      };
+      return countedVerdict(violations, { suggestion: "Use CREATE TABLE IF NOT EXISTS, DROP TABLE IF EXISTS for safe, idempotent migrations." });
     },
   },
   {

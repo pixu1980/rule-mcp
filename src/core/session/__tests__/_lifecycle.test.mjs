@@ -2,7 +2,7 @@
 import { strict as assert } from "node:assert";
 import { test } from "node:test";
 
-import { installSignalHandlers, killTrackedChildren, registerCleanup, resetLifecycle, runShutdown, trackChild, trackedChildCount, whenShutdown } from "../_lifecycle.js";
+import { installSignalHandlers, killTrackedChildren, registerCleanup, resetLifecycle, runShutdown, trackChild, trackedChildCount, whenShutdown } from "../lifecycle/index.js";
 
 test.beforeEach(() => resetLifecycle());
 

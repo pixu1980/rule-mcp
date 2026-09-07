@@ -1,4 +1,5 @@
 /** Guardrail `js-for-loop-braces`: for loops must have braces and be multi-line */
+import { countedVerdict } from "../../../../shared/index.js";
 export const jsForLoopBraces = {
   id: "js-for-loop-braces",
   label: "for loops must have braces and be multi-line",
@@ -23,12 +24,7 @@ export const jsForLoopBraces = {
     }
 
     if (filtered.length > 0) {
-      return {
-        pass: false,
-        failCount: filtered.length,
-        detail: filtered.slice(0, 5),
-        suggestion: "Place for loop body on separate lines.",
-      };
+      return countedVerdict(filtered, { suggestion: "Place for loop body on separate lines." });
     }
 
     return { pass: true };

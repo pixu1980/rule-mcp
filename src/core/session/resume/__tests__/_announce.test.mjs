@@ -16,7 +16,7 @@ process.env.RULE_MCP_STATE_DIR = stateDir;
 
 const { markAnnounced, wasAnnouncedThisSession, clearAnnounced, resumeAnnouncement } = await import("../_announce.js");
 
-const { scriptedRepository } = await import("../../../../../tests/tools/handon/_handon.fixture.mjs");
+const { scriptedRepository } = await import("../../../../tools/handon/__tests__/_handon.fixture.mjs");
 const cwd = mkdtempSync(join(tmpdir(), "rule-resume-project-"));
 
 test.after(() => rmSync(cwd, { recursive: true, force: true }));

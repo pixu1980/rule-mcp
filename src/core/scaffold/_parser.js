@@ -1,4 +1,5 @@
 // Auto-extracted - scaffold-section parsing shared by skill tools.
+import { errorResult, textResult } from "../../shared/index.js";
 
 /**
  * Extract the scaffold section from a SKILL.md body.
@@ -40,15 +41,7 @@ export function extractSingleScaffoldFile(section, fileName) {
   }
 
   if (startIndex < 0) {
-    return {
-      isError: true,
-      content: [
-        {
-          type: "text",
-          text: 'File "' + fileName + '" not found. Available: .prettierrc, .nvmrc, .npmrc, .editorconfig, .gitignore, eslint.config.mjs, tsconfig.json, jsconfig.json',
-        },
-      ],
-    };
+    return errorResult('File "' + fileName + '" not found. Available: .prettierrc, .nvmrc, .npmrc, .editorconfig, .gitignore, eslint.config.mjs, tsconfig.json, jsconfig.json');
   }
 
   let fenceStart = -1;
@@ -74,5 +67,5 @@ export function extractSingleScaffoldFile(section, fileName) {
     contentLines.push(lines[index]);
   }
 
-  return { content: [{ type: "text", text: contentLines.join("\n") }] };
+  return textResult(contentLines.join("\n"));
 }

@@ -18,19 +18,10 @@ export const SUITES = {
     steps: ["tests/smoke.mjs", "tests/tools/ai.test.mjs", "tests/core/detector.test.mjs", "tests/tools/framework-routing.test.mjs"],
   },
   foundations: {
-    globs: [
-      "tests/core/**/*.test.mjs",
-      "tests/docs/**/*.test.mjs",
-      "tests/prompts/**/*.test.mjs",
-      "tests/roles/**/*.test.mjs",
-      "tests/skills/**/*.test.mjs",
-      "tests/tools/**/*.test.mjs",
-      "tests/transport/**/*.test.mjs",
-      "src/**/__tests__/*.test.mjs",
-    ],
+    globs: ["tests/docs/**/*.test.mjs", "src/**/__tests__/*.test.mjs"],
   },
   installer: {
-    globs: ["tests/cli/**/*.test.mjs"],
+    globs: ["src/cli/**/__tests__/*.test.mjs"],
     shell: [
       ["bash", "-n", "scripts/install.sh"],
       ["bash", "-n", "scripts/uninstall.sh"],

@@ -1,5 +1,5 @@
 /** Render the doctor report for the terminal. */
-import { banner, color, section } from "../tui.js";
+import { banner, color, section } from "../index.js";
 import { WRAPPER_SCRIPT_PATH } from "../daemon/index.js";
 
 /**

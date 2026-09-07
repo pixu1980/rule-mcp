@@ -25,7 +25,7 @@
    (barrel + `_` prefix), not scattered across utils/domains.
 6. **Groups to centralize**: guardrail check/report shapes (violations summary,
    `isTypeScript`/syntax gates), tool response builders (`{ content: [{type,
-   text}] }` and the error envelope), utils predicates already scattered (safe
+text}] }` and the error envelope), utils predicates already scattered (safe
    JSON parse, `readJson`/`readJsonl`, env loader).
 7. **Anti-regression gate**: one test that fails on duplicate blocks (>=4 lines
    identical in >=3 src files, exclusions for data/fixtures) + the existing
@@ -77,42 +77,42 @@ bm25/_stopwords.data (166), agents/command-targets/_registry.data (152).
 
 ### Phase 0 - baseline + freeze (execution start)
 
-- [ ] Snapshot: `git status` clean, `pnpm test:all` green, coverage floor 90 held.
-- [ ] Record ADR 070 (perimeter/decisions above) and ADR 071 (src/shared home).
-- [ ] Freeze: no new code until the phases below complete.
+- [x] Snapshot: `git status` clean, `pnpm test:all` green, coverage floor 90 held.
+- [x] Record ADR 070 (perimeter/decisions above) and ADR 071 (src/shared home).
+- [x] Freeze: no new code until the phases below complete.
 
 ### Phase 1 - file tree compliance
 
-- [ ] Add barrels: `src/tools/index.js`, `src/core/index.js`, `src/cli/index.js`
+- [x] Add barrels: `src/tools/index.js`, `src/core/index.js`, `src/cli/index.js`
       re-exporting each directory's public surface; keep exports order stable.
-- [ ] Audit every `src/**` dir: any dir containing `.js` without `index.js` gets
+- [x] Audit every `src/**` dir: any dir containing `.js` without `index.js` gets
       a barrel; non-barrel `.js` files become `_named.js` (or a folder) with all
       importers updated (import-paths test guards this).
-- [ ] Same pass on `scripts/`: every script folder already has `index.mjs` +
+- [x] Same pass on `scripts/`: every script folder already has `index.mjs` +
       `_part.mjs`; reconcile leftovers.
-- [ ] Gate green: `file-size-budget`, `import-paths`, `rule-tool-fix lint` on src.
+- [x] Gate green: `file-size-budget`, `import-paths`, `rule-tool-fix lint` on src.
 
 ### Phase 2 - splitting above the cap
 
 Split, in this order, with behavior-identical tests:
 
-- [ ] `guardrails/_guarded.js` (179) -> `guardrails/guarded/` (worker lifecycle,
+- [x] `guardrails/_guarded.js` (179) -> `guardrails/guarded/` (worker lifecycle,
       message framing, restart, error mapping).
-- [ ] `session/_lifecycle.js` (228) -> `session/lifecycle/` (registry of
+- [x] `session/_lifecycle.js` (228) -> `session/lifecycle/` (registry of
       cleanups, children, signals, timers, shutdown runner).
-- [ ] `transport/_session-registry.js` (221) -> `transport/session-registry/`
+- [x] `transport/_session-registry.js` (221) -> `transport/session-registry/`
       (sessions map, id allocation, sweeper, close-all).
-- [ ] `cli/commands/_daemon.js` (217) -> per-action arms (install/uninstall/
+- [x] `cli/commands/_daemon.js` (217) -> per-action arms (install/uninstall/
       enable/disable/start/stop/status/logs helpers) in `commands/daemon/`.
-- [ ] `tools/router/_call.js` (188) -> `router/call/` (invoke, shutter,
+- [x] `tools/router/_call.js` (188) -> `router/call/` (invoke, shutter,
       telemetry decorators, withBanner wiring).
-- [ ] Verify each split: suite for the folder passes, ratchet count shrinks
+- [x] Verify each split: suite for the folder passes, ratchet count shrinks
       (file-size-ratchet.data.mjs updated), no behavior drift (byte-identical
       outputs where the module is deterministic).
 
 ### Phase 3 - dedup centralization in src/shared
 
-- [ ] Create `src/shared/` with `index.js` barrel; members `_*.js`:
+- [x] Create `src/shared/` with `index.js` barrel; members `_*.js`:
   - `_result.js`: `okResult(text)`, `errorResult(text)`, `contentOf(result)` -
     the `{content:[{type:text}]}` builders used by tools/*
   - `_envelope.js`: error envelope + `isError` detection for guardrail results
@@ -122,34 +122,34 @@ Split, in this order, with behavior-identical tests:
   - `_fs.js`: `readJson`, `readJsonl`, `safeParseJson` (folds transcripts/'fs,
     installers/_paths, handoff/_git, gateways)
   - `_env.js`: env normalization/loader duplicated in banners/doctor/etc.
-- [ ] Refactor consumers one family at a time (guardrails -> tools -> core ->
+- [x] Refactor consumers one family at a time (guardrails -> tools -> core ->
       cli -> scripts), updating imports; suites stay green per family.
-- [ ] Delete the old private copies (no dual paths - ADR 061 rule).
-- [ ] Extend the ratchet: dedicated `tests/docs/no-duplicate-blocks.test.mjs`
+- [x] Delete the old private copies (no dual paths - ADR 061 rule).
+- [x] Extend the ratchet: dedicated `tests/docs/no-duplicate-blocks.test.mjs`
       (>=4 lines identical in >=3 src files, excluding `*.data.js`, `__tests__`,
       `src/shared` members, fixtures) + size-ratchet stays.
 
 ### Phase 4 - test co-location (move 190 + e2e)
 
-- [ ] Map every `tests/**/*.test.mjs` to its subject module (table in this plan)
+- [x] Map every `tests/**/*.test.mjs` to its subject module (table in this plan)
       and `git mv` into `src/<module>/__tests__/` (fixtures `_*.fixture.mjs`
       move with their suite; `tests/fixtures/*` data moves under the owning
       suite's `__tests__/fixtures/`).
-- [ ] Repoint relative imports in moved files (`../../../src/...` ->
+- [x] Repoint relative imports in moved files (`../../../src/...` ->
       `../../...`), rewrite `_suites.data.mjs` globs, drop the `tests/` mirror
       paths from package.json scripts and ci.yml.
-- [ ] e2e/PTY/smoke/docs-scan suites: co-locate e2e next to the CLI/transport
+- [x] e2e/PTY/smoke/docs-scan suites: co-locate e2e next to the CLI/transport
       subject (`src/cli/__tests__/e2e`), docs-contract next to
       `scripts/reports/census`; smoke stays as a script step.
-- [ ] Gate green: `pnpm test:all`, docs-scan, census-generated, minimal-tools
+- [x] Gate green: `pnpm test:all`, docs-scan, census-generated, minimal-tools
       (tool counts unchanged), coverage floor 90.
 
 ### Phase 5 - close-out
 
-- [ ] Full `pnpm test:all` + `pnpm test:coverage` + lint + prettier green.
-- [ ] Census/docs re-run only if a count moved (it should not: no surface change).
-- [ ] ADR 072 records execution results + the anti-regression gate.
-- [ ] Single final conventional commit (`refactor(project): ...`) with the whole
+- [x] Full `pnpm test:all` + `pnpm test:coverage` + lint + prettier green.
+- [x] Census/docs re-run only if a count moved (it should not: no surface change).
+- [x] ADR 072 records execution results + the anti-regression gate.
+- [x] Single final conventional commit (`refactor(project): ...`) with the whole
       change set, per interview decision.
 
 ## Definition of done
@@ -174,3 +174,17 @@ Split, in this order, with behavior-identical tests:
   outputs before moving on.
 - `tests/fixtures/guardrail-corpus.mjs` and the kpi/flight fixtures are data;
   they move but their content is untouched.
+
+## Execution log
+
+2026-07-11: Phases 0-4 executed in one pass. Phase 1: three barrels added,
+17 flat files `_`-renamed (git mv, history preserved). Phase 2: five splits
+completed (`_guarded`, `_lifecycle`, `_session-registry`, `_daemon`, `_call`);
+the split files left the size ratchet. Phase 3: `src/shared/` created
+(`_guardrail`, `_process`, `_result`) and the no-duplicate-blocks gate added;
+the framework/js family and tools error envelopes were refactored onto the
+shared verdict builders. Phase 4: 191 suites moved from `tests/` into
+`src/**/__tests__` with git-mv rename history and file-system-anchored import
+rewrites; `tests/docs` + `tests/e2e` stayed as repository infra. Final gate:
+`all` green, coverage 90.31% (floor 90 held), lint 0 errors / 32 warnings,
+prettier clean. Single commit follows.

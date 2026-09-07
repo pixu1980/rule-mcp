@@ -1,18 +1,7 @@
 /** Git reads for the handoff: safe exec, working-tree diff, recent log. */
-import { execSync } from "node:child_process";
 import { existsSync } from "node:fs";
+import { tryExec } from "../../shared/index.js";
 import { join } from "node:path";
-
-/**
- * Safely run a shell command, returning stdout or empty string on failure.
- */
-export function tryExec(command, options = {}) {
-  try {
-    return execSync(command, { encoding: "utf8", timeout: 10_000, stdio: "pipe", ...options });
-  } catch {
-    return "";
-  }
-}
 
 /**
  * Get git working tree diff (uncommitted changes).

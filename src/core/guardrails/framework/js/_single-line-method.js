@@ -1,4 +1,5 @@
 /** Guardrail `js-single-line-method`: Class method bodies must be multi-line */
+import { countedVerdict } from "../../../../shared/index.js";
 export const jsSingleLineMethod = {
   id: "js-single-line-method",
   label: "Class method bodies must be multi-line",
@@ -24,12 +25,7 @@ export const jsSingleLineMethod = {
     }
 
     if (filtered.length > 0) {
-      return {
-        pass: false,
-        failCount: filtered.length,
-        detail: filtered.slice(0, 5),
-        suggestion: "Split method body across multiple lines.",
-      };
+      return countedVerdict(filtered, { suggestion: "Split method body across multiple lines." });
     }
 
     return { pass: true };

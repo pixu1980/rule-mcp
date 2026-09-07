@@ -2,7 +2,7 @@
 import { homedir } from "node:os";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { execSync } from "node:child_process";
+export { tryExec } from "../../shared/index.js";
 
 /** The user home directory. */
 export const HOME = homedir();
@@ -18,15 +18,6 @@ export function resolveEntrypoint() {
     script: scriptPath,
     command: [nodePath, scriptPath, "serve", "--transport", "sse"],
   };
-}
-
-/** Safely run a shell command, ignoring errors. */
-export function tryExec(command, options = {}) {
-  try {
-    return execSync(command, { encoding: "utf8", timeout: 10_000, stdio: "pipe", ...options });
-  } catch {
-    return "";
-  }
 }
 
 /**

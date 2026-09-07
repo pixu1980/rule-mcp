@@ -1,4 +1,6 @@
 /** @module tools/fix/generate - mode=generate: create a component file tree */
+import { errorResult } from "../../shared/index.js";
+/** @module tools/fix/generate - mode=generate: create a component file tree */
 
 /**
  * Handle mode=generate.
@@ -12,10 +14,7 @@ export async function generateMode(arguments_) {
   const { dirname, resolve, relative } = await import("node:path");
 
   if (!arguments_.name) {
-    return {
-      isError: true,
-      content: [{ type: "text", text: "mode=generate requires a `name` argument (PascalCase)." }],
-    };
+    return errorResult("mode=generate requires a `name` argument (PascalCase).");
   }
 
   const isDryRun = arguments_.dryRun !== false;
@@ -26,10 +25,7 @@ export async function generateMode(arguments_) {
   const sanitizedBase = relative(rootDir, resolve(rootDir, baseDir));
 
   if (sanitizedBase.startsWith("..") || sanitizedBase === "") {
-    return {
-      isError: true,
-      content: [{ type: "text", text: `baseDir "${baseDir}" escapes project root "${rootDir}". Refusing to generate.` }],
-    };
+    return errorResult(`baseDir "${baseDir}" escapes project root "${rootDir}". Refusing to generate.`);
   }
 
   const files = generateComponentFiles({

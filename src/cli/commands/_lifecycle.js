@@ -1,9 +1,9 @@
 /** Install and uninstall commands (agent catalog + service). */
 
 import { entrypoint, print, printJson } from "./_shared.js";
-import { formatInstallResult, formatUninstallResult } from "../tui.js";
+import { formatInstallResult, formatUninstallResult } from "../index.js";
 import { installAgent } from "../install/index.js";
-import { uninstallFromAgent } from "../uninstall.js";
+import { uninstallFromAgent } from "../index.js";
 function installCommand(opts) {
   const result = installAgent({
     agent: opts.agent,

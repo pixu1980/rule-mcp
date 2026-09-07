@@ -1,6 +1,6 @@
 /** @module cli/guard/inject - the context injected into a session start */
 
-import { promptDirective, sessionDirective } from "../../core/directive.js";
+import { promptDirective, sessionDirective } from "../../core/index.js";
 import { resumeContext } from "../../core/session/resume/index.js";
 
 /**
