@@ -9,10 +9,10 @@ process.env.PIX_GALAXY_MCP_STATE_DIR = mkdtempSync(join(tmpdir(), "pix-skilltool
 process.env.PIX_GALAXY_MCP_NO_TELEMETRY = "1";
 process.env.PIX_GALAXY_MCP_NO_AUTOUPDATE = "1";
 
-const { callTool } = await import("../router/index.js");
+const { callTool } = await import("../../router/index.js");
 
 before(async () => {
-  const { loadAllSkills } = await import("../../core/skills/index.js");
+  const { loadAllSkills } = await import("../../../core/skills/index.js");
   await loadAllSkills();
 });
 
