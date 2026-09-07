@@ -47,7 +47,7 @@ test("validateRole names every missing and malformed field", () => {
     "version must be a positive integer",
   ], "every invalid field is reported");
   assert.deepEqual(validateRole({ id: "fine", role: "Fine", yearsOfExperience: 1, skills: ["x"], status: "active", version: 1, evidenceSkills: "nope" }), [
-    "evidenceSkills must be an array of strings",
+    "evidenceSkills must be an array when present",
   ], "a malformed evidenceSkills is named");
 });
 
@@ -62,7 +62,8 @@ test("loadRoleOverlays reads md and legacy json overlays, overriding by id", () 
   assert.equal(problems.length, 1, "the broken file is reported");
   assert.match(problems[0].reason, /must be a non-empty string/, "the reason lists the missing fields");
 
-  const absent = loadRoleOverlays({ home: join(overlayDir, "no", "such") });
+  const elsewhere = join(mkdtempSync(join(tmpdir(), "rule-overlay-absent-")), "missing");
+  const absent = loadRoleOverlays({ home: elsewhere });
   assert.deepEqual(absent.roles, [], "a missing overlay dir has no roles");
 });
 
