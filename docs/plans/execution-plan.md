@@ -215,22 +215,22 @@
 - [x] First targeted tests on the darkest modules: block-spacing fixer (25% -> covered),
       enforcement validators, tui-formats renderers - co-located `__tests__` suites.
 - [x] CI gate: a dedicated coverage job fails when branches drop below the floor in
-      `scripts/reports/coverage/_threshold.data.mjs` (a rising ratchet, currently 87,
+      `scripts/reports/coverage/_threshold.data.mjs` (a rising ratchet, currently 89,
       target 95 - the plan-mandated 95 gate is the ratchet's endpoint, not a permanently
       red check).
-- [ ] Keep raising the floor to 95 (now 87, ADR 066): the floor moved 83 -> 87 via
-      ~30 targeted suites (doctor rendering, self-update gates, telemetry store I/O
-      and kpi, HTTP handler/start/cert, gateway core/render, transcripts + fallbacks,
-      cache catalog verify, project snapshot, handon verification, role
-      template/catalog, router helpers, terminal surface, argument guards,
-      external-css, handoff prompt, ...). Measured 87.88% branches locally; CI runs
-      ubuntu/Node22, so the floor holds a margin and 95 stays the ratchet endpoint.
-      Next targets by missed branches: cli/commands/_daemon 13 (partial platform
-      arms), cli/_register-handoff 10, skills-install 16, commands/_targets 9,
-      daemon/_status-format 9, install/_agent-ops 9, transport/sse/_handler 9,
-      docs-numbering orphans/rewrite 15, tool-cache entries/persistence 12,
-      guardrails template-load/external-css 14, plus ~200 long-tail chips (3-5 per
-      file) in CLI/transport subprocess arms.
+- [ ] Keep raising the floor to 95 (now 89, ADR 066+067): the branch floor moved
+      83 -> 87 -> 89. Second wave added ~30 more suites (SSE handler, tokensave
+      pipeline, handoff builder/sections/sources/format, export retention, tool-cache
+      persistence, session lifecycle + resume announce, CLI registrar arms via
+      subprocess, roles CLI edges, guard hook, skills install, installer paths +
+      agent dispatch, bm25 scoring, review findings, finder template-load, daemon
+      process, review docs, ...). Measured 89.27% branches locally (CI runs
+      ubuntu/Node22, so the floor holds a margin and 95 stays the ratchet endpoint).
+      ~370 branches remain: cli/commands/_daemon 13 (platform arms), _register-handoff 8,
+      skills-install _catalog 8, daemon _service/_status-format 16 (platform-locked),
+      docs-numbering orphans/rewrite 12, handoff _sources 9, ai/_framework 7 (dead
+      domains), plus ~300 long-tail chips (3-5 per file) in CLI/transport subprocess
+      and defensive branches.
 - [x] The 2 pre-existing flaky failures are resolved, not documented around: the
       untrusted-fence miss was a rebrand drift in the directive pattern (`PIX GALAXY
 WORKFLOW REMINDER` never matched) and the home-recording-leak race now checks a
