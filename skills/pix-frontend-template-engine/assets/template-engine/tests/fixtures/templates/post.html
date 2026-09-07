@@ -1,18 +1,18 @@
 <!doctype html>
 <html lang="{{ site.language }}">
-<head>
-  <meta charset="utf-8">
-  <title>{{ title }}</title>
-  <meta name="description" content="{{ description }}">
-  <meta property="og:title" content="{{ title }}">
-  <meta property="og:image" content="{{ ogImageUrl }}">
-  <meta name="twitter:image" content="{{ ogImageUrl }}">
-  <meta property="article:published_time" content="{{ post.date }}">
-  <link rel="canonical" href="{{ canonicalUrl }}">
-</head>
-<body>
-  <main>
-    <article>{{ post.content | raw }}</article>
-  </main>
-</body>
+  <head>
+    <meta charset="utf-8" />
+    <title>{{ title }}</title>
+    <meta name="description" content="{{ description }}" />
+    <meta property="og:title" content="{{ title }}" />
+    <meta property="og:image" content="{{ ogImageUrl }}" />
+    <meta name="twitter:image" content="{{ ogImageUrl }}" />
+    <meta property="article:published_time" content="{{ post.date }}" />
+    <link rel="canonical" href="{{ canonicalUrl }}" />
+  </head>
+  <body>
+    <main>
+      <article>{{ post.content | raw }}</article>
+    </main>
+  </body>
 </html>

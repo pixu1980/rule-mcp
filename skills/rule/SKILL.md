@@ -95,16 +95,16 @@ Plan architecture, SDD, context, and scaffolding flow.
 
 Design and implement APIs, runtime frameworks, security, and scaffolds.
 
-| Skill                                                        | Tool                     | Frameworks         | Use when                                                                                                                 |
-| ------------------------------------------------------------ | ------------------------ | ------------------ | ------------------------------------------------------------------------------------------------------------------------ |
-| [rule-backend](../rule-backend/SKILL.md)                       | `pix_backend`            | all                | Backend application development umbrella - routes REST, GraphQL, runtime, security, and database work to focused skills. |
-| [rule-backend-express](../rule-backend-express/SKILL.md)       | `pix_backend_express`    | all                | Express.js 5+ best practices: middleware patterns, error handling, routing, performance optimization, security header... |
-| [rule-backend-fastify](../rule-backend-fastify/SKILL.md)       | `pix_backend_fastify`    | all                | Fastify 5+ best practices: plugins, hooks, schema validation, serialization, lifecycle, logging, and performance tuni... |
-| [rule-backend-graphql](../rule-backend-graphql/SKILL.md)       | `pix_backend_graphql`    | node, api, graphql | GraphQL API engineering: schema-first contracts, resolver boundaries, N+1 prevention, caching, and abuse controls.       |
-| [rule-backend-hono](../rule-backend-hono/SKILL.md)             | `pix_backend_hono`       | all                | Hono 4+ best practices: edge-compatible API framework, middleware patterns, RPC-style type sharing, Zod validation, a... |
-| [rule-backend-nestjs](../rule-backend-nestjs/SKILL.md)         | `pix_backend_nestjs`     | all                | NestJS 10+ best practices: modular architecture, decorators, dependency injection, guards, interceptors, pipes, Graph... |
-| [rule-backend-node](../rule-backend-node/SKILL.md)             | `pix_backend_node`       | node, api          | Scaffold a new rule backend-node repository. Use when creating Express + TypeScript backend structure, baseline co...     |
-| [rule-backend-security](../rule-backend-security/SKILL.md)     | `pix_backend_security`   | node, api          | Apply security best practices to rule repositories. Use when handling environment variables, secrets, Docker secur...     |
+| Skill                                                    | Tool                   | Frameworks         | Use when                                                                                                                 |
+| -------------------------------------------------------- | ---------------------- | ------------------ | ------------------------------------------------------------------------------------------------------------------------ |
+| [rule-backend](../rule-backend/SKILL.md)                   | `pix_backend`          | all                | Backend application development umbrella - routes REST, GraphQL, runtime, security, and database work to focused skills. |
+| [rule-backend-express](../rule-backend-express/SKILL.md)   | `pix_backend_express`  | all                | Express.js 5+ best practices: middleware patterns, error handling, routing, performance optimization, security header... |
+| [rule-backend-fastify](../rule-backend-fastify/SKILL.md)   | `pix_backend_fastify`  | all                | Fastify 5+ best practices: plugins, hooks, schema validation, serialization, lifecycle, logging, and performance tuni... |
+| [rule-backend-graphql](../rule-backend-graphql/SKILL.md)   | `pix_backend_graphql`  | node, api, graphql | GraphQL API engineering: schema-first contracts, resolver boundaries, N+1 prevention, caching, and abuse controls.       |
+| [rule-backend-hono](../rule-backend-hono/SKILL.md)         | `pix_backend_hono`     | all                | Hono 4+ best practices: edge-compatible API framework, middleware patterns, RPC-style type sharing, Zod validation, a... |
+| [rule-backend-nestjs](../rule-backend-nestjs/SKILL.md)     | `pix_backend_nestjs`   | all                | NestJS 10+ best practices: modular architecture, decorators, dependency injection, guards, interceptors, pipes, Graph... |
+| [rule-backend-node](../rule-backend-node/SKILL.md)         | `pix_backend_node`     | node, api          | Scaffold a new rule backend-node repository. Use when creating Express + TypeScript backend structure, baseline co...     |
+| [rule-backend-security](../rule-backend-security/SKILL.md) | `pix_backend_security` | node, api          | Apply security best practices to rule repositories. Use when handling environment variables, secrets, Docker secur...     |
 
 ### Data
 
@@ -122,12 +122,12 @@ Model persistence, SQL, PostgreSQL, MySQL, and MongoDB.
 
 Configure Docker, CI, tests, coverage, and version automation.
 
-| Skill                                                            | Tool                       | Frameworks | Use when                                                                                                                 |
-| ---------------------------------------------------------------- | -------------------------- | ---------- | ------------------------------------------------------------------------------------------------------------------------ |
-| [rule-devops](../rule-devops/SKILL.md)                             | `pix_devops`               | all        | Index of DevOps and engineering skills: Docker, GitLab CI, observability, testing, and version management.               |
-| [rule-devops-docker](../rule-devops-docker/SKILL.md)               | `pix_devops_docker`        | all        | Create and maintain Docker configuration for rule repositories. Use when generating Dockerfiles, docker-compose.ym...     |
-| [rule-devops-observability](../rule-devops-observability/SKILL.md) | `pix_devops_observability` | all        | Define production observability: SLOs, telemetry, alerts, incident learning, and rollback verification.                  |
-| [rule-devops-testing](../rule-devops-testing/SKILL.md)             | `pix_devops_testing`       | all        | Write and maintain tests for rule repositories using Vitest. Use when creating unit or integration tests, configur...     |
+| Skill                                                            | Tool                       | Frameworks | Use when                                                                                                             |
+| ---------------------------------------------------------------- | -------------------------- | ---------- | -------------------------------------------------------------------------------------------------------------------- |
+| [rule-devops](../rule-devops/SKILL.md)                             | `pix_devops`               | all        | Index of DevOps and engineering skills: Docker, GitLab CI, observability, testing, and version management.           |
+| [rule-devops-docker](../rule-devops-docker/SKILL.md)               | `pix_devops_docker`        | all        | Create and maintain Docker configuration for rule repositories. Use when generating Dockerfiles, docker-compose.ym... |
+| [rule-devops-observability](../rule-devops-observability/SKILL.md) | `pix_devops_observability` | all        | Define production observability: SLOs, telemetry, alerts, incident learning, and rollback verification.              |
+| [rule-devops-testing](../rule-devops-testing/SKILL.md)             | `pix_devops_testing`       | all        | Write and maintain tests for rule repositories using Vitest. Use when creating unit or integration tests, configur... |
 
 ### Dispatcher
 
@@ -161,24 +161,24 @@ Build UI, components, routing, forms, and meta-framework apps.
 
 Select project platform: web, desktop, library, Expo/mobile.
 
-| Skill                                                    | Tool                   | Frameworks         | Use when                                                                                                                 |
-| -------------------------------------------------------- | ---------------------- | ------------------ | ------------------------------------------------------------------------------------------------------------------------ |
-| [rule-platform](../rule-platform/SKILL.md)                 | `pix_platform`         | all                | Index of all platform/project-type skills: Desktop (Electron), Expo (React Native), Library authoring, and Web platfo... |
-| [rule-platform-desktop](../rule-platform-desktop/SKILL.md) | `pix_platform_desktop` | electron, desktop  | Desktop application development with rule principles. Project type umbrella for desktop apps. Primary framework: E...     |
-| [rule-platform-library](../rule-platform-library/SKILL.md) | `pix_platform_library` | all                | Reusable library/package development with rule principles. Covers pnpm package structure, public API design, TypeS...     |
-| [rule-platform-web](../rule-platform-web/SKILL.md)         | `pix_platform_web`     | all                | Web application development with rule principles. Covers browser-based app architecture, bundling, routing, progre...     |
+| Skill                                                    | Tool                   | Frameworks        | Use when                                                                                                                 |
+| -------------------------------------------------------- | ---------------------- | ----------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| [rule-platform](../rule-platform/SKILL.md)                 | `pix_platform`         | all               | Index of all platform/project-type skills: Desktop (Electron), Expo (React Native), Library authoring, and Web platfo... |
+| [rule-platform-desktop](../rule-platform-desktop/SKILL.md) | `pix_platform_desktop` | electron, desktop | Desktop application development with rule principles. Project type umbrella for desktop apps. Primary framework: E...     |
+| [rule-platform-library](../rule-platform-library/SKILL.md) | `pix_platform_library` | all               | Reusable library/package development with rule principles. Covers pnpm package structure, public API design, TypeS...     |
+| [rule-platform-web](../rule-platform-web/SKILL.md)         | `pix_platform_web`     | all               | Web application development with rule principles. Covers browser-based app architecture, bundling, routing, progre...     |
 
 ### Process
 
 Write ADRs/docs, follow BMAD, feature workflow, and handoff.
 
-| Skill                                                                    | Tool                           | Frameworks | Use when                                                                                                                 |
-| ------------------------------------------------------------------------ | ------------------------------ | ---------- | ------------------------------------------------------------------------------------------------------------------------ |
-| [rule-process](../rule-process/SKILL.md)                                   | `pix_process`                  | all        | Index of process skills: ADR, BMAD, code review, documentation, feature workflow, and LLM handoff.                       |
-| [rule-process-adr](../rule-process-adr/SKILL.md)                           | `pix_process_adr`              | all        | Architecture Decision Records (ADR) for rule projects. Capture, store, and manage architectural decisions in docs/...     |
-| [rule-process-bmad](../rule-process-bmad/SKILL.md)                         | `pix_process_bmad`             | all        | BMAD Method (Build More Architect Dreams) - AI-driven development framework for structured software delivery through...  |
-| [rule-process-code-review](../rule-process-code-review/SKILL.md)           | `pix_process_code_review`      | all        | Prepare and conduct risk-based PR/MR reviews with explicit quality, safety, and follow-up gates.                         |
-| [rule-process-handoff](../rule-process-handoff/SKILL.md)                   | `pix_process_handoff`          | all        | Generate a compressed LLM handoff summary from ADR logs and project context. Enables cross-chat recovery, model-switc... |
+| Skill                                                          | Tool                      | Frameworks | Use when                                                                                                                 |
+| -------------------------------------------------------------- | ------------------------- | ---------- | ------------------------------------------------------------------------------------------------------------------------ |
+| [rule-process](../rule-process/SKILL.md)                         | `pix_process`             | all        | Index of process skills: ADR, BMAD, code review, documentation, feature workflow, and LLM handoff.                       |
+| [rule-process-adr](../rule-process-adr/SKILL.md)                 | `pix_process_adr`         | all        | Architecture Decision Records (ADR) for rule projects. Capture, store, and manage architectural decisions in docs/...     |
+| [rule-process-bmad](../rule-process-bmad/SKILL.md)               | `pix_process_bmad`        | all        | BMAD Method (Build More Architect Dreams) - AI-driven development framework for structured software delivery through...  |
+| [rule-process-code-review](../rule-process-code-review/SKILL.md) | `pix_process_code_review` | all        | Prepare and conduct risk-based PR/MR reviews with explicit quality, safety, and follow-up gates.                         |
+| [rule-process-handoff](../rule-process-handoff/SKILL.md)         | `pix_process_handoff`     | all        | Generate a compressed LLM handoff summary from ADR logs and project context. Enables cross-chat recovery, model-switc... |
 
 ### Styleguide
 
@@ -227,21 +227,21 @@ Design and route visible interface work while preserving rule implementation con
 
 ## Recommended dispatch bundles
 
-| Task                     | Primary                                             | Secondary                                             | Deterministic tools                      |
-| ------------------------ | --------------------------------------------------- | ----------------------------------------------------- | ---------------------------------------- |
-| Unknown project          | `rule`                                               | `rule-process-adr`                                     | `pix_detect`, `pix_search`               |
-| AI agent app             | `rule-ai` + `rule-platform-agent`                     | `rule-ai-agent-architecture`, `rule-devops-testing`                        | `pix_check`, `pix_process_adr`           |
-| New web UI               | `rule-ui` + `rule-ui-design-system` + framework skill | `rule-styleguide`, `rule-platform-web`                  | `pix_component`, `pix_check`             |
-| React/Vite app           | `rule-frontend-react`                                | `rule-toolchain-vite`, `rule-styleguide`                | `pix_scaffold`, `pix_check`              |
-| Backend API              | `rule-backend-node`                                  | `rule-backend-security`                 | `pix_check`, `pix_process_adr`           |
-| Database work            | database skill                                      | `rule-data`                              | `pix_search`, `pix_check`                |
-| Docker/CI/tests          | `rule-devops` focused skill                          | platform skill                                        | `pix_scaffold`, `pix_fix`                |
-| GraphQL API              | `rule-backend-graphql`                               | runtime skill, `rule-backend-security`                 | `pix_search`, `pix_check`                |
-| Production observability | `rule-devops-observability`                          | runtime and platform skill                            | `pix_check`, `pix_process_adr`           |
-| Code review              | `rule-process-code-review`                           | feature workflow, relevant domain skill               | `pix_check`                              |
-| Commit/push              | `rule-toolchain-commits`                             | `rule-toolchain-husky` | `pix_check`                              |
-| Docs/ADR                 | `rule-styleguide-markdown`                           | `rule-process-adr`                                     | `pix_process_adr`, `pix_process_handoff` |
-| File-tree cleanup        | `rule-styleguide-naming`                             | `rule-toolchain-project`                               | `pix_fix`, `pix_check`                   |
+| Task                     | Primary                                             | Secondary                                         | Deterministic tools                      |
+| ------------------------ | --------------------------------------------------- | ------------------------------------------------- | ---------------------------------------- |
+| Unknown project          | `rule`                                               | `rule-process-adr`                                 | `pix_detect`, `pix_search`               |
+| AI agent app             | `rule-ai` + `rule-platform-agent`                     | `rule-ai-agent-architecture`, `rule-devops-testing` | `pix_check`, `pix_process_adr`           |
+| New web UI               | `rule-ui` + `rule-ui-design-system` + framework skill | `rule-styleguide`, `rule-platform-web`              | `pix_component`, `pix_check`             |
+| React/Vite app           | `rule-frontend-react`                                | `rule-toolchain-vite`, `rule-styleguide`            | `pix_scaffold`, `pix_check`              |
+| Backend API              | `rule-backend-node`                                  | `rule-backend-security`                            | `pix_check`, `pix_process_adr`           |
+| Database work            | database skill                                      | `rule-data`                                        | `pix_search`, `pix_check`                |
+| Docker/CI/tests          | `rule-devops` focused skill                          | platform skill                                    | `pix_scaffold`, `pix_fix`                |
+| GraphQL API              | `rule-backend-graphql`                               | runtime skill, `rule-backend-security`             | `pix_search`, `pix_check`                |
+| Production observability | `rule-devops-observability`                          | runtime and platform skill                        | `pix_check`, `pix_process_adr`           |
+| Code review              | `rule-process-code-review`                           | feature workflow, relevant domain skill           | `pix_check`                              |
+| Commit/push              | `rule-toolchain-commits`                             | `rule-toolchain-husky`                             | `pix_check`                              |
+| Docs/ADR                 | `rule-styleguide-markdown`                           | `rule-process-adr`                                 | `pix_process_adr`, `pix_process_handoff` |
+| File-tree cleanup        | `rule-styleguide-naming`                             | `rule-toolchain-project`                           | `pix_fix`, `pix_check`                   |
 
 ## Operational sequence
 
@@ -274,15 +274,15 @@ This rule system is also available as an MCP server (`rule-mcp-rules`). If you h
 Load `rule` first: it is the index. Pull in the domain skill only when the task
 touches that domain:
 
-| Skill                          | When to load                                                                                 |
-| ------------------------------ | -------------------------------------------------------------------------------------------- |
-| `rule-toolchain-commits`        | **Immediately** - before any branch, commit, or push                                         |
-| `rule-styleguide-markdown`      | **Immediately** - when writing or updating README and prose files                            |
-| `rule-toolchain-typescript`     | **Immediately** - when writing TypeScript types and interfaces                               |
-| `rule-devops-testing`           | When creating tests or configuring coverage                                                  |
-| `rule-styleguide-a11y`          | **Frontend only** - when accessibility is part of the requirement                            |
-| `rule-styleguide-i18n`          | **Frontend only** - when internationalization is needed                                     |
-| `rule-backend-security`         | **Backend only** - when the service must be hardened                                         |
+| Skill                      | When to load                                                      |
+| -------------------------- | ----------------------------------------------------------------- |
+| `rule-toolchain-commits`    | **Immediately** - before any branch, commit, or push              |
+| `rule-styleguide-markdown`  | **Immediately** - when writing or updating README and prose files |
+| `rule-toolchain-typescript` | **Immediately** - when writing TypeScript types and interfaces    |
+| `rule-devops-testing`       | When creating tests or configuring coverage                       |
+| `rule-styleguide-a11y`      | **Frontend only** - when accessibility is part of the requirement |
+| `rule-styleguide-i18n`      | **Frontend only** - when internationalization is needed           |
+| `rule-backend-security`     | **Backend only** - when the service must be hardened              |
 
 ### What each one covers
 

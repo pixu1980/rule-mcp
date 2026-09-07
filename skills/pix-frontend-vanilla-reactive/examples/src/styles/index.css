@@ -2,5 +2,5 @@
    rule-vanilla-reactive demo - styles entry
    ═══════════════════════════════════════════════════════════════════════════════ */
 
-@import './_base.css';
-@import './_components.css';
+@import "./_base.css";
+@import "./_components.css";

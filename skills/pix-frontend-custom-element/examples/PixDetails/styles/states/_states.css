@@ -1,4 +1,4 @@
-[is='rule-details'] {
+[is="rule-details"] {
   &[open] {
     gap: var(--rule-details--gap);
 

@@ -11,7 +11,7 @@
   --rule-details--border-radius: var(--card-border-radius, var(--radius-control));
 }
 
-[is='rule-details'] {
+[is="rule-details"] {
   display: var(--rule-details--display);
   flex-flow: var(--rule-details--flex-flow);
 
@@ -31,7 +31,7 @@
 
     &::marker,
     &::-webkit-details-marker {
-      content: '';
+      content: "";
       display: none;
     }
 

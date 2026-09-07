@@ -40,7 +40,7 @@ Deterministic MCP server for the rule skill ecosystem. Live surface (enforced by
 
 | Surface   | Count | Notes                                                                                                       |
 | --------- | ----- | ----------------------------------------------------------------------------------------------------------- |
-| Tools     | 105   | per-skill tools + dispatcher/action tools                                                              |
+| Tools     | 105   | per-skill tools + dispatcher/action tools                                                                   |
 | Resources | 184   | rule:// per-skill index + summary + template URIs                                                            |
 | Prompts   | 73    | rule-area-* areas + one-shot workflow + 54 review-persona commands (rule-plan-* / rule-audit-* / rule-review-*) |
 | Skills    | 89    | frontend, backend, data, devops, toolchain, styleguide, process, platform, ai                               |

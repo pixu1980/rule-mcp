@@ -26,8 +26,7 @@ export const MANTRA = "Every token saved is a token earned.";
  * The no-subagent rule. Reused verbatim in the session directive, the generated
  * agent commands, and the skills - a paraphrase would read as a different rule.
  */
-export const NO_SUBAGENTS =
-  'NEVER spawn subagents for research or implementation - they burn tokens. Use rule tools (deterministic, LLM-free) and tokensave (code graph) instead.';
+export const NO_SUBAGENTS = "NEVER spawn subagents for research or implementation - they burn tokens. Use rule tools (deterministic, LLM-free) and tokensave (code graph) instead.";
 
 /**
  * The dependencies rule, one sentence, for every surface that states policy:
@@ -37,7 +36,7 @@ export const NO_SUBAGENTS =
  * written. Opt out with RULE_MCP_LOOSE_DEPS=1 for projects that manage
  * versions elsewhere.
  */
-export const DEPS_EXACT_LATEST = 'Dependencies: exact pins at the latest release (no ^ or ~; pnpm add --save-exact), and bump to latest when touching a manifest.';
+export const DEPS_EXACT_LATEST = "Dependencies: exact pins at the latest release (no ^ or ~; pnpm add --save-exact), and bump to latest when touching a manifest.";
 
 /** @returns {boolean} whether the exact-latest dependencies policy is active. */
 export function depsPolicyActive() {
@@ -62,7 +61,7 @@ export function depsPolicyActive() {
  * enough to name: named template areas, subgrid, explicit item placement or
  * overlap, and auto-fit/auto-fill tracks.
  */
-export const FLEX_FIRST = 'Flex first: display:grid only for named areas, subgrid, explicit placement, or auto-fit tracks - what a flex row or column can do, flex does.';
+export const FLEX_FIRST = "Flex first: display:grid only for named areas, subgrid, explicit placement, or auto-fit tracks - what a flex row or column can do, flex does.";
 
 /**
  * Whether the directive is injected at all.
@@ -91,7 +90,7 @@ export function sessionDirective() {
     "- Call `rule` (or `rule_tool_gateway`) before any implementation, on every prompt. " +
       "Routed skill evidence is source of truth; never invent APIs, files, dependencies, or passing checks.",
     `- ${NO_SUBAGENTS}`,
-    '- Caveman output: drop filler, articles and pleasantries. Keep every technical fact, code block, path and error string verbatim.',
+    "- Caveman output: drop filler, articles and pleasantries. Keep every technical fact, code block, path and error string verbatim.",
     "- American English, ASCII punctuation, no em dashes, no curly quotes.",
     "- Minimal change: build exactly what was asked. Propose anything extra in prose, never write it.",
     `- ${MANTRA}`,

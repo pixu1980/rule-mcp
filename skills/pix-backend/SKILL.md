@@ -36,11 +36,11 @@ This is the umbrella skill for backend development. It does not contain detailed
 
 ## API & Architecture
 
-| Skill                                                        | Focus                                                             |
-| ------------------------------------------------------------ | ----------------------------------------------------------------- |
-| [rule-backend-graphql](../rule-backend-graphql/SKILL.md)       | GraphQL schema, resolver, performance, and abuse controls         |
-| [rule-backend-security](../rule-backend-security/SKILL.md)     | Security hardening, auth, validation                              |
-| [rule-backend-workers](../rule-backend-workers/SKILL.md)       | Event loop, libuv thread pool, `worker_threads`, piscina, cluster |
+| Skill                                                    | Focus                                                             |
+| -------------------------------------------------------- | ----------------------------------------------------------------- |
+| [rule-backend-graphql](../rule-backend-graphql/SKILL.md)   | GraphQL schema, resolver, performance, and abuse controls         |
+| [rule-backend-security](../rule-backend-security/SKILL.md) | Security hardening, auth, validation                              |
+| [rule-backend-workers](../rule-backend-workers/SKILL.md)   | Event loop, libuv thread pool, `worker_threads`, piscina, cluster |
 
 ## Six ideas that replace memorizing architectures
 
