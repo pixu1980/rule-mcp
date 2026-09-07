@@ -9,7 +9,7 @@
 
 import test from "node:test";
 import assert from "node:assert/strict";
-import { mkdtempSync, writeFileSync, readFileSync, rmSync } from "node:fs";
+import { mkdirSync, mkdtempSync, writeFileSync, readFileSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 
@@ -92,4 +92,12 @@ test("the marker has the rule-mcp identity", () => {
   assert.equal(GIT_HOOK_MARKER, "rule-mcp");
   assert.ok(HOOKED_GIT_EVENTS.includes("post-checkout"));
   assert.ok(HOOKED_GIT_EVENTS.includes("post-merge"));
+});
+
+test("an unreadable hook file is skipped without a crash", () => {
+  const dir = mkdtempSync(join(tmpdir(), "rule-git-hooks-broken-"));
+  mkdirSync(join(dir, "post-merge"), { recursive: true }); // a directory at the hook path cannot be read
+  const result = uninstallGitHooks({ dir });
+  assert.deepEqual(result.removed, [], "an unreadable hook is skipped");
+  rmSync(dir, { recursive: true, force: true });
 });
