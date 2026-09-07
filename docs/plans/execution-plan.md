@@ -215,22 +215,20 @@
 - [x] First targeted tests on the darkest modules: block-spacing fixer (25% -> covered),
       enforcement validators, tui-formats renderers - co-located `__tests__` suites.
 - [x] CI gate: a dedicated coverage job fails when branches drop below the floor in
-      `scripts/reports/coverage/_threshold.data.mjs` (a rising ratchet, currently 89,
+      `scripts/reports/coverage/_threshold.data.mjs` (a rising ratchet, currently 90,
       target 95 - the plan-mandated 95 gate is the ratchet's endpoint, not a permanently
       red check).
-- [ ] Keep raising the floor to 95 (now 89, ADR 066+067): the branch floor moved
-      83 -> 87 -> 89. Second wave added ~30 more suites (SSE handler, tokensave
-      pipeline, handoff builder/sections/sources/format, export retention, tool-cache
-      persistence, session lifecycle + resume announce, CLI registrar arms via
-      subprocess, roles CLI edges, guard hook, skills install, installer paths +
-      agent dispatch, bm25 scoring, review findings, finder template-load, daemon
-      process, review docs, ...). Measured 89.27% branches locally (CI runs
-      ubuntu/Node22, so the floor holds a margin and 95 stays the ratchet endpoint).
-      ~370 branches remain: cli/commands/_daemon 13 (platform arms), _register-handoff 8,
-      skills-install _catalog 8, daemon _service/_status-format 16 (platform-locked),
-      docs-numbering orphans/rewrite 12, handoff _sources 9, ai/_framework 7 (dead
-      domains), plus ~300 long-tail chips (3-5 per file) in CLI/transport subprocess
-      and defensive branches.
+- [ ] Keep raising the floor to 95 (now 90, ADRs 066-068): the branch floor moved
+      83 -> 87 -> 89 -> 90. Wave three swept the long tail (English-only scanners,
+      tool surface annotations, cache replay tiers, agent-commands targets, review
+      overlays/validate/persona, check/search verdicts, handon verification, handoff
+      git reads, plan renderer, detector edges, flight renderer, a11y evaluate, ...).
+      Measured 90.08% branches locally; CI runs ubuntu/Node22 so the floor holds a
+      margin and 95 stays the ratchet endpoint. ~320 branches remain: CLI subprocess
+      arms (_register-handoff 8, skills-install 8, commands/_daemon 13 partial),
+      platform-locked daemon paths (_service/_status-format 16), dead/defensive
+      branches (ai/_framework 7, handoff _sources 9), plus ~280 long-tail chips
+      (2-5 per file).
 - [x] The 2 pre-existing flaky failures are resolved, not documented around: the
       untrusted-fence miss was a rebrand drift in the directive pattern (`PIX GALAXY
 WORKFLOW REMINDER` never matched) and the home-recording-leak race now checks a
