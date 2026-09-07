@@ -1,4 +1,4 @@
-// test/apply-containment.test.mjs
+// test/apply-containment: destination containment (findings 01 + 02).
 //
 // Audit findings 01 + 02 - pix_apply is the only tool that writes files, so
 // its containment check carries all the security weight.
@@ -18,11 +18,11 @@
 
 import test from "node:test";
 import assert from "node:assert/strict";
-import { mkdtempSync, mkdirSync, symlinkSync, realpathSync, writeFileSync } from "node:fs";
-import { tmpdir, homedir } from "node:os";
+import { mkdirSync, mkdtempSync, realpathSync, symlinkSync, writeFileSync } from "node:fs";
+import { homedir, tmpdir } from "node:os";
 import { join, parse, sep } from "node:path";
 
-import { resolveProjectRoot, resolveWriteTarget, canonicalFilesDigest } from "../../src/tools/apply/index.js";
+import { resolveProjectRoot, resolveWriteTarget } from "../../../src/tools/apply/index.js";
 
 /** A realpath'd temp project root (macOS /tmp is a symlink to /private/tmp). */
 const project = realpathSync(mkdtempSync(join(tmpdir(), "rule-apply-")));
@@ -102,45 +102,6 @@ test("resolveWriteTarget still allows ordinary project config", () => {
 
 test("resolveWriteTarget rejects NUL bytes in the path", () => {
   assert.throws(() => resolveWriteTarget(project, "src/a\0.js"), /NUL|invalid/i);
-});
-
-// ── canonicalFilesDigest: no in-band separator ambiguity ───────────────────
-
-test("canonicalFilesDigest binds paths, not just contents", () => {
-  const a = canonicalFilesDigest([{ path: "a.js", content: "X" }]);
-  const b = canonicalFilesDigest([{ path: "b.js", content: "X" }]);
-  assert.notEqual(a, b, "same content at a different path must not share a digest");
-});
-
-test("canonicalFilesDigest is stable for identical input", () => {
-  const files = [
-    { path: "a.js", content: "X" },
-    { path: "b.js", content: "Y" },
-  ];
-  assert.equal(canonicalFilesDigest(files), canonicalFilesDigest(structuredClone(files)));
-});
-
-test("canonicalFilesDigest resists the ---FILE--- separator collision", () => {
-  // The old digest joined contents with "\n---FILE---\n", so these two shapes
-  // hashed identically and one receipt validated both.
-  const twoFiles = canonicalFilesDigest([
-    { path: "a.js", content: "X" },
-    { path: "b.js", content: "Y" },
-  ]);
-  const oneFile = canonicalFilesDigest([{ path: "a.js", content: "X\n---FILE---\nY" }]);
-  assert.notEqual(twoFiles, oneFile);
-});
-
-test("canonicalFilesDigest is order-sensitive", () => {
-  const ab = canonicalFilesDigest([
-    { path: "a.js", content: "X" },
-    { path: "b.js", content: "Y" },
-  ]);
-  const ba = canonicalFilesDigest([
-    { path: "b.js", content: "Y" },
-    { path: "a.js", content: "X" },
-  ]);
-  assert.notEqual(ab, ba);
 });
 
 // ── the guard holds for a root that looks legitimate ───────────────────────

@@ -12,9 +12,4 @@ export const FILE_SIZE_RATCHET = new Map([
   ["src/core/session/_lifecycle.js", 228],
   ["src/tools/router/_call.js", 188],
   ["src/transport/_session-registry.js", 221],
-  ["tests/core/guardrails-precision-recall.test.mjs", 155],
-  ["tests/prompts/reminder-diet.test.mjs", 158],
-  ["tests/skills/skill-surface-embedded-only.test.mjs", 163],
-  ["tests/tools/apply-containment.test.mjs", 152],
-  ["tests/transport/sse.test.mjs", 151],
 ]);
