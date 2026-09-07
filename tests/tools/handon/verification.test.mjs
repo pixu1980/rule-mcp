@@ -36,7 +36,7 @@ test("lines groups files and adrs by verdict and renders the other kinds", () =>
   assert.ok(out.some((line) => line.includes("branch `feat/x`")), "branch lines render");
   assert.ok(out.some((line) => line.includes("2 commits")), "range lines render");
   assert.ok(out.some((line) => line.includes("`pnpm test`")), "command lines render");
-  assert.ok(out.some((line) => line.includes("open: value in a claim")), "open lines render");
+  assert.ok(out.some((line) => line.includes("open: the index")), "open lines render");
 });
 
 test("verifyBranch reads the checkout, the trunks and the merges", () => {
