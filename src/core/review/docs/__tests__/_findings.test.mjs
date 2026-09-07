@@ -46,8 +46,10 @@ test("mergeFindings flips reported-open and keeps resolved ones visible once", (
     { id: "F3", severity: "low", status: "open", evidence: "c", summary: "brand new" },
   ];
 
-  const merged = mergeFindings(prior, now);
+  const merged = mergeFindings(prior, now).findings;
   assert.ok(merged.some((f) => f.id === "F1" && f.status === "open"), "reported-open stays open");
   assert.ok(merged.some((f) => f.id === "F2" && f.status === "resolved"), "an open finding no longer reported resolves");
   assert.ok(merged.some((f) => f.id === "F3"), "a brand new finding is added");
+  const sorted = merged.findIndex((f) => f.id === "F1") < merged.findIndex((f) => f.id === "F3");
+  assert.equal(sorted, true, "higher severities sort before lower ones");
 });
