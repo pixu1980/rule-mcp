@@ -60,6 +60,11 @@ export function operationSection(role, operation) {
       `Produce \`docs/plans/${role.id}.md\` - the roadmap, in steps with dependencies, derived from the open`,
       `findings in the review, worst first. Read \`docs/reviews/${role.id}.md\` first and derive each step from`,
       "a finding it has open; deleted by the run that finds nothing open.",
+      "",
+      "The plan is written by an expert with this role's years behind it, ready for development:",
+      "exhaustive and meticulous, as many steps as the findings demand (no fixed count), each step",
+      "split into numbered sub-steps (the `steps` array on a finding) whenever it hides more than one",
+      "action - name the files, the commands and the gate that proves the step done.",
       ...common,
     ];
   }
@@ -75,6 +80,11 @@ export function operationSection(role, operation) {
     "   and a status of open or resolved. Updated: new findings appended, fixed ones flipped to resolved.",
     `3. \`docs/plans/${role.id}.md\` - the roadmap, in steps with dependencies. Re-derived from the open`,
     "   findings; deleted when a run finds none, so the trio collapses to an audit and a review saying clean.",
+    "",
+    "The plan is written by an expert with this role's years behind it, ready for development:",
+    "exhaustive and meticulous, as many steps as the findings demand (no fixed count), each step",
+    "split into numbered sub-steps (the `steps` array on a finding) whenever it hides more than one",
+    "action - name the files, the commands and the gate that proves the step done.",
     ...common,
     "",
     "Audit evidence-first: measure rather than assume, and quote the command and its output for every",
