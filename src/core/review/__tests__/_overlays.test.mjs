@@ -62,9 +62,13 @@ test("loadRoleOverlays reads md and legacy json overlays, overriding by id", () 
   assert.equal(problems.length, 1, "the broken file is reported");
   assert.match(problems[0].reason, /must be a non-empty string/, "the reason lists the missing fields");
 
-  const elsewhere = join(mkdtempSync(join(tmpdir(), "rule-overlay-absent-")), "missing");
-  const absent = loadRoleOverlays({ home: elsewhere });
-  assert.deepEqual(absent.roles, [], "a missing overlay dir has no roles");
+  delete process.env.RULE_MCP_ROLES_OVERLAY_DIR;
+  try {
+    const absent = loadRoleOverlays({ home: "/nonexistent-home-xyz" });
+    assert.deepEqual(absent.roles, [], "a missing overlay dir has no roles");
+  } finally {
+    process.env.RULE_MCP_ROLES_OVERLAY_DIR = overlayDir;
+  }
 });
 
 test("parsePersonaFile reads frontmatter and body lenses", () => {
