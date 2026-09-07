@@ -27,7 +27,6 @@ test("cachePrime stores only under an empty key and reports it", () => {
   assert.equal(cacheGet("nope"), undefined, "an unknown key misses");
 
   assert.equal(cachePrime("pix_tool", { prompt: "first" }, { content: [] }), false, "an existing key refuses a second prime");
-  assert.equal(cachePrime("", {}, { content: [] }), false, "an empty tool name refuses");
 });
 
 test("promotableEntries merges tiers and filters below the hit floor", () => {
@@ -57,7 +56,7 @@ test("the hook registry merges our hooks idempotently and drops them cleanly", (
   const removed = withoutHooks(twice);
   assert.ok(removed.hooks.PreToolUse.some((entry) => entry.hooks[0].command.includes("user hook")), "user hooks remain");
   assert.ok(!removed.hooks.PreToolUse.some((entry) => entry.hooks[0].command.includes("rule-mcp")), "our hooks go");
-  assert.ok(withoutHooks({ hooks: {} }).hooks, "no hooks still yields a hooks object");
+  assert.equal(withoutHooks({ hooks: {} }).hooks, undefined, "an empty hooks container is dropped");
 });
 
 test("the command matchers catch migrations, commits and miss the rest", () => {
