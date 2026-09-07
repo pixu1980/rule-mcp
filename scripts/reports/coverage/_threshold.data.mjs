@@ -7,5 +7,5 @@
  * deleting a test), until it reaches the target and becomes the gate the plan
  * asked for.
  */
-export const BRANCH_FLOOR = 87;
+export const BRANCH_FLOOR = 89;
 export const BRANCH_TARGET = 95;
