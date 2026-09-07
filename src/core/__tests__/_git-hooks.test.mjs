@@ -13,7 +13,7 @@ import { mkdtempSync, writeFileSync, readFileSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 
-const { GIT_HOOK_MARKER, HOOKED_GIT_EVENTS, uninstallGitHooks } = await import("../../src/core/git-hooks.js");
+const { GIT_HOOK_MARKER, HOOKED_GIT_EVENTS, uninstallGitHooks } = await import("../../../src/core/git-hooks.js");
 
 function hookTree() {
   const dir = mkdtempSync(join(tmpdir(), "rule-git-hooks-"));

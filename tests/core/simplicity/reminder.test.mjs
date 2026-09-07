@@ -16,18 +16,14 @@ const routed = await callTool("pix_tool", { prompt: "add a payments table migrat
 const reminder = routed.content.find((item) => item.text?.includes("## PIX WORKFLOW REMINDER"))?.text ?? "";
 check("T1 reminder states the minimal-change rule", /minimal change/i.test(reminder));
 check("T1.1 reminder forbids unrequested scope", /unrequested/i.test(reminder));
-check(
-  "T1.2 reminder asks for the ADR unprompted",
-  /rule_tool_process_adr/.test(reminder) && /without being asked/i.test(reminder),
-);
+check("T1.2 reminder asks for the ADR unprompted", /rule_tool_process_adr/.test(reminder) && /without being asked/i.test(reminder));
 
 // ── T2: the router emits a scope contract ──
 const routing = JSON.parse(routed.content[0].text);
 check("T2 routing carries a scope_contract", Boolean(routing.scope_contract));
 check(
   "T2.1 scope_contract lists what needs an explicit request",
-  Array.isArray(routing.scope_contract?.forbidden_without_explicit_request) &&
-    routing.scope_contract.forbidden_without_explicit_request.length > 0,
+  Array.isArray(routing.scope_contract?.forbidden_without_explicit_request) && routing.scope_contract.forbidden_without_explicit_request.length > 0,
 );
 check(
   "T2.2 scope_contract asks to declare out-of-scope up front",
@@ -41,7 +37,6 @@ const cosmetic = await callTool("pix_tool", { prompt: "center a button label" })
 const cosmeticRouting = JSON.parse(cosmetic.content[0].text);
 check("T3.2 cosmetic prompt gets no doc followup", !cosmeticRouting.docs_followup);
 
-
 // ── T8: a reduction request routes to the simplicity skill and asks for no ADR.
 //    The real corrective prompt is dominated by domain nouns (payment, schema,
 //    webhook, table) which used to swamp the signal. ──
@@ -52,13 +47,10 @@ const reduction = JSON.parse((await callTool("pix_tool", { prompt: REDUCTION }))
 check("T8 reduction prompt routes to simplicity", reduction.route === "rule-process-simplicity");
 check(
   "T8.1 the domain skill stays reachable",
-  reduction.next_tools.some((t) => t.startsWith("rule_tool_data")) ||
-    reduction.alternatives.some((a) => a.route.startsWith("rule-data")),
+  reduction.next_tools.some((t) => t.startsWith("rule_tool_data")) || reduction.alternatives.some((a) => a.route.startsWith("rule-data")),
 );
 check("T8.2 no ADR followup on a reduction request", !reduction.docs_followup);
-const build = JSON.parse(
-  (await callTool("pix_tool", { prompt: "add a payments table and its prisma migration" })).content[0].text,
-);
+const build = JSON.parse((await callTool("pix_tool", { prompt: "add a payments table and its prisma migration" })).content[0].text);
 check("T8.3 a build request still gets the ADR followup", build.docs_followup?.tool === "rule_tool_process_adr");
 check("T8.4 a build request still routes to its domain", build.route !== "rule-process-simplicity");
 
@@ -73,10 +65,7 @@ retainTools(before.filter((name) => name !== "rule_tool_process_simplicity"));
 const degraded = await callTool("pix_tool", { prompt: REDUCTION });
 check("T8.5 routing survives an unregistered skill", !degraded.isError);
 const degradedRouting = JSON.parse(degraded.content[0].text);
-check(
-  "T8.6 the unregistered tool is not advertised",
-  !degradedRouting.next_tools.includes("rule_tool_process_simplicity"),
-);
+check("T8.6 the unregistered tool is not advertised", !degradedRouting.next_tools.includes("rule_tool_process_simplicity"));
 check("T8.7 the route itself still names the skill", degradedRouting.route === "rule-process-simplicity");
 await loadAllSkills(true);
 
@@ -84,9 +73,7 @@ await loadAllSkills(true);
 const simplicitySkill = readFileSync("skills/rule-process-simplicity/SKILL.md", "utf8");
 check(
   "T9 the skill carries a schema-change checklist",
-  /## Schema changes/.test(simplicitySkill) &&
-    /who writes it/i.test(simplicitySkill) &&
-    /who reads it/i.test(simplicitySkill),
+  /## Schema changes/.test(simplicitySkill) && /who writes it/i.test(simplicitySkill) && /who reads it/i.test(simplicitySkill),
 );
 
 // ── T6: baseline - the repo's own committed source must stay clean ──
@@ -95,7 +82,10 @@ const walk = (dir) => {
   for (const entry of readdirSync(dir)) {
     const full = join(dir, entry);
     if (statSync(full).isDirectory()) {
-      walk(full);
+      // Co-located unit tests are checked by the test runner, not this sweep.
+      if (entry !== "__tests__") {
+        walk(full);
+      }
     } else if (/\.(?:js|mjs)$/.test(entry)) {
       sourceFiles.push(full);
     }

@@ -20,9 +20,9 @@ import { test } from "node:test";
 
 process.env.RULE_MCP_NO_AUTOUPDATE = "1";
 
-const { computeKpi } = await import("../../src/core/telemetry/kpi/index.js");
+const { computeKpi } = await import("../../../../../src/core/telemetry/kpi/index.js");
 
-const fixture = (name) => fileURLToPath(new URL(`../fixtures/${name}`, import.meta.url));
+const fixture = (name) => fileURLToPath(new URL(`../../../../../tests/fixtures/${name}`, import.meta.url));
 
 const EVENTS = readFileSync(fixture("kpi-regression.jsonl"), "utf8")
   .trim()

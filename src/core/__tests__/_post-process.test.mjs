@@ -25,7 +25,7 @@ const check = (label, ok) => {
 
 console.log("=== Post-process Tests ===\n");
 
-const { postProcessFiles } = await import("../../src/core/post-process.js");
+const { postProcessFiles } = await import("../../../src/core/post-process.js");
 
 const tmpDir = mkdtempSync(join(tmpdir(), "rule-pp-"));
 const origCwd = process.cwd();

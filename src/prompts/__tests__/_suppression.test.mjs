@@ -12,7 +12,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 
-import { listPrompts, listActivePrompts, promptsSuppressed } from "../../src/prompts/index.js";
+import { listPrompts, listActivePrompts, promptsSuppressed } from "../../../src/prompts/index.js";
 
 test("listPrompts returns the full registry regardless of the flag", () => {
   assert.ok(listPrompts().length > 1, "full registry must not be empty");

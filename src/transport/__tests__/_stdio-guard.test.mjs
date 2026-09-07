@@ -9,7 +9,7 @@
 
 import test from "node:test";
 import assert from "node:assert/strict";
-import { installStdioGuard, PARENT_POLL_MS } from "../../src/transport/_stdio-guard.js";
+import { installStdioGuard, PARENT_POLL_MS } from "../../../src/transport/_stdio-guard.js";
 
 /** A minimal emitter: the guard only needs on/off/emit and passes Errors through. */
 function emitter() {

@@ -9,7 +9,7 @@ import test from "node:test";
 
 process.env.RULE_MCP_GUARDED_CHECKS = "1"; // servers guard; CLI/tests run inline by default
 
-const { checkCodeGuarded, shutdownGuardrailWorker } = await import("../../src/core/guardrails/index.js");
+const { checkCodeGuarded, shutdownGuardrailWorker } = await import("../../../../src/core/guardrails/index.js");
 
 test("a normal check answers like the inline engine", async () => {
   const result = await checkCodeGuarded("rule-styleguide-css", "a { color: red; }", { fileName: "a.css" });

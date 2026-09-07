@@ -113,6 +113,14 @@ export default defineConfig([
     },
   },
   {
+    // Co-located unit tests live in Jest-style __tests__/ folders (ADR 061,
+    // phase 6); the dunder directory name is the convention, not a case slip.
+    files: ["src/**/__tests__/**/*.mjs"],
+    rules: {
+      "unicorn/filename-case": "off",
+    },
+  },
+  {
     ignores: ["node_modules/", "dist/", "coverage/", ".tokensave/", ".git/", ".DS_Store"],
   },
 ]);
