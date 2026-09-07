@@ -11,7 +11,7 @@ Phase 7's ratchet continued past ADR 066: a second wave of ~30 co-located suites
 
 ## Decision
 
-Raise BRANCH_FLOOR in scripts/reports/coverage/_threshold.data.mjs from 87 to 89. The ratchet mechanics are unchanged: pnpm test:coverage fails below the floor, the floor may only rise, and 95 stays where the phase closes. All suites landed co-located (src/**/__tests__) or as repo-level folder tests, picked up by the glob runner without package.json edits.
+Raise BRANCH_FLOOR in scripts/reports/coverage/_threshold.data.mjs from 87 to 89. The ratchet mechanics are unchanged: pnpm test:coverage fails below the floor, the floor may only rise, and 95 stays where the phase closes. All suites landed co-located (src/**/**tests**) or as repo-level folder tests, picked up by the glob runner without package.json edits.
 
 ## Consequences
 

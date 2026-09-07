@@ -11,7 +11,7 @@ Phase 7 of the plan (ADR 060/061/065) gates CI on a rising branch-coverage floor
 
 ## Decision
 
-Raise BRANCH_FLOOR in scripts/reports/coverage/_threshold.data.mjs from 83 to 87. The gate and the ratchet mechanics are unchanged: pnpm test:coverage fails below the floor, the floor may only rise, and 95 is when the phase closes. Every suite landed in this pass is co-located src/**/__tests__ or folder-split repo-level tests, so the glob runner picked them up with no package.json edits.
+Raise BRANCH_FLOOR in scripts/reports/coverage/_threshold.data.mjs from 83 to 87. The gate and the ratchet mechanics are unchanged: pnpm test:coverage fails below the floor, the floor may only rise, and 95 is when the phase closes. Every suite landed in this pass is co-located src/**/**tests** or folder-split repo-level tests, so the glob runner picked them up with no package.json edits.
 
 ## Consequences
 
