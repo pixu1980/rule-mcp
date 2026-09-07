@@ -10,7 +10,7 @@ export const HOME = homedir();
 /** Absolute path of the CLI entrypoint this service runs. */
 export function resolveEntrypoint() {
   const __dirname = fileURLToPath(new URL(".", import.meta.url));
-  const scriptPath = join(__dirname, "..", "..", "bin", "rule-mcp.js");
+  const scriptPath = join(__dirname, "..", "..", "..", "bin", "rule-mcp.js");
   const nodePath = process.execPath;
 
   return {

@@ -8,6 +8,9 @@ import { addBeforeToolHook, addPostToolHook, callTool, listTools, registerTool }
 // not the result cache (which has its own test). Disable caching here.
 process.env.RULE_MCP_NO_CACHE = "1";
 process.env.RULE_MCP_NO_AUTOUPDATE = "1"; // hermetic: no real git ops in tests
+// The reminder diet (hardening 4.2) sends nothing between re-anchors; a cadence
+// of 1 keeps a reminder on every call so this suite can assert its presence.
+process.env.RULE_MCP_REMINDER_EVERY = "1";
 
 console.log("enforcement pipeline test");
 
@@ -112,8 +115,8 @@ assert.ok(
   "rule_tool_check MCP schema must pass manifest dependencies into guardrail context",
 );
 
-// ── Token-saving: workflow reminder is full once per tool, terse thereafter, and
-//    fully suppressible via RULE_MCP_NO_REMINDER (Phase 4.1). ──
+// ── Token-saving: the full contract is emitted once per session, re-anchors are
+//    terse, and RULE_MCP_NO_REMINDER suppresses it (hardening 4.2). ──
 const secondRoute = await callTool("pix_tool", { prompt: "Vue button component" });
 const secondReminder = secondRoute.content.find((item) => item.text?.includes("PIX WORKFLOW REMINDER"));
 assert.ok(secondReminder, "repeat call must still carry a (terse) reminder");

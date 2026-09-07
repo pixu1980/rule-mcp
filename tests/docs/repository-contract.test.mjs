@@ -5,7 +5,7 @@ import { tmpdir } from "node:os";
 import { basename, dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
-const root = join(dirname(fileURLToPath(import.meta.url)), "..");
+const root = join(dirname(fileURLToPath(import.meta.url)), "..", "..");
 const forbidden = "";
 const ignoredDirectories = new Set([".git", "node_modules", ".tokensave", ".agents", ".pi", ".github", ".vscode"]);
 

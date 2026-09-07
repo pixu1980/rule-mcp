@@ -32,7 +32,7 @@ try {
     "package.json must advertise that skills need no separate install step",
   );
 
-  const result = spawnSync(process.execPath, [join(root, "scripts", "install-skills.mjs")], {
+  const result = spawnSync(process.execPath, [join(root, "scripts", "install", "skills", "index.mjs")], {
     cwd: root,
     env: { ...process.env, HOME: testHome, USERPROFILE: testHome },
     encoding: "utf8",

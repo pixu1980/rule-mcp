@@ -9,6 +9,11 @@
 import { strict as assert } from "node:assert";
 import { formatDoctorTerminal } from "../../src/cli/doctor/index.js";
 
+// Hermetic: color is decided by NO_COLOR / FORCE_COLOR / TTY, and a runner that
+// exports FORCE_COLOR would turn the plain-output assertions into escape soup.
+delete process.env.FORCE_COLOR;
+delete process.env.NO_COLOR;
+
 console.log("rule doctor UI test");
 
 const report = {

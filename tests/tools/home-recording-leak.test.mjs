@@ -19,38 +19,57 @@
  */
 import { strict as assert } from "node:assert";
 import { spawnSync } from "node:child_process";
-import { existsSync, readdirSync } from "node:fs";
-import { homedir } from "node:os";
+import { existsSync, mkdtempSync, readdirSync, rmSync } from "node:fs";
+import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { test } from "node:test";
 import { fileURLToPath } from "node:url";
 
 const testDir = fileURLToPath(new URL(".", import.meta.url));
-const realProjects = join(homedir(), ".rule-mcp", "projects");
 
-/** What the real projects root holds right now, sorted for comparison. */
-const listing = () => (existsSync(realProjects) ? readdirSync(realProjects).sort() : []);
+/** What a projects root holds, sorted for comparison. */
+const listing = (root) => (existsSync(root) ? readdirSync(root).sort() : []);
 
 /** Run these, because they are fast on their scripted repos. */
-const RUN = ["project-init.test.mjs", "session-resume/hook.test.mjs", "session-resume/prompt.test.mjs", "handon/claims.test.mjs"];
+const RUN = [
+  "project-init.test.mjs",
+  "session-resume/hook.test.mjs",
+  "session-resume/prompt.test.mjs",
+  "handon/claims.test.mjs",
+];
 
 // The SANDBOXED self-update suites are target-only tests that carry their own
 // HOME pins; the per-suite fixture assertions from the source do not apply here.
 
 for (const suite of RUN) {
-  test(`${suite} writes no recording into the real home`, () => {
-    const before = listing();
-    const env = { ...process.env };
+  test(`${suite} writes no recording into the default home`, () => {
+    // A private fake HOME stands in for the real one: the default recorder path
+    // resolves under $HOME, so a suite that pins nothing leaves its recordings
+    // here - detected deterministically, with no race against whatever other
+    // suites the parallel runner has in flight (the old check watched the real
+    // home, which anything could touch mid-window).
+    const home = mkdtempSync(join(tmpdir(), "rule-leak-home-"));
+    const projects = join(home, ".rule-mcp", "projects");
+    const env = { ...process.env, HOME: home, USERPROFILE: home };
     // The point is the default path: a pin from the parent would hide the leak.
     delete env.RULE_MCP_STATE_DIR;
-    const run = spawnSync(process.execPath, [join(testDir, suite)], {
-      encoding: "utf8",
-      env,
-      timeout: 120_000,
-    });
 
-    assert.equal(run.status, 0, `${suite} passes on its own: ${run.stderr}`);
-    assert.deepEqual(listing(), before, `a recording appeared in ${realProjects} while ${suite} ran; pin HOME or RULE_MCP_STATE_DIR in it`);
+    try {
+      const run = spawnSync(process.execPath, [join(testDir, suite)], {
+        encoding: "utf8",
+        env,
+        timeout: 120_000,
+      });
+
+      assert.equal(run.status, 0, `${suite} passes on its own: ${run.stderr}`);
+      assert.deepEqual(
+        listing(projects),
+        [],
+        `a recording appeared under $HOME while ${suite} ran; pin HOME or RULE_MCP_STATE_DIR in it`,
+      );
+    } finally {
+      rmSync(home, { recursive: true, force: true });
+    }
   });
 }
 
