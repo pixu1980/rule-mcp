@@ -90,6 +90,6 @@ test("decorateWithTokensave truncates allowlisted heavy outputs", () => {
   process.env.PIX_GALAXY_MCP_SUPPRESS_MIN_LINES = "30";
   const truncated = decorateWithTokensave("pix_tool_fix", heavy, { path: project });
 
-  assert.match(truncated.content[0].text, /lines omitted/, "the heavy output is truncated");
+  assert.match(truncated.content.map((item) => item.text).join("\n"), /lines omitted/, "the heavy output is truncated");
   assert.ok(TOKENSAVE_SUPPRESSIBLE.has("pix_tool_fix"), "the fix tool is allowlisted");
 });
