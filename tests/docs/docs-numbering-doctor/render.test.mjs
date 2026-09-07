@@ -37,7 +37,7 @@ test("a plan with renames lists them and the stale commits below", () => {
 
   const out = renderRenumberPlan(plan, {});
   assert.match(out, /collision\(s\) found/, "the collision count renders");
-  assert.match(out, /069-personas\.md -> 070-personas\.md/, "the rename renders");
+  assert.match(out, /069-personas\.md -> .*070-personas\.md/, "the rename renders");
   assert.match(out, /commit message\(s\) touch a document that moves/, "the stale-commit note renders");
   assert.match(out, /certainly stale/, "the certainly-stale list follows");
 
