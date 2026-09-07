@@ -24,17 +24,31 @@ const SPAWN_CALL = /\b(?:execFileSync|spawnSync|execSync)\s*\(/;
 test("every test that runs install.sh or uninstall.sh sandboxes PNPM_HOME", () => {
   const offenders = [];
 
-  for (const name of readdirSync(CLI_DIR)) {
-    if (!name.endsWith(".mjs") || name === "script-env-hermetic.test.mjs") {
-      continue;
-    }
+  /** A split suite may sandbox in its _*.fixture.mjs; the folder counts as one unit. */
+  const dirNamesPnpmHome = (dir) =>
+    readdirSync(dir, { withFileTypes: true }).some(
+      (entry) => entry.isFile() && entry.name.endsWith(".mjs") && readFileSync(join(dir, entry.name), "utf8").includes("PNPM_HOME"),
+    );
 
-    const source = readFileSync(join(CLI_DIR, name), "utf8");
+  const walk = (dir) => {
+    for (const entry of readdirSync(dir, { withFileTypes: true })) {
+      const full = join(dir, entry.name);
+      if (entry.isDirectory()) {
+        walk(full);
+        continue;
+      }
+      if (!entry.name.endsWith(".mjs") || entry.name === "script-env-hermetic.test.mjs") {
+        continue;
+      }
 
-    if (SPAWNS_SCRIPT.test(source) && SPAWN_CALL.test(source) && !source.includes("PNPM_HOME")) {
-      offenders.push(name);
+      const source = readFileSync(full, "utf8");
+
+      if (SPAWNS_SCRIPT.test(source) && SPAWN_CALL.test(source) && !source.includes("PNPM_HOME") && !dirNamesPnpmHome(dir)) {
+        offenders.push(full.slice(CLI_DIR.length));
+      }
     }
-  }
+  };
+  walk(CLI_DIR);
 
   assert.deepEqual(
     offenders,
