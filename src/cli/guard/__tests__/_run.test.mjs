@@ -1,16 +1,25 @@
 /** The guard hook: stdin reading, TTY short-circuits and fail-open answers. */
 import { strict as assert } from "node:assert";
-import { EventEmitter } from "node:events";
 import { test } from "node:test";
 
 import { readStdin, runGuard } from "../_run.js";
 
 /** A readable stream replacement that can be fed and closed. */
 function fakeStream(text = "", { tty = false, error = false } = {}) {
-  const stream = new EventEmitter();
-  stream.isTTY = tty;
-  stream.setEncoding = () => {};
-  stream.on = (event, fn) => EventEmitter.prototype.on.call(stream, event, fn);
+  const listeners = {};
+  const stream = {
+    isTTY: tty,
+    setEncoding() {},
+    on(event, fn) {
+      (listeners[event] ??= []).push(fn);
+      return stream;
+    },
+    emit(event, ...args) {
+      for (const fn of listeners[event] ?? []) {
+        fn(...args);
+      }
+    },
+  };
 
   queueMicrotask(() => {
     if (error) {
@@ -37,7 +46,8 @@ test("readStdin collects chunks and resolves on error with an empty string", asy
 test("session-start and prompt-submit inject without reading stdin", async () => {
   const writes = [];
   await runGuard("session-start", { stdin: fakeStream("", { tty: true }), write: (t) => writes.push(t) });
-  assert.equal(JSON.parse(writes.join("")).isTTY instanceof Boolean || true, true, "a session answer is produced");
+  const parsed = JSON.parse(writes.join(""));
+  assert.ok(typeof parsed === "object" && parsed !== null, "a session answer is produced");
 
   const prompt = [];
   await runGuard("prompt-submit", { stdin: fakeStream("", { tty: true }), write: (t) => prompt.push(t) });

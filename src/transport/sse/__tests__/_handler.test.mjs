@@ -21,7 +21,7 @@ before(async () => {
 after(() => stopSseServer());
 
 async function req(method, path, options = {}) {
-  const headers = { Authorization: `Bearer ${TOKEN}`, ...(options.headers ?? {}) };
+  const headers = { Authorization: `Bearer ${TOKEN}`, ...options.headers };
   const res = await fetch(`http://127.0.0.1:${port}${path}`, { method, headers, body: options.body });
 
   return { status: res.status, text: await res.text(), headers: Object.fromEntries(res.headers.entries()) };
@@ -54,7 +54,7 @@ test("/health is public, a bad token is 401 then 429, and a bad origin is 403", 
   const limited = await req("GET", "/sse", { headers: { Authorization: "Bearer wrong" } });
   assert.equal(limited.status, 429, "after the loopback budget the limiter refuses");
 
-  const denied = await req("GET", "/sse", { headers: { Origin: "http://evil.example" } });
+  const denied = await req("GET", "/sse", { headers: { Origin: "https://evil.example" } });
   assert.equal(denied.status, 403, "cross-origin denial");
   assert.match(denied.text, /Cross-origin/, "the error names the rule");
 });

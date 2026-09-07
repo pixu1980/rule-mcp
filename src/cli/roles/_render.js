@@ -13,7 +13,7 @@ export function renderList(roles, problems) {
   ];
 
   for (const role of roles) {
-    lines.push(`| ${role.id.padEnd(16)} | ${role.layer.padEnd(8)} | ${role.status.padEnd(10)} | ` + `${String(role.yearsOfExperience).padStart(5)} | ${role.role}`);
+    lines.push(`| ${role.id.padEnd(16)} | ${role.layer.padEnd(8)} | ${role.status.padEnd(10)} | ${String(role.yearsOfExperience).padStart(5)} | ${role.role}`);
   }
 
   if (problems.length > 0) {

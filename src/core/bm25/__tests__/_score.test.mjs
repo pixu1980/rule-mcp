@@ -18,7 +18,7 @@ function seedIndex() {
       ["grid", new Map([[1, 1]])],
       ["io", new Map([[2, 2]])],
     ]),
-    docLength: new Map([...docs.map((d) => [d.id, 10])]),
+    docLength: new Map(docs.map((d) => [d.id, 10])),
     docs,
     totalDocs: docs.length,
     avgDocLength: 10,

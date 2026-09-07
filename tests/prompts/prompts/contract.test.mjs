@@ -1,7 +1,7 @@
 /** Every prompt: implementation, one argument, help path, commit-scope closer. */
 import { strict as assert } from "node:assert";
 import { test } from "node:test";
-import { AREA_PROMPTS, getPrompt, listPrompts, names, prompts } from "./_prompts.fixture.mjs";
+import { AREA_PROMPTS, getPrompt, listPrompts, prompts } from "./_prompts.fixture.mjs";
 
 test("every listed prompt has a getPrompt implementation with messages", () => {
   for (const p of prompts) {

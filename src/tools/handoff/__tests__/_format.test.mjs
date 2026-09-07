@@ -1,6 +1,6 @@
 /** Handoff formatting helpers and the export-retention policy. */
 import { strict as assert } from "node:assert";
-import { mkdirSync, mkdtempSync, rmSync, writeFileSync, utimesSync } from "node:fs";
+import { mkdtempSync, rmSync, writeFileSync, utimesSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { test } from "node:test";
@@ -9,7 +9,7 @@ import { compressValue, estimateTokens, priorityScore } from "../_format.js";
 import { pruneExports } from "../../../core/telemetry/flight/_retention.js";
 
 test("compressValue shortens, passes through and normalizes the dash", () => {
-  assert.equal(compressValue(undefined), "-", "an absent value renders a dash");
+  assert.equal(compressValue(), "-", "an absent value renders a dash");
   assert.equal(compressValue("-"), "-", "a dash stays a dash");
   assert.equal(compressValue("short"), "short", "short values pass through");
   assert.equal(compressValue(42), "42", "numbers stringify");

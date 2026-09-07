@@ -38,16 +38,16 @@ test("an inserted blank above a block shifts its siblings", () => {
 
   // The if block is a middle block: its closing brace gets a blank above it
   // and a blank below, and the while block must still land at the same depth.
-  assert.match(content, /\n  if \(x\) \{\n/, "the if block still opens on line 1");
-  assert.match(content, /\n  while \(y\) \{\n\n?/, "the while block still sits after the blank");
+  assert.match(content, /\n {2}if \(x\) \{\n/, "the if block still opens on line 1");
+  assert.match(content, /\n {2}while \(y\) \{\n\n?/, "the while block still sits after the blank");
   assert.ok(content.split("\n").length >= 10, "insertions never swallow lines");
 });
 
 test("an end block gains a blank above but not below", () => {
   const { content } = fix("end.js", ["function f() {", "  const c = 2;", "  if (a) {", "    b();", "  }", "}", ""].join("\n"));
 
-  assert.match(content, /const c = 2;\n\n  if \(a\) \{/, "a blank joins the content above the end block");
-  assert.doesNotMatch(content, /if \(a\) \{\n    b\(\);\n  \}\n\n\}/, "no blank between the end block and the parent's brace");
+  assert.match(content, /const c = 2;\n\n {2}if \(a\) \{/, "a blank joins the content above the end block");
+  assert.doesNotMatch(content, /if \(a\) \{\n {4}b\(\);\n {2}\}\n\n\}/, "no blank between the end block and the parent's brace");
 });
 
 test("a line before }; keeps the block rule from double-inserting", () => {

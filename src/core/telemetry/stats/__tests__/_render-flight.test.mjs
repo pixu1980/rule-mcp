@@ -3,7 +3,7 @@ import { strict as assert } from "node:assert";
 import test from "node:test";
 
 import { renderFlight } from "../_render-flight.js";
-import { evaluate, BLOCKING } from "../../../../tools/a11y/_evaluate.js";
+import { evaluate } from "../../../../tools/a11y/_evaluate.js";
 
 const GENERIC = (overrides = {}) => ({
   session: { id: "s-1" },

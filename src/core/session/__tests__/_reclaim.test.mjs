@@ -1,6 +1,6 @@
 /** Telemetry retention/drain and the idle-reclaim policy. */
 import { strict as assert } from "node:assert";
-import { existsSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
+import { existsSync, mkdtempSync, rmSync } from "node:fs";
 import { join } from "node:path";
 import { tmpdir } from "node:os";
 import { test } from "node:test";

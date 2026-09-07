@@ -1,6 +1,5 @@
 /** Session lifecycle: cleanups, tracked children, signals, double shutdown. */
 import { strict as assert } from "node:assert";
-import { EventEmitter } from "node:events";
 import { test } from "node:test";
 
 import { installSignalHandlers, killTrackedChildren, registerCleanup, resetLifecycle, runShutdown, trackChild, trackedChildCount, whenShutdown } from "../_lifecycle.js";
@@ -9,7 +8,7 @@ test.beforeEach(() => resetLifecycle());
 
 test("an unregistered child is ignored and a kill failure is silent", () => {
   assert.equal(trackedChildCount(), 0, "nothing tracked by default");
-  trackChild(undefined);
+  trackChild();
   assert.equal(trackedChildCount(), 0, "a child without a pid is not tracked");
 
   const mockChild = (kill) => ({ pid: 42, kill, once() {}, removeListener() {} });
@@ -52,7 +51,18 @@ test("shutdown runs once and waiters resolve", async () => {
 });
 
 test("a second signal forces the exit", () => {
-  const target = new EventEmitter();
+  const listeners = {};
+  const target = {
+    on(event, fn) {
+      (listeners[event] ??= []).push(fn);
+      return target;
+    },
+    emit(event) {
+      for (const fn of listeners[event] ?? []) {
+        fn();
+      }
+    },
+  };
   const exits = [];
   installSignalHandlers({ target, exit: (code) => exits.push(code) });
 

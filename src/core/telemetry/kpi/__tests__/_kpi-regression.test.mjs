@@ -42,7 +42,7 @@ test("the fixture log still produces the KPI block committed beside it", () => {
     assert.deepEqual(
       kpi[block],
       EXPECTED[block],
-      `${block} moved. If that was deliberate, regenerate test/fixtures/kpi-regression.expected.json ` + "in the same commit as the ADR that redefined it.",
+      `${block} moved. If that was deliberate, regenerate test/fixtures/kpi-regression.expected.json in the same commit as the ADR that redefined it.`,
     );
   }
 });

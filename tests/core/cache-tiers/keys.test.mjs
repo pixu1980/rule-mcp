@@ -1,7 +1,7 @@
 /** The two key tiers: what normalizes, what forks the key, what has no key at all. */
 import test from "node:test";
 import assert from "node:assert/strict";
-import { cacheClear, cacheKey, normalizedKey, callTool } from "./_tiers.fixture.mjs";
+import { cacheClear, cacheKey, normalizedKey } from "./_tiers.fixture.mjs";
 
 // ── The normalized key ──
 

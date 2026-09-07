@@ -28,7 +28,7 @@ after(() => stopHttpServer());
 
 /** One request with arbitrary method/path/headers, returning status + headers. */
 async function req(method, path = "/mcp", options = {}) {
-  const headers = { Authorization: `Bearer ${TOKEN}`, ...(options.headers ?? {}) };
+  const headers = { Authorization: `Bearer ${TOKEN}`, ...options.headers };
   const res = await fetch(`http://127.0.0.1:${port}${path}`, { method, headers, body: options.body });
   return { status: res.status, body: await res.text(), headers: Object.fromEntries(res.headers.entries()) };
 }
@@ -78,7 +78,7 @@ test("failed auth is 401, then rate-limited to 429 on loopback", async () => {
 });
 
 test("a disallowed origin is refused with 403 on protected endpoints", async () => {
-  const res = await req("POST", "/mcp", { headers: { Origin: "http://evil.example", "Content-Type": "application/json" }, body: initBody });
+  const res = await req("POST", "/mcp", { headers: { Origin: "https://evil.example", "Content-Type": "application/json" }, body: initBody });
   assert.equal(res.status, 403, "cross-origin denial");
   assert.match(res.body, /Cross-origin/, "the error names the rule");
 });

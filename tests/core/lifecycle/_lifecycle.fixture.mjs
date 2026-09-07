@@ -10,8 +10,8 @@
  * test/process-hygiene.test.mjs.
  */
 
-import { spawn } from "node:child_process";
-import { join } from "node:path";
+import "node:child_process";
+import "node:path";
 
 export const lifecycle = await import("../../../src/core/session/_lifecycle.js");
 

@@ -12,7 +12,7 @@ const KPI = (overrides = {}) => ({
 });
 
 test("usageSection renders a full and an absent usage block", () => {
-  const absent = usageSection(undefined);
+  const absent = usageSection();
   assert.match(absent.join("\n"), /No agent transcript/, "absence is explained, not zeroed");
 
   const full = usageSection({

@@ -29,10 +29,10 @@ test("intervalMs: zero disables throttling and positives convert seconds", () =>
 });
 
 test("normalizeRemoteUrl: unusable inputs match nothing", () => {
-  assert.equal(normalizeRemoteUrl(undefined), null);
+  assert.equal(normalizeRemoteUrl(), null);
   assert.equal(normalizeRemoteUrl(null), null);
   assert.equal(normalizeRemoteUrl(42), null);
-  assert.equal(normalizeRemoteUrl("   "), null);
+  assert.equal(normalizeRemoteUrl(" ".repeat(3)), null);
 });
 
 test("normalizeRemoteUrl: local paths keep their location", () => {

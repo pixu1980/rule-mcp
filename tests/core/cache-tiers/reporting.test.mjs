@@ -2,7 +2,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { rmSync } from "node:fs";
-import { cacheClear, cacheStore, callTool, entryPathOf, result, stateDir } from "./_tiers.fixture.mjs";
+import { cacheClear, cacheStore, entryPathOf, result, stateDir } from "./_tiers.fixture.mjs";
 
 const { loadAllSkills } = await import("../../../src/core/skills/index.js");
 await loadAllSkills(true);

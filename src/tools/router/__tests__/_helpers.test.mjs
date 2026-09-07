@@ -15,7 +15,7 @@ test("withBanner prepends the banner to content and tolerates odd cores", () => 
 });
 
 test("argsBytes measures json length and tolerates the unmeasurable", () => {
-  assert.equal(argsBytes(undefined), 0, "no args means zero bytes");
+  assert.equal(argsBytes(), 0, "no args means zero bytes");
   assert.equal(argsBytes({ a: 1 }), JSON.stringify({ a: 1 }).length, "a json-serializable arg measures");
 
   const circular = {};

@@ -58,7 +58,7 @@ test("verifyCache reports drift, failures and skips together", async () => {
   assert.equal(verify.checked, 1, "one fresh entry is checked");
   assert.deepEqual(verify.drifted, [], "identical bytes are not drift");
   assert.deepEqual(verify.failed, [], "no failures");
-  assert.equal(cacheEntries().length >= 1, true, "the entry is still in the cache");
+  assert.equal(cacheEntries().length > 0, true, "the entry is still in the cache");
 });
 
 test("verifyCache flags a changed recompute as drift", async () => {
