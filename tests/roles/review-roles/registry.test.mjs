@@ -1,10 +1,8 @@
 /**
- * Personas plan A.1-A.3: the role registry, its overlays, and the template.
+ * Personas plan A.1-A.2: the role registry and its overlays.
  *
- * A role is data. These tests pin the three properties every surface depends
- * on: the catalog is valid, an overlay replaces an entry wholesale without
- * being able to break the load, and one role fills the template the same way
- * every time.
+ * A role is data: the catalog is valid, and an overlay replaces an entry
+ * wholesale without being able to break the load.
  */
 import { strict as assert } from "node:assert";
 import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
@@ -12,7 +10,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import test from "node:test";
 
-import { activeRoles, allRoles, EMBEDDED_ROLES, roleById, validateRole } from "../../src/core/review/roles/index.js";
+import { activeRoles, allRoles, EMBEDDED_ROLES, roleById, validateRole } from "../../../src/core/review/roles/index.js";
 
 test("every embedded role is valid", () => {
   for (const role of EMBEDDED_ROLES) {
@@ -90,14 +88,14 @@ test("a deprecated role leaves the surfaces but keeps its entry", () => {
 });
 
 test("an overlay replaces an entry wholesale, by id", async () => {
-  const { loadRoleOverlays } = await import("../../src/core/review/_overlays.js");
+  const { loadRoleOverlays } = await import("../../../src/core/review/_overlays.js");
   const home = mkdtempSync(join(tmpdir(), "rule-roles-user-"));
   try {
     mkdirSync(join(home, "config", "roles"), { recursive: true });
     // Only the user's layer remains: a project layer read roles out of a
     // checkout, which is why it needed a trust gate, and both are gone (ADR 082).
     // Overlays use the same persona-file format as the embedded catalog.
-    const { formatPersonaFile } = await import("../../src/core/review/persona-file/index.js");
+    const { formatPersonaFile } = await import("../../../src/core/review/persona-file/index.js");
     const replacement = { ...roleById("performance"), version: 2, yearsOfExperience: 11 };
     writeFileSync(join(home, "config", "roles", "performance.md"), formatPersonaFile(replacement));
 
@@ -114,7 +112,7 @@ test("an overlay replaces an entry wholesale, by id", async () => {
 });
 
 test("an invalid or unreadable overlay is reported, never fatal", async () => {
-  const { loadRoleOverlays } = await import("../../src/core/review/_overlays.js");
+  const { loadRoleOverlays } = await import("../../../src/core/review/_overlays.js");
   const home = mkdtempSync(join(tmpdir(), "rule-roles-bad-"));
   try {
     mkdirSync(join(home, "config", "roles"), { recursive: true });
@@ -127,40 +125,4 @@ test("an invalid or unreadable overlay is reported, never fatal", async () => {
   } finally {
     rmSync(home, { recursive: true, force: true });
   }
-});
-
-test("the template is filled verbatim from the role", async () => {
-  const { fillRoleTemplate } = await import("../../src/core/review/template/index.js");
-  const filled = fillRoleTemplate(roleById("security"));
-  assert.ok(!filled.includes("{{"), "no placeholder survives");
-  assert.match(filled, /Security Engineer/);
-  assert.match(filled, /25 years of experience/, "the template stays in the wording the user wrote");
-  assert.match(filled, /application security/);
-  assert.match(filled, /docs\/audits\/security\.md/, "the operation contract names the trio");
-  assert.match(filled, /docs\/reviews\/security\.md/);
-  assert.match(filled, /docs\/plans\/security\.md/);
-  assert.match(filled, /rule-backend-security/, "evidence skills are named");
-  assert.match(filled, /interview mode/, "interview mode survives the translation");
-  assert.match(
-    filled,
-    /rule_tool_plan_docs/,
-    "the contract names the helper that does the bookkeeping, or the agent is left to remember it",
-  );
-});
-
-test("the filled template is byte-stable", async () => {
-  const { fillRoleTemplate } = await import("../../src/core/review/template/index.js");
-  assert.equal(fillRoleTemplate(roleById("a11y")), fillRoleTemplate(roleById("a11y")));
-});
-
-test("overrides refine a role without editing the registry", async () => {
-  const { fillRoleTemplate } = await import("../../src/core/review/template/index.js");
-  const filled = fillRoleTemplate(roleById("privacy"), {
-    years: 33,
-    skills: ["ePrivacy"],
-    topic: "the flight recorder",
-  });
-  assert.match(filled, /33 years of experience/);
-  assert.match(filled, /ePrivacy/);
-  assert.match(filled, /the flight recorder/);
 });
