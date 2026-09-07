@@ -19,7 +19,6 @@ export const FILE_SIZE_RATCHET = new Map([
   ["tests/cli/self-update.test.mjs", 182],
   ["tests/cli/uninstall-purge-home.test.mjs", 212],
   ["tests/core/agent-command-targets.test.mjs", 186],
-  ["tests/core/cache-catalog.test.mjs", 297],
   ["tests/core/caveman-efficacy.test.mjs", 168],
   ["tests/core/en-english-language.test.mjs", 199],
   ["tests/core/guardrails-precision-recall.test.mjs", 155],
