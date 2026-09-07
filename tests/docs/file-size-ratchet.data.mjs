@@ -28,7 +28,6 @@ export const FILE_SIZE_RATCHET = new Map([
   ["tests/core/guardrails-precision-recall.test.mjs", 155],
   ["tests/core/lifecycle.test.mjs", 380],
   ["tests/core/manifest-guardrails.test.mjs", 184],
-  ["tests/core/process-hygiene.test.mjs", 383],
   ["tests/core/simplicity.test.mjs", 238],
   ["tests/core/telemetry.test.mjs", 359],
   ["tests/prompts/prompts.test.mjs", 252],
