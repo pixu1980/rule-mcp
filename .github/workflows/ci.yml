@@ -51,14 +51,8 @@ jobs:
         run: pnpm install --frozen-lockfile
       - name: Embed skills
         run: node scripts/build/embed-skills/index.mjs
-      - name: Run unit tests
-        run: node tests/smoke.mjs
-      - name: Run ai routing tests
-        run: node tests/tools/ai.test.mjs
-      - name: Run detector tests
-        run: node tests/core/detector.test.mjs
-      - name: Run framework routing tests
-        run: node tests/tools/framework-routing.test.mjs
+      - name: Run the quick suite (glob runner)
+        run: node scripts/ci/run-tests/index.mjs quick
 
   audit:
     name: Security audit

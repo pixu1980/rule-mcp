@@ -17,7 +17,7 @@ test("an error storm ends the process instead of being ridden out", async (t) =>
     [
       "--input-type=module",
       "-e",
-      `const { installProcessErrorHandlers } = await import(${JSON.stringify(join(root, "src", "utils", "sandbox.js"))});
+      `const { installProcessErrorHandlers } = await import(${JSON.stringify(join(root, "src", "utils", "index.js"))});
        installProcessErrorHandlers();
        const spin = () => setImmediate(() => { spin(); throw new Error("storm"); });
        spin();`,

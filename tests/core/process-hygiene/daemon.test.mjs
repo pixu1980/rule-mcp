@@ -38,7 +38,7 @@ test("daemon start detaches instead of holding the daemon open", async (t) => {
     [
       "--input-type=module",
       "-e",
-      `const { startDaemonProcess } = await import(${JSON.stringify(join(root, "src", "cli", "daemon.js"))});
+      `const { startDaemonProcess } = await import(${JSON.stringify(join(root, "src", "cli", "daemon", "index.js"))});
        const result = startDaemonProcess({});
        process.stdout.write(JSON.stringify(result));`,
     ],
