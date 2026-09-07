@@ -80,7 +80,7 @@ test("loadPersonaCatalog reports missing, unreadable, invalid and mismatched fil
   const { roles, problems } = loadPersonaCatalog(dir);
   assert.equal(roles.length, 0, "nothing valid to load");
   assert.equal(problems.length, 3, "every broken file names its problem");
-  assert.match(problems[0].reason, /frontmatter|unreadable/i, "a non-persona file is refused");
+  assert.match(problems[0].reason, /id must be/, "a non-persona file is refused on its empty role");
   assert.match(problems[1].reason, /yearsOfExperience/, "an invalid role is reported");
   assert.match(problems[2].reason, /does not match the file name/, "an id mismatch is reported");
   rmSync(dir, { recursive: true, force: true });
