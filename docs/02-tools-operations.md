@@ -59,19 +59,15 @@ Every source document below is preserved verbatim under its own heading so no pr
 | `pix_tool_backend_node`              | Skill      | Backend Node.js scaffold                  |
 | `pix_tool_frontend_react`            | Skill      | Frontend React + Vite scaffold            |
 | `pix_tool_platform_agent`            | Skill      | AI Agents monorepo scaffold               |
-| `pix_tool_platform_expo`             | Skill      | Expo mobile scaffold                      |
 |                                      |            |                                           |
 | **Engineering & DevOps**             |            |                                           |
 | `pix_tool_devops_docker`             | Skill      | Dockerfile + compose generation           |
 | `pix_tool_devops_docker`             | Skill      | Docker standards                          |
-| `pix_tool_devops_gitlab_ci`          | Skill      | GitLab CI/CD pipelines                    |
 | `pix_tool_devops_testing`            | Skill      | Vitest setup & test patterns              |
 | `pix_tool_devops_testing`            | Skill      | Coverage enforcement (60/50/60/60)        |
-| `pix_tool_devops_version`            | Skill      | Husky version auto-increment              |
 |                                      |            |                                           |
 | **Backend**                          |            |                                           |
 | `pix_tool_backend_security`          | Skill      | Security hardening                        |
-| `pix_tool_backend_api_design`        | Skill      | REST API design & OpenAPI                 |
 | `pix_tool_platform_agent`            | Skill      | AI Agent structure and tools              |
 |                                      |            |                                           |
 | **Frontend**                         |            |                                           |
@@ -79,11 +75,8 @@ Every source document below is preserved verbatim under its own heading so no pr
 | `pix_tool_styleguide_validation`     | Skill      | Business field validation                 |
 |                                      |            |                                           |
 | **Mobile**                           |            |                                           |
-| `pix_tool_platform_expo`             | Skill      | EAS Build & Expo CI/CD                    |
 |                                      |            |                                           |
 | **Workflow**                         |            |                                           |
-| `pix_tool_process_feature_workflow`  | Skill      | End-to-end feature workflow               |
-| `pix_tool_process_documentation`     | Skill      | Mintlify documentation setup              |
 
 ### Modes common to all skill tools
 
