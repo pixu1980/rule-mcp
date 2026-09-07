@@ -72,7 +72,7 @@ const removeFunction = extractBashFunction(uninstallSh, "remove_rules_block");
 assert.ok(appendFunction && removeFunction, "must extract append_rules_block and remove_rules_block");
 
 const harness = String.raw`#!/usr/bin/env bash
-set -euo pipefail
+set -euo pipefail; export PNPM_HOME="$(mktemp -d)/pnpm-sandbox"
 sub() { :; }
 ok() { :; }
 warn() { :; }

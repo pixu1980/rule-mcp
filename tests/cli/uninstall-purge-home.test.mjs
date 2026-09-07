@@ -104,7 +104,7 @@ function seedHome() {
 
 /** env without the runtime-relocation vars, so the real ~/.pix-galaxy-mcp is used. */
 function hermeticEnv(home, path) {
-  const env = { ...process.env, HOME: home, PATH: path };
+  const env = { ...process.env, HOME: home, PATH: path, PNPM_HOME: join(home, ".pnpm") };
   delete env.PIX_GALAXY_MCP_HOME;
   delete env.PIX_GALAXY_MCP_STATE_DIR;
   delete env.PIX_GALAXY_MCP_SKIP_GLOBAL_LINK;

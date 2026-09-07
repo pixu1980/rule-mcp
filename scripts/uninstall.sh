@@ -799,6 +799,12 @@ fi
 # ─────────────────────────────────────────────────────────────────────────────
 header "Phase 7: Global Package"
 
+# Mirror of install.sh: sandboxes and tests set this so the machine's real
+# global shim is never the one being unlinked or deleted.
+if [[ "${PIX_GALAXY_MCP_SKIP_GLOBAL_LINK:-}" == "1" ]]; then
+  info "Global shim removal skipped (PIX_GALAXY_MCP_SKIP_GLOBAL_LINK=1)"
+else
+
 # install.sh creates a `pnpm link --global` shim (scripts/install.sh →
 # ensure_global_shim) so agent configs can call `pix-galaxy-mcp` directly.
 # Uninstall must reverse that: unlink the linked package, then remove the bin
@@ -828,13 +834,16 @@ fi
 # metadata is gone. A stale shim keeps `command -v pix-galaxy-mcp` resolving
 # forever and silently breaks reinstalls.
 shim_candidates=()
-[[ -n "${PNPM_HOME:-}" ]] && shim_candidates+=("$PNPM_HOME/bin/pix-galaxy-mcp")
-shim_candidates+=(
-  "$HOME_DIR/Library/pnpm/bin/pix-galaxy-mcp"
-  "$HOME_DIR/.local/share/pnpm/bin/pix-galaxy-mcp"
-  "$HOME_DIR/.pnpm-global/bin/pix-galaxy-mcp"
-  "$HOME_DIR/.npm-global/bin/pix-galaxy-mcp"
-)
+# The -mcpd alias is retired (ADR 064); its stale shims are cleaned alongside.
+for shim_name in pix-galaxy-mcp pix-galaxy-mcpd; do
+  [[ -n "${PNPM_HOME:-}" ]] && shim_candidates+=("$PNPM_HOME/bin/$shim_name")
+  shim_candidates+=(
+    "$HOME_DIR/Library/pnpm/bin/$shim_name"
+    "$HOME_DIR/.local/share/pnpm/bin/$shim_name"
+    "$HOME_DIR/.pnpm-global/bin/$shim_name"
+    "$HOME_DIR/.npm-global/bin/$shim_name"
+  )
+done
 shim_seen=()
 for shim in "${shim_candidates[@]}"; do
   # Skip duplicates (e.g. PNPM_HOME coinciding with the default dir).
@@ -866,6 +875,8 @@ do
     fi
   fi
 done
+
+fi # PIX_GALAXY_MCP_SKIP_GLOBAL_LINK guard
 
 # ─────────────────────────────────────────────────────────────────────────────
 # PHASE 8: Daemon Service Removal
