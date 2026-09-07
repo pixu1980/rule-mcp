@@ -24,6 +24,7 @@ const FindingSchema = z.object({
   severity: z.string().optional().describe("critical|high|medium|low|info"),
   summary: z.string().optional().describe("What is wrong"),
   evidence: z.string().optional().describe("Audit pointer"),
+  steps: z.array(z.string()).optional().describe("Sub-steps for the plan checklist, one action each"),
 });
 
 const PlanDocsSchema = z.object({
@@ -73,7 +74,8 @@ export function registerPlanDocsTool() {
         ...result.written.map((path) => `- ${path}`),
         ...(result.deleted.length > 0 ? ["", "## Deleted", "", ...result.deleted.map((path) => `- ${path}`)] : []),
         "",
-        "The headers, tables, plan checklist and statuses are done. Fill the evidence in the audit, the wording of each",
+        "The headers, tables, plan checklist and statuses are done. Steps are uncapped: pass as many findings",
+        "as the run earned, with `steps` sub-actions on any finding that hides more than one. Fill the evidence in the audit, the wording of each",
         "finding in the review, and what each step takes in the plan.",
       ];
 

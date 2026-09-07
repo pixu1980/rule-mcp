@@ -87,6 +87,7 @@ export function mergeFindings(previous, reported) {
       status: "open",
       evidence: finding.evidence ?? "",
       summary: finding.summary ?? "",
+      ...(Array.isArray(finding.steps) && finding.steps.length > 0 && { steps: finding.steps }),
     });
   }
 

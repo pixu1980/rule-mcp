@@ -59,23 +59,40 @@ export function planFindingIds(plan) {
   return ids;
 }
 
+/** One nested sub-step: `  - [ ] **3.2**: ...` (checked or not). */
+const CHECKBOX_SUB = /^ {2}- \[( |x|X)\] \*\*\d+\.(\d+)\*\*: /;
+
 /**
- * The finding ids whose step is marked `[x]` in an existing plan, so a sync
- * can re-render without losing what somebody already executed.
+ * The marks made on an existing plan, so a sync can re-render without losing
+ * what somebody already executed: a finding id for a marked step, `id#M` for
+ * its marked M-th sub-step (a sub-step belongs to the step line above it).
  *
  * @param {string} plan
  * @returns {Set<string>}
  */
 export function planCheckedIds(plan) {
   const checked = new Set();
+  let parent;
 
   for (const line of plan.split("\n")) {
     const step = CHECKBOX_STEP.exec(line);
 
-    if (step && step[1] !== " ") {
-      for (const id of idsOf(step[2])) {
-        checked.add(id);
+    if (step) {
+      parent = idsOf(step[2])[0];
+
+      if (step[1] !== " ") {
+        for (const id of idsOf(step[2])) {
+          checked.add(id);
+        }
       }
+
+      continue;
+    }
+
+    const sub = CHECKBOX_SUB.exec(line);
+
+    if (sub && parent && sub[1] !== " ") {
+      checked.add(`${parent}#${sub[2]}`);
     }
   }
 

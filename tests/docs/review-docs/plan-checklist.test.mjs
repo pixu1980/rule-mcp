@@ -29,3 +29,49 @@ test("a checked step survives the next sync while its finding stays open", () =>
   assert.match(plan, /^- \[x\] \*\*Step 1 - SEC-1/m, "the executed mark is kept across the sync");
   assert.match(plan, /^- \[ \] \*\*Step 2 - SEC-2/m, "the unexecuted step stays unchecked");
 });
+
+test("a finding with sub-steps renders them as nested checkboxes under its step", () => {
+  const dir = project();
+  const detailed = [
+    {
+      id: "SEC-1",
+      severity: "high",
+      summary: "Token expiry compares with < instead of <=",
+      steps: ["Change the comparison in the middleware", "Add the boundary test at exactly expiry"],
+    },
+    { id: "SEC-2", severity: "medium", summary: "Rate limit counts by token, not by remote" },
+  ];
+
+  syncRoleDocs({ role: "security", findings: detailed, projectDir: dir });
+
+  const plan = read(dir, "docs/plans/security.md");
+
+  assert.match(plan, /^- \[ \] \*\*Step 1 - SEC-1 \(high\)\*\*: /m, "the step line is unchanged");
+  assert.match(plan, /^ {2}- \[ \] \*\*1\.1\*\*: Change the comparison in the middleware$/m, "first sub-step");
+  assert.match(plan, /^ {2}- \[ \] \*\*1\.2\*\*: Add the boundary test at exactly expiry$/m, "second sub-step");
+  assert.doesNotMatch(plan, /^ {2}- \[ \] \*\*2\.1\*\*/m, "a finding without sub-steps gets none");
+});
+
+test("a checked sub-step survives the next sync while its finding stays open", () => {
+  const dir = project();
+  const detailed = [
+    {
+      id: "SEC-1",
+      severity: "high",
+      summary: "Token expiry compares with < instead of <=",
+      steps: ["Change the comparison", "Add the boundary test"],
+    },
+  ];
+
+  syncRoleDocs({ role: "security", findings: detailed, projectDir: dir });
+
+  const planPath = join(dir, "docs/plans/security.md");
+
+  writeFileSync(planPath, readFileSync(planPath, "utf8").replace("  - [ ] **1.1**", "  - [x] **1.1**"));
+  syncRoleDocs({ role: "security", findings: detailed, projectDir: dir });
+
+  const plan = readFileSync(planPath, "utf8");
+
+  assert.match(plan, /^ {2}- \[x\] \*\*1\.1\*\*: Change the comparison$/m, "the executed sub-step stays marked");
+  assert.match(plan, /^ {2}- \[ \] \*\*1\.2\*\*: Add the boundary test$/m, "the other stays unchecked");
+});

@@ -43,28 +43,36 @@ export function renderReview(role, version, date, findings) {
 }
 
 /**
- * Render the plan: header, provenance note and one checkbox per open finding.
+ * Render the plan: header, provenance note and one checkbox per open finding,
+ * with a finding's sub-steps nested as `N.M` checkboxes under its step.
  *
  * A checklist rather than a table so an executed step can be marked with `[x]`
- * in place; the sync keeps the mark while the finding stays open.
+ * in place; the sync keeps the mark - step or sub-step - while the finding
+ * stays open. Steps are as many as the findings demand: nothing caps the list.
  *
  * @param {string} role @param {number} version @param {string} date
- * @param {Array<object>} open - open findings, worst first
- * @param {Set<string>} [checked] - finding ids whose step is already marked done
+ * @param {Array<object>} open - open findings, worst first; `steps` on a
+ *   finding becomes its numbered sub-checkboxes
+ * @param {Set<string>} [checked] - marks to keep: a finding id for its step,
+ *   `id#M` for its M-th sub-step
  */
 export function renderPlan(role, version, date, open, checked = new Set()) {
+  const box = (done) => `- [${done ? "x" : " "}]`;
+
   return [
     ...header(`${role} plan`, role, version, date),
     `Steps re-derived from the open findings in [the review](../reviews/${role}.md) on every run, worst`,
-    "first. Mark an executed step with `[x]` - the next sync keeps the mark while its finding stays",
-    "open. This file is deleted by the run that finds nothing open.",
+    "first. Mark an executed step or sub-step with `[x]` - the next sync keeps the mark while its",
+    "finding stays open. This file is deleted by the run that finds nothing open.",
     "",
     "## Steps",
     "",
-    ...open.map(
-      (finding, index) =>
-        `- [${checked.has(finding.id) ? "x" : " "}] **Step ${index + 1} - ${finding.id} (${finding.severity})**: ${finding.summary}`,
-    ),
+    ...open.flatMap((finding, index) => [
+      `${box(checked.has(finding.id))} **Step ${index + 1} - ${finding.id} (${finding.severity})**: ${finding.summary}`,
+      ...(finding.steps ?? []).map(
+        (sub, subIndex) => `  ${box(checked.has(`${finding.id}#${subIndex + 1}`))} **${index + 1}.${subIndex + 1}**: ${sub}`,
+      ),
+    ]),
     "",
   ].join("\n");
 }

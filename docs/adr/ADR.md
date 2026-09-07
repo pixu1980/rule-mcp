@@ -8,6 +8,7 @@ this directory are the source of truth; this index is generated from them by
 
 | # | Title | Date | Status | Tags |
 |---|-------|------|--------|------|
+| [063](063-plans-carry-nested-sub-steps-and-an-exhaustiveness-mandate.md) | Plans carry nested sub-steps and an exhaustiveness mandate | 2026-09-07 | accepted | documentation, personas, plans |
 | [062](062-persona-plans-are-checklists-with-marks-that-survive-the-sync.md) | Persona plans are checklists with marks that survive the sync | 2026-09-07 | accepted | documentation, personas, plans |
 | [061](061-one-file-per-rule-with-underscore-barrel-folders-and-a-size-ratchet.md) | One file per rule with underscore-barrel folders and a size ratchet | 2026-09-06 | accepted | architecture, refactor, structure, guardrails |
 | [060](060-reorganize-scripts-src-tests-with-150-line-code-splitting.md) | Reorganize scripts, src and tests with 150-line code splitting | 2026-09-06 | accepted | architecture, refactor, testing, structure |
@@ -75,6 +76,7 @@ file. Where a line stops short the rest is in the ADR.
 
 | ADR | Decision | Consequence |
 |-----|----------|-------------|
+| [063](063-plans-carry-nested-sub-steps-and-an-exhaustiveness-mandate.md) | A finding passed to `rule_tool_plan_docs` may carry a `steps` array; the renderer nests each. | Positive: execution is trackable at the action level, plans are development-ready documents. |
 | [062](062-persona-plans-are-checklists-with-marks-that-survive-the-sync.md) | The plan renderer emits a checklist instead of a table: one. | Positive: executed steps are markable in place, the mark survives re-syncs, and every. |
 | [061](061-one-file-per-rule-with-underscore-barrel-folders-and-a-size-ratchet.md) | Split rule catalogs one file per rule under family folders (framework/js, framework/vanilla, quality/typescript-prose-manifest-simplicity-comments) with kebab-case underscore-prefixed names and index.js barrels... | Positive: file names say what they contain, duplicate rules are impossible by construction, one canonical import path per module, and the language and size rules are regression-tested. |
 | [060](060-reorganize-scripts-src-tests-with-150-line-code-splitting.md) | Reorganize scripts/, src/ and test/ (renamed to tests/) into thematic subfolders by feature; apply code splitting with a 150-line threshold (100 + 50 tolerance) to JS/MJS files, exempting the shell installers; adopt the... | Positive: navigability, isolation, measurable coverage and a CI gate. |
@@ -267,6 +269,12 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [013](013-database-skills.md) Database Skills
 - [011](011-backend-framework-skills.md) backend framework skills
 - [005](005-backend-framework-skills.md) Backend Framework Skills
+
+### personas
+
+- [063](063-plans-carry-nested-sub-steps-and-an-exhaustiveness-mandate.md) Plans carry nested sub-steps and an exhaustiveness mandate
+- [062](062-persona-plans-are-checklists-with-marks-that-survive-the-sync.md) Persona plans are checklists with marks that survive the sync
+- [057](057-split-review-personas-into-per-operation-commands-plan-audit-review.md) Split review personas into per-operation commands (plan/audit/review)
 
 ### prompts
 
