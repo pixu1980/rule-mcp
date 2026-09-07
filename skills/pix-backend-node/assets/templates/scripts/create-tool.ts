@@ -1,46 +1,45 @@
 #!/usr/bin/env tsx
+/**
+ * Scaffold a new tool module under src/tools/ and export it for the executor.
+ *
+ * Usage: npm run new:tool -- <tool-name>
+ * The name may be passed in any case; the module is written in kebab-case.
+ */
 import { existsSync, mkdirSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
-const name = process.argv[2];
-if (!name) {
-  console.error("Usage: npm run new:tool <tool-name>");
+const toolName = process.argv[2]?.trim();
+
+if (!toolName) {
+  console.error("missing tool name; usage: new:tool <tool-name>");
+  process.exit(2);
+}
+
+const kebab = toolName.toLowerCase().replaceAll(/\s+/g, "-");
+const pascal = kebab.replace(/(?:^|-)([a-z])/g, (_, letter) => letter.toUpperCase());
+const toolsDir = join(dirname(fileURLToPath(import.meta.url)), "..", "src", "tools");
+const modulePath = join(toolsDir, `${kebab}.tool.ts`);
+const variableName = `${pascal.charAt(0).toLowerCase()}${pascal.slice(1)}`;
+
+if (existsSync(modulePath)) {
+  console.error(`${modulePath} already exists - aborting`);
   process.exit(1);
 }
 
-const kebab = name.toLowerCase().replace(/\s+/g, "-");
-const camel = kebab.replace(/-(\w)/g, (_, c: string) => c.toUpperCase());
-const dir = join(dirname(fileURLToPath(import.meta.url)), "..", "src", "tools");
-const file = join(dir, `${kebab}.tool.ts`);
+mkdirSync(toolsDir, { recursive: true });
 
-if (existsSync(file)) {
-  console.error(`Tool file already exists: ${file}`);
-  process.exit(1);
-}
+const source = `import { toolRegistry } from "../registries/tool-registry.js";
 
-mkdirSync(dir, { recursive: true });
-
-const template = `import { z } from 'zod';
-import { toolRegistry } from '../registries/tool-registry.js';
-import type { Tool } from '../types.js';
-
-const ${camel}Tool: Tool = {
-  name: '${kebab.replace(/-/g, "_")}',
-  description: 'TODO: describe this tool',
-  parameters: z.object({
-    // TODO: define parameters
-  }),
-  async execute(params) {
-    // TODO: implement tool logic
-    return { result: 'not implemented' };
+export const ${variableName}Tool = toolRegistry.define({
+  name: "${kebab}",
+  description: "TODO: what this tool does",
+  inputSchema: {},
+  async run(_input) {
+    throw new Error("not implemented yet");
   },
-};
-
-toolRegistry.register(${camel}Tool);
-
-export default ${camel}Tool;
+});
 `;
 
-writeFileSync(file, template, "utf-8");
-console.log(`✔ Created tool: ${file}`);
+writeFileSync(modulePath, source, "utf8");
+console.log(`created ${modulePath} - implement run() and register with the executor`);
