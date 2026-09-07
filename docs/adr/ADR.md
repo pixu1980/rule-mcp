@@ -8,6 +8,7 @@ this directory are the source of truth; this index is generated from them by
 
 | #                                                                                              | Title                                                                                              | Date       | Status     | Tags                                                                                |
 | ---------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- | ---------- | ---------- | ----------------------------------------------------------------------------------- |
+| [066](066-coverage-floor-raised-to-87-95-remains-the-ratchet-endpoint.md)                      | Coverage floor raised to 87; 95 remains the ratchet endpoint                                       | 2026-09-07 | accepted   | testing, coverage, ci, ratchet                                                      |
 | [065](065-glob-suite-runner-colocated-tests-and-a-branch-coverage-ratchet.md)                  | Glob suite runner, co-located tests, and a branch-coverage ratchet                                 | 2026-09-07 | accepted   | testing, ci, coverage, structure                                                    |
 | [064](064-one-global-shim-and-hermetic-pnpm-home-in-script-tests.md)                           | One global shim, and hermetic PNPM_HOME in script tests                                            | 2026-09-07 | accepted   | installer, cli, shim, testing, hermeticity                                          |
 | [063](063-plans-carry-nested-sub-steps-and-an-exhaustiveness-mandate.md)                       | Plans carry nested sub-steps and an exhaustiveness mandate                                         | 2026-09-07 | accepted   | documentation, personas, plans                                                      |
@@ -78,6 +79,7 @@ file. Where a line stops short the rest is in the ADR.
 
 | ADR                                                                                            | Decision                                                                                                                                                                                                                        | Consequence                                                                                                                                                                                                                    |
 | ---------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| [066](066-coverage-floor-raised-to-87-95-remains-the-ratchet-endpoint.md)                      | Raise BRANCH_FLOOR in scripts/reports/coverage/_threshold.data.mjs from 83 to 87. The gate and the ratchet mechanics are unchanged: pnpm test:coverage fails below the floor, the floor may only rise, and 95 is when the...    | Positive: the branch floor moved 83 to 87, and the coverage work surfaced and fixed two real defects - the ADR index generator emitted tables prettier immediately reformatted (byte-equal gate was red on main), and the...   |
 | [065](065-glob-suite-runner-colocated-tests-and-a-branch-coverage-ratchet.md)                  | Four pieces. (1) `scripts/ci/run-tests/index.mjs` resolves a suite from glob patterns in.                                                                                                                                       | Positive: adding a test is writing a file; the orphan class is gone (204 files run where.                                                                                                                                      |
 | [064](064-one-global-shim-and-hermetic-pnpm-home-in-script-tests.md)                           | Three layers. (1) Every test that spawns the shell scripts sets `env.PNPM_HOME` to a.                                                                                                                                           | Positive: the installer suite ran end to end with the real shim verified byte-identical.                                                                                                                                       |
 | [063](063-plans-carry-nested-sub-steps-and-an-exhaustiveness-mandate.md)                       | A finding passed to `rule_tool_plan_docs` may carry a `steps` array; the renderer nests each.                                                                                                                                    | Positive: execution is trackable at the action level, plans are development-ready documents.                                                                                                                                   |
@@ -230,6 +232,14 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [045](045-adopt-eslint-plugin-unicorn-for-js-ts-quality.md) Adopt eslint-plugin-unicorn for JS/TS quality
 - [019](019-fail-closed-mcp-enforcement-and-reusable-agent-commands.md) fail closed mcp enforcement and reusable agent commands
 
+### testing
+
+- [066](066-coverage-floor-raised-to-87-95-remains-the-ratchet-endpoint.md) Coverage floor raised to 87; 95 remains the ratchet endpoint
+- [065](065-glob-suite-runner-colocated-tests-and-a-branch-coverage-ratchet.md) Glob suite runner, co-located tests, and a branch-coverage ratchet
+- [064](064-one-global-shim-and-hermetic-pnpm-home-in-script-tests.md) One global shim, and hermetic PNPM_HOME in script tests
+- [060](060-reorganize-scripts-src-tests-with-150-line-code-splitting.md) Reorganize scripts, src and tests with 150-line code splitting
+- [049](049-v100-release-and-docs-accuracy-guard.md) v1.0.0 release and the docs-accuracy guard
+
 ### infrastructure
 
 - [009](009-scaffold-skill-consolidation.md) scaffold skill consolidation
@@ -250,13 +260,6 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [027](027-rename-rule-mcp-agents-to-rule-ai-agents-and-add-rule-ai-collector-skill.md) Rename rule-mcp-agents to rule-ai-agents and add rule-ai collector skill
 - [008](008-thematic-skill-taxonomy-rename.md) thematic skill taxonomy rename
 - [001](001-thematic-skill-rename.md) Thematic Skill Taxonomy Rename
-
-### testing
-
-- [065](065-glob-suite-runner-colocated-tests-and-a-branch-coverage-ratchet.md) Glob suite runner, co-located tests, and a branch-coverage ratchet
-- [064](064-one-global-shim-and-hermetic-pnpm-home-in-script-tests.md) One global shim, and hermetic PNPM_HOME in script tests
-- [060](060-reorganize-scripts-src-tests-with-150-line-code-splitting.md) Reorganize scripts, src and tests with 150-line code splitting
-- [049](049-v100-release-and-docs-accuracy-guard.md) v1.0.0 release and the docs-accuracy guard
 
 ### backend
 

@@ -215,13 +215,28 @@
 - [x] First targeted tests on the darkest modules: block-spacing fixer (25% -> covered),
       enforcement validators, tui-formats renderers - co-located `__tests__` suites.
 - [x] CI gate: a dedicated coverage job fails when branches drop below the floor in
-      `scripts/reports/coverage/_threshold.data.mjs` (a rising ratchet, currently 83,
+      `scripts/reports/coverage/_threshold.data.mjs` (a rising ratchet, currently 87,
       target 95 - the plan-mandated 95 gate is the ratchet's endpoint, not a permanently
       red check).
-- [ ] Keep raising the floor to 95: next targets by missed branches - doctor/_format 17,
-      transport/http/_handler 14, cli/commands/_daemon 13, installers/_writers-json 13,
-      self-update/_run 12, telemetry/store/_rollup 11, gateway/_core + _render 22.
+- [ ] Keep raising the floor to 95 (now 87, ADR 066): the floor moved 83 -> 87 via
+      ~30 targeted suites (doctor rendering, self-update gates, telemetry store I/O
+      and kpi, HTTP handler/start/cert, gateway core/render, transcripts + fallbacks,
+      cache catalog verify, project snapshot, handon verification, role
+      template/catalog, router helpers, terminal surface, argument guards,
+      external-css, handoff prompt, ...). Measured 87.88% branches locally; CI runs
+      ubuntu/Node22, so the floor holds a margin and 95 stays the ratchet endpoint.
+      Next targets by missed branches: cli/commands/_daemon 13 (partial platform
+      arms), cli/_register-handoff 10, skills-install 16, commands/_targets 9,
+      daemon/_status-format 9, install/_agent-ops 9, transport/sse/_handler 9,
+      docs-numbering orphans/rewrite 15, tool-cache entries/persistence 12,
+      guardrails template-load/external-css 14, plus ~200 long-tail chips (3-5 per
+      file) in CLI/transport subprocess arms.
 - [x] The 2 pre-existing flaky failures are resolved, not documented around: the
       untrusted-fence miss was a rebrand drift in the directive pattern (`PIX GALAXY
 WORKFLOW REMINDER` never matched) and the home-recording-leak race now checks a
       private fake HOME per suite instead of watching the real one.
+- [x] Two real defects surfaced by the coverage work (ADR 066): the ADR index
+      generator emitted tables prettier immediately reformats (the byte-equal gate
+      was red on main - fixed by emitting prettier-padded tables); the gateway
+      loaded evidence via a tool name that never registers (evidence blocks carried
+      "Unknown tool" text) - fixed to rule_tool_*.
