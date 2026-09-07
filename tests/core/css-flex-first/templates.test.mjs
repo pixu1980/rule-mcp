@@ -2,7 +2,7 @@
 import { run } from "./_flex.fixture.mjs";
 import test from "node:test";
 import assert from "node:assert/strict";
-import { join } from "node:path";
+import "node:path";
 
 // ── What the server generates ─────────────────────────────────────
 test("generated components pass their own rule", async () => {

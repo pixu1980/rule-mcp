@@ -94,8 +94,8 @@ test("the fixer leaves a start-type block unspaced above but spaced below", () =
 
   assert.equal(fixBlockSpacing(file), true, "a change is made");
   const out = readFileSync(file, "utf8");
-  assert.doesNotMatch(out, /if \(a\) \{[^}]*\}\n\n  \}/, "no blank above a start block's opener");
-  assert.match(out, /\n  \}\n\n  const c = 2/, "a blank is inserted after a start block");
+  assert.doesNotMatch(out, /if \(a\) \{[^}]*\}\n\n {2}\}/, "no blank above a start block's opener");
+  assert.match(out, /\n {2}\}\n\n {2}const c = 2/, "a blank is inserted after a start block");
 });
 
 test("the fixer drops triple blank lines", () => {

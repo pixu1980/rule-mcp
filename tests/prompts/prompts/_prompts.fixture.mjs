@@ -8,8 +8,7 @@
  *     involves TDD/a11y baselines (or asks the user what to do)
  */
 
-import { listPrompts, getPrompt } from "../../../src/prompts/index.js";
-import { parseHandoffOptions } from "../../../src/prompts/_handoff-options.js";
+import { listPrompts } from "../../../src/prompts/index.js";
 
 console.log("prompts registry test");
 
@@ -41,4 +40,5 @@ export const EXPECTED = [...WORKFLOW_PROMPTS, ...AREA_PROMPTS];
 export const prompts = listPrompts();
 export const names = prompts.map((p) => p.name);
 
-export { getPrompt, listPrompts, parseHandoffOptions };
+export { getPrompt, listPrompts } from "../../../src/prompts/index.js";
+export { parseHandoffOptions } from "../../../src/prompts/_handoff-options.js";

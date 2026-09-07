@@ -50,7 +50,7 @@ export function handoffBlock(cwd, occasion) {
     "",
     body,
     "",
-    "Continue from the suggested first move unless the user asks for something" + " else. Do not restate this back to them.",
+    'Continue from the suggested first move unless the user asks for something else. Do not restate this back to them.',
   ].join("\n");
 }
 

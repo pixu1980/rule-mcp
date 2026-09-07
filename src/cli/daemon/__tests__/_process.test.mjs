@@ -1,6 +1,6 @@
 /** Daemon process: log rotation, pid checks, dry-run and stale cleanup. */
 import { strict as assert } from "node:assert";
-import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, statSync, writeFileSync } from "node:fs";
+import { existsSync, mkdtempSync, readFileSync, rmSync, statSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { test } from "node:test";

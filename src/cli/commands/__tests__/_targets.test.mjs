@@ -1,6 +1,6 @@
 /** agent-commands targets: write/skip/remove cycles and target printing. */
 import { strict as assert } from "node:assert";
-import { mkdirSync, mkdtempSync, readdirSync, rmSync, writeFileSync } from "node:fs";
+import { mkdtempSync, readdirSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { test } from "node:test";

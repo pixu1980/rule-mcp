@@ -2,7 +2,7 @@
 import test from "node:test";
 import { rmSync } from "node:fs";
 import assert from "node:assert/strict";
-import { cacheClear, cacheEntries, callTool, loadAllSkills, result, skillDigest, stateDir } from "./_invalidation.fixture.mjs";
+import { cacheClear, cacheEntries, callTool, loadAllSkills, skillDigest, stateDir } from "./_invalidation.fixture.mjs";
 
 await loadAllSkills(true);
 

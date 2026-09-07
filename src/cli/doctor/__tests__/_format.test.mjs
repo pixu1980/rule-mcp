@@ -41,7 +41,7 @@ const minimal = {
   entrypoint: "/bin/rule-mcp.js",
   agentsTotal: 15,
   agentsConfigured: 2,
-  tools: [...Array.from({ length: 14 }, (_, i) => `rule_tool_${i}`)],
+  tools: Array.from({ length: 14 }, (_, i) => `rule_tool_${i}`),
   agents: [
     { name: "claude", configured: true, validated: true, configFile: "~/.claude.json" },
     { name: "windsurf", configured: true, validated: false, configFile: "" },

@@ -8,8 +8,8 @@ import { test } from "node:test";
 
 import { readAdrs, readContextValues, readProjectIdentity } from "../_sources.js";
 import { buildHandoff } from "../_build.js";
-import { adrLines, contextLines, headerLines, identityLines } from "../_sections-core.js";
-import { footerLines, gitLogLines, workingTreeLines } from "../_sections-repo.js";
+import "../_sections-core.js";
+import "../_sections-repo.js";
 
 const git = (args, cwd) => execFileSync("git", args, { cwd, encoding: "utf8", stdio: ["ignore", "pipe", "ignore"] }).trim();
 

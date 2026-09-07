@@ -1,9 +1,9 @@
 /** Cleanup registration, signals and exits: the lifecycle state machine itself. */
 import test from "node:test";
 import assert from "node:assert/strict";
-import { mkdtempSync, rmSync } from "node:fs";
-import { tmpdir } from "node:os";
-import { join } from "node:path";
+import "node:fs";
+import "node:os";
+import "node:path";
 import { spawn } from "node:child_process";
 import { alive, lifecycle, signalTarget, until } from "./_lifecycle.fixture.mjs";
 

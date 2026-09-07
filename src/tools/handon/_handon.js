@@ -37,7 +37,7 @@ export function handon({ projectDir = ".", file, list = false } = {}) {
         "",
         file ? `\`${file}\` does not exist.` : `\`${HANDOFF_DIR}/\` is missing or holds no \`NN-slug.md\` file.`,
         "",
-        "Write one with `rule_tool_process_handoff` at the end of a session. Guessing" + " at a session that did not happen would be worse than saying nothing.",
+        'Write one with `rule_tool_process_handoff` at the end of a session. Guessing at a session that did not happen would be worse than saying nothing.',
       ].join("\n"),
     };
   }

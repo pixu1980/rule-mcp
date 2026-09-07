@@ -19,7 +19,7 @@ export const check = (label, ok) => {
     console.log(`  \u2705 ${label}`);
   } else {
     fail++;
-    console.log(`  \u274c ${label}`);
+    console.log(`  \u274C ${label}`);
   }
 };
 

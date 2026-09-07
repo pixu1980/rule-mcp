@@ -1,7 +1,7 @@
 /** The error-storm backstop: swallowing stops when swallowing is all that happens. */
 import test from "node:test";
 import assert from "node:assert/strict";
-import { signalTarget, until } from "./_lifecycle.fixture.mjs";
+import { signalTarget } from "./_lifecycle.fixture.mjs";
 
 // ── Error storm ───────────────────────────────────────────────────
 

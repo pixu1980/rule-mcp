@@ -2,7 +2,7 @@
 import { strict as assert } from "node:assert";
 import test from "node:test";
 
-import { parseJson, removeJsonServer, removeVscodeServer, toJson, upsertJsonServer, upsertVscode, vscodeServerType } from "../_writers-json.js";
+import { parseJson, removeJsonServer, removeVscodeServer, upsertJsonServer, upsertVscode, vscodeServerType } from "../_writers-json.js";
 
 const SERVER = "rule-mcp";
 

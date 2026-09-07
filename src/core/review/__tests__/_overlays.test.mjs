@@ -1,6 +1,6 @@
 /** Role validation and the user overlay layer, on a scratch config dir. */
 import { strict as assert } from "node:assert";
-import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
+import { mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { test } from "node:test";
@@ -35,7 +35,7 @@ const PERSONA_FOR = (id) =>
   ].join("\n");
 
 test("validateRole names every missing and malformed field", () => {
-  assert.deepEqual(validateRole(undefined), ["not an object"], "a non-object role is invalid");
+  assert.deepEqual(validateRole(), ["not an object"], "a non-object role is invalid");
   const emptyProblems = validateRole({});
   assert.ok(emptyProblems.includes("id must be a non-empty string"), "the id is named");
   assert.ok(emptyProblems.includes("role must be a non-empty string"), "the role is named");

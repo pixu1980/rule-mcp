@@ -1,6 +1,6 @@
 /** Role template filling and the persona catalog loader, on a scratch dir. */
 import { strict as assert } from "node:assert";
-import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
+import { mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { test } from "node:test";
@@ -39,7 +39,7 @@ test("fillRoleTemplate honors overrides and tolerates missing fields", () => {
 });
 
 test("fillRoleTemplate refuses a missing role", () => {
-  assert.throws(() => fillRoleTemplate(undefined), /needs a role/, "no role throws");
+  assert.throws(() => fillRoleTemplate(), /needs a role/, "no role throws");
 });
 
 const PERSONA = (id) =>

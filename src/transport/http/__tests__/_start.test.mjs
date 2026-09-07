@@ -1,6 +1,6 @@
 /** startHttpServer: the HTTPS path, a failed cert generation, and an occupied port. */
 import { strict as assert } from "node:assert";
-import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
+import { mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import https from "node:https";
 import { createServer } from "node:net";
 import { tmpdir } from "node:os";

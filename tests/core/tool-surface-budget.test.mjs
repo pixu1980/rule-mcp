@@ -51,7 +51,7 @@ test("tools/list stays within its per-turn token budget", () => {
   const weight = Math.ceil(JSON.stringify(listTools()).length / 4);
   assert.ok(
     weight <= TOOL_SURFACE_BUDGET_TOKENS,
-    `tools/list is ~${weight} tokens, over the ${TOOL_SURFACE_BUDGET_TOKENS} budget. ` + "This is paid on every model turn. Trim the surface, or raise the budget deliberately.",
+    `tools/list is ~${weight} tokens, over the ${TOOL_SURFACE_BUDGET_TOKENS} budget. This is paid on every model turn. Trim the surface, or raise the budget deliberately.`,
   );
   console.log(`  tools/list: ~${weight} / ${TOOL_SURFACE_BUDGET_TOKENS} tokens`);
 });

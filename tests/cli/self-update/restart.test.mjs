@@ -16,7 +16,7 @@ console.log("self-update engine test: banner and restart");
   assert.match(buildBanner({ updated: true, from: "a", to: "b", count: 1, changedSkills: true, changedCode: false }), /Skills hot-reloaded\./, "skills-only hot-reload note");
   assert.match(buildBanner({ updated: true, from: "a", to: "b", count: 0, changedSkills: false, changedCode: false }), /\(0 file\(s\)\)/, "neither combo falls back to file(s)");
   assert.equal(buildBanner(null), null, "no result means no banner");
-  assert.equal(buildBanner(undefined), null, "undefined result means no banner");
+  assert.equal(buildBanner(), null, "undefined result means no banner");
 
   // Refused-remote banners are never silent.
   assert.match(buildBanner({ updated: false, reason: "remote-not-allowed", remote: "github.com/evil/repo" }), /REFUSED/);

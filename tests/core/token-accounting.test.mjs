@@ -62,10 +62,7 @@ test("the reminder's own cost is recorded, not left to a subtraction", () => {
   // Four independently-ceiled token estimates: the identity holds exactly
   // when the ceils happen to line up, and within the rounding slack otherwise.
   const identity = Number(miss.finalTokens) - Number(miss.coreTokens) + Number(miss.saved.caveman) - Number(miss.reminderTokens);
-  assert.ok(
-    Math.abs(identity) <= 5,
-    `core, compression and reminder have to add up within ceil rounding: final = core - compressed + reminder (off by ${identity})`,
-  );
+  assert.ok(Math.abs(identity) <= 5, `core, compression and reminder have to add up within ceil rounding: final = core - compressed + reminder (off by ${identity})`);
 });
 
 test("reminderOverhead is the reminder, even when compression removed more than it added", () => {

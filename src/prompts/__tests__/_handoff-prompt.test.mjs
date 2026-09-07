@@ -19,7 +19,7 @@ test("parseHandoffOptions applies every token and ignores the unknown", () => {
 });
 
 test("parseHandoffOptions defaults, short-circuits and reports help", () => {
-  const defaults = parseHandoffOptions(undefined);
+  const defaults = parseHandoffOptions();
   assert.equal(defaults.mode, "handoff", "the default mode is handoff");
   assert.equal(defaults.compress, true, "compress defaults on");
   assert.equal(defaults.format, "full", "the default format is full");
