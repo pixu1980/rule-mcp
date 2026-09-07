@@ -66,7 +66,19 @@ test("readProjectIdentity degrades from package.json", () => {
 });
 
 test("full build renders every section and stats the output", () => {
-  const { text, stats } = buildHandoff({ projectDir: project, includeContext: true, includeAdrs: true, includeIdentity: true, includeGitDiff: true, includeGitLog: true, includeRoadmap: true, compress: false, maxTokens: 0, format: "full", mode: "handoff" });
+  const { text, stats } = buildHandoff({
+    projectDir: project,
+    includeContext: true,
+    includeAdrs: true,
+    includeIdentity: true,
+    includeGitDiff: true,
+    includeGitLog: true,
+    includeRoadmap: true,
+    compress: false,
+    maxTokens: 0,
+    format: "full",
+    mode: "handoff",
+  });
 
   assert.match(text, /## HANDOFF: demo-proj/, "the header names the project");
   assert.match(text, /### Project Identity/, "the identity block renders");
@@ -84,26 +96,74 @@ test("full build renders every section and stats the output", () => {
 });
 
 test("brief and minimal formats trim the sections", () => {
-  const brief = buildHandoff({ projectDir: project, includeContext: true, includeAdrs: true, includeIdentity: true, includeGitDiff: true, includeGitLog: true, includeRoadmap: true, compress: true, maxTokens: 0, format: "brief", mode: "handoff" });
+  const brief = buildHandoff({
+    projectDir: project,
+    includeContext: true,
+    includeAdrs: true,
+    includeIdentity: true,
+    includeGitDiff: true,
+    includeGitLog: true,
+    includeRoadmap: true,
+    compress: true,
+    maxTokens: 0,
+    format: "brief",
+    mode: "handoff",
+  });
   assert.match(brief.text, /Project: demo-proj/, "the brief identity renders");
   assert.doesNotMatch(brief.text, /### Project Identity/, "the full identity block does not");
   assert.match(brief.text, /ADRs \(2\):/, "the brief adr list renders");
   assert.equal(brief.stats.format, "brief", "the format is reported");
 
-  const minimal = buildHandoff({ projectDir: project, includeContext: true, includeAdrs: true, includeIdentity: true, includeGitDiff: false, includeGitLog: false, includeRoadmap: false, compress: true, maxTokens: 0, format: "minimal", mode: "handoff" });
+  const minimal = buildHandoff({
+    projectDir: project,
+    includeContext: true,
+    includeAdrs: true,
+    includeIdentity: true,
+    includeGitDiff: false,
+    includeGitLog: false,
+    includeRoadmap: false,
+    compress: true,
+    maxTokens: 0,
+    format: "minimal",
+    mode: "handoff",
+  });
   assert.match(minimal.text, /^HANDOFF:demo-proj/, "the minimal header is one line");
   assert.match(minimal.text, /ADRs:2/, "the minimal adr count renders");
   assert.equal(minimal.stats.format, "minimal", "the format is reported");
 });
 
 test("a close-session build adds the recovery banner", () => {
-  const { text } = buildHandoff({ projectDir: project, includeContext: false, includeAdrs: false, includeIdentity: false, includeGitDiff: false, includeGitLog: false, includeRoadmap: false, compress: true, maxTokens: 0, format: "full", mode: "close-session" });
+  const { text } = buildHandoff({
+    projectDir: project,
+    includeContext: false,
+    includeAdrs: false,
+    includeIdentity: false,
+    includeGitDiff: false,
+    includeGitLog: false,
+    includeRoadmap: false,
+    compress: true,
+    maxTokens: 0,
+    format: "full",
+    mode: "close-session",
+  });
   assert.match(text, /SESSION CLOSE/, "the close banner renders");
   assert.match(text, /### Next Session Recovery/, "the recovery steps render");
 });
 
 test("an over-budget build degrades format to its most minimal fit", () => {
-  const { stats, text } = buildHandoff({ projectDir: project, includeContext: true, includeAdrs: true, includeIdentity: true, includeGitDiff: true, includeGitLog: true, includeRoadmap: false, compress: false, maxTokens: 1, format: "full", mode: "handoff" });
+  const { stats, text } = buildHandoff({
+    projectDir: project,
+    includeContext: true,
+    includeAdrs: true,
+    includeIdentity: true,
+    includeGitDiff: true,
+    includeGitLog: true,
+    includeRoadmap: false,
+    compress: false,
+    maxTokens: 1,
+    format: "full",
+    mode: "handoff",
+  });
   assert.equal(stats.format, "minimal", "full exceeds the budget and collapses");
   assert.match(text, /^HANDOFF:/, "the collapsed output is minimal");
 });

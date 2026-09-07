@@ -81,7 +81,10 @@ test("detectIdeConfigs counts the skills directory and the platform paths", () =
   assert.equal(cursor.configured, true, "an existing cursor config is detected");
   const windsurf = checks.find((entry) => entry.name === "Windsurf (IDE)");
   assert.equal(windsurf.configured, false, "a missing windsurf config is not");
-  assert.ok(checks.some((entry) => entry.name === "VS Code User"), "the platform vscode path is checked");
+  assert.ok(
+    checks.some((entry) => entry.name === "VS Code User"),
+    "the platform vscode path is checked",
+  );
   process.chdir(previousDir);
 });
 

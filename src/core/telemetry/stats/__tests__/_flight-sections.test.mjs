@@ -15,7 +15,21 @@ test("usageSection renders a full and an absent usage block", () => {
   const absent = usageSection(undefined);
   assert.match(absent.join("\n"), /No agent transcript/, "absence is explained, not zeroed");
 
-  const full = usageSection({ agent: "pi", model: "m", provider: "p", apiCalls: 2, userTurns: 1, output: 50, input: 100, cacheRead: 20, cacheWrite: 5, reasoning: 3, peakContext: 200, contextWindow: 8000, costUsd: 1.1 });
+  const full = usageSection({
+    agent: "pi",
+    model: "m",
+    provider: "p",
+    apiCalls: 2,
+    userTurns: 1,
+    output: 50,
+    input: 100,
+    cacheRead: 20,
+    cacheWrite: 5,
+    reasoning: 3,
+    peakContext: 200,
+    contextWindow: 8000,
+    costUsd: 1.1,
+  });
   const text = full.join("\n");
   assert.match(text, /Model usage \(pi\)/, "the agent names the section");
   assert.match(text, /8,000/, "the context window renders");
@@ -27,7 +41,15 @@ test("usageSection renders a full and an absent usage block", () => {
 });
 
 test("iterationsAndProject and productivity render their tables", () => {
-  const text = iterationsAndProject(KPI(), { files: { total: 5 }, lines: { total: 42 }, components: 2, adrs: 1, testFiles: 1, bytes: { source: 100, nodeModules: 200, dist: 300 }, tokensave: { present: true, dbBytes: 40 } }).join("\n");
+  const text = iterationsAndProject(KPI(), {
+    files: { total: 5 },
+    lines: { total: 42 },
+    components: 2,
+    adrs: 1,
+    testFiles: 1,
+    bytes: { source: 100, nodeModules: 200, dist: 300 },
+    tokensave: { present: true, dbBytes: 40 },
+  }).join("\n");
   assert.match(text, /## Iterations/, "iterations open the section");
   assert.match(text, /## Project/, "the project table follows");
   assert.match(text, /present/, "a present code graph reports its size");

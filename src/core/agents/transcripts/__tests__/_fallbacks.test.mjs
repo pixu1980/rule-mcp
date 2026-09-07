@@ -20,8 +20,16 @@ test("zero-valued codex totals keep the earlier totals instead of resetting", ()
   mkdirSync(dir, { recursive: true });
   const rows = [
     { type: "session_meta", payload: { cwd: projectDir } },
-    { type: "token_count", timestamp: "2026-01-01T10:00:00Z", payload: { type: "token_count", info: { total_token_usage: { input_tokens: 8000, output_tokens: 900, cached_input_tokens: 100, reasoning_output_tokens: 5 } } } },
-    { type: "token_count", timestamp: "2026-01-01T10:00:10Z", payload: { type: "token_count", info: { total_token_usage: { input_tokens: 0, output_tokens: 0, cached_input_tokens: 0, reasoning_output_tokens: 0 } } } },
+    {
+      type: "token_count",
+      timestamp: "2026-01-01T10:00:00Z",
+      payload: { type: "token_count", info: { total_token_usage: { input_tokens: 8000, output_tokens: 900, cached_input_tokens: 100, reasoning_output_tokens: 5 } } },
+    },
+    {
+      type: "token_count",
+      timestamp: "2026-01-01T10:00:10Z",
+      payload: { type: "token_count", info: { total_token_usage: { input_tokens: 0, output_tokens: 0, cached_input_tokens: 0, reasoning_output_tokens: 0 } } },
+    },
   ];
   writeFileSync(join(dir, "rollout.jsonl"), rows.map((row) => JSON.stringify(row)).join("\n") + "\n");
 
@@ -37,8 +45,14 @@ test("zero-valued codex totals keep the earlier totals instead of resetting", ()
 test("opencode rows without cache or model fields still fold", () => {
   const base = join(home, ".local", "share", "opencode", "storage", "message", "lean");
   mkdirSync(base, { recursive: true });
-  writeFileSync(join(base, "a.json"), JSON.stringify({ time: { created: "2026-01-01T09:00:00Z" }, path: { cwd: projectDir }, sessionID: "lean", role: "assistant", tokens: { input: 1, output: 2 } }));
-  writeFileSync(join(base, "b.json"), JSON.stringify({ time: { created: "2026-01-01T09:00:10Z" }, path: { cwd: projectDir }, sessionID: "lean", role: "assistant", tokens: { input: 4, output: 8 }, cost: "0" }));
+  writeFileSync(
+    join(base, "a.json"),
+    JSON.stringify({ time: { created: "2026-01-01T09:00:00Z" }, path: { cwd: projectDir }, sessionID: "lean", role: "assistant", tokens: { input: 1, output: 2 } }),
+  );
+  writeFileSync(
+    join(base, "b.json"),
+    JSON.stringify({ time: { created: "2026-01-01T09:00:10Z" }, path: { cwd: projectDir }, sessionID: "lean", role: "assistant", tokens: { input: 4, output: 8 }, cost: "0" }),
+  );
 
   const usage = readAgentUsage({ agent: "opencode", projectDir, home, since: Date.parse("2026-01-01"), until: Date.parse("2026-01-02") });
 

@@ -108,7 +108,10 @@ test("the fixer drops triple blank lines", () => {
 
 test("the fixer separates consecutive multi-line exports but not barrel lines", () => {
   const file = join(dir, "exports.js");
-  writeFileSync(file, ["export function a() {", "  return 1;", "}", "export function b() {", "  return 2;", "}", "export { x } from './x-mod';", "export { y } from './y-mod';", ""].join("\n"));
+  writeFileSync(
+    file,
+    ["export function a() {", "  return 1;", "}", "export function b() {", "  return 2;", "}", "export { x } from './x-mod';", "export { y } from './y-mod';", ""].join("\n"),
+  );
 
   assert.equal(fixBlockSpacing(file), true, "a change is made");
   const out = readFileSync(file, "utf8");

@@ -31,12 +31,30 @@ test("lines groups files and adrs by verdict and renders the other kinds", () =>
   ];
 
   const out = lines(claims, "checked");
-  assert.ok(out.some((line) => line.includes("exists: `a.js`, `b.js`")), "files group by verdict");
-  assert.ok(out.some((line) => line.includes("ADRs 001, 002: landed")), "adrs group and pluralize");
-  assert.ok(out.some((line) => line.includes("branch `feat/x`")), "branch lines render");
-  assert.ok(out.some((line) => line.includes("2 commits")), "range lines render");
-  assert.ok(out.some((line) => line.includes("`pnpm test`")), "command lines render");
-  assert.ok(out.some((line) => line.includes("open: the index")), "open lines render");
+  assert.ok(
+    out.some((line) => line.includes("exists: `a.js`, `b.js`")),
+    "files group by verdict",
+  );
+  assert.ok(
+    out.some((line) => line.includes("ADRs 001, 002: landed")),
+    "adrs group and pluralize",
+  );
+  assert.ok(
+    out.some((line) => line.includes("branch `feat/x`")),
+    "branch lines render",
+  );
+  assert.ok(
+    out.some((line) => line.includes("2 commits")),
+    "range lines render",
+  );
+  assert.ok(
+    out.some((line) => line.includes("`pnpm test`")),
+    "command lines render",
+  );
+  assert.ok(
+    out.some((line) => line.includes("open: the index")),
+    "open lines render",
+  );
 });
 
 test("verifyBranch reads the checkout, the trunks and the merges", () => {
