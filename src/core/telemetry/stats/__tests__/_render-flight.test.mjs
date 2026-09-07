@@ -40,7 +40,7 @@ test("renderFlight renders the redacted variant and absent kpi defensively", () 
 
 test("evaluate validates the scope, the results and the conformance claim", () => {
   assert.throws(() => evaluate({}), /scope/, "a missing scope throws");
-  assert.throws(() => evaluate({ scope: { title: "t", url: "u" }, results: [{ criterion: "1.4.9", outcome: "passed" }] }), /Unknown WCAG criterion/, "an unknown criterion throws");
+  assert.throws(() => evaluate({ scope: { title: "t", url: "u" }, results: [{ criterion: "1.1.x", outcome: "passed" }] }), /Unknown WCAG criterion/, "an unknown criterion throws");
   assert.throws(() => evaluate({ scope: { title: "t", url: "u" }, results: [{ criterion: "1.1.1", outcome: "maybe" }] }), /Unknown outcome/, "an unknown outcome throws");
   assert.throws(() => evaluate({ scope: { title: "t", url: "u" }, results: [{ criterion: "3.1.1", outcome: "passed" }] }), /outside a level AA/, "a level AAA criterion outside target throws");
 });
