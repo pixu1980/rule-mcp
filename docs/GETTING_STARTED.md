@@ -260,14 +260,14 @@ It writes an entry equivalent to:
       "args": ["serve"],
       "directTools": true,
       "allowedTools": [
-        "pix_gateway",
-        "pix_apply",
-        "pix",
-        "pix_search",
-        "pix_check",
-        "pix_detect",
-        "pix_scaffold",
-        "pix_component"
+        "pix_tool_gateway",
+        "pix_tool_apply",
+        "pix_tool",
+        "pix_tool_search",
+        "pix_tool_check",
+        "pix_tool_detect",
+        "pix_tool_scaffold",
+        "pix_tool_component"
       ]
     }
   }
@@ -303,7 +303,7 @@ pix-galaxy-mcp doctor
 pix-galaxy-mcp tools list | head -n 20
 
 # 3. Test framework detection
-pix-galaxy-mcp tools call pix_detect --json '{"path": "."}'
+pix-galaxy-mcp tools call pix_tool_detect --json '{"path": "."}'
 
 # 4. Test the router
 pix-galaxy-mcp tools call pix --json '{"prompt": "Create a React button component"}'
