@@ -80,7 +80,10 @@ export async function computeGatewayCore(arguments_, fileSet) {
   let evidence = "";
 
   if (primarySkill) {
-    const skillResult = await callTool(`pix_${primarySkill.replace(/^rule-/, "").replaceAll("-", "_")}`, {
+    // Skill tools register under rule_tool_<skill-in-underscores>; anything else
+    // resolves to "Unknown tool" and the evidence block silently carried that
+    // error text instead of the skill's rules (surfaced by the coverage phase).
+    const skillResult = await callTool(`rule_tool_${primarySkill.replace(/^rule-/, "").replaceAll("-", "_")}`, {
       mode: "tldr",
       query: prompt.slice(0, 300),
     });
