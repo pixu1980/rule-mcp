@@ -42,16 +42,29 @@ export function renderReview(role, version, date, findings) {
   ].join("\n");
 }
 
-/** Render the plan: header, provenance note and one step per open finding. */
-export function renderPlan(role, version, date, open) {
-  const rows = open.map((finding, index) => [String(index + 1), finding.id, finding.severity, finding.summary]);
-
+/**
+ * Render the plan: header, provenance note and one checkbox per open finding.
+ *
+ * A checklist rather than a table so an executed step can be marked with `[x]`
+ * in place; the sync keeps the mark while the finding stays open.
+ *
+ * @param {string} role @param {number} version @param {string} date
+ * @param {Array<object>} open - open findings, worst first
+ * @param {Set<string>} [checked] - finding ids whose step is already marked done
+ */
+export function renderPlan(role, version, date, open, checked = new Set()) {
   return [
     ...header(`${role} plan`, role, version, date),
     `Steps re-derived from the open findings in [the review](../reviews/${role}.md) on every run, worst`,
-    "first. This file is deleted by the run that finds nothing open.",
+    "first. Mark an executed step with `[x]` - the next sync keeps the mark while its finding stays",
+    "open. This file is deleted by the run that finds nothing open.",
     "",
-    ...table(["Step", "Finding", "Severity", "What it takes"], rows),
+    "## Steps",
+    "",
+    ...open.map(
+      (finding, index) =>
+        `- [${checked.has(finding.id) ? "x" : " "}] **Step ${index + 1} - ${finding.id} (${finding.severity})**: ${finding.summary}`,
+    ),
     "",
   ].join("\n");
 }

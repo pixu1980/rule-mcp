@@ -1,9 +1,10 @@
 /** @module core/review/docs/sync */
 
-import { existsSync, mkdirSync, rmSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { mergeFindings, readFindings } from "./_findings.js";
 import { trioPaths } from "./_paths.js";
+import { planCheckedIds } from "./_plan-ids.js";
 import { renderAudit, renderPlan, renderReview } from "./_render.js";
 
 /** Write a file, creating the directory it lives in. */
@@ -38,7 +39,11 @@ export function syncRoleDocs({ role, findings = [], projectDir = ".", version = 
   const planFile = join(projectDir, paths.plan);
 
   if (open.length > 0) {
-    write(projectDir, paths.plan, renderPlan(role, version, stamp, open));
+    // Marks already made on the checklist survive the re-render: an executed
+    // step whose finding is still open stays [x], everything else is re-derived.
+    const checked = existsSync(planFile) ? planCheckedIds(readFileSync(planFile, "utf8")) : new Set();
+
+    write(projectDir, paths.plan, renderPlan(role, version, stamp, open, checked));
     written.push(paths.plan);
   } else if (existsSync(planFile)) {
     rmSync(planFile);
