@@ -23,7 +23,7 @@ export function operationSection(role, operation) {
     "document and iterate until `allPass: true` before closing the run.",
     "",
     "Call `rule_tool_plan_docs` with this role and the findings of this run rather than writing that",
-    "bookkeeping by hand: it writes the headers and tables, merges the findings against the last run,",
+    "bookkeeping by hand: it writes the headers, tables and plan checklist, merges the findings against the",
     "flips the ones you no longer report to resolved, prunes what was already resolved and deletes the",
     "plan when nothing is open. The evidence, the wording of each finding and what each step takes are",
     "yours to fill in.",

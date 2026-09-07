@@ -44,78 +44,83 @@
 ## Phases
 
 ### Phase 0 - measurable coverage baseline (done)
+
 - [x] Line+branch coverage with native Node (71.57/80.91/72.66 on foundations).
 - [x] `test:coverage` npm script (`scripts/test-coverage.mjs`).
 - [x] Baseline recorded here and in ADR 060.
 
 ### Phase 1 - `test/` -> `tests/` + thematic subfolders (done)
+
 - [x] `git mv test tests`; domain subfolders (cli, core, tools, transport, roles, prompts, docs, e2e, skills, fixtures).
 - [x] package.json / ci.yml / docs path updates; relative-path fixes; porting-parity removed.
 
 ### Phase 2 - first splits (done, produced the junk names this plan now bans)
+
 - [x] `cli/agent-installers.js` -> `installers/`, `guardrails/framework.js` -> `framework/`,
-  `wcag-data.js` -> `wcag-data/`, `guardrails/quality.js` -> `quality/`, `bm25.js` -> `bm25/`,
-  `tools/router.js` -> `router/`, `cli/commands.js` -> `commands/`.
+      `wcag-data.js` -> `wcag-data/`, `guardrails/quality.js` -> `quality/`, `bm25.js` -> `bm25/`,
+      `tools/router.js` -> `router/`, `cli/commands.js` -> `commands/`.
 
 ### Phase 3 - convention rework (this session)
+
 - [x] Codemod: framework `js-1..4` + `vanilla-1..2` -> one rule per file under
-  `framework/js/` (16) and `framework/vanilla/` (9), underscore names, order preserved.
+      `framework/js/` (16) and `framework/vanilla/` (9), underscore names, order preserved.
 - [x] Codemod: quality `parts-1..4` -> family folders `typescript/` (4), `prose/` (5+1),
-  `manifest/` (2), `simplicity/` (1), `comments/` (3); **two duplicated rules dropped**
-  (`no-future-use-code`, `no-commented-out-code` appeared in both parts-3 and parts-4).
+      `manifest/` (2), `simplicity/` (1), `comments/` (3); **two duplicated rules dropped**
+      (`no-future-use-code`, `no-commented-out-code` appeared in both parts-3 and parts-4).
 - [x] bm25: `stopwords-a/b/union` merged into `_stopwords.data.js` (union side effect moved
-  into `_canonicalize.js`, import cycle removed); all bm25 modules renamed to `_` prefix.
+      into `_canonicalize.js`, import cycle removed); all bm25 modules renamed to `_` prefix.
 - [x] Underscore renames: `_react/_vue/_angular/_svelte.js`, `_a11y.js`, `_guards-meta.js`,
-  `_a11y-helpers.js`; dead `helpers-css.js` deleted (duplicate of `guardrails/util.js`).
+      `_a11y-helpers.js`; dead `helpers-css.js` deleted (duplicate of `guardrails/util.js`).
 - [x] Shims killed: `core/bm25.js`, `core/wcag-data.js`, `tools/router.js`, `cli/commands.js`;
-  every importer now uses the folder `index.js` path.
+      every importer now uses the folder `index.js` path.
 - [x] New guardrail `en-english-only-filenames` (+ `scanPathForForeign`, foreign-name
-  dictionary and suffix heuristic in `core/en-english.js`), test-first.
+      dictionary and suffix heuristic in `core/en-english.js`), test-first.
 - [x] English gate in `rule_tool_process_adr` (`adrEnglishOffenses`), test-first; ADR 060
-  translated to English (filename + content); index regenerated.
+      translated to English (filename + content); index regenerated.
 - [x] `tests/docs/file-size-budget.test.mjs`: junk-name ban + 150-line cap + shrink-only
-  ratchet (117 grandfathered files in `file-size-ratchet.data.mjs`); wired into
-  `test:foundations`.
+      ratchet (117 grandfathered files in `file-size-ratchet.data.mjs`); wired into
+      `test:foundations`.
 - [x] Code-splitting section in `skills/rule-process-simplicity/SKILL.md`; ADR 061.
 
 ### Phase 4 - shrink the ratchet (in progress, one family per commit)
+
 - [x] `tools/ai.js` (792) -> 15 files under `tools/ai/` (schema, sections, stopwords/aliases
-  data, scoring, affinities, domain, framework bias, contracts, ranking, register); dead
-  `scoreSkill` dropped.
+      data, scoring, affinities, domain, framework bias, contracts, ranking, register); dead
+      `scoreSkill` dropped.
 - [x] `core/docs-numbering.js` (740) -> 9 files under `core/docs-numbering/` (git plumbing,
-  families, authors, orphans, stale commits, plan, apply, rewrite, render).
+      families, authors, orphans, stale commits, plan, apply, rewrite, render).
 - [x] `core/wcag-data/`: generator/split desync fixed - the vendored catalog is one
-  `_criteria.data.js` (generator target), lookup helpers in `_lookup.js`; the 13
-  `criteria-N-N.js` slices and `meta.js` are gone.
+      `_criteria.data.js` (generator target), lookup helpers in `_lookup.js`; the 13
+      `criteria-N-N.js` slices and `meta.js` are gone.
 - [x] Underscore-barrel convention in every existing subfolder: `cli/commands`,
-  `cli/installers` (agent-installers.js became the folder index), `tools/router`,
-  `prompts`, `transport` (+barrel), `utils` (+barrel).
+      `cli/installers` (agent-installers.js became the folder index), `tools/router`,
+      `prompts`, `transport` (+barrel), `utils` (+barrel).
 - [x] `src/core` thematic folders: `agents/`, `telemetry/`, `cache/`, `text/`, `review/`,
-  `skills/`, `scaffold/`, `session/`, guardrails engine folded into `guardrails/`
-  (`_engine`, `_guarded`, `_worker-thread`, catalogs underscored); `cli/daemon/` pair.
-  Five more 1-2 line shims removed (guardrail-defs.js, guardrails/framework.js,
-  guardrails/quality.js and the flat daemon/commands aliases).
+      `skills/`, `scaffold/`, `session/`, guardrails engine folded into `guardrails/`
+      (`_engine`, `_guarded`, `_worker-thread`, catalogs underscored); `cli/daemon/` pair.
+      Five more 1-2 line shims removed (guardrail-defs.js, guardrails/framework.js,
+      guardrails/quality.js and the flat daemon/commands aliases).
 - [x] Second pass (2026-09-06, session 3): `guardrails/_shared.js` (654) -> 15 per-rule
-  files under `guardrails/shared/` - the three simplicity rules it duplicated from the
-  quality family are now shared objects and **getGuardrails dedupes by id** (they ran
-  twice per check before); maskLiterals single-sourced in `guardrails/_util.js`.
+      files under `guardrails/shared/` - the three simplicity rules it duplicated from the
+      quality family are now shared objects and **getGuardrails dedupes by id** (they ran
+      twice per check before); maskLiterals single-sourced in `guardrails/_util.js`.
 - [x] `tools/handon.js` (737) -> 12 files, `tools/handoff.js` (660) -> 10 files,
-  `core/cache/_tool-cache.js` (720) -> 10 files (shared cacheState object),
-  `core/file-tree.js` (686) -> 9 files (dead isComponentDir dropped),
-  `prompts/index.js` (629) -> 8 files (definitions as `_defs.data.js`),
-  `tools/adr.js` (580) -> 10 files, `tools/gateway.js` (530) -> 6 files.
+      `core/cache/_tool-cache.js` (720) -> 10 files (shared cacheState object),
+      `core/file-tree.js` (686) -> 9 files (dead isComponentDir dropped),
+      `prompts/index.js` (629) -> 8 files (definitions as `_defs.data.js`),
+      `tools/adr.js` (580) -> 10 files, `tools/gateway.js` (530) -> 6 files.
 - [x] `core/text/_fingerprint.js` and `_en-english.js` dictionaries extracted to
-  `*.data.js` (494->290 and 490->247 logic lines).
+      `*.data.js` (494->290 and 490->247 logic lines).
 - [x] Third pass (2026-09-06, session 4): `core/agents/_transcripts.js` (583) -> 8
-  per-agent readers; `cli/daemon/_platform.js` (548) -> per-service-manager adapters;
-  `cli/daemon/_daemon.js` (501) -> process/service/status modules; `cli/program.js`
-  (501) -> one registrar per command in five theme files (original order preserved);
-  `core/self-update.js` (483) -> 7 files; `cli/doctor.js` (478) -> 6 files;
-  `reports/census/index.mjs` 530 -> 369 (markdown/env/CLI-reference extracted,
-  byte-identical output); `flight-recorder.test.mjs` (540) -> 9 focused files with a
-  shared sandbox fixture.
+      per-agent readers; `cli/daemon/_platform.js` (548) -> per-service-manager adapters;
+      `cli/daemon/_daemon.js` (501) -> process/service/status modules; `cli/program.js`
+      (501) -> one registrar per command in five theme files (original order preserved);
+      `core/self-update.js` (483) -> 7 files; `cli/doctor.js` (478) -> 6 files;
+      `reports/census/index.mjs` 530 -> 369 (markdown/env/CLI-reference extracted,
+      byte-identical output); `flight-recorder.test.mjs` (540) -> 9 focused files with a
+      shared sandbox fixture.
 - [x] New guard: `tests/docs/import-paths.test.mjs` resolves every relative specifier
-  (static, dynamic, new URL) - it caught four dormant broken dynamic imports on landing.
+      (static, dynamic, new URL) - it caught four dormant broken dynamic imports on landing.
 - [x] Fourth pass (2026-09-07, session 5) - the src ratchet is down from 93 to 40 entries:
   - `core/telemetry`: `_flight` 449, `_telemetry` 409, `_stats` 386, `_store` 363,
     `_kpi` 283 -> `flight/`, `recorder/`, `stats/`, `store/`, `kpi/` (24 files, all <=133).
@@ -150,44 +155,47 @@
     instead of 112); caught by minimal-tools and fixed - depth bugs in `new URL` do not
     show up in import-paths, only in behavior tests.
 - [x] Test suites split per feature: `handon.test.mjs` (517) -> fixture + five files,
-  `docs-numbering-doctor.test.mjs` (507) -> fixture + six files (flight-recorder pattern);
-  package.json globs updated.
+      `docs-numbering-doctor.test.mjs` (507) -> fixture + six files (flight-recorder pattern);
+      package.json globs updated.
 - [x] `scripts/` fully cleared: census 369 -> surface/labels/generated-files/
-  instructions-file/marker-targets (byte-identical docs, verified); cache report 277 ->
-  context/workload/measure/render (verified end-to-end); self-guardrails 233 -> five
-  per-rule passes (identical 277-file dry-run); changelog 229 -> sections/history/render;
-  wcag 186 -> flatten/render; blank-lines, cache-similarity, post-process, prose each
-  shed one module.
+      instructions-file/marker-targets (byte-identical docs, verified); cache report 277 ->
+      context/workload/measure/render (verified end-to-end); self-guardrails 233 -> five
+      per-rule passes (identical 277-file dry-run); changelog 229 -> sections/history/render;
+      wcag 186 -> flatten/render; blank-lines, cache-similarity, post-process, prose each
+      shed one module.
 - [ ] Deliberate keeps, grandfathered with a rationale: `session/_lifecycle.js` 228 and
-  `transport/_session-registry.js` 221 (single state machines whose reset reassigns
-  module state), `guardrails/_guarded.js` 179 (worker lifecycle), `cli/commands/_daemon.js`
-  219 and `tools/router/_call.js` 188 (one dispatcher function each).
+      `transport/_session-registry.js` 221 (single state machines whose reset reassigns
+      module state), `guardrails/_guarded.js` 179 (worker lifecycle), `cli/commands/_daemon.js`
+      219 and `tools/router/_call.js` 188 (one dispatcher function each).
 - [ ] `core/tokensave.js` 273 is runtime-orphaned - only tests/core/tokensave-branch.test.mjs
-  imports it; the live integration is `core/agents/_integrations.js`. Decide: delete the
-  module and retarget or retire the test.
+      imports it; the live integration is `core/agents/_integrations.js`. Decide: delete the
+      module and retarget or retire the test.
 - [ ] Remaining in the ratchet: ~32 test suites between 151 and 383 lines
-  (worst: process-hygiene 383, lifecycle 380, css-flex-first 369, cache-tiers 363,
-  telemetry 359, cache-invalidation 334) - same fixture-module split, next session.
+      (worst: process-hygiene 383, lifecycle 380, css-flex-first 369, cache-tiers 363,
+      telemetry 359, cache-invalidation 334) - same fixture-module split, next session.
 
 ### Phase 5 - `scripts/` folders per script (done)
+
 - [x] `reports/` (census, cache, cache-similarity, tool-surface, coverage), `fix/`
-  (blank-lines, self-guardrails, prose, post-process), `build/` (changelog, embed-skills,
-  checksums), `ci/` (audit-gate), `data/` (wcag), `install/` (skills); each script is its
-  folder's `index.mjs`, shell installers stay flat.
+      (blank-lines, self-guardrails, prose, post-process), `build/` (changelog, embed-skills,
+      checksums), `ci/` (audit-gate), `data/` (wcag), `install/` (skills); each script is its
+      folder's `index.mjs`, shell installers stay flat.
 - [x] package.json, ci.yml, package.sh, pre-commit hook, docs and census header updated;
-  SHA256SUMS refreshed; stale `../test/routing-corpus.mjs` import in the cache reports fixed.
+      SHA256SUMS refreshed; stale `../test/routing-corpus.mjs` import in the cache reports fixed.
 - [x] Split the oversized scripts into underscore parts (fourth pass, session 5): every
-  script ratchet entry is gone.
+      script ratchet entry is gone.
 
 ### Phase 6 - co-located `__tests__/`
+
 - [ ] Glob-based runner (`node --test` patterns) replacing the hardcoded lists in
-  `test:foundations` / `test:installer` / `test:all` / `ci` and `.github/workflows/ci.yml`.
+      `test:foundations` / `test:installer` / `test:all` / `ci` and `.github/workflows/ci.yml`.
 - [ ] Move unit tests next to their subject as `__tests__/_name.test.mjs`; repo-level suites
-  stay in `tests/`; `files` in package.json excludes `**/__tests__/`.
+      stay in `tests/`; `files` in package.json excludes `**/__tests__/`.
 
 ### Phase 7 - coverage >= 95% branches
+
 - [ ] c8 (or `NODE_V8_COVERAGE`) so subprocess CLI/installer runs count.
 - [ ] Targeted tests on the under-threshold areas listed in the analysis.
 - [ ] CI gate: `pnpm test:coverage` fails under 95% branch coverage.
 - [ ] Resolve or document the 2 pre-existing flaky failures (untrusted-fence,
-  home-recording-leak race).
+      home-recording-leak race).

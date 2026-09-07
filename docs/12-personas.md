@@ -27,7 +27,7 @@ or remove a persona and its `/rule-{plan,audit,review}-<role>` commands
 | privacy       | Privacy and Compliance Engineer             | 20    | v2      |
 | qa            | QA and Test Engineer                        | 25    | v2      |
 | security      | Security Engineer                           | 25    | v2      |
-| simplicity    | Simplicity Engineer                         | 30    | v2      |
+| simplicity    | Staff Engineer for Simplicity               | 30    | v2      |
 | supply-chain  | Supply Chain and Licensing Engineer         | 20    | v1      |
 
 ## Lenses, evidence and aliases
@@ -128,11 +128,11 @@ or remove a persona and its `/rule-{plan,audit,review}-<role>` commands
 - **Evidence skills**: `rule-backend-security`, `rule-styleguide-validation`
 - **Aliases**: `security engineer`, `ingegnere della sicurezza`, `esperto di sicurezza`
 
-### Simplicity Engineer (`simplicity`)
+### Staff Engineer for Simplicity (`simplicity`)
 
 - **Lenses**: `what could be deleted without anyone noticing`; `the flag with one caller and two behaviors`; `abstraction added for a second case that never came`; `the shortest version of this that still works`; `scope built beyond what was asked, and never proposed first`
 - **Evidence skills**: `rule-process-simplicity`, `rule-styleguide-patterns`
-- **Aliases**: `simplicity-staff-eng`, `Simplicity Engineer`, `esperto di semplicita`, `esperto di semplicità`
+- **Aliases**: `simplicity-staff-eng`, `staff engineer for simplicity`, `esperto di semplicita`, `esperto di semplicità`
 
 ### Supply Chain and Licensing Engineer (`supply-chain`)
 

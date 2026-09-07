@@ -32,7 +32,6 @@ export const FILE_SIZE_RATCHET = new Map([
   ["tests/core/process-hygiene.test.mjs", 383],
   ["tests/core/simplicity.test.mjs", 238],
   ["tests/core/telemetry.test.mjs", 359],
-  ["tests/docs/review-docs.test.mjs", 271],
   ["tests/prompts/prompts.test.mjs", 252],
   ["tests/prompts/reminder-diet.test.mjs", 158],
   ["tests/roles/review-roles-surfaces.test.mjs", 156],

@@ -6,7 +6,7 @@
  *
  * `rule_tool_plan` hands the agent the operation; this tool does the part of it
  * that is bookkeeping rather than judgment. The agent reports what it found and
- * gets back three documents whose headers, tables and statuses are already
+ * gets back three documents whose headers, tables, checklist and statuses are already
  * correct, so the only thing left to write is the content.
  *
  * @see module:core/review/docs - the merge rules and the file formats
@@ -73,7 +73,7 @@ export function registerPlanDocsTool() {
         ...result.written.map((path) => `- ${path}`),
         ...(result.deleted.length > 0 ? ["", "## Deleted", "", ...result.deleted.map((path) => `- ${path}`)] : []),
         "",
-        "The headers, tables and statuses are done. Fill the evidence in the audit, the wording of each",
+        "The headers, tables, plan checklist and statuses are done. Fill the evidence in the audit, the wording of each",
         "finding in the review, and what each step takes in the plan.",
       ];
 
