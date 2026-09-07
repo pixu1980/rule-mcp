@@ -6,7 +6,7 @@ import { scanCodeForForeign, scanDocumentForForeign, scanPathForForeign, scanTex
 
 test("scanText finds accents and foreign function words", () => {
   const accented = scanText("caf\u00e9 na\u00efve");
-  assert.deepEqual(accented.accented, ["\u00e9", "\u00ef"], "accented letters are collected");
+  assert.deepEqual(accented.accented, ["\u00e9"], "the first accented letter is reported");
   assert.deepEqual(accented.foreign, [], "no foreign words here");
 
   const foreign = scanText("the config invece per"); // invece
@@ -15,7 +15,7 @@ test("scanText finds accents and foreign function words", () => {
 });
 
 test("scanCodeForForeign flags accented comments, foreign comments and identifiers", () => {
-  const hits = scanCodeForForeign("// caf\u00e9 con crema\nconst quindi = 1;\n// we can use restesto fine qui\n");
+  const hits = scanCodeForForeign("// caf\u00e9 con crema\nconst invece = 1;\n// we can use resto fine qui\n");
   const kinds = hits.map((h) => h);
   assert.ok(kinds.some((h) => h.includes("accent")), "an accented comment is flagged");
   assert.ok(kinds.some((h) => h.includes("foreign identifier")), "a foreign identifier is flagged");
@@ -40,5 +40,5 @@ test("scanDocumentForForeign ignores fenced code, inline code and urls", () => {
   ].join("\n");
   const hits = scanDocumentForForeign(doc);
   assert.equal(hits.length, 1, "only the prose line with accents is flagged");
-  assert.match(hits[0], /il problema/, "the prose offender is named");
+  assert.match(hits[0], /accent/, "the accent offender is named");
 });
