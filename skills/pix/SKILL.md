@@ -95,16 +95,16 @@ Plan architecture, SDD, context, and scaffolding flow.
 
 Design and implement APIs, runtime frameworks, security, and scaffolds.
 
-| Skill                                                        | Tool                     | Frameworks         | Use when                                                                                                                 |
-| ------------------------------------------------------------ | ------------------------ | ------------------ | ------------------------------------------------------------------------------------------------------------------------ |
-| [pix-backend](../pix-backend/SKILL.md)                       | `pix_backend`            | all                | Backend application development umbrella - routes REST, GraphQL, runtime, security, and database work to focused skills. |
-| [pix-backend-express](../pix-backend-express/SKILL.md)       | `pix_backend_express`    | all                | Express.js 5+ best practices: middleware patterns, error handling, routing, performance optimization, security header... |
-| [pix-backend-fastify](../pix-backend-fastify/SKILL.md)       | `pix_backend_fastify`    | all                | Fastify 5+ best practices: plugins, hooks, schema validation, serialization, lifecycle, logging, and performance tuni... |
-| [pix-backend-graphql](../pix-backend-graphql/SKILL.md)       | `pix_backend_graphql`    | node, api, graphql | GraphQL API engineering: schema-first contracts, resolver boundaries, N+1 prevention, caching, and abuse controls.       |
-| [pix-backend-hono](../pix-backend-hono/SKILL.md)             | `pix_backend_hono`       | all                | Hono 4+ best practices: edge-compatible API framework, middleware patterns, RPC-style type sharing, Zod validation, a... |
-| [pix-backend-nestjs](../pix-backend-nestjs/SKILL.md)         | `pix_backend_nestjs`     | all                | NestJS 10+ best practices: modular architecture, decorators, dependency injection, guards, interceptors, pipes, Graph... |
-| [pix-backend-node](../pix-backend-node/SKILL.md)             | `pix_backend_node`       | node, api          | Scaffold a new pix backend-node repository. Use when creating Express + TypeScript backend structure, baseline co...     |
-| [pix-backend-security](../pix-backend-security/SKILL.md)     | `pix_backend_security`   | node, api          | Apply security best practices to pix repositories. Use when handling environment variables, secrets, Docker secur...     |
+| Skill                                                    | Tool                   | Frameworks         | Use when                                                                                                                 |
+| -------------------------------------------------------- | ---------------------- | ------------------ | ------------------------------------------------------------------------------------------------------------------------ |
+| [pix-backend](../pix-backend/SKILL.md)                   | `pix_backend`          | all                | Backend application development umbrella - routes REST, GraphQL, runtime, security, and database work to focused skills. |
+| [pix-backend-express](../pix-backend-express/SKILL.md)   | `pix_backend_express`  | all                | Express.js 5+ best practices: middleware patterns, error handling, routing, performance optimization, security header... |
+| [pix-backend-fastify](../pix-backend-fastify/SKILL.md)   | `pix_backend_fastify`  | all                | Fastify 5+ best practices: plugins, hooks, schema validation, serialization, lifecycle, logging, and performance tuni... |
+| [pix-backend-graphql](../pix-backend-graphql/SKILL.md)   | `pix_backend_graphql`  | node, api, graphql | GraphQL API engineering: schema-first contracts, resolver boundaries, N+1 prevention, caching, and abuse controls.       |
+| [pix-backend-hono](../pix-backend-hono/SKILL.md)         | `pix_backend_hono`     | all                | Hono 4+ best practices: edge-compatible API framework, middleware patterns, RPC-style type sharing, Zod validation, a... |
+| [pix-backend-nestjs](../pix-backend-nestjs/SKILL.md)     | `pix_backend_nestjs`   | all                | NestJS 10+ best practices: modular architecture, decorators, dependency injection, guards, interceptors, pipes, Graph... |
+| [pix-backend-node](../pix-backend-node/SKILL.md)         | `pix_backend_node`     | node, api          | Scaffold a new pix backend-node repository. Use when creating Express + TypeScript backend structure, baseline co...     |
+| [pix-backend-security](../pix-backend-security/SKILL.md) | `pix_backend_security` | node, api          | Apply security best practices to pix repositories. Use when handling environment variables, secrets, Docker secur...     |
 
 ### Data
 
@@ -122,12 +122,12 @@ Model persistence, SQL, PostgreSQL, MySQL, and MongoDB.
 
 Configure Docker, CI, tests, coverage, and version automation.
 
-| Skill                                                            | Tool                       | Frameworks | Use when                                                                                                                 |
-| ---------------------------------------------------------------- | -------------------------- | ---------- | ------------------------------------------------------------------------------------------------------------------------ |
-| [pix-devops](../pix-devops/SKILL.md)                             | `pix_devops`               | all        | Index of DevOps and engineering skills: Docker, GitLab CI, observability, testing, and version management.               |
-| [pix-devops-docker](../pix-devops-docker/SKILL.md)               | `pix_devops_docker`        | all        | Create and maintain Docker configuration for pix repositories. Use when generating Dockerfiles, docker-compose.ym...     |
-| [pix-devops-observability](../pix-devops-observability/SKILL.md) | `pix_devops_observability` | all        | Define production observability: SLOs, telemetry, alerts, incident learning, and rollback verification.                  |
-| [pix-devops-testing](../pix-devops-testing/SKILL.md)             | `pix_devops_testing`       | all        | Write and maintain tests for pix repositories using Vitest. Use when creating unit or integration tests, configur...     |
+| Skill                                                            | Tool                       | Frameworks | Use when                                                                                                             |
+| ---------------------------------------------------------------- | -------------------------- | ---------- | -------------------------------------------------------------------------------------------------------------------- |
+| [pix-devops](../pix-devops/SKILL.md)                             | `pix_devops`               | all        | Index of DevOps and engineering skills: Docker, GitLab CI, observability, testing, and version management.           |
+| [pix-devops-docker](../pix-devops-docker/SKILL.md)               | `pix_devops_docker`        | all        | Create and maintain Docker configuration for pix repositories. Use when generating Dockerfiles, docker-compose.ym... |
+| [pix-devops-observability](../pix-devops-observability/SKILL.md) | `pix_devops_observability` | all        | Define production observability: SLOs, telemetry, alerts, incident learning, and rollback verification.              |
+| [pix-devops-testing](../pix-devops-testing/SKILL.md)             | `pix_devops_testing`       | all        | Write and maintain tests for pix repositories using Vitest. Use when creating unit or integration tests, configur... |
 
 ### Dispatcher
 
@@ -161,24 +161,24 @@ Build UI, components, routing, forms, and meta-framework apps.
 
 Select project platform: web, desktop, library, Expo/mobile.
 
-| Skill                                                    | Tool                   | Frameworks         | Use when                                                                                                                 |
-| -------------------------------------------------------- | ---------------------- | ------------------ | ------------------------------------------------------------------------------------------------------------------------ |
-| [pix-platform](../pix-platform/SKILL.md)                 | `pix_platform`         | all                | Index of all platform/project-type skills: Desktop (Electron), Expo (React Native), Library authoring, and Web platfo... |
-| [pix-platform-desktop](../pix-platform-desktop/SKILL.md) | `pix_platform_desktop` | electron, desktop  | Desktop application development with pix principles. Project type umbrella for desktop apps. Primary framework: E...     |
-| [pix-platform-library](../pix-platform-library/SKILL.md) | `pix_platform_library` | all                | Reusable library/package development with pix principles. Covers pnpm package structure, public API design, TypeS...     |
-| [pix-platform-web](../pix-platform-web/SKILL.md)         | `pix_platform_web`     | all                | Web application development with pix principles. Covers browser-based app architecture, bundling, routing, progre...     |
+| Skill                                                    | Tool                   | Frameworks        | Use when                                                                                                                 |
+| -------------------------------------------------------- | ---------------------- | ----------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| [pix-platform](../pix-platform/SKILL.md)                 | `pix_platform`         | all               | Index of all platform/project-type skills: Desktop (Electron), Expo (React Native), Library authoring, and Web platfo... |
+| [pix-platform-desktop](../pix-platform-desktop/SKILL.md) | `pix_platform_desktop` | electron, desktop | Desktop application development with pix principles. Project type umbrella for desktop apps. Primary framework: E...     |
+| [pix-platform-library](../pix-platform-library/SKILL.md) | `pix_platform_library` | all               | Reusable library/package development with pix principles. Covers pnpm package structure, public API design, TypeS...     |
+| [pix-platform-web](../pix-platform-web/SKILL.md)         | `pix_platform_web`     | all               | Web application development with pix principles. Covers browser-based app architecture, bundling, routing, progre...     |
 
 ### Process
 
 Write ADRs/docs, follow BMAD, feature workflow, and handoff.
 
-| Skill                                                                    | Tool                           | Frameworks | Use when                                                                                                                 |
-| ------------------------------------------------------------------------ | ------------------------------ | ---------- | ------------------------------------------------------------------------------------------------------------------------ |
-| [pix-process](../pix-process/SKILL.md)                                   | `pix_process`                  | all        | Index of process skills: ADR, BMAD, code review, documentation, feature workflow, and LLM handoff.                       |
-| [pix-process-adr](../pix-process-adr/SKILL.md)                           | `pix_process_adr`              | all        | Architecture Decision Records (ADR) for pix projects. Capture, store, and manage architectural decisions in docs/...     |
-| [pix-process-bmad](../pix-process-bmad/SKILL.md)                         | `pix_process_bmad`             | all        | BMAD Method (Build More Architect Dreams) - AI-driven development framework for structured software delivery through...  |
-| [pix-process-code-review](../pix-process-code-review/SKILL.md)           | `pix_process_code_review`      | all        | Prepare and conduct risk-based PR/MR reviews with explicit quality, safety, and follow-up gates.                         |
-| [pix-process-handoff](../pix-process-handoff/SKILL.md)                   | `pix_process_handoff`          | all        | Generate a compressed LLM handoff summary from ADR logs and project context. Enables cross-chat recovery, model-switc... |
+| Skill                                                          | Tool                      | Frameworks | Use when                                                                                                                 |
+| -------------------------------------------------------------- | ------------------------- | ---------- | ------------------------------------------------------------------------------------------------------------------------ |
+| [pix-process](../pix-process/SKILL.md)                         | `pix_process`             | all        | Index of process skills: ADR, BMAD, code review, documentation, feature workflow, and LLM handoff.                       |
+| [pix-process-adr](../pix-process-adr/SKILL.md)                 | `pix_process_adr`         | all        | Architecture Decision Records (ADR) for pix projects. Capture, store, and manage architectural decisions in docs/...     |
+| [pix-process-bmad](../pix-process-bmad/SKILL.md)               | `pix_process_bmad`        | all        | BMAD Method (Build More Architect Dreams) - AI-driven development framework for structured software delivery through...  |
+| [pix-process-code-review](../pix-process-code-review/SKILL.md) | `pix_process_code_review` | all        | Prepare and conduct risk-based PR/MR reviews with explicit quality, safety, and follow-up gates.                         |
+| [pix-process-handoff](../pix-process-handoff/SKILL.md)         | `pix_process_handoff`     | all        | Generate a compressed LLM handoff summary from ADR logs and project context. Enables cross-chat recovery, model-switc... |
 
 ### Styleguide
 
@@ -227,21 +227,21 @@ Design and route visible interface work while preserving pix implementation cons
 
 ## Recommended dispatch bundles
 
-| Task                     | Primary                                             | Secondary                                             | Deterministic tools                      |
-| ------------------------ | --------------------------------------------------- | ----------------------------------------------------- | ---------------------------------------- |
-| Unknown project          | `pix`                                               | `pix-process-adr`                                     | `pix_detect`, `pix_search`               |
-| AI agent app             | `pix-ai` + `pix-platform-agent`                     | `pix-ai-agent-architecture`, `pix-devops-testing`                        | `pix_check`, `pix_process_adr`           |
-| New web UI               | `pix-ui` + `pix-ui-design-system` + framework skill | `pix-styleguide`, `pix-platform-web`                  | `pix_component`, `pix_check`             |
-| React/Vite app           | `pix-frontend-react`                                | `pix-toolchain-vite`, `pix-styleguide`                | `pix_scaffold`, `pix_check`              |
-| Backend API              | `pix-backend-node`                                  | `pix-backend-security`                 | `pix_check`, `pix_process_adr`           |
-| Database work            | database skill                                      | `pix-data`                              | `pix_search`, `pix_check`                |
-| Docker/CI/tests          | `pix-devops` focused skill                          | platform skill                                        | `pix_scaffold`, `pix_fix`                |
-| GraphQL API              | `pix-backend-graphql`                               | runtime skill, `pix-backend-security`                 | `pix_search`, `pix_check`                |
-| Production observability | `pix-devops-observability`                          | runtime and platform skill                            | `pix_check`, `pix_process_adr`           |
-| Code review              | `pix-process-code-review`                           | feature workflow, relevant domain skill               | `pix_check`                              |
-| Commit/push              | `pix-toolchain-commits`                             | `pix-toolchain-husky` | `pix_check`                              |
-| Docs/ADR                 | `pix-styleguide-markdown`                           | `pix-process-adr`                                     | `pix_process_adr`, `pix_process_handoff` |
-| File-tree cleanup        | `pix-styleguide-naming`                             | `pix-toolchain-project`                               | `pix_fix`, `pix_check`                   |
+| Task                     | Primary                                             | Secondary                                         | Deterministic tools                      |
+| ------------------------ | --------------------------------------------------- | ------------------------------------------------- | ---------------------------------------- |
+| Unknown project          | `pix`                                               | `pix-process-adr`                                 | `pix_detect`, `pix_search`               |
+| AI agent app             | `pix-ai` + `pix-platform-agent`                     | `pix-ai-agent-architecture`, `pix-devops-testing` | `pix_check`, `pix_process_adr`           |
+| New web UI               | `pix-ui` + `pix-ui-design-system` + framework skill | `pix-styleguide`, `pix-platform-web`              | `pix_component`, `pix_check`             |
+| React/Vite app           | `pix-frontend-react`                                | `pix-toolchain-vite`, `pix-styleguide`            | `pix_scaffold`, `pix_check`              |
+| Backend API              | `pix-backend-node`                                  | `pix-backend-security`                            | `pix_check`, `pix_process_adr`           |
+| Database work            | database skill                                      | `pix-data`                                        | `pix_search`, `pix_check`                |
+| Docker/CI/tests          | `pix-devops` focused skill                          | platform skill                                    | `pix_scaffold`, `pix_fix`                |
+| GraphQL API              | `pix-backend-graphql`                               | runtime skill, `pix-backend-security`             | `pix_search`, `pix_check`                |
+| Production observability | `pix-devops-observability`                          | runtime and platform skill                        | `pix_check`, `pix_process_adr`           |
+| Code review              | `pix-process-code-review`                           | feature workflow, relevant domain skill           | `pix_check`                              |
+| Commit/push              | `pix-toolchain-commits`                             | `pix-toolchain-husky`                             | `pix_check`                              |
+| Docs/ADR                 | `pix-styleguide-markdown`                           | `pix-process-adr`                                 | `pix_process_adr`, `pix_process_handoff` |
+| File-tree cleanup        | `pix-styleguide-naming`                             | `pix-toolchain-project`                           | `pix_fix`, `pix_check`                   |
 
 ## Operational sequence
 
@@ -274,15 +274,15 @@ This rule system is also available as an MCP server (`pix-galaxy-rules`). If you
 Load `pix` first: it is the index. Pull in the domain skill only when the task
 touches that domain:
 
-| Skill                          | When to load                                                                                 |
-| ------------------------------ | -------------------------------------------------------------------------------------------- |
-| `pix-toolchain-commits`        | **Immediately** - before any branch, commit, or push                                         |
-| `pix-styleguide-markdown`      | **Immediately** - when writing or updating README and prose files                            |
-| `pix-toolchain-typescript`     | **Immediately** - when writing TypeScript types and interfaces                               |
-| `pix-devops-testing`           | When creating tests or configuring coverage                                                  |
-| `pix-styleguide-a11y`          | **Frontend only** - when accessibility is part of the requirement                            |
-| `pix-styleguide-i18n`          | **Frontend only** - when internationalization is needed                                     |
-| `pix-backend-security`         | **Backend only** - when the service must be hardened                                         |
+| Skill                      | When to load                                                      |
+| -------------------------- | ----------------------------------------------------------------- |
+| `pix-toolchain-commits`    | **Immediately** - before any branch, commit, or push              |
+| `pix-styleguide-markdown`  | **Immediately** - when writing or updating README and prose files |
+| `pix-toolchain-typescript` | **Immediately** - when writing TypeScript types and interfaces    |
+| `pix-devops-testing`       | When creating tests or configuring coverage                       |
+| `pix-styleguide-a11y`      | **Frontend only** - when accessibility is part of the requirement |
+| `pix-styleguide-i18n`      | **Frontend only** - when internationalization is needed           |
+| `pix-backend-security`     | **Backend only** - when the service must be hardened              |
 
 ### What each one covers
 

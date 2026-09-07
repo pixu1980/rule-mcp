@@ -1,4 +1,4 @@
-[is='pix-details'] {
+[is="pix-details"] {
   &[open] {
     gap: var(--pix-details--gap);
 

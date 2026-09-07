@@ -82,11 +82,11 @@ Two non-negotiables:
 
 The `EXPOSE` and `CMD` pair depends on the application:
 
-| Stack        | Port  | Entry                 |
-| ------------ | ----- | --------------------- |
-| Backend      | 3000  | `dist/server.js`      |
-| AI agent     | 3001  | `dist/agent.js`       |
-| Frontend dev | 5173  | Vite dev server       |
+| Stack        | Port | Entry            |
+| ------------ | ---- | ---------------- |
+| Backend      | 3000 | `dist/server.js` |
+| AI agent     | 3001 | `dist/agent.js`  |
+| Frontend dev | 5173 | Vite dev server  |
 
 Frontend images deviate deliberately: the Vite build happens in the build
 stage, the runtime stage serves the static output behind nginx, and the

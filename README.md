@@ -40,7 +40,7 @@ Deterministic MCP server for the pix skill ecosystem. Live surface (enforced by
 
 | Surface   | Count | Notes                                                                                                       |
 | --------- | ----- | ----------------------------------------------------------------------------------------------------------- |
-| Tools     | 105   | per-skill tools + dispatcher/action tools                                                              |
+| Tools     | 105   | per-skill tools + dispatcher/action tools                                                                   |
 | Resources | 184   | pix:// per-skill index + summary + template URIs                                                            |
 | Prompts   | 73    | pix-area-* areas + one-shot workflow + 54 review-persona commands (pix-plan-* / pix-audit-* / pix-review-*) |
 | Skills    | 89    | frontend, backend, data, devops, toolchain, styleguide, process, platform, ai                               |

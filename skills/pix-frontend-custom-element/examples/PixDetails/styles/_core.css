@@ -11,7 +11,7 @@
   --pix-details--border-radius: var(--card-border-radius, var(--radius-control));
 }
 
-[is='pix-details'] {
+[is="pix-details"] {
   display: var(--pix-details--display);
   flex-flow: var(--pix-details--flex-flow);
 
@@ -31,7 +31,7 @@
 
     &::marker,
     &::-webkit-details-marker {
-      content: '';
+      content: "";
       display: none;
     }
 

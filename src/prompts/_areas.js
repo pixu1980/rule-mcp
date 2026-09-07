@@ -43,10 +43,7 @@ export const AREAS = {
     "styleguide",
     "pix_styleguide_a11y, pix_styleguide_css, pix_styleguide_html, pix_styleguide_javascript, pix_styleguide_json, pix_styleguide_markdown, pix_styleguide_naming, pix_styleguide_patterns, pix_styleguide_validation",
   ),
-  "pix-area-process": areaPromptText(
-    "process",
-    "pix_process_code_review, pix_process_tdd, pix_process_bmad, pix_tool_process_adr, pix_tool_process_handoff",
-  ),
+  "pix-area-process": areaPromptText("process", "pix_process_code_review, pix_process_tdd, pix_process_bmad, pix_tool_process_adr, pix_tool_process_handoff"),
   "pix-area-devops": areaPromptText("devops", "pix_devops_docker, pix_devops_observability, pix_devops_testing"),
   "pix-area-platform": areaPromptText("platform", "pix_platform_web, pix_platform_desktop, pix_platform_agent, pix_platform_library"),
   "pix-area-ai": areaPromptText("ai", "pix_ai"),
