@@ -806,4 +806,3 @@ piece that matches the task instead of re-deriving it:
 - [rule-platform-web](../rule-platform-web/SKILL.md) - The renderer is a web app; its rules still apply
 - [rule-frontend-workers](../rule-frontend-workers/SKILL.md) - Off-main-thread work in the renderer
 - [rule-backend-workers](../rule-backend-workers/SKILL.md) - The main process is Node: same event loop, same worker_threads
-- [rule-devops-version](../rule-devops-version/SKILL.md) - Version bumping that drives the release tag

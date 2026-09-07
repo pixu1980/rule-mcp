@@ -40,8 +40,6 @@ const DOMAIN_OVERRIDE = {
   sqlite: "rule-data-sqlite",
   duckdb: "rule-data-duckdb",
   sql: "rule-data-sql",
-  docker: "rule-devops-docker",
-  "gitlab-ci": "rule-devops-gitlab-ci",
 };
 
 /**

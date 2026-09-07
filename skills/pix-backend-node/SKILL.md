@@ -17,113 +17,79 @@ tags:
   - "queue"
   - "packages"
 frameworks: [node, api]
-compatibility: Designed for AI coding assistants
 metadata:
   author: rule-engineering
-  version: "2.0"
+  version: "2.1"
 ---
 
 # Scaffolding Backend Node
 
-## Project type
+## Project profile
 
-Create a backend-only repository for REST APIs and business logic services.
-The generated project must be production-ready, typed, testable, and runnable locally and in CI.
+This repository is backend-only: it exposes HTTP APIs and implements the business
+logic behind them. Whatever the generator emits has to be production-ready from
+the first commit — typed everywhere, covered by tests, and runnable unchanged in
+local development and in CI.
 
-## Required main libraries
+## Dependency baseline
 
-Use these libraries unless explicitly overridden by user requirements:
+Start from the standard set. Deviate only when the user explicitly names an
+exception.
 
-- Runtime and API:
-  - `express`
-  - `cors`
-  - `helmet`
-- Validation and configuration:
-  - `zod`
-  - `dotenv`
-- Logging:
-  - `pino`
-  - `pino-http`
-- Tooling and DX:
-  - `typescript`
-  - `tsx`
-  - `vitest`
-  - `supertest`
-  - `@biomejs/biome`
+- HTTP layer and middleware: `express`, `cors`, `helmet`
+- Parsing and configuration: `zod`, `dotenv`
+- Structured logging: `pino`, plus `pino-http` for request context
+- Development toolchain: `typescript`, `tsx`, `vitest`, `supertest`,
+  `@biomejs/biome`
 
-## Mandatory folder structure
+## Required layout
 
-Create and immediately populate all folders with real files:
+Materialize every folder and file below immediately, each with a real
+implementation. Empty directories and placeholder bodies are not scaffold.
 
-```text
-project-root/
-├── scripts/
-│   ├── create-agent.ts
-│   └── create-tool.ts
-├── src/
-│   ├── agent-runner.ts
-│   ├── index.ts
-│   ├── logger.ts
-│   ├── types.ts
-│   ├── agents/
-│   │   ├── echo.agent.ts
-│   │   └── openai-test.agent.ts
-│   ├── common/
-│   │   ├── error.ts
-│   │   └── middleware/
-│   │       └── error-handler.ts
-│   ├── memory/
-│   │   ├── in-memory.ts
-│   │   └── index.ts
-│   ├── providers/
-│   │   ├── antigravity.ts
-│   │   ├── claude.ts
-│   │   ├── openai.ts
-│   │   ├── windsurf.ts
-│   │   └── index.ts
-│   ├── registries/
-│   │   ├── agent-registry.ts
-│   │   ├── provider-registry.ts
-│   │   └── tool-registry.ts
-│   ├── tools/
-│   │   └── current-time.tool.ts
-│   └── utils/
-│       └── zod-to-json-schema.ts
-├── tests/
-│   ├── agentRunner.test.ts
-│   ├── memory.test.ts
-│   └── registries.test.ts
-├── initEnv.ts
-├── package.json
-├── tsconfig.json
-└── .env.example
-```
+The tree groups the runtime into five coherent corners — the agent modules, the
+provider adapters, the registries that wire them, the tools they call, and the
+shared plumbing (`common`/`memory`) — plus the entrypoint, the generators and
+the test files:
 
-## Step-by-step scaffolding instructions
+- `scripts/` — handwritten generators: `create-agent.ts`, `create-tool.ts`
+- `src/index.ts` — the one entrypoint for the process
+- `src/agent-runner.ts` — drives the provider + tool loop, typed
+- `src/logger.ts`, `src/types.ts` — shared logging and shared types
+- `src/agents/` — per-agent modules: `echo.agent.ts`, `openai-test.agent.ts`
+- `src/common/` — `error.ts` and `middleware/error-handler.ts`
+- `src/memory/` — local state via `in-memory.ts`, exposed through `index.ts`
+- `src/providers/` — `antigravity.ts`, `claude.ts`, `openai.ts`, `windsurf.ts`,
+  with an `index.ts` barrel
+- `src/registries/` — `agent-registry.ts`, `provider-registry.ts`,
+  `tool-registry.ts`
+- `src/tools/` — a sample tool such as `current-time.tool.ts`
+- `src/utils/` — the schema bridge `zod-to-json-schema.ts`
+- `tests/` — `agentRunner.test.ts`, `memory.test.ts`, `registries.test.ts`
+- Root files: `initEnv.ts`, `package.json`, `tsconfig.json`, `.env.example`
 
-### Step 1 - Generate baseline configuration
+## Build order
 
-Create:
+Walk the stages below in sequence so the skeleton never sits half-formed.
 
-- `package.json` with scripts aligned to `apps/backend` style:
-  - `dev`, `build`, `type-check`, `new:agent`, `new:tool`
-- `tsconfig.json`
-- `.env.example` with runtime variables for providers and server startup
-- `initEnv.ts` to validate and normalize env variables
+### 1 · Baseline files
 
-### Step 2 - Generate Express bootstrap files
+- `package.json` carrying the usual quartet (`dev`, `build`, `type-check`)
+  and the two generators exposed as `new:agent` and `new:tool`
+- `tsconfig.json` in strict mode
+- `.env.example` naming every variable the providers and the server read at
+  boot
+- `initEnv.ts` that validates and normalizes those variables
 
-- `src/index.ts` must be the single backend entrypoint.
-- Register JSON parser, auth middleware (if configured), and `cors`.
-- Register API routes and global error middleware from `src/common/middleware/error-handler.ts`.
+### 2 · Bootstrap the Express app
 
-### Step 3 - Generate mandatory backend modules
+- `src/index.ts` remains the only process entry.
+- Register the JSON parser, `cors`, and the auth middleware when one is
+  configured.
+- Mount the API routes and the global error middleware from
+  `src/common/middleware/error-handler.ts`.
 
-- Generate all folders under `src/` listed in the mandatory structure.
-- Ensure registries (`agent`, `provider`, `tool`) are implemented and wired in the runtime.
-- Ensure `src/agent-runner.ts` executes provider + tool loop in a typed way.
-
-Example (`src/index.ts` health route):
+Reference health route:
 
 ```ts
 import express from "express";
@@ -140,39 +106,40 @@ app.get("/health", (_req: Request, res: Response) => {
 });
 ```
 
-### Step 4 - Generate mandatory scripts and tests
+### 3 · Fill in the domain modules
 
-- Create `scripts/` folder with `create-agent.ts` and `create-tool.ts` scripts copied from `assets/templates/scripts/` of this skill.
-- `scripts/create-agent.ts` must generate new agent module files under `src/agents`.
-- `scripts/create-tool.ts` must generate new tool module files under `src/tools`.
-- Generate tests under `tests/` for runner, memory, and registries.
+- Create every `src/` folder from the layout above.
+- The agent, provider and tool registries must be implemented and reachable
+  from the runtime.
+- `src/agent-runner.ts` has to run the provider + tool loop in a typed fashion.
 
-### Step 5 - Apply standards
+### 4 · Ship the generators and the test suite
 
-- Testing guardrails: use `testing-standards` rule
-- Type safety: use `typescript` rule
-- Docker: use `docker-standards` and `docker` skills
-- Docs: use `documentation` rule and `documentation` skill
+- `scripts/create-agent.ts` emits new agent modules under `src/agents/`;
+  `scripts/create-tool.ts` emits new tool modules under `src/tools/`.
+- `tests/` must cover the runner, the memory layer and the registries.
 
-### Step 6 - Finalize
+### 5 · Apply the surrounding standards
 
-- Generate `.gitlab-ci.yml` using `gitlab-ci` skill
-- Run seed before first start
-- Verify tests and build
+- Testing and coverage: align with `rule-devops-testing`.
+- Types: follow `rule-toolchain-typescript` (strict, no loose casts).
+- Containers: follow `rule-devops-docker` for images and base-image policy.
+- Prose and records: `rule-styleguide-markdown` for documentation,
+  `rule-process-adr` for decisions.
 
-### Step 7 - Final validation
+### 6 · Finalize
 
-- Verify backend starts with `pnpm run dev`
-- Verify TypeScript build with `pnpm run build`
-- Verify tests pass
+- Seed data before first start where the app depends on it.
+- Verify locally: `pnpm run dev` boots the backend, `pnpm run build` emits, and
+  the test suite is green.
 
 ## Quality gates
 
-- Never generate empty files or empty directories.
-- Never leave TODO placeholders.
-- TypeScript strict mode must be enabled.
+- No empty files, no empty directories, no TODO stubs.
+- TypeScript runs in strict mode.
 - `pnpm run build` must pass.
-- Generated structure must stay aligned with `apps/backend`.
+- The emitted tree matches the layout this skill defines; nothing is added
+  outside it without a reason.
 
 ## Local-First Storage Patterns (from rule-backend)
 
@@ -320,9 +287,8 @@ Three failures to design for before the first send:
 - **Redelivery.** A worker that sends successfully and dies before acknowledging
   will see the message again. At-least-once is the guarantee you actually have,
   so the send has to be idempotent, keyed on something stable per recipient per
-  event. See
-  [rule-backend-api-design](../rule-backend-api-design/SKILL.md) for the
-  key and its lifetime.
+  event. Treat the key like a credential: define it with the rest of the auth
+  surface (`rule-backend-security`) so it is single-use where it should be.
 - **The poison message.** One recipient whose record makes the worker throw will
   be retried forever and will block progress. Cap the attempts and move it to a
   dead-letter queue that somebody actually reads, with the failure attached.

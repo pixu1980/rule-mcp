@@ -271,7 +271,7 @@ tests/
 - Docker: `rule-devops-docker`
 - Accessibility: `rule-styleguide`
 - i18n: `rule-frontend-react`
-- Documentation: `rule-process-documentation`
+- Documentation: `rule-styleguide-markdown`
 
 ## See also
 

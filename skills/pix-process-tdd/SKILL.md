@@ -107,7 +107,6 @@ Use `coverage-gates` skill for CI coverage enforcement details.
 
 - [rule](../rule/SKILL.md) - Central skill index and dispatcher
 - [rule-process-code-review](../rule-process-code-review/SKILL.md) - Risk-based PR/MR review and a11y bridge
-- [rule-process-feature-workflow](../rule-process-feature-workflow/SKILL.md) - TDD inside the feature workflow
 - [rule-process-simplicity](../rule-process-simplicity/SKILL.md) - YAGNI guardrails that pair with test-first work
 - [rule-styleguide-javascript](../rule-styleguide-javascript/SKILL.md) - Code style that tests keep honest
 - [rule-toolchain-commits](../rule-toolchain-commits/SKILL.md) - Conventional-commit scaffolding the workflow closes with

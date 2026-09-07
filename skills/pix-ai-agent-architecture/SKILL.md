@@ -20,8 +20,8 @@ frameworks: [all]
 
 ## Purpose
 
-[rule-ai-agents](../rule-ai-agents/SKILL.md) is how to scaffold an agent
-repository here. This is the architecture underneath: what the loop is, what the
+[rule-platform-agent](../rule-platform-agent/SKILL.md) is how a scaffold is
+structured. This is the architecture underneath: This is the architecture underneath: what the loop is, what the
 protocol carries, and which decisions determine whether an agent is any good.
 
 One fact sits under all of it, and misunderstanding it produces most bad agent
@@ -200,7 +200,7 @@ not features:
 
 ## See also
 
-- [rule-ai-agents](../rule-ai-agents/SKILL.md) - scaffolding an agent repository here
+- [rule-platform-agent](../rule-platform-agent/SKILL.md) - scaffold structure for an agent repository
 - [rule-ai-context-engineering](../rule-ai-context-engineering/SKILL.md) - the window the loop fills
 - [rule-ai-evals](../rule-ai-evals/SKILL.md) - deciding whether a harness change helped
 - [rule-process-ai-sdlc](../rule-process-ai-sdlc/SKILL.md) - where an agent sits in the delivery process

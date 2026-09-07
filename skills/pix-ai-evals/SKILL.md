@@ -242,6 +242,6 @@ nothing is reproduced from anyone else's material.
 ## See also
 
 - [rule-process-ai-sdlc](../rule-process-ai-sdlc/SKILL.md) - where evals sit in the lifecycle
-- [rule-ai-agents](../rule-ai-agents/SKILL.md) - building the agent these evals measure
+- [rule-ai-agent-architecture](../rule-ai-agent-architecture/SKILL.md) - building the agent these evals measure
 - [rule-devops-testing](../rule-devops-testing/SKILL.md) - the deterministic tests underneath
 - [rule-ai-prompting](../rule-ai-prompting/SKILL.md) - writing the prompts being evaluated

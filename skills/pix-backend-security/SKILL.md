@@ -16,7 +16,6 @@ tags:
   - "rate-limiting"
   - "step-up"
 frameworks: [node, api]
-compatibility: Designed for AI coding assistants
 metadata:
   author: rule-engineering
   version: "1.0"
@@ -24,15 +23,18 @@ metadata:
 
 # Security Basics
 
-## Step 1 - Configure environment variables
+## Secure the surface, in order
 
-### .env files
+Work through the following checklist top to bottom; each item closes one hole that the next ones would otherwise build on.
 
-- Never commit `.env` files to the repository.
-- Always provide a `.env.example` with all required variables, using placeholder values.
-- Add `.env` and `.env.*` (except `.env.example`) to `.gitignore`.
+### 1 · Environment files and variables
 
-### .env.example format
+Rules for `.env` handling:
+
+- Never commit `.env` files. The repository tracks only `.env.example`, with every variable present and a placeholder value.
+- `.gitignore` must exclude `.env` and `.env.*`, while keeping the `.env.example` exception.
+
+Placeholder template:
 
 ```env
 # Server
@@ -52,9 +54,8 @@ REFRESH_TOKEN_EXPIRY=7d
 API_KEY=replace-with-your-api-key
 ```
 
-### Environment validation
-
-Validate all environment variables at application startup using zod. Fail fast if any required variable is missing or invalid:
+Validate everything at boot, before the server accepts a request. A missing or
+malformed variable is a startup error, never a runtime surprise:
 
 ```ts
 import { z } from "zod";
@@ -71,30 +72,32 @@ export const env = envSchema.parse(process.env);
 export type Env = z.infer<typeof envSchema>;
 ```
 
-Place this in `src/initEnv.ts`. Import and use `env` throughout the application instead of accessing `process.env` directly.
+The schema lives in `src/initEnv.ts`. From then on, read the exported `env`
+object everywhere instead of touching `process.env` directly.
 
-## Step 2 - Secure Docker images
+### 2 · Container hardening
 
-- Run production containers as non-root user (UID 1001)
-- Never copy `.env` files into Docker images
-- Use multi-stage builds to exclude dev dependencies and source code from production images
-- Set `NODE_ENV=production` in the production stage
-- Use `--frozen-lockfile` for reproducible installs
+- Production images run as a non-root user (UID 1001).
+- `.env` files never enter an image; variables arrive through the runtime.
+- Multi-stage builds keep dev dependencies and source out of the final image.
+- The production stage sets `NODE_ENV=production` and installs with
+  `--frozen-lockfile` so the lockfile stays authoritative.
 
-See **docker** skill for full Dockerfile patterns.
+Full Dockerfile patterns live in the **docker** skill
+([rule-devops-docker](../rule-devops-docker/SKILL.md)).
 
-## Step 3 - Audit dependencies
+### 3 · Dependency hygiene
 
-- Run `pnpm audit` (or `pnpm audit`) regularly and before releases
-- Do not use packages with known critical vulnerabilities
-- Pin dependency versions with caret (`^`) ranges, not wildcards
-- Review new dependencies before adding them
+- Run `pnpm audit` on a cadence and always before a release.
+- Packages with known critical vulnerabilities do not ship.
+- Declare ranges with caret (`^`) restrictions, never bare wildcards.
+- Vet new dependencies against the project ruleset before adding them.
 
-Validate dependency choices against the project's active ruleset and security policy.
+### 4 · HTTP security headers
 
-## Step 4 - Set HTTP security headers (backend)
-
-Use `helmet` or `@fastify/helmet` to set security headers:
+`helmet` (or `@fastify/helmet`) must be registered early, with the policy you
+actually intend - the defaults alone are better than nothing but not a
+statement of intent:
 
 ```ts
 import helmet from "helmet";
@@ -111,9 +114,9 @@ await app.register(helmet, {
 });
 ```
 
-## Step 5 - Add rate limiting (backend)
+### 5 · Rate limiting
 
-Use `express-rate-limit` or `@fastify/rate-limit`:
+Protect the API with a per-client limit that a normal user never hits:
 
 ```ts
 await app.register(rateLimit, {
@@ -122,9 +125,13 @@ await app.register(rateLimit, {
 });
 ```
 
-## Step 6 - Configure CORS (backend)
+Use `express-rate-limit` or `@fastify/rate-limit`; the decision later in this
+skill covers how to key limits so a distributed attack cannot bypass them with
+many source addresses.
 
-Use `cors` or `@fastify/cors` with explicit origin configuration:
+### 6 · CORS
+
+Never default to open. Enumerate the origins the client actually uses:
 
 ```ts
 import cors from "cors";
@@ -136,18 +143,20 @@ await app.register(cors, {
 });
 ```
 
-## Step 7 - Manage secrets in CI
+### 7 · Pipeline secrets
 
-- Store secrets as masked CI/CD variables in GitLab
-- Never hardcode secrets in `.gitlab-ci.yml`
-- Use variable references: `${DEPLOY_TOKEN}`, `${DATABASE_URL}`
-- Mark sensitive variables as "protected" and "masked" in GitLab settings
+- Secrets live in CI/CD variables with masking applied; the pipeline file never
+  contains them inline.
+- Reference them as variables (`${DEPLOY_TOKEN}`, `${DATABASE_URL}`).
+- Mark sensitive variables protected and masked so jobs and logs cannot leak
+  them.
+- When rotating, update staging and production together to avoid a deploy that
+  fails mid-transition.
 
-## Step 8 - Validate all external input
+### 8 · Input validation
 
-- Validate all external input (request bodies, query params, headers) using zod.
-- Never trust client-side validation alone.
-- Return structured error responses, never expose internal error details.
+Every external input - bodies, query strings, headers - passes through a schema
+before it reaches logic. Client-side validation informs, it does not secure:
 
 ```ts
 import { z } from "zod";
@@ -167,11 +176,17 @@ app.post("/users", async (request, reply) => {
 });
 ```
 
-## Edge cases
+Structured error responses are the contract; internal error details never reach
+the client.
 
-- **Frontend repos**: Steps 4-6 (helmet, rate limiting, CORS) do not apply. Focus on env validation and Docker security
-- **AI Agent repos**: If the agent calls external APIs, store API keys as validated env vars. Never log request/response payloads containing secrets
-- **Rotating secrets**: When rotating CI secrets, update both staging and production variables simultaneously to avoid deploy failures during the transition window
+## Where each item applies
+
+- **Frontend-only repos**: skip items 4-6 (headers, rate limiting, CORS). Keep
+  environment validation and container hardening.
+- **Agent repos**: when the agent calls external APIs, keys are validated env
+  vars; request/response payloads that carry secrets are never logged.
+- **Rotating secrets**: flip staging and production in the same window so a
+  deploy never sees half a rotation.
 
 ---
 
@@ -342,52 +357,42 @@ stuffing:
 Alert on what a person would act on tonight. Everything else is a dashboard, and
 a page nobody can act on trains the team to ignore the one they can.
 
-## Conventions (rules -> skills merge)
+## The API security contract, applied node-by-node
 
-# API Security Rules
+These rules cover every backend service and every repo that hosts backend
+components: external and internal APIs alike are secured by design, because the
+cost of retrofitting shows up exactly where nobody budgets for it.
 
-## Scope
+### Authentication and authorization
 
-These rules apply to backend services and monorepos with backend components. They cover external and internal APIs that must be secured by design to prevent unauthorized access, data leaks, and abuse.
+- User-facing clients (web and mobile) authenticate with the **OAuth 2.0
+  authorization code flow**; machine-to-machine calls use the **client
+  credentials flow**. No other grant is accepted.
+- Token scopes are defined per access level and kept as narrow as the endpoint
+  set allows. Least privilege is the default, not the goal.
 
-## Authentication & authorization
+### JWTs
 
-### OAuth 2.0
-
-- Use **OAuth 2.0 Authorization Code flow** for user-facing applications (frontend and mobile clients).
-- Use **OAuth 2.0 Client Credentials flow** for service-to-service communication.
-- Token scopes must be clearly defined and limited by access level.
-
-### JWT (JSON Web Tokens)
-
-JWTs must be:
-
-- Signed (`HS256` or `RS256`) and optionally encrypted.
-- Short-lived (typically < 15 minutes) with refresh tokens managed securely.
-
-Validate on every request:
-
-- Signature and issuer
-- Expiration time (`exp`)
-- Audience (`aud`) and subject (`sub`) claims
-
-Never trust a token without full verification. Tokens must be validated at every service boundary.
+- Signed with `HS256` or `RS256`, optionally encrypted, and short-lived (well
+  under 15 minutes) backed by securely handled refresh tokens.
+- Every request validates signature and issuer, checks `exp`, and verifies
+  `aud` and `sub` claims. A token is parsed and full-verified at every service
+  boundary before it is trusted.
 
 ### API keys
 
-- Use API keys only for system-to-system access without user context, or for legacy integrations.
-- API keys must:
-  - Be scoped to specific APIs and rate limits.
-  - Be rotatable and stored securely (e.g., secrets manager).
-  - Never be embedded in frontend code or exposed to the browser.
+- Keys appear only in system-to-system contexts with no user context, or in
+  legacy integrations that cannot exchange tokens.
+- A key is scoped to specific endpoints with its own rate limit, rotatable
+  without downtime, stored in a secrets manager, and never shipped to a browser
+  or mobile binary.
 
-## Rate limiting & abuse protection
+### Rate limiting and abuse protection
 
-### Rate limiting policies
-
-- Enforce limits per IP, token, or client ID using API gateway or middleware (e.g., `express-rate-limit`, NGINX, Kong).
-- Rate limits must differ by user type (e.g., free vs. paid) and API sensitivity (e.g., auth vs. public content).
-- Include rate limit headers in all responses:
+- Limits are keyed per IP, token, or client id in gateway or middleware
+  (`express-rate-limit`, NGINX, Kong) and vary by user tier and by endpoint
+  sensitivity (auth endpoints are stricter than public content).
+- Responses include the standard headers:
 
 ```
 RateLimit-Limit: 1000
@@ -395,41 +400,24 @@ RateLimit-Remaining: 200
 RateLimit-Reset: 60
 ```
 
-### Throttling & blocking
+- After repeated breaches: exponential backoff or a temporary ban, with the
+  offenses logged for later analysis or blacklisting.
 
-- Use exponential backoff or temporary bans after limit breaches.
-- Log repeated offenses for later analysis or blacklisting.
+### Logging and monitoring
 
-## Logging & monitoring
+- Every authenticated request logs method, endpoint, status, response time and
+  the auth context (user id or client id).
+- Sensitive data - passwords, tokens, personal information - never reaches a
+  log. Structured JSON output keeps incident queries possible.
+- Centralized monitoring surfaces the signals that matter: authentication
+  failures, 4xx/5xx spikes, rate-limit violations, anomalous traffic.
 
-### Logging standards
+### Best practices, baseline
 
-Log every authenticated request including:
-
-- HTTP method and endpoint
-- Status code
-- Response time
-- Auth context (user ID, client ID)
-
-Never log sensitive data (passwords, tokens, personal information). Use **structured JSON logging** for easier parsing and querying.
-
-### Monitoring & alerts
-
-- Integrate with centralized monitoring tools (e.g., Betterstack, Datadog, Prometheus + Grafana).
-- Set up alerts on:
-  - Authentication failures
-  - Spikes in 4xx/5xx errors
-  - Rate limit violations
-  - Anomalous traffic patterns
-
-## Best practices
-
-- Apply **CORS restrictions** to limit cross-origin requests.
-- Use **HTTPS-only** transport for all APIs (TLS 1.2 or higher).
-- Sanitize inputs and validate schema for all request bodies.
-- Follow the **least privilege principle** when assigning scopes or API permissions.
-- Conduct regular API security scans.
-- Include API security checks in automated CI/CD pipelines and manual code reviews.
+- CORS is restricted, transport is HTTPS-only (TLS 1.2 or newer).
+- Inputs are sanitized and schemas validated for every body.
+- Scopes and permissions follow least privilege; security scans run regularly;
+  API security checks are part of the CI/CD pipeline and of code review.
 
 ## See also
 

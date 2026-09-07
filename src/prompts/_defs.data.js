@@ -9,13 +9,13 @@
 export const PROMPT_DEFS = [
   {
     name: "rule-area-ai",
-    description: "AI agent work: rule-ai-agents patterns for agent integrations",
+    description: "AI agent work: rule-ai and agent-architecture patterns for agent integrations",
     arguments: [{ name: "request", description: "Agent integration task", required: true }],
   },
 
   {
     name: "rule-area-backend",
-    description: "Backend/API work: node, express, fastify, hono, nestjs, graphql, api design, security",
+    description: "Backend/API work: node, express, fastify, hono, nestjs, graphql, security",
     arguments: [
       {
         name: "request",
@@ -37,8 +37,8 @@ export const PROMPT_DEFS = [
   },
   {
     name: "rule-area-devops",
-    description: "DevOps work: docker, gitlab-ci, observability, testing, versioning",
-    arguments: [{ name: "request", description: "CI/CD, container, observability, or versioning task", required: true }],
+    description: "DevOps work: docker, observability, testing",
+    arguments: [{ name: "request", description: "Container, observability, or testing task", required: true }],
   },
   {
     name: "rule-area-frontend",
@@ -71,7 +71,7 @@ export const PROMPT_DEFS = [
   },
   {
     name: "rule-area-platform",
-    description: "Platform work: web, desktop, expo, agent, library",
+    description: "Platform work: web, desktop, agent, library",
     arguments: [
       {
         name: "request",

@@ -18,7 +18,7 @@ test("an explicit framework hint wins without touching the project", () => {
 test("an agents hint resolves to the ai domain", () => {
   const resolved = detectFrameworkSkill({ framework: "agents" });
 
-  assert.equal(resolved.detectedSkillName, "rule-ai-agents", "the agents skill is suggested");
+  assert.equal(resolved.detectedSkillName, "rule-ai", "the agents hint resolves to the ai umbrella");
   assert.equal(resolved.detectedDomain, "ai", "agents is ai");
 });
 

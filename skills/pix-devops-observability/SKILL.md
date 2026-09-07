@@ -209,7 +209,5 @@ recorded so a hit rate is explainable rather than merely reported.
 ## See also
 
 - [rule-devops](../rule-devops/SKILL.md) - DevOps skill index
-- [rule-devops-gitlab-ci](../rule-devops-gitlab-ci/SKILL.md) - CI/CD pipeline and deployment stages
 - [rule-backend-security](../rule-backend-security/SKILL.md) - Safe secrets, input, and transport handling
 - [rule-platform-web](../rule-platform-web/SKILL.md) - Web performance budgets and client error handling
-- [rule-process-feature-workflow](../rule-process-feature-workflow/SKILL.md) - Delivery validation and release workflow

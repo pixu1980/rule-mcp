@@ -150,4 +150,3 @@ routes → handlers → services → repositories
 
 - [rule](../rule/SKILL.md) - Central skill index and dispatcher
 - [rule-backend](../rule-backend/SKILL.md) - Backend skill index
-- [rule-backend-api-design](../rule-backend-api-design/SKILL.md) - API design

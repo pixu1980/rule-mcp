@@ -38,8 +38,7 @@ two mocking dialects and two coverage reports to reconcile.
 `jest-expo` preset and `@testing-library/react-native`, because the native
 module layer does not run under Vitest. Everything else in this skill still
 applies - the same `*.test.ts(x)` naming, the same package-level `tests/`
-directory, the same thresholds enforced locally and in CI. See
-[rule-platform-expo](../rule-platform-expo/SKILL.md).
+directory, the same thresholds enforced locally and in CI.
 
 ### Backend / AI Agent
 

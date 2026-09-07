@@ -14,8 +14,7 @@ skills:
   - "artifact signing and integrity"
 evidenceSkills:
   - "rule-devops-docker"
-  - "rule-devops-gitlab-ci"
-  - "rule-devops-observability"
+    - "rule-devops-observability"
   - "rule-process-npm-release"
   - "rule-process-changelog"
   - "rule-platform-desktop"

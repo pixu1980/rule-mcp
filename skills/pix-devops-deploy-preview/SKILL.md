@@ -106,6 +106,5 @@ Teardown runs through the GitLab environment lifecycle:
 ## See also
 
 - [rule-devops](../rule-devops/SKILL.md) - DevOps skills index
-- [rule-devops-gitlab-ci](../rule-devops-gitlab-ci/SKILL.md) - Base GitLab CI pipeline this merges into
 - [rule-devops-docker](../rule-devops-docker/SKILL.md) - The Dockerfile the preview image is built from
 - [rule](../rule/SKILL.md) - Central skill index and dispatcher

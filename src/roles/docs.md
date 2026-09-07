@@ -12,8 +12,7 @@ skills:
   - "commit-driven doc maintenance"
   - "plain-language editing"
 evidenceSkills:
-  - "rule-process-documentation"
-  - "rule-styleguide-markdown"
+    - "rule-styleguide-markdown"
   - "rule-styleguide-readme"
   - "rule-process-adr"
   - "rule-styleguide-javascript"

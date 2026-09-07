@@ -162,7 +162,6 @@ So the review reads the diff against the request, not only against itself:
 ## See also
 
 - [rule-process](../rule-process/SKILL.md) - Process skill index
-- [rule-process-feature-workflow](../rule-process-feature-workflow/SKILL.md) - Feature delivery flow
 - [rule-devops-testing](../rule-devops-testing/SKILL.md) - Tests and coverage gates
 - [rule-backend-security](../rule-backend-security/SKILL.md) - Security review concerns
 - [rule-process-adr](../rule-process-adr/SKILL.md) - Record durable architecture decisions

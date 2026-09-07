@@ -5,123 +5,163 @@ description: >-
 tags:
   - "devops"
   - "docker"
+  - "container"
+  - "compose"
+  - "multi-stage"
+  - "base-image"
 frameworks: [all]
-compatibility: Designed for AI coding assistants
 metadata:
   author: rule-engineering
-  version: "1.0"
+  version: "3.0"
 ---
 
 # Docker
 
-## Files to generate
+## What this skill produces
 
-For every repository, generate:
+For each repository, the container setup ships four artifacts plus one more
+when the stack is frontend-only:
 
-1. `Dockerfile` - Multi-stage production Dockerfile at project root
-2. `docker-compose.yml` - Development compose file at project root for development
-3. `docker-compose.autodeploy.yml` - Production compose file at project root for Gitlab CI/CD pipeline
-4. `.dockerignore` - Exclude unnecessary files from build context
-5. `nginx.conf` - Only for frontend repositories
+- `Dockerfile` at the repository root — a multi-stage image for production.
+- `docker-compose.yml` at the root — the development experience, wired to the
+  app's own port.
+- `docker-compose.autodeploy.yml` at the root — the deploy-time composition the
+  pipeline launches.
+- `.dockerignore` at the root — keeps the build context free of everything the
+  image must not see.
+- `nginx.conf` — only for frontend repositories, placed under `docker/`.
 
-## Step 1 - Create the Dockerfile (Backend or AI Agent)
+## Building the production image
 
-Copy `assets/templates/Dockerfile.backend` to `Dockerfile` at the project root.
+The Dockerfile follows one shape for every stack: **a dependency stage, a build
+stage, a runtime stage**. Only the runtime stage ships.
 
-Adjust the `EXPOSE` port and `CMD` entry point based on the application:
+Dependency install uses pnpm's lockfile semantics:
 
-- Backend: port `3000`, entry `dist/server.js`
-- AI Agent: port `3001`, entry `dist/agent.js`
+```dockerfile
+FROM node:22-alpine AS deps
+WORKDIR /app
+COPY package.json pnpm-lock.yaml ./
+RUN pnpm install --frozen-lockfile
+```
 
-## Step 2 - Create the Dockerfile (Frontend)
+The build stage compiles, type-checks and prunes before copying app code:
 
-Copy `assets/templates/Dockerfile.frontend` to `Dockerfile` at the project root.
+```dockerfile
+FROM node:22-alpine AS build
+WORKDIR /app
+COPY --from=deps /app/node_modules ./node_modules
+COPY . .
+RUN pnpm run build
+```
 
-Copy `assets/templates/nginx.conf` to `docker/nginx.conf`.
+The runtime stage is the only part that reaches production. It runs as an
+unprivileged user, exposes the app's port, and keeps the working directory
+minimal:
 
-## Step 3 - Create .dockerignore
+```dockerfile
+FROM node:22-alpine AS runtime
+WORKDIR /app
+ENV NODE_ENV=production
+COPY --from=build /app/dist ./dist
+COPY --from=build /app/node_modules ./node_modules
+RUN addgroup -S app && adduser -S app -G app
+USER app
+EXPOSE 3000
+CMD ["node", "dist/server.js"]
+```
 
-Copy `assets/templates/.dockerignore` to `.dockerignore` at the repository root.
+Two non-negotiables:
 
-## Step 4 - Create docker-compose.yml
+- The runtime user is never root. Create a low-privilege user in the image and
+  switch to it before the entry point.
+- `.env` files never enter the image. Secrets and configuration arrive at
+  runtime through the orchestrator, not through a baked-in layer.
 
-Copy `assets/templates/docker-compose.yml` to `docker-compose.yml` at the project root.
+## Per-stack entry points
 
-Adjust ports:
+The `EXPOSE` and `CMD` pair depends on the application:
 
-- Backend: `3000:3000`
-- Frontend: `5173:5173`
-- AI Agent: `3001:3001`
+| Stack        | Port  | Entry                 |
+| ------------ | ----- | --------------------- |
+| Backend      | 3000  | `dist/server.js`      |
+| AI agent     | 3001  | `dist/agent.js`       |
+| Frontend dev | 5173  | Vite dev server       |
 
-For multi-service setups, add multiple services with `depends_on` and healthcheck conditions.
+Frontend images deviate deliberately: the Vite build happens in the build
+stage, the runtime stage serves the static output behind nginx, and the
+`nginx.conf` under `docker/` provides the server block. Environment values that
+Vite injects at build time arrive as `ARG`s in the build stage — never as
+runtime `ENV`, which would either be empty or baked.
 
-## Step 5 - Validate
+## The ignore file
 
-After creating Docker files, verify:
+`.dockerignore` excludes the usual suspects so the build context stays small
+and clean: `node_modules`, `dist`, coverage output, editor state, CI caches,
+and any `.env*` file other than the example.
 
-1. `docker build -f Dockerfile -t test-build .` succeeds.
-2. `docker images test-build` shows image size within targets (see [Docker Standards](#docker-standards)).
-3. `docker run --rm test-build` starts without errors.
-4. Healthcheck responds correctly.
+```text
+node_modules/
+dist/
+coverage/
+.git/
+.env*
+!.env.example
+*.log
+.DS_Store
+```
 
-## Edge cases
+## Compose: development and deploy
 
-- **Monorepo context**: When the Dockerfile lives inside a monorepo, adjust `COPY` paths and build context to reference the correct package directory.
-- **Private npm registries**: Add `.npmrc` with registry configuration in the `deps` stage. Never bake auth tokens into the image - use build-time `--secret` mounts.
-- **Frontend environment variables**: Vite injects env vars at build time. Pass them as `ARG` in the build stage, not as runtime `ENV`.
+The development compose file maps the app port directly and enables live-file
+work where the stack supports it. For services the app depends on, mount them
+beside the app container with `depends_on` and rely on healthchecks to order the
+startup, not on arbitrary sleeps.
 
----
+The autodeploy compose file is the production composition: no volume-mounted
+source, images pulled by tag, restart policy set, and the same healthcheck that
+orchestration uses to decide readiness.
 
-## Docker Standards
+Keep the two compositions distinct. A compose file that tries to serve both
+roles ends up neither reproducible for a release nor convenient for a day of
+development.
 
 ## Base image policy
 
-- Backend/agent: updated alpine `node` equal to the app node version
-- Frontend: build the frontend app and serve it with an up-to-date `nginx` container using docker-compose
-- Use pinned major/minor tags (never `latest`)
+Every image derives from the current `alpine` variant of the Node major of the
+application (for backend and agent stacks) or the matching static-server image
+for frontend work. Pin by major and patch: `node:22-alpine`, not `node:latest`.
+The generated image should stay lean — multi-stage pruning plus alpine bases
+keep it in the tens of megabytes for backend work; a build that bloats past the
+framework's baseline is a signal to recheck what made it into the runtime stage.
 
-## Build policy
+## Validation
 
-- Use multi-stage builds (`base`, `deps`, `build`, `production`)
-- Keep production images minimal
-- Run as non-root in production
+Before calling the container work done:
 
-## Security policy
+1. `docker build -f Dockerfile -t ci-smoke .` completes.
+2. `docker images ci-smoke` shows the image within the size targets above.
+3. `docker run --rm ci-smoke` boots without error.
+4. The healthcheck answers when the container is queried.
 
-- Never bake secrets into images
-- Use `.dockerignore` to exclude `node_modules`, `.git`, `coverage`, `.env*`
-- Use `COPY --chown` where needed
+## Edge cases
 
-## Runtime policy
-
-- Configure `HEALTHCHECK` in production containers
-- Backend health endpoint: `/health`
-- Frontend health endpoint: `/`
-
-## Compose policy
-
-- Provide development compose setup
-- Provide a production compose setup for Gitlab pipeline (called docker-compose.autodeploy.yml)
-- Use health-based dependencies where applicable
-- Expose only required ports
-
-## Implementation reference
-
-Use `docker` skill for concrete templates and file-level generation steps.
-
-## Backend Deployment Targets (from rule-backend)
-
-| Target         | Config                                       |
-| -------------- | -------------------------------------------- |
-| **Node.js**    | Dockerfile + pm2 / systemd                   |
-| **Serverless** | AWS Lambda (Hono), CloudFlare Workers (Hono) |
-| **Docker**     | Multi-stage build with distroless            |
-| **Electron**   | Bundled as part of the desktop app           |
-
----
+- **Monorepo**: when the Dockerfile lives inside a sub-package, the build
+  context and every `COPY` path must be relative to that package, and the
+  dependency stage copies the workspace's lockfiles, not just the package's.
+- **Private registries**: add an `.npmrc` with the registry configuration to
+  the dependency stage. Auth tokens are never baked into the image: use
+  build-time `--secret` mounts so the layer history stays clean.
+- **Frontend configuration**: Vite environment variables are compile-time.
+  Pass them as `ARG` in the build stage; the running container reads static
+  files and needs no runtime environment of its own.
+- **Non-Node runtimes**: when the stack is not Node, keep the shape — a
+  dependency stage, a build stage, a minimal runtime stage, a non-root user —
+  and swap the toolchain-specific steps.
 
 ## See also
 
 - [rule](../rule/SKILL.md) - Central skill index and dispatcher
-- [rule-devops](../rule-devops/SKILL.md) - DevOps skill index
-- [rule-toolchain-project](../rule-toolchain-project/SKILL.md) - Project configuration baseline
+- [rule-backend-node](../rule-backend-node/SKILL.md) - Backend scaffold and runtime
+- [rule-devops-observability](../rule-devops-observability/SKILL.md) - Healthchecks and runtime signals
+- [rule-devops-testing](../rule-devops-testing/SKILL.md) - CI verification and coverage

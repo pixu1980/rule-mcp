@@ -803,9 +803,9 @@ All data stays on the filesystem. The MCP server is a read-only/validate-only se
 | Family                            | Count |
 | --------------------------------- | ----- |
 | Core tools                        | 16    |
-| Per-skill tools (from `skills/*`) | 96    |
-| `rule://` resources                | 198   |
-| Skills (`skills/*/SKILL.md`)      | 96    |
+| Per-skill tools (from `skills/*`) | 89    |
+| `rule://` resources                | 184   |
+| Skills (`skills/*/SKILL.md`)      | 89    |
 
 Refresh with `pnpm census`; full inventories in `docs/07-` .. `docs/12-`.
 

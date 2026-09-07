@@ -12,8 +12,7 @@ skills:
   - "telemetry ethics"
 evidenceSkills:
   - "rule-backend-security"
-  - "rule-process-documentation"
-  - "rule-devops-observability"
+    - "rule-devops-observability"
 aliases:
   - "privacy engineer"
   - "compliance engineer"

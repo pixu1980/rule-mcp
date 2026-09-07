@@ -254,8 +254,6 @@ Use the package or module name: `backend`, `frontend`, `agent`, `docker`, `ci`, 
 ## See also
 
 - [rule-toolchain-husky](../rule-toolchain-husky/SKILL.md) - Git hooks, commitlint, lint-staged setup
-- [rule-devops-version](../rule-devops-version/SKILL.md) - Automatic version bumps driven by commit types
-- [rule-process-feature-workflow](../rule-process-feature-workflow/SKILL.md) - Commit rules inside the feature delivery workflow
 - [rule](../rule/SKILL.md) - Central skill index and dispatcher
 
 ---

@@ -34,7 +34,7 @@ const { readEvents } = await import("../../src/core/telemetry/store/index.js");
 await loadAllSkills();
 process.chdir(projectDir);
 
-const PROMPTS = ["I need a React button component", "postgres index for a slow query", "docker healthcheck for a node service", "should I use enum or a union type"];
+const PROMPTS = ["I need a React button component", "postgres index for a slow query", "set up vite for a vanilla project", "should I use enum or a union type"];
 
 const answers = [];
 for (const prompt of PROMPTS) {
@@ -83,7 +83,7 @@ test("the estimate never claims more than reading the file would cost", () => {
 test("the estimate is positive exactly when the skill costs more than the answer", () => {
   // Measured on this corpus: a large skill is worth routing to
   // (rule-frontend-react is ~6100 tokens against a ~1900-token answer), and a
-  // small one is not - rule-devops-docker is ~1100 tokens while the router's
+  // small one is not - rule-toolchain-vite is ~510 tokens while the router's
   // own answer, which lists every skill, is ~1400. Routing that prompt costs
   // more than reading the file. The estimate says zero, and zero is the honest
   // answer rather than a missing field.

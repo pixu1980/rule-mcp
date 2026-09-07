@@ -78,6 +78,5 @@ When `rule_tool_check` reports `en-english-only-prose` or
 ## See also
 
 - [rule-styleguide-markdown](../rule-styleguide-markdown/SKILL.md) - Markdown style and tone
-- [rule-process-documentation](../rule-process-documentation/SKILL.md) - doc-driven workflow
 - [rule-styleguide-i18n](../rule-styleguide-i18n/SKILL.md) - where translated strings belong
 - [rule](../rule/SKILL.md) - Central skill index

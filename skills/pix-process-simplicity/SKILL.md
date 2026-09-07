@@ -268,5 +268,4 @@ sitting stays honest; a file that cannot be read whole hides its coupling.
 
 - [rule-process-adr](../rule-process-adr/SKILL.md) - record the decision instead of building for it
 - [rule-process-code-review](../rule-process-code-review/SKILL.md) - reviewing someone else's scope creep
-- [rule-process-feature-workflow](../rule-process-feature-workflow/SKILL.md) - the end-to-end feature lifecycle
 - [rule-styleguide-patterns](../rule-styleguide-patterns/SKILL.md) - when a pattern is actually warranted

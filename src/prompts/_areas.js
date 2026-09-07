@@ -32,7 +32,7 @@ export const AREAS = {
   ),
   "rule-area-backend": areaPromptText(
     "backend",
-    "pix_backend_node, pix_backend_express, pix_backend_fastify, pix_backend_hono, pix_backend_nestjs, pix_backend_graphql, pix_backend_api_design, pix_backend_security",
+    "pix_backend_node, pix_backend_express, pix_backend_fastify, pix_backend_hono, pix_backend_nestjs, pix_backend_graphql, pix_backend_security",
   ),
   "rule-area-data": areaPromptText("data", "pix_data_postgresql, pix_data_mysql, pix_data_sqlite, pix_data_mongodb, pix_data_duckdb, pix_data_indexed_db, pix_data_sql"),
   "rule-area-toolchain": areaPromptText(
@@ -45,11 +45,11 @@ export const AREAS = {
   ),
   "rule-area-process": areaPromptText(
     "process",
-    "pix_process_code_review, pix_process_tdd, pix_process_feature_workflow, pix_process_documentation, pix_process_bmad, rule_tool_process_adr, rule_tool_process_handoff",
+    "pix_process_code_review, pix_process_tdd, pix_process_bmad, rule_tool_process_adr, rule_tool_process_handoff",
   ),
-  "rule-area-devops": areaPromptText("devops", "pix_devops_docker, pix_devops_gitlab_ci, pix_devops_observability, pix_devops_testing, pix_devops_version"),
-  "rule-area-platform": areaPromptText("platform", "pix_platform_web, pix_platform_desktop, pix_platform_expo, pix_platform_agent, pix_platform_library"),
-  "rule-area-ai": areaPromptText("ai", "pix_ai_agents"),
+  "rule-area-devops": areaPromptText("devops", "pix_devops_docker, pix_devops_observability, pix_devops_testing"),
+  "rule-area-platform": areaPromptText("platform", "pix_platform_web, pix_platform_desktop, pix_platform_agent, pix_platform_library"),
+  "rule-area-ai": areaPromptText("ai", "pix_ai"),
   "rule-area-skills": areaPromptText("skills", "pix_find_skills"),
   "rule-area-ui": areaPromptText("ui", "pix_ui_design_system"),
 };

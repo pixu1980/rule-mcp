@@ -11,8 +11,7 @@ skills:
   - "error contracts and idempotency"
   - "rate limiting and pagination"
 evidenceSkills:
-  - "rule-backend-api-design"
-  - "rule-backend-graphql"
+    - "rule-backend-graphql"
   - "rule-styleguide-validation"
 aliases:
   - "api-design"

@@ -134,6 +134,5 @@ the author remembering something they did not write down.
 - [rule](../rule/SKILL.md) - Central skill index and dispatcher
 - [rule-styleguide](../rule-styleguide/SKILL.md) - Styleguide skill index
 - [rule-styleguide-markdown](../rule-styleguide-markdown/SKILL.md) - Markdown conventions this README must follow
-- [rule-process-documentation](../rule-process-documentation/SKILL.md) - Documentation process beyond the README
 - [rule-process-npm-release](../rule-process-npm-release/SKILL.md) - Publishing the package the README advertises
 - [How to make your open source popular](https://evilmartians.com/chronicles/how-to-make-your-open-source-popular) - The Evil Martians article this structure comes from

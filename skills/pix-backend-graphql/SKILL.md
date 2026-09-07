@@ -107,7 +107,6 @@ not contain business logic or directly expose ORM entities.
 ## See also
 
 - [rule-backend](../rule-backend/SKILL.md) - Backend skill index
-- [rule-backend-api-design](../rule-backend-api-design/SKILL.md) - REST and OpenAPI contracts
 - [rule-backend-security](../rule-backend-security/SKILL.md) - Input, auth, secret, and transport hardening
 - [rule-devops-observability](../rule-devops-observability/SKILL.md) - Production telemetry and alerting
 - [rule-devops-testing](../rule-devops-testing/SKILL.md) - Test strategy and coverage gates

@@ -2,7 +2,7 @@
 
 Run `pnpm census` after changing a tool, skill, prompt, command, persona or env var.
 
-# Tools (112)
+# Tools (105)
 
 **LLM-free: every tool below is deterministic and never calls an LLM** - the
 server is model-agnostic; an LLM is the caller, never the implementation.
@@ -28,21 +28,19 @@ server is model-agnostic; an LLM is the caller, never the implementation.
 | `rule-tool-fix`         | Lint/auto-fix of the project file tree (barrel files, naming, ...)                       | ✅       |
 | `rule-tool-component`   | Component/test templates following the rule principles                                    | ✅       |
 
-## Per-skill tools (96) - all LLM-free
+## Per-skill tools (89) - all LLM-free
 
-### rule-ai (6)
+### rule-ai (5)
 
 - `rule_tool_ai`
 - `rule_tool_ai_agent_architecture`
-- `rule_tool_ai_agents`
 - `rule_tool_ai_context_engineering`
 - `rule_tool_ai_evals`
 - `rule_tool_ai_prompting`
 
-### rule-backend (10)
+### rule-backend (9)
 
 - `rule_tool_backend`
-- `rule_tool_backend_api_design`
 - `rule_tool_backend_express`
 - `rule_tool_backend_fastify`
 - `rule_tool_backend_graphql`
@@ -67,15 +65,13 @@ server is model-agnostic; an LLM is the caller, never the implementation.
 - `rule_tool_data_sql`
 - `rule_tool_data_sqlite`
 
-### rule-devops (7)
+### rule-devops (5)
 
 - `rule_tool_devops`
 - `rule_tool_devops_deploy_preview`
 - `rule_tool_devops_docker`
-- `rule_tool_devops_gitlab_ci`
 - `rule_tool_devops_observability`
 - `rule_tool_devops_testing`
-- `rule_tool_devops_version`
 
 ### rule-frontend (14)
 
@@ -94,17 +90,16 @@ server is model-agnostic; an LLM is the caller, never the implementation.
 - `rule_tool_frontend_vue`
 - `rule_tool_frontend_workers`
 
-### rule-platform (7)
+### rule-platform (6)
 
 - `rule_tool_platform`
 - `rule_tool_platform_agent`
 - `rule_tool_platform_auth`
 - `rule_tool_platform_desktop`
-- `rule_tool_platform_expo`
 - `rule_tool_platform_library`
 - `rule_tool_platform_web`
 
-### rule-process (13)
+### rule-process (11)
 
 - `rule_tool_process`
 - `rule_tool_process_adr`
@@ -112,8 +107,6 @@ server is model-agnostic; an LLM is the caller, never the implementation.
 - `rule_tool_process_bmad`
 - `rule_tool_process_changelog`
 - `rule_tool_process_code_review`
-- `rule_tool_process_documentation`
-- `rule_tool_process_feature_workflow`
 - `rule_tool_process_handoff`
 - `rule_tool_process_handon`
 - `rule_tool_process_npm_release`

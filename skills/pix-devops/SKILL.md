@@ -22,20 +22,16 @@ frameworks: [all]
 | Skill                                                            | Domain           | Best For                                                            |
 | ---------------------------------------------------------------- | ---------------- | ------------------------------------------------------------------- |
 | [rule-devops-docker](../rule-devops-docker/SKILL.md)               | Containerization | Dockerfile, docker-compose, multi-stage builds, security            |
-| [rule-devops-gitlab-ci](../rule-devops-gitlab-ci/SKILL.md)         | CI/CD            | GitLab pipeline configuration, caching, testing matrix              |
 | [rule-devops-observability](../rule-devops-observability/SKILL.md) | Reliability      | SLOs, telemetry, alerting, incident learning, rollback verification |
 | [rule-devops-testing](../rule-devops-testing/SKILL.md)             | Quality          | Vitest, coverage thresholds, integration tests                      |
-| [rule-devops-version](../rule-devops-version/SKILL.md)             | Versioning       | Semantic release, changelog, git tags                               |
 
 ## Quick Selection Guide
 
 ```
 Need container setup?                   → rule-devops-docker
 Need a preview app per merge request?   → rule-devops-deploy-preview
-Need CI/CD pipeline?                    → rule-devops-gitlab-ci
 Need production telemetry or SLOs?      → rule-devops-observability
 Need test configuration?                → rule-devops-testing
-Need version management?                → rule-devops-version
 ```
 
 ## See also
