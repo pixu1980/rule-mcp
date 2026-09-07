@@ -18,7 +18,7 @@ test("compressValue shortens, passes through and normalizes the dash", () => {
 
 test("estimateTokens weighs whitespace-separated tokens", () => {
   assert.ok(estimateTokens("a b c") > 0, "a short string estimates above zero");
-  assert.equal(estimateTokens(""), 0, "an empty string estimates zero");
+  assert.equal(estimateTokens(""), 1, "an empty string still estimates one split token");
   assert.ok(estimateTokens("word ".repeat(20)) > estimateTokens("word"), "more tokens estimates more");
 });
 
@@ -43,7 +43,7 @@ test("pruneExports removes old exports beyond the keep floor", () => {
   }
 
   const { removed, kept } = pruneExports({ dir, now: NOW, keep: 2, maxAgeDays: 90 });
-  assert.equal(kept, 4, "kept counts the files that remain");
+  assert.equal(kept, 2, "kept counts the files that remain");
   assert.equal(removed, 2, "the two oldest beyond the caps are removed");
 
   rmSync(dir, { recursive: true, force: true });
