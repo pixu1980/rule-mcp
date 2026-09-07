@@ -10,6 +10,23 @@ console.log("self-update engine test: banner and restart");
   assert.match(buildBanner({ updated: true, from: "aaaaaaa", to: "bbbbbbb", count: 2, changedSkills: true, changedCode: false }), /Updating MCP server/);
   assert.equal(buildBanner({ updated: false }), null, "no banner when nothing changed");
 
+  // Every updated-combination banner: both, code-only, skills-only, neither.
+  assert.match(buildBanner({ updated: true, from: "a", to: "b", count: 1, changedSkills: true, changedCode: true }), /skills \+ code/, "skills + code combo");
+  assert.match(buildBanner({ updated: true, from: "a", to: "b", count: 1, changedSkills: false, changedCode: true }), /code file\(s\)/, "code-only combo");
+  assert.match(buildBanner({ updated: true, from: "a", to: "b", count: 1, changedSkills: true, changedCode: false }), /Skills hot-reloaded\./, "skills-only hot-reload note");
+  assert.match(buildBanner({ updated: true, from: "a", to: "b", count: 0, changedSkills: false, changedCode: false }), /\(0 file\(s\)\)/, "neither combo falls back to file(s)");
+  assert.equal(buildBanner(null), null, "no result means no banner");
+  assert.equal(buildBanner(undefined), null, "undefined result means no banner");
+
+  // Refused-remote banners are never silent.
+  assert.match(buildBanner({ updated: false, reason: "remote-not-allowed", remote: "github.com/evil/repo" }), /REFUSED/);
+  assert.match(buildBanner({ updated: false, reason: "remote-not-allowed" }), /unknown/, "refused banner tolerates a missing remote");
+  assert.match(buildBanner({ updated: false, reason: "no-allowed-remote" }), /REFUSED/);
+  assert.match(buildBanner({ updated: false, reason: "unsigned-upstream", to: "deadbeef" }), /deadbeef/);
+  assert.match(buildBanner({ updated: false, reason: "unsigned-upstream" }), /has no valid signature/, "unsigned banner tolerates a missing commit");
+  assert.match(buildBanner({ skipped: true, reason: "npm", note: "Update with: pnpm add -g" }), /up to date on disk/);
+  assert.equal(buildBanner({ updated: false, reason: "dirty-tree" }), null, "silent skips stay silent");
+
   // eslint-disable-next-line no-unused-vars
   let isExited = false;
   const note = scheduleRestartIfNeeded({ updated: true, changedCode: true }, () => {
