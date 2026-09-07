@@ -19,7 +19,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 
-import { issueReceipt, issueFilesReceipt, validateReceipt, validateApply } from "../../src/tools/gateway/index.js";
+import { issueReceipt, issueFilesReceipt, validateReceipt, validateApply } from "../../../../src/tools/gateway/index.js";
 
 const T0 = 2_000_000; // injected clock (ms)
 const TTL = 300_000;

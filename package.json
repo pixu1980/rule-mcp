@@ -55,6 +55,7 @@
   "files": [
     "bin/",
     "src/",
+    "!src/**/__tests__/",
     "skills/",
     "prompts/",
     "scripts/",

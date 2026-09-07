@@ -9,7 +9,7 @@
 import { strict as assert } from "node:assert";
 import test from "node:test";
 
-import { createAuthRateLimiter } from "../../src/transport/_auth-rate-limit.js";
+import { createAuthRateLimiter } from "../../../src/transport/_auth-rate-limit.js";
 
 test("failures below the budget answer 401, above it 429", () => {
   let clock = 0;

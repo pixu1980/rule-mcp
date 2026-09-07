@@ -13,7 +13,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 
-const { adrEnglishOffenses } = await import("../../src/tools/adr/index.js");
+const { adrEnglishOffenses } = await import("../../../../src/tools/adr/index.js");
 
 test("the Italian title that produced ADR 060 is rejected", () => {
   const offenses = adrEnglishOffenses({

@@ -13,7 +13,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import test from "node:test";
 
-import { pruneExports } from "../../src/core/telemetry/flight/index.js";
+import { pruneExports } from "../../../../../src/core/telemetry/flight/index.js";
 
 const DAY_MS = 86_400_000;
 

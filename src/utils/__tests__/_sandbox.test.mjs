@@ -22,7 +22,7 @@ const check = (label, ok) => {
 
 console.log("=== Sandbox / Resilience Tests ===\n");
 
-const { safeJsonParse, withTimeout, trySafe, wrapRequestHandler } = await import("../../src/utils/index.js");
+const { safeJsonParse, withTimeout, trySafe, wrapRequestHandler } = await import("../../../src/utils/index.js");
 
 // ── safeJsonParse ──
 check("safeJsonParse valid JSON", safeJsonParse('{"a":1}')?.a === 1);
