@@ -1,50 +1,19 @@
-/**
- * @module test/agent-command-targets
- *
- * The clean-command guarantee: EVERY supported agent/IDE either has a declared
- * slash-command target (so `/rule-*` is invoked bare, never as
- * `/mcp.rule-mcp.rule-backend` or `/rule-mcp:rule-backend`)
- * or is explicitly listed as having no file-based command surface, with a reason.
- *
- * Verifies:
- *   - coverage: no agent in the install registry is silently uncovered
- *   - VS Code Copilot Chat prompt files land in the user-profile `prompts` dirs
- *     (all variants + profiles) with the `.prompt.md` extension
- *   - hosts that namespace MCP prompts get them suppressed, so the clean files
- *     replace rather than duplicate the MCP entries
- *   - the `prompt` render format carries no `$ARGUMENTS` placeholder (VS Code
- *     does not substitute it)
- */
-
+/** Coverage and target resolution: every agent covered or excluded, dirs resolve per host. */
 import { strict as assert } from "node:assert";
-import { test } from "node:test";
 import { join } from "node:path";
+import { test } from "node:test";
+
 import {
   AGENTS_WITHOUT_COMMAND_SURFACE,
   COMMAND_TARGETS,
-  agentsWithCleanCommands,
-  resolveCommandTargets,
-  suppressesMcpPrompts,
-} from "../../src/core/agents/command-targets/index.js";
-import {
   FORMAT_EXT,
-  renderAgentCommand,
-  renderAgentCommandFiles,
-  listAgentCommands,
-} from "../../src/core/agents/commands/index.js";
-import { getAllAgents } from "../../src/cli/install/index.js";
+  agentsWithCleanCommands,
+  ctx,
+  getAllAgents,
+  resolveCommandTargets,
+} from "./_targets.fixture.mjs";
 
-console.log("agent command targets test");
-
-/** Deterministic context: nothing exists unless the test says it does. */
-const ctx = ({ present = [], profiles = {}, platform = "darwin", home = "/home/u", cwd = "/repo", env = {} } = {}) => ({
-  home,
-  cwd,
-  platform,
-  env,
-  exists: (path) => present.includes(path),
-  listDir: (path) => profiles[path] ?? [],
-});
+console.log("agent command targets test: coverage and resolution");
 
 test("coverage: every supported agent is either covered or explicitly excluded", () => {
   const covered = new Set(agentsWithCleanCommands());
@@ -148,39 +117,3 @@ test("detectedOnly resolves nothing for agents that are not installed", () => {
   });
   assert.deepEqual([...new Set(claudeOnly.map((t) => t.agent))], ["claude"], "only the detected agent is targeted");
 });
-
-test("hosts that namespace MCP prompts have them suppressed", () => {
-  assert.equal(suppressesMcpPrompts("claude"), true, "Claude shows /rule-mcp:* - suppress");
-  assert.equal(suppressesMcpPrompts("vscode"), true, "VS Code shows /mcp.rule-mcp.* - suppress");
-  assert.equal(suppressesMcpPrompts("pi"), false, "Pi already exposes bare /rule-* prompts");
-  assert.equal(suppressesMcpPrompts("jetbrains"), false, "no clean files installed - keep the MCP prompts");
-});
-
-test("the prompt format renders .prompt.md with frontmatter and no $ARGUMENTS", () => {
-  assert.equal(FORMAT_EXT.prompt, ".prompt.md", "VS Code prompt files use the .prompt.md suffix");
-  const files = renderAgentCommandFiles("prompt");
-  assert.ok(
-    files.every((f) => f.filename.endsWith(".prompt.md")),
-    "every rendered file uses the prompt-file suffix",
-  );
-  for (const command of listAgentCommands()) {
-    const out = renderAgentCommand(command, "prompt");
-    assert.ok(out.startsWith("---\n"), `${command.name}: prompt files open with frontmatter`);
-    assert.match(out, /\ndescription: ".*"\n/, `${command.name}: description is a quoted scalar`);
-    assert.match(out, /\nargument-hint: ".*"\n/, `${command.name}: argument-hint drives the chat input hint`);
-    assert.ok(!out.includes("$ARGUMENTS"), `${command.name}: VS Code does not substitute $ARGUMENTS`);
-    assert.match(out, /request/i, `${command.name}: the body must still say what the request is`);
-  }
-});
-
-test("formats without argument substitution never leak a placeholder", () => {
-  for (const format of ["prompt", "plain", "workflow"]) {
-    for (const command of listAgentCommands()) {
-      const out = renderAgentCommand(command, format);
-      assert.ok(!out.includes("$ARGUMENTS"), `${format}/${command.name}: no $ARGUMENTS leak`);
-      assert.ok(!out.includes("{{args}}"), `${format}/${command.name}: no {{args}} leak`);
-    }
-  }
-});
-
-console.log("\nagent command targets: all checks passed");

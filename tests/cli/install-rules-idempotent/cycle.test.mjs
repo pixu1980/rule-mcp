@@ -1,65 +1,11 @@
-/**
- * Regression: uninstall→install cycles must not accumulate blank lines in
- * agent instruction files (CLAUDE.md, GEMINI.md, AGENTS.md, .cursorrules).
- *
- * The old install.sh prefixed RULES_CONTENT with a "\n", and uninstall.sh's
- * sed range-delete left that blank line behind - so every cycle grew the file
- * by one empty line. The fix:
- *   - install: append_rules_block() normalizes trailing newlines and inserts
- *     exactly one separator line;
- *   - uninstall: remove_rules_block() collapses trailing blank lines after
- *     deleting the marker block.
- *
- * This test extracts the REAL functions from scripts/install.sh and
- * scripts/uninstall.sh and runs them in a sandbox, so it guards the actual
- * script code, not a copy of the logic.
- */
+/** Behavioral: the real append/remove functions cycle byte-stably in a sandbox. */
 import { strict as assert } from "node:assert";
 import { execFileSync } from "node:child_process";
 import { mkdtempSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 
-const installSh = readScript("scripts/install.sh");
-const uninstallSh = readScript("scripts/uninstall.sh");
-
-// ── Source guards ───────────────────────────────────────────────────────────
-
-assert.match(
-  installSh,
-  /RULES_CONTENT="\$\{RULES_MARKER\}\n/,
-  "RULES_CONTENT must start directly with the marker (no leading blank line)",
-);
-assert.doesNotMatch(
-  installSh,
-  /echo "\$RULES_CONTENT" >>/,
-  "installer must not append rules with a bare echo (skips normalization)",
-);
-assert.match(installSh, /append_rules_block\(\) \{/, "installer must define append_rules_block");
-const callSites = [...installSh.matchAll(/append_rules_block "\$[A-Z_]+"|append_rules_block "CLAUDE\.md"/g)];
-assert.ok(callSites.length >= 5, `all rule append sites must use append_rules_block (got ${callSites.length})`);
-assert.match(
-  installSh,
-  /perl -0pi -e 's\/\\n\*\\z/,
-  "installer append_rules_block must normalize trailing newlines with perl",
-);
-assert.match(
-  uninstallSh,
-  /perl -0pi -e 's\/\\n\*\\z/,
-  "uninstaller must collapse trailing blank lines after removing the rules block",
-);
-
-// ── Prettier drift guard: the committed project CLAUDE.md must embed the
-// installer's rules block byte-for-byte. If the committed block drifts from
-// RULES_CONTENT (e.g. blank lines inside the block), then every install is
-// followed by a `pnpm format` diff and the repo churns forever. Compared in
-// bash (below, harness step F) because RULES_CONTENT is bash-escaped here.
-const projectClaude = readFileSync(new URL(`../../CLAUDE.md`, import.meta.url), "utf8");
-assert.match(
-  projectClaude,
-  /<!-- rule-mcp-rules -->[\s\S]*?<!-- \/rule-mcp-rules -->/,
-  "CLAUDE.md must contain the rule-mcp-rules block",
-);
+import { extractBashFunction, installSh, uninstallSh } from "./_rules.fixture.mjs";
 
 // ── Behavioral: real functions extracted from the scripts ───────────────────
 
@@ -153,32 +99,3 @@ writeFileSync(harnessFile, harness);
 execFileSync("bash", [harnessFile], { encoding: "utf8" });
 
 console.log("  ✅ rules block install/uninstall is blank-line idempotent");
-
-// ── Helpers ─────────────────────────────────────────────────────────────────
-
-function readScript(path) {
-  return readFileSync(new URL(`../../${path}`, import.meta.url), "utf8");
-}
-
-import { readFileSync } from "node:fs";
-
-/** Extract a `name() { ... }` bash function (brace-balanced) from script source. */
-function extractBashFunction(source, name) {
-  const start = source.indexOf(`${name}() {`);
-  if (start === -1) {
-    return null;
-  }
-  const open = source.indexOf("{", start);
-  let depth = 0;
-  for (let index = open; index < source.length; index++) {
-    if (source[index] === "{") {
-      depth++;
-    } else if (source[index] === "}") {
-      depth--;
-      if (depth === 0) {
-        return source.slice(start, index + 1);
-      }
-    }
-  }
-  return null;
-}
