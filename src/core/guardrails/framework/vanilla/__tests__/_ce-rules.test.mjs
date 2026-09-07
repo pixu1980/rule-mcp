@@ -4,7 +4,7 @@ import test from "node:test";
 
 import { vanillaAdoptedStylesheets } from "../_adopted-stylesheets.js";
 import { vanillaCeExtends } from "../_ce-extends.js";
-import { preprocessToolCall } from "../../enforcement/index.js";
+import { preprocessToolCall } from "../../../../enforcement/index.js";
 
 test("adopted-stylesheets: non-CE and proper fetch pass, css-only fails", () => {
   const notCe = vanillaAdoptedStylesheets.check("const x = 1;");
