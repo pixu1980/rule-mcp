@@ -32,7 +32,7 @@ const realProjects = join(homedir(), ".rule-mcp", "projects");
 const listing = () => (existsSync(realProjects) ? readdirSync(realProjects).sort() : []);
 
 /** Run these, because they are fast on their scripted repos. */
-const RUN = ["project-init.test.mjs", "session-resume.test.mjs", "handon/claims.test.mjs"];
+const RUN = ["project-init.test.mjs", "session-resume/hook.test.mjs", "session-resume/prompt.test.mjs", "handon/claims.test.mjs"];
 
 // The SANDBOXED self-update suites are target-only tests that carry their own
 // HOME pins; the per-suite fixture assertions from the source do not apply here.
@@ -50,11 +50,7 @@ for (const suite of RUN) {
     });
 
     assert.equal(run.status, 0, `${suite} passes on its own: ${run.stderr}`);
-    assert.deepEqual(
-      listing(),
-      before,
-      `a recording appeared in ${realProjects} while ${suite} ran; pin HOME or RULE_MCP_STATE_DIR in it`,
-    );
+    assert.deepEqual(listing(), before, `a recording appeared in ${realProjects} while ${suite} ran; pin HOME or RULE_MCP_STATE_DIR in it`);
   });
 }
 
