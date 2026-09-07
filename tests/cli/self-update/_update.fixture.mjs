@@ -59,10 +59,10 @@ export function pushUpstreamChange(seed, files) {
  * pure git logic by replicating runSelfUpdate's steps is also overkill. We run
  * the real module with RULE_MCP_GALAXY_MCP overriding cwd through a child process.
  */
-export function runUpdateIn(clone, environment = {}) {
+export function runUpdateIn(clone, environment = {}, reloadSkills = false) {
   const script = `
     import { runSelfUpdate } from ${JSON.stringify(new URL("../../../src/core/self-update/index.js", import.meta.url).href)};
-    const r = await runSelfUpdate({ reloadSkills: false });
+    const r = await runSelfUpdate({ reloadSkills: ${reloadSkills} });
     process.stdout.write(JSON.stringify(r));
   `;
   const out = execFileSync(process.execPath, ["--input-type=module", "--eval", script], {
