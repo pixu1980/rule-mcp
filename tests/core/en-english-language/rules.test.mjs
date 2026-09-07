@@ -4,14 +4,7 @@ import test from "node:test";
 
 import { checkCode, findFingerprints, getGuardrails } from "./_english.fixture.mjs";
 
-const SKILLS = [
-  "rule-frontend-react",
-  "rule-backend-express",
-  "rule-data-postgresql",
-  "rule-devops-docker",
-  "rule-styleguide",
-  "rule-toolchain-pnpm",
-];
+const SKILLS = ["rule-frontend-react", "rule-backend-express", "rule-data-postgresql", "rule-devops-docker", "rule-styleguide", "rule-toolchain-pnpm"];
 
 for (const skill of SKILLS) {
   test(`every skill carries the English guardrails (${skill})`, () => {
@@ -65,13 +58,9 @@ test("a generated markdown document is checked as whole prose", () => {
     "Italian prose in a .md document must fire",
   );
 
-  const clean = checkCode(
-    "rule-styleguide-markdown",
-    "# Audit\n\nEvidence collected during the run, with no personal opinions.\n",
-    {
-      fileName: "docs/audits/security.md",
-    },
-  );
+  const clean = checkCode("rule-styleguide-markdown", "# Audit\n\nEvidence collected during the run, with no personal opinions.\n", {
+    fileName: "docs/audits/security.md",
+  });
   assert.equal(
     clean.failed.find((r) => r.id === "en-english-only-prose"),
     undefined,

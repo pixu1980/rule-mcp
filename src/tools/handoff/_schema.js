@@ -8,9 +8,7 @@ export const HandoffSchema = z.object({
     .enum(["handoff", "close-session"])
     .optional()
     .default("handoff")
-    .describe(
-      "handoff: generate context summary. close-session: full session close with git diff, roadmap check, doc scan.",
-    ),
+    .describe("handoff: generate context summary. close-session: full session close with git diff, roadmap check, doc scan."),
   includeContext: z.boolean().optional().default(true).describe("Include .context/ values"),
   includeAdrs: z.boolean().optional().default(true).describe("Include ADR summaries"),
   includeIdentity: z.boolean().optional().default(true).describe("Include project identity"),

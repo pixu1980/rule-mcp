@@ -51,9 +51,7 @@ export function rewriteCommitReferences(plan, options = {}) {
   }
 
   if (upstream) {
-    const unpublished = new Set(
-      gitOut(projectDir, ["log", "@{upstream}..HEAD", "--format=%h"]).split("\n").filter(Boolean),
-    );
+    const unpublished = new Set(gitOut(projectDir, ["log", "@{upstream}..HEAD", "--format=%h"]).split("\n").filter(Boolean));
     const published = certain.filter((entry) => !unpublished.has(entry.sha));
 
     if (published.length > 0) {
@@ -69,19 +67,13 @@ export function rewriteCommitReferences(plan, options = {}) {
     return {
       rewritten: 0,
       skipped: certain.length,
-      refused:
-        "the working tree has uncommitted changes, and rewriting a message rewrites every commit after it; commit or stash first",
+      refused: "the working tree has uncommitted changes, and rewriting a message rewrites every commit after it; commit or stash first",
     };
   }
 
-  const replacements =
-    planned.length > 0
-      ? planned.map((rename) => [rename.from, rename.to])
-      : [...new Map(orphans.map((entry) => [entry.from, entry.to]))];
+  const replacements = planned.length > 0 ? planned.map((rename) => [rename.from, rename.to]) : [...new Map(orphans.map((entry) => [entry.from, entry.to]))];
   report({ step: "messages", message: `Rewriting ${certain.length} message(s) with git filter-branch` });
-  const script = replacements
-    .map(([from, to]) => `s|${from.replaceAll("|", String.raw`\|`)}|${to.replaceAll("|", String.raw`\|`)}|g`)
-    .join("; ");
+  const script = replacements.map(([from, to]) => `s|${from.replaceAll("|", String.raw`\|`)}|${to.replaceAll("|", String.raw`\|`)}|g`).join("; ");
   const range = upstream ? "@{upstream}..HEAD" : "--all";
 
   try {

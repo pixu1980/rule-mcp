@@ -32,8 +32,5 @@ test("corpus coverage does not go backwards", () => {
   console.log(table.join("\n"));
   console.log(`  ${total - covered} rules have no labeled snippet yet\n`);
 
-  assert.ok(
-    covered >= COVERED_RULES_FLOOR,
-    `corpus covers ${covered} rules, below the ${COVERED_RULES_FLOOR} already committed`,
-  );
+  assert.ok(covered >= COVERED_RULES_FLOOR, `corpus covers ${covered} rules, below the ${COVERED_RULES_FLOOR} already committed`);
 });

@@ -166,12 +166,7 @@ describe("TemplateEngine - Renderer", () => {
     const renderer = new TemplateRenderer(path.resolve("./"));
 
     // Test various malformed templates
-    const malformedTemplates = [
-      "{{ unclosed variable",
-      '<for each="item in">content</for>',
-      "{{ nested {{ variable }} }}",
-      '<for each="">content</for>',
-    ];
+    const malformedTemplates = ["{{ unclosed variable", '<for each="item in">content</for>', "{{ nested {{ variable }} }}", '<for each="">content</for>'];
 
     for (const template of malformedTemplates) {
       try {

@@ -14,10 +14,7 @@ test("a rephrased prompt produces the same normalized key", () => {
 });
 
 test("an interrogative opening does not fork the key", () => {
-  assert.equal(
-    normalizedKey("pix_tool", { prompt: "How do I use a container query?" }),
-    normalizedKey("pix_tool", { prompt: "container queries" }),
-  );
+  assert.equal(normalizedKey("pix_tool", { prompt: "How do I use a container query?" }), normalizedKey("pix_tool", { prompt: "container queries" }));
 });
 
 test("a field whose value reaches the output is not normalizable", async () => {
@@ -30,11 +27,7 @@ test("a field whose value reaches the output is not normalizable", async () => {
 
   const searched = await call("rule_tool_styleguide_css", { mode: "search", query: "zzmarkerzz container" });
   assert.ok(searched.content[0].text.includes("zzmarkerzz"), "search echoes its query verbatim");
-  assert.equal(
-    normalizedKey("rule_tool_styleguide_css", { query: "zzmarkerzz container" }),
-    null,
-    "so it must not get a normalized key",
-  );
+  assert.equal(normalizedKey("rule_tool_styleguide_css", { query: "zzmarkerzz container" }), null, "so it must not get a normalized key");
 
   const routed = await call("pix_tool", { prompt: "react button component" });
   assert.ok(normalizedKey("pix_tool", { prompt: "react button component" }), "the router's prompt is on the allowlist");
@@ -64,11 +57,7 @@ test("an answer that quotes the question gets no normalized entry", async () => 
 
 test("a non-prompt argument still changes the answer, so it stays in the key", () => {
   const base = { prompt: "react button", mode: "full" };
-  assert.notEqual(
-    normalizedKey("pix_tool", base),
-    normalizedKey("pix_tool", { ...base, mode: "tldr" }),
-    "an unrelated argument changes the output and must change the key",
-  );
+  assert.notEqual(normalizedKey("pix_tool", base), normalizedKey("pix_tool", { ...base, mode: "tldr" }), "an unrelated argument changes the output and must change the key");
   assert.notEqual(normalizedKey("pix_tool", base), normalizedKey("pix_tool", { ...base, framework: "vue" }));
 });
 
@@ -76,26 +65,17 @@ test("capitalization does not fork the key", () => {
   // The search tokenizer splits camelCase and emits the parts alongside the
   // whole token, so `TypeScript` produced three terms and `typescript` one.
   // Canonicalization must not, or the same question typed two ways is two keys.
-  assert.equal(
-    normalizedKey("pix_tool", { prompt: "TypeScript: any vs unknown?" }),
-    normalizedKey("pix_tool", { prompt: "typescript any vs unknown" }),
-  );
+  assert.equal(normalizedKey("pix_tool", { prompt: "TypeScript: any vs unknown?" }), normalizedKey("pix_tool", { prompt: "typescript any vs unknown" }));
 });
 
 test("merging stays conservative: a content word is not dropped", () => {
   // Under-merging costs one miss. Over-merging replays an answer to a question
   // that was not asked, and the caller cannot tell.
-  assert.notEqual(
-    normalizedKey("pix_tool", { prompt: "build a react button component" }),
-    normalizedKey("pix_tool", { prompt: "react button component" }),
-  );
+  assert.notEqual(normalizedKey("pix_tool", { prompt: "build a react button component" }), normalizedKey("pix_tool", { prompt: "react button component" }));
 });
 
 test("two tools never share a normalized key", () => {
-  assert.notEqual(
-    normalizedKey("pix_tool", { prompt: "react button" }),
-    normalizedKey("rule_tool_gateway", { prompt: "react button" }),
-  );
+  assert.notEqual(normalizedKey("pix_tool", { prompt: "react button" }), normalizedKey("rule_tool_gateway", { prompt: "react button" }));
 });
 
 test("no normalizable argument means no normalized key", () => {

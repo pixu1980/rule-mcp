@@ -16,10 +16,7 @@ export const EM_DASH_ALONE = /(^|\|)(\s*)\u2014(\s*)($|\|)/g;
 export const EM_DASH_CLAUSE = /\s*\u2014\s*/g;
 
 export const WORD_RE = new RegExp(String.raw`\b(${[...WORDS.keys()].join("|")})\b`, "gi");
-export const OUR_RE = new RegExp(
-  String.raw`\b(${OUR_STEMS})our(s|ed|ing|able|ite|ites|ful|less|al|ally|ist|ists|ism|ed)?\b`,
-  "gi",
-);
+export const OUR_RE = new RegExp(String.raw`\b(${OUR_STEMS})our(s|ed|ing|able|ite|ites|ful|less|al|ally|ist|ists|ism|ed)?\b`, "gi");
 export const ISE_RE = new RegExp(String.raw`\b((?:un|re)?(?:${ISE_STEMS}))(e|es|ed|ing|ation|ations|er|ers|able)\b`, "gi");
 export const RE_RE = new RegExp(String.raw`\b(${RE_STEMS})(re|res|red|ring)\b`, "gi");
 export const OGUE_RE = new RegExp(String.raw`\b(${OGUE_STEMS})ogue(s)?\b`, "gi");

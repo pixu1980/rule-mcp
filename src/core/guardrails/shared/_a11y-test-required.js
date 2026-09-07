@@ -7,8 +7,7 @@ export const a11yTestRequired = {
   description:
     "Every project MUST have automated a11y tests using Playwright and @axe-core/playwright. Tests must live in tests/a11y/ and must include an axe-core scan with expect(results.violations).toEqual([]).",
   check: (code, context) => {
-    const isTestFile =
-      context?.fileName?.includes(".spec.") || context?.fileName?.includes(".test.") || context?.mode === "test";
+    const isTestFile = context?.fileName?.includes(".spec.") || context?.fileName?.includes(".test.") || context?.mode === "test";
     const hasAxeImport = /@axe-core\/playwright/.test(code) || /from\s+['"]@axe-core\/playwright['"]/.test(code);
     const hasAxeBuilder = /new\s+AxeBuilder/.test(code) || /AxeBuilder/.test(code);
     const hasViolationCheck = /\.violations\s*\.toEqual/.test(code) || /expect\(.*\.violations\)/.test(code);
@@ -29,10 +28,7 @@ export const a11yTestRequired = {
     const codeOnly = maskLiterals(code)
       .replaceAll(/\/\*[\s\S]*?\*\//g, "")
       .replaceAll(/(?:^|[^:])\/\/.*$/gm, "");
-    const looksLikeUi =
-      context?.isComponent === true ||
-      /<[A-Za-z][^>]*>/.test(codeOnly) ||
-      /\.(jsx|tsx|vue|svelte)$/.test(context?.fileName ?? "");
+    const looksLikeUi = context?.isComponent === true || /<[A-Za-z][^>]*>/.test(codeOnly) || /\.(jsx|tsx|vue|svelte)$/.test(context?.fileName ?? "");
     if (!isTestFile && !looksLikeUi && !hasPlaywrightConfig) {
       return { pass: true, note: "No UI surface in this file, skipping" };
     }

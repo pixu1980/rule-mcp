@@ -50,11 +50,7 @@ describe("TemplateEngine - SEO head rendering", () => {
       topTags: [],
     });
 
-    assertSocialTagsStayInHead(document, [
-      'meta[property="og:image"]',
-      'meta[name="twitter:image"]',
-      'script[type="application/ld+json"]',
-    ]);
+    assertSocialTagsStayInHead(document, ['meta[property="og:image"]', 'meta[name="twitter:image"]', 'script[type="application/ld+json"]']);
   });
 
   test("tag template emits one canonical and keeps metadata in head", () => {
@@ -90,10 +86,6 @@ describe("TemplateEngine - SEO head rendering", () => {
       title: "Example Post",
     });
 
-    assertSocialTagsStayInHead(document, [
-      'meta[property="og:image"]',
-      'meta[property="article:published_time"]',
-      'meta[name="twitter:image"]',
-    ]);
+    assertSocialTagsStayInHead(document, ['meta[property="og:image"]', 'meta[property="article:published_time"]', 'meta[name="twitter:image"]']);
   });
 });

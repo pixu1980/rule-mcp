@@ -5,14 +5,7 @@
  * tally plus the vendored-data and guardrail imports both halves read.
  */
 
-export {
-  CRITERIA,
-  EARL_OUTCOMES,
-  WCAG_EM_STEPS,
-  WCAG_VERSION,
-  criteriaForLevel,
-  criterion,
-} from "../../../src/core/wcag-data/index.js";
+export { CRITERIA, EARL_OUTCOMES, WCAG_EM_STEPS, WCAG_VERSION, criteriaForLevel, criterion } from "../../../src/core/wcag-data/index.js";
 export { checkCode } from "../../../src/core/guardrails/index.js";
 export { buildReport } from "../../../src/tools/a11y/index.js";
 

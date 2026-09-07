@@ -47,15 +47,12 @@ export function registerUsageTool() {
 
   registerTool({
     name: "rule_tool_usage",
-    description:
-      "Declare an agent usage sidecar for this project when no transcript can be read: input/output tokens, cost.",
+    description: "Declare an agent usage sidecar for this project when no transcript can be read: input/output tokens, cost.",
     zodSchema: UsageSchema,
     handler: async (arguments_) => {
       if (!telemetryEnabled()) {
         return {
-          content: [
-            { type: "text", text: "Telemetry is disabled (RULE_MCP_NO_TELEMETRY=1). Nothing was recorded." },
-          ],
+          content: [{ type: "text", text: "Telemetry is disabled (RULE_MCP_NO_TELEMETRY=1). Nothing was recorded." }],
         };
       }
 
@@ -68,12 +65,7 @@ export function registerUsageTool() {
           content: [
             {
               type: "text",
-              text: [
-                "Nothing to record: pass at least one figure.",
-                "",
-                "Agents whose usage cannot be read from disk, and why:",
-                ...rows,
-              ].join("\n"),
+              text: ["Nothing to record: pass at least one figure.", "", "Agents whose usage cannot be read from disk, and why:", ...rows].join("\n"),
             },
           ],
         };

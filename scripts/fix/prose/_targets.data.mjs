@@ -7,23 +7,7 @@
  * shell scripts, PowerShell, JSON and YAML for three phases. The house style is
  * the house style in every file that has prose in it.
  */
-export const TRACKED = [
-  "*.js",
-  "*.mjs",
-  "*.cjs",
-  "*.ts",
-  "*.mts",
-  "*.md",
-  "*.json",
-  "*.yml",
-  "*.yaml",
-  "*.sh",
-  "*.ps1",
-  "*.html",
-  "*.css",
-  "*.txt",
-  "*.toml",
-];
+export const TRACKED = ["*.js", "*.mjs", "*.cjs", "*.ts", "*.mts", "*.md", "*.json", "*.yml", "*.yaml", "*.sh", "*.ps1", "*.html", "*.css", "*.txt", "*.toml"];
 /**
  * Files the pass must never touch.
  *
@@ -34,13 +18,6 @@ export const TRACKED = [
  * W3C, where the criterion titles are normative text we are not entitled to
  * respell.
  */
-export const SKIP = [
-  /^test\/fixtures\//,
-  /^node_modules\//,
-  /^pnpm-lock\.yaml$/,
-  /^src\/core\/fingerprint\.js$/,
-  /^src\/core\/wcag-data\.js$/,
-  /^test\/fingerprint\.test\.mjs$/,
-];
+export const SKIP = [/^test\/fixtures\//, /^node_modules\//, /^pnpm-lock\.yaml$/, /^src\/core\/fingerprint\.js$/, /^src\/core\/wcag-data\.js$/, /^test\/fingerprint\.test\.mjs$/];
 
 // --others --exclude-standard so a brand new file is checked too. Without it

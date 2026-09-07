@@ -11,8 +11,7 @@ export const REACT_GUARDRAILS = [
         pass: !cn,
         failCount: cn?.length || 0,
         detail: cn || [],
-        suggestion:
-          'Replace className="..." with data-part="..." attributes. CSS uses [data-part="..."] selectors instead of .class selectors.',
+        suggestion: 'Replace className="..." with data-part="..." attributes. CSS uses [data-part="..."] selectors instead of .class selectors.',
       };
     },
   },

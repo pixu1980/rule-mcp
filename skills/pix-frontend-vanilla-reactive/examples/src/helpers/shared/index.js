@@ -15,8 +15,7 @@ export const appStore = new Store({
   preferences: { language: "en", theme: "light" },
   ui: {
     appTitle: "📋 Vanilla Reactive Todo",
-    description:
-      "Built with <strong>template engine</strong> syntax, <strong>filter pipes</strong>, and <strong>directives</strong>.",
+    description: "Built with <strong>template engine</strong> syntax, <strong>filter pipes</strong>, and <strong>directives</strong>.",
     extraInfo: "Click any todo to toggle completion.",
   },
 });

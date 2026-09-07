@@ -27,12 +27,7 @@ const widths = (text) =>
     .map((line) => displayWidth(line.trimEnd()));
 
 test("a short top border is padded with its own fill character", () => {
-  const ragged = [
-    "┌────────────────────┐",
-    "│   PASCAL CASE       │",
-    "│   Class names        │",
-    "└────────────────────┘",
-  ].join("\n");
+  const ragged = ["┌────────────────────┐", "│   PASCAL CASE       │", "│   Class names        │", "└────────────────────┘"].join("\n");
   const fixed = alignAsciiBoxes(ragged);
 
   const [border, content] = fixed.split("\n", 2);
@@ -122,11 +117,7 @@ test("displayWidth counts a wide glyph as two columns", () => {
 });
 
 test("no tracked file ships a ragged box", () => {
-  const files = execFileSync(
-    "git",
-    ["ls-files", "--cached", "--others", "--exclude-standard", "*.md", "*.js", "*.mjs", "*.sh", "*.ps1", "*.txt"],
-    { encoding: "utf8" },
-  )
+  const files = execFileSync("git", ["ls-files", "--cached", "--others", "--exclude-standard", "*.md", "*.js", "*.mjs", "*.sh", "*.ps1", "*.txt"], { encoding: "utf8" })
     .trim()
     .split("\n")
     .filter((file) => file && existsSync(file) && !file.startsWith("tests/fixtures/"));

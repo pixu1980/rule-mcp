@@ -12,8 +12,7 @@ export const fpAmericanEnglish = {
       pass: british.length === 0,
       failCount: british.length,
       detail: british.slice(0, 10),
-      suggestion:
-        "Use the American spelling. Identifiers from third-party APIs are exempt - put them in a code span or leave them in code.",
+      suggestion: "Use the American spelling. Identifiers from third-party APIs are exempt - put them in a code span or leave them in code.",
     };
   },
 };

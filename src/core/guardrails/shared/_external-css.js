@@ -48,8 +48,7 @@ export const externalCss = {
     return {
       pass: false,
       failCount: 1,
-      suggestion:
-        "Load CSS via an external file mechanism: adoptedStyleSheets (vanilla), styleUrls (Angular), <style> (Svelte), or CSS Modules (React).",
+      suggestion: "Load CSS via an external file mechanism: adoptedStyleSheets (vanilla), styleUrls (Angular), <style> (Svelte), or CSS Modules (React).",
     };
   },
 };

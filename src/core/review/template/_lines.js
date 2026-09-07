@@ -14,16 +14,10 @@ export function templateLines(operation) {
 
   const output =
     operation === "audit"
-      ? [
-          "the output of this run must be the evidence collected, without opinions,",
-          "in markdown, in the ./docs/audits folder",
-        ]
+      ? ["the output of this run must be the evidence collected, without opinions,", "in markdown, in the ./docs/audits folder"]
       : operation === "review"
         ? ["the output of this run must be the list of findings,", "in markdown, in the ./docs/reviews folder"]
-        : [
-            "the output of this run must be a plan with roadmaps organized into steps and dependencies,",
-            "in markdown, in the ./docs/plans folder",
-          ];
+        : ["the output of this run must be a plan with roadmaps organized into steps and dependencies,", "in markdown, in the ./docs/plans folder"];
 
   return [
     "Act as a {{ROLE}} with more than {{YEARS_OF_EXPERIENCE}} years of experience,",

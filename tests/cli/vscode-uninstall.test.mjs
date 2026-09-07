@@ -8,9 +8,7 @@ import { join } from "node:path";
 const fakeHome = mkdtempSync(join(tmpdir(), "rule-vscode-uninstall-"));
 const fakeProject = join(fakeHome, "project");
 const globalFile =
-  process.platform === "darwin"
-    ? join(fakeHome, "Library", "Application Support", "Code", "User", "mcp.json")
-    : join(fakeHome, ".config", "Code", "User", "mcp.json");
+  process.platform === "darwin" ? join(fakeHome, "Library", "Application Support", "Code", "User", "mcp.json") : join(fakeHome, ".config", "Code", "User", "mcp.json");
 mkdirSync(fakeProject, { recursive: true });
 mkdirSync(join(globalFile, ".."), { recursive: true });
 writeFileSync(
@@ -28,15 +26,10 @@ writeFileSync(
 );
 
 const installModule = new URL("../../src/cli/install/index.js", import.meta.url).href;
-execFileSync(
-  process.execPath,
-  [
-    "--input-type=module",
-    "--eval",
-    `import { uninstallAgent } from ${JSON.stringify(installModule)}; uninstallAgent({ agent: "vscode" });`,
-  ],
-  { cwd: fakeProject, env: { ...process.env, HOME: fakeHome } },
-);
+execFileSync(process.execPath, ["--input-type=module", "--eval", `import { uninstallAgent } from ${JSON.stringify(installModule)}; uninstallAgent({ agent: "vscode" });`], {
+  cwd: fakeProject,
+  env: { ...process.env, HOME: fakeHome },
+});
 
 assert.equal(existsSync(join(fakeProject, ".vscode", "mcp.json")), false, "must not create workspace mcp.json");
 const config = JSON.parse(readFileSync(globalFile, "utf8"));

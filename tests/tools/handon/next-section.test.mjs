@@ -51,16 +51,8 @@ test("a numbered Next section is read as the open items", () => {
 
   assert.doesNotMatch(text, /listed no open items/, "the Next section is the open items");
   assert.match(text, /saved\.cache/, "the first item is carried over verbatim enough to act on");
-  assert.match(
-    text,
-    /what it saves is recomputation/,
-    "an item that wrapped in the handoff arrives whole, not cut at the column",
-  );
+  assert.match(text, /what it saves is recomputation/, "an item that wrapped in the handoff arrives whole, not cut at the column");
   assert.match(text, /Label the remaining guardrail rules/, "and so are the rest");
   assert.doesNotMatch(text, /Conventional commits/, "the section after Next is not part of it");
-  assert.equal(
-    report.claims.filter((claim) => claim.kind === "open").length,
-    3,
-    "each item is a claim of its own, so every surface sees them",
-  );
+  assert.equal(report.claims.filter((claim) => claim.kind === "open").length, 3, "each item is a claim of its own, so every surface sees them");
 });

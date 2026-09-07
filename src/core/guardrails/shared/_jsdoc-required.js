@@ -4,8 +4,7 @@ import { maskLiterals } from "../_util.js";
 export const jsdocRequired = {
   id: "jsdoc-required",
   label: "JSDoc on every exported symbol",
-  description:
-    "Every JS/TS file must have JSDoc on all exported functions, classes, constants, and types. Module-level JSDoc recommended.",
+  description: "Every JS/TS file must have JSDoc on all exported functions, classes, constants, and types. Module-level JSDoc recommended.",
   check: (code, context) => {
     const fileName = context?.fileName || "";
 
@@ -58,8 +57,7 @@ export const jsdocRequired = {
       pass: false,
       failCount: missingDocs.length,
       detail: missingDocs.slice(0, 10).map((s) => `Missing JSDoc: ${s}`),
-      suggestion:
-        "Add JSDoc blocks before each exported symbol. Format: /** ... */ with @param and @returns where applicable.",
+      suggestion: "Add JSDoc blocks before each exported symbol. Format: /** ... */ with @param and @returns where applicable.",
     };
   },
 };

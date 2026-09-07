@@ -3,8 +3,7 @@
 export const componentFolderBarrel = {
   id: "component-folder-barrel",
   label: "Component folder has index.js barrel file",
-  description:
-    "Every component folder must have an index.js (or index.ts) that re-exports the public API. The barrel must contain at least one export statement.",
+  description: "Every component folder must have an index.js (or index.ts) that re-exports the public API. The barrel must contain at least one export statement.",
   check: (code, context) => {
     const fileName = context?.fileName || "";
 

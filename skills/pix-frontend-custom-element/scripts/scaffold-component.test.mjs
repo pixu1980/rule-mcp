@@ -112,17 +112,7 @@ test("scaffoldComponent fails when shared library is missing and --install-share
 test("scaffoldComponent generates a customized built-in with extendsElement", async () => {
   const target = await makeTempProject();
   try {
-    const options = parseArgs([
-      "--name",
-      "PixDetails",
-      "--target",
-      target,
-      "--install-shared",
-      "--extends",
-      "details",
-      "--attributes",
-      "open",
-    ]);
+    const options = parseArgs(["--name", "PixDetails", "--target", target, "--install-shared", "--extends", "details", "--attributes", "open"]);
     const result = await scaffoldComponent(options);
 
     const componentJs = await readFile(path.join(result.componentDir, "rule-details.js"), "utf8");
@@ -144,10 +134,7 @@ test("scaffoldComponent refuses to overwrite without --force", async () => {
   try {
     await scaffoldComponent(parseArgs(["--name", "PixCard", "--target", target, "--install-shared"]));
 
-    await assert.rejects(
-      () => scaffoldComponent(parseArgs(["--name", "PixCard", "--target", target])),
-      /Refusing to overwrite/,
-    );
+    await assert.rejects(() => scaffoldComponent(parseArgs(["--name", "PixCard", "--target", target])), /Refusing to overwrite/);
   } finally {
     await rm(target, { recursive: true, force: true });
   }

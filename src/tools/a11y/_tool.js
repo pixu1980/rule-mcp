@@ -32,8 +32,7 @@ export function registerA11yReportTool() {
 
   registerTool({
     name: "rule_tool_a11y_report",
-    description:
-      "Build a WCAG-EM accessibility report from criteria and audit results; returns findings and the verdict.",
+    description: "Build a WCAG-EM accessibility report from criteria and audit results; returns findings and the verdict.",
     zodSchema: ReportSchema,
     handler: async (arguments_) => {
       let report;

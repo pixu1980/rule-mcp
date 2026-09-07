@@ -95,9 +95,7 @@ export function firstMove(claims, claimed) {
 
   if (command) {
     const age = ageLabel(claimed.date);
-    const reason = [age && `the claim is ${age}`, since && since !== "0" && `${since} commits have landed since`]
-      .filter(Boolean)
-      .join(" and ");
+    const reason = [age && `the claim is ${age}`, since && since !== "0" && `${since} commits have landed since`].filter(Boolean).join(" and ");
 
     return `Re-run \`${command.value}\` before continuing${reason ? `: ${reason}` : ""}.`;
   }

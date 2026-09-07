@@ -3,8 +3,7 @@
 export const sqlInjection = {
   id: "sql-injection",
   label: "No SQL injection via string concatenation",
-  description:
-    "All SQL queries must use parameterized placeholders ($1, ?, :name). No string concatenation with user input.",
+  description: "All SQL queries must use parameterized placeholders ($1, ?, :name). No string concatenation with user input.",
   check: (code) => {
     // Any receiver, not only one called `db`: this project's own naming rules
     // would call it `database` or `pool`, and a rule that misses those is a
@@ -37,8 +36,7 @@ export const sqlInjection = {
       pass: violations.length === 0,
       failCount: violations.length,
       detail: violations.slice(0, 5),
-      suggestion:
-        "Use parameterized queries: db.query('SELECT ... WHERE id = $1', [id]). Never concatenate user input into SQL strings.",
+      suggestion: "Use parameterized queries: db.query('SELECT ... WHERE id = $1', [id]). Never concatenate user input into SQL strings.",
     };
   },
 };

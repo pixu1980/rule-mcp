@@ -21,14 +21,10 @@ export function inject(kind, payload = {}) {
   if (kind !== "session-start") {
     const additionalContext = promptDirective();
 
-    return additionalContext
-      ? { hookSpecificOutput: { hookEventName, additionalContext } }
-      : { hookSpecificOutput: { hookEventName } };
+    return additionalContext ? { hookSpecificOutput: { hookEventName, additionalContext } } : { hookSpecificOutput: { hookEventName } };
   }
   // Directive first: it states how to work, and the handoff is what to work on.
   const additionalContext = [sessionDirective(), resumeContext(payload)].filter(Boolean).join("\n\n");
 
-  return additionalContext
-    ? { hookSpecificOutput: { hookEventName, additionalContext } }
-    : { hookSpecificOutput: { hookEventName } };
+  return additionalContext ? { hookSpecificOutput: { hookEventName, additionalContext } } : { hookSpecificOutput: { hookEventName } };
 }

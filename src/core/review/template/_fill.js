@@ -19,10 +19,7 @@ export function fillRoleTemplate(role, overrides = {}) {
   const skills = [...(role.skills ?? []), ...(overrides.skills ?? [])];
   const operation = overrides.operation ?? "all";
 
-  const filled = templateLines(operation)
-    .replace("{{ROLE}}", role.role)
-    .replace("{{YEARS_OF_EXPERIENCE}}", String(years))
-    .replace("{{SKILLS}}", skills.join(", "));
+  const filled = templateLines(operation).replace("{{ROLE}}", role.role).replace("{{YEARS_OF_EXPERIENCE}}", String(years)).replace("{{SKILLS}}", skills.join(", "));
 
   const lenses = (role.lenses ?? []).map((lens) => `- ${lens}`);
   const evidence = (role.evidenceSkills ?? []).map((skill) => `- ${skill}`);

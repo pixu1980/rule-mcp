@@ -13,8 +13,7 @@ import test from "node:test";
 
 import { checkCode } from "../../../../src/core/guardrails/index.js";
 
-const rule = (id, code, fileName = "sample.js") =>
-  checkCode("rule-styleguide-javascript", code, { fileName }).failed.find((f) => f.id === id);
+const rule = (id, code, fileName = "sample.js") => checkCode("rule-styleguide-javascript", code, { fileName }).failed.find((f) => f.id === id);
 
 test("jsdoc-required sees a JSDoc block longer than 200 characters", () => {
   const documented = `/**

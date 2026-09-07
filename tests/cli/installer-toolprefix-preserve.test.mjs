@@ -20,11 +20,7 @@ const installModule = new URL("../../src/cli/install/index.js", import.meta.url)
 const installForPi = (home, piDir) =>
   execFileSync(
     process.execPath,
-    [
-      "--input-type=module",
-      "--eval",
-      `import { installAgent } from ${JSON.stringify(installModule)}; installAgent({ agent: "pi", entrypoint: "/tmp/rule-mcp.js" });`,
-    ],
+    ["--input-type=module", "--eval", `import { installAgent } from ${JSON.stringify(installModule)}; installAgent({ agent: "pi", entrypoint: "/tmp/rule-mcp.js" });`],
     { cwd: root, env: { ...process.env, HOME: home, PI_CODING_AGENT_DIR: piDir } },
   );
 
@@ -73,19 +69,11 @@ assert.equal(fresh.toolPrefix, "none", "fresh pi install must default to toolPre
 assert.equal(fresh.directTools, true);
 
 // 3. Uninstall removes the whole entry (nothing left behind).
-execFileSync(
-  process.execPath,
-  [
-    "--input-type=module",
-    "--eval",
-    `import { uninstallAgent } from ${JSON.stringify(installModule)}; uninstallAgent({ agent: "pi" });`,
-  ],
-  { cwd: root, env: { ...process.env, HOME: fakeHome2, PI_CODING_AGENT_DIR: piDir2 } },
-);
+execFileSync(process.execPath, ["--input-type=module", "--eval", `import { uninstallAgent } from ${JSON.stringify(installModule)}; uninstallAgent({ agent: "pi" });`], {
+  cwd: root,
+  env: { ...process.env, HOME: fakeHome2, PI_CODING_AGENT_DIR: piDir2 },
+});
 const afterUninstall = readFileSync(join(piDir2, "mcp.json"), "utf8").trim();
-assert.ok(
-  !afterUninstall || !JSON.parse(afterUninstall).mcpServers?.["rule-mcp"],
-  "uninstall must remove the rule-mcp entry",
-);
+assert.ok(!afterUninstall || !JSON.parse(afterUninstall).mcpServers?.["rule-mcp"], "uninstall must remove the rule-mcp entry");
 
 console.log("  ✅ pi reinstall preserves toolPrefix and defaults to clean /rule-* naming");

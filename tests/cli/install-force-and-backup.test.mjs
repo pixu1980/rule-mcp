@@ -72,10 +72,7 @@ writeFileSync(configFile, EDITED);
 
 install({ force: true });
 check("T5 writing over an existing config leaves a backup", existsSync(`${configFile}.bak`));
-check(
-  "T6 the backup holds what was there before the write",
-  existsSync(`${configFile}.bak`) && readFileSync(`${configFile}.bak`, "utf8") === EDITED,
-);
+check("T6 the backup holds what was there before the write", existsSync(`${configFile}.bak`) && readFileSync(`${configFile}.bak`, "utf8") === EDITED);
 check("T7 the config itself moved on", readFileSync(configFile, "utf8") !== EDITED && before.length > 0);
 
 // ── The instruction block is refreshed, not left to rot ──
@@ -86,10 +83,7 @@ check("T7 the config itself moved on", readFileSync(configFile, "utf8") !== EDIT
 
 const claudeMd = join(home, ".claude", "CLAUDE.md");
 const marker = "<!-- rule-mcp -->";
-check(
-  "T9 the install wrote the instruction block",
-  existsSync(claudeMd) && readFileSync(claudeMd, "utf8").includes(marker),
-);
+check("T9 the install wrote the instruction block", existsSync(claudeMd) && readFileSync(claudeMd, "utf8").includes(marker));
 
 const withStale = `# My own notes\n\n${marker}\nSTALE INSTRUCTIONS FROM AN OLDER VERSION\n<!-- /rule-mcp -->\n`;
 writeFileSync(claudeMd, withStale);

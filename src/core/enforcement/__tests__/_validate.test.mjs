@@ -49,23 +49,9 @@ test("validateRouterResult accepts a well-formed answer, none and unknown includ
 
 test("validateRouterResult rejects invented skills, tools, alternatives and bad JSON", () => {
   assert.throws(() => validateRouterResult(text("{ not json"), tools, skills), /invalid JSON/);
-  assert.throws(
-    () => validateRouterResult(answer({ route: "rule-made-up", confidence: 0.5 }), tools, skills),
-    /invented unknown skill/,
-  );
-  assert.throws(
-    () =>
-      validateRouterResult(
-        answer({ route: "none", alternatives: [{ route: "rule-ghost" }], confidence: 0.5 }),
-        tools,
-        skills,
-      ),
-    /invented unknown skill/,
-  );
-  assert.throws(
-    () => validateRouterResult(answer({ route: "none", next_tools: ["rule_tool_ghost"], confidence: 0.5 }), tools, skills),
-    /invented unknown tool/,
-  );
+  assert.throws(() => validateRouterResult(answer({ route: "rule-made-up", confidence: 0.5 }), tools, skills), /invented unknown skill/);
+  assert.throws(() => validateRouterResult(answer({ route: "none", alternatives: [{ route: "rule-ghost" }], confidence: 0.5 }), tools, skills), /invented unknown skill/);
+  assert.throws(() => validateRouterResult(answer({ route: "none", next_tools: ["rule_tool_ghost"], confidence: 0.5 }), tools, skills), /invented unknown tool/);
 });
 
 test("validateRouterResult rejects a confidence outside [0, 1]", () => {

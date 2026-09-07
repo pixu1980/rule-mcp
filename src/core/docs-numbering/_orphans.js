@@ -47,9 +47,7 @@ export function orphanedPathReferences(options = {}) {
         }
 
         const dir = join(projectDir, family.dir);
-        const candidates = existsSync(dir)
-          ? readdirSync(dir).filter((name) => name.endsWith(`-${slug}.md`) && !NOT_NUMBERED.has(name))
-          : [];
+        const candidates = existsSync(dir) ? readdirSync(dir).filter((name) => name.endsWith(`-${slug}.md`) && !NOT_NUMBERED.has(name)) : [];
 
         if (candidates.length !== 1) {
           continue;

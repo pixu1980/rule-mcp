@@ -89,11 +89,7 @@ assert.ok(
   "suppressed errors must fail guardrails",
 );
 
-const dependencyReport = checkCode(
-  "rule-frontend-react",
-  'import invented from "invented-sdk";\nexport function Demo() { return invented; }',
-  { allowedDependencies: ["react"] },
-);
+const dependencyReport = checkCode("rule-frontend-react", 'import invented from "invented-sdk";\nexport function Demo() { return invented; }', { allowedDependencies: ["react"] });
 assert.ok(
   dependencyReport.failed.some((item) => item.id === "verified-dependencies-only"),
   "unknown dependency must fail when manifest context exists",
@@ -120,10 +116,7 @@ assert.ok(
 const secondRoute = await callTool("pix_tool", { prompt: "Vue button component" });
 const secondReminder = secondRoute.content.find((item) => item.text?.includes("PIX WORKFLOW REMINDER"));
 assert.ok(secondReminder, "repeat call must still carry a (terse) reminder");
-assert.ok(
-  !secondReminder.text.includes("Missing evidence means unknown"),
-  "repeat call reminder must be the terse one-liner, not the full contract",
-);
+assert.ok(!secondReminder.text.includes("Missing evidence means unknown"), "repeat call reminder must be the terse one-liner, not the full contract");
 
 process.env.RULE_MCP_NO_REMINDER = "1";
 const suppressed = await callTool("pix_tool", { prompt: "React accessible form" });
@@ -131,11 +124,7 @@ assert.ok(
   suppressed.content.every((item) => !item.text?.includes("PIX WORKFLOW REMINDER")),
   "RULE_MCP_NO_REMINDER=1 must suppress the model-visible reminder",
 );
-assert.equal(
-  suppressed._meta?.pixEnforcement?.postprocessed,
-  true,
-  "suppression must not disable enforcement metadata",
-);
+assert.equal(suppressed._meta?.pixEnforcement?.postprocessed, true, "suppression must not disable enforcement metadata");
 delete process.env.RULE_MCP_NO_REMINDER;
 
 console.log("  ✅ preprocessing and postprocessing fail closed; hallucination guardrails enforced");

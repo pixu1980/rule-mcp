@@ -57,11 +57,7 @@ try {
 }
 
 assert.match(harnessOut, /probe=no/, "a broken shim must fail the launch probe");
-assert.match(
-  harnessOut,
-  /WARN: Global rule-mcp shim exists but fails to launch/,
-  "install.sh must warn on a stale shim",
-);
+assert.match(harnessOut, /WARN: Global rule-mcp shim exists but fails to launch/, "install.sh must warn on a stale shim");
 assert.match(harnessOut, /run_cli_rc=0/, "run_cli must fall back to the local binary when the shim is broken");
 assert.match(harnessOut, /run_cli_out=1\.0\.0/, "the fallback must actually run the CLI");
 

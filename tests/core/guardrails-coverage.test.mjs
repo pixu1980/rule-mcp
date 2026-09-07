@@ -35,14 +35,7 @@ import { callTool } from "../../src/tools/router/index.js";
 const sharedIds = SHARED_GUARDRAILS.map((g) => g.id);
 
 // ── T1: SHARED_GUARDRAILS apply to EVERY domain ──
-for (const skill of [
-  "rule-frontend-react",
-  "rule-frontend-vue",
-  "rule-backend-express",
-  "rule-data-postgresql",
-  "rule-devops-docker",
-  "rule-styleguide",
-]) {
+for (const skill of ["rule-frontend-react", "rule-frontend-vue", "rule-backend-express", "rule-data-postgresql", "rule-devops-docker", "rule-styleguide"]) {
   const ids = new Set(getGuardrails(skill).map((g) => g.id));
   check(
     `T1 ${skill} includes all shared guardrails`,
@@ -85,15 +78,7 @@ for (const [component, framework, skill] of [
 
 // ── T4: JS/TS idiom guardrails (eslint-plugin-unicorn rules) fire on stale
 //    patterns and pass on the modern idioms the styleguide mandates. ──
-const JS_IDIOM_IDS = [
-  "js-prefer-set-has",
-  "js-no-array-for-each",
-  "js-node-protocol",
-  "js-throw-new-error",
-  "js-prefer-replace-all",
-  "js-array-flat-map",
-  "js-new-for-builtins",
-];
+const JS_IDIOM_IDS = ["js-prefer-set-has", "js-no-array-for-each", "js-node-protocol", "js-throw-new-error", "js-prefer-replace-all", "js-array-flat-map", "js-new-for-builtins"];
 const BAD_JS = `const allowed = ['read', 'write'];
 const granted = requested.filter((scope) => allowed.includes(scope));
 users.forEach((user) => sendEmail(user));

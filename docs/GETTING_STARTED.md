@@ -259,16 +259,7 @@ It writes an entry equivalent to:
       "command": "rule-mcp",
       "args": ["serve"],
       "directTools": true,
-      "allowedTools": [
-        "rule_tool_gateway",
-        "rule_tool_apply",
-        "pix_tool",
-        "rule_tool_search",
-        "rule_tool_check",
-        "rule_tool_detect",
-        "rule_tool_scaffold",
-        "rule_tool_component"
-      ]
+      "allowedTools": ["rule_tool_gateway", "rule_tool_apply", "pix_tool", "rule_tool_search", "rule_tool_check", "rule_tool_detect", "rule_tool_scaffold", "rule_tool_component"]
     }
   }
 }

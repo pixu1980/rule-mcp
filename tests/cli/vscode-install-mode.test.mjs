@@ -12,9 +12,7 @@ import { join } from "node:path";
 const fakeHome = mkdtempSync(join(tmpdir(), "rule-vscode-install-"));
 const fakeProject = join(fakeHome, "project");
 const globalFile =
-  process.platform === "darwin"
-    ? join(fakeHome, "Library", "Application Support", "Code", "User", "mcp.json")
-    : join(fakeHome, ".config", "Code", "User", "mcp.json");
+  process.platform === "darwin" ? join(fakeHome, "Library", "Application Support", "Code", "User", "mcp.json") : join(fakeHome, ".config", "Code", "User", "mcp.json");
 mkdirSync(join(fakeProject, ".vscode"), { recursive: true });
 mkdirSync(join(globalFile, ".."), { recursive: true });
 writeFileSync(

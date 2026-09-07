@@ -63,17 +63,10 @@ export function adrLines(adrs, { isBrief, isMinimal }) {
       lines.push(`- ${String(a.number).padStart(3, "0")}: [${a.status}] ${compressValue(a.title, 80)}`);
     }
   } else {
-    lines.push(
-      "### ADR Log",
-      "",
-      "| # | Status | Title | Tags | Decision |",
-      "|---|--------|-------|------|----------|",
-    );
+    lines.push("### ADR Log", "", "| # | Status | Title | Tags | Decision |", "|---|--------|-------|------|----------|");
 
     for (const a of adrs) {
-      lines.push(
-        `| ${String(a.number).padStart(3, "0")} | ${a.status} | ${compressValue(a.title, 60)} | ${a.tags.slice(0, 3).join(", ")} | ${compressValue(a.decision, 100)} |`,
-      );
+      lines.push(`| ${String(a.number).padStart(3, "0")} | ${a.status} | ${compressValue(a.title, 60)} | ${a.tags.slice(0, 3).join(", ")} | ${compressValue(a.decision, 100)} |`);
     }
   }
 

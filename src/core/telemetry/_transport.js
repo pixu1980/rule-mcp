@@ -29,18 +29,7 @@ import { extname } from "node:path";
 export const REMOTE_ENABLED = false;
 
 /** Fields safe to forward as they are: counts, durations, outcomes. */
-const SAFE_FIELDS = [
-  "ts",
-  "tool",
-  "durationMs",
-  "ok",
-  "cacheHit",
-  "routedSkill",
-  "guardrailFailures",
-  "promptLength",
-  "estimatedRouting",
-  "transport",
-];
+const SAFE_FIELDS = ["ts", "tool", "durationMs", "ok", "cacheHit", "routedSkill", "guardrailFailures", "promptLength", "estimatedRouting", "transport"];
 
 /** @param {string} value @returns {string} */
 const hash = (value) => createHash("sha256").update(String(value)).digest("hex").slice(0, 16);

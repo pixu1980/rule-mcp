@@ -20,16 +20,7 @@ const hookBefore = hookExisted ? readFileSync(hookPath, "utf8") : null;
 
 // A minimal PATH keeps the test hermetic: the fake bin (broken shim + pnpm
 // stub), the running node, /usr/bin for bash/git/sed/etc.
-const e2ePath = [
-  join(e2eHome, "bin"),
-  dirname(process.execPath),
-  "/usr/bin",
-  "/bin",
-  "/usr/sbin",
-  "/sbin",
-  "/opt/homebrew/bin",
-  "/usr/local/bin",
-].join(":");
+const e2ePath = [join(e2eHome, "bin"), dirname(process.execPath), "/usr/bin", "/bin", "/usr/sbin", "/sbin", "/opt/homebrew/bin", "/usr/local/bin"].join(":");
 
 try {
   const output = execFileSync("bash", ["scripts/install.sh", "--agent", "pi", "--mode", "stdio", "--no-rules"], {

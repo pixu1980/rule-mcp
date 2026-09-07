@@ -81,9 +81,7 @@ const installEmacs = ({ entrypoint, dryRun, global }) => {
   return [
     writeText({
       file: initFile,
-      content: readText(initFile).includes("rule")
-        ? readText(initFile)
-        : `${readText(initFile).trimEnd()}\n\n${emacsConfig}`,
+      content: readText(initFile).includes("rule") ? readText(initFile) : `${readText(initFile).trimEnd()}\n\n${emacsConfig}`,
       dryRun,
     }),
   ];
@@ -129,13 +127,4 @@ const installDevin = ({ entrypoint, dryRun, global }) => {
   return results;
 };
 
-export {
-  vscodeGlobalDir,
-  devinConfigPath,
-  installVscode,
-  installJetbrains,
-  installNeovim,
-  installEmacs,
-  createGenericInstaller,
-  installDevin,
-};
+export { vscodeGlobalDir, devinConfigPath, installVscode, installJetbrains, installNeovim, installEmacs, createGenericInstaller, installDevin };

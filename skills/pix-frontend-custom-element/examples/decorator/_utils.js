@@ -39,8 +39,6 @@ export const strings = {
    * @returns {string}
    */
   guid() {
-    return `rule-${
-      globalThis.crypto?.randomUUID ? globalThis.crypto.randomUUID() : Math.random().toString(36).slice(2, 10)
-    }`;
+    return `rule-${globalThis.crypto?.randomUUID ? globalThis.crypto.randomUUID() : Math.random().toString(36).slice(2, 10)}`;
   },
 };

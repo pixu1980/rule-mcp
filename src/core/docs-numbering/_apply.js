@@ -26,10 +26,7 @@ export function applyRenumber(plan, options = {}) {
     }
     // The header states the number too, and a header that disagrees with the
     // filename is worse than the collision it came from.
-    const body = readFileSync(from, "utf8").replace(
-      new RegExp(String.raw`^(#\s*)${rename.fromNumber}(:)`, "m"),
-      `$1${rename.toNumber}$2`,
-    );
+    const body = readFileSync(from, "utf8").replace(new RegExp(String.raw`^(#\s*)${rename.fromNumber}(:)`, "m"), `$1${rename.toNumber}$2`);
     writeFileSync(from, body);
     renameSync(from, to);
     renamed += 1;
@@ -50,9 +47,7 @@ export function applyRenumber(plan, options = {}) {
       const newFile = `${rename.toNumber}-${rename.slug}.md`;
       // A markdown link carries the number twice: as the label and inside the
       // target. Both move, and only for the document that actually moved.
-      after = after
-        .replaceAll(`[${rename.fromNumber}](${oldFile})`, `[${rename.toNumber}](${newFile})`)
-        .replaceAll(oldFile, newFile);
+      after = after.replaceAll(`[${rename.fromNumber}](${oldFile})`, `[${rename.toNumber}](${newFile})`).replaceAll(oldFile, newFile);
     }
 
     if (after !== before) {

@@ -298,10 +298,7 @@ const [error, setError] = useState(null);
 const [user, setUser] = useState(null);
 
 // ✅ Discriminated union - invalid states impossible
-type UserState =
-  | { status: "loading"; user: null; error: null }
-  | { status: "success"; user: User; error: null }
-  | { status: "error"; user: null; error: string };
+type UserState = { status: "loading"; user: null; error: null } | { status: "success"; user: User; error: null } | { status: "error"; user: null; error: string };
 
 function userReducer(state: UserState, action: UserAction): UserState {
   switch (action.type) {

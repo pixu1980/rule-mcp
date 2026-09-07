@@ -9,17 +9,13 @@ import { autoFixFileTree } from "../../core/file-tree/index.js";
  * @returns {object} an MCP tool result
  */
 export function fixMode(arguments_) {
-        const isDryRun = arguments_.dryRun !== false;
+  const isDryRun = arguments_.dryRun !== false;
   const result = autoFixFileTree(arguments_.path || ".", {
     srcDir: arguments_.srcDir || "src",
     dryRun: isDryRun,
   });
 
-  const lines = [
-    `# File Tree Auto-Fix: ${isDryRun ? "DRY RUN" : "COMPLETE"}`,
-    "",
-    ...(isDryRun ? ["", "> This is a preview. Run with `dryRun=false` to apply fixes.", ""] : [""]),
-  ];
+  const lines = [`# File Tree Auto-Fix: ${isDryRun ? "DRY RUN" : "COMPLETE"}`, "", ...(isDryRun ? ["", "> This is a preview. Run with `dryRun=false` to apply fixes.", ""] : [""])];
 
   if (result.fixed.length > 0) {
     lines.push(`## Fixed (${result.fixed.length})`, "");

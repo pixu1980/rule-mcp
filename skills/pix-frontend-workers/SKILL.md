@@ -213,9 +213,7 @@ call site:
 ```js
 import { WorkerPool } from "./workers/index.js";
 
-const pool = new WorkerPool(
-  () => new Worker(new URL("./_pool-worker.js", import.meta.url), { type: "module", name: "rule-pool" }),
-);
+const pool = new WorkerPool(() => new Worker(new URL("./_pool-worker.js", import.meta.url), { type: "module", name: "rule-pool" }));
 
 const rows = await pool.run("parseCsv", { text }, { signal });
 

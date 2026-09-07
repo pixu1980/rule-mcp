@@ -72,8 +72,7 @@ export const COMMAND_TARGETS = [
     format: "workflow",
     scope: "global",
     namespacedPrompts: false,
-    detect: (ctx) =>
-      ctx.exists(join(ctx.home, ".codeium", "windsurf")) || ctx.exists(join(ctx.home, ".config", "windsurf")),
+    detect: (ctx) => ctx.exists(join(ctx.home, ".codeium", "windsurf")) || ctx.exists(join(ctx.home, ".config", "windsurf")),
     dirs: (ctx) =>
       firstExisting(ctx, [
         {
@@ -139,8 +138,7 @@ export const COMMAND_TARGETS = [
     scope: "global",
     namespacedPrompts: false,
     detect: (ctx) => ctx.exists(join(ctx.home, ".config", "opencode")),
-    dirs: (ctx) =>
-      ifParentExists(ctx, join(ctx.home, ".config", "opencode"), join(ctx.home, ".config", "opencode", "command")),
+    dirs: (ctx) => ifParentExists(ctx, join(ctx.home, ".config", "opencode"), join(ctx.home, ".config", "opencode", "command")),
   },
   {
     agent: "opencode",

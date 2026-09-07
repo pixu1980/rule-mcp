@@ -86,10 +86,7 @@ const rOverride = await callTool("pix_tool", {
 });
 const parsedOverride = JSON.parse(rOverride.content[0].text);
 const overrideRoutes = getAllRoutes(parsedOverride);
-check(
-  "T6.4 explicit framework overrides path: rule-frontend-react in results",
-  overrideRoutes.includes("rule-frontend-react"),
-);
+check("T6.4 explicit framework overrides path: rule-frontend-react in results", overrideRoutes.includes("rule-frontend-react"));
 
 // Cleanup
 rmSync(tmpDir, { recursive: true, force: true });

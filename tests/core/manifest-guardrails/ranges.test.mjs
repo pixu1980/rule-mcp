@@ -8,9 +8,7 @@ const ids = new Set(getGuardrails("rule-styleguide-javascript").map((g) => g.id)
 check("T0 both guardrails are shared", ids.has(EXACT) && ids.has(COREPACK));
 check(
   "T0.1 they are shared for every skill",
-  ["rule-frontend-react", "rule-backend-node", "rule-data-sql"].every((skill) =>
-    getGuardrails(skill).some((g) => g.id === EXACT),
-  ),
+  ["rule-frontend-react", "rule-backend-node", "rule-data-sql"].every((skill) => getGuardrails(skill).some((g) => g.id === EXACT)),
 );
 
 // ── T1: ranges are rejected, wherever they hide ──
@@ -27,10 +25,7 @@ check(
   (() => {
     const failure = run({ dependencies: { prettier: "^3.9.4", zod: "4.1.13" } }).failed.find((f) => f.id === EXACT);
 
-    return (
-      failure?.detail?.some((line) => line.includes("prettier")) &&
-      failure.detail.every((line) => !line.includes("zod"))
-    );
+    return failure?.detail?.some((line) => line.includes("prettier")) && failure.detail.every((line) => !line.includes("zod"));
   })(),
 );
 
@@ -40,14 +35,8 @@ check("T2.1 a prerelease passes", !fails({ dependencies: { vite: "8.0.0-beta.3" 
 check("T2.2 a workspace protocol passes", !fails({ dependencies: { ui: "workspace:*" } }, EXACT));
 check("T2.3 a catalog reference passes", !fails({ dependencies: { react: "catalog:" } }, EXACT));
 check("T2.4 file and link protocols pass", !fails({ dependencies: { a: "file:../a", b: "link:../b" } }, EXACT));
-check(
-  "T2.5 a git dependency passes",
-  !fails({ dependencies: { tool: "git+https://example.com/t.git#v1.2.3" } }, EXACT),
-);
+check("T2.5 a git dependency passes", !fails({ dependencies: { tool: "git+https://example.com/t.git#v1.2.3" } }, EXACT));
 check("T2.6 an aliased exact version passes", !fails({ dependencies: { react: "npm:react@19.2.0" } }, EXACT));
-check(
-  "T2.7 peerDependencies may declare a range: it states compatibility, not an install",
-  !fails({ peerDependencies: { react: "^18.0.0 || ^19.0.0" } }, EXACT),
-);
+check("T2.7 peerDependencies may declare a range: it states compatibility, not an install", !fails({ peerDependencies: { react: "^18.0.0 || ^19.0.0" } }, EXACT));
 
 finish();

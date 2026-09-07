@@ -58,11 +58,7 @@ test("every prompt supports /<name> help as an instant assistant message", () =>
       const full = getPrompt(p.name, { [argument.name]: token });
       assert.ok(full, `${p.name}: getPrompt with ${token} must return a prompt`);
       assert.equal(full.messages.length, 1, `${p.name}: help must be a single message`);
-      assert.equal(
-        full.messages[0].role,
-        "assistant",
-        `${p.name}: ${token} help must be an assistant message (shown instantly, no model call)`,
-      );
+      assert.equal(full.messages[0].role, "assistant", `${p.name}: ${token} help must be an assistant message (shown instantly, no model call)`);
       const text = full.messages[0].content.text;
       assert.match(text, /^Usage: \/rule-/, `${p.name}: ${token} must start with the usage line`);
       assert.ok(!/Do NOT call/i.test(text), `${p.name}: ${token} help must be pure content, no meta-instruction`);

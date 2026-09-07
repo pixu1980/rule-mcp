@@ -5,11 +5,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import test from "node:test";
 
-import {
-  renderRenumberPlan,
-  planRenumber,
-  applyRenumber,
-} from "../../../src/core/docs-numbering/index.js";
+import { renderRenumberPlan, planRenumber, applyRenumber } from "../../../src/core/docs-numbering/index.js";
 import { git } from "./_doctor.fixture.mjs";
 
 test("an ADR whose author is the tool, or missing, is reported", () => {
@@ -19,18 +15,9 @@ test("an ADR whose author is the tool, or missing, is reported", () => {
     git(["config", "user.email", "ada@example.com"], root);
     git(["config", "user.name", "Ada Lovelace"], root);
     mkdirSync(join(root, "docs", "adr"), { recursive: true });
-    writeFileSync(
-      join(root, "docs", "adr", "001-tool-author.md"),
-      "# 001: Tool author\n\n- **Status**: accepted\n- **Tags**: x\n- **Author**: rule-mcp\n",
-    );
-    writeFileSync(
-      join(root, "docs", "adr", "002-no-author.md"),
-      "# 002: No author\n\n- **Status**: accepted\n- **Tags**: x\n",
-    );
-    writeFileSync(
-      join(root, "docs", "adr", "003-a-person.md"),
-      "# 003: A person\n\n- **Status**: accepted\n- **Tags**: x\n- **Author**: Grace Hopper <grace@example.com>\n",
-    );
+    writeFileSync(join(root, "docs", "adr", "001-tool-author.md"), "# 001: Tool author\n\n- **Status**: accepted\n- **Tags**: x\n- **Author**: rule-mcp\n");
+    writeFileSync(join(root, "docs", "adr", "002-no-author.md"), "# 002: No author\n\n- **Status**: accepted\n- **Tags**: x\n");
+    writeFileSync(join(root, "docs", "adr", "003-a-person.md"), "# 003: A person\n\n- **Status**: accepted\n- **Tags**: x\n- **Author**: Grace Hopper <grace@example.com>\n");
     git(["add", "-A"], root);
     git(["commit", "--quiet", "-m", "docs(adr): three decisions"], root);
 
@@ -55,25 +42,15 @@ test("applying names the person who decided", () => {
     git(["config", "user.email", "ada@example.com"], root);
     git(["config", "user.name", "Ada Lovelace"], root);
     mkdirSync(join(root, "docs", "adr"), { recursive: true });
-    writeFileSync(
-      join(root, "docs", "adr", "001-tool-author.md"),
-      "# 001: Tool author\n\n- **Status**: accepted\n- **Tags**: x\n- **Author**: rule-mcp\n",
-    );
-    writeFileSync(
-      join(root, "docs", "adr", "002-no-author.md"),
-      "# 002: No author\n\n- **Status**: accepted\n- **Tags**: x\n",
-    );
+    writeFileSync(join(root, "docs", "adr", "001-tool-author.md"), "# 001: Tool author\n\n- **Status**: accepted\n- **Tags**: x\n- **Author**: rule-mcp\n");
+    writeFileSync(join(root, "docs", "adr", "002-no-author.md"), "# 002: No author\n\n- **Status**: accepted\n- **Tags**: x\n");
     git(["add", "-A"], root);
     git(["commit", "--quiet", "-m", "docs(adr): two decisions"], root);
 
     const applied = applyRenumber(planRenumber({ projectDir: root }), { projectDir: root });
 
     assert.equal(applied.authorsNamed, 2, "both files were repaired");
-    assert.match(
-      readFileSync(join(root, "docs", "adr", "001-tool-author.md"), "utf8"),
-      /^- \*\*Author\*\*: Ada Lovelace <ada@example\.com>$/m,
-      "the tool name was replaced",
-    );
+    assert.match(readFileSync(join(root, "docs", "adr", "001-tool-author.md"), "utf8"), /^- \*\*Author\*\*: Ada Lovelace <ada@example\.com>$/m, "the tool name was replaced");
     assert.match(
       readFileSync(join(root, "docs", "adr", "002-no-author.md"), "utf8"),
       /^- \*\*Tags\*\*: x\n- \*\*Author\*\*: Ada Lovelace <ada@example\.com>$/m,

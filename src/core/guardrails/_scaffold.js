@@ -19,8 +19,7 @@ export const SCAFFOLD_GUARDRAILS = [
     return {
       pass: hasConfig,
       failCount: hasConfig ? 0 : 1,
-      suggestion:
-        "Create .prettierrc at project root with printWidth=120, tabWidth=2, semi=true, trailingComma=all, singleQuote=false.",
+      suggestion: "Create .prettierrc at project root with printWidth=120, tabWidth=2, semi=true, trailingComma=all, singleQuote=false.",
     };
   }),
   SCAFFOLD_CHECK(".nvmrc", "NVM config present", (code) => {
@@ -35,8 +34,7 @@ export const SCAFFOLD_GUARDRAILS = [
     return {
       pass: exact,
       failCount: exact ? 0 : 1,
-      suggestion:
-        "Create .npmrc at project root with save-exact=true, so `pnpm add` writes an exact version instead of a caret range (guardrail pkg-exact-versions).",
+      suggestion: "Create .npmrc at project root with save-exact=true, so `pnpm add` writes an exact version instead of a caret range (guardrail pkg-exact-versions).",
     };
   }),
 

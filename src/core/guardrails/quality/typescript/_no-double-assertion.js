@@ -4,8 +4,7 @@ import { isTypeScript, stripLiterals } from "../_guards-meta.js";
 export const tsNoDoubleAssertion = {
   id: "ts-no-double-assertion",
   label: "No as-unknown-as escape hatch",
-  description:
-    "A double assertion silences the compiler twice over: it defeats both the original type and the check that would have caught the mismatch.",
+  description: "A double assertion silences the compiler twice over: it defeats both the original type and the check that would have caught the mismatch.",
   check: (code, context) => {
     if (!isTypeScript(code, context)) {
       return { pass: true, note: "Not a TypeScript file, skipping" };

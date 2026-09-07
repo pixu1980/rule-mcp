@@ -25,12 +25,7 @@ registerFilter("capitalize", (v) => {
 registerFilter("slugify", (v) => utilSlug(v));
 registerFilter("slug", (v) => utilSlug(v));
 registerFilter("trim", (v) => String(v).trim());
-registerFilter("escapeHtml", (v) =>
-  String(v).replace(
-    /[&<>"']/g,
-    (s) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#x27;" })[s] || s,
-  ),
-);
+registerFilter("escapeHtml", (v) => String(v).replace(/[&<>"']/g, (s) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#x27;" })[s] || s));
 registerFilter("striptags", (v) => String(v).replace(/<[^>]*>/g, ""));
 registerFilter("raw", (v) => v);
 registerFilter("json", (v) => {
@@ -76,8 +71,7 @@ registerFilter("date", (value, format = "en-US") => {
   if (format === "YYYY-MM-DD") return d.toISOString().split("T")[0];
   if (format === "long") return d.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
   if (format === "short") return d.toLocaleDateString("en-US", { year: "2-digit", month: "numeric", day: "numeric" });
-  if (format === "full")
-    return d.toLocaleDateString("en-US", { weekday: "long", year: "numeric", month: "long", day: "numeric" });
+  if (format === "full") return d.toLocaleDateString("en-US", { weekday: "long", year: "numeric", month: "long", day: "numeric" });
   if (format === "iso") return d.toISOString();
   if (format === "DD MMM YYYY") {
     const ms = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];

@@ -36,8 +36,7 @@ import { getRuntimePaths } from "../../cli/paths/index.js";
  */
 function layerDirs({ home }) {
   const { configDir } = getRuntimePaths();
-  const base =
-    process.env.RULE_MCP_ROLES_OVERLAY_DIR || (home ? join(home, "config", "roles") : join(configDir, "roles"));
+  const base = process.env.RULE_MCP_ROLES_OVERLAY_DIR || (home ? join(home, "config", "roles") : join(configDir, "roles"));
 
   return [{ layer: "user", dir: base }];
 }
@@ -71,16 +70,12 @@ export function loadRoleOverlays(options = {}) {
       const file = join(dir, name);
       let parsed;
       try {
-        parsed = name.endsWith(".md")
-          ? parsePersonaFile(readFileSync(file, "utf8"))
-          : JSON.parse(readFileSync(file, "utf8"));
+        parsed = name.endsWith(".md") ? parsePersonaFile(readFileSync(file, "utf8")) : JSON.parse(readFileSync(file, "utf8"));
       } catch (error) {
         problems.push({
           file,
           layer,
-          reason: name.endsWith(".md")
-            ? `unreadable persona file: ${error.message}`
-            : `not valid JSON: ${error.message}`,
+          reason: name.endsWith(".md") ? `unreadable persona file: ${error.message}` : `not valid JSON: ${error.message}`,
         });
         continue;
       }

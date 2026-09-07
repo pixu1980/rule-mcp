@@ -20,12 +20,7 @@ registerFilter("slugify", (v) =>
     .replace(/^-+|-+$/g, ""),
 );
 registerFilter("trim", (v) => String(v).trim());
-registerFilter("escapeHtml", (v) =>
-  String(v).replace(
-    /[&<>"']/g,
-    (s) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#x27;" })[s] || s,
-  ),
-);
+registerFilter("escapeHtml", (v) => String(v).replace(/[&<>"']/g, (s) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#x27;" })[s] || s));
 registerFilter("striptags", (v) => String(v).replace(/<[^>]*>/g, ""));
 registerFilter("raw", (v) => v);
 registerFilter("json", (v) => {
@@ -43,9 +38,7 @@ registerFilter("truncate", (v, l = 100) => {
 registerFilter("length", (v) => (Array.isArray(v) || typeof v === "string" ? v.length : 0));
 registerFilter("first", (v) => (Array.isArray(v) && v.length ? v[0] : v));
 registerFilter("last", (v) => (Array.isArray(v) && v.length ? v[v.length - 1] : v));
-registerFilter("join", (v, sep = ", ") =>
-  Array.isArray(v) ? v.map((i) => (typeof i === "object" && i?.label ? i.label : String(i))).join(sep) : v,
-);
+registerFilter("join", (v, sep = ", ") => (Array.isArray(v) ? v.map((i) => (typeof i === "object" && i?.label ? i.label : String(i))).join(sep) : v));
 registerFilter("tagLabel", (tag) => {
   if (!tag) return "";
   const raw = typeof tag === "object" ? tag.label || tag.name || String(tag) : String(tag);
@@ -53,12 +46,7 @@ registerFilter("tagLabel", (tag) => {
 });
 registerFilter("tagHref", (tag) => {
   if (!tag) return "/tags/";
-  if (typeof tag === "object")
-    return tag.url
-      ? tag.url.startsWith("/")
-        ? tag.url
-        : "/" + tag.url
-      : "/tags/" + String(tag.key || tag.name || tag) + ".html";
+  if (typeof tag === "object") return tag.url ? (tag.url.startsWith("/") ? tag.url : "/" + tag.url) : "/tags/" + String(tag.key || tag.name || tag) + ".html";
   return "/tags/" + String(tag) + ".html";
 });
 registerFilter("date", (value, format = "en-US") => {

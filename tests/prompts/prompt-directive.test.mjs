@@ -53,10 +53,7 @@ check("T2.4 plain ASCII only", /^[ -~\n]*$/.test(session));
 const line = promptDirective();
 check("T3 a single line", !line.includes("\n"));
 check("T3.1 short enough to ride on every prompt", line.length <= 120);
-check(
-  "T3.2 it still names all three rules",
-  /rule/i.test(line) && /caveman/i.test(line) && /subagent/i.test(line) && /token/i.test(line),
-);
+check("T3.2 it still names all three rules", /rule/i.test(line) && /caveman/i.test(line) && /subagent/i.test(line) && /token/i.test(line));
 
 // ── T4: one opt-out, honored by both forms ──
 const previous = process.env.RULE_MCP_NO_PROMPT_DIRECTIVE;
@@ -79,8 +76,7 @@ for (const event of EVENTS) {
 check("T5.2 PreToolUse still matches Bash only", entries.PreToolUse[0].matcher === "Bash");
 check(
   "T5.3 each event calls its own guard subcommand",
-  entries.SessionStart[0].hooks[0].command.includes("guard session-start") &&
-    entries.UserPromptSubmit[0].hooks[0].command.includes("guard prompt-submit"),
+  entries.SessionStart[0].hooks[0].command.includes("guard session-start") && entries.UserPromptSubmit[0].hooks[0].command.includes("guard prompt-submit"),
 );
 
 // ── T6: the merge stays additive, idempotent and reversible across all events ──
@@ -92,15 +88,10 @@ const foreign = {
   },
 };
 const installed = withHooks(foreign, LAUNCHER);
-check(
-  "T6 ours are installed on every event",
-  hasHooks(installed) &&
-    EVENTS.every((event) => installed.hooks[event]?.some((e) => e.hooks[0].command.includes(HOOK_MARKER))),
-);
+check("T6 ours are installed on every event", hasHooks(installed) && EVENTS.every((event) => installed.hooks[event]?.some((e) => e.hooks[0].command.includes(HOOK_MARKER))));
 check(
   "T6.1 foreign hooks survive on a shared event",
-  installed.hooks.SessionStart.some((e) => e.hooks[0].command === "load-context") &&
-    installed.hooks.PreToolUse.some((e) => e.matcher === "Write"),
+  installed.hooks.SessionStart.some((e) => e.hooks[0].command === "load-context") && installed.hooks.PreToolUse.some((e) => e.matcher === "Write"),
 );
 check("T6.2 unrelated settings survive", installed.model === "opus");
 check(
@@ -108,10 +99,7 @@ check(
   EVENTS.every((event) => withHooks(installed, LAUNCHER).hooks[event].length === installed.hooks[event].length),
 );
 const removed = withoutHooks(installed);
-check(
-  "T6.4 uninstall removes only ours",
-  !hasHooks(removed) && removed.hooks.PreToolUse.length === 1 && removed.hooks.SessionStart.length === 1,
-);
+check("T6.4 uninstall removes only ours", !hasHooks(removed) && removed.hooks.PreToolUse.length === 1 && removed.hooks.SessionStart.length === 1);
 check("T6.5 empty containers are dropped", withoutHooks(withHooks({}, LAUNCHER)).hooks === undefined);
 
 // ── T7: the CLI contract the harness actually invokes (cli/guard.js) ──
@@ -133,14 +121,8 @@ check("T7.1 it injects the full directive", start.hookSpecificOutput.additionalC
 const submit = run("prompt-submit", JSON.stringify({ prompt: "add a button" }));
 check("T7.2 prompt-submit answers on its own event", submit.hookSpecificOutput.hookEventName === "UserPromptSubmit");
 check("T7.3 it injects the one-liner", submit.hookSpecificOutput.additionalContext === promptDirective());
-check(
-  "T7.4 a malformed payload never blocks the prompt",
-  run("prompt-submit", "not json").hookSpecificOutput.hookEventName === "UserPromptSubmit",
-);
-check(
-  "T7.5 the opt-out silences the hook",
-  !run("prompt-submit", "{}", { RULE_MCP_NO_PROMPT_DIRECTIVE: "1" }).hookSpecificOutput.additionalContext,
-);
+check("T7.4 a malformed payload never blocks the prompt", run("prompt-submit", "not json").hookSpecificOutput.hookEventName === "UserPromptSubmit");
+check("T7.5 the opt-out silences the hook", !run("prompt-submit", "{}", { RULE_MCP_NO_PROMPT_DIRECTIVE: "1" }).hookSpecificOutput.additionalContext);
 
 console.log(`\n${pass} passed, ${fail} failed`);
 if (fail > 0) {

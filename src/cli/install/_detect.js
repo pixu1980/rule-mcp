@@ -25,29 +25,13 @@ export function detectInstalledAgents() {
   ];
 
   // Generic ~/.config/<name>/mcp.json agents
-  const genericAgents = [
-    "cline",
-    "roo",
-    "zed",
-    "opencode",
-    "antigravity",
-    "kilo",
-    "kimi",
-    "vibe",
-    "grok",
-    "droid",
-    "kiro",
-    "qwen",
-    "neovim",
-    "emacs",
-  ];
+  const genericAgents = ["cline", "roo", "zed", "opencode", "antigravity", "kilo", "kimi", "vibe", "grok", "droid", "kiro", "qwen", "neovim", "emacs"];
 
   // Devin reads mcp_config.json, not the generic mcp.json.
   checks.push({ name: "devin", path: join(HOME, ".config", "devin", "mcp_config.json"), key: serverName });
 
   for (const name of genericAgents) {
-    const agentPath =
-      name === "droid" ? join(HOME, ".config", "factory", "mcp.json") : join(HOME, ".config", name, "mcp.json");
+    const agentPath = name === "droid" ? join(HOME, ".config", "factory", "mcp.json") : join(HOME, ".config", name, "mcp.json");
     checks.push({ name, path: agentPath, key: serverName });
   }
 

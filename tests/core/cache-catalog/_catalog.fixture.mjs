@@ -21,8 +21,7 @@ process.env.RULE_MCP_STATE_DIR = mkdtempSync(join(tmpdir(), "rule-catalog-state-
 process.env.RULE_MCP_NO_AUTOUPDATE = "1";
 delete process.env.RULE_MCP_NO_CACHE;
 
-export const { cacheStore, cacheLookup, cacheClear, cacheEntries, promotableEntries, skillDigest } =
-  await import("../../../src/core/cache/tool-cache/index.js");
+export const { cacheStore, cacheLookup, cacheClear, cacheEntries, promotableEntries, skillDigest } = await import("../../../src/core/cache/tool-cache/index.js");
 export const { CATALOG_FILE, MIN_HITS, catalogPath, buildCatalog, writeCatalog, readCatalog, primeFromCatalog, verifyCache } =
   await import("../../../src/core/cache/catalog/index.js");
 

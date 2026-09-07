@@ -5,17 +5,7 @@ export const MAX_ARGUMENT_BYTES = 256 * 1024;
 export const MAX_OUTPUT_BYTES = 1024 * 1024;
 const MAX_DEPTH = 12;
 const MAX_KEYS = 1000;
-const NORMALIZED_FIELDS = new Set([
-  "prompt",
-  "query",
-  "skill",
-  "framework",
-  "mode",
-  "path",
-  "title",
-  "file",
-  "fileName",
-]);
+const NORMALIZED_FIELDS = new Set(["prompt", "query", "skill", "framework", "mode", "path", "title", "file", "fileName"]);
 const FORBIDDEN_KEYS = new Set(["__proto__", "prototype", "constructor"]);
 
 /** Reject prototype-pollution keys and enforce depth/key limits, recursively. */

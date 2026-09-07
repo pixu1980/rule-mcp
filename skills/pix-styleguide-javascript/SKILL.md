@@ -230,8 +230,7 @@ const ok = results.filter((r) => r.status === "fulfilled").map((r) => r.value);
 const fastest = await Promise.any([fromCache(), fromOrigin()]);
 
 // Timeout: race the work against a rejection
-const withTimeout = (promise, ms) =>
-  Promise.race([promise, new Promise((_, reject) => setTimeout(() => reject(new Error("timeout")), ms))]);
+const withTimeout = (promise, ms) => Promise.race([promise, new Promise((_, reject) => setTimeout(() => reject(new Error("timeout")), ms))]);
 
 // Retry with backoff. Retry only what is safe to repeat: idempotent reads,
 // 429 and 5xx. Never a POST that charges a card without an idempotency key.
@@ -752,9 +751,7 @@ test.describe("A11y: basic page structure", () => {
 
   test("headings don't skip levels", async ({ page }) => {
     await page.goto("/");
-    const levels = await page.evaluate(() =>
-      Array.from(document.querySelectorAll("h1,h2,h3,h4,h5,h6")).map((h) => parseInt(h.tagName[1], 10)),
-    );
+    const levels = await page.evaluate(() => Array.from(document.querySelectorAll("h1,h2,h3,h4,h5,h6")).map((h) => parseInt(h.tagName[1], 10)));
     for (let i = 1; i < levels.length; i++) {
       expect(levels[i] - levels[i - 1]).toBeLessThanOrEqual(1);
     }

@@ -2,8 +2,7 @@
 export const vanillaFnNoRegister = {
   id: "vanilla-fn-no-register",
   label: "Functional component does NOT call customElements.define",
-  description:
-    "Pattern B functions must NOT register themselves as custom elements. That is the parent CE's responsibility.",
+  description: "Pattern B functions must NOT register themselves as custom elements. That is the parent CE's responsibility.",
   check: (code) => {
     const isPlainFunction = /^export\s+function\s/.test(code.trim()) || /^function\s/.test(code.trim());
 
@@ -18,8 +17,7 @@ export const vanillaFnNoRegister = {
         pass: false,
         failCount: 1,
         detail: ["Functional component calls customElements.define()"],
-        suggestion:
-          "Remove customElements.define() from functional components. Register in the parent CE's static {} block.",
+        suggestion: "Remove customElements.define() from functional components. Register in the parent CE's static {} block.",
       };
     }
 

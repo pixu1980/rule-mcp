@@ -71,10 +71,7 @@ export function writeEvents(events) {
   }
 
   try {
-    writeFileSync(
-      eventsFile(),
-      events.map((event) => JSON.stringify(event)).join("\n") + (events.length > 0 ? "\n" : ""),
-    );
+    writeFileSync(eventsFile(), events.map((event) => JSON.stringify(event)).join("\n") + (events.length > 0 ? "\n" : ""));
 
     return true;
   } catch {

@@ -27,15 +27,7 @@ console.log("=== Harness guard hooks ===\n");
 
 import { execFileSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
-import {
-  HOOK_MARKER,
-  hasHooks,
-  hookEntries,
-  isCommitCommand,
-  isMigrationCommand,
-  withHooks,
-  withoutHooks,
-} from "../../src/core/agents/_hooks.js";
+import { HOOK_MARKER, hasHooks, hookEntries, isCommitCommand, isMigrationCommand, withHooks, withoutHooks } from "../../src/core/agents/_hooks.js";
 import { decide, skillForPath } from "../../src/cli/guard/index.js";
 
 const LAUNCHER = { command: "/usr/local/bin/rule-mcp", args: [] };
@@ -70,17 +62,11 @@ const migration = decide("npx prisma migrate deploy");
 check("T3 a migration asks first", migration.hookSpecificOutput.permissionDecision === "ask");
 check(
   "T3.1 the reason carries the column checklist",
-  /who writes it/.test(migration.hookSpecificOutput.permissionDecisionReason) &&
-    /who reads it/.test(migration.hookSpecificOutput.permissionDecisionReason),
+  /who writes it/.test(migration.hookSpecificOutput.permissionDecisionReason) && /who reads it/.test(migration.hookSpecificOutput.permissionDecisionReason),
 );
 check("T3.2 an unrelated command passes silently", decide("ls -la").hookSpecificOutput.permissionDecision === "allow");
-check(
-  "T3.3 a clean commit passes silently",
-  decide("git commit -m x", "bash", () => []).hookSpecificOutput.permissionDecision === "allow",
-);
-const dirty = decide("git commit -m x", "bash", () => [
-  { file: "prisma/x.sql", failures: ["no-speculative-audit-table"] },
-]);
+check("T3.3 a clean commit passes silently", decide("git commit -m x", "bash", () => []).hookSpecificOutput.permissionDecision === "allow");
+const dirty = decide("git commit -m x", "bash", () => [{ file: "prisma/x.sql", failures: ["no-speculative-audit-table"] }]);
 check(
   "T3.4 a failing commit asks, and names the file and the rule",
   dirty.hookSpecificOutput.permissionDecision === "ask" &&
@@ -90,11 +76,7 @@ check(
 check("T3.5 an empty command is never blocked", decide("").hookSpecificOutput.permissionDecision === "allow");
 
 // ── T4: file -> skill mapping for the staged check ──
-check(
-  "T4 sql and prisma map to the data skill",
-  skillForPath("prisma/migrations/x/migration.sql") === "rule-data-sql" &&
-    skillForPath("prisma/schema.prisma") === "rule-data-sql",
-);
+check("T4 sql and prisma map to the data skill", skillForPath("prisma/migrations/x/migration.sql") === "rule-data-sql" && skillForPath("prisma/schema.prisma") === "rule-data-sql");
 check("T4.1 components map to their framework", skillForPath("src/Button.tsx") === "rule-frontend-react");
 
 // ── T5: the settings merge is additive, idempotent and reversible ──
@@ -113,10 +95,7 @@ check("T5.3 one entry, one spawn per Bash call", hookEntries(LAUNCHER).PreToolUs
 check("T5.4 the entry is marked as ours", installed.hooks.PreToolUse.at(-1).hooks[0].command.includes(HOOK_MARKER));
 // The directive hooks are covered by test/prompt-directive.test.mjs; here we only
 // assert the guard entry keeps its own event to itself.
-check(
-  "T5.5 reinstall does not duplicate",
-  withHooks(installed, LAUNCHER).hooks.PreToolUse.length === installed.hooks.PreToolUse.length,
-);
+check("T5.5 reinstall does not duplicate", withHooks(installed, LAUNCHER).hooks.PreToolUse.length === installed.hooks.PreToolUse.length);
 const removed = withoutHooks(installed);
 check("T5.6 uninstall removes only ours", !hasHooks(removed) && removed.hooks.PreToolUse.length === 1);
 check("T5.7 an empty hooks container is dropped", withoutHooks(withHooks({}, LAUNCHER)).hooks === undefined);
@@ -129,10 +108,7 @@ const run = (command) =>
       encoding: "utf8",
     }),
   );
-check(
-  "T6 the CLI asks on a migration",
-  run("npx prisma migrate deploy").hookSpecificOutput.permissionDecision === "ask",
-);
+check("T6 the CLI asks on a migration", run("npx prisma migrate deploy").hookSpecificOutput.permissionDecision === "ask");
 check("T6.1 the CLI allows an unrelated command", run("ls").hookSpecificOutput.permissionDecision === "allow");
 const malformed = execFileSync(process.execPath, [BIN, "guard", "bash"], { input: "not json", encoding: "utf8" });
 check("T6.2 a malformed payload never blocks", JSON.parse(malformed).hookSpecificOutput.permissionDecision === "allow");

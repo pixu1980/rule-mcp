@@ -11,10 +11,7 @@ export const inputValidation = {
       return { pass: true, note: "No request input detected, skipping" };
     }
 
-    const hasValidation =
-      /z\.(?:object|string|number|boolean)|\.parse\(|\.safeParse\(|Joi\.(?:object|string)|class-validator|@Validate|express-validator/i.test(
-        code,
-      );
+    const hasValidation = /z\.(?:object|string|number|boolean)|\.parse\(|\.safeParse\(|Joi\.(?:object|string)|class-validator|@Validate|express-validator/i.test(code);
 
     return {
       pass: hasValidation,

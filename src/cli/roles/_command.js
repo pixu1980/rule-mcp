@@ -62,9 +62,7 @@ export function rolesCommand(subcommand = "list", options = {}) {
       }
 
       if (existsSync(join(userRolesDir(), `${options.id}.md`))) {
-        print(
-          `The user layer already has "${options.id}". Edit or delete ${join(userRolesDir(), `${options.id}.md`)}.`,
-        );
+        print(`The user layer already has "${options.id}". Edit or delete ${join(userRolesDir(), `${options.id}.md`)}.`);
         process.exitCode = 1;
 
         return;

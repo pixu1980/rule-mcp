@@ -3,8 +3,7 @@
 export const componentFilePrefix = {
   id: "component-file-prefix",
   label: "Component file has _PascalCase prefix",
-  description:
-    "Component files inside component folders must start with an underscore and PascalCase: _Button.jsx, _Card.vue, _Modal.svelte.",
+  description: "Component files inside component folders must start with an underscore and PascalCase: _Button.jsx, _Card.vue, _Modal.svelte.",
   check: (code, context) => {
     const fileName = context?.fileName || "";
     const isComponent = context?.isComponent === true;
@@ -50,9 +49,7 @@ export const componentFilePrefix = {
     return {
       pass: false,
       failCount: 1,
-      detail: [
-        `File "${fileName}" does not follow _PascalCase.ext (component) or _snake_case.js (helper) convention`,
-      ],
+      detail: [`File "${fileName}" does not follow _PascalCase.ext (component) or _snake_case.js (helper) convention`],
       suggestion: `Rename component to "${correctName}" or use _snake_case.js for helpers.`,
     };
   },

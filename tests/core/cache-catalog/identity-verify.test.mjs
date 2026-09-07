@@ -13,15 +13,8 @@ test("the cached core carries no per-call identity", async () => {
   const { postprocessToolResult, stampRequestId } = await import("../../../src/core/enforcement/index.js");
   const core = postprocessToolResult("rule_tool_search", { query: "x" }, result("found"));
 
-  assert.equal(
-    core._meta.pixEnforcement.requestId,
-    undefined,
-    "a fresh id in the core makes two runs of the same call differ, and a replay hand back an older call's id",
-  );
-  assert.equal(
-    JSON.stringify(core),
-    JSON.stringify(postprocessToolResult("rule_tool_search", { query: "x" }, result("found"))),
-  );
+  assert.equal(core._meta.pixEnforcement.requestId, undefined, "a fresh id in the core makes two runs of the same call differ, and a replay hand back an older call's id");
+  assert.equal(JSON.stringify(core), JSON.stringify(postprocessToolResult("rule_tool_search", { query: "x" }, result("found"))));
 
   const stamped = stampRequestId(core, "test-id");
   assert.equal(stamped._meta.pixEnforcement.requestId, "test-id", "it is stamped after the cache instead");

@@ -42,10 +42,7 @@ ${"Narrative a resuming reader already lived through, which is most of what a ha
   const verified = handon({ projectDir: fixture.root, file: "docs/handoff/09-long.md" });
   rmSync(join(fixture.root, "docs/handoff/09-long.md"));
 
-  assert.ok(
-    verified.text.length < long.length / 2,
-    `report ${verified.text.length} chars vs handoff ${long.length}: a handon should be a fraction, not a trim`,
-  );
+  assert.ok(verified.text.length < long.length / 2, `report ${verified.text.length} chars vs handoff ${long.length}: a handon should be a fraction, not a trim`);
   console.log(`  handoff ${long.length} chars -> report ${verified.text.length}`);
 });
 

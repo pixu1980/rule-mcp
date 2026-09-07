@@ -22,8 +22,7 @@ process.env.HOME = mkdtempSync(join(tmpdir(), "rule-handon-home-"));
 
 export const { handon } = await import("../../../src/tools/handon/index.js");
 
-export const git = (cwd, ...arguments_) =>
-  execFileSync("git", arguments_, { cwd, encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] }).trim();
+export const git = (cwd, ...arguments_) => execFileSync("git", arguments_, { cwd, encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] }).trim();
 
 export const write = (root, relativePath, body) => {
   mkdirSync(join(root, relativePath, ".."), { recursive: true });
@@ -63,11 +62,7 @@ export function scriptedRepository() {
   write(root, "src/keep.js", "export const keep = 1;\n");
   write(root, "src/gone.js", "export const gone = 1;\n");
   write(root, "src/touched.js", "export const touched = 1;\n");
-  write(
-    root,
-    "docs/adr/041-a-pending-decision.md",
-    "# 041: A pending decision\n\n- **Date**: 2026-08-01\n- **Status**: proposed\n- **Tags**: fixture\n",
-  );
+  write(root, "docs/adr/041-a-pending-decision.md", "# 041: A pending decision\n\n- **Date**: 2026-08-01\n- **Status**: proposed\n- **Tags**: fixture\n");
   git(root, "add", "-A");
   git(root, "commit", "-qm", "chore(fixture): initial");
   const base = git(root, "rev-parse", "HEAD");
@@ -87,11 +82,7 @@ export function scriptedRepository() {
   git(root, "commit", "-qm", "refactor(fixture): move on");
 
   // The pending ADR landed.
-  write(
-    root,
-    "docs/adr/041-a-pending-decision.md",
-    "# 041: A pending decision\n\n- **Date**: 2026-08-01\n- **Status**: accepted\n- **Tags**: fixture\n",
-  );
+  write(root, "docs/adr/041-a-pending-decision.md", "# 041: A pending decision\n\n- **Date**: 2026-08-01\n- **Status**: accepted\n- **Tags**: fixture\n");
   git(root, "add", "-A");
   git(root, "commit", "-qm", "docs(adr): accept 041");
 

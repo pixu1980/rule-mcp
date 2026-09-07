@@ -9,8 +9,7 @@ import { buildHandoff } from "./_build.js";
 export function registerProcessHandoffTool() {
   registerTool({
     name: "rule_tool_process_handoff",
-    description:
-      "Generate a compressed LLM handoff summary from ADR logs and project context. Paste the output into a new chat to resume work seamlessly.",
+    description: "Generate a compressed LLM handoff summary from ADR logs and project context. Paste the output into a new chat to resume work seamlessly.",
     zodSchema: HandoffSchema,
     handler: async (arguments_) => {
       const result = buildHandoff({

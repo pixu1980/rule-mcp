@@ -4,8 +4,7 @@ import { scanPathForForeign } from "../../../text/en-english/index.js";
 export const enEnglishOnlyFilenames = {
   id: "en-english-only-filenames",
   label: "English-only file and folder names",
-  description:
-    "Every file and folder name is English. A non-ASCII letter or a foreign word in any path segment fails this rule (see rule-styleguide-english).",
+  description: "Every file and folder name is English. A non-ASCII letter or a foreign word in any path segment fails this rule (see rule-styleguide-english).",
   check: (code, context = {}) => {
     const fileName = String(context.fileName ?? "");
 

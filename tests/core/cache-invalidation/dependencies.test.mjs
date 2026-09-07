@@ -37,9 +37,5 @@ test("a tool whose dependencies cannot be attributed depends on all of them", as
   const { getSkillNames } = await import("../../../src/tools/router/index.js");
   const deps = dependenciesOf("rule_tool_search", { query: "container query" }, result("x"));
 
-  assert.equal(
-    Object.keys(deps).length,
-    getSkillNames().length,
-    "a full-text search across the corpus genuinely depends on the corpus",
-  );
+  assert.equal(Object.keys(deps).length, getSkillNames().length, "a full-text search across the corpus genuinely depends on the corpus");
 });

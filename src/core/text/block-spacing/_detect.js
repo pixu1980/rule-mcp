@@ -29,9 +29,7 @@ export function findBlocks(lines) {
       /^\s*(?:export\s+)?(?:async\s+)?function\s+(?:\w+)?\s*\([^)]*\)\s*\{\s*$/.test(line) ||
       /^\s*(?:export\s+)?(?:async\s+)?function\s*\{\s*$/.test(line) ||
       /^\s*(?:export\s+)?class\s+\w+\s*(?:extends\s+\w+)?\s*\{\s*$/.test(line) ||
-      (/^\s*(?:\w+|\w+\.prototype)\s*\([^)]*\)\s*\{\s*$/.test(line) &&
-        !/^\s*(if|for|while|switch)\s*\(/.test(line) &&
-        !/^\s*(export|import)\s/.test(line)) ||
+      (/^\s*(?:\w+|\w+\.prototype)\s*\([^)]*\)\s*\{\s*$/.test(line) && !/^\s*(if|for|while|switch)\s*\(/.test(line) && !/^\s*(export|import)\s/.test(line)) ||
       /^\s*constructor\s*\([^)]*\)\s*\{\s*$/.test(line)
     ) {
       stack.push({ openLine: index, indent: indentOf(line) });
@@ -43,9 +41,7 @@ export function findBlocks(lines) {
       block.closeLine = index;
 
       // Only consider blocks with ≥1 inner code line
-      const innerLines = lines
-        .slice(block.openLine + 1, block.closeLine)
-        .filter((l) => l.trim() !== "" && !/^\s*\/\//.test(l) && !/^\s*\/\*/.test(l));
+      const innerLines = lines.slice(block.openLine + 1, block.closeLine).filter((l) => l.trim() !== "" && !/^\s*\/\//.test(l) && !/^\s*\/\*/.test(l));
 
       if (innerLines.length > 0) {
         blocks.push(block);
@@ -71,11 +67,7 @@ export function classifyBlock(block, allBlocks, lines) {
   let parent = null;
 
   for (const other of allBlocks) {
-    if (
-      other.openLine < block.openLine &&
-      other.closeLine > block.closeLine &&
-      (!parent || other.openLine > parent.openLine)
-    ) {
+    if (other.openLine < block.openLine && other.closeLine > block.closeLine && (!parent || other.openLine > parent.openLine)) {
       parent = other;
     }
   }
@@ -88,12 +80,7 @@ export function classifyBlock(block, allBlocks, lines) {
   let isAtStart = true;
 
   for (let index = parent.openLine + 1; index < block.openLine; index++) {
-    if (
-      lines[index].trim() !== "" &&
-      !lines[index].trimStart().startsWith("//") &&
-      !lines[index].trimStart().startsWith("/*") &&
-      !lines[index].trimStart().startsWith("*")
-    ) {
+    if (lines[index].trim() !== "" && !lines[index].trimStart().startsWith("//") && !lines[index].trimStart().startsWith("/*") && !lines[index].trimStart().startsWith("*")) {
       isAtStart = false;
       break;
     }
@@ -103,12 +90,7 @@ export function classifyBlock(block, allBlocks, lines) {
   let isAtEnd = true;
 
   for (let index = block.closeLine + 1; index < parent.closeLine; index++) {
-    if (
-      lines[index].trim() !== "" &&
-      !lines[index].trimStart().startsWith("//") &&
-      !lines[index].trimStart().startsWith("/*") &&
-      !lines[index].trimStart().startsWith("*")
-    ) {
+    if (lines[index].trim() !== "" && !lines[index].trimStart().startsWith("//") && !lines[index].trimStart().startsWith("/*") && !lines[index].trimStart().startsWith("*")) {
       isAtEnd = false;
       break;
     }

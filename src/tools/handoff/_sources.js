@@ -35,10 +35,7 @@ export function readAdrs(projectDir) {
         const number = parseInt(m[1]);
         const title = content.match(/^# (?:ADR-)?\d{3,4}: (.+)$/m)?.[1] || m[2].replaceAll("-", " ");
         const date = content.match(/\*\*Date\*\*: (\S+)/)?.[1] || "";
-        const statusRaw =
-          content.match(/\*\*Status\*\*:\s*(.+?)(?:\n|$)/)?.[1] ||
-          content.match(/^## Status\s*\n+\s*(.+?)(?:\n|$)/m)?.[1] ||
-          "proposed";
+        const statusRaw = content.match(/\*\*Status\*\*:\s*(.+?)(?:\n|$)/)?.[1] || content.match(/^## Status\s*\n+\s*(.+?)(?:\n|$)/m)?.[1] || "proposed";
         const status = statusRaw
           .replaceAll("**", "")
           .replaceAll(/\[([^\]]+)\]\([^)]*\)/g, "$1")

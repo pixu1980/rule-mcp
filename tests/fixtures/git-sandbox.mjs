@@ -21,8 +21,7 @@ import { homedir, tmpdir, userInfo } from "node:os";
 import { join } from "node:path";
 
 /** Run git, quietly, and hand back stdout. */
-const git = (arguments_, cwd) =>
-  execFileSync("git", arguments_, { cwd, stdio: ["ignore", "pipe", "ignore"], encoding: "utf8" });
+const git = (arguments_, cwd) => execFileSync("git", arguments_, { cwd, stdio: ["ignore", "pipe", "ignore"], encoding: "utf8" });
 
 /** @type {string | undefined} The template every sandbox is copied from. */
 let template;
@@ -70,9 +69,7 @@ export function clonePair() {
   // person's own home. Refusing here is what makes the pin an invariant rather
   // than something a reader has to notice in each suite (ADR 083).
   if (homedir() === userInfo().homedir) {
-    throw new Error(
-      'git-sandbox: pin a temporary home first - process.env.HOME = mkdtempSync(join(tmpdir(), "prefix-")) - or this sandbox records into the real one',
-    );
+    throw new Error('git-sandbox: pin a temporary home first - process.env.HOME = mkdtempSync(join(tmpdir(), "prefix-")) - or this sandbox records into the real one');
   }
 
   template ??= buildTemplate();

@@ -23,12 +23,7 @@ export async function registerGatewayTool() {
       .optional()
       .describe("Files to validate - yields a path-bound receipt, required for multi-file writes"),
     path: z.string().optional().describe("Project path for framework auto-detection"),
-    framework: z
-      .string()
-      .optional()
-      .describe(
-        "Target framework (react, vue, svelte, angular, solid, astro, vanilla, express, fastify, nestjs, hono)",
-      ),
+    framework: z.string().optional().describe("Target framework (react, vue, svelte, angular, solid, astro, vanilla, express, fastify, nestjs, hono)"),
   });
 
   registerTool({

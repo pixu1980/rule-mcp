@@ -49,10 +49,7 @@ export function compress(text, mode = "both") {
 export function registerCompressTool() {
   const CompressSchema = z.object({
     text: z.string().describe("Prose to compress. Code fences, inline code, URLs and JSON pass through untouched"),
-    mode: z
-      .enum(["both", "caveman", "fingerprint"])
-      .default("both")
-      .describe("both (default), caveman (filler only), fingerprint (punctuation and spelling only)"),
+    mode: z.enum(["both", "caveman", "fingerprint"]).default("both").describe("both (default), caveman (filler only), fingerprint (punctuation and spelling only)"),
   });
 
   registerTool({

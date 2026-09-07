@@ -47,9 +47,7 @@ test("aggregate keeps measured savings separate from the routing estimate", () =
 });
 
 test("renderStats never merges the estimate into the measured total", () => {
-  const stats = aggregate([
-    { tool: "pix_tool", durationMs: 5, saved: { caveman: 10 }, estimatedRouting: 900, ok: true, ts: 1, session: "s" },
-  ]);
+  const stats = aggregate([{ tool: "pix_tool", durationMs: 5, saved: { caveman: 10 }, estimatedRouting: 900, ok: true, ts: 1, session: "s" }]);
   const out = renderStats(stats);
 
   assert.ok(!out.includes("910"), "the estimate must not be added to the measured total");
@@ -78,8 +76,5 @@ test("renderFlight carries the modeled-estimate sentence with its number", () =>
 
   assert.match(out, /# rule flight: abc/, "the renderer brands its output");
   assert.match(out, /Redacted export/, "a redacted flight says so up front");
-  assert.ok(
-    out.indexOf("~400") < out.indexOf("is modeled, not measured"),
-    "the estimate sentence sits beside its number",
-  );
+  assert.ok(out.indexOf("~400") < out.indexOf("is modeled, not measured"), "the estimate sentence sits beside its number");
 });

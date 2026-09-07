@@ -2,8 +2,7 @@
 export const jsBlankLinesBlocks = {
   id: "js-blank-lines-blocks",
   label: "Multi-line blocks have blank lines above/below",
-  description:
-    "if/for/while/switch/try/return/promise/method chains spanning >1 line must have a blank line above and below.",
+  description: "if/for/while/switch/try/return/promise/method chains spanning >1 line must have a blank line above and below.",
   check: (code) => {
     const issues = [];
     const lines = code.split("\n");
@@ -13,19 +12,13 @@ export const jsBlankLinesBlocks = {
       const previous = lines[index - 1];
       const next = lines[index + 1];
       // Check if this line starts a block that spans multiple lines
-      if (
-        /^\s*(if|for|while|switch|try)\s*\(/.test(line) ||
-        /^\.(then|catch|finally|map|filter|reduce|forEach)\s*\(/.test(line)
-      ) {
+      if (/^\s*(if|for|while|switch|try)\s*\(/.test(line) || /^\.(then|catch|finally|map|filter|reduce|forEach)\s*\(/.test(line)) {
         // A line that opens or continues a block (`{`, `} else {`,
         // `} finally {`, `} catch (e) {`) is scaffolding, not a statement
         // that needs separating from the block below it (finding F-A1).
         const previousTrimmed = previous.trim();
         const isScaffolding =
-          previousTrimmed === "" ||
-          previousTrimmed.endsWith("{") ||
-          previousTrimmed.startsWith("}") ||
-          /^\s*(\/\/|\/\*|\*|if|for|while|switch|try|case|default)/.test(previous);
+          previousTrimmed === "" || previousTrimmed.endsWith("{") || previousTrimmed.startsWith("}") || /^\s*(\/\/|\/\*|\*|if|for|while|switch|try|case|default)/.test(previous);
 
         if (!isScaffolding) {
           issues.push(`Line ${index + 1}: no blank line before block`);

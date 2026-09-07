@@ -20,11 +20,7 @@ test("a branch ahead of upstream reports no update", () => {
 
     assert.equal(git(["status", "--porcelain", "--untracked-files=no"], clone).trim(), "", "tree must be clean");
     assert.equal(git(["rev-list", "--count", "@{u}..HEAD"], clone).trim(), "1", "HEAD must be ahead of upstream");
-    assert.equal(
-      git(["merge", "--ff-only", "@{u}"], clone).trim(),
-      "Already up to date.",
-      "git must report a no-op merge with exit 0",
-    );
+    assert.equal(git(["merge", "--ff-only", "@{u}"], clone).trim(), "Already up to date.", "git must report a no-op merge with exit 0");
 
     const result = runUpdateIn(clone, { RULE_MCP_UPDATE_REMOTE: upstream });
     assert.equal(result.reason, undefined, `must reach the merge, not bail out early (got ${result.reason})`);

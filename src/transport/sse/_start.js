@@ -45,9 +45,7 @@ export async function startSseServer(options = {}) {
       const generated = generateSelfSignedCert({ certPath: resolvedCert, keyPath: resolvedKey });
 
       if (!generated) {
-        throw new Error(
-          `Failed to generate self-signed cert at ${resolvedCert}. Provide valid --ssl-cert and --ssl-key.`,
-        );
+        throw new Error(`Failed to generate self-signed cert at ${resolvedCert}. Provide valid --ssl-cert and --ssl-key.`);
       }
 
       console.error(`[rule-mcp] Generated self-signed cert: ${resolvedCert}`);

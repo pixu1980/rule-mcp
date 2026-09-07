@@ -49,29 +49,17 @@ check(
 const events = readEvents();
 const routed = events.find((event) => event.tool === "pix_tool" && !event.cacheHit);
 check("T3.3 the routed skill is recorded", routed.routedSkill === "rule-frontend-react");
-check(
-  "T3.4 duration, outcome and cache hit are recorded",
-  routed.durationMs === 12 && routed.ok === true && routed.cacheHit === false,
-);
+check("T3.4 duration, outcome and cache hit are recorded", routed.durationMs === 12 && routed.ok === true && routed.cacheHit === false);
 check(
   "T3.5 the session is carried on every event",
   events.every((event) => event.session),
 );
 check("T3.6 an installation id is present and stable", new Set(events.map((event) => event.installation)).size === 1);
-check(
-  "T3.7 guardrail failures are counted",
-  events.find((event) => event.tool === "rule_tool_check").guardrailFailures === 3,
-);
+check("T3.7 guardrail failures are counted", events.find((event) => event.tool === "rule_tool_check").guardrailFailures === 3);
 
 // ── T4: the token buckets stay separate ──
-check(
-  "T4 measured savings are summed per source",
-  routed.saved.caveman === 120 && events.find((event) => event.cacheHit).saved.cache === 900,
-);
-check(
-  "T4.1 the routing estimate is a separate field, not part of saved",
-  routed.estimatedRouting === 3400 && routed.saved.estimatedRouting === undefined,
-);
+check("T4 measured savings are summed per source", routed.saved.caveman === 120 && events.find((event) => event.cacheHit).saved.cache === 900);
+check("T4.1 the routing estimate is a separate field, not part of saved", routed.estimatedRouting === 3400 && routed.saved.estimatedRouting === undefined);
 
 // ── T8: never break the call it observes ──
 const readOnly = mkdtempSync(join(tmpdir(), "rule-telemetry-ro-"));
@@ -101,10 +89,7 @@ process.env.RULE_MCP_NO_PROMPTS = "1";
 recordToolCall({ tool: "pix_tool", args: { prompt: "a confidential merger" }, now: T0 + 7000 });
 flush();
 delete process.env.RULE_MCP_NO_PROMPTS;
-check(
-  "T12 the kill switch keeps the prompt text off disk",
-  !readFileSync(eventsFile(), "utf8").includes("confidential"),
-);
+check("T12 the kill switch keeps the prompt text off disk", !readFileSync(eventsFile(), "utf8").includes("confidential"));
 check("T12.1 and keeps the length", readEvents().at(-1).promptLength === "a confidential merger".length);
 
 finish();

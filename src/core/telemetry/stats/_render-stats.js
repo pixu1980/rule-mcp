@@ -40,9 +40,7 @@ export function renderStats(stats, options = {}) {
   // lesson was that the unmeasured half is where the weight turns out to be.
   if (Object.keys(stats.byTier).length > 0) {
     const order = ["exact", "normalized", "similar", "miss"];
-    const rows = order
-      .filter((tier) => stats.byTier[tier] !== undefined)
-      .map((tier) => `  ${String(stats.byTier[tier]).padStart(5)}  ${tier}`);
+    const rows = order.filter((tier) => stats.byTier[tier] !== undefined).map((tier) => `  ${String(stats.byTier[tier]).padStart(5)}  ${tier}`);
 
     lines.push("## Cache, by tier", "", ...rows, "");
   }

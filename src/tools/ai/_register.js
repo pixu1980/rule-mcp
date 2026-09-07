@@ -90,9 +90,7 @@ export function registerAiTool() {
       const followup = docsFollowup(promptLower);
       // Only advertise tools this process actually registered.
       const registered = new Set(listTools().map((tool) => tool.name));
-      const nextTools = [
-        ...new Set([...top.flatMap((t) => t.next_tools), ...(followup ? [followup.tool] : [])]),
-      ].filter((tool) => {
+      const nextTools = [...new Set([...top.flatMap((t) => t.next_tools), ...(followup ? [followup.tool] : [])])].filter((tool) => {
         return registered.has(tool);
       });
 

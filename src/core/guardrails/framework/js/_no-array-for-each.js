@@ -2,8 +2,7 @@
 export const jsNoArrayForEach = {
   id: "js-no-array-for-each",
   label: "for...of over Array.forEach()",
-  description:
-    "Prefer for...of loops over Array.prototype.forEach: better type narrowing, direct await, and break/continue support.",
+  description: "Prefer for...of loops over Array.prototype.forEach: better type narrowing, direct await, and break/continue support.",
   check: (code) => {
     const violations = code.match(/\b\w+\.forEach\s*\(/g) || [];
 

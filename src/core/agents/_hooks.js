@@ -46,10 +46,7 @@ export const HOOK_EVENTS = ["PreToolUse", "SessionStart", "UserPromptSubmit"];
  * @returns {Record<string, Array<object>>} entries per hook event
  */
 export function hookEntries(launcher) {
-  const invoke = (subcommand) =>
-    [launcher.command, ...(launcher.args ?? []), "guard", subcommand]
-      .map((part) => (/\s/.test(part) ? JSON.stringify(part) : part))
-      .join(" ");
+  const invoke = (subcommand) => [launcher.command, ...(launcher.args ?? []), "guard", subcommand].map((part) => (/\s/.test(part) ? JSON.stringify(part) : part)).join(" ");
   const entry = (subcommand, statusMessage, extra = {}) => ({
     ...extra,
     hooks: [

@@ -82,9 +82,7 @@ if (!existsSync(sourceSkillsDir)) {
 
 const sourceCount = countSkillFiles(sourceSkillsDir);
 if (sourceCount < MIN_EXPECTED_SKILLS) {
-  console.error(
-    `ERROR: Only ${sourceCount} SKILL.md files found in skills/. Expected at least ${MIN_EXPECTED_SKILLS}. Refusing to continue.`,
-  );
+  console.error(`ERROR: Only ${sourceCount} SKILL.md files found in skills/. Expected at least ${MIN_EXPECTED_SKILLS}. Refusing to continue.`);
   process.exit(1);
 }
 

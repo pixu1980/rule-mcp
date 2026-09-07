@@ -7,17 +7,7 @@ import { overlayFile, parsePersonaFile, roles, sandbox, validateRole } from "./_
 
 test("new writes an overlay the validator accepts", () => {
   const box = sandbox();
-  const run = roles(
-    box,
-    "new",
-    "perf-hawk",
-    "--role",
-    "Performance Hawk",
-    "--skills",
-    "profiling,caching",
-    "--years",
-    "12",
-  );
+  const run = roles(box, "new", "perf-hawk", "--role", "Performance Hawk", "--skills", "profiling,caching", "--years", "12");
 
   assert.equal(run.status, 0, `${run.stdout}${run.stderr}`);
   assert.ok(existsSync(overlayFile(box, "perf-hawk")), "the overlay lands in the user layer");

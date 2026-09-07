@@ -40,11 +40,7 @@ const LICENSED = /w3\.org|github\.com\/AllThingsSmitty\/ai-flight-recorder|model
 // docs/plans/ named the reading folder and this test passed. Ignored paths stay
 // out, which is the point: the reading folder is gitignored on purpose, and
 // untracked-but-not-ignored is a file on its way into a commit.
-const tracked = execFileSync(
-  "git",
-  ["ls-files", "--cached", "--others", "--exclude-standard", "*.md", "*.js", "*.mjs", "*.json"],
-  { encoding: "utf8" },
-)
+const tracked = execFileSync("git", ["ls-files", "--cached", "--others", "--exclude-standard", "*.md", "*.js", "*.mjs", "*.json"], { encoding: "utf8" })
   .trim()
   .split("\n")
   .filter(Boolean)
@@ -73,11 +69,7 @@ test("no tracked file points at reading material", () => {
       offenders.push(`${file}:${line} contains ${name}`);
     }
   }
-  assert.deepEqual(
-    offenders,
-    [],
-    `Sources do not belong in this repository, only what was learned from them:\n  ${offenders.join("\n  ")}`,
-  );
+  assert.deepEqual(offenders, [], `Sources do not belong in this repository, only what was learned from them:\n  ${offenders.join("\n  ")}`);
 });
 
 test("commit messages on this branch name no sources", () => {

@@ -49,11 +49,7 @@ check("T3 SSE status 200", sseResult.status === 200);
 check("T3.1 SSE content-type text/event-stream", sseResult.headers["content-type"]?.includes("text/event-stream"));
 check("T3.2 SSE cache-control no-cache", String(sseResult.headers["cache-control"] ?? "").includes("no-cache"));
 check("T3.3 SSE connection keep-alive", sseResult.headers["connection"] === "keep-alive");
-check(
-  "T3.4 CORS deny-by-default on SSE",
-  sseResult.headers["access-control-allow-origin"] === undefined ||
-    sseResult.headers["access-control-allow-origin"] !== "*",
-);
+check("T3.4 CORS deny-by-default on SSE", sseResult.headers["access-control-allow-origin"] === undefined || sseResult.headers["access-control-allow-origin"] !== "*");
 check("T4 sessionId received", sessionId.length > 0);
 check("T4.1 sessionId format UUID", /^[a-f0-9-]{36}$/i.test(sessionId));
 

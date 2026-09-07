@@ -7,11 +7,11 @@ import { join } from "node:path";
 
 const root = new URL("../..", import.meta.url).pathname;
 const fakeHome = mkdtempSync(join(tmpdir(), "rule-cli-remote-failure-"));
-const result = spawnSync(
-  process.execPath,
-  [join(root, "bin", "rule-mcp.js"), "install", "--agent", "claude", "--mode", "daemon", "--json"],
-  { cwd: root, env: { ...process.env, HOME: fakeHome }, encoding: "utf8" },
-);
+const result = spawnSync(process.execPath, [join(root, "bin", "rule-mcp.js"), "install", "--agent", "claude", "--mode", "daemon", "--json"], {
+  cwd: root,
+  env: { ...process.env, HOME: fakeHome },
+  encoding: "utf8",
+});
 
 assert.equal(result.status, 1, "CLI must return failure status for unsupported remote install");
 assert.equal(JSON.parse(result.stdout).ok, false);

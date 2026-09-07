@@ -56,8 +56,7 @@ const commandConfig = (entrypoint, options = {}) => {
   const isPi = options.agentName === "pi";
 
   if (mode === "daemon" || mode === "docker") {
-    const port =
-      Number.isInteger(options.port) && options.port > 0 && options.port < 65_536 ? options.port : DEFAULT_SSE_PORT;
+    const port = Number.isInteger(options.port) && options.port > 0 && options.port < 65_536 ? options.port : DEFAULT_SSE_PORT;
     const token = getOrCreateSseBearerToken();
     const config = {
       url: `http://127.0.0.1:${port}/sse`,
@@ -105,13 +104,4 @@ function mcpServerConfig(entrypoint, opts = {}) {
   return { [serverName]: commandConfig(entrypoint, opts) };
 }
 
-export {
-  ENV_CONFIG_DIR,
-  ENV_CONFIG_FILE,
-  DEFAULT_OPTOUT_ENV,
-  readEnvConfig,
-  writeEnvConfig,
-  resolveEnvironment,
-  commandConfig,
-  mcpServerConfig,
-};
+export { ENV_CONFIG_DIR, ENV_CONFIG_FILE, DEFAULT_OPTOUT_ENV, readEnvConfig, writeEnvConfig, resolveEnvironment, commandConfig, mcpServerConfig };

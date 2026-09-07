@@ -7,10 +7,7 @@ console.log("self-update engine test: banner and restart");
 
 // ── T5: banner + restart decisions (pure) ──
 {
-  assert.match(
-    buildBanner({ updated: true, from: "aaaaaaa", to: "bbbbbbb", count: 2, changedSkills: true, changedCode: false }),
-    /Updating MCP server/,
-  );
+  assert.match(buildBanner({ updated: true, from: "aaaaaaa", to: "bbbbbbb", count: 2, changedSkills: true, changedCode: false }), /Updating MCP server/);
   assert.equal(buildBanner({ updated: false }), null, "no banner when nothing changed");
 
   // eslint-disable-next-line no-unused-vars

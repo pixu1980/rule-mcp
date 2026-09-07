@@ -26,17 +26,13 @@ export function renderAgentCommand(command, format) {
 
   if (spec.frontmatter === "yaml") {
     // Claude Code / Pi / Cursor / Roo / VS Code prompt files all read this shape.
-    return ["---", `description: ${quoted(description)}`, `argument-hint: "${argumentHint}"`, "---", body, ""].join(
-      "\n",
-    );
+    return ["---", `description: ${quoted(description)}`, `argument-hint: "${argumentHint}"`, "---", body, ""].join("\n");
   }
 
   if (spec.frontmatter === "devin") {
     // Devin reads one directory per command, each containing a SKILL.md whose
     // name field is the slash command.
-    return ["---", `name: /${name}`, `description: ${quoted(description)}`, "---", "", `# ${name}`, "", body, ""].join(
-      "\n",
-    );
+    return ["---", `name: /${name}`, `description: ${quoted(description)}`, "---", "", `# ${name}`, "", body, ""].join("\n");
   }
   // Prose-only workflow file (Windsurf, Cline).
   return [`# ${name}`, "", body, ""].join("\n");

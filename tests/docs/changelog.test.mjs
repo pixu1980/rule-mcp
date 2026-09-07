@@ -74,8 +74,7 @@ check("T3 the newest work is unreleased", out.indexOf("[Unreleased]") < out.inde
 check("T4 a release gets its own heading", out.includes("## [1.1.0]") && out.includes("## [1.0.0]"));
 check(
   "T5 a commit sits under the release that contains it",
-  out.indexOf("a shared catalog") > out.indexOf("## [1.1.0]") &&
-    out.indexOf("a shared catalog") < out.indexOf("## [1.0.0]"),
+  out.indexOf("a shared catalog") > out.indexOf("## [1.1.0]") && out.indexOf("a shared catalog") < out.indexOf("## [1.0.0]"),
 );
 
 check("T6 newest release first", out.indexOf("## [1.1.0]") < out.indexOf("## [1.0.0]"));
@@ -102,9 +101,7 @@ check("T11 two runs agree", buildChangelog({ projectDir: root }) === out);
 
 check(
   "T12 every conventional type has a decision",
-  ["feat", "fix", "perf", "refactor", "docs", "style", "test", "chore", "build", "ci", "revert"].every(
-    (type) => type in SECTION_FOR_TYPE,
-  ),
+  ["feat", "fix", "perf", "refactor", "docs", "style", "test", "chore", "build", "ci", "revert"].every((type) => type in SECTION_FOR_TYPE),
 );
 
 // ── It survives a repository with no tags at all ──
@@ -117,10 +114,7 @@ writeFileSync(join(bare, "a.txt"), "a\n");
 git(bare, "add", "-A");
 git(bare, "commit", "-qm", "feat(core): the first thing");
 const untagged = buildChangelog({ projectDir: bare });
-check(
-  "T13 with no tags everything is unreleased",
-  untagged.includes("[Unreleased]") && untagged.includes("the first thing"),
-);
+check("T13 with no tags everything is unreleased", untagged.includes("[Unreleased]") && untagged.includes("the first thing"));
 check("T13.1 and no empty release heading is emitted", !/## \[\]/.test(untagged));
 
 // ── The committed file is generated, not written ──
@@ -129,10 +123,7 @@ const { readFileSync } = await import("node:fs");
 const committed = readFileSync(new URL("../../CHANGELOG.md", import.meta.url), "utf8");
 const generatedHeader = buildChangelog({ projectDir: new URL("../..", import.meta.url).pathname }).split("## [", 1)[0];
 
-check(
-  "T14 the committed changelog carries the generated header",
-  committed.startsWith("# Changelog") && committed.split("## [", 1)[0] === generatedHeader,
-);
+check("T14 the committed changelog carries the generated header", committed.startsWith("# Changelog") && committed.split("## [", 1)[0] === generatedHeader);
 check(
   "T15 and nothing has been hand-written into it",
   // Every entry line is `- **scope**: subject (`hash`)`. Prose that is not an

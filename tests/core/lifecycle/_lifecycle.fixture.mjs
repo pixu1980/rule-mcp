@@ -15,7 +15,6 @@ import { join } from "node:path";
 
 export const lifecycle = await import("../../../src/core/session/_lifecycle.js");
 
-
 /**
  * A stand-in for `process` as a signal source: the handlers under test only
  * need on/off/emit, and a real emitter here would mean sending real signals to

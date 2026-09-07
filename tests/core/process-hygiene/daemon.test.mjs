@@ -64,11 +64,7 @@ test("daemon start detaches instead of holding the daemon open", async (t) => {
 
   // The daemon still logs, even though the parent is not piping for it.
   const logFile = join(stateDir, "daemon.log");
-  assert.equal(
-    await until(() => existsSync(logFile) && readFileSync(logFile, "utf8").includes("listening")),
-    true,
-    "the detached daemon wrote no log",
-  );
+  assert.equal(await until(() => existsSync(logFile) && readFileSync(logFile, "utf8").includes("listening")), true, "the detached daemon wrote no log");
 });
 
 test("daemon stop escalates to SIGKILL and only then forgets the pid", async (t) => {
@@ -80,11 +76,7 @@ test("daemon stop escalates to SIGKILL and only then forgets the pid", async (t)
   // and removed the only record of its pid. It reports when its handler is
   // installed: signalled any earlier, it would die of the default action and
   // prove nothing.
-  const stubborn = spawn(
-    process.execPath,
-    ["-e", "process.on('SIGTERM', () => {}); setInterval(() => {}, 1000); console.log('ready')"],
-    { stdio: ["ignore", "pipe", "ignore"] },
-  );
+  const stubborn = spawn(process.execPath, ["-e", "process.on('SIGTERM', () => {}); setInterval(() => {}, 1000); console.log('ready')"], { stdio: ["ignore", "pipe", "ignore"] });
   t.after(() => reap(stubborn.pid));
   let ready = "";
   stubborn.stdout.on("data", (chunk) => {

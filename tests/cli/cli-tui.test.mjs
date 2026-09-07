@@ -5,13 +5,7 @@
  */
 
 import { strict as assert } from "node:assert";
-import {
-  banner,
-  formatInstallResult,
-  formatSkillsList,
-  formatToolsList,
-  formatUninstallResult,
-} from "../../src/cli/tui.js";
+import { banner, formatInstallResult, formatSkillsList, formatToolsList, formatUninstallResult } from "../../src/cli/tui.js";
 
 console.log("rule CLI TUI test");
 

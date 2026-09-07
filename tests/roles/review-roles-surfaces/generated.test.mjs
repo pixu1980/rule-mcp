@@ -61,11 +61,7 @@ test("persona command bodies route through the tools, not a recap", () => {
     // The request typed after the command is the run's focus: it must be
     // forwarded into rule_tool_plan as `topic` (handoff-style pass-through).
     assert.match(command.body, /\$ARGUMENTS/, `${command.name}: body must carry the request placeholder`);
-    assert.match(
-      command.body,
-      /typed after this command passed through unchanged as `topic`/,
-      `${command.name}: body must forward the request as topic`,
-    );
+    assert.match(command.body, /typed after this command passed through unchanged as `topic`/, `${command.name}: body must forward the request as topic`);
   }
 });
 
@@ -75,11 +71,7 @@ test("persona prompts and commands accept a free-form request like every other p
   for (const prompt of personaDefs) {
     assert.equal(prompt.arguments.length, 1, `${prompt.name}: exactly one argument, the free-form request`);
     assert.equal(prompt.arguments[0].name, "topic", `${prompt.name}: the argument is the request`);
-    assert.match(
-      prompt.arguments[0].description,
-      /request/,
-      `${prompt.name}: the argument description must call it a request`,
-    );
+    assert.match(prompt.arguments[0].description, /request/, `${prompt.name}: the argument description must call it a request`);
   }
 
   // Help surfaces an invocation example, so the user sees how the request slots in.

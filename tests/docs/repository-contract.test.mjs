@@ -44,11 +44,7 @@ for (const sub of forbidden ? sourceDirectories : []) {
 
   // Check file names
   const nameMatches = files.filter((file) => basename(file).toLowerCase().includes(forbidden));
-  assert.equal(
-    nameMatches.length,
-    0,
-    `[${sub}] no files should contain '${forbidden}' in their name:\n` + nameMatches.join("\n"),
-  );
+  assert.equal(nameMatches.length, 0, `[${sub}] no files should contain '${forbidden}' in their name:\n` + nameMatches.join("\n"));
 
   // Check file contents
   const contentMatches = [];

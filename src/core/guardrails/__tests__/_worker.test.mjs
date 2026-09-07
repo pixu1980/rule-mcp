@@ -23,12 +23,7 @@ test("a runaway check is aborted at the budget and the next call answers", async
   process.env.RULE_MCP_TEST_SLOW_CHECK_MS = "60000";
   try {
     const started = performance.now();
-    const aborted = await checkCodeGuarded(
-      "rule-styleguide-css",
-      "a { color: red; }",
-      { fileName: "a.css" },
-      { timeoutMs: 500 },
-    );
+    const aborted = await checkCodeGuarded("rule-styleguide-css", "a { color: red; }", { fileName: "a.css" }, { timeoutMs: 500 });
     const elapsed = performance.now() - started;
     assert.equal(aborted.aborted, true, "the runaway check must be aborted");
     assert.equal(aborted.allPass, false);

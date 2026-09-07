@@ -13,14 +13,7 @@
 import { strict as assert } from "node:assert";
 import { test } from "node:test";
 import { listPrompts } from "../../src/prompts/index.js";
-import {
-  ROUTER_COMMAND,
-  FORMAT_EXT,
-  commandNames,
-  listAgentCommands,
-  renderAgentCommand,
-  renderAgentCommandFiles,
-} from "../../src/core/agents/commands/index.js";
+import { ROUTER_COMMAND, FORMAT_EXT, commandNames, listAgentCommands, renderAgentCommand, renderAgentCommandFiles } from "../../src/core/agents/commands/index.js";
 
 console.log("agent-commands generator test");
 
@@ -47,10 +40,7 @@ test("coverage: one clean command per prompt, plus the router, no duplicates", (
 test("every command routes through rule and proposes a scoped commit", () => {
   for (const cmd of listAgentCommands()) {
     assert.ok(/rule/i.test(cmd.body), `${cmd.name}: body must route through rule`);
-    assert.ok(
-      /commit/i.test(cmd.body) && /scope/i.test(cmd.body),
-      `${cmd.name}: body must propose a commit with scope`,
-    );
+    assert.ok(/commit/i.test(cmd.body) && /scope/i.test(cmd.body), `${cmd.name}: body must propose a commit with scope`);
     assert.ok(cmd.description && cmd.description.length > 0, `${cmd.name}: description required`);
   }
 });
@@ -59,11 +49,7 @@ test("args format renders frontmatter, safely quoted description, and $ARGUMENTS
   for (const cmd of listAgentCommands()) {
     const out = renderAgentCommand(cmd, "args");
     assert.ok(out.startsWith("---\n"), `${cmd.name}: args output must open with YAML frontmatter`);
-    assert.match(
-      out,
-      /\ndescription: ".*"\n/,
-      `${cmd.name}: description must be a quoted YAML scalar (colons are safe)`,
-    );
+    assert.match(out, /\ndescription: ".*"\n/, `${cmd.name}: description must be a quoted YAML scalar (colons are safe)`);
     assert.match(out, /\nargument-hint: ".*"\n/, `${cmd.name}: argument-hint required`);
     assert.ok(out.includes("$ARGUMENTS"), `${cmd.name}: args body must carry the $ARGUMENTS placeholder`);
   }

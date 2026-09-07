@@ -9,11 +9,7 @@ test("a first run writes the three documents", () => {
   const dir = project();
   const result = syncRoleDocs({ role: "security", findings: FINDINGS, projectDir: dir });
 
-  assert.deepEqual(
-    result.written.sort(),
-    ["docs/audits/security.md", "docs/plans/security.md", "docs/reviews/security.md"],
-    "the trio is written on the first run",
-  );
+  assert.deepEqual(result.written.sort(), ["docs/audits/security.md", "docs/plans/security.md", "docs/reviews/security.md"], "the trio is written on the first run");
   assert.match(read(dir, "docs/reviews/security.md"), /SEC-1/, "the review lists the findings");
   assert.match(read(dir, "docs/plans/security.md"), /SEC-1/, "the plan derives its steps from them");
   assert.equal(result.counts.open, 2);

@@ -12,7 +12,7 @@ import { BLOCKING } from "./_evaluate.js";
 export function renderMarkdown(ev) {
   const { scope, sample, evaluator, level, target, seen, counts, conforms, stamp } = ev;
 
-    const lines = [
+  const lines = [
     `# Accessibility evaluation: ${scope.title}`,
     "",
     `WCAG ${WCAG_VERSION}, conformance target level **${level}**. Evaluator: ${evaluator}. Date: ${stamp}.`,
@@ -30,9 +30,7 @@ export function renderMarkdown(ev) {
     "",
     `## ${WCAG_EM_STEPS[2].step}. ${WCAG_EM_STEPS[2].name}`,
     "",
-    sample.length > 0
-      ? sample.map((page) => `- ${page}`).join("\n")
-      : "_No sample declared. A result without one covers nothing beyond itself._",
+    sample.length > 0 ? sample.map((page) => `- ${page}`).join("\n") : "_No sample declared. A result without one covers nothing beyond itself._",
     "",
     `## ${WCAG_EM_STEPS[3].step}. ${WCAG_EM_STEPS[3].name}`,
     "",
@@ -81,10 +79,7 @@ export function renderMarkdown(ev) {
     );
   }
 
-  lines.push(
-    "---",
-    `Criteria data: ${WCAG_SOURCE} (vendored ${WCAG_GENERATED}). Methodology: WCAG-EM. Results vocabulary: EARL.`,
-  );
+  lines.push("---", `Criteria data: ${WCAG_SOURCE} (vendored ${WCAG_GENERATED}). Methodology: WCAG-EM. Results vocabulary: EARL.`);
 
   return lines.join("\n");
 }

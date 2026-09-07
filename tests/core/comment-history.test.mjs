@@ -38,8 +38,7 @@ const ids = new Set(getGuardrails("rule-styleguide-javascript").map((g) => g.id)
 check("T0 the rule is registered", ids.has(RULE));
 check(
   "T0.1 and it is shared with the CSS and backend skills",
-  new Set(getGuardrails("rule-styleguide-css").map((g) => g.id)).has(RULE) &&
-    new Set(getGuardrails("rule-backend-node").map((g) => g.id)).has(RULE),
+  new Set(getGuardrails("rule-styleguide-css").map((g) => g.id)).has(RULE) && new Set(getGuardrails("rule-backend-node").map((g) => g.id)).has(RULE),
 );
 
 // ── What it must catch ──
@@ -62,17 +61,11 @@ for (const [label, code] of HISTORY) {
 
 const FINE = [
   ["runtime state", "// The socket is no longer accepting connections at this point.\nexport const h = 8;\n"],
-  [
-    "a described behavior",
-    "/**\n * Returns the entry, or undefined when nothing is stored.\n */\nexport const i = 9;\n",
-  ],
+  ["a described behavior", "/**\n * Returns the entry, or undefined when nothing is stored.\n */\nexport const i = 9;\n"],
   ["a reason for the current shape", "// A Set, because membership is checked inside a loop.\nexport const j = 10;\n"],
   ["the word history in a domain sense", "// Reads the commit history for the range.\nexport const k = 11;\n"],
   ["a deprecation notice", "/** @deprecated Use writeText instead. */\nexport const l = 12;\n"],
-  [
-    "prose containing was in a condition",
-    "// True when the response was accepted by the server.\nexport const m = 13;\n",
-  ],
+  ["prose containing was in a condition", "// True when the response was accepted by the server.\nexport const m = 13;\n"],
 ];
 
 for (const [label, code] of FINE) {

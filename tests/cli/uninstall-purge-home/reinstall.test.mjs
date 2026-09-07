@@ -14,15 +14,7 @@ import { hermeticEnv, root } from "./_purge.fixture.mjs";
   // Symlink-free local-binary install path: install.sh resolves the CLI from
   // the repo (bin/rule-mcp.js) and RULE_MCP_SKIP_GLOBAL_LINK=1
   // skips the global shim entirely, keeping the e2e hermetic.
-  const path = [
-    dirname(process.execPath),
-    "/usr/bin",
-    "/bin",
-    "/usr/sbin",
-    "/sbin",
-    "/opt/homebrew/bin",
-    "/usr/local/bin",
-  ].join(":");
+  const path = [dirname(process.execPath), "/usr/bin", "/bin", "/usr/sbin", "/sbin", "/opt/homebrew/bin", "/usr/local/bin"].join(":");
   const hookPath = join(root, ".git", "hooks", "post-commit");
   const hookExisted = existsSync(hookPath);
   const hookBefore = hookExisted ? readFileSync(hookPath, "utf8") : null;

@@ -2,8 +2,7 @@
 export const semanticHtml = {
   id: "semantic-html",
   label: "Semantic HTML mandatory",
-  description:
-    "No <div> where <section>, <article>, <header>, <footer>, <nav>, <main>, <aside>, <form>, <ul>, <ol>, <li>, <search> exists.",
+  description: "No <div> where <section>, <article>, <header>, <footer>, <nav>, <main>, <aside>, <form>, <ul>, <ol>, <li>, <search> exists.",
   check: (code) => {
     const nonSemanticDivPatterns = [
       /<div[^>]*data-part="(header|footer|body|modal|content|nav|search|form|tabs|card|summary|stats|list|item|sidebar|banner|main)"/gi,

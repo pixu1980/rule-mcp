@@ -47,14 +47,10 @@ const generatedOn = new Date().toISOString().slice(0, 10);
 const next = render(criteria, generatedOn);
 
 const previous = existsSync(TARGET) ? readFileSync(TARGET, "utf8") : "";
-const strip = (text) =>
-  text.replaceAll(/^ \* Generated: .*$/gm, "").replaceAll(/^export const WCAG_GENERATED = .*$/gm, "");
+const strip = (text) => text.replaceAll(/^ \* Generated: .*$/gm, "").replaceAll(/^export const WCAG_GENERATED = .*$/gm, "");
 const changed = strip(previous) !== strip(next);
 
-const byLevel = Object.values(criteria).reduce(
-  (accumulator, c) => ({ ...accumulator, [c.level]: (accumulator[c.level] ?? 0) + 1 }),
-  {},
-);
+const byLevel = Object.values(criteria).reduce((accumulator, c) => ({ ...accumulator, [c.level]: (accumulator[c.level] ?? 0) + 1 }), {});
 console.log(`${count} criteria from ${SOURCE}`);
 console.log(`  A: ${byLevel.A ?? 0}   AA: ${byLevel.AA ?? 0}   AAA: ${byLevel.AAA ?? 0}`);
 
@@ -64,11 +60,7 @@ if (!changed) {
   writeFileSync(TARGET, next);
   console.log(`Wrote ${TARGET}`);
 } else {
-  const before = previous
-    ? Object.keys(
-        JSON.parse(`{${[...previous.matchAll(/^ {2}"(\d+\.\d+\.\d+)":/gm)].map((m) => `"${m[1]}":0`).join(",")}}`),
-      )
-    : [];
+  const before = previous ? Object.keys(JSON.parse(`{${[...previous.matchAll(/^ {2}"(\d+\.\d+\.\d+)":/gm)].map((m) => `"${m[1]}":0`).join(",")}}`)) : [];
   const after = Object.keys(criteria);
   const added = after.filter((n) => !before.includes(n));
   const removed = before.filter((n) => !after.includes(n));

@@ -66,11 +66,7 @@ try {
   const second = await openSse(server.port, token);
 
   assert.notEqual(first.sessionId, second.sessionId, "each client receives an independent session");
-  assert.equal(
-    await postToolsList(server.port, token, first.sessionId),
-    202,
-    "first client stays usable after second connects",
-  );
+  assert.equal(await postToolsList(server.port, token, first.sessionId), 202, "first client stays usable after second connects");
   assert.equal(await postToolsList(server.port, token, second.sessionId), 202, "second client is usable");
 
   first.response.destroy();

@@ -1,6 +1,5 @@
 /** @module core/session/resume/signal - is this prompt a resume request? */
 
-
 /**
  * Prompts that mean "carry on from where we stopped" and nothing else.
  *
@@ -59,4 +58,3 @@ export function isResumeSignal(prompt) {
 
   return RESUME_PHRASES.has(normalized);
 }
-

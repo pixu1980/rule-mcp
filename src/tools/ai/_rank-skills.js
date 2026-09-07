@@ -14,16 +14,7 @@ import { skillNextTools } from "./_next-tools.js";
  *
  * @returns {Array<{ skill: string, relativeScore: number, absoluteScore: number, sections: string[], next_tools: string[] }>}
  */
-export function rankSkills({
-  skills,
-  promptWords,
-  promptDomain,
-  isReduction,
-  ranked,
-  detectedFramework,
-  detectedSkillName,
-  applyFrameworkBias,
-}) {
+export function rankSkills({ skills, promptWords, promptDomain, isReduction, ranked, detectedFramework, detectedSkillName, applyFrameworkBias }) {
   const skillRawScores = [];
 
   for (const skillName of skills) {
@@ -53,9 +44,7 @@ export function rankSkills({
     if (detectedFramework && applyFrameworkBias) {
       if (skillName === detectedSkillName) {
         finalScore = Math.max(rawScore * 2, 20);
-      } else if (
-        ["rule-styleguide", "rule-frontend", "rule-platform-web", "rule-ui-design-system", "rule-ai"].includes(skillName)
-      ) {
+      } else if (["rule-styleguide", "rule-frontend", "rule-platform-web", "rule-ui-design-system", "rule-ai"].includes(skillName)) {
         finalScore *= 1.15;
       } else {
         finalScore *= 0.85;

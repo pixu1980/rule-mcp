@@ -27,9 +27,7 @@ const PERSONA_FRAMES = [
 
 /** Every name a role answers to: its id, its title, and the aliases it declares. */
 function roleNames(role) {
-  return [role.id, role.id.replaceAll("-", " "), role.role, ...(role.aliases ?? [])]
-    .filter(Boolean)
-    .map((name) => String(name).toLowerCase());
+  return [role.id, role.id.replaceAll("-", " "), role.role, ...(role.aliases ?? [])].filter(Boolean).map((name) => String(name).toLowerCase());
 }
 
 /**

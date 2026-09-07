@@ -283,14 +283,7 @@ export class TemplateInstance {
           if (node) node.replaceWith(s, e);
           // renderFn comes from values[renderAttrIdx] (a ${} slot)
           const renderFn = descriptor.renderAttrIdx >= 0 ? null : null;
-          const forPart = new ForPart(
-            s,
-            e,
-            descriptor.itemVar,
-            parseExpression(descriptor.itemsExprStr || ""),
-            descriptor.innerTemplate || "",
-            null,
-          );
+          const forPart = new ForPart(s, e, descriptor.itemVar, parseExpression(descriptor.itemsExprStr || ""), descriptor.innerTemplate || "", null);
           // Store renderAttrIdx so updateWithContext can pass the fn
           forPart._renderAttrIdx = descriptor.renderAttrIdx;
           this.forParts.push(forPart);
@@ -300,9 +293,7 @@ export class TemplateInstance {
           const s = document.createComment(`if:${descriptor.index}:s`);
           const e = document.createComment(`if:${descriptor.index}:e`);
           if (node) node.replaceWith(s, e);
-          this.ifParts.push(
-            new IfPart(s, e, parseExpression(descriptor.conditionStr || ""), descriptor.innerTemplate || ""),
-          );
+          this.ifParts.push(new IfPart(s, e, parseExpression(descriptor.conditionStr || ""), descriptor.innerTemplate || ""));
           break;
         }
       }
@@ -319,10 +310,7 @@ export class TemplateInstance {
     for (const { exprPart, parsedExpr, isAttr } of this.exprParts) {
       if (isAttr) {
         const val = evaluateExpression(parsedExpr, context);
-        exprPart.commit(
-          val,
-          parsedExpr.filters.length > 0 && parsedExpr.filters[parsedExpr.filters.length - 1].name === "raw",
-        );
+        exprPart.commit(val, parsedExpr.filters.length > 0 && parsedExpr.filters[parsedExpr.filters.length - 1].name === "raw");
       } else {
         exprPart.setValue(parsedExpr, context);
       }

@@ -14,11 +14,7 @@ const installModule = new URL("../../src/cli/install/index.js", import.meta.url)
 
 execFileSync(
   process.execPath,
-  [
-    "--input-type=module",
-    "--eval",
-    `import { installAgent } from ${JSON.stringify(installModule)}; installAgent({ agent: "pi", entrypoint: "/tmp/rule-mcp.js" });`,
-  ],
+  ["--input-type=module", "--eval", `import { installAgent } from ${JSON.stringify(installModule)}; installAgent({ agent: "pi", entrypoint: "/tmp/rule-mcp.js" });`],
   { cwd: root, env: { ...process.env, HOME: fakeHome, PI_CODING_AGENT_DIR: piDir } },
 );
 

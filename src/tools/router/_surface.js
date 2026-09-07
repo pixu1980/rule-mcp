@@ -14,14 +14,7 @@ const MUTATING_TOOLS = new Set([
 
 /** Tools whose answer depends on state outside their arguments, so a repeat
  * call can legitimately differ: the working tree, the clock, the code graph. */
-const NON_IDEMPOTENT_READS = new Set([
-  "rule_tool_detect",
-  "rule_tool_gateway",
-  "rule_tool_stats",
-  "rule_tool_usage",
-  "rule_tool_a11y_report",
-  "rule_tool_process_handon",
-]);
+const NON_IDEMPOTENT_READS = new Set(["rule_tool_detect", "rule_tool_gateway", "rule_tool_stats", "rule_tool_usage", "rule_tool_a11y_report", "rule_tool_process_handon"]);
 
 /**
  * MCP tool annotations, emitting only what differs from the spec defaults.
@@ -84,9 +77,7 @@ function listTools() {
 
     const annotations = annotationsFor(t.name);
 
-    return annotations
-      ? { name: t.name, description: t.description, inputSchema, annotations }
-      : { name: t.name, description: t.description, inputSchema };
+    return annotations ? { name: t.name, description: t.description, inputSchema, annotations } : { name: t.name, description: t.description, inputSchema };
   });
 }
 

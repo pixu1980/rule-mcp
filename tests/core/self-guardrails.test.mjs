@@ -73,9 +73,7 @@ test("the catalog exclusions still exist and still are catalogs", () => {
   const present = new Set(sourceFiles().map((file) => file.split("/").at(-1)));
   for (const [name] of CATALOGS) {
     const dirKey = name.endsWith("/");
-    const exists = dirKey
-      ? existsSync(join(SOURCE_ROOT.pathname, name))
-      : present.has(name);
+    const exists = dirKey ? existsSync(join(SOURCE_ROOT.pathname, name)) : present.has(name);
     assert.ok(exists, `${name} is excluded but no longer exists - drop the exclusion`);
   }
   assert.ok(CATALOGS.size <= 10, "the exclusion list is a short, argued list - not a place to hide failures");

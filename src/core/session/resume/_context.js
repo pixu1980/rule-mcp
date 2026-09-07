@@ -38,10 +38,7 @@ export function handoffBlock(cwd, occasion) {
     return "";
   }
 
-  const body =
-    report.text.length > MAX_CHARS
-      ? `${report.text.slice(0, MAX_CHARS)}\n\n(truncated: call \`rule_tool_process_handon\` for the rest)`
-      : report.text;
+  const body = report.text.length > MAX_CHARS ? `${report.text.slice(0, MAX_CHARS)}\n\n(truncated: call \`rule_tool_process_handon\` for the rest)` : report.text;
 
   return [
     "## PIX RESUMED SESSION",
@@ -53,8 +50,7 @@ export function handoffBlock(cwd, occasion) {
     "",
     body,
     "",
-    "Continue from the suggested first move unless the user asks for something" +
-      " else. Do not restate this back to them.",
+    "Continue from the suggested first move unless the user asks for something" + " else. Do not restate this back to them.",
   ].join("\n");
 }
 

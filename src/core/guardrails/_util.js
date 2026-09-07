@@ -66,12 +66,7 @@ export function looksLikeStylesheet(code) {
 /* ─── Grid justification ─── */
 
 export function unjustifiedGrids(css) {
-  const BLOCK_SIGNALS = [
-    /grid-template-areas\s*:/i,
-    /subgrid/i,
-    /grid-auto-flow\s*:/i,
-    /repeat\(\s*auto-(?:fit|fill)/i,
-  ];
+  const BLOCK_SIGNALS = [/grid-template-areas\s*:/i, /subgrid/i, /grid-auto-flow\s*:/i, /repeat\(\s*auto-(?:fit|fill)/i];
   const placesItems = /(?:^|[\s;{])grid-(?:area|column|row)(?:-start|-end)?\s*:/i.test(css);
   const offenders = [];
 
@@ -107,9 +102,7 @@ export function unjustifiedGrids(css) {
 /* ─── Styling markers ─── */
 
 export function looksLikeStyling(text) {
-  return /```css|<style[^>]*>|adoptedStyleSheets|display\s*:\s*(?:flex|grid|block|inline)|\[data-part=/i.test(
-    String(text ?? ""),
-  );
+  return /```css|<style[^>]*>|adoptedStyleSheets|display\s*:\s*(?:flex|grid|block|inline)|\[data-part=/i.test(String(text ?? ""));
 }
 
 /** Mask string/template literal contents so scanners see code, not quoted samples. */

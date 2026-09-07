@@ -7,7 +7,7 @@
  * @returns {Promise<object>} an MCP tool result
  */
 export async function generateMode(arguments_) {
-        const { generateComponentFiles } = await import("../../core/file-tree/index.js");
+  const { generateComponentFiles } = await import("../../core/file-tree/index.js");
   const { writeFileSync, mkdirSync } = await import("node:fs");
   const { dirname, resolve, relative } = await import("node:path");
 
@@ -28,9 +28,7 @@ export async function generateMode(arguments_) {
   if (sanitizedBase.startsWith("..") || sanitizedBase === "") {
     return {
       isError: true,
-      content: [
-        { type: "text", text: `baseDir "${baseDir}" escapes project root "${rootDir}". Refusing to generate.` },
-      ],
+      content: [{ type: "text", text: `baseDir "${baseDir}" escapes project root "${rootDir}". Refusing to generate.` }],
     };
   }
 

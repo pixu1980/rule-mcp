@@ -52,7 +52,6 @@ export function mergePluginGuardrails(pluginName, guardrails) {
   PLUGIN_GUARDRAILS.set(pluginName, [...existing, ...guardrails]);
 }
 
-
 /**
  * The guardrail rule families applicable to a skill: the quality families,
  * shared rules, framework/scaffold rules and the backend/database/devops/a11y
@@ -85,17 +84,7 @@ export function getGuardrails(skillName, mode) {
   const isA11y = skillName === "rule-styleguide-a11y" || /^rule-(?:frontend|platform|ui|styleguide)/.test(skillName);
   const a11y = isA11y ? A11Y_GUARDRAILS : [];
 
-  const families = [
-    ...QUALITY_GUARDRAILS,
-    ...SHARED_GUARDRAILS,
-    ...frameworkSpecific,
-    ...scaffold,
-    ...backend,
-    ...database,
-    ...devops,
-    ...a11y,
-    ...plugin,
-  ];
+  const families = [...QUALITY_GUARDRAILS, ...SHARED_GUARDRAILS, ...frameworkSpecific, ...scaffold, ...backend, ...database, ...devops, ...a11y, ...plugin];
 
   // One run per rule id: the simplicity rules belong to the quality family AND
   // to the shared set (the simplicity test pins that), so the assembly dedupes

@@ -22,10 +22,7 @@ export function renderGatewayReply(core, arguments_, fileSet, lines) {
   };
   const primarySkill = effectiveRoute?.startsWith("rule-") ? effectiveRoute : null;
   const checkResult = core.checkResult;
-  const truncated =
-    core.evidence.length > 8000
-      ? core.evidence.slice(0, 8000) + "\n\n... (truncated, use pix_* tool for full content)"
-      : core.evidence;
+  const truncated = core.evidence.length > 8000 ? core.evidence.slice(0, 8000) + "\n\n... (truncated, use pix_* tool for full content)" : core.evidence;
 
   lines.push(`## Route: ${effectiveRoute} (confidence: ${Math.round((route.confidence || 0) * 100)}%)`);
 

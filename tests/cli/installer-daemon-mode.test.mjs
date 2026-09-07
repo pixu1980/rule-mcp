@@ -29,11 +29,7 @@ assert.equal(config.lifecycle, undefined);
 assert.equal(config.directTools, undefined);
 assert.match(config.headers?.Authorization ?? "", /^Bearer [a-f0-9]{64}$/i, "daemon config must authenticate to SSE");
 assert.ok(existsSync(tokenFile), "daemon token must be persisted for service restarts");
-assert.equal(
-  config.headers.Authorization,
-  `Bearer ${readFileSync(tokenFile, "utf8").trim()}`,
-  "client and daemon must share the same persisted token",
-);
+assert.equal(config.headers.Authorization, `Bearer ${readFileSync(tokenFile, "utf8").trim()}`, "client and daemon must share the same persisted token");
 if (process.platform !== "win32") {
   assert.equal(statSync(tokenFile).mode & 0o777, 0o600, "daemon token file must be owner-readable only");
 }

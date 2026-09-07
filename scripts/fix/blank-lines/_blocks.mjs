@@ -31,16 +31,10 @@ export function fix_blocks(lines) {
     const line = lines[index];
     const previous = lines[index - 1];
     const next = lines[index + 1];
-    if (
-      /^\s*(if|for|while|switch|try)\s*\(/.test(line) ||
-      /^\.(then|catch|finally|map|filter|reduce|forEach)\s*\(/.test(line)
-    ) {
+    if (/^\s*(if|for|while|switch|try)\s*\(/.test(line) || /^\.(then|catch|finally|map|filter|reduce|forEach)\s*\(/.test(line)) {
       const previousTrimmed = previous.trim();
       const isScaffolding =
-        previousTrimmed === "" ||
-        previousTrimmed.endsWith("{") ||
-        previousTrimmed.startsWith("}") ||
-        /^\s*(\/\/|\/\*|\*|if|for|while|switch|try|case|default)/.test(previous);
+        previousTrimmed === "" || previousTrimmed.endsWith("{") || previousTrimmed.startsWith("}") || /^\s*(\/\/|\/\*|\*|if|for|while|switch|try|case|default)/.test(previous);
       if (!isScaffolding) {
         issuesBefore.push(index);
       }

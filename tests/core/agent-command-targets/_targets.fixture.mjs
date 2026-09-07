@@ -16,7 +16,6 @@
  *     does not substitute it)
  */
 
-
 export * from "../../../src/core/agents/command-targets/index.js";
 export * from "../../../src/core/agents/commands/index.js";
 export { getAllAgents } from "../../../src/cli/install/index.js";

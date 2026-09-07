@@ -44,9 +44,7 @@ export function wrapRequestHandler(handler, options = {}) {
       const message = error?.message ?? String(error ?? "Unknown error");
       const isTimeout = message.startsWith("Sandbox timeout");
 
-      process.stderr.write(
-        `[sandbox] ${isTimeout ? "TIMEOUT" : "ERROR"} ${request.method} ${request.url}: ${message}\n`,
-      );
+      process.stderr.write(`[sandbox] ${isTimeout ? "TIMEOUT" : "ERROR"} ${request.method} ${request.url}: ${message}\n`);
 
       try {
         if (!res.headersSent && !res.writableEnded) {

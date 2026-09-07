@@ -8,10 +8,7 @@ console.log("=== package.json guardrails: corepack, gating, repo ===\n");
 
 // ── T3: corepack, both spellings ──
 check("T3 packageManager fails", fails({ packageManager: "pnpm@11.24.0" }, COREPACK));
-check(
-  "T3.1 devEngines.packageManager fails",
-  fails({ devEngines: { packageManager: { name: "pnpm", version: "11.8.0", onFail: "download" } } }, COREPACK),
-);
+check("T3.1 devEngines.packageManager fails", fails({ devEngines: { packageManager: { name: "pnpm", version: "11.8.0", onFail: "download" } } }, COREPACK));
 check(
   "T3.2 both at once are one failure with two details",
   (() => {
@@ -23,10 +20,7 @@ check(
     return failure?.failCount === 2;
   })(),
 );
-check(
-  "T3.3 a manifest without either passes",
-  !fails({ name: "app", devEngines: { runtime: { name: "node", version: "24" } } }, COREPACK),
-);
+check("T3.3 a manifest without either passes", !fails({ name: "app", devEngines: { runtime: { name: "node", version: "24" } } }, COREPACK));
 check("T3.4 engines stays legal: it asserts, it does not download", !fails({ engines: { node: ">=22" } }, COREPACK));
 
 // ── T4: gated on the file ──
@@ -35,14 +29,8 @@ check(
   !fails('const range = "^3.9.4";\nexport const packageManager = "pnpm@11.24.0";\n', EXACT, "src/app.js") &&
     !fails('export const packageManager = "pnpm@11.24.0";\n', COREPACK, "src/app.js"),
 );
-check(
-  "T4.1 a nested manifest path is still a manifest",
-  fails({ dependencies: { prettier: "^3.9.4" } }, EXACT, "packages/ui/package.json"),
-);
-check(
-  "T4.2 unparseable JSON is reported, not thrown",
-  run("{ not json", "package.json").failed.some((f) => f.id === EXACT || f.id === COREPACK) === false,
-);
+check("T4.1 a nested manifest path is still a manifest", fails({ dependencies: { prettier: "^3.9.4" } }, EXACT, "packages/ui/package.json"));
+check("T4.2 unparseable JSON is reported, not thrown", run("{ not json", "package.json").failed.some((f) => f.id === EXACT || f.id === COREPACK) === false);
 
 // ── T5: this repository obeys its own rule ──
 const manifests = execFileSync("git", ["ls-files", "-z", "--", "*package.json"], { encoding: "utf8" })
@@ -55,10 +43,7 @@ const offenders = manifests.filter((path) => {
 
   return report.failed.some((failure) => failure.id === EXACT || failure.id === COREPACK);
 });
-check(
-  `T5.1 every tracked manifest passes both rules${offenders.length > 0 ? ` (offenders: ${offenders.join(", ")})` : ""}`,
-  offenders.length === 0,
-);
+check(`T5.1 every tracked manifest passes both rules${offenders.length > 0 ? ` (offenders: ${offenders.join(", ")})` : ""}`, offenders.length === 0);
 
 // ── T6: .npmrc is what stops the range from coming back ──
 //

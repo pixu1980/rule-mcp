@@ -15,12 +15,9 @@ const { canonicalizeQuery } = await import("../../../src/core/bm25/index.js");
 export function variants(prompt) {
   const words = prompt.trim().split(/\s+/);
 
-  return [
-    words.slice(0, -1).join(" "),
-    `${prompt} in my project`,
-    words.slice(1).join(" "),
-    `${words.slice(0, -1).join(" ")} best approach`,
-  ].filter((variant) => variant.trim().split(/\s+/).length >= 2);
+  return [words.slice(0, -1).join(" "), `${prompt} in my project`, words.slice(1).join(" "), `${words.slice(0, -1).join(" ")} best approach`].filter(
+    (variant) => variant.trim().split(/\s+/).length >= 2,
+  );
 }
 
 export const terms = (text) => new Set(canonicalizeQuery(text).split(" ").filter(Boolean));

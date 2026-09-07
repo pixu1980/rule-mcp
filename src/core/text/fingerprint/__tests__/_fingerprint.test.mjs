@@ -44,15 +44,9 @@ const t1 = stripFingerprint(dashed);
 check("T1 no em dash survives", !t1.includes(EM));
 check("T1.1 the clause is still readable", /router.*caches results.*is fast/.test(t1));
 check("T1.2 en dash goes too", !stripFingerprint(`pages 10${EN}20`).includes(EN));
-check(
-  "T1.3 a spaced em dash becomes a comma, not a run-on",
-  stripFingerprint(`Fast ${EM} and cheap.`).includes(", and cheap"),
-);
+check("T1.3 a spaced em dash becomes a comma, not a run-on", stripFingerprint(`Fast ${EM} and cheap.`).includes(", and cheap"));
 // A dash alone in a table cell means "none". A comma there says nothing at all.
-check(
-  "T1.4 a lone dash in a table cell stays a dash",
-  stripFingerprint(`| P1 | work | ${EM} | S |`) === "| P1 | work | - | S |",
-);
+check("T1.4 a lone dash in a table cell stays a dash", stripFingerprint(`| P1 | work | ${EM} | S |`) === "| P1 | work | - | S |");
 check("T1.5 a dash opening a line is a list marker", stripFingerprint(`${EM} first item`) === "- first item");
 
 // ── T2: the rest of the typographic set ──
@@ -68,22 +62,13 @@ const british = "The colour of the behaviour we organise, analysed at the centre
 const t3 = stripFingerprint(british);
 check("T3 spelling is normalised", /color/.test(t3) && /behavior/.test(t3) && /organize/.test(t3));
 check("T3.1 -yse and -re and -ogue too", /analyzed/.test(t3) && /center/.test(t3) && /catalog/.test(t3));
-check(
-  "T3.2 case is preserved",
-  stripFingerprint("Colour and COLOUR").includes("Color") && stripFingerprint("Colour and COLOUR").includes("COLOR"),
-);
+check("T3.2 case is preserved", stripFingerprint("Colour and COLOUR").includes("Color") && stripFingerprint("Colour and COLOUR").includes("COLOR"));
 check("T3.3 no false positive inside a longer word", stripFingerprint("discolouration").includes("discolouration"));
 // The word boundary sits before the prefix, not before the stem, so an -ise
 // stem has to accept `un` and `re` or half the family is missed.
 const prefixed = stripFingerprint("An unrecognised flag, unauthorised and reorganised.");
-check(
-  "T3.4 a prefixed -ise stem is corrected",
-  prefixed.includes("unrecognized") && prefixed.includes("unauthorized") && prefixed.includes("reorganized"),
-);
-check(
-  "T3.5 the prefix rule invents nothing",
-  stripFingerprint("unwise reprise franchise") === "unwise reprise franchise",
-);
+check("T3.4 a prefixed -ise stem is corrected", prefixed.includes("unrecognized") && prefixed.includes("unauthorized") && prefixed.includes("reorganized"));
+check("T3.5 the prefix rule invents nothing", stripFingerprint("unwise reprise franchise") === "unwise reprise franchise");
 
 // ── T4: code, spans and URLs are data ──
 const withCode = `Set it${EM}like this:\n\`\`\`js\nconst colour = "grey"; // the colour${EM}kept\n\`\`\`\ndone`;
@@ -102,10 +87,7 @@ check("T5 JSON is returned unchanged", stripFingerprint(json) === json);
 
 // ── T6: idempotence, or the cache replays a different string every time ──
 const messy = `${LDQUO}Colour${RDQUO}${EM}the behaviour${ELLIPSIS} organised.`;
-check(
-  "T6 running it twice equals running it once",
-  stripFingerprint(stripFingerprint(messy)) === stripFingerprint(messy),
-);
+check("T6 running it twice equals running it once", stripFingerprint(stripFingerprint(messy)) === stripFingerprint(messy));
 check("T6.1 clean text is left alone", stripFingerprint("Plain color text.") === "Plain color text.");
 
 // ── T7: the MCP result wrapper ──
@@ -123,10 +105,7 @@ check("T7.1 a prose content item is cleaned", wrapped.content[1].text === "The c
 const previous = process.env.RULE_MCP_NO_FINGERPRINT;
 process.env.RULE_MCP_NO_FINGERPRINT = "1";
 check("T8 the opt-out disables it", fingerprintEnabled() === false);
-check(
-  "T8.1 the result passes through untouched",
-  stripFingerprintResult(result).content[1].text === `The colour${EM}here.`,
-);
+check("T8.1 the result passes through untouched", stripFingerprintResult(result).content[1].text === `The colour${EM}here.`);
 if (previous === undefined) {
   delete process.env.RULE_MCP_NO_FINGERPRINT;
 } else {

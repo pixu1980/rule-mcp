@@ -40,10 +40,7 @@ export function renderFlight(flight) {
       ["Result bytes", num(kpi.mcp?.resultBytes)],
       ["Argument tokens received", `~${num(kpi.mcp?.argsTokens)}`],
       ["Average result", `~${num(kpi.mcp?.avgResultTokens)} tokens`],
-      [
-        "Share of the model's tokens",
-        kpi.mcp?.shareOfLlmTokens === undefined ? undefined : pct(kpi.mcp.shareOfLlmTokens, 2),
-      ],
+      ["Share of the model's tokens", kpi.mcp?.shareOfLlmTokens === undefined ? undefined : pct(kpi.mcp.shareOfLlmTokens, 2)],
       ["Cost of that share", kpi.mcp?.costUsd === undefined ? undefined : usd(kpi.mcp.costUsd)],
     ]),
     "## Tokens saved",
@@ -66,10 +63,7 @@ export function renderFlight(flight) {
       // Output the cache served, reported here rather than under tokens saved:
       // a replayed result is read by the model in full (ADR 079).
       ["Replayed output", kpi.cache?.replayedTokens ? `~${num(kpi.cache.replayedTokens)} tokens` : undefined],
-      [
-        "Recompute saved",
-        kpi.cache?.recomputeSavedMsPerHit ? `~${num(kpi.cache.recomputeSavedMsPerHit)} ms per hit` : undefined,
-      ],
+      ["Recompute saved", kpi.cache?.recomputeSavedMsPerHit ? `~${num(kpi.cache.recomputeSavedMsPerHit)} ms per hit` : undefined],
     ]),
     ...countTable(kpi.cache?.byTier, 5),
     "## Guardrails",

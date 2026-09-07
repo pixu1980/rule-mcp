@@ -3,15 +3,7 @@ import { strict as assert } from "node:assert";
 import { join } from "node:path";
 import { test } from "node:test";
 
-import {
-  AGENTS_WITHOUT_COMMAND_SURFACE,
-  COMMAND_TARGETS,
-  FORMAT_EXT,
-  agentsWithCleanCommands,
-  ctx,
-  getAllAgents,
-  resolveCommandTargets,
-} from "./_targets.fixture.mjs";
+import { AGENTS_WITHOUT_COMMAND_SURFACE, COMMAND_TARGETS, FORMAT_EXT, agentsWithCleanCommands, ctx, getAllAgents, resolveCommandTargets } from "./_targets.fixture.mjs";
 
 console.log("agent command targets test: coverage and resolution");
 
@@ -27,11 +19,7 @@ test("coverage: every supported agent is either covered or explicitly excluded",
       uncovered.push(agent);
     }
   }
-  assert.deepEqual(
-    uncovered,
-    [],
-    `agents with neither a command target nor a documented reason: ${uncovered.join(", ")}`,
-  );
+  assert.deepEqual(uncovered, [], `agents with neither a command target nor a documented reason: ${uncovered.join(", ")}`);
 });
 
 test("exclusions name real agents only, and never contradict a target", () => {
@@ -68,10 +56,7 @@ test("VS Code: prompt files land in the user-profile prompts dirs of every insta
 
   assert.ok(dirs.includes(join(codeUser, "prompts")), "stable VS Code user prompts dir is always targeted");
   assert.ok(dirs.includes(join(insidersUser, "prompts")), "installed Insiders variant is targeted");
-  assert.ok(
-    dirs.includes(join(insidersUser, "profiles", "-abc123", "prompts")),
-    "per-profile prompts dirs are targeted (prompt files are profile-scoped)",
-  );
+  assert.ok(dirs.includes(join(insidersUser, "profiles", "-abc123", "prompts")), "per-profile prompts dirs are targeted (prompt files are profile-scoped)");
   assert.ok(
     dirs.every((dir) => !dir.includes("Code - OSS")),
     "variants that are not installed must not be created",

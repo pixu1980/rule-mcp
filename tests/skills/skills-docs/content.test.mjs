@@ -18,27 +18,12 @@ for (const required of ["rule-ui-design-system", "rule-frontend", "rule-stylegui
 }
 
 const uiDesignSkill = skillDoc("rule-ui-design-system");
-for (const required of [
-  "Zero CSS classes",
-  "Zero inline styles",
-  "Semantic HTML",
-  "adoptedStyleSheets",
-  "WCAG 2.2 AA",
-  "rule_tool_check",
-]) {
+for (const required of ["Zero CSS classes", "Zero inline styles", "Semantic HTML", "adoptedStyleSheets", "WCAG 2.2 AA", "rule_tool_check"]) {
   assert.ok(uiDesignSkill.includes(required), `rule-ui-design-system must enforce ${required}`);
 }
 
 const sqlSkill = skillDoc("rule-data-sql");
-for (const required of [
-  "database is the authority",
-  "EAV",
-  "COMMENT ON COLUMN",
-  "schema tests",
-  "ORM",
-  "Soft delete is a policy choice",
-  "Avoid overloaded tables",
-]) {
+for (const required of ["database is the authority", "EAV", "COMMENT ON COLUMN", "schema tests", "ORM", "Soft delete is a policy choice", "Avoid overloaded tables"]) {
   assert.ok(sqlSkill.includes(required), `rule-data-sql must cover ${required}`);
 }
 
@@ -48,10 +33,7 @@ for (const required of ["referencing side of a foreign key", "timestamptz", "Pos
 }
 
 const mysqlSkill = skillDoc("rule-data-mysql");
-assert.ok(
-  mysqlSkill.includes("InnoDB automatically indexes foreign-key columns"),
-  "rule-data-mysql must document InnoDB foreign-key indexing",
-);
+assert.ok(mysqlSkill.includes("InnoDB automatically indexes foreign-key columns"), "rule-data-mysql must document InnoDB foreign-key indexing");
 
 const typescriptSkill = skillDoc("rule-toolchain-typescript");
 for (const required of [
@@ -92,17 +74,7 @@ for (const required of [
 }
 
 const jsStyleguide = skillDoc("rule-styleguide-javascript");
-for (const required of [
-  "new Set(",
-  "Set.has",
-  "for...of",
-  "node:fs",
-  "throw new Error",
-  "replaceAll",
-  "flatMap",
-  "new Map(",
-  "prefer-const",
-]) {
+for (const required of ["new Set(", "Set.has", "for...of", "node:fs", "throw new Error", "replaceAll", "flatMap", "new Map(", "prefer-const"]) {
   assert.ok(jsStyleguide.includes(required), `rule-styleguide-javascript must cover ${required}`);
 }
 

@@ -35,15 +35,12 @@ export function registerStatsTool() {
 
   registerTool({
     name: "rule_tool_stats",
-    description:
-      "Read the local telemetry log and summarize it: call counts, cache hit rate, saved/estimated tokens, latency.",
+    description: "Read the local telemetry log and summarize it: call counts, cache hit rate, saved/estimated tokens, latency.",
     zodSchema: StatsSchema,
     handler: async (arguments_) => {
       if (!telemetryEnabled()) {
         return {
-          content: [
-            { type: "text", text: "Telemetry is disabled (RULE_MCP_NO_TELEMETRY=1). Nothing has been recorded." },
-          ],
+          content: [{ type: "text", text: "Telemetry is disabled (RULE_MCP_NO_TELEMETRY=1). Nothing has been recorded." }],
         };
       }
       // An exported file is a closed recording window, so it is read as it is

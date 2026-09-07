@@ -5,11 +5,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import test from "node:test";
 
-import {
-  renderRenumberPlan,
-  planRenumber,
-  staleCommitReferences,
-} from "../../../src/core/docs-numbering/index.js";
+import { renderRenumberPlan, planRenumber, staleCommitReferences } from "../../../src/core/docs-numbering/index.js";
 import { git, seedRepo, seedScrambledIndex } from "./_doctor.fixture.mjs";
 
 test("a clean tree reports nothing to do", () => {

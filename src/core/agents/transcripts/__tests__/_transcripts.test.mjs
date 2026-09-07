@@ -16,8 +16,7 @@ import { mkdirSync, mkdtempSync, writeFileSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 
-const { AGENT_TRANSCRIPTS, detectAgentUsage, readAgentUsage, supportedAgents, unsupportedAgents } =
-  await import("../../../../../src/core/agents/transcripts/index.js");
+const { AGENT_TRANSCRIPTS, detectAgentUsage, readAgentUsage, supportedAgents, unsupportedAgents } = await import("../../../../../src/core/agents/transcripts/index.js");
 
 const home = mkdtempSync(join(tmpdir(), "rule-transcripts-home-"));
 

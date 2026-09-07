@@ -21,8 +21,7 @@ export function parseExpression(expr) {
 }
 
 export function parseArg(value) {
-  if ((value.startsWith('"') && value.endsWith('"')) || (value.startsWith("'") && value.endsWith("'")))
-    return value.slice(1, -1);
+  if ((value.startsWith('"') && value.endsWith('"')) || (value.startsWith("'") && value.endsWith("'"))) return value.slice(1, -1);
   if (/^\d+$/.test(value)) return parseInt(value, 10);
   if (/^\d+\.\d+$/.test(value)) return parseFloat(value);
   if (value === "true") return true;

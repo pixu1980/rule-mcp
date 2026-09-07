@@ -1,13 +1,5 @@
 /** Setup command registrars: install, uninstall, config, doctor, completions, agent-commands. */
-import {
-  agentCommandsCommand,
-  completionsCommand,
-  configCommand,
-  configureCommand,
-  doctorCommand,
-  installCommand,
-  uninstallCommand,
-} from "./commands/index.js";
+import { agentCommandsCommand, completionsCommand, configCommand, configureCommand, doctorCommand, installCommand, uninstallCommand } from "./commands/index.js";
 import { Option } from "commander";
 
 /** Collector for repeatable options: `--set A=1 --set B=2` → ["A=1", "B=2"]. */
@@ -19,14 +11,7 @@ export function registerInstallCommand(program) {
     .command("install")
     .description("Install rule-mcp into an agent/IDE (edits mcp.json)")
     .option("--agent <name>", "target agent, or 'all' for every supported agent", "all")
-    .addOption(
-      new Option("--mode <name>", "stdio (default), daemon (SSE), or docker").choices([
-        "stdio",
-        "daemon",
-        "sse",
-        "docker",
-      ]),
-    )
+    .addOption(new Option("--mode <name>", "stdio (default), daemon (SSE), or docker").choices(["stdio", "daemon", "sse", "docker"]))
     .option("--global", "use clean command path (requires global install)")
     .option("--force", "override existing configuration")
     .option("--dry-run", "preview without writing")

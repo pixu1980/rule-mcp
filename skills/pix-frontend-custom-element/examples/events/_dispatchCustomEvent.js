@@ -14,13 +14,7 @@
  * @param {EventTarget} [dispatcher]
  * @returns {void}
  */
-export const dispatchCustomEvent = function (
-  eventNamespace,
-  eventName,
-  detail = {},
-  originalEvent = undefined,
-  dispatcher = undefined,
-) {
+export const dispatchCustomEvent = function (eventNamespace, eventName, detail = {}, originalEvent = undefined, dispatcher = undefined) {
   const target = dispatcher ?? this ?? globalThis;
 
   const event = new CustomEvent(`${eventNamespace}.${eventName}`, {

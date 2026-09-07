@@ -2,19 +2,7 @@
 import { adrAuthor } from "./_author.js";
 
 /** Generate ADR markdown content. */
-export function generateAdr({
-  number,
-  title,
-  status,
-  context,
-  decision,
-  consequences,
-  alternatives,
-  endsWhen,
-  tags,
-  date,
-  author,
-}) {
+export function generateAdr({ number, title, status, context, decision, consequences, alternatives, endsWhen, tags, date, author }) {
   date ??= new Date().toISOString().slice(0, 10);
   const lines = [
     `# ${String(number).padStart(3, "0")}: ${title}`,

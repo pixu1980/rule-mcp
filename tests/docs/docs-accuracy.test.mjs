@@ -47,11 +47,7 @@ test("the docs suite 01-06 plus the unnumbered docs is complete and indexed", ()
 
 test("README advertises the real tool count", () => {
   assert.match(README, new RegExp(String.raw`\*\*${actual.tools} tools\*\*`), `README must say ${actual.tools} tools`);
-  assert.match(
-    README,
-    new RegExp(String.raw`All ${actual.tools} tools \(normal mode\)`),
-    "tool list header must match",
-  );
+  assert.match(README, new RegExp(String.raw`All ${actual.tools} tools \(normal mode\)`), "tool list header must match");
 });
 
 test("README advertises the real resource count", () => {
@@ -71,6 +67,4 @@ test("architecture diagram uses the real counts", () => {
   assert.match(README, new RegExp(`│ *${actual.resources} resources`), "resource count in the diagram");
 });
 
-console.log(
-  `  ✅ README counts match reality (${actual.tools} tools / ${actual.resources} resources / ${actual.prompts} prompts / ${actual.skills} skills)`,
-);
+console.log(`  ✅ README counts match reality (${actual.tools} tools / ${actual.resources} resources / ${actual.prompts} prompts / ${actual.skills} skills)`);

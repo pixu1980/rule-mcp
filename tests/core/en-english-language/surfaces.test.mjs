@@ -16,31 +16,18 @@ test("the rule-styleguide-english skill exists and is routed", async () => {
   assert.match(meta.description, /english/i, "the description advertises English/American spelling");
 
   const { callTool } = await import("../../../src/tools/router/index.js");
-  const answer = JSON.parse(
-    (await callTool("pix_tool", { prompt: "americanize this comment: colour -> color, behaviour -> behavior" }))
-      .content[0].text,
-  );
-  assert.match(
-    `${answer.route} ${(answer.alternatives ?? []).map((a) => a.route).join(" ")}`,
-    /styleguide-english/,
-    "an americanize/english-spelling prompt routes to the skill",
-  );
+  const answer = JSON.parse((await callTool("pix_tool", { prompt: "americanize this comment: colour -> color, behaviour -> behavior" })).content[0].text);
+  assert.match(`${answer.route} ${(answer.alternatives ?? []).map((a) => a.route).join(" ")}`, /styleguide-english/, "an americanize/english-spelling prompt routes to the skill");
 });
 
 test("the skill's wordlist matches the fingerprint dictionary exactly (no drift)", () => {
   const skillText = readFileSync("skills/rule-styleguide-english/SKILL.md", "utf8");
-  const pairs = [...skillText.matchAll(/^- ([a-z]+) → ([a-z]+)$/gim)].map((m) => [
-    m[1].toLowerCase(),
-    m[2].toLowerCase(),
-  ]);
+  const pairs = [...skillText.matchAll(/^- ([a-z]+) → ([a-z]+)$/gim)].map((m) => [m[1].toLowerCase(), m[2].toLowerCase()]);
   assert.ok(pairs.length >= 4, "the skill advertises the key UK→US pairs");
 
   for (const [uk, us] of pairs) {
     const { british } = findFingerprints(`the word ${uk} here`);
-    assert.ok(
-      british.includes(uk),
-      `fingerprint dictionary must flag "${uk}" so the skill's "${uk} -> ${us}" stays honest`,
-    );
+    assert.ok(british.includes(uk), `fingerprint dictionary must flag "${uk}" so the skill's "${uk} -> ${us}" stays honest`);
     assert.ok(!british.includes(us), `the US form "${us}" must not be flagged`);
   }
 });

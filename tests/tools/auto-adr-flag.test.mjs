@@ -85,9 +85,7 @@ check("T5 the separate disable name is inert", await hooksAutoLog({ [FLAG]: "1",
 
 const { readdirSync, readFileSync } = await import("node:fs");
 const walk = (dir) =>
-  readdirSync(dir, { withFileTypes: true }).flatMap((entry) =>
-    entry.isDirectory() ? walk(join(dir, entry.name)) : entry.name.endsWith(".js") ? [join(dir, entry.name)] : [],
-  );
+  readdirSync(dir, { withFileTypes: true }).flatMap((entry) => (entry.isDirectory() ? walk(join(dir, entry.name)) : entry.name.endsWith(".js") ? [join(dir, entry.name)] : []));
 const stragglers = walk(new URL("../../src", import.meta.url).pathname).filter((file) => {
   const text = readFileSync(file, "utf8");
 
@@ -99,10 +97,7 @@ check(`T6 no source file reads an old name (${stragglers.length} found)`, stragg
 
 const envDoc = readFileSync(new URL("../../docs/05-env-variables.md", import.meta.url), "utf8");
 check("T7 the flag is documented", envDoc.includes(FLAG));
-check(
-  "T8 and the names it replaced are not",
-  !envDoc.includes(RETIRED_DISABLE) && !envDoc.includes(`\`${RETIRED_ENABLE}\``),
-);
+check("T8 and the names it replaced are not", !envDoc.includes(RETIRED_DISABLE) && !envDoc.includes(`\`${RETIRED_ENABLE}\``));
 
 assert.ok(true);
 console.log(`\nResults: ${pass} passed, ${fail} failed`);

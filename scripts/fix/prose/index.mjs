@@ -99,9 +99,7 @@ for (const file of files) {
 }
 
 console.log(`${files.length} files scanned, ${changed} would change${apply ? " (written)" : ""}`);
-console.log(
-  `  dashes: ${dashes}   typographic: ${typographic}   british spellings: ${british}   ragged box lines: ${raggedLines}`,
-);
+console.log(`  dashes: ${dashes}   typographic: ${typographic}   british spellings: ${british}   ragged box lines: ${raggedLines}`);
 if (headingChanges.length > 0) {
   console.log(`\n${headingChanges.length} heading(s) change - these are the routing surface, review them:`);
   for (const change of headingChanges) {

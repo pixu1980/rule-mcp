@@ -5,9 +5,4 @@ import { componentExportCheck } from "./_component-export-check.js";
 import { barrelExportsMatchFiles } from "./_barrel-exports-match-files.js";
 
 /** The family, in canonical order. */
-export const FILE_TREE_GUARDRAILS = [
-  componentFolderBarrel,
-  componentFilePrefix,
-  componentExportCheck,
-  barrelExportsMatchFiles,
-];
+export const FILE_TREE_GUARDRAILS = [componentFolderBarrel, componentFilePrefix, componentExportCheck, barrelExportsMatchFiles];

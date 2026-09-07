@@ -78,9 +78,7 @@ if (process.argv.includes("--json")) {
   console.log("");
   console.log("Heaviest:");
   for (const row of report.heaviest) {
-    console.log(
-      `  ~${String(row.totalTokens).padStart(4)}  ${row.name.padEnd(36)} desc ${row.descriptionTokens}, schema ${row.schemaTokens}`,
-    );
+    console.log(`  ~${String(row.totalTokens).padStart(4)}  ${row.name.padEnd(36)} desc ${row.descriptionTokens}, schema ${row.schemaTokens}`);
   }
   if (report.verboseDescriptions.length > 0) {
     console.log("");

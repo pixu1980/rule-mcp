@@ -3,8 +3,7 @@
 export const barrelExportsMatchFiles = {
   id: "barrel-exports-match-files",
   label: "Barrel exports match actual component files",
-  description:
-    "The barrel file's export statements must reference existing component files with the correct _PascalCase names.",
+  description: "The barrel file's export statements must reference existing component files with the correct _PascalCase names.",
   check: (code, context) => {
     const fileName = context?.fileName || "";
 
@@ -25,9 +24,7 @@ export const barrelExportsMatchFiles = {
       const sourceBase = sourcePath.replace(/\.[a-z]+$/, "");
 
       if (!sourceBase.startsWith("_")) {
-        violations.push(
-          `Export "${exportedName}" references "${sourcePath}" which does not start with underscore prefix`,
-        );
+        violations.push(`Export "${exportedName}" references "${sourcePath}" which does not start with underscore prefix`);
       }
 
       if (!/^_[A-Z]/.test(sourceBase)) {

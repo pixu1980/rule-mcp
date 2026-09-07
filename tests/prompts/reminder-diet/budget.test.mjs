@@ -8,10 +8,7 @@ import { BASELINE_TOKENS, ENFORCEMENT, SESSION_CALLS, runSession } from "./_diet
 test("a session pays less than 40 % of what the reminder used to cost", () => {
   const { overhead } = runSession(SESSION_CALLS);
   const reduction = (BASELINE_TOKENS - overhead) / BASELINE_TOKENS;
-  assert.ok(
-    reduction > 0.6,
-    `reminder overhead must drop more than 60 % (was ${BASELINE_TOKENS}, now ${overhead}, ${Math.round(reduction * 100)} %)`,
-  );
+  assert.ok(reduction > 0.6, `reminder overhead must drop more than 60 % (was ${BASELINE_TOKENS}, now ${overhead}, ${Math.round(reduction * 100)} %)`);
 });
 
 test("the diet cuts repetition, not substance", () => {

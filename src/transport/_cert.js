@@ -73,28 +73,10 @@ export function generateSelfSignedCert({ certPath, keyPath, commonName = "rule-m
     ].join("\n");
     writeFileSync(configPath, certConfig, { encoding: "utf-8", mode: 0o600 });
 
-    const certResult = spawnSync(
-      "openssl",
-      [
-        "req",
-        "-x509",
-        "-new",
-        "-nodes",
-        "-key",
-        keyPath,
-        "-sha256",
-        "-days",
-        String(days),
-        "-out",
-        certPath,
-        "-config",
-        configPath,
-      ],
-      {
-        stdio: ["pipe", "pipe", "pipe"],
-        encoding: "utf-8",
-      },
-    );
+    const certResult = spawnSync("openssl", ["req", "-x509", "-new", "-nodes", "-key", keyPath, "-sha256", "-days", String(days), "-out", certPath, "-config", configPath], {
+      stdio: ["pipe", "pipe", "pipe"],
+      encoding: "utf-8",
+    });
 
     if (certResult.status !== 0) {
       console.error("Failed to generate certificate:", certResult.stderr);

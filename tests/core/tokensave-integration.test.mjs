@@ -50,10 +50,7 @@ check("T1.2 detectProject exposes tokensave flag", detectProject(withTs).tokensa
 // ── T2: suppression helper ──
 const heavy = Array.from({ length: 50 }, (_, index) => `line ${index}`).join("\n");
 const suppressed = suppressIfTokensave(heavy, { projectDir: withTs, label: "file tree" });
-check(
-  "T2 suppresses heavy block when active",
-  suppressed.includes("TOKENSAVE ACTIVE") && !suppressed.includes("line 49"),
-);
+check("T2 suppresses heavy block when active", suppressed.includes("TOKENSAVE ACTIVE") && !suppressed.includes("line 49"));
 // Multi-source note: with no explicit dir, env var or cwd can activate
 // tokensave - so the "inactive" scenario must run from a neutral cwd.
 const prevCwd = process.cwd();

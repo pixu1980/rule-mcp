@@ -1,6 +1,5 @@
 /** @module cli/cache/helpers - shared output and the recompute closure */
 
-
 export const print = (value) => process.stdout.write(`${value}\n`);
 
 /** The area a routed skill belongs to: `rule-styleguide-css` is styleguide. */

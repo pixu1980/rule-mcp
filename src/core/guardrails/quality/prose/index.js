@@ -6,11 +6,4 @@ import { enEnglishOnlyProse } from "./_english-only-prose.js";
 import { enEnglishOnlyFilenames } from "./_english-only-filenames.js";
 import { fpBoxRectangular } from "./_box-rectangular.js";
 
-export const PROSE_GUARDRAILS = [
-  fpNoEmdash,
-  fpNoTypographicChars,
-  fpAmericanEnglish,
-  enEnglishOnlyProse,
-  enEnglishOnlyFilenames,
-  fpBoxRectangular,
-];
+export const PROSE_GUARDRAILS = [fpNoEmdash, fpNoTypographicChars, fpAmericanEnglish, enEnglishOnlyProse, enEnglishOnlyFilenames, fpBoxRectangular];

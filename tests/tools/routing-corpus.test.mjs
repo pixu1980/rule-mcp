@@ -65,23 +65,15 @@ test("the corpus routes to the intended skill", () => {
   const rate = exact / results.length;
   const missed = results.filter((result) => !result.exact).map((result) => `${result.prompt} -> ${result.got}`);
   console.log(`  exact: ${exact}/${results.length} (${Math.round(rate * 100)}%)`);
-  assert.ok(
-    rate >= MIN_EXACT,
-    `routing fell to ${Math.round(rate * 100)}%, below the ${MIN_EXACT * 100}% floor.\n  ${missed.join("\n  ")}`,
-  );
+  assert.ok(rate >= MIN_EXACT, `routing fell to ${Math.round(rate * 100)}%, below the ${MIN_EXACT * 100}% floor.\n  ${missed.join("\n  ")}`);
 });
 
 test("a near miss still offers the right skill", () => {
   const reachable = results.filter((result) => result.exact || result.inAlternatives).length;
   const rate = reachable / results.length;
-  const unreachable = results
-    .filter((result) => !result.exact && !result.inAlternatives)
-    .map((result) => `${result.prompt} -> ${result.got}`);
+  const unreachable = results.filter((result) => !result.exact && !result.inAlternatives).map((result) => `${result.prompt} -> ${result.got}`);
   console.log(`  top-or-alternative: ${reachable}/${results.length} (${Math.round(rate * 100)}%)`);
-  assert.ok(
-    rate >= MIN_TOP_OR_ALT,
-    `the intended skill is unreachable for ${unreachable.length} prompt(s):\n  ${unreachable.join("\n  ")}`,
-  );
+  assert.ok(rate >= MIN_TOP_OR_ALT, `the intended skill is unreachable for ${unreachable.length} prompt(s):\n  ${unreachable.join("\n  ")}`);
 });
 
 test("nonsense stays uncertain", async () => {
@@ -99,10 +91,7 @@ test("the router still returns its full contract", async () => {
   for (const field of ["route", "confidence", "sections", "next_tools", "alternatives", "skills_available"]) {
     assert.ok(field in answer, `the router dropped ${field} from its output`);
   }
-  assert.ok(
-    Array.isArray(answer.sections) && answer.sections.length > 0,
-    "sections must name where the answer came from",
-  );
+  assert.ok(Array.isArray(answer.sections) && answer.sections.length > 0, "sections must name where the answer came from");
 });
 
 // ── Personas (D.3): the role is named and rule_tool_plan is offered ──
@@ -121,9 +110,7 @@ test("a persona request names the role it asks for", () => {
 });
 
 test("a persona request is pointed at rule_tool_plan", () => {
-  const missing = personaAnswers
-    .filter((entry) => !(entry.answer.next_tools ?? []).includes("rule_tool_plan"))
-    .map((entry) => entry.prompt);
+  const missing = personaAnswers.filter((entry) => !(entry.answer.next_tools ?? []).includes("rule_tool_plan")).map((entry) => entry.prompt);
 
   assert.deepEqual(missing, [], "the persona surface is rule_tool_plan, so the answer has to offer it");
 });
@@ -134,9 +121,7 @@ for (const prompt of NOT_PERSONAS) {
 }
 
 test("ordinary work is not mistaken for a persona", () => {
-  const overreach = negativeAnswers
-    .filter((entry) => entry.answer.persona)
-    .map((entry) => `${entry.prompt} -> ${entry.answer.persona.role}`);
+  const overreach = negativeAnswers.filter((entry) => entry.answer.persona).map((entry) => `${entry.prompt} -> ${entry.answer.persona.role}`);
 
   assert.deepEqual(overreach, [], `a subject is not a persona:\n  ${overreach.join("\n  ")}`);
 });

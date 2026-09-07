@@ -22,7 +22,6 @@ import { fileURLToPath } from "node:url";
 process.env.RULE_MCP_NO_CACHE = "1";
 process.env.RULE_MCP_NO_AUTOUPDATE = "1";
 
-
 export const root = fileURLToPath(new URL("../../..", import.meta.url));
 
 export const { SHARED_GUARDRAILS } = await import("../../../src/core/guardrails/index.js");

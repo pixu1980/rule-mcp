@@ -2,8 +2,7 @@
 export const noFutureUseCode = {
   id: "no-future-use-code",
   label: "No code kept for an imagined future",
-  description:
-    'Markers like "for future use", "in case we need", or "just in case" mark code written for a requirement that does not exist yet.',
+  description: 'Markers like "for future use", "in case we need", or "just in case" mark code written for a requirement that does not exist yet.',
   check: (code) => {
     const markers =
       code.match(

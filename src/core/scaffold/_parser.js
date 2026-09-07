@@ -45,10 +45,7 @@ export function extractSingleScaffoldFile(section, fileName) {
       content: [
         {
           type: "text",
-          text:
-            'File "' +
-            fileName +
-            '" not found. Available: .prettierrc, .nvmrc, .npmrc, .editorconfig, .gitignore, eslint.config.mjs, tsconfig.json, jsconfig.json',
+          text: 'File "' + fileName + '" not found. Available: .prettierrc, .nvmrc, .npmrc, .editorconfig, .gitignore, eslint.config.mjs, tsconfig.json, jsconfig.json',
         },
       ],
     };

@@ -7,11 +7,4 @@ import { rateLimiting } from "./_rate-limiting.js";
 import { helmetHeaders } from "./_helmet-headers.js";
 
 /** The family, in canonical order. */
-export const BACKEND_GUARDRAILS = [
-  sqlInjection,
-  errorExposure,
-  inputValidation,
-  corsExplicit,
-  rateLimiting,
-  helmetHeaders,
-];
+export const BACKEND_GUARDRAILS = [sqlInjection, errorExposure, inputValidation, corsExplicit, rateLimiting, helmetHeaders];

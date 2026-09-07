@@ -4,11 +4,7 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import test from "node:test";
 
-import {
-  renderRenumberPlan,
-  planRenumber,
-  applyRenumber,
-} from "../../../src/core/docs-numbering/index.js";
+import { renderRenumberPlan, planRenumber, applyRenumber } from "../../../src/core/docs-numbering/index.js";
 import { seedScrambledIndex } from "./_doctor.fixture.mjs";
 
 test("an out-of-order index is reported even when no number collides", () => {
@@ -26,9 +22,7 @@ test("applying regenerates an out-of-order index with no renames to do", () => {
 
   assert.equal(result.indexRegenerated, true);
 
-  const rows = [...readFileSync(join(root, "docs/adr/ADR.md"), "utf8").matchAll(/^\| \[(\d{3})\]/gm)].map((m) =>
-    Number(m[1]),
-  );
+  const rows = [...readFileSync(join(root, "docs/adr/ADR.md"), "utf8").matchAll(/^\| \[(\d{3})\]/gm)].map((m) => Number(m[1]));
   assert.deepEqual(rows.slice(0, 4), [82, 81, 80, 79], "every ADR is listed, newest first");
 });
 

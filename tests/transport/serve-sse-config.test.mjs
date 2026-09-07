@@ -15,14 +15,10 @@ const reservePort = () =>
   });
 
 const port = await reservePort();
-const child = spawn(
-  process.execPath,
-  ["bin/rule-mcp.js", "serve", "--transport", "sse", "--port", String(port)],
-  {
-    cwd: root,
-    stdio: ["ignore", "ignore", "pipe"],
-  },
-);
+const child = spawn(process.execPath, ["bin/rule-mcp.js", "serve", "--transport", "sse", "--port", String(port)], {
+  cwd: root,
+  stdio: ["ignore", "ignore", "pipe"],
+});
 let stderr = "";
 child.stderr.on("data", (chunk) => {
   stderr += chunk.toString();

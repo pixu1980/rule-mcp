@@ -18,11 +18,7 @@ test("the template is filled verbatim from the role", async () => {
   assert.match(filled, /docs\/plans\/security\.md/);
   assert.match(filled, /rule-backend-security/, "evidence skills are named");
   assert.match(filled, /interview mode/, "interview mode survives the translation");
-  assert.match(
-    filled,
-    /rule_tool_plan_docs/,
-    "the contract names the helper that does the bookkeeping, or the agent is left to remember it",
-  );
+  assert.match(filled, /rule_tool_plan_docs/, "the contract names the helper that does the bookkeeping, or the agent is left to remember it");
 });
 
 test("the filled template is byte-stable", async () => {

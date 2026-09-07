@@ -17,14 +17,7 @@ import { getGuardrails, SKILL_FRAMEWORK_MAP } from "./_registry.js";
  */
 export function getGuardrailsReport(skillName, mode) {
   const guardrails = getGuardrails(skillName, mode);
-  const lines = [
-    `# Guardrails: ${skillName}`,
-    "",
-    `Total: ${guardrails.length} testable assertions`,
-    "",
-    "## Shared (all rule skills)",
-    "",
-  ];
+  const lines = [`# Guardrails: ${skillName}`, "", `Total: ${guardrails.length} testable assertions`, "", "## Shared (all rule skills)", ""];
 
   for (const g of SHARED_GUARDRAILS) {
     lines.push(`- [ ] **${g.id}**: ${g.label}`, `  ${g.description}`, "");

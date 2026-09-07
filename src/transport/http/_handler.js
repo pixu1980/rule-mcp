@@ -29,9 +29,7 @@ export async function requestHandler(request, res) {
     res.writeHead(verdict.limited ? 429 : 401, { "Content-Type": "application/json" });
     res.end(
       JSON.stringify({
-        error: verdict.limited
-          ? "Too many failed auth attempts. Wait before retrying."
-          : "Unauthorized. Provide Authorization: Bearer <token> header.",
+        error: verdict.limited ? "Too many failed auth attempts. Wait before retrying." : "Unauthorized. Provide Authorization: Bearer <token> header.",
       }),
     );
 
@@ -93,9 +91,7 @@ export async function requestHandler(request, res) {
   } catch (error) {
     const requestId = randomUUID();
 
-    process.stderr.write(
-      `[rule-mcp] [${requestId}] ${request.method} ${request.url}: ${error?.stack ?? error?.message ?? error}\n`,
-    );
+    process.stderr.write(`[rule-mcp] [${requestId}] ${request.method} ${request.url}: ${error?.stack ?? error?.message ?? error}\n`);
 
     if (!res.headersSent) {
       res.writeHead(500, { "Content-Type": "application/json" });

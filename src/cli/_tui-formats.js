@@ -31,11 +31,7 @@ export function formatInstallResult(result) {
 
 /** Format uninstall command result for humans. */
 export function formatUninstallResult(result) {
-  const rows = Object.entries(result.uninstalled || {}).map(([agent, files]) => [
-    "🧹",
-    agent,
-    (files || []).join(", "),
-  ]);
+  const rows = Object.entries(result.uninstalled || {}).map(([agent, files]) => ["🧹", agent, (files || []).join(", ")]);
   const lines = [
     banner("rule-mcp uninstall", result.dryRun ? "dry run" : "agent cleanup"),
     "",
@@ -71,12 +67,7 @@ export function formatToolsList(tools) {
 
 /** Format installed/available skills for humans. */
 export function formatSkillsList(skills) {
-  const rows = skills.map((skill) => [
-    skill.installed ? "✅" : "○",
-    skill.name,
-    skill.installed ? "installed" : "available",
-    skill.description || "",
-  ]);
+  const rows = skills.map((skill) => [skill.installed ? "✅" : "○", skill.name, skill.installed ? "installed" : "available", skill.description || ""]);
 
   return `${[
     banner("rule-mcp skills", `${skills.length} available skills`),

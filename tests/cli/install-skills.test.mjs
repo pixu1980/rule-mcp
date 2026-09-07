@@ -51,10 +51,7 @@ try {
 
   assert.ok(!existsSync(join(target, "rule", "stale.txt")), "existing bundled skill must be replaced cleanly");
   assert.ok(existsSync(join(target, "custom-skill", "SKILL.md")), "unrelated custom skills must be preserved");
-  assert.ok(
-    result.stdout.includes(`Installed ${sourceSkills.length} skills`),
-    "installer must report the installed count",
-  );
+  assert.ok(result.stdout.includes(`Installed ${sourceSkills.length} skills`), "installer must report the installed count");
   assert.ok(result.stdout.includes(target), "installer must report the global destination");
 
   console.log(`  ✅ ${sourceSkills.length} skills installed globally without touching custom skills`);

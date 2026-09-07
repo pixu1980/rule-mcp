@@ -105,10 +105,7 @@ let sessionId;
 
 // ── T4.5: logging/setLevel is honored (advertised capability must work) ──
 {
-  const { res, body } = await post(
-    { jsonrpc: "2.0", id: 5, method: "logging/setLevel", params: { level: "info" } },
-    { sessionId },
-  );
+  const { res, body } = await post({ jsonrpc: "2.0", id: 5, method: "logging/setLevel", params: { level: "info" } }, { sessionId });
   check("T4.5 logging/setLevel → 200", res.status === 200);
   check("T4.5.1 logging/setLevel returns a non-error result", !!body && !body.error);
 }

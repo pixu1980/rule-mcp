@@ -6,27 +6,10 @@ import { BaseSignal } from "./_base-signal.js";
 import { StateSignal } from "./_state-signal.js";
 import { ComputedSignal } from "./_computed-signal.js";
 import { EffectCollector } from "./_effect-collector.js";
-import {
-  withCollector,
-  withoutCollector,
-  getCurrentCollector,
-  pushCollector,
-  popCollector,
-} from "./_collector-context.js";
+import { withCollector, withoutCollector, getCurrentCollector, pushCollector, popCollector } from "./_collector-context.js";
 import { schedule } from "./_scheduler.js";
 
-export {
-  BaseSignal,
-  StateSignal,
-  ComputedSignal,
-  EffectCollector,
-  schedule,
-  withCollector,
-  withoutCollector,
-  getCurrentCollector,
-  pushCollector,
-  popCollector,
-};
+export { BaseSignal, StateSignal, ComputedSignal, EffectCollector, schedule, withCollector, withoutCollector, getCurrentCollector, pushCollector, popCollector };
 
 export const Signal = {
   State: StateSignal,

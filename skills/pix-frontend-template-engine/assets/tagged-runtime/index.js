@@ -14,9 +14,7 @@ export class TemplateEngine {
    * @throws {Error}
    */
   render() {
-    throw new Error(
-      "TemplateEngine.render is not available in the browser-safe tagged runtime. Use the full rule-template-engine install for SSG/SSR workflows.",
-    );
+    throw new Error("TemplateEngine.render is not available in the browser-safe tagged runtime. Use the full rule-template-engine install for SSG/SSR workflows.");
   }
 
   /**

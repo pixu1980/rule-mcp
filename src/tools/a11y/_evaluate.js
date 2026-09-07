@@ -15,9 +15,7 @@ export function evaluate(input) {
   const { scope, sample = [], results = [], evaluator = "rule-mcp", date } = input ?? {};
 
   if (!scope?.title || !scope?.url) {
-    throw new Error(
-      "scope.title and scope.url are required: a result with no declared scope cannot be reproduced or disputed",
-    );
+    throw new Error("scope.title and scope.url are required: a result with no declared scope cannot be reproduced or disputed");
   }
 
   const level = scope.level ?? "AA";
@@ -32,9 +30,7 @@ export function evaluate(input) {
     const found = criterion(entry.criterion);
 
     if (!found) {
-      throw new Error(
-        `Unknown WCAG criterion "${entry.criterion}". WCAG ${WCAG_VERSION} defines no such success criterion.`,
-      );
+      throw new Error(`Unknown WCAG criterion "${entry.criterion}". WCAG ${WCAG_VERSION} defines no such success criterion.`);
     }
 
     if (!EARL_OUTCOMES.includes(entry.outcome)) {
@@ -42,9 +38,7 @@ export function evaluate(input) {
     }
 
     if (!targetNumbers.has(entry.criterion)) {
-      throw new Error(
-        `Criterion ${entry.criterion} is level ${found.level}, outside a level ${level} conformance target.`,
-      );
+      throw new Error(`Criterion ${entry.criterion} is level ${found.level}, outside a level ${level} conformance target.`);
     }
 
     seen.set(entry.criterion, { ...entry, ...found });

@@ -10,19 +10,12 @@ test("compression removes something measurable from real tool results", () => {
   const saved = before_ - after;
 
   assert.ok(saved > 0, `the corpus must compress at all (saved ${saved} tokens)`);
-  assert.ok(
-    saved / before_ > 0.01,
-    `compression is a modest saving, but it is a saving: ${saved}/${before_} = ${((saved / before_) * 100).toFixed(1)} %`,
-  );
+  assert.ok(saved / before_ > 0.01, `compression is a modest saving, but it is a saving: ${saved}/${before_} = ${((saved / before_) * 100).toFixed(1)} %`);
 });
 
 test("prose compresses and data is left alone", () => {
   const router = results.find((item) => item.name === "pix_tool");
-  assert.equal(
-    text(router.compressed),
-    text(router.core),
-    "the router answers in JSON: compressing it would corrupt the payload",
-  );
+  assert.equal(text(router.compressed), text(router.core), "the router answers in JSON: compressing it would corrupt the payload");
 
   const skill = results.find((item) => item.name === "rule_tool_backend_node");
   assert.ok(tokens(skill.compressed) < tokens(skill.core), "a skill body is prose and must lose its filler");

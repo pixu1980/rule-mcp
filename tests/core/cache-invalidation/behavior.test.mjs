@@ -51,16 +51,11 @@ test("editing one skill no longer empties the cache", async () => {
   const [worst, hit] = Object.entries(counts).sort((a, b) => b[1] - a[1])[0] ?? ["none", 0];
   const survival = 1 - hit / entries.length;
 
-  console.log(
-    `  ${entries.length} entries; worst case is ${worst} (${hit} dependents), ${Math.round(survival * 100)}% survive`,
-  );
+  console.log(`  ${entries.length} entries; worst case is ${worst} (${hit} dependents), ${Math.round(survival * 100)}% survive`);
   // The union surface (94 skills, item 11) concentrates the corpus dependents
   // on a few hubs (rule-ai-evals at ~100/198); the bar follows the measured
   // equilibrium of this surface rather than the 6-skill corpus it was set on.
-  assert.ok(
-    survival > 0.45,
-    `a single skill edit must leave most of the cache alone, got ${Math.round(survival * 100)}%`,
-  );
+  assert.ok(survival > 0.45, `a single skill edit must leave most of the cache alone, got ${Math.round(survival * 100)}%`);
 });
 
 // ── Correctness, because a deterministic cache nobody verifies is an assumption ──
@@ -114,10 +109,7 @@ test("a workload that is not only the router leaves entries no skill edit can to
   // The first version of the report said zero, which was true of the report and
   // not of the cache: it only ever called the router. A template tool reads no
   // skill, so its entry is valid until the server version changes.
-  assert.ok(
-    independent.length >= 2,
-    `expected template calls to record no dependencies, got ${independent.length} of ${entries.length}`,
-  );
+  assert.ok(independent.length >= 2, `expected template calls to record no dependencies, got ${independent.length} of ${entries.length}`);
   console.log(`  ${entries.length} entries, ${independent.length} independent of every skill`);
 });
 
@@ -135,4 +127,3 @@ test("a key never returns another tool's answer", async () => {
 });
 
 process.on("exit", () => rmSync(stateDir, { recursive: true, force: true }));
-

@@ -4,11 +4,7 @@ export const noPlaceholderImplementation = {
   label: "No placeholder or unfinished implementation",
   description: "Generated code must not contain TODO/FIXME markers, placeholder comments, or not-implemented throws.",
   check: (code) => {
-    const patterns = [
-      /\b(?:TODO|FIXME|XXX)\b/gi,
-      /\/\*\s*placeholder\s*\*\//gi,
-      /throw\s+new\s+Error\s*\(\s*["'](?:not implemented|todo)/gi,
-    ];
+    const patterns = [/\b(?:TODO|FIXME|XXX)\b/gi, /\/\*\s*placeholder\s*\*\//gi, /throw\s+new\s+Error\s*\(\s*["'](?:not implemented|todo)/gi];
     const violations = patterns.flatMap((pattern) => code.match(pattern) || []);
 
     return {

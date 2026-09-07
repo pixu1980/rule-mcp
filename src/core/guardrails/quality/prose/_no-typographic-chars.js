@@ -4,8 +4,7 @@ import { findFingerprints } from "../../../text/fingerprint/index.js";
 export const fpNoTypographicChars = {
   id: "fp-no-typographic-chars",
   label: "No curly quotes or ellipsis glyphs",
-  description:
-    "Curly quotes and the ellipsis character do not survive a copy-paste into source. Use straight quotes and three dots.",
+  description: "Curly quotes and the ellipsis character do not survive a copy-paste into source. Use straight quotes and three dots.",
   check: (code) => {
     const { typographic } = findFingerprints(code);
 

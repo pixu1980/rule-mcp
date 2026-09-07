@@ -43,36 +43,17 @@ test("the catalog ships the agreed active set", () => {
     "simplicity",
     "supply-chain",
   ]);
-  assert.equal(
-    allRoles().length,
-    EMBEDDED_ROLES.length,
-    "the catalog is exactly the adopted original set - nothing else rides along",
-  );
+  assert.equal(allRoles().length, EMBEDDED_ROLES.length, "the catalog is exactly the adopted original set - nothing else rides along");
 });
 
 test("validateRole rejects what a surface cannot generate from", () => {
+  assert.ok(validateRole({ id: "Bad Id", role: "x", yearsOfExperience: 1, skills: ["a"], status: "active", version: 1 }).some((p) => p.includes("kebab-case")));
+  assert.ok(validateRole({ id: "ok", role: "", yearsOfExperience: 1, skills: ["a"], status: "active", version: 1 }).length > 0);
+  assert.ok(validateRole({ id: "ok", role: "R", yearsOfExperience: 0, skills: ["a"], status: "active", version: 1 }).length > 0);
+  assert.ok(validateRole({ id: "ok", role: "R", yearsOfExperience: 1, skills: [], status: "active", version: 1 }).length > 0);
+  assert.ok(validateRole({ id: "ok", role: "R", yearsOfExperience: 1, skills: ["a"], status: "retired", version: 1 }).length > 0);
   assert.ok(
-    validateRole({ id: "Bad Id", role: "x", yearsOfExperience: 1, skills: ["a"], status: "active", version: 1 }).some(
-      (p) => p.includes("kebab-case"),
-    ),
-  );
-  assert.ok(
-    validateRole({ id: "ok", role: "", yearsOfExperience: 1, skills: ["a"], status: "active", version: 1 }).length > 0,
-  );
-  assert.ok(
-    validateRole({ id: "ok", role: "R", yearsOfExperience: 0, skills: ["a"], status: "active", version: 1 }).length > 0,
-  );
-  assert.ok(
-    validateRole({ id: "ok", role: "R", yearsOfExperience: 1, skills: [], status: "active", version: 1 }).length > 0,
-  );
-  assert.ok(
-    validateRole({ id: "ok", role: "R", yearsOfExperience: 1, skills: ["a"], status: "retired", version: 1 }).length >
-      0,
-  );
-  assert.ok(
-    validateRole({ id: "ok", role: "R", yearsOfExperience: 1, skills: ["a"], status: "deprecated", version: 1 }).some(
-      (problem) => problem.includes("deprecatedBy"),
-    ),
+    validateRole({ id: "ok", role: "R", yearsOfExperience: 1, skills: ["a"], status: "deprecated", version: 1 }).some((problem) => problem.includes("deprecatedBy")),
     "a deprecated role must say what replaces it",
   );
 });

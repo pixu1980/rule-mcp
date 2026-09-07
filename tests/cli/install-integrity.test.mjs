@@ -20,10 +20,7 @@ test("every shipped script has a published digest", () => {
   const scripts = readdirSync(scriptsDir).filter((name) => name.endsWith(".sh") || name.endsWith(".ps1"));
   assert.ok(scripts.length > 0, "there are scripts to publish");
   for (const name of scripts) {
-    assert.ok(
-      published.includes(`  scripts/${name}\n`),
-      `${name} has no published digest - run node scripts/build/checksums/index.mjs`,
-    );
+    assert.ok(published.includes(`  scripts/${name}\n`), `${name} has no published digest - run node scripts/build/checksums/index.mjs`);
   }
 });
 

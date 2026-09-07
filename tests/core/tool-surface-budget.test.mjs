@@ -51,8 +51,7 @@ test("tools/list stays within its per-turn token budget", () => {
   const weight = Math.ceil(JSON.stringify(listTools()).length / 4);
   assert.ok(
     weight <= TOOL_SURFACE_BUDGET_TOKENS,
-    `tools/list is ~${weight} tokens, over the ${TOOL_SURFACE_BUDGET_TOKENS} budget. ` +
-      "This is paid on every model turn. Trim the surface, or raise the budget deliberately.",
+    `tools/list is ~${weight} tokens, over the ${TOOL_SURFACE_BUDGET_TOKENS} budget. ` + "This is paid on every model turn. Trim the surface, or raise the budget deliberately.",
   );
   console.log(`  tools/list: ~${weight} / ${TOOL_SURFACE_BUDGET_TOKENS} tokens`);
 });
@@ -69,10 +68,7 @@ test("no tool description carries a version, a date or a path", () => {
     const description = tool.description ?? "";
     assert.ok(!/\b\d+\.\d+\.\d+\b/.test(description), `${tool.name} embeds a version in its description`);
     assert.ok(!/\b20\d\d-\d\d-\d\d\b/.test(description), `${tool.name} embeds a date in its description`);
-    assert.ok(
-      !description.includes("/Users/") && !description.includes("/home/"),
-      `${tool.name} embeds an absolute path`,
-    );
+    assert.ok(!description.includes("/Users/") && !description.includes("/home/"), `${tool.name} embeds an absolute path`);
   }
 });
 
@@ -83,19 +79,8 @@ test("no mutating tool is advertised as read-only", () => {
   const byName = new Map(listTools().map((tool) => [tool.name, tool]));
   // rule_tool_gateway is read-only (receipts live in memory, no writes), so it
   // may advertise readOnlyHint and is absent here.
-  for (const name of [
-    "rule_tool_apply",
-    "rule_tool_fix",
-    "rule_tool_process_adr",
-    "rule_tool_plan_docs",
-    "rule_tool_process_handoff",
-    "rule_tool_update",
-  ]) {
-    assert.notEqual(
-      byName.get(name)?.annotations?.readOnlyHint,
-      true,
-      `${name} mutates the filesystem and must never be advertised read-only`,
-    );
+  for (const name of ["rule_tool_apply", "rule_tool_fix", "rule_tool_process_adr", "rule_tool_plan_docs", "rule_tool_process_handoff", "rule_tool_update"]) {
+    assert.notEqual(byName.get(name)?.annotations?.readOnlyHint, true, `${name} mutates the filesystem and must never be advertised read-only`);
   }
 });
 

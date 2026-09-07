@@ -46,13 +46,7 @@ export function promptExamples(name) {
  */
 export function buildHelpMessage(name, def, examples = []) {
   const argumentList = def.arguments.map((a) => (a.required ? `<${a.name}>` : `[${a.name}]`)).join(" ");
-  const lines = [
-    `Usage: /${name} ${argumentList}`,
-    "",
-    def.description,
-    "",
-    ...def.arguments.map((a) => `  ${a.name}  ${a.description}`),
-  ];
+  const lines = [`Usage: /${name} ${argumentList}`, "", def.description, "", ...def.arguments.map((a) => `  ${a.name}  ${a.description}`)];
 
   if (examples.length > 0) {
     lines.push("", "Examples:", ...examples.map((e) => `  ${e}`));

@@ -27,9 +27,7 @@ const rolled = rollup({ now: T0 + 3000 });
 check("T6.1 rollup produces a daily aggregate", rolled.days >= 1 && readRollups().length > 0);
 check(
   "T6.2 a daily aggregate keeps counts, not events",
-  readRollups().every(
-    (day) => typeof day.date === "string" && typeof day.calls === "number" && day.events === undefined,
-  ),
+  readRollups().every((day) => typeof day.date === "string" && typeof day.calls === "number" && day.events === undefined),
 );
 
 purge({ now: T0 + 3000 });
@@ -48,10 +46,7 @@ check("T6.6 the state size is measurable for the cap", stateSize() > 0);
 const { getProjectPaths } = await import("../../../src/cli/paths/index.js");
 const projectStateDir = getProjectPaths(projectDir).dir;
 check("T10 the events file lives in this project's own directory", eventsFile().startsWith(projectStateDir));
-check(
-  "T10.1 rollups live beside it",
-  existsSync(projectStateDir) && readdirSync(projectStateDir).some((f) => f.includes("rollup")),
-);
+check("T10.1 rollups live beside it", existsSync(projectStateDir) && readdirSync(projectStateDir).some((f) => f.includes("rollup")));
 check("T10.2 that directory is under the home directory", !projectStateDir.startsWith(projectDir));
 check("T10.3 and the project itself is untouched", !existsSync(join(projectDir, ".rule-mcp")));
 

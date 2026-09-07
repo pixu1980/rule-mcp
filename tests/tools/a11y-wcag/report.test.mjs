@@ -15,14 +15,8 @@ const report = buildReport({
 });
 check("T10 the report states the conformance target", report.markdown.includes("AA"));
 check("T10.1 it names the criterion, not only the number", report.markdown.includes("Non-text Content"));
-check(
-  "T10.2 untested criteria are counted, not hidden",
-  report.summary.untested === 55 - 3 && report.summary.failed === 1,
-);
-check(
-  "T10.3 a failure blocks the claim",
-  /does not conform/i.test(report.markdown) && report.summary.conforms === false,
-);
+check("T10.2 untested criteria are counted, not hidden", report.summary.untested === 55 - 3 && report.summary.failed === 1);
+check("T10.3 a failure blocks the claim", /does not conform/i.test(report.markdown) && report.summary.conforms === false);
 check(
   "T10.4 the five WCAG-EM steps are present",
   WCAG_EM_STEPS.every((s) => report.markdown.includes(s.name)),
@@ -40,9 +34,7 @@ check(
   (() => {
     const first = JSON.parse(report.earl)["@graph"][0];
 
-    return (
-      first["@type"] === "Assertion" && first.result.outcome === "earl:failed" && first.test.title.includes("Non-text")
-    );
+    return first["@type"] === "Assertion" && first.result.outcome === "earl:failed" && first.test.title.includes("Non-text");
   })(),
 );
 check(
