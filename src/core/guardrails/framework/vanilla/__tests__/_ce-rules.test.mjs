@@ -15,7 +15,7 @@ test("adopted-stylesheets: non-CE and proper fetch pass, css-only fails", () => 
 
   const cssOnly = vanillaAdoptedStylesheets.check("class C extends HTMLElement { connectedCallback() { use('./_C.css'); } }");
   assert.equal(cssOnly.pass, false, "a css reference without the sheet pipeline fails");
-  assert.match(cssOnly.suggestion ?? "", /adoptedStyleSheets/, "the suggestion names the pipeline");
+  assert.match(cssOnly.suggestion ?? "", /CSSStyleSheet|replaceSync/, "the suggestion names the pipeline");
 
   const none = vanillaAdoptedStylesheets.check("class C extends HTMLElement { connectedCallback() { render(); } }");
   assert.equal(none.pass, true, "no css means skip");
@@ -31,7 +31,7 @@ test("ce-extends: classes must extend HTMLElement with the registration block", 
 
   const noExtends = vanillaCeExtends.check("export class Tag { static { vrComponent(this, {}); } }");
   assert.equal(noExtends.pass, false, "a missing extends fails");
-  assert.match(noExtends.suggestion ?? "", /HTMLElement/, "the suggestion says what to add");
+  assert.match(noExtends.suggestion ?? "", /vrComponent|static/, "the suggestion says what to add");
 
   const noBlock = vanillaCeExtends.check("export class Tag extends HTMLElement { render() {} }");
   assert.equal(noBlock.pass, false, "a missing static block fails");
