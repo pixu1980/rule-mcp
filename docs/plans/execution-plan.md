@@ -218,17 +218,26 @@
       `scripts/reports/coverage/_threshold.data.mjs` (a rising ratchet, currently 90,
       target 95 - the plan-mandated 95 gate is the ratchet's endpoint, not a permanently
       red check).
-- [ ] Keep raising the floor to 95 (now 90, ADRs 066-068): the branch floor moved
+- [ ] Keep raising the floor to 95 (now 90, ADRs 066-068 and 072): the branch floor moved
       83 -> 87 -> 89 -> 90. Wave three swept the long tail (English-only scanners,
       tool surface annotations, cache replay tiers, agent-commands targets, review
       overlays/validate/persona, check/search verdicts, handon verification, handoff
       git reads, plan renderer, detector edges, flight renderer, a11y evaluate, ...).
-      Measured 90.08% branches locally; CI runs ubuntu/Node22 so the floor holds a
-      margin and 95 stays the ratchet endpoint. ~320 branches remain: CLI subprocess
-      arms (_register-handoff 8, skills-install 8, commands/_daemon 13 partial),
-      platform-locked daemon paths (_service/_status-format 16), dead/defensive
-      branches (ai/_framework 7, handoff _sources 9), plus ~280 long-tail chips
-      (2-5 per file).
+      Wave four (2026-09-08, ADR 072) landed ~20 suites over the named tail - the
+      daemon command arms, skills-install catalog, IDE installer path/writer arms,
+      handoff sources, skill/search/component tool modes, claude transcript reader,
+      orphaned-path references, doctor run/detect-env, findings merge, persona
+      catalog edges, guardrails CSS util, snapshot sizes, router compute - and
+      fixed a real defect it surfaced (checkDaemonService's macos arm omitted
+      `platform`, so `daemon status` printed `Platform: undefined` and the plist
+      detail line never rendered). Measured 90.74% branches locally (6057/6675,
+      981 tests): the wave covered ~155 branches while newly-loaded modules added
+      ~140 uncovered ones to the denominator, so the floor stays 90 with a much
+      healthier margin (was 90.08). ~620 branches remain: platform-locked daemon
+      arms (~40 across _service/_service-status/_status-format/_launchd - linux
+      and windows arms on a darwin dev box, the reverse on ubuntu CI), dead
+      domain ternaries (ai/_framework), CLI serve transports, and a long tail of
+      2-4 branch chips per file.
 - [x] The 2 pre-existing flaky failures are resolved, not documented around: the
       untrusted-fence miss was a rebrand drift in the directive pattern (`PIX GALAXY
 WORKFLOW REMINDER` never matched) and the home-recording-leak race now checks a
