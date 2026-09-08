@@ -1,6 +1,5 @@
 /** Daemon lifecycle command: install/enable/disable/start/stop/status/logs arms. */
 import { getRuntimePaths } from "../../paths/index.js";
-import { print } from "../_shared.js";
 import { actionDisable, actionEnable, actionInstall, actionUninstall } from "./_service.js";
 import { actionStart, actionStop } from "./_process.js";
 import { actionLogs, actionStatus } from "./_reporting.js";

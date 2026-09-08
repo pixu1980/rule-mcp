@@ -28,6 +28,7 @@ export function checkDaemonService() {
       const ls = checkLaunchAgent();
 
       return {
+        platform,
         service: "launchd",
         installed: ls.installed,
         loaded: ls.loaded,
