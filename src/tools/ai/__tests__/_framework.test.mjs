@@ -32,6 +32,13 @@ test("a project with a package.json detects its framework when no hint is given"
   rmSync(dir, { recursive: true, force: true });
 });
 
+test("a path the detector chokes on resolves to nothing instead of throwing", () => {
+  const resolved = detectFrameworkSkill({ path: 42 });
+
+  assert.equal(resolved.detectedFramework, undefined, "a throwing detection is swallowed");
+  assert.equal(resolved.detectedSkillName, null, "no skill without a detection");
+});
+
 test("no framework and no project mean an empty resolution", () => {
   const resolved = detectFrameworkSkill({});
 

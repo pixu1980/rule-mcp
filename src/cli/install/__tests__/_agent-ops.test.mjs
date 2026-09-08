@@ -50,3 +50,16 @@ test("uninstallAgent dry-runs and refuses unknowns", () => {
 
   assert.throws(() => uninstallAgent({ agent: "ghost-agent" }), /Unsupported agent/, "an unknown agent throws on uninstall too");
 });
+
+test("a deprecated name redirects on uninstall with the same warning", () => {
+  const result = uninstallAgent({ agent: "windsurf", dryRun: true });
+  assert.deepEqual(result.warnings, ['"windsurf" is deprecated - use "devin" instead.'], "the warning names the successor");
+  assert.ok(result.uninstalled.devin, "the successor is the one uninstalled");
+});
+
+test("a real install writes the manifest into the sandboxed home", () => {
+  const result = installAgent({ agent: "claude", entrypoint: ENTRY });
+  assert.equal(result.dryRun, false, "this run is real");
+  assert.ok(result.manifest, "the manifest path is reported");
+  assert.ok(result.manifest.startsWith(home) || result.manifest.startsWith(join(home, "mcp")), "the manifest lands in the fake home");
+});

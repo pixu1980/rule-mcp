@@ -22,3 +22,35 @@ test("a pix skill registers under its underscored name", async () => {
 
   assert.ok(registered, "the pix skill registers as pix_tool_backend_express");
 });
+
+test("every mode arm of the handler answers", async () => {
+  registerSkillTool("pix-backend-express");
+
+  const { _tools } = await import("../../router/_hooks.js");
+  const tool = _tools.find((t) => t.name === "pix_tool_backend_express");
+  const text = (result) => result.content[0].text;
+
+  assert.match(text(await tool.handler({})), /^# pix-backend-express/, "no mode falls back to full");
+  assert.match(text(await tool.handler({ mode: "summary" })), /pix-backend-express/, "summary renders");
+  assert.match(text(await tool.handler({ mode: "guardrails" })), /./, "guardrails renders a report");
+  assert.match(text(await tool.handler({ mode: "search", query: "express" })), /./, "search with a query renders");
+  assert.match(text(await tool.handler({ mode: "search" })), /^# pix-backend-express/, "search without a query falls back to full");
+  assert.match(text(await tool.handler({ mode: "tldr", query: "routing" })), /./, "tldr renders");
+
+  const noCode = await tool.handler({ mode: "check" });
+  assert.equal(noCode.isError, true, "check without code is an error");
+  assert.match(text(noCode), /requires a `code` argument/, "the missing code is named");
+
+  const checked = await tool.handler({ mode: "check", code: "const x = 1;\n", fileName: "x.js" });
+  assert.match(text(checked), /Guardrail check: pix-backend-express/, "check renders the report");
+});
+
+test("the scaffold mode answers only on pix-styleguide", async () => {
+  registerSkillTool("pix-styleguide");
+
+  const { _tools } = await import("../../router/_hooks.js");
+  const tool = _tools.find((t) => t.name === "pix_tool_styleguide");
+  const scaffolded = await tool.handler({ mode: "scaffold" });
+
+  assert.match(scaffolded.content[0].text, /Project Scaffolding/, "the scaffold section renders");
+});
