@@ -17,5 +17,7 @@ const output = execFileSync("bash", ["scripts/install.sh", "--agent", "pi", "--m
 assert.match(output, /install --agent pi --mode daemon/, "must forward selected mode to CLI");
 assert.doesNotMatch(output, /Phase 4: IDE Integration/, "must not run unselected IDE configuration");
 assert.doesNotMatch(output, /Configuring VS Code|Configuring JetBrains/, "must not configure unselected IDEs");
+assert.match(output, /Skipping bundled skills \(non-interactive; pass --skills to install them\)/, "non-interactive runs must skip skills without prompting");
+assert.doesNotMatch(output, /Install bundled rule-.*\? \[y\/N\]/, "non-interactive runs must never prompt for skills");
 
 console.log("  ✅ targeted shell install respects mode and selected agents only");

@@ -12,8 +12,9 @@
 #   3. Registers rule-mcp as an MCP server in each detected agent
 #   4. Writes IDE configs / user settings for supported editors
 #   5. Optionally configures model provider API keys
-#   6. Appends instruction rules so agents prefer rule-mcp skills
-#   7. Runs a health check to confirm everything works
+#   6. Asks whether to install the bundled rule-* skills to ~/.agents/skills
+#   7. Appends instruction rules so agents prefer rule-mcp skills
+#   8. Runs a health check to confirm everything works
 #
 # Prerequisites:
 #   - Node.js >= 20 (https://nodejs.org)
@@ -26,6 +27,8 @@
 #
 # Options:
 #   --agent <name>       Install for a specific agent only
+#   --skills             Install the bundled rule-* skills to ~/.agents/skills
+#   --no-skills          Skip the bundled skills step entirely
 #   --models             Prompt to configure model API keys
 #   --no-rules           Skip agent instruction files
 #   --dry-run            Preview changes without writing
@@ -74,9 +77,13 @@ box_banner() {
   shift
   if [[ "$USE_COLOR" == "true" ]]; then
     echo -e "${BOLD}${color}╔══════════════════════════════════════════════════════╗${NC}"
+
     for line in "$@"; do
-      echo -e "${BOLD}${color}║  ${line}${NC}"
+      # Pad to the 54-column interior so the right border always closes.
+      printf -v padded '║  %-52s║' "$line"
+      echo -e "${BOLD}${color}${padded}${NC}"
     done
+
     echo -e "${BOLD}${color}╚══════════════════════════════════════════════════════╝${NC}"
   else
     for line in "$@"; do
@@ -100,6 +107,8 @@ CONFIGURE_MODELS=false
 TARGET_AGENT=""
 INSTALL_MODE=""
 MODE_WAS_REQUESTED=false
+INSTALL_SKILLS=""
+SKILLS_INSTALLED=0
 
 # ── Helpers ──────────────────────────────────────────────────────────────────
 info()  { echo -e "${CYAN}ℹ${NC} $1"; }
@@ -133,6 +142,8 @@ OS=$(detect_os)
 while [[ $# -gt 0 ]]; do
   case "$1" in
     --agent)      TARGET_AGENT="$2"; shift 2 ;;
+    --skills)     INSTALL_SKILLS=true; shift ;;
+    --no-skills)  INSTALL_SKILLS=false; shift ;;
     --models)     CONFIGURE_MODELS=true; shift ;;
     --no-rules)   INSTALL_RULES=false; shift ;;
     --dry-run)    DRY_RUN=true; shift ;;
@@ -144,6 +155,8 @@ while [[ $# -gt 0 ]]; do
       echo ""
       echo "Options:"
       echo "  --agent <name>   Install for a specific agent only"
+      echo "  --skills         Install the bundled rule-* skills to ~/.agents/skills"
+      echo "  --no-skills      Skip the bundled skills step entirely"
       echo "  --models         Configure model provider API keys"
       echo "  --no-rules       Skip agent instruction files"
       echo "  --dry-run        Preview changes without writing"
@@ -575,7 +588,7 @@ else
         local y=8 s
         print_at 1 "${BOLD}${CYAN}╔══════════════════════════════════════════════════════╗${NC}"
         print_at 2 "${BOLD}${CYAN}║   rule-mcp - Universal Installer               ${CYAN}║${NC}"
-        print_at 3 "${BOLD}${CYAN}║   Phase 3 - Agent Integration                       ${CYAN}║${NC}"
+        print_at 3 "${BOLD}${CYAN}║   Phase 3 - Agent Integration                        ${CYAN}║${NC}"
         print_at 4 "${BOLD}${CYAN}╚══════════════════════════════════════════════════════╝${NC}"
         print_at 5 ""
         print_at 6 "${BOLD}Select agents${NC}"
@@ -603,11 +616,20 @@ else
         printf '%b' "${pointer}(${radio}) $((i + 1)) ${MODE_LABELS[$i]}"
       }
       draw_mode_panel() {
-        local y
-        y=$((FOOTER_ROW + 1))
-        print_at $y "${BLUE}── Install mode ──${NC}"
-        MODE_BASE=$((y + 1))
-        print_at $MODE_BASE "  ${CYAN}↑↓/jk move · 1-3 select · ENTER confirm · q quit${NC}"
+        local i names
+        # Step transition (parity with install.ps1 Select-ModeInteractive):
+        # retitle the banner and erase everything below it so the mode step
+        # stands alone instead of stacking under the agent picker.
+        print_at 3 "${BOLD}${CYAN}║   Phase 3 - Install Mode                             ${CYAN}║${NC}"
+        printf '\033[6;1H\033[0J'
+        print_at 6 "${BOLD}Select install mode${NC}"
+        print_at 7 "  ${CYAN}↑↓/jk move · 1-3 select · ENTER confirm · q quit${NC}"
+        names="${SELECTED_AGENTS[*]}"
+        [[ ${#names} -gt 46 ]] && names="${names:0:43}..."
+        print_at 8 "${CYAN}Agents:${NC} ${#SELECTED_AGENTS[@]} selected · ${names}"
+        print_at 9 ""
+        MODE_BASE=9
+
         for ((i=0; i<${#MODES[@]}; i++)); do
           draw_mode_row "$i"
         done
@@ -690,14 +712,12 @@ else
               mode_up
               draw_mode_row "$prev"
               draw_mode_row "$MODE_CURSOR"
-              draw_footer
               ;;
             DOWN|j)
               prev=$MODE_CURSOR
               mode_down
               draw_mode_row "$prev"
               draw_mode_row "$MODE_CURSOR"
-              draw_footer
               ;;
             q)
               tui_leave
@@ -708,9 +728,10 @@ else
               ;;
             [1-3])
               idx=$((10#$KEY - 1))
+              prev=$MODE_CURSOR
               MODE_CURSOR=$idx
+              draw_mode_row "$prev"
               draw_mode_row "$idx"
-              draw_footer
               break
               ;;
           esac
@@ -897,6 +918,53 @@ else
 fi
 
 # ─────────────────────────────────────────────────────────────────────────────
+# PHASE 6c: Bundled Skills (optional)
+# ─────────────────────────────────────────────────────────────────────────────
+# The MCP server serves skills directly from the embedded catalog, so no
+# global copy is required. Copying the whole catalog to ~/.agents/skills is a
+# decision, not a default: the step asks first and a plain Enter/EOF declines.
+header "Phase 6c: Bundled Skills"
+
+SKILLS_DEST="${HOME_DIR}/.agents/skills"
+SKILL_CHOICE=""
+
+skills_install() {
+  if [[ "$DRY_RUN" == "true" ]]; then
+    sub "[dry-run] Would run: ${BIN_CMD} skills install --all"
+    sub "  Target: ${SKILLS_DEST}"
+    return 0
+  fi
+  if out="$(run_cli skills install --all 2>&1)"; then
+    ok "Bundled skills installed to ${SKILLS_DEST}"
+    printf '%s\n' "$out" | tail -n 2 | sed 's/^/    /'
+    SKILLS_INSTALLED=1
+  else
+    warn "Skills installation had issues"
+    printf '%s\n' "$out" | tail -n 3 | sed 's/^/    /'
+    sub "  Run: ${BIN_CMD} skills install"
+  fi
+}
+
+if [[ "$INSTALL_SKILLS" == "true" ]]; then
+  skills_install
+elif [[ "$INSTALL_SKILLS" == "false" ]]; then
+  sub "Skipping bundled skills (--no-skills)"
+elif [[ "$INTERACTIVE" == "true" ]] && [[ -t 0 ]]; then
+  printf '%s' "  Install bundled rule-* skills to ~/.agents/skills? [y/N] "
+  IFS= read -r SKILL_CHOICE || SKILL_CHOICE=""
+  case "$SKILL_CHOICE" in
+    y|Y|yes|YES|Yes)
+      skills_install
+      ;;
+    *)
+      sub "Skipping bundled skills (answer: ${SKILL_CHOICE:-n})"
+      ;;
+  esac
+else
+  sub "Skipping bundled skills (non-interactive; pass --skills to install them)"
+fi
+
+# ─────────────────────────────────────────────────────────────────────────────
 # PHASE 7: Git Hooks (optional)
 # ─────────────────────────────────────────────────────────────────────────────
 header "Phase 7: Git Integration"
@@ -1034,6 +1102,11 @@ echo -e "  ${BOLD}Agents:${NC}       ${CONFIGURED_COUNT} configured, ${SKIPPED_C
 if [[ ${#INSTALLED_AGENTS[@]} -gt 0 ]]; then
   echo -e "  ${BOLD}Installed for:${NC} ${INSTALLED_AGENTS[*]}"
 fi
+if [[ "$SKILLS_INSTALLED" == "1" ]]; then
+  echo -e "  ${BOLD}Skills:${NC}       installed to ~/.agents/skills"
+else
+  echo -e "  ${BOLD}Skills:${NC}       not installed - run '${BIN_CMD%% *} skills install' to choose"
+fi
 echo ""
 
 echo -e "  ${CYAN}Quick start:${NC}"
@@ -1042,6 +1115,7 @@ echo -e "    ${BIN_CMD} serve            # Start stdio MCP server"
 echo -e "    ${BIN_CMD} config --global  # Print mcp.json snippet"
 echo -e "    ${BIN_CMD} daemon status    # Check daemon/service status"
 echo -e "    ${BIN_CMD} daemon install   # Install native service (Login Items on macOS)"
+echo -e "    ${BIN_CMD} skills install   # Choose bundled skills to install"
 echo ""
 
 echo -e "  ${CYAN}Add to pi.dev coding agent's mcp.json (includes pi-specific properties):${NC}"

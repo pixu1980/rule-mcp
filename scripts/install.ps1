@@ -12,7 +12,8 @@
 #   3. Registers rule-mcp as an MCP server in each detected agent
 #   4. Writes IDE configs / user settings for supported editors
 #   5. Optionally configures model provider API keys
-#   6. Runs a health check to confirm everything works
+#   6. Asks whether to install the bundled rule-* skills to ~/.agents/skills
+#   7. Runs a health check to confirm everything works
 #
 # Prerequisites:
 #   - Node.js >= 20 (https://nodejs.org)
@@ -25,6 +26,8 @@
 #
 # Parameters:
 #   -Agent <name>    Install for a specific agent only
+#   -Skills          Install the bundled rule-* skills to ~/.agents/skills
+#   -NoSkills        Skip the bundled skills step entirely
 #   -Models          Prompt to configure model API keys
 #   -NoRules         Skip agent instruction files
 #   -DryRun          Preview changes without writing
@@ -35,6 +38,8 @@
 
 param(
   [string]$Agent = "",
+  [switch]$Skills = $false,
+  [switch]$NoSkills = $false,
   [switch]$Models = $false,
   [switch]$NoRules = $false,
   [switch]$DryRun = $false,
@@ -53,6 +58,8 @@ if ($Help) {
   Write-Host ""
   Write-Host "Parameters:" -ForegroundColor Yellow
   Write-Host "  -Agent <name>    Install for a specific agent only"
+  Write-Host "  -Skills          Install the bundled rule-* skills to ~/.agents/skills"
+  Write-Host "  -NoSkills        Skip the bundled skills step entirely"
   Write-Host "  -Models          Prompt to configure model API keys"
   Write-Host "  -NoRules         Skip agent instruction files"
   Write-Host "  -DryRun          Preview changes without writing"
@@ -96,8 +103,8 @@ function Show-Banner([string]$Subtitle) {
   }
   Clear-Host
   Write-Host "╔══════════════════════════════════════════════════════╗" -ForegroundColor Cyan
-  Write-Host "║         rule-mcp - Universal Installer        ║" -ForegroundColor Cyan
-  Write-Host ("║  " + $Subtitle.PadRight(50) + "║") -ForegroundColor Cyan
+  Write-Host "║         rule-mcp - Universal Installer         ║" -ForegroundColor Cyan
+  Write-Host ("║  " + $Subtitle.PadRight(52) + "║") -ForegroundColor Cyan
   Write-Host "╚══════════════════════════════════════════════════════╝" -ForegroundColor Cyan
   Write-Host ""
 }
@@ -264,8 +271,8 @@ if ($script:NoColor) {
 } else {
   Write-Host ""
   Write-Host "╔══════════════════════════════════════════════════════╗" -ForegroundColor Cyan
-  Write-Host "║         rule-mcp - Universal Installer        ║" -ForegroundColor Cyan
-  Write-Host "║   MCP Server for the rule-* Skill Ecosystem      ║" -ForegroundColor Cyan
+  Write-Host "║         rule-mcp - Universal Installer         ║" -ForegroundColor Cyan
+  Write-Host "║       MCP Server for the rule-* Skill Ecosystem       ║" -ForegroundColor Cyan
   Write-Host "╚══════════════════════════════════════════════════════╝" -ForegroundColor Cyan
   Write-Host ""
 }
@@ -398,6 +405,27 @@ function Invoke-PixCli {
   & $BinExecutable @BinArguments @Arguments
 }
 
+# Install the bundled rule-* skills to ~/.agents/skills via the argv-safe CLI
+# (mirrors the skills step in scripts/install.sh). The MCP server serves skills
+# directly from its embedded catalog, so this copy is optional and opt-in.
+function Install-BundledSkills {
+  if ($DryRun) {
+    Write-Step "[dry-run] Would run: $BinCmd skills install --all"
+    Write-Step "  Target: $HomeDir\.agents\skills"
+    return
+  }
+  Write-Info "Installing bundled rule-* skills to ~\.agents\skills ..."
+  $result = Invoke-PixCli skills install --all 2>&1
+  if ($LASTEXITCODE -eq 0) {
+    Write-Ok "Bundled skills installed"
+    $result | ForEach-Object { Write-Host "    $_" -ForegroundColor Gray }
+  } else {
+    Write-Warn "Skills installation had issues"
+    $result | ForEach-Object { Write-Host "    $_" -ForegroundColor Gray }
+    Write-Step "  Run: rule-mcp skills install"
+  }
+}
+
 # ─────────────────────────────────────────────────────────────────────────────
 # PHASE 3: Agent Detection & Installation
 # ─────────────────────────────────────────────────────────────────────────────
@@ -510,6 +538,29 @@ if ($TargetAgent) {
 }
 
 # Agent and IDE configurations are written only for selections made in Phase 3.
+
+# ─────────────────────────────────────────────────────────────────────────────
+# PHASE 4: Bundled Skills (optional)
+# ─────────────────────────────────────────────────────────────────────────────
+# Copying the whole catalog to ~/.agents/skills is a decision, not a default:
+# the step asks first and a blank answer declines (mirrors Phase 6c in
+# scripts/install.sh).
+Write-Header "Phase 4: Bundled Skills"
+
+if ($Skills) {
+  Install-BundledSkills
+} elseif ($NoSkills) {
+  Write-Step "Skipping bundled skills (-NoSkills)"
+} elseif (-not $NoInteractive -and [Environment]::UserInteractive) {
+  $choice = Read-Host "Install bundled rule-* skills to ~\.agents\skills? [y/N]"
+  if ($choice -match '^(y|yes)$') {
+    Install-BundledSkills
+  } else {
+    Write-Step "Skipping bundled skills (answer: $choice)"
+  }
+} else {
+  Write-Step "Skipping bundled skills (non-interactive; pass -Skills to install them)"
+}
 
 # ─────────────────────────────────────────────────────────────────────────────
 # PHASE 5: Model Provider Configuration
