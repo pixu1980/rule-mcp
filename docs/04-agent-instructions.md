@@ -91,7 +91,7 @@ costs less context on every turn): `pix_tool`, `pix_tool_update`, `pix_tool_gate
 
 ## Environment variables
 
-See [06-env-variables.md](06-env-variables.md) for the complete reference table, persistence, and configuration.
+See [05-env-variables.md](05-env-variables.md) for the complete reference table, persistence, and configuration.
 
 ## Layout default
 
