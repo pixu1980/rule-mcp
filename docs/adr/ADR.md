@@ -8,6 +8,7 @@ this directory are the source of truth; this index is generated from them by
 
 | #                                                                                                                       | Title                                                                                                     | Date       | Status     | Tags                                                                                |
 | ----------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- | ---------- | ---------- | ----------------------------------------------------------------------------------- |
+| [075](075-the-installer-asks-before-copying-bundled-skills-to-the-central-agents-directory.md)                          | The installer asks before copying bundled skills to the central agents directory                          | 2026-09-08 | accepted   | installer, skills, devx, bash, powershell                                           |
 | [074](074-the-census-generates-eight-numbered-documents-and-three-fenced-blocks-inside-the-chapters-a-person-writes.md) | The census generates eight numbered documents and three fenced blocks inside the chapters a person writes | 2026-09-08 | accepted   | docs, census, generator, tooling                                                    |
 | [073](073-installer-mode-step-replaces-the-agent-picker-instead-of-stacking-under-it.md)                                | Installer mode step replaces the agent picker instead of stacking under it                                | 2026-09-08 | accepted   | installer, tui, devx                                                                |
 | [072](072-coverage-wave-four-holds-the-floor-at-90-and-fixes-the-daemon-status-platform-de.md)                          | Coverage wave four holds the floor at 90 and fixes the daemon status platform defect                      | 2026-09-08 | accepted   | testing, coverage, ci, ratchet                                                      |
@@ -87,6 +88,7 @@ file. Where a line stops short the rest is in the ADR.
 
 | ADR                                                                                                                     | Decision                                                                                                                                                                                                                        | Consequence                                                                                                                                                                                                                    |
 | ----------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| [075](075-the-installer-asks-before-copying-bundled-skills-to-the-central-agents-directory.md)                          | Add a skills step to both installers that asks before copying. install.sh gains Phase 6c "Bundled Skills" and install.ps1 gains Phase 4: in interactive TTY runs it prompts "Install bundled rule-* skills to...                 | Positive: installing now asks before centralizing any skill; non-interactive runs stay silent by default and are deterministic via the new flags; bash and PowerShell behave identically; the copy path is the same...         |
 | [074](074-the-census-generates-eight-numbered-documents-and-three-fenced-blocks-inside-the-chapters-a-person-writes.md) | `docs/06-skills.md` through `docs/13-resources.md` are whole generated files, one inventory topic each, and `docs/01`, `docs/03` and `docs/05` carry `census:begin`/`census:end` fences the same run rewrites.                  | Eleven files are owned by the generator and must never be edited by hand: eight whole documents and the fenced blocks in three chapters.                                                                                       |
 | [073](073-installer-mode-step-replaces-the-agent-picker-instead-of-stacking-under-it.md)                                | Bring bash to parity with PowerShell: on entering step 2, draw_mode_panel retitles the banner to "Phase 3 - Install Mode", erases everything below row 5 (ESC[6;1H ESC[0J), and renders a standalone panel with its own hint... | Positive: each wizard step stands alone; average users see one question at a time; bash and PowerShell installers behave identically; banner boxes always close.                                                               |
 | [072](072-coverage-wave-four-holds-the-floor-at-90-and-fixes-the-daemon-status-platform-de.md)                          | Hold BRANCH_FLOOR at 90: the local measure (90.74) is below 91, so a raise would gate above what the suite delivers.                                                                                                            | Positive: 981 tests green, one user-visible CLI defect fixed (daemon status platform line), the darkest CLI and tool modules now have co-located suites, and the next floor raise starts from real headroom instead of a...    |
@@ -164,6 +166,21 @@ file. Where a line stops short the rest is in the ADR.
 Tags carried by 3 or more decisions. A decision appears under every
 theme it carries, and the early ADRs that predate the tag field are listed last.
 
+### skills
+
+- [075](075-the-installer-asks-before-copying-bundled-skills-to-the-central-agents-directory.md) The installer asks before copying bundled skills to the central agents directory
+- [069](069-remove-externally-derived-skills-from-the-served-knowledge-base.md) Remove externally derived skills from the served knowledge base
+- [058](058-restructure-the-command-surface-rule-router-rule-area-caveman-implicit-rule-process.md) Restructure the command surface: /rule router, rule-area-*, caveman implicit, rule-process-tdd skill
+- [028](028-add-rule-toolchain-commits-skill-for-atomic-conventional-commits-with-mandatory-s.md) Add rule-toolchain-commits skill for atomic conventional commits with mandatory scope
+- [027](027-rename-rule-mcp-agents-to-rule-ai-agents-and-add-rule-ai-collector-skill.md) Rename rule-mcp-agents to rule-ai-agents and add rule-ai collector skill
+- [016](016-toolchain-skill-isolation-vite.md) toolchain skill isolation vite
+- [013](013-database-skills.md) Database Skills
+- [011](011-backend-framework-skills.md) backend framework skills
+- [010](010-toolchain-vite.md) Toolchain Skill Isolation (Vite)
+- [009](009-scaffold-skill-consolidation.md) scaffold skill consolidation
+- [005](005-backend-framework-skills.md) Backend Framework Skills
+- [004](004-scaffold-consolidation.md) Scaffold Skill Consolidation
+
 ### architecture
 
 - [061](061-one-file-per-rule-with-underscore-barrel-folders-and-a-size-ratchet.md) One file per rule with underscore-barrel folders and a size ratchet
@@ -178,22 +195,9 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [018](018-forms-per-framework-merger-and-distribution.md) forms per framework merger and distribution
 - [012](012-forms-per-framework.md) Forms per Framework - Merger & Distribution
 
-### skills
-
-- [069](069-remove-externally-derived-skills-from-the-served-knowledge-base.md) Remove externally derived skills from the served knowledge base
-- [058](058-restructure-the-command-surface-rule-router-rule-area-caveman-implicit-rule-process.md) Restructure the command surface: /rule router, rule-area-*, caveman implicit, rule-process-tdd skill
-- [028](028-add-rule-toolchain-commits-skill-for-atomic-conventional-commits-with-mandatory-s.md) Add rule-toolchain-commits skill for atomic conventional commits with mandatory scope
-- [027](027-rename-rule-mcp-agents-to-rule-ai-agents-and-add-rule-ai-collector-skill.md) Rename rule-mcp-agents to rule-ai-agents and add rule-ai collector skill
-- [016](016-toolchain-skill-isolation-vite.md) toolchain skill isolation vite
-- [013](013-database-skills.md) Database Skills
-- [011](011-backend-framework-skills.md) backend framework skills
-- [010](010-toolchain-vite.md) Toolchain Skill Isolation (Vite)
-- [009](009-scaffold-skill-consolidation.md) scaffold skill consolidation
-- [005](005-backend-framework-skills.md) Backend Framework Skills
-- [004](004-scaffold-consolidation.md) Scaffold Skill Consolidation
-
 ### installer
 
+- [075](075-the-installer-asks-before-copying-bundled-skills-to-the-central-agents-directory.md) The installer asks before copying bundled skills to the central agents directory
 - [073](073-installer-mode-step-replaces-the-agent-picker-instead-of-stacking-under-it.md) Installer mode step replaces the agent picker instead of stacking under it
 - [064](064-one-global-shim-and-hermetic-pnpm-home-in-script-tests.md) One global shim, and hermetic PNPM_HOME in script tests
 - [059](059-drop-the-vs-code-extension-and-its-installers.md) Drop the VS Code extension and its installers

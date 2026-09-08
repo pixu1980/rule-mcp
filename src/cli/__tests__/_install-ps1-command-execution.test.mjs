@@ -19,6 +19,9 @@ assert.match(script, /Invoke-PixCli install --agent \$TargetAgent --mode \$Insta
 assert.match(script, /Invoke-PixCli install --agent \$agent --mode \$InstallMode --json/);
 assert.match(script, /Invoke-PixCli daemon install/);
 assert.match(script, /Invoke-PixCli doctor/);
+assert.match(script, /function Install-BundledSkills/, "installer must have a bundled skills helper");
+assert.match(script, /Invoke-PixCli skills install --all/, "skills install must use the argv-safe CLI path");
+assert.match(script, /Install bundled rule-\* skills to ~\\.agents\\skills\? \[y\/N\]/, "skills step must prompt default-No");
 
 // ── install.ps1: shim verification before trust ─────────────────────────────
 assert.match(script, /function Test-PixCli/, "installer must define a launch probe");

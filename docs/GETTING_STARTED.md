@@ -169,6 +169,9 @@ rule-mcp install --agent vscode --mode daemon
 # Docker mode starts the same authenticated SSE endpoint through Compose.
 ./scripts/install.sh --agent pi --mode docker --no-rules
 
+# Skills are never copied without asking; --skills forces the copy.
+./scripts/install.sh --skills
+
 # Preview before writing
 rule-mcp install --agent all --dry-run
 ```
@@ -185,6 +188,7 @@ Supported agents: `claude`, `codex`, `cursor`, `copilot`, `gemini`, `pi`, `cline
 - The installer **never runs `pnpm link --global`** (pnpm 10/11 rewrites `pnpm-workspace.yaml` overrides and the lockfile). Set `RULE_MCP_SKIP_GLOBAL_LINK=1` to skip writing the shim entirely.
 - CLI failures print their real output (indented) instead of being swallowed.
 - Colors and box-drawing render only on an interactive TTY without `NO_COLOR`; piped/CI output stays plain. The interactive selector supports `↑↓/jk`, `1-9`, `a` (all), `n` (none), `Enter`/`q`.
+- The installer _*asks before copying the bundled rule-* skills_* to `~/.agents/skills` (defaults to No, so a plain Enter never centralizes the catalog). Pass `--skills` / `-Skills` to force the copy in non-interactive runs, `--no-skills` / `-NoSkills` to skip the step entirely.
 - `uninstall.sh` / `uninstall.ps1` fully reverse the shim/global package, and the rules block appended to agent instruction files is prettier-clean, so the project `CLAUDE.md` no longer churns after install/uninstall cycles.
 
 ### Manual mcp.json configuration
