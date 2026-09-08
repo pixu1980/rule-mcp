@@ -24,7 +24,7 @@ export async function registerApplyTool() {
         }),
       )
       .describe("Array of files to create/write"),
-    receipt: z.string().describe("Receipt token from pix_gateway that validated this exact code"),
+    receipt: z.string().describe("Receipt token from rule_tool_gateway that validated this exact code"),
     path: z.string().optional().default(".").describe("Project root directory"),
     dryRun: z.boolean().optional().default(true).describe("Preview without writing (default: true)"),
   });
@@ -32,7 +32,7 @@ export async function registerApplyTool() {
   registerTool({
     name: "rule_tool_apply",
     description:
-      "Write files to disk after pix_gateway validation. Requires a valid receipt from pix_gateway " +
+      "Write files to disk after rule_tool_gateway validation. Requires a valid receipt from rule_tool_gateway " +
       "proving that the code passed all guardrails. The receipt is tied to the exact code hash - " +
       "modified code will be rejected. Use dryRun=true (default) to preview without writing.",
     zodSchema: ApplySchema,

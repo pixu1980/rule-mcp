@@ -91,3 +91,26 @@ commit - the docs follow the code instead of being remembered.
   frontmatter and a lenses list in the body, not a code change; run
   `pnpm census` afterwards.
 - Keep prose English, American spelling (enforced by `en-english-only-prose`).
+
+<!-- census:begin:command-surface -->
+
+### The command surface today (74)
+
+| Kind       | Count | Example           | Reach for it when                                                   |
+| ---------- | ----- | ----------------- | ------------------------------------------------------------------- |
+| `router`   | 1     | `/rule`            | Routes a free-text request to the skill that answers it             |
+| `area`     | 12    | `/rule-area-ai`    | Routes within one area, when the area is known and the skill is not |
+| `workflow` | 2     | `/rule-adr`        | Runs a named workflow: a decision record, a pre-flight check        |
+| `session`  | 5     | `/rule-handoff`    | Carries a session across a context boundary                         |
+| `persona`  | 54    | `/rule-audit-a11y` | Runs one review role at one operation, and writes its documents     |
+
+**Areas**: `/rule-area-ai`, `/rule-area-backend`, `/rule-area-data`, `/rule-area-devops`, `/rule-area-frontend`, `/rule-area-meta`, `/rule-area-platform`, `/rule-area-process`, `/rule-area-skills`, `/rule-area-styleguide`, `/rule-area-toolchain`, `/rule-area-ui`
+
+**Workflows**: `/rule-adr`, `/rule-flight`
+
+**Sessions**: `/rule-handoff`, `/rule-handon`, `/rule-init`, `/rule-process-check`, `/rule-update`
+
+Every command, with its description and its install target, is in
+[`09-instructions.md`](09-instructions.md). Regenerate this block with `pnpm census`.
+
+<!-- census:end:command-surface -->

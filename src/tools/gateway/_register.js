@@ -31,7 +31,7 @@ export async function registerGatewayTool() {
     description:
       "Single-entry orchestrator: routes prompt → loads skill evidence → checks code against guardrails → returns receipt. " +
       "Use this as the primary entry point instead of calling rule + skill tools separately. " +
-      "The returned receipt must be passed to pix_apply when writing files.",
+      "The returned receipt must be passed to rule_tool_apply when writing files.",
     zodSchema: GatewaySchema,
     handler: async (arguments_) => {
       const { code, files, path } = arguments_;

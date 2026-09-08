@@ -30,20 +30,11 @@ const actual = {};
 }
 
 const README = readFileSync(fileURLToPath(new URL("../../README.md", import.meta.url)), "utf8");
-const DOCS_INDEX = readFileSync(fileURLToPath(new URL("../../docs/README.md", import.meta.url)), "utf8");
-const DOC_DIR = fileURLToPath(new URL("../../docs", import.meta.url));
 
-const DOC_NUMBERS = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"];
-
-test("the docs suite 01-06 plus the unnumbered docs is complete and indexed", () => {
-  for (const name of DOC_NUMBERS) {
-    const doc = readdirSync(DOC_DIR).find((entry) => /^\d\d-/.test(entry) && entry.startsWith(name + "-"));
-    assert.ok(doc, "a docs/" + name + "-*.md file exists");
-    assert.ok(DOCS_INDEX.includes(doc), "docs/README indexes " + doc);
-    const text = readFileSync(join(DOC_DIR, doc), "utf8");
-    assert.ok(text.length > 200, doc + " is not an empty stub");
-  }
-});
+// The handbook itself - that every chapter exists, is indexed and is not a
+// stub - is checked by tests/docs/docs-handbook-numbering.test.mjs, which
+// derives the sequence from the directory. A list of numbers written here
+// would be the copy that forgets the chapter added next.
 
 test("README advertises the real tool count", () => {
   assert.match(README, new RegExp(String.raw`\*\*${actual.tools} tools\*\*`), `README must say ${actual.tools} tools`);

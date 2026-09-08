@@ -1,93 +1,72 @@
 /**
- * The census is a build artifact, not a document: the files it owns must be
- * byte-identical to a fresh run of scripts/reports/census/index.mjs (formatted with
- * the repository's own .prettierrc).
+ * @module tests/docs/census-generated
  *
- * Owned files: the generated inventory docs (07-skills through 12-personas,
- * whole files) plus the marker-refreshed blocks in 01-product-architecture.md
- * (family counts) and 05-env-variables.md (env registry). A tool, prompt,
- * skill, command, persona or env var added, removed, renamed or reworded in
- * the code changes the surface, and this test fails until `pnpm census` is
- * run - so the docs can never drift from the code they describe.
+ * The census is a build artifact, not a document: every file it owns must be
+ * byte-identical to a fresh run of `scripts/reports/census/index.mjs`.
  *
- * The generator renders to a temp copy of the docs tree (RULE_MCP_CENSUS_DOCS_DIR),
- * so the test never mutates the committed documents.
+ * Owned files: the eight generated inventories (`06-skills.md` through
+ * `13-resources.md`, whole files) plus the marker-refreshed blocks in
+ * `01-product-architecture.md`, `03-engineering-guides.md` and
+ * `05-env-variables.md`. A tool, prompt, skill, command, persona, guardrail or
+ * env var added, removed, renamed or reworded in the code changes the surface,
+ * and this test fails until `pnpm census` is run - so the docs can never drift
+ * from the code they describe.
+ *
+ * The generator formats its own output with the repository prettier settings,
+ * so the comparison is against what it would write, in memory: no temp tree,
+ * and no second prettier invocation that could disagree with the first.
  */
+
 import { strict as assert } from "node:assert";
-import { test } from "node:test";
-import { mkdtempSync, copyFileSync, readFileSync, readdirSync, existsSync, statSync } from "node:fs";
-import { tmpdir } from "node:os";
+import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
-import { spawnSync } from "node:child_process";
+import { test } from "node:test";
 
-const root = new URL("../../", import.meta.url).pathname;
-const GENERATOR = join(root, "scripts", "reports", "census", "index.mjs");
-const DOCS = join(root, "docs");
+import { censusOutputs } from "../../scripts/reports/census/index.mjs";
+import { GENERATED_DOCS } from "../../scripts/reports/census/_docs.mjs";
+import { MARKER_TARGETS } from "../../scripts/reports/census/_markers.mjs";
 
-/** Files the generator owns; each is compared after a fresh run. */
-const OWNED = ["01-product-architecture.md", "05-env-variables.md", "07-skills.md", "08-tools.md", "09-prompts.md", "10-instructions.md", "11-cli.md", "12-personas.md"];
+const DOCS = new URL("../../docs/", import.meta.url).pathname;
+const outputs = await censusOutputs();
 
-/** Numbered docs that must exist and stay wired into the docs suite. */
-const NUMBERED = [
-  "01-product-architecture.md",
-  "02-tools-operations.md",
-  "03-engineering-guides.md",
-  "04-agent-instructions.md",
-  "05-env-variables.md",
-  "06-privacy.md",
-  "07-skills.md",
-  "08-tools.md",
-  "09-prompts.md",
-  "10-instructions.md",
-  "11-cli.md",
-  "12-personas.md",
-];
+test("every file the census owns is the output of a fresh generation", () => {
+  const stale = outputs.filter((output) => readFileSync(join(DOCS, output.file), "utf8") !== output.content);
 
-test("the per-doc census blocks are the output of a fresh generation", () => {
-  const dir = mkdtempSync(join(tmpdir(), "rule-census-"));
-  for (const name of readdirSync(DOCS)) {
-    const source = join(DOCS, name);
-    if (statSync(source).isFile()) {
-      copyFileSync(source, join(dir, name));
-    }
-  }
+  assert.deepEqual(
+    stale.map((output) => output.file),
+    [],
+    "stale: run `pnpm census` and commit the regenerated docs",
+  );
+});
 
-  const generated = spawnSync(process.execPath, [GENERATOR], {
-    cwd: root,
-    env: { ...process.env, RULE_MCP_CENSUS_DOCS_DIR: dir },
-    encoding: "utf8",
-  });
-  assert.equal(generated.status, 0, `generator failed: ${generated.stderr}`);
+test("the census owns every generated document and every fenced block, and nothing else", () => {
+  assert.deepEqual(
+    outputs.map((output) => output.file),
+    [...GENERATED_DOCS.map((doc) => doc.file), ...MARKER_TARGETS.map((target) => target.file)],
+    "the generator writes a file no registry declares",
+  );
+});
 
-  for (const name of OWNED) {
-    const temp = join(dir, name);
-    const formatted = spawnSync(process.execPath, [join(root, "node_modules", "prettier", "bin", "prettier.cjs"), "--write", "--config", join(root, ".prettierrc"), temp], {
-      cwd: root,
-      encoding: "utf8",
-    });
-    assert.equal(formatted.status, 0, `prettier failed for ${name}: ${formatted.stderr}`);
-    assert.equal(readFileSync(temp, "utf8"), readFileSync(join(DOCS, name), "utf8"), name + " is stale: run `pnpm census` and commit the regenerated docs");
+test("a marker-refreshed chapter keeps a balanced fence", () => {
+  for (const target of MARKER_TARGETS) {
+    const text = readFileSync(join(DOCS, target.file), "utf8");
+
+    assert.ok(text.includes(`<!-- census:begin:${target.marker} -->`), `${target.file}: opens the ${target.marker} fence`);
+    assert.ok(text.includes(`<!-- census:end:${target.marker} -->`), `${target.file}: closes the ${target.marker} fence`);
   }
 });
 
-test("every generated doc stays wired to the census machinery", () => {
-  // Marker-refreshed docs keep their generated block between the marker pair.
-  for (const name of ["01-product-architecture.md", "05-env-variables.md"]) {
-    const text = readFileSync(join(DOCS, name), "utf8");
-    const markers = [...text.matchAll(/<!-- census:(?:begin|end):([a-z-]+) -->/g)].map((m) => m[1]);
-    assert.ok(markers.length >= 2, `${name}: carries the census marker pair`);
-    assert.ok(markers[0] === markers[1], `${name}: marker pair is balanced`);
+test("a whole generated document announces itself and is not a stub", () => {
+  for (const doc of GENERATED_DOCS) {
+    const text = readFileSync(join(DOCS, doc.file), "utf8");
+
+    assert.ok(text.startsWith("<!-- Generated by scripts/reports/census/index.mjs"), `${doc.file}: carries the generated header`);
+    assert.ok(text.length > 200, `${doc.file}: is not an empty stub`);
   }
-  // Whole-file generated docs announce themselves as generated output.
-  for (const name of ["07-skills.md", "08-tools.md", "09-prompts.md", "10-instructions.md", "11-cli.md", "12-personas.md"]) {
-    const text = readFileSync(join(DOCS, name), "utf8");
-    assert.ok(text.startsWith("<!-- Generated by scripts/reports/census/index.mjs"), `${name}: generated header`);
-    assert.ok(text.length > 200, `${name}: not an empty stub`);
-  }
-  for (const name of NUMBERED) {
-    assert.ok(existsSync(join(DOCS, name)), `${name} exists`);
-  }
-  for (const name of ["README.md", "GETTING_STARTED.md"]) {
-    assert.ok(existsSync(join(DOCS, name)), `${name} exists (unnumbered)`);
+});
+
+test("the documents a person owns are still there", () => {
+  for (const name of ["README.md", "GETTING_STARTED.md", "privacy.md", "adr/ADR.md"]) {
+    assert.ok(existsSync(join(DOCS, name)), `docs/${name} exists`);
   }
 });

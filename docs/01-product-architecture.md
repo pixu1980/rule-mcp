@@ -24,12 +24,14 @@ refreshed by `pnpm census` (on every build and every pre-commit) - and are
 rendered into dedicated registry files that the docs link to instead of
 re-listing:
 
-- **Skills** -> [`docs/07-skills.md`](./07-skills.md)
-- **Tools (all LLM-free, deterministic)** -> [`docs/08-tools.md`](./08-tools.md)
-- **Prompts** -> [`docs/09-prompts.md`](./09-prompts.md)
-- **Instructions / agent command surface** -> [`docs/10-instructions.md`](./10-instructions.md)
-- **CLI reference (commands, options, arguments)** -> [`docs/11-cli.md`](./11-cli.md)
-- **Personas** -> [`docs/12-personas.md`](./12-personas.md)
+- **Skills** -> [`docs/06-skills.md`](./06-skills.md)
+- **Tools (all LLM-free, deterministic)** -> [`docs/07-tools.md`](./07-tools.md)
+- **Prompts** -> [`docs/08-prompts.md`](./08-prompts.md)
+- **Instructions / agent command surface** -> [`docs/09-instructions.md`](./09-instructions.md)
+- **CLI reference (commands, options, arguments)** -> [`docs/10-cli.md`](./10-cli.md)
+- **Personas** -> [`docs/11-personas.md`](./11-personas.md)
+- **Guardrails** -> [`docs/12-guardrails.md`](./12-guardrails.md)
+- **Resources** -> [`docs/13-resources.md`](./13-resources.md)
 
 Tool-family counts for this document: the generated snapshot at the end of
 this file.
@@ -810,3 +812,30 @@ All data stays on the filesystem. The MCP server is a read-only/validate-only se
 Refresh with `pnpm census`; full inventories in `docs/07-` .. `docs/12-`.
 
 <!-- census:end:family-counts -->
+
+<!-- census:begin:surface-counts -->
+
+## Surface at a glance
+
+| Surface                   | Count | Defined in                                    |
+| ------------------------- | ----- | --------------------------------------------- |
+| MCP tools                 | 105   | `src/tools/*` via `src/tools/router/index.js` |
+| - action tools            | 17    | one per module, registered explicitly         |
+| - skill tools             | 88    | one per catalog skill, generated              |
+| MCP resources             | 184   | `src/resources/index.js`                      |
+| MCP prompts               | 73    | `src/prompts/index.js`                        |
+| - reusable                | 19    | workflow and area prompts                     |
+| - persona                 | 54    | 18 active roles x 3 operations                |
+| Skills                    | 88    | `skills/rule-*/SKILL.md`                       |
+| Review personas           | 18    | `src/core/review/roles/index.js`              |
+| Guardrail rules           | 95    | `src/core/guardrails/index.js`                |
+| Agent slash commands      | 74    | `src/core/agents/commands/index.js`           |
+| Agent/IDE command targets | 13    | `src/core/agents/command-targets/index.js`    |
+| CLI commands              | 21    | `src/cli/_program.js`                         |
+| Hook events               | 3     | `src/core/agents/_hooks.js`                   |
+| Architecture decisions    | 71    | [`docs/adr/ADR.md`](adr/ADR.md)               |
+
+Regenerate with `pnpm census`. The inventories themselves are
+[`06-skills.md`](06-skills.md) through [`13-resources.md`](13-resources.md).
+
+<!-- census:end:surface-counts -->
