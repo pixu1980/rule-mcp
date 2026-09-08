@@ -15,7 +15,7 @@
  */
 export const SUITES = {
   quick: {
-    steps: ["tests/smoke.mjs", "tests/tools/ai.test.mjs", "tests/core/detector.test.mjs", "tests/tools/framework-routing.test.mjs"],
+    steps: ["tests/smoke.mjs", "src/core/skills/__tests__/_ai.test.mjs", "src/core/skills/__tests__/_detector.test.mjs", "src/core/skills/__tests__/_framework-routing.test.mjs"],
   },
   foundations: {
     globs: ["tests/docs/**/*.test.mjs", "src/**/__tests__/*.test.mjs"],
