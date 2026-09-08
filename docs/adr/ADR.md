@@ -8,6 +8,7 @@ this directory are the source of truth; this index is generated from them by
 
 | #                                                                                              | Title                                                                                              | Date       | Status     | Tags                                                                                |
 | ---------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- | ---------- | ---------- | ----------------------------------------------------------------------------------- |
+| [072](072-coverage-wave-four-holds-the-floor-at-90-and-fixes-the-daemon-status-platform-de.md) | Coverage wave four holds the floor at 90 and fixes the daemon status platform defect               | 2026-09-08 | accepted   | testing, coverage, ci, ratchet                                                      |
 | [071](071-src-shared-for-every-shareable-helper.md)                                            | src shared for every shareable helper                                                              | -          | proposed   | -                                                                                   |
 | [070](070-co-locate-every-test-with-its-module.md)                                             | co locate every test with its module                                                               | -          | proposed   | -                                                                                   |
 | [069](069-remove-rule-derived-skills-from-the-served-knowledge-base.md)                     | Remove rule-derived skills from the served knowledge base                                       | 2026-09-07 | accepted   | skills, knowledge-base, attribution, governance                                     |
@@ -84,6 +85,7 @@ file. Where a line stops short the rest is in the ADR.
 
 | ADR                                                                                            | Decision                                                                                                                                                                                                                        | Consequence                                                                                                                                                                                                                    |
 | ---------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| [072](072-coverage-wave-four-holds-the-floor-at-90-and-fixes-the-daemon-status-platform-de.md) | Hold BRANCH_FLOOR at 90: the local measure (90.74) is below 91, so a raise would gate above what the suite delivers.                                                                                                            | Positive: 981 tests green, one user-visible CLI defect fixed (daemon status platform line), the darkest CLI and tool modules now have co-located suites, and the next floor raise starts from real headroom instead of a...    |
 | [071](071-src-shared-for-every-shareable-helper.md)                                            | All cross-cutting helpers with more than one caller live in `src/shared/`.                                                                                                                                                      | Guardrail rules now end in one shared verdict builder instead of 16 copies of.                                                                                                                                                 |
 | [070](070-co-locate-every-test-with-its-module.md)                                             | Move every unit and integration suite from `tests/<area>/...` into.                                                                                                                                                             | One import graph per module, renames re-pointed by the file system instead of.                                                                                                                                                 |
 | [069](069-remove-rule-derived-skills-from-the-served-knowledge-base.md)                     | Remove all rule-derived content from the served knowledge base.                                                                                                                                                              | Positive: the MCP knowledge base no longer contains rule-derived prose or structure; the surface is coherent (no dead references), all suites green (847 foundations + 78 installer), coverage floor 90 still holds.        |
@@ -210,6 +212,7 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 
 ### testing
 
+- [072](072-coverage-wave-four-holds-the-floor-at-90-and-fixes-the-daemon-status-platform-de.md) Coverage wave four holds the floor at 90 and fixes the daemon status platform defect
 - [068](068-coverage-floor-raised-to-90.md) Coverage floor raised to 90
 - [067](067-coverage-floor-raised-to-89-toward-the-95-endpoint.md) Coverage floor raised to 89 toward the 95 endpoint
 - [066](066-coverage-floor-raised-to-87-95-remains-the-ratchet-endpoint.md) Coverage floor raised to 87; 95 remains the ratchet endpoint
@@ -245,6 +248,22 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [016](016-toolchain-skill-isolation-vite.md) toolchain skill isolation vite
 - [010](010-toolchain-vite.md) Toolchain Skill Isolation (Vite)
 
+### ci
+
+- [072](072-coverage-wave-four-holds-the-floor-at-90-and-fixes-the-daemon-status-platform-de.md) Coverage wave four holds the floor at 90 and fixes the daemon status platform defect
+- [068](068-coverage-floor-raised-to-90.md) Coverage floor raised to 90
+- [067](067-coverage-floor-raised-to-89-toward-the-95-endpoint.md) Coverage floor raised to 89 toward the 95 endpoint
+- [066](066-coverage-floor-raised-to-87-95-remains-the-ratchet-endpoint.md) Coverage floor raised to 87; 95 remains the ratchet endpoint
+- [065](065-glob-suite-runner-colocated-tests-and-a-branch-coverage-ratchet.md) Glob suite runner, co-located tests, and a branch-coverage ratchet
+
+### coverage
+
+- [072](072-coverage-wave-four-holds-the-floor-at-90-and-fixes-the-daemon-status-platform-de.md) Coverage wave four holds the floor at 90 and fixes the daemon status platform defect
+- [068](068-coverage-floor-raised-to-90.md) Coverage floor raised to 90
+- [067](067-coverage-floor-raised-to-89-toward-the-95-endpoint.md) Coverage floor raised to 89 toward the 95 endpoint
+- [066](066-coverage-floor-raised-to-87-95-remains-the-ratchet-endpoint.md) Coverage floor raised to 87; 95 remains the ratchet endpoint
+- [065](065-glob-suite-runner-colocated-tests-and-a-branch-coverage-ratchet.md) Glob suite runner, co-located tests, and a branch-coverage ratchet
+
 ### guardrails
 
 - [061](061-one-file-per-rule-with-underscore-barrel-folders-and-a-size-ratchet.md) One file per rule with underscore-barrel folders and a size ratchet
@@ -253,26 +272,19 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [045](045-adopt-eslint-plugin-unicorn-for-js-ts-quality.md) Adopt eslint-plugin-unicorn for JS/TS quality
 - [019](019-fail-closed-mcp-enforcement-and-reusable-agent-commands.md) fail closed mcp enforcement and reusable agent commands
 
-### ci
-
-- [068](068-coverage-floor-raised-to-90.md) Coverage floor raised to 90
-- [067](067-coverage-floor-raised-to-89-toward-the-95-endpoint.md) Coverage floor raised to 89 toward the 95 endpoint
-- [066](066-coverage-floor-raised-to-87-95-remains-the-ratchet-endpoint.md) Coverage floor raised to 87; 95 remains the ratchet endpoint
-- [065](065-glob-suite-runner-colocated-tests-and-a-branch-coverage-ratchet.md) Glob suite runner, co-located tests, and a branch-coverage ratchet
-
-### coverage
-
-- [068](068-coverage-floor-raised-to-90.md) Coverage floor raised to 90
-- [067](067-coverage-floor-raised-to-89-toward-the-95-endpoint.md) Coverage floor raised to 89 toward the 95 endpoint
-- [066](066-coverage-floor-raised-to-87-95-remains-the-ratchet-endpoint.md) Coverage floor raised to 87; 95 remains the ratchet endpoint
-- [065](065-glob-suite-runner-colocated-tests-and-a-branch-coverage-ratchet.md) Glob suite runner, co-located tests, and a branch-coverage ratchet
-
 ### infrastructure
 
 - [009](009-scaffold-skill-consolidation.md) scaffold skill consolidation
 - [008](008-thematic-skill-taxonomy-rename.md) thematic skill taxonomy rename
 - [004](004-scaffold-consolidation.md) Scaffold Skill Consolidation
 - [001](001-thematic-skill-rename.md) Thematic Skill Taxonomy Rename
+
+### ratchet
+
+- [072](072-coverage-wave-four-holds-the-floor-at-90-and-fixes-the-daemon-status-platform-de.md) Coverage wave four holds the floor at 90 and fixes the daemon status platform defect
+- [068](068-coverage-floor-raised-to-90.md) Coverage floor raised to 90
+- [067](067-coverage-floor-raised-to-89-toward-the-95-endpoint.md) Coverage floor raised to 89 toward the 95 endpoint
+- [066](066-coverage-floor-raised-to-87-95-remains-the-ratchet-endpoint.md) Coverage floor raised to 87; 95 remains the ratchet endpoint
 
 ### refactor
 
@@ -335,12 +347,6 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [051](051-round-two-hardening-cycles-daemon-cleanup-diagnostics.md) Round-2 hardening - cycles, daemon/commands split, diagnostics, HTTP verification
 - [045](045-adopt-eslint-plugin-unicorn-for-js-ts-quality.md) Adopt eslint-plugin-unicorn for JS/TS quality
 - [044](044-strengthen-typescript-discipline-for-large-codebases.md) Strengthen TypeScript discipline for large codebases
-
-### ratchet
-
-- [068](068-coverage-floor-raised-to-90.md) Coverage floor raised to 90
-- [067](067-coverage-floor-raised-to-89-toward-the-95-endpoint.md) Coverage floor raised to 89 toward the 95 endpoint
-- [066](066-coverage-floor-raised-to-87-95-remains-the-ratchet-endpoint.md) Coverage floor raised to 87; 95 remains the ratchet endpoint
 
 ### security
 
