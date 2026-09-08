@@ -8,7 +8,7 @@ import { test } from "node:test";
 import { readFindings, mergeFindings } from "../_findings.js";
 
 const project = mkdtempSync(join(tmpdir(), "rule-findings-"));
-const reviewDir = mkdirSync(join(project, "docs", "reviews"), { recursive: true });
+mkdirSync(join(project, "docs", "reviews"), { recursive: true });
 
 test.after(() => rmSync(project, { recursive: true, force: true }));
 
@@ -61,4 +61,26 @@ test("mergeFindings flips reported-open and keeps resolved ones visible once", (
   );
   const sorted = merged.findIndex((f) => f.id === "F1") < merged.findIndex((f) => f.id === "F3");
   assert.equal(sorted, true, "higher severities sort before lower ones");
+});
+
+test("mergeFindings prunes stale resolved rows, defaults sparse fields and keeps steps", () => {
+  const prior = [{ id: "F9", severity: "low", status: "resolved", evidence: "", summary: "seen once already" }];
+  const now = [
+    { id: "FA", steps: ["fix the thing"] },
+    { id: "FB", severity: "unheard-of" },
+    { id: "FC", severity: "unheard-of" },
+  ];
+
+  const { findings, counts } = mergeFindings(prior, now);
+  assert.equal(counts.pruned, 1, "a resolved finding not reported again is pruned");
+  assert.equal(counts.open, 3, "everything reported counts as open");
+
+  const sparse = findings.find((f) => f.id === "FA");
+  assert.equal(sparse.severity, "medium", "a missing severity defaults to medium");
+  assert.equal(sparse.evidence, "", "a missing evidence defaults to empty");
+  assert.deepEqual(sparse.steps, ["fix the thing"], "reported steps survive the merge");
+
+  const unknownRank = findings.findIndex((f) => f.id === "FB");
+  assert.ok(unknownRank > findings.findIndex((f) => f.id === "FA"), "an unknown severity ranks after the known ones");
+  assert.ok(findings.findIndex((f) => f.id === "FB") < findings.findIndex((f) => f.id === "FC"), "equal severities tie-break by id");
 });

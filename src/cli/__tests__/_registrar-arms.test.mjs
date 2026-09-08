@@ -81,8 +81,38 @@ test("skills reload reports done", () => {
   assert.match(res.out, /reload/i, "the reload command reports");
 });
 
+test("handoff doctor --fix alone points at --fix-commits for the messages", async () => {
+  const { seedRepo } = await import("../../../tests/docs/docs-numbering-doctor/_doctor.fixture.mjs");
+  const root = seedRepo();
+
+  const fixed = runCli(["handoff", "doctor", "--dir", root, "--fix"], { cwd: root });
+  assert.match(fixed.out, /Renumbered/, "the fix applies");
+  assert.match(fixed.out, /Commit messages were not touched\. Add --fix-commits/, "the messages hint renders");
+  rmSync(root, { recursive: true, force: true });
+});
+
+test("handoff doctor --fix-commits alone rewrites messages without moving files", async () => {
+  const { seedRepo } = await import("../../../tests/docs/docs-numbering-doctor/_doctor.fixture.mjs");
+  const root = seedRepo();
+
+  const res = runCli(["handoff", "doctor", "--dir", root, "--fix-commits"], { cwd: root });
+  assert.match(res.out, /Rewrote \d+ commit message\(s\)|Commit messages left alone/, "the commit rewrite reports either way");
+  assert.doesNotMatch(res.out, /Renumbered \d+ document/, "no files move without --fix");
+  rmSync(root, { recursive: true, force: true });
+});
+
+test("handoff honors explicit format and mode flags", () => {
+  const project = mkdtempSync(join(tmpdir(), "rule-cli-handoff-flags-"));
+  mkdirSync(join(project, "docs"), { recursive: true });
+
+  const res = runCli(["handoff", "--format", "brief", "--mode", "close-session", "--compress"], { cwd: project });
+  assert.ok(res.out.length > 0, "the flagged handoff renders");
+  assert.equal(res.err, "", "no stderr noise");
+  rmSync(project, { recursive: true, force: true });
+});
+
 test("handoff doctor plans, applies and rewrites in a collision repo", async () => {
-  const { git, seedRepo } = await import("../../../tests/docs/docs-numbering-doctor/_doctor.fixture.mjs");
+  const { seedRepo } = await import("../../../tests/docs/docs-numbering-doctor/_doctor.fixture.mjs");
   const root = seedRepo();
 
   const dry = runCli(["handoff", "doctor", "--dir", root], { cwd: root });

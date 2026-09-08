@@ -102,6 +102,38 @@ test("a broken persona file is reported by name, never fatal", () => {
   }
 });
 
+test("a missing dir, an unreadable dir and an id mismatch are reported, never thrown", () => {
+  const missing = loadPersonaCatalog(join(tmpdir(), "rule-personas-nowhere"));
+  assert.equal(missing.roles.length, 0, "no roles from a missing dir");
+  assert.match(missing.problems[0].reason, /does not exist/, "the missing dir is stated");
+
+  const asFile = mkdtempSync(join(tmpdir(), "rule-personas-flat-"));
+  writeFileSync(join(asFile, "roles"), "a file, not a dir");
+  const unreadable = loadPersonaCatalog(join(asFile, "roles"));
+  assert.match(unreadable.problems[0].reason, /directory unreadable|does not exist/, "an unreadable dir is stated");
+  rmSync(asFile, { recursive: true, force: true });
+
+  const dir = mkdtempSync(join(tmpdir(), "rule-personas-mismatch-"));
+  writeFileSync(
+    join(dir, "wrong-name.md"),
+    formatPersonaFile({
+      id: "other-id",
+      role: "Mismatched",
+      yearsOfExperience: 1,
+      skills: ["x"],
+      evidenceSkills: [],
+      lenses: ["y"],
+      aliases: [],
+      status: "active",
+      version: 1,
+    }),
+  );
+  const mismatched = loadPersonaCatalog(dir);
+  assert.equal(mismatched.roles.length, 0, "a mismatched id does not load");
+  assert.match(mismatched.problems[0].reason, /does not match the file name/, "the mismatch is stated");
+  rmSync(dir, { recursive: true, force: true });
+});
+
 test("the active set that drives every plan/audit/review surface is the folder", () => {
   const active = activeRoles()
     .map((role) => role.id)
