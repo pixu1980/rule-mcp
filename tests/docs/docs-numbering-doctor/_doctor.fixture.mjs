@@ -88,3 +88,34 @@ export function seedScrambledIndex() {
 
   return root;
 }
+
+/**
+ * A repo whose numbers are unique and ordered, with holes where documents were
+ * deleted: 002 and 005 are gone, so the sequence runs 001, 003, 004, 006.
+ */
+export function seedGappedRepo() {
+  const root = mkdtempSync(join(tmpdir(), "rule-doctor-gaps-"));
+  git(["init", "--quiet", "--initial-branch=main"], root);
+  git(["config", "user.email", "t@example.com"], root);
+  git(["config", "user.name", "T"], root);
+  mkdirSync(join(root, "docs", "adr"), { recursive: true });
+  mkdirSync(join(root, "docs", "handoff"), { recursive: true });
+
+  for (const [number, slug] of [
+    ["001", "first"],
+    ["003", "third"],
+    ["004", "fourth"],
+    ["006", "sixth"],
+  ]) {
+    writeFileSync(join(root, "docs", "adr", `${number}-${slug}.md`), `# ${number}: ${slug}\n\n- **Status**: accepted\n`);
+  }
+
+  // A reference to a document that moves, and one to a document that does not.
+  writeFileSync(join(root, "docs", "adr", "001-first.md"), "# 001: first\n\n- **Status**: accepted\n\nSuperseded by [006](006-sixth.md).\n");
+  writeFileSync(join(root, "docs", "adr", "ADR.md"), "| ADR | Title |\n|-----|-------|\n| [006](006-sixth.md) | sixth |\n");
+  writeFileSync(join(root, "docs", "handoff", "01-only.md"), "# Handoff 01: only\n");
+  git(["add", "-A"], root);
+  git(["commit", "--quiet", "-m", "docs(adr): the gapped fixture"], root);
+
+  return root;
+}
