@@ -22,13 +22,13 @@ export function areaPromptText(area, tools) {
 
 /** System text per area prompt name. */
 export const AREAS = {
-  "rule-area-meta": areaPromptText(
-    "meta",
+  "rule-area-toolset": areaPromptText(
+    "toolset",
     "pix_tool, rule_tool_gateway, rule_tool_apply, rule_tool_search, rule_tool_check, rule_tool_scaffold, rule_tool_detect, rule_tool_fix, rule_tool_process_adr, rule_tool_process_handoff",
   ),
   "rule-area-frontend": areaPromptText(
     "frontend",
-    "pix_frontend_react, pix_frontend_vue, pix_frontend_svelte, pix_frontend_angular, pix_frontend_solidjs, pix_frontend_meta_astro, pix_frontend_meta_next, pix_frontend_meta_nuxt, pix_frontend_meta_remix, pix_frontend_vanilla_reactive, pix_frontend_design",
+    "pix_frontend_react, pix_frontend_vue, pix_frontend_svelte, pix_frontend_angular, pix_frontend_solidjs, pix_meta_astro, pix_meta_next, pix_meta_nuxt, pix_meta_remix, pix_frontend_vanilla_reactive, pix_frontend_design",
   ),
   "rule-area-backend": areaPromptText(
     "backend",

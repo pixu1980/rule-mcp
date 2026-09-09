@@ -7,7 +7,7 @@ a tool, a skill, a prompt, a role, a command or a guardrail;
 `tests/docs/census-generated.test.mjs` compares this file against the live
 registry, so a stale copy fails the build instead of misleading a reader.
 
-## MCP resources (184)
+## MCP resources (186)
 
 A resource is read with `resources/read`, and every one is JSON or markdown
 a client can cache: no call runs a model, and none of them writes.
@@ -27,7 +27,7 @@ a client can cache: no call runs a model, and none of them writes.
 
 ### Per skill
 
-176 more, two for each skill that mints them:
+178 more, two for each skill that mints them:
 
 - `rule://<skill>` - the whole `SKILL.md`
 - `rule://<skill>/summary` - the condensed form a router hands back

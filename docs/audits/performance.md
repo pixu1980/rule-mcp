@@ -28,7 +28,9 @@ the sources it consulted. No opinions - those belong in the review.
 | Platform inventory | files and line counts of the source skill | ~/.agents/skills/caveman-compress/scripts/: validate.py 189, compress.py 227, detect.py 121, benchmark.py 78, cli.py 73 (700 total) |
 | Validator invariants | read of validate.py | headings count/equality, code blocks exact, URL set exact, path set, bullets within 15% |
 | Meta surface | ls skills/*meta* | 4 dirs: rule-frontend-meta-astro, rule-frontend-meta-next, rule-frontend-meta-nuxt, rule-frontend-meta-remix |
-| Meta tool naming | read of src/tools/skill/_skill-tool.js | rule_tool_frontend_meta_astro etc. (skillName minus rule- prefix, dashes to underscores) |
+| Meta tool naming | read of src/tools/skill/_skill-tool.js | rule_tool_meta_astro etc. (skillName minus rule- prefix, dashes to underscores); renamed from the frontend-meta form by step 7 |
+| Connect cost, meta rename | listTools() before and after step 7 | 105 tools / 96,679 bytes -> 106 tools / 97,204 bytes (+525): the four entries were renamed, not merged, so the dispatcher is a net addition |
+| Connect cost, schema conversion | listTools() first and second call | 7.9 ms then 0 ms (memoized on the registry generation) |
 | Pre-existing name | node listPrompts() filter for meta and toolset | rule-area-meta prompt, argument request, dispatcher/action toolset (routing, gateway, apply, search, check, scaffold, detect, fix, ADR, handoff) |
 | Pre-existing name in docs | read of docs/02-tools-operations.md line 679 | census prompt table shows the row as rule-meta (rule-area- prefix stripped) |
 | Name history | read of docs/adr/001 and docs/adr/008 | rule-meta-* taxonomy existed before ADR 001 renamed it to rule-frontend-meta-* (3 skills at that time) |

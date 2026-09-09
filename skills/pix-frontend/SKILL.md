@@ -26,7 +26,7 @@ frameworks: [all]
 | [rule-frontend-angular](../rule-frontend-angular/SKILL.md)       | Angular 16+ (standalone) | signal()       | Signals         |
 | [rule-frontend-svelte](../rule-frontend-svelte/SKILL.md)         | Svelte 5                 | $state (runes) | Runes           |
 | [rule-frontend-solidjs](../rule-frontend-solidjs/SKILL.md)       | SolidJS                  | createSignal   | Signals         |
-| [rule-frontend-meta-astro](../rule-frontend-meta-astro/SKILL.md) | Astro (islands)          | Per-framework  | Per-framework   |
+| [rule-meta-astro](../rule-meta-astro/SKILL.md) | Astro (islands)          | Per-framework  | Per-framework   |
 
 ## Rules that hold whichever framework you route to
 
@@ -48,9 +48,9 @@ frameworks: [all]
 
 | Skill                                                          | Based On        | Features                                   |
 | -------------------------------------------------------------- | --------------- | ------------------------------------------ |
-| [rule-frontend-meta-next](../rule-frontend-meta-next/SKILL.md)   | Next.js (React) | App Router, SSR/SSG/ISR, server components |
-| [rule-frontend-meta-nuxt](../rule-frontend-meta-nuxt/SKILL.md)   | Nuxt 3 (Vue)    | File-based routing, SSR/SSG, auto-imports  |
-| [rule-frontend-meta-remix](../rule-frontend-meta-remix/SKILL.md) | Remix (React)   | Nested routing, loaders/actions, SSR       |
+| [rule-meta-next](../rule-meta-next/SKILL.md)   | Next.js (React) | App Router, SSR/SSG/ISR, server components |
+| [rule-meta-nuxt](../rule-meta-nuxt/SKILL.md)   | Nuxt 3 (Vue)    | File-based routing, SSR/SSG, auto-imports  |
+| [rule-meta-remix](../rule-meta-remix/SKILL.md) | Remix (React)   | Nested routing, loaders/actions, SSR       |
 
 ## When the framework is the over-engineering
 
@@ -86,7 +86,7 @@ Two things worth saying out loud when this comes up:
 
 The mixed answer is usually the correct one: server-rendered pages by default,
 with a component island where the interaction genuinely justifies one. See
-[rule-frontend-meta-astro](../rule-frontend-meta-astro/SKILL.md) for that shape as a
+[rule-meta-astro](../rule-meta-astro/SKILL.md) for that shape as a
 default. Where a small amount of client state does not need a framework at
 all, plain custom elements and a stylesheet are the whole answer:
 [rule-styleguide-javascript](../rule-styleguide-javascript/SKILL.md) and
@@ -101,12 +101,12 @@ Need SPA with Vue?                      → rule-frontend-vue
 Need enterprise Angular?                → rule-frontend-angular
 Need lightweight Svelte?                → rule-frontend-svelte
 Need fine-grained reactivity?           → rule-frontend-solidjs
-Need static + islands?                  → rule-frontend-meta-astro
+Need static + islands?                  → rule-meta-astro
 Need pure vanilla (no framework)?       → rule-styleguide-javascript
 UI freezes on heavy JS?                 → rule-frontend-workers
-Need full-stack React (Next.js)?        → rule-frontend-meta-next
-Need full-stack Vue (Nuxt)?             → rule-frontend-meta-nuxt
-Need nested routing (Remix)?            → rule-frontend-meta-remix
+Need full-stack React (Next.js)?        → rule-meta-next
+Need full-stack Vue (Nuxt)?             → rule-meta-nuxt
+Need nested routing (Remix)?            → rule-meta-remix
 ```
 
 ## See also

@@ -8,7 +8,7 @@ import { DEVOPS_GUARDRAILS } from "../_devops.js";
 import { FRAMEWORK_GUARDRAILS } from "../framework/index.js";
 import { A11Y_GUARDRAILS, QUALITY_GUARDRAILS } from "../quality/index.js";
 
-// ─── Skill → framework mapping ───
+// ─── Skill -> framework mapping ───
 
 export const SKILL_FRAMEWORK_MAP = {
   "rule-frontend-react": "react",
@@ -16,7 +16,7 @@ export const SKILL_FRAMEWORK_MAP = {
   "rule-frontend-svelte": "svelte",
   "rule-frontend-solidjs": "solid",
   "rule-frontend-angular": "angular",
-  "rule-frontend-meta-astro": "astro",
+  "rule-meta-astro": "astro",
   "rule-styleguide": "vanilla",
   "rule-styleguide-html": "vanilla",
   "rule-styleguide-css": "vanilla",

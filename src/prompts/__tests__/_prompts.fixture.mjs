@@ -17,7 +17,7 @@ console.log("prompts registry test");
 export const WORKFLOW_PROMPTS = ["rule-handoff"];
 
 export const AREA_PROMPTS = [
-  "rule-area-meta",
+  "rule-area-toolset",
   "rule-area-frontend",
   "rule-area-backend",
   "rule-area-data",

@@ -64,7 +64,7 @@ which agents are installed and where their homes are.
 
 **router**: `/rule`
 
-**area**: `/rule-area-ai`, `/rule-area-backend`, `/rule-area-data`, `/rule-area-devops`, `/rule-area-frontend`, `/rule-area-meta`, `/rule-area-platform`, `/rule-area-process`, `/rule-area-skills`, `/rule-area-styleguide`, `/rule-area-toolchain`, `/rule-area-ui`
+**area**: `/rule-area-ai`, `/rule-area-backend`, `/rule-area-data`, `/rule-area-devops`, `/rule-area-frontend`, `/rule-area-platform`, `/rule-area-process`, `/rule-area-skills`, `/rule-area-styleguide`, `/rule-area-toolchain`, `/rule-area-toolset`, `/rule-area-ui`
 
 **workflow**: `/rule-adr`, `/rule-flight`
 

@@ -23,12 +23,12 @@ Claude Code installs clean `/rule-*` commands instead and suppresses these
 | `/rule-area-data`       | <request>  | Data-layer work: postgresql, mysql, sqlite, mongodb, duckdb, indexed-db, SQL                                                                              |
 | `/rule-area-devops`     | <request>  | DevOps work: docker, observability, testing                                                                                                               |
 | `/rule-area-frontend`   | <request>  | Frontend work following rule styleguides: zero CSS classes, semantic HTML, external CSS, TDD + a11y                                                        |
-| `/rule-area-meta`       | <request>  | Work with the rule dispatcher/action toolset: routing, gateway, apply, search, check, scaffold, detect, fix, ADR, handoff                                  |
 | `/rule-area-platform`   | <request>  | Platform work: web, desktop, agent, library                                                                                                               |
 | `/rule-area-process`    | <request>  | Process work: code review, TDD, feature workflow, documentation, ADR, handoff, BMAD                                                                       |
 | `/rule-area-skills`     | <request>  | Skill discovery: find, install, and evaluate agent skills                                                                                                 |
 | `/rule-area-styleguide` | <request>  | Styleguide work: a11y, css, html, javascript, json, markdown, naming, patterns, validation                                                                |
 | `/rule-area-toolchain`  | <request>  | Toolchain configuration: vite, pnpm, turborepo, rspack, parcel, typescript, eslint, biome, husky, commits, project                                        |
+| `/rule-area-toolset`    | <request>  | Work with the rule dispatcher/action toolset: routing, gateway, apply, search, check, scaffold, detect, fix, ADR, handoff                                  |
 | `/rule-area-ui`         | <request>  | UI design-system work: design-system components, tokens, patterns                                                                                         |
 | `/rule-flight`          | [options]  | Read the flight recorder: what this server cost, and what to do about it                                                                                  |
 | `/rule-handoff`         | [options]  | Produce a compressed context handoff (ADR summary + git context) to resume in a new session, commiting pending work as scoped Conventional Commits first. |

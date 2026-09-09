@@ -132,7 +132,7 @@ commit - the docs follow the code instead of being remembered.
 | `session`  | 5     | `/rule-handoff`    | Carries a session across a context boundary                         |
 | `persona`  | 54    | `/rule-audit-a11y` | Runs one review role at one operation, and writes its documents     |
 
-**Areas**: `/rule-area-ai`, `/rule-area-backend`, `/rule-area-data`, `/rule-area-devops`, `/rule-area-frontend`, `/rule-area-meta`, `/rule-area-platform`, `/rule-area-process`, `/rule-area-skills`, `/rule-area-styleguide`, `/rule-area-toolchain`, `/rule-area-ui`
+**Areas**: `/rule-area-ai`, `/rule-area-backend`, `/rule-area-data`, `/rule-area-devops`, `/rule-area-frontend`, `/rule-area-platform`, `/rule-area-process`, `/rule-area-skills`, `/rule-area-styleguide`, `/rule-area-toolchain`, `/rule-area-toolset`, `/rule-area-ui`
 
 **Workflows**: `/rule-adr`, `/rule-flight`
 

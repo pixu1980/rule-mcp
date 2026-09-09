@@ -26,6 +26,7 @@ const embeddedSkillCount = readdirSync(new URL("../../../skills", import.meta.ur
 /** The guaranteed minimal tool surface. */
 const MINIMAL = [
   "pix_tool",
+  "rule_tool_meta",
   "rule_tool_update",
   "rule_tool_gateway",
   "rule_tool_apply",

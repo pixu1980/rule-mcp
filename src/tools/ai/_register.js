@@ -22,7 +22,7 @@ export function registerAiTool() {
     zodSchema: GalaxySchema,
     handler: async (arguments_) => {
       const allSkills = getSkillNames();
-      const skills = allSkills.filter((skillName) => skillName !== "rule");
+      const skills = allSkills.filter((skillName) => skillName !== "rule" && skillName !== "rule-meta");
       const prompt = expandPrompt((arguments_.prompt || "").trim());
 
       if (!prompt) {

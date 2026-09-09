@@ -1,7 +1,7 @@
 /** @module core/detector/rules.data - the framework, build-tool and skill tables */
 
 /**
- * Framework detection rules: dependency name → framework key.
+ * Framework detection rules: dependency name -> framework key.
  * Ordered by specificity (most specific first).
  */
 export const FRAMEWORK_RULES = [
@@ -16,7 +16,7 @@ export const FRAMEWORK_RULES = [
 ];
 
 /**
- * Build tool detection rules: devDependency name → tool key.
+ * Build tool detection rules: devDependency name -> tool key.
  */
 export const BUILD_TOOL_RULES = [
   { deps: ["vite"], key: "vite" },
@@ -32,14 +32,14 @@ export const BUILD_TOOL_RULES = [
 ];
 
 /**
- * Framework key → canonical thematic skill mapping.
+ * Framework key -> canonical thematic skill mapping.
  * Tool names are derived from the skill name by the same rule used by
  * registerSkillTool(): strip `rule-`, replace `-` with `_`, prefix `pix_`.
  */
 export const FRAMEWORK_SKILL_MAP = {
   agents: "rule-ai",
   angular: "rule-frontend-angular",
-  astro: "rule-frontend-meta-astro",
+  astro: "rule-meta-astro",
   electron: "rule-platform-desktop",
   react: "rule-frontend-react",
   solid: "rule-frontend-solidjs",

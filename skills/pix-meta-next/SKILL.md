@@ -1,5 +1,5 @@
 ---
-name: rule-frontend-meta-next
+name: rule-meta-next
 description: >-
   Use when building Next.js applications. Covers App Router, Server Components, SSR/SSG/ISR, API routes, middleware, and Vercel deployment.
 tags:
@@ -9,11 +9,11 @@ tags:
 frameworks: [next, react]
 ---
 
-# rule-frontend-meta-next - Next.js Applications with rule Principles
+# rule-meta-next - Next.js Applications with rule Principles
 
 Next.js is a React meta-framework providing file-based routing, SSR, SSG, ISR, API routes, and middleware. Use alongside [rule-frontend-react](../rule-frontend-react/SKILL.md) for the UI layer.
 
-## When to use rule-frontend-meta-next
+## When to use rule-meta-next
 
 - Building a React application that needs SSR, SSG, or ISR
 - Using the App Router with React Server Components
@@ -177,7 +177,7 @@ DATABASE_URL=postgres://...                     ← Server only
 
 ```
 ┌──────────────────────────────────────────────────────────────────────────────┐
-│  rule-frontend-meta-next - Next.js (React Meta-framework)                     │
+│  rule-meta-next - Next.js (React Meta-framework)                              │
 │                                                                              │
 │  Routing:   app/ directory, layout/page/loading/error                        │
 │  Data:      fetch with cache/no-store/revalidate                             │

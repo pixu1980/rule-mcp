@@ -22,17 +22,17 @@ export function buildIndex(force = false) {
   }
 
   const skillNames = getSkillNames();
-  const df = new Map(); // term → docId → freq
+  const df = new Map(); // term -> docId -> freq
   const documentLength = new Map();
   const docs = [];
   let documentId = 0;
 
   for (const skillName of skillNames) {
-    // The hub skill ("rule") is the router's own directory, not a body of
-    // knowledge: indexed, its near-ubiquitous vocabulary dilutes the
+    // A hub skill ("rule", "rule-meta") is a dispatcher's own directory, not a
+    // body of knowledge: indexed, its near-ubiquitous vocabulary dilutes the
     // document frequency of every common term and drags the whole routing
     // surface down with it.
-    if (skillName === "rule") {
+    if (skillName === "rule" || skillName === "rule-meta") {
       continue;
     }
 

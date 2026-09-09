@@ -7,14 +7,14 @@ a tool, a skill, a prompt, a role, a command or a guardrail;
 `tests/docs/census-generated.test.mjs` compares this file against the live
 registry, so a stale copy fails the build instead of misleading a reader.
 
-## Skills (88)
+## Skills (89)
 
 The catalog. A skill is the source of truth for its topic; the tool that
 serves it carries no rules of its own, and the guardrails it is checked
 against are in [`12-guardrails.md`](12-guardrails.md).
 
 The router's own directory, `skills/rule/`, mints no skill tool, which is why
-the catalog is 88 and the directory count is 89.
+the catalog is 89 and the directory count is 90.
 
 | Area                      | Skills | Covers                                                                |
 | ------------------------- | ------ | --------------------------------------------------------------------- |
@@ -23,7 +23,8 @@ the catalog is 88 and the directory count is 89.
 | [caveman](#caveman)       | 1      | Output compression: the rules that shorten prose without losing facts |
 | [data](#data)             | 8      | Databases and storage, from SQL dialects to IndexedDB                 |
 | [devops](#devops)         | 5      | Pipelines, containers, observability, testing, versioning             |
-| [frontend](#frontend)     | 14     | Frameworks and the code that runs in a browser                        |
+| [frontend](#frontend)     | 10     | Frameworks and the code that runs in a browser                        |
+| [meta](#meta)             | 5      |                                                                       |
 | [platform](#platform)     | 6      | Where the code ships: web, desktop, mobile, library, agent            |
 | [process](#process)       | 10     | How work is done: reviews, ADRs, changelogs, handoffs, simplicity     |
 | [styleguide](#styleguide) | 16     | The rules code is written to, per language and concern                |
@@ -85,22 +86,28 @@ the catalog is 88 and the directory count is 89.
 
 ### frontend
 
-| Skill                           | Tool                                 | Frameworks   | Description                                                                                                                                                                                                                                                      |
-| ------------------------------- | ------------------------------------ | ------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `rule-frontend`                  | `rule_tool_frontend`                  | all          | Use when building frontend UIs to route to the correct framework skill. Covers React, Vue, Angular, Svelte, SolidJS, Astro, and meta-frameworks.                                                                                                                 |
-| `rule-frontend-angular`          | `rule_tool_frontend_angular`          | angular      | Use when building Angular standalone components. Follows rule principles: zero CSS classes, semantic HTML, barrel file tree, data-part selectors.                                                                                                                 |
-| `rule-frontend-custom-element`   | `rule_tool_frontend_custom_element`   | vanilla      | Build Custom Elements v1 (autonomous and customized built-ins) in light DOM with zero dependencies: metadata-driven componentDecorator in a static {} block, adoptedStyleSheets, code-splitting (consts/utils/attributes/events/template), and a CLI scaffolder. |
-| `rule-frontend-meta-astro`       | `rule_tool_frontend_meta_astro`       | astro        | Use when building Astro islands-architecture sites. Supports zero CSS classes, semantic HTML, partial hydration, and integration with UI frameworks.                                                                                                             |
-| `rule-frontend-meta-next`        | `rule_tool_frontend_meta_next`        | next, react  | Use when building Next.js applications. Covers App Router, Server Components, SSR/SSG/ISR, API routes, middleware, and Vercel deployment.                                                                                                                        |
-| `rule-frontend-meta-nuxt`        | `rule_tool_frontend_meta_nuxt`        | nuxt, vue    | Use when building Nuxt.js applications. Covers file-based routing, SSR/SSG, server routes, auto-imports, Nitro engine, and modules ecosystem.                                                                                                                    |
-| `rule-frontend-meta-remix`       | `rule_tool_frontend_meta_remix`       | remix, react | Use when building Remix or React Router applications. Covers nested routing, loaders/actions, SSR, progressive enhancement, and sessions.                                                                                                                        |
-| `rule-frontend-react`            | `rule_tool_frontend_react`            | react        | Use when building React 18+ functional components. Follows rule principles: zero CSS classes, semantic HTML, barrel file tree, data-part selectors.                                                                                                               |
-| `rule-frontend-solidjs`          | `rule_tool_frontend_solidjs`          | solidjs      | Use when building SolidJS applications with fine-grained reactivity. Follows rule principles: zero CSS classes, semantic HTML, Signals, barrel file tree.                                                                                                         |
-| `rule-frontend-svelte`           | `rule_tool_frontend_svelte`           | svelte       | Use when building Svelte 5 applications with runes API. Follows rule principles: zero CSS classes, semantic HTML, $state/$derived, barrel file tree.                                                                                                              |
-| `rule-frontend-template-engine`  | `rule_tool_frontend_template_engine`  | vanilla      | File-based HTML template engine for static HTML generation, SSG, and SSR: extends/include/block layout inheritance, if/for/switch directives, {{ }} interpolation with filter pipelines, tagged template literals, and a browser-safe tagged runtime.            |
-| `rule-frontend-vanilla-reactive` | `rule_tool_frontend_vanilla_reactive` | vanilla      | Use when building reactive web UIs without frameworks. Covers Proxy-based Store, Signals, html`` tagged templates, custom elements, and adoptedStyleSheets.                                                                                                      |
-| `rule-frontend-vue`              | `rule_tool_frontend_vue`              | vue          | Use when building Vue 3 Composition API components. Follows rule principles: zero CSS classes, semantic HTML, barrel file tree, data-part selectors.                                                                                                              |
-| `rule-frontend-workers`          | `rule_tool_frontend_workers`          | all          | Use when browser JavaScript blocks the main thread. Covers Web Workers, worker pools, transferables, SharedArrayBuffer, OffscreenCanvas, scheduler.yield, and INP/LoAF measurement.                                                                              |
+| Skill                           | Tool                                 | Frameworks | Description                                                                                                                                                                                                                                                      |
+| ------------------------------- | ------------------------------------ | ---------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `rule-frontend`                  | `rule_tool_frontend`                  | all        | Use when building frontend UIs to route to the correct framework skill. Covers React, Vue, Angular, Svelte, SolidJS, Astro, and meta-frameworks.                                                                                                                 |
+| `rule-frontend-angular`          | `rule_tool_frontend_angular`          | angular    | Use when building Angular standalone components. Follows rule principles: zero CSS classes, semantic HTML, barrel file tree, data-part selectors.                                                                                                                 |
+| `rule-frontend-custom-element`   | `rule_tool_frontend_custom_element`   | vanilla    | Build Custom Elements v1 (autonomous and customized built-ins) in light DOM with zero dependencies: metadata-driven componentDecorator in a static {} block, adoptedStyleSheets, code-splitting (consts/utils/attributes/events/template), and a CLI scaffolder. |
+| `rule-frontend-react`            | `rule_tool_frontend_react`            | react      | Use when building React 18+ functional components. Follows rule principles: zero CSS classes, semantic HTML, barrel file tree, data-part selectors.                                                                                                               |
+| `rule-frontend-solidjs`          | `rule_tool_frontend_solidjs`          | solidjs    | Use when building SolidJS applications with fine-grained reactivity. Follows rule principles: zero CSS classes, semantic HTML, Signals, barrel file tree.                                                                                                         |
+| `rule-frontend-svelte`           | `rule_tool_frontend_svelte`           | svelte     | Use when building Svelte 5 applications with runes API. Follows rule principles: zero CSS classes, semantic HTML, $state/$derived, barrel file tree.                                                                                                              |
+| `rule-frontend-template-engine`  | `rule_tool_frontend_template_engine`  | vanilla    | File-based HTML template engine for static HTML generation, SSG, and SSR: extends/include/block layout inheritance, if/for/switch directives, {{ }} interpolation with filter pipelines, tagged template literals, and a browser-safe tagged runtime.            |
+| `rule-frontend-vanilla-reactive` | `rule_tool_frontend_vanilla_reactive` | vanilla    | Use when building reactive web UIs without frameworks. Covers Proxy-based Store, Signals, html`` tagged templates, custom elements, and adoptedStyleSheets.                                                                                                      |
+| `rule-frontend-vue`              | `rule_tool_frontend_vue`              | vue        | Use when building Vue 3 Composition API components. Follows rule principles: zero CSS classes, semantic HTML, barrel file tree, data-part selectors.                                                                                                              |
+| `rule-frontend-workers`          | `rule_tool_frontend_workers`          | all        | Use when browser JavaScript blocks the main thread. Covers Web Workers, worker pools, transferables, SharedArrayBuffer, OffscreenCanvas, scheduler.yield, and INP/LoAF measurement.                                                                              |
+
+### meta
+
+| Skill            | Tool                  | Frameworks               | Description                                                                                                                                                                                       |
+| ---------------- | --------------------- | ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `rule-meta`       | `rule_tool_meta`       | astro, next, nuxt, remix | Use when routing a meta-framework request to the correct rule skill: Astro, Next.js, Nuxt or Remix. Acts as the dispatcher for the meta-framework set, the way rule dispatches the whole ecosystem. |
+| `rule-meta-astro` | `rule_tool_meta_astro` | astro                    | Use when building Astro islands-architecture sites. Supports zero CSS classes, semantic HTML, partial hydration, and integration with UI frameworks.                                              |
+| `rule-meta-next`  | `rule_tool_meta_next`  | next, react              | Use when building Next.js applications. Covers App Router, Server Components, SSR/SSG/ISR, API routes, middleware, and Vercel deployment.                                                         |
+| `rule-meta-nuxt`  | `rule_tool_meta_nuxt`  | nuxt, vue                | Use when building Nuxt.js applications. Covers file-based routing, SSR/SSG, server routes, auto-imports, Nitro engine, and modules ecosystem.                                                     |
+| `rule-meta-remix` | `rule_tool_meta_remix` | remix, react             | Use when building Remix or React Router applications. Covers nested routing, loaders/actions, SSR, progressive enhancement, and sessions.                                                         |
 
 ### platform
 

@@ -8,6 +8,7 @@ this directory are the source of truth; this index is generated from them by
 
 | #                                                                                                                       | Title                                                                                                     | Date       | Status     | Tags                                                                                |
 | ----------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- | ---------- | ---------- | ----------------------------------------------------------------------------------- |
+| [078](078-meta-frameworks-get-their-own-namespace-and-a-narrow-dispatcher.md)                                           | Meta-frameworks get their own namespace and a narrow dispatcher                                           | 2026-09-09 | accepted   | skills, taxonomy, routing, tools                                                    |
 | [077](077-the-cli-entry-point-loads-no-command-handler-it-has-not-been-asked-for.md)                                    | The CLI entry point loads no command handler it has not been asked for                                    | 2026-09-09 | accepted   | cli, startup, performance, imports                                                  |
 | [076](076-compression-has-four-levels-and-no-llm-in-the-output-path.md)                                                 | Compression has four levels and no LLM in the output path                                                 | 2026-09-09 | accepted   | compression, tokens, determinism, text                                              |
 | [075](075-the-installer-asks-before-copying-bundled-skills-to-the-central-agents-directory.md)                          | The installer asks before copying bundled skills to the central agents directory                          | 2026-09-08 | accepted   | installer, skills, devx, bash, powershell                                           |
@@ -90,6 +91,7 @@ file. Where a line stops short the rest is in the ADR.
 
 | ADR                                                                                                                     | Decision                                                                                                                                                                                                                        | Consequence                                                                                                                                                                                                                    |
 | ----------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| [078](078-meta-frameworks-get-their-own-namespace-and-a-narrow-dispatcher.md)                                           | Rename the four skills to rule-meta-astro, next, nuxt and remix, rename the occupying prompt to rule-area-toolset (which is what it always described), and add skills/rule-meta as a hub with a code-registered rule_tool_meta...   | Routing a meta-framework request now names one skill and the component skill to load with it.                                                                                                                                  |
 | [077](077-the-cli-entry-point-loads-no-command-handler-it-has-not-been-asked-for.md)                                    | Keep the command and option declarations static, and load the handlers inside their actions.                                                                                                                                    | Warm --help fell from 216 ms to 48 ms, and every command still dispatches. listTools() is memoized on a registry generation bumped by register, clear and retain, so the 105-schema conversion is paid once per process...     |
 | [076](076-compression-has-four-levels-and-no-llm-in-the-output-path.md)                                                 | Port the deterministic half and refuse the LLM half.                                                                                                                                                                            | The vocabulary can be aggressive because a bad rule costs one paragraph, not the whole result.                                                                                                                                 |
 | [075](075-the-installer-asks-before-copying-bundled-skills-to-the-central-agents-directory.md)                          | Add a skills step to both installers that asks before copying. install.sh gains Phase 6c "Bundled Skills" and install.ps1 gains Phase 4: in interactive TTY runs it prompts "Install bundled rule-* skills to...                 | Positive: installing now asks before centralizing any skill; non-interactive runs stay silent by default and are deterministic via the new flags; bash and PowerShell behave identically; the copy path is the same...         |
@@ -172,6 +174,7 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 
 ### skills
 
+- [078](078-meta-frameworks-get-their-own-namespace-and-a-narrow-dispatcher.md) Meta-frameworks get their own namespace and a narrow dispatcher
 - [075](075-the-installer-asks-before-copying-bundled-skills-to-the-central-agents-directory.md) The installer asks before copying bundled skills to the central agents directory
 - [069](069-remove-externally-derived-skills-from-the-served-knowledge-base.md) Remove externally derived skills from the served knowledge base
 - [058](058-restructure-the-command-surface-rule-router-rule-area-caveman-implicit-rule-process.md) Restructure the command surface: /rule router, rule-area-*, caveman implicit, rule-process-tdd skill
@@ -214,6 +217,7 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 
 ### routing
 
+- [078](078-meta-frameworks-get-their-own-namespace-and-a-narrow-dispatcher.md) Meta-frameworks get their own namespace and a narrow dispatcher
 - [028](028-add-rule-toolchain-commits-skill-for-atomic-conventional-commits-with-mandatory-s.md) Add rule-toolchain-commits skill for atomic conventional commits with mandatory scope
 - [027](027-rename-rule-mcp-agents-to-rule-ai-agents-and-add-rule-ai-collector-skill.md) Rename rule-mcp-agents to rule-ai-agents and add rule-ai collector skill
 - [026](026-skill-routing-pnpm-package-manager-workspace-monorepo-setup.md) Skill routing: pnpm package manager workspace monorepo setup
@@ -285,6 +289,14 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [045](045-adopt-eslint-plugin-unicorn-for-js-ts-quality.md) Adopt eslint-plugin-unicorn for JS/TS quality
 - [019](019-fail-closed-mcp-enforcement-and-reusable-agent-commands.md) fail closed mcp enforcement and reusable agent commands
 
+### taxonomy
+
+- [078](078-meta-frameworks-get-their-own-namespace-and-a-narrow-dispatcher.md) Meta-frameworks get their own namespace and a narrow dispatcher
+- [028](028-add-rule-toolchain-commits-skill-for-atomic-conventional-commits-with-mandatory-s.md) Add rule-toolchain-commits skill for atomic conventional commits with mandatory scope
+- [027](027-rename-rule-mcp-agents-to-rule-ai-agents-and-add-rule-ai-collector-skill.md) Rename rule-mcp-agents to rule-ai-agents and add rule-ai collector skill
+- [008](008-thematic-skill-taxonomy-rename.md) thematic skill taxonomy rename
+- [001](001-thematic-skill-rename.md) Thematic Skill Taxonomy Rename
+
 ### cli
 
 - [077](077-the-cli-entry-point-loads-no-command-handler-it-has-not-been-asked-for.md) The CLI entry point loads no command handler it has not been asked for
@@ -312,13 +324,6 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [060](060-reorganize-scripts-src-tests-with-150-line-code-splitting.md) Reorganize scripts, src and tests with 150-line code splitting
 - [051](051-round-two-hardening-cycles-daemon-cleanup-diagnostics.md) Round-2 hardening - cycles, daemon/commands split, diagnostics, HTTP verification
 - [050](050-split-hotspot-modules.md) Split the hotspot modules (guardrails + installer)
-
-### taxonomy
-
-- [028](028-add-rule-toolchain-commits-skill-for-atomic-conventional-commits-with-mandatory-s.md) Add rule-toolchain-commits skill for atomic conventional commits with mandatory scope
-- [027](027-rename-rule-mcp-agents-to-rule-ai-agents-and-add-rule-ai-collector-skill.md) Rename rule-mcp-agents to rule-ai-agents and add rule-ai collector skill
-- [008](008-thematic-skill-taxonomy-rename.md) thematic skill taxonomy rename
-- [001](001-thematic-skill-rename.md) Thematic Skill Taxonomy Rename
 
 ### backend
 

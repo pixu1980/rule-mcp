@@ -1,5 +1,5 @@
 ---
-name: rule-frontend-meta-remix
+name: rule-meta-remix
 description: >-
   Use when building Remix or React Router applications. Covers nested routing, loaders/actions, SSR, progressive enhancement, and sessions.
 tags:
@@ -9,11 +9,11 @@ tags:
 frameworks: [remix, react]
 ---
 
-# rule-frontend-meta-remix - Remix / React Router Apps with rule Principles
+# rule-meta-remix - Remix / React Router Apps with rule Principles
 
 Remix (now React Router v7) is a React meta-framework with nested routing, loaders, actions, and progressive enhancement. Use alongside [rule-frontend-react](../rule-frontend-react/SKILL.md) for the UI layer.
 
-## When to use rule-frontend-meta-remix
+## When to use rule-meta-remix
 
 - Building a React application with nested routing
 - Using server-side loaders/actions for data mutations
@@ -200,7 +200,7 @@ export async function loader({ request }) {
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│  rule-frontend-meta-remix - Remix / React Router (React Meta-framework)      │
+│  rule-meta-remix - Remix / React Router (React Meta-framework)               │
 │                                                                             │
 │  Routing:   app/routes/, nested with _layout.jsx                            │
 │  Data:      loader() → useLoaderData()                                      │

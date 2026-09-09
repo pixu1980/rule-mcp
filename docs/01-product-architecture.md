@@ -150,7 +150,7 @@ No TypeScript compilation needed. The SDK ships JavaScript with `.d.ts` declarat
 | rule-frontend-angular          | 4                               | ~700   | ✅ Stable |
 | rule-frontend-svelte           | 4                               | ~650   | ✅ Stable |
 | rule-frontend-solidjs          | 4                               | ~600   | ✅ Stable |
-| rule-frontend-meta-astro       | 4                               | ~550   | ✅ Stable |
+| rule-meta-astro                | 4                               | ~550   | ✅ Stable |
 | rule-electron                  | 4                               | ~800   | ✅ Stable |
 | rule                           | 1 (SKILL.md)                    | ~200   | ✅ Mature |
 
@@ -413,7 +413,7 @@ rule-mcp/
 │   ├── rule-frontend-svelte/
 │   ├── rule-frontend-solidjs/
 │   ├── rule-frontend-angular/
-│   ├── rule-frontend-meta-astro/
+│   ├── rule-meta-astro/
 │   ├── rule-electron/
 │   ├── rule-frontend-vanilla-reactive/
 │   └── rule/
@@ -819,21 +819,21 @@ Refresh with `pnpm census`; full inventories in `docs/07-` .. `docs/12-`.
 
 | Surface                   | Count | Defined in                                    |
 | ------------------------- | ----- | --------------------------------------------- |
-| MCP tools                 | 105   | `src/tools/*` via `src/tools/router/index.js` |
+| MCP tools                 | 106   | `src/tools/*` via `src/tools/router/index.js` |
 | - action tools            | 17    | one per module, registered explicitly         |
-| - skill tools             | 88    | one per catalog skill, generated              |
-| MCP resources             | 184   | `src/resources/index.js`                      |
+| - skill tools             | 89    | one per catalog skill, generated              |
+| MCP resources             | 186   | `src/resources/index.js`                      |
 | MCP prompts               | 73    | `src/prompts/index.js`                        |
 | - reusable                | 19    | workflow and area prompts                     |
 | - persona                 | 54    | 18 active roles x 3 operations                |
-| Skills                    | 88    | `skills/rule-*/SKILL.md`                       |
+| Skills                    | 89    | `skills/rule-*/SKILL.md`                       |
 | Review personas           | 18    | `src/core/review/roles/index.js`              |
 | Guardrail rules           | 95    | `src/core/guardrails/index.js`                |
 | Agent slash commands      | 74    | `src/core/agents/commands/index.js`           |
 | Agent/IDE command targets | 13    | `src/core/agents/command-targets/index.js`    |
 | CLI commands              | 21    | `src/cli/_program.js`                         |
 | Hook events               | 3     | `src/core/agents/_hooks.js`                   |
-| Architecture decisions    | 74    | [`docs/adr/ADR.md`](adr/ADR.md)               |
+| Architecture decisions    | 75    | [`docs/adr/ADR.md`](adr/ADR.md)               |
 
 Regenerate with `pnpm census`. The inventories themselves are
 [`06-skills.md`](06-skills.md) through [`13-resources.md`](13-resources.md).

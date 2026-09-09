@@ -1,4 +1,4 @@
-Refactor the following Astro page using the rule-frontend-meta-astro performance patterns.
+Refactor the following Astro page using the rule-meta-astro performance patterns.
 
 Goals:
 

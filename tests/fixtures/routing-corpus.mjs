@@ -23,7 +23,7 @@ export const CORPUS = [
   { prompt: "Vue 3 component with Composition API", expect: "frontend-vue", area: "frontend" },
   { prompt: "svelte store for shared state", expect: "frontend-svelte", area: "frontend" },
   { prompt: "angular standalone component with signals", expect: "frontend-angular", area: "frontend" },
-  { prompt: "astro island that hydrates on visible", expect: "frontend-meta-astro", area: "frontend" },
+  { prompt: "astro island that hydrates on visible", expect: "meta-astro", area: "frontend" },
 
   // ── TypeScript: the split added in P3 ──
   { prompt: "should I use enum or a union type", expect: "styleguide-typescript", area: "styleguide" },
@@ -107,7 +107,7 @@ export const CORPUS = [
     area: "styleguide",
   },
   {
-    prompt: "americanize the comments: colour -> color, behaviour -> behavior",
+    prompt: "americanize the comments: color -> color, behavior -> behavior",
     expect: "styleguide-english",
     area: "styleguide",
   },

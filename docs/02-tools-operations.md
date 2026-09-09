@@ -41,10 +41,10 @@ Every source document below is preserved verbatim under its own heading so no pr
 | `rule_tool_frontend_solidjs`          | Skill      | SolidJS fine-grained reactivity           |
 |                                      |            |                                           |
 | **Meta-Frameworks**                  |            |                                           |
-| `rule_tool_frontend_meta_astro`       | Skill      | Astro islands architecture                |
-| `rule_tool_frontend_meta_next`        | Skill      | Next.js App Router                        |
-| `rule_tool_frontend_meta_nuxt`        | Skill      | Nuxt 3 best practices                     |
-| `rule_tool_frontend_meta_remix`       | Skill      | Remix best practices                      |
+| `rule_tool_meta_astro`       | Skill      | Astro islands architecture                |
+| `rule_tool_meta_next`        | Skill      | Next.js App Router                        |
+| `rule_tool_meta_nuxt`        | Skill      | Nuxt 3 best practices                     |
+| `rule_tool_meta_remix`       | Skill      | Remix best practices                      |
 |                                      |            |                                           |
 | **Project Types**                    |            |                                           |
 | `rule_tool_platform_web`              | Skill      | Web platform best practices               |
@@ -736,10 +736,10 @@ previousPassed: ["no-css-classes", "no-inline-styles", "semantic-html",
 | Svelte 5           | rule-frontend-svelte           | `rule_tool_frontend_svelte`           |
 | Angular            | rule-frontend-angular          | `rule_tool_frontend_angular`          |
 | SolidJS            | rule-frontend-solidjs          | `rule_tool_frontend_solidjs`          |
-| Astro              | rule-frontend-astro            | `rule_tool_frontend_meta_astro`       |
-| Next.js            | rule-frontend-meta-next        | `rule_tool_frontend_meta_next`        |
-| Nuxt 3             | rule-frontend-meta-nuxt        | `rule_tool_frontend_meta_nuxt`        |
-| Remix              | rule-frontend-meta-remix       | `rule_tool_frontend_meta_remix`       |
+| Astro              | rule-frontend-astro            | `rule_tool_meta_astro`       |
+| Next.js            | rule-meta-next        | `rule_tool_meta_next`        |
+| Nuxt 3             | rule-meta-nuxt        | `rule_tool_meta_nuxt`        |
+| Remix              | rule-meta-remix       | `rule_tool_meta_remix`       |
 | Desktop (Electron) | rule-platform-desktop          | `rule_tool_platform_desktop`          |
 | Vanilla JS         | rule-frontend-vanilla-reactive | `rule_tool_frontend_vanilla_reactive` |
 | Web platform       | rule-platform-web              | `rule_tool_platform_web`              |

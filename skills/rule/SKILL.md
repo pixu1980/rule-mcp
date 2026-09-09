@@ -43,7 +43,7 @@ Prompt
   ├─ unsure / broad / multi-domain      → rule + pix_search
   ├─ architecture / SDD / plan          → rule-process-adr
   ├─ UI / component / page              → rule-frontend + framework skill + rule-styleguide
-  ├─ meta-framework                     → rule-frontend-meta-* + base framework skill
+  ├─ meta-framework                     → rule-meta-* + base framework skill
   ├─ AI / agent / LLM application       → rule-ai + focused AI skill
   ├─ backend / REST / GraphQL / security → rule-backend + framework/security/API skill
   ├─ database / persistence             → rule-data + database skill
@@ -71,7 +71,7 @@ Prompt
 
 ### Skill tool naming
 
-Every regular skill is also exposed as `pix_` + skill name without `rule-` + hyphens converted to underscores. Example: `rule-frontend-react` → `pix_frontend_react`. Some process skills use dedicated action tools instead of generic skill tools: `rule-process-adr` → `pix_process_adr`, `rule-process-handoff` → `pix_process_handoff`.
+Every regular skill is also exposed as `pix_` + skill name without `rule-` + hyphens converted to underscores. Example: `rule-frontend-react` -> `pix_frontend_react`. Some process skills use dedicated action tools instead of generic skill tools: `rule-process-adr` -> `pix_process_adr`, `rule-process-handoff` -> `pix_process_handoff`.
 
 ## Complete skill inventory
 
@@ -145,10 +145,10 @@ Build UI, components, routing, forms, and meta-framework apps.
 | -------------------------------------------------------------------------- | ------------------------------- | ------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | [rule-frontend](../rule-frontend/SKILL.md)                                   | `pix_frontend`                  | all          | Index of all frontend UI framework skills: React, Vue, Angular, Svelte, SolidJS, Astro, Vanilla Reactive. Includes me...                                                         |
 | [rule-frontend-angular](../rule-frontend-angular/SKILL.md)                   | `pix_frontend_angular`          | angular      | Angular best practices aligned with rule-styleguide and rule-frontend-vanilla-reactive. Zero CSS classes (eleme...                                                                 |
-| [rule-frontend-meta-astro](../rule-frontend-meta-astro/SKILL.md)             | `pix_frontend_meta_astro`       | astro        | Astro best practices aligned with rule-styleguide and rule-frontend-vanilla-reactive. Zero CSS classes, zero in...                                                                 |
-| [rule-frontend-meta-next](../rule-frontend-meta-next/SKILL.md)               | `pix_frontend_meta_next`        | next, react  | Next.js application development with rule principles. Covers App Router, Server Components, SSR/SSG/ISR, API route...                                                             |
-| [rule-frontend-meta-nuxt](../rule-frontend-meta-nuxt/SKILL.md)               | `pix_frontend_meta_nuxt`        | nuxt, vue    | Nuxt.js application development with rule principles. Covers file-based routing, SSR/SSG, server routes, auto-impo...                                                             |
-| [rule-frontend-meta-remix](../rule-frontend-meta-remix/SKILL.md)             | `pix_frontend_meta_remix`       | remix, react | Remix / React Router application development with rule principles. Covers nested routing, loaders/actions, SSR, pr...                                                             |
+| [rule-meta-astro](../rule-meta-astro/SKILL.md)             | `pix_meta_astro`       | astro        | Astro best practices aligned with rule-styleguide and rule-frontend-vanilla-reactive. Zero CSS classes, zero in...                                                                 |
+| [rule-meta-next](../rule-meta-next/SKILL.md)               | `pix_meta_next`        | next, react  | Next.js application development with rule principles. Covers App Router, Server Components, SSR/SSG/ISR, API route...                                                             |
+| [rule-meta-nuxt](../rule-meta-nuxt/SKILL.md)               | `pix_meta_nuxt`        | nuxt, vue    | Nuxt.js application development with rule principles. Covers file-based routing, SSR/SSG, server routes, auto-impo...                                                             |
+| [rule-meta-remix](../rule-meta-remix/SKILL.md)             | `pix_meta_remix`       | remix, react | Remix / React Router application development with rule principles. Covers nested routing, loaders/actions, SSR, pr...                                                             |
 | [rule-frontend-react](../rule-frontend-react/SKILL.md)                       | `pix_frontend_react`            | react        | React best practices aligned with rule-styleguide and rule-frontend-vanilla-reactive. Zero CSS classes (element...                                                                 |
 | [rule-frontend-solidjs](../rule-frontend-solidjs/SKILL.md)                   | `pix_frontend_solidjs`          | solidjs      | SolidJS best practices aligned with rule-styleguide and rule-frontend-vanilla-reactive. Zero CSS classes (eleme...                                                                 |
 | [rule-frontend-custom-element](../rule-frontend-custom-element/SKILL.md)     | `pix_frontend_custom_element`   | vanilla      | Zero-dependency Custom Elements v1 (autonomous and customized built-ins): metadata-driven componentDecorator, adoptedStyleSheets, code-splitting, CLI scaffolder.                |

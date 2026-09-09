@@ -65,7 +65,7 @@ export const PROMPT_DEFS = [
     ],
   },
   {
-    name: "rule-area-meta",
+    name: "rule-area-toolset",
     description: "Work with the rule dispatcher/action toolset: routing, gateway, apply, search, check, scaffold, detect, fix, ADR, handoff",
     arguments: [{ name: "request", description: "What to route, search, validate, scaffold, or record", required: true }],
   },
@@ -176,7 +176,7 @@ export const PROMPT_EXAMPLES = {
   "rule-area-data": ["/rule-area-data help", "/rule-area-data postgresql schema for the users table"],
   "rule-area-devops": ["/rule-area-devops help", "/rule-area-devops multi-stage docker build for node"],
   "rule-area-frontend": ["/rule-area-frontend help", "/rule-area-frontend react login form with validation"],
-  "rule-area-meta": ["/rule-area-meta help", "/rule-area-meta search for the a11y skill"],
+  "rule-area-toolset": ["/rule-area-toolset help", "/rule-area-toolset search for the a11y skill"],
   "rule-area-platform": ["/rule-area-platform help", "/rule-area-platform electron desktop app scaffold"],
   "rule-area-process": ["/rule-area-process help", "/rule-area-process run a code review on the pending changes"],
   "rule-area-skills": ["/rule-area-skills help", "/rule-area-skills find a skill for docker"],

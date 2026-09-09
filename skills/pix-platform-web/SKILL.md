@@ -10,7 +10,7 @@ frameworks: [all]
 
 # rule-platform-web - Web Applications with rule Principles
 
-This skill is the **umbrella for all web framework skills** (rule-frontend-react, rule-frontend-vue, rule-frontend-angular, rule-frontend-solidjs, rule-frontend-svelte, rule-frontend-meta-astro).
+This skill is the **umbrella for all web framework skills** (rule-frontend-react, rule-frontend-vue, rule-frontend-angular, rule-frontend-solidjs, rule-frontend-svelte, rule-meta-astro).
 Choose one framework skill below the rule-platform-web layer.
 
 ## When to use rule-platform-web
@@ -44,7 +44,7 @@ Choose ONE framework skill below rule-platform-web:
 | Angular 16+ | [rule-frontend-angular](../rule-frontend-angular/SKILL.md)       | Large enterprise applications                     |
 | SolidJS     | [rule-frontend-solidjs](../rule-frontend-solidjs/SKILL.md)       | Fine-grained reactivity, fastest runtime          |
 | Svelte 5    | [rule-frontend-svelte](../rule-frontend-svelte/SKILL.md)         | Minimal boilerplate, smallest bundles             |
-| Astro       | [rule-frontend-meta-astro](../rule-frontend-meta-astro/SKILL.md) | Content-first, islands architecture               |
+| Astro       | [rule-meta-astro](../rule-meta-astro/SKILL.md) | Content-first, islands architecture               |
 
 ## File Tree Convention
 

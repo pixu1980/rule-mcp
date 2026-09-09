@@ -1,5 +1,5 @@
 ---
-name: rule-frontend-meta-astro
+name: rule-meta-astro
 description: >-
   Use when building Astro islands-architecture sites. Supports zero CSS classes, semantic HTML, partial hydration, and integration with UI frameworks.
 tags:
@@ -8,7 +8,7 @@ tags:
 frameworks: [astro]
 ---
 
-# rule-frontend-meta-astro - Astro with rule Principles
+# rule-meta-astro - Astro with rule Principles
 
 This skill adapts [rule-styleguide](../rule-styleguide/SKILL.md) and
 a store-and-signals architecture to **Astro** (islands architecture).
@@ -166,7 +166,7 @@ export { default as TodoItem } from "./_TodoItem.astro";
 
 ## Guardrails
 
-Run `rule_tool_frontend_meta_astro` mode=check or `rule_tool_check` to validate code against these rules.
+Run `rule_tool_meta_astro` mode=check or `rule_tool_check` to validate code against these rules.
 
 Key rules enforced: **no-css-classes**, **no-inline-styles**, **semantic-html**,
 **external-css** (Astro `<style>` scoped blocks or external CSS imports),
@@ -187,7 +187,7 @@ Iterate: `generate → rule_tool_check → fix → rule_tool_check → all pass`
 
 ## Astro Performance & Best Practices
 
-This section extends rule-frontend-meta-astro with a structured performance review methodology for Astro's islands architecture.
+This section extends rule-meta-astro with a structured performance review methodology for Astro's islands architecture.
 
 ### When to activate
 

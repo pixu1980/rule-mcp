@@ -19,10 +19,10 @@ Serves styleguides, component templates, framework best practices, and design sy
 - [What is rule-mcp](#what-is-rule-mcp)
 - [Architecture overview](#architecture-overview)
 - [Tool reference](#tool-reference)
-  - [All 105 tools (normal mode)](#all-105-tools-normal-mode)
+  - [All 106 tools (normal mode)](#all-106-tools-normal-mode)
   - [Minimal tool surface (10 tools)](#minimal-tool-surface-10-tools)
   - [Gateway deterministic mode](#gateway-deterministic-mode)
-- [MCP Resources (184)](#mcp-resources-184)
+- [MCP Resources (186)](#mcp-resources-186)
 - [MCP Prompts (73)](#mcp-prompts-73)
 - [Guardrail engine](#guardrail-engine)
 - [CLI reference](#cli-reference)
@@ -40,10 +40,10 @@ Deterministic MCP server for the rule skill ecosystem. Live surface (enforced by
 
 | Surface   | Count | Notes                                                                                                       |
 | --------- | ----- | ----------------------------------------------------------------------------------------------------------- |
-| Tools     | 105   | per-skill tools + dispatcher/action tools                                                                   |
-| Resources | 184   | rule:// per-skill index + summary + template URIs                                                            |
+| Tools     | 106   | per-skill tools + dispatcher/action tools                                                                   |
+| Resources | 186   | rule:// per-skill index + summary + template URIs                                                            |
 | Prompts   | 73    | rule-area-* areas + one-shot workflow + 54 review-persona commands (rule-plan-* / rule-audit-* / rule-review-*) |
-| Skills    | 89    | frontend, backend, data, devops, toolchain, styleguide, process, platform, ai                               |
+| Skills    | 90    | frontend, backend, data, devops, toolchain, styleguide, process, platform, ai                               |
 | Tests     | 212   | `pnpm test:all` green (incl. installer + PTY TUI)                                                           |
 
 Architecture decisions live in [`docs/adr/`](docs/adr/ADR.md) (47 records:
@@ -74,9 +74,9 @@ rule-mcp install --agent all
 
 ## What is rule-mcp
 
-rule-mcp is an [MCP](https://modelcontextprotocol.io) server that exposes **105 tools**, **184 resources**, and **73 prompts** to any MCP-compatible AI coding agent. Because the server never calls an LLM (every output is deterministic), it is **model-agnostic** - it behaves identically behind Claude, GPT, Gemini, Llama, Qwen, or any other model. It provides:
+rule-mcp is an [MCP](https://modelcontextprotocol.io) server that exposes **106 tools**, **186 resources**, and **73 prompts** to any MCP-compatible AI coding agent. Because the server never calls an LLM (every output is deterministic), it is **model-agnostic** - it behaves identically behind Claude, GPT, Gemini, Llama, Qwen, or any other model. It provides:
 
-- **89 modular skills** covering frontend, backend, database, devops, toolchain, styleguide, process, platform, and ai domains
+- **90 modular skills** covering frontend, backend, database, devops, toolchain, styleguide, process, platform, and ai domains
 - **BM25 full-text search** across all skill content
 - **Guardrail engine** with 18 shared rules + framework/backend/database/devops-specific checks
 - **Deterministic gateway** (`pix_gateway` + `pix_apply`) with receipt-based validation
@@ -114,10 +114,10 @@ Claude Code, Cursor, Cline, Roo Code, Copilot, Gemini CLI, Codex CLI, Devin (for
 ├───────────────────────────────────────────────────────────────┤
 │  Tool Registry              │  Resources Registry             │
 │  src/tools/router.js        │  src/resources/index.js         │
-│  105 tools                  │  184 resources                  │
+│  106 tools                  │  186 resources                  │
 ├──────────────────┬───────────┴────────────────┬───────────────┤
 │  Orchestration   │  Skills & BM25            │  Guardrails    │
-│  pix_gateway     │  89 skill dirs            │  18 shared     │
+│  pix_gateway     │  90 skill dirs            │  18 shared     │
 │  pix_apply       │  src/core/bm25.js         │  + framework   │
 │  receipt system  │  src/core/skills.js        │  + backend    │
 │                  │                            │  + database   │
@@ -151,7 +151,7 @@ Claude Code, Cursor, Cline, Roo Code, Copilot, Gemini CLI, Codex CLI, Devin (for
 
 | Mode                                       | Tools exposed   | Use case                                                                                                          |
 | ------------------------------------------ | --------------- | ----------------------------------------------------------------------------------------------------------------- |
-| Normal (default)                           | 89              | Full access to all skills, tools, and features                                                                    |
+| Normal (default)                           | 90              | Full access to all skills, tools, and features                                                                    |
 | Minimal (`RULE_MCP_MINIMAL_TOOLS=1`) | 10              | Dispatcher + action tools only - fits client tool caps (Cursor/Copilot), cheaper context, safe for untrusted code |
 | Allowed-tools filter                       | 8 (recommended) | Via `mcp.json` `allowedTools` - reduce token consumption                                                          |
 
@@ -159,7 +159,7 @@ Claude Code, Cursor, Cline, Roo Code, Copilot, Gemini CLI, Codex CLI, Devin (for
 
 ## Tool reference
 
-### All 105 tools (normal mode)
+### All 106 tools (normal mode)
 
 #### Deterministic tools (9)
 
@@ -204,10 +204,10 @@ Each skill directory under `skills/` becomes a tool `pix_<skill-name>`. All supp
 | `pix_devops_version`            | rule-devops-version            | 161   | DevOps     |
 | `pix_frontend`                  | rule-frontend                  | 61    | Frontend   |
 | `pix_frontend_angular`          | rule-frontend-angular          | 504   | Frontend   |
-| `pix_frontend_meta_astro`       | rule-frontend-meta-astro       | 526   | Frontend   |
-| `pix_frontend_meta_next`        | rule-frontend-meta-next        | 201   | Frontend   |
-| `pix_frontend_meta_nuxt`        | rule-frontend-meta-nuxt        | 181   | Frontend   |
-| `pix_frontend_meta_remix`       | rule-frontend-meta-remix       | 224   | Frontend   |
+| `pix_meta_astro`                | rule-meta-astro                | 526   | Frontend   |
+| `pix_meta_next`                 | rule-meta-next                 | 201   | Frontend   |
+| `pix_meta_nuxt`                 | rule-meta-nuxt                 | 181   | Frontend   |
+| `pix_meta_remix`                | rule-meta-remix                | 224   | Frontend   |
 | `pix_frontend_react`            | rule-frontend-react            | 688   | Frontend   |
 | `pix_frontend_solidjs`          | rule-frontend-solidjs          | 532   | Frontend   |
 | `pix_frontend_svelte`           | rule-frontend-svelte           | 508   | Frontend   |
@@ -285,7 +285,7 @@ See [ADR 044](./docs/adr/044-gateway-as-the-single-entrypoint-with-server-side-r
 
 ---
 
-## MCP Resources (184)
+## MCP Resources (186)
 
 196 resources accessible via the MCP `resources/read` protocol.
 

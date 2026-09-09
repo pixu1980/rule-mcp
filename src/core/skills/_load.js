@@ -1,18 +1,17 @@
 /**
  * @module core/skills/load
  *
- * Skill loading and registration orchestration.
- * Handles loading all rule skills from disk, registering them as MCP tools,
- * and providing skill content utility functions.
+ * Skill loading and registration: read the catalog from disk, register one MCP
+ * tool per skill, and register the dispatcher and action tools beside them.
+ * The per-tool registration logic lives in `tools/skill/`.
  *
- * The tool-specific registration logic lives in tools/skill/.
- *
- * Called once at startup, or on demand via `skills reload` CLI command.
+ * Runs once at startup, or on demand via `skills reload`.
  */
 
 import { getSkillNames, clearTools, retainTools } from "../../tools/router/index.js";
 import { registerSkillTool, registerSearchTool, registerCheckTool, registerScaffoldTool } from "../../tools/skill/index.js";
 import { registerAiTool } from "../../tools/ai/index.js";
+import { registerMetaTool } from "../../tools/meta/index.js";
 import { registerProcessAdrTool } from "../../tools/adr/index.js";
 import { registerFixTool } from "../../tools/fix/index.js";
 import { registerProcessHandoffTool } from "../../tools/handoff/index.js";
@@ -47,6 +46,7 @@ export async function loadAllSkills(force = false) {
 
   isLoaded = true;
   registerAiTool();
+  registerMetaTool();
   const { registerUpdateTool } = await import("../../tools/index.js");
   registerUpdateTool();
   await registerGatewayTool();
@@ -56,7 +56,7 @@ export async function loadAllSkills(force = false) {
 
   for (const name of skillNames) {
     // In minimal mode, skip skill-specific tools - evidence is loaded via pix_gateway
-    if (name !== "rule" && name !== "rule-process-adr" && name !== "rule-process-handoff" && !IS_MINIMAL_TOOLS) {
+    if (name !== "rule" && name !== "rule-meta" && name !== "rule-process-adr" && name !== "rule-process-handoff" && !IS_MINIMAL_TOOLS) {
       registerSkillTool(name);
     }
   }
