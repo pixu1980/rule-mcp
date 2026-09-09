@@ -126,4 +126,22 @@ test("a key never returns another tool's answer", async () => {
   }
 });
 
+// ── PERF-2: the level is part of the key ──
+
+test("a level change never replays another level's output", async () => {
+  cacheClear();
+  const args = { text: "The database configuration is really just a request.", mode: "caveman" };
+
+  process.env.RULE_MCP_CAVEMAN_LEVEL = "full";
+  const atFull = (await callTool("rule_tool_compress", args)).content[0].text;
+
+  process.env.RULE_MCP_CAVEMAN_LEVEL = "ultra";
+  const atUltra = (await callTool("rule_tool_compress", args)).content[0].text;
+  delete process.env.RULE_MCP_CAVEMAN_LEVEL;
+
+  assert.notEqual(atUltra, atFull, "ultra abbreviates what full leaves alone - a shared key would have replayed full");
+  assert.match(atUltra, /\bDB\b/, "the ultra answer is the ultra vocabulary");
+  assert.equal(cacheEntries().length, 2, "one entry per level, not one entry for both");
+});
+
 process.on("exit", () => rmSync(stateDir, { recursive: true, force: true }));

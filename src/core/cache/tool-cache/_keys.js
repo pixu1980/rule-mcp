@@ -3,6 +3,7 @@ import { createHash } from "node:crypto";
 import { canonicalizeQuery } from "../../bm25/index.js";
 import { NON_CACHEABLE, NORMALIZABLE } from "./_state.js";
 import { namespace, normalizedTierEnabled } from "./_config.js";
+import { cavemanLevel } from "../../text/_level.js";
 
 /** Stable stringify (sorted keys) so argument order never changes the key. */
 export function stableStringify(value) {
@@ -22,6 +23,13 @@ export function stableStringify(value) {
 /**
  * Compute the cache key for a tool call, or null if the tool is not cacheable.
  *
+ * The compression level is part of the key. Most cores are computed before
+ * compression and would be safe to share across levels, but `rule_tool_compress`
+ * IS the compressor: its core is the compressed text, so replaying it under a
+ * different level would hand back another level's output. Keying on the level
+ * makes that impossible to get wrong, and a level change is an env change -
+ * rare enough that recomputing is cheaper than a per-tool dependency list.
+ *
  * @param {string} toolName
  * @param {object} args
  * @returns {string|null}
@@ -31,7 +39,7 @@ export function cacheKey(toolName, args) {
     return null;
   }
 
-  const payload = `${namespace()}\u0000${toolName}\u0000${stableStringify(args ?? {})}`;
+  const payload = `${namespace()}\u0000${cavemanLevel()}\u0000${toolName}\u0000${stableStringify(args ?? {})}`;
 
   return createHash("sha256").update(payload).digest("hex");
 }
@@ -82,7 +90,7 @@ export function normalizedKey(toolName, args) {
 
   // "n1" separates this key space from L0's, so a canonical form can never
   // collide with a raw one that happens to stringify the same way.
-  const payload = `${namespace()} n1 ${toolName} ${stableStringify(normalized)}`;
+  const payload = `${namespace()} n1 ${cavemanLevel()} ${toolName} ${stableStringify(normalized)}`;
 
   return createHash("sha256").update(payload).digest("hex");
 }

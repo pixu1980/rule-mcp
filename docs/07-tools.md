@@ -120,10 +120,11 @@ Detect project framework, TypeScript usage, and build tool from package.json.
 
 Compress prose deterministically: strip filler and leading articles, replace typographic characters with ASCII, convert British spelling to American. Code, inline spans, URLs and JSON are never touched.
 
-| Parameter | Type                                 | Required | Default  | Description                                                                        |
-| --------- | ------------------------------------ | -------- | -------- | ---------------------------------------------------------------------------------- |
-| `text`    | string                               | yes      | -        | Prose to compress. Code fences, inline code, URLs and JSON pass through untouched  |
-| `mode`    | `both` \| `caveman` \| `fingerprint` | no       | `"both"` | both (default), caveman (filler only), fingerprint (punctuation and spelling only) |
+| Parameter  | Type                                 | Required | Default  | Description                                                                                                                       |
+| ---------- | ------------------------------------ | -------- | -------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| `text`     | string                               | yes      | -        | Prose to compress. Code fences, inline code, URLs and JSON pass through untouched                                                 |
+| `mode`     | `both` \| `caveman` \| `fingerprint` | no       | `"both"` | both (default), caveman (filler only), fingerprint (punctuation and spelling only)                                                |
+| `fileName` | string                               | no       | -        | Where the prose came from, when it came from a file. A sensitive name (.env, credentials, id_rsa, anything under .ssh) is refused |
 
 ### rule_tool_plan
 
