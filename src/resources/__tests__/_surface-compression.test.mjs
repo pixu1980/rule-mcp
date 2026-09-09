@@ -81,3 +81,16 @@ test("prompts/list is left alone: its descriptions are schema, not prose", () =>
     assert.ok(prompt.description.length > 0, `${prompt.name} keeps its hint`);
   }
 });
+
+test("a payload that is not text passes through the compression step", async () => {
+  // The reader can answer with a binary or an unnamed payload, and the way out
+  // must hand those back rather than try to shorten them.
+  const { readResource } = await import("../_serve.js");
+  const plain = await readResource("rule://a11y/test-basic");
+
+  assert.equal(plain.contents[0].mimeType, "text/plain");
+  assert.ok(plain.contents[0].text.length > 0, "a text/plain template still reads back");
+
+  const missing = await readResource("rule://not-a-resource");
+  assert.equal(missing.contents[0].text, "Resource not found", "an unknown URI answers, compressed or not");
+});
