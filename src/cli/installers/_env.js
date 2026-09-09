@@ -16,6 +16,15 @@ const ENV_CONFIG_DIR = join(homedir(), ".config", "rule-mcp");
 
 const ENV_CONFIG_FILE = join(ENV_CONFIG_DIR, "env.json");
 
+/**
+ * The compiled code cache directory handed to every agent spawn.
+ *
+ * stdio starts the server as a subprocess per client, so module compilation is
+ * paid per connect. A per-user directory keeps the cache out of the install
+ * tree (which may be read-only, or shared between users).
+ */
+const COMPILE_CACHE_DIR = join(homedir(), ".cache", "rule-mcp", "compile-cache");
+
 const DEFAULT_OPTOUT_ENV = {
   RULE_MCP_NO_AUTOUPDATE: "0",
   RULE_MCP_NO_AUTORESTART: "0",
@@ -46,7 +55,9 @@ function resolveEnvironment(options = {}) {
   const saved = readEnvConfig();
   // Opt-out defaults are the base so they always appear in generated config;
   // saved preferences and explicit opts override them.
-  return { ...DEFAULT_OPTOUT_ENV, ...saved, ...options.env };
+  // The cache directory is not an opt-out flag, so it sits beside the table
+  // rather than in it: every entry there is a documented "0" the user flips.
+  return { NODE_COMPILE_CACHE: COMPILE_CACHE_DIR, ...DEFAULT_OPTOUT_ENV, ...saved, ...options.env };
 }
 
 const commandConfig = (entrypoint, options = {}) => {

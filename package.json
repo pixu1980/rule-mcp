@@ -44,6 +44,7 @@
     "changelog": "node scripts/build/changelog/index.mjs --apply",
     "cache:report": "node scripts/reports/cache/index.mjs",
     "report:compression": "node scripts/reports/compression/index.mjs",
+    "report:startup": "node scripts/reports/startup/index.mjs",
     "cache:similarity": "node scripts/reports/cache-similarity/index.mjs",
     "clean:prose": "node scripts/fix/prose/index.mjs --apply",
     "surface:report": "node scripts/reports/tool-surface/index.mjs",

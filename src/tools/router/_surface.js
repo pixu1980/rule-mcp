@@ -1,6 +1,6 @@
 /** Registered-tool inventory: mutation classification, annotations, declared and public tool lists. */
 
-import { _tools } from "./_hooks.js";
+import { _tools, toolsGeneration } from "./_hooks.js";
 
 const MUTATING_TOOLS = new Set([
   "rule_tool_apply",
@@ -43,14 +43,26 @@ function declaredTools() {
   return _tools;
 }
 
+let memo = { generation: -1, tools: [] };
+
 /**
  * List all registered tools with their names, descriptions, and input schemas.
  * Converts Zod schemas to JSON Schema via the built-in toJSONSchema() method.
  *
+ * Memoized on the registry generation: the conversion is deterministic and the
+ * registry does not change between client connects, so it is paid once per
+ * process instead of once per `tools/list`.
+ *
  * @returns {Array<{ name: string, description: string, inputSchema: object }>}
  */
 function listTools() {
-  return _tools.map((t) => {
+  const generation = toolsGeneration();
+
+  if (memo.generation === generation) {
+    return memo.tools;
+  }
+
+  const tools = _tools.map((t) => {
     let inputSchema = t.inputSchema ?? { type: "object", properties: {} };
 
     // If a Zod schema is provided, convert it to JSON Schema
@@ -79,6 +91,10 @@ function listTools() {
 
     return annotations ? { name: t.name, description: t.description, inputSchema, annotations } : { name: t.name, description: t.description, inputSchema };
   });
+
+  memo = { generation, tools };
+
+  return tools;
 }
 
 /**

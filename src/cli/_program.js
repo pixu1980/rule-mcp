@@ -22,7 +22,6 @@
  */
 import { readFileSync } from "node:fs";
 import { Command, CommanderError } from "commander";
-import { serveCommand } from "./commands/index.js";
 import { registerServeCommand, registerUpCommand, registerDaemonCommand } from "./_register-server.js";
 import {
   registerInstallCommand,
@@ -67,7 +66,7 @@ export function buildProgram() {
 
   // Bare invocation = STDIO server. Agent mcp.json entries spawn the binary
   // with no arguments, so `rule-mcp` with an empty argv must serve.
-  program.action(() => serveCommand({ transport: "stdio" }));
+  program.action(async () => (await import("./commands/_help.js")).serveCommand({ transport: "stdio" }));
 
   registerHelpCommand(program);
   registerServeCommand(program);
