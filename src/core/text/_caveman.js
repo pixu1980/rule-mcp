@@ -47,6 +47,26 @@ export function compressText(text, options) {
 }
 
 /**
+ * Compress one text payload from a surface that is not a tool result: a
+ * `rule://` resource body, a prompt body. Same pipeline, same guard, booked
+ * under its own source so `rule_tool_stats` can say which surface saved what.
+ *
+ * @param {string} text
+ * @param {{ level?: string, source?: string }} [options]
+ * @returns {{ text: string, saved: number, rollbacks: number }}
+ */
+export function compressSurfaceText(text, { level = cavemanLevel(), source = "caveman" } = {}) {
+  if (level === "off" || typeof text !== "string" || text === "" || looksLikeJson(text)) {
+    return { text, saved: 0, rollbacks: 0 };
+  }
+
+  const compressed = compressTextGuarded(text, { level });
+  addCompression(text.length, compressed.text.length, source);
+
+  return { text: compressed.text, saved: Math.max(0, text.length - compressed.text.length), rollbacks: compressed.rollbacks };
+}
+
+/**
  * Compress an MCP tool result in place-safe fashion (returns a new object).
  * Only text content items that are prose (not JSON) are compressed.
  *
