@@ -23,8 +23,9 @@
  *   node scripts/clean-prose.mjs --apply skills        # limit to a path prefix
  */
 
-import { execFileSync } from "node:child_process";
-import { existsSync, readFileSync, writeFileSync } from "node:fs";
+import { readFileSync, writeFileSync } from "node:fs";
+
+import { trackedFiles } from "../_tracked.mjs";
 import { compressText } from "../../../src/core/text/_caveman.js";
 import { alignAsciiBoxes, findRaggedBoxes } from "../../../src/core/text/ascii-box/index.js";
 import { findFingerprints, stripFingerprint } from "../../../src/core/text/fingerprint/index.js";
@@ -34,17 +35,7 @@ const arguments_ = process.argv.slice(2);
 const apply = arguments_.includes("--apply");
 const withCaveman = arguments_.includes("--caveman");
 const prefixes = arguments_.filter((a) => !a.startsWith("--"));
-// the script silently skips exactly the files most likely to need it: three
-// batches of new skills passed a clean scan while still untracked.
-const files = execFileSync("git", ["ls-files", "--cached", "--others", "--exclude-standard", ...TRACKED], {
-  encoding: "utf8",
-})
-  .trim()
-  .split("\n")
-  .filter((f) => f && !SKIP.some((re) => re.test(f)))
-  .filter((f) => prefixes.length === 0 || prefixes.some((p) => f.startsWith(p)))
-  // git lists a deleted-but-still-tracked file; reading it would crash the pass.
-  .filter((f) => existsSync(f));
+const files = trackedFiles(TRACKED, { skip: SKIP, prefixes });
 
 /**
  * Files read as prose get the whole pass. The rest get the spelling rules only:

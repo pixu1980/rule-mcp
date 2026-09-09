@@ -18,7 +18,8 @@
  * break another.
  */
 import { readFileSync, writeFileSync } from "node:fs";
-import { execFileSync } from "node:child_process";
+
+import { trackedFiles } from "../_tracked.mjs";
 
 import { apply as blankBeforeReturn } from "./_blank-before-return.mjs";
 import { apply as blankBetweenMethods } from "./_blank-between-methods.mjs";
@@ -27,12 +28,7 @@ import { apply as constTop } from "./_const-top.mjs";
 import { apply as blankBlocks } from "./_blank-blocks.mjs";
 
 const dryRun = process.argv.includes("--dry-run");
-const files = execFileSync("git", ["ls-files", "--cached", "--others", "--exclude-standard", "src/**/*.js"], {
-  encoding: "utf8",
-})
-  .trim()
-  .split("\n")
-  .filter(Boolean);
+const files = trackedFiles(["src/**/*.js"]);
 
 /** Run every pass once, in the order the detectors expect. */
 function fix(text) {
