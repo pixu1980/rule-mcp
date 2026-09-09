@@ -833,7 +833,7 @@ Refresh with `pnpm census`; full inventories in `docs/07-` .. `docs/12-`.
 | Agent/IDE command targets | 13    | `src/core/agents/command-targets/index.js`    |
 | CLI commands              | 21    | `src/cli/_program.js`                         |
 | Hook events               | 3     | `src/core/agents/_hooks.js`                   |
-| Architecture decisions    | 72    | [`docs/adr/ADR.md`](adr/ADR.md)               |
+| Architecture decisions    | 74    | [`docs/adr/ADR.md`](adr/ADR.md)               |
 
 Regenerate with `pnpm census`. The inventories themselves are
 [`06-skills.md`](06-skills.md) through [`13-resources.md`](13-resources.md).
