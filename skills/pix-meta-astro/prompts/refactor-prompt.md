@@ -1,4 +1,4 @@
-Refactor the following Astro page using the pix-frontend-meta-astro performance patterns.
+Refactor the following Astro page using the pix-meta-astro performance patterns.
 
 Goals:
 

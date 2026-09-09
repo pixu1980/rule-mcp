@@ -17,7 +17,7 @@ console.log("prompts registry test");
 export const WORKFLOW_PROMPTS = ["pix-handoff"];
 
 export const AREA_PROMPTS = [
-  "pix-area-meta",
+  "pix-area-toolset",
   "pix-area-frontend",
   "pix-area-backend",
   "pix-area-data",

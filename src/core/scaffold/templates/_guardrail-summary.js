@@ -2,7 +2,7 @@
 
 import { checkCode } from "../../guardrails/index.js";
 
-/** Framework → canonical skill name, so component output is validated against
+/** Framework -> canonical skill name, so component output is validated against
  *  the same guardrails the agent's own code would face. */
 const FRAMEWORK_SKILL = {
   react: "pix-frontend-react",
@@ -10,7 +10,7 @@ const FRAMEWORK_SKILL = {
   svelte: "pix-frontend-svelte",
   angular: "pix-frontend-angular",
   solid: "pix-frontend-solidjs",
-  astro: "pix-frontend-meta-astro",
+  astro: "pix-meta-astro",
   vanilla: "pix-styleguide",
 };
 

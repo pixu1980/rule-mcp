@@ -43,7 +43,7 @@ Prompt
   ├─ unsure / broad / multi-domain      → pix + pix_search
   ├─ architecture / SDD / plan          → pix-process-adr
   ├─ UI / component / page              → pix-frontend + framework skill + pix-styleguide
-  ├─ meta-framework                     → pix-frontend-meta-* + base framework skill
+  ├─ meta-framework                     → pix-meta-* + base framework skill
   ├─ AI / agent / LLM application       → pix-ai + focused AI skill
   ├─ backend / REST / GraphQL / security → pix-backend + framework/security/API skill
   ├─ database / persistence             → pix-data + database skill
@@ -71,7 +71,7 @@ Prompt
 
 ### Skill tool naming
 
-Every regular skill is also exposed as `pix_` + skill name without `pix-` + hyphens converted to underscores. Example: `pix-frontend-react` → `pix_frontend_react`. Some process skills use dedicated action tools instead of generic skill tools: `pix-process-adr` → `pix_process_adr`, `pix-process-handoff` → `pix_process_handoff`.
+Every regular skill is also exposed as `pix_` + skill name without `pix-` + hyphens converted to underscores. Example: `pix-frontend-react` -> `pix_frontend_react`. Some process skills use dedicated action tools instead of generic skill tools: `pix-process-adr` -> `pix_process_adr`, `pix-process-handoff` -> `pix_process_handoff`.
 
 ## Complete skill inventory
 
@@ -145,10 +145,10 @@ Build UI, components, routing, forms, and meta-framework apps.
 | -------------------------------------------------------------------------- | ------------------------------- | ------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | [pix-frontend](../pix-frontend/SKILL.md)                                   | `pix_frontend`                  | all          | Index of all frontend UI framework skills: React, Vue, Angular, Svelte, SolidJS, Astro, Vanilla Reactive. Includes me...                                                         |
 | [pix-frontend-angular](../pix-frontend-angular/SKILL.md)                   | `pix_frontend_angular`          | angular      | Angular best practices aligned with pix-styleguide and pix-frontend-vanilla-reactive. Zero CSS classes (eleme...                                                                 |
-| [pix-frontend-meta-astro](../pix-frontend-meta-astro/SKILL.md)             | `pix_frontend_meta_astro`       | astro        | Astro best practices aligned with pix-styleguide and pix-frontend-vanilla-reactive. Zero CSS classes, zero in...                                                                 |
-| [pix-frontend-meta-next](../pix-frontend-meta-next/SKILL.md)               | `pix_frontend_meta_next`        | next, react  | Next.js application development with pix principles. Covers App Router, Server Components, SSR/SSG/ISR, API route...                                                             |
-| [pix-frontend-meta-nuxt](../pix-frontend-meta-nuxt/SKILL.md)               | `pix_frontend_meta_nuxt`        | nuxt, vue    | Nuxt.js application development with pix principles. Covers file-based routing, SSR/SSG, server routes, auto-impo...                                                             |
-| [pix-frontend-meta-remix](../pix-frontend-meta-remix/SKILL.md)             | `pix_frontend_meta_remix`       | remix, react | Remix / React Router application development with pix principles. Covers nested routing, loaders/actions, SSR, pr...                                                             |
+| [pix-meta-astro](../pix-meta-astro/SKILL.md)             | `pix_meta_astro`       | astro        | Astro best practices aligned with pix-styleguide and pix-frontend-vanilla-reactive. Zero CSS classes, zero in...                                                                 |
+| [pix-meta-next](../pix-meta-next/SKILL.md)               | `pix_meta_next`        | next, react  | Next.js application development with pix principles. Covers App Router, Server Components, SSR/SSG/ISR, API route...                                                             |
+| [pix-meta-nuxt](../pix-meta-nuxt/SKILL.md)               | `pix_meta_nuxt`        | nuxt, vue    | Nuxt.js application development with pix principles. Covers file-based routing, SSR/SSG, server routes, auto-impo...                                                             |
+| [pix-meta-remix](../pix-meta-remix/SKILL.md)             | `pix_meta_remix`       | remix, react | Remix / React Router application development with pix principles. Covers nested routing, loaders/actions, SSR, pr...                                                             |
 | [pix-frontend-react](../pix-frontend-react/SKILL.md)                       | `pix_frontend_react`            | react        | React best practices aligned with pix-styleguide and pix-frontend-vanilla-reactive. Zero CSS classes (element...                                                                 |
 | [pix-frontend-solidjs](../pix-frontend-solidjs/SKILL.md)                   | `pix_frontend_solidjs`          | solidjs      | SolidJS best practices aligned with pix-styleguide and pix-frontend-vanilla-reactive. Zero CSS classes (eleme...                                                                 |
 | [pix-frontend-custom-element](../pix-frontend-custom-element/SKILL.md)     | `pix_frontend_custom_element`   | vanilla      | Zero-dependency Custom Elements v1 (autonomous and customized built-ins): metadata-driven componentDecorator, adoptedStyleSheets, code-splitting, CLI scaffolder.                |

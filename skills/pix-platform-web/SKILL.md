@@ -10,7 +10,7 @@ frameworks: [all]
 
 # pix-platform-web - Web Applications with pix Principles
 
-This skill is the **umbrella for all web framework skills** (pix-frontend-react, pix-frontend-vue, pix-frontend-angular, pix-frontend-solidjs, pix-frontend-svelte, pix-frontend-meta-astro).
+This skill is the **umbrella for all web framework skills** (pix-frontend-react, pix-frontend-vue, pix-frontend-angular, pix-frontend-solidjs, pix-frontend-svelte, pix-meta-astro).
 Choose one framework skill below the pix-platform-web layer.
 
 ## When to use pix-platform-web
@@ -44,7 +44,7 @@ Choose ONE framework skill below pix-platform-web:
 | Angular 16+ | [pix-frontend-angular](../pix-frontend-angular/SKILL.md)       | Large enterprise applications                     |
 | SolidJS     | [pix-frontend-solidjs](../pix-frontend-solidjs/SKILL.md)       | Fine-grained reactivity, fastest runtime          |
 | Svelte 5    | [pix-frontend-svelte](../pix-frontend-svelte/SKILL.md)         | Minimal boilerplate, smallest bundles             |
-| Astro       | [pix-frontend-meta-astro](../pix-frontend-meta-astro/SKILL.md) | Content-first, islands architecture               |
+| Astro       | [pix-meta-astro](../pix-meta-astro/SKILL.md) | Content-first, islands architecture               |
 
 ## File Tree Convention
 

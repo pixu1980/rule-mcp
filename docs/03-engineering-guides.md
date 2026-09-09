@@ -132,7 +132,7 @@ commit - the docs follow the code instead of being remembered.
 | `session`  | 5     | `/pix-handoff`    | Carries a session across a context boundary                         |
 | `persona`  | 54    | `/pix-audit-a11y` | Runs one review role at one operation, and writes its documents     |
 
-**Areas**: `/pix-area-ai`, `/pix-area-backend`, `/pix-area-data`, `/pix-area-devops`, `/pix-area-frontend`, `/pix-area-meta`, `/pix-area-platform`, `/pix-area-process`, `/pix-area-skills`, `/pix-area-styleguide`, `/pix-area-toolchain`, `/pix-area-ui`
+**Areas**: `/pix-area-ai`, `/pix-area-backend`, `/pix-area-data`, `/pix-area-devops`, `/pix-area-frontend`, `/pix-area-platform`, `/pix-area-process`, `/pix-area-skills`, `/pix-area-styleguide`, `/pix-area-toolchain`, `/pix-area-toolset`, `/pix-area-ui`
 
 **Workflows**: `/pix-adr`, `/pix-flight`
 

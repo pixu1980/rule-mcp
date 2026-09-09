@@ -1,5 +1,5 @@
 ---
-name: pix-frontend-meta-nuxt
+name: pix-meta-nuxt
 description: >-
   Use when building Nuxt.js applications. Covers file-based routing, SSR/SSG, server routes, auto-imports, Nitro engine, and modules ecosystem.
 tags:
@@ -9,11 +9,11 @@ tags:
 frameworks: [nuxt, vue]
 ---
 
-# pix-frontend-meta-nuxt - Nuxt.js Applications with pix Principles
+# pix-meta-nuxt - Nuxt.js Applications with pix Principles
 
 Nuxt.js is a Vue meta-framework providing file-based routing, SSR, SSG, server routes, auto-imports, and the Nitro server engine. Use alongside [pix-frontend-vue](../pix-frontend-vue/SKILL.md) for the UI layer.
 
-## When to use pix-frontend-meta-nuxt
+## When to use pix-meta-nuxt
 
 - Building a Vue application that needs SSR or SSG
 - Using file-based routing with `pages/` directory
@@ -157,7 +157,7 @@ const user = await $fetch("/api/user", {
 
 ```
 ┌──────────────────────────────────────────────────────────────────────────────┐
-│  pix-frontend-meta-nuxt - Nuxt.js (Vue Meta-framework)                       │
+│  pix-meta-nuxt - Nuxt.js (Vue Meta-framework)                                │
 │                                                                              │
 │  Routing:   pages/ directory, dynamic [slug]                                 │
 │  SSR/SSG:   nuxt.config routeRules (SWR, prerender, SPA)                     │

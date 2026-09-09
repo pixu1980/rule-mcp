@@ -1,5 +1,5 @@
 ---
-name: pix-frontend-meta-next
+name: pix-meta-next
 description: >-
   Use when building Next.js applications. Covers App Router, Server Components, SSR/SSG/ISR, API routes, middleware, and Vercel deployment.
 tags:
@@ -9,11 +9,11 @@ tags:
 frameworks: [next, react]
 ---
 
-# pix-frontend-meta-next - Next.js Applications with pix Principles
+# pix-meta-next - Next.js Applications with pix Principles
 
 Next.js is a React meta-framework providing file-based routing, SSR, SSG, ISR, API routes, and middleware. Use alongside [pix-frontend-react](../pix-frontend-react/SKILL.md) for the UI layer.
 
-## When to use pix-frontend-meta-next
+## When to use pix-meta-next
 
 - Building a React application that needs SSR, SSG, or ISR
 - Using the App Router with React Server Components
@@ -177,7 +177,7 @@ DATABASE_URL=postgres://...                     ← Server only
 
 ```
 ┌──────────────────────────────────────────────────────────────────────────────┐
-│  pix-frontend-meta-next - Next.js (React Meta-framework)                     │
+│  pix-meta-next - Next.js (React Meta-framework)                              │
 │                                                                              │
 │  Routing:   app/ directory, layout/page/loading/error                        │
 │  Data:      fetch with cache/no-store/revalidate                             │
