@@ -81,6 +81,34 @@ commit - the docs follow the code instead of being remembered.
 - **Tests**: the suite covers the installer (bash + PowerShell), the CLI
   parse surface, the guardrails corpus, the docs/census drift, the personas
   and the transports (stdio, SSE, HTTP, daemon, Docker).
+- **Compression** (`pnpm report:compression`, 2026-09-09) removes, by level:
+
+  | Corpus                    | `lite` | `full` | `ultra` |
+  | ------------------------- | ------ | ------ | ------- |
+  | skills (89 SKILL.md)      | 0.06 % | 1.52 % | 2.02 %  |
+  | docs (17 files)           | 0.02 % | 0.56 % | 0.73 %  |
+  | real tool results (6)     | 0.11 % | 2.03 % | 2.58 %  |
+  | verbose prose (synthetic) | 17.4 % | 34.2 % | 42.3 %  |
+
+  The two rows are not in conflict. The shipped corpora are already written
+  in the compressed style, so on them the rules measure how little filler is
+  left; the synthetic corpus is what an uncompressed assistant answer looks
+  like, and that is the corpus the level table describes. Guard violations
+  are 0 at every level on all four, which is the number that has to stay 0.
+
+  The rules are ported from the [`rule-caveman`](../skills/rule-caveman/SKILL.md)
+  skill and its `caveman-compress` companion: the vocabulary tables, the
+  classification guards and `validate.py`'s structural validator. The LLM
+  compression step is deliberately not ported - an LLM in the output path
+  costs determinism, cacheability and the zero-dependency contract, and the
+  guard plus per-block rollback buys the same safety for free (ADR 076).
+
+- **Startup** (`pnpm report:startup`, 2026-09-09): warm `--help` 48 ms,
+  `tools list` 265 ms, stdio `initialize` 251 ms. A cold process spends 12 ms
+  on the entry import, 53 ms registering skills and 8 ms converting tool
+  schemas; the second `tools/list` in a process is free. The compiled code
+  cache is worth 2-6 %; the 168 ms came from what `--help` no longer loads
+  (ADR 077).
 
 ## Contributing
 

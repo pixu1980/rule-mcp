@@ -8,6 +8,8 @@ this directory are the source of truth; this index is generated from them by
 
 | #                                                                                                                       | Title                                                                                                     | Date       | Status     | Tags                                                                                |
 | ----------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- | ---------- | ---------- | ----------------------------------------------------------------------------------- |
+| [077](077-the-cli-entry-point-loads-no-command-handler-it-has-not-been-asked-for.md)                                    | The CLI entry point loads no command handler it has not been asked for                                    | 2026-09-09 | accepted   | cli, startup, performance, imports                                                  |
+| [076](076-compression-has-four-levels-and-no-llm-in-the-output-path.md)                                                 | Compression has four levels and no LLM in the output path                                                 | 2026-09-09 | accepted   | compression, tokens, determinism, text                                              |
 | [075](075-the-installer-asks-before-copying-bundled-skills-to-the-central-agents-directory.md)                          | The installer asks before copying bundled skills to the central agents directory                          | 2026-09-08 | accepted   | installer, skills, devx, bash, powershell                                           |
 | [074](074-the-census-generates-eight-numbered-documents-and-three-fenced-blocks-inside-the-chapters-a-person-writes.md) | The census generates eight numbered documents and three fenced blocks inside the chapters a person writes | 2026-09-08 | accepted   | docs, census, generator, tooling                                                    |
 | [073](073-installer-mode-step-replaces-the-agent-picker-instead-of-stacking-under-it.md)                                | Installer mode step replaces the agent picker instead of stacking under it                                | 2026-09-08 | accepted   | installer, tui, devx                                                                |
@@ -88,6 +90,8 @@ file. Where a line stops short the rest is in the ADR.
 
 | ADR                                                                                                                     | Decision                                                                                                                                                                                                                        | Consequence                                                                                                                                                                                                                    |
 | ----------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| [077](077-the-cli-entry-point-loads-no-command-handler-it-has-not-been-asked-for.md)                                    | Keep the command and option declarations static, and load the handlers inside their actions.                                                                                                                                    | Warm --help fell from 216 ms to 48 ms, and every command still dispatches. listTools() is memoized on a registry generation bumped by register, clear and retain, so the 105-schema conversion is paid once per process...     |
+| [076](076-compression-has-four-levels-and-no-llm-in-the-output-path.md)                                                 | Port the deterministic half and refuse the LLM half.                                                                                                                                                                            | The vocabulary can be aggressive because a bad rule costs one paragraph, not the whole result.                                                                                                                                 |
 | [075](075-the-installer-asks-before-copying-bundled-skills-to-the-central-agents-directory.md)                          | Add a skills step to both installers that asks before copying. install.sh gains Phase 6c "Bundled Skills" and install.ps1 gains Phase 4: in interactive TTY runs it prompts "Install bundled rule-* skills to...                 | Positive: installing now asks before centralizing any skill; non-interactive runs stay silent by default and are deterministic via the new flags; bash and PowerShell behave identically; the copy path is the same...         |
 | [074](074-the-census-generates-eight-numbered-documents-and-three-fenced-blocks-inside-the-chapters-a-person-writes.md) | `docs/06-skills.md` through `docs/13-resources.md` are whole generated files, one inventory topic each, and `docs/01`, `docs/03` and `docs/05` carry `census:begin`/`census:end` fences the same run rewrites.                  | Eleven files are owned by the generator and must never be edited by hand: eight whole documents and the fenced blocks in three chapters.                                                                                       |
 | [073](073-installer-mode-step-replaces-the-agent-picker-instead-of-stacking-under-it.md)                                | Bring bash to parity with PowerShell: on entering step 2, draw_mode_panel retitles the banner to "Phase 3 - Install Mode", erases everything below row 5 (ESC[6;1H ESC[0J), and renders a standalone panel with its own hint... | Positive: each wizard step stands alone; average users see one question at a time; bash and PowerShell installers behave identically; banner boxes always close.                                                               |
@@ -281,6 +285,13 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [045](045-adopt-eslint-plugin-unicorn-for-js-ts-quality.md) Adopt eslint-plugin-unicorn for JS/TS quality
 - [019](019-fail-closed-mcp-enforcement-and-reusable-agent-commands.md) fail closed mcp enforcement and reusable agent commands
 
+### cli
+
+- [077](077-the-cli-entry-point-loads-no-command-handler-it-has-not-been-asked-for.md) The CLI entry point loads no command handler it has not been asked for
+- [064](064-one-global-shim-and-hermetic-pnpm-home-in-script-tests.md) One global shim, and hermetic PNPM_HOME in script tests
+- [047](047-installer-self-heals-global-shim-surfaces-failures-gates-tui-rendering.md) Installer self-heals its global shim, surfaces failures, and gates TUI rendering
+- [034](034-registry-driven-clean-slash-commands-for-every-agent-and-ide.md) Registry-driven clean slash commands for every agent and IDE
+
 ### infrastructure
 
 - [009](009-scaffold-skill-consolidation.md) scaffold skill consolidation
@@ -314,12 +325,6 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [056](056-gateway-as-the-single-entrypoint-with-server-side-receipts-backend-data-devops-g.md) Gateway as the single entrypoint with server-side receipts; backend/data/devops guardrail families
 - [011](011-backend-framework-skills.md) backend framework skills
 - [005](005-backend-framework-skills.md) Backend Framework Skills
-
-### cli
-
-- [064](064-one-global-shim-and-hermetic-pnpm-home-in-script-tests.md) One global shim, and hermetic PNPM_HOME in script tests
-- [047](047-installer-self-heals-global-shim-surfaces-failures-gates-tui-rendering.md) Installer self-heals its global shim, surfaces failures, and gates TUI rendering
-- [034](034-registry-driven-clean-slash-commands-for-every-agent-and-ide.md) Registry-driven clean slash commands for every agent and IDE
 
 ### commands
 
