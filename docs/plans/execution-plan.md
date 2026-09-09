@@ -238,6 +238,18 @@
       and windows arms on a darwin dev box, the reverse on ubuntu CI), dead
       domain ternaries (ai/_framework), CLI serve transports, and a long tail of
       2-4 branch chips per file.
+      Wave five (2026-09-09, ADR 079) took it to 91.17% (6375/6992) and raised the
+      floor to 91, 12 branches of margin. It covered the three biggest non-platform
+      clusters - the multi-file scaffold generator (2 of 12 branches were visited),
+      the rule:// reader (11 of 26 unvisited, one per URI shape), the injectable
+      command-target context whose injection nothing used - plus the compression
+      pipeline's own refusals and the catalog's local-path gate. Two real defects
+      came with it: the rule-meta rename had dropped Astro out of the rule-frontend
+      prefix, costing it the router's framework bias, and a file template scaffolded
+      as a custom element wrapping an empty <template>. The daemon platform arms
+      (~40 branches in _service/_service-status/_status-format/_launchd) are
+      deliberately left: covering a darwin box's linux arms needs module mocks that
+      measure the mock, and the ubuntu CI run already walks the other half.
 - [x] The 2 pre-existing flaky failures are resolved, not documented around: the
       untrusted-fence miss was a rebrand drift in the directive pattern (`PIX GALAXY
 WORKFLOW REMINDER` never matched) and the home-recording-leak race now checks a

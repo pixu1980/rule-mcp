@@ -8,6 +8,7 @@ this directory are the source of truth; this index is generated from them by
 
 | #                                                                                                                       | Title                                                                                                     | Date       | Status     | Tags                                                                                |
 | ----------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- | ---------- | ---------- | ----------------------------------------------------------------------------------- |
+| [079](079-coverage-wave-five-raises-the-branch-floor-to-91.md)                                                          | Coverage wave five raises the branch floor to 91                                                          | 2026-09-09 | accepted   | testing, coverage, ci                                                               |
 | [078](078-meta-frameworks-get-their-own-namespace-and-a-narrow-dispatcher.md)                                           | Meta-frameworks get their own namespace and a narrow dispatcher                                           | 2026-09-09 | accepted   | skills, taxonomy, routing, tools                                                    |
 | [077](077-the-cli-entry-point-loads-no-command-handler-it-has-not-been-asked-for.md)                                    | The CLI entry point loads no command handler it has not been asked for                                    | 2026-09-09 | accepted   | cli, startup, performance, imports                                                  |
 | [076](076-compression-has-four-levels-and-no-llm-in-the-output-path.md)                                                 | Compression has four levels and no LLM in the output path                                                 | 2026-09-09 | accepted   | compression, tokens, determinism, text                                              |
@@ -91,6 +92,7 @@ file. Where a line stops short the rest is in the ADR.
 
 | ADR                                                                                                                     | Decision                                                                                                                                                                                                                        | Consequence                                                                                                                                                                                                                    |
 | ----------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| [079](079-coverage-wave-five-raises-the-branch-floor-to-91.md)                                                          | Cover the three biggest clusters that are not platform-locked and raise the floor to the measured integer. generateMultiFile had 2 of 12 branches visited, the rule:// reader 15 of 26, and the command-target context none...   | 91.17 percent branches (6375/6992), floor raised 90 to 91 with 12 branches of margin.                                                                                                                                          |
 | [078](078-meta-frameworks-get-their-own-namespace-and-a-narrow-dispatcher.md)                                           | Rename the four skills to rule-meta-astro, next, nuxt and remix, rename the occupying prompt to rule-area-toolset (which is what it always described), and add skills/rule-meta as a hub with a code-registered rule_tool_meta...   | Routing a meta-framework request now names one skill and the component skill to load with it.                                                                                                                                  |
 | [077](077-the-cli-entry-point-loads-no-command-handler-it-has-not-been-asked-for.md)                                    | Keep the command and option declarations static, and load the handlers inside their actions.                                                                                                                                    | Warm --help fell from 216 ms to 48 ms, and every command still dispatches. listTools() is memoized on a registry generation bumped by register, clear and retain, so the 105-schema conversion is paid once per process...     |
 | [076](076-compression-has-four-levels-and-no-llm-in-the-output-path.md)                                                 | Port the deterministic half and refuse the LLM half.                                                                                                                                                                            | The vocabulary can be aggressive because a bad rule costs one paragraph, not the whole result.                                                                                                                                 |
@@ -229,6 +231,7 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 
 ### testing
 
+- [079](079-coverage-wave-five-raises-the-branch-floor-to-91.md) Coverage wave five raises the branch floor to 91
 - [072](072-coverage-wave-four-holds-the-floor-at-90-and-fixes-the-daemon-status-platform-de.md) Coverage wave four holds the floor at 90 and fixes the daemon status platform defect
 - [068](068-coverage-floor-raised-to-90.md) Coverage floor raised to 90
 - [067](067-coverage-floor-raised-to-89-toward-the-95-endpoint.md) Coverage floor raised to 89 toward the 95 endpoint
@@ -247,6 +250,24 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [022](022-skill-routing-eslint-flat-config-for-typescript-react-proje.md) Skill routing: ESLint flat config for TypeScript React project
 - [021](021-skill-routing-typescript-tsconfig-strict-mode-configuration.md) Skill routing: TypeScript tsconfig strict mode configuration
 
+### ci
+
+- [079](079-coverage-wave-five-raises-the-branch-floor-to-91.md) Coverage wave five raises the branch floor to 91
+- [072](072-coverage-wave-four-holds-the-floor-at-90-and-fixes-the-daemon-status-platform-de.md) Coverage wave four holds the floor at 90 and fixes the daemon status platform defect
+- [068](068-coverage-floor-raised-to-90.md) Coverage floor raised to 90
+- [067](067-coverage-floor-raised-to-89-toward-the-95-endpoint.md) Coverage floor raised to 89 toward the 95 endpoint
+- [066](066-coverage-floor-raised-to-87-95-remains-the-ratchet-endpoint.md) Coverage floor raised to 87; 95 remains the ratchet endpoint
+- [065](065-glob-suite-runner-colocated-tests-and-a-branch-coverage-ratchet.md) Glob suite runner, co-located tests, and a branch-coverage ratchet
+
+### coverage
+
+- [079](079-coverage-wave-five-raises-the-branch-floor-to-91.md) Coverage wave five raises the branch floor to 91
+- [072](072-coverage-wave-four-holds-the-floor-at-90-and-fixes-the-daemon-status-platform-de.md) Coverage wave four holds the floor at 90 and fixes the daemon status platform defect
+- [068](068-coverage-floor-raised-to-90.md) Coverage floor raised to 90
+- [067](067-coverage-floor-raised-to-89-toward-the-95-endpoint.md) Coverage floor raised to 89 toward the 95 endpoint
+- [066](066-coverage-floor-raised-to-87-95-remains-the-ratchet-endpoint.md) Coverage floor raised to 87; 95 remains the ratchet endpoint
+- [065](065-glob-suite-runner-colocated-tests-and-a-branch-coverage-ratchet.md) Glob suite runner, co-located tests, and a branch-coverage ratchet
+
 ### tool
 
 - [026](026-skill-routing-pnpm-package-manager-workspace-monorepo-setup.md) Skill routing: pnpm package manager workspace monorepo setup
@@ -264,22 +285,6 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [028](028-add-rule-toolchain-commits-skill-for-atomic-conventional-commits-with-mandatory-s.md) Add rule-toolchain-commits skill for atomic conventional commits with mandatory scope
 - [016](016-toolchain-skill-isolation-vite.md) toolchain skill isolation vite
 - [010](010-toolchain-vite.md) Toolchain Skill Isolation (Vite)
-
-### ci
-
-- [072](072-coverage-wave-four-holds-the-floor-at-90-and-fixes-the-daemon-status-platform-de.md) Coverage wave four holds the floor at 90 and fixes the daemon status platform defect
-- [068](068-coverage-floor-raised-to-90.md) Coverage floor raised to 90
-- [067](067-coverage-floor-raised-to-89-toward-the-95-endpoint.md) Coverage floor raised to 89 toward the 95 endpoint
-- [066](066-coverage-floor-raised-to-87-95-remains-the-ratchet-endpoint.md) Coverage floor raised to 87; 95 remains the ratchet endpoint
-- [065](065-glob-suite-runner-colocated-tests-and-a-branch-coverage-ratchet.md) Glob suite runner, co-located tests, and a branch-coverage ratchet
-
-### coverage
-
-- [072](072-coverage-wave-four-holds-the-floor-at-90-and-fixes-the-daemon-status-platform-de.md) Coverage wave four holds the floor at 90 and fixes the daemon status platform defect
-- [068](068-coverage-floor-raised-to-90.md) Coverage floor raised to 90
-- [067](067-coverage-floor-raised-to-89-toward-the-95-endpoint.md) Coverage floor raised to 89 toward the 95 endpoint
-- [066](066-coverage-floor-raised-to-87-95-remains-the-ratchet-endpoint.md) Coverage floor raised to 87; 95 remains the ratchet endpoint
-- [065](065-glob-suite-runner-colocated-tests-and-a-branch-coverage-ratchet.md) Glob suite runner, co-located tests, and a branch-coverage ratchet
 
 ### guardrails
 
