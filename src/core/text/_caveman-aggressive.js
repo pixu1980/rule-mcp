@@ -1,79 +1,84 @@
 /**
  * @module core/text/caveman-aggressive
  *
- * Aggressive extra compression pass applied ON TOP of the standard caveman
- * output (default since v1.0.0; opt out entirely with RULE_MCP_NO_CAVEMAN=1).
+ * The `ultra` sentence-shape pass, applied on top of the per-line vocabulary
+ * pass: sentence-initial coordinating conjunctions go, because at `ultra` the
+ * structure of the list already carries what they connect.
  *
- * Same safety rules as the standard compressor: fenced code blocks, inline
- * code spans, URLs, headings and table rows are protected; only prose is
- * touched. Multi-word phrases collapse to shorter equivalents and a few more
- * single-word fillers are removed.
+ * The vocabulary itself (phrases, fillers, articles, synonyms, abbreviations,
+ * arrow causality) lives in `./_caveman-line.js` and its data tables, so there
+ * is one source of order rather than two passes racing over the same words.
+ *
+ * Same safety rules as the standard pass: fenced code, headings, table rows,
+ * blockquotes and data-shaped lines are left alone. Idempotent: the stripper
+ * loops, so `f(f(x)) === f(x)` even when two conjunctions open a line.
  */
 
-/** Multi-word phrases compressed to shorter equivalents (case-insensitive). */
-const PHRASES = [
-  ["in order to", "to"],
-  ["as well as", "and"],
-  ["note that", ""],
-  ["please", ""],
-  ["at this time", "now"],
-  ["right now", "now"],
-  ["kind of", ""],
-  ["sort of", ""],
-];
-const PHRASE_RES = PHRASES.map(([from]) => new RegExp(String.raw`\b${from.replaceAll(" ", String.raw`\s+`)}\b`, "gi"));
-const PHRASE_TOS = PHRASES.map(([, to]) => to);
+import { fenceClosedBy, fenceOpenedBy } from "./_fence.js";
+import { atLeast, cavemanLevel } from "./_level.js";
+import { isCodeLine, isYamlLine } from "./_line-shape.js";
 
-/** Extra single-word fillers removed in aggressive mode. */
-const AGGRESSIVE_RE = new RegExp(String.raw`\b(?:literally)\b\s*`, "gi");
+/** A bullet or ordered-list marker the conjunction hides behind. */
+const PREFIX_RE = /^([ \t]*(?:[*+-]|\d+\.)[ \t]+)?/;
+const LEADING_CONJUNCTION_RE = /^(?:and|but|or|so|then|however|therefore)\b[ \t,]+/i;
 
 /**
- * Aggressive extra pass over already-standard-compressed text.
+ * Strip sentence-initial conjunctions from one prose line.
  *
- * @param {string} text
+ * @param {string} line
  * @returns {string}
  */
-export function compressTextAggressive(text) {
-  if (typeof text !== "string" || text.length === 0 || text.trimStart().startsWith("```")) {
+function stripConjunctions(line) {
+  const prefix = PREFIX_RE.exec(line)?.[1] ?? "";
+  let rest = line.slice(prefix.length);
+
+  while (LEADING_CONJUNCTION_RE.test(rest)) {
+    rest = rest.replace(LEADING_CONJUNCTION_RE, "");
+  }
+
+  return prefix + rest;
+}
+
+/**
+ * The ultra extra pass over already-compressed text. A no-op below `ultra`.
+ *
+ * @param {string} text
+ * @param {{ level?: string }} [options]
+ * @returns {string}
+ */
+export function compressTextAggressive(text, { level = cavemanLevel() } = {}) {
+  if (typeof text !== "string" || text.length === 0 || !atLeast(level, "ultra")) {
     return text;
   }
 
-  let isInFence = false;
+  let fence = null;
 
   return text
     .split("\n")
     .map((line) => {
+      if (fence) {
+        if (fenceClosedBy(line, fence)) {
+          fence = null;
+        }
+
+        return line;
+      }
+
+      const opened = fenceOpenedBy(line);
+
+      if (opened) {
+        fence = opened;
+
+        return line;
+      }
+
       const trimmed = line.trimStart();
 
-      if (trimmed.startsWith("```")) {
-        isInFence = !isInFence;
-
+      if (trimmed.startsWith("#") || trimmed.startsWith("|") || trimmed.startsWith(">") || isCodeLine(line) || isYamlLine(trimmed)) {
         return line;
       }
 
-      if (isInFence || trimmed.startsWith("#") || trimmed.startsWith("|") || trimmed.startsWith(">")) {
-        return line;
-      }
-
-      const protectedSpans = [];
-      const protect = (m) => {
-        protectedSpans.push(m);
-
-        return `\x00${protectedSpans.length - 1}\x00`;
-      };
-      let work = line.replaceAll(/`[^`]*`/g, protect).replaceAll(/https?:\/\/\S+/g, protect);
-
-      for (const [i, PHRASE_RE] of PHRASE_RES.entries()) {
-        work = work.replace(PHRASE_RE, PHRASE_TOS[i]);
-      }
-
-      work = work
-        .replaceAll(AGGRESSIVE_RE, "")
-        .replaceAll(/[ \t]{2,}/g, " ")
-        .replace(/[ \t]+$/, "");
-      work = work.replaceAll(/\x00(\d+)\x00/g, (_, index) => protectedSpans[Number(index)]);
-
-      return work;
+      return stripConjunctions(line);
     })
     .join("\n");
 }

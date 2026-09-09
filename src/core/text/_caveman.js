@@ -1,89 +1,49 @@
 /**
  * @module core/caveman
  *
- * Deterministic "caveman" output compressor. Trims filler from PROSE to cut token
- * usage while preserving every piece of technical substance. Applied to tool
- * outputs by the router (always on; opt out with RULE_MCP_NO_CAVEMAN=1).
+ * Deterministic "caveman" output compressor. Trims filler from PROSE to cut
+ * token usage while preserving every piece of technical substance. Applied to
+ * tool outputs by the router (on by default; `RULE_MCP_CAVEMAN_LEVEL`
+ * picks the intensity, `RULE_MCP_NO_CAVEMAN=1` turns it off).
+ *
+ * Inspired by the caveman skill (`skills/rule-caveman/SKILL.md`) and its
+ * caveman-compress companion: the deterministic rules are ported - the
+ * vocabulary tables, the classification guards and `validate.py`'s structural
+ * validator - and the LLM compression step is deliberately not. An LLM in the
+ * output path costs determinism, cacheability and the zero-dependency
+ * contract; the guard plus per-block rollback buys the same safety for free.
  *
  * Safety -- the compressor NEVER touches:
  *   - fenced code blocks (``` ... ```)
  *   - inline code spans (`...`)
- *   - URLs
- *   - Markdown headings (# ...), table rows (| ... |)
+ *   - URLs and filesystem paths
+ *   - Markdown headings (# ...), table rows (| ... |), blockquotes
+ *   - code-shaped and `key: value` lines
  *   - content whose text is JSON (data, not prose -- compressing it would corrupt it)
  *
- * It only removes filler adverbs and leading articles from ordinary prose and
- * collapses redundant whitespace. An aggressive extra pass (multi-word phrase
- * compression + more fillers) runs on top by default - see
- * ./caveman-aggressive.js. Idempotent: compress(compress(x)) === compress(x).
+ * On top of those exemptions, every prose run between two fences is checked
+ * against the original by `./compress-guard/` - see `./_caveman-blocks.js`.
+ * Idempotent: compress(compress(x)) === compress(x).
  */
 
 import { addCompression } from "../telemetry/_token-stats.js";
-import { compressTextAggressive } from "./_caveman-aggressive.js";
+import { compressTextGuarded } from "./_caveman-blocks.js";
+import { looksLikeJson } from "./_classify.js";
+import { cavemanLevel } from "./_level.js";
 
-import { cavemanEnabled, compressLine, looksLikeJson } from "./_caveman-line.js";
-
-export { cavemanEnabled } from "./_caveman-line.js";
+export { compressTextGuarded } from "./_caveman-blocks.js";
+export { atLeast, cavemanEnabled, cavemanLevel, DEFAULT_LEVEL, LEVELS } from "./_level.js";
 
 /**
  * Compress a block of prose/markdown text. Fenced code blocks pass through
  * untouched; JSON content is returned unchanged.
  *
  * @param {string} text
+ * @param {{ level?: string }} [options]
  * @returns {string}
  */
-export function compressText(text) {
-  if (typeof text !== "string" || text.length === 0) {
-    return text;
-  }
-
-  if (looksLikeJson(text)) {
-    return text;
-  }
-
-  const lines = text.split("\n");
-  const out = [];
-  let isInFence = false;
-  let blankRun = 0;
-
-  for (const line of lines) {
-    if (line.trimStart().startsWith("```")) {
-      isInFence = !isInFence;
-      out.push(line.replace(/[ \t]+$/, ""));
-      blankRun = 0;
-      continue;
-    }
-
-    if (isInFence) {
-      out.push(line); // verbatim inside code
-      continue;
-    }
-
-    const compressed = compressLine(line);
-
-    if (compressed.trim() === "") {
-      blankRun += 1;
-
-      if (blankRun > 1) {
-        continue;
-      } // collapse consecutive blanks to one
-      out.push("");
-    } else {
-      blankRun = 0;
-      out.push(compressed);
-    }
-  }
-
-  // Trim leading/trailing blank lines.
-  while (out.length > 0 && out[0] === "") {
-    out.shift();
-  }
-
-  while (out.length > 0 && out.at(-1) === "") {
-    out.pop();
-  }
-
-  return out.join("\n");
+export function compressText(text, options) {
+  return compressTextGuarded(text, options).text;
 }
 
 /**
@@ -91,10 +51,11 @@ export function compressText(text) {
  * Only text content items that are prose (not JSON) are compressed.
  *
  * @param {{ content?: Array<{ type: string, text?: string }> }} result
+ * @param {{ level?: string }} [options]
  * @returns {object} the same result when disabled, else a compressed copy
  */
-export function compressResult(result) {
-  if (!cavemanEnabled()) {
+export function compressResult(result, { level = cavemanLevel() } = {}) {
+  if (level === "off") {
     return result;
   }
 
@@ -104,15 +65,15 @@ export function compressResult(result) {
 
   let bytesIn = 0;
   let bytesOut = 0;
+  let rollbacks = 0;
   const content = result.content.map((item) => {
     if (item && item.type === "text" && typeof item.text === "string" && !looksLikeJson(item.text)) {
-      // Standard pass, then the aggressive extra pass (default since v1.0.0).
-      const standard = compressText(item.text);
-      const text = compressTextAggressive(standard);
+      const compressed = compressTextGuarded(item.text, { level });
       bytesIn += item.text.length;
-      bytesOut += text.length;
+      bytesOut += compressed.text.length;
+      rollbacks += compressed.rollbacks;
 
-      return { ...item, text };
+      return { ...item, text: compressed.text };
     }
 
     return item;
@@ -120,5 +81,9 @@ export function compressResult(result) {
 
   addCompression(bytesIn, bytesOut);
 
-  return { ...result, content };
+  // A rollback is the only thing worth reporting: it means a rule was unsafe
+  // on this payload, which is a vocabulary bug, not a runtime condition.
+  const meta = rollbacks > 0 ? { _meta: { ...result._meta, pixCaveman: { level, rollbacks } } } : {};
+
+  return { ...result, content, ...meta };
 }
