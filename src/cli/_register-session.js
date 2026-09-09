@@ -31,7 +31,7 @@ export function registerAdrCommand(program) {
       const { callTool } = await import("../tools/router/index.js");
       const { loadAllSkills } = await import("../core/skills/index.js");
       await loadAllSkills();
-      const result = await callTool("pix_process_adr", {
+      const result = await callTool("rule_tool_process_adr", {
         title,
         status: options.status ?? "accepted",
         context: options.context ?? "",

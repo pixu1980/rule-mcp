@@ -73,7 +73,7 @@ async function updateCommand() {
  */
 async function fixCommand(opts = {}) {
   await loadAllSkills();
-  const result = await callTool("pix_fix", {
+  const result = await callTool("rule_tool_fix", {
     path: opts.dir || ".",
     srcDir: opts.srcDir || "src",
     mode: opts.mode || "lint",
