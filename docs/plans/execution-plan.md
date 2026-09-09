@@ -161,8 +161,9 @@
       instructions-file/marker-targets (byte-identical docs, verified); cache report 277 ->
       context/workload/measure/render (verified end-to-end); self-guardrails 233 -> five
       per-rule passes (identical 277-file dry-run); changelog 229 -> sections/history/render;
-      wcag 186 -> flatten/render; blank-lines, cache-similarity, post-process, prose each
-      shed one module.
+      wcag 186 -> flatten/render; cache-similarity, post-process and prose each shed one
+      module (blank-lines shed all three: it was a second, unwired copy of four rules
+      self-guardrails already fixes, deleted by the simplicity plan, SIMP-1).
 - [x] Deliberate keeps, grandfathered with a rationale: `session/_lifecycle.js` 228 and
       `transport/_session-registry.js` 221 (single state machines whose reset reassigns
       module state), `guardrails/_guarded.js` 179 (worker lifecycle), `cli/commands/_daemon.js`
@@ -183,7 +184,7 @@
 ### Phase 5 - `scripts/` folders per script (done)
 
 - [x] `reports/` (census, cache, cache-similarity, tool-surface, coverage), `fix/`
-      (blank-lines, self-guardrails, prose, post-process), `build/` (changelog, embed-skills,
+      (self-guardrails, prose, post-process), `build/` (changelog, embed-skills,
       checksums), `ci/` (audit-gate), `data/` (wcag), `install/` (skills); each script is its
       folder's `index.mjs`, shell installers stay flat.
 - [x] package.json, ci.yml, package.sh, pre-commit hook, docs and census header updated;
