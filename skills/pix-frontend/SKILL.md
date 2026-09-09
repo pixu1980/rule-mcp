@@ -26,7 +26,7 @@ frameworks: [all]
 | [pix-frontend-angular](../pix-frontend-angular/SKILL.md)       | Angular 16+ (standalone) | signal()       | Signals         |
 | [pix-frontend-svelte](../pix-frontend-svelte/SKILL.md)         | Svelte 5                 | $state (runes) | Runes           |
 | [pix-frontend-solidjs](../pix-frontend-solidjs/SKILL.md)       | SolidJS                  | createSignal   | Signals         |
-| [pix-frontend-meta-astro](../pix-frontend-meta-astro/SKILL.md) | Astro (islands)          | Per-framework  | Per-framework   |
+| [pix-meta-astro](../pix-meta-astro/SKILL.md) | Astro (islands)          | Per-framework  | Per-framework   |
 
 ## Rules that hold whichever framework you route to
 
@@ -48,9 +48,9 @@ frameworks: [all]
 
 | Skill                                                          | Based On        | Features                                   |
 | -------------------------------------------------------------- | --------------- | ------------------------------------------ |
-| [pix-frontend-meta-next](../pix-frontend-meta-next/SKILL.md)   | Next.js (React) | App Router, SSR/SSG/ISR, server components |
-| [pix-frontend-meta-nuxt](../pix-frontend-meta-nuxt/SKILL.md)   | Nuxt 3 (Vue)    | File-based routing, SSR/SSG, auto-imports  |
-| [pix-frontend-meta-remix](../pix-frontend-meta-remix/SKILL.md) | Remix (React)   | Nested routing, loaders/actions, SSR       |
+| [pix-meta-next](../pix-meta-next/SKILL.md)   | Next.js (React) | App Router, SSR/SSG/ISR, server components |
+| [pix-meta-nuxt](../pix-meta-nuxt/SKILL.md)   | Nuxt 3 (Vue)    | File-based routing, SSR/SSG, auto-imports  |
+| [pix-meta-remix](../pix-meta-remix/SKILL.md) | Remix (React)   | Nested routing, loaders/actions, SSR       |
 
 ## When the framework is the over-engineering
 
@@ -86,7 +86,7 @@ Two things worth saying out loud when this comes up:
 
 The mixed answer is usually the correct one: server-rendered pages by default,
 with a component island where the interaction genuinely justifies one. See
-[pix-frontend-meta-astro](../pix-frontend-meta-astro/SKILL.md) for that shape as a
+[pix-meta-astro](../pix-meta-astro/SKILL.md) for that shape as a
 default. Where a small amount of client state does not need a framework at
 all, plain custom elements and a stylesheet are the whole answer:
 [pix-styleguide-javascript](../pix-styleguide-javascript/SKILL.md) and
@@ -101,12 +101,12 @@ Need SPA with Vue?                      → pix-frontend-vue
 Need enterprise Angular?                → pix-frontend-angular
 Need lightweight Svelte?                → pix-frontend-svelte
 Need fine-grained reactivity?           → pix-frontend-solidjs
-Need static + islands?                  → pix-frontend-meta-astro
+Need static + islands?                  → pix-meta-astro
 Need pure vanilla (no framework)?       → pix-styleguide-javascript
 UI freezes on heavy JS?                 → pix-frontend-workers
-Need full-stack React (Next.js)?        → pix-frontend-meta-next
-Need full-stack Vue (Nuxt)?             → pix-frontend-meta-nuxt
-Need nested routing (Remix)?            → pix-frontend-meta-remix
+Need full-stack React (Next.js)?        → pix-meta-next
+Need full-stack Vue (Nuxt)?             → pix-meta-nuxt
+Need nested routing (Remix)?            → pix-meta-remix
 ```
 
 ## See also

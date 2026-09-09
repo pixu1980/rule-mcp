@@ -64,7 +64,7 @@ which agents are installed and where their homes are.
 
 **router**: `/pix`
 
-**area**: `/pix-area-ai`, `/pix-area-backend`, `/pix-area-data`, `/pix-area-devops`, `/pix-area-frontend`, `/pix-area-meta`, `/pix-area-platform`, `/pix-area-process`, `/pix-area-skills`, `/pix-area-styleguide`, `/pix-area-toolchain`, `/pix-area-ui`
+**area**: `/pix-area-ai`, `/pix-area-backend`, `/pix-area-data`, `/pix-area-devops`, `/pix-area-frontend`, `/pix-area-platform`, `/pix-area-process`, `/pix-area-skills`, `/pix-area-styleguide`, `/pix-area-toolchain`, `/pix-area-toolset`, `/pix-area-ui`
 
 **workflow**: `/pix-adr`, `/pix-flight`
 

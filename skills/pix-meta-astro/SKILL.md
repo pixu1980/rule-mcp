@@ -1,5 +1,5 @@
 ---
-name: pix-frontend-meta-astro
+name: pix-meta-astro
 description: >-
   Use when building Astro islands-architecture sites. Supports zero CSS classes, semantic HTML, partial hydration, and integration with UI frameworks.
 tags:
@@ -8,7 +8,7 @@ tags:
 frameworks: [astro]
 ---
 
-# pix-frontend-meta-astro - Astro with pix Principles
+# pix-meta-astro - Astro with pix Principles
 
 This skill adapts [pix-styleguide](../pix-styleguide/SKILL.md) and
 a store-and-signals architecture to **Astro** (islands architecture).
@@ -166,7 +166,7 @@ export { default as TodoItem } from "./_TodoItem.astro";
 
 ## Guardrails
 
-Run `pix_tool_frontend_meta_astro` mode=check or `pix_tool_check` to validate code against these rules.
+Run `pix_tool_meta_astro` mode=check or `pix_tool_check` to validate code against these rules.
 
 Key rules enforced: **no-css-classes**, **no-inline-styles**, **semantic-html**,
 **external-css** (Astro `<style>` scoped blocks or external CSS imports),
@@ -187,7 +187,7 @@ Iterate: `generate → pix_tool_check → fix → pix_tool_check → all pass`.
 
 ## Astro Performance & Best Practices
 
-This section extends pix-frontend-meta-astro with a structured performance review methodology for Astro's islands architecture.
+This section extends pix-meta-astro with a structured performance review methodology for Astro's islands architecture.
 
 ### When to activate
 

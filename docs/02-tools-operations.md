@@ -41,10 +41,10 @@ Every source document below is preserved verbatim under its own heading so no pr
 | `pix_tool_frontend_solidjs`          | Skill      | SolidJS fine-grained reactivity           |
 |                                      |            |                                           |
 | **Meta-Frameworks**                  |            |                                           |
-| `pix_tool_frontend_meta_astro`       | Skill      | Astro islands architecture                |
-| `pix_tool_frontend_meta_next`        | Skill      | Next.js App Router                        |
-| `pix_tool_frontend_meta_nuxt`        | Skill      | Nuxt 3 best practices                     |
-| `pix_tool_frontend_meta_remix`       | Skill      | Remix best practices                      |
+| `pix_tool_meta_astro`       | Skill      | Astro islands architecture                |
+| `pix_tool_meta_next`        | Skill      | Next.js App Router                        |
+| `pix_tool_meta_nuxt`        | Skill      | Nuxt 3 best practices                     |
+| `pix_tool_meta_remix`       | Skill      | Remix best practices                      |
 |                                      |            |                                           |
 | **Project Types**                    |            |                                           |
 | `pix_tool_platform_web`              | Skill      | Web platform best practices               |
@@ -736,10 +736,10 @@ previousPassed: ["no-css-classes", "no-inline-styles", "semantic-html",
 | Svelte 5           | pix-frontend-svelte           | `pix_tool_frontend_svelte`           |
 | Angular            | pix-frontend-angular          | `pix_tool_frontend_angular`          |
 | SolidJS            | pix-frontend-solidjs          | `pix_tool_frontend_solidjs`          |
-| Astro              | pix-frontend-astro            | `pix_tool_frontend_meta_astro`       |
-| Next.js            | pix-frontend-meta-next        | `pix_tool_frontend_meta_next`        |
-| Nuxt 3             | pix-frontend-meta-nuxt        | `pix_tool_frontend_meta_nuxt`        |
-| Remix              | pix-frontend-meta-remix       | `pix_tool_frontend_meta_remix`       |
+| Astro              | pix-frontend-astro            | `pix_tool_meta_astro`       |
+| Next.js            | pix-meta-next        | `pix_tool_meta_next`        |
+| Nuxt 3             | pix-meta-nuxt        | `pix_tool_meta_nuxt`        |
+| Remix              | pix-meta-remix       | `pix_tool_meta_remix`       |
 | Desktop (Electron) | pix-platform-desktop          | `pix_tool_platform_desktop`          |
 | Vanilla JS         | pix-frontend-vanilla-reactive | `pix_tool_frontend_vanilla_reactive` |
 | Web platform       | pix-platform-web              | `pix_tool_platform_web`              |

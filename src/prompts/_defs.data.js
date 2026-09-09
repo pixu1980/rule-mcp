@@ -65,7 +65,7 @@ export const PROMPT_DEFS = [
     ],
   },
   {
-    name: "pix-area-meta",
+    name: "pix-area-toolset",
     description: "Work with the pix dispatcher/action toolset: routing, gateway, apply, search, check, scaffold, detect, fix, ADR, handoff",
     arguments: [{ name: "request", description: "What to route, search, validate, scaffold, or record", required: true }],
   },
@@ -176,7 +176,7 @@ export const PROMPT_EXAMPLES = {
   "pix-area-data": ["/pix-area-data help", "/pix-area-data postgresql schema for the users table"],
   "pix-area-devops": ["/pix-area-devops help", "/pix-area-devops multi-stage docker build for node"],
   "pix-area-frontend": ["/pix-area-frontend help", "/pix-area-frontend react login form with validation"],
-  "pix-area-meta": ["/pix-area-meta help", "/pix-area-meta search for the a11y skill"],
+  "pix-area-toolset": ["/pix-area-toolset help", "/pix-area-toolset search for the a11y skill"],
   "pix-area-platform": ["/pix-area-platform help", "/pix-area-platform electron desktop app scaffold"],
   "pix-area-process": ["/pix-area-process help", "/pix-area-process run a code review on the pending changes"],
   "pix-area-skills": ["/pix-area-skills help", "/pix-area-skills find a skill for docker"],

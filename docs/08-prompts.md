@@ -23,12 +23,12 @@ Claude Code installs clean `/pix-*` commands instead and suppresses these
 | `/pix-area-data`       | <request>  | Data-layer work: postgresql, mysql, sqlite, mongodb, duckdb, indexed-db, SQL                                                                              |
 | `/pix-area-devops`     | <request>  | DevOps work: docker, observability, testing                                                                                                               |
 | `/pix-area-frontend`   | <request>  | Frontend work following pix styleguides: zero CSS classes, semantic HTML, external CSS, TDD + a11y                                                        |
-| `/pix-area-meta`       | <request>  | Work with the pix dispatcher/action toolset: routing, gateway, apply, search, check, scaffold, detect, fix, ADR, handoff                                  |
 | `/pix-area-platform`   | <request>  | Platform work: web, desktop, agent, library                                                                                                               |
 | `/pix-area-process`    | <request>  | Process work: code review, TDD, feature workflow, documentation, ADR, handoff, BMAD                                                                       |
 | `/pix-area-skills`     | <request>  | Skill discovery: find, install, and evaluate agent skills                                                                                                 |
 | `/pix-area-styleguide` | <request>  | Styleguide work: a11y, css, html, javascript, json, markdown, naming, patterns, validation                                                                |
 | `/pix-area-toolchain`  | <request>  | Toolchain configuration: vite, pnpm, turborepo, rspack, parcel, typescript, eslint, biome, husky, commits, project                                        |
+| `/pix-area-toolset`    | <request>  | Work with the pix dispatcher/action toolset: routing, gateway, apply, search, check, scaffold, detect, fix, ADR, handoff                                  |
 | `/pix-area-ui`         | <request>  | UI design-system work: design-system components, tokens, patterns                                                                                         |
 | `/pix-flight`          | [options]  | Read the flight recorder: what this server cost, and what to do about it                                                                                  |
 | `/pix-handoff`         | [options]  | Produce a compressed context handoff (ADR summary + git context) to resume in a new session, commiting pending work as scoped Conventional Commits first. |

@@ -18,6 +18,7 @@ export const IS_MINIMAL_TOOLS = process.env.PIX_GALAXY_MCP_MINIMAL_TOOLS === "1"
  */
 export const MINIMAL_ALLOWLIST = new Set([
   "pix_tool", // router / dispatcher
+  "pix_tool_meta", // meta-framework dispatcher
   "pix_tool_update", // self-update
   "pix_tool_gateway", // route + evidence + guardrails + receipt (single entry)
   "pix_tool_apply", // the only writer
