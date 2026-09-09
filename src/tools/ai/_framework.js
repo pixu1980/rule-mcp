@@ -1,6 +1,22 @@
 import { detectProject, getFrameworkSuggestion } from "../../core/detector/index.js";
 
 /**
+ * Skill-name prefix to routing domain, longest prefix first.
+ *
+ * A table rather than a ternary chain, because the chain carried three arms
+ * (backend, data, devops) that FRAMEWORK_SKILL_MAP can never reach: it only
+ * ever suggests pix-ai, pix-frontend-*, pix-meta-* and pix-platform-desktop.
+ * A meta-framework is frontend - it was, as pix-frontend-meta-astro, until the
+ * pix-meta rename dropped it out of the prefix and cost Astro its framework
+ * bias in the router (ADR 078).
+ */
+const DOMAIN_PREFIXES = [
+  ["pix-ai", "ai"],
+  ["pix-frontend", "frontend"],
+  ["pix-meta", "frontend"],
+];
+
+/**
  * Resolve the framework hint (argument or project detection) to a skill and
  * its domain, so the caller can decide whether framework bias applies.
  *
@@ -21,17 +37,7 @@ export function detectFrameworkSkill(arguments_) {
 
   const detectedSkillName = detectedFramework ? getFrameworkSuggestion(detectedFramework).skillName : null;
 
-  const detectedDomain = detectedSkillName?.startsWith("pix-ai")
-    ? "ai"
-    : detectedSkillName?.startsWith("pix-frontend")
-      ? "frontend"
-      : detectedSkillName?.startsWith("pix-backend")
-        ? "backend"
-        : detectedSkillName?.startsWith("pix-data")
-          ? "data"
-          : detectedSkillName?.startsWith("pix-devops")
-            ? "devops"
-            : null;
+  const prefix = DOMAIN_PREFIXES.find(([name]) => detectedSkillName?.startsWith(name));
 
-  return { detectedFramework, detectedSkillName, detectedDomain };
+  return { detectedFramework, detectedSkillName, detectedDomain: prefix?.[1] ?? null };
 }
