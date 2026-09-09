@@ -1,5 +1,12 @@
-/** Session command registrars: adr, skills, fix, handon. */
-import { fixCommand, skillsReloadCommand } from "./commands/index.js";
+/**
+ * Session command registrars: adr, skills, fix, handon.
+ *
+ * The handlers are imported inside the actions, not at the top of the file:
+ * the command declarations are what `--help` renders, and a static handler
+ * import made `--help`, `--version` and `config` pay for the server, both
+ * transports, the skill catalog and 105 tool registrations. Same pattern the
+ * adr and skills registrars already used - see `pnpm report:startup`.
+ */
 
 /** Register the `adr` command. */
 export function registerAdrCommand(program) {
@@ -65,7 +72,7 @@ export function registerSkillsCommand(program) {
           break;
         }
         case "reload": {
-          await skillsReloadCommand();
+          await (await import("./commands/_health.js")).skillsReloadCommand();
           break;
         }
         default: {
@@ -85,7 +92,7 @@ export function registerFixCommand(program) {
     .option("--mode <m>", "lint (scan + report) or fix (scan + auto-correct)", "lint")
     .option("--no-dry-run", "apply fixes instead of previewing")
     .allowExcessArguments(false)
-    .action((options) => fixCommand({ dir: options.dir, srcDir: options.srcDir, mode: options.mode, dryRun: options.dryRun }));
+    .action(async (options) => (await import("./commands/_health.js")).fixCommand({ dir: options.dir, srcDir: options.srcDir, mode: options.mode, dryRun: options.dryRun }));
 }
 
 /** Register the `handon` command. */
