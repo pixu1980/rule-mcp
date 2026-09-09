@@ -16,7 +16,7 @@ import { join } from "node:path";
 
 const BASE = new URL("../../..", import.meta.url).pathname;
 const { resolveTokensaveDir, tokensaveActive, suppressIfTokensave, decorateWithTokensave, resetTokenPipeline } = await import(join(BASE, "src/core/agents/_integrations.js"));
-const { compressResult } = await import(join(BASE, "src/core/text/_caveman.js"));
+const { compressResult, compressText } = await import(join(BASE, "src/core/text/_caveman.js"));
 const { compressTextAggressive } = await import(join(BASE, "src/core/text/_caveman-aggressive.js"));
 const { getTokenStats, resetTokenStats } = await import(join(BASE, "src/core/telemetry/_token-stats.js"));
 
@@ -83,14 +83,21 @@ test("allowlisted heavy outputs are truncated with the terse marker", () => {
   resetTokenPipeline();
 });
 
-test("caveman aggressive: phrases and extra fillers are compressed by default", () => {
-  const text = "In order to please configure the thing right now. This is literally the whole setup.";
-  const out = compressTextAggressive(text);
+test("phrases and extra fillers are compressed by default", () => {
+  // The phrase table moved into the per-line pass (PERF-4: phrases must run
+  // before single words), so the default result is what compressText returns.
+  const out = compressText("In order to please configure the thing right now. This is literally the whole setup.");
   assert.doesNotMatch(out, /in order to/i);
   assert.doesNotMatch(out, /\bplease\b/i);
   assert.doesNotMatch(out, /right now/i);
   assert.doesNotMatch(out, /\bliterally\b/i);
-  assert.match(out, /configure the thing/);
+  assert.match(out, /^To configure thing now\./);
+});
+
+test("the aggressive pass is the ultra extra: conjunctions go, and only there", () => {
+  const text = "And then the router caches the result.";
+  assert.equal(compressTextAggressive(text, { level: "full" }), text, "below ultra it is a no-op");
+  assert.equal(compressTextAggressive(text, { level: "ultra" }), "the router caches the result.");
 });
 
 test("runtime counters track compression and suppression savings", () => {
