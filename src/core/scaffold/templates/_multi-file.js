@@ -109,7 +109,10 @@ export function generateMultiFile(component, framework = "vanilla", name) {
       break;
     }
     default: {
-      if (!t.vanilla) {
+      // Markup, not just a `vanilla` key: a file template (playwright-config,
+      // the a11y suites) carries its content as a plain string, and treating
+      // that as a component emitted a custom element with an empty template.
+      if (!t.vanilla?.html) {
         return null;
       }
 
