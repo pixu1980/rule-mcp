@@ -1,5 +1,12 @@
-/** Setup command registrars: install, uninstall, config, doctor, completions, agent-commands. */
-import { agentCommandsCommand, completionsCommand, configCommand, configureCommand, doctorCommand, installCommand, uninstallCommand } from "./commands/index.js";
+/**
+ * Setup command registrars: install, uninstall, config, doctor, completions, agent-commands.
+ *
+ * The handlers are imported inside the actions, not at the top of the file:
+ * the command declarations are what `--help` renders, and a static handler
+ * import made `--help`, `--version` and `config` pay for the server, both
+ * transports, the skill catalog and 105 tool registrations. Same pattern the
+ * adr and skills registrars already used - see `pnpm report:startup`.
+ */
 import { Option } from "commander";
 
 /** Collector for repeatable options: `--set A=1 --set B=2` → ["A=1", "B=2"]. */
@@ -17,8 +24,8 @@ export function registerInstallCommand(program) {
     .option("--dry-run", "preview without writing")
     .option("--json", "print machine-readable JSON instead of Terminal UI")
     .allowExcessArguments(false)
-    .action((options) => {
-      installCommand({
+    .action(async (options) => {
+      (await import("./commands/_lifecycle.js")).installCommand({
         agent: options.agent,
         mode: options.mode ?? "stdio",
         global: options.global,
@@ -38,8 +45,8 @@ export function registerUninstallCommand(program) {
     .option("--dry-run", "preview without removing")
     .option("--json", "print machine-readable JSON instead of Terminal UI")
     .allowExcessArguments(false)
-    .action((options) => {
-      uninstallCommand({ agent: options.agent, dryRun: options.dryRun, json: options.json });
+    .action(async (options) => {
+      (await import("./commands/_lifecycle.js")).uninstallCommand({ agent: options.agent, dryRun: options.dryRun, json: options.json });
     });
 }
 
@@ -55,9 +62,9 @@ export function registerConfigCommand(program) {
     .option("--list", "list saved RULE_MCP_* env vars")
     .option("--unset <key>", "remove a saved RULE_MCP_* env var")
     .allowExcessArguments(false)
-    .action((section, options) => {
+    .action(async (section, options) => {
       if (section === "env") {
-        configureCommand({
+        (await import("./commands/_configure.js")).configureCommand({
           set: options.set.length > 0 ? options.set : undefined,
           list: options.list,
           unset: options.unset,
@@ -66,7 +73,7 @@ export function registerConfigCommand(program) {
         return;
       }
 
-      configCommand({ global: options.global, mode: options.mode ?? "stdio" });
+      (await import("./commands/_tools.js")).configCommand({ global: options.global, mode: options.mode ?? "stdio" });
     });
 }
 
@@ -80,8 +87,8 @@ export function registerDoctorCommand(program) {
     .option("--output <path>", "alias for --json-out")
     .option("--telemetry", "include anonymous usage stats in the report")
     .allowExcessArguments(false)
-    .action((options) =>
-      doctorCommand({
+    .action(async (options) =>
+      (await import("./commands/_health.js")).doctorCommand({
         telemetry: !!options.telemetry,
         json: !!options.json,
         jsonOut: options.jsonOut ?? options.output,
@@ -96,7 +103,7 @@ export function registerCompletionsCommand(program) {
     .description("Generate shell auto-completion script")
     .option("--shell <s>", "zsh (default), bash, fish", "zsh")
     .allowExcessArguments(false)
-    .action((options) => completionsCommand({ shell: options.shell }));
+    .action(async (options) => (await import("./commands/_health.js")).completionsCommand({ shell: options.shell }));
 }
 
 /** Register the `agent-commands` command. */
@@ -114,8 +121,8 @@ export function registerAgentCommandsCommand(program) {
     .option("--dry-run", "preview without writing")
     .option("--agent <name>", "limit to one agent")
     .allowExcessArguments(false)
-    .action((options) => {
-      agentCommandsCommand({
+    .action(async (options) => {
+      (await import("./commands/_targets.js")).agentCommandsCommand({
         dir: options.dir,
         format: options.format,
         list: options.list,

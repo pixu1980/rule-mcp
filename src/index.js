@@ -21,7 +21,10 @@
  */
 
 import { installProcessErrorHandlers } from "./utils/index.js";
-import { runCli } from "./cli/index.js";
+// Straight at the program, not the `./cli/index.js` barrel: the barrel also
+// exports the TUI and the uninstaller, whose own graphs cost ~330 ms that a
+// `--help` or a `serve` never touches (`pnpm report:startup`).
+import { runCli } from "./cli/_program.js";
 
 // Install global error handlers at process level
 // Prevents uncaught exceptions from crashing the server

@@ -119,6 +119,22 @@ session for the AI Flight Recorder DevTools timeline with
 
 - `RULE_MCP_SKILL_UNIVERSE=base`: route on the source-commensurate skill set for the routing-corpus measurement (see src/tools/router.js TARGET_ONLY_SKILLS).
 
+## Node variables this server sets or honors
+
+stdio starts the server as a subprocess per client, so module compilation is
+paid on every connect. `bin/rule-mcp.js` calls
+`module.enableCompileCache()` before it loads the application graph, and the
+installer writes a cache directory into the generated agent config.
+
+| Variable                     | Description                                                                                                                              | Default                                 |
+| ---------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------- |
+| `NODE_COMPILE_CACHE`         | Directory for the compiled code cache. The installer sets it for every agent spawn; unset, Node picks its own location.                  | `~/.cache/rule-mcp/compile-cache` |
+| `NODE_DISABLE_COMPILE_CACHE` | `1` turns the cache off, including the one the bin enables. The test runner sets it so no suite result depends on a cache another wrote. | unset                                   |
+
+Measured with `pnpm report:startup`: the cache takes 2-6% off a warm start.
+The larger win came from what the entry point no longer loads - `--help` went
+from 216 ms to 48 ms once the command handlers moved behind their actions.
+
 <!-- census:begin:env-registry -->
 
 ## Where each variable is read

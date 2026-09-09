@@ -1,12 +1,15 @@
-/** Help and serve: the usage text command and the STDIO/HTTP/SSE server entry. */
+/**
+ * Help and serve: the usage text command and the STDIO/HTTP/SSE server entry.
+ *
+ * The server, both transports, the skill catalog and the installer are
+ * imported inside `serveCommand` rather than at the top of the file. They are
+ * the whole 185 ms import graph, and `--help`, `--version` and `config` used
+ * to pay for it because they share this module - measured by
+ * `pnpm report:startup`.
+ */
 
-import { HELP_TEXT } from "../index.js";
+import { HELP_TEXT } from "../_help-text.js";
 import { entrypoint, print } from "./_shared.js";
-import { loadAllSkills } from "../../core/skills/index.js";
-import { mcpServerConfig } from "../install/index.js";
-import { startHttpServer } from "../../transport/index.js";
-import { startServer } from "../../server/index.js";
-import { startSseServer } from "../../transport/index.js";
 function helpCommand() {
   print(HELP_TEXT);
 }
@@ -17,6 +20,11 @@ function helpCommand() {
  * @param {object} [opts]
  */
 async function serveCommand(opts = {}) {
+  const { loadAllSkills } = await import("../../core/skills/index.js");
+  const { mcpServerConfig } = await import("../install/index.js");
+  const { startHttpServer, startSseServer } = await import("../../transport/index.js");
+  const { startServer } = await import("../../server/index.js");
+
   await loadAllSkills();
   const transport = opts.transport ?? "stdio";
 

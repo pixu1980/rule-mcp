@@ -2,6 +2,22 @@
 
 const _tools = [];
 
+/**
+ * Bumped by every mutation of the registry.
+ *
+ * `listTools()` converts 105 Zod schemas to JSON Schema, which costs ~8 ms and
+ * produces the same answer until the registry changes. stdio spawns a process
+ * per client, but a daemon serves many connects from one process and paid that
+ * conversion on each of them. The counter is what makes the memo safe: a
+ * register, clear or retain invalidates it by construction.
+ */
+let _generation = 0;
+
+/** @returns {number} the current registry generation. */
+function toolsGeneration() {
+  return _generation;
+}
+
 /** Mandatory before-tool hooks. Failures block execution. */
 const _beforeHooks = {};
 
@@ -54,6 +70,7 @@ function addAfterToolHook(toolName, fn) {
  */
 function clearTools() {
   _tools.length = 0;
+  _generation += 1;
 
   for (const key of Object.keys(_afterHooks)) {
     delete _afterHooks[key];
@@ -75,6 +92,8 @@ function retainTools(allowed) {
       _tools.splice(index, 1);
     }
   }
+
+  _generation += 1;
 }
 
 /**
@@ -90,9 +109,23 @@ function retainTools(allowed) {
  */
 function registerTool(tool) {
   _tools.push(tool);
+  _generation += 1;
 }
 
 /** Tools that change something on disk or in the project. Everything else is a
  * read, so clients use readOnlyHint to skip a confirmation prompt. */
 
-export { countAfterHooks, addBeforeToolHook, addPostToolHook, addAfterToolHook, clearTools, retainTools, registerTool, _tools, _beforeHooks, _postHooks, _afterHooks };
+export {
+  countAfterHooks,
+  addBeforeToolHook,
+  addPostToolHook,
+  addAfterToolHook,
+  clearTools,
+  retainTools,
+  registerTool,
+  toolsGeneration,
+  _tools,
+  _beforeHooks,
+  _postHooks,
+  _afterHooks,
+};

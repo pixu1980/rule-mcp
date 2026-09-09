@@ -47,3 +47,28 @@ test("listTools converts zod schemas and tolerates plain schemas", () => {
     "a plain schema passes through",
   );
 });
+
+// ── PERF-8: the schema conversion is paid once per registry, not per connect ──
+
+test("listTools is memoized on the registry generation", async () => {
+  const { clearTools, registerTool, toolsGeneration } = await import("../_hooks.js");
+  const { listTools } = await import("../_surface.js");
+  const { z } = await import("zod/v4");
+
+  clearTools();
+  registerTool({ name: "rule_tool_memo_a", description: "a", zodSchema: z.object({ q: z.string() }), handler: async () => ({ content: [] }) });
+
+  const first = listTools();
+  assert.equal(listTools(), first, "an unchanged registry returns the same converted array");
+
+  const generation = toolsGeneration();
+  registerTool({ name: "rule_tool_memo_b", description: "b", zodSchema: z.object({ q: z.string() }), handler: async () => ({ content: [] }) });
+
+  assert.notEqual(toolsGeneration(), generation, "registering bumps the generation");
+  const second = listTools();
+  assert.notEqual(second, first, "and the memo is rebuilt");
+  assert.equal(second.length, 2);
+
+  clearTools();
+  assert.deepEqual(listTools(), [], "clearing invalidates it too");
+});

@@ -1,5 +1,12 @@
-/** Server command registrars: serve, up, daemon. */
-import { daemonCommand, serveCommand } from "./commands/index.js";
+/**
+ * Server command registrars: serve, up, daemon.
+ *
+ * The handlers are imported inside the actions, not at the top of the file:
+ * the command declarations are what `--help` renders, and a static handler
+ * import made `--help`, `--version` and `config` pay for the server, both
+ * transports, the skill catalog and 105 tool registrations. Same pattern the
+ * adr and skills registrars already used - see `pnpm report:startup`.
+ */
 
 /** Register the `serve` command. */
 export function registerServeCommand(program) {
@@ -12,10 +19,10 @@ export function registerServeCommand(program) {
     .option("--ssl-cert <path>", "TLS certificate (requires --ssl-key)")
     .option("--ssl-key <path>", "TLS private key (auto-generates self-signed if missing)")
     .allowExcessArguments(false)
-    .action((options) => {
+    .action(async (options) => {
       const port = options.port === undefined ? undefined : parseInt(options.port, 10);
 
-      return serveCommand({
+      return (await import("./commands/_help.js")).serveCommand({
         transport: options.transport ?? "stdio",
         port,
         sslCert: options.sslCert,
@@ -31,10 +38,10 @@ export function registerUpCommand(program) {
     .description('Same as "serve --transport sse" (on-demand HTTP daemon)')
     .option("--port <number>", "port for the SSE server")
     .allowExcessArguments(false)
-    .action((options) => {
+    .action(async (options) => {
       const port = options.port === undefined ? undefined : parseInt(options.port, 10);
 
-      return serveCommand({ transport: "sse", port });
+      return (await import("./commands/_help.js")).serveCommand({ transport: "sse", port });
     });
 }
 
@@ -46,5 +53,5 @@ export function registerDaemonCommand(program) {
     .argument("[action]", "start|stop|status|logs|install|uninstall|enable|disable", "status")
     .option("--dry-run", "preview changes without writing (install/uninstall only)")
     .allowExcessArguments(false)
-    .action((action, options) => daemonCommand({ action, dryRun: options.dryRun }));
+    .action(async (action, options) => (await import("./commands/daemon/index.js")).daemonCommand({ action, dryRun: options.dryRun }));
 }

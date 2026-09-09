@@ -12,6 +12,10 @@ import { globSync } from "node:fs";
 
 import { SUITES } from "./_suites.data.mjs";
 
+// The compiled code cache never changes behavior, but a suite that reads a
+// cache another suite wrote is a suite whose result depends on run order.
+process.env.NODE_DISABLE_COMPILE_CACHE = "1";
+
 const name = process.argv[2];
 const suite = SUITES[name];
 

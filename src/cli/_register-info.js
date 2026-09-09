@@ -1,5 +1,12 @@
-/** Info command registrars: help, tools, stats, cache, roles, guard, update. */
-import { helpCommand, toolsCommand, updateCommand } from "./commands/index.js";
+/**
+ * Info command registrars: help, tools, stats, cache, roles, guard, update.
+ *
+ * The handlers are imported inside the actions, not at the top of the file:
+ * the command declarations are what `--help` renders, and a static handler
+ * import made `--help`, `--version` and `config` pay for the server, both
+ * transports, the skill catalog and 105 tool registrations. Same pattern the
+ * adr and skills registrars already used - see `pnpm report:startup`.
+ */
 import { Option } from "commander";
 
 /** Register the `help` command. */
@@ -7,8 +14,8 @@ export function registerHelpCommand(program) {
   program
     .command("help")
     .description("Show the full usage guide")
-    .action(() => {
-      helpCommand();
+    .action(async () => {
+      (await import("./commands/_help.js")).helpCommand();
     });
 }
 
@@ -21,12 +28,12 @@ export function registerToolsCommand(program) {
     .argument("[name]", "tool name (only for call)")
     .addOption(new Option("--json [value]", "list as JSON, or JSON arguments for call"))
     .allowExcessArguments(false)
-    .action((subcommand, name, options) => {
+    .action(async (subcommand, name, options) => {
       // Option is declared with an optional value: `--json` alone sets
       // options.json === true (a flag), `--json '{...}'` sets it to the string.
       const jsonFlag = options.json === true;
 
-      return toolsCommand({
+      return (await import("./commands/_tools.js")).toolsCommand({
         subcommand,
         toolName: name,
         json: jsonFlag ? "{}" : (options.json ?? "{}"),
@@ -118,5 +125,5 @@ export function registerUpdateCommand(program) {
     .command("update")
     .description("Self-update from the upstream git repo (fast-forward only)")
     .allowExcessArguments(false)
-    .action(() => updateCommand());
+    .action(async () => (await import("./commands/_health.js")).updateCommand());
 }
