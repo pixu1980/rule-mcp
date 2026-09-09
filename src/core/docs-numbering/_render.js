@@ -3,7 +3,7 @@ import { staleCommitReferences } from "./_stale-commits.js";
 /**
  * A human-readable report of a plan.
  *
- * @param {{ collisions: object[], renames: object[] }} plan
+ * @param {{ collisions: object[], gaps: object[], renames: object[] }} plan
  * @returns {string}
  */
 export function renderRenumberPlan(plan, options = {}) {
@@ -12,6 +12,11 @@ export function renderRenumberPlan(plan, options = {}) {
   const willFix = options.fix === true;
 
   const authors = plan.authors ?? [];
+  const gaps = plan.gaps ?? [];
+  // A hole collides with nothing, so a report that only counts collisions
+  // calls a gapped tree clean. Naming the missing numbers is what makes the
+  // report answer the question a reader actually has.
+  const gapLines = gaps.length === 0 ? [] : [`${gaps.length} number(s) missing from the sequence:`, "", ...gaps.map((gap) => `- ${gap.family} ${gap.number}`)];
   const authorLines =
     authors.length === 0
       ? []
@@ -23,7 +28,7 @@ export function renderRenumberPlan(plan, options = {}) {
         ];
 
   if (plan.renames.length === 0 && !plan.indexUnordered) {
-    const clean = "Numbering is clean: no duplicate ADR or handoff numbers, and the ADR index is in order.";
+    const clean = "Numbering is clean: no duplicate ADR or handoff numbers, no gaps, and the ADR index is in order.";
 
     return authors.length === 0 ? clean : [clean, "", ...authorLines].join("\n");
   }
@@ -37,7 +42,15 @@ export function renderRenumberPlan(plan, options = {}) {
     ].join("\n");
   }
 
-  const lines = [`${plan.collisions.length} collision(s) found:`, ""];
+  // The gap clause only appears when there are gaps: "0 gap(s)" in the header
+  // of every collision report is noise, and a reader scanning for the count
+  // they came for should find it where it has always been.
+  const counted = gaps.length > 0 ? `${plan.collisions.length} collision(s) and ${gaps.length} gap(s)` : `${plan.collisions.length} collision(s)`;
+  const lines = [`${counted} found:`, ""];
+
+  if (gapLines.length > 0) {
+    lines.push(...gapLines, "");
+  }
 
   if (authorLines.length > 0) {
     lines.push(...authorLines, "");
