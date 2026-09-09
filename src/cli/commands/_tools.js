@@ -2,7 +2,7 @@
 
 import { callTool, listTools } from "../../tools/router/index.js";
 import { entrypoint, parseJson, print, printJson } from "./_shared.js";
-import { formatToolsList } from "../index.js";
+import { formatToolsList } from "../_tui-formats.js";
 import { loadAllSkills } from "../../core/skills/index.js";
 import { mcpServerConfig } from "../install/index.js";
 async function toolsCommand(opts) {
