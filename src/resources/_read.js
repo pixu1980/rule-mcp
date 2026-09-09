@@ -1,4 +1,4 @@
-/** @module resources/read - serve one pix:// resource */
+/** @module resources/read - serve one pix:// body; `./_serve.js` is the way out callers use */
 
 import { readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
@@ -6,12 +6,12 @@ import { getSkillsDirs as getSkillsDirectories } from "../cli/paths/index.js";
 import { readSkill } from "../tools/router/index.js";
 
 /**
- * Read a resource by its URI and return its contents.
+ * Serve a resource by its URI, before compression.
  *
- * @param {string} uri - Resource URI (e.g. "pix://skills", "pix://pix-frontend-react")
+ * @param {string} uri - e.g. "pix://skills", "pix://pix-frontend-react"
  * @returns {Promise<{ contents: Array<{ uri: string, mimeType: string, text: string }> }>}
  */
-export async function readResource(uri) {
+export async function serveResource(uri) {
   // Bundled skills only - the same single source of truth the tool surface uses.
   const { embeddedSkills } = getSkillsDirectories();
 

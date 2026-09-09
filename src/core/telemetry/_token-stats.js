@@ -17,11 +17,27 @@ const stats = {
   directivesTerse: 0,
 };
 
-/** Record one caveman compression pass. */
-export function addCompression(bytesIn, bytesOut) {
+/**
+ * Bytes saved per emitting surface: tool results, resource reads, prompt
+ * bodies. One total hid the answer to the only question worth asking about
+ * coverage - which surface is still leaving uncompressed.
+ *
+ * @type {Record<string, number>}
+ */
+const savedBySource = {};
+
+/**
+ * Record one caveman compression pass.
+ *
+ * @param {number} bytesIn
+ * @param {number} bytesOut
+ * @param {string} [source] "caveman" (tool results), "caveman-resource", "caveman-prompt"
+ */
+export function addCompression(bytesIn, bytesOut, source = "caveman") {
   stats.compressionCalls += 1;
   stats.compressionBytesIn += bytesIn;
   stats.compressionBytesOut += bytesOut;
+  savedBySource[source] = (savedBySource[source] ?? 0) + Math.max(0, bytesIn - bytesOut);
 }
 
 /** Record one tokensave suppression (bytesSaved = omitted bytes). */
@@ -46,6 +62,7 @@ export function getTokenStats() {
   return {
     ...stats,
     compressionSaved,
+    savedBySource: { ...savedBySource },
     bytesSavedTotal: compressionSaved + stats.suppressedBytesSaved,
   };
 }
@@ -54,5 +71,9 @@ export function getTokenStats() {
 export function resetTokenStats() {
   for (const key of Object.keys(stats)) {
     stats[key] = 0;
+  }
+
+  for (const key of Object.keys(savedBySource)) {
+    delete savedBySource[key];
   }
 }
