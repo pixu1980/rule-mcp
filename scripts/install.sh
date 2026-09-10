@@ -905,7 +905,7 @@ fi
 # ─────────────────────────────────────────────────────────────────────────────
 header "Phase 6b: Agent Commands"
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" \&\& pwd)"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 if [[ -f "${SCRIPT_DIR}/install-agent-commands.sh" ]]; then
   if [[ "$DRY_RUN" == "true" ]]; then
     sub "[dry-run] Would run: ${SCRIPT_DIR}/install-agent-commands.sh"
