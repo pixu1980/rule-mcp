@@ -3,3 +3,6 @@ contact_links:
   - name: Security vulnerability report
     url: https://github.com/pixu1980/rule-mcp/security/advisories/new
     about: Do not file public issues for suspected vulnerabilities. Use the private advisory form.
+  - name: Code of conduct report
+    url: mailto:pisuemiliano.1980@gmail.com
+    about: Report a conduct problem privately, as CODE_OF_CONDUCT.md describes.
