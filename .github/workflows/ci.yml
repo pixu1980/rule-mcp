@@ -109,5 +109,5 @@ jobs:
           cache: "pnpm"
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
-      - name: pnpm audit (production)
-        run: pnpm audit --prod
+      - name: Dependency audit gate
+        run: pnpm audit:gate
