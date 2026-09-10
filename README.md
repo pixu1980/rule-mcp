@@ -664,7 +664,8 @@ Small fixes need no ceremony; structural change needs an ADR first.
 Start at [CONTRIBUTING.md](./CONTRIBUTING.md), then
 [GOVERNANCE.md](./GOVERNANCE.md) for who decides,
 [CODE_OF_CONDUCT.md](./CODE_OF_CONDUCT.md) for the standard of behavior, and
-[SECURITY.md](./SECURITY.md) for reporting vulnerabilities. The deeper
+[SECURITY.md](./SECURITY.md) for reporting vulnerabilities, and
+[ROADMAP.md](./ROADMAP.md) for where the project is going. The deeper
 engineering material lives in [`docs/07-engineering-guides.md`](./docs/07-engineering-guides.md).
 
 ## License
