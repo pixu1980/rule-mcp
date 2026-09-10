@@ -28,8 +28,8 @@ SHASUM=$(shasum -a 256 "${NAME}-${VERSION}.tgz" 2>/dev/null | cut -d' ' -f1 || e
 cat > "${NAME}.rb" << FORMULA
 class PixGalaxyMcp < Formula
   desc "MCP server for the pix-* skill ecosystem"
-  homepage "https://github.com/pix-galaxy/pix-galaxy-mcp"
-  url "https://registry.npmjs.org/${NAME}/-/${NAME}-${VERSION}.tgz"
+  homepage "https://github.com/pixu1980/pix-galaxy-mcp"
+  url "https://github.com/pixu1980/pix-galaxy-mcp/releases/download/v${VERSION}/${NAME}-${VERSION}.tgz"
   sha256 "${SHASUM}"
   license "MIT"
 
