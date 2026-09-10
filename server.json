@@ -1,6 +1,6 @@
 {
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
-  "name": "io.github.pix/pix-galaxy-mcp",
+  "name": "io.github.pixu1980/pix-galaxy-mcp",
   "title": "pix-galaxy-mcp",
   "description": "MCP server for the pix-* skill ecosystem. Serves styleguides, component templates, framework best practices, and design system patterns.",
   "repository": {
