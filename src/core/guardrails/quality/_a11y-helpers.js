@@ -1,3 +1,5 @@
+
+
 /** Literal-masking and context helpers used by the a11y guardrail family. */
 
 /** Lines short enough to hand-write; a kilobytes-long line is generated output. */

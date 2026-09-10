@@ -1,3 +1,5 @@
+
+
 /**
  * Phase 2c (plan: execution-plan.md) — resources/list descriptions.
  *

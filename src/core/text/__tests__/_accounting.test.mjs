@@ -1,3 +1,5 @@
+
+
 /** The accounting: the ratio is the measured saving, and the recorder books it. */
 import { strict as assert } from "node:assert";
 import { test } from "node:test";

@@ -1,3 +1,5 @@
+
+
 /** @module scripts/data/wcag/flatten */
 
 /** Flatten the principle/guideline/criterion tree into one keyed record. */

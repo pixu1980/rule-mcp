@@ -1,4 +1,6 @@
 #!/usr/bin/env node
+
+
 /**
  * @module scripts/update-wcag-data
  *

@@ -1,3 +1,5 @@
+
+
 /** @module core/guardrails/file-tree/component-folder-barrel */
 
 export const componentFolderBarrel = {

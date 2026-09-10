@@ -1,3 +1,5 @@
+
+
 /** The receipt: never replayed - fresh token, fresh expiry, bound to this call's content. */
 import { mock, test } from "node:test";
 import assert from "node:assert/strict";

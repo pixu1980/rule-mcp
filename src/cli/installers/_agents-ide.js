@@ -1,3 +1,5 @@
+
+
 /**
  * Installers for IDE/desktop agents: VS Code, JetBrains, Neovim, Emacs, Devin,
  * the generic fallback installer, and platform path helpers.

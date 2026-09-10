@@ -1,3 +1,5 @@
+
+
 /** The cadence: full once a session, free in between, terse every Nth, configurable, opt-out. */
 import { strict as assert } from "node:assert";
 import { test } from "node:test";

@@ -1,3 +1,5 @@
+
+
 /** Guardrail `vanilla-template-load`: Template loaded via fetch or bundle-text */
 export const vanillaTemplateLoad = {
   id: "vanilla-template-load",

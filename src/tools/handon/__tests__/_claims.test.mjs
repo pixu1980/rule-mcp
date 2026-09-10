@@ -1,3 +1,5 @@
+
+
 /** The scripted repository: every stale claim gets the verdict it deserves. */
 import test from "node:test";
 import assert from "node:assert/strict";

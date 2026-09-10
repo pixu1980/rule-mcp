@@ -1,3 +1,5 @@
+
+
 /** @module transport/sse/message-route - POST /message: relay one MCP message */
 
 import { safeJsonParse } from "../../utils/index.js";

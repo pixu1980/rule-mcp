@@ -1,3 +1,5 @@
+
+
 /** @module scripts/install/git-hooks/containment - is a hooks target inside the git directory? */
 
 import { posix, win32 } from "node:path";

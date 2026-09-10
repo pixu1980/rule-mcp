@@ -1,3 +1,5 @@
+
+
 /** Guardrail `js-throw-new-error`: throw requires new for error constructors */
 import { countedVerdict } from "../../../../shared/index.js";
 export const jsThrowNewError = {

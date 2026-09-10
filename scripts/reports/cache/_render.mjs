@@ -1,3 +1,5 @@
+
+
 /** @module scripts/reports/cache/render - the human-readable report */
 
 export function renderReport(report) {

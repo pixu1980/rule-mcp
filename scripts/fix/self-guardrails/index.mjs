@@ -1,3 +1,5 @@
+
+
 /**
  * One-shot style fixer for the repo's own guardrail rules (self-guardrails,
  * F-A1 discipline). Mirrors exactly the detectors in framework.js/shared.js so

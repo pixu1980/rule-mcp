@@ -1,3 +1,5 @@
+
+
 /**
  * Text writers: TOML blocks, instruction markers, and the sidecar command
  * template builders (commandBody, geminiCommand, copilotAgent).

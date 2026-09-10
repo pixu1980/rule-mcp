@@ -1,3 +1,5 @@
+
+
 /** Docker mode contract: the client config and container share one SSE token. */
 import { strict as assert } from "node:assert";
 import { readFileSync } from "node:fs";

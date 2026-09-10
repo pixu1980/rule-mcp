@@ -1,3 +1,5 @@
+
+
 /** @module core/guardrails/file-tree/component-export-check */
 
 export const componentExportCheck = {

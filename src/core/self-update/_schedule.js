@@ -1,3 +1,5 @@
+
+
 /** The update scheduler: throttled background checks, the pending banner, restarts. */
 import { autoUpdateEnabled, intervalMs } from "./_config.js";
 import { runSelfUpdate } from "./_run.js";

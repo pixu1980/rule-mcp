@@ -1,3 +1,5 @@
+
+
 /** The generated docs/adr/ADR.md index: tables, themes, and the rewrite. */
 import { writeFileSync } from "node:fs";
 import { join } from "node:path";

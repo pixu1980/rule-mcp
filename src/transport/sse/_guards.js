@@ -1,3 +1,5 @@
+
+
 /** @module transport/sse/guards */
 
 import { timingSafeEqual } from "node:crypto";

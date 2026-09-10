@@ -1,3 +1,5 @@
+
+
 import { findRaggedBoxes } from "../../../text/ascii-box/index.js";
 
 /** Guardrail `fp-box-rectangular`: A drawn box is a rectangle */

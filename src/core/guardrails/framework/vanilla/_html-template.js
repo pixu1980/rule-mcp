@@ -1,3 +1,5 @@
+
+
 /** Guardrail `vanilla-html-template`: Component uses html`` tagged template */
 export const vanillaHtmlTemplate = {
   id: "vanilla-html-template",

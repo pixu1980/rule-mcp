@@ -1,3 +1,5 @@
+
+
 import { z } from "zod/v4";
 
 /** Input schema of the rule routing tool. */

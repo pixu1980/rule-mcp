@@ -1,3 +1,5 @@
+
+
 /**
  * Hardening 0.1 (F-S1 partial): checkCode rejects oversize input fast.
  *

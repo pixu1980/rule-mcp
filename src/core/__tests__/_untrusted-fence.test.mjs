@@ -1,3 +1,5 @@
+
+
 /**
  * Hardening 4.4 (F-A3): repo-sourced text reaches the agent as data, never as
  * instructions.

@@ -1,3 +1,5 @@
+
+
 /** Tool registry state and hook management (before/post/after), plus register/clear/retain. */
 
 const _tools = [];

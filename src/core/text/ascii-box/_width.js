@@ -1,3 +1,5 @@
+
+
 /** @module core/text/ascii-box/width - display width, wide and zero-width ranges */
 
 /**

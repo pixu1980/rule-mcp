@@ -1,3 +1,5 @@
+
+
 /** Every prompt: implementation, one argument, help path, commit-scope closer. */
 import { strict as assert } from "node:assert";
 import { test } from "node:test";

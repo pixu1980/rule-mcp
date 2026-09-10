@@ -1,3 +1,5 @@
+
+
 /** rule_tool_plan: registered, answers per role, applies overrides, resolves aliases. */
 import { strict as assert } from "node:assert";
 import test from "node:test";

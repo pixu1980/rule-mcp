@@ -1,3 +1,5 @@
+
+
 /**
  * Building a plan must perform no work: the review screen shows it before
  * the user has agreed to anything.

@@ -1,3 +1,5 @@
+
+
 /** roles CLI edges: json list, show json, usage errors, unknown replacements. */
 import { strict as assert } from "node:assert";
 import { test } from "node:test";

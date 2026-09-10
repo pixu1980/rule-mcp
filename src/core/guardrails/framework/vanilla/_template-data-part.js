@@ -1,3 +1,5 @@
+
+
 /** Guardrail `vanilla-template-data-part`: External templates use data-part selectors */
 export const vanillaTemplateDataPart = {
   id: "vanilla-template-data-part",

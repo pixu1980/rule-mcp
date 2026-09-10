@@ -1,3 +1,5 @@
+
+
 /** Guardrail `js-no-array-for-each`: for...of over Array.forEach() */
 import { countedVerdict } from "../../../../shared/index.js";
 export const jsNoArrayForEach = {

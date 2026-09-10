@@ -1,3 +1,5 @@
+
+
 /** Regression: config --mode daemon must emit the daemon/SSE MCP snippet. */
 import { strict as assert } from "node:assert";
 import { execFileSync } from "node:child_process";

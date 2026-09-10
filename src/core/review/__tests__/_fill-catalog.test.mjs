@@ -1,3 +1,5 @@
+
+
 /** Role template filling and the persona catalog loader, on a scratch dir. */
 import { strict as assert } from "node:assert";
 import { mkdtempSync, rmSync, writeFileSync } from "node:fs";

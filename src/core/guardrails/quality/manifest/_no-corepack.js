@@ -1,3 +1,5 @@
+
+
 import { manifestOf } from "../_guards-meta.js";
 
 /** Guardrail `pkg-no-corepack`: No corepack activation fields */

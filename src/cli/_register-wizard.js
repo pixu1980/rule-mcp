@@ -1,3 +1,5 @@
+
+
 /**
  * Registrar for the `setup` command: the full-screen install/uninstall wizard.
  *

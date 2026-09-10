@@ -1,3 +1,5 @@
+
+
 /** Register the rule_tool_gateway orchestration tool. */
 import { GATEWAY_CORE_TOOL, gatewayCoreArguments, computeGatewayCore } from "./_core.js";
 import { renderGatewayReply } from "./_render.js";

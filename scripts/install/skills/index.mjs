@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 
+
+
 /**
  * Install only the skills bundled in this repository to ~/.agents/skills/.
  * Existing bundled skills are replaced; unrelated custom skills are preserved.

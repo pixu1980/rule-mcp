@@ -1,3 +1,5 @@
+
+
 /** Regression: installed-agent detection must look at VS Code's global config. */
 import { strict as assert } from "node:assert";
 import { execFileSync } from "node:child_process";

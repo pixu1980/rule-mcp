@@ -1,3 +1,5 @@
+
+
 // Phantom update: a branch ahead of upstream is not an update, and banners stay honest.
 import test from "node:test";
 import assert from "node:assert/strict";

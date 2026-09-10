@@ -1,3 +1,5 @@
+
+
 import { reductionSignal } from "./_reduction-signal.js";
 
 /** Prompt words that mark a structural change worth an ADR. */

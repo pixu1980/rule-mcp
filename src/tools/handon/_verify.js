@@ -1,3 +1,5 @@
+
+
 /** Walk every claim in a handoff and record what still holds. */
 import { existsSync } from "node:fs";
 import { join } from "node:path";

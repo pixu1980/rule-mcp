@@ -1,3 +1,5 @@
+
+
 /** Register the rule_tool_process_handon MCP tool. */
 import { z } from "zod/v4";
 import { registerTool } from "../router/index.js";

@@ -1,3 +1,5 @@
+
+
 /** Guardrail `vanilla-fn-no-register`: Functional component does NOT call customElements.define */
 export const vanillaFnNoRegister = {
   id: "vanilla-fn-no-register",

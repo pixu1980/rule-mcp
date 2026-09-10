@@ -1,3 +1,5 @@
+
+
 /** Shutdown flag and waiters: the one piece of shared lifecycle state. */
 let _shuttingDown = null;
 let _waiters = [];

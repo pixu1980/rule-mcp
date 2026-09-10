@@ -1,3 +1,5 @@
+
+
 /** Guardrail `js-node-protocol`: node: protocol for Node builtins */
 import { countedVerdict } from "../../../../shared/index.js";
 export const jsNodeProtocol = {

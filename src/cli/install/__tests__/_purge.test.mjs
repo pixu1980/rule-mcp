@@ -1,3 +1,5 @@
+
+
 /**
  * Behavioral: `uninstall.sh --purge` and `--keep-config` against a seeded
  * fake HOME, through the bootstrap the user actually runs.

@@ -1,3 +1,5 @@
+
+
 /** The argument guards: depth, key count, plain objects, for scanning. */
 import { strict as assert } from "node:assert";
 import test from "node:test";

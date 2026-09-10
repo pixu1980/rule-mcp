@@ -1,3 +1,5 @@
+
+
 /** Recording rules: what a tool call records, what it must not, and the kill switches. */
 import { chmodSync, mkdtempSync, readFileSync } from "node:fs";
 import { tmpdir } from "node:os";

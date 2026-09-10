@@ -1,3 +1,5 @@
+
+
 /** Named skills must keep their load-bearing content, and every MCP tool a useful description. */
 import { strict as assert } from "node:assert";
 

@@ -1,3 +1,5 @@
+
+
 /** The English gate: every ADR is written in English, filename included. */
 import { scanDocumentForForeign, scanPathForForeign } from "../../core/text/en-english/index.js";
 

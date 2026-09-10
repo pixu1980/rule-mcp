@@ -1,3 +1,5 @@
+
+
 /** Behavioral: the install bootstrap recreates the runtime home after a purge. */
 import { strict as assert } from "node:assert";
 import { execFileSync } from "node:child_process";

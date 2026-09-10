@@ -1,3 +1,5 @@
+
+
 /** Guardrail `js-single-line-method`: Class method bodies must be multi-line */
 import { countedVerdict } from "../../../../shared/index.js";
 export const jsSingleLineMethod = {

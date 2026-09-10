@@ -1,3 +1,5 @@
+
+
 /** @module scripts/fix/self-guardrails/blank-blocks - js-blank-lines-blocks */
 
 export function apply(text) {

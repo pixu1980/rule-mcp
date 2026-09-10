@@ -1,3 +1,5 @@
+
+
 /** @module core/telemetry/store/events */
 
 import { appendFileSync, existsSync, readFileSync, statSync, writeFileSync } from "node:fs";

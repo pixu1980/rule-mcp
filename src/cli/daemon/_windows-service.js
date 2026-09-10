@@ -1,3 +1,5 @@
+
+
 /** Windows service adapter: the sc.exe command, install, uninstall, check. */
 import { execSync } from "node:child_process";
 import { resolveEntrypoint, tryExec } from "./_service-shared.js";

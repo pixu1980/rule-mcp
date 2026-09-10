@@ -1,3 +1,5 @@
+
+
 /** @module core/text/en-english/scan - the three scanners: code, path, document */
 
 import { FOREIGN_TOKENS } from "../_en-english.data.js";

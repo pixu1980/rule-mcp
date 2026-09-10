@@ -1,3 +1,5 @@
+
+
 /** @module cli/guard/decide - allow, ask, or block one tool call */
 
 import { extname } from "node:path";

@@ -1,3 +1,5 @@
+
+
 /** doctor detection: agent config validation, IDE/model/dir checks on a fake HOME. */
 import { strict as assert } from "node:assert";
 import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";

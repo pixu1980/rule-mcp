@@ -1,3 +1,5 @@
+
+
 /** Guardrail `js-new-for-builtins`: new required for Map/Set/Date/Array/WeakMap/WeakSet */
 import { countedVerdict } from "../../../../shared/index.js";
 export const jsNewForBuiltins = {

@@ -1,3 +1,5 @@
+
+
 /** Framework guardrail catalog: per-framework families plus the shared JS and file-tree rules. */
 import { FILE_TREE_GUARDRAILS } from "../file-tree/index.js";
 import { REACT_GUARDRAILS } from "./_react.js";

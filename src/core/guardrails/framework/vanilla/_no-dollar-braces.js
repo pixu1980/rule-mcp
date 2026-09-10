@@ -1,3 +1,5 @@
+
+
 // Pattern C: External HTML Template
 
 /** Guardrail `vanilla-no-dollar-braces`: External templates do NOT contain ${} closures */

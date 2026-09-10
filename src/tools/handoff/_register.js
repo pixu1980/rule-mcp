@@ -1,3 +1,5 @@
+
+
 /** Register the rule_tool_process_handoff MCP tool. */
 import { registerTool } from "../router/index.js";
 import { HandoffSchema } from "./_schema.js";

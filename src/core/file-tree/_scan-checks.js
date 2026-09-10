@@ -1,3 +1,5 @@
+
+
 import { readFileSync } from "node:fs";
 import { join, extname, parse } from "node:path";
 import { COMPONENT_EXTENSIONS, isBarrelFile, isPrefixedComponent, isBareComponent } from "./_conventions.js";

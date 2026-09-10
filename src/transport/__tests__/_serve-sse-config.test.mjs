@@ -1,3 +1,5 @@
+
+
 /** End-to-end: serve --transport sse prints a matching remote MCP config. */
 import { strict as assert } from "node:assert";
 import { spawn } from "node:child_process";

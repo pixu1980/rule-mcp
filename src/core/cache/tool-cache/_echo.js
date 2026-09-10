@@ -1,3 +1,5 @@
+
+
 /** The echo check that gates the normalized tier. */
 import { NORMALIZABLE } from "./_state.js";
 

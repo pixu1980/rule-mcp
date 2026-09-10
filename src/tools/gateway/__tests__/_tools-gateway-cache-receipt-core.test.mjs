@@ -1,3 +1,5 @@
+
+
 /** The deterministic core: cached under its own key, receipt-free, and actually consulted. */
 import { test } from "node:test";
 import assert from "node:assert/strict";

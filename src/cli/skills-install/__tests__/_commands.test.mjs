@@ -1,3 +1,5 @@
+
+
 /** skills install/list: catalog discovery, copying, batch install, native mirror. */
 import { strict as assert } from "node:assert";
 import { existsSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, rmSync, writeFileSync } from "node:fs";

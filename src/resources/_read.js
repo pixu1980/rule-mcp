@@ -1,9 +1,12 @@
+
+
 /** @module resources/read - serve one rule:// body; `./_serve.js` is the way out callers use */
 
 import { readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 import { getSkillsDirs as getSkillsDirectories } from "../cli/paths/index.js";
 import { readSkill } from "../tools/router/index.js";
+import { serveStaticText } from "./_static.js";
 
 /**
  * Serve a resource by its URI, before compression.
@@ -57,25 +60,11 @@ export async function serveResource(uri) {
     };
   }
 
-  // ── rule skill ───────────────────────────────────────────
-  if (uri === "rule://ai") {
-    return { contents: [{ uri, mimeType: "text/markdown", text: readSkill("rule") || "" }] };
-  }
+  // ── Static text: rule://ai, rule://a11y ──────────────────────────
+  const staticText = serveStaticText(uri);
 
-  // ── A11y resources ─────────────────────────────────────────────
-  if (uri === "rule://a11y") {
-    return {
-      contents: [
-        {
-          uri,
-          mimeType: "text/markdown",
-          text:
-            "For the full a11y testing guide with Playwright + axe-core, see rule-styleguide a11y.md Section 12: Automated Testing.\n\n" +
-            "Use `rule_tool_component component=a11y-test-basic` to generate test files.\n" +
-            "Use `rule_tool_component component=playwright-config` to generate Playwright config.",
-        },
-      ],
-    };
+  if (staticText) {
+    return { contents: staticText };
   }
 
   if (uri === "rule://a11y/test-basic") {

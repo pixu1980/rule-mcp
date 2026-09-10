@@ -1,3 +1,5 @@
+
+
 /** @module scripts/fix/self-guardrails/const-top - js-const-top: blank after a declaration group */
 
 import { CONTINUES, DECL } from "./_decl.mjs";

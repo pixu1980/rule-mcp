@@ -1,3 +1,5 @@
+
+
 /** Quality guardrail catalog: one rule per file, grouped in family folders. */
 import { TYPESCRIPT_GUARDRAILS } from "./typescript/index.js";
 import { PROSE_GUARDRAILS } from "./prose/index.js";

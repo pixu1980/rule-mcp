@@ -1,3 +1,5 @@
+
+
 /** Service management: the platform detection and the install/uninstall dispatch. */
 import { platform } from "node:os";
 import { startDaemonProcess, stopDaemonProcess } from "./_process.js";

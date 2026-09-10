@@ -1,3 +1,5 @@
+
+
 /**
  * Regression: the SSE daemon must use the persisted token that installer
  * configurations contain; regenerating a token at every start breaks clients.

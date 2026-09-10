@@ -264,18 +264,18 @@ works.
   - [x] **16.4**: Add .github/CODEOWNERS mapping * to the maintainer and docs/adr/ to the BDFL.
   - [ ] **16.5**: Owner action: enable branch protection on main requiring the ci checks and one review for outside contributors, and record the exact setting in GOVERNANCE.md so it is auditable.
   - [ ] **16.6**: Gate: the ADR is present and docs/adr/ADR.md regenerated; pnpm census:check green; CODEOWNERS resolves on a test PR.
-- [ ] **Step 17 - OSS-17 (medium)**: No source file carries an SPDX identifier. The license is declared once in package.json and once in LICENSE, and 0 of 935 JavaScript files under src/, bin/ and scripts/ state their license, so file-level provenance cannot be established by a scanner and a copied file leaves the project without its terms.
-  - [ ] **17.1**: Write the failing check: a script or test that walks every tracked .js and .mjs under src/, bin/ and scripts/ and fails on a file with no SPDX-License-Identifier line.
-  - [ ] **17.2**: Add scripts/reports/license-headers/index.mjs with --check and --apply: it inserts the SPDX-FileCopyrightText and SPDX-License-Identifier lines at the top of each source file that lacks them, preserving any shebang.
-  - [ ] **17.3**: Run the --apply pass, then wire the --check form into ci.yml as its own job so a new file cannot land without a header.
-  - [ ] **17.4**: Restructure to the REUSE layout: `LICENSES/MIT.txt`, `LICENSE` kept at the root as the human-readable pointer.
-  - [ ] **17.5**: Run pnpx reuse lint over the tree and clear what it reports, then record the layout choice in an ADR if it differs from the flat LICENSE the project has today.
-  - [ ] **17.6**: Gate: pnpx reuse lint reports zero files without licensing information; the header check job green.
+- [x] **Step 17 - OSS-17 (medium)**: No source file carries an SPDX identifier. The license is declared once in package.json and once in LICENSE, and 0 of 935 JavaScript files under src/, bin/ and scripts/ state their license, so file-level provenance cannot be established by a scanner and a copied file leaves the project without its terms.
+  - [x] **17.1**: Write the failing check: scripts/reports/license-headers/index.mjs --check (989 files red) a script or test that walks every tracked .js and .mjs under src/, bin/ and scripts/ and fails on a file with no SPDX-License-Identifier line.
+  - [x] **17.2**: Add scripts/reports/license-headers/index.mjs with --check and --apply: it inserts the SPDX-FileCopyrightText and SPDX-License-Identifier lines at the top of each source file that lacks them, preserving any shebang.
+  - [x] **17.3**: Run the --apply pass, then wire the --check form into ci.yml as a license job as its own job so a new file cannot land without a header.
+  - [x] **17.4**: Restructure to the REUSE layout: LICENSES/MIT.txt plus REUSE.toml (dep5 is deprecated upstream) `LICENSES/MIT.txt`, `LICENSE` kept at the root as the human-readable pointer.
+  - [x] **17.5**: Run reuse lint over the tree and clear what it reports: 1538/1538 compliant (via pip venv - no npm reuse binary exists; 3 files tipped over budget were split per ADR 061) then record the layout choice in an ADR if it differs from the flat LICENSE the project has today.
+  - [x] **17.6**: Gate: reuse lint reports zero files without licensing information; test:all green (1209/0) the header check job green.
 - [ ] **Step 18 - OSS-18 (medium)**: Three different identities name the copyright. LICENSE says Pix, the git author is Emiliano Pisu, and the GitHub owner is pixu1980, so no downstream scanner or lawyer can map the copyright to one holder. The interview resolved the holder: pixu1980.
   - [x] **18.1**: Set the LICENSE line to "Copyright (c) 2025-2026 pixu1980".
   - [x] **18.2**: Add author, repository, bugs and homepage to package.json (done early by 21.4, verified here) (author pixu1980, repository github:pixu1980/rule-mcp) - this also closes half of OSS-21.
   - [x] **18.3**: Add an AUTHORS file listing pixu1980 with the contact address, so a contributor list has a home before the first outside contribution.
-  - [ ] **18.4**: Feed the same holder string into the SPDX header stamp from OSS-17 so the two cannot disagree.
+  - [x] **18.4**: Feed the same holder string into the SPDX header stamp from OSS-17: HOLDER is 2025-2026 pixu1980, matching LICENSE, AUTHORS and package.json so the two cannot disagree.
   - [x] **18.5**: Gate: grep over LICENSE, AUTHORS and package.json shows one holder only; pnpm census:check green.
 - [x] **Step 19 - OSS-19 (medium)**: The two commit gates disagree. The pull request title check accepts twelve types including release and does not check the scope; the local hook requires a scope and accepts eleven types without release. A contributor who passes one fails the other.
   - [x] **19.1**: Write the failing test tests/docs/commit-gates.test.mjs: parse both files, assert the type lists are identical, and assert release is either in both or in neither.

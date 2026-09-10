@@ -1,3 +1,5 @@
+
+
 // test/prompt-suppression.test.mjs
 //
 // When RULE_MCP_NO_PROMPTS=1, the server must hide its MCP prompts so the

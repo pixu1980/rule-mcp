@@ -1,3 +1,5 @@
+
+
 /** @module core/telemetry/recorder/buffer */
 
 import { appendEvents } from "../store/index.js";

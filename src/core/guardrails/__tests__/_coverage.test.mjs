@@ -1,3 +1,5 @@
+
+
 /** Coverage: every rule carries a labeled pair, and the floor only rises. */
 import { strict as assert } from "node:assert";
 import { test } from "node:test";

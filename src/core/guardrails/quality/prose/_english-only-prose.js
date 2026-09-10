@@ -1,3 +1,5 @@
+
+
 import { scanCodeForForeign, scanDocumentForForeign } from "../../../text/en-english/index.js";
 
 /** Guardrail `en-english-only-prose`: English-only prose */

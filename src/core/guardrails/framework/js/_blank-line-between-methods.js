@@ -1,3 +1,5 @@
+
+
 /** Guardrail `js-blank-line-between-methods`: Blank line between class methods */
 import { countedVerdict } from "../../../../shared/index.js";
 export const jsBlankLineBetweenMethods = {

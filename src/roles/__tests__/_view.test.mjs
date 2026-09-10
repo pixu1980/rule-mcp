@@ -1,3 +1,5 @@
+
+
 /** list and show: the merged catalog, its layers, and the unknown-role refusal. */
 import { strict as assert } from "node:assert";
 import { test } from "node:test";

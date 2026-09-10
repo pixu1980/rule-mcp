@@ -1,3 +1,5 @@
+
+
 /** Transcript fallbacks: zero-valued counters keep earlier totals, agents absent. */
 import { strict as assert } from "node:assert";
 import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";

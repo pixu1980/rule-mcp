@@ -1,3 +1,5 @@
+
+
 /** @module core/session/resume/signal - is this prompt a resume request? */
 
 /**

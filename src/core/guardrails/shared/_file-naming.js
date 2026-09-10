@@ -1,3 +1,5 @@
+
+
 /** Guardrail `file-naming`: File naming convention (_PascalCase.js) */
 export const fileNaming = {
   id: "file-naming",

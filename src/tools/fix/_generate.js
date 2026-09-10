@@ -1,3 +1,5 @@
+
+
 /** @module tools/fix/generate - mode=generate: create a component file tree */
 import { errorResult } from "../../shared/index.js";
 /** @module tools/fix/generate - mode=generate: create a component file tree */

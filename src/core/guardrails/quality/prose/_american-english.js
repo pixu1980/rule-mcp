@@ -1,3 +1,5 @@
+
+
 import { findFingerprints } from "../../../text/fingerprint/index.js";
 
 /** Guardrail `fp-american-english`: American English spelling */

@@ -1,3 +1,5 @@
+
+
 /**
  * Prettier drift guard: the block the installer appends must be byte-identical
  * to the block committed in ./CLAUDE.md.

@@ -1,3 +1,5 @@
+
+
 // test/self-update-remote-pin fixture
 //
 // Audit finding 06 - the forced self-update fetches and fast-forwards on every

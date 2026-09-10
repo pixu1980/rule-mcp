@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 
+
+
 /**
  * @module bin/rule-mcp
  *

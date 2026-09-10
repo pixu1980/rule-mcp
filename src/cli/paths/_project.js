@@ -1,3 +1,5 @@
+
+
 /** @module cli/paths/project - the per-project recording directory and its slug */
 
 import { createHash } from "node:crypto";

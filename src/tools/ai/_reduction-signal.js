@@ -1,3 +1,5 @@
+
+
 /** Phrases that mark a prompt as a scope challenge rather than a build request. */
 const REDUCTION_SIGNALS = [
   "over engineering",

@@ -1,3 +1,5 @@
+
+
 import { findFingerprints } from "../../../text/fingerprint/index.js";
 
 /** Guardrail `fp-no-emdash`: No em or en dashes */

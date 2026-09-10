@@ -1,3 +1,5 @@
+
+
 /** rule_tool_a11y_report: WCAG-EM structure, EARL JSON-LD, honest conformance. */
 import { WCAG_EM_STEPS, buildReport, check, criteriaForLevel, finish } from "./_a11y.fixture.mjs";
 

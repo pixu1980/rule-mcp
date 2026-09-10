@@ -1,3 +1,5 @@
+
+
 /** @module tools/skill/check-tool */
 
 import { z } from "zod/v4";

@@ -1,3 +1,5 @@
+
+
 /**
  * Phase 4b (plan: execution-plan.md) — write-time compression of agent command
  * files.

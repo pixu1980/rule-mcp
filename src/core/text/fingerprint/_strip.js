@@ -1,3 +1,5 @@
+
+
 /** @module core/text/fingerprint/strip - rewrite the fingerprints away, line by line */
 
 import { cleanLine, looksLikeJson } from "./_rewrite-line.js";

@@ -1,3 +1,5 @@
+
+
 /** registerSkillTool: plugin names keep their prefix, rule names strip it. */
 import { strict as assert } from "node:assert";
 import { test } from "node:test";

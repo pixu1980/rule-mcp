@@ -1,3 +1,5 @@
+
+
 /** The vanilla-template-load guardrail: each Pattern C permutation. */
 import { strict as assert } from "node:assert";
 import test from "node:test";

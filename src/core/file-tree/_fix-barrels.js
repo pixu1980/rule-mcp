@@ -1,3 +1,5 @@
+
+
 import { readdirSync, writeFileSync } from "node:fs";
 import { join, extname, basename, dirname, parse } from "node:path";
 import { COMPONENT_EXTENSIONS, isBarrelFile } from "./_conventions.js";

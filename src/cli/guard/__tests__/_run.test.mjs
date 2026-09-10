@@ -1,3 +1,5 @@
+
+
 /** The guard hook: stdin reading, TTY short-circuits and fail-open answers. */
 import { strict as assert } from "node:assert";
 import { test } from "node:test";

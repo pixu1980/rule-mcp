@@ -1,3 +1,5 @@
+
+
 /** Quiet async git for the updater. */
 import { execFile } from "node:child_process";
 import { promisify } from "node:util";

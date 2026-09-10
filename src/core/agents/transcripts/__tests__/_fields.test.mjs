@@ -1,3 +1,5 @@
+
+
 /** Transcript adapters: codex/opencode field folding, windows, and fs helpers. */
 import { strict as assert } from "node:assert";
 import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";

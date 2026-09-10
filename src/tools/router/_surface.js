@@ -1,3 +1,5 @@
+
+
 /** Registered-tool inventory: mutation classification, annotations, declared and public tool lists. */
 
 import { _tools, toolsGeneration } from "./_hooks.js";

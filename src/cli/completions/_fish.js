@@ -1,3 +1,5 @@
+
+
 /** @module cli/completions/fish */
 
 export function generateFish() {

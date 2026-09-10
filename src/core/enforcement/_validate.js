@@ -1,3 +1,5 @@
+
+
 /** @module core/enforcement/validate - the shape a result must have before it leaves */
 
 import { MAX_OUTPUT_BYTES } from "./_input.js";

@@ -1,3 +1,5 @@
+
+
 /** Shared guardrail shapes: the typed skip gate and the counted verdict. */
 
 /** Extensions that select TypeScript checks. */

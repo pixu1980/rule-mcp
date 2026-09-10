@@ -1,3 +1,5 @@
+
+
 /** The handoff format ladder: brief, minimal, close-session and the budget degrade. */
 import { strict as assert } from "node:assert";
 import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";

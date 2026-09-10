@@ -1,3 +1,5 @@
+
+
 // canonicalFilesDigest: no in-band separator ambiguity - the receipt binds exactly one shape.
 import test from "node:test";
 import assert from "node:assert/strict";

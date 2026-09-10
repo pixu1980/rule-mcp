@@ -1,3 +1,5 @@
+
+
 /** @module core/skills/detect-tool - the rule_tool_detect registration */
 
 import { z } from "zod/v4";

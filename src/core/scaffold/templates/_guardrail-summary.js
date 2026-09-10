@@ -1,3 +1,5 @@
+
+
 /** @module core/scaffold/templates/guardrail-summary */
 
 import { checkCode } from "../../guardrails/index.js";

@@ -1,3 +1,5 @@
+
+
 /** @module tools/a11y/tool */
 
 import { z } from "zod/v4";

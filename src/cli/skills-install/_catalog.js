@@ -1,3 +1,5 @@
+
+
 /** @module cli/skills-install/catalog - discover, inspect and copy the shipped skills */
 
 import { copyFileSync, existsSync, mkdirSync, readdirSync, readFileSync, rmSync } from "node:fs";

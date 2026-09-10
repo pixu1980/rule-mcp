@@ -1,3 +1,5 @@
+
+
 /** formatDoctorTerminal and its helpers: every branch renders, nothing stays dark. */
 import { strict as assert } from "node:assert";
 import test from "node:test";

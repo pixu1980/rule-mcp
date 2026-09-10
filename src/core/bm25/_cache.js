@@ -1,3 +1,5 @@
+
+
 /** On-disk index cache: read, write, stats. */
 
 import { mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";

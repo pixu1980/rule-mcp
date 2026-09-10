@@ -1,3 +1,5 @@
+
+
 import { scanPathForForeign } from "../../../text/en-english/index.js";
 
 /** Guardrail `en-english-only-filenames`: English-only file and folder names */

@@ -1,3 +1,5 @@
+
+
 /** @module scripts/fix/self-guardrails/blank-before-return - js-blank-line-before-return */
 
 export function apply(text) {

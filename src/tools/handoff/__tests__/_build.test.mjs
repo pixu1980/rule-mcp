@@ -1,3 +1,5 @@
+
+
 /** The handoff builder: sections per format, sources, and the budget degrade. */
 import { strict as assert } from "node:assert";
 import { execFileSync } from "node:child_process";

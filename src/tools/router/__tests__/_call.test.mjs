@@ -1,3 +1,5 @@
+
+
 /** callTool's error paths: validation failures and failing guardrail results. */
 import { strict as assert } from "node:assert";
 import { mkdtempSync } from "node:fs";

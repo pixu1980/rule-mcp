@@ -1,3 +1,5 @@
+
+
 /** Regression: the public CLI must parse and propagate --mode. */
 import { strict as assert } from "node:assert";
 import { execFileSync } from "node:child_process";

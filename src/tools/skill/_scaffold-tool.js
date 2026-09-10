@@ -1,3 +1,5 @@
+
+
 /** @module tools/skill/scaffold-tool */
 
 import { z } from "zod/v4";

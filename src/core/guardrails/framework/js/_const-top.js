@@ -1,3 +1,5 @@
+
+
 /** Guardrail `js-const-top`: Variable declarations grouped at top */
 export const jsConstTop = {
   id: "js-const-top",

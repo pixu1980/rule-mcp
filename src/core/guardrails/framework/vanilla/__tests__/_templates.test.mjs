@@ -1,3 +1,5 @@
+
+
 /** Generated component templates pass their own flex-first rule. */
 import { run } from "./_flex.fixture.mjs";
 import test from "node:test";

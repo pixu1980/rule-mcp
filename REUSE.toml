@@ -1,0 +1,14 @@
+# Bulk licensing: docs, skills, workflows and manifests are covered here.
+# Tracked source files carry their own SPDX headers instead (see
+# scripts/reports/license-headers/): per-file terms travel with a copied
+# file, which a central record cannot do.
+version = 1
+SPDX-PackageName = "rule-mcp"
+SPDX-PackageSupplier = "pixu1980 <pisuemiliano.1980@gmail.com>"
+SPDX-PackageDownloadLocation = "https://github.com/pixu1980/rule-mcp"
+
+[[annotations]]
+path = "**"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2025-2026 pixu1980"
+SPDX-License-Identifier = "MIT"

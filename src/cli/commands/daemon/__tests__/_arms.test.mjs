@@ -1,3 +1,5 @@
+
+
 /** daemonCommand arms: status, logs, dry-run lifecycle, enable/disable, unknown. */
 import { strict as assert } from "node:assert";
 import { existsSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";

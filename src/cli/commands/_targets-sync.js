@@ -1,3 +1,5 @@
+
+
 /** @module cli/commands/targets-sync - write the command files into every resolved target */
 
 import { renderAgentCommandFiles } from "../../core/agents/commands/index.js";

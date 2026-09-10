@@ -1,3 +1,5 @@
+
+
 /** Rendering: MCP-prompt suppression, the .prompt.md format, and placeholder hygiene. */
 import { strict as assert } from "node:assert";
 import { test } from "node:test";

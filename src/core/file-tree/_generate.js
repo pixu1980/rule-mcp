@@ -1,3 +1,5 @@
+
+
 /** Generate a convention-correct component folder for a framework. */
 import { join } from "node:path";
 

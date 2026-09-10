@@ -1,3 +1,5 @@
+
+
 /** Regression: doctor validates VS Code's `servers` schema, not mcpServers. */
 import { strict as assert } from "node:assert";
 import { execFileSync } from "node:child_process";

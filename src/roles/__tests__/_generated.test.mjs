@@ -1,3 +1,5 @@
+
+
 /** The generated surfaces: three prompts and three commands per active role, all from the registry. */
 import { strict as assert } from "node:assert";
 import test from "node:test";

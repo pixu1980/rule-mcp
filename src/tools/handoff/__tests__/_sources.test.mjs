@@ -1,3 +1,5 @@
+
+
 /** The handoff sources: ADR parsing edge shapes and context formats. */
 import { strict as assert } from "node:assert";
 import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";

@@ -1,3 +1,5 @@
+
+
 /** @module core/telemetry/stats/flight-sections - the tail sections of the flight report */
 
 import { countTable, kb, num, pct, table, usd } from "./_format.js";

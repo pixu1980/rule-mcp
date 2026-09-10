@@ -1,3 +1,5 @@
+
+
 /** Multilingual alias map: non-English domain keywords to English. Data file: exempt from the size cap. */
 export const MULTILINGUAL_ALIASES = {
   sicuro: "secure",

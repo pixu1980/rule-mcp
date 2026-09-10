@@ -1,3 +1,5 @@
+
+
 import { extractRealCSS, looksLikeStylesheet } from "../_util.js";
 
 /** Guardrail `external-css`: External CSS via adoptedStyleSheets or framework-native import */

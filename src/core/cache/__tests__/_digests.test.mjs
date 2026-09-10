@@ -1,3 +1,5 @@
+
+
 /** Skill digests and entry survival: unchanged stays, changed or vanished drops. */
 import test from "node:test";
 import assert from "node:assert/strict";

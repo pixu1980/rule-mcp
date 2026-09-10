@@ -1,3 +1,5 @@
+
+
 /** The sweep timer: unref'd housekeeping that is never the reason a process stays alive. */
 export function startSweeper(registry, intervalMs) {
   registry._sweeper ??= setInterval(() => {

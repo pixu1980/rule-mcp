@@ -1,3 +1,5 @@
+
+
 /** The auto-log entry fields, one shape per logged tool. */
 
 /** Title, tags and body lines for one auto-logged call, by tool. */

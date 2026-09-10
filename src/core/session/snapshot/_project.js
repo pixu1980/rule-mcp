@@ -1,3 +1,5 @@
+
+
 /** @module core/session/snapshot/project - the whole-project snapshot */
 
 import { readFileSync, readdirSync, statSync } from "node:fs";

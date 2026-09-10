@@ -1,3 +1,5 @@
+
+
 /** @module core/text/fingerprint/rewrite-line - the per-line rewrites */
 
 import { CHARACTER_MAP, SEQUENCE_MAP, RE_ENDINGS, WORDS } from "../_fingerprint.data.js";

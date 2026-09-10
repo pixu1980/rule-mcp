@@ -1,4 +1,6 @@
 #!/usr/bin/env node
+
+
 /**
  * @module scripts/install/git-hooks
  *
@@ -22,6 +24,7 @@ import { chmodSync, copyFileSync, existsSync, mkdirSync, readdirSync, readFileSy
 import { join } from "node:path";
 
 import { isInsideGitDir } from "./_containment.mjs";
+import { shim } from "./_shim.mjs";
 
 const check = process.argv.includes("--check");
 
@@ -48,26 +51,6 @@ if (!ROOT) {
 }
 
 const TRACKED = join(ROOT, ".githooks");
-
-/**
- * The shim that stands in `.git/hooks/` for one tracked hook. It resolves the
- * root at run time, so the clone can be moved.
- *
- * @param {string} name
- * @returns {string}
- */
-function shim(name) {
-  return [
-    "#!/bin/sh",
-    "# Installed by scripts/install/git-hooks. Do not edit:",
-    `# the hook itself is tracked at .githooks/${name}.`,
-    'root="$(git rev-parse --show-toplevel 2>/dev/null)"',
-    `hook="$root/.githooks/${name}"`,
-    '[ -x "$hook" ] || exit 0',
-    'exec "$hook" "$@"',
-    "",
-  ].join("\n");
-}
 
 /**
  * Where THIS CLONE keeps its hooks.

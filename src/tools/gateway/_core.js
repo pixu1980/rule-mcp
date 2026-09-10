@@ -1,3 +1,5 @@
+
+
 /** The gateway's deterministic core: route, domain override, evidence, guardrail verdict. */
 
 /**

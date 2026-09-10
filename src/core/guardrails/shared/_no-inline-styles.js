@@ -1,3 +1,5 @@
+
+
 /** Guardrail `no-inline-styles`: Zero inline styles in templates */
 export const noInlineStyles = {
   id: "no-inline-styles",

@@ -1,3 +1,5 @@
+
+
 /** TypeScript quality guardrails, one rule per file. */
 import { tsNoExplicitAny } from "./_no-explicit-any.js";
 import { tsCatchUnknown } from "./_catch-unknown.js";

@@ -1,3 +1,5 @@
+
+
 /** @module cli/installers/uninstall - the editor uninstallers and the registry */
 
 import { existsSync } from "node:fs";

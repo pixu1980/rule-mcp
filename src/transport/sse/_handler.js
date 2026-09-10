@@ -1,3 +1,5 @@
+
+
 /** @module transport/sse/handler - route dispatch, auth and the error envelope */
 
 import https from "node:https";

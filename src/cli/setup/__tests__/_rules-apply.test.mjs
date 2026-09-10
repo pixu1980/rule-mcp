@@ -1,3 +1,5 @@
+
+
 /**
  * Install and uninstall must agree on where the block lives - the asymmetry
  * that left Cursor's file dirty forever is what these tests pin down.

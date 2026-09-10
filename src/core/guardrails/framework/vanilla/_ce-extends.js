@@ -1,3 +1,5 @@
+
+
 // Pattern A: Custom Element + html``
 
 /** Guardrail `vanilla-ce-extends`: Custom Element extends HTMLElement */

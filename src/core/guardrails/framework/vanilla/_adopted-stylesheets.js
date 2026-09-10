@@ -1,3 +1,5 @@
+
+
 /** Guardrail `vanilla-adopted-stylesheets`: CSS via adoptedStyleSheets in static {} block */
 export const vanillaAdoptedStylesheets = {
   id: "vanilla-adopted-stylesheets",

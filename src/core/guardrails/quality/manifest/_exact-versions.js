@@ -1,3 +1,5 @@
+
+
 import { INSTALLED_GROUPS, isPinned, manifestOf } from "../_guards-meta.js";
 
 /** Guardrail `pkg-exact-versions`: Dependencies are pinned exactly */

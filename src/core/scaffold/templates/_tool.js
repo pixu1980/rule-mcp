@@ -1,3 +1,5 @@
+
+
 /** @module core/scaffold/templates/tool */
 
 import { z } from "zod/v4";

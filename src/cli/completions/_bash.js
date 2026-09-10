@@ -1,3 +1,5 @@
+
+
 /** @module cli/completions/bash */
 
 export function generateBash() {

@@ -1,3 +1,5 @@
+
+
 /**
  * Installers for CLI-focused agents: Claude, Codex, Cursor, Copilot, Gemini, Pi.
  * @module cli/installers/agents-cli

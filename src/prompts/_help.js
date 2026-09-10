@@ -1,3 +1,5 @@
+
+
 /** The generic `/rule-* help` machinery: trigger tokens, examples, the usage block. */
 import { PROMPT_EXAMPLES } from "./_defs.data.js";
 

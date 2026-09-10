@@ -1,3 +1,5 @@
+
+
 /** @module core/telemetry/flight/envelope */
 
 import { homedir } from "node:os";

@@ -1,3 +1,5 @@
+
+
 /** The one response shape a tool hands back: a text-only MCP result. */
 
 /** @param {string} text @returns {{ content: Array<{ type: "text", text: string }> }} */

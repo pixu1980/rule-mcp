@@ -1,3 +1,5 @@
+
+
 /** rule_tool_component: every handler arm over the registered tool. */
 import { strict as assert } from "node:assert";
 import { test } from "node:test";

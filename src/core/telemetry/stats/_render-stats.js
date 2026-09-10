@@ -1,3 +1,5 @@
+
+
 /** @module core/telemetry/stats/render-stats */
 
 import { compact, top } from "./_format.js";

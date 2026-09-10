@@ -1,3 +1,5 @@
+
+
 /** English stopword table filtered from the BM25 index and queries. Data file: exempt from the size cap. */
 
 export const STOPWORDS = new Set([

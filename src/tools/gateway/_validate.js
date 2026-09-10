@@ -1,3 +1,5 @@
+
+
 /** Receipt validation: the read path and the write path. */
 import { createHash } from "node:crypto";
 import { canonicalFilesDigest, openReceipt } from "./_receipts.js";

@@ -1,3 +1,5 @@
+
+
 /** The prompt path: resume signals, the announcement decision, and the one-door latch. */
 import { rmSync } from "node:fs";
 

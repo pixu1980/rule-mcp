@@ -1,3 +1,5 @@
+
+
 /** @module scripts/build/changelog/history - the commits and tags, read from git */
 
 import { execFileSync } from "node:child_process";

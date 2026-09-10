@@ -1,3 +1,5 @@
+
+
 /** After-hooks: fire-and-forget decoration registered per tool. */
 import { _afterHooks } from "../_hooks.js";
 

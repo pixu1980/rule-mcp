@@ -1,3 +1,5 @@
+
+
 /** The guardrails: wiring on every skill, prose, identifiers, docs, spellings, filenames. */
 import { strict as assert } from "node:assert";
 import test from "node:test";

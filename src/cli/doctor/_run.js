@@ -1,3 +1,5 @@
+
+
 /** Assemble the doctor report: SDK, agents, daemon, environment, telemetry. */
 import { existsSync, readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";

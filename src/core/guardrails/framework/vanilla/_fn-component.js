@@ -1,3 +1,5 @@
+
+
 // Pattern B: Functional Component
 
 /** Guardrail `vanilla-fn-component`: Functional component is a plain function */

@@ -1,3 +1,5 @@
+
+
 /** @module core/text/ascii-box/frames - the box-drawing character tables and box detection */
 
 /** Opening corners. A box starts here. */

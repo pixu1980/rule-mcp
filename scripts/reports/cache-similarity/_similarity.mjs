@@ -1,3 +1,5 @@
+
+
 /** @module scripts/reports/cache-similarity/similarity - variants, term sets and jaccard */
 
 const { canonicalizeQuery } = await import("../../../src/core/bm25/index.js");

@@ -1,3 +1,5 @@
+
+
 /** @module transport/sse/state - what one running SSE daemon shares across its routes */
 
 import { SessionRegistry } from "../session-registry/index.js";

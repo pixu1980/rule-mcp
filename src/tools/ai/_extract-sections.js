@@ -1,3 +1,5 @@
+
+
 /**
  * Extract `## Section` headings from SKILL.md content.
  * Strips YAML frontmatter so metadata keywords don't pollute scoring.

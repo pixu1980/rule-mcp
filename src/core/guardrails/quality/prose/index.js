@@ -1,3 +1,5 @@
+
+
 /** Prose and typography guardrails (fingerprint + English-only), one rule per file. */
 import { fpNoEmdash } from "./_no-emdash.js";
 import { fpNoTypographicChars } from "./_no-typographic-chars.js";
