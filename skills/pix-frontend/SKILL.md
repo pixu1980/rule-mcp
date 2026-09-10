@@ -19,14 +19,14 @@ frameworks: [all]
 
 ## UI Frameworks
 
-| Skill                                                          | Framework                | Reactive Model | State Mgmt      |
-| -------------------------------------------------------------- | ------------------------ | -------------- | --------------- |
-| [pix-frontend-react](../pix-frontend-react/SKILL.md)           | React 18+                | useState/hooks | Context + hooks |
-| [pix-frontend-vue](../pix-frontend-vue/SKILL.md)               | Vue 3                    | ref()/reactive | Pinia           |
-| [pix-frontend-angular](../pix-frontend-angular/SKILL.md)       | Angular 16+ (standalone) | signal()       | Signals         |
-| [pix-frontend-svelte](../pix-frontend-svelte/SKILL.md)         | Svelte 5                 | $state (runes) | Runes           |
-| [pix-frontend-solidjs](../pix-frontend-solidjs/SKILL.md)       | SolidJS                  | createSignal   | Signals         |
-| [pix-meta-astro](../pix-meta-astro/SKILL.md) | Astro (islands)          | Per-framework  | Per-framework   |
+| Skill                                                    | Framework                | Reactive Model | State Mgmt      |
+| -------------------------------------------------------- | ------------------------ | -------------- | --------------- |
+| [pix-frontend-react](../pix-frontend-react/SKILL.md)     | React 18+                | useState/hooks | Context + hooks |
+| [pix-frontend-vue](../pix-frontend-vue/SKILL.md)         | Vue 3                    | ref()/reactive | Pinia           |
+| [pix-frontend-angular](../pix-frontend-angular/SKILL.md) | Angular 16+ (standalone) | signal()       | Signals         |
+| [pix-frontend-svelte](../pix-frontend-svelte/SKILL.md)   | Svelte 5                 | $state (runes) | Runes           |
+| [pix-frontend-solidjs](../pix-frontend-solidjs/SKILL.md) | SolidJS                  | createSignal   | Signals         |
+| [pix-meta-astro](../pix-meta-astro/SKILL.md)             | Astro (islands)          | Per-framework  | Per-framework   |
 
 ## Rules that hold whichever framework you route to
 
@@ -46,8 +46,8 @@ frameworks: [all]
 
 ## Meta-Frameworks
 
-| Skill                                                          | Based On        | Features                                   |
-| -------------------------------------------------------------- | --------------- | ------------------------------------------ |
+| Skill                                        | Based On        | Features                                   |
+| -------------------------------------------- | --------------- | ------------------------------------------ |
 | [pix-meta-next](../pix-meta-next/SKILL.md)   | Next.js (React) | App Router, SSR/SSG/ISR, server components |
 | [pix-meta-nuxt](../pix-meta-nuxt/SKILL.md)   | Nuxt 3 (Vue)    | File-based routing, SSR/SSG, auto-imports  |
 | [pix-meta-remix](../pix-meta-remix/SKILL.md) | Remix (React)   | Nested routing, loaders/actions, SSR       |
