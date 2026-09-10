@@ -36,7 +36,11 @@ approving review for contributors outside the maintainer list. Enabling it
 is owner action 16.5 of docs/plans/oss.md; this section records the exact
 setting so it is auditable once enabled.
 
-## Funding and neutrality
+## Funding
 
-Donations do not buy roadmap priority and do not change this process.
-Who controls the account is stated wherever funding is documented.
+The project is unfunded today: no donations have been received and no
+expenses are covered by anyone but the maintainer. The GitHub Sponsors
+account, when created, is controlled by the BDFL, who reports what came
+in and what it covered. Sponsorship buys no roadmap priority.
+Donations do not change the decision process above: an ADR still needs
+its reasons, and money is never one of them.

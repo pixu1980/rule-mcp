@@ -314,10 +314,10 @@ works.
   - [ ] **24.4**: Extend the Table of Contents to cover the new sections and ROADMAP.md, and check every anchor resolves.
   - [ ] **24.5**: Walk the readme skill checklist end to end: first paragraph sells it, every number is sourced, the example runs, getting started works from a clean machine.
   - [ ] **24.6**: Gate: pnpm test:foundations (which covers tests/docs/docs-accuracy.test.mjs) green; every ToC anchor resolves; the checklist walked and recorded in the review evidence.
-- [ ] **Step 25 - OSS-25 (medium)**: There is no funding surface at all: no FUNDING.yml, no Sponsors section and no statement of where money would go or who controls it. The interview resolved the platform: GitHub Sponsors. Absent a policy, a sponsor cannot tell what they are funding.
-  - [ ] **25.1**: Add .github/FUNDING.yml with github: pixu1980, which is what makes the Sponsor button render.
-  - [ ] **25.2**: Add a Sponsors section to README.md stating what the money is spent on (hosting, release infrastructure, maintainer time) and that sponsorship buys no roadmap priority.
-  - [ ] **25.3**: Add a Funding section to GOVERNANCE.md stating who controls the account, that the project is unfunded today, and that donations do not change the decision process - so the answer survives a later review without a new file.
+- [x] **Step 25 - OSS-25 (medium)**: There is no funding surface at all: no FUNDING.yml, no Sponsors section and no statement of where money would go or who controls it. The interview resolved the platform: GitHub Sponsors. Absent a policy, a sponsor cannot tell what they are funding.
+  - [x] **25.1**: Add .github/FUNDING.yml with github: pixu1980, which is what makes the Sponsor button render.
+  - [x] **25.2**: Add a Sponsors section to README.md stating what the money is spent on (hosting, release infrastructure, maintainer time) and that sponsorship buys no roadmap priority.
+  - [x] **25.3**: Add a Funding section to GOVERNANCE.md stating who controls the account, that the project is unfunded today, and that donations do not change the decision process - so the answer survives a later review without a new file.
   - [ ] **25.4**: Owner action: create the GitHub Sponsors profile and mirror the same policy text there, so the two descriptions agree.
   - [ ] **25.5**: Gate: the Sponsor button renders on the repository; the README and GOVERNANCE policy text match word for word.
 - [ ] **Step 26 - OSS-26 (medium)**: The project name is neither protectable nor claimed. There is no trademark or naming policy; Pix is the brand of the Brazilian instant-payment system and a common product word, and the npm package name and the io.github.rule registry namespace are both unclaimed and open to squatting.

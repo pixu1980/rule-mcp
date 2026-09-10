@@ -668,6 +668,12 @@ Start at [CONTRIBUTING.md](./CONTRIBUTING.md), then
 [ROADMAP.md](./ROADMAP.md) for where the project is going. The deeper
 engineering material lives in [`docs/07-engineering-guides.md`](./docs/07-engineering-guides.md).
 
+## Sponsors
+
+rule-mcp is unfunded today. Sponsorship through [GitHub Sponsors](https://github.com/sponsors/pixu1980)
+would go to hosting, release infrastructure, and maintainer time.
+Sponsorship buys no roadmap priority.
+
 ## License
 
 MIT - see [LICENSE](./LICENSE).
