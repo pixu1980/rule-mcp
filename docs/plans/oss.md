@@ -209,10 +209,10 @@ works.
   - [x] **7.5**: Delete stale remote branches that still carry the old workflows (only main plus the working branch exist; nothing to delete) - an attacker exploits the old copy.
   - [ ] **7.6**: Gate: node --test tests/docs/action-pins.test.mjs green; the zizmor job green on main.
 - [ ] **Step 8 - OSS-13 (high)**: The CI workflow grants id-token: write to every job at workflow scope. The lint job, the six-cell test matrix, the coverage job and the audit job all install dependencies and none of them needs to mint an OIDC token; a compromised dependency in any of them inherits the ability.
-  - [ ] **8.1**: Write the failing test tests/docs/workflow-permissions.test.mjs: no workflow may set id-token, contents: write or actions: write at workflow scope, and every checkout step must set persist-credentials: false.
-  - [ ] **8.2**: In .github/workflows/ci.yml remove id-token: write from the workflow scope; keep contents: read as the default and add job-level permissions only where a job needs more.
-  - [ ] **8.3**: Add persist-credentials: false to every actions/checkout step in both workflows.
-  - [ ] **8.4**: Confirm the release workflow still works after the change and that any job needing id-token gets it at job scope only (relevant once OSS-22 and OSS-27 add one).
+  - [x] **8.1**: Write the failing test tests/docs/workflow-permissions.test.mjs: no workflow may set id-token, contents: write or actions: write at workflow scope, and every checkout step must set persist-credentials: false.
+  - [x] **8.2**: In .github/workflows/ci.yml remove id-token: write from the workflow scope; keep contents: read as the default and add job-level permissions only where a job needs more.
+  - [x] **8.3**: Add persist-credentials: false to every actions/checkout step in both workflows.
+  - [x] **8.4**: Confirm the release workflow still works after the change (gh-release keeps contents:write at job scope; local zizmor clean) and that any job needing id-token gets it at job scope only (relevant once OSS-22 and OSS-27 add one).
   - [ ] **8.5**: Gate: node --test tests/docs/workflow-permissions.test.mjs green; zizmor clean; the CI matrix still passes.
 - [ ] **Step 9 - OSS-14 (high)**: Dependencies are pinned exactly and nothing updates them. There is no Dependabot or Renovate configuration and no install cooldown configured, so every transitive security fix is manual, and the exact-pin policy has no adoption delay behind it.
   - [ ] **9.1**: Add .github/dependabot.yml with the npm and github-actions ecosystems, weekly schedule, grouped minor and patch updates, and commit-message prefixes that satisfy the scope gate (for example chore(deps)).
