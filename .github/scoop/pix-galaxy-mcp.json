@@ -1,22 +1,22 @@
 {
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "MCP server for the pix-* skill ecosystem",
-  "homepage": "https://github.com/pix/pix-galaxy-mcp",
+  "homepage": "https://github.com/pixu1980/pix-galaxy-mcp",
   "license": "MIT",
   "architecture": {
     "64bit": {
-      "url": "https://github.com/pix/pix-galaxy-mcp/releases/download/v0.1.0/pix-galaxy-mcp.tgz",
-      "hash": "PLACEHOLDER"
+      "url": "https://github.com/pixu1980/pix-galaxy-mcp/releases/download/v1.0.0/pix-galaxy-mcp-1.0.0.tgz",
+      "hash": "f6ae7f0ede4664a8d7f5a29e7500ecd7902be26690c84d6c4e6b9ff341e2da4e"
     }
   },
   "bin": [["bin/pix-galaxy-mcp.js", "pix-galaxy-mcp"]],
   "checkver": {
-    "github": "https://github.com/pix/pix-galaxy-mcp"
+    "github": "https://github.com/pixu1980/pix-galaxy-mcp"
   },
   "autoupdate": {
     "architecture": {
       "64bit": {
-        "url": "https://github.com/pix/pix-galaxy-mcp/releases/download/v$version/pix-galaxy-mcp.tgz"
+        "url": "https://github.com/pixu1980/pix-galaxy-mcp/releases/download/v$version/pix-galaxy-mcp-$version.tgz"
       }
     }
   }
