@@ -12,6 +12,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      # Tag, package.json, server.json and CHANGELOG must agree; --apply
+      # wires into the pack job once Step 6 adds one.
+      - name: Version sync
+        run: node scripts/build/version/index.mjs --check
       - name: Extract changelog entry
         id: changelog
         run: |

@@ -4,6 +4,12 @@
   "description": "MCP server for the pix-* skill ecosystem. Serves styleguides, component templates, framework best practices, and design system patterns.",
   "type": "module",
   "license": "MIT",
+  "author": "pixu1980",
+  "homepage": "https://github.com/pixu1980/pix-galaxy-mcp",
+  "repository": "github:pixu1980/pix-galaxy-mcp",
+  "bugs": {
+    "url": "https://github.com/pixu1980/pix-galaxy-mcp/issues"
+  },
   "private": false,
   "publishConfig": {
     "access": "public"
