@@ -676,4 +676,5 @@ Sponsorship buys no roadmap priority.
 
 ## License
 
-MIT - see [LICENSE](./LICENSE).
+MIT - see [LICENSE](./LICENSE). The name is covered separately in
+[TRADEMARK.md](./TRADEMARK.md).

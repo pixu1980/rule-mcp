@@ -8,6 +8,8 @@ this directory are the source of truth; this index is generated from them by
 
 | #                                                                                                                       | Title                                                                                                     | Date       | Status     | Tags                                                                                |
 | ----------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- | ---------- | ---------- | ----------------------------------------------------------------------------------- |
+| [085](085-reset-the-project-version-to-0-1-0-first-release-will-be-v0-1-0.md)                                           | Reset the project version to 0.1.0, first release will be v0.1.0                                          | 2026-09-10 | accepted   | release, versioning                                                                 |
+| [084](084-keep-the-name-with-a-written-posture-no-npm-placeholder-yet.md)                                               | Keep the name with a written posture, no npm placeholder yet                                              | 2026-09-10 | accepted   | naming, legal                                                                       |
 | [083](083-governance-is-an-explicit-bdfl-with-a-path-to-co-maintainers.md)                                              | Governance is an explicit BDFL with a path to co-maintainers                                              | 2026-09-10 | accepted   | governance, community                                                               |
 | [082](082-release-artifacts-are-github-tarballs-not-registry-packages.md)                                               | Release artifacts are GitHub tarballs, not registry packages                                              | 2026-09-10 | accepted   | registry, release                                                                   |
 | [081](081-mcp-registry-identity-is-the-github-owner-not-a-claimed-brand.md)                                             | MCP registry identity is the GitHub owner, not a claimed brand                                            | 2026-09-10 | accepted   | registry, release                                                                   |
@@ -99,6 +101,8 @@ file. Where a line stops short the rest is in the ADR.
 
 | ADR                                                                                                                     | Decision                                                                                                                                                                                                                        | Consequence                                                                                                                                                                                                                    |
 | ----------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| [085](085-reset-the-project-version-to-0-1-0-first-release-will-be-v0-1-0.md)                                           | Reset the project version to 0.1.0 in package.json, server.json (both version fields), the CHANGELOG release heading and the scoop/winget manifests with recomputed hashes.                                                     | package.json, server.json, CHANGELOG and the distribution manifests go back to 0.1.0 with recomputed hashes; tag v1.0.0 is deleted locally and remotely; the Step 26 placeholder question is settled (publish v0.1.0, no...    |
+| [084](084-keep-the-name-with-a-written-posture-no-npm-placeholder-yet.md)                                               | Keep the rule-mcp name with a written trademark posture (TRADEMARK.md) instead of a filing.                                                                                                                               | TRADEMARK.md states the boundary; README links it next to the license; the npm placeholder decision stays an explicit open owner item with a review date.                                                                      |
 | [083](083-governance-is-an-explicit-bdfl-with-a-path-to-co-maintainers.md)                                              | Governance is an explicit BDFL (pixu1980) with a documented path to co-maintainers.                                                                                                                                             | GOVERNANCE.md, MAINTAINERS.md and CODEOWNERS record the model; docs/adr/ stays the decision log; branch protection (owner action 16.5) makes one-review-for-outsiders mechanical.                                              |
 | [082](082-release-artifacts-are-github-tarballs-not-registry-packages.md)                                               | Release artifacts are signed GitHub Release tarballs, not registry packages: the pipeline packs the tarball, checksums it with SHA256SUMS, installs it from scratch to prove it, and attaches both files to the GitHub...       | release.yml grows build/verify/release jobs; the tarball plus SHA256SUMS are the shippable unit and the documented verify path; npm distribution stays out of scope so OSS-4 remains a documentation fix.                      |
 | [081](081-mcp-registry-identity-is-the-github-owner-not-a-claimed-brand.md)                                             | server.json name is io.github.pixu1980/rule-mcp, derived from repository.url.                                                                                                                                             | server.json is publishable in shape; the npm packages[] entry is untouched (out of scope, revisit with the release pipeline in Step 6); actual registry publication stays an explicit owner action.                            |
@@ -355,6 +359,13 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [050](050-round-two-hardening-cycles-daemon-cleanup-diagnostics.md) Round-2 hardening - cycles, daemon/commands split, diagnostics, HTTP verification
 - [049](049-split-hotspot-modules.md) Split the hotspot modules (guardrails + installer)
 
+### release
+
+- [085](085-reset-the-project-version-to-0-1-0-first-release-will-be-v0-1-0.md) Reset the project version to 0.1.0, first release will be v0.1.0
+- [082](082-release-artifacts-are-github-tarballs-not-registry-packages.md) Release artifacts are GitHub tarballs, not registry packages
+- [081](081-mcp-registry-identity-is-the-github-owner-not-a-claimed-brand.md) MCP registry identity is the GitHub owner, not a claimed brand
+- [048](048-v100-release-and-docs-accuracy-guard.md) v1.0.0 release and the docs-accuracy guard
+
 ### backend
 
 - [053](053-gateway-as-the-single-entrypoint-with-server-side-receipts-backend-data-devops-g.md) Gateway as the single entrypoint with server-side receipts; backend/data/devops guardrail families
@@ -385,6 +396,12 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [019](019-use-a-persistent-local-bearer-token-for-daemon-transport.md) use a persistent local bearer token for daemon transport
 - [018](018-fail-closed-mcp-enforcement-and-reusable-agent-commands.md) fail closed mcp enforcement and reusable agent commands
 
+### naming
+
+- [084](084-keep-the-name-with-a-written-posture-no-npm-placeholder-yet.md) Keep the name with a written posture, no npm placeholder yet
+- [007](007-thematic-skill-taxonomy-rename.md) thematic skill taxonomy rename
+- [001](001-thematic-skill-rename.md) Thematic Skill Taxonomy Rename
+
 ### new
 
 - [012](012-database-skills.md) Database Skills
@@ -408,12 +425,6 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [082](082-release-artifacts-are-github-tarballs-not-registry-packages.md) Release artifacts are GitHub tarballs, not registry packages
 - [081](081-mcp-registry-identity-is-the-github-owner-not-a-claimed-brand.md) MCP registry identity is the GitHub owner, not a claimed brand
 - [052](052-pre-packaged-mcp-prompt-registry-26-prompts-strict-schemas-commit-scope-closer.md) Pre-packaged MCP prompt registry (26 prompts, strict schemas, commit-scope closer)
-
-### release
-
-- [082](082-release-artifacts-are-github-tarballs-not-registry-packages.md) Release artifacts are GitHub tarballs, not registry packages
-- [081](081-mcp-registry-identity-is-the-github-owner-not-a-claimed-brand.md) MCP registry identity is the GitHub owner, not a claimed brand
-- [048](048-v100-release-and-docs-accuracy-guard.md) v1.0.0 release and the docs-accuracy guard
 
 ### security
 
