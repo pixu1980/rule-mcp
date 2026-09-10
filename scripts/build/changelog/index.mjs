@@ -23,6 +23,32 @@ import { renderRelease, toEntry } from "./_render.mjs";
 
 export { SECTION_FOR_TYPE } from "./_sections.mjs";
 
+/**
+ * The static preamble every generated changelog starts with.
+ *
+ * Exported so the test that pins the committed file to the generated header
+ * compares against the header itself, not against a whole generated document:
+ * a shallow clone, which is what a checkout gives CI, sees a truncated
+ * history and therefore no entries - and no entries meant no `## [` for the
+ * old comparison to split on, so a correct file failed.
+ */
+export const CHANGELOG_PREAMBLE = [
+  "# Changelog",
+  "",
+  "Generated from the commits by `scripts/build-changelog.mjs`. Run",
+  "`pnpm changelog` to refresh it; the release workflow regenerates it when a",
+  "version is tagged. Edits made here are overwritten.",
+  "",
+  "Every commit is `type(scope): subject`. Features, fixes, performance and",
+  "refactoring work and documentation become entries; `chore`, `ci`, `build`,",
+  "`test` and `style` commits do not, because a changelog that lists a",
+  "dependency bump is one nobody reads. All of them are in `git log`.",
+  "",
+  "The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)",
+  "and the versions follow [Semantic Versioning](https://semver.org/spec/v2.0.0.html).",
+  "",
+].join("\n");
+
 export function buildChangelog({ projectDir = process.cwd() } = {}) {
   const commits = readHistory(projectDir);
 
@@ -39,23 +65,6 @@ export function buildChangelog({ projectDir = process.cwd() } = {}) {
     releases.get(key).push(entry);
   }
 
-  const header = [
-    "# Changelog",
-    "",
-    "Generated from the commits by `scripts/build-changelog.mjs`. Run",
-    "`pnpm changelog` to refresh it; the release workflow regenerates it when a",
-    "version is tagged. Edits made here are overwritten.",
-    "",
-    "Every commit is `type(scope): subject`. Features, fixes, performance and",
-    "refactoring work and documentation become entries; `chore`, `ci`, `build`,",
-    "`test` and `style` commits do not, because a changelog that lists a",
-    "dependency bump is one nobody reads. All of them are in `git log`.",
-    "",
-    "The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)",
-    "and the versions follow [Semantic Versioning](https://semver.org/spec/v2.0.0.html).",
-    "",
-  ].join("\n");
-
   const sections = [];
   for (const [release, entries] of releases) {
     const heading = release === "" ? "[Unreleased]" : `[${release}]`;
@@ -65,7 +74,7 @@ export function buildChangelog({ projectDir = process.cwd() } = {}) {
     }
   }
 
-  return `${header}\n${sections.join("\n")}`.replace(/\n{3,}/g, "\n\n").replace(/\n*$/, "\n");
+  return `${CHANGELOG_PREAMBLE}\n${sections.join("\n")}`.replace(/\n{3,}/g, "\n\n").replace(/\n*$/, "\n");
 }
 
 /**

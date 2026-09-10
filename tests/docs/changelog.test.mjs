@@ -28,7 +28,7 @@ const check = (label, ok) => {
 
 console.log("changelog generator test");
 
-const { buildChangelog, SECTION_FOR_TYPE } = await import("../../scripts/build/changelog/index.mjs");
+const { buildChangelog, CHANGELOG_PREAMBLE, SECTION_FOR_TYPE } = await import("../../scripts/build/changelog/index.mjs");
 
 const git = (root, ...args) => execFileSync("git", args, { cwd: root, encoding: "utf8" }).trim();
 
@@ -121,9 +121,13 @@ check("T13.1 and no empty release heading is emitted", !/## \[\]/.test(untagged)
 
 const { readFileSync } = await import("node:fs");
 const committed = readFileSync(new URL("../../CHANGELOG.md", import.meta.url), "utf8");
-const generatedHeader = buildChangelog({ projectDir: new URL("../..", import.meta.url).pathname }).split("## [", 1)[0];
 
-check("T14 the committed changelog carries the generated header", committed.startsWith("# Changelog") && committed.split("## [", 1)[0] === generatedHeader);
+// Against the preamble itself, not against a generated document: CI checks out
+// a shallow clone, whose history stops at the tip commit, and a generator that
+// sees no entries emits no `## [` heading for a whole-document comparison to
+// anchor on. The header is what this test is about, so the header is what it
+// compares.
+check("T14 the committed changelog carries the generated header", committed.startsWith(CHANGELOG_PREAMBLE));
 check(
   "T15 and nothing has been hand-written into it",
   // Every entry line is `- **scope**: subject (`hash`)`. Prose that is not an
