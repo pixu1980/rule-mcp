@@ -4,9 +4,9 @@
  * The census is a build artifact, not a document: every file it owns must be
  * byte-identical to a fresh run of `scripts/reports/census/index.mjs`.
  *
- * Owned files: the eight generated inventories (`06-skills.md` through
- * `13-resources.md`, whole files) plus the marker-refreshed blocks in
- * `01-product-architecture.md`, `03-engineering-guides.md` and
+ * Owned files: the eight generated inventories (`08-skills.md` through
+ * `15-resources.md`, whole files) plus the marker-refreshed blocks in
+ * `02-product-architecture.md`, `07-engineering-guides.md` and
  * `05-env-variables.md`. A tool, prompt, skill, command, persona, guardrail or
  * env var added, removed, renamed or reworded in the code changes the surface,
  * and this test fails until `pnpm census` is run - so the docs can never drift
@@ -66,7 +66,7 @@ test("a whole generated document announces itself and is not a stub", () => {
 });
 
 test("the documents a person owns are still there", () => {
-  for (const name of ["README.md", "GETTING_STARTED.md", "privacy.md", "adr/ADR.md"]) {
+  for (const name of ["README.md", "01-getting-started.md", "06-privacy.md", "adr/ADR.md"]) {
     assert.ok(existsSync(join(DOCS, name)), `docs/${name} exists`);
   }
 });

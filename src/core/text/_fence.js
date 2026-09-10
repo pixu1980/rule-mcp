@@ -7,7 +7,7 @@
  *
  * Treating every ``` line as a toggle looks equivalent and is not: a
  * four-backtick block wrapping three-backtick content flips the state twice
- * and hands the enclosed code to the prose rules. `docs/02-tools-operations.md`
+ * and hands the enclosed code to the prose rules. `docs/04-operations.md`
  * is exactly that shape, and the compression guard is what caught it.
  */
 

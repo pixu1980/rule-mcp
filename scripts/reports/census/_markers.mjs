@@ -46,7 +46,7 @@ function surfaceCounts(data) {
     "",
     ...summarySection(data),
     "Regenerate with `pnpm census`. The inventories themselves are",
-    "[`06-skills.md`](06-skills.md) through [`13-resources.md`](13-resources.md).",
+    "[`08-skills.md`](08-skills.md) through [`15-resources.md`](15-resources.md).",
     "",
   ];
 }
@@ -91,7 +91,7 @@ function envRegistry() {
 
 /** One entry per fenced block: which document, which fence, what goes in it. */
 export const MARKER_TARGETS = [
-  { file: "01-product-architecture.md", marker: "surface-counts", build: (data) => surfaceCounts(data) },
-  { file: "03-engineering-guides.md", marker: "command-surface", build: (data) => commandSurfaceBlock(data) },
+  { file: "02-product-architecture.md", marker: "surface-counts", build: (data) => surfaceCounts(data) },
+  { file: "07-engineering-guides.md", marker: "command-surface", build: (data) => commandSurfaceBlock(data) },
   { file: "05-env-variables.md", marker: "env-registry", build: () => envRegistry() },
 ];
