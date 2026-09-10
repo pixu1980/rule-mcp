@@ -74,3 +74,11 @@ request range.
 Issues are triaged within 7 days; pull requests are reviewed within
 14 days (see MAINTAINERS.md). If a week passes with silence, a polite
 ping on the issue is welcome.
+
+## Triage
+
+Every issue gets a label from this set: `bug`, `enhancement`,
+`good first issue`, `needs-triage`, `help wanted`. New issues start at
+`needs-triage` until a maintainer routes them. An issue with no activity
+for 60 days gets a stale ping; 14 more silent days close it, and
+a comment reopens it at any time.
