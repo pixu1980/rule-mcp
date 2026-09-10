@@ -8,6 +8,7 @@ this directory are the source of truth; this index is generated from them by
 
 | #                                                                                                                       | Title                                                                                                     | Date       | Status     | Tags                                                                                |
 | ----------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- | ---------- | ---------- | ----------------------------------------------------------------------------------- |
+| [078](078-compress-agent-command-files-at-write-time.md)                                                                | Compress agent command files at write time                                                                | 2026-09-10 | accepted   | token-efficiency, compression, installer, agent-commands, write-time                |
 | [077](077-compress-every-server-model-list-surface-prompts-list-tools-list-resources-list.md)                           | Compress every server→model list surface (prompts/list, tools/list, resources/list)                       | 2026-09-10 | accepted   | token-efficiency, compression, mcp-surface, prompts, tools                          |
 | [076](076-coverage-wave-five-raises-the-branch-floor-to-91.md)                                                          | Coverage wave five raises the branch floor to 91                                                          | 2026-09-09 | accepted   | testing, coverage, ci                                                               |
 | [075](075-meta-frameworks-get-their-own-namespace-and-a-narrow-dispatcher.md)                                           | Meta-frameworks get their own namespace and a narrow dispatcher                                           | 2026-09-09 | accepted   | skills, taxonomy, routing, tools                                                    |
@@ -93,6 +94,7 @@ file. Where a line stops short the rest is in the ADR.
 
 | ADR                                                                                                                     | Decision                                                                                                                                                                                                                        | Consequence                                                                                                                                                                                                                    |
 | ----------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| [078](078-compress-agent-command-files-at-write-time.md)                                                                | Compress the body of every agent command file at write time: renderAgentCommandFiles() applies the caveman pass to each rendered content when caveman is enabled, leaving renderAgentCommand() canonical and untouched.         | Positive: every agent command file an installer writes reaches disk already compressed (~6% measured on the shipped bodies) - the same instruction costs less on every session; frontmatter, YAML/TOML headers, $ARGUMENTS...  |
 | [077](077-compress-every-server-model-list-surface-prompts-list-tools-list-resources-list.md)                           | Compress the prose fields of all three list surfaces at the protocol boundary only: prompts/list shortens description and argument descriptions (names, required untouched; books telemetry source caveman-prompt-list),...     | Positive: every server→model list surface now runs the guarded pipeline; prompts/list saves ~4.5% of its descriptions every session start; tools/list saves ~0.7% of descriptions on every turn; one invariant across all...   |
 | [076](076-coverage-wave-five-raises-the-branch-floor-to-91.md)                                                          | Cover the three biggest clusters that are not platform-locked and raise the floor to the measured integer. generateMultiFile had 2 of 12 branches visited, the rule:// reader 15 of 26, and the command-target context none...   | 91.17 percent branches (6375/6992), floor raised 90 to 91 with 12 branches of margin.                                                                                                                                          |
 | [075](075-meta-frameworks-get-their-own-namespace-and-a-narrow-dispatcher.md)                                           | Rename the four skills to rule-meta-astro, next, nuxt and remix, rename the occupying prompt to rule-area-toolset (which is what it always described), and add skills/rule-meta as a hub with a code-registered rule_tool_meta...   | Routing a meta-framework request now names one skill and the component skill to load with it.                                                                                                                                  |
@@ -208,6 +210,7 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 
 ### installer
 
+- [078](078-compress-agent-command-files-at-write-time.md) Compress agent command files at write time
 - [072](072-the-installer-asks-before-copying-bundled-skills-to-the-central-agents-directory.md) The installer asks before copying bundled skills to the central agents directory
 - [070](070-installer-mode-step-replaces-the-agent-picker-instead-of-stacking-under-it.md) Installer mode step replaces the agent picker instead of stacking under it
 - [061](061-one-global-shim-and-hermetic-pnpm-home-in-script-tests.md) One global shim, and hermetic PNPM_HOME in script tests
@@ -351,6 +354,12 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [054](054-split-review-personas-into-per-operation-commands-plan-audit-review.md) Split review personas into per-operation commands (plan/audit/review)
 - [028](028-clean-rule-commands-via-user-commands-prompt-suppression-not-a-plugin.md) Clean /rule-* commands via user commands + prompt suppression, not a plugin
 
+### compression
+
+- [078](078-compress-agent-command-files-at-write-time.md) Compress agent command files at write time
+- [077](077-compress-every-server-model-list-surface-prompts-list-tools-list-resources-list.md) Compress every server→model list surface (prompts/list, tools/list, resources/list)
+- [073](073-compression-has-four-levels-and-no-llm-in-the-output-path.md) Compression has four levels and no LLM in the output path
+
 ### mcp
 
 - [028](028-clean-rule-commands-via-user-commands-prompt-suppression-not-a-plugin.md) Clean /rule-* commands via user commands + prompt suppression, not a plugin
@@ -386,6 +395,12 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [062](062-glob-suite-runner-colocated-tests-and-a-branch-coverage-ratchet.md) Glob suite runner, co-located tests, and a branch-coverage ratchet
 - [058](058-one-file-per-rule-with-underscore-barrel-folders-and-a-size-ratchet.md) One file per rule with underscore-barrel folders and a size ratchet
 - [057](057-reorganize-scripts-src-tests-with-150-line-code-splitting.md) Reorganize scripts, src and tests with 150-line code splitting
+
+### token-efficiency
+
+- [078](078-compress-agent-command-files-at-write-time.md) Compress agent command files at write time
+- [077](077-compress-every-server-model-list-surface-prompts-list-tools-list-resources-list.md) Compress every server→model list surface (prompts/list, tools/list, resources/list)
+- [051](051-token-efficiency-pipeline.md) Token-efficiency pipeline (caveman aggressive + tokensave-aware decoration)
 
 ### vscode
 

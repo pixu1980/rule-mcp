@@ -102,14 +102,20 @@ Verification: text 36+4, router 16, prompts 39, resources 16, resume 7, self-upd
 gateway 34, cli 55 (1 pre-existing skip) all green; eslint clean; pix_check (rule-backend-node)
 56/56 on `_surfaces.js` and `_helpers.js`.
 
-## Phase 4 — Write-time compression of artifacts the model reads later (double win)
+## Phase 4 — Write-time compression of artifacts the model reads later — ✅ executed
 
-- [ ] **4a** `rule_tool_process_handoff`: compress the generated handoff before writing
-      `docs/handoff/NN-slug.md` when `compress` requested — next session reads a smaller file.
-      Test: `parseHandoff` + `verify()` still accept the compressed file (guard: headings,
-      `key: value` lines, inline code preserved).
-- [ ] **4b** Agent command files (`core/agents/commands/_render.js`) and instruction/persona
-      files written by installers: compress at write time (YAML frontmatter untouched).
+- [x] **4a** Handoff files: no server change needed — `rule_tool_process_handoff` already
+      returns compressed text (finalize); the agent saves that text to
+      `docs/handoff/NN-slug.md`, and `handon` re-compresses on read (ADR 078 note).
+- [x] **4b** Agent command files (`src/core/agents/commands/_render.js`
+      `renderAgentCommandFiles()`): each installed body runs the caveman pass at write
+      time (~6% measured on the shipped bodies); `renderAgentCommand()` stays canonical;
+      frontmatter/placeholders pass untouched; guard 0 errors across 296 samples / 4
+      formats; same opt-outs. Test `src/core/agents/commands/__tests__/_compression.test.mjs`.
+      Decision recorded in **ADR 078**.
+
+Verification: commands/installer/generator suites 36/36 green; eslint clean;
+pix_check (rule-backend-node) 56/56 on `_render.js`.
 
 ## Phase 5 — Attribution & docs
 
