@@ -58,7 +58,23 @@ export function splitRow(line) {
   return cells.map((cell) => unescapeCell(cell));
 }
 
-/** One markdown table, header row included. */
+/**
+ * One markdown table, header row included, columns padded Prettier-style.
+ *
+ * Cells are escaped first and padded after, so {@link escapeCell} stays
+ * unaware of the padding and the reader keeps trimming it back off.
+ */
 export function table(columns, rows) {
-  return [`| ${columns.join(" | ")} |`, `| ${columns.map(() => "---").join(" | ")} |`, ...rows.map((row) => `| ${row.map((cell) => escapeCell(cell)).join(" | ")} |`)];
+  const escaped = [columns, ...rows].map((row) => row.map((cell) => escapeCell(cell)));
+  const widths = columns.map((_, index) => Math.max(3, ...escaped.map((row) => (row[index] ?? "").length)));
+  const line = (cells, fill) => `| ${cells.map((cell, index) => cell.padEnd(widths[index], fill)).join(" | ")} |`;
+
+  return [
+    line(escaped[0], " "),
+    line(
+      widths.map((width) => "-".repeat(width)),
+      "-",
+    ),
+    ...escaped.slice(1).map((row) => line(row, " ")),
+  ];
 }
