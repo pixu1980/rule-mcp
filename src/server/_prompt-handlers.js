@@ -3,8 +3,9 @@
  *
  * A prompt body is persona prose the server emits and the model pays for, so
  * `prompts/get` runs it through the same compression pass and structural guard
- * as a tool result. `prompts/list` is left alone on purpose: its descriptions
- * and argument hints are the schema clients render, not prose to shorten.
+ * as a tool result. `prompts/list` shortens its descriptions the same way: a
+ * description is prose the model reads to choose a prompt, so it sheds filler
+ * while names and argument names (the machine contract) stay (plan 2a).
  */
 
 import { GetPromptRequestSchema, ListPromptsRequestSchema, ErrorCode, McpError } from "@modelcontextprotocol/sdk/types.js";
@@ -35,10 +36,28 @@ function compressMessages(messages) {
   return { messages: compressed, saved };
 }
 
+/**
+ * Shorten one prompt description (and each argument hint) with the same pass
+ * the prompt bodies use. Names are the schema contract clients match on and
+ * never change; only prose sheds filler. Booked under its own source.
+ *
+ * @param {string} text
+ * @returns {string}
+ */
+function compressPromptText(text) {
+  return compressSurfaceText(String(text ?? ""), { source: "caveman-prompt-list" }).text;
+}
+
 /** Register the prompt handlers on the server. */
 export function registerPromptHandlers(server) {
   server.setRequestHandler(ListPromptsRequestSchema, async () => {
-    return { prompts: listPrompts() };
+    const prompts = listPrompts().map(({ name, description, arguments: arguments_ }) => ({
+      name,
+      description: compressPromptText(description),
+      arguments: (arguments_ ?? []).map(({ name, description, required }) => ({ name, description: compressPromptText(description), required })),
+    }));
+
+    return { prompts };
   });
 
   server.setRequestHandler(GetPromptRequestSchema, async (request) => {

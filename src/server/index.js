@@ -21,7 +21,7 @@ import { registerCompletionHandler } from "./_completions.js";
 import { registerPromptHandlers } from "./_prompt-handlers.js";
 import { listTools, callTool } from "../tools/router/index.js";
 import { decorateWithTokensave } from "../core/agents/_integrations.js";
-import { listResources, readResource } from "../resources/index.js";
+import { compressResourceListing, listResources, readResource } from "../resources/index.js";
 
 /** @type {Server|null} */
 let serverInstance = null;
@@ -74,9 +74,9 @@ export function createServer() {
   // ── Resource handlers ──────────────────────────────────────────
 
   server.setRequestHandler(ListResourcesRequestSchema, async () => {
-    const resources = listResources();
-
-    return { resources };
+    // Labels are prose the model reads to discover a resource; the pass is a
+    // no-op on the terse real set but keeps the every-surface invariant (2c).
+    return { resources: compressResourceListing(listResources()) };
   });
 
   server.setRequestHandler(ReadResourceRequestSchema, async (request) => {

@@ -58,3 +58,4 @@ export function listResources() {
 
 export * from "./_read.js";
 export * from "./_serve.js";
+export * from "./_listing.js";
