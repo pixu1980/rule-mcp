@@ -58,4 +58,17 @@ test("architecture diagram uses the real counts", () => {
   assert.match(README, new RegExp(`│ *${actual.resources} resources`), "resource count in the diagram");
 });
 
+test("generated-document headers name scripts that exist", () => {
+  const header = readFileSync(fileURLToPath(new URL("../../CHANGELOG.md", import.meta.url)), "utf8")
+    .split("\n")
+    .slice(0, 8)
+    .join("\n");
+  const missing = [...header.matchAll(/`((?:scripts|src|tests|docs|bin)\/[^`]*?)`/gu)]
+    .map((match) => match[1])
+    .filter((file, index, all) => all.indexOf(file) === index)
+    .filter((file) => !existsSync(join(skillsRoot, "..", file)));
+
+  assert.deepEqual(missing, [], "a header that names a missing script sends the next editor off disk");
+});
+
 console.log(`  ✅ README counts match reality (${actual.tools} tools / ${actual.resources} resources / ${actual.prompts} prompts / ${actual.skills} skills)`);
