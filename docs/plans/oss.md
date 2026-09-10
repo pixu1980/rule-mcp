@@ -277,12 +277,12 @@ works.
   - [x] **18.3**: Add an AUTHORS file listing pixu1980 with the contact address, so a contributor list has a home before the first outside contribution.
   - [ ] **18.4**: Feed the same holder string into the SPDX header stamp from OSS-17 so the two cannot disagree.
   - [x] **18.5**: Gate: grep over LICENSE, AUTHORS and package.json shows one holder only; pnpm census:check green.
-- [ ] **Step 19 - OSS-19 (medium)**: The two commit gates disagree. The pull request title check accepts twelve types including release and does not check the scope; the local hook requires a scope and accepts eleven types without release. A contributor who passes one fails the other.
-  - [ ] **19.1**: Write the failing test tests/docs/commit-gates.test.mjs: parse both files, assert the type lists are identical, and assert release is either in both or in neither.
-  - [ ] **19.2**: Add scripts/build/commit-types/index.mjs as the single source of truth exporting the type list, and have a check fail when semantic.yml or commit-msg drifts from it.
-  - [ ] **19.3**: Decide release: either add it to the hook's regex or remove it from semantic.yml, and state the choice in CONTRIBUTING.md.
-  - [ ] **19.4**: Add a commit-lint job that validates every commit in the pull request range, not only the title, so the scope rule is enforced on contributions from clones without the hook installed.
-  - [ ] **19.5**: Gate: node --test tests/docs/commit-gates.test.mjs green; the commit-lint job green on a deliberately bad test commit.
+- [x] **Step 19 - OSS-19 (medium)**: The two commit gates disagree. The pull request title check accepts twelve types including release and does not check the scope; the local hook requires a scope and accepts eleven types without release. A contributor who passes one fails the other.
+  - [x] **19.1**: Write the failing test tests/docs/commit-gates.test.mjs: parse both files, assert the type lists are identical, and assert release is either in both or in neither.
+  - [x] **19.2**: Add scripts/build/commit-types/index.mjs as the single source of truth (plus a --lint-range CLI so CI reuses it instead of a third regex copy) exporting the type list, and have a check fail when semantic.yml or commit-msg drifts from it.
+  - [x] **19.3**: Decide release: removed from semantic.yml (changelog has no release section; bumps use the chore(release) scope) either add it to the hook's regex or remove it from semantic.yml, and state the choice in CONTRIBUTING.md.
+  - [x] **19.4**: Add a commit-lint job that validates every commit in the pull request range, not only the title, so the scope rule is enforced on contributions from clones without the hook installed.
+  - [x] **19.5**: Gate: node --test tests/docs/commit-gates.test.mjs green; bad-commit probe exits 1 the commit-lint job green on a deliberately bad test commit.
 - [x] **Step 20 - OSS-20 (medium)**: The changelog header names a script that does not exist and describes a release step that does not happen: it points at scripts/build-changelog.mjs and claims the release workflow regenerates the file, while release.yml only reads it.
   - [x] **20.1**: Write the failing test tests/docs/changelog-header.test.mjs: every repository path named in the CHANGELOG header must exist on disk.
   - [x] **20.2**: Fix CHANGELOG.md line 3 to name scripts/build/changelog/index.mjs and the pnpm changelog command.

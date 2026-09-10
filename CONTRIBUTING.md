@@ -51,7 +51,10 @@ rule-mcp doctor # health report for your machine
 Branches look like `feat/short-description` or `fix/short-description`.
 Commits follow Conventional Commits **with a mandatory scope**:
 `type(scope): subject` - the `commit-msg` hook rejects scope-less
-subjects.
+subjects. The allowed types live in one place,
+`scripts/build/commit-types/index.mjs`, and the hook, the PR-title
+check and the commit-lint CI job all follow it. There is no `release`
+type: version bumps use the `chore(release)` scope instead.
 
 Every commit also carries a DCO sign-off trailer:
 
