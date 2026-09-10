@@ -1,25 +1,100 @@
-/** Static contract: the scripts name the runtime home and the purge/keep paths (bash + PowerShell). */
+/**
+ * The runtime home contract: install recreates it, purge removes it,
+ * --keep-config spares it.
+ *
+ * Regression this guards: `uninstall --purge` used to remove only
+ * ~/.config/rule-mcp and leave ~/.rule-mcp behind, with the
+ * daemon SSE token, telemetry and caches in it. A reinstall then started
+ * from stale state and the "purge" promise was quietly false.
+ *
+ * The contract moved from the shell scripts into src/cli/setup/ (ADR 080),
+ * so it is asserted against the module that now owns it.
+ */
 import { strict as assert } from "node:assert";
+import { existsSync, mkdtempSync, writeFileSync, mkdirSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
+import test from "node:test";
 
-import { installPs1, installSh, uninstallPs1, uninstallSh } from "./_purge.fixture.mjs";
+import { ensureRuntimeHome, purgeRuntimeDirs, purgeTargets } from "../../setup/_runtime-home.js";
 
-// ── 1. install.sh must recreate the runtime home explicitly ────────────────
-assert.match(installSh, /RULE_MCP_HOME_DIR="\$HOME_DIR\/\.rule-mcp"/, "install.sh must define the runtime home path (~/.rule-mcp)");
-assert.match(
-  installSh,
-  /mkdir -p "\$RULE_MCP_HOME_DIR\/state" "\$RULE_MCP_HOME_DIR\/data" "\$RULE_MCP_HOME_DIR\/projects" "\$RULE_MCP_HOME_DIR\/config"/,
-  "install.sh must recreate state/, data/, projects/, config/ under ~/.rule-mcp",
-);
+/** Point the runtime home at a sandbox for the duration of one call. */
+function withRuntimeHome(run) {
+  const previous = process.env.RULE_MCP_HOME;
+  const home = mkdtempSync(join(tmpdir(), "rule-runtime-home-"));
 
-// ── 2. uninstall.sh --purge must remove ~/.rule-mcp/ ─────────────────
-assert.match(uninstallSh, /RULE_MCP_HOME_DIR="\$HOME_DIR\/\.rule-mcp"/, "uninstall.sh must define the runtime home path (~/.rule-mcp)");
-assert.match(uninstallSh, /rm -rf "\$RULE_MCP_HOME_DIR"/, "uninstall.sh --purge must delete the whole ~/.rule-mcp/ directory");
-assert.match(uninstallSh, /KEEP_CONFIG.*== "true"[\s\S]*?Keeping runtime home/, "uninstall.sh --keep-config must keep the runtime home");
-assert.match(uninstallSh, /Also delete ~\/\.config\/rule-mcp\/, ~\/\.rule-mcp\/ and API keys/, "uninstall.sh --help must advertise both directories under --purge");
+  process.env.RULE_MCP_HOME = home;
 
-// ── 3. PowerShell parity ────────────────────────────────────────────────────
-assert.match(installPs1, /New-Item -ItemType Directory -Force.*\$pixHomeDir/s, "install.ps1 must recreate the runtime home directory");
-assert.match(uninstallPs1, /\$pixHomeDir = Join-Path \$HomeDir "\.rule-mcp"/, "uninstall.ps1 must define the runtime home path");
-assert.match(uninstallPs1, /Remove-Item \$pixHomeDir -Recurse -Force/, "uninstall.ps1 -Purge must delete the whole ~/.rule-mcp/ directory");
+  try {
+    return run(home);
+  } finally {
+    if (previous === undefined) {
+      delete process.env.RULE_MCP_HOME;
+    } else {
+      process.env.RULE_MCP_HOME = previous;
+    }
+  }
+}
 
-console.log("  \u{2705} the scripts declare the runtime home and the purge/keep-config contract");
+test("install recreates the whole layout src/cli/paths expects", () => {
+  withRuntimeHome((home) => {
+    ensureRuntimeHome();
+
+    for (const dir of ["state", "data", "projects", "config"]) {
+      assert.ok(existsSync(join(home, dir)), `${dir}/ must be recreated`);
+    }
+  });
+});
+
+test("a dry run creates nothing", () => {
+  withRuntimeHome((home) => {
+    const result = ensureRuntimeHome({ dryRun: true });
+
+    assert.equal(result.status, "planned");
+    assert.ok(!existsSync(join(home, "state")));
+  });
+});
+
+test("purge names both the runtime home and the env config directory", () => {
+  const ids = purgeTargets().map((target) => target.id);
+
+  assert.deepEqual(ids.sort(), ["env-config", "runtime-home"]);
+});
+
+test("purge deletes the runtime home, token and all", () => {
+  withRuntimeHome((home) => {
+    ensureRuntimeHome();
+    writeFileSync(join(home, "state", "sse-token"), "test-token\n");
+
+    const removed = purgeRuntimeDirs({ ids: ["runtime-home"] });
+
+    assert.equal(removed[0].id, "runtime-home");
+    assert.ok(!existsSync(home), "the whole directory must go, not just its contents");
+  });
+});
+
+test("a purge that is not selected leaves the directory alone", () => {
+  withRuntimeHome((home) => {
+    ensureRuntimeHome();
+    mkdirSync(join(home, "state"), { recursive: true });
+    writeFileSync(join(home, "state", "sse-token"), "test-token\n");
+
+    purgeRuntimeDirs({ ids: ["env-config"] });
+
+    assert.ok(existsSync(join(home, "state", "sse-token")), "--keep-config must keep the SSE token untouched");
+  });
+});
+
+test("purge counts the files it is about to delete", () => {
+  withRuntimeHome((home) => {
+    ensureRuntimeHome();
+    writeFileSync(join(home, "state", "sse-token"), "token\n");
+    writeFileSync(join(home, "data", "notes.json"), "{}");
+
+    const planned = purgeRuntimeDirs({ dryRun: true, ids: ["runtime-home"] });
+
+    assert.equal(planned[0].status, "planned");
+    assert.equal(planned[0].files, 2, "the user is told how much is at stake before agreeing");
+    assert.ok(existsSync(home), "a dry run must delete nothing");
+  });
+});

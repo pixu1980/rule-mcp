@@ -8,6 +8,7 @@ this directory are the source of truth; this index is generated from them by
 
 | #                                                                                                                       | Title                                                                                                     | Date       | Status     | Tags                                                                                |
 | ----------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- | ---------- | ---------- | ----------------------------------------------------------------------------------- |
+| [080](080-one-installer-a-node-wizard-with-shell-bootstraps.md)                                                         | One installer, a Node wizard with shell bootstraps                                                        | 2026-09-10 | accepted   | installer, cli, tui, ink, shell, powershell, testing                                |
 | [079](079-add-the-oss-architect-review-persona.md)                                                                      | Add the OSS Architect review persona                                                                      | 2026-09-10 | accepted   | persona, oss, open-source, governance, licensing, community                         |
 | [078](078-compress-agent-command-files-at-write-time.md)                                                                | Compress agent command files at write time                                                                | 2026-09-10 | accepted   | token-efficiency, compression, installer, agent-commands, write-time                |
 | [077](077-compress-every-server-model-list-surface-prompts-list-tools-list-resources-list.md)                           | Compress every server→model list surface (prompts/list, tools/list, resources/list)                       | 2026-09-10 | accepted   | token-efficiency, compression, mcp-surface, prompts, tools                          |
@@ -95,6 +96,7 @@ file. Where a line stops short the rest is in the ADR.
 
 | ADR                                                                                                                     | Decision                                                                                                                                                                                                                        | Consequence                                                                                                                                                                                                                    |
 | ----------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| [080](080-one-installer-a-node-wizard-with-shell-bootstraps.md)                                                         | One implementation, in Node, behind one command.                                                                                                                                                                                | Positive: 3603 lines of shell become 4 bootstraps totaling ~250 lines plus ~2000 lines of tested Node.                                                                                                                         |
 | [079](079-add-the-oss-architect-review-persona.md)                                                                      | Add the OSS Architect persona (id: oss) as src/roles/oss.md, status active, layer process, 25 years, 12 lenses focused on the project itself (own license, governance, contributing, funding, disclosure, release, community... | Positive: the persona is drop-in (one file in src/roles/, no code change): it generates three persona prompts (rule-plan-oss, rule-audit-oss, rule-review-oss) and three slash commands; docs/13-personas.md and the census...    |
 | [078](078-compress-agent-command-files-at-write-time.md)                                                                | Compress the body of every agent command file at write time: renderAgentCommandFiles() applies the caveman pass to each rendered content when caveman is enabled, leaving renderAgentCommand() canonical and untouched.         | Positive: every agent command file an installer writes reaches disk already compressed (~6% measured on the shipped bodies) - the same instruction costs less on every session; frontmatter, YAML/TOML headers, $ARGUMENTS...  |
 | [077](077-compress-every-server-model-list-surface-prompts-list-tools-list-resources-list.md)                           | Compress the prose fields of all three list surfaces at the protocol boundary only: prompts/list shortens description and argument descriptions (names, required untouched; books telemetry source caveman-prompt-list),...     | Positive: every server→model list surface now runs the guarded pipeline; prompts/list saves ~4.5% of its descriptions every session start; tools/list saves ~0.7% of descriptions on every turn; one invariant across all...   |
@@ -196,6 +198,21 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [005](005-backend-framework-skills.md) Backend Framework Skills
 - [004](004-scaffold-consolidation.md) Scaffold Skill Consolidation
 
+### installer
+
+- [080](080-one-installer-a-node-wizard-with-shell-bootstraps.md) One installer, a Node wizard with shell bootstraps
+- [078](078-compress-agent-command-files-at-write-time.md) Compress agent command files at write time
+- [072](072-the-installer-asks-before-copying-bundled-skills-to-the-central-agents-directory.md) The installer asks before copying bundled skills to the central agents directory
+- [070](070-installer-mode-step-replaces-the-agent-picker-instead-of-stacking-under-it.md) Installer mode step replaces the agent picker instead of stacking under it
+- [061](061-one-global-shim-and-hermetic-pnpm-home-in-script-tests.md) One global shim, and hermetic PNPM_HOME in script tests
+- [056](056-drop-the-vs-code-extension-and-its-installers.md) Drop the VS Code extension and its installers
+- [055](055-restructure-the-command-surface-rule-router-rule-area-caveman-implicit-rule-process.md) Restructure the command surface: /rule router, rule-area-*, caveman implicit, rule-process-tdd skill
+- [049](049-split-hotspot-modules.md) Split the hotspot modules (guardrails + installer)
+- [046](046-installer-self-heals-global-shim-surfaces-failures-gates-tui-rendering.md) Installer self-heals its global shim, surfaces failures, and gates TUI rendering
+- [041](041-lossless-installer-preserve-toolprefix-normalize-rule-blank-lines.md) Lossless installer: preserve toolPrefix and normalize rule blank lines
+- [039](039-fix-vscode-extension-and-derivatives-install-uninstall.md) Fix VS Code extension and derivatives install/uninstall
+- [028](028-clean-rule-commands-via-user-commands-prompt-suppression-not-a-plugin.md) Clean /rule-* commands via user commands + prompt suppression, not a plugin
+
 ### architecture
 
 - [058](058-one-file-per-rule-with-underscore-barrel-folders-and-a-size-ratchet.md) One file per rule with underscore-barrel folders and a size ratchet
@@ -210,19 +227,18 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [017](017-forms-per-framework-merger-and-distribution.md) forms per framework merger and distribution
 - [011](011-forms-per-framework.md) Forms per Framework - Merger & Distribution
 
-### installer
+### testing
 
-- [078](078-compress-agent-command-files-at-write-time.md) Compress agent command files at write time
-- [072](072-the-installer-asks-before-copying-bundled-skills-to-the-central-agents-directory.md) The installer asks before copying bundled skills to the central agents directory
-- [070](070-installer-mode-step-replaces-the-agent-picker-instead-of-stacking-under-it.md) Installer mode step replaces the agent picker instead of stacking under it
+- [080](080-one-installer-a-node-wizard-with-shell-bootstraps.md) One installer, a Node wizard with shell bootstraps
+- [076](076-coverage-wave-five-raises-the-branch-floor-to-91.md) Coverage wave five raises the branch floor to 91
+- [069](069-coverage-wave-four-holds-the-floor-at-90-and-fixes-the-daemon-status-platform-de.md) Coverage wave four holds the floor at 90 and fixes the daemon status platform defect
+- [065](065-coverage-floor-raised-to-90.md) Coverage floor raised to 90
+- [064](064-coverage-floor-raised-to-89-toward-the-95-endpoint.md) Coverage floor raised to 89 toward the 95 endpoint
+- [063](063-coverage-floor-raised-to-87-95-remains-the-ratchet-endpoint.md) Coverage floor raised to 87; 95 remains the ratchet endpoint
+- [062](062-glob-suite-runner-colocated-tests-and-a-branch-coverage-ratchet.md) Glob suite runner, co-located tests, and a branch-coverage ratchet
 - [061](061-one-global-shim-and-hermetic-pnpm-home-in-script-tests.md) One global shim, and hermetic PNPM_HOME in script tests
-- [056](056-drop-the-vs-code-extension-and-its-installers.md) Drop the VS Code extension and its installers
-- [055](055-restructure-the-command-surface-rule-router-rule-area-caveman-implicit-rule-process.md) Restructure the command surface: /rule router, rule-area-*, caveman implicit, rule-process-tdd skill
-- [049](049-split-hotspot-modules.md) Split the hotspot modules (guardrails + installer)
-- [046](046-installer-self-heals-global-shim-surfaces-failures-gates-tui-rendering.md) Installer self-heals its global shim, surfaces failures, and gates TUI rendering
-- [041](041-lossless-installer-preserve-toolprefix-normalize-rule-blank-lines.md) Lossless installer: preserve toolPrefix and normalize rule blank lines
-- [039](039-fix-vscode-extension-and-derivatives-install-uninstall.md) Fix VS Code extension and derivatives install/uninstall
-- [028](028-clean-rule-commands-via-user-commands-prompt-suppression-not-a-plugin.md) Clean /rule-* commands via user commands + prompt suppression, not a plugin
+- [057](057-reorganize-scripts-src-tests-with-150-line-code-splitting.md) Reorganize scripts, src and tests with 150-line code splitting
+- [048](048-v100-release-and-docs-accuracy-guard.md) v1.0.0 release and the docs-accuracy guard
 
 ### routing
 
@@ -235,18 +251,6 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [022](022-skill-routing-turborepo-monorepo-pipeline-caching-parallel.md) Skill routing: Turborepo monorepo pipeline caching parallel builds
 - [021](021-skill-routing-eslint-flat-config-for-typescript-react-proje.md) Skill routing: ESLint flat config for TypeScript React project
 - [020](020-skill-routing-typescript-tsconfig-strict-mode-configuration.md) Skill routing: TypeScript tsconfig strict mode configuration
-
-### testing
-
-- [076](076-coverage-wave-five-raises-the-branch-floor-to-91.md) Coverage wave five raises the branch floor to 91
-- [069](069-coverage-wave-four-holds-the-floor-at-90-and-fixes-the-daemon-status-platform-de.md) Coverage wave four holds the floor at 90 and fixes the daemon status platform defect
-- [065](065-coverage-floor-raised-to-90.md) Coverage floor raised to 90
-- [064](064-coverage-floor-raised-to-89-toward-the-95-endpoint.md) Coverage floor raised to 89 toward the 95 endpoint
-- [063](063-coverage-floor-raised-to-87-95-remains-the-ratchet-endpoint.md) Coverage floor raised to 87; 95 remains the ratchet endpoint
-- [062](062-glob-suite-runner-colocated-tests-and-a-branch-coverage-ratchet.md) Glob suite runner, co-located tests, and a branch-coverage ratchet
-- [061](061-one-global-shim-and-hermetic-pnpm-home-in-script-tests.md) One global shim, and hermetic PNPM_HOME in script tests
-- [057](057-reorganize-scripts-src-tests-with-150-line-code-splitting.md) Reorganize scripts, src and tests with 150-line code splitting
-- [048](048-v100-release-and-docs-accuracy-guard.md) v1.0.0 release and the docs-accuracy guard
 
 ### auto-log
 
@@ -293,6 +297,14 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [015](015-toolchain-skill-isolation-vite.md) toolchain skill isolation vite
 - [009](009-toolchain-vite.md) Toolchain Skill Isolation (Vite)
 
+### cli
+
+- [080](080-one-installer-a-node-wizard-with-shell-bootstraps.md) One installer, a Node wizard with shell bootstraps
+- [074](074-the-cli-entry-point-loads-no-command-handler-it-has-not-been-asked-for.md) The CLI entry point loads no command handler it has not been asked for
+- [061](061-one-global-shim-and-hermetic-pnpm-home-in-script-tests.md) One global shim, and hermetic PNPM_HOME in script tests
+- [046](046-installer-self-heals-global-shim-surfaces-failures-gates-tui-rendering.md) Installer self-heals its global shim, surfaces failures, and gates TUI rendering
+- [033](033-registry-driven-clean-slash-commands-for-every-agent-and-ide.md) Registry-driven clean slash commands for every agent and IDE
+
 ### guardrails
 
 - [058](058-one-file-per-rule-with-underscore-barrel-folders-and-a-size-ratchet.md) One file per rule with underscore-barrel folders and a size ratchet
@@ -308,13 +320,6 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [026](026-rename-rule-mcp-agents-to-rule-ai-agents-and-add-rule-ai-collector-skill.md) Rename rule-mcp-agents to rule-ai-agents and add rule-ai collector skill
 - [007](007-thematic-skill-taxonomy-rename.md) thematic skill taxonomy rename
 - [001](001-thematic-skill-rename.md) Thematic Skill Taxonomy Rename
-
-### cli
-
-- [074](074-the-cli-entry-point-loads-no-command-handler-it-has-not-been-asked-for.md) The CLI entry point loads no command handler it has not been asked for
-- [061](061-one-global-shim-and-hermetic-pnpm-home-in-script-tests.md) One global shim, and hermetic PNPM_HOME in script tests
-- [046](046-installer-self-heals-global-shim-surfaces-failures-gates-tui-rendering.md) Installer self-heals its global shim, surfaces failures, and gates TUI rendering
-- [033](033-registry-driven-clean-slash-commands-for-every-agent-and-ide.md) Registry-driven clean slash commands for every agent and IDE
 
 ### infrastructure
 
@@ -403,6 +408,12 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [078](078-compress-agent-command-files-at-write-time.md) Compress agent command files at write time
 - [077](077-compress-every-server-model-list-surface-prompts-list-tools-list-resources-list.md) Compress every server→model list surface (prompts/list, tools/list, resources/list)
 - [051](051-token-efficiency-pipeline.md) Token-efficiency pipeline (caveman aggressive + tokensave-aware decoration)
+
+### tui
+
+- [080](080-one-installer-a-node-wizard-with-shell-bootstraps.md) One installer, a Node wizard with shell bootstraps
+- [070](070-installer-mode-step-replaces-the-agent-picker-instead-of-stacking-under-it.md) Installer mode step replaces the agent picker instead of stacking under it
+- [046](046-installer-self-heals-global-shim-surfaces-failures-gates-tui-rendering.md) Installer self-heals its global shim, surfaces failures, and gates TUI rendering
 
 ### vscode
 

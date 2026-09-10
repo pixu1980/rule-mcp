@@ -10,7 +10,8 @@ import { commandConfig } from "./_env.js";
 import { parseJson, toJson, upsertJsonServer } from "./_writers-json.js";
 import { commandTemplate, geminiCommand, copilotAgent, appendInstruction, upsertTomlBlock } from "./_writers-text.js";
 
-const installClaude = ({ entrypoint, dryRun, global, force = false }) => {
+/** Install into Claude Code only (~/.claude/commands/rule.md, never other agents). */
+const installClaude = ({ entrypoint, dryRun = false, global = false, force = false }) => {
   const file = join(HOME, ".claude.json");
   const mdFile = join(HOME, ".claude", "CLAUDE.md");
   const commandFile = join(HOME, ".claude", "commands", "rule.md");
@@ -25,10 +26,19 @@ const installClaude = ({ entrypoint, dryRun, global, force = false }) => {
     }),
     writeText({ file: mdFile, content: appendInstruction(readText(mdFile), { refresh: force }), dryRun }),
     writeText({ file: commandFile, content: commandTemplate(), dryRun, skipIfExists: !force, force }),
+    // Note: We DO NOT install into Pi or other agents here.
+    // User choices are respected - only the selected agent gets the slash commands.
+    // The RULE_MCP_NO_PROMPTS flag (when set by the user/system) will
+    // prevent duplicate MCP prompt entries in Claude Code.
   ];
 };
 
-const installCodex = ({ entrypoint, dryRun, global }) => {
+/**
+ * Installs rule-mcp into Codex.
+ * @param {{ entrypoint: string, dryRun?: boolean, global?: boolean }} opts
+ * @returns {Array<{ file: string, action: string }>}
+ */
+const installCodex = ({ entrypoint, dryRun = false, global = false }) => {
   const file = join(HOME, ".codex", "config.toml");
   const config = commandConfig(entrypoint, { global });
   const block = `command = "${config.command.replaceAll("\\", "\\\\")}"\nargs = [${config.args.map((a) => `"${a.replaceAll("\\", "\\\\")}"`).join(", ")}]`;
@@ -40,7 +50,12 @@ const installCodex = ({ entrypoint, dryRun, global }) => {
   ];
 };
 
-const installCursor = ({ entrypoint, dryRun, global }) => {
+/**
+ * Installs rule-mcp into Cursor.
+ * @param {{ entrypoint: string, dryRun?: boolean, global?: boolean }} opts
+ * @returns {Array<{ file: string, action: string }>}
+ */
+const installCursor = ({ entrypoint, dryRun = false, global = false }) => {
   const files = [];
   const cursorGlobal = join(HOME, ".cursor", "mcp.json");
   const cursorCommand = join(process.cwd(), ".cursor", "commands", "rule.md");
@@ -66,7 +81,12 @@ const installCursor = ({ entrypoint, dryRun, global }) => {
   return files;
 };
 
-const installCopilot = ({ entrypoint, dryRun, global }) => {
+/**
+ * Installs rule-mcp into Copilot.
+ * @param {{ entrypoint: string, dryRun?: boolean, global?: boolean }} opts
+ * @returns {Array<{ file: string, action: string }>}
+ */
+const installCopilot = ({ entrypoint, dryRun = false, global = false }) => {
   const hostsDir = join(HOME, ".config", "github-copilot");
   const hostsFile = join(hostsDir, "hosts.json");
   const agentFile = join(HOME, ".copilot", "agents", "rule-mcp.agent.md");
@@ -77,7 +97,12 @@ const installCopilot = ({ entrypoint, dryRun, global }) => {
   return [writeText({ file: hostsFile, content: toJson(json), dryRun }), writeText({ file: agentFile, content: copilotAgent(), dryRun })];
 };
 
-const installGemini = ({ entrypoint, dryRun, global }) => {
+/**
+ * Installs rule-mcp into Gemini CLI.
+ * @param {{ entrypoint: string, dryRun?: boolean, global?: boolean }} opts
+ * @returns {Array<{ file: string, action: string }>}
+ */
+const installGemini = ({ entrypoint, dryRun = false, global = false }) => {
   const file = join(HOME, ".gemini", "settings.json");
   const mdFile = join(HOME, ".gemini", "GEMINI.md");
   const commandFile = join(HOME, ".gemini", "commands", "rule.toml");
@@ -93,7 +118,12 @@ const installGemini = ({ entrypoint, dryRun, global }) => {
   ];
 };
 
-const installPi = ({ entrypoint, dryRun, global, mode }) => {
+/**
+ * Installs rule-mcp into Pi coding agent.
+ * @param {{ entrypoint: string, dryRun?: boolean, global?: boolean, mode?: string }} opts
+ * @returns {Array<{ file: string, action: string }>}
+ */
+const installPi = ({ entrypoint, dryRun = false, global = false, mode = "stdio" }) => {
   // Pi uses $PI_CODING_AGENT_DIR/mcp.json or ~/.pi/agent/mcp.json
   const piDir = process.env.PI_CODING_AGENT_DIR ? join(process.env.PI_CODING_AGENT_DIR) : join(HOME, ".pi", "agent");
   const file = join(piDir, "mcp.json");

@@ -1,7 +1,7 @@
 /** @module cli/commands/targets-sync - write the command files into every resolved target */
 
 import { renderAgentCommandFiles } from "../../core/agents/commands/index.js";
-import { mkdirSync, readdirSync, rmSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readdirSync, rmSync, writeFileSync } from "node:fs";
 import { print } from "./_shared.js";
 import { resolve } from "node:path";
 import { resolvedTargets } from "./_targets.js";
@@ -34,6 +34,15 @@ export function syncCommandTargets(opts) {
     // that left the registry (a rename, a deletion) are purged too instead of
     // lingering as stale commands next to the new set.
     if (opts.remove) {
+      // A detected agent does not always have its command directory yet -
+      // Pi is detected from ~/.pi/agent/mcp.json while the prompts dir is
+      // created on first write. readdirSync would throw ENOENT and take the
+      // whole removal down with it.
+      if (!existsSync(dir)) {
+        print(`  ${label}: no command directory → ${dir}`);
+        continue;
+      }
+
       const stale = readdirSync(dir)
         .filter((entry) => entry.startsWith("rule-"))
         .filter((entry) => entry.endsWith(".md") || entry.endsWith(".toml") || entry.endsWith(".prompt.md"));

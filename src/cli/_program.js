@@ -23,6 +23,7 @@
 import { readFileSync } from "node:fs";
 import { Command, CommanderError } from "commander";
 import { registerServeCommand, registerUpCommand, registerDaemonCommand } from "./_register-server.js";
+import { registerSetupCommand } from "./_register-wizard.js";
 import {
   registerInstallCommand,
   registerUninstallCommand,
@@ -72,6 +73,7 @@ export function buildProgram() {
   registerServeCommand(program);
   registerUpCommand(program);
   registerDaemonCommand(program);
+  registerSetupCommand(program);
   registerInstallCommand(program);
   registerUninstallCommand(program);
   registerToolsCommand(program);

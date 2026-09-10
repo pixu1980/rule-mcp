@@ -6,14 +6,15 @@
  * 1. The interactive picker offers every supported target, not only the ones
  *    detected on this machine. A user reported the list collapsing to Claude and
  *    Codex because nothing else had a config file yet - which is exactly when
- *    you need the installer to offer the rest.
+ *    you need the installer to offer the rest. The picker is now Ink-rendered
+ *    (ADR 080), so the rows are asserted where they are built.
  * 2. Devin is installable, at the path Devin documents
  *    (`mcp_config.json`, not the `mcp.json` every other agent uses), and is
  *    branded "(formerly Windsurf)" - Cognition acquired Windsurf.
  * 3. Windsurf is removed from the catalog: no picker row, no sweep entry.
  *    Naming it still works as a courtesy redirect to Devin, with a warning.
- * 4. The picker redraws rows incrementally (ANSI cursor addressing) instead of
- *    full-screen clearing on every keypress - the flicker regression guard.
+ * 4. No shell script carries a second copy of the catalog - the drift that
+ *    made the bash and PowerShell matrices disagree with this one.
  */
 
 import { strict as assert } from "node:assert";
@@ -21,6 +22,7 @@ import { readFileSync } from "node:fs";
 import { homedir } from "node:os";
 import { join } from "node:path";
 import { getAllAgents, installAgent, uninstallAgent } from "../index.js";
+import { agentRows } from "../../setup/_agent-rows.js";
 
 const root = new URL("../../../..", import.meta.url).pathname;
 const installSh = readFileSync(join(root, "scripts", "install.sh"), "utf8");
@@ -30,32 +32,28 @@ console.log("install agent catalog test");
 
 // ── 1. the picker renders the catalog, not the detection result ───────────
 
-/**
- * assert.match dumps the whole 800-line script on failure, which buries the
- * message. Substring checks keep the output readable.
- *
- * @param {string} needle
- * @param {string} message
- */
-function assertInstallSh(needle, message) {
-  assert.ok(installSh.includes(needle), `${message}\n  missing from scripts/install.sh: ${needle}`);
-}
+const rows = agentRows();
+const rowIds = rows.items.filter((item) => !item.section).map((item) => item.id);
 
-assertInstallSh('for i in "${!AGENT_NAMES[@]}"', "the agent checkbox list must iterate AGENT_NAMES (the catalog), not DETECTED_AGENTS");
-assertInstallSh("AGENT_CURSOR -ge ${#AGENT_NAMES[@]}", "cursor wrapping must follow the catalog, or the lower entries are unreachable");
-assert.ok(!installSh.includes("AGENT_CURSOR -ge ${#DETECTED_AGENTS[@]}"), "cursor wrapping must follow the catalog, or the lower entries are unreachable");
-assertInstallSh(
-  "${AGENT_DETECTED[$ai]} -eq 1 ]] && AGENT_FLAGS[$ai]=1",
-  "detected agents must start pre-selected (AGENT_DETECTED is a per-row flag, populated from the detection result)",
+assert.deepEqual(rowIds, getAllAgents(), "the picker must render the whole catalog, in catalog order, not the detection result");
+assert.ok(
+  rows.items.some((item) => item.section && item.label === "Coding agents") && rows.items.some((item) => item.section && item.label === "IDEs"),
+  "the catalog must stay sectioned so the list is readable",
 );
-assertInstallSh("No supported coding agents detected on this machine.", "an empty detection must not abort the picker");
+assert.ok(
+  rows.detected.every((name) => rowIds.includes(name)),
+  "every detected agent must have a row to be pre-selected on",
+);
+assert.ok(
+  rows.items.filter((item) => !item.section).every((item) => typeof item.detail === "string" && item.detail.length > 0),
+  "every row must explain itself in the detail panel, detected or not",
+);
 console.log("  ✅ the picker offers every supported target");
 
 // ── 2. Devin ────────────────────────────────────────────────────────────────
 
 assert.ok(getAllAgents().includes("devin"), "devin must be a supported agent");
-assertInstallSh("(formerly Windsurf)", "install.sh must brand Devin with its Windsurf heritage");
-assertInstallSh("$HOME_DIR/.config/devin/mcp_config.json", "install.sh must probe the devin config");
+assert.equal(rows.items.find((item) => item.id === "devin")?.label, "devin (formerly Windsurf)", "the picker must brand Devin with its Windsurf heritage");
 
 const devin = installAgent({ agent: "devin", entrypoint, dryRun: true });
 const devinPath = devin.installed.devin;
@@ -90,6 +88,7 @@ console.log("  ✅ devin installs to its documented config path, branded (former
 assert.ok(!getAllAgents().includes("windsurf"), "windsurf must not be offered by the catalog - Cognition renamed it Devin");
 assert.ok(!installSh.includes("windsurf"), "install.sh must not contain a windsurf entry anywhere");
 assert.ok(!/\bwindsurf\b/.test(readFileSync(join(root, "scripts", "install.ps1"), "utf8")), "install.ps1 must not list windsurf");
+assert.ok(!rowIds.includes("windsurf"), "the picker must not offer windsurf");
 
 const sweep = installAgent({ agent: "all", entrypoint, dryRun: true });
 
@@ -108,11 +107,14 @@ const removed = uninstallAgent({ agent: "windsurf", dryRun: true });
 assert.ok(Array.isArray(removed.uninstalled?.devin), "uninstalling windsurf must redirect to the devin cleanup");
 console.log("  ✅ windsurf removed from the catalog; --agent windsurf redirects to devin");
 
-// ── 4. no full re-render on every keypress (flicker guard) ─────────────────
+// ── 4. one catalog, and only one ───────────────────────────────────────────
 
-assertInstallSh("print_at", "the picker must redraw rows with ANSI cursor addressing (differential renderer)");
-assertInstallSh("draw_row", "the picker must own per-row drawing");
-assert.ok(!installSh.includes("tui_clear"), "the picker must never full-screen clear during interaction - that is the flicker source");
-console.log("  ✅ picker redraws rows incrementally, no full-screen clear per key");
+for (const script of ["install.sh", "uninstall.sh", "install.ps1", "uninstall.ps1"]) {
+  const source = readFileSync(join(root, "scripts", script), "utf8");
+  const strays = getAllAgents().filter((agent) => new RegExp(String.raw`\b${agent}\b`).test(source));
+
+  assert.deepEqual(strays, [], `${script} names agents (${strays.join(", ")}) - the catalog lives in src/cli/installers/_catalog.js and nowhere else`);
+}
+console.log("  ✅ no shell script carries a second agent catalog");
 
 console.log("  ✅ agent catalog invariants hold");

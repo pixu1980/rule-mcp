@@ -1,25 +1,48 @@
-/** Regression: native daemon service is installed only for daemon mode. */
+/**
+ * Regression: the native daemon service belongs to daemon mode alone.
+ *
+ * stdio starts a process per session and docker runs the service in a
+ * container; registering a LaunchAgent or a systemd unit for either would
+ * leave a second server running behind the user's back.
+ */
 import { strict as assert } from "node:assert";
 import { execFileSync } from "node:child_process";
+import { mkdtempSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
+import test from "node:test";
+import { fileURLToPath } from "node:url";
 
-const root = new URL("../../..", import.meta.url).pathname;
-const run = (mode) =>
-  execFileSync("bash", ["scripts/install.sh", "--agent", "pi", "--mode", mode, "--dry-run", "--no-rules"], {
+const root = fileURLToPath(new URL("../../..", import.meta.url));
+
+const run = (mode) => {
+  const home = mkdtempSync(join(tmpdir(), `rule-daemon-svc-${mode}-`));
+
+  return execFileSync("bash", ["scripts/install.sh", "--agent", "pi", "--mode", mode, "--dry-run", "--no-rules"], {
     cwd: root,
     encoding: "utf8",
-    env: { ...process.env, TERM: "dumb", PNPM_HOME: join(tmpdir(), "rule-daemon-svc-pnpm") },
+    env: {
+      ...process.env,
+      HOME: home,
+      PNPM_HOME: join(home, ".pnpm"),
+      RULE_MCP_HOME: join(home, ".rule-mcp"),
+      RULE_MCP_SKIP_GLOBAL_LINK: "1",
+      TERM: "dumb",
+    },
   });
+};
 
-const stdio = run("stdio");
-assert.doesNotMatch(stdio, /Would install daemon service/, "stdio mode must not install a background daemon");
+test("stdio mode installs no background service", () => {
+  assert.doesNotMatch(run("stdio"), /Platform daemon service/);
+});
 
-const daemon = run("daemon");
-assert.match(daemon, /Would install daemon service/, "daemon mode must install its background service");
+test("daemon mode installs the platform service", () => {
+  assert.match(run("daemon"), /Platform daemon service/);
+});
 
-const docker = run("docker");
-assert.doesNotMatch(docker, /Would install daemon service/, "docker mode must not install a native daemon");
-assert.match(docker, /docker compose up -d/, "docker mode must start Compose");
+test("docker mode starts Compose and installs no native service", () => {
+  const output = run("docker");
 
-console.log("  ✅ shell installer installs native daemon only in daemon mode");
+  assert.doesNotMatch(output, /Platform daemon service/, "the container is the service");
+  assert.match(output, /Docker SSE service/, "docker mode must run the Compose step");
+});

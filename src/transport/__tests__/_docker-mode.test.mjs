@@ -3,14 +3,14 @@ import { strict as assert } from "node:assert";
 import { readFileSync } from "node:fs";
 
 const compose = readFileSync("docker-compose.yml", "utf8");
-const shell = readFileSync("scripts/install.sh", "utf8");
-const powershell = readFileSync("scripts/install.ps1", "utf8");
+// The installer's Docker step lives in the setup wizard (ADR 080); the shell
+// and PowerShell entry points only forward to it.
+const dockerStep = readFileSync("src/cli/setup/_docker.js", "utf8");
 
 assert.match(compose, /RULE_MCP_SSE_TOKEN:/, "Compose must pass the daemon token into the container");
 assert.match(compose, /\$\{RULE_MCP_SSE_TOKEN/, "Compose must require the caller-provided token");
-assert.match(shell, /SSE_TOKEN_FILE=/, "shell installer must locate the persistent token");
-assert.match(shell, /docker compose up -d/, "shell installer must start Docker mode");
-assert.match(powershell, /\$env:RULE_MCP_SSE_TOKEN/, "PowerShell installer must pass the token to Docker");
-assert.match(powershell, /docker compose up -d/, "PowerShell installer must start Docker mode");
+assert.match(dockerStep, /sseTokenPath/, "the installer must locate the persistent token");
+assert.match(dockerStep, /RULE_MCP_SSE_TOKEN/, "the installer must pass the token to Docker");
+assert.match(dockerStep, /docker compose up -d/, "the installer must start Docker mode");
 
 console.log("  ✅ Docker mode shares authenticated SSE configuration with clients");

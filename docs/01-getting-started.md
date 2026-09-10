@@ -167,10 +167,10 @@ rule-mcp install --agent pi --mode daemon
 rule-mcp install --agent vscode --mode daemon
 
 # Docker mode starts the same authenticated SSE endpoint through Compose.
-./scripts/install.sh --agent pi --mode docker --no-rules
+rule-mcp setup --agent pi --mode docker --no-rules
 
 # Skills are never copied without asking; --skills forces the copy.
-./scripts/install.sh --skills
+rule-mcp setup --skills
 
 # Preview before writing
 rule-mcp install --agent all --dry-run
@@ -180,16 +180,66 @@ Supported agents: `claude`, `codex`, `cursor`, `copilot`, `gemini`, `pi`, `cline
 
 `daemon` and `docker` are deliberately limited to **Pi and VS Code** until the HTTP configuration schema of every other host is verified. Other adapters fail clearly rather than silently receiving a stdio configuration.
 
-### Installer CLI health (bash + PowerShell)
+### The setup wizard
 
-`scripts/install.sh` and `scripts/install.ps1` never trust a binary that cannot launch:
+`rule-mcp setup` is a full-viewport, step-based installer. It runs on the
+alternate screen, so the terminal it borrows is handed back exactly as it was
+found.
 
-- The global `rule-mcp` is only used when `rule-mcp --version` succeeds. A stale shim (e.g. left behind by a repo move) is **detected, warned about, and rewritten** as a plain launcher in the global bin dir; the install falls back to the local entrypoint (`node bin/rule-mcp.js`) instead of failing silently.
-- The installer **never runs `pnpm link --global`** (pnpm 10/11 rewrites `pnpm-workspace.yaml` overrides and the lockfile). Set `RULE_MCP_SKIP_GLOBAL_LINK=1` to skip writing the shim entirely.
-- CLI failures print their real output (indented) instead of being swallowed.
-- Colors and box-drawing render only on an interactive TTY without `NO_COLOR`; piped/CI output stays plain. The interactive selector supports `↑↓/jk`, `1-9`, `a` (all), `n` (none), `Enter`/`q`.
-- The installer _*asks before copying the bundled rule-* skills_* to `~/.agents/skills` (defaults to No, so a plain Enter never centralizes the catalog). Pass `--skills` / `-Skills` to force the copy in non-interactive runs, `--no-skills` / `-NoSkills` to skip the step entirely.
-- `uninstall.sh` / `uninstall.ps1` fully reverse the shim/global package, and the rules block appended to agent instruction files is prettier-clean, so the project `CLAUDE.md` no longer churns after install/uninstall cycles.
+| Step      | What you choose                                                                                   |
+| --------- | ------------------------------------------------------------------------------------------------- |
+| Preflight | Nothing - it reports Node, the package manager, git, the binary and the global shim               |
+| Agents    | Which agents get an MCP entry. Detected ones start ticked; the rest stay reachable                |
+| Mode      | `stdio`, `daemon` or `docker`, with what each one costs and which agents support it               |
+| Extras    | Instruction rules, slash commands, bundled skills, the commit hook, the service, the health check |
+| Review    | The whole plan as an ordered list, with `d` to toggle a dry run                                   |
+| Install   | Live progress, one row per task, with the output of whatever is running                           |
+| Done      | The tally, every warning with its message, and what to run next                                   |
+
+`--uninstall` runs the mirror: a scan of what is actually on the machine, one
+tick per removable group with its count and paths, a separate opt-in screen for
+the destructive purge, then the same review and progress screens.
+
+Keys: `↑↓`/`jk` move, `space` toggles, `1-9` jump and toggle, `a`/`n` select all
+or none, `enter` advances, `esc` goes back, `q` quits. Nothing is written before
+the review step is confirmed.
+
+**Every flag:**
+
+```bash
+rule-mcp setup --help
+```
+
+`--agent <name>` narrows the run to one target, `--mode <name>` picks the
+transport, `--dry-run` previews, `--force` overrides existing configuration, and
+each optional step has a pair (`--rules`/`--no-rules`, `--skills`/`--no-skills`,
+`--commands`/`--no-commands`, `--git-hook`/`--no-git-hook`,
+`--service`/`--no-service`, `--doctor`/`--no-doctor`). `--purge` and
+`--keep-config` apply to `--uninstall`.
+
+### Shell and PowerShell bootstraps
+
+`scripts/install.sh`, `scripts/uninstall.sh` and their `.ps1` counterparts are
+bootstraps of about 60 lines: they check Node, resolve the binary, and forward
+everything to `setup`. All the logic lives in `src/cli/setup/` (ADR 080), so
+there is one implementation to keep correct rather than three.
+
+- `curl -fsSL .../install.sh | bash` still gets the wizard: the bootstrap
+  borrows `/dev/tty` when stdin is the piped script and stdout is a terminal. A
+  fully redirected run stays non-interactive and prints one line per step.
+- The global `rule-mcp` is only used when `rule-mcp --version`
+  succeeds. A stale shim (left behind by a repo move, say) is detected and
+  rewritten as a plain launcher in the global bin dir.
+- The installer **never runs `pnpm link --global`** (pnpm 10/11 rewrites
+  `pnpm-workspace.yaml` overrides and the lockfile). Set
+  `RULE_MCP_SKIP_GLOBAL_LINK=1` to skip writing the shim entirely.
+- The bundled `rule-*` skills are never copied without asking. `--skills` forces
+  the copy in non-interactive runs, `--no-skills` skips the step.
+- The instruction block is written and removed through one target list, so
+  install and uninstall cannot disagree about where it lives, and the block is
+  prettier-clean so the project `CLAUDE.md` does not churn across cycles.
+- `--force` on `uninstall.sh` means "do not ask": it runs the plan with defaults
+  and no wizard.
 
 ### Manual mcp.json configuration
 

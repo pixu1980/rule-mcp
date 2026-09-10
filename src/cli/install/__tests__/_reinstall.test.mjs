@@ -1,4 +1,4 @@
-/** Behavioral: install.sh recreates the runtime home after a purge. */
+/** Behavioral: the install bootstrap recreates the runtime home after a purge. */
 import { strict as assert } from "node:assert";
 import { execFileSync } from "node:child_process";
 import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
@@ -26,9 +26,9 @@ import { hermeticEnv, root } from "./_purge.fixture.mjs";
       env: { ...hermeticEnv(home, path), RULE_MCP_SKIP_GLOBAL_LINK: "1" },
       timeout: 180_000,
     });
-    assert.match(output, /Runtime home ready/, "install.sh must report the runtime home creation");
-    assert.ok(existsSync(join(home, ".rule-mcp")), "install.sh must recreate ~/.rule-mcp/");
-    assert.ok(existsSync(join(home, ".rule-mcp", "state")), "install.sh must recreate state/");
+    assert.match(output, /Runtime home/, "the install must report the runtime home step");
+    assert.ok(existsSync(join(home, ".rule-mcp")), "the install must recreate ~/.rule-mcp/");
+    assert.ok(existsSync(join(home, ".rule-mcp", "state")), "the install must recreate state/");
     assert.ok(existsSync(join(home, ".pi", "agent", "mcp.json")), "pi must still be configured by the install");
   } catch (error) {
     if (error.stdout) {
@@ -45,4 +45,4 @@ import { hermeticEnv, root } from "./_purge.fixture.mjs";
   }
 }
 
-console.log("  \u{2705} install.sh explicitly recreates ~/.rule-mcp/{state,data,projects,config}");
+console.log("  \u{2705} the install explicitly recreates ~/.rule-mcp/{state,data,projects,config}");

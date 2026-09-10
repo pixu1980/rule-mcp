@@ -81,8 +81,10 @@ try {
     assert.ok(!existsSync(join(piPrompts, name)), `stale command must not be installed: ${name}`);
   }
 
-  const installScript = readFileSync(join(root, "scripts", "install.sh"), "utf8");
-  assert.ok(installScript.includes("install-agent-commands.sh"), "install.sh must install explicit agent commands");
+  // The bootstrap no longer shells out to install-agent-commands.sh; the
+  // setup plan owns the step, so the contract is asserted where it lives.
+  const commandsStep = readFileSync(join(root, "src", "cli", "setup", "_task-extras.js"), "utf8");
+  assert.ok(commandsStep.includes('"agent-commands", "--sync"'), "the setup plan must sync explicit agent commands");
 
   console.log(`  ✅ ${commandFiles.length} explicit agent command integrations installed`);
 } finally {

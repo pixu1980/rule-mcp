@@ -75,9 +75,11 @@ treated as personal data here even though this server never transmits them:
   exports have a retention cap; the redacted variant exists so the useful part
   can be shared without the identifying part.
 - **Erasure**: delete `~/.rule-mcp/projects/<slug>/` for one project and
-  `~/.rule-mcp/state` for machine-level state. `rule-mcp uninstall`
-  (and `scripts/uninstall.sh`) removes the whole runtime home; `--keep-config`
-  preserves the configuration directories.
+  `~/.rule-mcp/state` for machine-level state. `rule-mcp setup
+--uninstall --purge` (and `scripts/uninstall.sh --purge`) removes the whole
+  runtime home; `--keep-config` preserves the configuration directories. In the
+  wizard the purge is its own screen, starts empty, and names the file count
+  before it deletes anything.
 - **Access/portability**: the format is JSON on your disk. `rule-mcp
 stats` renders the local aggregate; any text editor reads the raw files.
 

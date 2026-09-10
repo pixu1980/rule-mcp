@@ -7,7 +7,7 @@ a tool, a skill, a prompt, a role, a command or a guardrail;
 `tests/docs/census-generated.test.mjs` compares this file against the live
 registry, so a stale copy fails the build instead of misleading a reader.
 
-## The commands (21)
+## The commands (22)
 
 Every command is listed with the arguments and options it reads, taken from
 the commander definitions that parse them. The same definitions answer
@@ -25,6 +25,7 @@ the package version from anywhere. An error exits 1 and prints to stderr;
 | [`serve`](#rule-mcp-serve)                   | 4       | Start the MCP server (STDIO by default)                                       |
 | [`up`](#rule-mcp-up)                         | 1       | Same as "serve --transport sse" (on-demand HTTP daemon)                       |
 | [`daemon`](#rule-mcp-daemon)                 | 1       | Manage the MCP daemon (process and native platform services)                  |
+| [`setup`](#rule-mcp-setup)                   | 20      | Full-screen wizard to install or remove this server across agents             |
 | [`install`](#rule-mcp-install)               | 6       | Install rule-mcp into an agent/IDE (edits mcp.json)                     |
 | [`uninstall`](#rule-mcp-uninstall)           | 3       | Remove rule-mcp from an agent/IDE                                       |
 | [`tools`](#rule-mcp-tools)                   | 1       | List or call MCP tools directly                                               |
@@ -103,6 +104,39 @@ rule-mcp daemon action
 | Flag        | Default | Choices | Description                                              |
 | ----------- | ------- | ------- | -------------------------------------------------------- |
 | `--dry-run` | -       | -       | preview changes without writing (install/uninstall only) |
+
+## rule-mcp setup
+
+Full-screen wizard to install or remove this server across agents
+
+```sh
+rule-mcp setup
+```
+
+**Options**
+
+| Flag               | Default | Choices                            | Description                                                           |
+| ------------------ | ------- | ---------------------------------- | --------------------------------------------------------------------- |
+| `--uninstall`      | -       | -                                  | run the removal wizard instead of the install wizard                  |
+| `--agent <name>`   | -       | -                                  | limit the run to one agent                                            |
+| `--mode <name>`    | -       | `stdio`, `daemon`, `sse`, `docker` | stdio (default), daemon (SSE), or docker                              |
+| `--rules`          | -       | -                                  | append the instruction block to agent instruction files               |
+| `--no-rules`       | -       | -                                  | skip agent instruction files                                          |
+| `--commands`       | -       | -                                  | write the rule-* slash commands                                        |
+| `--no-commands`    | -       | -                                  | skip the rule-* slash commands                                         |
+| `--skills`         | -       | -                                  | install the bundled rule-* skills to ~/.agents/skills                  |
+| `--no-skills`      | -       | -                                  | skip the bundled skills                                               |
+| `--git-hook`       | -       | -                                  | add the background health check to the post-commit hook               |
+| `--no-git-hook`    | -       | -                                  | skip the git hook                                                     |
+| `--service`        | -       | -                                  | register the platform daemon service (daemon mode)                    |
+| `--no-service`     | -       | -                                  | skip the platform daemon service                                      |
+| `--doctor`         | -       | -                                  | run the health check at the end                                       |
+| `--no-doctor`      | -       | -                                  | skip the closing health check                                         |
+| `--purge`          | -       | -                                  | uninstall only: delete ~/.rule-mcp and ~/.config/rule-mcp |
+| `--keep-config`    | -       | -                                  | uninstall only: keep the config directories even with --purge         |
+| `--force`          | -       | -                                  | override existing configuration                                       |
+| `--dry-run`        | -       | -                                  | preview without writing                                               |
+| `--no-interactive` | -       | -                                  | skip the wizard and run the plan with defaults                        |
 
 ## rule-mcp install
 

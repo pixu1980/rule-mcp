@@ -92,12 +92,23 @@ assert.ok(prompt.includes("$ARGUMENTS"), "Pi prompt template must forward comman
 assert.ok(prompt.includes("rule"), "Pi prompt template must route through rule tool");
 
 const universalInstallerPath = join(root, "scripts", "install.sh");
-const universalInstaller = readFileSync(universalInstallerPath, "utf8");
+const installerHome = mkdtempSync(join(tmpdir(), "rule-mcp-install-"));
 execFileSync("bash", [universalInstallerPath, "--agent", "pi", "--force", "--dry-run"], {
   cwd: root,
-  env: { ...process.env, HOME: mkdtempSync(join(tmpdir(), "rule-mcp-install-")) },
+  env: {
+    ...process.env,
+    HOME: installerHome,
+    // The bootstrap resolves the global bin dir from PNPM_HOME; without a
+    // sandbox a contract run rewrites the developer's real shim.
+    PNPM_HOME: join(installerHome, ".pnpm"),
+    RULE_MCP_HOME: join(installerHome, ".rule-mcp"),
+    RULE_MCP_SKIP_GLOBAL_LINK: "1",
+  },
   stdio: "pipe",
 });
+// The instruction block moved out of the shell installer and into the Node
+// wizard (ADR 073), so the tool names are asserted where they now live.
+const universalInstaller = readFileSync(join(root, "src", "cli", "setup", "_rules.data.js"), "utf8");
 for (const tool of ["pix_tool -", "rule_tool_process_adr", "rule_tool_process_handoff"]) {
   assert.ok(universalInstaller.includes(tool), `universal installer rules must reference ${tool}`);
 }

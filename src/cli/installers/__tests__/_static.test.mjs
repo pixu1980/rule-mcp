@@ -1,27 +1,73 @@
-/** Source contract: probe, heal, escape hatch, error surfacing, TTY gate, uninstall reversal. */
+/**
+ * Source contract for the shim: probe before trust, an escape hatch, and a
+ * removal that reverses every path an install may have written.
+ *
+ * The contract used to be asserted against install.sh and uninstall.sh; it
+ * moved into src/cli/setup/ with the rest of the logic (ADR 080).
+ */
 import { strict as assert } from "node:assert";
+import { homedir } from "node:os";
+import { join } from "node:path";
+import test from "node:test";
 
-import { installSh, uninstallSh } from "./_shim.fixture.mjs";
+import { globalBinDir, linkCandidates, shimCandidates, skipGlobalLink } from "../../setup/_shim.js";
+import { removeGlobalShims } from "../../setup/_shim-apply.js";
 
-// ── Source contract ─────────────────────────────────────────────────────────
+test("the escape hatch is honored by both directions", () => {
+  const saved = process.env.RULE_MCP_SKIP_GLOBAL_LINK;
 
-assert.match(installSh, /shim_works\(\) \{/, "install.sh must define a launch probe");
-assert.match(installSh, /rule-mcp --version/, "the probe must actually launch the binary");
-assert.match(installSh, /ensure_global_shim\(\) \{/, "install.sh must define ensure_global_shim");
-assert.match(installSh, /RULE_MCP_SKIP_GLOBAL_LINK/, "install.sh must expose a link-skip escape hatch");
-assert.doesNotMatch(installSh, /CI=true pnpm link --global/, "install.sh must NOT run `pnpm link --global` (pnpm 10/11 rewrites pnpm-workspace.yaml overrides)");
-assert.match(installSh, /bin_dir\/rule-mcp/, "install.sh must write the shim directly into the global bin dir");
-assert.match(installSh, /chmod \+x/, "install.sh must make the shim executable");
-assert.match(installSh, /if shim_works; then\n {4}rule-mcp "\$@"/, "run_cli must prefer the shim only when it launches");
-assert.match(installSh, /node "\$LOCAL_BIN" "\$@"/, "run_cli must keep the local-binary fallback");
-assert.doesNotMatch(installSh, /run_cli install --agent "\$\{TARGET_AGENT\}" --mode "\$\{INSTALL_MODE\}" --json >\/dev\/null/, "install.sh must not swallow a failed CLI install");
-assert.match(installSh, /out="\$\(run_cli install --agent "\$\{TARGET_AGENT\}"/, "install.sh must capture CLI errors");
-assert.match(installSh, /USE_COLOR=false/, "install.sh must gate colors behind a TTY/NO_COLOR check");
-assert.match(installSh, /\[\[ -t 1 \]\]/, "install.sh must check stdout is a TTY before coloring");
+  try {
+    process.env.RULE_MCP_SKIP_GLOBAL_LINK = "1";
 
-assert.match(uninstallSh, /pnpm unlink --global rule-mcp/, "uninstall.sh must unlink the pnpm-linked package");
-assert.match(uninstallSh, /for shim_name in rule-mcp rule-mcpd/, "uninstall.sh must remove both pnpm bin shims, the retired -mcpd alias included");
-assert.match(uninstallSh, /global\/"\*\/node_modules\/rule-mcp/, "uninstall.sh must remove the link from the global store");
-assert.match(uninstallSh, /USE_COLOR=false/, "uninstall.sh must gate colors the same way");
+    assert.equal(skipGlobalLink(), true);
+    assert.deepEqual(removeGlobalShims(), [{ path: "(all)", kind: "shim", status: "skipped" }], "removal must not touch a sandboxed machine's real shim");
+  } finally {
+    if (saved === undefined) {
+      delete process.env.RULE_MCP_SKIP_GLOBAL_LINK;
+    } else {
+      process.env.RULE_MCP_SKIP_GLOBAL_LINK = saved;
+    }
+  }
+});
 
-console.log("  \u{2705} uninstall.sh reverses the shim: pnpm unlink + bin shim + store link");
+test("PNPM_HOME wins when resolving the global bin directory", () => {
+  const saved = process.env.PNPM_HOME;
+
+  try {
+    process.env.PNPM_HOME = "/tmp/rule-fake-pnpm";
+
+    assert.equal(globalBinDir(), join("/tmp/rule-fake-pnpm", "bin"));
+  } finally {
+    if (saved === undefined) {
+      delete process.env.PNPM_HOME;
+    } else {
+      process.env.PNPM_HOME = saved;
+    }
+  }
+});
+
+test("removal sweeps every bin directory an install may have used", () => {
+  const home = "/tmp/rule-fake-home";
+  const candidates = shimCandidates(home);
+
+  for (const dir of [join(home, "Library", "pnpm", "bin"), join(home, ".local", "share", "pnpm", "bin"), join(home, ".pnpm-global", "bin"), join(home, ".npm-global", "bin")]) {
+    assert.ok(candidates.includes(join(dir, "rule-mcp")), `${dir} must be swept`);
+  }
+});
+
+test("the retired -mcpd alias is swept alongside the current name", () => {
+  // ADR 064 retired the alias; a stale shim keeps `command -v` resolving
+  // forever and silently breaks the next install.
+  assert.ok(
+    shimCandidates("/tmp/rule-fake-home").some((path) => path.endsWith("rule-mcpd")),
+    "the -mcpd shims must still be cleaned up",
+  );
+});
+
+test("the pnpm global store link is a removal target too", () => {
+  // Only directories that exist are enumerated, so this asserts the shape
+  // rather than a count: an install may have left a link in either root.
+  for (const path of linkCandidates(homedir())) {
+    assert.match(path, /node_modules\/rule-mcp$/, "store links point at the package directory");
+  }
+});

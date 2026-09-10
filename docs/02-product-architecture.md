@@ -477,9 +477,9 @@ Refresh with `pnpm census`; full inventories in `docs/07-` .. `docs/12-`.
 | Guardrail rules           | 95    | `src/core/guardrails/index.js`                |
 | Agent slash commands      | 77    | `src/core/agents/commands/index.js`           |
 | Agent/IDE command targets | 13    | `src/core/agents/command-targets/index.js`    |
-| CLI commands              | 21    | `src/cli/_program.js`                         |
+| CLI commands              | 22    | `src/cli/_program.js`                         |
 | Hook events               | 3     | `src/core/agents/_hooks.js`                   |
-| Architecture decisions    | 79    | [`docs/adr/ADR.md`](adr/ADR.md)               |
+| Architecture decisions    | 80    | [`docs/adr/ADR.md`](adr/ADR.md)               |
 
 Regenerate with `pnpm census`. The inventories themselves are
 [`08-skills.md`](08-skills.md) through [`15-resources.md`](15-resources.md).

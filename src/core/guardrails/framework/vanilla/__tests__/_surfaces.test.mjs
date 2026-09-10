@@ -103,12 +103,12 @@ test("a CSS route carries it, a backend route does not", async () => {
 });
 
 test("the installed agent rules carry it", () => {
-  // Source guards: both installers write the rules, and neither can be run
-  // against a real home directory from a test.
+  // Source guards: both writers of the block carry the rule, and neither can
+  // be run against a real home directory from a test.
   const installJs = readFileSync(join(root, "src", "cli", "installers", "_writers-text.js"), "utf8");
-  const installSh = readFileSync(join(root, "scripts", "install.sh"), "utf8");
+  const setupRules = readFileSync(join(root, "src", "cli", "setup", "_rules.data.js"), "utf8");
   assert.match(installJs, /flex first/i, "the instruction block written into CLAUDE.md must carry the rule");
-  assert.match(installSh, /flex first/i, "the shell installer's rules block must carry the rule");
+  assert.match(setupRules, /flex first/i, "the setup wizard's rules block must carry the rule");
 });
 
 test("the docs carry it", () => {
