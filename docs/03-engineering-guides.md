@@ -101,14 +101,14 @@ commit - the docs follow the code instead of being remembered.
   classification guards and `validate.py`'s structural validator. The LLM
   compression step is deliberately not ported - an LLM in the output path
   costs determinism, cacheability and the zero-dependency contract, and the
-  guard plus per-block rollback buys the same safety for free (ADR 076).
+  guard plus per-block rollback buys the same safety for free (ADR 073).
 
 - **Startup** (`pnpm report:startup`, 2026-09-09): warm `--help` 48 ms,
   `tools list` 265 ms, stdio `initialize` 251 ms. A cold process spends 12 ms
   on the entry import, 53 ms registering skills and 8 ms converting tool
   schemas; the second `tools/list` in a process is free. The compiled code
   cache is worth 2-6 %; the 168 ms came from what `--help` no longer loads
-  (ADR 077).
+  (ADR 074).
 
 ## Contributing
 

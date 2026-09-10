@@ -61,7 +61,7 @@ export function renderFlight(flight) {
       ["Hit rate", pct(kpi.cache?.hitRate, 0)],
       ["Hits", num(kpi.cache?.hits)],
       // Output the cache served, reported here rather than under tokens saved:
-      // a replayed result is read by the model in full (ADR 079).
+      // a replayed result is read by the model in full (ADR 076).
       ["Replayed output", kpi.cache?.replayedTokens ? `~${num(kpi.cache.replayedTokens)} tokens` : undefined],
       ["Recompute saved", kpi.cache?.recomputeSavedMsPerHit ? `~${num(kpi.cache.recomputeSavedMsPerHit)} ms per hit` : undefined],
     ]),

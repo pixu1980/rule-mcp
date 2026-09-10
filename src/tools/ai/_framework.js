@@ -8,7 +8,7 @@ import { detectProject, getFrameworkSuggestion } from "../../core/detector/index
  * ever suggests pix-ai, pix-frontend-*, pix-meta-* and pix-platform-desktop.
  * A meta-framework is frontend - it was, as pix-frontend-meta-astro, until the
  * pix-meta rename dropped it out of the prefix and cost Astro its framework
- * bias in the router (ADR 078).
+ * bias in the router (ADR 075).
  */
 const DOMAIN_PREFIXES = [
   ["pix-ai", "ai"],

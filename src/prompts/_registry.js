@@ -19,7 +19,7 @@ export function listPrompts() {
  *
  * The names are shared with the agent commands on purpose: the command
  * generator derives its set from this registry, so a second name for the same
- * operation would be the drift ADR 029 removed.
+ * operation would be the drift ADR 028 removed.
  *
  * @returns {Array<{ name: string, description: string, arguments: object[] }>}
  */

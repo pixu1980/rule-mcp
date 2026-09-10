@@ -56,7 +56,7 @@ export function applyRenumber(plan, options = {}) {
     }
   }
 
-  // The index is generated from the ADR files (ADR 051), so after a move it is
+  // The index is generated from the ADR files (ADR 050), so after a move it is
   // rebuilt rather than patched: link rewriting would leave the rows, the
   // titles and the order describing the arrangement before the repair.
   if (plan.renames.some((rename) => rename.family === "ADR") || plan.indexUnordered) {
