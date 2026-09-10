@@ -71,15 +71,31 @@ test("a prompt body is compressed and booked as its own source", async () => {
   assert.ok(getTokenStats().savedBySource["caveman-prompt"] > 0, "the prompt surface books its own saving");
 });
 
-test("prompts/list is left alone: its descriptions are schema, not prose", () => {
-  const listed = listPrompts();
+test("prompts/list descriptions compress; names and argument names stay", async () => {
+  resetTokenStats();
+  const handlers = new Map();
+  registerPromptHandlers({ setRequestHandler: (schema, handler) => handlers.set(schema.shape?.method?.value ?? handlers.size, handler) });
 
-  assert.ok(listed.length > 0);
+  const list = [...handlers.values()][0];
+  const { prompts: listed } = await list({});
+  const registry = listPrompts();
 
-  for (const prompt of listed.slice(0, 10)) {
-    assert.equal(typeof prompt.description, "string");
-    assert.ok(prompt.description.length > 0, `${prompt.name} keeps its hint`);
-  }
+  // Names are the machine contract: identical to the registry, untouched.
+  assert.deepEqual(listed.map((p) => p.name), registry.map((p) => p.name), "names survive the listing unchanged");
+  assert.deepEqual(
+    listed.map((p) => (p.arguments ?? []).map((a) => a.name)),
+    registry.map((p) => (p.arguments ?? []).map((a) => a.name)),
+    "argument names are the schema contract and stay",
+  );
+
+  // Prose descriptions compress: a persona prompt carries filler it sheds.
+  const raw = registry.find((prompt) => prompt.name === "rule-plan-security");
+  const out = listed.find((prompt) => prompt.name === raw.name);
+  assert.ok(out.description.length < raw.description.length, `the persona hint shortens: ${raw.description.length} -> ${out.description.length}`);
+  assert.ok(out.description.includes("Security"), "the substance of the description survives");
+
+  const stats = getTokenStats();
+  assert.ok(stats.savedBySource["caveman-prompt-list"] > 0, "the listing books its own saving");
 });
 
 test("a payload that is not text passes through the compression step", async () => {

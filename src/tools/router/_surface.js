@@ -2,6 +2,9 @@
 
 import { _tools, toolsGeneration } from "./_hooks.js";
 
+import { compressText } from "../../core/text/_caveman.js";
+import { cavemanEnabled } from "../../core/text/_level.js";
+
 const MUTATING_TOOLS = new Set([
   "rule_tool_apply",
   "rule_tool_fix",
@@ -43,22 +46,27 @@ function declaredTools() {
   return _tools;
 }
 
-let memo = { generation: -1, tools: [] };
+let memo = { generation: -1, tools: [], compress: null };
 
 /**
  * List all registered tools with their names, descriptions, and input schemas.
  * Converts Zod schemas to JSON Schema via the built-in toJSONSchema() method.
  *
- * Memoized on the registry generation: the conversion is deterministic and the
- * registry does not change between client connects, so it is paid once per
- * process instead of once per `tools/list`.
+ * Memoized on the registry generation AND the caveman state: the conversion
+ * is deterministic and the registry does not change between client connects,
+ * so it is paid once per process instead of once per `tools/list`.
+ *
+ * The description is prose the model reads on every turn to choose a tool, so
+ * it goes through the same caveman pass as tool results; names, schemas and
+ * annotations are the machine contract and are left untouched (plan 2b).
  *
  * @returns {Array<{ name: string, description: string, inputSchema: object }>}
  */
 function listTools() {
   const generation = toolsGeneration();
+  const compress = cavemanEnabled();
 
-  if (memo.generation === generation) {
+  if (memo.generation === generation && memo.compress === compress) {
     return memo.tools;
   }
 
@@ -87,12 +95,13 @@ function listTools() {
       }
     }
 
+    const description = compress ? compressText(String(t.description ?? "")) : String(t.description ?? "");
     const annotations = annotationsFor(t.name);
 
-    return annotations ? { name: t.name, description: t.description, inputSchema, annotations } : { name: t.name, description: t.description, inputSchema };
+    return annotations ? { name: t.name, description, inputSchema, annotations } : { name: t.name, description, inputSchema };
   });
 
-  memo = { generation, tools };
+  memo = { generation, compress, tools };
 
   return tools;
 }

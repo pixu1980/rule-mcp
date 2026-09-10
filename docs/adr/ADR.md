@@ -8,6 +8,7 @@ this directory are the source of truth; this index is generated from them by
 
 | #                                                                                                                       | Title                                                                                                     | Date       | Status     | Tags                                                                                |
 | ----------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- | ---------- | ---------- | ----------------------------------------------------------------------------------- |
+| [077](077-compress-every-server-model-list-surface-prompts-list-tools-list-resources-list.md)                           | Compress every server→model list surface (prompts/list, tools/list, resources/list)                       | 2026-09-10 | accepted   | token-efficiency, compression, mcp-surface, prompts, tools                          |
 | [076](076-coverage-wave-five-raises-the-branch-floor-to-91.md)                                                          | Coverage wave five raises the branch floor to 91                                                          | 2026-09-09 | accepted   | testing, coverage, ci                                                               |
 | [075](075-meta-frameworks-get-their-own-namespace-and-a-narrow-dispatcher.md)                                           | Meta-frameworks get their own namespace and a narrow dispatcher                                           | 2026-09-09 | accepted   | skills, taxonomy, routing, tools                                                    |
 | [074](074-the-cli-entry-point-loads-no-command-handler-it-has-not-been-asked-for.md)                                    | The CLI entry point loads no command handler it has not been asked for                                    | 2026-09-09 | accepted   | cli, startup, performance, imports                                                  |
@@ -92,6 +93,7 @@ file. Where a line stops short the rest is in the ADR.
 
 | ADR                                                                                                                     | Decision                                                                                                                                                                                                                        | Consequence                                                                                                                                                                                                                    |
 | ----------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| [077](077-compress-every-server-model-list-surface-prompts-list-tools-list-resources-list.md)                           | Compress the prose fields of all three list surfaces at the protocol boundary only: prompts/list shortens description and argument descriptions (names, required untouched; books telemetry source caveman-prompt-list),...     | Positive: every server→model list surface now runs the guarded pipeline; prompts/list saves ~4.5% of its descriptions every session start; tools/list saves ~0.7% of descriptions on every turn; one invariant across all...   |
 | [076](076-coverage-wave-five-raises-the-branch-floor-to-91.md)                                                          | Cover the three biggest clusters that are not platform-locked and raise the floor to the measured integer. generateMultiFile had 2 of 12 branches visited, the rule:// reader 15 of 26, and the command-target context none...   | 91.17 percent branches (6375/6992), floor raised 90 to 91 with 12 branches of margin.                                                                                                                                          |
 | [075](075-meta-frameworks-get-their-own-namespace-and-a-narrow-dispatcher.md)                                           | Rename the four skills to rule-meta-astro, next, nuxt and remix, rename the occupying prompt to rule-area-toolset (which is what it always described), and add skills/rule-meta as a hub with a code-registered rule_tool_meta...   | Routing a meta-framework request now names one skill and the component skill to load with it.                                                                                                                                  |
 | [074](074-the-cli-entry-point-loads-no-command-handler-it-has-not-been-asked-for.md)                                    | Keep the command and option declarations static, and load the handlers inside their actions.                                                                                                                                    | Warm --help fell from 216 ms to 48 ms, and every command still dispatches. listTools() is memoized on a registry generation bumped by register, clear and retain, so the 105-schema conversion is paid once per process...     |
@@ -316,6 +318,13 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [004](004-scaffold-consolidation.md) Scaffold Skill Consolidation
 - [001](001-thematic-skill-rename.md) Thematic Skill Taxonomy Rename
 
+### prompts
+
+- [077](077-compress-every-server-model-list-surface-prompts-list-tools-list-resources-list.md) Compress every server→model list surface (prompts/list, tools/list, resources/list)
+- [055](055-restructure-the-command-surface-rule-router-rule-area-caveman-implicit-rule-process.md) Restructure the command surface: /rule router, rule-area-*, caveman implicit, rule-process-tdd skill
+- [054](054-split-review-personas-into-per-operation-commands-plan-audit-review.md) Split review personas into per-operation commands (plan/audit/review)
+- [052](052-pre-packaged-mcp-prompt-registry-26-prompts-strict-schemas-commit-scope-closer.md) Pre-packaged MCP prompt registry (26 prompts, strict schemas, commit-scope closer)
+
 ### ratchet
 
 - [069](069-coverage-wave-four-holds-the-floor-at-90-and-fixes-the-daemon-status-platform-de.md) Coverage wave four holds the floor at 90 and fixes the daemon status platform defect
@@ -359,12 +368,6 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [060](060-plans-carry-nested-sub-steps-and-an-exhaustiveness-mandate.md) Plans carry nested sub-steps and an exhaustiveness mandate
 - [059](059-persona-plans-are-checklists-with-marks-that-survive-the-sync.md) Persona plans are checklists with marks that survive the sync
 - [054](054-split-review-personas-into-per-operation-commands-plan-audit-review.md) Split review personas into per-operation commands (plan/audit/review)
-
-### prompts
-
-- [055](055-restructure-the-command-surface-rule-router-rule-area-caveman-implicit-rule-process.md) Restructure the command surface: /rule router, rule-area-*, caveman implicit, rule-process-tdd skill
-- [054](054-split-review-personas-into-per-operation-commands-plan-audit-review.md) Split review personas into per-operation commands (plan/audit/review)
-- [052](052-pre-packaged-mcp-prompt-registry-26-prompts-strict-schemas-commit-scope-closer.md) Pre-packaged MCP prompt registry (26 prompts, strict schemas, commit-scope closer)
 
 ### quality
 
