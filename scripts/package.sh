@@ -47,43 +47,12 @@ end
 FORMULA
 echo "  Formula: ${NAME}.rb (sha256: ${SHASUM})"
 
-# 5. Create install scripts
-echo "--- Install scripts ---"
-cat > "$ROOT/scripts/install.sh" << 'SCRIPT'
-#!/usr/bin/env bash
-set -euo pipefail
-echo "Installing rule-mcp..."
-pnpm add -g rule-mcp || {
-  echo "pnpm add failed. Try:"
-  echo "  pnpx rule-mcp serve"
-  exit 1
-}
-echo "Installed. Run:"
-echo "  rule-mcp doctor"
-echo "  rule-mcp install --agent all"
-SCRIPT
-chmod +x "$ROOT/scripts/install.sh"
-
-cat > "$ROOT/scripts/install.ps1" << 'SCRIPT'
-#!/usr/bin/env pwsh
-Write-Host "Installing rule-mcp..."
-pnpm add -g rule-mcp
-if ($LASTEXITCODE -ne 0) {
-  Write-Host "pnpm add failed. Try: pnpx rule-mcp serve"
-  exit 1
-}
-Write-Host "Installed. Run:"
-Write-Host "  rule-mcp doctor"
-Write-Host "  rule-mcp install --agent all"
-SCRIPT
+# 5. Install scripts are NOT generated here. They are tracked bootstraps
+# (ADR 080): the single installer implementation lives in src/cli/setup/
+# and the shell scripts only forward to it. Regenerating them from
+# heredocs reintroduced the registry install and the drift this removed.
 
 echo "=== Done ==="
 echo ""
-echo "Publish to npm:"
-echo "  pnpm publish"
-echo ""
 echo "Publish to Homebrew:"
 echo "  gh release upload v$VERSION ${NAME}.rb"
-echo ""
-echo "Or install directly:"
-echo "  pnpm add -g ${NAME}"

@@ -263,6 +263,11 @@ curl http://localhost:37999/health
 rule-mcp tools list
 rule-mcp tools call rule_tool_detect --json '{}'
 rule-mcp tools call rule --json '{"prompt": "React button"}'
+
+# Verify a release tarball (every GitHub Release attaches both files)
+curl -fsSLO https://github.com/pixu1980/rule-mcp/releases/download/<tag>/rule-mcp-<version>.tgz
+curl -fsSLO https://github.com/pixu1980/rule-mcp/releases/download/<tag>/SHA256SUMS
+shasum -a 256 -c SHA256SUMS
 ```
 
 ---
@@ -270,11 +275,11 @@ rule-mcp tools call rule --json '{"prompt": "React button"}'
 ### 8. Subsequent Releases
 
 ```bash
-# Bump version
-pnpm version patch   # 0.1.0 → 0.1.1
-# pnpm version minor  # 0.1.0 → 0.2.0
-# pnpm version major  # 0.1.0 → 1.0.0
+# Bump version (single writer for package.json, server.json, CHANGELOG.md)
+node scripts/build/version/index.mjs --apply 1.1.0
+node scripts/build/version/index.mjs --check
 
+git add -A && git commit -m "chore(release): 1.1.0" && git tag v1.1.0
 git push --follow-tags
 ```
 
@@ -285,15 +290,13 @@ The release pipeline triggers automatically on tag `v*.*.*`.
 ### Release Pipeline Architecture
 
 ```
-Tag v0.2.0
+Tag vX.Y.Z
     │
-    ├─► publish-pnpm: pnpm publish --provenance
+    ├─► build: version/audit gates → pnpm build → tarball + SHA256SUMS (artifact)
     │
-    ├─► docker: buildx (amd64+arm64) → ghcr.io
+    ├─► verify: checksum check → scratch npm install → bin runs
     │
-    ├─► homebrew: package.sh → formula .rb → release asset
-    │
-    └─► github-release: pnpm pack → .tgz → release assets
+    └─► release: attach tarball + SHA256SUMS to the GitHub Release
 ```
 
 ---

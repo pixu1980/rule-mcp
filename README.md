@@ -70,6 +70,13 @@ cd rule-mcp
 rule-mcp doctor
 ```
 
+Verify a release tarball (every GitHub Release attaches both files):
+
+```bash
+curl -fsSLO https://github.com/pixu1980/rule-mcp/releases/download/<tag>/SHA256SUMS
+shasum -a 256 -c SHA256SUMS
+```
+
 ---
 
 ## What is rule-mcp

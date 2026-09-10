@@ -7,21 +7,81 @@ on:
 permissions:
   contents: read
 
+# The one place the pnpm version lives for this workflow (mirrors ci.yml).
+env:
+  PNPM_VERSION: "11.25.0"
+
 jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1 # v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+      # No setup-node cache here: this workflow runs on tags, and a cached
+      # dependency tree restored into a tag build is a cache-poisoning path.
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: "22"
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      # Tag, package.json, server.json and CHANGELOG must agree; bump locally
+      # with scripts/build/version/index.mjs --apply before tagging.
+      - name: Version sync
+        run: node scripts/build/version/index.mjs --check
+      - name: Dependency audit gate
+        run: pnpm audit:gate
+      - name: Pack the tarball
+        run: pnpm build
+      - name: Checksum the tarball
+        run: |
+          mkdir -p dist
+          mv rule-mcp-*.tgz dist/
+          cd dist && sha256sum rule-mcp-*.tgz > SHA256SUMS && cat SHA256SUMS
+      - name: Upload the artifact
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: release-tarball
+          path: dist/
+
+  verify:
+    runs-on: ubuntu-latest
+    needs: build
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          name: release-tarball
+          path: dist
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: "22"
+      - name: Verify the checksum
+        run: cd dist && sha256sum -c SHA256SUMS
+      # npm on purpose: the tarball must install under any npm-family client.
+      - name: Install the tarball from scratch
+        run: |
+          rm -rf /tmp/rule-verify && mkdir -p /tmp/rule-verify && cd /tmp/rule-verify
+          npm install "$GITHUB_WORKSPACE/dist/rule-mcp-"*.tgz
+          ./node_modules/.bin/rule-mcp --version
+
   release:
     runs-on: ubuntu-latest
+    needs: [build, verify]
     permissions:
       contents: write
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
           persist-credentials: false
-      # Tag, package.json, server.json and CHANGELOG must agree; --apply
-      # wires into the pack job once Step 6 adds one.
       - name: Version sync
         run: node scripts/build/version/index.mjs --check
-      # Must stay before the pack job once Step 6 adds one: no artifact
-      # ships with known advisories.
       - name: Dependency audit gate
         run: pnpm audit:gate
       - name: Extract changelog entry
@@ -36,7 +96,12 @@ jobs:
           echo "body<<EOFCHANGELOG" >> "$GITHUB_OUTPUT"
           echo "$BODY" >> "$GITHUB_OUTPUT"
           echo "EOFCHANGELOG" >> "$GITHUB_OUTPUT"
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          name: release-tarball
+          path: dist
       - uses: softprops/action-gh-release@3bb12739c298aeb8a4eeaf626c5b8d85266b0e65 # v2
         with:
           body: ${{ steps.changelog.outputs.body }}
           generate_release_notes: false
+          files: dist/*
