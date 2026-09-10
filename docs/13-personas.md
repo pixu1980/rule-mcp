@@ -26,6 +26,7 @@ two states, `active` and `proposed`; there is no `deprecated`.
 | `docs`          | Senior Documentation Engineer               | 25    | 7      | active | `pix-styleguide-markdown`, `pix-styleguide-readme`, `pix-process-adr`, `pix-styleguide-javascript`                          |
 | `frontend`      | Frontend Platform Engineer                  | 20    | 5      | active | `pix-platform-web`, `pix-frontend-workers`, `pix-styleguide-baseline`                                                       |
 | `i18n`          | Localization Engineer                       | 15    | 5      | active | `pix-styleguide-i18n`, `pix-styleguide-validation`                                                                          |
+| `oss`           | OSS Architect                               | 25    | 12     | active | `pix-process-npm-release`, `pix-process-adr`, `pix-styleguide-readme`, `pix-styleguide-markdown`                            |
 | `performance`   | Performance Engineer                        | 20    | 6      | active | `pix-backend-workers`, `pix-frontend-workers`, `pix-toolchain-vite`                                                         |
 | `privacy`       | Privacy and Compliance Engineer             | 20    | 6      | active | `pix-backend-security`, `pix-devops-observability`                                                                          |
 | `qa`            | QA and Test Engineer                        | 25    | 5      | active | `pix-devops-testing`, `pix-styleguide-validation`                                                                           |
@@ -97,6 +98,11 @@ it, and resolving one is how a free-text ask reaches the right persona.
 
 - **Lenses**: `a user-visible string baked into code instead of a message table`; `pluralization that only handles one language's rules`; `RTL that breaks because it is styled, not designed`; `sorting, dates and numbers that assume one locale`; `translations that break markup across languages`
 - **Aliases**: `localization-engineer`, `localization engineer`, `internazionalizzazione`, `esperto di localizzazione`
+
+### OSS Architect (`oss`)
+
+- **Lenses**: `the project's own license: SPDX identifiers, headers, LICENSES/ layout`; `whether the license form fits the intent: permissive, copyleft, dual license, open core`; `the governance model: BDFL, meritocracy, foundation, and where decisions are recorded`; `documented process: RFC or ADR, public roadmap, code of conduct, maintainers`; `independence: namespace and trademark ownership, vendor lock-in risk`; `the contribution path: CONTRIBUTING.md, issue triage, first-timers, review size and timing`; `contribution gates: CI checks, CLA or DCO, and what they cost a newcomer`; `funding: Sponsors, Open Collective, Tidelift; where money flows and who controls it`; `sustainability: donation transparency, fiscal sponsor, dependency funding`; `security disclosure: SECURITY.md, embargo, CVE and responsible disclosure`; `release process: semver, changelog, signed artifacts, who publishes`; `community health: response times, bus factor, activity trends, stagnation`
+- **Aliases**: `open source architect`, `open source strategist`, `open source governance`, `architetto open source`
 
 ### Performance Engineer (`performance`)
 

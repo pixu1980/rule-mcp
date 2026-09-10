@@ -169,7 +169,7 @@ runs it (plus `PIX_GALAXY_MCP_NO_RESUME_HANDON` for the resume block and
 
 <!-- census:begin:command-surface -->
 
-### The command surface today (74)
+### The command surface today (77)
 
 | Kind       | Count | Example           | Reach for it when                                                   |
 | ---------- | ----- | ----------------- | ------------------------------------------------------------------- |
@@ -177,7 +177,7 @@ runs it (plus `PIX_GALAXY_MCP_NO_RESUME_HANDON` for the resume block and
 | `area`     | 12    | `/pix-area-ai`    | Routes within one area, when the area is known and the skill is not |
 | `workflow` | 2     | `/pix-adr`        | Runs a named workflow: a decision record, a pre-flight check        |
 | `session`  | 5     | `/pix-handoff`    | Carries a session across a context boundary                         |
-| `persona`  | 54    | `/pix-audit-a11y` | Runs one review role at one operation, and writes its documents     |
+| `persona`  | 57    | `/pix-audit-a11y` | Runs one review role at one operation, and writes its documents     |
 
 **Areas**: `/pix-area-ai`, `/pix-area-backend`, `/pix-area-data`, `/pix-area-devops`, `/pix-area-frontend`, `/pix-area-platform`, `/pix-area-process`, `/pix-area-skills`, `/pix-area-styleguide`, `/pix-area-toolchain`, `/pix-area-toolset`, `/pix-area-ui`
 
