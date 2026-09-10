@@ -3,7 +3,6 @@
 **MCP server** for the **pix-*** skill ecosystem.  
 Serves styleguides, component templates, framework best practices, and design system patterns directly to your AI coding agent.
 
-[![npm version](https://img.shields.io/npm/v/pix-galaxy-mcp)](https://www.npmjs.com/package/pix-galaxy-mcp)
 [![Node](https://img.shields.io/badge/node-%3E%3D20-brightgreen)](https://nodejs.org)
 [![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 [![SDK](https://img.shields.io/badge/MCP%20SDK-1.29.0-blue)](https://github.com/modelcontextprotocol/typescript-sdk)
@@ -56,7 +55,7 @@ app + SDK repo.
 
 See **[`docs/01-getting-started.md`](./docs/01-getting-started.md)** for step-by-step installation:
 
-- Global npm / pnpm install
+- Global CLI from a clone
 - pnpx ephemeral (no install)
 - Local development clone
 - Docker
@@ -64,10 +63,11 @@ See **[`docs/01-getting-started.md`](./docs/01-getting-started.md)** for step-by
 - mcp.json configuration
 
 ```bash
-# TL;DR - install and go
-pnpm add -g pix-galaxy-mcp
+# TL;DR - clone and go
+git clone https://github.com/pixu1980/pix-galaxy-mcp.git
+cd pix-galaxy-mcp
+./scripts/install.sh
 pix-galaxy-mcp doctor
-pix-galaxy-mcp install --agent all
 ```
 
 ---

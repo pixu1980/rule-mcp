@@ -217,15 +217,15 @@ git push
 
 Users can install using these methods:
 
-| Method             | Command                                                           |
-| ------------------ | ----------------------------------------------------------------- |
-| **pnpm/pnpm**      | `pnpm add -g pix-galaxy-mcp`                                      |
-| **pnpx**           | `pnpx pix-galaxy-mcp serve`                                       |
-| **Homebrew**       | `brew install pix/tap/pix-galaxy-mcp`                             |
-| **Docker**         | `docker pull ghcr.io/pix/pix-galaxy-mcp`                          |
-| **Winget**         | `winget install pix.pix-galaxy-mcp`                               |
-| **Scoop**          | `scoop bucket add pix-galaxy-mcp && scoop install pix-galaxy-mcp` |
-| **GitHub Release** | Direct `.tgz` download                                            |
+| Method               | Command                                                           |
+| -------------------- | ----------------------------------------------------------------- |
+| **Clone + launcher** | `git clone` + `./scripts/install.sh`                              |
+| **pnpx**             | `pnpx pix-galaxy-mcp serve`                                       |
+| **Homebrew**         | `brew install pix/tap/pix-galaxy-mcp`                             |
+| **Docker**           | `docker pull ghcr.io/pix/pix-galaxy-mcp`                          |
+| **Winget**           | `winget install pix.pix-galaxy-mcp`                               |
+| **Scoop**            | `scoop bucket add pix-galaxy-mcp && scoop install pix-galaxy-mcp` |
+| **GitHub Release**   | Direct `.tgz` download                                            |
 
 #### Agent command artifacts
 
@@ -247,8 +247,10 @@ Uninstall removes same artifact. Universal command body forces routing, evidence
 ### 7. Post-Release Verification
 
 ```bash
-# Test pnpm
-pnpm add -g pix-galaxy-mcp
+# Test the clone install
+git clone https://github.com/pixu1980/pix-galaxy-mcp.git
+cd pix-galaxy-mcp
+./scripts/install.sh
 pix-galaxy-mcp doctor
 pix-galaxy-mcp install --agent all
 
@@ -480,7 +482,7 @@ pix-galaxy-mcp daemon logs
 
 | Symptom                             | Likely cause           | Fix                                                |
 | ----------------------------------- | ---------------------- | -------------------------------------------------- |
-| `command not found: pix-galaxy-mcp` | Not installed globally | `pnpm add -g pix-galaxy-mcp`                       |
+| `command not found: pix-galaxy-mcp` | Not installed globally | `git clone` + `./scripts/install.sh`               |
 | `Cannot find module`                | Node.js < 20           | Upgrade to Node.js 20+                             |
 | `ECONNREFUSED` on port 37999        | Daemon not running     | `pix-galaxy-mcp daemon start`                      |
 | Tools return 0 results              | Skills not loaded      | `pix-galaxy-mcp skills reload`                     |
