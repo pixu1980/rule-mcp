@@ -188,12 +188,12 @@ works.
   - [x] **4.3**: Update the three mirrored tables: docs/02-product-architecture.md lines 423-426 and docs/04-operations.md lines 222, 251, 483.
   - [x] **4.4**: Remove the npm-version badge from README.md line 6 and replace the Quick start block at README.md lines 66-70 with the clone path.
   - [x] **4.5**: Gate: node --test tests/docs/install-claims.test.mjs green; tests/docs/docs-accuracy.test.mjs green; pnpm census:check green.
-- [ ] **Step 5 - OSS-10 (high)**: There is no inbound contribution licensing. No DCO sign-off is required, there is no CLA, and no file states that contributions are licensed under the project license, so the licensing status of any contributed patch is undefined. The interview resolved the mechanism: DCO, no CLA.
-  - [ ] **5.1**: Write the failing test tests/docs/dco.test.mjs: the hook must reject a fixture commit body with no Signed-off-by trailer and accept one that has it.
-  - [ ] **5.2**: Extend .githooks/commit-msg to require a Signed-off-by: Name <email> trailer in the body, with the same message style as the scope check and the same merge/revert exemption.
-  - [ ] **5.3**: Add the DCO section to CONTRIBUTING.md with the git commit -s instruction, what the trailer asserts, and a link to https://developercertificate.org/.
-  - [ ] **5.4**: Add a CI job in .github/workflows/ci.yml that verifies every commit in the pull request range carries the trailer, so the local hook is not the only gate.
-  - [ ] **5.5**: Gate: node --test tests/docs/dco.test.mjs green; a commit without the trailer is rejected locally and by the CI job.
+- [x] **Step 5 - OSS-10 (high)**: There is no inbound contribution licensing. No DCO sign-off is required, there is no CLA, and no file states that contributions are licensed under the project license, so the licensing status of any contributed patch is undefined. The interview resolved the mechanism: DCO, no CLA.
+  - [x] **5.1**: Write the failing test tests/docs/dco.test.mjs: the hook must reject a fixture commit body with no Signed-off-by trailer and accept one that has it.
+  - [x] **5.2**: Extend .githooks/commit-msg to require a Signed-off-by: Name <email> trailer in the body, with the same message style as the scope check and the same merge/revert exemption.
+  - [x] **5.3**: Add the DCO section to CONTRIBUTING.md with the git commit -s instruction, what the trailer asserts, and a link to https://developercertificate.org/.
+  - [x] **5.4**: Add a CI job in .github/workflows/ci.yml that verifies every commit in the pull request range carries the trailer, so the local hook is not the only gate.
+  - [x] **5.5**: Gate: node --test tests/docs/dco.test.mjs green; a commit without the trailer is rejected locally and by the CI job.
 - [x] **Step 6 - OSS-11 (high)**: The release workflow publishes nothing but a GitHub Release. There is no build job, no artifact, no publish job, no signed artifact, no provenance and no version bump, so the v1.0.0 release is a changelog excerpt and package.json prepublishOnly is dead code. Given OSS-4, the artifact the project actually ships is the GitHub tarball, and that is not verified or signed.
   - [x] **6.1**: Record the decision with rule_tool_process_adr: ADR 082 "Release artifacts are signed GitHub Release tarballs, not registry packages" - and state plainly that npm distribution is out of scope so OSS-4 is a documentation fix rather than a publication project.
   - [x] **6.2**: Add the failing test tests/release/workflow.test.mjs: release.yml must contain a build job that runs pnpm build and produces a checksum manifest, and a release job that consumes the artifact; it must not reference any registry.

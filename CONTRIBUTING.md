@@ -53,6 +53,19 @@ Commits follow Conventional Commits **with a mandatory scope**:
 `type(scope): subject` - the `commit-msg` hook rejects scope-less
 subjects.
 
+Every commit also carries a DCO sign-off trailer:
+
+```
+Signed-off-by: Your Name <you@example.com>
+```
+
+`git commit -s` adds it for you. The trailer asserts you wrote the
+change (or have the right to contribute it) under the [Developer
+Certificate of Origin](https://developercertificate.org/). There is no
+CLA; inbound contributions are licensed under the DCO. The hook rejects
+a commit without the trailer, and CI checks every commit in the pull
+request range.
+
 ## Response times
 
 Issues are triaged within 7 days; pull requests are reviewed within
