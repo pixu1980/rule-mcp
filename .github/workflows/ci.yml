@@ -108,6 +108,17 @@ jobs:
             git log -1 --format=%B "$commit" | grep -Eq '^Signed-off-by: .+ <[^<>]+>$' || { echo "missing Signed-off-by in $commit"; exit 1; }
           done
 
+  commit-lint:
+    name: Commit lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - name: Every commit follows type(scope)
+        run: node scripts/build/commit-types/index.mjs --lint-range "${{ github.event.pull_request.base.sha || github.event.before }}" HEAD
+
   audit:
     name: Security audit
     runs-on: ubuntu-latest
