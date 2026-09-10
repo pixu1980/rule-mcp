@@ -202,11 +202,11 @@ works.
   - [ ] **6.5**: Document the verification command in README and docs/04: download the tarball and the checksum file, then shasum -a 256 -c.
   - [ ] **6.6**: Gate: node --test tests/release/workflow.test.mjs green; a scratch v1.1.0-rc.1 tag produces a release carrying the tarball plus the checksum file, and every job other than release declares contents: read.
 - [ ] **Step 7 - OSS-12 (high)**: Every GitHub Action is pinned by a moving tag rather than a commit SHA. A compromised or retagged upstream action executes arbitrary code in CI, and in release.yml that code runs with contents: write.
-  - [ ] **7.1**: Write the failing test tests/docs/action-pins.test.mjs: every uses: line in .github/workflows/ must match a 40-hex SHA followed by a version comment. Confirm it fails on all current uses.
-  - [ ] **7.2**: Resolve and pin each action to its current release SHA with the tag in a trailing comment: actions/checkout, pnpm/action-setup, actions/setup-node in ci.yml; actions/checkout, softprops/action-gh-release in release.yml, plus whatever OSS-15, OSS-22 and OSS-27 add.
-  - [ ] **7.3**: Add .github/workflows/check-workflows.yml running zizmorcore/zizmor-action over .github/workflows/, with contents: read and actions: read only.
-  - [ ] **7.4**: Run zizmor locally over the workflow directory (docker run --rm -t -v "$(pwd):/repo:ro" ghcr.io/zizmorcore/zizmor:latest /repo/.github/workflows) and fix every finding, then re-run until clean.
-  - [ ] **7.5**: Delete stale remote branches that still carry the old workflows - an attacker exploits the old copy.
+  - [x] **7.1**: Write the failing test tests/docs/action-pins.test.mjs: every uses: line in .github/workflows/ must match a 40-hex SHA followed by a version comment. Confirm it fails on all current uses.
+  - [x] **7.2**: Resolve and pin each action to its current release SHA with the tag in a trailing comment: actions/checkout, pnpm/action-setup, actions/setup-node in ci.yml; actions/checkout, softprops/action-gh-release in release.yml, plus whatever OSS-15, OSS-22 and OSS-27 add.
+  - [x] **7.3**: Add .github/workflows/check-workflows.yml running zizmorcore/zizmor-action over .github/workflows/, with contents: read and actions: read only.
+  - [x] **7.4**: Run zizmor locally over the workflow directory (zizmor 1.9.0 binary; only Step-8-owned findings remain) (docker run --rm -t -v "$(pwd):/repo:ro" ghcr.io/zizmorcore/zizmor:latest /repo/.github/workflows) and fix every finding, then re-run until clean.
+  - [x] **7.5**: Delete stale remote branches that still carry the old workflows (only main plus the working branch exist; nothing to delete) - an attacker exploits the old copy.
   - [ ] **7.6**: Gate: node --test tests/docs/action-pins.test.mjs green; the zizmor job green on main.
 - [ ] **Step 8 - OSS-13 (high)**: The CI workflow grants id-token: write to every job at workflow scope. The lint job, the six-cell test matrix, the coverage job and the audit job all install dependencies and none of them needs to mint an OIDC token; a compromised dependency in any of them inherits the ability.
   - [ ] **8.1**: Write the failing test tests/docs/workflow-permissions.test.mjs: no workflow may set id-token, contents: write or actions: write at workflow scope, and every checkout step must set persist-credentials: false.

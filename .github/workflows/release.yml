@@ -11,7 +11,7 @@ jobs:
   release:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
       # Tag, package.json, server.json and CHANGELOG must agree; --apply
       # wires into the pack job once Step 6 adds one.
       - name: Version sync
@@ -28,7 +28,7 @@ jobs:
           echo "body<<EOFCHANGELOG" >> "$GITHUB_OUTPUT"
           echo "$BODY" >> "$GITHUB_OUTPUT"
           echo "EOFCHANGELOG" >> "$GITHUB_OUTPUT"
-      - uses: softprops/action-gh-release@v2
+      - uses: softprops/action-gh-release@3bb12739c298aeb8a4eeaf626c5b8d85266b0e65 # v2
         with:
           body: ${{ steps.changelog.outputs.body }}
           generate_release_notes: false
