@@ -5,7 +5,6 @@ settings:
   excludeLinksFromLockfile: false
 
 overrides:
-  rule-mcp: 'link:'
   fast-uri: 3.1.6
   hono: 4.13.7
   qs: 6.16.0
@@ -26,9 +25,6 @@ importers:
       ink:
         specifier: 6.8.0
         version: 6.8.0(react@19.2.8)
-      rule-mcp:
-        specifier: 'link:'
-        version: 'link:'
       react:
         specifier: 19.2.8
         version: 19.2.8

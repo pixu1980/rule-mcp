@@ -1,7 +1,6 @@
 allowBuilds:
   "@modelcontextprotocol/inspector": false
 overrides:
-  rule-mcp: 'link:'
   # Transitive advisories that `@modelcontextprotocol/sdk` has not caught up
   # to. Overrides, not ranges: the pin is the remediation, and the audit gate
   # reads the resolved tree.

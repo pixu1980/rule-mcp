@@ -233,12 +233,12 @@ works.
   - [ ] **11.4**: Update the install documentation to present git clone plus ./scripts/install.sh as the default, keeping the pipe form as a documented alternative with the verification step shown inline.
   - [ ] **11.5**: Regenerate scripts/SHA256SUMS with pnpm checksums after the script edits.
   - [ ] **11.6**: Gate: node --test tests/docs/placeholder-hosts.test.mjs green; node --test src/cli/**tests**/_install-integrity.test.mjs green.
-- [ ] **Step 12 - OSS-5 (high)**: The published tarball cannot be installed by any npm-family client. package.json declares a runtime dependency on itself using the pnpm-only link: protocol, so installing the packed artifact aborts before the package is unpacked.
-  - [ ] **12.1**: Reproduce and capture the failure in an empty directory: npm pack, then npm install ./rule-mcp-1.0.0.tgz - expect EUNSUPPORTEDPROTOCOL.
-  - [ ] **12.2**: Delete "rule-mcp": "link:" from package.json dependencies and the matching overrides entry from pnpm-workspace.yaml; move local name resolution to the documented pnpm link --global dev instruction.
-  - [ ] **12.3**: Add tests/docs/manifest.test.mjs: no dependencies value may use the link:, file: or workspace: protocol unless the package is private.
-  - [ ] **12.4**: Re-reproduce after the change: npm pack and npm install ./rule-mcp-1.0.0.tgz in an empty directory must exit 0 and the bin must run.
-  - [ ] **12.5**: Gate: node --test tests/docs/manifest.test.mjs green; the temp-directory install exits 0.
+- [x] **Step 12 - OSS-5 (high)**: The published tarball cannot be installed by any npm-family client. package.json declares a runtime dependency on itself using the pnpm-only link: protocol, so installing the packed artifact aborts before the package is unpacked.
+  - [x] **12.1**: Reproduce and capture the failure in an empty directory: npm pack, then npm install ./rule-mcp-1.0.0.tgz - expect EUNSUPPORTEDPROTOCOL.
+  - [x] **12.2**: Delete "rule-mcp": "link:" from package.json dependencies and the matching overrides entry from pnpm-workspace.yaml; move local name resolution to the documented pnpm link --global dev instruction.
+  - [x] **12.3**: Add tests/docs/manifest.test.mjs: no dependencies value may use the link:, file: or workspace: protocol unless the package is private.
+  - [x] **12.4**: Re-reproduce after the change: npm pack and npm install ./rule-mcp-1.0.0.tgz in an empty directory must exit 0 and the bin must run.
+  - [x] **12.5**: Gate: node --test tests/docs/manifest.test.mjs green; the temp-directory install exits 0.
 - [ ] **Step 13 - OSS-6 (high)**: The two installers disagree and the Windows one still takes the path that cannot work. scripts/install.sh was migrated to a local-binary launcher ("no global npm install needed"), but scripts/install.ps1 still runs pnpm add -g / npm install -g against the unpublished registry package, and the bash header still claims it installs the npm package globally.
   - [ ] **13.1**: Add tests/installer/parity.test.mjs asserting neither installer invokes add -g on a registry package and that both resolve the CLI the same way.
   - [ ] **13.2**: Fix scripts/install.ps1 lines 340 and 380 to the local-binary launcher path the bash script uses (mirror ensure_global_shim), keeping the pnpx fallback only as an explicit opt-in flag.
