@@ -245,11 +245,11 @@ works.
   - [ ] **13.3**: Fix the scripts/install.sh header comment at line 10 to describe what the script actually does.
   - [ ] **13.4**: Regenerate scripts/SHA256SUMS with pnpm checksums - src/cli/**tests**/_install-integrity.test.mjs fails on any installer edit without it.
   - [ ] **13.5**: Gate: node --test src/cli/**tests**/_install-integrity.test.mjs green; installer parity test green; a --dry-run on Windows and on bash shows no registry call.
-- [ ] **Step 14 - OSS-7 (high)**: The project has no code of conduct, so the GitHub community profile is incomplete and there is no stated standard of behavior or route for reporting a conduct problem. The interview resolved the choice: Contributor Covenant 3.0.
-  - [ ] **14.1**: Add CODE_OF_CONDUCT.md at the repository root with the Contributor Covenant 3.0 text verbatim, adaptation section filled in for the project name.
-  - [ ] **14.2**: Fill the enforcement contact: `pisuemiliano.1980@gmail.com` until a project address exists, and state the escalation (maintainer then BDFL) in the same file.
-  - [ ] **14.3**: Add the conduct reporting link to .github/ISSUE_TEMPLATE/config.yml so it sits beside the security link.
-  - [ ] **14.4**: Link CODE_OF_CONDUCT.md from the README Contributing section added by OSS-8.
+- [x] **Step 14 - OSS-7 (high)**: The project has no code of conduct, so the GitHub community profile is incomplete and there is no stated standard of behavior or route for reporting a conduct problem. The interview resolved the choice: Contributor Covenant 3.0.
+  - [x] **14.1**: Add CODE_OF_CONDUCT.md at the repository root with the Contributor Covenant 3.0 text verbatim, adaptation section filled in for the project name.
+  - [x] **14.2**: Fill the enforcement contact: `pisuemiliano.1980@gmail.com` until a project address exists, and state the escalation (maintainer then BDFL) in the same file.
+  - [x] **14.3**: Add the conduct reporting link to .github/ISSUE_TEMPLATE/config.yml so it sits beside the security link.
+  - [x] **14.4**: Link CODE_OF_CONDUCT.md from the README Contributing section added by OSS-8.
   - [ ] **14.5**: Gate: the GitHub community profile lists CODE_OF_CONDUCT as added; pnpm format clean.
 - [x] **Step 15 - OSS-8 (high)**: There is no contribution entry point. No CONTRIBUTING.md, no issue templates and no pull request template exist, so the whole contribution path is seven lines buried in a numbered handbook chapter that a newcomer has to find first.
   - [x] **15.1**: Add CONTRIBUTING.md at the root, moving and expanding docs/07-engineering-guides.md lines 156-170: prerequisites, dev setup, the exact command list (pnpm install, pnpm test:all, pnpm lint, pnpm format, pnpm census:check), the ADR requirement for structural change, branch and commit conventions, and a first-response expectation of 7 days.
