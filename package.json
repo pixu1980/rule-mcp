@@ -4,6 +4,12 @@
   "description": "MCP server for the rule-* skill ecosystem. Serves styleguides, component templates, framework best practices, and design system patterns.",
   "type": "module",
   "license": "MIT",
+  "author": "pixu1980",
+  "homepage": "https://github.com/pixu1980/rule-mcp",
+  "repository": "github:pixu1980/rule-mcp",
+  "bugs": {
+    "url": "https://github.com/pixu1980/rule-mcp/issues"
+  },
   "private": false,
   "publishConfig": {
     "access": "public"

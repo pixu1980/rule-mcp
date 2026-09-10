@@ -41,6 +41,8 @@ jobs:
         run: pnpm exec eslint bin/ src/ tests/ --max-warnings 50
       - name: Prettier check
         run: pnpm exec prettier --check '**/*.{js,mjs,json,md}' --ignore-path .gitignore
+      - name: Version sync
+        run: node scripts/build/version/index.mjs --check
 
   test:
     name: test (${{ matrix.os }})
