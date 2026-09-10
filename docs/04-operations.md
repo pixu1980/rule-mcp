@@ -217,15 +217,15 @@ git push
 
 Users can install using these methods:
 
-| Method             | Command                                                           |
-| ------------------ | ----------------------------------------------------------------- |
-| **pnpm/pnpm**      | `pnpm add -g rule-mcp`                                      |
-| **pnpx**           | `pnpx rule-mcp serve`                                       |
-| **Homebrew**       | `brew install rule/tap/rule-mcp`                             |
-| **Docker**         | `docker pull ghcr.io/rule/rule-mcp`                          |
-| **Winget**         | `winget install rule.rule-mcp`                               |
-| **Scoop**          | `scoop bucket add rule-mcp && scoop install rule-mcp` |
-| **GitHub Release** | Direct `.tgz` download                                            |
+| Method               | Command                                                           |
+| -------------------- | ----------------------------------------------------------------- |
+| **Clone + launcher** | `git clone` + `./scripts/install.sh`                              |
+| **pnpx**             | `pnpx rule-mcp serve`                                       |
+| **Homebrew**         | `brew install rule/tap/rule-mcp`                             |
+| **Docker**           | `docker pull ghcr.io/rule/rule-mcp`                          |
+| **Winget**           | `winget install rule.rule-mcp`                               |
+| **Scoop**            | `scoop bucket add rule-mcp && scoop install rule-mcp` |
+| **GitHub Release**   | Direct `.tgz` download                                            |
 
 #### Agent command artifacts
 
@@ -247,8 +247,10 @@ Uninstall removes same artifact. Universal command body forces routing, evidence
 ### 7. Post-Release Verification
 
 ```bash
-# Test pnpm
-pnpm add -g rule-mcp
+# Test the clone install
+git clone https://github.com/pixu1980/rule-mcp.git
+cd rule-mcp
+./scripts/install.sh
 rule-mcp doctor
 rule-mcp install --agent all
 
@@ -480,7 +482,7 @@ rule-mcp daemon logs
 
 | Symptom                             | Likely cause           | Fix                                                |
 | ----------------------------------- | ---------------------- | -------------------------------------------------- |
-| `command not found: rule-mcp` | Not installed globally | `pnpm add -g rule-mcp`                       |
+| `command not found: rule-mcp` | Not installed globally | `git clone` + `./scripts/install.sh`               |
 | `Cannot find module`                | Node.js < 20           | Upgrade to Node.js 20+                             |
 | `ECONNREFUSED` on port 37999        | Daemon not running     | `rule-mcp daemon start`                      |
 | Tools return 0 results              | Skills not loaded      | `rule-mcp skills reload`                     |
