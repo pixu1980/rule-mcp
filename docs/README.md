@@ -27,6 +27,11 @@ reference, generated from the running server.
 | [./14-guardrails.md](./14-guardrails.md)                     | Generated: every guardrail rule, with what it rejects, by family               |
 | [./15-resources.md](./15-resources.md)                       | Generated: the MCP resource surface                                            |
 
+## Direction
+
+[../ROADMAP.md](../ROADMAP.md) is where the project is going: now, next
+and later, each with the ADR that justifies it.
+
 ## Architecture decisions
 
 [./adr/ADR.md](./adr/ADR.md) is every decision this project has taken: a

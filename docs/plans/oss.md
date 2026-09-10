@@ -302,10 +302,10 @@ works.
   - [ ] **22.4**: Run the Scorecard workflow once, read the findings, and fold anything it reports that this plan missed into the next oss review rather than fixing it ad hoc.
   - [ ] **22.5**: Gate: the Scorecard workflow green; sbom.cdx.json present on the next release; the score is recorded in the review evidence for the next run.
 - [ ] **Step 23 - OSS-23 (medium)**: There is no public roadmap and no stated triage expectation. docs/07 says only that open work is tracked in the issue tracker, so a would-be contributor cannot see direction, and a reporter has no idea when to expect a response.
-  - [ ] **23.1**: Add ROADMAP.md at the root with now / next / later, one paragraph each, and the ADR number that justifies each item so the reasoning is traceable.
-  - [ ] **23.2**: Define the triage convention in CONTRIBUTING.md: the label set (bug, enhancement, good first issue, needs-triage, help wanted), a first-response target of 7 days, and a stale rule with a stated window.
+  - [x] **23.1**: Add ROADMAP.md at the root with now / next / later, one paragraph each, and the ADR number that justifies each item so the reasoning is traceable.
+  - [x] **23.2**: Define the triage convention in CONTRIBUTING.md: the label set (bug, enhancement, good first issue, needs-triage, help wanted), a first-response target of 7 days, and a stale rule with a stated window.
   - [ ] **23.3**: Owner action: create the label set in the repository and mark two genuinely small tasks good first issue so the path is demonstrated rather than described.
-  - [ ] **23.4**: Link ROADMAP.md from docs/README.md and from the README Contributing section so it is inside the reading order, not beside it.
+  - [x] **23.4**: Link ROADMAP.md from docs/README.md and from the README Contributing section so it is inside the reading order, not beside it.
   - [ ] **23.5**: Gate: ROADMAP.md present and linked from both entry points; the labels exist; pnpm census:check green.
 - [ ] **Step 24 - OSS-24 (medium)**: The README front door fails the project's own readme skill. It opens with four shields.io badges, one of which is broken because the package is not on npm and one of which states a version that disagrees with package.json, and it has no Contributing, Code of Conduct, Governance, Security, Support or Sponsors section.
   - [ ] **24.1**: Remove the four badges at README.md lines 6-9 and state the same facts as text in the opening block: the Node floor, the `MIT` license, and the MCP SDK version read from package.json (1.30.0, fixing the drift).
