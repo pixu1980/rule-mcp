@@ -117,8 +117,13 @@ gateway 34, cli 55 (1 pre-existing skip) all green; eslint clean; pix_check (rul
 Verification: commands/installer/generator suites 36/36 green; eslint clean;
 pix_check (rule-backend-node) 56/56 on `_render.js`.
 
-## Phase 5 — Attribution & docs
+## Phase 5 — Attribution & docs — ✅ executed
 
-- [ ] **5.1** README: "Credits" block — caveman & caveman-compress by JuliusBrussee
-      (github.com/JuliusBrussee/caveman) as the inspiration for `src/core/text/`, MIT-compatible.
-- [ ] **5.2** `pnpm census` + docs accuracy check; ADR for the surface-mandate decision.
+- [x] **5.1** README: "Credits & attribution" section — caveman & caveman-compress by
+      JuliusBrussee (github.com/JuliusBrussee/caveman) as the inspiration for
+      `src/core/text/`, MIT-compatible; links the manifest and ADRs 073/077/078.
+- [x] **5.2** `pnpm census` — "the census is current"; `tests/docs/census-generated` 5/5,
+      `docs-accuracy` 5/5, `file-size-budget` 3/3, `repository-contract` ✅; decision ADRs:
+      077 (list surfaces), 078 (write-time command files).
+
+**All five phases executed. Plan complete.**

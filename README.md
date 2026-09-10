@@ -614,13 +614,13 @@ The Docker image uses `node:22-alpine`, has no build step, and runs the server d
 
 | Document                                                               | Description                                             |
 | ---------------------------------------------------------------------- | ------------------------------------------------------- |
-| [`docs/01-getting-started.md`](./docs/01-getting-started.md)                 | Step-by-step installation & agent integration           |
+| [`docs/01-getting-started.md`](./docs/01-getting-started.md)           | Step-by-step installation & agent integration           |
 | [`docs/02-product-architecture.md`](./docs/02-product-architecture.md) | Full skill taxonomy and product architecture            |
-| [`docs/04-operations.md`](./docs/04-operations.md)         | Detailed tool operations reference                      |
+| [`docs/04-operations.md`](./docs/04-operations.md)                     | Detailed tool operations reference                      |
 | [`docs/07-engineering-guides.md`](./docs/07-engineering-guides.md)     | Engineering practices and conventions                   |
 | [`docs/03-agent-instructions.md`](./docs/03-agent-instructions.md)     | Agent instruction templates (generated command surface) |
 | [`docs/05-env-variables.md`](./docs/05-env-variables.md)               | Complete `RULE_MCP_*` environment variable reference         |
-| [`docs/04-operations.md`](./docs/04-operations.md)         | Operator handbook + generated census blocks             |
+| [`docs/04-operations.md`](./docs/04-operations.md)                     | Operator handbook + generated census blocks             |
 | [`docs/adr/ADR.md`](./docs/adr/ADR.md)                                 | Architecture Decision Records index                     |
 
 ---
@@ -633,6 +633,23 @@ The Docker image uses `node:22-alpine`, has no build step, and runs the server d
 - lint zero errors, prettier clean, self-guardrails green over the whole `src/`
   tree, installer/transport suites green
 - decisions recorded in the [ADR index](docs/adr/ADR.md)
+
+## Credits & attribution
+
+`src/core/text/` — the deterministic caveman output pipeline — is inspired by
+[`caveman`](https://github.com/JuliusBrussee/caveman) and its
+`caveman-compress` companion: the vocabulary tables, the classification guards
+(`detect.py` → `_classify.js`) and the structural validator (`validate.py` →
+`compress-guard/`) are ported, with a parity test that runs the real python
+CLI when installed. The LLM compression step is deliberately not ported — an
+LLM in the output path costs determinism, cacheability and the zero-dependency
+contract (ADR 073). Every server→model surface is compressed (or documented as
+deliberately not) — see the manifest in
+[`src/core/text/_surfaces.js`](src/core/text/_surfaces.js) and the
+"Compression surfaces" section of
+[`docs/07-engineering-guides.md`](docs/07-engineering-guides.md); the list
+surfaces joined the pipeline under [ADR 077](docs/adr/077-compress-every-server-model-list-surface-prompts-list-tools-list-resources-list.md),
+agent command files at write time under ADR 078.
 
 ## License
 
