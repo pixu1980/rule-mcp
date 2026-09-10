@@ -30,7 +30,10 @@ test("rendered command files compress at write time; frontmatter and placeholder
     assert.ok(outTotal < rawTotal, `${format}: write-time set shrinks (${rawTotal} -> ${outTotal})`);
 
     for (const file of files) {
-      const raw = renderAgentCommand(listAgentCommands().find((command) => command.name === file.name), format);
+      const raw = renderAgentCommand(
+        listAgentCommands().find((command) => command.name === file.name),
+        format,
+      );
       assert.ok(file.content.includes("$ARGUMENTS") === raw.includes("$ARGUMENTS"), `${file.name}: placeholders keep their fate`);
       const verdict = guardCompression(raw, file.content);
       const errors = verdict.violations.filter((v) => v.severity === "error");

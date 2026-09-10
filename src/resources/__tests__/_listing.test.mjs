@@ -16,8 +16,16 @@ test("resources/list keeps every uri and mimeType, and the labels pass the compr
   const raw = listResources();
   const out = compressResourceListing(raw);
 
-  assert.deepEqual(out.map((r) => r.uri), raw.map((r) => r.uri), "uris are the protocol contract and never change");
-  assert.deepEqual(out.map((r) => r.mimeType), raw.map((r) => r.mimeType), "mimeTypes stay untouched");
+  assert.deepEqual(
+    out.map((r) => r.uri),
+    raw.map((r) => r.uri),
+    "uris are the protocol contract and never change",
+  );
+  assert.deepEqual(
+    out.map((r) => r.mimeType),
+    raw.map((r) => r.mimeType),
+    "mimeTypes stay untouched",
+  );
 
   // The real labels are already terse, so the pass must be a no-op on them.
   for (const entry of out) {
@@ -27,7 +35,9 @@ test("resources/list keeps every uri and mimeType, and the labels pass the compr
 });
 
 test("the listing pass does shorten prose when there is something to shorten", () => {
-  const out = compressResourceListing([{ uri: "rule://probe", name: "The guide was basically written to really just show you the whole pattern in detail", mimeType: "text/markdown" }]);
+  const out = compressResourceListing([
+    { uri: "rule://probe", name: "The guide was basically written to really just show you the whole pattern in detail", mimeType: "text/markdown" },
+  ]);
 
   assert.ok(out[0].name.length < 75, "verbose label sheds filler");
   assert.equal(out[0].uri, "rule://probe");

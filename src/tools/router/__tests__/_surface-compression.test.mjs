@@ -16,12 +16,19 @@ delete process.env.RULE_MCP_CAVEMAN_LEVEL;
 
 const { clearTools, registerTool, listTools } = await import("../index.js");
 
-const VERBOSE = "The gateway really just routes a prompt to the right skill and then loads the exact evidence that the skill needs. You should always make sure to check the code against the guardrails before you finish.";
+const VERBOSE =
+  "The gateway really just routes a prompt to the right skill and then loads the exact evidence that the skill needs. You should always make sure to check the code against the guardrails before you finish.";
 const SHORT = "zod tool";
 
 test("tools/list descriptions compress when caveman is on; names and schemas stay", () => {
   clearTools();
-  registerTool({ name: "rule_tool_verbose", description: VERBOSE, zodSchema: undefined, inputSchema: { type: "object", properties: { q: { type: "string", description: "a query" } } }, handler: async () => ({ content: [] }) });
+  registerTool({
+    name: "rule_tool_verbose",
+    description: VERBOSE,
+    zodSchema: undefined,
+    inputSchema: { type: "object", properties: { q: { type: "string", description: "a query" } } },
+    handler: async () => ({ content: [] }),
+  });
   registerTool({ name: "rule_tool_terse", description: SHORT, handler: async () => ({ content: [] }) });
 
   const listed = listTools();
