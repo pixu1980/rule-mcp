@@ -14,6 +14,14 @@ test("withBanner prepends the banner to content and tolerates odd cores", () => 
   assert.deepEqual(withBanner("x", null), null, "null result passes through");
 });
 
+test("withBanner puts the banner through the same caveman pass as results", () => {
+  const verbose = "The update process really just wants you to make sure that you restart the server.";
+  const decorated = withBanner(verbose, { content: [{ type: "text", text: "payload" }] });
+
+  assert.ok(decorated.content[0].text.length < verbose.length, "the banner sheds filler");
+  assert.equal(decorated.content[1].text, "payload", "the result content is untouched");
+});
+
 test("argsBytes measures json length and tolerates the unmeasurable", () => {
   assert.equal(argsBytes(), 0, "no args means zero bytes");
   assert.equal(argsBytes({ a: 1 }), JSON.stringify({ a: 1 }).length, "a json-serializable arg measures");

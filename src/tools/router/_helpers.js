@@ -1,7 +1,7 @@
 /** Result shaping helpers: banner, finalize, token/size estimates, and the skill-independent set. */
 
 import { alignAsciiBoxesResult } from "../../core/text/ascii-box/index.js";
-import { compressResult } from "../../core/text/_caveman.js";
+import { compressResult, compressSurfaceText } from "../../core/text/_caveman.js";
 import { decorateWorkflowReminder, stampRequestId } from "../../core/enforcement/index.js";
 import { stripFingerprintResult } from "../../core/text/fingerprint/index.js";
 
@@ -10,7 +10,13 @@ function withBanner(banner, result) {
     return result;
   }
 
-  return { ...result, content: [{ type: "text", text: banner }, ...result.content] };
+  // The banner rides on the result the model reads, so it is compressed at the
+  // same boundary, booked under its own source (manifest: banners). The resume
+  // announcement is already a compressed handon block; the self-update notice
+  // is terse but goes through the same pass for the invariant.
+  const bannerText = compressSurfaceText(String(banner), { source: "caveman-banner" }).text;
+
+  return { ...result, content: [{ type: "text", text: bannerText }, ...result.content] };
 }
 
 /**
