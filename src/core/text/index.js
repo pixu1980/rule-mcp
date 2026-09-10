@@ -8,3 +8,4 @@ export * from "./_sensitive.js";
 export * from "./compress-guard/index.js";
 export * from "./en-english/index.js";
 export * from "./fingerprint/index.js";
+export * from "./_surfaces.js";
