@@ -1,8 +1,9 @@
 # Changelog
 
-Generated from the commits by `scripts/build-changelog.mjs`. Run
-`pnpm changelog` to refresh it; the release workflow regenerates it when a
-version is tagged. Edits made here are overwritten.
+Generated from the commits by `scripts/build/changelog/index.mjs`. Run
+`pnpm changelog` to refresh it before tagging a version; the release
+workflow only reads the tagged entry into the release notes. Edits made
+here are overwritten.
 
 Every commit is `type(scope): subject`. Features, fixes, performance and
 refactoring work and documentation become entries; `chore`, `ci`, `build`,
