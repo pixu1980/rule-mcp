@@ -18,7 +18,7 @@
  *
  * @see module:core/text/caveman - the pass itself
  * @see module:core/text/compress-guard - the structural guard
- * @see ADR 073 - deterministic port, no LLM in the output path
+ * @see ADR 080 - deterministic port, no LLM in the output path
  * @see ADR 077 - the list surfaces joined the manifest
  */
 

@@ -124,10 +124,10 @@ Claude Code, Cursor, Cline, Roo Code, Copilot, Gemini CLI, Codex CLI, Devin (for
 │                  │                            │  + devops     │
 ├──────────────────┴────────────────────────────┴───────────────┤
 │  CLI                         │  Installer                     │
-│  src/cli/commands.js         │  src/cli/install.js            │
-│  src/cli/daemon.js           │  23 agents supported           │
-│  src/cli/doctor.js           │  scripts/install.sh | .ps1     │
-│                              │  scripts/uninstall.sh | .ps1   │
+│  src/cli/commands.js         │  src/cli/setup/  (Ink wizard)  │
+│  src/cli/daemon.js           │  src/cli/install.js            │
+│  src/cli/doctor.js           │  23 agents supported           │
+│                              │  scripts/*.sh|.ps1 bootstraps  │
 └──────────────────────────────┴────────────────────────────────┘
 ```
 
