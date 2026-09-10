@@ -103,6 +103,49 @@ commit - the docs follow the code instead of being remembered.
   costs determinism, cacheability and the zero-dependency contract, and the
   guard plus per-block rollback buys the same safety for free (ADR 073).
 
+## Compression surfaces: everything the server emits to a model
+
+The rule is one sentence: every text the server hands to a model runs through
+`src/core/text/` before it leaves. The manifest lives in
+[`src/core/text/_surfaces.js`](../../src/core/text/_surfaces.js) and is pinned
+by `src/core/text/__tests__/_surfaces.test.mjs`; the table below is that
+manifest rendered. "Prose" surfaces shorten verbose text, keep JSON identical
+and never break structure (the guard errors stay 0); the documented skips say
+why they are not compressed.
+
+| Surface                                                    | Where                                                  | Status                                | Telemetry source           |
+| ---------------------------------------------------------- | ------------------------------------------------------ | ------------------------------------- | -------------------------- |
+| tools/call results                                         | `src/tools/router/_helpers.js` `finalize()`            | prose                                 | `caveman`                  |
+| resources/read bodies (text/*)                             | `src/resources/_serve.js` `readResource()`             | prose                                 | `caveman-resource`         |
+| prompts/get bodies                                         | `src/server/_prompt-handlers.js` `GetPrompt`           | prose                                 | `caveman-prompt`           |
+| prompts/list descriptions                                  | `src/server/_prompt-handlers.js` `ListPrompts`         | prose                                 | `caveman-prompt-list`      |
+| tools/list descriptions                                    | `src/tools/router/_surface.js` `listTools()`           | prose                                 | none (memoized at startup) |
+| resources/list labels                                      | `src/resources/_listing.js`                            | prose (no-op on the terse set)        | none (ADR 077)             |
+| resume hook block (SessionStart / UserPromptSubmit)        | `src/core/session/resume/_context.js` `handoffBlock()` | prose                                 | `caveman-resume`           |
+| banners (self-update notice, resume announcement)          | `src/tools/router/_helpers.js` `withBanner()`          | prose                                 | `caveman-banner`           |
+| workflow reminder                                          | `src/core/enforcement/_reminder.js`                    | prose (rides on the tool-result pass) | `caveman`                  |
+| error envelopes                                            | `src/tools/router/call/_pipeline.js`                   | terse by construction, not compressed | -                          |
+| completions/complete                                       | `src/server/_completions.js`                           | fixed vocabulary, not prose (ADR 077) | -                          |
+| JSON payloads (application/json bodies, JSON tool content) | `_serve.js`, `_helpers.js`                             | data, never compressed                | -                          |
+
+By document category, the answer to "is it compressed before it reaches a
+model?":
+
+| Category                                                                            | Status                                                                                                                   |
+| ----------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| Markdown (handoffs, docs served via `rule://` text resources, the resume hook block) | compressed (tool result, resource read, `caveman-resume`)                                                                |
+| Skills (full body + summary resources, tool-embedded evidence)                      | compressed (resource read + tool-result pass)                                                                            |
+| Resources                                                                           | read: compressed; list labels: pass-through (no-op, ADR 077)                                                             |
+| Instructions (session/prompt directives, agent-instruction files)                   | directives already terse by authorship; anything emitted runs the pass                                                   |
+| Prompts                                                                             | get: compressed; list: descriptions compressed (ADR 077)                                                                 |
+| Tools                                                                               | results: compressed; list: descriptions compressed, schemas never (ADR 077)                                              |
+| Personas                                                                            | served content (plan outputs): compressed via the tool-result pass; `src/roles/*.md` source files stay untouched on disk |
+
+Opt-outs apply everywhere: `RULE_MCP_NO_CAVEMAN=1` and
+`RULE_MCP_CAVEMAN_LEVEL=off` turn the pass off on every surface that
+runs it (plus `RULE_MCP_NO_RESUME_HANDON` for the resume block and
+`RULE_MCP_NO_REMINDER` for the reminder).
+
 - **Startup** (`pnpm report:startup`, 2026-09-09): warm `--help` 48 ms,
   `tools list` 265 ms, stdio `initialize` 251 ms. A cold process spends 12 ms
   on the entry import, 53 ms registering skills and 8 ms converting tool
