@@ -338,11 +338,11 @@ works.
   - [ ] **31.2**: Align the table renderer in src/core/review/docs/_table.js so each column is padded to its widest cell, matching Prettier's Markdown table style; keep escapeCell unaware of the padding.
   - [ ] **31.3**: Run a `rule_tool_plan_docs` pass over a scratch role and confirm `pnpm format` is clean straight afterward with no `pnpm format:fix` step in between.
   - [ ] **31.4**: Gate: node --test tests/docs/review-docs/format.test.mjs green; `pnpm format` clean immediately after a generator run.
-- [ ] **Step 28 - OSS-28 (low)**: The audit is not a gate. scripts/ci/audit-gate/index.mjs and the audit:gate script both exist, but no workflow calls them - CI runs only the bare pnpm audit --prod, so a known advisory does not block a release.
-  - [ ] **28.1**: Write the failing test tests/ci/audit-gate.test.mjs: the release workflow must invoke pnpm audit:gate before the artifact is packed.
-  - [ ] **28.2**: Replace the bare pnpm audit --prod step in .github/workflows/ci.yml with pnpm audit:gate, or call it from the release build job so both paths cover it.
-  - [ ] **28.3**: Verify the gate actually fails: seed a fixture advisory and confirm a non-zero exit, then remove the fixture.
-  - [ ] **28.4**: Gate: node --test tests/ci/audit-gate.test.mjs green; the seeded advisory produces a non-zero exit.
+- [x] **Step 28 - OSS-28 (low)**: The audit is not a gate. scripts/ci/audit-gate/index.mjs and the audit:gate script both exist, but no workflow calls them - CI runs only the bare pnpm audit --prod, so a known advisory does not block a release.
+  - [x] **28.1**: Write the failing test tests/ci/audit-gate.test.mjs: the release workflow must invoke pnpm audit:gate before the artifact is packed.
+  - [x] **28.2**: Replace the bare pnpm audit --prod step in .github/workflows/ci.yml with pnpm audit:gate, or call it from the release build job so both paths cover it.
+  - [x] **28.3**: Verify the gate actually fails: probed with a stubbed pnpm (advisory exits 1, clean exits 0, garbage warns and passes) seed a fixture advisory and confirm a non-zero exit, then remove the fixture.
+  - [x] **28.4**: Gate: node --test tests/ci/audit-gate.test.mjs green; the seeded advisory produces a non-zero exit.
 - [ ] **Step 29 - OSS-29 (low)**: No commit and no tag is signed, so a consumer cannot verify that a release came from the maintainer, and GitHub shows no verified badge.
   - [ ] **29.1**: Document maintainer signing in CONTRIBUTING.md: the git config commit.gpgsign and user.signingkey setup, and the instruction to tag with git tag -s.
   - [ ] **29.2**: Owner action: enable Vigilant Mode in GitHub settings so unsigned commits are visibly marked rather than silently accepted.

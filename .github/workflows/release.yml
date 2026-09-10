@@ -20,6 +20,10 @@ jobs:
       # wires into the pack job once Step 6 adds one.
       - name: Version sync
         run: node scripts/build/version/index.mjs --check
+      # Must stay before the pack job once Step 6 adds one: no artifact
+      # ships with known advisories.
+      - name: Dependency audit gate
+        run: pnpm audit:gate
       - name: Extract changelog entry
         id: changelog
         run: |
