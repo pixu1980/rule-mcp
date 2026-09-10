@@ -3,6 +3,11 @@
 import { CHARACTER_MAP, SEQUENCE_MAP, RE_ENDINGS, WORDS } from "../_fingerprint.data.js";
 import { EM_DASH_ALONE, EM_DASH_CLAUSE, EM_DASH_LIST, ISE_RE, OGUE_RE, OUR_RE, RE_RE, WORD_RE } from "./_patterns.js";
 
+// One body, two passes: "is this data rather than prose" is the same question
+// for the compressor and for the fingerprint rewriter, and two copies of the
+// answer drift apart (SIMP-5).
+export { looksLikeJson } from "../_classify.js";
+
 /**
  * Give `target` the capitalisation of `source`: ALL CAPS stays all caps, an
  * initial capital stays capitalised, anything else is left lowercase.
@@ -21,23 +26,6 @@ export function matchCase(source, target) {
   }
 
   return target;
-}
-
-/** Does this text look like a JSON document (data, not prose)? */
-export function looksLikeJson(text) {
-  const t = text.trim();
-
-  if (!(t.startsWith("{") || t.startsWith("["))) {
-    return false;
-  }
-
-  try {
-    JSON.parse(t);
-
-    return true;
-  } catch {
-    return false;
-  }
 }
 
 /** @param {string} line @returns {string} */
