@@ -21,6 +21,8 @@ import { execFileSync } from "node:child_process";
 import { chmodSync, copyFileSync, existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 
+import { isInsideGitDir } from "./_containment.mjs";
+
 const check = process.argv.includes("--check");
 
 /** One place shells out; every question here is a `git rev-parse` read. */
@@ -87,7 +89,7 @@ function hooksDir() {
 function refuseOutside(target) {
   const gitDir = git("rev-parse", "--absolute-git-dir");
 
-  if (!target.startsWith(gitDir)) {
+  if (!isInsideGitDir(gitDir, target)) {
     console.error(`git hooks: refusing to write to ${target}, which is outside ${gitDir}`);
     process.exit(2);
   }
