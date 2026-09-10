@@ -1,8 +1,8 @@
 # Execution plan - structural hygiene: splitting, co-location, file tree, dedup
 
 > Status: waiting for go-ahead. Decisions locked in the interview (2026-09-07), to be
-> recorded as ADRs 070+ when execution starts. This plan runs SEPARATELY from
-> docs/plans/execution-plan.md (the coverage ratchet, referenced by ADR 060-069).
+> recorded as ADRs 067+ when execution starts. This plan runs SEPARATELY from
+> docs/plans/execution-plan.md (the coverage ratchet, referenced by ADR 057-069).
 
 ## Locked decisions (interview, 2026-09-07)
 
@@ -78,7 +78,7 @@ bm25/_stopwords.data (166), agents/command-targets/_registry.data (152).
 ### Phase 0 - baseline + freeze (execution start)
 
 - [x] Snapshot: `git status` clean, `pnpm test:all` green, coverage floor 90 held.
-- [x] Record ADR 070 (perimeter/decisions above) and ADR 071 (src/shared home).
+- [x] Record ADR 067 (perimeter/decisions above) and ADR 068 (src/shared home).
 - [x] Freeze: no new code until the phases below complete.
 
 ### Phase 1 - file tree compliance
@@ -124,7 +124,7 @@ Split, in this order, with behavior-identical tests:
   - `_env.js`: env normalization/loader duplicated in banners/doctor/etc.
 - [x] Refactor consumers one family at a time (guardrails -> tools -> core ->
       cli -> scripts), updating imports; suites stay green per family.
-- [x] Delete the old private copies (no dual paths - ADR 061 rule).
+- [x] Delete the old private copies (no dual paths - ADR 058 rule).
 - [x] Extend the ratchet: dedicated `tests/docs/no-duplicate-blocks.test.mjs`
       (>=4 lines identical in >=3 src files, excluding `*.data.js`, `__tests__`,
       `src/shared` members, fixtures) + size-ratchet stays.
@@ -148,7 +148,7 @@ Split, in this order, with behavior-identical tests:
 
 - [x] Full `pnpm test:all` + `pnpm test:coverage` + lint + prettier green.
 - [x] Census/docs re-run only if a count moved (it should not: no surface change).
-- [x] ADR 072 records execution results + the anti-regression gate.
+- [x] ADR 069 records execution results + the anti-regression gate.
 - [x] Single final conventional commit (`refactor(project): ...`) with the whole
       change set, per interview decision.
 

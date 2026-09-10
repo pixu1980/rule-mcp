@@ -31,7 +31,7 @@ export function ensureLoaded() {
         }
         // A core carrying a request id can never match a recompute, so it
         // would be reported as drift on every verify. Dropping it keeps the
-        // cache converging without anyone clearing it (ADR 062).
+        // cache converging without anyone clearing it (ADR 059).
         if (v.result?._meta?.pixEnforcement?.requestId !== undefined) {
           continue;
         }

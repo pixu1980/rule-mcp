@@ -51,7 +51,7 @@
  * action tool, 8% at the gateway and 8% straight at a skill tool - and only two
  * of the eighty-seven skill tools had ever been called. That is one machine and
  * mostly this repository's own sessions, so it argues for a shape change rather
- * than proving one, and it is recorded in ADR 055 for R8 to act on.
+ * than proving one, and it is recorded in ADR 052 for R8 to act on.
  *
  * Then the trim, larger than any raise. `listTools()` derives the advertised
  * schema from the zod schema whenever one is present, so a hand-written
@@ -65,7 +65,7 @@
  *
  * | ~14,080  | R8 raised the ceiling to 20,000 without spending it              |
  *
- * R8 is the phase ADR 055 handed the shape question to, and the measurement it
+ * R8 is the phase ADR 052 handed the shape question to, and the measurement it
  * asked for came back sharper than before: the 89 per-skill tools are about 80%
  * of the surface, the skill path carried 7.7% of calls, and exactly one of the
  * eighty-seven skill tools had ever been called. The trim was therefore
@@ -77,7 +77,7 @@
  * rule is to say so when the trim exists and is not taken. The surface stays
  * around 14,700 once R8's five skills land, so the guard still catches a
  * duplicated paragraph across 90 tools; what it no longer does is force the
- * question. The number that would reopen it is in ADR 055 and in this phase's
+ * question. The number that would reopen it is in ADR 052 and in this phase's
  * own ADR, and the sample behind it remains one machine.
  */
 export const TOOL_SURFACE_BUDGET_TOKENS = 26_000;

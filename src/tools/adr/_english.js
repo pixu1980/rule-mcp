@@ -4,7 +4,7 @@ import { scanDocumentForForeign, scanPathForForeign } from "../../core/text/en-e
 /**
  * Non-English content in the ADR fields, one offense per finding.
  *
- * The title feeds the file name (ADR 060 landed with an Italian slug), so it
+ * The title feeds the file name (ADR 057 landed with an Italian slug), so it
  * runs through the path scanner word by word; the prose fields run through
  * both the document scanner (function words, accents) and the path scanner
  * (name-plausible content words).

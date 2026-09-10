@@ -97,7 +97,7 @@ export function planRenumber(options = {}) {
 /**
  * Whether any table in `docs/adr/ADR.md` runs out of order.
  *
- * The index is generated newest first (ADR 051), and appends are what break it:
+ * The index is generated newest first (ADR 050), and appends are what break it:
  * a repository with no duplicate numbers ended up with 082 above 081 because
  * rows were added by hand over time. Ordering is the condition on purpose - it
  * is what a reader notices, and it does not treat a hand-edited summary as
