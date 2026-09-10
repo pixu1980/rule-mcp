@@ -50,7 +50,7 @@ and the versions follow [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - **plans**: close items 3-4, convert executed plans to ADRs 043/044, drop redundant plans (`2acbab6`)
 - **agent**: move repo-state block to top of CLAUDE.md and refresh ADR range (`bd413da`)
 
-## [1.0.0]
+## [0.1.0]
 
 ### Added
 
