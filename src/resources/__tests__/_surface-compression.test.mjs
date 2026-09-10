@@ -81,7 +81,11 @@ test("prompts/list descriptions compress; names and argument names stay", async 
   const registry = listPrompts();
 
   // Names are the machine contract: identical to the registry, untouched.
-  assert.deepEqual(listed.map((p) => p.name), registry.map((p) => p.name), "names survive the listing unchanged");
+  assert.deepEqual(
+    listed.map((p) => p.name),
+    registry.map((p) => p.name),
+    "names survive the listing unchanged",
+  );
   assert.deepEqual(
     listed.map((p) => (p.arguments ?? []).map((a) => a.name)),
     registry.map((p) => (p.arguments ?? []).map((a) => a.name)),
