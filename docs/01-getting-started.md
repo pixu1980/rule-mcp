@@ -8,11 +8,11 @@
 ## Table of Contents
 
 1. [Prerequisites](#1-prerequisites)
-2. [A. Global npm install (recommended)](#a-global-npm-install-recommended)
-3. [B. pnpx/npx (no install, ephemeral)](#b-pnpxnpx-no-install-ephemeral)
-4. [C. Local development clone](#c-local-development-clone)
-5. [D. Docker](#d-docker)
-6. [E. Agent integration](#e-agent-integration)
+2. [Global npm install (recommended)](#2-global-npm-install-recommended)
+3. [pnpx/npx (no install, ephemeral)](#3-pnpxnpx-no-install-ephemeral)
+4. [Local development clone](#4-local-development-clone)
+5. [Docker](#5-docker)
+6. [Agent integration](#6-agent-integration)
 7. [Verify everything works](#7-verify-everything-works)
 8. [Next steps](#8-next-steps)
 
@@ -34,7 +34,7 @@ npm install -g pnpm
 
 ---
 
-## 2. A. Global npm install (recommended)
+## 2. Global npm install (recommended)
 
 ```bash
 pnpm add -g rule-mcp
@@ -51,7 +51,7 @@ Expected output: health report with `ok: true`, 78 tools registered, detected ag
 
 ---
 
-## 3. B. pnpx/npx (no install, ephemeral)
+## 3. pnpx/npx (no install, ephemeral)
 
 Use directly without installing - ideal for evaluation, CI, or occasional use:
 
@@ -77,7 +77,7 @@ To integrate with an agent via `mcp.json`:
 
 ---
 
-## 4. C. Local development clone
+## 4. Local development clone
 
 For contributors or custom builds:
 
@@ -110,7 +110,7 @@ rule-mcp serve --transport sse
 
 ---
 
-## 5. D. Docker
+## 5. Docker
 
 ### Build and run
 
@@ -148,7 +148,7 @@ The Compose service requires `RULE_MCP_SSE_TOKEN`; the installer creates the own
 
 ---
 
-## 6. E. Agent integration
+## 6. Agent integration
 
 ### Auto-install into supported agents (23 total)
 
