@@ -221,9 +221,9 @@ works.
   - [ ] **9.4**: Decide and document the packageManager question: the guardrail pkg-no-corepack forbids adding it, so state in CONTRIBUTING.md that pnpm 11+ is required and why the version is not pinned in the manifest.
   - [ ] **9.5**: Gate: pnpm config get minimum-release-age returns the decided value; the new check green; the first Dependabot PR opens within a week.
 - [ ] **Step 10 - OSS-15 (high)**: Nothing analyzes the server's own source for security defects. There is no CodeQL or other SAST workflow; the guardrail engine scans the code this server validates, not the code it is made of.
-  - [ ] **10.1**: Add .github/workflows/codeql.yml for the javascript-typescript language with the security-extended query suite, triggered on push to main, on pull requests to main, and weekly on a schedule.
-  - [ ] **10.2**: Pin the CodeQL actions by SHA (OSS-12) and give the job only the permissions it needs: contents: read plus a job-scoped security-events: write.
-  - [ ] **10.3**: Turn on the audit gate: wire pnpm audit:gate through scripts/ci/audit-gate/index.mjs instead of the bare pnpm audit --prod (shared with OSS-28).
+  - [x] **10.1**: Add .github/workflows/codeql.yml for the javascript-typescript language with the security-extended query suite, triggered on push to main, on pull requests to main, and weekly on a schedule.
+  - [x] **10.2**: Pin the CodeQL actions by SHA (OSS-12) and give the job only the permissions it needs: contents: read plus a job-scoped security-events: write.
+  - [x] **10.3**: Turn on the audit gate: already wired by Step 28 (ci.yml runs pnpm audit:gate) wire pnpm audit:gate through scripts/ci/audit-gate/index.mjs instead of the bare pnpm audit --prod (shared with OSS-28).
   - [ ] **10.4**: Owner action: add the CodeQL and audit checks to the branch protection required list alongside the existing ci checks.
   - [ ] **10.5**: Gate: the CodeQL workflow green with zero open code-scanning alerts; the required-check list includes it.
 - [ ] **Step 11 - OSS-16 (high)**: The documented install is curl-piped-to-shell from a domain that does not exist. Five scripts present https://rule-mcp.domain.example as the install URL, and none of them verifies what it downloads before executing it.
