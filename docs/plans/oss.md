@@ -272,11 +272,11 @@ works.
   - [ ] **17.5**: Run pnpx reuse lint over the tree and clear what it reports, then record the layout choice in an ADR if it differs from the flat LICENSE the project has today.
   - [ ] **17.6**: Gate: pnpx reuse lint reports zero files without licensing information; the header check job green.
 - [ ] **Step 18 - OSS-18 (medium)**: Three different identities name the copyright. LICENSE says Pix, the git author is Emiliano Pisu, and the GitHub owner is pixu1980, so no downstream scanner or lawyer can map the copyright to one holder. The interview resolved the holder: pixu1980.
-  - [ ] **18.1**: Set the LICENSE line to "Copyright (c) 2025-2026 pixu1980".
-  - [ ] **18.2**: Add author, repository, bugs and homepage to package.json (author pixu1980, repository github:pixu1980/rule-mcp) - this also closes half of OSS-21.
-  - [ ] **18.3**: Add an AUTHORS file listing pixu1980 with the contact address, so a contributor list has a home before the first outside contribution.
+  - [x] **18.1**: Set the LICENSE line to "Copyright (c) 2025-2026 pixu1980".
+  - [x] **18.2**: Add author, repository, bugs and homepage to package.json (done early by 21.4, verified here) (author pixu1980, repository github:pixu1980/rule-mcp) - this also closes half of OSS-21.
+  - [x] **18.3**: Add an AUTHORS file listing pixu1980 with the contact address, so a contributor list has a home before the first outside contribution.
   - [ ] **18.4**: Feed the same holder string into the SPDX header stamp from OSS-17 so the two cannot disagree.
-  - [ ] **18.5**: Gate: grep over LICENSE, AUTHORS and package.json shows one holder only; pnpm census:check green.
+  - [x] **18.5**: Gate: grep over LICENSE, AUTHORS and package.json shows one holder only; pnpm census:check green.
 - [ ] **Step 19 - OSS-19 (medium)**: The two commit gates disagree. The pull request title check accepts twelve types including release and does not check the scope; the local hook requires a scope and accepts eleven types without release. A contributor who passes one fails the other.
   - [ ] **19.1**: Write the failing test tests/docs/commit-gates.test.mjs: parse both files, assert the type lists are identical, and assert release is either in both or in neither.
   - [ ] **19.2**: Add scripts/build/commit-types/index.mjs as the single source of truth exporting the type list, and have a check fail when semantic.yml or commit-msg drifts from it.
