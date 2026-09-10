@@ -34,11 +34,16 @@ npm install -g pnpm
 
 ---
 
-## 2. Global npm install (recommended)
+## 2. Global CLI from a clone
+
+The package is not on the npm registry yet, so install from a clone.
+The installer puts a `pix-galaxy-mcp` launcher on your PATH:
 
 ```bash
-pnpm add -g pix-galaxy-mcp
-# or: npm install -g pix-galaxy-mcp
+git clone https://github.com/pixu1980/pix-galaxy-mcp.git
+cd pix-galaxy-mcp
+pnpm install
+./scripts/install.sh
 ```
 
 Verify the installation:
@@ -48,6 +53,13 @@ pix-galaxy-mcp doctor
 ```
 
 Expected output: health report with `ok: true`, 78 tools registered, detected agents.
+
+<!-- install-claims:allow-start -->
+
+> **Note:** `pnpm add -g pix-galaxy-mcp` applies only once the package is
+> published to the npm registry. Until then, install from a clone as above.
+
+<!-- install-claims:allow-end -->
 
 ---
 
