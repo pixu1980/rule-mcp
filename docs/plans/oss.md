@@ -258,10 +258,10 @@ works.
   - [ ] **15.4**: Add a Contributing section to README.md linking CONTRIBUTING.md, CODE_OF_CONDUCT.md, GOVERNANCE.md and SECURITY.md, and leaving a pointer to docs/07 for the deeper engineering material.
   - [ ] **15.5**: Gate: an issue chooser shows both templates; a draft PR renders the template; pnpm test:all green.
 - [ ] **Step 16 - OSS-9 (high)**: No governance, maintainer or ownership file exists, and the bus factor is one. 80 ADRs record what was decided but nothing records who decides, how a maintainer is added, or how a dispute escalates. The interview resolved the model: explicit BDFL with a documented path to co-maintainers.
-  - [ ] **16.1**: Record the decision first with rule_tool_process_adr: "Governance is an explicit BDFL with a documented path to co-maintainers" - the model, the escalation rule (ADR, then maintainer, then BDFL), and the criteria a contributor must meet to become a maintainer.
-  - [ ] **16.2**: Add GOVERNANCE.md: the roles (contributor, triager, maintainer, BDFL), how each is earned, how a decision escalates, how a maintainer is removed, and the statement that docs/adr/ is the record of decisions.
-  - [ ] **16.3**: Add MAINTAINERS.md naming the single current maintainer, the areas they own, and the expected response times.
-  - [ ] **16.4**: Add .github/CODEOWNERS mapping * to the maintainer and docs/adr/ to the BDFL.
+  - [x] **16.1**: Record the decision first with rule_tool_process_adr: ADR 083 "Governance is an explicit BDFL with a documented path to co-maintainers" - the model, the escalation rule (ADR, then maintainer, then BDFL), and the criteria a contributor must meet to become a maintainer.
+  - [x] **16.2**: Add GOVERNANCE.md: the roles (contributor, triager, maintainer, BDFL), how each is earned, how a decision escalates, how a maintainer is removed, and the statement that docs/adr/ is the record of decisions.
+  - [x] **16.3**: Add MAINTAINERS.md naming the single current maintainer, the areas they own, and the expected response times.
+  - [x] **16.4**: Add .github/CODEOWNERS mapping * to the maintainer and docs/adr/ to the BDFL.
   - [ ] **16.5**: Owner action: enable branch protection on main requiring the ci checks and one review for outside contributors, and record the exact setting in GOVERNANCE.md so it is auditable.
   - [ ] **16.6**: Gate: the ADR is present and docs/adr/ADR.md regenerated; pnpm census:check green; CODEOWNERS resolves on a test PR.
 - [ ] **Step 17 - OSS-17 (medium)**: No source file carries an SPDX identifier. The license is declared once in package.json and once in LICENSE, and 0 of 935 JavaScript files under src/, bin/ and scripts/ state their license, so file-level provenance cannot be established by a scanner and a copied file leaves the project without its terms.
