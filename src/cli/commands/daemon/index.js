@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Daemon lifecycle command: install/enable/disable/start/stop/status/logs arms. */
 import { getRuntimePaths } from "../../paths/index.js";
 import { actionDisable, actionEnable, actionInstall, actionUninstall } from "./_service.js";

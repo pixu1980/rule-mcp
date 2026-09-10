@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** The install/uninstall/tools/skills terminal views: every result shape renders, no branch left dark. */
 import { strict as assert } from "node:assert";
 import test from "node:test";

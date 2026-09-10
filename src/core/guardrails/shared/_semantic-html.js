@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Guardrail `semantic-html`: Semantic HTML mandatory */
 export const semanticHtml = {
   id: "semantic-html",

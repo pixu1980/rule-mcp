@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 // Auto-extracted from src/cli/commands/index.js - help/usage text.
 
 /**

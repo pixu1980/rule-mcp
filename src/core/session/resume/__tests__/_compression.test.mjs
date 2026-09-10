@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /**
  * ITEM 1 (plan: execution-plan.md) — the handoff block injected by the resume
  * hook is prose the model pays for, exactly like a tool result, but it never

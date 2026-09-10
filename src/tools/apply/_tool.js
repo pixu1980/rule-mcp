@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** @module tools/apply/tool - the pix_tool_apply registration and handler */
 
 import { mkdirSync, writeFileSync } from "node:fs";

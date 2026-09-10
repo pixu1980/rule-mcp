@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** @module core/text/en-english/scan - the three scanners: code, path, document */
 
 import { FOREIGN_TOKENS } from "../_en-english.data.js";

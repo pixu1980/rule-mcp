@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** @module core/review/docs/plan-ids */
 
 import { splitRow } from "./_table.js";

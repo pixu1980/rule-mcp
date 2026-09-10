@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /**
  * Installers for CLI-focused agents: Claude, Codex, Cursor, Copilot, Gemini, Pi.
  * @module cli/installers/agents-cli

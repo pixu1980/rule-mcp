@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** The flight-report tail sections: usage, project, productivity, routing. */
 import { strict as assert } from "node:assert";
 import test from "node:test";

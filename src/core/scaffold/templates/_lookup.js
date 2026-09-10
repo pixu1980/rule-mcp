@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** @module core/scaffold/templates/lookup */
 
 import { COMPONENT_TEMPLATES } from "../_template-data.data.js";

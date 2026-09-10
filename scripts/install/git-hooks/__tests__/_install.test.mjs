@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /**
  * The hook installer: what it writes, where it refuses to write, and what it
  * leaves alone.

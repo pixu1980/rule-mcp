@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** formatDoctorTerminal and its helpers: every branch renders, nothing stays dark. */
 import { strict as assert } from "node:assert";
 import test from "node:test";

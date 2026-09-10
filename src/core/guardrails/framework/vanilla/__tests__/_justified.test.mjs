@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** What earns a grid: the four flex-impossible cases, the stated reason, the counting. */
 import { GUARDRAIL_ID, checkCode, run } from "./_flex.fixture.mjs";
 import test from "node:test";

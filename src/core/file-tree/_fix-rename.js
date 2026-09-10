@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 import { existsSync, renameSync } from "node:fs";
 import { join, dirname, basename } from "node:path";
 

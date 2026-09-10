@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** @module scripts/data/wcag/render - the generated _criteria.data.js source text */
 
 /** Render the module. Sorted by criterion number so the diff is readable. */

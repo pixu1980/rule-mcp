@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** The scripted repository: every stale claim gets the verdict it deserves. */
 import test from "node:test";
 import assert from "node:assert/strict";

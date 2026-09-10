@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** The update scheduler: throttled background checks, the pending banner, restarts. */
 import { autoUpdateEnabled, intervalMs } from "./_config.js";
 import { runSelfUpdate } from "./_run.js";

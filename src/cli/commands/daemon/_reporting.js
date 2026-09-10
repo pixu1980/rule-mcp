@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** The daemon reporting arms: status and logs. */
 import { existsSync, readFileSync } from "node:fs";
 import { formatDaemonStatus } from "../../daemon/index.js";

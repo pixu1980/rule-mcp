@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Shutdown flag and waiters: the one piece of shared lifecycle state. */
 let _shuttingDown = null;
 let _waiters = [];

@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** The report itself: shape, size, read-only behavior and file selection. */
 import test from "node:test";
 import assert from "node:assert/strict";

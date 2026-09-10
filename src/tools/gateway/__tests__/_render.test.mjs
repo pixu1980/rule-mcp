@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /**
  * renderGatewayReply: every reply shape - truncated evidence, pass/fail
  * verdicts, content vs files receipts, next-tool dedupe - driven by crafted

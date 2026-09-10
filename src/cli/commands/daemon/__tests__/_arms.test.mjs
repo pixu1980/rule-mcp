@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** daemonCommand arms: status, logs, dry-run lifecycle, enable/disable, unknown. */
 import { strict as assert } from "node:assert";
 import { existsSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";

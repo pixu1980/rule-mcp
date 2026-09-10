@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** @module core/enforcement/input - argument limits, prototype-pollution guard, normalization */
 
 export const MAX_ARGUMENT_BYTES = 256 * 1024;

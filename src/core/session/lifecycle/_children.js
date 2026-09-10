@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Tracked child processes, so they die with this one. */
 /** @type {Set<import("node:child_process").ChildProcess>} */
 const _children = new Set();

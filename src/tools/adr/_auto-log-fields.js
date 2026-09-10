@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** The auto-log entry fields, one shape per logged tool. */
 
 /** Title, tags and body lines for one auto-logged call, by tool. */

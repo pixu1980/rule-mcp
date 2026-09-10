@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Guardrail `js-node-protocol`: node: protocol for Node builtins */
 import { countedVerdict } from "../../../../shared/index.js";
 export const jsNodeProtocol = {

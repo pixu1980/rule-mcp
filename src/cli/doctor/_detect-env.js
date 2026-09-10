@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Detect IDE configs, model configuration, stored keys, environment info. */
 import { existsSync, readdirSync } from "node:fs";
 import { platform, arch } from "node:os";

@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Render the verification report: bucket lines, run ranges, the suggested first move. */
 import { ageLabel } from "./_age.js";
 

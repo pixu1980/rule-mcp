@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Shared command runtime helpers: entry point, console printers, JSON parse, safe exec. */
 import { resolve, dirname } from "node:path";
 import { fileURLToPath } from "node:url";

@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Backend guardrail family: security and API rules, one per file. */
 import { sqlInjection } from "./_sql-injection.js";
 import { errorExposure } from "./_error-exposure.js";

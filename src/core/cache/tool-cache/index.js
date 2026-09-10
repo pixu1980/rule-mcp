@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Tool-result cache barrel: keys, tiers, replay, persistence and promotion. */
 export * from "./_config.js";
 export * from "./_digests.js";

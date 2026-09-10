@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** @module scripts/reports/cache/measure - the passes and the two correctness invariants */
 
 import { CORPUS, cacheClear, cacheEntries, callTool, entryPathOf } from "./_context.mjs";

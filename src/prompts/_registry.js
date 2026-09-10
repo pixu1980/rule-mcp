@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** The prompt registry: static definitions plus generated persona prompts. */
 import { activeRoles } from "../core/review/roles/index.js";
 import { OPERATIONS } from "../core/review/template/index.js";

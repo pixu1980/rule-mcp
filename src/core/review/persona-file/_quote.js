@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** @module core/review/persona-file/quote */
 
 /** Strip one layer of matching quotes and unescape what the writer escaped. */

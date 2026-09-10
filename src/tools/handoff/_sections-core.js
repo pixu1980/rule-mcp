@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Handoff sections from project state: header, identity, the ADR log, the context snapshot. */
 import { compressValue, priorityScore } from "./_format.js";
 

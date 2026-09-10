@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /**
  * Shared fixture for the flight-recorder suite: a sandboxed HOME, one acme-app
  * project, the sample session every numeric expectation is pinned to, and the

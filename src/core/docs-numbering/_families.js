@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 import { existsSync, readdirSync, statSync } from "node:fs";
 import { join } from "node:path";
 import { createdAt } from "./_git.js";

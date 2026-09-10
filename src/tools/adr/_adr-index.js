@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** The generated docs/adr/ADR.md index: tables, themes, and the rewrite. */
 import { writeFileSync } from "node:fs";
 import { join } from "node:path";

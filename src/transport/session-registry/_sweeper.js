@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** The sweep timer: unref'd housekeeping that is never the reason a process stays alive. */
 export function startSweeper(registry, intervalMs) {
   registry._sweeper ??= setInterval(() => {

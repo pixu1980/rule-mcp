@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** @module core/enforcement/preprocess - the inbound half of the tool-call contract */
 
 import { assertSafeValue, MAX_ARGUMENT_BYTES, normalizeArguments } from "./_input.js";

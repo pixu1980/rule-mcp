@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** The handoff builder: sections per format, sources, and the budget degrade. */
 import { strict as assert } from "node:assert";
 import { execFileSync } from "node:child_process";

@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Render one gateway reply from its core, minting the always-fresh receipt. */
 import { issueReceipt, issueFilesReceipt } from "./_receipts.js";
 

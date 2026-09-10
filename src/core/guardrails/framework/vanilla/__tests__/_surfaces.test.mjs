@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Every surface that carries the rule: skills, directive, reminder, compression. */
 import { FLEX_FIRST, root, run, skillDocs } from "./_flex.fixture.mjs";
 import test from "node:test";

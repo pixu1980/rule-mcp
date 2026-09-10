@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Coverage: every rule carries a labeled pair, and the floor only rises. */
 import { strict as assert } from "node:assert";
 import { test } from "node:test";

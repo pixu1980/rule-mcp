@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Core computation with cache write-through: shared computeCore and the public recomputeCore. */
 
 import { _beforeHooks, _postHooks, _tools } from "./_hooks.js";

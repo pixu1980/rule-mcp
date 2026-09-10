@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** @module transport/sse/message-route - POST /message: relay one MCP message */
 
 import { safeJsonParse } from "../../utils/index.js";

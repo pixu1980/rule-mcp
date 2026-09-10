@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Guardrail `no-future-use-code`: No code kept for an imagined future */
 export const noFutureUseCode = {
   id: "no-future-use-code",

@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** @module core/text/en-english/tokenize - split code into the prose that can be judged */
 
 import { FOREIGN_NAME_SET, FOREIGN_SUFFIX_RE } from "./_patterns.js";

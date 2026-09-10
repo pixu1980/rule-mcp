@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Worker lifecycle: spawn, pending map, aborted-shaped answers. */
 import { Worker } from "node:worker_threads";
 

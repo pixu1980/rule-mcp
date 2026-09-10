@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** @module cli/paths/runtime - the package, the port, the host, the state dirs */
 
 import { readFileSync } from "node:fs";

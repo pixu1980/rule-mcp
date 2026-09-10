@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 import { maskLiterals } from "../_util.js";
 
 /** Guardrail `data-part-naming`: data-part attribute for child elements */

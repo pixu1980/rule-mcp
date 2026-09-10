@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Cache state: the in-memory tier, load/dirty/flush flags, denylist and normalizable fields. */
 
 /**

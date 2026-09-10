@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** @module cli/cache/command - the cache CLI dispatcher */
 
 import { primeFromCatalog, CATALOG_FILE } from "../../core/cache/catalog/index.js";

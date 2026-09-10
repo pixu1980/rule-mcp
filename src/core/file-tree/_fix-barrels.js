@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 import { readdirSync, writeFileSync } from "node:fs";
 import { join, extname, basename, dirname, parse } from "node:path";
 import { COMPONENT_EXTENSIONS, isBarrelFile } from "./_conventions.js";

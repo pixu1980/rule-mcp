@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 import { findRaggedBoxes } from "../../../text/ascii-box/index.js";
 
 /** Guardrail `fp-box-rectangular`: A drawn box is a rectangle */

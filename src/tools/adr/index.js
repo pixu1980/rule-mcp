@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** ADR barrel: author, body, index, English gate and tool registration. */
 export * from "./_files.js";
 export * from "./_body.js";

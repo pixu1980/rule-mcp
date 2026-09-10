@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /**
  * Behavioral: `uninstall.sh --purge` and `--keep-config` against a seeded
  * fake HOME, through the bootstrap the user actually runs.

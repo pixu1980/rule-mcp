@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Cleanup registration, signals and exits: the lifecycle state machine itself. */
 import test from "node:test";
 import assert from "node:assert/strict";

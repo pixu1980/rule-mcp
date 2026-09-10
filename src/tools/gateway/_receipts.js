@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /**
  * In-memory receipt store (cleared on server restart).
  * Maps receipt token → { codeHash, binding, skillName, allPass, expiresAt }

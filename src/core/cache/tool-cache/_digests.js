@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Skill content digests, the per-entry freshness dependencies. */
 import { createHash } from "node:crypto";
 import { readFileSync, readdirSync } from "node:fs";

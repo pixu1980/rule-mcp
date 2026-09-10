@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** The one response shape a tool hands back: a text-only MCP result. */
 
 /** @param {string} text @returns {{ content: Array<{ type: "text", text: string }> }} */

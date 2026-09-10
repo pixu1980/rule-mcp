@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** T1-T4: fast-forward + classification, dirty-tree guard, and the opt-out, on real repos. */
 import { strict as assert } from "node:assert";
 import { rmSync, writeFileSync } from "node:fs";

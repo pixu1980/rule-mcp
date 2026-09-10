@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Phrases that mark a prompt as a scope challenge rather than a build request. */
 const REDUCTION_SIGNALS = [
   "over engineering",

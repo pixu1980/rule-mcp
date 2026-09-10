@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /**
  * Regression: installAgent must pass the selected transport mode to each
  * agent-specific installer instead of silently writing stdio configuration.

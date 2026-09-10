@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** @module core/cache/catalog/build - which entries earn promotion, and the export shape */
 
 import { pkg as package_ } from "../../../cli/paths/index.js";

@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 // test/prompt-suppression.test.mjs
 //
 // When PIX_GALAXY_MCP_NO_PROMPTS=1, the server must hide its MCP prompts so the

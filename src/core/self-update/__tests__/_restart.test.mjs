@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** T5-T6: banner and restart decisions, including the client-safe daemon default. */
 import { strict as assert } from "node:assert";
 

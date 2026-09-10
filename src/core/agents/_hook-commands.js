@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** @module core/agents/hook-commands - the marker and the command classifiers */
 
 /** Marks our entries so merge and uninstall can find them without touching others. */

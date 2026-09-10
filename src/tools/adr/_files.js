@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** ADR files on disk: directory, numbering, slugs, filenames, the existing set. */
 import { readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";

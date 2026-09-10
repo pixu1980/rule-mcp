@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Session-registry policy constants. */
 
 /** Default idle ceiling: a session nobody has touched in an hour is gone. */

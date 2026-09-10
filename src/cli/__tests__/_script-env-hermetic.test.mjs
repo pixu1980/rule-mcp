@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /**
  * Tests that shell out to install.sh / uninstall.sh must sandbox PNPM_HOME.
  *

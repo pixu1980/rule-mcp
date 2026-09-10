@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 // test/skill-surface-embedded-only fixture
 //
 // The tool surface of this server is defined by ./skills in THIS repository and

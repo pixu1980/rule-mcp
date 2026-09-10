@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Register the pix_tool_gateway orchestration tool. */
 import { GATEWAY_CORE_TOOL, gatewayCoreArguments, computeGatewayCore } from "./_core.js";
 import { renderGatewayReply } from "./_render.js";

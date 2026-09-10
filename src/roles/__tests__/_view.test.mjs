@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** list and show: the merged catalog, its layers, and the unknown-role refusal. */
 import { strict as assert } from "node:assert";
 import { test } from "node:test";

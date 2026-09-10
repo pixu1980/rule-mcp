@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Update policy: enablement, cadence, remote allowlist, manual hints. */
 import { readFileSync } from "node:fs";
 

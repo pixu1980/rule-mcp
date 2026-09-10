@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Accessibility rules mapped to WCAG 2.2 criteria. */
 
 import { a11yRule, isStyles } from "./_a11y-helpers.js";

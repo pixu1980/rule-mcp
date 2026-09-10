@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** The tokensave pipeline: suppression thresholds, one-time directives, truncation. */
 import { strict as assert } from "node:assert";
 import { mkdirSync, mkdtempSync, rmSync } from "node:fs";

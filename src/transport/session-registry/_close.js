@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Closing sessions: one id, and everything on shutdown. */
 /**
  * Close one session's transport and server, then forget it. Never throws.

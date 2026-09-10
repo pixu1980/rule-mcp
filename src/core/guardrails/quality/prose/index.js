@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Prose and typography guardrails (fingerprint + English-only), one rule per file. */
 import { fpNoEmdash } from "./_no-emdash.js";
 import { fpNoTypographicChars } from "./_no-typographic-chars.js";

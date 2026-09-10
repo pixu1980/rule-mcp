@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /**
  * Installer registry: maps agent id -> install/uninstall implementation and
  * the deprecated-name redirect table.

@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /**
  * The runtime home contract: install recreates it, purge removes it,
  * --keep-config spares it.

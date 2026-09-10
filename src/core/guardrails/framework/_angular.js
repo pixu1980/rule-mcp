@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Angular guardrail family. */
 export const ANGULAR_GUARDRAILS = [
   {

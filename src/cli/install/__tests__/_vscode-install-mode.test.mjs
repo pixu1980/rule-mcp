@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /**
  * Regression: VS Code installs are user-global by default. Daemon installs
  * must use VS Code's HTTP MCP schema and migrate only this server's earlier

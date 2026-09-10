@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** @module scripts/fix/self-guardrails/decl - what counts as a declaration line */
 
 /** Is this line a declaration opener we can still extend? */

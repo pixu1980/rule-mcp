@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Resume announcements: the per-session record and the once-per-process latch. */
 import { strict as assert } from "node:assert";
 import { mkdtempSync, rmSync } from "node:fs";

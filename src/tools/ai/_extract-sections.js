@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /**
  * Extract `## Section` headings from SKILL.md content.
  * Strips YAML frontmatter so metadata keywords don't pollute scoring.

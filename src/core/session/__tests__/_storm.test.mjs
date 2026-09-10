@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** The error-storm backstop: swallowing stops when swallowing is all that happens. */
 import test from "node:test";
 import assert from "node:assert/strict";

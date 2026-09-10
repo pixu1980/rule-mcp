@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** @module core/text/en-english/patterns - the foreign-language regexes */
 
 import { FOREIGN_TOKENS, FOREIGN_NAME_TOKENS } from "../_en-english.data.js";

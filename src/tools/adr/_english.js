@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** The English gate: every ADR is written in English, filename included. */
 import { scanDocumentForForeign, scanPathForForeign } from "../../core/text/en-english/index.js";
 

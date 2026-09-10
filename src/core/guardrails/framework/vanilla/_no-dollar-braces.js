@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 // Pattern C: External HTML Template
 
 /** Guardrail `vanilla-no-dollar-braces`: External templates do NOT contain ${} closures */

@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** @module core/bm25/cache-signature - the cache key, file and skills signature */
 
 import { createHash } from "node:crypto";

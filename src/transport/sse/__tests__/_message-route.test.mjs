@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** POST /message routing: size cap, missing session, invalid JSON, relay. */
 import { strict as assert } from "node:assert";
 import { test } from "node:test";

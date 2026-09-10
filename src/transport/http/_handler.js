@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** @module transport/http/handler - route dispatch, auth and the error envelope */
 
 import https from "node:https";

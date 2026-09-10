@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** agent-commands targets: write/skip/remove cycles and target printing. */
 import { strict as assert } from "node:assert";
 import { mkdtempSync, readdirSync, rmSync } from "node:fs";

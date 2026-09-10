@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Service status: the per-platform check, its rendering, names and paths. */
 import { LAUNCH_AGENT_LABEL, LAUNCH_AGENT_PATH, checkLaunchAgent } from "./_launchd.js";
 import { SYSTEMD_UNIT_NAME, SYSTEMD_UNIT_PATH, checkSystemdService } from "./_systemd.js";

@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** @module cli/install/agent-ops - install into and remove from one agent config */
 
 import { allAgents, normalizeInstallMode, remoteModeAgents, installers, uninstallers } from "../installers/index.js";

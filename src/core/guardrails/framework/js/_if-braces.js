@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Guardrail `js-if-braces`: if/else always use braces */
 import { countedVerdict } from "../../../../shared/index.js";
 export const jsIfBraces = {

@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /**
  * The events log: every defensive return the writers and reader take, on a
  * hermetic PIX_GALAXY_MCP_HOME per scenario.

@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /**
  * Agent catalog: the install targets, the remote-mode set, and mode
  * normalization. Pure data + one small normalizer; no I/O.

@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Guardrail `css-comments-required`: CSS file-level comments */
 export const cssCommentsRequired = {
   id: "css-comments-required",

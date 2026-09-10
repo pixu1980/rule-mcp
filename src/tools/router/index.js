@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Tool router barrel: registry, surface, call dispatch and skill catalog. */
 export * from "./_helpers.js";
 export * from "./_entry.js";

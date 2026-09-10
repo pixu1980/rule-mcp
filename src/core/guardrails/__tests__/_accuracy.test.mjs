@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Precision and recall: perfect on the labeled corpus, from both sides. */
 import { strict as assert } from "node:assert";
 import { test } from "node:test";

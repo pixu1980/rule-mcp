@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Regression: remote MCP config must honor a caller-selected SSE port. */
 import { strict as assert } from "node:assert";
 import { mcpServerConfig } from "../index.js";

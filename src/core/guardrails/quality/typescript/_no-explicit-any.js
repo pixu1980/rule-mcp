@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 import { stripLiterals } from "../_guards-meta.js";
 import { countedVerdict, tsSkipResult } from "../../../../shared/index.js";
 

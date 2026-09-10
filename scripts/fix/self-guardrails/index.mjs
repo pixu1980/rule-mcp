@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /**
  * One-shot style fixer for the repo's own guardrail rules (self-guardrails,
  * F-A1 discipline). Mirrors exactly the detectors in framework.js/shared.js so

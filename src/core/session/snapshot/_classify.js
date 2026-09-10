@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** @module core/session/snapshot/classify - what counts as source, test, barrel, ignored */
 
 /** Directories that are never source, however large they are. */

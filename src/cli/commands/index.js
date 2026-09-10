@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** CLI command barrel: one module per command family. */
 export * from "./_help.js";
 export * from "./daemon/index.js";

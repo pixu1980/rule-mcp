@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** The devops guardrail family. */
 export const DEVOPS_GUARDRAILS = [
   {

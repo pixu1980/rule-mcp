@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Tool invocation: hooks, cache read-through, banner, telemetry. */
 import { _tools } from "../_hooks.js";
 import { estimateTokens, finalize, withBanner } from "../_helpers.js";

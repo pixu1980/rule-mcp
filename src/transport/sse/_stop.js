@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** @module transport/sse/stop */
 
 import { getHttpServer, sessions, setHttpServer } from "./_state.js";

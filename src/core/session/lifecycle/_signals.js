@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Signal handlers: install and reset, under an unref'd deadline. */
 import { runShutdown } from "./_cleanups.js";
 import { isShuttingDown } from "./_state.js";

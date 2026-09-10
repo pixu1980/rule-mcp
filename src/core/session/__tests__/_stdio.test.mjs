@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Stdio and serve hygiene: a server dies with its client, its socket, its signal. */
 
 import test from "node:test";

@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Vanilla CE guardrails and the argument preprocessor. */
 import { strict as assert } from "node:assert";
 import test from "node:test";

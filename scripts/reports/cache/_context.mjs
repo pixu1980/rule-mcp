@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** @module scripts/reports/cache/context - flags, scratch state dir and the lazily imported runtime */
 
 import { mkdtempSync, rmSync } from "node:fs";

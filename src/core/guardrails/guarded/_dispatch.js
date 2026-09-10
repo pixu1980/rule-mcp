@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** checkCodeGuarded: the race between the worker's answer and the budget. */
 import { checkCode } from "../engine/index.js";
 import { defaultTimeoutMs, guardedEnabled } from "./_policy.js";

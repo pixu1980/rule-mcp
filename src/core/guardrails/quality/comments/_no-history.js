@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Guardrail `js-comment-no-history`: Comments say what the code does, never what it used to do */
 export const jsCommentNoHistory = {
   id: "js-comment-no-history",

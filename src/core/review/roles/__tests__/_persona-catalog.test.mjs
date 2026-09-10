@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /**
  * Persona catalog contract: every persona lives as one markdown file in
  * `src/roles/` (frontmatter + a lenses bullet list in the body, same format

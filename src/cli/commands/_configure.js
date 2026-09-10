@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** @module cli/commands/configure - the interactive env configure flow */
 
 import { print } from "./_shared.js";

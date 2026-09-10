@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Guardrail `vanilla-fn-no-register`: Functional component does NOT call customElements.define */
 export const vanillaFnNoRegister = {
   id: "vanilla-fn-no-register",

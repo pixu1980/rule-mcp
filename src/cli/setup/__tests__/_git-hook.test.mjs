@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /**
  * A broken post-commit hook fails every later commit, so the removal path
  * gets the same scrutiny as the install path.

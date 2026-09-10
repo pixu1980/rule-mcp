@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Rendering: MCP-prompt suppression, the .prompt.md format, and placeholder hygiene. */
 import { strict as assert } from "node:assert";
 import { test } from "node:test";

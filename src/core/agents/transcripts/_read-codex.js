@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Read Codex transcripts for one project window. */
 import { join } from "node:path";
 import { inWindow, emptyUsage } from "./_window.js";

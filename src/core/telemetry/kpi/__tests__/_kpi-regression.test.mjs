@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /**
  * The numbers this server reports about itself are a product surface. They
  * changed meaning twice in one week upstream (reminder cadence, cavemanRatio

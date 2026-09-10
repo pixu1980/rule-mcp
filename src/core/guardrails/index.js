@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Guardrails barrel: the check engine plus every rule catalog family. */
 export * from "./engine/index.js";
 export * from "./guarded/index.js";

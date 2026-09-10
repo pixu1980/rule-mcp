@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Coverage and target resolution: every agent covered or excluded, dirs resolve per host. */
 import { strict as assert } from "node:assert";
 import { join } from "node:path";

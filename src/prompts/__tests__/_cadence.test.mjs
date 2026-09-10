@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** The cadence: full once a session, free in between, terse every Nth, configurable, opt-out. */
 import { strict as assert } from "node:assert";
 import { test } from "node:test";

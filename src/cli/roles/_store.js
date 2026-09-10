@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** @module cli/roles/store - where the user overlay roles live, read and written */
 
 import { mkdirSync, writeFileSync } from "node:fs";

@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** The simplicity guardrail family: each rule fires on its counterexample and only there. */
 import { readFileSync } from "node:fs";
 import { join } from "node:path";

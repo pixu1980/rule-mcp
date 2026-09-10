@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** @module tools/fix/auto-fix - mode=fix: scan and auto-correct */
 
 import { autoFixFileTree } from "../../core/file-tree/index.js";

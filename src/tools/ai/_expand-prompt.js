@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 import { MULTILINGUAL_ALIASES } from "./_aliases.data.js";
 
 /** Expand prompt with matching multilingual aliases. */

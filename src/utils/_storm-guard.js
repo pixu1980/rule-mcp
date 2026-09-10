@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** @module utils/storm-guard - last-resort process error handlers with a storm cap */
 
 /** The number of swallowed errors inside the window that means a broken process. */

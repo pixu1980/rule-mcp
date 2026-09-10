@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Guardrail `no-speculative-audit-table`: No audit/history table without a consumer */
 export const noSpeculativeAuditTable = {
   id: "no-speculative-audit-table",

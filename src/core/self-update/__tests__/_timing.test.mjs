@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** S1 + S2: the throttle re-arms after the interval, and never blocks the tool call. */
 import { strict as assert } from "node:assert";
 import { rmSync } from "node:fs";

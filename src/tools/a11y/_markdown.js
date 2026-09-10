@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** @module tools/a11y/markdown - the WCAG-EM structured report body */
 
 import { WCAG_EM_STEPS, WCAG_GENERATED, WCAG_SOURCE, WCAG_VERSION } from "../../core/wcag-data/index.js";

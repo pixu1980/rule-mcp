@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Named skills must keep their load-bearing content, and every MCP tool a useful description. */
 import { strict as assert } from "node:assert";
 

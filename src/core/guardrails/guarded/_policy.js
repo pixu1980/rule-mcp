@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** The guarded-check policy: when the worker applies and the per-call budget. */
 
 /** Default per-check budget; PIX_GALAXY_MCP_CHECK_TIMEOUT_MS overrides. */

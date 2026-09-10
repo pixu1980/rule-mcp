@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** The prompt path: resume signals, the announcement decision, and the one-door latch. */
 import { rmSync } from "node:fs";
 

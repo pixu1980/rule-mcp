@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** @module core/enforcement/reminder - the model-visible workflow contract on a session cadence */
 
 import { FLEX_FIRST } from "../index.js";

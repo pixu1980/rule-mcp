@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** @module cli/commands/targets-sync - write the command files into every resolved target */
 
 import { renderAgentCommandFiles } from "../../core/agents/commands/index.js";

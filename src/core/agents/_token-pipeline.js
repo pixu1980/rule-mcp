@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** @module core/agents/token-pipeline - directive-once and suppression accounting */
 
 import { addDirective, addSuppression, getTokenStats, resetTokenStats as _resetStats } from "../telemetry/_token-stats.js";

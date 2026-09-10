@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** The entry store: get/set with per-entry freshness, clear, release, enumerate. */
 import { cacheState, MAX_MEMORY_ENTRIES } from "./_state.js";
 import { cacheEnabled } from "./_config.js";

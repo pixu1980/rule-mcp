@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /**
  * Phase 2c (plan: execution-plan.md) — resources/list descriptions.
  *

@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Generate a convention-correct component folder for a framework. */
 import { join } from "node:path";
 

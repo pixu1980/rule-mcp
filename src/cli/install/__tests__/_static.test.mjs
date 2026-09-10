@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /**
  * Prettier drift guard: the block the installer appends must be byte-identical
  * to the block committed in ./CLAUDE.md.

@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Guardrail `js-throw-new-error`: throw requires new for error constructors */
 import { countedVerdict } from "../../../../shared/index.js";
 export const jsThrowNewError = {

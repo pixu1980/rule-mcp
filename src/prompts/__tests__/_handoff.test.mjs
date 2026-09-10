@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** pix-handoff: the single options argument, the compact vocabulary, the help path. */
 import { strict as assert } from "node:assert";
 import { test } from "node:test";

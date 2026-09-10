@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** The guardrails: wiring on every skill, prose, identifiers, docs, spellings, filenames. */
 import { strict as assert } from "node:assert";
 import test from "node:test";

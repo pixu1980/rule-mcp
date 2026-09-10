@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** @module cli/guard/run - stdin payload handling and the guard entrypoint */
 
 import { ALLOW, decide } from "./_decide.js";

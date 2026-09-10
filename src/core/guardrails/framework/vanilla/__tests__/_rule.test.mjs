@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** The css-flex-first guardrail itself: what an unjustified grid costs. */
 import { GUARDRAIL_ID, SHARED_GUARDRAILS, getGuardrails, checkCode, run } from "./_flex.fixture.mjs";
 import test from "node:test";

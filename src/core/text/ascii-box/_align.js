@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** @module core/text/ascii-box/align - pad every frame line of a box to one width */
 
 import { FILL_SET, findBoxes, isFrameLine, openingCharacter, TOP_SET } from "./_frames.js";

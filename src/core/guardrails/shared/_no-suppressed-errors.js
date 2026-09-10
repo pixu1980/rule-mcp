@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Guardrail `no-suppressed-errors`: No suppressed type, lint, or runtime errors */
 export const noSuppressedErrors = {
   id: "no-suppressed-errors",

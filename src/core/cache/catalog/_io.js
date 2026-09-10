@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** @module core/cache/catalog/io - where the committed catalog lives, read and written */
 
 import { existsSync, readFileSync, writeFileSync } from "node:fs";

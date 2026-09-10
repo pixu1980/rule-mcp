@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** @module tools/fix/generate - mode=generate: create a component file tree */
 import { errorResult } from "../../shared/index.js";
 /** @module tools/fix/generate - mode=generate: create a component file tree */

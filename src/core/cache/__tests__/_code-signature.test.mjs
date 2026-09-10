@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** The code signature: cache keys and the stored index move when the server code changes. */
 import test from "node:test";
 import assert from "node:assert/strict";

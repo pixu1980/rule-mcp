@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** @module cli/install/detect - which agents are present on this machine */
 
 import { readFileSync, existsSync } from "node:fs";

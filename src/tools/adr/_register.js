@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Register the pix_tool_process_adr MCP tool. */
 import { mkdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";

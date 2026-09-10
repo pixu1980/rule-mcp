@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 import { FLEX_FIRST } from "../../core/index.js";
 
 /** The minimal-change contract every routing answer carries. */

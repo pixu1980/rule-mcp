@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Telemetry retention/drain and the idle-reclaim policy. */
 import { strict as assert } from "node:assert";
 import { existsSync, mkdtempSync, rmSync } from "node:fs";

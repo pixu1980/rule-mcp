@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** src/tools: the tool surface - registration entries and shared tool helpers. */
 export * from "./_compress.js";
 export * from "./_plan-docs.js";

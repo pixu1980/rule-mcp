@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** The accounting: the ratio is the measured saving, and the recorder books it. */
 import { strict as assert } from "node:assert";
 import { test } from "node:test";

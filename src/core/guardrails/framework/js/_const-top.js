@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Guardrail `js-const-top`: Variable declarations grouped at top */
 export const jsConstTop = {
   id: "js-const-top",

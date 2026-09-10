@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Agent-command target resolution, printing and syncing helpers. */
 
 import { FORMAT_EXT, commandNames, renderAgentCommandFiles } from "../../core/agents/commands/index.js";

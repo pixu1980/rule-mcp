@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /**
  * computeKpi's remaining shapes: empty inputs, absent usage, non-numeric
  * timestamps, cost-per-1k spreads, core-token ratios and the reminder gap.

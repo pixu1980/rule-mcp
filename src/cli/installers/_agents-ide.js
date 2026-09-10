@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /**
  * Installers for IDE/desktop agents: VS Code, JetBrains, Neovim, Emacs, Devin,
  * the generic fallback installer, and platform path helpers.

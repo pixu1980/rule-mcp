@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** The receipt: never replayed - fresh token, fresh expiry, bound to this call's content. */
 import { mock, test } from "node:test";
 import assert from "node:assert/strict";

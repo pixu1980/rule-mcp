@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Render one ADR document from its fields (Nygard template). */
 import { adrAuthor } from "./_author.js";
 

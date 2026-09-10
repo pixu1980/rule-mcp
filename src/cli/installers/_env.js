@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /**
  * PIX_* environment configuration: where it lives on disk, the opt-out
  * defaults, and the mcpServerConfig builders that merge env + CLI args.

@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 import { z } from "zod/v4";
 
 /** Input schema of the pix routing tool. */

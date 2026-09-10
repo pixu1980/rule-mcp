@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** @module core/enforcement/validate - the shape a result must have before it leaves */
 
 import { MAX_OUTPUT_BYTES } from "./_input.js";

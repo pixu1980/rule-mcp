@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Validate each installed agent's mcp.json entry. */
 import { readFileSync } from "node:fs";
 import { homedir } from "node:os";

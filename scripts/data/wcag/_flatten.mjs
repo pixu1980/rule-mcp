@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** @module scripts/data/wcag/flatten */
 
 /** Flatten the principle/guideline/criterion tree into one keyed record. */

@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** @module core/skills/minimal - the reduced tool surface for tool-count-limited clients */
 
 /**

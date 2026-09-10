@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 import { scanPathForForeign } from "../../../text/en-english/index.js";
 
 /** Guardrail `en-english-only-filenames`: English-only file and folder names */

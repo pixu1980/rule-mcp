@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Guardrail `js-prefer-replace-all`: replaceAll over replace with /g regex */
 import { countedVerdict } from "../../../../shared/index.js";
 export const jsPreferReplaceAll = {

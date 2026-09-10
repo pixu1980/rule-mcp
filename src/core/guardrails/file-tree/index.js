@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** File-tree guardrail family: barrel and naming rules, one per file. */
 import { componentFolderBarrel } from "./_component-folder-barrel.js";
 import { componentFilePrefix } from "./_component-file-prefix.js";

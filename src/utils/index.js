@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Utils barrel: the command sandbox. */
 export * from "./_sandbox.js";
 export * from "./_request-wrapper.js";

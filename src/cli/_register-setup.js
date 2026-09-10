@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /**
  * Setup command registrars: install, uninstall, config, doctor, completions, agent-commands.
  *

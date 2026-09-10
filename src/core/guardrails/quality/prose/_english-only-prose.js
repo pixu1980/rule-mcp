@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 import { scanCodeForForeign, scanDocumentForForeign } from "../../../text/en-english/index.js";
 
 /** Guardrail `en-english-only-prose`: English-only prose */

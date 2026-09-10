@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /**
  * An uninstall may only delete lines this installer wrote. The shell version
  * deleted every `export OPENAI_API_KEY=...` it found; that must not come back.

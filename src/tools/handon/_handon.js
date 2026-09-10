@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** The handon entry: read the handoff, verify it, render the resume report. */
 import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";

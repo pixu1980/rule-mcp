@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Domain keyword tables consulted before framework bias is applied. */
 const AI_KEYWORDS = ["agent", "agents", "llm", "assistant", "autonomous", "registry", "provider"];
 const BACKEND_KEYWORDS = [

@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** TypeScript and manifest-policy helpers consulted by the quality checks. */
 export { TS_EXTENSION, TS_SYNTAX, isTypeScriptFile as isTypeScript } from "../../../shared/index.js";
 

@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** @module server/completions - the completion/complete request handler */
 
 import { CompleteRequestSchema } from "@modelcontextprotocol/sdk/types.js";

@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Quality guardrail catalog: one rule per file, grouped in family folders. */
 import { TYPESCRIPT_GUARDRAILS } from "./typescript/index.js";
 import { PROSE_GUARDRAILS } from "./prose/index.js";

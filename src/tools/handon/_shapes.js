@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Shape tests for inline code spans: branch, path, command. */
 import { TRUNKS } from "./_constants.js";
 

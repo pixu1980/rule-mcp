@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Windows service adapter: the sc.exe command, install, uninstall, check. */
 import { execSync } from "node:child_process";
 import { resolveEntrypoint, tryExec } from "./_service-shared.js";

@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Guardrail `verified-dependencies-only`: Only manifest-verified dependencies */
 export const verifiedDependenciesOnly = {
   id: "verified-dependencies-only",

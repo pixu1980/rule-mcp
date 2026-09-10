@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 import { INSTALLED_GROUPS, isPinned, manifestOf } from "../_guards-meta.js";
 
 /** Guardrail `pkg-exact-versions`: Dependencies are pinned exactly */

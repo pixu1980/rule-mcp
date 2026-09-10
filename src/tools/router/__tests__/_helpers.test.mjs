@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Result shaping helpers: banner guards, size accounting, guardrail tallies. */
 import { strict as assert } from "node:assert";
 import test from "node:test";

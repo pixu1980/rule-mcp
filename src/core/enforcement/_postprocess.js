@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** @module core/enforcement/postprocess - the outbound half: validation and stamps */
 
 import { randomUUID } from "node:crypto";

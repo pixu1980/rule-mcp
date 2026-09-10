@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Guardrail `file-naming`: File naming convention (_PascalCase.js) */
 export const fileNaming = {
   id: "file-naming",

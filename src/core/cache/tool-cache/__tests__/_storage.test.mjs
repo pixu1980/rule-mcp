@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Storage semantics: both tiers serve the same value, immutably, errors never stored. */
 import test from "node:test";
 import assert from "node:assert/strict";

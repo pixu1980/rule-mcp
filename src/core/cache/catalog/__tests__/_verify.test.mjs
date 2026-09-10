@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** verifyCache and the priming floors: disabled cache, bad entries, drift. */
 import { beforeEach, test } from "node:test";
 import assert from "node:assert/strict";

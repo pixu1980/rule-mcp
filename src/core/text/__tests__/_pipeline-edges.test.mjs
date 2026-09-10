@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /**
  * The compression pipeline's refusals: what it declines to touch, and what it
  * does with a value that is not text at all.

@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /**
  * Text writers: TOML blocks, instruction markers, and the sidecar command
  * template builders (commandBody, geminiCommand, copilotAgent).

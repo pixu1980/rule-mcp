@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Service management: the platform detection and the install/uninstall dispatch. */
 import { platform } from "node:os";
 import { startDaemonProcess, stopDaemonProcess } from "./_process.js";

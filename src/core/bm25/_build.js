@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Index construction over the skills catalog. */
 
 import { getSkillsDirs as getSkillsDirectories } from "../../cli/paths/index.js";

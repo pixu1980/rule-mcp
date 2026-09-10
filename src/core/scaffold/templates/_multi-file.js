@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** @module core/scaffold/templates/multi-file */
 
 import { COMPONENT_TEMPLATES, toPascal, toKebab, interpolate } from "../_template-data.data.js";

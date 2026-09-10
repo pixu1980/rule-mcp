@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Shared service plumbing: the entrypoint, safe exec, the wrapper script. */
 import { homedir } from "node:os";
 import { join } from "node:path";

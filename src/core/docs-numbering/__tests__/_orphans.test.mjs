@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** orphanedPathReferences: the empty-log arm and the ambiguous-slug skip. */
 import { strict as assert } from "node:assert";
 import { execFileSync } from "node:child_process";

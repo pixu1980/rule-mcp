@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 import { scanFileTree } from "./_scan.js";
 import { renameUnprefixedFiles } from "./_fix-rename.js";
 import { createMissingBarrels, populateEmptyBarrels } from "./_fix-barrels.js";

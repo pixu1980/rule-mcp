@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Doctor, skills reload, self-update, fix and completions commands. */
 
 import { callTool } from "../../tools/router/index.js";

@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** The daemon process arms: start and stop, native-first with a process fallback. */
 import { checkDaemonService, detectPlatform, getServiceName, startDaemonProcess, stopDaemonProcess } from "../../daemon/index.js";
 import { print, tryExec } from "../_shared.js";

@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /**
  * PERF-1 and PERF-2: the invariants every level has to hold, whatever the
  * tables say.

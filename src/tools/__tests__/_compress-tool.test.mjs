@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /**
  * PERF-1.3 and PERF-3.4: what `pix_tool_compress` refuses, and what it guards.
  *

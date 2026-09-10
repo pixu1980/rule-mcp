@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /**
  * Filesystem and path helpers shared by every installer: resolve, read,
  * atomic-write, remove, backup, plus the home/constants the writers use.

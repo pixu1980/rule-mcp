@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /**
  * generateSelfSignedCert failures that depend on what openssl does: a missing
  * binary, a failing key step and a failing certificate step. PATH points at a

@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** @module core/telemetry/recorder/identity */
 
 import { createHash, randomUUID } from "node:crypto";
