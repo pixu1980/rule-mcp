@@ -18,11 +18,7 @@ const REPO_PATH = /`((?:scripts|src|tests|docs|bin)\/[^`]*?)`/gu;
 
 function headerPaths(document, lines) {
   const text = readFileSync(join(root, document), "utf8").split("\n").slice(0, lines).join("\n");
-  const paths = [];
-
-  for (const match of text.matchAll(REPO_PATH)) {
-    paths.push(match[1]);
-  }
+  const paths = Array.from(text.matchAll(REPO_PATH), (match) => match[1]);
 
   return [...new Set(paths)];
 }
