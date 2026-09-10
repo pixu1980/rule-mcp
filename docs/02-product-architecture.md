@@ -469,17 +469,17 @@ Refresh with `pnpm census`; full inventories in `docs/07-` .. `docs/12-`.
 | - action tools            | 17    | one per module, registered explicitly         |
 | - skill tools             | 89    | one per catalog skill, generated              |
 | MCP resources             | 186   | `src/resources/index.js`                      |
-| MCP prompts               | 73    | `src/prompts/index.js`                        |
+| MCP prompts               | 76    | `src/prompts/index.js`                        |
 | - reusable                | 19    | workflow and area prompts                     |
-| - persona                 | 54    | 18 active roles x 3 operations                |
+| - persona                 | 57    | 19 active roles x 3 operations                |
 | Skills                    | 89    | `skills/rule-*/SKILL.md`                       |
-| Review personas           | 18    | `src/core/review/roles/index.js`              |
+| Review personas           | 19    | `src/core/review/roles/index.js`              |
 | Guardrail rules           | 95    | `src/core/guardrails/index.js`                |
-| Agent slash commands      | 74    | `src/core/agents/commands/index.js`           |
+| Agent slash commands      | 77    | `src/core/agents/commands/index.js`           |
 | Agent/IDE command targets | 13    | `src/core/agents/command-targets/index.js`    |
 | CLI commands              | 21    | `src/cli/_program.js`                         |
 | Hook events               | 3     | `src/core/agents/_hooks.js`                   |
-| Architecture decisions    | 78    | [`docs/adr/ADR.md`](adr/ADR.md)               |
+| Architecture decisions    | 79    | [`docs/adr/ADR.md`](adr/ADR.md)               |
 
 Regenerate with `pnpm census`. The inventories themselves are
 [`08-skills.md`](08-skills.md) through [`15-resources.md`](15-resources.md).

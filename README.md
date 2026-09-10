@@ -23,7 +23,7 @@ Serves styleguides, component templates, framework best practices, and design sy
   - [Minimal tool surface (10 tools)](#minimal-tool-surface-10-tools)
   - [Gateway deterministic mode](#gateway-deterministic-mode)
 - [MCP Resources (186)](#mcp-resources-186)
-- [MCP Prompts (73)](#mcp-prompts-73)
+- [MCP Prompts (76)](#mcp-prompts-76)
 - [Guardrail engine](#guardrail-engine)
 - [CLI reference](#cli-reference)
 - [Daemon & services](#daemon--services)
@@ -74,7 +74,7 @@ rule-mcp install --agent all
 
 ## What is rule-mcp
 
-rule-mcp is an [MCP](https://modelcontextprotocol.io) server that exposes **106 tools**, **186 resources**, and **73 prompts** to any MCP-compatible AI coding agent. Because the server never calls an LLM (every output is deterministic), it is **model-agnostic** - it behaves identically behind Claude, GPT, Gemini, Llama, Qwen, or any other model. It provides:
+rule-mcp is an [MCP](https://modelcontextprotocol.io) server that exposes **106 tools**, **186 resources**, and **76 prompts** to any MCP-compatible AI coding agent. Because the server never calls an LLM (every output is deterministic), it is **model-agnostic** - it behaves identically behind Claude, GPT, Gemini, Llama, Qwen, or any other model. It provides:
 
 - **90 modular skills** covering frontend, backend, database, devops, toolchain, styleguide, process, platform, and ai domains
 - **BM25 full-text search** across all skill content
@@ -313,7 +313,7 @@ Each skill (except `rule` itself) has two resources:
 
 ---
 
-## MCP Prompts (73)
+## MCP Prompts (76)
 
 73 prompts accessible via the MCP `prompts/get` protocol. The 12 `rule-area-*` commands and the
 54 review-persona commands (18 roles x plan/audit/review) are grouped in a row each; the one-shot

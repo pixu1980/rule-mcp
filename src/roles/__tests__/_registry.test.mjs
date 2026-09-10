@@ -36,6 +36,7 @@ test("the catalog ships the agreed active set", () => {
     "docs",
     "frontend",
     "i18n",
+    "oss",
     "performance",
     "privacy",
     "qa",

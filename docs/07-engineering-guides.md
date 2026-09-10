@@ -169,7 +169,7 @@ runs it (plus `RULE_MCP_NO_RESUME_HANDON` for the resume block and
 
 <!-- census:begin:command-surface -->
 
-### The command surface today (74)
+### The command surface today (77)
 
 | Kind       | Count | Example           | Reach for it when                                                   |
 | ---------- | ----- | ----------------- | ------------------------------------------------------------------- |
@@ -177,7 +177,7 @@ runs it (plus `RULE_MCP_NO_RESUME_HANDON` for the resume block and
 | `area`     | 12    | `/rule-area-ai`    | Routes within one area, when the area is known and the skill is not |
 | `workflow` | 2     | `/rule-adr`        | Runs a named workflow: a decision record, a pre-flight check        |
 | `session`  | 5     | `/rule-handoff`    | Carries a session across a context boundary                         |
-| `persona`  | 54    | `/rule-audit-a11y` | Runs one review role at one operation, and writes its documents     |
+| `persona`  | 57    | `/rule-audit-a11y` | Runs one review role at one operation, and writes its documents     |
 
 **Areas**: `/rule-area-ai`, `/rule-area-backend`, `/rule-area-data`, `/rule-area-devops`, `/rule-area-frontend`, `/rule-area-platform`, `/rule-area-process`, `/rule-area-skills`, `/rule-area-styleguide`, `/rule-area-toolchain`, `/rule-area-toolset`, `/rule-area-ui`
 
