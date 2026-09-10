@@ -10,6 +10,14 @@ permissions:
   contents: read
   id-token: write
 
+# The one place the pnpm version lives. `package.json` cannot carry it: the
+# manifest guardrail forbids `packageManager` and `devEngines.packageManager`
+# (corepack then owns the install and can refuse it offline or behind a proxy).
+# Without a version here, pnpm/action-setup fails with "No pnpm version is
+# specified" before any job does a single useful thing.
+env:
+  PNPM_VERSION: "11.25.0"
+
 jobs:
   lint:
     name: Lint + Format
@@ -17,6 +25,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
@@ -43,6 +53,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node }}
@@ -60,6 +72,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
@@ -77,6 +91,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
