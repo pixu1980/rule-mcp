@@ -119,6 +119,10 @@ commit - the docs follow the code instead of being remembered.
   frontmatter and a lenses list in the body, not a code change; run
   `pnpm census` afterwards.
 - Keep prose English, American spelling (enforced by `en-english-only-prose`).
+- Git hooks live in `.githooks/` and are installed by `pnpm install` (via
+  `prepare`), or on demand with `pnpm hooks:install`. What lands in
+  `.git/hooks/` is a shim that executes the tracked hook, so the two cannot
+  drift; `pnpm hooks:check` fails when a clone is missing them.
 
 <!-- census:begin:command-surface -->
 
