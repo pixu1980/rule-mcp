@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /**
  * A stdin/stdout pair Ink will render into without a real terminal.
  *

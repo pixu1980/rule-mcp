@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /**
  * requestHandler's full branch surface: preflight, health, 401/429 auth, 403
  * origin denial, session-less GET/DELETE, 404/405, the body cap, and a real

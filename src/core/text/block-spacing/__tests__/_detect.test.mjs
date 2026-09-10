@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** findBlocks / classifyBlock / indentOf and the fixer's edge rules. */
 import { strict as assert } from "node:assert";
 import test from "node:test";

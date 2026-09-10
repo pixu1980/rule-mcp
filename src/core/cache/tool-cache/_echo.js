@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** The echo check that gates the normalized tier. */
 import { NORMALIZABLE } from "./_state.js";
 

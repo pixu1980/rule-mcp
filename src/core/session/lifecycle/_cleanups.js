@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** The cleanups run at shutdown, newest first. */
 import { killTrackedChildren } from "./_children.js";
 import { currentShutdown, drainWaiters, setShuttingDown } from "./_state.js";

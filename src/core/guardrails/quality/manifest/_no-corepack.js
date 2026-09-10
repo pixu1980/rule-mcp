@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 import { manifestOf } from "../_guards-meta.js";
 
 /** Guardrail `pkg-no-corepack`: No corepack activation fields */

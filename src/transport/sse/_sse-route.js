@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** @module transport/sse/sse-route - GET /sse: open one stream, one server instance */
 
 import { SSEServerTransport } from "@modelcontextprotocol/sdk/server/sse.js";

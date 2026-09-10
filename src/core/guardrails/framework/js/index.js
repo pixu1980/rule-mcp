@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Framework-shared JS guardrail family, one rule per file. */
 import { jsIfBraces } from "./_if-braces.js";
 import { jsNoInlineBlocks } from "./_no-inline-blocks.js";

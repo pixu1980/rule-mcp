@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 import { execFileSync } from "node:child_process";
 import { gitOut } from "./_git.js";
 import { orphanedPathReferences } from "./_orphans.js";

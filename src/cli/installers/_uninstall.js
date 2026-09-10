@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** @module cli/installers/uninstall - the editor uninstallers and the registry */
 
 import { existsSync } from "node:fs";

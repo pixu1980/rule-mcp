@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** The author stamped on new ADRs, from the git identity. */
 import { execFileSync } from "node:child_process";
 

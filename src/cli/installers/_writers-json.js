@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /**
  * JSON writers: upsert/remove the MCP server entry in per-agent JSON configs
  * and the VS Code variants (settings.json server blocks).

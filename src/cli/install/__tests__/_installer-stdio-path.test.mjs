@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /**
  * Regression: Node's child_process.spawn does not expand a leading `~`.
  * MCP stdio configurations must therefore contain concrete absolute paths.

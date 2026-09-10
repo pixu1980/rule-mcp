@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** @module tools/a11y/evaluate - validate the outcomes and settle the claim */
 
 import { EARL_OUTCOMES, WCAG_VERSION, criteriaForLevel, criterion } from "../../core/wcag-data/index.js";

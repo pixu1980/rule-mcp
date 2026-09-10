@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Guardrail `js-for-loop-braces`: for loops must have braces and be multi-line */
 import { countedVerdict } from "../../../../shared/index.js";
 export const jsForLoopBraces = {

@@ -1,9 +1,12 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** @module resources/read - serve one pix:// body; `./_serve.js` is the way out callers use */
 
 import { readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 import { getSkillsDirs as getSkillsDirectories } from "../cli/paths/index.js";
 import { readSkill } from "../tools/router/index.js";
+import { serveStaticText } from "./_static.js";
 
 /**
  * Serve a resource by its URI, before compression.
@@ -57,25 +60,11 @@ export async function serveResource(uri) {
     };
   }
 
-  // ── pix skill ───────────────────────────────────────────
-  if (uri === "pix://ai") {
-    return { contents: [{ uri, mimeType: "text/markdown", text: readSkill("pix") || "" }] };
-  }
+  // ── Static text: pix://ai, pix://a11y ──────────────────────────
+  const staticText = serveStaticText(uri);
 
-  // ── A11y resources ─────────────────────────────────────────────
-  if (uri === "pix://a11y") {
-    return {
-      contents: [
-        {
-          uri,
-          mimeType: "text/markdown",
-          text:
-            "For the full a11y testing guide with Playwright + axe-core, see pix-styleguide a11y.md Section 12: Automated Testing.\n\n" +
-            "Use `pix_tool_component component=a11y-test-basic` to generate test files.\n" +
-            "Use `pix_tool_component component=playwright-config` to generate Playwright config.",
-        },
-      ],
-    };
+  if (staticText) {
+    return { contents: staticText };
   }
 
   if (uri === "pix://a11y/test-basic") {

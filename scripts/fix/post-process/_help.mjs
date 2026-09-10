@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** @module scripts/fix/post-process/help - the --help text */
 
 export function printHelp() {

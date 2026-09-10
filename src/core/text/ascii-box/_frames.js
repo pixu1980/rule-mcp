@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** @module core/text/ascii-box/frames - the box-drawing character tables and box detection */
 
 /** Opening corners. A box starts here. */

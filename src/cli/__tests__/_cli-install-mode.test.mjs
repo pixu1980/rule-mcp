@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Regression: the public CLI must parse and propagate --mode. */
 import { strict as assert } from "node:assert";
 import { execFileSync } from "node:child_process";

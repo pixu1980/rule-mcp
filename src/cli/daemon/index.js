@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Daemon barrel: process lifecycle, service adapters, status. */
 export * from "./_process.js";
 export * from "./_process-status.js";

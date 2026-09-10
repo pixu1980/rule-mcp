@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Self-update barrel: policy, the run, the banner, the scheduler. */
 export * from "./_config.js";
 export * from "./_run.js";

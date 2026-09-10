@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /**
  * computeGatewayCore's routing decisions: backend override, no-override
  * frontend, unknown-route fallback, multi-file verdicts and the code-only unit.

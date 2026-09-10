@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** @module core/guardrails/engine/report - the ruleset rendered as text */
 
 import { SHARED_GUARDRAILS } from "../shared/index.js";

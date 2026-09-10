@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Guardrail `js-blank-line-before-return`: Blank line before return statements */
 import { countedVerdict } from "../../../../shared/index.js";
 export const jsBlankLineBeforeReturn = {

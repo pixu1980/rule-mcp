@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** The surfaces: the skill exists and is routed, its wordlist matches the gate, prompts carry the mandate. */
 import { strict as assert } from "node:assert";
 import { existsSync, readFileSync } from "node:fs";

@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** BM25 scoring and search entry points. */
 
 import { K1, B, tokenize, DEFAULT_MAX_RESULTS } from "./_terms.js";

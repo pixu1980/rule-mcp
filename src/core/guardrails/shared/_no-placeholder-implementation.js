@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Guardrail `no-placeholder-implementation`: No placeholder or unfinished implementation */
 export const noPlaceholderImplementation = {
   id: "no-placeholder-implementation",

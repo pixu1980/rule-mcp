@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /**
  * Hardening 2.2 (F-P1): exports/ has a retention policy of its own.
  *

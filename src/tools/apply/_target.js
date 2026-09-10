@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** @module tools/apply/target - which destinations inside the root a write may name */
 
 import { existsSync } from "node:fs";

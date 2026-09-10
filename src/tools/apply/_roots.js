@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** @module tools/apply/roots - which project roots a write may be anchored to */
 
 import { realpathSync } from "node:fs";

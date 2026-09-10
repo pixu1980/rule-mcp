@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** roles CLI edges: json list, show json, usage errors, unknown replacements. */
 import { strict as assert } from "node:assert";
 import { test } from "node:test";

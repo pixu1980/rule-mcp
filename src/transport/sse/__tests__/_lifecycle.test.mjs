@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Lifecycle: token, port, public health, CORS deny-by-default, graceful stop. */
 import { check, finish, startSseServer, stopSseServer } from "./_sse.fixture.mjs";
 

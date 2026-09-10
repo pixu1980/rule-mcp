@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Receipt validation: the read path and the write path. */
 import { createHash } from "node:crypto";
 import { canonicalFilesDigest, openReceipt } from "./_receipts.js";

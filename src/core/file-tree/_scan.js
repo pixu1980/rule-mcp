@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 import { existsSync, readdirSync } from "node:fs";
 import { join, basename } from "node:path";
 import { isIgnored } from "./_conventions.js";

@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** @module cli/cache/export - export to and verify against the committed catalog */
 
 import { buildCatalog, verifyCache, writeCatalog, MIN_HITS } from "../../core/cache/catalog/index.js";

@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /**
  * Phase 3 (plan: execution-plan.md) — the compression-surface manifest, pinned.
  *

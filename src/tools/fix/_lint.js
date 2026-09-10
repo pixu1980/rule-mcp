@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** @module tools/fix/lint - mode=lint: scan and report */
 
 import { scanFileTree } from "../../core/file-tree/index.js";

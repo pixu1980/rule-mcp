@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** @module scripts/fix/self-guardrails/const-top - js-const-top: blank after a declaration group */
 
 import { CONTINUES, DECL } from "./_decl.mjs";

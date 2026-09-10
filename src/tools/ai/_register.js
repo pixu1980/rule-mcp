@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 import { getSkillNames, registerTool, listTools } from "../router/index.js";
 import { detectRole } from "../../core/review/roles/index.js";
 import { loadRoleOverlays } from "../../core/review/_overlays.js";

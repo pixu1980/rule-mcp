@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Shutdown hygiene: an error storm ends the process, a signal ends serve, no timer survives. */
 
 import test from "node:test";

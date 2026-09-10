@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Age of a handoff in days, and its human label. */
 
 /** Days between a `YYYY-MM-DD` string and today, or undefined. */

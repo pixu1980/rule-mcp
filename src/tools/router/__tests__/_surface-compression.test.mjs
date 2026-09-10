@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /**
  * Phase 2b (plan: execution-plan.md) — tools/list descriptions.
  *

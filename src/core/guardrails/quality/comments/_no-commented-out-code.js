@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Guardrail `no-commented-out-code`: No implementations parked in comments */
 export const noCommentedOutCode = {
   id: "no-commented-out-code",

@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** The JSON writer helpers: upsert/remove across agents and the VS Code variants. */
 import { strict as assert } from "node:assert";
 import test from "node:test";

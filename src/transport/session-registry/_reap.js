@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Reaping: find the sessions the sweep should let go, and close them. */
 import { closeSession } from "./_close.js";
 

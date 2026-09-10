@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** @module core/agents/commands/personas - persona command targets and bodies */
 
 import { activeRoles } from "../../review/roles/index.js";

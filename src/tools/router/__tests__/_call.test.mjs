@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** callTool's error paths: validation failures and failing guardrail results. */
 import { strict as assert } from "node:assert";
 import { mkdtempSync } from "node:fs";

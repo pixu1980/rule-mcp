@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Tools/config commands: list+call tools, env config and the interactive configure flow. */
 
 import { callTool, listTools } from "../../tools/router/index.js";

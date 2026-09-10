@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** BM25 skill-search engine: tokenizer, stopwords, index build/cache and scoring. */
 export * from "./_terms.js";
 export * from "./_canonicalize.js";

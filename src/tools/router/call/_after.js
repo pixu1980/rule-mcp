@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** After-hooks: fire-and-forget decoration registered per tool. */
 import { _afterHooks } from "../_hooks.js";
 

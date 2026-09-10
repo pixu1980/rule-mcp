@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 // test/gateway-receipt-paths.test.mjs
 //
 // Audit finding 02 - the gateway receipt proved "these bytes passed the

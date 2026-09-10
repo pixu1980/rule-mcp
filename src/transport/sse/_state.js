@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** @module transport/sse/state - what one running SSE daemon shares across its routes */
 
 import { SessionRegistry } from "../session-registry/index.js";

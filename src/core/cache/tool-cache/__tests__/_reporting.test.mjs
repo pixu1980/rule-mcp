@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Reporting: entry-path classification, per-tier aggregates, the rendered report. */
 import test from "node:test";
 import assert from "node:assert/strict";

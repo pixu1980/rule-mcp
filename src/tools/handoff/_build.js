@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Assemble the handoff document from its sections, degrading format to fit the token budget. */
 import { readAdrs, readContextValues, readProjectIdentity } from "./_sources.js";
 import { getGitDiff, getGitLog } from "./_git.js";

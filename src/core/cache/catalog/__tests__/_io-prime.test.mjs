@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** The committed file: byte-identical export, read-back, floor semantics, priming. */
 import test, { beforeEach } from "node:test";
 import assert from "node:assert/strict";

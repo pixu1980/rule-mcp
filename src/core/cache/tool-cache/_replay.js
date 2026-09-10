@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Replay: tiered lookup, the echo check that gates L1, store-under-every-key, freshness. */
 import { cacheState } from "./_state.js";
 import { echoesArguments } from "./_echo.js";

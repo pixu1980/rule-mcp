@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** The SSE transport request handler: every arm on an ephemeral in-process server. */
 import { strict as assert } from "node:assert";
 import { after, before, test } from "node:test";

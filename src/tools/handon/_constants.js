@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Shared constants: where handoffs and ADRs live, trunk names, scan windows, holding verdicts. */
 
 /** Where handoffs live, relative to the project root. */

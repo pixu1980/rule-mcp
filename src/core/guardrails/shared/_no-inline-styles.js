@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Guardrail `no-inline-styles`: Zero inline styles in templates */
 export const noInlineStyles = {
   id: "no-inline-styles",

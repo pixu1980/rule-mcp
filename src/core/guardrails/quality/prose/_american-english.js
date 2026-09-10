@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 import { findFingerprints } from "../../../text/fingerprint/index.js";
 
 /** Guardrail `fp-american-english`: American English spelling */

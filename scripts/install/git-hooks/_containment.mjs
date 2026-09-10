@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** @module scripts/install/git-hooks/containment - is a hooks target inside the git directory? */
 
 import { posix, win32 } from "node:path";

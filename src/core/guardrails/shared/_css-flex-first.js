@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 import { extractRealCSS, unjustifiedGrids } from "../_util.js";
 
 /** Guardrail `css-flex-first`: Flex first, grid only when flex cannot do it */

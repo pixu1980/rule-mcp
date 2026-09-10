@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /**
  * Uninstallers: per-agent removal implementations and the uninstaller map.
  * @module cli/installers/uninstall

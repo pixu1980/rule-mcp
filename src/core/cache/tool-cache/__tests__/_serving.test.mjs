@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** End to end: rephrased prompts served from cache, tiers reported, aggregates rendered. */
 import test from "node:test";
 import assert from "node:assert/strict";

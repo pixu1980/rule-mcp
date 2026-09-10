@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 // Pattern B: Functional Component
 
 /** Guardrail `vanilla-fn-component`: Functional component is a plain function */

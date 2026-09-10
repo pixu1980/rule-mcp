@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** @module tools/skill/skill-modes - the per-skill tool's mode handlers */
 
 import { checkCodeGuarded } from "../../core/guardrails/index.js";

@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Literal-masking and context helpers used by the a11y guardrail family. */
 
 /** Lines short enough to hand-write; a kilobytes-long line is generated output. */

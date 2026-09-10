@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Git reads for the handoff: safe exec, working-tree diff, recent log. */
 import { existsSync } from "node:fs";
 import { tryExec } from "../../shared/index.js";

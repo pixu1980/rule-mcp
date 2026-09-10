@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Shared guardrail shapes: the typed skip gate and the counted verdict. */
 
 /** Extensions that select TypeScript checks. */

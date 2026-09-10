@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** @module tools/a11y/earl - the EARL JSON-LD assertions */
 
 /** JSON-LD context for the EARL output. */

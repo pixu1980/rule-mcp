@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** List the handoff documents a project carries. */
 import { existsSync, readdirSync } from "node:fs";
 import { join } from "node:path";

@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** The database guardrail family. */
 import { countedVerdict } from "../../shared/index.js";
 export const DATABASE_GUARDRAILS = [

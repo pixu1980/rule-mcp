@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** @module transport/http/mcp-route - POST /mcp: initialize or relay one JSON-RPC message */
 
 import { randomUUID } from "node:crypto";

@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** The systemd user unit template. */
 import { mkdirSync } from "node:fs";
 import { getRuntimePaths } from "../paths/index.js";

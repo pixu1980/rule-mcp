@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** S3: interval env parsing - 0 checks every call, invalid and negative fall back to the default. */
 import { strict as assert } from "node:assert";
 import { rmSync } from "node:fs";

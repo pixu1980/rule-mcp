@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Guardrail `vanilla-html-template`: Component uses html`` tagged template */
 export const vanillaHtmlTemplate = {
   id: "vanilla-html-template",

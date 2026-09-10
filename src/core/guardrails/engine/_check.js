@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** @module core/guardrails/engine/check - run every applicable rule over one body of code */
 
 import { getGuardrails } from "./_registry.js";

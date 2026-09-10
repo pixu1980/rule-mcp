@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** @module core/agents/command-targets/registry - every directory and render format, per agent */
 
 import { join } from "node:path";

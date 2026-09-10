@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Docker mode contract: the client config and container share one SSE token. */
 import { strict as assert } from "node:assert";
 import { readFileSync } from "node:fs";

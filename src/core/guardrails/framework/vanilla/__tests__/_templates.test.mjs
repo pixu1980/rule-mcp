@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Generated component templates pass their own flex-first rule. */
 import { run } from "./_flex.fixture.mjs";
 import test from "node:test";

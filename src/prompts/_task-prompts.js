@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** The one-shot task prompts: adr, check, flight, handon, init, update. */
 
 /**

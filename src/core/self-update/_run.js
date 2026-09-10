@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** One self-update pass: gates, fetch, merge, the structured result. */
 import { git } from "./_git.js";
 import { reloadSkillsAfterMerge } from "./_reload.js";

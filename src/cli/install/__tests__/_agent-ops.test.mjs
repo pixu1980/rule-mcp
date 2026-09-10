@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** install/uninstall agent dispatch: redirects, sweeps, unsupported and remote modes. */
 import { strict as assert } from "node:assert";
 import { mkdtempSync, rmSync } from "node:fs";

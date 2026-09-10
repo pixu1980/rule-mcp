@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Guardrail `vanilla-template-load`: Template loaded via fetch or bundle-text */
 export const vanillaTemplateLoad = {
   id: "vanilla-template-load",

@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /**
  * The instruction block is a compatibility surface: install writes it,
  * uninstall has to find it again, and repeated cycles must leave the host

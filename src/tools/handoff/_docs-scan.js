@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Scan docs/ for roadmaps, changelogs and key documents. */
 import { existsSync, readdirSync, statSync } from "node:fs";
 import { join, relative } from "node:path";

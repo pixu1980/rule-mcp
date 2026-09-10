@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /**
  * Source contract for the shim: probe before trust, an escape hatch, and a
  * removal that reverses every path an install may have written.

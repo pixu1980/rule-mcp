@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 const SCAFFOLD_CHECK = (fileName, label, checkFunction) => ({
   id: `scaffold-${fileName.replace(/^[.]/, "")}`,
   label: `${fileName} present`,

@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Guardrail `js-single-line-method`: Class method bodies must be multi-line */
 import { countedVerdict } from "../../../../shared/index.js";
 export const jsSingleLineMethod = {

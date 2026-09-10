@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Guardrail `vanilla-adopted-stylesheets`: CSS via adoptedStyleSheets in static {} block */
 export const vanillaAdoptedStylesheets = {
   id: "vanilla-adopted-stylesheets",

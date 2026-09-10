@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** The generic `/pix-* help` machinery: trigger tokens, examples, the usage block. */
 import { PROMPT_EXAMPLES } from "./_defs.data.js";
 

@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Promotion: reuse counted, three hits earn export, drift and paths never leave. */
 import test, { beforeEach } from "node:test";
 import assert from "node:assert/strict";

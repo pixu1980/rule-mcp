@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Register the pix_tool_process_handon MCP tool. */
 import { z } from "zod/v4";
 import { registerTool } from "../router/index.js";

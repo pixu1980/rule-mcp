@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** The auto-ADR hook: log significant tool calls as lightweight ADR entries. */
 import { mkdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";

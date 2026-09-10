@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /**
  * Regression: reinstalling must not drop per-server user keys from the pi
  * MCP config. Previously upsertJsonServer replaced the whole server entry,

@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** The follow-up tools a routed skill suggests calling next. */
 export function skillNextTools(skillName) {
   const suggestions = [];

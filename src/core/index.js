@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** src/core: cross-cutting runtime helpers that are not owned by one subsystem. */
 export * from "./_code-signature.js";
 export * from "./_directive.js";

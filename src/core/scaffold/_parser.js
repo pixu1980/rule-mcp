@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 // Auto-extracted - scaffold-section parsing shared by skill tools.
 import { errorResult, textResult } from "../../shared/index.js";
 

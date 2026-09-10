@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Guardrail `vanilla-template-data-part`: External templates use data-part selectors */
 export const vanillaTemplateDataPart = {
   id: "vanilla-template-data-part",

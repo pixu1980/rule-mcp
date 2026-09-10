@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 // Auto-extracted - frontmatter parser shared by the skill store and router.
 
 /**

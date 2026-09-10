@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Guardrail checks the engine runs on barrels and component file names. */
 import { passResult } from "../../shared/index.js";
 import { isBarrelFile } from "./_conventions.js";

@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** @module core/agents/commands/names - the canonical command order */
 
 import { listPrompts } from "../../../prompts/index.js";

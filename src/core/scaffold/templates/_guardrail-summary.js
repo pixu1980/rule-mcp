@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** @module core/scaffold/templates/guardrail-summary */
 
 import { checkCode } from "../../guardrails/index.js";

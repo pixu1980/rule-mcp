@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** The budget and the substance: over 60% cheaper, and the opening contract keeps every rule. */
 import { strict as assert } from "node:assert";
 import { execFileSync } from "node:child_process";

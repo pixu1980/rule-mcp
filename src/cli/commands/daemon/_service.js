@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** The daemon service arms: install, uninstall, enable, disable. */
 import { installDaemonService, uninstallDaemonService, detectPlatform } from "../../daemon/index.js";
 import { getServiceFilePath, getServiceName } from "../../daemon/index.js";

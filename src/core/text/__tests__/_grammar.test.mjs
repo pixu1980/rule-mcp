@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** DOC-1: substance includes the meaning of a sentence - no broken English left behind. */
 import { strict as assert } from "node:assert";
 import { test } from "node:test";

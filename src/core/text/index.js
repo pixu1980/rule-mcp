@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Text-processing barrel: ascii boxes, block spacing, caveman compression, English checks, fingerprints. */
 export * from "./ascii-box/index.js";
 export * from "./block-spacing/index.js";

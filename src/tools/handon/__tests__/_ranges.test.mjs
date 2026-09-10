@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Range claims: fixed ends, open ends, and ends that no longer exist. */
 import test from "node:test";
 import assert from "node:assert/strict";

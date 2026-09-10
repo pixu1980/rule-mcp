@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** The agent transcript registry and the usage reads over it. */
 import { homedir } from "node:os";
 import { USAGE_WINDOW_SLACK_MS } from "./_window.js";

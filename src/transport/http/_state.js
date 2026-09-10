@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** @module transport/http/state - what one running Streamable HTTP daemon shares */
 
 import { createAuthRateLimiter } from "../_auth-rate-limit.js";

@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** The workflow reminder and routing carry the simplicity contract. */
 import { readFileSync, readdirSync, statSync } from "node:fs";
 import { join } from "node:path";

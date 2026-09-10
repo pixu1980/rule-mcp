@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /**
  * Regression: remote mode must never silently fall back to stdio for an agent
  * whose HTTP/SSE configuration schema has not been verified.

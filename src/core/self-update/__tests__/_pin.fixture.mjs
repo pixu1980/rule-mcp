@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 // test/self-update-remote-pin fixture
 //
 // Audit finding 06 - the forced self-update fetches and fast-forwards on every

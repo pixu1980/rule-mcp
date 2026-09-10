@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Cache promotion and the agent hook registry: entries, merge, removal. */
 import { strict as assert } from "node:assert";
 import { mkdtempSync, rmSync } from "node:fs";

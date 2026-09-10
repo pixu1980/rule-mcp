@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Every skill directory: frontmatter, cross-references, resolvable links, no embedded docs. */
 import { strict as assert } from "node:assert";
 import { existsSync, readFileSync } from "node:fs";

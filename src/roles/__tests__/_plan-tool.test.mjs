@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** pix_tool_plan: registered, answers per role, applies overrides, resolves aliases. */
 import { strict as assert } from "node:assert";
 import test from "node:test";

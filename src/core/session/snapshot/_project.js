@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** @module core/session/snapshot/project - the whole-project snapshot */
 
 import { readFileSync, readdirSync, statSync } from "node:fs";

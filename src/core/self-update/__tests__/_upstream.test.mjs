@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /**
  * T16-T18: where the update source comes from - install type, remote identity,
  * and the tracked branch - plus the hints each skip surfaces.

@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 import { extractRealCSS, looksLikeStylesheet } from "../_util.js";
 
 /** Guardrail `external-css`: External CSS via adoptedStyleSheets or framework-native import */

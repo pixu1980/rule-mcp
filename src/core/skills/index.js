@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Skills barrel: the skill catalog loader and SKILL.md frontmatter parser. */
 export * from "./_lru.js";
 export * from "./_minimal.js";

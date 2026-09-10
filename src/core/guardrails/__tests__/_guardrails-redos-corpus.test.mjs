@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /**
  * Hardening 1.1 (F-S1): every guardrail stays linear on adversarial input.
  *

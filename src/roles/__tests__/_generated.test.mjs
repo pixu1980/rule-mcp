@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** The generated surfaces: three prompts and three commands per active role, all from the registry. */
 import { strict as assert } from "node:assert";
 import test from "node:test";

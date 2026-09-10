@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Walk every claim in a handoff and record what still holds. */
 import { existsSync } from "node:fs";
 import { join } from "node:path";

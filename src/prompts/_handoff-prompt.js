@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** The /pix-handoff workflow prompt: resolve options server-side, then commit, run, persist. */
 import { parseHandoffOptions } from "./_handoff-options.js";
 

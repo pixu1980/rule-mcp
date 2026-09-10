@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Regression: global VS Code uninstall must not create a workspace config. */
 import { strict as assert } from "node:assert";
 import { execFileSync } from "node:child_process";

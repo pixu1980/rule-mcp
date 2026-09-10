@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** The cached core is identity-free, and verify recomputes without counting as use. */
 import test, { beforeEach } from "node:test";
 import assert from "node:assert/strict";

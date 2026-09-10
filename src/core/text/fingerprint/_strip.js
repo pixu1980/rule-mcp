@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** @module core/text/fingerprint/strip - rewrite the fingerprints away, line by line */
 
 import { cleanLine, looksLikeJson } from "./_rewrite-line.js";

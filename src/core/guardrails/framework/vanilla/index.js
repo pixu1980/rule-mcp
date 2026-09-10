@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Vanilla-reactive component guardrail family, one rule per file. */
 import { vanillaCeExtends } from "./_ce-extends.js";
 import { vanillaHtmlTemplate } from "./_html-template.js";

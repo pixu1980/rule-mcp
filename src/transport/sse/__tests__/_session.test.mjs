@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** The session flow: endpoint event, sessionId, and the POST /message channel. */
 import { get as httpGet, request as httpRequest } from "node:http";
 

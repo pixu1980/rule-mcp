@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Guardrail `js-blank-lines-blocks`: Multi-line blocks have blank lines above/below */
 import { countedVerdict } from "../../../../shared/index.js";
 export const jsBlankLinesBlocks = {

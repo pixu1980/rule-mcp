@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** @module cli/paths/project - the per-project recording directory and its slug */
 
 import { createHash } from "node:crypto";

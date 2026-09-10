@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 import { existsSync, readdirSync } from "node:fs";
 import { join, sep } from "node:path";
 import { FAMILIES, NOT_NUMBERED } from "./_families.js";

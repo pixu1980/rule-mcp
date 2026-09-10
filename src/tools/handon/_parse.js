@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Parse a handoff body into its claims. */
 import { ADR_DIR, PENDING_WINDOW } from "./_constants.js";
 import { codeSpans, looksLikeBranch, looksLikePath, looksLikeCommand } from "./_shapes.js";

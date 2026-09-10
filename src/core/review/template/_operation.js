@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** @module core/review/template/operation */
 
 /** The operations a persona run can be asked to do, in surface order. */

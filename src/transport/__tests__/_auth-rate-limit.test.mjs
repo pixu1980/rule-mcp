@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /**
  * Hardening 1.3 (F-S7): failed bearer auth is rate-limited per remote address
  * and every failure leaves one structured log line.

@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Result shaping helpers: banner, finalize, token/size estimates, and the skill-independent set. */
 
 import { alignAsciiBoxesResult } from "../../core/text/ascii-box/index.js";

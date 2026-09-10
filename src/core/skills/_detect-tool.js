@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** @module core/skills/detect-tool - the pix_tool_detect registration */
 
 import { z } from "zod/v4";

@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** @module core/session/resume/announce - one announcement per session, tracked on disk */
 
 import { createHash } from "node:crypto";

@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 import { extractRealCSS } from "../_util.js";
 
 /** Guardrail `no-css-classes`: Zero CSS classes in stylesheets */

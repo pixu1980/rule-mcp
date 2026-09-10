@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /**
  * Hardening 3.3 (F-S5): the published checksums match the scripts that ship.
  *

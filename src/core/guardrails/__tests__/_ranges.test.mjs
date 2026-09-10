@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** T0-T2: the rules are shared, ranges fail wherever they hide, non-ranges stay legal. */
 import { COREPACK, EXACT, check, fails, finish, getGuardrails, run } from "./_manifest.fixture.mjs";
 

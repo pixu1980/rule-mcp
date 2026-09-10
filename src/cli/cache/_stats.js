@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** @module cli/cache/stats - the cache stats view */
 
 import { catalogPath, readCatalog, MIN_HITS } from "../../core/cache/catalog/index.js";

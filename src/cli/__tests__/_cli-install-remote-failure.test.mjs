@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Regression: CLI must surface unsupported remote installs as a non-zero exit. */
 import { strict as assert } from "node:assert";
 import { spawnSync } from "node:child_process";

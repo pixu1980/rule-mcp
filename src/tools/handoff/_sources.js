@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Project sources a handoff reads: the ADR log, .context values, package identity. */
 import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";

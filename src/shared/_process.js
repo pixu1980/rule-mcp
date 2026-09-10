@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 import { execSync } from "node:child_process";
 /** The one shell-out helper: run a command, never throw. */
 

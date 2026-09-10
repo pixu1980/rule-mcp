@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Interrogative words, canonical stopwords and query canonicalization. */
 
 import { MIN_TERM_LENGTH, splitWords, stem } from "./_terms.js";

@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 import { readSkill, getSkillMetadata } from "../router/index.js";
 import { nameAffinity } from "./_name-affinity.js";
 import { tagAffinity } from "./_tag-affinity.js";

@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /**
  * Install and uninstall must agree on where the block lives - the asymmetry
  * that left Cursor's file dirty forever is what these tests pin down.

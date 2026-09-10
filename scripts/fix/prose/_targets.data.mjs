@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** @module scripts/fix/prose/targets.data - which files the pass reads, and which it must never touch */
 
 /**

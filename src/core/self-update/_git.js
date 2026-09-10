@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Quiet async git for the updater. */
 import { execFile } from "node:child_process";
 import { promisify } from "node:util";

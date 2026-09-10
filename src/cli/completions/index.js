@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 import { generateBash } from "./_bash.js";
 import { generateFish } from "./_fish.js";
 import { generateZsh } from "./_zsh.js";

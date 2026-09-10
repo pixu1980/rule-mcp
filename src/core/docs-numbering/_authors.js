@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 import { readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { adrAuthor } from "../../tools/adr/index.js";

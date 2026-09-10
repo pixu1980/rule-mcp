@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** new and deprecate: overlays valid by construction, never overwritten, never incomplete. */
 import { strict as assert } from "node:assert";
 import { existsSync, readFileSync } from "node:fs";

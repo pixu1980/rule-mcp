@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** @module cli/skills-install/native - register skills with the host natively */
 
 import { existsSync, mkdirSync } from "node:fs";

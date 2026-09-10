@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** @module scripts/fix/self-guardrails/blank-before-return - js-blank-line-before-return */
 
 export function apply(text) {

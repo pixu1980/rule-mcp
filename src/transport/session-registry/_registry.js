@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** The live MCP sessions of one server, capped and evictable. */
 import { DEFAULT_IDLE_MS, DEFAULT_MAX_SESSIONS, DEFAULT_SWEEP_MS } from "./_constants.js";
 import { closeAllSessions, closeSession } from "./_close.js";

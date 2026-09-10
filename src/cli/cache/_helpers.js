@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** @module cli/cache/helpers - shared output and the recompute closure */
 
 export const print = (value) => process.stdout.write(`${value}\n`);

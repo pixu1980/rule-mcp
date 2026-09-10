@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Guardrail `js-array-flat-map`: prefer flatMap over map().flat() */
 import { countedVerdict } from "../../../../shared/index.js";
 export const jsArrayFlatMap = {

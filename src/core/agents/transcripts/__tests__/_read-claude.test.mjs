@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** The Claude Code reader: human turns, tool results, usage blocks, the window. */
 import test from "node:test";
 import assert from "node:assert/strict";

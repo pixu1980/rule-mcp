@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** @module cli/skills-install/picker - the interactive multi-select */
 
 import { multiselect, isCancel } from "@clack/prompts";

@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Reload the skill catalog after a merge that touched skills/. */
 
 /** Re-register tools and flush the skill/result caches, best-effort. */

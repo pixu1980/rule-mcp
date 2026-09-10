@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Git plumbing: run git quietly, ask whether git knows a file. */
 import { execFileSync } from "node:child_process";
 

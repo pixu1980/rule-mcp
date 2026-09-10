@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Assemble the doctor report: SDK, agents, daemon, environment, telemetry. */
 import { existsSync, readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";

@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /**
  * Phase 4b (plan: execution-plan.md) — write-time compression of agent command
  * files.

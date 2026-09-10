@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /**
  * Building a plan must perform no work: the review screen shows it before
  * the user has agreed to anything.

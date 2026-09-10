@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /**
  * Regression: daemon installs must connect clients to the running local SSE
  * service, using a stable bearer token shared with that service.

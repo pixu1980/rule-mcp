@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Routing stopwords: generic words that never separate one skill from another. Data file: exempt from the size cap. */
 export const STOPWORDS = new Set([
   "component",

@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /**
  * Regression: a shared daemon must keep more than one authenticated MCP client
  * alive. Selecting Pi and VS Code must not make each new connection evict the

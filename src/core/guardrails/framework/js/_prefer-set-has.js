@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Guardrail `js-prefer-set-has`: Set.has() over Array.includes() inside loops */
 export const jsPreferSetHas = {
   id: "js-prefer-set-has",

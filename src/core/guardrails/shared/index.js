@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Shared guardrail family: the rules every skill enforces, one per file. */
 import { noCssClasses } from "./_no-css-classes.js";
 import { noInlineStyles } from "./_no-inline-styles.js";

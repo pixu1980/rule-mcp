@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** @module core/agents/command-targets/context - injectable filesystem/platform resolution */
 
 import { existsSync, readdirSync } from "node:fs";

@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** @module scripts/reports/cache-similarity/similarity - variants, term sets and jaccard */
 
 const { canonicalizeQuery } = await import("../../../src/core/bm25/index.js");

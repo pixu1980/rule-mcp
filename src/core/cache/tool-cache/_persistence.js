@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** The persistent tier: lazy load, debounced flush, atomic gzip write. */
 import { gzipSync, gunzipSync } from "node:zlib";
 import { existsSync, mkdirSync, readFileSync, writeFileSync, renameSync } from "node:fs";

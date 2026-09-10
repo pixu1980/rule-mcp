@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** @module cli/paths/repo - the shipped skills, the repo root and the install type */
 
 import { existsSync } from "node:fs";

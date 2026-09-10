@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Promotion to the shared catalog: hit threshold, priming, the promotable set. */
 import { cacheState } from "./_state.js";
 import { cacheEnabled } from "./_config.js";

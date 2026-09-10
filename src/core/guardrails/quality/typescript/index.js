@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** TypeScript quality guardrails, one rule per file. */
 import { tsNoExplicitAny } from "./_no-explicit-any.js";
 import { tsCatchUnknown } from "./_catch-unknown.js";

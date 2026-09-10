@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 import { STOPWORDS } from "./_stopwords.data.js";
 
 /** Suffixes that make a word a different form of the same word. */
