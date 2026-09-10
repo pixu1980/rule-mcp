@@ -8,7 +8,7 @@ import test from "node:test";
  * The distribution manifests must name the real owner (OSS-1).
  *
  * Scoop, winget and the Homebrew template named three different GitHub
- * owners, pinned 0.1.0 while the repo is at 1.0.0, carried literal
+ * owners, pinned 0.1.0 while the repo said 1.0.0, carried literal
  * PLACEHOLDER hashes and pointed at a tag that does not exist. Every
  * manifest must resolve to github.com/pixu1980/rule-mcp, carry
  * the package.json version, and contain no PLACEHOLDER.
