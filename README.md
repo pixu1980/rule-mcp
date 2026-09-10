@@ -658,6 +658,14 @@ deliberately not) — see the manifest in
 surfaces joined the pipeline under [ADR 077](docs/adr/077-compress-every-server-model-list-surface-prompts-list-tools-list-resources-list.md),
 agent command files at write time under ADR 078.
 
+## Contributing
+
+Small fixes need no ceremony; structural change needs an ADR first.
+Start at [CONTRIBUTING.md](./CONTRIBUTING.md), then
+[GOVERNANCE.md](./GOVERNANCE.md) for who decides and
+[SECURITY.md](./SECURITY.md) for reporting vulnerabilities. The deeper
+engineering material lives in [`docs/07-engineering-guides.md`](./docs/07-engineering-guides.md).
+
 ## License
 
 MIT - see [LICENSE](./LICENSE).
