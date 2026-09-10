@@ -51,16 +51,16 @@ Numbered docs are partly generated. `scripts/reports/census/index.mjs` refreshes
 blocks between `<!-- census:begin/end:<marker> -->` markers in the numbered
 docs and is wired into `prebuild`:
 
-- `docs/01-product-architecture.md` - tool-family counts
-- `docs/02-tools-operations.md` - tools in detail, resources, review personas,
+- `docs/02-product-architecture.md` - tool-family counts
+- `docs/04-operations.md` - tools in detail, resources, review personas,
   `.roo/commands` snapshot
-- `docs/04-agent-instructions.md` - the command surface and persona table
+- `docs/03-agent-instructions.md` - the command surface and persona table
 - `docs/05-env-variables.md` - the environment registry
 
 `docs/README.md` is the index. ADRs in `docs/adr/` are immutable decision
 records (a merger or a reversal writes a new ADR). A roadmap or plan never
 claims a numbered slot: it is deleted when fully executed or obsolete.
-`GETTING_STARTED.md` is the first-run guide.
+`01-getting-started.md` is the first-run guide.
 
 To add a surface, change the code, run `pnpm census`, verify
 `tests/docs/census-generated.test.mjs` and `tests/docs/docs-accuracy.test.mjs`, then
@@ -139,6 +139,6 @@ commit - the docs follow the code instead of being remembered.
 **Sessions**: `/rule-handoff`, `/rule-handon`, `/rule-init`, `/rule-process-check`, `/rule-update`
 
 Every command, with its description and its install target, is in
-[`09-instructions.md`](09-instructions.md). Regenerate this block with `pnpm census`.
+[`11-instructions.md`](11-instructions.md). Regenerate this block with `pnpm census`.
 
 <!-- census:end:command-surface -->

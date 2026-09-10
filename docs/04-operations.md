@@ -1,7 +1,7 @@
 # Tools and operations
 
 How to operate this server: the tool surface in one pointer, then plugins,
-release and troubleshooting. Installing it is [01 getting started](./GETTING_STARTED.md).
+release and troubleshooting. Installing it is [01 getting started](./01-getting-started.md).
 
 ## Tool and prompt reference
 
@@ -9,10 +9,10 @@ The tool, prompt and resource lists are generated from the running server by
 `pnpm census`, so they cannot drift from what it actually registers. They are
 never hand-edited; this document points at them instead of restating them.
 
-- Every tool, with its schema and modes: [07-tools.md](./07-tools.md)
-- Every prompt and its arguments: [08-prompts.md](./08-prompts.md)
-- Every `rule://` resource URI: [13-resources.md](./13-resources.md)
-- What each skill covers: [06-skills.md](./06-skills.md)
+- Every tool, with its schema and modes: [09-tools.md](./09-tools.md)
+- Every prompt and its arguments: [10-prompts.md](./10-prompts.md)
+- Every `rule://` resource URI: [15-resources.md](./15-resources.md)
+- What each skill covers: [08-skills.md](./08-skills.md)
 
 ## Plugins
 

@@ -316,7 +316,7 @@ Every successful MCP tool response includes `_meta.pixEnforcement` metadata.
 Once the server is running and integrated with your agent:
 
 - Read the [full documentation README](README.md) for complete architecture, tool reference, and guardrail system
-- Explore skill content via `./01-product-architecture.md` for the skill taxonomy
+- Explore skill content via `./02-product-architecture.md` for the skill taxonomy
 - Run `rule-mcp tools list` to see all available tools
 - Run `rule-mcp tools call rule -j '{"prompt":"..."}'` to test routing
 

@@ -47,7 +47,7 @@ export function skillCatalogSection(data) {
     "",
     "The catalog. A skill is the source of truth for its topic; the tool that",
     "serves it carries no rules of its own, and the guardrails it is checked",
-    "against are in [`12-guardrails.md`](12-guardrails.md).",
+    "against are in [`14-guardrails.md`](14-guardrails.md).",
     "",
     "The router's own directory, `skills/rule/`, mints no skill tool, which is why",
     `the catalog is ${data.catalog.length} and the directory count is ${data.skillDirs.length}.`,

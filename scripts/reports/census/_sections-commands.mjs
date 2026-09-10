@@ -63,14 +63,14 @@ export function commandKindsSection(data) {
     "",
     ...kinds.flatMap((entry) => (entry.kind === "persona" ? [] : [`**${entry.kind}**: ${entry.commands.map((name) => `\`/${name}\``).join(", ")}`, ""])),
     `The ${named("persona").commands.length} persona commands are one per role and operation`,
-    "([`11-personas.md`](11-personas.md)).",
+    "([`13-personas.md`](13-personas.md)).",
     "",
   ];
 }
 
 /**
  * The block the workflow chapter carries: what a developer types, and the
- * counts behind each kind. Written into `docs/03-engineering-guides.md`.
+ * counts behind each kind. Written into `docs/07-engineering-guides.md`.
  */
 export function commandSurfaceBlock(data) {
   const kinds = commandKinds(data);
@@ -98,7 +98,7 @@ export function commandSurfaceBlock(data) {
       .join(", ")}`,
     "",
     "Every command, with its description and its install target, is in",
-    "[`09-instructions.md`](09-instructions.md). Regenerate this block with `pnpm census`.",
+    "[`11-instructions.md`](11-instructions.md). Regenerate this block with `pnpm census`.",
     "",
   ];
 }

@@ -15,14 +15,14 @@ census pipeline is untouched; three manual docs move, one is absorbed, one is ap
 
 | New   | File                       | Was                        | Role in the journey                                                               |
 | ----- | -------------------------- | -------------------------- | --------------------------------------------------------------------------------- |
-| 01    | 01-getting-started.md      | GETTING_STARTED.md         | Install and first run (the entry point becomes step 1)                            |
-| 02    | 02-product-architecture.md | 01-product-architecture.md | What it is and how it works                                                       |
-| 03    | 03-agent-instructions.md   | 04-agent-instructions.md   | How an agent uses it every day                                                    |
-| 04    | 04-operations.md           | 02-tools-operations.md     | Operate it: plugins, release, troubleshooting (tool reference deleted, see DOC-2) |
+| 01    | 01-getting-started.md      | 01-getting-started.md         | Install and first run (the entry point becomes step 1)                            |
+| 02    | 02-product-architecture.md | 02-product-architecture.md | What it is and how it works                                                       |
+| 03    | 03-agent-instructions.md   | 03-agent-instructions.md   | How an agent uses it every day                                                    |
+| 04    | 04-operations.md           | 04-operations.md     | Operate it: plugins, release, troubleshooting (tool reference deleted, see DOC-2) |
 | 05    | 05-env-variables.md        | unchanged                  | Configure it                                                                      |
-| 06    | 06-privacy.md              | unchanged                  | Trust it                                                                          |
+| 06    | 06-06-privacy.md              | unchanged                  | Trust it                                                                          |
 | 07-12 | generated census docs      | unchanged                  | Reference: skills, tools, prompts, commands, CLI, personas                        |
-| 13    | 13-engineering-guides.md   | 03-engineering-guides.md   | Contribute to it (advanced tail)                                                  |
+| 13    | 13-engineering-guides.md   | 07-engineering-guides.md   | Contribute to it (advanced tail)                                                  |
 
 Blast radius, measured in the audit: `package.json` prebuild prettier list,
 `scripts/reports/census/_marker-targets.mjs` (writes into 01 by name),
@@ -32,20 +32,20 @@ links in the repo README, and the docs/README index table.
 
 ## Steps
 
-- [ ] **Step 1 - DOC-2 (high)**: Gut 02-tools-operations.md (1508 lines, four legacy docs pasted whole): the hand-written tool reference duplicates the generated 08-tools.md/09-prompts.md and has already drifted (101 vs 96 tool mentions). ~750 lines die, zero information lost.
+- [ ] **Step 1 - DOC-2 (high)**: Gut 04-operations.md (1508 lines, four legacy docs pasted whole): the hand-written tool reference duplicates the generated 08-tools.md/09-prompts.md and has already drifted (101 vs 96 tool mentions). ~750 lines die, zero information lost.
   - [ ] **1.1**: Delete the `## Preserved source: TOOLS.md` half: Quick Reference table, per-tool sections 0-10, `## MCP Resources (rule://*)`, `## MCP Prompts`, `## Best Practices`, `## Appendix: Framework -> Skill -> Tool` (lines ~9-755).
   - [ ] **1.2**: In their place write one short section "Tool and prompt reference" with three pointer lines: full tool list -> `./08-tools.md`, prompts -> `./09-prompts.md`, resources -> the `rule://` section of 08; note both are census-generated and never hand-edited.
   - [ ] **1.3**: Promote the three survivors to real sections: strip the `## Preserved source: PLUGINS.md / RELEASE.md / TROUBLESHOOTING.md` wrappers, renumber their internal headings to one consistent level (## Plugins, ## Release, ## Troubleshooting with ### children), remove duplicated intro paragraphs.
   - [ ] **1.4**: Sweep the survivors for stale facts against the fourth-pass tree (`scripts/fix/post-process/index.mjs` paths, `scripts/reports/census/` names, `src/server/index.js`) and fix what moved.
-  - [ ] **1.5**: Gate: `pnpm exec prettier --check docs/02-tools-operations.md`, `node --test tests/docs/docs-accuracy.test.mjs tests/docs/docs-scan.mjs`, and `grep -c "pix_tool" docs/02-tools-operations.md` drops from 101 to under 10.
-- [ ] **Step 2 - DOC-3 (medium)**: Merge the two concatenated documents inside 01-product-architecture.md (analysis sections 1-7, then a full second `## 1.`-`## 12.` sequence under "Preserved source: ARCHITECTURE.md").
-  - [ ] **2.1**: Inventory both halves (`grep -n "^## " docs/01-product-architecture.md`) and map each preserved section to keep / merge-into-analysis / drop-as-stale.
+  - [ ] **1.5**: Gate: `pnpm exec prettier --check docs/04-operations.md`, `node --test tests/docs/docs-accuracy.test.mjs tests/docs/docs-scan.mjs`, and `grep -c "pix_tool" docs/04-operations.md` drops from 101 to under 10.
+- [ ] **Step 2 - DOC-3 (medium)**: Merge the two concatenated documents inside 02-product-architecture.md (analysis sections 1-7, then a full second `## 1.`-`## 12.` sequence under "Preserved source: ARCHITECTURE.md").
+  - [ ] **2.1**: Inventory both halves (`grep -n "^## " docs/02-product-architecture.md`) and map each preserved section to keep / merge-into-analysis / drop-as-stale.
   - [ ] **2.2**: Fold the keepers into one outline with unique numbers: overview, architecture, data flow, transports, skill loading, resource scheme, security model; the gap-analysis and recommendations sections merge into a single "History and rationale" tail or move to the ADRs they produced.
   - [ ] **2.3**: Drop what the fourth-pass refactor falsified: the "Module Tree (Target)" (superseded by the real tree), "Dependencies (Target)", and any "current vs target" table whose target shipped - link ADR 057/061 instead of restating them.
   - [ ] **2.4**: Verify every remaining path/count claim against the tree (`ls src/core`, `wc -l`, census counts) - the doc must say what IS, with `<!-- census:begin:family-counts -->` staying the one generated block.
   - [ ] **2.5**: Gate: exactly one `# Title`, one `## N.` sequence (`grep -c "^## 1\." == 1`), `pnpm census` leaves the file unchanged, docs-accuracy green.
 - [ ] **Step 3 - DOC-4 (medium)**: Renumber to the target order in one commit, so the sequence reads basics-to-advanced. Depends on steps 1-2 (move clean content, not the duplicates).
-  - [ ] **3.1**: `git mv docs/GETTING_STARTED.md docs/01-getting-started.md && git mv docs/01-product-architecture.md docs/02-product-architecture.md && git mv docs/04-agent-instructions.md docs/03-agent-instructions.md && git mv docs/02-tools-operations.md docs/04-operations.md && git mv docs/03-engineering-guides.md docs/13-engineering-guides.md` (order matters: stage the swaps through the free numbers or a temp name).
+  - [ ] **3.1**: `git mv docs/01-getting-started.md docs/01-getting-started.md && git mv docs/02-product-architecture.md docs/02-product-architecture.md && git mv docs/03-agent-instructions.md docs/03-agent-instructions.md && git mv docs/04-operations.md docs/04-operations.md && git mv docs/07-engineering-guides.md docs/13-engineering-guides.md` (order matters: stage the swaps through the free numbers or a temp name).
   - [ ] **3.2**: Update the 19 relative cross-links inside docs/ (`grep -rn "](\./0[1-9]-\|](\./1[0-3]-" docs/*.md`) and the 2 GETTING_STARTED links in the repo README.
   - [ ] **3.3**: Update the writers and tests that name files: `scripts/reports/census/_marker-targets.mjs` (family-counts target -> 02-product-architecture.md), `package.json` prebuild prettier list, `tests/tools/auto-adr-flag.test.mjs` paths, `tests/docs/docs-accuracy.test.mjs` (`DOC_NUMBERS` gains "13").
   - [ ] **3.4**: Rebuild the docs/README handbook table in the new order with the journey one-liners from the target-order table above.

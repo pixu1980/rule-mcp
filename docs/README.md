@@ -5,26 +5,27 @@ right one, and validates code against guardrails without ever calling a model.
 
 ## Handbook
 
-| Document                                                     | Covers                                                                            |
-| ------------------------------------------------------------ | --------------------------------------------------------------------------------- |
-| [./01-product-architecture.md](./01-product-architecture.md) | How the server is built: modules, routing, caching, transports, security model    |
-| [./02-tools-operations.md](./02-tools-operations.md)         | Operator handbook: setup, agent installation, daemon, transports, troubleshooting |
-| [./03-engineering-guides.md](./03-engineering-guides.md)     | Worked examples, measured performance, contributor guidance                       |
-| [./04-agent-instructions.md](./04-agent-instructions.md)     | Agent workflow, frontend principles, session resume                               |
-| [./05-env-variables.md](./05-env-variables.md)               | Every `RULE_MCP_*` variable, its default and its effect                     |
-| [./06-skills.md](./06-skills.md)                             | Generated: the skill catalog by area, each with its tool and description          |
-| [./07-tools.md](./07-tools.md)                               | Generated: every action tool with its parameters, and the skill tools by area     |
-| [./08-prompts.md](./08-prompts.md)                           | Generated: every MCP prompt, reusable and persona                                 |
-| [./09-instructions.md](./09-instructions.md)                 | Generated: the agent slash commands, their install targets, and the hooks         |
-| [./10-cli.md](./10-cli.md)                                   | Generated: every command, its arguments, its options and its defaults             |
-| [./11-personas.md](./11-personas.md)                         | Generated: the review personas, their lenses, evidence skills and aliases         |
-| [./12-guardrails.md](./12-guardrails.md)                     | Generated: every guardrail rule, with what it rejects, by family                  |
-| [./13-resources.md](./13-resources.md)                       | Generated: the MCP resource surface                                               |
+The numbers are a route through the product: install it, understand it, use it,
+operate it, configure it, trust it, contribute to it. Everything from 08 on is
+reference, generated from the running server.
 
-Unnumbered, because neither is a chapter of the handbook:
-[./GETTING_STARTED.md](./GETTING_STARTED.md) is the first-run guide, and
-[./privacy.md](./privacy.md) is what is recorded, where it lives and how to
-erase it.
+| Document                                                     | Covers                                                                         |
+| ------------------------------------------------------------ | ------------------------------------------------------------------------------ |
+| [./01-getting-started.md](./01-getting-started.md)           | Install it and make the first call                                             |
+| [./02-product-architecture.md](./02-product-architecture.md) | How the server is built: modules, routing, caching, transports, security model |
+| [./03-agent-instructions.md](./03-agent-instructions.md)     | How an agent uses it every day: workflow, frontend principles, session resume  |
+| [./04-operations.md](./04-operations.md)                     | Operate it: plugins, release, troubleshooting                                  |
+| [./05-env-variables.md](./05-env-variables.md)               | Configure it: every `RULE_MCP_*` variable, its default and its effect    |
+| [./06-privacy.md](./06-privacy.md)                           | Trust it: what is recorded, where it lives, how to erase it                    |
+| [./07-engineering-guides.md](./07-engineering-guides.md)     | Contribute to it: worked examples, measured numbers, contributor guidance      |
+| [./08-skills.md](./08-skills.md)                             | Generated: the skill catalog by area, each with its tool and description       |
+| [./09-tools.md](./09-tools.md)                               | Generated: every action tool with its parameters, and the skill tools by area  |
+| [./10-prompts.md](./10-prompts.md)                           | Generated: every MCP prompt, reusable and persona                              |
+| [./11-instructions.md](./11-instructions.md)                 | Generated: the agent slash commands, their install targets, and the hooks      |
+| [./12-cli.md](./12-cli.md)                                   | Generated: every command, its arguments, its options and its defaults          |
+| [./13-personas.md](./13-personas.md)                         | Generated: the review personas, their lenses, evidence skills and aliases      |
+| [./14-guardrails.md](./14-guardrails.md)                     | Generated: every guardrail rule, with what it rejects, by family               |
+| [./15-resources.md](./15-resources.md)                       | Generated: the MCP resource surface                                            |
 
 ## Architecture decisions
 
@@ -39,8 +40,8 @@ describes what is true now.
 
 - Add long-form documentation to one of the numbered handbook files unless a
   separate file is justified.
-- **`06` through `13` are generated.** `pnpm census` derives them from the
-  registries, and refreshes the fenced blocks inside `01`, `03` and `05`.
+- **`08` through `15` are generated.** `pnpm census` derives them from the
+  registries, and refreshes the fenced blocks inside `02`, `05` and `07`.
   Editing one by hand is work the next commit throws away;
   `tests/docs/census-generated.test.mjs` fails when a committed copy and the
   registry disagree.

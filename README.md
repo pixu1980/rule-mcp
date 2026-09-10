@@ -54,7 +54,7 @@ app + SDK repo.
 
 ## Quick start
 
-See **[`docs/GETTING_STARTED.md`](./docs/GETTING_STARTED.md)** for step-by-step installation:
+See **[`docs/01-getting-started.md`](./docs/01-getting-started.md)** for step-by-step installation:
 
 - Global npm / pnpm install
 - pnpx ephemeral (no install)
@@ -614,13 +614,13 @@ The Docker image uses `node:22-alpine`, has no build step, and runs the server d
 
 | Document                                                               | Description                                             |
 | ---------------------------------------------------------------------- | ------------------------------------------------------- |
-| [`docs/GETTING_STARTED.md`](./docs/GETTING_STARTED.md)                 | Step-by-step installation & agent integration           |
-| [`docs/01-product-architecture.md`](./docs/01-product-architecture.md) | Full skill taxonomy and product architecture            |
-| [`docs/02-tools-operations.md`](./docs/02-tools-operations.md)         | Detailed tool operations reference                      |
-| [`docs/03-engineering-guides.md`](./docs/03-engineering-guides.md)     | Engineering practices and conventions                   |
-| [`docs/04-agent-instructions.md`](./docs/04-agent-instructions.md)     | Agent instruction templates (generated command surface) |
+| [`docs/01-getting-started.md`](./docs/01-getting-started.md)                 | Step-by-step installation & agent integration           |
+| [`docs/02-product-architecture.md`](./docs/02-product-architecture.md) | Full skill taxonomy and product architecture            |
+| [`docs/04-operations.md`](./docs/04-operations.md)         | Detailed tool operations reference                      |
+| [`docs/07-engineering-guides.md`](./docs/07-engineering-guides.md)     | Engineering practices and conventions                   |
+| [`docs/03-agent-instructions.md`](./docs/03-agent-instructions.md)     | Agent instruction templates (generated command surface) |
 | [`docs/05-env-variables.md`](./docs/05-env-variables.md)               | Complete `RULE_MCP_*` environment variable reference         |
-| [`docs/02-tools-operations.md`](./docs/02-tools-operations.md)         | Operator handbook + generated census blocks             |
+| [`docs/04-operations.md`](./docs/04-operations.md)         | Operator handbook + generated census blocks             |
 | [`docs/adr/ADR.md`](./docs/adr/ADR.md)                                 | Architecture Decision Records index                     |
 
 ---

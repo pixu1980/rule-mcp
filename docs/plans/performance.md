@@ -105,10 +105,10 @@ all four corpora, which is the number that has to stay 0.
 - [x] **Step 8 - PERF-6 (low)**: No token-based benchmark: the python skill benchmarks with tiktoken o200k base, the server has only the char-over-4 heuristic and no corpus script under scripts/reports/ to gate level tuning.
   - [x] **8.1**: Add scripts/reports/compression/index.mjs: corpus of skills/*/SKILL.md plus the recorded effect-fixture tool results; per level report chars, char-over-4 tokens, percent saved and guard-violation count (must be 0); --json for CI; wire pnpm report:compression
   - [x] **8.2**: Regression assertion in the efficacy suite: level full greater than or equal to 8% and ultra greater than or equal to 20% on the prose corpus, or correct the plan targets by measurement so plan and code cannot drift silently
-  - [x] **8.3**: Gate: script runs as pnpm report:compression and the measured-numbers section of docs/03-engineering-guides.md quotes it with the caveman skill credited
+  - [x] **8.3**: Gate: script runs as pnpm report:compression and the measured-numbers section of docs/07-engineering-guides.md quotes it with the caveman skill credited
 - [x] **Step 9 - PERF-7 (info)**: Attribution and decoupling: the compressor modules do not credit the caveman skill as the idea source, and the deterministic end state (no runtime dependency on the skill, LLM step not ported) is not recorded anywhere.
   - [x] **9.1**: Module doc of src/core/text/_caveman.js gains the credit line: inspired by the caveman skill and its caveman-compress companion, the deterministic rules are ported, the LLM step is deliberately not; same pattern as the ai-flight-recorder note in core/telemetry/flight
-  - [x] **9.2**: Same credit line beside the measured numbers in docs/03-engineering-guides.md
+  - [x] **9.2**: Same credit line beside the measured numbers in docs/07-engineering-guides.md
   - [x] **9.3**: Record an ADR with rule_tool_process_adr for the compression-levels decision and the no-LLM determinism contract, extending the existing token-efficiency ADR
   - [x] **9.4**: Gate: credit lines present and the ADR numbered and indexed by the tool
 
@@ -249,7 +249,7 @@ measures, so 7.8 must quote the before/after connect cost into the same report.
   guard-violation count (must be zero); `--json` for CI; wired as `pnpm report:compression`.
 - The 8%/20% targets in this plan's level table are gates, not predictions: the suite either
   meets them or the table is corrected by measurement - plan and code cannot drift silently.
-- Files: `docs/03-engineering-guides.md` measured-numbers section quotes the report, with the
+- Files: `docs/07-engineering-guides.md` measured-numbers section quotes the report, with the
   caveman skill credited.
 
 ### Step 9 - PERF-7: attribution and the determinism contract
@@ -257,7 +257,7 @@ measures, so 7.8 must quote the before/after connect cost into the same report.
 - Credit line in the module doc of `src/core/text/_caveman.js` ("Inspired by the caveman skill and
   its caveman-compress companion; the deterministic rules are ported, the LLM step is
   deliberately not"), the same pattern already used for the ai-flight-recorder note.
-- Same credit beside the measured numbers in `docs/03-engineering-guides.md`.
+- Same credit beside the measured numbers in `docs/07-engineering-guides.md`.
 - ADR via `rule_tool_process_adr`: the compression-levels decision and the no-LLM determinism
   contract, extending the existing token-efficiency ADR (052 family).
 
