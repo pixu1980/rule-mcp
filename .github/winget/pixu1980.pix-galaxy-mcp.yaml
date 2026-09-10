@@ -1,21 +1,22 @@
 # yaml-language-server: $schema=https://aka.ms/winget-manifest.version.1.6.0.schema.json
-PackageIdentifier: rule.rule-mcp
-PackageVersion: "0.1.0"
+# Hash refreshed per release from the tarball the Step 6 pipeline attaches.
+PackageIdentifier: pixu1980.rule-mcp
+PackageVersion: "1.0.0"
 PackageLocale: en-US
-Publisher: rule
-PublisherUrl: https://github.com/rule
+Publisher: pixu1980
+PublisherUrl: https://github.com/pixu1980
 PackageName: rule-mcp
-PackageUrl: https://github.com/rule/rule-mcp
+PackageUrl: https://github.com/pixu1980/rule-mcp
 License: MIT
-LicenseUrl: https://github.com/rule/rule-mcp/blob/main/LICENSE
+LicenseUrl: https://github.com/pixu1980/rule-mcp/blob/main/LICENSE
 ShortDescription: MCP server for the rule-* skill ecosystem
 Description: Serves styleguides, component templates, framework best practices, and design system patterns directly to your coding agent.
 Moniker: rule-mcp
 Installers:
   - Architecture: x64
     InstallerType: portable
-    InstallerUrl: https://github.com/rule/rule-mcp/releases/download/v0.1.0/rule-mcp.tgz
-    InstallerSha256: PLACEHOLDER
+    InstallerUrl: https://github.com/pixu1980/rule-mcp/releases/download/v1.0.0/rule-mcp-1.0.0.tgz
+    InstallerSha256: f6ae7f0ede4664a8d7f5a29e7500ecd7902be26690c84d6c4e6b9ff341e2da4e
     Commands:
       - rule-mcp
 ManifestType: singleton
