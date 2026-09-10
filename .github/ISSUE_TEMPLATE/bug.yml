@@ -1,0 +1,32 @@
+name: Bug report
+description: Something is broken
+labels: [bug, needs-triage]
+body:
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      description: Output of `rule-mcp --version`, or the commit you run on.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Reproduction
+      description: Commands run, files touched, and the smallest setup that shows it.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+      description: What should have happened instead.
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: OS, Node version (`node --version`), pnpm version (`pnpm --version`).
+    validations:
+      required: false
