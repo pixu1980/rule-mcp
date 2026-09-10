@@ -16,8 +16,7 @@ export function renderAudit(role, version, date) {
     "",
     "## Evidence",
     "",
-    "| What was measured | How | Result |",
-    "| --- | --- | --- |",
+    ...table(["What was measured", "How", "Result"], []),
     "",
   ].join("\n");
 }
