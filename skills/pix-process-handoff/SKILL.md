@@ -121,7 +121,7 @@ When the working tree has **pending changes**, `/rule-handoff` commits them _bef
 ## Resuming a session: where you left off, verified
 
 A handoff is a snapshot of a moment written in the present tense. Three days
-later "the fix is on `feat/x`, the suite is green, ADR 046 is pending" may be
+later "the fix is on `feat/x`, the suite is green, ADR 045 is pending" may be
 wrong in all three clauses, and nothing in the file says so. Pasting it whole
 also costs more than the situation warrants: most of a handoff is narrative the
 resuming reader already lived.

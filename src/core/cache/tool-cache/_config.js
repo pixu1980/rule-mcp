@@ -32,9 +32,9 @@ export function cacheFile() {
  * It carries no skill mtime: that would drop every entry for every skill when
  * one heading changes, which on a repository whose sessions mostly edit skills
  * leaves the cache ornamental. Skill freshness is checked per entry against the
- * digests it recorded (ADR 054), so the namespace is
- * back to what it can honestly claim: a server upgrade may change output shape
- * for reasons no content digest captures.
+ * digests it recorded (see `./_entries.js`), so the namespace is back to what
+ * it can honestly claim: a server upgrade may change output shape for reasons
+ * no content digest captures.
  *
  * @returns {string}
  */

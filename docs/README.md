@@ -45,7 +45,7 @@ describes what is true now.
   `tests/docs/census-generated.test.mjs` fails when a committed copy and the
   registry disagree.
 - **No counts in this table.** A number written beside a link is a claim with no
-  generator behind it, and it is the copy that goes stale (ADR 049). The counts
+  generator behind it, and it is the copy that goes stale (ADR 048). The counts
   live in the generated documents that derive them.
 - **Write what the code does, never what it did.** A document that explains a
   change instead of a behavior is a second copy of an ADR, and it is the copy

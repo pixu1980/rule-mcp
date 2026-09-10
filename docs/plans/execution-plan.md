@@ -1,6 +1,6 @@
 # Execution plan - reorganize `scripts/`, `src/`, `tests/` + coverage >= 95%
 
-> Status: in progress. Interview-locked design (2026-09-06, session 2) recorded in ADR 061.
+> Status: in progress. Interview-locked design (2026-09-06, session 2) recorded in ADR 058.
 > Coverage baseline measured with `node --experimental-test-coverage` (Node 24, line+branch).
 
 ## Locked design decisions (interview, 2026-09-06)
@@ -47,7 +47,7 @@
 
 - [x] Line+branch coverage with native Node (71.57/80.91/72.66 on foundations).
 - [x] `test:coverage` npm script (`scripts/test-coverage.mjs`).
-- [x] Baseline recorded here and in ADR 060.
+- [x] Baseline recorded here and in ADR 057.
 
 ### Phase 1 - `test/` -> `tests/` + thematic subfolders (done)
 
@@ -75,12 +75,12 @@
       every importer now uses the folder `index.js` path.
 - [x] New guardrail `en-english-only-filenames` (+ `scanPathForForeign`, foreign-name
       dictionary and suffix heuristic in `core/en-english.js`), test-first.
-- [x] English gate in `rule_tool_process_adr` (`adrEnglishOffenses`), test-first; ADR 060
+- [x] English gate in `rule_tool_process_adr` (`adrEnglishOffenses`), test-first; ADR 057
       translated to English (filename + content); index regenerated.
 - [x] `tests/docs/file-size-budget.test.mjs`: junk-name ban + 150-line cap + shrink-only
       ratchet (117 grandfathered files in `file-size-ratchet.data.mjs`); wired into
       `test:foundations`.
-- [x] Code-splitting section in `skills/rule-process-simplicity/SKILL.md`; ADR 061.
+- [x] Code-splitting section in `skills/rule-process-simplicity/SKILL.md`; ADR 058.
 
 ### Phase 4 - shrink the ratchet (in progress, one family per commit)
 
@@ -192,7 +192,7 @@
 - [x] Split the oversized scripts into underscore parts (fourth pass, session 5): every
       script ratchet entry is gone.
 
-### Phase 6 - co-located `__tests__/` (done, 2026-09-07, session 6; ADR 065)
+### Phase 6 - co-located `__tests__/` (done, 2026-09-07, session 6; ADR 062)
 
 - [x] Glob-based runner: `scripts/ci/run-tests/index.mjs` + `_suites.data.mjs` (quick /
       foundations / installer / all) replaced every hardcoded list in `test:foundations` /
@@ -208,7 +208,7 @@
       gateway pair, post-process, transport pair, tui-formats, block-spacing, validate);
       repo-level suites stay in `tests/`; npm `files` excludes `src/**/__tests__/`.
 
-### Phase 7 - coverage >= 95% branches (gate landed, ratcheting; ADR 065)
+### Phase 7 - coverage >= 95% branches (gate landed, ratcheting; ADR 062)
 
 - [x] c8 wired: `pnpm test:coverage` runs the whole `all` suite under c8, so subprocess
       CLI/installer/daemon runs count. Honest cross-process baseline: 84% branches /
@@ -219,12 +219,12 @@
       `scripts/reports/coverage/_threshold.data.mjs` (a rising ratchet, currently 90,
       target 95 - the plan-mandated 95 gate is the ratchet's endpoint, not a permanently
       red check).
-- [ ] Keep raising the floor to 95 (now 90, ADRs 066-068 and 072): the branch floor moved
+- [ ] Keep raising the floor to 95 (now 90, ADRs 063-068 and 072): the branch floor moved
       83 -> 87 -> 89 -> 90. Wave three swept the long tail (English-only scanners,
       tool surface annotations, cache replay tiers, agent-commands targets, review
       overlays/validate/persona, check/search verdicts, handon verification, handoff
       git reads, plan renderer, detector edges, flight renderer, a11y evaluate, ...).
-      Wave four (2026-09-08, ADR 072) landed ~20 suites over the named tail - the
+      Wave four (2026-09-08, ADR 069) landed ~20 suites over the named tail - the
       daemon command arms, skills-install catalog, IDE installer path/writer arms,
       handoff sources, skill/search/component tool modes, claude transcript reader,
       orphaned-path references, doctor run/detect-env, findings merge, persona
@@ -239,7 +239,7 @@
       and windows arms on a darwin dev box, the reverse on ubuntu CI), dead
       domain ternaries (ai/_framework), CLI serve transports, and a long tail of
       2-4 branch chips per file.
-      Wave five (2026-09-09, ADR 079) took it to 91.17% (6375/6992) and raised the
+      Wave five (2026-09-09, ADR 076) took it to 91.17% (6375/6992) and raised the
       floor to 91, 12 branches of margin. It covered the three biggest non-platform
       clusters - the multi-file scaffold generator (2 of 12 branches were visited),
       the rule:// reader (11 of 26 unvisited, one per URI shape), the injectable
@@ -255,7 +255,7 @@
       untrusted-fence miss was a rebrand drift in the directive pattern (`PIX GALAXY
 WORKFLOW REMINDER` never matched) and the home-recording-leak race now checks a
       private fake HOME per suite instead of watching the real one.
-- [x] Two real defects surfaced by the coverage work (ADR 066): the ADR index
+- [x] Two real defects surfaced by the coverage work (ADR 063): the ADR index
       generator emitted tables prettier immediately reformats (the byte-equal gate
       was red on main - fixed by emitting prettier-padded tables); the gateway
       loaded evidence via a tool name that never registers (evidence blocks carried

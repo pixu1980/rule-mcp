@@ -281,7 +281,7 @@ Exposed tools: `rule`, `pix_update`, `pix_gateway`, `pix_apply`, `pix_search`, `
 }
 ```
 
-See [ADR 044](./docs/adr/044-gateway-as-the-single-entrypoint-with-server-side-receipts-backend-data-devops-g.md) for the full design.
+See [ADR 043](./docs/adr/044-gateway-as-the-single-entrypoint-with-server-side-receipts-backend-data-devops-g.md) for the full design.
 
 ---
 
@@ -629,7 +629,7 @@ The Docker image uses `node:22-alpine`, has no build step, and runs the server d
 
 - `pnpm test:foundations` - the unit batch is green over `src/`
 - routing corpus pinned at 80/99 exact and 99/99 top-or-alternative (BM25
-  scorer parity with the source, ADR 048 numbers reproduced on the union)
+  scorer parity with the source, ADR 047 numbers reproduced on the union)
 - lint zero errors, prettier clean, self-guardrails green over the whole `src/`
   tree, installer/transport suites green
 - decisions recorded in the [ADR index](docs/adr/ADR.md)

@@ -40,7 +40,7 @@ export function postprocessToolResult(name, arguments_, result, context = {}) {
  * A core that carries a fresh request id can never match a recompute: two runs
  * of the same call would differ, and a replay would hand back an older call's
  * id. So the id is minted here, at the edge, and only on the response that is
- * actually returned - never inside the stored core (ADR 062).
+ * actually returned - never inside the stored core (ADR 059).
  *
  * @param {object} result - a postprocessed, de-identified core
  * @param {string} [requestId] - injected by the tests

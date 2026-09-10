@@ -22,7 +22,7 @@ startup branch, the benchmark, and the attribution.
 | 6 | PERF-8 startup | `pnpm report:startup`; compiled code cache in `bin/`; handlers deferred into their actions; `listTools()` memoized |
 | 7 | PERF-9 meta surface | `rule-meta-*` namespace, `rule_tool_meta` dispatcher, `rule-area-toolset` prompt rename (branch `perf/meta-surface`) |
 | 8 | PERF-6 benchmark | `pnpm report:compression` over four corpora |
-| 9 | PERF-7 attribution | Credit lines in the module doc and the guides; ADR 076 |
+| 9 | PERF-7 attribution | Credit lines in the module doc and the guides; ADR 073 |
 
 ## Commits
 
@@ -37,9 +37,9 @@ fd480cb4 perf(cli): warm --help from 216 ms to 48 ms, measured not assumed
 
 ## ADRs written
 
-- **076** - Compression has four levels and no LLM in the output path
-- **077** - The CLI entry point loads no command handler it has not been asked for
-- **078** - Meta-frameworks get their own namespace and a narrow dispatcher
+- **073** - Compression has four levels and no LLM in the output path
+- **074** - The CLI entry point loads no command handler it has not been asked for
+- **075** - Meta-frameworks get their own namespace and a narrow dispatcher
 
 ## Where the plan was wrong, and what the measurement said
 
@@ -112,7 +112,7 @@ are work `tools list` and `serve` genuinely need.
    All of it was reverted and the fix applied per-file. Consider making
    `--apply` require a path.
 4. **Merging the four meta tools into one** is the change that would actually
-   cut the connect cost, and it is deliberately not done (ADR 078).
+   cut the connect cost, and it is deliberately not done (ADR 075).
 5. `docs/audits/performance.md` and `docs/plans/performance.md` are not
    prettier-formatted. That predates this session; `pnpm format` is not in the
    test suite.

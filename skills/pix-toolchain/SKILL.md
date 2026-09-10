@@ -83,7 +83,7 @@ changes meaning. A **linter** finds problems, and only some are about layout.
 
 **The rule default: Prettier for formatting, ESLint 10 flat config with
 `eslint-plugin-unicorn` for linting, `eslint-config-prettier` between them, and
-husky plus lint-staged to run them.** See ADR 027 and ADR 028 for why.
+husky plus lint-staged to run them.** See ADR 026 and ADR 027 for why.
 
 One gotcha worth knowing: line endings. Set `end_of_line` in `.editorconfig` and
 `* text=auto eol=lf` in `.gitattributes`, or every Windows checkout produces a

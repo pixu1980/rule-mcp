@@ -8,7 +8,7 @@ import { detectProject, getFrameworkSuggestion } from "../../core/detector/index
  * ever suggests rule-ai, rule-frontend-*, rule-meta-* and rule-platform-desktop.
  * A meta-framework is frontend - it was, as rule-frontend-meta-astro, until the
  * rule-meta rename dropped it out of the prefix and cost Astro its framework
- * bias in the router (ADR 078).
+ * bias in the router (ADR 075).
  */
 const DOMAIN_PREFIXES = [
   ["rule-ai", "ai"],

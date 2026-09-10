@@ -2,8 +2,8 @@
 
 - **Applies to**: rule-mcp, every transport (stdio, SSE, HTTP, daemon, Docker)
 - **Last reviewed**: 2026-09-06
-- **Related**: ADR 020 (persistent local bearer token), ADR 035 (SSE bearer auth),
-  ADR 041 (per-invocation self-update with throttle, fire-and-forget), ADR 052
+- **Related**: ADR 019 (persistent local bearer token), ADR 034 (SSE bearer auth),
+  ADR 040 (per-invocation self-update with throttle, fire-and-forget), ADR 051
   (token-efficiency pipeline), `docs/01-product-architecture.md`,
   `docs/03-engineering-guides.md`
 - **Enforced by**: `tests/core/self-guardrails.test.mjs`, `tests/core/flight-redact.test.mjs`,

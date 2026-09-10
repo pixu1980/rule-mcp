@@ -4,7 +4,7 @@
  * The handoff a resumed session would otherwise have to be asked for.
  *
  * `rule_tool_process_handoff` writes the snapshot and `rule_tool_process_handon`
- * verifies it against the repository as it is now (ADR 052). Both are typed by
+ * verifies it against the repository as it is now (ADR 051). Both are typed by
  * hand, and the session that most needs them is the one where nobody types
  * anything: the user reopens the agent with `resume` hours later and asks the
  * next question, while the file that says where the work stopped sits unread in
@@ -33,7 +33,7 @@
  *   - **Verified, never restated.** The injected text is handon's output, so a
  *     merged branch or a landed ADR arrives labeled as changed. A hook that
  *     pasted the handoff would hand the model a stale snapshot with the
- *     confidence of the original, which is the failure ADR 052 exists to stop.
+ *     confidence of the original, which is the failure ADR 051 exists to stop.
  *   - **Silent when there is nothing.** No handoff means no injection. An
  *     apology for an absent file is tokens spent to say nothing.
  *
