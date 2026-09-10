@@ -21,4 +21,14 @@ if ! printf '%s\n' "$first" | grep -Eq '^(feat|fix|docs|style|refactor|perf|test
   echo "  got:      $first" >&2
   exit 1
 fi
+
+# DCO sign-off (OSS-10): every human commit certifies the Developer
+# Certificate of Origin with a trailer. Merges and reverts are exempt
+# above, like for the scope check.
+if ! grep -Eq '^Signed-off-by: .+ <[^<>]+>$' "$msg_file"; then
+  echo "commit-msg: rejected - DCO sign-off required" >&2
+  echo "  add:      Signed-off-by: Your Name <you@example.com>" >&2
+  echo "  hint:     git commit -s adds it for you" >&2
+  exit 1
+fi
 exit 0
