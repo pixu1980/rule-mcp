@@ -15,7 +15,7 @@ Keep the command and option declarations static, and load the handlers inside th
 
 ## Consequences
 
-Warm --help fell from 216 ms to 48 ms, and every command still dispatches. listTools() is memoized on a registry generation bumped by register, clear and retain, so the 105-schema conversion is paid once per process instead of once per tools/list. A wall-time assertion would be flaky, so src/cli/__tests__/_startup-graph.test.mjs asserts the property instead: the heavy graph must stay unreachable from the entry through static imports. Cost: a new command must remember to defer its handler, and the test is what enforces it.
+Warm --help fell from 216 ms to 48 ms, and every command still dispatches. listTools() is memoized on a registry generation bumped by register, clear and retain, so the 105-schema conversion is paid once per process instead of once per tools/list. A wall-time assertion would be flaky, so src/cli/**tests**/_startup-graph.test.mjs asserts the property instead: the heavy graph must stay unreachable from the entry through static imports. Cost: a new command must remember to defer its handler, and the test is what enforces it.
 
 ## What would end this
 

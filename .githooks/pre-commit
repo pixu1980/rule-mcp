@@ -13,8 +13,8 @@ cd "$(git rev-parse --show-toplevel)" || exit 1
 
 node scripts/reports/census/index.mjs >/dev/null
 
-git add docs/01-product-architecture.md docs/03-engineering-guides.md docs/05-env-variables.md \
-  docs/06-skills.md docs/07-tools.md docs/08-prompts.md docs/09-instructions.md \
-  docs/10-cli.md docs/11-personas.md docs/12-guardrails.md docs/13-resources.md
+git add docs/02-product-architecture.md docs/05-env-variables.md docs/07-engineering-guides.md \
+  docs/08-skills.md docs/09-tools.md docs/10-prompts.md docs/11-instructions.md \
+  docs/12-cli.md docs/13-personas.md docs/14-guardrails.md docs/15-resources.md
 
 exit 0

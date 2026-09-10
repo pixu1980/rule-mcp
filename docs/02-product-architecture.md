@@ -22,14 +22,14 @@ refreshed by `pnpm census` (on every build and every pre-commit) - and are
 rendered into dedicated registry files that the docs link to instead of
 re-listing:
 
-- **Skills** -> [`docs/06-skills.md`](./06-skills.md)
-- **Tools (all LLM-free, deterministic)** -> [`docs/07-tools.md`](./07-tools.md)
-- **Prompts** -> [`docs/08-prompts.md`](./08-prompts.md)
-- **Instructions / agent command surface** -> [`docs/09-instructions.md`](./09-instructions.md)
-- **CLI reference (commands, options, arguments)** -> [`docs/10-cli.md`](./10-cli.md)
-- **Personas** -> [`docs/11-personas.md`](./11-personas.md)
-- **Guardrails** -> [`docs/12-guardrails.md`](./12-guardrails.md)
-- **Resources** -> [`docs/13-resources.md`](./13-resources.md)
+- **Skills** -> [`docs/08-skills.md`](./08-skills.md)
+- **Tools (all LLM-free, deterministic)** -> [`docs/09-tools.md`](./09-tools.md)
+- **Prompts** -> [`docs/10-prompts.md`](./10-prompts.md)
+- **Instructions / agent command surface** -> [`docs/11-instructions.md`](./11-instructions.md)
+- **CLI reference (commands, options, arguments)** -> [`docs/12-cli.md`](./12-cli.md)
+- **Personas** -> [`docs/13-personas.md`](./13-personas.md)
+- **Guardrails** -> [`docs/14-guardrails.md`](./14-guardrails.md)
+- **Resources** -> [`docs/15-resources.md`](./15-resources.md)
 
 Tool-family counts for this document: the generated snapshot at the end of
 this file.
@@ -442,7 +442,7 @@ decisions live where they can be dated and superseded:
 - The persona command surface: ADR 054
 
 The release pipeline moved with them: it is documented beside the other
-operational procedures in [02 tools and operations](./02-tools-operations.md).
+operational procedures in [02 tools and operations](./04-operations.md).
 
 <!-- census:begin:family-counts -->
 
@@ -482,6 +482,6 @@ Refresh with `pnpm census`; full inventories in `docs/07-` .. `docs/12-`.
 | Architecture decisions    | 76    | [`docs/adr/ADR.md`](adr/ADR.md)               |
 
 Regenerate with `pnpm census`. The inventories themselves are
-[`06-skills.md`](06-skills.md) through [`13-resources.md`](13-resources.md).
+[`08-skills.md`](08-skills.md) through [`15-resources.md`](15-resources.md).
 
 <!-- census:end:surface-counts -->

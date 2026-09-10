@@ -103,7 +103,7 @@ export function resourceSection(data) {
     "- `pix://<skill>` - the whole `SKILL.md`",
     "- `pix://<skill>/summary` - the condensed form a router hands back",
     "",
-    "Listing them one row at a time would restate [`06-skills.md`](06-skills.md).",
+    "Listing them one row at a time would restate [`08-skills.md`](08-skills.md).",
     "",
   ];
 }

@@ -112,7 +112,7 @@ test("the installed agent rules carry it", () => {
 });
 
 test("the docs carry it", () => {
-  const agents = readFileSync(join(root, "docs", "04-agent-instructions.md"), "utf8");
+  const agents = readFileSync(join(root, "docs", "03-agent-instructions.md"), "utf8");
   assert.match(agents, /flex first/i);
 });
 
