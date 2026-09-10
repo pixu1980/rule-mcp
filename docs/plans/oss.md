@@ -215,9 +215,9 @@ works.
   - [x] **8.4**: Confirm the release workflow still works after the change (gh-release keeps contents:write at job scope; local zizmor clean) and that any job needing id-token gets it at job scope only (relevant once OSS-22 and OSS-27 add one).
   - [ ] **8.5**: Gate: node --test tests/docs/workflow-permissions.test.mjs green; zizmor clean; the CI matrix still passes.
 - [ ] **Step 9 - OSS-14 (high)**: Dependencies are pinned exactly and nothing updates them. There is no Dependabot or Renovate configuration and no install cooldown configured, so every transitive security fix is manual, and the exact-pin policy has no adoption delay behind it.
-  - [ ] **9.1**: Add .github/dependabot.yml with the npm and github-actions ecosystems, weekly schedule, grouped minor and patch updates, and commit-message prefixes that satisfy the scope gate (for example chore(deps)).
-  - [ ] **9.2**: Set the cooldown explicitly and record the choice: minimum-release-age=4320 (three days) in .npmrc, noting that pnpm 11 already defaults to 1440 so this is a raise rather than a new control.
-  - [ ] **9.3**: Add a check that reads the cooldown back so it cannot be dropped silently - extend the manifest guardrail family or add tests/docs/npmrc.test.mjs asserting the key and its value.
+  - [x] **9.1**: Add .github/dependabot.yml with the npm and github-actions ecosystems, weekly schedule, grouped minor and patch updates, and commit-message prefixes that satisfy the scope gate (for example chore(deps)).
+  - [x] **9.2**: Set the cooldown explicitly and record the choice: minimum-release-age=4320 (three days) in .npmrc, noting that pnpm 11 already defaults to 1440 so this is a raise rather than a new control.
+  - [x] **9.3**: Add a check that reads the cooldown back so it cannot be dropped silently - extend the manifest guardrail family or add tests/docs/npmrc.test.mjs asserting the key and its value.
   - [ ] **9.4**: Decide and document the packageManager question: the guardrail pkg-no-corepack forbids adding it, so state in CONTRIBUTING.md that pnpm 11+ is required and why the version is not pinned in the manifest.
   - [ ] **9.5**: Gate: pnpm config get minimum-release-age returns the decided value; the new check green; the first Dependabot PR opens within a week.
 - [ ] **Step 10 - OSS-15 (high)**: Nothing analyzes the server's own source for security defects. There is no CodeQL or other SAST workflow; the guardrail engine scans the code this server validates, not the code it is made of.
