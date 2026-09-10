@@ -39,6 +39,38 @@ self-update remote pinning, container non-root) are recorded in the
 
 ## Reporting
 
-Open an issue with the reproducer. The parity fixture and the hardening suites
-(`test/guardrails-*`, `test/stdin-guard*`, `test/stdio-guard.test.mjs`) are the
-first place a regression shows up.
+**Do not open a public issue for a suspected vulnerability.** A public
+report publishes the vulnerability before a fix exists.
+
+Report privately through the GitHub advisory form:
+
+https://github.com/pixu1980/rule-mcp/security/advisories/new
+
+What happens next:
+
+- **Acknowledgment** within 3 business days.
+- **Triage** within 7 days: confirmed, needs-more-info, or declined
+  with reasons.
+- **Coordinated disclosure** with a 90-day default embargo: we ship the
+  fix, you hold publication until the fix is released or 90 days pass,
+  whichever comes first. A shorter or longer window can be agreed for
+  severe issues.
+- **CVE**: if the issue qualifies, we request a CVE ID through the
+  GitHub advisory flow and credit the reporter, or keep them anonymous
+  on request.
+
+Public issues are for non-sensitive reports only: false positives in the
+hardening suites, hardening ideas, or questions about this policy. The
+parity fixture and the hardening suites (`test/guardrails-*`,
+`test/stdin-guard*`, `test/stdio-guard.test.mjs`) are the first place a
+regression shows up.
+
+### Supported versions
+
+| Version | Supported          |
+| ------- | ------------------ |
+| 1.0.x   | :white_check_mark: |
+| < 1.0   | :x:                |
+
+Only the latest minor line receives security fixes. If you are pinned
+older, upgrade first and say which version you reproduced on.
