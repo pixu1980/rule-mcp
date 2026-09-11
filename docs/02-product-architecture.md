@@ -417,16 +417,16 @@ All data stays on the filesystem. The MCP server is a read-only/validate-only se
 
 ## 12. Platform support
 
-| Platform | Package          | Method                                  |
-| -------- | ---------------- | --------------------------------------- |
-| macOS    | Homebrew         | `brew install pix/tap/pix-galaxy-mcp`   |
-| macOS    | Clone + launcher | `git clone` + `./scripts/install.sh`    |
-| Linux    | Clone + launcher | `git clone` + `./scripts/install.sh`    |
-| Linux    | Docker           | `docker pull pix-galaxy/pix-galaxy-mcp` |
-| Windows  | Clone + launcher | `git clone` + `./scripts/install.ps1`   |
-| Windows  | Winget           | `winget install pix/pix-galaxy-mcp`     |
-| All      | Direct download  | GitHub Releases `.tgz`                  |
-| All      | pnpx             | `pnpx pix-galaxy-mcp serve`             |
+| Platform | Package          | Method                                     |
+| -------- | ---------------- | ------------------------------------------ |
+| macOS    | Homebrew         | `brew install pixu1980/tap/pix-galaxy-mcp` |
+| macOS    | Clone + launcher | `git clone` + `./scripts/install.sh`       |
+| Linux    | Clone + launcher | `git clone` + `./scripts/install.sh`       |
+| Linux    | Docker           | `docker pull pixu1980/pix-galaxy-mcp`      |
+| Windows  | Clone + launcher | `git clone` + `./scripts/install.ps1`      |
+| Windows  | Winget           | `winget install pixu1980.pix-galaxy-mcp`   |
+| All      | Direct download  | GitHub Releases `.tgz`                     |
+| All      | pnpx             | `pnpx pix-galaxy-mcp serve`                |
 
 ## 13. History and rationale
 
