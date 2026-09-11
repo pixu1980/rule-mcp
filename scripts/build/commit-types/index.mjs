@@ -7,18 +7,29 @@
  *
  * The single source of truth for commit types (OSS-19).
  *
- * The commit-msg hook and the semantic.yml PR-title check used to accept
- * different lists, so a contributor who passed one failed the other.
- * Both are pinned to this list by tests/docs/commit-gates.test.mjs, and
- * the commit-lint CI job lints through this module so the pattern lives
- * in exactly one place:
+ * The commit-msg hook, the semantic.yml PR-title check, and the commit-lint
+ * CI job all accept this exact type list, so the pattern lives in exactly
+ * one place:
  *
  *   node scripts/build/commit-types/index.mjs --lint-range <base> <head>
  */
 
 import { execFileSync } from "node:child_process";
-
+/** The one accepted type list for every commit gate (OSS-19). */
 export const COMMIT_TYPES = ["feat", "fix", "docs", "style", "refactor", "perf", "test", "build", "ci", "chore", "revert"];
+
+/**
+ * System-generated subjects, which cannot carry a scope: GitHub's merge ref
+ * ("Merge <sha> into <sha>"), PR merges ("Merge pull request #N from ..."),
+ * and web reverts ("Revert \"...\""). The commit-msg hook exempts the same
+ * two prefixes, and tests/docs/commit-gates.test.mjs pins the parity.
+ */
+export const SYSTEM_MESSAGE_PREFIXES = ["Merge", "Revert"];
+export const SYSTEM_SUBJECT = new RegExp(`^(?:${SYSTEM_MESSAGE_PREFIXES.join("|")}) `, "u");
+
+export function isSystemSubject(subject) {
+  return SYSTEM_SUBJECT.test(subject);
+}
 
 const SUBJECT = new RegExp(String.raw`^(${COMMIT_TYPES.join("|")})\([a-z0-9._-]+\): .+$`, "u");
 
@@ -27,9 +38,16 @@ function lintRange(base, head) {
     .split("\n")
     .filter(Boolean);
   const bad = [];
+  let linted = 0;
 
   for (const commit of commits) {
     const subject = execFileSync("git", ["log", "-1", "--format=%s", commit], { encoding: "utf8" }).trim();
+
+    if (isSystemSubject(subject)) {
+      continue;
+    }
+
+    linted += 1;
 
     if (!SUBJECT.test(subject)) {
       bad.push(`${commit}: ${subject}`);
@@ -46,7 +64,7 @@ function lintRange(base, head) {
     return;
   }
 
-  process.stdout.write(`commit-lint: ${commits.length} commit(s) follow type(scope).\n`);
+  process.stdout.write(`commit-lint: ${linted} commit(s) follow type(scope).\n`);
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) {
