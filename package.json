@@ -19,6 +19,8 @@
   },
   "scripts": {
     "dev": "node ./bin/pix-galaxy-mcp.js serve",
+    "docs:dev": "node scripts/docs-site/serve.mjs",
+    "docs:build": "node scripts/docs-site/build.mjs",
     "dev:sse": "node ./bin/pix-galaxy-mcp.js serve --transport sse",
     "dev:daemon": "node ./bin/pix-galaxy-mcp.js daemon start",
     "inspector": "node ./node_modules/@modelcontextprotocol/inspector/cli/build/cli.js node ./bin/pix-galaxy-mcp.js serve",
