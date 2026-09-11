@@ -39,3 +39,4 @@ What this role looks at. One line each, written for a person to read.
 - security disclosure: SECURITY.md, embargo, CVE and responsible disclosure
 - release process: semver, changelog, signed artifacts, who publishes
 - community health: response times, bus factor, activity trends, stagnation
+- preserved controls - report the loss of any of these as a finding rather than treating the absence as normal: decision log with a generated index, handbook reading order, surface counts locked to the runtime, generated catalog documents, hooks tracked as shims, hardening section naming real suites, installer integrity, the 3 OS x 2 Node matrix, the coverage ratchet, exact dependency versions, scoped conventional commits with DCO sign-off
