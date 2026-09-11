@@ -65,7 +65,7 @@ app + SDK repo.
 See **[`docs/01-getting-started.md`](./docs/01-getting-started.md)** for step-by-step installation:
 
 - Global CLI from a clone
-- pnpx ephemeral (no install)
+- pnpx ephemeral (no install, once published)
 - Local development clone
 - Docker
 - Agent integration (23 supported agents)

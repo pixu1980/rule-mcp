@@ -81,6 +81,9 @@ T="$(mktemp -d)" && mkdir -p "$T/scripts" \
 
 ## 3. pnpx/npx (no install, ephemeral)
 
+> **Note:** `pnpx` resolves from the npm registry, so this path applies
+> once the package is published. Until then, use the clone above.
+
 Use directly without installing - ideal for evaluation, CI, or occasional use:
 
 ```bash
