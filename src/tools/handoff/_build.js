@@ -4,12 +4,26 @@
 import { readAdrs, readContextValues, readProjectIdentity } from "./_sources.js";
 import { getGitDiff, getGitLog } from "./_git.js";
 import { scanProjectDocs } from "./_docs-scan.js";
+import { archiveCompletedDocs, closeoutLines } from "./_closeout.js";
 import { estimateTokens } from "./_format.js";
 import { headerLines, identityLines, adrLines, contextLines } from "./_sections-core.js";
 import { workingTreeLines, gitLogLines, docsLines, footerLines } from "./_sections-repo.js";
 
 /** Build one handoff, re-running itself one format tighter when it exceeds maxTokens. */
-export function buildHandoff({ projectDir, includeContext, includeAdrs, includeIdentity, includeGitDiff, includeGitLog, includeRoadmap, compress, maxTokens, format, mode }) {
+export function buildHandoff({
+  projectDir,
+  includeContext,
+  includeAdrs,
+  includeIdentity,
+  includeGitDiff,
+  includeGitLog,
+  includeRoadmap,
+  compress,
+  maxTokens,
+  format,
+  mode,
+  _closeout,
+}) {
   const identity = includeIdentity ? readProjectIdentity(projectDir) : {};
   const adrs = includeAdrs ? readAdrs(projectDir) : [];
   const contextValues = includeContext ? readContextValues(projectDir) : {};
@@ -26,6 +40,8 @@ export function buildHandoff({ projectDir, includeContext, includeAdrs, includeI
     isBrief: format === "brief",
     isMinimal: format === "minimal",
   };
+  // Plain handoff stays read-only; only a session close archives and deletes.
+  const closeout = _closeout === undefined && shape.isCloseSession ? archiveCompletedDocs(projectDir) : _closeout;
 
   const lines = [
     ...headerLines(shape),
@@ -35,6 +51,7 @@ export function buildHandoff({ projectDir, includeContext, includeAdrs, includeI
     ...workingTreeLines(gitDiff, shape),
     ...gitLogLines(gitLog, shape),
     ...docsLines(docsScan, shape),
+    ...closeoutLines(closeout, shape),
     ...footerLines(shape),
   ];
 
@@ -51,6 +68,7 @@ export function buildHandoff({ projectDir, includeContext, includeAdrs, includeI
       compress: true,
       maxTokens,
       format: "brief",
+      _closeout: closeout,
     });
   }
 
@@ -63,6 +81,7 @@ export function buildHandoff({ projectDir, includeContext, includeAdrs, includeI
       compress: true,
       maxTokens,
       format: "minimal",
+      _closeout: closeout,
     });
   }
 
@@ -70,6 +89,7 @@ export function buildHandoff({ projectDir, includeContext, includeAdrs, includeI
     text: output,
     stats: {
       adrs: adrs.length,
+      archived: closeout ? closeout.archived.length : 0,
       contextKeys: Object.keys(contextValues).length,
       lines: output.split("\n").length,
       tokens,
