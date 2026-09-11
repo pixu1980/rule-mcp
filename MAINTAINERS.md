@@ -3,8 +3,8 @@
 The people who can merge to rule-mcp today, the areas they own,
 and how fast they answer.
 
-| Maintainer                             | Areas             | Response                                                            |
-| -------------------------------------- | ----------------- | ------------------------------------------------------------------- |
+| Maintainer                             | Areas             | Response                                                           |
+| -------------------------------------- | ----------------- | ------------------------------------------------------------------ |
 | pixu1980 <pisuemiliano.1980@gmail.com> | everything (BDFL) | issues triaged within 2 days; pull requests reviewed within 7 days |
 
 ## Becoming a maintainer
