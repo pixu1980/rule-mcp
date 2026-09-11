@@ -105,6 +105,11 @@ jobs:
         run: |
           base="${{ github.event.pull_request.base.sha || github.event.before }}"
           for commit in $(git rev-list "$base"..HEAD); do
+            subject="$(git log -1 --format=%s "$commit")"
+            # System-generated messages (merge / revert) are exempt, as in the hook.
+            case "$subject" in
+              "Merge "*|"Revert "*) continue ;;
+            esac
             git log -1 --format=%B "$commit" | grep -Eq '^Signed-off-by: .+ <[^<>]+>$' || { echo "missing Signed-off-by in $commit"; exit 1; }
           done
 
