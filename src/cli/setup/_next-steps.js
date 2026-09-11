@@ -50,7 +50,7 @@ export function uninstallNextSteps({ dryRun, purged }) {
     lines.push("State and config were kept - re-run and tick purge to delete them.");
   }
 
-  lines.push("curl -fsSL https://pix-galaxy.domain.example/install.sh | bash - to reinstall");
+  lines.push("curl -fsSL https://raw.githubusercontent.com/pixu1980/pix-galaxy-mcp/v0.1.0/scripts/install.sh | bash - to reinstall");
 
   return lines;
 }
