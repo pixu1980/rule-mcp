@@ -24,7 +24,10 @@ const NULLABLE_FIELDS = new Set(["deprecatedBy"]);
  * @returns {object} the role
  */
 export function parsePersonaFile(text) {
-  const source = String(text ?? "");
+  // Windows checkouts carry CRLF (no .gitattributes pins LF), and `.` never
+  // matches `\r`: without this normalization every scalar silently fails
+  // its match and the whole catalog reads as empty on windows-latest.
+  const source = String(text ?? "").replaceAll(/\r\n?/g, "\n");
   const framed = source.match(/^---\s*\n([\s\S]*?)\n---\s*\n?([\s\S]*)$/);
   const frontmatter = framed ? framed[1] : "";
   const body = framed ? framed[2] : source;
