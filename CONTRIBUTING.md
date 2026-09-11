@@ -56,6 +56,17 @@ subjects. The allowed types live in one place,
 check and the commit-lint CI job all follow it. There is no `release`
 type: version bumps use the `chore(release)` scope instead.
 
+Maintainers sign commits and tags. Once, per machine:
+
+```bash
+git config commit.gpgsign true
+git config user.signingkey <your-key-id>
+```
+
+Then tag releases signed: `git tag -s v0.1.0`. The release workflow
+refuses lightweight tags, and Vigilant Mode marks unsigned commits
+visibly on GitHub.
+
 Every commit also carries a DCO sign-off trailer:
 
 ```

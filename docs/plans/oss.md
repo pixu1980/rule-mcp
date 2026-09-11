@@ -344,9 +344,9 @@ works.
   - [x] **28.3**: Verify the gate actually fails: probed with a stubbed pnpm (advisory exits 1, clean exits 0, garbage warns and passes) seed a fixture advisory and confirm a non-zero exit, then remove the fixture.
   - [x] **28.4**: Gate: node --test tests/ci/audit-gate.test.mjs green; the seeded advisory produces a non-zero exit.
 - [ ] **Step 29 - OSS-29 (low)**: No commit and no tag is signed, so a consumer cannot verify that a release came from the maintainer, and GitHub shows no verified badge.
-  - [ ] **29.1**: Document maintainer signing in CONTRIBUTING.md: the git config commit.gpgsign and user.signingkey setup, and the instruction to tag with git tag -s.
+  - [x] **29.1**: Document maintainer signing in CONTRIBUTING.md: the git config commit.gpgsign and user.signingkey setup, and the instruction to tag with git tag -s.
   - [ ] **29.2**: Owner action: enable Vigilant Mode in GitHub settings so unsigned commits are visibly marked rather than silently accepted.
-  - [ ] **29.3**: Change the release instructions in docs/04-operations.md from git tag to git tag -s, and add a verification step to the release workflow that refuses a lightweight tag.
+  - [x] **29.3**: Change the release instructions in docs/04-operations.md from git tag to git tag -s (plus a refuse-lightweight-tags step proven both ways locally) and add a verification step to the release workflow that refuses a lightweight tag.
   - [ ] **29.4**: Gate: the next release tag verifies with git tag --verify, and the GitHub release shows Verified.
 - [ ] **Step 30 - OSS-30 (info)**: Controls worth naming so a later run treats their loss as a finding rather than rediscovering them: the ADR log with a generated index, the reading-order handbook, the docs-accuracy lock, the census generator, the tracked hooks with shims, the SECURITY hardening section that names its own tests, the installer integrity check, the CI matrix and the coverage ratchet.
   - [ ] **30.1**: Review the Preserved controls section at the top of this plan against what is actually present, and note any row that no longer holds.
