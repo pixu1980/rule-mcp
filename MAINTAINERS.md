@@ -5,7 +5,7 @@ and how fast they answer.
 
 | Maintainer                             | Areas             | Response                                                            |
 | -------------------------------------- | ----------------- | ------------------------------------------------------------------- |
-| pixu1980 <pisuemiliano.1980@gmail.com> | everything (BDFL) | issues triaged within 7 days; pull requests reviewed within 14 days |
+| pixu1980 <pisuemiliano.1980@gmail.com> | everything (BDFL) | issues triaged within 2 days; pull requests reviewed within 7 days |
 
 ## Becoming a maintainer
 
