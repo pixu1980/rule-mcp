@@ -288,7 +288,7 @@ Exposed tools: `pix`, `pix_update`, `pix_gateway`, `pix_apply`, `pix_search`, `p
 }
 ```
 
-See [ADR 043](./docs/adr/044-gateway-as-the-single-entrypoint-with-server-side-receipts-backend-data-devops-g.md) for the full design.
+See [ADR 053](./docs/adr/053-gateway-as-the-single-entrypoint-with-server-side-receipts-backend-data-devops-g.md) for the full design.
 
 ---
 

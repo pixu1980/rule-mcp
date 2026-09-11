@@ -1,6 +1,7 @@
 node_modules/
 .tokensave/
 dist/
+site-dist/
 *.pid
 *.log
 .env
