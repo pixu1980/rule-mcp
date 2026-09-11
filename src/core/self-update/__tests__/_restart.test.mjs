@@ -26,7 +26,7 @@ console.log("self-update engine test: banner and restart");
   assert.match(buildBanner({ updated: false, reason: "no-allowed-remote" }), /REFUSED/);
   assert.match(buildBanner({ updated: false, reason: "unsigned-upstream", to: "deadbeef" }), /deadbeef/);
   assert.match(buildBanner({ updated: false, reason: "unsigned-upstream" }), /has no valid signature/, "unsigned banner tolerates a missing commit");
-  assert.match(buildBanner({ skipped: true, reason: "npm", note: "Update with: pnpm add -g" }), /up to date on disk/);
+  assert.match(buildBanner({ skipped: true, reason: "npm", note: "Update with: git pull" }), /up to date on disk/);
   assert.equal(buildBanner({ updated: false, reason: "dirty-tree" }), null, "silent skips stay silent");
 
   // eslint-disable-next-line no-unused-vars

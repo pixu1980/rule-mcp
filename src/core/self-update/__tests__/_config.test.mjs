@@ -70,7 +70,7 @@ test("declaredRepository returns the shipped repository URL", () => {
 });
 
 test("manualHint names the right command per install type", () => {
-  assert.match(manualHint("npm"), /pnpm add -g/);
+  assert.match(manualHint("npm"), /scripts\/install\.sh/);
   assert.match(manualHint("docker"), /docker compose pull/);
   assert.match(manualHint("binary"), /git-clone installs/);
 });
