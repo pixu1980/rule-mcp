@@ -13,7 +13,7 @@ its inputs. That is the security posture the whole design leans on.
   matching runs (`MAX_CHECK_INPUT_BYTES`).
 - **ReDoS resistance** - guardrail regexes are run on the only thread, so an
   adversarial input is refused by the size gate before it can backtrack
-  (`test/guardrails-redos-corpus.test.mjs`).
+  (`src/core/guardrails/__tests__/_guardrails-redos-corpus.test.mjs`).
 - **Guardrails in a worker** - check runs with a timeout fence
   (`guardrails-guarded`), so a pathological rule cannot hang the server.
 - **Auth-gated transports** - HTTP/SSE entry points require a bearer token
@@ -30,9 +30,12 @@ its inputs. That is the security posture the whole design leans on.
 ## Upstream threat model
 
 The current security posture is documented in this file and enforced by the
-hardening suites (`test/guardrails-*`, `test/apply-containment.test.mjs`,
-`test/gateway-receipt-paths.test.mjs`, `test/auth-rate-limit.test.mjs`,
-`test/self-update-remote-pin.test.mjs`, `test/docker-hardening.test.mjs`).
+hardening suites (`src/core/guardrails/__tests__/_guardrails-*.test.mjs`,
+`src/tools/apply/__tests__/_containment.test.mjs`,
+`src/tools/gateway/__tests__/_receipt-paths.test.mjs`,
+`src/transport/__tests__/_auth-rate-limit.test.mjs`,
+`src/core/self-update/__tests__/_unit.test.mjs` (remote-pin coverage),
+`src/transport/__tests__/_docker-hardening.test.mjs`).
 Decisions about the trust boundaries (write containment, receipts, SSE auth,
 self-update remote pinning, container non-root) are recorded in the
 [ADR index](docs/adr/ADR.md).
@@ -61,8 +64,8 @@ What happens next:
 
 Public issues are for non-sensitive reports only: false positives in the
 hardening suites, hardening ideas, or questions about this policy. The
-parity fixture and the hardening suites (`test/guardrails-*`,
-`test/stdin-guard*`, `test/stdio-guard.test.mjs`) are the first place a
+parity fixture and the hardening suites (`src/core/guardrails/__tests__/_guardrails-*.test.mjs`,
+`src/transport/__tests__/_stdio-guard.test.mjs`) are the first place a
 regression shows up.
 
 ### Supported versions

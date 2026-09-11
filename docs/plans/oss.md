@@ -149,7 +149,7 @@ works.
 
 | Control                                              | Where it lives                                                                       | Prove it                                                                          |
 | ---------------------------------------------------- | ------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------- |
-| Decision log with a generated index                  | `docs/adr/` (80 records), `docs/adr/ADR.md`                                          | `pnpm census:check`                                                               |
+| Decision log with a generated index                  | `docs/adr/` (86 records), `docs/adr/ADR.md`                                          | `pnpm census:check`                                                               |
 | Handbook reading order                               | `docs/README.md`                                                                     | `pnpm test:foundations`                                                           |
 | Surface counts locked to the runtime                 | `tests/docs/docs-accuracy.test.mjs`                                                  | `pnpm test:foundations`                                                           |
 | Generated catalog documents                          | `pnpm census`                                                                        | `pnpm census:check`                                                               |
@@ -348,10 +348,10 @@ works.
   - [ ] **29.2**: Owner action: enable Vigilant Mode in GitHub settings so unsigned commits are visibly marked rather than silently accepted.
   - [x] **29.3**: Change the release instructions in docs/04-operations.md from git tag to git tag -s (plus a refuse-lightweight-tags step proven both ways locally) and add a verification step to the release workflow that refuses a lightweight tag.
   - [ ] **29.4**: Gate: the next release tag verifies with git tag --verify, and the GitHub release shows Verified.
-- [ ] **Step 30 - OSS-30 (info)**: Controls worth naming so a later run treats their loss as a finding rather than rediscovering them: the ADR log with a generated index, the reading-order handbook, the docs-accuracy lock, the census generator, the tracked hooks with shims, the SECURITY hardening section that names its own tests, the installer integrity check, the CI matrix and the coverage ratchet.
-  - [ ] **30.1**: Review the Preserved controls section at the top of this plan against what is actually present, and note any row that no longer holds.
-  - [ ] **30.2**: Fold the same list into the oss persona's review checklist so a later run reports a missing control as a finding rather than treating the absence as normal.
-  - [ ] **30.3**: Gate: the section is present in the plan; the next oss review run's evidence cites the list.
+- [x] **Step 30 - OSS-30 (info)**: Controls worth naming so a later run treats their loss as a finding rather than rediscovering them: the ADR log with a generated index, the reading-order handbook, the docs-accuracy lock, the census generator, the tracked hooks with shims, the SECURITY hardening section that names its own tests, the installer integrity check, the CI matrix and the coverage ratchet.
+  - [x] **30.1**: Review the Preserved controls section at the top of this plan: count fixed to 86, SECURITY suite paths corrected to the colocated **tests** layout against what is actually present, and note any row that no longer holds.
+  - [x] **30.2**: Fold the same list into the oss persona's review checklist: one preserved-controls lens on the oss persona (a body section never reaches the filled prompt) so a later run reports a missing control as a finding rather than treating the absence as normal.
+  - [x] **30.3**: Gate: the section is present in the plan; census regenerated for the new lens the next oss review run's evidence cites the list.
 
 ## Cross-references
 
