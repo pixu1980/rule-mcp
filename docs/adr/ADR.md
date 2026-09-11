@@ -8,6 +8,7 @@ this directory are the source of truth; this index is generated from them by
 
 | #                                                                                                                       | Title                                                                                                     | Date       | Status     | Tags                                                                                |
 | ----------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- | ---------- | ---------- | ----------------------------------------------------------------------------------- |
+| [087](087-session-close-archives-completed-audits-reviews-and-plans.md)                                                 | Session close archives completed audits, reviews and plans                                                | 2026-09-11 | accepted   | process, handoff, docs                                                              |
 | [086](086-documentation-site-is-hand-written-static-html-from-docs.md)                                                  | Documentation site is hand-written static HTML from docs                                                  | 2026-09-11 | accepted   | docs, site                                                                          |
 | [085](085-reset-the-project-version-to-0-1-0-first-release-will-be-v0-1-0.md)                                           | Reset the project version to 0.1.0, first release will be v0.1.0                                          | 2026-09-10 | accepted   | release, versioning                                                                 |
 | [084](084-keep-the-name-with-a-written-posture-no-npm-placeholder-yet.md)                                               | Keep the name with a written posture, no npm placeholder yet                                              | 2026-09-10 | accepted   | naming, legal                                                                       |
@@ -102,6 +103,7 @@ file. Where a line stops short the rest is in the ADR.
 
 | ADR                                                                                                                     | Decision                                                                                                                                                                                                                        | Consequence                                                                                                                                                                                                                    |
 | ----------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| [087](087-session-close-archives-completed-audits-reviews-and-plans.md)                                                 | In close-session mode only, rule_tool_process_handoff folds each completed doc into one Nygard ADR via src/tools/handoff/_closeout.js (reusing the ADR generators, the English gate and the index updater), names it in a...     | Completed working papers leave the tree on session close; each survives as one ADR plus a Closeout section in the persisted handoff, with full text recoverable from git history.                                              |
 | [086](086-documentation-site-is-hand-written-static-html-from-docs.md)                                                  | The documentation site is hand-written: a small Node generator in scripts/docs-site/ renders docs/ Markdown to static HTML with marked (already a devDependency), served locally by a static preview server.                    | scripts/docs-site/ holds a small marked-based generator plus a static preview server; docs/ stays the source of truth; chapters map to /<slug>.html and ADRs to /adr/<slug>.html with an index; the Pages workflow uploads...  |
 | [085](085-reset-the-project-version-to-0-1-0-first-release-will-be-v0-1-0.md)                                           | Reset the project version to 0.1.0 in package.json, server.json (both version fields), the CHANGELOG release heading and the scoop/winget manifests with recomputed hashes.                                                     | package.json, server.json, CHANGELOG and the distribution manifests go back to 0.1.0 with recomputed hashes; tag v1.0.0 is deleted locally and remotely; the Step 26 placeholder question is settled (publish v0.1.0, no...    |
 | [084](084-keep-the-name-with-a-written-posture-no-npm-placeholder-yet.md)                                               | Keep the rule-mcp name with a written trademark posture (TRADEMARK.md) instead of a filing.                                                                                                                               | TRADEMARK.md states the boundary; README links it next to the license; the npm placeholder decision stays an explicit open owner item with a review date.                                                                      |
@@ -333,6 +335,13 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [007](007-thematic-skill-taxonomy-rename.md) thematic skill taxonomy rename
 - [001](001-thematic-skill-rename.md) Thematic Skill Taxonomy Rename
 
+### docs
+
+- [087](087-session-close-archives-completed-audits-reviews-and-plans.md) Session close archives completed audits, reviews and plans
+- [086](086-documentation-site-is-hand-written-static-html-from-docs.md) Documentation site is hand-written static HTML from docs
+- [071](071-the-census-generates-eight-numbered-documents-and-three-fenced-blocks-inside-the-chapters-a-person-writes.md) The census generates eight numbered documents and three fenced blocks inside the chapters a person writes
+- [048](048-v100-release-and-docs-accuracy-guard.md) v1.0.0 release and the docs-accuracy guard
+
 ### infrastructure
 
 - [008](008-scaffold-skill-consolidation.md) scaffold skill consolidation
@@ -385,12 +394,6 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [078](078-compress-agent-command-files-at-write-time.md) Compress agent command files at write time
 - [077](077-compress-every-server-model-list-surface-prompts-list-tools-list-resources-list.md) Compress every server→model list surface (prompts/list, tools/list, resources/list)
 - [073](073-compression-has-four-levels-and-no-llm-in-the-output-path.md) Compression has four levels and no LLM in the output path
-
-### docs
-
-- [086](086-documentation-site-is-hand-written-static-html-from-docs.md) Documentation site is hand-written static HTML from docs
-- [071](071-the-census-generates-eight-numbered-documents-and-three-fenced-blocks-inside-the-chapters-a-person-writes.md) The census generates eight numbered documents and three fenced blocks inside the chapters a person writes
-- [048](048-v100-release-and-docs-accuracy-guard.md) v1.0.0 release and the docs-accuracy guard
 
 ### governance
 
