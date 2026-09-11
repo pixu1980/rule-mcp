@@ -25,9 +25,11 @@ jobs:
           version: ${{ env.PNPM_VERSION }}
       # No setup-node cache here: this workflow runs on tags, and a cached
       # dependency tree restored into a tag build is a cache-poisoning path.
+      # `package-manager-cache` defaults to true, so it must be off explicitly.
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
           node-version: "22"
+          package-manager-cache: false
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
       # Tag, package.json, server.json and CHANGELOG must agree; bump locally
@@ -64,13 +66,16 @@ jobs:
         with:
           name: release-tarball
           path: dist
+      # No cache here either: the verify job must not restore state from
+      # untrusted tag-build caches (see the build job above).
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
           node-version: "22"
+          package-manager-cache: false
       - name: Verify the checksum
         run: cd dist && sha256sum -c SHA256SUMS
       # npm on purpose: the tarball must install under any npm-family client.
-      - name: Install the tarball from scratch
+      - name: Install the tarball from scratch # zizmor: ignore[adhoc-packages] -- installs our own just-built tarball, not a remote package
         run: |
           rm -rf /tmp/rule-verify && mkdir -p /tmp/rule-verify && cd /tmp/rule-verify
           npm install "$GITHUB_WORKSPACE/dist/rule-mcp-"*.tgz
@@ -109,7 +114,7 @@ jobs:
         with:
           name: release-tarball
           path: dist
-      - uses: softprops/action-gh-release@3bb12739c298aeb8a4eeaf626c5b8d85266b0e65 # v2
+      - uses: softprops/action-gh-release@3bb12739c298aeb8a4eeaf626c5b8d85266b0e65 # v2 # zizmor: ignore[superfluous-actions] -- pinned SHA with scoped contents:write; keep the audited release path stable
         with:
           body: ${{ steps.changelog.outputs.body }}
           generate_release_notes: false
