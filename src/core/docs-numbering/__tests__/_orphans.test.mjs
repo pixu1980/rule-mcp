@@ -10,6 +10,11 @@ import { test } from "node:test";
 
 import { orphanedPathReferences } from "../index.js";
 
+// Hermetic git: ambient hooks (commit-msg, post-commit) must not see the
+// fixture commits, and no global config may leak into the fixture repos.
+process.env.GIT_CONFIG_GLOBAL = "/dev/null";
+process.env.GIT_CONFIG_NOSYSTEM = "1";
+
 /** Run git quietly in the fixture repo. */
 function git(root, ...args) {
   execFileSync("git", args, { cwd: root, stdio: "ignore" });
@@ -55,4 +60,38 @@ test("zero or many slug matches are skipped rather than guessed", () => {
   const many = seed({ candidates: 2 });
   assert.deepEqual(orphanedPathReferences({ projectDir: many }), [], "two candidates mean ambiguity, not a rename");
   rmSync(many, { recursive: true, force: true });
+});
+
+test("an explicit all-scope reads the whole log, and a missing adr dir reads empty", () => {
+  const root = seed({ candidates: 1 });
+  const found = orphanedPathReferences({ projectDir: root, scope: "all" });
+
+  assert.equal(found.length, 1, "the all-scope finds the same rename");
+
+  const bare = mkdtempSync(join(tmpdir(), "rule-orphans-nodir-"));
+  git(bare, "init", "-q");
+  git(bare, "-c", "user.email=t@t", "-c", "user.name=t", "commit", "--allow-empty", "-q", "-m", "docs(adr): retire docs/adr/001-old-slug.md");
+
+  assert.deepEqual(orphanedPathReferences({ projectDir: bare }), [], "without an adr dir there is nothing to match");
+  rmSync(root, { recursive: true, force: true });
+  rmSync(bare, { recursive: true, force: true });
+});
+
+test("a tracked upstream narrows the range to the local commits", () => {
+  const root = mkdtempSync(join(tmpdir(), "rule-orphans-upstream-"));
+  git(root, "init", "-q");
+  git(root, "-c", "user.email=t@t", "-c", "user.name=t", "commit", "--allow-empty", "-q", "-m", "chore(setup): baseline");
+  const branch = execFileSync("git", ["branch", "--show-current"], { cwd: root, encoding: "utf8" }).trim();
+  git(root, "remote", "add", "origin", "./does-not-exist");
+  git(root, "update-ref", "refs/remotes/origin/main", "HEAD");
+  git(root, "config", `branch.${branch}.remote`, "origin");
+  git(root, "config", `branch.${branch}.merge`, "refs/heads/main");
+  git(root, "-c", "user.email=t@t", "-c", "user.name=t", "commit", "--allow-empty", "-q", "-m", "docs(adr): retire docs/adr/001-old-slug.md");
+  mkdirSync(join(root, "docs", "adr"), { recursive: true });
+  writeFileSync(join(root, "docs", "adr", "002-old-slug.md"), "# moved\n");
+
+  const found = orphanedPathReferences({ projectDir: root });
+
+  assert.equal(found.length, 1, "the upstream range still sees the local rename");
+  rmSync(root, { recursive: true, force: true });
 });

@@ -75,6 +75,13 @@ test("triple blank lines collapse to one blank line", () => {
   assert.doesNotMatch(content, /\n\n\n/);
 });
 
+test("consecutive multi-line exports are separated by a blank line", () => {
+  const { changed, content } = fix("exports.js", ["export const a = {", "  x: 1", "}", "export const b = {", "  y: 2", "}", ""].join("\n"));
+
+  assert.equal(changed, true, "the missing separator is inserted");
+  assert.ok(content.includes("}\n\nexport const b"), "the blank line lands between the bodies");
+});
+
 test("fixBlockSpacingOnFiles counts changed files and skips unreadable ones", () => {
   const changed = join(dir, "multi-changed.js");
   writeFileSync(changed, ["if (a) {", "  use(a);", "}", "done(a);", ""].join("\n"));

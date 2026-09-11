@@ -19,7 +19,7 @@ test.after(() => {
   delete process.env.RULE_MCP_STATE_DIR;
 });
 
-const { cacheGet, cacheSet, flush, ensureLoaded, cacheKey } = await import("../index.js");
+const { cacheEntries, cacheGet, cacheSet, flush, cacheKey } = await import("../index.js");
 
 test("cacheSet and cacheGet round-trip a deep copy and count reuse", () => {
   const key = cacheKey("pix_tool", { prompt: "x" });
@@ -47,6 +47,41 @@ test("error results and missing keys never store", () => {
   cacheSet(key, { isError: true, content: [] }, {});
   assert.equal(cacheGet(key), undefined, "an error result is not cached");
   cacheSet("", { content: [] }, {});
+});
+
+test("a stored call replays its tool and args through the catalog", () => {
+  const key = cacheKey("pix_tool", { prompt: "call" });
+  cacheSet(key, { content: [{ type: "text", text: "call" }] }, {}, { tool: "pix_tool", args: { prompt: "call" } });
+
+  const stored = cacheEntries().find((entry) => entry.result?.content?.[0]?.text === "call");
+  assert.equal(stored.tool, "pix_tool", "the call tool survives the store");
+});
+
+test("a stored call without args reports none", () => {
+  const key = cacheKey("pix_tool", { prompt: "noargs" });
+  cacheSet(key, { content: [{ type: "text", text: "noargs" }] }, {}, { tool: "pix_tool" });
+
+  const stored = cacheEntries().find((entry) => entry.result?.content?.[0]?.text === "noargs");
+  assert.equal(stored.tool, "pix_tool", "the call tool survives the store");
+  assert.deepEqual(stored.args, {}, "a call without args stores an empty args object");
+});
+
+test("a bare state entry still maps through the report", async () => {
+  const { cacheState } = await import("../_state.js");
+  const key = "rule-bare-entry";
+
+  cacheState.memory.set(key, { result: undefined, deps: {} });
+
+  try {
+    const bare = cacheEntries().find((entry) => entry.tool === undefined && entry.result === undefined);
+
+    assert.ok(bare, "an entry without result, args or hits maps to its defaults");
+    assert.equal(bare.args, undefined, "absent args report as undefined");
+    assert.equal(bare.hits, 0, "absent hits count as zero");
+    assert.equal(bare.tokens, Math.ceil(JSON.stringify({}).length / 4), "an absent result tokenizes as empty");
+  } finally {
+    cacheState.memory.delete(key);
+  }
 });
 
 test("flush writes the gzipped file and tolerates an unwritable state", () => {

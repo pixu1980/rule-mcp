@@ -63,9 +63,48 @@ test("detectStoredModelKeys reads the key files under the config dir", () => {
   assert.equal(gemini.file, null, "no path without a file");
 });
 
+test("getEnvironmentInfo degrades to unknown when shell and terminal are absent", () => {
+  const saved = { SHELL: process.env.SHELL, ComSpec: process.env.ComSpec, TERM: process.env.TERM };
+
+  delete process.env.SHELL;
+  delete process.env.ComSpec;
+  delete process.env.TERM;
+
+  try {
+    const info = getEnvironmentInfo();
+
+    assert.equal(info.shell, "unknown", "no shell variable reads as unknown");
+    assert.equal(info.terminal, "unknown", "no terminal variable reads as unknown");
+  } finally {
+    for (const [key, value] of Object.entries(saved)) {
+      if (value === undefined) {
+        delete process.env[key];
+      } else {
+        process.env[key] = value;
+      }
+    }
+  }
+});
+
 test("getEnvironmentInfo names the platform and never leaves shell empty", () => {
   const info = getEnvironmentInfo();
   assert.ok(info.platform, "the platform is named");
   assert.ok(info.node.startsWith("v"), "the node version reads");
   assert.ok(info.shell.length > 0, "the shell falls back rather than reading empty");
+});
+
+test("detectIdeConfigs survives an unreadable skills entry", () => {
+  const cwd = mkdtempSync(join(tmpdir(), "rule-detect-env-cwd-"));
+  writeFileSync(join(cwd, "skills"), "a file, not a directory");
+  const previous = process.cwd();
+  process.chdir(cwd);
+
+  try {
+    const checks = detectIdeConfigs();
+    const skills = checks.find((c) => c.name === "Skills directory");
+    assert.equal(skills.configured, false, "an unreadable skills entry counts zero skills");
+  } finally {
+    process.chdir(previous);
+    rmSync(cwd, { recursive: true, force: true });
+  }
 });

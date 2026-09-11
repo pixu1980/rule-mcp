@@ -2,7 +2,7 @@
 
 /** snapshotProject and its helpers: walkers, component counting, tokensave. */
 import { strict as assert } from "node:assert";
-import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
+import { mkdirSync, mkdtempSync, rmSync, symlinkSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { test } from "node:test";
@@ -45,6 +45,32 @@ test("snapshotProject counts files, lines, components, adrs and tests", () => {
   assert.equal(snap.lines.byExtension[".js"], 5, "line counts accumulate per extension");
   assert.equal(snap.bytes.nodeModules, 100, "node_modules size is measured");
   assert.equal(snap.bytes.dist, 50, "dist size is measured");
+});
+
+test("snapshotProject skips non-files, counts empty sources as zero lines, and survives a non-directory", () => {
+  const edge = mkdtempSync(join(tmpdir(), "rule-proj-edge-"));
+
+  try {
+    writeFileSync(join(edge, "real.js"), "export const a = 1;\n");
+    writeFileSync(join(edge, "empty.js"), "");
+
+    try {
+      symlinkSync(join(edge, "real.js"), join(edge, "link.js"));
+    } catch {
+      // Windows without developer mode cannot create symlinks; the rest holds.
+    }
+
+    const snap = snapshotProject(edge);
+
+    assert.equal(snap.lines.byExtension[".js"], 1, "the empty source adds zero lines, the real one adds one");
+    assert.equal(snap.files.byExtension[".js"], 2, "a symlink is not a file and adds nothing");
+
+    const fileAsDir = snapshotProject(join(edge, "real.js"));
+
+    assert.equal(fileAsDir.files.total, 0, "a path that is not a directory snapshots empty");
+  } finally {
+    rmSync(edge, { recursive: true, force: true });
+  }
 });
 
 test("tokensaveStats reports the db file and bytes from the meta", () => {
