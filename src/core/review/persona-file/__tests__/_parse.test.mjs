@@ -29,3 +29,17 @@ test("a frameless text is all body, and nullish input parses to nothing", () => 
 
   assert.deepEqual(parsePersonaFile().lenses, [], "nullish input parses to an empty role");
 });
+
+test("a CRLF document parses exactly like its LF twin", () => {
+  const lf = ["---", "id: sample", 'role: "Sample Role"', "yearsOfExperience: 3", "skills:", '  - "quiet"', "---", "", "- a lens", ""].join("\n");
+  const crlf = lf.replaceAll("\n", "\r\n");
+
+  assert.deepEqual(parsePersonaFile(crlf), parsePersonaFile(lf), "line endings never change the parse");
+
+  const role = parsePersonaFile(crlf);
+  assert.equal(role.id, "sample", "scalars survive CRLF");
+  assert.equal(role.role, "Sample Role", "quoted scalars survive CRLF");
+  assert.equal(role.yearsOfExperience, 3, "numerics survive CRLF");
+  assert.deepEqual(role.skills, ["quiet"], "list items survive CRLF");
+  assert.deepEqual(role.lenses, ["a lens"], "body bullets survive CRLF");
+});
