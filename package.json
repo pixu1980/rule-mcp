@@ -19,6 +19,8 @@
   },
   "scripts": {
     "dev": "node ./bin/rule-mcp.js serve",
+    "docs:dev": "node scripts/docs-site/serve.mjs",
+    "docs:build": "node scripts/docs-site/build.mjs",
     "dev:sse": "node ./bin/rule-mcp.js serve --transport sse",
     "dev:daemon": "node ./bin/rule-mcp.js daemon start",
     "inspector": "node ./node_modules/@modelcontextprotocol/inspector/cli/build/cli.js node ./bin/rule-mcp.js serve",

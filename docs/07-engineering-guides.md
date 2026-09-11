@@ -107,7 +107,7 @@ commit - the docs follow the code instead of being remembered.
 
 The rule is one sentence: every text the server hands to a model runs through
 `src/core/text/` before it leaves. The manifest lives in
-[`src/core/text/_surfaces.js`](../../src/core/text/_surfaces.js) and is pinned
+[`src/core/text/_surfaces.js`](../src/core/text/_surfaces.js) and is pinned
 by `src/core/text/__tests__/_surfaces.test.mjs`; the table below is that
 manifest rendered. "Prose" surfaces shorten verbose text, keep JSON identical
 and never break structure (the guard errors stay 0); the documented skips say
