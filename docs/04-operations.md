@@ -179,9 +179,12 @@ Check: **GitHub → Actions → ci**
 Create a tag to trigger the release pipeline:
 
 ```bash
-git tag v0.1.0
+git tag -s v0.1.0
 git push origin v0.1.0
 ```
+
+The tag must be signed (`-s`): the release workflow refuses lightweight
+tags. Set up signing once per machine (see CONTRIBUTING.md).
 
 The release pipeline (`.github/workflows/release.yml`) runs automatically:
 
@@ -276,10 +279,10 @@ shasum -a 256 -c SHA256SUMS
 
 ```bash
 # Bump version (single writer for package.json, server.json, CHANGELOG.md)
-node scripts/build/version/index.mjs --apply 1.1.0
+node scripts/build/version/index.mjs --apply 0.1.0
 node scripts/build/version/index.mjs --check
 
-git add -A && git commit -m "chore(release): 1.1.0" && git tag v1.1.0
+git add -A && git commit -m "chore(release): 0.1.0" && git tag -s v0.1.0
 git push --follow-tags
 ```
 

@@ -85,6 +85,10 @@ jobs:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
           persist-credentials: false
+      # Lightweight tags stop here: only a signed (annotated) tag object
+      # carries a verifiable author.
+      - name: Refuse lightweight tags
+        run: test "$(git cat-file -t "${GITHUB_REF_NAME}")" = tag
       - name: Version sync
         run: node scripts/build/version/index.mjs --check
       - name: Dependency audit gate
