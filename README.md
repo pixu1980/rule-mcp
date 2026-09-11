@@ -47,7 +47,7 @@ Deterministic MCP server for the pix skill ecosystem. Live surface (enforced by
 | Tests     | 212   | `pnpm test:all` green (incl. installer + PTY TUI)                                                           |
 
 Architecture decisions live in [`docs/adr/`](docs/adr/ADR.md) (47 records:
-installer self-heal, architect split, doc-accuracy guard, v1.0.0 release).
+installer self-heal, architect split, doc-accuracy guard, v0.1.0-beta release).
 The former architect wizard now lives in the standalone
 [`pix-galaxy-architect`](https://github.com/pixu1980/pix-galaxy-architect) web
 app + SDK repo.
