@@ -239,7 +239,7 @@ works.
   - [x] **12.3**: Add tests/docs/manifest.test.mjs: no dependencies value may use the link:, file: or workspace: protocol unless the package is private.
   - [x] **12.4**: Re-reproduce after the change: npm pack and npm install ./rule-mcp-1.0.0.tgz in an empty directory must exit 0 and the bin must run.
   - [x] **12.5**: Gate: node --test tests/docs/manifest.test.mjs green; the temp-directory install exits 0.
-- [ ] **Step 13 - OSS-6 (high)**: The two installers disagree and the Windows one still takes the path that cannot work. scripts/install.sh was migrated to a local-binary launcher ("no global npm install needed"), but scripts/install.ps1 still runs pnpm add -g / npm install -g against the unpublished registry package, and the bash header still claims it installs the npm package globally.
+- [x] **Step 13 - OSS-6 (high)**: SUPERSEDED by ADR 080 before execution - both scripts are thin bootstraps forwarding to `rule-mcp setup` (single implementation, parity by construction, covered by _install-bootstrap tests on every platform). The described drift no longer exists.
   - [ ] **13.1**: Add tests/installer/parity.test.mjs asserting neither installer invokes add -g on a registry package and that both resolve the CLI the same way.
   - [ ] **13.2**: Fix scripts/install.ps1 lines 340 and 380 to the local-binary launcher path the bash script uses (mirror ensure_global_shim), keeping the pnpx fallback only as an explicit opt-in flag.
   - [ ] **13.3**: Fix the scripts/install.sh header comment at line 10 to describe what the script actually does.
@@ -271,7 +271,7 @@ works.
   - [x] **17.4**: Restructure to the REUSE layout: LICENSES/MIT.txt plus REUSE.toml (dep5 is deprecated upstream) `LICENSES/MIT.txt`, `LICENSE` kept at the root as the human-readable pointer.
   - [x] **17.5**: Run reuse lint over the tree and clear what it reports: 1538/1538 compliant (via pip venv - no npm reuse binary exists; 3 files tipped over budget were split per ADR 061) then record the layout choice in an ADR if it differs from the flat LICENSE the project has today.
   - [x] **17.6**: Gate: reuse lint reports zero files without licensing information; test:all green (1209/0) the header check job green.
-- [ ] **Step 18 - OSS-18 (medium)**: Three different identities name the copyright. LICENSE says Pix, the git author is Emiliano Pisu, and the GitHub owner is pixu1980, so no downstream scanner or lawyer can map the copyright to one holder. The interview resolved the holder: pixu1980.
+- [x] **Step 18 - OSS-18 (medium)**: Three different identities name the copyright. LICENSE says Pix, the git author is Emiliano Pisu, and the GitHub owner is pixu1980, so no downstream scanner or lawyer can map the copyright to one holder. The interview resolved the holder: pixu1980.
   - [x] **18.1**: Set the LICENSE line to "Copyright (c) 2025-2026 pixu1980".
   - [x] **18.2**: Add author, repository, bugs and homepage to package.json (done early by 21.4, verified here) (author pixu1980, repository github:pixu1980/rule-mcp) - this also closes half of OSS-21.
   - [x] **18.3**: Add an AUTHORS file listing pixu1980 with the contact address, so a contributor list has a home before the first outside contribution.
