@@ -61,6 +61,22 @@ Expected output: health report with `ok: true`, 78 tools registered, detected ag
 
 <!-- install-claims:allow-end -->
 
+### Piped install (verified alternative)
+
+Prefer the clone above. If you pipe, verify before executing: the script
+and its checksum both come from the same release tag, and a mismatch
+exits non-zero instead of running.
+
+```bash
+TAG=v0.1.0
+BASE="https://raw.githubusercontent.com/pixu1980/rule-mcp/$TAG"
+T="$(mktemp -d)" && mkdir -p "$T/scripts" \
+  && curl -fsSL -o "$T/scripts/install.sh" "$BASE/scripts/install.sh" \
+  && curl -fsSL -o "$T/SHA256SUMS" "$BASE/scripts/SHA256SUMS" \
+  && (cd "$T" && grep ' scripts/install.sh$' SHA256SUMS | shasum -a 256 -c -) \
+  && bash "$T/scripts/install.sh"
+```
+
 ---
 
 ## 3. pnpx/npx (no install, ephemeral)

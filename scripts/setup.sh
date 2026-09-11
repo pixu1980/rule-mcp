@@ -6,7 +6,7 @@
 # One-command setup: npm install + agent detection + configuration.
 # Designed to be curl-pipe-able:
 #
-#   curl -fsSL https://rule-mcp.domain.example/setup.sh | bash
+#   curl -fsSL https://raw.githubusercontent.com/pixu1980/rule-mcp/v0.1.0/scripts/setup.sh | bash
 #
 # Or local:
 #

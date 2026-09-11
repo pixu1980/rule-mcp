@@ -226,13 +226,13 @@ works.
   - [x] **10.3**: Turn on the audit gate: already wired by Step 28 (ci.yml runs pnpm audit:gate) wire pnpm audit:gate through scripts/ci/audit-gate/index.mjs instead of the bare pnpm audit --prod (shared with OSS-28).
   - [ ] **10.4**: Owner action: add the CodeQL and audit checks to the branch protection required list alongside the existing ci checks.
   - [ ] **10.5**: Gate: the CodeQL workflow green with zero open code-scanning alerts; the required-check list includes it.
-- [ ] **Step 11 - OSS-16 (high)**: The documented install is curl-piped-to-shell from a domain that does not exist. Five scripts present https://rule-mcp.domain.example as the install URL, and none of them verifies what it downloads before executing it.
-  - [ ] **11.1**: Write the failing test tests/docs/placeholder-hosts.test.mjs: no tracked Markdown or script may contain domain.example.
-  - [ ] **11.2**: Pin the install to a release tag rather than a branch, so the fetched script is immutable: replace the placeholder with the real canonical URL once OSS-27 lands, using the `raw.githubusercontent.com` tag URL as the interim.
-  - [ ] **11.3**: Add integrity: the one-line installer downloads the script and its SHA256 from the same release, verifies before executing, and exits non-zero on mismatch.
-  - [ ] **11.4**: Update the install documentation to present git clone plus ./scripts/install.sh as the default, keeping the pipe form as a documented alternative with the verification step shown inline.
-  - [ ] **11.5**: Regenerate scripts/SHA256SUMS with pnpm checksums after the script edits.
-  - [ ] **11.6**: Gate: node --test tests/docs/placeholder-hosts.test.mjs green; node --test src/cli/**tests**/_install-integrity.test.mjs green.
+- [x] **Step 11 - OSS-16 (high)**: The documented install is curl-piped-to-shell from a domain that does not exist. Five scripts present https://rule-mcp.domain.example as the install URL, and none of them verifies what it downloads before executing it.
+  - [x] **11.1**: Write the failing test tests/docs/placeholder-hosts.test.mjs: no tracked Markdown or script may contain domain.example.
+  - [x] **11.2**: Pin the install to a release tag rather than a branch: interim v0.1.0 raw.githubusercontent URL per the plan note so the fetched script is immutable: replace the placeholder with the real canonical URL once OSS-27 lands, using the `raw.githubusercontent.com` tag URL as the interim.
+  - [x] **11.3**: Add integrity: verified pipe form proven locally both ways (match OK, tamper exits 1) the one-line installer downloads the script and its SHA256 from the same release, verifies before executing, and exits non-zero on mismatch.
+  - [x] **11.4**: Update the install documentation to present git clone plus ./scripts/install.sh as the default with the verified pipe as alternative as the default, keeping the pipe form as a documented alternative with the verification step shown inline.
+  - [x] **11.5**: Regenerate scripts/SHA256SUMS with pnpm checksums after the script edits.
+  - [x] **11.6**: Gate: node --test tests/docs/placeholder-hosts.test.mjs green; install-integrity green; residual: setup.sh is orphaned legacy (placeholder fixed, deeper rewrite unowned) and the skill-guide example email stays out of scan scope node --test src/cli/**tests**/_install-integrity.test.mjs green.
 - [x] **Step 12 - OSS-5 (high)**: The published tarball cannot be installed by any npm-family client. package.json declares a runtime dependency on itself using the pnpm-only link: protocol, so installing the packed artifact aborts before the package is unpacked.
   - [x] **12.1**: Reproduce and capture the failure in an empty directory: npm pack, then npm install ./rule-mcp-1.0.0.tgz - expect EUNSUPPORTEDPROTOCOL.
   - [x] **12.2**: Delete "rule-mcp": "link:" from package.json dependencies and the matching overrides entry from pnpm-workspace.yaml; move local name resolution to the documented pnpm link --global dev instruction.

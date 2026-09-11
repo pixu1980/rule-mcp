@@ -9,7 +9,7 @@
 #
 # Usage:
 #   ./scripts/uninstall.sh [options]
-#   curl -fsSL https://rule-mcp.domain.example/uninstall.sh | bash
+#   curl -fsSL https://raw.githubusercontent.com/pixu1980/rule-mcp/v0.1.0/scripts/uninstall.sh | bash
 #
 # Options are forwarded verbatim, with one translation kept for
 # compatibility: `--force` used to mean "do not ask for confirmation", which

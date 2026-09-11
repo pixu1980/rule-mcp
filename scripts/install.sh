@@ -16,7 +16,7 @@
 # that logic, and the two drifted (ADR 080).
 #
 # Usage:
-#   curl -fsSL https://rule-mcp.domain.example/install.sh | bash
+#   curl -fsSL https://raw.githubusercontent.com/pixu1980/rule-mcp/v0.1.0/scripts/install.sh | bash
 #   ./scripts/install.sh [options]
 #
 # Every option is forwarded verbatim; run `./scripts/install.sh --help` for
