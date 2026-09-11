@@ -43,6 +43,11 @@ jobs:
           mkdir -p dist
           mv rule-mcp-*.tgz dist/
           cd dist && sha256sum rule-mcp-*.tgz > SHA256SUMS && cat SHA256SUMS
+      # npm sbom cannot read a pnpm tree (no package-lock.json), so the SBOM
+      # comes from cdxgen, which parses pnpm-lock.yaml. It rides along with
+      # `files: dist/*` next to the checksum file.
+      - name: Generate the SBOM
+        run: pnpx --yes @cyclonedx/cdxgen -t js -o dist/sbom.cdx.json .
       - name: Upload the artifact
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:

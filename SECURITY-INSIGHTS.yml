@@ -1,0 +1,42 @@
+header:
+  schema-version: 2.2.0
+  last-updated: "2026-09-11"
+  last-reviewed: "2026-09-11"
+  url: https://github.com/pixu1980/rule-mcp/raw/refs/heads/main/SECURITY-INSIGHTS.yml
+  comment: |
+    Single-repository file: project and repository sections in one file.
+    Mirrors SECURITY.md, GOVERNANCE.md and MAINTAINERS.md in machine-readable
+    form; those files stay the human-readable source of truth.
+
+project:
+  name: rule-mcp
+  administrators:
+    - name: pixu1980
+      email: pisuemiliano.1980@gmail.com
+      primary: true
+  repositories:
+    - name: rule-mcp
+      url: https://github.com/pixu1980/rule-mcp
+  vulnerability-reporting:
+    reports-accepted: true
+    bug-bounty-available: false
+
+repository:
+  url: https://github.com/pixu1980/rule-mcp
+  status: active
+  accepts-change-request: true
+  accepts-automated-change-request: true
+  core-team:
+    - name: pixu1980
+      email: pisuemiliano.1980@gmail.com
+      primary: true
+  license:
+    url: https://github.com/pixu1980/rule-mcp/blob/main/LICENSE
+    expression: MIT
+  security:
+    assessments:
+      self:
+        comment: |
+          Tracked in docs/plans/oss.md. The OSS-22 Scorecard run is the first
+          external assessment; anything it reports that the plan missed folds
+          into the next oss review.
