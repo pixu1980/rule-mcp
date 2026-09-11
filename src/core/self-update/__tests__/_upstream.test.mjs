@@ -18,9 +18,9 @@ import { g, makeClonePair, runUpdateIn } from "./_update.fixture.mjs";
   mkdirSync(npm, { recursive: true });
   const r = runUpdateIn(npm, {});
   assert.equal(r.reason, "npm", "a node_modules install reports npm");
-  assert.match(r.note, /pnpm add -g/, "npm installs get the pnpm hint");
+  assert.match(r.note, /scripts\/install\.sh/, "npm installs get the clone hint");
   rmSync(base, { recursive: true, force: true });
-  console.log("  ✅ non-git npm installs are skipped with the pnpm hint");
+  console.log("  ✅ non-git npm installs are skipped with the clone hint");
 }
 
 // ── T17: docker installs are skipped with the compose hint ──

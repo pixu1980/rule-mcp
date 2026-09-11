@@ -111,7 +111,7 @@ export function resolveAllowedRemotes(environment = process.env) {
 /** Manual update command hint for install types we cannot auto-update. */
 export function manualHint(type) {
   if (type === "npm") {
-    return "Update with: pnpm add -g rule-mcp@latest (then restart the server).";
+    return "Update with: git pull in your checkout, then ./scripts/install.sh (then restart the server).";
   }
 
   if (type === "docker") {

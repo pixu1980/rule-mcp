@@ -106,7 +106,7 @@ Examples:
 
 Install modes:
   local (default)    Uses node + script path - works without global install
-  --global           Clean command - requires \`npm install -g rule-mcp\`
+  --global           Clean command - needs the installer launcher on PATH (./scripts/install.sh)
 
 Universal installer:
   ./scripts/install.sh             Auto-detect + configure all agents
