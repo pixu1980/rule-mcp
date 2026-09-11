@@ -19,3 +19,9 @@ jobs:
         with:
           persist-credentials: false
       - uses: zizmorcore/zizmor-action@cc914d7f3750a2d13d75c7f184a1060aa0e9d482 # v0.6.4
+        # Code scanning is not enabled on this repository and the SARIF upload
+        # is unavailable on fork pull requests, so stay off Advanced Security
+        # and surface findings as annotations instead (tests/docs/workflow-zizmor.test.mjs).
+        with:
+          advanced-security: false
+          annotations: true
