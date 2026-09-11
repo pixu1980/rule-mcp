@@ -141,7 +141,7 @@ git add -A
 git commit -m "feat: initial release v0.1.0"
 
 # Add remote
-git remote add origin https://github.com/pix/pix-galaxy-mcp
+git remote add origin https://github.com/pixu1980/pix-galaxy-mcp
 
 # Push
 git branch -M main
@@ -188,25 +188,26 @@ tags. Set up signing once per machine (see CONTRIBUTING.md).
 
 The release pipeline (`.github/workflows/release.yml`) runs automatically:
 
-| Step                | Action                                                                |
-| ------------------- | --------------------------------------------------------------------- |
-| ✅ npm publish      | Publish to npmjs.com with provenance                                  |
-| ✅ Docker build     | Multi-arch (linux/amd64 + linux/arm64) → `ghcr.io/pix/pix-galaxy-mcp` |
-| ✅ Homebrew formula | Generate `.rb` and attach to GitHub Release                           |
-| ✅ GitHub Release   | Create release with `.tgz` + assets                                   |
+| Step              | Action                                                  |
+| ----------------- | ------------------------------------------------------- |
+| ✅ Version gate   | Tag, package.json, server.json and CHANGELOG must agree |
+| ✅ Audit gate     | No known advisories, or the build stops                 |
+| ✅ Build          | Pack the tarball, checksum it, generate the SBOM        |
+| ✅ Verify         | Checksum check plus scratch npm install, bin runs       |
+| ✅ GitHub Release | Attach tarball, SHA256SUMS and SBOM to the release      |
 
 ---
 
 ### 5. Homebrew Tap Configuration
 
-To enable `brew install pix/tap/pix-galaxy-mcp`:
+To enable `brew install pixu1980/tap/pix-galaxy-mcp`:
 
 ```bash
 # Create the tap repo
 # Go to https://github.com/new → create: pix-galaxy-homebrew-tap
 
 # Clone, copy the generated formula, push
-git clone https://github.com/pix/homebrew-tap
+git clone https://github.com/pixu1980/homebrew-tap
 cp pix-galaxy-mcp.rb homebrew-tap/Formula/
 cd homebrew-tap
 git add Formula/pix-galaxy-mcp.rb
@@ -224,9 +225,9 @@ Users can install using these methods:
 | -------------------- | ----------------------------------------------------------------- |
 | **Clone + launcher** | `git clone` + `./scripts/install.sh`                              |
 | **pnpx**             | `pnpx pix-galaxy-mcp serve`                                       |
-| **Homebrew**         | `brew install pix/tap/pix-galaxy-mcp`                             |
-| **Docker**           | `docker pull ghcr.io/pix/pix-galaxy-mcp`                          |
-| **Winget**           | `winget install pix.pix-galaxy-mcp`                               |
+| **Homebrew**         | `brew install pixu1980/tap/pix-galaxy-mcp`                        |
+| **Docker**           | `docker pull ghcr.io/pixu1980/pix-galaxy-mcp`                     |
+| **Winget**           | `winget install pixu1980.pix-galaxy-mcp`                          |
 | **Scoop**            | `scoop bucket add pix-galaxy-mcp && scoop install pix-galaxy-mcp` |
 | **GitHub Release**   | Direct `.tgz` download                                            |
 
@@ -258,7 +259,7 @@ pix-galaxy-mcp doctor
 pix-galaxy-mcp install --agent all
 
 # Test Docker
-docker pull ghcr.io/pix/pix-galaxy-mcp
+docker pull ghcr.io/pixu1980/pix-galaxy-mcp
 docker compose up -d
 curl http://localhost:37999/health
 
