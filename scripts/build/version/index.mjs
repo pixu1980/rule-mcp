@@ -11,14 +11,18 @@
  *   node scripts/build/version/index.mjs --check        exits 0 when they agree
  *   node scripts/build/version/index.mjs --apply 1.2.3  writes 1.2.3 everywhere
  *
- * --apply also stamps server.json packages[].version and inserts a bare
- * `## [1.2.3]` heading above the newest release heading. It never touches
- * the [Unreleased] section; entries arrive via `pnpm changelog`.
+ * --apply also stamps server.json packages[].version, inserts a bare
+ * `## [1.2.3]` heading above the newest release heading, and refreshes the
+ * scoop/winget version fields, tarball URLs and hashes from a throwaway
+ * pack. It never touches the [Unreleased] section; entries arrive via
+ * `pnpm changelog`.
  */
 
 import { readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+
+import { refreshManifests } from "./_hashes.mjs";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
 const read = (file) => readFileSync(join(root, file), "utf8");
@@ -64,13 +68,7 @@ function apply(version) {
   }
 
   const versions = readVersions();
-
-  if (versions.every(([, current]) => current === version)) {
-    process.stdout.write(`already at ${version}.\n`);
-
-    return;
-  }
-
+  const oldPkg = versions[0][1];
   const stamp = (file, old) => {
     const text = read(file);
     const stamped = text.split(`"version": "${old}"`).join(`"version": "${version}"`);
@@ -107,7 +105,8 @@ function apply(version) {
 
   lines.splice(at, 0, `## [${version}]`, "");
   writeFileSync(join(root, "CHANGELOG.md"), lines.join("\n"));
-  process.stdout.write(`stamped ${version} in package.json, server.json and CHANGELOG.md.\n`);
+  refreshManifests(root, version, oldPkg);
+  process.stdout.write(`stamped ${version} in package.json, server.json, CHANGELOG.md and the manifests.\n`);
 }
 
 const [flag, value] = process.argv.slice(2);
