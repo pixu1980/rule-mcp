@@ -1,11 +1,13 @@
 # rule-mcp
 
-**MCP server** for the **rule-*** skill ecosystem.  
-Serves styleguides, component templates, framework best practices, and design system patterns directly to your AI coding agent.
+**rule-mcp** is an [MCP](https://modelcontextprotocol.io) server that puts 90 modular skills
+(styleguides, component templates, framework practices, design patterns) inside your AI coding
+agent as tools, resources, and prompts - so a free-text request routes to the right skill, and
+generated code is validated against guardrails before it reaches you. It never calls an LLM
+itself, so it behaves identically behind Claude, GPT, Gemini, Llama, or Qwen, and everything
+runs on your machine with no build step.
 
-[![Node](https://img.shields.io/badge/node-%3E%3D20-brightgreen)](https://nodejs.org)
-[![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
-[![SDK](https://img.shields.io/badge/MCP%20SDK-1.29.0-blue)](https://github.com/modelcontextprotocol/typescript-sdk)
+Node ≥ 20 · [MIT license](LICENSE) · MCP SDK 1.30.0 (from package.json).
 
 > **Runtime deps:** `@modelcontextprotocol/sdk` + `zod` only. No build step needed.  
 > **Local-first:** everything runs on your machine, skills live in `~/.agents/skills/`.
@@ -29,6 +31,13 @@ Serves styleguides, component templates, framework best practices, and design sy
 - [Docker](#docker)
 - [Project structure](#project-structure)
 - [Further reading](#further-reading)
+- [Contributing](#contributing)
+- [Code of Conduct](#code-of-conduct)
+- [Governance](#governance)
+- [Security](#security)
+- [Sponsors](#sponsors)
+- [Roadmap](./ROADMAP.md)
+- [License](#license)
 
 ---
 
@@ -41,11 +50,11 @@ Deterministic MCP server for the rule skill ecosystem. Live surface (enforced by
 | --------- | ----- | ----------------------------------------------------------------------------------------------------------- |
 | Tools     | 106   | per-skill tools + dispatcher/action tools                                                                   |
 | Resources | 186   | rule:// per-skill index + summary + template URIs                                                            |
-| Prompts   | 73    | rule-area-* areas + one-shot workflow + 54 review-persona commands (rule-plan-* / rule-audit-* / rule-review-*) |
+| Prompts   | 76    | rule-area-* areas + one-shot workflow + 54 review-persona commands (rule-plan-* / rule-audit-* / rule-review-*) |
 | Skills    | 90    | frontend, backend, data, devops, toolchain, styleguide, process, platform, ai                               |
-| Tests     | 212   | `pnpm test:all` green (incl. installer + PTY TUI)                                                           |
+| Tests     | 1211  | `pnpm test:all` green (incl. installer + PTY TUI)                                                           |
 
-Architecture decisions live in [`docs/adr/`](docs/adr/ADR.md) (47 records:
+Architecture decisions live in [`docs/adr/`](docs/adr/ADR.md) (86 records:
 installer self-heal, architect split, doc-accuracy guard, v1.0.0 release).
 The former architect wizard now lives in the standalone
 [`rule-mcp-architect`](https://github.com/pixu1980/rule-mcp-architect) web
@@ -673,6 +682,23 @@ engineering material lives in [`docs/07-engineering-guides.md`](./docs/07-engine
 rule-mcp is unfunded today. Sponsorship through [GitHub Sponsors](https://github.com/sponsors/pixu1980)
 would go to hosting, release infrastructure, and maintainer time.
 Sponsorship buys no roadmap priority.
+
+## Code of Conduct
+
+We follow the [Contributor Covenant 3.0](./CODE_OF_CONDUCT.md). Report conduct problems privately
+as that file describes.
+
+## Governance
+
+Explicit BDFL with a documented path to co-maintainers - see [GOVERNANCE.md](./GOVERNANCE.md)
+for who decides and how disputes escalate, and [MAINTAINERS.md](./MAINTAINERS.md) for who merges
+today.
+
+## Security
+
+Report suspected vulnerabilities privately through the
+[GitHub advisory form](https://github.com/pixu1980/rule-mcp/security/advisories/new) - never
+a public issue. Details, SLAs, and supported versions: [SECURITY.md](./SECURITY.md).
 
 ## License
 
