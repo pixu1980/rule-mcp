@@ -1,49 +1,63 @@
-/** getGuardrailsReport: which sections a skill's ruleset renders. */
+/**
+ * getGuardrailsReport: the ruleset a skill will actually be checked against.
+ *
+ * The report lists what `getGuardrails` resolved rather than re-deriving the
+ * families, so it cannot drift from the check (ADR 079).
+ */
 import { strict as assert } from "node:assert";
 import { test } from "node:test";
 
 import { getGuardrailsReport } from "../_report.js";
+import { getGuardrails } from "../_registry.js";
 
-test("every report opens with the skill, a total and the shared rules", () => {
+test("the report lists exactly the rules the check will run", () => {
   const report = getGuardrailsReport("pix-frontend-react");
+  const rules = getGuardrails("pix-frontend-react");
 
   assert.match(report, /^# Guardrails: pix-frontend-react/, "the report names its skill");
-  assert.match(report, /Total: \d+ testable assertions/, "and counts what it is asserting");
-  assert.match(report, /## Shared \(all pix skills\)/, "the shared rules are always listed");
-  assert.match(report, /## How to use/, "and it closes with how to act on it");
-});
+  assert.match(report, new RegExp(`Total: ${rules.length} testable assertions`), "and counts them");
 
-test("a framework skill gets its framework section", () => {
-  assert.match(getGuardrailsReport("pix-frontend-react"), /## Framework-specific \(react\)/, "react rules are named for react");
-});
-
-test("a skill with no framework mapping renders no framework section", () => {
-  assert.ok(!getGuardrailsReport("pix-process-adr").includes("## Framework-specific"), "nothing is invented for a non-framework skill");
-});
-
-test("the styleguide skill carries the scaffolding rules", () => {
-  const report = getGuardrailsReport("pix-styleguide");
-
-  assert.match(report, /## Project Scaffolding \(\d+ config files\)/);
-  assert.match(report, /mode=scaffold/, "and says how to generate them");
-});
-
-test("backend, data and devops skills each get their own section", () => {
-  assert.match(getGuardrailsReport("pix-backend-express"), /## Backend Security & API \(\d+ checks\)/);
-  assert.match(getGuardrailsReport("pix-data-postgresql"), /## Database Safety \(\d+ checks\)/);
-  assert.match(getGuardrailsReport("pix-devops-docker"), /## DevOps & Security \(\d+ checks\)/);
-});
-
-test("a section belongs to its own family and no other", () => {
-  const frontend = getGuardrailsReport("pix-frontend-react");
-
-  for (const section of ["Backend Security & API", "Database Safety", "DevOps & Security", "Project Scaffolding"]) {
-    assert.ok(!frontend.includes(section), `a frontend skill must not carry the ${section} section`);
+  for (const rule of rules) {
+    assert.ok(report.includes(`**${rule.id}**`), `${rule.id} must appear in the report`);
   }
 });
 
-test("the mode is passed through to the ruleset", () => {
-  const scaffold = getGuardrailsReport("pix-styleguide", "scaffold");
+test("every rule is rendered as a checkbox with its label", () => {
+  const report = getGuardrailsReport("pix-styleguide-css");
 
-  assert.match(scaffold, /Total: \d+ testable assertions/, "a mode still produces a counted report");
+  assert.match(report, /## Rules/, "the rules have their own section");
+  assert.match(report, /- \[ ] \*\*[\w-]+\*\*: .+/, "each rule is a checkbox naming itself");
+});
+
+test("the report closes with how to act on it", () => {
+  const report = getGuardrailsReport("pix-styleguide-css");
+
+  assert.match(report, /## How to use/);
+  assert.match(report, /Re-check until all pass/, "the loop is spelled out");
+});
+
+test("a skill that inherits says where its rules came from", async () => {
+  const { loadLayerGuardrails } = await import("../../../layers/_guardrails.js");
+  const { setSkillGuardrails } = await import("../_registry.js");
+
+  setSkillGuardrails(await loadLayerGuardrails());
+
+  const report = getGuardrailsReport("pix-devops-docker");
+
+  assert.match(report, /Inherited from: pix-devops/, "a reader can see which declaration to edit");
+  assert.ok(report.includes("**docker-non-root**"), "its own rule is there");
+  assert.ok(report.includes("**secret-detection**"), "and the one it inherits");
+});
+
+test("a skill with no inheritance claims none", () => {
+  const report = getGuardrailsReport("pix-process-adr");
+
+  assert.ok(!report.includes("Inherited from:"), "nothing is claimed for a skill that inherits nothing");
+});
+
+test("an unknown skill still reports the rules that apply to everything", () => {
+  const report = getGuardrailsReport("pix-not-a-real-skill");
+
+  assert.match(report, /^# Guardrails: pix-not-a-real-skill/);
+  assert.match(report, /Total: \d+ testable assertions/, "the baseline still answers");
 });

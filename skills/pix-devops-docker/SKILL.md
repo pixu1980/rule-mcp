@@ -13,6 +13,8 @@ frameworks: [all]
 metadata:
   author: pix-engineering
   version: "3.0"
+guardrails: [docker-non-root, docker-healthcheck]
+inherits: [pix-devops]
 ---
 
 # Docker

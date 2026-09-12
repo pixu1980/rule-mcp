@@ -13,6 +13,7 @@ tags:
   - "version"
   - "index"
 frameworks: [all]
+guardrails: [secret-detection, env-gitignore]
 ---
 
 # pix-devops - DevOps & Engineering Skills Index
