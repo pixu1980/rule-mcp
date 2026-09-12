@@ -10,8 +10,8 @@
  * Called once at startup, or on demand via `skills reload` CLI command.
  */
 
-import { getSkillNames, clearTools, retainTools } from "../../tools/router/index.js";
-import { registerSkillTool, registerSearchTool, registerCheckTool, registerScaffoldTool } from "../../tools/skill/index.js";
+import { clearTools, retainTools, clearSkillResolution } from "../../tools/router/index.js";
+import { registerSearchTool, registerCheckTool, registerScaffoldTool } from "../../tools/skill/index.js";
 import { registerAiTool } from "../../tools/ai/index.js";
 import { registerProcessAdrTool } from "../../tools/adr/index.js";
 import { registerFixTool } from "../../tools/fix/index.js";
@@ -22,6 +22,7 @@ import { registerDetectTool } from "./_detect-tool.js";
 import { IS_MINIMAL_TOOLS, MINIMAL_ALLOWLIST } from "./_minimal.js";
 import { skillCache } from "./_lru.js";
 import { installSkillGuardrails } from "./_guardrail-layers.js";
+import { registerSkillTools } from "./_skill-tools.js";
 
 let isLoaded = false;
 
@@ -39,6 +40,7 @@ export async function loadAllSkills(force = false) {
   if (force) {
     skillCache.clear();
     clearTools();
+    clearSkillResolution();
     // Skill content changed - invalidate the deterministic result cache so we
     // never replay outputs computed from stale skills.
     const { cacheClear, clearSkillDigests } = await import("../cache/tool-cache/index.js");
@@ -55,14 +57,7 @@ export async function loadAllSkills(force = false) {
   await registerGatewayTool();
   await registerApplyTool();
 
-  const skillNames = getSkillNames();
-
-  for (const name of skillNames) {
-    // In minimal mode, skip skill-specific tools - evidence is loaded via pix_gateway
-    if (name !== "rule" && name !== "rule-process-adr" && name !== "rule-process-handoff" && !IS_MINIMAL_TOOLS) {
-      registerSkillTool(name);
-    }
-  }
+  registerSkillTools();
 
   registerSearchTool();
   registerCheckTool();

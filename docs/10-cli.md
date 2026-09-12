@@ -114,14 +114,14 @@ rule-mcp install
 
 **Options**
 
-| Flag             | Default | Choices                            | Description                                        |
-| ---------------- | ------- | ---------------------------------- | -------------------------------------------------- |
-| `--agent <name>` | all     | -                                  | target agent, or 'all' for every supported agent   |
-| `--mode <name>`  | -       | `stdio`, `daemon`, `sse`, `docker` | stdio (default), daemon (SSE), or docker           |
-| `--global`       | -       | -                                  | use clean command path (requires global install)   |
-| `--force`        | -       | -                                  | override existing configuration                    |
-| `--dry-run`      | -       | -                                  | preview without writing                            |
-| `--json`         | -       | -                                  | print machine-readable JSON instead of Terminal UI |
+| Flag             | Default | Choices                                      | Description                                                      |
+| ---------------- | ------- | -------------------------------------------- | ---------------------------------------------------------------- |
+| `--agent <name>` | all     | -                                            | target agent, or 'all' for every supported agent                 |
+| `--mode <name>`  | -       | `stdio`, `daemon`, `sse`, `docker`, `skills` | stdio (default), daemon (SSE), docker, or skills (no MCP server) |
+| `--global`       | -       | -                                            | use clean command path (requires global install)                 |
+| `--force`        | -       | -                                            | override existing configuration                                  |
+| `--dry-run`      | -       | -                                            | preview without writing                                          |
+| `--json`         | -       | -                                            | print machine-readable JSON instead of Terminal UI               |
 
 ## rule-mcp uninstall
 

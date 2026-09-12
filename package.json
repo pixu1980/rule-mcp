@@ -60,6 +60,7 @@
     "src/",
     "!src/**/__tests__/",
     "skills/",
+    "personas/",
     "prompts/",
     "scripts/",
     "README.md",

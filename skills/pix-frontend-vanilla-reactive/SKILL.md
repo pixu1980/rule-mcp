@@ -7,7 +7,18 @@ tags:
   - "vanilla"
   - "reactive"
 frameworks: [vanilla]
-guardrails: [vanilla-adopted-stylesheets, vanilla-ce-extends, vanilla-fn-component, vanilla-fn-no-register, vanilla-html-template, vanilla-mount-guard, vanilla-no-dollar-braces, vanilla-template-data-part, vanilla-template-load]
+guardrails:
+  [
+    vanilla-adopted-stylesheets,
+    vanilla-ce-extends,
+    vanilla-fn-component,
+    vanilla-fn-no-register,
+    vanilla-html-template,
+    vanilla-mount-guard,
+    vanilla-no-dollar-braces,
+    vanilla-template-data-part,
+    vanilla-template-load,
+  ]
 ---
 
 # rule-frontend-vanilla-reactive

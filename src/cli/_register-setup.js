@@ -9,6 +9,10 @@
  */
 import { Option } from "commander";
 
+/** How the server is reached, plus `skills`, which configures no server (ADR 079). */
+const INSTALL_MODES = ["stdio", "daemon", "sse", "docker", "skills"];
+const MODE_HELP = "stdio (default), daemon (SSE), docker, or skills (no MCP server)";
+
 /** Collector for repeatable options: `--set A=1 --set B=2` → ["A=1", "B=2"]. */
 const collect = (value, previous) => [...previous, value];
 
@@ -18,13 +22,19 @@ export function registerInstallCommand(program) {
     .command("install")
     .description("Install rule-mcp into an agent/IDE (edits mcp.json)")
     .option("--agent <name>", "target agent, or 'all' for every supported agent", "all")
-    .addOption(new Option("--mode <name>", "stdio (default), daemon (SSE), or docker").choices(["stdio", "daemon", "sse", "docker"]))
+    .addOption(new Option("--mode <name>", MODE_HELP).choices(INSTALL_MODES))
     .option("--global", "use clean command path (requires global install)")
     .option("--force", "override existing configuration")
     .option("--dry-run", "preview without writing")
     .option("--json", "print machine-readable JSON instead of Terminal UI")
     .allowExcessArguments(false)
     .action(async (options) => {
+      if (options.mode === "skills") {
+        await (await import("./install/_skills-mode.js")).installSkillsOnly(options);
+
+        return;
+      }
+
       (await import("./commands/_lifecycle.js")).installCommand({
         agent: options.agent,
         mode: options.mode ?? "stdio",

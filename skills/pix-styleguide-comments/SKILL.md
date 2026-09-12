@@ -28,7 +28,7 @@ the moment the change merges.
   nobody has asked for is a guess with a maintenance cost. Delete it and write
   it when the feature arrives.
 - **Change history.** `// changed 2026-03 by ...`, `// was: foo`, `// TODO
-  remove after the migration`. Git already answers who and when, and answers
+remove after the migration`. Git already answers who and when, and answers
   it correctly after the file moves.
 
 ## What to write instead

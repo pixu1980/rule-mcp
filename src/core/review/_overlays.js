@@ -3,20 +3,19 @@
  *
  * Where a role can come from besides this repository (personas plan A.2).
  *
- * One layer sits above the embedded catalog: the user's own
- * (`~/.rule-mcp/config/roles/*.md`, the same persona-file format as the
- * embedded catalog - frontmatter with a lenses list in the body). Legacy
- * `*.json` overlays are still read so an existing set survives the format
- * change. A match by id replaces the embedded entry WHOLESALE - field-level
- * merging would make "which lens applies here" undebuggable.
+ * Two layers sit above the embedded catalog, in the order skills use
+ * (ADR 079): the project's own (`./.rule-mcp/personas/*.md`, versioned
+ * with the code it judges) and then the machine owner's
+ * (`~/.rule-mcp/personas/*.md`), which therefore has the last word over
+ * any repository. A match by id replaces the embedded entry WHOLESALE -
+ * field-level merging would make "which lens applies here" undebuggable.
  *
- * A project layer existed and is gone (ADR 082). It read roles out of the
- * repository, which made a persona repository content and needed a trust gate
- * to be safe; nothing this server reads now comes from a checkout, so neither
- * the layer nor the gate has a subject.
+ * `~/.rule-mcp/config/roles/` is read as well, after both, so a set kept
+ * there still answers. It also accepts `*.json`, which the persona directories
+ * do not.
  *
- * An overlay that does not validate is reported and skipped. A bad JSON file
- * in a config directory must never stop the server from answering; the caller
+ * An overlay that does not validate is reported and skipped. A bad file in a
+ * config directory must never stop the server from answering; the caller
  * decides how loudly to say so.
  */
 
@@ -26,13 +25,13 @@ import { join } from "node:path";
 import { parsePersonaFile } from "./persona-file/index.js";
 import { validateRole } from "./roles/_validate.js";
 import { getRuntimePaths } from "../../cli/paths/index.js";
+import { resolvePersonaFiles } from "../layers/_resolve.js";
 
 /**
- * Where a user's own roles live.
+ * The legacy overlay directory, read after the persona layers.
  *
- * Overlays are user configuration, so they sit in the config roles directory
- * by default; `RULE_MCP_ROLES_OVERLAY_DIR` overrides it for tests,
- * containers, or a machine that wants the overlays elsewhere.
+ * `RULE_MCP_ROLES_OVERLAY_DIR` overrides it for tests, containers, or a
+ * machine that keeps its overlays elsewhere.
  */
 function layerDirs({ home }) {
   const { configDir } = getRuntimePaths();
@@ -42,14 +41,28 @@ function layerDirs({ home }) {
 }
 
 /**
- * Read the user's overlay layer.
+ * Read every layer above the embedded catalog, lowest precedence first.
  *
- * @param {{ home?: string }} [options]
+ * @param {{ home?: string, projectDir?: string }} [options]
  * @returns {{ roles: object[], problems: Array<{ file: string, layer: string, reason: string }> }}
  */
 export function loadRoleOverlays(options = {}) {
   const roles = [];
   const problems = [];
+
+  // The persona directories: project, then user. Native is the embedded
+  // catalog the caller already has, so it is not an overlay.
+  const layered = resolvePersonaFiles(options.projectDir ? { cwd: options.projectDir } : {});
+
+  problems.push(...layered.problems);
+
+  for (const layer of ["project", "user"]) {
+    for (const entry of layered.values()) {
+      if (entry.layer === layer) {
+        roles.push(entry.role);
+      }
+    }
+  }
 
   for (const { layer, dir } of layerDirs(options)) {
     if (!existsSync(dir)) {

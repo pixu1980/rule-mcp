@@ -1,38 +1,24 @@
 /** Skill file access: read SKILL.md, metadata, target-only set, name listing and plugin detection. */
 
-import { existsSync, readFileSync, readdirSync } from "node:fs";
-import { getSkillsDirs as getSkillsDirectories } from "../../cli/paths/index.js";
+import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { parseSkillFrontmatter } from "../../core/skills/_frontmatter.js";
+import { clearSkillResolution, resolvedSkills as resolved } from "./_skill-resolution.js";
 
+/** The SKILL.md of a skill, from the layer that won, or null. */
 function readSkill(skillName) {
-  const { embeddedSkills } = getSkillsDirectories();
+  const entry = resolved().get(skillName);
+
+  if (!entry) {
+    return null;
+  }
+
   try {
-    return readFileSync(join(embeddedSkills, skillName, "SKILL.md"), "utf8");
+    return readFileSync(join(entry.dir, "SKILL.md"), "utf8");
   } catch {
     return null;
   }
 }
-
-/**
- * Get a sorted list of all available skill names.
- *
- * The tool surface of this server is defined by the bundled `skills/` directory
- * and by nothing else. Two rules, both deliberate:
- *
- *   - only `skills/` is scanned. Merging `~/.agents/skills` meant any directory
- *     there became a callable tool under the pix_ prefix: 79 stale `rule-*`
- *     directories from the previous brand resurfaced as `pix_pix_*`, and
- *     generic skills like `test-driven-development` were renamed into the
- *     namespace. It also made plugin.js in the user's home an in-process import.
- *   - only `rule-*` names are accepted, so a foreign directory dropped into
- *     `skills/` cannot mint a tool that claims to be ours either.
- *
- * The bare `rule` directory is excluded: it backs the dispatcher tool, which
- * is registered by code, not as a per-skill tool.
- *
- * @returns {string[]}
- */
 
 const skillCache = new Map();
 
@@ -66,40 +52,65 @@ function getSkillMetadata(skillName) {
  */
 const TARGET_ONLY_SKILLS = new Set(["rule-frontend-custom-element", "rule-frontend-template-engine", "rule-frontend-vanilla-reactive", "rule-platform-auth"]);
 
+/**
+ * Every skill name that resolves, sorted.
+ *
+ * The bundled catalog is the native layer; a project and the machine owner can
+ * add to it or replace an entry (ADR 079). What a custom layer cannot do is
+ * grow the tool surface by accident: a skill mints a tool only when its
+ * frontmatter asks for one, which is `exposeTool` and defaults to false for
+ * anything this server does not ship.
+ *
+ * The bare `rule` directory is excluded: it backs the dispatcher tool, which is
+ * registered by code rather than as a per-skill tool.
+ *
+ * @returns {string[]}
+ */
 function getSkillNames() {
-  const names = new Set();
-  const { embeddedSkills } = getSkillsDirectories();
   const baseUniverse = process.env.RULE_MCP_SKILL_UNIVERSE === "base";
+  const names = [];
 
-  try {
-    for (const entry of readdirSync(embeddedSkills, { withFileTypes: true })) {
-      if (!entry.isDirectory() || !entry.name.startsWith("rule-")) {
-        continue;
-      }
-
-      if (baseUniverse && TARGET_ONLY_SKILLS.has(entry.name)) {
-        continue;
-      }
-
-      if (!existsSync(join(embeddedSkills, entry.name, "SKILL.md"))) {
-        continue;
-      }
-
-      names.add(entry.name);
+  for (const entry of resolved().values()) {
+    // The bare `rule` directory backs the dispatcher, which is registered by
+    // code; listing it here would mint a second, per-skill tool for it.
+    if (entry.name === "rule" || (baseUniverse && TARGET_ONLY_SKILLS.has(entry.name))) {
+      continue;
     }
-  } catch {
-    /* no dir */
+
+    names.push(entry.name);
   }
 
-  return [...names].sort();
+  return names.sort();
+}
+
+/** The layer a skill resolved from: native, project or user. */
+function skillLayer(skillName) {
+  return resolved().get(skillName)?.layer;
+}
+
+/**
+ * Whether a skill should also be registered as its own MCP tool.
+ *
+ * The bundled catalog is the tool surface this server advertises, so a native
+ * skill keeps its tool. A skill from a project or a home directory has to ask,
+ * because a surface that grows with whatever is on the machine is the cost
+ * ADR 033 measured at 176 tools and roughly 54k tokens per turn.
+ *
+ * @param {string} skillName
+ * @returns {boolean}
+ */
+function exposesTool(skillName) {
+  const entry = resolved().get(skillName);
+
+  if (!entry) {
+    return false;
+  }
+
+  return entry.layer === "native" ? entry.meta.exposeTool !== false : entry.meta.exposeTool === true;
 }
 
 /**
  * Check if a skill name is foreign to this server.
- *
- * getSkillNames() only ever yields `rule-*` names, so this is false for every
- * registered skill. It is kept as an explicit guard: resources and skill tools
- * consult it before treating a name as ours.
  *
  * @param {string} skillName
  * @returns {boolean}
@@ -110,16 +121,15 @@ function isPluginSkill(skillName) {
     return false;
   }
 
-  return !skillName.startsWith("rule-");
+  return skillLayer(skillName) !== "native";
 }
 
 /**
  * Whether a skill ships a plugin.js.
  *
- * Always false: plugin.js was only ever imported from `~/.agents/skills`, which
- * this server no longer reads. Importing it meant executing code from the user's
- * home directory in-process at startup, with no isolation and failures swallowed
- * (2026-08-04 audit, finding 15). Bundled skills carry no plugin.js.
+ * Always false. A skill's executable surface is its `guardrails/` folder, which
+ * declares what it exports and is checked against the SKILL.md that declares it
+ * (ADR 079); a free-form plugin.js has no such contract.
  *
  * @param {string} _pluginName - The plugin directory name
  * @returns {boolean}
@@ -128,4 +138,5 @@ function hasPluginJs(_pluginName) {
   return false;
 }
 
-export { readSkill, getSkillMetadata, TARGET_ONLY_SKILLS, getSkillNames, isPluginSkill, hasPluginJs };
+export { readSkill, getSkillMetadata, TARGET_ONLY_SKILLS, getSkillNames, isPluginSkill, hasPluginJs, exposesTool, skillLayer };
+export { clearSkillResolution } from "./_skill-resolution.js";
