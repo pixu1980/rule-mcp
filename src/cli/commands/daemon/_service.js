@@ -54,9 +54,9 @@ export function actionInstall(opts) {
 }
 
 /** Remove the platform-native service (or its dry-run). */
-export function actionUninstall(opts) {
+export async function actionUninstall(opts) {
   print(`Removing ${detectPlatform()} daemon service...`);
-  const result = uninstallDaemonService({ dryRun: opts.dryRun });
+  const result = await uninstallDaemonService({ dryRun: opts.dryRun });
 
   if (result.ok) {
     print(`✓ ${result.service} service removed (${result.result.action})`);
@@ -70,8 +70,10 @@ export function actionEnable() {
   const svcPath = getServiceFilePath();
   const svcName = getServiceName();
 
-  if (!svcPath) {
-    print("No native service file for this platform. Try: rule-mcp daemon install");
+  // Gated on the name, not the path: a Windows service has a name and no file,
+  // so gating on the path made the `sc` branch below unreachable.
+  if (!svcName) {
+    print("No native service for this platform. Try: rule-mcp daemon install");
 
     return;
   }
@@ -98,8 +100,9 @@ export function actionDisable() {
   const svcPath = getServiceFilePath();
   const svcName = getServiceName();
 
-  if (!svcPath) {
-    print("No native service file for this platform. Try: rule-mcp daemon uninstall");
+  // Gated on the name, not the path: see actionEnable.
+  if (!svcName) {
+    print("No native service for this platform. Try: rule-mcp daemon uninstall");
 
     return;
   }

@@ -30,12 +30,14 @@ export function syncCommandTargets(opts) {
       mkdirSync(dir, { recursive: true });
     }
 
-    // Remove sweeps the whole `rule-*` namespace in the target dir, so names
-    // that left the registry (a rename, a deletion) are purged too instead of
-    // lingering as stale commands next to the new set.
+    // Remove sweeps the whole `rule` namespace in the target dir, so names that
+    // left the registry (a rename, a deletion) are purged too instead of
+    // lingering as stale commands next to the new set. The separator matters:
+    // the root command is `rule.md`, not `rule-something.md`, and a bare `rule-`
+    // prefix left it behind on every uninstall.
     if (opts.remove) {
       const stale = readdirSync(dir)
-        .filter((entry) => entry.startsWith("rule-"))
+        .filter((entry) => /^rule[-.]/.test(entry))
         .filter((entry) => entry.endsWith(".md") || entry.endsWith(".toml") || entry.endsWith(".prompt.md"));
 
       for (const entry of stale) {

@@ -9,6 +9,7 @@ export function generateZsh() {
 _pix_galaxy_mcp_commands() {
   local -a commands=(
     'serve:Start MCP server (stdio or SSE)'
+    'up:Serve over SSE (on-demand HTTP daemon)'
     'daemon:Manage background daemon process'
     'install:Install into agent/IDE configuration'
     'uninstall:Remove from agent/IDE configuration'
@@ -18,6 +19,14 @@ _pix_galaxy_mcp_commands() {
     'skills:Manage skills (reload)'
     'adr:Manage Architecture Decision Records'
     'handoff:Generate LLM context handoff summary'
+    'handon:Verify the last handoff against the repo'
+    'fix:Validate and auto-fix project file tree'
+    'stats:Show telemetry statistics'
+    'cache:Inspect the on-disk tool cache'
+    'roles:Manage review persona roles'
+    'guard:Permission-guard payload processor'
+    'update:Self-update from the upstream repo'
+    'agent-commands:Manage agent slash commands'
     'completions:Generate shell completion script'
     'help:Show this help message'
   )

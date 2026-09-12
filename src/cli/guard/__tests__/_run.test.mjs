@@ -73,3 +73,26 @@ test("a valid payload is decided", async () => {
   const answer = JSON.parse(writes.join(""));
   assert.ok(answer.hookSpecificOutput, "the decision is rendered");
 });
+
+test("a session-start payload is read when stdin is a pipe", async () => {
+  const writes = [];
+  await runGuard("session-start", { stdin: fakeStream(JSON.stringify({ source: "startup" })), write: (t) => writes.push(t) });
+
+  assert.ok(JSON.parse(writes.join("")), "a readable payload is parsed and answered");
+});
+
+test("a session-start payload that is not an object still answers", async () => {
+  for (const body of ["not json", "null"]) {
+    const writes = [];
+    await runGuard("session-start", { stdin: fakeStream(body), write: (t) => writes.push(t) });
+
+    assert.ok(JSON.parse(writes.join("")), `${body}: an unusable payload is treated as an empty one, never as a crash`);
+  }
+});
+
+test("the kind defaults to bash", async () => {
+  const writes = [];
+  await runGuard(undefined, { stdin: fakeStream(JSON.stringify({ tool_input: { command: "ls" } })), write: (t) => writes.push(t) });
+
+  assert.ok(JSON.parse(writes.join("")).hookSpecificOutput, "an unnamed kind is decided as a bash command");
+});

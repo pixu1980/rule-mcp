@@ -13,12 +13,17 @@
 import { strict as assert } from "node:assert";
 import { test } from "node:test";
 import { spawnSync } from "node:child_process";
-import { mkdtempSync } from "node:fs";
+import { mkdtempSync, readFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const BIN = fileURLToPath(new URL("../../../bin/rule-mcp.js", import.meta.url));
+
+/** The version the manifest declares, prerelease suffix and all. */
+function packageVersion() {
+  return JSON.parse(readFileSync(fileURLToPath(new URL("../../../package.json", import.meta.url)), "utf8")).version;
+}
 
 /** Run the CLI in a sandboxed HOME so nothing touches the real machine. */
 function run(...args) {
@@ -73,7 +78,9 @@ test("subcommand --help exits 0 and names its options", () => {
 test("--version prints the package version", () => {
   const r = run("--version");
   assert.equal(r.status, 0, `${r.stdout}\n${r.stderr}`);
-  assert.match(r.stdout.trim(), /^\d+\.\d+\.\d+$/);
+  // Pinned to the manifest, not to a semver shape: a prerelease like
+  // 0.1.0-beta is a valid version and used to fail this assertion.
+  assert.equal(r.stdout.trim(), packageVersion(), "the CLI prints what package.json declares");
 });
 
 test("config env collects every repeated --set value", () => {

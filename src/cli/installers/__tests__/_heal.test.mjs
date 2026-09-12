@@ -1,11 +1,15 @@
 /** Behavioral: the real shim functions extracted from install.sh, run against a broken shim. */
 import { strict as assert } from "node:assert";
 import { execFileSync } from "node:child_process";
-import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
+import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 
 import { extractBashFunction, installSh, root } from "./_shim.fixture.mjs";
+
+// The fallback runs the real CLI, so the expected output is whatever the
+// manifest declares - never a pinned literal, which a version bump breaks.
+const version = JSON.parse(readFileSync(join(root, "package.json"), "utf8")).version;
 
 // ── Behavioral: real functions extracted from install.sh ────────────────────
 
@@ -59,6 +63,6 @@ try {
 assert.match(harnessOut, /probe=no/, "a broken shim must fail the launch probe");
 assert.match(harnessOut, /WARN: Global rule-mcp shim exists but fails to launch/, "install.sh must warn on a stale shim");
 assert.match(harnessOut, /run_cli_rc=0/, "run_cli must fall back to the local binary when the shim is broken");
-assert.match(harnessOut, /run_cli_out=1\.0\.0/, "the fallback must actually run the CLI");
+assert.match(harnessOut, new RegExp(`run_cli_out=${version.replaceAll(".", String.raw`\.`)}`), "the fallback must actually run the CLI");
 
 console.log("  \u{2705} broken shim: probe fails, warn fires, run_cli falls back to the local binary");
