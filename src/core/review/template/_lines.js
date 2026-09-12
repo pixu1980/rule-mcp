@@ -2,15 +2,17 @@
 
 /**
  * The template, exactly as written, with the operation-specific clause filled.
- * Placeholders are replaced, nothing else is invented.
+ * Placeholders are replaced, nothing else is invented. A scope narrows the
+ * action line to what the user asked for; without one the action covers the
+ * whole project, byte for byte as before.
  */
-export function templateLines(operation) {
+export function templateLines(operation, scope) {
   const action =
     operation === "audit"
-      ? "and run an audit of the project to surface bugs, rework, and whatever else needs doing"
+      ? `and run an audit of ${scope ?? "the project"} to surface bugs, rework, and whatever else needs doing`
       : operation === "review"
-        ? "and review the project to surface bugs, rework, and whatever else needs doing"
-        : "and build a bugfix/rework plan of everything it takes to put this project in its best possible shape";
+        ? `and review ${scope ?? "the project"} to surface bugs, rework, and whatever else needs doing`
+        : `and build a bugfix/rework plan of everything it takes to put ${scope ?? "this project"} in its best possible shape`;
 
   const output =
     operation === "audit"

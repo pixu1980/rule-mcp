@@ -84,3 +84,24 @@ test("mergeFindings prunes stale resolved rows, defaults sparse fields and keeps
   assert.ok(unknownRank > findings.findIndex((f) => f.id === "FA"), "an unknown severity ranks after the known ones");
   assert.ok(findings.findIndex((f) => f.id === "FB") < findings.findIndex((f) => f.id === "FC"), "equal severities tie-break by id");
 });
+
+test("a scoped merge leaves unreported findings untouched", () => {
+  const prior = [
+    { id: "F1", severity: "high", status: "open", evidence: "a", summary: "outside the scope" },
+    { id: "F2", severity: "medium", status: "resolved", evidence: "b", summary: "closed last run" },
+  ];
+  const now = [{ id: "F3", severity: "low", status: "open", evidence: "c", summary: "inside the scope" }];
+
+  const scoped = mergeFindings(prior, now, { preserveUnreported: true });
+  assert.ok(
+    scoped.findings.some((f) => f.id === "F1" && f.status === "open"),
+    "an open finding outside the scope stays open, not resolved",
+  );
+  assert.ok(
+    scoped.findings.some((f) => f.id === "F2" && f.status === "resolved"),
+    "a resolved finding outside the scope is not pruned",
+  );
+  assert.equal(scoped.counts.resolved, 0, "a scoped run resolves nothing it did not look at");
+  assert.equal(scoped.counts.pruned, 0, "a scoped run prunes nothing");
+  assert.equal(scoped.counts.open, 2, "open counts what is open after the merge");
+});

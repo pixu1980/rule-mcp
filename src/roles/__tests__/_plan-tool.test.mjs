@@ -1,5 +1,8 @@
 /** rule_tool_plan: registered, answers per role, applies overrides, resolves aliases. */
 import { strict as assert } from "node:assert";
+import { mkdirSync, mkdtempSync, rmSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 import test from "node:test";
 
 import { OPERATIONS, callTool, listPrompts, listTools } from "./_surfaces.fixture.mjs";
@@ -32,6 +35,27 @@ test("rule_tool_plan applies overrides, an operation, and lists roles for an unk
   const unknownText = unknown.content.map((part) => part.text).join("\n");
   assert.equal(unknown.isError, true);
   assert.match(unknownText, /security/, "an unknown role is answered with the ones that exist");
+});
+
+test("rule_tool_plan detects tokensave in the project dir for a scoped run", async () => {
+  // Assertions stay on headings and inline-code tokens: tool results pass
+  // through caveman compression, which never touches either.
+  const box = mkdtempSync(join(tmpdir(), "rule-plan-"));
+
+  try {
+    const before = await callTool("rule_tool_plan", { role: "security", operation: "audit", topic: "SSE daemon", projectDir: box });
+    const beforeText = before.content.map((part) => part.text).join("\n");
+    assert.match(beforeText, /## Resolve the scope/, "a scoped run maps its scope first");
+    assert.match(beforeText, /tokensave_status/, "without .tokensave/ availability is checked at run time");
+
+    mkdirSync(join(box, ".tokensave"));
+    const after = await callTool("rule_tool_plan", { role: "security", operation: "audit", topic: "SSE daemon", projectDir: box });
+    const afterText = after.content.map((part) => part.text).join("\n");
+    assert.match(afterText, /initialized/, "with .tokensave/ the prompt states availability");
+    assert.ok(!afterText.includes("tokensave_status"), "no availability check when the generator already knows");
+  } finally {
+    rmSync(box, { recursive: true, force: true });
+  }
 });
 
 test("an aliased id is reachable by the tool but has no generated surface", async () => {

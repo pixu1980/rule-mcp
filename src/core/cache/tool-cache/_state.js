@@ -18,6 +18,9 @@ export const NON_CACHEABLE = new Set([
   "rule_tool_gateway",
   "rule_tool_detect",
   "rule_tool_update",
+  // plan reads the filesystem (.tokensave/ presence in projectDir): a replayed
+  // answer states stale availability, and the fill itself is cheap string work.
+  "rule_tool_plan",
 ]);
 
 /**

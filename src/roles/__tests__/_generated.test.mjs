@@ -34,10 +34,11 @@ test("a role prompt carries the filled template for its operation", () => {
   assert.match(reviewText, /distilled from/, "the review points back at the audit");
 });
 
-test("a role prompt takes an optional topic", () => {
+test("a role prompt takes an optional topic and makes it the binding scope", () => {
   const prompt = getPrompt("rule-plan-privacy", { topic: "the flight recorder exports" });
   const text = prompt.messages.map((message) => message.content.text).join("\n");
   assert.match(text, /the flight recorder exports/);
+  assert.match(text, /## Scope: binding/, "the topic is a scope, not a suggestion");
 });
 
 test("every active role has all three agent commands", () => {
@@ -62,6 +63,7 @@ test("persona command bodies route through the tools, not a recap", () => {
     // forwarded into rule_tool_plan as `topic` (handoff-style pass-through).
     assert.match(command.body, /\$ARGUMENTS/, `${command.name}: body must carry the request placeholder`);
     assert.match(command.body, /typed after this command passed through unchanged as `topic`/, `${command.name}: body must forward the request as topic`);
+    assert.match(command.body, /binding scope/, `${command.name}: body must call the request the binding scope`);
   }
 });
 

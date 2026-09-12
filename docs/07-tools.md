@@ -130,24 +130,25 @@ Compress prose deterministically: strip filler and leading articles, replace typ
 
 Ask an expert review persona to audit, review or plan this project; returns the operation contract.
 
-| Parameter    | Type                          | Required | Default | Description                                                                   |
-| ------------ | ----------------------------- | -------- | ------- | ----------------------------------------------------------------------------- |
-| `role`       | string                        | yes      | -       | Role id (security, privacy, a11y...)                                          |
-| `operation`  | `plan` \| `audit` \| `review` | no       | -       | Which document this run produces: plan, audit, or review (default: all three) |
-| `years`      | integer                       | no       | -       |                                                                               |
-| `skills`     | array of string               | no       | -       |                                                                               |
-| `topic`      | string                        | no       | -       |                                                                               |
-| `projectDir` | string                        | no       | -       |                                                                               |
+| Parameter    | Type                          | Required | Default | Description                                                                          |
+| ------------ | ----------------------------- | -------- | ------- | ------------------------------------------------------------------------------------ |
+| `role`       | string                        | yes      | -       | Role id (security, privacy, a11y...)                                                 |
+| `operation`  | `plan` \| `audit` \| `review` | no       | -       | Which document this run produces: plan, audit, or review (default: all three)        |
+| `years`      | integer                       | no       | -       |                                                                                      |
+| `skills`     | array of string               | no       | -       |                                                                                      |
+| `topic`      | string                        | no       | -       | Free-text request; becomes the binding scope of the run. Default: the whole project. |
+| `projectDir` | string                        | no       | -       |                                                                                      |
 
 ### rule_tool_plan_docs
 
 Create or refresh the audit/review/plan documents for a review persona run: the bookkeeping half.
 
-| Parameter    | Type            | Required | Default | Description                                             |
-| ------------ | --------------- | -------- | ------- | ------------------------------------------------------- |
-| `role`       | string          | yes      | -       | Role id                                                 |
-| `findings`   | array of object | no       | -       | What this run found. Anything omitted counts as closed. |
-| `projectDir` | string          | no       | -       |                                                         |
+| Parameter    | Type            | Required | Default | Description                                                                                 |
+| ------------ | --------------- | -------- | ------- | ------------------------------------------------------------------------------------------- |
+| `role`       | string          | yes      | -       | Role id                                                                                     |
+| `findings`   | array of object | no       | -       | What this run found. Anything omitted counts as closed - unless a scope is set.             |
+| `scope`      | string          | no       | -       | The binding scope of a scoped run: findings outside it stay untouched instead of resolving. |
+| `projectDir` | string          | no       | -       |                                                                                             |
 
 ### rule_tool_stats
 

@@ -8,6 +8,7 @@ this directory are the source of truth; this index is generated from them by
 
 | #                                                                                                                       | Title                                                                                                     | Date       | Status     | Tags                                                                                |
 | ----------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- | ---------- | ---------- | ----------------------------------------------------------------------------------- |
+| [078](078-a-persona-topic-is-the-binding-scope-of-the-run.md)                                                           | A persona topic is the binding scope of the run                                                           | 2026-09-12 | accepted   | personas, prompts, review, tokensave                                                |
 | [077](077-the-cli-entry-point-loads-no-command-handler-it-has-not-been-asked-for.md)                                    | The CLI entry point loads no command handler it has not been asked for                                    | 2026-09-09 | accepted   | cli, startup, performance, imports                                                  |
 | [076](076-compression-has-four-levels-and-no-llm-in-the-output-path.md)                                                 | Compression has four levels and no LLM in the output path                                                 | 2026-09-09 | accepted   | compression, tokens, determinism, text                                              |
 | [075](075-the-installer-asks-before-copying-bundled-skills-to-the-central-agents-directory.md)                          | The installer asks before copying bundled skills to the central agents directory                          | 2026-09-08 | accepted   | installer, skills, devx, bash, powershell                                           |
@@ -90,6 +91,7 @@ file. Where a line stops short the rest is in the ADR.
 
 | ADR                                                                                                                     | Decision                                                                                                                                                                                                                        | Consequence                                                                                                                                                                                                                    |
 | ----------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| [078](078-a-persona-topic-is-the-binding-scope-of-the-run.md)                                                           | The topic becomes the binding scope everywhere the template speaks: the action line names the scope instead of the project, a dedicated 'Scope: binding' section forbids reading, auditing or reporting outside it (with a...   | A user request like /rule-audit-security the SSE daemon now produces a run confined to that scope, and repeated scoped runs no longer mark whole-project findings resolved by silence.                                          |
 | [077](077-the-cli-entry-point-loads-no-command-handler-it-has-not-been-asked-for.md)                                    | Keep the command and option declarations static, and load the handlers inside their actions.                                                                                                                                    | Warm --help fell from 216 ms to 48 ms, and every command still dispatches. listTools() is memoized on a registry generation bumped by register, clear and retain, so the 105-schema conversion is paid once per process...     |
 | [076](076-compression-has-four-levels-and-no-llm-in-the-output-path.md)                                                 | Port the deterministic half and refuse the LLM half.                                                                                                                                                                            | The vocabulary can be aggressive because a bad rule costs one paragraph, not the whole result.                                                                                                                                 |
 | [075](075-the-installer-asks-before-copying-bundled-skills-to-the-central-agents-directory.md)                          | Add a skills step to both installers that asks before copying. install.sh gains Phase 6c "Bundled Skills" and install.ps1 gains Phase 4: in interactive TTY runs it prompts "Install bundled rule-* skills to...                 | Positive: installing now asks before centralizing any skill; non-interactive runs stay silent by default and are deterministic via the new flags; bash and PowerShell behave identically; the copy path is the same...         |
@@ -299,6 +301,20 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [004](004-scaffold-consolidation.md) Scaffold Skill Consolidation
 - [001](001-thematic-skill-rename.md) Thematic Skill Taxonomy Rename
 
+### personas
+
+- [078](078-a-persona-topic-is-the-binding-scope-of-the-run.md) A persona topic is the binding scope of the run
+- [063](063-plans-carry-nested-sub-steps-and-an-exhaustiveness-mandate.md) Plans carry nested sub-steps and an exhaustiveness mandate
+- [062](062-persona-plans-are-checklists-with-marks-that-survive-the-sync.md) Persona plans are checklists with marks that survive the sync
+- [057](057-split-review-personas-into-per-operation-commands-plan-audit-review.md) Split review personas into per-operation commands (plan/audit/review)
+
+### prompts
+
+- [078](078-a-persona-topic-is-the-binding-scope-of-the-run.md) A persona topic is the binding scope of the run
+- [058](058-restructure-the-command-surface-rule-router-rule-area-caveman-implicit-rule-process.md) Restructure the command surface: /rule router, rule-area-*, caveman implicit, rule-process-tdd skill
+- [057](057-split-review-personas-into-per-operation-commands-plan-audit-review.md) Split review personas into per-operation commands (plan/audit/review)
+- [055](055-pre-packaged-mcp-prompt-registry-26-prompts-strict-schemas-commit-scope-closer.md) Pre-packaged MCP prompt registry (26 prompts, strict schemas, commit-scope closer)
+
 ### ratchet
 
 - [072](072-coverage-wave-four-holds-the-floor-at-90-and-fixes-the-daemon-status-platform-de.md) Coverage wave four holds the floor at 90 and fixes the daemon status platform defect
@@ -343,18 +359,6 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [013](013-database-skills.md) Database Skills
 - [011](011-backend-framework-skills.md) backend framework skills
 - [005](005-backend-framework-skills.md) Backend Framework Skills
-
-### personas
-
-- [063](063-plans-carry-nested-sub-steps-and-an-exhaustiveness-mandate.md) Plans carry nested sub-steps and an exhaustiveness mandate
-- [062](062-persona-plans-are-checklists-with-marks-that-survive-the-sync.md) Persona plans are checklists with marks that survive the sync
-- [057](057-split-review-personas-into-per-operation-commands-plan-audit-review.md) Split review personas into per-operation commands (plan/audit/review)
-
-### prompts
-
-- [058](058-restructure-the-command-surface-rule-router-rule-area-caveman-implicit-rule-process.md) Restructure the command surface: /rule router, rule-area-*, caveman implicit, rule-process-tdd skill
-- [057](057-split-review-personas-into-per-operation-commands-plan-audit-review.md) Split review personas into per-operation commands (plan/audit/review)
-- [055](055-pre-packaged-mcp-prompt-registry-26-prompts-strict-schemas-commit-scope-closer.md) Pre-packaged MCP prompt registry (26 prompts, strict schemas, commit-scope closer)
 
 ### quality
 
