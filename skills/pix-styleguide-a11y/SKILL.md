@@ -18,7 +18,19 @@ tags:
   - "compliance"
   - "vpats"
 frameworks: [all]
-guardrails: [a11y-aria-hidden-focusable, a11y-focus-visible, a11y-form-label, a11y-html-lang, a11y-iframe-title, a11y-img-alt, a11y-no-autoplay, a11y-positive-tabindex, a11y-test-required, a11y-video-captions]
+guardrails:
+  [
+    a11y-aria-hidden-focusable,
+    a11y-focus-visible,
+    a11y-form-label,
+    a11y-html-lang,
+    a11y-iframe-title,
+    a11y-img-alt,
+    a11y-no-autoplay,
+    a11y-positive-tabindex,
+    a11y-test-required,
+    a11y-video-captions,
+  ]
 ---
 
 # Accessibility Framework - WCAG 2.2 AA + A11Y.md Protocol
