@@ -7,7 +7,7 @@ a tool, a skill, a prompt, a role, a command or a guardrail;
 `tests/docs/census-generated.test.mjs` compares this file against the live
 registry, so a stale copy fails the build instead of misleading a reader.
 
-## Guardrail rules (95 distinct)
+## Guardrail rules (91 distinct)
 
 Deterministic checks, run by `rule_tool_check` and by the repository against
 itself. A rule can belong to more than one family, so the family counts sum
@@ -20,7 +20,6 @@ the shared rules always, plus whatever that skill's area adds.
 | [`angular`](#angular)                                      | 1     | A check against a `rule-frontend-angular` skill             |
 | [`backend`](#backend)                                      | 6     | A check against a `rule-backend-*` skill                    |
 | [`database`](#database)                                    | 4     | A check against a `rule-data-*` skill                       |
-| [`devops`](#devops)                                        | 4     | A check against a `rule-devops-*` skill                     |
 | [`file_tree`](#file_tree)                                  | 4     | A check that is given a file tree rather than one file     |
 | [`framework:astro`](#frameworkastro)                       | 20    | A check whose framework is Astro                           |
 | [`framework:solid`](#frameworksolid)                       | 20    | A check whose framework is Solid                           |
@@ -75,15 +74,6 @@ the shared rules always, plus whatever that skill's area adds.
 | `parameterized-queries` | Parameterized database queries | Queries must use placeholders ($1, ?, :name), not string concatenation.     | -       |
 | `transaction-safety`    | Multi-statement transactions   | Multiple mutations should be wrapped in a transaction.                      | -       |
 | `connection-pool`       | Connection pooling             | Database clients should use connection pooling with explicit max pool size. | -       |
-
-### devops
-
-| Rule                 | Label                           | What it rejects                                                 | Also in |
-| -------------------- | ------------------------------- | --------------------------------------------------------------- | ------- |
-| `docker-non-root`    | Container runs as non-root user | Docker containers must switch to a non-root user.               | -       |
-| `docker-healthcheck` | HEALTHCHECK defined             | Production images should include a HEALTHCHECK.                 | -       |
-| `secret-detection`   | No hardcoded secrets            | Passwords, API keys, and tokens must use environment variables. | -       |
-| `env-gitignore`      | .env in .gitignore              | .env files must be in .gitignore to prevent committing secrets. | -       |
 
 ### file_tree
 

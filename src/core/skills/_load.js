@@ -21,6 +21,7 @@ import { registerApplyTool } from "../../tools/apply/index.js";
 import { registerDetectTool } from "./_detect-tool.js";
 import { IS_MINIMAL_TOOLS, MINIMAL_ALLOWLIST } from "./_minimal.js";
 import { skillCache } from "./_lru.js";
+import { installSkillGuardrails } from "./_guardrail-layers.js";
 
 let isLoaded = false;
 
@@ -46,9 +47,11 @@ export async function loadAllSkills(force = false) {
   }
 
   isLoaded = true;
+  await installSkillGuardrails();
   registerAiTool();
-  const { registerUpdateTool } = await import("../../tools/index.js");
-  registerUpdateTool();
+
+  const tools = await import("../../tools/index.js");
+  tools.registerUpdateTool();
   await registerGatewayTool();
   await registerApplyTool();
 
@@ -65,19 +68,14 @@ export async function loadAllSkills(force = false) {
   registerCheckTool();
   registerScaffoldTool();
   registerDetectTool();
-  const { registerCompressTool } = await import("../../tools/index.js");
-  registerCompressTool();
+  tools.registerCompressTool();
   // Action tools: the collection-helpers of the rule surface. All read-only
   // except the plan/plan-docs writers, which are operationally useful in every
   // mode.
-  const { registerPlanTool } = await import("../../tools/index.js");
-  registerPlanTool();
-  const { registerPlanDocsTool } = await import("../../tools/index.js");
-  registerPlanDocsTool();
-  const { registerStatsTool } = await import("../../tools/index.js");
-  registerStatsTool();
-  const { registerUsageTool } = await import("../../tools/index.js");
-  registerUsageTool();
+  tools.registerPlanTool();
+  tools.registerPlanDocsTool();
+  tools.registerStatsTool();
+  tools.registerUsageTool();
   const { registerA11yReportTool } = await import("../../tools/a11y/index.js");
   registerA11yReportTool();
   const { registerProcessHandonTool } = await import("../../tools/handon/index.js");

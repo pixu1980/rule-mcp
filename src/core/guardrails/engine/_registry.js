@@ -4,9 +4,49 @@ import { SHARED_GUARDRAILS } from "../shared/index.js";
 import { SCAFFOLD_GUARDRAILS } from "../_scaffold.js";
 import { BACKEND_GUARDRAILS } from "../backend/index.js";
 import { DATABASE_GUARDRAILS } from "../_database.js";
-import { DEVOPS_GUARDRAILS } from "../_devops.js";
 import { FRAMEWORK_GUARDRAILS } from "../framework/index.js";
 import { A11Y_GUARDRAILS, QUALITY_GUARDRAILS } from "../quality/index.js";
+import { resolveInherited } from "../../layers/_inherit.js";
+
+// ─── Skill-owned guardrails (ADR 079) ───
+// Populated once at startup from the resolved skill layers. Read-only after
+// that: getGuardrails stays synchronous because the check engine is, and an
+// import on the check path would make every call await the filesystem.
+let SKILL_RULES = new Map();
+
+/**
+ * Install the rules the skills own, as loaded from the three layers.
+ *
+ * @param {Map<string, { inherits: string[], guardrails: object[] }>} rules
+ */
+export function setSkillGuardrails(rules) {
+  SKILL_RULES = rules instanceof Map ? rules : new Map();
+}
+
+/** What a skill owns and inherits, for the inheritance resolver. */
+function skillLookup(name) {
+  return SKILL_RULES.get(name);
+}
+
+/**
+ * The rules a skill owns plus the ones it inherits, nearest definition first.
+ *
+ * @param {string} skillName
+ * @returns {object[]}
+ */
+export function ownedGuardrails(skillName) {
+  return SKILL_RULES.has(skillName) ? resolveInherited(skillName, skillLookup).guardrails : [];
+}
+
+/**
+ * The skills a skill's rules came from, parents first, itself last.
+ *
+ * @param {string} skillName
+ * @returns {string[]}
+ */
+export function skillChain(skillName) {
+  return SKILL_RULES.has(skillName) ? resolveInherited(skillName, skillLookup).chain : [];
+}
 
 // ─── Skill → framework mapping ───
 
@@ -75,21 +115,24 @@ export function getGuardrails(skillName, mode) {
   const isDatabase = /^rule-data(?:-|$)/.test(skillName) || skillName.startsWith("rule-data-");
   const database = isDatabase ? DATABASE_GUARDRAILS : [];
 
-  // DevOps guardrails for devops skills
-  const isDevops = /^rule-devops(?:-|$)/.test(skillName);
-  const devops = isDevops ? DEVOPS_GUARDRAILS : [];
-
   // Accessibility guardrails: the a11y skill always, and any skill checking
   // markup or styles - a React component is as much an a11y surface as a page.
   const isA11y = skillName === "rule-styleguide-a11y" || /^rule-(?:frontend|platform|ui|styleguide)/.test(skillName);
   const a11y = isA11y ? A11Y_GUARDRAILS : [];
 
-  const families = [...QUALITY_GUARDRAILS, ...SHARED_GUARDRAILS, ...frameworkSpecific, ...scaffold, ...backend, ...database, ...devops, ...a11y, ...plugin];
+  // The skill's own rules come last so that a rule which has moved into a
+  // skill overrides the copy the families still carry while ADR 079's
+  // migration is in flight.
+  const families = [...QUALITY_GUARDRAILS, ...SHARED_GUARDRAILS, ...frameworkSpecific, ...scaffold, ...backend, ...database, ...a11y, ...plugin, ...ownedGuardrails(skillName)];
 
-  // One run per rule id: the simplicity rules belong to the quality family AND
-  // to the shared set (the simplicity test pins that), so the assembly dedupes
-  // instead of running the same rule twice for every skill.
-  const seen = new Set();
+  // One run per rule id, and the last definition wins: the simplicity rules
+  // belong to the quality family AND to the shared set (the simplicity test
+  // pins that), and a migrated rule appears in both its family and its skill.
+  const byId = new Map();
 
-  return families.filter((guardrail) => !seen.has(guardrail.id) && seen.add(guardrail.id));
+  for (const guardrail of families) {
+    byId.set(guardrail.id, guardrail);
+  }
+
+  return [...byId.values()];
 }

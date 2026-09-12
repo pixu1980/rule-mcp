@@ -828,7 +828,7 @@ Refresh with `pnpm census`; full inventories in `docs/07-` .. `docs/12-`.
 | - persona                 | 54    | 18 active roles x 3 operations                |
 | Skills                    | 88    | `skills/rule-*/SKILL.md`                       |
 | Review personas           | 18    | `src/core/review/roles/index.js`              |
-| Guardrail rules           | 95    | `src/core/guardrails/index.js`                |
+| Guardrail rules           | 91    | `src/core/guardrails/index.js`                |
 | Agent slash commands      | 74    | `src/core/agents/commands/index.js`           |
 | Agent/IDE command targets | 13    | `src/core/agents/command-targets/index.js`    |
 | CLI commands              | 21    | `src/cli/_program.js`                         |

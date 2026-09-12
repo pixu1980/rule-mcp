@@ -7,6 +7,5 @@ export * from "./framework/index.js";
 export * from "./_scaffold.js";
 export * from "./backend/index.js";
 export * from "./_database.js";
-export * from "./_devops.js";
 export * from "./quality/index.js";
 export * from "./_util.js";
