@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>075: Meta-frameworks get their own namespace and a narrow dispatcher - rule-mcp docs</title>
+<link rel="stylesheet" href="../../style.css">
+</head>
+<body>
+<header><nav><ul>
+<li><a href="../../index.html">Home</a></li>
+<li><a href="../../docs/01-getting-started.html">undefined</a></li>
+<li><a href="../../docs/02-product-architecture.html">undefined</a></li>
+<li><a href="../../docs/03-agent-instructions.html">undefined</a></li>
+<li><a href="../../docs/04-operations.html">undefined</a></li>
+<li><a href="../../docs/05-env-variables.html">undefined</a></li>
+<li><a href="../../docs/06-privacy.html">undefined</a></li>
+<li><a href="../../docs/07-engineering-guides.html">undefined</a></li>
+<li><a href="../../docs/08-skills.html">undefined</a></li>
+<li><a href="../../docs/09-tools.html">undefined</a></li>
+<li><a href="../../docs/10-prompts.html">undefined</a></li>
+<li><a href="../../docs/11-instructions.html">undefined</a></li>
+<li><a href="../../docs/12-cli.html">undefined</a></li>
+<li><a href="../../docs/13-personas.html">undefined</a></li>
+<li><a href="../../docs/14-guardrails.html">undefined</a></li>
+<li><a href="../../docs/15-resources.html">undefined</a></li>
+<li><a href="../../docs/adr/ADR.html">ADRs</a></li>
+</ul></nav></header>
+<main>
+<h1>075: Meta-frameworks get their own namespace and a narrow dispatcher</h1>
+<ul>
+<li><strong>Date</strong>: 2026-09-09</li>
+<li><strong>Status</strong>: accepted</li>
+<li><strong>Tags</strong>: skills, taxonomy, routing, tools</li>
+<li><strong>Author</strong>: Emiliano Pisu <a href="mailto:pisuemiliano.1980@gmail.com">pisuemiliano.1980@gmail.com</a></li>
+</ul>
+<h2>Context</h2>
+<p>The four meta-framework skills were named rule-frontend-meta-astro, next, nuxt and remix, which put them inside the frontend area where they compete with eleven component skills for the same routing prompts. A meta-framework is not a component library: it owns rendering, routing and data loading, and the component skill still applies under it. The user asked for the rule-meta-* namespace and a hub dispatcher. The name was occupied: the rule-area-meta prompt was the dispatcher and action toolset area, shown as rule-meta in the census.</p>
+<h2>Decision</h2>
+<p>Rename the four skills to rule-meta-astro, next, nuxt and remix, rename the occupying prompt to rule-area-toolset (which is what it always described), and add skills/rule-meta as a hub with a code-registered rule_tool_meta beside it. The dispatcher is deliberately narrow: it matches a named framework first and a framework-owned concept second (islands for Astro, server actions for Next, Nitro for Nuxt, loaders for Remix), and refuses rather than guessing. The router&#39;s own corpus and thresholds are measured over the whole skill set, so a second general router would mean re-measuring all of it for no gain. Like rule, the hub registers no per-skill tool and is not BM25-indexed: a dispatcher&#39;s own directory dilutes the document frequency of every common term.</p>
+<h2>Consequences</h2>
+<p>Routing a meta-framework request now names one skill and the component skill to load with it. The connect cost went up, not down: the four entries were renamed rather than merged, so the surface is 106 tools and 97,204 tools-list bytes against 105 and 96,679 before, +525 bytes for the dispatcher. The plan expected the rename to stop four near-identical entries being paid for on connect; that would need the four to become modes of one tool, which is a separate decision and a wider change. What this buys is a legible namespace and a dispatcher that answers without consulting ninety skills. ADR 001 and 008 keep the rule-frontend-meta names as history.</p>
+<h2>What would end this</h2>
+<p>The assumption this leans on, and the observation that would make it wrong.</p>
+
+</main>
+<footer><p>Generated from <code>docs/</code> - edit the Markdown, not this file.</p></footer>
+</body>
+</html>

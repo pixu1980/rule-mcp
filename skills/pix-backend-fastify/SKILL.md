@@ -10,6 +10,7 @@ tags:
   - "performance"
   - "http"
 frameworks: [all]
+inherits: [rule-backend]
 ---
 
 # rule-backend-fastify - Fastify Best Practices

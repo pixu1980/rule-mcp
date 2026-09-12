@@ -17,6 +17,7 @@ tags:
   - "workers"
   - "serverless"
 frameworks: [all]
+inherits: [rule-backend]
 ---
 
 # rule-backend-hono - Hono Best Practices

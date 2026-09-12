@@ -14,6 +14,7 @@ tags:
   - "mongoose"
   - "performance"
 frameworks: [all]
+inherits: [rule-data]
 ---
 
 # rule-data-mongodb - MongoDB 7+ Best Practices & Scripts

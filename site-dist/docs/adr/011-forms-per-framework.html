@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>011: Forms per Framework - Merger &amp; Distribution - rule-mcp docs</title>
+<link rel="stylesheet" href="../../style.css">
+</head>
+<body>
+<header><nav><ul>
+<li><a href="../../index.html">Home</a></li>
+<li><a href="../../docs/01-getting-started.html">undefined</a></li>
+<li><a href="../../docs/02-product-architecture.html">undefined</a></li>
+<li><a href="../../docs/03-agent-instructions.html">undefined</a></li>
+<li><a href="../../docs/04-operations.html">undefined</a></li>
+<li><a href="../../docs/05-env-variables.html">undefined</a></li>
+<li><a href="../../docs/06-privacy.html">undefined</a></li>
+<li><a href="../../docs/07-engineering-guides.html">undefined</a></li>
+<li><a href="../../docs/08-skills.html">undefined</a></li>
+<li><a href="../../docs/09-tools.html">undefined</a></li>
+<li><a href="../../docs/10-prompts.html">undefined</a></li>
+<li><a href="../../docs/11-instructions.html">undefined</a></li>
+<li><a href="../../docs/12-cli.html">undefined</a></li>
+<li><a href="../../docs/13-personas.html">undefined</a></li>
+<li><a href="../../docs/14-guardrails.html">undefined</a></li>
+<li><a href="../../docs/15-resources.html">undefined</a></li>
+<li><a href="../../docs/adr/ADR.html">ADRs</a></li>
+</ul></nav></header>
+<main>
+<h1>011: Forms per Framework - Merger &amp; Distribution</h1>
+<ul>
+<li><strong>Date</strong>: 2026-07-11</li>
+<li><strong>Status</strong>: accepted</li>
+<li><strong>Tags</strong>: architecture, forms, frontend, refactoring, solid</li>
+<li><strong>Author</strong>: rule-mcp-architect</li>
+</ul>
+<h2>Context</h2>
+<p>The <code>rule-frontend-forms</code> skill was React-specific (<code>react-hook-form</code>, <code>FormProvider</code>, <code>useFieldArray</code>) but sat at the top level as if it applied to all frameworks. This violated two architectural principles:</p>
+<ol>
+<li><strong>Single Responsibility Principle (SOLID - S)</strong>: A skill should cover one framework, not masquerade as generic while being framework-specific</li>
+<li><strong>Interface Segregation (SOLID - I)</strong>: Each framework should have its own form patterns, not depend on a React-specific interface</li>
+</ol>
+<p>Additionally, the skill contained Italian business entity validation (partita IVA, codice fiscale, SDI) which is domain-specific logic, not UI-level form handling - a violation of the <strong>Dependency Inversion Principle</strong>: business rules should not depend on UI frameworks.</p>
+<h2>Decision</h2>
+<h3>1. Merge React forms into <code>rule-frontend-react</code></h3>
+<p>All React-specific form content (<code>react-hook-form</code>, <code>zod</code>, <code>FormProvider</code>, <code>useFieldArray</code>) moved directly into the React skill where it belongs. The old <code>rule-frontend-forms</code> directory is deleted.</p>
+<h3>2. Create form sections for every UI framework</h3>
+<p>Each framework skill now has a <code>## Forms</code> section idiomatic to its ecosystem:</p>
+<table>
+<thead>
+<tr>
+<th>Framework</th>
+<th>Form Library</th>
+<th>Validation</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>React</td>
+<td><code>react-hook-form</code></td>
+<td><code>zod</code> + <code>@hookform/resolvers</code></td>
+</tr>
+<tr>
+<td>Vue 3</td>
+<td><code>vee-validate</code></td>
+<td><code>zod</code> + <code>@vee-validate/zod</code></td>
+</tr>
+<tr>
+<td>Angular</td>
+<td>Reactive Forms (<code>FormGroup</code>)</td>
+<td>Angular <code>Validators</code> + <code>zod</code></td>
+</tr>
+<tr>
+<td>SolidJS</td>
+<td><code>@modular-forms/solid</code></td>
+<td><code>zod</code> + <code>zodForm</code></td>
+</tr>
+<tr>
+<td>Svelte 5</td>
+<td><code>sveltekit-superforms</code></td>
+<td><code>zod</code> + adapter</td>
+</tr>
+<tr>
+<td>Astro</td>
+<td>Server Actions + islands</td>
+<td><code>zod</code> (shared client/server)</td>
+</tr>
+<tr>
+<td>Vanilla</td>
+<td>Store + Signals</td>
+<td><code>zod</code> + <code>safeParse</code></td>
+</tr>
+</tbody></table>
+<h3>3. Italian business validation - preserved but needs relocation</h3>
+<p>The Italian entity validation (partita IVA, codice fiscale, SDI) is currently orphaned after the forms skill deletion. This domain logic will be relocated to a future <code>rule-process-compliance</code> or <code>rule-platform-italian</code> skill in a follow-up - it is out of scope for this change.</p>
+<h2>Consequences</h2>
+<p><strong>Positive:</strong></p>
+<ul>
+<li>Each framework owns its own form patterns - no accidental React leakage into Vue/Svelte</li>
+<li>SOLID compliance: single responsibility per skill, proper interface segregation</li>
+<li>Vanilla Reactive finally has form patterns congruent with its Store/Signal architecture</li>
+<li>1 fewer top-level skill (54 total, down from 55)</li>
+</ul>
+<p><strong>Negative:</strong></p>
+<ul>
+<li>Italian business validation is temporarily orphaned (needs new home)</li>
+<li>Developers must look in each framework skill for form guidance rather than a central &quot;forms&quot; skill</li>
+<li>Cleanup: cross-references in other skills may still point to <code>rule-frontend-forms</code></li>
+</ul>
+
+</main>
+<footer><p>Generated from <code>docs/</code> - edit the Markdown, not this file.</p></footer>
+</body>
+</html>

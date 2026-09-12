@@ -14,6 +14,7 @@ tags:
   - "performance"
   - "reporting"
 frameworks: [all]
+inherits: [rule-data]
 ---
 
 # rule-data-duckdb - DuckDB 1.x Best Practices & Scripts

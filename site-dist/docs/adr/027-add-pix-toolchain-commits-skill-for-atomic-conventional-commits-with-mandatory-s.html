@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>027: Add rule-toolchain-commits skill for atomic conventional commits with mandatory scope - rule-mcp docs</title>
+<link rel="stylesheet" href="../../style.css">
+</head>
+<body>
+<header><nav><ul>
+<li><a href="../../index.html">Home</a></li>
+<li><a href="../../docs/01-getting-started.html">undefined</a></li>
+<li><a href="../../docs/02-product-architecture.html">undefined</a></li>
+<li><a href="../../docs/03-agent-instructions.html">undefined</a></li>
+<li><a href="../../docs/04-operations.html">undefined</a></li>
+<li><a href="../../docs/05-env-variables.html">undefined</a></li>
+<li><a href="../../docs/06-privacy.html">undefined</a></li>
+<li><a href="../../docs/07-engineering-guides.html">undefined</a></li>
+<li><a href="../../docs/08-skills.html">undefined</a></li>
+<li><a href="../../docs/09-tools.html">undefined</a></li>
+<li><a href="../../docs/10-prompts.html">undefined</a></li>
+<li><a href="../../docs/11-instructions.html">undefined</a></li>
+<li><a href="../../docs/12-cli.html">undefined</a></li>
+<li><a href="../../docs/13-personas.html">undefined</a></li>
+<li><a href="../../docs/14-guardrails.html">undefined</a></li>
+<li><a href="../../docs/15-resources.html">undefined</a></li>
+<li><a href="../../docs/adr/ADR.html">ADRs</a></li>
+</ul></nav></header>
+<main>
+<h1>027: Add rule-toolchain-commits skill for atomic conventional commits with mandatory scope</h1>
+<ul>
+<li><strong>Date</strong>: 2026-08-01</li>
+<li><strong>Status</strong>: accepted</li>
+<li><strong>Tags</strong>: taxonomy, skills, routing, git, toolchain</li>
+<li><strong>Author</strong>: rule-mcp-architect</li>
+</ul>
+<h2>Context</h2>
+<p>Commit/push prompts had no dedicated skill: the router sent them to rule-devops-version (version automation) or rule-toolchain-husky (hooks tooling), and the mandatory &quot;atomic conventional commits with scope&quot; rule existed only as a mention inside rule-process-feature-workflow and as a repo-local hook in rule-mcp. The taxonomy groups mechanical repo conventions under rule-toolchain (husky/commitlint, project config), so the convention itself belongs there.</p>
+<h2>Decision</h2>
+<p>Add a dedicated skill <code>rule-toolchain-commits</code> (tool <code>rule_tool_toolchain_commits</code>) in the rule-toolchain group that enforces atomic Conventional Commits with a MANDATORY scope on every commit/push, and add a git domain classification to the router so any prompt mentioning commit/push/conventional deterministically routes to it. Enforcement is made mechanical via commit-msg/commitlint hooks documented in the skill.</p>
+<h2>Consequences</h2>
+<p>Positive: commit/push prompts now deterministically route to rule-toolchain-commits; the rule (scope mandatory, atomicity) becomes a first-class skill in the same group as the hook tooling it depends on (rule-toolchain-husky); version automation in rule-devops-version remains downstream consumer. Negative: skills count grows by one; prompts with weak &quot;commit&quot; mentions are guarded against misrouting by requiring the signal to outweigh other domains (e.g. &quot;commit button&quot; stays frontend).</p>
+<h2>Alternatives Considered</h2>
+<ol>
+<li>rule-process group (rejected: process skills are lifecycle procedures - ADR/review/docs/handoff - not mechanical repo rules; a blocking convention would only apply if the workflow skill is read)</li>
+<li>rule-devops group (rejected: devops-version consumes commit messages for bumps; the convention is upstream of that automation)</li>
+<li>No new skill, only routing tweak to rule-toolchain-husky (rejected: husky covers hook tooling, not the convention/atomicity/push discipline itself)</li>
+</ol>
+
+</main>
+<footer><p>Generated from <code>docs/</code> - edit the Markdown, not this file.</p></footer>
+</body>
+</html>

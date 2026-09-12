@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>073: Compression has four levels and no LLM in the output path - rule-mcp docs</title>
+<link rel="stylesheet" href="../../style.css">
+</head>
+<body>
+<header><nav><ul>
+<li><a href="../../index.html">Home</a></li>
+<li><a href="../../docs/01-getting-started.html">undefined</a></li>
+<li><a href="../../docs/02-product-architecture.html">undefined</a></li>
+<li><a href="../../docs/03-agent-instructions.html">undefined</a></li>
+<li><a href="../../docs/04-operations.html">undefined</a></li>
+<li><a href="../../docs/05-env-variables.html">undefined</a></li>
+<li><a href="../../docs/06-privacy.html">undefined</a></li>
+<li><a href="../../docs/07-engineering-guides.html">undefined</a></li>
+<li><a href="../../docs/08-skills.html">undefined</a></li>
+<li><a href="../../docs/09-tools.html">undefined</a></li>
+<li><a href="../../docs/10-prompts.html">undefined</a></li>
+<li><a href="../../docs/11-instructions.html">undefined</a></li>
+<li><a href="../../docs/12-cli.html">undefined</a></li>
+<li><a href="../../docs/13-personas.html">undefined</a></li>
+<li><a href="../../docs/14-guardrails.html">undefined</a></li>
+<li><a href="../../docs/15-resources.html">undefined</a></li>
+<li><a href="../../docs/adr/ADR.html">ADRs</a></li>
+</ul></nav></header>
+<main>
+<h1>073: Compression has four levels and no LLM in the output path</h1>
+<ul>
+<li><strong>Date</strong>: 2026-09-09</li>
+<li><strong>Status</strong>: accepted</li>
+<li><strong>Tags</strong>: compression, tokens, determinism, text</li>
+<li><strong>Author</strong>: Emiliano Pisu <a href="mailto:pisuemiliano.1980@gmail.com">pisuemiliano.1980@gmail.com</a></li>
+</ul>
+<h2>Context</h2>
+<p>The caveman skill defines lite/full/ultra intensity levels, and its caveman-compress companion reaches its numbers by calling an LLM and validating the result with validate.py. The server had one level, a 16-word vocabulary and no validator, measured at 0.5-2.2 percent against the skill&#39;s ~75 percent claim. Whether to port the LLM step was the open question.</p>
+<h2>Decision</h2>
+<p>Port the deterministic half and refuse the LLM half. Four levels (off, lite, full, ultra) select data tables tagged per level, and validate.py becomes src/core/text/compress-guard/, running per prose run with rollback on violation. An LLM in the output path would cost determinism, cacheability and the zero-dependency contract, and the result cache could no longer replay a compression. The guard plus per-block rollback buys the same safety deterministically, and the caveman skill is credited as the idea source rather than invoked.</p>
+<h2>Consequences</h2>
+<p>The vocabulary can be aggressive because a bad rule costs one paragraph, not the whole result. Measured by pnpm report:compression: 2.03 percent on real tool results and 34.2 percent on verbose prose at full, with zero guard violations. The plan&#39;s 8 and 20 percent targets were corrected by measurement, because this repository&#39;s own docs are already written in the compressed style. The guard immediately caught a real bug: a 4-backtick fence wrapping 3-backtick content desynced the fence walker. Cost: the compression level is part of the tool cache key, so changing it recomputes.</p>
+<h2>What would end this</h2>
+<p>The assumption this leans on, and the observation that would make it wrong.</p>
+
+</main>
+<footer><p>Generated from <code>docs/</code> - edit the Markdown, not this file.</p></footer>
+</body>
+</html>

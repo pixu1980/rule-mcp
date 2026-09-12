@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>050: Round-2 hardening - cycles, daemon/commands split, diagnostics, HTTP verification - rule-mcp docs</title>
+<link rel="stylesheet" href="../../style.css">
+</head>
+<body>
+<header><nav><ul>
+<li><a href="../../index.html">Home</a></li>
+<li><a href="../../docs/01-getting-started.html">undefined</a></li>
+<li><a href="../../docs/02-product-architecture.html">undefined</a></li>
+<li><a href="../../docs/03-agent-instructions.html">undefined</a></li>
+<li><a href="../../docs/04-operations.html">undefined</a></li>
+<li><a href="../../docs/05-env-variables.html">undefined</a></li>
+<li><a href="../../docs/06-privacy.html">undefined</a></li>
+<li><a href="../../docs/07-engineering-guides.html">undefined</a></li>
+<li><a href="../../docs/08-skills.html">undefined</a></li>
+<li><a href="../../docs/09-tools.html">undefined</a></li>
+<li><a href="../../docs/10-prompts.html">undefined</a></li>
+<li><a href="../../docs/11-instructions.html">undefined</a></li>
+<li><a href="../../docs/12-cli.html">undefined</a></li>
+<li><a href="../../docs/13-personas.html">undefined</a></li>
+<li><a href="../../docs/14-guardrails.html">undefined</a></li>
+<li><a href="../../docs/15-resources.html">undefined</a></li>
+<li><a href="../../docs/adr/ADR.html">ADRs</a></li>
+</ul></nav></header>
+<main>
+<h1>050: Round-2 hardening - cycles, daemon/commands split, diagnostics, HTTP verification</h1>
+<ul>
+<li><strong>Date</strong>: 2026-08-25</li>
+<li><strong>Status</strong>: accepted</li>
+<li><strong>Tags</strong>: refactor, cycles, daemon, doctor, transport, logs, quality</li>
+<li><strong>Author</strong>: Emiliano Pisu <a href="mailto:pisuemiliano.1980@gmail.com">pisuemiliano.1980@gmail.com</a></li>
+</ul>
+<h2>Context</h2>
+<p>A second deep pass (health analytics + import-graph review) found: two real
+module-init cycles (<code>skills.js</code> ⇄ <code>skill.js</code> via scaffold parsers, <code>skills.js</code>
+⇄ <code>ai.js</code> via skill metadata), two remaining hotspot modules (<code>src/cli/daemon.js</code>
+879 lines, <code>src/cli/commands.js</code> 818 lines with a 5 KB help template), some
+dead exports, a doctor that did not report the live surface, and unverified
+claim about transports.</p>
+<h2>Decision</h2>
+<ol>
+<li><strong>Break the init cycles</strong>: <code>getSkillMetadata</code> moved into the skill store
+(<code>tools/router.js</code>) with the frontmatter parser extracted to a neutral
+<code>src/core/skill-frontmatter.js</code>; the scaffold section parsers moved to a
+neutral <code>src/core/scaffold-parser.js</code>. <code>skills.js</code> re-exports the moved
+names, so no import path changes.</li>
+<li><strong>Split the hotspots</strong>: <code>src/cli/daemon-platform.js</code> = platform service
+writers (macOS LaunchAgent, systemd, Windows) + wrapper script;
+<code>src/cli/daemon.js</code> keeps the orchestrators. <code>src/cli/help-text.js</code> = the
+usage text; <code>src/cli/commands.js</code> keeps the dispatchers. Re-exports keep
+historical import paths (<code>generateWrapperScript</code>, module URL imports).</li>
+<li><strong>Dead code</strong>: removed unused <code>annotateTokensave</code>, <code>_resetForTests</code>.</li>
+<li><strong>Diagnostics</strong>: <code>doctor</code> now reports <code>version</code>, and the live surface
+(tools/resources/prompts/skills counts) via a best-effort probe;
+<code>daemon start</code> rotates the log past 5 MB (<code>daemon.log → daemon.log.1</code>).</li>
+<li><strong>Transports</strong>: verified the SDK-based Streamable HTTP transport
+(<code>serve --transport http</code>, spec 2025-06-18, bearer + session) with its
+existing <code>test/http.test.mjs</code> coverage and aligned the stale <code>daemon.test</code>
+status assertions to <code>daemonProcessStatus</code> (T8 group).</li>
+</ol>
+<h2>Consequences</h2>
+<p><strong>Positive</strong>: runtime init cycles eliminated (no TDZ surprises); each hotspot
+is now a reviewable unit; doctor doubles as a health snapshot; logs never grow
+without bound; the transport claim is covered by tests. Suite 212/212, lint +
+prettier clean.
+<strong>Negative</strong>: two more indirection layers when tracing install/daemon flow
+(mitigated by re-export entry points); the dependency-graph still shows a hub
+SCC (router/skills/tool-cache init glue) that is an artifact of the documented
+hub pattern, tracked as future work.</p>
+
+</main>
+<footer><p>Generated from <code>docs/</code> - edit the Markdown, not this file.</p></footer>
+</body>
+</html>

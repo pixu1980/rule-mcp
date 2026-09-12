@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>001: Thematic Skill Taxonomy Rename - rule-mcp docs</title>
+<link rel="stylesheet" href="../../style.css">
+</head>
+<body>
+<header><nav><ul>
+<li><a href="../../index.html">Home</a></li>
+<li><a href="../../docs/01-getting-started.html">undefined</a></li>
+<li><a href="../../docs/02-product-architecture.html">undefined</a></li>
+<li><a href="../../docs/03-agent-instructions.html">undefined</a></li>
+<li><a href="../../docs/04-operations.html">undefined</a></li>
+<li><a href="../../docs/05-env-variables.html">undefined</a></li>
+<li><a href="../../docs/06-privacy.html">undefined</a></li>
+<li><a href="../../docs/07-engineering-guides.html">undefined</a></li>
+<li><a href="../../docs/08-skills.html">undefined</a></li>
+<li><a href="../../docs/09-tools.html">undefined</a></li>
+<li><a href="../../docs/10-prompts.html">undefined</a></li>
+<li><a href="../../docs/11-instructions.html">undefined</a></li>
+<li><a href="../../docs/12-cli.html">undefined</a></li>
+<li><a href="../../docs/13-personas.html">undefined</a></li>
+<li><a href="../../docs/14-guardrails.html">undefined</a></li>
+<li><a href="../../docs/15-resources.html">undefined</a></li>
+<li><a href="../../docs/adr/ADR.html">ADRs</a></li>
+</ul></nav></header>
+<main>
+<h1>001: Thematic Skill Taxonomy Rename</h1>
+<ul>
+<li><strong>Date</strong>: 2026-07-10</li>
+<li><strong>Status</strong>: accepted</li>
+<li><strong>Tags</strong>: infrastructure, naming, taxonomy, breaking-change</li>
+<li><strong>Author</strong>: rule-mcp-architect</li>
+</ul>
+<h2>Context</h2>
+<p>The original skill naming was flat: all skills lived under <code>rule-*</code> without any thematic grouping. This made it hard to discover related skills, understand the taxonomy at a glance, and navigate the growing collection (now 35 skills). Examples of the problem:</p>
+<ul>
+<li><code>rule-frontend-react</code>, <code>rule-frontend-vue</code>, <code>rule-frontend-angular</code>, and <code>rule-frontend-svelte</code> are all UI frameworks but their names don&#39;t reflect this shared category</li>
+<li><code>rule-devops-docker</code>, <code>rule-devops-testing</code>, and <code>rule-devops-gitlab-ci</code> are all DevOps concerns but appear unrelated</li>
+<li><code>rule-platform-desktop</code>, <code>rule-platform-library</code>, and <code>rule-platform-expo</code> are project-type/platform skills mixed in with everything else</li>
+</ul>
+<h2>Decision</h2>
+<p>Adopt a prefix-based thematic taxonomy with the following categories:</p>
+<table>
+<thead>
+<tr>
+<th>Prefix</th>
+<th>Category</th>
+<th>Skills</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>rule-</code> (no prefix)</td>
+<td>Core tools</td>
+<td>ai, backend, check, component, detect, fix, scaffold, search, styleguides</td>
+</tr>
+</tbody></table>
+<p>| <code>rule-backend-*</code> | Backend | api-design, security |
+| <code>rule-devops-*</code> | DevOps | docker, gitlab-ci, testing, version |
+| <code>rule-frontend-*</code> | UI frameworks | angular, astro, forms, react, solidjs, svelte, vanilla-reactive, vue |
+| <code>rule-meta-*</code> | Meta-frameworks | next, nuxt, remix |
+| <code>rule-platform-*</code> | Platforms | desktop, expo, library, web |
+| <code>rule-process-*</code> | Process | adr, architect, bmad, documentation, feature-workflow, handoff |
+| <code>rule-scaffold-*</code> | Scaffolding | ai-agents, backend-node, expo, frontend-react-vite |
+| <code>rule-devops-*</code> | DevOps &amp; engineering | docker, gitlab-ci, testing, version-management |
+| <code>rule-process-*</code> | Process &amp; docs | feature-workflow, documentation |</p>
+<p>Three skills keep their names (they are already correctly categorized or would lose meaning):</p>
+<ul>
+<li><code>rule-backend</code> stays as umbrella (no <code>backend-backend</code>)</li>
+<li><code>rule-backend-api-design</code> stays (no <code>backend-backend-api-design</code>)</li>
+</ul>
+<h2>Consequences</h2>
+<p><strong>Positive:</strong></p>
+<ul>
+<li>Clear visual grouping when listing skills (alphabetically sorted, skills cluster by prefix)</li>
+<li>Easy to discover related skills (<code>rule-frontend-*</code> lists all UI frameworks)</li>
+<li>Self-documenting taxonomy: the name tells you the category</li>
+<li>Scalable: new skills slot naturally into existing prefixes</li>
+</ul>
+<p><strong>Negative:</strong></p>
+<ul>
+<li>All existing MCP tool names change (e.g. <code>pix_react</code> → <code>rule_tool_frontend_react</code>)</li>
+<li>All documentation references must be updated (README, docs/TOOLS.md, cross-references)</li>
+<li>All cross-reference links between SKILL.md files must be updated</li>
+<li>Agents with hardcoded tool names will need their prompts updated</li>
+</ul>
+<p><strong>Migration:</strong></p>
+<ul>
+<li>The rename is performed atomically in a single commit</li>
+<li>All 35 skill directories, all SKILL.md files, all docs, and the README are updated together</li>
+<li>The MCP tool names change automatically (derived from directory names)</li>
+<li>No code changes needed in the router or skill loader - tool names are derived from directory basenames</li>
+</ul>
+<h2>Subsequent Updates (2026-07-10)</h2>
+<h3>Phase 2: Backend framework skills</h3>
+<p>Added <code>rule-backend-*</code> competitors:</p>
+<ul>
+<li><code>rule-backend-nestjs</code> - NestJS 10+ (modular, decorators, GraphQL)</li>
+<li><code>rule-backend-express</code> - Express.js 5+ (middleware, REST)</li>
+<li><code>rule-backend-fastify</code> - Fastify 5+ (schema validation, performance)</li>
+<li><code>rule-backend-hono</code> - Hono 4+ (edge, multi-runtime, RPC)</li>
+</ul>
+<h3>Phase 3: Database skills</h3>
+<p>Added <code>rule-database-*</code>:</p>
+<ul>
+<li><code>rule-data-sql</code> - General SQL best practices</li>
+<li><code>rule-data-postgresql</code> - PostgreSQL 16+ (indexing, replication, pooling)</li>
+<li><code>rule-data-mysql</code> - MySQL 8+ / MariaDB 11+ (InnoDB, replication)</li>
+<li><code>rule-data-mongodb</code> - MongoDB 7+ (schema design, aggregation, sharding)</li>
+</ul>
+<h3>Phase 4: Scaffold consolidation</h3>
+<ul>
+<li><code>rule-meta-*</code> → <code>rule-frontend-meta-*</code> (3 skills)</li>
+<li><code>rule-scaffold-backend-node</code> → <code>rule-backend-node</code> + merged content</li>
+<li><code>rule-scaffold-expo</code> → merged into <code>rule-platform-expo</code></li>
+<li><code>rule-scaffold-frontend-react-vite</code> split:<ul>
+<li>Vite config → <code>rule-toolchain-vite</code> (new)</li>
+<li>React scaffolding → <code>rule-frontend-react</code> (merged)</li>
+<li>Generic frontend → <code>rule-platform-web</code> (merged)</li>
+</ul>
+</li>
+<li>All remaining <code>rule-scaffold*</code> directories deleted</li>
+</ul>
+<h3>Final taxonomy</h3>
+<table>
+<thead>
+<tr>
+<th>Prefix</th>
+<th>Count</th>
+<th>Skills</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>rule-</code> (core)</td>
+<td>9</td>
+<td>ai, backend, check, component, detect, fix, scaffold, search, styleguides</td>
+</tr>
+<tr>
+<td><code>rule-backend-*</code></td>
+<td>7</td>
+<td>api-design, express, fastify, hono, nestjs, node, security</td>
+</tr>
+<tr>
+<td><code>rule-database-*</code></td>
+<td>4</td>
+<td>mongodb, mysql, postgresql, sql</td>
+</tr>
+<tr>
+<td><code>rule-devops-*</code></td>
+<td>4</td>
+<td>docker, gitlab-ci, testing, version</td>
+</tr>
+<tr>
+<td><code>rule-frontend-*</code></td>
+<td>11</td>
+<td>angular, astro, forms, meta-next, meta-nuxt, meta-remix, react, solidjs, svelte, vanilla-reactive, vue</td>
+</tr>
+<tr>
+<td><code>rule-platform-*</code></td>
+<td>4</td>
+<td>desktop, expo, library, web</td>
+</tr>
+<tr>
+<td><code>rule-process-*</code></td>
+<td>6</td>
+<td>adr, architect, bmad, documentation, feature-workflow, handoff</td>
+</tr>
+<tr>
+<td><code>rule-toolchain-*</code></td>
+<td>1</td>
+<td>vite</td>
+</tr>
+<tr>
+<td><strong>Total</strong></td>
+<td><strong>46</strong></td>
+<td></td>
+</tr>
+</tbody></table>
+
+</main>
+<footer><p>Generated from <code>docs/</code> - edit the Markdown, not this file.</p></footer>
+</body>
+</html>

@@ -13,8 +13,8 @@ frameworks: [all]
 metadata:
   author: rule-engineering
   version: "3.0"
-guardrails: [docker-non-root, docker-healthcheck]
 inherits: [rule-devops]
+guardrails: [docker-healthcheck, docker-non-root]
 ---
 
 # Docker

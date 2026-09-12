@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Governance - rule-mcp docs</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header><nav><ul>
+<li><a href="index.html">Home</a></li>
+<li><a href="docs/01-getting-started.html">undefined</a></li>
+<li><a href="docs/02-product-architecture.html">undefined</a></li>
+<li><a href="docs/03-agent-instructions.html">undefined</a></li>
+<li><a href="docs/04-operations.html">undefined</a></li>
+<li><a href="docs/05-env-variables.html">undefined</a></li>
+<li><a href="docs/06-privacy.html">undefined</a></li>
+<li><a href="docs/07-engineering-guides.html">undefined</a></li>
+<li><a href="docs/08-skills.html">undefined</a></li>
+<li><a href="docs/09-tools.html">undefined</a></li>
+<li><a href="docs/10-prompts.html">undefined</a></li>
+<li><a href="docs/11-instructions.html">undefined</a></li>
+<li><a href="docs/12-cli.html">undefined</a></li>
+<li><a href="docs/13-personas.html">undefined</a></li>
+<li><a href="docs/14-guardrails.html">undefined</a></li>
+<li><a href="docs/15-resources.html">undefined</a></li>
+<li><a href="docs/adr/ADR.html">ADRs</a></li>
+</ul></nav></header>
+<main>
+<h1>Governance</h1>
+<p>rule-mcp is led by an explicit <strong>BDFL</strong> with a documented path to
+co-maintainers (ADR 083). The bus factor is one today; this file exists so
+that fact is stated, not discovered.</p>
+<h2>Roles</h2>
+<ul>
+<li><strong>Contributor</strong> - anyone who opens an issue or a pull request. No
+invitation needed; the contribution path is in CONTRIBUTING.md.</li>
+<li><strong>Triager</strong> - a contributor the maintainer trusts to label and route
+issues. Earned through sustained, well-scoped reports.</li>
+<li><strong>Maintainer</strong> - earns merge rights through sustained reviewed
+contributions plus a BDFL nomination recorded in MAINTAINERS.md. There
+are no inactive maintainers: a maintainer who stops responding is
+moved back to contributor by the BDFL, in the open, with reasons.</li>
+<li><strong>BDFL</strong> - pixu1980. Sets direction, has the final word, and owns the
+accounts (repository settings, releases, funding).</li>
+</ul>
+<h2>How decisions are made</h2>
+<p>Small fixes need no ceremony: open the pull request and it gets reviewed.
+Structural change needs an ADR first - <code>docs/adr/</code> is the record of
+decisions, and a structural pull request without one is sent back for it.</p>
+<p>Disagreements escalate in this order:</p>
+<ol>
+<li>Write the disagreement down as an ADR, with the alternatives considered.</li>
+<li>A maintainer rules on the ADR.</li>
+<li>The BDFL rules last, and that ruling is final.</li>
+</ol>
+<h2>Branch protection (target state)</h2>
+<p><code>main</code> requires the <code>ci</code> checks plus the CodeQL and audit checks, and one
+approving review for contributors outside the maintainer list. Enabling it
+is owner action 16.5 of docs/plans/oss.md; this section records the exact
+setting so it is auditable once enabled.</p>
+<h2>Funding</h2>
+<p>The project is unfunded today: no donations have been received and no
+expenses are covered by anyone but the maintainer. The GitHub Sponsors
+account, when created, is controlled by the BDFL, who reports what came
+in and what it covered. Sponsorship buys no roadmap priority.
+Donations do not change the decision process above: an ADR still needs
+its reasons, and money is never one of them.</p>
+
+</main>
+<footer><p>Generated from <code>docs/</code> - edit the Markdown, not this file.</p></footer>
+</body>
+</html>

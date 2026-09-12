@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Agent Instructions for rule-mcp - rule-mcp docs</title>
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<header><nav><ul>
+<li><a href="../index.html">Home</a></li>
+<li><a href="../docs/01-getting-started.html">undefined</a></li>
+<li><a href="../docs/02-product-architecture.html">undefined</a></li>
+<li><a href="../docs/03-agent-instructions.html" aria-current="page">undefined</a></li>
+<li><a href="../docs/04-operations.html">undefined</a></li>
+<li><a href="../docs/05-env-variables.html">undefined</a></li>
+<li><a href="../docs/06-privacy.html">undefined</a></li>
+<li><a href="../docs/07-engineering-guides.html">undefined</a></li>
+<li><a href="../docs/08-skills.html">undefined</a></li>
+<li><a href="../docs/09-tools.html">undefined</a></li>
+<li><a href="../docs/10-prompts.html">undefined</a></li>
+<li><a href="../docs/11-instructions.html">undefined</a></li>
+<li><a href="../docs/12-cli.html">undefined</a></li>
+<li><a href="../docs/13-personas.html">undefined</a></li>
+<li><a href="../docs/14-guardrails.html">undefined</a></li>
+<li><a href="../docs/15-resources.html">undefined</a></li>
+<li><a href="../docs/adr/ADR.html">ADRs</a></li>
+</ul></nav></header>
+<main>
+<h1>Agent Instructions for rule-mcp</h1>
+<p>Use the rule-mcp workflow for every coding task.</p>
+<h2>Every prompt</h2>
+<p>Three rules ride on every prompt, injected by the harness hooks the installer writes
+(<code>SessionStart</code> states them in full once, <code>UserPromptSubmit</code> re-anchors them in one line):</p>
+<ol>
+<li>Call <code>rule</code> (or <code>rule_tool_gateway</code>) <strong>before any implementation</strong>.</li>
+<li><strong>NEVER spawn subagents for research or implementation - they burn tokens.</strong> Use rule tools
+(deterministic, LLM-free) and tokensave (code graph) instead.</li>
+<li>Keep the output caveman-compressed: substance verbatim, filler gone.</li>
+</ol>
+<blockquote>
+<p>Every token saved is a token earned.</p>
+</blockquote>
+<p>Agents without hook support (Gemini CLI, Windsurf, Cline, Devin) carry the same rules in the body of
+every generated <code>/rule-*</code> command. Opt out with <code>RULE_MCP_NO_PROMPT_DIRECTIVE=1</code>.</p>
+<h2>Resuming a session</h2>
+<p><code>SessionStart</code> fires with <code>source: &quot;resume&quot;</code> when the user reopens the agent (<code>claude --resume</code>,
+<code>claude --continue</code>). If <code>docs/handoff/</code> holds a handoff, the hook runs <code>rule_tool_process_handon</code> and
+injects the <strong>verified</strong> result before the first prompt: each claim from the handoff arrives labeled
+still true, changed, or unverified, so a merged branch or a landed ADR is not restated as fact.</p>
+<p>Nothing is injected on <code>startup</code>, <code>clear</code> or <code>fork</code>, and nothing is injected when there is no
+handoff. Opt out with <code>RULE_MCP_NO_RESUME_HANDON=1</code>.</p>
+<p>Not every harness spells resume as a session event. <code>pi resume</code> turns the word into the user&#39;s
+first message, and no hook fires at all. So the prompt is the second signal: when the prompt is a
+bare resume request and nothing else (<code>resume</code>, <code>riprendi</code>, <code>continue where we left off</code>, ...), the
+first tool call of the process carries the same verified handoff, prepended beside the self-update
+banner. It fires once per process, and it is applied outside the result cache, so a stored answer
+never replays a snapshot of a repository that has moved.</p>
+<p>A prompt that asks for real work is not a resume signal: the whole prompt has to be one of the
+resume phrasings, so &quot;continue implementing the parser&quot; routes normally.</p>
+<p>The two doors never both open. The hook records what it injected in the state directory, keyed by
+project; the tool path stays quiet when that record was written after the server process started,
+which for a stdio server means during this session. A record from a previous session suppresses
+nothing, so resuming twice from the same handoff works twice.</p>
+<h2>Recommended workflow</h2>
+<ol>
+<li>Call <code>rule</code> or <code>rule_tool_gateway</code> with full request plus known framework/project path.</li>
+<li><code>rule_tool_gateway</code> routes, loads evidence, and checks guardrails in a single call.</li>
+<li>Treat repository/tool evidence as source of truth. Never invent APIs, files, dependencies, tools, requirements, or successful checks.</li>
+<li>If evidence missing, call <code>rule_tool_search</code>; if still absent, state uncertainty.</li>
+<li>Write failing tests before implementation changes.</li>
+<li>Use <code>rule_tool_component</code> for component templates, <code>rule_tool_scaffold</code> for project config files.</li>
+<li>Run <code>rule_tool_check</code>. Failed guardrails are blocking; fix and rerun until all pass.</li>
+<li>Run project tests/typecheck and report only commands actually executed.</li>
+<li>Record structural decisions with <code>rule_tool_process_adr</code> (disabled by default, enable with <code>RULE_MCP_AUTO_ADR=1</code>).</li>
+<li>Before writing files, run <code>rule_tool_gateway</code> to get a receipt; use <code>rule_tool_apply</code> with the receipt for writes.</li>
+<li>After <code>rule_tool_apply</code> writes files, Prettier + blank-line fixer + block-spacing fixer run automatically as post-processing.</li>
+</ol>
+<h2>Advisory boundaries</h2>
+<p>The server applies preprocessing (rejects malformed/unsafe input) and postprocessing (validates output shape).
+These are <strong>advisory</strong> - they improve reliability but MCP protocol cannot enforce tool call ordering.
+See <code>src/core/enforcement.js</code> for details.</p>
+<h2>Frontend principles</h2>
+<ul>
+<li><strong>Zero CSS classes</strong> - element and <code>[data-part]</code>/<code>[data-*]</code> selectors only.</li>
+<li><strong>Zero inline styles</strong> - external CSS or framework-native external loading.</li>
+<li><strong>Flex first</strong> - <code>display: grid</code> only for named areas, subgrid, explicit placement or overlap, and auto-fit tracks; anything a flex row or column can do is flex, and a legitimate grid says which case it is in a <code>/* grid: why */</code> comment.</li>
+<li><strong>Semantic HTML mandatory</strong> - use semantic element instead of generic <code>&lt;div&gt;</code> where available.</li>
+<li><strong>Barrel pattern</strong> - component folder has <code>index.js</code>; implementation files use <code>_PascalCase.ext</code>.</li>
+<li><strong>No unapproved CSS frameworks</strong> - no Tailwind, Bootstrap, or CSS-in-JS.</li>
+</ul>
+<h2>Reusable entry points</h2>
+<p>Every agent receives the same <strong>registry-driven</strong> clean command set - the <code>/rule</code> router pinned first, then one <code>/rule-*</code> command per MCP prompt in alphabetical order (<code>/rule-a11y-audit</code> ... <code>/rule-update</code>). Regenerate or list it with <code>rule-mcp agent-commands</code>.</p>
+<ul>
+<li>Pi, Claude Code, Gemini CLI, Cursor, Windsurf, Cline: <code>/rule &lt;request&gt;</code> plus the full <code>/rule-*</code> set.</li>
+<li>Claude Code: the clean <code>/rule-*</code> commands replace the MCP prompts - the install sets <code>RULE_MCP_NO_PROMPTS=1</code>, so the prefixed <code>/rule-mcp:… (MCP)</code> duplicates are hidden.</li>
+<li><code>/rule-handoff</code> also commits pending work as atomic, scoped conventional commits (plus one separate <code>docs(adr):</code>/<code>docs(handoff):</code> commit for pending decision docs), writes the generated handoff to <code>docs/handoff/&lt;NN&gt;-&lt;slug&gt;.md</code> and commits it alone as <code>chore(handoff): …</code>, and never pushes.</li>
+<li>GitHub Copilot CLI: <code>/agent</code>, select <code>rule-mcp</code>.</li>
+<li>Codex CLI: invoke globally installed <code>rule</code> skill; exact custom prompt support varies by version.</li>
+</ul>
+<h2>Minimal tool surface</h2>
+<p>Set <code>RULE_MCP_MINIMAL_TOOLS=1</code> (off by default) to expose only the 10 dispatcher/action
+tools instead of the full per-skill surface (fits clients that cap or truncate the tool list, and
+costs less context on every turn): <code>pix_tool</code>, <code>rule_tool_update</code>, <code>rule_tool_gateway</code>,
+<code>rule_tool_apply</code>, <code>rule_tool_search</code>, <code>rule_tool_check</code>, <code>rule_tool_scaffold</code>, <code>rule_tool_detect</code>,
+<code>rule_tool_process_handoff</code>, <code>rule_tool_component</code>.</p>
+<h2>Environment variables</h2>
+<p>See <a href="05-env-variables.html">05-env-variables.md</a> for the complete reference table, persistence, and configuration.</p>
+<h2>Layout default</h2>
+<p>Flex first is the default layout: <code>display: flex</code> for rows and columns.
+<code>display: grid</code> only for named template areas, subgrid, explicit item placement
+or overlap, and auto-fit/auto-fill tracks, justified with a <code>/* grid: why */</code>
+comment (see rule-styleguide-css).</p>
+
+</main>
+<footer><p>Generated from <code>docs/</code> - edit the Markdown, not this file.</p></footer>
+</body>
+</html>

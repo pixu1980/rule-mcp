@@ -14,6 +14,7 @@ tags:
   - "microservices"
   - "modular"
 frameworks: [all]
+inherits: [rule-backend]
 ---
 
 # rule-backend-nestjs - NestJS Best Practices

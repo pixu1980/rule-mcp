@@ -20,6 +20,7 @@ frameworks: [node, api]
 metadata:
   author: rule-engineering
   version: "2.1"
+inherits: [rule-backend]
 ---
 
 # Scaffolding Backend Node

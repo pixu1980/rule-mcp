@@ -8,6 +8,7 @@ tags:
   - "concurrency"
   - "performance"
 frameworks: [node, worker-threads]
+inherits: [rule-backend]
 ---
 
 # rule-backend-workers - Node.js Concurrency & Worker Threads

@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>046: Installer self-heals its global shim, surfaces failures, and gates TUI rendering - rule-mcp docs</title>
+<link rel="stylesheet" href="../../style.css">
+</head>
+<body>
+<header><nav><ul>
+<li><a href="../../index.html">Home</a></li>
+<li><a href="../../docs/01-getting-started.html">undefined</a></li>
+<li><a href="../../docs/02-product-architecture.html">undefined</a></li>
+<li><a href="../../docs/03-agent-instructions.html">undefined</a></li>
+<li><a href="../../docs/04-operations.html">undefined</a></li>
+<li><a href="../../docs/05-env-variables.html">undefined</a></li>
+<li><a href="../../docs/06-privacy.html">undefined</a></li>
+<li><a href="../../docs/07-engineering-guides.html">undefined</a></li>
+<li><a href="../../docs/08-skills.html">undefined</a></li>
+<li><a href="../../docs/09-tools.html">undefined</a></li>
+<li><a href="../../docs/10-prompts.html">undefined</a></li>
+<li><a href="../../docs/11-instructions.html">undefined</a></li>
+<li><a href="../../docs/12-cli.html">undefined</a></li>
+<li><a href="../../docs/13-personas.html">undefined</a></li>
+<li><a href="../../docs/14-guardrails.html">undefined</a></li>
+<li><a href="../../docs/15-resources.html">undefined</a></li>
+<li><a href="../../docs/adr/ADR.html">ADRs</a></li>
+</ul></nav></header>
+<main>
+<h1>046: Installer self-heals its global shim, surfaces failures, and gates TUI rendering</h1>
+<ul>
+<li><strong>Date</strong>: 2026-08-25</li>
+<li><strong>Status</strong>: accepted</li>
+<li><strong>Tags</strong>: installer, cli, cross-platform, shim, tui, terminal, idempotency</li>
+<li><strong>Author</strong>: Emiliano Pisu <a href="mailto:pisuemiliano.1980@gmail.com">pisuemiliano.1980@gmail.com</a></li>
+</ul>
+<h2>Context</h2>
+<p>The universal installers (<code>scripts/install.sh</code>, <code>scripts/install.ps1</code>) trusted the
+result of <code>command -v rule-mcp</code> without verifying the binary could actually
+launch. That trust broke in a real scenario:</p>
+<ol>
+<li><code>pnpm link --global .</code> had created a cmd-shim that pins the repo&#39;s absolute
+path (<code># cmd-shim-target=…/rule-mcp/bin/rule-mcp.js</code>).</li>
+<li>The repo moved from <code>…/Projects/pixu1980/rule-mcp</code> to
+<code>…/Projects/pixu1980/ai/rule-mcp</code>. The shim stayed on <code>PATH</code> but crashed
+on launch (<code>Error: Cannot find module …</code>).</li>
+<li><code>run_cli install --agent pi … --json &gt;/dev/null 2&gt;&amp;1</code> swallowed both streams,
+so the failure looked exactly like a successful-but-skipped install. The pi
+entry was never written to <code>~/.pi/agent/mcp.json</code>, and re-running
+<code>./scripts/install.sh</code> never repaired anything because a relink only happened
+when <code>command -v rule-mcp</code> <strong>failed</strong> — it never did.</li>
+</ol>
+<p>While fixing this, <code>pnpm link --global .</code> proved worse than useless as a repair
+strategy: pnpm 10/11 rewrites <code>pnpm-workspace.yaml</code> (clobbering the <code>hono:</code>
+override and injecting <code>rule-mcp: &#39;link:&#39;</code>) and the lockfile when run
+inside the workspace.</p>
+<p>Separately, the terminal experience was poor: colors and box-drawing were
+emitted even when output was piped (CI/<code>curl | bash</code> garbage); the PowerShell
+TUI&#39;s <code>Enter { break }</code> inside a <code>switch</code> only exits the <strong>switch</strong>, so selection
+never confirmed (infinite re-render); and the bash TUI&#39;s cursor helpers ended
+with <code>[[ … ]] &amp;&amp; …</code>, which returns non-zero at list boundaries and killed the
+script under <code>set -euo pipefail</code>.</p>
+<h2>Decision</h2>
+<ol>
+<li><strong>Verify before trust.</strong> <code>shim_works()</code> (bash) / <code>Test-PixCli</code> (PS) run
+<code>rule-mcp --version</code>; the global binary is used only when it launches.
+When it exists but fails, the installer warns, removes the stale shim, and
+<strong>writes a plain launcher script</strong> (<code>exec node &#39;&lt;project&gt;/bin/rule-mcp.js&#39;</code>)
+directly into the detected global bin dir (<code>$PNPM_HOME/bin</code>, pnpm&#39;s
+<code>global-bin-dir</code>, or the platform default). In the local-repo flow the shim is
+never created via <code>pnpm link --global</code>. <code>RULE_MCP_SKIP_GLOBAL_LINK=1</code>
+skips writing the shim entirely (tests/sandboxes).</li>
+<li><strong>Fall back instead of failing silently.</strong> <code>run_cli</code> / <code>Invoke-PixCli</code> fall
+back to the local entrypoint (<code>node $LOCAL_BIN</code>) when the shim is broken, so a
+stale shim can never again block the install.</li>
+<li><strong>Surface CLI errors.</strong> All <code>install</code>/<code>daemon</code>/<code>doctor</code> calls capture output
+and print it indented on failure instead of <code>&gt;/dev/null 2&gt;&amp;1</code>.</li>
+<li><strong>TTY-gated rendering.</strong> Colors and box-drawing render only on a real TTY
+without <code>NO_COLOR</code>; redirected output gets plain separators. The PS scripts
+gate on <code>[Console]::IsOutputRedirected -or $env:NO_COLOR</code>.</li>
+<li><strong>TUI hardening.</strong> EOF-safe key reader; both <code>ESC [ A</code> and <code>ESC O A</code> cursor
+sequences; <code>↑↓/jk</code>, <code>1-9</code>, <code>a</code> (all), <code>n</code> (none); cursor helpers <code>return 0</code>;
+PS <code>Enter</code> confirms via a <code>$done</code> flag because <code>break</code> in a <code>switch</code> exits
+only the switch.</li>
+<li><strong>Prettier-clean rules block.</strong> <code>RULES_CONTENT</code> is byte-identical to the
+block committed in the project <code>CLAUDE.md</code> (including blank lines), so
+install/uninstall cycles never produce a <code>pnpm format</code> diff. A drift-guard
+step in <code>test/install-rules-idempotent.test.mjs</code> (harness F) enforces it.</li>
+<li><strong>Full reversal.</strong> <code>uninstall.sh</code> / <code>uninstall.ps1</code> remove the shim and links:
+<code>pnpm unlink --global</code>, <code>npm uninstall -g</code>, plus bin-shim removal in all
+common global dirs and the pnpm store link (deduped), so <code>command -v rule-mcp</code> resolves to nothing afterward.</li>
+</ol>
+<h2>Consequences</h2>
+<p><strong>Positive</strong></p>
+<ul>
+<li>A stale/<code>moved-repo</code> shim is detected, warned about, and repaired — the
+original &quot;pi silently skipped&quot; failure is structurally impossible.</li>
+<li><code>pnpm-workspace.yaml</code> / lockfile overrides can no longer be clobbered by the
+installer (regression-guarded by a source test in
+<code>test/install-script-shim-heal.test.mjs</code>).</li>
+<li>Piped and CI output is clean; the TUI actually confirms on Enter on both
+platforms; <code>set -e</code> no longer kills the TUI at list boundaries.</li>
+<li>The repo&#39;s <code>CLAUDE.md</code> stops churning after every install.</li>
+<li>The full <code>test:installer</code> suite (29 checks, including the PTY TUI acceptance
+test) and <code>test:all</code> (211 checks) run green.</li>
+</ul>
+<p><strong>Negative</strong></p>
+<ul>
+<li>The global bin dir is detected heuristically; a custom pnpm layout not under
+<code>$PNPM_HOME</code>/<code>global-bin-dir</code> falls back to the local entrypoint instead of
+creating a shim.</li>
+<li>PowerShell syntax is still validated in CI only when <code>pwsh</code> is present; the
+portable <code>pwsh</code> build must be available to run the parser check locally.</li>
+</ul>
+
+</main>
+<footer><p>Generated from <code>docs/</code> - edit the Markdown, not this file.</p></footer>
+</body>
+</html>

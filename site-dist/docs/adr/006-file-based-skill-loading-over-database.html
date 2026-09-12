@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>003 - File-Based Skill Loading over Database - rule-mcp docs</title>
+<link rel="stylesheet" href="../../style.css">
+</head>
+<body>
+<header><nav><ul>
+<li><a href="../../index.html">Home</a></li>
+<li><a href="../../docs/01-getting-started.html">undefined</a></li>
+<li><a href="../../docs/02-product-architecture.html">undefined</a></li>
+<li><a href="../../docs/03-agent-instructions.html">undefined</a></li>
+<li><a href="../../docs/04-operations.html">undefined</a></li>
+<li><a href="../../docs/05-env-variables.html">undefined</a></li>
+<li><a href="../../docs/06-privacy.html">undefined</a></li>
+<li><a href="../../docs/07-engineering-guides.html">undefined</a></li>
+<li><a href="../../docs/08-skills.html">undefined</a></li>
+<li><a href="../../docs/09-tools.html">undefined</a></li>
+<li><a href="../../docs/10-prompts.html">undefined</a></li>
+<li><a href="../../docs/11-instructions.html">undefined</a></li>
+<li><a href="../../docs/12-cli.html">undefined</a></li>
+<li><a href="../../docs/13-personas.html">undefined</a></li>
+<li><a href="../../docs/14-guardrails.html">undefined</a></li>
+<li><a href="../../docs/15-resources.html">undefined</a></li>
+<li><a href="../../docs/adr/ADR.html">ADRs</a></li>
+</ul></nav></header>
+<main>
+<h1>003 - File-Based Skill Loading over Database</h1>
+<p><strong>Status</strong>: Accepted<br><strong>Date</strong>: 2026-06-20<br><strong>Deciders</strong>: Project owner</p>
+<h2>Context</h2>
+<p>Skills (SKILL.md files) need to be discoverable and queryable. Options:</p>
+<ul>
+<li>File-based: read SKILL.md from <code>~/.agents/skills/&lt;name&gt;/</code> or embedded <code>skills/</code> directory</li>
+<li>Database: store skill content in SQLite, PostgreSQL, etc.</li>
+</ul>
+<h2>Decision</h2>
+<p>Use <strong>file-based skill loading</strong> with an in-memory LRU cache.</p>
+<h2>Rationale</h2>
+<ol>
+<li><strong>Zero dependencies</strong> - No database driver or migration system needed.</li>
+<li><strong>Skill files are markdown</strong> - Users can edit SKILL.md directly without any database schema knowledge.</li>
+<li><strong>Simplicity</strong> - <code>readFileSync</code> + LRU cache + BM25 inverted index. Total: 3 modules (skills.js, bm25.js, router.js).</li>
+<li><strong>Performance</strong> - LRU cache (50 entries) keeps frequently accessed skills in memory. BM25 index (170 sections, 2414 terms) is rebuilt in ∼20ms.</li>
+<li><strong>User control</strong> - Skills live at <code>~/.agents/skills/</code>. Users can add custom skills by creating a new directory with a SKILL.md file.</li>
+</ol>
+<h2>Consequences</h2>
+<ul>
+<li>Cross-skill queries require scanning all SKILL.md files at startup (∼20ms for 17 skills, negligible).</li>
+<li>Full-text search requires an in-memory BM25 index (built at load time, cleared on <code>skills reload</code>).</li>
+<li>Plugin system (Phase 7) is trivial: <code>~/.agents/skills/&lt;custom-skill&gt;/SKILL.md</code> is auto-detected.</li>
+<li>No concurrent access concerns - single-process, single-threaded Node.js.</li>
+</ul>
+
+</main>
+<footer><p>Generated from <code>docs/</code> - edit the Markdown, not this file.</p></footer>
+</body>
+</html>

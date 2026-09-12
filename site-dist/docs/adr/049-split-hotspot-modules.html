@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>049: Split the hotspot modules (guardrails + installer) - rule-mcp docs</title>
+<link rel="stylesheet" href="../../style.css">
+</head>
+<body>
+<header><nav><ul>
+<li><a href="../../index.html">Home</a></li>
+<li><a href="../../docs/01-getting-started.html">undefined</a></li>
+<li><a href="../../docs/02-product-architecture.html">undefined</a></li>
+<li><a href="../../docs/03-agent-instructions.html">undefined</a></li>
+<li><a href="../../docs/04-operations.html">undefined</a></li>
+<li><a href="../../docs/05-env-variables.html">undefined</a></li>
+<li><a href="../../docs/06-privacy.html">undefined</a></li>
+<li><a href="../../docs/07-engineering-guides.html">undefined</a></li>
+<li><a href="../../docs/08-skills.html">undefined</a></li>
+<li><a href="../../docs/09-tools.html">undefined</a></li>
+<li><a href="../../docs/10-prompts.html">undefined</a></li>
+<li><a href="../../docs/11-instructions.html">undefined</a></li>
+<li><a href="../../docs/12-cli.html">undefined</a></li>
+<li><a href="../../docs/13-personas.html">undefined</a></li>
+<li><a href="../../docs/14-guardrails.html">undefined</a></li>
+<li><a href="../../docs/15-resources.html">undefined</a></li>
+<li><a href="../../docs/adr/ADR.html">ADRs</a></li>
+</ul></nav></header>
+<main>
+<h1>049: Split the hotspot modules (guardrails + installer)</h1>
+<ul>
+<li><strong>Date</strong>: 2026-08-25</li>
+<li><strong>Status</strong>: accepted</li>
+<li><strong>Tags</strong>: refactor, maintainability, guardrails, installer</li>
+<li><strong>Author</strong>: Emiliano Pisu <a href="mailto:pisuemiliano.1980@gmail.com">pisuemiliano.1980@gmail.com</a></li>
+</ul>
+<h2>Context</h2>
+<p>Two modules had grown beyond comfortable review size with no domain structure:
+<code>src/core/guardrail-defs.js</code> (1771 lines, six guardrail families in one file)
+and <code>src/cli/install.js</code> (1273 lines mixing orchestrators, file helpers and 23
+per-agent installer/uninstaller definitions).</p>
+<h2>Decision</h2>
+<ol>
+<li><strong>Guardrails</strong>: each family moves to <code>src/core/guardrails/</code> —
+<code>shared.js</code>, <code>file-tree.js</code>, <code>framework.js</code>, <code>scaffold.js</code>, <code>backend.js</code>,
+<code>database.js</code>, <code>devops.js</code>, <code>util.js</code> — with <code>guardrail-defs.js</code> kept as a
+one-line re-export (<code>export * from &quot;./guardrails/index.js&quot;</code>) so historical
+import paths and the public export names never change.</li>
+<li><strong>Installer</strong>: the per-agent domain (file helpers, command builders,
+installers/uninstallers, env/command config) moves to a self-contained
+<code>src/cli/agent-installers.js</code>; <code>install.js</code> keeps the orchestrators
+(<code>installAgent</code>, <code>uninstallAgent</code>, <code>detectInstalledAgents</code>,
+<code>getAllAgents</code>) and re-exports the agent module so <code>new URL(../src/cli/install.js)</code> imports in tests keep working.</li>
+</ol>
+<h2>Consequences</h2>
+<p><strong>Positive</strong>: each guardrail domain is a standalone reviewable file; the
+installer&#39;s agent surface is decoupled from its orchestration; no public
+import path or export name changed (full installer suite + guardrail coverage
+stay green, 212 checks).
+<strong>Negative</strong>: two new indirection layers to navigate when tracing (mitigated by
+the re-export entry points).</p>
+
+</main>
+<footer><p>Generated from <code>docs/</code> - edit the Markdown, not this file.</p></footer>
+</body>
+</html>

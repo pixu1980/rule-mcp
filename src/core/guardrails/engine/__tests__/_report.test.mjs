@@ -9,6 +9,7 @@ import { test } from "node:test";
 
 import { getGuardrailsReport } from "../_report.js";
 import { getGuardrails } from "../_registry.js";
+import "../../__tests__/_install.fixture.mjs";
 
 test("the report lists exactly the rules the check will run", () => {
   const report = getGuardrailsReport("rule-frontend-react");
@@ -36,12 +37,7 @@ test("the report closes with how to act on it", () => {
   assert.match(report, /Re-check until all pass/, "the loop is spelled out");
 });
 
-test("a skill that inherits says where its rules came from", async () => {
-  const { loadLayerGuardrails } = await import("../../../layers/_guardrails.js");
-  const { setSkillGuardrails } = await import("../_registry.js");
-
-  setSkillGuardrails(await loadLayerGuardrails());
-
+test("a skill that inherits says where its rules came from", () => {
   const report = getGuardrailsReport("rule-devops-docker");
 
   assert.match(report, /Inherited from: rule-devops/, "a reader can see which declaration to edit");

@@ -93,12 +93,13 @@ async function loadFolder(entry, problems) {
 
 /** Report a frontmatter that no longer matches the folder beside it. */
 function reportDrift(entry, loaded, problems) {
-  const declared = new Set(entry.meta.guardrails ?? []);
+  const declaredIds = entry.meta.guardrails;
 
-  if (declared.size === 0 && loaded.length === 0) {
+  if (!declaredIds?.length && loaded.length === 0) {
     return;
   }
 
+  const declared = new Set(declaredIds);
   const exported = new Set(loaded.map((rule) => rule.id));
 
   for (const id of declared) {

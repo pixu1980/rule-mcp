@@ -9,6 +9,7 @@ tags:
   - "umbrella"
   - "index"
 frameworks: [all]
+guardrails: [cors-explicit, error-exposure, helmet-headers, input-validation, rate-limiting, sql-injection]
 ---
 
 # rule-backend - Backend Skill Index

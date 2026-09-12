@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>062: Glob suite runner, co-located tests, and a branch-coverage ratchet - rule-mcp docs</title>
+<link rel="stylesheet" href="../../style.css">
+</head>
+<body>
+<header><nav><ul>
+<li><a href="../../index.html">Home</a></li>
+<li><a href="../../docs/01-getting-started.html">undefined</a></li>
+<li><a href="../../docs/02-product-architecture.html">undefined</a></li>
+<li><a href="../../docs/03-agent-instructions.html">undefined</a></li>
+<li><a href="../../docs/04-operations.html">undefined</a></li>
+<li><a href="../../docs/05-env-variables.html">undefined</a></li>
+<li><a href="../../docs/06-privacy.html">undefined</a></li>
+<li><a href="../../docs/07-engineering-guides.html">undefined</a></li>
+<li><a href="../../docs/08-skills.html">undefined</a></li>
+<li><a href="../../docs/09-tools.html">undefined</a></li>
+<li><a href="../../docs/10-prompts.html">undefined</a></li>
+<li><a href="../../docs/11-instructions.html">undefined</a></li>
+<li><a href="../../docs/12-cli.html">undefined</a></li>
+<li><a href="../../docs/13-personas.html">undefined</a></li>
+<li><a href="../../docs/14-guardrails.html">undefined</a></li>
+<li><a href="../../docs/15-resources.html">undefined</a></li>
+<li><a href="../../docs/adr/ADR.html">ADRs</a></li>
+</ul></nav></header>
+<main>
+<h1>062: Glob suite runner, co-located tests, and a branch-coverage ratchet</h1>
+<ul>
+<li><strong>Date</strong>: 2026-09-07</li>
+<li><strong>Status</strong>: accepted</li>
+<li><strong>Tags</strong>: testing, ci, coverage, structure</li>
+<li><strong>Author</strong>: Emiliano Pisu <a href="mailto:pisuemiliano.1980@gmail.com">pisuemiliano.1980@gmail.com</a></li>
+</ul>
+<h2>Context</h2>
+<p>Suite membership lived in four hardcoded file lists (<code>test:foundations</code>, <code>test:installer</code>,
+<code>test:all</code>, <code>ci</code>) plus <code>.github/workflows/ci.yml</code> - every split or new test edited them, and
+files nobody wired in silently never ran. Running the orphans surfaced real defects the lists
+had been hiding: the daemon entrypoint resolved one directory short (the daemon could not
+start at all), the storm-guard test imported a deleted shim, the untrusted fence missed the
+rebranded reminder header, and the reminder diet spec (hardening 4.2) had tests but no
+implementation. Coverage was measured in-process only, blind to every subprocess suite, and
+nothing gated it.</p>
+<h2>Decision</h2>
+<p>Four pieces. (1) <code>scripts/ci/run-tests/index.mjs</code> resolves a suite from glob patterns in
+<code>_suites.data.mjs</code> (foundations = tests/* by domain + <code>src/**/__tests__</code>, installer =
+<code>tests/cli/**</code> + script syntax checks, all = smoke + docs-scan + both); a new <code>*.test.mjs</code>
+under a covered directory runs with no runner edit, and a suite whose globs match nothing
+fails loudly. (2) Single-module unit suites move next to their subject as
+<code>src/&lt;module&gt;/__tests__/_name.test.mjs</code>; repo-level contracts stay in <code>tests/</code>; the npm
+<code>files</code> list excludes <code>src/**/__tests__/</code>. (3) <code>pnpm test:coverage</code> runs the whole <code>all</code>
+suite under c8 (NODE_V8_COVERAGE reaches child processes, so CLI/installer/daemon runs
+count) and fails below the branch floor in
+<code>scripts/reports/coverage/_threshold.data.mjs</code> - a shrink-proof ratchet that only rises
+toward the 95% target; CI runs it as its own job. (4) The home-recording-leak check spawns
+suites against a private fake HOME instead of watching the real one, so the parallel runner
+cannot race it.</p>
+<h2>Consequences</h2>
+<p>Positive: adding a test is writing a file; the orphan class is gone (204 files run where
+151 were listed); measured branch coverage is an honest cross-process 84% with a gate that
+cannot drift down. Negative: foundations now includes the previously-orphaned suites, so a
+regression anywhere in tests/ blocks it; the coverage job runs the full suite a second time
+in CI.</p>
+<h2>What would end this</h2>
+<p>Node shipping first-class workspace test globbing with per-suite tags, or coverage reaching
+the 95% target and the ratchet collapsing into a fixed threshold.</p>
+<h2>Alternatives Considered</h2>
+<ol>
+<li>Gate coverage at 95 immediately - a permanently red gate teaches everyone to ignore it;
+the ratchet enforces today&#39;s truth and only moves toward the target.</li>
+<li>Keep per-file lists but generate them - still a second source of truth to regenerate,
+and orphans stay possible between regenerations.</li>
+</ol>
+
+</main>
+<footer><p>Generated from <code>docs/</code> - edit the Markdown, not this file.</p></footer>
+</body>
+</html>

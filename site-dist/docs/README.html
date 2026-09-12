@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>rule-mcp documentation - rule-mcp docs</title>
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<header><nav><ul>
+<li><a href="../index.html">Home</a></li>
+<li><a href="../docs/01-getting-started.html">undefined</a></li>
+<li><a href="../docs/02-product-architecture.html">undefined</a></li>
+<li><a href="../docs/03-agent-instructions.html">undefined</a></li>
+<li><a href="../docs/04-operations.html">undefined</a></li>
+<li><a href="../docs/05-env-variables.html">undefined</a></li>
+<li><a href="../docs/06-privacy.html">undefined</a></li>
+<li><a href="../docs/07-engineering-guides.html">undefined</a></li>
+<li><a href="../docs/08-skills.html">undefined</a></li>
+<li><a href="../docs/09-tools.html">undefined</a></li>
+<li><a href="../docs/10-prompts.html">undefined</a></li>
+<li><a href="../docs/11-instructions.html">undefined</a></li>
+<li><a href="../docs/12-cli.html">undefined</a></li>
+<li><a href="../docs/13-personas.html">undefined</a></li>
+<li><a href="../docs/14-guardrails.html">undefined</a></li>
+<li><a href="../docs/15-resources.html">undefined</a></li>
+<li><a href="../docs/adr/ADR.html">ADRs</a></li>
+</ul></nav></header>
+<main>
+<h1>rule-mcp documentation</h1>
+<p>An MCP server that serves the rule skill catalog as tools, routes a prompt to the
+right one, and validates code against guardrails without ever calling a model.</p>
+<h2>Handbook</h2>
+<p>The numbers are a route through the product: install it, understand it, use it,
+operate it, configure it, trust it, contribute to it. Everything from 08 on is
+reference, generated from the running server.</p>
+<table>
+<thead>
+<tr>
+<th>Document</th>
+<th>Covers</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><a href="01-getting-started.html">./01-getting-started.md</a></td>
+<td>Install it and make the first call</td>
+</tr>
+<tr>
+<td><a href="02-product-architecture.html">./02-product-architecture.md</a></td>
+<td>How the server is built: modules, routing, caching, transports, security model</td>
+</tr>
+<tr>
+<td><a href="03-agent-instructions.html">./03-agent-instructions.md</a></td>
+<td>How an agent uses it every day: workflow, frontend principles, session resume</td>
+</tr>
+<tr>
+<td><a href="04-operations.html">./04-operations.md</a></td>
+<td>Operate it: plugins, release, troubleshooting</td>
+</tr>
+<tr>
+<td><a href="05-env-variables.html">./05-env-variables.md</a></td>
+<td>Configure it: every <code>RULE_MCP_*</code> variable, its default and its effect</td>
+</tr>
+<tr>
+<td><a href="06-privacy.html">./06-privacy.md</a></td>
+<td>Trust it: what is recorded, where it lives, how to erase it</td>
+</tr>
+<tr>
+<td><a href="07-engineering-guides.html">./07-engineering-guides.md</a></td>
+<td>Contribute to it: worked examples, measured numbers, contributor guidance</td>
+</tr>
+<tr>
+<td><a href="08-skills.html">./08-skills.md</a></td>
+<td>Generated: the skill catalog by area, each with its tool and description</td>
+</tr>
+<tr>
+<td><a href="09-tools.html">./09-tools.md</a></td>
+<td>Generated: every action tool with its parameters, and the skill tools by area</td>
+</tr>
+<tr>
+<td><a href="10-prompts.html">./10-prompts.md</a></td>
+<td>Generated: every MCP prompt, reusable and persona</td>
+</tr>
+<tr>
+<td><a href="11-instructions.html">./11-instructions.md</a></td>
+<td>Generated: the agent slash commands, their install targets, and the hooks</td>
+</tr>
+<tr>
+<td><a href="12-cli.html">./12-cli.md</a></td>
+<td>Generated: every command, its arguments, its options and its defaults</td>
+</tr>
+<tr>
+<td><a href="13-personas.html">./13-personas.md</a></td>
+<td>Generated: the review personas, their lenses, evidence skills and aliases</td>
+</tr>
+<tr>
+<td><a href="14-guardrails.html">./14-guardrails.md</a></td>
+<td>Generated: every guardrail rule, with what it rejects, by family</td>
+</tr>
+<tr>
+<td><a href="15-resources.html">./15-resources.md</a></td>
+<td>Generated: the MCP resource surface</td>
+</tr>
+</tbody></table>
+<h2>Direction</h2>
+<p><a href="../ROADMAP.html">../ROADMAP.md</a> is where the project is going: now, next
+and later, each with the ADR that justifies it.</p>
+<h2>Architecture decisions</h2>
+<p><a href="adr/ADR.html">./adr/ADR.md</a> is every decision this project has taken: a
+chronological index, what each one says, and the themes they group into.
+Generated from the numbered files beside it, so it cannot fall behind them.</p>
+<p><strong>The ADR log is the only place history belongs.</strong> Everything else in <code>docs/</code>
+describes what is true now.</p>
+<h2>Maintenance rules</h2>
+<ul>
+<li>Add long-form documentation to one of the numbered handbook files unless a
+separate file is justified.</li>
+<li><strong><code>08</code> through <code>15</code> are generated.</strong> <code>pnpm census</code> derives them from the
+registries, and refreshes the fenced blocks inside <code>02</code>, <code>05</code> and <code>07</code>.
+Editing one by hand is work the next commit throws away;
+<code>tests/docs/census-generated.test.mjs</code> fails when a committed copy and the
+registry disagree.</li>
+<li><strong>No counts in this table.</strong> A number written beside a link is a claim with no
+generator behind it, and it is the copy that goes stale (ADR 048). The counts
+live in the generated documents that derive them.</li>
+<li><strong>Write what the code does, never what it did.</strong> A document that explains a
+change instead of a behavior is a second copy of an ADR, and it is the copy
+that goes stale.</li>
+<li>Keep ADRs in <code>docs/adr/</code>. They are immutable decision records, and the one
+exception to the rule above.</li>
+<li>When a plan is fully implemented, delete the plan file - no stale docs.</li>
+</ul>
+
+</main>
+<footer><p>Generated from <code>docs/</code> - edit the Markdown, not this file.</p></footer>
+</body>
+</html>

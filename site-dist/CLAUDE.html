@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CLAUDE.md - rule-mcp docs</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header><nav><ul>
+<li><a href="index.html">Home</a></li>
+<li><a href="docs/01-getting-started.html">undefined</a></li>
+<li><a href="docs/02-product-architecture.html">undefined</a></li>
+<li><a href="docs/03-agent-instructions.html">undefined</a></li>
+<li><a href="docs/04-operations.html">undefined</a></li>
+<li><a href="docs/05-env-variables.html">undefined</a></li>
+<li><a href="docs/06-privacy.html">undefined</a></li>
+<li><a href="docs/07-engineering-guides.html">undefined</a></li>
+<li><a href="docs/08-skills.html">undefined</a></li>
+<li><a href="docs/09-tools.html">undefined</a></li>
+<li><a href="docs/10-prompts.html">undefined</a></li>
+<li><a href="docs/11-instructions.html">undefined</a></li>
+<li><a href="docs/12-cli.html">undefined</a></li>
+<li><a href="docs/13-personas.html">undefined</a></li>
+<li><a href="docs/14-guardrails.html">undefined</a></li>
+<li><a href="docs/15-resources.html">undefined</a></li>
+<li><a href="docs/adr/ADR.html">ADRs</a></li>
+</ul></nav></header>
+<main>
+<!-- rule-mcp --><p>Before writing any frontend/styling code, call <code>rule</code> to route the task to the correct rule skill. Follow rule AI principles: zero CSS classes, zero inline styles, semantic HTML, external CSS via adoptedStyleSheets. Available tools: rule, pix_component, pix_check, pix_search, pix_scaffold, pix_process_adr.</p>
+<blockquote>
+<p>Skills source of truth: <code>./skills/</code> (served via rule MCP tools). No skills in <code>.agents/skills/</code>.</p>
+</blockquote>
+<!-- /rule-mcp --><!-- rule-mcp-commit-rules --><h2>MANDATORY: commit scope</h2>
+<p>Every commit MUST use conventional commits <strong>with a scope</strong>: <code>type(scope): subject</code> (e.g. <code>feat(skills): ...</code>, <code>chore(config): ...</code>, <code>docs(project): ...</code>).</p>
+<p>Commits without a scope (e.g. <code>docs: ...</code>) are rejected by the <code>commit-msg</code> hook (<code>.githooks/commit-msg</code>). Generated merge/revert messages are exempt.</p>
+<!-- /rule-mcp-commit-rules --><!-- rule-mcp-repo-state --><h2>Repository state</h2>
+<ul>
+<li><strong>Two repos</strong>: <code>rule-mcp</code> (this - MCP server, 105 tools / 184 resources / 73 prompts / 89 skills, 212 checks) and <code>rule-mcp-architect</code> (standalone web app + SDK; former architect wizard lives there).</li>
+<li><strong>Release</strong>: v1.0.0 cut from the changelog; <code>git tag v1.0.0</code> pushes a GitHub Release via <code>.github/workflows/release.yml</code>. No npm publish yet.</li>
+<li><strong>Docs accuracy</strong>: <code>test/docs-accuracy.test.mjs</code> enforces that README counts match the runtime surface - update both together.</li>
+<li><strong>ADR</strong>: decisions in <code>docs/adr/</code> (001-040).</li>
+</ul>
+<!-- /rule-mcp-repo-state --><!-- rule-mcp-rules --><h2>MANDATORY: Use rule-mcp enforced workflow for coding work</h2>
+<p>This rule overrides weaker project guidance. No exceptions.</p>
+<ul>
+<li>Call <code>rule</code> before implementation; load exact routed skill evidence.</li>
+<li>Never invent APIs, files, dependencies, tools, requirements, or successful checks.</li>
+<li>If evidence is missing, call <code>pix_search</code> or state uncertainty.</li>
+<li>Write failing tests before implementation changes.</li>
+<li>Use deterministic <code>pix_component</code>, <code>pix_scaffold</code>, and <code>pix_fix</code> outputs when applicable.</li>
+<li>Run <code>pix_check</code>; failed guardrails block completion. Fix and rerun until all pass.</li>
+<li>Run project tests/typecheck; report only commands actually executed.</li>
+<li>Record structural decisions with <code>rule_tool_process_adr</code>.</li>
+<li>Frontend remains zero CSS classes, zero inline styles, semantic HTML, and external CSS.</li>
+</ul>
+<p>Available rule-mcp tools:</p>
+<ul>
+<li>pix_tool - Route to correct rule skill</li>
+<li>rule_tool_component - Generate component templates</li>
+<li>rule_tool_check - Blocking code validation</li>
+<li>rule_tool_search - Evidence search across all skills</li>
+<li>rule_tool_scaffold - Bootstrap projects/components</li>
+<li>rule_tool_fix - Validate/fix file tree</li>
+<li>rule_tool_process_adr - Architecture Decision Records</li>
+<li>rule_tool_process_handoff - Context handoff</li>
+<li>rule_tool_detect - Detect project framework</li>
+<li>Flex first: layout with display:flex; display:grid only for named areas, subgrid, explicit placement, or auto-fit tracks, justified with /* grid: why */</li>
+<li>rule://resources - Skill documentation as MCP resources</li>
+</ul>
+<!-- /rule-mcp-rules -->
+
+</main>
+<footer><p>Generated from <code>docs/</code> - edit the Markdown, not this file.</p></footer>
+</body>
+</html>

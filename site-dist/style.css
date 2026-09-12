@@ -1,0 +1,47 @@
+/* rule-mcp docs: semantic elements only, no classes. */
+body {
+  font-family: system-ui, sans-serif;
+  line-height: 1.6;
+  max-width: 70ch;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+header nav ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1rem;
+  list-style: none;
+  padding: 1rem 0;
+  border-bottom: 1px solid;
+}
+
+main {
+  padding: 1rem 0 3rem;
+}
+
+pre {
+  overflow-x: auto;
+  padding: 1rem;
+  border: 1px solid;
+}
+
+code {
+  overflow-wrap: anywhere;
+}
+
+table {
+  border-collapse: collapse;
+}
+
+th,
+td {
+  border: 1px solid;
+  padding: 0.25rem 0.75rem;
+  text-align: left;
+}
+
+footer {
+  border-top: 1px solid;
+  padding: 1rem 0 2rem;
+}

@@ -19,6 +19,7 @@ frameworks: [node, api]
 metadata:
   author: rule-engineering
   version: "1.0"
+inherits: [rule-backend]
 ---
 
 # Security Basics

@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>080: One installer, a Node wizard with shell bootstraps - rule-mcp docs</title>
+<link rel="stylesheet" href="../../style.css">
+</head>
+<body>
+<header><nav><ul>
+<li><a href="../../index.html">Home</a></li>
+<li><a href="../../docs/01-getting-started.html">undefined</a></li>
+<li><a href="../../docs/02-product-architecture.html">undefined</a></li>
+<li><a href="../../docs/03-agent-instructions.html">undefined</a></li>
+<li><a href="../../docs/04-operations.html">undefined</a></li>
+<li><a href="../../docs/05-env-variables.html">undefined</a></li>
+<li><a href="../../docs/06-privacy.html">undefined</a></li>
+<li><a href="../../docs/07-engineering-guides.html">undefined</a></li>
+<li><a href="../../docs/08-skills.html">undefined</a></li>
+<li><a href="../../docs/09-tools.html">undefined</a></li>
+<li><a href="../../docs/10-prompts.html">undefined</a></li>
+<li><a href="../../docs/11-instructions.html">undefined</a></li>
+<li><a href="../../docs/12-cli.html">undefined</a></li>
+<li><a href="../../docs/13-personas.html">undefined</a></li>
+<li><a href="../../docs/14-guardrails.html">undefined</a></li>
+<li><a href="../../docs/15-resources.html">undefined</a></li>
+<li><a href="../../docs/adr/ADR.html">ADRs</a></li>
+</ul></nav></header>
+<main>
+<h1>080: One installer, a Node wizard with shell bootstraps</h1>
+<ul>
+<li><strong>Date</strong>: 2026-09-10</li>
+<li><strong>Status</strong>: accepted</li>
+<li><strong>Tags</strong>: installer, cli, tui, ink, shell, powershell, testing</li>
+<li><strong>Author</strong>: Emiliano Pisu <a href="mailto:pisuemiliano.1980@gmail.com">pisuemiliano.1980@gmail.com</a></li>
+</ul>
+<h2>Context</h2>
+<p>The install surface was three implementations of one contract. <code>scripts/install.sh</code> (1172 lines) and <code>scripts/uninstall.sh</code> (993 lines) carried their own agent matrix, their own hand-rolled ANSI picker with a differential renderer, their own rules-block text, and their own shim logic. <code>scripts/install.ps1</code> (777) and <code>scripts/uninstall.ps1</code> (661) carried a third copy for Windows. Underneath all three, <code>src/cli/install/</code>, <code>src/cli/installers/</code>, <code>src/cli/skills-install/</code> and <code>src/cli/daemon/</code> already implemented agent detection, per-agent config writes, skills installation and service registration in Node.</p>
+<p>The copies drifted, as copies do. <code>install.sh</code> appended the instruction block to <code>~/.cursorrules</code> while <code>uninstall.sh</code> cleaned <code>~/.cursor/.cursorrules</code>, so Cursor kept the block forever. The bash and PowerShell agent matrices disagreed with the Node catalog. <code>uninstall.sh</code> ran <code>sed &#39;/export OPENAI_API_KEY=&quot;.*&quot;/d&#39;</code> over every shell profile, deleting the user&#39;s own keys whether or not this installer had ever written them. The interactive picker could only be tested through a macOS PTY (<code>/usr/bin/script</code>), so the whole interactive path was unverified on Linux and Windows CI.</p>
+<p>The request was a full-viewport, step-based, granular wizard. OpenTUI was evaluated first and rejected on evidence: <code>@opentui/core@0.5.11</code> declares <code>engines: {&quot;bun&quot;: &quot;&gt;=1.3.0&quot;, &quot;node&quot;: &quot;&gt;=26.4.0&quot;}</code>, and on Node 24.19.0 <code>createCliRenderer()</code> throws <code>OpenTUI native FFI is not available for this runtime yet</code>. An installer that cannot start on the Node the user already has is worse than the shell it replaces. <code>ink@6.8.0</code> declares <code>engines: {&quot;node&quot;: &quot;&gt;=20&quot;}</code>, matching this package&#39;s own floor exactly, and renders in both TTY and non-TTY streams.</p>
+<h2>Decision</h2>
+<p>One implementation, in Node, behind one command.</p>
+<p><code>src/cli/setup/</code> holds the wizard: an Ink 6.8.0 + React 19.2.8 full-viewport application on the alternate screen, seven steps for install (preflight, agents, mode, extras, review, install, done) and five for uninstall (select, purge, review, remove, done). The steps are pure views over wizard state; nothing is written until the review step is confirmed. A plan is data - <code>buildInstallPlan</code> and <code>buildUninstallPlan</code> return an ordered list of tasks whose construction performs no work - so the review screen shows exactly what will happen, and a dry run is the same list with a flag flipped rather than a second code path.</p>
+<p>The logic the shell scripts owned alone moves into the same package: the runtime home, the global shim, the instruction block, the commit hook, the shell profiles, the Docker step. Everything else delegates to the modules that already existed. Steps that print (<code>skills install</code>, <code>agent-commands</code>, <code>doctor</code>) run out of process so their stdout cannot land inside the frame.</p>
+<p><code>rule-mcp setup</code> is the entry point, <code>--uninstall</code> the other direction. The four scripts shrink to bootstraps of about 60 lines each: check Node, resolve the binary, forward the arguments. Under <code>curl | bash</code> the bootstrap borrows <code>/dev/tty</code> so a piped install still gets the wizard - gated on stdout also being a terminal, so a scripted run stays non-interactive instead of blocking on a keystroke nobody will send.</p>
+<p>Two behaviors change deliberately. The instruction block is written and removed through one target list, legacy Cursor path included, so install and uninstall can no longer disagree. Shell-profile cleaning is narrowed to <code># rule-mcp:</code> comments and the single export each one annotates; an uninstall is not a license to delete lines it did not author.</p>
+<h2>Consequences</h2>
+<p>Positive: 3603 lines of shell become 4 bootstraps totaling ~250 lines plus ~2000 lines of tested Node. The interactive path is tested headlessly on every platform - Ink renders into any stream, so the fake-terminal suite replaced the macOS-only PTY test. Every step is granular and reversible: agents are individually selectable, optional steps say which files they touch, the purge is its own screen and starts empty. The Cursor asymmetry, the profile over-deletion and the catalog drift are structurally impossible now, and the wizard surfaced a real pre-existing bug on the way (<code>agent-commands --remove --sync</code> threw ENOENT on a detected agent whose command directory did not exist yet).</p>
+<p>Negative: <code>ink</code> and <code>react</code> join the production dependencies - 39 packages - on a server whose runtime does not otherwise need React. The wizard is pinned to <code>ink@6.8.0</code> because <code>ink@7</code> raises the Node floor to 22 while this package supports 20; that pin has to be revisited when the floor moves. Views are written with <code>React.createElement</code> rather than JSX, because this repository ships source to npm with no build step and a transpiler would mean the installer could not run from a checkout. The PowerShell bootstraps are unverified locally (no <code>pwsh</code> on this machine); their parse test skips itself when <code>pwsh</code> is absent and runs in CI where it is present.</p>
+<h2>What would end this</h2>
+<p>If Ink&#39;s Node floor moves past this package&#39;s own <code>engines</code>, or the alternate-screen render proves unreliable on a terminal users actually have, the frame is the part to reconsider - not the plan/task split underneath it, which is renderer-independent.</p>
+<h2>Alternatives Considered</h2>
+<ol>
+<li>OpenTUI (<code>@opentui/core</code>): rejected on evidence. It requires Node &gt;= 26.4.0 and throws <code>OpenTUI native FFI is not available for this runtime yet</code> on Node 24, so the installer could not start on the machine it is meant to install onto.</li>
+<li>A hand-rolled alternate-screen renderer with no new dependencies: rejected. It is roughly a thousand lines of widget and diff-renderer code to own and test, which is the cost the shell picker was already paying.</li>
+<li>Keep the shell scripts full and add the wizard beside them: rejected. That is the drift this decision exists to end - every future agent would be added twice.</li>
+<li>Delete the scripts and document <code>npx rule-mcp setup</code> only: rejected. The documented <code>curl | bash</code> install is the entry point people use, and a bootstrap that checks Node before anything else gives a better failure than a package manager error.</li>
+</ol>
+
+</main>
+<footer><p>Generated from <code>docs/</code> - edit the Markdown, not this file.</p></footer>
+</body>
+</html>

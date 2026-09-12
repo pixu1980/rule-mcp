@@ -3,6 +3,7 @@ import { readdirSync } from "node:fs";
 import { checkCode } from "../index.js";
 import { loadAllSkills } from "../../skills/index.js";
 import { addBeforeToolHook, addPostToolHook, callTool, listTools, registerTool } from "../../../tools/router/index.js";
+import "./_install.fixture.mjs";
 
 // Hermetic: this suite asserts deterministic tool behavior and side effects,
 // not the result cache (which has its own test). Disable caching here.

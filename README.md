@@ -19,10 +19,10 @@ Serves styleguides, component templates, framework best practices, and design sy
 - [What is rule-mcp](#what-is-rule-mcp)
 - [Architecture overview](#architecture-overview)
 - [Tool reference](#tool-reference)
-  - [All 105 tools (normal mode)](#all-105-tools-normal-mode)
+  - [All 107 tools (normal mode)](#all-107-tools-normal-mode)
   - [Minimal tool surface (10 tools)](#minimal-tool-surface-10-tools)
   - [Gateway deterministic mode](#gateway-deterministic-mode)
-- [MCP Resources (184)](#mcp-resources-184)
+- [MCP Resources (188)](#mcp-resources-188)
 - [MCP Prompts (73)](#mcp-prompts-73)
 - [Guardrail engine](#guardrail-engine)
 - [CLI reference](#cli-reference)
@@ -40,8 +40,8 @@ Deterministic MCP server for the rule skill ecosystem. Live surface (enforced by
 
 | Surface   | Count | Notes                                                                                                       |
 | --------- | ----- | ----------------------------------------------------------------------------------------------------------- |
-| Tools     | 105   | per-skill tools + dispatcher/action tools                                                                   |
-| Resources | 184   | rule:// per-skill index + summary + template URIs                                                            |
+| Tools     | 107   | per-skill tools + dispatcher/action tools                                                                   |
+| Resources | 188   | rule:// per-skill index + summary + template URIs                                                            |
 | Prompts   | 73    | rule-area-* areas + one-shot workflow + 54 review-persona commands (rule-plan-* / rule-audit-* / rule-review-*) |
 | Skills    | 89    | frontend, backend, data, devops, toolchain, styleguide, process, platform, ai                               |
 | Tests     | 212   | `pnpm test:all` green (incl. installer + PTY TUI)                                                           |
@@ -74,9 +74,9 @@ rule-mcp install --agent all
 
 ## What is rule-mcp
 
-rule-mcp is an [MCP](https://modelcontextprotocol.io) server that exposes **105 tools**, **184 resources**, and **73 prompts** to any MCP-compatible AI coding agent. Because the server never calls an LLM (every output is deterministic), it is **model-agnostic** - it behaves identically behind Claude, GPT, Gemini, Llama, Qwen, or any other model. It provides:
+rule-mcp is an [MCP](https://modelcontextprotocol.io) server that exposes **107 tools**, **188 resources**, and **73 prompts** to any MCP-compatible AI coding agent. Because the server never calls an LLM (every output is deterministic), it is **model-agnostic** - it behaves identically behind Claude, GPT, Gemini, Llama, Qwen, or any other model. It provides:
 
-- **89 modular skills** covering frontend, backend, database, devops, toolchain, styleguide, process, platform, and ai domains
+- **91 modular skills** covering frontend, backend, database, devops, toolchain, styleguide, process, platform, and ai domains
 - **BM25 full-text search** across all skill content
 - **Guardrail engine** with 18 shared rules + framework/backend/database/devops-specific checks
 - **Deterministic gateway** (`pix_gateway` + `pix_apply`) with receipt-based validation
@@ -114,7 +114,7 @@ Claude Code, Cursor, Cline, Roo Code, Copilot, Gemini CLI, Codex CLI, Devin (for
 ├───────────────────────────────────────────────────────────────┤
 │  Tool Registry              │  Resources Registry             │
 │  src/tools/router.js        │  src/resources/index.js         │
-│  105 tools                  │  184 resources                  │
+│  107 tools                  │  188 resources                  │
 ├──────────────────┬───────────┴────────────────┬───────────────┤
 │  Orchestration   │  Skills & BM25            │  Guardrails    │
 │  pix_gateway     │  89 skill dirs            │  18 shared     │
@@ -159,7 +159,7 @@ Claude Code, Cursor, Cline, Roo Code, Copilot, Gemini CLI, Codex CLI, Devin (for
 
 ## Tool reference
 
-### All 105 tools (normal mode)
+### All 107 tools (normal mode)
 
 #### Deterministic tools (9)
 
@@ -168,7 +168,7 @@ Claude Code, Cursor, Cline, Roo Code, Copilot, Gemini CLI, Codex CLI, Devin (for
 | `rule`                 | Route a prompt to the correct rule skill via BM25 keyword scoring + framework bias            | ✅        |
 | `pix_gateway`         | **Single-entry orchestrator:** routes → loads evidence → checks guardrails → returns receipt | ✅        |
 | `pix_apply`           | Write files to disk, requires valid receipt from `pix_gateway`                               | ❌        |
-| `pix_search`          | BM25 full-text search across all 89 skills                                                   | ✅        |
+| `pix_search`          | BM25 full-text search across all 91 skills                                                   | ✅        |
 | `pix_check`           | Run guardrail checks on code against any rule skill                                           | ✅        |
 | `pix_scaffold`        | Generate project config files (`.prettierrc`, `.editorconfig`, `.gitignore`, etc.)           | ✅        |
 | `pix_detect`          | Auto-detect project framework and suggest relevant skills/tools                              | ✅        |
@@ -285,7 +285,7 @@ See [ADR 044](./docs/adr/044-gateway-as-the-single-entrypoint-with-server-side-r
 
 ---
 
-## MCP Resources (184)
+## MCP Resources (188)
 
 196 resources accessible via the MCP `resources/read` protocol.
 

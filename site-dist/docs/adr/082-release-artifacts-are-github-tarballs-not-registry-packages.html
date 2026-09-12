@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>082: Release artifacts are GitHub tarballs, not registry packages - rule-mcp docs</title>
+<link rel="stylesheet" href="../../style.css">
+</head>
+<body>
+<header><nav><ul>
+<li><a href="../../index.html">Home</a></li>
+<li><a href="../../docs/01-getting-started.html">undefined</a></li>
+<li><a href="../../docs/02-product-architecture.html">undefined</a></li>
+<li><a href="../../docs/03-agent-instructions.html">undefined</a></li>
+<li><a href="../../docs/04-operations.html">undefined</a></li>
+<li><a href="../../docs/05-env-variables.html">undefined</a></li>
+<li><a href="../../docs/06-privacy.html">undefined</a></li>
+<li><a href="../../docs/07-engineering-guides.html">undefined</a></li>
+<li><a href="../../docs/08-skills.html">undefined</a></li>
+<li><a href="../../docs/09-tools.html">undefined</a></li>
+<li><a href="../../docs/10-prompts.html">undefined</a></li>
+<li><a href="../../docs/11-instructions.html">undefined</a></li>
+<li><a href="../../docs/12-cli.html">undefined</a></li>
+<li><a href="../../docs/13-personas.html">undefined</a></li>
+<li><a href="../../docs/14-guardrails.html">undefined</a></li>
+<li><a href="../../docs/15-resources.html">undefined</a></li>
+<li><a href="../../docs/adr/ADR.html">ADRs</a></li>
+</ul></nav></header>
+<main>
+<h1>082: Release artifacts are GitHub tarballs, not registry packages</h1>
+<ul>
+<li><strong>Date</strong>: 2026-09-10</li>
+<li><strong>Status</strong>: accepted</li>
+<li><strong>Tags</strong>: registry, release</li>
+<li><strong>Author</strong>: Emiliano Pisu <a href="mailto:pisuemiliano.1980@gmail.com">pisuemiliano.1980@gmail.com</a></li>
+</ul>
+<h2>Context</h2>
+<p>OSS-11: the release workflow publishes nothing but a GitHub Release with a changelog excerpt - no build job, no artifact, no checksum, no provenance. The artifact the project actually ships is the GitHub tarball, which is unverified and unsigned. Interview decision D4 keeps distribution on git-clone plus installer.</p>
+<h2>Decision</h2>
+<p>Release artifacts are signed GitHub Release tarballs, not registry packages: the pipeline packs the tarball, checksums it with SHA256SUMS, installs it from scratch to prove it, and attaches both files to the GitHub Release.</p>
+<h2>Consequences</h2>
+<p>release.yml grows build/verify/release jobs; the tarball plus SHA256SUMS are the shippable unit and the documented verify path; npm distribution stays out of scope so OSS-4 remains a documentation fix.</p>
+<h2>What would end this</h2>
+<p>The assumption this leans on, and the observation that would make it wrong.</p>
+<h2>Alternatives Considered</h2>
+<ol>
+<li>Publish to npm and ship the registry tarball (rejected: distribution stays git-clone plus installer per D4; the package name is unclaimed and publication is out of scope)</li>
+<li>Keep the changelog-only release (rejected: the v1.0.0 release is an excerpt with no verifiable artifact - OSS-11)</li>
+</ol>
+
+</main>
+<footer><p>Generated from <code>docs/</code> - edit the Markdown, not this file.</p></footer>
+</body>
+</html>

@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>074: The CLI entry point loads no command handler it has not been asked for - rule-mcp docs</title>
+<link rel="stylesheet" href="../../style.css">
+</head>
+<body>
+<header><nav><ul>
+<li><a href="../../index.html">Home</a></li>
+<li><a href="../../docs/01-getting-started.html">undefined</a></li>
+<li><a href="../../docs/02-product-architecture.html">undefined</a></li>
+<li><a href="../../docs/03-agent-instructions.html">undefined</a></li>
+<li><a href="../../docs/04-operations.html">undefined</a></li>
+<li><a href="../../docs/05-env-variables.html">undefined</a></li>
+<li><a href="../../docs/06-privacy.html">undefined</a></li>
+<li><a href="../../docs/07-engineering-guides.html">undefined</a></li>
+<li><a href="../../docs/08-skills.html">undefined</a></li>
+<li><a href="../../docs/09-tools.html">undefined</a></li>
+<li><a href="../../docs/10-prompts.html">undefined</a></li>
+<li><a href="../../docs/11-instructions.html">undefined</a></li>
+<li><a href="../../docs/12-cli.html">undefined</a></li>
+<li><a href="../../docs/13-personas.html">undefined</a></li>
+<li><a href="../../docs/14-guardrails.html">undefined</a></li>
+<li><a href="../../docs/15-resources.html">undefined</a></li>
+<li><a href="../../docs/adr/ADR.html">ADRs</a></li>
+</ul></nav></header>
+<main>
+<h1>074: The CLI entry point loads no command handler it has not been asked for</h1>
+<ul>
+<li><strong>Date</strong>: 2026-09-09</li>
+<li><strong>Status</strong>: accepted</li>
+<li><strong>Tags</strong>: cli, startup, performance, imports</li>
+<li><strong>Author</strong>: Emiliano Pisu <a href="mailto:pisuemiliano.1980@gmail.com">pisuemiliano.1980@gmail.com</a></li>
+</ul>
+<h2>Context</h2>
+<p>stdio starts the server as a subprocess per client, so startup is paid on every connect rather than once per machine. pnpm report:startup measured a warm --help at 216 ms, of which 185 ms was the static import graph: the command registrars imported their handlers at module load, and the handlers pull the MCP server, both transports, the installer and 105 tool registrations. NODE_COMPILE_CACHE was expected to cut 35 percent of that and measured 2-6 percent.</p>
+<h2>Decision</h2>
+<p>Keep the command and option declarations static, and load the handlers inside their actions. The declarations are what --help renders, so the generated help still cannot drift from what actually parses; the handler graph is what nothing but the chosen command needs. The entry also imports src/cli/_program.js directly instead of the cli barrel, which also exported the TUI and the uninstaller. The compiled code cache is enabled in bin/ before the application graph loads, which is why that load is a dynamic import: a static one is hoisted above the call.</p>
+<h2>Consequences</h2>
+<p>Warm --help fell from 216 ms to 48 ms, and every command still dispatches. listTools() is memoized on a registry generation bumped by register, clear and retain, so the 105-schema conversion is paid once per process instead of once per tools/list. A wall-time assertion would be flaky, so src/cli/<strong>tests</strong>/_startup-graph.test.mjs asserts the property instead: the heavy graph must stay unreachable from the entry through static imports. Cost: a new command must remember to defer its handler, and the test is what enforces it.</p>
+<h2>What would end this</h2>
+<p>The assumption this leans on, and the observation that would make it wrong.</p>
+
+</main>
+<footer><p>Generated from <code>docs/</code> - edit the Markdown, not this file.</p></footer>
+</body>
+</html>

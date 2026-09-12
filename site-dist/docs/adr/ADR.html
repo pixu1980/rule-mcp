@@ -1,0 +1,1402 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Architecture Decision Records - rule-mcp docs</title>
+<link rel="stylesheet" href="../../style.css">
+</head>
+<body>
+<header><nav><ul>
+<li><a href="../../index.html">Home</a></li>
+<li><a href="../../docs/01-getting-started.html">undefined</a></li>
+<li><a href="../../docs/02-product-architecture.html">undefined</a></li>
+<li><a href="../../docs/03-agent-instructions.html">undefined</a></li>
+<li><a href="../../docs/04-operations.html">undefined</a></li>
+<li><a href="../../docs/05-env-variables.html">undefined</a></li>
+<li><a href="../../docs/06-privacy.html">undefined</a></li>
+<li><a href="../../docs/07-engineering-guides.html">undefined</a></li>
+<li><a href="../../docs/08-skills.html">undefined</a></li>
+<li><a href="../../docs/09-tools.html">undefined</a></li>
+<li><a href="../../docs/10-prompts.html">undefined</a></li>
+<li><a href="../../docs/11-instructions.html">undefined</a></li>
+<li><a href="../../docs/12-cli.html">undefined</a></li>
+<li><a href="../../docs/13-personas.html">undefined</a></li>
+<li><a href="../../docs/14-guardrails.html">undefined</a></li>
+<li><a href="../../docs/15-resources.html">undefined</a></li>
+<li><a href="../../docs/adr/ADR.html" aria-current="page">ADRs</a></li>
+</ul></nav></header>
+<main>
+<h1>Architecture Decision Records</h1>
+<p>Every decision this project has taken, newest first. The numbered files in
+this directory are the source of truth; this index is generated from them by
+<code>rule_tool_process_adr</code>, so editing it by hand is work the next call throws away.</p>
+<h2>Index</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Title</th>
+<th>Date</th>
+<th>Status</th>
+<th>Tags</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><a href="087-session-close-archives-completed-audits-reviews-and-plans.html">087</a></td>
+<td>Session close archives completed audits, reviews and plans</td>
+<td>2026-09-11</td>
+<td>accepted</td>
+<td>process, handoff, docs</td>
+</tr>
+<tr>
+<td><a href="086-documentation-site-is-hand-written-static-html-from-docs.html">086</a></td>
+<td>Documentation site is hand-written static HTML from docs</td>
+<td>2026-09-11</td>
+<td>accepted</td>
+<td>docs, site</td>
+</tr>
+<tr>
+<td><a href="085-reset-the-project-version-to-0-1-0-first-release-will-be-v0-1-0.html">085</a></td>
+<td>Reset the project version to 0.1.0, first release will be v0.1.0</td>
+<td>2026-09-10</td>
+<td>accepted</td>
+<td>release, versioning</td>
+</tr>
+<tr>
+<td><a href="084-keep-the-name-with-a-written-posture-no-npm-placeholder-yet.html">084</a></td>
+<td>Keep the name with a written posture, no npm placeholder yet</td>
+<td>2026-09-10</td>
+<td>accepted</td>
+<td>naming, legal</td>
+</tr>
+<tr>
+<td><a href="083-governance-is-an-explicit-bdfl-with-a-path-to-co-maintainers.html">083</a></td>
+<td>Governance is an explicit BDFL with a path to co-maintainers</td>
+<td>2026-09-10</td>
+<td>accepted</td>
+<td>governance, community</td>
+</tr>
+<tr>
+<td><a href="082-release-artifacts-are-github-tarballs-not-registry-packages.html">082</a></td>
+<td>Release artifacts are GitHub tarballs, not registry packages</td>
+<td>2026-09-10</td>
+<td>accepted</td>
+<td>registry, release</td>
+</tr>
+<tr>
+<td><a href="081-mcp-registry-identity-is-the-github-owner-not-a-claimed-brand.html">081</a></td>
+<td>MCP registry identity is the GitHub owner, not a claimed brand</td>
+<td>2026-09-10</td>
+<td>accepted</td>
+<td>registry, release</td>
+</tr>
+<tr>
+<td><a href="080-one-installer-a-node-wizard-with-shell-bootstraps.html">080</a></td>
+<td>One installer, a Node wizard with shell bootstraps</td>
+<td>2026-09-10</td>
+<td>accepted</td>
+<td>installer, cli, tui, ink, shell, powershell, testing</td>
+</tr>
+<tr>
+<td><a href="079-add-the-oss-architect-review-persona.html">079</a></td>
+<td>Add the OSS Architect review persona</td>
+<td>2026-09-10</td>
+<td>accepted</td>
+<td>persona, oss, open-source, governance, licensing, community</td>
+</tr>
+<tr>
+<td><a href="078-compress-agent-command-files-at-write-time.html">078</a></td>
+<td>Compress agent command files at write time</td>
+<td>2026-09-10</td>
+<td>accepted</td>
+<td>token-efficiency, compression, installer, agent-commands, write-time</td>
+</tr>
+<tr>
+<td><a href="077-compress-every-server-model-list-surface-prompts-list-tools-list-resources-list.html">077</a></td>
+<td>Compress every server→model list surface (prompts/list, tools/list, resources/list)</td>
+<td>2026-09-10</td>
+<td>accepted</td>
+<td>token-efficiency, compression, mcp-surface, prompts, tools</td>
+</tr>
+<tr>
+<td><a href="076-coverage-wave-five-raises-the-branch-floor-to-91.html">076</a></td>
+<td>Coverage wave five raises the branch floor to 91</td>
+<td>2026-09-09</td>
+<td>accepted</td>
+<td>testing, coverage, ci</td>
+</tr>
+<tr>
+<td><a href="075-meta-frameworks-get-their-own-namespace-and-a-narrow-dispatcher.html">075</a></td>
+<td>Meta-frameworks get their own namespace and a narrow dispatcher</td>
+<td>2026-09-09</td>
+<td>accepted</td>
+<td>skills, taxonomy, routing, tools</td>
+</tr>
+<tr>
+<td><a href="074-the-cli-entry-point-loads-no-command-handler-it-has-not-been-asked-for.html">074</a></td>
+<td>The CLI entry point loads no command handler it has not been asked for</td>
+<td>2026-09-09</td>
+<td>accepted</td>
+<td>cli, startup, performance, imports</td>
+</tr>
+<tr>
+<td><a href="073-compression-has-four-levels-and-no-llm-in-the-output-path.html">073</a></td>
+<td>Compression has four levels and no LLM in the output path</td>
+<td>2026-09-09</td>
+<td>accepted</td>
+<td>compression, tokens, determinism, text</td>
+</tr>
+<tr>
+<td><a href="072-the-installer-asks-before-copying-bundled-skills-to-the-central-agents-directory.html">072</a></td>
+<td>The installer asks before copying bundled skills to the central agents directory</td>
+<td>2026-09-08</td>
+<td>accepted</td>
+<td>installer, skills, devx, bash, powershell</td>
+</tr>
+<tr>
+<td><a href="071-the-census-generates-eight-numbered-documents-and-three-fenced-blocks-inside-the-chapters-a-person-writes.html">071</a></td>
+<td>The census generates eight numbered documents and three fenced blocks inside the chapters a person writes</td>
+<td>2026-09-08</td>
+<td>accepted</td>
+<td>docs, census, generator, tooling</td>
+</tr>
+<tr>
+<td><a href="070-installer-mode-step-replaces-the-agent-picker-instead-of-stacking-under-it.html">070</a></td>
+<td>Installer mode step replaces the agent picker instead of stacking under it</td>
+<td>2026-09-08</td>
+<td>accepted</td>
+<td>installer, tui, devx</td>
+</tr>
+<tr>
+<td><a href="069-coverage-wave-four-holds-the-floor-at-90-and-fixes-the-daemon-status-platform-de.html">069</a></td>
+<td>Coverage wave four holds the floor at 90 and fixes the daemon status platform defect</td>
+<td>2026-09-08</td>
+<td>accepted</td>
+<td>testing, coverage, ci, ratchet</td>
+</tr>
+<tr>
+<td><a href="068-src-shared-for-every-shareable-helper.html">068</a></td>
+<td>src shared for every shareable helper</td>
+<td>-</td>
+<td>proposed</td>
+<td>-</td>
+</tr>
+<tr>
+<td><a href="067-co-locate-every-test-with-its-module.html">067</a></td>
+<td>co locate every test with its module</td>
+<td>-</td>
+<td>proposed</td>
+<td>-</td>
+</tr>
+<tr>
+<td><a href="066-remove-externally-derived-skills-from-the-served-knowledge-base.html">066</a></td>
+<td>Remove externally derived skills from the served knowledge base</td>
+<td>2026-09-07</td>
+<td>accepted</td>
+<td>skills, knowledge-base, attribution, governance</td>
+</tr>
+<tr>
+<td><a href="065-coverage-floor-raised-to-90.html">065</a></td>
+<td>Coverage floor raised to 90</td>
+<td>2026-09-07</td>
+<td>accepted</td>
+<td>testing, coverage, ci, ratchet</td>
+</tr>
+<tr>
+<td><a href="064-coverage-floor-raised-to-89-toward-the-95-endpoint.html">064</a></td>
+<td>Coverage floor raised to 89 toward the 95 endpoint</td>
+<td>2026-09-07</td>
+<td>accepted</td>
+<td>testing, coverage, ci, ratchet</td>
+</tr>
+<tr>
+<td><a href="063-coverage-floor-raised-to-87-95-remains-the-ratchet-endpoint.html">063</a></td>
+<td>Coverage floor raised to 87; 95 remains the ratchet endpoint</td>
+<td>2026-09-07</td>
+<td>accepted</td>
+<td>testing, coverage, ci, ratchet</td>
+</tr>
+<tr>
+<td><a href="062-glob-suite-runner-colocated-tests-and-a-branch-coverage-ratchet.html">062</a></td>
+<td>Glob suite runner, co-located tests, and a branch-coverage ratchet</td>
+<td>2026-09-07</td>
+<td>accepted</td>
+<td>testing, ci, coverage, structure</td>
+</tr>
+<tr>
+<td><a href="061-one-global-shim-and-hermetic-pnpm-home-in-script-tests.html">061</a></td>
+<td>One global shim, and hermetic PNPM_HOME in script tests</td>
+<td>2026-09-07</td>
+<td>accepted</td>
+<td>installer, cli, shim, testing, hermeticity</td>
+</tr>
+<tr>
+<td><a href="060-plans-carry-nested-sub-steps-and-an-exhaustiveness-mandate.html">060</a></td>
+<td>Plans carry nested sub-steps and an exhaustiveness mandate</td>
+<td>2026-09-07</td>
+<td>accepted</td>
+<td>documentation, personas, plans</td>
+</tr>
+<tr>
+<td><a href="059-persona-plans-are-checklists-with-marks-that-survive-the-sync.html">059</a></td>
+<td>Persona plans are checklists with marks that survive the sync</td>
+<td>2026-09-07</td>
+<td>accepted</td>
+<td>documentation, personas, plans</td>
+</tr>
+<tr>
+<td><a href="058-one-file-per-rule-with-underscore-barrel-folders-and-a-size-ratchet.html">058</a></td>
+<td>One file per rule with underscore-barrel folders and a size ratchet</td>
+<td>2026-09-06</td>
+<td>accepted</td>
+<td>architecture, refactor, structure, guardrails</td>
+</tr>
+<tr>
+<td><a href="057-reorganize-scripts-src-tests-with-150-line-code-splitting.html">057</a></td>
+<td>Reorganize scripts, src and tests with 150-line code splitting</td>
+<td>2026-09-06</td>
+<td>accepted</td>
+<td>architecture, refactor, testing, structure</td>
+</tr>
+<tr>
+<td><a href="056-drop-the-vs-code-extension-and-its-installers.html">056</a></td>
+<td>Drop the VS Code extension and its installers</td>
+<td>2026-09-05</td>
+<td>accepted</td>
+<td>vscode, extension, installer, lean-web</td>
+</tr>
+<tr>
+<td><a href="055-restructure-the-command-surface-rule-router-rule-area-caveman-implicit-rule-process.html">055</a></td>
+<td>Restructure the command surface: /rule router, rule-area-*, caveman implicit, rule-process-tdd skill</td>
+<td>2026-09-05</td>
+<td>accepted</td>
+<td>commands, prompts, surface, skills, installer</td>
+</tr>
+<tr>
+<td><a href="054-split-review-personas-into-per-operation-commands-plan-audit-review.html">054</a></td>
+<td>Split review personas into per-operation commands (plan/audit/review)</td>
+<td>2026-09-05</td>
+<td>accepted</td>
+<td>personas, commands, prompts, surface</td>
+</tr>
+<tr>
+<td><a href="053-gateway-as-the-single-entrypoint-with-server-side-receipts-backend-data-devops-g.html">053</a></td>
+<td>Gateway as the single entrypoint with server-side receipts; backend/data/devops guardrail families</td>
+<td>2026-09-04</td>
+<td>accepted</td>
+<td>gateway, guardrails, determinism, receipt, backend</td>
+</tr>
+<tr>
+<td><a href="052-pre-packaged-mcp-prompt-registry-26-prompts-strict-schemas-commit-scope-closer.html">052</a></td>
+<td>Pre-packaged MCP prompt registry (26 prompts, strict schemas, commit-scope closer)</td>
+<td>2026-09-04</td>
+<td>accepted</td>
+<td>prompts, registry, tdd, a11y</td>
+</tr>
+<tr>
+<td><a href="051-token-efficiency-pipeline.html">051</a></td>
+<td>Token-efficiency pipeline (caveman aggressive + tokensave-aware decoration)</td>
+<td>2026-08-25</td>
+<td>accepted</td>
+<td>token-efficiency, caveman, tokensave, mcp-boundary, diagnostics</td>
+</tr>
+<tr>
+<td><a href="050-round-two-hardening-cycles-daemon-cleanup-diagnostics.html">050</a></td>
+<td>Round-2 hardening - cycles, daemon/commands split, diagnostics, HTTP verification</td>
+<td>2026-08-25</td>
+<td>accepted</td>
+<td>refactor, cycles, daemon, doctor, transport, logs, quality</td>
+</tr>
+<tr>
+<td><a href="049-split-hotspot-modules.html">049</a></td>
+<td>Split the hotspot modules (guardrails + installer)</td>
+<td>2026-08-25</td>
+<td>accepted</td>
+<td>refactor, maintainability, guardrails, installer</td>
+</tr>
+<tr>
+<td><a href="048-v100-release-and-docs-accuracy-guard.html">048</a></td>
+<td>v1.0.0 release and the docs-accuracy guard</td>
+<td>2026-08-25</td>
+<td>accepted</td>
+<td>release, docs, accuracy, testing</td>
+</tr>
+<tr>
+<td><a href="047-architect-splits-into-standalone-web-app-repo.html">047</a></td>
+<td>rule-mcp-architect splits into a standalone web app repo (rule-mcp-architect)</td>
+<td>2026-08-25</td>
+<td>accepted</td>
+<td>architect, split, repo, web-app, sdk, vanilla, cross-repo</td>
+</tr>
+<tr>
+<td><a href="046-installer-self-heals-global-shim-surfaces-failures-gates-tui-rendering.html">046</a></td>
+<td>Installer self-heals its global shim, surfaces failures, and gates TUI rendering</td>
+<td>2026-08-25</td>
+<td>accepted</td>
+<td>installer, cli, cross-platform, shim, tui, terminal, idempotency</td>
+</tr>
+<tr>
+<td><a href="045-migrate-repo-tooling-to-eslint-10-flat-config-with-eslint-plugin-unicorn.html">045</a></td>
+<td>Migrate repo tooling to ESLint 10 flat config with eslint-plugin-unicorn</td>
+<td>2026-08-03</td>
+<td>accepted</td>
+<td>eslint, toolchain, unicorn, flat-config, migration, security, brace-expansion</td>
+</tr>
+<tr>
+<td><a href="044-adopt-eslint-plugin-unicorn-for-js-ts-quality.html">044</a></td>
+<td>Adopt eslint-plugin-unicorn for JS/TS quality</td>
+<td>2026-08-03</td>
+<td>accepted</td>
+<td>eslint, toolchain, unicorn, javascript, typescript, styleguide, guardrails, quality</td>
+</tr>
+<tr>
+<td><a href="043-strengthen-typescript-discipline-for-large-codebases.html">043</a></td>
+<td>Strengthen TypeScript discipline for large codebases</td>
+<td>2026-08-02</td>
+<td>accepted</td>
+<td>typescript, toolchain, strict, monorepo, quality</td>
+</tr>
+<tr>
+<td><a href="042-strengthen-database-relational-constraint-skills.html">042</a></td>
+<td>Strengthen database relational constraint skills</td>
+<td>2026-08-02</td>
+<td>accepted</td>
+<td>database, sql, postgresql, mysql, schema</td>
+</tr>
+<tr>
+<td><a href="041-lossless-installer-preserve-toolprefix-normalize-rule-blank-lines.html">041</a></td>
+<td>Lossless installer: preserve toolPrefix and normalize rule blank lines</td>
+<td>2026-08-01</td>
+<td>accepted</td>
+<td>installer, idempotency, toolPrefix, mcp-config</td>
+</tr>
+<tr>
+<td><a href="040-per-invocation-self-update-with-temporal-throttle-fire-and-forget.html">040</a></td>
+<td>Per-invocation self-update with temporal throttle and fire-and-forget</td>
+<td>2026-08-01</td>
+<td>accepted</td>
+<td>self-update, mcp-server, operational, background</td>
+</tr>
+<tr>
+<td><a href="039-fix-vscode-extension-and-derivatives-install-uninstall.html">039</a></td>
+<td>Fix VS Code extension and derivatives install/uninstall</td>
+<td>2026-07-19</td>
+<td>superseded</td>
+<td>vscode, extension, installer, cursor, windsurf</td>
+</tr>
+<tr>
+<td><a href="038-native-claude-skills-integration.html">038</a></td>
+<td>native claude skills integration</td>
+<td>-</td>
+<td>proposed</td>
+<td>-</td>
+</tr>
+<tr>
+<td><a href="037-documentation-and-see-also-in-skills.html">037</a></td>
+<td>documentation and see also in skills</td>
+<td>-</td>
+<td>proposed</td>
+<td>-</td>
+</tr>
+<tr>
+<td><a href="036-lossless-idempotent-installer.html">036</a></td>
+<td>lossless idempotent installer</td>
+<td>-</td>
+<td>proposed</td>
+<td>-</td>
+</tr>
+<tr>
+<td><a href="035-sandbox-timeout-with-abortcontroller.html">035</a></td>
+<td>sandbox timeout with abortcontroller</td>
+<td>-</td>
+<td>proposed</td>
+<td>-</td>
+</tr>
+<tr>
+<td><a href="034-sse-server-with-bearer-auth.html">034</a></td>
+<td>sse server with bearer auth</td>
+<td>-</td>
+<td>proposed</td>
+<td>-</td>
+</tr>
+<tr>
+<td><a href="033-registry-driven-clean-slash-commands-for-every-agent-and-ide.html">033</a></td>
+<td>Registry-driven clean slash commands for every agent and IDE</td>
+<td>2026-08-04</td>
+<td>accepted</td>
+<td>architecture, cli, agents, slash-commands, vscode</td>
+</tr>
+<tr>
+<td><a href="032-the-tool-surface-is-skills-and-nothing-else.html">032</a></td>
+<td>The tool surface is ./skills and nothing else</td>
+<td>2026-08-04</td>
+<td>accepted</td>
+<td>architecture</td>
+</tr>
+<tr>
+<td><a href="031-pin-the-self-update-remote-and-drop-root-in-the-container.html">031</a></td>
+<td>Pin the self-update remote and drop root in the container</td>
+<td>2026-08-04</td>
+<td>accepted</td>
+<td>architecture</td>
+</tr>
+<tr>
+<td><a href="030-interview-servers-enforce-same-origin-and-own-their-process-lifecycle.html">030</a></td>
+<td>Interview servers enforce same-origin and own their process lifecycle</td>
+<td>2026-08-04</td>
+<td>accepted</td>
+<td>architecture</td>
+</tr>
+<tr>
+<td><a href="029-bind-write-authorization-to-destinations-not-just-content.html">029</a></td>
+<td>Bind write authorization to destinations, not just content</td>
+<td>2026-08-04</td>
+<td>accepted</td>
+<td>architecture</td>
+</tr>
+<tr>
+<td><a href="028-clean-rule-commands-via-user-commands-prompt-suppression-not-a-plugin.html">028</a></td>
+<td>Clean /rule-* commands via user commands + prompt suppression, not a plugin</td>
+<td>2026-08-03</td>
+<td>accepted</td>
+<td>commands, claude, mcp, installer</td>
+</tr>
+<tr>
+<td><a href="027-add-rule-toolchain-commits-skill-for-atomic-conventional-commits-with-mandatory-s.html">027</a></td>
+<td>Add rule-toolchain-commits skill for atomic conventional commits with mandatory scope</td>
+<td>2026-08-01</td>
+<td>accepted</td>
+<td>taxonomy, skills, routing, git, toolchain</td>
+</tr>
+<tr>
+<td><a href="026-rename-rule-mcp-agents-to-rule-ai-agents-and-add-rule-ai-collector-skill.html">026</a></td>
+<td>Rename rule-mcp-agents to rule-ai-agents and add rule-ai collector skill</td>
+<td>2026-08-01</td>
+<td>accepted</td>
+<td>taxonomy, skills, routing, ai</td>
+</tr>
+<tr>
+<td><a href="025-skill-routing-pnpm-package-manager-workspace-monorepo-setup.html">025</a></td>
+<td>Skill routing: pnpm package manager workspace monorepo setup</td>
+<td>2026-07-11</td>
+<td>accepted</td>
+<td>tool, auto-log, routing</td>
+</tr>
+<tr>
+<td><a href="024-skill-routing-parcel-bundler-zero-config-build-tool.html">024</a></td>
+<td>Skill routing: Parcel bundler zero config build tool</td>
+<td>2026-07-11</td>
+<td>accepted</td>
+<td>tool, auto-log, routing</td>
+</tr>
+<tr>
+<td><a href="023-skill-routing-husky-git-hooks-pre-commit-lint-staged-commit.html">023</a></td>
+<td>Skill routing: Husky git hooks pre-commit lint-staged commitlint</td>
+<td>2026-07-11</td>
+<td>accepted</td>
+<td>tool, auto-log, routing</td>
+</tr>
+<tr>
+<td><a href="022-skill-routing-turborepo-monorepo-pipeline-caching-parallel.html">022</a></td>
+<td>Skill routing: Turborepo monorepo pipeline caching parallel builds</td>
+<td>2026-07-11</td>
+<td>accepted</td>
+<td>tool, auto-log, routing</td>
+</tr>
+<tr>
+<td><a href="021-skill-routing-eslint-flat-config-for-typescript-react-proje.html">021</a></td>
+<td>Skill routing: ESLint flat config for TypeScript React project</td>
+<td>2026-07-11</td>
+<td>accepted</td>
+<td>tool, auto-log, routing</td>
+</tr>
+<tr>
+<td><a href="020-skill-routing-typescript-tsconfig-strict-mode-configuration.html">020</a></td>
+<td>Skill routing: TypeScript tsconfig strict mode configuration</td>
+<td>2026-07-11</td>
+<td>accepted</td>
+<td>tool, auto-log, routing</td>
+</tr>
+<tr>
+<td><a href="019-use-a-persistent-local-bearer-token-for-daemon-transport.html">019</a></td>
+<td>use a persistent local bearer token for daemon transport</td>
+<td>2026-07-16</td>
+<td>accepted</td>
+<td>architecture, security, mcp, daemon</td>
+</tr>
+<tr>
+<td><a href="018-fail-closed-mcp-enforcement-and-reusable-agent-commands.html">018</a></td>
+<td>fail closed mcp enforcement and reusable agent commands</td>
+<td>2026-07-11</td>
+<td>accepted</td>
+<td>architecture, security, mcp, guardrails, agents</td>
+</tr>
+<tr>
+<td><a href="017-forms-per-framework-merger-and-distribution.html">017</a></td>
+<td>forms per framework merger and distribution</td>
+<td>2026-07-11</td>
+<td>accepted</td>
+<td>architecture, forms, frontend, refactoring, solid</td>
+</tr>
+<tr>
+<td><a href="016-file-based-skill-loading.html">016</a></td>
+<td>File-Based Skill Loading over Database</td>
+<td>2026-06-20</td>
+<td>Accepted</td>
+<td>-</td>
+</tr>
+<tr>
+<td><a href="015-toolchain-skill-isolation-vite.html">015</a></td>
+<td>toolchain skill isolation vite</td>
+<td>2026-07-10</td>
+<td>accepted</td>
+<td>skills, toolchain, vite, build</td>
+</tr>
+<tr>
+<td><a href="014-sdk-over-handrolled-protocol.html">014</a></td>
+<td>Official MCP SDK over Hand-Rolled Protocol</td>
+<td>2026-06-23</td>
+<td>Accepted</td>
+<td>-</td>
+</tr>
+<tr>
+<td><a href="013-vanilla-js-over-typescript.html">013</a></td>
+<td>Vanilla JS over TypeScript</td>
+<td>2026-06-20</td>
+<td>Accepted</td>
+<td>-</td>
+</tr>
+<tr>
+<td><a href="012-database-skills.html">012</a></td>
+<td>Database Skills</td>
+<td>2026-07-10</td>
+<td>accepted</td>
+<td>skills, database, sql, nosql, new</td>
+</tr>
+<tr>
+<td><a href="011-forms-per-framework.html">011</a></td>
+<td>Forms per Framework - Merger &amp; Distribution</td>
+<td>2026-07-11</td>
+<td>accepted</td>
+<td>architecture, forms, frontend, refactoring, solid</td>
+</tr>
+<tr>
+<td><a href="010-backend-framework-skills.html">010</a></td>
+<td>backend framework skills</td>
+<td>2026-07-10</td>
+<td>accepted</td>
+<td>skills, backend, frameworks, new</td>
+</tr>
+<tr>
+<td><a href="009-toolchain-vite.html">009</a></td>
+<td>Toolchain Skill Isolation (Vite)</td>
+<td>2026-07-10</td>
+<td>accepted</td>
+<td>skills, toolchain, vite, build</td>
+</tr>
+<tr>
+<td><a href="008-scaffold-skill-consolidation.html">008</a></td>
+<td>scaffold skill consolidation</td>
+<td>2026-07-10</td>
+<td>accepted</td>
+<td>infrastructure, skills, scaffolding, merge</td>
+</tr>
+<tr>
+<td><a href="007-thematic-skill-taxonomy-rename.html">007</a></td>
+<td>thematic skill taxonomy rename</td>
+<td>2026-07-10</td>
+<td>accepted</td>
+<td>infrastructure, naming, taxonomy, breaking-change</td>
+</tr>
+<tr>
+<td><a href="006-file-based-skill-loading-over-database.html">006</a></td>
+<td>file based skill loading over database</td>
+<td>2026-06-20</td>
+<td>Accepted</td>
+<td>-</td>
+</tr>
+<tr>
+<td><a href="005-backend-framework-skills.html">005</a></td>
+<td>Backend Framework Skills</td>
+<td>2026-07-10</td>
+<td>accepted</td>
+<td>skills, backend, frameworks, new</td>
+</tr>
+<tr>
+<td><a href="004-scaffold-consolidation.html">004</a></td>
+<td>Scaffold Skill Consolidation</td>
+<td>2026-07-10</td>
+<td>accepted</td>
+<td>infrastructure, skills, scaffolding, merge</td>
+</tr>
+<tr>
+<td><a href="003-official-mcp-sdk-over-hand-rolled-protocol.html">003</a></td>
+<td>official mcp sdk over hand rolled protocol</td>
+<td>2026-06-23</td>
+<td>Accepted</td>
+<td>-</td>
+</tr>
+<tr>
+<td><a href="002-vanilla-js-over-typescript.html">002</a></td>
+<td>vanilla js over typescript</td>
+<td>2026-06-20</td>
+<td>Accepted</td>
+<td>-</td>
+</tr>
+<tr>
+<td><a href="001-thematic-skill-rename.html">001</a></td>
+<td>Thematic Skill Taxonomy Rename</td>
+<td>2026-07-10</td>
+<td>accepted</td>
+<td>infrastructure, naming, taxonomy, breaking-change</td>
+</tr>
+</tbody></table>
+<h2>What each decision says</h2>
+<p>The opening sentence of each decision and of what it cost, lifted from the
+file. Where a line stops short the rest is in the ADR.</p>
+<table>
+<thead>
+<tr>
+<th>ADR</th>
+<th>Decision</th>
+<th>Consequence</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><a href="087-session-close-archives-completed-audits-reviews-and-plans.html">087</a></td>
+<td>In close-session mode only, rule_tool_process_handoff folds each completed doc into one Nygard ADR via src/tools/handoff/_closeout.js (reusing the ADR generators, the English gate and the index updater), names it in a...</td>
+<td>Completed working papers leave the tree on session close; each survives as one ADR plus a Closeout section in the persisted handoff, with full text recoverable from git history.</td>
+</tr>
+<tr>
+<td><a href="086-documentation-site-is-hand-written-static-html-from-docs.html">086</a></td>
+<td>The documentation site is hand-written: a small Node generator in scripts/docs-site/ renders docs/ Markdown to static HTML with marked (already a devDependency), served locally by a static preview server.</td>
+<td>scripts/docs-site/ holds a small marked-based generator plus a static preview server; docs/ stays the source of truth; chapters map to /<slug>.html and ADRs to /adr/<slug>.html with an index; the Pages workflow uploads...</td>
+</tr>
+<tr>
+<td><a href="085-reset-the-project-version-to-0-1-0-first-release-will-be-v0-1-0.html">085</a></td>
+<td>Reset the project version to 0.1.0 in package.json, server.json (both version fields), the CHANGELOG release heading and the scoop/winget manifests with recomputed hashes.</td>
+<td>package.json, server.json, CHANGELOG and the distribution manifests go back to 0.1.0 with recomputed hashes; tag v1.0.0 is deleted locally and remotely; the Step 26 placeholder question is settled (publish v0.1.0, no...</td>
+</tr>
+<tr>
+<td><a href="084-keep-the-name-with-a-written-posture-no-npm-placeholder-yet.html">084</a></td>
+<td>Keep the rule-mcp name with a written trademark posture (TRADEMARK.md) instead of a filing.</td>
+<td>TRADEMARK.md states the boundary; README links it next to the license; the npm placeholder decision stays an explicit open owner item with a review date.</td>
+</tr>
+<tr>
+<td><a href="083-governance-is-an-explicit-bdfl-with-a-path-to-co-maintainers.html">083</a></td>
+<td>Governance is an explicit BDFL (pixu1980) with a documented path to co-maintainers.</td>
+<td>GOVERNANCE.md, MAINTAINERS.md and CODEOWNERS record the model; docs/adr/ stays the decision log; branch protection (owner action 16.5) makes one-review-for-outsiders mechanical.</td>
+</tr>
+<tr>
+<td><a href="082-release-artifacts-are-github-tarballs-not-registry-packages.html">082</a></td>
+<td>Release artifacts are signed GitHub Release tarballs, not registry packages: the pipeline packs the tarball, checksums it with SHA256SUMS, installs it from scratch to prove it, and attaches both files to the GitHub...</td>
+<td>release.yml grows build/verify/release jobs; the tarball plus SHA256SUMS are the shippable unit and the documented verify path; npm distribution stays out of scope so OSS-4 remains a documentation fix.</td>
+</tr>
+<tr>
+<td><a href="081-mcp-registry-identity-is-the-github-owner-not-a-claimed-brand.html">081</a></td>
+<td>server.json name is io.github.pixu1980/rule-mcp, derived from repository.url.</td>
+<td>server.json is publishable in shape; the npm packages[] entry is untouched (out of scope, revisit with the release pipeline in Step 6); actual registry publication stays an explicit owner action.</td>
+</tr>
+<tr>
+<td><a href="080-one-installer-a-node-wizard-with-shell-bootstraps.html">080</a></td>
+<td>One implementation, in Node, behind one command.</td>
+<td>Positive: 3603 lines of shell become 4 bootstraps totaling ~250 lines plus ~2000 lines of tested Node.</td>
+</tr>
+<tr>
+<td><a href="079-add-the-oss-architect-review-persona.html">079</a></td>
+<td>Add the OSS Architect persona (id: oss) as src/roles/oss.md, status active, layer process, 25 years, 12 lenses focused on the project itself (own license, governance, contributing, funding, disclosure, release, community...</td>
+<td>Positive: the persona is drop-in (one file in src/roles/, no code change): it generates three persona prompts (rule-plan-oss, rule-audit-oss, rule-review-oss) and three slash commands; docs/13-personas.md and the census...</td>
+</tr>
+<tr>
+<td><a href="078-compress-agent-command-files-at-write-time.html">078</a></td>
+<td>Compress the body of every agent command file at write time: renderAgentCommandFiles() applies the caveman pass to each rendered content when caveman is enabled, leaving renderAgentCommand() canonical and untouched.</td>
+<td>Positive: every agent command file an installer writes reaches disk already compressed (~6% measured on the shipped bodies) - the same instruction costs less on every session; frontmatter, YAML/TOML headers, $ARGUMENTS...</td>
+</tr>
+<tr>
+<td><a href="077-compress-every-server-model-list-surface-prompts-list-tools-list-resources-list.html">077</a></td>
+<td>Compress the prose fields of all three list surfaces at the protocol boundary only: prompts/list shortens description and argument descriptions (names, required untouched; books telemetry source caveman-prompt-list),...</td>
+<td>Positive: every server→model list surface now runs the guarded pipeline; prompts/list saves ~4.5% of its descriptions every session start; tools/list saves ~0.7% of descriptions on every turn; one invariant across all...</td>
+</tr>
+<tr>
+<td><a href="076-coverage-wave-five-raises-the-branch-floor-to-91.html">076</a></td>
+<td>Cover the three biggest clusters that are not platform-locked and raise the floor to the measured integer. generateMultiFile had 2 of 12 branches visited, the rule:// reader 15 of 26, and the command-target context none...</td>
+<td>91.17 percent branches (6375/6992), floor raised 90 to 91 with 12 branches of margin.</td>
+</tr>
+<tr>
+<td><a href="075-meta-frameworks-get-their-own-namespace-and-a-narrow-dispatcher.html">075</a></td>
+<td>Rename the four skills to rule-meta-astro, next, nuxt and remix, rename the occupying prompt to rule-area-toolset (which is what it always described), and add skills/rule-meta as a hub with a code-registered rule_tool_meta...</td>
+<td>Routing a meta-framework request now names one skill and the component skill to load with it.</td>
+</tr>
+<tr>
+<td><a href="074-the-cli-entry-point-loads-no-command-handler-it-has-not-been-asked-for.html">074</a></td>
+<td>Keep the command and option declarations static, and load the handlers inside their actions.</td>
+<td>Warm --help fell from 216 ms to 48 ms, and every command still dispatches. listTools() is memoized on a registry generation bumped by register, clear and retain, so the 105-schema conversion is paid once per process...</td>
+</tr>
+<tr>
+<td><a href="073-compression-has-four-levels-and-no-llm-in-the-output-path.html">073</a></td>
+<td>Port the deterministic half and refuse the LLM half.</td>
+<td>The vocabulary can be aggressive because a bad rule costs one paragraph, not the whole result.</td>
+</tr>
+<tr>
+<td><a href="072-the-installer-asks-before-copying-bundled-skills-to-the-central-agents-directory.html">072</a></td>
+<td>Add a skills step to both installers that asks before copying. install.sh gains Phase 6c &quot;Bundled Skills&quot; and install.ps1 gains Phase 4: in interactive TTY runs it prompts &quot;Install bundled rule-* skills to...</td>
+<td>Positive: installing now asks before centralizing any skill; non-interactive runs stay silent by default and are deterministic via the new flags; bash and PowerShell behave identically; the copy path is the same...</td>
+</tr>
+<tr>
+<td><a href="071-the-census-generates-eight-numbered-documents-and-three-fenced-blocks-inside-the-chapters-a-person-writes.html">071</a></td>
+<td><code>docs/08-skills.md</code> through <code>docs/15-resources.md</code> are whole generated files, one inventory topic each, and <code>docs/01</code>, <code>docs/03</code> and <code>docs/05</code> carry <code>census:begin</code>/<code>census:end</code> fences the same run rewrites.</td>
+<td>Eleven files are owned by the generator and must never be edited by hand: eight whole documents and the fenced blocks in three chapters.</td>
+</tr>
+<tr>
+<td><a href="070-installer-mode-step-replaces-the-agent-picker-instead-of-stacking-under-it.html">070</a></td>
+<td>Bring bash to parity with PowerShell: on entering step 2, draw_mode_panel retitles the banner to &quot;Phase 3 - Install Mode&quot;, erases everything below row 5 (ESC[6;1H ESC[0J), and renders a standalone panel with its own hint...</td>
+<td>Positive: each wizard step stands alone; average users see one question at a time; bash and PowerShell installers behave identically; banner boxes always close.</td>
+</tr>
+<tr>
+<td><a href="069-coverage-wave-four-holds-the-floor-at-90-and-fixes-the-daemon-status-platform-de.html">069</a></td>
+<td>Hold BRANCH_FLOOR at 90: the local measure (90.74) is below 91, so a raise would gate above what the suite delivers.</td>
+<td>Positive: 981 tests green, one user-visible CLI defect fixed (daemon status platform line), the darkest CLI and tool modules now have co-located suites, and the next floor raise starts from real headroom instead of a...</td>
+</tr>
+<tr>
+<td><a href="068-src-shared-for-every-shareable-helper.html">068</a></td>
+<td>All cross-cutting helpers with more than one caller live in <code>src/shared/</code>.</td>
+<td>Guardrail rules now end in one shared verdict builder instead of 16 copies of.</td>
+</tr>
+<tr>
+<td><a href="067-co-locate-every-test-with-its-module.html">067</a></td>
+<td>Move every unit and integration suite from <code>tests/&lt;area&gt;/...</code> into.</td>
+<td>One import graph per module, renames re-pointed by the file system instead of.</td>
+</tr>
+<tr>
+<td><a href="066-remove-externally-derived-skills-from-the-served-knowledge-base.html">066</a></td>
+<td>Remove all externally derived content from the served knowledge base.</td>
+<td>Positive: the MCP knowledge base no longer contains externally derived prose or structure; the surface is coherent (no dead references), all suites green (847 foundations + 78 installer), coverage floor 90 still holds.</td>
+</tr>
+<tr>
+<td><a href="065-coverage-floor-raised-to-90.html">065</a></td>
+<td>Raise BRANCH_FLOOR from 89 to 90 in scripts/reports/coverage/_threshold.data.mjs.</td>
+<td>Positive: floor 83 -&gt; 87 -&gt; 89 -&gt; 90 with ~850 tests green locally.</td>
+</tr>
+<tr>
+<td><a href="064-coverage-floor-raised-to-89-toward-the-95-endpoint.html">064</a></td>
+<td>Raise BRANCH_FLOOR in scripts/reports/coverage/_threshold.data.mjs from 87 to 89. The ratchet mechanics are unchanged: pnpm test:coverage fails below the floor, the floor may only rise, and 95 stays where the phase...</td>
+<td>Positive: floor 83 -&gt; 87 -&gt; 89, ~790 tests green locally, and the coverage work surfaced further real defects (the ADR index byte-equal gate and the gateway evidence tool-name bug are fixed; the handoff/transcripts...</td>
+</tr>
+<tr>
+<td><a href="063-coverage-floor-raised-to-87-95-remains-the-ratchet-endpoint.html">063</a></td>
+<td>Raise BRANCH_FLOOR in scripts/reports/coverage/_threshold.data.mjs from 83 to 87. The gate and the ratchet mechanics are unchanged: pnpm test:coverage fails below the floor, the floor may only rise, and 95 is when the...</td>
+<td>Positive: the branch floor moved 83 to 87, and the coverage work surfaced and fixed two real defects - the ADR index generator emitted tables prettier immediately reformatted (byte-equal gate was red on main), and the...</td>
+</tr>
+<tr>
+<td><a href="062-glob-suite-runner-colocated-tests-and-a-branch-coverage-ratchet.html">062</a></td>
+<td>Four pieces. (1) <code>scripts/ci/run-tests/index.mjs</code> resolves a suite from glob patterns in.</td>
+<td>Positive: adding a test is writing a file; the orphan class is gone (204 files run where.</td>
+</tr>
+<tr>
+<td><a href="061-one-global-shim-and-hermetic-pnpm-home-in-script-tests.html">061</a></td>
+<td>Three layers. (1) Every test that spawns the shell scripts sets <code>env.PNPM_HOME</code> to a.</td>
+<td>Positive: the installer suite ran end to end with the real shim verified byte-identical.</td>
+</tr>
+<tr>
+<td><a href="060-plans-carry-nested-sub-steps-and-an-exhaustiveness-mandate.html">060</a></td>
+<td>A finding passed to <code>rule_tool_plan_docs</code> may carry a <code>steps</code> array; the renderer nests each.</td>
+<td>Positive: execution is trackable at the action level, plans are development-ready documents.</td>
+</tr>
+<tr>
+<td><a href="059-persona-plans-are-checklists-with-marks-that-survive-the-sync.html">059</a></td>
+<td>The plan renderer emits a checklist instead of a table: one.</td>
+<td>Positive: executed steps are markable in place, the mark survives re-syncs, and every.</td>
+</tr>
+<tr>
+<td><a href="058-one-file-per-rule-with-underscore-barrel-folders-and-a-size-ratchet.html">058</a></td>
+<td>Split rule catalogs one file per rule under family folders (framework/js, framework/vanilla, quality/typescript-prose-manifest-simplicity-comments) with kebab-case underscore-prefixed names and index.js barrels...</td>
+<td>Positive: file names say what they contain, duplicate rules are impossible by construction, one canonical import path per module, and the language and size rules are regression-tested.</td>
+</tr>
+<tr>
+<td><a href="057-reorganize-scripts-src-tests-with-150-line-code-splitting.html">057</a></td>
+<td>Reorganize scripts/, src/ and test/ (renamed to tests/) into thematic subfolders by feature; apply code splitting with a 150-line threshold (100 + 50 tolerance) to JS/MJS files, exempting the shell installers; adopt the...</td>
+<td>Positive: navigability, isolation, measurable coverage and a CI gate.</td>
+</tr>
+<tr>
+<td><a href="056-drop-the-vs-code-extension-and-its-installers.html">056</a></td>
+<td>Delete extensions/ (vscode-rule source + rule-vanilla-reactive.vsix).</td>
+<td>Positive: installers shrink (no vsce build, no six-editor probing), no committed binary .vsix, surface and supply chain simpler, aligns with upstream ADR 088 and the lean-web direction.</td>
+</tr>
+<tr>
+<td><a href="055-restructure-the-command-surface-rule-router-rule-area-caveman-implicit-rule-process.html">055</a></td>
+<td>Restructure the command surface: router rule-mcp -&gt; rule; the 12 area prompts become rule-area-_; delete rule-a11y-audit, rule-code-review, rule-caveman, rule-new-feature, rule-pull-request, rule-setup-project,...</td>
+<td>Positive: the command surface shrinks 49 -&gt; 41; one namespace per concern (rule-area-* for areas, rule-process-* for the process family incl. the new rule-process-tdd skill/tool and rule-process-check); caveman is implicit...</td>
+</tr>
+<tr>
+<td><a href="054-split-review-personas-into-per-operation-commands-plan-audit-review.html">054</a></td>
+<td>Give each active role three slash commands - rule-plan-<role>, rule-audit-<role>, rule-review-<role> (21 persona commands total), all generated from the same registry and all routing through the tools under the hood: the...</td>
+<td>Positive: the user can run just the step they need; every command body names the exact tools to call, so agent behavior no longer depends on which surface the host exposes; proposed roles still stay out of the surfaces...</td>
+</tr>
+<tr>
+<td><a href="053-gateway-as-the-single-entrypoint-with-server-side-receipts-backend-data-devops-g.html">053</a></td>
+<td>Gateway is the single server-side orchestrating entrypoint for every implementation flow; it issues a bound receipt the write path must present; backend/database/devops/security guardrails are first-class families mapped...</td>
+<td>Positive: unvalidated code cannot be delivered (fail-closed at a single server-side entrypoint), server-side receipts bind writes to what was checked, and backend/database/devops/security guardrail families run on every...</td>
+</tr>
+<tr>
+<td><a href="052-pre-packaged-mcp-prompt-registry-26-prompts-strict-schemas-commit-scope-closer.html">052</a></td>
+<td>Adopt the 26-prompt pre-packaged registry in src/prompts/index.js with strict argument schemas, tool-invoked styleguides, TDD/a11y baseline, and a mandatory commit-scope closer; keep prompt names distinct from the...</td>
+<td>Positive: one prompt per area with strict zod-validated arguments, styleguides invoked via tools, TDD/a11y baseline or explicit opt-out, every one-shot ends by proposing a commit message with mandatory scope.</td>
+</tr>
+<tr>
+<td><a href="051-token-efficiency-pipeline.html">051</a></td>
+<td>1. <strong>Decoration lives at the MCP boundary</strong> (<code>src/server.js</code>.</td>
+<td><strong>Positive</strong>: in <code>.tokensave</code> projects every call steers the model to the code.</td>
+</tr>
+<tr>
+<td><a href="050-round-two-hardening-cycles-daemon-cleanup-diagnostics.html">050</a></td>
+<td>1. <strong>Break the init cycles</strong>: <code>getSkillMetadata</code> moved into the skill store.</td>
+<td><strong>Positive</strong>: runtime init cycles eliminated (no TDZ surprises); each hotspot.</td>
+</tr>
+<tr>
+<td><a href="049-split-hotspot-modules.html">049</a></td>
+<td>1. <strong>Guardrails</strong>: each family moves to <code>src/core/guardrails/</code> —.</td>
+<td><strong>Positive</strong>: each guardrail domain is a standalone reviewable file; the.</td>
+</tr>
+<tr>
+<td><a href="048-v100-release-and-docs-accuracy-guard.html">048</a></td>
+<td>1. Add <code>test/docs-accuracy.test.mjs</code>: it computes the runtime surface (<code>listTools</code>/<code>listResources</code>/<code>listPrompts</code> + the <code>skills/</code> dirs) and fails when README.md disagrees.</td>
+<td><strong>Positive</strong>: stale-claim regressions are structurally impossible; the repo has a reproducible release flow (tag → changelog-based GitHub Release); the status section in README doubles as a health snapshot.</td>
+</tr>
+<tr>
+<td><a href="047-architect-splits-into-standalone-web-app-repo.html">047</a></td>
+<td>Split the architect product out of rule-mcp:.</td>
+<td><strong>Positive</strong>.</td>
+</tr>
+<tr>
+<td><a href="046-installer-self-heals-global-shim-surfaces-failures-gates-tui-rendering.html">046</a></td>
+<td>1. <strong>Verify before trust.</strong> <code>shim_works()</code> (bash) / <code>Test-PixCli</code> (PS) run.</td>
+<td><strong>Positive</strong>.</td>
+</tr>
+<tr>
+<td><a href="045-migrate-repo-tooling-to-eslint-10-flat-config-with-eslint-plugin-unicorn.html">045</a></td>
+<td>Migrate the repo to ESLint 10.8 flat config (eslint.config.mjs: @eslint/js + eslint-plugin-unicorn recommended + preserved repo preferences).</td>
+<td>pnpm lint passes with 0 errors and 48 warnings (CI budget 50); the code follows modern idioms (node:, replaceAll, flatMap, new for builtins, ternaries, assert.ok) and 2 real bugs were fixed (${words} interpolation in...</td>
+</tr>
+<tr>
+<td><a href="044-adopt-eslint-plugin-unicorn-for-js-ts-quality.html">044</a></td>
+<td>Update rule-toolchain-eslint to ESLint 10 flat config + eslint-plugin-unicorn (preset and high-value rules, keep/warn/disable table for opinionated rules, incremental adoption strategy, pairing with...</td>
+<td>ESLint tooling is aligned with ESLint 10 and flat config; code validated by pix_check follows modern, performant idioms (Set.has O(1) instead of includes O(n²) in loops, for...of with TS narrowing, non-shadowable node:...</td>
+</tr>
+<tr>
+<td><a href="043-strengthen-typescript-discipline-for-large-codebases.html">043</a></td>
+<td>Update rule-toolchain-typescript with exactOptionalPropertyTypes, verbatimModuleSyntax, explicit strict checks, incremental migration, discriminated unions, branded types, unknown, boundary validation, generated types,...</td>
+<td>The skill provides a safer baseline for large codebases and makes explicit the difference between compile-time and runtime guarantees; enabling exactOptionalPropertyTypes may require call site migration.</td>
+</tr>
+<tr>
+<td><a href="042-strengthen-database-relational-constraint-skills.html">042</a></td>
+<td>Integrate these rules into the rule-data-sql, rule-data-postgresql, and rule-data-mysql skills, keeping version-specific details of PostgreSQL 18 and MySQL/MariaDB separate.</td>
+<td>Skills will guide toward database-verifiable constraints, schema and migration testing, column documentation, and more informed indexing choices; PostgreSQL 18 examples remain opt-in and won&#39;t be treated as PostgreSQL...</td>
+</tr>
+<tr>
+<td><a href="041-lossless-installer-preserve-toolprefix-normalize-rule-blank-lines.html">041</a></td>
+<td>upsertJsonServer/upsertVscode merge the existing entry with the new config, preserving user keys (toolPrefix, timeout, custom env); cmdConfig writes toolPrefix:&quot;none&quot; by default for pi (tool rule-tool-<em>, prompt /rule-</em>);...</td>
+<td>The uninstall+install cycle is idempotent (no accumulated blank lines, no lost user keys).</td>
+</tr>
+<tr>
+<td><a href="040-per-invocation-self-update-with-temporal-throttle-fire-and-forget.html">040</a></td>
+<td>The check fires on every tool invocation but the actual git fetch is throttled: at most every RULE_MCP_AUTO_UPDATE_INTERVAL_SECONDS (default 60, 0 = every call, min 1s).</td>
+<td>Positives: updates received within ~1 minute of any activity, zero added latency per call (throttled background check), git-clone installs always fresh without manual intervention.</td>
+</tr>
+<tr>
+<td><a href="039-fix-vscode-extension-and-derivatives-install-uninstall.html">039</a></td>
+<td>Add <code>installVscodeExtension</code> and <code>uninstallVscodeExtension</code> functions in install.js that install/uninstall the .vsix for all derivative editors using their respective CLIs.</td>
+<td>Allows installing and uninstalling the VS Code extension from <code>rule-mcp install --agent vscode</code>, from <code>install.sh</code>, and from <code>install.ps1</code>. Supports all VS Code-based editors (Cursor, Windsurf, VS Code Insiders,...</td>
+</tr>
+<tr>
+<td><a href="038-native-claude-skills-integration.html">038</a></td>
+<td>installNativeSkills() now copies skills to ~/.claude/skills/<name>/ with Claude-compatible YARD frontmatter.</td>
+<td>Claude can auto-discover skills.</td>
+</tr>
+<tr>
+<td><a href="037-documentation-and-see-also-in-skills.html">037</a></td>
+<td>Added ## See also section with links to related skills in all missing skills.</td>
+<td>Docs tests pass.</td>
+</tr>
+<tr>
+<td><a href="036-lossless-idempotent-installer.html">036</a></td>
+<td>parseJson() now returns null on error, not {}. JSON file writes use atomicWrite with preventive backup.</td>
+<td>User configuration is no longer lost on malformed JSON. Install/uninstall operations are reproducible.</td>
+</tr>
+<tr>
+<td><a href="035-sandbox-timeout-with-abortcontroller.html">035</a></td>
+<td>withTimeout() now uses AbortController to actually cancel the ongoing operation when the timeout fires.</td>
+<td>No pending operations after timeout.</td>
+</tr>
+<tr>
+<td><a href="034-sse-server-with-bearer-auth.html">034</a></td>
+<td>The SSE server generates a bearer token at startup, requires Authorization: Bearer on /sse and /message, CORS deny-by-default, body limit 1MB.</td>
+<td>Server secure by default.</td>
+</tr>
+<tr>
+<td><a href="033-registry-driven-clean-slash-commands-for-every-agent-and-ide.html">033</a></td>
+<td>Add <code>src/core/agent-command-targets.js</code> as the <strong>single registry</strong> of clean-command targets.</td>
+<td><strong>Positive</strong>.</td>
+</tr>
+<tr>
+<td><a href="032-the-tool-surface-is-skills-and-nothing-else.html">032</a></td>
+<td>The bundled <code>skills/</code> directory is the single source of truth for the tool surface.</td>
+<td>- Custom and third-party skills in <code>~/.agents/skills</code> are no longer served by this server, and neither are plugin guardrails from <code>plugin.js</code>. This **supersedes the &quot;User control&quot; and &quot;plugin system&quot; points of ADR 003...</td>
+</tr>
+<tr>
+<td><a href="031-pin-the-self-update-remote-and-drop-root-in-the-container.html">031</a></td>
+<td>Verify the update source before any network or merge operation. normalizeRemoteUrl() reduces a remote to host+path (scheme, credentials, port, .git suffix and trailing slash removed) so the scp-style SSH remote this repo...</td>
+<td>Forks and any clone whose remote is not the declared repository stop auto-updating until RULE_MCP_UPDATE_REMOTE is set - a deliberate fail-closed change, surfaced through a banner and rule_tool_update rather than...</td>
+</tr>
+<tr>
+<td><a href="030-interview-servers-enforce-same-origin-and-own-their-process-lifecycle.html">030</a></td>
+<td>Add skills/rule-mcp-architect/http-guard.mjs - a shared, pure checkLocalRequest()/denyForeignRequest() pair - and apply it to every /api/* request on both servers: Sec-Fetch-Site must be same-origin or none, Origin...</td>
+<td>Non-browser clients (curl, tests) still reach the API because they send neither Origin nor Sec-Fetch-Site - anything already executing code on the loopback interface is outside this threat model.</td>
+</tr>
+<tr>
+<td><a href="029-bind-write-authorization-to-destinations-not-just-content.html">029</a></td>
+<td>Split write authorization into a validated root, a validated destination, and a path-bound receipt. resolveProjectRoot() refuses the filesystem root, the home directory, and system directories (temp dirs stay allowed for...</td>
+<td>Multi-file writes now require passing <code>files</code> to rule_tool_gateway; a bare <code>code</code> string cannot describe more than one destination and is limited to the legacy single-file flow.</td>
+</tr>
+<tr>
+<td><a href="028-clean-rule-commands-via-user-commands-prompt-suppression-not-a-plugin.html">028</a></td>
+<td>1. Do NOT ship a Claude plugin. 2) Generate the clean command set from the MCP prompt registry as the single source of truth (src/core/agent-commands.js + <code>rule-mcp agent-commands</code> CLI): the rule-mcp router...</td>
+<td>Claude users get bare /rule-* commands with no (MCP) duplicates after re-install + session restart.</td>
+</tr>
+<tr>
+<td><a href="027-add-rule-toolchain-commits-skill-for-atomic-conventional-commits-with-mandatory-s.html">027</a></td>
+<td>Add a dedicated skill <code>rule-toolchain-commits</code> (tool <code>rule_tool_toolchain_commits</code>) in the rule-toolchain group that enforces atomic Conventional Commits with a MANDATORY scope on every commit/push, and add a git domain...</td>
+<td>Positive: commit/push prompts now deterministically route to rule-toolchain-commits; the rule (scope mandatory, atomicity) becomes a first-class skill in the same group as the hook tooling it depends on...</td>
+</tr>
+<tr>
+<td><a href="026-rename-rule-mcp-agents-to-rule-ai-agents-and-add-rule-ai-collector-skill.html">026</a></td>
+<td>Rename <code>rule-mcp-agents</code> to <code>rule-ai-agents</code> (tool becomes <code>rule_tool_ai_agents</code>) and add a new <code>rule-ai</code> collector skill that indexes AI/agent skills - <code>rule-ai-agents</code> (@rule/rule-mcp-core based) and...</td>
+<td>Positive: AI/agent prompts now route to the <code>rule-ai</code> collector with <code>rule-ai-agents</code> as the concrete skill; naming is dependency-agnostic and consistent with other domain collectors; project auto-detection suggests the...</td>
+</tr>
+<tr>
+<td><a href="025-skill-routing-pnpm-package-manager-workspace-monorepo-setup.html">025</a></td>
+<td>Use <code>rule-toolchain-pnpm</code> for this task.</td>
+<td>None - informational entry.</td>
+</tr>
+<tr>
+<td><a href="024-skill-routing-parcel-bundler-zero-config-build-tool.html">024</a></td>
+<td>Use <code>rule-toolchain-parcel</code> for this task.</td>
+<td>None - informational entry.</td>
+</tr>
+<tr>
+<td><a href="023-skill-routing-husky-git-hooks-pre-commit-lint-staged-commit.html">023</a></td>
+<td>Use <code>rule-toolchain-husky</code> for this task.</td>
+<td>None - informational entry.</td>
+</tr>
+<tr>
+<td><a href="022-skill-routing-turborepo-monorepo-pipeline-caching-parallel.html">022</a></td>
+<td>Use <code>rule-toolchain-turborepo</code> for this task.</td>
+<td>None - informational entry.</td>
+</tr>
+<tr>
+<td><a href="021-skill-routing-eslint-flat-config-for-typescript-react-proje.html">021</a></td>
+<td>Use <code>rule-toolchain-eslint</code> for this task.</td>
+<td>None - informational entry.</td>
+</tr>
+<tr>
+<td><a href="020-skill-routing-typescript-tsconfig-strict-mode-configuration.html">020</a></td>
+<td>Use <code>rule-toolchain-typescript</code> for this task.</td>
+<td>None - informational entry.</td>
+</tr>
+<tr>
+<td><a href="019-use-a-persistent-local-bearer-token-for-daemon-transport.html">019</a></td>
+<td>Store one 256-bit token at ~/.rule-mcp/state/sse-token with owner-only permissions.</td>
+<td>Daemon clients remain connected across LaunchAgent/systemd restarts; secrets are no longer emitted in logs.</td>
+</tr>
+<tr>
+<td><a href="018-fail-closed-mcp-enforcement-and-reusable-agent-commands.html">018</a></td>
+<td>Wrap every MCP handler with mandatory preprocessing and postprocessing.</td>
+<td>Positive: deterministic fail-closed behavior, visible audit contract, fewer hallucinated dependencies and completion claims, consistent cross-agent workflow.</td>
+</tr>
+<tr>
+<td><a href="017-forms-per-framework-merger-and-distribution.html">017</a></td>
+<td>### 1. Merge React forms into <code>rule-frontend-react</code>.</td>
+<td><strong>Positive:</strong>.</td>
+</tr>
+<tr>
+<td><a href="016-file-based-skill-loading.html">016</a></td>
+<td>Use <strong>file-based skill loading</strong> with an in-memory LRU cache.</td>
+<td>- Cross-skill queries require scanning all SKILL.md files at startup (∼20ms for 17 skills, negligible).</td>
+</tr>
+<tr>
+<td><a href="015-toolchain-skill-isolation-vite.html">015</a></td>
+<td>Extract all Vite-related content from <code>rule-scaffold-frontend-react-vite</code> into a new <code>rule-toolchain-vite</code> skill covering:.</td>
+<td><strong>Positive:</strong>.</td>
+</tr>
+<tr>
+<td><a href="014-sdk-over-handrolled-protocol.html">014</a></td>
+<td>Replace the hand-rolled protocol with <code>@modelcontextprotocol/sdk</code> v1.29.0.</td>
+<td>- SDK is a runtime dependency (<code>@modelcontextprotocol/sdk</code> 1.29.0).</td>
+</tr>
+<tr>
+<td><a href="013-vanilla-js-over-typescript.html">013</a></td>
+<td>Use <strong>Vanilla JavaScript (ESM)</strong> throughout.</td>
+<td>- No compile-time type checking.</td>
+</tr>
+<tr>
+<td><a href="012-database-skills.html">012</a></td>
+<td>Create four database skills spanning relational and document databases:.</td>
+<td><strong>Positive:</strong>.</td>
+</tr>
+<tr>
+<td><a href="011-forms-per-framework.html">011</a></td>
+<td>### 1. Merge React forms into <code>rule-frontend-react</code>.</td>
+<td><strong>Positive:</strong>.</td>
+</tr>
+<tr>
+<td><a href="010-backend-framework-skills.html">010</a></td>
+<td>Add four backend framework skills covering the major Node.js HTTP framework ecosystems:.</td>
+<td><strong>Positive:</strong>.</td>
+</tr>
+<tr>
+<td><a href="009-toolchain-vite.html">009</a></td>
+<td>Extract all Vite-related content from <code>rule-scaffold-frontend-react-vite</code> into a new <code>rule-toolchain-vite</code> skill covering:.</td>
+<td><strong>Positive:</strong>.</td>
+</tr>
+<tr>
+<td><a href="008-scaffold-skill-consolidation.html">008</a></td>
+<td>### 1. Rename and absorb <code>scaffold-backend-node</code> → <code>backend-node</code>.</td>
+<td><strong>Positive:</strong>.</td>
+</tr>
+<tr>
+<td><a href="007-thematic-skill-taxonomy-rename.html">007</a></td>
+<td>Adopt a prefix-based thematic taxonomy with the following categories:.</td>
+<td><strong>Positive:</strong>.</td>
+</tr>
+<tr>
+<td><a href="006-file-based-skill-loading-over-database.html">006</a></td>
+<td>Use <strong>file-based skill loading</strong> with an in-memory LRU cache.</td>
+<td>- Cross-skill queries require scanning all SKILL.md files at startup (∼20ms for 17 skills, negligible).</td>
+</tr>
+<tr>
+<td><a href="005-backend-framework-skills.html">005</a></td>
+<td>Add four backend framework skills covering the major Node.js HTTP framework ecosystems:.</td>
+<td><strong>Positive:</strong>.</td>
+</tr>
+<tr>
+<td><a href="004-scaffold-consolidation.html">004</a></td>
+<td>### 1. Rename and absorb <code>scaffold-backend-node</code> → <code>backend-node</code>.</td>
+<td><strong>Positive:</strong>.</td>
+</tr>
+<tr>
+<td><a href="003-official-mcp-sdk-over-hand-rolled-protocol.html">003</a></td>
+<td>Replace the hand-rolled protocol with <code>@modelcontextprotocol/sdk</code> v1.29.0.</td>
+<td>- SDK is a runtime dependency (<code>@modelcontextprotocol/sdk</code> 1.29.0).</td>
+</tr>
+<tr>
+<td><a href="002-vanilla-js-over-typescript.html">002</a></td>
+<td>Use <strong>Vanilla JavaScript (ESM)</strong> throughout.</td>
+<td>- No compile-time type checking.</td>
+</tr>
+<tr>
+<td><a href="001-thematic-skill-rename.html">001</a></td>
+<td>Adopt a prefix-based thematic taxonomy with the following categories:.</td>
+<td><strong>Positive:</strong>.</td>
+</tr>
+</tbody></table>
+<h2>By theme</h2>
+<p>Tags carried by 3 or more decisions. A decision appears under every
+theme it carries, and the early ADRs that predate the tag field are listed last.</p>
+<h3>skills</h3>
+<ul>
+<li><a href="075-meta-frameworks-get-their-own-namespace-and-a-narrow-dispatcher.html">075</a> Meta-frameworks get their own namespace and a narrow dispatcher</li>
+<li><a href="072-the-installer-asks-before-copying-bundled-skills-to-the-central-agents-directory.html">072</a> The installer asks before copying bundled skills to the central agents directory</li>
+<li><a href="066-remove-externally-derived-skills-from-the-served-knowledge-base.html">066</a> Remove externally derived skills from the served knowledge base</li>
+<li><a href="055-restructure-the-command-surface-rule-router-rule-area-caveman-implicit-rule-process.html">055</a> Restructure the command surface: /rule router, rule-area-*, caveman implicit, rule-process-tdd skill</li>
+<li><a href="027-add-rule-toolchain-commits-skill-for-atomic-conventional-commits-with-mandatory-s.html">027</a> Add rule-toolchain-commits skill for atomic conventional commits with mandatory scope</li>
+<li><a href="026-rename-rule-mcp-agents-to-rule-ai-agents-and-add-rule-ai-collector-skill.html">026</a> Rename rule-mcp-agents to rule-ai-agents and add rule-ai collector skill</li>
+<li><a href="015-toolchain-skill-isolation-vite.html">015</a> toolchain skill isolation vite</li>
+<li><a href="012-database-skills.html">012</a> Database Skills</li>
+<li><a href="010-backend-framework-skills.html">010</a> backend framework skills</li>
+<li><a href="009-toolchain-vite.html">009</a> Toolchain Skill Isolation (Vite)</li>
+<li><a href="008-scaffold-skill-consolidation.html">008</a> scaffold skill consolidation</li>
+<li><a href="005-backend-framework-skills.html">005</a> Backend Framework Skills</li>
+<li><a href="004-scaffold-consolidation.html">004</a> Scaffold Skill Consolidation</li>
+</ul>
+<h3>installer</h3>
+<ul>
+<li><a href="080-one-installer-a-node-wizard-with-shell-bootstraps.html">080</a> One installer, a Node wizard with shell bootstraps</li>
+<li><a href="078-compress-agent-command-files-at-write-time.html">078</a> Compress agent command files at write time</li>
+<li><a href="072-the-installer-asks-before-copying-bundled-skills-to-the-central-agents-directory.html">072</a> The installer asks before copying bundled skills to the central agents directory</li>
+<li><a href="070-installer-mode-step-replaces-the-agent-picker-instead-of-stacking-under-it.html">070</a> Installer mode step replaces the agent picker instead of stacking under it</li>
+<li><a href="061-one-global-shim-and-hermetic-pnpm-home-in-script-tests.html">061</a> One global shim, and hermetic PNPM_HOME in script tests</li>
+<li><a href="056-drop-the-vs-code-extension-and-its-installers.html">056</a> Drop the VS Code extension and its installers</li>
+<li><a href="055-restructure-the-command-surface-rule-router-rule-area-caveman-implicit-rule-process.html">055</a> Restructure the command surface: /rule router, rule-area-*, caveman implicit, rule-process-tdd skill</li>
+<li><a href="049-split-hotspot-modules.html">049</a> Split the hotspot modules (guardrails + installer)</li>
+<li><a href="046-installer-self-heals-global-shim-surfaces-failures-gates-tui-rendering.html">046</a> Installer self-heals its global shim, surfaces failures, and gates TUI rendering</li>
+<li><a href="041-lossless-installer-preserve-toolprefix-normalize-rule-blank-lines.html">041</a> Lossless installer: preserve toolPrefix and normalize rule blank lines</li>
+<li><a href="039-fix-vscode-extension-and-derivatives-install-uninstall.html">039</a> Fix VS Code extension and derivatives install/uninstall</li>
+<li><a href="028-clean-rule-commands-via-user-commands-prompt-suppression-not-a-plugin.html">028</a> Clean /rule-* commands via user commands + prompt suppression, not a plugin</li>
+</ul>
+<h3>architecture</h3>
+<ul>
+<li><a href="058-one-file-per-rule-with-underscore-barrel-folders-and-a-size-ratchet.html">058</a> One file per rule with underscore-barrel folders and a size ratchet</li>
+<li><a href="057-reorganize-scripts-src-tests-with-150-line-code-splitting.html">057</a> Reorganize scripts, src and tests with 150-line code splitting</li>
+<li><a href="033-registry-driven-clean-slash-commands-for-every-agent-and-ide.html">033</a> Registry-driven clean slash commands for every agent and IDE</li>
+<li><a href="032-the-tool-surface-is-skills-and-nothing-else.html">032</a> The tool surface is ./skills and nothing else</li>
+<li><a href="031-pin-the-self-update-remote-and-drop-root-in-the-container.html">031</a> Pin the self-update remote and drop root in the container</li>
+<li><a href="030-interview-servers-enforce-same-origin-and-own-their-process-lifecycle.html">030</a> Interview servers enforce same-origin and own their process lifecycle</li>
+<li><a href="029-bind-write-authorization-to-destinations-not-just-content.html">029</a> Bind write authorization to destinations, not just content</li>
+<li><a href="019-use-a-persistent-local-bearer-token-for-daemon-transport.html">019</a> use a persistent local bearer token for daemon transport</li>
+<li><a href="018-fail-closed-mcp-enforcement-and-reusable-agent-commands.html">018</a> fail closed mcp enforcement and reusable agent commands</li>
+<li><a href="017-forms-per-framework-merger-and-distribution.html">017</a> forms per framework merger and distribution</li>
+<li><a href="011-forms-per-framework.html">011</a> Forms per Framework - Merger &amp; Distribution</li>
+</ul>
+<h3>testing</h3>
+<ul>
+<li><a href="080-one-installer-a-node-wizard-with-shell-bootstraps.html">080</a> One installer, a Node wizard with shell bootstraps</li>
+<li><a href="076-coverage-wave-five-raises-the-branch-floor-to-91.html">076</a> Coverage wave five raises the branch floor to 91</li>
+<li><a href="069-coverage-wave-four-holds-the-floor-at-90-and-fixes-the-daemon-status-platform-de.html">069</a> Coverage wave four holds the floor at 90 and fixes the daemon status platform defect</li>
+<li><a href="065-coverage-floor-raised-to-90.html">065</a> Coverage floor raised to 90</li>
+<li><a href="064-coverage-floor-raised-to-89-toward-the-95-endpoint.html">064</a> Coverage floor raised to 89 toward the 95 endpoint</li>
+<li><a href="063-coverage-floor-raised-to-87-95-remains-the-ratchet-endpoint.html">063</a> Coverage floor raised to 87; 95 remains the ratchet endpoint</li>
+<li><a href="062-glob-suite-runner-colocated-tests-and-a-branch-coverage-ratchet.html">062</a> Glob suite runner, co-located tests, and a branch-coverage ratchet</li>
+<li><a href="061-one-global-shim-and-hermetic-pnpm-home-in-script-tests.html">061</a> One global shim, and hermetic PNPM_HOME in script tests</li>
+<li><a href="057-reorganize-scripts-src-tests-with-150-line-code-splitting.html">057</a> Reorganize scripts, src and tests with 150-line code splitting</li>
+<li><a href="048-v100-release-and-docs-accuracy-guard.html">048</a> v1.0.0 release and the docs-accuracy guard</li>
+</ul>
+<h3>routing</h3>
+<ul>
+<li><a href="075-meta-frameworks-get-their-own-namespace-and-a-narrow-dispatcher.html">075</a> Meta-frameworks get their own namespace and a narrow dispatcher</li>
+<li><a href="027-add-rule-toolchain-commits-skill-for-atomic-conventional-commits-with-mandatory-s.html">027</a> Add rule-toolchain-commits skill for atomic conventional commits with mandatory scope</li>
+<li><a href="026-rename-rule-mcp-agents-to-rule-ai-agents-and-add-rule-ai-collector-skill.html">026</a> Rename rule-mcp-agents to rule-ai-agents and add rule-ai collector skill</li>
+<li><a href="025-skill-routing-pnpm-package-manager-workspace-monorepo-setup.html">025</a> Skill routing: pnpm package manager workspace monorepo setup</li>
+<li><a href="024-skill-routing-parcel-bundler-zero-config-build-tool.html">024</a> Skill routing: Parcel bundler zero config build tool</li>
+<li><a href="023-skill-routing-husky-git-hooks-pre-commit-lint-staged-commit.html">023</a> Skill routing: Husky git hooks pre-commit lint-staged commitlint</li>
+<li><a href="022-skill-routing-turborepo-monorepo-pipeline-caching-parallel.html">022</a> Skill routing: Turborepo monorepo pipeline caching parallel builds</li>
+<li><a href="021-skill-routing-eslint-flat-config-for-typescript-react-proje.html">021</a> Skill routing: ESLint flat config for TypeScript React project</li>
+<li><a href="020-skill-routing-typescript-tsconfig-strict-mode-configuration.html">020</a> Skill routing: TypeScript tsconfig strict mode configuration</li>
+</ul>
+<h3>auto-log</h3>
+<ul>
+<li><a href="025-skill-routing-pnpm-package-manager-workspace-monorepo-setup.html">025</a> Skill routing: pnpm package manager workspace monorepo setup</li>
+<li><a href="024-skill-routing-parcel-bundler-zero-config-build-tool.html">024</a> Skill routing: Parcel bundler zero config build tool</li>
+<li><a href="023-skill-routing-husky-git-hooks-pre-commit-lint-staged-commit.html">023</a> Skill routing: Husky git hooks pre-commit lint-staged commitlint</li>
+<li><a href="022-skill-routing-turborepo-monorepo-pipeline-caching-parallel.html">022</a> Skill routing: Turborepo monorepo pipeline caching parallel builds</li>
+<li><a href="021-skill-routing-eslint-flat-config-for-typescript-react-proje.html">021</a> Skill routing: ESLint flat config for TypeScript React project</li>
+<li><a href="020-skill-routing-typescript-tsconfig-strict-mode-configuration.html">020</a> Skill routing: TypeScript tsconfig strict mode configuration</li>
+</ul>
+<h3>ci</h3>
+<ul>
+<li><a href="076-coverage-wave-five-raises-the-branch-floor-to-91.html">076</a> Coverage wave five raises the branch floor to 91</li>
+<li><a href="069-coverage-wave-four-holds-the-floor-at-90-and-fixes-the-daemon-status-platform-de.html">069</a> Coverage wave four holds the floor at 90 and fixes the daemon status platform defect</li>
+<li><a href="065-coverage-floor-raised-to-90.html">065</a> Coverage floor raised to 90</li>
+<li><a href="064-coverage-floor-raised-to-89-toward-the-95-endpoint.html">064</a> Coverage floor raised to 89 toward the 95 endpoint</li>
+<li><a href="063-coverage-floor-raised-to-87-95-remains-the-ratchet-endpoint.html">063</a> Coverage floor raised to 87; 95 remains the ratchet endpoint</li>
+<li><a href="062-glob-suite-runner-colocated-tests-and-a-branch-coverage-ratchet.html">062</a> Glob suite runner, co-located tests, and a branch-coverage ratchet</li>
+</ul>
+<h3>coverage</h3>
+<ul>
+<li><a href="076-coverage-wave-five-raises-the-branch-floor-to-91.html">076</a> Coverage wave five raises the branch floor to 91</li>
+<li><a href="069-coverage-wave-four-holds-the-floor-at-90-and-fixes-the-daemon-status-platform-de.html">069</a> Coverage wave four holds the floor at 90 and fixes the daemon status platform defect</li>
+<li><a href="065-coverage-floor-raised-to-90.html">065</a> Coverage floor raised to 90</li>
+<li><a href="064-coverage-floor-raised-to-89-toward-the-95-endpoint.html">064</a> Coverage floor raised to 89 toward the 95 endpoint</li>
+<li><a href="063-coverage-floor-raised-to-87-95-remains-the-ratchet-endpoint.html">063</a> Coverage floor raised to 87; 95 remains the ratchet endpoint</li>
+<li><a href="062-glob-suite-runner-colocated-tests-and-a-branch-coverage-ratchet.html">062</a> Glob suite runner, co-located tests, and a branch-coverage ratchet</li>
+</ul>
+<h3>tool</h3>
+<ul>
+<li><a href="025-skill-routing-pnpm-package-manager-workspace-monorepo-setup.html">025</a> Skill routing: pnpm package manager workspace monorepo setup</li>
+<li><a href="024-skill-routing-parcel-bundler-zero-config-build-tool.html">024</a> Skill routing: Parcel bundler zero config build tool</li>
+<li><a href="023-skill-routing-husky-git-hooks-pre-commit-lint-staged-commit.html">023</a> Skill routing: Husky git hooks pre-commit lint-staged commitlint</li>
+<li><a href="022-skill-routing-turborepo-monorepo-pipeline-caching-parallel.html">022</a> Skill routing: Turborepo monorepo pipeline caching parallel builds</li>
+<li><a href="021-skill-routing-eslint-flat-config-for-typescript-react-proje.html">021</a> Skill routing: ESLint flat config for TypeScript React project</li>
+<li><a href="020-skill-routing-typescript-tsconfig-strict-mode-configuration.html">020</a> Skill routing: TypeScript tsconfig strict mode configuration</li>
+</ul>
+<h3>toolchain</h3>
+<ul>
+<li><a href="045-migrate-repo-tooling-to-eslint-10-flat-config-with-eslint-plugin-unicorn.html">045</a> Migrate repo tooling to ESLint 10 flat config with eslint-plugin-unicorn</li>
+<li><a href="044-adopt-eslint-plugin-unicorn-for-js-ts-quality.html">044</a> Adopt eslint-plugin-unicorn for JS/TS quality</li>
+<li><a href="043-strengthen-typescript-discipline-for-large-codebases.html">043</a> Strengthen TypeScript discipline for large codebases</li>
+<li><a href="027-add-rule-toolchain-commits-skill-for-atomic-conventional-commits-with-mandatory-s.html">027</a> Add rule-toolchain-commits skill for atomic conventional commits with mandatory scope</li>
+<li><a href="015-toolchain-skill-isolation-vite.html">015</a> toolchain skill isolation vite</li>
+<li><a href="009-toolchain-vite.html">009</a> Toolchain Skill Isolation (Vite)</li>
+</ul>
+<h3>cli</h3>
+<ul>
+<li><a href="080-one-installer-a-node-wizard-with-shell-bootstraps.html">080</a> One installer, a Node wizard with shell bootstraps</li>
+<li><a href="074-the-cli-entry-point-loads-no-command-handler-it-has-not-been-asked-for.html">074</a> The CLI entry point loads no command handler it has not been asked for</li>
+<li><a href="061-one-global-shim-and-hermetic-pnpm-home-in-script-tests.html">061</a> One global shim, and hermetic PNPM_HOME in script tests</li>
+<li><a href="046-installer-self-heals-global-shim-surfaces-failures-gates-tui-rendering.html">046</a> Installer self-heals its global shim, surfaces failures, and gates TUI rendering</li>
+<li><a href="033-registry-driven-clean-slash-commands-for-every-agent-and-ide.html">033</a> Registry-driven clean slash commands for every agent and IDE</li>
+</ul>
+<h3>guardrails</h3>
+<ul>
+<li><a href="058-one-file-per-rule-with-underscore-barrel-folders-and-a-size-ratchet.html">058</a> One file per rule with underscore-barrel folders and a size ratchet</li>
+<li><a href="053-gateway-as-the-single-entrypoint-with-server-side-receipts-backend-data-devops-g.html">053</a> Gateway as the single entrypoint with server-side receipts; backend/data/devops guardrail families</li>
+<li><a href="049-split-hotspot-modules.html">049</a> Split the hotspot modules (guardrails + installer)</li>
+<li><a href="044-adopt-eslint-plugin-unicorn-for-js-ts-quality.html">044</a> Adopt eslint-plugin-unicorn for JS/TS quality</li>
+<li><a href="018-fail-closed-mcp-enforcement-and-reusable-agent-commands.html">018</a> fail closed mcp enforcement and reusable agent commands</li>
+</ul>
+<h3>taxonomy</h3>
+<ul>
+<li><a href="075-meta-frameworks-get-their-own-namespace-and-a-narrow-dispatcher.html">075</a> Meta-frameworks get their own namespace and a narrow dispatcher</li>
+<li><a href="027-add-rule-toolchain-commits-skill-for-atomic-conventional-commits-with-mandatory-s.html">027</a> Add rule-toolchain-commits skill for atomic conventional commits with mandatory scope</li>
+<li><a href="026-rename-rule-mcp-agents-to-rule-ai-agents-and-add-rule-ai-collector-skill.html">026</a> Rename rule-mcp-agents to rule-ai-agents and add rule-ai collector skill</li>
+<li><a href="007-thematic-skill-taxonomy-rename.html">007</a> thematic skill taxonomy rename</li>
+<li><a href="001-thematic-skill-rename.html">001</a> Thematic Skill Taxonomy Rename</li>
+</ul>
+<h3>docs</h3>
+<ul>
+<li><a href="087-session-close-archives-completed-audits-reviews-and-plans.html">087</a> Session close archives completed audits, reviews and plans</li>
+<li><a href="086-documentation-site-is-hand-written-static-html-from-docs.html">086</a> Documentation site is hand-written static HTML from docs</li>
+<li><a href="071-the-census-generates-eight-numbered-documents-and-three-fenced-blocks-inside-the-chapters-a-person-writes.html">071</a> The census generates eight numbered documents and three fenced blocks inside the chapters a person writes</li>
+<li><a href="048-v100-release-and-docs-accuracy-guard.html">048</a> v1.0.0 release and the docs-accuracy guard</li>
+</ul>
+<h3>infrastructure</h3>
+<ul>
+<li><a href="008-scaffold-skill-consolidation.html">008</a> scaffold skill consolidation</li>
+<li><a href="007-thematic-skill-taxonomy-rename.html">007</a> thematic skill taxonomy rename</li>
+<li><a href="004-scaffold-consolidation.html">004</a> Scaffold Skill Consolidation</li>
+<li><a href="001-thematic-skill-rename.html">001</a> Thematic Skill Taxonomy Rename</li>
+</ul>
+<h3>prompts</h3>
+<ul>
+<li><a href="077-compress-every-server-model-list-surface-prompts-list-tools-list-resources-list.html">077</a> Compress every server→model list surface (prompts/list, tools/list, resources/list)</li>
+<li><a href="055-restructure-the-command-surface-rule-router-rule-area-caveman-implicit-rule-process.html">055</a> Restructure the command surface: /rule router, rule-area-*, caveman implicit, rule-process-tdd skill</li>
+<li><a href="054-split-review-personas-into-per-operation-commands-plan-audit-review.html">054</a> Split review personas into per-operation commands (plan/audit/review)</li>
+<li><a href="052-pre-packaged-mcp-prompt-registry-26-prompts-strict-schemas-commit-scope-closer.html">052</a> Pre-packaged MCP prompt registry (26 prompts, strict schemas, commit-scope closer)</li>
+</ul>
+<h3>ratchet</h3>
+<ul>
+<li><a href="069-coverage-wave-four-holds-the-floor-at-90-and-fixes-the-daemon-status-platform-de.html">069</a> Coverage wave four holds the floor at 90 and fixes the daemon status platform defect</li>
+<li><a href="065-coverage-floor-raised-to-90.html">065</a> Coverage floor raised to 90</li>
+<li><a href="064-coverage-floor-raised-to-89-toward-the-95-endpoint.html">064</a> Coverage floor raised to 89 toward the 95 endpoint</li>
+<li><a href="063-coverage-floor-raised-to-87-95-remains-the-ratchet-endpoint.html">063</a> Coverage floor raised to 87; 95 remains the ratchet endpoint</li>
+</ul>
+<h3>refactor</h3>
+<ul>
+<li><a href="058-one-file-per-rule-with-underscore-barrel-folders-and-a-size-ratchet.html">058</a> One file per rule with underscore-barrel folders and a size ratchet</li>
+<li><a href="057-reorganize-scripts-src-tests-with-150-line-code-splitting.html">057</a> Reorganize scripts, src and tests with 150-line code splitting</li>
+<li><a href="050-round-two-hardening-cycles-daemon-cleanup-diagnostics.html">050</a> Round-2 hardening - cycles, daemon/commands split, diagnostics, HTTP verification</li>
+<li><a href="049-split-hotspot-modules.html">049</a> Split the hotspot modules (guardrails + installer)</li>
+</ul>
+<h3>release</h3>
+<ul>
+<li><a href="085-reset-the-project-version-to-0-1-0-first-release-will-be-v0-1-0.html">085</a> Reset the project version to 0.1.0, first release will be v0.1.0</li>
+<li><a href="082-release-artifacts-are-github-tarballs-not-registry-packages.html">082</a> Release artifacts are GitHub tarballs, not registry packages</li>
+<li><a href="081-mcp-registry-identity-is-the-github-owner-not-a-claimed-brand.html">081</a> MCP registry identity is the GitHub owner, not a claimed brand</li>
+<li><a href="048-v100-release-and-docs-accuracy-guard.html">048</a> v1.0.0 release and the docs-accuracy guard</li>
+</ul>
+<h3>backend</h3>
+<ul>
+<li><a href="053-gateway-as-the-single-entrypoint-with-server-side-receipts-backend-data-devops-g.html">053</a> Gateway as the single entrypoint with server-side receipts; backend/data/devops guardrail families</li>
+<li><a href="010-backend-framework-skills.html">010</a> backend framework skills</li>
+<li><a href="005-backend-framework-skills.html">005</a> Backend Framework Skills</li>
+</ul>
+<h3>commands</h3>
+<ul>
+<li><a href="055-restructure-the-command-surface-rule-router-rule-area-caveman-implicit-rule-process.html">055</a> Restructure the command surface: /rule router, rule-area-*, caveman implicit, rule-process-tdd skill</li>
+<li><a href="054-split-review-personas-into-per-operation-commands-plan-audit-review.html">054</a> Split review personas into per-operation commands (plan/audit/review)</li>
+<li><a href="028-clean-rule-commands-via-user-commands-prompt-suppression-not-a-plugin.html">028</a> Clean /rule-* commands via user commands + prompt suppression, not a plugin</li>
+</ul>
+<h3>compression</h3>
+<ul>
+<li><a href="078-compress-agent-command-files-at-write-time.html">078</a> Compress agent command files at write time</li>
+<li><a href="077-compress-every-server-model-list-surface-prompts-list-tools-list-resources-list.html">077</a> Compress every server→model list surface (prompts/list, tools/list, resources/list)</li>
+<li><a href="073-compression-has-four-levels-and-no-llm-in-the-output-path.html">073</a> Compression has four levels and no LLM in the output path</li>
+</ul>
+<h3>governance</h3>
+<ul>
+<li><a href="083-governance-is-an-explicit-bdfl-with-a-path-to-co-maintainers.html">083</a> Governance is an explicit BDFL with a path to co-maintainers</li>
+<li><a href="079-add-the-oss-architect-review-persona.html">079</a> Add the OSS Architect review persona</li>
+<li><a href="066-remove-externally-derived-skills-from-the-served-knowledge-base.html">066</a> Remove externally derived skills from the served knowledge base</li>
+</ul>
+<h3>mcp</h3>
+<ul>
+<li><a href="028-clean-rule-commands-via-user-commands-prompt-suppression-not-a-plugin.html">028</a> Clean /rule-* commands via user commands + prompt suppression, not a plugin</li>
+<li><a href="019-use-a-persistent-local-bearer-token-for-daemon-transport.html">019</a> use a persistent local bearer token for daemon transport</li>
+<li><a href="018-fail-closed-mcp-enforcement-and-reusable-agent-commands.html">018</a> fail closed mcp enforcement and reusable agent commands</li>
+</ul>
+<h3>naming</h3>
+<ul>
+<li><a href="084-keep-the-name-with-a-written-posture-no-npm-placeholder-yet.html">084</a> Keep the name with a written posture, no npm placeholder yet</li>
+<li><a href="007-thematic-skill-taxonomy-rename.html">007</a> thematic skill taxonomy rename</li>
+<li><a href="001-thematic-skill-rename.html">001</a> Thematic Skill Taxonomy Rename</li>
+</ul>
+<h3>new</h3>
+<ul>
+<li><a href="012-database-skills.html">012</a> Database Skills</li>
+<li><a href="010-backend-framework-skills.html">010</a> backend framework skills</li>
+<li><a href="005-backend-framework-skills.html">005</a> Backend Framework Skills</li>
+</ul>
+<h3>personas</h3>
+<ul>
+<li><a href="060-plans-carry-nested-sub-steps-and-an-exhaustiveness-mandate.html">060</a> Plans carry nested sub-steps and an exhaustiveness mandate</li>
+<li><a href="059-persona-plans-are-checklists-with-marks-that-survive-the-sync.html">059</a> Persona plans are checklists with marks that survive the sync</li>
+<li><a href="054-split-review-personas-into-per-operation-commands-plan-audit-review.html">054</a> Split review personas into per-operation commands (plan/audit/review)</li>
+</ul>
+<h3>quality</h3>
+<ul>
+<li><a href="050-round-two-hardening-cycles-daemon-cleanup-diagnostics.html">050</a> Round-2 hardening - cycles, daemon/commands split, diagnostics, HTTP verification</li>
+<li><a href="044-adopt-eslint-plugin-unicorn-for-js-ts-quality.html">044</a> Adopt eslint-plugin-unicorn for JS/TS quality</li>
+<li><a href="043-strengthen-typescript-discipline-for-large-codebases.html">043</a> Strengthen TypeScript discipline for large codebases</li>
+</ul>
+<h3>registry</h3>
+<ul>
+<li><a href="082-release-artifacts-are-github-tarballs-not-registry-packages.html">082</a> Release artifacts are GitHub tarballs, not registry packages</li>
+<li><a href="081-mcp-registry-identity-is-the-github-owner-not-a-claimed-brand.html">081</a> MCP registry identity is the GitHub owner, not a claimed brand</li>
+<li><a href="052-pre-packaged-mcp-prompt-registry-26-prompts-strict-schemas-commit-scope-closer.html">052</a> Pre-packaged MCP prompt registry (26 prompts, strict schemas, commit-scope closer)</li>
+</ul>
+<h3>security</h3>
+<ul>
+<li><a href="045-migrate-repo-tooling-to-eslint-10-flat-config-with-eslint-plugin-unicorn.html">045</a> Migrate repo tooling to ESLint 10 flat config with eslint-plugin-unicorn</li>
+<li><a href="019-use-a-persistent-local-bearer-token-for-daemon-transport.html">019</a> use a persistent local bearer token for daemon transport</li>
+<li><a href="018-fail-closed-mcp-enforcement-and-reusable-agent-commands.html">018</a> fail closed mcp enforcement and reusable agent commands</li>
+</ul>
+<h3>structure</h3>
+<ul>
+<li><a href="062-glob-suite-runner-colocated-tests-and-a-branch-coverage-ratchet.html">062</a> Glob suite runner, co-located tests, and a branch-coverage ratchet</li>
+<li><a href="058-one-file-per-rule-with-underscore-barrel-folders-and-a-size-ratchet.html">058</a> One file per rule with underscore-barrel folders and a size ratchet</li>
+<li><a href="057-reorganize-scripts-src-tests-with-150-line-code-splitting.html">057</a> Reorganize scripts, src and tests with 150-line code splitting</li>
+</ul>
+<h3>token-efficiency</h3>
+<ul>
+<li><a href="078-compress-agent-command-files-at-write-time.html">078</a> Compress agent command files at write time</li>
+<li><a href="077-compress-every-server-model-list-surface-prompts-list-tools-list-resources-list.html">077</a> Compress every server→model list surface (prompts/list, tools/list, resources/list)</li>
+<li><a href="051-token-efficiency-pipeline.html">051</a> Token-efficiency pipeline (caveman aggressive + tokensave-aware decoration)</li>
+</ul>
+<h3>tui</h3>
+<ul>
+<li><a href="080-one-installer-a-node-wizard-with-shell-bootstraps.html">080</a> One installer, a Node wizard with shell bootstraps</li>
+<li><a href="070-installer-mode-step-replaces-the-agent-picker-instead-of-stacking-under-it.html">070</a> Installer mode step replaces the agent picker instead of stacking under it</li>
+<li><a href="046-installer-self-heals-global-shim-surfaces-failures-gates-tui-rendering.html">046</a> Installer self-heals its global shim, surfaces failures, and gates TUI rendering</li>
+</ul>
+<h3>vscode</h3>
+<ul>
+<li><a href="056-drop-the-vs-code-extension-and-its-installers.html">056</a> Drop the VS Code extension and its installers</li>
+<li><a href="039-fix-vscode-extension-and-derivatives-install-uninstall.html">039</a> Fix VS Code extension and derivatives install/uninstall</li>
+<li><a href="033-registry-driven-clean-slash-commands-for-every-agent-and-ide.html">033</a> Registry-driven clean slash commands for every agent and IDE</li>
+</ul>
+<h3>no tags</h3>
+<ul>
+<li><a href="068-src-shared-for-every-shareable-helper.html">068</a> src shared for every shareable helper</li>
+<li><a href="067-co-locate-every-test-with-its-module.html">067</a> co locate every test with its module</li>
+<li><a href="038-native-claude-skills-integration.html">038</a> native claude skills integration</li>
+<li><a href="037-documentation-and-see-also-in-skills.html">037</a> documentation and see also in skills</li>
+<li><a href="036-lossless-idempotent-installer.html">036</a> lossless idempotent installer</li>
+<li><a href="035-sandbox-timeout-with-abortcontroller.html">035</a> sandbox timeout with abortcontroller</li>
+<li><a href="034-sse-server-with-bearer-auth.html">034</a> sse server with bearer auth</li>
+<li><a href="016-file-based-skill-loading.html">016</a> File-Based Skill Loading over Database</li>
+<li><a href="014-sdk-over-handrolled-protocol.html">014</a> Official MCP SDK over Hand-Rolled Protocol</li>
+<li><a href="013-vanilla-js-over-typescript.html">013</a> Vanilla JS over TypeScript</li>
+<li><a href="006-file-based-skill-loading-over-database.html">006</a> file based skill loading over database</li>
+<li><a href="003-official-mcp-sdk-over-hand-rolled-protocol.html">003</a> official mcp sdk over hand rolled protocol</li>
+<li><a href="002-vanilla-js-over-typescript.html">002</a> vanilla js over typescript</li>
+</ul>
+<h2>Operating rules</h2>
+<ul>
+<li>Record a structural decision with <code>rule_tool_process_adr</code>, when it is taken.</li>
+<li>Never rewrite an accepted decision. Supersede it with a new one that says why.</li>
+<li>Never edit this file. Edit the ADR and let the next call regenerate it.</li>
+</ul>
+
+</main>
+<footer><p>Generated from <code>docs/</code> - edit the Markdown, not this file.</p></footer>
+</body>
+</html>

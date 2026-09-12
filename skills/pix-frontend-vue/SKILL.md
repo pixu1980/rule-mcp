@@ -6,6 +6,7 @@ tags:
   - "frontend"
   - "vue"
 frameworks: [vue]
+guardrails: [vue-no-class-binding]
 ---
 
 # rule-frontend-vue - Vue 3 with rule Principles

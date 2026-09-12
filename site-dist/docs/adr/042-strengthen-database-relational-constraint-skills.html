@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>042: Strengthen database relational constraint skills - rule-mcp docs</title>
+<link rel="stylesheet" href="../../style.css">
+</head>
+<body>
+<header><nav><ul>
+<li><a href="../../index.html">Home</a></li>
+<li><a href="../../docs/01-getting-started.html">undefined</a></li>
+<li><a href="../../docs/02-product-architecture.html">undefined</a></li>
+<li><a href="../../docs/03-agent-instructions.html">undefined</a></li>
+<li><a href="../../docs/04-operations.html">undefined</a></li>
+<li><a href="../../docs/05-env-variables.html">undefined</a></li>
+<li><a href="../../docs/06-privacy.html">undefined</a></li>
+<li><a href="../../docs/07-engineering-guides.html">undefined</a></li>
+<li><a href="../../docs/08-skills.html">undefined</a></li>
+<li><a href="../../docs/09-tools.html">undefined</a></li>
+<li><a href="../../docs/10-prompts.html">undefined</a></li>
+<li><a href="../../docs/11-instructions.html">undefined</a></li>
+<li><a href="../../docs/12-cli.html">undefined</a></li>
+<li><a href="../../docs/13-personas.html">undefined</a></li>
+<li><a href="../../docs/14-guardrails.html">undefined</a></li>
+<li><a href="../../docs/15-resources.html">undefined</a></li>
+<li><a href="../../docs/adr/ADR.html">ADRs</a></li>
+</ul></nav></header>
+<main>
+<h1>042: Strengthen database relational constraint skills</h1>
+<ul>
+<li><strong>Date</strong>: 2026-08-02</li>
+<li><strong>Status</strong>: accepted</li>
+<li><strong>Tags</strong>: database, sql, postgresql, mysql, schema</li>
+<li><strong>Author</strong>: rule-mcp-architect</li>
+</ul>
+<h2>Context</h2>
+<p>The OpenReplay article review highlighted that SQL skills already covered many patterns, but didn&#39;t emphasize enough the database as the authority for integrity, migration verification, EAV limits, and foreign key index differences.</p>
+<h2>Decision</h2>
+<p>Integrate these rules into the rule-data-sql, rule-data-postgresql, and rule-data-mysql skills, keeping version-specific details of PostgreSQL 18 and MySQL/MariaDB separate.</p>
+<h2>Consequences</h2>
+<p>Skills will guide toward database-verifiable constraints, schema and migration testing, column documentation, and more informed indexing choices; PostgreSQL 18 examples remain opt-in and won&#39;t be treated as PostgreSQL 16+ baseline.</p>
+<h2>Alternatives Considered</h2>
+<ol>
+<li>Add a new dedicated relational design skill</li>
+<li>Copy the entire article into an existing skill</li>
+<li>Don&#39;t modify skills because core patterns were already present</li>
+</ol>
+
+</main>
+<footer><p>Generated from <code>docs/</code> - edit the Markdown, not this file.</p></footer>
+</body>
+</html>

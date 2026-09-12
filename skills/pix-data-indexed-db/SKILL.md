@@ -14,6 +14,7 @@ tags:
   - "pwa"
   - "sync"
 frameworks: [all]
+inherits: [rule-data]
 ---
 
 # rule-data-indexed-db - IndexedDB / File System Best Practices & Scripts

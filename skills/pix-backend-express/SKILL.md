@@ -12,6 +12,7 @@ tags:
   - "middleware"
   - "http"
 frameworks: [all]
+inherits: [rule-backend]
 ---
 
 # rule-backend-express - Express.js Best Practices

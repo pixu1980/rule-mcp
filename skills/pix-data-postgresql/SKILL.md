@@ -15,6 +15,7 @@ tags:
   - "partitioning"
   - "replication"
 frameworks: [all]
+inherits: [rule-data]
 ---
 
 # rule-data-postgresql - PostgreSQL 16+ Best Practices & Scripts

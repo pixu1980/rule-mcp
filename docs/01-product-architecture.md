@@ -819,16 +819,16 @@ Refresh with `pnpm census`; full inventories in `docs/07-` .. `docs/12-`.
 
 | Surface                   | Count | Defined in                                    |
 | ------------------------- | ----- | --------------------------------------------- |
-| MCP tools                 | 105   | `src/tools/*` via `src/tools/router/index.js` |
+| MCP tools                 | 107   | `src/tools/*` via `src/tools/router/index.js` |
 | - action tools            | 17    | one per module, registered explicitly         |
-| - skill tools             | 88    | one per catalog skill, generated              |
-| MCP resources             | 184   | `src/resources/index.js`                      |
+| - skill tools             | 90    | one per catalog skill, generated              |
+| MCP resources             | 188   | `src/resources/index.js`                      |
 | MCP prompts               | 73    | `src/prompts/index.js`                        |
 | - reusable                | 19    | workflow and area prompts                     |
 | - persona                 | 54    | 18 active roles x 3 operations                |
-| Skills                    | 88    | `skills/rule-*/SKILL.md`                       |
+| Skills                    | 90    | `skills/rule-*/SKILL.md`                       |
 | Review personas           | 18    | `src/core/review/roles/index.js`              |
-| Guardrail rules           | 91    | `src/core/guardrails/index.js`                |
+| Guardrail rules           | 8     | `src/core/guardrails/index.js`                |
 | Agent slash commands      | 74    | `src/core/agents/commands/index.js`           |
 | Agent/IDE command targets | 13    | `src/core/agents/command-targets/index.js`    |
 | CLI commands              | 21    | `src/cli/_program.js`                         |

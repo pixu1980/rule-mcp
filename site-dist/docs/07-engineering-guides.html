@@ -1,0 +1,363 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Engineering guides - rule-mcp docs</title>
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<header><nav><ul>
+<li><a href="../index.html">Home</a></li>
+<li><a href="../docs/01-getting-started.html">undefined</a></li>
+<li><a href="../docs/02-product-architecture.html">undefined</a></li>
+<li><a href="../docs/03-agent-instructions.html">undefined</a></li>
+<li><a href="../docs/04-operations.html">undefined</a></li>
+<li><a href="../docs/05-env-variables.html">undefined</a></li>
+<li><a href="../docs/06-privacy.html">undefined</a></li>
+<li><a href="../docs/07-engineering-guides.html" aria-current="page">undefined</a></li>
+<li><a href="../docs/08-skills.html">undefined</a></li>
+<li><a href="../docs/09-tools.html">undefined</a></li>
+<li><a href="../docs/10-prompts.html">undefined</a></li>
+<li><a href="../docs/11-instructions.html">undefined</a></li>
+<li><a href="../docs/12-cli.html">undefined</a></li>
+<li><a href="../docs/13-personas.html">undefined</a></li>
+<li><a href="../docs/14-guardrails.html">undefined</a></li>
+<li><a href="../docs/15-resources.html">undefined</a></li>
+<li><a href="../docs/adr/ADR.html">ADRs</a></li>
+</ul></nav></header>
+<main>
+<h1>Engineering guides</h1>
+<p>Practical guides for working on rule-mcp itself: the engineering loop,
+the guardrails, the docs pipeline, and the numbers that matter. Counts here are
+verified by <code>tests/docs/docs-accuracy.test.mjs</code> against the live registries; the
+heavy inventories live in the generated census blocks of <code>docs/01-</code>,
+<code>docs/02-</code> and <code>docs/04-</code>.</p>
+<h2>The engineering loop</h2>
+<p>The server is deterministic and LLM-free: tools route, scaffold, validate,
+search, and record - they never generate prose by calling a model. Work on it
+follows the standard loop, enforced by the repo&#39;s own guardrails:</p>
+<ol>
+<li><strong>Write the failing test first.</strong> <code>node --test tests/&lt;area&gt;.test.mjs</code> runs a
+single suite; <code>pnpm test:all</code> runs everything.</li>
+<li><strong>Implement until the suite is green.</strong></li>
+<li><strong>Self-check with the repo&#39;s own guardrails</strong>: <code>pnpm lint</code> (eslint with
+<code>--max-warnings 50</code>) and <code>tests/core/self-guardrails.test.mjs</code> (the server must
+pass its own <code>rule_tool_check</code> rules - a guardrail product whose source
+cannot pass its checks is ignored by everyone downstream).</li>
+<li><strong>Format</strong>: <code>pnpm format:fix</code> (prettier) so <code>pnpm format</code> stays clean.</li>
+<li><strong>Regenerate the census</strong> when the surface changed: <code>pnpm census</code> updates
+the generated blocks in <code>docs/01-</code>, <code>docs/02-</code>, <code>docs/04-</code>, <code>docs/05-</code>
+(<code>tests/docs/census-generated.test.mjs</code> fails otherwise).</li>
+<li><strong>Commit with a scoped conventional message</strong>: <code>type(scope): subject</code>
+(the <code>commit-msg</code> hook rejects scope-less subjects).</li>
+</ol>
+<h2>The guardrails</h2>
+<p>Guardrail rules live in <code>src/core/guardrails/</code> split by domain and are applied
+per skill by <code>src/core/guardrails.js</code> (<code>getGuardrails</code> / <code>checkCode</code>).</p>
+<ul>
+<li><strong>Shared + quality families run on every skill</strong>: TypeScript strictness, the
+fingerprint family (em/en dashes, curly quotes, British -&gt; American
+spellings), comment hygiene, simplicity rules, flex-first layout, and the
+English-only rule (<code>en-english-only-prose</code>: comments, identifiers and whole
+<code>.md</code> documents must be English, American spelling).</li>
+<li><strong>Domain families</strong> attach per skill: backend, database (data-*), devops,
+a11y (frontend/platform/ui/styleguide), framework and scaffold rules.</li>
+<li><strong>Precision is measured</strong>: <code>tests/fixtures/guardrail-corpus.mjs</code> feeds every
+rule labeled good/bad snippets; <code>tests/core/guardrails-precision-recall.test.mjs</code>
+requires 100% precision and recall per rule - a rule that fires on idiomatic
+code or sleeps on violations fails the suite.</li>
+<li><strong>The repo is its own first customer</strong>: <code>tests/core/self-guardrails.test.mjs</code>
+runs the JavaScript rules over <code>src/**</code> and fails on any violation.</li>
+</ul>
+<h2>The docs pipeline</h2>
+<p>Numbered docs are partly generated. <code>scripts/reports/census/index.mjs</code> refreshes the
+blocks between <code>&lt;!-- census:begin/end:&lt;marker&gt; --&gt;</code> markers in the numbered
+docs and is wired into <code>prebuild</code>:</p>
+<ul>
+<li><code>docs/02-product-architecture.md</code> - tool-family counts</li>
+<li><code>docs/04-operations.md</code> - tools in detail, resources, review personas,
+<code>.roo/commands</code> snapshot</li>
+<li><code>docs/03-agent-instructions.md</code> - the command surface and persona table</li>
+<li><code>docs/05-env-variables.md</code> - the environment registry</li>
+</ul>
+<p><code>docs/README.md</code> is the index. ADRs in <code>docs/adr/</code> are immutable decision
+records (a merger or a reversal writes a new ADR). A roadmap or plan never
+claims a numbered slot: it is deleted when fully executed or obsolete.
+<code>01-getting-started.md</code> is the first-run guide.</p>
+<p>To add a surface, change the code, run <code>pnpm census</code>, verify
+<code>tests/docs/census-generated.test.mjs</code> and <code>tests/docs/docs-accuracy.test.mjs</code>, then
+commit - the docs follow the code instead of being remembered.</p>
+<h2>Measured numbers</h2>
+<ul>
+<li><p><strong>Skills</strong>: 96 <code>skills/*/SKILL.md</code> documents, each registered as a
+<code>rule-tool-&lt;skill&gt;</code> MCP tool with full/summary/tldr/search/guardrails/check
+modes; 112 tools and 198 <code>rule://</code> resources in total (runtime counts, see
+the generated blocks).</p>
+</li>
+<li><p><strong>Skill reading</strong> is cached (LRU): a cache hit is sub-millisecond, a miss is
+one disk read.</p>
+</li>
+<li><p><strong>Routing</strong> builds a deterministic BM25 index at startup; routing is measured
+against <code>tests/fixtures/routing-corpus.mjs</code> with floors on exact and top-or-alternative
+hits, so a new skill can only land when routing still finds the intended
+target.</p>
+</li>
+<li><p><strong>Tests</strong>: the suite covers the installer (bash + PowerShell), the CLI
+parse surface, the guardrails corpus, the docs/census drift, the personas
+and the transports (stdio, SSE, HTTP, daemon, Docker).</p>
+</li>
+<li><p><strong>Compression</strong> (<code>pnpm report:compression</code>, 2026-09-09) removes, by level:</p>
+<table>
+<thead>
+<tr>
+<th>Corpus</th>
+<th><code>lite</code></th>
+<th><code>full</code></th>
+<th><code>ultra</code></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>skills (89 SKILL.md)</td>
+<td>0.06 %</td>
+<td>1.52 %</td>
+<td>2.02 %</td>
+</tr>
+<tr>
+<td>docs (17 files)</td>
+<td>0.02 %</td>
+<td>0.56 %</td>
+<td>0.73 %</td>
+</tr>
+<tr>
+<td>real tool results (6)</td>
+<td>0.11 %</td>
+<td>2.03 %</td>
+<td>2.58 %</td>
+</tr>
+<tr>
+<td>verbose prose (synthetic)</td>
+<td>17.4 %</td>
+<td>34.2 %</td>
+<td>42.3 %</td>
+</tr>
+</tbody></table>
+<p>The two rows are not in conflict. The shipped corpora are already written
+in the compressed style, so on them the rules measure how little filler is
+left; the synthetic corpus is what an uncompressed assistant answer looks
+like, and that is the corpus the level table describes. Guard violations
+are 0 at every level on all four, which is the number that has to stay 0.</p>
+<p>The rules are ported from the <a href="https://github.com/pixu1980/rule-mcp/blob/main/skills/rule-caveman/SKILL.html"><code>rule-caveman</code></a>
+skill and its <code>caveman-compress</code> companion: the vocabulary tables, the
+classification guards and <code>validate.py</code>&#39;s structural validator. The LLM
+compression step is deliberately not ported - an LLM in the output path
+costs determinism, cacheability and the zero-dependency contract, and the
+guard plus per-block rollback buys the same safety for free (ADR 073).</p>
+</li>
+</ul>
+<h2>Compression surfaces: everything the server emits to a model</h2>
+<p>The rule is one sentence: every text the server hands to a model runs through
+<code>src/core/text/</code> before it leaves. The manifest lives in
+<a href="https://github.com/pixu1980/rule-mcp/blob/main/src/core/text/_surfaces.js"><code>src/core/text/_surfaces.js</code></a> and is pinned
+by <code>src/core/text/__tests__/_surfaces.test.mjs</code>; the table below is that
+manifest rendered. &quot;Prose&quot; surfaces shorten verbose text, keep JSON identical
+and never break structure (the guard errors stay 0); the documented skips say
+why they are not compressed.</p>
+<table>
+<thead>
+<tr>
+<th>Surface</th>
+<th>Where</th>
+<th>Status</th>
+<th>Telemetry source</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>tools/call results</td>
+<td><code>src/tools/router/_helpers.js</code> <code>finalize()</code></td>
+<td>prose</td>
+<td><code>caveman</code></td>
+</tr>
+<tr>
+<td>resources/read bodies (text/*)</td>
+<td><code>src/resources/_serve.js</code> <code>readResource()</code></td>
+<td>prose</td>
+<td><code>caveman-resource</code></td>
+</tr>
+<tr>
+<td>prompts/get bodies</td>
+<td><code>src/server/_prompt-handlers.js</code> <code>GetPrompt</code></td>
+<td>prose</td>
+<td><code>caveman-prompt</code></td>
+</tr>
+<tr>
+<td>prompts/list descriptions</td>
+<td><code>src/server/_prompt-handlers.js</code> <code>ListPrompts</code></td>
+<td>prose</td>
+<td><code>caveman-prompt-list</code></td>
+</tr>
+<tr>
+<td>tools/list descriptions</td>
+<td><code>src/tools/router/_surface.js</code> <code>listTools()</code></td>
+<td>prose</td>
+<td>none (memoized at startup)</td>
+</tr>
+<tr>
+<td>resources/list labels</td>
+<td><code>src/resources/_listing.js</code></td>
+<td>prose (no-op on the terse set)</td>
+<td>none (ADR 077)</td>
+</tr>
+<tr>
+<td>resume hook block (SessionStart / UserPromptSubmit)</td>
+<td><code>src/core/session/resume/_context.js</code> <code>handoffBlock()</code></td>
+<td>prose</td>
+<td><code>caveman-resume</code></td>
+</tr>
+<tr>
+<td>banners (self-update notice, resume announcement)</td>
+<td><code>src/tools/router/_helpers.js</code> <code>withBanner()</code></td>
+<td>prose</td>
+<td><code>caveman-banner</code></td>
+</tr>
+<tr>
+<td>workflow reminder</td>
+<td><code>src/core/enforcement/_reminder.js</code></td>
+<td>prose (rides on the tool-result pass)</td>
+<td><code>caveman</code></td>
+</tr>
+<tr>
+<td>error envelopes</td>
+<td><code>src/tools/router/call/_pipeline.js</code></td>
+<td>terse by construction, not compressed</td>
+<td>-</td>
+</tr>
+<tr>
+<td>completions/complete</td>
+<td><code>src/server/_completions.js</code></td>
+<td>fixed vocabulary, not prose (ADR 077)</td>
+<td>-</td>
+</tr>
+<tr>
+<td>JSON payloads (application/json bodies, JSON tool content)</td>
+<td><code>_serve.js</code>, <code>_helpers.js</code></td>
+<td>data, never compressed</td>
+<td>-</td>
+</tr>
+</tbody></table>
+<p>By document category, the answer to &quot;is it compressed before it reaches a
+model?&quot;:</p>
+<table>
+<thead>
+<tr>
+<th>Category</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Markdown (handoffs, docs served via <code>rule://</code> text resources, the resume hook block)</td>
+<td>compressed (tool result, resource read, <code>caveman-resume</code>)</td>
+</tr>
+<tr>
+<td>Skills (full body + summary resources, tool-embedded evidence)</td>
+<td>compressed (resource read + tool-result pass)</td>
+</tr>
+<tr>
+<td>Resources</td>
+<td>read: compressed; list labels: pass-through (no-op, ADR 077)</td>
+</tr>
+<tr>
+<td>Instructions (session/prompt directives, agent-instruction files)</td>
+<td>directives already terse by authorship; anything emitted runs the pass</td>
+</tr>
+<tr>
+<td>Prompts</td>
+<td>get: compressed; list: descriptions compressed (ADR 077)</td>
+</tr>
+<tr>
+<td>Tools</td>
+<td>results: compressed; list: descriptions compressed, schemas never (ADR 077)</td>
+</tr>
+<tr>
+<td>Personas</td>
+<td>served content (plan outputs): compressed via the tool-result pass; <code>src/roles/*.md</code> source files stay untouched on disk</td>
+</tr>
+</tbody></table>
+<p>Opt-outs apply everywhere: <code>RULE_MCP_NO_CAVEMAN=1</code> and
+<code>RULE_MCP_CAVEMAN_LEVEL=off</code> turn the pass off on every surface that
+runs it (plus <code>RULE_MCP_NO_RESUME_HANDON</code> for the resume block and
+<code>RULE_MCP_NO_REMINDER</code> for the reminder).</p>
+<ul>
+<li><strong>Startup</strong> (<code>pnpm report:startup</code>, 2026-09-09): warm <code>--help</code> 48 ms,
+<code>tools list</code> 265 ms, stdio <code>initialize</code> 251 ms. A cold process spends 12 ms
+on the entry import, 53 ms registering skills and 8 ms converting tool
+schemas; the second <code>tools/list</code> in a process is free. The compiled code
+cache is worth 2-6 %; the 168 ms came from what <code>--help</code> no longer loads
+(ADR 074).</li>
+</ul>
+<h2>Contributing</h2>
+<ul>
+<li>Read <code>docs/README.md</code>, then the numbered docs relevant to your change.</li>
+<li>Open work is tracked in the issue tracker; plans inside the repo are
+deleted when fully executed or obsolete.</li>
+<li>When a custom persona is added, it is a markdown file in <code>src/roles/</code> with
+frontmatter and a lenses list in the body, not a code change; run
+<code>pnpm census</code> afterwards.</li>
+<li>Keep prose English, American spelling (enforced by <code>en-english-only-prose</code>).</li>
+<li>Git hooks live in <code>.githooks/</code> and are installed by <code>pnpm install</code> (via
+<code>prepare</code>), or on demand with <code>pnpm hooks:install</code>. What lands in
+<code>.git/hooks/</code> is a shim that executes the tracked hook, so the two cannot
+drift; <code>pnpm hooks:check</code> fails when a clone is missing them.</li>
+</ul>
+<!-- census:begin:command-surface --><h3>The command surface today (77)</h3>
+<table>
+<thead>
+<tr>
+<th>Kind</th>
+<th>Count</th>
+<th>Example</th>
+<th>Reach for it when</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>router</code></td>
+<td>1</td>
+<td><code>/rule</code></td>
+<td>Routes a free-text request to the skill that answers it</td>
+</tr>
+<tr>
+<td><code>area</code></td>
+<td>12</td>
+<td><code>/rule-area-ai</code></td>
+<td>Routes within one area, when the area is known and the skill is not</td>
+</tr>
+<tr>
+<td><code>workflow</code></td>
+<td>2</td>
+<td><code>/rule-adr</code></td>
+<td>Runs a named workflow: a decision record, a pre-flight check</td>
+</tr>
+<tr>
+<td><code>session</code></td>
+<td>5</td>
+<td><code>/rule-handoff</code></td>
+<td>Carries a session across a context boundary</td>
+</tr>
+<tr>
+<td><code>persona</code></td>
+<td>57</td>
+<td><code>/rule-audit-a11y</code></td>
+<td>Runs one review role at one operation, and writes its documents</td>
+</tr>
+</tbody></table>
+<p><strong>Areas</strong>: <code>/rule-area-ai</code>, <code>/rule-area-backend</code>, <code>/rule-area-data</code>, <code>/rule-area-devops</code>, <code>/rule-area-frontend</code>, <code>/rule-area-platform</code>, <code>/rule-area-process</code>, <code>/rule-area-skills</code>, <code>/rule-area-styleguide</code>, <code>/rule-area-toolchain</code>, <code>/rule-area-toolset</code>, <code>/rule-area-ui</code></p>
+<p><strong>Workflows</strong>: <code>/rule-adr</code>, <code>/rule-flight</code></p>
+<p><strong>Sessions</strong>: <code>/rule-handoff</code>, <code>/rule-handon</code>, <code>/rule-init</code>, <code>/rule-process-check</code>, <code>/rule-update</code></p>
+<p>Every command, with its description and its install target, is in
+<a href="11-instructions.html"><code>11-instructions.md</code></a>. Regenerate this block with <code>pnpm census</code>.</p>
+<!-- census:end:command-surface -->
+
+</main>
+<footer><p>Generated from <code>docs/</code> - edit the Markdown, not this file.</p></footer>
+</body>
+</html>

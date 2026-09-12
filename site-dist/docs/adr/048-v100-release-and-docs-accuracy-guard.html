@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>048: v1.0.0 release and the docs-accuracy guard - rule-mcp docs</title>
+<link rel="stylesheet" href="../../style.css">
+</head>
+<body>
+<header><nav><ul>
+<li><a href="../../index.html">Home</a></li>
+<li><a href="../../docs/01-getting-started.html">undefined</a></li>
+<li><a href="../../docs/02-product-architecture.html">undefined</a></li>
+<li><a href="../../docs/03-agent-instructions.html">undefined</a></li>
+<li><a href="../../docs/04-operations.html">undefined</a></li>
+<li><a href="../../docs/05-env-variables.html">undefined</a></li>
+<li><a href="../../docs/06-privacy.html">undefined</a></li>
+<li><a href="../../docs/07-engineering-guides.html">undefined</a></li>
+<li><a href="../../docs/08-skills.html">undefined</a></li>
+<li><a href="../../docs/09-tools.html">undefined</a></li>
+<li><a href="../../docs/10-prompts.html">undefined</a></li>
+<li><a href="../../docs/11-instructions.html">undefined</a></li>
+<li><a href="../../docs/12-cli.html">undefined</a></li>
+<li><a href="../../docs/13-personas.html">undefined</a></li>
+<li><a href="../../docs/14-guardrails.html">undefined</a></li>
+<li><a href="../../docs/15-resources.html">undefined</a></li>
+<li><a href="../../docs/adr/ADR.html">ADRs</a></li>
+</ul></nav></header>
+<main>
+<h1>048: v1.0.0 release and the docs-accuracy guard</h1>
+<ul>
+<li><strong>Date</strong>: 2026-08-25</li>
+<li><strong>Status</strong>: accepted</li>
+<li><strong>Tags</strong>: release, docs, accuracy, testing</li>
+<li><strong>Author</strong>: Emiliano Pisu <a href="mailto:pisuemiliano.1980@gmail.com">pisuemiliano.1980@gmail.com</a></li>
+</ul>
+<h2>Context</h2>
+<p>README and the docs advertised a tool/resource/prompt/skill surface (99/146/24/89) that had silently drifted: after the architect split the real surface is 90/168/21/80. Nothing verified the claims — only <code>docs-scan</code> checked that referenced tool <em>names</em> still exist. The repository had also never cut a release: version stayed 1.0.0, everything lived under <code>[Unreleased]</code>.</p>
+<h2>Decision</h2>
+<ol>
+<li>Add <code>test/docs-accuracy.test.mjs</code>: it computes the runtime surface (<code>listTools</code>/<code>listResources</code>/<code>listPrompts</code> + the <code>skills/</code> dirs) and fails when README.md disagrees. Counts become a tested contract, not prose.</li>
+<li>Cut <strong>v1.0.0</strong>: promote the <code>[Unreleased]</code> history into a dated <code>[1.0.0]</code> section, keep <code>[Unreleased]</code> for future work, and add a <code>.github/workflows/release.yml</code> that publishes a GitHub Release from the changelog entry whenever a <code>v*</code> tag is pushed. No npm publish in this milestone (the package is consumed from the repo; publishing can be a follow-up ADR).</li>
+</ol>
+<h2>Consequences</h2>
+<p><strong>Positive</strong>: stale-claim regressions are structurally impossible; the repo has a reproducible release flow (tag → changelog-based GitHub Release); the status section in README doubles as a health snapshot.
+<strong>Negative</strong>: npm distribution is still pending; the accuracy test adds a small runtime cost to the suite.</p>
+
+</main>
+<footer><p>Generated from <code>docs/</code> - edit the Markdown, not this file.</p></footer>
+</body>
+</html>

@@ -2,7 +2,7 @@
  * @module test/guardrails-coverage.test
  *
  * Verifies guardrails are ALWAYS involved and enforce the core skill rules:
- *   - SHARED_GUARDRAILS apply to every skill (frontend, backend, data, devops).
+ *   - the baseline applies to every skill (frontend, backend, data, devops).
  *   - rule_tool_component generation self-validates and always emits a guardrail
  *     summary (guardrails involved even without an explicit rule_tool_check call).
  *   - The core rule principles - no CSS classes, no inline styles - pass on
@@ -27,24 +27,25 @@ process.env.RULE_MCP_DISABLE_AUTO_ADR = "1";
 process.env.RULE_MCP_NO_CACHE = "1";
 process.env.RULE_MCP_NO_AUTOUPDATE = "1"; // hermetic: no real git ops in tests
 
-import { getGuardrails, checkCode } from "../index.js";
-import { SHARED_GUARDRAILS } from "../index.js";
+import { getGuardrails, checkCode, BASELINE_SKILLS, ownedGuardrails } from "../index.js";
 import { loadAllSkills } from "../../skills/index.js";
 import { callTool } from "../../../tools/router/index.js";
 
-const sharedIds = SHARED_GUARDRAILS.map((g) => g.id);
+// The baseline now lives in the skills that own it (ADR 079); what every
+// domain must still carry is the union of those skills' rules.
+await loadAllSkills();
+const sharedIds = BASELINE_SKILLS.flatMap((skill) => ownedGuardrails(skill).map((rule) => rule.id));
 
-// ── T1: SHARED_GUARDRAILS apply to EVERY domain ──
+// ── T1: the baseline applies to EVERY domain ──
 for (const skill of ["rule-frontend-react", "rule-frontend-vue", "rule-backend-express", "rule-data-postgresql", "rule-devops-docker", "rule-styleguide"]) {
   const ids = new Set(getGuardrails(skill).map((g) => g.id));
   check(
-    `T1 ${skill} includes all shared guardrails`,
+    `T1 ${skill} includes the whole baseline`,
     sharedIds.every((id) => ids.has(id)),
   );
 }
 
 // ── T2: component generation always involves guardrails ──
-await loadAllSkills();
 for (const [component, framework] of [
   ["button", "react"],
   ["card", "vue"],
