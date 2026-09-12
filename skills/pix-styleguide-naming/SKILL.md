@@ -9,6 +9,7 @@ tags:
   - "barrel"
   - "structure"
 frameworks: [all]
+guardrails: [file-naming]
 ---
 
 # Naming and File Tree Conventions

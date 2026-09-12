@@ -20,6 +20,7 @@ frameworks: [node, api]
 metadata:
   author: pix-engineering
   version: "2.1"
+inherits: [pix-backend]
 ---
 
 # Scaffolding Backend Node

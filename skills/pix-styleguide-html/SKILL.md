@@ -16,6 +16,7 @@ tags:
   - "accessibility"
   - "template"
 frameworks: [all]
+guardrails: [data-part-naming, semantic-html]
 ---
 
 # HTML Style Guide and Standards

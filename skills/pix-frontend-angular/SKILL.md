@@ -6,6 +6,7 @@ tags:
   - "frontend"
   - "angular"
 frameworks: [angular]
+guardrails: [angular-no-ngclass]
 ---
 
 # pix-frontend-angular - Angular with pix Principles

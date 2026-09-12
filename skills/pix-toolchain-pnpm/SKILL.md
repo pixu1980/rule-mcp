@@ -11,6 +11,7 @@ tags:
   - "toolchain"
   - "nodejs"
 frameworks: [all]
+guardrails: [pkg-exact-versions, pkg-no-corepack, verified-dependencies-only]
 ---
 
 # pix-toolchain-pnpm - pnpm Package Manager

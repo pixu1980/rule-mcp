@@ -14,6 +14,7 @@ tags:
   - "microservices"
   - "modular"
 frameworks: [all]
+inherits: [pix-backend]
 ---
 
 # pix-backend-nestjs - NestJS Best Practices

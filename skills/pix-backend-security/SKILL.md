@@ -19,6 +19,7 @@ frameworks: [node, api]
 metadata:
   author: pix-engineering
   version: "1.0"
+inherits: [pix-backend]
 ---
 
 # Security Basics

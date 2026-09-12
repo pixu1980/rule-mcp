@@ -18,6 +18,7 @@ import test from "node:test";
 
 import { checkCode } from "../index.js";
 import { loadAllSkills } from "../../skills/index.js";
+import "./_install.fixture.mjs";
 
 await loadAllSkills();
 

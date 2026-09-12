@@ -15,6 +15,7 @@ tags:
   - "partitioning"
   - "replication"
 frameworks: [all]
+inherits: [pix-data]
 ---
 
 # pix-data-postgresql - PostgreSQL 16+ Best Practices & Scripts

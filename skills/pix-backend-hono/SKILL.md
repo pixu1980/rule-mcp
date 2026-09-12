@@ -17,6 +17,7 @@ tags:
   - "workers"
   - "serverless"
 frameworks: [all]
+inherits: [pix-backend]
 ---
 
 # pix-backend-hono - Hono Best Practices

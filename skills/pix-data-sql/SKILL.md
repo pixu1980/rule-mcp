@@ -14,6 +14,7 @@ tags:
   - "schema"
   - "migration"
 frameworks: [all]
+inherits: [pix-data]
 ---
 
 # pix-data-sql - SQL Best Practices & Scripts

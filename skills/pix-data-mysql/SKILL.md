@@ -13,6 +13,7 @@ tags:
   - "replication"
   - "backup"
 frameworks: [all]
+inherits: [pix-data]
 ---
 
 # pix-data-mysql - MySQL 8+ / MariaDB 11+ Best Practices & Scripts

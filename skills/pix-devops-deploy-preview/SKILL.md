@@ -14,6 +14,7 @@ compatibility: Designed for AI coding assistants
 metadata:
   author: pix-engineering
   version: "1.0"
+inherits: [pix-devops]
 ---
 
 # Deploy preview

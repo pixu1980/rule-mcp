@@ -6,6 +6,7 @@ tags:
   - "frontend"
   - "react"
 frameworks: [react]
+guardrails: [react-hooks-rules, react-no-classname]
 ---
 
 # pix-frontend-react - React with pix Principles

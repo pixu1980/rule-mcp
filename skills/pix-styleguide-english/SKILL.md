@@ -9,6 +9,7 @@ tags:
   - "spelling"
   - "i18n"
 frameworks: [all]
+guardrails: [en-english-only-filenames, en-english-only-prose]
 ---
 
 # English Style Guide: always English, always American spelling

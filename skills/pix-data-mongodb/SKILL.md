@@ -14,6 +14,7 @@ tags:
   - "mongoose"
   - "performance"
 frameworks: [all]
+inherits: [pix-data]
 ---
 
 # pix-data-mongodb - MongoDB 7+ Best Practices & Scripts

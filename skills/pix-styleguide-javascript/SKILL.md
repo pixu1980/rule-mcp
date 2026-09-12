@@ -10,6 +10,7 @@ tags:
   - "async"
   - "modules"
 frameworks: [all]
+guardrails: [js-array-flat-map, js-blank-line-before-return, js-blank-line-between-methods, js-blank-lines-blocks, js-const-top, js-for-loop-braces, js-if-braces, jsdoc-required, js-new-for-builtins, js-no-array-for-each, js-no-blank-lines-in-blocks, js-no-inline-blocks, js-node-protocol, js-prefer-replace-all, js-prefer-set-has, js-single-line-method, js-throw-new-error]
 ---
 
 # JavaScript Style Guide and Standards

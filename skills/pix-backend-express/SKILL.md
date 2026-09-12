@@ -12,6 +12,7 @@ tags:
   - "middleware"
   - "http"
 frameworks: [all]
+inherits: [pix-backend]
 ---
 
 # pix-backend-express - Express.js Best Practices

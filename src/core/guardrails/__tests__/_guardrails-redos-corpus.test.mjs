@@ -14,6 +14,7 @@ import test from "node:test";
 
 import { checkCode, getGuardrails } from "../index.js";
 import { loadAllSkills } from "../../skills/index.js";
+import "./_install.fixture.mjs";
 
 await loadAllSkills();
 

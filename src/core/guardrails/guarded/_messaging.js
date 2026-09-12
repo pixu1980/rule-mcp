@@ -62,7 +62,10 @@ export function spawn() {
       entry.resolve(message.result);
     }
   });
-  thread.on("error", () => flushPending("worker-error"));
+  thread.on("error", (error) => {
+    process.stderr.write(`guardrail worker error: ${error.stack ?? error.message}\n`);
+    flushPending("worker-error");
+  });
   thread.on("exit", () => {
     if (worker === thread) {
       worker = null;

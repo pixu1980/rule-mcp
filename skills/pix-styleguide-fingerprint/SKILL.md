@@ -14,6 +14,7 @@ tags:
   - writing
   - style
 frameworks: [all]
+guardrails: [fp-american-english, fp-box-rectangular, fp-no-emdash, fp-no-typographic-chars]
 ---
 
 # pix-styleguide-fingerprint - Write like a person typed it
