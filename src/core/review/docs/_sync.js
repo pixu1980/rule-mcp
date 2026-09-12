@@ -23,16 +23,18 @@ function write(projectDir, relative, contents) {
  * @param {string} [options.projectDir] - project root
  * @param {number} [options.version] - the role's version, for the headers
  * @param {string} [options.date] - the run date; defaults to today
+ * @param {string} [options.scope] - the binding scope of a scoped run: unreported
+ *   findings stay untouched and the headers record the scope
  * @returns {{written: string[], deleted: string[], counts: object, findings: Array<object>}}
  */
-export function syncRoleDocs({ role, findings = [], projectDir = ".", version = 1, date } = {}) {
+export function syncRoleDocs({ role, findings = [], projectDir = ".", version = 1, date, scope } = {}) {
   const paths = trioPaths(role);
   const stamp = date ?? new Date().toISOString().slice(0, 10);
-  const merged = mergeFindings(readFindings({ role, projectDir }), findings);
+  const merged = mergeFindings(readFindings({ role, projectDir }), findings, { preserveUnreported: Boolean(scope) });
   const open = merged.findings.filter((finding) => finding.status === "open");
 
-  write(projectDir, paths.audit, renderAudit(role, version, stamp));
-  write(projectDir, paths.review, renderReview(role, version, stamp, merged.findings));
+  write(projectDir, paths.audit, renderAudit(role, version, stamp, scope));
+  write(projectDir, paths.review, renderReview(role, version, stamp, merged.findings, scope));
 
   const written = [paths.audit, paths.review];
   const deleted = [];
@@ -43,7 +45,7 @@ export function syncRoleDocs({ role, findings = [], projectDir = ".", version = 
     // step whose finding is still open stays [x], everything else is re-derived.
     const checked = existsSync(planFile) ? planCheckedIds(readFileSync(planFile, "utf8")) : new Set();
 
-    write(projectDir, paths.plan, renderPlan(role, version, stamp, open, checked));
+    write(projectDir, paths.plan, renderPlan(role, version, stamp, open, checked, scope));
     written.push(paths.plan);
   } else if (existsSync(planFile)) {
     rmSync(planFile);

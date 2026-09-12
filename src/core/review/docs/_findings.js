@@ -54,11 +54,16 @@ function severityRank(severity) {
  * Reported means open. A finding the run no longer reports is resolved and kept
  * for one run so a reader can see what closed; the run after that removes it.
  *
+ * A scoped run looked at a slice of the project, so silence proves nothing:
+ * with `preserveUnreported` an unreported finding keeps its status instead of
+ * flipping to resolved, and nothing is pruned.
+ *
  * @param {Array<object>} previous - findings as recorded
  * @param {Array<object>} reported - findings this run found
+ * @param {{ preserveUnreported?: boolean }} [options]
  * @returns {{findings: Array<object>, counts: {open: number, resolved: number, pruned: number}}}
  */
-export function mergeFindings(previous, reported) {
+export function mergeFindings(previous, reported, { preserveUnreported = false } = {}) {
   const reportedById = new Map(reported.map((finding) => [finding.id, finding]));
   const findings = [];
   let resolved = 0;
@@ -69,6 +74,11 @@ export function mergeFindings(previous, reported) {
 
     if (stillReported) {
       continue; // it is re-added below, with this run's wording
+    }
+
+    if (preserveUnreported) {
+      findings.push({ ...record });
+      continue;
     }
 
     if (record.status === "open") {
@@ -97,5 +107,7 @@ export function mergeFindings(previous, reported) {
     return bySeverity === 0 ? left.id.localeCompare(right.id) : bySeverity;
   });
 
-  return { findings, counts: { open: reported.length, resolved, pruned } };
+  const open = findings.filter((finding) => finding.status === "open").length;
+
+  return { findings, counts: { open, resolved, pruned } };
 }

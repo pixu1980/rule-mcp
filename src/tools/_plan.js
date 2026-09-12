@@ -9,6 +9,9 @@
  * same registry, so whatever this tool answers, they answer too.
  */
 
+import { existsSync } from "node:fs";
+import { join } from "node:path";
+
 import { z } from "zod/v4";
 
 import { allRoles, roleById } from "../core/review/roles/index.js";
@@ -42,7 +45,7 @@ const PlanSchema = z.object({
   operation: z.enum(OPERATIONS).optional().describe("Which document this run produces: plan, audit, or review (default: all three)"),
   years: z.number().int().positive().optional(),
   skills: z.array(z.string()).optional(),
-  topic: z.string().optional(),
+  topic: z.string().optional().describe("Free-text request; becomes the binding scope of the run. Default: the whole project."),
   projectDir: z.string().optional(),
 });
 
@@ -73,6 +76,9 @@ export function registerPlanTool() {
         skills: arguments_.skills,
         topic: arguments_.topic,
         operation: arguments_.operation ?? "all",
+        // The generator is deterministic: it checks for .tokensave/ here so a
+        // scoped prompt can state availability instead of asking the run to probe.
+        tokensave: existsSync(join(arguments_.projectDir ?? ".", ".tokensave")) ? "available" : undefined,
       });
       // An overlay role is repository- or user-supplied text on its way to a
       // model: it is data, and it says so (hardening 4.4).
