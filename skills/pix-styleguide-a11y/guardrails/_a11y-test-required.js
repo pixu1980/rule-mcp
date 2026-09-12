@@ -1,6 +1,6 @@
-import { maskLiterals } from "../../../src/core/guardrails/_util.js";
-
 /** Guardrail `a11y-test-required`: Playwright + axe-core a11y tests */
+import { maskLiterals } from "@rule-mcp/sdk";
+
 export const a11yTestRequired = {
   id: "a11y-test-required",
   label: "Playwright + axe-core a11y tests",

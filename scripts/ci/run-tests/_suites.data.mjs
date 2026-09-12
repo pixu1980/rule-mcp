@@ -18,7 +18,7 @@ export const SUITES = {
     steps: ["tests/smoke.mjs", "src/core/skills/__tests__/_ai.test.mjs", "src/core/skills/__tests__/_detector.test.mjs", "src/core/skills/__tests__/_framework-routing.test.mjs"],
   },
   foundations: {
-    globs: ["tests/docs/**/*.test.mjs", "src/**/__tests__/*.test.mjs"],
+    globs: ["tests/docs/**/*.test.mjs", "src/**/__tests__/*.test.mjs", "packages/*/src/**/__tests__/*.test.mjs"],
   },
   installer: {
     globs: ["src/cli/**/__tests__/*.test.mjs"],

@@ -24,7 +24,7 @@ const check = (label, ok) => {
 
 console.log("=== AI fingerprint removal ===\n");
 
-import { fingerprintEnabled, stripFingerprint, stripFingerprintResult } from "../../../../../src/core/text/fingerprint/index.js";
+import { fingerprintEnabled, stripFingerprint, stripFingerprintResult } from "../index.js";
 
 const EM = String.fromCodePoint(0x20_14);
 const EN = String.fromCodePoint(0x20_13);

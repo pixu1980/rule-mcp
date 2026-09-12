@@ -1,7 +1,6 @@
-import { stripLiterals } from "../../../src/core/guardrails/quality/_guards-meta.js";
-import { countedVerdict, tsSkipResult } from "../../../src/shared/index.js";
-
 /** Guardrail `ts-catch-unknown`: Catch clauses use unknown */
+import { countedVerdict, stripLiterals, tsSkipResult } from "@rule-mcp/sdk";
+
 export const tsCatchUnknown = {
   id: "ts-catch-unknown",
   label: "Catch clauses use unknown",

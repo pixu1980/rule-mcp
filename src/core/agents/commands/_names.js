@@ -1,6 +1,6 @@
 /** @module core/agents/commands/names - the canonical command order */
 
-import { listPrompts } from "../../../prompts/index.js";
+import { listPrompts } from "@src/prompts/index.js";
 
 /** The router command, pinned first in every agent's command list. */
 export const ROUTER_COMMAND = "rule";

@@ -1,6 +1,6 @@
-import { findRaggedBoxes } from "../../../src/core/text/ascii-box/index.js";
-
 /** Guardrail `fp-box-rectangular`: A drawn box is a rectangle */
+import { findRaggedBoxes } from "@rule-mcp/sdk";
+
 export const fpBoxRectangular = {
   id: "fp-box-rectangular",
   label: "A drawn box is a rectangle",

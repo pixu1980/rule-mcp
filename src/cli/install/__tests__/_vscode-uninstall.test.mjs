@@ -1,9 +1,14 @@
 /** Regression: global VS Code uninstall must not create a workspace config. */
 import { strict as assert } from "node:assert";
+import { fileURLToPath } from "node:url";
 import { execFileSync } from "node:child_process";
 import { existsSync, mkdirSync, mkdtempSync, readFileSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
+
+// Server code resolves `@src/*` through a hook (ADR 079); a spawned
+// process loads it too, so it registers the hook as every entry point does.
+const ALIAS_HOOK = fileURLToPath(new URL("../../../../scripts/alias-hook.mjs", import.meta.url));
 
 const fakeHome = mkdtempSync(join(tmpdir(), "rule-vscode-uninstall-"));
 const fakeProject = join(fakeHome, "project");
@@ -26,10 +31,14 @@ writeFileSync(
 );
 
 const installModule = new URL("../index.js", import.meta.url).href;
-execFileSync(process.execPath, ["--input-type=module", "--eval", `import { uninstallAgent } from ${JSON.stringify(installModule)}; uninstallAgent({ agent: "vscode" });`], {
-  cwd: fakeProject,
-  env: { ...process.env, HOME: fakeHome },
-});
+execFileSync(
+  process.execPath,
+  ["--import", ALIAS_HOOK, "--input-type=module", "--eval", `import { uninstallAgent } from ${JSON.stringify(installModule)}; uninstallAgent({ agent: "vscode" });`],
+  {
+    cwd: fakeProject,
+    env: { ...process.env, HOME: fakeHome },
+  },
+);
 
 assert.equal(existsSync(join(fakeProject, ".vscode", "mcp.json")), false, "must not create workspace mcp.json");
 const config = JSON.parse(readFileSync(globalFile, "utf8"));

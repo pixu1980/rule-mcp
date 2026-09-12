@@ -8,6 +8,11 @@ import { execFileSync } from "node:child_process";
 import { existsSync, mkdirSync, mkdtempSync, readFileSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
+import { fileURLToPath } from "node:url";
+
+// Server code resolves `@src/*` through a hook (ADR 079); a spawned
+// process loads it too, so it registers the hook as every entry point does.
+const ALIAS_HOOK = fileURLToPath(new URL("../../../../scripts/alias-hook.mjs", import.meta.url));
 
 const fakeHome = mkdtempSync(join(tmpdir(), "rule-vscode-install-"));
 const fakeProject = join(fakeHome, "project");
@@ -41,6 +46,8 @@ const installModule = new URL("../index.js", import.meta.url).href;
 execFileSync(
   process.execPath,
   [
+    "--import",
+    ALIAS_HOOK,
     "--input-type=module",
     "--eval",
     `import { installAgent } from ${JSON.stringify(installModule)}; installAgent({ agent: "vscode", entrypoint: "/tmp/rule-mcp.js", mode: "daemon" });`,

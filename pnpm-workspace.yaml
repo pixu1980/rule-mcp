@@ -1,4 +1,8 @@
+packages:
+  - "."
+  - "packages/*"
+
 allowBuilds:
   "@modelcontextprotocol/inspector": false
 overrides:
-  rule-mcp: 'link:'
+  rule-mcp: "link:"

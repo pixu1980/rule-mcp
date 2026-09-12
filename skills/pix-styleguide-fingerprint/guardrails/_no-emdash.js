@@ -1,6 +1,6 @@
-import { findFingerprints } from "../../../src/core/text/fingerprint/index.js";
-
 /** Guardrail `fp-no-emdash`: No em or en dashes */
+import { findFingerprints } from "@rule-mcp/sdk";
+
 export const fpNoEmdash = {
   id: "fp-no-emdash",
   label: "No em or en dashes",

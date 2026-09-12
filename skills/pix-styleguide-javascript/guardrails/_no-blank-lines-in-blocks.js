@@ -1,5 +1,6 @@
 /** Guardrail `js-no-blank-lines-in-blocks`: No blank line immediately after { or before } */
-import { countedVerdict } from "../../../src/shared/index.js";
+import { countedVerdict } from "@rule-mcp/sdk";
+
 export const jsNoBlankLinesInBlocks = {
   id: "js-no-blank-lines-in-blocks",
   label: "No blank line immediately after { or before }",

@@ -13,6 +13,10 @@
 import { execFileSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 
+// Server code resolves `@src/*` through a hook (ADR 079); a spawned
+// process loads it too, so it registers the hook as every entry point does.
+const ALIAS_HOOK = fileURLToPath(new URL("../../../scripts/alias-hook.mjs", import.meta.url));
+
 export const ENFORCEMENT = fileURLToPath(new URL("../../../src/core/enforcement/index.js", import.meta.url));
 
 /**
@@ -64,7 +68,7 @@ export function runSession(calls, environment = {}) {
   `;
 
   return JSON.parse(
-    execFileSync(process.execPath, ["--input-type=module", "-e", script], {
+    execFileSync(process.execPath, ["--import", ALIAS_HOOK, "--input-type=module", "-e", script], {
       encoding: "utf8",
       env: { ...process.env, RULE_MCP_NO_AUTOUPDATE: "1", ...environment },
     }),

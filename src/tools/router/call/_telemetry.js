@@ -1,7 +1,7 @@
 /** The three recorded shapes of one tool call, folded into one place. */
 import { argsBytes, estimateTokens, guardrailRulesOf, textBytes } from "../_helpers.js";
 import { entryPathOf, routedSkillOf } from "../_entry.js";
-import { recordToolCall } from "../../../core/telemetry/recorder/index.js";
+import { recordToolCall } from "@src/core/telemetry/recorder/index.js";
 
 /** Record a call answered from the cache (a replay, decorated like a miss). */
 export function recordHit({ tool, args, startedAt, cached, final, cavemanSaved, reminderTokens }) {

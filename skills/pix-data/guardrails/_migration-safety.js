@@ -1,5 +1,5 @@
 /** Guardrail `migration-safety`: Safe DDL operations. */
-import { countedVerdict } from "../../../src/shared/index.js";
+import { countedVerdict } from "@rule-mcp/sdk";
 
 export const migrationSafety = {
   id: "migration-safety",

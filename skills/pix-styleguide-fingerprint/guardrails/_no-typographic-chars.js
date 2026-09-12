@@ -1,6 +1,6 @@
-import { findFingerprints } from "../../../src/core/text/fingerprint/index.js";
-
 /** Guardrail `fp-no-typographic-chars`: No curly quotes or ellipsis glyphs */
+import { findFingerprints } from "@rule-mcp/sdk";
+
 export const fpNoTypographicChars = {
   id: "fp-no-typographic-chars",
   label: "No curly quotes or ellipsis glyphs",

@@ -1,5 +1,6 @@
 /** Guardrail `js-no-array-for-each`: for...of over Array.forEach() */
-import { countedVerdict } from "../../../src/shared/index.js";
+import { countedVerdict } from "@rule-mcp/sdk";
+
 export const jsNoArrayForEach = {
   id: "js-no-array-for-each",
   label: "for...of over Array.forEach()",

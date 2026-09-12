@@ -9,7 +9,7 @@
  * Node 22 while `engines` still says 20.
  *
  * Both live in this project's own directory under the install,
- * `the projects root under the state dir` (ADR 082). Filed per project, because a
+ * `the projects root under the state dir`. Filed per project, because a
  * hit rate or a token saving averaged over every repository on a disk is a
  * number about the machine; the question anyone actually asks is what this
  * server did on THIS codebase. Kept out of the project, because nothing this

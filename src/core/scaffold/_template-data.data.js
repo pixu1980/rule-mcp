@@ -226,9 +226,12 @@ export function toPascal(string_) {
     return string_;
   }
 
+  // Split on separators AND on an internal capital, so camelCase keeps its
+  // humps: "primaryButton" is PrimaryButton, not Primarybutton.
   return string_
+    .replaceAll(/([a-z0-9])([A-Z])/g, "$1 $2")
     .split(/[-_\s]+/)
-    .map((s) => s.charAt(0).toUpperCase() + s.slice(1).toLowerCase())
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1).toLowerCase())
     .join("");
 }
 

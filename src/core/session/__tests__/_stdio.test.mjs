@@ -8,6 +8,11 @@ import { existsSync, mkdtempSync, readFileSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { alive, bin, reap, root, until, within } from "./_hygiene.fixture.mjs";
+import { fileURLToPath } from "node:url";
+
+// Server code resolves `@src/*` through a hook (ADR 079); a spawned
+// process loads it too, so it registers the hook as every entry point does.
+const ALIAS_HOOK = fileURLToPath(new URL("../../../../scripts/alias-hook.mjs", import.meta.url));
 test("a stdio server exits when its client is killed", async (t) => {
   const handoff = join(mkdtempSync(join(tmpdir(), "rule-orphan-")), "pid");
   let serverPid = null;
@@ -23,6 +28,8 @@ test("a stdio server exits when its client is killed", async (t) => {
   const client = spawn(
     process.execPath,
     [
+      "--import",
+      ALIAS_HOOK,
       "--input-type=module",
       "-e",
       `import { spawn } from "node:child_process";

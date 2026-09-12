@@ -19,9 +19,11 @@
  *   - every shared prompt/command surface carries the mandate.
  */
 
-export { checkCode, getGuardrails } from "../../../guardrails/index.js";
-export { findFingerprints } from "../../fingerprint/index.js";
+import "../../guardrails/__tests__/_install.fixture.mjs";
 
-const { loadAllSkills } = await import("../../../skills/index.js");
+export { checkCode, getGuardrails } from "../../guardrails/index.js";
+export { findFingerprints } from "@rule-mcp/sdk";
+
+const { loadAllSkills } = await import("../../skills/index.js");
 
 await loadAllSkills(true);

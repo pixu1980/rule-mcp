@@ -1,5 +1,6 @@
 /** Guardrail `js-blank-line-before-return`: Blank line before return statements */
-import { countedVerdict } from "../../../src/shared/index.js";
+import { countedVerdict } from "@rule-mcp/sdk";
+
 export const jsBlankLineBeforeReturn = {
   id: "js-blank-line-before-return",
   label: "Blank line before return statements",

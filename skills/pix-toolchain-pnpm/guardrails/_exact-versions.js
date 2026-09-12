@@ -1,6 +1,6 @@
-import { INSTALLED_GROUPS, isPinned, manifestOf } from "../../../src/core/guardrails/quality/_guards-meta.js";
-
 /** Guardrail `pkg-exact-versions`: Dependencies are pinned exactly */
+import { INSTALLED_GROUPS, isPinned, manifestOf } from "@rule-mcp/sdk";
+
 export const pkgExactVersions = {
   id: "pkg-exact-versions",
   label: "Dependencies are pinned exactly",

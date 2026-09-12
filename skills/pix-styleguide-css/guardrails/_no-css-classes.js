@@ -1,6 +1,6 @@
-import { extractRealCSS } from "../../../src/core/guardrails/_util.js";
-
 /** Guardrail `no-css-classes`: Zero CSS classes in stylesheets */
+import { extractRealCSS } from "@rule-mcp/sdk";
+
 export const noCssClasses = {
   id: "no-css-classes",
   label: "Zero CSS classes in stylesheets",

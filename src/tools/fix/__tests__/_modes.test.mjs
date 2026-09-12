@@ -51,7 +51,9 @@ test("lint lists every issue with its type, path and fix", () => {
     const body = text(lintMode({ path: root }));
 
     assert.match(body, /File Tree Validation: \d+ issues/);
-    assert.match(body, /- Missing barrel files: 1/);
+    // Two: src/Button holds a component, and src/Card holds a stylesheet,
+    // which counts as a component file and so wants a barrel of its own.
+    assert.match(body, /- Missing barrel files: 2/);
     assert.match(body, /- Wrong file prefix: 1/);
     assert.match(body, /### 🔧 missing-barrel/, "a fixable issue is marked with the wrench");
     assert.match(body, /### ⚠️ orphan-css/, "an unfixable one is marked with the warning");

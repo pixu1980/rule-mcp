@@ -1,5 +1,5 @@
 /** @module core/guardrails/file-tree/component-file-prefix */
-import { passResult } from "../../../src/shared/index.js";
+import { passResult } from "@rule-mcp/sdk";
 
 export const componentFilePrefix = {
   id: "component-file-prefix",

@@ -162,7 +162,6 @@ knob documented above can be traced to the code that answers it.
 | `RULE_MCP_NO_AUTOUPDATE`                | `src/cli/installers/_env.js`, `src/core/self-update/_config.js`, `src/tools/_update.js`                                                                                                                         |
 | `RULE_MCP_NO_CACHE`                     | `src/cli/cache/_helpers.js`, `src/cli/cache/_stats.js`, `src/cli/installers/_env.js`, `src/core/bm25/_cache-signature.js`, `src/core/cache/tool-cache/_config.js`                                               |
 | `RULE_MCP_NO_CAVEMAN`                   | `src/cli/installers/_env.js`, `src/core/text/_caveman.js`, `src/core/text/_level.js`                                                                                                                            |
-| `RULE_MCP_NO_FINGERPRINT`               | `src/core/text/fingerprint/_scan.js`                                                                                                                                                                            |
 | `RULE_MCP_NO_PROMPT_DIRECTIVE`          | `src/core/_directive.js`                                                                                                                                                                                        |
 | `RULE_MCP_NO_PROMPTS`                   | `src/core/agents/command-targets/index.js`, `src/core/agents/commands/index.js`, `src/core/telemetry/recorder/_flags.js`, `src/core/telemetry/recorder/index.js`, `src/prompts/_registry.js`                    |
 | `RULE_MCP_NO_REMINDER`                  | `src/cli/installers/_env.js`, `src/core/enforcement/_reminder.js`                                                                                                                                               |
@@ -183,11 +182,11 @@ knob documented above can be traced to the code that answers it.
 | `RULE_MCP_UPDATE_REMOTE`                | `src/core/self-update/_banner.js`, `src/core/self-update/_config.js`, `src/tools/_update.js`                                                                                                                    |
 | `RULE_MCP_UPDATE_REQUIRE_SIGNATURE`     | `src/core/self-update/_banner.js`, `src/core/self-update/_run.js`, `src/tools/_update.js`                                                                                                                       |
 
-38 read by the code, 40 documented in the table above.
+37 read by the code, 40 documented in the table above.
 
 Nothing the code reads is undocumented.
 
-Documented but read nowhere in `src/` or `bin/`: `RULE_MCP_TOKENSAVE_AUTOTRACK`, `RULE_MCP_AUTO_UPDATE`.
+Documented but read nowhere in `src/` or `bin/`: `RULE_MCP_NO_FINGERPRINT`, `RULE_MCP_TOKENSAVE_AUTOTRACK`, `RULE_MCP_AUTO_UPDATE`.
 
 Regenerate with `pnpm census`.
 

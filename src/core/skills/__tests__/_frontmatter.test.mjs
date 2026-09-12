@@ -79,3 +79,22 @@ test("a list ends where the frontmatter's next key begins", () => {
   assert.deepEqual(meta.inherits, ["rule-backend"]);
   assert.equal(meta.description, "Still parsed.", "and the key after it still parses");
 });
+
+test("a flow sequence a formatter wrapped across lines still parses", () => {
+  // Prettier rewrites a long `guardrails: [a, b, c]` into this shape, and a
+  // parser that only knew the two compact forms read it as empty.
+  const meta = parseSkillFrontmatter(
+    skill(
+      ["name: rule-frontend-vanilla-reactive", "guardrails:", "  [", "    vanilla-adopted-stylesheets,", "    vanilla-ce-extends,", "  ]", "inherits: [rule-styleguide]"].join("\n"),
+    ),
+  );
+
+  assert.deepEqual(meta.guardrails, ["vanilla-adopted-stylesheets", "vanilla-ce-extends"], "the wrapped entries are the list");
+  assert.deepEqual(meta.inherits, ["rule-styleguide"], "and the key after it still parses");
+});
+
+test("an empty wrapped flow sequence is an empty list", () => {
+  const meta = parseSkillFrontmatter(skill(["name: rule-text-only", "guardrails:", "  [", "  ]"].join("\n")));
+
+  assert.deepEqual(meta.guardrails, []);
+});

@@ -1,7 +1,6 @@
-import { stripLiterals } from "../../../src/core/guardrails/quality/_guards-meta.js";
-import { countedVerdict, tsSkipResult } from "../../../src/shared/index.js";
-
 /** Guardrail `ts-no-double-assertion`: No as-unknown-as escape hatch */
+import { countedVerdict, stripLiterals, tsSkipResult } from "@rule-mcp/sdk";
+
 export const tsNoDoubleAssertion = {
   id: "ts-no-double-assertion",
   label: "No as-unknown-as escape hatch",

@@ -1,5 +1,6 @@
 /** Guardrail `js-if-braces`: if/else always use braces */
-import { countedVerdict } from "../../../src/shared/index.js";
+import { countedVerdict } from "@rule-mcp/sdk";
+
 export const jsIfBraces = {
   id: "js-if-braces",
   label: "if/else always use braces",

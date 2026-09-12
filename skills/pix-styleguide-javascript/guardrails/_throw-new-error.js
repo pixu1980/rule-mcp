@@ -1,5 +1,6 @@
 /** Guardrail `js-throw-new-error`: throw requires new for error constructors */
-import { countedVerdict } from "../../../src/shared/index.js";
+import { countedVerdict } from "@rule-mcp/sdk";
+
 export const jsThrowNewError = {
   id: "js-throw-new-error",
   label: "throw requires new for error constructors",

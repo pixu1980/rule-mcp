@@ -1,5 +1,6 @@
 /** Guardrail `js-blank-line-between-methods`: Blank line between class methods */
-import { countedVerdict } from "../../../src/shared/index.js";
+import { countedVerdict } from "@rule-mcp/sdk";
+
 export const jsBlankLineBetweenMethods = {
   id: "js-blank-line-between-methods",
   label: "Blank line between class methods",

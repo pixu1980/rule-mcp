@@ -1,5 +1,6 @@
 /** Guardrail `js-prefer-replace-all`: replaceAll over replace with /g regex */
-import { countedVerdict } from "../../../src/shared/index.js";
+import { countedVerdict } from "@rule-mcp/sdk";
+
 export const jsPreferReplaceAll = {
   id: "js-prefer-replace-all",
   label: "replaceAll over replace with /g regex",

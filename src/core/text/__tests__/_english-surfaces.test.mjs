@@ -10,12 +10,12 @@ test("the rule-styleguide-english skill exists and is routed", async () => {
   const skillDir = "skills/rule-styleguide-english";
   assert.ok(existsSync(join(skillDir, "SKILL.md")), `${skillDir}/SKILL.md exists`);
 
-  const { parseSkillFrontmatter } = await import("../../../skills/index.js");
+  const { parseSkillFrontmatter } = await import("../../skills/index.js");
   const meta = parseSkillFrontmatter(readFileSync(join(skillDir, "SKILL.md"), "utf8"));
   assert.equal(meta.name, "rule-styleguide-english", "frontmatter name matches the directory");
   assert.match(meta.description, /english/i, "the description advertises English/American spelling");
 
-  const { callTool } = await import("../../../../tools/router/index.js");
+  const { callTool } = await import("../../../tools/router/index.js");
   const answer = JSON.parse((await callTool("pix_tool", { prompt: "americanize this comment: colour -> color, behaviour -> behavior" })).content[0].text);
   assert.match(`${answer.route} ${(answer.alternatives ?? []).map((a) => a.route).join(" ")}`, /styleguide-english/, "an americanize/english-spelling prompt routes to the skill");
 });
@@ -33,7 +33,7 @@ test("the skill's wordlist matches the fingerprint dictionary exactly (no drift)
 });
 
 test("every shared prompt/command surface carries the English mandate", async () => {
-  const { commandDefinition } = await import("../../../agents/commands/index.js");
+  const { commandDefinition } = await import("../../agents/commands/index.js");
   const surfaces = [
     ["router command", commandDefinition("rule").body],
     ["handoff command", commandDefinition("rule-handoff").body],
@@ -42,8 +42,8 @@ test("every shared prompt/command surface carries the English mandate", async ()
     assert.match(body, /American spelling|American English|US spelling/i, `${label} must carry the mandate`);
   }
 
-  const { fillRoleTemplate } = await import("../../../review/template/index.js");
-  const { roleById } = await import("../../../review/roles/index.js");
+  const { fillRoleTemplate } = await import("../../review/template/index.js");
+  const { roleById } = await import("../../review/roles/index.js");
   const filled = fillRoleTemplate(roleById("security"));
   assert.match(filled, /American spelling|English/i, "the persona template carries the mandate");
 });

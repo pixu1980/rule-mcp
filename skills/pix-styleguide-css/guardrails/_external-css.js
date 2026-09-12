@@ -1,6 +1,6 @@
-import { extractRealCSS, looksLikeStylesheet } from "../../../src/core/guardrails/_util.js";
-
 /** Guardrail `external-css`: External CSS via adoptedStyleSheets or framework-native import */
+import { extractRealCSS, looksLikeStylesheet } from "@rule-mcp/sdk";
+
 export const externalCss = {
   id: "external-css",
   label: "External CSS via adoptedStyleSheets or framework-native import",

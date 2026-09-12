@@ -1,6 +1,6 @@
-import { scanCodeForForeign, scanDocumentForForeign } from "../../../src/core/text/en-english/index.js";
-
 /** Guardrail `en-english-only-prose`: English-only prose */
+import { scanCodeForForeign, scanDocumentForForeign } from "@rule-mcp/sdk";
+
 export const enEnglishOnlyProse = {
   id: "en-english-only-prose",
   label: "English-only prose",

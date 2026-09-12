@@ -1,7 +1,6 @@
-import { stripLiterals } from "../../../src/core/guardrails/quality/_guards-meta.js";
-import { countedVerdict, tsSkipResult } from "../../../src/shared/index.js";
-
 /** Guardrail `ts-union-over-enum`: Union types over enum */
+import { countedVerdict, stripLiterals, tsSkipResult } from "@rule-mcp/sdk";
+
 export const tsUnionOverEnum = {
   id: "ts-union-over-enum",
   label: "Union types over enum",

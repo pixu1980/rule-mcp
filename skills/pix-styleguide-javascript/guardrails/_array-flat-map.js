@@ -1,5 +1,6 @@
 /** Guardrail `js-array-flat-map`: prefer flatMap over map().flat() */
-import { countedVerdict } from "../../../src/shared/index.js";
+import { countedVerdict } from "@rule-mcp/sdk";
+
 export const jsArrayFlatMap = {
   id: "js-array-flat-map",
   label: "prefer flatMap over map().flat()",

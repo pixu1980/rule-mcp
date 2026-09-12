@@ -1,5 +1,6 @@
 /** Guardrail `js-single-line-method`: Class method bodies must be multi-line */
-import { countedVerdict } from "../../../src/shared/index.js";
+import { countedVerdict } from "@rule-mcp/sdk";
+
 export const jsSingleLineMethod = {
   id: "js-single-line-method",
   label: "Class method bodies must be multi-line",

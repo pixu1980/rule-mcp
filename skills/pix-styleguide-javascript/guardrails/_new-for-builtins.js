@@ -1,5 +1,6 @@
 /** Guardrail `js-new-for-builtins`: new required for Map/Set/Date/Array/WeakMap/WeakSet */
-import { countedVerdict } from "../../../src/shared/index.js";
+import { countedVerdict } from "@rule-mcp/sdk";
+
 export const jsNewForBuiltins = {
   id: "js-new-for-builtins",
   label: "new required for Map/Set/Date/Array/WeakMap/WeakSet",

@@ -6,7 +6,7 @@
  * The block existed for one purpose: to re-assert a `.gitignore` rule for a
  * recorder directory this server wrote into every project it observed. Nothing
  * is written into a project any more - a recording lives under
- * `the home state dir/projects/` (ADR 082) - so nothing installs a hook, and what
+ * `the home state dir/projects/` - so nothing installs a hook, and what
  * remains here is the cleanup an install that has one still needs.
  *
  * The block is marked, so removing it never touches tokensave's hooks, which

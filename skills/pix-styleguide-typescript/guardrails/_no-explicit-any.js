@@ -1,7 +1,6 @@
-import { stripLiterals } from "../../../src/core/guardrails/quality/_guards-meta.js";
-import { countedVerdict, tsSkipResult } from "../../../src/shared/index.js";
-
 /** Guardrail `ts-no-explicit-any`: No explicit any */
+import { countedVerdict, stripLiterals, tsSkipResult } from "@rule-mcp/sdk";
+
 export const tsNoExplicitAny = {
   id: "ts-no-explicit-any",
   label: "No explicit any",

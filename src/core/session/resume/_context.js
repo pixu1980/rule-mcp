@@ -1,6 +1,6 @@
 /** @module core/session/resume/context - the verified handon block a resumed session receives */
 
-import { handon } from "../../../tools/handon/index.js";
+import { handon } from "@src/tools/handon/index.js";
 import { markAnnounced } from "./_announce.js";
 
 /** Session sources that mean "the user came back to unfinished work". */

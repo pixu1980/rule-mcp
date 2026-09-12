@@ -1,5 +1,6 @@
 /** Guardrail `js-for-loop-braces`: for loops must have braces and be multi-line */
-import { countedVerdict } from "../../../src/shared/index.js";
+import { countedVerdict } from "@rule-mcp/sdk";
+
 export const jsForLoopBraces = {
   id: "js-for-loop-braces",
   label: "for loops must have braces and be multi-line",

@@ -1,6 +1,6 @@
-import { maskLiterals } from "../../../src/core/guardrails/_util.js";
-
 /** Guardrail `jsdoc-required`: JSDoc on every exported symbol */
+import { maskLiterals } from "@rule-mcp/sdk";
+
 export const jsdocRequired = {
   id: "jsdoc-required",
   label: "JSDoc on every exported symbol",

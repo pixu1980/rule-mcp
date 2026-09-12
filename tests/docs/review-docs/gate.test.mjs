@@ -7,6 +7,10 @@ import { spawnSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 import { FINDINGS, project, syncRoleDocs, validateTrio } from "./_trio.fixture.mjs";
 
+// The scanner loads server code, which resolves `@src/*` through a hook
+// (ADR 079); a spawned process registers it as every entry point does.
+const ALIAS_HOOK = fileURLToPath(new URL("../../../scripts/alias-hook.mjs", import.meta.url));
+
 // The rule_tool_plan_docs tool-call tests land with the MCP surface phase
 // (item 9); the module behavior is pinned above and below this gap.
 // ── C.3: the gate over the trio ──
@@ -100,7 +104,7 @@ test("the docs gate exits non-zero on a broken trio", () => {
   writeFileSync(plan, readFileSync(plan, "utf8").replace("SEC-1", "SEC-404"));
 
   const scan = fileURLToPath(new URL("../docs-scan.mjs", import.meta.url));
-  const run = spawnSync(process.execPath, [scan], {
+  const run = spawnSync(process.execPath, ["--import", ALIAS_HOOK, scan], {
     cwd: dir,
     encoding: "utf8",
     env: { ...process.env, RULE_MCP_NO_AUTOUPDATE: "1" },

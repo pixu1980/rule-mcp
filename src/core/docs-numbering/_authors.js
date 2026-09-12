@@ -4,7 +4,7 @@ import { adrAuthor } from "../../tools/adr/index.js";
 import { FAMILIES, documentsIn } from "./_families.js";
 import { addedBy } from "./_git.js";
 
-/** Authors that name a program rather than a person (ADR 086). */
+/** Authors that name a program rather than a person. */
 const TOOL_AUTHORS = new Set(["rule-mcp"]);
 
 /** The `- **Author**:` bullet, in both punctuations the ADRs use. */
@@ -16,7 +16,7 @@ const TAGS_LINE = /^- \*\*Tags(\*\*:|:\*\*) *(.*)$/m;
 /**
  * ADRs whose author names a tool, or names nobody at all.
  *
- * The decision this repairs is ADR 086: the field answers "who do I ask", and
+ * The decision this repairs: the field answers "who do I ask", and
  * for every ADR written before that it answered with the name of a program.
  * The author is taken from the commit that added the file, because that is the
  * only record of who wrote it; a file git has never seen falls back to the

@@ -1,6 +1,6 @@
-import { findFingerprints } from "../../../src/core/text/fingerprint/index.js";
-
 /** Guardrail `fp-american-english`: American English spelling */
+import { findFingerprints } from "@rule-mcp/sdk";
+
 export const fpAmericanEnglish = {
   id: "fp-american-english",
   label: "American English spelling",

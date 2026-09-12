@@ -74,7 +74,7 @@ test("an overlay replaces an entry wholesale, by id", async () => {
   try {
     mkdirSync(join(home, "config", "roles"), { recursive: true });
     // Only the user's layer remains: a project layer read roles out of a
-    // checkout, which is why it needed a trust gate, and both are gone (ADR 082).
+    // checkout, which is why it needed a trust gate, and both are gone.
     // Overlays use the same persona-file format as the embedded catalog.
     const { formatPersonaFile } = await import("../../persona-file/index.js");
     const replacement = { ...roleById("performance"), version: 2, yearsOfExperience: 11 };

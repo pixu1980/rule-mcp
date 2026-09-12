@@ -1,5 +1,6 @@
 /** Guardrail `js-node-protocol`: node: protocol for Node builtins */
-import { countedVerdict } from "../../../src/shared/index.js";
+import { countedVerdict } from "@rule-mcp/sdk";
+
 export const jsNodeProtocol = {
   id: "js-node-protocol",
   label: "node: protocol for Node builtins",

@@ -9,10 +9,15 @@
  * `mcp__pix_galaxy_mcp__*` form.
  */
 import { strict as assert } from "node:assert";
+import { fileURLToPath } from "node:url";
 import { execFileSync } from "node:child_process";
 import { mkdirSync, mkdtempSync, readFileSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
+
+// Server code resolves `@src/*` through a hook (ADR 079); a spawned
+// process loads it too, so it registers the hook as every entry point does.
+const ALIAS_HOOK = fileURLToPath(new URL("../../../../scripts/alias-hook.mjs", import.meta.url));
 
 const root = new URL("../../../..", import.meta.url).pathname;
 const installModule = new URL("../index.js", import.meta.url).href;
@@ -20,7 +25,13 @@ const installModule = new URL("../index.js", import.meta.url).href;
 const installForPi = (home, piDir) =>
   execFileSync(
     process.execPath,
-    ["--input-type=module", "--eval", `import { installAgent } from ${JSON.stringify(installModule)}; installAgent({ agent: "pi", entrypoint: "/tmp/rule-mcp.js" });`],
+    [
+      "--import",
+      ALIAS_HOOK,
+      "--input-type=module",
+      "--eval",
+      `import { installAgent } from ${JSON.stringify(installModule)}; installAgent({ agent: "pi", entrypoint: "/tmp/rule-mcp.js" });`,
+    ],
     { cwd: root, env: { ...process.env, HOME: home, PI_CODING_AGENT_DIR: piDir } },
   );
 
@@ -69,10 +80,14 @@ assert.equal(fresh.toolPrefix, "none", "fresh pi install must default to toolPre
 assert.equal(fresh.directTools, true);
 
 // 3. Uninstall removes the whole entry (nothing left behind).
-execFileSync(process.execPath, ["--input-type=module", "--eval", `import { uninstallAgent } from ${JSON.stringify(installModule)}; uninstallAgent({ agent: "pi" });`], {
-  cwd: root,
-  env: { ...process.env, HOME: fakeHome2, PI_CODING_AGENT_DIR: piDir2 },
-});
+execFileSync(
+  process.execPath,
+  ["--import", ALIAS_HOOK, "--input-type=module", "--eval", `import { uninstallAgent } from ${JSON.stringify(installModule)}; uninstallAgent({ agent: "pi" });`],
+  {
+    cwd: root,
+    env: { ...process.env, HOME: fakeHome2, PI_CODING_AGENT_DIR: piDir2 },
+  },
+);
 const afterUninstall = readFileSync(join(piDir2, "mcp.json"), "utf8").trim();
 assert.ok(!afterUninstall || !JSON.parse(afterUninstall).mcpServers?.["rule-mcp"], "uninstall must remove the rule-mcp entry");
 

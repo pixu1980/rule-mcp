@@ -1,6 +1,6 @@
-import { extractRealCSS, unjustifiedGrids } from "../../../src/core/guardrails/_util.js";
-
 /** Guardrail `css-flex-first`: Flex first, grid only when flex cannot do it */
+import { extractRealCSS, unjustifiedGrids } from "@rule-mcp/sdk";
+
 export const cssFlexFirst = {
   id: "css-flex-first",
   label: "Flex first, grid only when flex cannot do it",

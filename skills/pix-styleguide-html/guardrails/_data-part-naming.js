@@ -1,6 +1,6 @@
-import { maskLiterals } from "../../../src/core/guardrails/_util.js";
-
 /** Guardrail `data-part-naming`: data-part attribute for child elements */
+import { maskLiterals } from "@rule-mcp/sdk";
+
 export const dataPartNaming = {
   id: "data-part-naming",
   label: "data-part attribute for child elements",

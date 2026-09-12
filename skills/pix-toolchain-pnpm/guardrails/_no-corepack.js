@@ -1,6 +1,6 @@
-import { manifestOf } from "../../../src/core/guardrails/quality/_guards-meta.js";
-
 /** Guardrail `pkg-no-corepack`: No corepack activation fields */
+import { manifestOf } from "@rule-mcp/sdk";
+
 export const pkgNoCorepack = {
   id: "pkg-no-corepack",
   label: "No corepack activation fields",

@@ -1,6 +1,6 @@
-import { scanPathForForeign } from "../../../src/core/text/en-english/index.js";
-
 /** Guardrail `en-english-only-filenames`: English-only file and folder names */
+import { scanPathForForeign } from "@rule-mcp/sdk";
+
 export const enEnglishOnlyFilenames = {
   id: "en-english-only-filenames",
   label: "English-only file and folder names",

@@ -1,0 +1,29 @@
+{
+  "name": "@rule-mcp/sdk",
+  "version": "0.1.0-beta",
+  "description": "Write a guardrail for rule-mcp: verdict constructors, source helpers and the prose scanners the bundled rules use.",
+  "license": "MIT",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.js",
+    "./text": "./src/text/index.js"
+  },
+  "files": [
+    "src/",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pixu1980/rule-mcp.git",
+    "directory": "packages/sdk"
+  },
+  "keywords": [
+    "rule-mcp",
+    "guardrails",
+    "mcp",
+    "linting"
+  ]
+}

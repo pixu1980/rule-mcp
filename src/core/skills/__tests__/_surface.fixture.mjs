@@ -23,6 +23,11 @@ import { execFileSync } from "node:child_process";
 import { mkdirSync, mkdtempSync, readdirSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
+import { fileURLToPath } from "node:url";
+
+// Server code resolves `@src/*` through a hook (ADR 079); a spawned
+// process loads it too, so it registers the hook as every entry point does.
+const ALIAS_HOOK = fileURLToPath(new URL("../../../../scripts/alias-hook.mjs", import.meta.url));
 
 /**
  * Load the server in a child process with HOME pointed at `home`, and return the
@@ -39,7 +44,7 @@ export function surfaceWith(home) {
       bytes: JSON.stringify(listTools()).length,
     }));
   `;
-  const out = execFileSync(process.execPath, ["--input-type=module", "--eval", script], {
+  const out = execFileSync(process.execPath, ["--import", ALIAS_HOOK, "--input-type=module", "--eval", script], {
     cwd: new URL("../../..", import.meta.url).pathname,
     env: { ...process.env, HOME: home, USERPROFILE: home, RULE_MCP_NO_AUTOUPDATE: "1" },
     encoding: "utf8",
@@ -79,7 +84,7 @@ export const surface = surfaceWith(home);
 
 /** Run a one-line module script in a child with the hostile HOME. */
 export function runWithHome(script) {
-  return execFileSync(process.execPath, ["--input-type=module", "--eval", script], {
+  return execFileSync(process.execPath, ["--import", ALIAS_HOOK, "--input-type=module", "--eval", script], {
     cwd: new URL("../../..", import.meta.url).pathname,
     env: { ...process.env, HOME: home, USERPROFILE: home },
     encoding: "utf8",

@@ -3,6 +3,11 @@ import { execFileSync } from "node:child_process";
 import { existsSync, mkdirSync, mkdtempSync, readFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
+import { fileURLToPath } from "node:url";
+
+// Server code resolves `@src/*` through a hook (ADR 079); a spawned
+// process loads it too, so it registers the hook as every entry point does.
+const ALIAS_HOOK = fileURLToPath(new URL("../../../../scripts/alias-hook.mjs", import.meta.url));
 
 // eslint-disable-next-line no-unused-vars
 const root = new URL("../../../..", import.meta.url).pathname;
@@ -15,6 +20,8 @@ mkdirSync(fakeProject, { recursive: true });
 execFileSync(
   process.execPath,
   [
+    "--import",
+    ALIAS_HOOK,
     "--input-type=module",
     "--eval",
     `import { installAgent } from ${JSON.stringify(installModule)}; for (const agent of ["pi", "claude", "gemini", "cursor", "copilot"]) installAgent({ agent, entrypoint: "/tmp/rule-mcp.js" });`,
@@ -38,6 +45,8 @@ for (const [file, marker, label] of expectations) {
 execFileSync(
   process.execPath,
   [
+    "--import",
+    ALIAS_HOOK,
     "--input-type=module",
     "--eval",
     `import { uninstallAgent } from ${JSON.stringify(installModule)}; for (const agent of ["pi", "claude", "gemini", "cursor", "copilot"]) uninstallAgent({ agent });`,

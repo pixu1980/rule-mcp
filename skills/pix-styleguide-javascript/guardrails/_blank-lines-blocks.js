@@ -1,5 +1,6 @@
 /** Guardrail `js-blank-lines-blocks`: Multi-line blocks have blank lines above/below */
-import { countedVerdict } from "../../../src/shared/index.js";
+import { countedVerdict } from "@rule-mcp/sdk";
+
 export const jsBlankLinesBlocks = {
   id: "js-blank-lines-blocks",
   label: "Multi-line blocks have blank lines above/below",

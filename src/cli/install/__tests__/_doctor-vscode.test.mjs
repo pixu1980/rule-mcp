@@ -4,6 +4,11 @@ import { execFileSync } from "node:child_process";
 import { mkdirSync, mkdtempSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
+import { fileURLToPath } from "node:url";
+
+// Server code resolves `@src/*` through a hook (ADR 079); a spawned
+// process loads it too, so it registers the hook as every entry point does.
+const ALIAS_HOOK = fileURLToPath(new URL("../../../../scripts/alias-hook.mjs", import.meta.url));
 
 const fakeHome = mkdtempSync(join(tmpdir(), "rule-doctor-vscode-"));
 const fakeProject = join(fakeHome, "project");
@@ -13,6 +18,8 @@ const doctorModule = new URL("../../doctor/index.js", import.meta.url).href;
 const output = execFileSync(
   process.execPath,
   [
+    "--import",
+    ALIAS_HOOK,
     "--input-type=module",
     "--eval",
     [
