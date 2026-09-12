@@ -19,7 +19,7 @@ export async function daemonCommand(opts) {
       break;
     }
     case "uninstall": {
-      actionUninstall({ dryRun });
+      await actionUninstall({ dryRun });
       break;
     }
     case "enable": {

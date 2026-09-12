@@ -9,6 +9,7 @@ complete -c pix-galaxy-mcp -f
 
 # Commands
 complete -c pix-galaxy-mcp -n "__fish_use_subcommand" -a serve     -d "Start MCP server"
+complete -c pix-galaxy-mcp -n "__fish_use_subcommand" -a up        -d "Serve over SSE (HTTP daemon)"
 complete -c pix-galaxy-mcp -n "__fish_use_subcommand" -a daemon    -d "Manage background daemon"
 complete -c pix-galaxy-mcp -n "__fish_use_subcommand" -a install   -d "Install into agent/IDE"
 complete -c pix-galaxy-mcp -n "__fish_use_subcommand" -a uninstall -d "Remove from agent/IDE"
@@ -18,6 +19,14 @@ complete -c pix-galaxy-mcp -n "__fish_use_subcommand" -a doctor    -d "System he
 complete -c pix-galaxy-mcp -n "__fish_use_subcommand" -a skills    -d "Manage skills"
 complete -c pix-galaxy-mcp -n "__fish_use_subcommand" -a adr       -d "Architecture Decision Records"
 complete -c pix-galaxy-mcp -n "__fish_use_subcommand" -a handoff   -d "LLM context handoff"
+complete -c pix-galaxy-mcp -n "__fish_use_subcommand" -a handon    -d "Verify the last handoff"
+complete -c pix-galaxy-mcp -n "__fish_use_subcommand" -a fix       -d "Auto-fix project file tree"
+complete -c pix-galaxy-mcp -n "__fish_use_subcommand" -a stats     -d "Show telemetry statistics"
+complete -c pix-galaxy-mcp -n "__fish_use_subcommand" -a cache     -d "Inspect the on-disk tool cache"
+complete -c pix-galaxy-mcp -n "__fish_use_subcommand" -a roles     -d "Manage review persona roles"
+complete -c pix-galaxy-mcp -n "__fish_use_subcommand" -a guard     -d "Permission-guard processor"
+complete -c pix-galaxy-mcp -n "__fish_use_subcommand" -a update    -d "Self-update from upstream"
+complete -c pix-galaxy-mcp -n "__fish_use_subcommand" -a agent-commands -d "Manage agent slash commands"
 complete -c pix-galaxy-mcp -n "__fish_use_subcommand" -a completions -d "Generate shell completion"
 complete -c pix-galaxy-mcp -n "__fish_use_subcommand" -a help      -d "Show help"
 

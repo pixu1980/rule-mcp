@@ -10,7 +10,7 @@ _pix_galaxy_mcp() {
   local cur prev words cword
   _init_completion || return
 
-  local commands="serve daemon install uninstall config tools doctor skills adr handoff completions help"
+  local commands="serve up daemon install uninstall config tools doctor skills adr handoff handon fix stats cache roles guard update agent-commands completions help"
   local daemon_actions="start stop status logs"
   local tools_sub="list call"
   local skills_actions="reload"

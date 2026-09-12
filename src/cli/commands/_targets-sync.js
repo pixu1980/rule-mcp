@@ -30,12 +30,14 @@ export function syncCommandTargets(opts) {
       mkdirSync(dir, { recursive: true });
     }
 
-    // Remove sweeps the whole `pix-*` namespace in the target dir, so names
-    // that left the registry (a rename, a deletion) are purged too instead of
-    // lingering as stale commands next to the new set.
+    // Remove sweeps the whole `pix` namespace in the target dir, so names that
+    // left the registry (a rename, a deletion) are purged too instead of
+    // lingering as stale commands next to the new set. The separator matters:
+    // the root command is `pix.md`, not `pix-something.md`, and a bare `pix-`
+    // prefix left it behind on every uninstall.
     if (opts.remove) {
       const stale = readdirSync(dir)
-        .filter((entry) => entry.startsWith("pix-"))
+        .filter((entry) => /^pix[-.]/.test(entry))
         .filter((entry) => entry.endsWith(".md") || entry.endsWith(".toml") || entry.endsWith(".prompt.md"));
 
       for (const entry of stale) {
