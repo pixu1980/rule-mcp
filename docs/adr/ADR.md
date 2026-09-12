@@ -8,6 +8,7 @@ this directory are the source of truth; this index is generated from them by
 
 | #                                                                                                                       | Title                                                                                                     | Date       | Status     | Tags                                                                                |
 | ----------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- | ---------- | ---------- | ----------------------------------------------------------------------------------- |
+| [079](079-skills-own-their-guardrails-and-three-layers-resolve-both-skills-and-personas.md)                             | Skills own their guardrails, and three layers resolve both skills and personas                            | 2026-09-12 | accepted   | architecture, skills, guardrails, personas, extensibility                           |
 | [078](078-a-persona-topic-is-the-binding-scope-of-the-run.md)                                                           | A persona topic is the binding scope of the run                                                           | 2026-09-12 | accepted   | personas, prompts, review, tokensave                                                |
 | [077](077-the-cli-entry-point-loads-no-command-handler-it-has-not-been-asked-for.md)                                    | The CLI entry point loads no command handler it has not been asked for                                    | 2026-09-09 | accepted   | cli, startup, performance, imports                                                  |
 | [076](076-compression-has-four-levels-and-no-llm-in-the-output-path.md)                                                 | Compression has four levels and no LLM in the output path                                                 | 2026-09-09 | accepted   | compression, tokens, determinism, text                                              |
@@ -91,6 +92,7 @@ file. Where a line stops short the rest is in the ADR.
 
 | ADR                                                                                                                     | Decision                                                                                                                                                                                                                        | Consequence                                                                                                                                                                                                                    |
 | ----------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| [079](079-skills-own-their-guardrails-and-three-layers-resolve-both-skills-and-personas.md)                             | A skill owns the rules that judge its subject.                                                                                                                                                                                  | A project versions its own rules beside its code and a team shares them through git.                                                                                                                                           |
 | [078](078-a-persona-topic-is-the-binding-scope-of-the-run.md)                                                           | The topic becomes the binding scope everywhere the template speaks: the action line names the scope instead of the project, a dedicated 'Scope: binding' section forbids reading, auditing or reporting outside it (with a...   | A user request like /rule-audit-security the SSE daemon now produces a run confined to that scope, and repeated scoped runs no longer mark whole-project findings resolved by silence.                                          |
 | [077](077-the-cli-entry-point-loads-no-command-handler-it-has-not-been-asked-for.md)                                    | Keep the command and option declarations static, and load the handlers inside their actions.                                                                                                                                    | Warm --help fell from 216 ms to 48 ms, and every command still dispatches. listTools() is memoized on a registry generation bumped by register, clear and retain, so the 105-schema conversion is paid once per process...     |
 | [076](076-compression-has-four-levels-and-no-llm-in-the-output-path.md)                                                 | Port the deterministic half and refuse the LLM half.                                                                                                                                                                            | The vocabulary can be aggressive because a bad rule costs one paragraph, not the whole result.                                                                                                                                 |
@@ -174,6 +176,7 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 
 ### skills
 
+- [079](079-skills-own-their-guardrails-and-three-layers-resolve-both-skills-and-personas.md) Skills own their guardrails, and three layers resolve both skills and personas
 - [075](075-the-installer-asks-before-copying-bundled-skills-to-the-central-agents-directory.md) The installer asks before copying bundled skills to the central agents directory
 - [069](069-remove-externally-derived-skills-from-the-served-knowledge-base.md) Remove externally derived skills from the served knowledge base
 - [058](058-restructure-the-command-surface-rule-router-rule-area-caveman-implicit-rule-process.md) Restructure the command surface: /rule router, rule-area-*, caveman implicit, rule-process-tdd skill
@@ -189,6 +192,7 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 
 ### architecture
 
+- [079](079-skills-own-their-guardrails-and-three-layers-resolve-both-skills-and-personas.md) Skills own their guardrails, and three layers resolve both skills and personas
 - [061](061-one-file-per-rule-with-underscore-barrel-folders-and-a-size-ratchet.md) One file per rule with underscore-barrel folders and a size ratchet
 - [060](060-reorganize-scripts-src-tests-with-150-line-code-splitting.md) Reorganize scripts, src and tests with 150-line code splitting
 - [034](034-registry-driven-clean-slash-commands-for-every-agent-and-ide.md) Registry-driven clean slash commands for every agent and IDE
@@ -245,6 +249,15 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [022](022-skill-routing-eslint-flat-config-for-typescript-react-proje.md) Skill routing: ESLint flat config for TypeScript React project
 - [021](021-skill-routing-typescript-tsconfig-strict-mode-configuration.md) Skill routing: TypeScript tsconfig strict mode configuration
 
+### guardrails
+
+- [079](079-skills-own-their-guardrails-and-three-layers-resolve-both-skills-and-personas.md) Skills own their guardrails, and three layers resolve both skills and personas
+- [061](061-one-file-per-rule-with-underscore-barrel-folders-and-a-size-ratchet.md) One file per rule with underscore-barrel folders and a size ratchet
+- [056](056-gateway-as-the-single-entrypoint-with-server-side-receipts-backend-data-devops-g.md) Gateway as the single entrypoint with server-side receipts; backend/data/devops guardrail families
+- [050](050-split-hotspot-modules.md) Split the hotspot modules (guardrails + installer)
+- [045](045-adopt-eslint-plugin-unicorn-for-js-ts-quality.md) Adopt eslint-plugin-unicorn for JS/TS quality
+- [019](019-fail-closed-mcp-enforcement-and-reusable-agent-commands.md) fail closed mcp enforcement and reusable agent commands
+
 ### tool
 
 - [026](026-skill-routing-pnpm-package-manager-workspace-monorepo-setup.md) Skill routing: pnpm package manager workspace monorepo setup
@@ -279,13 +292,13 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [066](066-coverage-floor-raised-to-87-95-remains-the-ratchet-endpoint.md) Coverage floor raised to 87; 95 remains the ratchet endpoint
 - [065](065-glob-suite-runner-colocated-tests-and-a-branch-coverage-ratchet.md) Glob suite runner, co-located tests, and a branch-coverage ratchet
 
-### guardrails
+### personas
 
-- [061](061-one-file-per-rule-with-underscore-barrel-folders-and-a-size-ratchet.md) One file per rule with underscore-barrel folders and a size ratchet
-- [056](056-gateway-as-the-single-entrypoint-with-server-side-receipts-backend-data-devops-g.md) Gateway as the single entrypoint with server-side receipts; backend/data/devops guardrail families
-- [050](050-split-hotspot-modules.md) Split the hotspot modules (guardrails + installer)
-- [045](045-adopt-eslint-plugin-unicorn-for-js-ts-quality.md) Adopt eslint-plugin-unicorn for JS/TS quality
-- [019](019-fail-closed-mcp-enforcement-and-reusable-agent-commands.md) fail closed mcp enforcement and reusable agent commands
+- [079](079-skills-own-their-guardrails-and-three-layers-resolve-both-skills-and-personas.md) Skills own their guardrails, and three layers resolve both skills and personas
+- [078](078-a-persona-topic-is-the-binding-scope-of-the-run.md) A persona topic is the binding scope of the run
+- [063](063-plans-carry-nested-sub-steps-and-an-exhaustiveness-mandate.md) Plans carry nested sub-steps and an exhaustiveness mandate
+- [062](062-persona-plans-are-checklists-with-marks-that-survive-the-sync.md) Persona plans are checklists with marks that survive the sync
+- [057](057-split-review-personas-into-per-operation-commands-plan-audit-review.md) Split review personas into per-operation commands (plan/audit/review)
 
 ### cli
 
@@ -300,13 +313,6 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [008](008-thematic-skill-taxonomy-rename.md) thematic skill taxonomy rename
 - [004](004-scaffold-consolidation.md) Scaffold Skill Consolidation
 - [001](001-thematic-skill-rename.md) Thematic Skill Taxonomy Rename
-
-### personas
-
-- [078](078-a-persona-topic-is-the-binding-scope-of-the-run.md) A persona topic is the binding scope of the run
-- [063](063-plans-carry-nested-sub-steps-and-an-exhaustiveness-mandate.md) Plans carry nested sub-steps and an exhaustiveness mandate
-- [062](062-persona-plans-are-checklists-with-marks-that-survive-the-sync.md) Persona plans are checklists with marks that survive the sync
-- [057](057-split-review-personas-into-per-operation-commands-plan-audit-review.md) Split review personas into per-operation commands (plan/audit/review)
 
 ### prompts
 

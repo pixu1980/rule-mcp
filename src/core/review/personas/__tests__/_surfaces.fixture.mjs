@@ -11,12 +11,12 @@
  * operation would be exactly the drift ADR 029 removed.
  */
 
-export { activeRoles } from "../../core/review/roles/index.js";
-export { OPERATIONS } from "../../core/review/template/index.js";
-export { getPrompt, listPrompts } from "../../prompts/index.js";
-export { listAgentCommands } from "../../core/agents/commands/index.js";
-export { callTool, listTools } from "../../tools/router/index.js";
+export { activeRoles } from "../../roles/index.js";
+export { OPERATIONS } from "../../template/index.js";
+export { getPrompt, listPrompts } from "../../../../prompts/index.js";
+export { listAgentCommands } from "../../../agents/commands/index.js";
+export { callTool, listTools } from "../../../../tools/router/index.js";
 
-const { registerPlanTool } = await import("../../tools/_plan.js");
+const { registerPlanTool } = await import("../../../../tools/_plan.js");
 
 registerPlanTool();

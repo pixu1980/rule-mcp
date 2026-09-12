@@ -10,7 +10,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import test from "node:test";
 
-import { activeRoles, allRoles, EMBEDDED_ROLES, roleById, validateRole } from "../../core/review/roles/index.js";
+import { activeRoles, allRoles, EMBEDDED_ROLES, roleById, validateRole } from "../../roles/index.js";
 
 test("every embedded role is valid", () => {
   for (const role of EMBEDDED_ROLES) {
@@ -69,14 +69,14 @@ test("a deprecated role leaves the surfaces but keeps its entry", () => {
 });
 
 test("an overlay replaces an entry wholesale, by id", async () => {
-  const { loadRoleOverlays } = await import("../../core/review/_overlays.js");
+  const { loadRoleOverlays } = await import("../../_overlays.js");
   const home = mkdtempSync(join(tmpdir(), "rule-roles-user-"));
   try {
     mkdirSync(join(home, "config", "roles"), { recursive: true });
     // Only the user's layer remains: a project layer read roles out of a
     // checkout, which is why it needed a trust gate, and both are gone (ADR 082).
     // Overlays use the same persona-file format as the embedded catalog.
-    const { formatPersonaFile } = await import("../../core/review/persona-file/index.js");
+    const { formatPersonaFile } = await import("../../persona-file/index.js");
     const replacement = { ...roleById("performance"), version: 2, yearsOfExperience: 11 };
     writeFileSync(join(home, "config", "roles", "performance.md"), formatPersonaFile(replacement));
 
@@ -93,7 +93,7 @@ test("an overlay replaces an entry wholesale, by id", async () => {
 });
 
 test("an invalid or unreadable overlay is reported, never fatal", async () => {
-  const { loadRoleOverlays } = await import("../../core/review/_overlays.js");
+  const { loadRoleOverlays } = await import("../../_overlays.js");
   const home = mkdtempSync(join(tmpdir(), "rule-roles-bad-"));
   try {
     mkdirSync(join(home, "config", "roles"), { recursive: true });

@@ -1,7 +1,7 @@
 /**
  * Persona catalog contract: every persona lives as one markdown file in
- * `src/roles/` (frontmatter + a lenses bullet list in the body, same format
- * as the user overlay layer), the server reads the folder at startup, and the
+ * `./personas/` (frontmatter + a lenses bullet list in the body, same format
+ * as the project and user layers), the server reads the folder at startup, and the
  * plan / audit / review surfaces are generated from what is on disk - so
  * adding or removing a file adds or removes a persona everywhere (prompts,
  * slash commands, tools, census).
@@ -21,9 +21,9 @@ import { fileURLToPath } from "node:url";
 import { EMBEDDED_ROLES, loadPersonaCatalog, activeRoles, validateRole } from "../index.js";
 import { parsePersonaFile, formatPersonaFile } from "../../persona-file/index.js";
 
-const PERSONA_DIR = fileURLToPath(new URL("../../../../roles", import.meta.url));
+const PERSONA_DIR = fileURLToPath(new URL("../../../../../personas", import.meta.url));
 
-test("src/roles is the single source of truth for the embedded personas", () => {
+test("./personas is the native layer for the embedded personas", () => {
   const files = readdirSync(PERSONA_DIR).filter((name) => name.endsWith(".md"));
   assert.ok(files.length >= 18, "the shipped catalog still has the full persona set");
   assert.equal(EMBEDDED_ROLES.length, files.length, "every persona file is loaded, nothing else");

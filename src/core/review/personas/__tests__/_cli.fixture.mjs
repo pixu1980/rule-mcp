@@ -17,10 +17,10 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 
-export { parsePersonaFile } from "../../core/review/persona-file/index.js";
-export { validateRole } from "../../core/review/roles/index.js";
+export { parsePersonaFile } from "../../persona-file/index.js";
+export { validateRole } from "../../roles/index.js";
 
-const BIN = fileURLToPath(new URL("../../../bin/rule-mcp.js", import.meta.url));
+const BIN = fileURLToPath(new URL("../../../../../bin/rule-mcp.js", import.meta.url));
 
 /** A home and a project of their own, so cases cannot see each other's roles. */
 export function sandbox() {
