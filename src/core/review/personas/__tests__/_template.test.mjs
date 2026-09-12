@@ -4,10 +4,10 @@
 import { strict as assert } from "node:assert";
 import test from "node:test";
 
-import { roleById } from "../../core/review/roles/index.js";
+import { roleById } from "../../roles/index.js";
 
 test("the template is filled verbatim from the role", async () => {
-  const { fillRoleTemplate } = await import("../../core/review/template/index.js");
+  const { fillRoleTemplate } = await import("../../template/index.js");
   const filled = fillRoleTemplate(roleById("security"));
   assert.ok(!filled.includes("{{"), "no placeholder survives");
   assert.match(filled, /Security Engineer/);
@@ -22,12 +22,12 @@ test("the template is filled verbatim from the role", async () => {
 });
 
 test("the filled template is byte-stable", async () => {
-  const { fillRoleTemplate } = await import("../../core/review/template/index.js");
+  const { fillRoleTemplate } = await import("../../template/index.js");
   assert.equal(fillRoleTemplate(roleById("a11y")), fillRoleTemplate(roleById("a11y")));
 });
 
 test("overrides refine a role without editing the registry", async () => {
-  const { fillRoleTemplate } = await import("../../core/review/template/index.js");
+  const { fillRoleTemplate } = await import("../../template/index.js");
   const filled = fillRoleTemplate(roleById("privacy"), {
     years: 33,
     skills: ["ePrivacy"],
@@ -39,7 +39,7 @@ test("overrides refine a role without editing the registry", async () => {
 });
 
 test("a topic becomes the binding scope of the run", async () => {
-  const { fillRoleTemplate } = await import("../../core/review/template/index.js");
+  const { fillRoleTemplate } = await import("../../template/index.js");
   const filled = fillRoleTemplate(roleById("security"), { topic: "the SSE daemon token handling", operation: "audit" });
 
   assert.match(filled, /run an audit of the SSE daemon token handling/, "the opening action names the scope, not the project");
@@ -54,7 +54,7 @@ test("a topic becomes the binding scope of the run", async () => {
 });
 
 test("a scoped run resolves its scope through tokensave when available", async () => {
-  const { fillRoleTemplate } = await import("../../core/review/template/index.js");
+  const { fillRoleTemplate } = await import("../../template/index.js");
 
   const unknown = fillRoleTemplate(roleById("security"), { topic: "the CLI", operation: "audit" });
   assert.match(unknown, /## Resolve the scope/, "a scoped run maps its scope to files first");
@@ -67,7 +67,7 @@ test("a scoped run resolves its scope through tokensave when available", async (
 });
 
 test("without a topic the template is unchanged", async () => {
-  const { fillRoleTemplate } = await import("../../core/review/template/index.js");
+  const { fillRoleTemplate } = await import("../../template/index.js");
   const filled = fillRoleTemplate(roleById("security"), { operation: "audit" });
 
   assert.match(filled, /run an audit of the project/, "the default scope is the whole project");

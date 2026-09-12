@@ -1,5 +1,10 @@
 // Auto-extracted - frontmatter parser shared by the skill store and router.
 
+import { listAt, yamlBoolean } from "./_yaml-list.js";
+
+/** The list keys a skill declares: the rules it owns and the skills it inherits (ADR 079). */
+const LIST_KEYS = ["tags", "guardrails", "inherits"];
+
 /**
  * Parse the YAML frontmatter of a SKILL.md file.
  *
@@ -64,30 +69,26 @@ export function parseSkillFrontmatter(content) {
 
       continue;
     }
-    // tags: YAML list (block)
-    if (trimmed === "tags:") {
-      const tags = [];
+    // tags / guardrails / inherits: a YAML list, inline or block
+    const listKey = LIST_KEYS.find((key) => listAt(lines, index, key) !== null);
 
-      for (let index_ = index + 1; index_ < lines.length; index_++) {
-        const tagLine = lines[index_].trim();
+    if (listKey) {
+      const values = listAt(lines, index, listKey);
 
-        if (tagLine.startsWith("- ")) {
-          tags.push(
-            tagLine
-              .slice(2)
-              .trim()
-              .replace(/^"(.*)"$/, "$1")
-              .replace(/^'(.*)'$/, "$1"),
-          );
-        } else if (!tagLine.startsWith("-")) {
-          break;
-        }
+      // `tags` keeps its old shape - absent when empty - because the routing
+      // corpus counts on it. The two new keys report an empty list as one: a
+      // skill saying it defines no rules is not a skill that failed to say.
+      if (listKey !== "tags" || values.length > 0) {
+        result[listKey] = values;
       }
 
-      if (tags.length > 0) {
-        result.tags = tags;
-      }
+      continue;
+    }
+    // exposeTool: whether a custom skill also mints a tool (ADR 079, default no)
+    const exposeMatch = line.match(/^exposeTool:\s*(.+)$/);
 
+    if (exposeMatch) {
+      result.exposeTool = yamlBoolean(exposeMatch[1]);
       continue;
     }
     // frameworks: inline scalar
