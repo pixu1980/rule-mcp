@@ -42,7 +42,7 @@ check("T6.6 the state size is measurable for the cap", stateSize() > 0);
 
 // The recording is filed per project under the home directory, never inside the
 // project: nothing this server writes needs a rule in somebody's .gitignore
-// (ADR 082).
+//
 const { getProjectPaths } = await import("../../../cli/paths/index.js");
 const projectStateDir = getProjectPaths(projectDir).dir;
 check("T10 the events file lives in this project's own directory", eventsFile().startsWith(projectStateDir));

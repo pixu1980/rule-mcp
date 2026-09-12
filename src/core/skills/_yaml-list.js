@@ -63,7 +63,48 @@ export function blockList(lines, start) {
 }
 
 /**
- * A list key in either shape, or null when the line is not that key.
+ * The entries of a flow sequence that spans lines, as a formatter may leave a
+ * long inline list: the key, then `[`, the entries, then `]`.
+ *
+ * @param {string[]} lines @param {number} start - the index of the key line
+ * @returns {string[]|null} null when what follows is not a flow sequence
+ */
+function wrappedFlow(lines, start) {
+  let index = start + 1;
+
+  while (index < lines.length && lines[index].trim() === "") {
+    index++;
+  }
+
+  if (lines[index]?.trim() !== "[") {
+    return null;
+  }
+
+  const entries = [];
+
+  for (index++; index < lines.length; index++) {
+    const line = lines[index].trim();
+
+    if (line === "]") {
+      return entries;
+    }
+
+    const entry = unquote(line.replace(/,$/, ""));
+
+    if (entry !== "") {
+      entries.push(entry);
+    }
+  }
+
+  return entries;
+}
+
+/**
+ * A list key in any of its shapes, or null when the line is not that key.
+ *
+ * Three shapes are accepted because all three are valid YAML and a formatter
+ * chooses between them by line length: `key: [a, b]`, the block list under
+ * `key:`, and the flow sequence a formatter wraps across lines.
  *
  * @param {string[]} lines @param {number} index @param {string} key
  * @returns {string[]|null}
@@ -75,7 +116,11 @@ export function listAt(lines, index, key) {
     return null;
   }
 
-  return match[1].trim() === "" ? blockList(lines, index) : inlineList(match[1]);
+  if (match[1].trim() !== "") {
+    return inlineList(match[1]);
+  }
+
+  return wrappedFlow(lines, index) ?? blockList(lines, index);
 }
 
 /** YAML truthiness for the booleans a skill declares. */

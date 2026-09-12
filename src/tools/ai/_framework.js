@@ -1,5 +1,11 @@
 import { detectProject, getFrameworkSuggestion } from "../../core/detector/index.js";
 
+/** Skill-name prefix to the domain that biases routing, most specific first. */
+const DOMAIN_PREFIXES = [
+  ["pix-ai", "ai"],
+  ["pix-frontend", "frontend"],
+];
+
 /**
  * Resolve the framework hint (argument or project detection) to a skill and
  * its domain, so the caller can decide whether framework bias applies.
@@ -21,17 +27,10 @@ export function detectFrameworkSkill(arguments_) {
 
   const detectedSkillName = detectedFramework ? getFrameworkSuggestion(detectedFramework).skillName : null;
 
-  const detectedDomain = detectedSkillName?.startsWith("pix-ai")
-    ? "ai"
-    : detectedSkillName?.startsWith("pix-frontend")
-      ? "frontend"
-      : detectedSkillName?.startsWith("pix-backend")
-        ? "backend"
-        : detectedSkillName?.startsWith("pix-data")
-          ? "data"
-          : detectedSkillName?.startsWith("pix-devops")
-            ? "devops"
-            : null;
+  // Only the domains a framework can actually map to. FRAMEWORK_SKILL_MAP
+  // answers with pix-ai, a pix-frontend-* or pix-platform-desktop, so arms for
+  // backend, data and devops were conditions no input could satisfy.
+  const detectedDomain = DOMAIN_PREFIXES.find(([prefix]) => detectedSkillName?.startsWith(prefix))?.[1] ?? null;
 
   return { detectedFramework, detectedSkillName, detectedDomain };
 }

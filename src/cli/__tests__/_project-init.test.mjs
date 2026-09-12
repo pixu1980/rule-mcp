@@ -13,7 +13,7 @@
  * into the project - and the removal path, which still has to strip a block
  * from a hook file it shares with tokensave without touching anything else.
  *
- * Ported upstream behavior (ADR 082) with the names rebranded to pix.
+ * Ported upstream behavior with the names rebranded to pix.
  */
 
 import assert from "node:assert/strict";

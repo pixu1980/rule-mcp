@@ -1,4 +1,8 @@
+packages:
+  - "."
+  - "packages/*"
+
 allowBuilds:
   "@modelcontextprotocol/inspector": false
 overrides:
-  pix-galaxy-mcp: 'link:'
+  pix-galaxy-mcp: "link:"

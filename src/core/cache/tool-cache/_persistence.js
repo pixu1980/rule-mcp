@@ -1,7 +1,7 @@
 /** The persistent tier: lazy load, debounced flush, atomic gzip write. */
 import { gzipSync, gunzipSync } from "node:zlib";
 import { existsSync, mkdirSync, readFileSync, writeFileSync, renameSync } from "node:fs";
-import { getRuntimePaths } from "../../../cli/paths/index.js";
+import { getRuntimePaths } from "@src/cli/paths/index.js";
 import { cacheState } from "./_state.js";
 import { cacheFile, namespace } from "./_config.js";
 

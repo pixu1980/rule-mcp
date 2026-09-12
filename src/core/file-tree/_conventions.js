@@ -7,7 +7,7 @@ export const IGNORE_DIRS = new Set(["node_modules", ".git", ".tokensave", "dist"
 export const BARREL_FILE_NAMES = new Set(["index.js", "index.ts", "index.jsx", "index.tsx"]);
 
 /** Extensions a component file can carry. */
-export const COMPONENT_EXTENSIONS = new Set([".js", ".jsx", ".ts", ".tsx", ".vue", ".svelte", "css"]);
+export const COMPONENT_EXTENSIONS = new Set([".js", ".jsx", ".ts", ".tsx", ".vue", ".svelte", ".css"]);
 
 /**
  * @typedef {"missing-barrel"|"wrong-prefix"|"missing-css"|"bare-file"|"wrong-folder-name"|"orphan-css"|"empty-barrel"|"stale-file"|"extra-file"} IssueType
