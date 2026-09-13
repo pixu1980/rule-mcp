@@ -37,7 +37,9 @@ test("every skill lands in exactly one area", () => {
   for (const [area, entry] of areas) {
     assert.ok(area.length > 0, "an area has a name");
 
-    for (const skill of [entry.hub, ...entry.members].filter(Boolean)) {
+    const owned = [entry.hub, ...entry.members].filter(Boolean);
+
+    for (const skill of owned) {
       assert.equal(seen.has(skill), false, `${skill} is claimed by two areas`);
       seen.add(skill);
     }

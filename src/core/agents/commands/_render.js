@@ -45,16 +45,22 @@ export function renderAgentCommand(command, format) {
  * @param {"args"|"workflow"|"gemini"} format
  * @returns {Array<{ name: string, filename: string, content: string }>}
  */
-export function renderAgentCommandFiles(format) {
+export function renderAgentCommandFiles(format, only) {
   const ext = FORMAT_EXT[format];
 
   if (!ext) {
     throw new Error(`Unknown agent command format: ${format}`);
   }
+  // `only` is the resolved selection: an install writes what the user chose,
+  // and absent means everything, which is what every caller wanted before the
+  // surface grew a command per skill.
+  const wanted = only ? new Set(only) : null;
 
-  return listAgentCommands().map((command) => ({
-    name: command.name,
-    filename: `${command.name}${ext}`,
-    content: renderAgentCommand(command, format),
-  }));
+  return listAgentCommands()
+    .filter((command) => !wanted || wanted.has(command.name))
+    .map((command) => ({
+      name: command.name,
+      filename: `${command.name}${ext}`,
+      content: renderAgentCommand(command, format),
+    }));
 }

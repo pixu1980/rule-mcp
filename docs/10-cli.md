@@ -41,7 +41,7 @@ the package version from anywhere. An error exits 1 and prints to stderr;
 | [`roles`](#pix-galaxy-mcp-roles)                   | 7       | Manage review persona roles                                                   |
 | [`guard`](#pix-galaxy-mcp-guard)                   | 0       | Permission-guard payload processor (invoked by PreToolUse hooks, reads stdin) |
 | [`update`](#pix-galaxy-mcp-update)                 | 0       | Self-update from the upstream git repo (fast-forward only)                    |
-| [`agent-commands`](#pix-galaxy-mcp-agent-commands) | 9       | Registry-driven agent slash-command management                                |
+| [`agent-commands`](#pix-galaxy-mcp-agent-commands) | 13      | Registry-driven agent slash-command management                                |
 
 ## pix-galaxy-mcp help
 
@@ -413,17 +413,21 @@ pix-galaxy-mcp agent-commands
 
 **Options**
 
-| Flag             | Default | Choices | Description                                     |
-| ---------------- | ------- | ------- | ----------------------------------------------- |
-| `--dir <path>`   | -       | -       | write commands to this directory                |
-| `--format <f>`   | -       | -       | args (default), workflow, gemini, prompt, plain |
-| `--list`         | -       | -       | list command names                              |
-| `--targets`      | -       | -       | print resolved target directories               |
-| `--sync`         | -       | -       | write to EVERY detected agent dir               |
-| `--remove`       | -       | -       | remove instead of writing                       |
-| `--force`        | -       | -       | overwrite existing files                        |
-| `--dry-run`      | -       | -       | preview without writing                         |
-| `--agent <name>` | -       | -       | limit to one agent                              |
+| Flag                | Default | Choices                       | Description                                     |
+| ------------------- | ------- | ----------------------------- | ----------------------------------------------- |
+| `--dir <path>`      | -       | -                             | write commands to this directory                |
+| `--format <f>`      | -       | -                             | args (default), workflow, gemini, prompt, plain |
+| `--list`            | -       | -                             | list command names                              |
+| `--targets`         | -       | -                             | print resolved target directories               |
+| `--sync`            | -       | -                             | write to EVERY detected agent dir               |
+| `--remove`          | -       | -                             | remove instead of writing                       |
+| `--force`           | -       | -                             | overwrite existing files                        |
+| `--dry-run`         | -       | -                             | preview without writing                         |
+| `--agent <name>`    | -       | -                             | limit to one agent                              |
+| `--preset <name>`   | -       | `minimal`, `standard`, `full` | minimal, standard or full                       |
+| `--families <list>` | -       | -                             | comma-separated: areas, personas, tasks         |
+| `--areas <list>`    | -       | -                             | comma-separated area names, e.g. frontend,data  |
+| `--skills <list>`   | -       | -                             | comma-separated skill names                     |
 
 ## The rest of the census
 
