@@ -1,5 +1,4 @@
 /** Guardrail `pkg-no-corepack`: No corepack activation fields */
-import { manifestOf } from "@rule-mcp/sdk";
 
 export const pkgNoCorepack = {
   id: "pkg-no-corepack",
@@ -7,6 +6,8 @@ export const pkgNoCorepack = {
   description:
     "No `packageManager` field and no `devEngines.packageManager`. Both hand control of the install to corepack, which can then refuse it - offline, behind a proxy, or shadowing the package manager already installed. `engines` stays legal: it asserts a version, it does not fetch one.",
   check: (code, context) => {
+    const { manifestOf } = context.helpers;
+
     const manifest = manifestOf(code, context);
 
     if (!manifest) {

@@ -57,5 +57,3 @@ function a11yRule(spec) {
  */
 
 export { scannableLines, MARKUP_EXTENSION, STYLE_EXTENSION, isMarkup, isStyles, a11yRule };
-
-export { maskLiterals } from "@rule-mcp/sdk";

@@ -1,5 +1,5 @@
 /** TypeScript and manifest-policy helpers consulted by the quality checks. */
-export { TS_EXTENSION, TS_SYNTAX, isTypeScriptFile as isTypeScript } from "./_verdict.js";
+export { TS_EXTENSION, TS_SYNTAX, isTypeScriptFile as isTypeScript } from "../../../shared/index.js";
 
 /** Strip strings, template literals and comments so prose never trips a rule. */
 function stripLiterals(code) {

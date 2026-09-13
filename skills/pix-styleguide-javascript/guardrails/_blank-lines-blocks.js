@@ -1,11 +1,10 @@
 /** Guardrail `js-blank-lines-blocks`: Multi-line blocks have blank lines above/below */
-import { countedVerdict } from "@rule-mcp/sdk";
 
 export const jsBlankLinesBlocks = {
   id: "js-blank-lines-blocks",
   label: "Multi-line blocks have blank lines above/below",
   description: "if/for/while/switch/try/return/promise/method chains spanning >1 line must have a blank line above and below.",
-  check: (code) => {
+  check: (code, { helpers: { countedVerdict } }) => {
     const issues = [];
     const lines = code.split("\n");
 

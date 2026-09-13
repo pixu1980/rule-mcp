@@ -1,11 +1,10 @@
 /** Guardrail `fp-box-rectangular`: A drawn box is a rectangle */
-import { findRaggedBoxes } from "@rule-mcp/sdk";
 
 export const fpBoxRectangular = {
   id: "fp-box-rectangular",
   label: "A drawn box is a rectangle",
   description: "Every line of a box ends in the same column. A right edge that steps in and out is the one tell a spell-check cannot see.",
-  check: (code) => {
+  check: (code, { helpers: { findRaggedBoxes } }) => {
     const ragged = findRaggedBoxes(code);
 
     return {

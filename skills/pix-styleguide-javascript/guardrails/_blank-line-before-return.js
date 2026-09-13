@@ -1,11 +1,10 @@
 /** Guardrail `js-blank-line-before-return`: Blank line before return statements */
-import { countedVerdict } from "@rule-mcp/sdk";
 
 export const jsBlankLineBeforeReturn = {
   id: "js-blank-line-before-return",
   label: "Blank line before return statements",
   description: "Every return statement must have a blank line before it (unless first in block).",
-  check: (code) => {
+  check: (code, { helpers: { countedVerdict } }) => {
     const issues = [];
     const lines = code.split("\n");
 

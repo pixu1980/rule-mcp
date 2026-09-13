@@ -1,11 +1,10 @@
 /** Guardrail `js-no-blank-lines-in-blocks`: No blank line immediately after { or before } */
-import { countedVerdict } from "@rule-mcp/sdk";
 
 export const jsNoBlankLinesInBlocks = {
   id: "js-no-blank-lines-in-blocks",
   label: "No blank line immediately after { or before }",
   description: "Blocks must not have blank lines at start or end: {\n\ncode → forbidden. code\n\n} → forbidden.",
-  check: (code) => {
+  check: (code, { helpers: { countedVerdict } }) => {
     const issues = [];
     const lines = code.split("\n");
 

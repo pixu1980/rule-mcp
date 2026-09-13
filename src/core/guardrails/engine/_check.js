@@ -1,6 +1,7 @@
 /** @module core/guardrails/engine/check - run every applicable rule over one body of code */
 
 import { getGuardrails } from "./_registry.js";
+import { GUARDRAIL_HELPERS } from "../_helpers.js";
 
 /**
  * Hard cap on the input handed to guardrail regexes. Above it the check is
@@ -19,6 +20,10 @@ export const MAX_CHECK_INPUT_BYTES = 256 * 1024;
  * @returns {object} the check report
  */
 export function checkCode(skillName, code, context = {}) {
+  // A rule imports nothing: what it needs arrives here (ADR 079). The caller's
+  // own context wins, so a test can hand a rule a different bag on purpose.
+  const withHelpers = { helpers: GUARDRAIL_HELPERS, ...context };
+
   // Refuse oversize input fast instead of scanning it (hardening 0.1).
   if (typeof code === "string" && Buffer.byteLength(code, "utf8") > MAX_CHECK_INPUT_BYTES) {
     return {
@@ -63,7 +68,7 @@ export function checkCode(skillName, code, context = {}) {
       };
     }
 
-    const result = g.check(code, context);
+    const result = g.check(code, withHelpers);
 
     return {
       id: g.id,

@@ -1,11 +1,12 @@
 /** Guardrail `ts-union-over-enum`: Union types over enum */
-import { countedVerdict, stripLiterals, tsSkipResult } from "@rule-mcp/sdk";
 
 export const tsUnionOverEnum = {
   id: "ts-union-over-enum",
   label: "Union types over enum",
   description: "An enum emits runtime code and numeric enums reverse-map. A string union compiles to nothing and autocompletes the same.",
   check: (code, context) => {
+    const { countedVerdict, stripLiterals, tsSkipResult } = context.helpers;
+
     const skip = tsSkipResult(code, context);
 
     if (skip) {

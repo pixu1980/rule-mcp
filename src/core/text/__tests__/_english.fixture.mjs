@@ -22,7 +22,7 @@
 import "../../guardrails/__tests__/_install.fixture.mjs";
 
 export { checkCode, getGuardrails } from "../../guardrails/index.js";
-export { findFingerprints } from "@rule-mcp/sdk";
+export { findFingerprints } from "../fingerprint/index.js";
 
 const { loadAllSkills } = await import("../../skills/index.js");
 

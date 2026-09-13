@@ -21,13 +21,17 @@ The reason is the graph. A baseline every skill inherits cannot also be a set of
 
 So: rules are distributed, which is what the skills own. Which skills are always on is one list, in one place, with the reason beside it.
 
-## The helper surface
+## The helper surface: a rule imports nothing
 
-A rule is written against `@rule-mcp/sdk`, a published package holding the verdict constructors, the source helpers and the prose scanners the bundled rules use. It is a declared dependency rather than a path into this server's `src/`, which is what lets a skill folder be copied anywhere and still resolve what its rules import.
+Node resolves a bare specifier by walking `node_modules` up from the importing file. A skill in a project's `.rule-mcp/skills`, in the user's own, or copied between machines has no `node_modules` above it, so anything a rule imported failed to load and the skill went silent. Measured, not assumed: a rule importing a helper resolved in this checkout and in no other layer.
 
-Inside this package, `@src/*` resolves to `./src/` through `module.registerHooks`, registered by every entry point that loads server code. The cost is explicit: a file using the alias is not runnable by a bare `node`, which is why the alias appears only in `src/` and never in a skill's guardrails.
+So a rule imports nothing. The engine passes `context.helpers` on every check - eighteen functions covering verdicts, source reading, manifests and prose scanning - and a rule file is a plain module that resolves the same wherever it was dropped.
 
-The server's own `exports` declares only `./package.json`. Its internals are not a contract, and a rule that reached into them would break on a refactor it never saw.
+A published package was built and removed. It worked, and it cost a package to version, a workspace, a resolve fallback for the directories that still could not reach it, and a dependency every skill author had to declare. Injection costs one destructuring line per rule and removes all of it.
+
+The trade is that the helper list is a contract: adding to it is adding to what every skill on the machine is written against, so it is a decision rather than an import. A rule is also no longer runnable outside the engine without being handed a bag, which is the same statement said twice.
+
+`@src/*` resolves to `./src/` through `module.registerHooks`, registered by every entry point that loads server code. That alias is for this server's own tree only: a file using it is not runnable by a bare `node`, which is exactly why it never appears in a skill's guardrails.
 
 ## Consequences
 

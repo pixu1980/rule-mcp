@@ -1,11 +1,10 @@
 /** Guardrail `fp-no-typographic-chars`: No curly quotes or ellipsis glyphs */
-import { findFingerprints } from "@rule-mcp/sdk";
 
 export const fpNoTypographicChars = {
   id: "fp-no-typographic-chars",
   label: "No curly quotes or ellipsis glyphs",
   description: "Curly quotes and the ellipsis character do not survive a copy-paste into source. Use straight quotes and three dots.",
-  check: (code) => {
+  check: (code, { helpers: { findFingerprints } }) => {
     const { typographic } = findFingerprints(code);
 
     return {

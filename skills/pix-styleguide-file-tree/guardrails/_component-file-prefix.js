@@ -1,11 +1,12 @@
 /** @module core/guardrails/file-tree/component-file-prefix */
-import { passResult } from "@rule-mcp/sdk";
 
 export const componentFilePrefix = {
   id: "component-file-prefix",
   label: "Component file has _PascalCase prefix",
   description: "Component files inside component folders must start with an underscore and PascalCase: _Button.jsx, _Card.vue, _Modal.svelte.",
   check: (code, context) => {
+    const { passResult } = context.helpers;
+
     const fileName = context?.fileName || "";
     const isComponent = context?.isComponent === true;
 

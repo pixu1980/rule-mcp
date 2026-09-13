@@ -19,16 +19,16 @@
  *
  * @see module:core/text/caveman - filler removal
  * @see module:core/text/compress-guard - the structural guard
- * @see @rule-mcp/sdk/text - typographic and spelling conversion
- * @see @rule-mcp/sdk/text - box alignment, which the fingerprint mode carries
+ * @see module:core/text/fingerprint - typographic and spelling conversion
+ * @see module:core/text/ascii-box - box alignment, which the fingerprint mode carries
  */
 
 import { z } from "zod/v4";
-import { alignAsciiBoxes } from "@rule-mcp/sdk/text";
+import { alignAsciiBoxes } from "../core/text/index.js";
 import { compressText } from "../core/text/_caveman.js";
 import { isSensitivePath } from "../core/text/_sensitive.js";
 import { guardCompression } from "../core/text/compress-guard/index.js";
-import { stripFingerprint } from "@rule-mcp/sdk/text";
+import { stripFingerprint } from "../core/text/index.js";
 import { registerTool } from "./router/index.js";
 
 /** Rough token estimate, good enough to report a saving. */

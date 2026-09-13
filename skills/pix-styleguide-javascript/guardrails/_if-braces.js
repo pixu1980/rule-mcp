@@ -1,11 +1,10 @@
 /** Guardrail `js-if-braces`: if/else always use braces */
-import { countedVerdict } from "@rule-mcp/sdk";
 
 export const jsIfBraces = {
   id: "js-if-braces",
   label: "if/else always use braces",
   description: "Every if, else, else if must use {} braces. Single-line if without braces is forbidden.",
-  check: (code) => {
+  check: (code, { helpers: { countedVerdict } }) => {
     // Line-oriented on purpose. Balancing parentheses means counting the
     // ones inside regex literals too, and a condition like
     // `/\([^)]*\)/.test(line)` then reads as a braceless if (finding F-A1).

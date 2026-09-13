@@ -1,5 +1,4 @@
 /** Guardrail `external-css`: External CSS via adoptedStyleSheets or framework-native import */
-import { extractRealCSS, looksLikeStylesheet } from "@rule-mcp/sdk";
 
 export const externalCss = {
   id: "external-css",
@@ -7,6 +6,8 @@ export const externalCss = {
   description:
     "CSS must be loaded as external file. Use fetch→CSSStyleSheet.replaceSync→adoptedStyleSheets for vanilla, or framework-native imports (Angular styleUrls, Svelte <style>, CSS Modules or plain import for React/Solid).",
   check: (code, context) => {
+    const { extractRealCSS, looksLikeStylesheet } = context.helpers;
+
     const framework = context?.framework || "vanilla";
     // CSS files are themselves external CSS
     if (context?.fileName && /\.css$/i.test(context.fileName)) {

@@ -1,11 +1,10 @@
 /** Guardrail `js-single-line-method`: Class method bodies must be multi-line */
-import { countedVerdict } from "@rule-mcp/sdk";
 
 export const jsSingleLineMethod = {
   id: "js-single-line-method",
   label: "Class method bodies must be multi-line",
   description: "Every method body must span multiple lines. No method() { stmt; } on one line.",
-  check: (code) => {
+  check: (code, { helpers: { countedVerdict } }) => {
     // Judged per line: a 2-line owner over a single statement must not read
     // as a one-liner once the surrounding newlines are trimmed (F-A1), and
     // `\w+\s*\(` stays linear on a long generated line (F-S1).

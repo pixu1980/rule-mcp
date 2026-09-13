@@ -1,12 +1,13 @@
 /** Guardrail `en-english-only-prose`: English-only prose */
-import { scanCodeForForeign, scanDocumentForForeign } from "@rule-mcp/sdk";
 
 export const enEnglishOnlyProse = {
   id: "en-english-only-prose",
   label: "English-only prose",
   description:
     "Every generated comment, identifier and document is English. A non-ASCII letter in a comment, two distinct foreign function words in a comment, a foreign function word in an identifier, or non-ASCII/foreign prose in a .md document fail this rule (see rule-styleguide-english).",
-  check: (code, context = {}) => {
+  check: (code, context) => {
+    const { scanCodeForForeign, scanDocumentForForeign } = context.helpers;
+
     const fileName = String(context.fileName ?? "").toLowerCase();
     const docs = /\.(?:md|mdx|txt)$/.test(fileName);
     const hits = docs ? scanDocumentForForeign(code) : scanCodeForForeign(code);

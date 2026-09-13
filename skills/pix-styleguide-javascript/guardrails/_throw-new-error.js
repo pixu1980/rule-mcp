@@ -1,11 +1,10 @@
 /** Guardrail `js-throw-new-error`: throw requires new for error constructors */
-import { countedVerdict } from "@rule-mcp/sdk";
 
 export const jsThrowNewError = {
   id: "js-throw-new-error",
   label: "throw requires new for error constructors",
   description: "Errors must be created with new: throw new Error('...'). Calling error constructors as functions (throw Error('...')) is forbidden.",
-  check: (code) => {
+  check: (code, { helpers: { countedVerdict } }) => {
     const violations = code.match(/throw\s+(?!new\s+)(?:Error|TypeError|RangeError|SyntaxError|ReferenceError|EvalError|URIError)\s*\(/g) || [];
 
     if (violations.length === 0) {

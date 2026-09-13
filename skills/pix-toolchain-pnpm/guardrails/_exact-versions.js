@@ -1,5 +1,4 @@
 /** Guardrail `pkg-exact-versions`: Dependencies are pinned exactly */
-import { INSTALLED_GROUPS, isPinned, manifestOf } from "@rule-mcp/sdk";
 
 export const pkgExactVersions = {
   id: "pkg-exact-versions",
@@ -7,6 +6,8 @@ export const pkgExactVersions = {
   description:
     "Every dependency, devDependency and optionalDependency is an exact version: no ^, ~, comparator, alternation, wildcard, x-range or dist-tag. A range leaves the subdependency tree free to change between two installs of the same commit. peerDependencies are exempt: a peer range states compatibility, it does not install anything.",
   check: (code, context) => {
+    const { INSTALLED_GROUPS, isPinned, manifestOf } = context.helpers;
+
     const manifest = manifestOf(code, context);
 
     if (!manifest) {

@@ -1,11 +1,10 @@
 /** Guardrail `js-for-loop-braces`: for loops must have braces and be multi-line */
-import { countedVerdict } from "@rule-mcp/sdk";
 
 export const jsForLoopBraces = {
   id: "js-for-loop-braces",
   label: "for loops must have braces and be multi-line",
   description: "Every for/for...of/for...in body must use {} and span multiple lines. No for (...) stmt;",
-  check: (code) => {
+  check: (code, { helpers: { countedVerdict } }) => {
     // Judged per line: a two-line for over a single statement must not read
     // as a one-liner once the surrounding newlines are trimmed (F-A1).
     const filtered = [];

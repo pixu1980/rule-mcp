@@ -1,11 +1,12 @@
 /** Guardrail `jsdoc-required`: JSDoc on every exported symbol */
-import { maskLiterals } from "@rule-mcp/sdk";
 
 export const jsdocRequired = {
   id: "jsdoc-required",
   label: "JSDoc on every exported symbol",
   description: "Every JS/TS file must have JSDoc on all exported functions, classes, constants, and types. Module-level JSDoc recommended.",
   check: (code, context) => {
+    const { maskLiterals } = context.helpers;
+
     const fileName = context?.fileName || "";
 
     if (fileName === "index.js" || fileName === "index.ts") {

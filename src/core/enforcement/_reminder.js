@@ -1,7 +1,7 @@
 /** @module core/enforcement/reminder - the model-visible workflow contract on a session cadence */
 
 import { FLEX_FIRST } from "../index.js";
-import { looksLikeStyling } from "@rule-mcp/sdk";
+import { looksLikeStyling } from "../guardrails/_util.js";
 
 /**
  * The reminder diet (hardening 4.2): the full contract is emitted once per

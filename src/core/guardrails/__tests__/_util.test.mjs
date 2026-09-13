@@ -2,7 +2,7 @@
 import { strict as assert } from "node:assert";
 import { test } from "node:test";
 
-import { extractRealCSS, looksLikeStyling, looksLikeStylesheet, maskLiterals, unjustifiedGrids } from "../_source.js";
+import { extractRealCSS, looksLikeStyling, looksLikeStylesheet, maskLiterals, unjustifiedGrids } from "../_util.js";
 
 test("extractRealCSS trusts a .css file name and collects every embedded form", () => {
   assert.equal(extractRealCSS("a { color: red; }", { fileName: "theme.css" }), "a { color: red; }", "a css file is css whole");

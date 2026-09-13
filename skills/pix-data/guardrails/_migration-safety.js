@@ -1,11 +1,10 @@
 /** Guardrail `migration-safety`: Safe DDL operations. */
-import { countedVerdict } from "@rule-mcp/sdk";
 
 export const migrationSafety = {
   id: "migration-safety",
   label: "Safe DDL operations",
   description: "DDL must use IF NOT EXISTS / IF EXISTS for idempotent migrations.",
-  check: (code) => {
+  check: (code, { helpers: { countedVerdict } }) => {
     const hasDdl = /CREATE\s+TABLE|DROP\s+TABLE|ALTER\s+TABLE/i.test(code);
 
     if (!hasDdl) {

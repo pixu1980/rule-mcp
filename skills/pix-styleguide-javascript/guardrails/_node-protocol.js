@@ -1,11 +1,10 @@
 /** Guardrail `js-node-protocol`: node: protocol for Node builtins */
-import { countedVerdict } from "@rule-mcp/sdk";
 
 export const jsNodeProtocol = {
   id: "js-node-protocol",
   label: "node: protocol for Node builtins",
   description: "Node builtin imports must use the explicit node: prefix (import fs from 'node:fs'). The bare form can be shadowed by a same-named npm package.",
-  check: (code) => {
+  check: (code, { helpers: { countedVerdict } }) => {
     const builtins = [
       "fs",
       "path",

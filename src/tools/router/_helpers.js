@@ -1,9 +1,9 @@
 /** Result shaping helpers: banner, finalize, token/size estimates, and the skill-independent set. */
 
-import { alignAsciiBoxesResult } from "@rule-mcp/sdk/text";
+import { alignAsciiBoxesResult } from "../../core/text/index.js";
 import { compressResult } from "../../core/text/_caveman.js";
 import { decorateWorkflowReminder, stampRequestId } from "../../core/enforcement/index.js";
-import { stripFingerprintResult } from "@rule-mcp/sdk/text";
+import { stripFingerprintResult } from "../../core/text/index.js";
 
 function withBanner(banner, result) {
   if (!banner || !result || !Array.isArray(result.content)) {

@@ -1,11 +1,12 @@
 /** Guardrail `ts-no-explicit-any`: No explicit any */
-import { countedVerdict, stripLiterals, tsSkipResult } from "@rule-mcp/sdk";
 
 export const tsNoExplicitAny = {
   id: "ts-no-explicit-any",
   label: "No explicit any",
   description: "any turns off checking exactly where a value is least understood. Use unknown and narrow it.",
   check: (code, context) => {
+    const { countedVerdict, stripLiterals, tsSkipResult } = context.helpers;
+
     const skip = tsSkipResult(code, context);
 
     if (skip) {

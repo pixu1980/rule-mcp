@@ -12,7 +12,7 @@ import { join } from "node:path";
 import test from "node:test";
 
 const ADR_DIR = "docs/adr";
-const ROOTS = ["src", "scripts", "tests", "bin", "packages", "skills", "personas"];
+const ROOTS = ["src", "scripts", "tests", "bin", "skills", "personas"];
 const CITATION = /\bADR[\s-]*(\d{3})\b/g;
 
 /** The numbers docs/adr actually holds. */

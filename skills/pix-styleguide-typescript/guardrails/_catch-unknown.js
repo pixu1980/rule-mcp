@@ -1,11 +1,12 @@
 /** Guardrail `ts-catch-unknown`: Catch clauses use unknown */
-import { countedVerdict, stripLiterals, tsSkipResult } from "@rule-mcp/sdk";
 
 export const tsCatchUnknown = {
   id: "ts-catch-unknown",
   label: "Catch clauses use unknown",
   description: "JavaScript can throw anything - a string, null, an object that is not an Error. any lets the handler assume otherwise and crash.",
   check: (code, context) => {
+    const { countedVerdict, stripLiterals, tsSkipResult } = context.helpers;
+
     const skip = tsSkipResult(code, context);
 
     if (skip) {

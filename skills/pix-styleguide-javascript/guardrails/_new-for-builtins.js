@@ -1,12 +1,11 @@
 /** Guardrail `js-new-for-builtins`: new required for Map/Set/Date/Array/WeakMap/WeakSet */
-import { countedVerdict } from "@rule-mcp/sdk";
 
 export const jsNewForBuiltins = {
   id: "js-new-for-builtins",
   label: "new required for Map/Set/Date/Array/WeakMap/WeakSet",
   description:
     "Builtin constructors Map, Set, Date, Array, WeakMap, WeakSet must be called with new. Calling them as functions (const m = Map()) is forbidden. String, Number, Boolean, Symbol, BigInt are exempt.",
-  check: (code) => {
+  check: (code, { helpers: { countedVerdict } }) => {
     const violations = [];
 
     for (const name of ["Map", "Set", "Date", "Array", "WeakMap", "WeakSet"]) {

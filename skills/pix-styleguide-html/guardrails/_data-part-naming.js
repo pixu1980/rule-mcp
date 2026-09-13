@@ -1,11 +1,10 @@
 /** Guardrail `data-part-naming`: data-part attribute for child elements */
-import { maskLiterals } from "@rule-mcp/sdk";
 
 export const dataPartNaming = {
   id: "data-part-naming",
   label: "data-part attribute for child elements",
   description: 'Component child elements with semantic roles must use data-part="role" attributes.',
-  check: (rawCode) => {
+  check: (rawCode, { helpers: { maskLiterals } }) => {
     // Markup inside a string is a sample a generator emits, not markup this
     // file renders: a template catalog was being told to add data-part to
     // the examples it quotes (finding F-A1).

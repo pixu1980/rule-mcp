@@ -1,11 +1,10 @@
 /** Guardrail `fp-american-english`: American English spelling */
-import { findFingerprints } from "@rule-mcp/sdk";
 
 export const fpAmericanEnglish = {
   id: "fp-american-english",
   label: "American English spelling",
   description: "The house style is American English: -or over -our, -ize over -ise, -er over -re, -og over -ogue.",
-  check: (code) => {
+  check: (code, { helpers: { findFingerprints } }) => {
     const { british } = findFingerprints(code);
 
     return {

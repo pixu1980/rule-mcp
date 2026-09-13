@@ -1,11 +1,12 @@
 /** Guardrail `en-english-only-filenames`: English-only file and folder names */
-import { scanPathForForeign } from "@rule-mcp/sdk";
 
 export const enEnglishOnlyFilenames = {
   id: "en-english-only-filenames",
   label: "English-only file and folder names",
   description: "Every file and folder name is English. A non-ASCII letter or a foreign word in any path segment fails this rule (see rule-styleguide-english).",
-  check: (code, context = {}) => {
+  check: (code, context) => {
+    const { scanPathForForeign } = context.helpers;
+
     const fileName = String(context.fileName ?? "");
 
     if (fileName === "") {

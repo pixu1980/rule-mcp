@@ -1,5 +1,4 @@
 /** Guardrail `css-flex-first`: Flex first, grid only when flex cannot do it */
-import { extractRealCSS, unjustifiedGrids } from "@rule-mcp/sdk";
 
 export const cssFlexFirst = {
   id: "css-flex-first",
@@ -8,6 +7,8 @@ export const cssFlexFirst = {
     "display:grid has to earn itself: named template areas, subgrid, explicit item placement or overlap, " +
     "auto-fit/auto-fill tracks, or a stated `/* grid: why */` reason. Anything a flex row or column can do is flex.",
   check: (code, context) => {
+    const { extractRealCSS, unjustifiedGrids } = context.helpers;
+
     const cssBlock = extractRealCSS(code, context);
     if (!cssBlock) {
       return { pass: true, note: "No CSS block found, skipping" };

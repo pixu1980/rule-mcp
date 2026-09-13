@@ -1,11 +1,10 @@
 /** Guardrail `js-no-array-for-each`: for...of over Array.forEach() */
-import { countedVerdict } from "@rule-mcp/sdk";
 
 export const jsNoArrayForEach = {
   id: "js-no-array-for-each",
   label: "for...of over Array.forEach()",
   description: "Prefer for...of loops over Array.prototype.forEach: better type narrowing, direct await, and break/continue support.",
-  check: (code) => {
+  check: (code, { helpers: { countedVerdict } }) => {
     const violations = code.match(/\b\w+\.forEach\s*\(/g) || [];
 
     if (violations.length === 0) {

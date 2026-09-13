@@ -3,9 +3,6 @@
   "version": "0.1.0-beta",
   "description": "MCP server for the rule-* skill ecosystem. Serves styleguides, component templates, framework best practices, and design system patterns.",
   "type": "module",
-  "exports": {
-    "./package.json": "./package.json"
-  },
   "license": "MIT",
   "private": false,
   "publishConfig": {
@@ -64,7 +61,6 @@
     "!src/**/__tests__/",
     "skills/",
     "personas/",
-    "packages/sdk/src/",
     "prompts/",
     "scripts/",
     "README.md",
@@ -89,7 +85,6 @@
     "web"
   ],
   "dependencies": {
-    "@rule-mcp/sdk": "workspace:*",
     "@clack/prompts": "1.7.0",
     "@modelcontextprotocol/sdk": "1.30.0",
     "commander": "15.0.0",

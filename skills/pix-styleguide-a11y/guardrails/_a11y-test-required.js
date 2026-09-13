@@ -1,5 +1,4 @@
 /** Guardrail `a11y-test-required`: Playwright + axe-core a11y tests */
-import { maskLiterals } from "@rule-mcp/sdk";
 
 export const a11yTestRequired = {
   id: "a11y-test-required",
@@ -7,6 +6,8 @@ export const a11yTestRequired = {
   description:
     "Every project MUST have automated a11y tests using Playwright and @axe-core/playwright. Tests must live in tests/a11y/ and must include an axe-core scan with expect(results.violations).toEqual([]).",
   check: (code, context) => {
+    const { maskLiterals } = context.helpers;
+
     const isTestFile = context?.fileName?.includes(".spec.") || context?.fileName?.includes(".test.") || context?.mode === "test";
     const hasAxeImport = /@axe-core\/playwright/.test(code) || /from\s+['"]@axe-core\/playwright['"]/.test(code);
     const hasAxeBuilder = /new\s+AxeBuilder/.test(code) || /AxeBuilder/.test(code);

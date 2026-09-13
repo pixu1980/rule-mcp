@@ -5,16 +5,19 @@
  * reaching a sibling subsystem through `../../../..` says nothing about where
  * it is going. `@src/core/text/index.js` does.
  *
- * Registered with `--import ./scripts/alias-hook.mjs` on every entry point
- * that loads server code: `bin/`, the package scripts, and the test runner.
- * A file that uses the alias is therefore NOT runnable by a bare `node` - that
- * is the cost of an alias without a bundler, and it is why the alias is only
- * used inside `src/`, never in a skill's guardrails. Those import
- * `@rule-mcp/sdk`, which is a real package and resolves anywhere.
+ * A skill's guardrails never use this alias, and import nothing at all: the
+ * helpers they need arrive in the context the check is called with (ADR 079),
+ * so a rule file resolves the same wherever the skill is dropped.
+ *
+ * Registered with `--import ./scripts/alias-hook.mjs` on every entry point that
+ * loads server code: `bin/`, the npm scripts, the git hooks, the test runner
+ * and every process a test spawns. Not in the shebang: a shebang takes one
+ * argument on Linux, so `node --import ...` there would arrive as a single
+ * unknown flag.
  *
  * `module.registerHooks` runs the hook in-thread and synchronously, so it also
  * covers `require`, worker threads started after registration, and the dynamic
- * imports the loader makes. It needs Node 22.15 or newer.
+ * imports the skill loader makes. It needs Node 22.15 or newer.
  */
 
 import { registerHooks } from "node:module";

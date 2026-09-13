@@ -1,11 +1,12 @@
 /** Guardrail `no-css-classes`: Zero CSS classes in stylesheets */
-import { extractRealCSS } from "@rule-mcp/sdk";
 
 export const noCssClasses = {
   id: "no-css-classes",
   label: "Zero CSS classes in stylesheets",
   description: "CSS must use only element selectors + [data-part] + [data-*] attribute selectors. No .class selectors (including pseudo-classes and combinators).",
   check: (code, context) => {
+    const { extractRealCSS } = context.helpers;
+
     const cssBlock = extractRealCSS(code, context);
 
     if (!cssBlock) {
