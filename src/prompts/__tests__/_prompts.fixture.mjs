@@ -9,6 +9,7 @@
  */
 
 import { listPrompts } from "../index.js";
+import { listAreaPrompts } from "../_areas.js";
 
 console.log("prompts registry test");
 
@@ -16,20 +17,10 @@ console.log("prompts registry test");
 
 export const WORKFLOW_PROMPTS = ["pix-handoff"];
 
-export const AREA_PROMPTS = [
-  "pix-area-meta",
-  "pix-area-frontend",
-  "pix-area-backend",
-  "pix-area-data",
-  "pix-area-toolchain",
-  "pix-area-styleguide",
-  "pix-area-process",
-  "pix-area-devops",
-  "pix-area-platform",
-  "pix-area-ai",
-  "pix-area-skills",
-  "pix-area-ui",
-];
+// The area prompts are derived from the resolved skill catalog, one per skill
+// (ADR 079), so the fixture asks the catalog rather than freezing a list that
+// a new skill would silently contradict.
+export const AREA_PROMPTS = listAreaPrompts().map((prompt) => prompt.name);
 
 export const ONE_SHOT_PROMPTS = ["pix-adr", "pix-flight", "pix-handon", "pix-init", "pix-process-check", "pix-update"];
 

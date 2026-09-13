@@ -7,7 +7,7 @@ a tool, a skill, a prompt, a role, a command or a guardrail;
 `tests/docs/census-generated.test.mjs` compares this file against the live
 registry, so a stale copy fails the build instead of misleading a reader.
 
-## Agent slash commands (74)
+## Agent slash commands (152)
 
 The router `/pix` is pinned first; the rest follow in
 locale-alphabetical order. The same set is written for every agent and IDE,
@@ -52,19 +52,19 @@ which agents are installed and where their homes are.
 | `emacs`       | mcp.el exposes prompts directly; there is no command-file convention to write to.                                                                                      |
 | `devin`       | Devin runs commands in its own workspace runtime, not from local slash-command files; MCP prompts remain the entry point.                                              |
 
-### The kinds (74 commands)
+### The kinds (152 commands)
 
 | Kind       | Count | What it is for                                                      |
 | ---------- | ----- | ------------------------------------------------------------------- |
 | `router`   | 1     | Routes a free-text request to the skill that answers it             |
-| `area`     | 12    | Routes within one area, when the area is known and the skill is not |
+| `area`     | 90    | Routes within one area, when the area is known and the skill is not |
 | `workflow` | 2     | Runs a named workflow: a decision record, a pre-flight check        |
 | `session`  | 5     | Carries a session across a context boundary                         |
 | `persona`  | 54    | Runs one review role at one operation, and writes its documents     |
 
 **router**: `/pix`
 
-**area**: `/pix-area-ai`, `/pix-area-backend`, `/pix-area-data`, `/pix-area-devops`, `/pix-area-frontend`, `/pix-area-meta`, `/pix-area-platform`, `/pix-area-process`, `/pix-area-skills`, `/pix-area-styleguide`, `/pix-area-toolchain`, `/pix-area-ui`
+**area**: `/pix-area-ai`, `/pix-area-ai-agent-architecture`, `/pix-area-ai-context-engineering`, `/pix-area-ai-evals`, `/pix-area-ai-prompting`, `/pix-area-backend`, `/pix-area-backend-express`, `/pix-area-backend-fastify`, `/pix-area-backend-graphql`, `/pix-area-backend-hono`, `/pix-area-backend-nestjs`, `/pix-area-backend-node`, `/pix-area-backend-security`, `/pix-area-backend-workers`, `/pix-area-caveman`, `/pix-area-data`, `/pix-area-data-duckdb`, `/pix-area-data-indexed-db`, `/pix-area-data-mongodb`, `/pix-area-data-mysql`, `/pix-area-data-postgresql`, `/pix-area-data-sql`, `/pix-area-data-sqlite`, `/pix-area-devops`, `/pix-area-devops-deploy-preview`, `/pix-area-devops-docker`, `/pix-area-devops-observability`, `/pix-area-devops-testing`, `/pix-area-frontend`, `/pix-area-frontend-angular`, `/pix-area-frontend-custom-element`, `/pix-area-frontend-meta-astro`, `/pix-area-frontend-meta-next`, `/pix-area-frontend-meta-nuxt`, `/pix-area-frontend-meta-remix`, `/pix-area-frontend-react`, `/pix-area-frontend-solidjs`, `/pix-area-frontend-svelte`, `/pix-area-frontend-template-engine`, `/pix-area-frontend-vanilla-reactive`, `/pix-area-frontend-vue`, `/pix-area-frontend-workers`, `/pix-area-platform`, `/pix-area-platform-agent`, `/pix-area-platform-auth`, `/pix-area-platform-desktop`, `/pix-area-platform-library`, `/pix-area-platform-web`, `/pix-area-process`, `/pix-area-process-adr`, `/pix-area-process-ai-sdlc`, `/pix-area-process-bmad`, `/pix-area-process-changelog`, `/pix-area-process-code-review`, `/pix-area-process-handoff`, `/pix-area-process-npm-release`, `/pix-area-process-simplicity`, `/pix-area-process-tdd`, `/pix-area-styleguide`, `/pix-area-styleguide-a11y`, `/pix-area-styleguide-baseline`, `/pix-area-styleguide-comments`, `/pix-area-styleguide-css`, `/pix-area-styleguide-english`, `/pix-area-styleguide-file-tree`, `/pix-area-styleguide-fingerprint`, `/pix-area-styleguide-html`, `/pix-area-styleguide-i18n`, `/pix-area-styleguide-javascript`, `/pix-area-styleguide-json`, `/pix-area-styleguide-markdown`, `/pix-area-styleguide-naming`, `/pix-area-styleguide-patterns`, `/pix-area-styleguide-readme`, `/pix-area-styleguide-typescript`, `/pix-area-styleguide-validation`, `/pix-area-toolchain`, `/pix-area-toolchain-biome`, `/pix-area-toolchain-commits`, `/pix-area-toolchain-eslint`, `/pix-area-toolchain-husky`, `/pix-area-toolchain-parcel`, `/pix-area-toolchain-pnpm`, `/pix-area-toolchain-project`, `/pix-area-toolchain-rspack`, `/pix-area-toolchain-turborepo`, `/pix-area-toolchain-typescript`, `/pix-area-toolchain-vite`, `/pix-area-ui`, `/pix-area-ui-design-system`
 
 **workflow**: `/pix-adr`, `/pix-flight`
 
