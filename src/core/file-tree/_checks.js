@@ -1,5 +1,5 @@
 /** Guardrail checks the engine runs on barrels and component file names. */
-import { passResult } from "@pix-galaxy-mcp/sdk";
+import { passResult } from "../../shared/index.js";
 import { isBarrelFile } from "./_conventions.js";
 
 /**

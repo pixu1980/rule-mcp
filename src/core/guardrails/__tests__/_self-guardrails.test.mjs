@@ -29,7 +29,7 @@ const CATALOGS = new Map([
   ["core/text/block-spacing/", "the block-spacing checker quotes the one-line blocks it forbids as examples"],
   ["_template-data.data.js", "component templates are emitted as strings, stubs included"],
   ["core/scaffold/templates/", "the template catalog quotes the markup and CSS it generates"],
-  ["text/fingerprint/", "the fingerprint scanner quotes typographic samples in its patterns"],
+  ["core/text/fingerprint/", "the fingerprint scanner quotes typographic samples in its patterns"],
   ["_fingerprint.data.js", "the British-vs-American dictionary contains the words it flags"],
   ["_read.js", "resource payloads quote the markup and template content they serve"],
   ["core/wcag-data/", "the WCAG criteria tables are reference data per guideline"],
@@ -37,12 +37,6 @@ const CATALOGS = new Map([
 ]);
 
 const SOURCE_ROOT = new URL("../../../../src", import.meta.url);
-
-/**
- * The published SDK holds rules a skill is written against, so it is held to
- * the same bar as the server that ships it (ADR 079).
- */
-const SDK_ROOT = new URL("../../../../packages/sdk/src", import.meta.url);
 
 function sourceFiles(dir = SOURCE_ROOT.pathname) {
   const found = [];
@@ -64,12 +58,9 @@ function sourceFiles(dir = SOURCE_ROOT.pathname) {
 
 test("every source file passes the JavaScript guardrails", () => {
   const failures = [];
-  for (const file of [...sourceFiles(), ...sourceFiles(SDK_ROOT.pathname)]) {
+  for (const file of sourceFiles()) {
     const fileName = file.split("/").at(-1);
-    // Relative to whichever root the file came from, so an exclusion key reads
-    // the same for the server and for the SDK package beside it.
-    const root = file.startsWith(SDK_ROOT.pathname) ? SDK_ROOT.pathname : SOURCE_ROOT.pathname;
-    const rel = file.slice(root.length).replace(/^\//, "");
+    const rel = file.slice(SOURCE_ROOT.pathname.length).replace(/^\//, "");
     const cataloguedDir = [...CATALOGS.keys()].some((key) => key.endsWith("/") && rel.startsWith(key));
     if (CATALOGS.has(fileName) || cataloguedDir) {
       continue;
@@ -84,10 +75,10 @@ test("every source file passes the JavaScript guardrails", () => {
 });
 
 test("the catalog exclusions still exist and still are catalogs", () => {
-  const present = new Set([...sourceFiles(), ...sourceFiles(SDK_ROOT.pathname)].map((file) => file.split("/").at(-1)));
+  const present = new Set(sourceFiles().map((file) => file.split("/").at(-1)));
   for (const [name] of CATALOGS) {
     const dirKey = name.endsWith("/");
-    const exists = dirKey ? existsSync(join(SOURCE_ROOT.pathname, name)) || existsSync(join(SDK_ROOT.pathname, name)) : present.has(name);
+    const exists = dirKey ? existsSync(join(SOURCE_ROOT.pathname, name)) : present.has(name);
     assert.ok(exists, `${name} is excluded but no longer exists - drop the exclusion`);
   }
   assert.ok(CATALOGS.size <= 10, "the exclusion list is a short, argued list - not a place to hide failures");
