@@ -23,7 +23,7 @@ Serves styleguides, component templates, framework best practices, and design sy
   - [Minimal tool surface (10 tools)](#minimal-tool-surface-10-tools)
   - [Gateway deterministic mode](#gateway-deterministic-mode)
 - [MCP Resources (188)](#mcp-resources-188)
-- [MCP Prompts (73)](#mcp-prompts-73)
+- [MCP Prompts (151)](#mcp-prompts-151)
 - [Guardrail engine](#guardrail-engine)
 - [CLI reference](#cli-reference)
 - [Daemon & services](#daemon--services)
@@ -38,13 +38,13 @@ Serves styleguides, component templates, framework best practices, and design sy
 Deterministic MCP server for the rule skill ecosystem. Live surface (enforced by
 `tests/docs/docs-accuracy.test.mjs` - the README and reality cannot drift):
 
-| Surface   | Count | Notes                                                                                                       |
-| --------- | ----- | ----------------------------------------------------------------------------------------------------------- |
-| Tools     | 107   | per-skill tools + dispatcher/action tools                                                                   |
-| Resources | 188   | rule:// per-skill index + summary + template URIs                                                            |
-| Prompts   | 73    | rule-area-* areas + one-shot workflow + 54 review-persona commands (rule-plan-* / rule-audit-* / rule-review-*) |
-| Skills    | 89    | frontend, backend, data, devops, toolchain, styleguide, process, platform, ai                               |
-| Tests     | 212   | `pnpm test:all` green (incl. installer + PTY TUI)                                                           |
+| Surface   | Count | Notes                                                                                                                          |
+| --------- | ----- | ------------------------------------------------------------------------------------------------------------------------------ |
+| Tools     | 107   | per-skill tools + dispatcher/action tools                                                                                      |
+| Resources | 188   | rule:// per-skill index + summary + template URIs                                                                               |
+| Prompts   | 151   | rule-area-* (one per skill, derived) + one-shot workflow + 54 review-persona commands (rule-plan-* / rule-audit-* / rule-review-*) |
+| Skills    | 89    | frontend, backend, data, devops, toolchain, styleguide, process, platform, ai                                                  |
+| Tests     | 212   | `pnpm test:all` green (incl. installer + PTY TUI)                                                                              |
 
 Architecture decisions live in [`docs/adr/`](docs/adr/ADR.md) (47 records:
 installer self-heal, architect split, doc-accuracy guard, v0.1.0-beta release).
@@ -74,7 +74,7 @@ rule-mcp install --agent all
 
 ## What is rule-mcp
 
-rule-mcp is an [MCP](https://modelcontextprotocol.io) server that exposes **107 tools**, **188 resources**, and **73 prompts** to any MCP-compatible AI coding agent. Because the server never calls an LLM (every output is deterministic), it is **model-agnostic** - it behaves identically behind Claude, GPT, Gemini, Llama, Qwen, or any other model. It provides:
+rule-mcp is an [MCP](https://modelcontextprotocol.io) server that exposes **107 tools**, **188 resources**, and **151 prompts** to any MCP-compatible AI coding agent. Because the server never calls an LLM (every output is deterministic), it is **model-agnostic** - it behaves identically behind Claude, GPT, Gemini, Llama, Qwen, or any other model. It provides:
 
 - **91 modular skills** covering frontend, backend, database, devops, toolchain, styleguide, process, platform, and ai domains
 - **BM25 full-text search** across all skill content
@@ -313,7 +313,7 @@ Each skill (except `rule` itself) has two resources:
 
 ---
 
-## MCP Prompts (73)
+## MCP Prompts (151)
 
 73 prompts accessible via the MCP `prompts/get` protocol. The 12 `rule-area-*` commands and the
 54 review-persona commands (18 roles x plan/audit/review) are grouped in a row each; the one-shot
