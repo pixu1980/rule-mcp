@@ -30,7 +30,7 @@ export function areaOf(skillName) {
   }
 
   const rest = skillName.slice("rule-".length);
-  const area = rest.split("-")[0];
+  const area = rest.split("-", 1)[0];
 
   return area === "" ? null : { area, member: rest.slice(area.length + 1) };
 }

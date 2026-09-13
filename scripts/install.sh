@@ -27,6 +27,7 @@
 #
 # Options:
 #   --agent <name>       Install for a specific agent only
+#   --commands <preset>  Slash commands to write: minimal, standard or full
 #   --skills             Install the bundled rule-* skills to ~/.agents/skills
 #   --no-skills          Skip the bundled skills step entirely
 #   --models             Prompt to configure model API keys
@@ -106,6 +107,7 @@ FORCE=false
 CONFIGURE_MODELS=false
 TARGET_AGENT=""
 INSTALL_MODE=""
+COMMAND_PRESET=""
 MODE_WAS_REQUESTED=false
 INSTALL_SKILLS=""
 SKILLS_INSTALLED=0
@@ -149,6 +151,7 @@ while [[ $# -gt 0 ]]; do
     --dry-run)    DRY_RUN=true; shift ;;
     --force)      FORCE=true; shift ;;
     --mode)       INSTALL_MODE="${2:-}"; MODE_WAS_REQUESTED=true; shift 2 ;;
+    --commands)   COMMAND_PRESET="${2:-}"; shift 2 ;;
     --no-interactive) INTERACTIVE=false; shift ;;
     --help|-h)
       echo "Usage: curl -fsSL https://rule-mcp.domain.example/install.sh | bash"
@@ -910,7 +913,7 @@ if [[ -f "${SCRIPT_DIR}/install-agent-commands.sh" ]]; then
   if [[ "$DRY_RUN" == "true" ]]; then
     sub "[dry-run] Would run: ${SCRIPT_DIR}/install-agent-commands.sh"
   else
-    "${SCRIPT_DIR}/install-agent-commands.sh" ${FORCE:+--force} ${DRY_RUN:+--dry-run}
+    "${SCRIPT_DIR}/install-agent-commands.sh" ${FORCE:+--force} ${DRY_RUN:+--dry-run} ${COMMAND_PRESET:+--preset "$COMMAND_PRESET"}
     ok "Agent commands installed"
   fi
 else

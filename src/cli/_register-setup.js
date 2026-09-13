@@ -115,33 +115,3 @@ export function registerCompletionsCommand(program) {
     .allowExcessArguments(false)
     .action(async (options) => (await import("./commands/_health.js")).completionsCommand({ shell: options.shell }));
 }
-
-/** Register the `agent-commands` command. */
-export function registerAgentCommandsCommand(program) {
-  program
-    .command("agent-commands")
-    .description("Registry-driven agent slash-command management")
-    .option("--dir <path>", "write commands to this directory")
-    .option("--format <f>", "args (default), workflow, gemini, prompt, plain")
-    .option("--list", "list command names")
-    .option("--targets", "print resolved target directories")
-    .option("--sync", "write to EVERY detected agent dir")
-    .option("--remove", "remove instead of writing")
-    .option("--force", "overwrite existing files")
-    .option("--dry-run", "preview without writing")
-    .option("--agent <name>", "limit to one agent")
-    .allowExcessArguments(false)
-    .action(async (options) => {
-      (await import("./commands/_targets.js")).agentCommandsCommand({
-        dir: options.dir,
-        format: options.format,
-        list: options.list,
-        targets: options.targets,
-        sync: options.sync,
-        remove: options.remove,
-        force: options.force,
-        dryRun: options.dryRun,
-        agent: options.agent,
-      });
-    });
-}

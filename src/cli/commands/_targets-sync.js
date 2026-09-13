@@ -10,7 +10,7 @@ import { resolvedTargets } from "./_targets.js";
  * Write (or remove with `--remove`) the whole clean command set in every resolved
  * target directory, so a single call covers every agent/IDE on this machine.
  *
- * @param {{ agent?: string, remove?: boolean, dryRun?: boolean, json?: boolean }} opts
+ * @param {{ agent?: string, remove?: boolean, dryRun?: boolean, json?: boolean, only?: string[] }} opts
  */
 export function syncCommandTargets(opts) {
   const targets = resolvedTargets(opts);
@@ -24,7 +24,7 @@ export function syncCommandTargets(opts) {
   let files = 0;
 
   for (const { label, format, dir } of targets) {
-    const rendered = renderAgentCommandFiles(format);
+    const rendered = renderAgentCommandFiles(format, opts.only ?? undefined);
 
     if (!opts.dryRun && !opts.remove) {
       mkdirSync(dir, { recursive: true });
