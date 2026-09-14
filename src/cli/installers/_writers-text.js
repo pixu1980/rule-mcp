@@ -5,6 +5,10 @@
  */
 
 import { COMMAND_TEMPLATE_PATH, readText } from "./_paths.js";
+import { INSTRUCTION_BLOCKS, INSTRUCTION_MARKER, RULES_MARKER, closingMarker } from "./_instruction.data.js";
+
+/** The sentinels an install owns, and an uninstall sweeps. */
+const INSTRUCTION_MARKERS = [INSTRUCTION_MARKER, RULES_MARKER];
 
 const upsertTomlBlock = (current, blockName, block) => {
   const escapedName = blockName.replaceAll(".", String.raw`\.`);
@@ -22,37 +26,43 @@ const removeTomlBlock = (current, blockName) => {
   return re.test(current) ? current.replace(re, "") : current;
 };
 
-const INSTRUCTION_BLOCK =
-  `${"<!-- rule-mcp -->"}\n` +
-  "Before writing any frontend/styling code, call `rule` to route the task to the correct rule skill. " +
-  "Follow rule AI principles: zero CSS classes, zero inline styles, semantic HTML, external CSS via " +
-  "adoptedStyleSheets. Available tools: rule, pix_component, pix_check, pix_search, pix_scaffold, " +
-  "pix_process_adr. Flex first: display:grid only for named areas, subgrid, explicit placement, or " +
-  "auto-fit tracks - what a flex row or column can do, flex does.\n" +
-  "<!-- /rule-mcp -->";
+/** Whether this text already carries one of the blocks. */
+const carriesBlock = (current) => INSTRUCTION_MARKERS.some((marker) => current.includes(marker));
 
-/** Append the marked instruction block, or refresh a stale one when forced. */
+/** Regex-safe form of a sentinel, which is markup and not a pattern. */
+const quoted = (marker) => marker.replaceAll(/[$()*+.?[\\\]^{|}]/g, String.raw`\$&`);
+
+/** A block and its sentinels, with the blank lines around it. */
+const blockPattern = (marker) => new RegExp(String.raw`\n*${quoted(marker)}[\s\S]*?${quoted(closingMarker(marker))}\n*`, "g");
+
+/** Append both marked blocks, or refresh stale ones when forced. */
 
 const appendInstruction = (current, { refresh = false } = {}) => {
-  if (current.includes("<!-- rule-mcp -->")) {
-    // A stale block is replaced so an install ships the CURRENT rules, never
-    // the text a user installed once. Without --force the existing block wins.
-    return refresh ? removeInstruction(current) + `\n\n${INSTRUCTION_BLOCK}\n` : current;
-  }
+  const present = carriesBlock(current);
 
-  return `${current.trimEnd()}\n\n${INSTRUCTION_BLOCK}\n`;
-};
-
-/** Remove the rule-mcp instruction marker. */
-
-const removeInstruction = (current) => {
-  const marker = "<!-- rule-mcp -->";
-
-  if (!current.includes(marker)) {
+  // A stale block is replaced so an install ships the CURRENT rules, never
+  // the text a user installed once. Without --force the existing block wins.
+  if (present && !refresh) {
     return current;
   }
 
-  return current.replaceAll(/\n*<!-- rule-mcp -->[\s\S]*?<!-- \/rule-mcp -->\n*/g, "").trimEnd();
+  return `${present ? removeInstruction(current) : current.trimEnd()}\n\n${INSTRUCTION_BLOCKS.join("\n\n")}\n`;
+};
+
+/** Remove every rule-mcp instruction block, sentinels included. */
+
+const removeInstruction = (current) => {
+  if (!carriesBlock(current)) {
+    return current;
+  }
+
+  let text = current;
+
+  for (const marker of INSTRUCTION_MARKERS) {
+    text = text.replaceAll(blockPattern(marker), "");
+  }
+
+  return text.trimEnd();
 };
 
 const commandTemplate = () => readText(COMMAND_TEMPLATE_PATH);
