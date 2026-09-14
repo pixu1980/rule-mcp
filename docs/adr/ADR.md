@@ -8,6 +8,7 @@ this directory are the source of truth; this index is generated from them by
 
 | #                                                                                                                       | Title                                                                                                     | Date       | Status     | Tags                                                                                |
 | ----------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- | ---------- | ---------- | ----------------------------------------------------------------------------------- |
+| [080](080-the-setup-wizard-is-the-installer-and-it-asks-which-commands-to-write.md)                                     | The setup wizard is the installer, and it asks which commands to write                                    | 2026-09-13 | accepted   | installer, cli, wizard, commands, ux                                                |
 | [079](079-skills-own-their-guardrails-and-three-layers-resolve-both-skills-and-personas.md)                             | Skills own their guardrails, and three layers resolve both skills and personas                            | 2026-09-12 | accepted   | architecture, skills, guardrails, personas, extensibility                           |
 | [078](078-a-persona-topic-is-the-binding-scope-of-the-run.md)                                                           | A persona topic is the binding scope of the run                                                           | 2026-09-12 | accepted   | personas, prompts, review, tokensave                                                |
 | [077](077-the-cli-entry-point-loads-no-command-handler-it-has-not-been-asked-for.md)                                    | The CLI entry point loads no command handler it has not been asked for                                    | 2026-09-09 | accepted   | cli, startup, performance, imports                                                  |
@@ -92,6 +93,7 @@ file. Where a line stops short the rest is in the ADR.
 
 | ADR                                                                                                                     | Decision                                                                                                                                                                                                                        | Consequence                                                                                                                                                                                                                    |
 | ----------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| [080](080-the-setup-wizard-is-the-installer-and-it-asks-which-commands-to-write.md)                                     | The wizard is the installer.                                                                                                                                                                                                    | One implementation, in node, tested on every platform without a terminal: `_options`, `_plan-*`, `_preflight`, `_scan` and `_run-plan` are pure or read-only, and only `_app-*`, `_step-*` and `_widget-*` know Ink exists.    |
 | [079](079-skills-own-their-guardrails-and-three-layers-resolve-both-skills-and-personas.md)                             | A skill owns the rules that judge its subject.                                                                                                                                                                                  | A project versions its own rules beside its code and a team shares them through git.                                                                                                                                           |
 | [078](078-a-persona-topic-is-the-binding-scope-of-the-run.md)                                                           | The topic becomes the binding scope everywhere the template speaks: the action line names the scope instead of the project, a dedicated 'Scope: binding' section forbids reading, auditing or reporting outside it (with a...   | A user request like /rule-audit-security the SSE daemon now produces a run confined to that scope, and repeated scoped runs no longer mark whole-project findings resolved by silence.                                          |
 | [077](077-the-cli-entry-point-loads-no-command-handler-it-has-not-been-asked-for.md)                                    | Keep the command and option declarations static, and load the handlers inside their actions.                                                                                                                                    | Warm --help fell from 216 ms to 48 ms, and every command still dispatches. listTools() is memoized on a registry generation bumped by register, clear and retain, so the 105-schema conversion is paid once per process...     |
@@ -207,6 +209,7 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 
 ### installer
 
+- [080](080-the-setup-wizard-is-the-installer-and-it-asks-which-commands-to-write.md) The setup wizard is the installer, and it asks which commands to write
 - [075](075-the-installer-asks-before-copying-bundled-skills-to-the-central-agents-directory.md) The installer asks before copying bundled skills to the central agents directory
 - [073](073-installer-mode-step-replaces-the-agent-picker-instead-of-stacking-under-it.md) Installer mode step replaces the agent picker instead of stacking under it
 - [064](064-one-global-shim-and-hermetic-pnpm-home-in-script-tests.md) One global shim, and hermetic PNPM_HOME in script tests
@@ -284,6 +287,14 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [066](066-coverage-floor-raised-to-87-95-remains-the-ratchet-endpoint.md) Coverage floor raised to 87; 95 remains the ratchet endpoint
 - [065](065-glob-suite-runner-colocated-tests-and-a-branch-coverage-ratchet.md) Glob suite runner, co-located tests, and a branch-coverage ratchet
 
+### cli
+
+- [080](080-the-setup-wizard-is-the-installer-and-it-asks-which-commands-to-write.md) The setup wizard is the installer, and it asks which commands to write
+- [077](077-the-cli-entry-point-loads-no-command-handler-it-has-not-been-asked-for.md) The CLI entry point loads no command handler it has not been asked for
+- [064](064-one-global-shim-and-hermetic-pnpm-home-in-script-tests.md) One global shim, and hermetic PNPM_HOME in script tests
+- [047](047-installer-self-heals-global-shim-surfaces-failures-gates-tui-rendering.md) Installer self-heals its global shim, surfaces failures, and gates TUI rendering
+- [034](034-registry-driven-clean-slash-commands-for-every-agent-and-ide.md) Registry-driven clean slash commands for every agent and IDE
+
 ### coverage
 
 - [072](072-coverage-wave-four-holds-the-floor-at-90-and-fixes-the-daemon-status-platform-de.md) Coverage wave four holds the floor at 90 and fixes the daemon status platform defect
@@ -300,12 +311,12 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [062](062-persona-plans-are-checklists-with-marks-that-survive-the-sync.md) Persona plans are checklists with marks that survive the sync
 - [057](057-split-review-personas-into-per-operation-commands-plan-audit-review.md) Split review personas into per-operation commands (plan/audit/review)
 
-### cli
+### commands
 
-- [077](077-the-cli-entry-point-loads-no-command-handler-it-has-not-been-asked-for.md) The CLI entry point loads no command handler it has not been asked for
-- [064](064-one-global-shim-and-hermetic-pnpm-home-in-script-tests.md) One global shim, and hermetic PNPM_HOME in script tests
-- [047](047-installer-self-heals-global-shim-surfaces-failures-gates-tui-rendering.md) Installer self-heals its global shim, surfaces failures, and gates TUI rendering
-- [034](034-registry-driven-clean-slash-commands-for-every-agent-and-ide.md) Registry-driven clean slash commands for every agent and IDE
+- [080](080-the-setup-wizard-is-the-installer-and-it-asks-which-commands-to-write.md) The setup wizard is the installer, and it asks which commands to write
+- [058](058-restructure-the-command-surface-rule-router-rule-area-caveman-implicit-rule-process.md) Restructure the command surface: /rule router, rule-area-*, caveman implicit, rule-process-tdd skill
+- [057](057-split-review-personas-into-per-operation-commands-plan-audit-review.md) Split review personas into per-operation commands (plan/audit/review)
+- [029](029-clean-rule-commands-via-user-commands-prompt-suppression-not-a-plugin.md) Clean /rule-* commands via user commands + prompt suppression, not a plugin
 
 ### infrastructure
 
@@ -347,12 +358,6 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [056](056-gateway-as-the-single-entrypoint-with-server-side-receipts-backend-data-devops-g.md) Gateway as the single entrypoint with server-side receipts; backend/data/devops guardrail families
 - [011](011-backend-framework-skills.md) backend framework skills
 - [005](005-backend-framework-skills.md) Backend Framework Skills
-
-### commands
-
-- [058](058-restructure-the-command-surface-rule-router-rule-area-caveman-implicit-rule-process.md) Restructure the command surface: /rule router, rule-area-*, caveman implicit, rule-process-tdd skill
-- [057](057-split-review-personas-into-per-operation-commands-plan-audit-review.md) Split review personas into per-operation commands (plan/audit/review)
-- [029](029-clean-rule-commands-via-user-commands-prompt-suppression-not-a-plugin.md) Clean /rule-* commands via user commands + prompt suppression, not a plugin
 
 ### mcp
 

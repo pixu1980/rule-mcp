@@ -454,8 +454,13 @@ rule-mcp daemon start|stop|status|logs
 rule-mcp daemon install|uninstall|enable|disable
 
 # Agent integration
+rule-mcp setup [--uninstall] [--agent <name>] [--mode stdio|daemon|docker] [--dry-run]
 rule-mcp install --agent <name> [--mode stdio|daemon|docker] [--global] [--dry-run] [--force]
 rule-mcp uninstall --agent <name> [--dry-run]
+
+# Which slash commands the setup writes (piped runs, where nothing can ask)
+rule-mcp setup --no-wizard --commands-preset minimal|standard|full
+rule-mcp setup --no-wizard --commands-families areas --commands-areas frontend,data
 
 # Tools (MCP tool calls from CLI)
 rule-mcp tools list [--json]
