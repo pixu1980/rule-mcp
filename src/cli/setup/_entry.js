@@ -55,6 +55,8 @@ export function setupOptions(kind, { getArgument, hasFlag }) {
     commands: pick(hasFlag("--commands"), hasFlag("--no-commands")),
     hooks: pick(hasFlag("--hooks"), hasFlag("--no-hooks")),
     skills: pick(hasFlag("--skills"), hasFlag("--no-skills")),
+    minimal: pick(hasFlag("--minimal"), hasFlag("--no-minimal")),
+    surface: getArgument("--surface"),
     service: pick(hasFlag("--service"), hasFlag("--no-service")),
     doctor: pick(hasFlag("--doctor"), hasFlag("--no-doctor")),
     purge: hasFlag("--purge"),
