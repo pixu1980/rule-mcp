@@ -9,7 +9,55 @@ const list = (value) =>
         .split(",")
         .map((entry) => entry.trim())
         .filter(Boolean)
-    : undefined;
+    : Array.isArray(value) && value.length > 0
+      ? value
+      : undefined;
+
+/**
+ * The selection a set of flags describes, or null when they describe none.
+ *
+ * Null is not "nothing": every caller reads it as "all of them", the behavior
+ * that held before the surface grew a command per skill.
+ *
+ * @param {{ preset?: string, families?: string|string[], areas?: string|string[], skills?: string|string[] }} options
+ * @returns {{ preset?: string, families?: string[], areas?: string[], skills?: string[] }|null}
+ */
+export function selectionOf(options = {}) {
+  const families = list(options.families);
+  const areas = list(options.areas);
+  const skills = list(options.skills);
+
+  if (!options.preset && !families && !areas && !skills) {
+    return null;
+  }
+
+  return { preset: options.preset, families, areas, skills };
+}
+
+/**
+ * The argv a selection asks for, for the `agent-commands` run that writes it.
+ *
+ * The inverse of `selectionOf`, so the wizard's answer and a flagged install
+ * reach the same command line rather than two that drifted.
+ *
+ * @param {{ preset?: string, families?: string[], areas?: string[], skills?: string[] }|null} [selection]
+ * @returns {string[]}
+ */
+export function selectionArgs(selection) {
+  if (!selection) {
+    return [];
+  }
+
+  if (selection.preset) {
+    return ["--preset", selection.preset];
+  }
+
+  return [
+    ...(selection.families?.length ? ["--families", selection.families.join(",")] : []),
+    ...(selection.areas?.length ? ["--areas", selection.areas.join(",")] : []),
+    ...(selection.skills?.length ? ["--skills", selection.skills.join(",")] : []),
+  ];
+}
 
 /**
  * The commands the flags select, or null when they select nothing in
@@ -24,20 +72,17 @@ const list = (value) =>
  * @returns {string[]|null}
  */
 export function selectionFrom(options, warn = (text) => process.stderr.write(`${text}\n`)) {
-  const families = list(options.families);
-  const areas = list(options.areas);
-  const skills = list(options.skills);
+  const selection = selectionOf(options);
 
-  if (!options.preset && !families && !areas && !skills) {
-    // No flag asked for anything, which every caller reads as "all of them".
+  if (!selection) {
     return null;
   }
 
   const { commands, problems } = resolveSelection({
-    preset: options.preset,
-    families: families ?? (options.preset ? [] : ["areas", "personas", "tasks"]),
-    areas,
-    skills,
+    preset: selection.preset,
+    families: selection.families ?? (selection.preset ? [] : ["areas", "personas", "tasks"]),
+    areas: selection.areas,
+    skills: selection.skills,
   });
 
   for (const problem of problems) {
