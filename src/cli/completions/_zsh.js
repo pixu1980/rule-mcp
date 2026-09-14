@@ -13,6 +13,7 @@ _pix_galaxy_mcp_commands() {
     'daemon:Manage background daemon process'
     'install:Install into agent/IDE configuration'
     'uninstall:Remove from agent/IDE configuration'
+    'setup:Full-screen install/uninstall wizard'
     'config:Print mcp.json configuration snippet'
     'tools:List or call MCP tools'
     'doctor:Run system health check'
@@ -99,7 +100,7 @@ _pix_galaxy_mcp() {
         tools)      _pix_galaxy_mcp_tools_subcommands ;;
         skills)     _pix_galaxy_mcp_skills_actions ;;
         adr)        _pix_galaxy_mcp_adr_actions ;;
-        install|uninstall) _pix_galaxy_mcp_options ;;
+        install|uninstall|setup) _pix_galaxy_mcp_options ;;
         handoff|serve|config|doctor|completions|help) _pix_galaxy_mcp_options ;;
         *)          _pix_galaxy_mcp_options ;;
       esac

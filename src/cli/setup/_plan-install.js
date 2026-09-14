@@ -1,0 +1,57 @@
+/**
+ * @module cli/setup/plan-install
+ *
+ * Assembling the install plan from the wizard's answers.
+ *
+ * Order matters: the runtime home and the shim come first because the agent
+ * writes reference the launcher, and the health check comes last because it
+ * is the only step that reports on all the others.
+ */
+
+import { agentInstallTask, runtimeHomeTask, shimTask } from "./_task-core.js";
+import { commandsTask, dockerTask, doctorTask, rulesTask, serviceTask, skillsTask } from "./_task-extras.js";
+
+/**
+ * @param {{ agents?: string[], mode?: string, extras?: object, force?: boolean, context?: object, selection?: object|null }} answers
+ * @returns {Array<{ id: string, title: string, detail: string, run: Function }>}
+ */
+export function buildInstallPlan({ agents = [], mode = "stdio", extras = {}, force = false, context = {}, selection = null } = {}) {
+  const plan = [runtimeHomeTask()];
+
+  if (context.hasLocalBin) {
+    plan.push(shimTask(context.localBin));
+  }
+
+  // The guard hooks are not a step of their own: they are written by the
+  // Claude installer, so declining them is an argument to that install rather
+  // than a task the plan can leave out. `extras` only ever carries the steps
+  // that were kept, so the test is presence - `!== false` was true for an
+  // absent key, which made the hooks impossible to decline.
+  plan.push(...agents.map((agent) => agentInstallTask(agent, mode, force, extras.hooks === true)));
+
+  if (extras.rules) {
+    plan.push(rulesTask(agents));
+  }
+
+  if (extras.commands) {
+    plan.push(commandsTask(force, agents, selection));
+  }
+
+  if (extras.skills) {
+    plan.push(skillsTask());
+  }
+
+  if (mode === "daemon" && extras.service) {
+    plan.push(serviceTask());
+  }
+
+  if (mode === "docker") {
+    plan.push(dockerTask());
+  }
+
+  if (extras.doctor) {
+    plan.push(doctorTask());
+  }
+
+  return plan;
+}

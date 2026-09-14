@@ -13,6 +13,7 @@ complete -c pix-galaxy-mcp -n "__fish_use_subcommand" -a up        -d "Serve ove
 complete -c pix-galaxy-mcp -n "__fish_use_subcommand" -a daemon    -d "Manage background daemon"
 complete -c pix-galaxy-mcp -n "__fish_use_subcommand" -a install   -d "Install into agent/IDE"
 complete -c pix-galaxy-mcp -n "__fish_use_subcommand" -a uninstall -d "Remove from agent/IDE"
+complete -c pix-galaxy-mcp -n "__fish_use_subcommand" -a setup -d "Install/uninstall wizard"
 complete -c pix-galaxy-mcp -n "__fish_use_subcommand" -a config    -d "Print mcp.json snippet"
 complete -c pix-galaxy-mcp -n "__fish_use_subcommand" -a tools     -d "List or call MCP tools"
 complete -c pix-galaxy-mcp -n "__fish_use_subcommand" -a doctor    -d "System health check"

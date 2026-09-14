@@ -23,7 +23,9 @@
 import { readFileSync } from "node:fs";
 import { Command, CommanderError } from "commander";
 import { registerServeCommand, registerUpCommand, registerDaemonCommand } from "./_register-server.js";
-import { registerInstallCommand, registerUninstallCommand, registerConfigCommand, registerDoctorCommand, registerCompletionsCommand } from "./_register-setup.js";
+import { registerInstallCommand, registerUninstallCommand } from "./_register-setup.js";
+import { registerSetupCommand } from "./_register-wizard.js";
+import { registerConfigCommand, registerDoctorCommand, registerCompletionsCommand } from "./_register-health.js";
 import { registerAgentCommandsCommand } from "./_register-agent-commands.js";
 import { registerHandoffCommand } from "./_register-handoff.js";
 import { registerAdrCommand, registerSkillsCommand, registerFixCommand, registerHandonCommand } from "./_register-session.js";
@@ -68,6 +70,7 @@ export function buildProgram() {
   registerDaemonCommand(program);
   registerInstallCommand(program);
   registerUninstallCommand(program);
+  registerSetupCommand(program);
   registerToolsCommand(program);
   registerConfigCommand(program);
   registerDoctorCommand(program);
