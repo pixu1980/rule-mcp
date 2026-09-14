@@ -26,7 +26,7 @@ import { hermeticEnv, root } from "./_purge.fixture.mjs";
       env: { ...hermeticEnv(home, path), RULE_MCP_SKIP_GLOBAL_LINK: "1" },
       timeout: 180_000,
     });
-    assert.match(output, /Runtime home ready/, "install.sh must report the runtime home creation");
+    assert.match(output, /Runtime home/, "install.sh must report the runtime home creation");
     assert.ok(existsSync(join(home, ".rule-mcp")), "install.sh must recreate ~/.rule-mcp/");
     assert.ok(existsSync(join(home, ".rule-mcp", "state")), "install.sh must recreate state/");
     assert.ok(existsSync(join(home, ".pi", "agent", "mcp.json")), "pi must still be configured by the install");

@@ -1,58 +1,55 @@
-/** End-to-end: a broken shim must not cause a silent "skipped" install. */
+/**
+ * End-to-end: the bootstrap reaches the wizard, and a broken shim does not
+ * cost the install.
+ *
+ * `scripts/install.sh` checks node, resolves the binary and forwards every
+ * argument to `rule-mcp setup` (ADR 080). Piped, with `--no-wizard`,
+ * that is the plain runner over the same plan - so this is the one test that
+ * proves the shell half and the node half still meet.
+ */
 import { strict as assert } from "node:assert";
 import { execFileSync } from "node:child_process";
-import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { chmodSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
+import { test } from "node:test";
 
-import { root } from "./_shim.fixture.mjs";
+const root = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..", "..");
 
-const e2eHome = mkdtempSync(join(tmpdir(), "rule-shim-e2e-"));
-mkdirSync(join(e2eHome, ".pi", "agent"), { recursive: true });
-mkdirSync(join(e2eHome, "bin"), { recursive: true });
-writeFileSync(join(e2eHome, ".pi", "agent", "mcp.json"), '{"mcpServers":{}}\n');
-writeFileSync(join(e2eHome, "bin", "rule-mcp"), "#!/bin/sh\nexit 3\n", { mode: 0o755 });
-writeFileSync(join(e2eHome, "bin", "pnpm"), "#!/bin/sh\nexit 0\n", { mode: 0o755 });
+test("install.sh --no-wizard configures the agent even with a broken shim on PATH", () => {
+  const home = mkdtempSync(join(tmpdir(), "rule-setup-e2e-"));
+  const bin = join(home, "bin");
 
-const hookPath = join(root, ".git", "hooks", "post-commit");
-const hookExisted = existsSync(hookPath);
-const hookBefore = hookExisted ? readFileSync(hookPath, "utf8") : null;
+  mkdirSync(join(home, ".pi", "agent"), { recursive: true });
+  mkdirSync(bin, { recursive: true });
+  writeFileSync(join(home, ".pi", "agent", "mcp.json"), '{"mcpServers":{}}\n');
+  // Resolves with `command -v`, crashes on launch: the shape that used to
+  // make an install report success and configure nothing.
+  writeFileSync(join(bin, "rule-mcp"), "#!/bin/sh\nexit 3\n");
+  chmodSync(join(bin, "rule-mcp"), 0o755);
 
-// A minimal PATH keeps the test hermetic: the fake bin (broken shim + pnpm
-// stub), the running node, /usr/bin for bash/git/sed/etc.
-const e2ePath = [join(e2eHome, "bin"), dirname(process.execPath), "/usr/bin", "/bin", "/usr/sbin", "/sbin", "/opt/homebrew/bin", "/usr/local/bin"].join(":");
+  try {
+    const output = execFileSync("bash", [join(root, "scripts", "install.sh"), "--agent", "pi", "--mode", "stdio", "--no-wizard", "--no-rules", "--no-commands", "--no-doctor"], {
+      cwd: root,
+      encoding: "utf8",
+      env: {
+        ...process.env,
+        HOME: home,
+        PATH: [bin, dirname(process.execPath), "/usr/bin", "/bin"].join(":"),
+        // Never the real one: the plan writes here.
+        PNPM_HOME: join(home, ".pnpm"),
+        RULE_MCP_SKIP_GLOBAL_LINK: "1",
+      },
+      timeout: 120_000,
+    });
 
-try {
-  const output = execFileSync("bash", ["scripts/install.sh", "--agent", "pi", "--mode", "stdio", "--no-rules"], {
-    cwd: root,
-    encoding: "utf8",
-    env: {
-      ...process.env,
-      HOME: e2eHome,
-      PATH: e2ePath,
-      PNPM_HOME: join(e2eHome, ".pnpm"), // never the real one: uninstall/install write here
-      RULE_MCP_SKIP_GLOBAL_LINK: "1",
-    },
-    timeout: 120_000,
-  });
+    assert.match(output, /Configure pi/, "the plan must name the agent step");
 
-  assert.match(output, /fails to launch - relinking/, "install.sh must notice the broken shim");
-  assert.match(output, /Installed for pi/, "pi must be configured, not silently skipped");
-  const mcp = JSON.parse(readFileSync(join(e2eHome, ".pi", "agent", "mcp.json"), "utf8"));
-  assert.ok(mcp.mcpServers["rule-mcp"], "pi mcp.json must contain the server entry");
-} catch (error) {
-  if (error.stdout) {
-    console.error(`\n--- captured installer output ---\n${error.stdout}`);
+    const mcp = JSON.parse(readFileSync(join(home, ".pi", "agent", "mcp.json"), "utf8"));
+
+    assert.ok(mcp.mcpServers["rule-mcp"], "pi mcp.json must contain the server entry");
+  } finally {
+    rmSync(home, { recursive: true, force: true });
   }
-  throw error;
-} finally {
-  // Restore the repo's post-commit hook to its pre-test state.
-  if (!hookExisted) {
-    rmSync(hookPath, { force: true });
-  } else if (hookBefore !== null) {
-    writeFileSync(hookPath, hookBefore);
-  }
-  rmSync(e2eHome, { recursive: true, force: true });
-}
-
-console.log("  \u{2705} broken global shim: detected, warned, and bypassed via local binary (pi configured)");
+});

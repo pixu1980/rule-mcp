@@ -1,63 +1,55 @@
 /**
- * macOS PTY acceptance test for the interactive installer.
- * The picker renders the full agent catalog and pre-selects detected agents:
- * the fake HOME only has Pi configured, so Pi starts checked. Confirm with
- * Enter, move to daemon with Down, confirm mode with Enter.
+ * PTY acceptance: a terminal gets the wizard, and the wizard can be left.
+ *
+ * The bootstrap forwards to `rule-mcp setup` (ADR 080), which draws the
+ * full-screen wizard when there is a terminal to draw on. Under a pipe every
+ * other test sees the plain runner, so this is the only place the Ink half is
+ * exercised end to end: the frame renders, the rail is there, and `q` leaves
+ * without writing anything.
  */
 import { strict as assert } from "node:assert";
 import { execFileSync } from "node:child_process";
-import { existsSync, mkdirSync, mkdtempSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
+import { test } from "node:test";
 
-if (process.platform !== "darwin" || !existsSync("/usr/bin/script")) {
-  console.log("  ⏭️  PTY installer acceptance test requires macOS /usr/bin/script");
-  process.exit(0);
-}
+const usable = process.platform === "darwin" && existsSync("/usr/bin/script");
 
-const root = new URL("../../..", import.meta.url).pathname;
-const fakeHome = mkdtempSync(join(tmpdir(), "rule-installer-pty-"));
-mkdirSync(join(fakeHome, ".pi", "agent"), { recursive: true });
-writeFileSync(join(fakeHome, ".pi", "agent", "mcp.json"), '{"mcpServers":{}}\n');
+test("a terminal gets the wizard, and q leaves it", { skip: usable ? false : "needs macOS /usr/bin/script" }, () => {
+  const root = new URL("../../..", import.meta.url).pathname;
+  const home = mkdtempSync(join(tmpdir(), "rule-installer-pty-"));
 
-// Keystrokes: Enter (confirm the pre-selected Pi agent), Down (daemon mode),
-// Enter (confirm mode), then n + Enter (decline the bundled skills step).
-const output = execFileSync(
-  "bash",
-  [
-    "-c",
-    String.raw`printf '\r\033[B\rn\r' | HOME=${JSON.stringify(fakeHome)} PNPM_HOME=${JSON.stringify(join(fakeHome, ".pnpm"))} TERM=xterm /usr/bin/script -q /dev/null bash scripts/install.sh --dry-run --no-rules`,
-  ],
-  { cwd: root, encoding: "utf8" },
-);
+  mkdirSync(join(home, ".pi", "agent"), { recursive: true });
+  writeFileSync(join(home, ".pi", "agent", "mcp.json"), '{"mcpServers":{}}\n');
 
-// Pi is detected (fake HOME) and therefore pre-selected: Enter confirms it.
-assert.match(output, /Selected 1 agent\(s\): pi/);
-assert.match(output, /Install mode: daemon/);
-assert.match(output, /Would install daemon service/);
-assert.match(output, /\[x\] 6 pi/, "detected agents must render pre-checked in the picker");
+  try {
+    // The keystroke waits for the frame: Ink puts the terminal in raw mode on
+    // mount, and a `q` sent before that is a `q` nobody reads. It is sent
+    // repeatedly because "when the frame is up" is a race under a loaded test
+    // runner, and a missed keystroke is a wizard nobody is there to close.
+    const output = execFileSync(
+      "bash",
+      [
+        "-c",
+        `(sleep 2; for _ in 1 2 3 4 5 6 7 8 9 10; do printf 'q'; sleep 1; done) | HOME=${JSON.stringify(home)} PNPM_HOME=${JSON.stringify(join(home, ".pnpm"))} RULE_MCP_SKIP_GLOBAL_LINK=1 TERM=xterm /usr/bin/script -q /dev/null bash scripts/install.sh --dry-run --no-rules`,
+      ],
+      { cwd: root, encoding: "utf8", timeout: 60_000, killSignal: "SIGKILL" },
+    );
+    const esc = String.fromCodePoint(27);
+    const plain = output.replaceAll(new RegExp(String.raw`${esc}\[[0-9;?]*[a-zA-Z]`, "g"), "").replaceAll("\r", "");
 
-// Banner box alignment: every border/content row must span the same width.
-const plain = output.replaceAll(/\x1B\[[0-9;?]*[a-zA-Z]/g, "");
-const boxLines = plain
-  .split(/\r*\n/)
-  .map((l) => l.replaceAll("\r", "").trimEnd())
-  .filter((l) => /^[╔║╚]/.test(l));
-assert.ok(boxLines.length >= 4, "banner box must render");
-const widths = new Set(boxLines.map((l) => l.length));
-assert.equal(widths.size, 1, `banner box rows misaligned: widths ${[...widths].join(", ")}`);
+    // The rail wraps at the pty's width, so the labels are asserted where they
+    // are data (`_steps.data.js`) and the frame is asserted here.
+    assert.match(plain, /Setup/, "the frame must render its title");
+    assert.match(plain, /dry run/, "the frame must say a dry run is a dry run");
+    assert.match(plain, /Environment/, "the preflight step must render its checks");
+    assert.match(plain, /Press Enter to choose which agents/, "the wizard must be waiting for a keystroke");
+    assert.match(plain, /q quit/, "the key bar must say how to leave");
+    assert.match(plain, /Nothing was written/, "leaving a dry run must report that nothing happened");
 
-// Step transition: the mode step must erase the agent picker and stand alone
-// (parity with install.ps1 Select-ModeInteractive re-showing the banner).
-assert.ok(output.includes("\x1B[6;1H\x1B[0J"), "mode step must erase the agent picker before rendering");
-assert.match(plain, /Phase 3 - Install Mode/, "mode step must retitle the banner");
-assert.match(plain, /Select install mode/, "mode step must carry its own title");
-assert.match(plain, /Agents: 1 selected/, "mode step must summarize the confirmed agents");
-
-// Skills step: the installer must ask before centralizing the catalog, and
-// a No answer must skip cleanly (a silent yes would centralize 89 skills).
-assert.match(plain, /Phase 6c: Bundled Skills/, "installer must have a bundled skills step");
-assert.match(plain, /Install bundled rule-.*skills to ~\/\.agents\/skills\? \[y\/N\]/, "skills step must prompt with a [y/N] default-No choice");
-assert.match(plain, /Skipping bundled skills/, "declining the skills step must skip cleanly");
-
-console.log("  ✅ PTY installer pre-selects detected agents, handles arrows and Enter, asks about skills");
+    assert.ok(!existsSync(join(home, ".rule-mcp")), "quitting the wizard must write nothing");
+  } finally {
+    rmSync(home, { recursive: true, force: true });
+  }
+});
