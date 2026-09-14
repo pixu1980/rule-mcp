@@ -4,8 +4,8 @@
  * The handlers are imported inside the actions, not at the top of the file:
  * the command declarations are what `--help` renders, and a static handler
  * import made `--help`, `--version` and `config` pay for the server, both
- * transports, the skill catalog and 105 tool registrations. Same pattern the
- * adr and skills registrars already used - see `pnpm report:startup`.
+ * transports, the skill catalog and the tool registrations - same pattern
+ * the adr and skills registrars already used - see `pnpm report:startup`.
  */
 import { Option } from "commander";
 
@@ -47,8 +47,7 @@ const WIZARD_ONLY = {
  */
 export function warnWizardOnly(options, warn = (text) => process.stderr.write(`${text}\n`)) {
   const given = Object.entries(WIZARD_ONLY)
-    // `--no-rules` asks for something this path already does not do, so it is
-    // honored by definition; only a flag asking for a step is a flag dropped.
+    // `--no-rules` is honored by definition; only a flag asking for a step is dropped.
     .filter(([key]) => options[key] !== undefined && options[key] !== false)
     .map(([, flag]) => flag);
 
@@ -80,6 +79,7 @@ export function registerInstallCommand(program) {
     .option("--no-hooks", "skip guard hooks")
     .option("--skills", "install the bundled rule-* skills")
     .option("--no-skills", "skip the bundled skills")
+    .option("--minimal", "minimal server tool surface (--no-minimal for full)")
     .option("--service", "register the platform daemon service")
     .option("--no-service", "skip the platform daemon service")
     .option("--doctor", "run the health check at the end")
@@ -117,6 +117,7 @@ export function registerInstallCommand(program) {
         force: options.force,
         dryRun: options.dryRun,
         json: options.json,
+        minimal: options.minimal,
       });
     });
 }

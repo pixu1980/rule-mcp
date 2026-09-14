@@ -63,6 +63,17 @@ export function extraItems({ mode, hasClaude, agents = [], ruleFiles = [] }) {
       ],
     },
     {
+      id: "minimal",
+      label: "Minimal tool surface",
+      detail: [
+        "Writes RULE_MCP_MINIMAL_TOOLS=1 into the",
+        "server env, so the installed server exposes",
+        "the 10 dispatcher tools instead of all 107.",
+        "",
+        "Off leaves the saved server config alone.",
+      ],
+    },
+    {
       id: "service",
       label: "Platform daemon service",
       detail:

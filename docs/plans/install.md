@@ -25,10 +25,10 @@ offerte, validazione guidata. Niente cambi di dipendenze, niente nuovo renderer.
 
 ## Step
 
-- [ ] **Step 1 - G-2 (flag `--minimal`)**: esporre la superficie MCP ridotta come flag + passo wizard, in sincrono perfetto; nessun cambio al set di 10 tool
-  - [ ] **1.1**: aggiungere `--minimal` / `--no-minimal` tri-state in `src/cli/setup/_options.js` (`resolveSetupOptions`), con default assente = comportamento attuale (env var ancora letta)
-  - [ ] **1.2**: aggiungere il toggle nel passo Extras del wizard (`src/cli/setup/_step-extras.js` + `_views-install.js`) con stesso default del flag; ogni risposta del wizard deve produrre gli stessi argv del flag (pattern `selectionArgs`)
-  - [ ] **1.3**: gate: `tools list` con `--minimal` = 10 tool dell'allowlist; `rule_tool_fix` lint pulito su `src/cli/setup/`; suite foundations verde
+- [x] **Step 1 - G-2 (flag `--minimal`)**: esporre la superficie MCP ridotta come flag + passo wizard, in sincrono perfetto; nessun cambio al set di 10 tool (via centrale env-mirror, scelta utente 2026-09-14: nessun installer toccato)
+  - [x] **1.1**: `--minimal` / `--no-minimal` tri-state in `src/cli/_register-setup.js` (`--minimal`, help cita `--no-minimal` di commander), passthrough `minimal` in `resolveSetupOptions` (`src/cli/setup/_options.js`), toggle `minimal` in `resolveExtras` per pre-selezionare la riga wizard
+  - [x] **1.2**: riga "Minimal tool surface" in `extraItems` (`src/cli/setup/_step-extras.js`); `buildInstallPlan` accetta `minimal` e lo passa ad `agentInstallTask`, il cui `run()` chiama `applyMinimalEnv(minimal)` prima di scrivere; il path stretto `installCommand` (`src/cli/commands/_lifecycle.js`) fa lo stesso; i writer specchiano l'ambient in `resolveEnvironment` (`src/cli/installers/_env.js`: `MINIMAL_ENV_VAR` + `minimalEnvFrom`)
+  - [x] **1.3**: gate: config agente installata contiene `RULE_MCP_MINIMAL_TOOLS=1` con `--minimal`, `"0"` con `--no-minimal`, assente senza flag; `tools list` invariato; ratchet 150 righe rispettato (`_register-setup.js`, `_app-install.js` a 150 esatti); census rigenerato (`10-cli.md`, `05-env-variables.md`); foundations + installer verdi
 - [ ] **Step 2 - G-1 (profilo superficie MCP per famiglie)**: riusare la grammatica preset/famiglie anche per i tool MCP, non solo per gli agent-command file
   - [ ] **2.1**: estendere `selectionOf`/`selectionFrom` in `src/cli/install/_selection-flags.js` e `_selection.js` con preset `minimal|standard|full` mappati sulle 22 famiglie censite; scelta ignota = warning su stderr senza bloccare (comportamento attuale)
   - [ ] **2.2**: aggiungere il passo di scelta nel wizard (estendere il passo Commands: `src/cli/setup/_step-commands.js` + `_commands-items.js`) con preset offerti nello stesso ordine di `PRESETS`; aggiungere l'inversa in `selectionArgs` cosi wizard e flag restano in sincrono
