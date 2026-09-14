@@ -13,6 +13,7 @@ complete -c rule-mcp -n "__fish_use_subcommand" -a up        -d "Serve over SSE 
 complete -c rule-mcp -n "__fish_use_subcommand" -a daemon    -d "Manage background daemon"
 complete -c rule-mcp -n "__fish_use_subcommand" -a install   -d "Install into agent/IDE"
 complete -c rule-mcp -n "__fish_use_subcommand" -a uninstall -d "Remove from agent/IDE"
+complete -c rule-mcp -n "__fish_use_subcommand" -a setup -d "Install/uninstall wizard"
 complete -c rule-mcp -n "__fish_use_subcommand" -a config    -d "Print mcp.json snippet"
 complete -c rule-mcp -n "__fish_use_subcommand" -a tools     -d "List or call MCP tools"
 complete -c rule-mcp -n "__fish_use_subcommand" -a doctor    -d "System health check"

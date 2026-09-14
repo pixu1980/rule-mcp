@@ -17,6 +17,8 @@
     "dev:daemon": "node ./bin/rule-mcp.js daemon start",
     "inspector": "node ./node_modules/@modelcontextprotocol/inspector/cli/build/cli.js node ./bin/rule-mcp.js serve",
     "doctor": "node ./bin/rule-mcp.js doctor",
+    "setup": "node ./bin/rule-mcp.js setup",
+    "setup:uninstall": "node ./bin/rule-mcp.js setup --uninstall",
     "tools": "node ./bin/rule-mcp.js tools list",
     "mcp:install": "bash ./scripts/install.sh --force",
     "mcp:install:ps1": "pwsh ./scripts/install.ps1",
@@ -88,7 +90,9 @@
     "@clack/prompts": "1.7.0",
     "@modelcontextprotocol/sdk": "1.30.0",
     "commander": "15.0.0",
+    "ink": "7.1.1",
     "rule-mcp": "link:",
+    "react": "19.3.0",
     "zod": "4.5.4"
   },
   "devDependencies": {

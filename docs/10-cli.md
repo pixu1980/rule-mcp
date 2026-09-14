@@ -7,7 +7,7 @@ a tool, a skill, a prompt, a role, a command or a guardrail;
 `tests/docs/census-generated.test.mjs` compares this file against the live
 registry, so a stale copy fails the build instead of misleading a reader.
 
-## The commands (21)
+## The commands (22)
 
 Every command is listed with the arguments and options it reads, taken from
 the commander definitions that parse them. The same definitions answer
@@ -25,8 +25,9 @@ the package version from anywhere. An error exits 1 and prints to stderr;
 | [`serve`](#rule-mcp-serve)                   | 4       | Start the MCP server (STDIO by default)                                       |
 | [`up`](#rule-mcp-up)                         | 1       | Same as "serve --transport sse" (on-demand HTTP daemon)                       |
 | [`daemon`](#rule-mcp-daemon)                 | 1       | Manage the MCP daemon (process and native platform services)                  |
-| [`install`](#rule-mcp-install)               | 6       | Install rule-mcp into an agent/IDE (edits mcp.json)                     |
-| [`uninstall`](#rule-mcp-uninstall)           | 3       | Remove rule-mcp from an agent/IDE                                       |
+| [`install`](#rule-mcp-install)               | 24      | Install rule-mcp into an agent/IDE (edits mcp.json)                     |
+| [`uninstall`](#rule-mcp-uninstall)           | 7       | Remove rule-mcp from an agent/IDE                                       |
+| [`setup`](#rule-mcp-setup)                   | 26      | Full-screen install/uninstall wizard (falls back to flags when piped)         |
 | [`tools`](#rule-mcp-tools)                   | 1       | List or call MCP tools directly                                               |
 | [`config`](#rule-mcp-config)                 | 5       | Print the mcp.json snippet, or manage RULE_MCP_* env vars with `config env`        |
 | [`doctor`](#rule-mcp-doctor)                 | 4       | Run system health check                                                       |
@@ -114,14 +115,32 @@ rule-mcp install
 
 **Options**
 
-| Flag             | Default | Choices                                      | Description                                                      |
-| ---------------- | ------- | -------------------------------------------- | ---------------------------------------------------------------- |
-| `--agent <name>` | all     | -                                            | target agent, or 'all' for every supported agent                 |
-| `--mode <name>`  | -       | `stdio`, `daemon`, `sse`, `docker`, `skills` | stdio (default), daemon (SSE), docker, or skills (no MCP server) |
-| `--global`       | -       | -                                            | use clean command path (requires global install)                 |
-| `--force`        | -       | -                                            | override existing configuration                                  |
-| `--dry-run`      | -       | -                                            | preview without writing                                          |
-| `--json`         | -       | -                                            | print machine-readable JSON instead of Terminal UI               |
+| Flag                         | Default | Choices                                      | Description                                                      |
+| ---------------------------- | ------- | -------------------------------------------- | ---------------------------------------------------------------- |
+| `--agent <name>`             | all     | -                                            | target agent, or 'all' for every supported agent                 |
+| `--mode <name>`              | -       | `stdio`, `daemon`, `sse`, `docker`, `skills` | stdio (default), daemon (SSE), docker, or skills (no MCP server) |
+| `--global`                   | -       | -                                            | use clean command path (requires global install)                 |
+| `--force`                    | -       | -                                            | override existing configuration                                  |
+| `--dry-run`                  | -       | -                                            | preview without writing                                          |
+| `--json`                     | -       | -                                            | print machine-readable JSON instead of Terminal UI               |
+| `--no-wizard`                | -       | -                                            | skip the full-screen wizard even on a terminal                   |
+| `--no-interactive`           | -       | -                                            | run the plan with defaults and no wizard                         |
+| `--rules`                    | -       | -                                            | write agent instruction files                                    |
+| `--no-rules`                 | -       | -                                            | skip agent instruction files                                     |
+| `--commands`                 | -       | -                                            | write agent slash commands                                       |
+| `--no-commands`              | -       | -                                            | skip agent slash commands                                        |
+| `--hooks`                    | -       | -                                            | install guard hooks (Claude)                                     |
+| `--no-hooks`                 | -       | -                                            | skip guard hooks                                                 |
+| `--skills`                   | -       | -                                            | install the bundled rule-* skills                                 |
+| `--no-skills`                | -       | -                                            | skip the bundled skills                                          |
+| `--service`                  | -       | -                                            | register the platform daemon service                             |
+| `--no-service`               | -       | -                                            | skip the platform daemon service                                 |
+| `--doctor`                   | -       | -                                            | run the health check at the end                                  |
+| `--no-doctor`                | -       | -                                            | skip the health check                                            |
+| `--commands-preset <name>`   | -       | `minimal`, `standard`, `full`                | which commands to write: minimal, standard or full               |
+| `--commands-families <list>` | -       | -                                            | comma-separated: areas, personas, tasks                          |
+| `--commands-areas <list>`    | -       | -                                            | comma-separated area names, e.g. frontend,data                   |
+| `--commands-skills <list>`   | -       | -                                            | comma-separated skill names                                      |
 
 ## rule-mcp uninstall
 
@@ -133,11 +152,54 @@ rule-mcp uninstall
 
 **Options**
 
-| Flag             | Default | Choices | Description                                        |
-| ---------------- | ------- | ------- | -------------------------------------------------- |
-| `--agent <name>` | all     | -       | target agent, or 'all' for every configured agent  |
-| `--dry-run`      | -       | -       | preview without removing                           |
-| `--json`         | -       | -       | print machine-readable JSON instead of Terminal UI |
+| Flag               | Default | Choices | Description                                        |
+| ------------------ | ------- | ------- | -------------------------------------------------- |
+| `--agent <name>`   | all     | -       | target agent, or 'all' for every configured agent  |
+| `--dry-run`        | -       | -       | preview without removing                           |
+| `--json`           | -       | -       | print machine-readable JSON instead of Terminal UI |
+| `--no-wizard`      | -       | -       | skip the full-screen wizard even on a terminal     |
+| `--no-interactive` | -       | -       | run the plan with defaults and no wizard           |
+| `--purge`          | -       | -       | also remove the runtime home and caches            |
+| `--keep-config`    | -       | -       | keep user configuration when purging               |
+
+## rule-mcp setup
+
+Full-screen install/uninstall wizard (falls back to flags when piped)
+
+```sh
+rule-mcp setup
+```
+
+**Options**
+
+| Flag                         | Default | Choices                       | Description                                         |
+| ---------------------------- | ------- | ----------------------------- | --------------------------------------------------- |
+| `--agent <name>`             | -       | -                             | narrow the run to one target                        |
+| `--mode <name>`              | stdio   | -                             | stdio (default), daemon (SSE), or docker            |
+| `--uninstall`                | -       | -                             | run the uninstall direction                         |
+| `--rules`                    | -       | -                             | write agent instruction files                       |
+| `--no-rules`                 | -       | -                             | skip agent instruction files                        |
+| `--commands`                 | -       | -                             | write agent slash commands                          |
+| `--no-commands`              | -       | -                             | skip agent slash commands                           |
+| `--hooks`                    | -       | -                             | install guard hooks (Claude)                        |
+| `--no-hooks`                 | -       | -                             | skip guard hooks                                    |
+| `--skills`                   | -       | -                             | install the bundled rule-* skills                    |
+| `--no-skills`                | -       | -                             | skip the bundled skills                             |
+| `--service`                  | -       | -                             | register the platform daemon service                |
+| `--no-service`               | -       | -                             | skip the platform daemon service                    |
+| `--doctor`                   | -       | -                             | run the health check at the end                     |
+| `--no-doctor`                | -       | -                             | skip the health check                               |
+| `--commands-preset <name>`   | -       | `minimal`, `standard`, `full` | which commands to write: minimal, standard or full  |
+| `--commands-families <list>` | -       | -                             | comma-separated: areas, personas, tasks             |
+| `--commands-areas <list>`    | -       | -                             | comma-separated area names, e.g. frontend,data      |
+| `--commands-skills <list>`   | -       | -                             | comma-separated skill names                         |
+| `--purge`                    | -       | -                             | also remove the runtime home and caches (uninstall) |
+| `--keep-config`              | -       | -                             | keep user configuration when purging                |
+| `--force`                    | -       | -                             | override existing configuration                     |
+| `--dry-run`                  | -       | -                             | preview without writing                             |
+| `--no-wizard`                | -       | -                             | run the plan with flags and no wizard               |
+| `--no-interactive`           | -       | -                             | run the plan with defaults and no wizard            |
+| `--json`                     | -       | -                             | print machine-readable output instead of the wizard |
 
 ## rule-mcp tools
 

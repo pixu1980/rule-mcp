@@ -176,16 +176,17 @@ knob documented above can be traced to the code that answers it.
 | `RULE_MCP_ROLES_DIR`                    | `src/core/review/roles/_catalog.js`                                                                                                                                                                             |
 | `RULE_MCP_ROLES_OVERLAY_DIR`            | `src/core/review/_overlays.js`                                                                                                                                                                                  |
 | `RULE_MCP_SKILL_UNIVERSE`               | `src/tools/router/_skills.js`                                                                                                                                                                                   |
-| `RULE_MCP_SSE_TOKEN`                    | `src/transport/_sse-auth.js`                                                                                                                                                                                    |
+| `RULE_MCP_SKIP_GLOBAL_LINK`             | `src/cli/setup/_shim-apply.js`, `src/cli/setup/_shim.js`                                                                                                                                                        |
+| `RULE_MCP_SSE_TOKEN`                    | `src/cli/setup/_docker.js`, `src/transport/_sse-auth.js`                                                                                                                                                        |
 | `RULE_MCP_STATE_DIR`                    | `src/cli/paths/_project.js`, `src/cli/paths/_runtime.js`                                                                                                                                                        |
 | `RULE_MCP_SUPPRESS_MIN_LINES`           | `src/core/agents/_token-pipeline.js`                                                                                                                                                                            |
 | `RULE_MCP_TEST_SLOW_CHECK_MS`           | `src/core/guardrails/guarded/_thread.js`                                                                                                                                                                        |
 | `RULE_MCP_UPDATE_REMOTE`                | `src/core/self-update/_banner.js`, `src/core/self-update/_config.js`, `src/tools/_update.js`                                                                                                                    |
 | `RULE_MCP_UPDATE_REQUIRE_SIGNATURE`     | `src/core/self-update/_banner.js`, `src/core/self-update/_run.js`, `src/tools/_update.js`                                                                                                                       |
 
-38 read by the code, 40 documented in the table above.
+39 read by the code, 40 documented in the table above.
 
-Nothing the code reads is undocumented.
+Read but undocumented: `RULE_MCP_SKIP_GLOBAL_LINK`.
 
 Documented but read nowhere in `src/` or `bin/`: `RULE_MCP_TOKENSAVE_AUTOTRACK`, `RULE_MCP_AUTO_UPDATE`.
 
