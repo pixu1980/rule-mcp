@@ -454,8 +454,13 @@ pix-galaxy-mcp daemon start|stop|status|logs
 pix-galaxy-mcp daemon install|uninstall|enable|disable
 
 # Agent integration
+pix-galaxy-mcp setup [--uninstall] [--agent <name>] [--mode stdio|daemon|docker] [--dry-run]
 pix-galaxy-mcp install --agent <name> [--mode stdio|daemon|docker] [--global] [--dry-run] [--force]
 pix-galaxy-mcp uninstall --agent <name> [--dry-run]
+
+# Which slash commands the setup writes (piped runs, where nothing can ask)
+pix-galaxy-mcp setup --no-wizard --commands-preset minimal|standard|full
+pix-galaxy-mcp setup --no-wizard --commands-families areas --commands-areas frontend,data
 
 # Tools (MCP tool calls from CLI)
 pix-galaxy-mcp tools list [--json]
