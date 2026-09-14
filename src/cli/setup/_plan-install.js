@@ -12,10 +12,10 @@ import { agentInstallTask, runtimeHomeTask, shimTask } from "./_task-core.js";
 import { commandsTask, dockerTask, doctorTask, rulesTask, serviceTask, skillsTask } from "./_task-extras.js";
 
 /**
- * @param {{ agents?: string[], mode?: string, extras?: object, force?: boolean, context?: object, selection?: object|null, minimal?: boolean }} answers
+ * @param {{ agents?: string[], mode?: string, extras?: object, force?: boolean, context?: object, selection?: object|null, minimal?: boolean, surface?: object|null }} answers
  * @returns {Array<{ id: string, title: string, detail: string, run: Function }>}
  */
-export function buildInstallPlan({ agents = [], mode = "stdio", extras = {}, force = false, context = {}, selection = null, minimal } = {}) {
+export function buildInstallPlan({ agents = [], mode = "stdio", extras = {}, force = false, context = {}, selection = null, minimal, surface } = {}) {
   const plan = [runtimeHomeTask()];
 
   if (context.hasLocalBin) {
@@ -27,7 +27,7 @@ export function buildInstallPlan({ agents = [], mode = "stdio", extras = {}, for
   // than a task the plan can leave out. `extras` only ever carries the steps
   // that were kept, so the test is presence - `!== false` was true for an
   // absent key, which made the hooks impossible to decline.
-  plan.push(...agents.map((agent) => agentInstallTask(agent, mode, force, extras.hooks === true, minimal)));
+  plan.push(...agents.map((agent) => agentInstallTask(agent, mode, force, extras.hooks === true, minimal, surface)));
 
   if (extras.rules) {
     plan.push(rulesTask(agents));

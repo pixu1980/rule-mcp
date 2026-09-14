@@ -11,6 +11,7 @@
 
 import { MINIMAL_ENV_VAR, normalizeInstallMode } from "../installers/index.js";
 import { selectionOf } from "../install/_selection-flags.js";
+import { surfaceOf } from "../install/_surface-flags.js";
 
 /** Optional steps that run unless the caller opts out. */
 export const DEFAULT_EXTRAS = ["rules", "commands", "hooks", "doctor"];
@@ -108,7 +109,7 @@ export function resolveExtras(options = {}) {
  * Normalize every flag into the shape the apps and the plain runner expect.
  *
  * @param {object} options
- * @returns {{ mode: string, agents: string[]|null, extras: string[], selection: object|null, minimal: boolean|undefined, dryRun: boolean, force: boolean, purge: boolean, keepConfig: boolean, interactive: boolean }}
+ * @returns {{ mode: string, agents: string[]|null, extras: string[], selection: object|null, minimal: boolean|undefined, surface: object|null, dryRun: boolean, force: boolean, purge: boolean, keepConfig: boolean, interactive: boolean }}
  */
 export function resolveSetupOptions(options = {}) {
   const mode = normalizeInstallMode(options.mode ?? "stdio");
@@ -118,6 +119,10 @@ export function resolveSetupOptions(options = {}) {
     // `--minimal` / `--no-minimal` choose the installed server surface;
     // absent leaves the saved config alone (see `applyMinimalEnv`).
     minimal: options.minimal,
+    // The Surface step answers apart from the command files; absent leaves
+    // the saved server config alone (see `applySurfaceEnv`). A flag arrives
+    // as its spec string, the wizard as its answer: both normalize to one.
+    surface: typeof options.surface === "string" ? surfaceOf({ surface: options.surface }) : (options.surface ?? null),
     // `--agent <name>` narrows the run to one target; absent means "whatever
     // detection found", which the caller resolves.
     agents: options.agent && options.agent !== "all" ? [options.agent] : null,

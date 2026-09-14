@@ -10,6 +10,7 @@
 
 import { entrypoint } from "../commands/_shared.js";
 import { installAgent } from "../install/index.js";
+import { applySurfaceEnv, surfaceSpec } from "../install/_surface-flags.js";
 import { applyMinimalEnv } from "./_options.js";
 import { uninstallFromAgent } from "../_uninstall.js";
 import { ensureRuntimeHome } from "./_runtime-home.js";
@@ -74,16 +75,18 @@ export const shimRemovalTask = () => ({
  *
  * `hooks` reaches the Claude installer, which is the only one that writes a
  * PreToolUse guard: a user who declined the guard screen must not get one
- * anyway because the agent screen selected Claude. `minimal` lands in the
- * process env just before the write, which the writers mirror into the
- * server env (see cli/installers/_env.js).
+ * anyway because the agent screen selected Claude. `minimal` and `surface`
+ * land in the process env just before the write, which the writers mirror
+ * into the server env (see cli/installers/_env.js); an answered Surface
+ * step owns the surface, the older toggle only applies when it was skipped.
  */
-export const agentInstallTask = (agent, mode, force, hooks = true, minimal) => ({
+export const agentInstallTask = (agent, mode, force, hooks = true, minimal, surface) => ({
   id: `agent:${agent}`,
   title: `Configure ${agent}`,
-  detail: `mode ${mode}${agent === "claude" && !hooks ? ", no guard hooks" : ""}${minimal === true ? ", minimal tools" : ""}`,
+  detail: `mode ${mode}${agent === "claude" && !hooks ? ", no guard hooks" : ""}${minimal === true && !surface ? ", minimal tools" : ""}${surface ? `, ${surfaceSpec(surface)} tools` : ""}`,
   run: ({ dryRun }) => {
-    applyMinimalEnv(minimal);
+    applyMinimalEnv(surface ? undefined : minimal);
+    applySurfaceEnv(surface);
 
     const result = installAgent({ agent, entrypoint, dryRun, force, mode, hooks });
     const outcome = result.installed[agent] ?? {};
@@ -92,7 +95,9 @@ export const agentInstallTask = (agent, mode, force, hooks = true, minimal) => (
       return { status: "warn", summary: outcome.error };
     }
 
-    return { status: "ok", summary: dryRun ? "would configure" : "configured" };
+    const notes = result.warnings?.length ? ` - ${result.warnings.join("; ")}` : "";
+
+    return { status: "ok", summary: `${dryRun ? "would configure" : "configured"}${notes}` };
   },
 });
 

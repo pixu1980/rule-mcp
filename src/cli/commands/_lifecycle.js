@@ -1,14 +1,17 @@
 /** Install and uninstall commands (agent catalog + service). */
 
 import { entrypoint, print, printJson } from "./_shared.js";
+import { applySurfaceEnv, surfaceOf } from "../install/_surface-flags.js";
 import { applyMinimalEnv } from "../setup/_options.js";
 import { formatInstallResult, formatUninstallResult } from "../_tui-formats.js";
 import { installAgent } from "../install/index.js";
 import { uninstallFromAgent } from "../_uninstall.js";
 function installCommand(opts) {
-  // The narrow path owns no plan, but the flag still has to land: same
+  // The narrow path owns no plan, but both answers still have to land: same
   // mirror the plan tasks use (see cli/installers/_env.js).
-  applyMinimalEnv(opts.minimal);
+  const surface = typeof opts.surface === "string" ? surfaceOf({ surface: opts.surface }) : (opts.surface ?? null);
+  applyMinimalEnv(surface ? undefined : opts.minimal);
+  applySurfaceEnv(surface);
 
   const result = installAgent({
     agent: opts.agent,

@@ -27,7 +27,7 @@ import { useSelection } from "./_use-selection.js";
  *
  * @param {{ title: string, items: object[], initial: string[], mode?: string, columns: number, height: number, onSubmit: Function, onBack: Function }} props
  */
-function Stage({ title, items, initial, mode = "check", columns, height, onSubmit, onBack }) {
+export function Stage({ title, items, initial, mode = "check", columns, height, onSubmit, onBack }) {
   const { cursor, selected, current } = useSelection(items, { initial, mode, onSubmit, onBack });
 
   return h(Box, { flexDirection: "column" }, h(Text, { color: COLORS.accentSoft, bold: true }, title), h(ListDetail, { items, cursor, selected, current, mode, height, columns }));

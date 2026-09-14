@@ -11,9 +11,7 @@ import { Option } from "commander";
 
 import { commanderIo } from "./_register-wizard.js";
 
-/** How the server is reached, plus `skills`, which configures no server (ADR 079). */
-const INSTALL_MODES = ["stdio", "daemon", "sse", "docker", "skills"];
-const MODE_HELP = "stdio (default), daemon (SSE), docker, or skills (no MCP server)";
+const MODE_HELP = "stdio (default), daemon (SSE), docker, or skills (no MCP server, ADR 079)";
 
 /**
  * Options only the wizard's plan performs, by the flag that asks for them.
@@ -64,7 +62,7 @@ export function registerInstallCommand(program) {
     .command("install")
     .description("Install rule-mcp into an agent/IDE (edits mcp.json)")
     .option("--agent <name>", "target agent, or 'all' for every supported agent", "all")
-    .addOption(new Option("--mode <name>", MODE_HELP).choices(INSTALL_MODES))
+    .addOption(new Option("--mode <name>", MODE_HELP).choices(["stdio", "daemon", "sse", "docker", "skills"]))
     .option("--global", "use clean command path (requires global install)")
     .option("--force", "override existing configuration")
     .option("--dry-run", "preview without writing")
@@ -80,6 +78,7 @@ export function registerInstallCommand(program) {
     .option("--skills", "install the bundled rule-* skills")
     .option("--no-skills", "skip the bundled skills")
     .option("--minimal", "minimal server tool surface (--no-minimal for full)")
+    .option("--surface <spec>", "server tool surface: minimal, standard, full, areas:<a,b> or skills:<s,...>")
     .option("--service", "register the platform daemon service")
     .option("--no-service", "skip the platform daemon service")
     .option("--doctor", "run the health check at the end")
@@ -118,6 +117,7 @@ export function registerInstallCommand(program) {
         dryRun: options.dryRun,
         json: options.json,
         minimal: options.minimal,
+        surface: options.surface,
       });
     });
 }
