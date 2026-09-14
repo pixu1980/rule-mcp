@@ -50,10 +50,32 @@ export const MODE_ITEMS = [
 ];
 
 /**
+ * The mode rows for the agents on the previous screen.
+ *
+ * Daemon and docker are discouraged, never removed, when someone selected
+ * cannot use them: the row names who, so the reason travels with the choice
+ * instead of arriving three steps later as a per-agent failure.
+ *
+ * @param {string[]} [agents]
+ */
+export function modeItemsFor(agents = []) {
+  const unsupported = agents.filter((agent) => !remoteModeAgents.has(agent));
+
+  if (agents.length > 0 && unsupported.length === 0) {
+    return MODE_ITEMS;
+  }
+
+  const note = `not recommended${unsupported.length > 0 ? ` for ${unsupported.join(", ")}` : ""}`;
+
+  return MODE_ITEMS.map((item) => (item.id === "stdio" ? item : { ...item, label: `${item.label} (${note})` }));
+}
+
+/**
  * @param {{ initial: string, columns: number, agents: string[], onSubmit: Function, onBack: Function }} props
  */
-export function StepMode({ initial, columns, agents, onSubmit, onBack }) {
-  const { cursor, selected, current } = useSelection(MODE_ITEMS, {
+export function StepMode({ initial, columns, agents = [], onSubmit, onBack }) {
+  const items = modeItemsFor(agents);
+  const { cursor, selected, current } = useSelection(items, {
     initial: [initial],
     mode: "radio",
     onSubmit: (id) => onSubmit(id),
@@ -65,7 +87,7 @@ export function StepMode({ initial, columns, agents, onSubmit, onBack }) {
     Box,
     { flexDirection: "column" },
     h(Text, { color: COLORS.accentSoft, bold: true }, "Install mode"),
-    h(ListDetail, { items: MODE_ITEMS, cursor, selected, current, mode: "radio", height: 6, columns }),
+    h(ListDetail, { items, cursor, selected, current, mode: "radio", height: 6, columns }),
     unsupported.length > 0
       ? h(
           Box,

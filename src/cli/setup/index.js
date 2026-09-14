@@ -78,6 +78,7 @@ async function install(options) {
     context,
     selection: options.selection,
     minimal: options.minimal,
+    surface: options.surface,
   });
   const { counts } = await runPlain({
     plan,

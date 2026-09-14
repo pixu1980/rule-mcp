@@ -5,8 +5,8 @@
  *
  * Split out of the app so the app is what it claims to be: state, and the
  * decision of which screen is holding it. Every entry is a thunk, so only the
- * screen on the rail is built - a view that constructed all seven would run
- * eight layouts per keystroke.
+ * screen on the rail is built - a view that constructed all eight would run
+ * nine layouts per keystroke.
  */
 
 import { h } from "./_h.js";
@@ -20,9 +20,10 @@ import { StepExtras } from "./_step-extras.js";
 import { StepMode } from "./_step-mode.js";
 import { StepPreflight } from "./_step-preflight.js";
 import { StepReview } from "./_step-review.js";
+import { StepSurface } from "./_step-surface.js";
 
 /**
- * Build the eight install screens over one snapshot of wizard state.
+ * Build the nine install screens over one snapshot of wizard state.
  *
  * @param {object} state - the app's state and the setters that move it
  * @returns {Array<() => object>} one thunk per step
@@ -49,6 +50,8 @@ export function installViews(state) {
     setMode,
     setSelection,
     setStep,
+    setSurface,
+    surface,
     quit,
   } = state;
 
@@ -103,13 +106,24 @@ export function installViews(state) {
         onBack: () => setStep(3),
       }),
     () =>
+      h(StepSurface, {
+        initial: surface,
+        columns,
+        height: body,
+        onSubmit: (picked) => {
+          setSurface(picked);
+          setStep(6);
+        },
+        onBack: () => setStep(extras.includes("commands") ? 4 : 3),
+      }),
+    () =>
       h(StepReview, {
         plan,
         dryRun,
         height: body,
         onToggleDryRun: () => setDryRun((current) => !current),
-        onSubmit: () => setStep(6),
-        onBack: () => setStep(extras.includes("commands") ? 4 : 3),
+        onSubmit: () => setStep(7),
+        onBack: () => setStep(5),
       }),
     () => h(StepApply, { results, activeIndex: active, dryRun, height: body }),
     () =>

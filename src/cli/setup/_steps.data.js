@@ -7,7 +7,7 @@
 
 /** The rail labels, in order. */
 export const STEP_NAMES = {
-  install: ["Preflight", "Agents", "Mode", "Extras", "Commands", "Review", "Install", "Done"],
+  install: ["Preflight", "Agents", "Mode", "Extras", "Commands", "Surface", "Review", "Install", "Done"],
   uninstall: ["Select", "Purge", "Review", "Remove", "Done"],
 };
 
@@ -28,6 +28,7 @@ export const HINTS = {
     [MOVE, TOGGLE, ALL, NEXT, BACK, QUIT],
     [MOVE, NEXT, BACK, QUIT],
     [MOVE, TOGGLE, NEXT, BACK, QUIT],
+    [MOVE, TOGGLE, ALL, NEXT, BACK, QUIT],
     [MOVE, TOGGLE, ALL, NEXT, BACK, QUIT],
     [DRY, RUN, BACK, QUIT],
     [QUIT],

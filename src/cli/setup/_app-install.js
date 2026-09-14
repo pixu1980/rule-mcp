@@ -2,10 +2,8 @@
  * @module cli/setup/app-install
  *
  * The install wizard: step state, and which view the frame is holding.
- *
- * Every step is a pure view over this state, so going back is a decrement
- * rather than an undo - nothing is written until the review step is
- * confirmed. The screens themselves live in `_views-install.js`.
+ * Steps are pure views over state, so back is a decrement and nothing is
+ * written until review is confirmed. Screens live in `_views-install.js`.
  */
 
 import { Box, Text, h, useApp, useEffect, useInput, useMemo, useState, useStdout } from "./_h.js";
@@ -23,8 +21,8 @@ import { installViews } from "./_views-install.js";
 import { useViewport } from "./_viewport.js";
 
 /** The step that runs the plan, and the one that reports it. */
-const APPLY_STEP = 6;
-const DONE_STEP = 7;
+const APPLY_STEP = 7;
+const DONE_STEP = 8;
 
 /**
  * @param {{ defaults?: object, onFinish?: Function }} props
@@ -37,8 +35,9 @@ export function InstallApp({ defaults = {}, onFinish }) {
   const [agents, setAgents] = useState(defaults.agents ?? null);
   const [mode, setMode] = useState(defaults.mode ?? "stdio");
   const [extras, setExtras] = useState(defaults.extras ?? DEFAULT_EXTRAS);
-  // Null is "every command": the commands step replaces it with what it was told.
+  // Null is every command and every tool: each step replaces what it was told.
   const [selection, setSelection] = useState(defaults.selection ?? null);
+  const [surface, setSurface] = useState(defaults.surface ?? null);
   const [dryRun, setDryRun] = useState(Boolean(defaults.dryRun));
   const [results, setResults] = useState([]);
   const [active, setActive] = useState(-1);
@@ -66,8 +65,9 @@ export function InstallApp({ defaults = {}, onFinish }) {
         context,
         selection,
         minimal: extras.includes("minimal") || undefined,
+        surface,
       }),
-    [selectedAgents, mode, extras, defaults.force, context, selection],
+    [selectedAgents, mode, extras, defaults.force, context, selection, surface],
   );
 
   const quit = () => {
@@ -99,14 +99,12 @@ export function InstallApp({ defaults = {}, onFinish }) {
     });
   }, [step, plan, dryRun]);
 
-  // Frame chrome costs 7 rows (two bordered boxes plus the step rail) and a
-  // step costs 4 more for its title, spacing and footer line. Overshooting
-  // this makes Yoga clip the list, which drops rows silently.
-  const body = Math.max(5, rows - 14);
+  // Frame chrome costs 7 rows plus the rail, a step 4 more; overshooting
+  // makes Yoga clip the list, which drops rows silently.
   const views = installViews({
     active,
     agents: selectedAgents,
-    body,
+    body: Math.max(5, rows - 14),
     catalog,
     checks,
     columns,
@@ -124,6 +122,8 @@ export function InstallApp({ defaults = {}, onFinish }) {
     setMode,
     setSelection,
     setStep,
+    setSurface,
+    surface,
     quit,
   });
 

@@ -20,6 +20,7 @@ import { registerGatewayTool } from "../../tools/gateway/index.js";
 import { registerApplyTool } from "../../tools/apply/index.js";
 import { registerDetectTool } from "./_detect-tool.js";
 import { IS_MINIMAL_TOOLS, MINIMAL_ALLOWLIST } from "./_minimal.js";
+import { retainSurface } from "./_surface-retain.js";
 import { skillCache } from "./_lru.js";
 import { installSkillGuardrails } from "./_guardrail-layers.js";
 import { registerSkillTools } from "./_skill-tools.js";
@@ -94,9 +95,12 @@ export async function loadAllSkills(force = false) {
   registerTemplateTool();
 
   // Enforce the minimal surface as a hard allowlist - guarantees a small, fixed
-  // tool list regardless of what the register* calls above added.
+  // tool list regardless of what the register* calls above added. Otherwise
+  // enforce the installer's surface answer, if it gave one; absent is full.
   if (IS_MINIMAL_TOOLS) {
     retainTools(MINIMAL_ALLOWLIST);
+  } else {
+    retainSurface();
   }
 }
 /**
