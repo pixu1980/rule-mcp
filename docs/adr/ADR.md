@@ -8,6 +8,7 @@ this directory are the source of truth; this index is generated from them by
 
 | #                                                                                                                       | Title                                                                                                     | Date       | Status     | Tags                                                                                |
 | ----------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- | ---------- | ---------- | ----------------------------------------------------------------------------------- |
+| [081](081-install-uninstall-rework-keeps-current-stack-steps-and-contents-only.md)                                      | Install/uninstall rework keeps current stack, steps and contents only                                     | 2026-09-14 | accepted   | install, wizard, architecture                                                       |
 | [080](080-the-setup-wizard-is-the-installer-and-it-asks-which-commands-to-write.md)                                     | The setup wizard is the installer, and it asks which commands to write                                    | 2026-09-13 | accepted   | installer, cli, wizard, commands, ux                                                |
 | [079](079-skills-own-their-guardrails-and-three-layers-resolve-both-skills-and-personas.md)                             | Skills own their guardrails, and three layers resolve both skills and personas                            | 2026-09-12 | accepted   | architecture, skills, guardrails, personas, extensibility                           |
 | [078](078-a-persona-topic-is-the-binding-scope-of-the-run.md)                                                           | A persona topic is the binding scope of the run                                                           | 2026-09-12 | accepted   | personas, prompts, review, tokensave                                                |
@@ -93,6 +94,7 @@ file. Where a line stops short the rest is in the ADR.
 
 | ADR                                                                                                                     | Decision                                                                                                                                                                                                                        | Consequence                                                                                                                                                                                                                    |
 | ----------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| [081](081-install-uninstall-rework-keeps-current-stack-steps-and-contents-only.md)                                      | The install/uninstall rework changes wizard steps and contents only (order, copy, offered choices, validation).                                                                                                                 | Upside: minimal regression risk, no dependency churn, the plain runner stays free.                                                                                                                                             |
 | [080](080-the-setup-wizard-is-the-installer-and-it-asks-which-commands-to-write.md)                                     | The wizard is the installer.                                                                                                                                                                                                    | One implementation, in node, tested on every platform without a terminal: `_options`, `_plan-*`, `_preflight`, `_scan` and `_run-plan` are pure or read-only, and only `_app-*`, `_step-*` and `_widget-*` know Ink exists.    |
 | [079](079-skills-own-their-guardrails-and-three-layers-resolve-both-skills-and-personas.md)                             | A skill owns the rules that judge its subject.                                                                                                                                                                                  | A project versions its own rules beside its code and a team shares them through git.                                                                                                                                           |
 | [078](078-a-persona-topic-is-the-binding-scope-of-the-run.md)                                                           | The topic becomes the binding scope everywhere the template speaks: the action line names the scope instead of the project, a dedicated 'Scope: binding' section forbids reading, auditing or reporting outside it (with a...   | A user request like /rule-audit-security the SSE daemon now produces a run confined to that scope, and repeated scoped runs no longer mark whole-project findings resolved by silence.                                          |
@@ -176,6 +178,22 @@ file. Where a line stops short the rest is in the ADR.
 Tags carried by 3 or more decisions. A decision appears under every
 theme it carries, and the early ADRs that predate the tag field are listed last.
 
+### architecture
+
+- [081](081-install-uninstall-rework-keeps-current-stack-steps-and-contents-only.md) Install/uninstall rework keeps current stack, steps and contents only
+- [079](079-skills-own-their-guardrails-and-three-layers-resolve-both-skills-and-personas.md) Skills own their guardrails, and three layers resolve both skills and personas
+- [061](061-one-file-per-rule-with-underscore-barrel-folders-and-a-size-ratchet.md) One file per rule with underscore-barrel folders and a size ratchet
+- [060](060-reorganize-scripts-src-tests-with-150-line-code-splitting.md) Reorganize scripts, src and tests with 150-line code splitting
+- [034](034-registry-driven-clean-slash-commands-for-every-agent-and-ide.md) Registry-driven clean slash commands for every agent and IDE
+- [033](033-the-tool-surface-is-skills-and-nothing-else.md) The tool surface is ./skills and nothing else
+- [032](032-pin-the-self-update-remote-and-drop-root-in-the-container.md) Pin the self-update remote and drop root in the container
+- [031](031-interview-servers-enforce-same-origin-and-own-their-process-lifecycle.md) Interview servers enforce same-origin and own their process lifecycle
+- [030](030-bind-write-authorization-to-destinations-not-just-content.md) Bind write authorization to destinations, not just content
+- [020](020-use-a-persistent-local-bearer-token-for-daemon-transport.md) use a persistent local bearer token for daemon transport
+- [019](019-fail-closed-mcp-enforcement-and-reusable-agent-commands.md) fail closed mcp enforcement and reusable agent commands
+- [018](018-forms-per-framework-merger-and-distribution.md) forms per framework merger and distribution
+- [012](012-forms-per-framework.md) Forms per Framework - Merger & Distribution
+
 ### skills
 
 - [079](079-skills-own-their-guardrails-and-three-layers-resolve-both-skills-and-personas.md) Skills own their guardrails, and three layers resolve both skills and personas
@@ -191,21 +209,6 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [009](009-scaffold-skill-consolidation.md) scaffold skill consolidation
 - [005](005-backend-framework-skills.md) Backend Framework Skills
 - [004](004-scaffold-consolidation.md) Scaffold Skill Consolidation
-
-### architecture
-
-- [079](079-skills-own-their-guardrails-and-three-layers-resolve-both-skills-and-personas.md) Skills own their guardrails, and three layers resolve both skills and personas
-- [061](061-one-file-per-rule-with-underscore-barrel-folders-and-a-size-ratchet.md) One file per rule with underscore-barrel folders and a size ratchet
-- [060](060-reorganize-scripts-src-tests-with-150-line-code-splitting.md) Reorganize scripts, src and tests with 150-line code splitting
-- [034](034-registry-driven-clean-slash-commands-for-every-agent-and-ide.md) Registry-driven clean slash commands for every agent and IDE
-- [033](033-the-tool-surface-is-skills-and-nothing-else.md) The tool surface is ./skills and nothing else
-- [032](032-pin-the-self-update-remote-and-drop-root-in-the-container.md) Pin the self-update remote and drop root in the container
-- [031](031-interview-servers-enforce-same-origin-and-own-their-process-lifecycle.md) Interview servers enforce same-origin and own their process lifecycle
-- [030](030-bind-write-authorization-to-destinations-not-just-content.md) Bind write authorization to destinations, not just content
-- [020](020-use-a-persistent-local-bearer-token-for-daemon-transport.md) use a persistent local bearer token for daemon transport
-- [019](019-fail-closed-mcp-enforcement-and-reusable-agent-commands.md) fail closed mcp enforcement and reusable agent commands
-- [018](018-forms-per-framework-merger-and-distribution.md) forms per framework merger and distribution
-- [012](012-forms-per-framework.md) Forms per Framework - Merger & Distribution
 
 ### installer
 
