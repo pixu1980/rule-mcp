@@ -26,7 +26,7 @@ import { hermeticEnv, root } from "./_purge.fixture.mjs";
       env: { ...hermeticEnv(home, path), PIX_GALAXY_MCP_SKIP_GLOBAL_LINK: "1" },
       timeout: 180_000,
     });
-    assert.match(output, /Runtime home ready/, "install.sh must report the runtime home creation");
+    assert.match(output, /Runtime home/, "install.sh must report the runtime home creation");
     assert.ok(existsSync(join(home, ".pix-galaxy-mcp")), "install.sh must recreate ~/.pix-galaxy-mcp/");
     assert.ok(existsSync(join(home, ".pix-galaxy-mcp", "state")), "install.sh must recreate state/");
     assert.ok(existsSync(join(home, ".pi", "agent", "mcp.json")), "pi must still be configured by the install");

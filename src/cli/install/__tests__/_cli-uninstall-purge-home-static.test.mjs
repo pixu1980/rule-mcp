@@ -1,25 +1,108 @@
-/** Static contract: the scripts name the runtime home and the purge/keep paths (bash + PowerShell). */
+/**
+ * The runtime home is created by an install and taken by a purge.
+ *
+ * Regression: `uninstall --purge` removed `~/.config/pix-galaxy-mcp/` and left
+ * `~/.pix-galaxy-mcp/` - the daemon token, the telemetry, the caches and the
+ * per-project recordings - behind. Reinstalling then started from stale state,
+ * and the promise the word "purge" makes was silently broken.
+ *
+ * This was a static contract over four shell scripts. They are bootstraps now
+ * (ADR 080): the layout and the purge list are node, and so is the assertion.
+ *
+ * Every case runs in a child process with its own HOME. The config directory
+ * is resolved once, when `cli/installers/_env.js` is imported, so a test that
+ * swapped HOME in-process would write the switches into the real one.
+ */
 import { strict as assert } from "node:assert";
+import { execFileSync } from "node:child_process";
+import { existsSync, mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
+import { test } from "node:test";
 
-import { installPs1, installSh, uninstallPs1, uninstallSh } from "./_purge.fixture.mjs";
+const here = dirname(fileURLToPath(import.meta.url));
+const runtimeHome = join(here, "..", "..", "setup", "_runtime-home.js");
+// The module reaches server code through `@src/*`, which only resolves with
+// the hook every entry point registers.
+const aliasHook = join(here, "..", "..", "..", "..", "scripts", "alias-hook.mjs");
 
-// ── 1. install.sh must recreate the runtime home explicitly ────────────────
-assert.match(installSh, /PIX_HOME_DIR="\$HOME_DIR\/\.pix-galaxy-mcp"/, "install.sh must define the runtime home path (~/.pix-galaxy-mcp)");
-assert.match(
-  installSh,
-  /mkdir -p "\$PIX_HOME_DIR\/state" "\$PIX_HOME_DIR\/data" "\$PIX_HOME_DIR\/projects" "\$PIX_HOME_DIR\/config"/,
-  "install.sh must recreate state/, data/, projects/, config/ under ~/.pix-galaxy-mcp",
-);
+/** Evaluate one expression over the module in a child process with this HOME. */
+function inHome(home, call) {
+  const source = `
+    const { ensureRuntimeHome, purgeTargets } = await import(${JSON.stringify(runtimeHome)});
+    process.stdout.write(JSON.stringify(${call}));
+  `;
 
-// ── 2. uninstall.sh --purge must remove ~/.pix-galaxy-mcp/ ─────────────────
-assert.match(uninstallSh, /PIX_HOME_DIR="\$HOME_DIR\/\.pix-galaxy-mcp"/, "uninstall.sh must define the runtime home path (~/.pix-galaxy-mcp)");
-assert.match(uninstallSh, /rm -rf "\$PIX_HOME_DIR"/, "uninstall.sh --purge must delete the whole ~/.pix-galaxy-mcp/ directory");
-assert.match(uninstallSh, /KEEP_CONFIG.*== "true"[\s\S]*?Keeping runtime home/, "uninstall.sh --keep-config must keep the runtime home");
-assert.match(uninstallSh, /Also delete ~\/\.config\/pix-galaxy-mcp\/, ~\/\.pix-galaxy-mcp\/ and API keys/, "uninstall.sh --help must advertise both directories under --purge");
+  return JSON.parse(
+    execFileSync(process.execPath, ["--import", aliasHook, "--input-type=module", "-e", source], {
+      encoding: "utf8",
+      env: { ...process.env, HOME: home, PIX_GALAXY_MCP_HOME: "", PIX_GALAXY_MCP_STATE_DIR: "" },
+    }),
+  );
+}
 
-// ── 3. PowerShell parity ────────────────────────────────────────────────────
-assert.match(installPs1, /New-Item -ItemType Directory -Force.*\$pixHomeDir/s, "install.ps1 must recreate the runtime home directory");
-assert.match(uninstallPs1, /\$pixHomeDir = Join-Path \$HomeDir "\.pix-galaxy-mcp"/, "uninstall.ps1 must define the runtime home path");
-assert.match(uninstallPs1, /Remove-Item \$pixHomeDir -Recurse -Force/, "uninstall.ps1 -Purge must delete the whole ~/.pix-galaxy-mcp/ directory");
+/** A fake HOME carrying both directories a purge is expected to take. */
+function seeded() {
+  const home = mkdtempSync(join(tmpdir(), "pix-purge-home-"));
 
-console.log("  \u{2705} the scripts declare the runtime home and the purge/keep-config contract");
+  for (const dir of ["state", "projects", "data", "config"]) {
+    mkdirSync(join(home, ".pix-galaxy-mcp", dir), { recursive: true });
+  }
+
+  writeFileSync(join(home, ".pix-galaxy-mcp", "state", "sse-token"), "test-token\n");
+  mkdirSync(join(home, ".config", "pix-galaxy-mcp"), { recursive: true });
+  writeFileSync(join(home, ".config", "pix-galaxy-mcp", "keys.json"), "{}");
+
+  return home;
+}
+
+test("an install recreates the whole layout, not just the directory", () => {
+  const home = mkdtempSync(join(tmpdir(), "pix-home-"));
+
+  try {
+    const result = inHome(home, "ensureRuntimeHome({})");
+
+    for (const dir of ["state", "data", "projects", "config"]) {
+      assert.ok(existsSync(join(home, ".pix-galaxy-mcp", dir)), `${dir}/ must exist after an install`);
+    }
+
+    assert.equal(result.homeDir, join(home, ".pix-galaxy-mcp"));
+    assert.equal(result.settings, "written", "a fresh install defaults the switches file");
+    assert.ok(existsSync(join(home, ".config", "pix-galaxy-mcp", "env.json")), "the switches file is part of the install");
+  } finally {
+    rmSync(home, { recursive: true, force: true });
+  }
+});
+
+test("a dry run creates nothing", () => {
+  const home = mkdtempSync(join(tmpdir(), "pix-home-"));
+
+  try {
+    inHome(home, "ensureRuntimeHome({ dryRun: true })");
+
+    assert.ok(!existsSync(join(home, ".pix-galaxy-mcp")), "a preview must leave the machine as it found it");
+  } finally {
+    rmSync(home, { recursive: true, force: true });
+  }
+});
+
+test("a purge names the runtime home, the cache and the configuration", () => {
+  const home = seeded();
+
+  try {
+    const targets = inHome(home, "purgeTargets()");
+    const dirs = targets.map((target) => target.dir);
+
+    assert.ok(dirs.includes(join(home, ".pix-galaxy-mcp")), `the runtime home must be purged: ${dirs.join(", ")}`);
+    assert.ok(dirs.includes(join(home, ".config", "pix-galaxy-mcp")), `the configuration must be purged: ${dirs.join(", ")}`);
+    assert.ok(
+      targets.some((target) => target.id === "runtime-home" && target.files > 0),
+      "a purge counts what it will take, so the user can see it",
+    );
+
+    assert.deepEqual(targets.map((target) => target.id).sort(), ["compile-cache", "env-config", "runtime-home"], "three directories, and a purge takes all of them");
+  } finally {
+    rmSync(home, { recursive: true, force: true });
+  }
+});
