@@ -10,6 +10,7 @@
 
 import { entrypoint } from "../commands/_shared.js";
 import { installAgent } from "../install/index.js";
+import { applyMinimalEnv } from "./_options.js";
 import { uninstallFromAgent } from "../_uninstall.js";
 import { ensureRuntimeHome } from "./_runtime-home.js";
 import { ensureGlobalShim, removeGlobalShims } from "./_shim-apply.js";
@@ -73,13 +74,17 @@ export const shimRemovalTask = () => ({
  *
  * `hooks` reaches the Claude installer, which is the only one that writes a
  * PreToolUse guard: a user who declined the guard screen must not get one
- * anyway because the agent screen selected Claude.
+ * anyway because the agent screen selected Claude. `minimal` lands in the
+ * process env just before the write, which the writers mirror into the
+ * server env (see cli/installers/_env.js).
  */
-export const agentInstallTask = (agent, mode, force, hooks = true) => ({
+export const agentInstallTask = (agent, mode, force, hooks = true, minimal) => ({
   id: `agent:${agent}`,
   title: `Configure ${agent}`,
-  detail: `mode ${mode}${agent === "claude" && !hooks ? ", no guard hooks" : ""}`,
+  detail: `mode ${mode}${agent === "claude" && !hooks ? ", no guard hooks" : ""}${minimal === true ? ", minimal tools" : ""}`,
   run: ({ dryRun }) => {
+    applyMinimalEnv(minimal);
+
     const result = installAgent({ agent, entrypoint, dryRun, force, mode, hooks });
     const outcome = result.installed[agent] ?? {};
 

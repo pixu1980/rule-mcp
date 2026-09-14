@@ -9,7 +9,7 @@
  * is `undefined` rather than `false` when it is absent.
  */
 
-import { normalizeInstallMode } from "../installers/index.js";
+import { MINIMAL_ENV_VAR, normalizeInstallMode } from "../installers/index.js";
 import { selectionOf } from "../install/_selection-flags.js";
 
 /** Optional steps that run unless the caller opts out. */
@@ -57,9 +57,28 @@ export const wizardRuntimeNote = () =>
     : "";
 
 /**
+ * Carry a `--minimal` / `--no-minimal` answer into the process environment.
+ *
+ * The written server config mirrors the ambient value (see
+ * `cli/installers/_env.js`), so the flag only has to arrive before the plan
+ * runs. Absent touches nothing: neither a saved preference nor an ambient
+ * value is created or clobbered by saying nothing.
+ *
+ * @param {boolean|undefined} minimal
+ * @param {object} [env]
+ */
+export function applyMinimalEnv(minimal, env = process.env) {
+  if (minimal === true) {
+    env[MINIMAL_ENV_VAR] = "1";
+  } else if (minimal === false) {
+    env[MINIMAL_ENV_VAR] = "0";
+  }
+}
+
+/**
  * Which optional steps a non-interactive run should perform.
  *
- * @param {{ rules?: boolean, commands?: boolean, hooks?: boolean, skills?: boolean, service?: boolean, doctor?: boolean, mode?: string }} options
+ * @param {{ rules?: boolean, commands?: boolean, hooks?: boolean, skills?: boolean, service?: boolean, doctor?: boolean, minimal?: boolean, mode?: string }} options
  */
 export function resolveExtras(options = {}) {
   const extras = new Set(DEFAULT_EXTRAS);
@@ -76,6 +95,9 @@ export function resolveExtras(options = {}) {
   toggle("hooks", options.hooks);
   toggle("skills", options.skills);
   toggle("doctor", options.doctor);
+  // Minimal is not a step that runs, but the Extras screen is where the
+  // wizard asks it, so the flag pre-checks that row the same way.
+  toggle("minimal", options.minimal);
   // The platform service belongs to daemon mode and is on by default there.
   toggle("service", options.service ?? options.mode === "daemon");
 
@@ -86,13 +108,16 @@ export function resolveExtras(options = {}) {
  * Normalize every flag into the shape the apps and the plain runner expect.
  *
  * @param {object} options
- * @returns {{ mode: string, agents: string[]|null, extras: string[], selection: object|null, dryRun: boolean, force: boolean, purge: boolean, keepConfig: boolean, interactive: boolean }}
+ * @returns {{ mode: string, agents: string[]|null, extras: string[], selection: object|null, minimal: boolean|undefined, dryRun: boolean, force: boolean, purge: boolean, keepConfig: boolean, interactive: boolean }}
  */
 export function resolveSetupOptions(options = {}) {
   const mode = normalizeInstallMode(options.mode ?? "stdio");
 
   return {
     mode,
+    // `--minimal` / `--no-minimal` choose the installed server surface;
+    // absent leaves the saved config alone (see `applyMinimalEnv`).
+    minimal: options.minimal,
     // `--agent <name>` narrows the run to one target; absent means "whatever
     // detection found", which the caller resolves.
     agents: options.agent && options.agent !== "all" ? [options.agent] : null,

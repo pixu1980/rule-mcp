@@ -25,7 +25,7 @@ the package version from anywhere. An error exits 1 and prints to stderr;
 | [`serve`](#pix-galaxy-mcp-serve)                   | 4       | Start the MCP server (STDIO by default)                                       |
 | [`up`](#pix-galaxy-mcp-up)                         | 1       | Same as "serve --transport sse" (on-demand HTTP daemon)                       |
 | [`daemon`](#pix-galaxy-mcp-daemon)                 | 1       | Manage the MCP daemon (process and native platform services)                  |
-| [`install`](#pix-galaxy-mcp-install)               | 24      | Install pix-galaxy-mcp into an agent/IDE (edits mcp.json)                     |
+| [`install`](#pix-galaxy-mcp-install)               | 25      | Install pix-galaxy-mcp into an agent/IDE (edits mcp.json)                     |
 | [`uninstall`](#pix-galaxy-mcp-uninstall)           | 7       | Remove pix-galaxy-mcp from an agent/IDE                                       |
 | [`setup`](#pix-galaxy-mcp-setup)                   | 26      | Full-screen install/uninstall wizard (falls back to flags when piped)         |
 | [`tools`](#pix-galaxy-mcp-tools)                   | 1       | List or call MCP tools directly                                               |
@@ -133,6 +133,7 @@ pix-galaxy-mcp install
 | `--no-hooks`                 | -       | -                                            | skip guard hooks                                                 |
 | `--skills`                   | -       | -                                            | install the bundled pix-* skills                                 |
 | `--no-skills`                | -       | -                                            | skip the bundled skills                                          |
+| `--minimal`                  | -       | -                                            | minimal server tool surface (--no-minimal for full)              |
 | `--service`                  | -       | -                                            | register the platform daemon service                             |
 | `--no-service`               | -       | -                                            | skip the platform daemon service                                 |
 | `--doctor`                   | -       | -                                            | run the health check at the end                                  |

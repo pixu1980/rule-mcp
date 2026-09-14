@@ -37,8 +37,7 @@ export function InstallApp({ defaults = {}, onFinish }) {
   const [agents, setAgents] = useState(defaults.agents ?? null);
   const [mode, setMode] = useState(defaults.mode ?? "stdio");
   const [extras, setExtras] = useState(defaults.extras ?? DEFAULT_EXTRAS);
-  // Null is "every command", the same thing an install with no selection flag
-  // writes. The commands step replaces it with what it was told.
+  // Null is "every command": the commands step replaces it with what it was told.
   const [selection, setSelection] = useState(defaults.selection ?? null);
   const [dryRun, setDryRun] = useState(Boolean(defaults.dryRun));
   const [results, setResults] = useState([]);
@@ -66,6 +65,7 @@ export function InstallApp({ defaults = {}, onFinish }) {
         force: Boolean(defaults.force),
         context,
         selection,
+        minimal: extras.includes("minimal") || undefined,
       }),
     [selectedAgents, mode, extras, defaults.force, context, selection],
   );

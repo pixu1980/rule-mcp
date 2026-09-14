@@ -1,10 +1,15 @@
 /** Install and uninstall commands (agent catalog + service). */
 
 import { entrypoint, print, printJson } from "./_shared.js";
+import { applyMinimalEnv } from "../setup/_options.js";
 import { formatInstallResult, formatUninstallResult } from "../_tui-formats.js";
 import { installAgent } from "../install/index.js";
 import { uninstallFromAgent } from "../_uninstall.js";
 function installCommand(opts) {
+  // The narrow path owns no plan, but the flag still has to land: same
+  // mirror the plan tasks use (see cli/installers/_env.js).
+  applyMinimalEnv(opts.minimal);
+
   const result = installAgent({
     agent: opts.agent,
     force: opts.force,
