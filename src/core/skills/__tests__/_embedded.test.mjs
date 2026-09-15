@@ -24,6 +24,7 @@ test("every tool traces back to a rule-* directory in ./skills", () => {
   const ACTION = new Set([
     "pix_tool",
     "rule_tool_apply",
+    "rule_tool_audit",
     "rule_tool_check",
     "rule_tool_component",
     "rule_tool_compress",
@@ -34,6 +35,7 @@ test("every tool traces back to a rule-* directory in ./skills", () => {
     "rule_tool_plan",
     "rule_tool_plan_docs",
     "rule_tool_process_handon",
+    "rule_tool_review",
     "rule_tool_scaffold",
     "rule_tool_search",
     "rule_tool_stats",

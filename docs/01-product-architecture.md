@@ -819,8 +819,8 @@ Refresh with `pnpm census`; full inventories in `docs/07-` .. `docs/12-`.
 
 | Surface                   | Count | Defined in                                    |
 | ------------------------- | ----- | --------------------------------------------- |
-| MCP tools                 | 107   | `src/tools/*` via `src/tools/router/index.js` |
-| - action tools            | 17    | one per module, registered explicitly         |
+| MCP tools                 | 109   | `src/tools/*` via `src/tools/router/index.js` |
+| - action tools            | 19    | one per module, registered explicitly         |
 | - skill tools             | 90    | one per catalog skill, generated              |
 | MCP resources             | 188   | `src/resources/index.js`                      |
 | MCP prompts               | 154   | `src/prompts/index.js`                        |

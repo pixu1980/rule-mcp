@@ -1,12 +1,15 @@
 /**
  * @module tools/plan
  *
- * `rule_tool_plan` - ask an expert persona to audit this project and plan the
- * work (personas plan B.1).
+ * The persona operation tools: `rule_tool_plan`, `rule_tool_audit` and
+ * `rule_tool_review` (personas plan B.1).
  *
- * This is the composable entry point: a role id plus optional refinements.
- * The per-role prompts and agent commands are conveniences generated from the
- * same registry, so whatever this tool answers, they answer too.
+ * One composable entry point (`rule_tool_plan`, with an `operation`) plus one
+ * tool per operation, so a custom IDE that lists tools instead of slash
+ * commands can reach `/rule-audit-*` and `/rule-review-*` without knowing the
+ * `operation` parameter. The per-role prompts and agent commands are
+ * conveniences generated from the same registry, so whatever these tools
+ * answer, they answer too.
  */
 
 import { existsSync } from "node:fs";
@@ -41,61 +44,91 @@ function resolveRole(requested, overlays) {
   );
 }
 
-const PlanSchema = z.object({
+/** The arguments every persona operation tool shares. */
+const baseShape = {
   role: z.string().describe("Role id (security, privacy, a11y...)"),
-  operation: z.enum(OPERATIONS).optional().describe("Which document this run produces: plan, audit, or review (default: all three)"),
   years: z.number().int().positive().optional(),
   skills: z.array(z.string()).optional(),
   topic: z.string().optional().describe("Free-text request; becomes the binding scope of the run. Default: the whole project."),
   projectDir: z.string().optional(),
+};
+
+const PlanSchema = z.object({
+  ...baseShape,
+  operation: z.enum(OPERATIONS).optional().describe("Which document this run produces: plan, audit, or review (default: all three)"),
 });
 
-/** Register the rule_tool_plan tool. */
+const OperationSchema = z.object(baseShape);
+
+/**
+ * The handler both entry points share. `pinned` forces one operation, which is
+ * what makes `rule_tool_audit` a tool rather than an alias.
+ */
+const planHandler = (pinned) => async (arguments_) => {
+  const operation = pinned ?? arguments_.operation ?? "all";
+  const { roles: overlays, problems } = loadRoleOverlays({ projectDir: arguments_.projectDir });
+  const role = resolveRole(arguments_.role, overlays);
+
+  if (!role) {
+    const known = allRoles(overlays)
+      .map((entry) => `${entry.id} (${entry.status})`)
+      .join(", ");
+
+    return {
+      isError: true,
+      content: [{ type: "text", text: `Unknown role "${arguments_.role}". Available: ${known}.` }],
+    };
+  }
+
+  const filled = fillRoleTemplate(role, {
+    years: arguments_.years,
+    skills: arguments_.skills,
+    topic: arguments_.topic,
+    operation,
+    // The generator is deterministic: it checks for .tokensave/ here so a
+    // scoped prompt can state availability instead of asking the run to probe.
+    tokensave: existsSync(join(arguments_.projectDir ?? ".", ".tokensave")) ? "available" : undefined,
+  });
+  const graph = graphHealth(arguments_.projectDir ?? ".");
+  const withGraph = graph ? [filled, "", graph].join("\n") : filled;
+  // An overlay role is repository- or user-supplied text on its way to a
+  // model: it is data, and it says so (hardening 4.4).
+  const body = role.layer ? fenceUntrusted(withGraph, { label: `${role.layer} overlay role "${role.id}"` }) : withGraph;
+  const notes = problems.map((problem) => `- ${problem.file}: ${problem.reason}`);
+
+  return {
+    content: [
+      {
+        type: "text",
+        text: [body, ...(notes.length > 0 ? ["", "## Overlay files skipped", "", ...notes] : [])].join("\n"),
+      },
+    ],
+  };
+};
+
+/** Register the persona operation tools. */
 export function registerPlanTool() {
   registerTool({
     name: "rule_tool_plan",
     description: "Ask an expert review persona to audit, review or plan this project; returns the operation contract.",
     zodSchema: PlanSchema,
     advertise: ["role", "topic", "operation"],
-    handler: async (arguments_) => {
-      const { roles: overlays, problems } = loadRoleOverlays({ projectDir: arguments_.projectDir });
-      const role = resolveRole(arguments_.role, overlays);
+    handler: planHandler(null),
+  });
 
-      if (!role) {
-        const known = allRoles(overlays)
-          .map((entry) => `${entry.id} (${entry.status})`)
-          .join(", ");
+  registerTool({
+    name: "rule_tool_audit",
+    description: "Run an audit as an expert review persona; returns the audit operation contract.",
+    zodSchema: OperationSchema,
+    advertise: ["role", "topic"],
+    handler: planHandler("audit"),
+  });
 
-        return {
-          isError: true,
-          content: [{ type: "text", text: `Unknown role "${arguments_.role}". Available: ${known}.` }],
-        };
-      }
-
-      const filled = fillRoleTemplate(role, {
-        years: arguments_.years,
-        skills: arguments_.skills,
-        topic: arguments_.topic,
-        operation: arguments_.operation ?? "all",
-        // The generator is deterministic: it checks for .tokensave/ here so a
-        // scoped prompt can state availability instead of asking the run to probe.
-        tokensave: existsSync(join(arguments_.projectDir ?? ".", ".tokensave")) ? "available" : undefined,
-      });
-      const graph = graphHealth(arguments_.projectDir ?? ".");
-      const withGraph = graph ? [filled, "", graph].join("\n") : filled;
-      // An overlay role is repository- or user-supplied text on its way to a
-      // model: it is data, and it says so (hardening 4.4).
-      const body = role.layer ? fenceUntrusted(withGraph, { label: `${role.layer} overlay role "${role.id}"` }) : withGraph;
-      const notes = problems.map((problem) => `- ${problem.file}: ${problem.reason}`);
-
-      return {
-        content: [
-          {
-            type: "text",
-            text: [body, ...(notes.length > 0 ? ["", "## Overlay files skipped", "", ...notes] : [])].join("\n"),
-          },
-        ],
-      };
-    },
+  registerTool({
+    name: "rule_tool_review",
+    description: "Run a review as an expert review persona; returns the review operation contract.",
+    zodSchema: OperationSchema,
+    advertise: ["role", "topic"],
+    handler: planHandler("review"),
   });
 }

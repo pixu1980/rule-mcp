@@ -19,7 +19,7 @@ Serves styleguides, component templates, framework best practices, and design sy
 - [What is rule-mcp](#what-is-rule-mcp)
 - [Architecture overview](#architecture-overview)
 - [Tool reference](#tool-reference)
-  - [All 107 tools (normal mode)](#all-107-tools-normal-mode)
+  - [All 109 tools (normal mode)](#all-109-tools-normal-mode)
   - [Minimal tool surface (10 tools)](#minimal-tool-surface-10-tools)
   - [Gateway deterministic mode](#gateway-deterministic-mode)
 - [MCP Resources (188)](#mcp-resources-188)
@@ -40,7 +40,7 @@ Deterministic MCP server for the rule skill ecosystem. Live surface (enforced by
 
 | Surface   | Count | Notes                                                                                                                          |
 | --------- | ----- | ------------------------------------------------------------------------------------------------------------------------------ |
-| Tools     | 107   | per-skill tools + dispatcher/action tools                                                                                      |
+| Tools     | 109   | per-skill tools + dispatcher/action tools                                                                                      |
 | Resources | 188   | rule:// per-skill index + summary + template URIs                                                                               |
 | Prompts   | 154   | rule-area-* (one per skill, derived) + one-shot workflow + 57 review-persona commands (rule-plan-* / rule-audit-* / rule-review-* for 19 active roles) |
 | Skills    | 89    | frontend, backend, data, devops, toolchain, styleguide, process, platform, ai                                                  |
@@ -74,7 +74,7 @@ rule-mcp install --agent all
 
 ## What is rule-mcp
 
-rule-mcp is an [MCP](https://modelcontextprotocol.io) server that exposes **107 tools**, **188 resources**, and **154 prompts** to any MCP-compatible AI coding agent. Because the server never calls an LLM (every output is deterministic), it is **model-agnostic** - it behaves identically behind Claude, GPT, Gemini, Llama, Qwen, or any other model. It provides:
+rule-mcp is an [MCP](https://modelcontextprotocol.io) server that exposes **109 tools**, **188 resources**, and **154 prompts** to any MCP-compatible AI coding agent. Because the server never calls an LLM (every output is deterministic), it is **model-agnostic** - it behaves identically behind Claude, GPT, Gemini, Llama, Qwen, or any other model. It provides:
 
 - **91 modular skills** covering frontend, backend, database, devops, toolchain, styleguide, process, platform, and ai domains
 - **BM25 full-text search** across all skill content
@@ -115,7 +115,7 @@ Claude Code, Cursor, Cline, Roo Code, Copilot, Gemini CLI, Codex CLI, Devin (for
 ├───────────────────────────────────────────────────────────────┤
 │  Tool Registry              │  Resources Registry             │
 │  src/tools/router.js        │  src/resources/index.js         │
-│  107 tools                  │  188 resources                  │
+│  109 tools                  │  188 resources                  │
 ├──────────────────┬───────────┴────────────────┬───────────────┤
 │  Orchestration   │  Skills & BM25            │  Guardrails    │
 │  pix_gateway     │  89 skill dirs            │  18 shared     │
@@ -160,7 +160,7 @@ Claude Code, Cursor, Cline, Roo Code, Copilot, Gemini CLI, Codex CLI, Devin (for
 
 ## Tool reference
 
-### All 107 tools (normal mode)
+### All 109 tools (normal mode)
 
 #### Deterministic tools (9)
 

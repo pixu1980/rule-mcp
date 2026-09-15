@@ -37,6 +37,16 @@ test("rule_tool_plan applies overrides, an operation, and lists roles for an unk
   assert.match(unknownText, /security/, "an unknown role is answered with the ones that exist");
 });
 
+test("audit and review tools pin their operation", async () => {
+  const audit = await callTool("rule_tool_audit", { role: "a11y" });
+  const auditText = audit.content.map((part) => part.text).join("\n");
+  assert.match(auditText, /## The operation: audit/, "rule_tool_audit pins the audit operation");
+
+  const review = await callTool("rule_tool_review", { role: "a11y" });
+  const reviewText = review.content.map((part) => part.text).join("\n");
+  assert.match(reviewText, /## The operation: review/, "rule_tool_review pins the review operation");
+});
+
 test("rule_tool_plan detects tokensave in the project dir for a scoped run", async () => {
   // Assertions stay on headings and inline-code tokens: tool results pass
   // through text compression, which never touches either.

@@ -8,6 +8,7 @@ import { getSkillsDirs as getSkillsDirectories } from "../paths/index.js";
 import { formatSkillsList } from "../index.js";
 import { copySkill, getAvailableSkills, isInstalled } from "./_catalog.js";
 import { installNativeSkills } from "./_native.js";
+import { generatePersonaSkills } from "./_personas.js";
 import { isCancelSelection, promptSkillSelection } from "./_picker.js";
 
 /**
@@ -52,6 +53,12 @@ export async function skillsInstallCommand(options = {}) {
     }
 
     process.stdout.write(`Installed ${installed}/${skills.length} skills to ${targetDir}\n`);
+    const personaSkills = selectAll ? generatePersonaSkills(targetDir) : [];
+
+    if (personaSkills.length > 0) {
+      process.stdout.write(`Generated ${personaSkills.length} persona skill(s) in ${targetDir}\n`);
+    }
+
     installNativeSkills(skills);
 
     return;
@@ -105,6 +112,12 @@ export async function skillsInstallCommand(options = {}) {
   }
 
   process.stdout.write(`\nInstalled ${installed}/${skills.length} skills to ${targetDir}\n`);
+  const personaSkills = selected.length === skills.length ? generatePersonaSkills(targetDir) : [];
+
+  if (personaSkills.length > 0) {
+    process.stdout.write(`Generated ${personaSkills.length} persona skill(s) in ${targetDir}\n`);
+  }
+
   installNativeSkills(skills);
   process.stdout.write(`Run 'rule-mcp skills reload' to load them.\n`);
 }

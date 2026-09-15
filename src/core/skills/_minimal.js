@@ -4,7 +4,7 @@
  * Minimal tool surface: expose only the dispatcher + action tools and hide the
  * 90 per-skill tools (their guidance is reached via pix_gateway / resources).
  *
- * The full 107-tool surface costs tokens on every model turn and exceeds the
+ * The full 109-tool surface costs tokens on every model turn and exceeds the
  * tool-count limits some clients impose (Cursor, GitHub Copilot), which then
  * silently truncate the list. Off by default; enable with
  * RULE_MCP_MINIMAL_TOOLS=1, or pick a narrower surface with

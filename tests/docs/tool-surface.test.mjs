@@ -1,5 +1,5 @@
 /**
- * The 107 tool names are a public API, so they are pinned here.
+ * The 109 tool names are a public API, so they are pinned here.
  *
  * A client caches tool names, a slash command names one, a person writes one
  * in a config: a rename is not a refactor, it is a breaking change nobody
@@ -9,7 +9,7 @@
  *
  * The quoted counts in the handbook are checked too. They drifted once
  * already - comments and pages said 105, 95 and ~85 while the server served
- * 107 - and a number in prose has no compiler behind it.
+ * 109 - and a number in prose has no compiler behind it.
  */
 import { strict as assert } from "node:assert";
 import { execFileSync } from "node:child_process";
