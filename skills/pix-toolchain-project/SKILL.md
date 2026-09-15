@@ -199,6 +199,24 @@ VITE_API_BASE_URL=http://localhost:3000/api
 lts/*
 ```
 
+## package.json: never a corepack activation field
+
+Two fields must never appear in a `package.json`:
+
+```json
+{
+  "packageManager": "pnpm@11.24.0",
+  "devEngines": {
+    "packageManager": { "name": "pnpm", "version": "11.8.0", "onFail": "download" }
+  }
+}
+```
+
+Both hand the install to corepack, which then gets a vote on whether it runs — offline, behind
+a proxy, or shadowing the package manager already installed. Pin Node with `.nvmrc` and the
+dependency tree with the lockfile. Guardrail: `pkg-no-corepack` (owned by
+[rule-toolchain-pnpm](../rule-toolchain-pnpm/SKILL.md), applied to every check).
+
 ## How to scaffold
 
 1. Run `rule_tool_toolchain_project mode=scaffold` to see all config file templates.
