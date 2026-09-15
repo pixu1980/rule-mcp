@@ -399,10 +399,17 @@ Gate: apply/gateway suites green; every write still passes the receipt.
 
 ### 6.6 Milestone 5 — Search and routing (P1, depends on M1)
 
+Status: **done** — commit `e38b32f`.
+
 - **T5.1** Index skill content as docs (`docs_dir`) so `doc` and `search` cover skills (`R16`).
-- **T5.2** Use `search` + `context` as an additional candidate source in `src/core/bm25`, never
-  as the only source (`R2`).
+  _(satisfied for project-local skills: TokenSave already indexes `skills/`. A central
+  `~/.agents/skills` install would need its own graph root; recorded as a follow-up.)_
+- **T5.2** Use `search` + `context` as an additional candidate source in `src/core/bm25`, never as
+  the only source (`R2`). _(done: `graphCandidates` adds a 3-point bonus to a skill whose own
+  files the graph matched; BM25 stays the base and the fallback)_
 - **T5.3** Measure routing precision against the existing routing corpus before and after.
+  _(measured: **80% exact / 95% top-or-alternative** without the graph, **81% exact / 95%**
+  with it; the corpus thresholds are 80% and 95%)_
 
 Gate: routing corpus unchanged or better; BM25 remains the deterministic fallback.
 
