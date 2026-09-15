@@ -6,4 +6,5 @@ export * from "./_files.js";
 export * from "./_graph.js";
 export * from "./_changes.js";
 export * from "./_edit.js";
+export * from "./_routing.js";
 export * from "./_fallback.js";
