@@ -3,12 +3,6 @@
 Open work that is not owned by a persona trio. Newest first. Each item names the
 symptom, not the fix, so the run that picks it up can choose the fix.
 
-## B-1 - `handoff doctor` does not regenerate ADR.md and HANDOFF.md
-
-`rule-mcp handoff doctor --fix` renumbers ADRs but does not refresh the
-`docs/adr/ADR.md` index or the `docs/handoff/` documents that quote them. A run
-that renumbers leaves both stale.
-
 ## B-2 - A from-zero install must prove the `rule-mcp` CLI works
 
 Installing from an empty machine has to end with a `rule-mcp doctor` (and a
@@ -33,3 +27,8 @@ Custom IDEs that call tools rather than commands cannot reach them; a tool per
 operation would. In the same move, installing the skills into `~/.agents/skills`
 does not generate the persona skills there, so a home install has no
 `rule-plan-<role>` skills to load.
+
+## Done
+
+- **B-1** `handoff doctor` regenerates a stale `ADR.md` (a missing, extra or changed row, not only an
+  unordered one) and refreshes a `HANDOFF.md` that a project keeps (commit `db33d01`).
