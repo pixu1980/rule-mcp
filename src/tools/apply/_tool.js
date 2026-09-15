@@ -1,8 +1,9 @@
 /** @module tools/apply/tool - the rule_tool_apply registration and handler */
 
-import { mkdirSync, writeFileSync } from "node:fs";
+import { mkdirSync } from "node:fs";
 import { dirname } from "node:path";
 import { postProcessFiles } from "../../core/index.js";
+import { applyEdit } from "../../core/tokensave/_edit.js";
 import { validateApply } from "../gateway/index.js";
 import { renderApplyResult } from "./_render.js";
 import { resolveProjectRoot } from "./_roots.js";
@@ -111,7 +112,7 @@ export async function registerApplyTool() {
         } else {
           try {
             mkdirSync(dirname(resolved), { recursive: true });
-            writeFileSync(resolved, file.content, "utf8");
+            applyEdit(rootDir, resolved, file.content);
             results.push({ path: file.path, status: "written", absPath: resolved });
           } catch (error) {
             results.push({ path: file.path, status: "error", error: error.message });
