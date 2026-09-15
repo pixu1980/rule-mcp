@@ -16,8 +16,11 @@
  * unknown flag.
  *
  * `module.registerHooks` runs the hook in-thread and synchronously, so it also
- * covers `require`, worker threads started after registration, and the dynamic
- * imports the skill loader makes. It needs Node 22.15 or newer.
+ * covers `require` and the dynamic imports the skill loader makes. It needs
+ * Node 22.15 or newer. A worker thread has its own module graph: a parent
+ * started with `--import` passes the flag down to its workers, while a parent
+ * that imports this file dynamically (the `bin` entry) must pass `--import` to
+ * the worker explicitly - see `core/guardrails/guarded/_messaging.js`.
  */
 
 import { registerHooks } from "node:module";

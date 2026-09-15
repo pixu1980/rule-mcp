@@ -1,5 +1,9 @@
 /** Worker lifecycle: spawn, pending map, aborted-shaped answers. */
+import { existsSync } from "node:fs";
 import { Worker } from "node:worker_threads";
+
+/** The alias hook worker threads need to resolve `@src/*` without `--import`. */
+const ALIAS_HOOK = new URL("../../../../scripts/alias-hook.mjs", import.meta.url);
 
 export let worker = null;
 export let ready = null;
@@ -40,8 +44,28 @@ export function flushPending(reason) {
   }
 }
 
+/**
+ * The `execArgv` a worker needs to resolve `@src/*`.
+ *
+ * A parent started with `--import ./scripts/alias-hook.mjs` passes the flag
+ * down through `process.execArgv` and the worker inherits it. A parent started
+ * from `bin/rule-mcp.js` imports the hook dynamically, which registers it
+ * in the parent thread only: a worker started afterwards has its own module
+ * graph and dies with ERR_MODULE_NOT_FOUND. This adds the hook for that case,
+ * and never twice.
+ *
+ * @returns {string[]}
+ */
+export function workerExecArgv() {
+  // Always pass the hook explicitly. Copying `process.execArgv` wholesale would
+  // also copy `-e`/`--input-type` and make the worker evaluate the parent's
+  // eval script instead of _thread.js; returning `[]` would drop the hook a
+  // parent started with `--import` relies on Node to propagate.
+  return existsSync(ALIAS_HOOK) ? ["--import", ALIAS_HOOK.href] : [];
+}
+
 export function spawn() {
-  const thread = new Worker(new URL("_thread.js", import.meta.url));
+  const thread = new Worker(new URL("_thread.js", import.meta.url), { execArgv: workerExecArgv() });
   thread.unref();
   ready = new Promise((resolve) => {
     const onReady = (message) => {
