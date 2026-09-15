@@ -4,13 +4,18 @@ import { getGitDiff, getGitLog } from "./_git.js";
 import { graphChanges } from "../../core/tokensave/_changes.js";
 import { scanProjectDocs } from "./_docs-scan.js";
 import { archiveCompletedDocs, closeoutLines } from "./_closeout.js";
+import { autoRenumber, renumberLines } from "./_renumber.js";
 import { estimateTokens } from "./_format.js";
 import { headerLines, identityLines, adrLines, contextLines } from "./_sections-core.js";
 import { workingTreeLines, gitLogLines, docsLines, footerLines } from "./_sections-repo.js";
 import { semanticLines } from "./_sections-semantic.js";
 
 /** Build one handoff, re-running itself one format tighter when it exceeds maxTokens. */
-export function buildHandoff({ projectDir, includeContext, includeAdrs, includeIdentity, includeGitDiff, includeGitLog, includeRoadmap, compress, maxTokens, format, mode, _closeout }) {
+export function buildHandoff({ projectDir, includeContext, includeAdrs, includeIdentity, includeGitDiff, includeGitLog, includeRoadmap, compress, maxTokens, format, mode, _closeout, _renumber }) {
+  // A close-session renumbers before it reads the ADR log, so the handoff
+  // quotes the numbers that exist after the repair. A plain handoff is a
+  // read-only diagnosis and never mutates.
+  const renumber = _renumber === undefined && mode === "close-session" ? autoRenumber(projectDir, { apply: true }) : _renumber;
   const identity = includeIdentity ? readProjectIdentity(projectDir) : {};
   const adrs = includeAdrs ? readAdrs(projectDir) : [];
   const contextValues = includeContext ? readContextValues(projectDir) : {};
@@ -40,6 +45,7 @@ export function buildHandoff({ projectDir, includeContext, includeAdrs, includeI
     ...semanticLines(changes, shape),
     ...gitLogLines(gitLog, shape),
     ...docsLines(docsScan, shape),
+    ...renumberLines(renumber, shape),
     ...closeoutLines(closeout, shape),
     ...footerLines(shape),
   ];
@@ -58,6 +64,7 @@ export function buildHandoff({ projectDir, includeContext, includeAdrs, includeI
       maxTokens,
       format: "brief",
       _closeout: closeout,
+      _renumber: renumber,
     });
   }
 
@@ -71,6 +78,7 @@ export function buildHandoff({ projectDir, includeContext, includeAdrs, includeI
       maxTokens,
       format: "minimal",
       _closeout: closeout,
+      _renumber: renumber,
     });
   }
 
