@@ -16,8 +16,8 @@ import { runPlan, tally } from "../_run-plan.js";
 
 const ids = (plan) => plan.map((task) => task.id);
 
-test("a minimal install plan is the runtime home alone", () => {
-  assert.deepEqual(ids(buildInstallPlan({})), ["runtime-home"]);
+test("a minimal install plan is the runtime home and the cli check", () => {
+  assert.deepEqual(ids(buildInstallPlan({})), ["runtime-home", "cli"]);
 });
 
 test("building a plan touches no filesystem", () => {
@@ -31,7 +31,7 @@ test("building a plan touches no filesystem", () => {
 test("every selected agent gets its own row", () => {
   const plan = buildInstallPlan({ agents: ["claude", "cursor", "pi"] });
 
-  assert.deepEqual(ids(plan), ["runtime-home", "agent:claude", "agent:cursor", "agent:pi"]);
+  assert.deepEqual(ids(plan), ["runtime-home", "agent:claude", "agent:cursor", "agent:pi", "cli"]);
 });
 
 test("the service step only appears in daemon mode", () => {

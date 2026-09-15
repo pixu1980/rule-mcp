@@ -48,5 +48,8 @@ test("every plan configures the agents it was given, and the runtime home first"
 test("every install proves the global CLI before it reports success", () => {
   const plan = buildInstallPlan({ agents: ["pi"], mode: "stdio", extras: {} });
 
-  assert.ok(plan.some((task) => task.id === "cli"), `the CLI is verified: ${plan.map((task) => task.id).join(", ")}`);
+  assert.ok(
+    plan.some((task) => task.id === "cli"),
+    `the CLI is verified: ${plan.map((task) => task.id).join(", ")}`,
+  );
 });
