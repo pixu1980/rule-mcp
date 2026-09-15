@@ -1,3 +1,5 @@
+
+
 /** @module resources/read - serve one rule:// body; `./_serve.js` is the way out callers use */
 
 import { readFileSync, readdirSync } from "node:fs";

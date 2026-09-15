@@ -1,3 +1,5 @@
+
+
 /** scanFileTree over real directory trees: recursion, depth rules, stats. */
 import { strict as assert } from "node:assert";
 import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";

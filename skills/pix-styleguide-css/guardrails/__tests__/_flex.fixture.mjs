@@ -24,19 +24,25 @@ import { fileURLToPath } from "node:url";
 process.env.RULE_MCP_NO_CACHE = "1";
 process.env.RULE_MCP_NO_AUTOUPDATE = "1";
 
-export const root = fileURLToPath(new URL("../../../../../../", import.meta.url));
+export const root = fileURLToPath(new URL("../../../../", import.meta.url));
 
-export const { SHARED_GUARDRAILS } = await import("../../../index.js");
-export const { getGuardrails, checkCode } = await import("../../../index.js");
-export const { FLEX_FIRST } = await import("../../../../index.js");
+// A skill owns its rules, and the engine only knows the ones a load has
+// registered, so every entry point that asks the engine loads first.
+const { loadAllSkills } = await import("@src/core/skills/index.js");
+await loadAllSkills();
+
+export const { cssFlexFirst } = await import("../_css-flex-first.js");
+export const { GUARDRAIL_HELPERS } = await import("@src/core/guardrails/_helpers.js");
+export const { getGuardrails, checkCode } = await import("@src/core/guardrails/index.js");
+export const { FLEX_FIRST } = await import("@src/core/index.js");
 
 export const GUARDRAIL_ID = "css-flex-first";
 
 /** Run only the flex-first guardrail over a CSS body. */
 export function run(css, fileName = "_Component.css") {
-  const guardrail = SHARED_GUARDRAILS.find((g) => g.id === GUARDRAIL_ID);
-
-  return guardrail.check(css, fileName ? { fileName } : {});
+  // A rule imports nothing: the engine hands it the helpers, so a direct
+  // call has to hand them over too.
+  return cssFlexFirst.check(css, { helpers: GUARDRAIL_HELPERS, ...(fileName ? { fileName } : {}) });
 }
 
 export function skillDocs(dir = join(root, "skills"), found = []) {

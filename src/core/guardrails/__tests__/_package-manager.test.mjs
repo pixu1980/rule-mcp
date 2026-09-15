@@ -1,3 +1,5 @@
+
+
 /**
  * The baseline forbids corepack activation fields in every package.json check:
  * `packageManager` and `devEngines.packageManager` must never appear.

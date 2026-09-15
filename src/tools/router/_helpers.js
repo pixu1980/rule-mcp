@@ -1,3 +1,5 @@
+
+
 /** Result shaping helpers: banner, finalize, token/size estimates, and the skill-independent set. */
 
 import { alignAsciiBoxesResult } from "../../core/text/index.js";

@@ -5,8 +5,9 @@ import { strict as assert } from "node:assert";
 import test from "node:test";
 
 import { externalCss } from "../_external-css.js";
+import { GUARDRAIL_HELPERS } from "@src/core/guardrails/_helpers.js";
 
-const check = (code, context = {}) => externalCss.check(code, context);
+const check = (code, context = {}) => externalCss.check(code, { helpers: GUARDRAIL_HELPERS, ...context });
 
 test("css files and stylesheets pass by definition", () => {
   assert.equal(check(".a { color: red; }", { fileName: "app.css" }).pass, true, "a css file is external css");

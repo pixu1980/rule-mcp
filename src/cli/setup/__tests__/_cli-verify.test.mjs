@@ -1,3 +1,5 @@
+
+
 /**
  * The install's own proof: the CLI on PATH answers `--version`, `tools list`
  * and `doctor`, and any one of them failing is a broken install.

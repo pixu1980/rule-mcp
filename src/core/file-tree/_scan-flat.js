@@ -1,3 +1,5 @@
+
+
 /**
  * @module core/file-tree/scan-flat
  *

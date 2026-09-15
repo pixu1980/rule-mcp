@@ -1,3 +1,5 @@
+
+
 /**
  * The SKILL.md frontmatter contract, including the three fields a skill needs
  * to own its guardrails and declare its surface (ADR 079): `guardrails`,

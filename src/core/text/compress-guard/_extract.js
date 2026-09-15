@@ -1,3 +1,5 @@
+
+
 /**
  * @module core/text/compress-guard/extract
  *

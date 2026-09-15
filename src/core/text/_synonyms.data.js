@@ -1,3 +1,5 @@
+
+
 /**
  * @module core/text/synonyms.data
  *

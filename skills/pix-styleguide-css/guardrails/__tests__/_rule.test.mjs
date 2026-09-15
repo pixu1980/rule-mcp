@@ -1,14 +1,15 @@
 
 
 /** The css-flex-first guardrail itself: what an unjustified grid costs. */
-import { GUARDRAIL_ID, SHARED_GUARDRAILS, getGuardrails, checkCode, run } from "./_flex.fixture.mjs";
+import { GUARDRAIL_ID, getGuardrails, checkCode, run } from "./_flex.fixture.mjs";
+import { GUARDRAILS } from "../index.js";
 import test from "node:test";
 import assert from "node:assert/strict";
 
 // ── The guardrail ─────────────────────────────────────────────────
 test("the guardrail is shared, so it reaches every skill", () => {
   assert.ok(
-    SHARED_GUARDRAILS.some((g) => g.id === GUARDRAIL_ID),
+    GUARDRAILS.some((g) => g.id === GUARDRAIL_ID),
     "css-flex-first must be a shared guardrail",
   );
   for (const skill of ["rule-styleguide-css", "rule-frontend-react", "rule-ui-design-system"]) {

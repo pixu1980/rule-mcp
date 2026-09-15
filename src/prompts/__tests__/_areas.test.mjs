@@ -1,3 +1,5 @@
+
+
 /**
  * The area prompts, derived from the resolved skill catalog.
  *

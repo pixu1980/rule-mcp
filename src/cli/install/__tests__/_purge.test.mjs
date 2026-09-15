@@ -1,3 +1,5 @@
+
+
 /**
  * Behavioral: `uninstall.sh --purge` and `--keep-config` against a fake HOME.
  *

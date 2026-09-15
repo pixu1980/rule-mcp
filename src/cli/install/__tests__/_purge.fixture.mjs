@@ -1,3 +1,5 @@
+
+
 /**
  * uninstall --purge must delete the runtime home ~/.rule-mcp/ (state,
  * projects, data, config — the layout src/cli/paths/index.js defines), and install

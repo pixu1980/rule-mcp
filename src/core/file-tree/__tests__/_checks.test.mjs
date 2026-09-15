@@ -1,3 +1,5 @@
+
+
 /** The two guardrail entry points the engine exposes for barrels and names. */
 import { strict as assert } from "node:assert";
 import { test } from "node:test";

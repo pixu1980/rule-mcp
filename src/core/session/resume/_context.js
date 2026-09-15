@@ -1,3 +1,5 @@
+
+
 /** @module core/session/resume/context - the verified handon block a resumed session receives */
 
 import { handon } from "@src/tools/handon/index.js";

@@ -46,7 +46,7 @@ test("the clause is one sentence, kept in one place", () => {
 });
 
 test("compression cannot invert the rule on its way out", async () => {
-  const { compressResult } = await import("../../../../text/_compression.js");
+  const { compressResult } = await import("@src/core/text/_compression.js");
   const compressed = compressResult({ content: [{ type: "text", text: `- ${FLEX_FIRST}` }] })
     .content.map((part) => part.text)
     .join("\n");
@@ -57,7 +57,7 @@ test("compression cannot invert the rule on its way out", async () => {
 });
 
 test("the reminder carries it when CSS is on the table, and not otherwise", async () => {
-  const { decorateWorkflowReminder } = await import("../../../../enforcement/index.js");
+  const { decorateWorkflowReminder } = await import("@src/core/enforcement/index.js");
   // The reminder is on a cadence (hardening 4.2), so the second call would carry
   // nothing at all and prove nothing about the layout rule. Re-anchor on every
   // call here: what is under test is which reminder carries FLEX_FIRST.
@@ -81,8 +81,8 @@ test("the reminder carries it when CSS is on the table, and not otherwise", asyn
 });
 
 test("a CSS route carries it, a backend route does not", async () => {
-  const { loadAllSkills } = await import("../../../../skills/index.js");
-  const { callTool } = await import("../../../../../tools/router/index.js");
+  const { loadAllSkills } = await import("@src/core/skills/index.js");
+  const { callTool } = await import("@src/tools/router/index.js");
   await loadAllSkills();
 
   const styling = await callTool("pix_tool", { prompt: "style a card component with CSS" });
@@ -107,7 +107,7 @@ test("a CSS route carries it, a backend route does not", async () => {
 test("the installed agent rules carry it", () => {
   // Source guards: both writers of the block carry the rule, and neither can
   // be run against a real home directory from a test.
-  const installJs = readFileSync(join(root, "src", "cli", "installers", "_writers-text.js"), "utf8");
+  const installJs = readFileSync(join(root, "src", "cli", "installers", "_instruction.data.js"), "utf8");
   const setupRules = readFileSync(join(root, "src", "cli", "setup", "_rules.data.js"), "utf8");
   assert.match(installJs, /flex first/i, "the instruction block written into CLAUDE.md must carry the rule");
   assert.match(setupRules, /flex first/i, "the setup wizard's rules block must carry the rule");

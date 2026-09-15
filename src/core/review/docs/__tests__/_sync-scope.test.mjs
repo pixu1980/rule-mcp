@@ -1,3 +1,5 @@
+
+
 /** Scoped sync: the scope lands in the headers and out-of-scope findings survive. */
 import { strict as assert } from "node:assert";
 import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
