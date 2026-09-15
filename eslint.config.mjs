@@ -53,6 +53,10 @@ export default defineConfig([
       "unicorn/name-replacements": "off", // i → index, stateDir → stateDirectory: noisy renames
       "unicorn/import-style": "off", // named node builtin imports are the repo convention
       "unicorn/text-encoding-identifier-case": "off", // utf-8 vs utf8: both valid, cosmetic
+      // unicorn 74 turns this rule on with the `multiline` default, which would
+      // force every one-line JSDoc in the tree onto three lines. The house style
+      // is a one-line block comment, so enforce that direction instead of it.
+      "unicorn/single-line-block-comment-style": ["error", "single-line"],
       "unicorn/no-array-sort": "off", // sort sites already pass explicit comparators
       "unicorn/require-array-sort-compare": "off", // lexical sort is correct for string keys
       "unicorn/no-break-in-nested-loop": "off",
