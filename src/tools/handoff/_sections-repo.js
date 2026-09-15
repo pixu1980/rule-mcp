@@ -1,4 +1,4 @@
-/** Handoff sections from the repository: working tree, recent commits, docs scan, footers. */
+/** Handoff sections from the repository: working tree, semantic changes, recent commits, docs scan, footers. */
 import { TOKENSAVE_DIRECTIVE, tokensaveActive } from "../../core/agents/_integrations.js";
 
 /** Uncommitted changes, deferring to the code graph instead of a raw diff when tokensave runs. */
