@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: 2025-2026 pixu1980
 // SPDX-License-Identifier: MIT
 /**
- * Layer resolution over real directories (ADR 079): which copy of a skill or a
+ * Layer resolution over real directories (ADR 089): which copy of a skill or a
  * persona answers, and which layer it came from.
  */
 import { strict as assert } from "node:assert";

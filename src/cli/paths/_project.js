@@ -16,7 +16,7 @@ const ROOT_MARKERS = [".git", ".pix-galaxy-mcp"];
  *
  * Either marker is enough: `.git` for a checkout, `.pix-galaxy-mcp` for a
  * directory that declares itself a project by carrying skills or personas
- * (ADR 079). A server started in a subdirectory of a monorepo therefore still
+ * (ADR 089). A server started in a subdirectory of a monorepo therefore still
  * finds the layers the project ships.
  *
  * @param {string} from

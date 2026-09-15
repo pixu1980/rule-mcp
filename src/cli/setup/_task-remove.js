@@ -54,7 +54,7 @@ export const commandsRemovalTask = () => ({
 /**
  * Delete the catalog directories the skills step copied.
  *
- * Global only, whatever directory the wizard runs in: ADR 031 keeps uninstall
+ * Global only, whatever directory the wizard runs in: ADR 030 keeps uninstall
  * out of the project tree, and `--scope project` on the CLI is the way to
  * clean a project's own `.agents/skills`.
  */

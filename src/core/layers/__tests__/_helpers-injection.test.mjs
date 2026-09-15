@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: 2025-2026 pixu1980
 // SPDX-License-Identifier: MIT
 /**
- * A skill's guardrails import nothing (ADR 079).
+ * A skill's guardrails import nothing (ADR 089).
  *
  * Node resolves a bare specifier by walking `node_modules` up from the
  * importing file, and a skill in a project's `.pix-galaxy-mcp/skills` or in

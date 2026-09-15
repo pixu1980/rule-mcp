@@ -3,7 +3,7 @@
 /**
  * @module core/layers/inherit
  *
- * Guardrail composition by inheritance (ADR 079).
+ * Guardrail composition by inheritance (ADR 089).
  *
  * A skill declares the rules it owns and the skills it takes rules from. This
  * walks that declaration depth-first, parents before the skill itself, so a

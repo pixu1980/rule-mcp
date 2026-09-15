@@ -9,7 +9,7 @@
  * to a skill; the long one is the workflow the server enforces - evidence
  * before implementation, failing tests before code, guardrails before done.
  * The shell installer owned the long block until the bootstraps stopped
- * installing anything (ADR 080), and it is the copy that named the tools
+ * installing anything (ADR 090), and it is the copy that named the tools
  * correctly, so it is the copy that survived.
  *
  * Every name here is a registered tool: they are all `pix_tool*`, and a bare

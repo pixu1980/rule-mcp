@@ -6,7 +6,7 @@
  * The git hook block earlier versions wrote, found so it can be removed.
  *
  * Nothing installs a hook any more - a recording lives under the home
- * directory, so no project needs a hook to keep it out of a commit (ADR 079).
+ * directory, so no project needs a hook to keep it out of a commit (ADR 089).
  * What is left is the cleanup a machine that ran an older install still needs,
  * and the uninstall scan cannot offer that cleanup without first looking.
  *

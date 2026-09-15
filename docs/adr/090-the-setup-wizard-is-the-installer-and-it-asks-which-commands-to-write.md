@@ -1,4 +1,4 @@
-# 080: The setup wizard is the installer, and it asks which commands to write
+# 090: The setup wizard is the installer, and it asks which commands to write
 
 - **Date**: 2026-09-13
 - **Status**: accepted

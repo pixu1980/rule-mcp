@@ -1,4 +1,4 @@
-# 058: Restructure the command surface: /pix router, pix-area-*, compression implicit, pix-process-tdd skill
+# 055: Restructure the command surface: /pix router, pix-area-*, compression implicit, pix-process-tdd skill
 
 - **Date**: 2026-09-05
 - **Status**: accepted

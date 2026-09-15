@@ -1,4 +1,4 @@
-# 082: Surface selection amends the install stack freeze with an additive loader filter
+# 092: Surface selection amends the install stack freeze with an additive loader filter
 
 - **Date**: 2026-09-14
 - **Status**: accepted

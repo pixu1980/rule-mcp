@@ -7,7 +7,7 @@
  *
  * A shim that exists is not a shim that works - it pins the absolute path of
  * the checkout it was written from, so moving the repository leaves one on PATH
- * that crashes on launch (ADR 046). This runs the CLI for real: `--version`
+ * that crashes on launch (ADR 045). This runs the CLI for real: `--version`
  * first, then a full `tools list` and a `doctor`, so an install that would
  * leave a dead launcher fails instead of reporting success.
  */

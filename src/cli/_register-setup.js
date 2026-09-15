@@ -13,7 +13,7 @@ import { Option } from "commander";
 
 import { commanderIo } from "./_register-wizard.js";
 
-const MODE_HELP = "stdio (default), daemon (SSE), docker, or skills (no MCP server, ADR 079)";
+const MODE_HELP = "stdio (default), daemon (SSE), docker, or skills (no MCP server, ADR 089)";
 
 /**
  * Options only the wizard's plan performs, by the flag that asks for them.

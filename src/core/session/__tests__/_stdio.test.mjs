@@ -12,7 +12,7 @@ import { join } from "node:path";
 import { alive, bin, reap, root, until, within } from "./_hygiene.fixture.mjs";
 import { fileURLToPath } from "node:url";
 
-// Server code resolves `@src/*` through a hook (ADR 079); a spawned
+// Server code resolves `@src/*` through a hook (ADR 089); a spawned
 // process loads it too, so it registers the hook as every entry point does.
 const ALIAS_HOOK = fileURLToPath(new URL("../../../../scripts/alias-hook.mjs", import.meta.url));
 test("a stdio server exits when its client is killed", async (t) => {

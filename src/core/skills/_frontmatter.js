@@ -4,7 +4,7 @@
 
 import { listAt, yamlBoolean } from "./_yaml-list.js";
 
-/** The list keys a skill declares: the rules it owns and the skills it inherits (ADR 079). */
+/** The list keys a skill declares: the rules it owns and the skills it inherits (ADR 089). */
 const LIST_KEYS = ["tags", "guardrails", "inherits"];
 
 /**
@@ -86,7 +86,7 @@ export function parseSkillFrontmatter(content) {
 
       continue;
     }
-    // exposeTool: whether a custom skill also mints a tool (ADR 079, default no)
+    // exposeTool: whether a custom skill also mints a tool (ADR 089, default no)
     const exposeMatch = line.match(/^exposeTool:\s*(.+)$/);
 
     if (exposeMatch) {

@@ -14,7 +14,7 @@
  * The switches file is part of that layout. It is the server's own home for
  * the controls a user sets, the prompt-recording one above all, so an install
  * defaults it here rather than writing a privacy decision into one client's
- * configuration and leaving the other hosts without it (ADR 080).
+ * configuration and leaving the other hosts without it (ADR 090).
  */
 
 import { existsSync, mkdirSync, readdirSync, rmSync, statSync } from "node:fs";

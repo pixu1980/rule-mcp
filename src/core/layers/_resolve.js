@@ -3,7 +3,7 @@
 /**
  * @module core/layers/resolve
  *
- * Which copy of a skill or a persona answers (ADR 079).
+ * Which copy of a skill or a persona answers (ADR 089).
  *
  * The layers are read in order and a later one replaces an earlier one
  * WHOLESALE: field-level merging makes "which rule applies here" undebuggable.

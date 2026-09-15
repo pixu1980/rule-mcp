@@ -21,7 +21,7 @@ import { loadLayerGuardrails } from "../../layers/_guardrails.js";
 
 // The rules a skill owns are loaded at startup by the server; a fixture that
 // runs the checker directly has to do the same, or every migrated rule reads
-// as missing (ADR 079).
+// as missing (ADR 089).
 const LAYERED = await loadLayerGuardrails();
 
 setSkillGuardrails(LAYERED);

@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: 2025-2026 pixu1980
 // SPDX-License-Identifier: MIT
 /**
- * The two blind spots ADR 074 named as follow-ups.
+ * The two blind spots ADR 071 named as follow-ups.
  *
  * A cache hit went through the same decoration as a miss - compressed, then
  * given a reminder - and recorded neither end of it, so every token figure was

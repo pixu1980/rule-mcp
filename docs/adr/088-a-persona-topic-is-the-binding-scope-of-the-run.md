@@ -1,4 +1,4 @@
-# 078: A persona topic is the binding scope of the run
+# 088: A persona topic is the binding scope of the run
 
 - **Date**: 2026-09-12
 - **Status**: accepted

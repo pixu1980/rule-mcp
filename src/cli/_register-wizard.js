@@ -7,7 +7,7 @@
  *
  * Split out of `_register-setup.js` because the wizard declares every flag
  * twice - once on `install` and once here - and a registrar file that holds
- * both is a file nobody reads to the end (ADR 061).
+ * both is a file nobody reads to the end (ADR 058).
  */
 import { Option } from "commander";
 

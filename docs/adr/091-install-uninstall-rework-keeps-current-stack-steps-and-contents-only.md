@@ -1,4 +1,4 @@
-# 081: Install/uninstall rework keeps current stack, steps and contents only
+# 091: Install/uninstall rework keeps current stack, steps and contents only
 
 - **Date**: 2026-09-14
 - **Status**: accepted

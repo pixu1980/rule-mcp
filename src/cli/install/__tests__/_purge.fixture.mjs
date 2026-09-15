@@ -12,7 +12,7 @@
  * was silently broken.
  *
  * Contract guarded here, through the bootstrap that forwards to the wizard
- * (ADR 080): `uninstall.sh --purge` removes ~/.pix-galaxy-mcp/ along with
+ * (ADR 090): `uninstall.sh --purge` removes ~/.pix-galaxy-mcp/ along with
  * ~/.config/pix-galaxy-mcp/, and --keep-config keeps the configuration while
  * still taking the runtime home.
  */

@@ -47,7 +47,7 @@ check(
 check(
   "F6.3 the measured saving stays separate from the routing estimate",
   // 600 of compression. The 1000 the cache replayed is output the model still
-  // reads, so it is reported under cache, not added here (ADR 079).
+  // reads, so it is reported under cache, not added here (ADR 089).
   kpi.tokens.measuredSaved === 600 && kpi.tokens.estimatedRouting === 12_000,
 );
 check("F6.3.1 what the cache replayed is reported as replayed output", kpi.cache.replayedTokens === 1000);

@@ -6,7 +6,7 @@
  * Where a role can come from besides this repository (personas plan A.2).
  *
  * Two layers sit above the embedded catalog, in the order skills use
- * (ADR 079): the project's own (`./.pix-galaxy-mcp/personas/*.md`, versioned
+ * (ADR 089): the project's own (`./.pix-galaxy-mcp/personas/*.md`, versioned
  * with the code it judges) and then the machine owner's
  * (`~/.pix-galaxy-mcp/personas/*.md`), which therefore has the last word over
  * any repository. A match by id replaces the embedded entry WHOLESALE -

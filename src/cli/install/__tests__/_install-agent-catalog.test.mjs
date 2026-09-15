@@ -14,7 +14,7 @@
  *    branded "(formerly Windsurf)" - Cognition acquired Windsurf.
  * 3. Windsurf is removed from the catalog: no picker row, no sweep entry.
  *    Naming it still works as a courtesy redirect to Devin, with a warning.
- * The screen itself is Ink now (ADR 080), so what used to be asserted against
+ * The screen itself is Ink now (ADR 090), so what used to be asserted against
  * the bash picker is asserted against the rows it renders.
  */
 

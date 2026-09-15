@@ -1,4 +1,4 @@
-# 083: Add an Open Source Steward persona for governance, contributors and donors
+# 093: Add an Open Source Steward persona for governance, contributors and donors
 
 - **Date**: 2026-09-15
 - **Status**: accepted

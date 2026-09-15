@@ -3,7 +3,7 @@
 /**
  * @module core/layers/guardrails
  *
- * The rules each skill owns, loaded from the layer that won (ADR 079).
+ * The rules each skill owns, loaded from the layer that won (ADR 089).
  *
  * A skill declares its rules in the SKILL.md frontmatter and defines them in
  * `guardrails/index.js` beside it. Both halves are checked against each other:
@@ -11,7 +11,7 @@
  * way round, is drift and is reported by name.
  *
  * Importing that folder runs code from wherever the skill came from, which for
- * the project and user layers means code this server did not ship. ADR 079
+ * the project and user layers means code this server did not ship. ADR 089
  * records that decision and its cost. What this module owes in return is that
  * a folder which throws, or exports something that is not a rule, is reported
  * and stepped over: one bad skill must not stop the server answering about the

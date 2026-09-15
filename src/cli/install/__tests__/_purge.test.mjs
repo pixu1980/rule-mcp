@@ -3,7 +3,7 @@
 /**
  * Behavioral: `uninstall.sh --purge` and `--keep-config` against a fake HOME.
  *
- * The bootstrap forwards to the wizard's uninstall plan (ADR 080), so this is
+ * The bootstrap forwards to the wizard's uninstall plan (ADR 090), so this is
  * the end-to-end proof that a purge takes the runtime home AND the
  * configuration directory - the one that was left behind, with the daemon
  * token and any stored model key in it.
