@@ -2,7 +2,7 @@
  * @module core/text/fillers.data
  *
  * Single words removed outright, each tagged with the lowest intensity level
- * that removes it. Ported from the rule table in `skills/rule-caveman/SKILL.md`
+ * that removes it. Ported from the rule table in `skills/rule-compression/SKILL.md`
  * ("Filler adverbs", "Pleasantries", "Hedging that carries no probability"):
  * filler, hedging and pleasantries are the `lite` contract, so every entry
  * here is `lite`.

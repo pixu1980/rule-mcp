@@ -88,7 +88,7 @@ function promptLines(area, subject, evidence) {
     "The request is free text: extract the target framework, platform, database or tool from it when present; never invent APIs, files, dependencies, commands, or requirements not present in the skill evidence.",
     "Baseline: involve TDD (write failing tests first) and a11y (WCAG 2.2 AA, axe-core where applicable). If the request has no test/a11y surface, ask the user what to cover before finishing.",
     "Validate generated code with `rule_tool_check` and iterate until all guardrails pass.",
-    "Caveman is implicit: if the user is working in caveman mode, keep the response compressed.",
+    "Compression is implicit: if the user is working in compression mode, keep the response compressed.",
     `When the work is done, propose a conventional commit message with a mandatory scope, e.g. "feat(${area}): ...".`,
   ].join("\n");
 }

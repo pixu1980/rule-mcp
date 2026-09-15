@@ -33,9 +33,9 @@ abstraction that would replace it.
 - [ ] **Step 4 - SIMP-4 (low)**: Fold the triplicated bare `execFileSync("git", ...)` wrapper (`build/changelog/_history.mjs` exports one; self-guardrails and prose inline theirs) into step 3's `trackedFiles()` so the two fix scripts no longer need a git wrapper at all; changelog keeps its exported `git()` as the one general-purpose copy.
   - [ ] **4.1**: After 3.2/3.3, `grep -rn 'execFileSync("git"' scripts` must list exactly two files: `_tracked.mjs` and `build/changelog/_history.mjs`.
   - [ ] **4.2**: Rides along with step 3's commit.
-- [ ] **Step 5 - SIMP-5 (info)**: Outside scripts/ (recorded for the next src pass, not this one): converge the two `looksLikeJson` copies - `src/core/text/_caveman-line.js` and `src/core/text/fingerprint/_rewrite-line.js` - on one export.
+- [ ] **Step 5 - SIMP-5 (info)**: Outside scripts/ (recorded for the next src pass, not this one): converge the two `looksLikeJson` copies - `src/core/text/_compression-line.js` and `src/core/text/fingerprint/_rewrite-line.js` - on one export.
   - [ ] **5.1**: Move the function to a shared `src/core/text/_json.js` (or fold into an existing text utility), import it from both call sites; identical body, identical contract.
-  - [ ] **5.2**: Gate: `node --test tests/core/caveman.test.mjs tests/core/caveman-efficacy.test.mjs tests/core/fingerprint.test.mjs` and `tests/docs/import-paths.test.mjs` green.
+  - [ ] **5.2**: Gate: `node --test tests/core/compression.test.mjs tests/core/compression-efficacy.test.mjs tests/core/fingerprint.test.mjs` and `tests/docs/import-paths.test.mjs` green.
 
 ## Dependencies
 

@@ -54,7 +54,7 @@ export function personaBody(target) {
     "   the same text as `scope` - it writes/refreshes the trio bookkeeping (headers, tables, statuses)",
     "   and leaves findings outside the scope untouched. Fill in the evidence, the finding wording and the steps.",
     "5. If a decision belongs to the user, stop and ask instead of guessing.",
-    "6. Caveman is implicit: if the user is working in caveman mode, keep the response compressed.",
+    "6. Responses are compressed automatically by the server: keep it factual and free of filler.",
     "7. Finish by proposing a conventional commit with a mandatory scope for the documents this run",
     `   wrote, e.g. \`docs(${target.role}): ${target.operation}\`.`,
   ].join("\n");

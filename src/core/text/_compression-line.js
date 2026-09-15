@@ -1,5 +1,5 @@
 /**
- * @module core/text/caveman-line
+ * @module core/text/compression-line
  *
  * The per-line prose compressor: the one place that owns the order the
  * vocabulary tables fire in.
@@ -11,13 +11,13 @@
  * owns it (see `./_level.js` and `docs/05-env-variables.md`).
  */
 
-import { atLeast, cavemanLevel } from "./_level.js";
+import { atLeast, compressionLevel } from "./_level.js";
 import { isCodeLine, isYamlLine } from "./_line-shape.js";
 import { PLACEHOLDER_CHAR, protectSpans, restoreSpans } from "./_protect.js";
 import { applyCase, tables } from "./_tables.js";
 
 export { looksLikeJson } from "./_classify.js";
-export { atLeast, cavemanEnabled, cavemanLevel, DEFAULT_LEVEL, LEVELS } from "./_level.js";
+export { atLeast, compressionEnabled, compressionLevel, DEFAULT_LEVEL, LEVELS } from "./_level.js";
 
 /** Leading articles: dropped at `full` and above. A placeholder counts as a word. */
 const ARTICLE_RE = new RegExp(String.raw`\b(?:the|an|a)\s+(?=[A-Za-z0-9${PLACEHOLDER_CHAR}])`, "gi");
@@ -33,7 +33,7 @@ const ARTICLE_RE = new RegExp(String.raw`\b(?:the|an|a)\s+(?=[A-Za-z0-9${PLACEHO
  * @param {string} [level] defaults to the level the environment asks for
  * @returns {string}
  */
-export function compressLine(line, level = cavemanLevel()) {
+export function compressLine(line, level = compressionLevel()) {
   if (level === "off") {
     return line;
   }

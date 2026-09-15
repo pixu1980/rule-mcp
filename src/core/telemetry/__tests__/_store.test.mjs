@@ -18,7 +18,7 @@ const old = {
   durationMs: 5,
   ok: true,
   cacheHit: false,
-  saved: { caveman: 10 },
+  saved: { compression: 10 },
 };
 writeFileSync(eventsFile(), `${readFileSync(eventsFile(), "utf8") + JSON.stringify(old)}\n`);
 check("T6 DAY_MS is a day", DAY_MS === DAY);

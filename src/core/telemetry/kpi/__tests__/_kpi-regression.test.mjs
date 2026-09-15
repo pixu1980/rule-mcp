@@ -1,6 +1,6 @@
 /**
  * The numbers this server reports about itself are a product surface. They
- * changed meaning twice in one week upstream (reminder cadence, cavemanRatio
+ * changed meaning twice in one week upstream (reminder cadence, compressionRatio
  * divisor), and the only thing standing between a redefinition and a quietly
  * wrong dashboard was a committed fixture. So a fixed event log and the KPI
  * block it is supposed to produce are committed side by side.
@@ -59,7 +59,7 @@ test("no reported quantity is negative and no ratio leaves its range", () => {
   const ratios = {
     "calls.errorRate": kpi.calls.errorRate,
     "cache.hitRate": kpi.cache.hitRate,
-    "tokens.cavemanRatio": kpi.tokens.cavemanRatio,
+    "tokens.compressionRatio": kpi.tokens.compressionRatio,
     "mcp.shareOfLlmTokens": kpi.mcp.shareOfLlmTokens,
     "mcp.shareOfSessionCost": kpi.mcp.shareOfSessionCost,
   };

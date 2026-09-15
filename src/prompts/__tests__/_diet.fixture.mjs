@@ -2,7 +2,7 @@
  * Hardening 4.2: the workflow reminder is put on a diet.
  *
  * The flight recorder measured the contradiction this suite locks down: the
- * reminder appended to every result cost ~460 tokens a session while caveman
+ * reminder appended to every result cost ~460 tokens a session while compression
  * compression measurably saved ~0. A rule the model has already read nine times
  * is not worth re-sending on the tenth call, so the full contract is emitted
  * once per session and re-anchored every Nth call after that.

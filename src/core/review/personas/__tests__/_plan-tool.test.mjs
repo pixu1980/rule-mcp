@@ -19,7 +19,7 @@ test("rule_tool_plan is registered and answers for a role", async () => {
 });
 
 test("rule_tool_plan applies overrides, an operation, and lists roles for an unknown one", async () => {
-  // Tool results pass through caveman compression, which drops articles: the
+  // Tool results pass through text compression, which drops articles: the
   // assertion is on the substance ("CLI output"), never on the filler.
   const overridden = await callTool("rule_tool_plan", { role: "a11y", years: 40, topic: "the CLI output" });
   const text = overridden.content.map((part) => part.text).join("\n");
@@ -39,7 +39,7 @@ test("rule_tool_plan applies overrides, an operation, and lists roles for an unk
 
 test("rule_tool_plan detects tokensave in the project dir for a scoped run", async () => {
   // Assertions stay on headings and inline-code tokens: tool results pass
-  // through caveman compression, which never touches either.
+  // through text compression, which never touches either.
   const box = mkdtempSync(join(tmpdir(), "rule-plan-"));
 
   try {

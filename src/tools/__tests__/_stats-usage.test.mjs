@@ -82,11 +82,11 @@ test("usage records the figures it was given and stamps the claim", async () => 
 test("usage refuses a declaration too large to be one", async () => {
   const result = await callTool("rule_tool_usage", { model: "m".repeat(5000) });
 
-  // Tool results pass through caveman compression, which drops articles: the
+  // Tool results pass through text compression, which drops articles: the
   // assertion is on the substance, never on the filler.
   assert.equal(result.isError, true, "an oversize body is refused outright");
   assert.match(text(result), /larger than 4096 bytes/, "the refusal names the cap");
-  assert.match(text(result), /not transcript/, "and says what to send instead");
+  assert.match(text(result), /not (a )?transcript/, "and says what to send instead");
 });
 
 test("usage validates the shape of every figure", async () => {

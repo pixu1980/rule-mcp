@@ -18,7 +18,7 @@
     "rule_tool_backend_node",
     "rule_tool_backend_security",
     "rule_tool_backend_workers",
-    "rule_tool_caveman",
+    "rule_tool_compression",
     "rule_tool_check",
     "rule_tool_component",
     "rule_tool_compress",

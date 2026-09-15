@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>051: Token-efficiency pipeline (caveman aggressive + tokensave-aware decoration) - rule-mcp docs</title>
+<title>051: Token-efficiency pipeline (compression aggressive + tokensave-aware decoration) - rule-mcp docs</title>
 <link rel="stylesheet" href="../../style.css">
 </head>
 <body>
@@ -27,15 +27,15 @@
 <li><a href="../../docs/adr/ADR.html">ADRs</a></li>
 </ul></nav></header>
 <main>
-<h1>051: Token-efficiency pipeline (caveman aggressive + tokensave-aware decoration)</h1>
+<h1>051: Token-efficiency pipeline (compression aggressive + tokensave-aware decoration)</h1>
 <ul>
 <li><strong>Date</strong>: 2026-08-25</li>
 <li><strong>Status</strong>: accepted</li>
-<li><strong>Tags</strong>: token-efficiency, caveman, tokensave, mcp-boundary, diagnostics</li>
+<li><strong>Tags</strong>: token-efficiency, compression, tokensave, mcp-boundary, diagnostics</li>
 <li><strong>Author</strong>: Emiliano Pisu <a href="mailto:pisuemiliano.1980@gmail.com">pisuemiliano.1980@gmail.com</a></li>
 </ul>
 <h2>Context</h2>
-<p>The server already compressed every output with caveman, but the tokensave
+<p>The server already compressed every output with compression, but the tokensave
 integration was partial: only <code>pix_gateway</code> and <code>rule_tool_process_handoff</code>
 emitted the tokensave directive, the suppression helper
 (<code>suppressIfTokensave</code>) had zero production callers, detection looked only at
@@ -58,7 +58,7 @@ JSON (tools like <code>pix_tool</code> contract <code>content[0]</code> to be pa
 <li><strong>Threshold suppression</strong>: blocks under 40 lines pass through untouched;
 heavy outputs of allowlisted tools (<code>rule_tool_fix</code>) truncate to head+tail
 plus a terse pointer. Threshold tunable via <code>RULE_MCP_SUPPRESS_MIN_LINES</code>.</li>
-<li><strong>Caveman aggressive by default</strong>: an extra pass compresses multi-word
+<li><strong>Compression aggressive by default</strong>: an extra pass compresses multi-word
 phrases (&quot;in order to&quot;→&quot;to&quot;, &quot;note that&quot;→&quot;&quot;, …) and more fillers, with the
 same safety rules (fences/JSON/headings verbatim).</li>
 <li><strong>Measured, not anecdotal</strong>: <code>src/core/token-stats.js</code> counts compression

@@ -1,13 +1,13 @@
-# 052: Token-efficiency pipeline (caveman aggressive + tokensave-aware decoration)
+# 052: Token-efficiency pipeline (compression aggressive + tokensave-aware decoration)
 
 - **Date**: 2026-08-25
 - **Status**: accepted
-- **Tags**: token-efficiency, caveman, tokensave, mcp-boundary, diagnostics
+- **Tags**: token-efficiency, compression, tokensave, mcp-boundary, diagnostics
 - **Author**: Emiliano Pisu <pisuemiliano.1980@gmail.com>
 
 ## Context
 
-The server already compressed every output with caveman, but the tokensave
+The server already compressed every output with compression, but the tokensave
 integration was partial: only `pix_gateway` and `rule_tool_process_handoff`
 emitted the tokensave directive, the suppression helper
 (`suppressIfTokensave`) had zero production callers, detection looked only at
@@ -29,7 +29,7 @@ possible on EVERY call - without breaking tool output contracts.
 4. **Threshold suppression**: blocks under 40 lines pass through untouched;
    heavy outputs of allowlisted tools (`rule_tool_fix`) truncate to head+tail
    plus a terse pointer. Threshold tunable via `RULE_MCP_SUPPRESS_MIN_LINES`.
-5. **Caveman aggressive by default**: an extra pass compresses multi-word
+5. **Compression aggressive by default**: an extra pass compresses multi-word
    phrases ("in order to"→"to", "note that"→"", …) and more fillers, with the
    same safety rules (fences/JSON/headings verbatim).
 6. **Measured, not anecdotal**: `src/core/token-stats.js` counts compression

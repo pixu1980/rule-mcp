@@ -1,12 +1,12 @@
 /**
- * @module core/text/caveman-aggressive
+ * @module core/text/compression-aggressive
  *
  * The `ultra` sentence-shape pass, applied on top of the per-line vocabulary
  * pass: sentence-initial coordinating conjunctions go, because at `ultra` the
  * structure of the list already carries what they connect.
  *
  * The vocabulary itself (phrases, fillers, articles, synonyms, abbreviations,
- * arrow causality) lives in `./_caveman-line.js` and its data tables, so there
+ * arrow causality) lives in `./_compression-line.js` and its data tables, so there
  * is one source of order rather than two passes racing over the same words.
  *
  * Same safety rules as the standard pass: fenced code, headings, table rows,
@@ -15,7 +15,7 @@
  */
 
 import { fenceClosedBy, fenceOpenedBy } from "./_fence.js";
-import { atLeast, cavemanLevel } from "./_level.js";
+import { atLeast, compressionLevel } from "./_level.js";
 import { isCodeLine, isYamlLine } from "./_line-shape.js";
 
 /** A bullet or ordered-list marker the conjunction hides behind. */
@@ -46,7 +46,7 @@ function stripConjunctions(line) {
  * @param {{ level?: string }} [options]
  * @returns {string}
  */
-export function compressTextAggressive(text, { level = cavemanLevel() } = {}) {
+export function compressTextAggressive(text, { level = compressionLevel() } = {}) {
   if (typeof text !== "string" || text.length === 0 || !atLeast(level, "ultra")) {
     return text;
   }

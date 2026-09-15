@@ -147,8 +147,8 @@ in the compressed style, so on them the rules measure how little filler is
 left; the synthetic corpus is what an uncompressed assistant answer looks
 like, and that is the corpus the level table describes. Guard violations
 are 0 at every level on all four, which is the number that has to stay 0.</p>
-<p>The rules are ported from the <a href="https://github.com/pixu1980/rule-mcp/blob/main/skills/rule-caveman/SKILL.html"><code>rule-caveman</code></a>
-skill and its <code>caveman-compress</code> companion: the vocabulary tables, the
+<p>The rules are ported from the <a href="https://github.com/pixu1980/rule-mcp/blob/main/skills/rule-compression/SKILL.html"><code>rule-compression</code></a>
+skill and its <code>compression-compress</code> companion: the vocabulary tables, the
 classification guards and <code>validate.py</code>&#39;s structural validator. The LLM
 compression step is deliberately not ported - an LLM in the output path
 costs determinism, cacheability and the zero-dependency contract, and the
@@ -176,25 +176,25 @@ why they are not compressed.</p>
 <td>tools/call results</td>
 <td><code>src/tools/router/_helpers.js</code> <code>finalize()</code></td>
 <td>prose</td>
-<td><code>caveman</code></td>
+<td><code>compression</code></td>
 </tr>
 <tr>
 <td>resources/read bodies (text/*)</td>
 <td><code>src/resources/_serve.js</code> <code>readResource()</code></td>
 <td>prose</td>
-<td><code>caveman-resource</code></td>
+<td><code>compression-resource</code></td>
 </tr>
 <tr>
 <td>prompts/get bodies</td>
 <td><code>src/server/_prompt-handlers.js</code> <code>GetPrompt</code></td>
 <td>prose</td>
-<td><code>caveman-prompt</code></td>
+<td><code>compression-prompt</code></td>
 </tr>
 <tr>
 <td>prompts/list descriptions</td>
 <td><code>src/server/_prompt-handlers.js</code> <code>ListPrompts</code></td>
 <td>prose</td>
-<td><code>caveman-prompt-list</code></td>
+<td><code>compression-prompt-list</code></td>
 </tr>
 <tr>
 <td>tools/list descriptions</td>
@@ -212,19 +212,19 @@ why they are not compressed.</p>
 <td>resume hook block (SessionStart / UserPromptSubmit)</td>
 <td><code>src/core/session/resume/_context.js</code> <code>handoffBlock()</code></td>
 <td>prose</td>
-<td><code>caveman-resume</code></td>
+<td><code>compression-resume</code></td>
 </tr>
 <tr>
 <td>banners (self-update notice, resume announcement)</td>
 <td><code>src/tools/router/_helpers.js</code> <code>withBanner()</code></td>
 <td>prose</td>
-<td><code>caveman-banner</code></td>
+<td><code>compression-banner</code></td>
 </tr>
 <tr>
 <td>workflow reminder</td>
 <td><code>src/core/enforcement/_reminder.js</code></td>
 <td>prose (rides on the tool-result pass)</td>
-<td><code>caveman</code></td>
+<td><code>compression</code></td>
 </tr>
 <tr>
 <td>error envelopes</td>
@@ -256,7 +256,7 @@ model?&quot;:</p>
 </thead>
 <tbody><tr>
 <td>Markdown (handoffs, docs served via <code>rule://</code> text resources, the resume hook block)</td>
-<td>compressed (tool result, resource read, <code>caveman-resume</code>)</td>
+<td>compressed (tool result, resource read, <code>compression-resume</code>)</td>
 </tr>
 <tr>
 <td>Skills (full body + summary resources, tool-embedded evidence)</td>
@@ -283,8 +283,8 @@ model?&quot;:</p>
 <td>served content (plan outputs): compressed via the tool-result pass; <code>src/roles/*.md</code> source files stay untouched on disk</td>
 </tr>
 </tbody></table>
-<p>Opt-outs apply everywhere: <code>RULE_MCP_NO_CAVEMAN=1</code> and
-<code>RULE_MCP_CAVEMAN_LEVEL=off</code> turn the pass off on every surface that
+<p>Opt-outs apply everywhere: <code>RULE_MCP_NO_COMPRESSION=1</code> and
+<code>RULE_MCP_COMPRESSION_LEVEL=off</code> turn the pass off on every surface that
 runs it (plus <code>RULE_MCP_NO_RESUME_HANDON</code> for the resume block and
 <code>RULE_MCP_NO_REMINDER</code> for the reminder).</p>
 <ul>

@@ -16,19 +16,19 @@ against are in [`12-guardrails.md`](12-guardrails.md).
 The router's own directory, `skills/rule/`, mints no skill tool, which is why
 the catalog is 90 and the directory count is 91.
 
-| Area                      | Skills | Covers                                                                |
-| ------------------------- | ------ | --------------------------------------------------------------------- |
-| [ai](#ai)                 | 5      | Building agents: prompting, context, evals, agent architecture        |
-| [backend](#backend)       | 9      | Services and APIs: Node frameworks, API design, backend security      |
-| [caveman](#caveman)       | 1      | Output compression: the rules that shorten prose without losing facts |
-| [data](#data)             | 8      | Databases and storage, from SQL dialects to IndexedDB                 |
-| [devops](#devops)         | 5      | Pipelines, containers, observability, testing, versioning             |
-| [frontend](#frontend)     | 14     | Frameworks and the code that runs in a browser                        |
-| [platform](#platform)     | 6      | Where the code ships: web, desktop, mobile, library, agent            |
-| [process](#process)       | 10     | How work is done: reviews, ADRs, changelogs, handoffs, simplicity     |
-| [styleguide](#styleguide) | 18     | The rules code is written to, per language and concern                |
-| [toolchain](#toolchain)   | 12     | Build tools, linters, package manager, commit hooks                   |
-| [ui](#ui)                 | 2      | The design system and its components                                  |
+| Area                        | Skills | Covers                                                                |
+| --------------------------- | ------ | --------------------------------------------------------------------- |
+| [ai](#ai)                   | 5      | Building agents: prompting, context, evals, agent architecture        |
+| [backend](#backend)         | 9      | Services and APIs: Node frameworks, API design, backend security      |
+| [compression](#compression) | 1      | Output compression: the rules that shorten prose without losing facts |
+| [data](#data)               | 8      | Databases and storage, from SQL dialects to IndexedDB                 |
+| [devops](#devops)           | 5      | Pipelines, containers, observability, testing, versioning             |
+| [frontend](#frontend)       | 14     | Frameworks and the code that runs in a browser                        |
+| [platform](#platform)       | 6      | Where the code ships: web, desktop, mobile, library, agent            |
+| [process](#process)         | 10     | How work is done: reviews, ADRs, changelogs, handoffs, simplicity     |
+| [styleguide](#styleguide)   | 18     | The rules code is written to, per language and concern                |
+| [toolchain](#toolchain)     | 12     | Build tools, linters, package manager, commit hooks                   |
+| [ui](#ui)                   | 2      | The design system and its components                                  |
 
 ### ai
 
@@ -54,11 +54,11 @@ the catalog is 90 and the directory count is 91.
 | `rule-backend-security` | `rule_tool_backend_security` | node, api            | Use when securing a backend or reviewing authentication. Covers environment variables, Docker images, dependency audits, security headers, rate limiting, CORS, secrets, input validation, and the authentication lifecycle: JWT verification, session revocation, logout, password reset, remembered devices, step-up auth, and CSRF. |
 | `rule-backend-workers`  | `rule_tool_backend_workers`  | node, worker-threads | Offload CPU-bound JavaScript to worker_threads, pools, and cluster. Covers the event loop model, libuv thread pool, piscina, clustering, and the decision framework for async vs workers vs cluster.                                                                                                                                   |
 
-### caveman
+### compression
 
-| Skill         | Tool               | Frameworks | Description                                                                                                                                                                                                                                   |
-| ------------- | ------------------ | ---------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `rule-caveman` | `rule_tool_caveman` | all        | Use when writing anything a human will read: answers, commit messages, code reviews, docs. Covers the compression rules, the intensity levels, what must never be compressed, and how the server enforces the output style deterministically. |
+| Skill             | Tool                   | Frameworks | Description                                                                                                                                                                                                                                   |
+| ----------------- | ---------------------- | ---------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `rule-compression` | `rule_tool_compression` | all        | Use when writing anything a human will read: answers, commit messages, code reviews, docs. Covers the compression rules, the intensity levels, what must never be compressed, and how the server enforces the output style deterministically. |
 
 ### data
 

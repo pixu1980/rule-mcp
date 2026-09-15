@@ -7,11 +7,11 @@
 
 ## Context
 
-The caveman skill defines lite/full/ultra intensity levels, and its caveman-compress companion reaches its numbers by calling an LLM and validating the result with validate.py. The server had one level, a 16-word vocabulary and no validator, measured at 0.5-2.2 percent against the skill's ~75 percent claim. Whether to port the LLM step was the open question.
+The compression skill defines lite/full/ultra intensity levels, and its compression-reference companion reaches its numbers by calling an LLM and validating the result with validate.py. The server had one level, a 16-word vocabulary and no validator, measured at 0.5-2.2 percent against the skill's ~75 percent claim. Whether to port the LLM step was the open question.
 
 ## Decision
 
-Port the deterministic half and refuse the LLM half. Four levels (off, lite, full, ultra) select data tables tagged per level, and validate.py becomes src/core/text/compress-guard/, running per prose run with rollback on violation. An LLM in the output path would cost determinism, cacheability and the zero-dependency contract, and the result cache could no longer replay a compression. The guard plus per-block rollback buys the same safety deterministically, and the caveman skill is credited as the idea source rather than invoked.
+Port the deterministic half and refuse the LLM half. Four levels (off, lite, full, ultra) select data tables tagged per level, and validate.py becomes src/core/text/compress-guard/, running per prose run with rollback on violation. An LLM in the output path would cost determinism, cacheability and the zero-dependency contract, and the result cache could no longer replay a compression. The guard plus per-block rollback buys the same safety deterministically, and the compression skill is credited as the idea source rather than invoked.
 
 ## Consequences
 

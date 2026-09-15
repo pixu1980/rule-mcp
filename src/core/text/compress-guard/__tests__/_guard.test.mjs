@@ -84,7 +84,7 @@ test("the extractors read what validate.py reads", () => {
 });
 
 // The python CLI is the port source; when it is installed, the two must agree.
-const validatePy = join(homedir(), ".agents/skills/caveman-compress/scripts/validate.py");
+const validatePy = join(homedir(), ".agents/skills/compression-reference/scripts/validate.py");
 const hasPython = spawnSync("python3", ["--version"], { stdio: "ignore" }).status === 0;
 
 test("the python validate.py CLI contract agrees with the guard", { skip: !(hasPython && existsSync(validatePy)) && "python3 or validate.py is not installed here" }, () => {

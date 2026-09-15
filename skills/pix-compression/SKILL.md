@@ -1,9 +1,8 @@
 ---
-name: rule-caveman
+name: rule-compression
 description: >-
   Use when writing anything a human will read: answers, commit messages, code reviews, docs. Covers the compression rules, the intensity levels, what must never be compressed, and how the server enforces the output style deterministically.
 tags:
-  - caveman
   - compression
   - compress
   - tokens
@@ -15,7 +14,7 @@ tags:
 frameworks: [all]
 ---
 
-# rule-caveman - Say it in fewer tokens
+# rule-compression - Say it in fewer tokens
 
 ## Purpose
 
@@ -113,7 +112,7 @@ result, both opt-out:
 
 | Pass        | Module                    | What it removes                           | Opt-out                           |
 | ----------- | ------------------------- | ----------------------------------------- | --------------------------------- |
-| Caveman     | `src/core/caveman.js`     | Filler, leading articles, blank-line runs | `RULE_MCP_NO_CAVEMAN=1`     |
+| Compression     | `src/core/compression.js`     | Filler, leading articles, blank-line runs | `RULE_MCP_NO_COMPRESSION=1`     |
 | Fingerprint | `src/core/fingerprint.js` | Em dashes, curly quotes, British spelling | `RULE_MCP_NO_FINGERPRINT=1` |
 
 Both skip fenced code, inline spans, URLs and JSON, and both are idempotent.

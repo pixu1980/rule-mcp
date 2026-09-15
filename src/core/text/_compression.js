@@ -1,17 +1,17 @@
 /**
- * @module core/caveman
+ * @module core/compression
  *
- * Deterministic "caveman" output compressor. Trims filler from PROSE to cut
- * token usage while preserving every piece of technical substance. Applied to
- * tool outputs by the router (on by default; `RULE_MCP_CAVEMAN_LEVEL`
- * picks the intensity, `RULE_MCP_NO_CAVEMAN=1` turns it off).
+ * Deterministic text compressor. Trims filler from PROSE to cut token usage
+ * while preserving every piece of technical substance. Applied to tool outputs
+ * by the router (on by default; `RULE_MCP_COMPRESSION_LEVEL` picks the
+ * intensity, `RULE_MCP_NO_COMPRESSION=1` turns it off).
  *
- * Inspired by the caveman skill (`skills/rule-caveman/SKILL.md`) and its
- * caveman-compress companion: the deterministic rules are ported - the
- * vocabulary tables, the classification guards and `validate.py`'s structural
- * validator - and the LLM compression step is deliberately not. An LLM in the
- * output path costs determinism, cacheability and the zero-dependency
- * contract; the guard plus per-block rollback buys the same safety for free.
+ * Inspired by the deterministic compression rules in the compression skill
+ * (`skills/rule-compression/SKILL.md`): the vocabulary tables, the
+ * classification guards and the structural validator are ported, while the LLM
+ * compression step is deliberately left out. An LLM in the output path costs
+ * determinism, cacheability and the zero-dependency contract; the guard plus
+ * per-block rollback buys the same safety for free.
  *
  * Safety -- the compressor NEVER touches:
  *   - fenced code blocks (``` ... ```)
@@ -22,17 +22,23 @@
  *   - content whose text is JSON (data, not prose -- compressing it would corrupt it)
  *
  * On top of those exemptions, every prose run between two fences is checked
- * against the original by `./compress-guard/` - see `./_caveman-blocks.js`.
+ * against the original by `./compress-guard/` - see `./_compression-blocks.js`.
  * Idempotent: compress(compress(x)) === compress(x).
  */
 
 import { addCompression } from "../telemetry/_token-stats.js";
-import { compressTextGuarded } from "./_caveman-blocks.js";
+import { compressTextGuarded } from "./_compression-blocks.js";
 import { looksLikeJson } from "./_classify.js";
-import { cavemanLevel } from "./_level.js";
+import { compressionLevel } from "./_level.js";
 
-export { compressTextGuarded } from "./_caveman-blocks.js";
-export { atLeast, cavemanEnabled, cavemanLevel, DEFAULT_LEVEL, LEVELS } from "./_level.js";
+export { compressTextGuarded } from "./_compression-blocks.js";
+export { atLeast, compressionEnabled, compressionLevel, DEFAULT_LEVEL, LEVELS } from "./_level.js";
+
+/**
+ * Below this many characters the compression pass costs more in overhead than
+ * it saves. The MCP middleware (tool results, prompts, resources) skips it.
+ */
+export const MIN_COMPRESS_LENGTH = 100;
 
 /**
  * Compress a block of prose/markdown text. Fenced code blocks pass through
@@ -55,7 +61,7 @@ export function compressText(text, options) {
  * @param {{ level?: string, source?: string }} [options]
  * @returns {{ text: string, saved: number, rollbacks: number }}
  */
-export function compressSurfaceText(text, { level = cavemanLevel(), source = "caveman" } = {}) {
+export function compressSurfaceText(text, { level = compressionLevel(), source = "compression" } = {}) {
   if (level === "off" || typeof text !== "string" || text === "" || looksLikeJson(text)) {
     return { text, saved: 0, rollbacks: 0 };
   }
@@ -74,7 +80,7 @@ export function compressSurfaceText(text, { level = cavemanLevel(), source = "ca
  * @param {{ level?: string }} [options]
  * @returns {object} the same result when disabled, else a compressed copy
  */
-export function compressResult(result, { level = cavemanLevel() } = {}) {
+export function compressResult(result, { level = compressionLevel() } = {}) {
   if (level === "off") {
     return result;
   }
@@ -103,7 +109,7 @@ export function compressResult(result, { level = cavemanLevel() } = {}) {
 
   // A rollback is the only thing worth reporting: it means a rule was unsafe
   // on this payload, which is a vocabulary bug, not a runtime condition.
-  const meta = rollbacks > 0 ? { _meta: { ...result._meta, pixCaveman: { level, rollbacks } } } : {};
+  const meta = rollbacks > 0 ? { _meta: { ...result._meta, pixCompression: { level, rollbacks } } } : {};
 
   return { ...result, content, ...meta };
 }

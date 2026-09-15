@@ -58,7 +58,7 @@ check("T3.6 an installation id is present and stable", new Set(events.map((event
 check("T3.7 guardrail failures are counted", events.find((event) => event.tool === "rule_tool_check").guardrailFailures === 3);
 
 // ── T4: the token buckets stay separate ──
-check("T4 measured savings are summed per source", routed.saved.caveman === 120 && events.find((event) => event.cacheHit).saved.cache === 900);
+check("T4 measured savings are summed per source", routed.saved.compression === 120 && events.find((event) => event.cacheHit).saved.cache === 900);
 check("T4.1 the routing estimate is a separate field, not part of saved", routed.estimatedRouting === 3400 && routed.saved.estimatedRouting === undefined);
 
 // ── T8: never break the call it observes ──

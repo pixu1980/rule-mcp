@@ -3,8 +3,8 @@
  *
  * The compression intensity levels and where the running level comes from.
  *
- * `RULE_MCP_CAVEMAN_LEVEL` picks one of `off`, `lite`, `full`, `ultra`
- * (default `full`); `RULE_MCP_NO_CAVEMAN=1` is the historical opt-out
+ * `RULE_MCP_COMPRESSION_LEVEL` picks one of `off`, `lite`, `full`, `ultra`
+ * (default `full`); `RULE_MCP_NO_COMPRESSION=1` is the historical opt-out
  * and aliases `off`. The value is parsed once per distinct environment rather
  * than once per line, and an unknown value warns once instead of silently
  * turning compression off.
@@ -38,9 +38,9 @@ let warned = false;
  *
  * @returns {"off"|"lite"|"full"|"ultra"}
  */
-export function cavemanLevel() {
-  const raw = process.env.RULE_MCP_CAVEMAN_LEVEL;
-  const off = process.env.RULE_MCP_NO_CAVEMAN === "1";
+export function compressionLevel() {
+  const raw = process.env.RULE_MCP_COMPRESSION_LEVEL;
+  const off = process.env.RULE_MCP_NO_COMPRESSION === "1";
 
   if (resolved.raw === raw && resolved.off === off) {
     return resolved.level;
@@ -57,7 +57,7 @@ export function cavemanLevel() {
       level = wanted;
     } else if (!warned) {
       warned = true;
-      process.stderr.write(`rule-mcp: unknown RULE_MCP_CAVEMAN_LEVEL "${raw}", using "${DEFAULT_LEVEL}"\n`);
+      process.stderr.write(`rule-mcp: unknown RULE_MCP_COMPRESSION_LEVEL "${raw}", using "${DEFAULT_LEVEL}"\n`);
     }
   }
 
@@ -67,6 +67,6 @@ export function cavemanLevel() {
 }
 
 /** @returns {boolean} */
-export function cavemanEnabled() {
-  return cavemanLevel() !== "off";
+export function compressionEnabled() {
+  return compressionLevel() !== "off";
 }

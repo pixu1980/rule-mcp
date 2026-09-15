@@ -23,7 +23,7 @@ export const ROUTER = {
     "8. Run project tests/typecheck. Report commands and real outcomes; never claim unexecuted checks passed.",
     "9. Finish by proposing a conventional commit message with a mandatory scope.",
     "",
-    "Caveman is implicit: if the user is working in caveman mode, keep every response compressed.",
+    "Responses are compressed automatically by the server: keep them factual and free of filler.",
   ].join("\n"),
 };
 
@@ -48,7 +48,7 @@ export const HANDOFF_BODY = [
   "4. Present the handoff as a paste-ready block for the next session, including the commit-scope convention reminder, the path of the handoff file, and the list of commits just created.",
   "5. If the grouping into atomic commits is ambiguous, ask the user how to split before committing.",
   "6. Write the handoff and every commit message in English, American spelling (color, behavior, organize).",
-  "7. Caveman is implicit: if the user is working in caveman mode, keep the handoff and every response compressed.",
+  "7. Responses are compressed automatically by the server: keep the handoff factual and free of filler.",
 ].join("\n");
 
 /**
@@ -70,6 +70,6 @@ export function areaBody(description) {
     "4. Validate generated code with `pix_check`; iterate until all guardrails pass.",
     "5. Write every comment, identifier and generated document in English, American spelling (color, behavior, organize - see rule-styleguide-english).",
     "6. Finish by proposing a conventional commit message with a mandatory scope.",
-    "7. Caveman is implicit: if the user is working in caveman mode, keep the response compressed.",
+    "7. Responses are compressed automatically by the server: keep it factual and free of filler.",
   ].join("\n");
 }

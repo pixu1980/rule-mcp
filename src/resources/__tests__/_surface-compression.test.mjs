@@ -16,7 +16,7 @@ import { test } from "node:test";
 process.env.RULE_MCP_STATE_DIR = mkdtempSync(join(tmpdir(), "rule-surface-"));
 process.env.RULE_MCP_NO_AUTOUPDATE = "1";
 process.env.RULE_MCP_NO_CACHE = "1";
-delete process.env.RULE_MCP_NO_CAVEMAN;
+delete process.env.RULE_MCP_NO_COMPRESSION;
 
 const { readResource } = await import("../_serve.js");
 const { registerPromptHandlers } = await import("../../server/_prompt-handlers.js");
@@ -45,8 +45,8 @@ test("a markdown resource body is compressed and booked as its own source", asyn
   assert.deepEqual(structure(out), structure(source), "and nothing structural with it");
 
   const stats = getTokenStats();
-  assert.ok(stats.savedBySource["caveman-resource"] > 0, "the resource surface books its own saving");
-  assert.equal(stats.savedBySource.caveman, undefined, "and does not book it as a tool result");
+  assert.ok(stats.savedBySource["compression-resource"] > 0, "the resource surface books its own saving");
+  assert.equal(stats.savedBySource.compression, undefined, "and does not book it as a tool result");
 });
 
 test("a JSON resource body is data and is left alone", async () => {
@@ -68,7 +68,7 @@ test("a prompt body is compressed and booked as its own source", async () => {
 
   assert.ok(after.length < before.length, `the persona prose must compress: ${before.length} -> ${after.length}`);
   assert.deepEqual(structure(after), structure(before), "and nothing structural with it");
-  assert.ok(getTokenStats().savedBySource["caveman-prompt"] > 0, "the prompt surface books its own saving");
+  assert.ok(getTokenStats().savedBySource["compression-prompt"] > 0, "the prompt surface books its own saving");
 });
 
 test("prompts/list is left alone: its descriptions are schema, not prose", () => {

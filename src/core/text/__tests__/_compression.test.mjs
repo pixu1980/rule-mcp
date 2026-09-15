@@ -1,5 +1,5 @@
 /**
- * @module test/caveman.test
+ * @module test/compression.test
  *
  * Unit tests for the deterministic output compressor: it must trim prose filler
  * while preserving code fences, inline code, URLs, headings, and JSON verbatim.
@@ -17,9 +17,9 @@ const check = (label, ok) => {
   }
 };
 
-console.log("=== Caveman Compressor Tests ===\n");
+console.log("=== Compression Compressor Tests ===\n");
 
-import { compressText, compressResult } from "../../../../src/core/text/_caveman.js";
+import { compressText, compressResult } from "../../../../src/core/text/_compression.js";
 
 // ── T1: filler + leading articles removed from prose ──
 const prose = "This is really just the button component that you actually want.";
@@ -63,10 +63,10 @@ check("T7 JSON content item untouched", cr.content[0].text === result.content[0]
 check("T7.1 prose content item compressed", !/\breally\b/i.test(cr.content[1].text));
 
 // ── T8: opt-out ──
-process.env.RULE_MCP_NO_CAVEMAN = "1";
+process.env.RULE_MCP_NO_COMPRESSION = "1";
 const cr2 = compressResult(result);
 check("T8 opt-out returns result unchanged", cr2.content[1].text === "This is really just prose.");
-delete process.env.RULE_MCP_NO_CAVEMAN;
+delete process.env.RULE_MCP_NO_COMPRESSION;
 
 console.log(`\nResults: ${pass} passed, ${fail} failed`);
 setTimeout(() => process.exit(fail > 0 ? 1 : 0), 50);

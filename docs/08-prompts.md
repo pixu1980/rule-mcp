@@ -32,7 +32,7 @@ Claude Code installs clean `/rule-*` commands instead and suppresses these
 | `/rule-area-backend-node`              | <request>  | backend: the node skill                                                                                                                                   |
 | `/rule-area-backend-security`          | <request>  | backend: the security skill                                                                                                                               |
 | `/rule-area-backend-workers`           | <request>  | backend: the workers skill                                                                                                                                |
-| `/rule-area-caveman`                   | <request>  | caveman work, across every caveman skill                                                                                                                  |
+| `/rule-area-compression`               | <request>  | compression work, across every compression skill                                                                                                          |
 | `/rule-area-data`                      | <request>  | data work, across every data skill                                                                                                                        |
 | `/rule-area-data-duckdb`               | <request>  | data: the duckdb skill                                                                                                                                    |
 | `/rule-area-data-indexed-db`           | <request>  | data: the indexed-db skill                                                                                                                                |

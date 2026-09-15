@@ -87,7 +87,7 @@
 </tr>
 <tr>
 <td><code>RULE_MCP_NO_PROMPT_DIRECTIVE</code></td>
-<td>Silence the SessionStart/UserPromptSubmit directive (rule-first, no subagents, caveman, mantra) injected by the harness hooks.</td>
+<td>Silence the SessionStart/UserPromptSubmit directive (rule-first, no subagents, compression, mantra) injected by the harness hooks.</td>
 <td>unset</td>
 <td><code>1</code> = disable</td>
 </tr>
@@ -98,14 +98,14 @@
 <td><code>1</code> = disable</td>
 </tr>
 <tr>
-<td><code>RULE_MCP_NO_CAVEMAN</code></td>
-<td>Disable caveman compression of tool results (filler and leading articles are stripped from prose; code, JSON, URLs and headings are never touched).</td>
+<td><code>RULE_MCP_NO_COMPRESSION</code></td>
+<td>Disable compression compression of tool results (filler and leading articles are stripped from prose; code, JSON, URLs and headings are never touched).</td>
 <td>unset</td>
 <td><code>1</code> = disable</td>
 </tr>
 <tr>
-<td><code>RULE_MCP_CAVEMAN_LEVEL</code></td>
-<td>Compression intensity. <code>off</code> is the alias of <code>RULE_MCP_NO_CAVEMAN=1</code>; <code>lite</code> drops filler, hedging and pleasantries and keeps whole sentences; <code>full</code> adds leading articles, phrase rewrites and short synonyms; <code>ultra</code> adds the abbreviation map, conjunction stripping and arrow causality. An unknown value falls back to <code>full</code> with one warning on stderr.</td>
+<td><code>RULE_MCP_COMPRESSION_LEVEL</code></td>
+<td>Compression intensity. <code>off</code> is the alias of <code>RULE_MCP_NO_COMPRESSION=1</code>; <code>lite</code> drops filler, hedging and pleasantries and keeps whole sentences; <code>full</code> adds leading articles, phrase rewrites and short synonyms; <code>ultra</code> adds the abbreviation map, conjunction stripping and arrow causality. An unknown value falls back to <code>full</code> with one warning on stderr.</td>
 <td><code>full</code></td>
 <td><code>off</code>, <code>lite</code>, <code>full</code>, <code>ultra</code></td>
 </tr>
@@ -397,8 +397,8 @@ knob documented above can be traced to the code that answers it.</p>
 <td><code>src/cli/cache/_stats.js</code>, <code>src/core/cache/tool-cache/_config.js</code></td>
 </tr>
 <tr>
-<td><code>RULE_MCP_CAVEMAN_LEVEL</code></td>
-<td><code>src/core/text/_caveman.js</code>, <code>src/core/text/_level.js</code>, <code>src/core/text/_surfaces.js</code></td>
+<td><code>RULE_MCP_COMPRESSION_LEVEL</code></td>
+<td><code>src/core/text/_compression.js</code>, <code>src/core/text/_level.js</code>, <code>src/core/text/_surfaces.js</code></td>
 </tr>
 <tr>
 <td><code>RULE_MCP_CHECK_TIMEOUT_MS</code></td>
@@ -453,8 +453,8 @@ knob documented above can be traced to the code that answers it.</p>
 <td><code>src/cli/cache/_helpers.js</code>, <code>src/cli/cache/_stats.js</code>, <code>src/cli/installers/_env.js</code>, <code>src/core/bm25/_cache-signature.js</code>, <code>src/core/cache/tool-cache/_config.js</code></td>
 </tr>
 <tr>
-<td><code>RULE_MCP_NO_CAVEMAN</code></td>
-<td><code>src/cli/installers/_env.js</code>, <code>src/core/text/_caveman.js</code>, <code>src/core/text/_level.js</code>, <code>src/core/text/_surfaces.js</code></td>
+<td><code>RULE_MCP_NO_COMPRESSION</code></td>
+<td><code>src/cli/installers/_env.js</code>, <code>src/core/text/_compression.js</code>, <code>src/core/text/_level.js</code>, <code>src/core/text/_surfaces.js</code></td>
 </tr>
 <tr>
 <td><code>RULE_MCP_NO_FINGERPRINT</code></td>

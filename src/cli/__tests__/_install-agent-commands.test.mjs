@@ -69,7 +69,7 @@ try {
     "rule-mcp.md",
     "rule-tdd.md",
     "rule-check.md",
-    "rule-caveman.md",
+    "rule-compression.md",
     "rule-new-feature.md",
     "rule-a11y-audit.md",
     "rule-code-review.md",

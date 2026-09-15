@@ -130,14 +130,14 @@ test("a key never returns another tool's answer", async () => {
 
 test("a level change never replays another level's output", async () => {
   cacheClear();
-  const args = { text: "The database configuration is really just a request.", mode: "caveman" };
+  const args = { text: "The database configuration is really just a request.", mode: "compression" };
 
-  process.env.RULE_MCP_CAVEMAN_LEVEL = "full";
+  process.env.RULE_MCP_COMPRESSION_LEVEL = "full";
   const atFull = (await callTool("rule_tool_compress", args)).content[0].text;
 
-  process.env.RULE_MCP_CAVEMAN_LEVEL = "ultra";
+  process.env.RULE_MCP_COMPRESSION_LEVEL = "ultra";
   const atUltra = (await callTool("rule_tool_compress", args)).content[0].text;
-  delete process.env.RULE_MCP_CAVEMAN_LEVEL;
+  delete process.env.RULE_MCP_COMPRESSION_LEVEL;
 
   assert.notEqual(atUltra, atFull, "ultra abbreviates what full leaves alone - a shared key would have replayed full");
   assert.match(atUltra, /\bDB\b/, "the ultra answer is the ultra vocabulary");

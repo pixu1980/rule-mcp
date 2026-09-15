@@ -1,7 +1,7 @@
 /**
- * Hardening 4.3: does caveman compression actually save anything?
+ * Hardening 4.3: does text compression actually save anything?
  *
- * Every flight export said `measuredSaved: 0` with `savedBySource.caveman: 0`,
+ * Every flight export said `measuredSaved: 0` with `savedBySource.compression: 0`,
  * which left two possibilities: the compressor was not running where it
  * mattered, or its savings were a story. This suite settles it on a corpus of
  * real tool results rather than on invented prose, and pins the two claims that
@@ -16,16 +16,16 @@ import { mkdirSync, mkdtempSync, realpathSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 
-const stateDir = mkdtempSync(join(tmpdir(), "rule-caveman-eval-"));
-const projectDir = realpathSync(mkdtempSync(join(tmpdir(), "rule-caveman-project-")));
+const stateDir = mkdtempSync(join(tmpdir(), "rule-compression-eval-"));
+const projectDir = realpathSync(mkdtempSync(join(tmpdir(), "rule-compression-project-")));
 mkdirSync(join(projectDir, ".git"), { recursive: true });
 process.env.RULE_MCP_STATE_DIR = stateDir;
 process.env.RULE_MCP_NO_CACHE = "1";
 process.env.RULE_MCP_NO_AUTOUPDATE = "1";
 delete process.env.RULE_MCP_NO_TELEMETRY;
-delete process.env.RULE_MCP_NO_CAVEMAN;
+delete process.env.RULE_MCP_NO_COMPRESSION;
 
-export const { compressResult } = await import("../_caveman.js");
+export const { compressResult } = await import("../_compression.js");
 const { loadAllSkills } = await import("../../skills/index.js");
 export const { callTool, recomputeCore } = await import("../../../tools/router/index.js");
 export const { flush } = await import("../../telemetry/recorder/index.js");
@@ -41,7 +41,7 @@ export const CORPUS = [
   ["rule_tool_styleguide_css", {}],
   ["rule_tool_backend_node", {}],
   ["rule_tool_process_code_review", {}],
-  ["rule_tool_caveman", {}],
+  ["rule_tool_compression", {}],
 ];
 
 export const text = (result) => (result?.content ?? []).map((item) => item.text ?? "").join("");

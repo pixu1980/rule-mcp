@@ -22,7 +22,7 @@ test("refactor: areas are rule-area-*, removed commands gone, check renamed to p
   for (const removed of [
     "rule-a11y-audit",
     "rule-code-review",
-    "rule-caveman",
+    "rule-compression",
     "rule-tdd",
     "rule-new-feature",
     "rule-pull-request",

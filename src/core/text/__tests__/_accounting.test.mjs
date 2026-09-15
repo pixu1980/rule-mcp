@@ -17,12 +17,12 @@ test("the reported compression ratio is the measured saving, not the net shrink"
         tool: "rule_tool_backend_node",
         coreTokens: 1200,
         finalTokens: 1260,
-        saved: { caveman: 120 },
+        saved: { compression: 120 },
       },
     ],
   });
 
-  assert.equal(kpi.tokens.cavemanRatio, 0.1, "the ratio must be what compression removed over what it was given");
+  assert.equal(kpi.tokens.compressionRatio, 0.1, "the ratio must be what compression removed over what it was given");
   assert.equal(kpi.tokens.reminderOverhead, 60, "the reminder's net cost stays its own number");
 });
 
@@ -34,7 +34,7 @@ test("the recorder books what compression removed, not what survives the reminde
   const recorded = readEvents().filter((event) => event.tool === "rule_tool_backend_node" && !event.cacheHit);
   assert.ok(recorded.length > 0, "the call must have been recorded at all");
   assert.ok(
-    recorded.some((event) => Number(event.saved?.caveman) > 0),
-    `savedBySource.caveman must be positive on a prose result (got ${JSON.stringify(recorded.map((event) => event.saved))})`,
+    recorded.some((event) => Number(event.saved?.compression) > 0),
+    `savedBySource.compression must be positive on a prose result (got ${JSON.stringify(recorded.map((event) => event.saved))})`,
   );
 });

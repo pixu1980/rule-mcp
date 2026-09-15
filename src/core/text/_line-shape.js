@@ -2,7 +2,7 @@
  * @module core/text/line-shape
  *
  * Per-line shape guards: is this line code, or a `key: value` pair, rather
- * than a sentence? Ported from the caveman-compress companion skill's
+ * than a sentence? Ported from the compression-reference companion skill's
  * `detect.py` (`CODE_PATTERNS`, the YAML indicator heuristic).
  *
  * Both compression passes share them, so a code-shaped line or a frontmatter

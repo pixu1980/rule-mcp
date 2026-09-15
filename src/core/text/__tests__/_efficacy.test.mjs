@@ -4,7 +4,7 @@
  * The plan asked for 8% at `full` and 20% at `ultra`, or for the targets to be
  * corrected by measurement. Measurement corrected them, and the reason is
  * worth keeping: this repository's skills and docs are already written in the
- * compressed style the caveman skill teaches, so on them the vocabulary
+ * compressed style the compression skill teaches, so on them the vocabulary
  * measures how little filler is left (1.5-2.6%), not what the rules can do. On
  * verbose prose - what an uncompressed assistant answer looks like - the same
  * rules take 17% at `lite`, 34% at `full` and 42% at `ultra`.
@@ -18,7 +18,7 @@ import { strict as assert } from "node:assert";
 import { test } from "node:test";
 
 import { VERBOSE_CORPUS } from "../../../../scripts/reports/compression/_verbose.data.mjs";
-import { compressTextGuarded } from "../_caveman.js";
+import { compressTextGuarded } from "../_compression.js";
 import { guardCompression } from "../compress-guard/index.js";
 import { results, text } from "./_efficacy.fixture.mjs";
 

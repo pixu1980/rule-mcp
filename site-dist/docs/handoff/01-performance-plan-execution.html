@@ -55,17 +55,17 @@ startup branch, the benchmark, and the attribution.</p>
 <tr>
 <td>2</td>
 <td>PERF-2 levels</td>
-<td><code>RULE_MCP_CAVEMAN_LEVEL=off|lite|full|ultra</code> (<code>_level.js</code>), threaded as <code>{ level }</code>, part of the tool cache key</td>
+<td><code>RULE_MCP_COMPRESSION_LEVEL=off|lite|full|ultra</code> (<code>_level.js</code>), threaded as <code>{ level }</code>, part of the tool cache key</td>
 </tr>
 <tr>
 <td>3</td>
 <td>PERF-3 guard</td>
-<td><code>src/core/text/compress-guard/</code> is <code>validate.py</code> ported, with per-block rollback in <code>_caveman-blocks.js</code>. The python CLI contract is asserted against the JS in a test that skips when python3 is absent</td>
+<td><code>src/core/text/compress-guard/</code> is <code>validate.py</code> ported, with per-block rollback in <code>_compression-blocks.js</code>. The python CLI contract is asserted against the JS in a test that skips when python3 is absent</td>
 </tr>
 <tr>
 <td>4</td>
 <td>PERF-4 traps</td>
-<td>Phrase-before-word order enforced in one place (<code>_caveman-line.js</code>); anchored pleasantry openers added</td>
+<td>Phrase-before-word order enforced in one place (<code>_compression-line.js</code>); anchored pleasantry openers added</td>
 </tr>
 <tr>
 <td>5</td>
@@ -114,7 +114,7 @@ dropped.</p>
 <ol>
 <li><p><strong>Compression targets of 8% (<code>full</code>) and 20% (<code>ultra</code>) are unreachable on
 this repository.</strong> Its own skills and docs are already written in the
-compressed style the caveman skill teaches, so on them the rules measure how
+compressed style the compression skill teaches, so on them the rules measure how
 little filler is left, not what they can do. Measured by
 <code>pnpm report:compression</code>:</p>
 <table>

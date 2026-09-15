@@ -1,7 +1,7 @@
 /**
  * @module core/telemetry/token-stats
  *
- * Runtime accounting of the token-efficiency pipeline (caveman compression +
+ * Runtime accounting of the token-efficiency pipeline (text compression +
  * tokensave suppression + directives). Pure counters, zero dependencies.
  * Surfaced by `rule-mcp doctor` so the savings are measurable, not
  * anecdotal.
@@ -27,13 +27,13 @@ const stats = {
 const savedBySource = {};
 
 /**
- * Record one caveman compression pass.
+ * Record one text compression pass.
  *
  * @param {number} bytesIn
  * @param {number} bytesOut
- * @param {string} [source] "caveman" (tool results), "caveman-resource", "caveman-prompt"
+ * @param {string} [source] "compression" (tool results), "compression-resource", "compression-prompt"
  */
-export function addCompression(bytesIn, bytesOut, source = "caveman") {
+export function addCompression(bytesIn, bytesOut, source = "compression") {
   stats.compressionCalls += 1;
   stats.compressionBytesIn += bytesIn;
   stats.compressionBytesOut += bytesOut;

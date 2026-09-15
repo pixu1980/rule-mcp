@@ -267,8 +267,8 @@ this directory are the source of truth; this index is generated from them by
 <td>vscode, extension, installer, lean-web</td>
 </tr>
 <tr>
-<td><a href="055-restructure-the-command-surface-rule-router-rule-area-caveman-implicit-rule-process.html">055</a></td>
-<td>Restructure the command surface: /rule router, rule-area-*, caveman implicit, rule-process-tdd skill</td>
+<td><a href="055-restructure-the-command-surface-rule-router-rule-area-compression-implicit-rule-process.html">055</a></td>
+<td>Restructure the command surface: /rule router, rule-area-*, compression implicit, rule-process-tdd skill</td>
 <td>2026-09-05</td>
 <td>accepted</td>
 <td>commands, prompts, surface, skills, installer</td>
@@ -296,10 +296,10 @@ this directory are the source of truth; this index is generated from them by
 </tr>
 <tr>
 <td><a href="051-token-efficiency-pipeline.html">051</a></td>
-<td>Token-efficiency pipeline (caveman aggressive + tokensave-aware decoration)</td>
+<td>Token-efficiency pipeline (compression aggressive + tokensave-aware decoration)</td>
 <td>2026-08-25</td>
 <td>accepted</td>
-<td>token-efficiency, caveman, tokensave, mcp-boundary, diagnostics</td>
+<td>token-efficiency, compression, tokensave, mcp-boundary, diagnostics</td>
 </tr>
 <tr>
 <td><a href="050-round-two-hardening-cycles-daemon-cleanup-diagnostics.html">050</a></td>
@@ -710,12 +710,12 @@ file. Where a line stops short the rest is in the ADR.</p>
 </tr>
 <tr>
 <td><a href="078-compress-agent-command-files-at-write-time.html">078</a></td>
-<td>Compress the body of every agent command file at write time: renderAgentCommandFiles() applies the caveman pass to each rendered content when caveman is enabled, leaving renderAgentCommand() canonical and untouched.</td>
+<td>Compress the body of every agent command file at write time: renderAgentCommandFiles() applies the compression pass to each rendered content when compression is enabled, leaving renderAgentCommand() canonical and untouched.</td>
 <td>Positive: every agent command file an installer writes reaches disk already compressed (~6% measured on the shipped bodies) - the same instruction costs less on every session; frontmatter, YAML/TOML headers, $ARGUMENTS...</td>
 </tr>
 <tr>
 <td><a href="077-compress-every-server-model-list-surface-prompts-list-tools-list-resources-list.html">077</a></td>
-<td>Compress the prose fields of all three list surfaces at the protocol boundary only: prompts/list shortens description and argument descriptions (names, required untouched; books telemetry source caveman-prompt-list),...</td>
+<td>Compress the prose fields of all three list surfaces at the protocol boundary only: prompts/list shortens description and argument descriptions (names, required untouched; books telemetry source compression-prompt-list),...</td>
 <td>Positive: every server→model list surface now runs the guarded pipeline; prompts/list saves ~4.5% of its descriptions every session start; tools/list saves ~0.7% of descriptions on every turn; one invariant across all...</td>
 </tr>
 <tr>
@@ -824,9 +824,9 @@ file. Where a line stops short the rest is in the ADR.</p>
 <td>Positive: installers shrink (no vsce build, no six-editor probing), no committed binary .vsix, surface and supply chain simpler, aligns with upstream ADR 088 and the lean-web direction.</td>
 </tr>
 <tr>
-<td><a href="055-restructure-the-command-surface-rule-router-rule-area-caveman-implicit-rule-process.html">055</a></td>
-<td>Restructure the command surface: router rule-mcp -&gt; rule; the 12 area prompts become rule-area-_; delete rule-a11y-audit, rule-code-review, rule-caveman, rule-new-feature, rule-pull-request, rule-setup-project,...</td>
-<td>Positive: the command surface shrinks 49 -&gt; 41; one namespace per concern (rule-area-* for areas, rule-process-* for the process family incl. the new rule-process-tdd skill/tool and rule-process-check); caveman is implicit...</td>
+<td><a href="055-restructure-the-command-surface-rule-router-rule-area-compression-implicit-rule-process.html">055</a></td>
+<td>Restructure the command surface: router rule-mcp -&gt; rule; the 12 area prompts become rule-area-_; delete rule-a11y-audit, rule-code-review, rule-compression, rule-new-feature, rule-pull-request, rule-setup-project,...</td>
+<td>Positive: the command surface shrinks 49 -&gt; 41; one namespace per concern (rule-area-* for areas, rule-process-* for the process family incl. the new rule-process-tdd skill/tool and rule-process-check); compression is implicit...</td>
 </tr>
 <tr>
 <td><a href="054-split-review-personas-into-per-operation-commands-plan-audit-review.html">054</a></td>
@@ -1107,7 +1107,7 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 <li><a href="075-meta-frameworks-get-their-own-namespace-and-a-narrow-dispatcher.html">075</a> Meta-frameworks get their own namespace and a narrow dispatcher</li>
 <li><a href="072-the-installer-asks-before-copying-bundled-skills-to-the-central-agents-directory.html">072</a> The installer asks before copying bundled skills to the central agents directory</li>
 <li><a href="066-remove-externally-derived-skills-from-the-served-knowledge-base.html">066</a> Remove externally derived skills from the served knowledge base</li>
-<li><a href="055-restructure-the-command-surface-rule-router-rule-area-caveman-implicit-rule-process.html">055</a> Restructure the command surface: /rule router, rule-area-*, caveman implicit, rule-process-tdd skill</li>
+<li><a href="055-restructure-the-command-surface-rule-router-rule-area-compression-implicit-rule-process.html">055</a> Restructure the command surface: /rule router, rule-area-*, compression implicit, rule-process-tdd skill</li>
 <li><a href="027-add-rule-toolchain-commits-skill-for-atomic-conventional-commits-with-mandatory-s.html">027</a> Add rule-toolchain-commits skill for atomic conventional commits with mandatory scope</li>
 <li><a href="026-rename-rule-mcp-agents-to-rule-ai-agents-and-add-rule-ai-collector-skill.html">026</a> Rename rule-mcp-agents to rule-ai-agents and add rule-ai collector skill</li>
 <li><a href="015-toolchain-skill-isolation-vite.html">015</a> toolchain skill isolation vite</li>
@@ -1126,7 +1126,7 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 <li><a href="070-installer-mode-step-replaces-the-agent-picker-instead-of-stacking-under-it.html">070</a> Installer mode step replaces the agent picker instead of stacking under it</li>
 <li><a href="061-one-global-shim-and-hermetic-pnpm-home-in-script-tests.html">061</a> One global shim, and hermetic PNPM_HOME in script tests</li>
 <li><a href="056-drop-the-vs-code-extension-and-its-installers.html">056</a> Drop the VS Code extension and its installers</li>
-<li><a href="055-restructure-the-command-surface-rule-router-rule-area-caveman-implicit-rule-process.html">055</a> Restructure the command surface: /rule router, rule-area-*, caveman implicit, rule-process-tdd skill</li>
+<li><a href="055-restructure-the-command-surface-rule-router-rule-area-compression-implicit-rule-process.html">055</a> Restructure the command surface: /rule router, rule-area-*, compression implicit, rule-process-tdd skill</li>
 <li><a href="049-split-hotspot-modules.html">049</a> Split the hotspot modules (guardrails + installer)</li>
 <li><a href="046-installer-self-heals-global-shim-surfaces-failures-gates-tui-rendering.html">046</a> Installer self-heals its global shim, surfaces failures, and gates TUI rendering</li>
 <li><a href="041-lossless-installer-preserve-toolprefix-normalize-rule-blank-lines.html">041</a> Lossless installer: preserve toolPrefix and normalize rule blank lines</li>
@@ -1258,7 +1258,7 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 <h3>prompts</h3>
 <ul>
 <li><a href="077-compress-every-server-model-list-surface-prompts-list-tools-list-resources-list.html">077</a> Compress every server→model list surface (prompts/list, tools/list, resources/list)</li>
-<li><a href="055-restructure-the-command-surface-rule-router-rule-area-caveman-implicit-rule-process.html">055</a> Restructure the command surface: /rule router, rule-area-*, caveman implicit, rule-process-tdd skill</li>
+<li><a href="055-restructure-the-command-surface-rule-router-rule-area-compression-implicit-rule-process.html">055</a> Restructure the command surface: /rule router, rule-area-*, compression implicit, rule-process-tdd skill</li>
 <li><a href="054-split-review-personas-into-per-operation-commands-plan-audit-review.html">054</a> Split review personas into per-operation commands (plan/audit/review)</li>
 <li><a href="052-pre-packaged-mcp-prompt-registry-26-prompts-strict-schemas-commit-scope-closer.html">052</a> Pre-packaged MCP prompt registry (26 prompts, strict schemas, commit-scope closer)</li>
 </ul>
@@ -1291,7 +1291,7 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 </ul>
 <h3>commands</h3>
 <ul>
-<li><a href="055-restructure-the-command-surface-rule-router-rule-area-caveman-implicit-rule-process.html">055</a> Restructure the command surface: /rule router, rule-area-*, caveman implicit, rule-process-tdd skill</li>
+<li><a href="055-restructure-the-command-surface-rule-router-rule-area-compression-implicit-rule-process.html">055</a> Restructure the command surface: /rule router, rule-area-*, compression implicit, rule-process-tdd skill</li>
 <li><a href="054-split-review-personas-into-per-operation-commands-plan-audit-review.html">054</a> Split review personas into per-operation commands (plan/audit/review)</li>
 <li><a href="028-clean-rule-commands-via-user-commands-prompt-suppression-not-a-plugin.html">028</a> Clean /rule-* commands via user commands + prompt suppression, not a plugin</li>
 </ul>
@@ -1359,7 +1359,7 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 <ul>
 <li><a href="078-compress-agent-command-files-at-write-time.html">078</a> Compress agent command files at write time</li>
 <li><a href="077-compress-every-server-model-list-surface-prompts-list-tools-list-resources-list.html">077</a> Compress every server→model list surface (prompts/list, tools/list, resources/list)</li>
-<li><a href="051-token-efficiency-pipeline.html">051</a> Token-efficiency pipeline (caveman aggressive + tokensave-aware decoration)</li>
+<li><a href="051-token-efficiency-pipeline.html">051</a> Token-efficiency pipeline (compression aggressive + tokensave-aware decoration)</li>
 </ul>
 <h3>tui</h3>
 <ul>
