@@ -371,11 +371,15 @@ Gate: review/plan documents cite TokenSave numbers; guardrail suite green.
 
 ### 6.4 Milestone 3 — Git and handoff context (P0, depends on M1)
 
-- **T3.1** `rule_tool_process_handoff` uses `commit_context`, `diff`, `diff_context`,
-  `changelog` (`R4`).
-- **T3.2** Symbol-level history via `blame` + `log` (`R14`).
+Status: **done** — T3.1 and T3.2 in the `Semantic Changes (TokenSave)` handoff section;
+T3.3 kept (the section is prose, so `src/core/text` compresses it like the rest).
+
+- **T3.1** `rule_tool_process_handoff` uses `commit_context`, `diff`, `diff_context`, `changelog`
+  (`R4`). _(done through `src/core/tokensave/_changes.js`)_
+- **T3.2** Symbol-level history via `blame` + `log` (`R14`). _(done: the first modified
+  function/method in the diff drives a `log` query)_
 - **T3.3** Keep the compressed handoff format; TokenSave supplies the data, `src/core/text`
-  supplies the compression.
+  supplies the compression. _(done)_
 
 Gate: handoff suite green; handoff output unchanged modulo the new data.
 
