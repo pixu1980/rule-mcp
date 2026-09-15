@@ -87,15 +87,16 @@ Semantic search across ALL rule skills using BM25 ranking. Returns scored, relev
 
 Run guardrail checks on code against any rule skill. Returns guardrail results with a re-check hint containing the current passing set. Run until allPass: true.
 
-| Parameter             | Type            | Required | Default | Description                                                    |
-| --------------------- | --------------- | -------- | ------- | -------------------------------------------------------------- |
-| `skill`               | string          | yes      | -       | Target rule skill name                                          |
-| `code`                | string          | yes      | -       | Code to validate against guardrails                            |
-| `framework`           | string          | no       | -       | Framework (react, vue, svelte, angular, solid, astro, vanilla) |
-| `fileName`            | string          | no       | -       | File name for naming convention checks                         |
-| `isComponent`         | boolean         | no       | -       | Whether this is a component file                               |
-| `mode`                | string          | no       | -       | Check mode (e.g. 'scaffold' to validate project config files)  |
-| `allowedDependencies` | array of string | no       | -       | Manifest-derived package names allowed in imports              |
+| Parameter             | Type            | Required | Default | Description                                                                         |
+| --------------------- | --------------- | -------- | ------- | ----------------------------------------------------------------------------------- |
+| `skill`               | string          | yes      | -       | Target rule skill name                                                               |
+| `code`                | string          | no       | -       | Code to validate against guardrails (omit with mode=project)                        |
+| `framework`           | string          | no       | -       | Framework (react, vue, svelte, angular, solid, astro, vanilla)                      |
+| `fileName`            | string          | no       | -       | File name for naming convention checks                                              |
+| `isComponent`         | boolean         | no       | -       | Whether this is a component file                                                    |
+| `mode`                | string          | no       | -       | Check mode: 'scaffold' for project config files, 'project' for the graph guardrails |
+| `allowedDependencies` | array of string | no       | -       | Manifest-derived package names allowed in imports                                   |
+| `projectDir`          | string          | no       | -       | Project root for mode=project (default: cwd)                                        |
 
 ### rule_tool_scaffold
 

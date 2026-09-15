@@ -3,3 +3,4 @@ export * from "./engine/index.js";
 export * from "./guarded/index.js";
 export * from "./_scaffold.js";
 export * from "./_util.js";
+export * from "./project/index.js";
