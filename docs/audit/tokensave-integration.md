@@ -415,10 +415,16 @@ Gate: routing corpus unchanged or better; BM25 remains the deterministic fallbac
 
 ### 6.7 Milestone 6 — Dependencies, diagnostics, tests (P1, depends on M1)
 
-- **T6.1** Replace `src/core/detector` manifest reads with `dependencies` + `config` (`R9`).
+Status: **done** — commit `a8a0eb4`.
+
+- **T6.1** Replace `src/core/detector` manifest reads with `dependencies` + `config` (`R9`). _(done:
+  `projectManifest` reads `name`, `dependencies`, `devDependencies` and `engines.node` through
+  TokenSave `config`; `detectProject` keeps the direct read and `detectProjectGraph` prefers the
+  graph. The routing hot path keeps the direct read)_
 - **T6.2** Use `affected`, `test_map`, `test_risk`, `test_coverage` to drive test runs and
-  coverage reviews (`R8`).
-- **T6.3** Use `diagnostics` (tsc) as an optional check inside `rule_tool_check` (`R15`).
+  coverage reviews (`R8`). _(done: the plan prompt checklist names all four)_
+- **T6.3** Use `diagnostics` (tsc) as an optional check inside `rule_tool_check` (`R15`). _(done:
+  `rule_tool_check mode=project` runs `project-diagnostics` only when `diagnostics: true`)_
 
 Gate: detector suite green; test selection documented and measured.
 
