@@ -28,6 +28,10 @@ export const GRAPH_CHECKS = [
   { tool: "tokensave_callers", what: "who calls a symbol, directly or transitively" },
   { tool: "tokensave_callees", what: "what a symbol calls, up to a depth" },
   { tool: "tokensave_file_dependents", what: "the files that import or depend on a file" },
+  { tool: "tokensave_affected", what: "the test files a set of changed sources reaches" },
+  { tool: "tokensave_test_map", what: "the tests that cover a symbol" },
+  { tool: "tokensave_test_risk", what: "the high-risk, weakly-tested symbols where the next test should go" },
+  { tool: "tokensave_test_coverage", what: "per-symbol, per-file and per-test coverage" },
 ];
 
 /**
