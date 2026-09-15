@@ -55,9 +55,7 @@ export async function loadAllSkills(force = false) {
   isLoaded = true;
   await installSkillGuardrails();
   registerAiTool();
-  // Registered in code, not minted by the rule-meta skill: the dispatcher is on
-  // the minimal allowlist, and minimal mode registers no skill tool at all
-  // (ADR 075).
+  // In code: minimal mode mints no skill tool, and this one is allowlisted (ADR 075).
   registerMetaTool();
 
   const tools = await import("../../tools/index.js");

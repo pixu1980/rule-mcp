@@ -50,7 +50,7 @@ export function uninstallNextSteps({ dryRun, purged }) {
     lines.push("State and config were kept - re-run and tick purge to delete them.");
   }
 
-  lines.push("curl -fsSL https://rule-mcp.domain.example/install.sh | bash - to reinstall");
+  lines.push("curl -fsSL https://raw.githubusercontent.com/pixu1980/rule-mcp/v0.1.0-beta/scripts/install.sh | bash - to reinstall");
 
   return lines;
 }

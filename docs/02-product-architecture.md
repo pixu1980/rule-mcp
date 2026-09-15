@@ -24,14 +24,14 @@ refreshed by `pnpm census` (on every build and every pre-commit) - and are
 rendered into dedicated registry files that the docs link to instead of
 re-listing:
 
-- **Skills** -> [`docs/06-skills.md`](./06-skills.md)
-- **Tools (all LLM-free, deterministic)** -> [`docs/07-tools.md`](./07-tools.md)
-- **Prompts** -> [`docs/08-prompts.md`](./08-prompts.md)
-- **Instructions / agent command surface** -> [`docs/09-instructions.md`](./09-instructions.md)
-- **CLI reference (commands, options, arguments)** -> [`docs/10-cli.md`](./10-cli.md)
-- **Personas** -> [`docs/11-personas.md`](./11-personas.md)
-- **Guardrails** -> [`docs/12-guardrails.md`](./12-guardrails.md)
-- **Resources** -> [`docs/13-resources.md`](./13-resources.md)
+- **Skills** -> [`docs/06-skills.md`](./08-skills.md)
+- **Tools (all LLM-free, deterministic)** -> [`docs/07-tools.md`](./09-tools.md)
+- **Prompts** -> [`docs/08-prompts.md`](./10-prompts.md)
+- **Instructions / agent command surface** -> [`docs/09-instructions.md`](./11-instructions.md)
+- **CLI reference (commands, options, arguments)** -> [`docs/10-cli.md`](./12-cli.md)
+- **Personas** -> [`docs/11-personas.md`](./13-personas.md)
+- **Guardrails** -> [`docs/12-guardrails.md`](./14-guardrails.md)
+- **Resources** -> [`docs/13-resources.md`](./15-resources.md)
 
 Tool-family counts for this document: the generated snapshot at the end of
 this file.
@@ -787,16 +787,16 @@ All data stays on the filesystem. The MCP server is a read-only/validate-only se
 
 ## 13. Platform Support
 
-| Platform | Package         | Method                                  |
-| -------- | --------------- | --------------------------------------- |
-| macOS    | Homebrew        | `brew install rule/tap/rule-mcp`   |
-| macOS    | pnpm            | `pnpm add -g rule-mcp`            |
-| Linux    | pnpm            | `pnpm add -g rule-mcp`            |
-| Linux    | Docker          | `docker pull rule-mcp/rule-mcp` |
-| Windows  | pnpm            | `pnpm add -g rule-mcp`            |
-| Windows  | Winget          | `winget install rule/rule-mcp`     |
-| All      | Direct download | GitHub Releases `.tgz`                  |
-| All      | pnpx            | `pnpx rule-mcp serve`             |
+| Platform | Package          | Method                                     |
+| -------- | ---------------- | ------------------------------------------ |
+| macOS    | Homebrew         | `brew install pixu1980/tap/rule-mcp` |
+| macOS    | Clone + launcher | `git clone` + `./scripts/install.sh`       |
+| Linux    | Clone + launcher | `git clone` + `./scripts/install.sh`       |
+| Linux    | Docker           | `docker pull pixu1980/rule-mcp`      |
+| Windows  | Clone + launcher | `git clone` + `./scripts/install.ps1`      |
+| Windows  | Winget           | `winget install pixu1980.rule-mcp`   |
+| All      | Direct download  | GitHub Releases `.tgz`                     |
+| All      | pnpx             | `pnpx rule-mcp serve`                |
 
 <!-- census:begin:family-counts -->
 

@@ -10,7 +10,7 @@ import { fileURLToPath } from "node:url";
 
 import { loadPersonaCatalog } from "../index.js";
 
-const PERSONA_DIR = fileURLToPath(new URL("../../../../roles", import.meta.url));
+const PERSONA_DIR = fileURLToPath(new URL("../../../../../personas", import.meta.url));
 
 test("a Windows checkout with CRLF endings loads the whole catalog", () => {
   // windows-latest checks out text as CRLF (no .gitattributes pins LF), and

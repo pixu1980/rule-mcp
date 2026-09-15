@@ -15,7 +15,7 @@ same result behind any client.
 
 | Tool                                               | What it does                                                                                                                                          |
 | -------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [`pix_tool`](#pixtool)                             | Route a prompt to the correct rule skill.                                                                                                              |
+| [`pix_tool`](#pixtool)                             | Route prompt to correct rule skill.                                                                                                                    |
 | [`rule_tool_update`](#pixtoolupdate)                | Force-update this local MCP server from its upstream git repo (fast-forward only), hot-reload skills, and restart if server code changed.             |
 | [`rule_tool_gateway`](#pixtoolgateway)              | Single-entry orchestrator: routes prompt → loads skill evidence → checks code against guardrails → returns receipt.                                   |
 | [`rule_tool_apply`](#pixtoolapply)                  | Write files to disk after rule_tool_gateway validation.                                                                                                |
@@ -24,14 +24,14 @@ same result behind any client.
 | [`rule_tool_scaffold`](#pixtoolscaffold)            | Generate project scaffolding files.                                                                                                                   |
 | [`rule_tool_detect`](#pixtooldetect)                | Detect project framework, TypeScript usage, and build tool from package.json.                                                                         |
 | [`rule_tool_compress`](#pixtoolcompress)            | Compress prose deterministically: strip filler and leading articles, replace typographic characters with ASCII, convert British spelling to American. |
-| [`rule_tool_plan`](#pixtoolplan)                    | Ask an expert review persona to audit, review or plan this project; returns the operation contract.                                                   |
-| [`rule_tool_audit`](#pixtoolaudit)                  | Run an audit as an expert review persona; returns the audit operation contract.                                                                       |
-| [`rule_tool_review`](#pixtoolreview)                | Run a review as an expert review persona; returns the review operation contract.                                                                      |
-| [`rule_tool_plan_docs`](#pixtoolplandocs)           | Create or refresh the audit/review/plan documents for a review persona run: the bookkeeping half.                                                     |
+| [`rule_tool_plan`](#pixtoolplan)                    | Ask expert review persona to audit, review or plan this project; returns operation contract.                                                          |
+| [`rule_tool_audit`](#pixtoolaudit)                  | Run audit as expert review persona; returns audit operation contract.                                                                                 |
+| [`rule_tool_review`](#pixtoolreview)                | Run review as expert review persona; returns review operation contract.                                                                               |
+| [`rule_tool_plan_docs`](#pixtoolplandocs)           | Create or refresh audit/review/plan documents for review persona run: bookkeeping half.                                                               |
 | [`rule_tool_stats`](#pixtoolstats)                  | Read the local telemetry log and summarize it: call counts, cache hit rate, saved/estimated tokens, latency.                                          |
 | [`rule_tool_usage`](#pixtoolusage)                  | Declare an agent usage sidecar for this project when no transcript can be read: input/output tokens, cost.                                            |
-| [`rule_tool_a11y_report`](#pixtoola11yreport)       | Build a WCAG-EM accessibility report from criteria and audit results; returns findings and the verdict.                                               |
-| [`rule_tool_process_handon`](#pixtoolprocesshandon) | Read the last handoff in docs/handoff/ and report which of its claims are still true: branch, commit range, files, ADRs, open work.                   |
+| [`rule_tool_a11y_report`](#pixtoola11yreport)       | Build WCAG-EM accessibility report from criteria and audit results; returns findings and verdict.                                                     |
+| [`rule_tool_process_handon`](#pixtoolprocesshandon) | Read last handoff in docs/handoff/ and report which of its claims are still true: branch, commit range, files, ADRs, open work.                       |
 | [`rule_tool_fix`](#pixtoolfix)                      | Validate and auto-fix project file tree structure against rule AI conventions (barrel files, _PascalCase naming, etc.).                                |
 | [`rule_tool_component`](#pixtoolcomponent)          | Generate component or test templates following rule AI principles.                                                                                     |
 
@@ -39,7 +39,7 @@ Call any of them from a shell with `rule-mcp tools call <name> --json '{...}'`.
 
 ### pix_tool
 
-Route a prompt to the correct rule skill. Returns structured routing with relevant sections.
+Route prompt to correct rule skill. Returns structured routing with relevant sections.
 
 | Parameter   | Type   | Required | Default | Description                                                                 |
 | ----------- | ------ | -------- | ------- | --------------------------------------------------------------------------- |
@@ -49,13 +49,13 @@ Route a prompt to the correct rule skill. Returns structured routing with releva
 
 ### rule_tool_update
 
-Force-update this local MCP server from its upstream git repo (fast-forward only), hot-reload skills, and restart if server code changed. Also runs automatically (throttled, in the background) on tool calls; call directly to update on demand.
+Force-update this local MCP server from its upstream git repo (fast-forward only), hot-reload skills, and restart if server code changed. Also runs automatically (throttled, in background) on tool calls; call directly to update on demand.
 
 Takes no parameters.
 
 ### rule_tool_gateway
 
-Single-entry orchestrator: routes prompt → loads skill evidence → checks code against guardrails → returns receipt. Use this as the primary entry point instead of calling rule + skill tools separately. The returned receipt must be passed to rule_tool_apply when writing files.
+Single-entry orchestrator: routes prompt → loads skill evidence → checks code against guardrails → returns receipt. Use this as primary entry point instead of calling rule + skill tools separately. returned receipt must be passed to rule_tool_apply when writing files.
 
 | Parameter   | Type            | Required | Default | Description                                                                                           |
 | ----------- | --------------- | -------- | ------- | ----------------------------------------------------------------------------------------------------- |
@@ -67,7 +67,7 @@ Single-entry orchestrator: routes prompt → loads skill evidence → checks cod
 
 ### rule_tool_apply
 
-Write files to disk after rule_tool_gateway validation. Requires a valid receipt from rule_tool_gateway proving that the code passed all guardrails. The receipt is tied to the exact code hash - modified code will be rejected. Use dryRun=true (default) to preview without writing.
+Write files to disk after rule_tool_gateway validation. Needs valid receipt from rule_tool_gateway proving that code passed all guardrails. receipt is tied to exact code hash - modified code will be rejected. Use dryRun=true (default) to preview without writing.
 
 | Parameter | Type            | Required | Default | Description                                                        |
 | --------- | --------------- | -------- | ------- | ------------------------------------------------------------------ |
@@ -87,7 +87,7 @@ Semantic search across ALL rule skills using BM25 ranking. Returns scored, relev
 
 ### rule_tool_check
 
-Run guardrail checks on code against any rule skill. Returns guardrail results with a re-check hint containing the current passing set. Run until allPass: true.
+Run guardrail checks on code against any rule skill. Returns guardrail results with re-check hint containing current passing set. Run until allPass: true.
 
 | Parameter             | Type            | Required | Default | Description                                                                         |
 | --------------------- | --------------- | -------- | ------- | ----------------------------------------------------------------------------------- |
@@ -132,7 +132,7 @@ Compress prose deterministically: strip filler and leading articles, replace typ
 
 ### rule_tool_plan
 
-Ask an expert review persona to audit, review or plan this project; returns the operation contract.
+Ask expert review persona to audit, review or plan this project; returns operation contract.
 
 | Parameter    | Type                          | Required | Default | Description                                                                          |
 | ------------ | ----------------------------- | -------- | ------- | ------------------------------------------------------------------------------------ |
@@ -145,7 +145,7 @@ Ask an expert review persona to audit, review or plan this project; returns the 
 
 ### rule_tool_audit
 
-Run an audit as an expert review persona; returns the audit operation contract.
+Run audit as expert review persona; returns audit operation contract.
 
 | Parameter    | Type            | Required | Default | Description                                                                          |
 | ------------ | --------------- | -------- | ------- | ------------------------------------------------------------------------------------ |
@@ -157,7 +157,7 @@ Run an audit as an expert review persona; returns the audit operation contract.
 
 ### rule_tool_review
 
-Run a review as an expert review persona; returns the review operation contract.
+Run review as expert review persona; returns review operation contract.
 
 | Parameter    | Type            | Required | Default | Description                                                                          |
 | ------------ | --------------- | -------- | ------- | ------------------------------------------------------------------------------------ |
@@ -169,7 +169,7 @@ Run a review as an expert review persona; returns the review operation contract.
 
 ### rule_tool_plan_docs
 
-Create or refresh the audit/review/plan documents for a review persona run: the bookkeeping half.
+Create or refresh audit/review/plan documents for review persona run: bookkeeping half.
 
 | Parameter    | Type            | Required | Default | Description                                                                                 |
 | ------------ | --------------- | -------- | ------- | ------------------------------------------------------------------------------------------- |
@@ -209,7 +209,7 @@ Declare an agent usage sidecar for this project when no transcript can be read: 
 
 ### rule_tool_a11y_report
 
-Build a WCAG-EM accessibility report from criteria and audit results; returns findings and the verdict.
+Build WCAG-EM accessibility report from criteria and audit results; returns findings and verdict.
 
 | Parameter   | Type            | Required | Default | Description            |
 | ----------- | --------------- | -------- | ------- | ---------------------- |
@@ -221,7 +221,7 @@ Build a WCAG-EM accessibility report from criteria and audit results; returns fi
 
 ### rule_tool_process_handon
 
-Read the last handoff in docs/handoff/ and report which of its claims are still true: branch, commit range, files, ADRs, open work. Read-only, never re-runs a claimed command.
+Read last handoff in docs/handoff/ and report which of its claims are still true: branch, commit range, files, ADRs, open work. Read-only, never re-runs claimed command.
 
 | Parameter    | Type    | Required | Default | Description                                      |
 | ------------ | ------- | -------- | ------- | ------------------------------------------------ |

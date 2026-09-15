@@ -31,7 +31,9 @@ test("a scoped sync records the scope and keeps out-of-scope findings open", () 
   assert.equal(result.counts.open, 2, "both findings stay open");
 
   const review = readFileSync(join(project, "docs", "reviews", "security.md"), "utf8");
-  assert.match(review, /\| F1 \| high \| open \|/, "the out-of-scope finding stays open");
+  // The generated tables are padded Prettier-style, so the row is matched by
+  // its cells and not by a fixed column width.
+  assert.match(review, /\| F1 +\| high +\| open +\|/, "the out-of-scope finding stays open");
   assert.match(review, /F2/, "the in-scope finding is recorded");
   assert.match(review, /\*\*Scope\*\*: the CLI output/, "the review header states the scope");
 

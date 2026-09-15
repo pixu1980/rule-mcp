@@ -20,6 +20,7 @@
  * references across docs/ is not something a diagnostic does on its own.
  */
 
+export * from "./_index-state.js";
 export * from "./_plan.js";
 export * from "./_apply.js";
 export * from "./_render.js";

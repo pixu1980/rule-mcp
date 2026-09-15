@@ -2,6 +2,8 @@
 
 /** Registered-tool inventory: mutation classification, annotations, declared and public tool lists. */
 
+import { compressText } from "../../core/text/_compression.js";
+import { compressionEnabled } from "../../core/text/_level.js";
 import { _tools, toolsGeneration } from "./_hooks.js";
 
 const MUTATING_TOOLS = new Set([
@@ -45,22 +47,28 @@ function declaredTools() {
   return _tools;
 }
 
-let memo = { generation: -1, tools: [] };
+let memo = { generation: -1, tools: [], compress: null };
 
 /**
  * List all registered tools with their names, descriptions, and input schemas.
  * Converts Zod schemas to JSON Schema via the built-in toJSONSchema() method.
  *
- * Memoized on the registry generation: the conversion is deterministic and the
- * registry does not change between client connects, so it is paid once per
- * process instead of once per `tools/list`.
+ * Memoized on the registry generation AND the compression state: the conversion
+ * is deterministic and the registry does not change between client connects, so
+ * it is paid once per process instead of once per `tools/list`.
+ *
+ * The description is prose the model reads on every turn to choose a tool, so
+ * it goes through the same compression pass as tool results; names, schemas and
+ * annotations are the machine contract and are left untouched (ADR 077).
  *
  * @returns {Array<{ name: string, description: string, inputSchema: object }>}
  */
 function listTools() {
   const generation = toolsGeneration();
 
-  if (memo.generation === generation) {
+  const compress = compressionEnabled();
+
+  if (memo.generation === generation && memo.compress === compress) {
     return memo.tools;
   }
 
@@ -91,10 +99,12 @@ function listTools() {
 
     const annotations = annotationsFor(t.name);
 
-    return annotations ? { name: t.name, description: t.description, inputSchema, annotations } : { name: t.name, description: t.description, inputSchema };
+    const description = compress ? compressText(String(t.description ?? "")) : String(t.description ?? "");
+
+    return annotations ? { name: t.name, description, inputSchema, annotations } : { name: t.name, description, inputSchema };
   });
 
-  memo = { generation, tools };
+  memo = { generation, compress, tools };
 
   return tools;
 }

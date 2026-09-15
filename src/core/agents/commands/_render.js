@@ -2,6 +2,8 @@
 
 /** @module core/agents/commands/render - one command to one file, per format */
 
+import { compressText } from "../../text/_compression.js";
+import { compressionEnabled } from "../../text/_level.js";
 import { listAgentCommands } from "./_definitions.js";
 import { ARGUMENTS_PROSE, FORMAT_EXT, FORMATS, quoted } from "./_formats.js";
 
@@ -44,6 +46,11 @@ export function renderAgentCommand(command, format) {
  * Render the full command set for a format as `{ filename, content }` pairs,
  * in canonical order. Callers own the actual filesystem writes.
  *
+ * The rendered file is read by the agent on every session, so its body runs
+ * through the compression pass before it reaches disk (measured ~6% on the
+ * shipped bodies; frontmatter and placeholders are code-shaped and pass
+ * untouched; the guard guarantees structure - ADR 078).
+ *
  * @param {"args"|"workflow"|"gemini"} format
  * @returns {Array<{ name: string, filename: string, content: string }>}
  */
@@ -58,11 +65,13 @@ export function renderAgentCommandFiles(format, only) {
   // surface grew a command per skill.
   const wanted = only ? new Set(only) : null;
 
+  const compress = compressionEnabled();
+
   return listAgentCommands()
     .filter((command) => !wanted || wanted.has(command.name))
-    .map((command) => ({
-      name: command.name,
-      filename: `${command.name}${ext}`,
-      content: renderAgentCommand(command, format),
-    }));
+    .map((command) => {
+      const content = renderAgentCommand(command, format);
+
+      return { name: command.name, filename: `${command.name}${ext}`, content: compress ? compressText(content) : content };
+    });
 }

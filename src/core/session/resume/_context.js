@@ -2,6 +2,7 @@
 
 /** @module core/session/resume/context - the verified handon block a resumed session receives */
 
+import { compressSurfaceText } from "@src/core/text/_compression.js";
 import { handon } from "@src/tools/handon/index.js";
 import { markAnnounced } from "./_announce.js";
 
@@ -42,7 +43,7 @@ export function handoffBlock(cwd, occasion) {
 
   const body = report.text.length > MAX_CHARS ? `${report.text.slice(0, MAX_CHARS)}\n\n(truncated: call \`rule_tool_process_handon\` for the rest)` : report.text;
 
-  return [
+  const block = [
     "## PIX RESUMED SESSION",
     "",
     `${occasion} \`${report.source}\` was verified against the repository as it is` +
@@ -54,6 +55,12 @@ export function handoffBlock(cwd, occasion) {
     "",
     "Continue from the suggested first move unless the user asks for something else. Do not restate this back to them.",
   ].join("\n");
+
+  // Injected verbatim into the model's context by the SessionStart hook, so it
+  // is prose the model pays for, exactly like a tool result - it goes through
+  // the same compression pipeline and guard before it leaves. With compression
+  // off the pass returns the input unchanged and books nothing.
+  return compressSurfaceText(block, { source: "compression-resume" }).text;
 }
 
 /**

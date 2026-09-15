@@ -55,8 +55,11 @@ test("the areas a derived map produces are the ones the catalog holds", () => {
   const areas = skillAreas();
 
   assert.ok(areas.get("frontend").members.includes("rule-frontend-react"), "react belongs to frontend");
-  assert.ok(areas.get("frontend").members.includes("rule-frontend-meta-astro"), "so does the astro meta-framework, rather than a meta area of its own");
   assert.equal(areas.get("frontend").hub, "rule-frontend", "and frontend has a hub");
+  // The meta-frameworks are their own namespace with a narrow dispatcher
+  // (ADR 075); routing still gives them the frontend bias.
+  assert.ok(areas.get("meta").members.includes("rule-meta-astro"), "astro belongs to the meta area");
+  assert.equal(areas.get("meta").hub, "rule-meta", "and meta has a hub of its own");
 });
 
 test("one prompt per skill, named for its area", () => {

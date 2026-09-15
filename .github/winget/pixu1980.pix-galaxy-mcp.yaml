@@ -1,7 +1,7 @@
 # yaml-language-server: $schema=https://aka.ms/winget-manifest.version.1.6.0.schema.json
 # Hash refreshed per release from the tarball the Step 6 pipeline attaches.
 PackageIdentifier: pixu1980.rule-mcp
-PackageVersion: "0.1.0"
+PackageVersion: "0.1.0-beta"
 PackageLocale: en-US
 Publisher: pixu1980
 PublisherUrl: https://github.com/pixu1980

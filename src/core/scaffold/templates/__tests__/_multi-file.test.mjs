@@ -1,8 +1,12 @@
 
 
 /**
- * generateMultiFile: one component folder per framework, and the arms that
- * refuse rather than emit a half-written tree.
+ * generateMultiFile: the file tree each framework gets, and when it gets none.
+ *
+ * The generator had two of twelve branches covered: the scaffold tool was
+ * exercised, the tree it emits was not. Every arm here is a real question -
+ * which files land, what the barrel re-exports, and which combinations have no
+ * answer at all and must say so instead of emitting half a component.
  */
 import { strict as assert } from "node:assert";
 import { test } from "node:test";
@@ -10,80 +14,78 @@ import { test } from "node:test";
 import { COMPONENT_TEMPLATES } from "../../_template-data.data.js";
 import { generateMultiFile } from "../_multi-file.js";
 
-/** The generated file whose path ends with the given suffix. */
-const endingIn = (files, suffix) => files.find((file) => file.path.endsWith(suffix));
+const paths = (files) => files.map((file) => file.path);
+const byPath = (files, suffix) => files.find((file) => file.path.endsWith(suffix));
 
-test("an unknown component is refused rather than guessed at", () => {
-  assert.equal(generateMultiFile("not-a-component"), null, "no template means no files");
-  assert.equal(generateMultiFile("not-a-component", "react"), null, "the framework does not rescue a missing template");
+test("an unknown component has no tree", () => {
+  assert.equal(generateMultiFile("does-not-exist", "react"), null);
 });
 
-test("the vanilla default emits a custom element, its stylesheet and a barrel", () => {
-  const files = generateMultiFile("button", "vanilla", "primary-button");
+test("react gets a component, its stylesheet and a barrel", () => {
+  const files = generateMultiFile("button", "react");
 
-  assert.equal(files.length, 3, "component, stylesheet, barrel");
-  const component = endingIn(files, "_PrimaryButton.js");
-  assert.ok(component, `expected a _PrimaryButton.js: ${files.map((file) => file.path).join(", ")}`);
-  assert.equal(component.language, "javascript");
-  assert.match(component.content, /export class PrimaryButton extends HTMLElement/, "the name comes from the caller, not the template");
-  assert.match(component.content, /customElements\.define\("primary-button", PrimaryButton\)/, "the tag is the kebab-case name");
-  assert.match(component.content, new RegExp(COMPONENT_TEMPLATES.button.description), "the module header carries the description");
-
-  assert.equal(endingIn(files, "_PrimaryButton.css").language, "css", "the stylesheet ships beside it");
-  assert.match(endingIn(files, "index.js").content, /export \{ PrimaryButton \}/, "the barrel re-exports the class");
+  assert.deepEqual(paths(files), ["src/components/Button/_Button.jsx", "src/components/Button/_Button.css", "src/components/Button/index.js"]);
+  assert.match(byPath(files, "index.js").content, /export \{ Button \} from '\.\/_Button\.jsx'/);
+  assert.equal(byPath(files, ".jsx").language, "jsx");
+  assert.equal(byPath(files, ".css").language, "css");
 });
 
-test("an unknown framework falls back to the vanilla arm", () => {
-  const files = generateMultiFile("button", "ember", "primary-button");
+test("solid has no template of its own and falls back to the react source", () => {
+  assert.equal(COMPONENT_TEMPLATES.button.solid, undefined, "the fixture this leans on");
 
-  assert.ok(endingIn(files, "_PrimaryButton.js"), "the fallback writes the custom element");
+  const solid = generateMultiFile("button", "solid");
+  const react = generateMultiFile("button", "react");
+
+  assert.deepEqual(paths(solid), paths(react));
+  assert.equal(byPath(solid, ".jsx").content, byPath(react, ".jsx").content, "same source, different framework key");
 });
 
-test("the name defaults to the component key", () => {
-  const files = generateMultiFile("button");
+test("a custom name renames the exported component, not just the file", () => {
+  const files = generateMultiFile("button", "react", "SubmitControl");
 
-  assert.ok(endingIn(files, "_Button.js"), `expected _Button.js: ${files.map((file) => file.path).join(", ")}`);
-  assert.ok(
-    files.every((file) => file.path.startsWith("src/components/Button/")),
-    "every file lands in the component folder",
-  );
+  assert.deepEqual(paths(files), ["src/components/SubmitControl/_SubmitControl.jsx", "src/components/SubmitControl/_SubmitControl.css", "src/components/SubmitControl/index.js"]);
+  assert.match(byPath(files, ".jsx").content, /export function SubmitControl/, "the export follows the name");
+  assert.doesNotMatch(byPath(files, ".jsx").content, /export function Button\b/, "and the template's own name is gone");
 });
 
-test("react and solid both emit jsx, and solid reuses the react source", () => {
-  for (const framework of ["react", "solid"]) {
-    const files = generateMultiFile("card", framework, "info-card");
+test("vue gets a single-file component and a default-export barrel", () => {
+  const files = generateMultiFile("card", "vue");
 
-    const component = endingIn(files, "_InfoCard.jsx");
-    assert.ok(component, `${framework}: expected a jsx component`);
-    assert.equal(component.language, "jsx");
-    assert.match(component.content, /export function InfoCard/, `${framework}: the exported function is renamed to the requested name`);
-    assert.match(endingIn(files, "index.js").content, /export \{ InfoCard \}/, `${framework}: the barrel re-exports it`);
+  assert.deepEqual(paths(files), ["src/components/Card/_Card.vue", "src/components/Card/index.js"]);
+  assert.equal(byPath(files, ".vue").language, "vue");
+  assert.match(byPath(files, "index.js").content, /export \{ default as Card \} from '\.\/_Card\.vue'/);
+});
+
+test("svelte gets a single-file component and a default-export barrel", () => {
+  const files = generateMultiFile("card", "svelte");
+
+  assert.deepEqual(paths(files), ["src/components/Card/_Card.svelte", "src/components/Card/index.js"]);
+  assert.equal(byPath(files, ".svelte").language, "svelte");
+  assert.match(byPath(files, "index.js").content, /export \{ default as Card \} from '\.\/_Card\.svelte'/);
+});
+
+test("an unknown framework falls through to a custom element", () => {
+  const files = generateMultiFile("modal", "no-such-framework");
+
+  assert.deepEqual(paths(files), ["src/components/Modal/_Modal.js", "src/components/Modal/_Modal.css", "src/components/Modal/index.js"]);
+
+  const element = byPath(files, "_Modal.js").content;
+  assert.match(element, /export class Modal extends HTMLElement/, "a custom element, not a framework component");
+  assert.match(element, /customElements\.define\("modal", Modal\)/, "registered under its kebab name");
+  assert.match(element, /template\.content\.cloneNode\(true\)/, "cloned from a template element");
+});
+
+test("a template with no markup has no tree in any framework", () => {
+  // playwright-config is a file template, not a component: its `vanilla` is the
+  // file's own text, not `{ html, css }`. Reading that as a component emitted a
+  // custom element wrapping an empty template - the defect this pins shut.
+  assert.equal(typeof COMPONENT_TEMPLATES["playwright-config"].vanilla, "string", "the fixture this leans on");
+
+  for (const framework of ["react", "solid", "vue", "svelte", "vanilla"]) {
+    assert.equal(generateMultiFile("playwright-config", framework), null, `${framework} must refuse rather than emit half a component`);
   }
 });
 
-test("vue and svelte emit a single-file component plus a default-export barrel", () => {
-  const vue = generateMultiFile("card", "vue", "info-card");
-  assert.ok(endingIn(vue, "_InfoCard.vue"), "vue writes a .vue file");
-  assert.equal(endingIn(vue, "_InfoCard.vue").language, "vue");
-  assert.match(endingIn(vue, "index.js").content, /export \{ default as InfoCard \}/, "a vue component is a default export");
-
-  const svelte = generateMultiFile("card", "svelte", "info-card");
-  assert.ok(endingIn(svelte, "_InfoCard.svelte"), "svelte writes a .svelte file");
-  assert.match(endingIn(svelte, "index.js").content, /export \{ default as InfoCard \}/, "so is a svelte one");
-});
-
-test("a template with no markup is refused on every framework arm", () => {
-  // The a11y and playwright templates are whole files, not component markup:
-  // there is nothing to wrap in a component, so the generator says so.
-  for (const framework of ["react", "solid", "vue", "svelte"]) {
-    assert.equal(generateMultiFile("a11y-test-basic", framework), null, `${framework}: no markup means no component tree`);
-  }
-});
-
-test("a markup-less template still produces a vanilla tree, without a stylesheet", () => {
-  const files = generateMultiFile("a11y-test-basic", "vanilla");
-
-  assert.equal(files.length, 2, "component and barrel, no stylesheet to write");
-  assert.ok(endingIn(files, "index.js"), "the barrel is always written");
-  assert.equal(endingIn(files, ".css"), undefined, "nothing is invented to style");
+test("the default framework is vanilla", () => {
+  assert.deepEqual(paths(generateMultiFile("list")), paths(generateMultiFile("list", "vanilla")));
 });

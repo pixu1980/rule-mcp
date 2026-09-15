@@ -96,7 +96,7 @@ commit - the docs follow the code instead of being remembered.
   like, and that is the corpus the level table describes. Guard violations
   are 0 at every level on all four, which is the number that has to stay 0.
 
-  The rules are ported from the [`rule-caveman`](../skills/rule-caveman/SKILL.md)
+  The rules are ported from the [`rule-compression`](../skills/rule-compression/SKILL.md)
   skill and its `caveman-compress` companion: the vocabulary tables, the
   classification guards and `validate.py`'s structural validator. The LLM
   compression step is deliberately not ported - an LLM in the output path
