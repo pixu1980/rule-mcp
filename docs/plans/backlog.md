@@ -3,11 +3,6 @@
 Open work that is not owned by a persona trio. Newest first. Each item names the
 symptom, not the fix, so the run that picks it up can choose the fix.
 
-## B-4 - Installer flickering in the VS Code bash terminal
-
-The installer renders with flicker in the VS Code integrated bash terminal. Find
-the renderer setting that stops it (or the terminal capability it mis-detects).
-
 ## B-5 - Persona operations as tools, and generated skills in `~/.agents/skills`
 
 `/rule-audit-*`, `/rule-review-*` and `/rule-plan-*` exist only as slash commands.
@@ -26,3 +21,6 @@ does not generate the persona skills there, so a home install has no
 - **B-3** A close-session handoff plans and applies the ADR/handoff renumbering before it reads the
   ADR log; a plain handoff stays read-only and the doctor remains the explicit dry run. Commit
   messages are reported, never rewritten automatically (commit `4863126`).
+- **B-4** The wizard forces Ink `interactive: true` (overriding the CI detection that disables
+  synchronized output) and turns on `incrementalRendering`, so the VS Code terminal stops
+  flickering (commit `1d4eba8`).
