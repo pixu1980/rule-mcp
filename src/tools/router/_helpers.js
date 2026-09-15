@@ -1,29 +1,21 @@
-
-
 /** Result shaping helpers: banner, finalize, token/size estimates, and the skill-independent set. */
 
-import { alignAsciiBoxesResult } from "../../core/text/ascii-box/index.js";
-import { compressResult, compressSurfaceText } from "../../core/text/_caveman.js";
+import { alignAsciiBoxesResult } from "../../core/text/index.js";
+import { compressResult, MIN_COMPRESS_LENGTH } from "../../core/text/_compression.js";
 import { decorateWorkflowReminder, stampRequestId } from "../../core/enforcement/index.js";
-import { stripFingerprintResult } from "../../core/text/fingerprint/index.js";
+import { stripFingerprintResult } from "../../core/text/index.js";
 
 function withBanner(banner, result) {
   if (!banner || !result || !Array.isArray(result.content)) {
     return result;
   }
 
-  // The banner rides on the result the model reads, so it is compressed at the
-  // same boundary, booked under its own source (manifest: banners). The resume
-  // announcement is already a compressed handon block; the self-update notice
-  // is terse but goes through the same pass for the invariant.
-  const bannerText = compressSurfaceText(String(banner), { source: "caveman-banner" }).text;
-
-  return { ...result, content: [{ type: "text", text: bannerText }, ...result.content] };
+  return { ...result, content: [{ type: "text", text: banner }, ...result.content] };
 }
 
 /**
  * Apply env/state-dependent decoration to a deterministic result core: the
- * workflow reminder (process state + opt-out), then caveman compression, then
+ * workflow reminder (process state + opt-out), then text compression, then
  * fingerprint removal, then box alignment (both opt-out). Runs on BOTH cache
  * hits and fresh computes so those toggles always take effect and are never
  * frozen into the cache.
@@ -33,19 +25,20 @@ function withBanner(banner, result) {
  * all - it counts columns, so it has to see the final characters.
  *
  * Both effects are measured at the step that causes them. Reading either as
- * core-minus-final nets them against each other (ADR 071).
+ * core-minus-final nets them against each other (ADR 074).
  *
  * @param {string} name
  * @param {object} core
- * @returns {{ final: object, cavemanSaved: number, reminderTokens: number }}
+ * @returns {{ final: object, compressionSaved: number, reminderTokens: number }}
  */
 function finalize(name, core) {
   const reminded = decorateWorkflowReminder(name, core);
-  const compressed = compressResult(reminded);
+  const tooShort = textBytes(reminded) <= MIN_COMPRESS_LENGTH;
+  const compressed = tooShort ? reminded : compressResult(reminded);
 
   return {
     final: stampRequestId(alignAsciiBoxesResult(stripFingerprintResult(compressed))),
-    cavemanSaved: Math.max(0, estimateTokens(reminded) - estimateTokens(compressed)),
+    compressionSaved: Math.max(0, estimateTokens(reminded) - estimateTokens(compressed)),
     reminderTokens: Math.max(0, estimateTokens(reminded) - estimateTokens(core)),
   };
 }

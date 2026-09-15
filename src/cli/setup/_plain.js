@@ -1,5 +1,3 @@
-
-
 /**
  * @module cli/setup/plain
  *
@@ -15,8 +13,15 @@ import { statusStyle } from "./_theme.js";
 
 const write = (line) => process.stdout.write(`${line}\n`);
 
-/** One finished task, as a line. */
-export const taskLine = (task) => `${statusStyle(task.status).glyph} ${task.title}${task.summary ? ` - ${task.summary}` : ""}`;
+/**
+ * One finished task, as a line.
+ *
+ * The detail is what the wizard's review screen shows before anything runs -
+ * the mode an agent is configured with, the commands a sync will write. A
+ * piped install that printed only the summary left that unauditable.
+ */
+export const taskLine = (task) =>
+  `${statusStyle(task.status).glyph} ${task.title}${task.detail ? ` (${task.detail})` : ""}${task.summary ? ` - ${task.summary}` : ""}`;
 
 /** The counts line plus whatever to do next. */
 function writeFooter(counts, nextSteps) {

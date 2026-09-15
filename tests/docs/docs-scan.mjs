@@ -26,7 +26,10 @@ function scan(dir) {
       const c = readFileSync(p, "utf8");
       const lines = c.split("\n");
       for (const [index, line] of lines.entries()) {
-        for (const m of line.matchAll(/\bpix_[a-z0-9_]+\b/g)) {
+        // A token must end in an alphanumeric: no tool is named with a
+        // trailing underscore, so `rule_tool_*` is the family wildcard in
+        // prose rather than a reference that went stale.
+        for (const m of line.matchAll(/\bpix_[a-z0-9_]*[a-z0-9]\b/g)) {
           if (tools.has(m[0]) || m[0] === "rule-mcp" || m[0] === "rule_tool_process_handoff") {
             continue;
           }
@@ -40,7 +43,8 @@ function scan(dir) {
   return stale;
 }
 
-const total = scan("docs");
+// The directory is an argument so the rule can be exercised on a scratch tree.
+const total = scan(process.argv[2] ?? "docs");
 console.log(total === 0 ? "✅ ALL CLEAN - 0 stale references across live docs/" : "❌ " + total + " stale references found");
 
 // Persona trios are checked here too (personas C.3): a review that lost its

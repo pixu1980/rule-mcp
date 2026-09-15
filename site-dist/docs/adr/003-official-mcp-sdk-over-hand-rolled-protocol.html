@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>002 - Official MCP SDK over Hand-Rolled Protocol - rule-mcp docs</title>
+<link rel="stylesheet" href="../../style.css">
+</head>
+<body>
+<header><nav><ul>
+<li><a href="../../index.html">Home</a></li>
+<li><a href="../../docs/01-getting-started.html">undefined</a></li>
+<li><a href="../../docs/02-product-architecture.html">undefined</a></li>
+<li><a href="../../docs/03-agent-instructions.html">undefined</a></li>
+<li><a href="../../docs/04-operations.html">undefined</a></li>
+<li><a href="../../docs/05-env-variables.html">undefined</a></li>
+<li><a href="../../docs/06-privacy.html">undefined</a></li>
+<li><a href="../../docs/07-engineering-guides.html">undefined</a></li>
+<li><a href="../../docs/08-skills.html">undefined</a></li>
+<li><a href="../../docs/09-tools.html">undefined</a></li>
+<li><a href="../../docs/10-prompts.html">undefined</a></li>
+<li><a href="../../docs/11-instructions.html">undefined</a></li>
+<li><a href="../../docs/12-cli.html">undefined</a></li>
+<li><a href="../../docs/13-personas.html">undefined</a></li>
+<li><a href="../../docs/14-guardrails.html">undefined</a></li>
+<li><a href="../../docs/15-resources.html">undefined</a></li>
+<li><a href="../../docs/adr/ADR.html">ADRs</a></li>
+</ul></nav></header>
+<main>
+<h1>002 - Official MCP SDK over Hand-Rolled Protocol</h1>
+<p><strong>Status</strong>: Accepted<br><strong>Date</strong>: 2026-06-23<br><strong>Deciders</strong>: Project owner</p>
+<h2>Context</h2>
+<p>The initial implementation used a custom JSON-RPC protocol for MCP communication. This required maintaining:</p>
+<ul>
+<li>Message framing (JSON-RPC 2.0)</li>
+<li>Request/response matching</li>
+<li>Error serialization</li>
+<li>Transport abstraction (stdio, SSE)</li>
+<li>Capability negotiation</li>
+<li>Protocol versioning</li>
+</ul>
+<h2>Decision</h2>
+<p>Replace the hand-rolled protocol with <code>@modelcontextprotocol/sdk</code> v1.29.0.</p>
+<h2>Rationale</h2>
+<ol>
+<li><strong>Standard compliance</strong> - SDK guarantees compatibility with all MCP clients (Claude, Cursor, VS Code, etc.).</li>
+<li><strong>Feature completeness</strong> - SDK provides transport (StdioServerTransport, SSEServerTransport), capability negotiation, logging, and completion handlers out of the box.</li>
+<li><strong>Reduced maintenance</strong> - Protocol changes are handled by SDK updates. No custom protocol bugs.</li>
+<li><strong>Future-proof</strong> - SDK evolves with the MCP specification. New MCP features (streaming, batching, etc.) become available without reimplementation.</li>
+</ol>
+<h2>Consequences</h2>
+<ul>
+<li>SDK is a runtime dependency (<code>@modelcontextprotocol/sdk</code> 1.29.0).</li>
+<li>SDK API changes require version pinning in package.json.</li>
+<li>The old <code>src/mcp/protocol.js</code> and <code>src/mcp/stdio.js</code> were deleted (∼400 lines removed).</li>
+<li><code>src/server.js</code> now uses <code>Server</code> from SDK with <code>setRequestHandler</code> for tools, resources, prompts, and completions.</li>
+</ul>
+
+</main>
+<footer><p>Generated from <code>docs/</code> - edit the Markdown, not this file.</p></footer>
+</body>
+</html>

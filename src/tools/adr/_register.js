@@ -3,6 +3,7 @@
 /** Register the rule_tool_process_adr MCP tool. */
 import { mkdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
+import { recordDecision } from "../../core/tokensave/_memory.js";
 import { registerTool } from "../router/index.js";
 import { ADR_DIR, nextAdrNumber, adrFilename, listExistingAdrs } from "./_files.js";
 import { generateAdr } from "./_body.js";
@@ -66,6 +67,15 @@ export function registerProcessAdrTool() {
       const existing = listExistingAdrs(adrDir);
 
       updateAdrIndex(adrDir, existing);
+
+      // The ADR file is the source of truth; the graph keeps a recall index
+      // beside it. A missing graph is a no-op, never a failure.
+      recordDecision(projectDir, {
+        text: arguments_.title,
+        reason: arguments_.decision || arguments_.context || "",
+        files: [filePath],
+        tags: arguments_.tags || ["architecture"],
+      });
 
       return {
         content: [

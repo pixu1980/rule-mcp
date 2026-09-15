@@ -9,6 +9,7 @@ import { classifyPromptDomain } from "./_domain.js";
 import { detectFrameworkSkill } from "./_framework.js";
 import { reductionSignal } from "./_reduction-signal.js";
 import { rankSkills } from "./_rank-skills.js";
+import { graphCandidates } from "../../core/tokensave/_routing.js";
 import { docsFollowup } from "./_docs-followup.js";
 import { SCOPE_CONTRACT, STYLING_CONTRACT, STYLING_ROUTES } from "./_contracts.js";
 
@@ -63,6 +64,7 @@ export function registerAiTool() {
       }
 
       const ranked = new Map(searchSkills(prompt).map((hit) => [hit.skill, hit]));
+      const graph = graphCandidates(process.cwd(), prompt, { skills });
       const isReduction = Boolean(reductionSignal(promptLower));
 
       const skillScores = rankSkills({
@@ -71,6 +73,7 @@ export function registerAiTool() {
         promptDomain,
         isReduction,
         ranked,
+        graph,
         detectedFramework,
         detectedSkillName,
         applyFrameworkBias,

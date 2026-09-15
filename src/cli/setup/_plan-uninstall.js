@@ -1,5 +1,3 @@
-
-
 /**
  * @module cli/setup/plan-uninstall
  *
@@ -11,11 +9,20 @@
  */
 
 import { agentRemovalTask, shimRemovalTask } from "./_task-core.js";
-import { commandsRemovalTask, gitHookRemovalTask, profilesTask, purgeTask, rulesRemovalTask, serviceRemovalTask } from "./_task-remove.js";
+import {
+  commandsRemovalTask,
+  gitHookRemovalTask,
+  profilesTask,
+  purgeTask,
+  rulesRemovalTask,
+  serviceRemovalTask,
+  skillsRemovalTask,
+} from "./_task-remove.js";
 
 const GROUP_TASKS = {
   rules: rulesRemovalTask,
   commands: commandsRemovalTask,
+  skills: skillsRemovalTask,
   "git-hook": gitHookRemovalTask,
   service: serviceRemovalTask,
   profiles: profilesTask,
@@ -23,7 +30,7 @@ const GROUP_TASKS = {
 };
 
 /** The order removal groups run in, whatever order they were selected. */
-const GROUP_ORDER = ["rules", "commands", "git-hook", "service", "profiles", "shim"];
+const GROUP_ORDER = ["rules", "commands", "skills", "git-hook", "service", "profiles", "shim"];
 
 /**
  * @param {{ agents?: string[], groups?: string[], purgeIds?: string[] }} answers

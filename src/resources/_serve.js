@@ -1,5 +1,3 @@
-
-
 /**
  * @module resources/serve
  *
@@ -11,7 +9,7 @@
  * is data, and compressing data corrupts it.
  */
 
-import { compressSurfaceText } from "../core/text/_caveman.js";
+import { compressSurfaceText, MIN_COMPRESS_LENGTH } from "../core/text/_compression.js";
 import { recordToolCall } from "../core/telemetry/recorder/index.js";
 import { serveResource } from "./_read.js";
 
@@ -28,11 +26,11 @@ export async function readResource(uri) {
   let saved = 0;
 
   const contents = (served.contents ?? []).map((item) => {
-    if (typeof item?.text !== "string" || !String(item.mimeType ?? "").startsWith("text/")) {
+    if (typeof item?.text !== "string" || !String(item.mimeType ?? "").startsWith("text/") || item.text.length <= MIN_COMPRESS_LENGTH) {
       return item;
     }
 
-    const compressed = compressSurfaceText(item.text, { source: "caveman-resource" });
+    const compressed = compressSurfaceText(item.text, { source: "compression-resource" });
     saved += compressed.saved;
 
     return { ...item, text: compressed.text };
@@ -45,7 +43,7 @@ export async function readResource(uri) {
     resource: true,
     durationMs: Date.now() - startedAt,
     resultBytes: contents.reduce((sum, item) => sum + (item.text?.length ?? 0), 0),
-    saved: { "caveman-resource": Math.ceil(saved / 4) },
+    saved: { "compression-resource": Math.ceil(saved / 4) },
   });
 
   return { ...served, contents };

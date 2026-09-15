@@ -47,7 +47,7 @@ check("T1.2 the mantra is the agreed sentence", MANTRA === "Every token saved is
 const session = sessionDirective();
 check("T2 rule first", /\bpix\b/.test(session) && /before any implementation/i.test(session));
 check("T2.1 no subagents, verbatim", session.includes(NO_SUBAGENTS));
-check("T2.2 caveman output", /caveman/i.test(session));
+check("T2.2 compression output", /compression/i.test(session));
 check("T2.3 the mantra closes it", session.includes(MANTRA));
 check("T2.4 plain ASCII only", /^[ -~\n]*$/.test(session));
 
@@ -55,7 +55,7 @@ check("T2.4 plain ASCII only", /^[ -~\n]*$/.test(session));
 const line = promptDirective();
 check("T3 a single line", !line.includes("\n"));
 check("T3.1 short enough to ride on every prompt", line.length <= 120);
-check("T3.2 it still names all three rules", /rule/i.test(line) && /caveman/i.test(line) && /subagent/i.test(line) && /token/i.test(line));
+check("T3.2 it still names all three rules", /rule/i.test(line) && /compression/i.test(line) && /subagent/i.test(line) && /token/i.test(line));
 
 // ── T4: one opt-out, honored by both forms ──
 const previous = process.env.RULE_MCP_NO_PROMPT_DIRECTIVE;

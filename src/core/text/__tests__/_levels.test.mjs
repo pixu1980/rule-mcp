@@ -1,5 +1,3 @@
-
-
 /**
  * PERF-1 and PERF-2: the vocabulary tables and the levels that gate them.
  *
@@ -13,7 +11,7 @@ import { strict as assert } from "node:assert";
 import { test } from "node:test";
 
 import { ABBREVIATIONS } from "../_abbreviations.data.js";
-import { compressText } from "../_caveman.js";
+import { compressText } from "../_compression.js";
 import { FILLERS } from "../_fillers.data.js";
 import { atLeast, LEVELS } from "../_level.js";
 import { PHRASES } from "../_phrases.data.js";

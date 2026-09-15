@@ -8,7 +8,7 @@
  * Three sources meet here and are kept apart on purpose:
  *
  *   - **Measured by us**: how many bytes our own results took, what the cache
- *     replayed, what caveman compressed, which guardrails failed.
+ *     replayed, what compression compressed, which guardrails failed.
  *   - **Measured by the agent**: the model's tokens and money, read from its
  *     transcript. Real figures, but not ours.
  *   - **Modeled**: what reading the whole skill file would have cost, and how

@@ -67,7 +67,7 @@ export function clonePair() {
   // directory. homedir() reads HOME while userInfo() reads the passwd entry:
   // equal means nothing was pinned, and the recordings would land in the
   // person's own home. Refusing here is what makes the pin an invariant rather
-  // than something a reader has to notice in each suite (ADR 083).
+  // than something a reader has to notice in each suite.
   if (homedir() === userInfo().homedir) {
     throw new Error('git-sandbox: pin a temporary home first - process.env.HOME = mkdtempSync(join(tmpdir(), "prefix-")) - or this sandbox records into the real one');
   }

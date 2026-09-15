@@ -1,53 +1,92 @@
-
-
 /**
- * Registrar for the `setup` command: the full-screen install/uninstall wizard.
+ * @module cli/register-wizard
  *
- * Its own file because the option surface is the whole installer contract -
- * every flag the shell bootstraps forward lands here - and the setup
- * registrar has no code in common with the narrower per-agent commands next
- * to it.
+ * The `setup` command, and the adapter that lets commander drive it.
  *
- * The handler is imported inside the action, not at the top: the command
- * declaration is what `--help` renders, and a static import would make
- * `--help` pay for React, Ink and the whole agent catalog.
+ * Split out of `_register-setup.js` because the wizard declares every flag
+ * twice - once on `install` and once here - and a registrar file that holds
+ * both is a file nobody reads to the end (ADR 061).
  */
 import { Option } from "commander";
 
 /**
- * Register the `setup` command: the full-screen install/uninstall wizard.
+ * Read one parsed flag back out of a commander options object.
  *
- * The boolean pairs are declared positive-first on purpose. Commander makes
- * a lone `--no-x` default `x` to true; declaring `--x` first keeps the
- * option undefined when neither flag is passed, which is what lets the
- * wizard tell "the user said no" apart from "the user said nothing".
+ * `src/cli/setup/_entry.js` expects the hand-rolled `{ getArgument,
+ * hasFlag }` readers; this adapts a parsed options object (plus the raw
+ * argv for `--no-*` negations commander folds into booleans) so the wizard
+ * and the plain runner see the same flags.
  */
+export function commanderIo(program, options, argv = process.argv) {
+  const getArgument = (name) => {
+    const key = name.replace(/^--/, "").replaceAll(/-([a-z])/g, (_, c) => c.toUpperCase());
+    const value = options[key];
+
+    return typeof value === "string" ? value : undefined;
+  };
+  // Commander folds `--thing`/`--no-thing` into `options.thing` (true/false/
+  // undefined), so the flag readers consult the parsed object first and the
+  // raw argv only as a fallback. This keeps `--no-rules` meaningful when the
+  // options object was built by hand (tests, embedding) rather than parsed.
+  const hasFlag = (name) => {
+    if (argv.includes(name)) {
+      return true;
+    }
+
+    const positive = name.startsWith("--no-")
+      ? name.slice(5).replaceAll(/-([a-z])/g, (_, c) => c.toUpperCase())
+      : name.replace(/^--/, "").replaceAll(/-([a-z])/g, (_, c) => c.toUpperCase());
+    const value = options[positive];
+
+    if (typeof value !== "boolean") {
+      return false;
+    }
+
+    return name.startsWith("--no-") ? value === false : value === true;
+  };
+
+  return { getArgument, getArguments: () => [], hasFlag, program, options };
+}
+
+/** Register the `setup` wizard: full-screen on a terminal, plain otherwise. */
 export function registerSetupCommand(program) {
   program
     .command("setup")
-    .description("Full-screen wizard to install or remove this server across agents")
-    .option("--uninstall", "run the removal wizard instead of the install wizard")
-    .option("--agent <name>", "limit the run to one agent")
-    .addOption(new Option("--mode <name>", "stdio (default), daemon (SSE), or docker").choices(["stdio", "daemon", "sse", "docker"]))
-    .option("--rules", "append the instruction block to agent instruction files")
+    .description("Full-screen install/uninstall wizard (falls back to flags when piped)")
+    .option("--agent <name>", "narrow the run to one target")
+    .option("--mode <name>", "stdio (default), daemon (SSE), or docker", "stdio")
+    .option("--uninstall", "run the uninstall direction")
+    .option("--rules", "write agent instruction files")
     .option("--no-rules", "skip agent instruction files")
-    .option("--commands", "write the rule-* slash commands")
-    .option("--no-commands", "skip the rule-* slash commands")
-    .option("--skills", "install the bundled rule-* skills to ~/.agents/skills")
+    .option("--commands", "write agent slash commands")
+    .option("--no-commands", "skip agent slash commands")
+    .option("--hooks", "install guard hooks (Claude)")
+    .option("--no-hooks", "skip guard hooks")
+    .option("--skills", "install the bundled rule-* skills")
     .option("--no-skills", "skip the bundled skills")
-    .option("--git-hook", "add the background health check to the post-commit hook")
-    .option("--no-git-hook", "skip the git hook")
-    .option("--service", "register the platform daemon service (daemon mode)")
+    .option("--minimal", "minimal server tool surface (--no-minimal for full)")
+    .option("--no-minimal", "full server tool surface")
+    .option("--surface <spec>", "server tool surface: minimal, standard, full, areas:<a,b> or skills:<s,...>")
+    .option("--service", "register the platform daemon service")
     .option("--no-service", "skip the platform daemon service")
     .option("--doctor", "run the health check at the end")
-    .option("--no-doctor", "skip the closing health check")
-    .option("--purge", "uninstall only: delete ~/.rule-mcp and ~/.config/rule-mcp")
-    .option("--keep-config", "uninstall only: keep the config directories even with --purge")
+    .option("--no-doctor", "skip the health check")
+    .addOption(new Option("--commands-preset <name>", "which commands to write: minimal, standard or full").choices(["minimal", "standard", "full"]))
+    .option("--commands-families <list>", "comma-separated: areas, personas, tasks")
+    .option("--commands-areas <list>", "comma-separated area names, e.g. frontend,data")
+    .option("--commands-skills <list>", "comma-separated skill names")
+    .option("--purge", "also remove the runtime home and caches (uninstall)")
+    .option("--keep-config", "keep user configuration when purging")
     .option("--force", "override existing configuration")
     .option("--dry-run", "preview without writing")
-    .option("--no-interactive", "skip the wizard and run the plan with defaults")
+    .option("--no-wizard", "run the plan with flags and no wizard")
+    .option("--no-interactive", "run the plan with defaults and no wizard")
+    .option("--json", "print machine-readable output instead of the wizard")
     .allowExcessArguments(false)
     .action(async (options) => {
-      await (await import("./setup/index.js")).runSetup(options);
+      const { runSetup } = await import("./setup/index.js");
+      const { setupOptions } = await import("./setup/_entry.js");
+
+      await runSetup(setupOptions(options.uninstall ? "uninstall" : "install", commanderIo(program, options)));
     });
 }

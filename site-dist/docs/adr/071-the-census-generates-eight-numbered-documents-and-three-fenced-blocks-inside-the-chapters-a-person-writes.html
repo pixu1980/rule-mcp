@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>071: The census generates eight numbered documents and three fenced blocks inside the chapters a person writes - rule-mcp docs</title>
+<link rel="stylesheet" href="../../style.css">
+</head>
+<body>
+<header><nav><ul>
+<li><a href="../../index.html">Home</a></li>
+<li><a href="../../docs/01-getting-started.html">undefined</a></li>
+<li><a href="../../docs/02-product-architecture.html">undefined</a></li>
+<li><a href="../../docs/03-agent-instructions.html">undefined</a></li>
+<li><a href="../../docs/04-operations.html">undefined</a></li>
+<li><a href="../../docs/05-env-variables.html">undefined</a></li>
+<li><a href="../../docs/06-privacy.html">undefined</a></li>
+<li><a href="../../docs/07-engineering-guides.html">undefined</a></li>
+<li><a href="../../docs/08-skills.html">undefined</a></li>
+<li><a href="../../docs/09-tools.html">undefined</a></li>
+<li><a href="../../docs/10-prompts.html">undefined</a></li>
+<li><a href="../../docs/11-instructions.html">undefined</a></li>
+<li><a href="../../docs/12-cli.html">undefined</a></li>
+<li><a href="../../docs/13-personas.html">undefined</a></li>
+<li><a href="../../docs/14-guardrails.html">undefined</a></li>
+<li><a href="../../docs/15-resources.html">undefined</a></li>
+<li><a href="../../docs/adr/ADR.html">ADRs</a></li>
+</ul></nav></header>
+<main>
+<h1>071: The census generates eight numbered documents and three fenced blocks inside the chapters a person writes</h1>
+<ul>
+<li><p><strong>Date</strong>: 2026-09-08</p>
+</li>
+<li><p><strong>Status</strong>: accepted</p>
+</li>
+<li><p><strong>Tags</strong>: docs, census, generator, tooling</p>
+</li>
+<li><p><strong>Author</strong>: Emiliano Pisu <a href="mailto:pisuemiliano.1980@gmail.com">pisuemiliano.1980@gmail.com</a></p>
+</li>
+</ul>
+<h2>Context</h2>
+<p>The census generated six documents (07-skills through 12-personas) and refreshed two fenced blocks, but the guardrail rules and the resource surface were documented nowhere a reader could find them: 95 rules and 184 resources existed only in the code. The generator also depended on two hand-kept data files. <code>_env-vars.data.mjs</code> restated the env table in <code>docs/05-env-variables.md</code>, which is two copies of one fact, and the copy without a generator behind it goes stale first - it had already drifted, documenting <code>RULE_MCP_TOKENSAVE_AUTOTRACK</code> and <code>RULE_MCP_AUTO_UPDATE</code>, which nothing in <code>src/</code> or <code>bin/</code> reads, while five variables the code does read appeared in no table. <code>_labels.data.mjs</code> hand-wrote a purpose line per core tool beside the <code>description</code> the tool already declares. Formatting lived outside the generator: <code>package.json</code> and <code>.githooks/pre-commit</code> each carried an eight-path prettier invocation, and <code>tests/docs/census-generated.test.mjs</code> ran a third one over a temp copy of <code>docs/</code>, so three lists had to agree for the staleness check to mean anything. <code>docs/README.md</code> had a header row triplicated and advertised counts (96 skills, 112 tools) that the runtime had not matched for some time - the drift ADR 048 exists to remove.</p>
+<h2>Decision</h2>
+<p><code>docs/08-skills.md</code> through <code>docs/15-resources.md</code> are whole generated files, one inventory topic each, and <code>docs/01</code>, <code>docs/03</code> and <code>docs/05</code> carry <code>census:begin</code>/<code>census:end</code> fences the same run rewrites. Privacy leaves the numbered sequence for <code>docs/06-privacy.md</code>, so the generated documents are the tail of the handbook and <code>tests/docs/docs-handbook-numbering.test.mjs</code> can assert exactly that, plus a gapless sequence from <code>01</code> and a <code>docs/README.md</code> row per chapter. The generator formats its own output with the repository prettier settings and writes only the files that changed, so one invocation owns the bytes: <code>pnpm census</code> writes, <code>pnpm census:check</code> exits 1 on a stale file, <code>prebuild</code> and the pre-commit hook call the same entry point, and the staleness test compares <code>censusOutputs()</code> in memory rather than shelling out to prettier a second time. Both hand-kept data files are gone. The env block is derived by scanning <code>src/</code> and <code>bin/</code> for <code>RULE_MCP_*</code>, excluding co-located <code>__tests__</code> (ADR 067) because a test sets a variable rather than reads it, and it reports the disagreement in both directions - read but undocumented, and documented but read nowhere. Core tool purposes come from each tool&#39;s own <code>description</code>. The CLI document is rendered from the commander program itself, not from a registry declared beside it: commander owns both what parses and what <code>--help</code> prints, so a second declaration would be the copy that goes stale.</p>
+<h2>Consequences</h2>
+<p>Eleven files are owned by the generator and must never be edited by hand: eight whole documents and the fenced blocks in three chapters. A new inventory topic is a new numbered file plus an entry in the census INDEX, which also updates the cross-links in the other seven, and the numbering test fails until the new document is the tail and <code>docs/README.md</code> lists it. The env scan depends on the literal <code>RULE_MCP_</code> prefix appearing in source, so a name assembled from string fragments would be missed. Renumbering moved six documents and made every prior link to <code>07</code>-<code>12</code> wrong; the links inside <code>docs/</code> were repointed, and anything outside the repository that deep-linked a chapter by number is broken. The hardcoded <code>01</code>..<code>12</code> list in <code>tests/docs/docs-accuracy.test.mjs</code> was deleted rather than extended, because a list of numbers is the copy that forgets the chapter added next. The pre-commit hook runs only where <code>.githooks</code> is installed into <code>.git/hooks</code>, and it exits early when prettier is absent, because a commit is not the place to fail over a missing dev dependency.</p>
+<h2>What would end this</h2>
+<p>Assumption: the eight inventories are read separately. The split stops paying if they are always opened together, because then the cross-links are the only navigation anyone uses. The env scan stops holding the moment a variable name is built at runtime rather than written literally, which the undocumented count would show as a number that no longer matches the table. The commander-rendered CLI document stops being the right shape if the CLI ever drops the parser for hand-rolled argument reading, because the option descriptions and defaults would then have no declaration to render from.</p>
+<h2>Alternatives Considered</h2>
+<ol>
+<li>Keep six documents and leave the guardrails and resources undocumented - 95 rules and 184 resources stay visible only in the code</li>
+<li>Keep the numbering and append <code>13-guardrails</code> and <code>14-resources</code> - no renames, but privacy sits between the chapters a person writes and the ones the census owns, so the generated set is not the tail and the numbering test cannot say so</li>
+<li>Keep prettier in <code>package.json</code>, the hook and the test - three path lists that must agree for the staleness check to mean anything</li>
+<li>Port a hand-kept env data file beside the generator - a second list to keep in sync with the doc table, which is what drifted</li>
+<li>Declare the CLI options in a registry the terminal and the census both render - the document would be right and the registry would be a second copy of what commander already parses</li>
+</ol>
+
+</main>
+<footer><p>Generated from <code>docs/</code> - edit the Markdown, not this file.</p></footer>
+</body>
+</html>

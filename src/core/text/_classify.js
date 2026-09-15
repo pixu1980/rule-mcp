@@ -1,11 +1,9 @@
-
-
 /**
  * @module core/text/classify
  *
  * Is this text natural language (compressible) or code/config (leave alone)?
  *
- * Ported from the caveman-compress companion skill's `detect.py`
+ * Ported from the compression-reference companion skill's `detect.py`
  * (`COMPRESSIBLE_EXTENSIONS`, `SKIP_EXTENSIONS`, `_is_json_content`,
  * `_is_yaml_content`, `detect_file_type`). The per-line shape guards live in
  * `./_line-shape.js` and the refusal list in `./_sensitive.js`.

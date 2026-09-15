@@ -21,6 +21,7 @@
 import { checkCode } from "../index.js";
 import { loadAllSkills } from "../../skills/index.js";
 import { callTool } from "../../../tools/router/index.js";
+import "./_install.fixture.mjs";
 
 let pass = 0;
 let fail = 0;

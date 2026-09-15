@@ -12,8 +12,9 @@
  * @see module:tools/router - pix_detect tool registered here
  */
 
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync } from "node:fs";
 import { join } from "node:path";
+import { projectManifest, readManifest } from "../tokensave/_deps.js";
 import { BUILD_TOOL_RULES, FRAMEWORK_RULES, FRAMEWORK_SKILL_MAP } from "./_rules.data.js";
 
 /**
@@ -57,64 +58,76 @@ function hasDependencies(deps, depNames) {
  *   nodeVersion: string|null
  * }}
  */
+/** The empty profile a project without a package.json answers. */
+function emptyProfile(projectDir) {
+  return { projectName: "unknown", framework: "vanilla", typescript: false, buildTool: "unknown", nodeVersion: null, tokensave: hasTokensave(projectDir) };
+}
+
+/**
+ * Detect from an already-read manifest.
+ *
+ * @param {object} manifest - package.json shape
+ * @param {string} projectDir
+ * @returns {{ projectName: string, framework: string, typescript: boolean, buildTool: string, nodeVersion: string|null, tokensave: boolean }}
+ */
+function detectFromManifest(manifest, projectDir) {
+  const dependencies = { ...manifest.dependencies, ...manifest.devDependencies };
+
+  let framework = "vanilla";
+
+  for (const rule of FRAMEWORK_RULES) {
+    if (hasDependencies(dependencies, rule.deps)) {
+      framework = rule.key;
+      break;
+    }
+  }
+
+  const typescript = !!dependencies?.typescript || existsSync(join(projectDir, "tsconfig.json"));
+
+  let buildTool = "unknown";
+
+  for (const rule of BUILD_TOOL_RULES) {
+    if (hasDependencies(dependencies, rule.deps)) {
+      buildTool = rule.key;
+      break;
+    }
+  }
+
+  return {
+    projectName: manifest.name || "unknown",
+    framework,
+    typescript,
+    buildTool,
+    nodeVersion: manifest.engines?.node ?? null,
+    tokensave: hasTokensave(projectDir),
+  };
+}
+
+/**
+ * Detect the project framework, TypeScript usage, and build tool from a
+ * project directory's package.json.
+ *
+ * @param {string} projectDir - Path to project root
+ * @returns {{ projectName: string, framework: string, typescript: boolean, buildTool: string, nodeVersion: string|null, tokensave: boolean }}
+ */
 export function detectProject(projectDir = ".") {
-  const packagePath = join(projectDir, "package.json");
+  const manifest = readManifest(projectDir);
 
-  if (!existsSync(packagePath)) {
-    return {
-      projectName: "unknown",
-      framework: "vanilla",
-      typescript: false,
-      buildTool: "unknown",
-      nodeVersion: null,
-    };
-  }
+  return manifest ? detectFromManifest(manifest, projectDir) : emptyProfile(projectDir);
+}
 
-  try {
-    const package_ = JSON.parse(readFileSync(packagePath, "utf8"));
-    const dependencies = { ...package_.dependencies, ...package_.devDependencies };
+/**
+ * Detection that prefers the TokenSave manifest provider and falls back to a
+ * direct package.json read.
+ *
+ * @param {string} [projectDir]
+ * @param {{ probe?: Function, client?: Function }} [options]
+ * @returns {{ projectName: string, framework: string, typescript: boolean, buildTool: string, nodeVersion: string|null, tokensave: boolean }}
+ */
+export function detectProjectGraph(projectDir = ".", options = {}) {
+  const manifest = projectManifest(projectDir, options);
 
-    // Detect framework
-    let framework = "vanilla";
-
-    for (const rule of FRAMEWORK_RULES) {
-      if (hasDependencies(dependencies, rule.deps)) {
-        framework = rule.key;
-        break;
-      }
-    }
-
-    // Detect TypeScript
-    const typescript = !!dependencies?.typescript || existsSync(join(projectDir, "tsconfig.json"));
-
-    // Detect build tool
-    let buildTool = "unknown";
-
-    for (const rule of BUILD_TOOL_RULES) {
-      if (hasDependencies(dependencies, rule.deps)) {
-        buildTool = rule.key;
-        break;
-      }
-    }
-
-    return {
-      projectName: package_.name || "unknown",
-      framework,
-      typescript,
-      buildTool,
-      nodeVersion: package_.engines?.node ?? null,
-      tokensave: hasTokensave(projectDir),
-    };
-  } catch {
-    return {
-      projectName: "unknown",
-      framework: "vanilla",
-      typescript: false,
-      buildTool: "unknown",
-      nodeVersion: null,
-      tokensave: hasTokensave(projectDir),
-    };
-  }
+  return manifest ? detectFromManifest(manifest, projectDir) : emptyProfile(projectDir);
 }
 
 /**

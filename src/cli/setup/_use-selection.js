@@ -1,5 +1,3 @@
-
-
 /**
  * @module cli/setup/use-selection
  *
@@ -13,7 +11,39 @@
 import { useCallback, useInput, useMemo, useRef, useState } from "./_h.js";
 
 /** Indices of rows the cursor may land on. */
-const selectableIndexes = (items) => items.map((item, index) => (item.section ? -1 : index)).filter((index) => index >= 0);
+const selectableIndexes = (items) =>
+  items.map((item, index) => (item.section ? -1 : index)).filter((index) => index >= 0);
+
+/**
+ * Where the cursor starts.
+ *
+ * In radio mode the highlighted row is the choice, so a cursor that ignored
+ * the incoming value would silently answer the question with row one - a
+ * daemon install offered stdio, a standard preset offered minimal.
+ *
+ * @param {object[]} items
+ * @param {number[]} indexes - the rows the cursor may land on
+ * @param {string[]} initial
+ * @param {"check"|"radio"} mode
+ * @returns {number}
+ */
+export function initialCursor(items, indexes, initial = [], mode = "check") {
+  const preselected = mode === "radio" ? indexes.find((index) => initial.includes(items[index]?.id)) : undefined;
+
+  return preselected ?? indexes[0] ?? 0;
+}
+
+/**
+ * The ids a tick can actually apply to.
+ *
+ * A disabled row stays reachable so its detail panel can explain why it is
+ * disabled, but it cannot be selected: a tick the plan then ignores is a
+ * promise the install does not keep.
+ *
+ * @param {object[]} items
+ * @returns {string[]}
+ */
+export const enabledIds = (items) => items.filter((item) => !item.section && !item.disabled).map((item) => item.id);
 
 /**
  * @param {object[]} items - entries and `{ section: true }` headings
@@ -25,9 +55,10 @@ export function useSelection(items, { initial = [], mode = "check", onSubmit, on
   // delivered before React re-renders, and reading the position from state
   // would make every key in the burst act on the same stale index - twenty
   // presses of Down would move one row.
-  const cursorRef = useRef(indexes[0] ?? 0);
+  const cursorRef = useRef(initialCursor(items, indexes, initial, mode));
   const [cursor, setCursor] = useState(cursorRef.current);
-  const [selected, setSelected] = useState(() => new Set(initial));
+  const allowed = useMemo(() => new Set(enabledIds(items)), [items]);
+  const [selected, setSelected] = useState(() => new Set(initial.filter((id) => allowed.has(id))));
 
   const move = useCallback(
     (delta) => {
@@ -42,6 +73,10 @@ export function useSelection(items, { initial = [], mode = "check", onSubmit, on
 
   const toggle = useCallback(
     (id) => {
+      if (!allowed.has(id)) {
+        return;
+      }
+
       setSelected((current) => {
         if (mode === "radio") {
           return new Set([id]);
@@ -58,7 +93,7 @@ export function useSelection(items, { initial = [], mode = "check", onSubmit, on
         return next;
       });
     },
-    [mode],
+    [allowed, mode],
   );
 
   useInput((input, key) => {
@@ -69,7 +104,7 @@ export function useSelection(items, { initial = [], mode = "check", onSubmit, on
     } else if (input === " ") {
       toggle(items[cursorRef.current]?.id);
     } else if (input === "a" && mode === "check") {
-      setSelected(new Set(indexes.map((index) => items[index].id)));
+      setSelected(new Set(indexes.map((index) => items[index].id).filter((id) => allowed.has(id))));
     } else if (input === "n" && mode === "check") {
       setSelected(new Set());
     } else if (/^[1-9]$/.test(input)) {

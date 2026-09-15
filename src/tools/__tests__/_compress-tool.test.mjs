@@ -1,5 +1,3 @@
-
-
 /**
  * PERF-1.3 and PERF-3.4: what `rule_tool_compress` refuses, and what it guards.
  *
@@ -33,10 +31,10 @@ test("a sensitive file name is refused before anything is compressed", async () 
 });
 
 test("an ordinary file name compresses, and the saving is reported", async () => {
-  const result = await call({ text: "The value is really just very large.", fileName: "docs/07-engineering-guides.md" });
+  const result = await call({ text: "The value is really just very large.", fileName: "docs/03-engineering-guides.md" });
 
   assert.notEqual(result.isError, true);
-  assert.equal(isSensitivePath("docs/07-engineering-guides.md"), false);
+  assert.equal(isSensitivePath("docs/03-engineering-guides.md"), false);
   assert.ok(result._meta.pixCompress.saved >= 0);
   assert.equal(result._meta.pixCompress.guarded, true, "a clean pass reports a clean guard");
   assert.deepEqual(result._meta.pixCompress.violations, []);
@@ -45,7 +43,7 @@ test("an ordinary file name compresses, and the saving is reported", async () =>
 test("every mode passes the guard on a text with structure to lose", async () => {
   const text = ["# The heading", "", "The router really just caches https://example.com/a in ./src/core/cache/index.js.", "", "```js", "const the = 1;", "```"].join("\n");
 
-  for (const mode of ["both", "caveman", "fingerprint"]) {
+  for (const mode of ["both", "compression", "fingerprint"]) {
     const result = await call({ text, mode });
     assert.equal(result._meta.pixCompress.guarded, true, `${mode} must not break structure`);
     assert.match(result.content[0].text, /^# The heading/, `${mode} keeps the heading`);
@@ -55,6 +53,6 @@ test("every mode passes the guard on a text with structure to lose", async () =>
 });
 
 test("compress() is the pass, and the tool is the pass plus the guard", () => {
-  assert.equal(compress("The value is really large.", "caveman"), "value is large.");
+  assert.equal(compress("The value is really large.", "compression"), "value is large.");
   assert.equal(compress("Use the em dash - here.", "fingerprint"), "Use the em dash - here.");
 });

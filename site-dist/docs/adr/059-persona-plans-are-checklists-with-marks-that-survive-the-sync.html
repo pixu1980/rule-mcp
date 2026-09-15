@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>059: Persona plans are checklists with marks that survive the sync - rule-mcp docs</title>
+<link rel="stylesheet" href="../../style.css">
+</head>
+<body>
+<header><nav><ul>
+<li><a href="../../index.html">Home</a></li>
+<li><a href="../../docs/01-getting-started.html">undefined</a></li>
+<li><a href="../../docs/02-product-architecture.html">undefined</a></li>
+<li><a href="../../docs/03-agent-instructions.html">undefined</a></li>
+<li><a href="../../docs/04-operations.html">undefined</a></li>
+<li><a href="../../docs/05-env-variables.html">undefined</a></li>
+<li><a href="../../docs/06-privacy.html">undefined</a></li>
+<li><a href="../../docs/07-engineering-guides.html">undefined</a></li>
+<li><a href="../../docs/08-skills.html">undefined</a></li>
+<li><a href="../../docs/09-tools.html">undefined</a></li>
+<li><a href="../../docs/10-prompts.html">undefined</a></li>
+<li><a href="../../docs/11-instructions.html">undefined</a></li>
+<li><a href="../../docs/12-cli.html">undefined</a></li>
+<li><a href="../../docs/13-personas.html">undefined</a></li>
+<li><a href="../../docs/14-guardrails.html">undefined</a></li>
+<li><a href="../../docs/15-resources.html">undefined</a></li>
+<li><a href="../../docs/adr/ADR.html">ADRs</a></li>
+</ul></nav></header>
+<main>
+<h1>059: Persona plans are checklists with marks that survive the sync</h1>
+<ul>
+<li><strong>Date</strong>: 2026-09-07</li>
+<li><strong>Status</strong>: accepted</li>
+<li><strong>Tags</strong>: documentation, personas, plans</li>
+<li><strong>Author</strong>: Emiliano Pisu <a href="mailto:pisuemiliano.1980@gmail.com">pisuemiliano.1980@gmail.com</a></li>
+</ul>
+<h2>Context</h2>
+<p><code>rule_tool_plan_docs</code> rendered <code>docs/plans/&lt;role&gt;.md</code> as a markdown table (Step, Finding,
+Severity, What it takes). A table cannot record execution: nothing marks a step as done, so
+progress lived only in the reader&#39;s head, while the hand-maintained
+<code>docs/plans/execution-plan.md</code> already tracked its phases with <code>- [ ]</code> checkboxes and proved
+the affordance works. Worse, the plan is re-derived from open findings on every sync, so any
+ad-hoc mark someone added would have been erased by the next run.</p>
+<h2>Decision</h2>
+<p>The plan renderer emits a checklist instead of a table: one
+<code>- [ ] **Step N - &lt;finding-id&gt; (&lt;severity&gt;)**: &lt;what it takes&gt;</code> item per open finding, worst
+first, under a <code>## Steps</code> heading - the metadata of the old table folded into the item&#39;s bold
+prefix. <code>planFindingIds</code> reads both the checklist and the legacy table so the validateTrio
+gate keeps working across the transition, and a new <code>planCheckedIds</code> feeds the sync: a step
+marked <code>[x]</code> stays marked while its finding is open, and disappears with the finding. The
+audit and review keep their tables - they are data, not work to tick off.</p>
+<h2>Consequences</h2>
+<p>Positive: executed steps are markable in place, the mark survives re-syncs, and every
+persona plan reads like execution-plan.md. Negative: one more parser shape to maintain, and
+a hand-combined step (<code>**Step 1 - DOC-1, DOC-2 (high)**</code>) must keep the id list inside the
+bold prefix for the gate to see it.</p>
+<h2>What would end this</h2>
+<p>A plan surface that tracks execution outside the file (issues, tasks), making in-file marks
+redundant.</p>
+<h2>Alternatives Considered</h2>
+<ol>
+<li>Keep the table and add a Status column - not clickable in editors and previews, and the
+sync would still have to parse cell text to preserve it.</li>
+<li>A separate checklist file beside the plan - two files to drift apart instead of one that
+cannot.</li>
+</ol>
+
+</main>
+<footer><p>Generated from <code>docs/</code> - edit the Markdown, not this file.</p></footer>
+</body>
+</html>

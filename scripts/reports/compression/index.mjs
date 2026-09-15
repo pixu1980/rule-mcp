@@ -1,13 +1,11 @@
 #!/usr/bin/env node
-
-
 /**
  * @module scripts/reports/compression
  *
  * What each compression level actually saves, on the corpus this server
  * actually emits.
  *
- * The caveman skill claims ~75%; the deterministic port measured 0.5-2.2% on
+ * The compression skill claims ~75%; the deterministic port measured 0.5-2.2% on
  * real payloads. Both numbers can be true - the skill compresses an assistant
  * answer written for a human, the server compresses skill bodies that are
  * mostly code fences, tables and headings, all of which are protected by
@@ -19,7 +17,7 @@
  *   node scripts/reports/compression/index.mjs --json    # machine-readable
  *
  * @see src/core/text/__tests__/_efficacy.test.mjs - the CI floors
- * @see skills/rule-caveman/SKILL.md - the rules this ports
+ * @see skills/rule-compression/SKILL.md - the rules this ports
  */
 
 process.env.RULE_MCP_NO_TELEMETRY ??= "1";
@@ -32,7 +30,7 @@ import { corpora } from "./_corpora.mjs";
 
 const ROOT = new URL("../../..", import.meta.url).pathname;
 
-const { compressTextGuarded } = await import(join(ROOT, "src/core/text/_caveman.js"));
+const { compressTextGuarded } = await import(join(ROOT, "src/core/text/_compression.js"));
 const { LEVELS } = await import(join(ROOT, "src/core/text/_level.js"));
 const { guardCompression } = await import(join(ROOT, "src/core/text/compress-guard/index.js"));
 

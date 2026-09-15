@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>060: Plans carry nested sub-steps and an exhaustiveness mandate - rule-mcp docs</title>
+<link rel="stylesheet" href="../../style.css">
+</head>
+<body>
+<header><nav><ul>
+<li><a href="../../index.html">Home</a></li>
+<li><a href="../../docs/01-getting-started.html">undefined</a></li>
+<li><a href="../../docs/02-product-architecture.html">undefined</a></li>
+<li><a href="../../docs/03-agent-instructions.html">undefined</a></li>
+<li><a href="../../docs/04-operations.html">undefined</a></li>
+<li><a href="../../docs/05-env-variables.html">undefined</a></li>
+<li><a href="../../docs/06-privacy.html">undefined</a></li>
+<li><a href="../../docs/07-engineering-guides.html">undefined</a></li>
+<li><a href="../../docs/08-skills.html">undefined</a></li>
+<li><a href="../../docs/09-tools.html">undefined</a></li>
+<li><a href="../../docs/10-prompts.html">undefined</a></li>
+<li><a href="../../docs/11-instructions.html">undefined</a></li>
+<li><a href="../../docs/12-cli.html">undefined</a></li>
+<li><a href="../../docs/13-personas.html">undefined</a></li>
+<li><a href="../../docs/14-guardrails.html">undefined</a></li>
+<li><a href="../../docs/15-resources.html">undefined</a></li>
+<li><a href="../../docs/adr/ADR.html">ADRs</a></li>
+</ul></nav></header>
+<main>
+<h1>060: Plans carry nested sub-steps and an exhaustiveness mandate</h1>
+<ul>
+<li><strong>Date</strong>: 2026-09-07</li>
+<li><strong>Status</strong>: accepted</li>
+<li><strong>Tags</strong>: documentation, personas, plans</li>
+<li><strong>Author</strong>: Emiliano Pisu <a href="mailto:pisuemiliano.1980@gmail.com">pisuemiliano.1980@gmail.com</a></li>
+</ul>
+<h2>Context</h2>
+<p>ADR 059 made persona plans checklists, but every step was one flat line: a step hiding five
+actions (&quot;rename, update the links, fix the writers, add the test number, run the gates&quot;)
+could only be marked done as a whole, and its detail lived in a prose blob. Runs also tended
+to produce uniformly short roadmaps - nothing in the machinery caps the step count, but
+nothing in the persona contract demanded more either, so plans read like summaries instead
+of the development-ready documents a 25-to-30-year expert would hand over.</p>
+<h2>Decision</h2>
+<p>A finding passed to <code>rule_tool_plan_docs</code> may carry a <code>steps</code> array; the renderer nests each
+entry as <code>  - [ ] **N.M**: &lt;action&gt;</code> under its step, and <code>planCheckedIds</code> keys sub-step marks
+as <code>id#M</code> so a marked sub-step survives the sync exactly like a marked step. The persona
+plan contract (the filled role template and the tool&#39;s follow-up text) now states the
+expectation explicitly: as many steps as the findings demand - no fixed count - each split
+into sub-steps whenever it hides more than one action, naming the files, the commands and
+the gate that proves the step done.</p>
+<h2>Consequences</h2>
+<p>Positive: execution is trackable at the action level, plans are development-ready documents
+rather than summaries, and the uncapped-steps expectation is written where every persona
+reads it. Negative: sub-step marks are keyed by ordinal, so reordering a finding&#39;s <code>steps</code>
+array between runs re-derives the marks below it; the parser gains a second line shape.</p>
+<h2>What would end this</h2>
+<p>Task tracking moving out of the plan files entirely (issues, task tools), making in-file
+sub-step marks redundant.</p>
+<h2>Alternatives Considered</h2>
+<ol>
+<li>Free-form nested bullets without the <code>N.M</code> key - unparseable, so marks could not survive
+the sync.</li>
+<li>A separate tasks file per plan - two files to drift apart instead of one that cannot.</li>
+</ol>
+
+</main>
+<footer><p>Generated from <code>docs/</code> - edit the Markdown, not this file.</p></footer>
+</body>
+</html>

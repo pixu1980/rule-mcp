@@ -1,5 +1,3 @@
-
-
 /**
  * @module cli/setup/app-uninstall
  *
@@ -36,13 +34,18 @@ export function UninstallApp({ defaults = {}, onFinish }) {
   const purgeRows = useMemo(() => purgeItems(scan.purge), [scan]);
 
   const [step, setStep] = useState(0);
-  const [groups, setGroups] = useState(defaults.groups ?? scan.groups.filter((group) => group.count > 0).map((group) => group.id));
+  const [groups, setGroups] = useState(
+    defaults.groups ?? scan.groups.filter((group) => group.count > 0).map((group) => group.id),
+  );
   const [purgeIds, setPurgeIds] = useState(defaults.purgeIds ?? []);
   const [dryRun, setDryRun] = useState(Boolean(defaults.dryRun));
   const [results, setResults] = useState([]);
   const [active, setActive] = useState(-1);
 
-  const plan = useMemo(() => buildUninstallPlan({ agents: scan.agents, groups, purgeIds }), [scan.agents, groups, purgeIds]);
+  const plan = useMemo(
+    () => buildUninstallPlan({ agents: scan.agents, groups, purgeIds }),
+    [scan.agents, groups, purgeIds],
+  );
 
   const quit = () => {
     onFinish?.({ results, dryRun });
@@ -111,8 +114,27 @@ export function UninstallApp({ defaults = {}, onFinish }) {
         onBack: () => setStep(1),
       }),
     () => h(StepApply, { results, activeIndex: active, dryRun, height: body }),
-    () => h(StepDone, { counts: tally(results), results, dryRun, nextSteps: uninstallNextSteps({ dryRun, purged: purgeIds.length > 0 }), onQuit: quit }),
+    () =>
+      h(StepDone, {
+        counts: tally(results),
+        results,
+        dryRun,
+        nextSteps: uninstallNextSteps({ dryRun, purged: purgeIds.length > 0 }),
+        onQuit: quit,
+      }),
   ];
 
-  return h(Frame, { title: "Uninstall", subtitle: dryRun ? "dry run" : "", steps: STEP_NAMES.uninstall, active: step, hints: HINTS.uninstall[step], rows, columns }, views[step]());
+  return h(
+    Frame,
+    {
+      title: "Uninstall",
+      subtitle: dryRun ? "dry run" : "",
+      steps: STEP_NAMES.uninstall,
+      active: step,
+      hints: HINTS.uninstall[step],
+      rows,
+      columns,
+    },
+    views[step](),
+  );
 }

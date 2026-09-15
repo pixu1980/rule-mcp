@@ -8,7 +8,7 @@
  * Three of them cost real money when a session forgets: skipping `rule`
  * means guessing at rules the server already knows; spawning a subagent pays a
  * fresh context window for work a deterministic tool answers for free; dropping
- * caveman means every answer carries filler nobody reads. None of the three is
+ * compression means every answer carries filler nobody reads. None of the three is
  * enforceable from inside a tool result - by the time a tool runs, the model has
  * already decided. So the text lives here and is carried by the harness:
  * SessionStart injects the full form once, UserPromptSubmit re-anchors it on
@@ -92,7 +92,7 @@ export function sessionDirective() {
     "- Call `rule` (or `rule_tool_gateway`) before any implementation, on every prompt. " +
       "Routed skill evidence is source of truth; never invent APIs, files, dependencies, or passing checks.",
     `- ${NO_SUBAGENTS}`,
-    "- Caveman output: drop filler, articles and pleasantries. Keep every technical fact, code block, path and error string verbatim.",
+    "- Compression output: drop filler, articles and pleasantries. Keep every technical fact, code block, path and error string verbatim.",
     "- American English, ASCII punctuation, no em dashes, no curly quotes.",
     "- Minimal change: build exactly what was asked. Propose anything extra in prose, never write it.",
     `- ${MANTRA}`,
@@ -110,5 +110,5 @@ export function promptDirective() {
     return "";
   }
 
-  return "rule first. caveman on. no subagents. every token saved is a token earned.";
+  return "rule first. compression on. no subagents. every token saved is a token earned.";
 }

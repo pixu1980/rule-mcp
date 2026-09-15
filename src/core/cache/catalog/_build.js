@@ -2,7 +2,7 @@
 
 /** @module core/cache/catalog/build - which entries earn promotion, and the export shape */
 
-import { pkg as package_ } from "../../../cli/paths/index.js";
+import { pkg as package_ } from "@src/cli/paths/index.js";
 import { promotableEntries } from "../tool-cache/index.js";
 import { CATALOG_VERSION } from "./_io.js";
 

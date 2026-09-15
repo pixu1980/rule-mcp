@@ -1,35 +1,29 @@
-
-
-/** syncCommandTargets: missing dirs, stale sweeps, and the dry-run prefix. */
+/**
+ * syncCommandTargets: one call covers every agent directory on the machine.
+ *
+ * HOME is redirected before the module loads, so every target this resolves
+ * lands inside a scratch directory rather than the real agent configuration.
+ */
 import { strict as assert } from "node:assert";
 import { existsSync, mkdirSync, mkdtempSync, readdirSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { test } from "node:test";
 
-import { syncCommandTargets } from "../_targets-sync.js";
+const home = mkdtempSync(join(tmpdir(), "rule-sync-home-"));
 
-const home = mkdtempSync(join(tmpdir(), "rule-targets-sync-"));
-const savedHome = process.env.HOME;
+process.env.HOME = home;
 
-test.before(() => {
-  process.env.HOME = home;
-  delete process.env.PI_CODING_AGENT_DIR;
-});
+const { syncCommandTargets } = await import("../_targets-sync.js");
+const { resolvedTargets } = await import("../_targets.js");
 
-test.after(() => {
-  if (savedHome === undefined) {
-    delete process.env.HOME;
-  } else {
-    process.env.HOME = savedHome;
-  }
+test.after(() => rmSync(home, { recursive: true, force: true }));
 
-  rmSync(home, { recursive: true, force: true });
-});
-
-const out = (fn) => {
+/** Run a command with stdout captured. */
+function out(run) {
   const chunks = [];
   const write = process.stdout.write;
+
   process.stdout.write = (chunk) => {
     chunks.push(String(chunk));
 
@@ -37,40 +31,88 @@ const out = (fn) => {
   };
 
   try {
-    fn();
+    run();
   } finally {
     process.stdout.write = write;
   }
 
   return chunks.join("");
-};
+}
 
-test("removing from a missing command directory reports and skips it", () => {
-  const text = out(() => syncCommandTargets({ agent: "pi", remove: true, dryRun: true }));
+/** The directory the claude target resolves to inside the scratch home. */
+const claudeDir = () => resolvedTargets({ agent: "claude" })[0].dir;
 
-  assert.match(text, /no command directory/, "the missing dir is named, not crashed on");
-  assert.match(text, /removed 0 file/, "nothing is removed");
+test("a machine with no agent directories is reported, not failed", () => {
+  const text = out(() => syncCommandTargets({ agent: "nosuchagent" }));
+
+  assert.match(text, /no agent command directories found/, "an empty resolution says so");
 });
 
-test("the sweep removes stale rule files of every ending and nothing else", () => {
-  const dir = join(home, ".pi", "agent", "prompts");
-  mkdirSync(dir, { recursive: true });
-  writeFileSync(join(dir, "rule-old.md"), "stale");
-  writeFileSync(join(dir, "rule-old.toml"), "stale");
-  writeFileSync(join(dir, "rule-note.txt"), "not a command ending");
-  writeFileSync(join(dir, "keep.md"), "not a rule file");
+test("a dry run reports the files it would write and writes none", () => {
+  const directory = claudeDir();
+  const text = out(() => syncCommandTargets({ agent: "claude", dryRun: true }));
 
-  const text = out(() => syncCommandTargets({ agent: "pi", remove: true, dryRun: false }));
+  assert.match(text, /wrote \d+ \w+ command file/, "it counts what it would write");
+  assert.match(text, /synced \d+ file\(s\) across \d+ directory/, "and closes with the totals");
+  assert.equal(existsSync(directory), false, "a dry run does not even create the directory");
+});
 
-  assert.match(text, /removed 2 rule\* command file/, "the md and the toml go");
-  assert.doesNotMatch(text, /\[dry-run\]/, "a real run carries no dry-run prefix");
-  assert.equal(existsSync(join(dir, "rule-old.md")), false, "the stale md is gone");
-  assert.equal(existsSync(join(dir, "rule-old.toml")), false, "the stale toml is gone");
-  assert.ok(existsSync(join(dir, "rule-note.txt")), "a rule file with another ending survives");
-  assert.ok(existsSync(join(dir, "keep.md")), "a non-rule file survives");
+test("a real sync writes the whole command set into the target", () => {
+  const directory = claudeDir();
 
-  const dry = out(() => syncCommandTargets({ agent: "pi", remove: true, dryRun: true }));
+  out(() => syncCommandTargets({ agent: "claude" }));
 
-  assert.match(dry, /\[dry-run\] .*removed 0/, "a dry run prefixes and removes nothing");
-  assert.deepEqual(readdirSync(dir).sort(), ["keep.md", "rule-note.txt"], "the survivors stay");
+  const written = readdirSync(directory);
+  assert.ok(written.length > 0, "the command files land");
+  assert.ok(
+    written.every((name) => /^rule[-.]/.test(name)),
+    `every file belongs to the rule namespace: ${written.join(", ")}`,
+  );
+  assert.ok(written.includes("rule-audit-security.md"), "a persona command is part of the set");
+  assert.ok(written.includes("rule.md"), "so is the root routing command");
+});
+
+test("remove sweeps the whole rule namespace, including names the registry dropped", () => {
+  const directory = claudeDir();
+
+  out(() => syncCommandTargets({ agent: "claude" }));
+  writeFileSync(join(directory, "rule-renamed-away.md"), "a command from an older release\n");
+  writeFileSync(join(directory, "keep-me.md"), "not ours\n");
+
+  const text = out(() => syncCommandTargets({ agent: "claude", remove: true }));
+
+  assert.match(text, /removed \d+ rule\* command file/, "the removal reports its count");
+  assert.deepEqual(readdirSync(directory), ["keep-me.md"], "every rule file goes, and nothing else does");
+});
+
+test("a dry-run remove reports what it would sweep and sweeps nothing", () => {
+  const directory = claudeDir();
+
+  out(() => syncCommandTargets({ agent: "claude" }));
+  const before = readdirSync(directory).length;
+
+  const text = out(() => syncCommandTargets({ agent: "claude", remove: true, dryRun: true }));
+
+  assert.match(text, /\[dry-run] /, "the line is marked as a preview");
+  assert.equal(readdirSync(directory).length, before, "the files are still there");
+});
+
+test("the target directory is created when it does not exist yet", () => {
+  const directory = claudeDir();
+  rmSync(directory, { recursive: true, force: true });
+
+  out(() => syncCommandTargets({ agent: "claude" }));
+
+  assert.ok(readdirSync(directory).length > 0, "the sync creates the directory it writes into");
+});
+
+test("every detected agent is covered by one call", () => {
+  // Two agent homes exist now, so detection must reach both in a single sync.
+  mkdirSync(join(home, ".codex"), { recursive: true });
+  mkdirSync(join(home, ".claude"), { recursive: true });
+
+  const text = out(() => syncCommandTargets({ dryRun: true }));
+  const detected = resolvedTargets({});
+
+  assert.match(text, new RegExp(`across ${detected.length} directory`), "the total matches what was resolved");
 });

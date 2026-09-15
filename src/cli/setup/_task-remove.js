@@ -1,21 +1,21 @@
-
-
 /**
  * @module cli/setup/task-remove
  *
- * The removal counterparts: instruction files, slash commands, the commit
- * hook, the platform service, shell profiles, and the purge.
+ * The removal counterparts: instruction files, slash commands, the legacy git
+ * hook block, the platform service, shell profiles, and the purge.
  *
  * Each one is the inverse of a task in `_task-extras.js`. Keeping the pairs
  * visible is what stops an install step from quietly outliving its removal.
  */
 
 import { uninstallDaemonService } from "../daemon/index.js";
+import { uninstallGitHooks } from "../../core/_git-hooks.js";
 import { runCliCommand } from "./_exec.js";
-import { removeGitHook } from "./_git-hook-apply.js";
+import { legacyHookFiles } from "./_legacy-hooks.js";
 import { removeRules } from "./_rules-apply.js";
 import { purgeRuntimeDirs } from "./_runtime-home.js";
 import { cleanShellProfiles } from "./_shell-profile.js";
+import { commandSyncArgs } from "./_task-extras.js";
 
 /** Strip the managed block from every instruction file that has it. */
 export const rulesRemovalTask = () => ({
@@ -25,7 +25,11 @@ export const rulesRemovalTask = () => ({
   run: ({ dryRun }) => {
     const results = removeRules({ dryRun });
 
-    return { status: "ok", summary: `${results.length} file(s)`, lines: results.map((entry) => `${entry.status.padEnd(8)} ${entry.file}`) };
+    return {
+      status: "ok",
+      summary: `${results.length} file(s)`,
+      lines: results.map((entry) => `${entry.status.padEnd(8)} ${entry.file}`),
+    };
   },
 });
 
@@ -35,21 +39,57 @@ export const commandsRemovalTask = () => ({
   title: "Agent slash commands",
   detail: "remove the rule-* command files",
   run: async ({ dryRun }) => {
-    const result = await runCliCommand(["agent-commands", "--remove", "--sync", ...(dryRun ? ["--dry-run"] : [])]);
+    const result = await runCliCommand(commandSyncArgs({ remove: true, dryRun }));
 
-    return { status: result.ok ? "ok" : "warn", summary: result.ok ? "removed" : "failed", lines: result.lines.slice(-6) };
+    return {
+      status: result.ok ? "ok" : "warn",
+      summary: result.ok ? "removed" : "failed",
+      lines: result.lines.slice(-6),
+    };
   },
 });
 
-/** Take the managed block back out of the post-commit hook. */
+/**
+ * Delete the catalog directories the skills step copied.
+ *
+ * Global only, whatever directory the wizard runs in: ADR 031 keeps uninstall
+ * out of the project tree, and `--scope project` on the CLI is the way to
+ * clean a project's own `.agents/skills`.
+ */
+export const skillsRemovalTask = () => ({
+  id: "skills",
+  title: "Bundled rule-* skills",
+  detail: "~/.agents/skills and ~/.claude/skills",
+  run: async ({ dryRun }) => {
+    const result = await runCliCommand(["skills", "uninstall", ...(dryRun ? ["--dry-run"] : [])]);
+
+    return {
+      status: result.ok ? "ok" : "warn",
+      summary: result.ok ? (dryRun ? "would remove" : "removed") : "failed",
+      lines: result.lines.slice(-6),
+    };
+  },
+});
+
+/** Strip the hook block an older install wrote into the global git hooks. */
 export const gitHookRemovalTask = () => ({
   id: "git-hook",
-  title: "Git post-commit hook",
-  detail: "remove the managed block",
+  title: "Legacy git hook block",
+  detail: "strip the block an older install left behind",
   run: ({ dryRun }) => {
-    const result = removeGitHook({ dryRun });
+    const files = legacyHookFiles();
 
-    return { status: result.status === "no-repo" ? "skip" : "ok", summary: result.file ? `${result.status} - ${result.file}` : "not a git repository" };
+    if (files.length === 0) {
+      return { status: "skip", summary: "nothing left behind" };
+    }
+
+    if (dryRun) {
+      return { status: "ok", summary: `${files.length} hook(s) would be cleaned`, lines: files };
+    }
+
+    const result = uninstallGitHooks();
+
+    return { status: "ok", summary: `${result.removed.length} hook(s) in ${result.dir}`, lines: result.removed };
   },
 });
 
@@ -73,7 +113,11 @@ export const profilesTask = () => ({
   run: ({ dryRun }) => {
     const results = cleanShellProfiles({ dryRun });
 
-    return { status: "ok", summary: `${results.length} file(s)`, lines: results.map((entry) => `${entry.status.padEnd(8)} ${entry.file}`) };
+    return {
+      status: "ok",
+      summary: `${results.length} file(s)`,
+      lines: results.map((entry) => `${entry.status.padEnd(8)} ${entry.file}`),
+    };
   },
 });
 
@@ -86,7 +130,7 @@ export const profilesTask = () => ({
 export const purgeTask = (ids) => ({
   id: "purge",
   title: "Purge state and config",
-  detail: "delete ~/.rule-mcp and ~/.config/rule-mcp",
+  detail: "delete ~/.rule-mcp, ~/.config/rule-mcp and the compiled-code cache",
   run: ({ dryRun }) => {
     const results = purgeRuntimeDirs({ dryRun, ids });
 

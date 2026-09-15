@@ -1,7 +1,6 @@
-
-
 import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
+import { buildAdrIndex, listExistingAdrs } from "../../tools/adr/index.js";
 import { FAMILIES, documentsIn } from "./_families.js";
 import { authorsToName } from "./_authors.js";
 
@@ -9,31 +8,23 @@ import { authorsToName } from "./_authors.js";
  * What the repair would do.
  *
  * @param {{ projectDir?: string }} [options]
- * @returns {{ projectDir: string, collisions: object[], gaps: object[], renames: object[] }}
+ * @returns {{ projectDir: string, collisions: object[], renames: object[] }}
  */
 export function planRenumber(options = {}) {
   const projectDir = options.projectDir ?? process.cwd();
   const report = options.onProgress ?? (() => {});
   const collisions = [];
   const renames = [];
-  const gaps = [];
 
   for (const family of FAMILIES) {
     report({ step: "scan", message: `Scanning ${family.dir} for numbers and creation order` });
     const documents = documentsIn(projectDir, family);
     report({ step: "scan", message: `Read ${documents.length} ${family.label} document(s)` });
     const taken = new Set();
-    // Number every document first, then look at the sequence as a whole. The
-    // two repairs are different: a collision is decided by creation order (the
-    // earlier holder keeps the number), a hole by position (everything after
-    // it moves down). Resolving collisions first means compaction sees one
-    // unique number per document, whichever repair produced it.
-    const assigned = [];
 
     for (const document of documents) {
       if (!taken.has(document.number)) {
         taken.add(document.number);
-        assigned.push({ document, number: document.number });
         continue;
       }
       // The earlier holder keeps the number; this one takes the next free slot.
@@ -44,44 +35,19 @@ export function planRenumber(options = {}) {
       }
 
       taken.add(next);
+      const padded = String(next).padStart(family.pad, "0");
       collisions.push({
         family: family.label,
         number: document.number,
         file: document.relativePath,
       });
-      assigned.push({ document, number: next });
-    }
-
-    // Compaction runs over the numbers, not over creation dates: closing a
-    // hole must move the documents after it down by one, never reshuffle which
-    // decision holds which number.
-    //
-    // The first document anchors the sequence rather than the number 1: a
-    // family that deliberately starts at 068 is numbered, not broken, and
-    // dragging it to 001 would rewrite every identity to reclaim numbers
-    // nobody lost. Only the holes between the oldest and the newest close.
-    const ordered = [...assigned].sort((left, right) => left.number - right.number);
-    const anchor = ordered[0]?.number ?? 1;
-
-    for (const [index, entry] of ordered.entries()) {
-      const target = anchor + index;
-
-      for (let missing = ordered[index - 1]?.number + 1 || entry.number; missing < entry.number; missing += 1) {
-        gaps.push({ family: family.label, number: String(missing).padStart(family.pad, "0") });
-      }
-
-      if (target === entry.document.number) {
-        continue;
-      }
-
-      const padded = String(target).padStart(family.pad, "0");
       renames.push({
         family: family.label,
-        from: entry.document.relativePath,
-        to: join(family.dir, `${padded}-${entry.document.slug}.md`),
-        fromNumber: String(entry.document.number).padStart(family.pad, "0"),
+        from: document.relativePath,
+        to: join(family.dir, `${padded}-${document.slug}.md`),
+        fromNumber: String(document.number).padStart(family.pad, "0"),
         toNumber: padded,
-        slug: entry.document.slug,
+        slug: document.slug,
       });
     }
   }
@@ -93,13 +59,39 @@ export function planRenumber(options = {}) {
     message: authors.length > 0 ? `${authors.length} ADR(s) name a tool or nobody` : "Every ADR names a person",
   });
 
-  return { projectDir, collisions, gaps, renames, authors, indexUnordered: isAdrIndexUnordered(projectDir) };
+  return { projectDir, collisions, renames, authors, indexUnordered: isAdrIndexUnordered(projectDir), indexStale: isAdrIndexStale(projectDir) };
+}
+
+/**
+ * Whether `docs/adr/ADR.md` differs from what the generator would write now.
+ *
+ * Ordering is one way an index goes stale; a missing, extra or changed row is
+ * the other, and it is the one a new ADR added by hand leaves behind. The
+ * comparison is the generator's own output, so "stale" means exactly "the next
+ * `rule_tool_process_adr` call would rewrite it".
+ *
+ * @param {string} projectDir
+ * @returns {boolean}
+ */
+function isAdrIndexStale(projectDir) {
+  const adrDir = join(projectDir, "docs", "adr");
+  const indexFile = join(adrDir, "ADR.md");
+
+  if (!existsSync(indexFile)) {
+    return false;
+  }
+
+  try {
+    return readFileSync(indexFile, "utf8") !== buildAdrIndex(listExistingAdrs(adrDir));
+  } catch {
+    return false;
+  }
 }
 
 /**
  * Whether any table in `docs/adr/ADR.md` runs out of order.
  *
- * The index is generated newest first (ADR 050), and appends are what break it:
+ * The index is generated newest first (ADR 051), and appends are what break it:
  * a repository with no duplicate numbers ended up with 082 above 081 because
  * rows were added by hand over time. Ordering is the condition on purpose - it
  * is what a reader notices, and it does not treat a hand-edited summary as

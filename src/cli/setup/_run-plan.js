@@ -1,5 +1,3 @@
-
-
 /**
  * @module cli/setup/run-plan
  *
@@ -20,10 +18,19 @@ export const TASK_PENDING = "pending";
  *
  * @param {Array<{ id: string, title: string, run: Function }>} plan
  * @param {{ dryRun?: boolean, onUpdate?: Function, signal?: { aborted: boolean } }} [options]
- * @returns {Promise<Array<{ id: string, title: string, status: string, summary: string, lines: string[] }>>}
+ * @returns {Promise<Array<{ id: string, title: string, detail: string, status: string, summary: string, lines: string[] }>>}
  */
 export async function runPlan(plan, { dryRun = false, onUpdate = () => {}, signal } = {}) {
-  const results = plan.map((task) => ({ id: task.id, title: task.title, status: TASK_PENDING, summary: "", lines: [] }));
+  // `detail` is carried through: it is what the review screen showed before
+  // the run, and a result that dropped it could not print what it just did.
+  const results = plan.map((task) => ({
+    id: task.id,
+    title: task.title,
+    detail: task.detail ?? "",
+    status: TASK_PENDING,
+    summary: "",
+    lines: [],
+  }));
 
   for (const [index, task] of plan.entries()) {
     if (signal?.aborted) {

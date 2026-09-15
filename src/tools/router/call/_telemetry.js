@@ -3,10 +3,10 @@
 /** The three recorded shapes of one tool call, folded into one place. */
 import { argsBytes, estimateTokens, guardrailRulesOf, textBytes } from "../_helpers.js";
 import { entryPathOf, routedSkillOf } from "../_entry.js";
-import { recordToolCall } from "../../../core/telemetry/recorder/index.js";
+import { recordToolCall } from "@src/core/telemetry/recorder/index.js";
 
 /** Record a call answered from the cache (a replay, decorated like a miss). */
-export function recordHit({ tool, args, startedAt, cached, final, cavemanSaved, reminderTokens }) {
+export function recordHit({ tool, args, startedAt, cached, final, compressionSaved, reminderTokens }) {
   recordToolCall({
     tool,
     args,
@@ -22,12 +22,12 @@ export function recordHit({ tool, args, startedAt, cached, final, cavemanSaved, 
     finalTokens: estimateTokens(final),
     reminderTokens,
     replayedTokens: estimateTokens(cached.result),
-    saved: { caveman: cavemanSaved },
+    saved: { compression: compressionSaved },
   });
 }
 
 /** Record a fresh compute that succeeded. */
-export function recordMiss({ tool, args, startedAt, core, final, cavemanSaved, reminderTokens, estimatedRouting, guardrailFailures, guardrailRules }) {
+export function recordMiss({ tool, args, startedAt, core, final, compressionSaved, reminderTokens, estimatedRouting, guardrailFailures, guardrailRules }) {
   recordToolCall({
     tool,
     args,
@@ -44,7 +44,7 @@ export function recordMiss({ tool, args, startedAt, core, final, cavemanSaved, r
     finalTokens: estimateTokens(final),
     guardrailFailures,
     guardrailRules,
-    saved: { caveman: cavemanSaved },
+    saved: { compression: compressionSaved },
     reminderTokens,
     estimatedRouting,
   });

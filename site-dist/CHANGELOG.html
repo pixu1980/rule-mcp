@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Changelog - rule-mcp docs</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header><nav><ul>
+<li><a href="index.html">Home</a></li>
+<li><a href="docs/01-getting-started.html">undefined</a></li>
+<li><a href="docs/02-product-architecture.html">undefined</a></li>
+<li><a href="docs/03-agent-instructions.html">undefined</a></li>
+<li><a href="docs/04-operations.html">undefined</a></li>
+<li><a href="docs/05-env-variables.html">undefined</a></li>
+<li><a href="docs/06-privacy.html">undefined</a></li>
+<li><a href="docs/07-engineering-guides.html">undefined</a></li>
+<li><a href="docs/08-skills.html">undefined</a></li>
+<li><a href="docs/09-tools.html">undefined</a></li>
+<li><a href="docs/10-prompts.html">undefined</a></li>
+<li><a href="docs/11-instructions.html">undefined</a></li>
+<li><a href="docs/12-cli.html">undefined</a></li>
+<li><a href="docs/13-personas.html">undefined</a></li>
+<li><a href="docs/14-guardrails.html">undefined</a></li>
+<li><a href="docs/15-resources.html">undefined</a></li>
+<li><a href="docs/adr/ADR.html">ADRs</a></li>
+</ul></nav></header>
+<main>
+<h1>Changelog</h1>
+<p>Generated from the commits by <code>scripts/build/changelog/index.mjs</code>. Run
+<code>pnpm changelog</code> to refresh it before tagging a version; the release
+workflow only reads the tagged entry into the release notes. Edits made
+here are overwritten.</p>
+<p>Every commit is <code>type(scope): subject</code>. Features, fixes, performance and
+refactoring work and documentation become entries; <code>chore</code>, <code>ci</code>, <code>build</code>,
+<code>test</code> and <code>style</code> commits do not, because a changelog that lists a
+dependency bump is one nobody reads. All of them are in <code>git log</code>.</p>
+<p>The format follows <a href="https://keepachangelog.com/en/1.1.0/">Keep a Changelog</a>
+and the versions follow <a href="https://semver.org/spec/v2.0.0.html">Semantic Versioning</a>.</p>
+<h2>[Unreleased]</h2>
+<h3>Added</h3>
+<ul>
+<li><strong>skills</strong>: source-wins body upgrade for ~28 common skills + asset sync (<code>589b838</code>)</li>
+<li><strong>prompts</strong>: reach and lock the 34-prompt union (<code>f911616</code>)</li>
+<li><strong>skills</strong>: port the 13 source-only skills -&gt; 110 tools, 194 resources, 94 skills (<code>77f6cc3</code>)</li>
+<li><strong>adr</strong>: annotations surface + docs-numbering doctor + handoff doctor CLI (<code>ac7e048</code>)</li>
+<li><strong>tools</strong>: port plan, plan-docs, stats, usage, a11y report; register handon (<code>535c4b7</code>)</li>
+<li><strong>installer</strong>: force/backup/instruction-refresh promises, role-aware write paths (<code>2a55e38</code>)</li>
+<li><strong>transport</strong>: session registry, auth rate limiting, stdio guard, shutdown sweeps (<code>f1df46c</code>)</li>
+<li><strong>cli</strong>: guard, cache, roles, handon, stats commands + review-roles subsystem, review-docs (<code>7935647</code>)</li>
+<li><strong>guardrails</strong>: guarded worker checks, input cap, quality families, self-guardrails sweep (<code>5874e91</code>)</li>
+<li><strong>cache</strong>: cache tiers, dependency invalidation, catalog, routing-evidence split, telemetry recorder (<code>b8558dc</code>)</li>
+<li><strong>handon</strong>: port handon verification, resume, and init commands (<code>487a153</code>)</li>
+<li><strong>telemetry</strong>: port telemetry-stats, kpi, project-snapshot, agent transcripts (<code>0de620a</code>)</li>
+<li><strong>paths</strong>: project paths, home migration, hooks, and tokensave awareness (<code>59f81b2</code>)</li>
+<li><strong>core</strong>: port lifecycle, reclaim, budgets, and cache memory tier (<code>522b119</code>)</li>
+<li><strong>core</strong>: port ascii-box, untrusted, fingerprint foundations (<code>ce82a94</code>)</li>
+<li><strong>efficiency</strong>: token-efficiency pipeline at the MCP boundary (<code>67a4422</code>)</li>
+</ul>
+<h3>Changed</h3>
+<ul>
+<li><strong>quality</strong>: round-2 hardening - break init cycles, split daemon/commands, richer doctor, daemon log rotation (<code>7647d6c</code>)</li>
+</ul>
+<h3>Documentation</h3>
+<ul>
+<li><strong>plans</strong>: close items 14-17 (Phase 5 complete) (<code>e5b2a97</code>)</li>
+<li><strong>plans</strong>: close items 10-13 (Phase 4 complete) (<code>e507945</code>)</li>
+<li><strong>plans</strong>: close item 9 in the execution plan (<code>d6d7942</code>)</li>
+<li><strong>plans</strong>: close item 8 in the execution plan (<code>2324f7a</code>)</li>
+<li><strong>plans</strong>: close item 7 in the execution plan (<code>4f8e46e</code>)</li>
+<li><strong>plans</strong>: close item 6 in the execution plan (<code>7c755f6</code>)</li>
+<li><strong>plans</strong>: close item 5 in the execution plan (<code>4fd4652</code>)</li>
+<li><strong>plans</strong>: close items 3-4, convert executed plans to ADRs 043/044, drop redundant plans (<code>2acbab6</code>)</li>
+<li><strong>agent</strong>: move repo-state block to top of CLAUDE.md and refresh ADR range (<code>bd413da</code>)</li>
+</ul>
+<h2>[0.1.0]</h2>
+<h3>Added</h3>
+<ul>
+<li><strong>release</strong>: v1.0.0 - docs accuracy guard, hotspot split, agent/IDE settings (<code>912d9cb</code>)</li>
+<li><strong>styleguide</strong>: add rule-styleguides-readme skill (<code>87187d8</code>)</li>
+<li><strong>process</strong>: add rule-process-npm-release supply chain skill (<code>6b087f9</code>)</li>
+<li><strong>auth</strong>: add rule-platform-auth strategy skill (<code>eb00cc9</code>)</li>
+<li><strong>workers</strong>: add rule-backend-workers and rule-frontend-workers skills (<code>2bcb291</code>)</li>
+<li><strong>platform-desktop</strong>: add packaging, signing, CI/CD, and distribution compliance (<code>91cbc2f</code>)</li>
+<li><strong>commands</strong>: registry-driven clean /rule-* command targets (<code>0372795</code>)</li>
+<li><strong>eslint</strong>: migrate repo tooling to ESLint 10 flat config + unicorn (<code>a7efa6e</code>)</li>
+<li><strong>eslint</strong>: adopt eslint-plugin-unicorn for JS/TS quality (<code>861952f</code>)</li>
+<li><strong>prompts</strong>: unify rule-* commands with instant help (<code>a9d7001</code>)</li>
+<li><strong>types</strong>: strengthen large-project TypeScript (<code>5e7ce24</code>)</li>
+<li><strong>data</strong>: strengthen relational SQL skills (<code>2550ade</code>)</li>
+<li><strong>skills</strong>: add rule-frontend-template-engine skill (<code>e14d86e</code>)</li>
+<li><strong>skills</strong>: add rule-frontend-custom-element skill (<code>c9d838e</code>)</li>
+<li><strong>prompts</strong>: consolidate registry to 24 alphabetical rule-* prompts (<code>649c167</code>)</li>
+<li><strong>prompts</strong>: extend MCP prompt registry to 26 prompts (<code>09640c7</code>)</li>
+<li><strong>tools</strong>: prefix all MCP tools with rule_tool_ (<code>dd1d4f0</code>)</li>
+<li><strong>self-update</strong>: throttled per-invocation async check (<code>6f85604</code>)</li>
+<li><strong>skills</strong>: add rule-toolchain-commits skill enforcing atomic conventional commits (<code>1af9b74</code>)</li>
+<li><strong>routing</strong>: classify ai and git domains for agent and commit prompts (<code>2a5b3a0</code>)</li>
+<li><strong>skills</strong>: add rule-ai collector and rename rule-mcp-agents to rule-ai-agents (<code>225d82e</code>)</li>
+<li><strong>rules</strong>: add rules pack (<code>8bbbb03</code>)</li>
+<li><strong>architect</strong>: add architect context-pack pipeline (<code>53841ff</code>)</li>
+<li><strong>skills</strong>: port skill ecosystem to rule naming (<code>c4639ed</code>)</li>
+<li><strong>skills</strong>: update existing skills and add rule-toolchain-rspack (<code>7804d78</code>)</li>
+<li><strong>test</strong>: add 12 test suites for new core modules and transports (<code>604aa9d</code>)</li>
+<li><strong>scripts</strong>: add install-skills and MCP inspector scripts (<code>b129908</code>)</li>
+<li><strong>skills</strong>: add vanilla-reactive todo example app and patterns reference (<code>c9dbafb</code>)</li>
+<li><strong>a11y</strong>: add 21 accessibility reference guides and 3 templates (<code>2cb50eb</code>)</li>
+<li><strong>skills</strong>: add rule-backend-graphql, rule-devops-observability, rule-mcp-agents, rule-process-code-review (<code>8c7abba</code>)</li>
+<li><strong>gateway</strong>: enforce receipt TTL, deterministic validation, and improve sandbox (<code>a342673</code>)</li>
+<li><strong>cli</strong>: add update command and Streamable HTTP support (<code>c727c78</code>)</li>
+<li><strong>transport</strong>: add Streamable HTTP transport and unify port/host config (<code>e943aeb</code>)</li>
+<li><strong>core</strong>: add deterministic tool cache, compression compression, self-update, and tokensave integration (<code>2cfe131</code>)</li>
+<li><strong>install</strong>: improve install/uninstall scripts and remove cursor commands (<code>0ef2356</code>)</li>
+<li><strong>config</strong>: RULE_MCP_* env var configuration via CLI + installer support (<code>5a3acbf</code>)</li>
+<li><strong>styleguide</strong>: enforce blank line between consecutive multi-line exports (<code>f66b2ff</code>)</li>
+<li><strong>core</strong>: deterministic block-spacing fixer, 3 cases for all code blocks (<code>8965246</code>)</li>
+<li><strong>format</strong>: auto-format post-processing in pix_apply (Prettier + blank-line fixer) (<code>2b80280</code>)</li>
+<li><strong>styleguide</strong>: enforce multi-line blocks and no blank lines inside blocks (<code>3a446c1</code>)</li>
+<li><strong>styleguide</strong>: JS styleguide rules + guardrails for blank lines, braces, const grouping (<code>75bc05b</code>)</li>
+<li><strong>engine</strong>: loadCSS helper, same pattern as loadTemplate for templates (<code>e23e189</code>)</li>
+<li><strong>engine</strong>: add CSS to fn-component (Pattern B, no vrComponent) (<code>4fab83e</code>)</li>
+<li><strong>engine</strong>: implicit context and template option in vrComponent (<code>8705f5b</code>)</li>
+<li><strong>examples</strong>: add where filter, simplify TodoStats to pure html (<code>b2309d0</code>)</li>
+<li><strong>engine</strong>: re-enable dollar-brace for text positions only (<code>2c5f47b</code>)</li>
+<li><strong>extension</strong>: add context-aware autocomplete provider (<code>0f0f523</code>)</li>
+<li><strong>vsce</strong>: build, install, and manage VS Code extension (<code>a6a509d</code>)</li>
+<li><strong>extension</strong>: add VS Code extension for syntax highlighting + snippets (<code>202b7f0</code>)</li>
+<li><strong>guardrails</strong>: strengthen FILE_TREE rules for naming + exports (<code>f5f65c8</code>)</li>
+<li><strong>engine</strong>: add withContext and compose helpers to reduce boilerplate (<code>8cc9432</code>)</li>
+<li><strong>engine</strong>: auto-tick on Store construction, loadTemplate helper, code-split demos (<code>97fd700</code>)</li>
+<li><strong>engine</strong>: automate tickState, extract DOM parts, rename app dir (<code>9850040</code>)</li>
+<li><strong>examples</strong>: add 4 standalone example apps (A, B, C, combo) (<code>592bc88</code>)</li>
+<li><strong>engine</strong>: add if-elseif-else and switch-case-default directives (<code>571d15f</code>)</li>
+<li><strong>examples</strong>: phase 4 - add Pattern B and C examples (<code>4c38042</code>)</li>
+<li><strong>guardrails</strong>: phase 5 - update for v2 syntax and vrComponent (<code>d53f3dd</code>)</li>
+<li><strong>engine</strong>: phase 2 - vrComponent decorator for reactive custom elements (<code>1329706</code>)</li>
+<li><strong>engine</strong>: phase 0 - remove dollar-brace, add click handler and fn call parser (<code>831ba67</code>)</li>
+<li><strong>guardrails</strong>: add vanilla-reactive guardrails for 3 component patterns (<code>cbeb2e9</code>)</li>
+<li><strong>server</strong>: change default SSE port from 37999 to 38000 (<code>4c73c05</code>)</li>
+<li><strong>install</strong>: auto-create global rule-mcp shim via pnpm link (<code>08048d6</code>)</li>
+<li><strong>install</strong>: prefer global rule-mcp binary in stdio config (<code>427c4d6</code>)</li>
+<li><strong>cli</strong>: add version command (rule-mcp --version) (<code>f059ef3</code>)</li>
+<li><strong>install</strong>: arrow key + space navigation for agent/mode selection (<code>7b2215f</code>)</li>
+<li><strong>architect</strong>: add new wizard CLI, web UI, and generator modules (<code>4e356e0</code>)</li>
+<li><strong>claude</strong>: native skills bridge, Use when descriptions, README counts (<code>ec546d6</code>)</li>
+<li><strong>gateway</strong>: deterministic single-entry orchestrator with receipt validation (<code>0e1ae1c</code>)</li>
+<li><strong>sse</strong>: bearer token auth, CORS deny-by-default, body size limit (<code>6cbf21f</code>)</li>
+</ul>
+<h3>Changed</h3>
+<ul>
+<li><strong>architect</strong>: split rule-mcp-architect into its own repo and remove all references (<code>ede3ded</code>)</li>
+<li><strong>skills</strong>: rename rule-styleguides-readme to rule-styleguide-readme (<code>9f00cce</code>)</li>
+<li><strong>core</strong>: align cli and utils tool names to rule naming (<code>15b9b9e</code>)</li>
+<li><strong>skills</strong>: get all 14 oversized skills under 500 lines (<code>ee06bff</code>)</li>
+<li><strong>skills</strong>: split 14 oversized SKILL.md files per agentskills.io spec (<code>8ab4986</code>)</li>
+<li><strong>styleguide</strong>: split JS_GUARDRAILS from VANILLA_REACTIVE_GUARDRAILS (<code>ee483c9</code>)</li>
+<li><strong>engine</strong>: fn-component mounts to body by default, no #root container (<code>ebc3fed</code>)</li>
+<li><strong>examples</strong>: flatten examples/ structure, remove apps/ dir (<code>3ee4357</code>)</li>
+<li><strong>skills</strong>: move core to skill root, add ARCHITECTURE.md (<code>02de7d0</code>)</li>
+<li><strong>core</strong>: Store, Signal, DOM Parts optimizations (<code>2be73a9</code>)</li>
+<li><strong>engine</strong>: remove compose/withContext from examples, simplify to html only (<code>57110fd</code>)</li>
+<li><strong>examples</strong>: split example apps into _store + _App + _components (<code>3c85571</code>)</li>
+<li><strong>core</strong>: rename klass -&gt; component in vrComponent (<code>f03d1d0</code>)</li>
+<li><strong>core</strong>: rename ClickHandlerPart to EventPart (<code>bc01718</code>)</li>
+<li><strong>install</strong>: rename server key from pix_galaxy_mcp to rule-mcp (<code>6da7496</code>)</li>
+<li><strong>core</strong>: update code-level naming - router skip dir, provider name, package.json (<code>9f4da4a</code>)</li>
+</ul>
+<h3>Fixed</h3>
+<ul>
+<li><strong>installer</strong>: prettier-clean rules block stops CLAUDE.md churn; silence PS output noise (<code>4993651</code>)</li>
+<li><strong>installer</strong>: heal stale global shim, surface CLI errors, harden TUI rendering (<code>e4a78c5</code>)</li>
+<li><strong>ci</strong>: remove explicit pnpm version to use packageManager from package.json (<code>17d21a8</code>)</li>
+<li><strong>ci</strong>: resolve pnpm version conflict, drop Node 20 (<code>9026c69</code>)</li>
+<li><strong>ci</strong>: keep single pnpm packageManager pin (<code>d00cd75</code>)</li>
+<li><strong>ci</strong>: remove duplicate packageManager fields (<code>a0f1031</code>)</li>
+<li><strong>config</strong>: add packageManager field to package.json for pnpm/action-setup@v4 (<code>6f7175a</code>)</li>
+<li><strong>ci</strong>: declare pnpm package manager version (<code>98c5049</code>)</li>
+<li><strong>ci</strong>: add packageManager field to fix pnpm version detection (<code>757b25f</code>)</li>
+<li><strong>config</strong>: add packageManager field to fix pnpm/action-setup@v4 CI failure (<code>d5e2484</code>)</li>
+<li><strong>ci</strong>: declare pnpm package manager (<code>00018fa</code>)</li>
+<li><strong>ci</strong>: add packageManager field to fix pnpm version detection (<code>8dca2b8</code>)</li>
+<li><strong>docs</strong>: raise docs cap to 8, dedupe ADR index entries, drop no-op skills:install (<code>6678188</code>)</li>
+<li><strong>security</strong>: drop root in the container and bind to loopback (<code>f891a3a</code>)</li>
+<li><strong>skills</strong>: the tool surface is ./skills and nothing else (<code>a9cbe36</code>)</li>
+<li><strong>security</strong>: pin the self-update remote and stop reporting phantom updates (<code>84d8398</code>)</li>
+<li><strong>security</strong>: enforce same-origin on interview servers and own their lifecycle (<code>0047541</code>)</li>
+<li><strong>security</strong>: bind writes to destinations and receipts to paths (<code>827ede6</code>)</li>
+<li><strong>handoff</strong>: parse 4-digit Nygard ADRs and fix CLI invocation (<code>ed36178</code>)</li>
+<li><strong>installer</strong>: make agent rules append/remove blank-line idempotent (<code>f37a03f</code>)</li>
+<li><strong>installer</strong>: preserve per-server user config on reinstall (<code>4e792ad</code>)</li>
+<li><strong>deps</strong>: patch transitive vulnerabilities (fast-uri, @hono/node-server, brace-expansion) (<code>f264bcc</code>)</li>
+<li><strong>styleguide</strong>: add See also section to a11y skill (<code>2331972</code>)</li>
+<li><strong>cli</strong>: parse folded description scalars and expose skills:install script (<code>4ac5d60</code>)</li>
+<li><strong>server</strong>: suppress startup banner on stderr when spawned by VS Code/IDE (<code>8975bdb</code>)</li>
+<li><strong>build</strong>: build script path, remove stale compliance reports (<code>e877fae</code>)</li>
+<li><strong>core</strong>: block-spacing now catches function declarations, 1-line blocks, let (<code>c08084f</code>)</li>
+<li><strong>engine</strong>: remove :host from CSS, no Shadow DOM in engine (<code>d620de2</code>)</li>
+<li><strong>core</strong>: security, broken imports, dead code, docs cleanup (<code>c855230</code>)</li>
+<li><strong>extension</strong>: scan all workspace files for autocomplete data (<code>0093aa8</code>)</li>
+<li><strong>build</strong>: clean VSIX build with @vscode/vsce, no warnings (<code>3a7a71a</code>)</li>
+<li><strong>skills</strong>: proper component folders with index.js barrels (<code>306b1a3</code>)</li>
+<li><strong>skills</strong>: rule-styleguide compliance, proper folders and naming (<code>54912b7</code>)</li>
+<li><strong>scripts</strong>: repair sed artifacts and finalize pattern renames (<code>127126b</code>)</li>
+<li><strong>install</strong>: remove stale project-level .vscode/mcp.json (<code>0f8bedc</code>)</li>
+<li><strong>doctor</strong>: clarify rule-mcpd daemon wrapper naming in output (<code>1dd96fb</code>)</li>
+<li><strong>install</strong>: implement mode propagation, persistent SSE auth, VS Code global config (<code>18b0e73</code>)</li>
+<li><strong>install</strong>: absolute stdio paths, daemon/docker SSE modes, VS Code user-level config (<code>f9a30d4</code>)</li>
+<li><strong>install</strong>: robust full-screen TUI and align PowerShell installer (<code>b71f525</code>)</li>
+<li><strong>install</strong>: IFS= before read to prevent space stripping on bash 3.2 (macOS) (<code>8c1f592</code>)</li>
+<li><strong>install</strong>: use read -N1 for raw byte capture, SPACE checked before Enter (<code>94143d3</code>)</li>
+<li><strong>install</strong>: safe array access for set -u, SPACE-only toggle (<code>7bcf706</code>)</li>
+<li><strong>install</strong>: remove duplicate render loops in checkbox/radio UI (<code>413662c</code>)</li>
+<li><strong>install</strong>: stable terminal UI with save/restore cursor (<code>34ea969</code>)</li>
+<li><strong>install</strong>: remove duplicate fi in toggle logic (<code>dcf2a59</code>)</li>
+<li><strong>install</strong>: unbound variable FIRST_RENDER, seq compatibility, toggle input validation (<code>cf512f2</code>)</li>
+<li><strong>install</strong>: fix shell syntax in interactive agent selection (<code>4abfd02</code>)</li>
+<li><strong>vscode</strong>: add global VS Code config path for macOS/Linux (<code>d7ef3f1</code>)</li>
+<li><strong>architect</strong>: restore deleted wizard assets, fix all 6 tool modes (<code>f02a054</code>)</li>
+<li><strong>sse</strong>: AbortController in sandbox, reload idempotent, resource plugin filter (<code>860224e</code>)</li>
+<li><strong>installer</strong>: parseJson fail-closed, atomic writes, batch mode, no API keys (<code>5b0a5cb</code>)</li>
+<li><strong>templates</strong>: React/Svelte components pass own guardrails (<code>670d691</code>)</li>
+<li><strong>router</strong>: domain-aware routing, multilingual aliases, confidence scoring (<code>81df0d3</code>)</li>
+<li><strong>guardrails</strong>: CSS/JSX parser coverage, advisory terminology (<code>01d3e75</code>)</li>
+<li><strong>build</strong>: reproducible embed, CI gates, package metadata (<code>092aadf</code>)</li>
+<li><strong>mcp</strong>: prompts/get returns spec-compliant shape and role (<code>460caad</code>)</li>
+<li><strong>pix_fix</strong>: sandbox file writes with dryRun, path traversal guard, valid custom element tags (<code>6a4c8a0</code>)</li>
+<li><strong>test</strong>: restore rule-mcp path literals in repository-contract assertions (<code>aa4c326</code>)</li>
+<li><strong>skills</strong>: update rule-architect refs from rule-mcp-agents to rule-platform-agent (<code>27f4bdf</code>)</li>
+<li><strong>skills</strong>: update rule dispatcher inventory for rule-platform-agent (<code>de9adcd</code>)</li>
+</ul>
+<h3>Removed</h3>
+<ul>
+<li><strong>engine</strong>: remove dollar-brace support entirely (<code>04b50b6</code>)</li>
+</ul>
+<h3>Documentation</h3>
+<ul>
+<li><strong>adr</strong>: record ADR 036 architect split into standalone repo (<code>3048cbd</code>)</li>
+<li><strong>adr</strong>: record installer shim/TUI decisions as ADR 035 and update usage docs (<code>f13cdc3</code>)</li>
+<li><strong>i18n</strong>: translate all Italian content to English (<code>065bf8e</code>)</li>
+<li><strong>adr</strong>: record decisions 029-034 and the security audit (<code>e9c7c05</code>)</li>
+<li><strong>project</strong>: document installer lossless fix (ADR 024, changelog) (<code>a84223a</code>)</li>
+<li><strong>project</strong>: update CLAUDE tool references to rule_tool_* (<code>811edfd</code>)</li>
+<li><strong>plans</strong>: mark prompt/tools plan items done (<code>75ce4e0</code>)</li>
+<li><strong>project</strong>: update changelog and relocate commit-scope rule in CLAUDE (<code>d02f6e4</code>)</li>
+<li><strong>project</strong>: document mandatory commit scope rule (<code>7315f89</code>)</li>
+<li><strong>project</strong>: port documentation and ADRs to rule naming (<code>b89d48f</code>)</li>
+<li><strong>readme</strong>: align documentation with current state and rule naming (<code>4d322bd</code>)</li>
+<li><strong>env</strong>: extract env vars table to docs/06-env-variables.md (<code>00de251</code>)</li>
+<li><strong>env</strong>: rename agent-instructions -&gt; 05-agent-instructions, add RULE_MCP_* env table (<code>97c4a55</code>)</li>
+<li><strong>skills</strong>: move analysis.md -&gt; skills/rule-frontend-vanilla-reactive/DESIGN.md (<code>05c1907</code>)</li>
+<li><strong>readme</strong>: update README.md and agent-instructions.md to reflect current state (<code>bdcde64</code>)</li>
+<li><strong>adr</strong>: renumber ADRs by logical dependency order (<code>39c41b2</code>)</li>
+<li><strong>adr</strong>: convert handoff docs to ADRs, delete docs/handoff/ (<code>00e7c2f</code>)</li>
+<li><strong>styleguide</strong>: align styleguide examples with enforced rules (<code>3be5703</code>)</li>
+<li><strong>arch</strong>: merge patterns.md into ARCHITECTURE.md, delete patterns.md (<code>5dee01d</code>)</li>
+<li><strong>arch</strong>: merge TEMPLATE_ENGINE.md into ARCHITECTURE.md, delete TEMPLATE_ENGINE.md (<code>d7f5a1d</code>)</li>
+<li><strong>patterns</strong>: rename Pattern A/B/C to descriptive names (<code>73642d1</code>)</li>
+<li><strong>qa</strong>: fix all 11 review issues for 0.1.0 (<code>bfd8b6f</code>)</li>
+<li><strong>skills</strong>: final cleanup - remove remaining v2 refs, add elseif/switch to SKILL.md (<code>5d44c8b</code>)</li>
+<li><strong>engine</strong>: align all docs with v2 decisions (<code>6a5182c</code>)</li>
+<li><strong>skill</strong>: phase 3 - rewrite SKILL.md for v2 syntax and 3 patterns (<code>157ebad</code>)</li>
+<li><strong>engine</strong>: align scope resolution docs with _scope mechanism (<code>83faee8</code>)</li>
+<li><strong>template-engine</strong>: clarify scope resolution, CE vs fn composition (<code>fa770f1</code>)</li>
+<li><strong>engine</strong>: trim event binding section to examples + resolution only (<code>8f3e45a</code>)</li>
+<li><strong>skills</strong>: replace _handlers with _scope, move ref into skill dir (<code>40fe9d2</code>)</li>
+<li><strong>skills</strong>: move template engine reference into skill directory (<code>3b4f3fb</code>)</li>
+<li><strong>engine</strong>: add template-engine-reference.md with full v2 capabilities (<code>0342914</code>)</li>
+<li><strong>plan</strong>: add nesting validation section, fn call parser to phase 0 (<code>a351534</code>)</li>
+<li><strong>plan</strong>: rename VanillaReactiveComponent to vrComponent (<code>caa70e8</code>)</li>
+<li><strong>plan</strong>: add vanilla-reactive v2 execution plan with 6 phases (<code>a44e08a</code>)</li>
+<li><strong>adr</strong>: update roadmap, ADR refs, architect inventory (<code>3de410b</code>)</li>
+<li><strong>reports</strong>: add audit reports, handoff index, determinism plan (<code>a194bcf</code>)</li>
+<li><strong>skills</strong>: add Use when descriptions to all 69 rule-* skills (<code>d2fcac7</code>)</li>
+<li><strong>docs</strong>: final compliance sweep, live docs 0 stale refs (<code>6a50f59</code>)</li>
+<li><strong>readme</strong>: full rewrite - GETTING_STARTED as install guide, README as comprehensive WIKI (<code>67bc1a9</code>)</li>
+<li><strong>skills</strong>: See also, stale refs, auto-ADR opt-in, handoff, doctor (<code>527f527</code>)</li>
+<li><strong>architecture</strong>: normalize naming in architecture docs and README (<code>9b2704a</code>)</li>
+<li><strong>skills</strong>: normalize naming - rule-mcp -&gt; rule across all skill files (<code>73e3cdf</code>)</li>
+</ul>
+
+</main>
+<footer><p>Generated from <code>docs/</code> - edit the Markdown, not this file.</p></footer>
+</body>
+</html>

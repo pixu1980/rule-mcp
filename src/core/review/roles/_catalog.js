@@ -9,11 +9,11 @@ import { pathToFileURL, fileURLToPath } from "node:url";
 import { parsePersonaFile } from "../persona-file/index.js";
 import { validateRole } from "./_validate.js";
 
-const PERSONA_DIR = new URL("../../../roles/", import.meta.url);
+const PERSONA_DIR = new URL("../../../../personas/", import.meta.url);
 const ROLES_DIR = process.env.RULE_MCP_ROLES_DIR || PERSONA_DIR;
 
 /**
- * The personas live as one persona file per role in `src/roles/` (markdown
+ * The personas live as one persona file per role in `./personas/` (markdown
  * with frontmatter and a lenses bullet list in the body - see
  * {@link module:core/persona-file}). The server reads the whole folder at
  * startup, so adding or removing a file adds or removes the persona (and its

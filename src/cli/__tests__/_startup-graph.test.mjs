@@ -1,12 +1,10 @@
-
-
 /**
  * PERF-8: what a `--help` is allowed to load.
  *
  * stdio spawns this server per client, so every module the entry point parses
  * is parsed again on the next connect. `--help` used to pay 216 ms because the
  * registrars imported their handlers statically, and the handlers pull the MCP
- * server, both transports, the installer and 105 tool registrations. Deferring
+ * server, both transports, the installer and every tool registration. Deferring
  * the handlers into the actions took it to 48 ms (`pnpm report:startup`).
  *
  * A wall-time assertion would be flaky, so this asserts the property that

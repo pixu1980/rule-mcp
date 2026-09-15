@@ -15,7 +15,7 @@
  *     stays on the user's own disk, in the project's own directory, and
  *     RULE_MCP_NO_PROMPTS=1 drops it back to a length. Nothing here is
  *     ever sent anywhere: see the remote rule below.
- *   - **Measured and estimated savings never merge.** Cache payloads, caveman
+ *   - **Measured and estimated savings never merge.** Cache payloads, compression
  *     before-and-after and tokensave's own counter are measured. "What a full
  *     file read would have cost" is a guess, kept in its own field, and always
  *     rendered with a tilde.

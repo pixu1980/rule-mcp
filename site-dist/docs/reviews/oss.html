@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>oss review - rule-mcp docs</title>
+<link rel="stylesheet" href="../../style.css">
+</head>
+<body>
+<header><nav><ul>
+<li><a href="../../index.html">Home</a></li>
+<li><a href="../../docs/01-getting-started.html">undefined</a></li>
+<li><a href="../../docs/02-product-architecture.html">undefined</a></li>
+<li><a href="../../docs/03-agent-instructions.html">undefined</a></li>
+<li><a href="../../docs/04-operations.html">undefined</a></li>
+<li><a href="../../docs/05-env-variables.html">undefined</a></li>
+<li><a href="../../docs/06-privacy.html">undefined</a></li>
+<li><a href="../../docs/07-engineering-guides.html">undefined</a></li>
+<li><a href="../../docs/08-skills.html">undefined</a></li>
+<li><a href="../../docs/09-tools.html">undefined</a></li>
+<li><a href="../../docs/10-prompts.html">undefined</a></li>
+<li><a href="../../docs/11-instructions.html">undefined</a></li>
+<li><a href="../../docs/12-cli.html">undefined</a></li>
+<li><a href="../../docs/13-personas.html">undefined</a></li>
+<li><a href="../../docs/14-guardrails.html">undefined</a></li>
+<li><a href="../../docs/15-resources.html">undefined</a></li>
+<li><a href="../../docs/adr/ADR.html">ADRs</a></li>
+</ul></nav></header>
+<main>
+<h1>oss review</h1>
+<ul>
+<li><strong>Role</strong>: oss v1</li>
+<li><strong>Date</strong>: 2026-09-10</li>
+</ul>
+<p>Findings distilled from <a href="../audits/oss.html">the audit</a>. A finding this run no longer reports is
+flipped to resolved and kept one run for visibility, then removed.</p>
+<table>
+<thead>
+<tr>
+<th>Finding</th>
+<th>Severity</th>
+<th>Status</th>
+<th>Evidence</th>
+<th>Summary</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>OSS-1</td>
+<td>critical</td>
+<td>open</td>
+<td>.github/scoop/rule-mcp.json (homepage + checkver.github = <code>github.com/rule/rule-mcp</code>, version 0.1.0, hash PLACEHOLDER); .github/winget/rule.rule-mcp.yaml and .github/winget/pixu1980.rule-mcp.yaml (PackageIdentifier rule.rule-mcp, Publisher rule, PublisherUrl <code>github.com/rule</code>, PackageVersion 0.1.0, InstallerSha256 PLACEHOLDER, InstallerUrl releases/download/v0.1.0/); scripts/package.sh line ~30 homepage &quot;<a href="https://github.com/rule-mcp/rule-mcp">https://github.com/rule-mcp/rule-mcp</a>&quot; and url &quot;<a href="https://registry.npmjs.org/rule-mcp/-/rule-mcp-1.0.0.tgz">https://registry.npmjs.org/rule-mcp/-/rule-mcp-1.0.0.tgz</a>&quot;; git remote -v; git tag -&gt; v1.0.0 only.</td>
+<td>The distribution manifests name three different GitHub owners and publish nothing: scoop points at <code>github.com/rule</code>, winget at rule + <code>github.com/rule</code>, and the generated Homebrew formula at <code>github.com/rule-mcp</code>. All three carry version 0.1.0 (the repo is at 1.0.0), two carry literal PLACEHOLDER hashes, and their download URLs point at a v0.1.0 release tag that does not exist. The real remote is <code>git@github.com:pixu1980/rule-mcp.git</code> and the only tag is v1.0.0.</td>
+</tr>
+<tr>
+<td>OSS-2</td>
+<td>critical</td>
+<td>open</td>
+<td>SECURITY.md section ## Reporting (&quot;Open an issue with the reproducer. The parity fixture and the hardening suites ... are the first place a regression shows up.&quot;); no security contact anywhere in the repo; no GitHub private vulnerability reporting configured; no SECURITY-INSIGHTS.yml.</td>
+<td>Security disclosure routes every vulnerability report into a public issue. SECURITY.md&#39;s only reporting instruction is &quot;Open an issue with the reproducer&quot; - there is no private channel, no security contact, no acknowledgment or triage SLA, no embargo window and no CVE request process. A reporter who follows the file publishes the vulnerability before a fix exists.</td>
+</tr>
+<tr>
+<td>OSS-3</td>
+<td>critical</td>
+<td>open</td>
+<td>server.json &quot;name&quot;: &quot;io.github.rule/rule-mcp&quot; against &quot;repository&quot;: { &quot;url&quot;: &quot;<a href="https://github.com/pixu1980/rule-mcp">https://github.com/pixu1980/rule-mcp</a>&quot; }; modelcontextprotocol/registry README: &quot;The registry validates namespace ownership when publishing. E.g. to publish io.github.domdomegg/my-cool-mcp you must login to GitHub as domdomegg, or be in a GitHub Action on domdomegg&#39;s repos&quot;; git remote -v.</td>
+<td>server.json asserts the MCP registry namespace io.github.rule while the GitHub owner is pixu1980. The registry validates namespace ownership when publishing - io.github.<owner> requires authenticating as that GitHub user - so the name as written is unpublishable and claims a namespace the maintainer does not control.</td>
+</tr>
+<tr>
+<td>OSS-4</td>
+<td>critical</td>
+<td>open</td>
+<td>npm view rule-mcp version -&gt; npm error code E404 Not Found; README.md lines 6 and 68; docs/01-getting-started.md lines 37-41 (&quot;## 2. Global npm install (recommended)&quot;); docs/02-product-architecture.md lines 423-426; docs/04-operations.md lines 222, 251, 483.</td>
+<td>The documented primary install is a 404. README, its npm badge, docs/01 section 2 titled &quot;Global npm install (recommended)&quot;, docs/02 and docs/04 all present pnpm add -g rule-mcp as the way to install, but the package is not on npm.</td>
+</tr>
+<tr>
+<td>OSS-10</td>
+<td>high</td>
+<td>open</td>
+<td>.githooks/commit-msg validates only the type(scope): subject format - its regex is ^(feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert)\([a-z0-9._-]+\): .+$ with no trailer check; no Signed-off-by requirement anywhere; CONTRIBUTING.md absent; no inbound=outbound statement in README, LICENSE or docs/.</td>
+<td>There is no inbound contribution licensing. No DCO sign-off is required, there is no CLA, and no file states that contributions are licensed under the project license, so the licensing status of any contributed patch is undefined. The interview resolved the mechanism: DCO, no CLA.</td>
+</tr>
+<tr>
+<td>OSS-11</td>
+<td>high</td>
+<td>open</td>
+<td>.github/workflows/release.yml is checkout + an awk changelog extraction + softprops/action-gh-release@v2 with generate_release_notes false; no id-token, no artifact upload, no npm stage publish, no provenance, no checksum job; package.json defines prepublishOnly and build but no workflow invokes them; scripts/SHA256SUMS exists and is only checked by src/cli/<strong>tests</strong>/_install-integrity.test.mjs.</td>
+<td>The release workflow publishes nothing but a GitHub Release. There is no build job, no artifact, no publish job, no signed artifact, no provenance and no version bump, so the v1.0.0 release is a changelog excerpt and package.json prepublishOnly is dead code. Given OSS-4, the artifact the project actually ships is the GitHub tarball, and that is not verified or signed.</td>
+</tr>
+<tr>
+<td>OSS-12</td>
+<td>high</td>
+<td>open</td>
+<td>.github/workflows/ci.yml uses actions/checkout@v4, pnpm/action-setup@v4, actions/setup-node@v4; .github/workflows/release.yml uses actions/checkout@v4 and softprops/action-gh-release@v2 under workflow-level permissions: contents: write; no SHA pin anywhere in .github/workflows/; no dependabot github-actions entry to bump them.</td>
+<td>Every GitHub Action is pinned by a moving tag rather than a commit SHA. A compromised or retagged upstream action executes arbitrary code in CI, and in release.yml that code runs with contents: write.</td>
+</tr>
+<tr>
+<td>OSS-13</td>
+<td>high</td>
+<td>open</td>
+<td>.github/workflows/ci.yml top-level permissions block reads contents: read and id-token: write, applying to jobs lint, test, coverage and audit; no job-level permissions override; no persist-credentials: false on any actions/checkout step.</td>
+<td>The CI workflow grants id-token: write to every job at workflow scope. The lint job, the six-cell test matrix, the coverage job and the audit job all install dependencies and none of them needs to mint an OIDC token; a compromised dependency in any of them inherits the ability.</td>
+</tr>
+<tr>
+<td>OSS-14</td>
+<td>high</td>
+<td>open</td>
+<td>No .github/dependabot.yml and no renovate.json; .npmrc contains only save-exact=true, with no minimum-release-age; package.json pins exact versions and a guardrail (src/core/guardrails/quality/manifest/_exact-versions.js) enforces that; pnpm is 11.25.0, whose minimumReleaseAge default is 1440 (one day), but nothing in the repo states or verifies it; package.json has no packageManager field to pin the pnpm version that carries that default.</td>
+<td>Dependencies are pinned exactly and nothing updates them. There is no Dependabot or Renovate configuration and no install cooldown configured, so every transitive security fix is manual, and the exact-pin policy has no adoption delay behind it.</td>
+</tr>
+<tr>
+<td>OSS-15</td>
+<td>high</td>
+<td>open</td>
+<td>No .github/workflows/codeql.yml or any SAST job; .github/workflows/ contains only ci.yml and release.yml; the ci.yml jobs are lint, test, coverage and audit (pnpm audit --prod only); no CodeQL configuration file.</td>
+<td>Nothing analyzes the server&#39;s own source for security defects. There is no CodeQL or other SAST workflow; the guardrail engine scans the code this server validates, not the code it is made of.</td>
+</tr>
+<tr>
+<td>OSS-16</td>
+<td>high</td>
+<td>open</td>
+<td>scripts/install.sh lines 24, 45, 154; scripts/setup.sh line 9; scripts/uninstall.sh lines 18, 33, 981; scripts/install.ps1 lines 23, 56, 77; scripts/uninstall.ps1 lines 16, 42, 55, 651 - all rule-mcp.domain.example; no signature or checksum verification on the fetched script in any of them.</td>
+<td>The documented install is curl-piped-to-shell from a domain that does not exist. Five scripts present <a href="https://rule-mcp.domain.example">https://rule-mcp.domain.example</a> as the install URL, and none of them verifies what it downloads before executing it.</td>
+</tr>
+<tr>
+<td>OSS-5</td>
+<td>high</td>
+<td>open</td>
+<td>package.json dependencies contains &quot;rule-mcp&quot;: &quot;link:&quot;; pnpm-workspace.yaml overrides rule-mcp: &#39;link:&#39;; reproduced this run: npm pack then npm install ./rule-mcp-1.0.0.tgz in an empty directory -&gt; npm error code EUNSUPPORTEDPROTOCOL, Unsupported URL Type &quot;link:&quot;: link:. Nothing under src/, bin/ or scripts/ imports the package by name; the entry exists to create node_modules/rule-mcp -&gt; ..</td>
+<td>The published tarball cannot be installed by any npm-family client. package.json declares a runtime dependency on itself using the pnpm-only link: protocol, so installing the packed artifact aborts before the package is unpacked.</td>
+</tr>
+<tr>
+<td>OSS-6</td>
+<td>high</td>
+<td>open</td>
+<td>scripts/install.sh line 330 comment &quot;Use the local binary directly - no global npm install needed&quot; and line 10 header &quot;Installs/updates the rule-mcp npm package globally&quot;; scripts/install.ps1 lines 340 and 380 call pnpm add -g ${NpmPackage}@${PackageVersion} and npm install -g; scripts/package.sh lines 56, 70, 89 print pnpm add -g.</td>
+<td>The two installers disagree and the Windows one still takes the path that cannot work. scripts/install.sh was migrated to a local-binary launcher (&quot;no global npm install needed&quot;), but scripts/install.ps1 still runs pnpm add -g / npm install -g against the unpublished registry package, and the bash header still claims it installs the npm package globally.</td>
+</tr>
+<tr>
+<td>OSS-7</td>
+<td>high</td>
+<td>open</td>
+<td>No CODE_OF_CONDUCT.md at the root or under .github/; find over the repo returns no conduct file; the GitHub community standards checklist requires README, LICENSE, CONTRIBUTING and CODE_OF_CONDUCT.</td>
+<td>The project has no code of conduct, so the GitHub community profile is incomplete and there is no stated standard of behavior or route for reporting a conduct problem. The interview resolved the choice: Contributor Covenant 3.0.</td>
+</tr>
+<tr>
+<td>OSS-8</td>
+<td>high</td>
+<td>open</td>
+<td>No CONTRIBUTING.md at the root or under .github/; no .github/ISSUE_TEMPLATE/ directory; no .github/PULL_REQUEST_TEMPLATE.md; the only guidance is docs/07-engineering-guides.md section ## Contributing (lines 156-170, five bullets).</td>
+<td>There is no contribution entry point. No CONTRIBUTING.md, no issue templates and no pull request template exist, so the whole contribution path is seven lines buried in a numbered handbook chapter that a newcomer has to find first.</td>
+</tr>
+<tr>
+<td>OSS-9</td>
+<td>high</td>
+<td>open</td>
+<td>No GOVERNANCE.md, MAINTAINERS.md or .github/CODEOWNERS anywhere in the tree; git log --format=%an | sort | uniq -c -&gt; 564 Emiliano Pisu, 10 copilot-swe-agent[bot] over 574 commits; history runs 2026-07-11 to 2026-09-10; docs/adr/ holds 80 numbered records with a generated docs/adr/ADR.md index.</td>
+<td>No governance, maintainer or ownership file exists, and the bus factor is one. 80 ADRs record what was decided but nothing records who decides, how a maintainer is added, or how a dispute escalates. The interview resolved the model: explicit BDFL with a documented path to co-maintainers.</td>
+</tr>
+<tr>
+<td>OSS-17</td>
+<td>medium</td>
+<td>open</td>
+<td>grep -rl &quot;SPDX-License-Identifier&quot; src/ bin/ scripts/ returns 0 files; find src bin scripts over *.js and *.mjs returns 935 files; no LICENSES/ directory; no AUTHORS file; package.json carries only <code>&quot;license&quot;: &quot;MIT&quot;</code>.</td>
+<td>No source file carries an SPDX identifier. The license is declared once in package.json and once in LICENSE, and 0 of 935 JavaScript files under src/, bin/ and scripts/ state their license, so file-level provenance cannot be established by a scanner and a copied file leaves the project without its terms.</td>
+</tr>
+<tr>
+<td>OSS-18</td>
+<td>medium</td>
+<td>open</td>
+<td>LICENSE line 3 &quot;Copyright (c) 2025-2026 Pix&quot;; git log -1 --format=%an &lt;%ae&gt; -&gt; Emiliano Pisu &lt;<code>pisuemiliano.1980@gmail.com</code>&gt;; git remote -v -&gt; <code>github.com/pixu1980/rule-mcp</code>; package.json has no author field; no AUTHORS file.</td>
+<td>Three different identities name the copyright. LICENSE says Pix, the git author is Emiliano Pisu, and the GitHub owner is pixu1980, so no downstream scanner or lawyer can map the copyright to one holder. The interview resolved the holder: pixu1980.</td>
+</tr>
+<tr>
+<td>OSS-19</td>
+<td>medium</td>
+<td>open</td>
+<td>.github/semantic.yml has titleOnly: true and types feat, fix, docs, style, refactor, perf, test, build, ci, chore, revert, release (12); .githooks/commit-msg regex ^(feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert)\([a-z0-9._-]+\): .+$ (11 types, no release, scope mandatory); nothing derives one from the other.</td>
+<td>The two commit gates disagree. The pull request title check accepts twelve types including release and does not check the scope; the local hook requires a scope and accepts eleven types without release. A contributor who passes one fails the other.</td>
+</tr>
+<tr>
+<td>OSS-20</td>
+<td>medium</td>
+<td>open</td>
+<td>CHANGELOG.md line 3 &quot;Generated from the commits by scripts/build-changelog.mjs&quot;; ls scripts/build-changelog.mjs -&gt; MISSING, the real path is scripts/build/changelog/index.mjs (package.json script changelog); CHANGELOG.md lines 5-6 claim the release workflow regenerates it; .github/workflows/release.yml runs only an awk extraction over CHANGELOG.md.</td>
+<td>The changelog header names a script that does not exist and describes a release step that does not happen: it points at scripts/build-changelog.mjs and claims the release workflow regenerates the file, while release.yml only reads it.</td>
+</tr>
+<tr>
+<td>OSS-21</td>
+<td>medium</td>
+<td>open</td>
+<td>package.json &quot;version&quot;: &quot;1.0.0&quot;; server.json &quot;version&quot;: &quot;1.0.0&quot;; git tag -&gt; v1.0.0; .github/workflows/release.yml reads the tag and the changelog but never reads or writes package.json or server.json; package.json has no repository field while server.json has repository.url.</td>
+<td>The version lives in three hand-synced copies - package.json, server.json and the git tag - and nothing bumps or verifies them, so a release can ship a manifest that disagrees with its tag. package.json also lacks the repository field that server.json carries, so npm metadata would lose the source link.</td>
+</tr>
+<tr>
+<td>OSS-22</td>
+<td>medium</td>
+<td>open</td>
+<td>No .github/workflows/scorecard.yml; no SECURITY-INSIGHTS.yml at the root; no sbom file and no npm sbom invocation anywhere in the tree; .github/workflows/ contains only ci.yml and release.yml; the README carries no scorecard or best-practices badge.</td>
+<td>There is no external, repeatable health signal for the project. No OpenSSF Scorecard run, no SECURITY-INSIGHTS.yml and no SBOM, so a consumer or a funder has nothing machine-readable to check and the maintainer has no trend to watch.</td>
+</tr>
+<tr>
+<td>OSS-23</td>
+<td>medium</td>
+<td>open</td>
+<td>No ROADMAP.md anywhere in the tree; find for <em>roadmap</em> returns nothing; docs/07-engineering-guides.md lines 160-161 &quot;Open work is tracked in the issue tracker; plans inside the repo are deleted when fully executed or obsolete.&quot;; no published label set, no response-time statement, no first-timer convention; the previous docs/plans/execution-plan.md was deleted in commit 7a73f6a0 as bookkeeping.</td>
+<td>There is no public roadmap and no stated triage expectation. docs/07 says only that open work is tracked in the issue tracker, so a would-be contributor cannot see direction, and a reporter has no idea when to expect a response.</td>
+</tr>
+<tr>
+<td>OSS-24</td>
+<td>medium</td>
+<td>open</td>
+<td>README.md lines 6-9 carry four badges; the npm-version badge resolves to <code>npmjs.com/package/rule-mcp</code> which returns E404; the SDK badge states 1.29.0 while package.json pins @modelcontextprotocol/sdk 1.30.0; grep for contribut, code of conduct, governance, sponsor or security in README.md returns only the License line; rule-styleguide-readme section 0 says to remove all badges and state the fact in text; the Table of Contents (README lines 16-34) stops at Further reading.</td>
+<td>The README front door fails the project&#39;s own readme skill. It opens with four shields.io badges, one of which is broken because the package is not on npm and one of which states a version that disagrees with package.json, and it has no Contributing, Code of Conduct, Governance, Security, Support or Sponsors section.</td>
+</tr>
+<tr>
+<td>OSS-25</td>
+<td>medium</td>
+<td>open</td>
+<td>No .github/FUNDING.yml and no FUNDING file anywhere in the tree; grep for sponsor, funding or tidelift across README.md and docs/ returns nothing; no funding section in any governance file (GOVERNANCE.md does not exist yet).</td>
+<td>There is no funding surface at all: no FUNDING.yml, no Sponsors section and no statement of where money would go or who controls it. The interview resolved the platform: GitHub Sponsors. Absent a policy, a sponsor cannot tell what they are funding.</td>
+</tr>
+<tr>
+<td>OSS-26</td>
+<td>medium</td>
+<td>open</td>
+<td>No TRADEMARK.md and no naming policy in any file; package.json name rule-mcp is unclaimed on the registry (E404) and so is available to anyone; server.json asserts io.github.rule which the maintainer does not own; LICENSE named the holder Pix until OSS-18; README and docs contain no naming statement.</td>
+<td>The project name is neither protectable nor claimed. There is no trademark or naming policy; Pix is the brand of the Brazilian instant-payment system and a common product word, and the npm package name and the io.github.rule registry namespace are both unclaimed and open to squatting.</td>
+</tr>
+<tr>
+<td>OSS-27</td>
+<td>medium</td>
+<td>open</td>
+<td>No mkdocs.yml, docs/.vitepress, docusaurus.config.js or astro.config.* anywhere; no pages or deploy job in .github/workflows/; five scripts point at <a href="https://rule-mcp.domain.example">https://rule-mcp.domain.example</a> as the install URL; package.json has no docs:dev or docs:build script; docs/ holds 15 numbered chapters plus 80 ADRs and a docs/README.md reading order.</td>
+<td>There is no documentation website, so the install instructions have no canonical URL - which is exactly why the placeholder host rule-mcp.domain.example survived in five scripts. The interview resolved the direction: build a documentation site from scratch and publish it with GitHub Actions.</td>
+</tr>
+<tr>
+<td>OSS-28</td>
+<td>low</td>
+<td>open</td>
+<td>scripts/ci/audit-gate/index.mjs exists; package.json defines &quot;audit:gate&quot;; grep for audit-gate across .github/workflows/ returns nothing; .github/workflows/ci.yml has an audit job whose only step is pnpm audit --prod; the release workflow runs no audit at all.</td>
+<td>The audit is not a gate. scripts/ci/audit-gate/index.mjs and the audit:gate script both exist, but no workflow calls them - CI runs only the bare pnpm audit --prod, so a known advisory does not block a release.</td>
+</tr>
+<tr>
+<td>OSS-29</td>
+<td>low</td>
+<td>open</td>
+<td>git log --format=%G? over the last five commits returns N for all of them; git tag has one tag with no signature; no signing guidance in CONTRIBUTING.md or docs/; release.yml performs no verification.</td>
+<td>No commit and no tag is signed, so a consumer cannot verify that a release came from the maintainer, and GitHub shows no verified badge.</td>
+</tr>
+<tr>
+<td>OSS-31</td>
+<td>medium</td>
+<td>open</td>
+<td><code>rule_tool_plan_docs</code> for role <code>oss</code>, then <code>pnpm exec prettier --check docs/audits/oss.md docs/reviews/oss.md docs/plans/oss.md</code> -&gt; &quot;[warn] Code style issues found in 3 files&quot; on the three files the generator had just written, while the same command passes for <code>docs/adr/ADR.md</code>, <code>docs/README.md</code> and <code>README.md</code>; <code>src/core/review/docs/_table.js</code> writes unpadded rows; <code>package.json</code> <code>format</code> runs <code>prettier --check &#39;**/*.{js,mjs,json,md}&#39;</code>; <code>tests/docs/review-docs/</code> has gate, plan-checklist and sync tests but no format test.</td>
+<td>The persona document generator writes Markdown that the repository&#39;s own format gate rejects. Every <code>rule_tool_plan_docs</code> run leaves three unformatted files, so the <code>lint</code> job goes red and a contributor has to run <code>pnpm format:fix</code> before the change can land - and the next generator run undoes it.</td>
+</tr>
+<tr>
+<td>OSS-30</td>
+<td>info</td>
+<td>open</td>
+<td>docs/adr/ADR.md generated from 80 numbered records; docs/README.md reading order; tests/docs/docs-accuracy.test.mjs; pnpm census with census:check; .githooks/{commit-msg,pre-commit,pre-push} installed as shims by pnpm hooks:install; <code>SECURITY.md</code> section <code>## Hardening</code> names <code>test/guardrails-*</code>, src/cli/<strong>tests</strong>/_install-integrity.test.mjs against scripts/SHA256SUMS; ci.yml matrix os x node = 3 x 2; scripts/reports/coverage with BRANCH_FLOOR and coverage/threshold data.</td>
+<td>Controls worth naming so a later run treats their loss as a finding rather than rediscovering them: the ADR log with a generated index, the reading-order handbook, the docs-accuracy lock, the census generator, the tracked hooks with shims, the SECURITY hardening section that names its own tests, the installer integrity check, the CI matrix and the coverage ratchet.</td>
+</tr>
+</tbody></table>
+
+</main>
+<footer><p>Generated from <code>docs/</code> - edit the Markdown, not this file.</p></footer>
+</body>
+</html>

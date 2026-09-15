@@ -14,6 +14,7 @@ import { strict as assert } from "node:assert";
 import test from "node:test";
 
 import { checkCode } from "../../../../src/core/guardrails/index.js";
+import "./_install.fixture.mjs";
 
 const rule = (id, code, fileName = "sample.js") => checkCode("rule-styleguide-javascript", code, { fileName }).failed.find((f) => f.id === id);
 

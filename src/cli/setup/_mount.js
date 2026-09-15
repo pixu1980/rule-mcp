@@ -1,5 +1,3 @@
-
-
 /**
  * @module cli/setup/mount
  *
@@ -20,6 +18,24 @@ const ALT_ON = "\u001B[?1049h\u001B[H";
 const ALT_OFF = "\u001B[?1049l";
 const CURSOR_HIDE = "\u001B[?25l";
 const CURSOR_SHOW = "\u001B[?25h";
+
+/**
+ * The Ink options the wizard needs.
+ *
+ * `interactive: true` overrides Ink's CI detection. That detection reads
+ * `is-in-ci`, which trips on `CONTINUOUS_INTEGRATION` as well as `CI` - a
+ * variable some VS Code and agent shells export without being a CI job - and
+ * a non-interactive Ink disables synchronized output and cursor control. The
+ * full-frame erase and redraw is then visible as flicker.
+ *
+ * `incrementalRendering` updates only the lines that changed instead of
+ * repainting the whole frame, which removes what is left on a slow terminal.
+ *
+ * @returns {object}
+ */
+export function wizardRenderOptions() {
+  return { exitOnCtrlC: false, patchConsole: true, interactive: true, incrementalRendering: true };
+}
 
 /**
  * Render one wizard component full-screen and resolve with what it finished
@@ -52,7 +68,7 @@ export async function mountWizard(App, props = {}) {
           outcome = result;
         },
       }),
-      { exitOnCtrlC: false, patchConsole: true },
+      wizardRenderOptions(),
     );
 
     await instance.waitUntilExit();

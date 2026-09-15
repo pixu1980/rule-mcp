@@ -1,9 +1,12 @@
 
 
 import { existsSync, readdirSync } from "node:fs";
-import { join, basename } from "node:path";
+import { basename, join } from "node:path";
+
+import { listFiles } from "../tokensave/_files.js";
 import { isIgnored } from "./_conventions.js";
-import { componentFolderIssues, bareFileIssues, orphanCssIssues, staleBarrelIssues } from "./_scan-checks.js";
+import { bareFileIssues, componentFolderIssues, orphanCssIssues, staleBarrelIssues } from "./_scan-checks.js";
+import { buildStats, scanFlat } from "./_scan-flat.js";
 
 /**
  * @typedef {Object} FileTreeReport
@@ -18,33 +21,28 @@ import { componentFolderIssues, bareFileIssues, orphanCssIssues, staleBarrelIssu
  * @property {number} stats.fixable - Fixable issue count
  */
 
+/** The empty report a missing source directory produces. */
+function emptyReport() {
+  return {
+    pass: true,
+    issues: [],
+    stats: { totalFiles: 0, totalDirs: 0, missingBarrel: 0, wrongPrefix: 0, bareFiles: 0, fixable: 0 },
+  };
+}
+
 /**
- * Scan a directory recursively and collect all file tree issues.
+ * The recursive scanner, kept as the fallback when the code graph is absent.
  *
- * @param {string} rootDir - Project root to scan
- * @param {object} [options]
- * @param {string} [options.srcDir="src"] - Source directory to scan (default: src)
- * @param {boolean} [options.autoFix=false] - Whether to apply fixes
+ * @param {string} target - The source directory to walk
  * @returns {FileTreeReport}
  */
-export function scanFileTree(rootDir, options = {}) {
-  const srcDir = options.srcDir || "src";
-  const target = join(rootDir, srcDir);
+function scanRecursive(target) {
   const issues = [];
-
   let totalFiles = 0;
   let totalDirectories = 0;
 
-  if (!existsSync(target)) {
-    return {
-      pass: true,
-      issues: [],
-      stats: { totalFiles: 0, totalDirs: 0, missingBarrel: 0, wrongPrefix: 0, bareFiles: 0, fixable: 0 },
-    };
-  }
-
-  /** Recursive scanner */
-  function scan(currentPath, depth = 0) {
+  /** Depth-first walk of one directory. */
+  const scan = (currentPath, depth = 0) => {
     let entries;
 
     try {
@@ -53,8 +51,8 @@ export function scanFileTree(rootDir, options = {}) {
       return;
     }
 
-    const directories = entries.filter((e) => e.isDirectory());
-    const files = entries.filter((e) => e.isFile());
+    const directories = entries.filter((entry) => entry.isDirectory());
+    const files = entries.filter((entry) => entry.isFile());
 
     totalDirectories += directories.length;
     totalFiles += files.length;
@@ -62,12 +60,10 @@ export function scanFileTree(rootDir, options = {}) {
     const dirName = basename(currentPath);
     const isComponentLike = /^[A-Z]/.test(dirName) && directories.length + files.length > 0;
 
-    // Only validate component folders (PascalCase directories under src/)
     if (isComponentLike && depth >= 1) {
       issues.push(...componentFolderIssues(files, currentPath, dirName));
     }
 
-    // Component-looking files outside a component folder
     if (!isComponentLike || depth === 0) {
       issues.push(...bareFileIssues(files, currentPath));
     }
@@ -79,22 +75,36 @@ export function scanFileTree(rootDir, options = {}) {
         scan(join(currentPath, dir.name), depth + 1);
       }
     }
-  }
+  };
 
   scan(target);
 
-  const stats = {
-    totalFiles,
-    totalDirs: totalDirectories,
-    missingBarrel: issues.filter((index) => index.type === "missing-barrel").length,
-    wrongPrefix: issues.filter((index) => index.type === "wrong-prefix").length,
-    bareFiles: issues.filter((index) => index.type === "bare-file").length,
-    fixable: issues.filter((index) => index.fixable).length,
-  };
+  return { pass: issues.length === 0, issues, stats: buildStats(issues, totalFiles, totalDirectories) };
+}
 
-  return {
-    pass: issues.length === 0,
-    issues,
-    stats,
-  };
+/**
+ * Scan a directory recursively and collect all file tree issues.
+ *
+ * Prefers the TokenSave `files` listing through the adapter and falls back to
+ * the `readdirSync` walk when the graph is absent. The listing is unioned with
+ * a live walk, because a file written a moment ago is not in the index and a
+ * missed component file is a wrong report.
+ *
+ * @param {string} rootDir - Project root to scan
+ * @param {object} [options]
+ * @param {string} [options.srcDir="src"] - Source directory to scan (default: src)
+ * @param {boolean} [options.autoFix=false] - Whether to apply fixes
+ * @returns {FileTreeReport}
+ */
+export function scanFileTree(rootDir, options = {}) {
+  const srcDir = options.srcDir || "src";
+  const target = join(rootDir, srcDir);
+
+  if (!existsSync(target)) {
+    return emptyReport();
+  }
+
+  const { files, source } = listFiles(rootDir, { path: srcDir, union: true, ...options });
+
+  return source === "tokensave" ? scanFlat(rootDir, srcDir, files) : scanRecursive(target);
 }

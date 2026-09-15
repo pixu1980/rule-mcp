@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>054: Split review personas into per-operation commands (plan/audit/review) - rule-mcp docs</title>
+<link rel="stylesheet" href="../../style.css">
+</head>
+<body>
+<header><nav><ul>
+<li><a href="../../index.html">Home</a></li>
+<li><a href="../../docs/01-getting-started.html">undefined</a></li>
+<li><a href="../../docs/02-product-architecture.html">undefined</a></li>
+<li><a href="../../docs/03-agent-instructions.html">undefined</a></li>
+<li><a href="../../docs/04-operations.html">undefined</a></li>
+<li><a href="../../docs/05-env-variables.html">undefined</a></li>
+<li><a href="../../docs/06-privacy.html">undefined</a></li>
+<li><a href="../../docs/07-engineering-guides.html">undefined</a></li>
+<li><a href="../../docs/08-skills.html">undefined</a></li>
+<li><a href="../../docs/09-tools.html">undefined</a></li>
+<li><a href="../../docs/10-prompts.html">undefined</a></li>
+<li><a href="../../docs/11-instructions.html">undefined</a></li>
+<li><a href="../../docs/12-cli.html">undefined</a></li>
+<li><a href="../../docs/13-personas.html">undefined</a></li>
+<li><a href="../../docs/14-guardrails.html">undefined</a></li>
+<li><a href="../../docs/15-resources.html">undefined</a></li>
+<li><a href="../../docs/adr/ADR.html">ADRs</a></li>
+</ul></nav></header>
+<main>
+<h1>054: Split review personas into per-operation commands (plan/audit/review)</h1>
+<ul>
+<li><strong>Date</strong>: 2026-09-05</li>
+<li><strong>Status</strong>: accepted</li>
+<li><strong>Tags</strong>: personas, commands, prompts, surface</li>
+<li><strong>Author</strong>: Emiliano Pisu <a href="mailto:pisuemiliano.1980@gmail.com">pisuemiliano.1980@gmail.com</a></li>
+</ul>
+<h2>Context</h2>
+<p>Each of the 7 active review personas shipped as one combined command, rule-plan-<role>, whose template instructs one run to produce all three documents of the trio (docs/audits, docs/reviews, docs/plans). Running only one step meant the user invoked the combined command and mentally ignored two thirds of the contract; the per-role command body was also a generic routing recap, so the persona-specific operation contract only surfaced via the MCP prompt, which is suppressed on hosts that install clean slash commands.</p>
+<h2>Decision</h2>
+<p>Give each active role three slash commands - rule-plan-<role>, rule-audit-<role>, rule-review-<role> (21 persona commands total), all generated from the same registry and all routing through the tools under the hood: the command body calls rule_tool_plan (with role and operation) to fetch the operation contract, and rule_tool_plan_docs for the trio bookkeeping. The template&#39;s header clause and operation section are now operation-aware; rule_tool_plan gained an optional operation parameter (default all three, unchanged for existing callers). Combined rule-plan-<role> becomes plan-only.</p>
+<h2>Consequences</h2>
+<p>Positive: the user can run just the step they need; every command body names the exact tools to call, so agent behavior no longer depends on which surface the host exposes; proposed roles still stay out of the surfaces automatically. Negative: the command set grows by 14 names per agent (21 persona commands); the plan-only command no longer performs the audit/review pass in the same run, so users wanting the full trio run three commands or call rule_tool_plan without an operation. Tests pin the 48-prompt union and the parity fixture was regenerated to match.</p>
+<h2>What would end this</h2>
+<p>A single run of the trio stops being the user&#39;s default and per-step runs become a habit.
+Once that is routine, an explicit <code>rule_tool_plan</code> call with no operation is the combined
+contract and the three per-role commands could be collapsed back, or extended to a
+fourth operation (e.g. <code>rule-close-*</code>) if the lifecycle needs it.</p>
+<h2>Alternatives Considered</h2>
+<ol>
+<li>Keep rule-plan-* only and run audit/review via rule_tool_plan explicitly (option 2: 7 commands)</li>
+<li>Ship rule-plan-* + rule-audit-* as commands, rule-review-* via tool only (option 3: 14 commands)</li>
+<li>Only the 4 core personas get commands (option 4: 12 commands)</li>
+</ol>
+
+</main>
+<footer><p>Generated from <code>docs/</code> - edit the Markdown, not this file.</p></footer>
+</body>
+</html>

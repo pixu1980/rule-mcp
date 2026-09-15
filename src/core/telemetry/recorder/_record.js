@@ -33,7 +33,7 @@ import { clientInfo, currentSession } from "./_session.js";
  *   replayedTokens?: number,
  *   mode?: string,
  *   resource?: boolean,
- *   saved?: { cache?: number, caveman?: number, tokensave?: number, estimatedRouting?: number },
+ *   saved?: { cache?: number, compression?: number, tokensave?: number, estimatedRouting?: number },
  *   path?: string,
  *   now?: number,
  * }} call

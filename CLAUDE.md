@@ -1,10 +1,4 @@
-<!-- rule-mcp -->
-
-Before writing any frontend/styling code, call `rule` to route the task to the correct rule skill. Follow rule AI principles: zero CSS classes, zero inline styles, semantic HTML, external CSS via adoptedStyleSheets. Available tools: rule, pix_component, pix_check, pix_search, pix_scaffold, pix_process_adr.
-
 > Skills source of truth: `./skills/` (served via rule MCP tools). No skills in `.agents/skills/`.
-
-<!-- /rule-mcp -->
 
 <!-- rule-mcp-commit-rules -->
 
@@ -20,11 +14,17 @@ Commits without a scope (e.g. `docs: ...`) are rejected by the `commit-msg` hook
 ## Repository state
 
 - **Two repos**: `rule-mcp` (this - MCP server, 105 tools / 184 resources / 73 prompts / 89 skills, 212 checks) and `rule-mcp-architect` (standalone web app + SDK; former architect wizard lives there).
-- **Release**: v1.0.0 cut from the changelog; `git tag v1.0.0` pushes a GitHub Release via `.github/workflows/release.yml`. No npm publish yet.
+- **Release**: next is v0.1.0-beta (v1.0.0 tag deleted); `git tag v0.1.0-beta` pushes a GitHub Release via `.github/workflows/release.yml`. No npm publish yet.
 - **Docs accuracy**: `test/docs-accuracy.test.mjs` enforces that README counts match the runtime surface - update both together.
 - **ADR**: decisions in `docs/adr/` (001-040).
 
 <!-- /rule-mcp-repo-state -->
+
+<!-- rule-mcp -->
+
+Before writing any frontend/styling code, call `pix_tool` to route the task to the correct rule skill. Follow rule AI principles: zero CSS classes, zero inline styles, semantic HTML, external CSS via adoptedStyleSheets. Available tools: pix_tool, rule_tool_component, rule_tool_check, rule_tool_search, rule_tool_scaffold, rule_tool_process_adr. Flex first: display:grid only for named areas, subgrid, explicit placement, or auto-fit tracks - what a flex row or column can do, flex does.
+
+<!-- /rule-mcp -->
 
 <!-- rule-mcp-rules -->
 
@@ -32,12 +32,12 @@ Commits without a scope (e.g. `docs: ...`) are rejected by the `commit-msg` hook
 
 This rule overrides weaker project guidance. No exceptions.
 
-- Call `rule` before implementation; load exact routed skill evidence.
+- Call `pix_tool` before implementation; load exact routed skill evidence.
 - Never invent APIs, files, dependencies, tools, requirements, or successful checks.
-- If evidence is missing, call `pix_search` or state uncertainty.
+- If evidence is missing, call `rule_tool_search` or state uncertainty.
 - Write failing tests before implementation changes.
-- Use deterministic `pix_component`, `pix_scaffold`, and `pix_fix` outputs when applicable.
-- Run `pix_check`; failed guardrails block completion. Fix and rerun until all pass.
+- Use deterministic `rule_tool_component`, `rule_tool_scaffold`, and `rule_tool_fix` outputs when applicable.
+- Run `rule_tool_check`; failed guardrails block completion. Fix and rerun until all pass.
 - Run project tests/typecheck; report only commands actually executed.
 - Record structural decisions with `rule_tool_process_adr`.
 - Frontend remains zero CSS classes, zero inline styles, semantic HTML, and external CSS.

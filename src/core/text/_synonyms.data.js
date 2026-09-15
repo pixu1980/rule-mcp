@@ -1,10 +1,8 @@
-
-
 /**
  * @module core/text/synonyms.data
  *
  * Short synonyms: one word swapped for a shorter one that says the same thing.
- * The `full` half of the rule table in `skills/rule-caveman/SKILL.md` ("short
+ * The `full` half of the rule table in `skills/rule-compression/SKILL.md` ("short
  * synonyms - big not extensive, fix not implement a solution for").
  *
  * Connectives that need a comma to read right ("however", "nevertheless") are

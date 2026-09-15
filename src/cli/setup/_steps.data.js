@@ -1,5 +1,3 @@
-
-
 /**
  * @module cli/setup/steps.data
  *
@@ -9,7 +7,7 @@
 
 /** The rail labels, in order. */
 export const STEP_NAMES = {
-  install: ["Preflight", "Agents", "Mode", "Extras", "Review", "Install", "Done"],
+  install: ["Preflight", "Agents", "Mode", "Extras", "Commands", "Surface", "Review", "Install", "Done"],
   uninstall: ["Select", "Purge", "Review", "Remove", "Done"],
 };
 
@@ -25,6 +23,22 @@ const CLOSE = ["enter", "close"];
 
 /** One hint row per step, indexed the same way as the views. */
 export const HINTS = {
-  install: [[NEXT, QUIT], [MOVE, TOGGLE, ALL, NEXT, BACK, QUIT], [MOVE, NEXT, BACK, QUIT], [MOVE, TOGGLE, NEXT, BACK, QUIT], [DRY, RUN, BACK, QUIT], [QUIT], [CLOSE]],
-  uninstall: [[MOVE, TOGGLE, ALL, NEXT, QUIT], [MOVE, TOGGLE, NEXT, BACK, QUIT], [DRY, RUN, BACK, QUIT], [QUIT], [CLOSE]],
+  install: [
+    [NEXT, QUIT],
+    [MOVE, TOGGLE, ALL, NEXT, BACK, QUIT],
+    [MOVE, NEXT, BACK, QUIT],
+    [MOVE, TOGGLE, NEXT, BACK, QUIT],
+    [MOVE, TOGGLE, ALL, NEXT, BACK, QUIT],
+    [MOVE, TOGGLE, ALL, NEXT, BACK, QUIT],
+    [DRY, RUN, BACK, QUIT],
+    [QUIT],
+    [CLOSE],
+  ],
+  uninstall: [
+    [MOVE, TOGGLE, ALL, NEXT, QUIT],
+    [MOVE, TOGGLE, NEXT, BACK, QUIT],
+    [DRY, RUN, BACK, QUIT],
+    [QUIT],
+    [CLOSE],
+  ],
 };

@@ -1,5 +1,3 @@
-
-
 /**
  * @module cli/setup/step-scan
  *
@@ -12,7 +10,7 @@
 
 import { Box, Text, h } from "./_h.js";
 import { COLORS, GLYPHS } from "./_theme.js";
-import { DetailPanel, SelectList } from "./_widget-list.js";
+import { ListDetail } from "./_widget-list.js";
 import { useSelection } from "./_use-selection.js";
 
 /** Turn scan groups into list rows, empty groups included but unticked. */
@@ -38,12 +36,11 @@ export function StepScan({ items, initial, columns, height, onSubmit, onBack }) 
     Box,
     { flexDirection: "column" },
     h(Text, { color: COLORS.accentSoft, bold: true }, "What to remove"),
+    h(ListDetail, { items, cursor, selected, current, height, columns }),
     h(
       Box,
       { paddingTop: 1 },
-      h(Box, { flexDirection: "column", flexGrow: 1 }, h(SelectList, { items, cursor, selected, height })),
-      h(DetailPanel, { title: current?.label ?? "", width: Math.max(34, Math.floor(columns / 2)), lines: current?.detail ?? [] }),
+      h(Text, { color: COLORS.muted }, `${GLYPHS.arrow} ${total} item(s) across ${selected.size} group(s)`),
     ),
-    h(Box, { paddingTop: 1 }, h(Text, { color: COLORS.muted }, `${GLYPHS.arrow} ${total} item(s) across ${selected.size} group(s)`)),
   );
 }

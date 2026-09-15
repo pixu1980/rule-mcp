@@ -1,5 +1,3 @@
-
-
 /**
  * @module cli/setup/step-agents
  *
@@ -11,7 +9,7 @@
 
 import { Box, Text, h } from "./_h.js";
 import { COLORS, GLYPHS } from "./_theme.js";
-import { DetailPanel, SelectList } from "./_widget-list.js";
+import { ListDetail } from "./_widget-list.js";
 import { ProgressBar } from "./_widget-progress.js";
 import { useSelection } from "./_use-selection.js";
 
@@ -27,16 +25,24 @@ export function StepAgents({ items, initial, height, columns, onSubmit, onBack }
     Box,
     { flexDirection: "column" },
     h(Text, { color: COLORS.accentSoft, bold: true }, "Select agents"),
+    h(ListDetail, {
+      items,
+      cursor,
+      selected,
+      current,
+      height,
+      width: detailWidth,
+      lines: [
+        current?.detail ?? "",
+        "",
+        selected.has(current?.id) ? `${GLYPHS.ok} will be configured` : `${GLYPHS.skip} will be left alone`,
+      ],
+    }),
     h(
       Box,
       { paddingTop: 1 },
-      h(Box, { flexDirection: "column", flexGrow: 1 }, h(SelectList, { items, cursor, selected, height })),
-      h(DetailPanel, {
-        title: current?.label ?? "",
-        width: detailWidth,
-        lines: [current?.detail ?? "", "", selected.has(current?.id) ? `${GLYPHS.ok} will be configured` : `${GLYPHS.skip} will be left alone`],
-      }),
+      h(ProgressBar, { value: selected.size, total, color: COLORS.accent }),
+      h(Text, { color: COLORS.muted }, "  agents selected"),
     ),
-    h(Box, { paddingTop: 1 }, h(ProgressBar, { value: selected.size, total, color: COLORS.accent }), h(Text, { color: COLORS.muted }, "  agents selected")),
   );
 }

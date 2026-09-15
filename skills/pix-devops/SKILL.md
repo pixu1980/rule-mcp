@@ -13,6 +13,7 @@ tags:
   - "version"
   - "index"
 frameworks: [all]
+guardrails: [env-gitignore, secret-detection]
 ---
 
 # rule-devops - DevOps & Engineering Skills Index

@@ -2,16 +2,15 @@
 
 /** @module core/guardrails/engine/report - the ruleset rendered as text */
 
-import { SHARED_GUARDRAILS } from "../shared/index.js";
-import { SCAFFOLD_GUARDRAILS } from "../_scaffold.js";
-import { BACKEND_GUARDRAILS } from "../backend/index.js";
-import { DATABASE_GUARDRAILS } from "../_database.js";
-import { DEVOPS_GUARDRAILS } from "../_devops.js";
-import { FRAMEWORK_GUARDRAILS } from "../framework/index.js";
-import { getGuardrails, SKILL_FRAMEWORK_MAP } from "./_registry.js";
+import { getGuardrails, skillChain } from "./_registry.js";
 
 /**
  * Render the guardrail ruleset for a skill as text.
+ *
+ * The list is what `getGuardrails` resolved, which is the only answer that
+ * cannot drift: it is the same set the check will run. Rules a skill owns or
+ * inherits are named with the skill they came from, so a reader can see which
+ * declaration to edit (ADR 079).
  *
  * @param {string} skillName
  * @param {string} [mode]
@@ -19,55 +18,24 @@ import { getGuardrails, SKILL_FRAMEWORK_MAP } from "./_registry.js";
  */
 export function getGuardrailsReport(skillName, mode) {
   const guardrails = getGuardrails(skillName, mode);
-  const lines = [`# Guardrails: ${skillName}`, "", `Total: ${guardrails.length} testable assertions`, "", "## Shared (all rule skills)", ""];
+  const chain = skillChain(skillName);
 
-  for (const g of SHARED_GUARDRAILS) {
-    lines.push(`- [ ] **${g.id}**: ${g.label}`, `  ${g.description}`, "");
+  const lines = [`# Guardrails: ${skillName}`, "", `Total: ${guardrails.length} testable assertions`, ""];
+
+  if (chain.length > 1) {
+    lines.push(`Inherited from: ${chain.slice(0, -1).join(", ")}`, "");
   }
 
-  const framework = SKILL_FRAMEWORK_MAP[skillName];
-  const fg = FRAMEWORK_GUARDRAILS[framework] || [];
+  lines.push("## Rules", "");
 
-  if (fg.length > 0) {
-    lines.push(`## Framework-specific (${framework})`, "");
+  for (const guardrail of guardrails) {
+    lines.push(`- [ ] **${guardrail.id}**: ${guardrail.label}`);
 
-    for (const g of fg) {
-      lines.push(`- [ ] **${g.id}**: ${g.label}`, `  ${g.description}`, "");
-    }
-  }
-
-  if (skillName === "rule-styleguide") {
-    lines.push(`## Project Scaffolding (${SCAFFOLD_GUARDRAILS.length} config files)`, "");
-
-    for (const g of SCAFFOLD_GUARDRAILS) {
-      lines.push(`- [ ] **${g.id}**: ${g.label}`, `  ${g.description}`, "");
+    if (guardrail.description) {
+      lines.push(`  ${guardrail.description}`);
     }
 
-    lines.push("Run `pix_styleguide mode=scaffold` to generate these files.", "");
-  }
-
-  if (/^rule-(?:backend|backend-)/.test(skillName)) {
-    lines.push(`## Backend Security & API (${BACKEND_GUARDRAILS.length} checks)`, "");
-
-    for (const g of BACKEND_GUARDRAILS) {
-      lines.push(`- [ ] **${g.id}**: ${g.label}`, `  ${g.description}`, "");
-    }
-  }
-
-  if (/^rule-data(?:-|$)/.test(skillName)) {
-    lines.push(`## Database Safety (${DATABASE_GUARDRAILS.length} checks)`, "");
-
-    for (const g of DATABASE_GUARDRAILS) {
-      lines.push(`- [ ] **${g.id}**: ${g.label}`, `  ${g.description}`, "");
-    }
-  }
-
-  if (/^rule-devops(?:-|$)/.test(skillName)) {
-    lines.push(`## DevOps & Security (${DEVOPS_GUARDRAILS.length} checks)`, "");
-
-    for (const g of DEVOPS_GUARDRAILS) {
-      lines.push(`- [ ] **${g.id}**: ${g.label}`, `  ${g.description}`, "");
-    }
+    lines.push("");
   }
 
   lines.push(

@@ -1,54 +1,145 @@
+/**
+ * @module prompts/areas
+ *
+ * One prompt per skill, grouped into areas read from the skill names.
+ *
+ * The area is already in the name: `rule-frontend-react` is frontend, and
+ * `rule-frontend` is frontend itself. Deriving the grouping means a skill that
+ * joins any layer - this repository, a project, a user's own - joins its area
+ * without a second place remembering it.
+ *
+ * The hub skill owns its area's command rather than competing with a prompt of
+ * the same name: `/rule-area-frontend` IS `rule-frontend`. Its members nest
+ * under it, so an agent's command list sorts them together.
+ */
 
+import { getSkillNames } from "../tools/router/index.js";
 
-/** The 15 area prompts: one specialist system text per tool area. */
+/** The router skill backs the dispatcher, not an area. */
+const ROUTER = "rule";
 
 /**
- * Shared system text for the 15 area prompts.
+ * The area a skill belongs to, and what it is called inside it.
  *
- * @param {string} area - area name (e.g. "frontend")
- * @param {string} tools - comma-separated rule_tool_* tools of the area
+ * @param {string} skillName
+ * @returns {{ area: string, member: string }|null} null when the name is not a skill of ours
  */
-export function areaPromptText(area, tools) {
-  const lines = [
-    `You are the ${area} area specialist for rule-mcp.`,
-    `Route this request through \`pix_tool\` first to pick the exact rule-* skill, then load the returned skill evidence as source of truth: ${tools}.`,
-    "The request is free text: extract the target framework/platform/database/tool from it when present; never invent APIs, files, dependencies, commands, or requirements not present in the skill evidence.",
-    "Baseline: involve TDD (write failing tests first) and a11y (WCAG 2.2 AA, axe-core where applicable). If the request has no test/a11y surface, ask the user what to cover before finishing.",
-    "Validate generated code with `rule_tool_check` and iterate until all guardrails pass.",
-    "Caveman is implicit: if the user is working in caveman mode, keep the response compressed.",
-    `When the work is done, propose a conventional commit message with a mandatory scope, e.g. "feat(${area}): ...".`,
-  ];
+export function areaOf(skillName) {
+  if (typeof skillName !== "string" || !skillName.startsWith("rule-")) {
+    return null;
+  }
 
-  return lines.join("\n");
+  const rest = skillName.slice("rule-".length);
+  const area = rest.split("-", 1)[0];
+
+  return area === "" ? null : { area, member: rest.slice(area.length + 1) };
 }
 
-/** System text per area prompt name. */
-export const AREAS = {
-  "rule-area-toolset": areaPromptText(
-    "toolset",
-    "pix_tool, rule_tool_gateway, rule_tool_apply, rule_tool_search, rule_tool_check, rule_tool_scaffold, rule_tool_detect, rule_tool_fix, rule_tool_process_adr, rule_tool_process_handoff",
-  ),
-  "rule-area-frontend": areaPromptText(
-    "frontend",
-    "pix_frontend_react, pix_frontend_vue, pix_frontend_svelte, pix_frontend_angular, pix_frontend_solidjs, pix_meta_astro, pix_meta_next, pix_meta_nuxt, pix_meta_remix, pix_frontend_vanilla_reactive, pix_frontend_design",
-  ),
-  "rule-area-backend": areaPromptText(
-    "backend",
-    "pix_backend_node, pix_backend_express, pix_backend_fastify, pix_backend_hono, pix_backend_nestjs, pix_backend_graphql, pix_backend_security",
-  ),
-  "rule-area-data": areaPromptText("data", "pix_data_postgresql, pix_data_mysql, pix_data_sqlite, pix_data_mongodb, pix_data_duckdb, pix_data_indexed_db, pix_data_sql"),
-  "rule-area-toolchain": areaPromptText(
-    "toolchain",
-    "pix_toolchain_vite, pix_toolchain_pnpm, pix_toolchain_turborepo, pix_toolchain_rspack, pix_toolchain_parcel, pix_toolchain_typescript, pix_toolchain_eslint, pix_toolchain_biome, pix_toolchain_husky, pix_toolchain_commits, pix_toolchain_project",
-  ),
-  "rule-area-styleguide": areaPromptText(
-    "styleguide",
-    "pix_styleguide_a11y, pix_styleguide_css, pix_styleguide_html, pix_styleguide_javascript, pix_styleguide_json, pix_styleguide_markdown, pix_styleguide_naming, pix_styleguide_patterns, pix_styleguide_validation",
-  ),
-  "rule-area-process": areaPromptText("process", "pix_process_code_review, pix_process_tdd, pix_process_bmad, rule_tool_process_adr, rule_tool_process_handoff"),
-  "rule-area-devops": areaPromptText("devops", "pix_devops_docker, pix_devops_observability, pix_devops_testing"),
-  "rule-area-platform": areaPromptText("platform", "pix_platform_web, pix_platform_desktop, pix_platform_agent, pix_platform_library"),
-  "rule-area-ai": areaPromptText("ai", "pix_ai"),
-  "rule-area-skills": areaPromptText("skills", "pix_find_skills"),
-  "rule-area-ui": areaPromptText("ui", "pix_ui_design_system"),
-};
+/**
+ * The command a skill owns.
+ *
+ * @param {string} skillName
+ * @returns {string|null}
+ */
+export function areaCommandName(skillName) {
+  const parsed = areaOf(skillName);
+
+  if (!parsed) {
+    return null;
+  }
+
+  return parsed.member === "" ? `rule-area-${parsed.area}` : `rule-area-${parsed.area}-${parsed.member}`;
+}
+
+/**
+ * Every area the resolved catalog holds, with its hub and its members.
+ *
+ * @returns {Map<string, { hub: string|null, members: string[] }>}
+ */
+export function skillAreas() {
+  const areas = new Map();
+
+  for (const skillName of getSkillNames()) {
+    const parsed = areaOf(skillName);
+
+    if (!parsed || skillName === ROUTER) {
+      continue;
+    }
+
+    const entry = areas.get(parsed.area) ?? { hub: null, members: [] };
+
+    if (parsed.member === "") {
+      entry.hub = skillName;
+    } else {
+      entry.members.push(skillName);
+    }
+
+    areas.set(parsed.area, entry);
+  }
+
+  return areas;
+}
+
+/** The lines every area prompt shares: route, load evidence, check, commit. */
+function promptLines(area, subject, evidence) {
+  return [
+    subject,
+    `Route this request through \`pix_tool\` first, then load ${evidence} as source of truth.`,
+    "The request is free text: extract the target framework, platform, database or tool from it when present; never invent APIs, files, dependencies, commands, or requirements not present in the skill evidence.",
+    "Baseline: involve TDD (write failing tests first) and a11y (WCAG 2.2 AA, axe-core where applicable). If the request has no test/a11y surface, ask the user what to cover before finishing.",
+    "Validate generated code with `rule_tool_check` and iterate until all guardrails pass.",
+    "Compression is implicit: if the user is working in compression mode, keep the response compressed.",
+    `When the work is done, propose a conventional commit message with a mandatory scope, e.g. "feat(${area}): ...".`,
+  ].join("\n");
+}
+
+/** A readable list of an area's skills, capped so a prompt stays a prompt. */
+function skillList(members) {
+  const shown = members.slice(0, 12);
+
+  return members.length > shown.length ? `${shown.join(", ")}, and ${members.length - shown.length} more` : shown.join(", ");
+}
+
+/**
+ * One prompt per skill: the hub speaks for its area, a member for itself.
+ *
+ * @returns {Array<{ name: string, description: string, text: string, skill: string, area: string, arguments: object[] }>}
+ */
+export function listAreaPrompts() {
+  const prompts = [];
+
+  for (const [area, entry] of skillAreas()) {
+    if (entry.hub) {
+      prompts.push({
+        name: `rule-area-${area}`,
+        skill: entry.hub,
+        area,
+        description: `${area} work, across every ${area} skill`,
+        text: promptLines(
+          area,
+          `You are the ${area} area specialist for rule-mcp.`,
+          entry.members.length > 0 ? `the \`${entry.hub}\` skill and whichever of these the request needs: ${skillList(entry.members)}` : `the \`${entry.hub}\` skill`,
+        ),
+        arguments: [{ name: "request", description: `A ${area} task, in free text`, required: true }],
+      });
+    }
+
+    for (const skill of entry.members) {
+      prompts.push({
+        name: areaCommandName(skill),
+        skill,
+        area,
+        description: `${area}: the ${skill.slice(`rule-${area}-`.length)} skill`,
+        text: promptLines(area, `You are working with the \`${skill}\` skill.`, `the \`${skill}\` skill`),
+        arguments: [{ name: "request", description: `A task for ${skill}, in free text`, required: true }],
+      });
+    }
+  }
+
+  return prompts;
+}
+
+/** The prompt text for an area command name, or undefined. */
+export function areaPromptText(name) {
+  return listAreaPrompts().find((prompt) => prompt.name === name)?.text;
+}

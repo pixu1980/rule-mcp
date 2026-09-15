@@ -2,12 +2,12 @@
 
 /** Project detection: framework, typescript, build tool, tokensave probe. */
 import { strict as assert } from "node:assert";
-import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
+import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { test } from "node:test";
 
-import { detectProject, getFrameworkSuggestion, hasTokensave } from "../index.js";
+import { detectProject, detectProjectGraph, getFrameworkSuggestion, hasTokensave } from "../index.js";
 
 const dir = mkdtempSync(join(tmpdir(), "rule-detect-"));
 
@@ -45,6 +45,37 @@ test("detectProject falls back for missing or malformed manifests", () => {
   const fallback = detectProject(bad);
   assert.equal(fallback.framework, "vanilla", "a malformed manifest means vanilla");
   rmSync(bad, { recursive: true, force: true });
+});
+
+test("detectProjectGraph reads the same profile through the config provider", () => {
+  const root = project({ react: "^19.0.0", vite: "^5.0.0" }, { typescript: "^5.0.0" }, { engines: { node: ">=20" } });
+  const client = (tool, args) => {
+    const manifest = JSON.parse(readFileSync(join(root, "package.json"), "utf8"));
+    const values = { name: manifest.name, dependencies: manifest.dependencies, devDependencies: manifest.devDependencies, "engines.node": manifest.engines?.node };
+
+    return { ok: true, value: { match_count: 1, matches: [{ value: values[args.key] }] } };
+  };
+
+  try {
+    const graph = detectProjectGraph(root, { probe: () => ({ available: true }), client });
+    const direct = detectProject(root);
+
+    assert.deepEqual(graph, direct);
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test("detectProjectGraph falls back to the direct read when the client fails", () => {
+  const root = project({ vue: "^3.0.0" });
+
+  try {
+    const graph = detectProjectGraph(root, { probe: () => ({ available: true }), client: () => ({ ok: false, unavailable: true, error: "boom" }) });
+
+    assert.equal(graph.framework, "vue");
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
 });
 
 test("getFrameworkSuggestion falls back for unknown frameworks", () => {

@@ -1,5 +1,3 @@
-
-
 /**
  * @module test/install-agent-commands
  *
@@ -7,7 +5,7 @@
  */
 
 import { strict as assert } from "node:assert";
-import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync } from "node:fs";
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import { spawnSync } from "node:child_process";
@@ -71,7 +69,7 @@ try {
     "rule-mcp.md",
     "rule-tdd.md",
     "rule-check.md",
-    "rule-caveman.md",
+    "rule-compression.md",
     "rule-new-feature.md",
     "rule-a11y-audit.md",
     "rule-code-review.md",
@@ -83,12 +81,40 @@ try {
     assert.ok(!existsSync(join(piPrompts, name)), `stale command must not be installed: ${name}`);
   }
 
-  // The bootstrap no longer shells out to install-agent-commands.sh; the
-  // setup plan owns the step, so the contract is asserted where it lives.
-  const commandsStep = readFileSync(join(root, "src", "cli", "setup", "_task-extras.js"), "utf8");
-  assert.ok(commandsStep.includes('"agent-commands", "--sync"'), "the setup plan must sync explicit agent commands");
-
   console.log(`  ✅ ${commandFiles.length} explicit agent command integrations installed`);
+
+  // The bootstrap writes the same files through the wizard's plan, narrowed to
+  // what the commands step chose: install.sh forwards to `setup`, the plan
+  // spawns `agent-commands --sync`, and the preset reaches it as flags (ADR
+  // 080). A chain that drops the selection writes 152 files per directory.
+  const chainHome = join(sandbox, "chain");
+  mkdirSync(join(chainHome, ".claude"), { recursive: true });
+
+  const chain = spawnSync(
+    "bash",
+    [join(root, "scripts", "install.sh"), "--agent", "claude", "--no-wizard", "--no-rules", "--no-doctor", "--commands", "--commands-preset", "minimal"],
+    {
+      cwd: root,
+      env: {
+        ...process.env,
+        HOME: chainHome,
+        PNPM_HOME: join(chainHome, ".pnpm"),
+        RULE_MCP_SKIP_GLOBAL_LINK: "1",
+      },
+      encoding: "utf8",
+      timeout: 120_000,
+    },
+  );
+
+  assert.equal(chain.status, 0, chain.stderr || chain.stdout);
+
+  const written = readdirSync(join(chainHome, ".claude", "commands"));
+
+  assert.ok(written.includes("rule.md"), "the router command is not optional");
+  assert.ok(written.includes("rule-area-frontend.md"), "minimal keeps the area hubs");
+  assert.ok(!written.includes("rule-area-frontend-react.md"), `minimal writes no command per skill: ${written.length} files`);
+
+  console.log(`  ✅ install.sh --commands-preset minimal wrote ${written.length} command files`);
 } finally {
   rmSync(sandbox, { recursive: true, force: true });
 }

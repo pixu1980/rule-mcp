@@ -1,5 +1,3 @@
-
-
 /**
  * PERF-1 and PERF-2: the invariants every level has to hold, whatever the
  * tables say.
@@ -11,7 +9,7 @@
 import { strict as assert } from "node:assert";
 import { test } from "node:test";
 
-import { compressText } from "../_caveman.js";
+import { compressText } from "../_compression.js";
 import { atLeast, LEVELS } from "../_level.js";
 
 /** One text carrying a construct from every table, plus structure to protect. */
@@ -23,7 +21,7 @@ const FIXTURE = [
   "implementation requires approximately the same configuration.",
   "",
   "- The first item leads to a large number of failures",
-  "- See https://example.com/a and ./src/core/text/_caveman.js",
+  "- See https://example.com/a and ./src/core/text/_compression.js",
   "",
   "```js",
   "const the = 1; // just really actually the code",

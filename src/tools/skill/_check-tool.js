@@ -4,7 +4,7 @@
 
 import { z } from "zod/v4";
 import { registerTool, readSkill, getSkillNames } from "../router/index.js";
-import { checkCodeGuarded } from "../../core/guardrails/index.js";
+import { checkCodeGuarded, checkProjectGuarded } from "../../core/guardrails/index.js";
 
 /**
  * Register the pix_check tool for running guardrail checks on code.
@@ -12,19 +12,52 @@ import { checkCodeGuarded } from "../../core/guardrails/index.js";
 export function registerCheckTool() {
   const CheckSchema = z.object({
     skill: z.string().describe("Target rule skill name"),
-    code: z.string().describe("Code to validate against guardrails"),
+    code: z.string().optional().describe("Code to validate against guardrails (omit with mode=project)"),
     framework: z.string().optional().describe("Framework (react, vue, svelte, angular, solid, astro, vanilla)"),
     fileName: z.string().optional().describe("File name for naming convention checks"),
     isComponent: z.boolean().optional().describe("Whether this is a component file"),
-    mode: z.string().optional().describe("Check mode (e.g. 'scaffold' to validate project config files)"),
+    mode: z.string().optional().describe("Check mode: 'scaffold' for project config files, 'project' for the graph guardrails"),
     allowedDependencies: z.array(z.string()).optional().describe("Manifest-derived package names allowed in imports"),
+    projectDir: z.string().optional().describe("Project root for mode=project (default: cwd)"),
+    diagnostics: z.boolean().optional().describe("Run the optional type-checker check in mode=project"),
   });
   registerTool({
     name: "rule_tool_check",
     description: "Run guardrail checks on code against any rule skill. Returns guardrail results with a re-check hint containing the current passing set. Run until allPass: true.",
     zodSchema: CheckSchema,
     handler: async (arguments_) => {
-      const { skill, code, fileName, isComponent, framework, mode, allowedDependencies } = arguments_;
+      const { skill, code, fileName, isComponent, framework, mode, allowedDependencies, projectDir } = arguments_;
+
+      if (mode === "project") {
+        const project = checkProjectGuarded(projectDir ?? ".", { skill, diagnostics: arguments_.diagnostics === true });
+        const projectLines = ["# Project guardrails", "", project.summary, ""];
+
+        for (const entry of project.failed) {
+          projectLines.push("## ❌ " + entry.id + ": " + entry.label, "", "- Failures: " + entry.failCount);
+
+          for (const detail of entry.detail ?? []) {
+            projectLines.push("- " + detail);
+          }
+
+          projectLines.push("- Fix: " + entry.suggestion, "");
+        }
+
+        if (project.skippedCount > 0) {
+          projectLines.push("### Skipped", "");
+
+          for (const entry of project.skipped) {
+            projectLines.push("- ⏩ " + entry.id + ": " + entry.reason);
+          }
+
+          projectLines.push("");
+        }
+
+        return { isError: !project.allPass, content: [{ type: "text", text: projectLines.join("\n") }], _meta: { pixProjectGuardrails: project } };
+      }
+
+      if (typeof code !== "string") {
+        return { isError: true, content: [{ type: "text", text: "rule_tool_check needs `code`, or `mode=project` to check the project graph." }] };
+      }
 
       if (!readSkill(skill)) {
         return {

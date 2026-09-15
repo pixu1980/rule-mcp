@@ -1,5 +1,3 @@
-
-
 /**
  * @module cli/setup/preflight
  *
@@ -67,7 +65,8 @@ export function preflight() {
       id: "node",
       label: "Node.js",
       status: major(nodeVersion) >= NODE_MIN ? "ok" : "fail",
-      detail: major(nodeVersion) >= NODE_MIN ? nodeVersion : `${nodeVersion} - version ${NODE_MIN} or newer is required`,
+      detail:
+        major(nodeVersion) >= NODE_MIN ? nodeVersion : `${nodeVersion} - version ${NODE_MIN} or newer is required`,
     },
     {
       id: "package-manager",
@@ -75,7 +74,12 @@ export function preflight() {
       status: packageManager ? "ok" : "fail",
       detail: packageManager || "neither pnpm nor npm is on PATH",
     },
-    { id: "git", label: "git", status: gitVersion ? "ok" : "warn", detail: gitVersion || "not found - the commit hook step will be skipped" },
+    {
+      id: "git",
+      label: "git",
+      status: gitVersion ? "ok" : "warn",
+      detail: gitVersion || "not found - the commit hook step will be skipped",
+    },
     { id: "home", label: "Home directory", status: "ok", detail: homedir() },
     {
       id: "binary",
@@ -87,12 +91,26 @@ export function preflight() {
       id: "shim",
       label: "Global shim",
       status: shimOk ? "ok" : shim ? "warn" : "warn",
-      detail: shimOk ? shim : shim ? `${shim} - present but does not launch, it will be rewritten` : "absent - it will be created",
+      detail: shimOk
+        ? shim
+        : shim
+          ? `${shim} - present but does not launch, it will be rewritten`
+          : "absent - it will be created",
     },
   ];
 
   return {
     checks,
-    context: { nodeVersion, packageManager, gitVersion, isLocalRepo, localBin, hasLocalBin, shim, shimOk, blocked: checks.some((check) => check.status === "fail") },
+    context: {
+      nodeVersion,
+      packageManager,
+      gitVersion,
+      isLocalRepo,
+      localBin,
+      hasLocalBin,
+      shim,
+      shimOk,
+      blocked: checks.some((check) => check.status === "fail"),
+    },
   };
 }

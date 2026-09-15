@@ -1,11 +1,7 @@
-
-
 /** @module core/agents/commands/render - one command to one file, per format */
 
 import { listAgentCommands } from "./_definitions.js";
 import { ARGUMENTS_PROSE, FORMAT_EXT, FORMATS, quoted } from "./_formats.js";
-import { compressText } from "../../text/_caveman.js";
-import { cavemanEnabled } from "../../text/_level.js";
 
 /**
  * Render one command to a single agent format's file content.
@@ -46,27 +42,25 @@ export function renderAgentCommand(command, format) {
  * Render the full command set for a format as `{ filename, content }` pairs,
  * in canonical order. Callers own the actual filesystem writes.
  *
- * The rendered file is read by the agent on every session, so its body runs
- * through the caveman pass before it reaches disk (measured ~6% on the shipped
- * bodies; frontmatter and placeholders are code-shaped and pass untouched;
- * the guard guarantees structure - ADR 078). `renderAgentCommand()` stays
- * canonical: this is the write-time emission, gated by the same opt-outs.
- *
  * @param {"args"|"workflow"|"gemini"} format
  * @returns {Array<{ name: string, filename: string, content: string }>}
  */
-export function renderAgentCommandFiles(format) {
+export function renderAgentCommandFiles(format, only) {
   const ext = FORMAT_EXT[format];
 
   if (!ext) {
     throw new Error(`Unknown agent command format: ${format}`);
   }
+  // `only` is the resolved selection: an install writes what the user chose,
+  // and absent means everything, which is what every caller wanted before the
+  // surface grew a command per skill.
+  const wanted = only ? new Set(only) : null;
 
-  const compress = cavemanEnabled();
-
-  return listAgentCommands().map((command) => {
-    const content = renderAgentCommand(command, format);
-
-    return { name: command.name, filename: `${command.name}${ext}`, content: compress ? compressText(content) : content };
-  });
+  return listAgentCommands()
+    .filter((command) => !wanted || wanted.has(command.name))
+    .map((command) => ({
+      name: command.name,
+      filename: `${command.name}${ext}`,
+      content: renderAgentCommand(command, format),
+    }));
 }

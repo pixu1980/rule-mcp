@@ -1,95 +1,107 @@
-
-
 /**
  * @module cli/setup/rules-apply
  *
- * Where the instruction block goes, and the file I/O that puts it there.
+ * The instruction block, as the wizard's tasks and its uninstall scan want it.
  *
- * Install and uninstall read the same target list. The shell pair did not:
+ * The block bytes live in `cli/installers/_instruction.data.js` - the short
+ * routing block and the enforced-workflow rules, each inside its own
+ * sentinels - and `_writers-text.js` writes them. This module is the adapter
+ * that shapes the same targets and bytes as the `{ id, label, file, status }`
+ * rows a task reports and a scan counts.
+ *
+ * Install and uninstall read one target list. The shell pair did not:
  * install.sh wrote `~/.cursorrules` while uninstall.sh cleaned
  * `~/.cursor/.cursorrules`, so Cursor kept the block forever. One list, one
- * `legacy` flag for paths older installs may have written, and the asymmetry
- * cannot come back.
+ * `legacy` flag, and the asymmetry cannot come back.
  */
 
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { homedir } from "node:os";
 import { dirname, join } from "node:path";
 
-import { hasRulesBlock, withRulesBlock, withoutRulesBlock } from "./_rules.js";
+import { appendInstruction, removeInstruction } from "../installers/index.js";
+import { INSTRUCTION_MARKER } from "../installers/_instruction.data.js";
 
 /**
- * Every instruction file this installer may touch.
- *
- * `when` decides whether install offers the target: the block belongs in an
- * agent's instruction file only when that agent is on the machine. Removal
- * ignores `when` and sweeps everything, legacy paths included.
- *
- * @param {{ home?: string, cwd?: string }} [scope]
+ * Where the block goes, and what has to exist for it to be written.
+ * Same probes as the original installer: a file is only touched when the
+ * agent is on this machine.
  */
-export function rulesTargets({ home = homedir(), cwd = process.cwd() } = {}) {
-  return [
-    { id: "claude", label: "Claude Code", file: join(home, ".claude", "CLAUDE.md"), when: [join(home, ".claude"), join(home, ".claude.json")] },
-    { id: "gemini", label: "Gemini CLI", file: join(home, ".gemini", "GEMINI.md"), when: [join(home, ".gemini")] },
-    { id: "codex", label: "Codex CLI", file: join(home, ".codex", "AGENTS.md"), when: [join(home, ".codex")] },
-    { id: "cursor", label: "Cursor", file: join(home, ".cursorrules"), when: [join(home, ".cursor")] },
-    { id: "cursor-legacy", label: "Cursor (legacy path)", file: join(home, ".cursor", ".cursorrules"), when: [], legacy: true },
-    { id: "pi", label: "Pi", file: join(home, ".pi", "agent", "AGENTS.md"), when: [join(home, ".pi", "agent")] },
-    { id: "project", label: "Project CLAUDE.md", file: join(cwd, "CLAUDE.md"), when: "always" },
-  ];
-}
+const RULES_TARGETS = [
+  { agent: "claude", probes: [".claude", ".claude.json"], file: ".claude/CLAUDE.md" },
+  { agent: "gemini", probes: [".gemini", ".gemini/settings.json"], file: ".gemini/GEMINI.md" },
+  { agent: "codex", probes: [".codex"], file: ".codex/AGENTS.md" },
+  { agent: "cursor", probes: [".cursor"], file: ".cursorrules" },
+  { agent: "pi", probes: [".pi/agent"], file: ".pi/agent/AGENTS.md" },
+  // Never written now, always swept: an old install wrote `~/.cursorrules`
+  // while uninstall cleaned `~/.cursor/.cursorrules`.
+  { agent: "cursor-legacy", probes: [], file: ".cursor/.cursorrules", legacy: true },
+];
 
-/** Targets whose agent is present on this machine. */
-export function installableTargets(scope) {
-  return rulesTargets(scope).filter((target) => target.when === "always" || target.when.some((path) => existsSync(path)));
-}
+/** One `{ agent, path, action }` row, as the wizard's `{ id, label, file, status }`. */
+const toRow = (entry) => ({ id: entry.agent, label: entry.agent, file: entry.path, status: entry.action });
+
+/** Targets that apply to this machine, narrowed to a selection when given. */
+const rulesTargets = (home = homedir(), agents) => {
+  const only = agents?.length ? new Set(agents) : null;
+
+  return RULES_TARGETS.filter(
+    (target) => (!only || only.has(target.agent)) && target.probes.some((probe) => existsSync(join(home, probe))),
+  ).map((target) => ({ agent: target.agent, path: join(home, target.file) }));
+};
+
+/** Targets a removal sweeps: every file that carries the block. */
+const removableRuleTargets = (home = homedir()) =>
+  RULES_TARGETS.map((target) => ({ agent: target.agent, path: join(home, target.file) })).filter((target) => {
+    try {
+      return existsSync(target.path) && readFileSync(target.path, "utf8").includes(INSTRUCTION_MARKER);
+    } catch {
+      return false;
+    }
+  });
+
+const applyRulesFiles = ({ home = homedir(), dryRun = false, remove = false, agents } = {}) =>
+  (remove ? removableRuleTargets(home) : rulesTargets(home, agents)).map((target) => {
+    const current = existsSync(target.path) ? readFileSync(target.path, "utf8") : "";
+    const next = remove ? `${removeInstruction(current)}\n` : appendInstruction(current, { refresh: true });
+    const action = remove ? "stripped" : current.includes(INSTRUCTION_MARKER) ? "refreshed" : "appended";
+
+    if (dryRun || (remove && !existsSync(target.path))) {
+      return { ...target, action: dryRun ? `would be ${action}` : "absent" };
+    }
+
+    mkdirSync(dirname(target.path), { recursive: true });
+    writeFileSync(target.path, next);
+
+    return { ...target, action };
+  });
+
+/** Targets whose agent is present on this machine, narrowed to a selection. */
+export const installableTargets = (home, agents) =>
+  rulesTargets(home, agents).map((target) => ({ id: target.agent, label: target.agent, file: target.path }));
 
 /** Targets that currently carry the block, legacy paths included. */
-export function removableTargets(scope) {
-  return rulesTargets(scope).filter((target) => existsSync(target.file) && hasRulesBlock(readFileSync(target.file, "utf8")));
-}
-
-const readIfPresent = (file) => (existsSync(file) ? readFileSync(file, "utf8") : "");
+export const removableTargets = (home) =>
+  removableRuleTargets(home).map((target) => ({ id: target.agent, label: target.agent, file: target.path }));
 
 /**
- * Append the block to every installable target that does not already have it.
+ * Write the block into the instruction files of the selected agents, replacing a
+ * stale one rather than leaving it: the rules change with the server, and a
+ * skip means the text a user installed once is the text they keep.
  *
- * @param {{ scope?: object, dryRun?: boolean }} [options]
- * @returns {Array<{ id: string, label: string, file: string, status: "written"|"present"|"planned" }>}
+ * @param {{ home?: string, dryRun?: boolean, agents?: string[] }} [options]
+ * @returns {Array<{ id: string, label: string, file: string, status: string }>}
  */
-export function applyRules({ scope, dryRun = false } = {}) {
-  return installableTargets(scope).map((target) => {
-    const current = readIfPresent(target.file);
-
-    if (hasRulesBlock(current)) {
-      return { id: target.id, label: target.label, file: target.file, status: "present" };
-    }
-
-    if (dryRun) {
-      return { id: target.id, label: target.label, file: target.file, status: "planned" };
-    }
-
-    mkdirSync(dirname(target.file), { recursive: true });
-    writeFileSync(target.file, withRulesBlock(current));
-
-    return { id: target.id, label: target.label, file: target.file, status: "written" };
-  });
+export function applyRules({ home, dryRun = false, agents } = {}) {
+  return applyRulesFiles({ home, dryRun, agents }).map(toRow);
 }
 
 /**
  * Strip the block from every target that carries it.
  *
- * @param {{ scope?: object, dryRun?: boolean }} [options]
- * @returns {Array<{ id: string, label: string, file: string, status: "removed"|"planned" }>}
+ * @param {{ home?: string, dryRun?: boolean }} [options]
+ * @returns {Array<{ id: string, label: string, file: string, status: string }>}
  */
-export function removeRules({ scope, dryRun = false } = {}) {
-  return removableTargets(scope).map((target) => {
-    if (dryRun) {
-      return { id: target.id, label: target.label, file: target.file, status: "planned" };
-    }
-
-    writeFileSync(target.file, withoutRulesBlock(readFileSync(target.file, "utf8")));
-
-    return { id: target.id, label: target.label, file: target.file, status: "removed" };
-  });
+export function removeRules({ home, dryRun = false } = {}) {
+  return applyRulesFiles({ home, dryRun, remove: true }).map(toRow);
 }

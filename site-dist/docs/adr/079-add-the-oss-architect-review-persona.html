@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>079: Add the OSS Architect review persona - rule-mcp docs</title>
+<link rel="stylesheet" href="../../style.css">
+</head>
+<body>
+<header><nav><ul>
+<li><a href="../../index.html">Home</a></li>
+<li><a href="../../docs/01-getting-started.html">undefined</a></li>
+<li><a href="../../docs/02-product-architecture.html">undefined</a></li>
+<li><a href="../../docs/03-agent-instructions.html">undefined</a></li>
+<li><a href="../../docs/04-operations.html">undefined</a></li>
+<li><a href="../../docs/05-env-variables.html">undefined</a></li>
+<li><a href="../../docs/06-privacy.html">undefined</a></li>
+<li><a href="../../docs/07-engineering-guides.html">undefined</a></li>
+<li><a href="../../docs/08-skills.html">undefined</a></li>
+<li><a href="../../docs/09-tools.html">undefined</a></li>
+<li><a href="../../docs/10-prompts.html">undefined</a></li>
+<li><a href="../../docs/11-instructions.html">undefined</a></li>
+<li><a href="../../docs/12-cli.html">undefined</a></li>
+<li><a href="../../docs/13-personas.html">undefined</a></li>
+<li><a href="../../docs/14-guardrails.html">undefined</a></li>
+<li><a href="../../docs/15-resources.html">undefined</a></li>
+<li><a href="../../docs/adr/ADR.html">ADRs</a></li>
+</ul></nav></header>
+<main>
+<h1>079: Add the OSS Architect review persona</h1>
+<ul>
+<li><strong>Date</strong>: 2026-09-10</li>
+<li><strong>Status</strong>: accepted</li>
+<li><strong>Tags</strong>: persona, oss, open-source, governance, licensing, community</li>
+<li><strong>Author</strong>: Emiliano Pisu <a href="mailto:pisuemiliano.1980@gmail.com">pisuemiliano.1980@gmail.com</a></li>
+</ul>
+<h2>Context</h2>
+<p>The persona catalog is filesystem-driven (src/roles/*.md): adding a persona is adding one file with frontmatter and a lenses list in the body; the server loads it at startup and generates the plan/audit/review prompts, the slash commands, and the census rows. An interview with the developer defined the persona: id oss, title OSS Architect, 25 years of experience, layer process, status active, standalone; lenses covering licensing (SPDX conformance, stack compatibility, dual licensing, headers), governance (decision model, documented process, maintainer roles, independence), contributing (guides and triage, CI gates, CLA/DCO, review process), funding (platforms, transparency, sustainability, alternatives), plus security disclosure, release process, community health, and contributor onboarding; deliverables mix checklists, gap analysis, prioritized roadmap, and a maturity score.</p>
+<h2>Decision</h2>
+<p>Add the OSS Architect persona (id: oss) as src/roles/oss.md, status active, layer process, 25 years, 12 lenses focused on the project itself (own license, governance, contributing, funding, disclosure, release, community health). Standard schema: no code change; registry tests and census updated to the new counts (76 prompts, 57 persona prompts, 77 commands).</p>
+<h2>Consequences</h2>
+<p>Positive: the persona is drop-in (one file in src/roles/, no code change): it generates three persona prompts (rule-plan-oss, rule-audit-oss, rule-review-oss) and three slash commands; docs/13-personas.md and the census blocks are regenerated; README now advertises 76 prompts. The licensing lens stays on the project&#39;s own license axis (SPDX, dual license, open core) without overlapping supply-chain&#39;s dependency axis. Negative: the counts change (73 to 76 prompts, 74 to 77 commands) and the two hardcoded arrays in the registry tests were updated; the persona carries 12 lenses (tied with devops, the current maximum), so the axis should be re-checked if the content grows.</p>
+<h2>What would end this</h2>
+<p>The assumption this leans on, and the observation that would make it wrong.</p>
+<h2>Alternatives Considered</h2>
+<ol>
+<li>Extend supply-chain (dependency licensing): rejected. The supply-chain axis is the dependency chain; the OSS persona looks at the project itself (its own license, governance, community, funding)</li>
+<li>Extend devx (contributing/onboarding): rejected. Contributing is one lens, not the axis; the OSS Architect is a project and ecosystem perspective</li>
+<li>Add the persona as proposed (no prompts generated): rejected. The interview asked for active, with the three plan/audit/review operations</li>
+</ol>
+
+</main>
+<footer><p>Generated from <code>docs/</code> - edit the Markdown, not this file.</p></footer>
+</body>
+</html>

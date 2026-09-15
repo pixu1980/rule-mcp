@@ -1,10 +1,8 @@
-
-
 /**
  * @module core/text/sensitive
  *
  * The refusal list a compression request has to clear, and the LLM-wrapper
- * strip that comes with it. Ported from the caveman-compress companion skill's
+ * strip that comes with it. Ported from the compression-reference companion skill's
  * `compress.py` (`SENSITIVE_BASENAME_REGEX`, `SENSITIVE_PATH_COMPONENTS`,
  * `SENSITIVE_NAME_TOKENS`, `strip_llm_wrapper`).
  *

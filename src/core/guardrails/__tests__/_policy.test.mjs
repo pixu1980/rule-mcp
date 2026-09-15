@@ -5,6 +5,7 @@ import { readFileSync } from "node:fs";
 import { execFileSync } from "node:child_process";
 
 import { COREPACK, EXACT, check, checkCode, fails, finish, run } from "./_manifest.fixture.mjs";
+import "./_install.fixture.mjs";
 
 console.log("=== package.json guardrails: corepack, gating, repo ===\n");
 

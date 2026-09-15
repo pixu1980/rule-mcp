@@ -1,6 +1,4 @@
 #!/usr/bin/env node
-
-
 /**
  * Glob-based test runner: `node scripts/ci/run-tests/index.mjs <suite>`.
  *
@@ -11,8 +9,13 @@
  */
 import { spawnSync } from "node:child_process";
 import { globSync } from "node:fs";
+import { fileURLToPath } from "node:url";
 
 import { SUITES } from "./_suites.data.mjs";
+
+// Server code resolves `@src/*` through a hook (ADR 079). Every process this
+// runner spawns loads server code, so every one of them registers it.
+const ALIAS_HOOK = ["--import", fileURLToPath(new URL("../../alias-hook.mjs", import.meta.url))];
 
 // The compiled code cache never changes behavior, but a suite that reads a
 // cache another suite wrote is a suite whose result depends on run order.
@@ -59,7 +62,7 @@ function run(command, args) {
 
 for (const step of new Set(steps)) {
   console.log(`\n== ${step} ==`);
-  run(process.execPath, [step]);
+  run(process.execPath, [...ALIAS_HOOK, step]);
 }
 
 const files = [...new Set(globs.flatMap((pattern) => globSync(pattern)))].sort();
@@ -71,7 +74,7 @@ if (globs.length > 0 && files.length === 0) {
 
 if (files.length > 0) {
   console.log(`\n== node --test (${files.length} files) ==`);
-  run(process.execPath, ["--test", ...files]);
+  run(process.execPath, [...ALIAS_HOOK, "--test", ...files]);
 }
 
 for (const [command, ...args] of shell) {

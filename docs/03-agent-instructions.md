@@ -10,7 +10,7 @@ Three rules ride on every prompt, injected by the harness hooks the installer wr
 1. Call `rule` (or `rule_tool_gateway`) **before any implementation**.
 2. **NEVER spawn subagents for research or implementation - they burn tokens.** Use rule tools
    (deterministic, LLM-free) and tokensave (code graph) instead.
-3. Keep the output caveman-compressed: substance verbatim, filler gone.
+3. Keep the output compression-referenceed: substance verbatim, filler gone.
 
 > Every token saved is a token earned.
 

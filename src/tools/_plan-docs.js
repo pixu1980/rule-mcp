@@ -31,7 +31,8 @@ const FindingSchema = z.object({
 
 const PlanDocsSchema = z.object({
   role: z.string().describe("Role id"),
-  findings: z.array(FindingSchema).optional().describe("What this run found. Anything omitted counts as closed."),
+  findings: z.array(FindingSchema).optional().describe("What this run found. Anything omitted counts as closed - unless a scope is set."),
+  scope: z.string().optional().describe("The binding scope of a scoped run: findings outside it stay untouched instead of resolving."),
   projectDir: z.string().optional(),
 });
 
@@ -62,11 +63,13 @@ export function registerPlanDocsTool() {
         findings: arguments_.findings ?? [],
         projectDir: arguments_.projectDir ?? ".",
         version: role.version ?? 1,
+        scope: arguments_.scope,
       });
 
       const lines = [
         `# Trio for ${role.id}`,
         "",
+        ...(arguments_.scope ? [`- scope: ${arguments_.scope} (findings outside it left untouched)`] : []),
         `- open: ${result.counts.open}`,
         `- resolved this run: ${result.counts.resolved}`,
         `- pruned: ${result.counts.pruned}`,

@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>052: Pre-packaged MCP prompt registry (26 prompts, strict schemas, commit-scope closer) - rule-mcp docs</title>
+<link rel="stylesheet" href="../../style.css">
+</head>
+<body>
+<header><nav><ul>
+<li><a href="../../index.html">Home</a></li>
+<li><a href="../../docs/01-getting-started.html">undefined</a></li>
+<li><a href="../../docs/02-product-architecture.html">undefined</a></li>
+<li><a href="../../docs/03-agent-instructions.html">undefined</a></li>
+<li><a href="../../docs/04-operations.html">undefined</a></li>
+<li><a href="../../docs/05-env-variables.html">undefined</a></li>
+<li><a href="../../docs/06-privacy.html">undefined</a></li>
+<li><a href="../../docs/07-engineering-guides.html">undefined</a></li>
+<li><a href="../../docs/08-skills.html">undefined</a></li>
+<li><a href="../../docs/09-tools.html">undefined</a></li>
+<li><a href="../../docs/10-prompts.html">undefined</a></li>
+<li><a href="../../docs/11-instructions.html">undefined</a></li>
+<li><a href="../../docs/12-cli.html">undefined</a></li>
+<li><a href="../../docs/13-personas.html">undefined</a></li>
+<li><a href="../../docs/14-guardrails.html">undefined</a></li>
+<li><a href="../../docs/15-resources.html">undefined</a></li>
+<li><a href="../../docs/adr/ADR.html">ADRs</a></li>
+</ul></nav></header>
+<main>
+<h1>052: Pre-packaged MCP prompt registry (26 prompts, strict schemas, commit-scope closer)</h1>
+<ul>
+<li><strong>Date</strong>: 2026-09-04</li>
+<li><strong>Status</strong>: accepted</li>
+<li><strong>Tags</strong>: prompts, registry, tdd, a11y</li>
+<li><strong>Author</strong>: Emiliano Pisu <a href="mailto:pisuemiliano.1980@gmail.com">pisuemiliano.1980@gmail.com</a></li>
+</ul>
+<h2>Context</h2>
+<p>The prepackaged-mcp-prompts execution plan (2025-08-01 interview) set the prompt registry growth from 5 to 26 prompts: 5 one-shot workflows + 16 area prompts + 5 existing updated, all prompts renamed during the rule_tool_* tool rename so prompt names could never collide with tool names. All 10 checklist items are done; the plan file is now redundant.</p>
+<h2>Decision</h2>
+<p>Adopt the 26-prompt pre-packaged registry in src/prompts/index.js with strict argument schemas, tool-invoked styleguides, TDD/a11y baseline, and a mandatory commit-scope closer; keep prompt names distinct from the rule_tool_* namespace.</p>
+<h2>Consequences</h2>
+<p>Positive: one prompt per area with strict zod-validated arguments, styleguides invoked via tools, TDD/a11y baseline or explicit opt-out, every one-shot ends by proposing a commit message with mandatory scope. Negative: prompt surface must be re-verified whenever tools are renamed or added (docs-accuracy enforces the live counts).</p>
+<h2>Alternatives Considered</h2>
+<ol>
+<li>Ship a handful of manually curated prompts maintained in prose</li>
+<li>Auto-generate every prompt from tool schemas</li>
+</ol>
+
+</main>
+<footer><p>Generated from <code>docs/</code> - edit the Markdown, not this file.</p></footer>
+</body>
+</html>

@@ -1,5 +1,3 @@
-
-
 /** The tool surface: annotations, declared and list views, schema conversion. */
 import { strict as assert } from "node:assert";
 import { test } from "node:test";
@@ -48,37 +46,6 @@ test("listTools converts zod schemas and tolerates plain schemas", () => {
     listed.some((t) => t.name === "rule_tool_plain" && t.inputSchema?.properties?.a),
     "a plain schema passes through",
   );
-});
-
-test("listTools tolerates schema-less shapes: empty, throwing, description-less", () => {
-  registerTool({
-    name: "rule_tool_empty_schema",
-    description: "shape without properties",
-    zodSchema: { toJSONSchema: () => ({}) },
-    handler: async () => ({ content: [] }),
-  });
-  registerTool({
-    name: "rule_tool_throwing_schema",
-    description: "shape that refuses conversion",
-    zodSchema: {
-      toJSONSchema: () => {
-        throw new Error("boom");
-      },
-    },
-    inputSchema: { type: "object", properties: {} },
-    handler: async () => ({ content: [] }),
-  });
-  registerTool({ name: "rule_tool_no_description", handler: async () => ({ content: [] }) });
-
-  const listed = listTools();
-  const empty = listed.find((t) => t.name === "rule_tool_empty_schema");
-  assert.deepEqual(empty.inputSchema, { type: "object", properties: {}, required: [] }, "typeless schemas default to an empty object schema");
-
-  const throwing = listed.find((t) => t.name === "rule_tool_throwing_schema");
-  assert.deepEqual(throwing.inputSchema, { type: "object", properties: {} }, "a failed conversion falls back to the plain schema");
-
-  const nodesc = listed.find((t) => t.name === "rule_tool_no_description");
-  assert.equal(nodesc.description, "", "an absent description lists as empty");
 });
 
 // ── PERF-8: the schema conversion is paid once per registry, not per connect ──

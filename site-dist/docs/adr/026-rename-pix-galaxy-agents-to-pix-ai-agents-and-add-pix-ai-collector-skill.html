@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>026: Rename rule-mcp-agents to rule-ai-agents and add rule-ai collector skill - rule-mcp docs</title>
+<link rel="stylesheet" href="../../style.css">
+</head>
+<body>
+<header><nav><ul>
+<li><a href="../../index.html">Home</a></li>
+<li><a href="../../docs/01-getting-started.html">undefined</a></li>
+<li><a href="../../docs/02-product-architecture.html">undefined</a></li>
+<li><a href="../../docs/03-agent-instructions.html">undefined</a></li>
+<li><a href="../../docs/04-operations.html">undefined</a></li>
+<li><a href="../../docs/05-env-variables.html">undefined</a></li>
+<li><a href="../../docs/06-privacy.html">undefined</a></li>
+<li><a href="../../docs/07-engineering-guides.html">undefined</a></li>
+<li><a href="../../docs/08-skills.html">undefined</a></li>
+<li><a href="../../docs/09-tools.html">undefined</a></li>
+<li><a href="../../docs/10-prompts.html">undefined</a></li>
+<li><a href="../../docs/11-instructions.html">undefined</a></li>
+<li><a href="../../docs/12-cli.html">undefined</a></li>
+<li><a href="../../docs/13-personas.html">undefined</a></li>
+<li><a href="../../docs/14-guardrails.html">undefined</a></li>
+<li><a href="../../docs/15-resources.html">undefined</a></li>
+<li><a href="../../docs/adr/ADR.html">ADRs</a></li>
+</ul></nav></header>
+<main>
+<h1>026: Rename rule-mcp-agents to rule-ai-agents and add rule-ai collector skill</h1>
+<ul>
+<li><strong>Date</strong>: 2026-08-01</li>
+<li><strong>Status</strong>: accepted</li>
+<li><strong>Tags</strong>: taxonomy, skills, routing, ai</li>
+<li><strong>Author</strong>: rule-mcp-architect</li>
+</ul>
+<h2>Context</h2>
+<p>The skill <code>rule-mcp-agents</code> was the only AI-domain skill and its name leaked the <code>rule-mcp-core</code> dependency into the taxonomy, while the ecosystem naming convention groups domain skills under a collector (e.g. <code>rule-frontend</code> → <code>rule-frontend-*</code>, <code>rule-data</code> → <code>rule-data-*</code>). AI/agent work had no collector and no domain classification in the routing scorer.</p>
+<h2>Decision</h2>
+<p>Rename <code>rule-mcp-agents</code> to <code>rule-ai-agents</code> (tool becomes <code>rule_tool_ai_agents</code>) and add a new <code>rule-ai</code> collector skill that indexes AI/agent skills - <code>rule-ai-agents</code> (@rule/rule-mcp-core based) and <code>rule-platform-agent</code> (framework-agnostic) - mirroring the <code>rule-frontend</code> / <code>rule-frontend-*</code> pattern. Router gains AI domain classification and treats <code>rule-ai</code> as a collector in framework bias; detector maps <code>@rule/rule-mcp-core</code> to the <code>agents</code> framework → <code>rule-ai-agents</code>.</p>
+<h2>Consequences</h2>
+<p>Positive: AI/agent prompts now route to the <code>rule-ai</code> collector with <code>rule-ai-agents</code> as the concrete skill; naming is dependency-agnostic and consistent with other domain collectors; project auto-detection suggests the right skill for rule-mcp-core repos. Negative: <code>pix_galaxy_agents</code> tool name is a breaking rename for any consumer referencing the old tool; the old skill name no longer resolves.</p>
+<h2>Alternatives Considered</h2>
+<ol>
+<li>Keep <code>rule-mcp-agents</code> name and add collector only (rejected: leaks core-library coupling into taxonomy)</li>
+<li>Create <code>rule-ai</code> as an alias that just forwards to rule-ai-agents without indexing rule-platform-agent (rejected: less useful than a real index)</li>
+<li>Add AI domain classification only, no collector (rejected: no routing target for broad agent work)</li>
+</ol>
+
+</main>
+<footer><p>Generated from <code>docs/</code> - edit the Markdown, not this file.</p></footer>
+</body>
+</html>

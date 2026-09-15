@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>085: Reset the project version to 0.1.0, first release will be v0.1.0 - rule-mcp docs</title>
+<link rel="stylesheet" href="../../style.css">
+</head>
+<body>
+<header><nav><ul>
+<li><a href="../../index.html">Home</a></li>
+<li><a href="../../docs/01-getting-started.html">undefined</a></li>
+<li><a href="../../docs/02-product-architecture.html">undefined</a></li>
+<li><a href="../../docs/03-agent-instructions.html">undefined</a></li>
+<li><a href="../../docs/04-operations.html">undefined</a></li>
+<li><a href="../../docs/05-env-variables.html">undefined</a></li>
+<li><a href="../../docs/06-privacy.html">undefined</a></li>
+<li><a href="../../docs/07-engineering-guides.html">undefined</a></li>
+<li><a href="../../docs/08-skills.html">undefined</a></li>
+<li><a href="../../docs/09-tools.html">undefined</a></li>
+<li><a href="../../docs/10-prompts.html">undefined</a></li>
+<li><a href="../../docs/11-instructions.html">undefined</a></li>
+<li><a href="../../docs/12-cli.html">undefined</a></li>
+<li><a href="../../docs/13-personas.html">undefined</a></li>
+<li><a href="../../docs/14-guardrails.html">undefined</a></li>
+<li><a href="../../docs/15-resources.html">undefined</a></li>
+<li><a href="../../docs/adr/ADR.html">ADRs</a></li>
+</ul></nav></header>
+<main>
+<h1>085: Reset the project version to 0.1.0, first release will be v0.1.0</h1>
+<ul>
+<li><strong>Date</strong>: 2026-09-10</li>
+<li><strong>Status</strong>: accepted</li>
+<li><strong>Tags</strong>: release, versioning</li>
+<li><strong>Author</strong>: Emiliano Pisu <a href="mailto:pisuemiliano.1980@gmail.com">pisuemiliano.1980@gmail.com</a></li>
+</ul>
+<h2>Context</h2>
+<p>The tree says 1.0.0 everywhere and carries tag v1.0.0, but no shippable artifact ever shipped under it (OSS-11) and the project is pre-1.0 in maturity. The owner decided the published version will be v0.1.0: reset the repo now and wait for the first real 0.1.0 release out of the Step 6 pipeline.</p>
+<h2>Decision</h2>
+<p>Reset the project version to 0.1.0 in package.json, server.json (both version fields), the CHANGELOG release heading and the scoop/winget manifests with recomputed hashes. Delete tag v1.0.0 locally and on the remote. The first publish - npm or registry - will be v0.1.0.</p>
+<h2>Consequences</h2>
+<p>package.json, server.json, CHANGELOG and the distribution manifests go back to 0.1.0 with recomputed hashes; tag v1.0.0 is deleted locally and remotely; the Step 26 placeholder question is settled (publish v0.1.0, no placeholder); the dangling GitHub Release v1.0.0 page needs owner deletion in the UI.</p>
+<h2>What would end this</h2>
+<p>The assumption this leans on, and the observation that would make it wrong.</p>
+<h2>Alternatives Considered</h2>
+<ol>
+<li>Keep 1.0.0 and publish v1.0.1 and later (rejected: 1.0.0 implies a stability the project has not earned, and no artifact ever shipped under it)</li>
+<li>Publish a 0.0.0 placeholder now (rejected: owner decision is v0.1.0 for the first publish)</li>
+</ol>
+
+</main>
+<footer><p>Generated from <code>docs/</code> - edit the Markdown, not this file.</p></footer>
+</body>
+</html>

@@ -15,6 +15,7 @@ tags:
   - "backup"
   - "offline"
 frameworks: [all]
+inherits: [rule-data]
 ---
 
 # rule-data-sqlite - SQLite 3.x Best Practices & Scripts

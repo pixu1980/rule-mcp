@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>02 - OSS audit, review and remediation plan - rule-mcp docs</title>
+<link rel="stylesheet" href="../../style.css">
+</head>
+<body>
+<header><nav><ul>
+<li><a href="../../index.html">Home</a></li>
+<li><a href="../../docs/01-getting-started.html">undefined</a></li>
+<li><a href="../../docs/02-product-architecture.html">undefined</a></li>
+<li><a href="../../docs/03-agent-instructions.html">undefined</a></li>
+<li><a href="../../docs/04-operations.html">undefined</a></li>
+<li><a href="../../docs/05-env-variables.html">undefined</a></li>
+<li><a href="../../docs/06-privacy.html">undefined</a></li>
+<li><a href="../../docs/07-engineering-guides.html">undefined</a></li>
+<li><a href="../../docs/08-skills.html">undefined</a></li>
+<li><a href="../../docs/09-tools.html">undefined</a></li>
+<li><a href="../../docs/10-prompts.html">undefined</a></li>
+<li><a href="../../docs/11-instructions.html">undefined</a></li>
+<li><a href="../../docs/12-cli.html">undefined</a></li>
+<li><a href="../../docs/13-personas.html">undefined</a></li>
+<li><a href="../../docs/14-guardrails.html">undefined</a></li>
+<li><a href="../../docs/15-resources.html">undefined</a></li>
+<li><a href="../../docs/adr/ADR.html">ADRs</a></li>
+</ul></nav></header>
+<main>
+<h1>02 - OSS audit, review and remediation plan</h1>
+<ul>
+<li><strong>Date</strong>: 2026-09-10</li>
+<li><strong>Branch</strong>: <code>perf/meta-surface</code></li>
+<li><strong>Commit range</strong>: <code>58652b7e..860cbbb6</code> (2 commits, none pushed)</li>
+<li><strong>Documents</strong>: <code>docs/audits/oss.md</code>, <code>docs/reviews/oss.md</code>, <code>docs/plans/oss.md</code></li>
+</ul>
+<h2>What was produced</h2>
+<p>Ran the <code>oss</code> persona (ADR 079, added one commit earlier in <code>58652b7e</code>) end to
+end: audit, review, plan. There was no prior <code>docs/reviews/oss.md</code> to derive
+from - it was deleted in <code>7a73f6a0</code> - so the audit was conducted fresh against
+the tree rather than against an older finding list.</p>
+<table>
+<thead>
+<tr>
+<th>Document</th>
+<th>Shape</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>docs/audits/oss.md</code></td>
+<td>Evidence only: 29 rows of command and result, plus files read and sources consulted</td>
+</tr>
+<tr>
+<td><code>docs/reviews/oss.md</code></td>
+<td>31 findings, worst first: 4 critical, 12 high, 12 medium, 2 low, 1 info</td>
+</tr>
+<tr>
+<td><code>docs/plans/oss.md</code></td>
+<td>6 phases, 31 steps, 158 numbered sub-steps, plus decisions, owner actions and preserved controls</td>
+</tr>
+</tbody></table>
+<p>The bookkeeping - headers, tables, statuses, checklist marks - came from
+<code>rule_tool_plan_docs</code>. Evidence, finding wording and step detail were written by
+hand on top of it.</p>
+<h2>The four critical findings</h2>
+<ol>
+<li><strong>OSS-1</strong> - three packaging manifests name three different GitHub owners.
+scoop says <code>github.com/rule</code>, winget says owner <code>rule</code> with <code>github.com/rule</code>,
+Homebrew says <code>github.com/rule-mcp</code>. All three pin <code>0.1.0</code>, two carry a
+literal <code>PLACEHOLDER</code> hash, and all three point at a <code>v0.1.0</code> tag that does
+not exist. The owner is <code>pixu1980</code>.</li>
+<li><strong>OSS-2</strong> - <code>SECURITY.md</code> routes vulnerability reports to a public issue. No
+private channel, no contact, no SLA, no embargo window, no CVE step.</li>
+<li><strong>OSS-3</strong> - <code>server.json</code> claims the <code>io.github.rule</code> namespace while the
+GitHub owner is <code>pixu1980</code>. The registry validates namespace ownership
+against the publishing account, so the file is unpublishable as written.</li>
+<li><strong>OSS-4</strong> - README, its npm badge and <code>docs/01-getting-started.md</code> sell
+<code>pnpm add -g rule-mcp</code> as the recommended install. <code>npm view</code> returns
+E404.</li>
+</ol>
+<p>Two of these were reproduced rather than inferred: <code>npm view rule-mcp</code>
+returns E404, and installing the packed tarball fails with
+<code>EUNSUPPORTEDPROTOCOL</code> because <code>&quot;rule-mcp&quot;: &quot;link:&quot;</code> sits in
+<code>dependencies</code> (OSS-5). That protocol error is also why the documented install
+cannot work even against a registry.</p>
+<h2>Interview decisions the plan is built on</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Decision</th>
+<th>Consequence</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>D1</td>
+<td>License stays <code>MIT</code></td>
+<td>Step 17 adds SPDX headers; no relicensing, no contributor re-consent</td>
+</tr>
+<tr>
+<td>D2</td>
+<td>Copyright holder is <code>pixu1980</code></td>
+<td>Step 18 rewrites one <code>LICENSE</code> line and adds <code>AUTHORS</code></td>
+</tr>
+<tr>
+<td>D3</td>
+<td>DCO inbound, no CLA</td>
+<td>Step 5 adds a <code>Signed-off-by</code> check to hook and CI</td>
+</tr>
+<tr>
+<td>D4</td>
+<td>Distribution stays git-clone plus installer; npm publication out of scope</td>
+<td>Step 4 removes every npm claim, but keeps the global <code>rule-mcp</code> command documented from the local checkout</td>
+</tr>
+<tr>
+<td>D5</td>
+<td>Documentation site built from scratch, deployed with GitHub Actions</td>
+<td>Step 27 adds the site; its URL replaces the placeholder host in step 11</td>
+</tr>
+<tr>
+<td>D6</td>
+<td>Explicit BDFL with a documented path to co-maintainers</td>
+<td>Step 16 writes the model down and adds <code>CODEOWNERS</code></td>
+</tr>
+<tr>
+<td>D7</td>
+<td>Contributor Covenant 3.0</td>
+<td>Step 14 adopts the text verbatim</td>
+</tr>
+<tr>
+<td>D8</td>
+<td>Funding is GitHub Sponsors</td>
+<td>Step 25 adds <code>FUNDING.yml</code> and the policy text</td>
+</tr>
+<tr>
+<td>D9</td>
+<td>MCP registry identity is the GitHub owner, not a claimed brand</td>
+<td>Step 3 rewrites <code>server.json</code> to <code>io.github.pixu1980/rule-mcp</code></td>
+</tr>
+</tbody></table>
+<h2>Bugs the work surfaced</h2>
+<p><strong>OSS-31</strong>, found while validating this session&#39;s own output.
+<code>rule_tool_plan_docs</code> writes Markdown that the repository&#39;s own Prettier gate
+rejects. Immediately after the generator wrote the trio:</p>
+<pre><code>pnpm exec prettier --check docs/audits/oss.md docs/reviews/oss.md docs/plans/oss.md
+[warn] Code style issues found in 3 files. Run Prettier with --write to fix.
+</code></pre>
+<p>The same command reports <code>All matched files use Prettier code style!</code> for the
+repository&#39;s other generated Markdown (<code>docs/adr/ADR.md</code>, <code>docs/README.md</code>,
+<code>README.md</code>), so the gate is sound and the generator output is what fails it.
+<code>src/core/review/docs/_table.js</code> writes rows as <code>| a | b |</code> with no column
+padding, while <code>package.json</code> <code>format</code> runs
+<code>prettier --check &#39;**/*.{js,mjs,json,md}&#39;</code>. <code>tests/docs/review-docs/</code> holds
+<code>gate</code>, <code>plan-checklist</code> and <code>sync</code> tests but none asserts the rendered output
+is Prettier-clean. Every persona run therefore leaves the <code>lint</code> job red until
+someone runs <code>pnpm format:fix</code>, and the next generator run undoes it. This
+session ended by running <code>format:fix</code>, which is the workaround, not the fix.</p>
+<h2>Verification</h2>
+<p>All four held at the end of the session:</p>
+<ul>
+<li><code>rule-styleguide-english</code> on the three documents: <code>allPass: true</code> (59/59 each)</li>
+<li><code>rule-styleguide-markdown</code> on the three documents: <code>allPass: true</code> (59/59 each)</li>
+<li><code>pnpm exec prettier --check</code> on the three documents: clean</li>
+<li><code>node --test tests/docs/*.test.mjs</code>: 20/20 pass</li>
+</ul>
+<p>Both guardrail runs went through <code>checkCodeGuarded</code> directly, the same engine
+<code>rule_tool_check</code> uses, rather than through the tool surface.</p>
+<h2>Open items for the next session</h2>
+<ul>
+<li>Nothing is fixed yet. The plan is written; no step has been executed. Step 1
+is the only one with no blocker.</li>
+<li>Phase 0 is entirely owner actions in the GitHub UI and cannot be closed by a
+code change. Nine of them are listed together in the plan&#39;s &quot;Owner actions in
+one list&quot; section; five of those block later steps.</li>
+<li>OSS-1, OSS-3 and OSS-4 all trace back to the same root cause - documentation
+and manifests written before the distribution model was settled. Fixing them
+in step order matters: step 3 rewrites <code>server.json</code>, and step 4 is what
+makes the install instructions true.</li>
+<li>The <code>link:</code> self-dependency (OSS-5) is a one-line fix in <code>package.json</code> but
+is sequenced at step 12 because the tarball it breaks is what step 6
+introduces.</li>
+<li><code>docs/plans/execution-plan.md</code> was removed in this session&#39;s second commit.
+It was a fully executed plan (&quot;All five phases executed. Plan complete.&quot;)
+and the repo convention in <code>docs/07-engineering-guides.md</code> is that executed
+plans are deleted. Note that the deletion appeared in the working tree
+between turns and was not made by this session&#39;s code: <code>syncRoleDocs</code> only
+ever deletes <code>docs/plans/&lt;role&gt;.md</code>.</li>
+</ul>
+<h2>Contract reminders</h2>
+<ul>
+<li>Conventional Commits with a mandatory scope, always: <code>type(scope): subject</code>.
+The <code>commit-msg</code> hook rejects a scope-less subject. This session used
+<code>docs(oss)</code> and <code>docs(plans)</code>.</li>
+<li>Two commits are sitting local and unpushed. Nothing was pushed.</li>
+<li><code>docs/plans/oss.md</code> is the plan of record; re-deriving it by hand is what
+<code>rule_tool_plan_docs</code> exists to avoid. If the trio is regenerated, the
+hand-written evidence, roadmap and decision tables are lost and must be
+re-applied.</li>
+</ul>
+<h2>Commands that verify the state</h2>
+<pre><code class="language-bash">git log --oneline 58652b7e..860cbbb6          # the two commits this handoff covers
+pnpm exec prettier --check docs/audits/oss.md docs/reviews/oss.md docs/plans/oss.md
+node --test tests/docs/*.test.mjs             # 20/20
+grep -cE &#39;^\| OSS-&#39; docs/reviews/oss.md       # 31 findings
+grep -cE &#39;^- \[ \] \*\*Step &#39; docs/plans/oss.md   # 31 steps
+</code></pre>
+
+</main>
+<footer><p>Generated from <code>docs/</code> - edit the Markdown, not this file.</p></footer>
+</body>
+</html>

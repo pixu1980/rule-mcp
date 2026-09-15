@@ -1,5 +1,3 @@
-
-
 /** Closeout: completed audits/reviews/plans fold into ADRs and leave the tree. */
 import { strict as assert } from "node:assert";
 import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
@@ -7,8 +5,8 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { test } from "node:test";
 
-import { archiveCompletedDocs, findCompletedDocs } from "../_closeout.js";
 import { buildHandoff } from "../_build.js";
+import { archiveCompletedDocs, findCompletedDocs } from "../_closeout.js";
 
 const PLAN_DONE = "# done plan\n\n- [x] **Step 1**: first.\n- [x] **1.1**: sub.\n";
 const PLAN_OPEN = "# open plan\n\n- [x] **Step 1**: first.\n- [ ] **Step 2**: second.\n";
@@ -38,7 +36,7 @@ function seed() {
 test("only fully completed docs are found, open and orphaned ones are not", () => {
   const dir = seed();
   const found = findCompletedDocs(dir)
-    .map((d) => d.path)
+    .map((entry) => entry.path)
     .sort();
 
   assert.deepEqual(found, ["docs/audits/done.md", "docs/plans/done.md", "docs/reviews/done.md"]);
@@ -54,10 +52,12 @@ test("archive writes one ADR per doc, refreshes the index, deletes sources", () 
   assert.equal(archived[0].adrNumber, 1, "numbering starts at one");
 
   const body = readFileSync(join(dir, "docs/adr", archived[0].adrFile), "utf8");
+
   assert.match(body, /^# 001: Close out /m, "the Nygard title records the closeout");
   assert.match(body, /^## Decision$/m, "the template sections render");
 
   const index = readFileSync(join(dir, "docs/adr/ADR.md"), "utf8");
+
   assert.match(index, /Close out/, "the index names the new ADR");
 
   for (const doc of archived) {
@@ -70,6 +70,7 @@ test("archive writes one ADR per doc, refreshes the index, deletes sources", () 
 
 test("a non-English doc is skipped and kept on disk", () => {
   const dir = seed();
+
   writeFileSync(join(dir, "docs/plans/piano.md"), "# piano di lavoro senza eccezioni\n\n- [x] **Passo 1**: fatto tutto.\n");
 
   const { archived, skipped } = archiveCompletedDocs(dir, { author: AUTHOR });
@@ -93,6 +94,7 @@ test("close-session archives and names the ADR, plain handoff stays read-only", 
   rmSync(closing, { recursive: true, force: true });
 
   const reading = seed();
+
   buildHandoff({ projectDir: reading, mode: "handoff", maxTokens: 0, format: "full" });
 
   assert.equal(existsSync(join(reading, "docs/plans/done.md")), true, "a plain handoff deletes nothing");

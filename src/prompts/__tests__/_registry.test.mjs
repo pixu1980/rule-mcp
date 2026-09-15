@@ -1,5 +1,3 @@
-
-
 /** The prompt registry: names, order, coverage, strict schemas. */
 import { strict as assert } from "node:assert";
 import { test } from "node:test";
@@ -23,7 +21,7 @@ test("registry covers workflow, area, one-shot, and persona prompts", () => {
   }
   // 13 expected (handoff + 12 areas) + 6 one-shot workflow prompts
   // (adr/flight/handon/init/process-check/update) + 57 review-persona prompts
-  // (rule-plan-<role> + rule-audit-<role> + rule-review-<role> for 19 active roles) = 76.
+  // (rule-plan-<role> + rule-audit-<role> + rule-review-<role> for 19 active roles) = 154.
   assert.equal(names.length, EXPECTED.length + 63, "no unexpected prompts");
 });
 

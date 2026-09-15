@@ -3,7 +3,12 @@
 /** The workflow reminder and routing carry the simplicity contract. */
 import { readFileSync, readdirSync, statSync } from "node:fs";
 import { join } from "node:path";
-import { SIMPLICITY_GUARDRAILS } from "../../guardrails/index.js";
+import { ownedGuardrails } from "../../guardrails/index.js";
+import "../../guardrails/__tests__/_install.fixture.mjs";
+
+// The simplicity rules live in the skills that own them (ADR 079).
+const SIMPLICITY_IDS = new Set(["no-speculative-audit-table", "no-future-use-code", "no-commented-out-code"]);
+const SIMPLICITY_GUARDRAILS = [...ownedGuardrails("rule-process-simplicity"), ...ownedGuardrails("rule-styleguide-comments")].filter((rule) => SIMPLICITY_IDS.has(rule.id));
 import { loadAllSkills } from "../../skills/index.js";
 import { callTool } from "../../../tools/router/index.js";
 import { check, finish } from "./_simplicity.fixture.mjs";

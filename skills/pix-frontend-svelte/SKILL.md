@@ -6,6 +6,7 @@ tags:
   - "frontend"
   - "svelte"
 frameworks: [svelte]
+guardrails: [svelte-no-class-directive]
 ---
 
 # rule-frontend-svelte - Svelte 5 with rule Principles

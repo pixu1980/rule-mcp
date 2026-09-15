@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>028: Clean /rule-* commands via user commands + prompt suppression, not a plugin - rule-mcp docs</title>
+<link rel="stylesheet" href="../../style.css">
+</head>
+<body>
+<header><nav><ul>
+<li><a href="../../index.html">Home</a></li>
+<li><a href="../../docs/01-getting-started.html">undefined</a></li>
+<li><a href="../../docs/02-product-architecture.html">undefined</a></li>
+<li><a href="../../docs/03-agent-instructions.html">undefined</a></li>
+<li><a href="../../docs/04-operations.html">undefined</a></li>
+<li><a href="../../docs/05-env-variables.html">undefined</a></li>
+<li><a href="../../docs/06-privacy.html">undefined</a></li>
+<li><a href="../../docs/07-engineering-guides.html">undefined</a></li>
+<li><a href="../../docs/08-skills.html">undefined</a></li>
+<li><a href="../../docs/09-tools.html">undefined</a></li>
+<li><a href="../../docs/10-prompts.html">undefined</a></li>
+<li><a href="../../docs/11-instructions.html">undefined</a></li>
+<li><a href="../../docs/12-cli.html">undefined</a></li>
+<li><a href="../../docs/13-personas.html">undefined</a></li>
+<li><a href="../../docs/14-guardrails.html">undefined</a></li>
+<li><a href="../../docs/15-resources.html">undefined</a></li>
+<li><a href="../../docs/adr/ADR.html">ADRs</a></li>
+</ul></nav></header>
+<main>
+<h1>028: Clean /rule-* commands via user commands + prompt suppression, not a plugin</h1>
+<ul>
+<li><strong>Date</strong>: 2026-08-03</li>
+<li><strong>Status</strong>: accepted</li>
+<li><strong>Tags</strong>: commands, claude, mcp, installer</li>
+<li><strong>Author</strong>: rule-mcp-architect</li>
+</ul>
+<h2>Context</h2>
+<p>Claude Code exposes MCP prompts as slash commands prefixed with the server name (/rule-mcp:rule-handoff, shown as (MCP)). Users wanted bare /rule-handoff. A Claude plugin does NOT solve this: plugin commands are also namespaced (/plugin-name:command); displayName is UI-only and never changes the invocation. The only mechanism that yields a bare /rule-handoff is a user/project command file in ~/.claude/commands/. MCP prompts cannot be hidden client-side - the server must stop emitting them (prompts/list) to remove the prefixed duplicates. The 7 agent commands were also hand-maintained per-agent heredocs, drifting from the ~23 MCP prompts.</p>
+<h2>Decision</h2>
+<ol>
+<li>Do NOT ship a Claude plugin. 2) Generate the clean command set from the MCP prompt registry as the single source of truth (src/core/agent-commands.js + <code>rule-mcp agent-commands</code> CLI): the rule-mcp router pinned first, then every prompt alphabetically, rendered per agent format (args/workflow/gemini). 3) Suppress the server&#39;s prompts for Claude via a new RULE_MCP_NO_PROMPTS env flag (default 0), set to 1 in the Claude MCP config; listActivePrompts() returns [] when set, while listPrompts() stays pure. 4) install.sh/install-agent-commands.sh and <code>install --agent claude</code> write the full set for every agent; uninstall removes it. 5) /rule-handoff commits pending work as atomic scoped conventional commits + one separate docs(handoff)/docs(adr) commit, never pushing.</li>
+</ol>
+<h2>Consequences</h2>
+<p>Claude users get bare /rule-* commands with no (MCP) duplicates after re-install + session restart. All agents share one consistently ordered, registry-derived command set that cannot drift. A shared daemon keeps prompts on (it serves all clients). Non-Claude stdio agents still see the MCP prompts unless similarly configured. Existing installs must re-run the installer (or <code>rule-mcp install --agent claude --force</code>) to pick up the env flag and expanded command set.</p>
+
+</main>
+<footer><p>Generated from <code>docs/</code> - edit the Markdown, not this file.</p></footer>
+</body>
+</html>

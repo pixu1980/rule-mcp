@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>072: The installer asks before copying bundled skills to the central agents directory - rule-mcp docs</title>
+<link rel="stylesheet" href="../../style.css">
+</head>
+<body>
+<header><nav><ul>
+<li><a href="../../index.html">Home</a></li>
+<li><a href="../../docs/01-getting-started.html">undefined</a></li>
+<li><a href="../../docs/02-product-architecture.html">undefined</a></li>
+<li><a href="../../docs/03-agent-instructions.html">undefined</a></li>
+<li><a href="../../docs/04-operations.html">undefined</a></li>
+<li><a href="../../docs/05-env-variables.html">undefined</a></li>
+<li><a href="../../docs/06-privacy.html">undefined</a></li>
+<li><a href="../../docs/07-engineering-guides.html">undefined</a></li>
+<li><a href="../../docs/08-skills.html">undefined</a></li>
+<li><a href="../../docs/09-tools.html">undefined</a></li>
+<li><a href="../../docs/10-prompts.html">undefined</a></li>
+<li><a href="../../docs/11-instructions.html">undefined</a></li>
+<li><a href="../../docs/12-cli.html">undefined</a></li>
+<li><a href="../../docs/13-personas.html">undefined</a></li>
+<li><a href="../../docs/14-guardrails.html">undefined</a></li>
+<li><a href="../../docs/15-resources.html">undefined</a></li>
+<li><a href="../../docs/adr/ADR.html">ADRs</a></li>
+</ul></nav></header>
+<main>
+<h1>072: The installer asks before copying bundled skills to the central agents directory</h1>
+<ul>
+<li><strong>Date</strong>: 2026-09-08</li>
+<li><strong>Status</strong>: accepted</li>
+<li><strong>Tags</strong>: installer, skills, devx, bash, powershell</li>
+<li><strong>Author</strong>: Emiliano Pisu <a href="mailto:pisuemiliano.1980@gmail.com">pisuemiliano.1980@gmail.com</a></li>
+</ul>
+<h2>Context</h2>
+<p>The rule-mcp installers (scripts/install.sh and scripts/install.ps1) configured agents, rules, commands and services, but never touched the bundled rule-* skills: the MCP server serves them directly from its embedded catalog. Users who wanted their agent to see the skills natively (agents such as Pi read ~/.agents/skills) had to run scripts/install-skills.sh or the CLI skills installer separately — both of which copy the whole 89-skill catalog to the central ~/.agents/skills location without asking. A user installing with install.sh reported ending up with the full skill catalog centralized with no step that offered a choice.</p>
+<h2>Decision</h2>
+<p>Add a skills step to both installers that asks before copying. install.sh gains Phase 6c &quot;Bundled Skills&quot; and install.ps1 gains Phase 4: in interactive TTY runs it prompts &quot;Install bundled rule-* skills to ~/.agents/skills? [y/N]&quot; defaulting to No, so a plain Enter or EOF never centralizes the catalog; the copy itself runs through the argv-safe CLI (rule-mcp skills install --all) which works for both local-repo and curl-piped installs and uses the embedded catalog. New flags --skills/-Skills force the copy and --no-skills/-NoSkills skip the step for non-interactive and CI runs, where the installer otherwise prints a skip hint instead of prompting. The PTY acceptance test now feeds a No answer and asserts the prompt/skip; a static selection test asserts non-interactive runs never prompt; the PowerShell contract test asserts the skills helper and prompt.</p>
+<h2>Consequences</h2>
+<p>Positive: installing now asks before centralizing any skill; non-interactive runs stay silent by default and are deterministic via the new flags; bash and PowerShell behave identically; the copy path is the same argv-safe CLI used everywhere else. Negative: interactive users get one more Enter; agents that only read ~/.agents/skills natively need an explicit yes or --skills to see the rule-* skills locally (the MCP server still serves them regardless); the wizard stays two-step so per-skill selection still lives in the standalone CLI.</p>
+<h2>What would end this</h2>
+<p>The assumption this leans on is that copying skills to ~/.agents/skills is an optional extra that deserves an explicit yes. It would be wrong if native ~/.agents/skills loading became the only way agents receive rule-* skills (MCP delivery removed), or if a curated subset rather than the full catalog became the normal install target - each would change the default, and the per-skill picker would then have to move into the wizard step itself.</p>
+<h2>Alternatives Considered</h2>
+<ol>
+<li>Default the skills step to Yes so agents get native skills by default - rejected: it re-centers 89 skills on a plain Enter, the exact surprise being reported</li>
+<li>Reuse scripts/install-skills.sh from the installer - rejected: it resolves ../skills relative to the script, which breaks curl-piped installs, while the CLI uses the embedded catalog and single-binary form</li>
+<li>Add a third full-screen TUI step with per-skill checkboxes - rejected: ADR 070 keeps the wizard a two-step alt-screen TUI; the CLI already ships the checkbox picker (rule-mcp skills install) for granular selection</li>
+</ol>
+
+</main>
+<footer><p>Generated from <code>docs/</code> - edit the Markdown, not this file.</p></footer>
+</body>
+</html>

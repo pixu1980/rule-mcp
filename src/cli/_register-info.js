@@ -1,12 +1,10 @@
-
-
 /**
  * Info command registrars: help, tools, stats, cache, roles, guard, update.
  *
  * The handlers are imported inside the actions, not at the top of the file:
  * the command declarations are what `--help` renders, and a static handler
  * import made `--help`, `--version` and `config` pay for the server, both
- * transports, the skill catalog and 105 tool registrations. Same pattern the
+ * transports, the skill catalog and every tool registration. Same pattern the
  * adr and skills registrars already used - see `pnpm report:startup`.
  */
 import { Option } from "commander";

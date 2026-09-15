@@ -1,5 +1,3 @@
-
-
 /**
  * @module cli/setup/exec
  *
@@ -43,6 +41,13 @@ export async function runCliCommand(args, { cwd = process.cwd(), timeout = 120_0
 
     return { ok: true, lines: [...toLines(stdout), ...toLines(stderr)] };
   } catch (error) {
-    return { ok: false, lines: [...toLines(error.stdout), ...toLines(error.stderr), ...(error.stdout || error.stderr ? [] : [error.message])] };
+    return {
+      ok: false,
+      lines: [
+        ...toLines(error.stdout),
+        ...toLines(error.stderr),
+        ...(error.stdout || error.stderr ? [] : [error.message]),
+      ],
+    };
   }
 }

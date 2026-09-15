@@ -1,22 +1,35 @@
-
-
 /**
  * @module cli/setup/runtime-home
  *
- * The runtime home (`~/.rule-mcp/`) and the env config directory
- * (`~/.config/rule-mcp/`): create them on install, report them on
- * uninstall, delete them only when the user asks to purge.
+ * The runtime home (`~/.rule-mcp/`) and the compiled-code cache: create
+ * them on install, report them on uninstall, delete them only when the user
+ * asks to purge.
  *
  * A purge removes the whole tree, so a reinstall has to recreate the layout
  * `src/cli/paths/_runtime.js` expects rather than waiting for some later
  * command to lazily do it.
+ *
+ * The switches file is part of that layout. It is the server's own home for
+ * the controls a user sets, the prompt-recording one above all, so an install
+ * defaults it here rather than writing a privacy decision into one client's
+ * configuration and leaving the other hosts without it (ADR 080).
  */
 
 import { existsSync, mkdirSync, readdirSync, rmSync, statSync } from "node:fs";
 import { join } from "node:path";
 
-import { ENV_CONFIG_DIR } from "../installers/index.js";
+import { homedir } from "node:os";
+import { DEFAULT_OPTOUT_ENV, readEnvConfig, writeEnvConfig } from "../installers/index.js";
 import { getRuntimePaths } from "../paths/index.js";
+
+/** Mirrors `cli/installers/_env.js` (not exported there): per-user compile cache. */
+const COMPILE_CACHE_DIR = join(homedir(), ".cache", "rule-mcp", "compile-cache");
+
+/** Also `cli/installers/_env.js`: the switches file and the stored model keys. */
+const ENV_CONFIG_DIR = join(homedir(), ".config", "rule-mcp");
+
+/** Former `pixGalaxyHome()` - now the rule-mcp runtime root. */
+const pixGalaxyHome = () => getRuntimePaths().homeDir;
 
 /** Subdirectories the runtime expects to find under the home root. */
 const SUBDIRS = ["state", "data", "projects", "config"];
@@ -39,33 +52,47 @@ export function countFiles(dir) {
 }
 
 /**
- * Create the runtime home and its subdirectories.
+ * Create the runtime home, its subdirectories and the switches file.
  *
  * @param {{ dryRun?: boolean }} [options]
- * @returns {{ homeDir: string, dirs: string[], status: "created"|"planned" }}
+ * @returns {{ homeDir: string, dirs: string[], status: "created"|"planned", settings: "written"|"kept"|"planned" }}
  */
 export function ensureRuntimeHome({ dryRun = false } = {}) {
-  const { homeDir } = getRuntimePaths();
+  const homeDir = pixGalaxyHome();
   const dirs = SUBDIRS.map((name) => join(homeDir, name));
 
   if (dryRun) {
-    return { homeDir, dirs, status: "planned" };
+    return { homeDir, dirs, status: "planned", settings: "planned" };
   }
 
   for (const dir of dirs) {
     mkdirSync(dir, { recursive: true });
   }
+  // Defaults only when there is nothing to keep: a user who has already turned
+  // a switch off must not have an install turn it back on.
+  const existing = readEnvConfig();
+  const settings = Object.keys(existing).length > 0 ? "kept" : "written";
 
-  return { homeDir, dirs, status: "created" };
+  if (settings === "written") {
+    writeEnvConfig(DEFAULT_OPTOUT_ENV);
+  }
+
+  return { homeDir, dirs, status: "created", settings };
 }
 
 /** What a purge would remove, and how much of it there is. */
 export function purgeTargets() {
-  const { homeDir } = getRuntimePaths();
-
   return [
-    { id: "runtime-home", label: "Runtime home (state, data, projects)", dir: homeDir },
-    { id: "env-config", label: "Env config and saved API keys", dir: ENV_CONFIG_DIR },
+    {
+      id: "runtime-home",
+      label: "Runtime home (state, data, projects, config)",
+      dir: pixGalaxyHome(),
+    },
+    { id: "compile-cache", label: "Compiled-code cache", dir: COMPILE_CACHE_DIR },
+    // A purge that took the runtime home and left this behind is what made
+    // "purge" a promise the uninstall did not keep: the env switches and any
+    // stored model key live here, outside the runtime home.
+    { id: "env-config", label: "Config and stored model keys", dir: ENV_CONFIG_DIR },
   ].map((target) => ({ ...target, exists: existsSync(target.dir), files: countFiles(target.dir) }));
 }
 

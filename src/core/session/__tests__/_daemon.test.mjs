@@ -23,6 +23,11 @@ import { existsSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "no
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { alive, reap, reservePort, root, until, within } from "./_hygiene.fixture.mjs";
+import { fileURLToPath } from "node:url";
+
+// Server code resolves `@src/*` through a hook (ADR 079); a spawned
+// process loads it too, so it registers the hook as every entry point does.
+const ALIAS_HOOK = fileURLToPath(new URL("../../../../scripts/alias-hook.mjs", import.meta.url));
 
 test("daemon start detaches instead of holding the daemon open", async (t) => {
   const stateDir = mkdtempSync(join(tmpdir(), "rule-daemon-detach-"));
@@ -38,6 +43,8 @@ test("daemon start detaches instead of holding the daemon open", async (t) => {
   const starter = spawn(
     process.execPath,
     [
+      "--import",
+      ALIAS_HOOK,
       "--input-type=module",
       "-e",
       `const { startDaemonProcess } = await import(${JSON.stringify(join(root, "src", "cli", "daemon", "index.js"))});

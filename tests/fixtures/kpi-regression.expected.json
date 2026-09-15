@@ -11,12 +11,12 @@
   "tokens": {
     "measuredSaved": 130,
     "savedBySource": {
-      "caveman": 130
+      "compression": 130
     },
     "estimatedRouting": 7200,
     "coreTokens": 3600,
     "finalTokens": 3510,
-    "cavemanRatio": 0.03611111111111111,
+    "compressionRatio": 0.03611111111111111,
     "reminderOverhead": 0
   },
   "cache": {

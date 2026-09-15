@@ -10,6 +10,7 @@ compatibility: Designed for AI coding assistants
 metadata:
   author: rule-engineering
   version: "1.0"
+inherits: [rule-devops]
 ---
 
 # Testing

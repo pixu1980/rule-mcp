@@ -15,8 +15,16 @@
  * either a rule bug or a mislabeled snippet, and both need a person.
  */
 import { CORPUS } from "../../../../tests/fixtures/guardrail-corpus.mjs";
-import { checkCode } from "../index.js";
+import { checkCode, setSkillGuardrails } from "../index.js";
 import * as DEFS from "../index.js";
+import { loadLayerGuardrails } from "../../layers/_guardrails.js";
+
+// The rules a skill owns are loaded at startup by the server; a fixture that
+// runs the checker directly has to do the same, or every migrated rule reads
+// as missing (ADR 079).
+const LAYERED = await loadLayerGuardrails();
+
+setSkillGuardrails(LAYERED);
 
 /** Every rule id the checker knows about, across every group. */
 export function allRuleIds() {
@@ -29,6 +37,12 @@ export function allRuleIds() {
           ids.add(rule.id);
         }
       }
+    }
+  }
+
+  for (const entry of LAYERED.values()) {
+    for (const rule of entry.guardrails) {
+      ids.add(rule.id);
     }
   }
 

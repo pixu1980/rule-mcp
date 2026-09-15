@@ -8,12 +8,12 @@
     "source": "github"
   },
   "websiteUrl": "https://github.com/pixu1980/rule-mcp",
-  "version": "0.1.0",
+  "version": "0.1.0-beta",
   "packages": [
     {
       "registryType": "npm",
       "identifier": "rule-mcp",
-      "version": "0.1.0",
+      "version": "0.1.0-beta",
       "packageArguments": [
         {
           "type": "positional",

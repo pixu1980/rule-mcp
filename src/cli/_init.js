@@ -9,7 +9,7 @@
  *
  *   1. Move a local `./.rule-mcp` into `~/.rule-mcp/projects/`, if
  *      an earlier version left one behind, and create the central directory
- *      this project records into (ADR 082). Nothing is written into the project.
+ *      this project records into. Nothing is written into the project.
  *   2. Run `tokensave init` when tokensave is installed. The two
  *      tools are used together, tokensave's code graph is what lets this server
  *      stop dumping file trees into the context, and a project prepared for one

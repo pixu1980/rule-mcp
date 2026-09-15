@@ -1,5 +1,3 @@
-
-
 /**
  * @module cli/setup/step-done
  *
@@ -41,7 +39,11 @@ export function StepDone({ counts, results, dryRun, nextSteps, onQuit }) {
   return h(
     Box,
     { flexDirection: "column" },
-    h(Text, { color: counts.fail > 0 ? COLORS.warn : COLORS.ok, bold: true }, dryRun ? "Dry run complete" : counts.fail > 0 ? "Finished with failures" : "Complete"),
+    h(
+      Text,
+      { color: counts.fail > 0 ? COLORS.warn : COLORS.ok, bold: true },
+      dryRun ? "Dry run complete" : counts.fail > 0 ? "Finished with failures" : "Complete",
+    ),
     h(Box, { paddingTop: 1 }, h(Tally, { counts })),
     problems.length > 0
       ? h(

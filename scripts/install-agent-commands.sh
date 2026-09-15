@@ -20,8 +20,10 @@ while [[ $# -gt 0 ]]; do
   case "$1" in
     --dry-run) DRY_RUN=true; shift ;;
     --force) FORCE=true; shift ;;
+    --preset) PRESET="${2:-}"; shift 2 ;;
+    --areas) AREAS="${2:-}"; shift 2 ;;
     --help|-h)
-      echo "Usage: ./scripts/install-agent-commands.sh [--dry-run] [--force]"
+      echo "Usage: ./scripts/install-agent-commands.sh [--dry-run] [--force] [--preset minimal|standard|full] [--areas a,b]"
       exit 0
       ;;
     *) echo "Unknown option: $1" >&2; exit 1 ;;
@@ -36,9 +38,12 @@ command_files() {
   local extra=()
   [[ "$FORCE" == "true" ]] && extra+=(--force)
   [[ "$DRY_RUN" == "true" ]] && extra+=(--dry-run)
+  # The selection is resolved by the CLI, which owns it for every caller.
+  [[ -n "${PRESET:-}" ]] && extra+=(--preset "$PRESET")
+  [[ -n "${AREAS:-}" ]] && extra+=(--areas "$AREAS")
 
   # ${extra[@]+...}: keep `set -u` happy when the array is empty
-  node "${REPO_ROOT}/bin/rule-mcp.js" agent-commands --dir "$dir" --format "$format" \
+  node --import "${REPO_ROOT}/scripts/alias-hook.mjs" "${REPO_ROOT}/bin/rule-mcp.js" agent-commands --dir "$dir" --format "$format" \
     "${extra[@]+"${extra[@]}"}" 2>/dev/null | sed "s/^/  [${label}] /"
 }
 

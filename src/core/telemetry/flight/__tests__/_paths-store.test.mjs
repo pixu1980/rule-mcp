@@ -37,7 +37,7 @@ check(
 const projectPaths = getProjectPaths(join(project, "src", "deep"));
 
 check("F1.4 the project root is the repository root", projectPaths.projectDir === project);
-// A recording is filed per project under the home directory (ADR 082).
+// A recording is filed per project under the home directory.
 check("F1.5 project data lives under the install, not the project", !projectPaths.dir.startsWith(project));
 check("F1.6 exports live under it", projectPaths.exportsDir === join(projectPaths.dir, "exports"));
 check("F1.7 the project itself is left alone", !existsSync(join(project, ".rule-mcp")));

@@ -1,0 +1,565 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tools and operations - rule-mcp docs</title>
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<header><nav><ul>
+<li><a href="../index.html">Home</a></li>
+<li><a href="../docs/01-getting-started.html">undefined</a></li>
+<li><a href="../docs/02-product-architecture.html">undefined</a></li>
+<li><a href="../docs/03-agent-instructions.html">undefined</a></li>
+<li><a href="../docs/04-operations.html" aria-current="page">undefined</a></li>
+<li><a href="../docs/05-env-variables.html">undefined</a></li>
+<li><a href="../docs/06-privacy.html">undefined</a></li>
+<li><a href="../docs/07-engineering-guides.html">undefined</a></li>
+<li><a href="../docs/08-skills.html">undefined</a></li>
+<li><a href="../docs/09-tools.html">undefined</a></li>
+<li><a href="../docs/10-prompts.html">undefined</a></li>
+<li><a href="../docs/11-instructions.html">undefined</a></li>
+<li><a href="../docs/12-cli.html">undefined</a></li>
+<li><a href="../docs/13-personas.html">undefined</a></li>
+<li><a href="../docs/14-guardrails.html">undefined</a></li>
+<li><a href="../docs/15-resources.html">undefined</a></li>
+<li><a href="../docs/adr/ADR.html">ADRs</a></li>
+</ul></nav></header>
+<main>
+<h1>Tools and operations</h1>
+<p>How to operate this server: the tool surface in one pointer, then plugins,
+release and troubleshooting. Installing it is <a href="01-getting-started.html">01 getting started</a>.</p>
+<h2>Tool and prompt reference</h2>
+<p>The tool, prompt and resource lists are generated from the running server by
+<code>pnpm census</code>, so they cannot drift from what it actually registers. They are
+never hand-edited; this document points at them instead of restating them.</p>
+<ul>
+<li>Every tool, with its schema and modes: <a href="09-tools.html">09-tools.md</a></li>
+<li>Every prompt and its arguments: <a href="10-prompts.html">10-prompts.md</a></li>
+<li>Every <code>rule://</code> resource URI: <a href="15-resources.html">15-resources.md</a></li>
+<li>What each skill covers: <a href="08-skills.html">08-skills.md</a></li>
+</ul>
+<h2>Plugins</h2>
+<h3>Overview</h3>
+<p>Any directory in <code>~/.agents/skills/</code> with a <code>SKILL.md</code> file is auto-detected as a skill.</p>
+<ul>
+<li><strong>Official rule skills</strong> start with <code>rule-</code> (e.g., <code>rule-frontend-react</code>, <code>rule-frontend-vue</code>)</li>
+<li><strong>Community/plugin skills</strong> can use any name (e.g., <code>my-company-rules</code>)</li>
+</ul>
+<p>Plugins are automatically registered as MCP tools (<code>pix_&lt;plugin-name&gt;</code>) and support
+all standard skill tool modes: <code>full</code>, <code>summary</code>, <code>search</code>, <code>guardrails</code>, <code>check</code>.</p>
+<h3>Creating a basic plugin</h3>
+<pre><code class="language-bash"># 1. Create the plugin directory
+mkdir -p ~/.agents/skills/my-custom-rules
+
+# 2. Create SKILL.md
+cat &gt; ~/.agents/skills/my-custom-rules/SKILL.md &lt;&lt; &#39;EOF&#39;
+---
+name: my-custom-rules
+description: Custom project rules
+---
+
+# my-custom-rules
+
+## Rules
+
+- Use 2-space indentation
+- Max line length: 100 characters
+EOF
+
+# 3. Reload skills
+rule-mcp skills reload
+
+# 4. Your plugin is now available as:
+rule-mcp tools call rule_tool_styleguide --json &#39;{&quot;mode&quot;: &quot;full&quot;}&#39;
+</code></pre>
+<h3>Adding custom guardrails with plugin.js</h3>
+<p>For advanced plugins, create a <code>plugin.js</code> file in your plugin directory:</p>
+<pre><code class="language-javascript">// ~/.agents/skills/my-custom-rules/plugin.js
+/**
+ * @module my-custom-rules/plugin
+ * Optional plugin.js for custom guardrails and generators.
+ */
+
+/** Custom guardrails to add to the rule_tool_check engine. */
+export const guardrails = [
+  {
+    id: &quot;custom-two-spaces&quot;,
+    label: &quot;2-space indentation&quot;,
+    description: &quot;Code must use 2-space indentation.&quot;,
+    check: (code) =&gt; {
+      const twoSpaceIndent = code.match(/^(\s{2})[^\s]/gm);
+      return {
+        pass: !twoSpaceIndent || twoSpaceIndent.length === 0,
+        failCount: twoSpaceIndent?.length || 0,
+        detail: twoSpaceIndent ? twoSpaceIndent.slice(0, 5) : [],
+        suggestion: &quot;Use 2-space indentation instead of 4.&quot;,
+      };
+    },
+  },
+];
+
+/** Custom generators (future use). */
+export const generators = {
+  configFile: () =&gt; &quot;// Custom config\n&quot;,
+};
+</code></pre>
+<h3>Plugin directory structure</h3>
+<pre><code>~/.agents/skills/
+├── my-custom-rules/          ← Plugin name (any valid directory name)
+│   ├── SKILL.md              ← Required: skill content (YAML frontmatter + markdown)
+│   └── plugin.js             ← Optional: custom guardrails &amp; generators
+├── my-company-rules/
+│   ├── SKILL.md
+│   └── plugin.js
+└── rule-frontend-react/                ← Official rule skills coexist
+    └── SKILL.md
+</code></pre>
+<h3>How plugins are detected</h3>
+<ol>
+<li>On startup (or <code>skills reload</code>), the server scans <code>~/.agents/skills/</code> and <code>skills/</code> (embedded)</li>
+<li>Any directory with a <code>SKILL.md</code> file is registered as a skill</li>
+<li>If the directory also has <code>plugin.js</code>, it&#39;s dynamically imported</li>
+<li>The plugin&#39;s guardrails are merged into the guardrails engine</li>
+<li>The plugin is registered as an MCP tool: <code>pix_&lt;plugin-name&gt;</code></li>
+</ol>
+<h3>Community skills</h3>
+<p>The <code>rule://community</code> resource lists all installed plugins:</p>
+<pre><code class="language-bash">rule-mcp tools call rule --json &#39;{&quot;prompt&quot;: &quot;List available community skills&quot;}&#39;
+# Or directly via MCP resource:
+# rule://community
+</code></pre>
+<h3>Best practices</h3>
+<ul>
+<li><strong>Plugin names</strong>: use <code>kebab-case</code> (e.g., <code>my-company-rules</code>)</li>
+<li><strong>SKILL.md</strong>: include YAML frontmatter with <code>name</code> and <code>description</code></li>
+<li><strong>Guardrail IDs</strong>: prefix with your plugin name to avoid conflicts (e.g., <code>myco-two-spaces</code>)</li>
+<li><strong>Test your plugin</strong>: run <code>rule_tool_check skill=&lt;plugin-name&gt;</code> to verify guardrails work</li>
+</ul>
+<h2>Release</h2>
+<h3>1. Repository Setup</h3>
+<pre><code class="language-bash">cd /Users/emilianopisu/Projects/ai/rule-mcp
+
+# Initialize git
+git init
+git add -A
+git commit -m &quot;feat: initial release v0.1.0&quot;
+
+# Add remote
+git remote add origin https://github.com/pixu1980/rule-mcp
+
+# Push
+git branch -M main
+git push -u origin main
+</code></pre>
+<hr>
+<h3>2. Configure GitHub Secrets</h3>
+<p>Go to <strong>GitHub → rule-mcp-rule-mcp → Settings → Secrets and variables → Actions</strong> and add:</p>
+<table>
+<thead>
+<tr>
+<th>Secret</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>NPM_TOKEN</code></td>
+<td>npm access token (create at <a href="https://www.npmjs.com/settings/~/tokens">npmjs.com</a> with type <strong>Automation</strong> and scope <strong>publish</strong>)</td>
+</tr>
+</tbody></table>
+<p><code>GITHUB_TOKEN</code> is automatic - no configuration needed.</p>
+<hr>
+<h3>3. Verify CI</h3>
+<p>After the first push to <code>main</code>, CI starts automatically:</p>
+<ul>
+<li><strong>Lint job</strong>: syntax check + ESLint + Prettier</li>
+<li><strong>Test job</strong>: 6 combinations (ubuntu × node20/22, macos × node20/22, windows × node20/22)</li>
+<li><strong>Audit job</strong>: <code>pnpm audit --prod</code></li>
+</ul>
+<p>Check: <strong>GitHub → Actions → ci</strong></p>
+<hr>
+<h3>4. First Release (v0.1.0)</h3>
+<p>Create a tag to trigger the release pipeline:</p>
+<pre><code class="language-bash">git tag -s v0.1.0
+git push origin v0.1.0
+</code></pre>
+<p>The tag must be signed (<code>-s</code>): the release workflow refuses lightweight
+tags. Set up signing once per machine (see CONTRIBUTING.md).</p>
+<p>The release pipeline (<code>.github/workflows/release.yml</code>) runs automatically:</p>
+<table>
+<thead>
+<tr>
+<th>Step</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>✅ Version gate</td>
+<td>Tag, package.json, server.json and CHANGELOG must agree</td>
+</tr>
+<tr>
+<td>✅ Audit gate</td>
+<td>No known advisories, or the build stops</td>
+</tr>
+<tr>
+<td>✅ Build</td>
+<td>Pack the tarball, checksum it, generate the SBOM</td>
+</tr>
+<tr>
+<td>✅ Verify</td>
+<td>Checksum check plus scratch npm install, bin runs</td>
+</tr>
+<tr>
+<td>✅ GitHub Release</td>
+<td>Attach tarball, SHA256SUMS and SBOM to the release</td>
+</tr>
+</tbody></table>
+<hr>
+<h3>5. Homebrew Tap Configuration</h3>
+<p>To enable <code>brew install pixu1980/tap/rule-mcp</code>:</p>
+<pre><code class="language-bash"># Create the tap repo
+# Go to https://github.com/new → create: rule-mcp-homebrew-tap
+
+# Clone, copy the generated formula, push
+git clone https://github.com/pixu1980/homebrew-tap
+cp rule-mcp.rb homebrew-tap/Formula/
+cd homebrew-tap
+git add Formula/rule-mcp.rb
+git commit -m &quot;feat: add rule-mcp v0.1.0&quot;
+git push
+</code></pre>
+<hr>
+<h3>6. User Installation</h3>
+<p>Users can install using these methods:</p>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Command</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Clone + launcher</strong></td>
+<td><code>git clone</code> + <code>./scripts/install.sh</code></td>
+</tr>
+<tr>
+<td><strong>pnpx</strong></td>
+<td><code>pnpx rule-mcp serve</code></td>
+</tr>
+<tr>
+<td><strong>Homebrew</strong></td>
+<td><code>brew install pixu1980/tap/rule-mcp</code></td>
+</tr>
+<tr>
+<td><strong>Docker</strong></td>
+<td><code>docker pull ghcr.io/pixu1980/rule-mcp</code></td>
+</tr>
+<tr>
+<td><strong>Winget</strong></td>
+<td><code>winget install pixu1980.rule-mcp</code></td>
+</tr>
+<tr>
+<td><strong>Scoop</strong></td>
+<td><code>scoop bucket add rule-mcp &amp;&amp; scoop install rule-mcp</code></td>
+</tr>
+<tr>
+<td><strong>GitHub Release</strong></td>
+<td>Direct <code>.tgz</code> download</td>
+</tr>
+</tbody></table>
+<h4>Agent command artifacts</h4>
+<p><code>install --agent &lt;name&gt;</code> installs MCP config plus host-native reusable entry point where verified:</p>
+<table>
+<thead>
+<tr>
+<th>Agent</th>
+<th>Artifact</th>
+<th>Invocation</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Pi</td>
+<td><code>~/.pi/agent/prompts/rule-mcp.md</code></td>
+<td><code>/rule-mcp</code></td>
+</tr>
+<tr>
+<td>Claude Code</td>
+<td><code>~/.claude/commands/rule-mcp.md</code></td>
+<td><code>/rule-mcp</code></td>
+</tr>
+<tr>
+<td>Gemini CLI</td>
+<td><code>~/.gemini/commands/rule-mcp.toml</code></td>
+<td><code>/rule-mcp</code></td>
+</tr>
+<tr>
+<td>Cursor</td>
+<td><code>.cursor/commands/rule-mcp.md</code></td>
+<td><code>/rule-mcp</code></td>
+</tr>
+<tr>
+<td>GitHub Copilot CLI</td>
+<td><code>~/.copilot/agents/rule-mcp.agent.md</code></td>
+<td><code>/agent</code> selection</td>
+</tr>
+<tr>
+<td>Codex CLI</td>
+<td><code>~/.agents/skills/rule/</code></td>
+<td>Skill workflow; no stable exact custom command assumed</td>
+</tr>
+</tbody></table>
+<p>Uninstall removes same artifact. Universal command body forces routing, evidence lookup, test-first implementation, blocking <code>rule_tool_check</code>, real test reporting, and ADR capture.</p>
+<hr>
+<h3>7. Post-Release Verification</h3>
+<pre><code class="language-bash"># Test the clone install
+git clone https://github.com/pixu1980/rule-mcp.git
+cd rule-mcp
+./scripts/install.sh
+rule-mcp doctor
+rule-mcp install --agent all
+
+# Test Docker
+docker pull ghcr.io/pixu1980/rule-mcp
+docker compose up -d
+curl http://localhost:37999/health
+
+# Test tools
+rule-mcp tools list
+rule-mcp tools call rule_tool_detect --json &#39;{}&#39;
+rule-mcp tools call rule --json &#39;{&quot;prompt&quot;: &quot;React button&quot;}&#39;
+
+# Verify a release tarball (every GitHub Release attaches both files)
+curl -fsSLO https://github.com/pixu1980/rule-mcp/releases/download/&lt;tag&gt;/rule-mcp-&lt;version&gt;.tgz
+curl -fsSLO https://github.com/pixu1980/rule-mcp/releases/download/&lt;tag&gt;/SHA256SUMS
+shasum -a 256 -c SHA256SUMS
+</code></pre>
+<hr>
+<h3>8. Subsequent Releases</h3>
+<pre><code class="language-bash"># Bump version (single writer for package.json, server.json, CHANGELOG.md)
+node scripts/build/version/index.mjs --apply 0.1.0
+node scripts/build/version/index.mjs --check
+
+git add -A &amp;&amp; git commit -m &quot;chore(release): 0.1.0&quot; &amp;&amp; git tag -s v0.1.0
+git push --follow-tags
+</code></pre>
+<p>The release pipeline triggers automatically on tag <code>v*.*.*</code>.</p>
+<hr>
+<h3>Release Pipeline Architecture</h3>
+<pre><code>Tag vX.Y.Z
+    │
+    ├─► build: version/audit gates → pnpm build → tarball + SHA256SUMS (artifact)
+    │
+    ├─► verify: checksum check → scratch npm install → bin runs
+    │
+    └─► release: attach tarball + SHA256SUMS to the GitHub Release
+</code></pre>
+<hr>
+<h3>Secrets / Tokens Summary</h3>
+<table>
+<thead>
+<tr>
+<th>Service</th>
+<th>Required</th>
+<th>Where to create</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>npm</strong></td>
+<td><code>NPM_TOKEN</code> (Automation)</td>
+<td><a href="https://www.npmjs.com/settings/~/tokens">npmjs.com tokens</a></td>
+</tr>
+<tr>
+<td><strong>GitHub</strong></td>
+<td><code>GITHUB_TOKEN</code> (auto)</td>
+<td>Already present - permissions: <code>contents: write</code>, <code>id-token: write</code>, <code>packages: write</code> (configured in <code>release.yml</code>)</td>
+</tr>
+<tr>
+<td><strong>Docker GHCR</strong></td>
+<td>None</td>
+<td>Login via <code>GITHUB_TOKEN</code> - already configured via <code>docker/login-action@v3</code></td>
+</tr>
+</tbody></table>
+<p>Everything else is already configured in existing workflows:</p>
+<ul>
+<li>CI: <code>.github/workflows/ci.yml</code></li>
+<li>Release: <code>.github/workflows/release.yml</code></li>
+<li>Docker: <code>Dockerfile</code> + <code>docker-compose.yml</code></li>
+<li>Winget: <code>.github/winget/rule-mcp.rule-mcp.yaml</code></li>
+<li>Scoop: <code>.github/scoop/rule-mcp.json</code></li>
+<li>Server manifest: <code>server.json</code></li>
+<li>Changelog: <code>CHANGELOG.md</code></li>
+</ul>
+<h2>Troubleshooting</h2>
+<h3>Quick diagnostics</h3>
+<pre><code class="language-bash"># Run the health check
+rule-mcp doctor
+
+# List all available tools
+rule-mcp tools list
+
+# Test a specific tool
+rule-mcp tools call rule --json &#39;{&quot;prompt&quot;: &quot;test&quot;}&#39;
+
+# Check daemon status
+rule-mcp daemon status
+
+# View daemon logs
+rule-mcp daemon logs
+</code></pre>
+<h3>Agent-specific issues</h3>
+<h4>Claude (Claude Code / Claude Desktop)</h4>
+<p><strong>Issue</strong>: Tool not found by Claude.</p>
+<ul>
+<li><strong>Fix</strong>: Ensure <code>~/.claude.json</code> has the <code>rule-mcp</code> entry.<pre><code class="language-bash">rule-mcp install --agent claude
+</code></pre>
+</li>
+<li><strong>Verify</strong>: The file should contain:<pre><code class="language-json">{
+  &quot;mcpServers&quot;: {
+    &quot;rule-mcp&quot;: {
+      &quot;command&quot;: &quot;/path/to/node&quot;,
+      &quot;args&quot;: [&quot;/path/to/bin/rule-mcp.js&quot;, &quot;serve&quot;]
+    }
+  }
+}
+</code></pre>
+</li>
+</ul>
+<p><strong>Issue</strong>: Claude says &quot;Tool not available&quot; after install.</p>
+<ul>
+<li><strong>Fix</strong>: Restart Claude Code. MCP servers are loaded at startup.</li>
+<li><strong>Debug</strong>: Check <code>~/.claude.log</code> for connection errors.</li>
+</ul>
+<h4>Cursor</h4>
+<p><strong>Issue</strong>: MCP server not connecting.</p>
+<ul>
+<li><strong>Fix</strong>: Check <code>~/.cursor/mcp.json</code> exists and is valid JSON.<pre><code class="language-bash">rule-mcp install --agent cursor
+</code></pre>
+</li>
+<li><strong>Known limitation</strong>: Cursor requires the MCP server to be available at IDE startup. If you install while Cursor is running, restart Cursor.</li>
+</ul>
+<h4>VS Code</h4>
+<p><strong>Issue</strong>: VS Code doesn&#39;t detect the MCP server.</p>
+<ul>
+<li><strong>Fix</strong>: The config goes into <code>.vscode/mcp.json</code> in your project root.<pre><code class="language-bash">cd your-project
+rule-mcp install --agent vscode
+</code></pre>
+</li>
+<li><strong>Verify</strong>: <code>.vscode/mcp.json</code> in your project root should contain:<pre><code class="language-json">{
+  &quot;servers&quot;: {
+    &quot;rule-mcp&quot;: {
+      &quot;type&quot;: &quot;stdio&quot;,
+      &quot;command&quot;: &quot;/path/to/node&quot;,
+      &quot;args&quot;: [&quot;/path/to/bin/rule-mcp.js&quot;, &quot;serve&quot;]
+    }
+  }
+}
+</code></pre>
+</li>
+</ul>
+<h4>GitHub Copilot</h4>
+<p><strong>Issue</strong>: Copilot doesn&#39;t support custom MCP servers directly.</p>
+<ul>
+<li><strong>Fix</strong>: Copilot uses a different integration path. Copy the instructions from:<pre><code class="language-bash">rule-mcp install --agent copilot --dry-run
+</code></pre>
+The generated instructions file explains how to configure Copilot.</li>
+</ul>
+<h4>Pi (pi.dev)</h4>
+<p><strong>Issue</strong>: pi doesn&#39;t auto-discover the MCP server.</p>
+<ul>
+<li><strong>Fix</strong>: Ensure <code>~/.pi/agent/mcp.json</code> has the entry:<pre><code class="language-bash">rule-mcp install --agent pi
+</code></pre>
+</li>
+</ul>
+<h3>Daemon mode</h3>
+<p><strong>Issue</strong>: Daemon fails to start (port in use).</p>
+<ul>
+<li><strong>Fix</strong>: Check if another instance is running:<pre><code class="language-bash">rule-mcp daemon status
+lsof -i :37999
+</code></pre>
+</li>
+<li><strong>Kill the existing process</strong>:<pre><code class="language-bash">rule-mcp daemon stop
+# Or manually: kill $(cat ~/.rule-mcp/state/daemon.pid)
+</code></pre>
+</li>
+</ul>
+<p><strong>Issue</strong>: Daemon started but health check fails.</p>
+<ul>
+<li><strong>Debug</strong>: Check the daemon log:<pre><code class="language-bash">cat ~/.rule-mcp/state/daemon.log
+</code></pre>
+</li>
+</ul>
+<p><strong>Issue</strong>: SSE connection drops.</p>
+<ul>
+<li><strong>Check</strong>: The SSE endpoint should return <code>text/event-stream</code> content type:<pre><code class="language-bash">curl -N http://localhost:37999/sse
+</code></pre>
+</li>
+<li><strong>Expected</strong>: You should see a <code>sessionId</code> event within 1 second.</li>
+</ul>
+<h3>Docker</h3>
+<p><strong>Issue</strong>: Docker container exits immediately.</p>
+<ul>
+<li><strong>Fix</strong>: The container needs to be run with stdio mode for MCP agents. Use compose for SSE:<pre><code class="language-bash">docker compose up -d
+</code></pre>
+</li>
+</ul>
+<p><strong>Issue</strong>: Can&#39;t connect to Docker container.</p>
+<ul>
+<li><strong>Verify</strong>: Health check should return 200:<pre><code class="language-bash">curl http://localhost:37999/health
+</code></pre>
+</li>
+</ul>
+<h3>Skills</h3>
+<p><strong>Issue</strong>: Skills not loading after update.</p>
+<ul>
+<li><strong>Fix</strong>: Re-embed skills:<pre><code class="language-bash">rule-mcp skills reload
+</code></pre>
+</li>
+</ul>
+<p><strong>Issue</strong>: <code>pix_tool</code> returns no matching skill.</p>
+<ul>
+<li><strong>Verify</strong>: Skills are loaded:<pre><code class="language-bash">rule-mcp tools list | grep rule-mcp
+</code></pre>
+</li>
+<li><strong>Try</strong>: Use <code>rule_tool_search</code> for free-text search across all skills.</li>
+</ul>
+<h3>General debugging</h3>
+<table>
+<thead>
+<tr>
+<th>Symptom</th>
+<th>Likely cause</th>
+<th>Fix</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>command not found: rule-mcp</code></td>
+<td>Not installed globally</td>
+<td><code>git clone</code> + <code>./scripts/install.sh</code></td>
+</tr>
+<tr>
+<td><code>Cannot find module</code></td>
+<td>Node.js &lt; 20</td>
+<td>Upgrade to Node.js 20+</td>
+</tr>
+<tr>
+<td><code>ECONNREFUSED</code> on port 37999</td>
+<td>Daemon not running</td>
+<td><code>rule-mcp daemon start</code></td>
+</tr>
+<tr>
+<td>Tools return 0 results</td>
+<td>Skills not loaded</td>
+<td><code>rule-mcp skills reload</code></td>
+</tr>
+<tr>
+<td><code>ZodError</code> in tool output</td>
+<td>Invalid arguments</td>
+<td>Check tool schema with <code>rule-mcp tools list</code></td>
+</tr>
+</tbody></table>
+
+</main>
+<footer><p>Generated from <code>docs/</code> - edit the Markdown, not this file.</p></footer>
+</body>
+</html>

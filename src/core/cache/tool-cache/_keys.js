@@ -1,11 +1,9 @@
-
-
 /** Cache keys: stable stringify, the exact key and the normalized (L1) key. */
 import { createHash } from "node:crypto";
 import { canonicalizeQuery } from "../../bm25/index.js";
 import { NON_CACHEABLE, NORMALIZABLE } from "./_state.js";
 import { namespace, normalizedTierEnabled } from "./_config.js";
-import { cavemanLevel } from "../../text/_level.js";
+import { compressionLevel } from "../../text/_level.js";
 
 /** Stable stringify (sorted keys) so argument order never changes the key. */
 export function stableStringify(value) {
@@ -41,7 +39,7 @@ export function cacheKey(toolName, args) {
     return null;
   }
 
-  const payload = `${namespace()}\u0000${cavemanLevel()}\u0000${toolName}\u0000${stableStringify(args ?? {})}`;
+  const payload = `${namespace()}\u0000${compressionLevel()}\u0000${toolName}\u0000${stableStringify(args ?? {})}`;
 
   return createHash("sha256").update(payload).digest("hex");
 }
@@ -92,7 +90,7 @@ export function normalizedKey(toolName, args) {
 
   // "n1" separates this key space from L0's, so a canonical form can never
   // collide with a raw one that happens to stringify the same way.
-  const payload = `${namespace()} n1 ${cavemanLevel()} ${toolName} ${stableStringify(normalized)}`;
+  const payload = `${namespace()} n1 ${compressionLevel()} ${toolName} ${stableStringify(normalized)}`;
 
   return createHash("sha256").update(payload).digest("hex");
 }

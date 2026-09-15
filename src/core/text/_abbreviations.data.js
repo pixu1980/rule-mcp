@@ -1,5 +1,3 @@
-
-
 /**
  * @module core/text/abbreviations.data
  *

@@ -1,7 +1,6 @@
-
-
-import { readdirSync, writeFileSync } from "node:fs";
+import { readdirSync } from "node:fs";
 import { join, extname, basename, dirname, parse } from "node:path";
+import { applyEdit } from "../tokensave/_edit.js";
 import { COMPONENT_EXTENSIONS, isBarrelFile } from "./_conventions.js";
 
 /** The `_PascalCase` component names present among a directory's files. */
@@ -31,8 +30,9 @@ function barrelHeader(folderName) {
  * @param {boolean} isDryRun
  * @param {Array<{ path: string, action: string }>} fixed - appended in place
  * @param {Array<{ path: string, error: string }>} errors - appended in place
+ * @param {string|null} [projectDir] - project root, for the TokenSave edit path
  */
-export function createMissingBarrels(issues, isDryRun, fixed, errors) {
+export function createMissingBarrels(issues, isDryRun, fixed, errors, projectDir = null) {
   for (const issue of issues) {
     if (!(issue.type === "missing-barrel" && issue.fixable)) {
       continue;
@@ -79,7 +79,7 @@ export function createMissingBarrels(issues, isDryRun, fixed, errors) {
       fixed.push({ path: barrelPath, action: `[DRY RUN] Create index.js` });
     } else {
       try {
-        writeFileSync(barrelPath, barrelContent, "utf8");
+        applyEdit(projectDir, barrelPath, barrelContent);
         fixed.push({ path: barrelPath, action: "Created index.js" });
       } catch (error) {
         errors.push({ path: barrelPath, error: `Cannot write: ${error.message}` });
@@ -95,8 +95,9 @@ export function createMissingBarrels(issues, isDryRun, fixed, errors) {
  * @param {boolean} isDryRun
  * @param {Array<{ path: string, action: string }>} fixed - appended in place
  * @param {Array<{ path: string, error: string }>} errors - appended in place
+ * @param {string|null} [projectDir] - project root, for the TokenSave edit path
  */
-export function populateEmptyBarrels(issues, isDryRun, fixed, errors) {
+export function populateEmptyBarrels(issues, isDryRun, fixed, errors, projectDir = null) {
   for (const issue of issues) {
     if (!(issue.type === "empty-barrel" && issue.fixable)) {
       continue;
@@ -125,7 +126,7 @@ export function populateEmptyBarrels(issues, isDryRun, fixed, errors) {
       fixed.push({ path: issue.path, action: "[DRY RUN] Populate barrel with exports" });
     } else {
       try {
-        writeFileSync(issue.path, `${barrelHeader(folderName)}${content}`, "utf8");
+        applyEdit(projectDir, issue.path, `${barrelHeader(folderName)}${content}`);
         fixed.push({ path: issue.path, action: "Populated barrel with exports" });
       } catch (error) {
         errors.push({ path: issue.path, error: error.message });

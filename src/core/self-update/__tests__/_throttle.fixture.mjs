@@ -19,6 +19,11 @@ import { execFileSync } from "node:child_process";
 import { chmodSync, existsSync, mkdirSync, mkdtempSync, readFileSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
+import { fileURLToPath } from "node:url";
+
+// Server code resolves `@src/*` through a hook (ADR 079); a spawned
+// process loads it too, so it registers the hook as every entry point does.
+const ALIAS_HOOK = fileURLToPath(new URL("../../../../scripts/alias-hook.mjs", import.meta.url));
 
 export const g = (arguments_, cwd) => execFileSync("git", arguments_, { cwd, stdio: ["ignore", "pipe", "ignore"], encoding: "utf8" });
 
@@ -80,7 +85,7 @@ export function runScenario(clone, scriptBody, environment = {}) {
     const { maybeSelfUpdate } = await import(${JSON.stringify(moduleUrl)});
     ${scriptBody}
   `;
-  const out = execFileSync(process.execPath, ["--input-type=module", "--eval", script], {
+  const out = execFileSync(process.execPath, ["--import", ALIAS_HOOK, "--input-type=module", "--eval", script], {
     cwd: clone,
     env: {
       ...process.env,

@@ -2,7 +2,7 @@
 
 /** @module core/agents/commands/definitions */
 
-import { listPrompts } from "../../../prompts/index.js";
+import { listPrompts } from "@src/prompts/index.js";
 import { areaBody, HANDOFF_BODY, ROUTER } from "./_bodies.js";
 import { commandNames, ROUTER_COMMAND } from "./_names.js";
 import { personaBody, personaTarget } from "./_personas.js";

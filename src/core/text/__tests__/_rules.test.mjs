@@ -3,18 +3,26 @@
 /** The simplicity guardrail family: each rule fires on its counterexample and only there. */
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
-import { SHARED_GUARDRAILS, SIMPLICITY_GUARDRAILS, getGuardrails } from "../../guardrails/index.js";
+import { BASELINE_SKILLS, getGuardrails, ownedGuardrails } from "../../guardrails/index.js";
+import { loadAllSkills } from "../../skills/index.js";
 import { check, finish } from "./_simplicity.fixture.mjs";
 
 console.log("=== Simplicity: guardrails ===\n");
 
+// The simplicity rules live in the skills that own them (ADR 079):
+// rule-process-simplicity keeps two, rule-styleguide-comments the third.
+await loadAllSkills();
+const SIMPLICITY_GUARDRAILS = [...ownedGuardrails("rule-process-simplicity"), ...ownedGuardrails("rule-styleguide-comments")].filter((rule) =>
+  ["no-speculative-audit-table", "no-future-use-code", "no-commented-out-code"].includes(rule.id),
+);
+
 // ── T4: guardrails ship everywhere ──
 const simplicityIds = SIMPLICITY_GUARDRAILS.map((g) => g.id);
 check("T4 three simplicity guardrails exist", simplicityIds.length === 3);
-const sharedIds = new Set(SHARED_GUARDRAILS.map((g) => g.id));
+const baselineIds = new Set(BASELINE_SKILLS.flatMap((skill) => ownedGuardrails(skill).map((rule) => rule.id)));
 check(
-  "T4.1 simplicity guardrails are shared",
-  simplicityIds.every((id) => sharedIds.has(id)),
+  "T4.1 simplicity guardrails are part of the baseline",
+  simplicityIds.every((id) => baselineIds.has(id)),
 );
 for (const skill of ["rule-data-postgresql", "rule-backend-express", "rule-frontend-react"]) {
   const ids = new Set(getGuardrails(skill).map((g) => g.id));

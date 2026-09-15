@@ -14,6 +14,7 @@ tags:
   - "schema"
   - "migration"
 frameworks: [all]
+inherits: [rule-data]
 ---
 
 # rule-data-sql - SQL Best Practices & Scripts

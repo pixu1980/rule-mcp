@@ -15,6 +15,7 @@ tags:
   - code-review
   - styleguide
 frameworks: [all]
+guardrails: [ts-catch-unknown, ts-no-double-assertion, ts-no-explicit-any, ts-union-over-enum]
 ---
 
 # rule-styleguide-typescript - Types that hold up in review

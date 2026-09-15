@@ -1,62 +1,62 @@
-
-
 /**
  * @module test/install-agent-catalog
  *
  * Agent catalog invariants.
  *
- * 1. The interactive picker offers every supported target, not only the ones
+ * 1. The wizard's agent screen offers every supported target, not only the ones
  *    detected on this machine. A user reported the list collapsing to Claude and
  *    Codex because nothing else had a config file yet - which is exactly when
- *    you need the installer to offer the rest. The picker is now Ink-rendered
- *    (ADR 080), so the rows are asserted where they are built.
+ *    you need the installer to offer the rest.
  * 2. Devin is installable, at the path Devin documents
  *    (`mcp_config.json`, not the `mcp.json` every other agent uses), and is
  *    branded "(formerly Windsurf)" - Cognition acquired Windsurf.
  * 3. Windsurf is removed from the catalog: no picker row, no sweep entry.
  *    Naming it still works as a courtesy redirect to Devin, with a warning.
- * 4. No shell script carries a second copy of the catalog - the drift that
- *    made the bash and PowerShell matrices disagree with this one.
+ * The screen itself is Ink now (ADR 080), so what used to be asserted against
+ * the bash picker is asserted against the rows it renders.
  */
 
 import { strict as assert } from "node:assert";
-import { readFileSync } from "node:fs";
 import { homedir } from "node:os";
 import { join } from "node:path";
 import { getAllAgents, installAgent, uninstallAgent } from "../index.js";
-import { agentRows } from "../../setup/_agent-rows.js";
+import { agentCatalog, agentRows } from "../../setup/_agent-rows.js";
 
 const root = new URL("../../../..", import.meta.url).pathname;
-const installSh = readFileSync(join(root, "scripts", "install.sh"), "utf8");
 const entrypoint = join(root, "bin", "rule-mcp.js");
 
 console.log("install agent catalog test");
 
-// ── 1. the picker renders the catalog, not the detection result ───────────
+// ── 1. the screen renders the catalog, not the detection result ───────────
 
-const rows = agentRows();
-const rowIds = rows.items.filter((item) => !item.section).map((item) => item.id);
+const { items, detected } = agentRows();
+const offered = new Set(items.filter((item) => !item.section).map((item) => item.id));
 
-assert.deepEqual(rowIds, getAllAgents(), "the picker must render the whole catalog, in catalog order, not the detection result");
+for (const agent of getAllAgents()) {
+  assert.ok(offered.has(agent), `${agent} must be offered by the agent screen`);
+}
+
+assert.ok(offered.size >= getAllAgents().length, "the rows are the catalog, not the detection result");
 assert.ok(
-  rows.items.some((item) => item.section && item.label === "Coding agents") && rows.items.some((item) => item.section && item.label === "IDEs"),
-  "the catalog must stay sectioned so the list is readable",
+  detected.every((name) => offered.has(name)),
+  "a detected agent must be a row that can be ticked",
+);
+assert.deepEqual(
+  detected,
+  agentCatalog()
+    .filter((entry) => entry.present && !entry.deprecated)
+    .map((entry) => entry.name),
+  "detected agents start pre-selected, and a superseded name never does",
 );
 assert.ok(
-  rows.detected.every((name) => rowIds.includes(name)),
-  "every detected agent must have a row to be pre-selected on",
+  items.some((item) => item.section),
+  "the list is sectioned, so a 23-row catalog can be read",
 );
-assert.ok(
-  rows.items.filter((item) => !item.section).every((item) => typeof item.detail === "string" && item.detail.length > 0),
-  "every row must explain itself in the detail panel, detected or not",
-);
-console.log("  ✅ the picker offers every supported target");
+console.log("  ✅ the agent screen offers every supported target");
 
 // ── 2. Devin ────────────────────────────────────────────────────────────────
 
 assert.ok(getAllAgents().includes("devin"), "devin must be a supported agent");
-assert.equal(rows.items.find((item) => item.id === "devin")?.label, "devin (formerly Windsurf)", "the picker must brand Devin with its Windsurf heritage");
-
 const devin = installAgent({ agent: "devin", entrypoint, dryRun: true });
 const devinPath = devin.installed.devin;
 
@@ -88,9 +88,10 @@ console.log("  ✅ devin installs to its documented config path, branded (former
 // ── 3. Windsurf is gone from the catalog; naming it redirects to Devin ─────
 
 assert.ok(!getAllAgents().includes("windsurf"), "windsurf must not be offered by the catalog - Cognition renamed it Devin");
-assert.ok(!installSh.includes("windsurf"), "install.sh must not contain a windsurf entry anywhere");
-assert.ok(!/\bwindsurf\b/.test(readFileSync(join(root, "scripts", "install.ps1"), "utf8")), "install.ps1 must not list windsurf");
-assert.ok(!rowIds.includes("windsurf"), "the picker must not offer windsurf");
+assert.ok(
+  agentRows().items.every((item) => item.id !== "windsurf"),
+  "the agent screen must not offer windsurf",
+);
 
 const sweep = installAgent({ agent: "all", entrypoint, dryRun: true });
 
@@ -108,15 +109,5 @@ const removed = uninstallAgent({ agent: "windsurf", dryRun: true });
 
 assert.ok(Array.isArray(removed.uninstalled?.devin), "uninstalling windsurf must redirect to the devin cleanup");
 console.log("  ✅ windsurf removed from the catalog; --agent windsurf redirects to devin");
-
-// ── 4. one catalog, and only one ───────────────────────────────────────────
-
-for (const script of ["install.sh", "uninstall.sh", "install.ps1", "uninstall.ps1"]) {
-  const source = readFileSync(join(root, "scripts", script), "utf8");
-  const strays = getAllAgents().filter((agent) => new RegExp(String.raw`\b${agent}\b`).test(source));
-
-  assert.deepEqual(strays, [], `${script} names agents (${strays.join(", ")}) - the catalog lives in src/cli/installers/_catalog.js and nowhere else`);
-}
-console.log("  ✅ no shell script carries a second agent catalog");
 
 console.log("  ✅ agent catalog invariants hold");

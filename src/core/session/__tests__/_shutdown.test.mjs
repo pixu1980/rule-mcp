@@ -9,6 +9,11 @@ import { mkdtempSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { bin, reap, reservePort, root, until, within } from "./_hygiene.fixture.mjs";
+import { fileURLToPath } from "node:url";
+
+// Server code resolves `@src/*` through a hook (ADR 079); a spawned
+// process loads it too, so it registers the hook as every entry point does.
+const ALIAS_HOOK = fileURLToPath(new URL("../../../../scripts/alias-hook.mjs", import.meta.url));
 test("an error storm ends the process instead of being ridden out", async (t) => {
   // The shape found on a real machine, read off a `sample` of the stack: a
   // callback that throws on every check phase of the event loop, an
@@ -17,6 +22,8 @@ test("an error storm ends the process instead of being ridden out", async (t) =>
   const storm = spawn(
     process.execPath,
     [
+      "--import",
+      ALIAS_HOOK,
       "--input-type=module",
       "-e",
       `const { installProcessErrorHandlers } = await import(${JSON.stringify(join(root, "src", "utils", "index.js"))});

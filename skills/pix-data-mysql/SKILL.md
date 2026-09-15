@@ -13,6 +13,7 @@ tags:
   - "replication"
   - "backup"
 frameworks: [all]
+inherits: [rule-data]
 ---
 
 # rule-data-mysql - MySQL 8+ / MariaDB 11+ Best Practices & Scripts

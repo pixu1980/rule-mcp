@@ -6,6 +6,7 @@ tags:
   - "frontend"
   - "angular"
 frameworks: [angular]
+guardrails: [angular-no-ngclass]
 ---
 
 # rule-frontend-angular - Angular with rule Principles

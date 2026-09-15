@@ -62,7 +62,7 @@ export function seedEvents() {
     ok: true,
     cacheHit: false,
     routedSkill: "rule-frontend-react",
-    saved: { cache: 0, caveman: 120, tokensave: 0, estimatedRouting: 3400 },
+    saved: { cache: 0, compression: 120, tokensave: 0, estimatedRouting: 3400 },
     now: T0 + 2100,
   });
   recorder.recordToolCall({

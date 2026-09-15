@@ -36,11 +36,13 @@ function printCommandTargets(opts) {
  * agent directory. Registry-driven (see {@link module:core/agent-commands}) so
  * the same ordered set is written for every agent.
  *
- * @param {{ dir?: string, format?: string, remove?: boolean, list?: boolean, force?: boolean, dryRun?: boolean }} opts
+ * @param {{ dir?: string, format?: string, remove?: boolean, list?: boolean, force?: boolean, dryRun?: boolean, only?: string[] }} opts
  */
 function agentCommandsCommand(opts = {}) {
   if (opts.list) {
-    print(commandNames().join("\n"));
+    // The selection applies here too: listing is how a person previews what an
+    // install would write before writing it.
+    print((opts.only ?? commandNames()).join("\n"));
 
     return;
   }
@@ -68,7 +70,7 @@ function agentCommandsCommand(opts = {}) {
   }
 
   const dir = resolve(opts.dir);
-  const files = renderAgentCommandFiles(format);
+  const files = renderAgentCommandFiles(format, opts.only ?? undefined);
 
   let written = 0;
   let skipped = 0;

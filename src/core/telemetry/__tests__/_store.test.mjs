@@ -20,7 +20,7 @@ const old = {
   durationMs: 5,
   ok: true,
   cacheHit: false,
-  saved: { caveman: 10 },
+  saved: { compression: 10 },
 };
 writeFileSync(eventsFile(), `${readFileSync(eventsFile(), "utf8") + JSON.stringify(old)}\n`);
 check("T6 DAY_MS is a day", DAY_MS === DAY);
@@ -44,7 +44,7 @@ check("T6.6 the state size is measurable for the cap", stateSize() > 0);
 
 // The recording is filed per project under the home directory, never inside the
 // project: nothing this server writes needs a rule in somebody's .gitignore
-// (ADR 082).
+//
 const { getProjectPaths } = await import("../../../cli/paths/index.js");
 const projectStateDir = getProjectPaths(projectDir).dir;
 check("T10 the events file lives in this project's own directory", eventsFile().startsWith(projectStateDir));

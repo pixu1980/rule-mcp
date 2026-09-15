@@ -1,0 +1,1378 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>rule-mcp - rule-mcp docs</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header><nav><ul>
+<li><a href="index.html" aria-current="page">Home</a></li>
+<li><a href="docs/01-getting-started.html">undefined</a></li>
+<li><a href="docs/02-product-architecture.html">undefined</a></li>
+<li><a href="docs/03-agent-instructions.html">undefined</a></li>
+<li><a href="docs/04-operations.html">undefined</a></li>
+<li><a href="docs/05-env-variables.html">undefined</a></li>
+<li><a href="docs/06-privacy.html">undefined</a></li>
+<li><a href="docs/07-engineering-guides.html">undefined</a></li>
+<li><a href="docs/08-skills.html">undefined</a></li>
+<li><a href="docs/09-tools.html">undefined</a></li>
+<li><a href="docs/10-prompts.html">undefined</a></li>
+<li><a href="docs/11-instructions.html">undefined</a></li>
+<li><a href="docs/12-cli.html">undefined</a></li>
+<li><a href="docs/13-personas.html">undefined</a></li>
+<li><a href="docs/14-guardrails.html">undefined</a></li>
+<li><a href="docs/15-resources.html">undefined</a></li>
+<li><a href="docs/adr/ADR.html">ADRs</a></li>
+</ul></nav></header>
+<main>
+<h1>rule-mcp</h1>
+<p><strong>rule-mcp</strong> is an <a href="https://modelcontextprotocol.io">MCP</a> server that puts 90 modular skills
+(styleguides, component templates, framework practices, design patterns) inside your AI coding
+agent as tools, resources, and prompts - so a free-text request routes to the right skill, and
+generated code is validated against guardrails before it reaches you. It never calls an LLM
+itself, so it behaves identically behind Claude, GPT, Gemini, Llama, or Qwen, and everything
+runs on your machine with no build step.</p>
+<p>Node ≥ 20 · <a href="https://github.com/pixu1980/rule-mcp/blob/main/LICENSE">MIT license</a> · MCP SDK 1.30.0 (from package.json).</p>
+<blockquote>
+<p><strong>Runtime deps:</strong> <code>@modelcontextprotocol/sdk</code> + <code>zod</code> only. No build step needed.<br><strong>Local-first:</strong> everything runs on your machine, skills live in <code>~/.agents/skills/</code>.</p>
+</blockquote>
+<hr>
+<h2>Table of Contents</h2>
+<ul>
+<li><a href="#quick-start">Quick start</a></li>
+<li><a href="#what-is-rule-mcp">What is rule-mcp</a></li>
+<li><a href="#architecture-overview">Architecture overview</a></li>
+<li><a href="#tool-reference">Tool reference</a><ul>
+<li><a href="#all-106-tools-normal-mode">All 106 tools (normal mode)</a></li>
+<li><a href="#minimal-tool-surface-10-tools">Minimal tool surface (10 tools)</a></li>
+<li><a href="#gateway-deterministic-mode">Gateway deterministic mode</a></li>
+</ul>
+</li>
+<li><a href="#mcp-resources-186">MCP Resources (186)</a></li>
+<li><a href="#mcp-prompts-76">MCP Prompts (76)</a></li>
+<li><a href="#guardrail-engine">Guardrail engine</a></li>
+<li><a href="#cli-reference">CLI reference</a></li>
+<li><a href="#daemon--services">Daemon &amp; services</a></li>
+<li><a href="#docker">Docker</a></li>
+<li><a href="#project-structure">Project structure</a></li>
+<li><a href="#further-reading">Further reading</a></li>
+<li><a href="#contributing">Contributing</a></li>
+<li><a href="#code-of-conduct">Code of Conduct</a></li>
+<li><a href="#governance">Governance</a></li>
+<li><a href="#security">Security</a></li>
+<li><a href="#sponsors">Sponsors</a></li>
+<li><a href="ROADMAP.html">Roadmap</a></li>
+<li><a href="#license">License</a></li>
+</ul>
+<hr>
+<h2>Project status</h2>
+<p>Deterministic MCP server for the rule skill ecosystem. Live surface (enforced by
+<code>tests/docs/docs-accuracy.test.mjs</code> - the README and reality cannot drift):</p>
+<table>
+<thead>
+<tr>
+<th>Surface</th>
+<th>Count</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Tools</td>
+<td>106</td>
+<td>per-skill tools + dispatcher/action tools</td>
+</tr>
+<tr>
+<td>Resources</td>
+<td>186</td>
+<td>rule:// per-skill index + summary + template URIs</td>
+</tr>
+<tr>
+<td>Prompts</td>
+<td>76</td>
+<td>rule-area-* areas + one-shot workflow + 54 review-persona commands (rule-plan-* / rule-audit-* / rule-review-*)</td>
+</tr>
+<tr>
+<td>Skills</td>
+<td>90</td>
+<td>frontend, backend, data, devops, toolchain, styleguide, process, platform, ai</td>
+</tr>
+<tr>
+<td>Tests</td>
+<td>1211</td>
+<td><code>pnpm test:all</code> green (incl. installer + PTY TUI)</td>
+</tr>
+</tbody></table>
+<p>Architecture decisions live in <a href="docs/adr/ADR.html"><code>docs/adr/</code></a> (86 records:
+installer self-heal, architect split, doc-accuracy guard, v1.0.0 release).
+The former architect wizard now lives in the standalone
+<a href="https://github.com/pixu1980/rule-mcp-architect"><code>rule-mcp-architect</code></a> web
+app + SDK repo.</p>
+<h2>Quick start</h2>
+<p>See <strong><a href="docs/01-getting-started.html"><code>docs/01-getting-started.md</code></a></strong> for step-by-step installation:</p>
+<ul>
+<li>Global CLI from a clone</li>
+<li>pnpx ephemeral (no install, once published)</li>
+<li>Local development clone</li>
+<li>Docker</li>
+<li>Agent integration (23 supported agents)</li>
+<li>mcp.json configuration</li>
+</ul>
+<pre><code class="language-bash"># TL;DR - clone and go
+git clone https://github.com/pixu1980/rule-mcp.git
+cd rule-mcp
+./scripts/install.sh
+rule-mcp doctor
+</code></pre>
+<p>Verify a release tarball (every GitHub Release attaches both files):</p>
+<pre><code class="language-bash">curl -fsSLO https://github.com/pixu1980/rule-mcp/releases/download/&lt;tag&gt;/SHA256SUMS
+shasum -a 256 -c SHA256SUMS
+</code></pre>
+<hr>
+<h2>What is rule-mcp</h2>
+<p>rule-mcp is an <a href="https://modelcontextprotocol.io">MCP</a> server that exposes <strong>106 tools</strong>, <strong>186 resources</strong>, and <strong>76 prompts</strong> to any MCP-compatible AI coding agent. Because the server never calls an LLM (every output is deterministic), it is <strong>model-agnostic</strong> - it behaves identically behind Claude, GPT, Gemini, Llama, Qwen, or any other model. It provides:</p>
+<ul>
+<li><strong>90 modular skills</strong> covering frontend, backend, database, devops, toolchain, styleguide, process, platform, and ai domains</li>
+<li><strong>BM25 full-text search</strong> across all skill content</li>
+<li><strong>Guardrail engine</strong> with 18 shared rules + framework/backend/database/devops-specific checks</li>
+<li><strong>Deterministic gateway</strong> (<code>pix_gateway</code> + <code>pix_apply</code>) with receipt-based validation</li>
+<li><strong>Minimal tool surface</strong> (<code>RULE_MCP_MINIMAL_TOOLS=1</code>, off by default) collapsing the surface to 10 dispatcher/action tools - for clients that cap MCP tool counts (Cursor, GitHub Copilot) and to cut per-turn token cost on every model</li>
+</ul>
+<h3>Supported agents</h3>
+<p>Claude Code, Cursor, Cline, Roo Code, Copilot, Gemini CLI, Codex CLI, Devin (formerly Windsurf), OpenCode, Pi, and any MCP-compatible host.</p>
+<blockquote>
+<p><strong>Transport support tiers.</strong> <strong>stdio</strong> is the universally-tested path and works with every MCP host - prefer it. <strong>Daemon / HTTP+SSE</strong> is verified end-to-end for <strong>Pi</strong> and <strong>VS Code</strong>; the other agents receive a best-effort standard <code>mcpServers</code> config (correct shape, but not each individually interop-tested) and may need a manual tweak.</p>
+</blockquote>
+<hr>
+<h2>Architecture overview</h2>
+<pre><code>┌──────────────────────────────────────────────────────────────┐
+│                    AI Coding Agent                           │
+│  (Claude Code / Cursor / Pi / Gemini CLI / etc.)             │
+└──────────────┬──────────────────────────────┬────────────────┘
+               │ MCP protocol (tools/list,     │
+               │ tools/call, resources/read,    │
+               │ prompts/get, completion)       │
+               ▼                                ▼
+┌──────────────────────────────┬───────────────────────────────┐
+│      STDIO Transport         │       SSE Transport           │
+│  (default, for agents)       │  (optional, for IDE/HTTP)     │
+└──────────────┬───────────────┴──────────────┬────────────────┘
+               ▼                               ▼
+┌───────────────────────────────────────────────────────────────┐
+│                    MCP Server (SDK)                           │
+│  src/server.js - handler registration                         │
+│  src/transport/sse.js - SSE HTTP server                       │
+│  src/transport/cert.js - self-signed TLS cert generation      │
+├───────────────────────────────────────────────────────────────┤
+│  Tool Registry              │  Resources Registry             │
+│  src/tools/router.js        │  src/resources/index.js         │
+│  106 tools                  │  186 resources                  │
+├──────────────────┬───────────┴────────────────┬───────────────┤
+│  Orchestration   │  Skills &amp; BM25            │  Guardrails    │
+│  pix_gateway     │  90 skill dirs            │  18 shared     │
+│  pix_apply       │  src/core/bm25.js         │  + framework   │
+│  receipt system  │  src/core/skills.js        │  + backend    │
+│                  │                            │  + database   │
+│                  │                            │  + devops     │
+├──────────────────┴────────────────────────────┴───────────────┤
+│  CLI                         │  Installer                     │
+│  src/cli/commands.js         │  src/cli/setup/  (Ink wizard)  │
+│  src/cli/daemon.js           │  src/cli/install.js            │
+│  src/cli/doctor.js           │  23 agents supported           │
+│                              │  scripts/*.sh|.ps1 bootstraps  │
+└──────────────────────────────┴────────────────────────────────┘
+</code></pre>
+<p><strong>Key files:</strong></p>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>src/server.js</code></td>
+<td>MCP server bootstrap, handler registration</td>
+</tr>
+<tr>
+<td><code>src/tools/router.js</code></td>
+<td>Generic tool registry (<code>registerTool</code>, <code>listTools</code>, <code>callTool</code>)</td>
+</tr>
+<tr>
+<td><code>src/tools/ai.js</code></td>
+<td>Router tool <code>pix_tool</code> (BM25 keyword scoring + framework bias)</td>
+</tr>
+<tr>
+<td><code>src/tools/gateway.js</code></td>
+<td>Gateway orchestrator <code>pix_gateway</code> + receipt system</td>
+</tr>
+<tr>
+<td><code>src/tools/apply.js</code></td>
+<td>Write tool <code>pix_apply</code> with receipt validation</td>
+</tr>
+<tr>
+<td><code>src/tools/skill.js</code></td>
+<td>Skill-tool generator + <code>pix_search</code>, <code>pix_check</code>, <code>pix_scaffold</code></td>
+</tr>
+<tr>
+<td><code>src/core/guardrails.js</code></td>
+<td>Guardrail engine (check runner + report)</td>
+</tr>
+<tr>
+<td><code>src/core/guardrail-defs.js</code></td>
+<td>All guardrail definitions (shared, framework, backend, database, devops)</td>
+</tr>
+<tr>
+<td><code>src/core/enforcement.js</code></td>
+<td>Pre/post processing (advisory - policy tag: <code>advisory</code>)</td>
+</tr>
+<tr>
+<td><code>src/core/bm25.js</code></td>
+<td>BM25 full-text search index</td>
+</tr>
+<tr>
+<td><code>src/core/detector.js</code></td>
+<td>Project framework detection</td>
+</tr>
+</tbody></table>
+<p><strong>Modes:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Mode</th>
+<th>Tools exposed</th>
+<th>Use case</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Normal (default)</td>
+<td>90</td>
+<td>Full access to all skills, tools, and features</td>
+</tr>
+<tr>
+<td>Minimal (<code>RULE_MCP_MINIMAL_TOOLS=1</code>)</td>
+<td>10</td>
+<td>Dispatcher + action tools only - fits client tool caps (Cursor/Copilot), cheaper context, safe for untrusted code</td>
+</tr>
+<tr>
+<td>Allowed-tools filter</td>
+<td>8 (recommended)</td>
+<td>Via <code>mcp.json</code> <code>allowedTools</code> - reduce token consumption</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>Tool reference</h2>
+<h3>All 106 tools (normal mode)</h3>
+<h4>Deterministic tools (9)</h4>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>Description</th>
+<th>Read-only</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>rule</code></td>
+<td>Route a prompt to the correct rule skill via BM25 keyword scoring + framework bias</td>
+<td>✅</td>
+</tr>
+<tr>
+<td><code>pix_gateway</code></td>
+<td><strong>Single-entry orchestrator:</strong> routes → loads evidence → checks guardrails → returns receipt</td>
+<td>✅</td>
+</tr>
+<tr>
+<td><code>pix_apply</code></td>
+<td>Write files to disk, requires valid receipt from <code>pix_gateway</code></td>
+<td>❌</td>
+</tr>
+<tr>
+<td><code>pix_search</code></td>
+<td>BM25 full-text search across all 89 skills</td>
+<td>✅</td>
+</tr>
+<tr>
+<td><code>pix_check</code></td>
+<td>Run guardrail checks on code against any rule skill</td>
+<td>✅</td>
+</tr>
+<tr>
+<td><code>pix_scaffold</code></td>
+<td>Generate project config files (<code>.prettierrc</code>, <code>.editorconfig</code>, <code>.gitignore</code>, etc.)</td>
+<td>✅</td>
+</tr>
+<tr>
+<td><code>pix_detect</code></td>
+<td>Auto-detect project framework and suggest relevant skills/tools</td>
+<td>✅</td>
+</tr>
+<tr>
+<td><code>pix_component</code></td>
+<td>Generate component templates (button, card, modal, form, list, nav) for 7 frameworks</td>
+<td>✅</td>
+</tr>
+<tr>
+<td><code>pix_process_handoff</code></td>
+<td>Generate compressed LLM handoff for cross-session recovery</td>
+<td>✅</td>
+</tr>
+</tbody></table>
+<h4>Skill tools (67)</h4>
+<p>Each skill directory under <code>skills/</code> becomes a tool <code>pix_&lt;skill-name&gt;</code>. All support 6 modes: <code>full</code>, <code>summary</code>, <code>search</code>, <code>guardrails</code>, <code>check</code>, <code>tldr</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>Skill name</th>
+<th>Lines</th>
+<th>Domain</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>pix_backend</code></td>
+<td>rule-backend</td>
+<td>61</td>
+<td>Backend</td>
+</tr>
+<tr>
+<td><code>pix_backend_api_design</code></td>
+<td>rule-backend-api-design</td>
+<td>158</td>
+<td>Backend</td>
+</tr>
+<tr>
+<td><code>pix_backend_express</code></td>
+<td>rule-backend-express</td>
+<td>147</td>
+<td>Backend</td>
+</tr>
+<tr>
+<td><code>pix_backend_fastify</code></td>
+<td>rule-backend-fastify</td>
+<td>82</td>
+<td>Backend</td>
+</tr>
+<tr>
+<td><code>pix_backend_hono</code></td>
+<td>rule-backend-hono</td>
+<td>91</td>
+<td>Backend</td>
+</tr>
+<tr>
+<td><code>pix_backend_nestjs</code></td>
+<td>rule-backend-nestjs</td>
+<td>94</td>
+<td>Backend</td>
+</tr>
+<tr>
+<td><code>pix_backend_node</code></td>
+<td>rule-backend-node</td>
+<td>214</td>
+<td>Backend</td>
+</tr>
+<tr>
+<td><code>pix_backend_security</code></td>
+<td>rule-backend-security</td>
+<td>174</td>
+<td>Backend</td>
+</tr>
+<tr>
+<td><code>pix_data</code></td>
+<td>rule-data</td>
+<td>39</td>
+<td>Data</td>
+</tr>
+<tr>
+<td><code>pix_data_duckdb</code></td>
+<td>rule-data-duckdb</td>
+<td>234</td>
+<td>Data</td>
+</tr>
+<tr>
+<td><code>pix_data_indexed_db</code></td>
+<td>rule-data-indexed-db</td>
+<td>317</td>
+<td>Data</td>
+</tr>
+<tr>
+<td><code>pix_data_mongodb</code></td>
+<td>rule-data-mongodb</td>
+<td>743</td>
+<td>Data</td>
+</tr>
+<tr>
+<td><code>pix_data_mysql</code></td>
+<td>rule-data-mysql</td>
+<td>595</td>
+<td>Data</td>
+</tr>
+<tr>
+<td><code>pix_data_postgresql</code></td>
+<td>rule-data-postgresql</td>
+<td>649</td>
+<td>Data</td>
+</tr>
+<tr>
+<td><code>pix_data_sql</code></td>
+<td>rule-data-sql</td>
+<td>632</td>
+<td>Data</td>
+</tr>
+<tr>
+<td><code>pix_data_sqlite</code></td>
+<td>rule-data-sqlite</td>
+<td>242</td>
+<td>Data</td>
+</tr>
+<tr>
+<td><code>pix_devops</code></td>
+<td>rule-devops</td>
+<td>42</td>
+<td>DevOps</td>
+</tr>
+<tr>
+<td><code>pix_devops_docker</code></td>
+<td>rule-devops-docker</td>
+<td>128</td>
+<td>DevOps</td>
+</tr>
+<tr>
+<td><code>pix_devops_gitlab_ci</code></td>
+<td>rule-devops-gitlab-ci</td>
+<td>75</td>
+<td>DevOps</td>
+</tr>
+<tr>
+<td><code>pix_devops_testing</code></td>
+<td>rule-devops-testing</td>
+<td>300</td>
+<td>DevOps</td>
+</tr>
+<tr>
+<td><code>pix_devops_version</code></td>
+<td>rule-devops-version</td>
+<td>161</td>
+<td>DevOps</td>
+</tr>
+<tr>
+<td><code>pix_frontend</code></td>
+<td>rule-frontend</td>
+<td>61</td>
+<td>Frontend</td>
+</tr>
+<tr>
+<td><code>pix_frontend_angular</code></td>
+<td>rule-frontend-angular</td>
+<td>504</td>
+<td>Frontend</td>
+</tr>
+<tr>
+<td><code>pix_meta_astro</code></td>
+<td>rule-meta-astro</td>
+<td>526</td>
+<td>Frontend</td>
+</tr>
+<tr>
+<td><code>pix_meta_next</code></td>
+<td>rule-meta-next</td>
+<td>201</td>
+<td>Frontend</td>
+</tr>
+<tr>
+<td><code>pix_meta_nuxt</code></td>
+<td>rule-meta-nuxt</td>
+<td>181</td>
+<td>Frontend</td>
+</tr>
+<tr>
+<td><code>pix_meta_remix</code></td>
+<td>rule-meta-remix</td>
+<td>224</td>
+<td>Frontend</td>
+</tr>
+<tr>
+<td><code>pix_frontend_react</code></td>
+<td>rule-frontend-react</td>
+<td>688</td>
+<td>Frontend</td>
+</tr>
+<tr>
+<td><code>pix_frontend_solidjs</code></td>
+<td>rule-frontend-solidjs</td>
+<td>532</td>
+<td>Frontend</td>
+</tr>
+<tr>
+<td><code>pix_frontend_svelte</code></td>
+<td>rule-frontend-svelte</td>
+<td>508</td>
+<td>Frontend</td>
+</tr>
+<tr>
+<td><code>pix_frontend_vanilla_reactive</code></td>
+<td>rule-frontend-vanilla-reactive</td>
+<td>640</td>
+<td>Frontend</td>
+</tr>
+<tr>
+<td><code>pix_frontend_vue</code></td>
+<td>rule-frontend-vue</td>
+<td>522</td>
+<td>Frontend</td>
+</tr>
+<tr>
+<td><code>pix_platform</code></td>
+<td>rule-platform</td>
+<td>43</td>
+<td>Platform</td>
+</tr>
+<tr>
+<td><code>pix_platform_agent</code></td>
+<td>rule-platform-agent</td>
+<td>294</td>
+<td>Platform</td>
+</tr>
+<tr>
+<td><code>pix_platform_desktop</code></td>
+<td>rule-platform-desktop</td>
+<td>542</td>
+<td>Platform</td>
+</tr>
+<tr>
+<td><code>pix_platform_expo</code></td>
+<td>rule-platform-expo</td>
+<td>254</td>
+<td>Platform</td>
+</tr>
+<tr>
+<td><code>pix_platform_library</code></td>
+<td>rule-platform-library</td>
+<td>259</td>
+<td>Platform</td>
+</tr>
+<tr>
+<td><code>pix_platform_web</code></td>
+<td>rule-platform-web</td>
+<td>241</td>
+<td>Platform</td>
+</tr>
+<tr>
+<td><code>pix_process</code></td>
+<td>rule-process</td>
+<td>43</td>
+<td>Process</td>
+</tr>
+<tr>
+<td><code>pix_process_bmad</code></td>
+<td>rule-process-bmad</td>
+<td>422</td>
+<td>Process</td>
+</tr>
+<tr>
+<td><code>pix_process_documentation</code></td>
+<td>rule-process-documentation</td>
+<td>201</td>
+<td>Process</td>
+</tr>
+<tr>
+<td><code>pix_process_feature_workflow</code></td>
+<td>rule-process-feature-workflow</td>
+<td>121</td>
+<td>Process</td>
+</tr>
+<tr>
+<td><code>pix_process_tdd</code></td>
+<td>rule-process-tdd</td>
+<td>205</td>
+<td>Process</td>
+</tr>
+<tr>
+<td><code>pix_styleguide</code></td>
+<td>rule-styleguide</td>
+<td>58</td>
+<td>Styleguide</td>
+</tr>
+<tr>
+<td><code>pix_styleguide_a11y</code></td>
+<td>rule-styleguide-a11y</td>
+<td>514</td>
+<td>Styleguide</td>
+</tr>
+<tr>
+<td><code>pix_styleguide_css</code></td>
+<td>rule-styleguide-css</td>
+<td>488</td>
+<td>Styleguide</td>
+</tr>
+<tr>
+<td><code>pix_styleguide_html</code></td>
+<td>rule-styleguide-html</td>
+<td>339</td>
+<td>Styleguide</td>
+</tr>
+<tr>
+<td><code>pix_styleguide_javascript</code></td>
+<td>rule-styleguide-javascript</td>
+<td>553</td>
+<td>Styleguide</td>
+</tr>
+<tr>
+<td><code>pix_styleguide_json</code></td>
+<td>rule-styleguide-json</td>
+<td>132</td>
+<td>Styleguide</td>
+</tr>
+<tr>
+<td><code>pix_styleguide_markdown</code></td>
+<td>rule-styleguide-markdown</td>
+<td>132</td>
+<td>Styleguide</td>
+</tr>
+<tr>
+<td><code>pix_styleguide_naming</code></td>
+<td>rule-styleguide-naming</td>
+<td>228</td>
+<td>Styleguide</td>
+</tr>
+<tr>
+<td><code>pix_styleguide_patterns</code></td>
+<td>rule-styleguide-patterns</td>
+<td>183</td>
+<td>Styleguide</td>
+</tr>
+<tr>
+<td><code>pix_styleguide_validation</code></td>
+<td>rule-styleguide-validation</td>
+<td>472</td>
+<td>Styleguide</td>
+</tr>
+<tr>
+<td><code>pix_toolchain</code></td>
+<td>rule-toolchain</td>
+<td>69</td>
+<td>Toolchain</td>
+</tr>
+<tr>
+<td><code>pix_toolchain_biome</code></td>
+<td>rule-toolchain-biome</td>
+<td>101</td>
+<td>Toolchain</td>
+</tr>
+<tr>
+<td><code>pix_toolchain_eslint</code></td>
+<td>rule-toolchain-eslint</td>
+<td>81</td>
+<td>Toolchain</td>
+</tr>
+<tr>
+<td><code>pix_toolchain_husky</code></td>
+<td>rule-toolchain-husky</td>
+<td>116</td>
+<td>Toolchain</td>
+</tr>
+<tr>
+<td><code>pix_toolchain_parcel</code></td>
+<td>rule-toolchain-parcel</td>
+<td>120</td>
+<td>Toolchain</td>
+</tr>
+<tr>
+<td><code>pix_toolchain_pnpm</code></td>
+<td>rule-toolchain-pnpm</td>
+<td>114</td>
+<td>Toolchain</td>
+</tr>
+<tr>
+<td><code>pix_toolchain_project</code></td>
+<td>rule-toolchain-project</td>
+<td>217</td>
+<td>Toolchain</td>
+</tr>
+<tr>
+<td><code>pix_toolchain_turborepo</code></td>
+<td>rule-toolchain-turborepo</td>
+<td>108</td>
+<td>Toolchain</td>
+</tr>
+<tr>
+<td><code>pix_toolchain_typescript</code></td>
+<td>rule-toolchain-typescript</td>
+<td>132</td>
+<td>Toolchain</td>
+</tr>
+<tr>
+<td><code>pix_toolchain_vite</code></td>
+<td>rule-toolchain-vite</td>
+<td>93</td>
+<td>Toolchain</td>
+</tr>
+<tr>
+<td><code>pix_ui</code></td>
+<td>rule-ui</td>
+<td>79</td>
+<td>UI</td>
+</tr>
+<tr>
+<td><code>pix_ui_design_system</code></td>
+<td>rule-ui-design-system</td>
+<td>214</td>
+<td>UI</td>
+</tr>
+</tbody></table>
+<h4>Mutating tools (2)</h4>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>pix_fix</code></td>
+<td>File tree lint, fix, and component generation (sandboxed in Phase 1)</td>
+</tr>
+<tr>
+<td><code>pix_process_adr</code></td>
+<td>Architecture Decision Record creation (auto-log disabled by default)</td>
+</tr>
+</tbody></table>
+<h3>Minimal tool surface (10 tools)</h3>
+<p>Set <code>RULE_MCP_MINIMAL_TOOLS=1</code> (off by default) to expose only the dispatcher + action tools. Skill-specific tools (<code>pix_backend_express</code>, <code>pix_frontend_react</code>, etc.) and mutation tools (<code>pix_fix</code>, <code>pix_process_adr</code>) are hidden - their guidance is reached through <code>pix_gateway</code> and <code>rule://</code> resources. Use this for clients that cap MCP tool counts (Cursor, GitHub Copilot) or to cut per-turn token overhead on any model. The set is enforced as a hard allowlist, so it stays fixed regardless of future additions.</p>
+<pre><code class="language-bash">RULE_MCP_MINIMAL_TOOLS=1 rule-mcp serve
+</code></pre>
+<p>Exposed tools: <code>rule</code>, <code>pix_update</code>, <code>pix_gateway</code>, <code>pix_apply</code>, <code>pix_search</code>, <code>pix_check</code>, <code>pix_scaffold</code>, <code>pix_detect</code>, <code>pix_process_handoff</code>, <code>pix_component</code>.</p>
+<h3>Gateway deterministic mode</h3>
+<p><code>pix_gateway</code> and <code>pix_apply</code> form a deterministic write path:</p>
+<ol>
+<li><strong>Call <code>pix_gateway</code></strong> with <code>{ prompt, code? }</code> → routes to correct skill, loads evidence, runs guardrails</li>
+<li><strong>If all guardrails pass</strong>, a <strong>receipt</strong> (HMAC-SHA256 tied to code hash) is returned</li>
+<li><strong>Call <code>pix_apply</code></strong> with <code>{ files: [...], receipt }</code> → validates receipt, writes files atomically</li>
+<li><strong>If code is modified</strong> after the gateway call, the receipt is <strong>invalid</strong> and <code>pix_apply</code> rejects the write</li>
+</ol>
+<pre><code class="language-json">{
+  &quot;receipt&quot;: &quot;abc123...&quot;,
+  &quot;route&quot;: &quot;rule-backend-express&quot;,
+  &quot;checkResult&quot;: { &quot;allPass&quot;: true, &quot;total&quot;: 22 }
+}
+</code></pre>
+<p>See <a href="docs/adr/053-gateway-as-the-single-entrypoint-with-server-side-receipts-backend-data-devops-g.html">ADR 053</a> for the full design.</p>
+<hr>
+<h2>MCP Resources (186)</h2>
+<p>196 resources accessible via the MCP <code>resources/read</code> protocol.</p>
+<h3>Static resources (8)</h3>
+<table>
+<thead>
+<tr>
+<th>URI</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>rule://skills</code></td>
+<td>Index of all 95 skills with paths and sizes</td>
+</tr>
+<tr>
+<td><code>rule://templates</code></td>
+<td>Design system component template catalog</td>
+</tr>
+<tr>
+<td><code>rule://project</code></td>
+<td>Project analysis: detected framework + suggested tools/ skills</td>
+</tr>
+<tr>
+<td><code>rule://community</code></td>
+<td>Community / plugin rule skills index</td>
+</tr>
+<tr>
+<td><code>rule://ai</code></td>
+<td>rule skill full content</td>
+</tr>
+<tr>
+<td><code>rule://a11y</code></td>
+<td>A11y testing guide (Playwright + axe-core)</td>
+</tr>
+<tr>
+<td><code>rule://a11y/test-basic</code></td>
+<td>Basic a11y test template</td>
+</tr>
+<tr>
+<td><code>rule://a11y/test-forms</code></td>
+<td>Form a11y test template</td>
+</tr>
+</tbody></table>
+<h3>Skill resources (188 = 94 × 2)</h3>
+<p>Each skill (except <code>rule</code> itself) has two resources:</p>
+<table>
+<thead>
+<tr>
+<th>URI</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>rule://&lt;skill-name&gt;</code></td>
+<td>Full skill content</td>
+</tr>
+<tr>
+<td><code>rule://&lt;skill-name&gt;/summary</code></td>
+<td>First 30 lines</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>MCP Prompts (76)</h2>
+<p>73 prompts accessible via the MCP <code>prompts/get</code> protocol. The 12 <code>rule-area-*</code> commands and the
+54 review-persona commands (18 roles x plan/audit/review) are grouped in a row each; the one-shot
+workflow prompts are listed individually. The same registry drives the clean <code>/rule-*</code> agent
+commands (pinned by the <code>/rule</code> router), so every prompt takes a <strong>single free-form argument</strong> and
+supports <code>help</code> (or <code>--help</code> / <code>-h</code>) as its value to print the usage list, e.g. <code>/rule-area-frontend help</code> - help is returned as a ready-made assistant message and displayed instantly, without
+invoking the model.</p>
+<table>
+<thead>
+<tr>
+<th>Prompt</th>
+<th>Description</th>
+<th>Arguments</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>rule</code> (router)</td>
+<td>Route a request through the rule workflow (<code>/rule-mcp</code> became <code>/rule</code>)</td>
+<td><code>&lt;request&gt;</code> (required)</td>
+</tr>
+<tr>
+<td><code>rule-area-*</code> (12)</td>
+<td>Area specialists: <code>ai</code>, <code>backend</code>, <code>data</code>, <code>devops</code>, <code>frontend</code>, <code>meta</code>, <code>platform</code>, <code>process</code>, <code>skills</code>, <code>styleguide</code>, <code>toolchain</code>, <code>ui</code></td>
+<td><code>request</code> (required, free text)</td>
+</tr>
+<tr>
+<td><code>rule-handoff</code></td>
+<td>Compressed context handoff (ADR + git) for a new session; commits pending work first</td>
+<td><code>options</code> (optional: <code>handoff</code> | <code>close-session</code>, <code>compress</code> | <code>no-compress</code> (default: compress), <code>full</code> | <code>brief</code> | <code>minimal</code>, <code>no-*</code>, <code>max=&lt;n&gt;</code>, <code>help</code>; empty = all defaults)</td>
+</tr>
+<tr>
+<td><code>rule-adr</code></td>
+<td>Record an architecture decision: context, decision, alternatives, consequences</td>
+<td><code>decision</code> (required)</td>
+</tr>
+<tr>
+<td><code>rule-flight</code></td>
+<td>Read the flight recorder: what this server cost and what to do about it</td>
+<td><code>options</code> (optional: export | show <file> | prune | redact)</td>
+</tr>
+<tr>
+<td><code>rule-handon</code></td>
+<td>Resume: verify the last handoff against the repository as it is now</td>
+<td><code>options</code> (optional: list | file=<path>)</td>
+</tr>
+<tr>
+<td><code>rule-init</code></td>
+<td>Prepare a project for rule-mcp: recorder dir + tokensave</td>
+<td><code>options</code> (optional: no-tokensave)</td>
+</tr>
+<tr>
+<td><code>rule-process-check</code></td>
+<td>Validate code against the rule guardrails and fix what fails (<code>rule-check</code> became <code>rule-process-check</code>)</td>
+<td><code>target</code> (optional; default: current diff)</td>
+</tr>
+<tr>
+<td><code>rule-update</code></td>
+<td>Apply an available server update explicitly, and report what changed</td>
+<td><code>options</code> (optional: check | apply)</td>
+</tr>
+<tr>
+<td><code>rule-plan-*</code> / <code>rule-audit-*</code> / <code>rule-review-*</code></td>
+<td>54 review-persona commands: one per operation (plan/audit/review) per active role (architect, simplicity, docs, backend, security, auth, supply-chain, privacy, qa, performance, ai, devx, a11y, design-system, frontend, i18n, data, devops); each routes through <code>rule_tool_plan</code> + <code>rule_tool_plan_docs</code></td>
+<td><code>topic</code> (optional)</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>Guardrail engine</h2>
+<p>The guardrail engine runs deterministic checks against code and returns structured pass/fail results.</p>
+<h3>Shared guardrails (18 rules - apply to ALL skills)</h3>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Label</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>no-css-classes</code></td>
+<td>Zero CSS classes</td>
+<td>No <code>.class</code> selectors (including pseudo-classes, combinators)</td>
+</tr>
+<tr>
+<td><code>no-inline-styles</code></td>
+<td>Zero inline styles</td>
+<td>No <code>style=&quot;&quot;</code> or <code>style={{}}</code> in JSX</td>
+</tr>
+<tr>
+<td><code>semantic-html</code></td>
+<td>Semantic HTML</td>
+<td>No <code>&lt;div&gt;</code> where <code>&lt;section&gt;</code>, <code>&lt;article&gt;</code>, <code>&lt;header&gt;</code>, etc. exist</td>
+</tr>
+<tr>
+<td><code>external-css</code></td>
+<td>External CSS</td>
+<td>CSS via <code>adoptedStyleSheets</code>, <code>import</code>, or framework-native</td>
+</tr>
+<tr>
+<td><code>barrel-file-tree</code></td>
+<td>Barrel pattern</td>
+<td><code>index.js</code> re-exports public API</td>
+</tr>
+<tr>
+<td><code>file-naming</code></td>
+<td>File naming</td>
+<td><code>_PascalCase.ext</code> for component files</td>
+</tr>
+<tr>
+<td><code>data-part-naming</code></td>
+<td>data-part attribute</td>
+<td>Child elements use <code>data-part=&quot;name&quot;</code></td>
+</tr>
+<tr>
+<td><code>jsdoc-required</code></td>
+<td>JSDoc on exports</td>
+<td>Every exported symbol has <code>/** */</code></td>
+</tr>
+<tr>
+<td><code>css-comments-required</code></td>
+<td>CSS file comments</td>
+<td>CSS files start with <code>/* FILE: ... */</code></td>
+</tr>
+<tr>
+<td><code>a11y-test-required</code></td>
+<td>A11y tests</td>
+<td>Playwright + axe-core tests exist</td>
+</tr>
+<tr>
+<td><code>no-placeholder-implementation</code></td>
+<td>No placeholders</td>
+<td>No <code>TODO</code>, <code>FIXME</code>, placeholder code</td>
+</tr>
+<tr>
+<td><code>no-suppressed-errors</code></td>
+<td>No suppressed errors</td>
+<td>No <code>@ts-ignore</code>, <code>eslint-disable</code> without reason</td>
+</tr>
+<tr>
+<td><code>verified-dependencies-only</code></td>
+<td>Verified deps</td>
+<td>Imports must exist in manifest</td>
+</tr>
+<tr>
+<td><code>react-no-classname</code></td>
+<td>No className</td>
+<td>React uses <code>data-part</code> not <code>className</code></td>
+</tr>
+<tr>
+<td><code>react-hooks-rules</code></td>
+<td>Hooks rules</td>
+<td>Hooks called at top level only</td>
+</tr>
+<tr>
+<td><code>component-folder-barrel</code></td>
+<td>Folder barrel</td>
+<td>Component folder has <code>index.js</code></td>
+</tr>
+<tr>
+<td><code>component-file-prefix</code></td>
+<td>File prefix</td>
+<td>Component files start with <code>_</code></td>
+</tr>
+<tr>
+<td><code>barrel-exports-match-files</code></td>
+<td>Barrel matches files</td>
+<td><code>index.js</code> exports match actual files</td>
+</tr>
+</tbody></table>
+<h3>Framework-specific guardrails</h3>
+<p>Applied in addition to shared rules when checking code for a specific framework:</p>
+<table>
+<thead>
+<tr>
+<th>Framework</th>
+<th>Guardrails</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>React</td>
+<td><code>REACT_GUARDRAILS</code> + <code>FILE_TREE_GUARDRAILS</code></td>
+</tr>
+<tr>
+<td>Vue</td>
+<td><code>VUE_GUARDRAILS</code> + <code>FILE_TREE_GUARDRAILS</code></td>
+</tr>
+<tr>
+<td>Angular</td>
+<td><code>ANGULAR_GUARDRAILS</code> + <code>FILE_TREE_GUARDRAILS</code></td>
+</tr>
+<tr>
+<td>Svelte</td>
+<td><code>SVELTE_GUARDRAILS</code> + <code>FILE_TREE_GUARDRAILS</code></td>
+</tr>
+<tr>
+<td>Solid</td>
+<td><code>FILE_TREE_GUARDRAILS</code></td>
+</tr>
+</tbody></table>
+<h3>Backend guardrails (6 checks)</h3>
+<p>Applied when <code>pix_check</code> targets a <code>rule-backend-*</code> skill:</p>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>sql-injection</code></td>
+<td>No string concatenation in SQL queries</td>
+</tr>
+<tr>
+<td><code>error-exposure</code></td>
+<td>No stack traces or error details in HTTP responses</td>
+</tr>
+<tr>
+<td><code>input-validation</code></td>
+<td>Zod/Joi/class-validator present when handling request input</td>
+</tr>
+<tr>
+<td><code>cors-explicit</code></td>
+<td>CORS with explicit origin list, no wildcard <code>*</code></td>
+</tr>
+<tr>
+<td><code>rate-limiting</code></td>
+<td>Rate limiter configured (express-rate-limit, @fastify/rate-limit, ThrottlerModule)</td>
+</tr>
+<tr>
+<td><code>helmet-headers</code></td>
+<td>Security headers via helmet or framework equivalent</td>
+</tr>
+</tbody></table>
+<h3>Database guardrails (4 checks)</h3>
+<p>Applied when targeting a <code>rule-data-*</code> skill:</p>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>migration-safety</code></td>
+<td>DDL uses <code>IF NOT EXISTS</code> / <code>IF EXISTS</code></td>
+</tr>
+<tr>
+<td><code>parameterized-queries</code></td>
+<td>All queries use placeholders, not string concatenation</td>
+</tr>
+<tr>
+<td><code>transaction-safety</code></td>
+<td>Multiple mutations wrapped in a transaction</td>
+</tr>
+<tr>
+<td><code>connection-pool</code></td>
+<td>Server code uses connection pool, not direct client</td>
+</tr>
+</tbody></table>
+<h3>DevOps guardrails (4 checks)</h3>
+<p>Applied when targeting a <code>rule-devops-*</code> skill:</p>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>docker-non-root</code></td>
+<td>Container runs as non-root user</td>
+</tr>
+<tr>
+<td><code>docker-healthcheck</code></td>
+<td><code>HEALTHCHECK</code> instruction present</td>
+</tr>
+<tr>
+<td><code>secret-detection</code></td>
+<td>No hardcoded passwords, API keys, or tokens</td>
+</tr>
+<tr>
+<td><code>env-gitignore</code></td>
+<td><code>.env</code> listed in <code>.gitignore</code></td>
+</tr>
+</tbody></table>
+<h3>How to use guardrails</h3>
+<pre><code class="language-bash"># Check code against a skill&#39;s guardrails
+rule-mcp tools call pix_check --json &#39;{
+  &quot;skill&quot;: &quot;rule-frontend-react&quot;,
+  &quot;code&quot;: &quot;export function Button() { return &lt;button&gt;Click&lt;/button&gt; }&quot;,
+  &quot;fileName&quot;: &quot;_Button.tsx&quot;,
+  &quot;isComponent&quot;: true
+}&#39;
+
+# Check backend code
+rule-mcp tools call pix_check --json &#39;{
+  &quot;skill&quot;: &quot;rule-backend-express&quot;,
+  &quot;code&quot;: &quot;app.get(\&quot;/users\&quot;, (req,res) =&gt; { db.query(\&quot;SELECT * FROM users WHERE id = \&quot; + req.params.id) })&quot;,
+  &quot;framework&quot;: &quot;express&quot;
+}&#39;
+</code></pre>
+<p>The guardrail engine is defined in:</p>
+<ul>
+<li><a href="https://github.com/pixu1980/rule-mcp/blob/main/src/core/guardrail-defs.js"><code>src/core/guardrail-defs.js</code></a> - all 30+ guardrail checks</li>
+<li><a href="https://github.com/pixu1980/rule-mcp/blob/main/src/core/guardrails.js"><code>src/core/guardrails.js</code></a> - engine (runner, reporter, merge)</li>
+</ul>
+<hr>
+<h2>CLI reference</h2>
+<pre><code class="language-bash"># Server
+# --transport: stdio (default) | http (Streamable HTTP, current MCP spec) | sse (legacy HTTP+SSE)
+# --port defaults to 37999 (or $RULE_MCP_PORT); bind host via $RULE_MCP_HOST (default 127.0.0.1)
+rule-mcp serve [--transport stdio|http|sse] [--port PORT] [--ssl-cert FILE --ssl-key FILE]
+
+# Self-update (git-clone installs)
+rule-mcp update
+
+# Daemon (background process)
+rule-mcp daemon start|stop|status|logs
+rule-mcp daemon install|uninstall|enable|disable
+
+# Agent integration
+rule-mcp install --agent &lt;name&gt; [--mode stdio|daemon|docker] [--global] [--dry-run] [--force]
+rule-mcp uninstall --agent &lt;name&gt; [--dry-run]
+
+# Tools (MCP tool calls from CLI)
+rule-mcp tools list [--json]
+rule-mcp tools call &lt;name&gt; --json &#39;{...}&#39;
+
+# Health
+rule-mcp doctor [--json] [--json-out FILE] [--telemetry]
+
+# Skills
+rule-mcp skills install [--scope global|project] [--all]
+rule-mcp skills reload
+rule-mcp skills list [--json]
+
+# File tree
+rule-mcp fix [--mode lint|fix|generate] [--name NAME] [--framework &lt;fw&gt;] [--path DIR] [--dry-run]
+
+# ADR
+rule-mcp adr new &quot;&lt;title&gt;&quot; [--status proposed|accepted|deprecated|superseded] [--tags a,b,c]
+
+# Handoff
+rule-mcp handoff [--mode handoff|close-session] [--compress] [--format full|brief|minimal]
+
+# Config
+rule-mcp config [--mode stdio|daemon|docker] [--global]
+rule-mcp completions --shell zsh|bash|fish
+
+# Help
+rule-mcp help
+rule-mcp &lt;command&gt; --help
+</code></pre>
+<hr>
+<h2>Forced self-update</h2>
+<p>On git-clone installs the server keeps itself current automatically. Every
+tool invocation kicks a background check - the actual <code>git fetch</code> runs at most
+once per <code>RULE_MCP_AUTO_UPDATE_INTERVAL_SECONDS</code> (default 60s) - and
+fast-forwards if behind, hot-reloads skills, and restarts when server code
+changed. The check never blocks the tool call (fire-and-forget); a
+<code>🔄 Updating MCP server</code> banner is prepended to a later result.</p>
+<ul>
+<li><strong>Safe</strong>: fast-forward only (never discards local commits/changes); skipped
+when the working tree has tracked changes, HEAD is detached, or no upstream is
+configured. Offline/timeout fails open on the current version.</li>
+<li><strong>Scope</strong>: git clones only. npm/npx and Docker installs get a one-line hint
+with the correct manual update command.</li>
+<li><strong>On demand</strong>: <code>rule-mcp update</code>, or the <code>pix_update</code> MCP tool.</li>
+<li><strong>Opt-out</strong>: <code>RULE_MCP_NO_AUTOUPDATE=1</code> disables the check;
+<code>RULE_MCP_NO_AUTORESTART=1</code> keeps the process alive on code changes
+(you restart/reconnect manually). <code>RULE_MCP_AUTO_UPDATE_INTERVAL_SECONDS</code>
+tunes the throttle (default 60; <code>0</code> = check on every tool call).</li>
+</ul>
+<hr>
+<h2>Daemon &amp; services</h2>
+<p>The daemon runs the SSE server as a background process or system service (LaunchAgent on macOS, systemd on Linux, Windows Service).</p>
+<pre><code class="language-bash"># Process-level (cross-platform, no reboot persistence)
+rule-mcp daemon start     # Fork background SSE process
+rule-mcp daemon stop      # Stop the process
+rule-mcp daemon status    # Check if running + PID
+rule-mcp daemon logs      # View daemon log
+
+# Service-level (persists across reboots)
+rule-mcp daemon install   # Install native service (Login Items on macOS)
+rule-mcp daemon uninstall # Remove native service
+rule-mcp daemon enable    # Load/activate service
+rule-mcp daemon disable   # Unload/deactivate service
+</code></pre>
+<p>The daemon always listens on <code>127.0.0.1:37999</code> over SSE. Health endpoint: <code>http://127.0.0.1:37999/health</code>.</p>
+<h3>Security</h3>
+<ul>
+<li>Bearer token auth required for <code>/sse</code> and <code>/message</code>; the local daemon keeps an owner-only token at <code>~/.rule-mcp/state/sse-token</code> across restarts</li>
+<li><code>/health</code> is public (no auth)</li>
+<li>CORS deny-by-default (only explicit origins allowed)</li>
+<li>1 MB max POST body size</li>
+<li>Loopback-only binding (<code>127.0.0.1</code>)</li>
+</ul>
+<hr>
+<h2>Docker</h2>
+<pre><code class="language-bash"># Build
+docker build -t rule-mcp .
+
+# Stdio (MCP agents)
+docker run -i rule-mcp
+
+# SSE (Pi or VS Code integration)
+RULE_MCP_SSE_TOKEN=&quot;$(cat ~/.rule-mcp/state/sse-token)&quot; \
+  docker run -e RULE_MCP_SSE_TOKEN -p 37999:37999 \
+  rule-mcp node src/index.js serve --transport sse
+
+# With docker-compose (after `rule-mcp install --agent pi --mode docker`)
+RULE_MCP_SSE_TOKEN=&quot;$(cat ~/.rule-mcp/state/sse-token)&quot; \
+  docker compose up -d
+# → authenticated SSE: http://localhost:37999/sse
+</code></pre>
+<p>The Docker image uses <code>node:22-alpine</code>, has no build step, and runs the server directly.</p>
+<hr>
+<h2>Project structure</h2>
+<pre><code>.
+├── bin/rule-mcp.js          ← CLI entrypoint
+├── src/
+│   ├── server.js                  ← MCP server bootstrap (SDK)
+│   ├── transport/
+│   │   └── sse.js                 ← SSE HTTP server
+│   ├── tools/
+│   │   ├── router.js              ← Tool registry
+│   │   ├── ai.js                  ← rule router (BM25)
+│   │   ├── gateway.js             ← pix_gateway orchestrator + receipts
+│   │   ├── apply.js               ← pix_apply write tool
+│   │   ├── skill.js               ← Skill tool generator + check/search/scaffold
+│   │   ├── adr.js                 ← Architecture Decision Records
+│   │   ├── fix.js                 ← File tree lint/fix/generate
+│   │   └── handoff.js             ← Context handoff
+│   ├── core/
+│   │   ├── skills.js              ← Skill loading + minimal tool surface + frontmatter parser
+│   │   ├── guardrails.js          ← Guardrail engine (runner)
+│   │   ├── guardrail-defs.js      ← All guardrail definitions
+│   │   ├── enforcement.js         ← Pre/post processing (advisory)
+│   │   ├── bm25.js                ← Full-text search index
+│   │   ├── detector.js            ← Framework detection
+│   │   ├── templates.js           ← Template generation engine
+│   │   └── template-data.js       ← Template strings per component/framework
+│   ├── cli/
+│   │   ├── commands.js            ← CLI dispatch (serve, daemon, install, etc.)
+│   │   ├── install.js             ← Multi-agent installer (23 agents)
+│   │   ├── daemon.js              ← Daemon lifecycle
+│   │   ├── doctor.js              ← Health check
+│   │   └── skills-install.js      ← Interactive skill installer
+│   ├── resources/index.js         ← MCP resource registry
+│   ├── prompts/index.js           ← MCP prompt registry
+│   └── index.js                   ← CLI entry handler
+├── skills/                        ← 89 skill directories
+├── prompts/                       ← System prompt templates
+├── scripts/                       ← Install/build scripts
+├── tests/                          ← 20 test files
+└── docs/                          ← Architecture, guides, plans, decisions
+</code></pre>
+<hr>
+<h2>Further reading</h2>
+<table>
+<thead>
+<tr>
+<th>Document</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><a href="docs/01-getting-started.html"><code>docs/01-getting-started.md</code></a></td>
+<td>Step-by-step installation &amp; agent integration</td>
+</tr>
+<tr>
+<td><a href="docs/02-product-architecture.html"><code>docs/02-product-architecture.md</code></a></td>
+<td>Full skill taxonomy and product architecture</td>
+</tr>
+<tr>
+<td><a href="docs/04-operations.html"><code>docs/04-operations.md</code></a></td>
+<td>Detailed tool operations reference</td>
+</tr>
+<tr>
+<td><a href="docs/07-engineering-guides.html"><code>docs/07-engineering-guides.md</code></a></td>
+<td>Engineering practices and conventions</td>
+</tr>
+<tr>
+<td><a href="docs/03-agent-instructions.html"><code>docs/03-agent-instructions.md</code></a></td>
+<td>Agent instruction templates (generated command surface)</td>
+</tr>
+<tr>
+<td><a href="docs/05-env-variables.html"><code>docs/05-env-variables.md</code></a></td>
+<td>Complete <code>RULE_MCP_*</code> environment variable reference</td>
+</tr>
+<tr>
+<td><a href="docs/04-operations.html"><code>docs/04-operations.md</code></a></td>
+<td>Operator handbook + generated census blocks</td>
+</tr>
+<tr>
+<td><a href="docs/adr/ADR.html"><code>docs/adr/ADR.md</code></a></td>
+<td>Architecture Decision Records index</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>Test Evidence</h2>
+<ul>
+<li><code>pnpm test:foundations</code> - the unit batch is green over <code>src/</code></li>
+<li>routing corpus pinned at 80/99 exact and 99/99 top-or-alternative (BM25
+scorer parity with the source, ADR 047 numbers reproduced on the union)</li>
+<li>lint zero errors, prettier clean, self-guardrails green over the whole <code>src/</code>
+tree, installer/transport suites green</li>
+<li>decisions recorded in the <a href="docs/adr/ADR.html">ADR index</a></li>
+</ul>
+<h2>Credits &amp; attribution</h2>
+<p><code>src/core/text/</code> — the deterministic compression output pipeline — is inspired by
+<a href="https://github.com/JuliusBrussee/compression"><code>compression</code></a> and its
+<code>compression-compress</code> companion: the vocabulary tables, the classification guards
+(<code>detect.py</code> → <code>_classify.js</code>) and the structural validator (<code>validate.py</code> →
+<code>compress-guard/</code>) are ported, with a parity test that runs the real python
+CLI when installed. The LLM compression step is deliberately not ported — an
+LLM in the output path costs determinism, cacheability and the zero-dependency
+contract (ADR 073). Every server→model surface is compressed (or documented as
+deliberately not) — see the manifest in
+<a href="https://github.com/pixu1980/rule-mcp/blob/main/src/core/text/_surfaces.js"><code>src/core/text/_surfaces.js</code></a> and the
+&quot;Compression surfaces&quot; section of
+<a href="docs/07-engineering-guides.html"><code>docs/07-engineering-guides.md</code></a>; the list
+surfaces joined the pipeline under <a href="docs/adr/077-compress-every-server-model-list-surface-prompts-list-tools-list-resources-list.html">ADR 077</a>,
+agent command files at write time under ADR 078.</p>
+<h2>Contributing</h2>
+<p>Small fixes need no ceremony; structural change needs an ADR first.
+Start at <a href="CONTRIBUTING.html">CONTRIBUTING.md</a>, then
+<a href="GOVERNANCE.html">GOVERNANCE.md</a> for who decides,
+<a href="CODE_OF_CONDUCT.html">CODE_OF_CONDUCT.md</a> for the standard of behavior, and
+<a href="SECURITY.html">SECURITY.md</a> for reporting vulnerabilities, and
+<a href="ROADMAP.html">ROADMAP.md</a> for where the project is going. The deeper
+engineering material lives in <a href="docs/07-engineering-guides.html"><code>docs/07-engineering-guides.md</code></a>.</p>
+<h2>Sponsors</h2>
+<p>rule-mcp is unfunded today. Sponsorship through <a href="https://github.com/sponsors/pixu1980">GitHub Sponsors</a>
+would go to hosting, release infrastructure, and maintainer time.
+Sponsorship buys no roadmap priority.</p>
+<h2>Code of Conduct</h2>
+<p>We follow the <a href="CODE_OF_CONDUCT.html">Contributor Covenant 3.0</a>. Report conduct problems privately
+as that file describes.</p>
+<h2>Governance</h2>
+<p>Explicit BDFL with a documented path to co-maintainers - see <a href="GOVERNANCE.html">GOVERNANCE.md</a>
+for who decides and how disputes escalate, and <a href="MAINTAINERS.html">MAINTAINERS.md</a> for who merges
+today.</p>
+<h2>Security</h2>
+<p>Report suspected vulnerabilities privately through the
+<a href="https://github.com/pixu1980/rule-mcp/security/advisories/new">GitHub advisory form</a> - never
+a public issue. Details, SLAs, and supported versions: <a href="SECURITY.html">SECURITY.md</a>.</p>
+<h2>License</h2>
+<p>MIT - see <a href="https://github.com/pixu1980/rule-mcp/blob/main/LICENSE">LICENSE</a>. The name is covered separately in
+<a href="TRADEMARK.html">TRADEMARK.md</a>.</p>
+
+</main>
+<footer><p>Generated from <code>docs/</code> - edit the Markdown, not this file.</p></footer>
+</body>
+</html>

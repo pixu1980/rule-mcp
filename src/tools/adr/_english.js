@@ -1,7 +1,7 @@
 
 
 /** The English gate: every ADR is written in English, filename included. */
-import { scanDocumentForForeign, scanPathForForeign } from "../../core/text/en-english/index.js";
+import { scanDocumentForForeign, scanPathForForeign } from "../../core/text/index.js";
 
 /**
  * Non-English content in the ADR fields, one offense per finding.

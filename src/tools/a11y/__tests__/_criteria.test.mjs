@@ -62,6 +62,7 @@ check(
 );
 
 // ── T3: every a11y guardrail maps to a criterion that exists ──
+await import("../../../core/guardrails/__tests__/_install.fixture.mjs");
 const { getGuardrails } = await import("../../../core/guardrails/index.js");
 const a11yRules = getGuardrails("rule-styleguide-a11y").filter((g) => g.id.startsWith("a11y-") && g.wcag);
 check("T9 there are a11y rules with a criterion", a11yRules.length >= 8);

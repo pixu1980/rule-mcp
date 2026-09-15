@@ -2,7 +2,7 @@
 
 /** The check and search tools: unknown skills, clean and failing verdicts. */
 import { strict as assert } from "node:assert";
-import { mkdtempSync } from "node:fs";
+import { mkdtempSync, rmSync } from "node:fs";
 import { join } from "node:path";
 import { tmpdir } from "node:os";
 import { before, test } from "node:test";
@@ -41,4 +41,19 @@ test("search answers without an index build via the fallback path", async () => 
   const result = await callTool("rule_tool_search", { query: "flex layout helpers" });
   assert.ok(!result.isError, "a search never errors");
   assert.ok(Array.isArray(result.content), "the search returns content");
+});
+
+test("check in project mode skips without a graph instead of failing", async () => {
+  const box = mkdtempSync(join(tmpdir(), "rule-project-check-"));
+
+  try {
+    const result = await callTool("rule_tool_check", { skill: "rule-styleguide-javascript", mode: "project", projectDir: box });
+    const text = result.content[0].text;
+
+    assert.match(text, /Project guardrails/);
+    assert.match(text, /skipped/i, "without a graph the checks are skipped, not failed");
+    assert.equal(result.isError, false, "a skipped check is not a failure");
+  } finally {
+    rmSync(box, { recursive: true, force: true });
+  }
 });

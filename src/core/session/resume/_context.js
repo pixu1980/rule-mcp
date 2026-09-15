@@ -1,9 +1,6 @@
-
-
 /** @module core/session/resume/context - the verified handon block a resumed session receives */
 
-import { compressSurfaceText } from "../../text/_caveman.js";
-import { handon } from "../../../tools/handon/index.js";
+import { handon } from "@src/tools/handon/index.js";
 import { markAnnounced } from "./_announce.js";
 
 /** Session sources that mean "the user came back to unfinished work". */
@@ -43,7 +40,7 @@ export function handoffBlock(cwd, occasion) {
 
   const body = report.text.length > MAX_CHARS ? `${report.text.slice(0, MAX_CHARS)}\n\n(truncated: call \`rule_tool_process_handon\` for the rest)` : report.text;
 
-  const block = [
+  return [
     "## PIX RESUMED SESSION",
     "",
     `${occasion} \`${report.source}\` was verified against the repository as it is` +
@@ -55,12 +52,6 @@ export function handoffBlock(cwd, occasion) {
     "",
     "Continue from the suggested first move unless the user asks for something else. Do not restate this back to them.",
   ].join("\n");
-
-  // Injected verbatim into the model's context by the SessionStart hook, so it
-  // is prose the model pays for, exactly like a tool result - it goes through
-  // the same caveman pipeline and guardian before it leaves (plan item 1). When
-  // caveman is off the pass returns the input unchanged and books nothing.
-  return compressSurfaceText(block, { source: "caveman-resume" }).text;
 }
 
 /**

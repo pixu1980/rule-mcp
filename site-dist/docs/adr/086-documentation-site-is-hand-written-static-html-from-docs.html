@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>086: Documentation site is hand-written static HTML from docs - rule-mcp docs</title>
+<link rel="stylesheet" href="../../style.css">
+</head>
+<body>
+<header><nav><ul>
+<li><a href="../../index.html">Home</a></li>
+<li><a href="../../docs/01-getting-started.html">undefined</a></li>
+<li><a href="../../docs/02-product-architecture.html">undefined</a></li>
+<li><a href="../../docs/03-agent-instructions.html">undefined</a></li>
+<li><a href="../../docs/04-operations.html">undefined</a></li>
+<li><a href="../../docs/05-env-variables.html">undefined</a></li>
+<li><a href="../../docs/06-privacy.html">undefined</a></li>
+<li><a href="../../docs/07-engineering-guides.html">undefined</a></li>
+<li><a href="../../docs/08-skills.html">undefined</a></li>
+<li><a href="../../docs/09-tools.html">undefined</a></li>
+<li><a href="../../docs/10-prompts.html">undefined</a></li>
+<li><a href="../../docs/11-instructions.html">undefined</a></li>
+<li><a href="../../docs/12-cli.html">undefined</a></li>
+<li><a href="../../docs/13-personas.html">undefined</a></li>
+<li><a href="../../docs/14-guardrails.html">undefined</a></li>
+<li><a href="../../docs/15-resources.html">undefined</a></li>
+<li><a href="../../docs/adr/ADR.html">ADRs</a></li>
+</ul></nav></header>
+<main>
+<h1>086: Documentation site is hand-written static HTML from docs</h1>
+<ul>
+<li><strong>Date</strong>: 2026-09-11</li>
+<li><strong>Status</strong>: accepted</li>
+<li><strong>Tags</strong>: docs, site</li>
+<li><strong>Author</strong>: Emiliano Pisu <a href="mailto:pisuemiliano.1980@gmail.com">pisuemiliano.1980@gmail.com</a></li>
+</ul>
+<h2>Context</h2>
+<p>OSS-27: install instructions have no canonical URL because there is no documentation site. The interview decided the direction: build the site from scratch and publish it with GitHub Actions, so the deployed URL becomes the canonical install URL.</p>
+<h2>Decision</h2>
+<p>The documentation site is hand-written: a small Node generator in scripts/docs-site/ renders docs/ Markdown to static HTML with marked (already a devDependency), served locally by a static preview server. No site framework, no new dependencies.</p>
+<h2>Consequences</h2>
+<p>scripts/docs-site/ holds a small marked-based generator plus a static preview server; docs/ stays the source of truth; chapters map to /<slug>.html and ADRs to /adr/<slug>.html with an index; the Pages workflow uploads the emitted artifact.</p>
+<h2>What would end this</h2>
+<p>The assumption this leans on, and the observation that would make it wrong.</p>
+<h2>Alternatives Considered</h2>
+<ol>
+<li>Adopt a site generator (VitePress/Astro/Next) (rejected: heavy dependencies and a build toolchain for what is 15 chapters plus an ADR log; contradicts the no-build-step grain of the repo)</li>
+<li>Publish docs from a branch (rejected: a second long-lived branch to keep in sync; the artifact deploys it)</li>
+</ol>
+
+</main>
+<footer><p>Generated from <code>docs/</code> - edit the Markdown, not this file.</p></footer>
+</body>
+</html>

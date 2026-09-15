@@ -9,6 +9,32 @@ import { deprecatedAgents } from "../installers/index.js";
 import { writeInstalledManifest } from "./_manifest.js";
 
 /**
+ * Whether an agent can be reached in a mode, before anything is written.
+ *
+ * Daemon and docker configs are verified only for pi and vscode, but the
+ * writers know the shape for every agent: `force` means the owner checked
+ * their client speaks SSE, so the failure downgrades to a warning that
+ * keeps the safe default visible. Pure, so the rule is tested where it is
+ * decided instead of through a home directory.
+ *
+ * @param {string} name
+ * @param {string} normalizedMode
+ * @param {boolean} [force]
+ * @returns {{ error?: string, warning?: string }|null}
+ */
+export function checkRemoteSupport(name, normalizedMode, force = false) {
+  if (normalizedMode === "stdio" || remoteModeAgents.has(name)) {
+    return null;
+  }
+
+  if (force) {
+    return { warning: `Install mode "${normalizedMode}" is verified only for Pi and VS Code; wrote it for ${name} anyway - stdio stays the supported choice.` };
+  }
+
+  return { error: `Install mode "${normalizedMode}" is currently supported only for Pi and VS Code; use stdio for ${name}.` };
+}
+
+/**
  * Install rule-mcp into one or more agents.
  * Writes an installed.md manifest after successful installation.
  *
@@ -24,7 +50,9 @@ export const installAgent = ({ agent, entrypoint, dryRun = false, force = false,
   // `--agent all` sweeps the live catalog (which holds no deprecated names).
   const selected = target === "all" ? allAgents.filter((name) => !deprecatedAgents.has(name)) : [target];
   const warnings = redirect ? [`"${agent}" is deprecated - use "${redirect}" instead.`] : agent === "all" ? [] : [];
-  const surfacedWarnings = warnings.length > 0 ? warnings : undefined;
+  // Computed at the returns, not here: the loop below appends per-agent
+  // warnings (remote transports, `--force`), which an early snapshot drops.
+  const surfacedWarnings = () => (warnings.length > 0 ? warnings : undefined);
 
   if (!installers[target] && target !== "all") {
     throw new Error(`Unsupported agent: "${agent}". Supported agents: ${allAgents.join(", ")}`);
@@ -38,11 +66,15 @@ export const installAgent = ({ agent, entrypoint, dryRun = false, force = false,
       continue;
     }
 
-    if (normalizedMode !== "stdio" && !remoteModeAgents.has(name)) {
-      result[name] = {
-        error: `Install mode "${normalizedMode}" is currently supported only for Pi and VS Code; use stdio for ${name}.`,
-      };
+    const support = checkRemoteSupport(name, normalizedMode, force);
+
+    if (support?.error) {
+      result[name] = { error: support.error };
       continue;
+    }
+
+    if (support?.warning) {
+      warnings.push(support.warning);
     }
 
     try {
@@ -64,11 +96,11 @@ export const installAgent = ({ agent, entrypoint, dryRun = false, force = false,
       mode: normalizedMode,
       installed: result,
       manifest: manifestPath,
-      warnings: surfacedWarnings,
+      warnings: surfacedWarnings(),
     };
   }
 
-  return { ok, dryRun, global, mode: normalizedMode, installed: result, warnings: surfacedWarnings };
+  return { ok, dryRun, global, mode: normalizedMode, installed: result, warnings: surfacedWarnings() };
 };
 
 // ─── Uninstallers ───────────────────────────────────────────────────────────

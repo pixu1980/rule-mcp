@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>076: Coverage wave five raises the branch floor to 91 - rule-mcp docs</title>
+<link rel="stylesheet" href="../../style.css">
+</head>
+<body>
+<header><nav><ul>
+<li><a href="../../index.html">Home</a></li>
+<li><a href="../../docs/01-getting-started.html">undefined</a></li>
+<li><a href="../../docs/02-product-architecture.html">undefined</a></li>
+<li><a href="../../docs/03-agent-instructions.html">undefined</a></li>
+<li><a href="../../docs/04-operations.html">undefined</a></li>
+<li><a href="../../docs/05-env-variables.html">undefined</a></li>
+<li><a href="../../docs/06-privacy.html">undefined</a></li>
+<li><a href="../../docs/07-engineering-guides.html">undefined</a></li>
+<li><a href="../../docs/08-skills.html">undefined</a></li>
+<li><a href="../../docs/09-tools.html">undefined</a></li>
+<li><a href="../../docs/10-prompts.html">undefined</a></li>
+<li><a href="../../docs/11-instructions.html">undefined</a></li>
+<li><a href="../../docs/12-cli.html">undefined</a></li>
+<li><a href="../../docs/13-personas.html">undefined</a></li>
+<li><a href="../../docs/14-guardrails.html">undefined</a></li>
+<li><a href="../../docs/15-resources.html">undefined</a></li>
+<li><a href="../../docs/adr/ADR.html">ADRs</a></li>
+</ul></nav></header>
+<main>
+<h1>076: Coverage wave five raises the branch floor to 91</h1>
+<ul>
+<li><strong>Date</strong>: 2026-09-09</li>
+<li><strong>Status</strong>: accepted</li>
+<li><strong>Tags</strong>: testing, coverage, ci</li>
+<li><strong>Author</strong>: Emiliano Pisu <a href="mailto:pisuemiliano.1980@gmail.com">pisuemiliano.1980@gmail.com</a></li>
+</ul>
+<h2>Context</h2>
+<p>The execution plan&#39;s last open step is the branch ratchet: 90 measured, 95 the target. The named remainder was platform-locked daemon arms, dead domain ternaries and a long tail of 2-4 branch chips. The compression and startup work of the previous session also added modules, and a new module lands in the denominator uncovered.</p>
+<h2>Decision</h2>
+<p>Cover the three biggest clusters that are not platform-locked and raise the floor to the measured integer. generateMultiFile had 2 of 12 branches visited, the rule:// reader 15 of 26, and the command-target context none of its injection arms despite existing to be injectable. The compression pipeline&#39;s own refusals - a non-string, a JSON body, level off, an unknown level - and the catalog&#39;s local-path gate close the rest. The daemon platform arms stay uncovered on purpose: reaching a linux arm from a darwin box needs module mocking, which measures the mock rather than the code, and the ubuntu CI run already walks that half.</p>
+<h2>Consequences</h2>
+<p>91.17 percent branches (6375/6992), floor raised 90 to 91 with 12 branches of margin. Two real defects surfaced and were fixed: the rule-meta rename had dropped Astro out of the rule-frontend prefix so detectFrameworkSkill returned no domain and the router stopped applying its framework bias; and generateMultiFile read a file template&#39;s string vanilla field as a component, emitting a custom element wrapping an empty template. The domain ternary chain became a prefix table, which also deletes three arms FRAMEWORK_SKILL_MAP can never reach. Risk: 12 branches of margin is thinner than wave four&#39;s, and the platform arms swing between the darwin dev box and the ubuntu CI runner, so a red coverage job means re-measuring on CI rather than assuming a regression.</p>
+<h2>What would end this</h2>
+<p>The assumption this leans on, and the observation that would make it wrong.</p>
+
+</main>
+<footer><p>Generated from <code>docs/</code> - edit the Markdown, not this file.</p></footer>
+</body>
+</html>

@@ -1,18 +1,60 @@
-
-
 /**
- * Setup command registrars: install, uninstall, config, doctor, completions, agent-commands.
+ * Lifecycle command registrars: install and uninstall.
  *
  * The handlers are imported inside the actions, not at the top of the file:
  * the command declarations are what `--help` renders, and a static handler
  * import made `--help`, `--version` and `config` pay for the server, both
- * transports, the skill catalog and 105 tool registrations. Same pattern the
- * adr and skills registrars already used - see `pnpm report:startup`.
+ * transports, the skill catalog and the tool registrations - same pattern
+ * the adr and skills registrars already used - see `pnpm report:startup`.
  */
 import { Option } from "commander";
 
-/** Collector for repeatable options: `--set A=1 --set B=2` → ["A=1", "B=2"]. */
-const collect = (value, previous) => [...previous, value];
+import { commanderIo } from "./_register-wizard.js";
+
+const MODE_HELP = "stdio (default), daemon (SSE), docker, or skills (no MCP server, ADR 079)";
+
+/**
+ * Options only the wizard's plan performs, by the flag that asks for them.
+ *
+ * `install` without a wizard is the narrow command it always was: it writes
+ * the mcp.json entry and the router command file, and nothing else. Every
+ * step below belongs to the plan, so a flag naming one is a flag this path
+ * cannot honor.
+ */
+const WIZARD_ONLY = {
+  rules: "--rules",
+  commands: "--commands",
+  hooks: "--hooks",
+  skills: "--skills",
+  service: "--service",
+  doctor: "--doctor",
+  commandsPreset: "--commands-preset",
+  commandsFamilies: "--commands-families",
+  commandsAreas: "--commands-areas",
+  commandsSkills: "--commands-skills",
+};
+
+/**
+ * Say so when a flag the plan owns was given to a run that has no plan.
+ *
+ * Silence here is the failure the commands step exists to remove: a question
+ * asked, answered, and dropped.
+ *
+ * @param {object} options
+ * @param {(text: string) => void} [warn]
+ */
+export function warnWizardOnly(options, warn = (text) => process.stderr.write(`${text}\n`)) {
+  const given = Object.entries(WIZARD_ONLY)
+    // `--no-rules` is honored by definition; only a flag asking for a step is dropped.
+    .filter(([key]) => options[key] !== undefined && options[key] !== false)
+    .map(([, flag]) => flag);
+
+  if (given.length > 0) {
+    warn(`install: ${given.join(", ")} need the wizard - run \`rule-mcp setup\` (it runs the same plan when piped).`);
+  }
+
+  return given;
+}
 
 /** Register the `install` command. */
 export function registerInstallCommand(program) {
@@ -20,13 +62,53 @@ export function registerInstallCommand(program) {
     .command("install")
     .description("Install rule-mcp into an agent/IDE (edits mcp.json)")
     .option("--agent <name>", "target agent, or 'all' for every supported agent", "all")
-    .addOption(new Option("--mode <name>", "stdio (default), daemon (SSE), or docker").choices(["stdio", "daemon", "sse", "docker"]))
+    .addOption(new Option("--mode <name>", MODE_HELP).choices(["stdio", "daemon", "sse", "docker", "skills"]))
     .option("--global", "use clean command path (requires global install)")
     .option("--force", "override existing configuration")
     .option("--dry-run", "preview without writing")
     .option("--json", "print machine-readable JSON instead of Terminal UI")
+    .option("--no-wizard", "skip the full-screen wizard even on a terminal")
+    .option("--no-interactive", "run the plan with defaults and no wizard")
+    .option("--rules", "write agent instruction files")
+    .option("--no-rules", "skip agent instruction files")
+    .option("--commands", "write agent slash commands")
+    .option("--no-commands", "skip agent slash commands")
+    .option("--hooks", "install guard hooks (Claude)")
+    .option("--no-hooks", "skip guard hooks")
+    .option("--skills", "install the bundled rule-* skills")
+    .option("--no-skills", "skip the bundled skills")
+    .option("--minimal", "minimal server tool surface (--no-minimal for full)")
+    .option("--surface <spec>", "server tool surface: minimal, standard, full, areas:<a,b> or skills:<s,...>")
+    .option("--service", "register the platform daemon service")
+    .option("--no-service", "skip the platform daemon service")
+    .option("--doctor", "run the health check at the end")
+    .option("--no-doctor", "skip the health check")
+    .addOption(new Option("--commands-preset <name>", "which commands to write: minimal, standard or full").choices(["minimal", "standard", "full"]))
+    .option("--commands-families <list>", "comma-separated: areas, personas, tasks")
+    .option("--commands-areas <list>", "comma-separated area names, e.g. frontend,data")
+    .option("--commands-skills <list>", "comma-separated skill names")
     .allowExcessArguments(false)
     .action(async (options) => {
+      if (options.mode === "skills") {
+        await (await import("./install/_skills-mode.js")).installSkillsOnly(options);
+
+        return;
+      }
+
+      // A terminal gets the full-screen wizard (src/cli/setup/); a pipe, CI
+      // job, --json or --no-wizard gets the same plan via the flag path.
+      // The wizard is lazy: --help never loads Ink or React.
+      if (!options.json && options.wizard !== false && options.interactive !== false) {
+        const { setupRan } = await import("./setup/_entry.js");
+        const io = commanderIo(program, options);
+
+        if (await setupRan("install", io)) {
+          return;
+        }
+      }
+
+      warnWizardOnly(options);
+
       (await import("./commands/_lifecycle.js")).installCommand({
         agent: options.agent,
         mode: options.mode ?? "stdio",
@@ -34,6 +116,8 @@ export function registerInstallCommand(program) {
         force: options.force,
         dryRun: options.dryRun,
         json: options.json,
+        minimal: options.minimal,
+        surface: options.surface,
       });
     });
 }
@@ -46,94 +130,21 @@ export function registerUninstallCommand(program) {
     .option("--agent <name>", "target agent, or 'all' for every configured agent", "all")
     .option("--dry-run", "preview without removing")
     .option("--json", "print machine-readable JSON instead of Terminal UI")
+    .option("--no-wizard", "skip the full-screen wizard even on a terminal")
+    .option("--no-interactive", "run the plan with defaults and no wizard")
+    .option("--purge", "also remove the runtime home and caches")
+    .option("--keep-config", "keep user configuration when purging")
     .allowExcessArguments(false)
     .action(async (options) => {
-      (await import("./commands/_lifecycle.js")).uninstallCommand({ agent: options.agent, dryRun: options.dryRun, json: options.json });
-    });
-}
+      if (!options.json && options.wizard !== false && options.interactive !== false) {
+        const { setupRan } = await import("./setup/_entry.js");
+        const io = commanderIo(program, options);
 
-/** Register the `config` command. */
-export function registerConfigCommand(program) {
-  program
-    .command("config")
-    .description("Print the mcp.json snippet, or manage RULE_MCP_* env vars with `config env`")
-    .argument("[section]", "env to configure RULE_MCP_* variables (default: print mcp.json snippet)")
-    .option("--global", "use clean command path (requires global install)")
-    .option("--mode <name>", "stdio (default), daemon (SSE), or docker")
-    .option("--set <pair>", "KEY=VALUE to save (repeatable)", collect, [])
-    .option("--list", "list saved RULE_MCP_* env vars")
-    .option("--unset <key>", "remove a saved RULE_MCP_* env var")
-    .allowExcessArguments(false)
-    .action(async (section, options) => {
-      if (section === "env") {
-        (await import("./commands/_configure.js")).configureCommand({
-          set: options.set.length > 0 ? options.set : undefined,
-          list: options.list,
-          unset: options.unset,
-        });
-
-        return;
+        if (await setupRan("uninstall", io)) {
+          return;
+        }
       }
 
-      (await import("./commands/_tools.js")).configCommand({ global: options.global, mode: options.mode ?? "stdio" });
-    });
-}
-
-/** Register the `doctor` command. */
-export function registerDoctorCommand(program) {
-  program
-    .command("doctor")
-    .description("Run system health check")
-    .option("--json", "print machine-readable JSON to stdout")
-    .option("--json-out <path>", "export JSON report to a file and keep Terminal UI on stdout")
-    .option("--output <path>", "alias for --json-out")
-    .option("--telemetry", "include anonymous usage stats in the report")
-    .allowExcessArguments(false)
-    .action(async (options) =>
-      (await import("./commands/_health.js")).doctorCommand({
-        telemetry: !!options.telemetry,
-        json: !!options.json,
-        jsonOut: options.jsonOut ?? options.output,
-      }),
-    );
-}
-
-/** Register the `completions` command. */
-export function registerCompletionsCommand(program) {
-  program
-    .command("completions")
-    .description("Generate shell auto-completion script")
-    .option("--shell <s>", "zsh (default), bash, fish", "zsh")
-    .allowExcessArguments(false)
-    .action(async (options) => (await import("./commands/_health.js")).completionsCommand({ shell: options.shell }));
-}
-
-/** Register the `agent-commands` command. */
-export function registerAgentCommandsCommand(program) {
-  program
-    .command("agent-commands")
-    .description("Registry-driven agent slash-command management")
-    .option("--dir <path>", "write commands to this directory")
-    .option("--format <f>", "args (default), workflow, gemini, prompt, plain")
-    .option("--list", "list command names")
-    .option("--targets", "print resolved target directories")
-    .option("--sync", "write to EVERY detected agent dir")
-    .option("--remove", "remove instead of writing")
-    .option("--force", "overwrite existing files")
-    .option("--dry-run", "preview without writing")
-    .option("--agent <name>", "limit to one agent")
-    .allowExcessArguments(false)
-    .action(async (options) => {
-      (await import("./commands/_targets.js")).agentCommandsCommand({
-        dir: options.dir,
-        format: options.format,
-        list: options.list,
-        targets: options.targets,
-        sync: options.sync,
-        remove: options.remove,
-        force: options.force,
-        dryRun: options.dryRun,
-        agent: options.agent,
-      });
+      (await import("./commands/_lifecycle.js")).uninstallCommand({ agent: options.agent, dryRun: options.dryRun, json: options.json });
     });
 }

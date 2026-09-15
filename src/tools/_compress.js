@@ -1,5 +1,3 @@
-
-
 /**
  * @module tools/compress
  *
@@ -19,18 +17,18 @@
  * No model call, no filesystem, no clock: same input, same output, so the
  * result cache can replay it.
  *
- * @see module:core/text/caveman - filler removal
+ * @see module:core/text/compression - filler removal
  * @see module:core/text/compress-guard - the structural guard
  * @see module:core/text/fingerprint - typographic and spelling conversion
  * @see module:core/text/ascii-box - box alignment, which the fingerprint mode carries
  */
 
 import { z } from "zod/v4";
-import { alignAsciiBoxes } from "../core/text/ascii-box/index.js";
-import { compressText } from "../core/text/_caveman.js";
+import { alignAsciiBoxes } from "../core/text/index.js";
+import { compressText } from "../core/text/_compression.js";
 import { isSensitivePath } from "../core/text/_sensitive.js";
 import { guardCompression } from "../core/text/compress-guard/index.js";
-import { stripFingerprint } from "../core/text/fingerprint/index.js";
+import { stripFingerprint } from "../core/text/index.js";
 import { registerTool } from "./router/index.js";
 
 /** Rough token estimate, good enough to report a saving. */
@@ -40,11 +38,11 @@ const estimateTokens = (text) => Math.ceil(text.length / 4);
  * Apply the passes a caller asked for.
  *
  * @param {string} text
- * @param {"both"|"caveman"|"fingerprint"} mode
+ * @param {"both"|"compression"|"fingerprint"} mode
  * @returns {string}
  */
 export function compress(text, mode = "both") {
-  if (mode === "caveman") {
+  if (mode === "compression") {
     return compressText(text);
   }
 
@@ -59,7 +57,7 @@ export function compress(text, mode = "both") {
 export function registerCompressTool() {
   const CompressSchema = z.object({
     text: z.string().describe("Prose to compress. Code fences, inline code, URLs and JSON pass through untouched"),
-    mode: z.enum(["both", "caveman", "fingerprint"]).default("both").describe("both (default), caveman (filler only), fingerprint (punctuation and spelling only)"),
+    mode: z.enum(["both", "compression", "fingerprint"]).default("both").describe("both (default), compression (filler only), fingerprint (punctuation and spelling only)"),
     fileName: z.string().optional().describe("Where the prose came from, when it came from a file. A sensitive name (.env, credentials, id_rsa, anything under .ssh) is refused"),
   });
 

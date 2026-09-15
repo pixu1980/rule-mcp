@@ -12,9 +12,18 @@ export const OPERATIONS = ["plan", "audit", "review"];
  *
  * @param {object} role
  * @param {"all"|"plan"|"audit"|"review"} operation
+ * @param {string} [scope] - the binding scope of a topic-scoped run
  * @returns {string[]}
  */
-export function operationSection(role, operation) {
+export function operationSection(role, operation, scope) {
+  const scoped = scope
+    ? [
+        "",
+        `The scope of this run is binding: ${scope}. The document header states it, and every finding`,
+        "cites evidence inside it. Pass `scope` to `rule_tool_plan_docs` so findings outside the scope",
+        "stay untouched rather than flipped to resolved.",
+      ]
+    : [];
   const common = [
     "",
     `Each document opens with the run date, the role id and version (\`${role.id} v${role.version ?? 1}\`).`,
@@ -29,6 +38,7 @@ export function operationSection(role, operation) {
     "flips the ones you no longer report to resolved, prunes what was already resolved and deletes the",
     "plan when nothing is open. The evidence, the wording of each finding and what each step takes are",
     "yours to fill in.",
+    ...scoped,
   ];
 
   if (operation === "audit") {

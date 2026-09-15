@@ -1,5 +1,3 @@
-
-
 /**
  * @module cli/setup/step-purge
  *
@@ -12,7 +10,7 @@
 
 import { Box, Text, h } from "./_h.js";
 import { COLORS, GLYPHS } from "./_theme.js";
-import { DetailPanel, SelectList } from "./_widget-list.js";
+import { ListDetail } from "./_widget-list.js";
 import { useSelection } from "./_use-selection.js";
 
 /** Purge targets as rows, with their file counts. */
@@ -39,12 +37,13 @@ export function StepPurge({ items, columns, onSubmit, onBack }) {
     { flexDirection: "column" },
     h(Text, { color: COLORS.warn, bold: true }, "Purge state and config"),
     h(Box, { paddingTop: 1 }, h(Text, { color: COLORS.muted }, "Everything here is kept unless you tick it.")),
-    h(
-      Box,
-      { paddingTop: 1 },
-      h(Box, { flexDirection: "column", flexGrow: 1 }, h(SelectList, { items, cursor, selected, height: 4 })),
-      h(DetailPanel, { title: current?.label ?? "", width: Math.max(34, Math.floor(columns / 2)), lines: current?.detail ?? [] }),
-    ),
-    files > 0 ? h(Box, { paddingTop: 1 }, h(Text, { color: COLORS.fail }, `${GLYPHS.warn} ${files} file(s) will be deleted permanently.`)) : null,
+    h(ListDetail, { items, cursor, selected, current, height: 4, columns }),
+    files > 0
+      ? h(
+          Box,
+          { paddingTop: 1 },
+          h(Text, { color: COLORS.fail }, `${GLYPHS.warn} ${files} file(s) will be deleted permanently.`),
+        )
+      : null,
   );
 }

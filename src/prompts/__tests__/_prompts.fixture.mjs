@@ -1,5 +1,3 @@
-
-
 /**
  * @module test/prompts/fixture
  *
@@ -11,6 +9,7 @@
  */
 
 import { listPrompts } from "../index.js";
+import { listAreaPrompts } from "../_areas.js";
 
 console.log("prompts registry test");
 
@@ -18,20 +17,10 @@ console.log("prompts registry test");
 
 export const WORKFLOW_PROMPTS = ["rule-handoff"];
 
-export const AREA_PROMPTS = [
-  "rule-area-toolset",
-  "rule-area-frontend",
-  "rule-area-backend",
-  "rule-area-data",
-  "rule-area-toolchain",
-  "rule-area-styleguide",
-  "rule-area-process",
-  "rule-area-devops",
-  "rule-area-platform",
-  "rule-area-ai",
-  "rule-area-skills",
-  "rule-area-ui",
-];
+// The area prompts are derived from the resolved skill catalog, one per skill
+// (ADR 079), so the fixture asks the catalog rather than freezing a list that
+// a new skill would silently contradict.
+export const AREA_PROMPTS = listAreaPrompts().map((prompt) => prompt.name);
 
 export const ONE_SHOT_PROMPTS = ["rule-adr", "rule-flight", "rule-handon", "rule-init", "rule-process-check", "rule-update"];
 

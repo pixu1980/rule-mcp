@@ -27,7 +27,7 @@ test("aggregate keeps measured savings separate from the routing estimate", () =
     {
       tool: "pix_tool",
       durationMs: 10,
-      saved: { caveman: 40 },
+      saved: { compression: 40 },
       cacheHit: true,
       cacheTier: "exact",
       ok: true,
@@ -42,14 +42,14 @@ test("aggregate keeps measured savings separate from the routing estimate", () =
   assert.equal(stats.errors, 1);
   assert.equal(stats.cacheHits, 1);
   assert.equal(stats.savedTokens, 40);
-  assert.deepEqual(stats.savedBySource, { caveman: 40 });
+  assert.deepEqual(stats.savedBySource, { compression: 40 });
   assert.equal(stats.estimatedTokens, 500);
   assert.equal(stats.latencyP50, 10);
   assert.equal(stats.latencyP95, 20);
 });
 
 test("renderStats never merges the estimate into the measured total", () => {
-  const stats = aggregate([{ tool: "pix_tool", durationMs: 5, saved: { caveman: 10 }, estimatedRouting: 900, ok: true, ts: 1, session: "s" }]);
+  const stats = aggregate([{ tool: "pix_tool", durationMs: 5, saved: { compression: 10 }, estimatedRouting: 900, ok: true, ts: 1, session: "s" }]);
   const out = renderStats(stats);
 
   assert.ok(!out.includes("910"), "the estimate must not be added to the measured total");
@@ -67,7 +67,7 @@ test("renderFlight carries the modeled-estimate sentence with its number", () =>
       calls: { total: 1, tools: 1, resources: 0, distinctTools: 1, errorRate: 0 },
       latency: { p50: 1, p95: 2 },
       mcp: { resultTokens: 10, argsTokens: 2 },
-      tokens: { measuredSaved: 3, savedBySource: { caveman: 3 }, estimatedRouting: 400 },
+      tokens: { measuredSaved: 3, savedBySource: { compression: 3 }, estimatedRouting: 400 },
       guardrails: { failures: 0, byRule: {} },
       cache: { hits: 0, hitRate: 0 },
       routing: {},

@@ -14,6 +14,7 @@ tags:
   - writing
   - style
 frameworks: [all]
+guardrails: [fp-american-english, fp-box-rectangular, fp-no-emdash, fp-no-typographic-chars]
 ---
 
 # rule-styleguide-fingerprint - Write like a person typed it
@@ -162,7 +163,7 @@ Run `rule_tool_compress` to apply the passes to arbitrary prose before writing i
 
 ## See also
 
-- [rule-caveman](../rule-caveman/SKILL.md) - the compression pass that runs alongside this one
+- [rule-compression](../rule-compression/SKILL.md) - the compression pass that runs alongside this one
 - [rule-styleguide-markdown](../rule-styleguide-markdown/SKILL.md) - the document structure this writes into
 - [rule-styleguide-naming](../rule-styleguide-naming/SKILL.md) - naming, where code wins over prose style
 - [rule-toolchain-commits](../rule-toolchain-commits/SKILL.md) - commit messages follow these rules too

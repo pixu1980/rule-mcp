@@ -2,13 +2,73 @@
 
 /** @module core/guardrails/engine/registry - which rule families apply to which skill */
 
-import { SHARED_GUARDRAILS } from "../shared/index.js";
 import { SCAFFOLD_GUARDRAILS } from "../_scaffold.js";
-import { BACKEND_GUARDRAILS } from "../backend/index.js";
-import { DATABASE_GUARDRAILS } from "../_database.js";
-import { DEVOPS_GUARDRAILS } from "../_devops.js";
-import { FRAMEWORK_GUARDRAILS } from "../framework/index.js";
-import { A11Y_GUARDRAILS, QUALITY_GUARDRAILS } from "../quality/index.js";
+import { resolveInherited } from "../../layers/_inherit.js";
+
+// ─── Skill-owned guardrails (ADR 079) ───
+// Populated once at startup from the resolved skill layers. Read-only after
+// that: getGuardrails stays synchronous because the check engine is, and an
+// import on the check path would make every call await the filesystem.
+let SKILL_RULES = new Map();
+
+/**
+ * Install the rules the skills own, as loaded from the three layers.
+ *
+ * @param {Map<string, { inherits: string[], guardrails: object[] }>} rules
+ */
+export function setSkillGuardrails(rules) {
+  SKILL_RULES = rules instanceof Map ? rules : new Map();
+}
+
+/** What a skill owns and inherits, for the inheritance resolver. */
+function skillLookup(name) {
+  return SKILL_RULES.get(name);
+}
+
+/**
+ * The rules a skill owns plus the ones it inherits, nearest definition first.
+ *
+ * @param {string} skillName
+ * @returns {object[]}
+ */
+export function ownedGuardrails(skillName) {
+  return SKILL_RULES.has(skillName) ? resolveInherited(skillName, skillLookup).guardrails : [];
+}
+
+/**
+ * The skills a skill's rules came from, parents first, itself last.
+ *
+ * @param {string} skillName
+ * @returns {string[]}
+ */
+export function skillChain(skillName) {
+  return SKILL_RULES.has(skillName) ? resolveInherited(skillName, skillLookup).chain : [];
+}
+
+/**
+ * The skills whose rules every check includes (ADR 079).
+ *
+ * These are the baseline: the naming, prose, comment, simplicity and markup
+ * rules that applied to every skill before the rules moved into the skills
+ * that own them. They are named here rather than inherited by each of the 91
+ * SKILL.md files because a baseline every skill inherits cannot also be a set
+ * of skills that inherit the baseline - the graph would be a cycle, and a
+ * cycle the resolver has to break is not a declaration anybody can read.
+ */
+export const BASELINE_SKILLS = [
+  "rule-styleguide-css",
+  "rule-styleguide-html",
+  "rule-styleguide-javascript",
+  "rule-styleguide-naming",
+  "rule-styleguide-file-tree",
+  "rule-styleguide-a11y",
+  "rule-styleguide-fingerprint",
+  "rule-styleguide-english",
+  "rule-styleguide-comments",
+  "rule-styleguide-typescript",
+  "rule-process-simplicity",
+  "rule-toolchain-pnpm",
+];
 
 // ─── Skill -> framework mapping ───
 
@@ -64,34 +124,23 @@ export function mergePluginGuardrails(pluginName, guardrails) {
  * @returns {Array<object>}
  */
 export function getGuardrails(skillName, mode) {
-  const framework = SKILL_FRAMEWORK_MAP[skillName] || "vanilla";
-  const frameworkSpecific = FRAMEWORK_GUARDRAILS[framework] || [];
   const scaffold = skillName === "rule-styleguide" && mode === "scaffold" ? SCAFFOLD_GUARDRAILS : [];
   const plugin = PLUGIN_GUARDRAILS.get(skillName) || [];
 
-  // Backend guardrails for backend/api skills
-  const isBackend = /^rule-(?:backend|backend-)/.test(skillName);
-  const backend = isBackend ? BACKEND_GUARDRAILS : [];
+  // The skill's own rules come last so that a rule which has moved into a
+  // skill overrides the copy the families still carry while ADR 079's
+  // migration is in flight.
+  const baseline = BASELINE_SKILLS.flatMap((name) => (name === skillName ? [] : ownedGuardrails(name)));
+  const families = [...baseline, ...scaffold, ...plugin, ...ownedGuardrails(skillName)];
 
-  // Database guardrails for data/database skills
-  const isDatabase = /^rule-data(?:-|$)/.test(skillName) || skillName.startsWith("rule-data-");
-  const database = isDatabase ? DATABASE_GUARDRAILS : [];
+  // One run per rule id, and the last definition wins: the simplicity rules
+  // belong to the quality family AND to the shared set (the simplicity test
+  // pins that), and a migrated rule appears in both its family and its skill.
+  const byId = new Map();
 
-  // DevOps guardrails for devops skills
-  const isDevops = /^rule-devops(?:-|$)/.test(skillName);
-  const devops = isDevops ? DEVOPS_GUARDRAILS : [];
+  for (const guardrail of families) {
+    byId.set(guardrail.id, guardrail);
+  }
 
-  // Accessibility guardrails: the a11y skill always, and any skill checking
-  // markup or styles - a React component is as much an a11y surface as a page.
-  const isA11y = skillName === "rule-styleguide-a11y" || /^rule-(?:frontend|platform|ui|styleguide)/.test(skillName);
-  const a11y = isA11y ? A11Y_GUARDRAILS : [];
-
-  const families = [...QUALITY_GUARDRAILS, ...SHARED_GUARDRAILS, ...frameworkSpecific, ...scaffold, ...backend, ...database, ...devops, ...a11y, ...plugin];
-
-  // One run per rule id: the simplicity rules belong to the quality family AND
-  // to the shared set (the simplicity test pins that), so the assembly dedupes
-  // instead of running the same rule twice for every skill.
-  const seen = new Set();
-
-  return families.filter((guardrail) => !seen.has(guardrail.id) && seen.add(guardrail.id));
+  return [...byId.values()];
 }

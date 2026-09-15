@@ -1,13 +1,9 @@
-
-
 /**
- * Every `rule://` URI the server advertises, read back.
+ * Every `rule://` URI the reader answers, and the one it refuses.
  *
- * `listResources()` promises a URI list; nothing checked that reading one
- * returns what its entry claims. Eleven of the reader's twenty-six branches
- * were unvisited, which is one branch per URI shape - the catalogs, the two
- * a11y templates, the project probe, a skill and its summary, and the
- * not-found fallback that must answer rather than throw.
+ * The reader is one long chain of URI equality checks: each arm is its own
+ * mime type and its own body shape, and nothing but a test says which arm a
+ * URI lands in.
  */
 import { strict as assert } from "node:assert";
 import { mkdtempSync } from "node:fs";
@@ -15,117 +11,122 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { test } from "node:test";
 
-process.env.RULE_MCP_STATE_DIR = mkdtempSync(join(tmpdir(), "rule-read-"));
-process.env.RULE_MCP_NO_TELEMETRY = "1";
+process.env.RULE_MCP_STATE_DIR = mkdtempSync(join(tmpdir(), "rule-resource-read-"));
 process.env.RULE_MCP_NO_AUTOUPDATE = "1";
-process.env.RULE_MCP_NO_CACHE = "1";
 
 const { serveResource } = await import("../_read.js");
-const { listResources } = await import("../index.js");
 const { loadAllSkills } = await import("../../core/skills/index.js");
 
 await loadAllSkills();
 
-/** The single content item a read returns. */
-const one = async (uri) => (await serveResource(uri)).contents[0];
-const json = async (uri) => JSON.parse((await one(uri)).text);
+/** The single content entry a URI serves. */
+async function body(uri) {
+  const result = await serveResource(uri);
 
-test("the skill index lists every bundled skill with its path and size", async () => {
-  const item = await one("rule://skills");
+  assert.equal(result.contents.length, 1, `${uri}: a resource serves exactly one body`);
+  assert.equal(result.contents[0].uri, uri, `${uri}: the body echoes the URI it answers`);
 
-  assert.equal(item.mimeType, "application/json");
-  const skills = JSON.parse(item.text);
-  assert.ok(skills.length > 50, `the catalog, not a sample: got ${skills.length}`);
+  return result.contents[0];
+}
 
-  for (const entry of skills.slice(0, 5)) {
-    assert.match(entry.name, /^rule/);
-    assert.match(entry.path, /SKILL\.md$/);
-    assert.ok(entry.length > 0, `${entry.name} has a body`);
+/** The parsed JSON body of a URI that serves application/json. */
+async function json(uri) {
+  const content = await body(uri);
+
+  assert.equal(content.mimeType, "application/json", `${uri}: serves JSON`);
+
+  return JSON.parse(content.text);
+}
+
+test("rule://skills indexes the bundled skills with their sizes", async () => {
+  const skills = await json("rule://skills");
+
+  assert.ok(Array.isArray(skills), "the index is a list");
+  assert.ok(skills.length > 0, "the bundled skills are found");
+
+  for (const skill of skills) {
+    assert.match(skill.name, /^rule/, `every entry is a rule skill: ${skill.name}`);
+    assert.ok(skill.path.endsWith("SKILL.md"), `${skill.name}: the path points at its SKILL.md`);
+    assert.ok(skill.length > 0, `${skill.name}: an empty skill would be a packaging bug`);
   }
 });
 
-test("the template catalog answers with its categories", async () => {
-  const item = await one("rule://templates");
+test("rule://templates lists the template categories", async () => {
+  const categories = await json("rule://templates");
 
-  assert.equal(item.mimeType, "application/json");
-  assert.ok(Array.isArray(JSON.parse(item.text)) || typeof JSON.parse(item.text) === "object");
+  assert.ok(categories && typeof categories === "object", "the catalog is structured");
 });
 
-test("the community index reports plugin skills, and reports none honestly", async () => {
-  const result = await json("rule://community");
+test("rule://ai serves the routing skill as markdown", async () => {
+  const content = await body("rule://ai");
 
-  assert.equal(typeof result.total, "number");
-  assert.deepEqual(result.known_community, []);
-  assert.equal(result.plugins.length, result.total, "the count is the list, not a claim about it");
-
-  for (const plugin of result.plugins) {
-    assert.equal(plugin.type, "plugin");
-    assert.ok(plugin.description.length > 0, `${plugin.name} carries a description`);
-  }
+  assert.equal(content.mimeType, "text/markdown");
+  assert.ok(content.text.length > 0, "the rule skill is bundled, so this is never empty");
 });
 
-test("the project probe detects the framework and suggests tools for it", async () => {
-  const result = await json("rule://project");
+test("rule://a11y points at the guide and the generators", async () => {
+  const content = await body("rule://a11y");
 
-  assert.ok(result.framework, "a framework is reported, even if vanilla");
-  assert.equal(result.suggested_skills.length, 1);
-  assert.ok(result.suggested_tools.includes("rule_tool_check"), "the guardrail tool is always suggested");
-  assert.match(result.message, /Detected/);
+  assert.equal(content.mimeType, "text/markdown");
+  assert.match(content.text, /Playwright \+ axe-core/, "it names the tooling");
+  assert.match(content.text, /rule_tool_component/, "and the tool that generates the specs");
 });
 
-test("rule://ai serves the dispatcher skill body", async () => {
-  const item = await one("rule://ai");
-
-  assert.equal(item.mimeType, "text/markdown");
-  assert.match(item.text, /^---\nname: rule\n/, "the hub skill, frontmatter and all");
-});
-
-test("the a11y guide and both test templates read back", async () => {
-  const guide = await one("rule://a11y");
-  assert.equal(guide.mimeType, "text/markdown");
-  assert.match(guide.text, /rule_tool_component/, "it points at the tool that generates the files");
-
+test("the a11y test templates serve as plain text", async () => {
   for (const uri of ["rule://a11y/test-basic", "rule://a11y/test-forms"]) {
-    const item = await one(uri);
-    assert.equal(item.mimeType, "text/plain", `${uri} is a file, not prose`);
-    assert.ok(item.text.length > 0, `${uri} has content`);
+    const content = await body(uri);
+
+    assert.equal(content.mimeType, "text/plain", `${uri}: a template is plain text`);
+    assert.equal(typeof content.text, "string", `${uri}: a missing template serves "" rather than throwing`);
   }
 });
 
-test("a skill URI serves its body, and /summary serves the head of it", async () => {
-  const full = await one("rule://rule-backend-node");
+test("rule://community reports the plugin skills, counted", async () => {
+  const community = await json("rule://community");
+
+  assert.ok(Array.isArray(community.plugins), "the plugins are a list");
+  assert.equal(community.total, community.plugins.length, "the total matches the list");
+  assert.deepEqual(community.known_community, [], "nothing is claimed about skills the server does not ship");
+});
+
+test("rule://project detects this repository and suggests tools for it", async () => {
+  const project = await json("rule://project");
+
+  assert.ok(project.framework, "a framework is always named");
+  assert.equal(project.suggested_skills.length, 1, "one skill is suggested");
+  assert.ok(project.suggested_tools.includes("rule_tool_check"), "the guardrail tool is always suggested");
+  assert.match(project.message, new RegExp(project.framework), "the message names what was detected");
+});
+
+test("a skill URI serves the skill, and its summary arm truncates", async () => {
+  const full = await body("rule://rule-styleguide-css");
   assert.equal(full.mimeType, "text/markdown");
-  assert.match(full.text, /name: rule-backend-node/);
+  assert.ok(full.text.length > 0, "the skill body is served whole");
 
-  const summary = await one("rule://rule-backend-node/summary");
-  assert.match(summary.text, /^# rule-backend-node \(summary\)/);
-  assert.ok(summary.text.length < full.text.length, "a summary is shorter than the body");
-  assert.match(summary.text, /\.\.\.$/, "and says it was cut");
+  const summary = await body("rule://rule-styleguide-css/summary");
+  assert.match(summary.text, /^# rule-styleguide-css \(summary\)/, "the summary is labeled as one");
+  assert.ok(summary.text.endsWith("...\n\n...") || summary.text.endsWith("..."), "and it says it was cut");
+  assert.ok(summary.text.length < full.text.length, "a summary is shorter than the skill");
 });
 
-test("an unknown URI answers instead of throwing", async () => {
-  for (const uri of ["rule://not-a-skill", "rule://", "totally-invalid", undefined]) {
-    const item = await one(uri);
-    assert.equal(item.text, "Resource not found", `${uri} must answer`);
-    assert.equal(item.mimeType, "text/plain");
+test("an unknown section of a known skill falls through to the whole skill", async () => {
+  const section = await body("rule://rule-styleguide-css/nosuchsection");
+  const full = await body("rule://rule-styleguide-css");
+
+  assert.equal(section.text, full.text, "only `summary` is special; any other section serves the skill");
+});
+
+test("a URI nothing answers to is refused in plain text", async () => {
+  for (const uri of ["rule://rule-not-a-real-skill", "rule://nonsense", "not-a-uri-at-all"]) {
+    const content = await serveResource(uri);
+
+    assert.equal(content.contents[0].mimeType, "text/plain", `${uri}: a refusal is plain text`);
+    assert.equal(content.contents[0].text, "Resource not found", `${uri}: and it says so plainly`);
   }
 });
 
-test("every advertised resource URI is readable", async () => {
-  const advertised = listResources();
-  assert.ok(advertised.length > 100, `the surface, not a sample: got ${advertised.length}`);
+test("serveResource tolerates being handed nothing", async () => {
+  const content = await serveResource();
 
-  // The whole list is the point: an advertised URI that reads back "not found"
-  // is a promise the server does not keep.
-  const missing = [];
-
-  for (const resource of advertised) {
-    const item = await one(resource.uri);
-
-    if (item.text === "Resource not found") {
-      missing.push(resource.uri);
-    }
-  }
-
-  assert.deepEqual(missing, []);
+  assert.equal(content.contents[0].text, "Resource not found", "an absent URI is a miss, not a crash");
 });

@@ -1,0 +1,553 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Environment Variables Reference - rule-mcp docs</title>
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<header><nav><ul>
+<li><a href="../index.html">Home</a></li>
+<li><a href="../docs/01-getting-started.html">undefined</a></li>
+<li><a href="../docs/02-product-architecture.html">undefined</a></li>
+<li><a href="../docs/03-agent-instructions.html">undefined</a></li>
+<li><a href="../docs/04-operations.html">undefined</a></li>
+<li><a href="../docs/05-env-variables.html" aria-current="page">undefined</a></li>
+<li><a href="../docs/06-privacy.html">undefined</a></li>
+<li><a href="../docs/07-engineering-guides.html">undefined</a></li>
+<li><a href="../docs/08-skills.html">undefined</a></li>
+<li><a href="../docs/09-tools.html">undefined</a></li>
+<li><a href="../docs/10-prompts.html">undefined</a></li>
+<li><a href="../docs/11-instructions.html">undefined</a></li>
+<li><a href="../docs/12-cli.html">undefined</a></li>
+<li><a href="../docs/13-personas.html">undefined</a></li>
+<li><a href="../docs/14-guardrails.html">undefined</a></li>
+<li><a href="../docs/15-resources.html">undefined</a></li>
+<li><a href="../docs/adr/ADR.html">ADRs</a></li>
+</ul></nav></header>
+<main>
+<h1>Environment Variables Reference</h1>
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Description</th>
+<th>Default</th>
+<th>Values</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>RULE_MCP_MINIMAL_TOOLS</code></td>
+<td>Expose only the 13 dispatcher/action tools (fits client tool caps, cheaper context). Safe for untrusted code.</td>
+<td>unset</td>
+<td><code>1</code> = enable</td>
+</tr>
+<tr>
+<td><code>RULE_MCP_NO_PROMPTS</code></td>
+<td>Return an empty <code>prompts/list</code> (hide the <code>/&lt;server&gt;:&lt;prompt&gt; (MCP)</code> slash commands). Set automatically in the Claude Code config, which ships clean <code>/rule-*</code> user commands instead.</td>
+<td><code>0</code></td>
+<td><code>1</code> = suppress prompts</td>
+</tr>
+<tr>
+<td><code>RULE_MCP_AUTO_ADR</code></td>
+<td>Write an ADR automatically after a routing, scaffold, detect or fix call. Off unless asked for: it writes files into the project as a side effect of ordinary tool use.</td>
+<td>unset</td>
+<td><code>1</code> = enable</td>
+</tr>
+<tr>
+<td><code>RULE_MCP_DAEMON</code></td>
+<td>Run as daemon process (used by LaunchAgent/systemd units).</td>
+<td>unset</td>
+<td><code>1</code> = daemon mode</td>
+</tr>
+<tr>
+<td><code>RULE_MCP_SSE_TOKEN</code></td>
+<td>Bearer token for SSE transport authentication. Auto-generated if unset.</td>
+<td>auto-generated</td>
+<td>any string</td>
+</tr>
+<tr>
+<td><code>RULE_MCP_AUTO_UPDATE_INTERVAL_SECONDS</code></td>
+<td>Throttle between self-update checks (git fetch at most once per interval, on tool invocations).</td>
+<td><code>60</code></td>
+<td>seconds; <code>0</code> = check on every tool call</td>
+</tr>
+<tr>
+<td><code>RULE_MCP_UPDATE_REMOTE</code></td>
+<td>Git remote(s) this install may take code from, replacing the repository declared in <code>server.json</code>. Required for forks and sandboxes: an unrecognized remote is refused before any fetch.</td>
+<td><code>server.json</code> <code>repository.url</code></td>
+<td>comma-separated URLs or paths</td>
+</tr>
+<tr>
+<td><code>RULE_MCP_UPDATE_REQUIRE_SIGNATURE</code></td>
+<td>Require a valid signature on the upstream commit (<code>git verify-commit</code>) before merging. Off by default because most repositories do not sign.</td>
+<td>unset</td>
+<td><code>1</code> = require signature</td>
+</tr>
+<tr>
+<td><code>RULE_MCP_NO_PROMPT_DIRECTIVE</code></td>
+<td>Silence the SessionStart/UserPromptSubmit directive (rule-first, no subagents, compression, mantra) injected by the harness hooks.</td>
+<td>unset</td>
+<td><code>1</code> = disable</td>
+</tr>
+<tr>
+<td><code>RULE_MCP_NO_RESUME_HANDON</code></td>
+<td>Stop the verified handoff from being injected when a session is resumed: the SessionStart hook (<code>source: &quot;resume&quot;</code>) and the first tool call whose prompt is a bare resume request. Nothing is injected when <code>docs/handoff/</code> holds no handoff.</td>
+<td>unset</td>
+<td><code>1</code> = disable</td>
+</tr>
+<tr>
+<td><code>RULE_MCP_NO_COMPRESSION</code></td>
+<td>Disable compression compression of tool results (filler and leading articles are stripped from prose; code, JSON, URLs and headings are never touched).</td>
+<td>unset</td>
+<td><code>1</code> = disable</td>
+</tr>
+<tr>
+<td><code>RULE_MCP_COMPRESSION_LEVEL</code></td>
+<td>Compression intensity. <code>off</code> is the alias of <code>RULE_MCP_NO_COMPRESSION=1</code>; <code>lite</code> drops filler, hedging and pleasantries and keeps whole sentences; <code>full</code> adds leading articles, phrase rewrites and short synonyms; <code>ultra</code> adds the abbreviation map, conjunction stripping and arrow causality. An unknown value falls back to <code>full</code> with one warning on stderr.</td>
+<td><code>full</code></td>
+<td><code>off</code>, <code>lite</code>, <code>full</code>, <code>ultra</code></td>
+</tr>
+<tr>
+<td><code>RULE_MCP_LOOSE_DEPS</code></td>
+<td>Drop the exact-latest dependencies policy line from the workflow reminder (projects that manage versions elsewhere).</td>
+<td>unset</td>
+<td><code>1</code> = disable</td>
+</tr>
+<tr>
+<td><code>RULE_MCP_NO_REMINDER</code></td>
+<td>Suppress the workflow reminder appended to tool results.</td>
+<td>unset</td>
+<td><code>1</code> = disable</td>
+</tr>
+<tr>
+<td><code>RULE_MCP_REMINDER_EVERY</code></td>
+<td>How often the workflow reminder is re-anchored after the opening contract: the full contract goes out on the session&#39;s first result, a one-liner every Nth result after it, and nothing in between. <code>1</code> reminds on every call (the pre-4.2 behavior), <code>0</code> sends the contract only once.</td>
+<td><code>5</code></td>
+<td>integer &gt;= 0</td>
+</tr>
+<tr>
+<td><code>RULE_MCP_GUARDED_CHECKS</code></td>
+<td>Run guardrail checks in a killable worker thread instead of inline. The server sets this for itself; a CLI one-shot stays inline, where spawning a thread that reloads every skill would cost more than it protects.</td>
+<td>unset</td>
+<td><code>1</code> = enable</td>
+</tr>
+<tr>
+<td><code>RULE_MCP_CHECK_TIMEOUT_MS</code></td>
+<td>Per-check budget for a guarded check before the worker is killed and the call reported as failed.</td>
+<td><code>5000</code></td>
+<td>milliseconds</td>
+</tr>
+<tr>
+<td><code>RULE_MCP_TEST_SLOW_CHECK_MS</code></td>
+<td>Test-only: busy-wait this long inside the worker before checking, so the kill path can be exercised. Never set it in a real install.</td>
+<td>unset</td>
+<td>milliseconds</td>
+</tr>
+<tr>
+<td><code>RULE_MCP_NO_FINGERPRINT</code></td>
+<td>Disable AI-fingerprint removal on tool results (em dashes and typographic characters become ASCII, British spelling becomes American; code, inline spans, URLs and JSON are never touched).</td>
+<td>unset</td>
+<td><code>1</code> = disable</td>
+</tr>
+<tr>
+<td><code>RULE_MCP_NO_TELEMETRY</code></td>
+<td>Disable local telemetry entirely: no events recorded, no files written. Telemetry is local-only and never sent anywhere.</td>
+<td>unset</td>
+<td><code>1</code> = disable</td>
+</tr>
+<tr>
+<td><code>RULE_MCP_NO_PROMPTS</code></td>
+<td>Record only the prompt length, never its text. Prompt text is recorded by default, into the home recording (<code>~/.rule-mcp/</code>), and is never sent anywhere.</td>
+<td>unset</td>
+<td><code>1</code> = lengths only</td>
+</tr>
+<tr>
+<td><code>RULE_MCP_NO_TOKENSAVE</code></td>
+<td>Disable tokensave awareness: no code-graph directive, no context suppression, no branch-staleness warning.</td>
+<td>unset</td>
+<td><code>1</code> = disable</td>
+</tr>
+<tr>
+<td><code>RULE_MCP_NO_CACHE</code></td>
+<td>Disable the deterministic result cache at every tier, including a committed catalog. Every call recomputes.</td>
+<td>unset</td>
+<td><code>1</code> = disable</td>
+</tr>
+<tr>
+<td><code>RULE_MCP_CACHE_EXACT_ONLY</code></td>
+<td>Answer only from the exact key, never the normalized one. Reported by <code>cache stats</code>, so a low hit rate stays explainable.</td>
+<td>unset</td>
+<td><code>1</code> = exact only</td>
+</tr>
+<tr>
+<td><code>RULE_MCP_STATE_DIR</code></td>
+<td>Where mutable state lives: the result cache, the bm25 index, the SSE token, the daemon pid/log.</td>
+<td><code>~/.rule-mcp/state</code></td>
+<td>an absolute path</td>
+</tr>
+<tr>
+<td><code>RULE_MCP_HOME</code></td>
+<td>The whole rule-mcp home root (state, data, projects, config under it). <code>RULE_MCP_STATE_DIR</code> overrides just the state subdirectory.</td>
+<td><code>~/.rule-mcp</code></td>
+<td>an absolute path</td>
+</tr>
+<tr>
+<td><code>RULE_MCP_REPO_ROOT</code></td>
+<td>The repository the server reads its own skills and version from.</td>
+<td>the installed package</td>
+<td>an absolute path</td>
+</tr>
+<tr>
+<td><code>RULE_MCP_PORT</code></td>
+<td>Port for the HTTP and SSE transports.</td>
+<td><code>37999</code></td>
+<td>a port number</td>
+</tr>
+<tr>
+<td><code>RULE_MCP_HOST</code></td>
+<td>Interface the HTTP and SSE transports bind to.</td>
+<td><code>127.0.0.1</code></td>
+<td>a hostname or address</td>
+</tr>
+<tr>
+<td><code>RULE_MCP_NO_AUTOUPDATE</code></td>
+<td>Stop the throttled self-update check that runs on tool invocations.</td>
+<td>unset</td>
+<td><code>1</code> = disable</td>
+</tr>
+<tr>
+<td><code>RULE_MCP_NO_AUTORESTART</code></td>
+<td>After a self-update changes server code, print an instruction instead of exiting for the client to respawn.</td>
+<td>unset</td>
+<td><code>1</code> = disable</td>
+</tr>
+<tr>
+<td><code>RULE_MCP_DAEMON_AUTORESTART</code></td>
+<td>Let a daemon exit after a self-update so its service manager restarts it. Off by default: a shared daemon dropping every client is worse than running one commit behind.</td>
+<td>unset</td>
+<td><code>1</code> = enable</td>
+</tr>
+<tr>
+<td><code>RULE_MCP_DOCKER</code></td>
+<td>Marks the process as running inside the container image, which changes the paths the installer writes.</td>
+<td>unset</td>
+<td><code>1</code> = container</td>
+</tr>
+<tr>
+<td><code>RULE_MCP_DISABLE_AUTO_ADR</code></td>
+<td>Never write an ADR automatically, whatever <code>RULE_MCP_AUTO_ADR</code> says. Set by <code>tools call</code> for the duration of a one-shot, so a CLI invocation does not leave a decision record behind.</td>
+<td>unset</td>
+<td><code>1</code> = never</td>
+</tr>
+<tr>
+<td><code>RULE_MCP_PROJECT_DIR</code></td>
+<td>An extra directory to search when resolving the project an agent integration belongs to, tried before the working directory.</td>
+<td>unset</td>
+<td>an absolute path</td>
+</tr>
+<tr>
+<td><code>RULE_MCP_ROLES_DIR</code></td>
+<td>Where the persona catalog is read from, replacing the embedded <code>src/roles/</code>.</td>
+<td>the embedded <code>src/roles/</code></td>
+<td>an absolute path</td>
+</tr>
+<tr>
+<td><code>RULE_MCP_ROLES_OVERLAY_DIR</code></td>
+<td>Where a user&#39;s own role overlays are read from. Overlays are user configuration, so they default under the config home; this moves them for a container or a test.</td>
+<td><code>&lt;home&gt;/config/roles</code></td>
+<td>an absolute path</td>
+</tr>
+<tr>
+<td><code>RULE_MCP_SUPPRESS_MIN_LINES</code></td>
+<td>How many lines a tool result must reach before the token pipeline suppresses or truncates it.</td>
+<td><code>40</code> to suppress, <code>120</code> to truncate</td>
+<td>integer</td>
+</tr>
+</tbody></table>
+<h2>Configuration</h2>
+<p>Set these variables via:</p>
+<pre><code class="language-bash"># CLI (persisted to ~/.config/rule-mcp/env.json)
+rule config env --set RULE_MCP_MINIMAL_TOOLS=1
+
+# Interactive mode
+rule config env
+
+# Environment (overrides persisted config)
+export RULE_MCP_MINIMAL_TOOLS=1
+</code></pre>
+<h2>Persistence</h2>
+<p>Variables set via <code>rule config env</code> are saved to <code>~/.config/rule-mcp/env.json</code>
+and automatically injected into the MCP stdio configuration on install/update.</p>
+<p>Environment variables set in your shell profile override the persisted config.</p>
+<h2>Minimal tool surface</h2>
+<p>Set <code>RULE_MCP_MINIMAL_TOOLS=1</code> (off by default) to expose only the 13 dispatcher/action tools:
+<code>rule</code>, <code>rule_tool_update</code>, <code>rule_tool_gateway</code>, <code>rule_tool_apply</code>, <code>rule_tool_search</code>, <code>rule_tool_compress</code>, <code>rule_tool_check</code>, <code>rule_tool_a11y_report</code>, <code>rule_tool_stats</code>, <code>rule_tool_scaffold</code>, <code>rule_tool_detect</code>, <code>rule_tool_process_handoff</code>, <code>rule_tool_component</code>.</p>
+<h2>Telemetry</h2>
+<p>Local, on by default, and never sent anywhere. Disable with
+<code>RULE_MCP_NO_TELEMETRY=1</code>.</p>
+<p>Telemetry belongs to a project, not to a machine: a cache hit rate averaged
+over every repository on a disk answers nothing.</p>
+<table>
+<thead>
+<tr>
+<th>What</th>
+<th>Where</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Raw events, 7-day retention</td>
+<td><code>~/.rule-mcp/projects/&lt;project&gt;/telemetry.jsonl</code></td>
+</tr>
+<tr>
+<td>Daily aggregates</td>
+<td><code>~/.rule-mcp/projects/&lt;project&gt;/telemetry-rollup.json</code></td>
+</tr>
+<tr>
+<td>Usage an agent declared for itself</td>
+<td><code>~/.rule-mcp/projects/&lt;project&gt;/usage.json</code></td>
+</tr>
+<tr>
+<td>Id of the current recording window</td>
+<td><code>~/.rule-mcp/projects/&lt;project&gt;/project-id</code></td>
+</tr>
+<tr>
+<td>Exported flights</td>
+<td><code>~/.rule-mcp/projects/&lt;project&gt;/exports/*.flight</code></td>
+</tr>
+<tr>
+<td>Random installation id</td>
+<td><code>&lt;stateDir&gt;/installation-id</code></td>
+</tr>
+</tbody></table>
+<p><code>rule-mcp telemetry export</code> writes one <code>.flight</code> holding the timeline,
+the KPI block, the model&#39;s own usage and a snapshot of the project, then empties
+the log: the file is the archive, not a copy of it. <code>--keep</code> leaves the log in
+place. <code>rule-mcp telemetry show &lt;file&gt;</code> reports an export as tables, and
+<code>rule_tool_stats</code> does the same with a <code>flight</code> argument.</p>
+<p>The model&#39;s tokens and cost are read from the coding agent&#39;s own transcript -
+pi, Claude Code, Codex and opencode are supported. An agent whose usage is not
+on disk in a parseable form can declare it with <code>rule_tool_usage</code>; a transcript
+always wins over a declaration, and a declaration is labeled as one.</p>
+<p>Nothing is written into the project: a recording is filed per project under the
+home directory, so a checkout has nothing to ignore (ADR 082).
+<code>rule-mcp init</code> sets that up, and installs git hooks so a clone or a
+checkout re-asserts the rule.</p>
+<p>Recorded per tool call: tool name, duration, outcome, cache hit, routed skill,
+guardrail failure count, and tokens saved per source.</p>
+<p><strong>Never recorded:</strong> prompt text. Only its length. Remote sending is implemented
+behind an interface and switched off in code, not by an environment variable,
+because enabling it is a decision with a legal basis attached.</p>
+<p>Read it with <code>rule-mcp stats</code> or the <code>rule_tool_stats</code> tool. Export a
+session for the AI Flight Recorder DevTools timeline with
+<code>rule-mcp telemetry export</code>. Roll up and prune with
+<code>rule-mcp telemetry prune</code>.</p>
+<h2>Target-only additions</h2>
+<ul>
+<li><code>RULE_MCP_SKILL_UNIVERSE=base</code>: route on the source-commensurate skill set for the routing-corpus measurement (see src/tools/router.js TARGET_ONLY_SKILLS).</li>
+</ul>
+<h2>Node variables this server sets or honors</h2>
+<p>stdio starts the server as a subprocess per client, so module compilation is
+paid on every connect. <code>bin/rule-mcp.js</code> calls
+<code>module.enableCompileCache()</code> before it loads the application graph, and the
+installer writes a cache directory into the generated agent config.</p>
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>NODE_COMPILE_CACHE</code></td>
+<td>Directory for the compiled code cache. The installer sets it for every agent spawn; unset, Node picks its own location.</td>
+<td><code>~/.cache/rule-mcp/compile-cache</code></td>
+</tr>
+<tr>
+<td><code>NODE_DISABLE_COMPILE_CACHE</code></td>
+<td><code>1</code> turns the cache off, including the one the bin enables. The test runner sets it so no suite result depends on a cache another wrote.</td>
+<td>unset</td>
+</tr>
+</tbody></table>
+<p>Measured with <code>pnpm report:startup</code>: the cache takes 2-6% off a warm start.
+The larger win came from what the entry point no longer loads - <code>--help</code> went
+from 216 ms to 48 ms once the command handlers moved behind their actions.</p>
+<!-- census:begin:env-registry --><h2>Where each variable is read</h2>
+<p>Generated from <code>src/</code> and <code>bin/</code>: the modules that name the variable, so a
+knob documented above can be traced to the code that answers it.</p>
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Read in</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>RULE_MCP_AUTO_ADR</code></td>
+<td><code>src/cli/commands/_configure.js</code>, <code>src/tools/adr/_auto-log.js</code></td>
+</tr>
+<tr>
+<td><code>RULE_MCP_AUTO_UPDATE_INTERVAL_SECONDS</code></td>
+<td><code>src/core/self-update/_config.js</code></td>
+</tr>
+<tr>
+<td><code>RULE_MCP_CACHE_EXACT_ONLY</code></td>
+<td><code>src/cli/cache/_stats.js</code>, <code>src/core/cache/tool-cache/_config.js</code></td>
+</tr>
+<tr>
+<td><code>RULE_MCP_COMPRESSION_LEVEL</code></td>
+<td><code>src/core/text/_compression.js</code>, <code>src/core/text/_level.js</code>, <code>src/core/text/_surfaces.js</code></td>
+</tr>
+<tr>
+<td><code>RULE_MCP_CHECK_TIMEOUT_MS</code></td>
+<td><code>src/core/guardrails/guarded/_policy.js</code></td>
+</tr>
+<tr>
+<td><code>RULE_MCP_DAEMON</code></td>
+<td><code>src/cli/commands/_configure.js</code>, <code>src/cli/daemon/_launchd-plist.js</code>, <code>src/cli/daemon/_process.js</code>, <code>src/cli/daemon/_service-shared.js</code>, <code>src/cli/daemon/_systemd-unit.js</code>, <code>src/core/self-update/_schedule.js</code></td>
+</tr>
+<tr>
+<td><code>RULE_MCP_DAEMON_AUTORESTART</code></td>
+<td><code>src/core/self-update/_schedule.js</code></td>
+</tr>
+<tr>
+<td><code>RULE_MCP_DISABLE_AUTO_ADR</code></td>
+<td><code>src/cli/commands/_configure.js</code>, <code>src/cli/commands/_tools.js</code>, <code>src/tools/adr/_auto-log.js</code></td>
+</tr>
+<tr>
+<td><code>RULE_MCP_DOCKER</code></td>
+<td><code>src/cli/paths/_repo.js</code></td>
+</tr>
+<tr>
+<td><code>RULE_MCP_GUARDED_CHECKS</code></td>
+<td><code>src/core/guardrails/guarded/_policy.js</code></td>
+</tr>
+<tr>
+<td><code>RULE_MCP_HOME</code></td>
+<td><code>src/cli/paths/_runtime.js</code></td>
+</tr>
+<tr>
+<td><code>RULE_MCP_HOST</code></td>
+<td><code>src/cli/paths/_runtime.js</code>, <code>src/transport/http/index.js</code></td>
+</tr>
+<tr>
+<td><code>RULE_MCP_LOOSE_DEPS</code></td>
+<td><code>src/core/_directive.js</code></td>
+</tr>
+<tr>
+<td><code>RULE_MCP_MINIMAL_TOOLS</code></td>
+<td><code>src/cli/commands/_configure.js</code>, <code>src/core/skills/_minimal.js</code></td>
+</tr>
+<tr>
+<td><code>RULE_MCP_NO_AUTORESTART</code></td>
+<td><code>src/cli/installers/_env.js</code>, <code>src/core/self-update/_schedule.js</code></td>
+</tr>
+<tr>
+<td><code>RULE_MCP_NO_AUTOUPDATE</code></td>
+<td><code>src/cli/installers/_env.js</code>, <code>src/core/self-update/_config.js</code>, <code>src/tools/_update.js</code></td>
+</tr>
+<tr>
+<td><code>RULE_MCP_NO_CACHE</code></td>
+<td><code>src/cli/cache/_helpers.js</code>, <code>src/cli/cache/_stats.js</code>, <code>src/cli/installers/_env.js</code>, <code>src/core/bm25/_cache-signature.js</code>, <code>src/core/cache/tool-cache/_config.js</code></td>
+</tr>
+<tr>
+<td><code>RULE_MCP_NO_COMPRESSION</code></td>
+<td><code>src/cli/installers/_env.js</code>, <code>src/core/text/_compression.js</code>, <code>src/core/text/_level.js</code>, <code>src/core/text/_surfaces.js</code></td>
+</tr>
+<tr>
+<td><code>RULE_MCP_NO_FINGERPRINT</code></td>
+<td><code>src/core/text/fingerprint/_scan.js</code></td>
+</tr>
+<tr>
+<td><code>RULE_MCP_NO_PROMPT_DIRECTIVE</code></td>
+<td><code>src/core/_directive.js</code></td>
+</tr>
+<tr>
+<td><code>RULE_MCP_NO_PROMPTS</code></td>
+<td><code>src/cli/installers/_agents-cli.js</code>, <code>src/core/agents/command-targets/index.js</code>, <code>src/core/agents/commands/index.js</code>, <code>src/core/telemetry/recorder/_flags.js</code>, <code>src/core/telemetry/recorder/index.js</code>, <code>src/prompts/_registry.js</code></td>
+</tr>
+<tr>
+<td><code>RULE_MCP_NO_REMINDER</code></td>
+<td><code>src/cli/installers/_env.js</code>, <code>src/core/enforcement/_reminder.js</code>, <code>src/core/text/_surfaces.js</code></td>
+</tr>
+<tr>
+<td><code>RULE_MCP_NO_RESUME_HANDON</code></td>
+<td><code>src/core/session/resume/_context.js</code>, <code>src/core/session/resume/index.js</code>, <code>src/core/text/_surfaces.js</code></td>
+</tr>
+<tr>
+<td><code>RULE_MCP_NO_TELEMETRY</code></td>
+<td><code>src/cli/_register-info.js</code>, <code>src/core/telemetry/recorder/_flags.js</code>, <code>src/core/telemetry/recorder/index.js</code>, <code>src/tools/_stats.js</code>, <code>src/tools/_usage.js</code></td>
+</tr>
+<tr>
+<td><code>RULE_MCP_NO_TOKENSAVE</code></td>
+<td><code>src/cli/installers/_env.js</code>, <code>src/core/agents/_integrations.js</code>, <code>src/core/agents/_token-pipeline.js</code></td>
+</tr>
+<tr>
+<td><code>RULE_MCP_PORT</code></td>
+<td><code>src/cli/commands/_help.js</code>, <code>src/cli/paths/_runtime.js</code>, <code>src/transport/http/_start.js</code>, <code>src/transport/sse/_start.js</code></td>
+</tr>
+<tr>
+<td><code>RULE_MCP_PROJECT_DIR</code></td>
+<td><code>src/core/agents/_integrations.js</code></td>
+</tr>
+<tr>
+<td><code>RULE_MCP_REMINDER_EVERY</code></td>
+<td><code>src/core/enforcement/_reminder.js</code></td>
+</tr>
+<tr>
+<td><code>RULE_MCP_REPO_ROOT</code></td>
+<td><code>src/cli/paths/_repo.js</code></td>
+</tr>
+<tr>
+<td><code>RULE_MCP_ROLES_DIR</code></td>
+<td><code>src/core/review/roles/_catalog.js</code></td>
+</tr>
+<tr>
+<td><code>RULE_MCP_ROLES_OVERLAY_DIR</code></td>
+<td><code>src/core/review/_overlays.js</code></td>
+</tr>
+<tr>
+<td><code>RULE_MCP_SKILL_UNIVERSE</code></td>
+<td><code>src/tools/router/_skills.js</code></td>
+</tr>
+<tr>
+<td><code>RULE_MCP_SKIP_GLOBAL_LINK</code></td>
+<td><code>src/cli/setup/_shim-apply.js</code>, <code>src/cli/setup/_shim.js</code></td>
+</tr>
+<tr>
+<td><code>RULE_MCP_SSE_TOKEN</code></td>
+<td><code>src/cli/setup/_docker.js</code>, <code>src/transport/_sse-auth.js</code></td>
+</tr>
+<tr>
+<td><code>RULE_MCP_STATE_DIR</code></td>
+<td><code>src/cli/paths/_project.js</code>, <code>src/cli/paths/_runtime.js</code></td>
+</tr>
+<tr>
+<td><code>RULE_MCP_SUPPRESS_MIN_LINES</code></td>
+<td><code>src/core/agents/_token-pipeline.js</code></td>
+</tr>
+<tr>
+<td><code>RULE_MCP_TEST_SLOW_CHECK_MS</code></td>
+<td><code>src/core/guardrails/guarded/_thread.js</code></td>
+</tr>
+<tr>
+<td><code>RULE_MCP_UPDATE_REMOTE</code></td>
+<td><code>src/core/self-update/_banner.js</code>, <code>src/core/self-update/_config.js</code>, <code>src/tools/_update.js</code></td>
+</tr>
+<tr>
+<td><code>RULE_MCP_UPDATE_REQUIRE_SIGNATURE</code></td>
+<td><code>src/core/self-update/_banner.js</code>, <code>src/core/self-update/_run.js</code>, <code>src/tools/_update.js</code></td>
+</tr>
+</tbody></table>
+<p>39 read by the code, 38 documented in the table above.</p>
+<p>Read but undocumented: <code>RULE_MCP_SKIP_GLOBAL_LINK</code>.</p>
+<p>Nothing documented goes unread.</p>
+<p>Regenerate with <code>pnpm census</code>.</p>
+<!-- census:end:env-registry -->
+
+</main>
+<footer><p>Generated from <code>docs/</code> - edit the Markdown, not this file.</p></footer>
+</body>
+</html>

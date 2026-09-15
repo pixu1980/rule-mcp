@@ -1,5 +1,3 @@
-
-
 /**
  * @module test/token-pipeline.test.mjs
  *
@@ -8,7 +6,7 @@
  *   - directive emitted once per process (full first, terse travels with
  *     suppressions), never spammed on every call
  *   - suppression threshold (small blocks pass through untouched)
- *   - caveman aggressive pass + runtime byte counters
+ *   - compression aggressive pass + runtime byte counters
  */
 import test from "node:test";
 import assert from "node:assert/strict";
@@ -18,8 +16,8 @@ import { join } from "node:path";
 
 const BASE = new URL("../../..", import.meta.url).pathname;
 const { resolveTokensaveDir, tokensaveActive, suppressIfTokensave, decorateWithTokensave, resetTokenPipeline } = await import(join(BASE, "src/core/agents/_integrations.js"));
-const { compressResult, compressText } = await import(join(BASE, "src/core/text/_caveman.js"));
-const { compressTextAggressive } = await import(join(BASE, "src/core/text/_caveman-aggressive.js"));
+const { compressResult, compressText } = await import(join(BASE, "src/core/text/_compression.js"));
+const { compressTextAggressive } = await import(join(BASE, "src/core/text/_compression-aggressive.js"));
 const { getTokenStats, resetTokenStats } = await import(join(BASE, "src/core/telemetry/_token-stats.js"));
 
 test("multi-source detection: env var wins over a tokensave-less cwd", () => {

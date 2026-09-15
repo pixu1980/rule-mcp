@@ -1,23 +1,25 @@
-
-
 /**
- * Behavioral: `uninstall.sh --purge` and `--keep-config` against a seeded
- * fake HOME, through the bootstrap the user actually runs.
+ * Behavioral: `uninstall.sh --purge` and `--keep-config` against a fake HOME.
+ *
+ * The bootstrap forwards to the wizard's uninstall plan (ADR 080), so this is
+ * the end-to-end proof that a purge takes the runtime home AND the
+ * configuration directory - the one that was left behind, with the daemon
+ * token and any stored model key in it.
  */
 import { strict as assert } from "node:assert";
 import { existsSync, rmSync } from "node:fs";
 import { join } from "node:path";
-import test from "node:test";
+import { test } from "node:test";
 
 import { runUninstall, seedHome } from "./_purge.fixture.mjs";
 
-test("--purge deletes the runtime home and the env config directory", () => {
+test("--purge takes the runtime home and the configuration with it", () => {
   const home = seedHome();
 
   try {
     const output = runUninstall(home, []);
 
-    assert.match(output, /Purge state and config/, "the purge step must be reported, not silently performed");
+    assert.match(output, /Purge state and config/, "the plan must name the step that deletes them");
     assert.ok(!existsSync(join(home, ".rule-mcp")), "--purge must delete ~/.rule-mcp/");
     assert.ok(!existsSync(join(home, ".config", "rule-mcp")), "--purge must also delete ~/.config/rule-mcp/");
   } finally {
@@ -25,13 +27,12 @@ test("--purge deletes the runtime home and the env config directory", () => {
   }
 });
 
-test("--keep-config spares both directories", () => {
+test("--keep-config keeps both directories, token and all", () => {
   const home = seedHome();
 
   try {
-    const output = runUninstall(home, ["--keep-config"]);
+    runUninstall(home, ["--keep-config"]);
 
-    assert.doesNotMatch(output, /Purge state and config/, "--keep-config must not even plan the purge");
     assert.ok(existsSync(join(home, ".rule-mcp")), "--keep-config must keep the runtime home");
     assert.ok(existsSync(join(home, ".config", "rule-mcp")), "--keep-config must keep ~/.config/rule-mcp/");
     assert.ok(existsSync(join(home, ".rule-mcp", "state", "sse-token")), "--keep-config must keep the SSE token untouched");

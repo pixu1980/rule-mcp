@@ -13,6 +13,11 @@ process.env.RULE_MCP_GUARDED_CHECKS = "1"; // servers guard; CLI/tests run inlin
 
 const { checkCodeGuarded, shutdownGuardrailWorker } = await import("../../../../src/core/guardrails/index.js");
 
+// Dynamic, and after the env above: a static import is hoisted, and loading
+// the guardrail policy before RULE_MCP_GUARDED_CHECKS is set would pin
+// it to the inline path this file exists to bypass.
+await import("./_install.fixture.mjs");
+
 test("a normal check answers like the inline engine", async () => {
   const result = await checkCodeGuarded("rule-styleguide-css", "a { color: red; }", { fileName: "a.css" });
   assert.equal(typeof result.allPass, "boolean");

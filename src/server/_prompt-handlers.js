@@ -1,17 +1,14 @@
-
-
 /**
  * @module server/prompt-handlers - the prompts/list and prompts/get handlers
  *
  * A prompt body is persona prose the server emits and the model pays for, so
  * `prompts/get` runs it through the same compression pass and structural guard
- * as a tool result. `prompts/list` shortens its descriptions the same way: a
- * description is prose the model reads to choose a prompt, so it sheds filler
- * while names and argument names (the machine contract) stay (plan 2a).
+ * as a tool result. `prompts/list` is left alone on purpose: its descriptions
+ * and argument hints are the schema clients render, not prose to shorten.
  */
 
 import { GetPromptRequestSchema, ListPromptsRequestSchema, ErrorCode, McpError } from "@modelcontextprotocol/sdk/types.js";
-import { compressSurfaceText } from "../core/text/_caveman.js";
+import { compressSurfaceText, MIN_COMPRESS_LENGTH } from "../core/text/_compression.js";
 import { recordToolCall } from "../core/telemetry/recorder/index.js";
 import { getPrompt, listPrompts } from "../prompts/index.js";
 
@@ -25,11 +22,11 @@ function compressMessages(messages) {
   let saved = 0;
 
   const compressed = (messages ?? []).map((message) => {
-    if (message?.content?.type !== "text" || typeof message.content.text !== "string") {
+    if (message?.content?.type !== "text" || typeof message.content.text !== "string" || message.content.text.length <= MIN_COMPRESS_LENGTH) {
       return message;
     }
 
-    const result = compressSurfaceText(message.content.text, { source: "caveman-prompt" });
+    const result = compressSurfaceText(message.content.text, { source: "compression-prompt" });
     saved += result.saved;
 
     return { ...message, content: { ...message.content, text: result.text } };
@@ -38,28 +35,10 @@ function compressMessages(messages) {
   return { messages: compressed, saved };
 }
 
-/**
- * Shorten one prompt description (and each argument hint) with the same pass
- * the prompt bodies use. Names are the schema contract clients match on and
- * never change; only prose sheds filler. Booked under its own source.
- *
- * @param {string} text
- * @returns {string}
- */
-function compressPromptText(text) {
-  return compressSurfaceText(String(text ?? ""), { source: "caveman-prompt-list" }).text;
-}
-
 /** Register the prompt handlers on the server. */
 export function registerPromptHandlers(server) {
   server.setRequestHandler(ListPromptsRequestSchema, async () => {
-    const prompts = listPrompts().map(({ name, description, arguments: arguments_ }) => ({
-      name,
-      description: compressPromptText(description),
-      arguments: (arguments_ ?? []).map(({ name, description, required }) => ({ name, description: compressPromptText(description), required })),
-    }));
-
-    return { prompts };
+    return { prompts: listPrompts() };
   });
 
   server.setRequestHandler(GetPromptRequestSchema, async (request) => {
@@ -81,7 +60,7 @@ export function registerPromptHandlers(server) {
     recordToolCall({
       tool: `prompt:${name}`,
       durationMs: Date.now() - startedAt,
-      saved: { "caveman-prompt": Math.ceil(saved / 4) },
+      saved: { "compression-prompt": Math.ceil(saved / 4) },
     });
 
     return { description: prompt.description, messages };

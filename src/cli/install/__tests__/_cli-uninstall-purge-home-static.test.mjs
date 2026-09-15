@@ -1,102 +1,108 @@
-
-
 /**
- * The runtime home contract: install recreates it, purge removes it,
- * --keep-config spares it.
+ * The runtime home is created by an install and taken by a purge.
  *
- * Regression this guards: `uninstall --purge` used to remove only
- * ~/.config/rule-mcp and leave ~/.rule-mcp behind, with the
- * daemon SSE token, telemetry and caches in it. A reinstall then started
- * from stale state and the "purge" promise was quietly false.
+ * Regression: `uninstall --purge` removed `~/.config/rule-mcp/` and left
+ * `~/.rule-mcp/` - the daemon token, the telemetry, the caches and the
+ * per-project recordings - behind. Reinstalling then started from stale state,
+ * and the promise the word "purge" makes was silently broken.
  *
- * The contract moved from the shell scripts into src/cli/setup/ (ADR 080),
- * so it is asserted against the module that now owns it.
+ * This was a static contract over four shell scripts. They are bootstraps now
+ * (ADR 080): the layout and the purge list are node, and so is the assertion.
+ *
+ * Every case runs in a child process with its own HOME. The config directory
+ * is resolved once, when `cli/installers/_env.js` is imported, so a test that
+ * swapped HOME in-process would write the switches into the real one.
  */
 import { strict as assert } from "node:assert";
-import { existsSync, mkdtempSync, writeFileSync, mkdirSync } from "node:fs";
+import { execFileSync } from "node:child_process";
+import { existsSync, mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
-import { join } from "node:path";
-import test from "node:test";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
+import { test } from "node:test";
 
-import { ensureRuntimeHome, purgeRuntimeDirs, purgeTargets } from "../../setup/_runtime-home.js";
+const here = dirname(fileURLToPath(import.meta.url));
+const runtimeHome = join(here, "..", "..", "setup", "_runtime-home.js");
+// The module reaches server code through `@src/*`, which only resolves with
+// the hook every entry point registers.
+const aliasHook = join(here, "..", "..", "..", "..", "scripts", "alias-hook.mjs");
 
-/** Point the runtime home at a sandbox for the duration of one call. */
-function withRuntimeHome(run) {
-  const previous = process.env.RULE_MCP_HOME;
-  const home = mkdtempSync(join(tmpdir(), "rule-runtime-home-"));
+/** Evaluate one expression over the module in a child process with this HOME. */
+function inHome(home, call) {
+  const source = `
+    const { ensureRuntimeHome, purgeTargets } = await import(${JSON.stringify(runtimeHome)});
+    process.stdout.write(JSON.stringify(${call}));
+  `;
 
-  process.env.RULE_MCP_HOME = home;
-
-  try {
-    return run(home);
-  } finally {
-    if (previous === undefined) {
-      delete process.env.RULE_MCP_HOME;
-    } else {
-      process.env.RULE_MCP_HOME = previous;
-    }
-  }
+  return JSON.parse(
+    execFileSync(process.execPath, ["--import", aliasHook, "--input-type=module", "-e", source], {
+      encoding: "utf8",
+      env: { ...process.env, HOME: home, RULE_MCP_HOME: "", RULE_MCP_STATE_DIR: "" },
+    }),
+  );
 }
 
-test("install recreates the whole layout src/cli/paths expects", () => {
-  withRuntimeHome((home) => {
-    ensureRuntimeHome();
+/** A fake HOME carrying both directories a purge is expected to take. */
+function seeded() {
+  const home = mkdtempSync(join(tmpdir(), "rule-purge-home-"));
+
+  for (const dir of ["state", "projects", "data", "config"]) {
+    mkdirSync(join(home, ".rule-mcp", dir), { recursive: true });
+  }
+
+  writeFileSync(join(home, ".rule-mcp", "state", "sse-token"), "test-token\n");
+  mkdirSync(join(home, ".config", "rule-mcp"), { recursive: true });
+  writeFileSync(join(home, ".config", "rule-mcp", "keys.json"), "{}");
+
+  return home;
+}
+
+test("an install recreates the whole layout, not just the directory", () => {
+  const home = mkdtempSync(join(tmpdir(), "rule-home-"));
+
+  try {
+    const result = inHome(home, "ensureRuntimeHome({})");
 
     for (const dir of ["state", "data", "projects", "config"]) {
-      assert.ok(existsSync(join(home, dir)), `${dir}/ must be recreated`);
+      assert.ok(existsSync(join(home, ".rule-mcp", dir)), `${dir}/ must exist after an install`);
     }
-  });
+
+    assert.equal(result.homeDir, join(home, ".rule-mcp"));
+    assert.equal(result.settings, "written", "a fresh install defaults the switches file");
+    assert.ok(existsSync(join(home, ".config", "rule-mcp", "env.json")), "the switches file is part of the install");
+  } finally {
+    rmSync(home, { recursive: true, force: true });
+  }
 });
 
 test("a dry run creates nothing", () => {
-  withRuntimeHome((home) => {
-    const result = ensureRuntimeHome({ dryRun: true });
+  const home = mkdtempSync(join(tmpdir(), "rule-home-"));
 
-    assert.equal(result.status, "planned");
-    assert.ok(!existsSync(join(home, "state")));
-  });
+  try {
+    inHome(home, "ensureRuntimeHome({ dryRun: true })");
+
+    assert.ok(!existsSync(join(home, ".rule-mcp")), "a preview must leave the machine as it found it");
+  } finally {
+    rmSync(home, { recursive: true, force: true });
+  }
 });
 
-test("purge names both the runtime home and the env config directory", () => {
-  const ids = purgeTargets().map((target) => target.id);
+test("a purge names the runtime home, the cache and the configuration", () => {
+  const home = seeded();
 
-  assert.deepEqual(ids.sort(), ["env-config", "runtime-home"]);
-});
+  try {
+    const targets = inHome(home, "purgeTargets()");
+    const dirs = targets.map((target) => target.dir);
 
-test("purge deletes the runtime home, token and all", () => {
-  withRuntimeHome((home) => {
-    ensureRuntimeHome();
-    writeFileSync(join(home, "state", "sse-token"), "test-token\n");
+    assert.ok(dirs.includes(join(home, ".rule-mcp")), `the runtime home must be purged: ${dirs.join(", ")}`);
+    assert.ok(dirs.includes(join(home, ".config", "rule-mcp")), `the configuration must be purged: ${dirs.join(", ")}`);
+    assert.ok(
+      targets.some((target) => target.id === "runtime-home" && target.files > 0),
+      "a purge counts what it will take, so the user can see it",
+    );
 
-    const removed = purgeRuntimeDirs({ ids: ["runtime-home"] });
-
-    assert.equal(removed[0].id, "runtime-home");
-    assert.ok(!existsSync(home), "the whole directory must go, not just its contents");
-  });
-});
-
-test("a purge that is not selected leaves the directory alone", () => {
-  withRuntimeHome((home) => {
-    ensureRuntimeHome();
-    mkdirSync(join(home, "state"), { recursive: true });
-    writeFileSync(join(home, "state", "sse-token"), "test-token\n");
-
-    purgeRuntimeDirs({ ids: ["env-config"] });
-
-    assert.ok(existsSync(join(home, "state", "sse-token")), "--keep-config must keep the SSE token untouched");
-  });
-});
-
-test("purge counts the files it is about to delete", () => {
-  withRuntimeHome((home) => {
-    ensureRuntimeHome();
-    writeFileSync(join(home, "state", "sse-token"), "token\n");
-    writeFileSync(join(home, "data", "notes.json"), "{}");
-
-    const planned = purgeRuntimeDirs({ dryRun: true, ids: ["runtime-home"] });
-
-    assert.equal(planned[0].status, "planned");
-    assert.equal(planned[0].files, 2, "the user is told how much is at stake before agreeing");
-    assert.ok(existsSync(home), "a dry run must delete nothing");
-  });
+    assert.deepEqual(targets.map((target) => target.id).sort(), ["compile-cache", "env-config", "runtime-home"], "three directories, and a purge takes all of them");
+  } finally {
+    rmSync(home, { recursive: true, force: true });
+  }
 });

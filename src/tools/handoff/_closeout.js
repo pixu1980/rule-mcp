@@ -1,13 +1,12 @@
-
-
 /** Closeout: completed audits/reviews/plans fold into ADRs, then leave the tree. */
 import { mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { join, parse } from "node:path";
-import { ADR_DIR, adrFilename, listExistingAdrs, nextAdrNumber } from "../adr/_files.js";
-import { generateAdr } from "../adr/_body.js";
+
 import { updateAdrIndex } from "../adr/_adr-index.js";
-import { adrEnglishOffenses } from "../adr/_english.js";
 import { adrAuthor } from "../adr/_author.js";
+import { generateAdr } from "../adr/_body.js";
+import { adrEnglishOffenses } from "../adr/_english.js";
+import { ADR_DIR, adrFilename, listExistingAdrs, nextAdrNumber } from "../adr/_files.js";
 
 /** Working-paper kinds that close out, in archive order. */
 const KINDS = ["plans", "reviews", "audits"];
@@ -15,6 +14,7 @@ const KINDS = ["plans", "reviews", "audits"];
 /** True when a plan carries checks and none is open. */
 function planDone(text) {
   const lines = text.split("\n");
+
   return lines.some((line) => /^\s*-\s*\[[xX]\]/.test(line)) && lines.every((line) => !/^\s*-\s*\[ \]/.test(line));
 }
 
@@ -56,26 +56,35 @@ export function findCompletedDocs(projectDir) {
     }
   };
   const reviewState = new Map();
+
   for (const file of list("reviews")) {
     const text = read("reviews", file) ?? "";
+
     reviewState.set(parse(file).name, { done: reviewDone(text), resolved: countMatches(text, /\|\s*resolved\s*\|/g) });
   }
+
   const done = [];
+
   for (const kind of KINDS) {
     for (const file of list(kind)) {
       const text = read(kind, file);
+
       if (text === null) {
         continue;
       }
+
       const name = parse(file).name;
       const review = reviewState.get(name) ?? { done: false, resolved: 0 };
       const complete = kind === "plans" ? planDone(text) : review.done;
+
       if (complete) {
         const items = kind === "plans" ? countMatches(text, /^\s*-\s*\[[xX]\]/gm) : review.resolved;
+
         done.push({ kind, name, path: `docs/${kind}/${file}`, title: titleOf(text, name), date: dateOf(text), items });
       }
     }
   }
+
   return done;
 }
 
@@ -83,6 +92,7 @@ export function findCompletedDocs(projectDir) {
 function closeoutFields(doc) {
   const kind = doc.kind.slice(0, -1);
   const when = doc.date ? ` on ${doc.date}` : "";
+
   return {
     title: `Close out ${kind} ${doc.name}`,
     context: `The ${kind} record ${doc.path}, "${doc.title}", finished with ${doc.items} resolved items${when}.`,
@@ -98,23 +108,29 @@ export function archiveCompletedDocs(projectDir, { author } = {}) {
   const archived = [];
   const skipped = [];
   const adrDir = join(projectDir, ADR_DIR);
+
   for (const doc of findCompletedDocs(projectDir)) {
     const fields = closeoutFields(doc);
     const offenses = adrEnglishOffenses({ title: fields.title, context: fields.context, decision: fields.decision, consequences: fields.consequences });
+
     if (offenses.length > 0) {
       skipped.push({ path: doc.path, reason: `non-English content fails the ADR gate (${offenses[0]})` });
       continue;
     }
+
     mkdirSync(adrDir, { recursive: true });
     const number = nextAdrNumber(adrDir);
     const adrFile = adrFilename(number, fields.title);
+
     writeFileSync(join(adrDir, adrFile), generateAdr({ number, status: "accepted", author: author || adrAuthor(), ...fields }));
     rmSync(join(projectDir, doc.path));
     archived.push({ ...doc, adrNumber: number, adrFile });
   }
+
   if (archived.length > 0) {
     updateAdrIndex(adrDir, listExistingAdrs(adrDir));
   }
+
   return { archived, skipped };
 }
 
@@ -123,6 +139,7 @@ export function closeoutLines(closeout, { isMinimal }) {
   if (!closeout || isMinimal || (closeout.archived.length === 0 && closeout.skipped.length === 0)) {
     return [];
   }
+
   return [
     "### Closeout",
     "",

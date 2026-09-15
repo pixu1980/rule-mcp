@@ -1,15 +1,13 @@
-
-
 /**
  * @module core/text/phrases.data
  *
  * Multi-word rewrites, each tagged with the lowest intensity level that
- * applies it. Ported from the rule table in `skills/rule-caveman/SKILL.md`:
+ * applies it. Ported from the rule table in `skills/rule-compression/SKILL.md`:
  * pleasantries, throat-clearing openers and hedging are `lite`; the
  * structural rewrites that shorten a clause are `full`; arrow causality is
  * `ultra`.
  *
- * Phrases always run before single words (see `./_caveman-line.js`): a word
+ * Phrases always run before single words (see `./_compression-line.js`): a word
  * table that fires first eats the head of a phrase and inverts it - "quite a
  * few" became "few" that way, which is the opposite of what it means.
  */

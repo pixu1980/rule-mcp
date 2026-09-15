@@ -50,7 +50,7 @@ export function renderFlight(flight) {
     ...table([
       ["Measured", `~${num(kpi.tokens?.measuredSaved)}`],
       ...Object.entries(kpi.tokens?.savedBySource ?? {}).map(([source, amount]) => [`  ${source}`, `~${num(amount)}`]),
-      ["Caveman compression", kpi.tokens?.cavemanRatio === undefined ? undefined : pct(kpi.tokens.cavemanRatio)],
+      ["Compression compression", kpi.tokens?.compressionRatio === undefined ? undefined : pct(kpi.tokens.compressionRatio)],
       ["Reminder overhead", kpi.tokens?.reminderOverhead ? `~${num(kpi.tokens.reminderOverhead)}` : undefined],
       ["Routing estimate", `~${num(kpi.tokens?.estimatedRouting)}`],
     ]),

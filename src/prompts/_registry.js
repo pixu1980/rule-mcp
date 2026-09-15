@@ -4,6 +4,7 @@
 import { activeRoles } from "../core/review/roles/index.js";
 import { OPERATIONS } from "../core/review/template/index.js";
 import { PROMPT_DEFS } from "./_defs.data.js";
+import { listAreaPrompts } from "./_areas.js";
 
 /**
  * List all available prompts with their descriptions and argument schemas.
@@ -11,7 +12,11 @@ import { PROMPT_DEFS } from "./_defs.data.js";
  * @returns {Array<{ name: string, description: string, arguments: Array<{ name: string, description: string, required?: boolean }> }>}
  */
 export function listPrompts() {
-  return [...PROMPT_DEFS, ...rolePrompts()].sort((left, right) => left.name.localeCompare(right.name));
+  // The area prompts are one per skill, derived from the resolved catalog, so
+  // a skill any layer adds brings its command with it (ADR 079).
+  const areas = listAreaPrompts().map(({ name, description, arguments: args }) => ({ name, description, arguments: args }));
+
+  return [...PROMPT_DEFS, ...areas, ...rolePrompts()].sort((left, right) => left.name.localeCompare(right.name));
 }
 
 /**
@@ -35,7 +40,8 @@ function rolePrompts() {
       arguments: [
         {
           name: "topic",
-          description: "Extra request for this run (free text: what to audit/review/plan, e.g. a component, a directory, a concern). Default: the whole project.",
+          description:
+            "Extra request for this run (free text: what to audit/review/plan, e.g. a component, a directory, a concern). It becomes the binding scope of the run. Default: the whole project.",
           required: false,
         },
       ],

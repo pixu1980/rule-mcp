@@ -1,5 +1,3 @@
-
-
 /**
  * @module scripts/reports/startup/measure
  *

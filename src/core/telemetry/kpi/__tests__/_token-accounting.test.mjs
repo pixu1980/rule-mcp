@@ -28,7 +28,7 @@ process.env.RULE_MCP_NO_AUTOUPDATE = "1";
 process.env.RULE_MCP_REMINDER_EVERY = "1";
 delete process.env.RULE_MCP_NO_CACHE;
 delete process.env.RULE_MCP_NO_TELEMETRY;
-delete process.env.RULE_MCP_NO_CAVEMAN;
+delete process.env.RULE_MCP_NO_COMPRESSION;
 
 const { computeKpi } = await import("../index.js");
 const { loadAllSkills } = await import("../../../skills/index.js");
@@ -56,14 +56,14 @@ test("both calls were recorded, one as a miss and one as a hit", () => {
 test("a cache hit reports what post-processing did to it", () => {
   assert.equal(typeof hit.coreTokens, "number", "a hit is decorated like a miss, so it is measured like one");
   assert.equal(typeof hit.finalTokens, "number");
-  assert.ok(Number(hit.saved?.caveman) > 0, "the replayed result is compressed on the way out, and that is a saving");
+  assert.ok(Number(hit.saved?.compression) > 0, "the replayed result is compressed on the way out, and that is a saving");
 });
 
 test("the reminder's own cost is recorded, not left to a subtraction", () => {
   assert.ok(Number(miss.reminderTokens) > 0, "the call carried a reminder, so its cost is a number");
   // Four independently-ceiled token estimates: the identity holds exactly
   // when the ceils happen to line up, and within the rounding slack otherwise.
-  const identity = Number(miss.finalTokens) - Number(miss.coreTokens) + Number(miss.saved.caveman) - Number(miss.reminderTokens);
+  const identity = Number(miss.finalTokens) - Number(miss.coreTokens) + Number(miss.saved.compression) - Number(miss.reminderTokens);
   assert.ok(Math.abs(identity) <= 5, `core, compression and reminder have to add up within ceil rounding: final = core - compressed + reminder (off by ${identity})`);
 });
 
@@ -77,13 +77,13 @@ test("reminderOverhead is the reminder, even when compression removed more than 
         coreTokens: 1000,
         finalTokens: 980,
         reminderTokens: 60,
-        saved: { caveman: 80 },
+        saved: { compression: 80 },
       },
     ],
   });
 
   assert.equal(kpi.tokens.reminderOverhead, 60, "the net shrink of 20 tokens must not hide a reminder that cost 60");
-  assert.equal(kpi.tokens.cavemanRatio, 0.08, "and compression keeps reporting what it removed");
+  assert.equal(kpi.tokens.compressionRatio, 0.08, "and compression keeps reporting what it removed");
 });
 
 test("a log written before the field existed still reports something honest", () => {
@@ -104,7 +104,7 @@ test("a hit reports the output it replayed, not a token saving", () => {
 test("measuredSaved counts only what was really saved", () => {
   const kpi = computeKpi({
     events: [
-      { ts: 1, session: "s", tool: "pix_tool", cacheHit: false, durationMs: 12, saved: { caveman: 80 } },
+      { ts: 1, session: "s", tool: "pix_tool", cacheHit: false, durationMs: 12, saved: { compression: 80 } },
       { ts: 2, session: "s", tool: "pix_tool", cacheHit: true, durationMs: 1, replayedTokens: 1000 },
     ],
   });

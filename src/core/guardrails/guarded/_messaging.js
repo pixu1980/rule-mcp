@@ -1,11 +1,22 @@
 
 
 /** Worker lifecycle: spawn, pending map, aborted-shaped answers. */
+import { existsSync } from "node:fs";
 import { Worker } from "node:worker_threads";
 
+/** The alias hook worker threads need to resolve `@src/*` without `--import`. */
+const ALIAS_HOOK = new URL("../../../../scripts/alias-hook.mjs", import.meta.url);
+
+/** The live worker thread, or null when none has been spawned. */
 export let worker = null;
+
+/** Resolves once the current worker has loaded its skill set. */
 export let ready = null;
+
+/** Monotonic id for the request/response correlation. */
 export let seq = 0;
+
+/** Pending checks keyed by request id; resolved by the worker's answer. */
 export const pending = new Map();
 
 /** The shape a check answers when the budget was exceeded or the worker died. */
@@ -35,6 +46,11 @@ export function abortedResult(skillName, reason) {
   };
 }
 
+/**
+ * Resolve every pending check with an aborted-shaped answer.
+ *
+ * @param {string} reason - Why the checks could not be answered
+ */
 export function flushPending(reason) {
   for (const [id, entry] of pending) {
     pending.delete(id);
@@ -42,8 +58,26 @@ export function flushPending(reason) {
   }
 }
 
+/**
+ * The `execArgv` a worker needs to resolve `@src/*`.
+ *
+ * @returns {string[]}
+ */
+export function workerExecArgv() {
+  // Always pass the hook explicitly. Copying `process.execArgv` wholesale would
+  // also copy `-e`/`--input-type` and make the worker evaluate the parent's
+  // eval script instead of _thread.js; returning `[]` would drop the hook a
+  // parent started with `--import` relies on Node to propagate.
+  return existsSync(ALIAS_HOOK) ? ["--import", ALIAS_HOOK.href] : [];
+}
+
+/**
+ * Spawn the guardrail worker and wire its lifecycle events.
+ *
+ * @returns {import("node:worker_threads").Worker} the new thread
+ */
 export function spawn() {
-  const thread = new Worker(new URL("_thread.js", import.meta.url));
+  const thread = new Worker(new URL("_thread.js", import.meta.url), { execArgv: workerExecArgv() });
   thread.unref();
   ready = new Promise((resolve) => {
     const onReady = (message) => {
@@ -64,7 +98,10 @@ export function spawn() {
       entry.resolve(message.result);
     }
   });
-  thread.on("error", () => flushPending("worker-error"));
+  thread.on("error", (error) => {
+    process.stderr.write(`guardrail worker error: ${error.stack ?? error.message}\n`);
+    flushPending("worker-error");
+  });
   thread.on("exit", () => {
     if (worker === thread) {
       worker = null;
@@ -74,18 +111,34 @@ export function spawn() {
   return thread;
 }
 
+/**
+ * The live worker, or null when none is running.
+ *
+ * @returns {import("node:worker_threads").Worker|null}
+ */
 export function currentWorker() {
   return worker;
 }
 
+/**
+ * Replace the live worker reference.
+ *
+ * @param {import("node:worker_threads").Worker|null} value
+ */
 export function setWorker(value) {
   worker = value;
 }
 
+/** Drop the live worker reference after a termination. */
 export function clearWorker() {
   worker = null;
 }
 
+/**
+ * The next request id.
+ *
+ * @returns {number}
+ */
 export function nextId() {
   seq += 1;
 
