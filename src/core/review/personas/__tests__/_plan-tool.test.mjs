@@ -37,6 +37,16 @@ test("pix_tool_plan applies overrides, an operation, and lists roles for an unkn
   assert.match(unknownText, /security/, "an unknown role is answered with the ones that exist");
 });
 
+test("audit and review tools pin their operation", async () => {
+  const audit = await callTool("pix_tool_audit", { role: "a11y" });
+  const auditText = audit.content.map((part) => part.text).join("\n");
+  assert.match(auditText, /## The operation: audit/, "pix_tool_audit pins the audit operation");
+
+  const review = await callTool("pix_tool_review", { role: "a11y" });
+  const reviewText = review.content.map((part) => part.text).join("\n");
+  assert.match(reviewText, /## The operation: review/, "pix_tool_review pins the review operation");
+});
+
 test("pix_tool_plan detects tokensave in the project dir for a scoped run", async () => {
   // Assertions stay on headings and inline-code tokens: tool results pass
   // through text compression, which never touches either.
