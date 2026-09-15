@@ -52,6 +52,23 @@ test("probeFilesystem reports unavailable without a graph", () => {
   }
 });
 
+test("probeFilesystem refuses a graph written by another major", () => {
+  const dir = scratch((base) => {
+    mkdirSync(join(base, TOKENSAVE_DIR));
+    writeFileSync(join(base, TOKENSAVE_DIR, "tokensave.db"), "");
+    writeFileSync(join(base, TOKENSAVE_DIR, "config.json"), JSON.stringify({ last_indexed_version: "8.0.0" }));
+  });
+
+  try {
+    const probe = probeFilesystem(dir);
+
+    assert.equal(probe.available, false, "a major this adapter does not know is refused");
+    assert.equal(probe.supported, false);
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
 test("probeTokensave enriches the probe with status", async () => {
   const dir = scratch((base) => {
     mkdirSync(join(base, TOKENSAVE_DIR));
@@ -84,6 +101,24 @@ test("probeTokensave keeps staleSeconds null without a status function", async (
 
     assert.equal(probe.available, true);
     assert.equal(probe.staleSeconds, null);
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test("probeTokensave reports staleness from the live status", async () => {
+  const dir = scratch((base) => {
+    mkdirSync(join(base, TOKENSAVE_DIR));
+    writeFileSync(join(base, TOKENSAVE_DIR, "tokensave.db"), "");
+  });
+
+  try {
+    const probe = await probeTokensave(dir, {
+      status: async () => ({ version: "7.12.1", last_sync_at: 1000, stale_files: 2, stale_commits: 1 }),
+    });
+
+    assert.equal(probe.staleFiles, 2);
+    assert.equal(probe.staleCommits, 1);
   } finally {
     rmSync(dir, { recursive: true, force: true });
   }
