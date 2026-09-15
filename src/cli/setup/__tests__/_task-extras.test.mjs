@@ -7,7 +7,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { test } from "node:test";
 
-import { dockerTask, doctorTask, gitHookTask, rulesTask, serviceTask, skillsTask } from "../_task-extras.js";
+import { dockerTask, doctorTask, rulesTask, serviceTask, skillsTask } from "../_task-extras.js";
 
 test("dry runs describe instead of doing", async () => {
   assert.deepEqual(await doctorTask().run({ dryRun: true }), { status: "ok", summary: "would run rule-mcp doctor" });
@@ -30,20 +30,4 @@ test("the service task names its platform service in dry run", () => {
 
   assert.equal(result.status, "ok", "a dry-run install answers ok");
   assert.match(result.summary, /on (macos|linux|windows|unknown)/, "the summary names the platform");
-});
-
-test("the git hook task skips outside a repository", () => {
-  const bare = mkdtempSync(join(tmpdir(), "rule-task-extras-bare-"));
-  const previous = process.cwd();
-  process.chdir(bare);
-
-  try {
-    const result = gitHookTask().run({ dryRun: true });
-
-    assert.equal(result.status, "skip", "no repository means nothing to hook");
-    assert.match(result.summary, /not a git repository/, "the summary says why");
-  } finally {
-    process.chdir(previous);
-    rmSync(bare, { recursive: true, force: true });
-  }
 });

@@ -14,11 +14,17 @@ import { KEY, settle } from "./_fake-terminal.fixture.mjs";
 import { mountApp as mount } from "./_mount.fixture.mjs";
 import { InstallApp } from "../_app-install.js";
 
-/** Walk from preflight to the review screen. */
+/**
+ * Walk from preflight to the review screen.
+ *
+ * Counted by the screen it is looking for, not by a number of steps: the step
+ * list grows, and a hard-coded count silently stops one screen short and then
+ * asserts against whatever happens to be on the terminal.
+ */
 async function toReview(handles) {
   await settle();
 
-  for (let step = 0; step < 4; step++) {
+  for (let step = 0; step < 12 && !/\n {2}Review\n/.test(handles.stdout.lastFrame); step++) {
     handles.stdin.press(KEY.enter);
     await settle();
   }
@@ -77,7 +83,7 @@ test("the apply screen reports every task in the plan", async () => {
   await settle(1200);
 
   assert.match(handles.stdout.output, /Runtime home/, "the first task must have been shown");
-  assert.match(handles.stdout.output, /Instruction files/, "an optional task must have been shown");
+  assert.match(handles.stdout.output, /Instruction file/, "an optional task must have been shown");
 
   handles.instance.unmount();
 });
