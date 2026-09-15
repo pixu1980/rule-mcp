@@ -10,6 +10,7 @@
 
 import { agentInstallTask, runtimeHomeTask, shimTask } from "./_task-core.js";
 import { commandsTask, dockerTask, doctorTask, rulesTask, serviceTask, skillsTask } from "./_task-extras.js";
+import { cliVerifyTask } from "./_task-cli.js";
 
 /**
  * @param {{ agents?: string[], mode?: string, extras?: object, force?: boolean, context?: object, selection?: object|null, minimal?: boolean, surface?: object|null }} answers
@@ -48,6 +49,10 @@ export function buildInstallPlan({ agents = [], mode = "stdio", extras = {}, for
   if (mode === "docker") {
     plan.push(dockerTask());
   }
+
+  // The install proves its own launcher before it reports success: a shim on
+  // PATH that does not answer is an install that failed, not a warning.
+  plan.push(cliVerifyTask());
 
   if (extras.doctor) {
     plan.push(doctorTask());
