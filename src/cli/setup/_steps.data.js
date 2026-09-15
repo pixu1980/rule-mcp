@@ -36,11 +36,5 @@ export const HINTS = {
     [QUIT],
     [CLOSE],
   ],
-  uninstall: [
-    [MOVE, TOGGLE, ALL, NEXT, QUIT],
-    [MOVE, TOGGLE, NEXT, BACK, QUIT],
-    [DRY, RUN, BACK, QUIT],
-    [QUIT],
-    [CLOSE],
-  ],
+  uninstall: [[MOVE, TOGGLE, ALL, NEXT, QUIT], [MOVE, TOGGLE, NEXT, BACK, QUIT], [DRY, RUN, BACK, QUIT], [QUIT], [CLOSE]],
 };

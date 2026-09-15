@@ -1,6 +1,6 @@
 # rule-mcp
 
-**rule-mcp** is an [MCP](https://modelcontextprotocol.io) server that puts 90 modular skills
+**rule-mcp** is an [MCP](https://modelcontextprotocol.io) server that puts 92 modular skills
 (styleguides, component templates, framework practices, design patterns) inside your AI coding
 agent as tools, resources, and prompts - so a free-text request routes to the right skill, and
 generated code is validated against guardrails before it reaches you. It never calls an LLM
@@ -20,7 +20,7 @@ Node ≥ 20 · [MIT license](LICENSE) · MCP SDK 1.30.0 (from package.json).
 - [What is rule-mcp](#what-is-rule-mcp)
 - [Architecture overview](#architecture-overview)
 - [Tool reference](#tool-reference)
-  - [All 106 tools (normal mode)](#all-106-tools-normal-mode)
+  - [All 110 tools (normal mode)](#all-110-tools-normal-mode)
   - [Minimal tool surface (10 tools)](#minimal-tool-surface-10-tools)
   - [Gateway deterministic mode](#gateway-deterministic-mode)
 - [MCP Resources (186)](#mcp-resources-186)
@@ -90,9 +90,9 @@ shasum -a 256 -c SHA256SUMS
 
 ## What is rule-mcp
 
-rule-mcp is an [MCP](https://modelcontextprotocol.io) server that exposes **106 tools**, **186 resources**, and **76 prompts** to any MCP-compatible AI coding agent. Because the server never calls an LLM (every output is deterministic), it is **model-agnostic** - it behaves identically behind Claude, GPT, Gemini, Llama, Qwen, or any other model. It provides:
+rule-mcp is an [MCP](https://modelcontextprotocol.io) server that exposes **110 tools**, **190 resources**, and **155 prompts** to any MCP-compatible AI coding agent. Because the server never calls an LLM (every output is deterministic), it is **model-agnostic** - it behaves identically behind Claude, GPT, Gemini, Llama, Qwen, or any other model. It provides:
 
-- **90 modular skills** covering frontend, backend, database, devops, toolchain, styleguide, process, platform, and ai domains
+- **92 modular skills** covering frontend, backend, database, devops, toolchain, styleguide, process, platform, and ai domains
 - **BM25 full-text search** across all skill content
 - **Guardrail engine** with 18 shared rules + framework/backend/database/devops-specific checks
 - **Deterministic gateway** (`pix_gateway` + `pix_apply`) with receipt-based validation
@@ -130,7 +130,7 @@ Claude Code, Cursor, Cline, Roo Code, Copilot, Gemini CLI, Codex CLI, Devin (for
 ├───────────────────────────────────────────────────────────────┤
 │  Tool Registry              │  Resources Registry             │
 │  src/tools/router.js        │  src/resources/index.js         │
-│  106 tools                  │  186 resources                  │
+│  110 tools                  │  190 resources                  │
 ├──────────────────┬───────────┴────────────────┬───────────────┤
 │  Orchestration   │  Skills & BM25            │  Guardrails    │
 │  pix_gateway     │  90 skill dirs            │  18 shared     │
@@ -175,7 +175,7 @@ Claude Code, Cursor, Cline, Roo Code, Copilot, Gemini CLI, Codex CLI, Devin (for
 
 ## Tool reference
 
-### All 106 tools (normal mode)
+### All 110 tools (normal mode)
 
 #### Deterministic tools (9)
 

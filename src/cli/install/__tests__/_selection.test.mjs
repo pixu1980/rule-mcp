@@ -48,7 +48,10 @@ test("minimal is the router and the area hubs, without the per-skill commands", 
 
   assert.ok(commands.includes("rule-area-frontend"), "the hub is there");
   assert.ok(!commands.includes("rule-area-frontend-react"), "the member is not");
-  assert.ok(commands.every((name) => !name.startsWith("rule-audit-")), "and neither are the personas");
+  assert.ok(
+    commands.every((name) => !name.startsWith("rule-audit-")),
+    "and neither are the personas",
+  );
 });
 
 test("picking areas narrows the skill commands to those areas", () => {
@@ -56,7 +59,10 @@ test("picking areas narrows the skill commands to those areas", () => {
 
   assert.ok(commands.includes("rule-area-frontend"), "a chosen area keeps its hub");
   assert.ok(commands.includes("rule-area-frontend-react"), "and its members");
-  assert.ok(commands.every((name) => !name.startsWith("rule-area-backend")), "an area nobody chose is absent");
+  assert.ok(
+    commands.every((name) => !name.startsWith("rule-area-backend")),
+    "an area nobody chose is absent",
+  );
 });
 
 test("picking skills narrows further, inside the areas chosen", () => {
@@ -77,7 +83,10 @@ test("personas and tasks are their own families", () => {
     personas.some((name) => name.startsWith("rule-plan-")),
     "the plan personas",
   );
-  assert.ok(personas.every((name) => !name.startsWith("rule-area-")), "and nothing from another family");
+  assert.ok(
+    personas.every((name) => !name.startsWith("rule-area-")),
+    "and nothing from another family",
+  );
 
   const tasks = resolveSelection({ families: ["tasks"] }).commands;
   assert.ok(tasks.includes("rule-handoff") && tasks.includes("rule-adr"), "the one-shot tasks");

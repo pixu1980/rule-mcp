@@ -38,11 +38,7 @@ test("graphCandidates returns nothing when disabled", () => {
 test("graphCandidates folds search hits onto their skill", () => {
   const client = () => ({
     ok: true,
-    value: [
-      { file: "skills/rule-frontend-react/SKILL.md" },
-      { file: "skills/rule-frontend-react/examples/a.js" },
-      { file: "src/core/skills/__tests__/_ai.test.mjs" },
-    ],
+    value: [{ file: "skills/rule-frontend-react/SKILL.md" }, { file: "skills/rule-frontend-react/examples/a.js" }, { file: "src/core/skills/__tests__/_ai.test.mjs" }],
   });
   const result = graphCandidates("/tmp/p", "react button", { skills: ["rule-frontend-react"], probe: () => ({ available: true }), client });
 

@@ -45,11 +45,7 @@ export async function runCliCommand(args, { cwd = process.cwd(), timeout = 120_0
   } catch (error) {
     return {
       ok: false,
-      lines: [
-        ...toLines(error.stdout),
-        ...toLines(error.stderr),
-        ...(error.stdout || error.stderr ? [] : [error.message]),
-      ],
+      lines: [...toLines(error.stdout), ...toLines(error.stderr), ...(error.stdout || error.stderr ? [] : [error.message])],
     };
   }
 }

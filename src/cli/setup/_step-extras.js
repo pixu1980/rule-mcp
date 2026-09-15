@@ -57,12 +57,7 @@ export function extraItems({ mode, hasClaude, agents = [], ruleFiles = [] }) {
     {
       id: "skills",
       label: "Bundled rule-* skills",
-      detail: [
-        "Copies the skill catalog to ~/.agents/skills.",
-        "",
-        "Not required: the server already serves skills",
-        "from its embedded catalog.",
-      ],
+      detail: ["Copies the skill catalog to ~/.agents/skills.", "", "Not required: the server already serves skills", "from its embedded catalog."],
     },
     {
       id: "minimal",
@@ -78,10 +73,7 @@ export function extraItems({ mode, hasClaude, agents = [], ruleFiles = [] }) {
     {
       id: "service",
       label: "Platform daemon service",
-      detail:
-        mode === "daemon"
-          ? ["Registers a LaunchAgent, systemd user unit,", "or Windows service that starts at login."]
-          : ["Only applies in daemon mode."],
+      detail: mode === "daemon" ? ["Registers a LaunchAgent, systemd user unit,", "or Windows service that starts at login."] : ["Only applies in daemon mode."],
       disabled: mode !== "daemon",
     },
     {

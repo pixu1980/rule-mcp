@@ -13,7 +13,11 @@ import { TokensaveUnavailableError } from "../_client.js";
 import { withFallback } from "../_fallback.js";
 
 test("withFallback returns the TokenSave answer when it succeeds", async () => {
-  const result = await withFallback("impact", async () => ({ from: "tokensave" }), () => ({ from: "js" }));
+  const result = await withFallback(
+    "impact",
+    async () => ({ from: "tokensave" }),
+    () => ({ from: "js" }),
+  );
 
   assert.deepEqual(result, { value: { from: "tokensave" }, path: "tokensave" });
 });

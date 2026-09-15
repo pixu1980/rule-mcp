@@ -95,10 +95,7 @@ async function install(options) {
 /** The uninstall direction, with or without a wizard. */
 async function uninstall(options) {
   if (options.interactive) {
-    const [{ UninstallApp }, { mountWizard }] = await Promise.all([
-      import("./_app-uninstall.js"),
-      import("./_mount.js"),
-    ]);
+    const [{ UninstallApp }, { mountWizard }] = await Promise.all([import("./_app-uninstall.js"), import("./_mount.js")]);
     const outcome = await mountWizard(UninstallApp, { defaults: options });
 
     settleExit(

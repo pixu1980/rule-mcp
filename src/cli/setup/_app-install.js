@@ -140,13 +140,7 @@ export function InstallApp({ defaults = {}, onFinish }) {
       rows,
       columns,
     },
-    selectedAgents.length === 0 && step > 1
-      ? h(
-          Box,
-          { paddingBottom: 1 },
-          h(Text, { color: COLORS.warn }, "No agents selected - only the shared steps will run."),
-        )
-      : null,
+    selectedAgents.length === 0 && step > 1 ? h(Box, { paddingBottom: 1 }, h(Text, { color: COLORS.warn }, "No agents selected - only the shared steps will run.")) : null,
     views[step](),
   );
 }

@@ -17,7 +17,8 @@ test("graphChanges returns null without a graph", () => {
 });
 
 test("graphChanges returns null when the tools report nothing", () => {
-  const client = (tool) => (tool === "commit_context" ? { ok: true, value: { message: "No changes detected." } } : { ok: true, value: { changed_files: [], modified_symbols: [] } });
+  const client = (tool) =>
+    tool === "commit_context" ? { ok: true, value: { message: "No changes detected." } } : { ok: true, value: { changed_files: [], modified_symbols: [] } };
 
   assert.equal(graphChanges("/tmp/p", { files: ["src/a.js"], probe: () => ({ available: true }), client }), null);
 });

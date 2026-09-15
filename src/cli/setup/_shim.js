@@ -55,9 +55,7 @@ export function globalBinDir() {
     return configured;
   }
 
-  return platform() === "darwin"
-    ? join(homedir(), "Library", "pnpm", "bin")
-    : join(homedir(), ".local", "share", "pnpm", "bin");
+  return platform() === "darwin" ? join(homedir(), "Library", "pnpm", "bin") : join(homedir(), ".local", "share", "pnpm", "bin");
 }
 
 /**
@@ -83,7 +81,5 @@ export function shimCandidates(home = homedir()) {
 export function linkCandidates(home = homedir()) {
   const roots = [join(home, "Library", "pnpm", "global"), join(home, ".local", "share", "pnpm", "global")];
 
-  return roots
-    .filter((root) => existsSync(root))
-    .flatMap((root) => readdirSync(root).map((version) => join(root, version, "node_modules", "rule-mcp")));
+  return roots.filter((root) => existsSync(root)).flatMap((root) => readdirSync(root).map((version) => join(root, version, "node_modules", "rule-mcp")));
 }

@@ -15,16 +15,7 @@ import { COLORS, GLYPHS } from "./_theme.js";
 /**
  * @param {{ plan: object[], dryRun: boolean, title?: string, danger?: boolean, height: number, onToggleDryRun: Function, onSubmit: Function, onBack: Function }} props
  */
-export function StepReview({
-  plan,
-  dryRun,
-  title = "Review",
-  danger = false,
-  height,
-  onToggleDryRun,
-  onSubmit,
-  onBack,
-}) {
+export function StepReview({ plan, dryRun, title = "Review", danger = false, height, onToggleDryRun, onSubmit, onBack }) {
   useInput((input, key) => {
     if (input === "d") {
       onToggleDryRun();
@@ -52,26 +43,13 @@ export function StepReview({
     Box,
     { flexDirection: "column" },
     h(Text, { color: danger ? COLORS.warn : COLORS.accentSoft, bold: true }, title),
-    h(
-      Box,
-      { flexDirection: "column", paddingTop: 1 },
-      ...rows,
-      hidden > 0 ? h(Text, { color: COLORS.muted }, `    ${GLYPHS.dot} ${hidden} more`) : null,
-    ),
+    h(Box, { flexDirection: "column", paddingTop: 1 }, ...rows, hidden > 0 ? h(Text, { color: COLORS.muted }, `    ${GLYPHS.dot} ${hidden} more`) : null),
     h(
       Box,
       { paddingTop: 1 },
       dryRun
-        ? h(
-            Text,
-            { color: COLORS.info },
-            `${GLYPHS.radioOn} Dry run - nothing will be written. Press d to arm it for real.`,
-          )
-        : h(
-            Text,
-            { color: danger ? COLORS.fail : COLORS.warn },
-            `${GLYPHS.warn} Live run - ${plan.length} step(s) will change this machine. Press d for a dry run.`,
-          ),
+        ? h(Text, { color: COLORS.info }, `${GLYPHS.radioOn} Dry run - nothing will be written. Press d to arm it for real.`)
+        : h(Text, { color: danger ? COLORS.fail : COLORS.warn }, `${GLYPHS.warn} Live run - ${plan.length} step(s) will change this machine. Press d for a dry run.`),
     ),
   );
 }

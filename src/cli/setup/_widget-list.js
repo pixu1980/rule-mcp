@@ -39,8 +39,7 @@ function Row({ item, active, selected, mode, first }) {
     return h(Box, { paddingTop: first ? 0 : 1 }, h(Text, { color: COLORS.accentSoft, bold: true }, item.label));
   }
 
-  const mark =
-    mode === "radio" ? (selected ? GLYPHS.radioOn : GLYPHS.radioOff) : selected ? GLYPHS.checked : GLYPHS.unchecked;
+  const mark = mode === "radio" ? (selected ? GLYPHS.radioOn : GLYPHS.radioOff) : selected ? GLYPHS.checked : GLYPHS.unchecked;
 
   return h(
     Box,
@@ -69,12 +68,7 @@ export function SelectList({ items, cursor, selected, mode = "check", height = 1
   );
   const hidden = items.length - (end - start);
 
-  return h(
-    Box,
-    { flexDirection: "column" },
-    ...rows,
-    hidden > 0 ? h(Text, { color: COLORS.muted }, `  ${GLYPHS.dot} ${hidden} more`) : null,
-  );
+  return h(Box, { flexDirection: "column" }, ...rows, hidden > 0 ? h(Text, { color: COLORS.muted }, `  ${GLYPHS.dot} ${hidden} more`) : null);
 }
 
 /** The side panel: whatever detail belongs to the row under the cursor. */

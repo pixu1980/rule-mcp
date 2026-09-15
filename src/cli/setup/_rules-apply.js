@@ -47,9 +47,10 @@ const toRow = (entry) => ({ id: entry.agent, label: entry.agent, file: entry.pat
 const rulesTargets = (home = homedir(), agents) => {
   const only = agents?.length ? new Set(agents) : null;
 
-  return RULES_TARGETS.filter(
-    (target) => (!only || only.has(target.agent)) && target.probes.some((probe) => existsSync(join(home, probe))),
-  ).map((target) => ({ agent: target.agent, path: join(home, target.file) }));
+  return RULES_TARGETS.filter((target) => (!only || only.has(target.agent)) && target.probes.some((probe) => existsSync(join(home, probe)))).map((target) => ({
+    agent: target.agent,
+    path: join(home, target.file),
+  }));
 };
 
 /** Targets a removal sweeps: every file that carries the block. */
@@ -79,12 +80,10 @@ const applyRulesFiles = ({ home = homedir(), dryRun = false, remove = false, age
   });
 
 /** Targets whose agent is present on this machine, narrowed to a selection. */
-export const installableTargets = (home, agents) =>
-  rulesTargets(home, agents).map((target) => ({ id: target.agent, label: target.agent, file: target.path }));
+export const installableTargets = (home, agents) => rulesTargets(home, agents).map((target) => ({ id: target.agent, label: target.agent, file: target.path }));
 
 /** Targets that currently carry the block, legacy paths included. */
-export const removableTargets = (home) =>
-  removableRuleTargets(home).map((target) => ({ id: target.agent, label: target.agent, file: target.path }));
+export const removableTargets = (home) => removableRuleTargets(home).map((target) => ({ id: target.agent, label: target.agent, file: target.path }));
 
 /**
  * Write the block into the instruction files of the selected agents, replacing a

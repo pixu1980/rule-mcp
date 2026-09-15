@@ -11,15 +11,7 @@
  */
 
 import { agentRemovalTask, shimRemovalTask } from "./_task-core.js";
-import {
-  commandsRemovalTask,
-  gitHookRemovalTask,
-  profilesTask,
-  purgeTask,
-  rulesRemovalTask,
-  serviceRemovalTask,
-  skillsRemovalTask,
-} from "./_task-remove.js";
+import { commandsRemovalTask, gitHookRemovalTask, profilesTask, purgeTask, rulesRemovalTask, serviceRemovalTask, skillsRemovalTask } from "./_task-remove.js";
 
 const GROUP_TASKS = {
   rules: rulesRemovalTask,

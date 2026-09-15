@@ -279,17 +279,10 @@ The catalog itself, with what each skill covers, is
 
 ### Arguments, the same for all 91
 
-| Parameter             | Type                                                                 | Required | Default  | Description                                               |
-| --------------------- | -------------------------------------------------------------------- | -------- | -------- | --------------------------------------------------------- |
-| `query`               | string                                                               | no       | -        | Search query (mode=search/tldr)                           |
-| `mode`                | `full` \| `summary` \| `search` \| `guardrails` \| `check` \| `tldr` | no       | `"full"` | Tool mode: full, summary, tldr, search, guardrails, check |
-| `code`                | string                                                               | no       | -        | Code to check (mode=check)                                |
-| `framework`           | string                                                               | no       | -        | Framework hint                                            |
-| `file`                | string                                                               | no       | -        | Scaffold file                                             |
-| `target`              | string                                                               | no       | -        | Target dir                                                |
-| `fileName`            | string                                                               | no       | -        | File name                                                 |
-| `isComponent`         | boolean                                                              | no       | -        |                                                           |
-| `allowedDependencies` | array of string                                                      | no       | -        |                                                           |
+| Parameter   | Type   | Required | Default | Description                                                                               |
+| ----------- | ------ | -------- | ------- | ----------------------------------------------------------------------------------------- |
+| `prompt`    | string | yes      | -       | What to build or change in a meta-framework: rendering, routing, data loading, deployment |
+| `framework` | string | no       | -       | Optional framework hint (astro, next, nuxt, remix) to skip the concept match              |
 
 ## The rest of the census
 

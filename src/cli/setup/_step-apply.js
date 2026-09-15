@@ -41,21 +41,9 @@ export function StepApply({ results, activeIndex, dryRun, height }) {
       h(Text, { color: COLORS.muted }, "  "),
       h(ProgressBar, { value: done, total: results.length }),
     ),
-    h(
-      Box,
-      { flexDirection: "column", paddingTop: 1 },
-      ...results
-        .slice(0, rowHeight)
-        .map((task, index) => h(TaskRow, { key: task.id, task, active: index === activeIndex })),
-    ),
+    h(Box, { flexDirection: "column", paddingTop: 1 }, ...results.slice(0, rowHeight).map((task, index) => h(TaskRow, { key: task.id, task, active: index === activeIndex }))),
     lines.length > 0
-      ? h(
-          Box,
-          { flexDirection: "column", paddingTop: 1 },
-          ...lines.map((line, index) =>
-            h(Text, { key: index, color: COLORS.muted, wrap: "truncate-end" }, `  ${line}`),
-          ),
-        )
+      ? h(Box, { flexDirection: "column", paddingTop: 1 }, ...lines.map((line, index) => h(Text, { key: index, color: COLORS.muted, wrap: "truncate-end" }, `  ${line}`)))
       : null,
   );
 }

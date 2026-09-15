@@ -13,8 +13,7 @@
 import { useCallback, useInput, useMemo, useRef, useState } from "./_h.js";
 
 /** Indices of rows the cursor may land on. */
-const selectableIndexes = (items) =>
-  items.map((item, index) => (item.section ? -1 : index)).filter((index) => index >= 0);
+const selectableIndexes = (items) => items.map((item, index) => (item.section ? -1 : index)).filter((index) => index >= 0);
 
 /**
  * Where the cursor starts.

@@ -112,7 +112,7 @@ result, both opt-out:
 
 | Pass        | Module                    | What it removes                           | Opt-out                           |
 | ----------- | ------------------------- | ----------------------------------------- | --------------------------------- |
-| Compression     | `src/core/compression.js`     | Filler, leading articles, blank-line runs | `RULE_MCP_NO_COMPRESSION=1`     |
+| Compression | `src/core/compression.js` | Filler, leading articles, blank-line runs | `RULE_MCP_NO_COMPRESSION=1` |
 | Fingerprint | `src/core/fingerprint.js` | Em dashes, curly quotes, British spelling | `RULE_MCP_NO_FINGERPRINT=1` |
 
 Both skip fenced code, inline spans, URLs and JSON, and both are idempotent.

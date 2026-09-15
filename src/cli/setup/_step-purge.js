@@ -40,12 +40,6 @@ export function StepPurge({ items, columns, onSubmit, onBack }) {
     h(Text, { color: COLORS.warn, bold: true }, "Purge state and config"),
     h(Box, { paddingTop: 1 }, h(Text, { color: COLORS.muted }, "Everything here is kept unless you tick it.")),
     h(ListDetail, { items, cursor, selected, current, height: 4, columns }),
-    files > 0
-      ? h(
-          Box,
-          { paddingTop: 1 },
-          h(Text, { color: COLORS.fail }, `${GLYPHS.warn} ${files} file(s) will be deleted permanently.`),
-        )
-      : null,
+    files > 0 ? h(Box, { paddingTop: 1 }, h(Text, { color: COLORS.fail }, `${GLYPHS.warn} ${files} file(s) will be deleted permanently.`)) : null,
   );
 }

@@ -27,9 +27,7 @@ export function installNextSteps({ mode, dryRun }) {
   if (mode === "daemon") {
     lines.push(
       "rule-mcp daemon status - check the background service",
-      platform() === "darwin"
-        ? "System Settings > General > Login Items - the LaunchAgent appears here"
-        : "systemctl --user status rule-mcp - the unit appears here",
+      platform() === "darwin" ? "System Settings > General > Login Items - the LaunchAgent appears here" : "systemctl --user status rule-mcp - the unit appears here",
     );
   }
 
@@ -43,16 +41,10 @@ export function installNextSteps({ mode, dryRun }) {
 /** Lines for a finished uninstall. */
 export function uninstallNextSteps({ dryRun, purged }) {
   if (dryRun) {
-    return [
-      "Nothing was removed. Run the wizard again without dry run to apply it.",
-      "rule-mcp setup --uninstall",
-    ];
+    return ["Nothing was removed. Run the wizard again without dry run to apply it.", "rule-mcp setup --uninstall"];
   }
 
-  const lines = [
-    "Restart your coding agent so it drops the removed MCP entry.",
-    "The project files in this directory were not deleted.",
-  ];
+  const lines = ["Restart your coding agent so it drops the removed MCP entry.", "The project files in this directory were not deleted."];
 
   if (!purged) {
     lines.push("State and config were kept - re-run and tick purge to delete them.");

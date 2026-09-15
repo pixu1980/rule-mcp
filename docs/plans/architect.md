@@ -26,11 +26,11 @@ Break the eight-module invocation cycle first, then shrink the god initializer t
   - [ ] **1.3**: Break pipeline -> self-update edge by moving maybeSelfUpdate and consumeUpdateBanner behind a ToolCallContext hook injected from src/server/index.js; _pipeline.js no longer imports core/self-update; gate: tokensave_circular reports zero cycles on src/tools, src/core/skills, src/core/self-update and node scripts/ci/run-tests/index.mjs foundations green
 - [ ] **Step 2 - ARCH-2 (high)**: loadAllSkills is a god initializer that knows every tool family and hides 8 edges behind dynamic import: fan_out 28 with fan_in 22, so the static coupling graph understates the true blast radius
   - [ ] **2.1**: Convert the 8 lazy await import() calls in _load.js to top-level static imports from src/tools/index.js, src/tools/a11y/index.js, src/tools/handon/index.js, core/bm25/index.js, core/scaffold/templates/index.js, and core/cache/tool-cache/index.js; keep force-reload invalidation as an explicit function call
-  - [ ] **2.2**: Split loadAllSkills into three named phases in the same module: resetForReload, registerCoreTools, registerSkillTools, each with its own JSDoc and unit test in src/core/skills/__tests__/_load-phases.test.mjs
+  - [ ] **2.2**: Split loadAllSkills into three named phases in the same module: resetForReload, registerCoreTools, registerSkillTools, each with its own JSDoc and unit test in src/core/skills/**tests**/_load-phases.test.mjs
   - [ ] **2.3**: Gate: tokensave_coupling fan_out on _load.js drops below 12, eslint import/first passes with no dynamic import in src/core/skills, and foundations suite green
 - [ ] **Step 3 - ARCH-3 (high)**: The 105-tool surface is a public API with no versioning or rename contract: renames break clients, MUTATING_TOOLS and annotations drift as parallel lists, entry is derived by string surgery, and minimal mode builds the full surface only to delete it
   - [ ] **3.1**: Freeze the tool contract: add src/tools/router/_contract.js exporting TOOL_CONTRACT_VERSION and a deprecation map; entryPathOf and annotationsFor read the map so a rename keeps the old name as an alias for one release with a stderr warning
-  - [ ] **3.2**: Replace string-munged entryPathOf with an explicit per-tool entry field set at registerTool time; update _entry.js dependenciesOf and routedSkillOf to read the field; add src/tools/router/__tests__/_entry-contract.test.mjs pinning every one of the 105 names
+  - [ ] **3.2**: Replace string-munged entryPathOf with an explicit per-tool entry field set at registerTool time; update _entry.js dependenciesOf and routedSkillOf to read the field; add src/tools/router/**tests**/_entry-contract.test.mjs pinning every one of the 105 names
   - [ ] **3.3**: Move MINIMAL_ALLOWLIST enforcement from post-registration retainTools to registration time (skip registration when minimal) so minimal processes never pay the full 105-tool build; gate: listTools in minimal mode returns exactly the allowlist, docs-accuracy green, and census tool count quoted before and after
 - [ ] **Step 4 - ARCH-4 (high)**: A 19-deep dependency chain runs from tests through census, CLI, tools, file-tree, review docs, and session registry to docs: layering is nominal, so a leaf edit can ripple across 88 files in the largest cluster
   - [ ] **4.1**: Cut the test-to-source edge: move census-generated assertions off live CLI imports onto the checked-in census JSON snapshot plus schema test; tests/docs/census-generated.test.mjs no longer imports scripts/reports/census/index.mjs
@@ -39,18 +39,18 @@ Break the eight-module invocation cycle first, then shrink the god initializer t
 - [ ] **Step 5 - ARCH-5 (medium)**: Session, cache, and process seams are concrete and untested where it hurts most: in-memory Maps vanish on restart, the persistent cache does sync gzip and file IO on the request path, and tryExec serves 46 callers with no contract test
   - [ ] **5.1**: Define StoragePort and SessionStorePort interfaces in src/shared/_ports.js (get, set, delete, sweep) with in-memory and filesystem implementations; SessionRegistry and tool-cache depend on the port, not on Map or fs directly
   - [ ] **5.2**: Move ensureLoaded off the hot path: preload the gzip cache once at server startup in src/server/index.js and make callTool await the ready promise instead of sync-reading; replace gzipSync with async gzip in flush with the existing 2s debounce kept
-  - [ ] **5.3**: Add contract tests for the two riskiest seams first: src/shared/__tests__/_process-contract.test.mjs for tryExec timeout and failure shape, and src/cli/daemon/__tests__/_service-platform.test.mjs for detectPlatform across darwin, linux, and win32; gate: test_risk no longer lists tryExec or detectPlatform in the top 15 and callTool p95 unchanged
+  - [ ] **5.3**: Add contract tests for the two riskiest seams first: src/shared/**tests**/_process-contract.test.mjs for tryExec timeout and failure shape, and src/cli/daemon/**tests**/_service-platform.test.mjs for detectPlatform across darwin, linux, and win32; gate: test_risk no longer lists tryExec or detectPlatform in the top 15 and callTool p95 unchanged
 - [ ] **Step 6 - ARCH-6 (medium)**: Flat files and single-caller registrars do not earn their module boundaries: six src/core and six src/tools siblings bypass their barrels while a dozen _register.js files exist only to be called once by loadAllSkills
   - [ ] **6.1**: Fold the six src/core flat files into their owning folders (enforcement, cache, git-hooks, post-process, directive) with index.js barrels as the only public entry per rule-styleguide-patterns; leave a re-export shim for one release only if an external import exists
   - [ ] **6.2**: Fold the six src/tools flat action tools behind src/tools/actions/index.js so the router sees one registration function per family instead of six siblings; update src/core/skills/_load.js to call the family registrar
-  - [ ] **6.3**: Gate: rule_tool_fix lint on src passes, every src directory with .js has an index.js barrel, no non-barrel file without _ prefix remains outside __tests__, and foundations green
+  - [ ] **6.3**: Gate: rule_tool_fix lint on src passes, every src directory with .js has an index.js barrel, no non-barrel file without _ prefix remains outside **tests**, and foundations green
 - [ ] **Step 7 - ARCH-7 (medium)**: Complexity is concentrated in a few god files that ship to every install: four skills assets carry 98 to 146 complexity points each while callTool, doctor formatting, roles, and self-update combine high fan-out with high CRAP and no tests
   - [ ] **7.1**: Split the four shipped god files by responsibility: _filters.js by filter family, _renderer.js by render phase, _expression-parser.js by tokenizer plus parser plus safe-context, _template-instance.js by template resolution plus instance lifecycle; keep each new module under 150 lines per the size ratchet
   - [ ] **7.2**: Reduce src hotspots without behavior change: extract callTool stage helpers (validate, cacheLookupOrCompute, finalizeAndRecord) into src/tools/router/call/_stages.js, and split formatDoctorTerminal and rolesCommand by output section; add missing branch tests for the self-update and roles paths
   - [ ] **7.3**: Gate: gini complexity drops below 0.60, no shipped file outside tests exceeds 300 complexity-weighted lines, callTool fan_out drops below 15, and coverage floor 90 holds
 - [ ] **Step 8 - ARCH-8 (medium)**: Functionally duplicated bodies persist because src/shared is incomplete: shell, session, and telemetry helpers are copied across installers and fixtures instead of living once behind the shared barrel
   - [ ] **8.1**: Create src/shared/_shell.js exporting detectOs and extractBashFunction and refactor scripts/install.sh, scripts/uninstall.sh, and both cli fixtures onto it; keep shell behavior byte-identical with the existing installer tests as the gate
-  - [ ] **8.2**: Create src/shared/_testkit.js exporting alive, until, and withHome fixtures and refactor src/core/session/__tests__ and src/core/telemetry/store/__tests__ onto it; delete the private copies with no dual path per ADR 061
+  - [ ] **8.2**: Create src/shared/_testkit.js exporting alive, until, and withHome fixtures and refactor src/core/session/**tests** and src/core/telemetry/store/**tests** onto it; delete the private copies with no dual path per ADR 061
   - [ ] **8.3**: Add the remaining structure-hygiene shared members _envelope.js, _fs.js, _env.js, and _syntax.js to src/shared with the no-duplicate-blocks gate covering them; gate: redundancy reports zero definite pairs under src and scripts and the new gate test green
 - [ ] **Step 9 - ARCH-9 (medium)**: Three Node traffic patterns from the evidence skill are unhardened: a 95ms synchronous BM25 build blocks the loop, cache persistence does sync file and gzip IO, and self-update fetch has no timeout while its trigger is fire-and-forget
   - [ ] **9.1**: Yield the BM25 build off the event loop: keep restoreIndex fast path, chunk the full tokenize into 50ms slices with setImmediate yields, and document the 95ms budget in the startup report; gate: startup report shows no single block over 50ms
@@ -149,18 +149,18 @@ Severity first, as the review sorts: the invocation cycle and the god initialize
 
 ## Measured baseline (2026-09-11, this run)
 
-| What | How | Result |
-| --- | --- | --- |
-| Quality signal | tokensave_health | 7441; depth 0.5789 is the binding constraint |
-| Worst cycle | tokensave_circular | 8 nodes across pipeline, skills load, self-update, update tool, gateway |
-| Deepest chain | tokensave_dependency_depth | 19 vs ideal 11 through census, CLI, tools, file-tree, review docs, session registry |
-| Inequality | tokensave_gini | 0.7209 extreme; top outlier 146 points |
-| Hottest function | tokensave_complexity plus hotspots | callTool 100 lines, fan_in 88, fan_out 25 |
-| Riskiest untested | tokensave_test_risk | registerBuiltinFilters 546, tryExec fan_in 46 at 282 |
-| Duplication | tokensave_redundancy | 20 definite pairs |
-| Tool surface | tools list | 105 tools, 10 in minimal allowlist |
-| Loader fan-out | tokensave_coupling | _load.js 28 out, 20 in |
-| Clusters | tokensave_dsm | 343 clusters, largest 88 files, density 0.0009 |
+| What              | How                                | Result                                                                              |
+| ----------------- | ---------------------------------- | ----------------------------------------------------------------------------------- |
+| Quality signal    | tokensave_health                   | 7441; depth 0.5789 is the binding constraint                                        |
+| Worst cycle       | tokensave_circular                 | 8 nodes across pipeline, skills load, self-update, update tool, gateway             |
+| Deepest chain     | tokensave_dependency_depth         | 19 vs ideal 11 through census, CLI, tools, file-tree, review docs, session registry |
+| Inequality        | tokensave_gini                     | 0.7209 extreme; top outlier 146 points                                              |
+| Hottest function  | tokensave_complexity plus hotspots | callTool 100 lines, fan_in 88, fan_out 25                                           |
+| Riskiest untested | tokensave_test_risk                | registerBuiltinFilters 546, tryExec fan_in 46 at 282                                |
+| Duplication       | tokensave_redundancy               | 20 definite pairs                                                                   |
+| Tool surface      | tools list                         | 105 tools, 10 in minimal allowlist                                                  |
+| Loader fan-out    | tokensave_coupling                 | _load.js 28 out, 20 in                                                              |
+| Clusters          | tokensave_dsm                      | 343 clusters, largest 88 files, density 0.0009                                      |
 
 ## Dependencies
 
