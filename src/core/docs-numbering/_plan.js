@@ -1,5 +1,6 @@
 import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
+import { buildAdrIndex, listExistingAdrs } from "../../tools/adr/index.js";
 import { FAMILIES, documentsIn } from "./_families.js";
 import { authorsToName } from "./_authors.js";
 
@@ -58,7 +59,33 @@ export function planRenumber(options = {}) {
     message: authors.length > 0 ? `${authors.length} ADR(s) name a tool or nobody` : "Every ADR names a person",
   });
 
-  return { projectDir, collisions, renames, authors, indexUnordered: isAdrIndexUnordered(projectDir) };
+  return { projectDir, collisions, renames, authors, indexUnordered: isAdrIndexUnordered(projectDir), indexStale: isAdrIndexStale(projectDir) };
+}
+
+/**
+ * Whether `docs/adr/ADR.md` differs from what the generator would write now.
+ *
+ * Ordering is one way an index goes stale; a missing, extra or changed row is
+ * the other, and it is the one a new ADR added by hand leaves behind. The
+ * comparison is the generator's own output, so "stale" means exactly "the next
+ * `rule_tool_process_adr` call would rewrite it".
+ *
+ * @param {string} projectDir
+ * @returns {boolean}
+ */
+function isAdrIndexStale(projectDir) {
+  const adrDir = join(projectDir, "docs", "adr");
+  const indexFile = join(adrDir, "ADR.md");
+
+  if (!existsSync(indexFile)) {
+    return false;
+  }
+
+  try {
+    return readFileSync(indexFile, "utf8") !== buildAdrIndex(listExistingAdrs(adrDir));
+  } catch {
+    return false;
+  }
 }
 
 /**

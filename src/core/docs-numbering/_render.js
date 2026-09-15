@@ -22,10 +22,19 @@ export function renderRenumberPlan(plan, options = {}) {
           ...(willFix ? [] : ["", "Run with --fix to name the person the commit says added each file."]),
         ];
 
-  if (plan.renames.length === 0 && !plan.indexUnordered) {
+  if (plan.renames.length === 0 && !plan.indexUnordered && !plan.indexStale) {
     const clean = "Numbering is clean: no duplicate ADR or handoff numbers, and the ADR index is in order.";
 
     return authors.length === 0 ? clean : [clean, "", ...authorLines].join("\n");
+  }
+
+  if (plan.renames.length === 0 && plan.indexStale && !plan.indexUnordered) {
+    return [
+      "No duplicate numbers, but the ADR index (docs/adr/ADR.md) does not match the files on disk:",
+      "a row is missing, extra, or changed since the generator last wrote it.",
+      ...(willFix ? [] : ["", "Run with --fix to regenerate it."]),
+      ...(authorLines.length > 0 ? ["", ...authorLines] : []),
+    ].join("\n");
   }
 
   if (plan.renames.length === 0) {
