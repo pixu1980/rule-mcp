@@ -4,4 +4,5 @@ export * from "./_client.js";
 export * from "./_client-sync.js";
 export * from "./_files.js";
 export * from "./_graph.js";
+export * from "./_changes.js";
 export * from "./_fallback.js";

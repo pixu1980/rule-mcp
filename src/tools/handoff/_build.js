@@ -1,10 +1,12 @@
 /** Assemble the handoff document from its sections, degrading format to fit the token budget. */
 import { readAdrs, readContextValues, readProjectIdentity } from "./_sources.js";
 import { getGitDiff, getGitLog } from "./_git.js";
+import { graphChanges } from "../../core/tokensave/_changes.js";
 import { scanProjectDocs } from "./_docs-scan.js";
 import { estimateTokens } from "./_format.js";
 import { headerLines, identityLines, adrLines, contextLines } from "./_sections-core.js";
 import { workingTreeLines, gitLogLines, docsLines, footerLines } from "./_sections-repo.js";
+import { semanticLines } from "./_sections-semantic.js";
 
 /** Build one handoff, re-running itself one format tighter when it exceeds maxTokens. */
 export function buildHandoff({ projectDir, includeContext, includeAdrs, includeIdentity, includeGitDiff, includeGitLog, includeRoadmap, compress, maxTokens, format, mode }) {
@@ -12,6 +14,7 @@ export function buildHandoff({ projectDir, includeContext, includeAdrs, includeI
   const adrs = includeAdrs ? readAdrs(projectDir) : [];
   const contextValues = includeContext ? readContextValues(projectDir) : {};
   const gitDiff = includeGitDiff === false ? null : getGitDiff(projectDir);
+  const changes = includeGitDiff === false ? null : graphChanges(projectDir, { files: gitDiff?.files ?? [] });
   const gitLog = includeGitLog === false ? null : getGitLog(projectDir);
   const docsScan = includeRoadmap === false ? null : scanProjectDocs(projectDir);
 
@@ -31,6 +34,7 @@ export function buildHandoff({ projectDir, includeContext, includeAdrs, includeI
     ...adrLines(adrs, shape),
     ...contextLines(contextValues, shape),
     ...workingTreeLines(gitDiff, shape),
+    ...semanticLines(changes, shape),
     ...gitLogLines(gitLog, shape),
     ...docsLines(docsScan, shape),
     ...footerLines(shape),
