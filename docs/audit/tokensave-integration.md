@@ -342,9 +342,11 @@ Gate: `pnpm test:all` green with and without `.tokensave/`; `pnpm lint` zero err
 
 ### 6.2 Milestone 1 — Read-only discovery (P0, depends on M0)
 
-- **T1.1** Replace `src/core/file-tree` reads with `files` + `read` + `entities` behind `R1`.
-- **T1.2** Replace `rule_tool_fix` tree scans with `module_api` + `distribution`.
-- **T1.3** Replace the `src/tools/handoff/_sources.js` file enumeration with `files`.
+Status: **partial** — T1.3 done in commit `77f6148`; T1.1 and T1.2 pending.
+
+- **T1.1** Replace `src/core/file-tree` reads with `files` + `read` + `entities` behind `R1`. _(pending)_
+- **T1.2** Replace `rule_tool_fix` tree scans with `module_api` + `distribution`. _(pending)_
+- **T1.3** Replace the `src/tools/handoff/_sources.js` file enumeration with `files`. _(done)_
 
 Gate: file-tree and fix suites green on both paths; byte-identical output on the JS fallback.
 
