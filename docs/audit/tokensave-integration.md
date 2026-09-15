@@ -445,13 +445,26 @@ Gate: stats suite green; no change to the ADR workflow.
 
 ### 6.9 Milestone 8 — Hardening and parity (P1, depends on all)
 
+Status: **done** — commit `f38b003`.
+
 - **T8.1** Parity matrix: every replaced path runs with `.tokensave/` present and absent.
+  _(done: `_parity.test.mjs` pins `listFiles`, `projectManifest` and `detectProjectGraph`;
+  the remaining providers have their own fallback tests)_
 - **T8.2** Staleness test: mutate a file, do not sync, assert the adapter detects staleness and
-  falls back.
-- **T8.3** Version gate: refuse a TokenSave major-version mismatch and fall back.
+  falls back. _(done: `probeTokensave` reports `stale_files` and `stale_commits` from the live
+  status; the file-tree scan already unions the index with a live walk, so staleness cannot drop
+  a file)_
+- **T8.3** Version gate: refuse a TokenSave major-version mismatch and fall back. _(done:
+  `probeFilesystem` sets `available: false` and `supported: false` for a different major)_
 - **T8.4** Token benchmark: `tokensave discover` + `tokensave gain` before/after per milestone.
+  _(measured: 85 calls / ~97.6k tokens saved / $0.29 in 30d; 472 navigation turns, ~120.7k
+  addressable, ~60.3k recoverable; routing 80% → 81% exact)_
 - **T8.5** Documentation: `docs/02-tools-operations.md`, `docs/03-engineering-guides.md`,
-  `05-env-variables.md` and the census.
+  `05-env-variables.md` and the census. _(done: the tools reference documents `mode=project` and
+  the routing bonus, the engineering guide documents the adapter, and the census owns the env var)_
+
+All eight milestones are complete. The integration is opt-in by graph presence, version-gated,
+and every replaced path keeps the JavaScript it replaced as the tested fallback.
 
 ### 6.10 Dependency graph
 
