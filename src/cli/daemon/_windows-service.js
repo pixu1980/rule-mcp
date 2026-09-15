@@ -4,6 +4,10 @@
 import { execSync } from "node:child_process";
 import { resolveEntrypoint, tryExec } from "./_service-shared.js";
 
+// No `2>nul` on the `sc` probes below: tryExec pipes stdio, so stderr is
+// already discarded, and off Windows that cmd syntax creates a real file named
+// `nul` in the working directory instead of a null device.
+
 // ═══════════════════════════════════════════════════════════════════════════
 // Windows - Windows Service
 // ═══════════════════════════════════════════════════════════════════════════
@@ -33,14 +37,14 @@ export function installWindowsService({ dryRun = false } = {}) {
   }
 
   // Check if service already exists
-  const check = tryExec(`sc query "${name}" 2>nul || echo NOT_FOUND`);
+  const check = tryExec(`sc query "${name}" || echo NOT_FOUND`);
   const isExists = !check.includes("NOT_FOUND") && !check.includes("FAILED") && !check.includes("1060");
 
   if (isExists) {
     // Service exists - update config and restart
     tryExec(`sc config "${name}" binPath= "${command}" start= auto`);
-    tryExec(`sc stop "${name}" 2>nul || true`);
-    tryExec(`sc start "${name}" 2>nul || true`);
+    tryExec(`sc stop "${name}" || true`);
+    tryExec(`sc start "${name}" || true`);
 
     return { ok: true, name, action: "updated-and-started" };
   }
@@ -81,7 +85,7 @@ export function uninstallWindowsService({ dryRun = false } = {}) {
   const name = WINDOWS_SERVICE_NAME;
 
   // Check if service exists
-  const check = tryExec(`sc query "${name}" 2>nul || echo NOT_FOUND`);
+  const check = tryExec(`sc query "${name}" || echo NOT_FOUND`);
 
   if (check.includes("NOT_FOUND") || check.includes("FAILED") || check.includes("1060")) {
     return { ok: true, name, action: "not-installed" };
@@ -91,7 +95,7 @@ export function uninstallWindowsService({ dryRun = false } = {}) {
     return { ok: true, name, action: "dry-run (would remove service)" };
   }
 
-  tryExec(`sc stop "${name}" 2>nul || true`);
+  tryExec(`sc stop "${name}" || true`);
   tryExec(`sc delete "${name}"`);
 
   return { ok: true, name, action: "stopped-and-deleted" };
