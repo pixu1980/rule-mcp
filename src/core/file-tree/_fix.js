@@ -27,8 +27,8 @@ export function autoFixFileTree(rootDir, options = {}) {
   const errors = [];
 
   renameUnprefixedFiles(report.issues, isDryRun, fixed, errors);
-  createMissingBarrels(report.issues, isDryRun, fixed, errors);
-  populateEmptyBarrels(report.issues, isDryRun, fixed, errors);
+  createMissingBarrels(report.issues, isDryRun, fixed, errors, rootDir);
+  populateEmptyBarrels(report.issues, isDryRun, fixed, errors, rootDir);
 
   const fixableTypes = new Set(["missing-barrel", "wrong-prefix", "empty-barrel"]);
   const remaining = report.issues.filter((index) => !fixableTypes.has(index.type));
