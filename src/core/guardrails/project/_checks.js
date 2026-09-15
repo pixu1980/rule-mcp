@@ -106,4 +106,25 @@ export const PROJECT_CHECKS = [
       };
     },
   },
+  {
+    id: "project-diagnostics",
+    label: "Type-checker reports no errors",
+    tool: "diagnostics",
+    args: { scope: "workspace" },
+    optional: true,
+    evaluate: (value) => {
+      const list = value?.diagnostics ?? value?.errors ?? [];
+      const errors = Array.isArray(list) ? list.filter((entry) => !entry?.level || entry.level === "error") : [];
+
+      if (errors.length === 0) {
+        return null;
+      }
+
+      return {
+        failCount: errors.length,
+        detail: [`${errors.length} type-checker error(s)`],
+        suggestion: "Fix the first error; `tokensave_diagnose` maps compiler output to callers.",
+      };
+    },
+  },
 ];

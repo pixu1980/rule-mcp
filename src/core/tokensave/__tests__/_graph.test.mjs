@@ -33,4 +33,8 @@ test("graphHealth names the architecture tools and the scope tools", () => {
   assert.match(block, /tokensave_callers/);
   assert.match(block, /tokensave_callees/);
   assert.match(block, /tokensave_file_dependents/);
+  assert.match(block, /tokensave_affected/);
+  assert.match(block, /tokensave_test_map/);
+  assert.match(block, /tokensave_test_risk/);
+  assert.match(block, /tokensave_test_coverage/);
 });

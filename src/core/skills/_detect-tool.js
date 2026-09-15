@@ -2,7 +2,7 @@
 
 import { z } from "zod/v4";
 import { registerTool } from "../../tools/router/index.js";
-import { detectProject, getFrameworkSuggestion } from "../detector/index.js";
+import { detectProjectGraph, getFrameworkSuggestion } from "../detector/index.js";
 
 /** Register the rule_tool_detect tool. */
 export function registerDetectTool() {
@@ -15,7 +15,7 @@ export function registerDetectTool() {
     zodSchema: DetectSchema,
     handler: async (arguments_) => {
       const projectDir = arguments_.path || ".";
-      const profile = detectProject(projectDir);
+      const profile = detectProjectGraph(projectDir);
       // Suggest relevant skill tools based on detected framework
       const { skillName, toolName } = getFrameworkSuggestion(profile.framework);
       const suggestions = [toolName, "rule_tool_check", "rule_tool_scaffold", "rule_tool_component"];

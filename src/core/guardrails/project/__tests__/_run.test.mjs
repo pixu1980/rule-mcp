@@ -21,15 +21,27 @@ const cleanClient = (tool) => {
     return { ok: true, value: { dead_code_count: 0, symbols: [] } };
   }
 
+  if (tool === "diagnostics") {
+    return { ok: true, value: { diagnostics: [] } };
+  }
+
   return { ok: true, value: { match_count: 0, matches: [] } };
 };
 
 test("a clean graph passes every project check", () => {
-  const result = checkProjectGuarded("/tmp/p", { probe: () => ({ available: true }), client: cleanClient });
+  const result = checkProjectGuarded("/tmp/p", { probe: () => ({ available: true }), client: cleanClient, diagnostics: true });
 
   assert.equal(result.allPass, true);
   assert.equal(result.failCount, 0);
   assert.equal(result.skippedCount, 0);
+});
+
+test("the optional diagnostics check is skipped unless asked", () => {
+  const result = checkProjectGuarded("/tmp/p", { probe: () => ({ available: true }), client: cleanClient });
+
+  assert.equal(result.allPass, true);
+  assert.equal(result.skippedCount, 1);
+  assert.equal(result.skipped[0].id, "project-diagnostics");
 });
 
 test("a cycle, a low health score, dead code and an unsafe pattern each fail", () => {

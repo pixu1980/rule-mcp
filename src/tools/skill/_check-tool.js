@@ -17,6 +17,7 @@ export function registerCheckTool() {
     mode: z.string().optional().describe("Check mode: 'scaffold' for project config files, 'project' for the graph guardrails"),
     allowedDependencies: z.array(z.string()).optional().describe("Manifest-derived package names allowed in imports"),
     projectDir: z.string().optional().describe("Project root for mode=project (default: cwd)"),
+    diagnostics: z.boolean().optional().describe("Run the optional type-checker check in mode=project"),
   });
   registerTool({
     name: "rule_tool_check",
@@ -26,7 +27,7 @@ export function registerCheckTool() {
       const { skill, code, fileName, isComponent, framework, mode, allowedDependencies, projectDir } = arguments_;
 
       if (mode === "project") {
-        const project = checkProjectGuarded(projectDir ?? ".", { skill });
+        const project = checkProjectGuarded(projectDir ?? ".", { skill, diagnostics: arguments_.diagnostics === true });
         const projectLines = ["# Project guardrails", "", project.summary, ""];
 
         for (const entry of project.failed) {

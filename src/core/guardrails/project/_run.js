@@ -31,16 +31,21 @@ import { PROJECT_CHECKS } from "./_checks.js";
  * Run every project check against one project.
  *
  * @param {string} [projectDir] - Project root
- * @param {{ skill?: string, probe?: Function, client?: Function }} [options]
+ * @param {{ skill?: string, diagnostics?: boolean, probe?: Function, client?: Function }} [options]
  * @returns {ProjectCheckResult}
  */
-export function checkProjectGuarded(projectDir = process.cwd(), { skill = "rule-process-simplicity", probe = probeFilesystem, client = callToolSync } = {}) {
+export function checkProjectGuarded(projectDir = process.cwd(), { skill = "rule-process-simplicity", diagnostics = false, probe = probeFilesystem, client = callToolSync } = {}) {
   const available = probe(projectDir).available;
   const passed = [];
   const failed = [];
   const skipped = [];
 
   for (const check of PROJECT_CHECKS) {
+    if (check.optional && !diagnostics) {
+      skipped.push({ id: check.id, label: check.label, reason: "optional check not requested" });
+      continue;
+    }
+
     if (!available) {
       skipped.push({ id: check.id, label: check.label, reason: "graph unavailable" });
       continue;

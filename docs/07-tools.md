@@ -97,6 +97,7 @@ Run guardrail checks on code against any rule skill. Returns guardrail results w
 | `mode`                | string          | no       | -       | Check mode: 'scaffold' for project config files, 'project' for the graph guardrails |
 | `allowedDependencies` | array of string | no       | -       | Manifest-derived package names allowed in imports                                   |
 | `projectDir`          | string          | no       | -       | Project root for mode=project (default: cwd)                                        |
+| `diagnostics`         | boolean         | no       | -       | Run the optional type-checker check in mode=project                                 |
 
 ### rule_tool_scaffold
 
