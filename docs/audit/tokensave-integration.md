@@ -322,6 +322,8 @@ decision, TokenSave supplies the data), and the fallback trigger.
 
 ### 6.1 Milestone 0 — Adapter foundation (P0)
 
+Status: **done** in ADR 086, commit `d4521b5` (`feat(tokensave): add adapter foundation (M0)`).
+
 Deliverable: `src/core/tokensave/` with a capability probe, a typed client, and a fallback
 dispatcher. Nothing else changes behaviour.
 
