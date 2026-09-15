@@ -3,12 +3,6 @@
 Open work that is not owned by a persona trio. Newest first. Each item names the
 symptom, not the fix, so the run that picks it up can choose the fix.
 
-## B-2 - A from-zero install must prove the `rule-mcp` CLI works
-
-Installing from an empty machine has to end with a `rule-mcp doctor` (and a
-real `rule-mcp tools list`) that answers. Today the install can succeed
-while the global CLI is missing or points at the wrong path.
-
 ## B-3 - Automatic ADR and handoff renumbering
 
 Renumbering ADRs (and the handoff numbers that follow them) is still a manual
@@ -32,3 +26,6 @@ does not generate the persona skills there, so a home install has no
 
 - **B-1** `handoff doctor` regenerates a stale `ADR.md` (a missing, extra or changed row, not only an
   unordered one) and refreshes a `HANDOFF.md` that a project keeps (commit `db33d01`).
+- **B-2** Every install plan ends with a `cli` task that runs `rule-mcp --version`,
+  `tools list` and `doctor` through the shim on PATH; a missing or broken shim fails the install
+  (commit `9b053c3`).
