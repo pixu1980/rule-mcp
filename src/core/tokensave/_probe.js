@@ -18,6 +18,26 @@ import { join } from "node:path";
 /** The directory TokenSave writes its database and metadata into. */
 export const TOKENSAVE_DIR = ".tokensave";
 
+/** The TokenSave major this adapter is built against. */
+export const SUPPORTED_MAJOR = 7;
+
+/**
+ * Whether a reported TokenSave version is one this adapter understands.
+ *
+ * A missing version is accepted (the adapter is optimistic), a different
+ * major is refused, because the tool surface can change shape between majors.
+ *
+ * @param {unknown} version
+ * @returns {boolean}
+ */
+export function versionSupported(version) {
+  if (version === null || version === undefined || version === "") {
+    return true;
+  }
+
+  return Number.parseInt(String(version).split(".", 1)[0], 10) === SUPPORTED_MAJOR;
+}
+
 /** Read and parse a JSON file, returning `null` on any failure. */
 function readJson(path) {
   try {
@@ -62,16 +82,17 @@ function secondsSince(timestamp) {
 export function probeFilesystem(projectDir = process.cwd()) {
   const dir = join(projectDir, TOKENSAVE_DIR);
   const dbPath = join(dir, "tokensave.db");
-  const available = existsSync(dbPath);
-  const config = available ? readJson(join(dir, "config.json")) : null;
-  const branchMeta = available ? readJson(join(dir, "branch-meta.json")) : null;
+  const config = existsSync(dbPath) ? readJson(join(dir, "config.json")) : null;
+  const branchMeta = existsSync(dbPath) ? readJson(join(dir, "branch-meta.json")) : null;
   const active = activeFromBranchMeta(branchMeta);
+  const version = config?.last_indexed_version ?? null;
 
   return {
-    available,
+    available: existsSync(dbPath) && versionSupported(version),
     dir,
     dbPath,
-    version: config?.last_indexed_version ?? null,
+    version,
+    supported: versionSupported(version),
     branch: active?.name ?? null,
     parentBranch: active?.parent ?? null,
   };
@@ -105,6 +126,8 @@ export async function probeTokensave(projectDir = process.cwd(), { status } = {}
       branch: live?.active_branch ?? base.branch,
       parentBranch: live?.parent_branch ?? base.parentBranch,
       staleSeconds: secondsSince(live?.last_sync_at),
+      staleFiles: live?.stale_files ?? null,
+      staleCommits: live?.stale_commits ?? null,
     };
   } catch {
     return { ...base, staleSeconds: null };

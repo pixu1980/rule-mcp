@@ -167,8 +167,11 @@ rule prompt="Create a responsive navbar" framework=react
 2. For each skill, extracts `##` sections and scores them
 3. Per-word score: 3× if in section heading, 1× in body, +2× in YAML description, +3× if skill base name matches
 4. Framework bias: ×2 for matching framework skill, ×1.15 for styleguides/web, ×0.85 for others
-5. Normalizes: confidence = raw / maxRaw
-6. Returns top 6 skills + relevant sections + suggested next_tools
+5. TokenSave bonus: with a local code graph, the symbols the graph matches under `skills/` add a
+   small bonus to the skills that own them. With no graph (`RULE_MCP_NO_TOKENSAVE=1`),
+   routing is exactly the BM25 answer.
+6. Normalizes: confidence = raw / maxRaw
+7. Returns top 6 skills + relevant sections + suggested next_tools
 
 ---
 
@@ -281,13 +284,20 @@ Supports smart iteration: pass `previousPassed` to skip already-verified guardra
 | Param                 | Type     | Required | Default | Description                                                                                   |
 | --------------------- | -------- | -------- | ------- | --------------------------------------------------------------------------------------------- |
 | `skill`               | string   | ✅       | -       | Target skill (e.g. `rule-frontend-react`)                                                      |
-| `code`                | string   | ✅       | -       | Source code to validate                                                                       |
+| `code`                | string   | -        | -       | Source code to validate (required unless `mode=project`)                                      |
 | `fileName`            | string   | -        | -       | File name (enables naming convention checks)                                                  |
 | `isComponent`         | boolean  | -        | -       | Whether this is a component file                                                              |
 | `framework`           | string   | -        | -       | Framework override                                                                            |
-| `mode`                | string   | -        | -       | Check mode (e.g. `scaffold` for config files)                                                 |
+| `mode`                | string   | -        | -       | Check mode: `scaffold` for config files, `project` for the code-graph guardrails              |
+| `projectDir`          | string   | -        | `.`     | Project root for `mode=project`                                                               |
+| `diagnostics`         | boolean  | -        | `false` | Run the optional type-checker check in `mode=project`                                         |
 | `previousPassed`      | string[] | -        | -       | Guardrail IDs already passed - skip on re-check                                               |
 | `allowedDependencies` | string[] | -        | -       | Manifest-derived packages allowed in external imports; enables dependency hallucination check |
+
+`mode=project` runs the project-level graph checks through TokenSave: `project-circular`,
+`project-health`, `project-dead-code` and `project-unsafe-patterns`, plus `project-diagnostics`
+when `diagnostics: true`. A missing graph or a failing TokenSave tool skips a check; it never
+marks it failed.
 
 ### Guardrails checked
 
@@ -670,7 +680,7 @@ Prompt templates accessible via the MCP `prompts/get` protocol. Every prompt tak
 | `rule-a11y-audit`    | `code` (req, free text)                                                                                                                                                                    | Audit a11y end-to-end: WCAG 2.2 AA review + Playwright/axe-core tests                                 |
 | `rule-ai`            | `request` (req)                                                                                                                                                                            | AI agent integrations                                                                                 |
 | `rule-backend`       | `request` (req, free text: framework)                                                                                                                                                      | Node, Express, Fastify, Hono, NestJS, GraphQL, API design, security                                   |
-| `rule-compression`       | `request` (req)                                                                                                                                                                            | Compressed communication, commits, reviews                                                            |
+| `rule-compression`   | `request` (req)                                                                                                                                                                            | Compressed communication, commits, reviews                                                            |
 | `rule-code-review`   | `code` (req, free text)                                                                                                                                                                    | Review code against rule styleguides                                                                   |
 | `rule-data`          | `request` (req, free text: database)                                                                                                                                                       | PostgreSQL, MySQL, SQLite, MongoDB, DuckDB, IndexedDB, SQL                                            |
 | `rule-devops`        | `request` (req)                                                                                                                                                                            | Docker, GitLab CI, observability, testing, versioning                                                 |
