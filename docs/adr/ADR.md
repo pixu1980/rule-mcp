@@ -8,6 +8,8 @@ this directory are the source of truth; this index is generated from them by
 
 | #                                                                                                                       | Title                                                                                                     | Date       | Status     | Tags                                                                                |
 | ----------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- | ---------- | ---------- | ----------------------------------------------------------------------------------- |
+| [100](100-the-tokensave-integration-closes-out-and-the-adapter-is-the-code-graph-layer.md)                              | The TokenSave integration closes out: the adapter and its graph-backed tools are the code-graph layer     | 2026-09-15 | accepted   | tokensave, architecture, closeout, code-graph                                       |
+| [099](099-close-out-plan-develop-consolidation.md)                                                                      | Close out plan develop-consolidation                                                                      | 2026-09-15 | accepted   | docs, closeout, plan                                                                |
 | [098](098-develop-merges-into-main-by-area-and-stays-as-an-integration-branch.md)                                       | develop merges into main by area, and stays as an integration branch                                      | 2026-09-15 | accepted   | process, git, merge, governance                                                     |
 | [097](097-the-release-target-is-v0-1-0-beta-and-the-version-tooling-accepts-a-prerelease.md)                            | The release target is v0.1.0-beta, and the version tooling accepts a prerelease                           | 2026-09-15 | accepted   | release, versioning, changelog, workflow                                            |
 | [096](096-tokensave-is-the-primary-code-graph-javascript-is-the-fallback.md)                                            | TokenSave is the primary code graph, JavaScript is the fallback                                           | 2026-09-15 | accepted   | tokensave, architecture, adapter, fallback, code-graph                              |
@@ -114,6 +116,8 @@ file. Where a line stops short the rest is in the ADR.
 
 | ADR                                                                                                                     | Decision                                                                                                                                                                                                                        | Consequence                                                                                                                                                                                                                    |
 | ----------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| [100](100-the-tokensave-integration-closes-out-and-the-adapter-is-the-code-graph-layer.md)                              | Fold the plan record into this ADR, name it in the session handoff, and delete the source file; the full text stays in git history.                                                                                             | docs/plans/tokensave-integration.md is gone from the tree and the handoff of this session names what it carried.                                                                                                               |
+| [099](099-close-out-plan-develop-consolidation.md)                                                                      | Fold the record into this ADR and the session handoff, then delete the source file.                                                                                                                                             | docs/plans/develop-consolidation.md is gone from the tree; the handoff of this session names what it carried. main, origin/main, develop and origin/develop all point at c33c9e46, so develop is now an integration branch...  |
 | [098](098-develop-merges-into-main-by-area-and-stays-as-an-integration-branch.md)                                       | One merge commit, resolved by area rather than by hunk, followed by reconciliation commits.                                                                                                                                     | The 71 develop commits stay readable in the graph instead of being replayed, which a rebase would have done against two cross-cutting mechanical passes on main.                                                               |
 | [097](097-the-release-target-is-v0-1-0-beta-and-the-version-tooling-accepts-a-prerelease.md)                            | The version is 0.1.0-beta in package.json, server.json, both packaging manifests and the newest CHANGELOG heading.                                                                                                              | ADR 085 is superseded on the version it names; its reasoning about resetting away from v1.0.0 stands.                                                                                                                          |
 | [096](096-tokensave-is-the-primary-code-graph-javascript-is-the-fallback.md)                                            | Add src/core/tokensave/ with three modules and a barrel. probe.js detects .tokensave/tokensave.db, reads config and branch metadata, and exposes { available, version, branch, parentBranch, staleSeconds }; the status...      | The server gains an optional runtime dependency on a local TokenSave installation; when the graph or the binary is missing, the JavaScript path answers and the server behaves exactly as before.                              |
@@ -220,6 +224,7 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 
 ### architecture
 
+- [100](100-the-tokensave-integration-closes-out-and-the-adapter-is-the-code-graph-layer.md) The TokenSave integration closes out: the adapter and its graph-backed tools are the code-graph layer
 - [096](096-tokensave-is-the-primary-code-graph-javascript-is-the-fallback.md) TokenSave is the primary code graph, JavaScript is the fallback
 - [092](092-surface-selection-amends-the-install-stack-freeze-with-an-additive-loader-filter.md) Surface selection amends the install stack freeze with an additive loader filter
 - [091](091-install-uninstall-rework-keeps-current-stack-steps-and-contents-only.md) Install/uninstall rework keeps current stack, steps and contents only
@@ -330,6 +335,15 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [063](063-coverage-floor-raised-to-87-95-remains-the-ratchet-endpoint.md) Coverage floor raised to 87; 95 remains the ratchet endpoint
 - [062](062-glob-suite-runner-colocated-tests-and-a-branch-coverage-ratchet.md) Glob suite runner, co-located tests, and a branch-coverage ratchet
 
+### docs
+
+- [099](099-close-out-plan-develop-consolidation.md) Close out plan develop-consolidation
+- [095](095-close-out-the-install-and-uninstall-rework-plan.md) Close out the install and uninstall rework plan
+- [087](087-session-close-archives-completed-audits-reviews-and-plans.md) Session close archives completed audits, reviews and plans
+- [086](086-documentation-site-is-hand-written-static-html-from-docs.md) Documentation site is hand-written static HTML from docs
+- [071](071-the-census-generates-eight-numbered-documents-and-three-fenced-blocks-inside-the-chapters-a-person-writes.md) The census generates eight numbered documents and three fenced blocks inside the chapters a person writes
+- [048](048-v100-release-and-docs-accuracy-guard.md) v1.0.0 release and the docs-accuracy guard
+
 ### guardrails
 
 - [089](089-skills-own-their-guardrails-and-three-layers-resolve-both-skills-and-personas.md) Skills own their guardrails, and three layers resolve both skills and personas
@@ -365,14 +379,6 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [027](027-add-rule-toolchain-commits-skill-for-atomic-conventional-commits-with-mandatory-s.md) Add rule-toolchain-commits skill for atomic conventional commits with mandatory scope
 - [015](015-toolchain-skill-isolation-vite.md) toolchain skill isolation vite
 - [009](009-toolchain-vite.md) Toolchain Skill Isolation (Vite)
-
-### docs
-
-- [095](095-close-out-the-install-and-uninstall-rework-plan.md) Close out the install and uninstall rework plan
-- [087](087-session-close-archives-completed-audits-reviews-and-plans.md) Session close archives completed audits, reviews and plans
-- [086](086-documentation-site-is-hand-written-static-html-from-docs.md) Documentation site is hand-written static HTML from docs
-- [071](071-the-census-generates-eight-numbered-documents-and-three-fenced-blocks-inside-the-chapters-a-person-writes.md) The census generates eight numbered documents and three fenced blocks inside the chapters a person writes
-- [048](048-v100-release-and-docs-accuracy-guard.md) v1.0.0 release and the docs-accuracy guard
 
 ### governance
 
@@ -441,11 +447,24 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [050](050-round-two-hardening-cycles-daemon-cleanup-diagnostics.md) Round-2 hardening - cycles, daemon/commands split, diagnostics, HTTP verification
 - [049](049-split-hotspot-modules.md) Split the hotspot modules (guardrails + installer)
 
+### tokensave
+
+- [100](100-the-tokensave-integration-closes-out-and-the-adapter-is-the-code-graph-layer.md) The TokenSave integration closes out: the adapter and its graph-backed tools are the code-graph layer
+- [096](096-tokensave-is-the-primary-code-graph-javascript-is-the-fallback.md) TokenSave is the primary code graph, JavaScript is the fallback
+- [088](088-a-persona-topic-is-the-binding-scope-of-the-run.md) A persona topic is the binding scope of the run
+- [051](051-token-efficiency-pipeline.md) Token-efficiency pipeline (caveman aggressive + tokensave-aware decoration)
+
 ### backend
 
 - [053](053-gateway-as-the-single-entrypoint-with-server-side-receipts-backend-data-devops-g.md) Gateway as the single entrypoint with server-side receipts; backend/data/devops guardrail families
 - [010](010-backend-framework-skills.md) backend framework skills
 - [005](005-backend-framework-skills.md) Backend Framework Skills
+
+### closeout
+
+- [100](100-the-tokensave-integration-closes-out-and-the-adapter-is-the-code-graph-layer.md) The TokenSave integration closes out: the adapter and its graph-backed tools are the code-graph layer
+- [099](099-close-out-plan-develop-consolidation.md) Close out plan develop-consolidation
+- [095](095-close-out-the-install-and-uninstall-rework-plan.md) Close out the install and uninstall rework plan
 
 ### determinism
 
@@ -511,12 +530,6 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 
 - [078](078-compress-agent-command-files-at-write-time.md) Compress agent command files at write time
 - [077](077-compress-every-server-model-list-surface-prompts-list-tools-list-resources-list.md) Compress every server→model list surface (prompts/list, tools/list, resources/list)
-- [051](051-token-efficiency-pipeline.md) Token-efficiency pipeline (caveman aggressive + tokensave-aware decoration)
-
-### tokensave
-
-- [096](096-tokensave-is-the-primary-code-graph-javascript-is-the-fallback.md) TokenSave is the primary code graph, JavaScript is the fallback
-- [088](088-a-persona-topic-is-the-binding-scope-of-the-run.md) A persona topic is the binding scope of the run
 - [051](051-token-efficiency-pipeline.md) Token-efficiency pipeline (caveman aggressive + tokensave-aware decoration)
 
 ### tui
