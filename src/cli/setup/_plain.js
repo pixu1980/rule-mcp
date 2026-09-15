@@ -22,8 +22,7 @@ const write = (line) => process.stdout.write(`${line}\n`);
  * the mode an agent is configured with, the commands a sync will write. A
  * piped install that printed only the summary left that unauditable.
  */
-export const taskLine = (task) =>
-  `${statusStyle(task.status).glyph} ${task.title}${task.detail ? ` (${task.detail})` : ""}${task.summary ? ` - ${task.summary}` : ""}`;
+export const taskLine = (task) => `${statusStyle(task.status).glyph} ${task.title}${task.detail ? ` (${task.detail})` : ""}${task.summary ? ` - ${task.summary}` : ""}`;
 
 /** The counts line plus whatever to do next. */
 function writeFooter(counts, nextSteps) {

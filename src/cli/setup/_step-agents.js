@@ -34,17 +34,8 @@ export function StepAgents({ items, initial, height, columns, onSubmit, onBack }
       current,
       height,
       width: detailWidth,
-      lines: [
-        current?.detail ?? "",
-        "",
-        selected.has(current?.id) ? `${GLYPHS.ok} will be configured` : `${GLYPHS.skip} will be left alone`,
-      ],
+      lines: [current?.detail ?? "", "", selected.has(current?.id) ? `${GLYPHS.ok} will be configured` : `${GLYPHS.skip} will be left alone`],
     }),
-    h(
-      Box,
-      { paddingTop: 1 },
-      h(ProgressBar, { value: selected.size, total, color: COLORS.accent }),
-      h(Text, { color: COLORS.muted }, "  agents selected"),
-    ),
+    h(Box, { paddingTop: 1 }, h(ProgressBar, { value: selected.size, total, color: COLORS.accent }), h(Text, { color: COLORS.muted }, "  agents selected")),
   );
 }

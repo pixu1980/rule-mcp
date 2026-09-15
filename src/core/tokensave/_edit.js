@@ -52,11 +52,7 @@ export function applyEdit(projectDir, absolutePath, content, { probe = probeFile
     return { changed: false, source: "tokensave" };
   }
 
-  const result = client(
-    "str_replace",
-    { path: relativeTo(projectDir, absolutePath), old_str: oldContent, new_str: content, project_root: projectDir },
-    { projectDir },
-  );
+  const result = client("str_replace", { path: relativeTo(projectDir, absolutePath), old_str: oldContent, new_str: content, project_root: projectDir }, { projectDir });
 
   if (result.ok) {
     return { changed: true, source: "tokensave" };

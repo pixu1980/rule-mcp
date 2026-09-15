@@ -21,12 +21,7 @@ export const MODE_ITEMS = [
   {
     id: "stdio",
     label: "stdio",
-    detail: [
-      "The agent starts a local process per session.",
-      "No background service, no port, works everywhere.",
-      "",
-      "Supported by every agent in the catalog.",
-    ],
+    detail: ["The agent starts a local process per session.", "No background service, no port, works everywhere.", "", "Supported by every agent in the catalog."],
   },
   {
     id: "daemon",
@@ -42,12 +37,7 @@ export const MODE_ITEMS = [
   {
     id: "docker",
     label: "docker",
-    detail: [
-      "The SSE service in a container via compose.",
-      "Needs Docker Compose v2 and a daemon token.",
-      "",
-      `Only: ${[...remoteModeAgents].join(", ")}`,
-    ],
+    detail: ["The SSE service in a container via compose.", "Needs Docker Compose v2 and a daemon token.", "", `Only: ${[...remoteModeAgents].join(", ")}`],
   },
 ];
 
@@ -91,15 +81,7 @@ export function StepMode({ initial, columns, agents = [], onSubmit, onBack }) {
     h(Text, { color: COLORS.accentSoft, bold: true }, "Install mode"),
     h(ListDetail, { items, cursor, selected, current, mode: "radio", height: 6, columns }),
     unsupported.length > 0
-      ? h(
-          Box,
-          { paddingTop: 1 },
-          h(
-            Text,
-            { color: COLORS.warn },
-            `${GLYPHS.warn} ${unsupported.join(", ")} will fall back to a warning - they only support stdio.`,
-          ),
-        )
+      ? h(Box, { paddingTop: 1 }, h(Text, { color: COLORS.warn }, `${GLYPHS.warn} ${unsupported.join(", ")} will fall back to a warning - they only support stdio.`))
       : null,
   );
 }

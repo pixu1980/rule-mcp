@@ -28,8 +28,7 @@ export const DEFAULT_EXTRAS = ["rules", "commands", "hooks", "doctor"];
 export const WIZARD_NODE_MIN = 22;
 
 /** The major of a version string, `v24.1.0` or `24.1.0` alike. */
-export const majorOf = (version = process.version) =>
-  Number.parseInt(String(version).replace(/^v/, "").split(".", 1)[0], 10);
+export const majorOf = (version = process.version) => Number.parseInt(String(version).replace(/^v/, "").split(".", 1)[0], 10);
 
 /**
  * Whether this process can host a full-screen wizard.
@@ -40,12 +39,7 @@ export const majorOf = (version = process.version) =>
  *
  * @param {object} [env] @param {object} [stdin] @param {object} [stdout] @param {string} [version]
  */
-export function canRenderWizard(
-  env = process.env,
-  stdin = process.stdin,
-  stdout = process.stdout,
-  version = process.version,
-) {
+export function canRenderWizard(env = process.env, stdin = process.stdin, stdout = process.stdout, version = process.version) {
   if (majorOf(version) < WIZARD_NODE_MIN) {
     return false;
   }
@@ -55,9 +49,7 @@ export function canRenderWizard(
 
 /** Why the wizard is not drawing, when the reason is the runtime. */
 export const wizardRuntimeNote = () =>
-  majorOf() < WIZARD_NODE_MIN
-    ? `${process.version} cannot host the wizard (node ${WIZARD_NODE_MIN} or newer draws it) - running the same plan from the flags.`
-    : "";
+  majorOf() < WIZARD_NODE_MIN ? `${process.version} cannot host the wizard (node ${WIZARD_NODE_MIN} or newer draws it) - running the same plan from the flags.` : "";
 
 /**
  * Carry a `--minimal` / `--no-minimal` answer into the process environment.

@@ -39,10 +39,6 @@ export function StepScan({ items, initial, columns, height, onSubmit, onBack }) 
     { flexDirection: "column" },
     h(Text, { color: COLORS.accentSoft, bold: true }, "What to remove"),
     h(ListDetail, { items, cursor, selected, current, height, columns }),
-    h(
-      Box,
-      { paddingTop: 1 },
-      h(Text, { color: COLORS.muted }, `${GLYPHS.arrow} ${total} item(s) across ${selected.size} group(s)`),
-    ),
+    h(Box, { paddingTop: 1 }, h(Text, { color: COLORS.muted }, `${GLYPHS.arrow} ${total} item(s) across ${selected.size} group(s)`)),
   );
 }

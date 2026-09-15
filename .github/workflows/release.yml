@@ -119,3 +119,6 @@ jobs:
           body: ${{ steps.changelog.outputs.body }}
           generate_release_notes: false
           files: dist/*
+          # Tags with a hyphen (v0.1.0-beta, v1.0.0-rc.1) ship as prereleases;
+          # plain tags (v0.1.0, v1.0.0) ship as latest stable releases.
+          prerelease: ${{ contains(github.ref_name, '-') }}

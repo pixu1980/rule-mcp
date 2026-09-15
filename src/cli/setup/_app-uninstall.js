@@ -36,18 +36,13 @@ export function UninstallApp({ defaults = {}, onFinish }) {
   const purgeRows = useMemo(() => purgeItems(scan.purge), [scan]);
 
   const [step, setStep] = useState(0);
-  const [groups, setGroups] = useState(
-    defaults.groups ?? scan.groups.filter((group) => group.count > 0).map((group) => group.id),
-  );
+  const [groups, setGroups] = useState(defaults.groups ?? scan.groups.filter((group) => group.count > 0).map((group) => group.id));
   const [purgeIds, setPurgeIds] = useState(defaults.purgeIds ?? []);
   const [dryRun, setDryRun] = useState(Boolean(defaults.dryRun));
   const [results, setResults] = useState([]);
   const [active, setActive] = useState(-1);
 
-  const plan = useMemo(
-    () => buildUninstallPlan({ agents: scan.agents, groups, purgeIds }),
-    [scan.agents, groups, purgeIds],
-  );
+  const plan = useMemo(() => buildUninstallPlan({ agents: scan.agents, groups, purgeIds }), [scan.agents, groups, purgeIds]);
 
   const quit = () => {
     onFinish?.({ results, dryRun });

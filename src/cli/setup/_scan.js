@@ -32,8 +32,7 @@ import { daemonServicePresent } from "./_service-status.js";
 export const configuredAgents = () => detectInstalledAgents().filter((agent) => agent.configured);
 
 /** Shell startup files carrying lines this installer wrote. */
-export const dirtyProfiles = (home = homedir()) =>
-  profilePaths(home).filter((file) => existsSync(file) && hasOwnedLines(readFileSync(file, "utf8")));
+export const dirtyProfiles = (home = homedir()) => profilePaths(home).filter((file) => existsSync(file) && hasOwnedLines(readFileSync(file, "utf8")));
 
 /**
  * The generated command files that are actually on disk, per directory.

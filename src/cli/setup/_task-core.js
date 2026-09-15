@@ -63,10 +63,7 @@ export const shimRemovalTask = () => ({
     // Counting the statuses rather than the rows is what keeps the summary
     // from claiming work that was declined.
     const removed = results.filter((entry) => entry.status !== "skipped");
-    const summary =
-      removed.length === 0
-        ? (results[0]?.status ?? "nothing found")
-        : `${removed.length} entr${removed.length === 1 ? "y" : "ies"}`;
+    const summary = removed.length === 0 ? (results[0]?.status ?? "nothing found") : `${removed.length} entr${removed.length === 1 ? "y" : "ies"}`;
 
     return { status: "ok", summary, lines: results.map((entry) => `${entry.status.padEnd(8)} ${entry.path}`) };
   },

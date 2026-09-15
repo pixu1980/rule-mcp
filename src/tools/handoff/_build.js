@@ -13,7 +13,21 @@ import { workingTreeLines, gitLogLines, docsLines, footerLines } from "./_sectio
 import { semanticLines } from "./_sections-semantic.js";
 
 /** Build one handoff, re-running itself one format tighter when it exceeds maxTokens. */
-export function buildHandoff({ projectDir, includeContext, includeAdrs, includeIdentity, includeGitDiff, includeGitLog, includeRoadmap, compress, maxTokens, format, mode, _closeout, _renumber }) {
+export function buildHandoff({
+  projectDir,
+  includeContext,
+  includeAdrs,
+  includeIdentity,
+  includeGitDiff,
+  includeGitLog,
+  includeRoadmap,
+  compress,
+  maxTokens,
+  format,
+  mode,
+  _closeout,
+  _renumber,
+}) {
   // A close-session renumbers before it reads the ADR log, so the handoff
   // quotes the numbers that exist after the repair. A plain handoff is a
   // read-only diagnosis and never mutates.

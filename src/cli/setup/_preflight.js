@@ -67,8 +67,7 @@ export function preflight() {
       id: "node",
       label: "Node.js",
       status: major(nodeVersion) >= NODE_MIN ? "ok" : "fail",
-      detail:
-        major(nodeVersion) >= NODE_MIN ? nodeVersion : `${nodeVersion} - version ${NODE_MIN} or newer is required`,
+      detail: major(nodeVersion) >= NODE_MIN ? nodeVersion : `${nodeVersion} - version ${NODE_MIN} or newer is required`,
     },
     {
       id: "package-manager",
@@ -93,11 +92,7 @@ export function preflight() {
       id: "shim",
       label: "Global shim",
       status: shimOk ? "ok" : shim ? "warn" : "warn",
-      detail: shimOk
-        ? shim
-        : shim
-          ? `${shim} - present but does not launch, it will be rewritten`
-          : "absent - it will be created",
+      detail: shimOk ? shim : shim ? `${shim} - present but does not launch, it will be rewritten` : "absent - it will be created",
     },
   ];
 

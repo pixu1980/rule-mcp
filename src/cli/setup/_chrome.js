@@ -31,10 +31,7 @@ export function Stepper({ steps, active }) {
 /** The key hints along the bottom, rendered as `key action` pairs. */
 export function KeyBar({ hints }) {
   const cells = hints.flatMap(([key, action], index) => {
-    const pair = [
-      h(Text, { key: `${key}-k`, color: COLORS.accentSoft, bold: true }, key),
-      h(Text, { key: `${key}-a`, color: COLORS.muted }, ` ${action}`),
-    ];
+    const pair = [h(Text, { key: `${key}-k`, color: COLORS.accentSoft, bold: true }, key), h(Text, { key: `${key}-a`, color: COLORS.muted }, ` ${action}`)];
 
     return index === 0 ? pair : [h(Text, { key: `${key}-sep`, color: COLORS.muted }, `  ${GLYPHS.dot}  `), ...pair];
   });

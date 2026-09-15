@@ -133,7 +133,11 @@ test("probeTokensave stays available when the status reader fails", async () => 
   });
 
   try {
-    const probe = await probeTokensave(dir, { status: async () => { throw new Error("offline"); } });
+    const probe = await probeTokensave(dir, {
+      status: async () => {
+        throw new Error("offline");
+      },
+    });
 
     assert.equal(probe.available, true);
     assert.equal(probe.staleSeconds, null);

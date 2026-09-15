@@ -123,4 +123,3 @@ export function surfaceLabel(surface) {
 
   return `surface ${surface.areas ? `areas ${surface.areas.join(",")}` : `${surface.skills.length} skills`}`;
 }
-
