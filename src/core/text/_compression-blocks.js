@@ -1,5 +1,5 @@
 /**
- * @module core/text/caveman-blocks
+ * @module core/text/compression-blocks
  *
  * The block walker: it splits text on fence boundaries, compresses every prose
  * run, and checks each run against its original with `./compress-guard/`.
@@ -10,11 +10,11 @@
  * rollback count is the signal that the rule is bad.
  */
 
-import { compressTextAggressive } from "./_caveman-aggressive.js";
+import { compressTextAggressive } from "./_compression-aggressive.js";
 import { looksLikeJson } from "./_classify.js";
-import { compressLine } from "./_caveman-line.js";
+import { compressLine } from "./_compression-line.js";
 import { fenceClosedBy, fenceOpenedBy } from "./_fence.js";
-import { cavemanLevel } from "./_level.js";
+import { compressionLevel } from "./_level.js";
 import { guardCompression } from "./compress-guard/index.js";
 
 /**
@@ -25,7 +25,7 @@ import { guardCompression } from "./compress-guard/index.js";
  * @returns {{ text: string, rollbacks: number }} `rollbacks` counts the prose
  *   runs that failed the guard and were emitted unchanged.
  */
-export function compressTextGuarded(text, { level = cavemanLevel() } = {}) {
+export function compressTextGuarded(text, { level = compressionLevel() } = {}) {
   if (typeof text !== "string" || text.length === 0 || level === "off" || looksLikeJson(text)) {
     return { text, rollbacks: 0 };
   }

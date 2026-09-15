@@ -77,10 +77,10 @@ export function toolCallEvent(call, context = {}) {
     event.argsBytes = argsBytes;
     event.argsTokensEst = Math.ceil(argsBytes / 4);
   }
-  // Both ends of post-processing, not only the difference: caveman shrinks the
+  // Both ends of post-processing, not only the difference: compression shrinks the
   // core result and the workflow reminder grows it again, and a ratio cannot
   // be recovered from a single saving figure. Named after what they are, not
-  // after one of the two effects - calling the pair "caveman" produced a
+  // after one of the two effects - calling the pair "compression" produced a
   // compression percentage that went negative whenever the reminder won.
   if (typeof call.coreTokens === "number" && typeof call.finalTokens === "number") {
     event.coreTokens = call.coreTokens;

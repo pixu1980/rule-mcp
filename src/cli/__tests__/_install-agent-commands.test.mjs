@@ -69,7 +69,7 @@ try {
     "pix-galaxy-mcp.md",
     "pix-tdd.md",
     "pix-check.md",
-    "pix-caveman.md",
+    "pix-compression.md",
     "pix-new-feature.md",
     "pix-a11y-audit.md",
     "pix-code-review.md",

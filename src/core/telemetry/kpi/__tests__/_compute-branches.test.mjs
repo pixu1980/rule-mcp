@@ -20,12 +20,12 @@ test("empty inputs produce structurally complete zeros", () => {
   assert.equal(kpi.productivity.activeMs, 0);
   assert.equal(kpi.productivity.avgPerCallMs, 0);
   assert.equal("shareOfLlmTokens" in kpi.mcp, false, "no llm traffic means no share");
-  assert.equal("cavemanRatio" in kpi.tokens, false, "no core tokens means no ratio");
+  assert.equal("compressionRatio" in kpi.tokens, false, "no core tokens means no ratio");
 });
 
 test("usage without cost and a single timestamp fill the undefined gaps", () => {
   const kpi = computeKpi({
-    events: [{ ts: "not-a-number", durationMs: 5, tool: "pix_tool", saved: { caveman: "many" } }],
+    events: [{ ts: "not-a-number", durationMs: 5, tool: "pix_tool", saved: { compression: "many" } }],
     usage: { input: 100, output: 50, cacheRead: 25, cacheWrite: 5 },
   });
 
@@ -40,7 +40,7 @@ test("a cost-bearing usage spreads per-1k and per-prompt costs", () => {
   const kpi = computeKpi({
     events: [
       { ts: 1000, durationMs: 500, tool: "a", resultTokensEst: 200, saved: { a: 10 } },
-      { ts: 2000, durationMs: 300, tool: "a", resultTokensEst: 100, cacheHit: true, cacheTier: "lru", coreTokens: 400, saved: { caveman: 10 } },
+      { ts: 2000, durationMs: 300, tool: "a", resultTokensEst: 100, cacheHit: true, cacheTier: "lru", coreTokens: 400, saved: { compression: 10 } },
       { ts: 3000, durationMs: 700, tool: "b", ok: false },
     ],
     usage: { input: 10000, output: 2000, costUsd: 2.4, cacheRead: 100, cacheWrite: 100, userTurns: 4 },
@@ -52,7 +52,7 @@ test("a cost-bearing usage spreads per-1k and per-prompt costs", () => {
   assert.equal(kpi.productivity.linesPerMinute, 1000 / ((3000 - 1000) / 60_000), "lines per active minute");
   assert.equal(kpi.productivity.costPer1kOutput, (2.4 / 2000) * 1000, "cost per 1k output tokens");
   assert.ok(kpi.productivity.costPerPrompt > 0, "cost per prompt is ratioed");
-  assert.equal(kpi.tokens.cavemanRatio, 10 / 400, "caveman savings over core tokens");
+  assert.equal(kpi.tokens.compressionRatio, 10 / 400, "compression savings over core tokens");
 });
 
 test("a log without reminder tokens falls back to the core-to-final gap", () => {

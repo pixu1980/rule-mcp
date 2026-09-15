@@ -78,7 +78,7 @@ export function recordSampleSession({ setClientInfo, startSession, recordToolCal
     finalTokens: 1800,
     guardrailFailures: 3,
     guardrailRules: { "no-css-classes": 2, "semantic-html": 1 },
-    saved: { caveman: 600 },
+    saved: { compression: 600 },
     estimatedRouting: 12_000,
     now: T0 + 100,
   });

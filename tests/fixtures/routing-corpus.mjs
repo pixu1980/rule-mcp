@@ -98,9 +98,9 @@ export const CORPUS = [
 
   // ── Process and AI: added in P2 and P4 ──
   { prompt: "should I extract this into a helper function", expect: "process-simplicity", area: "process" },
-  { prompt: "compress the output to save tokens", expect: "caveman", area: "output" },
-  { prompt: "write a caveman style code review", expect: "caveman", area: "output" },
-  { prompt: "make this text shorter and less verbose", expect: "caveman", area: "output" },
+  { prompt: "compress the output to save tokens", expect: "compression", area: "output" },
+  { prompt: "write a compression style code review", expect: "compression", area: "output" },
+  { prompt: "make this text shorter and less verbose", expect: "compression", area: "output" },
   {
     prompt: "remove em dashes and use american english spelling",
     expect: "styleguide-english",

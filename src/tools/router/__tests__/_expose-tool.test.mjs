@@ -50,14 +50,14 @@ test("a custom skill that asks for a tool gets one", () => {
 test("exposeTool false on a bundled skill removes its tool", () => {
   // The flag reads both ways, so a fork can shrink the surface it ships
   // without deleting the skill and the rules it owns.
-  assert.equal(exposesTool("pix-caveman"), true);
+  assert.equal(exposesTool("pix-compression"), true);
 
-  const dir = join(home, "skills", "pix-caveman");
+  const dir = join(home, "skills", "pix-compression");
   mkdirSync(dir, { recursive: true });
-  writeFileSync(join(dir, "SKILL.md"), "---\nname: pix-caveman\nexposeTool: false\n---\n\n# Overridden\n");
+  writeFileSync(join(dir, "SKILL.md"), "---\nname: pix-compression\nexposeTool: false\n---\n\n# Overridden\n");
   clearSkillResolution();
 
-  assert.equal(exposesTool("pix-caveman"), false, "the layer that won decides");
+  assert.equal(exposesTool("pix-compression"), false, "the layer that won decides");
 });
 
 test("a name nothing resolves to exposes nothing", () => {

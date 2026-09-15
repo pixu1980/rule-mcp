@@ -10,29 +10,29 @@
  * rules before it can enforce them on anyone else.
  *
  * Three passes: fingerprint removal (punctuation and spelling), box alignment
- * (a drawn box has to be a rectangle), and optionally caveman compression.
+ * (a drawn box has to be a rectangle), and optionally text compression.
  *
- * Dry-run by default. `--apply` writes. `--caveman` additionally compresses
+ * Dry-run by default. `--apply` writes. `--compression` additionally compresses
  * prose, which is a much bigger change - headings are the routing surface, so
  * that pass is opt-in and reviewed separately.
  *
  * Usage:
  *   node scripts/clean-prose.mjs                       # report
  *   node scripts/clean-prose.mjs --apply               # fingerprint pass
- *   node scripts/clean-prose.mjs --apply --caveman     # + compression
+ *   node scripts/clean-prose.mjs --apply --compression     # + compression
  *   node scripts/clean-prose.mjs --apply skills        # limit to a path prefix
  */
 
 import { execFileSync } from "node:child_process";
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
-import { compressText } from "../../../src/core/text/_caveman.js";
+import { compressText } from "../../../src/core/text/_compression.js";
 import { alignAsciiBoxes, findRaggedBoxes } from "../../../src/core/text/index.js";
 import { findFingerprints, stripFingerprint } from "../../../src/core/text/index.js";
 import { SKIP, TRACKED } from "./_targets.data.mjs";
 
 const arguments_ = process.argv.slice(2);
 const apply = arguments_.includes("--apply");
-const withCaveman = arguments_.includes("--caveman");
+const withCompression = arguments_.includes("--compression");
 const prefixes = arguments_.filter((a) => !a.startsWith("--"));
 // the script silently skips exactly the files most likely to need it: three
 // batches of new skills passed a clean scan while still untracked.
@@ -78,7 +78,7 @@ for (const file of files) {
   raggedLines += findRaggedBoxes(before).filter((entry) => entry.reason !== "box never closes").length;
 
   let after = alignAsciiBoxes(stripFingerprint(before, { spellingOnly: !prose }));
-  if (withCaveman && file.endsWith(".md")) {
+  if (withCompression && file.endsWith(".md")) {
     after = alignAsciiBoxes(compressText(after));
   }
   if (after === before) {

@@ -10,7 +10,7 @@ import { test } from "node:test";
 
 import { areasOfSkills, filterSurfaceSkills, isRootSkill, parseSurface } from "../_surface.js";
 
-const SKILLS = ["pix-ai", "pix-ai-prompting", "pix-data", "pix-data-sql", "pix-frontend", "pix-frontend-react", "pix-caveman"];
+const SKILLS = ["pix-ai", "pix-ai-prompting", "pix-data", "pix-data-sql", "pix-frontend", "pix-frontend-react", "pix-compression"];
 
 test("parseSurface reads presets", () => {
   assert.deepEqual(parseSurface("minimal"), { preset: "minimal" });
@@ -31,7 +31,7 @@ test("parseSurface treats empty and unknown as untouched", () => {
 });
 
 test("areasOfSkills lists the eleven roots, sorted", () => {
-  assert.deepEqual(areasOfSkills(SKILLS), ["ai", "caveman", "data", "frontend"]);
+  assert.deepEqual(areasOfSkills(SKILLS), ["ai", "compression", "data", "frontend"]);
   assert.ok(isRootSkill("pix-data"));
   assert.ok(!isRootSkill("pix-data-sql"));
 });
@@ -40,7 +40,7 @@ test("standard keeps the roots only", () => {
   const { skills, problems } = filterSurfaceSkills({ preset: "standard" }, SKILLS);
 
   assert.deepEqual(problems, []);
-  assert.deepEqual([...skills].sort(), ["pix-ai", "pix-caveman", "pix-data", "pix-frontend"]);
+  assert.deepEqual([...skills].sort(), ["pix-ai", "pix-compression", "pix-data", "pix-frontend"]);
 });
 
 test("areas keep their roots and members", () => {

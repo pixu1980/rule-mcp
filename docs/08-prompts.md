@@ -32,7 +32,7 @@ Claude Code installs clean `/pix-*` commands instead and suppresses these
 | `/pix-area-backend-node`              | <request>  | backend: the node skill                                                                                                                                   |
 | `/pix-area-backend-security`          | <request>  | backend: the security skill                                                                                                                               |
 | `/pix-area-backend-workers`           | <request>  | backend: the workers skill                                                                                                                                |
-| `/pix-area-caveman`                   | <request>  | caveman work, across every caveman skill                                                                                                                  |
+| `/pix-area-compression`               | <request>  | compression work, across every compression skill                                                                                                          |
 | `/pix-area-data`                      | <request>  | data work, across every data skill                                                                                                                        |
 | `/pix-area-data-duckdb`               | <request>  | data: the duckdb skill                                                                                                                                    |
 | `/pix-area-data-indexed-db`           | <request>  | data: the indexed-db skill                                                                                                                                |

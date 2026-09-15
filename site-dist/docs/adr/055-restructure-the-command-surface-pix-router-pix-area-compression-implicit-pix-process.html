@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>055: Restructure the command surface: /pix router, pix-area-*, compression implicit, pix-process-tdd skill - pix-galaxy-mcp docs</title>
+<link rel="stylesheet" href="../../style.css">
+</head>
+<body>
+<header><nav><ul>
+<li><a href="../../index.html">Home</a></li>
+<li><a href="../../docs/01-getting-started.html">undefined</a></li>
+<li><a href="../../docs/02-product-architecture.html">undefined</a></li>
+<li><a href="../../docs/03-agent-instructions.html">undefined</a></li>
+<li><a href="../../docs/04-operations.html">undefined</a></li>
+<li><a href="../../docs/05-env-variables.html">undefined</a></li>
+<li><a href="../../docs/06-privacy.html">undefined</a></li>
+<li><a href="../../docs/07-engineering-guides.html">undefined</a></li>
+<li><a href="../../docs/08-skills.html">undefined</a></li>
+<li><a href="../../docs/09-tools.html">undefined</a></li>
+<li><a href="../../docs/10-prompts.html">undefined</a></li>
+<li><a href="../../docs/11-instructions.html">undefined</a></li>
+<li><a href="../../docs/12-cli.html">undefined</a></li>
+<li><a href="../../docs/13-personas.html">undefined</a></li>
+<li><a href="../../docs/14-guardrails.html">undefined</a></li>
+<li><a href="../../docs/15-resources.html">undefined</a></li>
+<li><a href="../../docs/adr/ADR.html">ADRs</a></li>
+</ul></nav></header>
+<main>
+<h1>055: Restructure the command surface: /pix router, pix-area-*, compression implicit, pix-process-tdd skill</h1>
+<ul>
+<li><strong>Date</strong>: 2026-09-05</li>
+<li><strong>Status</strong>: accepted</li>
+<li><strong>Tags</strong>: commands, prompts, surface, skills, installer</li>
+<li><strong>Author</strong>: Emiliano Pisu <a href="mailto:pisuemiliano.1980@gmail.com">pisuemiliano.1980@gmail.com</a></li>
+</ul>
+<h2>Context</h2>
+<p>While completing the persona split (ADR 044), the user asked for a second, larger surface restructure: the /pix-galaxy-mcp router becomes /pix; area prompts move under /pix-area-* ; /pix-compression is removed and compression becomes implicit in every other command; /pix-code-review is superseded by the /pix-review-* persona commands; the legacy one-shots /pix-a11y-audit, /pix-new-feature, /pix-pull-request, /pix-setup-project, /pix-write-tests and /pix-tdd are removed (write-tests and setup-project content merged into pix-process-tdd / pix-init); and /pix-check becomes /pix-process-check. Deleted or renamed commands must be purged from every surface, including installers and uninstallers, and stale files removed from the local pi agent.</p>
+<h2>Decision</h2>
+<p>Restructure the command surface: router pix-galaxy-mcp -&gt; pix; the 12 area prompts become pix-area-<em>; delete pix-a11y-audit, pix-code-review, pix-compression, pix-new-feature, pix-pull-request, pix-setup-project, pix-write-tests and pix-tdd; rename pix-check -&gt; pix-process-check; create a pix-process-tdd skill that absorbs tdd + write-tests; make compression implicit in every command body. The command set is registry-driven end to end: scripts/install-agent-commands.sh renders from the registry, agent-commands --remove and scripts/uninstall.sh sweep the pix-</em> namespace, so renamed/deleted commands cannot survive in any agent. New surface: 40 prompts, 41 commands, 95 skills, 111 tools, 196 resources.</p>
+<h2>Consequences</h2>
+<p>Positive: the command surface shrinks 49 -&gt; 41; one namespace per concern (pix-area-* for areas, pix-process-* for the process family incl. the new pix-process-tdd skill/tool and pix-process-check); compression is implicit in every command body instead of a standalone command; the router is a short /pix; scratch commands (setup-project/new-feature/pull-request) are gone; write-tests content merged into pix-process-tdd; setup-project content absorbed into pix-init. The legacy shell installer and the universal uninstaller are registry-driven/glob-based, so a renamed or deleted command cannot linger. Negative: surface counts change (40 prompts, 41 commands, 95 skills, 111 tools, 196 resources) and every consumer of the old names (README, parity fixture, tests, ~/.pi command files) must migrate; /pix area prompts are less discoverable in help lists than per-area names.</p>
+<h2>What would end this</h2>
+<p>The assumption this leans on is that the pix-* namespace is the whole command story and that
+one-shot, hand-curated workflows (setup/project, pull request) belong outside it. If a new
+feature ships a hand-written one-shot command next to the registry again, or if the user&#39;s
+workflow shows /pix-compression-style shortcuts are wanted as explicit commands, this restructure
+is reversed per-name rather than preserved.</p>
+<h2>Alternatives Considered</h2>
+<ol>
+<li>Keep the old names and just add the new area/review commands (leaves /pix-compression and one-shot legacy commands active)</li>
+<li>Rename only the router and area prefixes, keep legacy one-shots (larger surface, more drift)</li>
+<li>Fold tdd under the existing pix-process skill instead of a dedicated pix-process-tdd skill dir</li>
+</ol>
+
+</main>
+<footer><p>Generated from <code>docs/</code> - edit the Markdown, not this file.</p></footer>
+</body>
+</html>

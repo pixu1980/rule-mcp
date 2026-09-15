@@ -67,7 +67,7 @@ test("rollup folds errors, cache hits, tool names and missing fields from old ev
     const dayBts = NOW - 3 * DAY;
     const lines =
       [
-        { tool: "a", ts: dayAts, ok: false, cacheHit: true, saved: { caveman: 10 }, estimatedRouting: 100 },
+        { tool: "a", ts: dayAts, ok: false, cacheHit: true, saved: { compression: 10 }, estimatedRouting: 100 },
         { tool: "a", ts: dayAts + 1, ok: true, cacheHit: false, saved: { zeroed: 0 } },
         { tool: "b", ts: dayBts, ok: true },
       ]

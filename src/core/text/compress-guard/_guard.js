@@ -2,7 +2,7 @@
  * @module core/text/compress-guard/guard
  *
  * The deterministic safety check a compression pass has to survive. Ported
- * from the caveman-compress companion skill's `validate.py`, keeping its
+ * from the compression-reference companion skill's `validate.py`, keeping its
  * severities: heading count, code blocks and URLs are errors (structure or a
  * reference was destroyed), path and bullet drift are tolerances (worth
  * reporting, not worth reverting for).

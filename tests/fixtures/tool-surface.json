@@ -18,7 +18,7 @@
     "pix_tool_backend_node",
     "pix_tool_backend_security",
     "pix_tool_backend_workers",
-    "pix_tool_caveman",
+    "pix_tool_compression",
     "pix_tool_check",
     "pix_tool_component",
     "pix_tool_compress",

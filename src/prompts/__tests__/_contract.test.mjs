@@ -22,7 +22,7 @@ test("refactor: areas are pix-area-*, removed commands gone, check renamed to pr
   for (const removed of [
     "pix-a11y-audit",
     "pix-code-review",
-    "pix-caveman",
+    "pix-compression",
     "pix-tdd",
     "pix-new-feature",
     "pix-pull-request",

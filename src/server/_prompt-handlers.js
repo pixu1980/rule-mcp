@@ -8,7 +8,7 @@
  */
 
 import { GetPromptRequestSchema, ListPromptsRequestSchema, ErrorCode, McpError } from "@modelcontextprotocol/sdk/types.js";
-import { compressSurfaceText } from "../core/text/_caveman.js";
+import { compressSurfaceText, MIN_COMPRESS_LENGTH } from "../core/text/_compression.js";
 import { recordToolCall } from "../core/telemetry/recorder/index.js";
 import { getPrompt, listPrompts } from "../prompts/index.js";
 
@@ -22,11 +22,11 @@ function compressMessages(messages) {
   let saved = 0;
 
   const compressed = (messages ?? []).map((message) => {
-    if (message?.content?.type !== "text" || typeof message.content.text !== "string") {
+    if (message?.content?.type !== "text" || typeof message.content.text !== "string" || message.content.text.length <= MIN_COMPRESS_LENGTH) {
       return message;
     }
 
-    const result = compressSurfaceText(message.content.text, { source: "caveman-prompt" });
+    const result = compressSurfaceText(message.content.text, { source: "compression-prompt" });
     saved += result.saved;
 
     return { ...message, content: { ...message.content, text: result.text } };
@@ -60,7 +60,7 @@ export function registerPromptHandlers(server) {
     recordToolCall({
       tool: `prompt:${name}`,
       durationMs: Date.now() - startedAt,
-      saved: { "caveman-prompt": Math.ceil(saved / 4) },
+      saved: { "compression-prompt": Math.ceil(saved / 4) },
     });
 
     return { description: prompt.description, messages };
