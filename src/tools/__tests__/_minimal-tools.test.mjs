@@ -1,10 +1,11 @@
 /**
  * @module test/minimal-tools
  *
- * Compatibility: the full server exposes ~95 MCP tools, which several clients
- * cap or truncate (Cursor, Copilot) and which cost tokens on every turn for any
- * model. A minimal-surface mode must collapse this to a small, fixed dispatcher
- * + action set so the server stays usable behind those clients.
+ * Compatibility: the full server exposes one tool per catalog skill plus the
+ * action tools (107 at the time of writing), which several clients cap or
+ * truncate (Cursor, Copilot) and which cost tokens on every turn for any model.
+ * A minimal-surface mode must collapse this to a small, fixed dispatcher +
+ * action set so the server stays usable behind those clients.
  *
  * Spawns the CLI so the env-gated registration is read at process start.
  */

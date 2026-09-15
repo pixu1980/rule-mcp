@@ -9,7 +9,7 @@
  *
  * The budget is a regression guard, not a target. It sits a little above where
  * the surface honestly lands, so a new tool is fine and a new duplicated
- * paragraph across 85 tools is not.
+ * paragraph on every skill tool is not.
  *
  * Raising it is a deliberate act: every future turn of every user gets more
  * expensive. Trim first, and if the trim is not there, say so in the commit.
@@ -26,7 +26,7 @@
  * | Surface  | What changed                                                  |
  * |----------|---------------------------------------------------------------|
  * | ~27,400  | Before. Descriptions were 12% of it; schemas were 82%          |
- * | ~17,600  | Dropped the seven property descriptions repeated on 85 tools   |
+ * | ~17,600  | Dropped the seven property descriptions repeated on every skill tool|
  * | ~15,300  | Dropped the mode gloss duplicated in each tool's description   |
  * | ~16,700  | Added MCP annotations (+2k, then trimmed to non-defaults only)  |
  * | ~16,300  | Trimmed four long descriptions, omitted empty `required`        |

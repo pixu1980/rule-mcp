@@ -40,9 +40,9 @@ offerte, validazione guidata. Niente cambi di dipendenze, niente nuovo renderer.
 - [x] **Step 4 - G-4 (validazione fail-fast in `install.sh`)**: lo script valida le opzioni note prima di scaricare/eseguire, invece di inoltrarle verbatim (+ fix: flag `--minimal`/`--surface` mancanti sul comando `setup`, l'unico che gli script chiamano)
   - [x] **4.1**: tabelle `KNOWN_SETUP_FLAGS`/`VALUE_SETUP_FLAGS` in `scripts/install.sh` (+ specchio `$KnownSetupFlags`/`$ValueSetupFlags` in `scripts/install.ps1`): `--bogus`/posizionali/`--` muoiono con exit 1 citando `setup --help` prima di node/download; short `-x` passano a commander; `--flag valore` consumato come commander; flag `--minimal`/`--no-minimal`/`--surface` aggiunti al comando `setup` (`_register-wizard.js`) e mappati in `setupOptions` (`_entry.js`: tri-state + spec)
   - [x] **4.2**: gate: `./scripts/install.sh --bogus` exit 1 pre-download; e2e `install.sh --agent pi --surface areas:frontend --dry-run` → piano `Configure pi (mode stdio, areas:frontend tools)`; test di sincronia `install.sh`↔`install.ps1`↔`setup` (`_install-script-flags.test.mjs`); SHA256SUMS rigenerati; installer suite verde; census corrente
-- [ ] **Step 5 - G-5 (census pinnato + fix drift)**: fissare il numero reale di tool e correggere i conteggi driftati
-  - [ ] **5.1**: aggiungere test che pinna i 107 nomi (`tools list --json` vs snapshot) e aggiorna i commenti driftati (`_minimal.js`, skill, census) al numero reale
-  - [ ] **5.2**: gate: census verde; nessun commento nel repo cita piu 105/95/~85
+- [x] **Step 5 - G-5 (census pinnato + fix drift)**: fissare il numero reale di tool e correggere i conteggi driftati
+  - [x] **5.1**: snapshot `tests/fixtures/tool-surface.json` (107 nomi, generato da `tools list --json`); test `tests/docs/tool-surface.test.mjs`: superficie live == snapshot (nuovo/rimosso = fail con rimando all'edit deliberato), `docs/07-tools.md` azione (17) e skill tool (90) == live, e le due metà sommano al pinnato; commenti driftati corretti: `_minimal.js` (~85/95 → 90/107 + rimando a SURFACE), `_tool-budget.js` (85 → ogni skill tool), `_register-info/server/session.js` e `_startup-graph.test.mjs` (105 → "every tool registration"), `_minimal-tools.test.mjs` (~95 → 107 verificato dal vivo)
+  - [x] **5.2**: gate: `grep -rn "105 tool\|95-tool\|~85" src scripts tests` non trova piu nulla fuori dal commento storico del test di pinna; foundations verde; census corrente
 
 ## Dipendenze
 
