@@ -1,6 +1,6 @@
 /** rule_tool_plan: registered, answers per role, applies overrides, resolves aliases. */
 import { strict as assert } from "node:assert";
-import { mkdirSync, mkdtempSync, rmSync } from "node:fs";
+import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import test from "node:test";
@@ -49,9 +49,11 @@ test("rule_tool_plan detects tokensave in the project dir for a scoped run", asy
     assert.match(beforeText, /tokensave_status/, "without .tokensave/ availability is checked at run time");
 
     mkdirSync(join(box, ".tokensave"));
+    writeFileSync(join(box, ".tokensave", "tokensave.db"), "");
     const after = await callTool("rule_tool_plan", { role: "security", operation: "audit", topic: "SSE daemon", projectDir: box });
     const afterText = after.content.map((part) => part.text).join("\n");
     assert.match(afterText, /initialized/, "with .tokensave/ the prompt states availability");
+    assert.match(afterText, /Graph health/, "the graph checklist rides with an available graph");
     assert.ok(!afterText.includes("tokensave_status"), "no availability check when the generator already knows");
   } finally {
     rmSync(box, { recursive: true, force: true });

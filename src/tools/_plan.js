@@ -17,6 +17,7 @@ import { z } from "zod/v4";
 import { allRoles, roleById } from "../core/review/roles/index.js";
 import { loadRoleOverlays } from "../core/review/_overlays.js";
 import { fillRoleTemplate, OPERATIONS } from "../core/review/template/index.js";
+import { graphHealth } from "../core/tokensave/_graph.js";
 import { fenceUntrusted } from "../core/_untrusted.js";
 import { registerTool } from "./router/index.js";
 
@@ -80,9 +81,11 @@ export function registerPlanTool() {
         // scoped prompt can state availability instead of asking the run to probe.
         tokensave: existsSync(join(arguments_.projectDir ?? ".", ".tokensave")) ? "available" : undefined,
       });
+      const graph = graphHealth(arguments_.projectDir ?? ".");
+      const withGraph = graph ? [filled, "", graph].join("\n") : filled;
       // An overlay role is repository- or user-supplied text on its way to a
       // model: it is data, and it says so (hardening 4.4).
-      const body = role.layer ? fenceUntrusted(filled, { label: `${role.layer} overlay role "${role.id}"` }) : filled;
+      const body = role.layer ? fenceUntrusted(withGraph, { label: `${role.layer} overlay role "${role.id}"` }) : withGraph;
       const notes = problems.map((problem) => `- ${problem.file}: ${problem.reason}`);
 
       return {
