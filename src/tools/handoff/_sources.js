@@ -1,6 +1,8 @@
 /** Project sources a handoff reads: the ADR log, .context values, package identity. */
-import { existsSync, readFileSync, readdirSync } from "node:fs";
-import { join } from "node:path";
+import { existsSync, readFileSync } from "node:fs";
+import { basename, join } from "node:path";
+
+import { listFiles } from "../../core/tokensave/_files.js";
 
 /** Default project directory. */
 /** Where the ADR log lives, relative to the project root. */
@@ -20,10 +22,11 @@ export function readAdrs(projectDir) {
   }
 
   try {
-    const files = readdirSync(adrDir);
+    const { files } = listFiles(projectDir, { path: ADR_DIR, union: true });
     const adrs = [];
 
-    for (const f of files) {
+    for (const file of files) {
+      const f = basename(file);
       const m = f.match(/^(\d{3,4})-(.+)\.md$/);
 
       if (!m) {
@@ -31,7 +34,7 @@ export function readAdrs(projectDir) {
       }
 
       try {
-        const content = readFileSync(join(adrDir, f), "utf8");
+        const content = readFileSync(join(projectDir, file), "utf8");
         const number = parseInt(m[1]);
         const title = content.match(/^# (?:ADR-)?\d{3,4}: (.+)$/m)?.[1] || m[2].replaceAll("-", " ");
         const date = content.match(/\*\*Date\*\*: (\S+)/)?.[1] || "";
@@ -78,11 +81,15 @@ export function readContextValues(projectDir) {
 
   const values = {};
   try {
-    const files = readdirSync(ctxDir).filter((f) => f.endsWith(".md"));
+    const { files } = listFiles(projectDir, { path: CONTEXT_DIR, union: true });
 
-    for (const f of files) {
+    for (const file of files) {
+      if (!file.endsWith(".md")) {
+        continue;
+      }
+
       try {
-        const content = readFileSync(join(ctxDir, f), "utf8");
+        const content = readFileSync(join(projectDir, file), "utf8");
         // Extract YAML-like or markdown list items
         const lines = content.split("\n");
 
