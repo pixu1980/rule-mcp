@@ -13,8 +13,8 @@
 import { strict as assert } from "node:assert";
 import { test } from "node:test";
 
-delete process.env.RULE_MCP_NO_CAVEMAN;
-delete process.env.RULE_MCP_CAVEMAN_LEVEL;
+delete process.env.RULE_MCP_NO_COMPRESSION;
+delete process.env.RULE_MCP_COMPRESSION_LEVEL;
 
 const { SURFACES } = await import("../_surfaces.js");
 const { guardCompression } = await import("../compress-guard/index.js");

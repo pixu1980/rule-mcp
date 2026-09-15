@@ -6,7 +6,7 @@
  * went through the compressor: `handoffBlock`/`resumeContext` handed the raw
  * handon report to the SessionStart hook's `additionalContext`.
  *
- * This pins that the injected block now runs through the caveman pipeline, that
+ * This pins that the injected block now runs through the compression pipeline, that
  * the structural guard holds on it (headings, inline code, the file name, the
  * claim headings), and that it books its own telemetry source so coverage is
  * answerable. The opt-outs must keep working.
@@ -21,8 +21,8 @@ import { test } from "node:test";
 process.env.RULE_MCP_STATE_DIR = mkdtempSync(join(tmpdir(), "rule-resume-compression-"));
 process.env.RULE_MCP_NO_TELEMETRY = "1";
 process.env.RULE_MCP_NO_AUTOUPDATE = "1";
-delete process.env.RULE_MCP_NO_CAVEMAN;
-delete process.env.RULE_MCP_CAVEMAN_LEVEL;
+delete process.env.RULE_MCP_NO_COMPRESSION;
+delete process.env.RULE_MCP_COMPRESSION_LEVEL;
 
 const { resumeContext } = await import("../index.js");
 const { getTokenStats, resetTokenStats } = await import("../../../telemetry/_token-stats.js");
@@ -80,17 +80,17 @@ test("the resume hook block is compressed, structure intact, booked under its ow
     assert.ok(compressed.includes("01-verbose"), "the handoff file name survives");
     assert.ok(compressed.includes("`rule_tool_gateway`"), "inline code survives untouched");
 
-    // Caveman was on (no opt-outs): the pass must have removed something.
+    // Compression was on (no opt-outs): the pass must have removed something.
     const stats = getTokenStats();
-    assert.ok((stats.savedBySource["caveman-resume"] ?? 0) > 0, "the block books a caveman-resume saving");
+    assert.ok((stats.savedBySource["compression-resume"] ?? 0) > 0, "the block books a compression-resume saving");
 
     // The compressed block is strictly shorter than the raw one.
-    process.env.RULE_MCP_NO_CAVEMAN = "1";
+    process.env.RULE_MCP_NO_COMPRESSION = "1";
     try {
       const raw = resumeContext({ source: "resume", cwd: dir });
       assert.ok(tokens(compressed) < tokens(raw), `compressed (${tokens(compressed)}) must beat raw (${tokens(raw)})`);
     } finally {
-      delete process.env.RULE_MCP_NO_CAVEMAN;
+      delete process.env.RULE_MCP_NO_COMPRESSION;
     }
   } finally {
     rmSync(dir, { recursive: true, force: true });
@@ -108,11 +108,11 @@ test("the resume hook still respects both opt-outs", () => {
       delete process.env.RULE_MCP_NO_RESUME_HANDON;
     }
 
-    process.env.RULE_MCP_NO_CAVEMAN = "1";
+    process.env.RULE_MCP_NO_COMPRESSION = "1";
     try {
-      assert.ok(resumeContext({ source: "resume", cwd: dir }).includes("## PIX RESUMED SESSION"), "NO_CAVEMAN keeps the block, uncompressed");
+      assert.ok(resumeContext({ source: "resume", cwd: dir }).includes("## PIX RESUMED SESSION"), "NO_COMPRESSION keeps the block, uncompressed");
     } finally {
-      delete process.env.RULE_MCP_NO_CAVEMAN;
+      delete process.env.RULE_MCP_NO_COMPRESSION;
     }
   } finally {
     rmSync(dir, { recursive: true, force: true });

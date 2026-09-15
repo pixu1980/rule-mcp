@@ -12,19 +12,19 @@
  * stays so the "every server→model surface is compressed" invariant holds.
  */
 
-import { compressText } from "../core/text/_caveman.js";
-import { cavemanEnabled } from "../core/text/_level.js";
+import { compressText } from "../core/text/_compression.js";
+import { compressionEnabled } from "../core/text/_level.js";
 
 /**
  * Compress every label of a `resources/list` payload. Urls and mimeTypes are
- * the protocol contract and are never touched; names pass through the caveman
+ * the protocol contract and are never touched; names pass through the compression
  * pipeline (identity when already terse, guarded when not).
  *
  * @param {Array<{ uri: string, name: string, mimeType: string }>} resources
  * @returns {Array<{ uri: string, name: string, mimeType: string }>}
  */
 export function compressResourceListing(resources) {
-  const compress = cavemanEnabled();
+  const compress = compressionEnabled();
 
   return (resources ?? []).map(({ name, ...rest }) => ({ ...rest, name: compress ? compressText(String(name ?? "")) : String(name ?? "") }));
 }

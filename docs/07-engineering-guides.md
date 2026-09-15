@@ -169,17 +169,17 @@ runs it (plus `RULE_MCP_NO_RESUME_HANDON` for the resume block and
 
 <!-- census:begin:command-surface -->
 
-### The command surface today (77)
+### The command surface today (156)
 
 | Kind       | Count | Example           | Reach for it when                                                   |
 | ---------- | ----- | ----------------- | ------------------------------------------------------------------- |
 | `router`   | 1     | `/rule`            | Routes a free-text request to the skill that answers it             |
-| `area`     | 12    | `/rule-area-ai`    | Routes within one area, when the area is known and the skill is not |
+| `area`     | 91    | `/rule-area-ai`    | Routes within one area, when the area is known and the skill is not |
 | `workflow` | 2     | `/rule-adr`        | Runs a named workflow: a decision record, a pre-flight check        |
 | `session`  | 5     | `/rule-handoff`    | Carries a session across a context boundary                         |
 | `persona`  | 57    | `/rule-audit-a11y` | Runs one review role at one operation, and writes its documents     |
 
-**Areas**: `/rule-area-ai`, `/rule-area-backend`, `/rule-area-data`, `/rule-area-devops`, `/rule-area-frontend`, `/rule-area-platform`, `/rule-area-process`, `/rule-area-skills`, `/rule-area-styleguide`, `/rule-area-toolchain`, `/rule-area-toolset`, `/rule-area-ui`
+**Areas**: `/rule-area-ai`, `/rule-area-ai-agent-architecture`, `/rule-area-ai-context-engineering`, `/rule-area-ai-evals`, `/rule-area-ai-prompting`, `/rule-area-backend`, `/rule-area-backend-express`, `/rule-area-backend-fastify`, `/rule-area-backend-graphql`, `/rule-area-backend-hono`, `/rule-area-backend-nestjs`, `/rule-area-backend-node`, `/rule-area-backend-security`, `/rule-area-backend-workers`, `/rule-area-compression`, `/rule-area-data`, `/rule-area-data-duckdb`, `/rule-area-data-indexed-db`, `/rule-area-data-mongodb`, `/rule-area-data-mysql`, `/rule-area-data-postgresql`, `/rule-area-data-sql`, `/rule-area-data-sqlite`, `/rule-area-devops`, `/rule-area-devops-deploy-preview`, `/rule-area-devops-docker`, `/rule-area-devops-observability`, `/rule-area-devops-testing`, `/rule-area-frontend`, `/rule-area-frontend-angular`, `/rule-area-frontend-custom-element`, `/rule-area-frontend-react`, `/rule-area-frontend-solidjs`, `/rule-area-frontend-svelte`, `/rule-area-frontend-template-engine`, `/rule-area-frontend-vanilla-reactive`, `/rule-area-frontend-vue`, `/rule-area-frontend-workers`, `/rule-area-meta`, `/rule-area-meta-astro`, `/rule-area-meta-next`, `/rule-area-meta-nuxt`, `/rule-area-meta-remix`, `/rule-area-platform`, `/rule-area-platform-agent`, `/rule-area-platform-auth`, `/rule-area-platform-desktop`, `/rule-area-platform-library`, `/rule-area-platform-web`, `/rule-area-process`, `/rule-area-process-adr`, `/rule-area-process-ai-sdlc`, `/rule-area-process-bmad`, `/rule-area-process-changelog`, `/rule-area-process-code-review`, `/rule-area-process-handoff`, `/rule-area-process-npm-release`, `/rule-area-process-simplicity`, `/rule-area-process-tdd`, `/rule-area-styleguide`, `/rule-area-styleguide-a11y`, `/rule-area-styleguide-baseline`, `/rule-area-styleguide-comments`, `/rule-area-styleguide-css`, `/rule-area-styleguide-english`, `/rule-area-styleguide-file-tree`, `/rule-area-styleguide-fingerprint`, `/rule-area-styleguide-html`, `/rule-area-styleguide-i18n`, `/rule-area-styleguide-javascript`, `/rule-area-styleguide-json`, `/rule-area-styleguide-markdown`, `/rule-area-styleguide-naming`, `/rule-area-styleguide-patterns`, `/rule-area-styleguide-readme`, `/rule-area-styleguide-typescript`, `/rule-area-styleguide-validation`, `/rule-area-toolchain`, `/rule-area-toolchain-biome`, `/rule-area-toolchain-commits`, `/rule-area-toolchain-eslint`, `/rule-area-toolchain-husky`, `/rule-area-toolchain-parcel`, `/rule-area-toolchain-pnpm`, `/rule-area-toolchain-project`, `/rule-area-toolchain-rspack`, `/rule-area-toolchain-turborepo`, `/rule-area-toolchain-typescript`, `/rule-area-toolchain-vite`, `/rule-area-ui`, `/rule-area-ui-design-system`
 
 **Workflows**: `/rule-adr`, `/rule-flight`
 

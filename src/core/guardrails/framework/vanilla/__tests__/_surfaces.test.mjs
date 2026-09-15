@@ -46,7 +46,7 @@ test("the clause is one sentence, kept in one place", () => {
 });
 
 test("compression cannot invert the rule on its way out", async () => {
-  const { compressResult } = await import("../../../../text/_caveman.js");
+  const { compressResult } = await import("../../../../text/_compression.js");
   const compressed = compressResult({ content: [{ type: "text", text: `- ${FLEX_FIRST}` }] })
     .content.map((part) => part.text)
     .join("\n");

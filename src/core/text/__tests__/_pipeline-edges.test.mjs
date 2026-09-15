@@ -13,9 +13,9 @@
 import { strict as assert } from "node:assert";
 import { test } from "node:test";
 
-import { compressResult, compressSurfaceText, compressText } from "../_caveman.js";
+import { compressResult, compressSurfaceText, compressText } from "../_compression.js";
 import { classifyText, looksLikeYaml } from "../_classify.js";
-import { cavemanEnabled, cavemanLevel, DEFAULT_LEVEL } from "../_level.js";
+import { compressionEnabled, compressionLevel, DEFAULT_LEVEL } from "../_level.js";
 import { isSensitivePath, stripOuterFence } from "../_sensitive.js";
 
 test("a value that is not a string comes back untouched", () => {
@@ -34,7 +34,7 @@ test("a JSON body is data, so no level compresses it", () => {
     assert.equal(compressText(body, { level }), body, `${level} must not corrupt a payload`);
   }
 
-  const surface = compressSurfaceText(body, { source: "caveman-resource" });
+  const surface = compressSurfaceText(body, { source: "compression-resource" });
   assert.equal(surface.text, body);
   assert.equal(surface.saved, 0, "nothing removed is nothing booked");
 });
@@ -66,32 +66,32 @@ test("a non-text content item is left alone beside one that compresses", () => {
 });
 
 test("an unknown level falls back to the default instead of turning compression off", () => {
-  const previous = process.env.RULE_MCP_CAVEMAN_LEVEL;
-  process.env.RULE_MCP_CAVEMAN_LEVEL = "aggressive";
+  const previous = process.env.RULE_MCP_COMPRESSION_LEVEL;
+  process.env.RULE_MCP_COMPRESSION_LEVEL = "aggressive";
 
   try {
-    assert.equal(cavemanLevel(), DEFAULT_LEVEL, "a typo must not silently stop compressing");
-    assert.equal(cavemanEnabled(), true);
+    assert.equal(compressionLevel(), DEFAULT_LEVEL, "a typo must not silently stop compressing");
+    assert.equal(compressionEnabled(), true);
   } finally {
     if (previous === undefined) {
-      delete process.env.RULE_MCP_CAVEMAN_LEVEL;
+      delete process.env.RULE_MCP_COMPRESSION_LEVEL;
     } else {
-      process.env.RULE_MCP_CAVEMAN_LEVEL = previous;
+      process.env.RULE_MCP_COMPRESSION_LEVEL = previous;
     }
   }
 });
 
 test("a level named in any case, with any padding, still resolves", () => {
-  const previous = process.env.RULE_MCP_CAVEMAN_LEVEL;
-  process.env.RULE_MCP_CAVEMAN_LEVEL = "  ULTRA ";
+  const previous = process.env.RULE_MCP_COMPRESSION_LEVEL;
+  process.env.RULE_MCP_COMPRESSION_LEVEL = "  ULTRA ";
 
   try {
-    assert.equal(cavemanLevel(), "ultra");
+    assert.equal(compressionLevel(), "ultra");
   } finally {
     if (previous === undefined) {
-      delete process.env.RULE_MCP_CAVEMAN_LEVEL;
+      delete process.env.RULE_MCP_COMPRESSION_LEVEL;
     } else {
-      process.env.RULE_MCP_CAVEMAN_LEVEL = previous;
+      process.env.RULE_MCP_COMPRESSION_LEVEL = previous;
     }
   }
 });

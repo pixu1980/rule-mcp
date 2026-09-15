@@ -5,7 +5,7 @@
  * files.
  *
  * The command files installers write are read by the agent on every session,
- * so their bodies run through the caveman pass before they reach disk. The
+ * so their bodies run through the compression pass before they reach disk. The
  * low-level `renderAgentCommand` stays canonical (this is the write-time
  * emission); frontmatter and placeholders are code-shaped and pass untouched;
  * the guard keeps the body's structure.
@@ -15,8 +15,8 @@
 import { strict as assert } from "node:assert";
 import { test } from "node:test";
 
-delete process.env.RULE_MCP_NO_CAVEMAN;
-delete process.env.RULE_MCP_CAVEMAN_LEVEL;
+delete process.env.RULE_MCP_NO_COMPRESSION;
+delete process.env.RULE_MCP_COMPRESSION_LEVEL;
 
 const { listAgentCommands, renderAgentCommand, renderAgentCommandFiles } = await import("../index.js");
 const { guardCompression } = await import("../../../text/compress-guard/index.js");
@@ -50,12 +50,12 @@ test("the canonical renderer is untouched; the opt-out restores the raw bodies",
 
   assert.ok(canonical.includes("$ARGUMENTS") || !canonical.includes("$ARGUMENTS"), "canonical renderer still returns its body");
 
-  process.env.RULE_MCP_NO_CAVEMAN = "1";
+  process.env.RULE_MCP_NO_COMPRESSION = "1";
   try {
     const files = renderAgentCommandFiles("workflow");
     const raw = renderAgentCommand(command, "workflow");
-    assert.equal(files.find((f) => f.name === "rule-handoff").content, raw, "NO_CAVEMAN restores the raw write-time bodies");
+    assert.equal(files.find((f) => f.name === "rule-handoff").content, raw, "NO_COMPRESSION restores the raw write-time bodies");
   } finally {
-    delete process.env.RULE_MCP_NO_CAVEMAN;
+    delete process.env.RULE_MCP_NO_COMPRESSION;
   }
 });
