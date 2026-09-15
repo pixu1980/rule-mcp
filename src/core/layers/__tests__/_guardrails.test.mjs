@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /**
  * Loading the rules a skill owns (ADR 079): a skill's guardrails/ folder is
  * imported from the layer that won, and what the frontmatter declared is

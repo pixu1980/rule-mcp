@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** TokenSave adapter foundation: probe, CLI clients, file provider, fallback. */
 export * from "./_probe.js";
 export * from "./_client.js";

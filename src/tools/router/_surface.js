@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Registered-tool inventory: mutation classification, annotations, declared and public tool lists. */
 
 import { _tools, toolsGeneration } from "./_hooks.js";

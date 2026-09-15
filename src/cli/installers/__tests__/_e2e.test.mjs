@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /**
  * End-to-end: the bootstrap reaches the wizard, and a broken shim does not
  * cost the install.

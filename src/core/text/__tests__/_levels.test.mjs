@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /**
  * PERF-1 and PERF-2: the vocabulary tables and the levels that gate them.
  *

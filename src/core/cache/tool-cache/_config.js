@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Cache switches and locations: enable flags, the persistent file, the namespace fingerprint. */
 import { join } from "node:path";
 import { codeSignature } from "../../index.js";

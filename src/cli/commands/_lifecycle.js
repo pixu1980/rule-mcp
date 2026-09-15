@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Install and uninstall commands (agent catalog + service). */
 
 import { entrypoint, print, printJson } from "./_shared.js";

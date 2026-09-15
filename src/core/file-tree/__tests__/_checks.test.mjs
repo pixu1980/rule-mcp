@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** The two guardrail entry points the engine exposes for barrels and names. */
 import { strict as assert } from "node:assert";
 import { test } from "node:test";

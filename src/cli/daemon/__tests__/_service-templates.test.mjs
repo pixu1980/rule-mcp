@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /**
  * The service templates and the paths that never touch the machine: plist and
  * unit generation, the wrapper script, dry runs, and the not-installed exits.

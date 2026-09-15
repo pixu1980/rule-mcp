@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /**
  * generateMultiFile: one component folder per framework, and the arms that
  * refuse rather than emit a half-written tree.

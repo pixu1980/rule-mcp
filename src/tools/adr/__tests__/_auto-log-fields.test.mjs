@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /**
  * autoLogFields: one entry shape per logged tool, and what each arm falls back
  * to when the call it describes told it nothing.

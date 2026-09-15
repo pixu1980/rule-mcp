@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Project-level graph guardrails: the policy and its runner. */
 export * from "./_checks.js";
 export * from "./_run.js";

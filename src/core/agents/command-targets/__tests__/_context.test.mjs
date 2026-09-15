@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /**
  * The injectable resolution context: where editor data lives per platform, and
  * the gates that decide whether a candidate directory is a target.

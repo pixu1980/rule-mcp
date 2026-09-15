@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /**
  * getGuardrailsReport: the ruleset a skill will actually be checked against.
  *

@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /**
  * Project-level guardrails: the graph checks pass, fail or skip, and a
  * missing graph is never a failure.

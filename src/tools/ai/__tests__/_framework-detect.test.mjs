@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /**
  * detectFrameworkSkill: the hint wins, the path is the fallback, and the
  * domain is derived from the skill the framework maps to.

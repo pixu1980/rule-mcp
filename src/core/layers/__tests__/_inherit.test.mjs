@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /**
  * Guardrail composition by inheritance (ADR 079): a skill declares the rules
  * it owns and the skills it takes rules from, and the nearest definition of an

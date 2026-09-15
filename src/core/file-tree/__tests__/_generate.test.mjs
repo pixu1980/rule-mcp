@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** generateComponentFiles: one folder per framework, barrel plus component. */
 import { strict as assert } from "node:assert";
 import { join } from "node:path";

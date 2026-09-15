@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Behavioral: install.sh recreates the runtime home after a purge. */
 import { strict as assert } from "node:assert";
 import { execFileSync } from "node:child_process";

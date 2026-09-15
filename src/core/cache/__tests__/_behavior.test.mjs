@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** End to end: recorded dependencies, surgical invalidation, determinism, hit parity. */
 import test from "node:test";
 import { rmSync } from "node:fs";

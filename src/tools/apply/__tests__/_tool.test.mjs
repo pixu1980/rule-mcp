@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /**
  * pix_tool_apply end to end through the router: the receipt gate, the root
  * gate, the path gate, the dry run and the write.

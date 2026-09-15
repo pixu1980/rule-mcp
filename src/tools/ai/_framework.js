@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 import { detectProject, getFrameworkSuggestion } from "../../core/detector/index.js";
 
 /** Skill-name prefix to the domain that biases routing, most specific first. */

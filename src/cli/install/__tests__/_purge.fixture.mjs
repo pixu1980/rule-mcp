@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /**
  * uninstall --purge must delete the runtime home ~/.pix-galaxy-mcp/ (state,
  * projects, data, config — the layout src/cli/paths/index.js defines), and install

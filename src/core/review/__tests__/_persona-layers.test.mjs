@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /**
  * Personas resolve through the same three layers as skills (ADR 079), and the
  * machine owner has the last word: native, then project, then user.

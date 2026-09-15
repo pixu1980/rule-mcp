@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /**
  * The mode step: daemon and docker are discouraged, never removed, when the
  * selected agents cannot use them.

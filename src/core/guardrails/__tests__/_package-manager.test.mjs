@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /**
  * The baseline forbids corepack activation fields in every package.json check:
  * `packageManager` and `devEngines.packageManager` must never appear.

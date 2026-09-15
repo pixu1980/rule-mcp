@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /**
  * pix_tool_process_adr through the router, and the auto-log hook beside it:
  * the English gate, the numbering, the index, and when auto-logging declines.

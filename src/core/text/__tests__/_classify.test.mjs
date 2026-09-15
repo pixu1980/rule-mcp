@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /**
  * classifyText and its two content heuristics: what the compressor may touch
  * and what it must leave alone.

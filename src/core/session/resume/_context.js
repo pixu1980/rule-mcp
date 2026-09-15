@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** @module core/session/resume/context - the verified handon block a resumed session receives */
 
 import { handon } from "@src/tools/handon/index.js";

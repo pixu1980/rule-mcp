@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /**
  * The wizard's Ink options: interactive mode is forced and incremental
  * rendering is on, which is what stops the full-frame repaint from flickering

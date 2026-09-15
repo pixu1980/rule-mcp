@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /**
  * The install's own proof: the CLI on PATH answers `--version`, `tools list`
  * and `doctor`, and any one of them failing is a broken install.

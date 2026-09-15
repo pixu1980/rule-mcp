@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** @module core/skills/skill-tools - one tool per skill that asks for one */
 
 import { exposesTool, getSkillNames } from "../../tools/router/index.js";

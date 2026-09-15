@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /**
  * Persona skill generation: one SKILL.md per active role and operation, with
  * `exposeTool: false` so the tool surface is unchanged.

@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /** Handoff sections from the repository: working tree, semantic changes, recent commits, docs scan, footers. */
 import { TOKENSAVE_DIRECTIVE, tokensaveActive } from "../../core/agents/_integrations.js";
 

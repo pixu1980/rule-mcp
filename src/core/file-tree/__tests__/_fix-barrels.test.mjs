@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /**
  * The barrel writers called directly, for the paths a whole-tree fix cannot
  * reach: a folder that vanished, a barrel that cannot be written, and an issue

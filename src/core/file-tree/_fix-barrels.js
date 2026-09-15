@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 import { readdirSync } from "node:fs";
 import { join, extname, basename, dirname, parse } from "node:path";
 import { applyEdit } from "../tokensave/_edit.js";

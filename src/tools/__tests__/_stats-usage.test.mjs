@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /**
  * pix_tool_stats and pix_tool_usage, driven through the router in a scratch
  * state directory: every scope, the flight-file arm, the disabled arm, and the

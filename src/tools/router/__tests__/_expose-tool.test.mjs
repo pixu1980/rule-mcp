@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /**
  * A custom skill adds rules and evidence without growing the tool surface
  * (ADR 079).

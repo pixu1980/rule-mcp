@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2025-2026 pixu1980
+// SPDX-License-Identifier: MIT
 /**
  * The three pix_tool_fix modes as the router calls them: lint reports, fix
  * corrects, generate writes a component folder and refuses to escape the root.
