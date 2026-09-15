@@ -385,10 +385,15 @@ Gate: handoff suite green; handoff output unchanged modulo the new data.
 
 ### 6.5 Milestone 4 — Edit primitives (P0, depends on M0)
 
-- **T4.1** `rule_tool_apply` and `rule_tool_gateway` try TokenSave edit tools first (`R6`).
-- **T4.2** `rule_tool_fix` uses `str_replace` / `multi_str_replace` for file edits.
+Status: **done** — commit `8693722`.
+
+- **T4.1** `rule_tool_apply` and `rule_tool_gateway` try TokenSave edit tools first (`R6`). _(done:
+  `rule_tool_apply` writes through `applyEdit`; the gateway keeps its receipt role)_
+- **T4.2** `rule_tool_fix` uses `str_replace` / `multi_str_replace` for file edits. _(done through
+  the same adapter for existing files; file rename stays JavaScript because TokenSave has no
+  rename primitive)_
 - **T4.3** Keep the receipt validation and containment checks in JS — TokenSave writes, the
-  gateway decides.
+  gateway decides. _(done: `validateApply` and `resolveWriteTarget` are untouched)_
 
 Gate: apply/gateway suites green; every write still passes the receipt.
 
