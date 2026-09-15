@@ -352,14 +352,20 @@ Gate: file-tree and fix suites green on both paths; byte-identical output on the
 
 ### 6.3 Milestone 2 — Impact and architecture health (P0, depends on M1)
 
+Status: **partial** — T2.1 and T2.3 done in commit `8377b49`; T2.2 already satisfied
+(`docs/plans/architect.md` and `docs/reviews/architect.md` cite `tokensave_circular` and
+`tokensave_imports`); T2.4 pending.
+
 - **T2.1** Wire `impact`, `callers`, `callees`, `file_dependents` into `rule_tool_plan` and
-  `rule_tool_check` reviews (`R11`).
+  `rule_tool_check` reviews (`R11`). _(done through the graph checklist)_
 - **T2.2** Replace the manual circular measurement in `docs/plans/architect.md` (ARCH-1) with
-  `circular` + `imports` (`R13`).
+  `circular` + `imports` (`R13`). _(already TokenSave-based)_
 - **T2.3** Feed `dsm`, `dependency_depth`, `gini`, `coupling`, `hotspots`, `health` into audit
-  and review context (`R12`).
+  and review context (`R12`). _(done through the graph checklist)_
 - **T2.4** Replace guardrail rules that are pure graph queries with the TokenSave equivalents
-  (`R3`), keeping the guardrail engine as the policy owner.
+  (`R3`), keeping the guardrail engine as the policy owner. _(pending: the guardrail engine
+  checks a code string, not the project graph; a TokenSave-backed project pass belongs in a
+  dedicated tool rather than a snippet rule)_
 
 Gate: review/plan documents cite TokenSave numbers; guardrail suite green.
 
