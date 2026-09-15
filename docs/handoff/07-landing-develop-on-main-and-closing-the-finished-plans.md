@@ -95,11 +95,9 @@ to resolve to a file that exists.
 
 ## Open items
 
-- The `nul` artifact: `src/cli/daemon/_windows-service.js` shells out to
-  `sc query "<name>" 2>nul`, so a POSIX run writes a 31-byte file named `nul`
-  into the working directory. `_service-templates.test.mjs` avoids the Windows
-  arm for that reason. It was removed for the landing and returns on every full
-  test run; the shell-out itself needs a look.
+- The `nul` artifact: fixed in `38e5e904` and audited in handoff 08; a full test run now leaves no
+  such file. The audit of that surface opened eight findings, worst first in
+  `docs/plans/security.md`.
 - `docs/plans/oss.md` marks are stale against the landed code (see above).
 - ADRs 099 and 100 land as `accepted` with no owner review of their text.
 
