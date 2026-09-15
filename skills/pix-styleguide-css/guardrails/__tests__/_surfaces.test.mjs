@@ -105,12 +105,12 @@ test("a CSS route carries it, a backend route does not", async () => {
 });
 
 test("the installed agent rules carry it", () => {
-  // Source guards: both writers of the block carry the rule, and neither can
-  // be run against a real home directory from a test.
+  // Source guards: the block the installer writes carries the rule, and the
+  // one sentence it quotes is the shared directive, not a second copy.
   const installJs = readFileSync(join(root, "src", "cli", "installers", "_instruction.data.js"), "utf8");
-  const setupRules = readFileSync(join(root, "src", "cli", "setup", "_rules.data.js"), "utf8");
+  const directive = readFileSync(join(root, "src", "core", "_directive.js"), "utf8");
   assert.match(installJs, /flex first/i, "the instruction block written into CLAUDE.md must carry the rule");
-  assert.match(setupRules, /flex first/i, "the setup wizard's rules block must carry the rule");
+  assert.match(directive, /flex first/i, "the shared directive must carry the rule");
 });
 
 test("the docs carry it", () => {
