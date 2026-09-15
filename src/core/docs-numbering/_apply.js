@@ -59,7 +59,7 @@ export function applyRenumber(plan, options = {}) {
   // The index is generated from the ADR files (ADR 051), so after a move it is
   // rebuilt rather than patched: link rewriting would leave the rows, the
   // titles and the order describing the arrangement before the repair.
-  if (plan.renames.some((rename) => rename.family === "ADR") || plan.indexUnordered) {
+  if (plan.renames.some((rename) => rename.family === "ADR") || plan.indexUnordered || plan.indexStale) {
     report({ step: "index", message: "Regenerating docs/adr/ADR.md from the files on disk" });
   }
 
@@ -88,7 +88,7 @@ function regenerateAdrIndex(projectDir, plan) {
   const touchedAdrs = plan.renames.some((rename) => rename.family === "ADR");
   const adrDir = join(projectDir, "docs", "adr");
 
-  if ((!touchedAdrs && !plan.indexUnordered) || !existsSync(join(adrDir, "ADR.md"))) {
+  if ((!touchedAdrs && !plan.indexUnordered && !plan.indexStale) || !existsSync(join(adrDir, "ADR.md"))) {
     return false;
   }
 

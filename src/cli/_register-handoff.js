@@ -21,7 +21,7 @@ export function registerHandoffCommand(program) {
         const plan = planRenumber({ projectDir, onProgress });
         process.stdout.write(`${renderRenumberPlan(plan, { fix: options.fix })}\n`);
         const authors = plan.authors?.length ?? 0;
-        const somethingToFix = plan.renames.length > 0 || plan.indexUnordered || authors > 0;
+        const somethingToFix = plan.renames.length > 0 || plan.indexUnordered || plan.indexStale || authors > 0;
 
         if (options.fixCommits) {
           const rewrite = rewriteCommitReferences(plan, { projectDir, onProgress });
@@ -37,6 +37,13 @@ export function registerHandoffCommand(program) {
               `${applied.indexRegenerated ? "; ADR.md regenerated" : ""}` +
               `${applied.authorsNamed > 0 ? `; ${applied.authorsNamed} author(s) named` : ""}.\n`,
           );
+
+          const { regenerateHandoffFile } = await import("../tools/handoff/_refresh.js");
+          const handoffFile = regenerateHandoffFile(projectDir);
+
+          if (handoffFile) {
+            process.stdout.write(`${handoffFile} regenerated.\n`);
+          }
 
           if (!options.fixCommits && plan.renames.length > 0) {
             process.stdout.write("Commit messages were not touched. Add --fix-commits to amend the local ones.\n");
