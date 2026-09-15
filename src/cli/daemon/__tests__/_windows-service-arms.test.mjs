@@ -9,9 +9,39 @@
  * for what they report when the query cannot run at all.
  */
 import { strict as assert } from "node:assert";
+import { execFileSync } from "node:child_process";
+import { mkdtempSync, readdirSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 import { test } from "node:test";
+import { fileURLToPath } from "node:url";
 
 import { checkWindowsService, getWindowsServiceCommand, installWindowsService, uninstallWindowsService, WINDOWS_SERVICE_NAME } from "../_windows-service.js";
+
+const ARMS = fileURLToPath(new URL("../_windows-service.js", import.meta.url));
+
+test("the arms leave no null-device artifact in the directory they run from", () => {
+  const scratch = mkdtempSync(join(tmpdir(), "rule-windows-arms-"));
+
+  execFileSync(
+    process.execPath,
+    [
+      "--input-type=module",
+      "-e",
+      `const arms = await import(${JSON.stringify(ARMS)});
+       arms.uninstallWindowsService({ dryRun: true });
+       arms.checkWindowsService();`,
+    ],
+    { cwd: scratch, encoding: "utf8", timeout: 60_000 },
+  );
+
+  // `sc query ... 2>nul` is cmd syntax. On a host whose shell is not cmd the
+  // redirect creates a real file named `nul` here rather than discarding
+  // stderr, which is how one kept appearing in the repository root: the only
+  // way to exercise this arm off Windows is to call it, and calling it is what
+  // shelled out.
+  assert.deepEqual(readdirSync(scratch), [], "the probe writes nothing");
+});
 
 test("the service command quotes both halves, so a path with a space survives", () => {
   const command = getWindowsServiceCommand();
