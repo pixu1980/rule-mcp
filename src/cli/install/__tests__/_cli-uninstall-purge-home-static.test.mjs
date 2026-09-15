@@ -9,7 +9,7 @@
  * and the promise the word "purge" makes was silently broken.
  *
  * This was a static contract over four shell scripts. They are bootstraps now
- * (ADR 080): the layout and the purge list are node, and so is the assertion.
+ * (ADR 090): the layout and the purge list are node, and so is the assertion.
  *
  * Every case runs in a child process with its own HOME. The config directory
  * is resolved once, when `cli/installers/_env.js` is imported, so a test that

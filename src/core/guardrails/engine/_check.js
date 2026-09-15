@@ -22,7 +22,7 @@ export const MAX_CHECK_INPUT_BYTES = 256 * 1024;
  * @returns {object} the check report
  */
 export function checkCode(skillName, code, context = {}) {
-  // A rule imports nothing: what it needs arrives here (ADR 079). The caller's
+  // A rule imports nothing: what it needs arrives here (ADR 089). The caller's
   // own context wins, so a test can hand a rule a different bag on purpose.
   const withHelpers = { helpers: GUARDRAIL_HELPERS, ...context };
 

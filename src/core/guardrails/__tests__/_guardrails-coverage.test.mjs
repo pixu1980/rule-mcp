@@ -33,7 +33,7 @@ import { getGuardrails, checkCode, BASELINE_SKILLS, ownedGuardrails } from "../i
 import { loadAllSkills } from "../../skills/index.js";
 import { callTool } from "../../../tools/router/index.js";
 
-// The baseline now lives in the skills that own it (ADR 079); what every
+// The baseline now lives in the skills that own it (ADR 089); what every
 // domain must still carry is the union of those skills' rules.
 await loadAllSkills();
 const sharedIds = BASELINE_SKILLS.flatMap((skill) => ownedGuardrails(skill).map((rule) => rule.id));

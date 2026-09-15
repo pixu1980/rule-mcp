@@ -5,7 +5,7 @@
  *
  * `scripts/install.{sh,ps1}` and `scripts/uninstall.{sh,ps1}` used to be a
  * second installer: agent detection, pickers, modes, instruction files, the
- * daemon service. They are bootstraps now (ADR 080) - check node, resolve the
+ * daemon service. They are bootstraps now (ADR 090) - check node, resolve the
  * binary, forward to `rule-mcp setup` - and the contract worth asserting
  * is that they stay that way. Parity is the point: a question one platform
  * asks and the other does not is how the two drifted the first time.

@@ -27,7 +27,7 @@ function withBanner(banner, result) {
  * all - it counts columns, so it has to see the final characters.
  *
  * Both effects are measured at the step that causes them. Reading either as
- * core-minus-final nets them against each other (ADR 074).
+ * core-minus-final nets them against each other (ADR 071).
  *
  * @param {string} name
  * @param {object} core

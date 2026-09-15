@@ -1,4 +1,4 @@
-# 084: Rename the compression subsystem and apply it to every model-facing surface
+# 094: Rename the compression subsystem and apply it to every model-facing surface
 
 - **Date**: 2026-09-15
 - **Status**: accepted

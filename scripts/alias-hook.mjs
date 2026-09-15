@@ -8,7 +8,7 @@
  * it is going. `@src/core/text/index.js` does.
  *
  * A skill's guardrails never use this alias, and import nothing at all: the
- * helpers they need arrive in the context the check is called with (ADR 079),
+ * helpers they need arrive in the context the check is called with (ADR 089),
  * so a rule file resolves the same wherever the skill is dropped.
  *
  * Registered with `--import ./scripts/alias-hook.mjs` on every entry point that

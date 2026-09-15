@@ -1,4 +1,4 @@
-# 086: TokenSave is the primary code graph, JavaScript is the fallback
+# 096: TokenSave is the primary code graph, JavaScript is the fallback
 
 - **Date**: 2026-09-15
 - **Status**: accepted

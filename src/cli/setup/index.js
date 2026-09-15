@@ -6,7 +6,7 @@
  * One entry point for both directions. `runSetup` decides whether this
  * terminal can host the full-screen wizard and falls back to the plain
  * runner when it cannot. The shell and PowerShell scripts are bootstraps
- * that check node and call in here (ADR 080).
+ * that check node and call in here (ADR 090).
  *
  * The split inside this folder is deliberate. `_options`, `_plan-*`,
  * `_preflight`, `_scan` and `_run-plan` are pure or read-only and hold the

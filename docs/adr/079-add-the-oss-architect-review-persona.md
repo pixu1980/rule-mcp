@@ -1,9 +1,11 @@
 # 079: Add the OSS Architect review persona
 
 - **Date**: 2026-09-10
-- **Status**: accepted
+- **Status**: superseded
 - **Tags**: persona, oss, open-source, governance, licensing, community
 - **Author**: Emiliano Pisu <pisuemiliano.1980@gmail.com>
+
+> Superseded by [ADR 093](093-add-an-open-source-steward-persona-for-governance-contributors-and-donors.md). The develop branch added its own OSS persona, Open Source Steward, and that is the one the merge kept.
 
 ## Context
 

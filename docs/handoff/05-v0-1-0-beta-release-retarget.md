@@ -1,4 +1,4 @@
-# Session handoff 01 — v0.1.0-beta release retarget
+# Session handoff 05 - v0.1.0-beta release retarget
 
 - Branch: `main`
 - Commit range covered: `78ef4f2..1d4baa0` (session created `d778312`, `1d4baa0`)
@@ -34,34 +34,35 @@ not in `.gitignore`; deliberately not staged).
 ## HANDOFF: rule-mcp
 
 ### Project Identity
+
 - Description: MCP server for rule-* skill ecosystem. Serves styleguides,
   component templates, framework best practices, and design system patterns.
 - Version: 0.1.0-beta
 
 ### ADR log (accepted, most recent first)
 
-| # | Title |
-|---|-------|
-| 077 | CLI entry point loads no command handler it has not built (static decls, lazy handlers; startup perf) |
-| 076 | Compression has four levels, no LLM in output path (off/lite/full/ultra, deterministic) |
-| 075 | Installer asks before copying bundled skills to central agents dir |
-| 074 | Census generates eight numbered docs + three fenced blocks, one formatter |
-| 073 | Installer mode step replaces agent picker (bash/PS parity) |
-| 072 | Coverage wave four holds floor at 90; daemon fixes |
-| 071 | src shared for every shareable helper (`src/shared/` + barrel) |
-| 070 | Co-locate every test with its module (`__tests__` next to source) |
-| 069 | Remove externally derived skills from served knowledge base |
-| 068/067/066 | Coverage floor ratchet 83 → 87 → 89 → 90 (endpoint 95) |
-| 065 | Glob suite runner, co-located tests, branch-coverage gate |
-| 064 | One global shim; hermetic PNPM_HOME in script tests |
-| 063 | Plans carry nested sub-steps + exhaustiveness mandate |
-| 062 | Persona plans are checklists; executed marks survive sync |
-| 058 | Command surface restructure: /rule router, rule-area-*, compression implicit, rule-process-tdd |
-| 057 | Review personas split into per-operation commands (plan/audit/review) |
-| 056 | Gateway as single entrypoint with server-side receipts |
-| 049 | v1.0.0 release + docs-accuracy guard (NOTE: release retargeted to v0.1.0-beta this session; ADR 049 predates the retarget) |
-| 048 | rule-mcp-architect splits into standalone web-app repo |
-| 047 | Installer self-heals global shim, surfaces failures |
+| #           | Title                                                                                                                      |
+| ----------- | -------------------------------------------------------------------------------------------------------------------------- |
+| 077         | CLI entry point loads no command handler it has not built (static decls, lazy handlers; startup perf)                      |
+| 076         | Compression has four levels, no LLM in output path (off/lite/full/ultra, deterministic)                                    |
+| 075         | Installer asks before copying bundled skills to central agents dir                                                         |
+| 074         | Census generates eight numbered docs + three fenced blocks, one formatter                                                  |
+| 073         | Installer mode step replaces agent picker (bash/PS parity)                                                                 |
+| 072         | Coverage wave four holds floor at 90; daemon fixes                                                                         |
+| 071         | src shared for every shareable helper (`src/shared/` + barrel)                                                             |
+| 070         | Co-locate every test with its module (`__tests__` next to source)                                                          |
+| 069         | Remove externally derived skills from served knowledge base                                                                |
+| 068/067/066 | Coverage floor ratchet 83 → 87 → 89 → 90 (endpoint 95)                                                                     |
+| 065         | Glob suite runner, co-located tests, branch-coverage gate                                                                  |
+| 064         | One global shim; hermetic PNPM_HOME in script tests                                                                        |
+| 063         | Plans carry nested sub-steps + exhaustiveness mandate                                                                      |
+| 062         | Persona plans are checklists; executed marks survive sync                                                                  |
+| 058         | Command surface restructure: /rule router, rule-area-*, compression implicit, rule-process-tdd                                |
+| 057         | Review personas split into per-operation commands (plan/audit/review)                                                      |
+| 056         | Gateway as single entrypoint with server-side receipts                                                                     |
+| 049         | v1.0.0 release + docs-accuracy guard (NOTE: release retargeted to v0.1.0-beta this session; ADR 049 predates the retarget) |
+| 048         | rule-mcp-architect splits into standalone web-app repo                                                                   |
+| 047         | Installer self-heals global shim, surfaces failures                                                                        |
 
 Proposed (not accepted): 039 native Claude skills integration, 038 skill
 "see also" sections, 037 lossless idempotent installer, 036 sandbox timeout

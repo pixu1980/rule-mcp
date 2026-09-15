@@ -8,6 +8,15 @@ this directory are the source of truth; this index is generated from them by
 
 | #                                                                                                                       | Title                                                                                                     | Date       | Status     | Tags                                                                                |
 | ----------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- | ---------- | ---------- | ----------------------------------------------------------------------------------- |
+| [096](096-tokensave-is-the-primary-code-graph-javascript-is-the-fallback.md)                                            | TokenSave is the primary code graph, JavaScript is the fallback                                           | 2026-09-15 | accepted   | tokensave, architecture, adapter, fallback, code-graph                              |
+| [095](095-close-out-the-install-and-uninstall-rework-plan.md)                                                           | Close out the install and uninstall rework plan                                                           | 2026-09-15 | accepted   | docs, closeout, plan, install                                                       |
+| [094](094-rename-the-compression-subsystem-and-apply-it-to-every-model-facing-surface.md)                               | Rename the compression subsystem and apply it to every model-facing surface                               | 2026-09-15 | accepted   | compression, tokens, rename, mcp-boundary, determinism                              |
+| [093](093-add-an-open-source-steward-persona-for-governance-contributors-and-donors.md)                                 | Add an Open Source Steward persona for governance, contributors and donors                                | 2026-09-15 | accepted   | personas, open-source, governance, catalog                                          |
+| [092](092-surface-selection-amends-the-install-stack-freeze-with-an-additive-loader-filter.md)                          | Surface selection amends the install stack freeze with an additive loader filter                          | 2026-09-14 | accepted   | install, wizard, architecture                                                       |
+| [091](091-install-uninstall-rework-keeps-current-stack-steps-and-contents-only.md)                                      | Install/uninstall rework keeps current stack, steps and contents only                                     | 2026-09-14 | accepted   | install, wizard, architecture                                                       |
+| [090](090-the-setup-wizard-is-the-installer-and-it-asks-which-commands-to-write.md)                                     | The setup wizard is the installer, and it asks which commands to write                                    | 2026-09-13 | accepted   | installer, cli, wizard, commands, ux                                                |
+| [089](089-skills-own-their-guardrails-and-three-layers-resolve-both-skills-and-personas.md)                             | Skills own their guardrails, and three layers resolve both skills and personas                            | 2026-09-12 | accepted   | architecture, skills, guardrails, personas, extensibility                           |
+| [088](088-a-persona-topic-is-the-binding-scope-of-the-run.md)                                                           | A persona topic is the binding scope of the run                                                           | 2026-09-12 | accepted   | personas, prompts, review, tokensave                                                |
 | [087](087-session-close-archives-completed-audits-reviews-and-plans.md)                                                 | Session close archives completed audits, reviews and plans                                                | 2026-09-11 | accepted   | process, handoff, docs                                                              |
 | [086](086-documentation-site-is-hand-written-static-html-from-docs.md)                                                  | Documentation site is hand-written static HTML from docs                                                  | 2026-09-11 | accepted   | docs, site                                                                          |
 | [085](085-reset-the-project-version-to-0-1-0-first-release-will-be-v0-1-0.md)                                           | Reset the project version to 0.1.0, first release will be v0.1.0                                          | 2026-09-10 | accepted   | release, versioning                                                                 |
@@ -15,8 +24,8 @@ this directory are the source of truth; this index is generated from them by
 | [083](083-governance-is-an-explicit-bdfl-with-a-path-to-co-maintainers.md)                                              | Governance is an explicit BDFL with a path to co-maintainers                                              | 2026-09-10 | accepted   | governance, community                                                               |
 | [082](082-release-artifacts-are-github-tarballs-not-registry-packages.md)                                               | Release artifacts are GitHub tarballs, not registry packages                                              | 2026-09-10 | accepted   | registry, release                                                                   |
 | [081](081-mcp-registry-identity-is-the-github-owner-not-a-claimed-brand.md)                                             | MCP registry identity is the GitHub owner, not a claimed brand                                            | 2026-09-10 | accepted   | registry, release                                                                   |
-| [080](080-one-installer-a-node-wizard-with-shell-bootstraps.md)                                                         | One installer, a Node wizard with shell bootstraps                                                        | 2026-09-10 | accepted   | installer, cli, tui, ink, shell, powershell, testing                                |
-| [079](079-add-the-oss-architect-review-persona.md)                                                                      | Add the OSS Architect review persona                                                                      | 2026-09-10 | accepted   | persona, oss, open-source, governance, licensing, community                         |
+| [080](080-one-installer-a-node-wizard-with-shell-bootstraps.md)                                                         | One installer, a Node wizard with shell bootstraps                                                        | 2026-09-10 | superseded | installer, cli, tui, ink, shell, powershell, testing                                |
+| [079](079-add-the-oss-architect-review-persona.md)                                                                      | Add the OSS Architect review persona                                                                      | 2026-09-10 | superseded | persona, oss, open-source, governance, licensing, community                         |
 | [078](078-compress-agent-command-files-at-write-time.md)                                                                | Compress agent command files at write time                                                                | 2026-09-10 | accepted   | token-efficiency, compression, installer, agent-commands, write-time                |
 | [077](077-compress-every-server-model-list-surface-prompts-list-tools-list-resources-list.md)                           | Compress every server→model list surface (prompts/list, tools/list, resources/list)                       | 2026-09-10 | accepted   | token-efficiency, compression, mcp-surface, prompts, tools                          |
 | [076](076-coverage-wave-five-raises-the-branch-floor-to-91.md)                                                          | Coverage wave five raises the branch floor to 91                                                          | 2026-09-09 | accepted   | testing, coverage, ci                                                               |
@@ -40,7 +49,7 @@ this directory are the source of truth; this index is generated from them by
 | [058](058-one-file-per-rule-with-underscore-barrel-folders-and-a-size-ratchet.md)                                       | One file per rule with underscore-barrel folders and a size ratchet                                       | 2026-09-06 | accepted   | architecture, refactor, structure, guardrails                                       |
 | [057](057-reorganize-scripts-src-tests-with-150-line-code-splitting.md)                                                 | Reorganize scripts, src and tests with 150-line code splitting                                            | 2026-09-06 | accepted   | architecture, refactor, testing, structure                                          |
 | [056](056-drop-the-vs-code-extension-and-its-installers.md)                                                             | Drop the VS Code extension and its installers                                                             | 2026-09-05 | accepted   | vscode, extension, installer, lean-web                                              |
-| [055](055-restructure-the-command-surface-rule-router-rule-area-caveman-implicit-rule-process.md)                          | Restructure the command surface: /rule router, rule-area-*, caveman implicit, rule-process-tdd skill         | 2026-09-05 | accepted   | commands, prompts, surface, skills, installer                                       |
+| [055](055-restructure-the-command-surface-rule-router-rule-area-compression-implicit-rule-process.md)                      | Restructure the command surface: /rule router, rule-area-*, compression implicit, rule-process-tdd skill     | 2026-09-05 | accepted   | commands, prompts, surface, skills, installer                                       |
 | [054](054-split-review-personas-into-per-operation-commands-plan-audit-review.md)                                       | Split review personas into per-operation commands (plan/audit/review)                                     | 2026-09-05 | accepted   | personas, commands, prompts, surface                                                |
 | [053](053-gateway-as-the-single-entrypoint-with-server-side-receipts-backend-data-devops-g.md)                          | Gateway as the single entrypoint with server-side receipts; backend/data/devops guardrail families        | 2026-09-04 | accepted   | gateway, guardrails, determinism, receipt, backend                                  |
 | [052](052-pre-packaged-mcp-prompt-registry-26-prompts-strict-schemas-commit-scope-closer.md)                            | Pre-packaged MCP prompt registry (26 prompts, strict schemas, commit-scope closer)                        | 2026-09-04 | accepted   | prompts, registry, tdd, a11y                                                        |
@@ -103,6 +112,15 @@ file. Where a line stops short the rest is in the ADR.
 
 | ADR                                                                                                                     | Decision                                                                                                                                                                                                                        | Consequence                                                                                                                                                                                                                    |
 | ----------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| [096](096-tokensave-is-the-primary-code-graph-javascript-is-the-fallback.md)                                            | Add src/core/tokensave/ with three modules and a barrel. probe.js detects .tokensave/tokensave.db, reads config and branch metadata, and exposes { available, version, branch, parentBranch, staleSeconds }; the status...      | The server gains an optional runtime dependency on a local TokenSave installation; when the graph or the binary is missing, the JavaScript path answers and the server behaves exactly as before.                              |
+| [095](095-close-out-the-install-and-uninstall-rework-plan.md)                                                           | Fold the record into this ADR and the session handoff, then delete the source file.                                                                                                                                             | docs/plans/install.md is gone from the tree; the handoff of this session names what it carried.                                                                                                                                |
+| [094](094-rename-the-compression-subsystem-and-apply-it-to-every-model-facing-surface.md)                               | Rename the code, comments and configuration to neutral compression names: `_caveman*.js` becomes `_compression*.js`, `cavemanLevel`/`cavemanEnabled` become `compressionLevel`/`compressionEnabled`,...                         | The codebase, generated agent commands, installers and docs no longer carry caveman branding; README.md is the only file that references the inspiration.                                                                      |
+| [093](093-add-an-open-source-steward-persona-for-governance-contributors-and-donors.md)                                 | Add `personas/oss.md` as an active persona named `Open Source Steward` with id `oss`. Its skills cover open source governance, contributor management, donor and funding management, release management, and community...       | A free-text request about governance, contributors, donors or community now resolves to a role that owns those lenses.                                                                                                         |
+| [092](092-surface-selection-amends-the-install-stack-freeze-with-an-additive-loader-filter.md)                          | Amend ADR 081 narrowly: the installer writes one grammar string (RULE_MCP_SURFACE) and the loader enforces it with the same post-registration retain the minimal mode uses.                                               | Upside: the installer's surface promise is honest end to end with minimal code.                                                                                                                                                |
+| [091](091-install-uninstall-rework-keeps-current-stack-steps-and-contents-only.md)                                      | The install/uninstall rework changes wizard steps and contents only (order, copy, offered choices, validation).                                                                                                                 | Upside: minimal regression risk, no dependency churn, the plain runner stays free.                                                                                                                                             |
+| [090](090-the-setup-wizard-is-the-installer-and-it-asks-which-commands-to-write.md)                                     | The wizard is the installer.                                                                                                                                                                                                    | One implementation, in node, tested on every platform without a terminal: `_options`, `_plan-*`, `_preflight`, `_scan` and `_run-plan` are pure or read-only, and only `_app-*`, `_step-*` and `_widget-*` know Ink exists.    |
+| [089](089-skills-own-their-guardrails-and-three-layers-resolve-both-skills-and-personas.md)                             | A skill owns the rules that judge its subject.                                                                                                                                                                                  | A project versions its own rules beside its code and a team shares them through git.                                                                                                                                           |
+| [088](088-a-persona-topic-is-the-binding-scope-of-the-run.md)                                                           | The topic becomes the binding scope everywhere the template speaks: the action line names the scope instead of the project, a dedicated 'Scope: binding' section forbids reading, auditing or reporting outside it (with a...   | A user request like /rule-audit-security the SSE daemon now produces a run confined to that scope, and repeated scoped runs no longer mark whole-project findings resolved by silence.                                          |
 | [087](087-session-close-archives-completed-audits-reviews-and-plans.md)                                                 | In close-session mode only, rule_tool_process_handoff folds each completed doc into one Nygard ADR via src/tools/handoff/_closeout.js (reusing the ADR generators, the English gate and the index updater), names it in a...     | Completed working papers leave the tree on session close; each survives as one ADR plus a Closeout section in the persisted handoff, with full text recoverable from git history.                                              |
 | [086](086-documentation-site-is-hand-written-static-html-from-docs.md)                                                  | The documentation site is hand-written: a small Node generator in scripts/docs-site/ renders docs/ Markdown to static HTML with marked (already a devDependency), served locally by a static preview server.                    | scripts/docs-site/ holds a small marked-based generator plus a static preview server; docs/ stays the source of truth; chapters map to /<slug>.html and ADRs to /adr/<slug>.html with an index; the Pages workflow uploads...  |
 | [085](085-reset-the-project-version-to-0-1-0-first-release-will-be-v0-1-0.md)                                           | Reset the project version to 0.1.0 in package.json, server.json (both version fields), the CHANGELOG release heading and the scoop/winget manifests with recomputed hashes.                                                     | package.json, server.json, CHANGELOG and the distribution manifests go back to 0.1.0 with recomputed hashes; tag v1.0.0 is deleted locally and remotely; the Step 26 placeholder question is settled (publish v0.1.0, no...    |
@@ -135,7 +153,7 @@ file. Where a line stops short the rest is in the ADR.
 | [058](058-one-file-per-rule-with-underscore-barrel-folders-and-a-size-ratchet.md)                                       | Split rule catalogs one file per rule under family folders (framework/js, framework/vanilla, quality/typescript-prose-manifest-simplicity-comments) with kebab-case underscore-prefixed names and index.js barrels...           | Positive: file names say what they contain, duplicate rules are impossible by construction, one canonical import path per module, and the language and size rules are regression-tested.                                       |
 | [057](057-reorganize-scripts-src-tests-with-150-line-code-splitting.md)                                                 | Reorganize scripts/, src/ and test/ (renamed to tests/) into thematic subfolders by feature; apply code splitting with a 150-line threshold (100 + 50 tolerance) to JS/MJS files, exempting the shell installers; adopt the...  | Positive: navigability, isolation, measurable coverage and a CI gate.                                                                                                                                                          |
 | [056](056-drop-the-vs-code-extension-and-its-installers.md)                                                             | Delete extensions/ (vscode-rule source + rule-vanilla-reactive.vsix).                                                                                                                                                             | Positive: installers shrink (no vsce build, no six-editor probing), no committed binary .vsix, surface and supply chain simpler, aligns with upstream ADR 088 and the lean-web direction.                                      |
-| [055](055-restructure-the-command-surface-rule-router-rule-area-caveman-implicit-rule-process.md)                          | Restructure the command surface: router rule-mcp -> rule; the 12 area prompts become rule-area-_; delete rule-a11y-audit, rule-code-review, rule-caveman, rule-new-feature, rule-pull-request, rule-setup-project,...             | Positive: the command surface shrinks 49 -> 41; one namespace per concern (rule-area-* for areas, rule-process-* for the process family incl. the new rule-process-tdd skill/tool and rule-process-check); caveman is implicit...  |
+| [055](055-restructure-the-command-surface-rule-router-rule-area-compression-implicit-rule-process.md)                      | Restructure the command surface: router rule-mcp -> rule; the 12 area prompts become rule-area-_; delete rule-a11y-audit, rule-code-review, rule-compression, rule-new-feature, rule-pull-request, rule-setup-project,...         | Positive: the command surface shrinks 49 -> 41; one namespace per concern (rule-area-* for areas, rule-process-* for the process family incl. the new rule-process-tdd skill/tool and rule-process-check); compression is...       |
 | [054](054-split-review-personas-into-per-operation-commands-plan-audit-review.md)                                       | Give each active role three slash commands - rule-plan-<role>, rule-audit-<role>, rule-review-<role> (21 persona commands total), all generated from the same registry and all routing through the tools under the hood: the...    | Positive: the user can run just the step they need; every command body names the exact tools to call, so agent behavior no longer depends on which surface the host exposes; proposed roles still stay out of the surfaces...  |
 | [053](053-gateway-as-the-single-entrypoint-with-server-side-receipts-backend-data-devops-g.md)                          | Gateway is the single server-side orchestrating entrypoint for every implementation flow; it issues a bound receipt the write path must present; backend/database/devops/security guardrails are first-class families mapped... | Positive: unvalidated code cannot be delivered (fail-closed at a single server-side entrypoint), server-side receipts bind writes to what was checked, and backend/database/devops/security guardrail families run on every... |
 | [052](052-pre-packaged-mcp-prompt-registry-26-prompts-strict-schemas-commit-scope-closer.md)                            | Adopt the 26-prompt pre-packaged registry in src/prompts/index.js with strict argument schemas, tool-invoked styleguides, TDD/a11y baseline, and a mandatory commit-scope closer; keep prompt names distinct from the...        | Positive: one prompt per area with strict zod-validated arguments, styleguides invoked via tools, TDD/a11y baseline or explicit opt-out, every one-shot ends by proposing a commit message with mandatory scope.               |
@@ -196,12 +214,31 @@ file. Where a line stops short the rest is in the ADR.
 Tags carried by 3 or more decisions. A decision appears under every
 theme it carries, and the early ADRs that predate the tag field are listed last.
 
+### architecture
+
+- [096](096-tokensave-is-the-primary-code-graph-javascript-is-the-fallback.md) TokenSave is the primary code graph, JavaScript is the fallback
+- [092](092-surface-selection-amends-the-install-stack-freeze-with-an-additive-loader-filter.md) Surface selection amends the install stack freeze with an additive loader filter
+- [091](091-install-uninstall-rework-keeps-current-stack-steps-and-contents-only.md) Install/uninstall rework keeps current stack, steps and contents only
+- [089](089-skills-own-their-guardrails-and-three-layers-resolve-both-skills-and-personas.md) Skills own their guardrails, and three layers resolve both skills and personas
+- [058](058-one-file-per-rule-with-underscore-barrel-folders-and-a-size-ratchet.md) One file per rule with underscore-barrel folders and a size ratchet
+- [057](057-reorganize-scripts-src-tests-with-150-line-code-splitting.md) Reorganize scripts, src and tests with 150-line code splitting
+- [033](033-registry-driven-clean-slash-commands-for-every-agent-and-ide.md) Registry-driven clean slash commands for every agent and IDE
+- [032](032-the-tool-surface-is-skills-and-nothing-else.md) The tool surface is ./skills and nothing else
+- [031](031-pin-the-self-update-remote-and-drop-root-in-the-container.md) Pin the self-update remote and drop root in the container
+- [030](030-interview-servers-enforce-same-origin-and-own-their-process-lifecycle.md) Interview servers enforce same-origin and own their process lifecycle
+- [029](029-bind-write-authorization-to-destinations-not-just-content.md) Bind write authorization to destinations, not just content
+- [019](019-use-a-persistent-local-bearer-token-for-daemon-transport.md) use a persistent local bearer token for daemon transport
+- [018](018-fail-closed-mcp-enforcement-and-reusable-agent-commands.md) fail closed mcp enforcement and reusable agent commands
+- [017](017-forms-per-framework-merger-and-distribution.md) forms per framework merger and distribution
+- [011](011-forms-per-framework.md) Forms per Framework - Merger & Distribution
+
 ### skills
 
+- [089](089-skills-own-their-guardrails-and-three-layers-resolve-both-skills-and-personas.md) Skills own their guardrails, and three layers resolve both skills and personas
 - [075](075-meta-frameworks-get-their-own-namespace-and-a-narrow-dispatcher.md) Meta-frameworks get their own namespace and a narrow dispatcher
 - [072](072-the-installer-asks-before-copying-bundled-skills-to-the-central-agents-directory.md) The installer asks before copying bundled skills to the central agents directory
 - [066](066-remove-externally-derived-skills-from-the-served-knowledge-base.md) Remove externally derived skills from the served knowledge base
-- [055](055-restructure-the-command-surface-rule-router-rule-area-caveman-implicit-rule-process.md) Restructure the command surface: /rule router, rule-area-*, caveman implicit, rule-process-tdd skill
+- [055](055-restructure-the-command-surface-rule-router-rule-area-compression-implicit-rule-process.md) Restructure the command surface: /rule router, rule-area-*, compression implicit, rule-process-tdd skill
 - [027](027-add-rule-toolchain-commits-skill-for-atomic-conventional-commits-with-mandatory-s.md) Add rule-toolchain-commits skill for atomic conventional commits with mandatory scope
 - [026](026-rename-rule-mcp-agents-to-rule-ai-agents-and-add-rule-ai-collector-skill.md) Rename rule-mcp-agents to rule-ai-agents and add rule-ai collector skill
 - [015](015-toolchain-skill-isolation-vite.md) toolchain skill isolation vite
@@ -214,32 +251,19 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 
 ### installer
 
+- [090](090-the-setup-wizard-is-the-installer-and-it-asks-which-commands-to-write.md) The setup wizard is the installer, and it asks which commands to write
 - [080](080-one-installer-a-node-wizard-with-shell-bootstraps.md) One installer, a Node wizard with shell bootstraps
 - [078](078-compress-agent-command-files-at-write-time.md) Compress agent command files at write time
 - [072](072-the-installer-asks-before-copying-bundled-skills-to-the-central-agents-directory.md) The installer asks before copying bundled skills to the central agents directory
 - [070](070-installer-mode-step-replaces-the-agent-picker-instead-of-stacking-under-it.md) Installer mode step replaces the agent picker instead of stacking under it
 - [061](061-one-global-shim-and-hermetic-pnpm-home-in-script-tests.md) One global shim, and hermetic PNPM_HOME in script tests
 - [056](056-drop-the-vs-code-extension-and-its-installers.md) Drop the VS Code extension and its installers
-- [055](055-restructure-the-command-surface-rule-router-rule-area-caveman-implicit-rule-process.md) Restructure the command surface: /rule router, rule-area-*, caveman implicit, rule-process-tdd skill
+- [055](055-restructure-the-command-surface-rule-router-rule-area-compression-implicit-rule-process.md) Restructure the command surface: /rule router, rule-area-*, compression implicit, rule-process-tdd skill
 - [049](049-split-hotspot-modules.md) Split the hotspot modules (guardrails + installer)
 - [046](046-installer-self-heals-global-shim-surfaces-failures-gates-tui-rendering.md) Installer self-heals its global shim, surfaces failures, and gates TUI rendering
 - [041](041-lossless-installer-preserve-toolprefix-normalize-rule-blank-lines.md) Lossless installer: preserve toolPrefix and normalize rule blank lines
 - [039](039-fix-vscode-extension-and-derivatives-install-uninstall.md) Fix VS Code extension and derivatives install/uninstall
 - [028](028-clean-rule-commands-via-user-commands-prompt-suppression-not-a-plugin.md) Clean /rule-* commands via user commands + prompt suppression, not a plugin
-
-### architecture
-
-- [058](058-one-file-per-rule-with-underscore-barrel-folders-and-a-size-ratchet.md) One file per rule with underscore-barrel folders and a size ratchet
-- [057](057-reorganize-scripts-src-tests-with-150-line-code-splitting.md) Reorganize scripts, src and tests with 150-line code splitting
-- [033](033-registry-driven-clean-slash-commands-for-every-agent-and-ide.md) Registry-driven clean slash commands for every agent and IDE
-- [032](032-the-tool-surface-is-skills-and-nothing-else.md) The tool surface is ./skills and nothing else
-- [031](031-pin-the-self-update-remote-and-drop-root-in-the-container.md) Pin the self-update remote and drop root in the container
-- [030](030-interview-servers-enforce-same-origin-and-own-their-process-lifecycle.md) Interview servers enforce same-origin and own their process lifecycle
-- [029](029-bind-write-authorization-to-destinations-not-just-content.md) Bind write authorization to destinations, not just content
-- [019](019-use-a-persistent-local-bearer-token-for-daemon-transport.md) use a persistent local bearer token for daemon transport
-- [018](018-fail-closed-mcp-enforcement-and-reusable-agent-commands.md) fail closed mcp enforcement and reusable agent commands
-- [017](017-forms-per-framework-merger-and-distribution.md) forms per framework merger and distribution
-- [011](011-forms-per-framework.md) Forms per Framework - Merger & Distribution
 
 ### testing
 
@@ -284,6 +308,15 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [063](063-coverage-floor-raised-to-87-95-remains-the-ratchet-endpoint.md) Coverage floor raised to 87; 95 remains the ratchet endpoint
 - [062](062-glob-suite-runner-colocated-tests-and-a-branch-coverage-ratchet.md) Glob suite runner, co-located tests, and a branch-coverage ratchet
 
+### cli
+
+- [090](090-the-setup-wizard-is-the-installer-and-it-asks-which-commands-to-write.md) The setup wizard is the installer, and it asks which commands to write
+- [080](080-one-installer-a-node-wizard-with-shell-bootstraps.md) One installer, a Node wizard with shell bootstraps
+- [074](074-the-cli-entry-point-loads-no-command-handler-it-has-not-been-asked-for.md) The CLI entry point loads no command handler it has not been asked for
+- [061](061-one-global-shim-and-hermetic-pnpm-home-in-script-tests.md) One global shim, and hermetic PNPM_HOME in script tests
+- [046](046-installer-self-heals-global-shim-surfaces-failures-gates-tui-rendering.md) Installer self-heals its global shim, surfaces failures, and gates TUI rendering
+- [033](033-registry-driven-clean-slash-commands-for-every-agent-and-ide.md) Registry-driven clean slash commands for every agent and IDE
+
 ### coverage
 
 - [076](076-coverage-wave-five-raises-the-branch-floor-to-91.md) Coverage wave five raises the branch floor to 91
@@ -292,6 +325,24 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [064](064-coverage-floor-raised-to-89-toward-the-95-endpoint.md) Coverage floor raised to 89 toward the 95 endpoint
 - [063](063-coverage-floor-raised-to-87-95-remains-the-ratchet-endpoint.md) Coverage floor raised to 87; 95 remains the ratchet endpoint
 - [062](062-glob-suite-runner-colocated-tests-and-a-branch-coverage-ratchet.md) Glob suite runner, co-located tests, and a branch-coverage ratchet
+
+### guardrails
+
+- [089](089-skills-own-their-guardrails-and-three-layers-resolve-both-skills-and-personas.md) Skills own their guardrails, and three layers resolve both skills and personas
+- [058](058-one-file-per-rule-with-underscore-barrel-folders-and-a-size-ratchet.md) One file per rule with underscore-barrel folders and a size ratchet
+- [053](053-gateway-as-the-single-entrypoint-with-server-side-receipts-backend-data-devops-g.md) Gateway as the single entrypoint with server-side receipts; backend/data/devops guardrail families
+- [049](049-split-hotspot-modules.md) Split the hotspot modules (guardrails + installer)
+- [044](044-adopt-eslint-plugin-unicorn-for-js-ts-quality.md) Adopt eslint-plugin-unicorn for JS/TS quality
+- [018](018-fail-closed-mcp-enforcement-and-reusable-agent-commands.md) fail closed mcp enforcement and reusable agent commands
+
+### personas
+
+- [093](093-add-an-open-source-steward-persona-for-governance-contributors-and-donors.md) Add an Open Source Steward persona for governance, contributors and donors
+- [089](089-skills-own-their-guardrails-and-three-layers-resolve-both-skills-and-personas.md) Skills own their guardrails, and three layers resolve both skills and personas
+- [088](088-a-persona-topic-is-the-binding-scope-of-the-run.md) A persona topic is the binding scope of the run
+- [060](060-plans-carry-nested-sub-steps-and-an-exhaustiveness-mandate.md) Plans carry nested sub-steps and an exhaustiveness mandate
+- [059](059-persona-plans-are-checklists-with-marks-that-survive-the-sync.md) Persona plans are checklists with marks that survive the sync
+- [054](054-split-review-personas-into-per-operation-commands-plan-audit-review.md) Split review personas into per-operation commands (plan/audit/review)
 
 ### tool
 
@@ -311,21 +362,21 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [015](015-toolchain-skill-isolation-vite.md) toolchain skill isolation vite
 - [009](009-toolchain-vite.md) Toolchain Skill Isolation (Vite)
 
-### cli
+### docs
 
-- [080](080-one-installer-a-node-wizard-with-shell-bootstraps.md) One installer, a Node wizard with shell bootstraps
-- [074](074-the-cli-entry-point-loads-no-command-handler-it-has-not-been-asked-for.md) The CLI entry point loads no command handler it has not been asked for
-- [061](061-one-global-shim-and-hermetic-pnpm-home-in-script-tests.md) One global shim, and hermetic PNPM_HOME in script tests
-- [046](046-installer-self-heals-global-shim-surfaces-failures-gates-tui-rendering.md) Installer self-heals its global shim, surfaces failures, and gates TUI rendering
-- [033](033-registry-driven-clean-slash-commands-for-every-agent-and-ide.md) Registry-driven clean slash commands for every agent and IDE
+- [095](095-close-out-the-install-and-uninstall-rework-plan.md) Close out the install and uninstall rework plan
+- [087](087-session-close-archives-completed-audits-reviews-and-plans.md) Session close archives completed audits, reviews and plans
+- [086](086-documentation-site-is-hand-written-static-html-from-docs.md) Documentation site is hand-written static HTML from docs
+- [071](071-the-census-generates-eight-numbered-documents-and-three-fenced-blocks-inside-the-chapters-a-person-writes.md) The census generates eight numbered documents and three fenced blocks inside the chapters a person writes
+- [048](048-v100-release-and-docs-accuracy-guard.md) v1.0.0 release and the docs-accuracy guard
 
-### guardrails
+### prompts
 
-- [058](058-one-file-per-rule-with-underscore-barrel-folders-and-a-size-ratchet.md) One file per rule with underscore-barrel folders and a size ratchet
-- [053](053-gateway-as-the-single-entrypoint-with-server-side-receipts-backend-data-devops-g.md) Gateway as the single entrypoint with server-side receipts; backend/data/devops guardrail families
-- [049](049-split-hotspot-modules.md) Split the hotspot modules (guardrails + installer)
-- [044](044-adopt-eslint-plugin-unicorn-for-js-ts-quality.md) Adopt eslint-plugin-unicorn for JS/TS quality
-- [018](018-fail-closed-mcp-enforcement-and-reusable-agent-commands.md) fail closed mcp enforcement and reusable agent commands
+- [088](088-a-persona-topic-is-the-binding-scope-of-the-run.md) A persona topic is the binding scope of the run
+- [077](077-compress-every-server-model-list-surface-prompts-list-tools-list-resources-list.md) Compress every server→model list surface (prompts/list, tools/list, resources/list)
+- [055](055-restructure-the-command-surface-rule-router-rule-area-compression-implicit-rule-process.md) Restructure the command surface: /rule router, rule-area-*, compression implicit, rule-process-tdd skill
+- [054](054-split-review-personas-into-per-operation-commands-plan-audit-review.md) Split review personas into per-operation commands (plan/audit/review)
+- [052](052-pre-packaged-mcp-prompt-registry-26-prompts-strict-schemas-commit-scope-closer.md) Pre-packaged MCP prompt registry (26 prompts, strict schemas, commit-scope closer)
 
 ### taxonomy
 
@@ -335,12 +386,26 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [007](007-thematic-skill-taxonomy-rename.md) thematic skill taxonomy rename
 - [001](001-thematic-skill-rename.md) Thematic Skill Taxonomy Rename
 
-### docs
+### commands
 
-- [087](087-session-close-archives-completed-audits-reviews-and-plans.md) Session close archives completed audits, reviews and plans
-- [086](086-documentation-site-is-hand-written-static-html-from-docs.md) Documentation site is hand-written static HTML from docs
-- [071](071-the-census-generates-eight-numbered-documents-and-three-fenced-blocks-inside-the-chapters-a-person-writes.md) The census generates eight numbered documents and three fenced blocks inside the chapters a person writes
-- [048](048-v100-release-and-docs-accuracy-guard.md) v1.0.0 release and the docs-accuracy guard
+- [090](090-the-setup-wizard-is-the-installer-and-it-asks-which-commands-to-write.md) The setup wizard is the installer, and it asks which commands to write
+- [055](055-restructure-the-command-surface-rule-router-rule-area-compression-implicit-rule-process.md) Restructure the command surface: /rule router, rule-area-*, compression implicit, rule-process-tdd skill
+- [054](054-split-review-personas-into-per-operation-commands-plan-audit-review.md) Split review personas into per-operation commands (plan/audit/review)
+- [028](028-clean-rule-commands-via-user-commands-prompt-suppression-not-a-plugin.md) Clean /rule-* commands via user commands + prompt suppression, not a plugin
+
+### compression
+
+- [094](094-rename-the-compression-subsystem-and-apply-it-to-every-model-facing-surface.md) Rename the compression subsystem and apply it to every model-facing surface
+- [078](078-compress-agent-command-files-at-write-time.md) Compress agent command files at write time
+- [077](077-compress-every-server-model-list-surface-prompts-list-tools-list-resources-list.md) Compress every server→model list surface (prompts/list, tools/list, resources/list)
+- [073](073-compression-has-four-levels-and-no-llm-in-the-output-path.md) Compression has four levels and no LLM in the output path
+
+### governance
+
+- [093](093-add-an-open-source-steward-persona-for-governance-contributors-and-donors.md) Add an Open Source Steward persona for governance, contributors and donors
+- [083](083-governance-is-an-explicit-bdfl-with-a-path-to-co-maintainers.md) Governance is an explicit BDFL with a path to co-maintainers
+- [079](079-add-the-oss-architect-review-persona.md) Add the OSS Architect review persona
+- [066](066-remove-externally-derived-skills-from-the-served-knowledge-base.md) Remove externally derived skills from the served knowledge base
 
 ### infrastructure
 
@@ -348,13 +413,6 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [007](007-thematic-skill-taxonomy-rename.md) thematic skill taxonomy rename
 - [004](004-scaffold-consolidation.md) Scaffold Skill Consolidation
 - [001](001-thematic-skill-rename.md) Thematic Skill Taxonomy Rename
-
-### prompts
-
-- [077](077-compress-every-server-model-list-surface-prompts-list-tools-list-resources-list.md) Compress every server→model list surface (prompts/list, tools/list, resources/list)
-- [055](055-restructure-the-command-surface-rule-router-rule-area-caveman-implicit-rule-process.md) Restructure the command surface: /rule router, rule-area-*, caveman implicit, rule-process-tdd skill
-- [054](054-split-review-personas-into-per-operation-commands-plan-audit-review.md) Split review personas into per-operation commands (plan/audit/review)
-- [052](052-pre-packaged-mcp-prompt-registry-26-prompts-strict-schemas-commit-scope-closer.md) Pre-packaged MCP prompt registry (26 prompts, strict schemas, commit-scope closer)
 
 ### ratchet
 
@@ -383,23 +441,17 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [010](010-backend-framework-skills.md) backend framework skills
 - [005](005-backend-framework-skills.md) Backend Framework Skills
 
-### commands
+### determinism
 
-- [055](055-restructure-the-command-surface-rule-router-rule-area-caveman-implicit-rule-process.md) Restructure the command surface: /rule router, rule-area-*, caveman implicit, rule-process-tdd skill
-- [054](054-split-review-personas-into-per-operation-commands-plan-audit-review.md) Split review personas into per-operation commands (plan/audit/review)
-- [028](028-clean-rule-commands-via-user-commands-prompt-suppression-not-a-plugin.md) Clean /rule-* commands via user commands + prompt suppression, not a plugin
-
-### compression
-
-- [078](078-compress-agent-command-files-at-write-time.md) Compress agent command files at write time
-- [077](077-compress-every-server-model-list-surface-prompts-list-tools-list-resources-list.md) Compress every server→model list surface (prompts/list, tools/list, resources/list)
+- [094](094-rename-the-compression-subsystem-and-apply-it-to-every-model-facing-surface.md) Rename the compression subsystem and apply it to every model-facing surface
 - [073](073-compression-has-four-levels-and-no-llm-in-the-output-path.md) Compression has four levels and no LLM in the output path
+- [053](053-gateway-as-the-single-entrypoint-with-server-side-receipts-backend-data-devops-g.md) Gateway as the single entrypoint with server-side receipts; backend/data/devops guardrail families
 
-### governance
+### install
 
-- [083](083-governance-is-an-explicit-bdfl-with-a-path-to-co-maintainers.md) Governance is an explicit BDFL with a path to co-maintainers
-- [079](079-add-the-oss-architect-review-persona.md) Add the OSS Architect review persona
-- [066](066-remove-externally-derived-skills-from-the-served-knowledge-base.md) Remove externally derived skills from the served knowledge base
+- [095](095-close-out-the-install-and-uninstall-rework-plan.md) Close out the install and uninstall rework plan
+- [092](092-surface-selection-amends-the-install-stack-freeze-with-an-additive-loader-filter.md) Surface selection amends the install stack freeze with an additive loader filter
+- [091](091-install-uninstall-rework-keeps-current-stack-steps-and-contents-only.md) Install/uninstall rework keeps current stack, steps and contents only
 
 ### mcp
 
@@ -418,12 +470,6 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [012](012-database-skills.md) Database Skills
 - [010](010-backend-framework-skills.md) backend framework skills
 - [005](005-backend-framework-skills.md) Backend Framework Skills
-
-### personas
-
-- [060](060-plans-carry-nested-sub-steps-and-an-exhaustiveness-mandate.md) Plans carry nested sub-steps and an exhaustiveness mandate
-- [059](059-persona-plans-are-checklists-with-marks-that-survive-the-sync.md) Persona plans are checklists with marks that survive the sync
-- [054](054-split-review-personas-into-per-operation-commands-plan-audit-review.md) Split review personas into per-operation commands (plan/audit/review)
 
 ### quality
 
@@ -455,6 +501,12 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [077](077-compress-every-server-model-list-surface-prompts-list-tools-list-resources-list.md) Compress every server→model list surface (prompts/list, tools/list, resources/list)
 - [051](051-token-efficiency-pipeline.md) Token-efficiency pipeline (caveman aggressive + tokensave-aware decoration)
 
+### tokensave
+
+- [096](096-tokensave-is-the-primary-code-graph-javascript-is-the-fallback.md) TokenSave is the primary code graph, JavaScript is the fallback
+- [088](088-a-persona-topic-is-the-binding-scope-of-the-run.md) A persona topic is the binding scope of the run
+- [051](051-token-efficiency-pipeline.md) Token-efficiency pipeline (caveman aggressive + tokensave-aware decoration)
+
 ### tui
 
 - [080](080-one-installer-a-node-wizard-with-shell-bootstraps.md) One installer, a Node wizard with shell bootstraps
@@ -466,6 +518,12 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [056](056-drop-the-vs-code-extension-and-its-installers.md) Drop the VS Code extension and its installers
 - [039](039-fix-vscode-extension-and-derivatives-install-uninstall.md) Fix VS Code extension and derivatives install/uninstall
 - [033](033-registry-driven-clean-slash-commands-for-every-agent-and-ide.md) Registry-driven clean slash commands for every agent and IDE
+
+### wizard
+
+- [092](092-surface-selection-amends-the-install-stack-freeze-with-an-additive-loader-filter.md) Surface selection amends the install stack freeze with an additive loader filter
+- [091](091-install-uninstall-rework-keeps-current-stack-steps-and-contents-only.md) Install/uninstall rework keeps current stack, steps and contents only
+- [090](090-the-setup-wizard-is-the-installer-and-it-asks-which-commands-to-write.md) The setup wizard is the installer, and it asks which commands to write
 
 ### no tags
 

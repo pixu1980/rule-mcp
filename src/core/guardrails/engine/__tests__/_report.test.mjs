@@ -4,7 +4,7 @@
  * getGuardrailsReport: the ruleset a skill will actually be checked against.
  *
  * The report lists what `getGuardrails` resolved rather than re-deriving the
- * families, so it cannot drift from the check (ADR 079).
+ * families, so it cannot drift from the check (ADR 089).
  */
 import { strict as assert } from "node:assert";
 import { test } from "node:test";

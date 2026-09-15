@@ -7,7 +7,7 @@
  *
  * Split out of `_register-setup.js`, which is the install and uninstall pair,
  * for the size cap and because the two sets have nothing to say to each other
- * (ADR 061).
+ * (ADR 058).
  *
  * The handlers are imported inside the actions, not at the top of the file:
  * the command declarations are what `--help` renders, and a static handler

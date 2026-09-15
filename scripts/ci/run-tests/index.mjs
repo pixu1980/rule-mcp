@@ -15,7 +15,7 @@ import { fileURLToPath } from "node:url";
 
 import { SUITES } from "./_suites.data.mjs";
 
-// Server code resolves `@src/*` through a hook (ADR 079). Every process this
+// Server code resolves `@src/*` through a hook (ADR 089). Every process this
 // runner spawns loads server code, so every one of them registers it.
 const ALIAS_HOOK = ["--import", fileURLToPath(new URL("../../alias-hook.mjs", import.meta.url))];
 

@@ -9,7 +9,7 @@ import { check, finish } from "./_simplicity.fixture.mjs";
 
 console.log("=== Simplicity: guardrails ===\n");
 
-// The simplicity rules live in the skills that own them (ADR 079):
+// The simplicity rules live in the skills that own them (ADR 089):
 // rule-process-simplicity keeps two, rule-styleguide-comments the third.
 await loadAllSkills();
 const SIMPLICITY_GUARDRAILS = [...ownedGuardrails("rule-process-simplicity"), ...ownedGuardrails("rule-styleguide-comments")].filter((rule) =>

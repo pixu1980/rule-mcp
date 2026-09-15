@@ -58,7 +58,7 @@ const TARGET_ONLY_SKILLS = new Set(["rule-frontend-custom-element", "rule-fronte
  * Every skill name that resolves, sorted.
  *
  * The bundled catalog is the native layer; a project and the machine owner can
- * add to it or replace an entry (ADR 079). What a custom layer cannot do is
+ * add to it or replace an entry (ADR 089). What a custom layer cannot do is
  * grow the tool surface by accident: a skill mints a tool only when its
  * frontmatter asks for one, which is `exposeTool` and defaults to false for
  * anything this server does not ship.
@@ -96,7 +96,7 @@ function skillLayer(skillName) {
  * The bundled catalog is the tool surface this server advertises, so a native
  * skill keeps its tool. A skill from a project or a home directory has to ask,
  * because a surface that grows with whatever is on the machine is the cost
- * ADR 033 measured at 176 tools and roughly 54k tokens per turn.
+ * ADR 032 measured at 176 tools and roughly 54k tokens per turn.
  *
  * @param {string} skillName
  * @returns {boolean}
@@ -131,7 +131,7 @@ function isPluginSkill(skillName) {
  *
  * Always false. A skill's executable surface is its `guardrails/` folder, which
  * declares what it exports and is checked against the SKILL.md that declares it
- * (ADR 079); a free-form plugin.js has no such contract.
+ * (ADR 089); a free-form plugin.js has no such contract.
  *
  * @param {string} _pluginName - The plugin directory name
  * @returns {boolean}

@@ -118,7 +118,7 @@ rule-mcp install
 | Flag                         | Default | Choices                                      | Description                                                                 |
 | ---------------------------- | ------- | -------------------------------------------- | --------------------------------------------------------------------------- |
 | `--agent <name>`             | all     | -                                            | target agent, or 'all' for every supported agent                            |
-| `--mode <name>`              | -       | `stdio`, `daemon`, `sse`, `docker`, `skills` | stdio (default), daemon (SSE), docker, or skills (no MCP server, ADR 079)   |
+| `--mode <name>`              | -       | `stdio`, `daemon`, `sse`, `docker`, `skills` | stdio (default), daemon (SSE), docker, or skills (no MCP server, ADR 089)   |
 | `--global`                   | -       | -                                            | use clean command path (requires global install)                            |
 | `--force`                    | -       | -                                            | override existing configuration                                             |
 | `--dry-run`                  | -       | -                                            | preview without writing                                                     |

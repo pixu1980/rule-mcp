@@ -6,7 +6,7 @@ import { join } from "node:path";
 import { ownedGuardrails } from "../../guardrails/index.js";
 import "../../guardrails/__tests__/_install.fixture.mjs";
 
-// The simplicity rules live in the skills that own them (ADR 079).
+// The simplicity rules live in the skills that own them (ADR 089).
 const SIMPLICITY_IDS = new Set(["no-speculative-audit-table", "no-future-use-code", "no-commented-out-code"]);
 const SIMPLICITY_GUARDRAILS = [...ownedGuardrails("rule-process-simplicity"), ...ownedGuardrails("rule-styleguide-comments")].filter((rule) => SIMPLICITY_IDS.has(rule.id));
 import { loadAllSkills } from "../../skills/index.js";

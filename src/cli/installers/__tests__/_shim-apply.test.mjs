@@ -5,8 +5,8 @@
  *
  * A shim pins the absolute path of the repo it was created from. Move the
  * project and it stays on PATH and crashes on launch, and every agent install
- * after it fails silently (ADR 046). This was a contract asserted against the
- * bash in install.sh; the bash is a bootstrap now (ADR 080), so the same
+ * after it fails silently (ADR 045). This was a contract asserted against the
+ * bash in install.sh; the bash is a bootstrap now (ADR 090), so the same
  * contract is asserted against the node that replaced it.
  *
  * Every case runs in a child process with its own HOME, PATH and PNPM_HOME:
@@ -140,7 +140,7 @@ test("a removal sweeps the current name and the retired alias", () => {
     const removed = run("removeGlobalShims()", box);
     const paths = removed.map((entry) => entry.path);
 
-    // The -mcpd alias is retired (ADR 064): a stale shim keeps `command -v`
+    // The -mcpd alias is retired (ADR 061): a stale shim keeps `command -v`
     // resolving forever and silently breaks the next install.
     assert.deepEqual(new Set(paths), new Set([join(dir, "rule-mcp"), join(dir, "rule-mcpd")]));
     assert.ok(removed.every(isRemoved), JSON.stringify(removed));

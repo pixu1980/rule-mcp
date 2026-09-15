@@ -5,7 +5,7 @@
 #
 # The mirror of scripts/install.sh: check node, resolve the binary, hand over
 # to `rule-mcp setup --uninstall`. The removal logic - the scan, the
-# per-group choices, the purge - lives in src/cli/setup/ (ADR 105).
+# per-group choices, the purge - lives in src/cli/setup/ (ADR 080).
 #
 # Scope guarantee:
 #   Every path removed lives under $HOME. The project files in the directory

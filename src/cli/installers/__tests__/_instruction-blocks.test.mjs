@@ -5,7 +5,7 @@
  *
  * Two blocks, both sentinel-delimited: the short routing line, and the
  * enforced-workflow rules the shell installer used to write by itself. The
- * shell is a bootstrap now (ADR 080), so the bytes it owned have to be here -
+ * shell is a bootstrap now (ADR 090), so the bytes it owned have to be here -
  * and they have to name tools this server actually registers, which the
  * shell's copy did and the node copy did not.
  */

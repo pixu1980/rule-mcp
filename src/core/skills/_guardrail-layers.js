@@ -4,7 +4,7 @@
 
 /**
  * Resolve the three skill layers and hand the guardrail engine the rules each
- * skill owns (ADR 079).
+ * skill owns (ADR 089).
  *
  * Called before any tool registers, so the first check already sees them. What
  * a layer could not load is reported by the loader and stepped over: a broken

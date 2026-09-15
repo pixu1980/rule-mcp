@@ -21,7 +21,7 @@
    - `cache-poisoning` (high) x2: `actions/setup-node` defaults
      `package-manager-cache` to true → set `false` explicitly in build + verify.
    - `adhoc-packages` on the verify `npm install <local tarball>` — false
-     positive, accepted-risk ignore (its purpose *is* installing our artifact).
+     positive, accepted-risk ignore (its purpose _is_ installing our artifact).
    - `superfluous-actions` (informational) on pinned `softprops/action-gh-release`
      — accepted-risk ignore; re-plumbing publishing without a testable tag
      release was disproportionate. Note: zizmor ignores only work as trailing
@@ -49,13 +49,16 @@
 ## Full context from rule_tool_process_handoff
 
 ## TOKENSAVE ACTIVE - this project has a .tokensave code graph. Use tokensave_context / tokensave_search for code exploration; do NOT re-read files, glob, or grep. The context below is intentionally trimmed - query the graph for detail.
+
 ## HANDOFF: rule-mcp
 
 ### Project Identity
+
 - Description: MCP server for rule-* skill ecosystem. Serves styleguides, component templates, framework best practices, and design system patterns.
 - Version: 0.1.0
 
 ### ADR Log (87 ADRs, newest first)
+
 - 087 accepted: Session close archives completed audits, reviews and plans (process, handoff, docs)
 - 086 accepted: Documentation site is hand-written static HTML from docs (docs, site)
 - 085 accepted: Reset the project version to 0.1.0 (release, versioning)
@@ -70,6 +73,7 @@
 - 001–072: taxonomy, installer, prompts registry, gateway receipts, skills, performance (see docs/adr/)
 
 ### Recent commits at handoff
+
 - a0b34e6 fix(ci): satisfy zizmor in the release workflow
 - cf9a22a docs(plans): close Step 31, add GitHub admin checklist
 - ef02cb8 docs(adr): record session-close archiving as ADR 087
@@ -77,10 +81,12 @@
 - 2cbd892 fix(personas): parse persona files with CRLF line endings
 
 ### Docs/roadmap status
+
 - Handoffs present: 01-performance-plan-execution, 02-oss-audit-and-remediation-plan, 03-roadmap-execution-oss-phases-1-5 (+ this 04)
 - Key docs current as of 2026-09-11 (docs/01–10, census 08–15, ADR index).
 
 ### Continuing
+
 Review ADRs for architectural decisions. Work on branch `perf/meta-surface`.
 Commit convention: Conventional Commits WITH mandatory scope (`type(scope): subject`) —
 the commit-msg hook rejects scope-less messages. Every commit needs

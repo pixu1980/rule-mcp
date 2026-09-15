@@ -7,7 +7,7 @@
  *
  * A shim pins the absolute path of the repo it was created from. Move the
  * project and the shim stays on PATH but crashes on launch, and every agent
- * install after it fails silently (ADR 046). Nothing here trusts the shim's
+ * install after it fails silently (ADR 045). Nothing here trusts the shim's
  * existence: it is verified by running it.
  */
 
@@ -63,7 +63,7 @@ export function globalBinDir() {
 /**
  * Every path a shim may have been written to, for removal.
  *
- * The `-mcpd` alias is retired (ADR 064) and is swept alongside the current
+ * The `-mcpd` alias is retired (ADR 061) and is swept alongside the current
  * name: a stale shim keeps `command -v` resolving forever and silently
  * breaks the next install.
  */

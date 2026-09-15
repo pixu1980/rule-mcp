@@ -6,7 +6,7 @@ import { resolveSkillDirs } from "../../core/layers/_resolve.js";
 
 /**
  * Resolution walks three directories and parses every SKILL.md it finds
- * (ADR 079). getSkillNames() is called on every tool listing, so the walk is
+ * (ADR 089). getSkillNames() is called on every tool listing, so the walk is
  * done once and thrown away by clearSkillResolution() when the skills reload.
  */
 let RESOLVED;

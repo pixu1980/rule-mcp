@@ -1,7 +1,7 @@
 
 
 /**
- * Personas resolve through the same three layers as skills (ADR 079), and the
+ * Personas resolve through the same three layers as skills (ADR 089), and the
  * machine owner has the last word: native, then project, then user.
  */
 import { strict as assert } from "node:assert";

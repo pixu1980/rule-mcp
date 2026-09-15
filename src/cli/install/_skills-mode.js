@@ -4,7 +4,7 @@
 
 /**
  * Copy the skills where agents read them natively, and configure no MCP
- * server at all (ADR 079).
+ * server at all (ADR 089).
  *
  * `--mode skills` is not a transport. It trades every server-side guarantee -
  * the guardrail engine, the result cache, the compression, the routing - for

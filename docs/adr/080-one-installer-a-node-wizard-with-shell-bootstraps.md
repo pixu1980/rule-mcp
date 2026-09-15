@@ -1,9 +1,11 @@
 # 080: One installer, a Node wizard with shell bootstraps
 
 - **Date**: 2026-09-10
-- **Status**: accepted
+- **Status**: superseded
 - **Tags**: installer, cli, tui, ink, shell, powershell, testing
 - **Author**: Emiliano Pisu <pisuemiliano.1980@gmail.com>
+
+> Superseded by [ADR 090](090-the-setup-wizard-is-the-installer-and-it-asks-which-commands-to-write.md). The wizard this decision describes was superseded by the one develop shipped, which also asks which commands to write.
 
 ## Context
 

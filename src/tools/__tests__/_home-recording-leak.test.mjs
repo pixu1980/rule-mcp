@@ -27,7 +27,7 @@ import { join } from "node:path";
 import { test } from "node:test";
 import { fileURLToPath } from "node:url";
 
-// Server code resolves `@src/*` through a hook (ADR 079); these suites are
+// Server code resolves `@src/*` through a hook (ADR 089); these suites are
 // re-run as their own processes, so they register it as every entry point does.
 const ALIAS_HOOK = fileURLToPath(new URL("../../../scripts/alias-hook.mjs", import.meta.url));
 

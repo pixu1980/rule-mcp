@@ -1,4 +1,4 @@
-# 085: Close out the install and uninstall rework plan
+# 095: Close out the install and uninstall rework plan
 
 - **Date**: 2026-09-15
 - **Status**: accepted

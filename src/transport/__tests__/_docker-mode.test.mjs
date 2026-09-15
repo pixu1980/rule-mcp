@@ -5,7 +5,7 @@
  *
  * The compose file requires the token from the caller's environment, and the
  * installer is what puts it there. That used to be shell in `install.sh` and
- * PowerShell in `install.ps1`; it is `cli/setup/_docker.js` now (ADR 080), so
+ * PowerShell in `install.ps1`; it is `cli/setup/_docker.js` now (ADR 090), so
  * the contract is asserted against the compose file and that module.
  */
 import { strict as assert } from "node:assert";

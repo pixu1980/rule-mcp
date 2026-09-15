@@ -10,7 +10,7 @@
  * Naming note: the prompts and the agent commands share the names
  * `rule-plan-<role>`, `rule-audit-<role>`, `rule-review-<role>`. The agent-command
  * generator derives its set from the prompt registry, so two names for one
- * operation would be exactly the drift ADR 029 removed.
+ * operation would be exactly the drift ADR 028 removed.
  */
 
 export { activeRoles } from "../../roles/index.js";

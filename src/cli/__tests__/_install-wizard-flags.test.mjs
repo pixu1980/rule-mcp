@@ -5,7 +5,7 @@
  *
  * `install` without a wizard writes the mcp.json entry and the router command
  * file; the instruction files, the slash commands, the skills, the service and
- * the health check belong to the wizard's plan (ADR 080). Dropping a flag that
+ * the health check belong to the wizard's plan (ADR 090). Dropping a flag that
  * asks for one of those in silence is the failure the commands step exists to
  * remove - a question asked, answered, and ignored.
  */

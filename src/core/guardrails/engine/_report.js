@@ -10,7 +10,7 @@ import { getGuardrails, skillChain } from "./_registry.js";
  * The list is what `getGuardrails` resolved, which is the only answer that
  * cannot drift: it is the same set the check will run. Rules a skill owns or
  * inherits are named with the skill they came from, so a reader can see which
- * declaration to edit (ADR 079).
+ * declaration to edit (ADR 089).
  *
  * @param {string} skillName
  * @param {string} [mode]

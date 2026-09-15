@@ -1,12 +1,12 @@
 
 
 /**
- * Loading the rules a skill owns (ADR 079): a skill's guardrails/ folder is
+ * Loading the rules a skill owns (ADR 089): a skill's guardrails/ folder is
  * imported from the layer that won, and what the frontmatter declared is
  * checked against what the folder actually exports.
  *
  * Importing a custom guardrail runs code the user put on disk. That is the
- * decision ADR 079 records; what is pinned here is that a broken one is
+ * decision ADR 089 records; what is pinned here is that a broken one is
  * reported and stepped over rather than taking the server down with it.
  */
 import { strict as assert } from "node:assert";

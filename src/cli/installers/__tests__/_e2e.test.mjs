@@ -5,7 +5,7 @@
  * cost the install.
  *
  * `scripts/install.sh` checks node, resolves the binary and forwards every
- * argument to `rule-mcp setup` (ADR 080). Piped, with `--no-wizard`,
+ * argument to `rule-mcp setup` (ADR 090). Piped, with `--no-wizard`,
  * that is the plain runner over the same plan - so this is the one test that
  * proves the shell half and the node half still meet.
  */

@@ -14,7 +14,7 @@
 # in node, under src/cli/setup/, and is covered by tests that run on every
 # platform. The shell that used to do the binary resolution and the shim by
 # hand was a second implementation of what the wizard already does, and the
-# two drifted (ADR 105).
+# two drifted (ADR 080).
 #
 # Scope guarantee:
 #   Every path written to lives under $HOME. Nothing is created, edited or

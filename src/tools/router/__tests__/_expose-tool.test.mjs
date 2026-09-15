@@ -2,9 +2,9 @@
 
 /**
  * A custom skill adds rules and evidence without growing the tool surface
- * (ADR 079).
+ * (ADR 089).
  *
- * The surface is what every turn pays for: ADR 033 measured a machine-defined
+ * The surface is what every turn pays for: ADR 032 measured a machine-defined
  * one at 176 tools and roughly 54k tokens of schemas. A skill this server does
  * not ship therefore mints a tool only when its frontmatter asks.
  */

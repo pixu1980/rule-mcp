@@ -11,7 +11,7 @@
   files, the guard hooks, skills, the daemon service, the health check - lives
   in node, under src/cli/setup/, shared with the POSIX bootstrap. The
   PowerShell that used to answer the same questions on its own was a second
-  implementation, and the two drifted (ADR 105).
+  implementation, and the two drifted (ADR 080).
 
   Every path written to lives under the user profile. Nothing is created,
   edited or deleted inside the current directory.

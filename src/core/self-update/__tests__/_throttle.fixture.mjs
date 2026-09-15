@@ -4,7 +4,7 @@
  * @module test/self-update-throttle
  *
  * Tests the throttled, per-invocation, fire-and-forget self-update trigger
- * (ADR 023):
+ * (ADR 022):
  *   a) the check re-runs once the interval elapses - not once per process
  *   b) maybeSelfUpdate() returns immediately (does not block the tool call)
  *   c) interval env parsing: default 60s, 0 = check on every call,
@@ -21,7 +21,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 
-// Server code resolves `@src/*` through a hook (ADR 079); a spawned
+// Server code resolves `@src/*` through a hook (ADR 089); a spawned
 // process loads it too, so it registers the hook as every entry point does.
 const ALIAS_HOOK = fileURLToPath(new URL("../../../../scripts/alias-hook.mjs", import.meta.url));
 

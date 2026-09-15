@@ -15,7 +15,7 @@ import { test } from "node:test";
 import { fileURLToPath } from "node:url";
 
 // The scanner loads server code, which resolves `@src/*` through a hook
-// (ADR 079); a spawned process registers it as every entry point does.
+// (ADR 089); a spawned process registers it as every entry point does.
 const ALIAS_HOOK = fileURLToPath(new URL("../../scripts/alias-hook.mjs", import.meta.url));
 
 const SCAN = fileURLToPath(new URL("docs-scan.mjs", import.meta.url));

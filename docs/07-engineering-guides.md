@@ -153,6 +153,38 @@ runs it (plus `RULE_MCP_NO_RESUME_HANDON` for the resume block and
   cache is worth 2-6 %; the 168 ms came from what `--help` no longer loads
   (ADR 074).
 
+## The TokenSave adapter
+
+[TokenSave](https://github.com/aovestdipaperino/tokensave) is a local code-graph MCP server.
+When a project ships `.tokensave/tokensave.db`, the server prefers it for the reads a graph serves
+better and keeps the JavaScript it replaced as the tested fallback. The adapter is
+`src/core/tokensave/`: no other module calls TokenSave directly, and `RULE_MCP_NO_TOKENSAVE=1`
+turns the whole integration off.
+
+| Provider                         | Prefers                                                | Falls back to                                 |
+| -------------------------------- | ------------------------------------------------------ | --------------------------------------------- |
+| `_probe.js`                      | `.tokensave/tokensave.db`, config and branch metadata  | no graph                                      |
+| `_client.js` / `_client-sync.js` | `tokensave tool <name> --json --args <json>`           | one `{ ok: false, unavailable: true }` result |
+| `_files.js`                      | `files` (unioned with a live walk)                     | `readdirSync` walk                            |
+| `_edit.js`                       | `str_replace` for an existing file                     | `writeFileSync`                               |
+| `_deps.js`                       | `config` for name, deps and engines                    | direct `package.json` read                    |
+| `_graph.js`                      | the architecture checklist in the plan prompt          | no section                                    |
+| `_changes.js`                    | `commit_context`, `diff_context`, `log` in the handoff | no section                                    |
+| `_routing.js`                    | `search` as a routing bonus                            | BM25 alone                                    |
+| `_memory.js`                     | `record_decision` / `session_recall`                   | no-op                                         |
+| `_ledger.js`                     | `tokensave gain --json` in `rule_tool_stats`            | no section                                    |
+
+The graph is refused outright when its `last_indexed_version` names a different major than the
+adapter supports (currently `7`), and a failing tool call is skipped, never failed.
+
+Measured on 2026-09-15, `develop`:
+
+- **Savings ledger** (`tokensave gain --json --range 30d`): 85 calls, ~97.6k tokens saved, $0.29.
+- **Missed opportunities** (`tokensave discover --since 30d`): 472 navigation turns, ~120.7k
+  addressable input tokens, ~60.3k conservative recoverable.
+- **Routing** (`tests/fixtures/routing-corpus.mjs`): 80% exact / 95% top-or-alternative without
+  the graph, 81% exact / 95% with it.
+
 ## Contributing
 
 - Read `docs/README.md`, then the numbered docs relevant to your change.

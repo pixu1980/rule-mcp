@@ -1,4 +1,4 @@
-# 079: Skills own their guardrails, and three layers resolve both skills and personas
+# 089: Skills own their guardrails, and three layers resolve both skills and personas
 
 - **Date**: 2026-09-12
 - **Status**: accepted

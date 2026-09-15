@@ -11,7 +11,7 @@ import { mkdtempSync, readFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 
-// Server code resolves `@src/*` through a hook (ADR 079); a spawned
+// Server code resolves `@src/*` through a hook (ADR 089); a spawned
 // process loads it too, so it registers the hook as every entry point does.
 const ALIAS_HOOK = fileURLToPath(new URL("../../../../scripts/alias-hook.mjs", import.meta.url));
 
