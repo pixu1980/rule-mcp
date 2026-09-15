@@ -430,11 +430,16 @@ Gate: detector suite green; test selection documented and measured.
 
 ### 6.8 Milestone 7 — Memory, stats, branches (P2, depends on M0/M1)
 
+Status: **done** — commit `59f4397`.
+
 - **T7.1** Mirror ADR decisions into `record_decision`; keep `docs/adr/` as source of truth
-  (`R5`).
-- **T7.2** Read `gain`/`cost`/`runtime` into `rule_tool_stats` (`R7`).
-- **T7.3** Use `branch_list`/`branch_search`/`branch_diff` for multi-branch work (`R18`).
-- **T7.4** Use `session_start`/`session_end` for health deltas in audits (`R17`).
+  (`R5`). _(done: `rule_tool_process_adr` mirrors each ADR; a missing graph is a no-op)_
+- **T7.2** Read `gain`/`cost`/`runtime` into `rule_tool_stats` (`R7`). _(done: the gain ledger is
+  appended to the stats output)_
+- **T7.3** Use `branch_list`/`branch_search`/`branch_diff` for multi-branch work (`R18`). _(done:
+  named in the plan checklist)_
+- **T7.4** Use `session_start`/`session_end` for health deltas in audits (`R17`). _(done: named
+  in the plan checklist, with `session_recall`)_
 
 Gate: stats suite green; no change to the ADR workflow.
 
