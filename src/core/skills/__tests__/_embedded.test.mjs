@@ -26,6 +26,7 @@ test("every tool traces back to a pix-* directory in ./skills", () => {
   const ACTION = new Set([
     "pix_tool",
     "pix_tool_apply",
+    "pix_tool_audit",
     "pix_tool_check",
     "pix_tool_component",
     "pix_tool_compress",
@@ -36,6 +37,7 @@ test("every tool traces back to a pix-* directory in ./skills", () => {
     "pix_tool_plan",
     "pix_tool_plan_docs",
     "pix_tool_process_handon",
+    "pix_tool_review",
     "pix_tool_scaffold",
     "pix_tool_search",
     "pix_tool_stats",

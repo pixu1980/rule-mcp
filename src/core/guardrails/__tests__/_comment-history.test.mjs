@@ -29,6 +29,7 @@ console.log("comment history test");
 
 const { checkCode } = await import("../index.js");
 const { getGuardrails } = await import("../index.js");
+import "./_install.fixture.mjs";
 
 const RULE = "js-comment-no-history";
 const context = { framework: "vanilla", isComponent: false, fileName: "sample.js" };

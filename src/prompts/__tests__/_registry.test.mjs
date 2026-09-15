@@ -1,5 +1,3 @@
-// SPDX-FileCopyrightText: 2025-2026 pixu1980
-// SPDX-License-Identifier: MIT
 /** The prompt registry: names, order, coverage, strict schemas. */
 import { strict as assert } from "node:assert";
 import { test } from "node:test";
@@ -23,7 +21,7 @@ test("registry covers workflow, area, one-shot, and persona prompts", () => {
   }
   // 13 expected (handoff + 12 areas) + 6 one-shot workflow prompts
   // (adr/flight/handon/init/process-check/update) + 57 review-persona prompts
-  // (pix-plan-<role> + pix-audit-<role> + pix-review-<role> for 19 active roles) = 76.
+  // (pix-plan-<role> + pix-audit-<role> + pix-review-<role> for 19 active roles) = 154.
   assert.equal(names.length, EXPECTED.length + 63, "no unexpected prompts");
 });
 

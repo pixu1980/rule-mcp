@@ -8,14 +8,24 @@ import { getGuardrailsReport } from "../../core/guardrails/index.js";
 import { checkMode, scaffoldMode, searchMode, summaryMode, tldrMode } from "./_skill-modes.js";
 
 /**
+ * The MCP tool name a skill mints: `pix-frontend-react` serves `pix_tool_frontend_react`.
+ *
+ * @param {string} skillName - The skill name (e.g. "pix-frontend-react" or "my-custom-rule")
+ */
+export function toolNameForSkill(skillName) {
+  const displayName = isPluginSkill(skillName) ? skillName.replaceAll("-", "_") : skillName.replace(/^pix-/, "").replaceAll("-", "_");
+
+  return `pix_tool_${displayName}`;
+}
+
+/**
  * Register a single skill as an MCP tool.
  * Supports both official pix-* skills and custom plugins.
  *
  * @param {string} skillName - The skill name (e.g. "pix-frontend-react" or "my-custom-rule")
  */
 export function registerSkillTool(skillName) {
-  const isPlugin = isPluginSkill(skillName);
-  const displayName = isPlugin ? skillName.replaceAll("-", "_") : skillName.replace(/^pix-/, "").replaceAll("-", "_");
+  const displayName = toolNameForSkill(skillName).replace(/^pix_tool_/, "");
   const isStyleguides = skillName === "pix-styleguide";
   const modes = isStyleguides ? ["full", "summary", "search", "guardrails", "check", "scaffold", "tldr"] : ["full", "summary", "search", "guardrails", "check", "tldr"];
   const SkillSchema = z.object({

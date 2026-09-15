@@ -5,7 +5,7 @@
 import { createHash } from "node:crypto";
 import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { join, resolve } from "node:path";
-import { getRuntimePaths } from "../../../cli/paths/index.js";
+import { getRuntimePaths } from "@src/cli/paths/index.js";
 
 import { handoffBlock } from "./_context.js";
 import { isResumeSignal } from "./_signal.js";

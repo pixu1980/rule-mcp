@@ -9,6 +9,7 @@ tags:
   - over-engineering
   - planning
 frameworks: [all]
+guardrails: [no-placeholder-implementation, no-speculative-audit-table, no-suppressed-errors]
 ---
 
 # pix-process-simplicity - Build only what was asked

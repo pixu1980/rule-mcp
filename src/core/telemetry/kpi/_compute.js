@@ -82,7 +82,7 @@ export function computeKpi(options = {}) {
       // compression of zero on results that demonstrably compressed (ADR 071).
       // The reminder's own cost stays in reminderOverhead, below.
       ...(fold.coreTokens > 0 && {
-        cavemanRatio: Math.min(1, (fold.savedBySource.caveman ?? 0) / fold.coreTokens),
+        compressionRatio: Math.min(1, (fold.savedBySource.compression ?? 0) / fold.coreTokens),
       }),
       // What the reminder cost, from the recorder rather than from the gap
       // between the two ends of post-processing: compression runs in the same

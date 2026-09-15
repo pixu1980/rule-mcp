@@ -12,7 +12,7 @@
  * These helpers are pure and deterministic so they compose with the result cache.
  *
  * @see module:core/detector - hasTokensave
- * @see module:core/text/caveman - output compression (complementary token saving)
+ * @see module:core/text/compression - output compression (complementary token saving)
  */
 
 import { hasTokensave } from "../detector/index.js";

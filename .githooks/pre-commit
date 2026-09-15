@@ -11,7 +11,7 @@ cd "$(git rev-parse --show-toplevel)" || exit 1
 
 [ -d node_modules/prettier ] || exit 0
 
-node scripts/reports/census/index.mjs >/dev/null
+node --import ./scripts/alias-hook.mjs scripts/reports/census/index.mjs >/dev/null
 
 git add docs/02-product-architecture.md docs/05-env-variables.md docs/07-engineering-guides.md \
   docs/08-skills.md docs/09-tools.md docs/10-prompts.md docs/11-instructions.md \

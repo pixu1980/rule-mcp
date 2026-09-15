@@ -1,10 +1,8 @@
-// SPDX-FileCopyrightText: 2025-2026 pixu1980
-// SPDX-License-Identifier: MIT
 /**
  * @module core/text/synonyms.data
  *
  * Short synonyms: one word swapped for a shorter one that says the same thing.
- * The `full` half of the rule table in `skills/pix-caveman/SKILL.md` ("short
+ * The `full` half of the rule table in `skills/pix-compression/SKILL.md` ("short
  * synonyms - big not extensive, fix not implement a solution for").
  *
  * Connectives that need a comma to read right ("however", "nevertheless") are

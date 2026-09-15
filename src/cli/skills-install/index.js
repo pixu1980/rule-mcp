@@ -15,5 +15,6 @@
 
 export * from "./_catalog.js";
 export * from "./_native.js";
+export * from "./_personas.js";
 export * from "./_picker.js";
 export * from "./_commands.js";

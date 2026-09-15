@@ -8,6 +8,8 @@
  */
 
 export { CRITERIA, EARL_OUTCOMES, WCAG_EM_STEPS, WCAG_VERSION, criteriaForLevel, criterion } from "../../../core/wcag-data/index.js";
+import "../../../core/guardrails/__tests__/_install.fixture.mjs";
+
 export { checkCode } from "../../../core/guardrails/index.js";
 export { buildReport } from "../index.js";
 

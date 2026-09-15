@@ -28,7 +28,7 @@
  * This module necessarily fails `fp-american-english` on itself: it is the
  * dictionary, so it contains every word it maps. Nothing to fix there.
  *
- * @see module:core/text/caveman - the other half of the output layer (filler removal)
+ * @see module:core/text/compression - the other half of the output layer (filler removal)
  */
 
 export * from "./_patterns.js";

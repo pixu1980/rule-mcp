@@ -15,6 +15,7 @@ tags:
   - "backup"
   - "offline"
 frameworks: [all]
+inherits: [pix-data]
 ---
 
 # pix-data-sqlite - SQLite 3.x Best Practices & Scripts

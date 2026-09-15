@@ -21,7 +21,7 @@ test("the cache key moves when the server's code changes", async () => {
 
   // A source edit is what the signature has to notice.
   const { utimesSync } = await import("node:fs");
-  const source = new URL("../../text/_caveman.js", import.meta.url).pathname;
+  const source = new URL("../../text/_compression.js", import.meta.url).pathname;
   const later = new Date(Date.now() + 60_000);
   utimesSync(source, later, later);
 

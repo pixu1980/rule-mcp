@@ -10,6 +10,7 @@ tags:
   - "responsive"
   - "design"
 frameworks: [all]
+guardrails: [css-comments-required, css-flex-first, external-css, no-css-classes, no-inline-styles]
 ---
 
 # CSS Style Guide and Standards

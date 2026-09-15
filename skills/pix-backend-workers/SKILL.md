@@ -8,6 +8,7 @@ tags:
   - "concurrency"
   - "performance"
 frameworks: [node, worker-threads]
+inherits: [pix-backend]
 ---
 
 # pix-backend-workers - Node.js Concurrency & Worker Threads

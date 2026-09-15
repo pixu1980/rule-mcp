@@ -14,7 +14,7 @@ const GENERIC = (overrides = {}) => ({
   kpi: {
     calls: { total: 5, tools: 4, resources: 1, distinctTools: 3, errorRate: 0.1, latency: { p50: 12, p95: 20 } },
     mcp: { resultTokens: 100, resultBytes: 200, argsTokens: 300, avgResultTokens: 20, shareOfLlmTokens: 0.5, costUsd: 1.2 },
-    tokens: { measuredSaved: 1000, savedBySource: { caveman: 600, cache: 400 }, cavemanRatio: 0.6, reminderOverhead: 0, estimatedRouting: 5000 },
+    tokens: { measuredSaved: 1000, savedBySource: { compression: 600, cache: 400 }, compressionRatio: 0.6, reminderOverhead: 0, estimatedRouting: 5000 },
     cache: { hits: 3, hitRate: 0.6, replayedTokens: 90 },
     guardrails: { failures: 1, byRule: {} },
     productivity: { activeMs: 1_800_000, avgPerCallMs: 120 },
@@ -29,7 +29,7 @@ test("renderFlight renders the tables, the redaction note and the model sentence
   assert.match(out, /## MCP token footprint/, "the footprint block renders");
   assert.match(out, /estimatedRouting|Routing estimate/, "the routing estimate renders");
   assert.match(out, /modeled, not measured/, "the model caveat is always present");
-  assert.match(out, /Caveman compression/, "the savings table renders");
+  assert.match(out, /Compression compression/, "the savings table renders");
 });
 
 test("renderFlight renders the redacted variant and absent kpi defensively", () => {

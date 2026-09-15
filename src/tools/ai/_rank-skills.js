@@ -16,7 +16,7 @@ import { skillNextTools } from "./_next-tools.js";
  *
  * @returns {Array<{ skill: string, relativeScore: number, absoluteScore: number, sections: string[], next_tools: string[] }>}
  */
-export function rankSkills({ skills, promptWords, promptDomain, isReduction, ranked, detectedFramework, detectedSkillName, applyFrameworkBias }) {
+export function rankSkills({ skills, promptWords, promptDomain, isReduction, ranked, detectedFramework, detectedSkillName, applyFrameworkBias, graph = new Map() }) {
   const skillRawScores = [];
 
   for (const skillName of skills) {
@@ -28,7 +28,7 @@ export function rankSkills({ skills, promptWords, promptDomain, isReduction, ran
 
     const meta = getSkillMetadata(skillName);
     const hit = ranked.get(skillName);
-    const rawScore = (hit?.score ?? 0) + nameAffinity(skillName, promptWords) + tagAffinity(meta, promptWords);
+    const rawScore = (hit?.score ?? 0) + nameAffinity(skillName, promptWords) + tagAffinity(meta, promptWords) + (graph.get(skillName) ?? 0);
 
     let finalScore = rawScore;
 

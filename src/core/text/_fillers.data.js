@@ -1,10 +1,8 @@
-// SPDX-FileCopyrightText: 2025-2026 pixu1980
-// SPDX-License-Identifier: MIT
 /**
  * @module core/text/fillers.data
  *
  * Single words removed outright, each tagged with the lowest intensity level
- * that removes it. Ported from the rule table in `skills/pix-caveman/SKILL.md`
+ * that removes it. Ported from the rule table in `skills/pix-compression/SKILL.md`
  * ("Filler adverbs", "Pleasantries", "Hedging that carries no probability"):
  * filler, hedging and pleasantries are the `lite` contract, so every entry
  * here is `lite`.

@@ -12,7 +12,7 @@ _pix_galaxy_mcp() {
   local cur prev words cword
   _init_completion || return
 
-  local commands="serve daemon install uninstall config tools doctor skills adr handoff completions help"
+  local commands="serve up daemon install uninstall setup config tools doctor skills adr handoff handon fix stats cache roles guard update agent-commands completions help"
   local daemon_actions="start stop status logs"
   local tools_sub="list call"
   local skills_actions="reload"
@@ -43,7 +43,7 @@ _pix_galaxy_mcp() {
         new) COMPREPLY=($(compgen -W "--status --context --decision --consequences --tags" -- "$cur")) ;;
       esac
       ;;
-    install|uninstall)
+    install|uninstall|setup)
       COMPREPLY=($(compgen -W "--agent --dry-run --force --global" -- "$cur"))
       [[ $prev == "--agent" ]] && COMPREPLY=($(compgen -W "$agents" -- "$cur"))
       ;;

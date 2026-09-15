@@ -4,7 +4,7 @@
 
 import { mkdirSync } from "node:fs";
 import { join } from "node:path";
-import { getProjectPaths } from "../../../cli/paths/index.js";
+import { getProjectPaths } from "@src/cli/paths/index.js";
 
 /** @returns {string} path of the raw event log */
 export function eventsFile() {

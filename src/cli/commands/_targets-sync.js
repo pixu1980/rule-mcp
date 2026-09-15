@@ -12,7 +12,7 @@ import { resolvedTargets } from "./_targets.js";
  * Write (or remove with `--remove`) the whole clean command set in every resolved
  * target directory, so a single call covers every agent/IDE on this machine.
  *
- * @param {{ agent?: string, remove?: boolean, dryRun?: boolean, json?: boolean }} opts
+ * @param {{ agent?: string, remove?: boolean, dryRun?: boolean, json?: boolean, only?: string[] }} opts
  */
 export function syncCommandTargets(opts) {
   const targets = resolvedTargets(opts);
@@ -26,15 +26,17 @@ export function syncCommandTargets(opts) {
   let files = 0;
 
   for (const { label, format, dir } of targets) {
-    const rendered = renderAgentCommandFiles(format);
+    const rendered = renderAgentCommandFiles(format, opts.only ?? undefined);
 
     if (!opts.dryRun && !opts.remove) {
       mkdirSync(dir, { recursive: true });
     }
 
-    // Remove sweeps the whole `pix-*` namespace in the target dir, so names
-    // that left the registry (a rename, a deletion) are purged too instead of
-    // lingering as stale commands next to the new set.
+    // Remove sweeps the whole `pix` namespace in the target dir, so names that
+    // left the registry (a rename, a deletion) are purged too instead of
+    // lingering as stale commands next to the new set. The separator matters:
+    // the root command is `pix.md`, not `pix-something.md`, and a bare `pix-`
+    // prefix left it behind on every uninstall.
     if (opts.remove) {
       // A detected agent does not always have its command directory yet -
       // Pi is detected from ~/.pi/agent/mcp.json while the prompts dir is
@@ -46,7 +48,7 @@ export function syncCommandTargets(opts) {
       }
 
       const stale = readdirSync(dir)
-        .filter((entry) => entry.startsWith("pix-"))
+        .filter((entry) => /^pix[-.]/.test(entry))
         .filter((entry) => entry.endsWith(".md") || entry.endsWith(".toml") || entry.endsWith(".prompt.md"));
 
       for (const entry of stale) {

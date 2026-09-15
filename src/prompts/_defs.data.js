@@ -1,5 +1,3 @@
-// SPDX-FileCopyrightText: 2025-2026 pixu1980
-// SPDX-License-Identifier: MIT
 /**
  * @module prompts/defs
  *
@@ -9,50 +7,6 @@
 
 /** The static prompt definitions (name, description, argument schemas). */
 export const PROMPT_DEFS = [
-  {
-    name: "pix-area-ai",
-    description: "AI agent work: pix-ai and agent-architecture patterns for agent integrations",
-    arguments: [{ name: "request", description: "Agent integration task", required: true }],
-  },
-
-  {
-    name: "pix-area-backend",
-    description: "Backend/API work: node, express, fastify, hono, nestjs, graphql, security",
-    arguments: [
-      {
-        name: "request",
-        description: 'Endpoint, service, or backend task (free text: include framework, e.g. "express REST API")',
-        required: true,
-      },
-    ],
-  },
-  {
-    name: "pix-area-data",
-    description: "Data-layer work: postgresql, mysql, sqlite, mongodb, duckdb, indexed-db, SQL",
-    arguments: [
-      {
-        name: "request",
-        description: 'Schema, query, or data-layer task (free text: include database, e.g. "postgresql users table")',
-        required: true,
-      },
-    ],
-  },
-  {
-    name: "pix-area-devops",
-    description: "DevOps work: docker, observability, testing",
-    arguments: [{ name: "request", description: "Container, observability, or testing task", required: true }],
-  },
-  {
-    name: "pix-area-frontend",
-    description: "Frontend work following pix styleguides: zero CSS classes, semantic HTML, external CSS, TDD + a11y",
-    arguments: [
-      {
-        name: "request",
-        description: 'Component, page, or frontend task (free text: include framework, e.g. "react login form")',
-        required: true,
-      },
-    ],
-  },
   {
     name: "pix-handoff",
     description:
@@ -65,53 +19,6 @@ export const PROMPT_DEFS = [
         required: false,
       },
     ],
-  },
-  {
-    name: "pix-area-toolset",
-    description: "Work with the pix dispatcher/action toolset: routing, gateway, apply, search, check, scaffold, detect, fix, ADR, handoff",
-    arguments: [{ name: "request", description: "What to route, search, validate, scaffold, or record", required: true }],
-  },
-  {
-    name: "pix-area-platform",
-    description: "Platform work: web, desktop, agent, library",
-    arguments: [
-      {
-        name: "request",
-        description: 'Platform target or task (free text: include platform, e.g. "electron desktop app")',
-        required: true,
-      },
-    ],
-  },
-  {
-    name: "pix-area-process",
-    description: "Process work: code review, TDD, feature workflow, documentation, ADR, handoff, BMAD",
-    arguments: [{ name: "request", description: "Review, TDD, workflow, documentation, or decision task", required: true }],
-  },
-  {
-    name: "pix-area-skills",
-    description: "Skill discovery: find, install, and evaluate agent skills",
-    arguments: [{ name: "request", description: "Skill you are looking for", required: true }],
-  },
-  {
-    name: "pix-area-styleguide",
-    description: "Styleguide work: a11y, css, html, javascript, json, markdown, naming, patterns, validation",
-    arguments: [{ name: "request", description: "Styleguide check or authoring task", required: true }],
-  },
-  {
-    name: "pix-area-toolchain",
-    description: "Toolchain configuration: vite, pnpm, turborepo, rspack, parcel, typescript, eslint, biome, husky, commits, project",
-    arguments: [
-      {
-        name: "request",
-        description: 'Toolchain config or setup task (free text: include tool, e.g. "vite + biome")',
-        required: true,
-      },
-    ],
-  },
-  {
-    name: "pix-area-ui",
-    description: "UI design-system work: design-system components, tokens, patterns",
-    arguments: [{ name: "request", description: "UI/design-system task", required: true }],
   },
   {
     name: "pix-adr",
@@ -178,7 +85,7 @@ export const PROMPT_EXAMPLES = {
   "pix-area-data": ["/pix-area-data help", "/pix-area-data postgresql schema for the users table"],
   "pix-area-devops": ["/pix-area-devops help", "/pix-area-devops multi-stage docker build for node"],
   "pix-area-frontend": ["/pix-area-frontend help", "/pix-area-frontend react login form with validation"],
-  "pix-area-toolset": ["/pix-area-toolset help", "/pix-area-toolset search for the a11y skill"],
+  "pix-area-meta": ["/pix-area-meta help", "/pix-area-meta search for the a11y skill"],
   "pix-area-platform": ["/pix-area-platform help", "/pix-area-platform electron desktop app scaffold"],
   "pix-area-process": ["/pix-area-process help", "/pix-area-process run a code review on the pending changes"],
   "pix-area-skills": ["/pix-area-skills help", "/pix-area-skills find a skill for docker"],

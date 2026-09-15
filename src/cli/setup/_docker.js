@@ -1,5 +1,3 @@
-// SPDX-FileCopyrightText: 2025-2026 pixu1980
-// SPDX-License-Identifier: MIT
 /**
  * @module cli/setup/docker
  *
@@ -58,7 +56,11 @@ export function dockerComposeUp({ cwd = process.cwd(), dryRun = false } = {}) {
   }
 
   const token = readFileSync(sseTokenPath(), "utf8").replaceAll(/[\r\n]/g, "");
-  const output = tryExec("docker compose up -d", { cwd, env: { ...process.env, PIX_GALAXY_MCP_SSE_TOKEN: token }, timeout: 120_000 });
+  const output = tryExec("docker compose up -d", {
+    cwd,
+    env: { ...process.env, PIX_GALAXY_MCP_SSE_TOKEN: token },
+    timeout: 120_000,
+  });
 
   return output === "" ? { status: "blocked", reason: "docker compose up -d failed" } : { status: "started" };
 }

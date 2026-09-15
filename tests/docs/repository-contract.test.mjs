@@ -92,28 +92,21 @@ assert.ok(prompt.includes("$ARGUMENTS"), "Pi prompt template must forward comman
 assert.ok(prompt.includes("pix"), "Pi prompt template must route through pix tool");
 
 const universalInstallerPath = join(root, "scripts", "install.sh");
-const installerHome = mkdtempSync(join(tmpdir(), "pix-galaxy-install-"));
-execFileSync("bash", [universalInstallerPath, "--agent", "pi", "--force", "--dry-run"], {
+const universalInstaller = readFileSync(universalInstallerPath, "utf8");
+execFileSync("bash", [universalInstallerPath, "--agent", "pi", "--force", "--dry-run", "--no-wizard"], {
   cwd: root,
-  env: {
-    ...process.env,
-    HOME: installerHome,
-    // The bootstrap resolves the global bin dir from PNPM_HOME; without a
-    // sandbox a contract run rewrites the developer's real shim.
-    PNPM_HOME: join(installerHome, ".pnpm"),
-    PIX_GALAXY_MCP_HOME: join(installerHome, ".pix-galaxy-mcp"),
-    PIX_GALAXY_MCP_SKIP_GLOBAL_LINK: "1",
-  },
+  env: { ...process.env, HOME: mkdtempSync(join(tmpdir(), "pix-galaxy-install-")) },
   stdio: "pipe",
 });
-// The instruction block moved out of the shell installer and into the Node
-// wizard (ADR 073), so the tool names are asserted where they now live.
-const universalInstaller = readFileSync(join(root, "src", "cli", "setup", "_rules.data.js"), "utf8");
+// The bootstrap forwards to `pix-galaxy-mcp setup` and writes nothing itself
+// (ADR 080), so the rules it used to carry are read where they live now.
+const installerRules = readFileSync(join(root, "src", "cli", "installers", "_instruction.data.js"), "utf8");
 for (const tool of ["pix_tool -", "pix_tool_process_adr", "pix_tool_process_handoff"]) {
-  assert.ok(universalInstaller.includes(tool), `universal installer rules must reference ${tool}`);
+  assert.ok(installerRules.includes(tool), `universal installer rules must reference ${tool}`);
 }
 for (const tool of ["pix_tool_ai", "pix_adr", "pix_handoff"]) {
-  assert.ok(!universalInstaller.includes(tool), `universal installer rules must not reference obsolete ${tool}`);
+  assert.ok(!installerRules.includes(tool), `universal installer rules must not reference obsolete ${tool}`);
+  assert.ok(!universalInstaller.includes(tool), `the bootstrap must not reference obsolete ${tool}`);
   const obsoletePattern = new RegExp(`(?<![A-Za-z0-9_])${tool}(?![A-Za-z0-9_])`);
   const sourceDir = join(root, "src");
   if (existsSync(sourceDir)) {

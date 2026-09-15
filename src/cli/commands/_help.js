@@ -1,5 +1,3 @@
-// SPDX-FileCopyrightText: 2025-2026 pixu1980
-// SPDX-License-Identifier: MIT
 /**
  * Help and serve: the usage text command and the STDIO/HTTP/SSE server entry.
  *

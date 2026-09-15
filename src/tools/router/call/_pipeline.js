@@ -3,13 +3,13 @@
 /** Tool invocation: hooks, cache read-through, banner, telemetry. */
 import { _tools } from "../_hooks.js";
 import { estimateTokens, finalize, withBanner } from "../_helpers.js";
-import { cacheLookup, cacheStore } from "../../../core/cache/tool-cache/index.js";
+import { cacheLookup, cacheStore } from "@src/core/cache/tool-cache/index.js";
 import { computeCore, estimateRoutingSaving } from "../_compute.js";
-import { consumeUpdateBanner, maybeSelfUpdate } from "../../../core/self-update/index.js";
+import { consumeUpdateBanner, maybeSelfUpdate } from "@src/core/self-update/index.js";
 import { dependenciesOf } from "../_entry.js";
-import { enforcementError } from "../../../core/enforcement/index.js";
-import { resumeAnnouncement } from "../../../core/session/resume/index.js";
-import { touchActivity } from "../../../core/session/_reclaim.js";
+import { enforcementError } from "@src/core/enforcement/index.js";
+import { resumeAnnouncement } from "@src/core/session/resume/index.js";
+import { touchActivity } from "@src/core/session/_reclaim.js";
 import { guardrailRulesOf } from "../_helpers.js";
 import { z } from "zod/v4";
 import { runAfterHooks } from "./_after.js";
@@ -72,8 +72,8 @@ export async function callTool(name, args) {
 
     if (cached) {
       const replay = { ...cached.result, _meta: { ...cached.result._meta, pixCache: { tier: cached.tier } } };
-      const { final, cavemanSaved, reminderTokens } = finalize(name, replay);
-      recordHit({ tool: name, args: validated, startedAt, cached, final, cavemanSaved, reminderTokens });
+      const { final, compressionSaved, reminderTokens } = finalize(name, replay);
+      recordHit({ tool: name, args: validated, startedAt, cached, final, compressionSaved, reminderTokens });
 
       return withBanner(banner, final);
     }
@@ -88,14 +88,14 @@ export async function callTool(name, args) {
       // Cache the deterministic core; the reminder/compression/fingerprint
       // decoration is re-applied per call.
       cacheStore(name, processedArguments, core, dependenciesOf(name, processedArguments, core));
-      const { final, cavemanSaved, reminderTokens } = finalize(name, core);
+      const { final, compressionSaved, reminderTokens } = finalize(name, core);
       recordMiss({
         tool: name,
         args: processedArguments,
         startedAt,
         core,
         final,
-        cavemanSaved,
+        compressionSaved,
         reminderTokens,
         estimatedRouting: estimateRoutingSaving(name, core, final),
         guardrailFailures: core?._meta?.pixGuardrails?.failCount,

@@ -1,21 +1,9 @@
-// SPDX-FileCopyrightText: 2025-2026 pixu1980
-// SPDX-License-Identifier: MIT
 import { detectProject, getFrameworkSuggestion } from "../../core/detector/index.js";
 
-/**
- * Skill-name prefix to routing domain, longest prefix first.
- *
- * A table rather than a ternary chain, because the chain carried three arms
- * (backend, data, devops) that FRAMEWORK_SKILL_MAP can never reach: it only
- * ever suggests pix-ai, pix-frontend-*, pix-meta-* and pix-platform-desktop.
- * A meta-framework is frontend - it was, as pix-frontend-meta-astro, until the
- * pix-meta rename dropped it out of the prefix and cost Astro its framework
- * bias in the router (ADR 075).
- */
+/** Skill-name prefix to the domain that biases routing, most specific first. */
 const DOMAIN_PREFIXES = [
   ["pix-ai", "ai"],
   ["pix-frontend", "frontend"],
-  ["pix-meta", "frontend"],
 ];
 
 /**
@@ -39,7 +27,10 @@ export function detectFrameworkSkill(arguments_) {
 
   const detectedSkillName = detectedFramework ? getFrameworkSuggestion(detectedFramework).skillName : null;
 
-  const prefix = DOMAIN_PREFIXES.find(([name]) => detectedSkillName?.startsWith(name));
+  // Only the domains a framework can actually map to. FRAMEWORK_SKILL_MAP
+  // answers with pix-ai, a pix-frontend-* or pix-platform-desktop, so arms for
+  // backend, data and devops were conditions no input could satisfy.
+  const detectedDomain = DOMAIN_PREFIXES.find(([prefix]) => detectedSkillName?.startsWith(prefix))?.[1] ?? null;
 
-  return { detectedFramework, detectedSkillName, detectedDomain: prefix?.[1] ?? null };
+  return { detectedFramework, detectedSkillName, detectedDomain };
 }

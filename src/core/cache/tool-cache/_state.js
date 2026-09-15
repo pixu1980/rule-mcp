@@ -20,6 +20,9 @@ export const NON_CACHEABLE = new Set([
   "pix_tool_gateway",
   "pix_tool_detect",
   "pix_tool_update",
+  // plan reads the filesystem (.tokensave/ presence in projectDir): a replayed
+  // answer states stale availability, and the fill itself is cheap string work.
+  "pix_tool_plan",
 ]);
 
 /**

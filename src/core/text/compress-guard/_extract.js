@@ -1,10 +1,8 @@
-// SPDX-FileCopyrightText: 2025-2026 pixu1980
-// SPDX-License-Identifier: MIT
 /**
  * @module core/text/compress-guard/extract
  *
  * The structural extractors the compression guard compares before and after a
- * pass. Ported from the caveman-compress companion skill's `validate.py`
+ * pass. Ported from the compression-reference companion skill's `validate.py`
  * (`extract_headings`, `extract_code_blocks`, `extract_urls`, `extract_paths`,
  * `count_bullets`), so the JS pipeline and the python CLI agree on what
  * "structure survived" means.

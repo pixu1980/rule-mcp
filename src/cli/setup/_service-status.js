@@ -1,5 +1,3 @@
-// SPDX-FileCopyrightText: 2025-2026 pixu1980
-// SPDX-License-Identifier: MIT
 /**
  * @module cli/setup/service-status
  *
@@ -12,14 +10,10 @@
  */
 
 import { existsSync } from "node:fs";
-import { homedir, platform } from "node:os";
-import { join } from "node:path";
+import { platform } from "node:os";
 
-import { LAUNCH_AGENT_PATH, WINDOWS_SERVICE_NAME } from "../daemon/index.js";
+import { LAUNCH_AGENT_PATH, SYSTEMD_UNIT_PATH, WINDOWS_SERVICE_NAME } from "../daemon/index.js";
 import { tryExec } from "../../shared/index.js";
-
-/** The systemd user unit this installer writes. */
-export const systemdUnitPath = (home = homedir()) => join(home, ".config", "systemd", "user", "pix-galaxy-mcp.service");
 
 /**
  * @returns {{ present: boolean, detail: string }}
@@ -30,9 +24,7 @@ export function daemonServicePresent() {
   }
 
   if (platform() === "linux") {
-    const unit = systemdUnitPath();
-
-    return { present: existsSync(unit), detail: unit };
+    return { present: existsSync(SYSTEMD_UNIT_PATH), detail: SYSTEMD_UNIT_PATH };
   }
 
   if (platform() === "win32") {

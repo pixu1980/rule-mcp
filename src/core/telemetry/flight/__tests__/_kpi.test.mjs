@@ -51,19 +51,19 @@ check(
   kpi.tokens.measuredSaved === 600 && kpi.tokens.estimatedRouting === 12_000,
 );
 check("F6.3.1 what the cache replayed is reported as replayed output", kpi.cache.replayedTokens === 1000);
-check("F6.4 caveman's compression is a measured ratio", Math.abs(kpi.tokens.cavemanRatio - 0.25) < 1e-9);
+check("F6.4 compression's compression is a measured ratio", Math.abs(kpi.tokens.compressionRatio - 0.25) < 1e-9);
 check(
   "F6.4.1 a result the reminder grew reports no compression and names the overhead",
   (() => {
     // finalizeResult appends the workflow reminder, so the result that leaves
     // the server is routinely LARGER than the core it was built from. Reported
-    // as a negative compression, that reads as caveman having made things
+    // as a negative compression, that reads as compression having made things
     // worse; it is the reminder's own cost and belongs in its own field.
     const grown = computeKpi({
       events: [{ ts: T0, session: "s", tool: "pix_tool", coreTokens: 100, finalTokens: 130 }],
     });
 
-    return grown.tokens.cavemanRatio === 0 && grown.tokens.reminderOverhead === 30;
+    return grown.tokens.compressionRatio === 0 && grown.tokens.reminderOverhead === 30;
   })(),
 );
 check("F6.5 guardrail failures are attributed to rules", kpi.guardrails.byRule["no-css-classes"] === 2);

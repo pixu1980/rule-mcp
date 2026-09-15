@@ -1,18 +1,16 @@
-// SPDX-FileCopyrightText: 2025-2026 pixu1980
-// SPDX-License-Identifier: MIT
 /**
  * @module scripts/reports/compression/verbose.data
  *
  * Synthetic verbose prose: the corpus the level table is actually about.
  *
  * This project's own skills and docs are already written in the compressed
- * style the caveman skill teaches, so measuring the vocabulary on them
+ * style the compression skill teaches, so measuring the vocabulary on them
  * measures how little filler is left, not what the rules can do. The paragraphs
  * below are what an uncompressed assistant answer looks like - pleasantries,
  * hedging, throat-clearing, long-form connectives - and they are labeled
  * synthetic everywhere the number is quoted.
  *
- * @see skills/pix-caveman/SKILL.md - every construct here appears in its rule table
+ * @see skills/pix-compression/SKILL.md - every construct here appears in its rule table
  */
 
 /** @type {Array<{ name: string, text: string }>} */

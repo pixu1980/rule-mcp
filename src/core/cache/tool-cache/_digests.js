@@ -4,7 +4,7 @@
 import { createHash } from "node:crypto";
 import { readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
-import { getSkillsDirs as getSkillsDirectories } from "../../../cli/paths/index.js";
+import { getSkillsDirs as getSkillsDirectories } from "@src/cli/paths/index.js";
 
 /** Content digests of the skills, computed once per process. */
 export const _digests = new Map();

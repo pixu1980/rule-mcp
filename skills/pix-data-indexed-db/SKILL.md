@@ -14,6 +14,7 @@ tags:
   - "pwa"
   - "sync"
 frameworks: [all]
+inherits: [pix-data]
 ---
 
 # pix-data-indexed-db - IndexedDB / File System Best Practices & Scripts

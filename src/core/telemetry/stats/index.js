@@ -7,7 +7,7 @@
  *
  * One rule shapes the whole output: measured savings and estimated savings are
  * reported as separate numbers, and the estimate is always rendered with a
- * tilde. Cache payloads and caveman before-and-after are measured, byte for
+ * tilde. Cache payloads and compression before-and-after are measured, byte for
  * byte. "What reading the whole skill file would have cost" is a model of a
  * thing that did not happen, and adding it to a measured total produces a
  * headline number nobody can defend.

@@ -10,6 +10,7 @@ tags:
   - "performance"
   - "http"
 frameworks: [all]
+inherits: [pix-backend]
 ---
 
 # pix-backend-fastify - Fastify Best Practices

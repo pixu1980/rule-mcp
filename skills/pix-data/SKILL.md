@@ -9,6 +9,7 @@ tags:
   - "sql"
   - "nosql"
 frameworks: [all]
+guardrails: [connection-pool, migration-safety, parameterized-queries, transaction-safety]
 ---
 
 # pix-data - Data & Database Skills Index

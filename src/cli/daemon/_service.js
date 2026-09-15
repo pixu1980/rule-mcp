@@ -84,10 +84,15 @@ export function installDaemonService({ dryRun = false } = {}) {
  * On Linux, stops, disables, and removes the systemd unit.
  * On Windows, stops and deletes the service.
  *
+ * Async because the process fallback has to be awaited: returning its promise
+ * unawaited reported `ok: undefined` and a pending promise as the result, so
+ * `daemon uninstall` printed a failure on every platform without a native
+ * service even when the stop had succeeded.
+ *
  * @param {{ dryRun?: boolean }} [opts]
- * @returns {{ ok: boolean, platform: string, service: string, result: object }}
+ * @returns {Promise<{ ok: boolean, platform: string, service: string, result: object }>}
  */
-export function uninstallDaemonService({ dryRun = false } = {}) {
+export async function uninstallDaemonService({ dryRun = false } = {}) {
   const platform = detectPlatform();
 
   switch (platform) {
@@ -102,7 +107,7 @@ export function uninstallDaemonService({ dryRun = false } = {}) {
     }
     default: {
       // Fallback: stop process-based daemon
-      const proc = stopDaemonProcess({ dryRun });
+      const proc = await stopDaemonProcess({ dryRun });
 
       return { ok: proc.ok, platform: "unknown", service: "process", result: proc };
     }

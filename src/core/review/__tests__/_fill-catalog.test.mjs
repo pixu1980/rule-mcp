@@ -34,8 +34,8 @@ test("fillRoleTemplate honors overrides and tolerates missing fields", () => {
 
   assert.match(filled, /7 years/, "the years override wins");
   assert.match(filled, /extra/, "the extra skill is added");
-  assert.match(filled, /the whole project, through this role's expertise/, "no lenses default");
-  assert.match(filled, /Focus this run on: the auth flow/, "the topic focuses the run");
+  assert.match(filled, /the scope above, through this role's expertise/, "the no-lenses default follows the scope");
+  assert.match(filled, /covers ONLY: the auth flow/, "the topic is the binding scope");
   assert.match(filled, /operation: audit/, "the commit example names the operation");
   assert.doesNotMatch(filled, /threat modeling/, "role skills absent when none");
 });

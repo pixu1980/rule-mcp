@@ -22,6 +22,7 @@
 import { readFileSync } from "node:fs";
 import { z } from "zod/v4";
 import { aggregate, renderFlight, renderStats } from "../core/telemetry/stats/index.js";
+import { tokensaveGain } from "../core/tokensave/_ledger.js";
 import { readEvents, readRollups } from "../core/telemetry/store/index.js";
 import { telemetryEnabled } from "../core/telemetry/recorder/index.js";
 import { registerTool } from "./router/index.js";
@@ -100,6 +101,18 @@ export function registerStatsTool() {
             "",
           ].join("\n");
         }
+      }
+
+      const gain = tokensaveGain(process.cwd());
+
+      if (gain) {
+        text += [
+          "",
+          "## TokenSave ledger",
+          "",
+          `${gain.calls ?? 0} TokenSave calls over ${gain.range ?? "30d"} saved ~${gain.saved_tokens ?? 0} tokens${Number.isFinite(gain.usd) ? ` ($${gain.usd})` : ""}.`,
+          "",
+        ].join("\n");
       }
 
       return { content: [{ type: "text", text }], _meta: { pixStats: stats } };

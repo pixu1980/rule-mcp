@@ -1,6 +1,4 @@
 #!/usr/bin/env node
-// SPDX-FileCopyrightText: 2025-2026 pixu1980
-// SPDX-License-Identifier: MIT
 
 /**
  * @module bin/pix-galaxy-mcp
@@ -21,8 +19,15 @@
  * turns it off, which is what CI and the test suites use so a run never depends
  * on a cache another run wrote.
  *
+ * The `@src/*` resolve hook is registered here for the same reason, and not in
+ * the shebang: a shebang takes one argument on Linux, so `node --import ...`
+ * there would be passed as a single unknown flag. Every other entry point that
+ * loads server code registers it too - see `scripts/alias-hook.mjs`.
+ *
  * @see https://nodejs.org/api/module.html#moduleenablecompilecachecachedir
  */
+
+await import("../scripts/alias-hook.mjs");
 
 try {
   const { enableCompileCache } = await import("node:module");
