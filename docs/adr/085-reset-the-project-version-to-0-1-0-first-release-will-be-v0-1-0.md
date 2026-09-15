@@ -1,9 +1,11 @@
 # 085: Reset the project version to 0.1.0, first release will be v0.1.0
 
 - **Date**: 2026-09-10
-- **Status**: accepted
+- **Status**: superseded
 - **Tags**: release, versioning
 - **Author**: Emiliano Pisu <pisuemiliano.1980@gmail.com>
+
+> Superseded by [ADR 097](097-the-release-target-is-v0-1-0-beta-and-the-version-tooling-accepts-a-prerelease.md) on the version it names: the first release is v0.1.0-beta.
 
 ## Context
 

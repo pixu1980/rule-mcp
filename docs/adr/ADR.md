@@ -8,6 +8,8 @@ this directory are the source of truth; this index is generated from them by
 
 | #                                                                                                                       | Title                                                                                                     | Date       | Status     | Tags                                                                                |
 | ----------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- | ---------- | ---------- | ----------------------------------------------------------------------------------- |
+| [098](098-develop-merges-into-main-by-area-and-stays-as-an-integration-branch.md)                                       | develop merges into main by area, and stays as an integration branch                                      | 2026-09-15 | accepted   | process, git, merge, governance                                                     |
+| [097](097-the-release-target-is-v0-1-0-beta-and-the-version-tooling-accepts-a-prerelease.md)                            | The release target is v0.1.0-beta, and the version tooling accepts a prerelease                           | 2026-09-15 | accepted   | release, versioning, changelog, workflow                                            |
 | [096](096-tokensave-is-the-primary-code-graph-javascript-is-the-fallback.md)                                            | TokenSave is the primary code graph, JavaScript is the fallback                                           | 2026-09-15 | accepted   | tokensave, architecture, adapter, fallback, code-graph                              |
 | [095](095-close-out-the-install-and-uninstall-rework-plan.md)                                                           | Close out the install and uninstall rework plan                                                           | 2026-09-15 | accepted   | docs, closeout, plan, install                                                       |
 | [094](094-rename-the-compression-subsystem-and-apply-it-to-every-model-facing-surface.md)                               | Rename the compression subsystem and apply it to every model-facing surface                               | 2026-09-15 | accepted   | compression, tokens, rename, mcp-boundary, determinism                              |
@@ -19,7 +21,7 @@ this directory are the source of truth; this index is generated from them by
 | [088](088-a-persona-topic-is-the-binding-scope-of-the-run.md)                                                           | A persona topic is the binding scope of the run                                                           | 2026-09-12 | accepted   | personas, prompts, review, tokensave                                                |
 | [087](087-session-close-archives-completed-audits-reviews-and-plans.md)                                                 | Session close archives completed audits, reviews and plans                                                | 2026-09-11 | accepted   | process, handoff, docs                                                              |
 | [086](086-documentation-site-is-hand-written-static-html-from-docs.md)                                                  | Documentation site is hand-written static HTML from docs                                                  | 2026-09-11 | accepted   | docs, site                                                                          |
-| [085](085-reset-the-project-version-to-0-1-0-first-release-will-be-v0-1-0.md)                                           | Reset the project version to 0.1.0, first release will be v0.1.0                                          | 2026-09-10 | accepted   | release, versioning                                                                 |
+| [085](085-reset-the-project-version-to-0-1-0-first-release-will-be-v0-1-0.md)                                           | Reset the project version to 0.1.0, first release will be v0.1.0                                          | 2026-09-10 | superseded | release, versioning                                                                 |
 | [084](084-keep-the-name-with-a-written-posture-no-npm-placeholder-yet.md)                                               | Keep the name with a written posture, no npm placeholder yet                                              | 2026-09-10 | accepted   | naming, legal                                                                       |
 | [083](083-governance-is-an-explicit-bdfl-with-a-path-to-co-maintainers.md)                                              | Governance is an explicit BDFL with a path to co-maintainers                                              | 2026-09-10 | accepted   | governance, community                                                               |
 | [082](082-release-artifacts-are-github-tarballs-not-registry-packages.md)                                               | Release artifacts are GitHub tarballs, not registry packages                                              | 2026-09-10 | accepted   | registry, release                                                                   |
@@ -112,6 +114,8 @@ file. Where a line stops short the rest is in the ADR.
 
 | ADR                                                                                                                     | Decision                                                                                                                                                                                                                        | Consequence                                                                                                                                                                                                                    |
 | ----------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| [098](098-develop-merges-into-main-by-area-and-stays-as-an-integration-branch.md)                                       | One merge commit, resolved by area rather than by hunk, followed by reconciliation commits.                                                                                                                                     | The 71 develop commits stay readable in the graph instead of being replayed, which a rebase would have done against two cross-cutting mechanical passes on main.                                                               |
+| [097](097-the-release-target-is-v0-1-0-beta-and-the-version-tooling-accepts-a-prerelease.md)                            | The version is 0.1.0-beta in package.json, server.json, both packaging manifests and the newest CHANGELOG heading.                                                                                                              | ADR 085 is superseded on the version it names; its reasoning about resetting away from v1.0.0 stands.                                                                                                                          |
 | [096](096-tokensave-is-the-primary-code-graph-javascript-is-the-fallback.md)                                            | Add src/core/tokensave/ with three modules and a barrel. probe.js detects .tokensave/tokensave.db, reads config and branch metadata, and exposes { available, version, branch, parentBranch, staleSeconds }; the status...      | The server gains an optional runtime dependency on a local TokenSave installation; when the graph or the binary is missing, the JavaScript path answers and the server behaves exactly as before.                              |
 | [095](095-close-out-the-install-and-uninstall-rework-plan.md)                                                           | Fold the record into this ADR and the session handoff, then delete the source file.                                                                                                                                             | docs/plans/install.md is gone from the tree; the handoff of this session names what it carried.                                                                                                                                |
 | [094](094-rename-the-compression-subsystem-and-apply-it-to-every-model-facing-surface.md)                               | Rename the code, comments and configuration to neutral compression names: `_caveman*.js` becomes `_compression*.js`, `cavemanLevel`/`cavemanEnabled` become `compressionLevel`/`compressionEnabled`,...                         | The codebase, generated agent commands, installers and docs no longer carry caveman branding; README.md is the only file that references the inspiration.                                                                      |
@@ -370,6 +374,14 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [071](071-the-census-generates-eight-numbered-documents-and-three-fenced-blocks-inside-the-chapters-a-person-writes.md) The census generates eight numbered documents and three fenced blocks inside the chapters a person writes
 - [048](048-v100-release-and-docs-accuracy-guard.md) v1.0.0 release and the docs-accuracy guard
 
+### governance
+
+- [098](098-develop-merges-into-main-by-area-and-stays-as-an-integration-branch.md) develop merges into main by area, and stays as an integration branch
+- [093](093-add-an-open-source-steward-persona-for-governance-contributors-and-donors.md) Add an Open Source Steward persona for governance, contributors and donors
+- [083](083-governance-is-an-explicit-bdfl-with-a-path-to-co-maintainers.md) Governance is an explicit BDFL with a path to co-maintainers
+- [079](079-add-the-oss-architect-review-persona.md) Add the OSS Architect review persona
+- [066](066-remove-externally-derived-skills-from-the-served-knowledge-base.md) Remove externally derived skills from the served knowledge base
+
 ### prompts
 
 - [088](088-a-persona-topic-is-the-binding-scope-of-the-run.md) A persona topic is the binding scope of the run
@@ -377,6 +389,14 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [055](055-restructure-the-command-surface-rule-router-rule-area-compression-implicit-rule-process.md) Restructure the command surface: /rule router, rule-area-*, compression implicit, rule-process-tdd skill
 - [054](054-split-review-personas-into-per-operation-commands-plan-audit-review.md) Split review personas into per-operation commands (plan/audit/review)
 - [052](052-pre-packaged-mcp-prompt-registry-26-prompts-strict-schemas-commit-scope-closer.md) Pre-packaged MCP prompt registry (26 prompts, strict schemas, commit-scope closer)
+
+### release
+
+- [097](097-the-release-target-is-v0-1-0-beta-and-the-version-tooling-accepts-a-prerelease.md) The release target is v0.1.0-beta, and the version tooling accepts a prerelease
+- [085](085-reset-the-project-version-to-0-1-0-first-release-will-be-v0-1-0.md) Reset the project version to 0.1.0, first release will be v0.1.0
+- [082](082-release-artifacts-are-github-tarballs-not-registry-packages.md) Release artifacts are GitHub tarballs, not registry packages
+- [081](081-mcp-registry-identity-is-the-github-owner-not-a-claimed-brand.md) MCP registry identity is the GitHub owner, not a claimed brand
+- [048](048-v100-release-and-docs-accuracy-guard.md) v1.0.0 release and the docs-accuracy guard
 
 ### taxonomy
 
@@ -400,13 +420,6 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [077](077-compress-every-server-model-list-surface-prompts-list-tools-list-resources-list.md) Compress every server→model list surface (prompts/list, tools/list, resources/list)
 - [073](073-compression-has-four-levels-and-no-llm-in-the-output-path.md) Compression has four levels and no LLM in the output path
 
-### governance
-
-- [093](093-add-an-open-source-steward-persona-for-governance-contributors-and-donors.md) Add an Open Source Steward persona for governance, contributors and donors
-- [083](083-governance-is-an-explicit-bdfl-with-a-path-to-co-maintainers.md) Governance is an explicit BDFL with a path to co-maintainers
-- [079](079-add-the-oss-architect-review-persona.md) Add the OSS Architect review persona
-- [066](066-remove-externally-derived-skills-from-the-served-knowledge-base.md) Remove externally derived skills from the served knowledge base
-
 ### infrastructure
 
 - [008](008-scaffold-skill-consolidation.md) scaffold skill consolidation
@@ -427,13 +440,6 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [057](057-reorganize-scripts-src-tests-with-150-line-code-splitting.md) Reorganize scripts, src and tests with 150-line code splitting
 - [050](050-round-two-hardening-cycles-daemon-cleanup-diagnostics.md) Round-2 hardening - cycles, daemon/commands split, diagnostics, HTTP verification
 - [049](049-split-hotspot-modules.md) Split the hotspot modules (guardrails + installer)
-
-### release
-
-- [085](085-reset-the-project-version-to-0-1-0-first-release-will-be-v0-1-0.md) Reset the project version to 0.1.0, first release will be v0.1.0
-- [082](082-release-artifacts-are-github-tarballs-not-registry-packages.md) Release artifacts are GitHub tarballs, not registry packages
-- [081](081-mcp-registry-identity-is-the-github-owner-not-a-claimed-brand.md) MCP registry identity is the GitHub owner, not a claimed brand
-- [048](048-v100-release-and-docs-accuracy-guard.md) v1.0.0 release and the docs-accuracy guard
 
 ### backend
 
@@ -458,6 +464,12 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [028](028-clean-rule-commands-via-user-commands-prompt-suppression-not-a-plugin.md) Clean /rule-* commands via user commands + prompt suppression, not a plugin
 - [019](019-use-a-persistent-local-bearer-token-for-daemon-transport.md) use a persistent local bearer token for daemon transport
 - [018](018-fail-closed-mcp-enforcement-and-reusable-agent-commands.md) fail closed mcp enforcement and reusable agent commands
+
+### merge
+
+- [098](098-develop-merges-into-main-by-area-and-stays-as-an-integration-branch.md) develop merges into main by area, and stays as an integration branch
+- [008](008-scaffold-skill-consolidation.md) scaffold skill consolidation
+- [004](004-scaffold-consolidation.md) Scaffold Skill Consolidation
 
 ### naming
 
