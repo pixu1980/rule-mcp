@@ -10,13 +10,18 @@
 #   3. hands the arguments to `rule-mcp setup`
 #
 # Everything else - agent detection, the picker, install modes, instruction
-# files, skills, the daemon service, the health check - lives in Node, under
-# src/cli/setup/, and is covered by tests that run on every platform. The
-# 1100 lines of shell that used to live here were a second implementation of
-# that logic, and the two drifted (ADR 080).
+# files, the guard hooks, skills, the daemon service, the health check - lives
+# in node, under src/cli/setup/, and is covered by tests that run on every
+# platform. The shell that used to do the binary resolution and the shim by
+# hand was a second implementation of what the wizard already does, and the
+# two drifted (ADR 105).
+#
+# Scope guarantee:
+#   Every path written to lives under $HOME. Nothing is created, edited or
+#   deleted inside the current directory or the repository this runs from.
 #
 # Usage:
-#   curl -fsSL https://raw.githubusercontent.com/pixu1980/rule-mcp/v0.1.0/scripts/install.sh | bash
+#   curl -fsSL https://raw.githubusercontent.com/pixu1980/rule-mcp/v0.1.0-beta/scripts/install.sh | bash
 #   ./scripts/install.sh [options]
 #
 # Every option is forwarded verbatim; run `./scripts/install.sh --help` for
@@ -28,10 +33,65 @@ set -euo pipefail
 
 NODE_MIN=20
 
+# Options `rule-mcp setup` accepts. The shell runs before node exists,
+# so it cannot ask: this table is the contract, kept honest by the
+# install-script-flags test against the `setup` command source.
+KNOWN_SETUP_FLAGS="agent mode uninstall rules no-rules commands no-commands hooks no-hooks skills no-skills minimal no-minimal surface service no-service doctor no-doctor commands-preset commands-families commands-areas commands-skills purge keep-config force dry-run no-wizard no-interactive json help version"
+VALUE_SETUP_FLAGS="agent mode commands-preset commands-families commands-areas commands-skills surface"
+
+# Reject anything `setup` cannot spell before a byte is downloaded: a typo
+# surfaces here, with the list, instead of deep in a fetched install. A
+# separate value rides with its flag, the way commander parses it - so
+# `--agent --mode` still means an agent called `--mode`, and a missing
+# value is node's to report.
+validate_setup_args() {
+  while [ $# -gt 0 ]; do
+    arg="$1"
+    shift
+    case "$arg" in
+      --)
+        # Everything past `--` is positional, and `setup` takes none.
+        if [ $# -gt 0 ]; then
+          die "unexpected argument '$1' - run 'rule-mcp setup --help' for the list"
+        fi
+        return 0
+        ;;
+      --*=*)
+        flag="${arg%%=*}"
+        flag="${flag#--}"
+        ;;
+      --*)
+        flag="${arg#--}"
+        ;;
+      -*)
+        # Short flags belong to node; commander owns `-h`.
+        continue
+        ;;
+      *)
+        die "unexpected argument '$arg' - run 'rule-mcp setup --help' for the list"
+        ;;
+    esac
+    case " $KNOWN_SETUP_FLAGS " in
+      *" $flag "*) ;;
+      *) die "unknown option '--$flag' - run 'rule-mcp setup --help' for the list" ;;
+    esac
+    case " $VALUE_SETUP_FLAGS " in
+      *" $flag "*)
+        case "$arg" in
+          --*=*) ;;
+          *) if [ $# -gt 0 ]; then shift; fi ;;
+        esac
+        ;;
+    esac
+  done
+}
+
 die() {
   echo "rule-mcp: $1" >&2
   exit 1
 }
+
+validate_setup_args "$@"
 
 command -v node >/dev/null 2>&1 || die "Node.js >= ${NODE_MIN} is required - https://nodejs.org"
 

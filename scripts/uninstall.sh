@@ -3,13 +3,17 @@
 # rule-mcp - uninstaller bootstrap
 # =============================================================================
 #
-# The mirror of scripts/install.sh: check Node, resolve the binary, hand over
+# The mirror of scripts/install.sh: check node, resolve the binary, hand over
 # to `rule-mcp setup --uninstall`. The removal logic - the scan, the
-# per-group choices, the purge - lives in src/cli/setup/ (ADR 080).
+# per-group choices, the purge - lives in src/cli/setup/ (ADR 105).
+#
+# Scope guarantee:
+#   Every path removed lives under $HOME. The project files in the directory
+#   this runs from are never touched.
 #
 # Usage:
 #   ./scripts/uninstall.sh [options]
-#   curl -fsSL https://raw.githubusercontent.com/pixu1980/rule-mcp/v0.1.0/scripts/uninstall.sh | bash
+#   curl -fsSL https://raw.githubusercontent.com/pixu1980/rule-mcp/v0.1.0-beta/scripts/uninstall.sh | bash
 #
 # Options are forwarded verbatim, with one translation kept for
 # compatibility: `--force` used to mean "do not ask for confirmation", which

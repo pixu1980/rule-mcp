@@ -4,9 +4,12 @@
   rule-mcp uninstaller bootstrap for Windows.
 
 .DESCRIPTION
-  The mirror of scripts/install.ps1: check Node, resolve the binary, hand
+  The mirror of scripts/install.ps1: check node, resolve the binary, hand
   over to `rule-mcp setup --uninstall`. The removal logic - the scan,
-  the per-group choices, the purge - lives in src/cli/setup/ (ADR 080).
+  the per-group choices, the purge - lives in src/cli/setup/ (ADR 105).
+
+  Every path removed lives under the user profile; the project files in the
+  directory this runs from are never touched.
 
   One translation is kept for compatibility: `--force` used to mean "do not
   ask for confirmation", which is now `--no-interactive` - run the plan with

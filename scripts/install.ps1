@@ -8,10 +8,13 @@
   arguments to `rule-mcp setup`.
 
   Everything else - agent detection, the picker, install modes, instruction
-  files, skills, the daemon service, the health check - lives in Node, under
-  src/cli/setup/, shared with the POSIX bootstrap. The 700 lines of
-  PowerShell that used to live here were a third implementation of that
-  logic and drifted from both others (ADR 080).
+  files, the guard hooks, skills, the daemon service, the health check - lives
+  in node, under src/cli/setup/, shared with the POSIX bootstrap. The
+  PowerShell that used to answer the same questions on its own was a second
+  implementation, and the two drifted (ADR 105).
+
+  Every path written to lives under the user profile. Nothing is created,
+  edited or deleted inside the current directory.
 
 .EXAMPLE
   ./scripts/install.ps1
@@ -26,6 +29,34 @@ param(
 
 $ErrorActionPreference = 'Stop'
 $nodeMin = 20
+
+# Options `rule-mcp setup` accepts - same contract as install.sh (see
+# the install-script-flags test); unknown options fail before any download.
+$KnownSetupFlags = @('agent', 'mode', 'uninstall', 'rules', 'no-rules', 'commands', 'no-commands', 'hooks', 'no-hooks', 'skills', 'no-skills', 'minimal', 'no-minimal', 'surface', 'service', 'no-service', 'doctor', 'no-doctor', 'commands-preset', 'commands-families', 'commands-areas', 'commands-skills', 'purge', 'keep-config', 'force', 'dry-run', 'no-wizard', 'no-interactive', 'json', 'help', 'version')
+$ValueSetupFlags = @('agent', 'mode', 'commands-preset', 'commands-families', 'commands-areas', 'commands-skills', 'surface')
+
+function Assert-SetupArguments([string[]]$rest) {
+  $i = 0
+  while ($i -lt $rest.Count) {
+    $arg = $rest[$i]
+    $i++
+    if ($arg -eq '--') {
+      # Everything past `--` is positional, and `setup` takes none.
+      if ($i -lt $rest.Count) { Stop-WithMessage "unexpected argument '$($rest[$i])' - run 'rule-mcp setup --help' for the list" }
+      return
+    }
+    if ($arg -notlike '-*') { Stop-WithMessage "unexpected argument '$arg' - run 'rule-mcp setup --help' for the list" }
+    if ($arg -notlike '--*') { continue }
+    $name = $arg.Substring(2)
+    $inline = $false
+    if ($name -like '*=*') { $name = ($name -split '=', 2)[0]; $inline = $true }
+    if ($KnownSetupFlags -notcontains $name) { Stop-WithMessage "unknown option '--$name' - run 'rule-mcp setup --help' for the list" }
+    # A separate value rides with its flag; an attached one already did.
+    if (($ValueSetupFlags -contains $name) -and (-not $inline) -and ($i -lt $rest.Count)) { $i++ }
+  }
+}
+
+Assert-SetupArguments $Arguments
 
 function Stop-WithMessage([string]$message) {
   Write-Error "rule-mcp: $message"
