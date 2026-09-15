@@ -7,7 +7,7 @@ a tool, a skill, a prompt, a role, a command or a guardrail;
 `tests/docs/census-generated.test.mjs` compares this file against the live
 registry, so a stale copy fails the build instead of misleading a reader.
 
-## Agent slash commands (152)
+## Agent slash commands (155)
 
 The router `/rule` is pinned first; the rest follow in
 locale-alphabetical order. The same set is written for every agent and IDE,
@@ -52,7 +52,7 @@ which agents are installed and where their homes are.
 | `emacs`       | mcp.el exposes prompts directly; there is no command-file convention to write to.                                                                                      |
 | `devin`       | Devin runs commands in its own workspace runtime, not from local slash-command files; MCP prompts remain the entry point.                                              |
 
-### The kinds (152 commands)
+### The kinds (155 commands)
 
 | Kind       | Count | What it is for                                                      |
 | ---------- | ----- | ------------------------------------------------------------------- |
@@ -60,7 +60,7 @@ which agents are installed and where their homes are.
 | `area`     | 90    | Routes within one area, when the area is known and the skill is not |
 | `workflow` | 2     | Runs a named workflow: a decision record, a pre-flight check        |
 | `session`  | 5     | Carries a session across a context boundary                         |
-| `persona`  | 54    | Runs one review role at one operation, and writes its documents     |
+| `persona`  | 57    | Runs one review role at one operation, and writes its documents     |
 
 **router**: `/rule`
 
@@ -70,7 +70,7 @@ which agents are installed and where their homes are.
 
 **session**: `/rule-handoff`, `/rule-handon`, `/rule-init`, `/rule-process-check`, `/rule-update`
 
-The 54 persona commands are one per role and operation
+The 57 persona commands are one per role and operation
 ([`11-personas.md`](11-personas.md)).
 
 ## Hooks (3 entries across 3 events)

@@ -8,6 +8,7 @@ this directory are the source of truth; this index is generated from them by
 
 | #                                                                                                                       | Title                                                                                                     | Date       | Status     | Tags                                                                                |
 | ----------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- | ---------- | ---------- | ----------------------------------------------------------------------------------- |
+| [083](083-add-an-open-source-steward-persona-for-governance-contributors-and-donors.md)                                 | Add an Open Source Steward persona for governance, contributors and donors                                | 2026-09-15 | accepted   | personas, open-source, governance, catalog                                          |
 | [082](082-surface-selection-amends-the-install-stack-freeze-with-an-additive-loader-filter.md)                          | Surface selection amends the install stack freeze with an additive loader filter                          | 2026-09-14 | accepted   | install, wizard, architecture                                                       |
 | [081](081-install-uninstall-rework-keeps-current-stack-steps-and-contents-only.md)                                      | Install/uninstall rework keeps current stack, steps and contents only                                     | 2026-09-14 | accepted   | install, wizard, architecture                                                       |
 | [080](080-the-setup-wizard-is-the-installer-and-it-asks-which-commands-to-write.md)                                     | The setup wizard is the installer, and it asks which commands to write                                    | 2026-09-13 | accepted   | installer, cli, wizard, commands, ux                                                |
@@ -95,6 +96,7 @@ file. Where a line stops short the rest is in the ADR.
 
 | ADR                                                                                                                     | Decision                                                                                                                                                                                                                        | Consequence                                                                                                                                                                                                                    |
 | ----------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| [083](083-add-an-open-source-steward-persona-for-governance-contributors-and-donors.md)                                 | Add `personas/oss.md` as an active persona named `Open Source Steward` with id `oss`. Its skills cover open source governance, contributor management, donor and funding management, release management, and community...       | A free-text request about governance, contributors, donors or community now resolves to a role that owns those lenses.                                                                                                         |
 | [082](082-surface-selection-amends-the-install-stack-freeze-with-an-additive-loader-filter.md)                          | Amend ADR 081 narrowly: the installer writes one grammar string (RULE_MCP_SURFACE) and the loader enforces it with the same post-registration retain the minimal mode uses.                                               | Upside: the installer's surface promise is honest end to end with minimal code.                                                                                                                                                |
 | [081](081-install-uninstall-rework-keeps-current-stack-steps-and-contents-only.md)                                      | The install/uninstall rework changes wizard steps and contents only (order, copy, offered choices, validation).                                                                                                                 | Upside: minimal regression risk, no dependency churn, the plain runner stays free.                                                                                                                                             |
 | [080](080-the-setup-wizard-is-the-installer-and-it-asks-which-commands-to-write.md)                                     | The wizard is the installer.                                                                                                                                                                                                    | One implementation, in node, tested on every platform without a terminal: `_options`, `_plan-*`, `_preflight`, `_scan` and `_run-plan` are pure or read-only, and only `_app-*`, `_step-*` and `_widget-*` know Ink exists.    |
@@ -267,6 +269,15 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [045](045-adopt-eslint-plugin-unicorn-for-js-ts-quality.md) Adopt eslint-plugin-unicorn for JS/TS quality
 - [019](019-fail-closed-mcp-enforcement-and-reusable-agent-commands.md) fail closed mcp enforcement and reusable agent commands
 
+### personas
+
+- [083](083-add-an-open-source-steward-persona-for-governance-contributors-and-donors.md) Add an Open Source Steward persona for governance, contributors and donors
+- [079](079-skills-own-their-guardrails-and-three-layers-resolve-both-skills-and-personas.md) Skills own their guardrails, and three layers resolve both skills and personas
+- [078](078-a-persona-topic-is-the-binding-scope-of-the-run.md) A persona topic is the binding scope of the run
+- [063](063-plans-carry-nested-sub-steps-and-an-exhaustiveness-mandate.md) Plans carry nested sub-steps and an exhaustiveness mandate
+- [062](062-persona-plans-are-checklists-with-marks-that-survive-the-sync.md) Persona plans are checklists with marks that survive the sync
+- [057](057-split-review-personas-into-per-operation-commands-plan-audit-review.md) Split review personas into per-operation commands (plan/audit/review)
+
 ### tool
 
 - [026](026-skill-routing-pnpm-package-manager-workspace-monorepo-setup.md) Skill routing: pnpm package manager workspace monorepo setup
@@ -308,14 +319,6 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [067](067-coverage-floor-raised-to-89-toward-the-95-endpoint.md) Coverage floor raised to 89 toward the 95 endpoint
 - [066](066-coverage-floor-raised-to-87-95-remains-the-ratchet-endpoint.md) Coverage floor raised to 87; 95 remains the ratchet endpoint
 - [065](065-glob-suite-runner-colocated-tests-and-a-branch-coverage-ratchet.md) Glob suite runner, co-located tests, and a branch-coverage ratchet
-
-### personas
-
-- [079](079-skills-own-their-guardrails-and-three-layers-resolve-both-skills-and-personas.md) Skills own their guardrails, and three layers resolve both skills and personas
-- [078](078-a-persona-topic-is-the-binding-scope-of-the-run.md) A persona topic is the binding scope of the run
-- [063](063-plans-carry-nested-sub-steps-and-an-exhaustiveness-mandate.md) Plans carry nested sub-steps and an exhaustiveness mandate
-- [062](062-persona-plans-are-checklists-with-marks-that-survive-the-sync.md) Persona plans are checklists with marks that survive the sync
-- [057](057-split-review-personas-into-per-operation-commands-plan-audit-review.md) Split review personas into per-operation commands (plan/audit/review)
 
 ### commands
 

@@ -7,9 +7,9 @@ a tool, a skill, a prompt, a role, a command or a guardrail;
 `tests/docs/census-generated.test.mjs` compares this file against the live
 registry, so a stale copy fails the build instead of misleading a reader.
 
-## MCP prompts (151)
+## MCP prompts (154)
 
-97 reusable prompts, plus 54 generated from the persona registry.
+97 reusable prompts, plus 57 generated from the persona registry.
 Claude Code installs clean `/rule-*` commands instead and suppresses these
 (ADR 029), so the two names are deliberately the same.
 
@@ -135,6 +135,7 @@ takes an optional free-text `request` naming the focus for the run.
 | `docs`          | `/rule-plan-docs`          | `/rule-audit-docs`          | `/rule-review-docs`          |
 | `frontend`      | `/rule-plan-frontend`      | `/rule-audit-frontend`      | `/rule-review-frontend`      |
 | `i18n`          | `/rule-plan-i18n`          | `/rule-audit-i18n`          | `/rule-review-i18n`          |
+| `oss`           | `/rule-plan-oss`           | `/rule-audit-oss`           | `/rule-review-oss`           |
 | `performance`   | `/rule-plan-performance`   | `/rule-audit-performance`   | `/rule-review-performance`   |
 | `privacy`       | `/rule-plan-privacy`       | `/rule-audit-privacy`       | `/rule-review-privacy`       |
 | `qa`            | `/rule-plan-qa`            | `/rule-audit-qa`            | `/rule-review-qa`            |
