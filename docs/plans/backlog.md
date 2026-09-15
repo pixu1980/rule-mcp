@@ -1,15 +1,8 @@
 # Backlog
 
-Open work that is not owned by a persona trio. Newest first. Each item names the
-symptom, not the fix, so the run that picks it up can choose the fix.
-
-## B-5 - Persona operations as tools, and generated skills in `~/.agents/skills`
-
-`/rule-audit-*`, `/rule-review-*` and `/rule-plan-*` exist only as slash commands.
-Custom IDEs that call tools rather than commands cannot reach them; a tool per
-operation would. In the same move, installing the skills into `~/.agents/skills`
-does not generate the persona skills there, so a home install has no
-`rule-plan-<role>` skills to load.
+The queue of work not owned by a persona trio. Each item names the symptom, not
+the fix, so the run that picks it up can choose the fix. The queue is empty right
+now; the Done section is the record.
 
 ## Done
 
@@ -24,3 +17,6 @@ does not generate the persona skills there, so a home install has no
 - **B-4** The wizard forces Ink `interactive: true` (overriding the CI detection that disables
   synchronized output) and turns on `incrementalRendering`, so the VS Code terminal stops
   flickering (commit `1d4eba8`).
+- **B-5** `rule_tool_audit` and `rule_tool_review` are tools for IDEs that list tools, and a full
+  skills install generates one `rule-<operation>-<role>` skill per active role with
+  `exposeTool: false` (commit `f2f4c25`).
