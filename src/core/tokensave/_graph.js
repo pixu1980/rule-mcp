@@ -32,6 +32,12 @@ export const GRAPH_CHECKS = [
   { tool: "tokensave_test_map", what: "the tests that cover a symbol" },
   { tool: "tokensave_test_risk", what: "the high-risk, weakly-tested symbols where the next test should go" },
   { tool: "tokensave_test_coverage", what: "per-symbol, per-file and per-test coverage" },
+  { tool: "tokensave_branch_list", what: "the tracked branches and how stale each one is" },
+  { tool: "tokensave_branch_search", what: "a symbol on another branch without switching the checkout" },
+  { tool: "tokensave_branch_diff", what: "the symbols a branch added, removed or changed" },
+  { tool: "tokensave_session_recall", what: "the decisions and code areas a past session recorded" },
+  { tool: "tokensave_session_start", what: "a health baseline to measure the run against" },
+  { tool: "tokensave_session_end", what: "the health delta this run produced" },
 ];
 
 /**
