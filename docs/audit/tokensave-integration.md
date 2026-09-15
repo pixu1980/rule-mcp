@@ -352,9 +352,8 @@ Gate: file-tree and fix suites green on both paths; byte-identical output on the
 
 ### 6.3 Milestone 2 — Impact and architecture health (P0, depends on M1)
 
-Status: **partial** — T2.1 and T2.3 done in commit `8377b49`; T2.2 already satisfied
-(`docs/plans/architect.md` and `docs/reviews/architect.md` cite `tokensave_circular` and
-`tokensave_imports`); T2.4 pending.
+Status: **done** — T2.1 and T2.3 in commit `8377b49`; T2.2 already satisfied; T2.4 in the
+`project` guardrail pass.
 
 - **T2.1** Wire `impact`, `callers`, `callees`, `file_dependents` into `rule_tool_plan` and
   `rule_tool_check` reviews (`R11`). _(done through the graph checklist)_
@@ -363,9 +362,10 @@ Status: **partial** — T2.1 and T2.3 done in commit `8377b49`; T2.2 already sat
 - **T2.3** Feed `dsm`, `dependency_depth`, `gini`, `coupling`, `hotspots`, `health` into audit
   and review context (`R12`). _(done through the graph checklist)_
 - **T2.4** Replace guardrail rules that are pure graph queries with the TokenSave equivalents
-  (`R3`), keeping the guardrail engine as the policy owner. _(pending: the guardrail engine
-  checks a code string, not the project graph; a TokenSave-backed project pass belongs in a
-  dedicated tool rather than a snippet rule)_
+  (`R3`), keeping the guardrail engine as the policy owner. _(done: `rule_tool_check` `mode=project`
+  runs `project-circular`, `project-health`, `project-dead-code` and `project-unsafe-patterns`
+  through `src/core/guardrails/project/`; a missing graph or a failing tool skips a check, never
+  fails it)_
 
 Gate: review/plan documents cite TokenSave numbers; guardrail suite green.
 
