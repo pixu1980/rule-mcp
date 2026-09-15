@@ -1,5 +1,5 @@
 {
-  "version": "0.1.0",
+  "version": "0.1.0-beta",
   "description": "MCP server for the pix-* skill ecosystem",
   "homepage": "https://github.com/pixu1980/pix-galaxy-mcp",
   "license": "MIT",

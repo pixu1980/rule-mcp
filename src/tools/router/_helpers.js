@@ -3,7 +3,7 @@
 /** Result shaping helpers: banner, finalize, token/size estimates, and the skill-independent set. */
 
 import { alignAsciiBoxesResult } from "../../core/text/index.js";
-import { compressResult, MIN_COMPRESS_LENGTH } from "../../core/text/_compression.js";
+import { compressResult, compressSurfaceText, MIN_COMPRESS_LENGTH } from "../../core/text/_compression.js";
 import { decorateWorkflowReminder, stampRequestId } from "../../core/enforcement/index.js";
 import { stripFingerprintResult } from "../../core/text/index.js";
 
@@ -12,7 +12,13 @@ function withBanner(banner, result) {
     return result;
   }
 
-  return { ...result, content: [{ type: "text", text: banner }, ...result.content] };
+  // The banner rides on the result the model reads, so it is compressed at the
+  // same boundary, booked under its own source (manifest: banners). The resume
+  // announcement is already a compressed handon block; the self-update notice
+  // is terse but goes through the same pass for the invariant.
+  const bannerText = compressSurfaceText(String(banner), { source: "compression-banner" }).text;
+
+  return { ...result, content: [{ type: "text", text: bannerText }, ...result.content] };
 }
 
 /**

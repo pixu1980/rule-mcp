@@ -60,8 +60,10 @@ function check() {
 }
 
 function apply(version) {
-  if (!/^\d+\.\d+\.\d+$/u.test(version ?? "")) {
-    process.stderr.write("usage: version/index.mjs --apply <x.y.z>\n");
+  // A prerelease suffix is part of the version this project ships next, and
+  // the release workflow already reads the hyphen to mark the GitHub release.
+  if (!/^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?$/u.test(version ?? "")) {
+    process.stderr.write("usage: version/index.mjs --apply <x.y.z[-prerelease]>\n");
     process.exitCode = 1;
 
     return;

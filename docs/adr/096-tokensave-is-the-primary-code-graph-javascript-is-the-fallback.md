@@ -7,7 +7,7 @@
 
 ## Context
 
-TokenSave indexes this project into a local code graph and already ships 89 MCP tools for symbols, relationships, impact, health, tests, git history and edits. The server used it only as a suppression signal: it detected .tokensave/ and trimmed its own context dumps. Everything else was reimplemented in JavaScript. The analysis in docs/audit/tokensave-integration.md maps 18 replacement opportunities and stages them in milestones; M0 is the foundation every later milestone depends on.
+TokenSave indexes this project into a local code graph and already ships 89 MCP tools for symbols, relationships, impact, health, tests, git history and edits. The server used it only as a suppression signal: it detected .tokensave/ and trimmed its own context dumps. Everything else was reimplemented in JavaScript. The analysis in docs/plans/tokensave-integration.md maps 18 replacement opportunities and stages them in milestones; M0 is the foundation every later milestone depends on.
 
 ## Decision
 
@@ -15,7 +15,7 @@ Add src/core/tokensave/ with three modules and a barrel. probe.js detects .token
 
 ## Consequences
 
-The server gains an optional runtime dependency on a local TokenSave installation; when the graph or the binary is missing, the JavaScript path answers and the server behaves exactly as before. The adapter is the only module that knows TokenSave exists, so the integration can be disabled in one place. The probe is injected and the client is injected, so both are testable without a live graph. The plan in docs/audit/tokensave-integration.md now has its foundation.
+The server gains an optional runtime dependency on a local TokenSave installation; when the graph or the binary is missing, the JavaScript path answers and the server behaves exactly as before. The adapter is the only module that knows TokenSave exists, so the integration can be disabled in one place. The probe is injected and the client is injected, so both are testable without a live graph. The plan in docs/plans/tokensave-integration.md now has its foundation.
 
 ## What would end this
 

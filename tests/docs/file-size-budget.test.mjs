@@ -54,7 +54,13 @@ function collectSourceFiles() {
 }
 
 const files = collectSourceFiles();
-const lineCount = (file) => readFileSync(file, "utf8").split("\n").length - 1;
+// The two SPDX lines are mandated on every source file (ADR 071), so they
+// are not part of what a module chose to write and do not spend its budget.
+const lineCount = (file) =>
+  readFileSync(file, "utf8")
+    .split("\n")
+    .slice(0, -1)
+    .filter((line) => !line.startsWith("// SPDX-")).length;
 
 test("no numbered junk file names (js-1.js, parts-2.js, ...)", () => {
   const junk = files.filter((file) => JUNK_NAME.test(file.split("/").at(-1)));

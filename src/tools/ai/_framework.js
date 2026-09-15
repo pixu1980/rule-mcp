@@ -2,10 +2,17 @@
 // SPDX-License-Identifier: MIT
 import { detectProject, getFrameworkSuggestion } from "../../core/detector/index.js";
 
-/** Skill-name prefix to the domain that biases routing, most specific first. */
+/**
+ * Skill-name prefix to the domain that biases routing, most specific first.
+ *
+ * A meta-framework is frontend: it was, as pix-frontend-meta-astro, until the
+ * pix-meta rename dropped it out of the prefix and cost Astro its bias
+ * (ADR 075).
+ */
 const DOMAIN_PREFIXES = [
   ["pix-ai", "ai"],
   ["pix-frontend", "frontend"],
+  ["pix-meta", "frontend"],
 ];
 
 /**
