@@ -26,6 +26,7 @@ two states, `active` and `proposed`; there is no `deprecated`.
 | `docs`          | Senior Documentation Engineer               | 25    | 7      | active | `pix-styleguide-markdown`, `pix-styleguide-readme`, `pix-process-adr`, `pix-styleguide-javascript`                          |
 | `frontend`      | Frontend Platform Engineer                  | 20    | 5      | active | `pix-platform-web`, `pix-frontend-workers`, `pix-styleguide-baseline`                                                       |
 | `i18n`          | Localization Engineer                       | 15    | 5      | active | `pix-styleguide-i18n`, `pix-styleguide-validation`                                                                          |
+| `oss`           | Open Source Steward                         | 25    | 7      | active | `pix-process-adr`, `pix-process-changelog`, `pix-process-npm-release`                                                       |
 | `performance`   | Performance Engineer                        | 20    | 6      | active | `pix-backend-workers`, `pix-frontend-workers`, `pix-toolchain-vite`                                                         |
 | `privacy`       | Privacy and Compliance Engineer             | 20    | 6      | active | `pix-backend-security`, `pix-devops-observability`                                                                          |
 | `qa`            | QA and Test Engineer                        | 25    | 5      | active | `pix-devops-testing`, `pix-styleguide-validation`                                                                           |
@@ -97,6 +98,11 @@ it, and resolving one is how a free-text ask reaches the right persona.
 
 - **Lenses**: `a user-visible string baked into code instead of a message table`; `pluralization that only handles one language's rules`; `RTL that breaks because it is styled, not designed`; `sorting, dates and numbers that assume one locale`; `translations that break markup across languages`
 - **Aliases**: `localization-engineer`, `localization engineer`, `internazionalizzazione`, `esperto di localizzazione`
+
+### Open Source Steward (`oss`)
+
+- **Lenses**: `governance that a new contributor can find and follow`; `a contribution path from first issue to merge, and where it stalls`; `the CLA or DCO the project asks for, and whether it is enforced`; `funding that is transparent to donors and independent of one payer`; `a release cadence contributors can plan around`; `a community whose decisions are documented, not remembered`; `boundaries between maintainers and donors, and who decides when they conflict`
+- **Aliases**: `oss`, `open source steward`, `open source maintainer`, `oss maintainer`, `open source program office`, `ospo`, `esperto open source`, `esperto di open source`
 
 ### Performance Engineer (`performance`)
 

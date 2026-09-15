@@ -7,9 +7,9 @@ a tool, a skill, a prompt, a role, a command or a guardrail;
 `tests/docs/census-generated.test.mjs` compares this file against the live
 registry, so a stale copy fails the build instead of misleading a reader.
 
-## MCP prompts (151)
+## MCP prompts (154)
 
-97 reusable prompts, plus 54 generated from the persona registry.
+97 reusable prompts, plus 57 generated from the persona registry.
 Claude Code installs clean `/pix-*` commands instead and suppresses these
 (ADR 029), so the two names are deliberately the same.
 
@@ -135,6 +135,7 @@ takes an optional free-text `request` naming the focus for the run.
 | `docs`          | `/pix-plan-docs`          | `/pix-audit-docs`          | `/pix-review-docs`          |
 | `frontend`      | `/pix-plan-frontend`      | `/pix-audit-frontend`      | `/pix-review-frontend`      |
 | `i18n`          | `/pix-plan-i18n`          | `/pix-audit-i18n`          | `/pix-review-i18n`          |
+| `oss`           | `/pix-plan-oss`           | `/pix-audit-oss`           | `/pix-review-oss`           |
 | `performance`   | `/pix-plan-performance`   | `/pix-audit-performance`   | `/pix-review-performance`   |
 | `privacy`       | `/pix-plan-privacy`       | `/pix-audit-privacy`       | `/pix-review-privacy`       |
 | `qa`            | `/pix-plan-qa`            | `/pix-audit-qa`            | `/pix-review-qa`            |
