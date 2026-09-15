@@ -51,7 +51,10 @@ test("a commit with no roles omits the parenthesis rather than printing an empty
   const lines = semanticLines({ commit: { changed_files: ["a.js"] } }, FULL);
 
   assert.ok(lines.includes("- Changed files: 1"), "no roles, no parenthesis");
-  assert.ok(!lines.some((line) => line.includes("()")), "an empty role list is not rendered");
+  assert.ok(
+    lines.every((line) => !line.includes("()")),
+    "an empty role list is not rendered",
+  );
 });
 
 test("a diff wins over the commit count, and fills in what it knows", () => {
@@ -103,5 +106,8 @@ test("an event with no short sha falls back to the full commit", () => {
 test("an empty history list adds no history lines", () => {
   const lines = semanticLines({ history: { symbol: "doThing", events: [] } }, FULL);
 
-  assert.ok(!lines.some((line) => line.startsWith("- History for")), "nothing to report is not reported");
+  assert.ok(
+    lines.every((line) => !line.startsWith("- History for")),
+    "nothing to report is not reported",
+  );
 });

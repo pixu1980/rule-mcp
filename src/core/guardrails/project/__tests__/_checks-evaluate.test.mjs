@@ -37,7 +37,7 @@ test("a graph that answered with nothing passes every check", () => {
       continue;
     }
 
-    assert.equal(entry.evaluate(undefined), null, `${entry.id} passes on undefined`);
+    assert.equal(entry.evaluate(), null, `${entry.id} passes on undefined`);
     assert.equal(entry.evaluate({}), null, `${entry.id} passes on an empty payload`);
   }
 });

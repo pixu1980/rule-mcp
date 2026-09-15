@@ -83,7 +83,9 @@ test("skill rows are grouped under a heading per area", () => {
   );
   assert.ok(items.length > headings.length, "and the area's skills follow it");
 
-  for (const item of items.filter((entry) => !entry.section)) {
+  const rows = items.filter((entry) => !entry.section);
+
+  for (const item of rows) {
     assert.ok(
       item.detail.some((line) => line.startsWith("Writes /rule-area-")),
       `${item.id} says which command it writes: ${JSON.stringify(item.detail)}`,

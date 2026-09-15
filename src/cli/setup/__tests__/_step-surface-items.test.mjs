@@ -57,7 +57,9 @@ test("the skills of an area are offered, hub included, and named by kind", () =>
     assert.deepEqual(hub.detail, ["Area hub: kept either way."], "a hub says it is kept whatever the tick");
   }
 
-  for (const item of items.filter((entry) => entry.id !== `rule-${first.id}`)) {
+  const members = items.filter((entry) => entry.id !== `rule-${first.id}`);
+
+  for (const item of members) {
     assert.deepEqual(item.detail, ["Member skill tool."]);
   }
 });
@@ -69,7 +71,7 @@ test("an area nobody has offers no skills", () => {
 
 test("the review line says which answer was given", () => {
   assert.equal(surfaceLabel(null), "full surface", "no answer is the full surface");
-  assert.equal(surfaceLabel(undefined), "full surface");
+  assert.equal(surfaceLabel(), "full surface");
   assert.equal(surfaceLabel({ preset: "minimal" }), "surface minimal");
   assert.equal(surfaceLabel({ areas: ["frontend", "backend"] }), "surface areas frontend,backend");
   assert.equal(surfaceLabel({ skills: ["a", "b", "c"] }), "surface 3 skills", "skills are counted, because naming them would not fit one line");

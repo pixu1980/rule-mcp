@@ -47,7 +47,7 @@ test("a preset alone is a selection", () => {
 
 test("the argv of no selection is no argv", () => {
   assert.deepEqual(selectionArgs(null), []);
-  assert.deepEqual(selectionArgs(undefined), []);
+  assert.deepEqual(selectionArgs(), []);
 });
 
 test("a preset wins the argv on its own", () => {

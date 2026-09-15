@@ -25,7 +25,7 @@ test("a commit call that failed is the same as no graph", () => {
 });
 
 test("a commit with an empty message and nothing changed says nothing", () => {
-  assert.equal(graphChanges("/tmp/p", { probe: available, client: clientOf({ commit_context: { ok: true, value: { message: "   " } } }) }), null);
+  assert.equal(graphChanges("/tmp/p", { probe: available, client: clientOf({ commit_context: { ok: true, value: { message: " ".repeat(3) } } }) }), null);
 });
 
 test("a commit payload that is not an object is refused", () => {
