@@ -16,7 +16,7 @@ test("withBanner prepends the banner to content and tolerates odd cores", () => 
   assert.deepEqual(withBanner("x", null), null, "null result passes through");
 });
 
-test("withBanner puts the banner through the same caveman pass as results", () => {
+test("withBanner puts the banner through the same compression pass as results", () => {
   const verbose = "The update process really just wants you to make sure that you restart the server.";
   const decorated = withBanner(verbose, { content: [{ type: "text", text: "payload" }] });
 
