@@ -12,7 +12,7 @@
 import { GetPromptRequestSchema, ListPromptsRequestSchema, ErrorCode, McpError } from "@modelcontextprotocol/sdk/types.js";
 import { compressSurfaceText, MIN_COMPRESS_LENGTH } from "../core/text/_compression.js";
 import { recordToolCall } from "../core/telemetry/recorder/index.js";
-import { getPrompt, listPrompts } from "../prompts/index.js";
+import { getPrompt, listActivePrompts } from "../prompts/index.js";
 
 /**
  * Compress the text of every message in a prompt body.
@@ -40,7 +40,7 @@ function compressMessages(messages) {
 /** Register the prompt handlers on the server. */
 export function registerPromptHandlers(server) {
   server.setRequestHandler(ListPromptsRequestSchema, async () => {
-    return { prompts: listPrompts() };
+    return { prompts: listActivePrompts() };
   });
 
   server.setRequestHandler(GetPromptRequestSchema, async (request) => {

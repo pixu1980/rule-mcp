@@ -32,6 +32,25 @@ test("prompts/list serves the registry with compressed descriptions", async () =
   );
 });
 
+test("prompts/list honors PIX_GALAXY_MCP_NO_PROMPTS suppression", async () => {
+  const server = stubServer();
+  registerPromptHandlers(server);
+  const previous = process.env.PIX_GALAXY_MCP_NO_PROMPTS;
+  process.env.PIX_GALAXY_MCP_NO_PROMPTS = "1";
+
+  try {
+    const { prompts } = await server.handlers[0]();
+
+    assert.equal(prompts.length, 0, "suppressed prompts/list must return no prompts, so Claude Code shows only the local /pix-* commands");
+  } finally {
+    if (previous === undefined) {
+      delete process.env.PIX_GALAXY_MCP_NO_PROMPTS;
+    } else {
+      process.env.PIX_GALAXY_MCP_NO_PROMPTS = previous;
+    }
+  }
+});
+
 test("prompts/get rejects a missing or unknown name", async () => {
   const server = stubServer();
   registerPromptHandlers(server);
