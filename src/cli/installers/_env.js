@@ -34,6 +34,7 @@ const DEFAULT_OPTOUT_ENV = {
   PIX_GALAXY_MCP_NO_COMPRESSION: "0",
   PIX_GALAXY_MCP_NO_TOKENSAVE: "0",
   PIX_GALAXY_MCP_NO_REMINDER: "0",
+  PIX_GALAXY_MCP_NO_PROMPTS: "1",
 };
 
 /** Env var that selects the minimal MCP tool surface (see core/skills/_minimal.js). */
