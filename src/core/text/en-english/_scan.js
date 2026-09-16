@@ -113,6 +113,10 @@ export function scanDocumentForForeign(document) {
         : line
             .replaceAll(/`[^`]*`/g, " ")
             .replaceAll(/https?:\/\/\S+/g, " ")
+            // An address is an identifier, not prose. Without this, every
+            // generated ADR failed on the domain suffix of its author e-mail,
+            // which collides with a Portuguese function word.
+            .replaceAll(/[\w.+-]+@[\w-]+(?:\.[\w-]+)+/g, " ")
             .replaceAll(/[#*_>|:-]+/g, " "),
     );
   }
