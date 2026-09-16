@@ -16,6 +16,12 @@ test("scanText finds accents and foreign function words", () => {
   assert.deepEqual(scanText("plain english"), { accented: [], foreign: [] }, "plain text stays clean");
 });
 
+test("scanText keeps acronyms out of the foreign words", () => {
+  assert.deepEqual(scanText("released under the MIT license").foreign, [], "an acronym is not German prose");
+  assert.deepEqual(scanText("MIT and TIM both appear").foreign, [], "every acronym stays clean");
+  assert.deepEqual(scanText("mit dem Auto").foreign, ["mit"], "the lower-case word is still caught");
+});
+
 test("scanCodeForForeign flags accented comments, foreign comments and identifiers", () => {
   const hits = scanCodeForForeign("// caf\u00E9 con crema\nconst invece = 1;\n// we can use resto fine qui\n");
   const kinds = hits.map((h) => h);

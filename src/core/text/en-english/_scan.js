@@ -9,7 +9,10 @@ import { extractComments, foreignWord, identifierTokens } from "./_tokenize.js";
 /** Scan a run of prose/comment text for accents and foreign function words. */
 export function scanText(text) {
   const accented = [...new Set(text.match(NON_ASCII_LETTER))];
-  const foreign = [...new Set((text.match(FOREIGN_RE) ?? []).map((t) => t.toLowerCase()))];
+  // An acronym is not a foreign function word: `MIT` is a license and `TIM` a
+  // carrier, while a lower-case `mit` is German prose. Every dictionary entry is
+  // a lower-case function word, so an all-caps occurrence is a different word.
+  const foreign = [...new Set((text.match(FOREIGN_RE) ?? []).filter((token) => token !== token.toUpperCase()).map((t) => t.toLowerCase()))];
 
   return { accented, foreign };
 }
