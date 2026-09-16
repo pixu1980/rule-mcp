@@ -7,7 +7,12 @@ export const vanillaHtmlTemplate = {
   description: "Pattern A and B components must return html`` (TemplateResult) for their template.",
   check: (code) => {
     const isUsesHtml = /html`/.test(code);
-    const isFunction = /^export\s+function\s/.test(code.trim()) || /^function\s/.test(code.trim()) || /=>\s*\{/.test(code);
+    // Line-anchored on purpose. A block-body arrow (`(row) => {`) appears in
+    // stores, data files and helpers, so testing the whole body for one cannot
+    // tell a component from any module that happens to hold a callback: it made
+    // `_store.js` fail for carrying two `.sort((a, b) => {})` comparators.
+    // The shape now matches `vanilla-fn-component`.
+    const isFunction = /^export\s+function\s/.test(code.trim()) || /^function\s/.test(code.trim());
     const isCe = /extends\s+HTMLElement/.test(code);
 
     if (!isFunction && !isCe) {
