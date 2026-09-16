@@ -1,9 +1,9 @@
 allowBuilds:
   "@modelcontextprotocol/inspector": false
+minimumReleaseAgeExclude:
+  - eslint-plugin-unicorn@75.0.0
 overrides:
   # Transitive advisories that `@modelcontextprotocol/sdk` has not caught up
   # to. Overrides, not ranges: the pin is the remediation, and the audit gate
   # reads the resolved tree.
-  fast-uri: 3.1.6
-  hono: 4.13.7
-  qs: 6.16.0
+  rule-mcp: 'link:'
