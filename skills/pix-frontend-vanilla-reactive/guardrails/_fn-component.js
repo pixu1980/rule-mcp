@@ -8,7 +8,12 @@ export const vanillaFnComponent = {
   label: "Functional component is a plain function",
   description: "Pattern B components must be plain functions, NOT classes extending HTMLElement.",
   check: (code) => {
-    const isPlainFunction = /^export\s+function\s/.test(code.trim()) || /^function\s/.test(code.trim()) || /^export\s+const\s/.test(code.trim());
+    const head = code.trim();
+    const declaration = /^export\s+function\s+([A-Za-z0-9_$]+)/.exec(head) || /^function\s+([A-Za-z0-9_$]+)/.exec(head) || /^export\s+const\s+([A-Za-z0-9_$]+)/.exec(head);
+    // PascalCase, because a plain declaration is not a component signature:
+    // `DEFAULTS`, `helper` and `getSortedIncomes` all open a module with
+    // `export const` or `export function` and none of them renders anything.
+    const isPlainFunction = Boolean(declaration) && /^[A-Z]/.test(declaration[1]) && /[a-z]/.test(declaration[1]);
     const isClass = /extends\s+HTMLElement/.test(code);
 
     if (isClass) {
@@ -19,7 +24,9 @@ export const vanillaFnComponent = {
       return { pass: true, note: "Not a Pattern B component - skipping" };
     }
 
-    const isReturnsHtml = /return\s+html`/.test(code);
+    // An arrow with an expression body returns the template without a `return`
+    // keyword, so `export const App = () => html`` is Pattern B too.
+    const isReturnsHtml = /return\s+html`/.test(code) || /=>\s*(?:\([^)]*\)\s*)?html`/.test(code);
 
     if (!isReturnsHtml) {
       return {
