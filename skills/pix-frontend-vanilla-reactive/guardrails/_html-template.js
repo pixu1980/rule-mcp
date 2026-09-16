@@ -7,12 +7,15 @@ export const vanillaHtmlTemplate = {
   description: "Pattern A and B components must return html`` (TemplateResult) for their template.",
   check: (code) => {
     const isUsesHtml = /html`/.test(code);
-    // Line-anchored on purpose. A block-body arrow (`(row) => {`) appears in
-    // stores, data files and helpers, so testing the whole body for one cannot
-    // tell a component from any module that happens to hold a callback: it made
-    // `_store.js` fail for carrying two `.sort((a, b) => {})` comparators.
-    // The shape now matches `vanilla-fn-component`.
-    const isFunction = /^export\s+function\s/.test(code.trim()) || /^function\s/.test(code.trim());
+    // Line-anchored and PascalCase on purpose. A block-body arrow
+    // (`(row) => {`) appears in stores, data files and helpers, so testing the
+    // whole body for one cannot tell a component from any module that happens
+    // to hold a callback: it made `_store.js` fail for carrying two
+    // `.sort((a, b) => {})` comparators. A lowercase declaration is not a
+    // component either. The shape matches `vanilla-fn-component`.
+    const head = code.trim();
+    const declaration = /^export\s+function\s+([A-Za-z0-9_$]+)/.exec(head) || /^function\s+([A-Za-z0-9_$]+)/.exec(head) || /^export\s+const\s+([A-Za-z0-9_$]+)/.exec(head);
+    const isFunction = Boolean(declaration) && /^[A-Z]/.test(declaration[1]) && /[a-z]/.test(declaration[1]);
     const isCe = /extends\s+HTMLElement/.test(code);
 
     if (!isFunction && !isCe) {
