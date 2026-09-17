@@ -8,6 +8,7 @@ this directory are the source of truth; this index is generated from them by
 
 | #                                                                                                                       | Title                                                                                                     | Date       | Status     | Tags                                                                                |
 | ----------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- | ---------- | ---------- | ----------------------------------------------------------------------------------- |
+| [101](101-accept-a-comma-separated-agent-list-in-agent-commands.md)                                                     | Accept a comma-separated agent list in agent-commands                                                     | 2026-09-17 | accepted   | cli, installer, agent-commands                                                      |
 | [100](100-the-tokensave-integration-closes-out-and-the-adapter-is-the-code-graph-layer.md)                              | The TokenSave integration closes out: the adapter and its graph-backed tools are the code-graph layer     | 2026-09-15 | accepted   | tokensave, architecture, closeout, code-graph                                       |
 | [099](099-close-out-plan-develop-consolidation.md)                                                                      | Close out plan develop-consolidation                                                                      | 2026-09-15 | accepted   | docs, closeout, plan                                                                |
 | [098](098-develop-merges-into-main-by-area-and-stays-as-an-integration-branch.md)                                       | develop merges into main by area, and stays as an integration branch                                      | 2026-09-15 | accepted   | process, git, merge, governance                                                     |
@@ -116,6 +117,7 @@ file. Where a line stops short the rest is in the ADR.
 
 | ADR                                                                                                                     | Decision                                                                                                                                                                                                                        | Consequence                                                                                                                                                                                                                    |
 | ----------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| [101](101-accept-a-comma-separated-agent-list-in-agent-commands.md)                                                     | `resolveCommandTargets` now parses `options.agent` as a comma-separated list (arrays work too) and filters targets through a Set, so one `--agent claude,pi` call covers every named agent.                                     | Multi-agent installs write the full selected command set into every selected agent's directory in a single sync.                                                                                                               |
 | [100](100-the-tokensave-integration-closes-out-and-the-adapter-is-the-code-graph-layer.md)                              | Fold the plan record into this ADR, name it in the session handoff, and delete the source file; the full text stays in git history.                                                                                             | docs/plans/tokensave-integration.md is gone from the tree and the handoff of this session names what it carried.                                                                                                               |
 | [099](099-close-out-plan-develop-consolidation.md)                                                                      | Fold the record into this ADR and the session handoff, then delete the source file.                                                                                                                                             | docs/plans/develop-consolidation.md is gone from the tree; the handoff of this session names what it carried. main, origin/main, develop and origin/develop all point at c33c9e46, so develop is now an integration branch...  |
 | [098](098-develop-merges-into-main-by-area-and-stays-as-an-integration-branch.md)                                       | One merge commit, resolved by area rather than by hunk, followed by reconciliation commits.                                                                                                                                     | The 71 develop commits stay readable in the graph instead of being replayed, which a rebase would have done against two cross-cutting mechanical passes on main.                                                               |
@@ -241,6 +243,23 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [017](017-forms-per-framework-merger-and-distribution.md) forms per framework merger and distribution
 - [011](011-forms-per-framework.md) Forms per Framework - Merger & Distribution
 
+### installer
+
+- [101](101-accept-a-comma-separated-agent-list-in-agent-commands.md) Accept a comma-separated agent list in agent-commands
+- [090](090-the-setup-wizard-is-the-installer-and-it-asks-which-commands-to-write.md) The setup wizard is the installer, and it asks which commands to write
+- [080](080-one-installer-a-node-wizard-with-shell-bootstraps.md) One installer, a Node wizard with shell bootstraps
+- [078](078-compress-agent-command-files-at-write-time.md) Compress agent command files at write time
+- [072](072-the-installer-asks-before-copying-bundled-skills-to-the-central-agents-directory.md) The installer asks before copying bundled skills to the central agents directory
+- [070](070-installer-mode-step-replaces-the-agent-picker-instead-of-stacking-under-it.md) Installer mode step replaces the agent picker instead of stacking under it
+- [061](061-one-global-shim-and-hermetic-pnpm-home-in-script-tests.md) One global shim, and hermetic PNPM_HOME in script tests
+- [056](056-drop-the-vs-code-extension-and-its-installers.md) Drop the VS Code extension and its installers
+- [055](055-restructure-the-command-surface-rule-router-rule-area-compression-implicit-rule-process.md) Restructure the command surface: /rule router, rule-area-*, compression implicit, rule-process-tdd skill
+- [049](049-split-hotspot-modules.md) Split the hotspot modules (guardrails + installer)
+- [046](046-installer-self-heals-global-shim-surfaces-failures-gates-tui-rendering.md) Installer self-heals its global shim, surfaces failures, and gates TUI rendering
+- [041](041-lossless-installer-preserve-toolprefix-normalize-rule-blank-lines.md) Lossless installer: preserve toolPrefix and normalize rule blank lines
+- [039](039-fix-vscode-extension-and-derivatives-install-uninstall.md) Fix VS Code extension and derivatives install/uninstall
+- [028](028-clean-rule-commands-via-user-commands-prompt-suppression-not-a-plugin.md) Clean /rule-* commands via user commands + prompt suppression, not a plugin
+
 ### skills
 
 - [089](089-skills-own-their-guardrails-and-three-layers-resolve-both-skills-and-personas.md) Skills own their guardrails, and three layers resolve both skills and personas
@@ -257,22 +276,6 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [008](008-scaffold-skill-consolidation.md) scaffold skill consolidation
 - [005](005-backend-framework-skills.md) Backend Framework Skills
 - [004](004-scaffold-consolidation.md) Scaffold Skill Consolidation
-
-### installer
-
-- [090](090-the-setup-wizard-is-the-installer-and-it-asks-which-commands-to-write.md) The setup wizard is the installer, and it asks which commands to write
-- [080](080-one-installer-a-node-wizard-with-shell-bootstraps.md) One installer, a Node wizard with shell bootstraps
-- [078](078-compress-agent-command-files-at-write-time.md) Compress agent command files at write time
-- [072](072-the-installer-asks-before-copying-bundled-skills-to-the-central-agents-directory.md) The installer asks before copying bundled skills to the central agents directory
-- [070](070-installer-mode-step-replaces-the-agent-picker-instead-of-stacking-under-it.md) Installer mode step replaces the agent picker instead of stacking under it
-- [061](061-one-global-shim-and-hermetic-pnpm-home-in-script-tests.md) One global shim, and hermetic PNPM_HOME in script tests
-- [056](056-drop-the-vs-code-extension-and-its-installers.md) Drop the VS Code extension and its installers
-- [055](055-restructure-the-command-surface-rule-router-rule-area-compression-implicit-rule-process.md) Restructure the command surface: /rule router, rule-area-*, compression implicit, rule-process-tdd skill
-- [049](049-split-hotspot-modules.md) Split the hotspot modules (guardrails + installer)
-- [046](046-installer-self-heals-global-shim-surfaces-failures-gates-tui-rendering.md) Installer self-heals its global shim, surfaces failures, and gates TUI rendering
-- [041](041-lossless-installer-preserve-toolprefix-normalize-rule-blank-lines.md) Lossless installer: preserve toolPrefix and normalize rule blank lines
-- [039](039-fix-vscode-extension-and-derivatives-install-uninstall.md) Fix VS Code extension and derivatives install/uninstall
-- [028](028-clean-rule-commands-via-user-commands-prompt-suppression-not-a-plugin.md) Clean /rule-* commands via user commands + prompt suppression, not a plugin
 
 ### testing
 
@@ -299,6 +302,16 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [021](021-skill-routing-eslint-flat-config-for-typescript-react-proje.md) Skill routing: ESLint flat config for TypeScript React project
 - [020](020-skill-routing-typescript-tsconfig-strict-mode-configuration.md) Skill routing: TypeScript tsconfig strict mode configuration
 
+### cli
+
+- [101](101-accept-a-comma-separated-agent-list-in-agent-commands.md) Accept a comma-separated agent list in agent-commands
+- [090](090-the-setup-wizard-is-the-installer-and-it-asks-which-commands-to-write.md) The setup wizard is the installer, and it asks which commands to write
+- [080](080-one-installer-a-node-wizard-with-shell-bootstraps.md) One installer, a Node wizard with shell bootstraps
+- [074](074-the-cli-entry-point-loads-no-command-handler-it-has-not-been-asked-for.md) The CLI entry point loads no command handler it has not been asked for
+- [061](061-one-global-shim-and-hermetic-pnpm-home-in-script-tests.md) One global shim, and hermetic PNPM_HOME in script tests
+- [046](046-installer-self-heals-global-shim-surfaces-failures-gates-tui-rendering.md) Installer self-heals its global shim, surfaces failures, and gates TUI rendering
+- [033](033-registry-driven-clean-slash-commands-for-every-agent-and-ide.md) Registry-driven clean slash commands for every agent and IDE
+
 ### auto-log
 
 - [025](025-skill-routing-pnpm-package-manager-workspace-monorepo-setup.md) Skill routing: pnpm package manager workspace monorepo setup
@@ -316,15 +329,6 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [064](064-coverage-floor-raised-to-89-toward-the-95-endpoint.md) Coverage floor raised to 89 toward the 95 endpoint
 - [063](063-coverage-floor-raised-to-87-95-remains-the-ratchet-endpoint.md) Coverage floor raised to 87; 95 remains the ratchet endpoint
 - [062](062-glob-suite-runner-colocated-tests-and-a-branch-coverage-ratchet.md) Glob suite runner, co-located tests, and a branch-coverage ratchet
-
-### cli
-
-- [090](090-the-setup-wizard-is-the-installer-and-it-asks-which-commands-to-write.md) The setup wizard is the installer, and it asks which commands to write
-- [080](080-one-installer-a-node-wizard-with-shell-bootstraps.md) One installer, a Node wizard with shell bootstraps
-- [074](074-the-cli-entry-point-loads-no-command-handler-it-has-not-been-asked-for.md) The CLI entry point loads no command handler it has not been asked for
-- [061](061-one-global-shim-and-hermetic-pnpm-home-in-script-tests.md) One global shim, and hermetic PNPM_HOME in script tests
-- [046](046-installer-self-heals-global-shim-surfaces-failures-gates-tui-rendering.md) Installer self-heals its global shim, surfaces failures, and gates TUI rendering
-- [033](033-registry-driven-clean-slash-commands-for-every-agent-and-ide.md) Registry-driven clean slash commands for every agent and IDE
 
 ### coverage
 

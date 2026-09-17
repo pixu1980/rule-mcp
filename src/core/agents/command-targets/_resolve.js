@@ -22,11 +22,32 @@ export function suppressesMcpPrompts(agent) {
 }
 
 /**
+ * The agents a filter names: one name, or the comma-separated list the install
+ * plan builds from its selected agents. Null when no filter was given.
+ *
+ * @param {string|string[]} [agent]
+ * @returns {Set<string>|null}
+ */
+const requestedAgents = (agent) => {
+  if (!agent) {
+    return null;
+  }
+
+  return new Set(
+    String(agent)
+      .split(",")
+      .map((name) => name.trim())
+      .filter(Boolean),
+  );
+};
+
+/**
  * Resolve command targets to concrete directories.
  *
  * @param {object} [options]
- * @param {string} [options.agent] - only this agent (gates are skipped: an
- *   explicit install targets the agent even if nothing is detected yet)
+ * @param {string|string[]} [options.agent] - only these agents (a
+ *   comma-separated list or an array); their gates are skipped, because an
+ *   explicit install targets the agent even if nothing is detected yet
  * @param {boolean} [options.detectedOnly] - only agents present on this machine
  * @param {string} [options.home] @param {string} [options.cwd]
  * @param {string} [options.platform] @param {object} [options.env]
@@ -36,13 +57,14 @@ export function suppressesMcpPrompts(agent) {
  */
 export function resolveCommandTargets(options = {}) {
   const base = { ...defaultContext(), ...options };
+  const wanted = requestedAgents(options.agent);
   const resolved = [];
 
   for (const target of COMMAND_TARGETS) {
-    if (options.agent && target.agent !== options.agent) {
+    if (wanted && !wanted.has(target.agent)) {
       continue;
     }
-    // An explicit single-agent install forces its user-level directories into
+    // An explicit install forces the named agents' user-level directories into
     // existence; project directories are never created on spec, and a sweep over
     // every agent (detectedOnly) only fills what is already there.
     const ctx = { ...base, force: Boolean(options.agent) && !options.detectedOnly && target.scope === "global" };

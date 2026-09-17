@@ -490,7 +490,7 @@ rule-mcp agent-commands
 | `--remove`          | -       | -                             | remove instead of writing                       |
 | `--force`           | -       | -                             | overwrite existing files                        |
 | `--dry-run`         | -       | -                             | preview without writing                         |
-| `--agent <name>`    | -       | -                             | limit to one agent                              |
+| `--agent <name>`    | -       | -                             | limit to these agents (comma-separated)         |
 | `--preset <name>`   | -       | `minimal`, `standard`, `full` | minimal, standard or full                       |
 | `--families <list>` | -       | -                             | comma-separated: areas, personas, tasks         |
 | `--areas <list>`    | -       | -                             | comma-separated area names, e.g. frontend,data  |

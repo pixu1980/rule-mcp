@@ -19,7 +19,7 @@ export function registerAgentCommandsCommand(program) {
     .option("--remove", "remove instead of writing")
     .option("--force", "overwrite existing files")
     .option("--dry-run", "preview without writing")
-    .option("--agent <name>", "limit to one agent")
+    .option("--agent <name>", "limit to these agents (comma-separated)")
     .addOption(new Option("--preset <name>", PRESET_HELP).choices(["minimal", "standard", "full"]))
     .option("--families <list>", "comma-separated: areas, personas, tasks")
     .option("--areas <list>", "comma-separated area names, e.g. frontend,data")

@@ -118,3 +118,18 @@ test("every detected agent is covered by one call", () => {
 
   assert.match(text, new RegExp(`across ${detected.length} directory`), "the total matches what was resolved");
 });
+
+test("a comma-separated agent list writes every named agent", () => {
+  // Regression: the install plan joins selected agents with commas, which used
+  // to match no target at all - a two-agent install wrote zero command files.
+  const claude = claudeDir();
+  const pi = resolvedTargets({ agent: "pi" })[0].dir;
+  rmSync(pi, { recursive: true, force: true });
+
+  const text = out(() => syncCommandTargets({ agent: "claude,pi" }));
+
+  assert.match(text, /across 2 directory/, "both named agents are covered in one call");
+  assert.ok(readdirSync(claude).includes("rule.md"), "claude receives the router");
+  assert.ok(readdirSync(pi).includes("rule.md"), "pi receives the router too");
+  assert.ok(readdirSync(pi).includes("rule-audit-security.md"), "and the rest of the clean set");
+});
