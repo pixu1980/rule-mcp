@@ -135,6 +135,7 @@ what do I do next?**
 ```bash
 rule-mcp handon                 # the newest handoff, verified
 rule-mcp handon --list          # what handoffs exist
+rule-mcp handon --no-archive    # verify without touching the papers
 rule-mcp handon --file docs/handoff/01-token-first-upgrade.md
 ```
 
@@ -152,16 +153,32 @@ now:
 
 Three rules make the answer worth trusting:
 
-- **Read-only.** No checkout, no stash, no write. Git plumbing that reports.
-- **It never re-runs a claimed command.** That would take minutes and sometimes
-  writes files. It reports the claim and its age, and lets you decide.
 - **It never guesses.** "Unverified" is a real answer. "Probably still fine" is
   how a stale handoff does its damage.
+- **It never re-runs a claimed command.** That would take minutes and sometimes
+  writes files. It reports the claim and its age, and lets you decide.
+- **It writes only through the sweep.** Completed audits, reviews and plans
+  become ADRs and leave the tree; the `Closeout` section names each one.
+  `no-archive` is the pure read, and `list` writes nothing at all.
 
-Output is grouped as **Still true**, **Changed since**, **Unverified**, and the
-open items in order, ending in one suggested first move that names its reason. A
-handon longer than the handoff it read has failed; on this repository's own
+Output is grouped as **Still true**, **Changed since**, **Unverified**, then
+**Closeout** when the sweep archived something, the open items in order, and
+**Next from the plans**: a proposal, not a decision. It is the first open step
+of every plan that still has one, newest first, for you to confirm before any
+work starts. The report ends in one suggested first move that names its reason.
+A handon longer than the handoff it read has failed; on this repository's own
 handoff it lands at about a quarter of the source.
+
+### What the sweep does
+
+Both `handoff` modes and `handon` archive before they render. A working paper
+is complete when a plan carries checks with none open, a review shows a Status
+column with no open row, or an audit has a completed review of the same name.
+Each finished doc becomes one Nygard ADR, the index is refreshed, the source is
+deleted, and the ADR numbering is repaired first so the new ADR cannot land on a
+collision. A doc that fails the English gate is skipped and kept, with the
+reason reported. The full text stays in git history, and the ADR title carries
+the name the document had.
 
 ## Recovery Flow
 

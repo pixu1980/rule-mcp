@@ -32,11 +32,11 @@ the package version from anywhere. An error exits 1 and prints to stderr;
 | [`config`](#rule-mcp-config)                 | 5       | Print the mcp.json snippet, or manage RULE_MCP_* env vars with `config env`        |
 | [`doctor`](#rule-mcp-doctor)                 | 4       | Run system health check                                                       |
 | [`adr`](#rule-mcp-adr)                       | 5       | Create a new Architecture Decision Record (ADR)                               |
-| [`handoff`](#rule-mcp-handoff)               | 6       | Generate a compressed LLM context handoff summary                             |
+| [`handoff`](#rule-mcp-handoff)               | 7       | Generate a compressed LLM context handoff summary                             |
 | [`skills`](#rule-mcp-skills)                 | 3       | Manage the rule AI skill system                                                |
 | [`fix`](#rule-mcp-fix)                       | 4       | Validate and auto-fix project file tree structure                             |
 | [`completions`](#rule-mcp-completions)       | 1       | Generate shell auto-completion script                                         |
-| [`handon`](#rule-mcp-handon)                 | 3       | Verify the last handoff against the repo now                                  |
+| [`handon`](#rule-mcp-handon)                 | 4       | Verify the last handoff against the repo now                                  |
 | [`stats`](#rule-mcp-stats)                   | 0       | Show telemetry statistics from the local log                                  |
 | [`cache`](#rule-mcp-cache)                   | 1       | Inspect the on-disk tool cache                                                |
 | [`roles`](#rule-mcp-roles)                   | 7       | Manage review persona roles                                                   |
@@ -310,14 +310,15 @@ rule-mcp handoff subcommand
 
 **Options**
 
-| Flag            | Default | Choices | Description                                          |
-| --------------- | ------- | ------- | ---------------------------------------------------- |
-| `--dir <path>`  | .       | -       | project root (default: .)                            |
-| `--format <f>`  | -       | -       | full (default), brief, minimal                       |
-| `--compress`    | -       | -       | aggressively truncate values                         |
-| `--mode <m>`    | -       | -       | handoff (default) or close-session                   |
-| `--fix`         | -       | -       | apply the ADR renumber plan                          |
-| `--fix-commits` | -       | -       | amend local commit messages to match renumbered ADRs |
+| Flag            | Default | Choices | Description                                                            |
+| --------------- | ------- | ------- | ---------------------------------------------------------------------- |
+| `--dir <path>`  | .       | -       | project root (default: .)                                              |
+| `--format <f>`  | -       | -       | full (default), brief, minimal                                         |
+| `--compress`    | -       | -       | aggressively truncate values                                           |
+| `--mode <m>`    | -       | -       | handoff (default) or close-session                                     |
+| `--no-archive`  | -       | -       | render without archiving completed docs or repairing the ADR numbering |
+| `--fix`         | -       | -       | apply the ADR renumber plan                                            |
+| `--fix-commits` | -       | -       | amend local commit messages to match renumbered ADRs                   |
 
 ## rule-mcp skills
 
@@ -382,11 +383,12 @@ rule-mcp handon
 
 **Options**
 
-| Flag            | Default | Choices | Description                  |
-| --------------- | ------- | ------- | ---------------------------- |
-| `--dir <path>`  | .       | -       | project root (default: .)    |
-| `--file <path>` | -       | -       | verify a single handoff file |
-| `--list`        | -       | -       | list handoffs                |
+| Flag            | Default | Choices | Description                             |
+| --------------- | ------- | ------- | --------------------------------------- |
+| `--dir <path>`  | .       | -       | project root (default: .)               |
+| `--file <path>` | -       | -       | verify a single handoff file            |
+| `--list`        | -       | -       | list handoffs                           |
+| `--no-archive`  | -       | -       | verify without archiving completed docs |
 
 ## rule-mcp stats
 

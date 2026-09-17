@@ -221,13 +221,14 @@ Build WCAG-EM accessibility report from criteria and audit results; returns find
 
 ### rule_tool_process_handon
 
-Read last handoff in docs/handoff/ and report which of its claims are still true: branch, commit range, files, ADRs, open work. Read-only, never re-runs claimed command.
+Read last handoff in docs/handoff/ and report which of its claims are still true: branch, commit range, files, ADRs, open work. Sweeps completed audits/reviews/plans into ADRs first, then proposes next workstream each open plan still carries, for user to confirm. Never re-runs claimed command.
 
-| Parameter    | Type    | Required | Default | Description                                      |
-| ------------ | ------- | -------- | ------- | ------------------------------------------------ |
-| `projectDir` | string  | no       | `"."`   | Project root directory                           |
-| `file`       | string  | no       | -       | A specific handoff to read instead of the newest |
-| `list`       | boolean | no       | `false` | List the handoffs and verify nothing             |
+| Parameter    | Type    | Required | Default | Description                                                                                                          |
+| ------------ | ------- | -------- | ------- | -------------------------------------------------------------------------------------------------------------------- |
+| `projectDir` | string  | no       | `"."`   | Project root directory                                                                                               |
+| `file`       | string  | no       | -       | A specific handoff to read instead of the newest                                                                     |
+| `list`       | boolean | no       | `false` | List the handoffs and verify nothing                                                                                 |
+| `closeout`   | boolean | no       | `true`  | Archive completed audits/reviews/plans into ADRs before verifying (default on; false = verify only, nothing written) |
 
 ### rule_tool_fix
 

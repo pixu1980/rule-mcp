@@ -111,7 +111,7 @@ Claude Code installs clean `/rule-*` commands instead and suppresses these
 | `/rule-area-ui-design-system`          | <request>  | ui: the design-system skill                                                                                                                               |
 | `/rule-flight`                         | [options]  | Read the flight recorder: what this server cost, and what to do about it                                                                                  |
 | `/rule-handoff`                        | [options]  | Produce a compressed context handoff (ADR summary + git context) to resume in a new session, commiting pending work as scoped Conventional Commits first. |
-| `/rule-handon`                         | [options]  | Resume: verify the last handoff against the repository as it is now                                                                                       |
+| `/rule-handon`                         | [options]  | Resume: verify the last handoff against the repository as it is now, archive what finished, and propose the next workstream                               |
 | `/rule-init`                           | [options]  | Prepare a project for rule-mcp: the central recorder directory and tokensave                                                                        |
 | `/rule-process-check`                  | [target]   | Validate code against the rule guardrails and fix what fails                                                                                               |
 | `/rule-update`                         | [options]  | Apply an available server update explicitly, and report what changed                                                                                      |

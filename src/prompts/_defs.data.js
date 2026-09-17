@@ -51,11 +51,11 @@ export const PROMPT_DEFS = [
   },
   {
     name: "rule-handon",
-    description: "Resume: verify the last handoff against the repository as it is now",
+    description: "Resume: verify the last handoff against the repository as it is now, archive what finished, and propose the next workstream",
     arguments: [
       {
         name: "options",
-        description: "Space-separated: list, file=<path>. Default: the newest handoff.",
+        description: "Space-separated: list, file=<path>, no-archive. Default: the newest handoff, swept and verified.",
         required: false,
       },
     ],
