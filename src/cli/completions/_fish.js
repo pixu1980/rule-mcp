@@ -30,6 +30,7 @@ complete -c pix-galaxy-mcp -n "__fish_use_subcommand" -a roles     -d "Manage re
 complete -c pix-galaxy-mcp -n "__fish_use_subcommand" -a guard     -d "Permission-guard processor"
 complete -c pix-galaxy-mcp -n "__fish_use_subcommand" -a update    -d "Self-update from upstream"
 complete -c pix-galaxy-mcp -n "__fish_use_subcommand" -a agent-commands -d "Manage agent slash commands"
+complete -c pix-galaxy-mcp -n "__fish_use_subcommand" -a reinstall -d "Purge deps, install again, refresh global bin"
 complete -c pix-galaxy-mcp -n "__fish_use_subcommand" -a completions -d "Generate shell completion"
 complete -c pix-galaxy-mcp -n "__fish_use_subcommand" -a help      -d "Show help"
 

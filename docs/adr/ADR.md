@@ -8,6 +8,7 @@ this directory are the source of truth; this index is generated from them by
 
 | #                                                                                                                       | Title                                                                                                     | Date       | Status     | Tags                                                                                |
 | ----------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- | ---------- | ---------- | ----------------------------------------------------------------------------------- |
+| [102](102-reinstall-is-one-shell-script-behind-three-entry-points.md)                                                   | Reinstall is one shell script behind three entry points                                                   | 2026-09-17 | accepted   | cli, installer, devx                                                                |
 | [101](101-accept-a-comma-separated-agent-list-in-agent-commands.md)                                                     | Accept a comma-separated agent list in agent-commands                                                     | 2026-09-17 | accepted   | cli, installer, agent-commands                                                      |
 | [100](100-the-tokensave-integration-closes-out-and-the-adapter-is-the-code-graph-layer.md)                              | The TokenSave integration closes out: the adapter and its graph-backed tools are the code-graph layer     | 2026-09-15 | accepted   | tokensave, architecture, closeout, code-graph                                       |
 | [099](099-close-out-plan-develop-consolidation.md)                                                                      | Close out plan develop-consolidation                                                                      | 2026-09-15 | accepted   | docs, closeout, plan                                                                |
@@ -117,6 +118,7 @@ file. Where a line stops short the rest is in the ADR.
 
 | ADR                                                                                                                     | Decision                                                                                                                                                                                                                        | Consequence                                                                                                                                                                                                                    |
 | ----------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| [102](102-reinstall-is-one-shell-script-behind-three-entry-points.md)                                                   | `scripts/reinstall.sh` owns the sequence and runs from the checkout it lives in; it refuses a directory without package.json.                                                                                                   | One implementation, three entry points, so the purge cannot drift.                                                                                                                                                             |
 | [101](101-accept-a-comma-separated-agent-list-in-agent-commands.md)                                                     | `resolveCommandTargets` now parses `options.agent` as a comma-separated list (arrays work too) and filters targets through a Set, so one `--agent claude,pi` call covers every named agent.                                     | Multi-agent installs write the full selected command set into every selected agent's directory in a single sync.                                                                                                               |
 | [100](100-the-tokensave-integration-closes-out-and-the-adapter-is-the-code-graph-layer.md)                              | Fold the plan record into this ADR, name it in the session handoff, and delete the source file; the full text stays in git history.                                                                                             | docs/plans/tokensave-integration.md is gone from the tree and the handoff of this session names what it carried.                                                                                                               |
 | [099](099-close-out-plan-develop-consolidation.md)                                                                      | Fold the record into this ADR and the session handoff, then delete the source file.                                                                                                                                             | docs/plans/develop-consolidation.md is gone from the tree; the handoff of this session names what it carried. main, origin/main, develop and origin/develop all point at c33c9e46, so develop is now an integration branch...  |
@@ -245,6 +247,7 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 
 ### installer
 
+- [102](102-reinstall-is-one-shell-script-behind-three-entry-points.md) Reinstall is one shell script behind three entry points
 - [101](101-accept-a-comma-separated-agent-list-in-agent-commands.md) Accept a comma-separated agent list in agent-commands
 - [090](090-the-setup-wizard-is-the-installer-and-it-asks-which-commands-to-write.md) The setup wizard is the installer, and it asks which commands to write
 - [080](080-one-installer-a-node-wizard-with-shell-bootstraps.md) One installer, a Node wizard with shell bootstraps
@@ -304,6 +307,7 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 
 ### cli
 
+- [102](102-reinstall-is-one-shell-script-behind-three-entry-points.md) Reinstall is one shell script behind three entry points
 - [101](101-accept-a-comma-separated-agent-list-in-agent-commands.md) Accept a comma-separated agent list in agent-commands
 - [090](090-the-setup-wizard-is-the-installer-and-it-asks-which-commands-to-write.md) The setup wizard is the installer, and it asks which commands to write
 - [080](080-one-installer-a-node-wizard-with-shell-bootstraps.md) One installer, a Node wizard with shell bootstraps
@@ -475,6 +479,12 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [094](094-rename-the-compression-subsystem-and-apply-it-to-every-model-facing-surface.md) Rename the compression subsystem and apply it to every model-facing surface
 - [073](073-compression-has-four-levels-and-no-llm-in-the-output-path.md) Compression has four levels and no LLM in the output path
 - [053](053-gateway-as-the-single-entrypoint-with-server-side-receipts-backend-data-devops-g.md) Gateway as the single entrypoint with server-side receipts; backend/data/devops guardrail families
+
+### devx
+
+- [102](102-reinstall-is-one-shell-script-behind-three-entry-points.md) Reinstall is one shell script behind three entry points
+- [072](072-the-installer-asks-before-copying-bundled-skills-to-the-central-agents-directory.md) The installer asks before copying bundled skills to the central agents directory
+- [070](070-installer-mode-step-replaces-the-agent-picker-instead-of-stacking-under-it.md) Installer mode step replaces the agent picker instead of stacking under it
 
 ### install
 
