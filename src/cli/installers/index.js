@@ -20,6 +20,8 @@ export * from "./_env.js";
 
 export * from "./_writers-json.js";
 
+export * from "./_writers-opencode.js";
+
 export * from "./_writers-text.js";
 
 export * from "./_agents-ide.js";
