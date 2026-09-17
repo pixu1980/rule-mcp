@@ -2,6 +2,7 @@
 
 /** Handoff sections from the repository: working tree, semantic changes, recent commits, docs scan, footers. */
 import { TOKENSAVE_DIRECTIVE, tokensaveActive } from "../../core/agents/_integrations.js";
+import { resumePromptLines } from "./_sections-prompt.js";
 
 /** Uncommitted changes, deferring to the code graph instead of a raw diff when tokensave runs. */
 export function workingTreeLines(gitDiff, { isMinimal, compress, projectDir }) {
@@ -87,7 +88,7 @@ export function docsLines(docsScan, { isMinimal, isBrief }) {
   return lines;
 }
 
-/** The session-close recovery steps and the closing handoff instruction. */
+/** The session-close recovery steps and the resume prompt the document closes with. */
 export function footerLines({ projectName, isMinimal, isCloseSession }) {
   const lines = [];
 
@@ -109,16 +110,7 @@ export function footerLines({ projectName, isMinimal, isCloseSession }) {
   if (isMinimal) {
     lines.push("Continue work on " + projectName + ". ADRs at docs/adr/. Do not re-ask.", "");
   } else {
-    lines.push(
-      "### Handoff Instruction",
-      "",
-      `You are continuing work on **${projectName}**.`,
-      "The ADR log and context snapshot capture everything decided so far.",
-      "",
-      "Review ADRs for architectural decisions. Review snapshot for configuration.",
-      "Continue without re-asking answered questions.",
-      "",
-    );
+    lines.push(...resumePromptLines({ projectName }));
   }
 
   return lines;

@@ -40,15 +40,22 @@ where the previous one left off - with zero Q&A to re-establish context.
    - States the project identity and current state
    - Lists all ADRs with status and key decisions
    - Condenses `.context/` values into a flat key-value table
-   - Ends with a handoff instruction for the receiving LLM
+   - Ends with the **Resume Prompt** the receiving LLM opens with
+
+The document closes with that last block, under a `### Resume Prompt` heading and
+inside a ` ```prompt ` fence. It is the one part of the handoff written to be
+pasted rather than read: whoever persists the file adds the path of the document
+and the first step of the next session to it, and nothing follows it. `handon`
+reads it back and reports it verbatim as `## Prompt to run next`, so the block
+travels with the file instead of living only in a chat that has since closed.
 
 3. The output is emitted via the **MCP tool** `rule_tool_process_handoff` or the **CLI** `rule-mcp handoff`.
 
 ## Output Format
 
-The handoff prompt has four sections:
+The handoff opens with the project identity and closes with the resume prompt:
 
-```
+````
 ## HANDOFF: Project Name
 
 ### Identity
@@ -63,9 +70,20 @@ PROJECT_TYPE=webapp
 STACK=react
 ...
 
-### Handoff Instruction
-[Instruction for the receiving LLM to continue the work]
+### Resume Prompt
+
+The next session opens with this block. Add the path of this document and the
+first step of the next session before saving it.
+
+```prompt
+Resume work on Project Name. Run `rule_tool_process_handon` first: it checks which
+claims in this handoff still hold before any of them are trusted.
+The ADR log and the context snapshot capture what has been decided; do not re-ask
+answered questions.
+Every commit is `type(scope): subject`; the commit-msg hook rejects a scope-less
+message.
 ```
+````
 
 ## Usage
 
@@ -165,8 +183,10 @@ Output is grouped as **Still true**, **Changed since**, **Unverified**, then
 **Closeout** when the sweep archived something, the open items in order, and
 **Next from the plans**: a proposal, not a decision. It is the first open step
 of every plan that still has one, newest first, for you to confirm before any
-work starts. The report ends in one suggested first move that names its reason.
-A handon longer than the handoff it read has failed; on this repository's own
+work starts. The report ends in one suggested first move that names its reason,
+and then in **Prompt to run next** when the handoff carried a `Resume Prompt`: the
+block is quoted verbatim, with the file it came from named. A handon longer than
+the handoff it read has failed; on this repository's own
 handoff it lands at about a quarter of the source.
 
 ### What the sweep does
@@ -182,9 +202,12 @@ the name the document had.
 
 ## Recovery Flow
 
-1. **Source session**: Before closing, run `rule-mcp handoff` -> copy output
-2. **Target session**: Paste the handoff block as the **first message**, or run
-   `rule-mcp handon` if the handoff was persisted to `docs/handoff/`
+1. **Source session**: Before closing, run `rule-mcp handoff`. The document
+   persists to `docs/handoff/<NN>-<slug>.md`, and its closing `Resume Prompt`
+   block is what the chat shows - copy the block, which is in the file too.
+2. **Target session**: Paste that block as the **first message**, or run
+   `rule-mcp handon` if the handoff was persisted: it quotes the same block
+   back under `Prompt to run next`.
 3. The receiving LLM understands the project, the decisions, and which parts of
    the previous session's account no longer hold
 
