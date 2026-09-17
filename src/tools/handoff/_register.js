@@ -11,12 +11,14 @@ import { buildHandoff } from "./_build.js";
 export function registerProcessHandoffTool() {
   registerTool({
     name: "rule_tool_process_handoff",
-    description: "Generate a compressed LLM handoff summary from ADR logs and project context. Paste the output into a new chat to resume work seamlessly.",
+    description:
+      "Generate a compressed LLM handoff summary from ADR logs and project context. Archives completed audits/reviews/plans as ADRs and repairs the ADR numbering first (pass closeout: false to diagnose without writing). Paste the output into a new chat to resume work seamlessly.",
     zodSchema: HandoffSchema,
     handler: async (arguments_) => {
       const result = buildHandoff({
         projectDir: arguments_.projectDir || ".",
         mode: arguments_.mode || "handoff",
+        closeout: arguments_.closeout !== false,
         includeContext: arguments_.includeContext !== false,
         includeAdrs: arguments_.includeAdrs !== false,
         includeIdentity: arguments_.includeIdentity !== false,

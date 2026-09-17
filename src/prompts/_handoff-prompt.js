@@ -33,6 +33,7 @@ export function handoffPrompt(args, user) {
         `- compress=${options.compress ? "true" : "false"}\n` +
         `- format=${options.format}\n` +
         `- ${includeFlags}\n` +
+        `- closeout=${options.closeout ? "true" : "false"} (archives completed audits/reviews/plans as ADRs and repairs the ADR numbering before rendering)\n` +
         `- maxTokens=${options.maxTokens}\n` +
         "Step 1 - Commit pending work FIRST, before running the handoff tool:\n" +
         "  a. If the working tree has uncommitted changes, group them by concern and stage each group explicitly (pathspecs or `git add -p`).\n" +
@@ -42,8 +43,9 @@ export function handoffPrompt(args, user) {
         "  e. If the grouping into atomic commits is ambiguous, ask the user how to split before committing.\n" +
         "Step 2 - Run `rule_tool_process_handoff` with EXACTLY the resolved arguments above; do not change them.\n" +
         "Include the ADR summary (docs/adr) and git context in the output.\n" +
-        "Step 3 - Persist the handoff: write its text to `docs/handoff/<NN>-<slug>.md` where NN is the next free two-digit number and <slug> is kebab-case (e.g. `13-security-audit-remediation.md`). Open with the branch, the commit range it covers, and the date. Then commit that file ALONE - no other paths - as `chore(handoff): add session handoff <NN>-<slug>`. A handoff that exists only in the chat is lost when the session ends.\n" +
-        "Step 4 - Present the handoff as a paste-ready block for the next session, including the commit-scope convention reminder, the path of the handoff file, and the list of commits just created.\n" +
+        "Step 3 - With closeout=true the run writes to the tree: one ADR per completed working paper, the deleted sources, and any ADR renumbering. Stage exactly those paths and commit them as ONE `docs(adr): ...` commit before going on.\n" +
+        "Step 4 - Persist the handoff: write its text to `docs/handoff/<NN>-<slug>.md` where NN is the next free two-digit number and <slug> is kebab-case (e.g. `13-security-audit-remediation.md`). Open with the branch, the commit range it covers, and the date. Then commit that file ALONE - no other paths - as `chore(handoff): add session handoff <NN>-<slug>`. A handoff that exists only in the chat is lost when the session ends.\n" +
+        "Step 5 - Present the handoff as a paste-ready block for the next session, including the commit-scope convention reminder, the path of the handoff file, and the list of commits just created.\n" +
         "If the resolved arguments are ambiguous, ask the user which parts to include.\n" +
         "Finish by listing the commits just made (or proposing the next conventional commit message with a mandatory scope if nothing needed committing).",
     ),

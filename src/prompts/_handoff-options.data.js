@@ -22,6 +22,7 @@ export const HANDOFF_COMPLETIONS = [
   "no-context",
   "no-adrs",
   "no-roadmap",
+  "no-archive",
   "max=",
   "help",
 ];
@@ -37,6 +38,7 @@ Options (space-separated, all optional):
   no-context                omit .context/ values
   no-adrs                   omit the ADR summary
   no-roadmap                omit the roadmap/docs scan
+  no-archive                render without archiving completed docs or repairing the ADR numbering
   max=<n>                   cap output to n tokens (0 = no limit)
   help                      show this usage list
 
@@ -59,6 +61,7 @@ export const DEFAULTS = Object.freeze({
   includeContext: true,
   includeAdrs: true,
   includeRoadmap: true,
+  closeout: true,
   maxTokens: 0,
   help: false,
 });

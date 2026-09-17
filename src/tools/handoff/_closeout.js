@@ -136,14 +136,14 @@ export function archiveCompletedDocs(projectDir, { author } = {}) {
   return { archived, skipped };
 }
 
-/** The handoff section naming what close-session archived and what it kept. */
-export function closeoutLines(closeout, { isMinimal }) {
+/** The handoff section naming what the run archived and what it kept. */
+export function closeoutLines(closeout, { isMinimal, heading = "###" }) {
   if (!closeout || isMinimal || (closeout.archived.length === 0 && closeout.skipped.length === 0)) {
     return [];
   }
 
   return [
-    "### Closeout",
+    `${heading} Closeout`,
     "",
     ...closeout.archived.map((doc) => `- Archived \`${doc.path}\` → ADR ${String(doc.adrNumber).padStart(3, "0")} (\`${doc.adrFile}\`); source file deleted.`),
     ...closeout.skipped.map((doc) => `- Skipped \`${doc.path}\`: ${doc.reason}; file kept.`),

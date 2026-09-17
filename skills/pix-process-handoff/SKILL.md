@@ -93,6 +93,7 @@ STACK=react
 | `compress`                                                         | Aggressively compress the output                                                             |
 | `full` \| `brief` \| `minimal`                                     | Output format (default: `full`)                                                              |
 | `no-diff` \| `no-log` \| `no-context` \| `no-adrs` \| `no-roadmap` | Omit the corresponding section                                                               |
+| `no-archive`                                                       | Render without archiving completed docs or repairing the ADR numbering (read-only run)       |
 | `max=<n>`                                                          | Cap output to n tokens (0 = no limit)                                                        |
 | `help`                                                             | Print the usage list (no tool call)                                                          |
 
@@ -103,6 +104,7 @@ STACK=react
 /rule-handoff compress minimal                 # compressed one-line JSON
 /rule-handoff brief                            # brief format
 /rule-handoff no-diff                          # handoff without the diff
+/rule-handoff no-archive                       # diagnose without archiving anything
 /rule-handoff close-session no-diff no-log     # close without diff/log
 /rule-handoff compress max=2000                # compressed, token-capped
 ```

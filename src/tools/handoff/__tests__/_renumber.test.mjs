@@ -78,13 +78,27 @@ test("a close-session handoff renumbers before it writes the ADR log", () => {
   }
 });
 
-test("a plain handoff renumbers nothing", () => {
+test("a plain handoff renumbers too, because it archives too", () => {
   const root = seedRepo();
 
   try {
-    buildHandoff({ projectDir: root, mode: "handoff", maxTokens: 0, format: "full" });
+    const plain = buildHandoff({ projectDir: root, mode: "handoff", maxTokens: 0, format: "full" });
 
-    assert.ok(existsSync(join(root, "docs/adr/069-personas.md")), "a plain handoff is read-only");
+    assert.match(plain.text, /Renumbered \d+ document/);
+    assert.equal(existsSync(join(root, "docs/adr/069-personas.md")), false, "the repair ran");
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test("closeout false leaves the numbering alone", () => {
+  const root = seedRepo();
+
+  try {
+    const readOnly = buildHandoff({ projectDir: root, mode: "close-session", closeout: false, maxTokens: 0, format: "full" });
+
+    assert.doesNotMatch(readOnly.text, /Renumbered/, "nothing was renumbered");
+    assert.ok(existsSync(join(root, "docs/adr/069-personas.md")), "the collision is still there for the doctor to report");
   } finally {
     rmSync(root, { recursive: true, force: true });
   }

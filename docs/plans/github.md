@@ -1,7 +1,7 @@
 # GitHub admin checklist
 
 Passi da eseguire come admin della repo. Quando tutte le caselle sono
-spuntate, il prossimo `close-session` archivia questo piano in un ADR e lo
+spuntate, il prossimo `handoff` archivia questo piano in un ADR e lo
 rimuove da qui (vale per ogni piano completato).
 
 ## Sicurezza e segnalazioni (Step 2)

@@ -2,7 +2,7 @@
 
 /** Closeout: completed audits/reviews/plans fold into ADRs and leave the tree. */
 import { strict as assert } from "node:assert";
-import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { test } from "node:test";
@@ -85,20 +85,34 @@ test("a non-English doc is skipped and kept on disk", () => {
   rmSync(dir, { recursive: true, force: true });
 });
 
-test("close-session archives and names the ADR, plain handoff stays read-only", () => {
-  const closing = seed();
-  const closed = buildHandoff({ projectDir: closing, mode: "close-session", maxTokens: 0, format: "full" });
+test("every mode archives and names the ADR", () => {
+  const roots = ["close-session", "handoff"].map((mode) => {
+    const root = seed();
+    const built = buildHandoff({ projectDir: root, mode, maxTokens: 0, format: "full" });
 
-  assert.match(closed.text, /### Closeout/, "the handoff carries the section");
-  assert.match(closed.text, /docs\/plans\/done\.md.*ADR 00\d/, "the section links doc to ADR");
-  assert.equal(closed.stats.archived, 3, "the stats count the archived docs");
-  assert.equal(existsSync(join(closing, "docs/plans/done.md")), false, "sources are deleted");
-  rmSync(closing, { recursive: true, force: true });
+    assert.match(built.text, /### Closeout/, `${mode} carries the section`);
+    assert.match(built.text, /docs\/plans\/done\.md.*ADR 00\d/, `${mode} links doc to ADR`);
+    assert.equal(built.stats.archived, 3, `${mode} counts the archived docs`);
+    assert.equal(existsSync(join(root, "docs/plans/done.md")), false, `${mode} deletes the sources`);
+    assert.equal(existsSync(join(root, "docs/plans/open.md")), true, `${mode} keeps open work`);
 
-  const reading = seed();
+    return root;
+  });
 
-  buildHandoff({ projectDir: reading, mode: "handoff", maxTokens: 0, format: "full" });
+  for (const root of roots) {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
 
-  assert.equal(existsSync(join(reading, "docs/plans/done.md")), true, "a plain handoff deletes nothing");
-  rmSync(reading, { recursive: true, force: true });
+test("closeout false is a read-only diagnosis in every mode", () => {
+  for (const mode of ["close-session", "handoff"]) {
+    const root = seed();
+    const built = buildHandoff({ projectDir: root, mode, closeout: false, maxTokens: 0, format: "full" });
+
+    assert.doesNotMatch(built.text, /### Closeout/, `${mode} renders no closeout section`);
+    assert.equal(built.stats.archived, 0, `${mode} archives nothing`);
+    assert.equal(existsSync(join(root, "docs/plans/done.md")), true, `${mode} deletes nothing`);
+    assert.equal(readdirSync(join(root, "docs/adr")).length, 0, `${mode} writes no ADR`);
+    rmSync(root, { recursive: true, force: true });
+  }
 });
