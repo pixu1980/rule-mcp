@@ -8,6 +8,7 @@ this directory are the source of truth; this index is generated from them by
 
 | #                                                                                                                       | Title                                                                                                     | Date       | Status     | Tags                                                                                |
 | ----------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- | ---------- | ---------- | ----------------------------------------------------------------------------------- |
+| [103](103-every-handoff-mode-sweeps-completed-working-papers-and-closeout-false-is-the-rea.md)                          | Every handoff mode sweeps completed working papers, and closeout false is the read-only run               | 2026-09-17 | accepted   | docs, closeout, handoff, handon, process                                            |
 | [102](102-reinstall-is-one-shell-script-behind-three-entry-points.md)                                                   | Reinstall is one shell script behind three entry points                                                   | 2026-09-17 | accepted   | cli, installer, devx                                                                |
 | [101](101-accept-a-comma-separated-agent-list-in-agent-commands.md)                                                     | Accept a comma-separated agent list in agent-commands                                                     | 2026-09-17 | accepted   | cli, installer, agent-commands                                                      |
 | [100](100-the-tokensave-integration-closes-out-and-the-adapter-is-the-code-graph-layer.md)                              | The TokenSave integration closes out: the adapter and its graph-backed tools are the code-graph layer     | 2026-09-15 | accepted   | tokensave, architecture, closeout, code-graph                                       |
@@ -23,7 +24,7 @@ this directory are the source of truth; this index is generated from them by
 | [090](090-the-setup-wizard-is-the-installer-and-it-asks-which-commands-to-write.md)                                     | The setup wizard is the installer, and it asks which commands to write                                    | 2026-09-13 | accepted   | installer, cli, wizard, commands, ux                                                |
 | [089](089-skills-own-their-guardrails-and-three-layers-resolve-both-skills-and-personas.md)                             | Skills own their guardrails, and three layers resolve both skills and personas                            | 2026-09-12 | accepted   | architecture, skills, guardrails, personas, extensibility                           |
 | [088](088-a-persona-topic-is-the-binding-scope-of-the-run.md)                                                           | A persona topic is the binding scope of the run                                                           | 2026-09-12 | accepted   | personas, prompts, review, tokensave                                                |
-| [087](087-session-close-archives-completed-audits-reviews-and-plans.md)                                                 | Session close archives completed audits, reviews and plans                                                | 2026-09-11 | accepted   | process, handoff, docs                                                              |
+| [087](087-session-close-archives-completed-audits-reviews-and-plans.md)                                                 | Session close archives completed audits, reviews and plans                                                | 2026-09-11 | superseded | process, handoff, docs                                                              |
 | [086](086-documentation-site-is-hand-written-static-html-from-docs.md)                                                  | Documentation site is hand-written static HTML from docs                                                  | 2026-09-11 | accepted   | docs, site                                                                          |
 | [085](085-reset-the-project-version-to-0-1-0-first-release-will-be-v0-1-0.md)                                           | Reset the project version to 0.1.0, first release will be v0.1.0                                          | 2026-09-10 | superseded | release, versioning                                                                 |
 | [084](084-keep-the-name-with-a-written-posture-no-npm-placeholder-yet.md)                                               | Keep the name with a written posture, no npm placeholder yet                                              | 2026-09-10 | accepted   | naming, legal                                                                       |
@@ -118,6 +119,7 @@ file. Where a line stops short the rest is in the ADR.
 
 | ADR                                                                                                                     | Decision                                                                                                                                                                                                                        | Consequence                                                                                                                                                                                                                    |
 | ----------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| [103](103-every-handoff-mode-sweeps-completed-working-papers-and-closeout-false-is-the-rea.md)                          | Both handoff modes and handon archive completed working papers by default, in src/tools/handoff/_closeout.js, and report what they archived.                                                                                    | Finished working papers leave the tree at every handoff instead of only at a session close, so docs/audits, docs/reviews and docs/plans hold open work and nothing else.                                                       |
 | [102](102-reinstall-is-one-shell-script-behind-three-entry-points.md)                                                   | `scripts/reinstall.sh` owns the sequence and runs from the checkout it lives in; it refuses a directory without package.json.                                                                                                   | One implementation, three entry points, so the purge cannot drift.                                                                                                                                                             |
 | [101](101-accept-a-comma-separated-agent-list-in-agent-commands.md)                                                     | `resolveCommandTargets` now parses `options.agent` as a comma-separated list (arrays work too) and filters targets through a Set, so one `--agent claude,pi` call covers every named agent.                                     | Multi-agent installs write the full selected command set into every selected agent's directory in a single sync.                                                                                                               |
 | [100](100-the-tokensave-integration-closes-out-and-the-adapter-is-the-code-graph-layer.md)                              | Fold the plan record into this ADR, name it in the session handoff, and delete the source file; the full text stays in git history.                                                                                             | docs/plans/tokensave-integration.md is gone from the tree and the handoff of this session names what it carried.                                                                                                               |
@@ -316,6 +318,16 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [046](046-installer-self-heals-global-shim-surfaces-failures-gates-tui-rendering.md) Installer self-heals its global shim, surfaces failures, and gates TUI rendering
 - [033](033-registry-driven-clean-slash-commands-for-every-agent-and-ide.md) Registry-driven clean slash commands for every agent and IDE
 
+### docs
+
+- [103](103-every-handoff-mode-sweeps-completed-working-papers-and-closeout-false-is-the-rea.md) Every handoff mode sweeps completed working papers, and closeout false is the read-only run
+- [099](099-close-out-plan-develop-consolidation.md) Close out plan develop-consolidation
+- [095](095-close-out-the-install-and-uninstall-rework-plan.md) Close out the install and uninstall rework plan
+- [087](087-session-close-archives-completed-audits-reviews-and-plans.md) Session close archives completed audits, reviews and plans
+- [086](086-documentation-site-is-hand-written-static-html-from-docs.md) Documentation site is hand-written static HTML from docs
+- [071](071-the-census-generates-eight-numbered-documents-and-three-fenced-blocks-inside-the-chapters-a-person-writes.md) The census generates eight numbered documents and three fenced blocks inside the chapters a person writes
+- [048](048-v100-release-and-docs-accuracy-guard.md) v1.0.0 release and the docs-accuracy guard
+
 ### auto-log
 
 - [025](025-skill-routing-pnpm-package-manager-workspace-monorepo-setup.md) Skill routing: pnpm package manager workspace monorepo setup
@@ -342,15 +354,6 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [064](064-coverage-floor-raised-to-89-toward-the-95-endpoint.md) Coverage floor raised to 89 toward the 95 endpoint
 - [063](063-coverage-floor-raised-to-87-95-remains-the-ratchet-endpoint.md) Coverage floor raised to 87; 95 remains the ratchet endpoint
 - [062](062-glob-suite-runner-colocated-tests-and-a-branch-coverage-ratchet.md) Glob suite runner, co-located tests, and a branch-coverage ratchet
-
-### docs
-
-- [099](099-close-out-plan-develop-consolidation.md) Close out plan develop-consolidation
-- [095](095-close-out-the-install-and-uninstall-rework-plan.md) Close out the install and uninstall rework plan
-- [087](087-session-close-archives-completed-audits-reviews-and-plans.md) Session close archives completed audits, reviews and plans
-- [086](086-documentation-site-is-hand-written-static-html-from-docs.md) Documentation site is hand-written static HTML from docs
-- [071](071-the-census-generates-eight-numbered-documents-and-three-fenced-blocks-inside-the-chapters-a-person-writes.md) The census generates eight numbered documents and three fenced blocks inside the chapters a person writes
-- [048](048-v100-release-and-docs-accuracy-guard.md) v1.0.0 release and the docs-accuracy guard
 
 ### guardrails
 
@@ -420,6 +423,13 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [007](007-thematic-skill-taxonomy-rename.md) thematic skill taxonomy rename
 - [001](001-thematic-skill-rename.md) Thematic Skill Taxonomy Rename
 
+### closeout
+
+- [103](103-every-handoff-mode-sweeps-completed-working-papers-and-closeout-false-is-the-rea.md) Every handoff mode sweeps completed working papers, and closeout false is the read-only run
+- [100](100-the-tokensave-integration-closes-out-and-the-adapter-is-the-code-graph-layer.md) The TokenSave integration closes out: the adapter and its graph-backed tools are the code-graph layer
+- [099](099-close-out-plan-develop-consolidation.md) Close out plan develop-consolidation
+- [095](095-close-out-the-install-and-uninstall-rework-plan.md) Close out the install and uninstall rework plan
+
 ### commands
 
 - [090](090-the-setup-wizard-is-the-installer-and-it-asks-which-commands-to-write.md) The setup wizard is the installer, and it asks which commands to write
@@ -468,12 +478,6 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [010](010-backend-framework-skills.md) backend framework skills
 - [005](005-backend-framework-skills.md) Backend Framework Skills
 
-### closeout
-
-- [100](100-the-tokensave-integration-closes-out-and-the-adapter-is-the-code-graph-layer.md) The TokenSave integration closes out: the adapter and its graph-backed tools are the code-graph layer
-- [099](099-close-out-plan-develop-consolidation.md) Close out plan develop-consolidation
-- [095](095-close-out-the-install-and-uninstall-rework-plan.md) Close out the install and uninstall rework plan
-
 ### determinism
 
 - [094](094-rename-the-compression-subsystem-and-apply-it-to-every-model-facing-surface.md) Rename the compression subsystem and apply it to every model-facing surface
@@ -515,6 +519,12 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [012](012-database-skills.md) Database Skills
 - [010](010-backend-framework-skills.md) backend framework skills
 - [005](005-backend-framework-skills.md) Backend Framework Skills
+
+### process
+
+- [103](103-every-handoff-mode-sweeps-completed-working-papers-and-closeout-false-is-the-rea.md) Every handoff mode sweeps completed working papers, and closeout false is the read-only run
+- [098](098-develop-merges-into-main-by-area-and-stays-as-an-integration-branch.md) develop merges into main by area, and stays as an integration branch
+- [087](087-session-close-archives-completed-audits-reviews-and-plans.md) Session close archives completed audits, reviews and plans
 
 ### quality
 
