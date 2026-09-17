@@ -29,6 +29,7 @@ import { registerInstallCommand, registerUninstallCommand } from "./_register-se
 import { registerSetupCommand } from "./_register-wizard.js";
 import { registerConfigCommand, registerDoctorCommand, registerCompletionsCommand } from "./_register-health.js";
 import { registerAgentCommandsCommand } from "./_register-agent-commands.js";
+import { registerReinstallCommand } from "./_register-reinstall.js";
 import { registerHandoffCommand } from "./_register-handoff.js";
 import { registerAdrCommand, registerSkillsCommand, registerFixCommand, registerHandonCommand } from "./_register-session.js";
 import {
@@ -88,6 +89,7 @@ export function buildProgram() {
   registerGuardCommand(program);
   registerUpdateCommand(program);
   registerAgentCommandsCommand(program);
+  registerReinstallCommand(program);
 
   return program;
 }

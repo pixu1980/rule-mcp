@@ -34,6 +34,7 @@
     "tools": "node ./bin/rule-mcp.js tools list",
     "mcp:install": "bash ./scripts/install.sh --force",
     "mcp:install:ps1": "pwsh ./scripts/install.ps1",
+    "reinstall": "bash ./scripts/reinstall.sh",
     "mcp:uninstall": "bash ./scripts/uninstall.sh --force",
     "post-process": "node --import ./scripts/alias-hook.mjs scripts/fix/post-process/index.mjs",
     "post-process:fix": "node --import ./scripts/alias-hook.mjs scripts/fix/post-process/index.mjs --fix --no-dry-run",

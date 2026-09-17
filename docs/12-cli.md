@@ -7,7 +7,7 @@ a tool, a skill, a prompt, a role, a command or a guardrail;
 `tests/docs/census-generated.test.mjs` compares this file against the live
 registry, so a stale copy fails the build instead of misleading a reader.
 
-## The commands (22)
+## The commands (23)
 
 Every command is listed with the arguments and options it reads, taken from
 the commander definitions that parse them. The same definitions answer
@@ -43,6 +43,7 @@ the package version from anywhere. An error exits 1 and prints to stderr;
 | [`guard`](#rule-mcp-guard)                   | 0       | Permission-guard payload processor (invoked by PreToolUse hooks, reads stdin) |
 | [`update`](#rule-mcp-update)                 | 0       | Self-update from the upstream git repo (fast-forward only)                    |
 | [`agent-commands`](#rule-mcp-agent-commands) | 13      | Registry-driven agent slash-command management                                |
+| [`reinstall`](#rule-mcp-reinstall)           | 0       | Purge node_modules and pnpm-lock.yaml, install again, refresh the global bin  |
 
 ## rule-mcp help
 
@@ -495,6 +496,16 @@ rule-mcp agent-commands
 | `--families <list>` | -       | -                             | comma-separated: areas, personas, tasks         |
 | `--areas <list>`    | -       | -                             | comma-separated area names, e.g. frontend,data  |
 | `--skills <list>`   | -       | -                             | comma-separated skill names                     |
+
+## rule-mcp reinstall
+
+Purge node_modules and pnpm-lock.yaml, install again, refresh the global bin
+
+```sh
+rule-mcp reinstall
+```
+
+Takes no options beyond the global `-h, --help`.
 
 ## The rest of the census
 
