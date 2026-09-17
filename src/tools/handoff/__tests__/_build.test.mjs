@@ -91,7 +91,8 @@ test("full build renders every section and stats the output", () => {
   assert.match(text, /### Working Tree Changes/, "the uncommitted changes render");
   assert.match(text, /### Recent Commits/, "the commit log renders");
   assert.match(text, /### Documentation Status/, "the docs scan renders");
-  assert.match(text, /### Handoff Instruction/, "the footer renders");
+  assert.match(text, /### Resume Prompt/, "the document closes with the prompt the next session opens with");
+  assert.match(text, /### Resume Prompt/, "the prompt the next session opens with rides with the document");
   assert.equal(stats.adrs, 2, "the stats count adrs");
   assert.equal(stats.format, "full", "the stats name the format");
   assert.ok(stats.lines > 10, "the stats count lines");
