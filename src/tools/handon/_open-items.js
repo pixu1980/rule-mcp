@@ -2,6 +2,8 @@
 
 /** The still-open items a handoff hands to the next session. */
 
+import { fencedLines } from "./_shapes.js";
+
 /**
  * What the handoff says is left to do.
  *
@@ -11,12 +13,27 @@
  * checked box is done, and prose under the heading is prose, so neither counts.
  * The list ends where the following heading begins.
  *
+ * A fenced block is a quote, not the handoff speaking: the resume prompt this
+ * repository asks every handoff to carry spells its own steps out, and counting
+ * those as open work would hand the next session a list of the previous one's
+ * leftovers.
+ *
  * @param {string} body - the handoff's text
  * @returns {string[]} the items, in the order the handoff put them
  */
 export function openItems(body) {
-  const boxes = [...body.matchAll(/^[ \t]*[-*]\s*\[ \]\s*(.+?)\s*$/gm)].map((match) => match[1]);
   const lines = body.split("\n");
+  const quoted = fencedLines(lines);
+  const boxes = [];
+
+  for (const [index, line] of lines.entries()) {
+    const box = line.match(/^[ \t]*[-*]\s*\[[ ]\]\s*(.+?)\s*$/);
+
+    if (box && !quoted.has(index)) {
+      boxes.push(box[1]);
+    }
+  }
+
   const heading = lines.findIndex((line) => /^#{2,}[ \t]*Next\b/i.test(line));
 
   if (heading === -1) {
@@ -35,7 +52,11 @@ export function openItems(body) {
     current = "";
   };
 
-  for (const line of lines.slice(heading + 1)) {
+  for (const [offset, line] of lines.slice(heading + 1).entries()) {
+    if (quoted.has(heading + 1 + offset)) {
+      continue;
+    }
+
     if (/^#{2,}[ \t]/.test(line)) {
       break;
     }
