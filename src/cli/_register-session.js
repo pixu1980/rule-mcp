@@ -105,10 +105,11 @@ export function registerHandonCommand(program) {
     .option("--dir <path>", "project root (default: .)", ".")
     .option("--file <path>", "verify a single handoff file")
     .option("--list", "list handoffs")
+    .option("--no-archive", "verify without archiving completed docs")
     .allowExcessArguments(false)
     .action(async (options) => {
       const { handon } = await import("../tools/handon/index.js");
 
-      process.stdout.write(`${handon({ projectDir: options.dir, file: options.file || undefined, list: options.list }).text}\n`);
+      process.stdout.write(`${handon({ projectDir: options.dir, file: options.file || undefined, list: options.list, closeout: options.archive !== false }).text}\n`);
     });
 }

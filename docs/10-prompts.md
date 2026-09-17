@@ -111,7 +111,7 @@ Claude Code installs clean `/pix-*` commands instead and suppresses these
 | `/pix-area-ui-design-system`          | <request>  | ui: the design-system skill                                                                                                                               |
 | `/pix-flight`                         | [options]  | Read the flight recorder: what this server cost, and what to do about it                                                                                  |
 | `/pix-handoff`                        | [options]  | Produce a compressed context handoff (ADR summary + git context) to resume in a new session, commiting pending work as scoped Conventional Commits first. |
-| `/pix-handon`                         | [options]  | Resume: verify the last handoff against the repository as it is now                                                                                       |
+| `/pix-handon`                         | [options]  | Resume: verify the last handoff against the repository as it is now, archive what finished, and propose the next workstream                               |
 | `/pix-init`                           | [options]  | Prepare a project for pix-galaxy-mcp: the central recorder directory and tokensave                                                                        |
 | `/pix-process-check`                  | [target]   | Validate code against the pix guardrails and fix what fails                                                                                               |
 | `/pix-update`                         | [options]  | Apply an available server update explicitly, and report what changed                                                                                      |

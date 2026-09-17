@@ -32,11 +32,11 @@ the package version from anywhere. An error exits 1 and prints to stderr;
 | [`config`](#pix-galaxy-mcp-config)                 | 5       | Print the mcp.json snippet, or manage PIX_* env vars with `config env`        |
 | [`doctor`](#pix-galaxy-mcp-doctor)                 | 4       | Run system health check                                                       |
 | [`adr`](#pix-galaxy-mcp-adr)                       | 5       | Create a new Architecture Decision Record (ADR)                               |
-| [`handoff`](#pix-galaxy-mcp-handoff)               | 6       | Generate a compressed LLM context handoff summary                             |
+| [`handoff`](#pix-galaxy-mcp-handoff)               | 7       | Generate a compressed LLM context handoff summary                             |
 | [`skills`](#pix-galaxy-mcp-skills)                 | 3       | Manage the pix AI skill system                                                |
 | [`fix`](#pix-galaxy-mcp-fix)                       | 4       | Validate and auto-fix project file tree structure                             |
 | [`completions`](#pix-galaxy-mcp-completions)       | 1       | Generate shell auto-completion script                                         |
-| [`handon`](#pix-galaxy-mcp-handon)                 | 3       | Verify the last handoff against the repo now                                  |
+| [`handon`](#pix-galaxy-mcp-handon)                 | 4       | Verify the last handoff against the repo now                                  |
 | [`stats`](#pix-galaxy-mcp-stats)                   | 0       | Show telemetry statistics from the local log                                  |
 | [`cache`](#pix-galaxy-mcp-cache)                   | 1       | Inspect the on-disk tool cache                                                |
 | [`roles`](#pix-galaxy-mcp-roles)                   | 7       | Manage review persona roles                                                   |
@@ -310,14 +310,15 @@ pix-galaxy-mcp handoff subcommand
 
 **Options**
 
-| Flag            | Default | Choices | Description                                          |
-| --------------- | ------- | ------- | ---------------------------------------------------- |
-| `--dir <path>`  | .       | -       | project root (default: .)                            |
-| `--format <f>`  | -       | -       | full (default), brief, minimal                       |
-| `--compress`    | -       | -       | aggressively truncate values                         |
-| `--mode <m>`    | -       | -       | handoff (default) or close-session                   |
-| `--fix`         | -       | -       | apply the ADR renumber plan                          |
-| `--fix-commits` | -       | -       | amend local commit messages to match renumbered ADRs |
+| Flag            | Default | Choices | Description                                                            |
+| --------------- | ------- | ------- | ---------------------------------------------------------------------- |
+| `--dir <path>`  | .       | -       | project root (default: .)                                              |
+| `--format <f>`  | -       | -       | full (default), brief, minimal                                         |
+| `--compress`    | -       | -       | aggressively truncate values                                           |
+| `--mode <m>`    | -       | -       | handoff (default) or close-session                                     |
+| `--no-archive`  | -       | -       | render without archiving completed docs or repairing the ADR numbering |
+| `--fix`         | -       | -       | apply the ADR renumber plan                                            |
+| `--fix-commits` | -       | -       | amend local commit messages to match renumbered ADRs                   |
 
 ## pix-galaxy-mcp skills
 
@@ -382,11 +383,12 @@ pix-galaxy-mcp handon
 
 **Options**
 
-| Flag            | Default | Choices | Description                  |
-| --------------- | ------- | ------- | ---------------------------- |
-| `--dir <path>`  | .       | -       | project root (default: .)    |
-| `--file <path>` | -       | -       | verify a single handoff file |
-| `--list`        | -       | -       | list handoffs                |
+| Flag            | Default | Choices | Description                             |
+| --------------- | ------- | ------- | --------------------------------------- |
+| `--dir <path>`  | .       | -       | project root (default: .)               |
+| `--file <path>` | -       | -       | verify a single handoff file            |
+| `--list`        | -       | -       | list handoffs                           |
+| `--no-archive`  | -       | -       | verify without archiving completed docs |
 
 ## pix-galaxy-mcp stats
 

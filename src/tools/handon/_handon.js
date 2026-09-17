@@ -10,14 +10,21 @@ import { parseHandoff } from "./_parse.js";
 import { verify } from "./_verify.js";
 import { lines, firstMove } from "./_report.js";
 import { ageLabel } from "./_age.js";
+import { nextPlanSteps, planLines } from "./_plans.js";
+import { archiveCompletedDocs, closeoutLines } from "../handoff/_closeout.js";
 
 /**
  * Read the last handoff and report what is still true.
  *
- * @param {{ projectDir?: string, file?: string, list?: boolean }} options
+ * Resuming is also the moment the working papers are swept: a session that
+ * picks the project up is the one that can tell a finished audit from an open
+ * one, and it is the moment the docs tree is looked at anyway. `closeout: false`
+ * keeps the call a pure read.
+ *
+ * @param {{ projectDir?: string, file?: string, list?: boolean, closeout?: boolean }} options
  * @returns {{ source?: string, claims: Array<object>, text: string, parsed?: object }}
  */
-export function handon({ projectDir = ".", file, list = false } = {}) {
+export function handon({ projectDir = ".", file, list = false, closeout = true } = {}) {
   const available = listHandoffs(projectDir);
 
   if (list) {
@@ -48,6 +55,11 @@ export function handon({ projectDir = ".", file, list = false } = {}) {
   const claimed = parseHandoff(body);
   const claims = verify(projectDir, claimed);
 
+  // The verification runs before the sweep, so the report describes the tree
+  // the handoff was written against. Sweeping first would make it call the
+  // papers it just archived "deleted".
+  const swept = closeout === false ? null : archiveCompletedDocs(projectDir);
+
   const range = claims.find((claim) => claim.kind === "range");
   const since = range?.verdict.match(/^\d+ commits\b/) ? `, ${range.verdict}` : "";
   const age = ageLabel(claimed.date);
@@ -63,6 +75,12 @@ export function handon({ projectDir = ".", file, list = false } = {}) {
     out.push("", `## ${heading}`, "", ...(rows.length > 0 ? rows : ["- nothing"]));
   }
 
+  const sweptLines = closeoutLines(swept, { heading: "##" });
+
+  if (sweptLines.length > 0) {
+    out.push("", ...sweptLines);
+  }
+
   // The open items come out of a file in the repository, which is input, not
   // instruction: a hostile checkout could otherwise ship "ignore previous
   // instructions" as step 1 of the next session (hardening 4.4).
@@ -71,6 +89,12 @@ export function handon({ projectDir = ".", file, list = false } = {}) {
 
   if (claimed.missing.length > 0) {
     out.push("", "## Could not parse", "", `- ${claimed.missing.join(", ")}`, "", "Reported rather than dropped: what is missing here was never checked.");
+  }
+
+  const proposed = planLines(nextPlanSteps(projectDir));
+
+  if (proposed.length > 0) {
+    out.push("", ...proposed);
   }
 
   out.push("", "## Suggested first move", "", firstMove(claims, claimed));
