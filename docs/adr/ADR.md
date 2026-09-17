@@ -8,6 +8,7 @@ this directory are the source of truth; this index is generated from them by
 
 | #                                                                                                                       | Title                                                                                                     | Date       | Status     | Tags                                                                                |
 | ----------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- | ---------- | ---------- | ----------------------------------------------------------------------------------- |
+| [104](104-the-handoff-document-closes-with-the-resume-prompt.md)                                                        | The handoff document closes with the resume prompt                                                        | 2026-09-17 | accepted   | handoff, handon, prompts, docs                                                      |
 | [103](103-every-handoff-mode-sweeps-completed-working-papers-and-closeout-false-is-the-rea.md)                          | Every handoff mode sweeps completed working papers, and closeout false is the read-only run               | 2026-09-17 | accepted   | docs, closeout, handoff, handon, process                                            |
 | [102](102-reinstall-is-one-shell-script-behind-three-entry-points.md)                                                   | Reinstall is one shell script behind three entry points                                                   | 2026-09-17 | accepted   | cli, installer, devx                                                                |
 | [101](101-accept-a-comma-separated-agent-list-in-agent-commands.md)                                                     | Accept a comma-separated agent list in agent-commands                                                     | 2026-09-17 | accepted   | cli, installer, agent-commands                                                      |
@@ -119,6 +120,7 @@ file. Where a line stops short the rest is in the ADR.
 
 | ADR                                                                                                                     | Decision                                                                                                                                                                                                                        | Consequence                                                                                                                                                                                                                    |
 | ----------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| [104](104-the-handoff-document-closes-with-the-resume-prompt.md)                                                        | Every handoff document ends with a `Resume Prompt` section holding a fenced `prompt` block: the message the next session opens with.                                                                                            | The block is the same bytes in the file and in the chat, so the two cannot drift.                                                                                                                                              |
 | [103](103-every-handoff-mode-sweeps-completed-working-papers-and-closeout-false-is-the-rea.md)                          | Both handoff modes and handon archive completed working papers by default, in src/tools/handoff/_closeout.js, and report what they archived.                                                                                    | Finished working papers leave the tree at every handoff instead of only at a session close, so docs/audits, docs/reviews and docs/plans hold open work and nothing else.                                                       |
 | [102](102-reinstall-is-one-shell-script-behind-three-entry-points.md)                                                   | `scripts/reinstall.sh` owns the sequence and runs from the checkout it lives in; it refuses a directory without package.json.                                                                                                   | One implementation, three entry points, so the purge cannot drift.                                                                                                                                                             |
 | [101](101-accept-a-comma-separated-agent-list-in-agent-commands.md)                                                     | `resolveCommandTargets` now parses `options.agent` as a comma-separated list (arrays work too) and filters targets through a Set, so one `--agent claude,pi` call covers every named agent.                                     | Multi-agent installs write the full selected command set into every selected agent's directory in a single sync.                                                                                                               |
@@ -320,6 +322,7 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 
 ### docs
 
+- [104](104-the-handoff-document-closes-with-the-resume-prompt.md) The handoff document closes with the resume prompt
 - [103](103-every-handoff-mode-sweeps-completed-working-papers-and-closeout-false-is-the-rea.md) Every handoff mode sweeps completed working papers, and closeout false is the read-only run
 - [099](099-close-out-plan-develop-consolidation.md) Close out plan develop-consolidation
 - [095](095-close-out-the-install-and-uninstall-rework-plan.md) Close out the install and uninstall rework plan
@@ -373,6 +376,15 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [059](059-persona-plans-are-checklists-with-marks-that-survive-the-sync.md) Persona plans are checklists with marks that survive the sync
 - [054](054-split-review-personas-into-per-operation-commands-plan-audit-review.md) Split review personas into per-operation commands (plan/audit/review)
 
+### prompts
+
+- [104](104-the-handoff-document-closes-with-the-resume-prompt.md) The handoff document closes with the resume prompt
+- [088](088-a-persona-topic-is-the-binding-scope-of-the-run.md) A persona topic is the binding scope of the run
+- [077](077-compress-every-server-model-list-surface-prompts-list-tools-list-resources-list.md) Compress every server→model list surface (prompts/list, tools/list, resources/list)
+- [055](055-restructure-the-command-surface-rule-router-rule-area-compression-implicit-rule-process.md) Restructure the command surface: /rule router, rule-area-*, compression implicit, rule-process-tdd skill
+- [054](054-split-review-personas-into-per-operation-commands-plan-audit-review.md) Split review personas into per-operation commands (plan/audit/review)
+- [052](052-pre-packaged-mcp-prompt-registry-26-prompts-strict-schemas-commit-scope-closer.md) Pre-packaged MCP prompt registry (26 prompts, strict schemas, commit-scope closer)
+
 ### tool
 
 - [025](025-skill-routing-pnpm-package-manager-workspace-monorepo-setup.md) Skill routing: pnpm package manager workspace monorepo setup
@@ -398,14 +410,6 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [083](083-governance-is-an-explicit-bdfl-with-a-path-to-co-maintainers.md) Governance is an explicit BDFL with a path to co-maintainers
 - [079](079-add-the-oss-architect-review-persona.md) Add the OSS Architect review persona
 - [066](066-remove-externally-derived-skills-from-the-served-knowledge-base.md) Remove externally derived skills from the served knowledge base
-
-### prompts
-
-- [088](088-a-persona-topic-is-the-binding-scope-of-the-run.md) A persona topic is the binding scope of the run
-- [077](077-compress-every-server-model-list-surface-prompts-list-tools-list-resources-list.md) Compress every server→model list surface (prompts/list, tools/list, resources/list)
-- [055](055-restructure-the-command-surface-rule-router-rule-area-compression-implicit-rule-process.md) Restructure the command surface: /rule router, rule-area-*, compression implicit, rule-process-tdd skill
-- [054](054-split-review-personas-into-per-operation-commands-plan-audit-review.md) Split review personas into per-operation commands (plan/audit/review)
-- [052](052-pre-packaged-mcp-prompt-registry-26-prompts-strict-schemas-commit-scope-closer.md) Pre-packaged MCP prompt registry (26 prompts, strict schemas, commit-scope closer)
 
 ### release
 
@@ -489,6 +493,12 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [102](102-reinstall-is-one-shell-script-behind-three-entry-points.md) Reinstall is one shell script behind three entry points
 - [072](072-the-installer-asks-before-copying-bundled-skills-to-the-central-agents-directory.md) The installer asks before copying bundled skills to the central agents directory
 - [070](070-installer-mode-step-replaces-the-agent-picker-instead-of-stacking-under-it.md) Installer mode step replaces the agent picker instead of stacking under it
+
+### handoff
+
+- [104](104-the-handoff-document-closes-with-the-resume-prompt.md) The handoff document closes with the resume prompt
+- [103](103-every-handoff-mode-sweeps-completed-working-papers-and-closeout-false-is-the-rea.md) Every handoff mode sweeps completed working papers, and closeout false is the read-only run
+- [087](087-session-close-archives-completed-audits-reviews-and-plans.md) Session close archives completed audits, reviews and plans
 
 ### install
 
