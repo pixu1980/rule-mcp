@@ -1,9 +1,11 @@
 # 087: Session close archives completed audits, reviews and plans
 
 - **Date**: 2026-09-11
-- **Status**: accepted
+- **Status**: superseded
 - **Tags**: process, handoff, docs
 - **Author**: Emiliano Pisu <pisuemiliano.1980@gmail.com>
+
+> Superseded by [ADR 103](103-every-handoff-mode-sweeps-completed-working-papers-and-closeout-false-is-the-rea.md) on the mode question only: the sweep now runs in every handoff mode and in handon, because restricting it to close-session left finished papers on disk. What counts as complete, the one-ADR-per-doc fold and the English gate stay as this decision wrote them.
 
 ## Context
 
