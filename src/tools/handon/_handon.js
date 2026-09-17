@@ -9,6 +9,7 @@ import { listHandoffs } from "./_handoffs.js";
 import { parseHandoff } from "./_parse.js";
 import { verify } from "./_verify.js";
 import { lines, firstMove } from "./_report.js";
+import { promptToRunLines, resumePrompt } from "./_resume-prompt.js";
 import { ageLabel } from "./_age.js";
 import { nextPlanSteps, planLines } from "./_plans.js";
 import { archiveCompletedDocs, closeoutLines } from "../handoff/_closeout.js";
@@ -98,6 +99,11 @@ export function handon({ projectDir = ".", file, list = false, closeout = true }
   }
 
   out.push("", "## Suggested first move", "", firstMove(claims, claimed));
+
+  // The handoff's own prompt closes the report, verbatim: the value of a prompt
+  // is its exact wording, and this is the block the reader pastes. It comes last
+  // for that reason - one block, nothing after it to copy around.
+  out.push("", ...promptToRunLines(resumePrompt(body), { source }));
 
   return { source, claims, text: out.join("\n"), parsed: claimed };
 }
