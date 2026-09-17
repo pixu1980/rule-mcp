@@ -22,12 +22,13 @@ export function detectInstalledAgents() {
     { name: "copilot", path: join(HOME, ".config", "github-copilot", "hosts.json"), key: `copilot-mcp-${serverName}` },
     { name: "gemini", path: join(HOME, ".gemini", "settings.json"), key: serverName },
     { name: "pi", path: join(HOME, ".pi", "agent", "mcp.json"), key: serverName },
+    { name: "opencode", path: join(HOME, ".config", "opencode", "opencode.json"), key: serverName },
     { name: "vscode", path: join(vscodeGlobalDir(), "mcp.json"), key: serverName },
     { name: "jetbrains", path: join(process.cwd(), ".idea", "mcp.json"), key: serverName },
   ];
 
   // Generic ~/.config/<name>/mcp.json agents
-  const genericAgents = ["cline", "roo", "zed", "opencode", "antigravity", "kilo", "kimi", "vibe", "grok", "droid", "kiro", "qwen", "neovim", "emacs"];
+  const genericAgents = ["cline", "roo", "zed", "antigravity", "kilo", "kimi", "vibe", "grok", "droid", "kiro", "qwen", "neovim", "emacs"];
 
   // Devin reads mcp_config.json, not the generic mcp.json.
   checks.push({ name: "devin", path: join(HOME, ".config", "devin", "mcp_config.json"), key: serverName });

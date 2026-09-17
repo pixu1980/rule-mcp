@@ -9,6 +9,7 @@
 import { join } from "node:path";
 import { HOME } from "./_paths.js";
 import { installClaude, installCodex, installCursor, installCopilot, installGemini, installPi } from "./_agents-cli.js";
+import { installOpencode } from "./_agents-opencode.js";
 import { installVscode, installJetbrains, installNeovim, installEmacs, installDevin, createGenericInstaller } from "./_agents-ide.js";
 
 const deprecatedAgents = new Map([["windsurf", "devin"]]);
@@ -21,12 +22,13 @@ const installers = {
   copilot: installCopilot,
   gemini: installGemini,
   pi: installPi,
+  // opencode reads a JSON config file of its own shape, not the mcpServers one.
+  opencode: installOpencode,
 
   // Generic JSON config agents
   cline: createGenericInstaller("cline"),
   roo: createGenericInstaller("roo"),
   zed: createGenericInstaller("zed"),
-  opencode: createGenericInstaller("opencode"),
   antigravity: createGenericInstaller("antigravity"),
   kilo: createGenericInstaller("kilo"),
   kimi: createGenericInstaller("kimi"),

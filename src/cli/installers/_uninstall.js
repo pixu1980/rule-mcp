@@ -8,7 +8,9 @@ import { HOME, IS_MACOS, IS_WINDOWS, readText, removeFile, writeText } from "./_
 import { removeJsonServer, removeVscodeServer } from "./_writers-json.js";
 import { vscodeGlobalDir, devinConfigPath } from "./_agents-ide.js";
 import { uninstallClaude, uninstallCodex, uninstallCursor, uninstallCopilot, uninstallGemini, uninstallPi } from "./_uninstall-clis.js";
+import { uninstallOpencode } from "./_agents-opencode.js";
 export * from "./_uninstall-clis.js";
+export { uninstallOpencode } from "./_agents-opencode.js";
 
 const uninstallVscode = ({ dryRun }) => {
   const removeFromExistingFile = (file) => {
@@ -86,12 +88,12 @@ const uninstallers = {
   copilot: uninstallCopilot,
   gemini: uninstallGemini,
   pi: uninstallPi,
+  opencode: uninstallOpencode,
   vscode: uninstallVscode,
   jetbrains: uninstallJetbrains,
   cline: uninstallGeneric("cline"),
   roo: uninstallGeneric("roo"),
   zed: uninstallGeneric("zed"),
-  opencode: uninstallGeneric("opencode"),
   antigravity: uninstallGeneric("antigravity"),
   devin: uninstallDevin,
   kilo: uninstallGeneric("kilo"),
