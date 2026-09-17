@@ -36,6 +36,7 @@ test("parseHandoffOptions translates the compact vocabulary", () => {
     includeContext: true,
     includeAdrs: true,
     includeRoadmap: true,
+    closeout: true,
     maxTokens: 0,
     help: false,
   };
@@ -55,6 +56,8 @@ test("parseHandoffOptions translates the compact vocabulary", () => {
   assert.equal(parseHandoffOptions("no-context").includeContext, false);
   assert.equal(parseHandoffOptions("no-adrs").includeAdrs, false);
   assert.equal(parseHandoffOptions("no-roadmap").includeRoadmap, false);
+  assert.equal(parseHandoffOptions("no-archive").closeout, false, "no-archive turns the sweep off");
+  assert.equal(parseHandoffOptions("handoff").closeout, true, "the sweep is on by default");
   assert.equal(parseHandoffOptions("max=2000").maxTokens, 2000);
   assert.equal(parseHandoffOptions("max=0").maxTokens, 0);
 

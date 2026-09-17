@@ -12,6 +12,7 @@ export function registerHandoffCommand(program) {
     .option("--format <f>", "full (default), brief, minimal")
     .option("--compress", "aggressively truncate values")
     .option("--mode <m>", "handoff (default) or close-session")
+    .option("--no-archive", "render without archiving completed docs or repairing the ADR numbering")
     .option("--fix", "apply the ADR renumber plan")
     .option("--fix-commits", "amend local commit messages to match renumbered ADRs")
     .allowExcessArguments(false)
@@ -65,6 +66,7 @@ export function registerHandoffCommand(program) {
         compress: options.compress,
         format: options.format ?? "full",
         mode: options.mode ?? "handoff",
+        closeout: options.archive !== false,
       });
 
       process.stdout.write(`${handoffRes.content[0].text}\n`);

@@ -17,7 +17,7 @@ export const PROMPT_DEFS = [
       {
         name: "options",
         description:
-          "Space-separated tokens: handoff | close-session (default: handoff), compress | no-compress (default: compress), full | brief | minimal (default: full), no-diff, no-log, no-context, no-adrs, no-roadmap, max=<n> (default: 0), or help. Empty = all defaults.",
+          "Space-separated tokens: handoff | close-session (default: handoff), compress | no-compress (default: compress), full | brief | minimal (default: full), no-diff, no-log, no-context, no-adrs, no-roadmap, no-archive, max=<n> (default: 0), or help. Empty = all defaults. Completed audits/reviews/plans are archived as ADRs by default; no-archive turns that off.",
         required: false,
       },
     ],

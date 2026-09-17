@@ -10,7 +10,12 @@ export const HandoffSchema = z.object({
     .enum(["handoff", "close-session"])
     .optional()
     .default("handoff")
-    .describe("handoff: generate context summary. close-session: full session close with git diff, roadmap check, doc scan."),
+    .describe("handoff: generate context summary. close-session: the same, with the session-close banner."),
+  closeout: z
+    .boolean()
+    .optional()
+    .default(true)
+    .describe("Archive completed audits/reviews/plans into ADRs and repair the ADR numbering first (default on; false = read-only diagnosis, nothing written)"),
   includeContext: z.boolean().optional().default(true).describe("Include .context/ values"),
   includeAdrs: z.boolean().optional().default(true).describe("Include ADR summaries"),
   includeIdentity: z.boolean().optional().default(true).describe("Include project identity"),

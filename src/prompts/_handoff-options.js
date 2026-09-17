@@ -15,6 +15,7 @@
  *   compress | no-compress      → compress = true | false (default: compress)
  *   full | brief | minimal      → format
  *   no-diff | no-log | no-context | no-adrs | no-roadmap → include* = false
+ *   no-archive                  → closeout = false (do not archive, do not renumber)
  *   max=<n>                     → maxTokens = n
  *   help | --help | -h          → help (print usage, do not run the tool)
  */
@@ -31,7 +32,7 @@ export { HANDOFF_COMPLETIONS, HANDOFF_FORMATS, HANDOFF_MODES, HANDOFF_USAGE } fr
  * @returns {{ mode: string, compress: boolean, format: string,
  *             includeGitDiff: boolean, includeGitLog: boolean,
  *             includeContext: boolean, includeAdrs: boolean,
- *             includeRoadmap: boolean, maxTokens: number, help: boolean }}
+ *             includeRoadmap: boolean, closeout: boolean, maxTokens: number, help: boolean }}
  */
 export function parseHandoffOptions(raw) {
   const result = { ...DEFAULTS };
@@ -83,6 +84,10 @@ export function parseHandoffOptions(raw) {
       }
       case "no-roadmap": {
         result.includeRoadmap = false;
+        break;
+      }
+      case "no-archive": {
+        result.closeout = false;
         break;
       }
       case "help":

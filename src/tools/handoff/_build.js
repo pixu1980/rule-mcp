@@ -25,13 +25,16 @@ export function buildHandoff({
   maxTokens,
   format,
   mode,
+  closeout,
   _closeout,
   _renumber,
 }) {
-  // A close-session renumbers before it reads the ADR log, so the handoff
-  // quotes the numbers that exist after the repair. A plain handoff is a
-  // read-only diagnosis and never mutates.
-  const renumber = _renumber === undefined && mode === "close-session" ? autoRenumber(projectDir, { apply: true }) : _renumber;
+  // Archiving completed papers and repairing the ADR numbering are one act: a
+  // run that writes ADRs renumbers so it cannot leave a collision behind, and a
+  // run asked to keep its hands off the tree does neither. Both handoff modes
+  // archive (ADR 103); `closeout: false` is the read-only diagnosis.
+  const shouldArchive = closeout !== false;
+  const renumber = _renumber === undefined && shouldArchive ? autoRenumber(projectDir, { apply: true }) : _renumber;
   const identity = includeIdentity ? readProjectIdentity(projectDir) : {};
   const adrs = includeAdrs ? readAdrs(projectDir) : [];
   const contextValues = includeContext ? readContextValues(projectDir) : {};
@@ -49,8 +52,9 @@ export function buildHandoff({
     isBrief: format === "brief",
     isMinimal: format === "minimal",
   };
-  // Plain handoff stays read-only; only a session close archives and deletes.
-  const closeout = _closeout === undefined && shape.isCloseSession ? archiveCompletedDocs(projectDir) : _closeout;
+  // The renumber runs before the archive reads the ADR log, so the handoff
+  // quotes the numbers that exist after the repair.
+  const closeoutResult = _closeout === undefined && shouldArchive ? archiveCompletedDocs(projectDir) : _closeout;
 
   const lines = [
     ...headerLines(shape),
@@ -62,7 +66,7 @@ export function buildHandoff({
     ...gitLogLines(gitLog, shape),
     ...docsLines(docsScan, shape),
     ...renumberLines(renumber, shape),
-    ...closeoutLines(closeout, shape),
+    ...closeoutLines(closeoutResult, shape),
     ...footerLines(shape),
   ];
 
@@ -79,7 +83,7 @@ export function buildHandoff({
       compress: true,
       maxTokens,
       format: "brief",
-      _closeout: closeout,
+      _closeout: closeoutResult,
       _renumber: renumber,
     });
   }
@@ -93,7 +97,7 @@ export function buildHandoff({
       compress: true,
       maxTokens,
       format: "minimal",
-      _closeout: closeout,
+      _closeout: closeoutResult,
       _renumber: renumber,
     });
   }
@@ -102,7 +106,7 @@ export function buildHandoff({
     text: output,
     stats: {
       adrs: adrs.length,
-      archived: closeout ? closeout.archived.length : 0,
+      archived: closeoutResult ? closeoutResult.archived.length : 0,
       contextKeys: Object.keys(contextValues).length,
       lines: output.split("\n").length,
       tokens,
