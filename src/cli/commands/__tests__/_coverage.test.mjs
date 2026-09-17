@@ -94,6 +94,17 @@ test("Claude and Pi keep their existing bare-command dirs", () => {
   assert.ok(piOverride.includes(join("/custom/pi", "prompts")), "PI_CODING_AGENT_DIR wins");
 });
 
+test("a comma-separated agent list resolves every named agent", () => {
+  // The wizard passes the selected agents joined by commas, so a multi-agent
+  // install must not resolve to zero targets and silently write no commands.
+  const targets = resolveCommandTargets({ agent: "claude,pi", ...ctx() });
+  const agents = [...new Set(targets.map((t) => t.agent))].sort();
+
+  assert.deepEqual(agents, ["claude", "pi"], "both named agents are resolved");
+  assert.ok(targets.map((t) => t.dir).includes(join("/home/u", ".claude", "commands")), "claude keeps its user commands dir");
+  assert.ok(targets.map((t) => t.dir).includes(join("/home/u", ".pi", "agent", "prompts")), "pi keeps its prompt templates dir");
+});
+
 test("detectedOnly resolves nothing for agents that are not installed", () => {
   const none = resolveCommandTargets({ detectedOnly: true, ...ctx() });
   assert.deepEqual(none, [], "an empty machine has no command targets");
