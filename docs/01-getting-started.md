@@ -362,6 +362,7 @@ It writes an entry equivalent to:
 | Zed         | `~/.config/zed/mcp.json`                                                                                                                                         |
 | Devin       | `~/.config/devin/mcp_config.json` (formerly Windsurf)                                                                                                            |
 | Pi          | `~/.pi/agent/mcp.json`                                                                                                                                           |
+| opencode    | `~/.config/opencode/opencode.json` under `mcp`: `{"type": "local", "command": ["rule-mcp", "serve"], "enabled": true, "environment": {…}}`                 |
 | Gemini CLI  | `~/.gemini/settings.json`                                                                                                                                        |
 | JetBrains   | `.idea/mcp.json` (project-level)                                                                                                                                 |
 | Neovim      | `~/.config/nvim/mcp.json`                                                                                                                                        |
