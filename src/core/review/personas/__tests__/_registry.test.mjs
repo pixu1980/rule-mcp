@@ -32,7 +32,6 @@ test("the catalog ships the agreed active set", () => {
     "auth",
     "backend",
     "data",
-    "design-system",
     "devops",
     "devx",
     "docs",
@@ -45,6 +44,7 @@ test("the catalog ships the agreed active set", () => {
     "security",
     "simplicity",
     "supply-chain",
+    "ui",
   ]);
   assert.equal(allRoles().length, EMBEDDED_ROLES.length, "the catalog is exactly the adopted original set - nothing else rides along");
 });
