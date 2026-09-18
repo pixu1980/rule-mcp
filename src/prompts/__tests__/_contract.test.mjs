@@ -15,7 +15,7 @@ test("every listed prompt has a getPrompt implementation with messages", () => {
   }
 });
 
-test("refactor: areas are pix-area-*, removed commands gone, check renamed to process-check", () => {
+test("refactor: areas are pix-area-*, removed commands gone", () => {
   const names = new Set(listPrompts().map((p) => p.name));
   // The area prompts live under the pix-area-* namespace now.
   for (const area of AREA_PROMPTS) {
@@ -33,16 +33,13 @@ test("refactor: areas are pix-area-*, removed commands gone, check renamed to pr
     "pix-generate-component",
     "pix-a11y-test",
     "pix-a11y-review",
+    "pix-adr",
+    "pix-process-check",
   ]) {
     assert.ok(!names.has(removed), `${removed} must be removed`);
   }
-  assert.ok(names.has("pix-process-check"), "pix-check must be renamed to pix-process-check");
-  assert.ok(!names.has("pix-check"), "plain pix-check must be gone");
-  const processCheck = getPrompt("pix-process-check");
-  assert.ok(processCheck, "pix-process-check must exist");
-  const text = processCheck.messages.map((m) => m.content?.text ?? "").join("\n");
-  assert.match(text, /pix_tool_check/, "pix-process-check must validate with pix_tool_check");
-  assert.match(text, /commit/, "pix-process-check must close with a scoped commit");
+  // pix-check is an agent command (not an MCP prompt) - not in this registry
+  assert.ok(!names.has("pix-check"), "pix-check is an agent command, not an MCP prompt");
 });
 
 // ── Content rules (commit scope + TDD/a11y baselines) ────────────

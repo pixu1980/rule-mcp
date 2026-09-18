@@ -7,114 +7,112 @@ a tool, a skill, a prompt, a role, a command or a guardrail;
 `tests/docs/census-generated.test.mjs` compares this file against the live
 registry, so a stale copy fails the build instead of misleading a reader.
 
-## MCP prompts (155)
+## MCP prompts (153)
 
-98 reusable prompts, plus 57 generated from the persona registry.
+96 reusable prompts, plus 57 generated from the persona registry.
 Claude Code installs clean `/pix-*` commands instead and suppresses these
 (ADR 029), so the two names are deliberately the same.
 
 ### Reusable
 
-| Prompt                                | Arguments  | Description                                                                                                                                               |
-| ------------------------------------- | ---------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `/pix-adr`                            | <decision> | Record an architecture decision: context, decision, alternatives, consequences                                                                            |
-| `/pix-area-ai`                        | <request>  | ai work, across every ai skill                                                                                                                            |
-| `/pix-area-ai-agent-architecture`     | <request>  | ai: the agent-architecture skill                                                                                                                          |
-| `/pix-area-ai-context-engineering`    | <request>  | ai: the context-engineering skill                                                                                                                         |
-| `/pix-area-ai-evals`                  | <request>  | ai: the evals skill                                                                                                                                       |
-| `/pix-area-ai-prompting`              | <request>  | ai: the prompting skill                                                                                                                                   |
-| `/pix-area-backend`                   | <request>  | backend work, across every backend skill                                                                                                                  |
-| `/pix-area-backend-express`           | <request>  | backend: the express skill                                                                                                                                |
-| `/pix-area-backend-fastify`           | <request>  | backend: the fastify skill                                                                                                                                |
-| `/pix-area-backend-graphql`           | <request>  | backend: the graphql skill                                                                                                                                |
-| `/pix-area-backend-hono`              | <request>  | backend: the hono skill                                                                                                                                   |
-| `/pix-area-backend-nestjs`            | <request>  | backend: the nestjs skill                                                                                                                                 |
-| `/pix-area-backend-node`              | <request>  | backend: the node skill                                                                                                                                   |
-| `/pix-area-backend-security`          | <request>  | backend: the security skill                                                                                                                               |
-| `/pix-area-backend-workers`           | <request>  | backend: the workers skill                                                                                                                                |
-| `/pix-area-compression`               | <request>  | compression work, across every compression skill                                                                                                          |
-| `/pix-area-data`                      | <request>  | data work, across every data skill                                                                                                                        |
-| `/pix-area-data-duckdb`               | <request>  | data: the duckdb skill                                                                                                                                    |
-| `/pix-area-data-indexed-db`           | <request>  | data: the indexed-db skill                                                                                                                                |
-| `/pix-area-data-mongodb`              | <request>  | data: the mongodb skill                                                                                                                                   |
-| `/pix-area-data-mysql`                | <request>  | data: the mysql skill                                                                                                                                     |
-| `/pix-area-data-postgresql`           | <request>  | data: the postgresql skill                                                                                                                                |
-| `/pix-area-data-sql`                  | <request>  | data: the sql skill                                                                                                                                       |
-| `/pix-area-data-sqlite`               | <request>  | data: the sqlite skill                                                                                                                                    |
-| `/pix-area-devops`                    | <request>  | devops work, across every devops skill                                                                                                                    |
-| `/pix-area-devops-deploy-preview`     | <request>  | devops: the deploy-preview skill                                                                                                                          |
-| `/pix-area-devops-docker`             | <request>  | devops: the docker skill                                                                                                                                  |
-| `/pix-area-devops-observability`      | <request>  | devops: the observability skill                                                                                                                           |
-| `/pix-area-devops-testing`            | <request>  | devops: the testing skill                                                                                                                                 |
-| `/pix-area-frontend`                  | <request>  | frontend work, across every frontend skill                                                                                                                |
-| `/pix-area-frontend-angular`          | <request>  | frontend: the angular skill                                                                                                                               |
-| `/pix-area-frontend-custom-element`   | <request>  | frontend: the custom-element skill                                                                                                                        |
-| `/pix-area-frontend-react`            | <request>  | frontend: the react skill                                                                                                                                 |
-| `/pix-area-frontend-solidjs`          | <request>  | frontend: the solidjs skill                                                                                                                               |
-| `/pix-area-frontend-svelte`           | <request>  | frontend: the svelte skill                                                                                                                                |
-| `/pix-area-frontend-template-engine`  | <request>  | frontend: the template-engine skill                                                                                                                       |
-| `/pix-area-frontend-vanilla-reactive` | <request>  | frontend: the vanilla-reactive skill                                                                                                                      |
-| `/pix-area-frontend-vue`              | <request>  | frontend: the vue skill                                                                                                                                   |
-| `/pix-area-frontend-workers`          | <request>  | frontend: the workers skill                                                                                                                               |
-| `/pix-area-meta`                      | <request>  | meta work, across every meta skill                                                                                                                        |
-| `/pix-area-meta-astro`                | <request>  | meta: the astro skill                                                                                                                                     |
-| `/pix-area-meta-next`                 | <request>  | meta: the next skill                                                                                                                                      |
-| `/pix-area-meta-nuxt`                 | <request>  | meta: the nuxt skill                                                                                                                                      |
-| `/pix-area-meta-remix`                | <request>  | meta: the remix skill                                                                                                                                     |
-| `/pix-area-platform`                  | <request>  | platform work, across every platform skill                                                                                                                |
-| `/pix-area-platform-agent`            | <request>  | platform: the agent skill                                                                                                                                 |
-| `/pix-area-platform-auth`             | <request>  | platform: the auth skill                                                                                                                                  |
-| `/pix-area-platform-desktop`          | <request>  | platform: the desktop skill                                                                                                                               |
-| `/pix-area-platform-library`          | <request>  | platform: the library skill                                                                                                                               |
-| `/pix-area-platform-web`              | <request>  | platform: the web skill                                                                                                                                   |
-| `/pix-area-process`                   | <request>  | process work, across every process skill                                                                                                                  |
-| `/pix-area-process-adr`               | <request>  | process: the adr skill                                                                                                                                    |
-| `/pix-area-process-ai-sdlc`           | <request>  | process: the ai-sdlc skill                                                                                                                                |
-| `/pix-area-process-bmad`              | <request>  | process: the bmad skill                                                                                                                                   |
-| `/pix-area-process-changelog`         | <request>  | process: the changelog skill                                                                                                                              |
-| `/pix-area-process-code-review`       | <request>  | process: the code-review skill                                                                                                                            |
-| `/pix-area-process-handoff`           | <request>  | process: the handoff skill                                                                                                                                |
-| `/pix-area-process-npm-release`       | <request>  | process: the npm-release skill                                                                                                                            |
-| `/pix-area-process-simplicity`        | <request>  | process: the simplicity skill                                                                                                                             |
-| `/pix-area-process-tdd`               | <request>  | process: the tdd skill                                                                                                                                    |
-| `/pix-area-styleguide`                | <request>  | styleguide work, across every styleguide skill                                                                                                            |
-| `/pix-area-styleguide-a11y`           | <request>  | styleguide: the a11y skill                                                                                                                                |
-| `/pix-area-styleguide-baseline`       | <request>  | styleguide: the baseline skill                                                                                                                            |
-| `/pix-area-styleguide-comments`       | <request>  | styleguide: the comments skill                                                                                                                            |
-| `/pix-area-styleguide-css`            | <request>  | styleguide: the css skill                                                                                                                                 |
-| `/pix-area-styleguide-english`        | <request>  | styleguide: the english skill                                                                                                                             |
-| `/pix-area-styleguide-file-tree`      | <request>  | styleguide: the file-tree skill                                                                                                                           |
-| `/pix-area-styleguide-fingerprint`    | <request>  | styleguide: the fingerprint skill                                                                                                                         |
-| `/pix-area-styleguide-html`           | <request>  | styleguide: the html skill                                                                                                                                |
-| `/pix-area-styleguide-i18n`           | <request>  | styleguide: the i18n skill                                                                                                                                |
-| `/pix-area-styleguide-javascript`     | <request>  | styleguide: the javascript skill                                                                                                                          |
-| `/pix-area-styleguide-json`           | <request>  | styleguide: the json skill                                                                                                                                |
-| `/pix-area-styleguide-markdown`       | <request>  | styleguide: the markdown skill                                                                                                                            |
-| `/pix-area-styleguide-naming`         | <request>  | styleguide: the naming skill                                                                                                                              |
-| `/pix-area-styleguide-patterns`       | <request>  | styleguide: the patterns skill                                                                                                                            |
-| `/pix-area-styleguide-readme`         | <request>  | styleguide: the readme skill                                                                                                                              |
-| `/pix-area-styleguide-typescript`     | <request>  | styleguide: the typescript skill                                                                                                                          |
-| `/pix-area-styleguide-validation`     | <request>  | styleguide: the validation skill                                                                                                                          |
-| `/pix-area-toolchain`                 | <request>  | toolchain work, across every toolchain skill                                                                                                              |
-| `/pix-area-toolchain-biome`           | <request>  | toolchain: the biome skill                                                                                                                                |
-| `/pix-area-toolchain-commits`         | <request>  | toolchain: the commits skill                                                                                                                              |
-| `/pix-area-toolchain-eslint`          | <request>  | toolchain: the eslint skill                                                                                                                               |
-| `/pix-area-toolchain-husky`           | <request>  | toolchain: the husky skill                                                                                                                                |
-| `/pix-area-toolchain-parcel`          | <request>  | toolchain: the parcel skill                                                                                                                               |
-| `/pix-area-toolchain-pnpm`            | <request>  | toolchain: the pnpm skill                                                                                                                                 |
-| `/pix-area-toolchain-project`         | <request>  | toolchain: the project skill                                                                                                                              |
-| `/pix-area-toolchain-rspack`          | <request>  | toolchain: the rspack skill                                                                                                                               |
-| `/pix-area-toolchain-turborepo`       | <request>  | toolchain: the turborepo skill                                                                                                                            |
-| `/pix-area-toolchain-typescript`      | <request>  | toolchain: the typescript skill                                                                                                                           |
-| `/pix-area-toolchain-vite`            | <request>  | toolchain: the vite skill                                                                                                                                 |
-| `/pix-area-ui`                        | <request>  | ui work, across every ui skill                                                                                                                            |
-| `/pix-area-ui-design-system`          | <request>  | ui: the design-system skill                                                                                                                               |
-| `/pix-flight`                         | [options]  | Read the flight recorder: what this server cost, and what to do about it                                                                                  |
-| `/pix-handoff`                        | [options]  | Produce a compressed context handoff (ADR summary + git context) to resume in a new session, commiting pending work as scoped Conventional Commits first. |
-| `/pix-handon`                         | [options]  | Resume: verify the last handoff against the repository as it is now, archive what finished, and propose the next workstream                               |
-| `/pix-init`                           | [options]  | Prepare a project for pix-galaxy-mcp: the central recorder directory and tokensave                                                                        |
-| `/pix-process-check`                  | [target]   | Validate code against the pix guardrails and fix what fails                                                                                               |
-| `/pix-update`                         | [options]  | Apply an available server update explicitly, and report what changed                                                                                      |
+| Prompt                                | Arguments | Description                                                                                                                                               |
+| ------------------------------------- | --------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `/pix-area-ai`                        | <request> | ai work, across every ai skill                                                                                                                            |
+| `/pix-area-ai-agent-architecture`     | <request> | ai: the agent-architecture skill                                                                                                                          |
+| `/pix-area-ai-context-engineering`    | <request> | ai: the context-engineering skill                                                                                                                         |
+| `/pix-area-ai-evals`                  | <request> | ai: the evals skill                                                                                                                                       |
+| `/pix-area-ai-prompting`              | <request> | ai: the prompting skill                                                                                                                                   |
+| `/pix-area-backend`                   | <request> | backend work, across every backend skill                                                                                                                  |
+| `/pix-area-backend-express`           | <request> | backend: the express skill                                                                                                                                |
+| `/pix-area-backend-fastify`           | <request> | backend: the fastify skill                                                                                                                                |
+| `/pix-area-backend-graphql`           | <request> | backend: the graphql skill                                                                                                                                |
+| `/pix-area-backend-hono`              | <request> | backend: the hono skill                                                                                                                                   |
+| `/pix-area-backend-nestjs`            | <request> | backend: the nestjs skill                                                                                                                                 |
+| `/pix-area-backend-node`              | <request> | backend: the node skill                                                                                                                                   |
+| `/pix-area-backend-security`          | <request> | backend: the security skill                                                                                                                               |
+| `/pix-area-backend-workers`           | <request> | backend: the workers skill                                                                                                                                |
+| `/pix-area-compression`               | <request> | compression work, across every compression skill                                                                                                          |
+| `/pix-area-data`                      | <request> | data work, across every data skill                                                                                                                        |
+| `/pix-area-data-duckdb`               | <request> | data: the duckdb skill                                                                                                                                    |
+| `/pix-area-data-indexed-db`           | <request> | data: the indexed-db skill                                                                                                                                |
+| `/pix-area-data-mongodb`              | <request> | data: the mongodb skill                                                                                                                                   |
+| `/pix-area-data-mysql`                | <request> | data: the mysql skill                                                                                                                                     |
+| `/pix-area-data-postgresql`           | <request> | data: the postgresql skill                                                                                                                                |
+| `/pix-area-data-sql`                  | <request> | data: the sql skill                                                                                                                                       |
+| `/pix-area-data-sqlite`               | <request> | data: the sqlite skill                                                                                                                                    |
+| `/pix-area-devops`                    | <request> | devops work, across every devops skill                                                                                                                    |
+| `/pix-area-devops-deploy-preview`     | <request> | devops: the deploy-preview skill                                                                                                                          |
+| `/pix-area-devops-docker`             | <request> | devops: the docker skill                                                                                                                                  |
+| `/pix-area-devops-observability`      | <request> | devops: the observability skill                                                                                                                           |
+| `/pix-area-devops-testing`            | <request> | devops: the testing skill                                                                                                                                 |
+| `/pix-area-frontend`                  | <request> | frontend work, across every frontend skill                                                                                                                |
+| `/pix-area-frontend-angular`          | <request> | frontend: the angular skill                                                                                                                               |
+| `/pix-area-frontend-custom-element`   | <request> | frontend: the custom-element skill                                                                                                                        |
+| `/pix-area-frontend-react`            | <request> | frontend: the react skill                                                                                                                                 |
+| `/pix-area-frontend-solidjs`          | <request> | frontend: the solidjs skill                                                                                                                               |
+| `/pix-area-frontend-svelte`           | <request> | frontend: the svelte skill                                                                                                                                |
+| `/pix-area-frontend-template-engine`  | <request> | frontend: the template-engine skill                                                                                                                       |
+| `/pix-area-frontend-vanilla-reactive` | <request> | frontend: the vanilla-reactive skill                                                                                                                      |
+| `/pix-area-frontend-vue`              | <request> | frontend: the vue skill                                                                                                                                   |
+| `/pix-area-frontend-workers`          | <request> | frontend: the workers skill                                                                                                                               |
+| `/pix-area-meta`                      | <request> | meta work, across every meta skill                                                                                                                        |
+| `/pix-area-meta-astro`                | <request> | meta: the astro skill                                                                                                                                     |
+| `/pix-area-meta-next`                 | <request> | meta: the next skill                                                                                                                                      |
+| `/pix-area-meta-nuxt`                 | <request> | meta: the nuxt skill                                                                                                                                      |
+| `/pix-area-meta-remix`                | <request> | meta: the remix skill                                                                                                                                     |
+| `/pix-area-platform`                  | <request> | platform work, across every platform skill                                                                                                                |
+| `/pix-area-platform-agent`            | <request> | platform: the agent skill                                                                                                                                 |
+| `/pix-area-platform-auth`             | <request> | platform: the auth skill                                                                                                                                  |
+| `/pix-area-platform-desktop`          | <request> | platform: the desktop skill                                                                                                                               |
+| `/pix-area-platform-library`          | <request> | platform: the library skill                                                                                                                               |
+| `/pix-area-platform-web`              | <request> | platform: the web skill                                                                                                                                   |
+| `/pix-area-process`                   | <request> | process work, across every process skill                                                                                                                  |
+| `/pix-area-process-adr`               | <request> | process: the adr skill                                                                                                                                    |
+| `/pix-area-process-ai-sdlc`           | <request> | process: the ai-sdlc skill                                                                                                                                |
+| `/pix-area-process-bmad`              | <request> | process: the bmad skill                                                                                                                                   |
+| `/pix-area-process-changelog`         | <request> | process: the changelog skill                                                                                                                              |
+| `/pix-area-process-code-review`       | <request> | process: the code-review skill                                                                                                                            |
+| `/pix-area-process-handoff`           | <request> | process: the handoff skill                                                                                                                                |
+| `/pix-area-process-npm-release`       | <request> | process: the npm-release skill                                                                                                                            |
+| `/pix-area-process-simplicity`        | <request> | process: the simplicity skill                                                                                                                             |
+| `/pix-area-process-tdd`               | <request> | process: the tdd skill                                                                                                                                    |
+| `/pix-area-styleguide`                | <request> | styleguide work, across every styleguide skill                                                                                                            |
+| `/pix-area-styleguide-a11y`           | <request> | styleguide: the a11y skill                                                                                                                                |
+| `/pix-area-styleguide-baseline`       | <request> | styleguide: the baseline skill                                                                                                                            |
+| `/pix-area-styleguide-comments`       | <request> | styleguide: the comments skill                                                                                                                            |
+| `/pix-area-styleguide-css`            | <request> | styleguide: the css skill                                                                                                                                 |
+| `/pix-area-styleguide-english`        | <request> | styleguide: the english skill                                                                                                                             |
+| `/pix-area-styleguide-file-tree`      | <request> | styleguide: the file-tree skill                                                                                                                           |
+| `/pix-area-styleguide-fingerprint`    | <request> | styleguide: the fingerprint skill                                                                                                                         |
+| `/pix-area-styleguide-html`           | <request> | styleguide: the html skill                                                                                                                                |
+| `/pix-area-styleguide-i18n`           | <request> | styleguide: the i18n skill                                                                                                                                |
+| `/pix-area-styleguide-javascript`     | <request> | styleguide: the javascript skill                                                                                                                          |
+| `/pix-area-styleguide-json`           | <request> | styleguide: the json skill                                                                                                                                |
+| `/pix-area-styleguide-markdown`       | <request> | styleguide: the markdown skill                                                                                                                            |
+| `/pix-area-styleguide-naming`         | <request> | styleguide: the naming skill                                                                                                                              |
+| `/pix-area-styleguide-patterns`       | <request> | styleguide: the patterns skill                                                                                                                            |
+| `/pix-area-styleguide-readme`         | <request> | styleguide: the readme skill                                                                                                                              |
+| `/pix-area-styleguide-typescript`     | <request> | styleguide: the typescript skill                                                                                                                          |
+| `/pix-area-styleguide-validation`     | <request> | styleguide: the validation skill                                                                                                                          |
+| `/pix-area-toolchain`                 | <request> | toolchain work, across every toolchain skill                                                                                                              |
+| `/pix-area-toolchain-biome`           | <request> | toolchain: the biome skill                                                                                                                                |
+| `/pix-area-toolchain-commits`         | <request> | toolchain: the commits skill                                                                                                                              |
+| `/pix-area-toolchain-eslint`          | <request> | toolchain: the eslint skill                                                                                                                               |
+| `/pix-area-toolchain-husky`           | <request> | toolchain: the husky skill                                                                                                                                |
+| `/pix-area-toolchain-parcel`          | <request> | toolchain: the parcel skill                                                                                                                               |
+| `/pix-area-toolchain-pnpm`            | <request> | toolchain: the pnpm skill                                                                                                                                 |
+| `/pix-area-toolchain-project`         | <request> | toolchain: the project skill                                                                                                                              |
+| `/pix-area-toolchain-rspack`          | <request> | toolchain: the rspack skill                                                                                                                               |
+| `/pix-area-toolchain-turborepo`       | <request> | toolchain: the turborepo skill                                                                                                                            |
+| `/pix-area-toolchain-typescript`      | <request> | toolchain: the typescript skill                                                                                                                           |
+| `/pix-area-toolchain-vite`            | <request> | toolchain: the vite skill                                                                                                                                 |
+| `/pix-area-ui`                        | <request> | ui work, across every ui skill                                                                                                                            |
+| `/pix-area-ui-design-system`          | <request> | ui: the design-system skill                                                                                                                               |
+| `/pix-flight`                         | [options] | Read the flight recorder: what this server cost, and what to do about it                                                                                  |
+| `/pix-handoff`                        | [options] | Produce a compressed context handoff (ADR summary + git context) to resume in a new session, commiting pending work as scoped Conventional Commits first. |
+| `/pix-handon`                         | [options] | Resume: verify the last handoff against the repository as it is now, archive what finished, and propose the next workstream                               |
+| `/pix-init`                           | [options] | Prepare a project for pix-galaxy-mcp: the central recorder directory and tokensave                                                                        |
+| `/pix-update`                         | [options] | Apply an available server update explicitly, and report what changed                                                                                      |
 
 ### Persona, one per role and operation
 
@@ -122,27 +120,27 @@ An operation is a prefix of the trio (ADR 057): `audit` writes `docs/audits/`
 and stops, `review` adds `docs/reviews/`, `plan` adds `docs/plans/`. Each
 takes an optional free-text `request` naming the focus for the run.
 
-| Role            | plan                      | audit                      | review                      |
-| --------------- | ------------------------- | -------------------------- | --------------------------- |
-| `a11y`          | `/pix-plan-a11y`          | `/pix-audit-a11y`          | `/pix-review-a11y`          |
-| `ai`            | `/pix-plan-ai`            | `/pix-audit-ai`            | `/pix-review-ai`            |
-| `architect`     | `/pix-plan-architect`     | `/pix-audit-architect`     | `/pix-review-architect`     |
-| `auth`          | `/pix-plan-auth`          | `/pix-audit-auth`          | `/pix-review-auth`          |
-| `backend`       | `/pix-plan-backend`       | `/pix-audit-backend`       | `/pix-review-backend`       |
-| `data`          | `/pix-plan-data`          | `/pix-audit-data`          | `/pix-review-data`          |
-| `design-system` | `/pix-plan-design-system` | `/pix-audit-design-system` | `/pix-review-design-system` |
-| `devops`        | `/pix-plan-devops`        | `/pix-audit-devops`        | `/pix-review-devops`        |
-| `devx`          | `/pix-plan-devx`          | `/pix-audit-devx`          | `/pix-review-devx`          |
-| `docs`          | `/pix-plan-docs`          | `/pix-audit-docs`          | `/pix-review-docs`          |
-| `frontend`      | `/pix-plan-frontend`      | `/pix-audit-frontend`      | `/pix-review-frontend`      |
-| `i18n`          | `/pix-plan-i18n`          | `/pix-audit-i18n`          | `/pix-review-i18n`          |
-| `oss`           | `/pix-plan-oss`           | `/pix-audit-oss`           | `/pix-review-oss`           |
-| `performance`   | `/pix-plan-performance`   | `/pix-audit-performance`   | `/pix-review-performance`   |
-| `privacy`       | `/pix-plan-privacy`       | `/pix-audit-privacy`       | `/pix-review-privacy`       |
-| `qa`            | `/pix-plan-qa`            | `/pix-audit-qa`            | `/pix-review-qa`            |
-| `security`      | `/pix-plan-security`      | `/pix-audit-security`      | `/pix-review-security`      |
-| `simplicity`    | `/pix-plan-simplicity`    | `/pix-audit-simplicity`    | `/pix-review-simplicity`    |
-| `supply-chain`  | `/pix-plan-supply-chain`  | `/pix-audit-supply-chain`  | `/pix-review-supply-chain`  |
+| Role           | plan                     | audit                     | review                     |
+| -------------- | ------------------------ | ------------------------- | -------------------------- |
+| `a11y`         | `/pix-plan-a11y`         | `/pix-audit-a11y`         | `/pix-review-a11y`         |
+| `ai`           | `/pix-plan-ai`           | `/pix-audit-ai`           | `/pix-review-ai`           |
+| `architect`    | `/pix-plan-architect`    | `/pix-audit-architect`    | `/pix-review-architect`    |
+| `auth`         | `/pix-plan-auth`         | `/pix-audit-auth`         | `/pix-review-auth`         |
+| `backend`      | `/pix-plan-backend`      | `/pix-audit-backend`      | `/pix-review-backend`      |
+| `data`         | `/pix-plan-data`         | `/pix-audit-data`         | `/pix-review-data`         |
+| `devops`       | `/pix-plan-devops`       | `/pix-audit-devops`       | `/pix-review-devops`       |
+| `devx`         | `/pix-plan-devx`         | `/pix-audit-devx`         | `/pix-review-devx`         |
+| `docs`         | `/pix-plan-docs`         | `/pix-audit-docs`         | `/pix-review-docs`         |
+| `frontend`     | `/pix-plan-frontend`     | `/pix-audit-frontend`     | `/pix-review-frontend`     |
+| `i18n`         | `/pix-plan-i18n`         | `/pix-audit-i18n`         | `/pix-review-i18n`         |
+| `oss`          | `/pix-plan-oss`          | `/pix-audit-oss`          | `/pix-review-oss`          |
+| `performance`  | `/pix-plan-performance`  | `/pix-audit-performance`  | `/pix-review-performance`  |
+| `privacy`      | `/pix-plan-privacy`      | `/pix-audit-privacy`      | `/pix-review-privacy`      |
+| `qa`           | `/pix-plan-qa`           | `/pix-audit-qa`           | `/pix-review-qa`           |
+| `security`     | `/pix-plan-security`     | `/pix-audit-security`     | `/pix-review-security`     |
+| `simplicity`   | `/pix-plan-simplicity`   | `/pix-audit-simplicity`   | `/pix-review-simplicity`   |
+| `supply-chain` | `/pix-plan-supply-chain` | `/pix-audit-supply-chain` | `/pix-review-supply-chain` |
+| `ui`           | `/pix-plan-ui`           | `/pix-audit-ui`           | `/pix-review-ui`           |
 
 ## The rest of the census
 

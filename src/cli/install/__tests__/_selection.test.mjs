@@ -89,7 +89,7 @@ test("personas and tasks are their own families", () => {
   );
 
   const tasks = resolveSelection({ families: ["tasks"] }).commands;
-  assert.ok(tasks.includes("pix-handoff") && tasks.includes("pix-adr"), "the one-shot tasks");
+  assert.ok(tasks.includes("pix-handoff") && tasks.includes("pix-check"), "the one-shot tasks");
 });
 
 test("an empty selection is the router alone, not a crash", () => {

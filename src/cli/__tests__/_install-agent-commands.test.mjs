@@ -62,7 +62,7 @@ try {
   // The full registry set lands, not just the router: an area command, a
   // one-shot and a persona command.
   const piPrompts = join(home, ".pi", "agent", "prompts");
-  for (const expected of ["pix-area-frontend.md", "pix-process-check.md", "pix-plan-security.md"]) {
+  for (const expected of ["pix-area-frontend.md", "pix-area-frontend-check.md", "pix-plan-security.md"]) {
     assert.ok(existsSync(join(piPrompts, expected)), `missing registry command: ${expected}`);
   }
 
@@ -70,7 +70,7 @@ try {
   const stale = [
     "pix-galaxy-mcp.md",
     "pix-tdd.md",
-    "pix-check.md",
+    "pix-process-check.md",
     "pix-compression.md",
     "pix-new-feature.md",
     "pix-a11y-audit.md",

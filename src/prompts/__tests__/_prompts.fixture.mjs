@@ -24,7 +24,7 @@ export const WORKFLOW_PROMPTS = ["pix-handoff"];
 // a new skill would silently contradict.
 export const AREA_PROMPTS = listAreaPrompts().map((prompt) => prompt.name);
 
-export const ONE_SHOT_PROMPTS = ["pix-adr", "pix-flight", "pix-handon", "pix-init", "pix-process-check", "pix-update"];
+export const ONE_SHOT_PROMPTS = ["pix-flight", "pix-handon", "pix-init", "pix-update"];
 
 export const EXPECTED = [...WORKFLOW_PROMPTS, ...AREA_PROMPTS];
 

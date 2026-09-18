@@ -23,22 +23,6 @@ export const PROMPT_DEFS = [
     ],
   },
   {
-    name: "pix-adr",
-    description: "Record an architecture decision: context, decision, alternatives, consequences",
-    arguments: [{ name: "decision", description: "The decision to record (free text: what changed and why)", required: true }],
-  },
-  {
-    name: "pix-process-check",
-    description: "Validate code against the pix guardrails and fix what fails",
-    arguments: [
-      {
-        name: "target",
-        description: "What to check (free text: paths, or the current diff). Default: the current diff.",
-        required: false,
-      },
-    ],
-  },
-  {
     name: "pix-flight",
     description: "Read the flight recorder: what this server cost, and what to do about it",
     arguments: [
@@ -95,5 +79,4 @@ export const PROMPT_EXAMPLES = {
   "pix-area-toolchain": ["/pix-area-toolchain help", "/pix-area-toolchain set up vite + biome"],
   "pix-area-ui": ["/pix-area-ui help", "/pix-area-ui design-system button component"],
   "pix-handoff": ["/pix-handoff help", "/pix-handoff close-session"],
-  "pix-process-check": ["/pix-process-check help", "/pix-process-check the current diff"],
 };
