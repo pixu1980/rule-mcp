@@ -90,7 +90,7 @@ shasum -a 256 -c SHA256SUMS
 
 ## What is rule-mcp
 
-rule-mcp is an [MCP](https://modelcontextprotocol.io) server that exposes **110 tools**, **190 resources**, and **155 prompts** to any MCP-compatible AI coding agent. Because the server never calls an LLM (every output is deterministic), it is **model-agnostic** - it behaves identically behind Claude, GPT, Gemini, Llama, Qwen, or any other model. It provides:
+rule-mcp is an [MCP](https://modelcontextprotocol.io) server that exposes **110 tools**, **190 resources**, and **153 prompts** to any MCP-compatible AI coding agent. Because the server never calls an LLM (every output is deterministic), it is **model-agnostic** - it behaves identically behind Claude, GPT, Gemini, Llama, Qwen, or any other model. It provides:
 
 - **92 modular skills** covering frontend, backend, database, devops, toolchain, styleguide, process, platform, and ai domains
 - **BM25 full-text search** across all skill content

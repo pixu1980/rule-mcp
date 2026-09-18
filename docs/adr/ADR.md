@@ -8,6 +8,8 @@ this directory are the source of truth; this index is generated from them by
 
 | #                                                                                                                       | Title                                                                                                     | Date       | Status     | Tags                                                                                |
 | ----------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- | ---------- | ---------- | ----------------------------------------------------------------------------------- |
+| [107](107-the-design-system-persona-becomes-the-ui-ux-lead.md)                                                          | The design-system persona becomes the UI/UX lead                                                          | 2026-09-18 | accepted   | personas, ui, review                                                                |
+| [106](106-check-runs-per-area-and-the-general-check-auto-detects-it.md)                                                 | Check runs per area, and the general check auto-detects it                                                | 2026-09-18 | accepted   | commands, prompts, guardrails                                                       |
 | [105](105-opencode-gets-a-dedicated-installer-writing-its-own-config-shape.md)                                          | opencode gets a dedicated installer writing its own config shape                                          | 2026-09-17 | accepted   | installer, cli, opencode, mcp                                                       |
 | [104](104-the-handoff-document-closes-with-the-resume-prompt.md)                                                        | The handoff document closes with the resume prompt                                                        | 2026-09-17 | accepted   | handoff, handon, prompts, docs                                                      |
 | [103](103-every-handoff-mode-sweeps-completed-working-papers-and-closeout-false-is-the-rea.md)                          | Every handoff mode sweeps completed working papers, and closeout false is the read-only run               | 2026-09-17 | accepted   | docs, closeout, handoff, handon, process                                            |
@@ -121,6 +123,8 @@ file. Where a line stops short the rest is in the ADR.
 
 | ADR                                                                                                                     | Decision                                                                                                                                                                                                                        | Consequence                                                                                                                                                                                                                    |
 | ----------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| [107](107-the-design-system-persona-becomes-the-ui-ux-lead.md)                                                          | Rename the role id `design-system` to `ui` and its title to UI/UX Lead.                                                                                                                                                         | The active role set stays at 19; only the id and title change.                                                                                                                                                                 |
+| [106](106-check-runs-per-area-and-the-general-check-auto-detects-it.md)                                                 | Remove `/rule-adr` and `/rule-process-check` from the MCP prompt registry.                                                                                                                                                        | MCP prompts fall 155 to 153; reusable prompts 98 to 96. Agent slash commands rise 156 to 246, since one command per area now has a check sibling.                                                                              |
 | [105](105-opencode-gets-a-dedicated-installer-writing-its-own-config-shape.md)                                          | opencode gets a dedicated installer, like Pi: `upsertOpencode`/`removeOpencode` in the JSON writers translate the shared config into opencode's dialect (`command` array, `environment`, `type: remote` when a url is...        | One writer owns opencode's dialect next to the VS Code one, and both the wizard and `install --agent opencode` write a config opencode actually loads.                                                                         |
 | [104](104-the-handoff-document-closes-with-the-resume-prompt.md)                                                        | Every handoff document ends with a `Resume Prompt` section holding a fenced `prompt` block: the message the next session opens with.                                                                                            | The block is the same bytes in the file and in the chat, so the two cannot drift.                                                                                                                                              |
 | [103](103-every-handoff-mode-sweeps-completed-working-papers-and-closeout-false-is-the-rea.md)                          | Both handoff modes and handon archive completed working papers by default, in src/tools/handoff/_closeout.js, and report what they archived.                                                                                    | Finished working papers leave the tree at every handoff instead of only at a session close, so docs/audits, docs/reviews and docs/plans hold open work and nothing else.                                                       |
@@ -335,6 +339,36 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [071](071-the-census-generates-eight-numbered-documents-and-three-fenced-blocks-inside-the-chapters-a-person-writes.md) The census generates eight numbered documents and three fenced blocks inside the chapters a person writes
 - [048](048-v100-release-and-docs-accuracy-guard.md) v1.0.0 release and the docs-accuracy guard
 
+### guardrails
+
+- [106](106-check-runs-per-area-and-the-general-check-auto-detects-it.md) Check runs per area, and the general check auto-detects it
+- [089](089-skills-own-their-guardrails-and-three-layers-resolve-both-skills-and-personas.md) Skills own their guardrails, and three layers resolve both skills and personas
+- [058](058-one-file-per-rule-with-underscore-barrel-folders-and-a-size-ratchet.md) One file per rule with underscore-barrel folders and a size ratchet
+- [053](053-gateway-as-the-single-entrypoint-with-server-side-receipts-backend-data-devops-g.md) Gateway as the single entrypoint with server-side receipts; backend/data/devops guardrail families
+- [049](049-split-hotspot-modules.md) Split the hotspot modules (guardrails + installer)
+- [044](044-adopt-eslint-plugin-unicorn-for-js-ts-quality.md) Adopt eslint-plugin-unicorn for JS/TS quality
+- [018](018-fail-closed-mcp-enforcement-and-reusable-agent-commands.md) fail closed mcp enforcement and reusable agent commands
+
+### personas
+
+- [107](107-the-design-system-persona-becomes-the-ui-ux-lead.md) The design-system persona becomes the UI/UX lead
+- [093](093-add-an-open-source-steward-persona-for-governance-contributors-and-donors.md) Add an Open Source Steward persona for governance, contributors and donors
+- [089](089-skills-own-their-guardrails-and-three-layers-resolve-both-skills-and-personas.md) Skills own their guardrails, and three layers resolve both skills and personas
+- [088](088-a-persona-topic-is-the-binding-scope-of-the-run.md) A persona topic is the binding scope of the run
+- [060](060-plans-carry-nested-sub-steps-and-an-exhaustiveness-mandate.md) Plans carry nested sub-steps and an exhaustiveness mandate
+- [059](059-persona-plans-are-checklists-with-marks-that-survive-the-sync.md) Persona plans are checklists with marks that survive the sync
+- [054](054-split-review-personas-into-per-operation-commands-plan-audit-review.md) Split review personas into per-operation commands (plan/audit/review)
+
+### prompts
+
+- [106](106-check-runs-per-area-and-the-general-check-auto-detects-it.md) Check runs per area, and the general check auto-detects it
+- [104](104-the-handoff-document-closes-with-the-resume-prompt.md) The handoff document closes with the resume prompt
+- [088](088-a-persona-topic-is-the-binding-scope-of-the-run.md) A persona topic is the binding scope of the run
+- [077](077-compress-every-server-model-list-surface-prompts-list-tools-list-resources-list.md) Compress every server→model list surface (prompts/list, tools/list, resources/list)
+- [055](055-restructure-the-command-surface-rule-router-rule-area-compression-implicit-rule-process.md) Restructure the command surface: /rule router, rule-area-*, compression implicit, rule-process-tdd skill
+- [054](054-split-review-personas-into-per-operation-commands-plan-audit-review.md) Split review personas into per-operation commands (plan/audit/review)
+- [052](052-pre-packaged-mcp-prompt-registry-26-prompts-strict-schemas-commit-scope-closer.md) Pre-packaged MCP prompt registry (26 prompts, strict schemas, commit-scope closer)
+
 ### auto-log
 
 - [025](025-skill-routing-pnpm-package-manager-workspace-monorepo-setup.md) Skill routing: pnpm package manager workspace monorepo setup
@@ -362,33 +396,6 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [063](063-coverage-floor-raised-to-87-95-remains-the-ratchet-endpoint.md) Coverage floor raised to 87; 95 remains the ratchet endpoint
 - [062](062-glob-suite-runner-colocated-tests-and-a-branch-coverage-ratchet.md) Glob suite runner, co-located tests, and a branch-coverage ratchet
 
-### guardrails
-
-- [089](089-skills-own-their-guardrails-and-three-layers-resolve-both-skills-and-personas.md) Skills own their guardrails, and three layers resolve both skills and personas
-- [058](058-one-file-per-rule-with-underscore-barrel-folders-and-a-size-ratchet.md) One file per rule with underscore-barrel folders and a size ratchet
-- [053](053-gateway-as-the-single-entrypoint-with-server-side-receipts-backend-data-devops-g.md) Gateway as the single entrypoint with server-side receipts; backend/data/devops guardrail families
-- [049](049-split-hotspot-modules.md) Split the hotspot modules (guardrails + installer)
-- [044](044-adopt-eslint-plugin-unicorn-for-js-ts-quality.md) Adopt eslint-plugin-unicorn for JS/TS quality
-- [018](018-fail-closed-mcp-enforcement-and-reusable-agent-commands.md) fail closed mcp enforcement and reusable agent commands
-
-### personas
-
-- [093](093-add-an-open-source-steward-persona-for-governance-contributors-and-donors.md) Add an Open Source Steward persona for governance, contributors and donors
-- [089](089-skills-own-their-guardrails-and-three-layers-resolve-both-skills-and-personas.md) Skills own their guardrails, and three layers resolve both skills and personas
-- [088](088-a-persona-topic-is-the-binding-scope-of-the-run.md) A persona topic is the binding scope of the run
-- [060](060-plans-carry-nested-sub-steps-and-an-exhaustiveness-mandate.md) Plans carry nested sub-steps and an exhaustiveness mandate
-- [059](059-persona-plans-are-checklists-with-marks-that-survive-the-sync.md) Persona plans are checklists with marks that survive the sync
-- [054](054-split-review-personas-into-per-operation-commands-plan-audit-review.md) Split review personas into per-operation commands (plan/audit/review)
-
-### prompts
-
-- [104](104-the-handoff-document-closes-with-the-resume-prompt.md) The handoff document closes with the resume prompt
-- [088](088-a-persona-topic-is-the-binding-scope-of-the-run.md) A persona topic is the binding scope of the run
-- [077](077-compress-every-server-model-list-surface-prompts-list-tools-list-resources-list.md) Compress every server→model list surface (prompts/list, tools/list, resources/list)
-- [055](055-restructure-the-command-surface-rule-router-rule-area-compression-implicit-rule-process.md) Restructure the command surface: /rule router, rule-area-*, compression implicit, rule-process-tdd skill
-- [054](054-split-review-personas-into-per-operation-commands-plan-audit-review.md) Split review personas into per-operation commands (plan/audit/review)
-- [052](052-pre-packaged-mcp-prompt-registry-26-prompts-strict-schemas-commit-scope-closer.md) Pre-packaged MCP prompt registry (26 prompts, strict schemas, commit-scope closer)
-
 ### tool
 
 - [025](025-skill-routing-pnpm-package-manager-workspace-monorepo-setup.md) Skill routing: pnpm package manager workspace monorepo setup
@@ -406,6 +413,14 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [027](027-add-rule-toolchain-commits-skill-for-atomic-conventional-commits-with-mandatory-s.md) Add rule-toolchain-commits skill for atomic conventional commits with mandatory scope
 - [015](015-toolchain-skill-isolation-vite.md) toolchain skill isolation vite
 - [009](009-toolchain-vite.md) Toolchain Skill Isolation (Vite)
+
+### commands
+
+- [106](106-check-runs-per-area-and-the-general-check-auto-detects-it.md) Check runs per area, and the general check auto-detects it
+- [090](090-the-setup-wizard-is-the-installer-and-it-asks-which-commands-to-write.md) The setup wizard is the installer, and it asks which commands to write
+- [055](055-restructure-the-command-surface-rule-router-rule-area-compression-implicit-rule-process.md) Restructure the command surface: /rule router, rule-area-*, compression implicit, rule-process-tdd skill
+- [054](054-split-review-personas-into-per-operation-commands-plan-audit-review.md) Split review personas into per-operation commands (plan/audit/review)
+- [028](028-clean-rule-commands-via-user-commands-prompt-suppression-not-a-plugin.md) Clean /rule-* commands via user commands + prompt suppression, not a plugin
 
 ### governance
 
@@ -437,13 +452,6 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [100](100-the-tokensave-integration-closes-out-and-the-adapter-is-the-code-graph-layer.md) The TokenSave integration closes out: the adapter and its graph-backed tools are the code-graph layer
 - [099](099-close-out-plan-develop-consolidation.md) Close out plan develop-consolidation
 - [095](095-close-out-the-install-and-uninstall-rework-plan.md) Close out the install and uninstall rework plan
-
-### commands
-
-- [090](090-the-setup-wizard-is-the-installer-and-it-asks-which-commands-to-write.md) The setup wizard is the installer, and it asks which commands to write
-- [055](055-restructure-the-command-surface-rule-router-rule-area-compression-implicit-rule-process.md) Restructure the command surface: /rule router, rule-area-*, compression implicit, rule-process-tdd skill
-- [054](054-split-review-personas-into-per-operation-commands-plan-audit-review.md) Split review personas into per-operation commands (plan/audit/review)
-- [028](028-clean-rule-commands-via-user-commands-prompt-suppression-not-a-plugin.md) Clean /rule-* commands via user commands + prompt suppression, not a plugin
 
 ### compression
 
