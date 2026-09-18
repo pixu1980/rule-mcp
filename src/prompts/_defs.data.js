@@ -23,22 +23,6 @@ export const PROMPT_DEFS = [
     ],
   },
   {
-    name: "rule-adr",
-    description: "Record an architecture decision: context, decision, alternatives, consequences",
-    arguments: [{ name: "decision", description: "The decision to record (free text: what changed and why)", required: true }],
-  },
-  {
-    name: "rule-process-check",
-    description: "Validate code against the rule guardrails and fix what fails",
-    arguments: [
-      {
-        name: "target",
-        description: "What to check (free text: paths, or the current diff). Default: the current diff.",
-        required: false,
-      },
-    ],
-  },
-  {
     name: "rule-flight",
     description: "Read the flight recorder: what this server cost, and what to do about it",
     arguments: [
@@ -95,5 +79,4 @@ export const PROMPT_EXAMPLES = {
   "rule-area-toolchain": ["/rule-area-toolchain help", "/rule-area-toolchain set up vite + biome"],
   "rule-area-ui": ["/rule-area-ui help", "/rule-area-ui design-system button component"],
   "rule-handoff": ["/rule-handoff help", "/rule-handoff close-session"],
-  "rule-process-check": ["/rule-process-check help", "/rule-process-check the current diff"],
 };

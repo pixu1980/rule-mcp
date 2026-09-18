@@ -15,7 +15,7 @@ test("every listed prompt has a getPrompt implementation with messages", () => {
   }
 });
 
-test("refactor: areas are rule-area-*, removed commands gone, check renamed to process-check", () => {
+test("refactor: areas are rule-area-*, removed commands gone", () => {
   const names = new Set(listPrompts().map((p) => p.name));
   // The area prompts live under the rule-area-* namespace now.
   for (const area of AREA_PROMPTS) {
@@ -33,16 +33,13 @@ test("refactor: areas are rule-area-*, removed commands gone, check renamed to p
     "rule-generate-component",
     "rule-a11y-test",
     "rule-a11y-review",
+    "rule-adr",
+    "rule-process-check",
   ]) {
     assert.ok(!names.has(removed), `${removed} must be removed`);
   }
-  assert.ok(names.has("rule-process-check"), "rule-check must be renamed to rule-process-check");
-  assert.ok(!names.has("rule-check"), "plain rule-check must be gone");
-  const processCheck = getPrompt("rule-process-check");
-  assert.ok(processCheck, "rule-process-check must exist");
-  const text = processCheck.messages.map((m) => m.content?.text ?? "").join("\n");
-  assert.match(text, /rule_tool_check/, "rule-process-check must validate with rule_tool_check");
-  assert.match(text, /commit/, "rule-process-check must close with a scoped commit");
+  // rule-check is an agent command (not an MCP prompt) - not in this registry
+  assert.ok(!names.has("rule-check"), "rule-check is an agent command, not an MCP prompt");
 });
 
 // ── Content rules (commit scope + TDD/a11y baselines) ────────────

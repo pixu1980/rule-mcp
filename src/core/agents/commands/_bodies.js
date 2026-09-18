@@ -77,3 +77,53 @@ export function areaBody(description) {
     "7. Responses are compressed automatically by the server: keep it factual and free of filler.",
   ].join("\n");
 }
+
+/**
+ * Body for an area-specific check command (rule-area-*-check).
+ *
+ * @param {string} area - the area name (e.g., "frontend", "ui")
+ * @param {string} skill - the skill name (e.g., "rule-frontend-react")
+ * @returns {string}
+ */
+export function checkBody(area, skill) {
+  return [
+    `Validate code against ${area} skill guardrails: $ARGUMENTS`,
+    "",
+    `Target skill: ${skill}`,
+    "",
+    "1. Determine what to check:",
+    "   - If $ARGUMENTS is provided, use those paths/files as the target.",
+    "   - Otherwise, use the current git diff (staged + unstaged) as the target.",
+    "   - If no diff, check the entire project.",
+    "2. Call `rule_tool_check` with the target and the skill's framework/context.",
+    "3. Fix every guardrail failure and rerun until all pass.",
+    "4. Report the commands run and real outcomes; never claim unexecuted checks passed.",
+    "5. Write every comment and identifier in English, American spelling.",
+    "6. Finish by proposing a conventional commit message with a mandatory scope.",
+    "7. Responses are compressed automatically by the server: keep it factual and free of filler.",
+  ].join("\n");
+}
+
+/**
+ * Body for the general rule-check command (auto-detects area from context).
+ *
+ * @returns {string}
+ */
+export const generalCheckBody = [
+  "Auto-detect area and run rule guardrails validation: $ARGUMENTS",
+  "",
+  "1. Determine what to check:",
+  "   - If $ARGUMENTS is provided, use those paths/files as the target.",
+  "   - Otherwise, use the current git diff (staged + unstaged) as the target.",
+  "   - If no diff, check the entire project.",
+  "2. Auto-detect the relevant area/skill from context:",
+  "   - Analyze changed files to identify the primary area (frontend, backend, ui, data, etc.)",
+  "   - Consider the chat context and recent conversation for intent.",
+  "   - Consider the codebase structure and frameworks in use.",
+  "3. Call `rule_tool_check` with the target and the detected skill/framework.",
+  "4. Fix every guardrail failure and rerun until all pass.",
+  "5. Report the commands run and real outcomes; never claim unexecuted checks passed.",
+  "6. Write every comment and identifier in English, American spelling.",
+  "7. Finish by proposing a conventional commit message with a mandatory scope.",
+  "8. Responses are compressed automatically by the server: keep it factual and free of filler.",
+].join("\n");

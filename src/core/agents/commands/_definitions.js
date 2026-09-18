@@ -3,8 +3,9 @@
 /** @module core/agents/commands/definitions */
 
 import { listPrompts } from "@src/prompts/index.js";
-import { areaBody, HANDOFF_BODY, ROUTER } from "./_bodies.js";
-import { commandNames, ROUTER_COMMAND } from "./_names.js";
+import { listAreaPrompts } from "@src/prompts/_areas.js";
+import { areaBody, HANDOFF_BODY, ROUTER, checkBody, generalCheckBody } from "./_bodies.js";
+import { commandNames, ROUTER_COMMAND, CHECK_COMMAND } from "./_names.js";
 import { personaBody, personaTarget } from "./_personas.js";
 
 /**
@@ -16,6 +17,30 @@ import { personaBody, personaTarget } from "./_personas.js";
 export function commandDefinition(name) {
   if (name === ROUTER_COMMAND) {
     return { name, description: ROUTER.description, argumentHint: ROUTER.argumentHint, body: ROUTER.body };
+  }
+
+  if (name === CHECK_COMMAND) {
+    return {
+      name,
+      description: "Auto-detect area from context and run rule guardrails validation",
+      argumentHint: "[target]",
+      body: generalCheckBody,
+    };
+  }
+
+  // Handle area check subcommands (rule-area-*-check)
+  if (name.endsWith("-check")) {
+    const areaName = name.slice(0, -6); // Remove "-check" suffix
+    const areaPrompt = listAreaPrompts().find((p) => p.name === areaName);
+
+    if (areaPrompt) {
+      return {
+        name,
+        description: `Validate code against ${areaPrompt.area} skill guardrails`,
+        argumentHint: "[target]",
+        body: checkBody(areaPrompt.area, areaPrompt.skill),
+      };
+    }
   }
 
   const prompt = listPrompts().find((p) => p.name === name);

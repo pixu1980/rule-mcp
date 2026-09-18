@@ -29,14 +29,15 @@ test("router is pinned first and the rest are alphabetical", () => {
   assert.deepEqual(rest, sorted, "commands after the router must be locale-alphabetical");
 });
 
-test("coverage: one clean command per prompt, plus the router, no duplicates", () => {
+test("coverage: one clean command per prompt, plus the router, plus area check subcommands and general check", () => {
   assert.equal(new Set(names).size, names.length, "command names must be unique");
   for (const p of promptNames) {
     assert.ok(names.includes(p), `missing command for prompt ${p}`);
   }
-  // router + every prompt (router itself is never a prompt name)
+  // router + every prompt + area check subcommands (one per area prompt) + general rule-check
   assert.ok(!promptNames.includes(ROUTER_COMMAND), "router must not also be a prompt");
-  assert.equal(names.length, promptNames.length + 1, "exactly router + all prompts");
+  const areaPromptCount = promptNames.filter((n) => n.startsWith("rule-area-")).length;
+  assert.equal(names.length, promptNames.length + 1 + areaPromptCount + 1, "router + all prompts + area checks + general check");
 });
 
 test("every command routes through rule and proposes a scoped commit", () => {
