@@ -18,7 +18,7 @@ import { tryExec } from "../../shared/index.js";
 import { getRepoRoot } from "../paths/index.js";
 import { shimPath, shimWorks } from "./_shim.js";
 
-/** Lowest Node this server runs on; mirrors the `engines` field. */
+/** Lowest Node this server runs on; the floor the installers and CI enforce. */
 export const NODE_MIN = 20;
 
 const major = (version) => Number.parseInt(String(version).replace(/^v/, "").split(".", 1)[0], 10);

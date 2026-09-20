@@ -67,9 +67,6 @@
     "census": "node --import ./scripts/alias-hook.mjs scripts/reports/census/index.mjs",
     "census:check": "node --import ./scripts/alias-hook.mjs scripts/reports/census/index.mjs --check"
   },
-  "engines": {
-    "node": ">=20"
-  },
   "files": [
     "bin/",
     "src/",

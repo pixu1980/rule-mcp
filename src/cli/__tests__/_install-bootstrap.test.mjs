@@ -52,7 +52,7 @@ for (const name of ["install.sh", "uninstall.sh"]) {
   test(`${name} refuses a Node it cannot run on`, () => {
     const source = read(name);
 
-    assert.match(source, /NODE_MIN=20/, "the floor must match the package engines field");
+    assert.match(source, /NODE_MIN=20/, "the floor must match NODE_MIN in src/cli/setup/_preflight.js");
     assert.match(source, /process\.versions\.node/, "the check must read the running Node version");
   });
 
