@@ -124,20 +124,25 @@ When not constrained by an external spec, prefer this order:
 
 ## package.json: never a corepack activation field
 
-Two fields must never appear in a `package.json`:
+Three fields must never appear in a `package.json`:
 
 ```json
 {
-  "packageManager": "pnpm@11.24.0",
+  "packageManager": "pnpm@11.25.0",
+  "engines": {
+    "node": ">=22"
+  },
   "devEngines": {
     "packageManager": { "name": "pnpm", "version": "11.8.0", "onFail": "download" }
   }
 }
 ```
 
-Both hand the install to corepack, which then gets a vote on whether it runs — offline, behind
-a proxy, or shadowing the package manager already installed. Pin Node with `.nvmrc` and the
-dependency tree with the lockfile. Guardrail: `pkg-no-corepack` (owned by
+`packageManager` and `devEngines.packageManager` hand the install to corepack;
+`engines` gives npm, pnpm or yarn a range to warn or refuse on. rule-mcp
+does not support either: the install must not be something a tool can decline on
+a machine the project cannot see. Pin Node with `.nvmrc` and the dependency tree
+with the lockfile. Guardrails: `pkg-no-corepack`, `pkg-no-engines` (owned by
 [rule-toolchain-pnpm](../rule-toolchain-pnpm/SKILL.md), applied to every check).
 
 ---

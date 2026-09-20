@@ -8,6 +8,7 @@ this directory are the source of truth; this index is generated from them by
 
 | #                                                                                                                       | Title                                                                                                     | Date       | Status     | Tags                                                                                |
 | ----------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- | ---------- | ---------- | ----------------------------------------------------------------------------------- |
+| [109](109-no-corepack-activation-and-no-engines-field-in-a-generated-package-json.md)                                   | No corepack activation and no engines field in a generated package.json                                   | 2026-09-20 | accepted   | guardrails, pnpm, corepack, manifest, gateway, toolchain                            |
 | [108](108-the-handoff-family-gets-a-generated-index-and-the-root-handoff-summary-retires.md)                            | The handoff family gets a generated index, and the root HANDOFF summary retires                           | 2026-09-20 | accepted   | handoff, docs, cli, doctor, code-graph                                              |
 | [107](107-the-design-system-persona-becomes-the-ui-ux-lead.md)                                                          | The design-system persona becomes the UI/UX lead                                                          | 2026-09-18 | accepted   | personas, ui, review                                                                |
 | [106](106-check-runs-per-area-and-the-general-check-auto-detects-it.md)                                                 | Check runs per area, and the general check auto-detects it                                                | 2026-09-18 | accepted   | commands, prompts, guardrails                                                       |
@@ -124,6 +125,7 @@ file. Where a line stops short the rest is in the ADR.
 
 | ADR                                                                                                                     | Decision                                                                                                                                                                                                                        | Consequence                                                                                                                                                                                                                    |
 | ----------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| [109](109-no-corepack-activation-and-no-engines-field-in-a-generated-package-json.md)                                   | rule-mcp does not support either kind of field.                                                                                                                                                                           | rule-mcp's own package.json no longer declares `engines`, so consumers no longer get npm's version warning; the Node floor is enforced by the installers (`NODE_MIN=20`) and stated where a person reads it.             |
 | [108](108-the-handoff-family-gets-a-generated-index-and-the-root-handoff-summary-retires.md)                            | docs/handoff/HANDOFF.md is generated from the numbered handoff files by handoff doctor, exactly as docs/adr/ADR.md is generated from the ADRs.                                                                                  | The doctor is the only writer of the index; editing it by hand is work the next run discards.                                                                                                                                  |
 | [107](107-the-design-system-persona-becomes-the-ui-ux-lead.md)                                                          | Rename the role id `design-system` to `ui` and its title to UI/UX Lead.                                                                                                                                                         | The active role set stays at 19; only the id and title change.                                                                                                                                                                 |
 | [106](106-check-runs-per-area-and-the-general-check-auto-detects-it.md)                                                 | Remove `/rule-adr` and `/rule-process-check` from the MCP prompt registry.                                                                                                                                                        | MCP prompts fall 155 to 153; reusable prompts 98 to 96. Agent slash commands rise 156 to 246, since one command per area now has a check sibling.                                                                              |
@@ -345,6 +347,7 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 
 ### guardrails
 
+- [109](109-no-corepack-activation-and-no-engines-field-in-a-generated-package-json.md) No corepack activation and no engines field in a generated package.json
 - [106](106-check-runs-per-area-and-the-general-check-auto-detects-it.md) Check runs per area, and the general check auto-detects it
 - [089](089-skills-own-their-guardrails-and-three-layers-resolve-both-skills-and-personas.md) Skills own their guardrails, and three layers resolve both skills and personas
 - [058](058-one-file-per-rule-with-underscore-barrel-folders-and-a-size-ratchet.md) One file per rule with underscore-barrel folders and a size ratchet
@@ -372,6 +375,16 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [055](055-restructure-the-command-surface-rule-router-rule-area-compression-implicit-rule-process.md) Restructure the command surface: /rule router, rule-area-*, compression implicit, rule-process-tdd skill
 - [054](054-split-review-personas-into-per-operation-commands-plan-audit-review.md) Split review personas into per-operation commands (plan/audit/review)
 - [052](052-pre-packaged-mcp-prompt-registry-26-prompts-strict-schemas-commit-scope-closer.md) Pre-packaged MCP prompt registry (26 prompts, strict schemas, commit-scope closer)
+
+### toolchain
+
+- [109](109-no-corepack-activation-and-no-engines-field-in-a-generated-package-json.md) No corepack activation and no engines field in a generated package.json
+- [045](045-migrate-repo-tooling-to-eslint-10-flat-config-with-eslint-plugin-unicorn.md) Migrate repo tooling to ESLint 10 flat config with eslint-plugin-unicorn
+- [044](044-adopt-eslint-plugin-unicorn-for-js-ts-quality.md) Adopt eslint-plugin-unicorn for JS/TS quality
+- [043](043-strengthen-typescript-discipline-for-large-codebases.md) Strengthen TypeScript discipline for large codebases
+- [027](027-add-rule-toolchain-commits-skill-for-atomic-conventional-commits-with-mandatory-s.md) Add rule-toolchain-commits skill for atomic conventional commits with mandatory scope
+- [015](015-toolchain-skill-isolation-vite.md) toolchain skill isolation vite
+- [009](009-toolchain-vite.md) Toolchain Skill Isolation (Vite)
 
 ### auto-log
 
@@ -408,15 +421,6 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [022](022-skill-routing-turborepo-monorepo-pipeline-caching-parallel.md) Skill routing: Turborepo monorepo pipeline caching parallel builds
 - [021](021-skill-routing-eslint-flat-config-for-typescript-react-proje.md) Skill routing: ESLint flat config for TypeScript React project
 - [020](020-skill-routing-typescript-tsconfig-strict-mode-configuration.md) Skill routing: TypeScript tsconfig strict mode configuration
-
-### toolchain
-
-- [045](045-migrate-repo-tooling-to-eslint-10-flat-config-with-eslint-plugin-unicorn.md) Migrate repo tooling to ESLint 10 flat config with eslint-plugin-unicorn
-- [044](044-adopt-eslint-plugin-unicorn-for-js-ts-quality.md) Adopt eslint-plugin-unicorn for JS/TS quality
-- [043](043-strengthen-typescript-discipline-for-large-codebases.md) Strengthen TypeScript discipline for large codebases
-- [027](027-add-rule-toolchain-commits-skill-for-atomic-conventional-commits-with-mandatory-s.md) Add rule-toolchain-commits skill for atomic conventional commits with mandatory scope
-- [015](015-toolchain-skill-isolation-vite.md) toolchain skill isolation vite
-- [009](009-toolchain-vite.md) Toolchain Skill Isolation (Vite)
 
 ### commands
 
