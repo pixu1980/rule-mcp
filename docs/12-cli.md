@@ -304,9 +304,9 @@ rule-mcp handoff subcommand
 
 **Arguments**
 
-| Argument     | Default | Description                    |
-| ------------ | ------- | ------------------------------ |
-| `subcommand` | -       | doctor to repair ADR numbering |
+| Argument     | Default | Description                                                        |
+| ------------ | ------- | ------------------------------------------------------------------ |
+| `subcommand` | -       | doctor to repair ADR/handoff numbering and their generated indexes |
 
 **Options**
 

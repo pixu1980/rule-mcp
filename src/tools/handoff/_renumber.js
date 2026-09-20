@@ -23,7 +23,7 @@ import { applyRenumber, planRenumber } from "../../core/docs-numbering/index.js"
 export function autoRenumber(projectDir = ".", { apply = false, onProgress } = {}) {
   const plan = planRenumber({ projectDir, onProgress });
   const authors = plan.authors?.length ?? 0;
-  const needed = plan.renames.length > 0 || plan.indexUnordered || plan.indexStale || authors > 0;
+  const needed = plan.renames.length > 0 || plan.indexUnordered || plan.indexStale || plan.handoffIndexUnordered || plan.handoffIndexStale || authors > 0;
 
   if (!needed) {
     return { needed: false, plan, applied: null };
@@ -52,10 +52,12 @@ export function renumberLines(renumber, { isMinimal }) {
     return ["### Renumber pending", "", `${renumber.plan.renames.length} collision(s) wait for a close-session run.`, ""];
   }
 
+  const regenerated = [renumber.applied.indexRegenerated ? "ADR.md" : undefined, renumber.applied.handoffIndexRegenerated ? "HANDOFF.md" : undefined].filter(Boolean);
+
   return [
     "### Renumber",
     "",
-    `Renumbered ${renumber.applied.renamed} document(s); ${renumber.applied.referencesUpdated} file(s) had references updated${renumber.applied.indexRegenerated ? "; ADR.md regenerated" : ""}.`,
+    `Renumbered ${renumber.applied.renamed} document(s); ${renumber.applied.referencesUpdated} file(s) had references updated${regenerated.length > 0 ? `; ${regenerated.join(" and ")} regenerated` : ""}.`,
     "Commit messages are not rewritten; run `rule-mcp handoff doctor --fix-commits` to amend the local ones.",
     "",
   ];

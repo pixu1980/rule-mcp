@@ -1,6 +1,7 @@
 /** Applying the plan: renames, headers, references and the regenerated ADR index. */
 import { strict as assert } from "node:assert";
-import { existsSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
 import { join } from "node:path";
 import test from "node:test";
 
@@ -81,6 +82,26 @@ test("applying regenerates the ADR index instead of patching its links", () => {
       [...run.numbers].sort((a, b) => b - a),
       "each table runs newest first",
     );
+  }
+});
+
+test("a missing ADR index is created, not just refreshed", () => {
+  const root = mkdtempSync(join(tmpdir(), "rule-doctor-no-index-"));
+
+  try {
+    mkdirSync(join(root, "docs", "adr"), { recursive: true });
+    writeFileSync(join(root, "docs/adr/001-one.md"), "# 001: One\n\n- **Date**: 2026-09-04\n- **Status**: accepted\n- **Tags**: fixture\n");
+
+    const plan = planRenumber({ projectDir: root });
+
+    assert.equal(plan.indexStale, true, "a family with no index is stale by definition");
+
+    const result = applyRenumber(plan, { projectDir: root });
+
+    assert.equal(result.indexRegenerated, true);
+    assert.match(readFileSync(join(root, "docs/adr/ADR.md"), "utf8"), /\[001\]/, "the index exists and lists the ADR");
+  } finally {
+    rmSync(root, { recursive: true, force: true });
   }
 });
 

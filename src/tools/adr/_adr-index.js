@@ -3,31 +3,12 @@
 /** The generated docs/adr/ADR.md index: tables, themes, and the rewrite. */
 import { writeFileSync } from "node:fs";
 import { join } from "node:path";
+
+import { renderTable } from "../../core/text/_markdown-table.js";
 import { ADR_INDEX_FILE, adrFilename } from "./_files.js";
 
 /** Tags carried by this many decisions form a theme section in the index. */
 export const THEME_THRESHOLD = 3;
-
-/**
- * Render a markdown table exactly as prettier 3.x does: every cell padded to
- * the column width (longest cell), separators of dashes two wider than the
- * column. Docs/adr/ADR.md must satisfy two gates at once - the byte-equal
- * regeneration test and `prettier --check` - so the generator is the prettier
- * formatter for tables, instead of the two fighting over the committed file.
- *
- * @param {string[]} headers
- * @param {string[][]} rows
- * @returns {string[]} table lines, no trailing blank line
- */
-export function renderTable(headers, rows) {
-  const all = [headers, ...rows];
-  const widths = headers.map((_, col) => Math.max(...all.map((row) => String(row[col]).length)));
-  const cell = (text, width) => ` ${String(text).padEnd(width)} `;
-  const line = (row) => `|${row.map((text, col) => cell(text, widths[col])).join("|")}|`;
-  const separator = `|${widths.map((width) => cell("-".repeat(width), width)).join("|")}|`;
-
-  return [line(headers), separator, ...rows.map(line)];
-}
 
 /**
  * Rendered ADR index as text, the shape the docs-numbering tool rewrites.

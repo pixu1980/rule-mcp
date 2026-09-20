@@ -13,13 +13,22 @@ import { test } from "node:test";
 import { seedRepo } from "../../../../tests/docs/docs-numbering-doctor/_doctor.fixture.mjs";
 import { buildHandoff } from "../_build.js";
 import { autoRenumber, renumberLines } from "../_renumber.js";
+import { listExistingAdrs } from "../../adr/_files.js";
+import { updateAdrIndex } from "../../adr/_adr-index.js";
 
-/** A clean project with one ADR and no index. */
+/**
+ * A clean project with one ADR and an index that matches it.
+ *
+ * The index matters: a family with documents and no index is stale by design,
+ * so a project is only clean once its index exists and is current.
+ */
 function cleanProject() {
   const root = mkdtempSync(join(tmpdir(), "rule-renumber-clean-"));
+  const adrDir = join(root, "docs", "adr");
 
-  mkdirSync(join(root, "docs", "adr"), { recursive: true });
-  writeFileSync(join(root, "docs/adr/001-one.md"), "# 001: One\n");
+  mkdirSync(adrDir, { recursive: true });
+  writeFileSync(join(adrDir, "001-one.md"), "# 001: One\n\n- **Date**: 2026-09-04\n- **Status**: accepted\n- **Tags**: fixture\n- **Author**: T\n");
+  updateAdrIndex(adrDir, listExistingAdrs(adrDir));
 
   return root;
 }

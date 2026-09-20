@@ -89,6 +89,33 @@ export function seedScrambledIndex() {
   return root;
 }
 
+// ── The handoff family and its generated index ──
+
+/**
+ * A repo whose handoffs predate the index: three documents, three header
+ * shapes, and no `docs/handoff/HANDOFF.md`. The doctor must create the index
+ * from the files, and read every shape they were written in.
+ */
+export function seedHandoffs() {
+  const root = mkdtempSync(join(tmpdir(), "rule-doctor-handoffs-"));
+  git(["init", "--quiet", "--initial-branch=main"], root);
+  git(["config", "user.email", "t@example.com"], root);
+  git(["config", "user.name", "T"], root);
+  mkdirSync(join(root, "docs", "handoff"), { recursive: true });
+
+  const write = (name, body) => writeFileSync(join(root, "docs", "handoff", name), body);
+  write(
+    "01-old-style.md",
+    "# 01 - the oldest shape\n\n- **Date**: 2026-09-09\n- **Branch**: `perf/meta-surface` (step 7 only); steps 1-6 are on `main`\n- **Commit range**: `13d20b6c..949c25c9` (6 commits)\n",
+  );
+  write("02-session-prefix.md", "# Session handoff 02 — the middle shape\n\n- Branch: `main`\n- Covers: `58652b7e..860cbbb6`\n- Date: 2026-09-10\n");
+  write("03-handoff-prefix.md", "# Handoff: the newest shape\n\n**Branch:** main\n**Commits covered:** `829c368..c754545` (42 commits)\n**Date:** 2026-09-11\n");
+  git(["add", "-A"], root);
+  git(["commit", "--quiet", "-m", "docs(handoff): the fixture"], root);
+
+  return root;
+}
+
 /**
  * A repo whose numbers are unique and ordered, with holes where documents were
  * deleted: 002 and 005 are gone, so the sequence runs 001, 003, 004, 006.

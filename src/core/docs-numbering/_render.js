@@ -15,6 +15,12 @@ export function renderRenumberPlan(plan, options = {}) {
 
   const authors = plan.authors ?? [];
   const gaps = plan.gaps ?? [];
+  // The two families each own one generated index, and either can be behind
+  // without a single number colliding: a document added by hand leaves a row
+  // missing, and a family whose index was never committed has none at all.
+  const adrIndexBehind = Boolean(plan.indexUnordered || plan.indexStale);
+  const handoffIndexBehind = Boolean(plan.handoffIndexUnordered || plan.handoffIndexStale);
+  const anyIndexBehind = adrIndexBehind || handoffIndexBehind;
   // A hole collides with nothing, so a report that only counts collisions
   // calls a gapped tree clean. Naming the missing numbers is what makes the
   // report answer the question a reader actually has.
@@ -29,16 +35,23 @@ export function renderRenumberPlan(plan, options = {}) {
           ...(willFix ? [] : ["", "Run with --fix to name the person the commit says added each file."]),
         ];
 
-  if (plan.renames.length === 0 && !plan.indexUnordered) {
-    const clean = "Numbering is clean: no duplicate ADR or handoff numbers, no gaps, and the ADR index is in order.";
+  if (plan.renames.length === 0 && !anyIndexBehind) {
+    const clean = "Numbering is clean: no duplicate ADR or handoff numbers, no gaps, and the generated indexes are current.";
 
     return authors.length === 0 ? clean : [clean, "", ...authorLines].join("\n");
   }
 
   if (plan.renames.length === 0) {
+    const unordered = Boolean(plan.indexUnordered || plan.handoffIndexUnordered);
+    const behind = [adrIndexBehind ? "docs/adr/ADR.md" : undefined, handoffIndexBehind ? "docs/handoff/HANDOFF.md" : undefined].filter(Boolean);
+
     return [
-      "No duplicate numbers, but the ADR index (docs/adr/ADR.md) is out of order:",
-      "a row sits above one with a higher number, which appends do and the generator does not.",
+      unordered ? "No duplicate numbers, but a generated index runs out of order:" : "No duplicate numbers, but a generated index is behind the files on disk:",
+      unordered
+        ? "a row sits above one with a higher number, which appends do and the generator does not."
+        : "it is missing, or its rows no longer match what the generator would write.",
+      "",
+      ...behind.map((file) => `- ${file}`),
       ...(willFix ? [] : ["", "Run with --fix to regenerate it."]),
       ...(authorLines.length > 0 ? ["", ...authorLines] : []),
     ].join("\n");
