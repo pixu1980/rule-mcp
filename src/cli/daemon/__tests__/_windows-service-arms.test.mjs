@@ -44,9 +44,17 @@ test("the arms leave no null-device artifact in the directory they run from", ()
 });
 
 test("the service command quotes both halves, so a path with a space survives", () => {
-  const command = getWindowsServiceCommand();
+  const command = getWindowsServiceCommand([String.raw`C:\Program Files\node\node.exe`, String.raw`C:\my app\cli.js`, "serve", "--transport", "sse"]);
 
-  assert.match(command, /^".+" ".+" serve --transport sse$/, command);
+  assert.equal(command, String.raw`"C:\Program Files\node\node.exe" "C:\my app\cli.js" serve --transport sse`, command);
+});
+
+test("a quote inside a path is escaped, so it cannot split the binPath into arguments sc reads as its own", () => {
+  const command = getWindowsServiceCommand([String.raw`C:\odd "name"\node.exe`, String.raw`C:\app\cli.js`, "serve"]);
+
+  assert.ok(command.startsWith('"'), command);
+  assert.ok(command.includes(String.raw`\"name\"`), "the embedded quotes are escaped");
+  assert.ok(command.endsWith(" serve"), command);
 });
 
 test("a dry-run install promises the command it would register", () => {
