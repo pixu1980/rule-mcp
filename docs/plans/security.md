@@ -23,9 +23,9 @@ finding stays open. This file is deleted by the run that finds nothing open.
 - [x] **Step 4 - SEC-4 (medium)**: A failing service command returns error.message, which carries the full command line and the tool's stderr, to the caller.
   - [x] **4.1**: Return a fixed reason plus an exit code instead of the raw message and keep the command line out of the tool result
   - [x] **4.2**: Cover the failure shape of each adapter with a test that asserts what the error string contains
-- [ ] **Step 5 - SEC-5 (medium)**: shimWorks() verifies the shim by executing whatever the PATH resolves for rule-mcp.
-  - [ ] **5.1**: Resolve the shim target and compare it with the checkout's own entry point before running it
-  - [ ] **5.2**: Test that a shim resolving outside the checkout is reported as not ours
+- [x] **Step 5 - SEC-5 (medium)**: shimWorks() verifies the shim by executing whatever the PATH resolves for rule-mcp.
+  - [x] **5.1**: Resolve the shim target and compare it with the checkout's own entry point before running it
+  - [x] **5.2**: Test that a shim resolving outside the checkout is reported as not ours
 - [x] **Step 6 - SEC-8 (medium)**: Argument quoting in the generated command lines is broken in two measured ways, one on Windows and one in the systemd unit.
   - [x] **6.1**: Build the Windows binPath from the argv array instead of interpolating an already-quoted string
   - [x] **6.2**: Quote systemd ExecStart arguments with one escaper that also escapes an embedded quote, and test both cases

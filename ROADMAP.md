@@ -25,7 +25,7 @@ comes before anything that adds surface. Plan:
 - [x] SEC-2 (medium): the launchd wrapper single-quotes its paths instead of XML-escaping them
 - [x] SEC-3 (medium): the PowerShell fallback launches with an argv array, not `shell: true`
 - [x] SEC-4 (medium): a failed install reports the exit code, never the command line
-- [ ] SEC-5 (medium): `shimWorks()` executes whatever the PATH resolves
+- [x] SEC-5 (medium): `shimWorks()` resolves the shim to this checkout's entrypoint before running it
 - [x] SEC-6 (medium): argument quoting built from the argv array in the Windows `binPath` and the systemd `ExecStart`
 - [ ] SEC-7 (low): `tryExec` collapses every failure, including the output cap, into `""`
 - [ ] SEC-8 (low): the daemon shell-out surface exists twice in the live tree
