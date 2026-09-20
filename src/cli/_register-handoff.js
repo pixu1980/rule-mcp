@@ -7,7 +7,7 @@ export function registerHandoffCommand(program) {
   program
     .command("handoff")
     .description("Generate a compressed LLM context handoff summary")
-    .argument("[subcommand]", "doctor to repair ADR numbering")
+    .argument("[subcommand]", "doctor to repair ADR/handoff numbering and their generated indexes")
     .option("--dir <path>", "project root (default: .)", ".")
     .option("--format <f>", "full (default), brief, minimal")
     .option("--compress", "aggressively truncate values")
@@ -24,7 +24,7 @@ export function registerHandoffCommand(program) {
         const plan = planRenumber({ projectDir, onProgress });
         process.stdout.write(`${renderRenumberPlan(plan, { fix: options.fix })}\n`);
         const authors = plan.authors?.length ?? 0;
-        const somethingToFix = plan.renames.length > 0 || plan.indexUnordered || plan.indexStale || authors > 0;
+        const somethingToFix = plan.renames.length > 0 || plan.indexUnordered || plan.indexStale || plan.handoffIndexUnordered || plan.handoffIndexStale || authors > 0;
 
         if (options.fixCommits) {
           const rewrite = rewriteCommitReferences(plan, { projectDir, onProgress });
@@ -38,15 +38,9 @@ export function registerHandoffCommand(program) {
           process.stdout.write(
             `Renumbered ${applied.renamed} document(s); ${applied.referencesUpdated} file(s) had references updated` +
               `${applied.indexRegenerated ? "; ADR.md regenerated" : ""}` +
+              `${applied.handoffIndexRegenerated ? "; HANDOFF.md regenerated" : ""}` +
               `${applied.authorsNamed > 0 ? `; ${applied.authorsNamed} author(s) named` : ""}.\n`,
           );
-
-          const { regenerateHandoffFile } = await import("../tools/handoff/_refresh.js");
-          const handoffFile = regenerateHandoffFile(projectDir);
-
-          if (handoffFile) {
-            process.stdout.write(`${handoffFile} regenerated.\n`);
-          }
 
           if (!options.fixCommits && plan.renames.length > 0) {
             process.stdout.write("Commit messages were not touched. Add --fix-commits to amend the local ones.\n");

@@ -3,14 +3,14 @@
 import { join } from "node:path";
 
 import { FAMILIES, documentsIn } from "./_families.js";
-import { isAdrIndexStale, isAdrIndexUnordered } from "./_index-state.js";
+import { isAdrIndexStale, isAdrIndexUnordered, isHandoffIndexStale, isHandoffIndexUnordered } from "./_index-state.js";
 import { authorsToName } from "./_authors.js";
 
 /**
  * What the repair would do.
  *
  * @param {{ projectDir?: string }} [options]
- * @returns {{ projectDir: string, collisions: object[], gaps: object[], renames: object[], indexStale: boolean }}
+ * @returns {{ projectDir: string, collisions: object[], gaps: object[], renames: object[], indexStale: boolean, handoffIndexStale: boolean }}
  */
 export function planRenumber(options = {}) {
   const projectDir = options.projectDir ?? process.cwd();
@@ -103,5 +103,7 @@ export function planRenumber(options = {}) {
     authors,
     indexUnordered: isAdrIndexUnordered(projectDir),
     indexStale: isAdrIndexStale(projectDir),
+    handoffIndexUnordered: isHandoffIndexUnordered(projectDir),
+    handoffIndexStale: isHandoffIndexStale(projectDir),
   };
 }

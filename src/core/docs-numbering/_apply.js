@@ -3,6 +3,7 @@
 import { existsSync, readFileSync, renameSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { buildAdrIndex, listExistingAdrs } from "../../tools/adr/index.js";
+import { buildHandoffIndex, listExistingHandoffs } from "../../tools/handoff/_handoff-index.js";
 import { markdownFiles } from "./_families.js";
 import { nameAuthorIn } from "./_authors.js";
 
@@ -52,20 +53,29 @@ export function applyRenumber(plan, options = {}) {
       after = after.replaceAll(`[${rename.fromNumber}](${oldFile})`, `[${rename.toNumber}](${newFile})`).replaceAll(oldFile, newFile);
     }
 
-    if (after !== before) {
-      writeFileSync(file, after);
-      referencesUpdated += 1;
+    if (!(after !== before)) {
+      continue;
     }
+
+    writeFileSync(file, after);
+    referencesUpdated += 1;
   }
 
-  // The index is generated from the ADR files (ADR 050), so after a move it is
-  // rebuilt rather than patched: link rewriting would leave the rows, the
-  // titles and the order describing the arrangement before the repair.
+  // The indexes are generated from the files (ADR 050 and its handoff twin), so
+  // after a move they are rebuilt rather than patched: link rewriting would
+  // leave the rows, the titles and the order describing the arrangement before
+  // the repair. A family with documents and no index is stale too, so the run
+  // that repairs a collision can also be the one that first creates the index.
   if (plan.renames.some((rename) => rename.family === "ADR") || plan.indexUnordered || plan.indexStale) {
     report({ step: "index", message: "Regenerating docs/adr/ADR.md from the files on disk" });
   }
 
+  if (plan.renames.some((rename) => rename.family === "handoff") || plan.handoffIndexUnordered || plan.handoffIndexStale) {
+    report({ step: "index", message: "Regenerating docs/handoff/HANDOFF.md from the files on disk" });
+  }
+
   const indexRegenerated = regenerateAdrIndex(projectDir, plan);
+  const handoffIndexRegenerated = regenerateHandoffIndex(projectDir, plan);
   let authorsNamed = 0;
 
   for (const entry of plan.authors ?? []) {
@@ -76,7 +86,7 @@ export function applyRenumber(plan, options = {}) {
     }
   }
 
-  return { renamed, referencesUpdated, indexRegenerated, authorsNamed };
+  return { renamed, referencesUpdated, indexRegenerated, handoffIndexRegenerated, authorsNamed };
 }
 
 /**
@@ -87,14 +97,34 @@ export function applyRenumber(plan, options = {}) {
  * @returns {boolean} whether the index was rewritten
  */
 function regenerateAdrIndex(projectDir, plan) {
-  const touchedAdrs = plan.renames.some((rename) => rename.family === "ADR");
   const adrDir = join(projectDir, "docs", "adr");
+  const touched = plan.renames.some((rename) => rename.family === "ADR");
 
-  if ((!touchedAdrs && !plan.indexUnordered && !plan.indexStale) || !existsSync(join(adrDir, "ADR.md"))) {
+  if (!existsSync(adrDir) || (!touched && !plan.indexUnordered && !plan.indexStale)) {
     return false;
   }
 
   writeFileSync(join(adrDir, "ADR.md"), buildAdrIndex(listExistingAdrs(adrDir)));
+
+  return true;
+}
+
+/**
+ * Rebuild `docs/handoff/HANDOFF.md` from the files on disk.
+ *
+ * @param {string} projectDir
+ * @param {{ renames: object[] }} plan
+ * @returns {boolean} whether the index was written
+ */
+function regenerateHandoffIndex(projectDir, plan) {
+  const handoffDir = join(projectDir, "docs", "handoff");
+  const touched = plan.renames.some((rename) => rename.family === "handoff");
+
+  if (!existsSync(handoffDir) || (!touched && !plan.handoffIndexUnordered && !plan.handoffIndexStale)) {
+    return false;
+  }
+
+  writeFileSync(join(handoffDir, "HANDOFF.md"), buildHandoffIndex(listExistingHandoffs(handoffDir)));
 
   return true;
 }
