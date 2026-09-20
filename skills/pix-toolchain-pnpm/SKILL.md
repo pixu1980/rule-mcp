@@ -11,7 +11,7 @@ tags:
   - "toolchain"
   - "nodejs"
 frameworks: [all]
-guardrails: [pkg-exact-versions, pkg-no-corepack, verified-dependencies-only]
+guardrails: [pkg-exact-versions, pkg-no-corepack, pkg-no-engines, verified-dependencies-only]
 ---
 
 # rule-toolchain-pnpm - pnpm Package Manager
@@ -74,32 +74,42 @@ false claim that only one version works.
 
 Guardrail: `pkg-exact-versions`.
 
-## No packageManager field, no corepack
+## No packageManager, no engines, no corepack
 
-**Mandatory.** Neither field goes in `package.json`:
+**Mandatory.** None of these fields goes in a `package.json`:
 
 ```json
 {
-  "packageManager": "pnpm@11.24.0",
+  "packageManager": "pnpm@11.25.0",
+  "engines": {
+    "node": ">=22"
+  },
   "devEngines": {
     "packageManager": { "name": "pnpm", "version": "11.8.0", "onFail": "download" }
   }
 }
 ```
 
-Both activate corepack, which then gets a vote on whether the install runs at
-all: it downloads a package manager on a machine that is offline, verifies a
-signature from behind a proxy that rewrites it, and shadows the pnpm that was
-already on the PATH with a shim that reports a different version. What they buy
-is an assertion about a version. `.nvmrc` plus `pnpm-lock.yaml` already give
-that, without a component in the middle that can refuse.
+`packageManager` and `devEngines.packageManager` activate corepack. rule-mcp
+chooses not to support that: corepack gets a vote on whether the install runs at
+all. It downloads a package manager on a machine that is offline, verifies a
+signature from behind a proxy that rewrites it, and shadows the pnpm already on
+the PATH with a shim that reports a different version. What it buys is an
+assertion about a version, and `.nvmrc` plus `pnpm-lock.yaml` already give that,
+without a component in the middle that can refuse.
+
+`engines` is the same policy reached another way. npm, pnpm and yarn warn or
+refuse when the running Node falls outside the declared range, so the field is a
+second place the install can be declined for a reason that belongs to the
+machine, not to the project. The Node floor goes in `.nvmrc`, in the installer
+and in CI, where a person reads it and nothing acts on it during an install.
 
 State the package manager where a human reads it - the README, the contributing
 guide, the CI job - not where a tool will act on it.
 
-`engines` is fine and unrelated: it asserts a Node version and fetches nothing.
-
-Guardrail: `pkg-no-corepack`.
+Guardrails: `pkg-no-corepack`, `pkg-no-engines`. The write path removes the
+fields from a generated manifest before it checks it, so a model that writes
+them gets a receipt for the cleaned file and not for what it sent.
 
 ## Quick Start
 

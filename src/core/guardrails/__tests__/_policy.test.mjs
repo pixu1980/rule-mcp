@@ -4,7 +4,7 @@
 import { readFileSync } from "node:fs";
 import { execFileSync } from "node:child_process";
 
-import { COREPACK, EXACT, check, checkCode, fails, finish, run } from "./_manifest.fixture.mjs";
+import { COREPACK, EXACT, ENGINES, check, checkCode, fails, finish, run } from "./_manifest.fixture.mjs";
 import "./_install.fixture.mjs";
 
 console.log("=== package.json guardrails: corepack, gating, repo ===\n");
@@ -24,7 +24,8 @@ check(
   })(),
 );
 check("T3.3 a manifest without either passes", !fails({ name: "app", devEngines: { runtime: { name: "node", version: "24" } } }, COREPACK));
-check("T3.4 engines stays legal: it asserts, it does not download", !fails({ engines: { node: ">=22" } }, COREPACK));
+check("T3.4 engines also fails: the range gives the package manager a veto", fails({ engines: { node: ">=22" } }, ENGINES));
+check("T3.5 devEngines.runtime alone is not engines", !fails({ name: "app", devEngines: { runtime: { name: "node", version: "24" } } }, ENGINES));
 
 // ── T4: gated on the file ──
 check(
@@ -44,9 +45,9 @@ check("T5 every tracked manifest was found", manifests.length > 0);
 const offenders = manifests.filter((path) => {
   const report = checkCode("rule-toolchain-pnpm", readFileSync(path, "utf8"), { fileName: path });
 
-  return report.failed.some((failure) => failure.id === EXACT || failure.id === COREPACK);
+  return report.failed.some((failure) => failure.id === EXACT || failure.id === COREPACK || failure.id === ENGINES);
 });
-check(`T5.1 every tracked manifest passes both rules${offenders.length > 0 ? ` (offenders: ${offenders.join(", ")})` : ""}`, offenders.length === 0);
+check(`T5.1 every tracked manifest passes all three rules${offenders.length > 0 ? ` (offenders: ${offenders.join(", ")})` : ""}`, offenders.length === 0);
 
 // ── T6: .npmrc is what stops the range from coming back ──
 //

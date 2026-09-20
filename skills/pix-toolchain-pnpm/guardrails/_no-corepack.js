@@ -4,7 +4,7 @@ export const pkgNoCorepack = {
   id: "pkg-no-corepack",
   label: "No corepack activation fields",
   description:
-    "No `packageManager` field and no `devEngines.packageManager`. Both hand control of the install to corepack, which can then refuse it - offline, behind a proxy, or shadowing the package manager already installed. `engines` stays legal: it asserts a version, it does not fetch one.",
+    "No `packageManager` field and no `devEngines.packageManager`. Both hand control of the install to corepack, which can then refuse it - offline, behind a proxy, or shadowing the package manager already installed. `engines` is the sibling rule, `pkg-no-engines`.",
   check: (code, context) => {
     const { manifestOf } = context.helpers;
 

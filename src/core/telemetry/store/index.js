@@ -8,7 +8,7 @@
  * Append-only JSONL for raw events plus a rollup file of daily aggregates. Two
  * files and no database on purpose: SQLite would mean either a native
  * dependency, which this project does not take, or `node:sqlite`, which needs
- * Node 22 while `engines` still says 20.
+ * Node 22 while the installers still allow Node 20.
  *
  * Both live in this project's own directory under the install,
  * `the projects root under the state dir`. Filed per project, because a

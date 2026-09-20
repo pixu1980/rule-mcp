@@ -1056,6 +1056,22 @@ export const CORPUS = [
     why: "no such field",
     code: `{\n  "name": "app"\n}\n`,
   },
+  {
+    rule: "pkg-no-engines",
+    skill: PNPM,
+    label: "bad",
+    fileName: "package.json",
+    why: "engines gives the package manager a range it can refuse to install outside of",
+    code: `{\n  "engines": {\n    "node": ">=22"\n  }\n}\n`,
+  },
+  {
+    rule: "pkg-no-engines",
+    skill: PNPM,
+    label: "good",
+    fileName: "package.json",
+    why: "the Node floor lives in .nvmrc and the installer, not in the manifest",
+    code: `{\n  "name": "app"\n}\n`,
+  },
 
   // ── The scaffold files, which load only in scaffold mode ──
   {

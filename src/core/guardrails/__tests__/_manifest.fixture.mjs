@@ -59,3 +59,4 @@ export const fails = (manifest, id, fileName) => run(manifest, fileName).failed.
 
 export const EXACT = "pkg-exact-versions";
 export const COREPACK = "pkg-no-corepack";
+export const ENGINES = "pkg-no-engines";
