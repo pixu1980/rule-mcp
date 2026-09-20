@@ -85,28 +85,30 @@ export function listExistingAdrs(adrDir) {
     for (const f of files) {
       const m = f.match(/^(\d{3})-(.+)\.md$/);
 
-      if (m) {
-        const content = readFileSync(join(adrDir, f), "utf8");
-        const title = content.match(/^# \d{3}: (.+)$/m)?.[1] || m[2].replaceAll("-", " ");
-        const date = content.match(/\*\*Date\*\*: (\S+)/)?.[1] || "";
-        const status = content.match(/\*\*Status\*\*: (\w+)/)?.[1] || "proposed";
-        const tagsLine = content.match(/\*\*Tags\*\*: (.+)/)?.[1] || "";
-        const tags = tagsLine
-          .split(",")
-          .map((s) => s.trim())
-          .filter(Boolean);
-
-        adrs.push({
-          file: f,
-          number: parseInt(m[1]),
-          title,
-          date,
-          status,
-          tags,
-          decision: firstSentence(section(content, "Decision")),
-          consequence: firstSentence(section(content, "Consequences")),
-        });
+      if (!m) {
+        continue;
       }
+
+      const content = readFileSync(join(adrDir, f), "utf8");
+      const title = content.match(/^# \d{3}: (.+)$/m)?.[1] || m[2].replaceAll("-", " ");
+      const date = content.match(/\*\*Date\*\*: (\S+)/)?.[1] || "";
+      const status = content.match(/\*\*Status\*\*: (\w+)/)?.[1] || "proposed";
+      const tagsLine = content.match(/\*\*Tags\*\*: (.+)/)?.[1] || "";
+      const tags = tagsLine
+        .split(",")
+        .map((s) => s.trim())
+        .filter(Boolean);
+
+      adrs.push({
+        file: f,
+        number: parseInt(m[1]),
+        title,
+        date,
+        status,
+        tags,
+        decision: firstSentence(section(content, "Decision")),
+        consequence: firstSentence(section(content, "Consequences")),
+      });
     }
 
     return adrs;

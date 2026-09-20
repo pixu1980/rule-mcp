@@ -35,12 +35,14 @@ const sseResult = await new Promise((resolve, reject) => {
       data += chunk.toString();
       // Parse endpoint event: event: endpoint\ndata: /message?sessionId=XXX
       const m = data.match(/data:\s*(\/[^\s]*sessionId=([^\s]+))/);
-      if (m) {
-        endpointPath = m[1];
-        sessionId = m[2];
-        clearTimeout(timer);
-        resolve({ status: res.statusCode, headers: res.headers, data, sessionId });
+      if (!m) {
+        return;
       }
+
+      endpointPath = m[1];
+      sessionId = m[2];
+      clearTimeout(timer);
+      resolve({ status: res.statusCode, headers: res.headers, data, sessionId });
     });
     res.on("error", reject);
   });

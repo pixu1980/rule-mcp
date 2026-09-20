@@ -50,11 +50,7 @@ export const GRAPH_CHECKS = [
  * @returns {string|null}
  */
 export function graphHealth(projectDir = process.cwd(), { probe = probeFilesystem, enabled } = {}) {
-  if (enabled === false || process.env.RULE_MCP_NO_TOKENSAVE === "1") {
-    return null;
-  }
-
-  if (!probe(projectDir).available) {
+  if (enabled === false || process.env.RULE_MCP_NO_TOKENSAVE === "1" || !probe(projectDir).available) {
     return null;
   }
 

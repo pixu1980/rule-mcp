@@ -109,13 +109,17 @@ for (const tool of ["rule_tool_ai", "pix_adr", "pix_handoff"]) {
   assert.ok(!universalInstaller.includes(tool), `the bootstrap must not reference obsolete ${tool}`);
   const obsoletePattern = new RegExp(`(?<![A-Za-z0-9_])${tool}(?![A-Za-z0-9_])`);
   const sourceDir = join(root, "src");
-  if (existsSync(sourceDir)) {
-    const matches = walk(sourceDir).filter((file) => {
-      const data = readFileSync(file);
-      return !data.includes(0) && obsoletePattern.test(data.toString("utf8"));
-    });
-    assert.deepEqual(matches, [], `src/ must not reference obsolete ${tool}`);
+
+  if (!existsSync(sourceDir)) {
+    continue;
   }
+
+  const matches = walk(sourceDir).filter((file) => {
+    const data = readFileSync(file);
+    return !data.includes(0) && obsoletePattern.test(data.toString("utf8"));
+  });
+
+  assert.deepEqual(matches, [], `src/ must not reference obsolete ${tool}`);
 }
 
 const skillsInstaller = join(root, "scripts", "install-skills.sh");

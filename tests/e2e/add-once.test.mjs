@@ -40,11 +40,14 @@ test("add adds exactly 1 group per click", async ({ page }) => {
 
   // Remove one
   const removeButton = page.locator("[data-part='remove-btn']").first();
-  if (await removeButton.isVisible().catch(() => false)) {
-    await removeButton.click();
-    await page.waitForTimeout(500);
-    const afterRemove = await groups.count();
-    console.log(`After remove: ${after2} → ${afterRemove}`);
-    expect(afterRemove).toBe(after2 - 1);
+
+  if (!(await removeButton.isVisible().catch(() => false))) {
+    return;
   }
+
+  await removeButton.click();
+  await page.waitForTimeout(500);
+  const afterRemove = await groups.count();
+  console.log(`After remove: ${after2} → ${afterRemove}`);
+  expect(afterRemove).toBe(after2 - 1);
 });

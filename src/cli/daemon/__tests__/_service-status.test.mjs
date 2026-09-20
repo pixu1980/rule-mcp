@@ -26,11 +26,13 @@ test("checkDaemonService names its platform on every arm", () => {
   assert.ok(status.platform, "the platform key is set");
   assert.notEqual(status.platform, "undefined", "the platform is a real name");
 
-  if (process.platform === "darwin") {
-    assert.equal(status.platform, "macos", "darwin reports macos");
-    assert.equal(status.service, "launchd", "darwin uses launchd");
-    assert.ok(status.details.launchAgent, "the launch agent details are attached");
+  if (!(process.platform === "darwin")) {
+    return;
   }
+
+  assert.equal(status.platform, "macos", "darwin reports macos");
+  assert.equal(status.service, "launchd", "darwin uses launchd");
+  assert.ok(status.details.launchAgent, "the launch agent details are attached");
 });
 
 test("formatDaemonStatus renders the platform and the native detail line", () => {

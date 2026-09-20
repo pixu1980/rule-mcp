@@ -54,7 +54,7 @@ test("uninstall.ps1 keeps --force meaning 'do not ask'", () => {
   assert.match(read("uninstall.ps1"), /'--no-interactive'/, "--force must translate to a non-interactive run");
 });
 
-test("both PowerShell bootstraps parse", { skip: pwshAvailable() ? false : "pwsh is not installed" }, () => {
+test("both PowerShell bootstraps parse", { skip: !pwshAvailable() && "pwsh is not installed" }, () => {
   for (const name of ["install.ps1", "uninstall.ps1"]) {
     execFileSync(
       "pwsh",

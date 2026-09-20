@@ -68,10 +68,13 @@ test("every source file passes the JavaScript guardrails", () => {
       continue;
     }
     const result = checkCode("rule-styleguide-javascript", readFileSync(file, "utf8"), { fileName });
-    if (!result.allPass) {
-      const rules = result.failed.map((rule) => `${rule.id} (${(rule.detail?.[0] ?? "").split("\n", 1)[0]})`);
-      failures.push(`${file.split("/src/", 2)[1]}: ${rules.join("; ")}`);
+
+    if (result.allPass) {
+      continue;
     }
+
+    const rules = result.failed.map((rule) => `${rule.id} (${(rule.detail?.[0] ?? "").split("\n", 1)[0]})`);
+    failures.push(`${file.split("/src/", 2)[1]}: ${rules.join("; ")}`);
   }
   assert.deepEqual(failures, [], `the repo must pass its own guardrails:\n${failures.join("\n")}`);
 });

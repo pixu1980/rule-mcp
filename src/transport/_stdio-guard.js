@@ -101,10 +101,12 @@ export function installStdioGuard(options) {
     stdout.off("error", onWriteError);
     stderr.off("error", onWriteError);
 
-    if (poll) {
-      clearInterval(poll);
-      poll = null;
+    if (!poll) {
+      return;
     }
+
+    clearInterval(poll);
+    poll = null;
   }
 
   return stop;

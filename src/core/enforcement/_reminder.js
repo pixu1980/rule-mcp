@@ -60,11 +60,7 @@ function enforcementContract(name, terse, styling = false) {
  * Errors are returned undecorated and do not advance the cadence.
  */
 export function decorateWorkflowReminder(name, result) {
-  if (!result || result.isError) {
-    return result;
-  }
-
-  if (process.env.RULE_MCP_NO_REMINDER === "1") {
+  if (!result || result.isError || process.env.RULE_MCP_NO_REMINDER === "1") {
     return result;
   }
 

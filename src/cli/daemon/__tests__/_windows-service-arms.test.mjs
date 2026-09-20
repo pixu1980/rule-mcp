@@ -78,8 +78,10 @@ test("the status read answers a shape, never a throw, with no service manager", 
   assert.equal(typeof status.running, "boolean");
   assert.ok(status.pid === null || Number.isInteger(status.pid), "a pid is a number or nothing");
 
-  if (!status.installed) {
-    assert.equal(status.running, false, "nothing that is not installed is running");
-    assert.equal(status.pid, null);
+  if (status.installed) {
+    return;
   }
+
+  assert.equal(status.running, false, "nothing that is not installed is running");
+  assert.equal(status.pid, null);
 });

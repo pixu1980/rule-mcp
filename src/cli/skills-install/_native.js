@@ -22,10 +22,12 @@ export function installNativeSkills(skills) {
     for (const skill of skills) {
       const destination = join(claudeDir, skill.name);
 
-      if (!existsSync(destination)) {
-        copySkill(skill.source, join(homedir(), ".claude"), skill.name);
-        count++;
+      if (existsSync(destination)) {
+        continue;
       }
+
+      copySkill(skill.source, join(homedir(), ".claude"), skill.name);
+      count++;
     }
 
     if (count > 0) {

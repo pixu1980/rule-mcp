@@ -15,10 +15,7 @@ import { fingerprintEnabled } from "./_scan.js";
  * @returns {string}
  */
 export function stripFingerprint(text, options = {}) {
-  if (typeof text !== "string" || text.length === 0) {
-    return text;
-  }
-  if (looksLikeJson(text)) {
+  if (typeof text !== "string" || text.length === 0 || looksLikeJson(text)) {
     return text;
   }
 
@@ -45,11 +42,7 @@ export function stripFingerprint(text, options = {}) {
  * @returns {object} the same result when disabled, else a cleaned copy
  */
 export function stripFingerprintResult(result) {
-  if (!fingerprintEnabled()) {
-    return result;
-  }
-
-  if (!result || !Array.isArray(result.content)) {
+  if (!fingerprintEnabled() || !result || !Array.isArray(result.content)) {
     return result;
   }
 

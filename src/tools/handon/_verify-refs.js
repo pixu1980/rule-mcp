@@ -25,11 +25,7 @@ export function verifyBranch(projectDir, branch, current) {
   }
 
   for (const trunk of TRUNKS) {
-    if (trunk === branch) {
-      continue;
-    }
-
-    if (!git(projectDir, ["rev-parse", "--verify", "--quiet", `refs/heads/${trunk}`])) {
+    if (trunk === branch || !git(projectDir, ["rev-parse", "--verify", "--quiet", `refs/heads/${trunk}`])) {
       continue;
     }
 

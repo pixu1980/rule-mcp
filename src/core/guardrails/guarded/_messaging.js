@@ -93,10 +93,12 @@ export function spawn() {
   thread.on("message", (message) => {
     const entry = pending.get(message?.id);
 
-    if (entry) {
-      pending.delete(message.id);
-      entry.resolve(message.result);
+    if (!entry) {
+      return;
     }
+
+    pending.delete(message.id);
+    entry.resolve(message.result);
   });
   thread.on("error", (error) => {
     process.stderr.write(`guardrail worker error: ${error.stack ?? error.message}\n`);

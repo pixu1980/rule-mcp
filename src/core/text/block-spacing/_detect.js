@@ -38,17 +38,21 @@ export function findBlocks(lines) {
     }
 
     // Closing brace - pop from stack and record the block
-    if (/^\s*\}\s*$/.test(line) && stack.length > 0) {
-      const block = stack.pop();
-      block.closeLine = index;
-
-      // Only consider blocks with ≥1 inner code line
-      const innerLines = lines.slice(block.openLine + 1, block.closeLine).filter((l) => l.trim() !== "" && !/^\s*\/\//.test(l) && !/^\s*\/\*/.test(l));
-
-      if (innerLines.length > 0) {
-        blocks.push(block);
-      }
+    if (!/^\s*\}\s*$/.test(line) || stack.length === 0) {
+      continue;
     }
+
+    const block = stack.pop();
+    block.closeLine = index;
+
+    // Only consider blocks with ≥1 inner code line
+    const innerLines = lines.slice(block.openLine + 1, block.closeLine).filter((l) => l.trim() !== "" && !/^\s*\/\//.test(l) && !/^\s*\/\*/.test(l));
+
+    if (innerLines.length === 0) {
+      continue;
+    }
+
+    blocks.push(block);
   }
 
   return blocks;

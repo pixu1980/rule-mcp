@@ -96,11 +96,7 @@ export function resumeAnnouncement({ prompt, cwd, force = false } = {}) {
     return "";
   }
 
-  if (!isResumeSignal(prompt)) {
-    return "";
-  }
-
-  if (wasAnnouncedThisSession(cwd)) {
+  if (!isResumeSignal(prompt) || wasAnnouncedThisSession(cwd)) {
     return "";
   }
 

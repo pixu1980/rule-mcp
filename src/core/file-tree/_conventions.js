@@ -52,11 +52,7 @@ export function isPrefixedComponent(name) {
  * Matches: PascalCase.ext, kebab-case.ext, camelCase.ext
  */
 export function isBareComponent(name) {
-  if (isBarrelFile(name)) {
-    return false;
-  }
-
-  if (name.startsWith("_")) {
+  if (isBarrelFile(name) || name.startsWith("_")) {
     return false;
   }
 

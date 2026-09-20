@@ -31,11 +31,7 @@ export function readOpencode({ projectDir, home, ...window }) {
   }
 
   for (const { file, row } of rows) {
-    if (!sessions.has(row.sessionID ?? dirname(file))) {
-      continue;
-    }
-
-    if (!inWindow(row.time?.created, window)) {
+    if (!sessions.has(row.sessionID ?? dirname(file)) || !inWindow(row.time?.created, window)) {
       continue;
     }
 
