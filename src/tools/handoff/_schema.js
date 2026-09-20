@@ -6,11 +6,7 @@ import { z } from "zod/v4";
 /** Input schema of the rule_tool_process_handoff tool. */
 export const HandoffSchema = z.object({
   projectDir: z.string().optional().default(".").describe("Project root directory"),
-  mode: z
-    .enum(["handoff", "close-session"])
-    .optional()
-    .default("handoff")
-    .describe("handoff: generate context summary. close-session: the same, with the session-close banner."),
+  mode: z.enum(["handoff", "close-session"]).optional().default("handoff").describe("handoff: generate context summary. close-session: the same, with the session-close banner."),
   closeout: z
     .boolean()
     .optional()

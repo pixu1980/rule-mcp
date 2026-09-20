@@ -12,9 +12,34 @@ import { nextPlanSteps } from "../_plans.js";
 
 const HANDOFF = "docs/handoff/01-a-session.md";
 
-const ALPHA = ["# alpha plan", "", "- **Role**: architect", "- **Date**: 2026-09-10", "", "Steps are re-derived on every run.", "", "## Workstream A", "", "- [x] **A.1**: done.", "- [ ] **A.2**: the first open step.", "- [ ] **A.3**: the second.", ""].join("\n");
+const ALPHA = [
+  "# alpha plan",
+  "",
+  "- **Role**: architect",
+  "- **Date**: 2026-09-10",
+  "",
+  "Steps are re-derived on every run.",
+  "",
+  "## Workstream A",
+  "",
+  "- [x] **A.1**: done.",
+  "- [ ] **A.2**: the first open step.",
+  "- [ ] **A.3**: the second.",
+  "",
+].join("\n");
 
-const ZETA = ["# zeta plan", "", "- **Role**: security", "- **Date**: 2026-09-15", "", "## Workstream Z", "", "- [ ] **Z.1**: a step that wraps onto the continuation line", "      and finishes here.", ""].join("\n");
+const ZETA = [
+  "# zeta plan",
+  "",
+  "- **Role**: security",
+  "- **Date**: 2026-09-15",
+  "",
+  "## Workstream Z",
+  "",
+  "- [ ] **Z.1**: a step that wraps onto the continuation line",
+  "      and finishes here.",
+  "",
+].join("\n");
 
 const ALL_DONE = ["# finished plan", "", "- **Date**: 2026-09-01", "", "## Workstream F", "", "- [x] **F.1**: done.", ""].join("\n");
 

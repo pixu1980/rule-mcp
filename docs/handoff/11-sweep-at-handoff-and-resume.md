@@ -76,12 +76,12 @@ One unrelated test that was already failing at HEAD was fixed in its own commit.
 
 ## Verification
 
-| Gate | Result |
-| --- | --- |
-| `scripts/ci/run-tests/index.mjs all` | 1779 tests, 1776 pass, 3 skipped, 0 fail (exit 0) |
-| `rule_tool_check` mode=project | 2/5 red, both pre-existing: `project-circular` (3 cycles in `src/transport/session-registry/*`, `src/core/session/resume/*`, `src/cli/commands/_targets*` and the `skills/rule-frontend-vanilla-reactive/examples` tree) and `project-dead-code` (53 symbols; the 3 in `tools/handoff` and `tools/handon` are `register*Tool`, invoked dynamically by the registry) |
-| `pnpm lint` | Baseline already red at HEAD: 64 errors repo-wide. Every file this session added is clean; the 7 errors inside the touched directories are on pre-existing lines |
-| census freshness | Green at the tip |
+| Gate                                 | Result                                                                                                                                                                                                                                                                                                                                                             |
+| ------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `scripts/ci/run-tests/index.mjs all` | 1779 tests, 1776 pass, 3 skipped, 0 fail (exit 0)                                                                                                                                                                                                                                                                                                                  |
+| `rule_tool_check` mode=project        | 2/5 red, both pre-existing: `project-circular` (3 cycles in `src/transport/session-registry/*`, `src/core/session/resume/*`, `src/cli/commands/_targets*` and the `skills/rule-frontend-vanilla-reactive/examples` tree) and `project-dead-code` (53 symbols; the 3 in `tools/handoff` and `tools/handon` are `register*Tool`, invoked dynamically by the registry) |
+| `pnpm lint`                          | Baseline already red at HEAD: 64 errors repo-wide. Every file this session added is clean; the 7 errors inside the touched directories are on pre-existing lines                                                                                                                                                                                                   |
+| census freshness                     | Green at the tip                                                                                                                                                                                                                                                                                                                                                   |
 
 `nextPlanSteps` and `planLines` are not in the dead-code list: `handon` calls
 them.
@@ -132,7 +132,7 @@ Carried over from handoff 10: POSIX-only, exercised in a scratch copy with a fak
 ## ADR Reference
 
 - ADR 103: every handoff mode sweeps completed working papers, and `closeout:
-  false` is the read-only run
+false` is the read-only run
 - ADR 087: session close archives completed audits, reviews and plans
   (superseded on the mode question)
 - ADR 028: clean `/rule-*` commands via user commands and prompt suppression

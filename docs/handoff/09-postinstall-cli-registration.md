@@ -11,6 +11,7 @@ Added automatic global CLI registration on `pnpm install` postinstall hook to en
 ## Work Completed
 
 ### Installer postinstall script
+
 - Added `postinstall` script to package.json: `pnpm install -g . 2>/dev/null || true`
 - Enables `rule-mcp` CLI to be available globally after `pnpm i`
 - Works in CI environments (errors suppressed)
@@ -23,6 +24,7 @@ Added automatic global CLI registration on `pnpm install` postinstall hook to en
 **Root cause:** Unknown - likely in skill registration during setup wizard or MCP server configuration.
 
 **Files to investigate:**
+
 - `src/cli/setup/_commands-items.js` - command naming logic
 - `src/cli/setup/_task-extras.js` - how commands and skills are installed
 - `src/core/agents/commands/` - command template generation

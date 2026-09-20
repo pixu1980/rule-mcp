@@ -26,8 +26,7 @@ export function commandNames() {
 
   // Add check subcommands for area commands (rule-area-*-check)
   const areaPrompts = listAreaPrompts();
-  const areaCheckCommands = areaPrompts
-    .map((p) => `${p.name}-check`);
+  const areaCheckCommands = areaPrompts.map((p) => `${p.name}-check`);
 
   // Combine all commands and sort alphabetically (except router which is pinned first)
   const allCommands = [...prompts, ...areaCheckCommands, CHECK_COMMAND].sort((a, b) => a.localeCompare(b));
