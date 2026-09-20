@@ -3,7 +3,7 @@
 /** Linux systemd adapter: the user unit, install, uninstall, check. */
 import { writeFileSync, mkdirSync, existsSync, rmSync } from "node:fs";
 import { join } from "node:path";
-import { HOME, resolveEntrypoint, tryExec } from "./_service-shared.js";
+import { HOME, resolveEntrypoint, tryExecFile } from "./_service-shared.js";
 import { generateSystemdUnit } from "./_systemd-unit.js";
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -22,10 +22,10 @@ export const SYSTEMD_UNIT_PATH = join(SYSTEMD_USER_DIR, `${SYSTEMD_UNIT_NAME}.se
 /**
  * Install the systemd user service, enable and start it.
  *
- * @param {{ dryRun?: boolean }} [opts]
+ * @param {{ dryRun?: boolean, exec?: Function }} [opts]
  * @returns {{ ok: boolean, path: string, action: string, error?: string }}
  */
-export function installSystemdService({ dryRun = false } = {}) {
+export function installSystemdService({ dryRun = false, exec = tryExecFile } = {}) {
   const ep = resolveEntrypoint();
   const content = generateSystemdUnit(ep);
 
@@ -37,9 +37,9 @@ export function installSystemdService({ dryRun = false } = {}) {
   writeFileSync(SYSTEMD_UNIT_PATH, content, "utf8");
 
   // Reload daemon, enable, start
-  tryExec("systemctl --user daemon-reload");
-  tryExec(`systemctl --user enable "${SYSTEMD_UNIT_NAME}"`);
-  const out = tryExec(`systemctl --user restart "${SYSTEMD_UNIT_NAME}"`);
+  exec("systemctl", ["--user", "daemon-reload"]);
+  exec("systemctl", ["--user", "enable", SYSTEMD_UNIT_NAME]);
+  const out = exec("systemctl", ["--user", "restart", SYSTEMD_UNIT_NAME]);
 
   // Check if it failed
   if (out.includes("Failed") || out.includes("failed")) {
@@ -52,10 +52,10 @@ export function installSystemdService({ dryRun = false } = {}) {
 /**
  * Stop, disable, and remove the systemd user service.
  *
- * @param {{ dryRun?: boolean }} [opts]
+ * @param {{ dryRun?: boolean, exec?: Function }} [opts]
  * @returns {{ ok: boolean, path: string, action: string }}
  */
-export function uninstallSystemdService({ dryRun = false } = {}) {
+export function uninstallSystemdService({ dryRun = false, exec = tryExecFile } = {}) {
   if (!existsSync(SYSTEMD_UNIT_PATH)) {
     return { ok: true, path: SYSTEMD_UNIT_PATH, action: "not-installed" };
   }
@@ -64,9 +64,9 @@ export function uninstallSystemdService({ dryRun = false } = {}) {
     return { ok: true, path: SYSTEMD_UNIT_PATH, action: "dry-run (unit not removed)" };
   }
 
-  tryExec(`systemctl --user stop "${SYSTEMD_UNIT_NAME}" 2>/dev/null || true`);
-  tryExec(`systemctl --user disable "${SYSTEMD_UNIT_NAME}" 2>/dev/null || true`);
-  tryExec("systemctl --user daemon-reload");
+  exec("systemctl", ["--user", "stop", SYSTEMD_UNIT_NAME]);
+  exec("systemctl", ["--user", "disable", SYSTEMD_UNIT_NAME]);
+  exec("systemctl", ["--user", "daemon-reload"]);
   rmSync(SYSTEMD_UNIT_PATH, { force: true });
 
   return { ok: true, path: SYSTEMD_UNIT_PATH, action: "stopped-disabled-removed" };
@@ -75,9 +75,10 @@ export function uninstallSystemdService({ dryRun = false } = {}) {
 /**
  * Check systemd user service status.
  *
+ * @param {{ exec?: Function }} [opts]
  * @returns {{ installed: boolean, enabled: boolean, active: boolean, pid: number|null, path: string }}
  */
-export function checkSystemdService() {
+export function checkSystemdService({ exec = tryExecFile } = {}) {
   const result = {
     installed: existsSync(SYSTEMD_UNIT_PATH),
     enabled: false,
@@ -90,13 +91,13 @@ export function checkSystemdService() {
     return result;
   }
 
-  const enabledOut = tryExec(`systemctl --user is-enabled "${SYSTEMD_UNIT_NAME}" 2>/dev/null || echo "disabled"`);
+  const enabledOut = exec("systemctl", ["--user", "is-enabled", SYSTEMD_UNIT_NAME]);
   result.enabled = enabledOut.trim() === "enabled";
 
-  const activeOut = tryExec(`systemctl --user is-active "${SYSTEMD_UNIT_NAME}" 2>/dev/null || echo "inactive"`);
+  const activeOut = exec("systemctl", ["--user", "is-active", SYSTEMD_UNIT_NAME]);
   result.active = activeOut.trim() === "active";
 
-  const pidOut = tryExec(`systemctl --user show -p MainPID "${SYSTEMD_UNIT_NAME}" 2>/dev/null || echo "MainPID=0"`);
+  const pidOut = exec("systemctl", ["--user", "show", "-p", "MainPID", SYSTEMD_UNIT_NAME]);
   const pidMatch = pidOut.match(/MainPID=(\d+)/);
 
   if (pidMatch) {

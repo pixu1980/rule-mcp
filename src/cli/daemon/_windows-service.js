@@ -1,10 +1,12 @@
 
 
 /** Windows service adapter: the sc.exe command, install, uninstall, check. */
-import { execSync } from "node:child_process";
-import { resolveEntrypoint, tryExec } from "./_service-shared.js";
+import { execFileSync } from "node:child_process";
+import { resolveEntrypoint, tryExecFile } from "./_service-shared.js";
 
-// No `2>nul` on the `sc` probes below: tryExec pipes stdio, so stderr is
+// Every command goes through an argv array, never a shell string: the paths
+// here are HOME- and install-derived, and a shell would execute a `$(...)` in
+// one. No `2>nul` on the probes either - tryExecFile pipes stdio, so stderr is
 // already discarded, and off Windows that cmd syntax creates a real file named
 // `nul` in the working directory instead of a null device.
 
@@ -15,20 +17,45 @@ import { resolveEntrypoint, tryExec } from "./_service-shared.js";
 /** The Windows service name. */
 export const WINDOWS_SERVICE_NAME = "rule-mcp";
 
-/** @returns {string} - Windows command line for the service binary */
-export function getWindowsServiceCommand() {
-  const ep = resolveEntrypoint();
+/** Quote one argv element for a Windows command line, where a space or quote needs it. */
+export function quoteWindowsArg(value) {
+  return /[\s"]/.test(value) ? `"${value.replaceAll('"', String.raw`\"`)}"` : value;
+}
 
-  return `"${ep.node}" "${ep.script}" serve --transport sse`;
+/**
+ * The `binPath` sc.exe receives: the argv array joined, each element quoted as
+ * needed. Built from the array so a path with a space or a quote cannot split
+ * the command line into arguments sc.exe reads as its own.
+ *
+ * @param {string[]} [command]
+ * @returns {string}
+ */
+export function windowsBinPath(command = resolveEntrypoint().command) {
+  return command.map(quoteWindowsArg).join(" ");
+}
+
+/** @returns {string} - Windows command line for the service binary */
+export function getWindowsServiceCommand(command) {
+  return windowsBinPath(command);
+}
+
+/** Whether the service is registered, judged by whether `sc query` printed anything. */
+function serviceExists(name, exec) {
+  return exec("sc", ["query", name]).trim() !== "";
+}
+
+/** Quote a value as a PowerShell single-quoted literal. */
+function psQuote(value) {
+  return value.replaceAll("'", "''");
 }
 
 /**
  * Install Windows service using sc.exe (with PowerShell fallback).
  *
- * @param {{ dryRun?: boolean }} [opts]
+ * @param {{ dryRun?: boolean, exec?: Function }} [opts]
  * @returns {{ ok: boolean, name: string, action: string, error?: string }}
  */
-export function installWindowsService({ dryRun = false } = {}) {
+export function installWindowsService({ dryRun = false, exec = tryExecFile } = {}) {
   const name = WINDOWS_SERVICE_NAME;
   const command = getWindowsServiceCommand();
 
@@ -36,58 +63,55 @@ export function installWindowsService({ dryRun = false } = {}) {
     return { ok: true, name, action: `dry-run (would create service: ${command})` };
   }
 
-  // Check if service already exists
-  const check = tryExec(`sc query "${name}" || echo NOT_FOUND`);
-  const isExists = !check.includes("NOT_FOUND") && !check.includes("FAILED") && !check.includes("1060");
-
-  if (isExists) {
-    // Service exists - update config and restart
-    tryExec(`sc config "${name}" binPath= "${command}" start= auto`);
-    tryExec(`sc stop "${name}" || true`);
-    tryExec(`sc start "${name}" || true`);
+  if (serviceExists(name, exec)) {
+    exec("sc", ["config", name, "binPath=", command, "start=", "auto"]);
+    exec("sc", ["stop", name]);
+    exec("sc", ["start", name]);
 
     return { ok: true, name, action: "updated-and-started" };
   }
 
-  // Create new service
   try {
-    execSync(`sc create "${name}" binPath= "${command}" start= auto displayName= "rule-mcp MCP Server"`, {
+    execFileSync("sc", ["create", name, "binPath=", command, "start=", "auto", "displayName=", "rule-mcp MCP Server"], {
       encoding: "utf8",
       timeout: 10_000,
       stdio: "pipe",
     });
-    tryExec(`sc description "${name}" "MCP server for the rule-* skill ecosystem. Serves styleguides, component templates, and framework best practices."`);
-    tryExec(`sc start "${name}"`);
+    exec("sc", ["description", name, "MCP server for the rule-* skill ecosystem. Serves styleguides, component templates, and framework best practices."]);
+    exec("sc", ["start", name]);
 
     return { ok: true, name, action: "created-and-started" };
   } catch {
-    // Fallback: try PowerShell New-Service
-    try {
-      execSync(
-        `powershell -Command "New-Service -Name '${name}' -BinaryPathName '${command}' -StartupType Automatic -Description 'MCP server for the rule-* skill ecosystem' ; Start-Service -Name '${name}'"`,
-        { encoding: "utf8", timeout: 30_000, stdio: "pipe", shell: true },
-      );
+    return installViaPowerShell(name, command);
+  }
+}
 
-      return { ok: true, name, action: "created-and-started (PowerShell)" };
-    } catch (error) {
-      return { ok: false, name, error: `Failed to create service: ${error.message}` };
-    }
+/** The PowerShell fallback: the script is one argv element, values single-quoted. */
+function installViaPowerShell(name, command) {
+  const script = [
+    `New-Service -Name '${psQuote(name)}' -BinaryPathName '${psQuote(command)}' -StartupType Automatic -Description 'MCP server for the rule-* skill ecosystem'`,
+    `Start-Service -Name '${psQuote(name)}'`,
+  ].join("; ");
+
+  try {
+    execFileSync("powershell", ["-NoProfile", "-NonInteractive", "-Command", script], { encoding: "utf8", timeout: 30_000, stdio: "pipe" });
+
+    return { ok: true, name, action: "created-and-started (PowerShell)" };
+  } catch (error) {
+    return { ok: false, name, error: `Failed to create service (exit ${error.status ?? "unknown"})` };
   }
 }
 
 /**
  * Stop and remove Windows service.
  *
- * @param {{ dryRun?: boolean }} [opts]
+ * @param {{ dryRun?: boolean, exec?: Function }} [opts]
  * @returns {{ ok: boolean, name: string, action: string }}
  */
-export function uninstallWindowsService({ dryRun = false } = {}) {
+export function uninstallWindowsService({ dryRun = false, exec = tryExecFile } = {}) {
   const name = WINDOWS_SERVICE_NAME;
 
-  // Check if service exists
-  const check = tryExec(`sc query "${name}" || echo NOT_FOUND`);
-
-  if (check.includes("NOT_FOUND") || check.includes("FAILED") || check.includes("1060")) {
+  if (!serviceExists(name, exec)) {
     return { ok: true, name, action: "not-installed" };
   }
 
@@ -95,8 +119,8 @@ export function uninstallWindowsService({ dryRun = false } = {}) {
     return { ok: true, name, action: "dry-run (would remove service)" };
   }
 
-  tryExec(`sc stop "${name}" || true`);
-  tryExec(`sc delete "${name}"`);
+  exec("sc", ["stop", name]);
+  exec("sc", ["delete", name]);
 
   return { ok: true, name, action: "stopped-and-deleted" };
 }
@@ -104,14 +128,15 @@ export function uninstallWindowsService({ dryRun = false } = {}) {
 /**
  * Check Windows service status.
  *
+ * @param {{ exec?: Function }} [opts]
  * @returns {{ installed: boolean, running: boolean, pid: number|null, name: string }}
  */
-export function checkWindowsService() {
+export function checkWindowsService({ exec = tryExecFile } = {}) {
   const name = WINDOWS_SERVICE_NAME;
   const result = { installed: false, running: false, pid: null, name };
 
-  const out = tryExec(`sc query "${name}"`);
-  result.installed = !out.includes("FAILED") && !out.includes("1060") && out.length > 0;
+  const out = exec("sc", ["query", name]);
+  result.installed = out.trim() !== "";
 
   if (result.installed) {
     result.running = out.includes("RUNNING") || (out.includes("STATE") && out.includes("4"));

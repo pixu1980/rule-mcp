@@ -5,6 +5,24 @@ import { mkdirSync } from "node:fs";
 import { getRuntimePaths } from "../paths/index.js";
 
 /**
+ * Quote one ExecStart argument for systemd, whose rules are not the shell's.
+ *
+ * systemd groups a quoted run and reads `\` as an escape, so a backslash or a
+ * double quote inside a path has to be escaped or the argument splits into two
+ * that systemd reads as its own directives.
+ *
+ * @param {string} value
+ * @returns {string}
+ */
+export function systemdQuote(value) {
+  if (!/[\s"\\]/.test(value)) {
+    return value;
+  }
+
+  return `"${value.replaceAll("\\", "\\\\").replaceAll('"', String.raw`\"`)}"`;
+}
+
+/**
  * Generate the systemd user service unit file.
  * @param {{ node: string, script: string, command: string[] }} ep
  * @returns {string} - systemd unit content
@@ -15,8 +33,8 @@ export function generateSystemdUnit(ep) {
 
   mkdirSync(p.stateDir, { recursive: true });
 
-  // Build a shell command string from the command array
-  const command = ep.command.map((a) => (a.includes(" ") ? `"${a}"` : a)).join(" ");
+  // Build the ExecStart line from the argv array, each element quoted by systemd's rules.
+  const command = ep.command.map(systemdQuote).join(" ");
 
   // Extract node bin dir for PATH
   const nodeBinDir = ep.node.replace(/\/node$/, "");

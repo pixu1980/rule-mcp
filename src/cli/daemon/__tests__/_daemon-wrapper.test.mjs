@@ -19,7 +19,7 @@ const script = generateWrapperScript({
 });
 
 assert.ok(script.includes("if [[ $# -gt 0 ]]; then"), "wrapper must branch when CLI args are provided");
-assert.ok(script.includes('exec /usr/local/bin/node /opt/rule-mcp/bin/rule-mcp.js "$@"'), "wrapper must forward CLI args");
+assert.ok(script.includes("exec '/usr/local/bin/node' '/opt/rule-mcp/bin/rule-mcp.js' \"$@\""), "wrapper must forward CLI args, each path single-quoted");
 assert.ok(script.includes("serve --transport sse"), "wrapper must still default to SSE daemon with no args");
 assert.ok(script.indexOf('"$@"') < script.indexOf("serve --transport sse"), "arg forwarding must happen before daemon fallback");
 

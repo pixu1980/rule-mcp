@@ -4,7 +4,7 @@
 import { homedir } from "node:os";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
-export { tryExec } from "../../shared/index.js";
+export { tryExec, tryExecFile } from "../../shared/index.js";
 
 /** The user home directory. */
 export const HOME = homedir();
@@ -30,6 +30,21 @@ export function resolveEntrypoint() {
 export const WRAPPER_SCRIPT_PATH = join(HOME, ".local", "bin", "rule-mcpd");
 
 /**
+ * Quote a value as a single-quoted shell word.
+ *
+ * A path is not shell syntax: the wrapper runs under `bash`, and a space,
+ * `$(...)` or a quote in the node path must arrive at `exec` as one argument.
+ * A single-quoted word stops every expansion; an embedded quote closes, escapes
+ * and reopens, which is the only way a single quote gets through.
+ *
+ * @param {string} value
+ * @returns {string}
+ */
+export function shQuote(value) {
+  return `'${value.replaceAll("'", String.raw`'\''`)}'`;
+}
+
+/**
  * Generate the wrapper shell script that the LaunchAgent runs.
  * Using a wrapper script instead of calling Node.js directly ensures that
  * macOS displays "rule-mcpd" in Login Items rather than "Node.js Foundation".
@@ -45,11 +60,11 @@ export function generateWrapperScript(ep) {
 set -euo pipefail
 
 if [[ $# -gt 0 ]]; then
-  exec ${escapePlist(ep.node)} ${escapePlist(ep.script)} "$@"
+  exec ${shQuote(ep.node)} ${shQuote(ep.script)} "$@"
 fi
 
 export RULE_MCP_DAEMON=1
-exec ${escapePlist(ep.node)} ${escapePlist(ep.script)} serve --transport sse
+exec ${shQuote(ep.node)} ${shQuote(ep.script)} serve --transport sse
 `;
 }
 

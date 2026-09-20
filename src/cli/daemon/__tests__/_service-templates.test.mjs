@@ -22,7 +22,7 @@ process.env.RULE_MCP_STATE_DIR = state;
 
 const { escapePlist, generateWrapperScript, resolveEntrypoint } = await import("../_service-shared.js");
 const { generateLaunchAgentPlist } = await import("../_launchd-plist.js");
-const { generateSystemdUnit } = await import("../_systemd-unit.js");
+const { generateSystemdUnit, systemdQuote } = await import("../_systemd-unit.js");
 const { LAUNCH_AGENT_PATH, installLaunchAgent, uninstallLaunchAgent, checkLaunchAgent } = await import("../_launchd.js");
 const { SYSTEMD_UNIT_PATH, installSystemdService, uninstallSystemdService, checkSystemdService } = await import("../_systemd.js");
 const { getWindowsServiceCommand, installWindowsService } = await import("../_windows-service.js");
@@ -86,6 +86,21 @@ test("a systemd unit quotes only the arguments that need it", () => {
 
   assert.match(unit, /ExecStart=\/usr\/bin\/node "\/opt\/my app\/cli\.js" serve/, "a path with a space is quoted, the rest is not");
   assert.match(unit, /Environment=PATH=.*:\/usr\/bin/, "the node bin dir is appended to PATH");
+});
+
+test("systemdQuote escapes an embedded quote and backslash, so the argument cannot split", () => {
+  assert.equal(systemdQuote("/usr/bin/node"), "/usr/bin/node", "an ordinary path is left alone");
+  assert.equal(systemdQuote('/opt/a"b/cli.js'), String.raw`"/opt/a\"b/cli.js"`, "an embedded quote is escaped");
+  assert.equal(systemdQuote(String.raw`C:\odd\node.exe`), String.raw`"C:\\odd\\node.exe"`, "an embedded backslash is escaped");
+});
+
+test("a failed service install reports the exit, never the command line", () => {
+  const result = installWindowsService({});
+
+  assert.equal(result.ok, false, "the install failed");
+  assert.match(result.error, /^Failed to create service \(exit /, result.error);
+  assert.equal(result.error.includes(resolveEntrypoint().node), false, "the node path is not echoed back");
+  assert.equal(result.error.includes("sc create"), false, "the command line is not echoed back");
 });
 
 test("a dry run reports what it would do without touching the machine", () => {

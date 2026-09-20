@@ -10,26 +10,26 @@ finding stays open. This file is deleted by the run that finds nothing open.
 
 ## Steps
 
-- [ ] **Step 1 - SEC-1 (high)**: tryExec hands every interpolated string to a shell: a value containing `$(...)` executes, measured with the template this surface uses. Reachable values are HOME-derived paths and the install-path-derived command line, so the prerequisite is control of HOME or of the install directory.
-  - [ ] **1.1**: Replace the interpolated command strings in the daemon service layer with an argv-array (execFile) helper so no shell parses a path
-  - [ ] **1.2**: Add a test per adapter asserting that a path containing `$(`, a double quote, `;` and a space is passed as one argument and executes nothing
-  - [ ] **1.3**: Re-run the daemon arm tests under the darwin, linux and win32-forced fixtures
-- [ ] **Step 2 - SEC-2 (medium)**: XML escaping is used as shell escaping: generateWrapperScript writes escapePlist(ep.node) into a bash script that launchd executes.
-  - [ ] **2.1**: Quote the wrapper's exec arguments for the shell, or generate the wrapper from the argv array
-  - [ ] **2.2**: Cover wrapper generation with a test asserting a path containing shell metacharacters is quoted
-- [ ] **Step 3 - SEC-3 (medium)**: The PowerShell fallback passes an interpolated string to a shell (the only `shell: true` site in src).
-  - [ ] **3.1**: Launch PowerShell with an argv array passing the script as one argument, or drop the shell and quote both values
-  - [ ] **3.2**: Add a test asserting the fallback builds its arguments without a shell
-- [ ] **Step 4 - SEC-4 (medium)**: A failing service command returns error.message, which carries the full command line and the tool's stderr, to the caller.
-  - [ ] **4.1**: Return a fixed reason plus an exit code instead of the raw message and keep the command line out of the tool result
-  - [ ] **4.2**: Cover the failure shape of each adapter with a test that asserts what the error string contains
+- [x] **Step 1 - SEC-1 (high)**: tryExec hands every interpolated string to a shell: a value containing `$(...)` executes, measured with the template this surface uses. Reachable values are HOME-derived paths and the install-path-derived command line, so the prerequisite is control of HOME or of the install directory.
+  - [x] **1.1**: Replace the interpolated command strings in the daemon service layer with an argv-array (execFile) helper so no shell parses a path
+  - [x] **1.2**: Add a test per adapter asserting that a path containing `$(`, a double quote, `;` and a space is passed as one argument and executes nothing
+  - [x] **1.3**: Re-run the daemon arm tests under the darwin, linux and win32-forced fixtures
+- [x] **Step 2 - SEC-2 (medium)**: XML escaping is used as shell escaping: generateWrapperScript writes escapePlist(ep.node) into a bash script that launchd executes.
+  - [x] **2.1**: Quote the wrapper's exec arguments for the shell, or generate the wrapper from the argv array
+  - [x] **2.2**: Cover wrapper generation with a test asserting a path containing shell metacharacters is quoted
+- [x] **Step 3 - SEC-3 (medium)**: The PowerShell fallback passes an interpolated string to a shell (the only `shell: true` site in src).
+  - [x] **3.1**: Launch PowerShell with an argv array passing the script as one argument, or drop the shell and quote both values
+  - [x] **3.2**: Add a test asserting the fallback builds its arguments without a shell
+- [x] **Step 4 - SEC-4 (medium)**: A failing service command returns error.message, which carries the full command line and the tool's stderr, to the caller.
+  - [x] **4.1**: Return a fixed reason plus an exit code instead of the raw message and keep the command line out of the tool result
+  - [x] **4.2**: Cover the failure shape of each adapter with a test that asserts what the error string contains
 - [ ] **Step 5 - SEC-5 (medium)**: shimWorks() verifies the shim by executing whatever the PATH resolves for rule-mcp.
   - [ ] **5.1**: Resolve the shim target and compare it with the checkout's own entry point before running it
   - [ ] **5.2**: Test that a shim resolving outside the checkout is reported as not ours
-- [ ] **Step 6 - SEC-8 (medium)**: Argument quoting in the generated command lines is broken in two measured ways, one on Windows and one in the systemd unit.
-  - [ ] **6.1**: Build the Windows binPath from the argv array instead of interpolating an already-quoted string
-  - [ ] **6.2**: Quote systemd ExecStart arguments with one escaper that also escapes an embedded quote, and test both cases
-  - [ ] **6.3**: Verify both generated lines on a real Windows and a real Linux host
+- [x] **Step 6 - SEC-8 (medium)**: Argument quoting in the generated command lines is broken in two measured ways, one on Windows and one in the systemd unit.
+  - [x] **6.1**: Build the Windows binPath from the argv array instead of interpolating an already-quoted string
+  - [x] **6.2**: Quote systemd ExecStart arguments with one escaper that also escapes an embedded quote, and test both cases
+  - [ ] **6.3**: Verify both generated lines on a real Windows and a real Linux host (not verifiable on this machine; the escaper is covered by unit tests instead)
 - [ ] **Step 7 - SEC-6 (low)**: tryExec collapses every failure into an empty string, including the output cap, so 'died' and 'printed nothing' are the same value to callers.
   - [ ] **7.1**: Return a discriminated result (ok, stdout, exit code, capped) or an explicit sentinel instead of ""
   - [ ] **7.2**: Update the callers that compare against "" to check the new result

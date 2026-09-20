@@ -4,7 +4,7 @@
 import { writeFileSync, mkdirSync, existsSync, rmSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { generateLaunchAgentPlist } from "./_launchd-plist.js";
-import { HOME, resolveEntrypoint, tryExec, WRAPPER_SCRIPT_PATH, generateWrapperScript } from "./_service-shared.js";
+import { HOME, resolveEntrypoint, tryExecFile, WRAPPER_SCRIPT_PATH, generateWrapperScript } from "./_service-shared.js";
 
 // ═══════════════════════════════════════════════════════════════════════════
 // macOS - LaunchAgent plist
@@ -24,10 +24,10 @@ export const LAUNCH_AGENT_PATH = join(LAUNCH_AGENT_DIR, `${LAUNCH_AGENT_LABEL}.p
  * After this, the daemon appears in System Settings → General → Login Items
  * as "rule-mcpd" (not "Node.js Foundation").
  *
- * @param {{ dryRun?: boolean }} [opts]
+ * @param {{ dryRun?: boolean, exec?: Function }} [opts]
  * @returns {{ ok: boolean, path: string, action: string, error?: string }}
  */
-export function installLaunchAgent({ dryRun = false } = {}) {
+export function installLaunchAgent({ dryRun = false, exec = tryExecFile } = {}) {
   const ep = resolveEntrypoint();
 
   if (dryRun) {
@@ -37,17 +37,17 @@ export function installLaunchAgent({ dryRun = false } = {}) {
   // Write wrapper script first (so the plist references something valid)
   mkdirSync(dirname(WRAPPER_SCRIPT_PATH), { recursive: true });
   writeFileSync(WRAPPER_SCRIPT_PATH, generateWrapperScript(ep), "utf8");
-  tryExec(`chmod +x "${WRAPPER_SCRIPT_PATH}"`);
+  exec("chmod", ["+x", WRAPPER_SCRIPT_PATH]);
 
   // Write plist
   mkdirSync(LAUNCH_AGENT_DIR, { recursive: true });
   writeFileSync(LAUNCH_AGENT_PATH, generateLaunchAgentPlist(ep), "utf8");
 
   // Unload first if already loaded (to overwrite)
-  tryExec(`launchctl unload -w "${LAUNCH_AGENT_PATH}" 2>/dev/null || launchctl remove ${LAUNCH_AGENT_LABEL} 2>/dev/null || true`);
+  unloadLaunchAgent(exec);
 
   // Load the new plist
-  const out = tryExec(`launchctl load -w "${LAUNCH_AGENT_PATH}"`);
+  const out = exec("launchctl", ["load", "-w", LAUNCH_AGENT_PATH]);
 
   if (out.includes("Error") || out.includes("error")) {
     return { ok: false, path: LAUNCH_AGENT_PATH, error: `launchctl load failed: ${out}` };
@@ -57,12 +57,22 @@ export function installLaunchAgent({ dryRun = false } = {}) {
 }
 
 /**
+ * Unload a loaded agent, trying both launchctl spellings.
+ *
+ * @param {Function} exec
+ */
+function unloadLaunchAgent(exec) {
+  exec("launchctl", ["unload", "-w", LAUNCH_AGENT_PATH]);
+  exec("launchctl", ["remove", LAUNCH_AGENT_LABEL]);
+}
+
+/**
  * Unload and remove the macOS LaunchAgent plist and wrapper script.
  *
- * @param {{ dryRun?: boolean }} [opts]
+ * @param {{ dryRun?: boolean, exec?: Function }} [opts]
  * @returns {{ ok: boolean, path: string, action: string }}
  */
-export function uninstallLaunchAgent({ dryRun = false } = {}) {
+export function uninstallLaunchAgent({ dryRun = false, exec = tryExecFile } = {}) {
   if (!existsSync(LAUNCH_AGENT_PATH)) {
     return { ok: true, path: LAUNCH_AGENT_PATH, action: "not-installed" };
   }
@@ -72,7 +82,7 @@ export function uninstallLaunchAgent({ dryRun = false } = {}) {
   }
 
   // Unload first
-  tryExec(`launchctl unload -w "${LAUNCH_AGENT_PATH}" 2>/dev/null || launchctl remove ${LAUNCH_AGENT_LABEL} 2>/dev/null || true`);
+  unloadLaunchAgent(exec);
 
   // Remove plist
   rmSync(LAUNCH_AGENT_PATH, { force: true });
@@ -88,13 +98,14 @@ export function uninstallLaunchAgent({ dryRun = false } = {}) {
 /**
  * Check macOS LaunchAgent status.
  *
+ * @param {{ exec?: Function }} [opts]
  * @returns {{ installed: boolean, loaded: boolean, pid: number|null, path: string }}
  */
-export function checkLaunchAgent() {
+export function checkLaunchAgent({ exec = tryExecFile } = {}) {
   const result = { installed: existsSync(LAUNCH_AGENT_PATH), loaded: false, pid: null, path: LAUNCH_AGENT_PATH };
 
   if (result.installed) {
-    const out = tryExec(`launchctl list ${LAUNCH_AGENT_LABEL} 2>/dev/null || true`);
+    const out = exec("launchctl", ["list", LAUNCH_AGENT_LABEL]);
 
     if (out.includes(LAUNCH_AGENT_LABEL)) {
       result.loaded = true;
