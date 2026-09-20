@@ -3,6 +3,7 @@
 /** Register the rule_tool_gateway orchestration tool. */
 import { GATEWAY_CORE_TOOL, gatewayCoreArguments, computeGatewayCore } from "./_core.js";
 import { renderGatewayReply } from "./_render.js";
+import { stripManifestFiles } from "../../core/guardrails/_manifest-strip.js";
 
 /**
  * Register the single-entry orchestrator: route → evidence → guardrails →
@@ -39,7 +40,16 @@ export async function registerGatewayTool() {
       const { code, files, path } = arguments_;
       // A file set yields a path-bound receipt; a bare `code` string cannot name
       // a destination, so it stays limited to the single-file write.
-      const fileSet = Array.isArray(files) && files.length > 0 ? files : null;
+      const rawFileSet = Array.isArray(files) && files.length > 0 ? files : null;
+      // The write path is also the repair: a manifest the model wrote with a
+      // field the rules forbid is cleaned before it is checked, so the receipt
+      // binds the content that gets written and the reply names what was
+      // removed. Only the path-bound flow can be cleaned - a bare `code` string
+      // does not say which file it is.
+      const strippedFiles = rawFileSet ? stripManifestFiles(rawFileSet) : { files: null, removed: [] };
+      const fileSet = strippedFiles.files;
+      const stripped = strippedFiles.removed;
+      const args = { ...arguments_, ...(fileSet && { files: fileSet }) };
       const lines = [];
 
       // ── Token-saving: nudge the agent toward the code graph when present ──
@@ -57,12 +67,12 @@ export async function registerGatewayTool() {
       // minted per call, bound to the content of THIS call and expiring from the
       // current clock, so a replay can never hand back a stale token.
       const { cacheLookup, cacheStore, skillDigest } = await import("../../core/cache/tool-cache/index.js");
-      const coreArgs = gatewayCoreArguments(arguments_);
+      const coreArgs = gatewayCoreArguments(args);
       const cached = cacheLookup(GATEWAY_CORE_TOOL, coreArgs);
       let core = cached?.result;
 
       if (!core) {
-        core = await computeGatewayCore(arguments_, fileSet);
+        core = await computeGatewayCore(args, fileSet);
 
         // The answer depends on the skill whose evidence produced it; the
         // guardrail corpus is deterministic. This is what lets one skill edit
@@ -81,7 +91,7 @@ export async function registerGatewayTool() {
         cacheStore(GATEWAY_CORE_TOOL, coreArgs, core, deps);
       }
 
-      const { response, receipt, checkResult } = renderGatewayReply(core, arguments_, fileSet, lines);
+      const { response, receipt, checkResult } = renderGatewayReply(core, args, fileSet, lines, stripped);
 
       return {
         content: [

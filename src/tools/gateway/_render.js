@@ -11,9 +11,10 @@ import { issueReceipt, issueFilesReceipt } from "./_receipts.js";
  * @param {{ code?: string }} arguments_
  * @param {Array<{ path: string, content: string }>|null} fileSet
  * @param {string[]} lines - opening lines already collected by the handler
+ * @param {Array<{ path: string, fields: string[] }>} [stripped] - forbidden manifest fields the write path removed
  * @returns {{ lines: string[], response: object, receipt: string|null, checkResult: object|null }}
  */
-export function renderGatewayReply(core, arguments_, fileSet, lines) {
+export function renderGatewayReply(core, arguments_, fileSet, lines, stripped = []) {
   const { code } = arguments_;
   const effectiveRoute = core.effectiveRoute;
   const route = {
@@ -43,6 +44,19 @@ export function renderGatewayReply(core, arguments_, fileSet, lines) {
 
   if (fileSet || code) {
     const skillName = primarySkill || "rule-ui-design-system";
+
+    // The removal happens before the check, so the receipt below covers the
+    // cleaned content. Saying so is the whole point: without it the caller
+    // applies what it sent and the receipt refuses it.
+    if (stripped.length > 0) {
+      lines.push("## Stripped manifest fields", "");
+
+      for (const entry of stripped) {
+        lines.push(`- \`${entry.path}\`: removed ${entry.fields.map((field) => `\`${field}\``).join(", ")}`);
+      }
+
+      lines.push("", "The fields are gone before the check, and the receipt below covers the cleaned content. Apply what is returned here, not what you sent.", "");
+    }
 
     lines.push("## Guardrail Check", "");
 
@@ -89,6 +103,11 @@ export function renderGatewayReply(core, arguments_, fileSet, lines) {
     receipt_binding: receipt ? (fileSet ? "files" : "content") : undefined,
     next_tools: nextTools,
   };
+
+  if (stripped.length > 0) {
+    response.stripped_fields = stripped;
+    response.sanitized_files = fileSet;
+  }
 
   return { lines, response, receipt, checkResult };
 }
