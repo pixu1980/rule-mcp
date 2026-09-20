@@ -44,6 +44,27 @@ test("a passing core with files renders evidence, truncation and a files receipt
   assert.equal(response.evidence_loaded, true, "evidence loaded flag is set");
 });
 
+test("a stripped manifest renders what it removed and the content to apply", () => {
+  const files = [{ path: "package.json", content: '{\n  "name": "app"\n}\n' }];
+  const { lines, response } = renderGatewayReply(fullCore(), {}, files, [], [{ path: "package.json", fields: ["packageManager", "engines"] }]);
+  const text = lines.join("\n");
+
+  assert.match(text, /## Stripped manifest fields/, "the section renders before the verdict");
+  assert.match(text, /`package\.json`: removed `packageManager`, `engines`/, "the fields are named");
+  assert.match(text, /Apply what is returned here/, "the caller is told to apply the cleaned content");
+  assert.ok(text.indexOf("## Stripped manifest fields") < text.indexOf("## Guardrail Check"), "it sits above the verdict it explains");
+  assert.deepEqual(response.stripped_fields, [{ path: "package.json", fields: ["packageManager", "engines"] }], "the JSON carries the removal");
+  assert.deepEqual(response.sanitized_files, files, "the JSON carries the content to apply");
+});
+
+test("a reply with nothing stripped says nothing about stripping", () => {
+  const { lines, response } = renderGatewayReply(fullCore(), { code: "const a = 1;" }, null, []);
+
+  assert.doesNotMatch(lines.join("\n"), /Stripped manifest fields/, "no section without a strip");
+  assert.equal("stripped_fields" in response, false, "and no JSON field either");
+  assert.equal("sanitized_files" in response, false);
+});
+
 test("a short evidence block is not truncated", () => {
   const { lines } = renderGatewayReply(fullCore({ evidence: "short" }), {}, null, []);
   assert.doesNotMatch(lines.join("\n"), /truncated/, "short evidence passes through");
