@@ -27,7 +27,7 @@ import { canRenderWizard } from "./_options.js";
  * The third state is load-bearing: "the user said no" and "the user said
  * nothing" choose differently once a mode default is in play.
  */
-const pick = (on, off) => (on ? true : off ? false : undefined);
+const pick = (on, off) => (on ? true : !off && undefined);
 
 /**
  * Every setup option this invocation asked for.

@@ -60,10 +60,12 @@ export function compressLine(line, level = compressionLevel()) {
     for (const opener of openers) {
       const stripped = work.replace(opener, "");
 
-      if (stripped !== work) {
-        work = stripped;
-        changing = true;
+      if (!(stripped !== work)) {
+        continue;
       }
+
+      work = stripped;
+      changing = true;
     }
   }
 

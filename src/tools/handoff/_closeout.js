@@ -42,25 +42,24 @@ function dateOf(text) {
 
 /** Read-only scan: every completed doc with its size, never touching disk. */
 export function findCompletedDocs(projectDir) {
-  const docs = (kind) => join(projectDir, "docs", kind);
   const list = (kind) => {
     try {
-      return readdirSync(docs(kind)).filter((file) => file.endsWith(".md"));
+      return readdirSync(join(projectDir, "docs", kind)).filter((file) => file.endsWith(".md"));
     } catch {
       return [];
     }
   };
   const read = (kind, file) => {
     try {
-      return readFileSync(join(docs(kind), file), "utf8");
+      return readFileSync(join(projectDir, "docs", kind, file), "utf8");
     } catch {
-      return null;
+      return "";
     }
   };
   const reviewState = new Map();
 
   for (const file of list("reviews")) {
-    const text = read("reviews", file) ?? "";
+    const text = read("reviews", file);
 
     reviewState.set(parse(file).name, { done: reviewDone(text), resolved: countMatches(text, /\|\s*resolved\s*\|/g) });
   }
@@ -70,20 +69,17 @@ export function findCompletedDocs(projectDir) {
   for (const kind of KINDS) {
     for (const file of list(kind)) {
       const text = read(kind, file);
+      const name = parse(file).name;
+      const review = reviewState.get(name);
+      const complete = kind === "plans" ? planDone(text) : Boolean(review?.done);
 
-      if (text === null) {
+      if (!complete) {
         continue;
       }
 
-      const name = parse(file).name;
-      const review = reviewState.get(name) ?? { done: false, resolved: 0 };
-      const complete = kind === "plans" ? planDone(text) : review.done;
+      const items = kind === "plans" ? countMatches(text, /^\s*-\s*\[[xX]\]/gm) : (review?.resolved ?? 0);
 
-      if (complete) {
-        const items = kind === "plans" ? countMatches(text, /^\s*-\s*\[[xX]\]/gm) : review.resolved;
-
-        done.push({ kind, name, path: `docs/${kind}/${file}`, title: titleOf(text, name), date: dateOf(text), items });
-      }
+      done.push({ kind, name, path: `docs/${kind}/${file}`, title: titleOf(text, name), date: dateOf(text), items });
     }
   }
 

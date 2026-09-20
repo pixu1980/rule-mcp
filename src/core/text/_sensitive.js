@@ -35,11 +35,7 @@ export function isSensitivePath(fileName) {
   const parts = fileName.split(/[/\\]/);
   const base = parts.at(-1) ?? "";
 
-  if (SENSITIVE_BASENAME_RE.test(base)) {
-    return true;
-  }
-
-  if (parts.some((part) => SENSITIVE_PATH_COMPONENTS.has(part.toLowerCase()))) {
+  if (SENSITIVE_BASENAME_RE.test(base) || parts.some((part) => SENSITIVE_PATH_COMPONENTS.has(part.toLowerCase()))) {
     return true;
   }
 

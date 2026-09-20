@@ -74,19 +74,22 @@ function agentCommandsCommand(opts = {}) {
 
   let written = 0;
   let skipped = 0;
-  let removed = 0;
 
   if (opts.remove) {
+    let removed = 0;
+
     for (const { filename } of files) {
       const file = resolve(dir, filename);
 
-      if (existsSync(file)) {
-        if (!opts.dryRun) {
-          rmSync(file, { force: true });
-        }
-
-        removed += 1;
+      if (!existsSync(file)) {
+        continue;
       }
+
+      if (!opts.dryRun) {
+        rmSync(file, { force: true });
+      }
+
+      removed += 1;
     }
 
     print(`agent-commands: removed ${removed} file(s) from ${dir}`);

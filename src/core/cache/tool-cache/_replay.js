@@ -33,11 +33,13 @@ export function cacheLookup(toolName, args) {
   const normalizedK = normalizedKey(toolName, args);
   const normalized = cacheGet(normalizedK);
 
-  if (normalized) {
-    backfillCall(normalizedK, toolName, args);
-
-    return { result: normalized, tier: "normalized" };
+  if (!normalized) {
+    return;
   }
+
+  backfillCall(normalizedK, toolName, args);
+
+  return { result: normalized, tier: "normalized" };
 }
 
 /**

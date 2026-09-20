@@ -83,11 +83,7 @@ export function compressSurfaceText(text, { level = compressionLevel(), source =
  * @returns {object} the same result when disabled, else a compressed copy
  */
 export function compressResult(result, { level = compressionLevel() } = {}) {
-  if (level === "off") {
-    return result;
-  }
-
-  if (!result || !Array.isArray(result.content)) {
+  if (level === "off" || !result || !Array.isArray(result.content)) {
     return result;
   }
 

@@ -36,10 +36,12 @@ export async function statsCommand(directory) {
   for (const event of events) {
     tiers[event.cacheTier ?? "miss"] = (tiers[event.cacheTier ?? "miss"] ?? 0) + 1;
 
-    if (!event.cacheHit && event.routedSkill) {
-      const area = areaOf(event.routedSkill);
-      recomputingByArea[area] = (recomputingByArea[area] ?? 0) + 1;
+    if (event.cacheHit || !event.routedSkill) {
+      continue;
     }
+
+    const area = areaOf(event.routedSkill);
+    recomputingByArea[area] = (recomputingByArea[area] ?? 0) + 1;
   }
 
   print(`\n## Which tier answered\n`);
@@ -50,12 +52,14 @@ export async function statsCommand(directory) {
 
   const areas = Object.entries(recomputingByArea).sort((a, b) => b[1] - a[1]);
 
-  if (areas.length > 0) {
-    print(`\n## Areas still recomputing\n`);
-    print(`Where the next canonical entry, or the next skill, would pay.\n`);
+  if (areas.length === 0) {
+    return;
+  }
 
-    for (const [area, count] of areas.slice(0, 10)) {
-      print(`  ${String(count).padStart(5)}  ${area}`);
-    }
+  print(`\n## Areas still recomputing\n`);
+  print(`Where the next canonical entry, or the next skill, would pay.\n`);
+
+  for (const [area, count] of areas.slice(0, 10)) {
+    print(`  ${String(count).padStart(5)}  ${area}`);
   }
 }

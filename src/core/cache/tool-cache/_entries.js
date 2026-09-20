@@ -51,11 +51,7 @@ export function cacheGet(key) {
  * @param {object} [deps] skill name -> digest at store time, from dependenciesOf()
  */
 export function cacheSet(key, result, deps = {}, call = {}) {
-  if (!key || !cacheEnabled()) {
-    return;
-  }
-
-  if (!result || result.isError) {
+  if (!key || !cacheEnabled() || !result || result.isError) {
     return;
   }
 

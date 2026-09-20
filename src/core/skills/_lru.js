@@ -47,12 +47,14 @@ class LruCache {
 
     this._map.set(key, value);
 
-    if (this._map.size > this._maxSize) {
-      const firstKey = this._map.keys().next().value;
+    if (this._map.size <= this._maxSize) {
+      return;
+    }
 
-      if (firstKey !== undefined) {
-        this._map.delete(firstKey);
-      }
+    const firstKey = this._map.keys().next().value;
+
+    if (firstKey !== undefined) {
+      this._map.delete(firstKey);
     }
   }
   /** Clear all entries. */

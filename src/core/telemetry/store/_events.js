@@ -12,11 +12,7 @@ import { ensureDirectory, eventsFile } from "./_paths.js";
  * @returns {boolean} whether they were written
  */
 export function appendEvents(events) {
-  if (!Array.isArray(events) || events.length === 0) {
-    return false;
-  }
-
-  if (!ensureDirectory()) {
+  if (!Array.isArray(events) || events.length === 0 || !ensureDirectory()) {
     return false;
   }
 

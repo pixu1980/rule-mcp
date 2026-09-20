@@ -53,36 +53,40 @@ export function fixBlockSpacing(filePath) {
     }
 
     // Check line below (blank after closing brace)
-    if (block.closeLine < lines.length - 1) {
-      const nextLine = lines[block.closeLine + 1];
-      const nextTrimmed = nextLine.trim();
-      const isNeedsBelow = type === "start" || type === "middle" || type === "start_end";
+    if (block.closeLine >= lines.length - 1) {
+      continue;
+    }
 
-      if (
-        isNeedsBelow &&
-        nextTrimmed !== "" &&
-        !nextTrimmed.startsWith("//") &&
-        !nextTrimmed.startsWith("/*") &&
-        !nextTrimmed.startsWith("*") &&
-        !nextTrimmed.startsWith(")") &&
-        !nextTrimmed.startsWith("]") &&
-        !nextTrimmed.startsWith(",") &&
-        !/^\s*(catch|else|finally|case|default)/.test(nextLine) &&
-        !nextTrimmed.endsWith("{") &&
-        !nextTrimmed.startsWith("(")
-      ) {
-        // Insert blank line after the block
-        lines.splice(block.closeLine + 1, 0, "");
+    const nextLine = lines[block.closeLine + 1];
+    const nextTrimmed = nextLine.trim();
+    const isNeedsBelow = type === "start" || type === "middle" || type === "start_end";
+    const needsBlankBelow =
+      isNeedsBelow &&
+      nextTrimmed !== "" &&
+      !nextTrimmed.startsWith("//") &&
+      !nextTrimmed.startsWith("/*") &&
+      !nextTrimmed.startsWith("*") &&
+      !nextTrimmed.startsWith(")") &&
+      !nextTrimmed.startsWith("]") &&
+      !nextTrimmed.startsWith(",") &&
+      !/^\s*(catch|else|finally|case|default)/.test(nextLine) &&
+      !nextTrimmed.endsWith("{") &&
+      !nextTrimmed.startsWith("(");
 
-        for (const other of blocks) {
-          if (!(other.openLine > block.closeLine)) {
-            continue;
-          }
+    if (!needsBlankBelow) {
+      continue;
+    }
 
-          other.openLine++;
-          other.closeLine++;
-        }
+    // Insert blank line after the block
+    lines.splice(block.closeLine + 1, 0, "");
+
+    for (const other of blocks) {
+      if (!(other.openLine > block.closeLine)) {
+        continue;
       }
+
+      other.openLine++;
+      other.closeLine++;
     }
   }
 
