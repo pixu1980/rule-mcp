@@ -28,6 +28,12 @@ async function serveCommand(opts = {}) {
   const { startServer } = await import("../../server/index.js");
 
   await loadAllSkills();
+  // Warm the durable tool-result cache on the same startup path as the catalog:
+  // left to the first call it reads and gunzips the file synchronously on the
+  // request path, once per process - which for a stdio server is once per client.
+  const { ensureLoaded } = await import("../../core/cache/tool-cache/index.js");
+
+  ensureLoaded();
   const transport = opts.transport ?? "stdio";
 
   if (transport === "sse" || transport === "http") {
