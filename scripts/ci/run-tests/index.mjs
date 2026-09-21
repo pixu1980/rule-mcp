@@ -10,9 +10,9 @@
  * with no runner edit.
  */
 import { spawnSync } from "node:child_process";
-import { globSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 
+import { expandSuite, resolveSuite } from "./_expand.mjs";
 import { SUITES } from "./_suites.data.mjs";
 
 // Server code resolves `@src/*` through a hook (ADR 089). Every process this
@@ -31,26 +31,13 @@ if (!suite) {
   process.exit(2);
 }
 
-/** Resolve a suite plus everything it includes, once each. */
-function resolve(id, seen = new Set()) {
-  if (seen.has(id)) {
-    return { steps: [], globs: [], shell: [] };
-  }
-  seen.add(id);
-  const entry = SUITES[id];
-  const merged = { steps: [...(entry.steps ?? [])], globs: [...(entry.globs ?? [])], shell: [...(entry.shell ?? [])] };
+const { steps, globs, shell } = resolveSuite(name);
+const { files, absent } = expandSuite(name);
 
-  for (const child of entry.include ?? []) {
-    const sub = resolve(child, seen);
-    merged.steps.push(...sub.steps);
-    merged.globs.push(...sub.globs);
-    merged.shell.push(...sub.shell);
-  }
-
-  return merged;
+if (absent.length > 0) {
+  console.error(`${name}: ${absent.join(", ")} is excluded by name but does not exist - a rename left the exclusion behind`);
+  process.exit(1);
 }
-
-const { steps, globs, shell } = resolve(name);
 
 /** Run one command inheriting stdio; a failure ends the suite immediately. */
 function run(command, args) {
@@ -66,8 +53,6 @@ for (const step of new Set(steps)) {
   console.log(`\n== ${step} ==`);
   run(process.execPath, [...ALIAS_HOOK, step]);
 }
-
-const files = [...new Set(globs.flatMap((pattern) => globSync(pattern)))].sort();
 
 if (globs.length > 0 && files.length === 0) {
   console.error(`${name}: the globs matched no test files - a rename broke the suite`);

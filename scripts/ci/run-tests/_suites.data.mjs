@@ -19,8 +19,18 @@ export const SUITES = {
   quick: {
     steps: ["tests/smoke.mjs", "src/core/skills/__tests__/_ai.test.mjs", "src/core/skills/__tests__/_detector.test.mjs", "src/core/skills/__tests__/_framework-routing.test.mjs"],
   },
+  skills: {
+    // The asset trees ship their own node:test files beside the code they cover,
+    // in tests/ rather than __tests__, so nothing rooted at src/ or tests/
+    // reaches them. Two files under skills/ belong to another runner and stay
+    // out: demo.test.js is a Playwright spec, and _parse-csv.test.js is a vitest
+    // example that runs in the user's project.
+    globs: ["skills/**/tests/*.test.js", "skills/**/scripts/*.test.mjs"],
+    exclude: ["skills/rule-frontend-vanilla-reactive/tests/demo.test.js", "skills/rule-frontend-workers/examples/src/tasks/_parse-csv.test.js"],
+  },
   foundations: {
     globs: ["tests/docs/**/*.test.mjs", "src/**/__tests__/*.test.mjs", "scripts/**/__tests__/*.test.mjs", "skills/**/__tests__/*.test.mjs"],
+    include: ["skills"],
   },
   installer: {
     globs: ["src/cli/**/__tests__/*.test.mjs"],
