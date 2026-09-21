@@ -4,6 +4,7 @@
 export * from "./_process.js";
 export * from "./_process-status.js";
 export * from "./_service.js";
+export * from "./_service-verbs.js";
 export * from "./_service-status.js";
 export * from "./_status-format.js";
 export * from "./_service-shared.js";
