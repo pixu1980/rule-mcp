@@ -14,7 +14,7 @@ import { existsSync, readFileSync } from "node:fs";
 import { homedir } from "node:os";
 import { join } from "node:path";
 
-import { tryExec } from "../../shared/index.js";
+import { tryExecResult } from "../../shared/index.js";
 import { getRepoRoot } from "../paths/index.js";
 import { shimPath, shimWorks } from "./_shim.js";
 
@@ -40,11 +40,11 @@ export function detectLocalRepo(root = process.cwd()) {
 
 /** pnpm when it is there, npm otherwise, "" when neither is. */
 export function detectPackageManager() {
-  if (tryExec("pnpm --version").trim()) {
+  if (tryExecResult("pnpm --version").ok) {
     return "pnpm";
   }
 
-  return tryExec("npm --version").trim() ? "npm" : "";
+  return tryExecResult("npm --version").ok ? "npm" : "";
 }
 
 /**
@@ -55,7 +55,8 @@ export function detectPackageManager() {
 export function preflight() {
   const nodeVersion = process.version;
   const packageManager = detectPackageManager();
-  const gitVersion = tryExec("git --version").trim();
+  const git = tryExecResult("git --version");
+  const gitVersion = git.stdout.trim();
   const isLocalRepo = detectLocalRepo();
   const localBin = join(isLocalRepo ? process.cwd() : getRepoRoot(), "bin", "rule-mcp.js");
   const hasLocalBin = existsSync(localBin);
@@ -78,7 +79,7 @@ export function preflight() {
     {
       id: "git",
       label: "git",
-      status: gitVersion ? "ok" : "warn",
+      status: git.ok ? "ok" : "warn",
       detail: gitVersion || "not found - the commit hook step will be skipped",
     },
     { id: "home", label: "Home directory", status: "ok", detail: homedir() },

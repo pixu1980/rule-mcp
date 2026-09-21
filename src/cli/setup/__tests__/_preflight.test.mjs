@@ -3,13 +3,34 @@
 /** detectLocalRepo on missing, foreign and broken manifests, plus a starved preflight. */
 import { strict as assert } from "node:assert";
 import { execFileSync } from "node:child_process";
-import { mkdtempSync, rmSync, writeFileSync } from "node:fs";
+import { chmodSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { test } from "node:test";
 import { fileURLToPath } from "node:url";
 
-import { detectLocalRepo } from "../_preflight.js";
+import { detectLocalRepo, detectPackageManager } from "../_preflight.js";
+
+/** Run fn with a PATH whose only entry is dir. */
+function withPath(dir, fn) {
+  const saved = process.env.PATH;
+
+  process.env.PATH = dir;
+
+  try {
+    return fn();
+  } finally {
+    process.env.PATH = saved;
+  }
+}
+
+/** A scratch dir holding an executable name whose body is given. */
+function scratchBin(dir, name, body) {
+  const path = join(dir, name);
+
+  writeFileSync(path, body);
+  chmodSync(path, 0o755);
+}
 
 test("detectLocalRepo reads the manifest name, and nothing else", () => {
   const bare = mkdtempSync(join(tmpdir(), "rule-preflight-bare-"));
@@ -61,5 +82,30 @@ test("a starved environment fails the binary and package manager checks and warn
   } finally {
     rmSync(empty, { recursive: true, force: true });
     rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test("a package manager that runs but prints nothing is still the package manager", () => {
+  const dir = mkdtempSync(join(tmpdir(), "rule-preflight-quiet-"));
+
+  try {
+    scratchBin(dir, "pnpm", "#!/bin/sh\nexit 0\n");
+
+    assert.equal(withPath(dir, detectPackageManager), "pnpm", "the exit status decides, not whether a version was printed");
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test("a probe that dies moves to the next package manager", () => {
+  const dir = mkdtempSync(join(tmpdir(), "rule-preflight-dead-"));
+
+  try {
+    scratchBin(dir, "pnpm", "#!/bin/sh\nexit 1\n");
+    scratchBin(dir, "npm", "#!/bin/sh\necho 10.9.0\n");
+
+    assert.equal(withPath(dir, detectPackageManager), "npm", "a failed probe is not an answer");
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
   }
 });

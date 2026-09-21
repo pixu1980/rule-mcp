@@ -13,7 +13,7 @@
 import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 
-import { tryExec } from "../../shared/index.js";
+import { tryExecResult } from "../../shared/index.js";
 import { getRuntimePaths } from "../paths/index.js";
 
 /** Where the daemon writes the token the container has to share. */
@@ -25,7 +25,7 @@ export const sseTokenPath = () => join(getRuntimePaths().stateDir, "sse-token");
  * @param {{ cwd?: string }} [options]
  */
 export function dockerBlockers({ cwd = process.cwd() } = {}) {
-  if (!tryExec("docker compose version").trim()) {
+  if (!tryExecResult("docker compose version").ok) {
     return "Docker Compose v2 is required for Docker mode";
   }
 
@@ -58,11 +58,18 @@ export function dockerComposeUp({ cwd = process.cwd(), dryRun = false } = {}) {
   }
 
   const token = readFileSync(sseTokenPath(), "utf8").replaceAll(/[\r\n]/g, "");
-  const output = tryExec("docker compose up -d", {
+  const result = tryExecResult("docker compose up -d", {
     cwd,
     env: { ...process.env, RULE_MCP_SSE_TOKEN: token },
     timeout: 120_000,
   });
 
-  return output === "" ? { status: "blocked", reason: "docker compose up -d failed" } : { status: "started" };
+  if (result.ok) {
+    return { status: "started" };
+  }
+
+  return {
+    status: "blocked",
+    reason: result.capped ? "docker compose up -d passed the output capture limit" : "docker compose up -d failed",
+  };
 }
