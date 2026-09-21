@@ -1,9 +1,22 @@
 
 
-/** Interrogative words, canonical stopwords and query canonicalization. */
+/**
+ * @module core/text/canonical-query
+ *
+ * The canonical form of a query, and the word lists it drops.
+ *
+ * This is text processing, so it lives with the rest of it. It sat in the BM25
+ * module, where the cache imported it through that module's barrel - and the
+ * barrel also carries the index builder, which needs the skill catalog, which
+ * imports the tool families, which import the router. One import of a text
+ * function therefore pulled the catalog and the updater into every cache
+ * lookup. The tokenizer it uses still lives in `core/bm25/`; moving that is the
+ * barrel-hygiene pass, not this one.
+ */
 
-import { MIN_TERM_LENGTH, splitWords, stem } from "./_terms.js";
-import { STOPWORDS } from "./_stopwords.data.js";
+import { MIN_TERM_LENGTH, splitWords, stem } from "../bm25/_terms.js";
+import { STOPWORDS } from "../bm25/_stopwords.data.js";
+
 const INTERROGATIVES = new Set([
   "how",
   "why",

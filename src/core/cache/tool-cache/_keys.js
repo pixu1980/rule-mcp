@@ -2,7 +2,7 @@
 
 /** Cache keys: stable stringify, the exact key and the normalized (L1) key. */
 import { createHash } from "node:crypto";
-import { canonicalizeQuery } from "../../bm25/index.js";
+import { canonicalizeQuery } from "../../text/_canonical-query.js";
 import { NON_CACHEABLE, NORMALIZABLE } from "./_state.js";
 import { namespace, normalizedTierEnabled } from "./_config.js";
 import { compressionLevel } from "../../text/_level.js";
