@@ -14,7 +14,19 @@ import { existsSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 
 import { areaOf, toolOf } from "./_format.mjs";
-import { ROOT, allRoles, commandNames, guardrailFamilies, listExistingAdrs, listPrompts, listResources, listTools, loadAllSkills, parsePersonaName } from "./_registries.mjs";
+import {
+  ROOT,
+  allRoles,
+  bootstrapCoreTools,
+  commandNames,
+  guardrailFamilies,
+  listExistingAdrs,
+  listPrompts,
+  listResources,
+  listTools,
+  loadAllSkills,
+  parsePersonaName,
+} from "./_registries.mjs";
 
 /**
  * Everything the census counts, read once.
@@ -23,6 +35,10 @@ import { ROOT, allRoles, commandNames, guardrailFamilies, listExistingAdrs, list
  */
 export async function gather() {
   await loadAllSkills(true);
+  // The core tools the invocation path owns are registered at startup, not by
+  // the catalog, so the surface a reader is told about is only complete after
+  // the same bootstrap the server runs.
+  await bootstrapCoreTools();
 
   const tools = await listTools();
   const resources = await listResources();

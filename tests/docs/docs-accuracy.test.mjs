@@ -17,6 +17,10 @@ const actual = {};
 {
   const { loadAllSkills } = await import("../../src/core/skills/index.js");
   await loadAllSkills(true);
+  // The surface this counts includes the core tools the invocation path owns,
+  // so the same bootstrap the server runs is what the count is measured after.
+  const { bootstrapCoreTools } = await import("../../src/tools/_bootstrap.js");
+  await bootstrapCoreTools();
   const { listTools } = await import("../../src/tools/router/index.js");
   const { listResources } = await import("../../src/resources/index.js");
   const { listPrompts } = await import("../../src/prompts/index.js");

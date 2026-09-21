@@ -69,6 +69,10 @@ check("T3.1 activation restored after opt-out cleared", tokensaveActive(withTs) 
 
 // ── T4: gateway injects the directive ──
 await loadAllSkills();
+// The gateway is registered at startup, not by the catalog.
+const { bootstrapCoreTools } = await import("../../../tools/_bootstrap.js");
+
+await bootstrapCoreTools();
 const gw = await callTool("rule_tool_gateway", { prompt: "make a react button", path: withTs });
 const gwText = gw.content.map((c) => c.text).join("\n");
 check("T4 gateway emits tokensave directive for graphed project", gwText.includes("TOKENSAVE ACTIVE"));

@@ -23,6 +23,7 @@ export const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..", "..", ".
 export const DOCS = process.env.RULE_MCP_CENSUS_DOCS_DIR || join(ROOT, "docs");
 
 export const { loadAllSkills, getSkillMetadata } = await import("../../../src/core/skills/index.js");
+export const { bootstrapCoreTools } = await import("../../../src/tools/_bootstrap.js");
 export const { listTools } = await import("../../../src/tools/router/index.js");
 export const { listResources } = await import("../../../src/resources/index.js");
 export const { listPrompts } = await import("../../../src/prompts/index.js");

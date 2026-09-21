@@ -63,6 +63,16 @@ export function buildProgram() {
     .showHelpAfterError()
     .exitOverride();
 
+  // The catalog registers the per-skill tools; the core tools the invocation
+  // path itself depends on - the gateway and the apply tool - are registered
+  // here, once per command. A hook rather than a top-level import, so --help
+  // and --version stay off that import graph.
+  program.hook("preAction", async () => {
+    const { bootstrapCoreTools } = await import("../tools/_bootstrap.js");
+
+    await bootstrapCoreTools();
+  });
+
   // Bare invocation = STDIO server. Agent mcp.json entries spawn the binary
   // with no arguments, so `rule-mcp` with an empty argv must serve.
   program.action(async () => (await import("./commands/_help.js")).serveCommand({ transport: "stdio" }));
