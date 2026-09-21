@@ -1,6 +1,7 @@
 
 
 /** The live MCP sessions of one server, capped and evictable. */
+import { createMemoryStore } from "../../shared/_ports.js";
 import { DEFAULT_IDLE_MS, DEFAULT_MAX_SESSIONS, DEFAULT_SWEEP_MS } from "./_constants.js";
 import { closeAllSessions, closeSession } from "./_close.js";
 import { reapIdle } from "./_reap.js";
@@ -10,26 +11,27 @@ import { startSweeper, stopSweeper } from "./_sweeper.js";
  * The live MCP sessions of one server, capped and evictable.
  *
  * A transport that keeps sessions in a bare Map grows without bound and has
- * nothing to close on shutdown; this owns both ends.
+ * nothing to close on shutdown; this owns both ends. Where they are held is the
+ * store's business: the registry keeps the policy, the store keeps the entries.
  */
 export class SessionRegistry {
   /**
-   * @param {{ maxSessions?: number, idleMs?: number, sweepMs?: number, label?: string }} [options]
+   * @param {{ maxSessions?: number, idleMs?: number, sweepMs?: number, label?: string, store?: import("../../shared/_ports.js").StorePort }} [options]
    */
   constructor(options = {}) {
     this.maxSessions = options.maxSessions ?? DEFAULT_MAX_SESSIONS;
     this.idleMs = options.idleMs ?? DEFAULT_IDLE_MS;
     this.sweepMs = options.sweepMs ?? DEFAULT_SWEEP_MS;
     this.label = options.label ?? "session";
-    /** @type {Map<string, { transport: object, server: object, isDead?: () => boolean, lastSeen: number }>} */
-    this._sessions = new Map();
+    /** @type {import("../../shared/_ports.js").StorePort} */
+    this._store = options.store ?? createMemoryStore();
     /** @type {NodeJS.Timeout|null} */
     this._sweeper = null;
   }
 
   /** @returns {number} */
   get size() {
-    return this._sessions.size;
+    return this._store.size();
   }
 
   /** @returns {boolean} Whether a sweep timer is running. */
@@ -39,7 +41,7 @@ export class SessionRegistry {
 
   /** @returns {boolean} Whether the session ceiling has been reached. */
   atCapacity() {
-    return this._sessions.size >= this.maxSessions;
+    return this._store.size() >= this.maxSessions;
   }
 
   /**
@@ -48,7 +50,7 @@ export class SessionRegistry {
    * @param {{ now?: number }} [options]
    */
   add(id, session, options = {}) {
-    this._sessions.set(id, { ...session, lastSeen: options.now ?? Date.now() });
+    this._store.set(id, { ...session, lastSeen: options.now ?? Date.now() });
   }
 
   /**
@@ -56,7 +58,7 @@ export class SessionRegistry {
    * @returns {{ transport: object, server: object }|undefined}
    */
   get(id) {
-    return this._sessions.get(id);
+    return this._store.get(id);
   }
 
   /**
@@ -66,7 +68,7 @@ export class SessionRegistry {
    * @param {number} [now]
    */
   touch(id, now = Date.now()) {
-    const session = this._sessions.get(id);
+    const session = this._store.get(id);
 
     if (session) {
       session.lastSeen = now;
@@ -81,7 +83,7 @@ export class SessionRegistry {
    * @returns {boolean} Whether the id was present
    */
   delete(id) {
-    return this._sessions.delete(id);
+    return this._store.delete(id);
   }
 
   /** @see module:_close */

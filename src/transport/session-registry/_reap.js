@@ -15,7 +15,7 @@ export async function reapIdle(registry, options = {}) {
   const idleMs = options.idleMs ?? registry.idleMs;
   const doomed = [];
 
-  for (const [id, session] of registry._sessions) {
+  for (const [id, session] of registry._store.entries()) {
     // A session that cannot answer whether it is alive is treated as dead:
     // the question is asked of a stream, and a stream that throws is gone.
     let dead;
