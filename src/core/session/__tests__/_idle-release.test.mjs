@@ -41,12 +41,13 @@ test("an idle server drops the search index and the skill cache", async () => {
   const { loadAllSkills, skillCache } = await import("../../skills/index.js");
   const { isIndexReady, buildIndex } = await import("../../bm25/index.js");
   const reclaim = await import("../_reclaim.js");
+  const activity = await import("../_activity.js");
 
   await loadAllSkills();
   buildIndex();
   assert.equal(isIndexReady(), true, "the index was not built");
 
-  reclaim.touchActivity(1000);
+  activity.touchActivity(1000);
   assert.equal(reclaim.reclaimIfIdle({ now: 1000 }), null, "a busy server must keep its index");
   assert.equal(isIndexReady(), true);
 
