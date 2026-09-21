@@ -2,7 +2,7 @@
 
 /** One self-update pass: gates, fetch, merge, the structured result. */
 import { git } from "./_git.js";
-import { reloadSkillsAfterMerge } from "./_reload.js";
+import { reloadSkills as reloadSkillCatalog } from "@src/core/skills/_reload-port.js";
 import { getRepoRoot, detectInstallType } from "../../cli/paths/index.js";
 import { autoUpdateEnabled, normalizeRemoteUrl, resolveAllowedRemotes, manualHint } from "./_config.js";
 
@@ -129,7 +129,7 @@ export async function runSelfUpdate(opts = {}) {
   const changedCode = changed.some((p) => /^(?:src|bin)\//.test(p) || p === "package.json");
 
   if (changedSkills && reloadSkills) {
-    await reloadSkillsAfterMerge();
+    await reloadSkillCatalog();
   }
 
   return {
