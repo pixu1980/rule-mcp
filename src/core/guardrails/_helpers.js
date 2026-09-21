@@ -19,7 +19,7 @@
 
 import { countedVerdict, isTypeScriptFile, passResult, tsSkipResult } from "../../shared/index.js";
 import { extractRealCSS, looksLikeStylesheet, looksLikeStyling, maskLiterals, unjustifiedGrids } from "./_util.js";
-import { INSTALLED_GROUPS, isPinned, manifestOf, stripLiterals } from "./quality/_guards-meta.js";
+import { INSTALLED_GROUPS, isPinned, manifestOf, stripLiterals } from "./quality/index.js";
 import { findRaggedBoxes } from "../text/ascii-box/index.js";
 import { scanCodeForForeign, scanDocumentForForeign, scanPathForForeign } from "../text/en-english/index.js";
 import { findFingerprints } from "../text/fingerprint/index.js";

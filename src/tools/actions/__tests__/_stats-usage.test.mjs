@@ -19,7 +19,7 @@ delete process.env.RULE_MCP_NO_TELEMETRY;
 
 const { registerStatsTool } = await import("../_stats.js");
 const { registerUsageTool } = await import("../_usage.js");
-const { callTool } = await import("../router/index.js");
+const { callTool } = await import("../../router/index.js");
 
 registerStatsTool();
 registerUsageTool();

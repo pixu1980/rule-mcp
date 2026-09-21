@@ -25,7 +25,7 @@ process.env.RULE_MCP_NO_AUTOUPDATE = "1";
 
 const { loadAllSkills } = await import("../index.js");
 const { callTool, listTools } = await import("../../../tools/router/index.js");
-const { TOOL_SURFACE_BUDGET_TOKENS } = await import("../../_tool-budget.js");
+const { TOOL_SURFACE_BUDGET_TOKENS } = await import("../../enforcement/index.js");
 
 await loadAllSkills(true);
 

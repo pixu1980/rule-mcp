@@ -17,7 +17,7 @@
  * `engines` key is not a manifest and is left alone.
  */
 
-import { MANIFEST_FILE } from "./quality/_guards-meta.js";
+import { MANIFEST_FILE } from "./quality/index.js";
 
 /** The fields a generated manifest must not carry, outermost first. */
 export const FORBIDDEN_MANIFEST_FIELDS = ["packageManager", "engines"];

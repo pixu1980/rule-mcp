@@ -11,10 +11,10 @@
 import { strict as assert } from "node:assert";
 import { test } from "node:test";
 
-import { isSensitivePath } from "../../core/text/_sensitive.js";
+import { isSensitivePath } from "../../../core/text/_sensitive.js";
 import { compress } from "../_compress.js";
 import { registerCompressTool } from "../_compress.js";
-import { callTool, clearTools } from "../router/index.js";
+import { callTool, clearTools } from "../../router/index.js";
 
 clearTools();
 registerCompressTool();

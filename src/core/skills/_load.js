@@ -17,13 +17,13 @@
  * Called once at startup, or on demand via `skills reload`.
  */
 
-import { registerProcessAdrTool } from "../../tools/adr/index.js";
 import { registerA11yReportTool } from "../../tools/a11y/index.js";
+import { registerActionTools } from "../../tools/actions/index.js";
+import { registerProcessAdrTool } from "../../tools/adr/index.js";
 import { registerAiTool } from "../../tools/ai/index.js";
 import { registerFixTool } from "../../tools/fix/index.js";
 import { registerProcessHandoffTool } from "../../tools/handoff/index.js";
 import { registerProcessHandonTool } from "../../tools/handon/index.js";
-import { registerCompressTool, registerPlanDocsTool, registerPlanTool, registerStatsTool, registerUpdateTool, registerUsageTool } from "../../tools/index.js";
 import { registerMetaTool } from "../../tools/meta/index.js";
 import { clearSkillResolution, clearTools } from "../../tools/router/index.js";
 import { registerCheckTool, registerScaffoldTool, registerSearchTool } from "../../tools/skill/index.js";
@@ -72,19 +72,14 @@ export async function registerCoreTools() {
   registerAiTool();
   // In code: minimal mode mints no skill tool, and this one is allowlisted (ADR 075).
   registerMetaTool();
-  registerUpdateTool();
   registerSearchTool();
   registerCheckTool();
   registerScaffoldTool();
   registerDetectTool();
-  registerCompressTool();
   // Action tools: the collection-helpers of the rule surface. All read-only
   // except the plan/plan-docs writers, which are operationally useful in every
   // mode.
-  registerPlanTool();
-  registerPlanDocsTool();
-  registerStatsTool();
-  registerUsageTool();
+  registerActionTools();
   registerA11yReportTool();
   registerProcessHandonTool();
 

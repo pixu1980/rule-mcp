@@ -108,7 +108,7 @@ test("the installed agent rules carry it", () => {
   // Source guards: the block the installer writes carries the rule, and the
   // one sentence it quotes is the shared directive, not a second copy.
   const installJs = readFileSync(join(root, "src", "cli", "installers", "_instruction.data.js"), "utf8");
-  const directive = readFileSync(join(root, "src", "core", "_directive.js"), "utf8");
+  const directive = readFileSync(join(root, "src", "core", "directive", "_directive.js"), "utf8");
   assert.match(installJs, /flex first/i, "the instruction block written into CLAUDE.md must carry the rule");
   assert.match(directive, /flex first/i, "the shared directive must carry the rule");
 });

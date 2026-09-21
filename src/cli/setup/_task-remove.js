@@ -11,7 +11,7 @@
  */
 
 import { uninstallDaemonService } from "../daemon/index.js";
-import { uninstallGitHooks } from "../../core/_git-hooks.js";
+import { uninstallGitHooks } from "../../core/git-hooks/index.js";
 import { runCliCommand } from "./_exec.js";
 import { legacyHookFiles } from "./_legacy-hooks.js";
 import { removeRules } from "./_rules-apply.js";

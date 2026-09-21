@@ -1,9 +1,8 @@
 
 
-/** src/tools: the tool surface - registration entries and shared tool helpers. */
-export * from "./_compress.js";
-export * from "./_plan-docs.js";
-export * from "./_plan.js";
-export * from "./_stats.js";
-export * from "./_update.js";
-export * from "./_usage.js";
+/**
+ * src/tools: the action-tool family is the public barrel. Gateway and apply
+ * stay off it: they belong to `bootstrapCoreTools()`, which the catalog must
+ * not reach.
+ */
+export * from "./actions/index.js";

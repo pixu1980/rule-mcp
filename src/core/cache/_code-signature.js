@@ -27,7 +27,7 @@ import { readdirSync, statSync } from "node:fs";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 
-import { pkg as package_ } from "../cli/paths/index.js";
+import { pkg as package_ } from "../../cli/paths/index.js";
 
 /** Memoized: the source tree does not change under a running process. */
 let _signature;

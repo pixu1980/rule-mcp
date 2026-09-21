@@ -11,7 +11,7 @@
       "file": "05-env-variables.md",
       "kind": "block",
       "marker": "env-registry",
-      "sha256": "32ab4a079bb07a8c490e0748e35dd9db05998d167ff4bfdb557706f6eca17968"
+      "sha256": "672f56d20c01779fef8c9f9cc7ba0213efaebb0dbf058c76837fc3c20118732b"
     },
     {
       "file": "07-engineering-guides.md",
@@ -27,7 +27,7 @@
     {
       "file": "09-tools.md",
       "kind": "document",
-      "sha256": "597fc895ebab0765c9d2e51c95ebd23108786f59984c9110a982c9912e204d92"
+      "sha256": "78fedd6c4fabe8b4417b9031c6b9182c531091be481c7777fcee785cc31905e5"
     },
     {
       "file": "10-prompts.md",

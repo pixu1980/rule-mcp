@@ -19,12 +19,12 @@ import { join } from "node:path";
 
 import { z } from "zod/v4";
 
-import { allRoles, roleById } from "../core/review/roles/index.js";
-import { loadRoleOverlays } from "../core/review/_overlays.js";
-import { fillRoleTemplate, OPERATIONS } from "../core/review/template/index.js";
-import { graphHealth } from "../core/tokensave/_graph.js";
-import { fenceUntrusted } from "../core/_untrusted.js";
-import { registerTool } from "./router/index.js";
+import { allRoles, roleById } from "../../core/review/roles/index.js";
+import { loadRoleOverlays } from "../../core/review/_overlays.js";
+import { fillRoleTemplate, OPERATIONS } from "../../core/review/template/index.js";
+import { graphHealth } from "../../core/tokensave/_graph.js";
+import { fenceUntrusted } from "../../core/enforcement/index.js";
+import { registerTool } from "../router/index.js";
 
 /**
  * Resolve a role by exact id first, then by any name it answers to (title,

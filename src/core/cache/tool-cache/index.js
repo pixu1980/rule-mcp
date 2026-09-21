@@ -9,4 +9,3 @@ export * from "./_entries.js";
 export * from "./_echo.js";
 export * from "./_replay.js";
 export * from "./_promote.js";
-export { codeSignature } from "../../index.js";

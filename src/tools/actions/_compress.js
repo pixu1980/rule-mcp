@@ -26,12 +26,12 @@
  */
 
 import { z } from "zod/v4";
-import { alignAsciiBoxes } from "../core/text/index.js";
-import { compressText } from "../core/text/_compression.js";
-import { isSensitivePath } from "../core/text/_sensitive.js";
-import { guardCompression } from "../core/text/compress-guard/index.js";
-import { stripFingerprint } from "../core/text/index.js";
-import { registerTool } from "./router/index.js";
+import { alignAsciiBoxes } from "../../core/text/index.js";
+import { compressText } from "../../core/text/_compression.js";
+import { isSensitivePath } from "../../core/text/_sensitive.js";
+import { guardCompression } from "../../core/text/compress-guard/index.js";
+import { stripFingerprint } from "../../core/text/index.js";
+import { registerTool } from "../router/index.js";
 
 /** Rough token estimate, good enough to report a saving. */
 const estimateTokens = (text) => Math.ceil(text.length / 4);

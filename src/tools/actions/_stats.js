@@ -21,11 +21,11 @@
 
 import { readFileSync } from "node:fs";
 import { z } from "zod/v4";
-import { aggregate, renderFlight, renderStats } from "../core/telemetry/stats/index.js";
-import { tokensaveGain } from "../core/tokensave/_ledger.js";
-import { readEvents, readRollups } from "../core/telemetry/store/index.js";
-import { telemetryEnabled } from "../core/telemetry/recorder/index.js";
-import { registerTool } from "./router/index.js";
+import { aggregate, renderFlight, renderStats } from "../../core/telemetry/stats/index.js";
+import { tokensaveGain } from "../../core/tokensave/_ledger.js";
+import { readEvents, readRollups } from "../../core/telemetry/store/index.js";
+import { telemetryEnabled } from "../../core/telemetry/recorder/index.js";
+import { registerTool } from "../router/index.js";
 
 const DAY_MS = 86_400_000;
 
@@ -66,7 +66,7 @@ export function registerStatsTool() {
       }
 
       const scope = arguments_.scope ?? "week";
-      const { sessionId } = await import("../core/telemetry/recorder/index.js");
+      const { sessionId } = await import("../../core/telemetry/recorder/index.js");
       let events = readEvents();
 
       if (scope === "session") {
