@@ -29,6 +29,7 @@
 import { clearIndex, isIndexReady } from "../bm25/index.js";
 import { skillCache } from "../skills/index.js";
 import { flush, memoryEntryCount, releaseMemory } from "../cache/tool-cache/index.js";
+import { idleFor, isReclaimed, markReclaimed } from "./_activity.js";
 
 /** Silence after which the rebuildable heaps are dropped. */
 export const IDLE_RECLAIM_MS = 600_000;
@@ -36,32 +37,8 @@ export const IDLE_RECLAIM_MS = 600_000;
 /** How often idleness is checked. */
 export const RECLAIM_CHECK_MS = 60_000;
 
-/** Last time a tool call passed through. */
-let _lastActivity = Date.now();
-
-/** True once an idle window has been reclaimed, until the next call arrives. */
-let _reclaimed = false;
-
 /** @type {NodeJS.Timeout|null} */
 let _timer = null;
-
-/**
- * Mark the server as in use. Called at the top of every tool call.
- *
- * @param {number} [now] - Injectable clock, for the tests
- */
-export function touchActivity(now = Date.now()) {
-  _lastActivity = now;
-  _reclaimed = false;
-}
-
-/**
- * @param {number} [now]
- * @returns {number} Milliseconds since the last tool call
- */
-export function idleFor(now = Date.now()) {
-  return now - _lastActivity;
-}
 
 /**
  * Drop the rebuildable heaps if the server has been idle long enough.
@@ -74,11 +51,11 @@ export function reclaimIfIdle(options = {}) {
   const now = options.now ?? Date.now();
   const idleMs = options.idleMs ?? IDLE_RECLAIM_MS;
 
-  if (_reclaimed || now - _lastActivity <= idleMs) {
+  if (isReclaimed() || idleFor(now) <= idleMs) {
     return null;
   }
 
-  _reclaimed = true;
+  markReclaimed();
 
   return reclaimNow();
 }

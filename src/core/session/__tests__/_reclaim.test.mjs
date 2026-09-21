@@ -19,7 +19,8 @@ test.after(() => {
 });
 
 const { maintain, purge, drain } = await import("../../../core/telemetry/store/index.js");
-const { reclaimIfIdle, reclaimNow, touchActivity, idleFor, startIdleReclaim, stopIdleReclaim } = await import("../_reclaim.js");
+const { reclaimIfIdle, reclaimNow, startIdleReclaim, stopIdleReclaim } = await import("../_reclaim.js");
+const { idleFor, touchActivity } = await import("../_activity.js");
 const { cacheStore } = await import("../../../core/cache/tool-cache/index.js");
 const { writeEvents } = await import("../../../core/telemetry/store/index.js");
 const { eventsFile } = await import("../../../core/telemetry/store/index.js");
