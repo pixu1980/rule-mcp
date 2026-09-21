@@ -3,36 +3,132 @@
 /**
  * @module core/skills/load
  *
- * Skill loading and registration orchestration.
- * Handles loading all rule skills from disk, registering them as MCP tools,
- * and providing skill content utility functions.
+ * The skill catalog loader: three named phases and the orchestrator that runs
+ * them.
  *
- * The tool-specific registration logic lives in tools/skill/.
+ * The loader is the one module that knows every tool family, so it is the
+ * module most likely to grow a new one. Naming the phases keeps that growth
+ * testable: what a reload clears, what the catalog owns itself, and what is
+ * minted per skill are three separate answers.
  *
- * Called once at startup, or on demand via `skills reload` CLI command.
+ * Every import here is static. An `await import()` hides an edge from the
+ * coupling graph, which is the measurement the phase split exists to protect.
+ *
+ * Called once at startup, or on demand via `skills reload`.
  */
 
-import { clearTools, retainTools, clearSkillResolution } from "../../tools/router/index.js";
-import { registerSearchTool, registerCheckTool, registerScaffoldTool } from "../../tools/skill/index.js";
-import { registerAiTool } from "../../tools/ai/index.js";
-import { registerMetaTool } from "../../tools/meta/index.js";
 import { registerProcessAdrTool } from "../../tools/adr/index.js";
+import { registerA11yReportTool } from "../../tools/a11y/index.js";
+import { registerAiTool } from "../../tools/ai/index.js";
 import { registerFixTool } from "../../tools/fix/index.js";
 import { registerProcessHandoffTool } from "../../tools/handoff/index.js";
+import { registerProcessHandonTool } from "../../tools/handon/index.js";
+import { registerCompressTool, registerPlanDocsTool, registerPlanTool, registerStatsTool, registerUpdateTool, registerUsageTool } from "../../tools/index.js";
+import { registerMetaTool } from "../../tools/meta/index.js";
+import { clearSkillResolution, clearTools, retainTools } from "../../tools/router/index.js";
+import { registerCheckTool, registerScaffoldTool, registerSearchTool } from "../../tools/skill/index.js";
+import { buildIndex, clearIndex } from "../bm25/index.js";
+import { cacheClear, clearSkillDigests } from "../cache/tool-cache/index.js";
+import { registerTemplateTool } from "../scaffold/templates/index.js";
 import { registerDetectTool } from "./_detect-tool.js";
-import { IS_MINIMAL_TOOLS, MINIMAL_ALLOWLIST } from "./_minimal.js";
-import { retainSurface } from "./_surface-retain.js";
-import { skillCache } from "./_lru.js";
 import { installSkillGuardrails } from "./_guardrail-layers.js";
-import { registerSkillTools } from "./_skill-tools.js";
+import { skillCache } from "./_lru.js";
+import { IS_MINIMAL_TOOLS, MINIMAL_ALLOWLIST } from "./_minimal.js";
+import { registerSkillTools as registerPerSkillTools } from "./_skill-tools.js";
+import { retainSurface } from "./_surface-retain.js";
 
 let isLoaded = false;
 
 /**
- * Load all rule skills and register their corresponding MCP tools.
+ * Clear what a reload starts from: the skill cache, the tool registry, the
+ * resolved-skill memo, the deterministic result cache and the search index.
+ *
+ * The result cache goes because its entries were computed from the skill text
+ * that is about to change: replaying one would answer from a catalog that no
+ * longer exists.
+ */
+export function resetForReload() {
+  isLoaded = false;
+  skillCache.clear();
+  clearTools();
+  clearSkillResolution();
+  cacheClear();
+  clearSkillDigests();
+  clearIndex();
+}
+
+/**
+ * Register the families the catalog owns: everything that is not minted per
+ * skill, plus the index and the templates the skill tools read.
+ *
+ * The gateway and the apply tool are deliberately absent. They belong to the
+ * invocation path the catalog is loaded by, and `bootstrapCoreTools()` is what
+ * registers them from a startup entry point.
+ *
+ * @returns {Promise<void>}
+ */
+export async function registerCoreTools() {
+  await installSkillGuardrails();
+  registerAiTool();
+  // In code: minimal mode mints no skill tool, and this one is allowlisted (ADR 075).
+  registerMetaTool();
+  registerUpdateTool();
+  registerSearchTool();
+  registerCheckTool();
+  registerScaffoldTool();
+  registerDetectTool();
+  registerCompressTool();
+  // Action tools: the collection-helpers of the rule surface. All read-only
+  // except the plan/plan-docs writers, which are operationally useful in every
+  // mode.
+  registerPlanTool();
+  registerPlanDocsTool();
+  registerStatsTool();
+  registerUsageTool();
+  registerA11yReportTool();
+  registerProcessHandonTool();
+
+  // Mutation tools: hidden in minimal mode
+  if (!IS_MINIMAL_TOOLS) {
+    registerProcessAdrTool();
+    registerFixTool();
+  }
+
+  registerProcessHandoffTool();
+  // The index is built from the skill files on disk, not from the tools
+  // registered above, so it does not wait for the per-skill pass.
+  buildIndex();
+  registerTemplateTool();
+}
+
+/**
+ * Register one tool per skill that asks for one, in the skill catalog's order.
+ */
+export function registerSkillTools() {
+  registerPerSkillTools();
+}
+
+/**
+ * Enforce the surface the process was started with, after everything is
+ * registered: the minimal allowlist in minimal mode, the installer's answer
+ * otherwise, and the full surface when it gave none.
+ */
+function applySurface() {
+  if (IS_MINIMAL_TOOLS) {
+    retainTools(MINIMAL_ALLOWLIST);
+  } else {
+    retainSurface();
+  }
+}
+
+/**
+ * Load the whole catalog: reset when forced, the core families, then the
+ * per-skill tools, then the surface policy.
+ *
  * Idempotent - subsequent calls are no-ops unless `force` is true.
  *
  * @param {boolean} [force=false] - Force re-load even if already loaded
+ * @returns {Promise<void>}
  */
 export async function loadAllSkills(force = false) {
   if (isLoaded && !force) {
@@ -40,109 +136,11 @@ export async function loadAllSkills(force = false) {
   }
 
   if (force) {
-    skillCache.clear();
-    clearTools();
-    clearSkillResolution();
-    // Skill content changed - invalidate the deterministic result cache so we
-    // never replay outputs computed from stale skills.
-    const { cacheClear, clearSkillDigests } = await import("../cache/tool-cache/index.js");
-    cacheClear();
-    clearSkillDigests();
+    resetForReload();
   }
 
   isLoaded = true;
-  await installSkillGuardrails();
-  registerAiTool();
-  // In code: minimal mode mints no skill tool, and this one is allowlisted (ADR 075).
-  registerMetaTool();
-
-  const tools = await import("../../tools/index.js");
-  tools.registerUpdateTool();
-
+  await registerCoreTools();
   registerSkillTools();
-
-  registerSearchTool();
-  registerCheckTool();
-  registerScaffoldTool();
-  registerDetectTool();
-  tools.registerCompressTool();
-  // Action tools: the collection-helpers of the rule surface. All read-only
-  // except the plan/plan-docs writers, which are operationally useful in every
-  // mode.
-  tools.registerPlanTool();
-  tools.registerPlanDocsTool();
-  tools.registerStatsTool();
-  tools.registerUsageTool();
-  const { registerA11yReportTool } = await import("../../tools/a11y/index.js");
-  registerA11yReportTool();
-  const { registerProcessHandonTool } = await import("../../tools/handon/index.js");
-  registerProcessHandonTool();
-  // Mutation tools: hidden in minimal mode
-  if (!IS_MINIMAL_TOOLS) {
-    registerProcessAdrTool();
-    registerFixTool();
-  }
-
-  registerProcessHandoffTool(); // Build BM25 search index (async, non-blocking)
-  const { buildIndex, clearIndex } = await import("../bm25/index.js");
-
-  if (force) {
-    clearIndex();
-  }
-
-  buildIndex();
-  const { registerTemplateTool } = await import("../scaffold/templates/index.js");
-
-  registerTemplateTool();
-
-  // Enforce the minimal surface as a hard allowlist - guarantees a small, fixed
-  // tool list regardless of what the register* calls above added. Otherwise
-  // enforce the installer's surface answer, if it gave one; absent is full.
-  if (IS_MINIMAL_TOOLS) {
-    retainTools(MINIMAL_ALLOWLIST);
-  } else {
-    retainSurface();
-  }
+  applySurface();
 }
-/**
- * Parse YAML frontmatter from a skill SKILL.md file.
- * Extracts name, description, tags, and frameworks metadata
- * from the YAML frontmatter block (between --- markers).
- *
- * Supports:
- * - Inline scalars: `description: text`
- * - Literal block scalars: `description: |\n  line1\n  line2`
- * - Folded block scalars: `description: >\n  line1\n  line2`
- *
- * @param {string} content - Full SKILL.md content
- * @returns {{ name?: string, description?: string, tags?: string[], frameworks?: string[] }}
- */
-export { parseSkillFrontmatter } from "./_frontmatter.js";
-/**
- * Get skill metadata (parsed from YAML frontmatter).
- * Results are cached in the LRU cache.
- *
- * @param {string} skillName - e.g. "rule-frontend-react"
- * @returns {{ name?: string, description?: string, tags?: string[], frameworks?: string[] }}
- */
-export { getSkillMetadata } from "../../tools/router/index.js";
-/**
- * Extract the "Project Scaffolding" section from a SKILL.md file.
- * Looks for the section between the scaffold heading and the next section.
- *
- * @param {string} content - Full SKILL.md content
- * @returns {string} - The extracted scaffolding section text
- */
-export { extractScaffoldSection } from "../scaffold/_parser.js";
-/**
- * Extract a single scaffold file's content from the scaffolding section.
- * Matches by file name in a markdown heading (e.g. ### `.prettierrc`).
- *
- * @param {string} section - The extracted scaffolding section text
- * @param {string} fileName - The config file name (e.g. ".prettierrc")
- * @returns {{ isError?: boolean, content: Array<{ type: string, text: string }> }}
- */
-export { extractSingleScaffoldFile } from "../scaffold/_parser.js";
-/**
- * Register the pix_detect tool for project framework detection.
- */

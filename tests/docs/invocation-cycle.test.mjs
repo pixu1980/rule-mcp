@@ -133,3 +133,16 @@ test("the invocation pipeline never reaches self-update", () => {
 test("the skill catalog never reaches the gateway or the apply tool", () => {
   assert.deepEqual(offenders(["src/core/skills/_load.js"], ["src/tools/gateway/", "src/tools/apply/"]), [], "the bootstrap registers those, not loadAllSkills");
 });
+
+test("the search index never reaches the loader", () => {
+  // _load.js builds the index and the index reads the skill bodies, so the two
+  // modules touch each other. Drawing the index's edge to the skills *barrel*
+  // is what turns that into a cycle: the barrel re-exports the loader.
+  assert.deepEqual(offenders(under("src/core/bm25/"), ["src/core/skills/_load.js"]), [], "the index takes the skill cache from its own module, not from the catalog's barrel");
+});
+
+test("the loader imports the whole catalog statically", () => {
+  const loader = readFileSync(join(root, "src/core/skills/_load.js"), "utf8");
+
+  assert.doesNotMatch(loader, /await import\(\s*["']/, "no edge may hide behind a dynamic import in the loader");
+});
