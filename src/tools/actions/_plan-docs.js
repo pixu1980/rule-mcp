@@ -16,10 +16,10 @@
 
 import { z } from "zod/v4";
 
-import { allRoles, roleById } from "../core/review/roles/index.js";
-import { loadRoleOverlays } from "../core/review/_overlays.js";
-import { syncRoleDocs } from "../core/review/docs/index.js";
-import { registerTool } from "./router/index.js";
+import { allRoles, roleById } from "../../core/review/roles/index.js";
+import { loadRoleOverlays } from "../../core/review/_overlays.js";
+import { syncRoleDocs } from "../../core/review/docs/index.js";
+import { registerTool } from "../router/index.js";
 
 const FindingSchema = z.object({
   id: z.string().describe("Finding id"),

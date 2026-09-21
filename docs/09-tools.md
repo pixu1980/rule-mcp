@@ -16,7 +16,6 @@ same result behind any client.
 | Tool                                               | What it does                                                                                                                                          |
 | -------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
 | [`pix_tool`](#pixtool)                             | Route prompt to correct pix skill.                                                                                                                    |
-| [`pix_tool_update`](#pixtoolupdate)                | Force-update this local MCP server from its upstream git repo (fast-forward only), hot-reload skills, and restart if server code changed.             |
 | [`pix_tool_search`](#pixtoolsearch)                | Semantic search across ALL pix skills using BM25 ranking.                                                                                             |
 | [`pix_tool_check`](#pixtoolcheck)                  | Run guardrail checks on code against any pix skill.                                                                                                   |
 | [`pix_tool_scaffold`](#pixtoolscaffold)            | Generate project scaffolding files.                                                                                                                   |
@@ -28,6 +27,7 @@ same result behind any client.
 | [`pix_tool_plan_docs`](#pixtoolplandocs)           | Create or refresh audit/review/plan documents for review persona run: bookkeeping half.                                                               |
 | [`pix_tool_stats`](#pixtoolstats)                  | Read the local telemetry log and summarize it: call counts, cache hit rate, saved/estimated tokens, latency.                                          |
 | [`pix_tool_usage`](#pixtoolusage)                  | Declare an agent usage sidecar for this project when no transcript can be read: input/output tokens, cost.                                            |
+| [`pix_tool_update`](#pixtoolupdate)                | Force-update this local MCP server from its upstream git repo (fast-forward only), hot-reload skills, and restart if server code changed.             |
 | [`pix_tool_a11y_report`](#pixtoola11yreport)       | Build WCAG-EM accessibility report from criteria and audit results; returns findings and verdict.                                                     |
 | [`pix_tool_process_handon`](#pixtoolprocesshandon) | Read last handoff in docs/handoff/ and report which of its claims are still true: branch, commit range, files, ADRs, open work.                       |
 | [`pix_tool_fix`](#pixtoolfix)                      | Validate and auto-fix project file tree structure against pix AI conventions (barrel files, _PascalCase naming, etc.).                                |
@@ -46,12 +46,6 @@ Route prompt to correct pix skill. Returns structured routing with relevant sect
 | `prompt`    | string | yes      | -       | User's question about frontend development                                  |
 | `framework` | string | no       | -       | Optional framework hint (react, vue, svelte, angular, etc.) to bias routing |
 | `path`      | string | no       | -       | Optional project path for auto-detecting framework                          |
-
-### pix_tool_update
-
-Force-update this local MCP server from its upstream git repo (fast-forward only), hot-reload skills, and restart if server code changed. Also runs automatically (throttled, in background) on tool calls; call directly to update on demand.
-
-Takes no parameters.
 
 ### pix_tool_search
 
@@ -183,6 +177,12 @@ Declare an agent usage sidecar for this project when no transcript can be read: 
 | `contextWindow` | integer | no       | -       |             |
 | `costUsd`       | number  | no       | -       |             |
 | `agent`         | string  | no       | -       |             |
+
+### pix_tool_update
+
+Force-update this local MCP server from its upstream git repo (fast-forward only), hot-reload skills, and restart if server code changed. Also runs automatically (throttled, in background) on tool calls; call directly to update on demand.
+
+Takes no parameters.
 
 ### pix_tool_a11y_report
 

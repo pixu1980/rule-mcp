@@ -16,7 +16,7 @@
 import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 
-import { GIT_HOOK_MARKER, HOOKED_GIT_EVENTS, gitHooksDir } from "../../core/_git-hooks.js";
+import { GIT_HOOK_MARKER, HOOKED_GIT_EVENTS, gitHooksDir } from "../../core/git-hooks/index.js";
 
 /**
  * The hook files that still carry the marked block.

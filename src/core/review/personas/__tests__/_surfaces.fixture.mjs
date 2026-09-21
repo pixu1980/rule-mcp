@@ -19,6 +19,6 @@ export { getPrompt, listPrompts } from "../../../../prompts/index.js";
 export { listAgentCommands } from "../../../agents/commands/index.js";
 export { callTool, listTools } from "../../../../tools/router/index.js";
 
-const { registerPlanTool } = await import("../../../../tools/_plan.js");
+const { registerPlanTool } = await import("../../../../tools/actions/_plan.js");
 
 registerPlanTool();

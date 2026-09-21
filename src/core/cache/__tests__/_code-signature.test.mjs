@@ -13,7 +13,8 @@ test("the cache key moves when the server's code changes", async () => {
   // what a tool returns was invisible: this project installs by git pull, where
   // the version rarely moves per commit. The routing suite read back cores
   // computed before the code under test existed and reported green.
-  const { cacheKey, codeSignature } = await import("../tool-cache/index.js");
+  const { cacheKey } = await import("../tool-cache/index.js");
+  const { codeSignature } = await import("../_code-signature.js");
   const before = cacheKey("pix_tool", { prompt: "same question" });
   const signature = codeSignature();
 
@@ -26,7 +27,7 @@ test("the cache key moves when the server's code changes", async () => {
   utimesSync(source, later, later);
 
   // The memo lives in code-signature.js, so that is the module to re-import.
-  const { codeSignature: fresh } = await import(`../../../core/_code-signature.js?edited=${Date.now()}`);
+  const { codeSignature: fresh } = await import(`../_code-signature.js?edited=${Date.now()}`);
   assert.notEqual(fresh(), signature, "an edited source file changes the signature");
   assert.ok(before.length > 0, "and the key is built from it");
 });
