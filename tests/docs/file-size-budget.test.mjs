@@ -13,7 +13,9 @@
  *   - names like js-1.js, parts-2.js or vanilla-1.js - the auto-split
  *     artifacts this rework removed - fail outright;
  *   - pure data is exempt when named for it: *.data.js/mjs, *.corpus.mjs,
- *     *.fixture.mjs, or anything under tests/fixtures/.
+ *     *.fixture.mjs, or anything under tests/fixtures/;
+ *   - the tests a skill tree ships beside its code are exempt (ADR 112): a test
+ *     table is data about behavior, not a module that grew.
  */
 
 import { strict as assert } from "node:assert";
@@ -24,10 +26,19 @@ import test from "node:test";
 import { FILE_SIZE_RATCHET } from "./file-size-ratchet.data.mjs";
 
 const CAP = 150;
-const ROOTS = ["src", "scripts", "tests"];
+const ROOTS = ["src", "scripts", "tests", "skills"];
 const SOURCE_FILE = /\.m?js$/;
 const DATA_FILE = /\.(?:data\.m?js|corpus\.mjs|fixture\.mjs)$/;
 const JUNK_NAME = /^(?:js|ts|css|misc|temp|utils?|helpers?|vanilla|parts?|chunk|section|split)-\d+\.m?js$/;
+
+/**
+ * The tests a skill tree ships beside its code: data about behavior, exempt per
+ * ADR 112. Scoped to skills/ so the roots already covered lose no file.
+ *
+ * @param {string} file
+ * @returns {boolean}
+ */
+const SHIPPED_TEST = (file) => file.startsWith("skills/") && /\.test\.m?js$/.test(file);
 
 /** Every checkable source file under the roots, repo-relative with / separators. */
 function collectSourceFiles() {
@@ -40,7 +51,7 @@ function collectSourceFiles() {
         if (full !== "tests/fixtures") {
           walk(full);
         }
-      } else if (SOURCE_FILE.test(entry) && !DATA_FILE.test(entry)) {
+      } else if (SOURCE_FILE.test(entry) && !DATA_FILE.test(entry) && !SHIPPED_TEST(full)) {
         files.push(full);
       }
     }
