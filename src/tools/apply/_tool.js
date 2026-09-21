@@ -34,6 +34,7 @@ export async function registerApplyTool() {
 
   registerTool({
     name: "rule_tool_apply",
+    entry: "action",
     description:
       "Write files to disk after rule_tool_gateway validation. Requires a valid receipt from rule_tool_gateway " +
       "proving that the code passed all guardrails. The receipt is tied to the exact code hash - " +

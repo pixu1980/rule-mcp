@@ -40,6 +40,7 @@ const PlanDocsSchema = z.object({
 export function registerPlanDocsTool() {
   registerTool({
     name: "rule_tool_plan_docs",
+    entry: "action",
     description: "Create or refresh the audit/review/plan documents for a review persona run: the bookkeeping half.",
     zodSchema: PlanDocsSchema,
     advertise: ["role", "findings"],

@@ -11,9 +11,9 @@ import { declaredTools, listTools } from "../_surface.js";
 test.beforeEach(() => clearTools());
 
 test("annotations mark reads idempotent and non-idempotent, nothing for mutators", () => {
-  registerTool({ name: "rule_tool_apply", description: "w", handler: async () => ({}) });
-  registerTool({ name: "rule_tool_stats", description: "r", handler: async () => ({}) });
-  registerTool({ name: "rule_tool_compress", description: "r", handler: async () => ({}) });
+  registerTool({ entry: "action", name: "rule_tool_apply", description: "w", handler: async () => ({}) });
+  registerTool({ entry: "action", name: "rule_tool_stats", description: "r", handler: async () => ({}) });
+  registerTool({ entry: "action", name: "rule_tool_compress", description: "r", handler: async () => ({}) });
 
   const tools = listTools();
   const raw = declaredTools();
@@ -33,11 +33,18 @@ test("annotations mark reads idempotent and non-idempotent, nothing for mutators
 test("listTools converts zod schemas and tolerates plain schemas", () => {
   registerTool({
     name: "rule_tool_z",
+    entry: "action",
     description: "zod tool",
     zodSchema: z.object({ count: z.number().optional() }),
     handler: async () => ({ content: [] }),
   });
-  registerTool({ name: "rule_tool_plain", description: "plain", inputSchema: { type: "object", properties: { a: { type: "string" } } }, handler: async () => ({ content: [] }) });
+  registerTool({
+    entry: "action",
+    name: "rule_tool_plain",
+    description: "plain",
+    inputSchema: { type: "object", properties: { a: { type: "string" } } },
+    handler: async () => ({ content: [] }),
+  });
 
   const listed = listTools();
   assert.ok(
@@ -58,13 +65,13 @@ test("listTools is memoized on the registry generation", async () => {
   const { z } = await import("zod/v4");
 
   clearTools();
-  registerTool({ name: "rule_tool_memo_a", description: "a", zodSchema: z.object({ q: z.string() }), handler: async () => ({ content: [] }) });
+  registerTool({ entry: "action", name: "rule_tool_memo_a", description: "a", zodSchema: z.object({ q: z.string() }), handler: async () => ({ content: [] }) });
 
   const first = listTools();
   assert.equal(listTools(), first, "an unchanged registry returns the same converted array");
 
   const generation = toolsGeneration();
-  registerTool({ name: "rule_tool_memo_b", description: "b", zodSchema: z.object({ q: z.string() }), handler: async () => ({ content: [] }) });
+  registerTool({ entry: "action", name: "rule_tool_memo_b", description: "b", zodSchema: z.object({ q: z.string() }), handler: async () => ({ content: [] }) });
 
   assert.notEqual(toolsGeneration(), generation, "registering bumps the generation");
   const second = listTools();

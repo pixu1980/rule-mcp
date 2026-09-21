@@ -68,6 +68,7 @@ check("T4.1 persisted payload holds the stored entry", disk.entries[k]?.result?.
 let calls = 0;
 registerTool({
   name: "pix_cache_probe",
+  entry: "action",
   description: "test-only cacheable tool",
   handler: async () => {
     calls += 1;

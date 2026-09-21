@@ -38,6 +38,7 @@ export function registerStatsTool() {
 
   registerTool({
     name: "rule_tool_stats",
+    entry: "action",
     description: "Read the local telemetry log and summarize it: call counts, cache hit rate, saved/estimated tokens, latency.",
     zodSchema: StatsSchema,
     handler: async (arguments_) => {

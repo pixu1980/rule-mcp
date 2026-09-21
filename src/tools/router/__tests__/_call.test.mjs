@@ -19,12 +19,14 @@ const { registerTool } = await import("../_hooks.js");
 before(() => {
   registerTool({
     name: "rule_tool_probe",
+    entry: "action",
     description: "a probe tool",
     zodSchema: z.object({ count: z.number().min(1).max(3) }),
     handler: (args) => (args.boom ? Promise.reject(new Error("boom")) : Promise.resolve({ content: [{ type: "text", text: `ok ${args.count}` }] })),
   });
   registerTool({
     name: "rule_tool_probe_boom",
+    entry: "action",
     zodSchema: z.object({}),
     handler: () => {
       throw new Error("boom");
@@ -32,6 +34,7 @@ before(() => {
   });
   registerTool({
     name: "rule_tool_probe_fail",
+    entry: "action",
     zodSchema: z.object({}),
     handler: () => ({
       isError: true,

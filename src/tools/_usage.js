@@ -50,6 +50,7 @@ export function registerUsageTool() {
 
   registerTool({
     name: "rule_tool_usage",
+    entry: "action",
     description: "Declare an agent usage sidecar for this project when no transcript can be read: input/output tokens, cost.",
     zodSchema: UsageSchema,
     handler: async (arguments_) => {

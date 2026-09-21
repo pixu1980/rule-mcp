@@ -4,6 +4,7 @@
 
 import { compressText } from "../../core/text/_compression.js";
 import { compressionEnabled } from "../../core/text/_level.js";
+import { resolveToolName } from "./_contract.js";
 import { _tools, toolsGeneration } from "./_hooks.js";
 
 const MUTATING_TOOLS = new Set([
@@ -30,11 +31,15 @@ const NON_IDEMPOTENT_READS = new Set(["rule_tool_detect", "rule_tool_gateway", "
  * @returns {object|undefined}
  */
 function annotationsFor(name) {
-  if (MUTATING_TOOLS.has(name)) {
+  // A renamed tool is classified under the name that answers for it today, so a
+  // rename cannot leave its annotations behind.
+  const { name: current } = resolveToolName(name);
+
+  if (MUTATING_TOOLS.has(current)) {
     return;
   }
 
-  return NON_IDEMPOTENT_READS.has(name) ? { readOnlyHint: true } : { readOnlyHint: true, idempotentHint: true };
+  return NON_IDEMPOTENT_READS.has(current) ? { readOnlyHint: true } : { readOnlyHint: true, idempotentHint: true };
 }
 
 /**

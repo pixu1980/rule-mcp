@@ -25,7 +25,7 @@ import { registerProcessHandoffTool } from "../../tools/handoff/index.js";
 import { registerProcessHandonTool } from "../../tools/handon/index.js";
 import { registerCompressTool, registerPlanDocsTool, registerPlanTool, registerStatsTool, registerUpdateTool, registerUsageTool } from "../../tools/index.js";
 import { registerMetaTool } from "../../tools/meta/index.js";
-import { clearSkillResolution, clearTools, retainTools } from "../../tools/router/index.js";
+import { clearSkillResolution, clearTools } from "../../tools/router/index.js";
 import { registerCheckTool, registerScaffoldTool, registerSearchTool } from "../../tools/skill/index.js";
 import { buildIndex, clearIndex } from "../bm25/index.js";
 import { cacheClear, clearSkillDigests } from "../cache/tool-cache/index.js";
@@ -33,7 +33,7 @@ import { registerTemplateTool } from "../scaffold/templates/index.js";
 import { registerDetectTool } from "./_detect-tool.js";
 import { installSkillGuardrails } from "./_guardrail-layers.js";
 import { skillCache } from "./_lru.js";
-import { IS_MINIMAL_TOOLS, MINIMAL_ALLOWLIST } from "./_minimal.js";
+import { IS_MINIMAL_TOOLS } from "./_minimal.js";
 import { registerSkillTools as registerPerSkillTools } from "./_skill-tools.js";
 import { retainSurface } from "./_surface-retain.js";
 
@@ -110,15 +110,14 @@ export function registerSkillTools() {
 
 /**
  * Enforce the surface the process was started with, after everything is
- * registered: the minimal allowlist in minimal mode, the installer's answer
- * otherwise, and the full surface when it gave none.
+ * registered: the installer's answer when it gave one, the full surface when it
+ * did not.
+ *
+ * Minimal mode is not enforced here: a tool outside its allowlist is never
+ * registered (see the tool registry), so there is nothing left to cut.
  */
 function applySurface() {
-  if (IS_MINIMAL_TOOLS) {
-    retainTools(MINIMAL_ALLOWLIST);
-  } else {
-    retainSurface();
-  }
+  retainSurface();
 }
 
 /**

@@ -112,6 +112,7 @@ const planHandler = (pinned) => async (arguments_) => {
 export function registerPlanTool() {
   registerTool({
     name: "rule_tool_plan",
+    entry: "action",
     description: "Ask an expert review persona to audit, review or plan this project; returns the operation contract.",
     zodSchema: PlanSchema,
     advertise: ["role", "topic", "operation"],
@@ -120,6 +121,7 @@ export function registerPlanTool() {
 
   registerTool({
     name: "rule_tool_audit",
+    entry: "action",
     description: "Run an audit as an expert review persona; returns the audit operation contract.",
     zodSchema: OperationSchema,
     advertise: ["role", "topic"],
@@ -128,6 +130,7 @@ export function registerPlanTool() {
 
   registerTool({
     name: "rule_tool_review",
+    entry: "action",
     description: "Run a review as an expert review persona; returns the review operation contract.",
     zodSchema: OperationSchema,
     advertise: ["role", "topic"],

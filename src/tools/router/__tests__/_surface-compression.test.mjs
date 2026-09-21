@@ -26,12 +26,13 @@ test("tools/list descriptions compress when compression is on; names and schemas
   clearTools();
   registerTool({
     name: "rule_tool_verbose",
+    entry: "action",
     description: VERBOSE,
     zodSchema: undefined,
     inputSchema: { type: "object", properties: { q: { type: "string", description: "a query" } } },
     handler: async () => ({ content: [] }),
   });
-  registerTool({ name: "rule_tool_terse", description: SHORT, handler: async () => ({ content: [] }) });
+  registerTool({ entry: "action", name: "rule_tool_terse", description: SHORT, handler: async () => ({ content: [] }) });
 
   const listed = listTools();
   const verbose = listed.find((tool) => tool.name === "rule_tool_verbose");

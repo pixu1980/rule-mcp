@@ -31,6 +31,7 @@ export async function registerGatewayTool() {
 
   registerTool({
     name: "rule_tool_gateway",
+    entry: "gateway",
     description:
       "Single-entry orchestrator: routes prompt → loads skill evidence → checks code against guardrails → returns receipt. " +
       "Use this as the primary entry point instead of calling rule + skill tools separately. " +

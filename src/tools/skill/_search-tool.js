@@ -25,6 +25,7 @@ export function registerSearchTool() {
   });
   registerTool({
     name: "rule_tool_search",
+    entry: "action",
     description: "Semantic search across ALL rule skills using BM25 ranking. Returns scored, relevant sections.",
     zodSchema: SearchSchema,
     handler: async (arguments_) => {

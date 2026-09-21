@@ -28,6 +28,7 @@ export function registerScaffoldTool() {
   });
   registerTool({
     name: "rule_tool_scaffold",
+    entry: "action",
     description: "Generate project scaffolding files. Returns one or all config file templates.",
     zodSchema: ScaffoldSchema,
     handler: async (arguments_) => {

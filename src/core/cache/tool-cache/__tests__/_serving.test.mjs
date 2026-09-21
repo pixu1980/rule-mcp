@@ -41,6 +41,7 @@ test("a tool outside the allowlist gets L0 and nothing else", async () => {
   let runs = 0;
   registerTool({
     name: "rule_tool_tier_probe",
+    entry: "action",
     description: "A probe tool for the tier tests, long enough to satisfy the description rule.",
     inputSchema: { type: "object", properties: { prompt: { type: "string" } } },
     handler: async () => {

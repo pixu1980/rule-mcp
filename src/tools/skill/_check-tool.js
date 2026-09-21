@@ -23,6 +23,7 @@ export function registerCheckTool() {
   });
   registerTool({
     name: "rule_tool_check",
+    entry: "action",
     description: "Run guardrail checks on code against any rule skill. Returns guardrail results with a re-check hint containing the current passing set. Run until allPass: true.",
     zodSchema: CheckSchema,
     handler: async (arguments_) => {

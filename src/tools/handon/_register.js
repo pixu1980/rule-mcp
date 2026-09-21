@@ -16,6 +16,7 @@ const HandonSchema = z.object({
 export function registerProcessHandonTool() {
   registerTool({
     name: "rule_tool_process_handon",
+    entry: "action",
     description:
       "Read the last handoff in docs/handoff/ and report which of its claims are still true: branch, commit range, files, ADRs, open work. Sweeps completed audits/reviews/plans into ADRs first, then proposes the next workstream each open plan still carries, for the user to confirm. Never re-runs a claimed command.",
     zodSchema: HandonSchema,

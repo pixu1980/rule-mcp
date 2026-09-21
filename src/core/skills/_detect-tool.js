@@ -13,6 +13,7 @@ export function registerDetectTool() {
   });
   registerTool({
     name: "rule_tool_detect",
+    entry: "action",
     description: "Detect project framework, TypeScript usage, and build tool from package.json.",
     zodSchema: DetectSchema,
     handler: async (arguments_) => {

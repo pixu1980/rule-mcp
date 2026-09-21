@@ -21,6 +21,7 @@ import { SCOPE_CONTRACT, STYLING_CONTRACT, STYLING_ROUTES } from "./_contracts.j
 export function registerAiTool() {
   registerTool({
     name: "pix_tool",
+    entry: "router",
     description: "Route a prompt to the correct rule skill. Returns structured routing with relevant sections.",
     zodSchema: GalaxySchema,
     handler: async (arguments_) => {

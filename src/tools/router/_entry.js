@@ -2,22 +2,27 @@
 
 /** Tool entry resolution: entry path, dependency edge mapping, and the routed-skill lookup. */
 
+import { _tools } from "./_hooks.js";
+import { resolveToolName } from "./_contract.js";
 import { SKILL_INDEPENDENT } from "./_helpers.js";
 import { getSkillNames } from "./_skills.js";
 import { skillDigest } from "../../core/cache/tool-cache/index.js";
 
+/**
+ * The entry a tool was registered through, or "unregistered" when no tool
+ * answers to the name.
+ *
+ * The answer is what the tool declared, never a re-derivation from its name:
+ * a tool whose skill is gone still reports the entry it arrived by, and a
+ * renamed tool is resolved before the lookup.
+ *
+ * @param {string} name
+ * @returns {string}
+ */
 function entryPathOf(name) {
-  if (name === "pix_tool") {
-    return "router";
-  }
+  const { name: current } = resolveToolName(name);
 
-  if (name === "rule_tool_gateway") {
-    return "gateway";
-  }
-
-  const directory = `rule-${name.replace(/^rule_tool_/, "").replaceAll("_", "-")}`;
-
-  return getSkillNames().includes(directory) ? "skill" : "action";
+  return _tools.find((tool) => tool.name === current)?.entry ?? "unregistered";
 }
 
 /**

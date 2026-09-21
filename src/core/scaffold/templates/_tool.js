@@ -20,6 +20,7 @@ export function registerTemplateTool() {
 
   registerTool({
     name: "rule_tool_component",
+    entry: "action",
     description: "Generate component or test templates following rule AI principles.",
     zodSchema: ComponentSchema,
     handler: async (arguments_) => {

@@ -19,6 +19,7 @@ import { registerAutoAdrHook } from "./_auto-log.js";
 export function registerProcessAdrTool() {
   registerTool({
     name: "rule_tool_process_adr",
+    entry: "skill",
     description: "Save an Architecture Decision Record (ADR) to docs/adr/. Auto-numbers, maintains index, uses Nygard template.",
     zodSchema: ADRSchema,
     handler: async (arguments_) => {

@@ -10,6 +10,7 @@ import { estimateRoutingSaving, recomputeCore } from "../_compute.js";
 test("recomputeCore runs a schemaless tool and refuses an unknown one", async () => {
   registerTool({
     name: "rule_tool_test_compute_probe",
+    entry: "action",
     description: "a schemaless probe for recomputeCore",
     handler: async (arguments_) => ({ content: [{ type: "text", text: `echo:${arguments_.value}` }] }),
   });

@@ -23,6 +23,7 @@ const adrsBefore = adrCount();
 let isHandlerCalled = false;
 registerTool({
   name: "test_enforced",
+  entry: "action",
   description: "Test-only tool for mandatory preprocessing and postprocessing.",
   handler: async (arguments_) => {
     isHandlerCalled = true;
@@ -43,6 +44,7 @@ assert.equal(processed.content[1].text, "postprocessed", "postprocessor must tra
 let isBlockedHandlerCalled = false;
 registerTool({
   name: "test_blocked",
+  entry: "action",
   description: "Test-only tool that mandatory preprocessing must block.",
   handler: async () => {
     isBlockedHandlerCalled = true;

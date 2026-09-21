@@ -1,6 +1,10 @@
 
 
 /** Tool registry state and hook management (before/post/after), plus register/clear/retain. */
+import { IS_MINIMAL_TOOLS, MINIMAL_ALLOWLIST } from "../../core/skills/_minimal.js";
+
+/** The entries a tool may declare. */
+const ENTRIES = new Set(["router", "gateway", "skill", "action"]);
 
 const _tools = [];
 
@@ -101,8 +105,15 @@ function retainTools(allowed) {
 /**
  * Register a tool definition.
  *
+ * `entry` is required and declared rather than derived from the name, so a name
+ * that no longer maps to a skill cannot silently classify as an action.
+ *
+ * In minimal mode a tool outside the allowlist is never registered at all, so
+ * the surface is never built only to be cut down afterwards.
+ *
  * @param {{
  *   name: string,
+ *   entry: "router"|"gateway"|"skill"|"action",
  *   description: string,
  *   inputSchema?: object,
  *   zodSchema?: import("zod/v4").ZodObject<any>,
@@ -110,6 +121,14 @@ function retainTools(allowed) {
  * }} tool
  */
 function registerTool(tool) {
+  if (!ENTRIES.has(tool.entry)) {
+    throw new Error(`registerTool(${tool.name}): entry must be one of ${[...ENTRIES].join(", ")}, got ${String(tool.entry)}`);
+  }
+
+  if (IS_MINIMAL_TOOLS && !MINIMAL_ALLOWLIST.has(tool.name)) {
+    return;
+  }
+
   _tools.push(tool);
   _generation += 1;
 }

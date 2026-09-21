@@ -24,6 +24,7 @@ const { registerTool } = await import("../_hooks.js");
 before(() => {
   registerTool({
     name: "rule_tool_host_probe",
+    entry: "action",
     description: "a probe tool",
     zodSchema: z.object({}),
     handler: () => Promise.resolve({ content: [{ type: "text", text: "ok" }] }),

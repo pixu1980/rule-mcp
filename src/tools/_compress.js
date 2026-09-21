@@ -65,6 +65,7 @@ export function registerCompressTool() {
 
   registerTool({
     name: "rule_tool_compress",
+    entry: "action",
     description:
       "Compress prose deterministically: strip filler and leading articles, replace typographic characters " +
       "with ASCII, convert British spelling to American. Code, inline spans, URLs and JSON are never touched.",

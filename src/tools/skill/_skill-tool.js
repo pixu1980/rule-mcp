@@ -44,6 +44,7 @@ export function registerSkillTool(skillName) {
   });
   registerTool({
     name: "rule_tool_" + displayName,
+    entry: "skill",
     description:
       skillName +
       " skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content)" +

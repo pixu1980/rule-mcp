@@ -52,6 +52,7 @@ function matchFramework(prompt, hint) {
 export function registerMetaTool() {
   registerTool({
     name: "rule_tool_meta",
+    entry: "skill",
     description:
       "Route a meta-framework request to the right rule skill: Astro, Next.js, Nuxt or Remix. Returns the skill, its relevant sections and the base framework skill to load with it.",
     zodSchema: MetaSchema,
