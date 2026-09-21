@@ -7,12 +7,16 @@
  */
 
 import { validateTrio } from "../../src/core/review/docs/index.js";
+import { bootstrapCoreTools } from "../../src/tools/_bootstrap.js";
 import { loadAllSkills } from "../../src/core/skills/index.js";
 import { listTools } from "../../src/tools/router/index.js";
 import { readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 
 await loadAllSkills();
+// The core tools the invocation path owns are registered at startup, so the
+// surface a doc may name is only complete after the same bootstrap runs.
+await bootstrapCoreTools();
 const tools = new Set(listTools().map((x) => x.name));
 const archivalDirectories = new Set(["adr", "handoff", "plans", "reports"]);
 

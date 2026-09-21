@@ -20,6 +20,10 @@ let computeGatewayCore;
 before(async () => {
   const { loadAllSkills } = await import("../../../core/skills/index.js");
   await loadAllSkills();
+  // The gateway and the apply tool are registered at startup, not by the
+  // catalog, so a test that drives them runs the same bootstrap.
+  const { bootstrapCoreTools } = await import("../../_bootstrap.js");
+  await bootstrapCoreTools();
   ({ computeGatewayCore } = await import("../index.js"));
 });
 

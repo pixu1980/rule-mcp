@@ -32,6 +32,9 @@ export const { cacheKey, cacheGet, cacheSet, cacheClear } = await import("../../
 export const { GATEWAY_CORE_TOOL, gatewayCoreArguments, validateApply } = await import("../index.js");
 
 await loadAllSkills();
+// The gateway and the apply tool are registered at startup, not by the catalog.
+const { bootstrapCoreTools } = await import("../../_bootstrap.js");
+await bootstrapCoreTools();
 
 /** Receipt lifetime, mirrored from the module under test. */
 export const TTL = 300_000;

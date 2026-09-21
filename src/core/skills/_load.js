@@ -19,8 +19,6 @@ import { registerMetaTool } from "../../tools/meta/index.js";
 import { registerProcessAdrTool } from "../../tools/adr/index.js";
 import { registerFixTool } from "../../tools/fix/index.js";
 import { registerProcessHandoffTool } from "../../tools/handoff/index.js";
-import { registerGatewayTool } from "../../tools/gateway/index.js";
-import { registerApplyTool } from "../../tools/apply/index.js";
 import { registerDetectTool } from "./_detect-tool.js";
 import { IS_MINIMAL_TOOLS, MINIMAL_ALLOWLIST } from "./_minimal.js";
 import { retainSurface } from "./_surface-retain.js";
@@ -60,8 +58,6 @@ export async function loadAllSkills(force = false) {
 
   const tools = await import("../../tools/index.js");
   tools.registerUpdateTool();
-  await registerGatewayTool();
-  await registerApplyTool();
 
   registerSkillTools();
 

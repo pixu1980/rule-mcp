@@ -123,6 +123,11 @@ export async function startServer() {
   // the parent pulse and exits (the orphaned-server trap).
   const { installStdioGuard } = await import("../transport/index.js");
   installStdioGuard({ onLost: () => process.exit(0) });
+  // The catalog registers the per-skill tools; the gateway and the apply tool
+  // sit above it and are registered here, once, before the server answers.
+  const { bootstrapCoreTools } = await import("../tools/_bootstrap.js");
+
+  await bootstrapCoreTools();
   const server = createServer();
   const transport = new StdioServerTransport();
 
