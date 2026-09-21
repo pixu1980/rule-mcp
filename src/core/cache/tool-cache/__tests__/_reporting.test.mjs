@@ -7,7 +7,12 @@ import { rmSync } from "node:fs";
 import { cacheClear, cacheStore, entryPathOf, result, stateDir } from "./_tiers.fixture.mjs";
 
 const { loadAllSkills } = await import("../../../skills/index.js");
+const { bootstrapCoreTools } = await import("../../../../tools/_bootstrap.js");
+
 await loadAllSkills(true);
+// The gateway and the apply tool are registered by the startup bootstrap, not
+// by the catalog (ARCH-1), so the surface is only complete after both run.
+await bootstrapCoreTools();
 
 // ── End to end through callTool ──
 test("every call is classified by the path it arrived on", () => {

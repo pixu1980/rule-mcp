@@ -20,6 +20,7 @@ export function registerTemplateTool() {
 
   registerTool({
     name: "pix_tool_component",
+    entry: "action",
     description: "Generate component or test templates following pix AI principles.",
     zodSchema: ComponentSchema,
     handler: async (arguments_) => {
