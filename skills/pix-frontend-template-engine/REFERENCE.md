@@ -4,9 +4,9 @@ The bundled engine resources include:
 
 - `assets/template-engine/index.js`: main `TemplateEngine` class for Node-side rendering
 - `assets/tagged-runtime/index.js`: browser-safe tagged template runtime for custom elements and other browser bundles
-- `_renderer.js`: DOM-based renderer and directive handling
-- `_expression-parser.js`: expression parsing and evaluation
-- `_filters.js`: built-in filters and custom filter hooks
+- `renderer/`: DOM-based renderer by phase (preprocess, render, walk, text, directives)
+- `expression-parser/`: expression parsing and evaluation (parse, path, js, evaluate)
+- `filters/`: built-in filters by family (text, markdown, date, collection, value) and custom filter hooks
 - `tests/*.test.js`: functional tests for directives and rendering behavior
 
 ## Supported directives and features
