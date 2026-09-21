@@ -30,6 +30,9 @@ import { GENERATED_DOCS } from "./_docs.mjs";
 import { gather } from "./_gather.mjs";
 import { MARKER_TARGETS, upsertBlock } from "./_markers.mjs";
 import { DOCS } from "./_registries.mjs";
+import { SNAPSHOT, readSnapshot, snapshotText } from "./_snapshot.mjs";
+
+export { SNAPSHOT };
 
 /** The current content of a document, or nothing when it does not exist yet. */
 function read(file) {
@@ -56,19 +59,21 @@ async function format(text) {
 /**
  * Every file the census owns, with the content it should hold.
  *
- * @returns {Promise<Array<{file: string, content: string}>>}
+ * @returns {Promise<Array<{file: string, kind: string, marker?: string, content: string}>>}
  */
 export async function censusOutputs() {
   const data = await gather();
   const outputs = [];
 
   for (const doc of GENERATED_DOCS) {
-    outputs.push({ file: doc.file, content: await format(doc.build(data).join("\n")) });
+    outputs.push({ file: doc.file, kind: "document", content: await format(doc.build(data).join("\n")) });
   }
 
   for (const target of MARKER_TARGETS) {
     outputs.push({
       file: target.file,
+      kind: "block",
+      marker: target.marker,
       content: await format(upsertBlock(read(target.file), target.marker, target.build(data))),
     });
   }
@@ -77,14 +82,15 @@ export async function censusOutputs() {
 }
 
 /**
- * Write the census, returning the files that changed.
+ * Write the census and its snapshot, returning the files that changed.
  *
  * @returns {Promise<string[]>}
  */
 export async function writeCensus() {
   const changed = [];
+  const outputs = await censusOutputs();
 
-  for (const output of await censusOutputs()) {
+  for (const output of outputs) {
     if (read(output.file) === output.content) {
       continue;
     }
@@ -93,17 +99,28 @@ export async function writeCensus() {
     changed.push(output.file);
   }
 
+  const snapshot = snapshotText(outputs);
+
+  if (readSnapshot() !== snapshot) {
+    writeFileSync(SNAPSHOT, snapshot);
+    changed.push("tests/fixtures/census.json");
+  }
+
   return changed;
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) {
   if (process.argv.includes("--check")) {
-    const stale = (await censusOutputs()).filter((output) => read(output.file) !== output.content);
+    const outputs = await censusOutputs();
+    const stale = outputs.filter((output) => read(output.file) !== output.content).map((output) => `docs/${output.file}`);
+    const snapshotStale = readSnapshot() !== snapshotText(outputs);
 
-    if (stale.length === 0) {
+    if (stale.length === 0 && !snapshotStale) {
       console.log("the census is current");
     } else {
-      console.error(`stale, run pnpm census: ${stale.map((output) => `docs/${output.file}`).join(", ")}`);
+      const drifted = [...stale, ...(snapshotStale ? ["tests/fixtures/census.json"] : [])];
+
+      console.error(`stale, run pnpm census: ${drifted.join(", ")}`);
       process.exitCode = 1;
     }
   } else {

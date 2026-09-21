@@ -1,0 +1,63 @@
+{
+  "version": 1,
+  "files": [
+    {
+      "file": "02-product-architecture.md",
+      "kind": "block",
+      "marker": "surface-counts",
+      "sha256": "ec299ab8f10716641a49cfd56d99a4a15370a15fc8496f39623cde2a372c1275"
+    },
+    {
+      "file": "05-env-variables.md",
+      "kind": "block",
+      "marker": "env-registry",
+      "sha256": "32ab4a079bb07a8c490e0748e35dd9db05998d167ff4bfdb557706f6eca17968"
+    },
+    {
+      "file": "07-engineering-guides.md",
+      "kind": "block",
+      "marker": "command-surface",
+      "sha256": "037c8a364a74cadb8dc2ac411bf59929ef14c3ba48d99284821206e255b89217"
+    },
+    {
+      "file": "08-skills.md",
+      "kind": "document",
+      "sha256": "708a43b0a62626efebf8e4704f05ff205f9cd14b8bcc81159d77a8c000cd8bfe"
+    },
+    {
+      "file": "09-tools.md",
+      "kind": "document",
+      "sha256": "597fc895ebab0765c9d2e51c95ebd23108786f59984c9110a982c9912e204d92"
+    },
+    {
+      "file": "10-prompts.md",
+      "kind": "document",
+      "sha256": "2dfdbff722c3b508f9771429241597eae8fd9d4d771fbd772b0b057a90da9650"
+    },
+    {
+      "file": "11-instructions.md",
+      "kind": "document",
+      "sha256": "53bb30ce894c21ea9eecf0056df3848ba37bfdbf52243c100110a0c498012a31"
+    },
+    {
+      "file": "12-cli.md",
+      "kind": "document",
+      "sha256": "33cc5791f031a622bdafe0b64a7d378f2b860fb6615b83cd2655bafd560e9d1a"
+    },
+    {
+      "file": "13-personas.md",
+      "kind": "document",
+      "sha256": "8a7784db8e8f024c767ae349d37e0daa9bd2faf5d98a9a16a7751696b4f58d44"
+    },
+    {
+      "file": "14-guardrails.md",
+      "kind": "document",
+      "sha256": "64afa62b7e162e1966f390591045bc521c4e277892c0945b1c1569b8e967bdca"
+    },
+    {
+      "file": "15-resources.md",
+      "kind": "document",
+      "sha256": "85213348775addd1ab8ac2a8aa044eea73a6b28475bccca1210c65f1b771abec"
+    }
+  ]
+}

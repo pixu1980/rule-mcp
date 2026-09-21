@@ -1,67 +1,87 @@
+
+
 /**
  * @module tests/docs/census-generated
  *
- * The census is a build artifact, not a document: every file it owns must be
- * byte-identical to a fresh run of `scripts/reports/census/index.mjs`.
+ * The census is a build artifact, not a document: every file it owns holds
+ * exactly what the census last wrote into it.
  *
- * Owned files: the eight generated inventories (`08-skills.md` through
- * `15-resources.md`, whole files) plus the marker-refreshed blocks in
- * `02-product-architecture.md`, `07-engineering-guides.md` and
- * `05-env-variables.md`. A tool, prompt, skill, command, persona, guardrail or
- * env var added, removed, renamed or reworded in the code changes the surface,
- * and this test fails until `pnpm census` is run - so the docs can never drift
- * from the code they describe.
+ * This test reads the checked-in snapshot (`tests/fixtures/census.json`) and the
+ * documents, and nothing else. It used to import the generator, which reaches
+ * 551 source files, so a documentation test loaded the whole application to
+ * compare bytes - and a leaf edit anywhere in `src/` was in its dependency
+ * chain.
  *
- * The generator formats its own output with the repository prettier settings,
- * so the comparison is against what it would write, in memory: no temp tree,
- * and no second prettier invocation that could disagree with the first.
+ * Freshness - the documents against a *fresh* generation from the live code -
+ * is `pnpm census:check`'s job now, and CI runs it. The guarantee did not
+ * weaken; it moved from a test process that booted the application's graph to
+ * the pipeline that had to hold it anyway.
  */
-
 import { strict as assert } from "node:assert";
+import { createHash } from "node:crypto";
 import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { test } from "node:test";
+import { fileURLToPath } from "node:url";
 
-import { censusOutputs } from "../../scripts/reports/census/index.mjs";
-import { GENERATED_DOCS } from "../../scripts/reports/census/_docs.mjs";
-import { MARKER_TARGETS } from "../../scripts/reports/census/_markers.mjs";
+const root = fileURLToPath(new URL("../../", import.meta.url));
+const DOCS = join(root, "docs");
+const snapshot = JSON.parse(readFileSync(join(root, "tests", "fixtures", "census.json"), "utf8"));
 
-const DOCS = new URL("../../docs/", import.meta.url).pathname;
-const outputs = await censusOutputs();
+/** The digest the snapshot records for one document. */
+const digestOf = (text) => createHash("sha256").update(text).digest("hex");
 
-test("every file the census owns is the output of a fresh generation", () => {
-  const stale = outputs.filter((output) => readFileSync(join(DOCS, output.file), "utf8") !== output.content);
+test("the snapshot names the files the census owns and what it wrote into them", () => {
+  assert.equal(snapshot.version, 1, "the schema is versioned, so a change to it is visible");
+  assert.ok(snapshot.files.length > 0, "an empty snapshot would check nothing");
+
+  for (const entry of snapshot.files) {
+    assert.ok(["document", "block"].includes(entry.kind), `${entry.file}: declares a known kind`);
+    assert.match(entry.sha256, /^[a-f0-9]{64}$/, `${entry.file}: carries a sha256 digest`);
+
+    if (entry.kind === "block") {
+      assert.ok(entry.marker, `${entry.file}: a marker block names its marker`);
+    }
+  }
+
+  const names = snapshot.files.map((entry) => entry.file);
 
   assert.deepEqual(
-    stale.map((output) => output.file),
-    [],
-    "stale: run `pnpm census` and commit the regenerated docs",
+    names,
+    [...names].sort((a, b) => a.localeCompare(b)),
+    "the list is sorted, so a run that changes nothing writes the same bytes",
   );
 });
 
-test("the census owns every generated document and every fenced block, and nothing else", () => {
+test("every file the census owns still holds what it wrote", () => {
+  const drifted = snapshot.files.filter((entry) => digestOf(readFileSync(join(DOCS, entry.file), "utf8")) !== entry.sha256);
+
   assert.deepEqual(
-    outputs.map((output) => output.file),
-    [...GENERATED_DOCS.map((doc) => doc.file), ...MARKER_TARGETS.map((target) => target.file)],
-    "the generator writes a file no registry declares",
+    drifted.map((entry) => entry.file),
+    [],
+    "drifted: run `pnpm census` and commit, or `pnpm census:check` to see it against a fresh generation",
   );
 });
 
 test("a marker-refreshed chapter keeps a balanced fence", () => {
-  for (const target of MARKER_TARGETS) {
-    const text = readFileSync(join(DOCS, target.file), "utf8");
+  const blocks = snapshot.files.filter((candidate) => candidate.kind === "block");
 
-    assert.ok(text.includes(`<!-- census:begin:${target.marker} -->`), `${target.file}: opens the ${target.marker} fence`);
-    assert.ok(text.includes(`<!-- census:end:${target.marker} -->`), `${target.file}: closes the ${target.marker} fence`);
+  for (const entry of blocks) {
+    const text = readFileSync(join(DOCS, entry.file), "utf8");
+
+    assert.ok(text.includes(`<!-- census:begin:${entry.marker} -->`), `${entry.file}: opens the ${entry.marker} fence`);
+    assert.ok(text.includes(`<!-- census:end:${entry.marker} -->`), `${entry.file}: closes the ${entry.marker} fence`);
   }
 });
 
 test("a whole generated document announces itself and is not a stub", () => {
-  for (const doc of GENERATED_DOCS) {
-    const text = readFileSync(join(DOCS, doc.file), "utf8");
+  const documents = snapshot.files.filter((candidate) => candidate.kind === "document");
 
-    assert.ok(text.startsWith("<!-- Generated by scripts/reports/census/index.mjs"), `${doc.file}: carries the generated header`);
-    assert.ok(text.length > 200, `${doc.file}: is not an empty stub`);
+  for (const entry of documents) {
+    const text = readFileSync(join(DOCS, entry.file), "utf8");
+
+    assert.ok(text.startsWith("<!-- Generated by scripts/reports/census/index.mjs"), `${entry.file}: carries the generated header`);
+    assert.ok(text.length > 200, `${entry.file}: is not an empty stub`);
   }
 });
 

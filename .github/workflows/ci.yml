@@ -45,6 +45,12 @@ jobs:
         run: pnpm exec prettier --check '**/*.{js,mjs,json,md}' --ignore-path .gitignore
       - name: Version sync
         run: node scripts/build/version/index.mjs --check
+      # The generated documents must match a fresh generation from the live
+      # code. This is the only place that check runs: the test that reads them
+      # compares against the checked-in snapshot so a documentation test never
+      # has to load the application.
+      - name: Census is current
+        run: pnpm census:check
 
   test:
     name: test (${{ matrix.os }})
