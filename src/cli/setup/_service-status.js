@@ -14,8 +14,7 @@
 import { existsSync } from "node:fs";
 import { platform } from "node:os";
 
-import { LAUNCH_AGENT_PATH, SYSTEMD_UNIT_PATH, WINDOWS_SERVICE_NAME } from "../daemon/index.js";
-import { tryExec } from "../../shared/index.js";
+import { checkWindowsService, LAUNCH_AGENT_PATH, SYSTEMD_UNIT_PATH, WINDOWS_SERVICE_NAME } from "../daemon/index.js";
 
 /**
  * @returns {{ present: boolean, detail: string }}
@@ -30,9 +29,7 @@ export function daemonServicePresent() {
   }
 
   if (platform() === "win32") {
-    const query = tryExec(`sc query ${WINDOWS_SERVICE_NAME}`);
-
-    return { present: query.includes(WINDOWS_SERVICE_NAME), detail: `Windows service ${WINDOWS_SERVICE_NAME}` };
+    return { present: checkWindowsService().installed, detail: `Windows service ${WINDOWS_SERVICE_NAME}` };
   }
 
   return { present: false, detail: "no platform service on this OS" };

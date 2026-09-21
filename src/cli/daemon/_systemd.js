@@ -1,6 +1,6 @@
 
 
-/** Linux systemd adapter: the user unit, install, uninstall, check. */
+/** Linux systemd adapter: the user unit, install, uninstall, the lifecycle verbs, check. */
 import { writeFileSync, mkdirSync, existsSync, rmSync } from "node:fs";
 import { join } from "node:path";
 import { HOME, resolveEntrypoint, tryExecFile } from "./_service-shared.js";
@@ -38,7 +38,7 @@ export function installSystemdService({ dryRun = false, exec = tryExecFile } = {
 
   // Reload daemon, enable, start
   exec("systemctl", ["--user", "daemon-reload"]);
-  exec("systemctl", ["--user", "enable", SYSTEMD_UNIT_NAME]);
+  enableSystemdService({ exec });
   const out = exec("systemctl", ["--user", "restart", SYSTEMD_UNIT_NAME]);
 
   // Check if it failed
@@ -64,12 +64,52 @@ export function uninstallSystemdService({ dryRun = false, exec = tryExecFile } =
     return { ok: true, path: SYSTEMD_UNIT_PATH, action: "dry-run (unit not removed)" };
   }
 
-  exec("systemctl", ["--user", "stop", SYSTEMD_UNIT_NAME]);
-  exec("systemctl", ["--user", "disable", SYSTEMD_UNIT_NAME]);
+  stopSystemdService({ exec });
+  disableSystemdService({ exec });
   exec("systemctl", ["--user", "daemon-reload"]);
   rmSync(SYSTEMD_UNIT_PATH, { force: true });
 
   return { ok: true, path: SYSTEMD_UNIT_PATH, action: "stopped-disabled-removed" };
+}
+
+/**
+ * Enable the user unit so it starts at login.
+ *
+ * @param {{ exec?: Function }} [opts]
+ * @returns {string} the executor's output
+ */
+export function enableSystemdService({ exec = tryExecFile } = {}) {
+  return exec("systemctl", ["--user", "enable", SYSTEMD_UNIT_NAME]);
+}
+
+/**
+ * Start the user unit now.
+ *
+ * @param {{ exec?: Function }} [opts]
+ * @returns {string} the executor's output
+ */
+export function startSystemdService({ exec = tryExecFile } = {}) {
+  return exec("systemctl", ["--user", "start", SYSTEMD_UNIT_NAME]);
+}
+
+/**
+ * Stop the running user unit.
+ *
+ * @param {{ exec?: Function }} [opts]
+ * @returns {string} the executor's output
+ */
+export function stopSystemdService({ exec = tryExecFile } = {}) {
+  return exec("systemctl", ["--user", "stop", SYSTEMD_UNIT_NAME]);
+}
+
+/**
+ * Disable the user unit so it no longer starts at login.
+ *
+ * @param {{ exec?: Function }} [opts]
+ * @returns {string} the executor's output
+ */
+export function disableSystemdService({ exec = tryExecFile } = {}) {
+  return exec("systemctl", ["--user", "disable", SYSTEMD_UNIT_NAME]);
 }
 
 /**

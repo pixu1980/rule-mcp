@@ -1,6 +1,6 @@
 
 
-/** macOS launchd adapter: the LaunchAgent plist, install, uninstall, check. */
+/** macOS launchd adapter: the LaunchAgent plist, install, uninstall, the lifecycle verbs, check. */
 import { writeFileSync, mkdirSync, existsSync, rmSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { generateLaunchAgentPlist } from "./_launchd-plist.js";
@@ -44,10 +44,10 @@ export function installLaunchAgent({ dryRun = false, exec = tryExecFile } = {}) 
   writeFileSync(LAUNCH_AGENT_PATH, generateLaunchAgentPlist(ep), "utf8");
 
   // Unload first if already loaded (to overwrite)
-  unloadLaunchAgent(exec);
+  unloadLaunchAgent({ exec });
 
   // Load the new plist
-  const out = exec("launchctl", ["load", "-w", LAUNCH_AGENT_PATH]);
+  const out = loadLaunchAgent({ exec });
 
   if (out.includes("Error") || out.includes("error")) {
     return { ok: false, path: LAUNCH_AGENT_PATH, error: `launchctl load failed: ${out}` };
@@ -56,14 +56,28 @@ export function installLaunchAgent({ dryRun = false, exec = tryExecFile } = {}) 
   return { ok: true, path: LAUNCH_AGENT_PATH, action: "loaded" };
 }
 
-/**
- * Unload a loaded agent, trying both launchctl spellings.
- *
- * @param {Function} exec
- */
-function unloadLaunchAgent(exec) {
-  exec("launchctl", ["unload", "-w", LAUNCH_AGENT_PATH]);
+/** Load the LaunchAgent into launchd. */
+export function loadLaunchAgent({ exec = tryExecFile } = {}) {
+  return exec("launchctl", ["load", "-w", LAUNCH_AGENT_PATH]);
+}
+
+/** Unload a loaded agent, trying both launchctl spellings. */
+export function unloadLaunchAgent({ exec = tryExecFile } = {}) {
+  const out = exec("launchctl", ["unload", "-w", LAUNCH_AGENT_PATH]);
+
   exec("launchctl", ["remove", LAUNCH_AGENT_LABEL]);
+
+  return out;
+}
+
+/** Start the loaded LaunchAgent now, without waiting for the next login. */
+export function startLaunchAgent({ exec = tryExecFile } = {}) {
+  return exec("launchctl", ["start", LAUNCH_AGENT_LABEL]);
+}
+
+/** Stop the loaded LaunchAgent, leaving it loaded for the next login. */
+export function stopLaunchAgent({ exec = tryExecFile } = {}) {
+  return exec("launchctl", ["kill", "SIGTERM", LAUNCH_AGENT_LABEL]);
 }
 
 /**
@@ -82,7 +96,7 @@ export function uninstallLaunchAgent({ dryRun = false, exec = tryExecFile } = {}
   }
 
   // Unload first
-  unloadLaunchAgent(exec);
+  unloadLaunchAgent({ exec });
 
   // Remove plist
   rmSync(LAUNCH_AGENT_PATH, { force: true });

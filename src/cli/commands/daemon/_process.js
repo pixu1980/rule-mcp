@@ -1,8 +1,15 @@
 
 
 /** The daemon process arms: start and stop, native-first with a process fallback. */
-import { checkDaemonService, detectPlatform, getServiceName, startDaemonProcess, stopDaemonProcess } from "../../daemon/index.js";
-import { print, tryExec } from "../_shared.js";
+import { checkDaemonService, detectPlatform, startDaemonProcess, startDaemonService, stopDaemonProcess, stopDaemonService } from "../../daemon/index.js";
+import { print } from "../_shared.js";
+
+/** The line each platform prints after a native start. */
+const startedMessage = {
+  macos: "✓ Service started via launchctl",
+  linux: "✓ Service started via systemctl",
+  windows: "✓ Service started via sc",
+};
 
 /** Start the daemon - the native service when installed, the process otherwise. */
 export async function actionStart(opts) {
@@ -11,15 +18,12 @@ export async function actionStart(opts) {
   if (nativeStatus.installed && detectPlatform() !== "unknown") {
     print(`Using native service (${nativeStatus.service})`);
 
-    if (detectPlatform() === "macos") {
-      tryExec(`launchctl start ${getServiceName()}`);
-      print("✓ Service started via launchctl");
-    } else if (detectPlatform() === "linux") {
-      tryExec(`systemctl --user start "${getServiceName()}"`);
-      print("✓ Service started via systemctl");
-    } else if (detectPlatform() === "windows") {
-      tryExec(`sc start "${getServiceName()}"`);
-      print("✓ Service started via sc");
+    const platform = detectPlatform();
+
+    startDaemonService();
+
+    if (startedMessage[platform]) {
+      print(startedMessage[platform]);
     }
 
     return;
@@ -41,14 +45,7 @@ export async function actionStop(opts) {
   const nativeStatus = checkDaemonService();
 
   if (nativeStatus.installed && detectPlatform() !== "unknown") {
-    if (detectPlatform() === "macos") {
-      tryExec(`launchctl kill SIGTERM ${getServiceName()}`);
-    } else if (detectPlatform() === "linux") {
-      tryExec(`systemctl --user stop "${getServiceName()}"`);
-    } else if (detectPlatform() === "windows") {
-      tryExec(`sc stop "${getServiceName()}"`);
-    }
-
+    stopDaemonService();
     print("✓ Service stopped");
 
     return;

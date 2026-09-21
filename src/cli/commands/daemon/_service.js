@@ -1,9 +1,9 @@
 
 
 /** The daemon service arms: install, uninstall, enable, disable. */
-import { installDaemonService, uninstallDaemonService, detectPlatform } from "../../daemon/index.js";
+import { disableDaemonService, enableDaemonService, installDaemonService, uninstallDaemonService, detectPlatform } from "../../daemon/index.js";
 import { getServiceFilePath, getServiceName } from "../../daemon/index.js";
-import { print, tryExec } from "../_shared.js";
+import { print } from "../_shared.js";
 
 /** Install the platform-native service (or its dry-run). */
 export function actionInstall(opts) {
@@ -69,11 +69,10 @@ export async function actionUninstall(opts) {
 
 /** Load the service for the current platform (macos/linux/windows arms). */
 export function actionEnable() {
-  const svcPath = getServiceFilePath();
   const svcName = getServiceName();
 
   // Gated on the name, not the path: a Windows service has a name and no file,
-  // so gating on the path made the `sc` branch below unreachable.
+  // so gating on the path made the Windows branch unreachable.
   if (!svcName) {
     print("No native service for this platform. Try: rule-mcp daemon install");
 
@@ -82,24 +81,20 @@ export function actionEnable() {
 
   print(`Enabling service: ${svcName}`);
 
+  enableDaemonService();
+
   if (detectPlatform() === "macos") {
-    tryExec(`launchctl load -w "${svcPath}"`);
+    const svcPath = getServiceFilePath();
+
     print(`✓ Service loaded (${svcPath})`);
     print("  It will start at next login and appears in Login Items.");
-  } else if (detectPlatform() === "linux") {
-    tryExec(`systemctl --user enable "${svcName}"`);
-    tryExec(`systemctl --user start "${svcName}"`);
-    print("✓ Service enabled and started");
-  } else if (detectPlatform() === "windows") {
-    tryExec(`sc config "${svcName}" start= auto`);
-    tryExec(`sc start "${svcName}"`);
+  } else {
     print("✓ Service enabled and started");
   }
 }
 
 /** Unload the service for the current platform. */
 export function actionDisable() {
-  const svcPath = getServiceFilePath();
   const svcName = getServiceName();
 
   // Gated on the name, not the path: see actionEnable.
@@ -111,17 +106,14 @@ export function actionDisable() {
 
   print(`Disabling service: ${svcName}`);
 
+  disableDaemonService();
+
   if (detectPlatform() === "macos") {
-    tryExec(`launchctl unload -w "${svcPath}"`);
+    const svcPath = getServiceFilePath();
+
     print(`✓ Service unloaded (${svcPath})`);
     print("  It will no longer start at login and is removed from Login Items.");
-  } else if (detectPlatform() === "linux") {
-    tryExec(`systemctl --user stop "${svcName}"`);
-    tryExec(`systemctl --user disable "${svcName}"`);
-    print("✓ Service stopped and disabled");
-  } else if (detectPlatform() === "windows") {
-    tryExec(`sc stop "${svcName}"`);
-    tryExec(`sc config "${svcName}" start= demand`);
+  } else {
     print("✓ Service stopped and disabled");
   }
 }

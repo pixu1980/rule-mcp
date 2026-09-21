@@ -2,6 +2,7 @@
 
 /** Windows service adapter: the sc.exe command, install, uninstall, check. */
 import { execFileSync } from "node:child_process";
+import { installViaPowerShell } from "./_windows-powershell.js";
 import { resolveEntrypoint, tryExecFile } from "./_service-shared.js";
 
 // Every command goes through an argv array, never a shell string: the paths
@@ -44,11 +45,6 @@ function serviceExists(name, exec) {
   return exec("sc", ["query", name]).trim() !== "";
 }
 
-/** Quote a value as a PowerShell single-quoted literal. */
-function psQuote(value) {
-  return value.replaceAll("'", "''");
-}
-
 /**
  * Install Windows service using sc.exe (with PowerShell fallback).
  *
@@ -65,8 +61,8 @@ export function installWindowsService({ dryRun = false, exec = tryExecFile } = {
 
   if (serviceExists(name, exec)) {
     exec("sc", ["config", name, "binPath=", command, "start=", "auto"]);
-    exec("sc", ["stop", name]);
-    exec("sc", ["start", name]);
+    stopWindowsService({ exec });
+    startWindowsService({ exec });
 
     return { ok: true, name, action: "updated-and-started" };
   }
@@ -78,7 +74,7 @@ export function installWindowsService({ dryRun = false, exec = tryExecFile } = {
       stdio: "pipe",
     });
     exec("sc", ["description", name, "MCP server for the rule-* skill ecosystem. Serves styleguides, component templates, and framework best practices."]);
-    exec("sc", ["start", name]);
+    startWindowsService({ exec });
 
     return { ok: true, name, action: "created-and-started" };
   } catch {
@@ -86,20 +82,19 @@ export function installWindowsService({ dryRun = false, exec = tryExecFile } = {
   }
 }
 
-/** The PowerShell fallback: the script is one argv element, values single-quoted. */
-function installViaPowerShell(name, command) {
-  const script = [
-    `New-Service -Name '${psQuote(name)}' -BinaryPathName '${psQuote(command)}' -StartupType Automatic -Description 'MCP server for the rule-* skill ecosystem'`,
-    `Start-Service -Name '${psQuote(name)}'`,
-  ].join("; ");
+/** Start the Windows service now. */
+export function startWindowsService({ exec = tryExecFile } = {}) {
+  return exec("sc", ["start", WINDOWS_SERVICE_NAME]);
+}
 
-  try {
-    execFileSync("powershell", ["-NoProfile", "-NonInteractive", "-Command", script], { encoding: "utf8", timeout: 30_000, stdio: "pipe" });
+/** Stop the running Windows service. */
+export function stopWindowsService({ exec = tryExecFile } = {}) {
+  return exec("sc", ["stop", WINDOWS_SERVICE_NAME]);
+}
 
-    return { ok: true, name, action: "created-and-started (PowerShell)" };
-  } catch (error) {
-    return { ok: false, name, error: `Failed to create service (exit ${error.status ?? "unknown"})` };
-  }
+/** Set whether the Windows service starts with the machine. */
+export function setWindowsServiceStartup({ exec = tryExecFile, startup = "auto" } = {}) {
+  return exec("sc", ["config", WINDOWS_SERVICE_NAME, "start=", startup]);
 }
 
 /**
@@ -119,7 +114,7 @@ export function uninstallWindowsService({ dryRun = false, exec = tryExecFile } =
     return { ok: true, name, action: "dry-run (would remove service)" };
   }
 
-  exec("sc", ["stop", name]);
+  stopWindowsService({ exec });
   exec("sc", ["delete", name]);
 
   return { ok: true, name, action: "stopped-and-deleted" };
