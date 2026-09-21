@@ -5,11 +5,11 @@ import { _tools } from "../_hooks.js";
 import { estimateTokens, finalize, withBanner } from "../_helpers.js";
 import { cacheLookup, cacheStore } from "@src/core/cache/tool-cache/index.js";
 import { computeCore, estimateRoutingSaving } from "../_compute.js";
-import { consumeUpdateBanner, maybeSelfUpdate } from "@src/core/self-update/index.js";
+import { hostBanner, hostBeforeCall } from "./_host.js";
 import { dependenciesOf } from "../_entry.js";
 import { enforcementError } from "@src/core/enforcement/index.js";
 import { resumeAnnouncement } from "@src/core/session/resume/index.js";
-import { touchActivity } from "@src/core/session/_reclaim.js";
+import { touchActivity } from "@src/core/session/_activity.js";
 import { guardrailRulesOf } from "../_helpers.js";
 import { z } from "zod/v4";
 import { runAfterHooks } from "./_after.js";
@@ -32,10 +32,11 @@ export async function callTool(name, args) {
   }
 
   // Self-update: throttled fire-and-forget, kicked before the cache lookup, NOT
-  // awaited; the banner is consumed below and prepended to the result.
+  // awaited; the banner is consumed below and prepended to the result. The host
+  // owns both halves - this module never imports the updater.
   if (name !== "rule_tool_update") {
     try {
-      maybeSelfUpdate();
+      hostBeforeCall(name);
     } catch {
       /* fail-open */
     }
@@ -50,7 +51,7 @@ export async function callTool(name, args) {
     /* fail-open */
   }
 
-  const banner = [consumeUpdateBanner(), notice].filter(Boolean).join("\n\n");
+  const banner = [hostBanner(), notice].filter(Boolean).join("\n\n");
   const tool = _tools.find((entry) => entry.name === name);
 
   if (!tool) {
