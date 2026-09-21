@@ -1,13 +1,12 @@
 
 
 /** Replay: tiered lookup, the echo check that gates L1, store-under-every-key, freshness. */
-import { cacheState } from "./_state.js";
 import { echoesArguments } from "./_echo.js";
 import { cacheEnabled } from "./_config.js";
 import { dependenciesHold } from "./_digests.js";
 import { cacheKey, normalizedKey } from "./_keys.js";
 import { cacheGet, cacheSet } from "./_entries.js";
-import { ensureLoaded } from "./_persistence.js";
+import { entriesStore } from "./_persistence.js";
 
 /**
  * Look a call up across the tiers, cheapest first, and say which one answered.
@@ -55,7 +54,8 @@ export function cacheLookup(toolName, args) {
  * @param {object} args
  */
 export function backfillCall(key, toolName, args) {
-  const entry = cacheState.memory.get(key);
+  const store = entriesStore();
+  const entry = store.get(key);
 
   if (!entry || entry.tool !== undefined) {
     return;
@@ -63,7 +63,9 @@ export function backfillCall(key, toolName, args) {
 
   entry.tool = toolName;
   entry.args = structuredClone(args ?? {});
-  cacheState.isDirty = true;
+  // Set it back rather than leaving the mutation to be noticed: the store writes
+  // what it is told, and a file tier that never heard about this would drop it.
+  store.set(key, entry);
 }
 
 /**
@@ -104,10 +106,8 @@ export function cacheIsFresh(toolName, args) {
     return false;
   }
 
-  ensureLoaded();
-
   for (const key of [cacheKey(toolName, args), normalizedKey(toolName, args)]) {
-    const entry = key ? cacheState.memory.get(key) : undefined;
+    const entry = key ? entriesStore().get(key) : undefined;
 
     if (entry && dependenciesHold(entry.deps)) {
       return true;

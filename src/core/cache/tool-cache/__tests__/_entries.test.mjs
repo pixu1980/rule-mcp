@@ -70,7 +70,7 @@ test("a bare state entry still maps through the report", async () => {
   const { cacheState } = await import("../_state.js");
   const key = "rule-bare-entry";
 
-  cacheState.memory.set(key, { result: undefined, deps: {} });
+  cacheState.store.set(key, { result: undefined, deps: {} });
 
   try {
     const bare = cacheEntries().find((entry) => entry.tool === undefined && entry.result === undefined);
@@ -80,7 +80,7 @@ test("a bare state entry still maps through the report", async () => {
     assert.equal(bare.hits, 0, "absent hits count as zero");
     assert.equal(bare.tokens, Math.ceil(JSON.stringify({}).length / 4), "an absent result tokenizes as empty");
   } finally {
-    cacheState.memory.delete(key);
+    cacheState.store.delete(key);
   }
 });
 

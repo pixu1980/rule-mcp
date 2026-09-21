@@ -1,10 +1,10 @@
 
 
 /** The entry store: get/set with per-entry freshness, clear, release, enumerate. */
-import { cacheState, MAX_MEMORY_ENTRIES } from "./_state.js";
+import { MAX_MEMORY_ENTRIES } from "./_state.js";
 import { cacheEnabled } from "./_config.js";
 import { dependenciesHold } from "./_digests.js";
-import { ensureLoaded, scheduleFlush, flush } from "./_persistence.js";
+import { entriesStore } from "./_persistence.js";
 
 /**
  * Look up a cached result.
@@ -17,8 +17,8 @@ export function cacheGet(key) {
     return;
   }
 
-  ensureLoaded();
-  const hit = cacheState.memory.get(key);
+  const store = entriesStore();
+  const hit = store.get(key);
 
   if (hit === undefined) {
     return;
@@ -27,20 +27,36 @@ export function cacheGet(key) {
   // is evicted on the read that found it, so a stale answer is never served and
   // the space it held is not held twice.
   if (!dependenciesHold(hit.deps)) {
-    cacheState.memory.delete(key);
-    cacheState.isDirty = true;
+    store.delete(key);
 
     return;
   }
   // Promote to MRU, and count the reuse: promotion to the catalog is earned by
   // being used, and a counter kept anywhere else would have to be kept in step.
   hit.hits = (hit.hits ?? 0) + 1;
-  cacheState.isDirty = true;
-  cacheState.memory.delete(key);
-  cacheState.memory.set(key, hit);
+  store.delete(key);
+  store.set(key, hit);
   // Return a deep copy so callers can't mutate the cached object.
 
   return structuredClone(hit.result);
+}
+
+/**
+ * Keep the memory tier under its ceiling by dropping the entry that was used
+ * longest ago: insertion order is the recency order, because a read re-inserts.
+ *
+ * @param {import("../../../shared/ports/index.js").StorePort} store
+ */
+function evictOldest(store) {
+  if (store.size() <= MAX_MEMORY_ENTRIES) {
+    return;
+  }
+
+  const oldest = store.entries().next().value?.[0];
+
+  if (oldest !== undefined) {
+    store.delete(oldest);
+  }
 }
 
 /**
@@ -55,8 +71,9 @@ export function cacheSet(key, result, deps = {}, call = {}) {
     return;
   }
 
-  ensureLoaded();
-  cacheState.memory.set(key, {
+  const store = entriesStore();
+
+  store.set(key, {
     result: structuredClone(result),
     deps: { ...deps },
     // The call that produced this, so `cache verify` and `cache export` can run
@@ -65,27 +82,17 @@ export function cacheSet(key, result, deps = {}, call = {}) {
     ...(call.tool !== undefined && { tool: call.tool, args: structuredClone(call.args ?? {}) }),
     hits: 0,
   });
-  if (cacheState.memory.size > MAX_MEMORY_ENTRIES) {
-    const oldest = cacheState.memory.keys().next().value;
-
-    if (oldest !== undefined) {
-      cacheState.memory.delete(oldest);
-    }
-  }
-
-  scheduleFlush();
+  evictOldest(store);
 }
 
 /** Clear both tiers. */
 export function cacheClear() {
-  cacheState.memory.clear();
-  cacheState.isDirty = true;
-  flush();
+  entriesStore().clear();
 }
 
 /** @returns {number} Entries held in the in-memory tier. */
 export function memoryEntryCount() {
-  return cacheState.memory.size;
+  return entriesStore().size();
 }
 
 /**
@@ -99,14 +106,7 @@ export function memoryEntryCount() {
  * @returns {number} How many entries were released
  */
 export function releaseMemory() {
-  flush();
-  const released = cacheState.memory.size;
-
-  cacheState.memory.clear();
-  cacheState.isDirty = false;
-  cacheState.isLoaded = false;
-
-  return released;
+  return entriesStore().release();
 }
 
 /**
@@ -118,9 +118,7 @@ export function releaseMemory() {
  * @returns {Array<{ deps: object, tokens: number }>}
  */
 export function cacheEntries() {
-  ensureLoaded();
-
-  return [...cacheState.memory.values()].map((entry) => ({
+  return [...entriesStore().entries()].map(([, entry]) => ({
     tool: entry.tool,
     args: entry.args === undefined ? undefined : structuredClone(entry.args),
     result: structuredClone(entry.result),

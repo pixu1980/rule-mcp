@@ -1,7 +1,7 @@
 
 
 /** The live MCP sessions of one server, capped and evictable. */
-import { createMemoryStore } from "../../shared/_ports.js";
+import { createMemoryStore } from "../../shared/ports/index.js";
 import { DEFAULT_IDLE_MS, DEFAULT_MAX_SESSIONS, DEFAULT_SWEEP_MS } from "./_constants.js";
 import { closeAllSessions, closeSession } from "./_close.js";
 import { reapIdle } from "./_reap.js";
@@ -16,14 +16,14 @@ import { startSweeper, stopSweeper } from "./_sweeper.js";
  */
 export class SessionRegistry {
   /**
-   * @param {{ maxSessions?: number, idleMs?: number, sweepMs?: number, label?: string, store?: import("../../shared/_ports.js").StorePort }} [options]
+   * @param {{ maxSessions?: number, idleMs?: number, sweepMs?: number, label?: string, store?: import("../../shared/ports/index.js").StorePort }} [options]
    */
   constructor(options = {}) {
     this.maxSessions = options.maxSessions ?? DEFAULT_MAX_SESSIONS;
     this.idleMs = options.idleMs ?? DEFAULT_IDLE_MS;
     this.sweepMs = options.sweepMs ?? DEFAULT_SWEEP_MS;
     this.label = options.label ?? "session";
-    /** @type {import("../../shared/_ports.js").StorePort} */
+    /** @type {import("../../shared/ports/index.js").StorePort} */
     this._store = options.store ?? createMemoryStore();
     /** @type {NodeJS.Timeout|null} */
     this._sweeper = null;

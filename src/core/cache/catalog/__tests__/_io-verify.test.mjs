@@ -32,10 +32,10 @@ test("verifyCache skips tool-less, unrunnable, repeated and stale entries", asyn
   // under another key to exercise the already-seen skip.
   const dupArgs = args("dup");
   const keys = [cacheKey("pix_tool", dupArgs), "verify-dup", cacheKey("pix_tool", args("stale")), "verify-bare"];
-  cacheState.memory.set(keys[0], { tool: "pix_tool", args: dupArgs, result: result("dup"), deps: {} });
-  cacheState.memory.set(keys[1], { tool: "pix_tool", args: dupArgs, result: result("dup"), deps: {} });
-  cacheState.memory.set(keys[2], { tool: "pix_tool", args: args("stale"), result: result("stale"), deps: { [SKILL]: "moved" } });
-  cacheState.memory.set(keys[3], { result: undefined, deps: {} });
+  cacheState.store.set(keys[0], { tool: "pix_tool", args: dupArgs, result: result("dup"), deps: {} });
+  cacheState.store.set(keys[1], { tool: "pix_tool", args: dupArgs, result: result("dup"), deps: {} });
+  cacheState.store.set(keys[2], { tool: "pix_tool", args: args("stale"), result: result("stale"), deps: { [SKILL]: "moved" } });
+  cacheState.store.set(keys[3], { result: undefined, deps: {} });
 
   try {
     const skipped = await verifyCache({ recompute: () => result("same"), canRun: () => false });
@@ -47,7 +47,7 @@ test("verifyCache skips tool-less, unrunnable, repeated and stale entries", asyn
     assert.deepEqual(report.drifted, [], "identical recomputes do not drift");
   } finally {
     for (const key of keys) {
-      cacheState.memory.delete(key);
+      cacheState.store.delete(key);
     }
   }
 });

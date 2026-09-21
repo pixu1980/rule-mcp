@@ -1,6 +1,7 @@
 
 
-/** Cache state: the in-memory tier, load/dirty/flush flags, denylist and normalizable fields. */
+/** Cache state: the entry store, the denylist and the normalizable fields. */
+import { createMemoryStore } from "../../../shared/ports/index.js";
 
 /**
  * Tools that must never be served from cache: they mutate the filesystem, read
@@ -52,13 +53,15 @@ export const NORMALIZABLE = new Map([["pix_tool", new Set(["prompt"])]]);
 export const MAX_MEMORY_ENTRIES = 500;
 
 /**
- * Mutable cache state shared by the tier modules: the in-memory map, whether
- * the persistent tier was loaded, whether it has unsaved changes, and the
- * debounced flush timer.
+ * The entries, behind the store port.
+ *
+ * The default is a store with no file, and the persistence module replaces it
+ * with the file-backed one on the first cache touch. Everything about holding
+ * entries - the memory tier, the durability, the debounce - belongs to the
+ * store; what is left here is what a cache entry is allowed to be.
+ *
+ * @type {import("../../../shared/ports/index.js").StorePort}
  */
 export const cacheState = {
-  memory: new Map(),
-  isLoaded: false,
-  isDirty: false,
-  flushTimer: null,
+  store: createMemoryStore(),
 };

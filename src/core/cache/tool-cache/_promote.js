@@ -1,11 +1,10 @@
 
 
 /** Promotion to the shared catalog: hit threshold, priming, the promotable set. */
-import { cacheState } from "./_state.js";
 import { cacheEnabled } from "./_config.js";
 import { cacheKey, stableStringify } from "./_keys.js";
 import { cacheSet, cacheEntries } from "./_entries.js";
-import { ensureLoaded } from "./_persistence.js";
+import { entriesStore } from "./_persistence.js";
 
 /**
  * Reuses an entry needs before it is a candidate for the shared catalog.
@@ -35,14 +34,9 @@ export function cachePrime(toolName, args, result, deps = {}) {
   }
 
   const key = cacheKey(toolName, args);
-
-  if (!key) {
-    return false;
-  }
-
-  ensureLoaded();
-
-  if (cacheState.memory.has(key)) {
+  // Nothing to prime under, or the entry is already there: inserting it again
+  // would reset the reuse count the promotion is earned by.
+  if (!key || entriesStore().get(key) !== undefined) {
     return false;
   }
 
