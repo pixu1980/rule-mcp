@@ -17,8 +17,6 @@ same result behind any client.
 | -------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
 | [`pix_tool`](#pixtool)                             | Route prompt to correct rule skill.                                                                                                                    |
 | [`rule_tool_update`](#pixtoolupdate)                | Force-update this local MCP server from its upstream git repo (fast-forward only), hot-reload skills, and restart if server code changed.             |
-| [`rule_tool_gateway`](#pixtoolgateway)              | Single-entry orchestrator: routes prompt → loads skill evidence → checks code against guardrails → returns receipt.                                   |
-| [`rule_tool_apply`](#pixtoolapply)                  | Write files to disk after rule_tool_gateway validation.                                                                                                |
 | [`rule_tool_search`](#pixtoolsearch)                | Semantic search across ALL rule skills using BM25 ranking.                                                                                             |
 | [`rule_tool_check`](#pixtoolcheck)                  | Run guardrail checks on code against any rule skill.                                                                                                   |
 | [`rule_tool_scaffold`](#pixtoolscaffold)            | Generate project scaffolding files.                                                                                                                   |
@@ -34,6 +32,8 @@ same result behind any client.
 | [`rule_tool_process_handon`](#pixtoolprocesshandon) | Read last handoff in docs/handoff/ and report which of its claims are still true: branch, commit range, files, ADRs, open work.                       |
 | [`rule_tool_fix`](#pixtoolfix)                      | Validate and auto-fix project file tree structure against rule AI conventions (barrel files, _PascalCase naming, etc.).                                |
 | [`rule_tool_component`](#pixtoolcomponent)          | Generate component or test templates following rule AI principles.                                                                                     |
+| [`rule_tool_gateway`](#pixtoolgateway)              | Single-entry orchestrator: routes prompt → loads skill evidence → checks code against guardrails → returns receipt.                                   |
+| [`rule_tool_apply`](#pixtoolapply)                  | Write files to disk after rule_tool_gateway validation.                                                                                                |
 
 Call any of them from a shell with `rule-mcp tools call <name> --json '{...}'`.
 
@@ -52,29 +52,6 @@ Route prompt to correct rule skill. Returns structured routing with relevant sec
 Force-update this local MCP server from its upstream git repo (fast-forward only), hot-reload skills, and restart if server code changed. Also runs automatically (throttled, in background) on tool calls; call directly to update on demand.
 
 Takes no parameters.
-
-### rule_tool_gateway
-
-Single-entry orchestrator: routes prompt → loads skill evidence → checks code against guardrails → returns receipt. Use this as primary entry point instead of calling rule + skill tools separately. returned receipt must be passed to rule_tool_apply when writing files.
-
-| Parameter   | Type            | Required | Default | Description                                                                                           |
-| ----------- | --------------- | -------- | ------- | ----------------------------------------------------------------------------------------------------- |
-| `prompt`    | string          | yes      | -       | Complete coding request                                                                               |
-| `code`      | string          | no       | -       | Code to validate against guardrails (single file)                                                     |
-| `files`     | array of object | no       | -       | Files to validate - yields a path-bound receipt, required for multi-file writes                       |
-| `path`      | string          | no       | -       | Project path for framework auto-detection                                                             |
-| `framework` | string          | no       | -       | Target framework (react, vue, svelte, angular, solid, astro, vanilla, express, fastify, nestjs, hono) |
-
-### rule_tool_apply
-
-Write files to disk after rule_tool_gateway validation. Needs valid receipt from rule_tool_gateway proving that code passed all guardrails. receipt is tied to exact code hash - modified code will be rejected. Use dryRun=true (default) to preview without writing.
-
-| Parameter | Type            | Required | Default | Description                                                        |
-| --------- | --------------- | -------- | ------- | ------------------------------------------------------------------ |
-| `files`   | array of object | yes      | -       | Array of files to create/write                                     |
-| `receipt` | string          | yes      | -       | Receipt token from rule_tool_gateway that validated this exact code |
-| `path`    | string          | no       | `"."`   | Project root directory                                             |
-| `dryRun`  | boolean         | no       | `true`  | Preview without writing (default: true)                            |
 
 ### rule_tool_search
 
@@ -254,6 +231,29 @@ Generate component or test templates following rule AI principles.
 | `framework` | `vanilla` \| `react` \| `vue` \| `svelte` \| `angular` \| `solid` \| `astro` | no       | `"vanilla"`  |                                          |
 | `name`      | string                                                                       | no       | -            | Component name for multi-file generation |
 | `mode`      | `generate` \| `multi` \| `guardrails`                                        | no       | `"generate"` |                                          |
+
+### rule_tool_gateway
+
+Single-entry orchestrator: routes prompt → loads skill evidence → checks code against guardrails → returns receipt. Use this as primary entry point instead of calling rule + skill tools separately. returned receipt must be passed to rule_tool_apply when writing files.
+
+| Parameter   | Type            | Required | Default | Description                                                                                           |
+| ----------- | --------------- | -------- | ------- | ----------------------------------------------------------------------------------------------------- |
+| `prompt`    | string          | yes      | -       | Complete coding request                                                                               |
+| `code`      | string          | no       | -       | Code to validate against guardrails (single file)                                                     |
+| `files`     | array of object | no       | -       | Files to validate - yields a path-bound receipt, required for multi-file writes                       |
+| `path`      | string          | no       | -       | Project path for framework auto-detection                                                             |
+| `framework` | string          | no       | -       | Target framework (react, vue, svelte, angular, solid, astro, vanilla, express, fastify, nestjs, hono) |
+
+### rule_tool_apply
+
+Write files to disk after rule_tool_gateway validation. Needs valid receipt from rule_tool_gateway proving that code passed all guardrails. receipt is tied to exact code hash - modified code will be rejected. Use dryRun=true (default) to preview without writing.
+
+| Parameter | Type            | Required | Default | Description                                                        |
+| --------- | --------------- | -------- | ------- | ------------------------------------------------------------------ |
+| `files`   | array of object | yes      | -       | Array of files to create/write                                     |
+| `receipt` | string          | yes      | -       | Receipt token from rule_tool_gateway that validated this exact code |
+| `path`    | string          | no       | `"."`   | Project root directory                                             |
+| `dryRun`  | boolean         | no       | `true`  | Preview without writing (default: true)                            |
 
 ## Skill tools (91)
 
