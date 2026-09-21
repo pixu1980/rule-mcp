@@ -9,13 +9,13 @@
  * @returns {Promise<boolean>} Whether the id was present
  */
 export async function closeSession(registry, id) {
-  const session = registry._sessions.get(id);
+  const session = registry._store.get(id);
 
   if (!session) {
     return false;
   }
 
-  registry._sessions.delete(id);
+  registry._store.delete(id);
   try {
     // Drop the callback first: it would only call back into a map that has
     // already forgotten this id.
@@ -41,13 +41,13 @@ export async function closeSession(registry, id) {
  */
 export async function closeAllSessions(registry) {
   registry.stopSweeper();
-  const ids = [...registry._sessions.keys()];
+  const ids = [...registry._store.entries()].map(([id]) => id);
 
   for (const id of ids) {
     await closeSession(registry, id);
   }
 
-  registry._sessions.clear();
+  registry._store.sweep();
 
   return ids.length;
 }
