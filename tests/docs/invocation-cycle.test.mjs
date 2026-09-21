@@ -123,15 +123,10 @@ test("self-update reaches the reload port and nothing else in the catalog", () =
   assert.deepEqual(offenders(under("src/core/self-update/"), ["src/core/skills/"]), ["src/core/skills/_reload-port.js"], "self-update depends on the port, never on the loader");
 });
 
-test("the router never imports self-update, it asks the call host", () => {
-  const routerFiles = files.filter((file) => file.startsWith("src/tools/router/"));
-  const offenders = routerFiles.filter((file) => (graph.get(file) ?? []).some((target) => target.startsWith("src/core/self-update/")));
+test("the invocation pipeline never reaches self-update", () => {
+  const reached = offenders(["src/tools/router/call/_pipeline.js"], ["src/core/self-update/"]);
 
-  // Direct edges only. The router still *reaches* the updater transitively -
-  // cache to bm25 to the catalog to the tools barrel - and that chain is the
-  // next cut, not this one: what step 1.3 establishes is that the invocation
-  // path never names the updater.
-  assert.deepEqual(offenders, [], "the router must reach the updater through the host port, never by import");
+  assert.deepEqual(reached, [], "a tool call must not pull the updater in behind it");
   assert.ok(graph.get("src/tools/router/call/_pipeline.js").includes("src/tools/router/call/_host.js"), "and it must ask the host");
 });
 

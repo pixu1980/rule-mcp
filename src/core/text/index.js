@@ -6,6 +6,7 @@ export * from "./ascii-box/index.js";
 export * from "./en-english/index.js";
 export * from "./fingerprint/index.js";
 export * from "./_compression.js";
+export * from "./_canonical-query.js";
 export * from "./_markdown-table.js";
 export * from "./_compression-aggressive.js";
 export * from "./_classify.js";
