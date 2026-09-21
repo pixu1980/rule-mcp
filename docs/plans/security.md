@@ -30,9 +30,9 @@ finding stays open. This file is deleted by the run that finds nothing open.
   - [x] **6.1**: Build the Windows binPath from the argv array instead of interpolating an already-quoted string
   - [x] **6.2**: Quote systemd ExecStart arguments with one escaper that also escapes an embedded quote, and test both cases
   - [ ] **6.3**: Verify both generated lines on a real Windows and a real Linux host (not verifiable on this machine; the escaper is covered by unit tests instead)
-- [ ] **Step 7 - SEC-6 (low)**: tryExec collapses every failure into an empty string, including the output cap, so 'died' and 'printed nothing' are the same value to callers.
-  - [ ] **7.1**: Return a discriminated result (ok, stdout, exit code, capped) or an explicit sentinel instead of ""
-  - [ ] **7.2**: Update the callers that compare against "" to check the new result
-- [ ] **Step 8 - SEC-7 (low)**: The daemon shell-out surface exists twice in the live tree, so the same command strings are maintained in two places.
-  - [ ] **8.1**: Point the serve command at the daemon modules and delete the duplicate command strings
-  - [ ] **8.2**: Assert one owner per platform command in the repository contract test
+- [x] **Step 7 - SEC-6 (low)**: tryExec collapses every failure into an empty string, including the output cap, so 'died' and 'printed nothing' are the same value to callers.
+  - [x] **7.1**: Return a discriminated result (ok, stdout, exit code, capped) or an explicit sentinel instead of ""
+  - [x] **7.2**: Update the callers that compare against "" to check the new result
+- [x] **Step 8 - SEC-7 (low)**: The daemon shell-out surface exists twice in the live tree, so the same command strings are maintained in two places.
+  - [x] **8.1**: Point the serve command at the daemon modules and delete the duplicate command strings
+  - [x] **8.2**: Assert one owner per platform command in the repository contract test
