@@ -9,7 +9,7 @@
  * intensity, `RULE_MCP_NO_COMPRESSION=1` turns it off).
  *
  * Inspired by the deterministic compression rules in the compression skill
- * (`skills/rule-compression/SKILL.md`): the vocabulary tables, the
+ * (`skills/rule-process-compression/SKILL.md`): the vocabulary tables, the
  * classification guards and the structural validator are ported, while the LLM
  * compression step is deliberately left out. An LLM in the output path costs
  * determinism, cacheability and the zero-dependency contract; the guard plus

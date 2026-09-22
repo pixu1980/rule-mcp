@@ -9,10 +9,10 @@
  * the config falls back to the local Node + entrypoint pair.
  */
 import { strict as assert } from "node:assert";
-import { existsSync } from "node:fs";
 import { homedir } from "node:os";
 import { join } from "node:path";
 import { mcpServerConfig, DEFAULT_OPTOUT_ENV } from "../index.js";
+import { resolveGlobalBinary } from "../../installers/_paths.js";
 
 const HOME = homedir();
 const entrypoint = join(HOME, "Projects", "rule-mcp", "bin", "rule-mcp.js");
@@ -34,10 +34,11 @@ assert.equal(typeof config.command, "string", "command must be a string");
 assert.ok(config.command.startsWith("/"), `command must be absolute, got ${config.command}`);
 assert.equal(config.command.startsWith("~"), false, "command must never use tilde shorthand");
 
-// When a global binary is available, the config uses the single-binary form.
-const globalPnpx = join(HOME, "Library", "pnpm", "bin", "rule-mcp");
-const globalBrew = "/opt/homebrew/bin/rule-mcp";
-if (existsSync(globalPnpx) || existsSync(globalBrew)) {
+// Prefer the same resolver the installer uses (candidates + PATH), not a
+// hard-coded subset of paths that can disagree with `command -v`.
+const globalBin = resolveGlobalBinary();
+if (globalBin) {
+  assert.equal(config.command, globalBin, "stdio command tracks resolveGlobalBinary");
   assert.deepEqual(config.args, ["serve"], "global binary needs only 'serve' arg");
 } else {
   // Fallback: local development uses Node + entrypoint pair.

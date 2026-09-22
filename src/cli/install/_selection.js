@@ -22,7 +22,7 @@ import { areaOf, skillAreas } from "../../prompts/_areas.js";
 export const FAMILIES = [
   { id: "areas", label: "Areas and skills", hint: "one command per skill, grouped by area" },
   { id: "personas", label: "Review personas", hint: "audit, review and plan as a specialist" },
-  { id: "tasks", label: "One-shot tasks", hint: "adr, handoff, handon, init, flight, update" },
+  { id: "tasks", label: "One-shot tasks", hint: "handoff, handon, init, flight, update, check" },
 ];
 
 /** The family a command name belongs to. */
@@ -35,7 +35,7 @@ function familyOf(name) {
     return "areas";
   }
 
-  return /^rule-(?:audit|review|plan)-/.test(name) ? "personas" : "tasks";
+  return name.startsWith("rule-persona-") ? "personas" : "tasks";
 }
 
 /**

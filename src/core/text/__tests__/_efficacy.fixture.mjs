@@ -18,8 +18,8 @@ import { mkdirSync, mkdtempSync, realpathSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 
-const stateDir = mkdtempSync(join(tmpdir(), "rule-compression-eval-"));
-const projectDir = realpathSync(mkdtempSync(join(tmpdir(), "rule-compression-project-")));
+const stateDir = mkdtempSync(join(tmpdir(), "rule-process-compression-eval-"));
+const projectDir = realpathSync(mkdtempSync(join(tmpdir(), "rule-process-compression-project-")));
 mkdirSync(join(projectDir, ".git"), { recursive: true });
 process.env.RULE_MCP_STATE_DIR = stateDir;
 process.env.RULE_MCP_NO_CACHE = "1";
@@ -43,7 +43,7 @@ export const CORPUS = [
   ["rule_tool_styleguide_css", {}],
   ["rule_tool_backend_node", {}],
   ["rule_tool_process_code_review", {}],
-  ["rule_tool_compression", {}],
+  ["rule_tool_process_compression", {}],
 ];
 
 export const text = (result) => (result?.content ?? []).map((item) => item.text ?? "").join("");

@@ -62,7 +62,7 @@ try {
   // The full registry set lands, not just the router: an area command, a
   // one-shot and a persona command.
   const piPrompts = join(home, ".pi", "agent", "prompts");
-  for (const expected of ["rule-area-frontend.md", "rule-area-frontend-check.md", "rule-plan-security.md"]) {
+  for (const expected of ["rule-area-frontend.md", "rule-area-frontend-check.md", "rule-persona-security-plan.md"]) {
     assert.ok(existsSync(join(piPrompts, expected)), `missing registry command: ${expected}`);
   }
 
@@ -70,8 +70,14 @@ try {
   const stale = [
     "rule-mcp.md",
     "rule-tdd.md",
-    "rule-process-check.md",
     "rule-compression.md",
+    "rule-process-compression.md",
+    "rule-flight.md",
+    "rule-adr.md",
+    "rule-process-check.md",
+    "rule-audit-security.md",
+    "rule-plan-security.md",
+    "rule-review-security.md",
     "rule-new-feature.md",
     "rule-a11y-audit.md",
     "rule-code-review.md",

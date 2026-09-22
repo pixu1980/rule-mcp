@@ -15,7 +15,7 @@ Remove `/rule-adr` and `/rule-process-check` from the MCP prompt registry. Give 
 
 ## Consequences
 
-MCP prompts fall 155 to 153; reusable prompts 98 to 96. Agent slash commands rise 156 to 246, since one command per area now has a check sibling. A check is reachable both per area and generically, and the two-name collision around `rule-check` is gone. The persona and session families are untouched.
+MCP prompts fall 155 to 153; reusable prompts 98 to 96. Agent slash commands rise 156 to 246, since one command per area now has a check sibling. A check is reachable both per area and generically, and the two-name collision around `rule-check` is gone. The persona and session families are untouched. ADR 113 later hard-deletes any leftover `rule-adr` / `rule-process-check` task-prompt cases and documents `/rule-area-process-adr` / `/rule-area-process-check` as the only ADR/check entry points beside `/rule-check`.
 
 ## What would end this
 

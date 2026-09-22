@@ -2,15 +2,17 @@
 
 /** The generic `/rule-* help` machinery: trigger tokens, examples, the usage block. */
 import { PROMPT_EXAMPLES } from "./_defs.data.js";
+import { parsePersonaCommand } from "../core/review/roles/index.js";
 
 /** Tokens that trigger the generic per-prompt help message. */
 export const HELP_TOKENS = new Set(["help", "--help", "-h"]);
 
 /**
  * Invocation examples for the help block. Area/workflow prompts carry
- * hand-written examples; persona prompts (`/rule-plan-*`, `/rule-audit-*`,
- * `/rule-review-*`) get one generated per operation so the help shows how the
- * free-form request slots into the command, exactly like the other prompts.
+ * hand-written examples; persona prompts (`/rule-persona-*-plan`,
+ * `/rule-persona-*-audit`, `/rule-persona-*-review`) get one generated per
+ * operation so the help shows how the free-form request slots into the
+ * command, exactly like the other prompts.
  *
  * @param {string} name
  * @returns {string[]}
@@ -22,13 +24,13 @@ export function promptExamples(name) {
     return hand;
   }
 
-  const persona = /^rule-(plan|audit|review)-(\w+)$/.exec(name);
+  const persona = parsePersonaCommand(name);
 
   if (!persona) {
     return [];
   }
 
-  const operation = persona[1];
+  const operation = persona.operation;
   const focus = {
     plan: "fix the SSE daemon auth flow",
     audit: "the /rule-handoff commit flow",

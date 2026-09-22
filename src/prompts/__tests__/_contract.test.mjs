@@ -25,6 +25,8 @@ test("refactor: areas are rule-area-*, removed commands gone", () => {
     "rule-a11y-audit",
     "rule-code-review",
     "rule-compression",
+    "rule-process-compression",
+    "rule-flight",
     "rule-tdd",
     "rule-new-feature",
     "rule-pull-request",
@@ -35,6 +37,9 @@ test("refactor: areas are rule-area-*, removed commands gone", () => {
     "rule-a11y-review",
     "rule-adr",
     "rule-process-check",
+    "rule-audit-security",
+    "rule-plan-security",
+    "rule-review-security",
   ]) {
     assert.ok(!names.has(removed), `${removed} must be removed`);
   }

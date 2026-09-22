@@ -22,7 +22,7 @@
     "rule_tool_check",
     "rule_tool_component",
     "rule_tool_compress",
-    "rule_tool_compression",
+    "rule_tool_process_compression",
     "rule_tool_data",
     "rule_tool_data_duckdb",
     "rule_tool_data_indexed_db",

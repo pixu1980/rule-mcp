@@ -24,7 +24,7 @@ export const WORKFLOW_PROMPTS = ["rule-handoff"];
 // a new skill would silently contradict.
 export const AREA_PROMPTS = listAreaPrompts().map((prompt) => prompt.name);
 
-export const ONE_SHOT_PROMPTS = ["rule-flight", "rule-handon", "rule-init", "rule-update"];
+export const ONE_SHOT_PROMPTS = ["rule-process-flight", "rule-handon", "rule-init", "rule-update"];
 
 export const EXPECTED = [...WORKFLOW_PROMPTS, ...AREA_PROMPTS];
 

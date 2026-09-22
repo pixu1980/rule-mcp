@@ -31,7 +31,6 @@ Claude Code installs clean `/rule-*` commands instead and suppresses these
 | `/rule-area-backend-node`              | <request> | backend: the node skill                                                                                                                                   |
 | `/rule-area-backend-security`          | <request> | backend: the security skill                                                                                                                               |
 | `/rule-area-backend-workers`           | <request> | backend: the workers skill                                                                                                                                |
-| `/rule-area-compression`               | <request> | compression work, across every compression skill                                                                                                          |
 | `/rule-area-data`                      | <request> | data work, across every data skill                                                                                                                        |
 | `/rule-area-data-duckdb`               | <request> | data: the duckdb skill                                                                                                                                    |
 | `/rule-area-data-indexed-db`           | <request> | data: the indexed-db skill                                                                                                                                |
@@ -72,6 +71,7 @@ Claude Code installs clean `/rule-*` commands instead and suppresses these
 | `/rule-area-process-bmad`              | <request> | process: the bmad skill                                                                                                                                   |
 | `/rule-area-process-changelog`         | <request> | process: the changelog skill                                                                                                                              |
 | `/rule-area-process-code-review`       | <request> | process: the code-review skill                                                                                                                            |
+| `/rule-area-process-compression`       | <request> | process: the compression skill                                                                                                                            |
 | `/rule-area-process-handoff`           | <request> | process: the handoff skill                                                                                                                                |
 | `/rule-area-process-npm-release`       | <request> | process: the npm-release skill                                                                                                                            |
 | `/rule-area-process-simplicity`        | <request> | process: the simplicity skill                                                                                                                             |
@@ -108,39 +108,39 @@ Claude Code installs clean `/rule-*` commands instead and suppresses these
 | `/rule-area-toolchain-vite`            | <request> | toolchain: the vite skill                                                                                                                                 |
 | `/rule-area-ui`                        | <request> | ui work, across every ui skill                                                                                                                            |
 | `/rule-area-ui-design-system`          | <request> | ui: the design-system skill                                                                                                                               |
-| `/rule-flight`                         | [options] | Read the flight recorder: what this server cost, and what to do about it                                                                                  |
 | `/rule-handoff`                        | [options] | Produce a compressed context handoff (ADR summary + git context) to resume in a new session, commiting pending work as scoped Conventional Commits first. |
 | `/rule-handon`                         | [options] | Resume: verify the last handoff against the repository as it is now, archive what finished, and propose the next workstream                               |
 | `/rule-init`                           | [options] | Prepare a project for rule-mcp: the central recorder directory and tokensave                                                                        |
+| `/rule-process-flight`                 | [options] | Read the flight recorder: what this server cost, and what to do about it                                                                                  |
 | `/rule-update`                         | [options] | Apply an available server update explicitly, and report what changed                                                                                      |
 
 ### Persona, one per role and operation
 
-An operation is a prefix of the trio (ADR 057): `audit` writes `docs/audits/`
-and stops, `review` adds `docs/reviews/`, `plan` adds `docs/plans/`. Each
-takes an optional free-text `request` naming the focus for the run.
+An operation is a suffix of the persona command (ADR 113): `rule-persona-<role>-audit`
+writes `docs/audits/` and stops, `-review` adds `docs/reviews/`, `-plan` adds
+`docs/plans/`. Each takes an optional free-text `request` naming the focus for the run.
 
-| Role           | plan                     | audit                     | review                     |
-| -------------- | ------------------------ | ------------------------- | -------------------------- |
-| `a11y`         | `/rule-plan-a11y`         | `/rule-audit-a11y`         | `/rule-review-a11y`         |
-| `ai`           | `/rule-plan-ai`           | `/rule-audit-ai`           | `/rule-review-ai`           |
-| `architect`    | `/rule-plan-architect`    | `/rule-audit-architect`    | `/rule-review-architect`    |
-| `auth`         | `/rule-plan-auth`         | `/rule-audit-auth`         | `/rule-review-auth`         |
-| `backend`      | `/rule-plan-backend`      | `/rule-audit-backend`      | `/rule-review-backend`      |
-| `data`         | `/rule-plan-data`         | `/rule-audit-data`         | `/rule-review-data`         |
-| `devops`       | `/rule-plan-devops`       | `/rule-audit-devops`       | `/rule-review-devops`       |
-| `devx`         | `/rule-plan-devx`         | `/rule-audit-devx`         | `/rule-review-devx`         |
-| `docs`         | `/rule-plan-docs`         | `/rule-audit-docs`         | `/rule-review-docs`         |
-| `frontend`     | `/rule-plan-frontend`     | `/rule-audit-frontend`     | `/rule-review-frontend`     |
-| `i18n`         | `/rule-plan-i18n`         | `/rule-audit-i18n`         | `/rule-review-i18n`         |
-| `oss`          | `/rule-plan-oss`          | `/rule-audit-oss`          | `/rule-review-oss`          |
-| `performance`  | `/rule-plan-performance`  | `/rule-audit-performance`  | `/rule-review-performance`  |
-| `privacy`      | `/rule-plan-privacy`      | `/rule-audit-privacy`      | `/rule-review-privacy`      |
-| `qa`           | `/rule-plan-qa`           | `/rule-audit-qa`           | `/rule-review-qa`           |
-| `security`     | `/rule-plan-security`     | `/rule-audit-security`     | `/rule-review-security`     |
-| `simplicity`   | `/rule-plan-simplicity`   | `/rule-audit-simplicity`   | `/rule-review-simplicity`   |
-| `supply-chain` | `/rule-plan-supply-chain` | `/rule-audit-supply-chain` | `/rule-review-supply-chain` |
-| `ui`           | `/rule-plan-ui`           | `/rule-audit-ui`           | `/rule-review-ui`           |
+| Role           | plan                             | audit                             | review                             |
+| -------------- | -------------------------------- | --------------------------------- | ---------------------------------- |
+| `a11y`         | `/rule-persona-a11y-plan`         | `/rule-persona-a11y-audit`         | `/rule-persona-a11y-review`         |
+| `ai`           | `/rule-persona-ai-plan`           | `/rule-persona-ai-audit`           | `/rule-persona-ai-review`           |
+| `architect`    | `/rule-persona-architect-plan`    | `/rule-persona-architect-audit`    | `/rule-persona-architect-review`    |
+| `auth`         | `/rule-persona-auth-plan`         | `/rule-persona-auth-audit`         | `/rule-persona-auth-review`         |
+| `backend`      | `/rule-persona-backend-plan`      | `/rule-persona-backend-audit`      | `/rule-persona-backend-review`      |
+| `data`         | `/rule-persona-data-plan`         | `/rule-persona-data-audit`         | `/rule-persona-data-review`         |
+| `devops`       | `/rule-persona-devops-plan`       | `/rule-persona-devops-audit`       | `/rule-persona-devops-review`       |
+| `devx`         | `/rule-persona-devx-plan`         | `/rule-persona-devx-audit`         | `/rule-persona-devx-review`         |
+| `docs`         | `/rule-persona-docs-plan`         | `/rule-persona-docs-audit`         | `/rule-persona-docs-review`         |
+| `frontend`     | `/rule-persona-frontend-plan`     | `/rule-persona-frontend-audit`     | `/rule-persona-frontend-review`     |
+| `i18n`         | `/rule-persona-i18n-plan`         | `/rule-persona-i18n-audit`         | `/rule-persona-i18n-review`         |
+| `oss`          | `/rule-persona-oss-plan`          | `/rule-persona-oss-audit`          | `/rule-persona-oss-review`          |
+| `performance`  | `/rule-persona-performance-plan`  | `/rule-persona-performance-audit`  | `/rule-persona-performance-review`  |
+| `privacy`      | `/rule-persona-privacy-plan`      | `/rule-persona-privacy-audit`      | `/rule-persona-privacy-review`      |
+| `qa`           | `/rule-persona-qa-plan`           | `/rule-persona-qa-audit`           | `/rule-persona-qa-review`           |
+| `security`     | `/rule-persona-security-plan`     | `/rule-persona-security-audit`     | `/rule-persona-security-review`     |
+| `simplicity`   | `/rule-persona-simplicity-plan`   | `/rule-persona-simplicity-audit`   | `/rule-persona-simplicity-review`   |
+| `supply-chain` | `/rule-persona-supply-chain-plan` | `/rule-persona-supply-chain-audit` | `/rule-persona-supply-chain-review` |
+| `ui`           | `/rule-persona-ui-plan`           | `/rule-persona-ui-audit`           | `/rule-persona-ui-review`           |
 
 ## The rest of the census
 

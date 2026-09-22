@@ -17,7 +17,7 @@ Add the OSS Architect persona (id: oss) as src/roles/oss.md, status active, laye
 
 ## Consequences
 
-Positive: the persona is drop-in (one file in src/roles/, no code change): it generates three persona prompts (rule-plan-oss, rule-audit-oss, rule-review-oss) and three slash commands; docs/13-personas.md and the census blocks are regenerated; README now advertises 76 prompts. The licensing lens stays on the project's own license axis (SPDX, dual license, open core) without overlapping supply-chain's dependency axis. Negative: the counts change (73 to 76 prompts, 74 to 77 commands) and the two hardcoded arrays in the registry tests were updated; the persona carries 12 lenses (tied with devops, the current maximum), so the axis should be re-checked if the content grows.
+Positive: the persona is drop-in (one file in src/roles/, no code change): it generates three persona prompts (rule-persona-oss-plan, rule-persona-oss-audit, rule-persona-oss-review) and three slash commands; docs/13-personas.md and the census blocks are regenerated; README now advertises 76 prompts. The licensing lens stays on the project's own license axis (SPDX, dual license, open core) without overlapping supply-chain's dependency axis. Negative: the counts change (73 to 76 prompts, 74 to 77 commands) and the two hardcoded arrays in the registry tests were updated; the persona carries 12 lenses (tied with devops, the current maximum), so the axis should be re-checked if the content grows.
 
 ## What would end this
 

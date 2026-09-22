@@ -46,14 +46,14 @@ test("guardrails and inherits also parse inline", () => {
 });
 
 test("an empty list is an empty list, not a missing field", () => {
-  const inline = parseSkillFrontmatter(skill(["name: rule-compression", "guardrails: []", "inherits: []"].join("\n")));
+  const inline = parseSkillFrontmatter(skill(["name: rule-process-compression", "guardrails: []", "inherits: []"].join("\n")));
 
   assert.deepEqual(inline.guardrails, [], "a skill can say it defines no rules");
   assert.deepEqual(inline.inherits, [], "and that it inherits none");
 });
 
 test("a skill that declares neither field reports neither", () => {
-  const meta = parseSkillFrontmatter(skill("name: rule-compression"));
+  const meta = parseSkillFrontmatter(skill("name: rule-process-compression"));
 
   assert.equal(meta.guardrails, undefined, "absent is absent: the loader decides what that means");
   assert.equal(meta.inherits, undefined);

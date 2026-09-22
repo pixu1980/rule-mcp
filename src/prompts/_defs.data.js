@@ -23,7 +23,7 @@ export const PROMPT_DEFS = [
     ],
   },
   {
-    name: "rule-flight",
+    name: "rule-process-flight",
     description: "Read the flight recorder: what this server cost, and what to do about it",
     arguments: [
       {

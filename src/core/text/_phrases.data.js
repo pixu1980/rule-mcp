@@ -4,7 +4,7 @@
  * @module core/text/phrases.data
  *
  * Multi-word rewrites, each tagged with the lowest intensity level that
- * applies it. Ported from the rule table in `skills/rule-compression/SKILL.md`:
+ * applies it. Ported from the rule table in `skills/rule-process-compression/SKILL.md`:
  * pleasantries, throat-clearing openers and hedging are `lite`; the
  * structural rewrites that shorten a clause are `full`; arrow causality is
  * `ultra`.

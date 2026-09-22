@@ -9,7 +9,7 @@
 
 import { AREA_SUBJECT } from "./_areas.data.mjs";
 import { firstSentence, table, toolOf } from "./_format.mjs";
-import { COMMAND_TARGETS, HOOK_EVENTS, OPERATIONS, activeRoles, cliCommands, getSkillMetadata } from "./_registries.mjs";
+import { COMMAND_TARGETS, HOOK_EVENTS, OPERATIONS, activeRoles, cliCommands, getSkillMetadata, personaCommandName } from "./_registries.mjs";
 
 /** The counted summary, and the one number that needs explaining. */
 export function summarySection(data) {
@@ -97,13 +97,13 @@ export function promptSection(data) {
     "",
     "### Persona, one per role and operation",
     "",
-    "An operation is a prefix of the trio (ADR 057): `audit` writes `docs/audits/`",
-    "and stops, `review` adds `docs/reviews/`, `plan` adds `docs/plans/`. Each",
-    "takes an optional free-text `request` naming the focus for the run.",
+    "An operation is a suffix of the persona command (ADR 113): `rule-persona-<role>-audit`",
+    "writes `docs/audits/` and stops, `-review` adds `docs/reviews/`, `-plan` adds",
+    "`docs/plans/`. Each takes an optional free-text `request` naming the focus for the run.",
     "",
     ...table(
       ["Role", ...OPERATIONS],
-      activeRoles().map((role) => [`\`${role.id}\``, ...OPERATIONS.map((operation) => `\`/rule-${operation}-${role.id}\``)]),
+      activeRoles().map((role) => [`\`${role.id}\``, ...OPERATIONS.map((operation) => `\`/${personaCommandName(role.id, operation)}\``)]),
     ),
     "",
   ];

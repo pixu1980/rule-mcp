@@ -15,7 +15,7 @@ The topic becomes the binding scope everywhere the template speaks: the action l
 
 ## Consequences
 
-A user request like /rule-audit-security the SSE daemon now produces a run confined to that scope, and repeated scoped runs no longer mark whole-project findings resolved by silence. The trio headers record the scope of the last run. Cost: a scoped run can never close findings outside its scope, so a periodic whole-project run is still what retires them; and rule_tool_plan answers are recomputed on every call, which is cheap string work.
+A user request like /rule-persona-security-audit the SSE daemon now produces a run confined to that scope, and repeated scoped runs no longer mark whole-project findings resolved by silence. The trio headers record the scope of the last run. Cost: a scoped run can never close findings outside its scope, so a periodic whole-project run is still what retires them; and rule_tool_plan answers are recomputed on every call, which is cheap string work.
 
 ## What would end this
 

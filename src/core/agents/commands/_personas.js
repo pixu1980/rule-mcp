@@ -2,8 +2,7 @@
 
 /** @module core/agents/commands/personas - persona command targets and bodies */
 
-import { activeRoles } from "../../review/roles/index.js";
-import { OPERATIONS } from "../../review/template/index.js";
+import { activeRoles, parsePersonaCommand } from "../../review/roles/index.js";
 
 /**
  * A persona command's target: which role and which operation it runs.
@@ -12,19 +11,16 @@ import { OPERATIONS } from "../../review/template/index.js";
  * @returns {{ role: string, roleName: string, operation: string }|null} null for non-persona commands
  */
 export function personaTarget(name) {
-  for (const operation of OPERATIONS) {
-    const prefix = `rule-${operation}-`;
+  const parsed = parsePersonaCommand(name);
 
-    if (!name.startsWith(prefix)) {
-      continue;
-    }
+  if (!parsed) {
+    return null;
+  }
 
-    const roleId = name.slice(prefix.length);
-    const role = activeRoles().find((entry) => entry.id === roleId);
+  const role = activeRoles().find((entry) => entry.id === parsed.roleId);
 
-    if (role) {
-      return { role: role.id, roleName: role.role, operation };
-    }
+  if (role) {
+    return { role: role.id, roleName: role.role, operation: parsed.operation };
   }
 
   return null;

@@ -27,7 +27,7 @@ export const { bootstrapCoreTools } = await import("../../../src/tools/_bootstra
 export const { listTools } = await import("../../../src/tools/router/index.js");
 export const { listResources } = await import("../../../src/resources/index.js");
 export const { listPrompts } = await import("../../../src/prompts/index.js");
-export const { allRoles, activeRoles } = await import("../../../src/core/review/roles/index.js");
+export const { allRoles, activeRoles, parsePersonaCommand, personaCommandName } = await import("../../../src/core/review/roles/index.js");
 export const { OPERATIONS } = await import("../../../src/core/review/template/index.js");
 export const { commandNames, ROUTER_COMMAND } = await import("../../../src/core/agents/commands/index.js");
 export const { COMMAND_TARGETS, AGENTS_WITHOUT_COMMAND_SURFACE } = await import("../../../src/core/agents/command-targets/index.js");
@@ -37,19 +37,17 @@ export const { buildProgram } = await import("../../../src/cli/index.js");
 
 const guardrails = await import("../../../src/core/guardrails/index.js");
 
-/** A persona command or prompt is `rule-<operation>-<role>`, for the operations the template declares. */
-const PERSONA_NAME = new RegExp(`^rule-(?:${OPERATIONS.join("|")})-(.+)$`);
-
 /**
  * The role a persona name addresses, or nothing when the name is not one.
+ * Canonical form: `rule-persona-<role>-<operation>` (ADR 113).
  *
  * @param {string} name
  * @returns {{operation: string, role: string} | undefined}
  */
 export function parsePersonaName(name) {
-  const found = PERSONA_NAME.exec(name);
+  const found = parsePersonaCommand(name);
 
-  return found ? { operation: name.split("-")[1], role: found[1] } : undefined;
+  return found ? { operation: found.operation, role: found.roleId } : undefined;
 }
 
 /** Every guardrail id, with the families that carry it. */

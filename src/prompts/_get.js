@@ -2,7 +2,7 @@
 
 /** Resolve one prompt by name: help, persona, workflow, area or task. */
 import { HANDOFF_USAGE } from "./_handoff-options.js";
-import { roleById } from "../core/review/roles/index.js";
+import { roleById, parsePersonaCommand } from "../core/review/roles/index.js";
 import { fillRoleTemplate } from "../core/review/template/index.js";
 import { HELP_TOKENS, promptExamples, buildHelpMessage } from "./_help.js";
 import { listPrompts } from "./_registry.js";
@@ -40,11 +40,11 @@ export function getPrompt(name, args = {}) {
   }
 
   // ── Review personas: one prompt per active role and operation, filled from the registry ──
-  const personaOp = /^rule-(plan|audit|review)-/.exec(name);
+  const parsed = parsePersonaCommand(name);
 
-  if (personaOp) {
-    const operation = personaOp[1];
-    const role = roleById(name.slice(`rule-${operation}-`.length));
+  if (parsed) {
+    const { operation, roleId } = parsed;
+    const role = roleById(roleId);
 
     if (role) {
       return {

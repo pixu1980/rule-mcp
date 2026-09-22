@@ -1,5 +1,5 @@
 ---
-name: rule-compression
+name: rule-process-compression
 description: >-
   Use when writing anything a human will read: answers, commit messages, code reviews, docs. Covers the compression rules, the intensity levels, what must never be compressed, and how the server enforces the output style deterministically.
 tags:
@@ -11,10 +11,12 @@ tags:
   - commits
   - review
   - writing
+  - process
 frameworks: [all]
+inherits: [rule-process]
 ---
 
-# rule-compression - Say it in fewer tokens
+# rule-process-compression - Say it in fewer tokens
 
 ## Purpose
 

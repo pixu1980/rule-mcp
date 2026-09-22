@@ -191,5 +191,5 @@ start fresh more often, index instead of reading, then improve the prompts.
 - [rule-ai-prompting](../rule-ai-prompting/SKILL.md) - what to write, once the window is right
 - [rule-ai-agent-architecture](../rule-ai-agent-architecture/SKILL.md) - the loop that fills the window
 - [rule-process-handoff](../rule-process-handoff/SKILL.md) - writing a boundary down, and reading it back verified
-- [rule-compression](../rule-compression/SKILL.md) - compressing output without losing substance
+- [rule-process-compression](../rule-process-compression/SKILL.md) - compressing output without losing substance
 - [rule-ai-evals](../rule-ai-evals/SKILL.md) - measuring whether any of this helped

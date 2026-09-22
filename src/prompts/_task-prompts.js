@@ -1,6 +1,6 @@
 
 
-/** The one-shot task prompts: adr, check, flight, handon, init, update. */
+/** The one-shot task prompts: flight, handon, init, update. */
 
 /**
  * The task prompt for a name, or null when the name is not a task prompt.
@@ -12,50 +12,7 @@
  */
 export function taskPrompt(name, args, user) {
   switch (name) {
-    case "rule-adr": {
-      return {
-        name,
-        description: "Record an architecture decision",
-        messages: user(
-          [
-            "Record this decision as an ADR:",
-            "",
-            args.decision ?? "",
-            "",
-            "1. Call `rule` first, then `rule_tool_process_adr` - it auto-numbers and maintains the index.",
-            "2. Context states the forcing factors, not the history. Decision states what is true now.",
-            "3. List the alternatives you actually considered and why each lost.",
-            "4. Consequences name the cost as well as the benefit, including what tests now enforce it.",
-            "5. If an earlier ADR is reversed in part, mark it superseded and link both ways.",
-            "6. Ask the user rather than guessing when the decision is theirs to make.",
-            "",
-            "Finish by proposing a conventional commit with a mandatory scope, e.g. `docs(adr): ...`.",
-          ].join("\n"),
-        ),
-      };
-    }
-
-    case "rule-process-check": {
-      return {
-        name,
-        description: "Validate code against the guardrails",
-        messages: user(
-          [
-            `Validate this against the rule guardrails: ${args.target ?? "the current diff"}.`,
-            "",
-            "1. Call `rule` to route, then `rule_tool_check` per file - input above 256 KiB is refused, so check",
-            "   source files in units rather than bundles.",
-            "2. Fix every reported failure and re-run until `allPass` is true. Do not silence a rule; a suppression",
-            "   is acceptable only when it states its reason.",
-            "3. Run the project's tests and report the commands you actually executed.",
-            "",
-            "Finish by proposing a conventional commit with a mandatory scope, e.g. `fix(guardrails): ...`.",
-          ].join("\n"),
-        ),
-      };
-    }
-
-    case "rule-flight": {
+    case "rule-process-flight": {
       return {
         name,
         description: "Read the flight recorder",

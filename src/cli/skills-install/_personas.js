@@ -13,10 +13,10 @@
  * so `exposeTool: false` keeps the tool list unchanged.
  */
 
-import { mkdirSync, writeFileSync } from "node:fs";
+import { mkdirSync, writeFileSync, rmSync, existsSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 
-import { activeRoles } from "../../core/review/roles/index.js";
+import { activeRoles, personaCommandName, parsePersonaCommand } from "../../core/review/roles/index.js";
 import { OPERATIONS } from "../../core/review/template/index.js";
 
 /** The tool that serves one operation. */
@@ -25,11 +25,12 @@ const toolFor = (operation) => (operation === "audit" ? "rule_tool_audit" : oper
 /** The `SKILL.md` body for one role and operation. */
 const skillContent = (role, operation) => {
   const tool = toolFor(operation);
+  const name = personaCommandName(role.id, operation);
   const call = operation === "plan" ? `with \`role: "${role.id}"\` and the request as \`topic\`` : `with \`role: "${role.id}"\``;
 
   return [
     "---",
-    `name: rule-${operation}-${role.id}`,
+    `name: ${name}`,
     "description: >-",
     `  ${operation} as a ${role.role}. Generated from the persona registry; call \`${tool}\` ${call}.`,
     "tags:",
@@ -51,6 +52,39 @@ const skillContent = (role, operation) => {
 };
 
 /**
+ * Remove legacy `rule-{plan|audit|review}-*` persona skill dirs that predate
+ * the `rule-persona-<role>-<op>` naming.
+ *
+ * @param {string} targetDir
+ * @param {boolean} dryRun
+ * @returns {string[]} removed names
+ */
+function purgeLegacyPersonaSkills(targetDir, dryRun) {
+  if (!existsSync(targetDir)) {
+    return [];
+  }
+
+  const removed = [];
+
+  for (const entry of readdirSync(targetDir)) {
+    const legacy = /^rule-(plan|audit|review)-/.test(entry);
+    const alreadyNew = parsePersonaCommand(entry);
+
+    if (!legacy || alreadyNew) {
+      continue;
+    }
+
+    if (!dryRun) {
+      rmSync(join(targetDir, entry), { recursive: true, force: true });
+    }
+
+    removed.push(entry);
+  }
+
+  return removed;
+}
+
+/**
  * Write one persona skill per active role and operation.
  *
  * @param {string} targetDir - The skills directory (`~/.agents/skills`)
@@ -58,11 +92,13 @@ const skillContent = (role, operation) => {
  * @returns {string[]} the skill names written
  */
 export function generatePersonaSkills(targetDir, { roles = activeRoles(), operations = OPERATIONS, dryRun = false } = {}) {
+  purgeLegacyPersonaSkills(targetDir, dryRun);
+
   const written = [];
 
   for (const role of roles) {
     for (const operation of operations) {
-      const name = `rule-${operation}-${role.id}`;
+      const name = personaCommandName(role.id, operation);
 
       if (!dryRun) {
         mkdirSync(join(targetDir, name), { recursive: true });

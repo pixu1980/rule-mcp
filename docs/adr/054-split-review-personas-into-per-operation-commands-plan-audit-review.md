@@ -11,7 +11,7 @@ Each of the 7 active review personas shipped as one combined command, rule-plan-
 
 ## Decision
 
-Give each active role three slash commands - rule-plan-<role>, rule-audit-<role>, rule-review-<role> (21 persona commands total), all generated from the same registry and all routing through the tools under the hood: the command body calls rule_tool_plan (with role and operation) to fetch the operation contract, and rule_tool_plan_docs for the trio bookkeeping. The template's header clause and operation section are now operation-aware; rule_tool_plan gained an optional operation parameter (default all three, unchanged for existing callers). Combined rule-plan-<role> becomes plan-only.
+Give each active role three slash commands - `rule-persona-<role>-plan`, `rule-persona-<role>-audit`, `rule-persona-<role>-review` (naming finalized in ADR 113; originally shipped as `rule-plan-<role>` / `rule-audit-<role>` / `rule-review-<role>`), all generated from the same registry and all routing through the tools under the hood: the command body calls rule_tool_plan (with role and operation) to fetch the operation contract, and rule_tool_plan_docs for the trio bookkeeping. The template's header clause and operation section are now operation-aware; rule_tool_plan gained an optional operation parameter (default all three, unchanged for existing callers). Combined plan command becomes plan-only.
 
 ## Consequences
 
@@ -26,6 +26,6 @@ fourth operation (e.g. `rule-close-*`) if the lifecycle needs it.
 
 ## Alternatives Considered
 
-1. Keep rule-plan-* only and run audit/review via rule_tool_plan explicitly (option 2: 7 commands)
-1. Ship rule-plan-* + rule-audit-* as commands, rule-review-* via tool only (option 3: 14 commands)
+1. Keep plan-only commands and run audit/review via rule_tool_plan explicitly (option 2: 7 commands)
+1. Ship plan + audit as commands, review via tool only (option 3: 14 commands)
 1. Only the 4 core personas get commands (option 4: 12 commands)

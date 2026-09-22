@@ -7,7 +7,7 @@
 # A command renamed or deleted in the registry disappears from this installer
 # too - there is no second, hand-maintained list to drift. The set includes
 # the /rule router, the /rule-area-* commands, the one-shot workflow prompts
-# and the review-persona commands (rule-plan-* / rule-audit-* / rule-review-*).
+# and the review-persona commands (rule-persona-*-plan / rule-persona-*-audit / rule-persona-*-review).
 #
 # Supported agents: Pi, Claude Code, Gemini CLI, Windsurf, Cline, Cursor
 

@@ -16,20 +16,19 @@ against are in [`14-guardrails.md`](14-guardrails.md).
 The router's own directory, `skills/rule/`, mints no skill tool, which is why
 the catalog is 91 and the directory count is 92.
 
-| Area                        | Skills | Covers                                                                |
-| --------------------------- | ------ | --------------------------------------------------------------------- |
-| [ai](#ai)                   | 5      | Building agents: prompting, context, evals, agent architecture        |
-| [backend](#backend)         | 9      | Services and APIs: Node frameworks, API design, backend security      |
-| [compression](#compression) | 1      | Output compression: the rules that shorten prose without losing facts |
-| [data](#data)               | 8      | Databases and storage, from SQL dialects to IndexedDB                 |
-| [devops](#devops)           | 5      | Pipelines, containers, observability, testing, versioning             |
-| [frontend](#frontend)       | 10     | Frameworks and the code that runs in a browser                        |
-| [meta](#meta)               | 5      |                                                                       |
-| [platform](#platform)       | 6      | Where the code ships: web, desktop, mobile, library, agent            |
-| [process](#process)         | 10     | How work is done: reviews, ADRs, changelogs, handoffs, simplicity     |
-| [styleguide](#styleguide)   | 18     | The rules code is written to, per language and concern                |
-| [toolchain](#toolchain)     | 12     | Build tools, linters, package manager, commit hooks                   |
-| [ui](#ui)                   | 2      | The design system and its components                                  |
+| Area                      | Skills | Covers                                                            |
+| ------------------------- | ------ | ----------------------------------------------------------------- |
+| [ai](#ai)                 | 5      | Building agents: prompting, context, evals, agent architecture    |
+| [backend](#backend)       | 9      | Services and APIs: Node frameworks, API design, backend security  |
+| [data](#data)             | 8      | Databases and storage, from SQL dialects to IndexedDB             |
+| [devops](#devops)         | 5      | Pipelines, containers, observability, testing, versioning         |
+| [frontend](#frontend)     | 10     | Frameworks and the code that runs in a browser                    |
+| [meta](#meta)             | 5      |                                                                   |
+| [platform](#platform)     | 6      | Where the code ships: web, desktop, mobile, library, agent        |
+| [process](#process)       | 11     | How work is done: reviews, ADRs, changelogs, handoffs, simplicity |
+| [styleguide](#styleguide) | 18     | The rules code is written to, per language and concern            |
+| [toolchain](#toolchain)   | 12     | Build tools, linters, package manager, commit hooks               |
+| [ui](#ui)                 | 2      | The design system and its components                              |
 
 ### ai
 
@@ -54,12 +53,6 @@ the catalog is 91 and the directory count is 92.
 | `rule-backend-node`     | `rule_tool_backend_node`     | node, api            | Use when scaffolding or hardening a Node.js backend. Covers project structure, required libraries, quality gates, and the patterns that break under real traffic: blocking the event loop, unbounded Promise.all, buffering payloads, in-memory state, backpressure, missing timeouts, and fire-and-forget work.                       |
 | `rule-backend-security` | `rule_tool_backend_security` | node, api            | Use when securing a backend or reviewing authentication. Covers environment variables, Docker images, dependency audits, security headers, rate limiting, CORS, secrets, input validation, and the authentication lifecycle: JWT verification, session revocation, logout, password reset, remembered devices, step-up auth, and CSRF. |
 | `rule-backend-workers`  | `rule_tool_backend_workers`  | node, worker-threads | Offload CPU-bound JavaScript to worker_threads, pools, and cluster. Covers the event loop model, libuv thread pool, piscina, clustering, and the decision framework for async vs workers vs cluster.                                                                                                                                   |
-
-### compression
-
-| Skill             | Tool                   | Frameworks | Description                                                                                                                                                                                                                                   |
-| ----------------- | ---------------------- | ---------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `rule-compression` | `rule_tool_compression` | all        | Use when writing anything a human will read: answers, commit messages, code reviews, docs. Covers the compression rules, the intensity levels, what must never be compressed, and how the server enforces the output style deterministically. |
 
 ### data
 
@@ -130,6 +123,7 @@ the catalog is 91 and the directory count is 92.
 | `rule-process-bmad`        | `rule_tool_process_bmad`        | all                 | Use when following the BMad structured delivery method. Covers 4-phase workflow (analysis, planning, solution, implementation) with agent-guided execution.                                                                                                                                            |
 | `rule-process-changelog`   | `rule_tool_process_changelog`   | all                 | Use when a project needs a CHANGELOG, when deciding where changelog entries come from, or when one has drifted from the commits. Covers generating it from conventional commits, which commit types earn an entry, and why the release tag is the moment to build it rather than the commit hook.      |
 | `rule-process-code-review` | `rule_tool_process_code_review` | all                 | Use when preparing, conducting, or improving a pull or merge request review. Covers review readiness, risk-based review, constructive feedback, approval gates, and follow-up ownership.                                                                                                               |
+| `rule-process-compression` | `rule_tool_process_compression` | all                 | Use when writing anything a human will read: answers, commit messages, code reviews, docs. Covers the compression rules, the intensity levels, what must never be compressed, and how the server enforces the output style deterministically.                                                          |
 | `rule-process-handoff`     | `rule_tool_process_handoff`     | all                 | Use when closing a session or resuming one. Covers writing a compressed handoff (ADR log, project context, git state) and reading the last one back with handon, which verifies which of its claims are still true.                                                                                    |
 | `rule-process-npm-release` | `rule_tool_process_npm_release` | npm, github-actions | "Set up a secure release process for an npm package to protect it from supply chain attacks. Use for any request to create and publish a new npm package, secure npm publishing or releasing, set up npm Trusted Publishing, provenance, or Staged Publishing, harden a release workflow."             |
 | `rule-process-simplicity`  | `rule_tool_process_simplicity`  | all                 | Use before and during implementation to keep the change minimal. Covers the scope contract, the over-engineering catalog, the removal pass, and when a structural decision earns an ADR instead of code.                                                                                               |
