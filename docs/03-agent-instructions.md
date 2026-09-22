@@ -49,7 +49,7 @@ nothing, so resuming twice from the same handoff works twice.
 3. Treat repository/tool evidence as source of truth. Never invent APIs, files, dependencies, tools, requirements, or successful checks.
 4. If evidence missing, call `rule_tool_search`; if still absent, state uncertainty.
 5. Write failing tests before implementation changes.
-6. Use `/rule-area-styleguide` and `/rule-area-styleguide-file-tree` for templates and project tree work (ADR 115: component/scaffold/form tools removed).
+6. Use `/rule-area-styleguide` (name leaves like file-tree in the request) for templates and project tree work (ADR 115/117).
 7. Run `rule_tool_check`. Failed guardrails are blocking; fix and rerun until all pass.
 8. Run project tests/typecheck and report only commands actually executed.
 9. Record structural decisions with `rule_tool_process_adr` (disabled by default, enable with `RULE_MCP_AUTO_ADR=1`).

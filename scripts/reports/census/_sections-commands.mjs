@@ -43,8 +43,8 @@ export function commandKinds(data) {
 
   return [
     { kind: "router", what: "Routes a free-text request to the skill that answers it", commands: kinds.router },
-    { kind: "area", what: "Routes within one area, when the area is known and the skill is not", commands: kinds.area },
-    { kind: "workflow", what: "Runs a named workflow: a decision record, a pre-flight check", commands: kinds.workflow },
+    { kind: "area", what: "Area hub: free text routes to leaf skills/tools (ADR 117)", commands: kinds.area },
+    { kind: "workflow", what: "Runs a named workflow (e.g. /rule-check auto-detects guardrails)", commands: kinds.workflow },
     { kind: "session", what: "Carries a session across a context boundary", commands: kinds.session },
     { kind: "persona", what: "Runs one review role at one operation, and writes its documents", commands: kinds.persona },
   ];
@@ -63,7 +63,17 @@ export function commandKindsSection(data) {
       kinds.map((entry) => [`\`${entry.kind}\``, entry.commands.length, entry.what]),
     ),
     "",
-    ...kinds.flatMap((entry) => (entry.kind === "persona" ? [] : [`**${entry.kind}**: ${entry.commands.map((name) => `\`/${name}\``).join(", ")}`, ""])),
+    ...kinds.flatMap((entry) => {
+      if (entry.kind === "persona") {
+        return [];
+      }
+
+      if (entry.commands.length === 0) {
+        return [`**${entry.kind}**: none`, ""];
+      }
+
+      return [`**${entry.kind}**: ${entry.commands.map((name) => `\`/${name}\``).join(", ")}`, ""];
+    }),
     `The ${named("persona").commands.length} persona commands are one per role and operation`,
     "([`13-personas.md`](13-personas.md)).",
     "",
@@ -91,10 +101,14 @@ export function commandSurfaceBlock(data) {
       .commands.map((name) => `\`/${name}\``)
       .join(", ")}`,
     "",
-    `**Workflows**: ${named("workflow")
-      .commands.map((name) => `\`/${name}\``)
-      .join(", ")}`,
-    "",
+    ...(named("workflow").commands.length > 0
+      ? [
+          `**Workflows**: ${named("workflow")
+            .commands.map((name) => `\`/${name}\``)
+            .join(", ")}`,
+          "",
+        ]
+      : ["**Workflows**: none", ""]),
     `**Sessions**: ${named("session")
       .commands.map((name) => `\`/${name}\``)
       .join(", ")}`,
