@@ -60,11 +60,12 @@ try {
   }
 
   // The full registry set lands, not just the router: an area command, a
-  // one-shot and a persona command.
+  // one-shot, pix-check, and a persona command. ADR 116: no area *-check siblings.
   const piPrompts = join(home, ".pi", "agent", "prompts");
-  for (const expected of ["pix-area-frontend.md", "pix-area-frontend-check.md", "pix-persona-security-plan.md"]) {
+  for (const expected of ["pix-area-frontend.md", "pix-check.md", "pix-persona-security-plan.md", "pix-handoff.md"]) {
     assert.ok(existsSync(join(piPrompts, expected)), `missing registry command: ${expected}`);
   }
+  assert.ok(!existsSync(join(piPrompts, "pix-area-frontend-check.md")), "area check siblings are not installed");
 
   // Renamed/deleted commands never surface: the installer is registry-driven.
   const stale = [
@@ -81,6 +82,9 @@ try {
     "pix-area-process-flight.md",
     "pix-adr.md",
     "pix-process-check.md",
+    "pix-area-frontend-check.md",
+    "pix-area-frontend-react.md",
+    "pix-area-toolchain-rspack.md",
     "pix-audit-security.md",
     "pix-plan-security.md",
     "pix-review-security.md",

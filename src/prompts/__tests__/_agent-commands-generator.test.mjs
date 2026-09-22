@@ -29,15 +29,38 @@ test("router is pinned first and the rest are alphabetical", () => {
   assert.deepEqual(rest, sorted, "commands after the router must be locale-alphabetical");
 });
 
-test("coverage: one clean command per prompt, plus the router, plus area check subcommands and general check", () => {
+test("coverage: one clean command per prompt, plus the router, plus /pix-check (no area check siblings)", () => {
   assert.equal(new Set(names).size, names.length, "command names must be unique");
   for (const p of promptNames) {
     assert.ok(names.includes(p), `missing command for prompt ${p}`);
   }
-  // router + every prompt + area check subcommands (one per area prompt) + general pix-check
+  // router + every prompt + general pix-check; ADR 116 dropped area *-check siblings
   assert.ok(!promptNames.includes(ROUTER_COMMAND), "router must not also be a prompt");
-  const areaPromptCount = promptNames.filter((n) => n.startsWith("pix-area-")).length;
-  assert.equal(names.length, promptNames.length + 1 + areaPromptCount + 1, "router + all prompts + area checks + general check");
+  assert.equal(names.length, promptNames.length + 1 + 1, "router + all prompts + pix-check");
+  assert.ok(names.includes("pix-check"), "pix-check remains");
+  assert.ok(
+    names.filter((name) => name.endsWith("-check")).every((name) => name === "pix-check"),
+    "only /pix-check ends with -check; no area siblings",
+  );
+});
+
+test("area and router bodies fold check intent via keywords; pix-check stays dedicated", () => {
+  const area = listAgentCommands().find((c) => c.name === "pix-area-frontend");
+  assert.ok(area, "pix-area-frontend must exist");
+  assert.match(area.body, /Check intent/i);
+  assert.match(area.body, /controlla/);
+  assert.match(area.body, /pix_tool_check/);
+  assert.match(area.body, /pix-frontend/, "area check path binds the hub skill");
+  assert.match(area.body, /pix_tool_frontend_react|Leaf skills/, "hub lists leaf tools for routing");
+
+  const router = listAgentCommands().find((c) => c.name === ROUTER_COMMAND);
+  assert.match(router.body, /Check intent/i);
+  assert.match(router.body, /auto-detected skill/);
+
+  const check = listAgentCommands().find((c) => c.name === "pix-check");
+  assert.ok(check, "pix-check must exist");
+  assert.match(check.body, /pix_tool_check/);
+  assert.match(check.body, /Auto-detect/i);
 });
 
 test("every command routes through pix and proposes a scoped commit", () => {

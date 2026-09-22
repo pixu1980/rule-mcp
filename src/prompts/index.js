@@ -6,7 +6,7 @@
  * MCP Prompt registry for pix-galaxy-mcp.
  * Provides reusable prompt templates that guide agents through pix AI
  * workflow phases: one-shot workflow prompts (orchestrate multiple tools),
- * area prompts (one per skill), and persona prompts. Flight costing is not a
+ * area prompts (one per area hub; ADR 117), and persona prompts. Flight costing is not a
  * prompt: it injects via the session directive as `pix-area-process-flight`
  * (ADR 114).
  *

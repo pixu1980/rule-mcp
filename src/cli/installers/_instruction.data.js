@@ -31,7 +31,7 @@ export const INSTRUCTION_BLOCK = [
   "Before writing any frontend/styling code, call `pix_tool` to route the task to the correct pix skill. " +
     "Follow pix AI principles: zero CSS classes, zero inline styles, semantic HTML, external CSS via " +
     "adoptedStyleSheets. Available tools: pix_tool, pix_tool_check, pix_tool_search, pix_tool_process_adr, " +
-    "pix_tool_compress. Prefer `/pix-area-styleguide*` for templates and file-tree work. Flex first: " +
+    "pix_tool_compress. Prefer `/pix-area-styleguide` (name leaves like file-tree in the request) for templates and file-tree work. Flex first: " +
     "display:grid only for named areas, subgrid, explicit placement, or auto-fit tracks - what a flex " +
     "row or column can do, flex does.",
   "",
@@ -50,7 +50,7 @@ export const RULES_BLOCK = [
   "- Never invent APIs, files, dependencies, tools, requirements, or successful checks.",
   "- If evidence is missing, call `pix_tool_search` or state uncertainty.",
   "- Write failing tests before implementation changes.",
-  "- Use `/pix-area-styleguide` / `/pix-area-styleguide-file-tree` (and related area skills) for templates and tree work.",
+  "- Use `/pix-area-styleguide` (name leaves like file-tree in the request) for templates and tree work.",
   "- Run `pix_tool_check`; failed guardrails block completion. Fix and rerun until all pass.",
   "- Run project tests/typecheck; report only commands actually executed.",
   "- Record structural decisions with `pix_tool_process_adr`.",

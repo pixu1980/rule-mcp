@@ -3,20 +3,13 @@
 /**
  * The area prompts, derived from the resolved skill catalog.
  *
- * An area was a hand-written map with each area's tool list pasted into its
- * prose, so a skill added anywhere had to be remembered in a second place. The
- * area is already in the skill's name - `pix-frontend-react` is frontend - so
- * it is read from there, and a skill that joins a layer joins its area on its
- * own.
- *
- * The hub skill and the area are one thing: `pix-frontend` IS frontend, so it
- * owns `/pix-area-frontend` rather than competing with a prompt of the same
- * name.
+ * Hub collectors only on the slash/MCP prompt surface (ADR 117); leaf skills
+ * stay as tools and are named from free text on the hub.
  */
 import { strict as assert } from "node:assert";
 import { test } from "node:test";
 
-import { areaCommandName, areaOf, listAreaPrompts, skillAreas } from "../_areas.js";
+import { areaCommandName, areaOf, listAreaPrompts, skillAreas, skillToolName } from "../_areas.js";
 
 test("an area is the segment after the pix prefix", () => {
   assert.deepEqual(areaOf("pix-frontend-react"), { area: "frontend", member: "react" });
@@ -26,10 +19,11 @@ test("an area is the segment after the pix prefix", () => {
   assert.equal(areaOf("not-a-pix-skill"), null);
 });
 
-test("a hub skill owns its area's command, a member nests under it", () => {
+test("every skill routes through its area hub command (ADR 117)", () => {
   assert.equal(areaCommandName("pix-frontend"), "pix-area-frontend");
-  assert.equal(areaCommandName("pix-frontend-react"), "pix-area-frontend-react");
-  assert.equal(areaCommandName("pix-styleguide-a11y"), "pix-area-styleguide-a11y");
+  assert.equal(areaCommandName("pix-frontend-react"), "pix-area-frontend");
+  assert.equal(areaCommandName("pix-styleguide-a11y"), "pix-area-styleguide");
+  assert.equal(skillToolName("pix-frontend-react"), "pix_tool_frontend_react");
 });
 
 test("every skill lands in exactly one area", () => {
@@ -56,39 +50,38 @@ test("the areas a derived map produces are the ones the catalog holds", () => {
 
   assert.ok(areas.get("frontend").members.includes("pix-frontend-react"), "react belongs to frontend");
   assert.equal(areas.get("frontend").hub, "pix-frontend", "and frontend has a hub");
-  // The meta-frameworks are their own namespace with a narrow dispatcher
-  // (ADR 075); routing still gives them the frontend bias.
   assert.ok(areas.get("meta").members.includes("pix-meta-astro"), "astro belongs to the meta area");
   assert.equal(areas.get("meta").hub, "pix-meta", "and meta has a hub of its own");
 });
 
-test("one prompt per skill, named for its area", () => {
+test("one prompt per area hub only (ADR 117)", () => {
   const prompts = listAreaPrompts();
   const names = new Set(prompts.map((prompt) => prompt.name));
 
   assert.ok(names.has("pix-area-frontend"), "the hub prompt");
-  assert.ok(names.has("pix-area-frontend-react"), "and the member prompt");
+  assert.ok(!names.has("pix-area-frontend-react"), "no member slash/prompt");
   assert.equal(names.size, prompts.length, "no name is minted twice");
+  assert.equal(
+    prompts.every((p) => /^pix-area-[a-z]+$/.test(p.name)),
+    true,
+    "every area prompt is a single-segment hub",
+  );
 
   for (const prompt of prompts) {
-    assert.match(prompt.name, /^pix-area-/, `${prompt.name}: every area prompt is namespaced`);
     assert.ok(prompt.description.length > 0, `${prompt.name}: a prompt says what it is for`);
     assert.equal(prompt.arguments.length, 1, `${prompt.name}: one free-text request`);
+    assert.ok(Array.isArray(prompt.members), `${prompt.name}: members listed for routing`);
   }
 });
 
-test("a prompt's text routes through the tool and names its skill", () => {
-  const { text } = listAreaPrompts().find((prompt) => prompt.name === "pix-area-frontend-react");
-
-  assert.match(text, /pix-frontend-react/, "it names the skill it loads as evidence");
-  assert.match(text, /pix_tool/, "it routes rather than guessing");
-  assert.match(text, /pix_tool_check/, "and validates what it produced");
-  assert.match(text, /feat\(frontend\)/, "the commit example carries the area as its scope");
-});
-
-test("the hub prompt speaks for the whole area", () => {
-  const { text } = listAreaPrompts().find((prompt) => prompt.name === "pix-area-frontend");
+test("the hub prompt routes leaves from free text and names tools", () => {
+  const { text, members } = listAreaPrompts().find((prompt) => prompt.name === "pix-area-frontend");
 
   assert.match(text, /frontend area/, "it says which area it is");
   assert.match(text, /pix-frontend-react/, "and lists the skills it can reach for");
+  assert.match(text, /pix_tool_frontend_react/, "and the matching leaf tools");
+  assert.match(text, /pix_tool/, "it routes rather than guessing");
+  assert.match(text, /pix_tool_check/, "and validates what it produced");
+  assert.match(text, /feat\(frontend\)/, "the commit example carries the area as its scope");
+  assert.ok(members.includes("pix-frontend-react"));
 });

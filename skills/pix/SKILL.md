@@ -65,7 +65,7 @@ Prompt
 | `pix_scaffold`        | Scaffold   | Generate project scaffolding files. Returns one or all config file templates.                                                            |
 | `pix_detect`          | Detection  | Detect project framework, TypeScript usage, and build tool from package.json.                                                            |
 | `pix_tool_process_adr`     | ADR        | Save an Architecture Decision Record (ADR) to docs/adr/. Auto-numbers, maintains index, uses Nygard template.                            |
-| `/pix-area-styleguide-file-tree`             | Auto-fix   | Validate and auto-fix project file tree structure against pix conventions (barrel files, _PascalCase naming, etc.).                      |
+| `/pix-area-styleguide` (request: file-tree) | Auto-fix   | Validate and auto-fix project file tree via styleguide leaf skills/tools (ADR 117: hub slash only).                      |
 | `pix_tool_handoff` | Handoff    | Generate a compressed LLM handoff summary from ADR logs and project context. Paste the output into a new chat to resume work seamlessly. |
 | `pix_component`       | Templates  | Generate component or test templates following pix principles.                                                                           |
 
@@ -235,13 +235,13 @@ Design and route visible interface work while preserving pix implementation cons
 | React/Vite app           | `pix-frontend-react`                                | `pix-toolchain-vite`, `pix-styleguide`            | `pix_scaffold`, `pix_check`              |
 | Backend API              | `pix-backend-node`                                  | `pix-backend-security`                            | `pix_check`, `pix_tool_process_adr`           |
 | Database work            | database skill                                      | `pix-data`                                        | `pix_search`, `pix_check`                |
-| Docker/CI/tests          | `pix-devops` focused skill                          | platform skill                                    | `pix_scaffold`, `/pix-area-styleguide-file-tree`                |
+| Docker/CI/tests          | `pix-devops` focused skill                          | platform skill                                    | `pix_tool_detect`, `/pix-area-styleguide` (file-tree)           |
 | GraphQL API              | `pix-backend-graphql`                               | runtime skill, `pix-backend-security`             | `pix_search`, `pix_check`                |
 | Production observability | `pix-devops-observability`                          | runtime and platform skill                        | `pix_check`, `pix_tool_process_adr`           |
 | Code review              | `pix-process-code-review`                           | feature workflow, relevant domain skill           | `pix_check`                              |
 | Commit/push              | `pix-toolchain-commits`                             | `pix-toolchain-husky`                             | `pix_check`                              |
 | Docs/ADR                 | `pix-styleguide-markdown`                           | `pix-process-adr`                                 | `pix_tool_process_adr`, `pix_tool_handoff` |
-| File-tree cleanup        | `pix-styleguide-naming`                             | `pix-toolchain-project`                           | `/pix-area-styleguide-file-tree`, `pix_check`                   |
+| File-tree cleanup        | `pix-styleguide-naming`                             | `pix-toolchain-project`                           | `/pix-area-styleguide` (file-tree), `pix_check`                |
 
 ## Operational sequence
 
@@ -251,7 +251,7 @@ Design and route visible interface work while preserving pix implementation cons
 4. Generate deterministic artifacts with `pix_component` or `pix_scaffold`.
 5. Validate with `pix_check`; pass `previousPassed` on subsequent iterations.
 6. Record major decisions with `pix_tool_process_adr`.
-7. Use `/pix-area-styleguide-file-tree` for file-tree convention fixes and `pix_tool_handoff` before context switches.
+7. Use `/pix-area-styleguide` with file-tree in the request (or `pix_tool_styleguide_file_tree`) for file-tree convention fixes and `pix_tool_handoff` before context switches.
 
 ## Conventions (rules -> skills merge)
 
