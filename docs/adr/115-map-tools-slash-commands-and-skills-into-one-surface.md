@@ -13,8 +13,8 @@ The live surface mixed three naming systems that looked alike but meant differen
 
 ### Keep
 
-1. Skill-backed triple 1:1: `pix_tool_<x>` ↔ `/pix-area-<x>`[+`-check`] ↔ skill `pix-<x>` (collector and leaf).
-2. Check in three forms: `pix_tool_check`, `/pix-check`, `/pix-area-*-check`.
+1. Skill-backed tool↔skill 1:1: `pix_tool_<x>` ↔ skill `pix-<x>`. Area slash is hub-only `/pix-area-<area>` (ADR 117); leaves route from free text on the collector.
+2. Check forms: `pix_tool_check`, `/pix-check`, and keyword intent on `/pix-area-*` hubs (ADR 116).
 3. Personas: 57 `/pix-persona-*-{plan|audit|review}` → `pix_tool_plan` / `pix_tool_audit` / `pix_tool_review` (+ `pix_tool_plan_docs` tool-only).
 4. Router: `pix_tool` and `/pix`. Update: `pix_tool_update` and `/pix-update`. ADR area: `pix_tool_process_adr` + skill + `/pix-area-process-adr*`.
 5. Tool-only: `pix_tool_gateway`, `pix_tool_apply`, `pix_tool_search`, `pix_tool_detect`, `pix_tool_plan_docs`.
