@@ -71,8 +71,6 @@ Claude Code installs clean `/pix-*` commands instead and suppresses these
 | `/pix-area-process-bmad`              | <request> | process: the bmad skill                                                                                                                                   |
 | `/pix-area-process-changelog`         | <request> | process: the changelog skill                                                                                                                              |
 | `/pix-area-process-code-review`       | <request> | process: the code-review skill                                                                                                                            |
-| `/pix-area-process-compression`       | <request> | process: the compression skill                                                                                                                            |
-| `/pix-area-process-handoff`           | <request> | process: the handoff skill                                                                                                                                |
 | `/pix-area-process-npm-release`       | <request> | process: the npm-release skill                                                                                                                            |
 | `/pix-area-process-simplicity`        | <request> | process: the simplicity skill                                                                                                                             |
 | `/pix-area-process-tdd`               | <request> | process: the tdd skill                                                                                                                                    |
@@ -108,11 +106,13 @@ Claude Code installs clean `/pix-*` commands instead and suppresses these
 | `/pix-area-toolchain-vite`            | <request> | toolchain: the vite skill                                                                                                                                 |
 | `/pix-area-ui`                        | <request> | ui work, across every ui skill                                                                                                                            |
 | `/pix-area-ui-design-system`          | <request> | ui: the design-system skill                                                                                                                               |
+| `/pix-compress`                       | [options] | Run pix_tool_compress: sole engine for prompt/context preprocessing and prose postprocessing                                                              |
 | `/pix-handoff`                        | [options] | Produce a compressed context handoff (ADR summary + git context) to resume in a new session, commiting pending work as scoped Conventional Commits first. |
 | `/pix-handon`                         | [options] | Resume: verify the last handoff against the repository as it is now, archive what finished, and propose the next workstream                               |
 | `/pix-init`                           | [options] | Prepare a project for pix-galaxy-mcp: the central recorder directory and tokensave                                                                        |
-| `/pix-process-flight`                 | [options] | Read the flight recorder: what this server cost, and what to do about it                                                                                  |
+| `/pix-stats`                          | [options] | Read local telemetry via pix_tool_stats: calls, cache hits, tokens, latency                                                                               |
 | `/pix-update`                         | [options] | Apply an available server update explicitly, and report what changed                                                                                      |
+| `/pix-usage`                          | [options] | Declare a usage sidecar via pix_tool_usage when no transcript is available                                                                                |
 
 ### Persona, one per role and operation
 
